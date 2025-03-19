@@ -55,21 +55,19 @@ unless Rails.env.production?
         ar_class = to_active_record_class(model)
 
         # Mark the hint as used if we don't use custom hint
-        if !input_params.include?("hint:")
+        if input_params.exclude?("hint:")
           retval << ["simple_form.hints.#{model}.#{attribute}", occurrence]
         end
 
         # Mark the label as used if we don't use custom hint.
-        if !input_params.include?("label:")
-          # Simple form can fetch its labels from activerecord.attributes,
-          # Mark it as used ... Except if the model is not an ActiveRecord ;)
-          if ar_class
-            retval << ["activerecord.attributes.#{model}.#{attribute}", occurrence]
-          end
+        # Simple form can fetch its labels from activerecord.attributes,
+        # Mark it as used ... Except if the model is not an ActiveRecord ;)
+        if input_params.exclude?("label:") && ar_class
+          retval << ["activerecord.attributes.#{model}.#{attribute}", occurrence]
         end
 
         # If this is an enum, add all its possible values.
-        if ar_class && ar_class.defined_enums.include?(attribute)
+        if ar_class&.defined_enums&.include?(attribute)
           ar_class.defined_enums[attribute].each_key do |key|
             retval << ["enums.#{model}.#{attribute}.#{key}", occurrence]
           end

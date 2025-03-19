@@ -59,7 +59,6 @@ gem 'devise-jwt'
 gem 'jwt'
 gem 'iso', github: 'thewca/ruby-iso'
 gem 'csv'
-gem 'ostruct'
 
 # Pointing to jfly/selectize-rails which has a workaround for
 #  https://github.com/selectize/selectize.js/issues/953
@@ -88,7 +87,7 @@ gem 'i18n-country-translations', github: 'thewca/i18n-country-translations'
 gem 'http_accept_language'
 gem 'twitter_cldr'
 # version explicitly specified because Shakapacker wants to keep Gemfile and package.json in sync
-gem 'shakapacker', '8.1.0'
+gem 'shakapacker', '8.2.0'
 gem 'json-schema'
 gem 'translighterate'
 gem 'enum_help'
@@ -132,6 +131,13 @@ group :development do
   gem 'overcommit', require: false
   gem 'rubocop', require: false
   gem 'rubocop-thread_safety', require: false
+  gem 'rubocop-performance', require: false
+  gem 'rubocop-rails', require: false
+  gem 'rubocop-rspec', require: false
+  gem 'rubocop-rspec_rails', require: false
+  gem 'rubocop-factory_bot', require: false
+  gem 'rubocop-capybara', require: false
+  gem 'rubocop-rake', require: false
   gem 'better_errors'
   gem 'binding_of_caller'
   gem 'bullet'

@@ -111,7 +111,6 @@ Rails.application.routes.draw do
     # WRT views and action
     get '/admin/upload-results' => "admin#new_results", as: :admin_upload_results_edit
     get '/admin/check-existing-results' => "admin#check_competition_results", as: :admin_check_existing_results
-    post '/admin/check-existing-results' => "admin#do_check_competition_results", as: :admin_run_validators
     post '/admin/upload-json' => "admin#create_results", as: :admin_upload_results
     post '/admin/clear-submission' => "admin#clear_results_submission", as: :clear_results_submission
     get '/admin/import-results' => 'admin#import_results', as: :admin_import_results
@@ -165,7 +164,7 @@ Rails.application.routes.draw do
 
   get 'results/rankings', to: redirect('results/rankings/333/single', status: 302)
   get 'results/rankings/333mbf/average',
-      to: redirect(status: 302) { |params, request| URI.parse(request.original_url).query ? "results/rankings/333mbf/single?#{URI.parse(request.original_url).query}" : "results/rankings/333mbf/single" }
+      to: redirect(status: 302) { |_params, request| URI.parse(request.original_url).query ? "results/rankings/333mbf/single?#{URI.parse(request.original_url).query}" : "results/rankings/333mbf/single" }
   get 'results/rankings/:event_id', to: redirect('results/rankings/%{event_id}/single', status: 302)
   get 'results/rankings/:event_id/:type' => 'results#rankings', as: :rankings
   get 'results/records' => 'results#records', as: :records
@@ -203,13 +202,16 @@ Rails.application.routes.draw do
   scope 'panel' do
     get 'staff' => 'panel#staff', as: :panel_staff
     get 'generate_db_token' => 'panel#generate_db_token', as: :panel_generate_db_token
+    get 'competition_count' => 'panel#competition_count', as: :panel_competition_count
+    get 'validators_for_competition_list' => 'panel#validators_for_competition_list', as: :panel_validators_for_competition_list
+    get 'validators_for_competitions_in_range' => 'panel#validators_for_competitions_in_range', as: :panel_validators_for_competitions_in_range
+    get 'cronjob_details' => 'panel#cronjob_details', as: :panel_cronjob_details
+    post 'cronjob_run' => 'panel#cronjob_run', as: :panel_cronjob_run
+    post 'cronjob_reset' => 'panel#cronjob_reset', as: :panel_cronjob_reset
   end
   get 'panel/:panel_id' => 'panel#index', as: :panel_index
   scope 'panel-page' do
-    get 'run-validators' => 'admin#check_results', as: :admin_check_results
     get 'check-records' => 'admin#check_regional_records', as: :admin_check_regional_records
-    get 'compute-auxiliary-data' => 'admin#compute_auxiliary_data', as: :admin_compute_auxiliary_data
-    get 'generate-data-exports' => 'admin#generate_exports', as: :admin_generate_exports
     get 'fix-results' => 'admin#fix_results', as: :admin_fix_results
     get 'merge-profiles' => 'admin#merge_people', as: :admin_merge_people
     get 'reassign-connected-wca-id' => 'admin#reassign_wca_id', as: :admin_reassign_wca_id
@@ -296,16 +298,11 @@ Rails.application.routes.draw do
 
   get '/admin/all-voters' => 'admin#all_voters', as: :eligible_voters
   get '/admin/leader-senior-voters' => 'admin#leader_senior_voters', as: :leader_senior_voters
-  get '/admin/validation_competitions' => "admin#compute_validation_competitions"
-  post '/admin/check_results' => 'admin#do_check_results', as: :admin_do_check_results
   post '/admin/merge_people' => 'admin#do_merge_people', as: :admin_do_merge_people
   get '/admin/fix_results_selector' => 'admin#fix_results_selector', as: :admin_fix_results_ajax
   get '/admin/person_data' => 'admin#person_data'
   get '/admin/do_compute_auxiliary_data' => 'admin#do_compute_auxiliary_data'
-  get '/admin/reset_compute_auxiliary_data' => 'admin#reset_compute_auxiliary_data'
   get '/admin/generate_db_token' => 'admin#generate_db_token'
-  get '/admin/do_generate_dev_export' => 'admin#do_generate_dev_export'
-  get '/admin/do_generate_public_export' => 'admin#do_generate_public_export'
   get '/admin/override_regional_records' => 'admin#override_regional_records'
   post '/admin/override_regional_records' => 'admin#do_override_regional_records'
   get '/admin/complete_persons' => 'admin#complete_persons'

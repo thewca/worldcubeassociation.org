@@ -72,7 +72,7 @@ export default function EventRestrictions() {
         <InputBoolean id="enabled" />
         <ConditionalSection showIf={restrictEvents}>
           <InputTextArea id="reason" />
-          <InputNumber id="perRegistrationLimit" />
+          <InputNumber id="perRegistrationLimit" min={1} nullable />
         </ConditionalSection>
       </SubSection>
 

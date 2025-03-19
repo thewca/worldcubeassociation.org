@@ -30,7 +30,7 @@ class LiveController < ApplicationController
 
     result = LiveResult.includes(:live_attempts).find_by(round: round, registration_id: registration_id)
 
-    return render json: { status: "result does not exist" }, status: :unprocessable_entity unless result.present?
+    return render json: { status: "result does not exist" }, status: :unprocessable_entity if result.blank?
 
     previous_attempts = result.live_attempts.index_by(&:attempt_number)
 

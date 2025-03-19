@@ -11,7 +11,7 @@ import useSaveAction from '../../lib/hooks/useSaveAction';
 import { fetchJsonOrError } from '../../lib/requests/fetchWithAuthenticityToken';
 import UtcDatePicker from '../wca/UtcDatePicker';
 import RegionSelector from '../wca/RegionSelector';
-import GenderSelector from '../GenderSelector/GenderSelector';
+import GenderSelector from '../wca/GenderSelector';
 
 const CONTACT_EDIT_PROFILE_FORM_QUERY_CLIENT = new QueryClient();
 

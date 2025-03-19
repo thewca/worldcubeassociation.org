@@ -14,7 +14,7 @@ RSpec.describe RegistrationReminderJob, type: :job do
 
       expect do
         RegistrationReminderJob.perform_now
-      end.to change { enqueued_jobs.size }.by(0)
+      end.to change(enqueued_jobs, :size).by(0)
     end
 
     it "schedules registration reminder emails" do
@@ -29,12 +29,12 @@ RSpec.describe RegistrationReminderJob, type: :job do
 
       expect do
         RegistrationReminderJob.perform_now
-      end.to change { enqueued_jobs.size }.by(5)
+      end.to change(enqueued_jobs, :size).by(5)
 
       # Running the job again won't send any more emails.
       expect do
         RegistrationReminderJob.perform_now
-      end.to change { enqueued_jobs.size }.by(0)
+      end.to change(enqueued_jobs, :size).by(0)
     end
 
     it "resends when registration period changes" do
@@ -50,7 +50,7 @@ RSpec.describe RegistrationReminderJob, type: :job do
 
       expect do
         RegistrationReminderJob.perform_now
-      end.to change { enqueued_jobs.size }.by(5)
+      end.to change(enqueued_jobs, :size).by(5)
     end
 
     it "does not send to registered and accepted users" do
@@ -66,7 +66,7 @@ RSpec.describe RegistrationReminderJob, type: :job do
 
       expect do
         RegistrationReminderJob.perform_now
-      end.to change { enqueued_jobs.size }.by(4)
+      end.to change(enqueued_jobs, :size).by(4)
     end
   end
 end

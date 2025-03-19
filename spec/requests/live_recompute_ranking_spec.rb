@@ -40,7 +40,7 @@ RSpec.describe "WCA Live API" do
       competition = FactoryBot.create(:competition, event_ids: ["333"], delegates: [delegate])
       round = FactoryBot.create(:round, competition: competition, event_id: "333")
 
-      3.times do |i|
+      3.times do |_i|
         registration = FactoryBot.create(:registration, :accepted, competition: competition)
 
         FactoryBot.create(:live_result, round: round, registration: registration, average: 100)

@@ -4,7 +4,7 @@ class Api::V0::Wrt::PersonsController < Api::V0::ApiController
   before_action :current_user_can_admin_results!
   private def current_user_can_admin_results!
     unless current_user.can_admin_results?
-      render json: {}, status: 401
+      render json: {}, status: :unauthorized
     end
   end
 
@@ -13,7 +13,7 @@ class Api::V0::Wrt::PersonsController < Api::V0::ApiController
     representing = person_params.require(:representing)
     gender = person_params.require(:gender)
     dob = person_params.require(:dob)
-    country_id = Country.find_by_iso2(representing).id
+    country_id = Country.find_by(iso2: representing).id
 
     {
       name: name,

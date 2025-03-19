@@ -11,7 +11,7 @@ import useLoadedData from '../../../../lib/hooks/useLoadedData';
 import Errored from '../../../Requests/Errored';
 import UtcDatePicker from '../../../wca/UtcDatePicker';
 import RegionSelector from '../../../wca/RegionSelector';
-import GenderSelector from '../../../GenderSelector/GenderSelector';
+import GenderSelector from '../../../wca/GenderSelector';
 
 export default function EditPersonForm({ wcaId, onSuccess, showDestroyButton = false }) {
   const {

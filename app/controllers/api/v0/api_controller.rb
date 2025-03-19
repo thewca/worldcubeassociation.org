@@ -36,7 +36,7 @@ class Api::V0::ApiController < ApplicationController
 
   def user_qualification_data
     date = cutoff_date
-    return render json: { error: 'Invalid date format. Please provide an iso8601 date string.' }, status: :bad_request unless date.present?
+    return render json: { error: 'Invalid date format. Please provide an iso8601 date string.' }, status: :bad_request if date.blank?
     return render json: { error: 'You cannot request qualification data for a future date.' }, status: :bad_request if date > Date.current
 
     user = User.find(params.require(:user_id))
@@ -133,7 +133,7 @@ class Api::V0::ApiController < ApplicationController
       end
     end
 
-    if current_user && current_user.can_admin_results?
+    if current_user&.can_admin_results?
       options = {
         private_attributes: %w[incorrect_wca_id_claim_count dob],
       }
@@ -195,7 +195,7 @@ class Api::V0::ApiController < ApplicationController
     concise_results_date = ComputeAuxiliaryData.end_date || Date.current
     cache_key = ["records", concise_results_date.iso8601]
     json = Rails.cache.fetch(cache_key) do
-      records = ActiveRecord::Base.connection.exec_query <<-SQL
+      records = ActiveRecord::Base.connection.exec_query <<-SQL.squish
         SELECT 'single' type, MIN(best) value, countryId country_id, eventId event_id
         FROM ConciseSingleResults
         GROUP BY countryId, eventId
@@ -232,10 +232,14 @@ class Api::V0::ApiController < ApplicationController
     end
   end
 
+  def authenticated_user
+    current_api_user || current_user
+  end
+
   # Find the user that owns the access token.
   # From: https://github.com/doorkeeper-gem/doorkeeper#authenticated-resource-owner
   private def current_api_user
-    @current_api_user ||= User.find_by_id(doorkeeper_token&.resource_owner_id) if doorkeeper_token&.accessible?
+    @current_api_user ||= User.find_by(id: doorkeeper_token&.resource_owner_id) if doorkeeper_token&.accessible?
   end
 
   private def require_user!
@@ -248,8 +252,8 @@ class Api::V0::ApiController < ApplicationController
   end
 
   def competition_series
-    competition_series = CompetitionSeries.find_by_wcif_id(params[:id])
-    if !competition_series.present? || competition_series.public_competitions.empty?
+    competition_series = CompetitionSeries.find_by(wcif_id: params[:id])
+    if competition_series.blank? || competition_series.public_competitions.empty?
       raise WcaExceptions::NotFound.new("Competition series with ID #{params[:id]} not found")
     end
     render json: competition_series.to_wcif

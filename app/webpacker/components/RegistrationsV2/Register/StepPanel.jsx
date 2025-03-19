@@ -5,6 +5,7 @@ import RegistrationRequirements from './RegistrationRequirements';
 import StripeWrapper from './StripeWrapper';
 import I18n from '../../../lib/i18n';
 import RegistrationOverview from './RegistrationOverview';
+import { useRegistration } from '../lib/RegistrationProvider';
 
 const requirementsStepConfig = {
   key: 'requirements',
@@ -67,16 +68,14 @@ export default function StepPanel({
   competitionInfo,
   preferredEvents,
   user,
-  registration,
-  refetchRegistration,
   stripePublishableKey,
   connectedAccountId,
   qualifications,
 }) {
-  const isRegistered = Boolean(registration) && registration.competing.registration_status !== 'cancelled';
-  const isAccepted = isRegistered && registration.competing.registration_status === 'accepted';
-  const isRejected = isRegistered && registration.competing.registration_status === 'rejected';
-  const hasPaid = registration?.payment?.has_paid;
+  const {
+    isRegistered, isAccepted, isRejected, hasPaid,
+  } = useRegistration();
+
   const registrationFinished = (isRegistered && hasPaid) || (isRegistered && !competitionInfo['using_payment_integrations?']);
 
   const steps = useMemo(() => {
@@ -137,8 +136,6 @@ export default function StepPanel({
         ))}
       </Step.Group>
       <CurrentStepPanel
-        registration={registration}
-        refetchRegistration={refetchRegistration}
         competitionInfo={competitionInfo}
         preferredEvents={preferredEvents}
         user={user}
