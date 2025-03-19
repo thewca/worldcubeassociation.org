@@ -214,12 +214,6 @@ Naming/BlockParameterName:
 Naming/MethodParameterName:
   Enabled: false
 
-Style/YodaCondition:
-  Enabled: false
-
-Style/FormatStringToken:
-  Enabled: false
-
 Lint/EmptyFile:
   Exclude:
     - 'db/seeds.rb'
