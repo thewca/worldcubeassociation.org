@@ -2593,7 +2593,7 @@ class Competition < ApplicationRecord
     raise WcaExceptions::BadApiParameter.new("The Series must include the competition you're currently editing.") unless form_data_series["competitionIds"].include?(self.id)
 
     competition_series = form_data_series["id"].present? ? CompetitionSeries.find(form_data_series["id"]) : CompetitionSeries.new
-    competition_series.set_form_data(form_data_series)
+    competition_series.assign_form_data(form_data_series)
 
     self.competition_series = competition_series
   end

@@ -98,7 +98,7 @@ class CompetitionSeries < ApplicationRecord
     }
   end
 
-  def set_form_data(form_data_series)
+  def assign_form_data(form_data_series)
     raise WcaExceptions::BadApiParameter.new("A Series must include at least two competitions.") if form_data_series["competitionIds"].count <= 1
 
     self.competition_ids = form_data_series["competitionIds"].join(",")

@@ -519,7 +519,7 @@ class CompetitionsController < ApplicationController
     # HACK END
     #####
 
-    competition.set_form_data(form_data, current_user)
+    competition.assign_form_data(form_data, current_user)
 
     if competition.save
       # Automatically compute the cellName and ID for competitions with a short name.

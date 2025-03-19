@@ -45,9 +45,6 @@ Bundler/OrderedGems:
 Lint/UnusedMethodArgument:
   Enabled: false
 
-Naming/AccessorMethodName:
-  Enabled: false
-
 Style/Alias:
   EnforcedStyle: prefer_alias_method
 
