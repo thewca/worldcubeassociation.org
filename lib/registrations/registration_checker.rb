@@ -77,7 +77,7 @@ module Registrations
           registrations_to_be_accepted > 0 &&
           total_accepted_registrations_after_update > competition.competitor_limit
       end
-      
+
       def user_can_modify_registration!(competition, current_user, target_user, registration, new_status)
         raise WcaExceptions::RegistrationError.new(:unauthorized, Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) unless
           can_administer_or_current_user?(competition, current_user, target_user)
