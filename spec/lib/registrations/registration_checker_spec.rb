@@ -944,25 +944,6 @@ RSpec.describe Registrations::RegistrationChecker do
           expect(error.error).to eq(Registrations::ErrorCodes::USER_COMMENT_TOO_LONG)
         end
       end
-
-      it 'user cant change comment after edit events deadline' do
-        edit_deadline_passed = FactoryBot.create(:competition, :event_edit_passed)
-        registration = FactoryBot.create(:registration, competition: edit_deadline_passed)
-
-        update_request = FactoryBot.build(
-          :update_request,
-          competition_id: registration.competition.id,
-          user_id: registration.user_id,
-          competing: { 'comment' => 'updated_comment' },
-        )
-
-        expect {
-          Registrations::RegistrationChecker.update_registration_allowed!(update_request, registration, Competition.find(update_request['competition_id']), User.find(update_request['submitted_by']))
-        }.to raise_error(WcaExceptions::RegistrationError) do |error|
-          expect(error.status).to eq(:forbidden)
-          expect(error.error).to eq(Registrations::ErrorCodes::USER_EDITS_NOT_ALLOWED)
-        end
-      end
     end
 
     describe '#update_registration_allowed!.validate_organizer_fields!' do
@@ -1188,25 +1169,6 @@ RSpec.describe Registrations::RegistrationChecker do
 
         expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, default_registration, Competition.find(update_request['competition_id']), User.find(update_request['submitted_by'])) }
           .not_to raise_error
-      end
-
-      it 'user cant change guests after registration change deadline' do
-        competition = FactoryBot.create(:competition, :event_edit_passed)
-        registration = FactoryBot.create(:registration, competition: competition)
-
-        update_request = FactoryBot.build(
-          :update_request,
-          user_id: registration.user_id,
-          competition_id: registration.competition.id,
-          guests: 5,
-        )
-
-        expect {
-          Registrations::RegistrationChecker.update_registration_allowed!(update_request, registration, Competition.find(update_request['competition_id']), User.find(update_request['submitted_by']))
-        }.to raise_error(WcaExceptions::RegistrationError) do |error|
-          expect(error.status).to eq(:forbidden)
-          expect(error.error).to eq(Registrations::ErrorCodes::USER_EDITS_NOT_ALLOWED)
-        end
       end
 
       it 'organizer can change guests after registration change deadline' do
@@ -1523,27 +1485,6 @@ RSpec.describe Registrations::RegistrationChecker do
 
         expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, cancelled_reg, Competition.find(update_request['competition_id']), User.find(update_request['submitted_by'])) }
           .not_to raise_error
-      end
-
-      it 'user cant cancel registration after registration ends' do
-        editing_over = FactoryBot.create(
-          :competition, :registration_closed, :event_edit_passed
-        )
-        registration = FactoryBot.create(:registration, competition: editing_over)
-
-        update_request = FactoryBot.build(
-          :update_request,
-          user_id: registration.user_id,
-          competition_id: registration.competition.id,
-          competing: { 'status' => 'cancelled' },
-        )
-
-        expect {
-          Registrations::RegistrationChecker.update_registration_allowed!(update_request, registration, Competition.find(update_request['competition_id']), User.find(update_request['submitted_by']))
-        }.to raise_error(WcaExceptions::RegistrationError) do |error|
-          expect(error.status).to eq(:forbidden)
-          expect(error.error).to eq(Registrations::ErrorCodes::USER_EDITS_NOT_ALLOWED)
-        end
       end
 
       it 'organizer can cancel registration after registration ends' do

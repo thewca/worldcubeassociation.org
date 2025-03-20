@@ -297,6 +297,77 @@ RSpec.describe 'API Registrations' do
       expect(response).to have_http_status(:forbidden)
     end
 
+    it 'user cant cancel registration after registration ends' do
+      editing_over = FactoryBot.create(
+        :competition, :registration_closed, :event_edit_passed
+      )
+      registration = FactoryBot.create(:registration, competition: editing_over)
+
+      update_request = FactoryBot.build(
+        :update_request,
+        user_id: registration.user_id,
+        competition_id: registration.competition.id,
+        competing: { 'status' => 'cancelled' },
+        )
+
+      headers = { 'Authorization' => update_request['jwt_token'] }
+
+      patch api_v1_registrations_register_path, params: update_request, headers: headers
+
+      error_json = {
+        error: Registrations::ErrorCodes::USER_EDITS_NOT_ALLOWED,
+      }.to_json
+
+      expect(response.body).to eq(error_json)
+      expect(response).to have_http_status(:forbidden)
+    end
+
+    it 'user cant change guests after registration change deadline' do
+      competition = FactoryBot.create(:competition, :event_edit_passed)
+      registration = FactoryBot.create(:registration, competition: competition)
+
+      update_request = FactoryBot.build(
+        :update_request,
+        user_id: registration.user_id,
+        competition_id: registration.competition.id,
+        guests: 5,
+        )
+
+      headers = { 'Authorization' => update_request['jwt_token'] }
+
+      patch api_v1_registrations_register_path, params: update_request, headers: headers
+
+      error_json = {
+        error: Registrations::ErrorCodes::USER_EDITS_NOT_ALLOWED,
+      }.to_json
+
+      expect(response.body).to eq(error_json)
+      expect(response).to have_http_status(:forbidden)
+    end
+
+    it 'user cant change comment after edit events deadline' do
+      edit_deadline_passed = FactoryBot.create(:competition, :event_edit_passed)
+      registration = FactoryBot.create(:registration, competition: edit_deadline_passed)
+
+      update_request = FactoryBot.build(
+        :update_request,
+        competition_id: registration.competition.id,
+        user_id: registration.user_id,
+        competing: { 'comment' => 'updated_comment' },
+        )
+
+      headers = { 'Authorization' => update_request['jwt_token'] }
+
+      patch api_v1_registrations_register_path, params: update_request, headers: headers
+
+      error_json = {
+        error: Registrations::ErrorCodes::USER_EDITS_NOT_ALLOWED,
+      }.to_json
+
+      expect(response.body).to eq(error_json)
+      expect(response).to have_http_status(:forbidden)
+    end
+
     it 'organizer can change user registration' do
       update_request = FactoryBot.build(
         :update_request,
