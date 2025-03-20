@@ -408,7 +408,7 @@ RSpec.describe 'API Registrations' do
           user_id: registration.user_id,
           competition_id: registration.competition.id,
           competing: { 'status' => new_status },
-          )
+        )
         headers = { 'Authorization' => update_request['jwt_token'] }
 
         patch api_v1_registrations_register_path, params: update_request, headers: headers
@@ -418,8 +418,8 @@ RSpec.describe 'API Registrations' do
 
         expect(response.body).to eq(error_json)
         expect(response).to have_http_status(:unauthorized)
-        end
       end
+    end
 
     [
       { initial_status: :rejected, new_status: 'cancelled' },
@@ -437,7 +437,7 @@ RSpec.describe 'API Registrations' do
     let(:user1) { FactoryBot.create :user }
     let(:user2) { FactoryBot.create :user }
     let(:user3) { FactoryBot.create :user }
-    let(:user_ids) { [user1.id, user2.id, user3.id]}
+    let(:user_ids) { [user1.id, user2.id, user3.id] }
 
     let(:registration1) { FactoryBot.create(:registration, competition: competition, user: user1) }
     let(:registration2) { FactoryBot.create(:registration, competition: competition, user: user2) }
@@ -570,7 +570,7 @@ RSpec.describe 'API Registrations' do
         submitted_by: registration1.user_id,
         user_ids: user_ids,
         competition_id: competition.id,
-        )
+      )
 
       headers = { 'Authorization' => bulk_update_request['jwt_token'] }
       patch api_v1_registrations_bulk_update_path, params: bulk_update_request, headers: headers
@@ -588,7 +588,7 @@ RSpec.describe 'API Registrations' do
         user_ids: [registration1.user_id],
         submitted_by: competition.organizers.first.id,
         competition_id: competition.id,
-        )
+      )
       headers = { 'Authorization' => bulk_update_request['jwt_token'] }
       patch api_v1_registrations_bulk_update_path, params: bulk_update_request, headers: headers
 
@@ -601,7 +601,7 @@ RSpec.describe 'API Registrations' do
         user_ids: user_ids,
         submitted_by: competition.organizers.first.id,
         competition_id: competition.id,
-        )
+      )
       headers = { 'Authorization' => bulk_update_request['jwt_token'] }
       patch api_v1_registrations_bulk_update_path, params: bulk_update_request, headers: headers
 
@@ -619,7 +619,7 @@ RSpec.describe 'API Registrations' do
         submitted_by: default_competition.organizers.first.id,
         competition_id: default_competition.id,
         requests: [failed_update],
-        )
+      )
 
       headers = { 'Authorization' => bulk_update_request['jwt_token'] }
       patch api_v1_registrations_bulk_update_path, params: bulk_update_request, headers: headers
@@ -648,7 +648,7 @@ RSpec.describe 'API Registrations' do
         submitted_by: competition.organizers.first.id,
         competition_id: competition.id,
         requests: [failed_update, failed_update_2, normal_update],
-        )
+      )
       headers = { 'Authorization' => bulk_update_request['jwt_token'] }
       patch api_v1_registrations_bulk_update_path, params: bulk_update_request, headers: headers
 
@@ -670,7 +670,7 @@ RSpec.describe 'API Registrations' do
         competition_id: registration1.competition.id,
         requests: [failed_update],
         submitted_by: competition.organizers.first.id,
-        )
+      )
 
       headers = { 'Authorization' => bulk_update_request['jwt_token'] }
       patch api_v1_registrations_bulk_update_path, params: bulk_update_request, headers: headers
@@ -703,7 +703,7 @@ RSpec.describe 'API Registrations' do
         competition_id: registration1.competition.id,
         requests: updates,
         submitted_by: competition.organizers.first.id,
-        )
+      )
 
       error_json = {
         registration1.user_id => Registrations::ErrorCodes::INVALID_EVENT_SELECTION,
