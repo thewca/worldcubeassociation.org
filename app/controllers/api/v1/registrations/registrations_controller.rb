@@ -135,7 +135,7 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
   end
 
   def payment_ticket
-    donation = params[:donation_iso].to_i || 0
+    donation = params[:iso_donation].to_i || 0
     # We could delegate this call to the prepare_intent function given that we're already giving it registration - however,
     # in the long-term we want to decouple registrations from payments, so I'm deliberately not introducing any more tight coupling
     amount_ruby_money = @registration.entry_fee_with_donation(donation)

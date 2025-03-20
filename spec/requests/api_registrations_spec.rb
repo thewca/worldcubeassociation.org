@@ -595,7 +595,7 @@ RSpec.describe 'API Registrations' do
 
     it 'allows a donation to be specified' do
       expected_response = { api_amounts: { stripe: 2500, paypal: "25.00" }, human_amount: "25 kr (Swedish Krona)" }.with_indifferent_access
-      get registration_payment_denomination_path(id: reg.id), headers: headers, params: { donation_lowest_denomination: 1000 }
+      get registration_payment_denomination_path(id: reg.id), headers: headers, params: { iso_donation: 1000 }
 
       expect(response).to be_successful
       expect(response.parsed_body).to eq(expected_response)

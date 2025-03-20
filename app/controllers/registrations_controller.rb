@@ -261,7 +261,7 @@ class RegistrationsController < ApplicationController
 
   def payment_denomination
     registration = registration_from_params
-    donation = params[:donation_lowest_denomination].to_i || 0
+    donation = params[:iso_donation].to_i || 0
     ruby_money = registration.entry_fee_with_donation(donation)
     human_amount = helpers.format_money(ruby_money)
 

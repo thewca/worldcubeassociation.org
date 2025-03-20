@@ -10,9 +10,9 @@ import { fetchJsonOrError } from '../../../lib/requests/fetchWithAuthenticityTok
 import { paymentDenominationUrl } from '../../../lib/requests/routes.js.erb';
 import { useRegistration } from '../lib/RegistrationProvider';
 
-const convertISOAmount = async (registrationId, donationLowestDenomination) => {
+const convertISOAmount = async (registrationId, isoDonation) => {
   const { data } = await fetchJsonOrError(
-    paymentDenominationUrl(registrationId, donationLowestDenomination),
+    paymentDenominationUrl(registrationId, isoDonation),
   );
   return data;
 };

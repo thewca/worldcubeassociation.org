@@ -135,9 +135,9 @@ class Registration < ApplicationRecord
     )
   end
 
-  def entry_fee_with_donation(donation_lowest_denomination = 0)
+  def entry_fee_with_donation(iso_donation = 0)
     Money.new(
-      entry_fee.cents + donation_lowest_denomination,
+      entry_fee.cents + iso_donation,
       entry_fee.currency,
     )
   end
