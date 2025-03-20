@@ -1239,11 +1239,11 @@ class Competition < ApplicationRecord
   end
 
   # Source http://www.movable-type.co.uk/scripts/latlong.html
-  def kilometers_to(c)
+  def kilometers_to(competition)
     6371 *
       Math.sqrt(
-        (((c.longitude_radians - longitude_radians) * Math.cos((c.latitude_radians + latitude_radians)/2)) ** 2) +
-        ((c.latitude_radians - latitude_radians) ** 2),
+        (((competition.longitude_radians - longitude_radians) * Math.cos((competition.latitude_radians + latitude_radians)/2)) ** 2) +
+        ((competition.latitude_radians - latitude_radians) ** 2),
       )
   end
 
@@ -1289,43 +1289,43 @@ class Competition < ApplicationRecord
     confirmed_or_visible? && (will_save_change_to_start_date? || will_save_change_to_confirmed_at?)
   end
 
-  def days_until_competition?(c)
-    return false if !c.date_set? || !self.date_set?
+  def days_until_competition?(competition)
+    return false if !competition.date_set? || !self.date_set?
 
-    days_until = (c.start_date - self.end_date).to_i
-    days_until = (self.start_date - c.end_date).to_i * -1 if days_until < 0
+    days_until = (competition.start_date - self.end_date).to_i
+    days_until = (self.start_date - competition.end_date).to_i * -1 if days_until < 0
     days_until
   end
 
-  def dangerously_close_to?(c)
-    self.adjacent_to?(c, NEARBY_DISTANCE_KM_DANGER, NEARBY_DAYS_DANGER)
+  def dangerously_close_to?(competition)
+    self.adjacent_to?(competition, NEARBY_DISTANCE_KM_DANGER, NEARBY_DAYS_DANGER)
   end
 
-  def adjacent_to?(c, distance_km, distance_days)
-    self.distance_adjacent_to?(c, distance_km) && self.start_date_adjacent_to?(c, distance_days)
+  def adjacent_to?(competition, distance_km, distance_days)
+    self.distance_adjacent_to?(competition, distance_km) && self.start_date_adjacent_to?(competition, distance_days)
   end
 
-  def start_date_adjacent_to?(c, distance_days)
-    return false if !c.date_set? || !self.date_set?
+  def start_date_adjacent_to?(competition, distance_days)
+    return false if !competition.date_set? || !self.date_set?
 
-    self.days_until_competition?(c).abs < distance_days
+    self.days_until_competition?(competition).abs < distance_days
   end
 
-  def distance_adjacent_to?(c, distance_km)
-    self.kilometers_to(c) < distance_km
+  def distance_adjacent_to?(competition, distance_km)
+    self.kilometers_to(competition) < distance_km
   end
 
-  def registration_open_adjacent_to?(c, distance_minutes)
-    return false if !c.registration_start_date_set? || !self.registration_start_date_set?
+  def registration_open_adjacent_to?(competition, distance_minutes)
+    return false if !competition.registration_start_date_set? || !self.registration_start_date_set?
 
-    self.minutes_until_other_registration_starts(c).abs < distance_minutes
+    self.minutes_until_other_registration_starts(competition).abs < distance_minutes
   end
 
-  def minutes_until_other_registration_starts(c)
-    return false if !c.registration_start_date_set? || !self.registration_start_date_set?
+  def minutes_until_other_registration_starts(competition)
+    return false if !competition.registration_start_date_set? || !self.registration_start_date_set?
 
-    seconds_until = (c.registration_open - self.registration_open).to_i
-    seconds_until = (self.registration_open - c.registration_open).to_i * -1 if seconds_until < 0
+    seconds_until = (competition.registration_open - self.registration_open).to_i
+    seconds_until = (self.registration_open - competition.registration_open).to_i * -1 if seconds_until < 0
     seconds_until / 60
   end
 

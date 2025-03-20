@@ -174,7 +174,6 @@ Style/SymbolProc:
 
 Naming/MethodParameterName:
   AllowedNames:
-    - c
     - n
     - id
 
