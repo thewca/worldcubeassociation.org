@@ -6,7 +6,7 @@
     <% if @competition.any_rounds? %>
       <li><a href="#competition-events" data-toggle="tab"><%=t 'competitions.show.events' %></a></li>
     <% end %>
-    <% if @competition.schedule_set? %>
+    <% if @competition.any_venues? %>
       <li><a href="#competition-schedule" data-toggle="tab"><%=t 'competitions.show.schedule' %></a></li>
     <% end %>
     <% @competition.tabs.each do |tab| %>
@@ -25,7 +25,7 @@
         <%= render "events_tab" %>
       </div>
     <% end %>
-    <% if @competition.schedule_set? %>
+    <% if @competition.any_venues? %>
       <div class="tab-pane" id="competition-schedule">
         <%= render "competition_schedule_tab", competition: @competition %>
       </div>

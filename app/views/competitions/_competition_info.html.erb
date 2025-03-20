@@ -53,7 +53,7 @@
       </dd>
     </dl>
 
-    <% if @competition.schedule_set? %>
+    <% if @competition.any_venues? %>
       <dl class="dl-horizontal">
         <dt><%= ui_icon("print") %></dt>
         <dd>

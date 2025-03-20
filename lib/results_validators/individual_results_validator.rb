@@ -24,7 +24,7 @@ module ResultsValidators
       "This validator checks that all results respect the format, time limit, and cutoff information if available. It also looks for similar results within the round."
     end
 
-    def self.automated_fix?
+    def self.automatically_fixable?
       false
     end
 
@@ -63,7 +63,7 @@ module ResultsValidators
 
           time_limit_for_round = round_info.time_limit
 
-          if round_info.undef_tl?
+          if round_info.time_limit_undefined?
             # This situation may happen with "old" competitions, where time limit
             # were possibly not enforced at the discretion of the WCA Delegate.
             # In which case we let the TL undefined, and no errors should be
@@ -91,7 +91,7 @@ module ResultsValidators
             completed_solves = all_solve_times.select(&:complete?)
 
             # Below are checks for time limits, skip them if the time limit is undefined
-            next if round_info.undef_tl?
+            next if round_info.time_limit_undefined?
 
             # Checks for time limits if it can be user-specified
             unless %w[333mbf 333fm].include?(result.eventId)

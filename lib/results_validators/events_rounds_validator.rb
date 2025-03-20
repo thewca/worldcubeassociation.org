@@ -14,7 +14,7 @@ module ResultsValidators
       "This validator checks that all events and rounds match between what has been announced and what is present in the results. It also check for a main event and emit a warning if there is none (and if 3x3 is not in the results)."
     end
 
-    def self.automated_fix?
+    def self.automatically_fixable?
       false
     end
 

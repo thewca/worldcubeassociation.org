@@ -12,7 +12,7 @@ module ResultsValidators
       ScramblesValidator,
     ].freeze
 
-    VALIDATORS_WITH_FIX = ALL_VALIDATORS.select(&:automated_fix?).freeze
+    VALIDATORS_WITH_FIX = ALL_VALIDATORS.select(&:automatically_fixable?).freeze
 
     def self.validator_class_from_name(name)
       ALL_VALIDATORS.find { |v| v.class_name == name }

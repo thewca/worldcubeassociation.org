@@ -4,7 +4,7 @@ require 'csv'
 
 class AdminController < ApplicationController
   before_action :authenticate_user!
-  before_action -> { redirect_to_root_unless_user(:can_admin_results?) }, except: [:all_voters, :leader_senior_voters]
+  before_action -> { redirect_to_root_unless_user(:any_results?) }, except: [:all_voters, :leader_senior_voters]
   before_action -> { redirect_to_root_unless_user(:can_see_eligible_voters?) }, only: [:all_voters, :leader_senior_voters]
 
   def index

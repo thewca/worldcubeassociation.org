@@ -360,7 +360,7 @@ class Competition < ApplicationRecord
   # Competitions after 2018-12-31 will have this check. All comps from 2019 onwards required a schedule.
   # Check added per "Support for cancelled competitions" and adding some old cancelled competitions to the website without a schedule.
   def schedule_must_match_rounds
-    errors.add(:competition_events, I18n.t('competitions.errors.schedule_must_match_rounds')) if start_date.present? && start_date > Date.new(2018, 12, 31) && !(any_round_empty? && schedule_includes_rounds?)
+    errors.add(:competition_events, I18n.t('competitions.errors.schedule_must_match_rounds')) if start_date.present? && start_date > Date.new(2018, 12, 31) && !(no_round_empty? && schedule_includes_rounds?)
   end
 
   validate :advancement_condition_must_be_present_for_all_non_final_rounds, if: :confirmed_at_changed?, on: :update
@@ -403,7 +403,7 @@ class Competition < ApplicationRecord
       registrations.waitlisted.count > 0 && !registration_full_and_accepted?
   end
 
-  def any_round_empty?
+  def no_round_empty?
     competition_events.map(&:rounds).none?(&:empty?)
   end
 
@@ -569,7 +569,7 @@ class Competition < ApplicationRecord
       # NOTE: this will show up on the edit schedule page, and stay even if the
       # schedule matches when saved. Should we add some logic to not show this
       # message on the edit schedule page?
-      warnings[:schedule] = I18n.t('competitions.messages.schedule_must_match_rounds') unless any_round_empty? && schedule_includes_rounds?
+      warnings[:schedule] = I18n.t('competitions.messages.schedule_must_match_rounds') unless no_round_empty? && schedule_includes_rounds?
 
       warnings[:advancement_conditions] = I18n.t('competitions.messages.advancement_condition_must_be_present_for_all_non_final_rounds') unless rounds.all?(&:advancement_condition_is_valid?)
 
@@ -1074,7 +1074,7 @@ class Competition < ApplicationRecord
     rounds.any?
   end
 
-  def schedule_set?
+  def any_venues?
     competition_venues.any?
   end
 

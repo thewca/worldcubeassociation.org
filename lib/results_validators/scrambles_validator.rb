@@ -14,7 +14,7 @@ module ResultsValidators
       "This validator checks that all results have matching scrambles, and if possible, checks that the scrambles have the correct number of attempts compared to the expected round format."
     end
 
-    def self.automated_fix?
+    def self.automatically_fixable?
       false
     end
 

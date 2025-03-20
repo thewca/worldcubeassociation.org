@@ -24,7 +24,7 @@ module ResultsValidators
       "This validator checks that advancement between rounds is correct according to the regulations."
     end
 
-    def self.automated_fix?
+    def self.automatically_fixable?
       false
     end
 

@@ -14,7 +14,7 @@
         <li>Then the website will run a number of checks. If everything is correct you'll be able to submit these results to the WRT.</li>
       </ul>
     </p>
-    <%= render "submit_json_panel", upload_json: @upload_json, already_has_submitted_result: @results_validator.results? %>
+    <%= render "submit_json_panel", upload_json: @upload_json, already_has_submitted_result: @results_validator.any_results? %>
 
     <%= render "check_results_panel",
       results_validator: @results_validator,
@@ -23,7 +23,7 @@
     <% if @current_user.can_submit_competition_results?(@competition) %>
       <%= render "results_submission_panel",
         competition: @competition,
-        has_errors: @results_validator.errors?,
+        has_errors: @results_validator.errored?,
         results_submission: @results_submission
       %>
     <% end %>

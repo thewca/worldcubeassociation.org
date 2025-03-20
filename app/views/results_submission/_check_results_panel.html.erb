@@ -2,10 +2,10 @@
   force_collapse ||= false
   display_competition ||= false
   # NOTE: expect valid 'results_validator' variable
-  panel_style = class_for_panel(error: results_validator.errors?,
+  panel_style = class_for_panel(error: results_validator.errored?,
                                 warning: results_validator.warnings?,
                                 no_validator: results_validator.validators.empty?)
-  collapse_panel = force_collapse || !results_validator.results?
+  collapse_panel = force_collapse || !results_validator.any_results?
 %>
 <div class="panel panel-<%= panel_style %>">
   <div class="panel-heading heading-as-link <%= "collapsed" if collapse_panel %>" data-toggle="collapse" data-target="#collapse-check-results">

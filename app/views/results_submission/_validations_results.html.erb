@@ -29,7 +29,7 @@
   <% end %>
 <% end %>
 <h3>Errors</h3>
-<% if results_validator.errors? %>
+<% if results_validator.errored? %>
   <p>Please fix the errors below:</p>
   <% results_validator.errors.group_by(&:kind).each do |type, errors| %>
     <% if errors.any? %>
@@ -47,7 +47,7 @@
       </ul>
     <% end %>
   <% end %>
-<% elsif !results_validator.results? %>
+<% elsif !results_validator.any_results? %>
   <p class="text-danger">
   <% if results_validator.check_real_results? %>
     No results for the competition yet.
@@ -82,7 +82,7 @@
       </ul>
     <% end %>
   <% end %>
-<% elsif !results_validator.results? %>
+<% elsif !results_validator.any_results? %>
   <p class="text-danger">
   <% if results_validator.check_real_results? %>
     No results for the competition yet.

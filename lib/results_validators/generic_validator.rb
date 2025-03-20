@@ -9,7 +9,7 @@ module ResultsValidators
       reset_state
     end
 
-    def errors?
+    def errored?
       @errors.any?
     end
 
