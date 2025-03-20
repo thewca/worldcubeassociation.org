@@ -135,6 +135,13 @@ class Registration < ApplicationRecord
     )
   end
 
+  def entry_fee_with_donation(donation_lowest_denomination = 0)
+    Money.new(
+      entry_fee.cents + donation_lowest_denomination,
+      entry_fee.currency,
+    )
+  end
+
   def paid_entry_fees
     Money.new(
       # NOTE: we do *not* sum on the association, as it bypasses any clean
