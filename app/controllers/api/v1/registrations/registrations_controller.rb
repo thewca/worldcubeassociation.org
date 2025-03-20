@@ -79,7 +79,7 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
     new_status = params.dig('competing', 'status')
     target_user = @registration.user
     raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::COMPETITOR_LIMIT_REACHED) if
-      will_exceed_competitor_limit?(params, @competition)
+      will_exceed_competitor_limit?(params.require('requests'), @competition)
     raise WcaExceptions::RegistrationError.new(:unauthorized, Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) unless
       can_administer_or_current_user?(@competition, @current_user, target_user)
     raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::USER_EDITS_NOT_ALLOWED) unless
@@ -103,7 +103,7 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
 
   def validate_bulk_update_request
     errors = {}
-    params.require('requests').each do |update_request|
+    params['requests'].each do |update_request|
       registration = Registration.find_by(competition: @competition, user_id: update_request['user_id'])
       raise WcaExceptions::RegistrationError.new(:not_found, Registrations::ErrorCodes::REGISTRATION_NOT_FOUND) if registration.blank?
 

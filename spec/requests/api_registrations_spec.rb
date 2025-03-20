@@ -610,7 +610,7 @@ RSpec.describe 'API Registrations' do
 
     it 'returns an array user_ids:error codes - 1 failure' do
       failed_update = FactoryBot.build(
-        :update_request, user_id: registration_1.user_id, competition_id: registration_1.competition.id, competing: { 'event_ids' => [] }
+        :update_request, user_id: registration1.user_id, competition_id: registration1.competition.id, competing: { 'event_ids' => [] }
       )
 
       bulk_update_request = FactoryBot.build(
@@ -663,7 +663,7 @@ RSpec.describe 'API Registrations' do
 
     it 'returns an error if the registration isnt found' do
       missing_registration_user_id = (registration1.user_id-1)
-      failed_update = FactoryBot.build(:update_request, user_id: missing_registration_user_id, competition_id: registration_1.competition.id)
+      failed_update = FactoryBot.build(:update_request, user_id: missing_registration_user_id, competition_id: registration1.competition.id)
       bulk_update_request = FactoryBot.build(
         :bulk_update_request,
         user_ids: [missing_registration_user_id],
@@ -705,17 +705,16 @@ RSpec.describe 'API Registrations' do
         submitted_by: competition.organizers.first.id,
       )
 
+      headers = { 'Authorization' => bulk_update_request['jwt_token'] }
+      patch api_v1_registrations_bulk_update_path, params: bulk_update_request, headers: headers
+
       error_json = {
         registration1.user_id => Registrations::ErrorCodes::INVALID_EVENT_SELECTION,
         missing_registration_user_id => Registrations::ErrorCodes::REGISTRATION_NOT_FOUND,
-      }
+      }.to_json
 
-      expect {
-        Registrations::RegistrationChecker.bulk_update_allowed!(bulk_update_request, User.find(bulk_update_request['submitted_by']))
-      }.to raise_error(WcaExceptions::BulkUpdateError) do |error|
-        expect(error.errors).to eq(error_json)
-        expect(error.status).to eq(:unprocessable_entity)
-      end
+      expect(response.body).to eq(error_json)
+      expect(response).to have_http_status(:unprocessable_entity)
     end
 
     context 'when bulk accepting registrations' do
