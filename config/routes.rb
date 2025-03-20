@@ -19,9 +19,7 @@ Rails.application.routes.draw do
   end
 
   # Don't expose Paypal routes in production until we're reading to launch
-  unless PaypalInterface.paypal_disabled?
-    post 'registration/:id/capture-paypal-payment' => 'registrations#capture_paypal_payment', as: :registration_capture_paypal_payment
-  end
+  post 'registration/:id/capture-paypal-payment' => 'registrations#capture_paypal_payment', as: :registration_capture_paypal_payment unless PaypalInterface.paypal_disabled?
 
   # Prevent account deletion, and overrides the sessions controller for 2FA.
   #  https://github.com/plataformatec/devise/wiki/How-To:-Disable-user-from-destroying-their-account

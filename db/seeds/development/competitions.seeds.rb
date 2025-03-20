@@ -11,18 +11,14 @@ after "development:users", "development:user_roles" do
       r = rand(5000..100_000)
 
       # Solves over 10 minutes must be rounded to the nearest second.
-      if r > 10 * 60 * 100
-        r = 100 * (r / 100)
-      end
+      r = 100 * (r / 100) if r > 10 * 60 * 100
       r
     end
 
     def random_city(country)
       city = Faker::Address.city
       state_validator = CityValidator.get_validator_for_country(country.iso2)
-      if state_validator
-        city += ", #{state_validator.valid_regions.to_a.sample}"
-      end
+      city += ", #{state_validator.valid_regions.to_a.sample}" if state_validator
       city
     end
   end
@@ -186,7 +182,7 @@ after "development:users", "development:user_roles" do
       organizers: User.all.sample(2),
       use_wca_registration: true,
       registration_open: 1.week.ago,
-      registration_close: start_day - (1.week),
+      registration_close: start_day - 1.week,
       latitude_degrees: rand(-90.0..90.0),
       longitude_degrees: rand(-180.0..180.0),
     )
@@ -196,6 +192,7 @@ after "development:users", "development:user_roles" do
 
     # Create registrations for some competitions taking place far in the future
     next if i < 480
+
     users.each_with_index do |user, j|
       competing_status = j % 4 == 0 ? Registrations::Helper::STATUS_ACCEPTED : Registrations::Helper::STATUS_PENDING
       registration_competition_events = competition.competition_events.sample(rand(1..competition.competition_events.count))

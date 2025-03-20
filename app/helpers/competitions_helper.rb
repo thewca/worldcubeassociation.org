@@ -8,9 +8,7 @@ module CompetitionsHelper
 
     messages_to_join = []
 
-    if competition.cancelled? # If the competition is cancelled, that's the only string we need to show the user.
-      return t('competitions.messages.cancelled')
-    end
+    return t('competitions.messages.cancelled') if competition.cancelled? # If the competition is cancelled, that's the only string we need to show the user.
 
     messages_to_join << get_registration_status_message_if_registered(competition, user, registration)
     messages_to_join << get_competition_status_message(competition)
@@ -101,25 +99,21 @@ module CompetitionsHelper
         record_strs = comp_records.group_by(&:personName).sort.map do |personName, results_for_name|
           results_by_personId = results_for_name.group_by(&:personId).sort
           results_by_personId.map do |personId, results|
-            if results_by_personId.length > 1
-              # Two or more people with the same name set records at this competition!
-              # Append their WCA IDs to distinguish between them.
-              uniqueName = "[#{personName} (#{personId})](#{person_url personId})"
-            else
-              uniqueName = "[#{personName}](#{person_url personId})"
-            end
+            uniqueName = if results_by_personId.length > 1
+                           # Two or more people with the same name set records at this competition!
+                           # Append their WCA IDs to distinguish between them.
+                           "[#{personName} (#{personId})](#{person_url personId})"
+                         else
+                           "[#{personName}](#{person_url personId})"
+                         end
             record_strs = results.sort_by do |r|
               round_type = RoundType.c_find(r.roundTypeId)
               [Event.c_find(r.eventId).rank, round_type.rank]
             end.map do |result|
               event = Event.c_find(result.eventId)
               record_strs = []
-              if result.regionalSingleRecord == code
-                record_strs << t('competitions.competition_info.regional_single_record', event_name: event.name, result: (result.to_s :best))
-              end
-              if result.regionalAverageRecord == code
-                record_strs << t('competitions.competition_info.regional_average_record', event_name: event.name, result: (result.to_s :average))
-              end
+              record_strs << t('competitions.competition_info.regional_single_record', event_name: event.name, result: (result.to_s :best)) if result.regionalSingleRecord == code
+              record_strs << t('competitions.competition_info.regional_average_record', event_name: event.name, result: (result.to_s :average)) if result.regionalAverageRecord == code
               record_strs
             end.flatten
             "#{uniqueName}&lrm; #{record_strs.to_sentence}"

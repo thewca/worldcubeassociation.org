@@ -46,16 +46,20 @@ module Registrations
     end
 
     def self.bulk_update_allowed!(bulk_update_request, current_user)
+      update_requests = bulk_update_request['requests']
       raise WcaExceptions::BulkUpdateError.new(:bad_request, [Registrations::ErrorCodes::INVALID_REQUEST_DATA]) if
-        bulk_update_request['requests'].blank?
+        update_requests.blank?
 
       competition = Competition.find(bulk_update_request['competition_id'])
+
+      raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::COMPETITOR_LIMIT_REACHED) if
+        will_exceed_competitor_limit?(update_requests, competition)
 
       raise WcaExceptions::BulkUpdateError.new(:unauthorized, [Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS]) unless
         current_user.can_manage_competition?(competition)
 
       errors = {}
-      bulk_update_request['requests'].each do |update_request|
+      update_requests.each do |update_request|
         update_registration_allowed!(update_request, competition, current_user)
       rescue WcaExceptions::RegistrationError => e
         errors[update_request['user_id']] = e.error
@@ -65,6 +69,15 @@ module Registrations
     end
 
     class << self
+      def will_exceed_competitor_limit?(update_requests, competition)
+        registrations_to_be_accepted = update_requests.count { |r| r.dig('competing', 'status') == Registrations::Helper::STATUS_ACCEPTED }
+        total_accepted_registrations_after_update = competition.registrations.accepted_count + registrations_to_be_accepted
+
+        competition.competitor_limit_enabled &&
+          registrations_to_be_accepted > 0 &&
+          total_accepted_registrations_after_update > competition.competitor_limit
+      end
+      
       def user_can_modify_registration!(competition, current_user, target_user, registration, new_status)
         raise WcaExceptions::RegistrationError.new(:unauthorized, Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) unless
           can_administer_or_current_user?(competition, current_user, target_user)
@@ -108,6 +121,7 @@ module Registrations
 
       def validate_qualifications!(request, competition, target_user)
         return unless competition.enforces_qualifications?
+
         event_ids = request.dig('competing', 'event_ids')
 
         unqualified_events = event_ids.filter do |event|
@@ -120,6 +134,7 @@ module Registrations
 
       def process_validation_error!(registration, field)
         return if registration.valid?
+
         error_details = registration.errors.details[field].first
 
         return if error_details.blank?

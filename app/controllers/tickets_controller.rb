@@ -15,9 +15,7 @@ class TicketsController < ApplicationController
 
     # Filter based on params
     type = params[:type]
-    if type
-      tickets = tickets.where(metadata_type: type)
-    end
+    tickets = tickets.where(metadata_type: type) if type
 
     status = params[:status]
     tickets = tickets.select do |ticket|
