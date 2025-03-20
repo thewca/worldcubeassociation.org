@@ -140,14 +140,10 @@ module Registrations
         process_validation_error!(registration, :registration_competition_events)
       end
 
-      def read_error_details(ar_entity, field)
-        return if ar_entity.valid?
-
-        ar_entity.errors.details[field].first
-      end
-
       def process_validation_error!(registration, field)
-        error_details = read_error_details(registration, field)
+        return if registration.valid?
+
+        error_details = registration.errors.details[field]&.first
 
         return if error_details.blank?
 
@@ -158,21 +154,27 @@ module Registrations
       def process_nested_validation_error!(registration, association, field)
         return if registration.valid?
 
-        error_details = registration.public_send(association).index_with do |entity|
-          read_error_details(entity, field)
-        end.compact
+        grouped_error_details = registration.public_send(association)
+                                            .reject { it.valid? }
+                                            .index_with { it.errors.details[field]&.presence }
+                                            .compact
 
-        return if error_details.empty?
+        return if grouped_error_details.empty?
 
-        # We somewhat arbitrarily throw an error about the first thing that we stumble upon
-        first_error_type = error_details.values.first[:error]
-        same_error_details = error_details.select { |_, v| v[:error] == first_error_type }
+        # Re-key: From { obj: [error1, error2, error3] } to { error1: { obj: error }, error2: { obj, error }, error3: { obj: error } }
+        objects_by_error = grouped_error_details.flat_map { |obj, errors| errors.map { |err| [err.slice(:error, :frontend_code), obj, err] } }
+                                                .group_by { |meta, _obj, _err| meta }
+                                                .transform_values { it.to_h { |_meta, obj, err| [obj, err] } }
 
-        grouped_error_details = same_error_details.keys
-        grouped_error_details = grouped_error_details.map { yield it } if block_given?
+        # Just like in the single-property case above, we throw an error about the first thing that we stumble upon
+        error_details, errored_entities = objects_by_error.first
 
-        frontend_code = same_error_details.values.first[:frontend_code] || Registrations::ErrorCodes::INVALID_REQUEST_DATA
-        raise WcaExceptions::RegistrationError.new(:unprocessable_entity, frontend_code, grouped_error_details)
+        errored_entities = errored_entities.keys
+        # Transform for better readability, if the user so desires
+        errored_entities = errored_entities.map { yield it } if block_given?
+
+        frontend_code = error_details[:frontend_code] || Registrations::ErrorCodes::INVALID_REQUEST_DATA
+        raise WcaExceptions::RegistrationError.new(:unprocessable_entity, frontend_code, errored_entities)
       end
 
       def validate_guests!(registration)
