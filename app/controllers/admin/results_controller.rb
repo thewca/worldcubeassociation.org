@@ -40,14 +40,10 @@ module Admin
       #   - either lock them and reply ok, or there is none to lock and reply
       #   it was a no-op.
       @updated_competitions = Competition.pending_posting.where(posting_user: nil).where(id: params[:competition_ids])
-      if @updated_competitions.empty?
-        return render json: { error: "No competitions to lock." }
-      end
+      return render json: { error: "No competitions to lock." } if @updated_competitions.empty?
 
       json = { error: "Something went wrong." }
-      if @updated_competitions.update(posting_user: current_user)
-        json = { message: "Competitions successfully locked, go on posting!" }
-      end
+      json = { message: "Competitions successfully locked, go on posting!" } if @updated_competitions.update(posting_user: current_user)
 
       render json: json
     end
@@ -127,9 +123,7 @@ module Admin
                else
                  ["The result was saved."]
                end
-        if competitions_to_validate.size > 1
-          info << "The results was moved to another competition, make sure to check the competition validators for both of them."
-        end
+        info << "The results was moved to another competition, make sure to check the competition validators for both of them." if competitions_to_validate.size > 1
         render json: {
           # Make sure we emit the competition's id next to the info, because we
           # may validate multiple competitions at the same time.

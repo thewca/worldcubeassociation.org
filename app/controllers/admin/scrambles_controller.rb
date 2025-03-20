@@ -55,9 +55,7 @@ module Admin
                else
                  ["The scramble was saved."]
                end
-        if competitions_to_validate.size > 1
-          info << "The scrambles was moved to another competition, make sure to check the competition validators for both of them."
-        end
+        info << "The scrambles was moved to another competition, make sure to check the competition validators for both of them." if competitions_to_validate.size > 1
         render json: {
           # Make sure we emit the competition's id next to the info, because we
           # may validate multiple competitions at the same time.

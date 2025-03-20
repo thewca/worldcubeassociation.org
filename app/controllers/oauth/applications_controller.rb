@@ -48,9 +48,7 @@ class Oauth::ApplicationsController < ApplicationController
     @application = Doorkeeper::Application.find(params[:id])
     # Don't let users view or edit applications they don't own,
     # unless they're an admin.
-    if @application.owner != current_user && !current_user.admin?
-      raise ActionController::RoutingError.new('Not Found')
-    end
+    raise ActionController::RoutingError.new('Not Found') if @application.owner != current_user && !current_user.admin?
   end
 
   private def application_params

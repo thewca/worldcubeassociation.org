@@ -27,9 +27,7 @@ class TimeLimit
 
   validates :centiseconds, numericality: { only_integer: true }
   validate do
-    unless self.cumulative_round_ids.is_a?(Array) && self.cumulative_round_ids.all?(String)
-      errors.add(:cumulative_round_ids, "must be an Array of Strings")
-    end
+    errors.add(:cumulative_round_ids, "must be an Array of Strings") unless self.cumulative_round_ids.is_a?(Array) && self.cumulative_round_ids.all?(String)
   end
 
   def initialize(centiseconds: 10.minutes.in_centiseconds, cumulative_round_ids: [].freeze)
@@ -60,6 +58,7 @@ class TimeLimit
   # this file.
   def self.load(json)
     return UNDEF_TL.dup if json.nil?
+
     TimeLimit.new.tap do |time_limit|
       json_obj = json.is_a?(Hash) ? json : JSON.parse(json)
       time_limit.cumulative_round_ids = json_obj['cumulativeRoundIds']
@@ -83,6 +82,7 @@ class TimeLimit
 
   def to_s(round)
     return "" if round.has_undef_tl?
+
     time_str = SolveTime.new(round.event.id, :best, self.centiseconds).clock_format
     case self.cumulative_round_ids.length
     when 0

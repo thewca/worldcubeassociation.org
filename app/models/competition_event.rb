@@ -25,9 +25,7 @@ class CompetitionEvent < ApplicationRecord
   validate do
     remaining_rounds = rounds.reject(&:marked_for_destruction?)
     numbers = remaining_rounds.map(&:number).sort
-    if numbers != (1..remaining_rounds.length).to_a
-      errors.add(:rounds, "#{numbers} is wrong")
-    end
+    errors.add(:rounds, "#{numbers} is wrong") if numbers != (1..remaining_rounds.length).to_a
   end
 
   def currency_code

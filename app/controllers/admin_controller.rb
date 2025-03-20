@@ -190,9 +190,7 @@ class AdminController < ApplicationController
 
     # This makes sure the json structure is valid!
     if @upload_json.import_to_inbox
-      if @competition.results_submitted_at.nil?
-        @competition.update!(results_submitted_at: Time.now)
-      end
+      @competition.update!(results_submitted_at: Time.now) if @competition.results_submitted_at.nil?
       flash[:success] = "JSON file has been imported."
       redirect_to competition_admin_upload_results_edit_path
     else
@@ -314,10 +312,10 @@ class AdminController < ApplicationController
     @competition_ids = competition_list_from_string(@competition_ids_string)
     @persons_to_finish = FinishUnfinishedPersons.search_persons(@competition_ids)
 
-    if @persons_to_finish.empty?
-      flash[:warning] = "There are no persons to complete for the selected competition"
-      redirect_to panel_page_path(id: User.panel_pages[:createNewComers], competition_ids: @competition_ids)
-    end
+    return unless @persons_to_finish.empty?
+
+    flash[:warning] = "There are no persons to complete for the selected competition"
+    redirect_to panel_page_path(id: User.panel_pages[:createNewComers], competition_ids: @competition_ids)
   end
 
   def do_complete_persons
@@ -373,9 +371,7 @@ class AdminController < ApplicationController
     if continue_batch
       can_continue = FinishUnfinishedPersons.unfinished_results_scope(competition_list_from_string(competition_ids)).any?
 
-      if can_continue
-        return redirect_to action: :complete_persons, competition_ids: competition_ids
-      end
+      return redirect_to action: :complete_persons, competition_ids: competition_ids if can_continue
     end
 
     redirect_to panel_page_path(id: User.panel_pages[:createNewComers], competition_ids: competition_ids)

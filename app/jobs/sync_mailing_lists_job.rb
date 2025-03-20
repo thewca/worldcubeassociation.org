@@ -55,14 +55,10 @@ class SyncMailingListsJob < WcaCronjob
         else
           delegate_emails << role_email
         end
-        if role_status == RolesMetadataDelegateRegions.statuses[:senior_delegate]
-          senior_emails << role_email
-        end
+        senior_emails << role_email if role_status == RolesMetadataDelegateRegions.statuses[:senior_delegate]
       end
       region_email_id = region.metadata&.email
-      if region_email_id.present?
-        GsuiteMailingLists.sync_group(region_email_id, region_emails.uniq)
-      end
+      GsuiteMailingLists.sync_group(region_email_id, region_emails.uniq) if region_email_id.present?
     end
     GsuiteMailingLists.sync_group("delegates@worldcubeassociation.org", delegate_emails.uniq)
     GsuiteMailingLists.sync_group("trainees@worldcubeassociation.org", trainee_emails.uniq)

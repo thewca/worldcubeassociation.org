@@ -36,9 +36,7 @@ module ResultsValidators
 
         check_events_match(competition, results_for_comp)
 
-        if competition.has_rounds?
-          check_rounds_match(competition, results_for_comp)
-        end
+        check_rounds_match(competition, results_for_comp) if competition.has_rounds?
       end
     end
 
