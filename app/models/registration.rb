@@ -135,6 +135,13 @@ class Registration < ApplicationRecord
     )
   end
 
+  def entry_fee_with_donation(iso_donation = 0)
+    Money.new(
+      entry_fee.cents + iso_donation,
+      entry_fee.currency,
+    )
+  end
+
   def paid_entry_fees
     Money.new(
       # NOTE: we do *not* sum on the association, as it bypasses any clean
@@ -244,6 +251,7 @@ class Registration < ApplicationRecord
     private_attributes = pii ? %w[dob email] : nil
 
     base_json = {
+      id: self.id,
       user: user.as_json(only: %w[id wca_id name gender country_iso2], methods: %w[country], include: [], private_attributes: private_attributes),
       user_id: user_id,
       competing: {

@@ -452,17 +452,153 @@ RSpec.describe 'API Registrations' do
     end
   end
 
+  def stub_successful_stripe_payment_intent(amount, currency)
+    stub_request(:post, "https://api.stripe.com/v1/payment_intents")
+      .to_return(
+        status: 200,
+        headers: { 'Content-Type' => 'application/json' },
+        body: {
+          id: "pi_3MtwBwLkdIwHu7ix28a3tqPa",
+          object: "payment_intent",
+          amount: amount,
+          amount_capturable: 0,
+          amount_details: {
+            tip: {},
+          },
+          amount_received: 0,
+          application: nil,
+          application_fee_amount: nil,
+          automatic_payment_methods: {
+            enabled: true,
+          },
+          canceled_at: nil,
+          cancellation_reason: nil,
+          capture_method: "automatic",
+          client_secret: "pi_3MtwBwLkdIwHu7ix28a3tqPa_secret_YrKJUKribcBjcG8HVhfZluoGH",
+          confirmation_method: "automatic",
+          created: 1_680_800_504,
+          currency: currency,
+          customer: nil,
+          description: nil,
+          invoice: nil,
+          last_payment_error: nil,
+          latest_charge: nil,
+          livemode: false,
+          metadata: {},
+          next_action: nil,
+          on_behalf_of: nil,
+          payment_method: nil,
+          payment_method_options: {
+            card: {
+              installments: nil,
+              mandate_options: nil,
+              network: nil,
+              request_three_d_secure: "automatic",
+            },
+            link: {
+              persistent_token: nil,
+            },
+          },
+          payment_method_types: [
+            "card",
+            "link",
+          ],
+          processing: nil,
+          receipt_email: nil,
+          review: nil,
+          setup_future_usage: nil,
+          shipping: nil,
+          source: nil,
+          statement_descriptor: nil,
+          statement_descriptor_suffix: nil,
+          status: "requires_payment_method",
+          transfer_data: nil,
+          transfer_group: nil,
+        }.to_json,
+      )
+  end
+
   describe 'GET #payment_ticket' do
+    let(:competition) { FactoryBot.create(:competition, :registration_open, :with_organizer, :stripe_connected) }
+    let(:reg) { FactoryBot.create(:registration, :pending, competition: competition) }
+    let(:headers) { { 'Authorization' => fetch_jwt_token(reg.user_id) } }
+
+    it 'successfully builds a payment_intent via Stripe API' do
+      get api_v1_registrations_payment_ticket_path(competition_id: competition.id), headers: headers
+      expect(response).to be_successful
+    end
+
+    context 'mocked Stripe API' do
+      context 'successful payment ticket' do
+        before do
+          stub_successful_stripe_payment_intent(1000, 'usd')
+          get api_v1_registrations_payment_ticket_path(competition_id: competition.id), headers: headers
+        end
+
+        it 'returns a client secret' do
+          expect(response.parsed_body.keys).to include('client_secret')
+        end
+
+        it 'creates a payment intent' do
+          expect(PaymentIntent.find_by(holder_type: "Registration", holder_id: reg.id)).to be_present
+        end
+
+        it 'payment intent details match expected values' do
+          payment_record = PaymentIntent.find_by(holder_type: "Registration", holder_id: reg.id).payment_record
+          expect(payment_record.amount_stripe_denomination).to be(1000)
+          expect(payment_record.currency_code).to eq("usd")
+        end
+      end
+
+      it 'has the correct payment_intent properties when a donation is present' do
+        stub_successful_stripe_payment_intent(2300, 'usd')
+        get api_v1_registrations_payment_ticket_path(competition_id: competition.id), headers: headers, params: { donation_iso: 1300 }
+
+        payment_record = PaymentIntent.find_by(holder_type: "Registration", holder_id: reg.id).payment_record
+        expect(payment_record.amount_stripe_denomination).to be(2300)
+        expect(payment_record.currency_code).to eq("usd")
+      end
+    end
+
     it 'refuses ticket create request if registration is closed' do
       closed_comp = FactoryBot.create(:competition, :registration_closed, :with_organizer, :stripe_connected)
-      reg = FactoryBot.create(:registration, :pending, competition: closed_comp)
+      closed_reg = FactoryBot.create(:registration, :pending, competition: closed_comp)
 
-      headers = { 'Authorization' => fetch_jwt_token(reg.user_id) }
+      headers = { 'Authorization' => fetch_jwt_token(closed_reg.user_id) }
       get api_v1_registrations_payment_ticket_path(competition_id: closed_comp.id), headers: headers
 
       body = response.parsed_body
       expect(response).to have_http_status(:forbidden)
       expect(body).to eq({ error: Registrations::ErrorCodes::REGISTRATION_CLOSED }.with_indifferent_access)
+    end
+  end
+
+  describe 'GET #payment_denomination' do
+    let(:competition) {
+      FactoryBot.create(:competition,
+                        :registration_open,
+                        :with_organizer,
+                        :stripe_connected,
+                        currency_code: "SEK",
+                        base_entry_fee_lowest_denomination: 1500)
+    }
+    let(:reg) { FactoryBot.create(:registration, :pending, competition: competition) }
+    let(:headers) { { 'Authorization' => fetch_jwt_token(reg.user_id) } }
+
+    it 'returns a hash of amounts/currencies formatted for payment providers' do
+      expected_response = { api_amounts: { stripe: 1500, paypal: "15.00" }, human_amount: "15 kr (Swedish Krona)" }.with_indifferent_access
+      get registration_payment_denomination_path(id: reg.id), headers: headers
+
+      expect(response).to be_successful
+      expect(response.parsed_body).to eq(expected_response)
+    end
+
+    it 'allows a donation to be specified' do
+      expected_response = { api_amounts: { stripe: 2500, paypal: "25.00" }, human_amount: "25 kr (Swedish Krona)" }.with_indifferent_access
+      get registration_payment_denomination_path(id: reg.id), headers: headers, params: { iso_donation: 1000 }
+
+      expect(response).to be_successful
+      expect(response.parsed_body).to eq(expected_response)
     end
   end
 end
