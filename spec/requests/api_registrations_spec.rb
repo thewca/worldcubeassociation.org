@@ -458,63 +458,63 @@ RSpec.describe 'API Registrations' do
         status: 200,
         headers: { 'Content-Type' => 'application/json' },
         body: {
-          "id": "pi_3MtwBwLkdIwHu7ix28a3tqPa",
-          "object": "payment_intent",
-          "amount": amount,
-          "amount_capturable": 0,
-          "amount_details": {
-            "tip": {}
+          id: "pi_3MtwBwLkdIwHu7ix28a3tqPa",
+          object: "payment_intent",
+          amount: amount,
+          amount_capturable: 0,
+          amount_details: {
+            tip: {},
           },
-          "amount_received": 0,
-          "application": nil,
-          "application_fee_amount": nil,
-          "automatic_payment_methods": {
-            "enabled": true
+          amount_received: 0,
+          application: nil,
+          application_fee_amount: nil,
+          automatic_payment_methods: {
+            enabled: true,
           },
-          "canceled_at": nil,
-          "cancellation_reason": nil,
-          "capture_method": "automatic",
-          "client_secret": "pi_3MtwBwLkdIwHu7ix28a3tqPa_secret_YrKJUKribcBjcG8HVhfZluoGH",
-          "confirmation_method": "automatic",
-          "created": 1680800504,
-          "currency": currency,
-          "customer": nil,
-          "description": nil,
-          "invoice": nil,
-          "last_payment_error": nil,
-          "latest_charge": nil,
-          "livemode": false,
-          "metadata": {},
-          "next_action": nil,
-          "on_behalf_of": nil,
-          "payment_method": nil,
-          "payment_method_options": {
-            "card": {
-              "installments": nil,
-              "mandate_options": nil,
-              "network": nil,
-              "request_three_d_secure": "automatic"
+          canceled_at: nil,
+          cancellation_reason: nil,
+          capture_method: "automatic",
+          client_secret: "pi_3MtwBwLkdIwHu7ix28a3tqPa_secret_YrKJUKribcBjcG8HVhfZluoGH",
+          confirmation_method: "automatic",
+          created: 1_680_800_504,
+          currency: currency,
+          customer: nil,
+          description: nil,
+          invoice: nil,
+          last_payment_error: nil,
+          latest_charge: nil,
+          livemode: false,
+          metadata: {},
+          next_action: nil,
+          on_behalf_of: nil,
+          payment_method: nil,
+          payment_method_options: {
+            card: {
+              installments: nil,
+              mandate_options: nil,
+              network: nil,
+              request_three_d_secure: "automatic",
             },
-            "link": {
-              "persistent_token": nil
-            }
+            link: {
+              persistent_token: nil,
+            },
           },
-          "payment_method_types": [
+          payment_method_types: [
             "card",
-            "link"
+            "link",
           ],
-          "processing": nil,
-          "receipt_email": nil,
-          "review": nil,
-          "setup_future_usage": nil,
-          "shipping": nil,
-          "source": nil,
-          "statement_descriptor": nil,
-          "statement_descriptor_suffix": nil,
-          "status": "requires_payment_method",
-          "transfer_data": nil,
-          "transfer_group": nil
-        }.to_json
+          processing: nil,
+          receipt_email: nil,
+          review: nil,
+          setup_future_usage: nil,
+          shipping: nil,
+          source: nil,
+          statement_descriptor: nil,
+          statement_descriptor_suffix: nil,
+          status: "requires_payment_method",
+          transfer_data: nil,
+          transfer_group: nil,
+        }.to_json,
       )
   end
 
@@ -522,6 +522,7 @@ RSpec.describe 'API Registrations' do
     let(:competition) { FactoryBot.create(:competition, :registration_open, :with_organizer, :stripe_connected) }
     let(:reg) { FactoryBot.create(:registration, :pending, competition: competition) }
     let(:headers) { { 'Authorization' => fetch_jwt_token(reg.user_id) } }
+
     it 'successfully builds a payment_intent via Stripe API' do
       get api_v1_registrations_payment_ticket_path(competition_id: competition.id), headers: headers
       expect(response).to be_successful
@@ -573,26 +574,27 @@ RSpec.describe 'API Registrations' do
   end
 
   describe 'GET #payment_denomination' do
-    let(:competition) { FactoryBot.create(:competition,
-      :registration_open,
-      :with_organizer,
-      :stripe_connected,
-      currency_code: "SEK",
-      base_entry_fee_lowest_denomination: 1500,
-    ) }
+    let(:competition) {
+      FactoryBot.create(:competition,
+                        :registration_open,
+                        :with_organizer,
+                        :stripe_connected,
+                        currency_code: "SEK",
+                        base_entry_fee_lowest_denomination: 1500)
+    }
     let(:reg) { FactoryBot.create(:registration, :pending, competition: competition) }
     let(:headers) { { 'Authorization' => fetch_jwt_token(reg.user_id) } }
 
     it 'returns a hash of amounts/currencies formatted for payment providers' do
-      expected_response = { api_amounts: { stripe: 1500, paypal:"15.00" }, human_amount: "15 kr (Swedish Krona)" }.with_indifferent_access
+      expected_response = { api_amounts: { stripe: 1500, paypal: "15.00" }, human_amount: "15 kr (Swedish Krona)" }.with_indifferent_access
       get registration_payment_denomination_path(id: reg.id), headers: headers
 
       expect(response).to be_successful
       expect(response.parsed_body).to eq(expected_response)
     end
 
-      it 'allows a donation to be specified' do
-      expected_response = { api_amounts: { stripe: 2500, paypal:"25.00" }, human_amount: "25 kr (Swedish Krona)" }.with_indifferent_access
+    it 'allows a donation to be specified' do
+      expected_response = { api_amounts: { stripe: 2500, paypal: "25.00" }, human_amount: "25 kr (Swedish Krona)" }.with_indifferent_access
       get registration_payment_denomination_path(id: reg.id), headers: headers, params: { donation_lowest_denomination: 1000 }
 
       expect(response).to be_successful
