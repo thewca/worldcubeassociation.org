@@ -616,8 +616,8 @@ RSpec.describe 'API Registrations' do
       bulk_update_request = FactoryBot.build(
         :bulk_update_request,
         user_ids: user_ids,
-        submitted_by: default_competition.organizers.first.id,
-        competition_id: default_competition.id,
+        submitted_by: competition.organizers.first.id,
+        competition_id: competition.id,
         requests: [failed_update],
       )
 
@@ -653,8 +653,10 @@ RSpec.describe 'API Registrations' do
       patch api_v1_registrations_bulk_update_path, params: bulk_update_request, headers: headers
 
       error_json = {
-        registration1[:user_id] => Registrations::ErrorCodes::INVALID_EVENT_SELECTION,
-        registration2[:user_id] => Registrations::ErrorCodes::INVALID_REQUEST_DATA,
+        error: {
+          registration1[:user_id] => Registrations::ErrorCodes::INVALID_EVENT_SELECTION,
+          registration2[:user_id] => Registrations::ErrorCodes::INVALID_REQUEST_DATA,
+        }
       }.to_json
 
       expect(response.body).to eq(error_json)
@@ -676,7 +678,9 @@ RSpec.describe 'API Registrations' do
       patch api_v1_registrations_bulk_update_path, params: bulk_update_request, headers: headers
 
       error_json = {
-        missing_registration_user_id => Registrations::ErrorCodes::REGISTRATION_NOT_FOUND,
+        error: {
+            missing_registration_user_id => Registrations::ErrorCodes::REGISTRATION_NOT_FOUND,
+          }
       }.to_json
 
       expect(response.body).to eq(error_json)
@@ -709,8 +713,10 @@ RSpec.describe 'API Registrations' do
       patch api_v1_registrations_bulk_update_path, params: bulk_update_request, headers: headers
 
       error_json = {
-        registration1.user_id => Registrations::ErrorCodes::INVALID_EVENT_SELECTION,
-        missing_registration_user_id => Registrations::ErrorCodes::REGISTRATION_NOT_FOUND,
+        error: {
+          registration1.user_id => Registrations::ErrorCodes::INVALID_EVENT_SELECTION,
+          missing_registration_user_id => Registrations::ErrorCodes::REGISTRATION_NOT_FOUND,
+        }
       }.to_json
 
       expect(response.body).to eq(error_json)
