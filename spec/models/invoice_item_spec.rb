@@ -4,38 +4,36 @@ require 'rails_helper'
 
 RSpec.describe InvoiceItem do
  describe "validations" do
-    let(:registration) { FactoryBot.build_stubbed(:registration) }
-
     describe "consistent_currency_code" do
       context "when creating the first invoice item for a registration" do
         it "is valid with any currency code" do
-          invoice_item = FactoryBot.create(:invoice_item, :entry, custom_registration: registration, currency_code: "USD")
+          invoice_item = FactoryBot.create(:invoice_item, :entry, currency_code: "USD")
           expect(invoice_item).to be_valid
         end
 
         it "can change its currency code after being created" do
-          invoice_item = FactoryBot.create(:invoice_item, :entry, custom_registration: registration, currency_code: "USD")
+          invoice_item = FactoryBot.create(:invoice_item, :entry, currency_code: "USD")
           invoice_item.update(currency_code: "EUR")
           expect(invoice_item).to be_valid
         end
       end
 
       context "when adding subsequent invoice items" do
-        let!(:existing_item) { FactoryBot.create(:invoice_item, :entry, registration: registration) }
+        let!(:existing_item) { FactoryBot.create(:invoice_item, :entry) }
 
         it "is valid when currency code matches existing items" do
-          invoice_item = FactoryBot.build(:invoice_item, :entry, registration: registration)
+          invoice_item = FactoryBot.build(:invoice_item, :entry, registration: existing_item.registration)
           expect(invoice_item).to be_valid
         end
 
         it "is invalid when currency code differs from existing items" do
-          invoice_item = FactoryBot.build(:invoice_item, registration: registration, currency_code: "EUR")
+          invoice_item = FactoryBot.build(:invoice_item, currency_code: "EUR", registration: existing_item.registration)
           expect(invoice_item).to be_invalid
           expect(invoice_item.errors[:currency_code]).to include("must be USD to match existing items in this registration")
         end
 
         it "ignores itself when validating existing records" do
-          invoice_item = FactoryBot.create(:invoice_item, registration: registration, currency_code: "USD")
+          invoice_item = FactoryBot.create(:invoice_item, currency_code: "USD", registration: existing_item.registration)
 
           # Modify the same record and ensure it remains valid
           invoice_item.display_name = "Updated display name"
@@ -45,7 +43,7 @@ RSpec.describe InvoiceItem do
     end
 
     describe "monetized attributes" do
-      let(:item) { FactoryBot.create(:invoice_item, :entry, registration: registration) }
+      let(:item) { FactoryBot.create(:invoice_item, :entry) }
 
       it "monetizes amount_lowest_denomination" do
         expect(item.amount).to be_a Money
@@ -73,7 +71,7 @@ RSpec.describe InvoiceItem do
       end
 
       it 'updates all invoice_items to paid if invoice fully paid' do
-        FactoryBot.create(:invoice_item, custom_registration: registration, display_name: "arbitrary payment", amount_lowest_denomination: 350)
+        FactoryBot.create(:invoice_item, display_name: "arbitrary payment", amount_lowest_denomination: 350)
         FactoryBot.create(:registration_payment, registration: registration, amount_lowest_denomination: registration.invoice_items_total)
         registration.invoice_items.each { |i| expect(i.status).to eq('paid') }
       end
@@ -86,7 +84,7 @@ RSpec.describe InvoiceItem do
       end
 
       it 'all invoice_items remain unpaid' do
-        FactoryBot.create(:invoice_item, custom_registration: registration, display_name: "arbitrary payment", amount_lowest_denomination: 350)
+        FactoryBot.create(:invoice_item, display_name: "arbitrary payment", amount_lowest_denomination: 350)
         FactoryBot.create(:registration_payment, registration: registration, amount_lowest_denomination: registration.invoice_items_total-100)
         registration.invoice_items.each { |i| expect(i.status).to eq('unpaid') }
       end
@@ -99,7 +97,7 @@ RSpec.describe InvoiceItem do
       end
 
       it 'all invoice_items remain unpaid' do
-        FactoryBot.create(:invoice_item, custom_registration: registration, display_name: "arbitrary payment", amount_lowest_denomination: 350)
+        FactoryBot.create(:invoice_item, display_name: "arbitrary payment", amount_lowest_denomination: 350)
         FactoryBot.create(:registration_payment, registration: registration, amount_lowest_denomination: registration.invoice_items_total+100)
         registration.invoice_items.each { |i| expect(i.status).to eq('unpaid') }
       end

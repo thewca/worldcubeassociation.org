@@ -118,11 +118,13 @@ FactoryBot.define do
       paid
     end
 
-    trait :paid_no_hooks do
+    trait :without_callbacks do
+      after(:build) do |registration|
+        Registration.skip_callback(:create)
+      end
+
       after(:create) do |registration|
-        payment = FactoryBot.build :registration_payment, registration: registration, user: registration.user,
-                                                          amount_lowest_denomination: registration.competition.base_entry_fee_lowest_denomination
-        payment.save(validate: false)
+        Registration.reset_callbacks(:create)
       end
     end
 

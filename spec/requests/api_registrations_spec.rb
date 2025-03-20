@@ -426,6 +426,8 @@ RSpec.describe 'API Registrations' do
   end
 
   describe 'GET #payment_ticket' do
+    it 'returns a '
+
     it 'refuses ticket create request if registration is closed' do
       closed_comp = FactoryBot.create(:competition, :registration_closed, :with_organizer, :stripe_connected)
       reg = FactoryBot.create(:registration, :pending, competition: closed_comp)
@@ -438,4 +440,8 @@ RSpec.describe 'API Registrations' do
       expect(body).to eq({ error: Registrations::ErrorCodes::REGISTRATION_CLOSED }.with_indifferent_access)
     end
   end
+
+  describe 'GET #payment_denomination' do
+  end
+
 end
