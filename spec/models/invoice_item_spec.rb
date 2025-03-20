@@ -4,12 +4,12 @@ require 'rails_helper'
 
 RSpec.describe InvoiceItem do
  describe "validations" do
-    describe "consistent_currency_code" do
-      let(:registration) { FactoryBot.build_stubbed(:registration) }
+    let(:registration) { FactoryBot.build_stubbed(:registration) }
 
+    describe "consistent_currency_code" do
       context "when creating the first invoice item for a registration" do
         it "is valid with any currency code" do
-          invoice_item = FactoryBot.build(:invoice_item, :entry, registration: registration, currency_code: "USD")
+          invoice_item = FactoryBot.create(:invoice_item, :entry, custom_registration: registration, currency_code: "USD")
           expect(invoice_item).to be_valid
         end
 
@@ -43,6 +43,24 @@ RSpec.describe InvoiceItem do
         end
       end
     end
+
+    describe "monetized attributes" do
+      let(:item) { FactoryBot.create(:invoice_item, :entry, registration: registration) }
+
+      it "monetizes amount_lowest_denomination" do
+        expect(item.amount).to be_a Money
+        expect(item.amount.format).to eq "$10.00"
+      end
+
+      it "disallows nil values" do
+        item.amount_lowest_denomination = nil
+        expect(item).not_to be_valid
+      end
+
+      it "uses the correct currency" do
+        expect(item.amount.currency.iso_code).to eq "USD"
+      end
+    end
   end
 
   describe "update status after payment" do
@@ -74,7 +92,7 @@ RSpec.describe InvoiceItem do
       end
     end
 
-    context 'when payment is greater than invoice total', :tag do
+    context 'when payment is greater than invoice total' do
       it 'single invoice item remains unpaid' do
         FactoryBot.create(:registration_payment, registration: registration, amount_lowest_denomination: 10000)
         expect(registration.invoice_items.first.status).to eq('unpaid')
