@@ -452,108 +452,111 @@ RSpec.describe 'API Registrations' do
     end
   end
 
+  def stub_successful_stripe_payment_intent(amount, currency)
+    stub_request(:post, "https://api.stripe.com/v1/payment_intents")
+      .to_return(
+        status: 200,
+        headers: { 'Content-Type' => 'application/json' },
+        body: {
+          "id": "pi_3MtwBwLkdIwHu7ix28a3tqPa",
+          "object": "payment_intent",
+          "amount": amount,
+          "amount_capturable": 0,
+          "amount_details": {
+            "tip": {}
+          },
+          "amount_received": 0,
+          "application": nil,
+          "application_fee_amount": nil,
+          "automatic_payment_methods": {
+            "enabled": true
+          },
+          "canceled_at": nil,
+          "cancellation_reason": nil,
+          "capture_method": "automatic",
+          "client_secret": "pi_3MtwBwLkdIwHu7ix28a3tqPa_secret_YrKJUKribcBjcG8HVhfZluoGH",
+          "confirmation_method": "automatic",
+          "created": 1680800504,
+          "currency": currency,
+          "customer": nil,
+          "description": nil,
+          "invoice": nil,
+          "last_payment_error": nil,
+          "latest_charge": nil,
+          "livemode": false,
+          "metadata": {},
+          "next_action": nil,
+          "on_behalf_of": nil,
+          "payment_method": nil,
+          "payment_method_options": {
+            "card": {
+              "installments": nil,
+              "mandate_options": nil,
+              "network": nil,
+              "request_three_d_secure": "automatic"
+            },
+            "link": {
+              "persistent_token": nil
+            }
+          },
+          "payment_method_types": [
+            "card",
+            "link"
+          ],
+          "processing": nil,
+          "receipt_email": nil,
+          "review": nil,
+          "setup_future_usage": nil,
+          "shipping": nil,
+          "source": nil,
+          "statement_descriptor": nil,
+          "statement_descriptor_suffix": nil,
+          "status": "requires_payment_method",
+          "transfer_data": nil,
+          "transfer_group": nil
+        }.to_json
+      )
+  end
+
   describe 'GET #payment_ticket' do
     let(:competition) { FactoryBot.create(:competition, :registration_open, :with_organizer, :stripe_connected) }
     let(:reg) { FactoryBot.create(:registration, :pending, competition: competition) }
     let(:headers) { { 'Authorization' => fetch_jwt_token(reg.user_id) } }
-
-    before do
-      stub_request(:post, "https://api.stripe.com/v1/payment_intents")
-        .to_return(
-          status: 200,
-          headers: { 'Content-Type' => 'application/json' },
-          body: {
-            "id": "pi_3MtwBwLkdIwHu7ix28a3tqPa",
-            "object": "payment_intent",
-            "amount": 1000,
-            "amount_capturable": 0,
-            "amount_details": {
-              "tip": {}
-            },
-            "amount_received": 0,
-            "application": nil,
-            "application_fee_amount": nil,
-            "automatic_payment_methods": {
-              "enabled": true
-            },
-            "canceled_at": nil,
-            "cancellation_reason": nil,
-            "capture_method": "automatic",
-            "client_secret": "pi_3MtwBwLkdIwHu7ix28a3tqPa_secret_YrKJUKribcBjcG8HVhfZluoGH",
-            "confirmation_method": "automatic",
-            "created": 1680800504,
-            "currency": "usd",
-            "customer": nil,
-            "description": nil,
-            "invoice": nil,
-            "last_payment_error": nil,
-            "latest_charge": nil,
-            "livemode": false,
-            "metadata": {},
-            "next_action": nil,
-            "on_behalf_of": nil,
-            "payment_method": nil,
-            "payment_method_options": {
-              "card": {
-                "installments": nil,
-                "mandate_options": nil,
-                "network": nil,
-                "request_three_d_secure": "automatic"
-              },
-              "link": {
-                "persistent_token": nil
-              }
-            },
-            "payment_method_types": [
-              "card",
-              "link"
-            ],
-            "processing": nil,
-            "receipt_email": nil,
-            "review": nil,
-            "setup_future_usage": nil,
-            "shipping": nil,
-            "source": nil,
-            "statement_descriptor": nil,
-            "statement_descriptor_suffix": nil,
-            "status": "requires_payment_method",
-            "transfer_data": nil,
-            "transfer_group": nil
-          }.to_json
-        )
+    it 'successfully builds a payment_intent via Stripe API' do
+      get api_v1_registrations_payment_ticket_path(competition_id: competition.id), headers: headers
+      expect(response).to be_successful
     end
 
-    context 'successful payment ticket' do
-      before do
-        get api_v1_registrations_payment_ticket_path(competition_id: competition.id), headers: headers
+    context 'mocked Stripe API' do
+      context 'successful payment ticket' do
+        before do
+          stub_successful_stripe_payment_intent(1000, 'usd')
+          get api_v1_registrations_payment_ticket_path(competition_id: competition.id), headers: headers
+        end
+
+        it 'returns a client secret' do
+          expect(response.parsed_body.keys).to include('client_secret')
+        end
+
+        it 'creates a payment intent' do
+          expect(PaymentIntent.find_by(holder_type: "Registration", holder_id: reg.id)).to be_present
+        end
+
+        it 'payment intent details match expected values' do
+          payment_record = PaymentIntent.find_by(holder_type: "Registration", holder_id: reg.id).payment_record
+          expect(payment_record.amount_stripe_denomination).to be(1000)
+          expect(payment_record.currency_code).to eq("usd")
+        end
       end
 
-      it 'returns success' do
-        expect(response).to be_successful
-      end
+      it 'has the correct payment_intent properties when a donation is present' do
+        stub_successful_stripe_payment_intent(2300, 'usd')
+        get api_v1_registrations_payment_ticket_path(competition_id: competition.id), headers: headers, params: { donation_iso: 1300 }
 
-      # TODO: Refactor to use webmock instead of hitting the live API
-      it 'returns a client secret' do
-        expect(response.parsed_body.keys).to include('client_secret')
-      end
-
-      it 'creates a payment intent' do
-        expect(PaymentIntent.find_by(holder_type: "Registration", holder_id: reg.id)).to be_present
-      end
-
-      it 'payment intent details match expected values' do
         payment_record = PaymentIntent.find_by(holder_type: "Registration", holder_id: reg.id).payment_record
-        expect(payment_record.amount_stripe_denomination).to be(1000)
+        expect(payment_record.amount_stripe_denomination).to be(2300)
         expect(payment_record.currency_code).to eq("usd")
       end
-    end
-
-    it 'has the correct payment_intent properties when a donation is present' do
-      get api_v1_registrations_payment_ticket_path(competition_id: competition.id), headers: headers, params: { donation_iso: 1300 }
-
-      payment_record = PaymentIntent.find_by(holder_type: "Registration", holder_id: reg.id).payment_record
-      expect(payment_record.amount_stripe_denomination).to be(2300)
-      expect(payment_record.currency_code).to eq("usd")
     end
 
     it 'refuses ticket create request if registration is closed' do

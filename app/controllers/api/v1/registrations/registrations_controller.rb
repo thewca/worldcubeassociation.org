@@ -136,10 +136,11 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
 
   def payment_ticket
     donation = params[:donation_iso].to_i || 0
-    amount_iso = @competition.base_entry_fee_lowest_denomination
-    currency_iso = @competition.currency_code
+    # We could delegate this call to the prepare_intent function given that we're already giving it registration - however,
+    # in the long-term we want to decouple registrations from payments, so I'm deliberately not introducing any more tight coupling
+    amount_ruby_money = @registration.entry_fee_with_donation(donation)
     payment_account = @competition.payment_account_for(:stripe)
-    payment_intent = payment_account.prepare_intent(@registration, amount_iso + donation, currency_iso, @current_user)
+    payment_intent = payment_account.prepare_intent(@registration, amount_ruby_money.cents, amount_ruby_money.currency.iso_code, @current_user)
     render json: { client_secret: payment_intent.client_secret }
   end
 
