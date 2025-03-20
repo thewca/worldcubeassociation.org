@@ -79,6 +79,7 @@ module Registrations
 
       def validate_qualifications!(request, competition, target_user)
         return unless competition.enforces_qualifications?
+
         event_ids = request.dig('competing', 'event_ids')
 
         unqualified_events = event_ids.filter do |event|
@@ -91,6 +92,7 @@ module Registrations
 
       def process_validation_error!(registration, field)
         return if registration.valid?
+
         error_details = registration.errors.details[field].first
 
         return if error_details.blank?

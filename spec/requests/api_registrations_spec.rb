@@ -308,7 +308,7 @@ RSpec.describe 'API Registrations' do
         user_id: registration.user_id,
         competition_id: registration.competition.id,
         competing: { 'status' => 'cancelled' },
-        )
+      )
 
       headers = { 'Authorization' => update_request['jwt_token'] }
 
@@ -331,7 +331,7 @@ RSpec.describe 'API Registrations' do
         user_id: registration.user_id,
         competition_id: registration.competition.id,
         guests: 5,
-        )
+      )
 
       headers = { 'Authorization' => update_request['jwt_token'] }
 
@@ -354,7 +354,7 @@ RSpec.describe 'API Registrations' do
         competition_id: registration.competition.id,
         user_id: registration.user_id,
         competing: { 'comment' => 'updated_comment' },
-        )
+      )
 
       headers = { 'Authorization' => update_request['jwt_token'] }
 
