@@ -78,6 +78,8 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
   def user_can_modify_registration
     new_status = params.dig('competing', 'status')
     target_user = @registration.user
+    raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::COMPETITOR_LIMIT_REACHED) if
+      will_exceed_competitor_limit?(params, @competition)
     raise WcaExceptions::RegistrationError.new(:unauthorized, Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) unless
       can_administer_or_current_user?(@competition, @current_user, target_user)
     raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::USER_EDITS_NOT_ALLOWED) unless
@@ -240,5 +242,14 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
       other_series_ids.any? do |comp_id|
         Registration.find_by(competition_id: comp_id, user_id: target_user.id)&.might_attend?
       end
+    end
+
+    def will_exceed_competitor_limit?(update_requests, competition)
+      registrations_to_be_accepted = update_requests.count { |r| r.dig('competing', 'status') == Registrations::Helper::STATUS_ACCEPTED }
+      total_accepted_registrations_after_update = competition.registrations.accepted_count + registrations_to_be_accepted
+
+      competition.competitor_limit_enabled &&
+        registrations_to_be_accepted > 0 &&
+        total_accepted_registrations_after_update > competition.competitor_limit
     end
 end
