@@ -453,6 +453,35 @@ RSpec.describe 'API Registrations' do
   end
 
   describe 'GET #payment_ticket' do
+    context 'successful payment ticket' do
+      let(:competition) { FactoryBot.create(:competition, :registration_open, :with_organizer, :stripe_connected) }
+      let(:reg) { FactoryBot.create(:registration, :pending, competition: competition) }
+      let(:headers) { { 'Authorization' => fetch_jwt_token(reg.user_id) } }
+
+      before do
+        get api_v1_registrations_payment_ticket_path(competition_id: competition.id), headers: headers
+      end
+
+      it 'returns success' do
+        expect(response).to be_successful
+      end
+
+      # TODO: Refactor to use webmock instead of hitting the live API
+      it 'returns a client secret' do
+        expect(response.parsed_body.keys).to include('client_secret')
+      end
+
+      it 'creates a payment intent' do
+        expect(PaymentIntent.find_by(holder_type: "Registration", holder_id: reg.id)).to be_present
+      end
+
+      it 'payment intent details match expected values' do
+        payment_record = PaymentIntent.find_by(holder_type: "Registration", holder_id: reg.id).payment_record
+        expect(payment_record.amount_stripe_denomination).to be(1000)
+        expect(payment_record.currency_code).to eq("usd")
+      end
+    end
+
     it 'refuses ticket create request if registration is closed' do
       closed_comp = FactoryBot.create(:competition, :registration_closed, :with_organizer, :stripe_connected)
       reg = FactoryBot.create(:registration, :pending, competition: closed_comp)
