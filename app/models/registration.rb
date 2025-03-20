@@ -39,10 +39,6 @@ class Registration < ApplicationRecord
 
   validates :user, presence: true, on: [:create]
 
-  validates :guests, numericality: { greater_than_or_equal_to: 0 }
-
-  validates :guests, numericality: { less_than_or_equal_to: :guest_limit, if: :check_guest_limit? }
-
   validates :registered_at, presence: true
   # Set a `registered_at` timestamp for newly created records,
   #   but only if there is no value already specified from the outside
@@ -51,6 +47,10 @@ class Registration < ApplicationRecord
   private def mark_registered_at
     self.registered_at = current_time_from_proper_timezone
   end
+
+  validates :guests, numericality: { greater_than_or_equal_to: 0 }
+
+  validates :guests, numericality: { less_than_or_equal_to: :guest_limit, if: :check_guest_limit? }
 
   after_create :add_competition_entry_invoice_item
   def add_competition_entry_invoice_item
