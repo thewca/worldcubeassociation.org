@@ -398,6 +398,37 @@ RSpec.describe 'API Registrations' do
       patch api_v1_registrations_register_path, params: update_request, headers: headers
       expect(response).to have_http_status(:ok)
     end
+
+    RSpec.shared_examples 'user cant update rejected registration' do |initial_status, new_status|
+      it "user cant change 'status' => #{initial_status} to: #{new_status}" do
+        registration = FactoryBot.create(:registration, competing_status: initial_status.to_s, competition: competition)
+
+        update_request = FactoryBot.build(
+          :update_request,
+          user_id: registration.user_id,
+          competition_id: registration.competition.id,
+          competing: { 'status' => new_status },
+          )
+        headers = { 'Authorization' => update_request['jwt_token'] }
+
+        patch api_v1_registrations_register_path, params: update_request, headers: headers
+        error_json = {
+          error: Registrations::ErrorCodes::REGISTRATION_IS_REJECTED,
+        }.to_json
+
+        expect(response.body).to eq(error_json)
+        expect(response).to have_http_status(:unauthorized)
+        end
+      end
+
+    [
+      { initial_status: :rejected, new_status: 'cancelled' },
+      { initial_status: :rejected, new_status: 'accepted' },
+      { initial_status: :rejected, new_status: 'waiting_list' },
+      { initial_status: :rejected, new_status: 'pending' },
+    ].each do |params|
+      it_behaves_like 'user cant update rejected registration', params[:initial_status], params[:new_status]
+    end
   end
 
   describe 'PATCH #bulk_update' do
