@@ -10,6 +10,31 @@ RSpec.describe Registrations::RegistrationChecker do
 
   describe '#create' do
     describe '#create_registration_allowed!' do
+      it 'can perform a full check without firing any DB writes', :clean_db_with_truncation do
+        registration_request = FactoryBot.build(
+          :registration_request,
+          competition_id: default_competition.id,
+          user_id: default_user.id,
+          guests: 10,
+          raw_comment: 'This is a perfectly legitimate registration',
+          events: ['222', '333', 'pyram'],
+        )
+
+        expect {
+          Registrations::RegistrationChecker.create_registration_allowed!(
+            registration_request, User.find(registration_request['submitted_by'])
+          )
+        }.not_to raise_error
+
+        ActiveRecord::Base.connected_to(role: :reading, prevent_writes: true) do
+          expect {
+            Registrations::RegistrationChecker.create_registration_allowed!(
+              registration_request, User.find(registration_request['submitted_by'])
+            )
+          }.not_to raise_error
+        end
+      end
+
       it 'user cant create a duplicate registration' do
         existing_reg = FactoryBot.create(:registration, competition: default_competition)
 
