@@ -437,6 +437,7 @@ RSpec.describe 'API Registrations' do
     let(:user1) { FactoryBot.create :user }
     let(:user2) { FactoryBot.create :user }
     let(:user3) { FactoryBot.create :user }
+    let(:user_ids) { [user1.id, user2.id, user3.id]}
 
     let(:registration1) { FactoryBot.create(:registration, competition: competition, user: user1) }
     let(:registration2) { FactoryBot.create(:registration, competition: competition, user: user2) }
@@ -561,6 +562,160 @@ RSpec.describe 'API Registrations' do
       patch api_v1_registrations_bulk_update_path, params: bulk_update_request, headers: headers
 
       expect(response).to have_http_status(:bad_request)
+    end
+
+    it 'users cant submit bulk updates' do
+      bulk_update_request = FactoryBot.build(
+        :bulk_update_request,
+        submitted_by: registration1.user_id,
+        user_ids: user_ids,
+        competition_id: competition.id,
+        )
+
+      headers = { 'Authorization' => bulk_update_request['jwt_token'] }
+      patch api_v1_registrations_bulk_update_path, params: bulk_update_request, headers: headers
+      error_json = {
+        error: [Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS],
+      }.to_json
+
+      expect(response.body).to eq(error_json)
+      expect(response).to have_http_status(:unauthorized)
+    end
+
+    it 'doesnt raise an error if all checks pass - single update' do
+      bulk_update_request = FactoryBot.build(
+        :bulk_update_request,
+        user_ids: [registration1.user_id],
+        submitted_by: competition.organizers.first.id,
+        competition_id: competition.id,
+        )
+      headers = { 'Authorization' => bulk_update_request['jwt_token'] }
+      patch api_v1_registrations_bulk_update_path, params: bulk_update_request, headers: headers
+
+      expect(response).to have_http_status(:ok)
+    end
+
+    it 'doesnt raise an error if all checks pass - 3 updates' do
+      bulk_update_request = FactoryBot.build(
+        :bulk_update_request,
+        user_ids: user_ids,
+        submitted_by: competition.organizers.first.id,
+        competition_id: competition.id,
+        )
+      headers = { 'Authorization' => bulk_update_request['jwt_token'] }
+      patch api_v1_registrations_bulk_update_path, params: bulk_update_request, headers: headers
+
+      expect(response).to have_http_status(:ok)
+    end
+
+    it 'returns an array user_ids:error codes - 1 failure' do
+      failed_update = FactoryBot.build(
+        :update_request, user_id: registration_1.user_id, competition_id: registration_1.competition.id, competing: { 'event_ids' => [] }
+      )
+
+      bulk_update_request = FactoryBot.build(
+        :bulk_update_request,
+        user_ids: user_ids,
+        submitted_by: default_competition.organizers.first.id,
+        competition_id: default_competition.id,
+        requests: [failed_update],
+        )
+
+      headers = { 'Authorization' => bulk_update_request['jwt_token'] }
+      patch api_v1_registrations_bulk_update_path, params: bulk_update_request, headers: headers
+      error_json = {
+        error: { registration1.user_id => Registrations::ErrorCodes::INVALID_EVENT_SELECTION },
+      }.to_json
+
+      expect(response.body).to eq(error_json)
+      expect(response).to have_http_status(:unprocessable_entity)
+    end
+
+    it 'returns an array user_ids:error codes - 2 validation failures' do
+      failed_update = FactoryBot.build(
+        :update_request, user_id: registration1.user_id, competition_id: registration1.competition.id, competing: { 'event_ids' => [] }
+      )
+      failed_update_2 = FactoryBot.build(
+        :update_request, user_id: registration2.user_id, competition_id: registration2.competition.id, competing: { 'status' => 'random_status' }
+      )
+      normal_update = FactoryBot.build(
+        :update_request, user_id: registration3.user_id, competition_id: registration3.competition.id, competing: { 'status' => 'accepted' }
+      )
+
+      bulk_update_request = FactoryBot.build(
+        :bulk_update_request,
+        user_ids: user_ids,
+        submitted_by: competition.organizers.first.id,
+        competition_id: competition.id,
+        requests: [failed_update, failed_update_2, normal_update],
+        )
+      headers = { 'Authorization' => bulk_update_request['jwt_token'] }
+      patch api_v1_registrations_bulk_update_path, params: bulk_update_request, headers: headers
+
+      error_json = {
+        registration1[:user_id] => Registrations::ErrorCodes::INVALID_EVENT_SELECTION,
+        registration2[:user_id] => Registrations::ErrorCodes::INVALID_REQUEST_DATA,
+      }.to_json
+
+      expect(response.body).to eq(error_json)
+      expect(response).to have_http_status(:unprocessable_entity)
+    end
+
+    it 'returns an error if the registration isnt found' do
+      missing_registration_user_id = (registration1.user_id-1)
+      failed_update = FactoryBot.build(:update_request, user_id: missing_registration_user_id, competition_id: registration_1.competition.id)
+      bulk_update_request = FactoryBot.build(
+        :bulk_update_request,
+        user_ids: [missing_registration_user_id],
+        competition_id: registration1.competition.id,
+        requests: [failed_update],
+        submitted_by: competition.organizers.first.id,
+        )
+
+      headers = { 'Authorization' => bulk_update_request['jwt_token'] }
+      patch api_v1_registrations_bulk_update_path, params: bulk_update_request, headers: headers
+
+      error_json = {
+        missing_registration_user_id => Registrations::ErrorCodes::REGISTRATION_NOT_FOUND,
+      }.to_json
+
+      expect(response.body).to eq(error_json)
+      expect(response).to have_http_status(:unprocessable_entity)
+    end
+
+    it 'returns errors array - validation failure and reg not found' do
+      failed_update = FactoryBot.build(
+        :update_request, user_id: registration1.user_id, competition_id: registration1.competition.id, competing: { 'event_ids' => [] }
+      )
+      normal_update = FactoryBot.build(
+        :update_request, user_id: registration3.user_id, competition_id: registration3.competition.id, competing: { 'status' => 'accepted' }
+      )
+
+      missing_registration_user_id = 999_999_999
+      failed_update2 = FactoryBot.build(
+        :update_request, user_id: missing_registration_user_id, competition_id: registration2.competition.id, competing: { 'status' => 'accepted' }
+      )
+      updates = [failed_update, normal_update, failed_update2]
+
+      bulk_update_request = FactoryBot.build(
+        :bulk_update_request,
+        user_ids: [registration1.user_id, registration3.user_id, missing_registration_user_id],
+        competition_id: registration1.competition.id,
+        requests: updates,
+        submitted_by: competition.organizers.first.id,
+        )
+
+      error_json = {
+        registration1.user_id => Registrations::ErrorCodes::INVALID_EVENT_SELECTION,
+        missing_registration_user_id => Registrations::ErrorCodes::REGISTRATION_NOT_FOUND,
+      }
+
+      expect {
+        Registrations::RegistrationChecker.bulk_update_allowed!(bulk_update_request, User.find(bulk_update_request['submitted_by']))
+      }.to raise_error(WcaExceptions::BulkUpdateError) do |error|
+        expect(error.errors).to eq(error_json)
+        expect(error.status).to eq(:unprocessable_entity)
+      end
     end
 
     context 'when bulk accepting registrations' do
