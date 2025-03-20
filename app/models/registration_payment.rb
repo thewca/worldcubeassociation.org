@@ -10,6 +10,7 @@ class RegistrationPayment < ApplicationRecord
   has_many :refunding_registration_payments, class_name: 'RegistrationPayment', inverse_of: :refunded_registration_payment, foreign_key: :refunded_registration_payment_id, dependent: :destroy
 
   after_create :auto_close_hook, unless: :refunded_registration_payment_id?
+  after_create :update_invoice_items
 
   monetize :amount_lowest_denomination,
            as: "amount",
@@ -31,5 +32,9 @@ class RegistrationPayment < ApplicationRecord
 
   private def auto_close_hook
     registration.consider_auto_close
+  end
+
+  private def update_invoice_items
+    registration.invoice_items.each { |i| i.update(status: 'paid') } if amount_lowest_denomination == registration.invoice_items_total
   end
 end
