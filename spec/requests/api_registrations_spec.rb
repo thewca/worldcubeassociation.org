@@ -453,11 +453,77 @@ RSpec.describe 'API Registrations' do
   end
 
   describe 'GET #payment_ticket' do
-    context 'successful payment ticket' do
-      let(:competition) { FactoryBot.create(:competition, :registration_open, :with_organizer, :stripe_connected) }
-      let(:reg) { FactoryBot.create(:registration, :pending, competition: competition) }
-      let(:headers) { { 'Authorization' => fetch_jwt_token(reg.user_id) } }
+    let(:competition) { FactoryBot.create(:competition, :registration_open, :with_organizer, :stripe_connected) }
+    let(:reg) { FactoryBot.create(:registration, :pending, competition: competition) }
+    let(:headers) { { 'Authorization' => fetch_jwt_token(reg.user_id) } }
 
+    before do
+      stub_request(:post, "https://api.stripe.com/v1/payment_intents")
+        .to_return(
+          status: 200,
+          headers: { 'Content-Type' => 'application/json' },
+          body: {
+            "id": "pi_3MtwBwLkdIwHu7ix28a3tqPa",
+            "object": "payment_intent",
+            "amount": 1000,
+            "amount_capturable": 0,
+            "amount_details": {
+              "tip": {}
+            },
+            "amount_received": 0,
+            "application": nil,
+            "application_fee_amount": nil,
+            "automatic_payment_methods": {
+              "enabled": true
+            },
+            "canceled_at": nil,
+            "cancellation_reason": nil,
+            "capture_method": "automatic",
+            "client_secret": "pi_3MtwBwLkdIwHu7ix28a3tqPa_secret_YrKJUKribcBjcG8HVhfZluoGH",
+            "confirmation_method": "automatic",
+            "created": 1680800504,
+            "currency": "usd",
+            "customer": nil,
+            "description": nil,
+            "invoice": nil,
+            "last_payment_error": nil,
+            "latest_charge": nil,
+            "livemode": false,
+            "metadata": {},
+            "next_action": nil,
+            "on_behalf_of": nil,
+            "payment_method": nil,
+            "payment_method_options": {
+              "card": {
+                "installments": nil,
+                "mandate_options": nil,
+                "network": nil,
+                "request_three_d_secure": "automatic"
+              },
+              "link": {
+                "persistent_token": nil
+              }
+            },
+            "payment_method_types": [
+              "card",
+              "link"
+            ],
+            "processing": nil,
+            "receipt_email": nil,
+            "review": nil,
+            "setup_future_usage": nil,
+            "shipping": nil,
+            "source": nil,
+            "statement_descriptor": nil,
+            "statement_descriptor_suffix": nil,
+            "status": "requires_payment_method",
+            "transfer_data": nil,
+            "transfer_group": nil
+          }.to_json
+        )
+    end
+
+    context 'successful payment ticket' do
       before do
         get api_v1_registrations_payment_ticket_path(competition_id: competition.id), headers: headers
       end
@@ -482,16 +548,38 @@ RSpec.describe 'API Registrations' do
       end
     end
 
+    it 'has the correct payment_intent properties when a donation is present' do
+      get api_v1_registrations_payment_ticket_path(competition_id: competition.id), headers: headers, params: { donation_iso: 1300 }
+
+      payment_record = PaymentIntent.find_by(holder_type: "Registration", holder_id: reg.id).payment_record
+      expect(payment_record.amount_stripe_denomination).to be(2300)
+      expect(payment_record.currency_code).to eq("usd")
+    end
+
     it 'refuses ticket create request if registration is closed' do
       closed_comp = FactoryBot.create(:competition, :registration_closed, :with_organizer, :stripe_connected)
-      reg = FactoryBot.create(:registration, :pending, competition: closed_comp)
+      closed_reg = FactoryBot.create(:registration, :pending, competition: closed_comp)
 
-      headers = { 'Authorization' => fetch_jwt_token(reg.user_id) }
+      headers = { 'Authorization' => fetch_jwt_token(closed_reg.user_id) }
       get api_v1_registrations_payment_ticket_path(competition_id: closed_comp.id), headers: headers
 
       body = response.parsed_body
       expect(response).to have_http_status(:forbidden)
       expect(body).to eq({ error: Registrations::ErrorCodes::REGISTRATION_CLOSED }.with_indifferent_access)
+    end
+  end
+
+  describe 'GET #payment_denomination' do
+    let(:competition) { FactoryBot.create(:competition, :registration_open, :with_organizer, :stripe_connected) }
+    let(:reg) { FactoryBot.create(:registration, :pending, competition: competition) }
+    let(:headers) { { 'Authorization' => fetch_jwt_token(reg.user_id) } }
+
+    it 'returns a hash of amounts/currencies formatted for payment providers' do
+      expected_response = { api_amounts: { stripe: 1500, paypal:"15.00" }, human_amount: "15 kr (Swedish Krona)" }.with_indifferent_access
+      get registration_payment_denomination_path(competition_id: competition.id), headers: headers, params: { amount: 1500, currency_iso: "SEK" }
+
+      expect(response).to be_successful
+      expect(response.parsed_body).to eq(expected_response)
     end
   end
 end
