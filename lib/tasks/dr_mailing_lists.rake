@@ -29,7 +29,7 @@ end
 namespace :dr_mailing_lists do
   desc "Create country and continent mailing lists"
   task create: :environment do
-    gmail_service = GsuiteMailingLists.get_service
+    gmail_service = GsuiteMailingLists.directory_service
 
     create_missing_lists(gmail_service, Country) do |country|
       DelegateReport.country_mailing_list(country)

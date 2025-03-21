@@ -62,7 +62,7 @@ class PanelController < ApplicationController
     )
     results_validator.validate(competition_ids)
     render json: {
-      has_results: results_validator.has_results?,
+      has_results: results_validator.any_results?,
       validators: results_validator.validators,
       infos: results_validator.infos,
       errors: results_validator.errors,

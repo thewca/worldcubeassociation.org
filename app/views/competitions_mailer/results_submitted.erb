@@ -14,7 +14,7 @@
 </p>
 
 <p>
-  <% unless @results_submission.results_validator.has_warnings? %>
+  <% unless @results_submission.results_validator.warnings? %>
     The competition results had no warning.
   <% else %>
     Please find below the list of warnings for the competition's results:

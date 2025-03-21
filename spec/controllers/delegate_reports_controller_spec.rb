@@ -65,7 +65,7 @@ RSpec.describe DelegateReportsController do
       comp.start_date = 1.day.from_now.strftime("%F")
       comp.end_date = 1.day.from_now.strftime("%F")
       comp.save!
-      expect(comp.is_probably_over?).to be false
+      expect(comp.probably_over?).to be false
 
       post :update, params: { competition_id: comp.id, delegate_report: { remarks: "My new remarks", posted: false } }
       comp.reload

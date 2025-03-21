@@ -73,9 +73,9 @@ class UserRole < ApplicationRecord
     startDate:
       lambda { |role| role.start_date.to_time.to_i },
     lead:
-      lambda { |role| role.is_lead? ? 0 : 1 },
+      lambda { |role| role.lead? ? 0 : 1 },
     eligibleVoter:
-      lambda { |role| role.is_eligible_voter? ? 0 : 1 },
+      lambda { |role| role.eligible_voter? ? 0 : 1 },
     groupTypeRank:
       lambda { |role| GROUP_TYPE_RANK_ORDER.find_index(role.group_type) || GROUP_TYPE_RANK_ORDER.length },
     status:
@@ -97,11 +97,11 @@ class UserRole < ApplicationRecord
     UserRole.status_rank(group_type, status)
   end
 
-  def is_active?
+  def active?
     self.end_date.nil? || self.end_date > Date.today
   end
 
-  def is_lead?
+  def lead?
     status = metadata ? metadata[:status] : nil
     case group_type
     when UserGroup.group_types[:delegate_regions]
@@ -115,7 +115,7 @@ class UserRole < ApplicationRecord
     end
   end
 
-  def is_staff?
+  def staff?
     case group_type
     when UserGroup.group_types[:delegate_regions]
       ["senior_delegate", "regional_delegate", "delegate", "junior_delegate"].include?(metadata.status)
@@ -126,7 +126,7 @@ class UserRole < ApplicationRecord
     end
   end
 
-  def is_eligible_voter?
+  def eligible_voter?
     status = metadata&.status
     case group_type
     when UserGroup.group_types[:delegate_regions]
@@ -155,7 +155,7 @@ class UserRole < ApplicationRecord
     return true unless group.is_hidden # Roles of non-hidden groups are public
     return false if user.nil? # Roles of hidden groups are visible only to a set of users based on permisssions.
 
-    role_permission = is_active? ? :can_read_groups_current : :can_read_groups_past
+    role_permission = active? ? :can_read_groups_current : :can_read_groups_past
     user.has_permission?(role_permission, group.id)
   end
 
@@ -174,9 +174,9 @@ class UserRole < ApplicationRecord
       # foo is a boolean false but we need to actually check if the boolean is present or not.
 
       (!status.nil? && status != role.metadata&.status) ||
-        (!is_active.nil? && is_active != role.is_active?) ||
+        (!is_active.nil? && is_active != role.active?) ||
         (!group_type.nil? && group_type != role.group_type) ||
-        (!is_lead.nil? && is_lead != role.is_lead?)
+        (!is_lead.nil? && is_lead != role.lead?)
     end
   end
 
