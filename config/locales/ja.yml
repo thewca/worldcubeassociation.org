@@ -276,6 +276,8 @@ ja:
     user:
       #original_hash: 603a218
       wca_id: WCA ID
+      #original_hash: fa4c045
+      representing: 国・地域
     #original_hash: 3fc0ba1
     all_regions: 全地域
     errors:
@@ -342,6 +344,8 @@ ja:
         unconfirmed_wca_id: WCA ID (未確認)
         #original_hash: 8ed8874
         login: メールアドレスまたは WCA ID
+        #original_hash: fa4c045
+        country_iso2: 国・地域
         #original_hash: ab58155
         dob: 生年月日
         #original_hash: 7636bbc
@@ -416,6 +420,8 @@ ja:
       person:
         #original_hash: 8c41ae8
         wca_id: 個人
+        #original_hash: fa4c045
+        countryId: 国・地域
         #original_hash: ab58155
         dob: 生年月日
         #original_hash: 8a754c6
@@ -565,6 +571,12 @@ ja:
         #original_hash: da39a3e
         competition_id: ''
       user:
+        #original_hash: 7588d71
+        dob: 競技者の生年月日を「西暦-月-日」の形式で記入してください。　例：2001-04-01
+        #original_hash: ac908c9
+        name: >-
+          競技者の氏名をフルネームで記載してください。<br/>例：Shuhei Omura
+          (大村周平)<br/>※<strong>ローマ字表記は必須</strong>です。パスポートなどに記載の正確な表記を使用してください。ミドルネームは省略可です。<br/>※母国語表記（漢字表記など）は、上の例のようにカッコ書きで併記することができます。
         #original_hash: da39a3e
         email: ''
         #original_hash: 8a91e53
@@ -640,8 +652,6 @@ ja:
         person1_wca_id: ''
         #original_hash: da39a3e
         person2_wca_id: ''
-        #original_hash: da39a3e
-        person_wca_id: ''
       poll:
         #original_hash: da39a3e
         comment: ''
@@ -883,8 +893,13 @@ ja:
       have_competed: WCA 公式大会に参加したことがあります
       #original_hash: dcd1d70
       have_never_competed: WCA 公式大会に参加したことがありません
+      #original_hash: 3511bc5
+      let_us_know: 過去にWCA公式大会に参加したことがあるかを選択してください：
       #original_hash: f9f512b
       welcome_back: こんにちは！WCA アカウントの作成には WCA ID が必要です。
+      #original_hash: ef8243e
+      welcome_html: >-
+        WCA公式大会に参加するためには、記録を管理するために追加の情報を登録いただく必要があります。<br/>※生年月日は許可なく公開されることはありません。<br/>※必ず<strong>競技を行う方ご本人<strong/>の情報を登録してください。
   layouts:
     navigation:
       #original_hash: 0eb5ed5
@@ -1024,6 +1039,10 @@ ja:
     support:
       #original_hash: 610edba
       title: WCAへの寄付
+      #original_hash: 1aaf818
+      text: >-
+        WCAは米国税法第501条(c)(3)による税優遇を受けた非営利団体 (NPO)
+        です。100%ボランティア団体として、世界中でより楽しいWCA大会を提供するための寄付を歓迎しています。
       #original_hash: 65c84ec
       button: ご支援いただくには
   users:
@@ -1342,12 +1361,6 @@ ja:
       export_csv: CSV に出力
       #original_hash: 84add5b
       email: メールアドレス
-      #original_hash: 7b2c7f1
-      approve: 承認
-      #original_hash: 92d40dc
-      waiting_list: キャンセル待ち
-      #original_hash: 06f7d1a
-      approved_registrations: 承認済み参加申し込み
       #original_hash: ac5d958
       not_paid: 未支払い
       registered:
@@ -1380,6 +1393,8 @@ ja:
     update: 申し込み情報を更新する
     #original_hash: b72119a
     delete_confirm: 本当に参加申し込みを削除してよろしいですか？
+    #original_hash: bbcc3dc
+    delete_registration: 申し込みを削除する
     #original_hash: e9ddc6e
     will_open_html: '参加申し込みは <strong>%{days}</strong> 後 %{time} に開始します。'
     #original_hash: 34eb009
@@ -2064,8 +2079,6 @@ ja:
           event_change_deadline_date: すでに登録済みの参加申し込み内容（参加種目など）を変更できる締切日時
           #original_hash: 2529d04
           allow_on_the_spot: 会場申し込みについて
-          #original_hash: 3d47eca
-          allow_self_delete_after_acceptance: 参加申し込みキャンセル
           #original_hash: 7e53b96
           allow_self_edits: 申し込み登録内容の編集
           #original_hash: 3c23a67
@@ -2235,7 +2248,7 @@ ja:
           #original_hash: da39a3e
           allow_on_the_spot: ''
           #original_hash: da39a3e
-          allow_self_delete_after_acceptance: ''
+          competitor_can_cancel: ''
           #original_hash: da39a3e
           allow_self_edits: ''
           #original_hash: da39a3e
@@ -2307,11 +2320,6 @@ ja:
             'true': 種目変更締切までは、申し込み登録情報変更を許可する。
             #original_hash: 2cbb80e
             'false': 申し込み登録情報変更を許可しない。
-          allow_self_delete_after_acceptance:
-            #original_hash: 5c2e8c1
-            'true': 承認後も競技者の参加申し込み削除を許可する。
-            #original_hash: 3b77604
-            'false': 承認後は競技者の参加申し込み削除を許可しない。
           guest_entry_status:
             #original_hash: 7e54323
             unclear: 何も表示しない（「その他の大会申し込み要領」の項目に記載する）
@@ -2339,8 +2347,6 @@ ja:
         needs_approval: 参加申し込みは主催者による承認待ちで、これには時間がかかる場合があります。旅程の準備を進めすぎないようご注意ください。
         #original_hash: 6071fd9
         is_accepted: 大会参加が承認されました！旅程の準備をしましょう！
-        #original_hash: e29a4d3
-        is_cancelled: 参加申し込みはキャンセルされ、大会に参加することはできません。ただし再度参加申し込みを行うことは可能です。
         #original_hash: 2a88d10
         is_rejected: 参加申し込みは主催者により承認されませんでした。ミスの可能性が疑われる場合は、主催者に連絡してください。
         #original_hash: 719dea0
@@ -2353,19 +2359,15 @@ ja:
         spots_remaining_plural:
           zero: 参加者定員の空きはありません
           other: '参加者定員の空きは%{count}人です'
-        cancelled:
-          #original_hash: e9c5a55
-          title: キャンセル済み参加申し込み
-          #original_hash: bb5b570
-          information: 参加申し込みをキャンセルした競技者は再申し込みが可能です。
-        rejected:
-          #original_hash: 199b7c5
-          title: 拒否された参加申し込み
-          #original_hash: 3fd2e0c
-          information: 参加申し込みが拒否された場合、再申し込みはできません。
         pending:
           #original_hash: 5e16c6d
           information: 承認待ちは、参加費支払未了などの不完全な申し込みのみに使用してください。参加者定員に達している場合は、キャンセル待ちを使用してください。
+        cancelled:
+          #original_hash: bb5b570
+          information: 参加申し込みをキャンセルした競技者は再申し込みが可能です。
+        rejected:
+          #original_hash: 3fd2e0c
+          information: 参加申し込みが拒否された場合、再申し込みはできません。
         payment:
           #original_hash: d6fbc7a
           refunded_status: 返金済み
@@ -2415,14 +2417,6 @@ ja:
         email_copy: メールをコピー
         #original_hash: b83b663
         email_message: メールをコピーしました。メール送信の際、必要であればbccを使用してください。
-        #original_hash: 71327f1
-        move_pending: 承認待ちリストに移動
-        #original_hash: 9144dd6
-        move_waiting: キャンセル待ちリストに移動
-        #original_hash: 284b24f
-        cancel: 参加申し込みをキャンセルする（再申し込み可）
-        #original_hash: df40450
-        reject: 参加申し込みを拒否する（再申し込み不可）
         #original_hash: 43dc853
         amount: 数
         #original_hash: 67b3c7d
@@ -2795,7 +2789,7 @@ ja:
         #original_hash: 6a72085
         all: すべて
         #original_hash: 6eef664
-        none: クリア
+        none: '-'
         #original_hash: 9b9a6aa
         show_buttons: タイムゾーンボタンを表示
         #original_hash: d2ac826
@@ -2939,6 +2933,10 @@ ja:
     records:
       #original_hash: e51c552
       title: 記録
+    #original_hash: e02fccb
+    last_updated_html: '最終更新：%{timestamp}'
+    #original_hash: 9ca9d89
+    filters_fixes_underway: ※一部の絞り込み機能は現在調整中のため使用できません。ご不便をおかけしますが、ご理解のほどよろしくお願いいたします。
     selector_elements:
       events_selector:
         #original_hash: ad8919a
@@ -3004,6 +3002,8 @@ ja:
       name: 氏名
       #original_hash: 5faa59d
       result: 結果
+      #original_hash: fa4c045
+      representing: 国・地域
       #original_hash: 1917f4f
       competition: 大会
       #original_hash: e7f6fc5
@@ -3034,6 +3034,8 @@ ja:
       name_or_wca_id: 名前または WCA ID
       #original_hash: 709a232
       name: 名前
+      #original_hash: fa4c045
+      country: 国・地域
       #original_hash: 02ae2bd
       podiums: 入賞回数
       #original_hash: 56656a0
@@ -3422,8 +3424,6 @@ ja:
         '3': 定款および動議に記載された WCA の目的を尊重し、これを遂行する
         #original_hash: 0c3576b
         '4': WCA 大会規則を遵守する
-        #original_hash: 1a9e6c5
-        '5': WCA スタッフの決定を受け入れ、遵守する
         #original_hash: d4ae7c1
         '6': 現在の定款および活動規約の写しを電子ファイル形式で WCA に保管する
     application_instructions:

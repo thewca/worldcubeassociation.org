@@ -5,6 +5,7 @@ module AdvancementConditions
     include ActiveModel::Validations
 
     attr_accessor :level
+
     validates :level, numericality: { only_integer: true }
 
     @@advancement_conditions = [AttemptResultCondition, PercentCondition, RankingCondition].freeze
@@ -26,7 +27,7 @@ module AdvancementConditions
     end
 
     def self.wcif_type_to_class
-      @@wcif_type_to_class ||= @@advancement_conditions.to_h { |cls| [cls.wcif_type, cls] }
+      @@wcif_type_to_class ||= @@advancement_conditions.index_by { |cls| cls.wcif_type }
     end
 
     def self.load(json)

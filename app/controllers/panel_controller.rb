@@ -5,7 +5,6 @@ class PanelController < ApplicationController
 
   before_action :authenticate_user!
   before_action -> { redirect_to_root_unless_user(:has_permission?, 'can_access_panels', params[:panel_id].to_sym) }, only: [:index]
-  before_action -> { redirect_to_root_unless_user(:has_permission?, 'can_access_panels', :staff) }, only: [:staff]
   before_action -> { redirect_to_root_unless_user(:has_permission?, 'can_access_panels', :admin) }, only: [:generate_db_token]
   before_action -> { redirect_to_root_unless_user(:can_access_senior_delegate_panel?) }, only: [:pending_claims_for_subordinate_delegates]
 
@@ -107,5 +106,26 @@ class PanelController < ApplicationController
 
     query_params = request.query_parameters.except(:id)
     redirect_to panel_index_path(panel_id: panel_with_panel_page, anchor: panel_page_id, **query_params)
+  end
+
+  def cronjob_details
+    cronjob_name = params.require(:cronjob_name)
+    render json: JobUtils.cronjob_statistics_from_cronjob_name(cronjob_name)
+  end
+
+  def cronjob_run
+    cronjob_name = params.require(:cronjob_name)
+    JobUtils.run_cronjob(cronjob_name)
+
+    render json: JobUtils.cronjob_statistics_from_cronjob_name(cronjob_name)
+  rescue WcaExceptions::NotPermitted => e
+    render status: e.status, json: { error: e.to_s }
+  end
+
+  def cronjob_reset
+    cronjob_name = params.require(:cronjob_name)
+    JobUtils.reset_cronjob(cronjob_name)
+
+    render json: JobUtils.cronjob_statistics_from_cronjob_name(cronjob_name)
   end
 end

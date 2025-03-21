@@ -5,7 +5,7 @@ class RegionalOrganizationsController < ApplicationController
   before_action -> { redirect_to_root_unless_user(:can_manage_regional_organizations?) }, except: [:index, :new, :create]
 
   def admin
-    @regional_organizations = RegionalOrganization.all.order(country: :asc)
+    @regional_organizations = RegionalOrganization.order(country: :asc)
   end
 
   def index

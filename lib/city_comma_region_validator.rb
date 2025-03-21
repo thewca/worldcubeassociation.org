@@ -16,8 +16,6 @@ class CityCommaRegionValidator < CountryCityValidator
       "is not of the form 'city, #{@type_of_region}'"
     elsif @valid_regions.exclude?(region)
       "#{region} is not a valid #{@type_of_region}"
-    else
-      nil
     end
   end
 end

@@ -2,19 +2,20 @@
 
 module Registrations
   class RegistrationChecker
-    COMMENT_CHARACTER_LIMIT = 240
-    DEFAULT_GUEST_LIMIT = 99
-
     def self.create_registration_allowed!(registration_request, current_user)
       target_user = User.find(registration_request['user_id'])
       competition = Competition.find(registration_request['competition_id'])
       guests = registration_request['guests']
+      comment = registration_request.dig('competing', 'comment')
+
+      r = Registration.new(guests: guests.to_i, competition: competition, comments: comment)
 
       user_can_create_registration!(competition, current_user, target_user)
       validate_create_events!(registration_request, competition)
       validate_qualifications!(registration_request, competition, target_user)
-      validate_guests!(guests.to_i, competition) unless guests.nil?
-      validate_comment!(registration_request.dig('competing', 'comment'), competition)
+      # Migrated to ActiveRecord-style validations
+      validate_guests!(r)
+      validate_comment!(r)
     end
 
     def self.update_registration_allowed!(update_request, competition, current_user)
@@ -24,15 +25,23 @@ module Registrations
       target_user = User.find(update_request['user_id'])
       waiting_list_position = update_request.dig('competing', 'waiting_list_position')
       comment = update_request.dig('competing', 'comment')
+      organizer_comment = update_request.dig('competing', 'organizer_comment')
       guests = update_request['guests']
       new_status = update_request.dig('competing', 'status')
       events = update_request.dig('competing', 'event_ids')
 
+      registration.guests = guests.to_i if update_request.key?('guests')
+      competing_payload = update_request['competing']
+      registration.comments = comment if competing_payload&.key?('comment')
+      registration.administrative_notes = organizer_comment if competing_payload&.key?('organizer_comment')
+
       user_can_modify_registration!(competition, current_user, target_user, registration, new_status)
-      validate_guests!(guests.to_i, competition) unless guests.nil?
-      validate_comment!(comment, competition, registration)
+      # Migrated to ActiveRecord-style validations
+      validate_guests!(registration)
+      validate_comment!(registration)
+      validate_organizer_comment!(registration)
+      # Old-style validations within this class
       validate_organizer_fields!(update_request, current_user, competition)
-      validate_organizer_comment!(update_request)
       validate_waiting_list_position!(waiting_list_position, competition, registration) unless waiting_list_position.nil?
       validate_update_status!(new_status, competition, current_user, target_user, registration, events) unless new_status.nil?
       validate_update_events!(events, competition) unless events.nil?
@@ -40,16 +49,20 @@ module Registrations
     end
 
     def self.bulk_update_allowed!(bulk_update_request, current_user)
+      update_requests = bulk_update_request['requests']
       raise WcaExceptions::BulkUpdateError.new(:bad_request, [Registrations::ErrorCodes::INVALID_REQUEST_DATA]) if
-        bulk_update_request['requests'].blank?
+        update_requests.blank?
 
       competition = Competition.find(bulk_update_request['competition_id'])
+
+      raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::COMPETITOR_LIMIT_REACHED) if
+        will_exceed_competitor_limit?(update_requests, competition)
 
       raise WcaExceptions::BulkUpdateError.new(:unauthorized, [Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS]) unless
         current_user.can_manage_competition?(competition)
 
       errors = {}
-      bulk_update_request['requests'].each do |update_request|
+      update_requests.each do |update_request|
         update_registration_allowed!(update_request, competition, current_user)
       rescue WcaExceptions::RegistrationError => e
         errors[update_request['user_id']] = e.error
@@ -59,6 +72,15 @@ module Registrations
     end
 
     class << self
+      def will_exceed_competitor_limit?(update_requests, competition)
+        registrations_to_be_accepted = update_requests.count { |r| r.dig('competing', 'status') == Registrations::Helper::STATUS_ACCEPTED }
+        total_accepted_registrations_after_update = competition.registrations.accepted_count + registrations_to_be_accepted
+
+        competition.competitor_limit_enabled &&
+          registrations_to_be_accepted > 0 &&
+          total_accepted_registrations_after_update > competition.competitor_limit
+      end
+
       def user_can_create_registration!(competition, current_user, target_user)
         raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::REGISTRATION_ALREADY_EXISTS) if
           Registration.exists?(competition_id: competition.id, user_id: target_user.id)
@@ -113,11 +135,13 @@ module Registrations
           event_ids.present? && competition.events_held?(event_ids)
 
         event_limit = competition.events_per_registration_limit
-        raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::INVALID_EVENT_SELECTION) if event_limit.present? && event_ids.count > event_limit
+        raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::INVALID_EVENT_SELECTION) if
+          competition.event_restrictions? && event_limit.present? && event_ids.count > event_limit
       end
 
       def validate_qualifications!(request, competition, target_user)
         return unless competition.enforces_qualifications?
+
         event_ids = request.dig('competing', 'event_ids')
 
         unqualified_events = event_ids.filter do |event|
@@ -128,24 +152,23 @@ module Registrations
         raise WcaExceptions::RegistrationError.new(:unprocessable_entity, Registrations::ErrorCodes::QUALIFICATION_NOT_MET, unqualified_events) unless unqualified_events.empty?
       end
 
-      def validate_guests!(guests, competition)
-        raise WcaExceptions::RegistrationError.new(:unprocessable_entity, ErrorCodes::INVALID_REQUEST_DATA) if guests < 0
-        raise WcaExceptions::RegistrationError.new(:unprocessable_entity, ErrorCodes::GUEST_LIMIT_EXCEEDED) if competition.guest_limit_exceeded?(guests)
-        raise WcaExceptions::RegistrationError.new(:unprocessable_entity, ErrorCodes::UNREASONABLE_GUEST_COUNT) if
-          guests > DEFAULT_GUEST_LIMIT && !competition.guest_entry_status_restricted?
+      def process_validation_error!(registration, field)
+        return if registration.valid?
+
+        error_details = registration.errors.details[field].first
+
+        return if error_details.blank?
+
+        frontend_code = error_details[:frontend_code] || Registrations::ErrorCodes::INVALID_REQUEST_DATA
+        raise WcaExceptions::RegistrationError.new(:unprocessable_entity, frontend_code, error_details)
       end
 
-      def validate_comment!(comment, competition, registration = nil)
-        if comment.nil?
-          # Return if no comment was supplied in the request but one already exists for the registration
-          return if registration.present? && !registration.comments.nil? && !(registration.comments == '')
+      def validate_guests!(registration)
+        process_validation_error!(registration, :guests)
+      end
 
-          # Raise error if comment is mandatory, none has been supplied, and none exists for the registration
-          raise WcaExceptions::RegistrationError.new(:unprocessable_entity, Registrations::ErrorCodes::REQUIRED_COMMENT_MISSING) if competition.force_comment_in_registration
-        else
-          raise WcaExceptions::RegistrationError.new(:unprocessable_entity, ErrorCodes::USER_COMMENT_TOO_LONG) if comment.length > COMMENT_CHARACTER_LIMIT
-          raise WcaExceptions::RegistrationError.new(:unprocessable_entity, ErrorCodes::REQUIRED_COMMENT_MISSING) if competition.force_comment_in_registration && comment.strip.empty?
-        end
+      def validate_comment!(registration)
+        process_validation_error!(registration, :comments)
       end
 
       def validate_organizer_fields!(request, current_user, competition)
@@ -154,10 +177,8 @@ module Registrations
         raise WcaExceptions::RegistrationError.new(:unauthorized, Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) if contains_organizer_fields?(request, organizer_fields) && !current_user.can_manage_competition?(competition)
       end
 
-      def validate_organizer_comment!(request)
-        organizer_comment = request.dig('competing', 'organizer_comment')
-        raise WcaExceptions::RegistrationError.new(:unprocessable_entity, Registrations::ErrorCodes::USER_COMMENT_TOO_LONG) if
-          !organizer_comment.nil? && organizer_comment.length > COMMENT_CHARACTER_LIMIT
+      def validate_organizer_comment!(registration)
+        process_validation_error!(registration, :administrative_notes)
       end
 
       def validate_waiting_list_position!(waiting_list_position, competition, registration)

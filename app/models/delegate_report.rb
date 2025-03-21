@@ -27,7 +27,7 @@ class DelegateReport < ApplicationRecord
 
   before_create :set_discussion_url
   def set_discussion_url
-    self.discussion_url = "https://groups.google.com/a/worldcubeassociation.org/forum/#!topicsearchin/reports/" + URI.encode_www_form_component(competition.name)
+    self.discussion_url = "https://groups.google.com/a/worldcubeassociation.org/forum/#!topicsearchin/reports/#{URI.encode_www_form_component(competition.name)}"
   end
 
   private def render_section_template(section)
@@ -56,9 +56,7 @@ class DelegateReport < ApplicationRecord
 
   validate :setup_image_count, if: [:posted?, :requires_setup_images?]
   private def setup_image_count
-    if self.setup_images.count < self.required_setup_images_count
-      errors.add(:setup_images, "Needs at least #{self.required_setup_images_count} images")
-    end
+    errors.add(:setup_images, "Needs at least #{self.required_setup_images_count} images") if self.setup_images.count < self.required_setup_images_count
   end
 
   validates :setup_images, blob: { content_type: :web_image }

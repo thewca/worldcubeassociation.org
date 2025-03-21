@@ -14,9 +14,7 @@ class Post < ApplicationRecord
 
   validate :unstick_at_must_be_in_the_future, if: :unstick_at
   private def unstick_at_must_be_in_the_future
-    if unstick_at <= Date.today
-      errors.add(:unstick_at, I18n.t('posts.errors.unstick_at_future'))
-    end
+    errors.add(:unstick_at, I18n.t('posts.errors.unstick_at_future')) if unstick_at <= Date.today
   end
 
   before_validation :clear_unstick_at, unless: :sticky?
@@ -69,9 +67,7 @@ class Post < ApplicationRecord
     else
       json[:body] = body
     end
-    if options[:can_manage]
-      json[:edit_url] = Rails.application.routes.url_helpers.edit_post_path(slug)
-    end
+    json[:edit_url] = Rails.application.routes.url_helpers.edit_post_path(slug) if options[:can_manage]
 
     json
   end

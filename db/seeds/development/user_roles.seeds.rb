@@ -58,8 +58,8 @@ after :user_groups do
   end
 
   # Board Roles
-  past_board_roles = Array.new(9) { |index| FactoryBot.create(:board_role, :inactive) }
-  current_board_roles = Array.new(4) { |index| FactoryBot.create(:board_role, :active) }
+  past_board_roles = Array.new(9) { |_index| FactoryBot.create(:board_role, :inactive) }
+  current_board_roles = Array.new(4) { |_index| FactoryBot.create(:board_role, :active) }
 
   # Officer Roles
   # Giving officer roles to all board users except past_board_roles[0] and current_board_roles[0]

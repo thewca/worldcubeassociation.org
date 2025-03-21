@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 class Registration < ApplicationRecord
+  COMMENT_CHARACTER_LIMIT = 240
+  DEFAULT_GUEST_LIMIT = 99
+
   scope :pending, -> { where(competing_status: 'pending') }
   scope :accepted, -> { where(competing_status: 'accepted') }
   scope :cancelled, -> { where(competing_status: 'cancelled') }
@@ -47,9 +50,10 @@ class Registration < ApplicationRecord
     self.registered_at = current_time_from_proper_timezone
   end
 
-  validates_numericality_of :guests, greater_than_or_equal_to: 0
-
-  validates_numericality_of :guests, less_than_or_equal_to: :guest_limit, if: :check_guest_limit?
+  validates :guests, numericality: { greater_than_or_equal_to: 0 }
+  validates :guests, numericality: { less_than_or_equal_to: :guest_limit, if: :check_guest_limit?, frontend_code: Registrations::ErrorCodes::GUEST_LIMIT_EXCEEDED }
+  validates :guests, numericality: { equal_to: 0, unless: :guests_allowed?, frontend_code: Registrations::ErrorCodes::GUEST_LIMIT_EXCEEDED }
+  validates :guests, numericality: { less_than_or_equal_to: DEFAULT_GUEST_LIMIT, if: :guests_unrestricted?, frontend_code: Registrations::ErrorCodes::UNREASONABLE_GUEST_COUNT }
 
   after_save :mark_registration_processing_as_done
 
@@ -66,7 +70,15 @@ class Registration < ApplicationRecord
   end
 
   def check_guest_limit?
-    competition.present? && competition.guests_per_registration_limit_enabled?
+    competition&.guests_per_registration_limit_enabled?
+  end
+
+  def guests_allowed?
+    competition&.guests_enabled?
+  end
+
+  def guests_unrestricted?
+    !competition&.guest_entry_status_restricted?
   end
 
   def rejected?
@@ -99,11 +111,11 @@ class Registration < ApplicationRecord
 
   delegate :name, :gender, :country, :email, :dob, :wca_id, to: :user
 
-  alias birthday dob
-  alias personId wca_id
+  alias_method :birthday, :dob
+  alias_method :personId, :wca_id
 
   def person
-    Person.find_by_wca_id(personId)
+    Person.find_by(wca_id: personId)
   end
 
   def world_rank(event, type)
@@ -259,9 +271,7 @@ class Registration < ApplicationRecord
                                 admin_comment: administrative_notes,
                               },
                             })
-      if competing_status == "waiting_list"
-        base_json[:competing][:waiting_list_position] = waiting_list_position
-      end
+      base_json[:competing][:waiting_list_position] = waiting_list_position if competing_status == "waiting_list"
     end
     if history
       base_json.deep_merge!({
@@ -319,58 +329,52 @@ class Registration < ApplicationRecord
   validate :user_can_register_for_competition, on: :create, unless: :rejected?
   private def user_can_register_for_competition
     cannot_register_reasons = user&.cannot_register_for_competition_reasons(competition, is_competing: self.is_competing?)
-    if cannot_register_reasons.present?
-      errors.add(:user_id, cannot_register_reasons.to_sentence)
-    end
+    errors.add(:user_id, cannot_register_reasons.to_sentence) if cannot_register_reasons.present?
   end
 
   # TODO: V3-REG cleanup. All these Validations can be used instead of the registration_checker checks
   validate :cannot_be_undeleted_when_banned, if: :competing_status_changed?
   private def cannot_be_undeleted_when_banned
-    if user.banned_at_date?(competition.start_date) && might_attend?
-      errors.add(:user_id, I18n.t('registrations.errors.undelete_banned'))
-    end
+    errors.add(:user_id, I18n.t('registrations.errors.undelete_banned')) if user.banned_at_date?(competition.start_date) && might_attend?
   end
 
   validate :must_register_for_gte_one_event, if: :is_competing?
   private def must_register_for_gte_one_event
-    if registration_competition_events.reject(&:marked_for_destruction?).empty?
-      errors.add(:registration_competition_events, I18n.t('registrations.errors.must_register'))
-    end
+    errors.add(:registration_competition_events, I18n.t('registrations.errors.must_register')) if registration_competition_events.reject(&:marked_for_destruction?).empty?
   end
 
   validate :must_not_register_for_more_events_than_event_limit
   private def must_not_register_for_more_events_than_event_limit
-    if competition.blank? || !competition.events_per_registration_limit_enabled?
-      return
-    end
-    if registration_competition_events.count { |element| !element.marked_for_destruction? } > competition.events_per_registration_limit
-      errors.add(:registration_competition_events, I18n.t('registrations.errors.exceeds_event_limit', count: competition.events_per_registration_limit))
-    end
+    return if competition.blank? || !competition.events_per_registration_limit_enabled?
+    return unless registration_competition_events.count { |element| !element.marked_for_destruction? } > competition.events_per_registration_limit
+
+    errors.add(:registration_competition_events, I18n.t('registrations.errors.exceeds_event_limit', count: competition.events_per_registration_limit))
   end
 
   validate :cannot_register_for_unqualified_events
   private def cannot_register_for_unqualified_events
-    if competition && competition.allow_registration_without_qualification
-      return
-    end
-    if registration_competition_events.reject(&:marked_for_destruction?).any? { |event| !event.competition_event&.can_register?(user) }
-      errors.add(:registration_competition_events, I18n.t('registrations.errors.can_only_register_for_qualified_events'))
-    end
+    return if competition && competition.allow_registration_without_qualification
+    return unless registration_competition_events.reject(&:marked_for_destruction?).any? { |event| !event.competition_event&.can_register?(user) }
+
+    errors.add(:registration_competition_events, I18n.t('registrations.errors.can_only_register_for_qualified_events'))
   end
 
-  validate :forcing_competitors_to_add_comment, if: :is_competing?
-  private def forcing_competitors_to_add_comment
-    if competition&.force_comment_in_registration.present? && comments&.strip.blank?
-      errors.add(:user_id, I18n.t('registrations.errors.cannot_register_without_comment'))
-    end
+  strip_attributes only: [:comments, :administrative_notes]
+
+  validates :comments, length: { maximum: COMMENT_CHARACTER_LIMIT, frontend_code: Registrations::ErrorCodes::USER_COMMENT_TOO_LONG },
+                       presence: { message: I18n.t('registrations.errors.cannot_register_without_comment'), if: :force_comment?, frontend_code: Registrations::ErrorCodes::REQUIRED_COMMENT_MISSING }
+
+  validates :administrative_notes, length: { maximum: COMMENT_CHARACTER_LIMIT, frontend_code: Registrations::ErrorCodes::USER_COMMENT_TOO_LONG }
+
+  def force_comment?
+    competition&.force_comment_in_registration?
   end
 
   # For associated_events_picker
   def events_to_associated_events(events)
     events.map do |event|
       competition_event = competition.competition_events.find_by!(event: event)
-      registration_competition_events.find_by_competition_event_id(competition_event.id) || registration_competition_events.build(competition_event: competition_event)
+      registration_competition_events.find_by(competition_event_id: competition_event.id) || registration_competition_events.build(competition_event: competition_event)
     end
   end
 
@@ -391,11 +395,7 @@ class Registration < ApplicationRecord
 
   validate :only_one_accepted_per_series
   private def only_one_accepted_per_series
-    if competition&.part_of_competition_series? && competing_status_accepted?
-      unless series_sibling_registrations(:accepted).empty?
-        errors.add(:competition_id, I18n.t('registrations.errors.series_more_than_one_accepted'))
-      end
-    end
+    errors.add(:competition_id, I18n.t('registrations.errors.series_more_than_one_accepted')) if competition&.part_of_competition_series? && competing_status_accepted? && !series_sibling_registrations(:accepted).empty?
   end
 
   def series_sibling_registrations(registration_status = nil)

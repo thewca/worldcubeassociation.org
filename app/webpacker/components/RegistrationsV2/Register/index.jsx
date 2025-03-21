@@ -26,12 +26,17 @@ export default function Index({
   stripePublishableKey = '',
   connectedAccountId = '',
   cannotRegisterReasons,
+  isProcessing = false,
 }) {
   return (
     <WCAQueryClientProvider>
       <StoreProvider reducer={messageReducer} initialState={{ messages: [] }}>
         <ConfirmProvider>
-          <RegistrationProvider competitionInfo={competitionInfo} userInfo={userInfo}>
+          <RegistrationProvider
+            competitionInfo={competitionInfo}
+            userInfo={userInfo}
+            isProcessing={isProcessing}
+          >
             <Register
               competitionInfo={competitionInfo}
               userInfo={userInfo}

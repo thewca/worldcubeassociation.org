@@ -59,7 +59,7 @@ module RegulationTranslationsHelper
     # avoid File.read-ing this during every `select` iteration
     base_version = current_base_version
 
-    translations_metadata.select { |metadata| metadata[:version] != base_version }
+    translations_metadata.reject { |metadata| metadata[:version] == base_version }
                          .sort_by { |metadata| metadata[:language_english] }
                          .sort_by { |metadata| Date.parse(metadata[:version]) }
                          .reverse

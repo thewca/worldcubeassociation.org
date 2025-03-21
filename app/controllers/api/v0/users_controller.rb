@@ -3,14 +3,14 @@
 class Api::V0::UsersController < Api::V0::ApiController
   def show_me
     require_user!
-    if stale?(current_user)
-      # Also include the users current prs so we can handle qualifications on the Frontend
-      show_user(current_user, show_rankings: true, private_attributes: ['email'])
-    end
+    return unless stale?(current_user)
+
+    # Also include the users current prs so we can handle qualifications on the Frontend
+    show_user(current_user, show_rankings: true, private_attributes: ['email'])
   end
 
   def show_user_by_id
-    user = User.find_by_id(params[:id])
+    user = User.find_by(id: params[:id])
     show_user(user)
   end
 
@@ -25,21 +25,20 @@ class Api::V0::UsersController < Api::V0::ApiController
   end
 
   def show_user_by_wca_id
-    user = User.find_by_wca_id(params[:wca_id])
+    user = User.find_by(wca_id: params[:wca_id])
     show_user(user)
   end
 
   def permissions
     require_user!
-    if stale?(authenticated_user)
-      render json: authenticated_user.permissions
-    end
+    render json: authenticated_user.permissions if stale?(authenticated_user)
   end
 
   def personal_records
     require_user!
     return render json: { single: [], average: [] } if current_user.wca_id.blank?
-    person = Person.includes(:ranksSingle, :ranksAverage).find_by_wca_id!(current_user.wca_id)
+
+    person = Person.includes(:ranksSingle, :ranksAverage).find_by!(wca_id: current_user.wca_id)
     render json: { single: person.ranksSingle.map(&:to_wcif), average: person.ranksAverage.map(&:to_wcif) }
   end
 
@@ -69,14 +68,10 @@ class Api::V0::UsersController < Api::V0::ApiController
     def show_user(user, show_rankings: false, private_attributes: [])
       if user
         json = { user: user.serializable_hash(private_attributes: private_attributes) }
-        if params[:upcoming_competitions]
-          json[:upcoming_competitions] = user.accepted_competitions.select(&:upcoming?)
-        end
-        if params[:ongoing_competitions]
-          json[:ongoing_competitions] = user.accepted_competitions.select(&:in_progress?)
-        end
+        json[:upcoming_competitions] = user.accepted_competitions.select(&:upcoming?) if params[:upcoming_competitions]
+        json[:ongoing_competitions] = user.accepted_competitions.select(&:in_progress?) if params[:ongoing_competitions]
         if show_rankings && user.wca_id.present?
-          person = Person.includes(:ranksSingle, :ranksAverage).find_by_wca_id!(user.wca_id)
+          person = Person.includes(:ranksSingle, :ranksAverage).find_by!(wca_id: user.wca_id)
           json[:rankings] = { single: person.ranksSingle, average: person.ranksAverage }
         end
         render status: :ok, json: json

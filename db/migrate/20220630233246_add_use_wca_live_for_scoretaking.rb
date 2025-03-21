@@ -1,3 +1,4 @@
+# rubocop:disable all
 # frozen_string_literal: true
 
 class AddUseWcaLiveForScoretaking < ActiveRecord::Migration[6.0]

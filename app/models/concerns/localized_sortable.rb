@@ -8,11 +8,11 @@ module LocalizedSortable
   extend ActiveSupport::Concern
 
   def name
-    I18n.t(read_attribute(self.class::NAME_LOOKUP_ATTRIBUTE), scope: self.class.name.underscore.pluralize)
+    I18n.t(self[self.class::NAME_LOOKUP_ATTRIBUTE], scope: self.class.name.underscore.pluralize)
   end
 
   def name_in(locale)
-    I18n.t(read_attribute(self.class::NAME_LOOKUP_ATTRIBUTE), scope: self.class.name.underscore.pluralize, locale: locale)
+    I18n.t(self[self.class::NAME_LOOKUP_ATTRIBUTE], scope: self.class.name.underscore.pluralize, locale: locale)
   end
 
   def real?

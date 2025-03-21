@@ -18,7 +18,6 @@ class SolveTime
     self.wca_value = wca_value
   end
 
-  attr_reader :wca_value, :time_centiseconds, :move_count
   def wca_value=(wca_value)
     @wca_value = wca_value
     @move_count = nil
@@ -81,12 +80,13 @@ class SolveTime
   end
 
   def time_centiseconds=(time_centiseconds)
-    raise "time out of range" unless 0 <= time_centiseconds && time_centiseconds <= 99_999 * 100
+    raise "time out of range" unless time_centiseconds.between?(0, 99_999 * 100)
+
     @time_centiseconds = time_centiseconds
     recompute_wca_value
   end
 
-  attr_reader :solved, :attempted
+  attr_reader :wca_value, :time_centiseconds, :move_count, :solved, :attempted
 
   def missed
     self.attempted - self.solved
@@ -98,12 +98,14 @@ class SolveTime
 
   def solved=(solved)
     raise "solved out of range" unless (0...100).cover?(solved)
+
     @solved = solved
     recompute_wca_value
   end
 
   def attempted=(attempted)
     raise "attempted out of range" unless (0...100).cover?(attempted)
+
     @attempted = attempted
     recompute_wca_value
   end
@@ -176,9 +178,7 @@ class SolveTime
     centis = centiseconds % 100
 
     clock_format = format(CLOCK_FORMAT, hours, minutes, seconds, centis).sub(/^[0:]*/, EMPTY_STRING)
-    if clock_format.start_with? DOT_STRING
-      clock_format = ZERO_STRING + clock_format
-    end
+    clock_format = ZERO_STRING + clock_format if clock_format.start_with? DOT_STRING
     clock_format
   end
 
@@ -239,9 +239,7 @@ class SolveTime
 
   validate :wca_value_valid
   def wca_value_valid
-    unless wca_value >= -2
-      errors.add(:base, "invalid")
-    end
+    errors.add(:base, "invalid") unless wca_value >= -2
   end
 
   # Enforce https://www.worldcubeassociation.org/regulations/#H1b.
@@ -253,27 +251,23 @@ class SolveTime
     time_limit_seconds = time_limit_minutes * 60
     # We let up to 30s margin for +2 during the attempt
     # The error message 'hide' the fact that we let a 30s margin above the time limit, but we're fine with it
-    if time_seconds > (time_limit_seconds + 30)
-      errors.add(:base, "should be less than or equal to #{time_limit_minutes} minutes")
-    end
+    errors.add(:base, "should be less than or equal to #{time_limit_minutes} minutes") if time_seconds > (time_limit_seconds + 30)
   end
 
   validate :time_centiseconds_must_not_be_nil
   def time_centiseconds_must_not_be_nil
     return if incomplete? || (!@event.timed_event? && !@event.multiple_blindfolded?)
+
     # For 333mbo only, time_centiseconds may be nil to indicate an unknown time.
-    unless time_centiseconds || @event.id == "333mbo"
-      errors.add(:base, "time_centiseconds must not be nil")
-    end
+    errors.add(:base, "time_centiseconds must not be nil") unless time_centiseconds || @event.id == "333mbo"
   end
 
   validate :times_over_10_minutes_must_be_rounded
   def times_over_10_minutes_must_be_rounded
     # See validation for nil time_centiseconds above
     return if incomplete? || time_centiseconds.nil?
-    if (@event.timed_event? || @event.multiple_blindfolded?) && time_minutes > 10 && time_centiseconds % 100 > 0
-      errors.add(:base, "times over 10 minutes should be rounded")
-    end
+
+    errors.add(:base, "times over 10 minutes should be rounded") if (@event.timed_event? || @event.multiple_blindfolded?) && time_minutes > 10 && time_centiseconds % 100 > 0
   end
 
   DNF_VALUE = -1

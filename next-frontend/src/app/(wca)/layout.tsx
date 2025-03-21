@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
 import React from "react";
 import AuthProvider from "@/providers/SessionProvider";
 import WCAQueryClientProvider from "@/providers/WCAQueryClientProvider";
 import PermissionProvider from "@/providers/PermissionProvider";
 import { Provider as UiProvider } from "@/components/ui/provider";
+import Navbar from "./navbar";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -33,6 +33,7 @@ export default function RootLayout({
         <WCAQueryClientProvider>
           <AuthProvider>
             <UiProvider>
+              <Navbar />
               <PermissionProvider>{children}</PermissionProvider>
             </UiProvider>
           </AuthProvider>

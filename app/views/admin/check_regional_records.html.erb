@@ -29,7 +29,7 @@
   </p>
 
   <%= alert :warning do %>
-    This script relies on auxiliary tables which are computed as part of <%= link_to "running CAD", admin_compute_auxiliary_data_path, target: :_blank %>.
+    This script relies on auxiliary tables which are computed as part of <%= link_to "running CAD", panel_page_path(id: User.panel_pages[:computeAuxiliaryData]), target: :_blank %>.
     <br/>
     <b>The detected records will not automatically be up-to-date with the <code>Results</code> table by default.</b>
     <br/>

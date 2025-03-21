@@ -49,7 +49,7 @@ class CompetitionsMailerPreview < ActionMailer::Preview
 
   def notify_of_delegate_report_submission
     report = DelegateReport.where.not(posted_at: nil).first
-    if !report
+    unless report
       report = Competition.first.delegate_report
       report.update!(schedule_url: "http://example.com", posted_by_user_id: User.last.id, posted_at: Time.now)
     end
@@ -65,7 +65,7 @@ class CompetitionsMailerPreview < ActionMailer::Preview
     delegate_report.wrc_primary_user = wrc_primary_user
     delegate_report.wrc_secondary_user = wrc_secondary_user
 
-    if !report
+    unless report
       report = Competition.first.delegate_report
       report.update!(schedule_url: "http://example.com", posted_by_user_id: User.last.id, posted_at: Time.now)
     end

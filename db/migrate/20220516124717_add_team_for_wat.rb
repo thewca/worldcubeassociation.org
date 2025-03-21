@@ -1,3 +1,4 @@
+# rubocop:disable all
 # frozen_string_literal: true
 
 class AddTeamForWat < ActiveRecord::Migration[6.1]

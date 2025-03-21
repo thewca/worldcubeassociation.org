@@ -36,9 +36,7 @@ module ResultsValidators
 
         check_events_match(competition, results_for_comp)
 
-        if competition.has_rounds?
-          check_rounds_match(competition, results_for_comp)
-        end
+        check_rounds_match(competition, results_for_comp) if competition.has_rounds?
       end
     end
 
@@ -80,7 +78,7 @@ module ResultsValidators
         # Check that rounds match what was declared.
         # This function automatically casts cutoff rounds to regular rounds if everyone has met the cutoff.
 
-        expected_rounds_by_ids = competition.competition_events.map(&:rounds).flatten.to_h { |r| ["#{r.event.id}-#{r.round_type_id}", r] }
+        expected_rounds_by_ids = competition.competition_events.map(&:rounds).flatten.index_by { |r| "#{r.event.id}-#{r.round_type_id}" }
 
         expected = expected_rounds_by_ids.keys
         real = results.map { |r| "#{r.eventId}-#{r.roundTypeId}" }.uniq

@@ -36,14 +36,14 @@ module ResultsHelper
     if pb_marker
       record_class = 'pb'
       if regional_record.present?
-        case regional_record
-        when 'WR'
-          record_class = 'wr'
-        when 'NR'
-          record_class = 'nr'
-        else
-          record_class = 'cr'
-        end
+        record_class = case regional_record
+                       when 'WR'
+                         'wr'
+                       when 'NR'
+                         'nr'
+                       else
+                         'cr'
+                       end
       end
     end
     record_class

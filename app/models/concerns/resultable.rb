@@ -21,7 +21,7 @@ module Resultable
     # Forgetting to synchronize the results in WCA Live is a very common mistake,
     # so this error message is hinting the user to check that, even if it's
     # outside the scope of the WCA website.
-    validates_numericality_of :pos, message: "The position is not a valid number. Did you clear all the empty rows and synchronized WCA Live?"
+    validates :pos, numericality: { message: "The position is not a valid number. Did you clear all the empty rows and synchronized WCA Live?" }
 
     # Define cached stuff with the same name as the associations for validation
     def round_type
@@ -46,24 +46,22 @@ module Resultable
       # competition.find_round_for.
       Competition
         .includes(:rounds)
-        .find_by_id(competition_id)
+        .find_by(id: competition_id)
         &.find_round_for(event_id, round_type_id, format_id)
     end
 
     validate :belongs_to_a_round
     def belongs_to_a_round
-      if round.blank?
-        errors.add(:round_type,
-                   "Result must belong to a valid round. Please check that the tuple (competitionId, eventId, roundTypeId, formatId) matches an existing round.")
-      end
+      return if round.present?
+
+      errors.add(:round_type,
+                 "Result must belong to a valid round. Please check that the tuple (competitionId, eventId, roundTypeId, formatId) matches an existing round.")
     end
 
     validate :validate_each_solve, if: :event
     def validate_each_solve
       solve_times.each_with_index do |solve_time, i|
-        unless solve_time.valid?
-          errors.add(:"value#{i + 1}", solve_time.errors.full_messages.join(" "))
-        end
+        errors.add(:"value#{i + 1}", solve_time.errors.full_messages.join(" ")) unless solve_time.valid?
       end
     end
 
@@ -92,19 +90,13 @@ module Resultable
     return "Invalid round_type" unless round_type
     return "All solves cannot be DNS/skipped." if solve_times.all? { |s| s.dns? || s.skipped? }
 
-    unless solve_times.drop_while(&:unskipped?).all?(&:skipped?)
-      return "Skipped solves must all come at the end."
-    end
+    return "Skipped solves must all come at the end." unless solve_times.drop_while(&:unskipped?).all?(&:skipped?)
 
     unskipped_count = solve_times.count(&:unskipped?)
     if round_type.combined?
-      if unskipped_count > format.expected_solve_count
-        "Expected at most #{hlp.pluralize(format.expected_solve_count, 'solve')}, but found #{unskipped_count}."
-      end
-    else
-      if unskipped_count != format.expected_solve_count
-        "Expected #{hlp.pluralize(format.expected_solve_count, 'solve')}, but found #{unskipped_count}."
-      end
+      "Expected at most #{hlp.pluralize(format.expected_solve_count, 'solve')}, but found #{unskipped_count}." if unskipped_count > format.expected_solve_count
+    elsif unskipped_count != format.expected_solve_count
+      "Expected #{hlp.pluralize(format.expected_solve_count, 'solve')}, but found #{unskipped_count}."
     end
   end
 
@@ -154,21 +146,19 @@ module Resultable
   def compute_correct_average
     if average_is_not_computable_reason || missed_combined_round_cutoff? || !should_compute_average?
       0
+    elsif counting_solve_times.any?(&:incomplete?)
+      SolveTime::DNF_VALUE
+    elsif eventId == "333fm"
+      sum_moves = counting_solve_times.sum(&:move_count).to_f
+      (100 * sum_moves / counting_solve_times.length).round
     else
-      if counting_solve_times.any?(&:incomplete?)
-        SolveTime::DNF_VALUE
-      elsif eventId == "333fm"
-        sum_moves = counting_solve_times.sum(&:move_count).to_f
-        (100 * sum_moves / counting_solve_times.length).round
-      else
-        # Cast at least one of the operands to float
-        sum_centis = counting_solve_times.sum(&:time_centiseconds).to_f
-        raw_average = sum_centis / counting_solve_times.length
-        # Round the result.
-        # If the average is above 10 minutes, round it to the nearest second as per
-        # https://www.worldcubeassociation.org/regulations/#9f2
-        raw_average > 60_000 ? raw_average.round(-2) : raw_average.round
-      end
+      # Cast at least one of the operands to float
+      sum_centis = counting_solve_times.sum(&:time_centiseconds).to_f
+      raw_average = sum_centis / counting_solve_times.length
+      # Round the result.
+      # If the average is above 10 minutes, round it to the nearest second as per
+      # https://www.worldcubeassociation.org/regulations/#9f2
+      raw_average > 60_000 ? raw_average.round(-2) : raw_average.round
     end
   end
 

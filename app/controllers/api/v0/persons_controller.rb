@@ -2,39 +2,31 @@
 
 class Api::V0::PersonsController < Api::V0::ApiController
   def index
-    if params[:q].present?
-      persons = Person.search(params[:q])
-    else
-      persons = Person.current.includes(:user)
-    end
+    persons = if params[:q].present?
+                Person.search(params[:q])
+              else
+                Person.current.includes(:user)
+              end
     persons = persons.includes(:ranksSingle, :ranksAverage)
-    if params[:wca_ids].present?
-      persons = persons.where(wca_id: params[:wca_ids].split(','))
-    end
+    persons = persons.where(wca_id: params[:wca_ids].split(',')) if params[:wca_ids].present?
     render json: paginate(persons).map { |person| person_to_json person }
   end
 
   def show
     wca_id = params[:wca_id]
-    person = Person.current.includes(:user, :ranksSingle, :ranksAverage).find_by_wca_id!(wca_id)
-    private_attributes = []
-    if current_user
-      if current_user.wca_id == wca_id || current_user.any_kind_of_delegate?
-        private_attributes = %w[dob]
-      elsif current_user.can_admin_results?
-        private_attributes = %w[incorrect_wca_id_claim_count dob]
-      end
-    end
+    person = Person.current.includes(:user, :ranksSingle, :ranksAverage).find_by!(wca_id: wca_id)
+    private_attributes = person.private_attributes_for_user(current_user)
+
     render json: person_to_json(person, private_attributes)
   end
 
   def results
-    person = Person.current.find_by_wca_id!(params[:wca_id])
+    person = Person.current.find_by!(wca_id: params[:wca_id])
     render json: person.results
   end
 
   def competitions
-    person = Person.current.find_by_wca_id!(params[:wca_id])
+    person = Person.current.find_by!(wca_id: params[:wca_id])
     render json: person.competitions
   end
 
