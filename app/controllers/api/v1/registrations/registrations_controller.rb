@@ -5,6 +5,7 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
   # The order of the validations is important to not leak any non public info via the API
   # That's why we should always validate a request first, before taking any other before action
   # before_actions are triggered in the order they are defined
+  before_action :user_can_create_registration, only: [:create]
   before_action :validate_create_request, only: [:create]
   before_action :validate_show_registration, only: [:show]
   before_action :validate_list_admin, only: [:list_admin]
@@ -54,8 +55,24 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
     render json: { status: 'bad request', message: 'You need to supply at least one lane' }, status: :bad_request
   end
 
+  def user_can_create_registration
+    @target_user = User.find(params.require('user_id'))
+    @competition = Competition.find(params.require('competition_id'))
+    raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::REGISTRATION_ALREADY_EXISTS) if
+      Registration.exists?(competition: @competition, user: @target_user)
+
+    # Only the user themselves can create a registration for the user
+    raise WcaExceptions::RegistrationError.new(:unauthorized, Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) unless @current_user.id == @target_user.id
+
+    # Only organizers can register when registration is closed
+    raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::REGISTRATION_CLOSED) unless @competition.registration_currently_open? || current_user.can_manage_competition?(@competition)
+
+    # Users must have the necessary permissions to compete - eg, they cannot be banned or have incomplete profiles
+    raise WcaExceptions::RegistrationError.new(:unauthorized, Registrations::ErrorCodes::USER_CANNOT_COMPETE) unless @target_user.cannot_register_for_competition_reasons(@competition).empty?
+  end
+
   def validate_create_request
-    Registrations::RegistrationChecker.create_registration_allowed!(params, @current_user)
+    Registrations::RegistrationChecker.create_registration_allowed!(params, @target_user, @competition)
   end
 
   def update
