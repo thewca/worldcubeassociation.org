@@ -26,7 +26,7 @@ class CompetitionsController < ApplicationController
     :admin_edit,
     :disconnect_payment_integration,
   ]
-  before_action -> { redirect_to_root_unless_user(:any_results?) }, only: [
+  before_action -> { redirect_to_root_unless_user(:can_admin_results?) }, only: [
     :post_results,
   ]
   before_action -> { redirect_to_root_unless_user(:can_create_competitions?) }, only: [
