@@ -656,7 +656,7 @@ RSpec.describe 'API Registrations' do
         error: {
           registration1[:user_id] => Registrations::ErrorCodes::INVALID_EVENT_SELECTION,
           registration2[:user_id] => Registrations::ErrorCodes::INVALID_REQUEST_DATA,
-        }
+        },
       }.to_json
 
       expect(response.body).to eq(error_json)
@@ -679,8 +679,8 @@ RSpec.describe 'API Registrations' do
 
       error_json = {
         error: {
-            missing_registration_user_id => Registrations::ErrorCodes::REGISTRATION_NOT_FOUND,
-          }
+          missing_registration_user_id => Registrations::ErrorCodes::REGISTRATION_NOT_FOUND,
+        },
       }.to_json
 
       expect(response.body).to eq(error_json)
@@ -716,7 +716,7 @@ RSpec.describe 'API Registrations' do
         error: {
           registration1.user_id => Registrations::ErrorCodes::INVALID_EVENT_SELECTION,
           missing_registration_user_id => Registrations::ErrorCodes::REGISTRATION_NOT_FOUND,
-        }
+        },
       }.to_json
 
       expect(response.body).to eq(error_json)
