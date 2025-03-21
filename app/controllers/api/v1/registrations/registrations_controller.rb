@@ -64,8 +64,8 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
     # Only the user themselves can create a registration for the user
     raise WcaExceptions::RegistrationError.new(:unauthorized, Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) unless @current_user.id == @target_user.id
 
-    # Only organizers can register when registration is closed, and they can only register for themselves - not for other users
-    raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::REGISTRATION_CLOSED) unless @competition.registration_currently_open? || organizer_modifying_own_registration?(@competition, @current_user, @target_user)
+    # Only organizers can register when registration is closed
+    raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::REGISTRATION_CLOSED) unless @competition.registration_currently_open? || current_user.can_manage_competition?(@competition)
 
     # Users must have the necessary permissions to compete - eg, they cannot be banned or have incomplete profiles
     raise WcaExceptions::RegistrationError.new(:unauthorized, Registrations::ErrorCodes::USER_CANNOT_COMPETE) unless @target_user.cannot_register_for_competition_reasons(@competition).empty?
@@ -190,11 +190,5 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
 
     def list_params
       params.require(:competition_id)
-    end
-
-    # Some of these are currently duplicated while migrating from registration_checker
-
-    def organizer_modifying_own_registration?(competition, current_user, target_user)
-      (current_user.id == target_user.id) && current_user.can_manage_competition?(competition)
     end
 end
