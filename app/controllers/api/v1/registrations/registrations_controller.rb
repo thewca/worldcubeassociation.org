@@ -94,9 +94,10 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
 
   def user_can_bulk_modify_registrations
     @competition = Competition.find(params['competition_id'])
+    @update_requests = params.require('requests')
 
     raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::COMPETITOR_LIMIT_REACHED) if
-      will_exceed_competitor_limit?(params.require('requests'), @competition)
+      will_exceed_competitor_limit?(@update_requests, @competition)
 
     raise WcaExceptions::BulkUpdateError.new(:unauthorized, [Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS]) unless
       current_user.can_manage_competition?(@competition)
@@ -104,7 +105,8 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
 
   def validate_bulk_update_request
     errors = {}
-    params.require('requests').each do |update_request|
+
+    @update_requests.each do |update_request|
       registration = Registration.find_by(competition: @competition, user_id: update_request['user_id'])
       raise WcaExceptions::RegistrationError.new(:not_found, Registrations::ErrorCodes::REGISTRATION_NOT_FOUND) if registration.blank?
 
@@ -118,9 +120,8 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
 
   def bulk_update
     updated_registrations = {}
-    update_requests = params[:requests]
 
-    update_requests.each do |update|
+    @update_requests.each do |update|
       updated_registrations[update['user_id']] = Registrations::Lanes::Competing.update!(update, @competition, @current_user.id)
     end
 

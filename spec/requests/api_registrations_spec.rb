@@ -374,6 +374,7 @@ RSpec.describe 'API Registrations' do
         user_id: registration.user_id,
         competition_id: registration.competition.id,
         submitted_by: competition.organizers.first.id,
+        competing: { 'comment' => 'updated_comment' },
       )
       headers = { 'Authorization' => update_request['jwt_token'] }
 
@@ -397,6 +398,33 @@ RSpec.describe 'API Registrations' do
 
       patch api_v1_registrations_register_path, params: update_request, headers: headers
       expect(response).to have_http_status(:ok)
+    end
+
+    it 'cant re-register (register after cancelling) if they have a registration for another series comp' do
+      registration_a = FactoryBot.create(:registration, :accepted)
+      series = FactoryBot.create(:competition_series)
+      competition_a = registration_a.competition
+      competition_b = FactoryBot.create(
+        :competition, :registration_open, :editable_registrations, :with_organizer, competition_series: series, series_base: competition_a
+      )
+      registration_b = FactoryBot.create(:registration, :cancelled, competition: competition_b, user_id: registration_a.user.id)
+      competition_a.update!(competition_series: series)
+
+      update_request = FactoryBot.build(
+        :update_request,
+        user_id: registration_b.user.id,
+        competition_id: competition_b.id,
+        competing: { 'status' => 'pending' },
+      )
+      headers = { 'Authorization' => update_request['jwt_token'] }
+
+      patch api_v1_registrations_register_path, params: update_request, headers: headers
+      error_json = {
+        error: Registrations::ErrorCodes::ALREADY_REGISTERED_IN_SERIES,
+      }.to_json
+
+      expect(response.body).to eq(error_json)
+      expect(response).to have_http_status(:forbidden)
     end
 
     RSpec.shared_examples 'user cant update rejected registration' do |initial_status, new_status|
@@ -437,11 +465,11 @@ RSpec.describe 'API Registrations' do
     let(:user1) { FactoryBot.create :user }
     let(:user2) { FactoryBot.create :user }
     let(:user3) { FactoryBot.create :user }
-    let(:user_ids) { [user1.id, user2.id, user3.id] }
 
     let(:registration1) { FactoryBot.create(:registration, competition: competition, user: user1) }
     let(:registration2) { FactoryBot.create(:registration, competition: competition, user: user2) }
     let(:registration3) { FactoryBot.create(:registration, competition: competition, user: user3) }
+    let(:user_ids) { [registration1.user.id, registration2.user.id, registration3.user.id] }
 
     it 'admin submits a bulk update containing 1 update' do
       bulk_update_request = FactoryBot.build(

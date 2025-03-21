@@ -2281,22 +2281,6 @@ RSpec.describe Registrations::RegistrationChecker do
         competitionA.update!(competition_series: series)
       end
 
-      it 'cant re-register (register after cancelling) if they have a registration for another series comp' do
-        update_request = FactoryBot.build(
-          :update_request,
-          user_id: registrationB.user.id,
-          competition_id: competitionB.id,
-          competing: { 'status' => 'pending' },
-        )
-
-        expect {
-          Registrations::RegistrationChecker.update_registration_allowed!(update_request, registrationB, Competition.find(update_request['competition_id']), User.find(update_request['submitted_by']))
-        }.to raise_error(WcaExceptions::RegistrationError) do |error|
-          expect(error.error).to eq(Registrations::ErrorCodes::ALREADY_REGISTERED_IN_SERIES)
-          expect(error.status).to eq(:forbidden)
-        end
-      end
-
       it 'organizer cant set status to accepted if attendee is accepted for another series comp' do
         update_request = FactoryBot.build(
           :update_request,
