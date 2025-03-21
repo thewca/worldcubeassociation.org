@@ -77,9 +77,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
       ban_reason = params[:banReason]
       scope = params[:scope]
       upcoming_registrations_for_user = user.registrations.not_cancelled
-      if end_date.present?
-        upcoming_registrations_for_user = upcoming_registrations_for_user.joins(:competition).merge(Competition.between_dates(Date.today, end_date))
-      end
+      upcoming_registrations_for_user = upcoming_registrations_for_user.joins(:competition).merge(Competition.between_dates(Date.today, end_date)) if end_date.present?
       unless upcoming_registrations_for_user.empty?
         upcoming_registrations_for_user.each do |registration|
           registration.update!(competing_status: Registrations::Helper::STATUS_REJECTED)

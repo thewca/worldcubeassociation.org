@@ -97,13 +97,13 @@ class RegistrationsMailer < ApplicationMailer
     @registration = registration
     @end_date = end_date
     to = registration.competition.competition_delegates.map { |x| x.user.email }
-    unless to.empty?
-      mail(
-        to: to,
-        cc: UserGroup.teams_committees_group_wic.metadata.email,
-        reply_to: UserGroup.teams_committees_group_wic.metadata.email,
-        subject: "Competitor Ban Notice – Registration Deleted for #{registration.competition.name}",
-      )
-    end
+    return if to.empty?
+
+    mail(
+      to: to,
+      cc: UserGroup.teams_committees_group_wic.metadata.email,
+      reply_to: UserGroup.teams_committees_group_wic.metadata.email,
+      subject: "Competitor Ban Notice – Registration Deleted for #{registration.competition.name}",
+    )
   end
 end
