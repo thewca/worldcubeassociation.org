@@ -19,7 +19,7 @@ export default async function CompetitionOverView({
   if (!competitionInfo) {
     return <Text>Competition does not exist</Text>;
   }
-
+  console.log(competitionInfo);
   return (
     <Container centerContent>
       <Heading>{competitionInfo.name}</Heading>
