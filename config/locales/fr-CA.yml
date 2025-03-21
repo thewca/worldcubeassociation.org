@@ -3510,8 +3510,8 @@ fr-CA:
           country_id: ''
           #original_hash: bce4589
           city_name: >-
-            Nom de la ville où la compétition a lieu. Ne pas mettre le pays (ex
-            : Paris).
+            Nom de la ville où la compétition a lieu ainsi que la province / état (dans les pays où c'est l'usage). Ne pas mettre le pays. Exemple d'entrée valide:
+            : Montréal, Quebec
           #original_hash: 9d9126e
           name_html: >-
             La salle où la compétition à lieu. %{md}. Par exemple : [École de Technologie Supérieure](https://www.etsmtl.ca)
