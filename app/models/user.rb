@@ -1534,7 +1534,7 @@ class User < ApplicationRecord
     ]
   end
 
-  def anonymizedocker
+  def anonymize
     skip_reconfirmation!
     update(
       email: id.to_s + User::ANONYMOUS_ACCOUNT_EMAIL_ID_SUFFIX,
