@@ -43,6 +43,7 @@ export default function TicketCommentCreate({
           id="new-comment"
           value={comment}
           onChange={setComment}
+          imageUploadEnabled={false}
         />
       </Modal.Content>
       <Modal.Actions>
