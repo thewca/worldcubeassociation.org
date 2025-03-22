@@ -11,8 +11,7 @@ class WfcController < ApplicationController
     select_attributes = [
       :id, :name, :start_date, :end_date,
       :countryId, :announced_at, :results_posted_at,
-      :currency_code, :base_entry_fee_lowest_denomination,
-      "count(distinct Persons.id) as num_competitors"
+      :currency_code, :base_entry_fee_lowest_denomination
     ]
     from = params.require(:from_date)
     to = params.require(:to_date)
