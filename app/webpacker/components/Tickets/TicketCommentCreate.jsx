@@ -7,10 +7,6 @@ import createComment from './api/createComment';
 import Loading from '../Requests/Loading';
 import Errored from '../Requests/Errored';
 
-const TICKET_COMMENTS_MD_EDITOR_OPTIONS = {
-  enableImageUpload: false,
-};
-
 export default function TicketCommentCreate({
   open, onClose, ticketId, currentStakeholder,
 }) {
@@ -47,7 +43,7 @@ export default function TicketCommentCreate({
           id="new-comment"
           value={comment}
           onChange={setComment}
-          editorOptions={TICKET_COMMENTS_MD_EDITOR_OPTIONS}
+          imageUploadEnabled={false}
         />
       </Modal.Content>
       <Modal.Actions>
