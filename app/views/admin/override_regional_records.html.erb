@@ -12,7 +12,7 @@
 
   <h1>
     <%= yield(:title) %>
-    <%= link_to "Go back", admin_check_regional_records_path(competition_id: competition_id, event_id: event_id), class: "btn btn-default" %>
+    <%= link_to "Go back", panel_page_path(id: User.panel_pages[:checkRecords], competition_id: competition_id, event_id: event_id), class: "btn btn-default" %>
   </h1>
 
   <% if diff_mode %>
@@ -168,7 +168,7 @@
     <% end %>
 
     <%= f.button :submit, value: "Submit overrides", class: "btn-primary" %>
-    <%= link_to "Go back", admin_check_regional_records_path(competition_id: competition_id, event_id: event_id), class: "btn btn-default" %>
+    <%= link_to "Go back", panel_page_path(id: User.panel_pages[:checkRecords], competition_id: competition_id, event_id: event_id), class: "btn btn-default" %>
   <% end %>
 </div>
 

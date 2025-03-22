@@ -5,7 +5,6 @@ import {
   subordinateUpcomingCompetitionsUrl,
   generateDbTokenUrl,
   serverStatusPageUrl,
-  checkRecordsUrl,
   fixResultsUrl,
   mergeProfilesUrl,
   reassignConnectedWcaIdUrl,
@@ -38,6 +37,7 @@ import CreateNewcomersPage from './pages/CreateNewcomersPage';
 import RunValidatorsForm from './pages/RunValidatorsPage/RunValidatorsForm';
 import ComputeAuxiliaryDataPage from './pages/ComputeAuxiliaryDataPage';
 import GenerateDataExportsPage from './pages/GenerateDataExportsPage';
+import CheckRecordsPage from './pages/CheckRecordsPage';
 
 export default {
   [PANEL_PAGES.postingDashboard]: {
@@ -166,7 +166,7 @@ export default {
   },
   [PANEL_PAGES.checkRecords]: {
     name: 'Check Records',
-    link: checkRecordsUrl,
+    component: CheckRecordsPage,
   },
   [PANEL_PAGES.computeAuxiliaryData]: {
     name: 'Compute Auxiliary Data',
