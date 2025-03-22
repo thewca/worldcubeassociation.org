@@ -1500,6 +1500,7 @@ class User < ApplicationRecord
   end
 
   def anonymization_checks_with_message_args
+    upcoming_registered_competitions = competitions_registered_for.not_over.merge(Registration.not_cancelled)
     access_grants = oauth_access_grants
                     .where.not(revoked_at: nil)
                     .map do |access_grant|
@@ -1523,15 +1524,17 @@ class User < ApplicationRecord
         user_banned_in_past: banned_in_past?,
         user_may_have_forum_account: true,
         user_has_active_oauth_access_grants: access_grants.any?,
+        user_has_upcoming_registered_competitions: upcoming_registered_competitions.any?,
       },
       {
         access_grants: access_grants,
         oauth_applications: oauth_applications,
+        upcoming_registered_competitions: upcoming_registered_competitions,
       },
     ]
   end
 
-  def anonymize
+  def anonymizedocker
     skip_reconfirmation!
     update(
       email: id.to_s + User::ANONYMOUS_ACCOUNT_EMAIL_ID_SUFFIX,
