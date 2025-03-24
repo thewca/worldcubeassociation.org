@@ -15,11 +15,9 @@ module Registrations
       validate_comment!(r)
     end
 
-    def self.update_registration_allowed!(update_request, competition, current_user)
-      registration = Registration.find_by(competition_id: competition.id, user_id: update_request['user_id'])
-      raise WcaExceptions::RegistrationError.new(:not_found, Registrations::ErrorCodes::REGISTRATION_NOT_FOUND) if registration.blank?
-
-      target_user = User.find(update_request['user_id'])
+    def self.update_registration_allowed!(update_request, registration, current_user)
+      target_user = registration.user
+      competition = registration.competition
       waiting_list_position = update_request.dig('competing', 'waiting_list_position')
       comment = update_request.dig('competing', 'comment')
       organizer_comment = update_request.dig('competing', 'organizer_comment')
@@ -32,82 +30,18 @@ module Registrations
       registration.comments = comment if competing_payload&.key?('comment')
       registration.administrative_notes = organizer_comment if competing_payload&.key?('organizer_comment')
 
-      user_can_modify_registration!(competition, current_user, target_user, registration, new_status)
       # Migrated to ActiveRecord-style validations
       validate_guests!(registration)
       validate_comment!(registration)
       validate_organizer_comment!(registration)
       # Old-style validations within this class
-      validate_organizer_fields!(update_request, current_user, competition)
       validate_waiting_list_position!(waiting_list_position, competition, registration) unless waiting_list_position.nil?
       validate_update_status!(new_status, competition, current_user, target_user, registration, events) unless new_status.nil?
       validate_update_events!(events, competition) unless events.nil?
       validate_qualifications!(update_request, competition, target_user) unless events.nil?
     end
 
-    def self.bulk_update_allowed!(bulk_update_request, current_user)
-      update_requests = bulk_update_request['requests']
-      raise WcaExceptions::BulkUpdateError.new(:bad_request, [Registrations::ErrorCodes::INVALID_REQUEST_DATA]) if
-        update_requests.blank?
-
-      competition = Competition.find(bulk_update_request['competition_id'])
-
-      raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::COMPETITOR_LIMIT_REACHED) if
-        will_exceed_competitor_limit?(update_requests, competition)
-
-      raise WcaExceptions::BulkUpdateError.new(:unauthorized, [Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS]) unless
-        current_user.can_manage_competition?(competition)
-
-      errors = {}
-      update_requests.each do |update_request|
-        update_registration_allowed!(update_request, competition, current_user)
-      rescue WcaExceptions::RegistrationError => e
-        errors[update_request['user_id']] = e.error
-      end
-
-      raise WcaExceptions::BulkUpdateError.new(:unprocessable_entity, errors) unless errors.empty?
-    end
-
     class << self
-      def will_exceed_competitor_limit?(update_requests, competition)
-        registrations_to_be_accepted = update_requests.count { |r| r.dig('competing', 'status') == Registrations::Helper::STATUS_ACCEPTED }
-        total_accepted_registrations_after_update = competition.registrations.accepted_count + registrations_to_be_accepted
-
-        competition.competitor_limit_enabled &&
-          registrations_to_be_accepted > 0 &&
-          total_accepted_registrations_after_update > competition.competitor_limit
-      end
-
-      def user_can_modify_registration!(competition, current_user, target_user, registration, new_status)
-        raise WcaExceptions::RegistrationError.new(:unauthorized, Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) unless
-          can_administer_or_current_user?(competition, current_user, target_user)
-        raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::USER_EDITS_NOT_ALLOWED) unless
-          competition.registration_edits_currently_permitted? || current_user.can_manage_competition?(competition) || user_uncancelling_registration?(registration, new_status)
-        raise WcaExceptions::RegistrationError.new(:unauthorized, Registrations::ErrorCodes::REGISTRATION_IS_REJECTED) if
-          user_is_rejected?(current_user, target_user, registration) && !organizer_modifying_own_registration?(competition, current_user, target_user)
-        raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::ALREADY_REGISTERED_IN_SERIES) if
-          existing_registration_in_series?(competition, target_user) && !current_user.can_manage_competition?(competition)
-      end
-
-      def user_uncancelling_registration?(registration, new_status)
-        registration.competing_status_cancelled? && new_status == Registrations::Helper::STATUS_PENDING
-      end
-
-      def user_is_rejected?(current_user, target_user, registration)
-        current_user.id == target_user.id && registration.rejected?
-      end
-
-      def organizer_modifying_own_registration?(competition, current_user, target_user)
-        (current_user.id == target_user.id) && current_user.can_manage_competition?(competition)
-      end
-
-      def can_administer_or_current_user?(competition, current_user, target_user)
-        # Only an organizer or the user themselves can create a registration for the user
-        # One case where organizers need to create registrations for users is if a 3rd-party registration system is being used, and registration data is being
-        # passed to the Registration Service from it
-        (current_user.id == target_user.id) || current_user.can_manage_competition?(competition)
-      end
-
       def validate_create_events!(request, competition)
         event_ids = request['competing']['event_ids']
         # Event submitted must be held at the competition
@@ -151,12 +85,6 @@ module Registrations
         process_validation_error!(registration, :comments)
       end
 
-      def validate_organizer_fields!(request, current_user, competition)
-        organizer_fields = ['organizer_comment', 'waiting_list_position']
-
-        raise WcaExceptions::RegistrationError.new(:unauthorized, Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) if contains_organizer_fields?(request, organizer_fields) && !current_user.can_manage_competition?(competition)
-      end
-
       def validate_organizer_comment!(registration)
         process_validation_error!(registration, :administrative_notes)
       end
@@ -177,10 +105,6 @@ module Registrations
         raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::INVALID_WAITING_LIST_POSITION) if waiting_list.empty? && converted_position != 1
         raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::INVALID_WAITING_LIST_POSITION) if converted_position > waiting_list.length
         raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::INVALID_WAITING_LIST_POSITION) if converted_position < 1
-      end
-
-      def contains_organizer_fields?(request, organizer_fields)
-        request['competing']&.keys&.any? { |key| organizer_fields.include?(key) }
       end
 
       # rubocop:disable Metrics/ParameterLists
