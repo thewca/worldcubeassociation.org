@@ -87,14 +87,16 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
   end
 
   def ensure_registration_exists
-    @competition = Competition.find(params.require('competition_id'))
-    @registration = Registration.includes(:user).find_by(competition: @competition, user_id: params.require('user_id'))
+    @request = update_params
+    @competition = Competition.find(@request[:competition_id])
+    @registration = Registration.includes(:user).find_by(competition: @competition, user_id: @request[:user_id])
     raise WcaExceptions::RegistrationError.new(:not_found, Registrations::ErrorCodes::REGISTRATION_NOT_FOUND) if @registration.blank?
   end
 
   def user_can_modify_registration
-    new_status = params.dig('competing', 'status')
+    new_status = @request.dig('competing', 'status')
     target_user = @registration.user
+
     raise WcaExceptions::RegistrationError.new(:unauthorized, Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) unless
       can_administer_or_current_user?(@competition, @current_user, target_user)
     raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::USER_EDITS_NOT_ALLOWED) unless
@@ -103,6 +105,7 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
       user_is_rejected?(@current_user, target_user, @registration) && !organizer_modifying_own_registration?(@competition, @current_user, target_user)
     raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::ALREADY_REGISTERED_IN_SERIES) if
       existing_registration_in_series?(@competition, target_user) && !current_user.can_manage_competition?(@competition)
+    raise WcaExceptions::RegistrationError.new(:unauthorized, Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) if contains_organizer_fields?(@request) && !@current_user.can_manage_competition?(@competition)
   end
 
   def validate_update_request
@@ -124,10 +127,12 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
     errors = {}
 
     @update_requests.each do |update_request|
-      registration = Registration.find_by(competition: @competition, user_id: update_request['user_id'])
-      raise WcaExceptions::RegistrationError.new(:not_found, Registrations::ErrorCodes::REGISTRATION_NOT_FOUND) if registration.blank?
+      @registration = Registration.find_by(competition: @competition, user_id: update_request['user_id'])
+      raise WcaExceptions::RegistrationError.new(:not_found, Registrations::ErrorCodes::REGISTRATION_NOT_FOUND) if @registration.blank?
+      @request = update_request
+      user_can_modify_registration
 
-      Registrations::RegistrationChecker.update_registration_allowed!(update_request, registration, @current_user)
+      Registrations::RegistrationChecker.update_registration_allowed!(update_request, @registration, @current_user)
     rescue WcaExceptions::RegistrationError => e
       errors[update_request['user_id']] = e.error
     end
@@ -227,6 +232,7 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
     def update_params
       params.require([:user_id, :competition_id])
       params.permit(:guests, competing: [:status, :comment, { event_ids: [] }, :admin_comment])
+      params
     end
 
     def list_params
@@ -270,5 +276,11 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
       competition.competitor_limit_enabled &&
         registrations_to_be_accepted > 0 &&
         total_accepted_registrations_after_update > competition.competitor_limit
+    end
+
+    def contains_organizer_fields?(request)
+      organizer_fields = ['organizer_comment', 'waiting_list_position']
+
+      request['competing']&.keys&.any? { |key| organizer_fields.include?(key) }
     end
 end

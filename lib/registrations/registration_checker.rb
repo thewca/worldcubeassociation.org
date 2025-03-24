@@ -35,7 +35,6 @@ module Registrations
       validate_comment!(registration)
       validate_organizer_comment!(registration)
       # Old-style validations within this class
-      validate_organizer_fields!(update_request, current_user, competition)
       validate_waiting_list_position!(waiting_list_position, competition, registration) unless waiting_list_position.nil?
       validate_update_status!(new_status, competition, current_user, target_user, registration, events) unless new_status.nil?
       validate_update_events!(events, competition) unless events.nil?
@@ -86,12 +85,6 @@ module Registrations
         process_validation_error!(registration, :comments)
       end
 
-      def validate_organizer_fields!(request, current_user, competition)
-        organizer_fields = ['organizer_comment', 'waiting_list_position']
-
-        raise WcaExceptions::RegistrationError.new(:unauthorized, Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) if contains_organizer_fields?(request, organizer_fields) && !current_user.can_manage_competition?(competition)
-      end
-
       def validate_organizer_comment!(registration)
         process_validation_error!(registration, :administrative_notes)
       end
@@ -112,10 +105,6 @@ module Registrations
         raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::INVALID_WAITING_LIST_POSITION) if waiting_list.empty? && converted_position != 1
         raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::INVALID_WAITING_LIST_POSITION) if converted_position > waiting_list.length
         raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::INVALID_WAITING_LIST_POSITION) if converted_position < 1
-      end
-
-      def contains_organizer_fields?(request, organizer_fields)
-        request['competing']&.keys&.any? { |key| organizer_fields.include?(key) }
       end
 
       # rubocop:disable Metrics/ParameterLists

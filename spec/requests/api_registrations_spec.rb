@@ -585,6 +585,46 @@ RSpec.describe 'API Registrations' do
       expect(response).to have_http_status(:forbidden)
     end
 
+    it 'user cant submit an organizer comment' do
+      update_request = FactoryBot.build(
+        :update_request,
+        user_id: registration.user_id,
+        competition_id: registration.competition_id,
+        competing: { 'organizer_comment' => 'this is an admin comment' },
+        )
+
+      headers = { 'Authorization' => update_request['jwt_token'] }
+
+      patch api_v1_registrations_register_path, params: update_request, headers: headers
+
+      error_json = {
+        error: Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS,
+      }.to_json
+
+      expect(response.body).to eq(error_json)
+      expect(response).to have_http_status(:unauthorized)
+    end
+
+    it 'user cant submit waiting_list_position' do
+      update_request = FactoryBot.build(
+        :update_request,
+        user_id: registration.user_id,
+        competition_id: registration.competition_id,
+        competing: { 'waiting_list_position' => '1' },
+        )
+
+      headers = { 'Authorization' => update_request['jwt_token'] }
+
+      patch api_v1_registrations_register_path, params: update_request, headers: headers
+
+      error_json = {
+        error: Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS,
+      }.to_json
+
+      expect(response.body).to eq(error_json)
+      expect(response).to have_http_status(:unauthorized)
+    end
+
     it 'organizer can change user registration' do
       update_request = FactoryBot.build(
         :update_request,

@@ -764,38 +764,6 @@ RSpec.describe Registrations::RegistrationChecker do
         expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, registration, User.find(update_request['submitted_by'])) }
           .not_to raise_error
       end
-
-      it 'user cant submit an organizer comment' do
-        update_request = FactoryBot.build(
-          :update_request,
-          user_id: default_registration.user_id,
-          competition_id: default_registration.competition_id,
-          competing: { 'organizer_comment' => 'this is an admin comment' },
-        )
-
-        expect {
-          Registrations::RegistrationChecker.update_registration_allowed!(update_request, default_registration, User.find(update_request['submitted_by']))
-        }.to raise_error(WcaExceptions::RegistrationError) do |error|
-          expect(error.status).to eq(:unauthorized)
-          expect(error.error).to eq(Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS)
-        end
-      end
-
-      it 'user cant submit waiting_list_position' do
-        update_request = FactoryBot.build(
-          :update_request,
-          user_id: default_registration.user_id,
-          competition_id: default_registration.competition_id,
-          competing: { 'waiting_list_position' => '1' },
-        )
-
-        expect {
-          Registrations::RegistrationChecker.update_registration_allowed!(update_request, default_registration, User.find(update_request['submitted_by']))
-        }.to raise_error(WcaExceptions::RegistrationError) do |error|
-          expect(error.status).to eq(:unauthorized)
-          expect(error.error).to eq(Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS)
-        end
-      end
     end
 
     describe '#update_registration_allowed!.validate_organizer_comment!' do
