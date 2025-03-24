@@ -15,8 +15,9 @@ module Registrations
       validate_comment!(r)
     end
 
-    def self.update_registration_allowed!(update_request, registration, competition, current_user)
+    def self.update_registration_allowed!(update_request, registration, current_user)
       target_user = registration.user
+      competition = registration.competition
       waiting_list_position = update_request.dig('competing', 'waiting_list_position')
       comment = update_request.dig('competing', 'comment')
       organizer_comment = update_request.dig('competing', 'organizer_comment')

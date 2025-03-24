@@ -106,7 +106,7 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
   end
 
   def validate_update_request
-    Registrations::RegistrationChecker.update_registration_allowed!(params, @registration, @competition, @current_user)
+    Registrations::RegistrationChecker.update_registration_allowed!(params, @registration, @current_user)
   end
 
   def user_can_bulk_modify_registrations
@@ -127,7 +127,7 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
       registration = Registration.find_by(competition: @competition, user_id: update_request['user_id'])
       raise WcaExceptions::RegistrationError.new(:not_found, Registrations::ErrorCodes::REGISTRATION_NOT_FOUND) if registration.blank?
 
-      Registrations::RegistrationChecker.update_registration_allowed!(update_request, registration, @competition, @current_user)
+      Registrations::RegistrationChecker.update_registration_allowed!(update_request, registration, @current_user)
     rescue WcaExceptions::RegistrationError => e
       errors[update_request['user_id']] = e.error
     end
