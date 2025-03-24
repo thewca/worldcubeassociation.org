@@ -20,12 +20,6 @@ RSpec.describe Registrations::RegistrationChecker do
           events: ['222', '333', 'pyram'],
         )
 
-        expect {
-          Registrations::RegistrationChecker.create_registration_allowed!(
-            registration_request, User.find(registration_request['submitted_by']), Competition.find(registration_request['competition_id'])
-          )
-        }.not_to raise_error
-
         ActiveRecord::Base.connected_to(role: :reading, prevent_writes: true) do
           expect {
             Registrations::RegistrationChecker.create_registration_allowed!(
