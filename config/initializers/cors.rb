@@ -23,7 +23,7 @@ else
         expose: %w[Total Per-Page Link],
         max_age: 0,
         credentials: false,
-        )
+      )
 
       resource(
         '/api/v1/*',
@@ -32,7 +32,7 @@ else
         expose: %w[Total Per-Page Link],
         max_age: 0,
         credentials: false,
-        )
+      )
     end
 
     allow do
@@ -44,7 +44,7 @@ else
         methods: %i[get post delete put patch options head],
         max_age: 0,
         credentials: false,
-        )
+      )
     end
   end
 end

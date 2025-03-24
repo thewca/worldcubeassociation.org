@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class Api::Internal::ApiController < ActionController::API
-
   # Manually include new Relic because we don't derive from ActionController::Base
   include NewRelic::Agent::Instrumentation::ControllerInstrumentation if Rails.env.production?
 
