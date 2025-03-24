@@ -343,15 +343,10 @@ Rails.application.routes.draw do
 
   namespace :api do
     get '/', to: redirect('/help/api', status: 302)
+
+    # These are all protected by CORS to not be called from outside of wca.org
     namespace :internal do
-      namespace :v1 do
-        get '/users/:id/permissions' => 'permissions#index'
-        get '/competitions/:competition_id' => 'competitions#show'
-        get '/competitions/:competition_id/qualifications' => 'competitions#qualifications'
-        post '/users/competitor-info' => 'users#competitor_info'
-        post '/mailers/registration' => 'mailers#registration'
-        post '/payment/init_stripe' => 'payment#init_stripe'
-      end
+      get '/:person_id/results', to: 'api#results', as: 'internal_api_results'
     end
 
     # While this is the start of a v1 API, this is currently not usable by outside developers as
