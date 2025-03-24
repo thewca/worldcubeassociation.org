@@ -116,7 +116,7 @@ module Registrations
 
         if new_status == Registrations::Helper::STATUS_ACCEPTED && competition.competitor_limit_enabled?
           raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::COMPETITOR_LIMIT_REACHED) if
-            competition.registrations.competing_status_accepted.count >= competition.competitor_limit
+            competition.registrations.competing_status_accepted.competing.count >= competition.competitor_limit
 
           if competition.enforce_newcomer_month_reservations? && !target_user.newcomer_month_eligible?
             available_spots = competition.competitor_limit - competition.registrations.competing_status_accepted.count
