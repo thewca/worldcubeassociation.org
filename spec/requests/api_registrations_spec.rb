@@ -9,7 +9,7 @@ RSpec.describe 'API Registrations' do
   let(:headers) { { 'CONTENT_TYPE' => 'application/json' } }
 
   describe 'POST #create' do
-    context 'create a registration' do
+    context 'when creating a registration' do
       let(:user) { FactoryBot.create :user }
       let(:competition) { FactoryBot.create :competition, :registration_open }
       let(:headers) { { 'Authorization' => registration_request['jwt_token'] } }
@@ -46,6 +46,223 @@ RSpec.describe 'API Registrations' do
 
         expect(reg_history[:actor_id]).to eq(user.id.to_s)
         expect(reg_history[:action]).to eq("Worker processed")
+      end
+
+      it 'cant register if registration is closed' do
+        competition = FactoryBot.create(:competition, :registration_closed)
+        registration_request = FactoryBot.build(:registration_request, competition_id: competition.id, user_id: user.id)
+
+        post api_v1_registrations_register_path, params: registration_request, headers: headers
+
+        error_json = {
+          error: Registrations::ErrorCodes::REGISTRATION_CLOSED,
+        }.to_json
+
+        expect(response.body).to eq(error_json)
+        expect(response).to have_http_status(:forbidden)
+      end
+
+      it 'user cant create a duplicate registration' do
+        existing_reg = FactoryBot.create(:registration, competition: competition)
+
+        registration_request = FactoryBot.build(
+          :registration_request, guests: 10, competition_id: competition.id, user_id: existing_reg.user_id
+        )
+
+        post api_v1_registrations_register_path, params: registration_request, headers: headers
+
+        error_json = {
+          error: Registrations::ErrorCodes::REGISTRATION_ALREADY_EXISTS,
+        }.to_json
+        expect(response.body).to eq(error_json)
+        expect(response).to have_http_status(:forbidden)
+      end
+
+      it 'doesnt leak data if organizer tries to register for a banned user' do
+        banned_user = FactoryBot.create(:user, :banned)
+        competition = FactoryBot.create(:competition, :registration_open, :with_organizer)
+        organizer_id = competition.organizers.first.id
+        registration_request = FactoryBot.build(
+          :registration_request, :incomplete, :impersonation, competition_id: competition.id, user_id: banned_user.id, submitted_by: organizer_id
+        )
+        headers = { 'Authorization' => registration_request['jwt_token'] }
+
+        post api_v1_registrations_register_path, params: registration_request, headers: headers
+
+        error_json = {
+          error: Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS,
+        }.to_json
+
+        expect(response.body).to eq(error_json)
+        expect(response).to have_http_status(:unauthorized)
+      end
+
+      it 'doesnt leak data if user tries to register for a banned user' do
+        banned_user = FactoryBot.create(:user, :banned)
+        registration_request = FactoryBot.build(
+          :registration_request, :banned, :impersonation, competition_id: competition.id, user_id: banned_user.id, submitted_by: user.id
+        )
+        headers = { 'Authorization' => registration_request['jwt_token'] }
+
+        post api_v1_registrations_register_path, params: registration_request, headers: headers
+
+        error_json = {
+          error: Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS,
+        }.to_json
+
+        expect(response.body).to eq(error_json)
+        expect(response).to have_http_status(:unauthorized)
+      end
+
+      it 'user with incomplete profile cant register' do
+        user = FactoryBot.create(:user, :incomplete)
+        registration_request = FactoryBot.build(:registration_request, :incomplete, competition_id: competition.id, user_id: user.id)
+        headers = { 'Authorization' => registration_request['jwt_token'] }
+
+        post api_v1_registrations_register_path, params: registration_request, headers: headers
+
+        error_json = {
+          error: Registrations::ErrorCodes::USER_CANNOT_COMPETE,
+        }.to_json
+
+        expect(response.body).to eq(error_json)
+        expect(response).to have_http_status(:unauthorized)
+      end
+
+      it 'cant register if ban ends after competition starts' do
+        banned_user = FactoryBot.create(:user, :banned)
+        registration_request = FactoryBot.build(:registration_request, competition_id: competition.id, user_id: banned_user.id)
+        headers = { 'Authorization' => registration_request['jwt_token'] }
+
+        post api_v1_registrations_register_path, params: registration_request, headers: headers
+
+        error_json = {
+          error: Registrations::ErrorCodes::USER_CANNOT_COMPETE,
+        }.to_json
+
+        expect(response.body).to eq(error_json)
+        expect(response).to have_http_status(:unauthorized)
+      end
+
+      it 'can register if ban ends before competition starts' do
+        briefly_banned_user = FactoryBot.create(:user, :briefly_banned)
+        registration_request = FactoryBot.build(:registration_request, competition_id: competition.id, user_id: briefly_banned_user.id)
+        headers = { 'Authorization' => registration_request['jwt_token'] }
+
+        post api_v1_registrations_register_path, params: registration_request, headers: headers
+
+        expect(response).to have_http_status(:accepted)
+      end
+
+      it 'organizers cannot create registrations for users' do
+        competition = FactoryBot.create(:competition, :registration_open, :with_organizer)
+        registration_request = FactoryBot.build(
+          :registration_request,
+          competition_id: competition.id,
+          user_id: user.id,
+          submitted_by: competition.organizers.first.id,
+        )
+        headers = { 'Authorization' => registration_request['jwt_token'] }
+
+        post api_v1_registrations_register_path, params: registration_request, headers: headers
+
+        error_json = {
+          error: Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS,
+        }.to_json
+
+        expect(response.body).to eq(error_json)
+        expect(response).to have_http_status(:unauthorized)
+      end
+
+      it 'organizers can register before registration opens' do
+        competition = FactoryBot.create(:competition, :registration_not_opened, :with_organizer)
+        registration_request = FactoryBot.build(:registration_request, competition_id: competition.id, user_id: competition.organizers.first.id)
+        headers = { 'Authorization' => registration_request['jwt_token'] }
+
+        post api_v1_registrations_register_path, params: registration_request, headers: headers
+        expect(response.body).to eq({ status: "accepted", message: "Started Registration Process" }.to_json)
+        expect(response).to have_http_status(:accepted)
+      end
+
+      it 'users can only register for themselves' do
+        registration_request = FactoryBot.build(:registration_request, :impersonation, competition_id: competition.id, user_id: user.id)
+        headers = { 'Authorization' => registration_request['jwt_token'] }
+
+        post api_v1_registrations_register_path, params: registration_request, headers: headers
+
+        error_json = {
+          error: Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS,
+        }.to_json
+
+        expect(response.body).to eq(error_json)
+        expect(response).to have_http_status(:unauthorized)
+      end
+
+      it 'can register if this is the first registration in a series' do
+        series = FactoryBot.create(:competition_series)
+        competition_a = FactoryBot.create(:competition, :registration_open, competition_series: series)
+        FactoryBot.create(:competition, :registration_open, competition_series: series, series_base: competition_a)
+
+        registration_request = FactoryBot.build(:registration_request, competition_id: competition_a.id, user_id: user.id)
+        headers = { 'Authorization' => registration_request['jwt_token'] }
+
+        post api_v1_registrations_register_path, params: registration_request, headers: headers
+
+        expect(response).to have_http_status(:accepted)
+      end
+
+      it 'can register if already have a non-cancelled registration for another series competition' do
+        registration = FactoryBot.create(:registration, :accepted)
+
+        series = FactoryBot.create(:competition_series)
+        competition_a = registration.competition
+        competition_a.update!(competition_series: series)
+        competition_b = FactoryBot.create(:competition, :registration_open, competition_series: series, series_base: competition_a)
+
+        user = registration.user
+
+        registration_request = FactoryBot.build(:registration_request, competition_id: competition_b.id, user_id: user.id)
+        headers = { 'Authorization' => registration_request['jwt_token'] }
+
+        post api_v1_registrations_register_path, params: registration_request, headers: headers
+
+        expect(response).to have_http_status(:accepted)
+      end
+
+      it 'can register if they have a cancelled registration for another series comp' do
+        registration = FactoryBot.create(:registration, :cancelled)
+
+        series = FactoryBot.create(:competition_series)
+        competition_a = registration.competition
+        competition_a.update!(competition_series: series)
+        competition_b = FactoryBot.create(:competition, :registration_open, competition_series: series, series_base: competition_a)
+
+        user = registration.user
+
+        registration_request = FactoryBot.build(:registration_request, competition_id: competition_b.id, user_id: user.id)
+        headers = { 'Authorization' => registration_request['jwt_token'] }
+
+        post api_v1_registrations_register_path, params: registration_request, headers: headers
+
+        expect(response).to have_http_status(:accepted)
+      end
+
+      it 'can register if they have a pending registration for another series comp' do
+        registration = FactoryBot.create(:registration, :pending)
+
+        series = FactoryBot.create(:competition_series)
+        competition_a = registration.competition
+        competition_a.update!(competition_series: series)
+        competition_b = FactoryBot.create(:competition, :registration_open, competition_series: series, series_base: competition_a)
+
+        user = registration.user
+
+        registration_request = FactoryBot.build(:registration_request, competition_id: competition_b.id, user_id: user.id)
+        headers = { 'Authorization' => registration_request['jwt_token'] }
+
+        post api_v1_registrations_register_path, params: registration_request, headers: headers
+
+        expect(response).to have_http_status(:accepted)
       end
     end
 
