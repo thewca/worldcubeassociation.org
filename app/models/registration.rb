@@ -314,6 +314,10 @@ class Registration < ApplicationRecord
     accepted.count
   end
 
+  def self.accepted_and_competing_count
+    accepted.competing.count
+  end
+
   def self.accepted_and_paid_pending_count
     accepted_count + pending.with_payments.count
   end
