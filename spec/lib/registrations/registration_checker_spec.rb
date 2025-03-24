@@ -617,7 +617,7 @@ RSpec.describe Registrations::RegistrationChecker do
         )
 
         expect {
-          Registrations::RegistrationChecker.update_registration_allowed!(update_request, Competition.find(update_request['competition_id']), User.find(update_request['submitted_by']))
+          Registrations::RegistrationChecker.update_registration_allowed!(update_request, default_registration, User.find(update_request['submitted_by']))
         }.not_to raise_error
 
         # We never actually fired the update, we just checked whether it _would_ be permissible to do so
