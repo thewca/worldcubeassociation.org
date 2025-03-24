@@ -1,2 +1,4 @@
 src/payload-types.ts
 src/app/(payload)/
+src/lib/wca/internalSchema.ts
+src/lib/wca/wcaSchema.ts
