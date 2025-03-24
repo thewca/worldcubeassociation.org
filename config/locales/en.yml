@@ -1835,6 +1835,9 @@ en:
         rejected:
           title: "Rejected Registrations"
           information: "Rejected competitors cannot re-register."
+        non_competing:
+          title: "Non-Competing Registrations"
+          information: "For non-competitors that you can assign staff duties to in the WCIF."
         payment:
          refunded_status: "Refunded"
          initialized: "Payment process was started on %{date}, but not finished."

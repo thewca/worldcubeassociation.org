@@ -899,7 +899,7 @@ ja:
       welcome_back: こんにちは！WCA アカウントの作成には WCA ID が必要です。
       #original_hash: ef8243e
       welcome_html: >-
-        WCA公式大会に参加するためには、記録を管理するために追加の情報を登録いただく必要があります。<br/>※生年月日は許可なく公開されることはありません。<br/>※必ず<strong>競技を行う方ご本人<strong/>の情報を登録してください。
+        WCA公式大会に参加するためには、記録を管理するために追加の情報を登録いただく必要があります。<br/>※生年月日は許可なく公開されることはありません。<br/>※必ず<strong>競技を行う方ご本人</strong>の情報を登録してください。
   layouts:
     navigation:
       #original_hash: 0eb5ed5
