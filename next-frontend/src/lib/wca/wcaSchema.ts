@@ -4,308 +4,308 @@
  */
 
 export interface paths {
-  "/competitions/{competitionId}/": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    /** Get competition details */
-    get: {
-      parameters: {
-        query?: never;
-        header?: never;
-        path: {
-          competitionId: string;
+    "/competitions/{competitionId}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
         };
-        cookie?: never;
-      };
-      requestBody?: never;
-      responses: {
-        /** @description Successful response */
-        200: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content: {
-            "application/json": components["schemas"]["CompetitionInfo"];
-          };
+        /** Get competition details */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    competitionId: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Successful response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["CompetitionInfo"];
+                    };
+                };
+            };
         };
-      };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/users/me/permissions": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/users/me/permissions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get user's permissions */
+        get: operations["getUserPermissions"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    /** Get user's permissions */
-    get: operations["getUserPermissions"];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
 }
 export type webhooks = Record<string, never>;
 export interface components {
-  schemas: {
-    Person: {
-      /** @example 267 */
-      id?: number;
-      /** @example Tim Reynolds */
-      name?: string;
-      /** @example 2005REYN01 */
-      wca_id?: string;
-      /** @example US */
-      country_iso2?: string;
-      /**
-       * Format: uri
-       * @example https://www.worldcubeassociation.org/persons/2005REYN01
-       */
-      url?: string;
+    schemas: {
+        Person: {
+            /** @example 267 */
+            id?: number;
+            /** @example Tim Reynolds */
+            name?: string;
+            /** @example 2005REYN01 */
+            wca_id?: string;
+            /** @example US */
+            country_iso2?: string;
+            /**
+             * Format: uri
+             * @example https://www.worldcubeassociation.org/persons/2005REYN01
+             */
+            url?: string;
+        };
+        Organizer: components["schemas"]["Person"] & {
+            /** @example regional_delegate */
+            delegate_status?: string;
+            /**
+             * Format: email
+             * @example 255@worldcubeassociation.org
+             */
+            email?: string;
+            avatar?: {
+                /**
+                 * Format: uri
+                 * @example https://avatars.worldcubeassociation.org/uploads/user/avatar/2099EXAM/1535183030.jpg
+                 */
+                url?: string;
+                /**
+                 * Format: uri
+                 * @example https://avatars.worldcubeassociation.org/uploads/user/avatar/2099EXAM/1535183030_thumb.jpg
+                 */
+                thumb_url?: string;
+            };
+        };
+        CompetitionInfo: {
+            /** @example WC2003 */
+            id: string;
+            /** @example WCA World Championship 2003 */
+            name: string;
+            /** @example First WCA World Championship */
+            information: string;
+            /** @example Toronto */
+            venue: string;
+            /**
+             * Format: uri
+             * @example https://www.example.com
+             */
+            contact: string;
+            /**
+             * Format: date-time
+             * @example 2025-01-03T14:00:00.000Z
+             */
+            registration_open: string;
+            /**
+             * Format: date-time
+             * @example 2025-01-10T14:00:00.000Z
+             */
+            registration_close: string;
+            /** @example true */
+            use_wca_registration: boolean;
+            /** @example false */
+            guests_enabled: boolean;
+            /**
+             * Format: date-time
+             * @example 2024-10-08T22:00:00.000Z
+             */
+            announced_at: string;
+            /** @example 12000 */
+            base_entry_fee_lowest_denomination: number;
+            /** @example USD */
+            currency_code: string;
+            /**
+             * Format: date
+             * @example 2025-07-03
+             */
+            start_date: string;
+            /**
+             * Format: date
+             * @example 2025-07-06
+             */
+            end_date: string;
+            /** @example false */
+            enable_donations: boolean;
+            /** @example 2000 */
+            competitor_limit: number;
+            /** @example  */
+            extra_registration_requirements: string;
+            /** @example false */
+            on_the_spot_registration: boolean;
+            /** @example 50 */
+            refund_policy_percent: number;
+            /**
+             * Format: date-time
+             * @example 2025-05-15T06:59:00.000Z
+             */
+            refund_policy_limit_date: string;
+            /** @example 1000 */
+            guests_entry_fee_lowest_denomination: number;
+            /** @example true */
+            qualification_results: boolean;
+            /** @example false */
+            event_restrictions: boolean;
+            cancelled_at?: string | null;
+            /**
+             * Format: date-time
+             * @example 2025-05-29T06:59:00.000Z
+             */
+            waiting_list_deadline_date: string;
+            /**
+             * Format: date-time
+             * @example 2025-05-29T06:59:00.000Z
+             */
+            event_change_deadline_date: string;
+            /** @example not_accepted */
+            competitor_can_cancel: string;
+            /**
+             * Format: uri
+             * @example https://www.worldcubeassociation.org/competitions/WC2003
+             */
+            url: string;
+            /**
+             * Format: uri
+             * @example https://cubingusa.org/worlds
+             */
+            website: string;
+            /** @example Seattle, Washington */
+            city: string;
+            /**
+             * Format: float
+             * @example 47.611387
+             */
+            latitude_degrees: number;
+            /**
+             * Format: float
+             * @example -122.332554
+             */
+            longitude_degrees: number;
+            /** @example US */
+            country_iso2: string;
+            /** @example [
+             *       "333"
+             *     ] */
+            event_ids: string[];
+            /** @example true */
+            "registration_full?": boolean;
+            delegates: components["schemas"]["Person"][];
+            organizers: components["schemas"]["Organizer"][];
+        };
+        CompetitionPermissions: string[] | string;
+        UserPermissions: {
+            can_attend_competitions: {
+                scope: components["schemas"]["CompetitionPermissions"];
+                /** Format: date-time */
+                until?: string | null;
+            };
+            can_organize_competitions: {
+                scope: components["schemas"]["CompetitionPermissions"];
+            };
+            can_administer_competitions: {
+                scope: components["schemas"]["CompetitionPermissions"];
+            };
+            can_view_delegate_admin_page: {
+                scope: components["schemas"]["CompetitionPermissions"];
+            };
+            can_view_delegate_report: {
+                scope: components["schemas"]["CompetitionPermissions"];
+            };
+            can_edit_delegate_report: {
+                scope: components["schemas"]["CompetitionPermissions"];
+            };
+            can_create_groups: {
+                scope: string[];
+            };
+            can_read_groups_current: {
+                scope: string[];
+            };
+            can_read_groups_past: {
+                scope: string[];
+            };
+            can_edit_groups: {
+                scope: string[];
+            };
+            can_access_panels: {
+                scope: string[];
+            };
+            can_request_to_edit_others_profile: {
+                scope: string[] | string;
+            };
+        };
+        User: {
+            /** Format: uuid */
+            id?: string;
+            name?: string;
+            /** Format: email */
+            email?: string;
+        };
+        PersonalRecord: {
+            eventId?: string;
+            /** @description Best performance in milliseconds */
+            bestTime?: number;
+            /** @description Average performance in milliseconds */
+            averageTime?: number;
+        };
+        Event: {
+            id?: string;
+            name?: string;
+        };
     };
-    Organizer: components["schemas"]["Person"] & {
-      /** @example regional_delegate */
-      delegate_status?: string;
-      /**
-       * Format: email
-       * @example 255@worldcubeassociation.org
-       */
-      email?: string;
-      avatar?: {
-        /**
-         * Format: uri
-         * @example https://avatars.worldcubeassociation.org/uploads/user/avatar/2099EXAM/1535183030.jpg
-         */
-        url?: string;
-        /**
-         * Format: uri
-         * @example https://avatars.worldcubeassociation.org/uploads/user/avatar/2099EXAM/1535183030_thumb.jpg
-         */
-        thumb_url?: string;
-      };
-    };
-    CompetitionInfo: {
-      /** @example WC2003 */
-      id: string;
-      /** @example WCA World Championship 2003 */
-      name: string;
-      /** @example First WCA World Championship */
-      information: string;
-      /** @example Toronto */
-      venue: string;
-      /**
-       * Format: uri
-       * @example https://www.example.com
-       */
-      contact: string;
-      /**
-       * Format: date-time
-       * @example 2025-01-03T14:00:00.000Z
-       */
-      registration_open: string;
-      /**
-       * Format: date-time
-       * @example 2025-01-10T14:00:00.000Z
-       */
-      registration_close: string;
-      /** @example true */
-      use_wca_registration: boolean;
-      /** @example false */
-      guests_enabled: boolean;
-      /**
-       * Format: date-time
-       * @example 2024-10-08T22:00:00.000Z
-       */
-      announced_at: string;
-      /** @example 12000 */
-      base_entry_fee_lowest_denomination: number;
-      /** @example USD */
-      currency_code: string;
-      /**
-       * Format: date
-       * @example 2025-07-03
-       */
-      start_date: string;
-      /**
-       * Format: date
-       * @example 2025-07-06
-       */
-      end_date: string;
-      /** @example false */
-      enable_donations: boolean;
-      /** @example 2000 */
-      competitor_limit: number;
-      /** @example  */
-      extra_registration_requirements: string;
-      /** @example false */
-      on_the_spot_registration: boolean;
-      /** @example 50 */
-      refund_policy_percent: number;
-      /**
-       * Format: date-time
-       * @example 2025-05-15T06:59:00.000Z
-       */
-      refund_policy_limit_date: string;
-      /** @example 1000 */
-      guests_entry_fee_lowest_denomination: number;
-      /** @example true */
-      qualification_results: boolean;
-      /** @example false */
-      event_restrictions: boolean;
-      cancelled_at?: string | null;
-      /**
-       * Format: date-time
-       * @example 2025-05-29T06:59:00.000Z
-       */
-      waiting_list_deadline_date: string;
-      /**
-       * Format: date-time
-       * @example 2025-05-29T06:59:00.000Z
-       */
-      event_change_deadline_date: string;
-      /** @example not_accepted */
-      competitor_can_cancel: string;
-      /**
-       * Format: uri
-       * @example https://www.worldcubeassociation.org/competitions/WC2003
-       */
-      url: string;
-      /**
-       * Format: uri
-       * @example https://cubingusa.org/worlds
-       */
-      website: string;
-      /** @example Seattle, Washington */
-      city: string;
-      /**
-       * Format: float
-       * @example 47.611387
-       */
-      latitude_degrees: number;
-      /**
-       * Format: float
-       * @example -122.332554
-       */
-      longitude_degrees: number;
-      /** @example US */
-      country_iso2: string;
-      /** @example [
-       *       "333"
-       *     ] */
-      event_ids: string[];
-      /** @example true */
-      "registration_full?": boolean;
-      delegates: components["schemas"]["Person"][];
-      organizers: components["schemas"]["Organizer"][];
-    };
-    CompetitionPermissions: string[] | "*";
-    UserPermissions: {
-      can_attend_competitions: {
-        scope: components["schemas"]["CompetitionPermissions"];
-        /** Format: date-time */
-        until?: string | null;
-      };
-      can_organize_competitions: {
-        scope: components["schemas"]["CompetitionPermissions"];
-      };
-      can_administer_competitions: {
-        scope: components["schemas"]["CompetitionPermissions"];
-      };
-      can_view_delegate_admin_page: {
-        scope: components["schemas"]["CompetitionPermissions"];
-      };
-      can_view_delegate_report: {
-        scope: components["schemas"]["CompetitionPermissions"];
-      };
-      can_edit_delegate_report: {
-        scope: components["schemas"]["CompetitionPermissions"];
-      };
-      can_create_groups: {
-        scope: string[];
-      };
-      can_read_groups_current: {
-        scope: string[];
-      };
-      can_read_groups_past: {
-        scope: string[];
-      };
-      can_edit_groups: {
-        scope: string[];
-      };
-      can_access_panels: {
-        scope: string[];
-      };
-      can_request_to_edit_others_profile: {
-        scope: string[] | "*";
-      };
-    };
-    User: {
-      /** Format: uuid */
-      id?: string;
-      name?: string;
-      /** Format: email */
-      email?: string;
-    };
-    PersonalRecord: {
-      eventId?: string;
-      /** @description Best performance in milliseconds */
-      bestTime?: number;
-      /** @description Average performance in milliseconds */
-      averageTime?: number;
-    };
-    Event: {
-      id?: string;
-      name?: string;
-    };
-  };
-  responses: never;
-  parameters: never;
-  requestBodies: never;
-  headers: never;
-  pathItems: never;
+    responses: never;
+    parameters: never;
+    requestBodies: never;
+    headers: never;
+    pathItems: never;
 }
 export type $defs = Record<string, never>;
 export interface operations {
-  getUserPermissions: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    getUserPermissions: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successfully retrieved permissions */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UserPermissions"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
     };
-    requestBody?: never;
-    responses: {
-      /** @description Successfully retrieved permissions */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["UserPermissions"];
-        };
-      };
-      /** @description Unauthorized */
-      401: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-    };
-  };
 }
