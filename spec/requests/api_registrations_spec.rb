@@ -591,7 +591,7 @@ RSpec.describe 'API Registrations' do
         user_id: registration.user_id,
         competition_id: registration.competition_id,
         competing: { 'organizer_comment' => 'this is an admin comment' },
-        )
+      )
 
       headers = { 'Authorization' => update_request['jwt_token'] }
 
@@ -611,7 +611,7 @@ RSpec.describe 'API Registrations' do
         user_id: registration.user_id,
         competition_id: registration.competition_id,
         competing: { 'waiting_list_position' => '1' },
-        )
+      )
 
       headers = { 'Authorization' => update_request['jwt_token'] }
 
