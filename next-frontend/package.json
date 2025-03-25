@@ -11,17 +11,17 @@
     "lint:fix": "next lint --fix"
   },
   "dependencies": {
-    "@chakra-ui/react": "^3.11.0",
+    "@chakra-ui/react": "^3.14.2",
     "@emotion/react": "^11.14.0",
-    "@payloadcms/db-sqlite": "^3.27.0",
+    "@payloadcms/db-sqlite": "^3.30.0",
     "@payloadcms/live-preview-react": "^3.27.0",
-    "@payloadcms/next": "^3.27.0",
-    "@tanstack/react-query": "^5.67.2",
+    "@payloadcms/next": "^3.30.0",
+    "@tanstack/react-query": "^5.69.0",
     "graphql": "^16.8.1",
     "next": "15.2.3",
     "next-auth": "5.0.0-beta.25",
-    "next-themes": "^0.4.5",
-    "openapi-fetch": "^0.13.4",
+    "next-themes": "^0.4.6",
+    "openapi-fetch": "^0.13.5",
     "payload": "^3.27.0",
     "payload-authjs": "^0.7.1",
     "react": "^19.0.0",
@@ -29,19 +29,19 @@
     "react-icons": "^5.5.0"
   },
   "devDependencies": {
-    "@chakra-ui/cli": "^3.11.0",
+    "@chakra-ui/cli": "^3.14.2",
     "@eslint/eslintrc": "^3",
     "@stylistic/eslint-plugin": "^4.2.0",
-    "@types/node": "^20",
+    "@types/node": "^22",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
-    "eslint-config-next": "15.2.0",
+    "eslint-config-next": "15.2.4",
     "eslint-config-prettier": "^10.1.1",
-    "eslint-plugin-prettier": "^5.2.3",
+    "eslint-plugin-prettier": "^5.2.5",
     "openapi-typescript": "^7.6.1",
     "prettier": "^3.5.3",
     "typescript": "^5"
   },
-  "packageManager": "yarn@4.6.0"
+  "packageManager": "yarn@4.7.0"
 }

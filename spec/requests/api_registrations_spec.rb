@@ -1074,6 +1074,19 @@ RSpec.describe 'API Registrations' do
         expect(Registration.find_by(user_id: update_request3['user_id']).competing_status).to eq('accepted')
       end
 
+      it 'doesnt include non-competing registrations in competitor limit' do
+        FactoryBot.create(:registration, :non_competing, competition: competition)
+        competition.update(competitor_limit: 3)
+
+        patch api_v1_registrations_bulk_update_path, params: bulk_update_request, headers: headers
+
+        expect(response).to have_http_status(:ok)
+
+        expect(Registration.find_by(user_id: update_request1['user_id']).competing_status).to eq('accepted')
+        expect(Registration.find_by(user_id: update_request2['user_id']).competing_status).to eq('accepted')
+        expect(Registration.find_by(user_id: update_request3['user_id']).competing_status).to eq('accepted')
+      end
+
       it 'wont accept competitors over the competitor limit' do
         competition.update(competitor_limit: 2)
 
