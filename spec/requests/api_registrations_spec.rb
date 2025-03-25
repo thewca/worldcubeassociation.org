@@ -587,7 +587,7 @@ RSpec.describe 'API Registrations' do
 
     it 'returns a hash of amounts/currencies formatted for payment providers' do
       expected_response = { api_amounts: { stripe: 1500, paypal: "15.00" }, human_amount: "15 kr (Swedish Krona)" }.with_indifferent_access
-      get registration_payment_denomination_path(id: reg.id), headers: headers
+      get registration_payment_denomination_path(competition_id: competition.id, user_id: reg.user_id), headers: headers
 
       expect(response).to be_successful
       expect(response.parsed_body).to eq(expected_response)
@@ -595,7 +595,7 @@ RSpec.describe 'API Registrations' do
 
     it 'allows a donation to be specified' do
       expected_response = { api_amounts: { stripe: 2500, paypal: "25.00" }, human_amount: "25 kr (Swedish Krona)" }.with_indifferent_access
-      get registration_payment_denomination_path(id: reg.id), headers: headers, params: { iso_donation: 1000 }
+      get registration_payment_denomination_path(competition_id: competition.id, user_id: reg.user_id), headers: headers, params: { iso_donation: 1000 }
 
       expect(response).to be_successful
       expect(response.parsed_body).to eq(expected_response)

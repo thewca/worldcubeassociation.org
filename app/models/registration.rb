@@ -135,11 +135,8 @@ class Registration < ApplicationRecord
     )
   end
 
-  def entry_fee_with_donation(iso_donation = 0)
-    Money.new(
-      entry_fee.cents + iso_donation,
-      entry_fee.currency,
-    )
+  def entry_fee_with_donation(iso_donation_amount = 0)
+    entry_fee + Money.new(iso_donation_amount, entry_fee.currency)
   end
 
   def paid_entry_fees
@@ -251,7 +248,6 @@ class Registration < ApplicationRecord
     private_attributes = pii ? %w[dob email] : nil
 
     base_json = {
-      id: self.id,
       user: user.as_json(only: %w[id wca_id name gender country_iso2], methods: %w[country], include: [], private_attributes: private_attributes),
       user_id: user_id,
       competing: {

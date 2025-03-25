@@ -10,9 +10,9 @@ import { fetchJsonOrError } from '../../../lib/requests/fetchWithAuthenticityTok
 import { paymentDenominationUrl } from '../../../lib/requests/routes.js.erb';
 import { useRegistration } from '../lib/RegistrationProvider';
 
-const convertISOAmount = async (registrationId, isoDonation) => {
+const convertISOAmount = async (competitionId, userId, isoDonation) => {
   const { data } = await fetchJsonOrError(
-    paymentDenominationUrl(registrationId, isoDonation),
+    paymentDenominationUrl(competitionId, userId, isoDonation),
   );
   return data;
 };
@@ -33,7 +33,7 @@ export default function StripeWrapper({
   const {
     data, isFetching,
   } = useQuery({
-    queryFn: () => convertISOAmount(registration.id, donationAmount),
+    queryFn: () => convertISOAmount(competitionInfo.id, registration.user_id, donationAmount),
     queryKey: ['displayAmount', donationAmount, competitionInfo.currency_code],
   });
 
