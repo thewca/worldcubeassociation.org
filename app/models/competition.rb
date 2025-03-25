@@ -1054,9 +1054,7 @@ class Competition < ApplicationRecord
     self.longitude_microdegrees = @longitude_degrees * 1e6 unless @longitude_degrees.nil?
   end
 
-  def base_entry_fee_nonzero?
-    base_entry_fee.nonzero?
-  end
+  delegate :nonzero?, to: :base_entry_fee, prefix: true
 
   def payment_required?
     if base_entry_fee_lowest_denomination.nil?
