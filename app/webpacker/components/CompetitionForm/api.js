@@ -1,11 +1,11 @@
-import {useQuery, useQueryClient} from '@tanstack/react-query';
+import { useCallback } from 'react';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { fetchJsonOrError } from '../../lib/requests/fetchWithAuthenticityToken';
 import {
   competitionAnnouncementDataUrl,
   competitionConfirmationDataUrl,
   competitionUserPreferencesUrl,
 } from '../../lib/requests/routes.js.erb';
-import {useCallback} from "react";
 
 export function announcementDataQueryKey(competitionId) {
   return ['announcement-data', competitionId];

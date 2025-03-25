@@ -6,9 +6,7 @@ import {
 import I18n from '../../../lib/i18n';
 import { events } from '../../../lib/wca-data.js.erb';
 import useToggleState from '../../../lib/hooks/useToggleState';
-import { useStore } from '../../../lib/providers/StoreProvider';
-import { useFormObject } from '../../wca/FormBuilder/provider/FormObjectProvider';
-import {useSectionDisabled} from "../../wca/FormBuilder/provider/FormSectionProvider";
+import { useSectionDisabled } from '../../wca/FormBuilder/provider/FormSectionProvider';
 
 function NotConfirmedIcon() {
   return (
