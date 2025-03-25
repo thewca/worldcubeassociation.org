@@ -27,7 +27,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CompetitionInfo'
-  /person/{wca_id}/:
+  /persons/{wca_id}/:
     get:
       summary: Get information for a person
       parameters:
@@ -43,6 +43,26 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/PersonInfo'
+  /persons/{wca_id}/results:
+    get:
+      summary: Get results for a person
+      parameters:
+        - name: wca_id
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: event_id
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Results'
 
   /users/me/permissions:
     get:
@@ -89,6 +109,7 @@ components:
           type: string
           format: uri
           example: "https://www.worldcubeassociation.org/persons/2005REYN01"
+
     Organizer:
       allOf:
         - $ref: '#/components/schemas/Person'
@@ -112,6 +133,7 @@ components:
                   type: string
                   format: uri
                   example: "https://avatars.worldcubeassociation.org/uploads/user/avatar/2099EXAM/1535183030_thumb.jpg"
+
     Rank:
       type: object
       required:
@@ -137,6 +159,7 @@ components:
           type: integer
         countryRank:
           type: integer
+
     Medals:
       type: object
       required:
@@ -153,6 +176,7 @@ components:
           type: integer
         total:
           type: integer
+
     Records:
       type: object
       required:
@@ -169,6 +193,7 @@ components:
           type: integer
         total:
           type: integer
+
     PersonInfo:
       type: object
       required:
@@ -217,6 +242,7 @@ components:
               type: array
               items:
                 type: object
+
     CompetitionInfo:
       type: object
       required:
@@ -402,6 +428,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Organizer'
+
     CompetitionPermissions:
       oneOf:
         - type: array
@@ -410,6 +437,7 @@ components:
         - type: string
           format: "Wildcard"
           enum: "*"
+
     UserPermissions:
       type: object
       required:
@@ -530,6 +558,7 @@ components:
                 - type: string
                   format: "Wildcard"
                   enum: "*"
+
     User:
       type: object
       properties:
@@ -541,6 +570,68 @@ components:
         email:
           type: string
           format: email
+
+    Results:
+      type: array
+      items:
+        $ref: "#/components/schemas/Result"
+
+    Result:
+      type: object
+      required:
+        - id
+        - pos
+        - best
+        - average
+        - name
+        - country_iso2
+        - competition_id
+        - event_id
+        - round_type_id
+        - format_id
+        - wca_id
+        - attempts
+        - best_index
+        - worst_index
+        - regional_single_record
+        - regional_average_record
+      properties:
+        id:
+          type: integer
+        pos:
+          type: integer
+        best:
+          type: integer
+        average:
+          type: integer
+        name:
+          type: string
+        country_iso2:
+          type: string
+        competition_id:
+          type: string
+        event_id:
+          type: string
+        round_type_id:
+          type: string
+        format_id:
+          type: string
+        wca_id:
+          type: string
+        attempts:
+          type: array
+          items:
+            type: integer
+        best_index:
+          type: integer
+        worst_index:
+          type: integer
+        regional_single_record:
+          type: string
+          nullable: true
+        regional_average_record:
+          type: string
+          nullable: true
 
     PersonalRecord:
       type: object

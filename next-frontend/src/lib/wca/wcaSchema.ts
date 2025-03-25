@@ -42,7 +42,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/person/{wca_id}/": {
+    "/persons/{wca_id}/": {
         parameters: {
             query?: never;
             header?: never;
@@ -68,6 +68,46 @@ export interface paths {
                     };
                     content: {
                         "application/json": components["schemas"]["PersonInfo"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/persons/{wca_id}/results": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get results for a person */
+        get: {
+            parameters: {
+                query?: {
+                    event_id?: string;
+                };
+                header?: never;
+                path: {
+                    wca_id: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Successful response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Results"];
                     };
                 };
             };
@@ -333,6 +373,25 @@ export interface components {
             name?: string;
             /** Format: email */
             email?: string;
+        };
+        Results: components["schemas"]["Result"][];
+        Result: {
+            id: number;
+            pos: number;
+            best: number;
+            average: number;
+            name: string;
+            country_iso2: string;
+            competition_id: string;
+            event_id: string;
+            round_type_id: string;
+            format_id: string;
+            wca_id: string;
+            attempts: number[];
+            best_index: number;
+            worst_index: number;
+            regional_single_record: string | null;
+            regional_average_record: string | null;
         };
         PersonalRecord: {
             eventId?: string;
