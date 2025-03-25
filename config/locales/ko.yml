@@ -1030,7 +1030,9 @@ ko:
             WST에서는 로그인 시 일회용 비밀번호를 얻기 위해 개인 기기에서 %{authy}를 사용할 것을 권장합니다.<br/>다른
             대안으로는 %{google}과 %{microsoft}가 있습니다.
           #original_hash: f1b2ec2
-          scan_qrcode_html: "2FA 애플리케이션에서 메시지가 표시되면 아래 QR 코드를 스캔합니다(모바일을 사용하는 경우 %{here}를 클릭하십시오)."
+          scan_qrcode_html: >-
+            2FA 애플리케이션에서 메시지가 표시되면 아래 QR 코드를 스캔합니다(모바일을 사용하는 경우 %{here}를
+            클릭하십시오).
           #original_hash: e7cba1a
           backup_codes: 백업 코드
           #original_hash: fa62416
@@ -1564,8 +1566,8 @@ ko:
       title: WCA 후원하기
       #original_hash: 1aaf818
       text: >-
-        세계 큐브 협회는 501(c)(3) 비과세법인입니다. 100% 자원 봉사로 운영되는 비영리 단체로서, 전 세계에서 더 즐거운 대회를
-        펼칠 수 있도록 비전을 더욱 발전시키는 데 도움이 되는 기부를 환영합니다.
+        세계 큐브 협회는 501(c)(3) 비과세법인입니다. 100% 자원 봉사로 운영되는 비영리 단체로서, 전 세계에서 더 즐거운
+        대회를 펼칠 수 있도록 비전을 더욱 발전시키는 데 도움이 되는 기부를 환영합니다.
       #original_hash: 65c84ec
       button: WCA를 후원하는 방법에 대해 자세히 알아보세요
   users:
@@ -1591,7 +1593,9 @@ ko:
         #original_hash: fb02586
         login_form: 로그인 양식
         #original_hash: 333999b
-        addendum: "이 이메일은 자동으로 생성된 이메일 입니다. 세계 큐브 협회의 홈페이지에 계정을 생성하지 않았다면, 이 이메일을 무시해주십시오."
+        addendum: >-
+          이 이메일은 자동으로 생성된 이메일 입니다. 세계 큐브 협회의 홈페이지에 계정을 생성하지 않았다면, 이 이메일을
+          무시해주십시오.
         #original_hash: dbc2263
         questions: "다른 질문이 있으신가요? 기꺼이 답변해 드리겠습니다! %{contact_link}로 메일을 보내주십시오."
       reconfirmation_mail:
@@ -2095,12 +2099,12 @@ ko:
     closed_html: "<strong>%{days}</strong>일 전 %{time}에 참가 신청 기간이 종료되었습니다."
     #original_hash: 2e7024d
     please_sign_in_past_html: >-
-      참가 신청 상태 확인을 위해서는 %{sign_in}하십시오. 만약 WCA 계정이 없으면 %{here}에서 가입할 수 있지만, 이 대회에
-      참가 신청하기에는 너무 늦었습니다.
+      참가 신청 상태 확인을 위해서는 %{sign_in}하십시오. 만약 WCA 계정이 없으면 %{here}에서 가입할 수 있지만, 이
+      대회에 참가 신청하기에는 너무 늦었습니다.
     #original_hash: 7753b2e
     please_sign_in_not_yet_open_html: >-
-      참가 신청 상태 확인을 위해서는 %{sign_in}하십시오. 만약 WCA 계정이 없으면 %{here}에서 가입할 수 있지만, 참가 신청
-      접수가 아직 시작되지 않았습니다.
+      참가 신청 상태 확인을 위해서는 %{sign_in}하십시오. 만약 WCA 계정이 없으면 %{here}에서 가입할 수 있지만, 참가
+      신청 접수가 아직 시작되지 않았습니다.
     #original_hash: 4f84af0
     please_sign_in_html: "%{comp}에 참가 신청하기 위해서는 %{sign_in}하십시오. 만약 WCA 계정이 없으면, %{here}에서 만들 수 있습니다."
     #original_hash: 322f646
@@ -3214,6 +3218,11 @@ ko:
           title: 거절된 참가 신청
           #original_hash: 3fd2e0c
           information: 참가 신청이 거절된 선수는 참가 신청을 다시 할 수 없습니다.
+        non_competing:
+          #original_hash: d4e453a
+          title: 대회 미참가 참가 신청
+          #original_hash: 2ed9c67
+          information: 미참가자에 대해 WCIF에서 스태프 업무를 할당하기 위함
         payment:
           #original_hash: d6fbc7a
           refunded_status: 환불됨
@@ -4321,8 +4330,8 @@ ko:
     donation_banner:
       #original_hash: 1aaf818
       content: >-
-        세계 큐브 협회는 501(c)(3) 면세 조직입니다. 100% 자원봉사로 운영되는 비영리 단체로서, 전 세계에서 더 즐거운 경쟁을
-        펼칠 수 있도록 비전을 더욱 발전시키는 데 도움이 되는 기부를 환영합니다.
+        세계 큐브 협회는 501(c)(3) 비과세법인입니다. 100% 자원 봉사로 운영되는 비영리 단체로서, 전 세계에서 더 즐거운
+        대회를 펼칠 수 있도록 비전을 더욱 발전시키는 데 도움이 되는 기부를 환영합니다.
       #original_hash: 24c87db
       donate_credit: 신용카드로 기부하기
       #original_hash: 0e5a9c3
@@ -4350,9 +4359,9 @@ ko:
         파견위원</strong>, <strong>파견위원</strong>, <strong>준 파견위원</strong> 및
         <strong>수습 파견위원</strong>%{see_link}을 구분합니다.</p> <p>WCA 파견위원의 임무 외에도 수석
         파견위원 또는 지역 파견위원은 해당 지역의 WCA 파견위원을 관리할 책임이 있으며, 지역 문제에 대해 커뮤니티에서 연락을 받을
-        수도 있습니다.</p> <p>새로운 파견위원은 처음에 준 파견위원으로 임명됩니다. 이후 WCA 파견위원으로 승격되기 전에
-        WCA 대회를 관리하는 능력을 증명해야 합니다.</p> <p>수습 파견위원은 WCA 파견위원에 대한 교육을 받으며, WCA
-        파견위원이 있는 대회에서만 파견위원 역할을 수행할 수 있습니다.</p>
+        수도 있습니다.</p> <p>새로운 파견위원은 처음에 준 파견위원으로 임명됩니다. 이후 WCA 파견위원으로 승격되기 전에 WCA
+        대회를 관리하는 능력을 증명해야 합니다.</p> <p>수습 파견위원은 WCA 파견위원에 대한 교육을 받으며, WCA 파견위원이
+        있는 대회에서만 파견위원 역할을 수행할 수 있습니다.</p>
       #original_hash: 27d18ac
       see_link_html: " (%{link} 참고)"
       #original_hash: 5b01fcc
