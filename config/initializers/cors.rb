@@ -34,17 +34,5 @@ else
         credentials: false,
       )
     end
-
-    allow do
-      origins 'https://worldcubeassociation.org', 'https://staging.worldcubeassociation.org'
-
-      resource(
-        '/api/internal/*',
-        headers: %w[Origin X-Requested-With Content-Type Accept Authorization],
-        methods: %i[get post delete put patch options head],
-        max_age: 0,
-        credentials: false,
-      )
-    end
   end
 end

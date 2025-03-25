@@ -42,6 +42,44 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/person/{wca_id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get information for a person */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    wca_id: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Successful response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["PersonInfo"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/users/me/permissions": {
         parameters: {
             query?: never;
@@ -97,6 +135,41 @@ export interface components {
                  * @example https://avatars.worldcubeassociation.org/uploads/user/avatar/2099EXAM/1535183030_thumb.jpg
                  */
                 thumb_url?: string;
+            };
+        };
+        Rank: {
+            id: number;
+            personId: string;
+            eventId: string;
+            best: number;
+            worldRank: number;
+            continentRank: number;
+            countryRank: number;
+        };
+        Medals: {
+            gold: number;
+            silver: number;
+            bronze: number;
+            total: number;
+        };
+        Records: {
+            national: number;
+            continental: number;
+            world: number;
+            total: number;
+        };
+        PersonInfo: {
+            person: components["schemas"]["Person"];
+            previous_persons: Record<string, never>[];
+            ranks_single: components["schemas"]["Rank"][];
+            ranks_average: components["schemas"]["Rank"][];
+            medals: components["schemas"]["Medals"];
+            records: components["schemas"]["Records"];
+            championship_podiums: {
+                world?: Record<string, never>[];
+                continental?: Record<string, never>[];
+                greater_china?: Record<string, never>[];
+                national?: Record<string, never>[];
             };
         };
         CompetitionInfo: {

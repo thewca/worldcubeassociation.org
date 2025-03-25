@@ -27,6 +27,22 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CompetitionInfo'
+  /person/{wca_id}/:
+    get:
+      summary: Get information for a person
+      parameters:
+        - name: wca_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PersonInfo'
 
   /users/me/permissions:
     get:
@@ -96,6 +112,111 @@ components:
                   type: string
                   format: uri
                   example: "https://avatars.worldcubeassociation.org/uploads/user/avatar/2099EXAM/1535183030_thumb.jpg"
+    Rank:
+      type: object
+      required:
+        - id
+        - personId
+        - eventId
+        - best
+        - worldRank
+        - continentRank
+        - countryRank
+      properties:
+        id:
+          type: integer
+        personId:
+          type: string
+        eventId:
+          type: string
+        best:
+          type: integer
+        worldRank:
+          type: integer
+        continentRank:
+          type: integer
+        countryRank:
+          type: integer
+    Medals:
+      type: object
+      required:
+        - gold
+        - silver
+        - bronze
+        - total
+      properties:
+        gold:
+          type: integer
+        silver:
+          type: integer
+        bronze:
+          type: integer
+        total:
+          type: integer
+    Records:
+      type: object
+      required:
+        - national
+        - continental
+        - world
+        - total
+      properties:
+        national:
+          type: integer
+        continental:
+          type: integer
+        world:
+          type: integer
+        total:
+          type: integer
+    PersonInfo:
+      type: object
+      required:
+        - person
+        - previous_persons
+        - ranks_average
+        - ranks_single
+        - medals
+        - records
+        - championship_podiums
+      properties:
+        person:
+          $ref: '#/components/schemas/Person'
+        previous_persons:
+          type: array
+          items:
+            type: object
+        ranks_single:
+          type: array
+          items:
+            $ref: '#/components/schemas/Rank'
+        ranks_average:
+          type: array
+          items:
+            $ref: '#/components/schemas/Rank'
+        medals:
+          $ref: '#/components/schemas/Medals'
+        records:
+          $ref: '#/components/schemas/Records'
+        championship_podiums:
+          type: object
+          properties:
+            world:
+              type: array
+              items:
+                type: object
+            continental:
+              type: array
+              items:
+                type: object
+            greater_china:
+              type: array
+              items:
+                type: object
+            national:
+              type: array
+              items:
+                type: object
     CompetitionInfo:
       type: object
       required:
