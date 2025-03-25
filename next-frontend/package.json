@@ -21,7 +21,7 @@
     "next": "15.2.3",
     "next-auth": "5.0.0-beta.25",
     "next-themes": "^0.4.6",
-    "openapi-fetch": "^0.13.4",
+    "openapi-fetch": "^0.13.5",
     "payload": "^3.27.0",
     "payload-authjs": "^0.7.1",
     "react": "^19.0.0",
