@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import { Button, Dropdown } from 'semantic-ui-react';
 import { DateTime } from 'luxon';
+import { noop } from 'lodash';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
 import { showMessage } from '../Register/RegistrationMessage';
 import I18n from '../../../lib/i18n';
@@ -8,6 +9,7 @@ import { countries } from '../../../lib/wca-data.js.erb';
 import {
   APPROVED_COLOR, APPROVED_ICON,
   CANCELLED_COLOR, CANCELLED_ICON,
+  getSkippedPendingCount,
   getSkippedWaitlistCount,
   PENDING_COLOR, PENDING_ICON,
   REJECTED_COLOR, REJECTED_ICON,
@@ -118,11 +120,13 @@ export default function RegistrationActions({
     );
   };
 
-  const moveToWaitingList = (attendees) => {
+  const moveSelectedToWaitlist = () => {
+    const idsToWaitlist = [...pending, ...cancelled, ...accepted, ...rejected];
+
     const registrationsByUserId = _.groupBy(registrations, 'user_id');
 
     const [paid, unpaid] = _.partition(
-      attendees,
+      idsToWaitlist,
       (userId) => registrationsByUserId[userId]?.[0]?.payment?.updated_at,
     );
 
@@ -136,9 +140,33 @@ export default function RegistrationActions({
     changeStatus(combined, 'waiting_list');
   };
 
-  const attemptToApprove = () => {
+  const onMoveSelectedToWaitlist = () => {
+    const skippedPendingCount = getSkippedPendingCount(
+      registrations,
+      partitionedSelectedIds,
+    );
+
+    if (skippedPendingCount > 0) {
+      confirm({
+        content: I18n.t(
+          'competitions.registration_v2.list.pending.waitlist_skipped_warning',
+          { count: skippedPendingCount },
+        ),
+      }).then(
+        moveSelectedToWaitlist,
+      ).catch(noop);
+    } else {
+      moveSelectedToWaitlist();
+    }
+  };
+
+  const onMoveSelectedToApproved = () => {
     const idsToAccept = [...pending, ...cancelled, ...waiting, ...rejected];
     const skippedWaitlistCount = getSkippedWaitlistCount(
+      registrations,
+      partitionedSelectedIds,
+    );
+    const skippedPendingCount = getSkippedPendingCount(
       registrations,
       partitionedSelectedIds,
     );
@@ -151,7 +179,16 @@ export default function RegistrationActions({
         ),
       }).then(
         () => changeStatus(idsToAccept, 'accepted'),
-      ).catch(() => null);
+      ).catch(noop);
+    } else if (skippedPendingCount > 0) {
+      confirm({
+        content: I18n.t(
+          'competitions.registration_v2.list.pending.approve_skipped_warning',
+          { count: skippedPendingCount },
+        ),
+      }).then(
+        () => changeStatus(idsToAccept, 'accepted'),
+      ).catch(noop);
     } else if (idsToAccept.length > spotsRemaining) {
       dispatch(showMessage(
         'competitions.registration_v2.update.too_many',
@@ -232,9 +269,7 @@ export default function RegistrationActions({
             icon={WAITLIST_ICON}
             color={WAITLIST_COLOR}
             isDisabled={!anyWaitlistable}
-            onClick={() => moveToWaitingList(
-              [...pending, ...cancelled, ...accepted, ...rejected],
-            )}
+            onClick={onMoveSelectedToWaitlist}
           />
 
           <MoveAction
@@ -242,7 +277,7 @@ export default function RegistrationActions({
             icon={APPROVED_ICON}
             color={APPROVED_COLOR}
             isDisabled={!anyApprovable}
-            onClick={attemptToApprove}
+            onClick={onMoveSelectedToApproved}
           />
 
           <MoveAction
