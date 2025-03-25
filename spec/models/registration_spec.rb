@@ -926,4 +926,18 @@ RSpec.describe Registration do
     expect(reg).not_to be_valid
     expect(reg.errors[:registered_at]).to include("can't be blank")
   end
+
+  describe '#does_not_exceed_competitor_limit', :tag do
+    let(:competition) { FactoryBot.create(:competition, :registration_open, competitor_limit: 3) }
+    let(:accepted_reg) { FactoryBot.build(:registration, :accepted, competition: competition) }
+
+    before do
+      FactoryBot.create_list(:registration, 2, :accepted, competition: competition)
+    end
+
+    it 'does not include non-competing registrations in competitor limit' do
+      FactoryBot.create(:registration, :non_competing, competition: competition)
+      expect(accepted_reg).to be_valid
+    end
+  end
 end
