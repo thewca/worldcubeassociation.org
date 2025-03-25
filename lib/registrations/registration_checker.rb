@@ -109,6 +109,12 @@ module Registrations
 
       # rubocop:disable Metrics/ParameterLists
       def validate_update_status!(new_status, competition, current_user, target_user, registration, events)
+        validate_status_value!(new_status, competition, target_user)
+        validate_user_permissions!(new_status, registration, competition, events) unless current_user.can_manage_competition?(competition)
+      end
+      # rubocop:enable Metrics/ParameterLists
+
+      def validate_status_value!(new_status, competition, target_user)
         raise WcaExceptions::RegistrationError.new(:unprocessable_entity, Registrations::ErrorCodes::INVALID_REQUEST_DATA) unless
           Registration.competing_statuses.include?(new_status)
         raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::ALREADY_REGISTERED_IN_SERIES) if
@@ -129,11 +135,10 @@ module Registrations
               available_spots > competition.newcomer_month_reserved_spots_remaining
           end
         end
+      end
 
-        # Otherwise, organizers can make any status change they want to
-        return if current_user.can_manage_competition?(competition)
-
-        # A user (ie not an organizer) is only allowed to:
+      def validate_user_permissions!(new_status, registration, competition, events)
+        # A competitor (ie, these restrictions dont apply to organizers) is only allowed to:
         # 1. Reactivate their registration if they previously cancelled it (ie, change status from 'cancelled' to 'pending')
         # 2. Cancel their registration, assuming they are allowed to cancel
 
@@ -146,7 +151,7 @@ module Registrations
           return # No further checks needed if status is pending
         end
 
-        # Now that we've checked the 'pending' case, raise an error is the status is not cancelled (cancelling is the only valid action remaining)
+        # Now that we've checked the 'pending' case, raise an error if the status is not cancelled (cancelling is the only valid action remaining)
         raise WcaExceptions::RegistrationError.new(:unauthorized, Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) unless
           [Registrations::Helper::STATUS_DELETED, Registrations::Helper::STATUS_CANCELLED].include?(new_status)
 
@@ -158,7 +163,6 @@ module Registrations
         raise WcaExceptions::RegistrationError.new(:unprocessable_entity, Registrations::ErrorCodes::INVALID_REQUEST_DATA) if
           events.present? && registration.event_ids != events
       end
-      # rubocop:enable Metrics/ParameterLists
 
       def validate_update_events!(event_ids, competition)
         raise WcaExceptions::RegistrationError.new(:unprocessable_entity, Registrations::ErrorCodes::INVALID_EVENT_SELECTION) unless
