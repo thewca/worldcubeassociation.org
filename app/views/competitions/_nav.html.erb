@@ -222,10 +222,10 @@
     <div id="competition-data">
       <h3>
         <% if current_user && @competition.upcoming? %>
-          <span class="bookmark-icon" id="not-bookmarked" data-toggle="tooltip" data-placement="bottom" title="<%= I18n.t('competitions.competition_info.bookmark') %>" <% if current_user.bookmarked?(@competition) %>style="display: none;"<% end %>>
+          <span class="bookmark-icon" id="not-bookmarked" data-toggle="tooltip" data-placement="bottom" title="<%= I18n.t('competitions.competition_info.bookmark') %>" <% if current_user.competition_bookmarked?(@competition) %>style="display: none;"<% end %>>
             <%= ui_icon('bookmark') %>
           </span>
-          <span class="bookmark-icon" id="bookmarked" data-toggle="tooltip" data-placement="bottom" title="<%= I18n.t('competitions.competition_info.is_bookmarked') %>" <% if !current_user.bookmarked?(@competition) %>style="display: none;"<% end %>>
+          <span class="bookmark-icon" id="bookmarked" data-toggle="tooltip" data-placement="bottom" title="<%= I18n.t('competitions.competition_info.is_bookmarked') %>" <% if !current_user.competition_bookmarked?(@competition) %>style="display: none;"<% end %>>
             <%= ui_icon('bookmark') %>
           </span>
         <% end %>

@@ -2,8 +2,8 @@
   force_collapse ||= false
   display_competition ||= false
   # NOTE: expect valid 'results_validator' variable
-  panel_style = class_for_panel(error: results_validator.errored?,
-                                warning: results_validator.warnings?,
+  panel_style = class_for_panel(error: results_validator.any_errors?,
+                                warning: results_validator.any_warnings?,
                                 no_validator: results_validator.validators.empty?)
   collapse_panel = force_collapse || !results_validator.any_results?
 %>

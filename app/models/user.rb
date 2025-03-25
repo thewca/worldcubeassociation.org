@@ -1137,7 +1137,7 @@ class User < ApplicationRecord
     CompetitionsMailer.notify_users_of_id_claim_possibility(self, competition).deliver_later if !wca_id && !unconfirmed_wca_id
   end
 
-  def bookmarked?(competition)
+  def competition_bookmarked?(competition)
     BookmarkedCompetition.where(competition: competition, user: self).present?
   end
 

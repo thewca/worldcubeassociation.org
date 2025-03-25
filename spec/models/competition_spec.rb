@@ -39,15 +39,15 @@ RSpec.describe Competition do
   context "when there is an entry fee" do
     it "correctly identifies there is a fee when there is only a base fee" do
       competition = FactoryBot.build :competition, name: "Foo: Test - 2015", base_entry_fee_lowest_denomination: 10
-      expect(competition.paid?).to be true
-      expect(competition.base_entry_fee_set?).to eq competition.base_entry_fee
+      expect(competition.payment_required?).to be true
+      expect(competition.base_entry_fee_nonzero?).to eq competition.base_entry_fee
     end
 
     it "correctly identifies there is a fee when there is only event fees" do
       competition = FactoryBot.create :competition, name: "Foo: Test - 2015", base_entry_fee_lowest_denomination: 0
       competition.competition_events.first.update_attribute(:fee_lowest_denomination, 100)
-      expect(competition.base_entry_fee_set?).to be nil
-      expect(competition.paid?).to be true
+      expect(competition.base_entry_fee_nonzero?).to be nil
+      expect(competition.payment_required?).to be true
     end
   end
 

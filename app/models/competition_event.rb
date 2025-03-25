@@ -32,7 +32,7 @@ class CompetitionEvent < ApplicationRecord
     competition&.currency_code
   end
 
-  def paid?
+  def payment_required?
     fee.nonzero?
   end
 

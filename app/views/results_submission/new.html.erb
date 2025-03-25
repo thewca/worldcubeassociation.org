@@ -23,7 +23,7 @@
     <% if @current_user.can_submit_competition_results?(@competition) %>
       <%= render "results_submission_panel",
         competition: @competition,
-        has_errors: @results_validator.errored?,
+        has_errors: @results_validator.any_errors?,
         results_submission: @results_submission
       %>
     <% end %>

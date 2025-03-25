@@ -595,7 +595,7 @@ class Competition < ApplicationRecord
 
       warnings = championship_warnings.merge(warnings) if championship_warnings.any?
 
-      warnings[:registration_payment_info] = I18n.t('competitions.messages.registration_payment_info') if paid? && !competition_payment_integrations.exists?
+      warnings[:registration_payment_info] = I18n.t('competitions.messages.registration_payment_info') if payment_required? && !competition_payment_integrations.exists?
     end
 
     warnings = reg_warnings.merge(warnings) if reg_warnings.any? && user&.can_manage_competition?(self)
@@ -976,7 +976,7 @@ class Competition < ApplicationRecord
   end
 
   def using_payment_integrations?
-    competition_payment_integrations.any? && paid?
+    competition_payment_integrations.any? && payment_required?
   end
 
   def can_edit_registration_fees?
@@ -1054,11 +1054,11 @@ class Competition < ApplicationRecord
     self.longitude_microdegrees = @longitude_degrees * 1e6 unless @longitude_degrees.nil?
   end
 
-  def base_entry_fee_set?
+  def base_entry_fee_nonzero?
     base_entry_fee.nonzero?
   end
 
-  def paid?
+  def payment_required?
     if base_entry_fee_lowest_denomination.nil?
       competition_events.sum(:fee_lowest_denomination) > 0
     else
@@ -1143,7 +1143,7 @@ class Competition < ApplicationRecord
   end
 
   # does the competition have this field (regardless of whether it's a date or blank)
-  def event_change_deadline_date_set?
+  def event_change_deadline_date_present?
     start_date.present? && start_date > Date.new(2021, 6, 24)
   end
 
@@ -1151,7 +1151,7 @@ class Competition < ApplicationRecord
   # must be allowed in general, and if the deadline field exists, is it a date and in the future
   def registration_edits_currently_permitted?
     !started? && self.allow_registration_edits &&
-      (!event_change_deadline_date_set? || event_change_deadline_date.blank? || event_change_deadline_date > DateTime.now)
+      (!event_change_deadline_date_present? || event_change_deadline_date.blank? || event_change_deadline_date > DateTime.now)
   end
 
   private def dates_must_be_valid
@@ -1251,8 +1251,8 @@ class Competition < ApplicationRecord
     !start_date.nil? || !end_date.nil?
   end
 
-  def registration_start_date_set?
-    !registration_open.nil?
+  def registration_start_date_present?
+    registration_open.present?
   end
 
   # The division is to convert the end result from secods to days. .to_date removed some hours from the subtraction
@@ -1266,11 +1266,6 @@ class Competition < ApplicationRecord
 
   def date_range
     ApplicationController.helpers.wca_date_range(self.start_date, self.end_date)
-  end
-
-  def contains_date_errors?
-    valid?
-    !errors[:start_date].empty? || !errors[:end_date].empty? || (!showAtAll && days_until && days_until < MUST_BE_ANNOUNCED_GTE_THIS_MANY_DAYS)
   end
 
   # The competition must be at least 28 days in advance in order to confirm it. Admins are able to modify the competition despite being less than 28 days in advance.
@@ -1316,13 +1311,13 @@ class Competition < ApplicationRecord
   end
 
   def registration_open_adjacent_to?(competition, distance_minutes)
-    return false if !competition.registration_start_date_set? || !self.registration_start_date_set?
+    return false if !competition.registration_start_date_present? || !self.registration_start_date_present?
 
     self.minutes_until_other_registration_starts(competition).abs < distance_minutes
   end
 
   def minutes_until_other_registration_starts(competition)
-    return false if !competition.registration_start_date_set? || !self.registration_start_date_set?
+    return false if !competition.registration_start_date_present? || !self.registration_start_date_present?
 
     seconds_until = (competition.registration_open - self.registration_open).to_i
     seconds_until = (self.registration_open - competition.registration_open).to_i * -1 if seconds_until < 0
