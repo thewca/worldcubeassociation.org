@@ -344,11 +344,6 @@ Rails.application.routes.draw do
   namespace :api do
     get '/', to: redirect('/help/api', status: 302)
 
-    # These are all protected by CORS to not be called from outside of wca.org
-    namespace :internal do
-      get '/:person_id/results', to: 'api#results', as: 'internal_api_results'
-    end
-
     # While this is the start of a v1 API, this is currently not usable by outside developers as
     # getting a JWT token requires you to be logged in through the Website
     namespace :v1 do
