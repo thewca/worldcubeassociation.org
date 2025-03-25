@@ -37,7 +37,9 @@ class Registration < ApplicationRecord
 
   serialize :roles, coder: YAML
 
+  # TODO: V3-REG cleanup. The "accepts_nested_attributes_for" directly below can be removed.
   accepts_nested_attributes_for :registration_competition_events, allow_destroy: true
+  validates_associated :registration_competition_events
 
   validates :user, presence: true, on: [:create]
 
@@ -107,6 +109,13 @@ class Registration < ApplicationRecord
 
   def new_or_deleted?
     new_record? || cancelled? || !is_competing?
+  end
+
+  def volatile_event_ids
+    # When checking registration validity as part of the user-facing registration frontend,
+    #   we want to avoid database writes at all cost. So we create an in-memory dummy registration,
+    #   but unfortunately `through` association support is very limited for such volatile models.
+    registration_competition_events.map(&:event_id)
   end
 
   delegate :name, :gender, :country, :email, :dob, :wca_id, to: :user
@@ -342,26 +351,29 @@ class Registration < ApplicationRecord
     errors.add(:user_id, I18n.t('registrations.errors.undelete_banned')) if user.banned_at_date?(competition.start_date) && might_attend?
   end
 
-  validate :must_register_for_gte_one_event, if: :is_competing?
-  private def must_register_for_gte_one_event
-    errors.add(:registration_competition_events, I18n.t('registrations.errors.must_register')) if registration_competition_events.reject(&:marked_for_destruction?).empty?
+  validates :registration_competition_events, presence: {
+                                                if: :is_competing?,
+                                                message: I18n.t('registrations.errors.must_register'),
+                                                frontend_code: Registrations::ErrorCodes::INVALID_EVENT_SELECTION,
+                                              },
+                                              length: {
+                                                maximum: :events_limit,
+                                                if: :events_limit_enabled?,
+                                                message: ->(registration, _data) {
+                                                  I18n.t('registrations.errors.exceeds_event_limit', count: registration.events_limit)
+                                                },
+                                                frontend_code: Registrations::ErrorCodes::INVALID_EVENT_SELECTION,
+                                              }
+
+  def events_limit
+    competition&.events_per_registration_limit
   end
 
-  validate :must_not_register_for_more_events_than_event_limit
-  private def must_not_register_for_more_events_than_event_limit
-    return if competition.blank? || !competition.events_per_registration_limit_enabled?
-    return unless registration_competition_events.count { |element| !element.marked_for_destruction? } > competition.events_per_registration_limit
-
-    errors.add(:registration_competition_events, I18n.t('registrations.errors.exceeds_event_limit', count: competition.events_per_registration_limit))
+  def events_limit_enabled?
+    competition&.events_per_registration_limit_enabled?
   end
 
-  validate :cannot_register_for_unqualified_events
-  private def cannot_register_for_unqualified_events
-    return if competition && competition.allow_registration_without_qualification
-    return unless registration_competition_events.reject(&:marked_for_destruction?).any? { |event| !event.competition_event&.can_register?(user) }
-
-    errors.add(:registration_competition_events, I18n.t('registrations.errors.can_only_register_for_qualified_events'))
-  end
+  delegate :allow_registration_without_qualification?, to: :competition, allow_nil: true
 
   strip_attributes only: [:comments, :administrative_notes]
 

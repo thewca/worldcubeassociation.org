@@ -10,6 +10,25 @@ RSpec.describe Registrations::RegistrationChecker do
 
   describe '#create' do
     describe '#create_registration_allowed!' do
+      it 'can perform a full check without firing any DB writes', :clean_db_with_truncation do
+        registration_request = FactoryBot.build(
+          :registration_request,
+          competition_id: default_competition.id,
+          user_id: default_user.id,
+          guests: 10,
+          raw_comment: 'This is a perfectly legitimate registration',
+          events: ['222', '333', 'pyram'],
+        )
+
+        ActiveRecord::Base.connected_to(role: :reading, prevent_writes: true) do
+          expect {
+            Registrations::RegistrationChecker.create_registration_allowed!(
+              registration_request, User.find(registration_request['submitted_by']), Competition.find(registration_request['competition_id'])
+            )
+          }.not_to raise_error
+        end
+      end
+
       describe 'validate_guests!' do
         it 'guests can equal the maximum allowed' do
           comp = FactoryBot.create(:competition, :with_guest_limit, :registration_open)
@@ -251,7 +270,7 @@ RSpec.describe Registrations::RegistrationChecker do
         expect {
           Registrations::RegistrationChecker.create_registration_allowed!(registration_request, User.find(registration_request['user_id']), event_limit_comp)
         }.to raise_error(WcaExceptions::RegistrationError) do |error|
-          expect(error.status).to eq(:forbidden)
+          expect(error.status).to eq(:unprocessable_entity)
           expect(error.error).to eq(Registrations::ErrorCodes::INVALID_EVENT_SELECTION)
         end
       end
@@ -285,7 +304,7 @@ RSpec.describe Registrations::RegistrationChecker do
         expect {
           Registrations::RegistrationChecker.create_registration_allowed!(registration_request, User.find(registration_request['user_id']), event_limit_comp)
         }.to raise_error(WcaExceptions::RegistrationError) do |error|
-          expect(error.status).to eq(:forbidden)
+          expect(error.status).to eq(:unprocessable_entity)
           expect(error.error).to eq(Registrations::ErrorCodes::INVALID_EVENT_SELECTION)
         end
       end
@@ -587,6 +606,24 @@ RSpec.describe Registrations::RegistrationChecker do
 
   describe '#update' do
     let(:default_registration) { FactoryBot.create(:registration, competition: default_competition) }
+
+    describe '#update_registration_allowed!' do
+      it 'does not alter the base registration during checking' do
+        update_request = FactoryBot.build(
+          :update_request,
+          competition_id: default_registration.competition.id,
+          user_id: default_registration.user_id,
+          competing: { 'event_ids' => ['333'] },
+        )
+
+        expect {
+          Registrations::RegistrationChecker.update_registration_allowed!(update_request, default_registration, User.find(update_request['submitted_by']))
+        }.not_to raise_error
+
+        # We never actually fired the update, we just checked whether it _would_ be permissible to do so
+        expect(default_registration.reload.event_ids).to eq(['333', '333oh'])
+      end
+    end
 
     describe '#update_registration_allowed!.validate_comment!' do
       it 'user can change comment' do
@@ -1559,7 +1596,7 @@ RSpec.describe Registrations::RegistrationChecker do
         expect {
           Registrations::RegistrationChecker.update_registration_allowed!(update_request, limited_registration, User.find(update_request['submitted_by']))
         }.to raise_error(WcaExceptions::RegistrationError) do |error|
-          expect(error.status).to eq(:forbidden)
+          expect(error.status).to eq(:unprocessable_entity)
           expect(error.error).to eq(Registrations::ErrorCodes::INVALID_EVENT_SELECTION)
         end
       end
@@ -1577,7 +1614,7 @@ RSpec.describe Registrations::RegistrationChecker do
         expect {
           Registrations::RegistrationChecker.update_registration_allowed!(update_request, organizer_reg, User.find(update_request['submitted_by']))
         }.to raise_error(WcaExceptions::RegistrationError) do |error|
-          expect(error.status).to eq(:forbidden)
+          expect(error.status).to eq(:unprocessable_entity)
           expect(error.error).to eq(Registrations::ErrorCodes::INVALID_EVENT_SELECTION)
         end
       end
