@@ -663,7 +663,7 @@ RSpec.describe Registration do
   end
 
   describe '#entry_fee_with_donation' do
-    it 'returns a hash of entry fee and currency code' do
+    it 'returns a RubyMoney object' do
       expect(registration.entry_fee_with_donation).to eq(Money.new(1000, "USD"))
     end
 

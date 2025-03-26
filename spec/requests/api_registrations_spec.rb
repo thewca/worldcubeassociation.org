@@ -552,7 +552,7 @@ RSpec.describe 'API Registrations' do
 
       it 'has the correct payment_intent properties when a donation is present' do
         stub_successful_stripe_payment_intent(2300, 'usd')
-        get api_v1_registrations_payment_ticket_path(competition_id: competition.id), headers: headers, params: { donation_iso: 1300 }
+        get api_v1_registrations_payment_ticket_path(competition_id: competition.id), headers: headers, params: { iso_donation_amount: 1300 }
 
         payment_record = PaymentIntent.find_by(holder_type: "Registration", holder_id: reg.id).payment_record
         expect(payment_record.amount_stripe_denomination).to be(2300)
