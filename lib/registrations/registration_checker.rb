@@ -134,31 +134,34 @@ module Registrations
         competition = persisted_registration.competition
         target_user = persisted_registration.user
 
+        validate_status_value!(new_status, competition, target_user)
+        validate_user_permissions!(new_status, persisted_registration, updated_registration, competition) unless current_user.can_manage_competition?(competition)
+      end
+
+      def validate_status_value!(new_status, competition, target_user)
         raise WcaExceptions::RegistrationError.new(:unprocessable_entity, Registrations::ErrorCodes::INVALID_REQUEST_DATA) unless
           Registration.competing_statuses.include?(new_status)
         raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::ALREADY_REGISTERED_IN_SERIES) if
           new_status == Registrations::Helper::STATUS_ACCEPTED && existing_registration_in_series?(competition, target_user)
 
-        if new_status == Registrations::Helper::STATUS_ACCEPTED && competition.competitor_limit_enabled?
-          raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::COMPETITOR_LIMIT_REACHED) if
-            competition.registrations.accepted_and_competing_count >= competition.competitor_limit
+        return unless new_status == Registrations::Helper::STATUS_ACCEPTED && competition.competitor_limit_enabled?
+        raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::COMPETITOR_LIMIT_REACHED) if
+          competition.registrations.accepted_and_competing_count >= competition.competitor_limit
 
-          if competition.enforce_newcomer_month_reservations? && !target_user.newcomer_month_eligible?
-            available_spots = competition.competitor_limit - competition.registrations.competing_status_accepted.count
+        return unless competition.enforce_newcomer_month_reservations? && !target_user.newcomer_month_eligible?
 
-            # There are a limited number of "reserved" spots for newcomer_month_eligible competitions
-            # We know that there are _some_ available_spots in the comp available, because we passed the competitor_limit check above
-            # However, we still don't know how many of the reserved spots have been taken up by newcomers, versus how many "general" spots are left
-            # For a non-newcomer to be accepted, there need to be more spots available than spots still reserved for newcomers
-            raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::NO_UNRESERVED_SPOTS_REMAINING) unless
-              available_spots > competition.newcomer_month_reserved_spots_remaining
-          end
-        end
+        available_spots = competition.competitor_limit - competition.registrations.competing_status_accepted.count
 
-        # Otherwise, organizers can make any status change they want to
-        return if current_user.can_manage_competition?(competition)
+        # There are a limited number of "reserved" spots for newcomer_month_eligible competitions
+        # We know that there are _some_ available_spots in the comp available, because we passed the competitor_limit check above
+        # However, we still don't know how many of the reserved spots have been taken up by newcomers, versus how many "general" spots are left
+        # For a non-newcomer to be accepted, there need to be more spots available than spots still reserved for newcomers
+        raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::NO_UNRESERVED_SPOTS_REMAINING) unless
+          available_spots > competition.newcomer_month_reserved_spots_remaining
+      end
 
-        # A user (ie not an organizer) is only allowed to:
+      def validate_user_permissions!(new_status, persisted_registration, updated_registration, competition)
+        # A competitor (ie, these restrictions dont apply to organizers) is only allowed to:
         # 1. Reactivate their registration if they previously cancelled it (ie, change status from 'cancelled' to 'pending')
         # 2. Cancel their registration, assuming they are allowed to cancel
 
@@ -171,7 +174,7 @@ module Registrations
           return # No further checks needed if status is pending
         end
 
-        # Now that we've checked the 'pending' case, raise an error is the status is not cancelled (cancelling is the only valid action remaining)
+        # Now that we've checked the 'pending' case, raise an error if the status is not cancelled (cancelling is the only valid action remaining)
         raise WcaExceptions::RegistrationError.new(:unauthorized, Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) unless
           [Registrations::Helper::STATUS_DELETED, Registrations::Helper::STATUS_CANCELLED].include?(new_status)
 
