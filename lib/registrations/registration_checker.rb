@@ -12,9 +12,11 @@ module Registrations
         competing_payload = raw_payload['competing']
         comment = competing_payload&.dig('comment')
         organizer_comment = competing_payload&.dig('organizer_comment')
+        competing_status = competing_payload&.dig('status')
 
         new_registration.comments = comment if competing_payload&.key?('comment')
         new_registration.administrative_notes = organizer_comment if competing_payload&.key?('organizer_comment')
+        new_registration.competing_status = competing_status if competing_payload&.key?('status')
 
         # Since even deep cloning does not take care of associations, we must fall back to the original registration.
         #   Otherwise, every payload that does not specify `event_ids` would trigger "must register for >= 1 event"
@@ -51,10 +53,11 @@ module Registrations
       validate_comment!(updated_registration)
       validate_organizer_comment!(updated_registration)
       validate_registration_events!(updated_registration)
+      validate_status_value!(updated_registration)
 
       # Old-style validations within this class
       validate_waiting_list_position!(waiting_list_position, competition, updated_registration) unless waiting_list_position.nil?
-      validate_update_status!(new_status, current_user, registration, updated_registration) unless new_status.nil?
+      validate_update_status!(current_user, registration, updated_registration) unless new_status.nil?
     end
 
     class << self
@@ -130,16 +133,17 @@ module Registrations
         raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::INVALID_WAITING_LIST_POSITION) if converted_position < 1
       end
 
-      def validate_update_status!(new_status, current_user, persisted_registration, updated_registration)
+      def validate_update_status!(current_user, persisted_registration, updated_registration)
         competition = persisted_registration.competition
 
-        validate_status_value!(new_status, updated_registration)
         validate_user_permissions!(persisted_registration, updated_registration) unless current_user.can_manage_competition?(competition)
       end
 
-      def validate_status_value!(new_status, registration)
+      def validate_status_value!(registration)
         competition = registration.competition
         target_user = registration.user
+
+        new_status = registration.competing_status
 
         process_validation_error!(registration, :competing_status)
         process_validation_error!(registration, :competition_id)
