@@ -2,6 +2,11 @@ import { createSystem, defaultConfig, defineConfig } from "@chakra-ui/react";
 
 
 const customConfig = defineConfig({
+  globalCss: {
+    html: {
+      fontSize: "15px", // 1rem = 15px
+    },
+  },
   theme: {
     keyframes: {
       slideInGradient: {
@@ -88,8 +93,8 @@ const customConfig = defineConfig({
       shadows:{
         wca: {
           value: {
-            _light: "rgba(17, 17, 26, 0.2) 0px 0px 8px",
-            _dark: "rgba(252, 252, 252, 0.4) 0px 0px 8px"
+            _light: "rgba(17, 17, 26, 0.3) 0px 0px 16px",
+            _dark: "rgba(252, 252, 252, 0.4) 0px 0px 16px"
           }
         }
       },
@@ -444,6 +449,17 @@ const customConfig = defineConfig({
             },
           },
         ],
+      },
+      prose: {
+        base: {
+          "& a": {
+            color: "{colors.blue.highContrast}",
+            fontWeight: "medium",
+            _hover: {
+              color: "{colors.blue.highContrast/80}",
+            }
+          },
+        }
       }
       
     },
@@ -453,6 +469,7 @@ const customConfig = defineConfig({
           root: {
             shadow: "{shadows.wca}",
             colorPalette: "grey",
+            borderRadius: "xl",
           }
         },
         defaultVariants: {
@@ -481,6 +498,33 @@ const customConfig = defineConfig({
               description: {
                 color:  "colorPalette.contrast",
               }
+            },
+            plain: {
+              root: {
+                overflow: "hidden",
+                bg: "bg",
+                p: "2",
+                w: "100%",
+                flexGrow: "1",
+              },
+              body: {
+                gap: "4",
+              }
+            },
+            infoSnippet: {
+              root: {
+                shadow: "none",
+              },
+              body: {
+                p: "0px",
+              },
+              header: {
+                p: "0px",
+                fontWeight: "semibold",
+                flexDirection: "row",
+                alignItems: "center",
+                gap: "1"
+              }
             }
           }
         },
@@ -491,6 +535,17 @@ const customConfig = defineConfig({
               title: {textStyle: "4xl",}//needed to supercede the default textStyle
             },
           },
+          {
+            variant: "infoSnippet",
+            css: {
+              header: {
+                "svg": {
+                  height: "1.15em",
+                  width: "1.15em"
+                }
+              }
+            }
+          }
         ],
       },
       accordion: {
