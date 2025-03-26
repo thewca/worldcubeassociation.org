@@ -410,9 +410,20 @@ class Registration < ApplicationRecord
     outstanding_entry_fees.zero? && competition.attempt_auto_close!
   end
 
+  def trying_to_accept?
+    competing_status_changed? && competing_status_accepted?
+  end
+
   validate :only_one_accepted_per_series
   private def only_one_accepted_per_series
-    errors.add(:competition_id, I18n.t('registrations.errors.series_more_than_one_accepted')) if competition&.part_of_competition_series? && competing_status_accepted? && !series_sibling_registrations.accepted.empty?
+    return unless part_of_competition_series? && trying_to_accept? && !series_sibling_registrations.accepted.empty?
+
+    errors.add(
+      :competition_id,
+      :already_registered_in_series,
+      message: I18n.t('registrations.errors.series_more_than_one_accepted'),
+      frontend_code: Registrations::ErrorCodes::ALREADY_REGISTERED_IN_SERIES,
+    )
   end
 
   delegate :part_of_competition_series?, to: :competition

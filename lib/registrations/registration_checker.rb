@@ -142,9 +142,7 @@ module Registrations
         target_user = registration.user
 
         process_validation_error!(registration, :competing_status)
-
-        raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::ALREADY_REGISTERED_IN_SERIES) if
-          new_status == Registrations::Helper::STATUS_ACCEPTED && existing_registration_in_series?(registration)
+        process_validation_error!(registration, :competition_id)
 
         return unless new_status == Registrations::Helper::STATUS_ACCEPTED && competition.competitor_limit_enabled?
         raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::COMPETITOR_LIMIT_REACHED) if
@@ -166,10 +164,6 @@ module Registrations
         # Users aren't allowed to change events when cancelling
         raise WcaExceptions::RegistrationError.new(:unprocessable_entity, Registrations::ErrorCodes::INVALID_REQUEST_DATA) if
           updated_registration.volatile_event_ids != persisted_registration.event_ids
-      end
-
-      def existing_registration_in_series?(registration)
-        registration.part_of_competition_series? && registration.series_sibling_registrations.might_attend.any?
       end
     end
   end
