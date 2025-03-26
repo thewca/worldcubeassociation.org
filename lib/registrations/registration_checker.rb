@@ -135,7 +135,7 @@ module Registrations
         target_user = persisted_registration.user
 
         validate_status_value!(new_status, competition, target_user)
-        validate_user_permissions!(new_status, persisted_registration, updated_registration, competition) unless current_user.can_manage_competition?(competition)
+        validate_user_permissions!(persisted_registration, updated_registration) unless current_user.can_manage_competition?(competition)
       end
 
       def validate_status_value!(new_status, competition, target_user)
