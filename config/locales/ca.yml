@@ -659,19 +659,19 @@ ca:
         competition_id: Ha passat durant
       competition_medium:
         #original_hash: 1917f4f
-        competitionId: Competició
+        competition_id: Competició
         #original_hash: 3deb745
-        type: Tipus
+        media_type: Tipus
         #original_hash: c3328c3
         text: Text
         #original_hash: d051707
         uri: Enllaç
         #original_hash: 1be755a
-        submitterName: Nom de l'emissor
+        submitter_name: Nom de l'emissor
         #original_hash: 78cdfee
-        submitterEmail: Correu electrònic de l'emissor
+        submitter_email: Correu electrònic de l'emissor
         #original_hash: 0d31f23
-        submitterComment: Comentari de l'emissor
+        submitter_comment: Comentari de l'emissor
         #original_hash: bae7d5b
         status: Estat
       regional_organization:
@@ -1150,19 +1150,19 @@ ca:
         comment: ''
       competition_medium:
         #original_hash: da39a3e
-        competitionId: ''
+        competition_id: ''
         #original_hash: da39a3e
-        type: ''
+        media_type: ''
         #original_hash: da39a3e
         text: ''
         #original_hash: da39a3e
         uri: ''
         #original_hash: da39a3e
-        submitterName: ''
+        submitter_name: ''
         #original_hash: da39a3e
-        submitterEmail: ''
+        submitter_email: ''
         #original_hash: da39a3e
-        submitterComment: ''
+        submitter_comment: ''
         #original_hash: da39a3e
         status: ''
       results_submission:

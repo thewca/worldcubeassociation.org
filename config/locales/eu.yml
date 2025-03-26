@@ -574,19 +574,19 @@ eu:
         competition_id: Honen bitartean gertatu zen
       competition_medium:
         #original_hash: 1917f4f
-        competitionId: Lehiaketa
+        competition_id: Lehiaketa
         #original_hash: 3deb745
-        type: Mota
+        media_type: Mota
         #original_hash: c3328c3
         text: Testua
         #original_hash: d051707
         uri: Esteka
         #original_hash: 1be755a
-        submitterName: Egilearen izena
+        submitter_name: Egilearen izena
         #original_hash: 78cdfee
-        submitterEmail: Egilearen e-maila
+        submitter_email: Egilearen e-maila
         #original_hash: 0d31f23
-        submitterComment: Egilearen iruzkina
+        submitter_comment: Egilearen iruzkina
         #original_hash: bae7d5b
         status: Egoera
       regional_organization:
@@ -893,19 +893,19 @@ eu:
         comment: ''
       competition_medium:
         #original_hash: da39a3e
-        competitionId: ''
+        competition_id: ''
         #original_hash: da39a3e
-        type: ''
+        media_type: ''
         #original_hash: da39a3e
         text: ''
         #original_hash: da39a3e
         uri: ''
         #original_hash: da39a3e
-        submitterName: ''
+        submitter_name: ''
         #original_hash: da39a3e
-        submitterEmail: ''
+        submitter_email: ''
         #original_hash: da39a3e
-        submitterComment: ''
+        submitter_comment: ''
         #original_hash: da39a3e
         status: ''
       results_submission:
@@ -4537,7 +4537,7 @@ eu:
         #original_hash: 53adda3
         stripe: >-
           Zure Stripe kontua konektatzeak WCAri salneurriak sor dezan ahalmena
-          ematen dio. Baita zure Stripe kontura zuzenean diru-itzulketak 
+          ematen dio. Baita zure Stripe kontura zuzenean diru-itzulketak
           jaulkitzea.
         #original_hash: 7cedd12
         paypal: >-
