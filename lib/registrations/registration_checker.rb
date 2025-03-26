@@ -132,15 +132,17 @@ module Registrations
 
       def validate_update_status!(new_status, current_user, persisted_registration, updated_registration)
         competition = persisted_registration.competition
-        target_user = persisted_registration.user
 
-        validate_status_value!(new_status, competition, target_user)
+        validate_status_value!(new_status, updated_registration)
         validate_user_permissions!(persisted_registration, updated_registration) unless current_user.can_manage_competition?(competition)
       end
 
-      def validate_status_value!(new_status, competition, target_user)
-        raise WcaExceptions::RegistrationError.new(:unprocessable_entity, Registrations::ErrorCodes::INVALID_REQUEST_DATA) unless
-          Registration.competing_statuses.include?(new_status)
+      def validate_status_value!(new_status, registration)
+        competition = registration.competition
+        target_user = registration.user
+
+        process_validation_error!(registration, :competing_status)
+
         raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::ALREADY_REGISTERED_IN_SERIES) if
           new_status == Registrations::Helper::STATUS_ACCEPTED && existing_registration_in_series?(competition, target_user)
 
