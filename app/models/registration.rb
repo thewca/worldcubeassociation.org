@@ -414,8 +414,23 @@ class Registration < ApplicationRecord
     competing_status_changed? && competing_status_accepted?
   end
 
-  validate :only_one_accepted_per_series, if: [:part_of_competition_series?, :trying_to_accept?, :has_accepted_sibling_registrations?]
+  delegate :competitor_limit_enabled?, to: :competition
+
+  validate :cannot_exceed_competitor_limit, if: [:trying_to_accept?, :competitor_limit_enabled?]
+  private def cannot_exceed_competitor_limit
+    return unless competition.registrations.accepted_and_competing_count >= competition.competitor_limit
+
+    errors.add(
+      :competing_status,
+      :exceeding_competitor_limit,
+      frontend_code: Registrations::ErrorCodes::COMPETITOR_LIMIT_REACHED,
+    )
+  end
+
+  validate :only_one_accepted_per_series, if: [:part_of_competition_series?, :trying_to_accept?]
   private def only_one_accepted_per_series
+    return unless series_sibling_registrations.accepted.any?
+
     errors.add(
       :competition_id,
       :already_registered_in_series,
@@ -431,10 +446,6 @@ class Registration < ApplicationRecord
 
     competition.series_sibling_registrations
                .where(user_id: self.user_id)
-  end
-
-  def has_accepted_sibling_registrations?
-    series_sibling_registrations.accepted.any?
   end
 
   def ensure_waitlist_eligibility!

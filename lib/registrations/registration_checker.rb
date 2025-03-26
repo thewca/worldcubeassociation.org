@@ -143,14 +143,8 @@ module Registrations
         competition = registration.competition
         target_user = registration.user
 
-        new_status = registration.competing_status
-
         process_validation_error!(registration, :competing_status)
         process_validation_error!(registration, :competition_id)
-
-        return unless new_status == Registrations::Helper::STATUS_ACCEPTED && competition.competitor_limit_enabled?
-        raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::COMPETITOR_LIMIT_REACHED) if
-          competition.registrations.accepted_and_competing_count >= competition.competitor_limit
 
         return unless competition.enforce_newcomer_month_reservations? && !target_user.newcomer_month_eligible?
 
