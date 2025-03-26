@@ -160,28 +160,7 @@ module Registrations
           available_spots > competition.newcomer_month_reserved_spots_remaining
       end
 
-      def validate_user_permissions!(new_status, persisted_registration, updated_registration, competition)
-        # A competitor (ie, these restrictions dont apply to organizers) is only allowed to:
-        # 1. Reactivate their registration if they previously cancelled it (ie, change status from 'cancelled' to 'pending')
-        # 2. Cancel their registration, assuming they are allowed to cancel
-
-        # User reactivating registration
-        if new_status == Registrations::Helper::STATUS_PENDING
-          raise WcaExceptions::RegistrationError.new(:unauthorized, Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) unless persisted_registration.cancelled?
-          raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::REGISTRATION_CLOSED) if
-            persisted_registration.cancelled? && !competition.registration_currently_open?
-
-          return # No further checks needed if status is pending
-        end
-
-        # Now that we've checked the 'pending' case, raise an error if the status is not cancelled (cancelling is the only valid action remaining)
-        raise WcaExceptions::RegistrationError.new(:unauthorized, Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) unless
-          [Registrations::Helper::STATUS_DELETED, Registrations::Helper::STATUS_CANCELLED].include?(new_status)
-
-        # Raise an error if competition prevents users from cancelling a registration once it is accepted
-        raise WcaExceptions::RegistrationError.new(:unauthorized, Registrations::ErrorCodes::ORGANIZER_MUST_CANCEL_REGISTRATION) unless
-          persisted_registration.permit_user_cancellation?
-
+      def validate_user_permissions!(persisted_registration, updated_registration)
         # Users aren't allowed to change events when cancelling
         raise WcaExceptions::RegistrationError.new(:unprocessable_entity, Registrations::ErrorCodes::INVALID_REQUEST_DATA) if
           updated_registration.volatile_event_ids != persisted_registration.event_ids
