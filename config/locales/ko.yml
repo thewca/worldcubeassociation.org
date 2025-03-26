@@ -323,7 +323,7 @@ ko:
     #original_hash: cdd7bb2
     setup: 사전 준비
     #original_hash: 0b28e08
-    teardown: 철수
+    teardown: 행사 정리
     #original_hash: 6e6a6f2
     misc: 기타
   common:
@@ -636,16 +636,16 @@ ko:
           senior_delegate: 수석 파견위원
         teams_committees:
           #original_hash: 6853c98
-          member: 구성원
+          member: 위원
           #original_hash: c366473
-          senior_member: 수석 구성원
+          senior_member: 수석 위원
           #original_hash: e26c936
           leader: 대표
         councils:
           #original_hash: 6853c98
-          member: 구성원
+          member: 위원
           #original_hash: c366473
-          senior_member: 수석 구성원
+          senior_member: 수석 위원
           #original_hash: e26c936
           leader: 대표
         officers:
@@ -1389,16 +1389,16 @@ ko:
           #original_hash: 54f0036
           label: 누구에게 연락하고 싶으십니까?
           competition:
-            #original_hash: baa2425
+            #original_hash: 5a280ab
             label: 대회 주최자/파견위원에게 연락(특정 대회에 관한 질문을 하기 위해)
           wct:
             #original_hash: b73e465
             label: "WCA에 일반적인 문의사항(WCA ID/프로필, 대회 주최, 대회 규정, 대회 미디어 등) 문의하기"
           wrt:
-            #original_hash: 0f6b96b
+            #original_hash: 4dd66f7
             label: 결과 팀에 연락하기(대회 결과와 관련된 모든 사항)
           wst:
-            #original_hash: 1d74033
+            #original_hash: 2be6d53
             label: 소프트웨어 팀에 문의(웹사이트의 버그나 API 관련 질문이 있는 경우)
         competition:
           competition:
