@@ -6,16 +6,26 @@ module Waitlistable
   extend ActiveSupport::Concern
 
   included do
-    attr_accessor :new_waitlist_position
+    attr_writer :waiting_list_position
 
-    def new_waitlist_position?
-      self.new_waitlist_position.present?
+    def waiting_list_position?
+      @waiting_list_position.present?
     end
 
-    after_commit :clear_waitlist_position, on: :save
+    after_save :commit_waitlist_position
+
+    def commit_waitlist_position
+      should_add = self.waitlistable? && !self.waiting_list_position?
+      should_move = self.waitlistable? && self.waiting_list_position?
+      should_remove = !self.waitlistable? && self.waiting_list_position?
+
+      self.waiting_list.add(self.waitlistable_id) if should_add
+      self.waiting_list.move_to_position(self.waitlistable_id, @waiting_list_position) if should_move
+      self.waiting_list.remove(self.waitlistable_id) if should_remove
+    end
 
     def clear_waitlist_position
-      self.new_waitlist_position = nil
+      self.waiting_list_position = nil
     end
 
     # Tells the waitlist entity what ID to waitlist by.
@@ -27,11 +37,11 @@ module Waitlistable
     # Tells the hooks whether the current entity
     #   can be put on the waitlist in the first place.
     def waitlistable?
-      true
+      false
     end
 
     def waiting_list_position
-      self.waiting_list.position(self.waitlistable_id)
+      @waiting_list_position ||= self.waiting_list.position(self.waitlistable_id)
     end
   end
 end
