@@ -34,7 +34,7 @@ class Registration < ApplicationRecord
     cancelled: Registrations::Helper::STATUS_CANCELLED,
     rejected: Registrations::Helper::STATUS_REJECTED,
     waiting_list: Registrations::Helper::STATUS_WAITING_LIST,
-  }, prefix: true, validate: true
+  }, prefix: true, validate: { frontend_code: Registrations::ErrorCodes::INVALID_REQUEST_DATA }
 
   serialize :roles, coder: YAML
 
