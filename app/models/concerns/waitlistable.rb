@@ -6,9 +6,27 @@ module Waitlistable
   extend ActiveSupport::Concern
 
   included do
+    delegate :empty?, :length, to: :waiting_list, prefix: true
+
     attr_writer :waiting_list_position
 
-    validates :waiting_list_position, numericality: { only_integer: true, allow_nil: true, frontend_code: Registrations::ErrorCodes::INVALID_WAITING_LIST_POSITION }
+    validates :waiting_list_position, numericality: {
+      only_integer: true,
+      greater_than_or_equal_to: 1,
+      frontend_code: Registrations::ErrorCodes::INVALID_WAITING_LIST_POSITION,
+      if: :waitlistable?,
+    }
+    validates :waiting_list_position, numericality: {
+      equal_to: 1,
+      frontend_code: Registrations::ErrorCodes::INVALID_WAITING_LIST_POSITION,
+      if: [:waitlistable?, :waiting_list_empty?],
+    }
+    validates :waiting_list_position, numericality: {
+      less_than_or_equal_to: :waiting_list_length,
+      frontend_code: Registrations::ErrorCodes::INVALID_WAITING_LIST_POSITION,
+      if: :waitlistable?,
+      unless: :waiting_list_empty?,
+    }
 
     def waiting_list_position?
       @waiting_list_position.present?
@@ -43,7 +61,7 @@ module Waitlistable
     end
 
     def waiting_list_position
-      @waiting_list_position ||= self.waiting_list.position(self.waitlistable_id)
+      @waiting_list_position ||= self.waiting_list&.position(self.waitlistable_id)
     end
   end
 end

@@ -3,6 +3,8 @@
 class WaitingList < ApplicationRecord
   belongs_to :holder, polymorphic: true
 
+  delegate :empty?, :length, to: :entries
+
   def remove(entry_id)
     update_column :entries, entries - [entry_id]
   end

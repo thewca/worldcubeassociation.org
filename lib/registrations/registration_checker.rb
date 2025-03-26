@@ -42,8 +42,6 @@ module Registrations
     end
 
     def self.update_registration_allowed!(update_request, registration)
-      competition = registration.competition
-
       waiting_list_position = update_request.dig('competing', 'waiting_list_position')
 
       updated_registration = self.apply_payload(registration, update_request)
@@ -56,7 +54,7 @@ module Registrations
       validate_status_value!(updated_registration)
 
       # Old-style validations within this class
-      validate_waiting_list_position!(waiting_list_position, competition, updated_registration) unless waiting_list_position.nil?
+      validate_waiting_list_position!(updated_registration) unless waiting_list_position.nil?
     end
 
     class << self
@@ -115,18 +113,10 @@ module Registrations
         process_validation_error!(registration, :administrative_notes)
       end
 
-      def validate_waiting_list_position!(waiting_list_position, competition, updated_registration)
+      def validate_waiting_list_position!(registration)
         # User must be on the wating list
         raise WcaExceptions::RegistrationError.new(:unprocessable_entity, Registrations::ErrorCodes::INVALID_REQUEST_DATA) unless
-         updated_registration.competing_status == Registrations::Helper::STATUS_WAITING_LIST
-
-        # We convert strings to integers and then check if they are an integer
-        converted_position = waiting_list_position.to_i
-
-        waiting_list = competition.waiting_list.entries
-        raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::INVALID_WAITING_LIST_POSITION) if waiting_list.empty? && converted_position != 1
-        raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::INVALID_WAITING_LIST_POSITION) if converted_position > waiting_list.length
-        raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::INVALID_WAITING_LIST_POSITION) if converted_position < 1
+         registration.competing_status == Registrations::Helper::STATUS_WAITING_LIST
       end
 
       def validate_status_value!(registration)

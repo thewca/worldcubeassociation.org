@@ -29,6 +29,7 @@ class Registration < ApplicationRecord
   has_many :assignments, as: :registration, dependent: :delete_all
   has_many :wcif_extensions, as: :extendable, dependent: :delete_all
   has_many :payment_intents, as: :holder, dependent: :delete_all
+  has_one :waiting_list, through: :competition
 
   enum :competing_status, {
     pending: Registrations::Helper::STATUS_PENDING,
