@@ -41,19 +41,13 @@ module Waitlistable
       should_move = self.waitlistable? && self.waiting_list_position?
       should_remove = !self.waitlistable? && self.waiting_list_position?
 
-      self.waiting_list.add(self.waitlistable_id) if should_add
-      self.waiting_list.move_to_position(self.waitlistable_id, @waiting_list_position) if should_move
-      self.waiting_list.remove(self.waitlistable_id) if should_remove
+      self.waiting_list.add(self) if should_add
+      self.waiting_list.move_to_position(self, @waiting_list_position) if should_move
+      self.waiting_list.remove(self) if should_remove
     end
 
     def clear_waitlist_position
       self.waiting_list_position = nil
-    end
-
-    # Tells the waitlist entity what ID to waitlist by.
-    #   For most objects, this should be `id` by default.
-    def waitlistable_id
-      self.id
     end
 
     # Tells the hooks whether the current entity
@@ -63,7 +57,7 @@ module Waitlistable
     end
 
     def waiting_list_position
-      @waiting_list_position ||= self.waiting_list&.position(self.waitlistable_id)
+      @waiting_list_position ||= self.waiting_list&.position(self)
     end
   end
 end
