@@ -28,6 +28,8 @@ module Waitlistable
       unless: :waiting_list_empty?,
     }
 
+    validates :waitlistable?, presence: { if: :waiting_list_position?, frontend_code: Registrations::ErrorCodes::INVALID_REQUEST_DATA }
+
     def waiting_list_position?
       @waiting_list_position.present?
     end
