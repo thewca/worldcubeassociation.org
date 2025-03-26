@@ -679,7 +679,7 @@ kk:
         accepted: Мақұлданды
         #original_hash: 96f608c
         pending: Күту
-      type:
+      media_type:
         #original_hash: ee45c30
         report: Есеп
         #original_hash: 4360c2d

@@ -777,7 +777,7 @@ de:
         accepted: Akzeptiert
         #original_hash: 96f608c
         pending: Ausstehend
-      type:
+      media_type:
         #original_hash: ee45c30
         report: Report
         #original_hash: 4360c2d

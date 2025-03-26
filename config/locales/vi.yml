@@ -659,7 +659,7 @@ vi:
         accepted: Được chấp nhận
         #original_hash: 96f608c
         pending: Đang chờ
-      type:
+      media_type:
         #original_hash: ee45c30
         report: Báo cáo
         #original_hash: 4360c2d

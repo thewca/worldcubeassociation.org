@@ -372,7 +372,7 @@ en:
         tags: "Tags"
         competition_id: "Happened during"
       competition_medium:
-        competition_d: "Competition"
+        competition_id: "Competition"
         media_type: "Type"
         text: "Text"
         uri: "Link"
@@ -432,7 +432,7 @@ en:
       status:
         accepted: "Accepted"
         pending: "Pending"
-      type:
+      media_type:
         report: "Report"
         article: "Article"
         multimedia: "Multimedia"

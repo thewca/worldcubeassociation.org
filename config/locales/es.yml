@@ -760,7 +760,7 @@ es:
         accepted: Aceptado
         #original_hash: 96f608c
         pending: Pendiente
-      type:
+      media_type:
         #original_hash: ee45c30
         report: Informe
         #original_hash: 4360c2d

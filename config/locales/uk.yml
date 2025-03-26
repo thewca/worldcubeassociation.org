@@ -686,7 +686,7 @@ uk:
         accepted: Прийнято
         #original_hash: 96f608c
         pending: Очікує
-      type:
+      media_type:
         #original_hash: ee45c30
         report: Звітувати
         #original_hash: 4360c2d

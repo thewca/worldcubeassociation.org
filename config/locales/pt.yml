@@ -681,7 +681,7 @@ pt:
         accepted: Aceite
         #original_hash: 96f608c
         pending: Pendente
-      type:
+      media_type:
         #original_hash: ee45c30
         report: Relatório
         #original_hash: 4360c2d

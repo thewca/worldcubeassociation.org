@@ -688,7 +688,7 @@ it:
         accepted: Accettato
         #original_hash: 96f608c
         pending: In attesa
-      type:
+      media_type:
         #original_hash: ee45c30
         report: Report
         #original_hash: 4360c2d

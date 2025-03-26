@@ -692,7 +692,7 @@ pl:
         accepted: Zaakceptowane
         #original_hash: 96f608c
         pending: Oczekujące
-      type:
+      media_type:
         #original_hash: ee45c30
         report: Reportaż
         #original_hash: 4360c2d

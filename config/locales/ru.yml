@@ -756,7 +756,7 @@ ru:
         accepted: Одобрено
         #original_hash: 96f608c
         pending: В ожидании
-      type:
+      media_type:
         #original_hash: ee45c30
         report: Отчёт
         #original_hash: 4360c2d

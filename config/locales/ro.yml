@@ -765,7 +765,7 @@ ro:
         accepted: Acceptat
         #original_hash: 96f608c
         pending: În așteptare
-      type:
+      media_type:
         #original_hash: ee45c30
         report: Raport
         #original_hash: 4360c2d

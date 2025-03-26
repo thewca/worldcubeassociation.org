@@ -199,7 +199,7 @@ RSpec.describe "media" do
         expect(medium.type).to eq 'article'
 
         patch_medium.call(
-          competitionId: competition.id,
+          competition_id: competition.id,
           media_type: 'multimedia',
           text: 'this is some new text',
           uri: 'http://newexample.com',

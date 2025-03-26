@@ -532,7 +532,7 @@ ja:
         accepted: 受理済
         #original_hash: 96f608c
         pending: 保留中
-      type:
+      media_type:
         #original_hash: ee45c30
         report: 報告
         #original_hash: 4360c2d

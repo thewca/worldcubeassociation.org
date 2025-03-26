@@ -124,12 +124,12 @@ module DatabaseDumper
       ),
     }.freeze,
     "competition_payment_integrations" => :skip_all_rows,
-    "CompetitionsMedia" => {
+    "competition_media" => {
       where_clause: "WHERE status = 'accepted'",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
-          competitionId
+          competition_id
           media_type
           text
           uri

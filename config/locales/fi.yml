@@ -652,7 +652,7 @@ fi:
         accepted: Hyväksytty
         #original_hash: 96f608c
         pending: Odottaa
-      type:
+      media_type:
         #original_hash: ee45c30
         report: Raportti
         #original_hash: 4360c2d

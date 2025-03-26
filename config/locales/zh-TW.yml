@@ -672,7 +672,7 @@ zh-TW:
         accepted: 成功
         #original_hash: 96f608c
         pending: 待核准
-      type:
+      media_type:
         #original_hash: ee45c30
         report: 報導
         #original_hash: 4360c2d

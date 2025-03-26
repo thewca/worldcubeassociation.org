@@ -571,7 +571,7 @@ zh-CN:
         accepted: 已接收
         #original_hash: 96f608c
         pending: 待接收
-      type:
+      media_type:
         #original_hash: ee45c30
         report: 报道
         #original_hash: 4360c2d

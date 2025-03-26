@@ -682,7 +682,7 @@ fr-CA:
         accepted: Accepté
         #original_hash: 96f608c
         pending: En attente
-      type:
+      media_type:
         #original_hash: ee45c30
         report: Rapport
         #original_hash: 4360c2d

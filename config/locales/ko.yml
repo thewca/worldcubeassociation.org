@@ -672,7 +672,7 @@ ko:
         accepted: 승인
         #original_hash: 96f608c
         pending: 대기
-      type:
+      media_type:
         #original_hash: ee45c30
         report: 보고
         #original_hash: 4360c2d

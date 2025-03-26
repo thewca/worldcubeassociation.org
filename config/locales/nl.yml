@@ -691,7 +691,7 @@ nl:
         accepted: Geaccepteerd
         #original_hash: 96f608c
         pending: In bewerking
-      type:
+      media_type:
         #original_hash: ee45c30
         report: Rapportage
         #original_hash: 4360c2d

@@ -24,7 +24,7 @@ RSpec.feature "Media" do
       fill_in "Competition", with: competition.id
       click_button "Submit media"
 
-      medium = CompetitionMedium.find_by!(competitionId: competition.id)
+      medium = CompetitionMedium.find_by!(competition_id: competition.id)
       expect(medium.status).to eq "pending"
       expect(medium.text).to eq "I am a brand new medium!"
       expect(medium.uri).to eq "https://example.com"
