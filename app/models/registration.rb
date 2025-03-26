@@ -414,7 +414,28 @@ class Registration < ApplicationRecord
     competing_status_changed? && competing_status_accepted?
   end
 
-  delegate :competitor_limit_enabled?, to: :competition
+  delegate :newcomer_month_eligible?, to: :user
+
+  validate :cannot_exceed_newcomer_limit, if: [
+    :trying_to_accept?,
+    :competitor_limit_enabled?,
+    :enforce_newcomer_month_reservations?,
+    :newcomer_month_eligible?,
+  ]
+
+  private def cannot_exceed_newcomer_limit
+    available_spots = competition.competitor_limit - competition.registrations.accepted_and_competing_count
+
+    # There are a limited number of "reserved" spots for newcomer_month_eligible competitions
+    # We know that there are _some_ available_spots in the comp available, because we passed the competitor_limit check above
+    # However, we still don't know how many of the reserved spots have been taken up by newcomers, versus how many "general" spots are left
+    # For a non-newcomer to be accepted, there need to be more spots available than spots still reserved for newcomers
+    return if available_spots > competition.newcomer_month_reserved_spots_remaining
+
+    errors.add(:competing_status, :exceeding_newcomer_limit, frontend_code: Registrations::ErrorCodes::NO_UNRESERVED_SPOTS_REMAINING)
+  end
+
+  delegate :competitor_limit_enabled?, :enforce_newcomer_month_reservations?, to: :competition
 
   validate :cannot_exceed_competitor_limit, if: [:trying_to_accept?, :competitor_limit_enabled?]
   private def cannot_exceed_competitor_limit
