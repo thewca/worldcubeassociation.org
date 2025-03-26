@@ -39,12 +39,12 @@ module RegulationTranslationsHelper
     ).bucket(BUCKET_NAME)
   end
 
-  private def current_build_hash(s3 = regulations_bucket)
-    s3.object(TRANSLATIONS_HASH_FILE).get.body.read.strip
+  private def current_build_hash(s3_client = regulations_bucket)
+    s3_client.object(TRANSLATIONS_HASH_FILE).get.body.read.strip
   end
 
-  private def current_base_version(s3 = regulations_bucket)
-    s3.object(TRANSLATIONS_DATE_FILE).get.body.read.strip
+  private def current_base_version(s3_client = regulations_bucket)
+    s3_client.object(TRANSLATIONS_DATE_FILE).get.body.read.strip
   end
 
   def current_reg_translations

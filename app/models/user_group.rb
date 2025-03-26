@@ -170,7 +170,7 @@ class UserGroup < ApplicationRecord
   end
 
   def lead_role
-    active_roles.includes(:group, :metadata).find { |role| role.is_lead? }
+    active_roles.includes(:group, :metadata).find { |role| role.lead? }
   end
 
   # TODO: Once the roles migration is done, add a validation to make sure there is only one lead_user per group.
@@ -189,7 +189,7 @@ class UserGroup < ApplicationRecord
     end
   end
 
-  def is_root_group?
+  def root_group?
     parent_group_id.nil?
   end
 

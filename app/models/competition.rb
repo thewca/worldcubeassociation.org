@@ -298,10 +298,6 @@ class Competition < ApplicationRecord
     persisted_events_id.length
   end
 
-  def has_administrative_notes?
-    registrations.any? { |registration| registration.administrative_notes.present? }
-  end
-
   NEARBY_DISTANCE_KM_WARNING = 250
   NEARBY_DISTANCE_KM_DANGER = 30
   NEARBY_DISTANCE_KM_INFO = 100
@@ -364,7 +360,7 @@ class Competition < ApplicationRecord
   # Competitions after 2018-12-31 will have this check. All comps from 2019 onwards required a schedule.
   # Check added per "Support for cancelled competitions" and adding some old cancelled competitions to the website without a schedule.
   def schedule_must_match_rounds
-    errors.add(:competition_events, I18n.t('competitions.errors.schedule_must_match_rounds')) if start_date.present? && start_date > Date.new(2018, 12, 31) && !(has_any_round_per_event? && schedule_includes_rounds?)
+    errors.add(:competition_events, I18n.t('competitions.errors.schedule_must_match_rounds')) if start_date.present? && start_date > Date.new(2018, 12, 31) && !(no_round_empty? && schedule_includes_rounds?)
   end
 
   validate :advancement_condition_must_be_present_for_all_non_final_rounds, if: :confirmed_at_changed?, on: :update
@@ -407,7 +403,7 @@ class Competition < ApplicationRecord
       registrations.waitlisted.count > 0 && !registration_full_and_accepted?
   end
 
-  def has_any_round_per_event?
+  def no_round_empty?
     competition_events.map(&:rounds).none?(&:empty?)
   end
 
@@ -530,7 +526,7 @@ class Competition < ApplicationRecord
   # See https://github.com/thewca/worldcubeassociation.org/issues/185#issuecomment-168402252
   # for a discussion about tracking delegate history so we could tighten up
   # this validation.
-  validate :delegates_must_be_delegates, unless: :is_probably_over?
+  validate :delegates_must_be_delegates, unless: :probably_over?
   def delegates_must_be_delegates
     return if self.delegates.all?(&:any_kind_of_delegate?)
 
@@ -539,11 +535,11 @@ class Competition < ApplicationRecord
   end
 
   def user_should_post_delegate_report?(user)
-    persisted? && is_probably_over? && !cancelled? && !delegate_report.posted? && delegates.include?(user)
+    persisted? && probably_over? && !cancelled? && !delegate_report.posted? && delegates.include?(user)
   end
 
   def user_should_post_competition_results?(user)
-    persisted? && is_probably_over? && !cancelled? && !self.results_submitted? && delegates.include?(user)
+    persisted? && probably_over? && !cancelled? && !self.results_submitted? && delegates.include?(user)
   end
 
   def warnings_for(user)
@@ -573,7 +569,7 @@ class Competition < ApplicationRecord
       # NOTE: this will show up on the edit schedule page, and stay even if the
       # schedule matches when saved. Should we add some logic to not show this
       # message on the edit schedule page?
-      warnings[:schedule] = I18n.t('competitions.messages.schedule_must_match_rounds') unless has_any_round_per_event? && schedule_includes_rounds?
+      warnings[:schedule] = I18n.t('competitions.messages.schedule_must_match_rounds') unless no_round_empty? && schedule_includes_rounds?
 
       warnings[:advancement_conditions] = I18n.t('competitions.messages.advancement_condition_must_be_present_for_all_non_final_rounds') unless rounds.all?(&:advancement_condition_is_valid?)
 
@@ -599,7 +595,7 @@ class Competition < ApplicationRecord
 
       warnings = championship_warnings.merge(warnings) if championship_warnings.any?
 
-      warnings[:registration_payment_info] = I18n.t('competitions.messages.registration_payment_info') if has_fees? && !competition_payment_integrations.exists?
+      warnings[:registration_payment_info] = I18n.t('competitions.messages.registration_payment_info') if payment_required? && !competition_payment_integrations.exists?
     end
 
     warnings = reg_warnings.merge(warnings) if reg_warnings.any? && user&.can_manage_competition?(self)
@@ -644,7 +640,7 @@ class Competition < ApplicationRecord
 
   def info_for(user)
     info = {}
-    info[:upload_results] = I18n.t('competitions.messages.upload_results') if !self.results_posted? && self.is_probably_over? && !self.cancelled?
+    info[:upload_results] = I18n.t('competitions.messages.upload_results') if !self.results_posted? && self.probably_over? && !self.cancelled?
     if self.in_progress? && !self.cancelled?
       info[:in_progress] = if self.use_wca_live_for_scoretaking
                              I18n.t('competitions.messages.in_progress_at_wca_live_html', link_here: self.wca_live_link).html_safe
@@ -661,7 +657,7 @@ class Competition < ApplicationRecord
   end
 
   def being_cloned_from
-    @being_cloned_from_cache ||= Competition.find_by(id: being_cloned_from_id)
+    @being_cloned_from ||= Competition.find_by(id: being_cloned_from_id)
   end
 
   def build_clone
@@ -815,7 +811,7 @@ class Competition < ApplicationRecord
     delegates.select(&:trainee_delegate?)
   end
 
-  def has_defined_dates?
+  def dates_set?
     self.start_date.present? && self.end_date.present?
   end
 
@@ -901,7 +897,7 @@ class Competition < ApplicationRecord
     end
   end
 
-  attr_accessor :closing_full_registration, :being_cloned_from_id, :being_cloned_from_cache, :clone_tabs, :editing_user_id
+  attr_accessor :closing_full_registration, :being_cloned_from_id, :clone_tabs, :editing_user_id
 
   validate :user_cannot_demote_themself
   def user_cannot_demote_themself
@@ -929,8 +925,8 @@ class Competition < ApplicationRecord
 
   attr_reader :receive_registration_emails
 
-  def receive_registration_emails=(r)
-    @receive_registration_emails = ActiveRecord::Type::Boolean.new.cast(r)
+  def receive_registration_emails=(registration)
+    @receive_registration_emails = ActiveRecord::Type::Boolean.new.cast(registration)
   end
 
   after_save :clear_external_website, if: :generate_website?
@@ -980,7 +976,7 @@ class Competition < ApplicationRecord
   end
 
   def using_payment_integrations?
-    competition_payment_integrations.any? && has_fees?
+    competition_payment_integrations.any? && payment_required?
   end
 
   def can_edit_registration_fees?
@@ -1058,19 +1054,9 @@ class Competition < ApplicationRecord
     self.longitude_microdegrees = @longitude_degrees * 1e6 unless @longitude_degrees.nil?
   end
 
-  def has_events_with_ids?(event_ids)
-    (event_ids - events.ids).empty?
-  end
+  delegate :nonzero?, to: :base_entry_fee, prefix: true
 
-  def has_event?(event)
-    self.events.include?(event)
-  end
-
-  def has_base_entry_fee?
-    base_entry_fee.nonzero?
-  end
-
-  def has_fees?
+  def payment_required?
     if base_entry_fee_lowest_denomination.nil?
       competition_events.sum(:fee_lowest_denomination) > 0
     else
@@ -1082,11 +1068,11 @@ class Competition < ApplicationRecord
     confirmed? && !use_wca_registration && created_at.present? && created_at > Date.new(2018, 12, 31)
   end
 
-  def has_rounds?
+  def any_rounds?
     rounds.any?
   end
 
-  def has_schedule?
+  def any_venues?
     competition_venues.any?
   end
 
@@ -1155,7 +1141,7 @@ class Competition < ApplicationRecord
   end
 
   # does the competition have this field (regardless of whether it's a date or blank)
-  def has_event_change_deadline_date?
+  def event_change_deadline_date_present?
     start_date.present? && start_date > Date.new(2021, 6, 24)
   end
 
@@ -1163,7 +1149,7 @@ class Competition < ApplicationRecord
   # must be allowed in general, and if the deadline field exists, is it a date and in the future
   def registration_edits_currently_permitted?
     !started? && self.allow_registration_edits &&
-      (!has_event_change_deadline_date? || event_change_deadline_date.blank? || event_change_deadline_date > DateTime.now)
+      (!event_change_deadline_date_present? || event_change_deadline_date.blank? || event_change_deadline_date > DateTime.now)
   end
 
   private def dates_must_be_valid
@@ -1251,24 +1237,20 @@ class Competition < ApplicationRecord
   end
 
   # Source http://www.movable-type.co.uk/scripts/latlong.html
-  def kilometers_to(c)
+  def kilometers_to(competition)
     6371 *
       Math.sqrt(
-        (((c.longitude_radians - longitude_radians) * Math.cos((c.latitude_radians + latitude_radians)/2)) ** 2) +
-        ((c.latitude_radians - latitude_radians) ** 2),
+        (((competition.longitude_radians - longitude_radians) * Math.cos((competition.latitude_radians + latitude_radians)/2)) ** 2) +
+        ((competition.latitude_radians - latitude_radians) ** 2),
       )
   end
 
-  def has_date?
+  def date_set?
     !start_date.nil? || !end_date.nil?
   end
 
-  def has_registration_start_date?
-    !registration_open.nil?
-  end
-
-  def has_location?
-    latitude.present? && longitude.present?
+  def registration_start_date_present?
+    registration_open.present?
   end
 
   # The division is to convert the end result from secods to days. .to_date removed some hours from the subtraction
@@ -1282,11 +1264,6 @@ class Competition < ApplicationRecord
 
   def date_range
     ApplicationController.helpers.wca_date_range(self.start_date, self.end_date)
-  end
-
-  def has_date_errors?
-    valid?
-    !errors[:start_date].empty? || !errors[:end_date].empty? || (!showAtAll && days_until && days_until < MUST_BE_ANNOUNCED_GTE_THIS_MANY_DAYS)
   end
 
   # The competition must be at least 28 days in advance in order to confirm it. Admins are able to modify the competition despite being less than 28 days in advance.
@@ -1305,43 +1282,43 @@ class Competition < ApplicationRecord
     confirmed_or_visible? && (will_save_change_to_start_date? || will_save_change_to_confirmed_at?)
   end
 
-  def days_until_competition?(c)
-    return false if !c.has_date? || !self.has_date?
+  def days_until_competition?(competition)
+    return false if !competition.date_set? || !self.date_set?
 
-    days_until = (c.start_date - self.end_date).to_i
-    days_until = (self.start_date - c.end_date).to_i * -1 if days_until < 0
+    days_until = (competition.start_date - self.end_date).to_i
+    days_until = (self.start_date - competition.end_date).to_i * -1 if days_until < 0
     days_until
   end
 
-  def dangerously_close_to?(c)
-    self.adjacent_to?(c, NEARBY_DISTANCE_KM_DANGER, NEARBY_DAYS_DANGER)
+  def dangerously_close_to?(competition)
+    self.adjacent_to?(competition, NEARBY_DISTANCE_KM_DANGER, NEARBY_DAYS_DANGER)
   end
 
-  def adjacent_to?(c, distance_km, distance_days)
-    self.distance_adjacent_to?(c, distance_km) && self.start_date_adjacent_to?(c, distance_days)
+  def adjacent_to?(competition, distance_km, distance_days)
+    self.distance_adjacent_to?(competition, distance_km) && self.start_date_adjacent_to?(competition, distance_days)
   end
 
-  def start_date_adjacent_to?(c, distance_days)
-    return false if !c.has_date? || !self.has_date?
+  def start_date_adjacent_to?(competition, distance_days)
+    return false if !competition.date_set? || !self.date_set?
 
-    self.days_until_competition?(c).abs < distance_days
+    self.days_until_competition?(competition).abs < distance_days
   end
 
-  def distance_adjacent_to?(c, distance_km)
-    self.kilometers_to(c) < distance_km
+  def distance_adjacent_to?(competition, distance_km)
+    self.kilometers_to(competition) < distance_km
   end
 
-  def registration_open_adjacent_to?(c, distance_minutes)
-    return false if !c.has_registration_start_date? || !self.has_registration_start_date?
+  def registration_open_adjacent_to?(competition, distance_minutes)
+    return false if !competition.registration_start_date_present? || !self.registration_start_date_present?
 
-    self.minutes_until_other_registration_starts(c).abs < distance_minutes
+    self.minutes_until_other_registration_starts(competition).abs < distance_minutes
   end
 
-  def minutes_until_other_registration_starts(c)
-    return false if !c.has_registration_start_date? || !self.has_registration_start_date?
+  def minutes_until_other_registration_starts(competition)
+    return false if !competition.registration_start_date_present? || !self.registration_start_date_present?
 
-    seconds_until = (c.registration_open - self.registration_open).to_i
-    seconds_until = (self.registration_open - c.registration_open).to_i * -1 if seconds_until < 0
+    seconds_until = (competition.registration_open - self.registration_open).to_i
+    seconds_until = (self.registration_open - competition.registration_open).to_i * -1 if seconds_until < 0
     seconds_until / 60
   end
 
@@ -1448,7 +1425,7 @@ class Competition < ApplicationRecord
   # We don't actually know when competitions are over, because we don't know their schedules, nor
   # do we know their timezones.
   # See discussion here: https://github.com/thewca/worldcubeassociation.org/pull/1206/files#r98485399.
-  def is_probably_over?
+  def probably_over?
     !end_date.nil? && end_date < Date.today
   end
 
@@ -1476,8 +1453,8 @@ class Competition < ApplicationRecord
   def person_ids_with_results
     light_results_from_relation(results)
       .group_by(&:personId)
-      .sort_by { |_personId, results| results.first.personName }
-      .map do |personId, results|
+      .sort_by { |_person_id, results| results.first.personName }
+      .map do |person_id, results|
         results.sort_by! { |r| [r.event.rank, -r.round_type.rank] }
 
         # Mute (soften) each result that wasn't the competitor's last for the event.
@@ -1487,7 +1464,7 @@ class Competition < ApplicationRecord
           last_event = result.event
         end
 
-        [personId, results.sort_by { |r| [r.event.rank, -r.round_type.rank] }]
+        [person_id, results.sort_by { |r| [r.event.rank, -r.round_type.rank] }]
       end
   end
 
