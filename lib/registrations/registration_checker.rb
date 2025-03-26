@@ -120,12 +120,8 @@ module Registrations
         raise WcaExceptions::RegistrationError.new(:unprocessable_entity, Registrations::ErrorCodes::INVALID_REQUEST_DATA) unless
          updated_registration.competing_status == Registrations::Helper::STATUS_WAITING_LIST
 
-        # Floats are not allowed
-        raise WcaExceptions::RegistrationError.new(:unprocessable_entity, Registrations::ErrorCodes::INVALID_WAITING_LIST_POSITION) if waiting_list_position.is_a? Float
-
         # We convert strings to integers and then check if they are an integer
-        converted_position = Integer(waiting_list_position, exception: false)
-        raise WcaExceptions::RegistrationError.new(:unprocessable_entity, Registrations::ErrorCodes::INVALID_WAITING_LIST_POSITION) unless converted_position.is_a? Integer
+        converted_position = waiting_list_position.to_i
 
         waiting_list = competition.waiting_list.entries
         raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::INVALID_WAITING_LIST_POSITION) if waiting_list.empty? && converted_position != 1

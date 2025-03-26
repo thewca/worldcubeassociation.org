@@ -8,6 +8,8 @@ module Waitlistable
   included do
     attr_writer :waiting_list_position
 
+    validates :waiting_list_position, numericality: { only_integer: true, allow_nil: true, frontend_code: Registrations::ErrorCodes::INVALID_WAITING_LIST_POSITION }
+
     def waiting_list_position?
       @waiting_list_position.present?
     end
