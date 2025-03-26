@@ -96,7 +96,7 @@
 
     <% media = competition.media.accepted %>
     <% [:report, :article, :multimedia].each do |media_type| %>
-      <% media_of_type = media.send(media_type).order(timestampDecided: :desc) %>
+      <% media_of_type = media.send(media_type).order(decided_at: :desc) %>
       <% if media_of_type.length > 0 %>
 
         <div class="panel panel-default">
