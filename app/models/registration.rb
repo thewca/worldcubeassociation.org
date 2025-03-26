@@ -414,10 +414,8 @@ class Registration < ApplicationRecord
     competing_status_changed? && competing_status_accepted?
   end
 
-  validate :only_one_accepted_per_series
+  validate :only_one_accepted_per_series, if: [:part_of_competition_series?, :trying_to_accept?, :has_accepted_sibling_registrations?]
   private def only_one_accepted_per_series
-    return unless part_of_competition_series? && trying_to_accept? && !series_sibling_registrations.accepted.empty?
-
     errors.add(
       :competition_id,
       :already_registered_in_series,
@@ -433,6 +431,10 @@ class Registration < ApplicationRecord
 
     competition.series_sibling_registrations
                .where(user_id: self.user_id)
+  end
+
+  def has_accepted_sibling_registrations?
+    series_sibling_registrations.accepted.any?
   end
 
   def ensure_waitlist_eligibility!
