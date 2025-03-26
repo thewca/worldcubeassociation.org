@@ -327,17 +327,17 @@ module DatabaseDumper
         ),
       ),
     }.freeze,
-    "Scrambles" => {
+    "scrambles" => {
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
-          competitionId
-          eventId
-          groupId
-          isExtra
-          roundTypeId
+          competition_id
+          event_id
+          group_id
+          is_extra
+          round_type_id
           scramble
-          scrambleId
-          scrambleNum
+          scramble_id
+          scramble_num
         ),
       ),
     }.freeze,
