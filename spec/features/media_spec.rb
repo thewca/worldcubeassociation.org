@@ -28,7 +28,7 @@ RSpec.feature "Media" do
       expect(medium.status).to eq "pending"
       expect(medium.text).to eq "I am a brand new medium!"
       expect(medium.uri).to eq "https://example.com"
-      expect(medium.submitterComment).to eq "This is the best medium ever"
+      expect(medium.submitter_comment).to eq "This is the best medium ever"
     end
   end
 

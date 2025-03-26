@@ -196,7 +196,7 @@ RSpec.describe "media" do
 
       it "can edit medium" do
         competition = FactoryBot.create :competition
-        expect(medium.type).to eq 'article'
+        expect(medium.media_type).to eq 'article'
 
         patch_medium.call(
           competition_id: competition.id,
