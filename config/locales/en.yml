@@ -1124,6 +1124,7 @@ en:
   registrations:
     #context: and when an error is found
     errors:
+      edit_deadline_passed: "The Registration Edit Deadline has passed! Changes should only be made in extraordinary circumstances."
       need_name: "Need a name"
       need_gender: "Need a gender"
       need_dob: "Need a birthdate"
@@ -1159,6 +1160,7 @@ en:
     edit_registration:
       #context: the title for a specific registration to a competition
       title: "%{person} for %{comp}"
+
     #context: text appearing in mails sent to competitors during registration
     mailer:
       #context: "people" is replaced by the organizers and Delegates' names
@@ -1299,6 +1301,11 @@ en:
     preferred_events_prompt_html: "To speed up registration in the future, you can set your preferred events %{link}."
     preferred_events_populated_html: "We autopopulated this with your preferred events, which you can edit %{link}."
     registration_requirements: "Registration requirements for the competition:"
+    registration_history:
+      acting_user: "Acting User"
+      action: "Action"
+      changes: "Changes"
+      title: "Registration History"
     import:
       title: "Import registrations for %{comp}"
       info: "You can import registrations multiple times. Changes will be determined and the database will be updated accordingly."
@@ -2237,6 +2244,10 @@ en:
     connect_wca_id: "Connect your WCA ID to your account!"
   payments:
     #context: localized names of payment providers
+    labels:
+      payment_statuses: "Payment Statuses"
+      available_reunds: "Available Refunds"
+      original_payment: "Original Payment"
     payment_providers:
       paypal: 'PayPal'
       stripe: 'Stripe'
@@ -2272,6 +2283,9 @@ en:
           display_name: "Name"
           primary_email: "Email"
         fallback_not_applicable: "N/A"
+    statuses:
+      succeeded: "Succeeded"
+      refunded: "Refunded"
   persons:
     #context: Person search page
     index:
