@@ -113,6 +113,7 @@ module Registrations
 
       def validate_waiting_list_position!(registration)
         process_validation_error!(registration, :waiting_list_position)
+        process_validation_error!(registration, :waitlistable?)
       end
 
       def validate_status_value!(registration)
