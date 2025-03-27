@@ -202,17 +202,20 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
         )}
         {registrationEditDeadlinePassed && (
           // i18n-tasks-use t('registrations.errors.edit_deadline_passed')
-          <Message> {I18n.t('registrations.errors.edit_deadline_passed')} </Message>
+          <Message>
+            {I18n.t('registrations.errors.edit_deadline_passed')}
+          </Message>
         )}
         <Header>
           {`${competitor.name} `}
           (
-          {/* The onClick functions prevent Semantic UI from rendering large icons indicating new tabs */}
+          {/* The onClick functions prevent Semantic UI from rendering large icons indicating new
+          tabs */}
           <a
             href={personUrl(competitor.wca_id)}
             onClick={(e) => {
               e.preventDefault();
-              window.open(personUrl(competitor.wca_id), "_blank", "noopener,noreferrer");
+              window.open(personUrl(competitor.wca_id), '_blank', 'noopener,noreferrer');
             }}
           >
             {competitor.wca_id}
@@ -226,7 +229,7 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
             className="edit-link"
             onClick={(e) => {
               e.preventDefault();
-              window.open(editPersonUrl(competitor.id), "_blank", "noopener,noreferrer");
+              window.open(editPersonUrl(competitor.id), '_blank', 'noopener,noreferrer');
             }}
           >
             <Icon name="edit" />
@@ -246,7 +249,7 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
         </Form.Field>
 
         <Form.TextArea
-          label={I18n.t("activerecord.attributes.registration.comments")}
+          label={I18n.t('activerecord.attributes.registration.comments')}
           id="competitor-comment"
           maxLength={240}
           value={comment}
@@ -254,7 +257,7 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
         />
 
         <Form.TextArea
-          label={I18n.t("activerecord.attributes.registration.administrative_notes")}
+          label={I18n.t('activerecord.attributes.registration.administrative_notes')}
           id="admin-comment"
           maxLength={240}
           value={adminComment}

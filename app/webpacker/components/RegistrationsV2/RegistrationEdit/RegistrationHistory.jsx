@@ -3,6 +3,7 @@ import { Header, Popup, Table } from 'semantic-ui-react';
 import { getIsoDateString, getShortTimeString, getTimeWithSecondsString } from '../../../lib/utils/dates';
 import { events } from '../../../lib/wca-data.js.erb';
 import EventIcon from '../../wca/EventIcon';
+import I18n from '../../../lib/i18n';
 
 const formatHistoryColumn = (key, value) => {
   if (key === 'event_ids') {
