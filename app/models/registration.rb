@@ -413,8 +413,7 @@ class Registration < ApplicationRecord
     :trying_to_accept?,
     :competitor_limit_enabled?,
     :enforce_newcomer_month_reservations?,
-    :newcomer_month_eligible?,
-  ]
+  ], unless: :newcomer_month_eligible?
 
   private def cannot_exceed_newcomer_limit
     available_spots = competition.competitor_limit - competition.registrations.accepted_and_competing_count
