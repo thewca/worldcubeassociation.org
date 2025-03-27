@@ -2246,7 +2246,7 @@ en:
     #context: localized names of payment providers
     labels:
       payment_statuses: "Payment Statuses"
-      available_reunds: "Available Refunds"
+      available_refunds: "Available Refunds"
       original_payment: "Original Payment"
     payment_providers:
       paypal: 'PayPal'
