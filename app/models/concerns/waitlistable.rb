@@ -51,7 +51,7 @@ module Waitlistable
     end
 
     def clear_waitlist_position
-      self.waiting_list_position = nil
+      @waiting_list_position = nil
     end
 
     # Tells the hooks whether the current entity
