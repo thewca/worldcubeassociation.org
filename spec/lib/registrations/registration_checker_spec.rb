@@ -1181,7 +1181,7 @@ RSpec.describe Registrations::RegistrationChecker do
           Registrations::RegistrationChecker.update_registration_allowed!(update_request, limited_reg, User.find(update_request['submitted_by']))
         }.to raise_error(WcaExceptions::RegistrationError) do |error|
           expect(error.error).to eq(Registrations::ErrorCodes::COMPETITOR_LIMIT_REACHED)
-          expect(error.status).to eq(:forbidden)
+          expect(error.status).to eq(:unprocessable_entity)
         end
       end
 
@@ -2036,7 +2036,7 @@ RSpec.describe Registrations::RegistrationChecker do
             Registrations::RegistrationChecker.update_registration_allowed!(update_request, non_newcomer_reg, User.find(update_request['submitted_by']))
           }.to raise_error(WcaExceptions::RegistrationError) do |error|
             expect(error.error).to eq(Registrations::ErrorCodes::NO_UNRESERVED_SPOTS_REMAINING)
-            expect(error.status).to eq(:forbidden)
+            expect(error.status).to eq(:unprocessable_entity)
           end
         end
 
@@ -2152,7 +2152,7 @@ RSpec.describe Registrations::RegistrationChecker do
           Registrations::RegistrationChecker.update_registration_allowed!(update_request, non_newcomer_reg, User.find(update_request['submitted_by']))
         }.to raise_error(WcaExceptions::RegistrationError) do |error|
           expect(error.error).to eq(Registrations::ErrorCodes::NO_UNRESERVED_SPOTS_REMAINING)
-          expect(error.status).to eq(:forbidden)
+          expect(error.status).to eq(:unprocessable_entity)
         end
       end
     end
