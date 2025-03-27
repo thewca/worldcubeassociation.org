@@ -31,11 +31,11 @@ function V3csvExport(selected, registrations, competition) {
       },${
         registration.competing.registration_status
       },${
-        registration.guests // IP feel always blank
+        registration.guests // IP field always blank
       },"",${
         DateTime.fromISO(registration.competing.registered_on).setZone('UTC').toFormat('yyyy-MM-dd HH:mm:ss ZZZZ')
       },${
-        registration.payment?.has_paid ? DateTime.fromISO(registration.payment?.updated_at).setZone('UTC').toFormat('yyyy-MM-dd HH:mm:ss ZZZZ') : ''
+        registration.payment?.has_paid ? DateTime.fromISO(registration.payment.updated_at).setZone('UTC').toFormat('yyyy-MM-dd HH:mm:ss ZZZZ') : ''
       }\n`;
     });
 
