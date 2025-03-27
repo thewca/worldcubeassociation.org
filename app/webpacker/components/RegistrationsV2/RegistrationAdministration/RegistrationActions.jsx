@@ -16,13 +16,11 @@ import {
 import { useConfirm } from '../../../lib/providers/ConfirmProvider';
 
 function V3csvExport(selected, registrations, competition) {
-  let csvContent = 'data:text/csv;charset=utf-8,';
-  csvContent
-    += `Status,Name,Country,WCA ID,Birth Date,Gender,${competition.event_ids.join(',')},Email,Guests,IP,Registration Date Time (UTC)\n`;
+  let csvContent = `User Id,Registration status,Name,Country,WCA ID,Birth Date,Gender,${competition.event_ids.join(',')},Email,Guests,IP,Registration Date Time (UTC)\n`;
   registrations
     .filter((r) => selected.length === 0 || selected.includes(r.user_id))
     .forEach((registration) => {
-      csvContent += `${registration.competing.registration_status === 'accepted' ? 'a' : 'p'},"${
+      csvContent += `${registration.user_id},${registration.competing.registration_status},"${
         registration.user.name
       }","${countries.byIso2[registration.user.country.iso2].name}",${
         registration.user.wca_id
