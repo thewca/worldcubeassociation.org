@@ -112,13 +112,6 @@ class Registration < ApplicationRecord
     new_record? || cancelled? || !is_competing?
   end
 
-  def volatile_event_ids
-    # When checking registration validity as part of the user-facing registration frontend,
-    #   we want to avoid database writes at all cost. So we create an in-memory dummy registration,
-    #   but unfortunately `through` association support is very limited for such volatile models.
-    registration_competition_events.map(&:event_id)
-  end
-
   delegate :name, :gender, :country, :email, :dob, :wca_id, to: :user
 
   alias_method :birthday, :dob
@@ -472,6 +465,33 @@ class Registration < ApplicationRecord
   def ensure_waitlist_eligibility!
     raise ArgumentError.new("Registration must have a competing_status of 'waiting_list' to be added to the waiting list") unless
       competing_status == Registrations::Helper::STATUS_WAITING_LIST
+  end
+
+  def trying_to_cancel?
+    competing_status_changed? && (competing_status_cancelled? || competing_status_rejected?)
+  end
+
+  validate :not_changing_when_cancelling, if: [:trying_to_cancel?, :competition_events_changed?]
+  private def not_changing_when_cancelling
+    errors.add(:competition_events, :cannot_change_when_cancelling, frontend_code: Registrations::ErrorCodes::INVALID_REQUEST_DATA)
+  end
+
+  attr_writer :tracked_event_ids
+
+  def tracked_event_ids
+    @tracked_event_ids ||= self.event_ids
+  end
+
+  def volatile_event_ids
+    # When checking registration validity as part of the user-facing registration frontend,
+    #   we want to avoid database writes at all cost. So we create an in-memory dummy registration,
+    #   but unfortunately `through` association support is very limited for such volatile models.
+    registration_competition_events.map(&:event_id)
+  end
+
+  def competition_events_changed?
+    self.tracked_event_ids.sort != self.volatile_event_ids.sort ||
+      self.competition_events.any?(&:changed?)
   end
 
   DEFAULT_SERIALIZE_OPTIONS = {

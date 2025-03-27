@@ -21,6 +21,7 @@ module Registrations
         # Since even deep cloning does not take care of associations, we must fall back to the original registration.
         #   Otherwise, every payload that does not specify `event_ids` would trigger "must register for >= 1 event"
         desired_events = competing_payload&.dig('event_ids') || registration.event_ids
+        new_registration.tracked_event_ids = registration.event_ids
 
         competition_events_lookup = registration.competition.competition_events.where(event_id: desired_events).index_by(&:event_id)
         competition_events = desired_events.map { competition_events_lookup[it]&.deep_dup }
@@ -64,6 +65,7 @@ module Registrations
       def validate_registration_events!(registration)
         process_nested_validation_error!(registration, :registration_competition_events, :competition_event) { it.event_id }
         process_validation_error!(registration, :registration_competition_events)
+        process_validation_error!(registration, :competition_events)
       end
 
       def process_validation_error!(registration, field)
