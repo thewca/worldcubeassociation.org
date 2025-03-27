@@ -336,7 +336,7 @@ module DatabaseDumper
           is_extra
           round_type_id
           scramble
-          scramble_id
+          id
           scramble_num
         ),
       ),
