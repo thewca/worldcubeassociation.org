@@ -74,7 +74,7 @@ export default function RegistrationActions({
   const anySelected = selectedCount > 0;
 
   const {
-    pending, accepted, cancelled, waiting, rejected,
+    pending, accepted, cancelled, waiting, rejected, nonCompeting,
   } = partitionedSelectedIds;
   const anyPending = pending.length < selectedCount;
   const anyApprovable = accepted.length < selectedCount;
@@ -92,7 +92,9 @@ export default function RegistrationActions({
     [registrations],
   );
 
-  const selectedEmails = [...pending, ...waiting, ...accepted, ...cancelled, ...rejected]
+  const selectedEmails = [
+    ...pending, ...waiting, ...accepted, ...cancelled, ...rejected, ...nonCompeting,
+  ]
     .map((userId) => userEmailMap[userId])
     .join(',');
 

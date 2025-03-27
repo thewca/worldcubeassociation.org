@@ -138,9 +138,7 @@ RSpec.describe ResultsValidators::AdvancementConditionsValidator do
         fake_person = FactoryBot.create(:person)
         value = i > 10 ? -1 : i * 100
         FactoryBot.create(:result, competition: competition2, eventId: "222", roundTypeId: "1", person: fake_person, best: value, average: value)
-        if i <= 10
-          FactoryBot.create(:result, competition: competition2, eventId: "222", roundTypeId: "f", person: fake_person, best: value, average: value)
-        end
+        FactoryBot.create(:result, competition: competition2, eventId: "222", roundTypeId: "f", person: fake_person, best: value, average: value) if i <= 10
       end
 
       acv = ACV.new.validate(competition_ids: [competition2], model: Result)

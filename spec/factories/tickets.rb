@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-  factory :ticket do
-  end
+  factory :ticket
 end

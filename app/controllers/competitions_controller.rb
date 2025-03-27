@@ -71,9 +71,7 @@ class CompetitionsController < ApplicationController
 
   private def competition_from_params(includes: nil)
     Competition.includes(includes).find(params[:competition_id] || params[:id]).tap do |competition|
-      unless competition.user_can_view?(current_user)
-        raise ActionController::RoutingError.new('Not Found')
-      end
+      raise ActionController::RoutingError.new('Not Found') unless competition.user_can_view?(current_user)
 
       assign_editing_user(competition)
     end
@@ -180,8 +178,7 @@ class CompetitionsController < ApplicationController
     }
     @competition = competition_from_params(includes: associations)
     respond_to do |format|
-      format.html do
-      end
+      format.html
       format.pdf do
         unless @competition.has_schedule?
           flash[:danger] = t('.no_schedule')
@@ -253,9 +250,7 @@ class CompetitionsController < ApplicationController
     competition = competition_from_params
     payment_integration = params.require(:payment_integration)
 
-    unless current_user&.can_manage_competition?(competition)
-      raise ActionController::RoutingError.new('Not Found')
-    end
+    raise ActionController::RoutingError.new('Not Found') unless current_user&.can_manage_competition?(competition)
 
     if payment_integration == 'paypal' && PaypalInterface.paypal_disabled?
       flash[:error] = 'PayPal is not yet available in production environments'
@@ -265,9 +260,7 @@ class CompetitionsController < ApplicationController
     connector = CompetitionPaymentIntegration::AVAILABLE_INTEGRATIONS[payment_integration.to_sym].safe_constantize
     account_reference = connector&.connect_account(params)
 
-    if account_reference.blank?
-      raise ActionController::RoutingError.new("Payment Integration #{payment_integration} not Found")
-    end
+    raise ActionController::RoutingError.new("Payment Integration #{payment_integration} not Found") if account_reference.blank?
 
     competition.competition_payment_integrations.new(connected_account: account_reference)
 
@@ -290,9 +283,7 @@ class CompetitionsController < ApplicationController
     competition_id = params.require(:state)
     competition = Competition.find(competition_id)
 
-    unless current_user&.can_manage_competition?(competition)
-      raise ActionController::RoutingError.new('Not Found')
-    end
+    raise ActionController::RoutingError.new('Not Found') unless current_user&.can_manage_competition?(competition)
 
     redirect_to competition_connect_payment_integration_path(
       competition_id,
@@ -330,11 +321,11 @@ class CompetitionsController < ApplicationController
   end
 
   def competition_form_nearby_json(competition, other_comp)
-    if current_user.can_admin_results?
-      comp_link = ActionController::Base.helpers.link_to(other_comp.name, competition_admin_edit_path(other_comp.id), target: "_blank", rel: "noopener")
-    else
-      comp_link = ActionController::Base.helpers.link_to(other_comp.name, competition_path(other_comp.id))
-    end
+    comp_link = if current_user.can_admin_results?
+                  ActionController::Base.helpers.link_to(other_comp.name, competition_admin_edit_path(other_comp.id), target: "_blank", rel: "noopener")
+                else
+                  ActionController::Base.helpers.link_to(other_comp.name, competition_path(other_comp.id))
+                end
 
     days_until = competition.days_until_competition?(other_comp)
 
@@ -393,11 +384,11 @@ class CompetitionsController < ApplicationController
   end
 
   def competition_form_registration_collision_json(competition, other_comp)
-    if current_user.can_admin_results?
-      comp_link = ActionController::Base.helpers.link_to(other_comp.name, competition_admin_edit_path(other_comp.id), target: "_blank", rel: "noopener")
-    else
-      comp_link = ActionController::Base.helpers.link_to(other_comp.name, competition_path(other_comp.id))
-    end
+    comp_link = if current_user.can_admin_results?
+                  ActionController::Base.helpers.link_to(other_comp.name, competition_admin_edit_path(other_comp.id), target: "_blank", rel: "noopener")
+                else
+                  ActionController::Base.helpers.link_to(other_comp.name, competition_path(other_comp.id))
+                end
 
     {
       id: other_comp.id,
@@ -652,9 +643,7 @@ class CompetitionsController < ApplicationController
   def announce
     competition = competition_from_params
 
-    if competition.announced?
-      return render json: { error: "Already announced" }
-    end
+    return render json: { error: "Already announced" } if competition.announced?
 
     competition.update!(announced_at: Time.now, announced_by: current_user.id, showAtAll: true)
 
@@ -680,13 +669,11 @@ class CompetitionsController < ApplicationController
       else
         render json: { error: t('competitions.messages.uncancel_failure') }, status: :bad_request
       end
+    elsif competition.can_be_cancelled?
+      competition.update!(cancelled_at: Time.now, cancelled_by: current_user.id)
+      render json: { status: "ok", message: t('competitions.messages.cancel_success') }
     else
-      if competition.can_be_cancelled?
-        competition.update!(cancelled_at: Time.now, cancelled_by: current_user.id)
-        render json: { status: "ok", message: t('competitions.messages.cancel_success') }
-      else
-        render json: { error: t('competitions.messages.cancel_failure') }, status: :bad_request
-      end
+      render json: { error: t('competitions.messages.cancel_failure') }, status: :bad_request
     end
   end
 
@@ -733,15 +720,13 @@ class CompetitionsController < ApplicationController
         [r.competition_id, r.competing_status]
       end
       competition_ids.concat(@registered_for_by_competition_id.keys)
-      if current_user.person
-        competition_ids.concat(current_user.person.competitions.pluck(:competitionId))
-      end
+      competition_ids.concat(current_user.person.competitions.pluck(:competitionId)) if current_user.person
       # An organiser might still have duties to perform for a cancelled competition until the date of the competition has passed.
       # For example, mailing all competitors about the cancellation.
       # In general ensuring ease of access until it is certain that they won't need to frequently visit the page anymore.
       competitions = Competition.includes(:delegate_report, :championships)
                                 .where(id: competition_ids.uniq).where("cancelled_at is null or end_date >= curdate()")
-                                .sort_by { |comp| comp.start_date || (Date.today + 20.year) }.reverse
+                                .sort_by { |comp| comp.start_date || (Date.today + 20.years) }.reverse
       @past_competitions, @not_past_competitions = competitions.partition(&:is_probably_over?)
       bookmarked_ids = current_user.competitions_bookmarked.pluck(:competition_id)
       @bookmarked_competitions = Competition.not_over
@@ -754,6 +739,6 @@ class CompetitionsController < ApplicationController
   def for_senior
     user_id = params[:user_id] || current_user.id
     @user = User.find(user_id)
-    @competitions = @user.subordinate_delegates.map(&:delegated_competitions).flatten.uniq.reject(&:is_probably_over?).sort_by { |c| c.start_date || (Date.today + 20.year) }.reverse
+    @competitions = @user.subordinate_delegates.map(&:delegated_competitions).flatten.uniq.reject(&:is_probably_over?).sort_by { |c| c.start_date || (Date.today + 20.years) }.reverse
   end
 end

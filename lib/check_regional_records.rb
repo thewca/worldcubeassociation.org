@@ -59,9 +59,7 @@ module CheckRegionalRecords
       # there might be an overlap where the next competition started in the morning but the old competition set a record in the evening.
       if next_start_date > competition.end_date
         tentative_records.each do |region, record|
-          if !confirmed_records.key?(region) || record < confirmed_records[region]
-            confirmed_records[region] = record
-          end
+          confirmed_records[region] = record if !confirmed_records.key?(region) || record < confirmed_records[region]
         end
       else
         still_pending.push(cache)

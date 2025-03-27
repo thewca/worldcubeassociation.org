@@ -4,6 +4,7 @@ class Qualification
   include ActiveModel::Validations
 
   attr_accessor :when_date, :level, :wcif_type, :result_type
+
   validates :when_date, presence: true
   validates :result_type, presence: true, inclusion: { in: ["single", "average"] }
   validates :wcif_type, presence: true, inclusion: { in: ["attemptResult", "ranking", "anyResult"] }
@@ -41,6 +42,7 @@ class Qualification
 
   def can_register?(user, event_id)
     return false if user.person.nil?
+
     before_deadline_results = user.person.results.in_event(event_id).on_or_before(self.when_date)
     # Allow any competitor with a result to register when type == "ranking" or type == "anyResult".
     # When type == "ranking", the results need to be manually cleared out later.
@@ -90,16 +92,16 @@ class Qualification
 
   def to_s(event)
     if self.wcif_type == "ranking"
-      I18n.t("qualification." + self.result_type + ".ranking", ranking: level)
+      I18n.t("qualification.#{self.result_type}.ranking", ranking: level)
     elsif self.wcif_type == "anyResult"
-      I18n.t("qualification." + self.result_type + ".any_result")
+      I18n.t("qualification.#{self.result_type}.any_result")
     elsif event.event.timed_event?
-      I18n.t("qualification." + self.result_type + ".time", time: SolveTime.centiseconds_to_clock_format(level))
+      I18n.t("qualification.#{self.result_type}.time", time: SolveTime.centiseconds_to_clock_format(level))
     elsif event.event.fewest_moves?
       moves = self.result_type == "average" ? (level.to_f / 100).round(2) : level
-      I18n.t("qualification." + self.result_type + ".moves", moves: moves)
+      I18n.t("qualification.#{self.result_type}.moves", moves: moves)
     elsif event.event.multiple_blindfolded?
-      I18n.t("qualification." + self.result_type + ".points", points: SolveTime.multibld_attempt_to_points(level))
+      I18n.t("qualification.#{self.result_type}.points", points: SolveTime.multibld_attempt_to_points(level))
     end
   end
 end

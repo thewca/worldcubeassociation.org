@@ -17,13 +17,11 @@ class InboxPerson < ApplicationRecord
 
   validate :dob_must_be_in_the_past
   private def dob_must_be_in_the_past
-    if dob && dob >= Date.today
-      errors.add(:dob, "must be in the past")
-    end
+    errors.add(:dob, "must be in the past") if dob && dob >= Date.today
   end
 
   def country
-    Country.find_by_iso2(countryId)
+    Country.find_by(iso2: countryId)
   end
 
   # NOTE: silly method overriding: we don't have an id on that table.

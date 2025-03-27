@@ -291,7 +291,7 @@ RSpec.describe CompetitionsController do
         invalid_competition_delegate = CompetitionDelegate.last
         update_params = build_competition_update(competition, name: competition.name)
         patch :update, params: update_params, as: :json
-        expect(CompetitionDelegate.find_by_id(invalid_competition_delegate.id)).to be_nil
+        expect(CompetitionDelegate.find_by(id: invalid_competition_delegate.id)).to be_nil
       end
 
       it "saving removes nonexistent organizers" do
@@ -299,7 +299,7 @@ RSpec.describe CompetitionsController do
         invalid_competition_organizer = CompetitionOrganizer.last
         update_params = build_competition_update(competition, name: competition.name)
         patch :update, params: update_params, as: :json
-        expect(CompetitionOrganizer.find_by_id(invalid_competition_organizer.id)).to be_nil
+        expect(CompetitionOrganizer.find_by(id: invalid_competition_organizer.id)).to be_nil
       end
 
       it "can change competition id" do
@@ -438,7 +438,7 @@ RSpec.describe CompetitionsController do
         competition.update(showAtAll: false)
         delete :destroy, params: { id: competition }
         expect(response).to be_successful
-        expect(Competition.find_by_id(competition.id)).to be_nil
+        expect(Competition.find_by(id: competition.id)).to be_nil
       end
 
       it "board member cannot delete a visible competition" do
@@ -447,7 +447,7 @@ RSpec.describe CompetitionsController do
         expect(response).to have_http_status(:forbidden)
         parsed_body = response.parsed_body
         expect(parsed_body["error"]).to eq "Cannot delete a competition that is publicly visible."
-        expect(Competition.find_by_id(competition.id)).not_to be_nil
+        expect(Competition.find_by(id: competition.id)).not_to be_nil
       end
     end
 
@@ -491,7 +491,7 @@ RSpec.describe CompetitionsController do
       end
 
       it "can confirm a competition and expects wcat and organizers to receive a notification email" do
-        competition.update(start_date: 5.week.from_now, end_date: 5.week.from_now)
+        competition.update(start_date: 5.weeks.from_now, end_date: 5.weeks.from_now)
         expect(CompetitionsMailer).to receive(:notify_organizer_of_confirmed_competition).with(competition.delegates.last, competition, competition.organizers.last).and_call_original
         expect(CompetitionsMailer).to receive(:notify_wcat_of_confirmed_competition).with(competition.delegates.last, competition).and_call_original
         expect do
@@ -502,14 +502,14 @@ RSpec.describe CompetitionsController do
       end
 
       it "cannot confirm a competition that is not at least 28 days in the future" do
-        competition.update(start_date: 26.day.from_now, end_date: 26.day.from_now)
+        competition.update(start_date: 26.days.from_now, end_date: 26.days.from_now)
         put :confirm, params: { competition_id: competition }
         expect(response).to have_http_status(:bad_request)
         expect(competition.reload.confirmed?).to be false
       end
 
       it "can confirm a competition that is having advancement conditions" do
-        competition.update(start_date: 29.day.from_now, end_date: 29.day.from_now)
+        competition.update(start_date: 29.days.from_now, end_date: 29.days.from_now)
         competition.competition_events[0].rounds.destroy_all!
         competition.competition_events[0].rounds.create!(
           format: competition.competition_events[0].event.preferred_formats.first.format,
@@ -563,7 +563,7 @@ RSpec.describe CompetitionsController do
         expect(response).to have_http_status(:forbidden)
         errors = response.parsed_body
         expect(errors['error']).to eq "Cannot delete a competition that is publicly visible."
-        expect(Competition.find_by_id(competition.id)).not_to be_nil
+        expect(Competition.find_by(id: competition.id)).not_to be_nil
       end
 
       it "cannot delete confirmed competition" do
@@ -574,7 +574,7 @@ RSpec.describe CompetitionsController do
         expect(response).to have_http_status(:forbidden)
         errors = response.parsed_body
         expect(errors['error']).to eq "Cannot delete a confirmed competition."
-        expect(Competition.find_by_id(competition.id)).not_to be_nil
+        expect(Competition.find_by(id: competition.id)).not_to be_nil
       end
 
       it "can delete not confirmed and not visible competition" do
@@ -582,7 +582,7 @@ RSpec.describe CompetitionsController do
         # Attempt to delete competition. This should work, because we allow
         # deletion of (not confirmed and not visible) competitions.
         delete :destroy, params: { id: competition }
-        expect(Competition.find_by_id(competition.id)).to be_nil
+        expect(Competition.find_by(id: competition.id)).to be_nil
         expect(response).to be_successful
       end
 
@@ -662,7 +662,7 @@ RSpec.describe CompetitionsController do
 
       it "cannot confirm a competition" do
         competition.organizers << organizer1
-        competition.update(start_date: 5.week.from_now, end_date: 5.week.from_now)
+        competition.update(start_date: 5.weeks.from_now, end_date: 5.weeks.from_now)
         put :confirm, params: { competition_id: competition }
         expect(response).to have_http_status(:forbidden)
         expect(competition.reload.confirmed?).to be false
@@ -676,7 +676,7 @@ RSpec.describe CompetitionsController do
         expect(response).to have_http_status(:forbidden)
         errors = response.parsed_body
         expect(errors['error']).to eq "Cannot delete a competition that is publicly visible."
-        expect(Competition.find_by_id(competition.id)).not_to be_nil
+        expect(Competition.find_by(id: competition.id)).not_to be_nil
       end
 
       it "cannot delete confirmed competition" do
@@ -687,7 +687,7 @@ RSpec.describe CompetitionsController do
         expect(response).to have_http_status(:forbidden)
         errors = response.parsed_body
         expect(errors['error']).to eq "Cannot delete a confirmed competition."
-        expect(Competition.find_by_id(competition.id)).not_to be_nil
+        expect(Competition.find_by(id: competition.id)).not_to be_nil
       end
 
       it "can delete not confirmed and not visible competition" do
@@ -695,7 +695,7 @@ RSpec.describe CompetitionsController do
         # Attempt to delete competition. This should work, because we allow
         # deletion of (not confirmed and not visible) competitions.
         delete :destroy, params: { id: competition }
-        expect(Competition.find_by_id(competition.id)).to be_nil
+        expect(Competition.find_by(id: competition.id)).to be_nil
         expect(response).to be_successful
       end
 
@@ -743,7 +743,7 @@ RSpec.describe CompetitionsController do
         # Attempt to delete competition. This should not work, because we're
         # not the delegate for this competition.
         delete :destroy, params: { id: competition }
-        expect(Competition.find_by_id(competition.id)).not_to be_nil
+        expect(Competition.find_by(id: competition.id)).not_to be_nil
       end
     end
   end
@@ -959,14 +959,14 @@ RSpec.describe CompetitionsController do
   describe 'GET #my_competitions', :clean_db_with_truncation do
     let(:delegate) { FactoryBot.create(:delegate) }
     let(:organizer) { FactoryBot.create(:user) }
-    let!(:future_competition1) { FactoryBot.create(:competition, :registration_open, starts: 5.week.from_now, organizers: [organizer], delegates: [delegate], events: Event.where(id: %w(222 333))) }
+    let!(:future_competition1) { FactoryBot.create(:competition, :registration_open, starts: 5.weeks.from_now, organizers: [organizer], delegates: [delegate], events: Event.where(id: %w(222 333))) }
     let!(:future_competition2) { FactoryBot.create(:competition, :registration_open, starts: 4.weeks.from_now, organizers: [organizer], events: Event.where(id: %w(222 333))) }
     let!(:future_competition3) { FactoryBot.create(:competition, :registration_open, starts: 3.weeks.from_now, organizers: [organizer], events: Event.where(id: %w(222 333))) }
     let!(:future_competition4) { FactoryBot.create(:competition, :registration_open, starts: 3.weeks.from_now, organizers: [], events: Event.where(id: %w(222 333))) }
     let!(:past_competition1) { FactoryBot.create(:competition, starts: 1.month.ago, organizers: [organizer], events: Event.where(id: %w(222 333))) }
-    let!(:past_competition2) { FactoryBot.create(:competition, starts: 2.month.ago, delegates: [delegate], events: Event.where(id: %w(222 333))) }
-    let!(:past_competition3) { FactoryBot.create(:competition, starts: 3.month.ago, delegates: [delegate], events: Event.where(id: %w(222 333))) }
-    let!(:past_competition4) { FactoryBot.create(:competition, :results_posted, starts: 4.month.ago, delegates: [delegate], events: Event.where(id: %w(222 333))) }
+    let!(:past_competition2) { FactoryBot.create(:competition, starts: 2.months.ago, delegates: [delegate], events: Event.where(id: %w(222 333))) }
+    let!(:past_competition3) { FactoryBot.create(:competition, starts: 3.months.ago, delegates: [delegate], events: Event.where(id: %w(222 333))) }
+    let!(:past_competition4) { FactoryBot.create(:competition, :results_posted, starts: 4.months.ago, delegates: [delegate], events: Event.where(id: %w(222 333))) }
     let!(:unscheduled_competition1) { FactoryBot.create(:competition, starts: nil, ends: nil, delegates: [delegate], events: Event.where(id: %w(222 333))) }
     let(:registered_user) { FactoryBot.create :user, name: "Jan-Ove Waldner" }
     let!(:registration1) { FactoryBot.create(:registration, :accepted, competition: future_competition1, user: registered_user) }

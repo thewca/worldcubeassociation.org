@@ -16,9 +16,7 @@ class RegulationsController < ApplicationController
     # a url like example.com/index.html, for instance).
     # Only attempt to redirect if the current url does not match the one
     # url_for would want.
-    if trailing_slash?(request.env['REQUEST_URI']) != trailing_slash?(desired_url)
-      redirect_to desired_url, status: :moved_permanently
-    end
+    redirect_to desired_url, status: :moved_permanently if trailing_slash?(request.env['REQUEST_URI']) != trailing_slash?(desired_url)
   end
 
   def render_regulations(route, version_file = REGULATIONS_VERSION_FILE)

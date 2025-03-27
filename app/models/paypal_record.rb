@@ -75,7 +75,7 @@ class PaypalRecord < ApplicationRecord
   end
 
   def determine_wca_status
-    result = WCA_TO_PAYPAL_STATUS_MAP.find { |key, values| values.include?(self.paypal_status) }
+    result = WCA_TO_PAYPAL_STATUS_MAP.find { |_key, values| values.include?(self.paypal_status) }
     result&.first || raise("No associated wca_status for paypal_status: #{self.paypal_status} - our tests should prevent this from happening!")
   end
 

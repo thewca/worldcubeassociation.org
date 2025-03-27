@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-  resultable_instance_members = ->(*args) {
+  resultable_instance_members = ->(*_args) {
     transient do
       competition { FactoryBot.create(:competition, event_ids: ["333oh"]) }
       skip_round_creation { false }
@@ -14,9 +14,7 @@ FactoryBot.define do
     after(:build) do |result, options|
       # In order to be valid, a result must have a round.
       # Make sure it exists before going through validations.
-      if !result.round && !options.skip_round_creation
-        FactoryBot.create(:round, competition: result.competition, event_id: result.eventId, format_id: result.formatId)
-      end
+      FactoryBot.create(:round, competition: result.competition, event_id: result.eventId, format_id: result.formatId) if !result.round && !options.skip_round_creation
     end
 
     competitionId { competition.id }

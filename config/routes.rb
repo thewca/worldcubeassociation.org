@@ -19,9 +19,7 @@ Rails.application.routes.draw do
   end
 
   # Don't expose Paypal routes in production until we're reading to launch
-  unless PaypalInterface.paypal_disabled?
-    post 'registration/:id/capture-paypal-payment' => 'registrations#capture_paypal_payment', as: :registration_capture_paypal_payment
-  end
+  post 'registration/:id/capture-paypal-payment' => 'registrations#capture_paypal_payment', as: :registration_capture_paypal_payment unless PaypalInterface.paypal_disabled?
 
   # Prevent account deletion, and overrides the sessions controller for 2FA.
   #  https://github.com/plataformatec/devise/wiki/How-To:-Disable-user-from-destroying-their-account
@@ -164,7 +162,7 @@ Rails.application.routes.draw do
 
   get 'results/rankings', to: redirect('results/rankings/333/single', status: 302)
   get 'results/rankings/333mbf/average',
-      to: redirect(status: 302) { |params, request| URI.parse(request.original_url).query ? "results/rankings/333mbf/single?#{URI.parse(request.original_url).query}" : "results/rankings/333mbf/single" }
+      to: redirect(status: 302) { |_params, request| URI.parse(request.original_url).query ? "results/rankings/333mbf/single?#{URI.parse(request.original_url).query}" : "results/rankings/333mbf/single" }
   get 'results/rankings/:event_id', to: redirect('results/rankings/%{event_id}/single', status: 302)
   get 'results/rankings/:event_id/:type' => 'results#rankings', as: :rankings
   get 'results/records' => 'results#records', as: :records

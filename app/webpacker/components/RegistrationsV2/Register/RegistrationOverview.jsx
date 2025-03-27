@@ -107,7 +107,7 @@ export default function RegistrationOverview({
                 {I18n.t('activerecord.attributes.registration.comments')}
                 :
               </List.Header>
-              {registration.competing.comment.length > 0 ? registration.competing.comment : I18n.t('competitions.schedule.rooms_panel.none')}
+              {registration.competing.comment?.length > 0 ? registration.competing.comment : I18n.t('competitions.schedule.rooms_panel.none')}
             </List.Item>
             {competitionInfo.guests_enabled && (
               <List.Item>

@@ -5,6 +5,7 @@ module AdvancementConditions
     include ActiveModel::Validations
 
     attr_accessor :level
+
     validates :level, numericality: { only_integer: true }
 
     @@advancement_conditions = [AttemptResultCondition, PercentCondition, RankingCondition].freeze
