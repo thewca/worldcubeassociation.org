@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_03_06_165113) do
+ActiveRecord::Schema[7.2].define(version: 2025_03_27_144913) do
   create_table "Competitions", id: { type: :string, limit: 32, default: "" }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", limit: 50, default: "", null: false
     t.string "cityName", limit: 50, default: "", null: false
@@ -129,22 +129,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_06_165113) do
     t.integer "year", limit: 2, default: 0, null: false, unsigned: true
     t.integer "month", limit: 2, default: 0, null: false, unsigned: true
     t.integer "day", limit: 2, default: 0, null: false, unsigned: true
-  end
-
-  create_table "Continents", id: { type: :string, limit: 50, default: "" }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
-    t.string "name", limit: 50, default: "", null: false
-    t.string "recordName", limit: 3, default: "", null: false
-    t.integer "latitude", default: 0, null: false
-    t.integer "longitude", default: 0, null: false
-    t.integer "zoom", limit: 1, default: 0, null: false
-  end
-
-  create_table "Countries", id: { type: :string, limit: 50, default: "" }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
-    t.string "name", limit: 50, default: "", null: false
-    t.string "continentId", limit: 50, default: "", null: false
-    t.string "iso2", limit: 2
-    t.index ["continentId"], name: "fk_continents"
-    t.index ["iso2"], name: "iso2", unique: true
   end
 
   create_table "Events", id: { type: :string, limit: 6, default: "" }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB PACK_KEYS=0", force: :cascade do |t|
@@ -667,6 +651,22 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_06_165113) do
     t.string "account_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "continents", id: { type: :string, limit: 50, default: "" }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "name", limit: 50, default: "", null: false
+    t.string "record_name", limit: 3, default: "", null: false
+    t.integer "latitude", default: 0, null: false
+    t.integer "longitude", default: 0, null: false
+    t.integer "zoom", limit: 1, default: 0, null: false
+  end
+
+  create_table "countries", id: { type: :string, limit: 50, default: "" }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "name", limit: 50, default: "", null: false
+    t.string "continent_id", limit: 50, default: "", null: false
+    t.string "iso2", limit: 2
+    t.index ["continent_id"], name: "fk_continents"
+    t.index ["iso2"], name: "iso2", unique: true
   end
 
   create_table "country_band_details", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
