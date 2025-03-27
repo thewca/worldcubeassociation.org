@@ -4,8 +4,6 @@ class Country < ApplicationRecord
   include Cachable
   include StaticData
 
-  self.table_name = "Countries"
-
   has_one :wfc_dues_redirect, as: :redirect_source
 
   # It is surprisingly difficult to retrieve a "clean" list of timezones.
@@ -36,7 +34,7 @@ class Country < ApplicationRecord
   WCA_COUNTRIES = WCA_STATES_JSON["states_lists"].flat_map do |list|
     list["states"].map do |state|
       state_id = state["id"] || I18n.transliterate(state["name"]).tr("'", "_")
-      { id: state_id, continentId: state["continent_id"],
+      { id: state_id, continent_id: state["continent_id"],
         iso2: state["iso2"], name: state["name"] }
     end
   end.freeze
@@ -67,13 +65,12 @@ class Country < ApplicationRecord
     "#{self.name.pluralize.underscore}.fictive"
   end
 
-  belongs_to :continent, foreign_key: :continentId
-  alias_attribute :continent_id, :continentId
+  belongs_to :continent
   has_many :competitions, foreign_key: :countryId
   has_one :band, foreign_key: :iso2, primary_key: :iso2, class_name: "CountryBand"
 
   def continent
-    Continent.c_find(self.continentId)
+    Continent.c_find(self.continent_id)
   end
 
   def self.find_by_iso2(iso2)

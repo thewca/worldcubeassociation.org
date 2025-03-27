@@ -11,7 +11,7 @@ class Continent < ApplicationRecord
   REAL_CONTINENTS = self.all_raw.select { |c| FICTIVE_IDS.exclude?(c[:id]) }.freeze
   REAL_CONTINENT_IDS = REAL_CONTINENTS.pluck(:id).freeze
 
-  has_many :countries, foreign_key: :continentId
+  has_many :countries
 
   def url_id
     self.name_in(:en).parameterize.underscore.downcase

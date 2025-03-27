@@ -1036,11 +1036,11 @@ module DatabaseDumper
         ),
       ),
     }.freeze,
-    "Countries" => {
+    "countries" => {
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
-          continentId
+          continent_id
           iso2
           name
         ),

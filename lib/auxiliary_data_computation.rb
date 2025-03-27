@@ -22,7 +22,7 @@ module AuxiliaryDataComputation
             valueAndId,
             personId,
             eventId,
-            country.id countryId,
+            countries.id countryId,
             continentId,
             YEAR(start_date),
             MONTH(start_date),
@@ -36,7 +36,7 @@ module AuxiliaryDataComputation
             ) MinValuesWithId
             JOIN Results result ON result.id = valueAndId % 1000000000
             JOIN Competitions competition ON competition.id = competitionId
-            JOIN Countries country ON country.id = result.countryId
+            JOIN countries countries ON country.id = result.countryId
             JOIN Events event ON event.id = eventId
         SQL
       end
@@ -85,7 +85,7 @@ module AuxiliaryDataComputation
             # Set the person's data (first time the current location is matched).
             personal_rank[person_id][:best] ||= value
             personal_rank[person_id][:world_rank] ||= current_rank["World"]
-            personal_rank[person_id][:continent_rank] ||= current_rank[continent_id] if continent_id == cached_country.continentId
+            personal_rank[person_id][:continent_rank] ||= current_rank[continent_id] if continent_id == cached_country.continent_id
             personal_rank[person_id][:country_rank] ||= current_rank[country_id] if country_id == cached_country.id
           end
           values = personal_rank.map do |person_id, rank_data|
