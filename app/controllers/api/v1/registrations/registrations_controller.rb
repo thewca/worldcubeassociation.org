@@ -99,13 +99,43 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
 
     raise WcaExceptions::RegistrationError.new(:unauthorized, Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) unless
       can_administer_or_current_user?(@competition, @current_user, target_user)
+
     raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::USER_EDITS_NOT_ALLOWED) unless
       @competition.registration_edits_currently_permitted? || @current_user.can_manage_competition?(@competition) || user_uncancelling_registration?(@registration, new_status)
+
     raise WcaExceptions::RegistrationError.new(:unauthorized, Registrations::ErrorCodes::REGISTRATION_IS_REJECTED) if
       user_is_rejected?(@current_user, target_user, @registration) && !organizer_modifying_own_registration?(@competition, @current_user, target_user)
+
     raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::ALREADY_REGISTERED_IN_SERIES) if
       existing_registration_in_series?(@competition, target_user) && !current_user.can_manage_competition?(@competition)
+
     raise WcaExceptions::RegistrationError.new(:unauthorized, Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) if contains_organizer_fields?(@request) && !@current_user.can_manage_competition?(@competition)
+
+    # The rest of these are status + normal user related
+    return if @current_user.can_manage_competition?(@competition)
+    return if new_status.nil?
+
+    # A competitor (ie, these restrictions don't apply to organizers) is only allowed to:
+    # 1. Reactivate their registration if they previously cancelled it (ie, change status from 'cancelled' to 'pending')
+    # 2. Cancel their registration, assuming they are allowed to cancel
+
+    # User reactivating registration
+    if new_status == Registrations::Helper::STATUS_PENDING
+      raise WcaExceptions::RegistrationError.new(:unauthorized, Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) unless @registration.cancelled?
+
+      raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::REGISTRATION_CLOSED) if
+        @registration.cancelled? && !@competition.registration_currently_open?
+
+      return # No further checks needed if status is pending
+    end
+
+    # Now that we've checked the 'pending' case, raise an error if the status is not cancelled (cancelling is the only valid action remaining)
+    raise WcaExceptions::RegistrationError.new(:unauthorized, Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) unless
+      [Registrations::Helper::STATUS_DELETED, Registrations::Helper::STATUS_CANCELLED].include?(new_status)
+
+    # Raise an error if competition prevents users from cancelling a registration once it is accepted
+    raise WcaExceptions::RegistrationError.new(:unauthorized, Registrations::ErrorCodes::ORGANIZER_MUST_CANCEL_REGISTRATION) unless
+      @registration.permit_user_cancellation?
   end
 
   def validate_update_request
