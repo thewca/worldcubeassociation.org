@@ -23,7 +23,7 @@ module AuxiliaryDataComputation
             personId,
             eventId,
             countries.id countryId,
-            continentId,
+            continent_id continentId,
             YEAR(start_date),
             MONTH(start_date),
             DAY(start_date)
@@ -36,7 +36,7 @@ module AuxiliaryDataComputation
             ) MinValuesWithId
             JOIN Results result ON result.id = valueAndId % 1000000000
             JOIN Competitions competition ON competition.id = competitionId
-            JOIN countries countries ON country.id = result.countryId
+            JOIN countries countries ON countries.id = result.countryId
             JOIN Events event ON event.id = eventId
         SQL
       end
