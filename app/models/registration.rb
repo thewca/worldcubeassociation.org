@@ -471,12 +471,16 @@ class Registration < ApplicationRecord
     competing_status_changed? && (competing_status_cancelled? || competing_status_rejected?)
   end
 
-  validate :not_changing_events_when_cancelling, if: [:trying_to_cancel?, :competition_events_changed?], unless: :new_record?
+  validate :not_changing_events_when_cancelling, if: [:trying_to_cancel?, :tracked_event_ids?, :competition_events_changed?]
   private def not_changing_events_when_cancelling
-    errors.add(:competition_events, :cannot_change_when_cancelling, message: I18n.t('registrations.errors.cannot_change_events_when_cancelling'), frontend_code: Registrations::ErrorCodes::INVALID_REQUEST_DATA)
+    errors.add(:competition_events, :cannot_change_events_when_cancelling, message: I18n.t('registrations.errors.cannot_change_events_when_cancelling'), frontend_code: Registrations::ErrorCodes::INVALID_REQUEST_DATA)
   end
 
   attr_writer :tracked_event_ids
+
+  def tracked_event_ids?
+    @tracked_event_ids.present?
+  end
 
   def tracked_event_ids
     @tracked_event_ids ||= self.event_ids
