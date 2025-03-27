@@ -23,7 +23,6 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
   rescue_from WcaExceptions::RegistrationError do |e|
     # TODO: Figure out what the best way to log errors in development is
     Rails.logger.debug { "Create was rejected with error #{e.error} at #{e.backtrace[0]}" }
-    puts("Create was rejected with error #{e.error} at #{e.backtrace[0]}")
     render_error(e.status, e.error, e.data)
   end
 
@@ -111,6 +110,8 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
       existing_registration_in_series?(@competition, target_user) && !current_user.can_manage_competition?(@competition)
 
     raise WcaExceptions::RegistrationError.new(:unauthorized, Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) if contains_organizer_fields?(@request) && !@current_user.can_manage_competition?(@competition)
+
+    return if @current_user.can_manage_competition?(@competition)
 
     # A competitor (ie, these restrictions don't apply to organizers) is only allowed to:
     # 1. Reactivate their registration if they previously cancelled it (ie, change status from 'cancelled' to 'pending')
