@@ -104,11 +104,17 @@ function EditForm({
     />
   );
 
-  const renderUnsavedChangesAlert = () => (
+  const renderUnsavedChangesAlert = (showSaveButton = true) => (
     <Message info>
-      You have unsaved changes. Don&apos;t forget to
-      {' '}
-      {renderSaveButton('save your changes!')}
+      You have unsaved changes.
+      {showSaveButton && (
+        <>
+          {' '}
+          Don&apos;t forget to
+          {' '}
+          {renderSaveButton('save your changes!')}
+        </>
+      )}
     </Message>
   );
 
@@ -137,17 +143,16 @@ function EditForm({
           {children}
         </Form>
       </div>
-      {unsavedChanges ? renderUnsavedChangesAlert() : (
-        <ConfirmProvider>
-          <Divider />
-          <Button.Group>
-            {renderSaveButton(saveButtonText || 'Save')}
-            {footerActions.map((action) => (
-              <FormActionButton key={action.id} onUnload={onUnload} {...action} />
-            ))}
-          </Button.Group>
-        </ConfirmProvider>
-      )}
+      <Divider />
+      {unsavedChanges && renderUnsavedChangesAlert(false)}
+      <ConfirmProvider>
+        <Button.Group>
+          {renderSaveButton(saveButtonText || 'Save')}
+          {!unsavedChanges && footerActions.map((action) => (
+            <FormActionButton key={action.id} onUnload={onUnload} {...action} />
+          ))}
+        </Button.Group>
+      </ConfirmProvider>
     </>
   );
   /* eslint-enable react/jsx-props-no-spreading */
