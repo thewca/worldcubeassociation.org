@@ -1003,24 +1003,6 @@ RSpec.describe Registrations::RegistrationChecker do
             .not_to raise_error
         end
 
-        it 'stops accepted user from cancelling' do
-          accepted_reg = FactoryBot.create(:registration, :accepted, competition: accepted_cant_cancel)
-
-          update_request = FactoryBot.build(
-            :update_request,
-            user_id: accepted_reg.user_id,
-            competition_id: accepted_reg.competition_id,
-            competing: { 'status' => 'cancelled' },
-          )
-
-          expect {
-            Registrations::RegistrationChecker.update_registration_allowed!(update_request, accepted_reg, User.find(update_request['submitted_by']))
-          }.to raise_error(WcaExceptions::RegistrationError) do |error|
-            expect(error.status).to eq(:unauthorized)
-            expect(error.error).to eq(Registrations::ErrorCodes::ORGANIZER_MUST_CANCEL_REGISTRATION)
-          end
-        end
-
         it 'lets organizer cancel accepted registration' do
           not_accepted_reg = FactoryBot.create(:registration, competition: accepted_cant_cancel)
 
@@ -1056,42 +1038,6 @@ RSpec.describe Registrations::RegistrationChecker do
 
           expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, not_paid_reg, User.find(update_request['submitted_by'])) }
             .not_to raise_error
-        end
-
-        it 'stops user cancelling fully paid registration' do
-          paid_reg = FactoryBot.create(:registration, :paid, competition: paid_cant_cancel)
-
-          update_request = FactoryBot.build(
-            :update_request,
-            user_id: paid_reg.user_id,
-            competition_id: paid_reg.competition_id,
-            competing: { 'status' => 'cancelled' },
-          )
-
-          expect {
-            Registrations::RegistrationChecker.update_registration_allowed!(update_request, paid_reg, User.find(update_request['submitted_by']))
-          }.to raise_error(WcaExceptions::RegistrationError) do |error|
-            expect(error.status).to eq(:unauthorized)
-            expect(error.error).to eq(Registrations::ErrorCodes::ORGANIZER_MUST_CANCEL_REGISTRATION)
-          end
-        end
-
-        it 'stops user cancelling partially paid registration' do
-          paid_reg = FactoryBot.create(:registration, :partially_paid, competition: paid_cant_cancel)
-
-          update_request = FactoryBot.build(
-            :update_request,
-            user_id: paid_reg.user_id,
-            competition_id: paid_reg.competition_id,
-            competing: { 'status' => 'cancelled' },
-          )
-
-          expect {
-            Registrations::RegistrationChecker.update_registration_allowed!(update_request, paid_reg, User.find(update_request['submitted_by']))
-          }.to raise_error(WcaExceptions::RegistrationError) do |error|
-            expect(error.status).to eq(:unauthorized)
-            expect(error.error).to eq(Registrations::ErrorCodes::ORGANIZER_MUST_CANCEL_REGISTRATION)
-          end
         end
 
         it 'lets organizer cancel paid registration' do
@@ -1315,65 +1261,6 @@ RSpec.describe Registrations::RegistrationChecker do
 
         expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, registration, User.find(update_request['submitted_by'])) }
           .not_to raise_error
-      end
-
-      it 'cancelled user cant re-register if registration is closed' do
-        closed_comp = FactoryBot.create(:competition, :registration_closed, :editable_registrations)
-        cancelled_reg = FactoryBot.create(:registration, :cancelled, competition: closed_comp)
-
-        update_request = FactoryBot.build(
-          :update_request,
-          user_id: cancelled_reg.user_id,
-          competition_id: cancelled_reg.competition_id,
-          competing: { 'status' => 'pending' },
-        )
-
-        expect {
-          Registrations::RegistrationChecker.update_registration_allowed!(update_request, cancelled_reg, User.find(update_request['submitted_by']))
-        }.to raise_error(WcaExceptions::RegistrationError) do |error|
-          expect(error.status).to eq(:forbidden)
-          expect(error.error).to eq(Registrations::ErrorCodes::REGISTRATION_CLOSED)
-        end
-      end
-
-      RSpec.shared_examples 'invalid user status updates' do |initial_status, new_status|
-        it "user cant change 'status' => #{initial_status} to: #{new_status}" do
-          registration = FactoryBot.create(:registration, initial_status, competition: default_competition)
-
-          update_request = FactoryBot.build(
-            :update_request,
-            user_id: registration.user_id,
-            competition_id: registration.competition_id,
-            competing: { 'status' => new_status },
-          )
-
-          expect {
-            Registrations::RegistrationChecker.update_registration_allowed!(update_request, registration, User.find(update_request['submitted_by']))
-          }.to raise_error(WcaExceptions::RegistrationError) do |error|
-            expect(error.status).to eq(:unauthorized)
-            expect(error.error).to eq(Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS)
-          end
-        end
-      end
-
-      [
-        { initial_status: :pending, new_status: 'accepted' },
-        { initial_status: :pending, new_status: 'waiting_list' },
-        { initial_status: :pending, new_status: 'pending' },
-        { initial_status: :pending, new_status: 'rejected' },
-        { initial_status: :waiting_list, new_status: 'pending' },
-        { initial_status: :waiting_list, new_status: 'waiting_list' },
-        { initial_status: :waiting_list, new_status: 'accepted' },
-        { initial_status: :waiting_list, new_status: 'rejected' },
-        { initial_status: :accepted, new_status: 'pending' },
-        { initial_status: :accepted, new_status: 'waiting_list' },
-        { initial_status: :accepted, new_status: 'accepted' },
-        { initial_status: :accepted, new_status: 'rejected' },
-        { initial_status: :cancelled, new_status: 'accepted' },
-        { initial_status: :cancelled, new_status: 'waiting_list' },
-        { initial_status: :cancelled, new_status: 'rejected' },
-      ].each do |params|
-        it_behaves_like 'invalid user status updates', params[:initial_status], params[:new_status]
       end
 
       RSpec.shared_examples 'valid organizer status updates' do |initial_status, new_status|

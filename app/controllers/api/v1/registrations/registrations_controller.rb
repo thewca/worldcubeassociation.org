@@ -111,7 +111,9 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
 
     raise WcaExceptions::RegistrationError.new(:unauthorized, Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) if contains_organizer_fields?(@request) && !@current_user.can_manage_competition?(@competition)
 
+    # The rest of these are status + normal user related
     return if @current_user.can_manage_competition?(@competition)
+    return if new_status.nil?
 
     # A competitor (ie, these restrictions don't apply to organizers) is only allowed to:
     # 1. Reactivate their registration if they previously cancelled it (ie, change status from 'cancelled' to 'pending')
