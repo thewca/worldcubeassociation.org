@@ -453,7 +453,7 @@ class Registration < ApplicationRecord
     )
   end
 
-  delegate :part_of_competition_series?, to: :competition
+  delegate :part_of_competition_series?, to: :competition, allow_nil: true
 
   def series_sibling_registrations
     return [] unless part_of_competition_series?
@@ -471,9 +471,9 @@ class Registration < ApplicationRecord
     competing_status_changed? && (competing_status_cancelled? || competing_status_rejected?)
   end
 
-  validate :not_changing_when_cancelling, if: [:trying_to_cancel?, :competition_events_changed?]
-  private def not_changing_when_cancelling
-    errors.add(:competition_events, :cannot_change_when_cancelling, frontend_code: Registrations::ErrorCodes::INVALID_REQUEST_DATA)
+  validate :not_changing_events_when_cancelling, if: [:trying_to_cancel?, :competition_events_changed?], unless: :new_record?
+  private def not_changing_events_when_cancelling
+    errors.add(:competition_events, :cannot_change_when_cancelling, message: I18n.t('registrations.errors.cannot_change_events_when_cancelling'), frontend_code: Registrations::ErrorCodes::INVALID_REQUEST_DATA)
   end
 
   attr_writer :tracked_event_ids

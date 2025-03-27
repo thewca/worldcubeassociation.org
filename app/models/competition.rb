@@ -692,6 +692,7 @@ class Competition < ApplicationRecord
              'bookmarked_users',
              'competition_series',
              'series_competitions',
+             'series_registrations',
              'posting_user',
              'inbox_results',
              'inbox_persons',
