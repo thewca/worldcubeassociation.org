@@ -352,7 +352,7 @@ class Registration < ApplicationRecord
     return if competition&.competitor_limit.blank?
     return unless competing_status == Registrations::Helper::STATUS_ACCEPTED
     errors.add(:competitor_limit, I18n.t('registrations.errors.competitor_limit_reached')) if
-      competition.registrations.competing_status_accepted.count >= competition.competitor_limit
+      competition.registrations.accepted_and_competing_count >= competition.competitor_limit
   end
 
   # TODO: V3-REG cleanup. All these Validations can be used instead of the registration_checker checks
