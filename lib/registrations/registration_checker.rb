@@ -41,11 +41,10 @@ module Registrations
       validate_registration_events!(registration)
     end
 
-    def self.update_registration_allowed!(update_request, registration, current_user)
+    def self.update_registration_allowed!(update_request, registration)
       competition = registration.competition
 
       waiting_list_position = update_request.dig('competing', 'waiting_list_position')
-      new_status = update_request.dig('competing', 'status')
 
       updated_registration = self.apply_payload(registration, update_request)
 
@@ -58,7 +57,6 @@ module Registrations
 
       # Old-style validations within this class
       validate_waiting_list_position!(waiting_list_position, competition, updated_registration) unless waiting_list_position.nil?
-      validate_update_status!(current_user, registration, updated_registration) unless new_status.nil?
     end
 
     class << self
@@ -135,21 +133,9 @@ module Registrations
         raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::INVALID_WAITING_LIST_POSITION) if converted_position < 1
       end
 
-      def validate_update_status!(current_user, persisted_registration, updated_registration)
-        competition = persisted_registration.competition
-
-        validate_user_permissions!(persisted_registration, updated_registration) unless current_user.can_manage_competition?(competition)
-      end
-
       def validate_status_value!(registration)
         process_validation_error!(registration, :competing_status)
         process_validation_error!(registration, :competition_id)
-      end
-
-      def validate_user_permissions!(persisted_registration, updated_registration)
-        # Users aren't allowed to change events when cancelling
-        raise WcaExceptions::RegistrationError.new(:unprocessable_entity, Registrations::ErrorCodes::INVALID_REQUEST_DATA) if
-          updated_registration.volatile_event_ids != persisted_registration.event_ids
       end
     end
   end
