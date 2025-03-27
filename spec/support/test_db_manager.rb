@@ -2,7 +2,7 @@
 
 class TestDbManager
   CONSTANT_TABLES = %w(
-    Continents
+    continents
     Countries
     eligible_country_iso2s_for_championship
     Events

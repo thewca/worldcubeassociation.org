@@ -1046,14 +1046,14 @@ module DatabaseDumper
         ),
       ),
     }.freeze,
-    "Continents" => {
+    "continents" => {
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
           latitude
           longitude
           name
-          recordName
+          record_name
           zoom
         ),
       ),
