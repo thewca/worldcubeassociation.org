@@ -29,7 +29,6 @@ class Registration < ApplicationRecord
   has_many :assignments, as: :registration, dependent: :delete_all
   has_many :wcif_extensions, as: :extendable, dependent: :delete_all
   has_many :payment_intents, as: :holder, dependent: :delete_all
-  has_one :waiting_list, through: :competition
 
   enum :competing_status, {
     pending: Registrations::Helper::STATUS_PENDING,
@@ -98,6 +97,12 @@ class Registration < ApplicationRecord
   def waitlisted?
     competing_status_waiting_list?
   end
+
+  # Can NOT use a `has_one :waiting_list, through: :competition` association here, because
+  #   that would screw us over with caching. Unfortunately, even `through` associations cache themselves
+  #   so every registration of a competition then effectively has "its own" waiting list.
+  #   (We might want to revisit this decision when we switch to hook-based committing in waitlistable.rb)
+  delegate :waiting_list, to: :competition, allow_nil: true
 
   def waitlistable?
     waitlisted?

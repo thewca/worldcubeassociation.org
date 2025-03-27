@@ -46,7 +46,7 @@ module Waitlistable
       should_remove = !self.waitlistable? && self.waiting_list_position?
 
       self.waiting_list.add(self) if should_add
-      self.waiting_list.move_to_position(self, @waiting_list_position) if should_move
+      self.waiting_list.move_to_position(self, self.waiting_list_position) if should_move
       self.waiting_list.remove(self) if should_remove
     end
 
