@@ -351,6 +351,7 @@ class Registration < ApplicationRecord
   private def does_not_exceed_competitor_limit
     return if competition&.competitor_limit.blank?
     return unless competing_status == Registrations::Helper::STATUS_ACCEPTED
+
     errors.add(:competitor_limit, I18n.t('registrations.errors.competitor_limit_reached')) if
       competition.registrations.accepted_and_competing_count >= competition.competitor_limit
   end
@@ -466,6 +467,7 @@ class Registration < ApplicationRecord
 
   def attempt_auto_accept
     return false if Rails.env.production? && EnvConfig.WCA_LIVE_SITE?
+
     failure_reason = nil
 
     failure_reason = if outstanding_entry_fees > 0
@@ -475,7 +477,7 @@ class Registration < ApplicationRecord
                      elsif !competing_status_pending? && !(competing_status_waiting_list? && waiting_list_position == 1)
                        'Can only auto-accept pending registrations or first position on waiting list'
                      elsif competition.auto_accept_threshold_reached?
-                       ("Competition has reached auto_accept_disable_threshold of #{competition.auto_accept_disable_threshold} registrations")
+                       "Competition has reached auto_accept_disable_threshold of #{competition.auto_accept_disable_threshold} registrations"
                      elsif !competition.registration_currently_open?
                        'Cant auto-accept while registration is not open'
                      end
