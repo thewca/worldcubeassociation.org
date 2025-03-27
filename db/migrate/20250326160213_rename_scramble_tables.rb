@@ -2,8 +2,11 @@
 
 class RenameScrambleTables < ActiveRecord::Migration[7.2]
   def change
-    change_table :Scrambles do |t|
+    change_table :Scrambles, bulk: true do |t|
+      # Intentionally rename it to the conventional id field
+      # rubocop:disable Rails/DangerousColumnNames
       t.rename :scrambleId, :id
+      # rubocop:enable Rails/DangerousColumnNames
       t.rename :competitionId, :competition_id
       t.rename :eventId, :event_id
       t.rename :roundTypeId, :round_type_id
