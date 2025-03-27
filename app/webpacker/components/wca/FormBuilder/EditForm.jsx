@@ -71,6 +71,7 @@ function EditForm({
   saveMutation,
   CustomHeader = null,
   footerActions = [],
+  saveButtonText = null,
 }) {
   const {
     unsavedChanges,
@@ -140,7 +141,7 @@ function EditForm({
         <ConfirmProvider>
           <Divider />
           <Button.Group>
-            {renderSaveButton('Save')}
+            {renderSaveButton(saveButtonText || 'Save')}
             {footerActions.map((action) => (
               <FormActionButton key={action.id} onUnload={onUnload} {...action} />
             ))}
@@ -158,6 +159,7 @@ export default function Wrapper({
   saveMutation,
   CustomHeader = null,
   footerActions = [],
+  saveButtonText = null,
   globalDisabled = false,
 }) {
   return (
@@ -169,6 +171,7 @@ export default function Wrapper({
         saveMutation={saveMutation}
         CustomHeader={CustomHeader}
         footerActions={footerActions}
+        saveButtonText={saveButtonText}
       >
         {children}
       </EditForm>

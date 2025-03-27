@@ -99,6 +99,7 @@ function EditCompetition({
         saveMutation={saveMutation}
         CustomHeader={Header}
         footerActions={footerActions}
+        saveButtonText={I18n.t('competitions.competition_form.submit_update_value')}
         globalDisabled={isDisabled}
       >
         <MainForm storedEvents={storedEvents} />

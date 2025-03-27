@@ -8,6 +8,7 @@ import MainForm from './MainForm';
 import { fetchJsonOrError } from '../../lib/requests/fetchWithAuthenticityToken';
 import { useQueryRedirect } from './api';
 import WCAQueryClientProvider from '../../lib/providers/WCAQueryClientProvider';
+import I18n from '../../lib/i18n';
 
 function CreateCompetition({
   competition = null,
@@ -38,6 +39,7 @@ function CreateCompetition({
       <EditForm
         initialObject={competition}
         saveMutation={saveMutation}
+        saveButtonText={I18n.t('competitions.competition_form.submit_create_value')}
       >
         <MainForm isCloning={isCloning} />
       </EditForm>
