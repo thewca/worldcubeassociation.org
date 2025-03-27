@@ -703,7 +703,7 @@ RSpec.describe 'API Registrations' do
         user_id: cancelled_reg.user_id,
         competition_id: cancelled_reg.competition_id,
         competing: { 'status' => 'pending' },
-        )
+      )
 
       headers = { 'Authorization' => update_request['jwt_token'] }
 
@@ -724,7 +724,7 @@ RSpec.describe 'API Registrations' do
         user_id: paid_reg.user_id,
         competition_id: paid_reg.competition_id,
         competing: { 'status' => 'cancelled' },
-        )
+      )
 
       headers = { 'Authorization' => update_request['jwt_token'] }
 
@@ -745,7 +745,7 @@ RSpec.describe 'API Registrations' do
         user_id: paid_reg.user_id,
         competition_id: paid_reg.competition_id,
         competing: { 'status' => 'cancelled' },
-        )
+      )
       headers = { 'Authorization' => update_request['jwt_token'] }
 
       patch api_v1_registrations_register_path, params: update_request, headers: headers
@@ -765,7 +765,7 @@ RSpec.describe 'API Registrations' do
         user_id: accepted_reg.user_id,
         competition_id: accepted_reg.competition_id,
         competing: { 'status' => 'cancelled' },
-        )
+      )
       headers = { 'Authorization' => update_request['jwt_token'] }
 
       patch api_v1_registrations_register_path, params: update_request, headers: headers
@@ -786,7 +786,7 @@ RSpec.describe 'API Registrations' do
           user_id: registration.user_id,
           competition_id: registration.competition_id,
           competing: { 'status' => new_status },
-          )
+        )
         headers = { 'Authorization' => update_request['jwt_token'] }
 
         patch api_v1_registrations_register_path, params: update_request, headers: headers
