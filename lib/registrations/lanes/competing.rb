@@ -45,7 +45,7 @@ module Registrations
       end
 
       def self.send_status_change_email(registration, current_user_id)
-        case registration.status
+        case registration.competing_status
         when Registrations::Helper::STATUS_WAITING_LIST
           RegistrationsMailer.notify_registrant_of_waitlisted_registration(registration).deliver_later
         when Registrations::Helper::STATUS_PENDING
