@@ -16,13 +16,23 @@ class Api::V0::PersonsController < Api::V0::ApiController
     wca_id = params[:wca_id]
     person = Person.current.includes(:user, :ranksSingle, :ranksAverage).find_by!(wca_id: wca_id)
     private_attributes = person.private_attributes_for_user(current_user)
+    return unless stale?(person, public: true)
 
     render json: person_to_json(person, private_attributes)
   end
 
   def results
+    event = params[:event_id]
     person = Person.current.find_by!(wca_id: params[:wca_id])
-    render json: person.results
+    results = if event.present?
+                person.results.where(event_id: event)
+              else
+                person.results
+              end
+
+    return unless stale?(results, public: true)
+
+    render json: results
   end
 
   def competitions

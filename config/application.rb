@@ -68,21 +68,6 @@ module WcaOnRails
                          "World Cube Association"
                        end
 
-    config.middleware.insert_before 0, Rack::Cors, debug: false, logger: -> { Rails.logger } do
-      allow do
-        origins '*'
-
-        resource(
-          '/api/*',
-          headers: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept', 'Authorization'],
-          methods: [:get, :post, :delete, :put, :patch, :options, :head],
-          expose: ['Total', 'Per-Page', 'Link'],
-          max_age: 0,
-          credentials: false,
-        )
-      end
-    end
-
     # Setup available locales
     I18n.available_locales = Locales::AVAILABLE.keys
 
