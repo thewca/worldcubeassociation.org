@@ -15,19 +15,12 @@ import {
 } from '../../../lib/utils/registrationAdmin';
 import { useConfirm } from '../../../lib/providers/ConfirmProvider';
 
-const registrationStatusMap = {
-  accepted: 'a',
-  pending: 'p',
-  cancelled: 'd',
-  waiting_list: 'p',
-  rejected: 'd',
-};
 function V3csvExport(selected, registrations, competition) {
-  let csvContent = `User Id,Status,Name,Country,WCA ID,Birth Date,Gender,${competition.event_ids.join(',')},Email,Registration Status,Guests,IP,Registration Date Time (UTC),Payment Date Time (UTC)\n`;
+  let csvContent= `Status,Name,Country,WCA ID,Birth Date,Gender,${competition.event_ids.join(',')},Email,Guests,IP,Registration Date Time (UTC),Payment Date Time(UTC),User Id, Registration Status\n`;
   registrations
     .filter((r) => selected.length === 0 || selected.includes(r.user_id))
     .forEach((registration) => {
-      csvContent += `${registration.user_id},${registrationStatusMap[registration.competing.registration_status]},"${
+      csvContent += `${registration.competing.registration_status === 'accepted' ? 'a' : 'p'},"${
         registration.user.name
       }","${countries.byIso2[registration.user.country.iso2].name}",${
         registration.user.wca_id
@@ -36,13 +29,15 @@ function V3csvExport(selected, registrations, competition) {
       },${competition.event_ids.map((evt) => (registration.competing.event_ids.includes(evt) ? '1' : '0'))},${
         registration.user.email
       },${
-        registration.competing.registration_status
-      },${
-        registration.guests // IP field always blank
+        registration.guests // IP feel always blank
       },"",${
         DateTime.fromISO(registration.competing.registered_on).setZone('UTC').toFormat('yyyy-MM-dd HH:mm:ss ZZZZ')
       },${
         registration.payment?.has_paid ? DateTime.fromISO(registration.payment.updated_at).setZone('UTC').toFormat('yyyy-MM-dd HH:mm:ss ZZZZ') : ''
+      },${
+        registration.user_id
+      },${
+        registration.competing.registration_status
       }\n`;
     });
 
