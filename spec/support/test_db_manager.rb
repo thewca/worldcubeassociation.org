@@ -5,7 +5,7 @@ class TestDbManager
     Continents
     Countries
     eligible_country_iso2s_for_championship
-    Events
+    events
     Formats
     cronjob_statistics
     preferred_formats
