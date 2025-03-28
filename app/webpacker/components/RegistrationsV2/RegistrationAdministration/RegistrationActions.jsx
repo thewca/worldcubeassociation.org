@@ -20,7 +20,7 @@ const registrationStatusMap = {
   pending: 'p',
   cancelled: 'd',
   waiting_list: 'p',
-  rejected: 'd'
+  rejected: 'd',
 };
 function V3csvExport(selected, registrations, competition) {
   let csvContent = `User Id,Status,Name,Country,WCA ID,Birth Date,Gender,${competition.event_ids.join(',')},Email,Registration Status,Guests,IP,Registration Date Time (UTC),Payment Date Time (UTC)\n`;
