@@ -1589,7 +1589,7 @@ RSpec.describe Registrations::RegistrationChecker do
         expect {
           Registrations::RegistrationChecker.update_registration_allowed!(update_request, waitlisted_registration)
         }.to raise_error(WcaExceptions::RegistrationError) do |error|
-          expect(error.status).to eq(:forbidden)
+          expect(error.status).to eq(:unprocessable_entity)
           expect(error.error).to eq(Registrations::ErrorCodes::INVALID_WAITING_LIST_POSITION)
         end
       end
@@ -1606,7 +1606,7 @@ RSpec.describe Registrations::RegistrationChecker do
         expect {
           Registrations::RegistrationChecker.update_registration_allowed!(update_request, waitlisted_registration)
         }.to raise_error(WcaExceptions::RegistrationError) do |error|
-          expect(error.status).to eq(:forbidden)
+          expect(error.status).to eq(:unprocessable_entity)
           expect(error.error).to eq(Registrations::ErrorCodes::INVALID_WAITING_LIST_POSITION)
         end
       end

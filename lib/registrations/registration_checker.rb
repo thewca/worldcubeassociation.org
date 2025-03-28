@@ -13,10 +13,12 @@ module Registrations
         comment = competing_payload&.dig('comment')
         organizer_comment = competing_payload&.dig('organizer_comment')
         competing_status = competing_payload&.dig('status')
+        waiting_list_position = competing_payload&.dig('waiting_list_position')
 
         new_registration.comments = comment if competing_payload&.key?('comment')
         new_registration.administrative_notes = organizer_comment if competing_payload&.key?('organizer_comment')
         new_registration.competing_status = competing_status if competing_payload&.key?('status')
+        new_registration.waiting_list_position = waiting_list_position if competing_payload&.key?('waiting_list_position')
 
         # Since even deep cloning does not take care of associations, we must fall back to the original registration.
         #   Otherwise, every payload that does not specify `event_ids` would trigger "must register for >= 1 event"
@@ -42,10 +44,6 @@ module Registrations
     end
 
     def self.update_registration_allowed!(update_request, registration)
-      competition = registration.competition
-
-      waiting_list_position = update_request.dig('competing', 'waiting_list_position')
-
       updated_registration = self.apply_payload(registration, update_request)
 
       # Migrated to ActiveRecord-style validations
@@ -54,9 +52,7 @@ module Registrations
       validate_organizer_comment!(updated_registration)
       validate_registration_events!(updated_registration)
       validate_status_value!(updated_registration)
-
-      # Old-style validations within this class
-      validate_waiting_list_position!(waiting_list_position, competition, updated_registration) unless waiting_list_position.nil?
+      validate_waiting_list_position!(updated_registration)
     end
 
     class << self
@@ -115,22 +111,9 @@ module Registrations
         process_validation_error!(registration, :administrative_notes)
       end
 
-      def validate_waiting_list_position!(waiting_list_position, competition, updated_registration)
-        # User must be on the wating list
-        raise WcaExceptions::RegistrationError.new(:unprocessable_entity, Registrations::ErrorCodes::INVALID_REQUEST_DATA) unless
-         updated_registration.competing_status == Registrations::Helper::STATUS_WAITING_LIST
-
-        # Floats are not allowed
-        raise WcaExceptions::RegistrationError.new(:unprocessable_entity, Registrations::ErrorCodes::INVALID_WAITING_LIST_POSITION) if waiting_list_position.is_a? Float
-
-        # We convert strings to integers and then check if they are an integer
-        converted_position = Integer(waiting_list_position, exception: false)
-        raise WcaExceptions::RegistrationError.new(:unprocessable_entity, Registrations::ErrorCodes::INVALID_WAITING_LIST_POSITION) unless converted_position.is_a? Integer
-
-        waiting_list = competition.waiting_list.entries
-        raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::INVALID_WAITING_LIST_POSITION) if waiting_list.empty? && converted_position != 1
-        raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::INVALID_WAITING_LIST_POSITION) if converted_position > waiting_list.length
-        raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::INVALID_WAITING_LIST_POSITION) if converted_position < 1
+      def validate_waiting_list_position!(registration)
+        process_validation_error!(registration, :waiting_list_position)
+        process_validation_error!(registration, :waitlistable?)
       end
 
       def validate_status_value!(registration)

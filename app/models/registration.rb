@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Registration < ApplicationRecord
+  include Waitlistable
+
   COMMENT_CHARACTER_LIMIT = 240
   DEFAULT_GUEST_LIMIT = 99
 
@@ -94,6 +96,16 @@ class Registration < ApplicationRecord
 
   def waitlisted?
     competing_status_waiting_list?
+  end
+
+  # Can NOT use a `has_one :waiting_list, through: :competition` association here, because
+  #   that would screw us over with caching. Unfortunately, even `through` associations cache themselves
+  #   so every registration of a competition then effectively has "its own" waiting list.
+  #   (We might want to revisit this decision when we switch to hook-based committing in waitlistable.rb)
+  delegate :waiting_list, to: :competition, allow_nil: true
+
+  def waitlistable?
+    waitlisted?
   end
 
   def accepted?
@@ -208,10 +220,6 @@ class Registration < ApplicationRecord
     end
   end
 
-  def waiting_list_position
-    competition.waiting_list.position(self)
-  end
-
   def wcif_status
     # Non-competing staff are treated as accepted.
     # TODO: WCIF spec needs to be updated - and possibly versioned - to include new statuses
@@ -274,7 +282,7 @@ class Registration < ApplicationRecord
                                 admin_comment: administrative_notes|| "",
                               },
                             })
-      base_json[:competing][:waiting_list_position] = waiting_list_position if competing_status == "waiting_list"
+      base_json[:competing][:waiting_list_position] = waiting_list_position if competing_status_waiting_list?
     end
     if history
       base_json.deep_merge!({
