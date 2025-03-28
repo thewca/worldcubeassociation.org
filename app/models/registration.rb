@@ -102,7 +102,9 @@ class Registration < ApplicationRecord
   #   that would screw us over with caching. Unfortunately, even `through` associations cache themselves
   #   so every registration of a competition then effectively has "its own" waiting list.
   #   (We might want to revisit this decision when we switch to hook-based committing in waitlistable.rb)
-  delegate :waiting_list, to: :competition, allow_nil: true
+  def waiting_list
+    competition&.waiting_list || competition&.create_waiting_list(entries: [])
+  end
 
   def waitlistable?
     waitlisted?
@@ -485,6 +487,12 @@ class Registration < ApplicationRecord
 
   def tracked_event_ids?
     @tracked_event_ids.present?
+  end
+
+  after_commit :reset_tracked_event_ids
+
+  private def reset_tracked_event_ids
+    @tracked_event_ids = nil
   end
 
   def tracked_event_ids

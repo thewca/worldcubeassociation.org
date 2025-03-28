@@ -23,24 +23,15 @@ module Registrations
       end
 
       def self.update!(update_params, competition, current_user_id)
-        status = update_params.dig('competing', 'status')
-        waiting_list_position = update_params.dig('competing', 'waiting_list_position')
         user_id = update_params[:user_id]
 
         registration = Registration.find_by(competition: competition, user_id: user_id)
         registration = Registrations::RegistrationChecker.apply_payload(registration, update_params)
 
-        old_status = registration.competing_status
-
         ActiveRecord::Base.transaction do
-          if old_status == Registrations::Helper::STATUS_WAITING_LIST || status == Registrations::Helper::STATUS_WAITING_LIST
-            waiting_list = competition.waiting_list || competition.create_waiting_list(entries: [])
-            update_waiting_list(update_params[:competing], registration, old_status, waiting_list)
-          end
-
           changes = registration.changes.transform_values { |change| change[1] }
 
-          changes[:waiting_list_position] = waiting_list_position if waiting_list_position.present?
+          changes[:waiting_list_position] = registration.waiting_list_position if registration.waiting_list_position?
           changes[:event_ids] = registration.changed_event_ids if registration.changed_event_ids.present?
 
           registration.save!
@@ -51,20 +42,6 @@ module Registrations
 
         # TODO: V3-REG Cleanup Figure out a way to get rid of this reload
         registration.reload
-      end
-
-      def self.update_waiting_list(competing_params, registration, old_status, waiting_list)
-        status = competing_params['status']
-        waiting_list_position = competing_params['waiting_list_position']
-
-        should_add = status == Registrations::Helper::STATUS_WAITING_LIST && registration.waiting_list_position.nil?
-        should_move = waiting_list_position.present?
-        should_remove = status.present? && old_status == Registrations::Helper::STATUS_WAITING_LIST &&
-                        status != Registrations::Helper::STATUS_WAITING_LIST
-
-        waiting_list.add(registration) if should_add
-        waiting_list.move_to_position(registration, competing_params[:waiting_list_position].to_i) if should_move
-        waiting_list.remove(registration) if should_remove
       end
 
       def self.send_status_change_email(registration, current_user_id)
