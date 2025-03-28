@@ -6,18 +6,16 @@ module Registrations
       def self.process!(lane_params, user_id, competition_id)
         registration = Registration.build(competition_id: competition_id,
                                           user_id: user_id,
-                                          comments: lane_params[:competing][:comment] || '',
-                                          guests: lane_params[:guests] || 0,
                                           registered_at: Time.now.utc)
 
-        create_event_ids = lane_params[:competing][:event_ids]
-
-        create_competition_events = registration.competition.competition_events.where(event_id: create_event_ids)
-        registration.competition_events = create_competition_events
+        # Apply all the information passed in by the user
+        registration = Registrations::RegistrationChecker.apply_payload(registration, lane_params)
 
         changes = registration.changes.transform_values { |change| change[1] }
-        changes[:event_ids] = create_event_ids
+        changes[:event_ids] = registration.changed_event_ids
+
         registration.save!
+
         RegistrationsMailer.notify_organizers_of_new_registration(registration).deliver_later
         RegistrationsMailer.notify_registrant_of_new_registration(registration).deliver_later
         RegistrationsMailer.notify_delegates_of_formerly_banned_user_registration(registration).deliver_later if registration.user.banned_in_past?

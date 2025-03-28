@@ -498,6 +498,10 @@ class Registration < ApplicationRecord
     registration_competition_events.map(&:event_id)
   end
 
+  def changed_event_ids
+    self.volatile_event_ids - self.tracked_event_ids
+  end
+
   def competition_events_changed?
     self.tracked_event_ids.sort != self.volatile_event_ids.sort ||
       self.competition_events.any?(&:changed?)
