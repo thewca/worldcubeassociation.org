@@ -89,12 +89,12 @@ class UploadJson
             ["scrambles", "extraScrambles"].each do |scramble_type|
               group[scramble_type]&.each_with_index do |scramble, index|
                 new_scramble_attributes = {
-                  competitionId: competition_id,
-                  eventId: event["eventId"],
-                  roundTypeId: round["roundId"],
-                  groupId: group["group"],
-                  isExtra: scramble_type == "extraScrambles",
-                  scrambleNum: index+1,
+                  competition_id: competition_id,
+                  event_id: event["eventId"],
+                  round_type_id: round["roundId"],
+                  group_id: group["group"],
+                  is_extra: scramble_type == "extraScrambles",
+                  scramble_num: index+1,
                   scramble: scramble,
                 }
                 scrambles_to_import << Scramble.new(new_scramble_attributes)
@@ -107,7 +107,7 @@ class UploadJson
         ActiveRecord::Base.transaction do
           InboxPerson.where(competitionId: competition_id).delete_all
           InboxResult.where(competitionId: competition_id).delete_all
-          Scramble.where(competitionId: competition_id).delete_all
+          Scramble.where(competition_id: competition_id).delete_all
           InboxPerson.import!(persons_to_import)
           Scramble.import!(scrambles_to_import)
           InboxResult.import!(results_to_import)
@@ -119,7 +119,7 @@ class UploadJson
       rescue ActiveRecord::RecordInvalid => e
         object = e.record
         if object.instance_of?(Scramble)
-          errors.add(:results_file, "Scramble in '#{Round.name_from_attributes_id(object.eventId, object.roundTypeId)}' is invalid (#{e.message}), please fix it!")
+          errors.add(:results_file, "Scramble in '#{Round.name_from_attributes_id(object.event_id, object.round_type_id)}' is invalid (#{e.message}), please fix it!")
         elsif object.instance_of?(InboxPerson)
           errors.add(:results_file, "Person #{object.name} is invalid (#{e.message}), please fix it!")
         elsif object.instance_of?(InboxResult)
