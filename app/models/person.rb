@@ -159,7 +159,7 @@ class Person < ApplicationRecord
     results.podium
            .joins(:event, competition: [:championships])
            .where("championships.championship_type = 'world'")
-           .order("YEAR(start_date) DESC, Events.rank")
+           .order("YEAR(start_date) DESC, events.rank")
            .includes(:competition, :format)
   end
 
@@ -180,7 +180,7 @@ class Person < ApplicationRecord
             .final
             .succeeded
             .joins(:event)
-            .order("Events.rank, pos")
+            .order("events.rank, pos")
             .includes(:format, :competition)
             .group_by(&:eventId)
             .each_value do |final_results|
