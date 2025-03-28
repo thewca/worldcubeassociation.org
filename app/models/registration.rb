@@ -276,8 +276,8 @@ class Registration < ApplicationRecord
                               competing: {
                                 registration_status: is_competing ? competing_status : 'non_competing',
                                 registered_on: registered_at,
-                                comment: comments,
-                                admin_comment: administrative_notes,
+                                comment: comments || "",
+                                admin_comment: administrative_notes|| "",
                               },
                             })
       base_json[:competing][:waiting_list_position] = waiting_list_position if competing_status == "waiting_list"
