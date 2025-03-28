@@ -46,11 +46,11 @@ export default function Refunds({
 
   return (
     <>
-      <Header>Available Refunds:</Header>
+      <Header>{I18n.t('payments.labels.available_refunds')}</Header>
       <Table>
         <Table.Header>
           <Table.Row>
-            <Table.HeaderCell>Original Payment</Table.HeaderCell>
+            <Table.HeaderCell>{I18n.t('payments.labels.original_payment')}</Table.HeaderCell>
             <Table.HeaderCell>{I18n.t('registrations.refund_form.hints.refund_amount')}</Table.HeaderCell>
             <Table.HeaderCell>{I18n.t('registrations.refund_form.labels.refund_amount')}</Table.HeaderCell>
             <Table.HeaderCell />
