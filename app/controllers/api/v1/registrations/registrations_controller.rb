@@ -139,7 +139,7 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
   end
 
   def validate_update_request
-    Registrations::RegistrationChecker.update_registration_allowed!(params, @registration, @current_user)
+    Registrations::RegistrationChecker.update_registration_allowed!(params, @registration)
   end
 
   def user_can_bulk_modify_registrations
@@ -163,7 +163,7 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
       @request = update_request
       user_can_modify_registration
 
-      Registrations::RegistrationChecker.update_registration_allowed!(update_request, @registration, @current_user)
+      Registrations::RegistrationChecker.update_registration_allowed!(update_request, @registration)
     rescue WcaExceptions::RegistrationError => e
       errors[update_request['user_id']] = e.error
     end

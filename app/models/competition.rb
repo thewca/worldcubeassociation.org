@@ -32,6 +32,7 @@ class Competition < ApplicationRecord
   has_many :bookmarked_users, through: :bookmarked_competitions, source: :user
   belongs_to :competition_series, optional: true
   has_many :series_competitions, -> { readonly }, through: :competition_series, source: :competitions
+  has_many :series_registrations, -> { readonly }, through: :series_competitions, source: :registrations
   belongs_to :posting_user, optional: true, foreign_key: 'posting_by', class_name: "User"
   has_many :inbox_results, foreign_key: "competitionId", dependent: :delete_all
   has_many :inbox_persons, foreign_key: "competitionId", dependent: :delete_all
@@ -691,6 +692,7 @@ class Competition < ApplicationRecord
              'bookmarked_users',
              'competition_series',
              'series_competitions',
+             'series_registrations',
              'posting_user',
              'inbox_results',
              'inbox_persons',
@@ -1854,7 +1856,7 @@ class Competition < ApplicationRecord
   end
 
   def other_series_ids
-    series_sibling_competitions.pluck(:id)
+    series_sibling_competitions.ids
   end
 
   def qualification_wcif
@@ -2236,6 +2238,13 @@ class Competition < ApplicationRecord
 
     series_competitions
       .where.not(id: self.id)
+  end
+
+  def series_sibling_registrations
+    return [] unless part_of_competition_series?
+
+    series_registrations
+      .where.not(competition: self)
   end
 
   def find_round_for(event_id, round_type_id, format_id = nil)

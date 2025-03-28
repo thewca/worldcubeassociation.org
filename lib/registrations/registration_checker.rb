@@ -12,13 +12,16 @@ module Registrations
         competing_payload = raw_payload['competing']
         comment = competing_payload&.dig('comment')
         organizer_comment = competing_payload&.dig('organizer_comment')
+        competing_status = competing_payload&.dig('status')
 
         new_registration.comments = comment if competing_payload&.key?('comment')
         new_registration.administrative_notes = organizer_comment if competing_payload&.key?('organizer_comment')
+        new_registration.competing_status = competing_status if competing_payload&.key?('status')
 
         # Since even deep cloning does not take care of associations, we must fall back to the original registration.
         #   Otherwise, every payload that does not specify `event_ids` would trigger "must register for >= 1 event"
         desired_events = competing_payload&.dig('event_ids') || registration.event_ids
+        new_registration.tracked_event_ids = registration.event_ids
 
         competition_events_lookup = registration.competition.competition_events.where(event_id: desired_events).index_by(&:event_id)
         competition_events = desired_events.map { competition_events_lookup[it]&.deep_dup }
@@ -38,11 +41,10 @@ module Registrations
       validate_registration_events!(registration)
     end
 
-    def self.update_registration_allowed!(update_request, registration, current_user)
+    def self.update_registration_allowed!(update_request, registration)
       competition = registration.competition
 
       waiting_list_position = update_request.dig('competing', 'waiting_list_position')
-      new_status = update_request.dig('competing', 'status')
 
       updated_registration = self.apply_payload(registration, update_request)
 
@@ -51,16 +53,17 @@ module Registrations
       validate_comment!(updated_registration)
       validate_organizer_comment!(updated_registration)
       validate_registration_events!(updated_registration)
+      validate_status_value!(updated_registration)
 
       # Old-style validations within this class
       validate_waiting_list_position!(waiting_list_position, competition, updated_registration) unless waiting_list_position.nil?
-      validate_update_status!(new_status, current_user, registration, updated_registration) unless new_status.nil?
     end
 
     class << self
       def validate_registration_events!(registration)
         process_nested_validation_error!(registration, :registration_competition_events, :competition_event) { it.event_id }
         process_validation_error!(registration, :registration_competition_events)
+        process_validation_error!(registration, :competition_events)
       end
 
       def process_validation_error!(registration, field)
@@ -130,49 +133,9 @@ module Registrations
         raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::INVALID_WAITING_LIST_POSITION) if converted_position < 1
       end
 
-      def validate_update_status!(new_status, current_user, persisted_registration, updated_registration)
-        competition = persisted_registration.competition
-        target_user = persisted_registration.user
-
-        validate_status_value!(new_status, competition, target_user)
-        validate_user_permissions!(persisted_registration, updated_registration) unless current_user.can_manage_competition?(competition)
-      end
-
-      def validate_status_value!(new_status, competition, target_user)
-        raise WcaExceptions::RegistrationError.new(:unprocessable_entity, Registrations::ErrorCodes::INVALID_REQUEST_DATA) unless
-          Registration.competing_statuses.include?(new_status)
-        raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::ALREADY_REGISTERED_IN_SERIES) if
-          new_status == Registrations::Helper::STATUS_ACCEPTED && existing_registration_in_series?(competition, target_user)
-
-        return unless new_status == Registrations::Helper::STATUS_ACCEPTED && competition.competitor_limit_enabled?
-        raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::COMPETITOR_LIMIT_REACHED) if
-          competition.registrations.accepted_and_competing_count >= competition.competitor_limit
-
-        return unless competition.enforce_newcomer_month_reservations? && !target_user.newcomer_month_eligible?
-
-        available_spots = competition.competitor_limit - competition.registrations.competing_status_accepted.count
-
-        # There are a limited number of "reserved" spots for newcomer_month_eligible competitions
-        # We know that there are _some_ available_spots in the comp available, because we passed the competitor_limit check above
-        # However, we still don't know how many of the reserved spots have been taken up by newcomers, versus how many "general" spots are left
-        # For a non-newcomer to be accepted, there need to be more spots available than spots still reserved for newcomers
-        raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::NO_UNRESERVED_SPOTS_REMAINING) unless
-          available_spots > competition.newcomer_month_reserved_spots_remaining
-      end
-
-      def validate_user_permissions!(persisted_registration, updated_registration)
-        # Users aren't allowed to change events when cancelling
-        raise WcaExceptions::RegistrationError.new(:unprocessable_entity, Registrations::ErrorCodes::INVALID_REQUEST_DATA) if
-          updated_registration.volatile_event_ids != persisted_registration.event_ids
-      end
-
-      def existing_registration_in_series?(competition, target_user)
-        return false unless competition.part_of_competition_series?
-
-        other_series_ids = competition.other_series_ids
-        other_series_ids.any? do |comp_id|
-          Registration.find_by(competition_id: comp_id, user_id: target_user.id)&.might_attend?
-        end
+      def validate_status_value!(registration)
+        process_validation_error!(registration, :competing_status)
+        process_validation_error!(registration, :competition_id)
       end
     end
   end
