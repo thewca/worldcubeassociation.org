@@ -39,8 +39,7 @@ module Waitlistable
       @waiting_list_position.present?
     end
 
-    # TODO: V3-REG cleanup: Enable this hook so that we can actually have the updating function for free
-    # after_save :commit_waitlist_position
+    after_save :commit_waitlist_position
 
     def commit_waitlist_position
       should_add = self.waitlistable? && !self.waiting_list_position?
@@ -52,7 +51,9 @@ module Waitlistable
       self.waiting_list.remove(self) if should_remove
     end
 
-    def clear_waitlist_position
+    after_commit :clear_waitlist_position
+
+    private def clear_waitlist_position
       @waiting_list_position = nil
     end
 
