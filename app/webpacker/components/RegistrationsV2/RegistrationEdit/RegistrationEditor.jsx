@@ -201,7 +201,6 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
           </Message>
         )}
         {registrationEditDeadlinePassed && (
-          // i18n-tasks-use t('registrations.errors.edit_deadline_passed')
           <Message>
             {I18n.t('registrations.errors.edit_deadline_passed')}
           </Message>
