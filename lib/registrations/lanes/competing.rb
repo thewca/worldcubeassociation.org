@@ -26,7 +26,7 @@ module Registrations
         user_id = update_params[:user_id]
 
         registration = Registration.find_by(competition: competition, user_id: user_id)
-        registration = Registrations::RegistrationChecker.apply_payload(registration, update_params)
+        registration = Registrations::RegistrationChecker.apply_payload(registration, update_params, clone: false)
 
         ActiveRecord::Base.transaction do
           changes = registration.changes.transform_values { |change| change[1] }
