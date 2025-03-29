@@ -87,6 +87,15 @@ class SessionsController < Devise::SessionsController
     end
 
     def authenticate_with_two_factor
+      # The method we're currently in gets called as a `prepend_before_action`
+      #   with the purpose to "intercept" users who need to enter 2FA codes.
+      # Unfortunately, rendering out the 2FA form halts any Rails action filter chain,
+      #   so the `set_locale` that is normally (correctly!) set up in the top-level `ApplicationController`
+      #   is not called in this instance. The "cheapest" fix is just to call it manually here.
+      # (The basic notiong of "halting" is described at https://guides.rubyonrails.org/action_controller_overview.html#before-action
+      #   although not in very great detail. The server also logs a message about "was halted because ... rendered something" during runtime.)
+      set_locale
+
       user = self.resource = find_user
       if user_params[:otp_attempt].present? && session[:otp_user_id]
         authenticate_via_otp(user)
