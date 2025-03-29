@@ -33,6 +33,7 @@ module Waitlistable
     }
 
     validates :waitlistable?, presence: { if: :waiting_list_position?, frontend_code: Registrations::ErrorCodes::INVALID_REQUEST_DATA }
+    validates :waiting_list_present?, presence: { if: :waiting_list_position?, frontend_code: Registrations::ErrorCodes::INVALID_REQUEST_DATA }
 
     def waiting_list_position?
       @waiting_list_position.present?
