@@ -2179,6 +2179,8 @@ eo:
       series_more_than_one_accepted: Vi povas esti akceptita nur en unu Seria konkurso samtempe.
       #original_hash: 13bfcd6
       can_only_register_for_qualified_events: Vi ne povas registriĝi por konkurseroj por kiuj vi ne estas kvalifikita.
+      #original_hash: 93ed20e
+      cannot_change_events_when_cancelling: Vi ne povas ŝanĝi viajn konkurserojn dum nuligado de via registriĝo.
       #original_hash: 4025877
       cannot_register_without_comment: >-
         Vi devas skribi komenton. Bonvolu legi la Registriĝaj Postuloj supre por
