@@ -468,49 +468,49 @@ class Registration < ApplicationRecord
   def attempt_auto_accept
     return false if Rails.env.production? && EnvConfig.WCA_LIVE_SITE?
 
-    failure_reason = nil
-
-    failure_reason = if outstanding_entry_fees > 0
-                       'Competitor still has outstanding registration fees'
-                     elsif !competition.auto_accept_registrations?
-                       'Auto-accept is not enabled for this competition.'
-                     elsif !competing_status_pending? && !(competing_status_waiting_list? && waiting_list_position == 1)
-                       'Can only auto-accept pending registrations or first position on waiting list'
-                     elsif competition.auto_accept_threshold_reached?
-                       "Competition has reached auto_accept_disable_threshold of #{competition.auto_accept_disable_threshold} registrations"
-                     elsif !competition.registration_currently_open?
-                       'Cant auto-accept while registration is not open'
-                     end
-
+    failure_reason = auto_accept_failure_reason
     if failure_reason.present?
-      add_history_entry(
-        { auto_accept_failure_reason: failure_reason },
-        'System',
-        'Auto accept',
-        'System reject',
-      )
+      log_auto_accept_failure(failure_reason)
       return false
     end
 
-    if competition.registration_full_and_accepted? && competing_status_pending?
+    update_payload = build_auto_accept_payload
+    if Registrations::RegistrationChecker.apply_payload(self, update_payload).valid?
       update_lanes!(
-        { user_id: user_id, competing: { status: Registrations::Helper::STATUS_WAITING_LIST } }.with_indifferent_access,
+        update_payload,
         'Auto-accept',
       )
+      true
     else
-      update_lanes!(
-        { user_id: user_id, competing: { status: Registrations::Helper::STATUS_ACCEPTED } }.with_indifferent_access,
-        'Auto-accept',
-      )
+      log_auto_accept_failure(accept_registration.errors)
+      false
     end
-  # Temporary implementation pending discussion of how to access the validation state of the registration in lanes/competing.rb
-  rescue ActiveRecord::RecordInvalid => e
+  end
+
+  private def auto_accept_failure_reason
+    return 'Competitor still has outstanding registration fees' if outstanding_entry_fees > 0
+    return 'Auto-accept is not enabled for this competition.' unless competition.auto_accept_registrations?
+    return 'Can only auto-accept pending registrations or first position on waiting list' unless competing_status_pending? || (competing_status_waiting_list? && waiting_list_position == 1)
+    return "Competition has reached auto_accept_disable_threshold of #{competition.auto_accept_disable_threshold} registrations" if competition.auto_accept_threshold_reached?
+    return 'Cant auto-accept while registration is not open' unless competition.registration_currently_open?
+  end
+
+  private def log_auto_accept_failure(reason)
     add_history_entry(
-      { auto_accept_failure_reason: e },
+      { auto_accept_failure_reason: reason },
       'System',
       'Auto accept',
       'System reject',
     )
-    false
+  end
+
+  private def build_auto_accept_payload
+    status = if competition.registration_full_and_accepted? && competing_status_pending?
+              Registrations::Helper::STATUS_WAITING_LIST
+            else
+              Registrations::Helper::STATUS_ACCEPTED
+            end
+
+    { user_id: user_id, competing: { status: status } }.with_indifferent_access
   end
 end
