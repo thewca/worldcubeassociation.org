@@ -76,6 +76,7 @@ Rails.application.routes.draw do
     get 'announcement_data' => 'competitions#announcement_data', as: :announcement_data
     get 'user_preferences' => 'competitions#user_preferences', as: :user_preferences
     get 'confirmation_data' => 'competitions#confirmation_data', as: :confirmation_data
+    patch 'confirmation_data' => 'competitions#update_confirmation_data', as: :update_confirmation_data
 
     put 'confirm' => 'competitions#confirm', as: :confirm
     put 'announce' => 'competitions#announce', as: :announce
