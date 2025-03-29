@@ -34,7 +34,7 @@ export default function StripeWrapper({
     data, isFetching,
   } = useQuery({
     queryFn: () => convertISOAmount(competitionInfo.id, registration.user_id, isoDonationAmount),
-    queryKey: ['displayAmount', isoDonationAmount, competitionInfo.currency_code],
+    queryKey: ['displayAmount', isoDonationAmount, competitionInfo.id, registration.user_id],
   });
 
   useEffect(() => {
