@@ -67,7 +67,7 @@ class Registration < ApplicationRecord
   end
 
   def update_lanes!(params, acting_user)
-    Registrations::Lanes::Competing.update!(params, self.competition, acting_user.id)
+    Registrations::Lanes::Competing.update!(params, self.competition, acting_user)
   end
 
   def guest_limit
@@ -246,12 +246,12 @@ class Registration < ApplicationRecord
                             end
       end
       {
-        changed_attributes: changed_attributes,
+        changed_attributes: changed_attributes.with_indifferent_access,
         actor_type: r.actor_type,
         actor_id: r.actor_id,
         timestamp: r.created_at,
         action: r.action,
-      }
+      }.with_indifferent_access
     end
   end
 
@@ -349,6 +349,17 @@ class Registration < ApplicationRecord
   private def user_can_register_for_competition
     cannot_register_reasons = user&.cannot_register_for_competition_reasons(competition, is_competing: self.is_competing?)
     errors.add(:user_id, cannot_register_reasons.to_sentence) if cannot_register_reasons.present?
+  end
+
+  # TODO: This is a redunandant check with registration checker - switch to using this instead of registration_checker when
+  # functionality exists to use validations to raise errors on submitted registrations
+  validate :does_not_exceed_competitor_limit
+  private def does_not_exceed_competitor_limit
+    return if competition&.competitor_limit.blank?
+    return unless competing_status == Registrations::Helper::STATUS_ACCEPTED
+
+    errors.add(:competitor_limit, I18n.t('registrations.errors.competitor_limit_reached')) if
+      competition.registrations.accepted_and_competing_count >= competition.competitor_limit
   end
 
   # TODO: V3-REG cleanup. All these Validations can be used instead of the registration_checker checks
@@ -516,5 +527,54 @@ class Registration < ApplicationRecord
 
   def serializable_hash(options = nil)
     super(DEFAULT_SERIALIZE_OPTIONS.merge(options || {}))
+  end
+
+  def attempt_auto_accept
+    return false if Rails.env.production? && EnvConfig.WCA_LIVE_SITE?
+
+    failure_reason = auto_accept_failure_reason
+    if failure_reason.present?
+      log_auto_accept_failure(failure_reason)
+      return false
+    end
+
+    update_payload = build_auto_accept_payload
+    if Registrations::RegistrationChecker.apply_payload(self, update_payload).valid?
+      update_lanes!(
+        update_payload,
+        'Auto-accept',
+      )
+      true
+    else
+      log_auto_accept_failure(accept_registration.errors)
+      false
+    end
+  end
+
+  private def auto_accept_failure_reason
+    return 'Competitor still has outstanding registration fees' if outstanding_entry_fees > 0
+    return 'Auto-accept is not enabled for this competition.' unless competition.auto_accept_registrations?
+    return 'Can only auto-accept pending registrations or first position on waiting list' unless competing_status_pending? || (competing_status_waiting_list? && waiting_list_position == 1)
+    return "Competition has reached auto_accept_disable_threshold of #{competition.auto_accept_disable_threshold} registrations" if competition.auto_accept_threshold_reached?
+    return 'Cant auto-accept while registration is not open' unless competition.registration_currently_open?
+  end
+
+  private def log_auto_accept_failure(reason)
+    add_history_entry(
+      { auto_accept_failure_reason: reason },
+      'System',
+      'Auto accept',
+      'System reject',
+    )
+  end
+
+  private def build_auto_accept_payload
+    status = if competition.registration_full_and_accepted? && competing_status_pending?
+              Registrations::Helper::STATUS_WAITING_LIST
+            else
+              Registrations::Helper::STATUS_ACCEPTED
+            end
+
+    { user_id: user_id, competing: { status: status } }.with_indifferent_access
   end
 end
