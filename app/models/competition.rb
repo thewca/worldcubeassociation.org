@@ -2283,6 +2283,36 @@ class Competition < ApplicationRecord
     xero_dues_payer&.is_combined_invoice || false
   end
 
+  def form_announcement_data
+    {
+      isAnnounced: self.announced?,
+      announcedBy: self.announced_by_user&.name,
+      announcedAt: self.announced_at&.iso8601,
+      isCancelled: self.cancelled?,
+      canBeCancelled: self.can_be_cancelled?,
+      cancelledBy: self.cancelled_by_user&.name,
+      cancelledAt: self.cancelled_at&.iso8601,
+      isRegistrationPast: self.registration_past?,
+      isRegistrationFull: self.registration_full?,
+      canCloseFullRegistration: self.orga_can_close_reg_full_limit?,
+    }
+  end
+
+  def form_confirmation_data(for_user)
+    {
+      isConfirmed: self.confirmed?,
+      canConfirm: for_user.can_confirm_competition?(self),
+      isVisible: self.showAtAll?,
+      cannotDeleteReason: for_user.get_cannot_delete_competition_reason(self),
+    }
+  end
+
+  def form_user_preferences(for_user)
+    {
+      isReceivingNotifications: self.receiving_registration_emails?(for_user.id),
+    }
+  end
+
   def to_form_data
     {
       # TODO: enable this once we have persistent IDs
@@ -2372,10 +2402,6 @@ class Competition < ApplicationRecord
         "mainEventId" => main_event_id,
       },
       "remarks" => remarks,
-      "admin" => {
-        "isConfirmed" => confirmed?,
-        "isVisible" => showAtAll?,
-      },
       "cloning" => {
         "fromId" => being_cloned_from_id,
         "cloneTabs" => clone_tabs || false,
@@ -2481,10 +2507,6 @@ class Competition < ApplicationRecord
         "mainEventId" => errors[:main_event_id],
       },
       "remarks" => errors[:remarks],
-      "admin" => {
-        "isConfirmed" => errors[:confirmed_at],
-        "isVisible" => errors[:showAtAll],
-      },
       "cloning" => {
         "fromId" => errors[:being_cloned_from_id],
         "cloneTabs" => being_cloned_from_id.present? ? being_cloned_from&.association_errors(:tabs) : errors[:clone_tabs],
@@ -2589,8 +2611,6 @@ class Competition < ApplicationRecord
       guests_per_registration_limit: form_data.dig('registration', 'guestsPerRegistration'),
       events_per_registration_limit: form_data.dig('eventRestrictions', 'eventLimitation', 'perRegistrationLimit'),
       force_comment_in_registration: form_data.dig('registration', 'forceComment'),
-      confirmed: form_data.dig('admin', 'isConfirmed'),
-      showAtAll: form_data.dig('admin', 'isVisible'),
       being_cloned_from_id: form_data.dig('cloning', 'fromId'),
       clone_tabs: form_data.dig('cloning', 'cloneTabs'),
     }
