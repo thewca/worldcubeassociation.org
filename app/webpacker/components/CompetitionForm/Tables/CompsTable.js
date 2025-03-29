@@ -6,8 +6,7 @@ import {
 import I18n from '../../../lib/i18n';
 import { events } from '../../../lib/wca-data.js.erb';
 import useToggleState from '../../../lib/hooks/useToggleState';
-import { useStore } from '../../../lib/providers/StoreProvider';
-import { useFormObject } from '../../wca/FormBuilder/provider/FormObjectProvider';
+import { useSectionDisabled } from '../../wca/FormBuilder/provider/FormSectionProvider';
 
 function NotConfirmedIcon() {
   return (
@@ -81,10 +80,7 @@ function CompsTableHeaderRow({ showEvents }) {
  * @constructor
  */
 function CompsTableCompRow({ comp, action, showEvents }) {
-  const { isAdminView } = useStore();
-  const { admin: { isConfirmed } } = useFormObject();
-
-  const formDisabled = isConfirmed && !isAdminView;
+  const sectionDisabled = useSectionDisabled();
 
   return (
     <Table.Row warning={!comp.danger} error={comp.danger}>
@@ -96,7 +92,7 @@ function CompsTableCompRow({ comp, action, showEvents }) {
           <br />
           <Button
             size="mini"
-            disabled={formDisabled}
+            disabled={sectionDisabled}
             onClick={() => action.onClick(comp)}
           >
             {action.label}

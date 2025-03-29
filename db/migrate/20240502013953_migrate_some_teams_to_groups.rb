@@ -1,3 +1,4 @@
+# rubocop:disable all
 # frozen_string_literal: true
 
 class MigrateSomeTeamsToGroups < ActiveRecord::Migration[7.1]

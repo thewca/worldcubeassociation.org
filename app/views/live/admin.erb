@@ -1,0 +1,5 @@
+<% provide(:title, @round.name) %>
+
+<%= render layout: 'competitions/nav' do %>
+  <%= react_component('Live/Admin/Results', { competitionId: @competition_id, competitors: @competitors, roundId: @round.id, eventId: @event_id }) %>
+<% end %>

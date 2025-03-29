@@ -11,9 +11,10 @@ class FileSizeValidator < ActiveModel::EachValidator
   RESERVED_OPTIONS = [:minimum, :maximum, :within, :is, :tokenizer, :too_short, :too_long].freeze
 
   def initialize(options)
-    range = (options.delete(:in) || options.delete(:within))
+    range = options.delete(:in) || options.delete(:within)
     if range
       raise ArgumentError.new(":in and :within must be a Range") unless range.is_a?(Range)
+
       options[:minimum] = range.begin
       options[:maximum] = range.end
       options[:maximum] -= 1 if range.exclude_end?
@@ -25,16 +26,12 @@ class FileSizeValidator < ActiveModel::EachValidator
   def check_validity!
     keys = CHECKS.keys & options.keys
 
-    if keys.empty?
-      raise ArgumentError.new('Range unspecified. Specify the :within, :maximum, :minimum, or :is option.')
-    end
+    raise ArgumentError.new('Range unspecified. Specify the :within, :maximum, :minimum, or :is option.') if keys.empty?
 
     keys.each do |key|
       value = options[key]
 
-      unless value.is_a?(Integer) && value >= 0
-        raise ArgumentError.new(":#{key} must be a nonnegative Integer")
-      end
+      raise ArgumentError.new(":#{key} must be a nonnegative Integer") unless value.is_a?(Integer) && value >= 0
     end
   end
 

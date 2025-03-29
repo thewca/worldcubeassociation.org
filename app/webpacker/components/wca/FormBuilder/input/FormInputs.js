@@ -23,8 +23,7 @@ import {
   useSectionDisabled,
   useSections,
 } from '../provider/FormSectionProvider';
-import { useFormObjectSection, useFormSectionUpdateAction } from '../EditForm';
-import { useFormContext } from '../provider/FormObjectProvider';
+import { useFormContext, useFormObjectSection, useFormUpdateAction } from '../provider/FormObjectProvider';
 
 function snakifyId(id, section = []) {
   const idParts = [...section, id];
@@ -114,7 +113,7 @@ const wrapInput = (
   const sectionAllowDisabledOverride = useSectionAllowDisabledOverride();
 
   const formValues = useFormObjectSection();
-  const updateFormValue = useFormSectionUpdateAction();
+  const updateFormValue = useFormUpdateAction();
 
   const inputProps = additionalPropNames.reduce((acc, propName) => ({
     ...acc,
@@ -122,8 +121,8 @@ const wrapInput = (
   }), {});
 
   const onChange = useCallback((e, { [inputValueKey]: newValue }) => {
-    updateFormValue(props.id, newValue);
-  }, [updateFormValue, props.id]);
+    updateFormValue(props.id, newValue, section);
+  }, [updateFormValue, props.id, section]);
 
   let value = formValues[props.id];
 
@@ -204,9 +203,10 @@ export const InputTextArea = wrapInput((props) => (
 ), [], '');
 
 export const InputNumber = wrapInput((props) => {
-  const onChangeNumber = useCallback((e, { value: newValue }) => {
-    const convertedNumber = Number(newValue);
-    props.onChange(e, { value: convertedNumber });
+  const onChangeNumber = useCallback((e, { value: inputValue }) => {
+    const setToNull = props.nullable && inputValue === '';
+    const processedValue = setToNull ? null : Number(inputValue);
+    props.onChange(e, { value: processedValue });
   }, [props]);
 
   return (
@@ -222,7 +222,7 @@ export const InputNumber = wrapInput((props) => {
       step={props.step}
     />
   );
-}, ['attachedLabel', 'min', 'max', 'step']);
+}, ['attachedLabel', 'min', 'max', 'step', 'nullable']);
 
 export const InputDate = wrapInput((props) => {
   const onChangeInternal = useCallback((isoDate) => {

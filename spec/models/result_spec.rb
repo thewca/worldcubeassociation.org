@@ -100,7 +100,7 @@ RSpec.describe Result do
 
           it "missing solves" do
             result = build_result(value1: 42, value2: 43, value3: 44, value4: 0, value5: 0, best: 42, average: 44)
-            expect(result.average_is_not_computable_reason).to eq nil
+            expect(result.average_is_not_computable_reason).to be nil
             expect(result.compute_correct_average).to eq 0
             expect(result).to be_invalid(average: ["should be 0"])
           end
@@ -389,7 +389,7 @@ RSpec.describe Result do
       def result_with_n_solves(n, options)
         result = FactoryBot.build :result, options
         (1..5).each do |i|
-          result.send "value#{i}=", i <= n ? 42 : 0
+          result.send :"value#{i}=", i <= n ? 42 : 0
         end
         result
       end

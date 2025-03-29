@@ -42,7 +42,7 @@ RSpec.describe Post do
       post.update!(tags: "wic")
       expect(Post.find(post.id).tags_array).to match_array %w(wic)
 
-      expect(post.update(tags: "wic,test tag with spaces")).to eq false
+      expect(post.update(tags: "wic,test tag with spaces")).to be false
       expect(post).to be_invalid_with_errors('post_tags.tag': ["only allows English letters, numbers, hyphens, and '+'"])
 
       expect(Post.find(post.id).tags_array).to match_array %w(wic)

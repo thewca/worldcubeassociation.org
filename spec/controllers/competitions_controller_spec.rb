@@ -6,112 +6,6 @@ RSpec.describe CompetitionsController do
   let(:competition) { FactoryBot.create(:competition, :with_delegate, :with_organizer, :registration_open, :with_valid_schedule, :with_guest_limit, :with_meaningless_event_limit, name: "my long competition name above 32 chars 2023") }
   let(:future_competition) { FactoryBot.create(:competition, :with_delegate, :ongoing) }
 
-  describe 'GET #index' do
-    describe "selecting events" do
-      let!(:competition1) { FactoryBot.create(:competition, :confirmed, :visible, starts: 1.week.from_now, events: Event.where(id: %w(222 333 444 555 666))) }
-      let!(:competition2) { FactoryBot.create(:competition, :confirmed, :visible, starts: 2.week.from_now, events: Event.where(id: %w(333 444 555 pyram clock))) }
-      let!(:competition3) { FactoryBot.create(:competition, :confirmed, :visible, starts: 3.week.from_now, events: Event.where(id: %w(222 333 skewb 666 pyram sq1))) }
-      let!(:competition4) { FactoryBot.create(:competition, :confirmed, :visible, starts: 4.week.from_now, events: Event.where(id: %w(333 pyram 666 777 clock))) }
-
-      context "when no event is selected" do
-        it "competitions are sorted by start date" do
-          get :index
-          expect(assigns(:competitions)).to eq [competition1, competition2, competition3, competition4]
-        end
-      end
-
-      context "when events are selected" do
-        it "only competitions matching all of the selected events are shown" do
-          get :index, params: { event_ids: %w(333 pyram clock) }
-          expect(assigns(:competitions)).to eq [competition2, competition4]
-        end
-
-        it "competitions are still sorted by start date" do
-          get :index, params: { event_ids: ["333"] }
-          expect(assigns(:competitions)).to eq [competition1, competition2, competition3, competition4]
-        end
-
-        # See: https://github.com/thewca/worldcubeassociation.org/issues/472
-        it "works when event_ids are passed as a hash instead of an array (facebook redirection)" do
-          get :index, params: { event_ids: { "0" => "333", "1" => "pyram", "2" => "clock" } }
-          expect(assigns(:competitions)).to eq [competition2, competition4]
-        end
-      end
-    end
-
-    describe "selecting present/past/recent/by_announcement/custom competitions" do
-      let!(:past_comp1) { FactoryBot.create(:competition, :confirmed, :visible, starts: 1.year.ago) }
-      let!(:past_comp2) { FactoryBot.create(:competition, :confirmed, :visible, starts: 3.years.ago) }
-      let!(:in_progress_comp1) { FactoryBot.create(:competition, :confirmed, :visible, starts: Date.today, ends: 1.day.from_now) }
-      let!(:in_progress_comp2) { FactoryBot.create(:competition, :confirmed, :visible, starts: Date.today, ends: Date.today) }
-      let!(:upcoming_comp1) { FactoryBot.create(:competition, :confirmed, :visible, starts: 2.weeks.from_now) }
-      let!(:upcoming_comp2) { FactoryBot.create(:competition, :confirmed, :visible, starts: 3.weeks.from_now) }
-
-      context "when present is selected" do
-        before do
-          get :index, params: { state: :present }
-        end
-
-        it "shows only competitions being in progress or upcoming" do
-          expect(assigns(:competitions)).to match_array [in_progress_comp1, in_progress_comp2, upcoming_comp1, upcoming_comp2]
-        end
-
-        it "upcoming competitions are sorted ascending by date" do
-          expect(assigns(:competitions).last(2)).to eq [upcoming_comp1, upcoming_comp2]
-        end
-      end
-
-      context "when past is selected" do
-        it "when all years are selected, shows all past competitions" do
-          get :index, params: { state: :past, year: "all years" }
-          expect(assigns(:competitions)).to match [past_comp1, past_comp2]
-        end
-
-        it "when a single year is selected, shows past competitions from this year" do
-          get :index, params: { state: :past, year: past_comp1.start_date.year }
-          expect(assigns(:competitions)).to eq [past_comp1]
-        end
-
-        it "competitions are sorted descending by date" do
-          get :index, params: { state: :past, year: "all years" }
-          expect(assigns(:competitions)).to eq [past_comp1, past_comp2]
-        end
-      end
-
-      context "when recent is selected" do
-        before do
-          get :index, params: { state: :recent }
-        end
-
-        it "shows in progress competition that ends today" do
-          expect(assigns(:competitions)).to match_array [in_progress_comp2]
-        end
-      end
-
-      context "when by_announcement is selected" do
-        before do
-          get :index, params: { state: :by_announcement }
-          upcoming_comp1.update_column(:announced_at, 2.month.ago)
-          upcoming_comp2.update_column(:announced_at, 1.month.ago)
-        end
-
-        it "competitions are sorted by announcement_date" do
-          expect(assigns(:competitions).first(2)).to eq [upcoming_comp2, upcoming_comp1]
-        end
-      end
-
-      context "when custom is selected" do
-        before do
-          get :index, params: { state: :custom, from_date: 1.day.from_now, to_date: 2.weeks.from_now }
-        end
-
-        it "shows competitions overlapping the given date range" do
-          expect(assigns(:competitions)).to match_array [in_progress_comp1, upcoming_comp1]
-        end
-      end
-    end
-  end
-
   describe 'GET #show' do
     context 'when not signed in' do
       sign_out
@@ -119,7 +13,7 @@ RSpec.describe CompetitionsController do
       it 'redirects to the old php page' do
         competition.update_column(:showAtAll, true)
         get :show, params: { id: competition.id }
-        expect(response.status).to eq 200
+        expect(response).to have_http_status :ok
         expect(assigns(:competition)).to eq competition
       end
 
@@ -217,12 +111,12 @@ RSpec.describe CompetitionsController do
 
       it 'cannot see unconfirmed nearby competitions' do
         get :nearby_competitions_json, params: my_competition.serializable_hash
-        expect(JSON.parse(response.body)).to eq []
+        expect(response.parsed_body).to eq []
         other_competition.organizers = [organizer]
         other_competition.confirmed = true
         other_competition.save!
         get :nearby_competitions_json, params: my_competition.serializable_hash
-        json = JSON.parse(response.body)
+        json = response.parsed_body
         expect(json.length).to eq 1
         expect(json.first["id"]).to eq other_competition.id
       end
@@ -235,7 +129,7 @@ RSpec.describe CompetitionsController do
 
       it "can see unconfirmed nearby competitions" do
         get :nearby_competitions_json, params: my_competition.serializable_hash
-        json = JSON.parse(response.body)
+        json = response.parsed_body
         expect(json.length).to eq 1
         expect(json.first["id"]).to eq other_competition.id
       end
@@ -282,6 +176,7 @@ RSpec.describe CompetitionsController do
 
     context 'when signed in as a delegate' do
       let(:delegate) { FactoryBot.create :delegate }
+
       before :each do
         sign_in delegate
       end
@@ -292,7 +187,7 @@ RSpec.describe CompetitionsController do
         creation_params = build_competition_update(Competition.new, name: "Test 2015", venue: { countryId: "USA" }, staff: { staffDelegateIds: [delegate.id], organizerIds: [organizer.id] }, website: { usesWcaRegistration: false })
         expect do
           post :create, params: creation_params, as: :json
-        end.to change { enqueued_jobs.size }.by(1)
+        end.to change(enqueued_jobs, :size).by(1)
         expect(response).to be_successful
         new_comp = Competition.find("Test2015")
         expect(new_comp.id).to eq "Test2015"
@@ -305,7 +200,7 @@ RSpec.describe CompetitionsController do
         creation_params = build_competition_update(competition, staff: { staffDelegateIds: [delegate.id] }, eventRestrictions: { mainEventId: nil })
         post :create, params: creation_params, as: :json
         expect(response).to have_http_status(:bad_request)
-        errors = JSON.parse(response.body)
+        errors = response.parsed_body
         expect(errors['name']).to eq ["has already been taken"]
       end
 
@@ -327,9 +222,9 @@ RSpec.describe CompetitionsController do
         expect(new_comp.name).to eq ""
         # When cloning a competition, we don't want to clone its showAtAll,
         # confirmed, and results_posted_at attributes.
-        expect(new_comp.showAtAll).to eq false
-        expect(new_comp.confirmed?).to eq false
-        expect(new_comp.results_posted_at).to eq nil
+        expect(new_comp.showAtAll).to be false
+        expect(new_comp.confirmed?).to be false
+        expect(new_comp.results_posted_at).to be nil
         # We don't want to clone its dates.
         expect(new_comp.start_date).to be_nil
         expect(new_comp.end_date).to be_nil
@@ -343,13 +238,13 @@ RSpec.describe CompetitionsController do
         # the delegate doing the cloning.
         expect(new_comp.delegates.sort_by(&:id)).to eq((competition.delegates + [delegate]).sort_by(&:id))
         # Assert competition has guest limit
-        expect(competition.guests_per_registration_limit_enabled?).to eq true
+        expect(competition.guests_per_registration_limit_enabled?).to be true
         # Guest limit is cloned
         expect(new_comp.guests_enabled).to eq competition.guests_enabled
         expect(new_comp.guest_entry_status).to eq competition.guest_entry_status
         expect(new_comp.guests_per_registration_limit).to eq competition.guests_per_registration_limit
         # Source competition has event limit
-        expect(competition.events_per_registration_limit_enabled?).to eq true
+        expect(competition.events_per_registration_limit_enabled?).to be true
         # Event limit is NOT cloned
         expect(new_comp.event_restrictions).not_to eq competition.event_restrictions
         expect(new_comp.event_restrictions_reason).not_to eq competition.event_restrictions_reason
@@ -379,7 +274,7 @@ RSpec.describe CompetitionsController do
       it 'can confirm competition' do
         put :confirm, params: { competition_id: competition }
         expect(response).to be_successful
-        expect(competition.reload.confirmed?).to eq true
+        expect(competition.reload.confirmed?).to be true
       end
 
       it 'saves staff_delegate_ids' do
@@ -396,7 +291,7 @@ RSpec.describe CompetitionsController do
         invalid_competition_delegate = CompetitionDelegate.last
         update_params = build_competition_update(competition, name: competition.name)
         patch :update, params: update_params, as: :json
-        expect(CompetitionDelegate.find_by_id(invalid_competition_delegate.id)).to be_nil
+        expect(CompetitionDelegate.find_by(id: invalid_competition_delegate.id)).to be_nil
       end
 
       it "saving removes nonexistent organizers" do
@@ -404,7 +299,7 @@ RSpec.describe CompetitionsController do
         invalid_competition_organizer = CompetitionOrganizer.last
         update_params = build_competition_update(competition, name: competition.name)
         patch :update, params: update_params, as: :json
-        expect(CompetitionOrganizer.find_by_id(invalid_competition_organizer.id)).to be_nil
+        expect(CompetitionOrganizer.find_by(id: invalid_competition_organizer.id)).to be_nil
       end
 
       it "can change competition id" do
@@ -434,6 +329,7 @@ RSpec.describe CompetitionsController do
 
     context 'when signed in as organizer' do
       let(:organizer) { FactoryBot.create(:delegate) }
+
       before :each do
         competition.organizers << organizer
         future_competition.organizers << organizer
@@ -446,7 +342,7 @@ RSpec.describe CompetitionsController do
         update_params = build_competition_update(future_competition, staff: { staffDelegateIds: [fake_delegate.id] })
         post :update, params: update_params, as: :json
         expect(response).to have_http_status(:bad_request)
-        errors = JSON.parse(response.body)
+        errors = response.parsed_body
         expect(errors['staff']['staffDelegateIds']).to eq ["are not all Delegates"]
         expect(errors['staff']['traineeDelegateIds']).to eq ["are not all Delegates"]
         future_competition.reload
@@ -464,7 +360,7 @@ RSpec.describe CompetitionsController do
       it 'cannot confirm competition' do
         put :confirm, params: { competition_id: competition }
         expect(response).to have_http_status(:forbidden)
-        expect(competition.reload.confirmed?).to eq false
+        expect(competition.reload.confirmed?).to be false
       end
 
       it "who is also the delegate can remove oneself as delegate" do
@@ -488,7 +384,7 @@ RSpec.describe CompetitionsController do
         update_params = build_competition_update(competition, staff: { organizerIds: [original_organizer.id] })
         patch :update, params: update_params, as: :json
         expect(response).to have_http_status(:bad_request)
-        errors = JSON.parse(response.body)
+        errors = response.parsed_body
         expect(errors['staff']['staffDelegateIds']).to eq ["You cannot demote yourself"]
         expect(errors['staff']['traineeDelegateIds']).to eq ["You cannot demote yourself"]
         expect(errors['staff']['organizerIds']).to eq ["You cannot demote yourself"]
@@ -542,16 +438,16 @@ RSpec.describe CompetitionsController do
         competition.update(showAtAll: false)
         delete :destroy, params: { id: competition }
         expect(response).to be_successful
-        expect(Competition.find_by_id(competition.id)).to be_nil
+        expect(Competition.find_by(id: competition.id)).to be_nil
       end
 
       it "board member cannot delete a visible competition" do
         competition.update(showAtAll: true)
         delete :destroy, params: { id: competition }
         expect(response).to have_http_status(:forbidden)
-        parsed_body = JSON.parse(response.body)
+        parsed_body = response.parsed_body
         expect(parsed_body["error"]).to eq "Cannot delete a competition that is publicly visible."
-        expect(Competition.find_by_id(competition.id)).not_to be_nil
+        expect(Competition.find_by(id: competition.id)).not_to be_nil
       end
     end
 
@@ -559,6 +455,7 @@ RSpec.describe CompetitionsController do
       let(:delegate) { FactoryBot.create(:delegate) }
       let(:organizer1) { FactoryBot.create(:user) }
       let(:organizer2) { FactoryBot.create(:user) }
+
       before :each do
         competition.delegates << delegate
         sign_in delegate
@@ -571,7 +468,7 @@ RSpec.describe CompetitionsController do
         update_params = build_competition_update(competition, staff: { organizerIds: organizers.map(&:id) })
         expect do
           patch :update, params: update_params, as: :json
-        end.to change { enqueued_jobs.size }.by(1)
+        end.to change(enqueued_jobs, :size).by(1)
       end
 
       it "notifies organizers correctly when id changes" do
@@ -581,7 +478,7 @@ RSpec.describe CompetitionsController do
         expect(CompetitionsMailer).to receive(:notify_organizer_of_addition_to_competition).with(competition.delegates.last, competition, new_organizer).and_call_original
         expect do
           patch :update, params: update_params, as: :json
-        end.to change { enqueued_jobs.size }.by(1)
+        end.to change(enqueued_jobs, :size).by(1)
       end
 
       it "removes an organizer and expects him to receive a notification email" do
@@ -590,29 +487,29 @@ RSpec.describe CompetitionsController do
         update_params = build_competition_update(competition, staff: { organizerIds: [competition.organizers.first.id, organizer1.id] })
         expect do
           patch :update, params: update_params, as: :json
-        end.to change { enqueued_jobs.size }.by(1)
+        end.to change(enqueued_jobs, :size).by(1)
       end
 
       it "can confirm a competition and expects wcat and organizers to receive a notification email" do
-        competition.update(start_date: 5.week.from_now, end_date: 5.week.from_now)
+        competition.update(start_date: 5.weeks.from_now, end_date: 5.weeks.from_now)
         expect(CompetitionsMailer).to receive(:notify_organizer_of_confirmed_competition).with(competition.delegates.last, competition, competition.organizers.last).and_call_original
         expect(CompetitionsMailer).to receive(:notify_wcat_of_confirmed_competition).with(competition.delegates.last, competition).and_call_original
         expect do
           put :confirm, params: { competition_id: competition }
-        end.to change { enqueued_jobs.size }.by(2)
+        end.to change(enqueued_jobs, :size).by(2)
         expect(response).to be_successful
-        expect(competition.reload.confirmed?).to eq true
+        expect(competition.reload.confirmed?).to be true
       end
 
       it "cannot confirm a competition that is not at least 28 days in the future" do
-        competition.update(start_date: 26.day.from_now, end_date: 26.day.from_now)
+        competition.update(start_date: 26.days.from_now, end_date: 26.days.from_now)
         put :confirm, params: { competition_id: competition }
         expect(response).to have_http_status(:bad_request)
-        expect(competition.reload.confirmed?).to eq false
+        expect(competition.reload.confirmed?).to be false
       end
 
       it "can confirm a competition that is having advancement conditions" do
-        competition.update(start_date: 29.day.from_now, end_date: 29.day.from_now)
+        competition.update(start_date: 29.days.from_now, end_date: 29.days.from_now)
         competition.competition_events[0].rounds.destroy_all!
         competition.competition_events[0].rounds.create!(
           format: competition.competition_events[0].event.preferred_formats.first.format,
@@ -638,7 +535,7 @@ RSpec.describe CompetitionsController do
         )
         put :confirm, params: { competition_id: competition }
         expect(response).to be_successful
-        expect(competition.reload.confirmed?).to eq true
+        expect(competition.reload.confirmed?).to be true
       end
 
       it "cannot confirm a competition that is not having advancement conditions" do
@@ -655,7 +552,7 @@ RSpec.describe CompetitionsController do
           scramble_set_count: 1,
         )
         put :confirm, params: { competition_id: competition }
-        expect(competition.reload.confirmed?).to eq false
+        expect(competition.reload.confirmed?).to be false
       end
 
       it "cannot delete not confirmed, but visible competition" do
@@ -664,9 +561,9 @@ RSpec.describe CompetitionsController do
         # deletion of (not confirmed and not visible) competitions.
         delete :destroy, params: { id: competition }
         expect(response).to have_http_status(:forbidden)
-        errors = JSON.parse(response.body)
+        errors = response.parsed_body
         expect(errors['error']).to eq "Cannot delete a competition that is publicly visible."
-        expect(Competition.find_by_id(competition.id)).not_to be_nil
+        expect(Competition.find_by(id: competition.id)).not_to be_nil
       end
 
       it "cannot delete confirmed competition" do
@@ -675,9 +572,9 @@ RSpec.describe CompetitionsController do
         # delegates deleting unconfirmed competitions.
         delete :destroy, params: { id: competition }
         expect(response).to have_http_status(:forbidden)
-        errors = JSON.parse(response.body)
+        errors = response.parsed_body
         expect(errors['error']).to eq "Cannot delete a confirmed competition."
-        expect(Competition.find_by_id(competition.id)).not_to be_nil
+        expect(Competition.find_by(id: competition.id)).not_to be_nil
       end
 
       it "can delete not confirmed and not visible competition" do
@@ -685,7 +582,7 @@ RSpec.describe CompetitionsController do
         # Attempt to delete competition. This should work, because we allow
         # deletion of (not confirmed and not visible) competitions.
         delete :destroy, params: { id: competition }
-        expect(Competition.find_by_id(competition.id)).to be_nil
+        expect(Competition.find_by(id: competition.id)).to be_nil
         expect(response).to be_successful
       end
 
@@ -772,6 +669,7 @@ RSpec.describe CompetitionsController do
       let(:trainee_delegate) { FactoryBot.create(:trainee_delegate) }
       let(:organizer1) { FactoryBot.create(:user) }
       let(:organizer2) { FactoryBot.create(:user) }
+
       before :each do
         competition.delegates << delegate
         competition.delegates << trainee_delegate
@@ -785,7 +683,7 @@ RSpec.describe CompetitionsController do
         update_params = build_competition_update(competition, staff: { organizerIds: organizers.map(&:id) })
         expect do
           patch :update, params: update_params, as: :json
-        end.to change { enqueued_jobs.size }.by(1)
+        end.to change(enqueued_jobs, :size).by(1)
       end
 
       it "notifies organizers correctly when id changes" do
@@ -795,7 +693,7 @@ RSpec.describe CompetitionsController do
         expect(CompetitionsMailer).to receive(:notify_organizer_of_addition_to_competition).with(competition.trainee_delegates.last, competition, new_organizer).and_call_original
         expect do
           patch :update, params: update_params, as: :json
-        end.to change { enqueued_jobs.size }.by(1)
+        end.to change(enqueued_jobs, :size).by(1)
       end
 
       it "removes an organizer and expects him to receive a notification email" do
@@ -804,15 +702,15 @@ RSpec.describe CompetitionsController do
         update_params = build_competition_update(competition, staff: { organizerIds: [competition.organizers.first.id, organizer1.id] })
         expect do
           patch :update, params: update_params, as: :json
-        end.to change { enqueued_jobs.size }.by(1)
+        end.to change(enqueued_jobs, :size).by(1)
       end
 
       it "cannot confirm a competition" do
         competition.organizers << organizer1
-        competition.update(start_date: 5.week.from_now, end_date: 5.week.from_now)
+        competition.update(start_date: 5.weeks.from_now, end_date: 5.weeks.from_now)
         put :confirm, params: { competition_id: competition }
         expect(response).to have_http_status(:forbidden)
-        expect(competition.reload.confirmed?).to eq false
+        expect(competition.reload.confirmed?).to be false
       end
 
       it "cannot delete not confirmed, but visible competition" do
@@ -821,9 +719,9 @@ RSpec.describe CompetitionsController do
         # deletion of (not confirmed and not visible) competitions.
         delete :destroy, params: { id: competition }
         expect(response).to have_http_status(:forbidden)
-        errors = JSON.parse(response.body)
+        errors = response.parsed_body
         expect(errors['error']).to eq "Cannot delete a competition that is publicly visible."
-        expect(Competition.find_by_id(competition.id)).not_to be_nil
+        expect(Competition.find_by(id: competition.id)).not_to be_nil
       end
 
       it "cannot delete confirmed competition" do
@@ -832,9 +730,9 @@ RSpec.describe CompetitionsController do
         # delegates deleting unconfirmed competitions.
         delete :destroy, params: { id: competition }
         expect(response).to have_http_status(:forbidden)
-        errors = JSON.parse(response.body)
+        errors = response.parsed_body
         expect(errors['error']).to eq "Cannot delete a confirmed competition."
-        expect(Competition.find_by_id(competition.id)).not_to be_nil
+        expect(Competition.find_by(id: competition.id)).not_to be_nil
       end
 
       it "can delete not confirmed and not visible competition" do
@@ -842,7 +740,7 @@ RSpec.describe CompetitionsController do
         # Attempt to delete competition. This should work, because we allow
         # deletion of (not confirmed and not visible) competitions.
         delete :destroy, params: { id: competition }
-        expect(Competition.find_by_id(competition.id)).to be_nil
+        expect(Competition.find_by(id: competition.id)).to be_nil
         expect(response).to be_successful
       end
 
@@ -925,6 +823,7 @@ RSpec.describe CompetitionsController do
 
     context "when signed in as delegate for a different competition" do
       let(:delegate) { FactoryBot.create(:delegate) }
+
       before :each do
         sign_in delegate
       end
@@ -934,7 +833,7 @@ RSpec.describe CompetitionsController do
         # Attempt to delete competition. This should not work, because we're
         # not the delegate for this competition.
         delete :destroy, params: { id: competition }
-        expect(Competition.find_by_id(competition.id)).not_to be_nil
+        expect(Competition.find_by(id: competition.id)).not_to be_nil
       end
     end
   end
@@ -951,7 +850,7 @@ RSpec.describe CompetitionsController do
         expect(CompetitionsMailer).to receive(:notify_organizer_of_announced_competition).with(competition, competition.organizers.last).and_call_original
         expect do
           put :announce, params: { competition_id: competition }
-        end.to change { enqueued_jobs.size }.by(1)
+        end.to change(enqueued_jobs, :size).by(1)
         competition.reload
         expect(competition.announced_at.to_f).to be < Time.now.to_f
         expect(competition.announced_by).to eq wcat_member.id
@@ -961,8 +860,10 @@ RSpec.describe CompetitionsController do
 
   describe 'PUT #cancel_or_uncancel' do
     let(:competition) { FactoryBot.create(:competition, :confirmed, :announced, :future) }
+
     context 'when signed in as WCAT' do
       let(:wcat_member) { FactoryBot.create(:user, :wcat_member) }
+
       before :each do
         sign_in wcat_member
       end
@@ -971,32 +872,33 @@ RSpec.describe CompetitionsController do
         comp = FactoryBot.create(:competition, :announced)
         put :cancel_or_uncancel, params: { competition_id: comp }
         expect(response).to have_http_status(:bad_request)
-        expect(comp.reload.cancelled?).to eq false
+        expect(comp.reload.cancelled?).to be false
       end
 
       it "cannot cancel unannounced competition" do
         comp = FactoryBot.create(:competition, :confirmed)
         put :cancel_or_uncancel, params: { competition_id: comp }
         expect(response).to have_http_status(:bad_request)
-        expect(comp.reload.cancelled?).to eq false
+        expect(comp.reload.cancelled?).to be false
       end
 
       it "can cancel competition" do
         put :cancel_or_uncancel, params: { competition_id: competition }
         expect(response).to be_successful
-        expect(competition.reload.cancelled?).to eq true
+        expect(competition.reload.cancelled?).to be true
       end
 
       it "can uncancel competition" do
         cancelled_competition = FactoryBot.create(:competition, :cancelled, :future)
         put :cancel_or_uncancel, params: { competition_id: cancelled_competition, undo: true }
         expect(response).to be_successful
-        expect(cancelled_competition.reload.cancelled?).to eq false
+        expect(cancelled_competition.reload.cancelled?).to be false
       end
     end
 
     context 'when signed in as orga' do
       let(:orga) { FactoryBot.create(:user) }
+
       before :each do
         sign_in orga
       end
@@ -1005,14 +907,14 @@ RSpec.describe CompetitionsController do
         competition.organizers << orga
         put :cancel_or_uncancel, params: { competition_id: competition }
         expect(response).to have_http_status(:forbidden)
-        expect(competition.reload.cancelled?).to eq false
+        expect(competition.reload.cancelled?).to be false
       end
 
       it 'cannot uncancel competition' do
         cancelled_competition = FactoryBot.create(:competition, :cancelled, organizers: [orga])
         put :cancel_or_uncancel, params: { competition_id: cancelled_competition }
         expect(response).to have_http_status(:forbidden)
-        expect(cancelled_competition.reload.cancelled?).to eq true
+        expect(cancelled_competition.reload.cancelled?).to be true
       end
     end
   end
@@ -1020,6 +922,7 @@ RSpec.describe CompetitionsController do
   describe 'POST #orga_close_reg_when_full_limit' do
     context 'organiser trying to close registration via button' do
       let(:orga) { FactoryBot.create(:user) }
+
       before :each do
         sign_in orga
       end
@@ -1075,7 +978,7 @@ RSpec.describe CompetitionsController do
         expect(CompetitionsMailer).to receive(:notify_users_of_results_presence).and_call_original.exactly(4).times
         expect do
           post :post_results, params: { id: competition }
-        end.to change { enqueued_jobs.size }.by(4)
+        end.to change(enqueued_jobs, :size).by(4)
         competition.reload
         expect(competition.results_posted_at.to_f).to be < Time.now.to_f
         expect(competition.results_posted_by).to eq wrt_member.id
@@ -1093,7 +996,7 @@ RSpec.describe CompetitionsController do
         expect(CompetitionsMailer).to receive(:notify_users_of_id_claim_possibility).and_call_original.exactly(2).times
         expect do
           post :post_results, params: { id: competition }
-        end.to change { enqueued_jobs.size }.by(2)
+        end.to change(enqueued_jobs, :size).by(2)
       end
 
       it "assigns wca id when user matches one person in results" do
@@ -1143,17 +1046,17 @@ RSpec.describe CompetitionsController do
     end
   end
 
-  describe 'GET #my_competitions', clean_db_with_truncation: true do
+  describe 'GET #my_competitions', :clean_db_with_truncation do
     let(:delegate) { FactoryBot.create(:delegate) }
     let(:organizer) { FactoryBot.create(:user) }
-    let!(:future_competition1) { FactoryBot.create(:competition, :registration_open, starts: 5.week.from_now, organizers: [organizer], delegates: [delegate], events: Event.where(id: %w(222 333))) }
+    let!(:future_competition1) { FactoryBot.create(:competition, :registration_open, starts: 5.weeks.from_now, organizers: [organizer], delegates: [delegate], events: Event.where(id: %w(222 333))) }
     let!(:future_competition2) { FactoryBot.create(:competition, :registration_open, starts: 4.weeks.from_now, organizers: [organizer], events: Event.where(id: %w(222 333))) }
     let!(:future_competition3) { FactoryBot.create(:competition, :registration_open, starts: 3.weeks.from_now, organizers: [organizer], events: Event.where(id: %w(222 333))) }
     let!(:future_competition4) { FactoryBot.create(:competition, :registration_open, starts: 3.weeks.from_now, organizers: [], events: Event.where(id: %w(222 333))) }
     let!(:past_competition1) { FactoryBot.create(:competition, starts: 1.month.ago, organizers: [organizer], events: Event.where(id: %w(222 333))) }
-    let!(:past_competition2) { FactoryBot.create(:competition, starts: 2.month.ago, delegates: [delegate], events: Event.where(id: %w(222 333))) }
-    let!(:past_competition3) { FactoryBot.create(:competition, starts: 3.month.ago, delegates: [delegate], events: Event.where(id: %w(222 333))) }
-    let!(:past_competition4) { FactoryBot.create(:competition, :results_posted, starts: 4.month.ago, delegates: [delegate], events: Event.where(id: %w(222 333))) }
+    let!(:past_competition2) { FactoryBot.create(:competition, starts: 2.months.ago, delegates: [delegate], events: Event.where(id: %w(222 333))) }
+    let!(:past_competition3) { FactoryBot.create(:competition, starts: 3.months.ago, delegates: [delegate], events: Event.where(id: %w(222 333))) }
+    let!(:past_competition4) { FactoryBot.create(:competition, :results_posted, starts: 4.months.ago, delegates: [delegate], events: Event.where(id: %w(222 333))) }
     let!(:unscheduled_competition1) { FactoryBot.create(:competition, starts: nil, ends: nil, delegates: [delegate], events: Event.where(id: %w(222 333))) }
     let(:registered_user) { FactoryBot.create :user, name: "Jan-Ove Waldner" }
     let!(:registration1) { FactoryBot.create(:registration, :accepted, competition: future_competition1, user: registered_user) }
@@ -1281,16 +1184,16 @@ RSpec.describe CompetitionsController do
       end
 
       it 'bookmarks a competition' do
-        expect(user.is_bookmarked?(competition)).to eq false
+        expect(user.is_bookmarked?(competition)).to be false
         post :bookmark, params: { id: competition.id }
-        expect(user.is_bookmarked?(competition)).to eq true
+        expect(user.is_bookmarked?(competition)).to be true
       end
 
       it 'unbookmarks a competition' do
         post :bookmark, params: { id: competition.id }
-        expect(user.is_bookmarked?(competition)).to eq true
+        expect(user.is_bookmarked?(competition)).to be true
         post :unbookmark, params: { id: competition.id }
-        expect(user.is_bookmarked?(competition)).to eq false
+        expect(user.is_bookmarked?(competition)).to be false
       end
     end
   end
@@ -1340,7 +1243,7 @@ RSpec.describe CompetitionsController do
 
       it 'displays payment setup status' do
         get :payment_integration_setup, params: { competition_id: competition }
-        expect(response.status).to eq 200
+        expect(response).to have_http_status :ok
         expect(assigns(:competition)).to eq competition
       end
     end
@@ -1405,7 +1308,7 @@ RSpec.describe CompetitionsController do
       it 'displays the page' do
         # NOTE: we test the javascript part renders in the feature spec!
         get :edit_schedule, params: { id: competition }
-        expect(response.status).to eq 200
+        expect(response).to have_http_status :ok
         expect(assigns(:competition)).to eq competition
       end
     end

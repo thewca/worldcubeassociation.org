@@ -77,7 +77,7 @@ class Country < ApplicationRecord
   end
 
   def self.find_by_iso2(iso2)
-    c_values.select { |c| c.iso2 == iso2 }.first
+    c_values.find { |c| c.iso2 == iso2 }
   end
 
   def multiple_countries?

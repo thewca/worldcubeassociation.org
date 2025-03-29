@@ -4,8 +4,20 @@ class MediaController < ApplicationController
   before_action :authenticate_user!, except: [:index]
   before_action -> { redirect_to_root_unless_user(:can_approve_media?) }, except: [:index, :new, :create]
 
+  def index
+    params[:status] = "accepted"
+    params[:year] ||= Date.today.year
+    @media = get_media
+    render :index
+  end
+
   def new
     @medium = CompetitionMedium.new
+  end
+
+  def edit
+    @medium = find_medium
+    I18n.with_locale(:en) { render :edit }
   end
 
   def create
@@ -35,22 +47,10 @@ class MediaController < ApplicationController
     media
   end
 
-  def index
-    params[:status] = "accepted"
-    params[:year] ||= Date.today.year
-    @media = get_media
-    render :index
-  end
-
   def validate
     params[:status] ||= "pending"
     @media = get_media
     I18n.with_locale(:en) { render :validate }
-  end
-
-  def edit
-    @medium = find_medium
-    I18n.with_locale(:en) { render :edit }
   end
 
   def update

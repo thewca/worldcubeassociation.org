@@ -1,3 +1,4 @@
+# rubocop:disable all
 # frozen_string_literal: true
 
 class CreateUploadedJson < ActiveRecord::Migration[5.2]

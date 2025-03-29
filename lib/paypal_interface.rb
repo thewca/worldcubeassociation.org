@@ -41,9 +41,7 @@ module PaypalInterface
     end
 
     response.body['links'].each do |link|
-      if link['rel'] == "action_url"
-        return link['href']
-      end
+      return link['href'] if link['rel'] == "action_url"
     end
   end
 

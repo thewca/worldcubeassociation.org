@@ -21,7 +21,7 @@ module CacheAccess
       cached_entities
     else
       # Get Data for all uncached ids
-      uncached_entities = hydration_block.call(uncached_ids).map(&:deep_stringify_keys)
+      uncached_entities = yield(uncached_ids).map(&:deep_stringify_keys)
 
       # Write all new data into the cache
       hydrated_entries = uncached_entities.index_by do |item|

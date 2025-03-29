@@ -42,6 +42,7 @@ namespace :db do
       DbDumpHelper.dump_developer_db
     end
 
+    desc 'Generates a partial dump of our database containing only results and relevant stuff for statistics.'
     task public_results: :environment do
       DbDumpHelper.dump_results_db
     end
@@ -50,9 +51,7 @@ namespace :db do
   namespace :load do
     desc 'Download and import the publicly accessible database dump from the production server, use the reload parameter to replace an already existing DB without downtime'
     task :development, [:reload] => [:environment] do |_, args|
-      if EnvConfig.WCA_LIVE_SITE?
-        abort "This actions is disabled for the production server!"
-      end
+      abort "This actions is disabled for the production server!" if EnvConfig.WCA_LIVE_SITE?
 
       reload = args[:reload] || false
 
@@ -90,9 +89,7 @@ namespace :db do
             DatabaseDumper.mysql("SET unique_checks=0", working_db)
             DatabaseDumper.mysql("SET foreign_key_checks=0", working_db)
             DatabaseDumper.mysql("SET autocommit=0", working_db)
-            if Rails.env.development?
-              DatabaseDumper.mysql("SET GLOBAL innodb_flush_log_at_trx_commit=0", working_db)
-            end
+            DatabaseDumper.mysql("SET GLOBAL innodb_flush_log_at_trx_commit=0", working_db) if Rails.env.development?
 
             # Explicitly loading the schema is not necessary because the downloaded SQL dump file contains CREATE TABLE
             # definitions, so if we load the schema here the SOURCE command below would overwrite it anyways
@@ -102,9 +99,7 @@ namespace :db do
             DatabaseDumper.mysql("SET unique_checks=1", working_db)
             DatabaseDumper.mysql("SET foreign_key_checks=1", working_db)
             DatabaseDumper.mysql("SET autocommit=1", working_db)
-            if Rails.env.development?
-              DatabaseDumper.mysql("SET GLOBAL innodb_flush_log_at_trx_commit=1", working_db)
-            end
+            DatabaseDumper.mysql("SET GLOBAL innodb_flush_log_at_trx_commit=1", working_db) if Rails.env.development?
 
             DatabaseDumper.mysql("COMMIT", working_db)
           end
@@ -123,11 +118,11 @@ namespace :db do
 
               # Swap tables between the databases
               temp_tables.each do |table|
-                if current_tables.include?(table)
-                  rename_sql = "RENAME TABLE #{database_name}.#{table} TO #{database_name}_old.#{table}, #{temp_db_name}.#{table} TO #{database_name}.#{table};"
-                else
-                  rename_sql = "RENAME TABLE #{temp_db_name}.#{table} TO #{database_name}.#{table};"
-                end
+                rename_sql = if current_tables.include?(table)
+                               "RENAME TABLE #{database_name}.#{table} TO #{database_name}_old.#{table}, #{temp_db_name}.#{table} TO #{database_name}.#{table};"
+                             else
+                               "RENAME TABLE #{temp_db_name}.#{table} TO #{database_name}.#{table};"
+                             end
                 ActiveRecord::Base.connection.execute(rename_sql)
               end
             end
@@ -156,7 +151,7 @@ namespace :db do
             redirect_uri: "urn:ietf:wg:oauth:2.0:oob",
             dangerously_allow_any_redirect_uri: true,
             scopes: Doorkeeper.configuration.scopes.to_s,
-            owner_id: User.find_by_wca_id!("2005FLEI01").id,
+            owner_id: User.find_by!(wca_id: "2005FLEI01").id,
             owner_type: "User",
           )
         end

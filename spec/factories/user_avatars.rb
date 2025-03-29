@@ -22,7 +22,7 @@ FactoryBot.define do
 
     after(:create) do |avatar, evaluator|
       if evaluator.upload_file
-        default_io = File.open(Rails.root.join('app', 'assets', 'images', UserAvatar::DEFAULT_AVATAR_FILE), 'rb')
+        default_io = Rails.root.join('app', 'assets', 'images', UserAvatar::DEFAULT_AVATAR_FILE).open('rb')
 
         avatar.attach_image(
           io: default_io,

@@ -1,29 +1,9 @@
 <% provide(:title, t(".title")) %>
 
-<% ranking_timestamp = ComputeAuxiliaryData.end_date || Date.current %>
-<% @rows = execute_cached_query([*@cache_params, ranking_timestamp], @query) %>
-
 <div class="container">
   <h1><%= yield(:title) %></h1>
-  <p><%= t("results.last_updated_html", timestamp: wca_local_time(ranking_timestamp)) %></p>
+  <p><%= t("results.last_updated_html", timestamp: wca_local_time(@record_timestamp)) %></p>
   <p><i><%= t('results.filters_fixes_underway') %></i></p>
 
-  <div id="results-selector" class="results-select form-inline">
-    <%= render 'results_selector', show_rankings_options: true %>
-  </div>
-  <% cache [*@cache_params, ranking_timestamp, I18n.locale] do %>
-    <%
-      comp_ids = @rows.map { |r| r["competitionId"] }.uniq
-      @competitions_by_id = Hash[Competition.where(id: comp_ids).map { |c| [c.id, c] }]
-    %>
-    <div id="search-results" class="results">
-      <div id="results-list">
-        <% if @is_by_region %>
-          <%= render 'rankings_by_region_table' %>
-        <% else %>
-          <%= render 'rankings_table' %>
-        <% end %>
-      </div>
-    </div>
-  <% end %>
+  <%= react_component("Results/Rankings") %>
 </div>

@@ -1,3 +1,4 @@
+# rubocop:disable all
 # frozen_string_literal: true
 
 class OptInCurrentJuniorAndTraineeToReports < ActiveRecord::Migration[7.1]

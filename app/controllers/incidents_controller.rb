@@ -13,11 +13,11 @@ class IncidentsController < ApplicationController
 
   def index
     base_model = Incident.includes(:competitions, :incident_tags)
-    if current_user&.can_manage_incidents?
-      @incidents = base_model.all
-    else
-      @incidents = base_model.resolved
-    end
+    @incidents = if current_user&.can_manage_incidents?
+                   base_model.all
+                 else
+                   base_model.resolved
+                 end
 
     respond_to do |format|
       format.html do
@@ -36,9 +36,7 @@ class IncidentsController < ApplicationController
 
   def show
     set_incident
-    unless @incident.resolved?
-      redirect_to_root_unless_user(:can_manage_incidents?)
-    end
+    redirect_to_root_unless_user(:can_manage_incidents?) unless @incident.resolved?
   end
 
   def new

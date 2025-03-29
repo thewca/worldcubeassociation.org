@@ -34,9 +34,7 @@ module ResultsValidators
       end
 
       if competition_ids.present?
-        unless competition_ids.respond_to? :each
-          competition_ids = [competition_ids]
-        end
+        competition_ids = [competition_ids] unless competition_ids.respond_to? :each
 
         check_real_results = model == Result
 
@@ -93,8 +91,8 @@ module ResultsValidators
         # where a round_id may be missing in the competition rounds: if it was a
         # cutoff round and everyone made the cutoff!
         # See additional comment here: https://github.com/thewca/worldcubeassociation.org/pull/4357#discussion_r307312177
-        rounds_information = competition.competition_events.flat_map(&:rounds).to_h do |r|
-          ["#{r.event.id}-#{r.round_type_id}", r]
+        rounds_information = competition.competition_events.flat_map(&:rounds).index_by do |r|
+          "#{r.event.id}-#{r.round_type_id}"
         end
         # Now try to "cast" a declared cutoff round to an existing non-cutoff round
         missing_round_ids = round_ids_from_results - rounds_information.keys
@@ -104,9 +102,7 @@ module ResultsValidators
           equivalent_round_id = "#{event_id}-#{RoundType.toggle_cutoff(round_type_id)}"
           if extra_round_ids.delete(equivalent_round_id)
             equivalent_round = rounds_information[equivalent_round_id]
-            if equivalent_round.round_type.combined?
-              rounds_information[round_id] = rounds_information.delete(equivalent_round_id)
-            end
+            rounds_information[round_id] = rounds_information.delete(equivalent_round_id) if equivalent_round.round_type.combined?
           end
         end
         rounds_information

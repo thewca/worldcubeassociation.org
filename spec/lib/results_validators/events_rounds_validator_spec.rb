@@ -37,25 +37,25 @@ RSpec.describe ERV do
       end
 
       expected_warnings = [
-        RV::ValidationWarning.new(:events, competition1.id,
-                                  ERV::NO_MAIN_EVENT_WARNING),
-        RV::ValidationWarning.new(:events, competition2.id,
-                                  ERV::NOT_333_MAIN_EVENT_WARNING,
+        RV::ValidationWarning.new(ERV::NO_MAIN_EVENT_WARNING,
+                                  :events, competition1.id),
+        RV::ValidationWarning.new(ERV::NOT_333_MAIN_EVENT_WARNING,
+                                  :events, competition2.id,
                                   main_event_id: "222"),
-        RV::ValidationWarning.new(:events, competition2.id,
-                                  ERV::MISSING_RESULTS_WARNING,
+        RV::ValidationWarning.new(ERV::MISSING_RESULTS_WARNING,
+                                  :events, competition2.id,
                                   event_id: "555"),
-        RV::ValidationWarning.new(:events, competition1.id,
-                                  ERV::MISSING_RESULTS_WARNING,
+        RV::ValidationWarning.new(ERV::MISSING_RESULTS_WARNING,
+                                  :events, competition1.id,
                                   event_id: "333"),
       ]
 
       expected_errors = [
-        RV::ValidationError.new(:events, competition2.id,
-                                ERV::UNEXPECTED_RESULTS_ERROR,
+        RV::ValidationError.new(ERV::UNEXPECTED_RESULTS_ERROR,
+                                :events, competition2.id,
                                 event_id: "444"),
-        RV::ValidationError.new(:rounds, competition2.id,
-                                ERV::UNEXPECTED_ROUND_RESULTS_ERROR,
+        RV::ValidationError.new(ERV::UNEXPECTED_ROUND_RESULTS_ERROR,
+                                :rounds, competition2.id,
                                 round_id: '444-f'),
       ]
 
@@ -101,22 +101,22 @@ RSpec.describe ERV do
                           skip_round_creation: true)
       end
       expected_errors = [
-        RV::ValidationError.new(:rounds, competition1.id,
-                                ERV::UNEXPECTED_COMBINED_ROUND_ERROR,
+        RV::ValidationError.new(ERV::UNEXPECTED_COMBINED_ROUND_ERROR,
+                                :rounds, competition1.id,
                                 round_name: "3x3x3 One-Handed Final"),
-        RV::ValidationError.new(:rounds, competition1.id,
-                                ERV::MISSING_ROUND_RESULTS_ERROR,
+        RV::ValidationError.new(ERV::MISSING_ROUND_RESULTS_ERROR,
+                                :rounds, competition1.id,
                                 round_id: "333oh-1"),
-        RV::ValidationError.new(:rounds, competition2.id,
-                                ERV::UNEXPECTED_ROUND_RESULTS_ERROR,
+        RV::ValidationError.new(ERV::UNEXPECTED_ROUND_RESULTS_ERROR,
+                                :rounds, competition2.id,
                                 round_id: "222-c"),
       ]
 
       expected_warnings = [
-        RV::ValidationWarning.new(:events, competition1.id,
-                                  ERV::NO_MAIN_EVENT_WARNING),
-        RV::ValidationWarning.new(:events, competition2.id,
-                                  ERV::NOT_333_MAIN_EVENT_WARNING,
+        RV::ValidationWarning.new(ERV::NO_MAIN_EVENT_WARNING,
+                                  :events, competition1.id),
+        RV::ValidationWarning.new(ERV::NOT_333_MAIN_EVENT_WARNING,
+                                  :events, competition2.id,
                                   main_event_id: "222"),
       ]
       validator_args.each do |arg|

@@ -62,8 +62,8 @@ RSpec.describe IRV do
                                                    cutoff: cutoff, eventId: "444")
         res_over_missing_value.update!(value2: 0)
 
-        errs << RV::ValidationError.new(:results, competition1.id,
-                                        IRV::WRONG_ATTEMPTS_FOR_CUTOFF_ERROR,
+        errs << RV::ValidationError.new(IRV::WRONG_ATTEMPTS_FOR_CUTOFF_ERROR,
+                                        :results, competition1.id,
                                         round_id: "444-c",
                                         person_name: res_over_missing_value.personName)
 
@@ -76,8 +76,8 @@ RSpec.describe IRV do
                                       value5: res_over_with_results.value2,
                                       average: res_over_with_results.value2)
 
-        errs << RV::ValidationError.new(:results, competition1.id,
-                                        IRV::DIDNT_MEET_CUTOFF_HAS_RESULTS_ERROR,
+        errs << RV::ValidationError.new(IRV::DIDNT_MEET_CUTOFF_HAS_RESULTS_ERROR,
+                                        :results, competition1.id,
                                         round_id: "444-c",
                                         person_name: res_over_with_results.personName,
                                         cutoff: cutoff.to_s(round44))
@@ -89,8 +89,8 @@ RSpec.describe IRV do
                                                         roundTypeId: "c")
         res_over_limit.update(value5: 12_001)
 
-        errs << RV::ValidationError.new(:results, competition1.id,
-                                        IRV::RESULT_OVER_TIME_LIMIT_ERROR,
+        errs << RV::ValidationError.new(IRV::RESULT_OVER_TIME_LIMIT_ERROR,
+                                        :results, competition1.id,
                                         round_id: "444-c",
                                         person_name: res_over_limit.personName,
                                         time_limit: time_limit.to_s(round44))
@@ -101,8 +101,8 @@ RSpec.describe IRV do
                                    formatId: "m", eventId: "333fm")
         res_fm.update(value1: 30)
 
-        errs << RV::ValidationError.new(:results, competition2.id,
-                                        IRV::MET_CUTOFF_MISSING_RESULTS_ERROR,
+        errs << RV::ValidationError.new(IRV::MET_CUTOFF_MISSING_RESULTS_ERROR,
+                                        :results, competition2.id,
                                         round_id: "333fm-c",
                                         person_name: res_fm.personName,
                                         cutoff: cutoff_fm.to_s(round_fm))
@@ -110,16 +110,16 @@ RSpec.describe IRV do
         res_cumul = FactoryBot.create(result_kind, :mo3, competition: competition2, eventId: "666", best: 6000)
         FactoryBot.create(result_kind, competition: competition2, eventId: "555", best: 6000, average: 6000, person: person_for_result(res_cumul))
 
-        errs << RV::ValidationError.new(:results, competition2.id,
-                                        IRV::RESULTS_OVER_CUMULATIVE_TIME_LIMIT_ERROR,
+        errs << RV::ValidationError.new(IRV::RESULTS_OVER_CUMULATIVE_TIME_LIMIT_ERROR,
+                                        :results, competition2.id,
                                         round_ids: "555-f,666-f",
                                         person_name: res_cumul.personName,
                                         time_limit: cumul_valid.to_s(round55))
 
         FactoryBot.create(result_kind, :mo3, competition: competition2, eventId: "777")
 
-        errs << RV::ValidationError.new(:results, competition2.id,
-                                        IRV::MISSING_CUMULATIVE_ROUND_ID_ERROR,
+        errs << RV::ValidationError.new(IRV::MISSING_CUMULATIVE_ROUND_ID_ERROR,
+                                        :results, competition2.id,
                                         original_round_id: "777-f",
                                         wcif_id: "444-r1")
 
@@ -142,8 +142,8 @@ RSpec.describe IRV do
       irv = IRV.new.validate(competition_ids: competition1.id)
 
       expected_warnings = [
-        RV::ValidationWarning.new(:results, competition1.id,
-                                  IRV::NO_ROUND_INFORMATION_WARNING,
+        RV::ValidationWarning.new(IRV::NO_ROUND_INFORMATION_WARNING,
+                                  :results, competition1.id,
                                   round_id: "333oh-f"),
       ]
       expect(irv.errors).to be_empty
@@ -158,8 +158,8 @@ RSpec.describe IRV do
       irv = IRV.new.validate(competition_ids: competition1.id)
 
       expected_warnings = [
-        RV::ValidationWarning.new(:results, competition1.id,
-                                  IRV::UNDEF_TL_WARNING,
+        RV::ValidationWarning.new(IRV::UNDEF_TL_WARNING,
+                                  :results, competition1.id,
                                   round_id: "333oh-f"),
       ]
       expect(irv.errors).to be_empty
@@ -179,8 +179,8 @@ RSpec.describe IRV do
         result_kind = model.model_name.singular.to_sym
         FactoryBot.create(result_kind, competition: competition1, eventId: "444")
         res_ko = FactoryBot.create(result_kind, :skip_validation, :mo3, competition: competition1, eventId: "444", skip_round_creation: true)
-        errs[model.to_s] << RV::ValidationError.new(:results, competition1.id,
-                                                    IRV::MISMATCHED_RESULT_FORMAT_ERROR,
+        errs[model.to_s] << RV::ValidationError.new(IRV::MISMATCHED_RESULT_FORMAT_ERROR,
+                                                    :results, competition1.id,
                                                     round_id: "444-f",
                                                     person_name: res_ko.personName,
                                                     expected_format: "Average of 5",
@@ -215,23 +215,23 @@ RSpec.describe IRV do
         res_mbf = FactoryBot.create(result_kind, :mbf, competition: competition1)
         # 8 points in 60:02 (ie: reached the time limit and got +2)
         res_mbf.update(value2: 910_360_200)
-        warns << RV::ValidationWarning.new(:results, competition1.id,
-                                           IRV::MBF_RESULT_OVER_TIME_LIMIT_WARNING,
+        warns << RV::ValidationWarning.new(IRV::MBF_RESULT_OVER_TIME_LIMIT_WARNING,
+                                           :results, competition1.id,
                                            round_id: "333mbf-f",
                                            person_name: res_mbf.personName,
                                            result: res_mbf.solve_times[1].clock_format)
 
         res22 = FactoryBot.create(result_kind, competition: competition2, eventId: "222")
         res22.update(value4: -2)
-        warns << RV::ValidationWarning.new(:results, competition2.id,
-                                           IRV::RESULT_AFTER_DNS_WARNING,
+        warns << RV::ValidationWarning.new(IRV::RESULT_AFTER_DNS_WARNING,
+                                           :results, competition2.id,
                                            round_id: "222-f",
                                            person_name: res22.personName)
 
         # This creates the same result row for a different person as res22, expect for the DNS.
         res_sim1 = FactoryBot.create(result_kind, competition: competition2, eventId: "222")
-        warns << RV::ValidationWarning.new(:results, competition2.id,
-                                           IRV::SIMILAR_RESULTS_WARNING,
+        warns << RV::ValidationWarning.new(IRV::SIMILAR_RESULTS_WARNING,
+                                           :results, competition2.id,
                                            round_id: "222-f",
                                            person_name: res_sim1.personName,
                                            similar_person_name: res22.personName)
@@ -241,8 +241,8 @@ RSpec.describe IRV do
         # already has one DNF which counts towards the cumulative time limit of 2:00.00.
         res_bf = FactoryBot.create(result_kind, :blind_dnf_mo3, competition: competition1, best: 100_00, value1: -1)
 
-        warns << RV::ValidationWarning.new(:results, competition1.id,
-                                           IRV::SUSPICIOUS_DNF_WARNING,
+        warns << RV::ValidationWarning.new(IRV::SUSPICIOUS_DNF_WARNING,
+                                           :results, competition1.id,
                                            round_ids: "333bf-f",
                                            person_name: res_bf.personName)
 

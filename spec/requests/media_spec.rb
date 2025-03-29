@@ -65,7 +65,7 @@ RSpec.describe "media" do
   describe 'GET #new' do
     it_should_behave_like 'must sign in',
                           lambda { get new_medium_path },
-                          lambda { |current_user| expect(response).to be_successful }
+                          lambda { |_current_user| expect(response).to be_successful }
   end
 
   describe 'POST #create' do
@@ -87,7 +87,7 @@ RSpec.describe "media" do
         }
       end,
       lambda do |current_user|
-        medium = CompetitionMedium.find_by_text!("i was just created")
+        medium = CompetitionMedium.find_by!(text: "i was just created")
         expect(medium.status).to eq "pending"
         expect(medium.submitterName).to eq current_user.name
         expect(medium.submitterEmail).to eq current_user.email
@@ -227,7 +227,7 @@ RSpec.describe "media" do
                           lambda { destroy_medium.call },
                           lambda {
                             expect(response).to redirect_to validate_media_path
-                            expect(CompetitionMedium.find_by_id(medium.id)).to be_nil
+                            expect(CompetitionMedium.find_by(id: medium.id)).to be_nil
                           }
   end
 end

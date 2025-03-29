@@ -47,9 +47,9 @@ services:
     restart: no
     depends_on:
       wca_db:
-        condition: 'service_healthy'
+        condition: "service_healthy"
       wca_redis:
-        condition: 'service_started'
+        condition: "service_started"
 
   wca_on_rails:
     <<: *app
@@ -66,6 +66,25 @@ services:
     depends_on:
       wca_environment:
         condition: service_completed_successfully
+
+  wca_nextjs:
+    build:
+      dockerfile: Dockerfile.dev
+      context: .
+    container_name: "nextjs"
+    environment:
+      PORT: 3001
+    ports:
+      - "3001:3001"
+    working_dir: /app
+    command: >
+      bash -c 'corepack install && yarn install &&
+      yarn run dev'
+    volumes:
+      - ./next-frontend:/app
+      - next_yarn_volume:/app/node_modules
+    networks:
+      - wca-main
 
   wca_webpacker:
     <<: *app
@@ -96,7 +115,7 @@ services:
 
   wca_sidekiq:
     <<: *app
-    container_name: 'sidekiq'
+    container_name: "sidekiq"
     environment:
       <<: *appEnv
       # Cronjobs are disabled in development by default. If you wish to run cronjobs,
@@ -108,11 +127,14 @@ services:
         condition: service_completed_successfully
 
   wca_db:
-    image: mysql:8.0
+    # You will have to run docker exec -it database mysql to connect to the database and then
+    # ALTER USER 'root'@'%' IDENTIFIED WITH caching_sha2_password BY '';
+    # To upgrade your DB from mysql8.0 to mysql8.4
+    image: mysql:8.4
     container_name: "database"
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD: "true"
-    command: --authentication-policy=mysql_native_password
+    command: --mysql-native-password=ON
     ports:
       - "3306:3306"
     volumes:
@@ -148,6 +170,8 @@ volumes:
   wca_db_volume:
     driver: local
   cache_volume:
+    driver: local
+  next_yarn_volume:
     driver: local
 
 networks:

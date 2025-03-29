@@ -3,15 +3,16 @@ import {
   Button,
   Card,
   Container,
-  DropdownHeader,
+  Dropdown,
   Form,
   Icon,
   Image,
 } from 'semantic-ui-react';
 import _ from 'lodash';
 
+import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import VenueLocationMap from './VenueLocationMap';
-import { countries, backendTimezones } from '../../../lib/wca-data.js.erb';
+import { backendTimezones } from '../../../lib/wca-data.js.erb';
 import RoomPanel from './RoomPanel';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
 import { useConfirm } from '../../../lib/providers/ConfirmProvider';
@@ -21,14 +22,15 @@ import {
   removeVenue,
 } from '../store/actions';
 import { toDegrees, toMicrodegrees } from '../../../lib/utils/edit-schedule';
+import { fetchWithAuthenticityToken } from '../../../lib/requests/fetchWithAuthenticityToken';
+import { geocodingTimeZoneUrl } from '../../../lib/requests/routes.js.erb';
 import { getTimeZoneDropdownLabel, sortByOffset } from '../../../lib/utils/timezone';
+import CountrySelector from '../../CountrySelector/CountrySelector';
 
-const countryOptions = countries.real.map((country) => ({
-  key: country.iso2,
-  text: country.name,
-  value: country.iso2,
-  flag: country.iso2.toLowerCase(),
-}));
+// We need to keep track of which timezones the frontend can actually understand.
+//   Sometimes, package updates or Ruby runtime updates can introduce newly-fangled IANA timezones
+//   that the user's browser never heard about, leading to unpleasant runtime crashes.
+const frontendTimezones = Intl.supportedValuesOf('timeZone');
 
 function VenuePanel({
   venue,
@@ -75,25 +77,35 @@ function VenuePanel({
   // In the end the array should look like that:
   //   - country_zone_a, country_zone_b, [...], other_tz_a, other_tz_b, [...]
   const timezoneOptions = useMemo(() => {
-    // Stuff that is recommended based on the country list
-    const competitionZoneIds = _.uniq(countryZones);
+    const competitionZoneIds = _.intersection(
+      // Stuff that is recommended based on the country list
+      _.uniq(countryZones),
+      // ...but only if the current browser actually understands them
+      frontendTimezones,
+    );
+
     const sortedCompetitionZones = sortByOffset(competitionZoneIds, referenceTime);
 
-    // Stuff that is listed in our `backendTimezones` list but not in the preferred country list
-    const otherZoneIds = _.difference(backendTimezones, competitionZoneIds);
+    const otherZoneIds = _.intersection(
+      // Stuff that is listed in our `backendTimezones` list but not in the preferred country list
+      _.difference(backendTimezones, competitionZoneIds),
+      // ...but only if the current browser actually understands them
+      frontendTimezones,
+    );
+
     const sortedOtherZones = sortByOffset(otherZoneIds, referenceTime);
 
     // Both merged together, with the countryZone entries listed first.
     return [
       {
-        as: DropdownHeader,
+        as: Dropdown.Header,
         key: 'local-zones-header',
         text: 'Local time zones',
         disabled: true,
       },
       ...sortedCompetitionZones.map(makeTimeZoneOption),
       {
-        as: DropdownHeader,
+        as: Dropdown.Header,
         key: 'other-zones-header',
         text: 'Other time zones',
         disabled: true,
@@ -101,6 +113,37 @@ function VenuePanel({
       ...sortedOtherZones.map(makeTimeZoneOption),
     ];
   }, [countryZones, referenceTime, makeTimeZoneOption]);
+
+  const fetchSuggestedTimeZones = useCallback(async () => {
+    const url = `${geocodingTimeZoneUrl}?${new URLSearchParams({
+      lat: venue.latitudeMicrodegrees,
+      lng: venue.longitudeMicrodegrees,
+    }).toString()}`;
+
+    const response = await fetchWithAuthenticityToken(url);
+    return response.json();
+  }, [venue.latitudeMicrodegrees, venue.longitudeMicrodegrees]);
+
+  const {
+    data: suggestedTimeZones,
+    isLoading: timeZonesLoading,
+    isError: timeZonesError,
+  } = useQuery({
+    queryFn: fetchSuggestedTimeZones,
+    queryKey: ['suggested-tz', venue.latitudeMicrodegrees, venue.longitudeMicrodegrees],
+    enabled: Boolean(venue.latitudeMicrodegrees && venue.longitudeMicrodegrees),
+    placeholderData: keepPreviousData,
+  });
+
+  const bestMatch = useMemo(() => suggestedTimeZones?.find(
+    (tz) => timezoneOptions.some((tzOpt) => tzOpt.key === tz),
+  ), [suggestedTimeZones, timezoneOptions]);
+
+  const handleDetectTimezone = async (evt) => {
+    if (bestMatch) {
+      handleVenueChange(evt, { name: 'timezone', value: bestMatch });
+    }
+  };
 
   return (
     <Card fluid raised>
@@ -140,14 +183,27 @@ function VenuePanel({
               value={venue.name}
               onChange={handleVenueChange}
             />
-            <Form.Select
-              search
-              label="Country"
+            <CountrySelector
               name="countryIso2"
-              options={countryOptions}
-              value={venue.countryIso2}
+              countryIso2={venue.countryIso2}
               onChange={handleVenueChange}
             />
+            {bestMatch && (
+              <Button
+                floated="right"
+                compact
+                icon
+                labelPosition="left"
+                primary
+                negative={timeZonesError}
+                disabled={timeZonesLoading}
+                onClick={handleDetectTimezone}
+              >
+                <Icon name="target" />
+                Use coordinate timezone
+                <div>{bestMatch}</div>
+              </Button>
+            )}
             <Form.Select
               label="Timezone"
               name="timezone"

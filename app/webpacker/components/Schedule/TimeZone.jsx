@@ -46,7 +46,7 @@ export default function TimeZoneSelector({
         search
         selection
         value={activeTimeZone}
-        onChange={(_, data) => setActiveTimeZone(data.value)}
+        onChange={(_e, data) => setActiveTimeZone(data.value)}
         options={timeZoneOptions}
       />
       <br />
@@ -71,7 +71,7 @@ export default function TimeZoneSelector({
         <Checkbox
           label={I18n.t('competitions.schedule.timezone_follow_venue')}
           checked={followVenueSelection}
-          onChange={(_, data) => setFollowVenueSelection(data.checked)}
+          onChange={(_e, data) => setFollowVenueSelection(data.checked)}
         />
       )}
     </Segment>

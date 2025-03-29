@@ -4,7 +4,7 @@ require 'rails_helper'
 require 'auxiliary_data_computation'
 
 RSpec.describe "AuxiliaryDataComputation" do
-  describe ".compute_concise_results", clean_db_with_truncation: true do
+  describe ".compute_concise_results", :clean_db_with_truncation do
     let(:person) { FactoryBot.create :person, countryId: "China" }
     let(:competition_2016) { FactoryBot.create :competition, starts: Date.parse("2016-04-04") }
     let(:next_competition_2016) { FactoryBot.create :competition, starts: Date.parse("2016-07-07") }
@@ -54,7 +54,7 @@ RSpec.describe "AuxiliaryDataComputation" do
     end
   end
 
-  describe ".compute_rank_tables", clean_db_with_truncation: true do
+  describe ".compute_rank_tables", :clean_db_with_truncation do
     let(:australian) { FactoryBot.create :person, countryId: "Australia" }
     let(:canadian) { FactoryBot.create :person, countryId: "Canada" }
     let(:american_1) { FactoryBot.create :person, countryId: "USA" }

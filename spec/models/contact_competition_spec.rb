@@ -3,7 +3,7 @@
 require "rails_helper"
 
 RSpec.describe ContactCompetition do
-  let(:delegates) { [FactoryBot.create(:delegate), FactoryBot.create(:delegate)] }
+  let(:delegates) { FactoryBot.create_list(:delegate, 2) }
   let(:organizers) { [FactoryBot.create(:user)] }
 
   context "to email" do
@@ -53,7 +53,7 @@ RSpec.describe ContactCompetition do
   context "subject" do
     it "builds subject line for specific competition inquiry" do
       form = FactoryBot.build(:contact_competition, :with_competition, competition_delegates: delegates, competition_organizers: organizers)
-      competition_name = Competition.find_by_id(form.competition_id).name
+      competition_name = Competition.find_by(id: form.competition_id).name
       expect(form.subject).to start_with("[WCA Website] Comment for #{competition_name} by #{form.name} on")
     end
   end

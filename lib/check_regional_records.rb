@@ -5,7 +5,7 @@ module CheckRegionalRecords
   LOOKUP_TABLE_NAME = 'regional_records_lookup'
 
   def self.add_to_lookup_table(competition_id = nil, table_name: LOOKUP_TABLE_NAME)
-    ActiveRecord::Base.connection.execute <<-SQL
+    ActiveRecord::Base.connection.execute <<-SQL.squish
       INSERT INTO #{table_name}
       (resultId, countryId, eventId, competitionEndDate, best, average)
       SELECT Results.id, Results.countryId, Results.eventId, Competitions.end_date, Results.best, Results.average
@@ -59,9 +59,7 @@ module CheckRegionalRecords
       # there might be an overlap where the next competition started in the morning but the old competition set a record in the evening.
       if next_start_date > competition.end_date
         tentative_records.each do |region, record|
-          if !confirmed_records.key?(region) || record < confirmed_records[region]
-            confirmed_records[region] = record
-          end
+          confirmed_records[region] = record if !confirmed_records.key?(region) || record < confirmed_records[region]
         end
       else
         still_pending.push(cache)
@@ -166,7 +164,7 @@ module CheckRegionalRecords
       pending_competitions = []
 
       check_results = self.load_ordered_results(event_id, competition_id, value_column, regional_record_symbol)
-                          .map do |r|
+                          .filter_map do |r|
         value_solve = r.send(value_solve_symbol)
 
         # Skip DNF, DNS, invalid Multi attempts
@@ -216,7 +214,7 @@ module CheckRegionalRecords
           competition: r.competition,
           result: r,
         }
-      end.compact
+      end
 
       [value_column, check_results]
     end

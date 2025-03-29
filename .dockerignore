@@ -25,3 +25,6 @@ node_modules
 
 # Don't add the .terraform folder in infra
 /infra/wca_on_rails/.terraform
+
+# Don't add the git frontend (yet)
+/next-frontend

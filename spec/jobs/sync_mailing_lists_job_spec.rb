@@ -85,7 +85,7 @@ RSpec.describe SyncMailingListsJob, type: :job do
     # organizations@ mailing list
     regional_organization = FactoryBot.create :regional_organization
     previously_acknowledged_regional_organization = FactoryBot.create :regional_organization
-    previously_acknowledged_regional_organization.update(start_date: 2.days.ago, end_date: 1.days.ago)
+    previously_acknowledged_regional_organization.update(start_date: 2.days.ago, end_date: 1.day.ago)
 
     expect(GsuiteMailingLists).to receive(:sync_group).with(
       "leaders@worldcubeassociation.org",

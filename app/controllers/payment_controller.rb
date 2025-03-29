@@ -9,7 +9,7 @@ class PaymentController < ApplicationController
 
       registration = Registration.includes(:registration_payments).find_by(competition: competition, user_id: user_id)
 
-      return render status: :bad_request, json: { error: "Registration not found" } unless registration.present?
+      return render status: :bad_request, json: { error: "Registration not found" } if registration.blank?
 
       return render status: :unauthorized, json: { error: 'unauthorized' } unless current_user.can_manage_competition?(competition)
 

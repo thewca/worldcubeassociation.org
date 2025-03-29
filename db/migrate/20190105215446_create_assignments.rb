@@ -1,3 +1,4 @@
+# rubocop:disable all
 # frozen_string_literal: true
 
 class CreateAssignments < ActiveRecord::Migration[5.2]

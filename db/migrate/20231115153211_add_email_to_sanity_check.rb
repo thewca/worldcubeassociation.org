@@ -1,3 +1,4 @@
+# rubocop:disable all
 # frozen_string_literal: true
 
 class AddEmailToSanityCheck < ActiveRecord::Migration[7.0]

@@ -29,7 +29,7 @@ RSpec.describe ResultsHelper do
       results << FactoryBot.create(:result, person: person, best: 1000, average: 1300)
 
       pb_markers = helper.historical_pb_markers results
-      expect(pb_markers[results[1].id][:single]).to eq true
+      expect(pb_markers[results[1].id][:single]).to be true
     end
 
     it "doesn't mark uncompleted solves as PB" do

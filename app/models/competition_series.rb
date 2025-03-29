@@ -31,21 +31,21 @@ class CompetitionSeries < ApplicationRecord
   before_validation :create_id_and_cell_name
   def create_id_and_cell_name
     m = VALID_NAME_RE.match(name)
-    if m
-      name_without_year = m[1]
-      year = m[2]
-      if wcif_id.blank?
-        # Generate competition id from name
-        # By replacing accented chars with their ascii equivalents, and then
-        # removing everything that isn't a digit or a character.
-        safe_name_without_year = ActiveSupport::Inflector.transliterate(name_without_year).gsub(/[^a-z0-9]+/i, '')
-        self.wcif_id = safe_name_without_year[0...(MAX_ID_LENGTH - year.length)] + year
-      end
-      if short_name.blank?
-        year = " " + year
-        self.short_name = name_without_year.truncate(MAX_SHORT_NAME_LENGTH - year.length) + year
-      end
+    return unless m
+
+    name_without_year = m[1]
+    year = m[2]
+    if wcif_id.blank?
+      # Generate competition id from name
+      # By replacing accented chars with their ascii equivalents, and then
+      # removing everything that isn't a digit or a character.
+      safe_name_without_year = ActiveSupport::Inflector.transliterate(name_without_year).gsub(/[^a-z0-9]+/i, '')
+      self.wcif_id = safe_name_without_year[0...(MAX_ID_LENGTH - year.length)] + year
     end
+    return if short_name.present?
+
+    year = " #{year}"
+    self.short_name = name_without_year.truncate(MAX_SHORT_NAME_LENGTH - year.length) + year
   end
 
   # The notion of circumventing model associations is stolen from competition.rb#delegate_ids et al.
@@ -56,9 +56,9 @@ class CompetitionSeries < ApplicationRecord
   end
 
   def destroy_if_orphaned
-    if persisted? && competitions.count <= 1
-      self.destroy # NULL is handled by has_many#dependent set to :nullify above
-    end
+    return unless persisted? && competitions.count <= 1
+
+    self.destroy # NULL is handled by has_many#dependent set to :nullify above
   end
 
   DEFAULT_SERIALIZE_OPTIONS = {
@@ -70,10 +70,8 @@ class CompetitionSeries < ApplicationRecord
     options = DEFAULT_SERIALIZE_OPTIONS.merge(options || {})
     include_competitions = options[:include]&.delete("competitions")
     json = super
-    json.merge!(id: wcif_id)
-    if include_competitions
-      json[:competitions] = competitions.ids
-    end
+    json[:id] = wcif_id
+    json[:competitions] = competitions.ids if include_competitions
     json
   end
 
@@ -101,9 +99,7 @@ class CompetitionSeries < ApplicationRecord
   end
 
   def set_form_data(form_data_series)
-    if form_data_series["competitionIds"].count <= 1
-      raise WcaExceptions::BadApiParameter.new("A Series must include at least two competitions.")
-    end
+    raise WcaExceptions::BadApiParameter.new("A Series must include at least two competitions.") if form_data_series["competitionIds"].count <= 1
 
     self.competition_ids = form_data_series["competitionIds"].join(",")
     assign_attributes(CompetitionSeries.form_data_to_attributes(form_data_series))
@@ -158,9 +154,7 @@ class CompetitionSeries < ApplicationRecord
   def set_wcif!(wcif_series)
     JSON::Validator.validate!(CompetitionSeries.wcif_json_schema, wcif_series)
 
-    if wcif_series["competitionIds"].count <= 1
-      raise WcaExceptions::BadApiParameter.new("A Series must include at least two competitions.")
-    end
+    raise WcaExceptions::BadApiParameter.new("A Series must include at least two competitions.") if wcif_series["competitionIds"].count <= 1
 
     self.competition_ids = wcif_series["competitionIds"].join(",")
     update!(CompetitionSeries.wcif_to_attributes(wcif_series))
@@ -178,10 +172,10 @@ class CompetitionSeries < ApplicationRecord
 
   before_save :unpack_competition_ids
   private def unpack_competition_ids
-    if @competition_ids
-      unpacked_competitions = @competition_ids.split(',').map { |id| Competition.find(id) }
-      self.competitions = unpacked_competitions
-    end
+    return unless @competition_ids
+
+    unpacked_competitions = @competition_ids.split(',').map { |id| Competition.find(id) }
+    self.competitions = unpacked_competitions
   end
 
   after_save :clear_competition_ids

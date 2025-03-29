@@ -2,13 +2,13 @@
 
 module RoleMigrationHelper
   def create_user_role_for_team_member(team_member, group)
-    if team_member.leader?
-      status = RolesMetadataTeamsCommittees.statuses[:leader]
-    elsif team_member.senior_member?
-      status = RolesMetadataTeamsCommittees.statuses[:senior_member]
-    else
-      status = RolesMetadataTeamsCommittees.statuses[:member]
-    end
+    status = if team_member.leader?
+               RolesMetadataTeamsCommittees.statuses[:leader]
+             elsif team_member.senior_member?
+               RolesMetadataTeamsCommittees.statuses[:senior_member]
+             else
+               RolesMetadataTeamsCommittees.statuses[:member]
+             end
     metadata = RolesMetadataTeamsCommittees.create!(status: status)
     UserRole.create!(
       user_id: team_member.user_id,

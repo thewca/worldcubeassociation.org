@@ -10,7 +10,7 @@ class WcaCronjob < ApplicationJob
   before_enqueue do |job|
     statistics = job.class.cronjob_statistics
 
-    if statistics.scheduled? || statistics.in_progress? || statistics.recently_errored > 0
+    if statistics.scheduled? || statistics.in_progress? || statistics.recently_errored?
       statistics.increment! :recently_rejected
 
       # Make ActiveJob abort and do NOT enqueue the job
@@ -90,7 +90,7 @@ class WcaCronjob < ApplicationJob
   end
 
   class << self
-    delegate :in_progress?, :scheduled?, :enqueued_at, :finished?, :last_run_successful?, :last_error_message, to: :cronjob_statistics
+    delegate :in_progress?, :scheduled?, :enqueued_at, :finished?, :last_run_successful?, :last_error_message, :recently_errored?, to: :cronjob_statistics
 
     def cronjob_statistics
       CronjobStatistic.find_or_create_by!(name: self.name)
@@ -106,6 +106,15 @@ class WcaCronjob < ApplicationJob
 
     def successful_start_date
       self.cronjob_statistics.successful_run_start
+    end
+
+    def reset_error_state!
+      self.cronjob_statistics.update!(
+        run_start: nil,
+        run_end: nil,
+        recently_errored: 0,
+        last_error_message: nil,
+      )
     end
   end
 end

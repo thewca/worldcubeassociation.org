@@ -17,7 +17,7 @@ RSpec.describe 'I18n' do
 
   I18n.available_locales.each do |locale|
     it "#{locale} defines time_format correctly" do
-      time_format = I18n.translate("common.time_format", locale: locale, default: nil)
+      time_format = I18n.t("common.time_format", locale: locale, default: nil)
       allowed_values = [
         "12h",
         "24h",

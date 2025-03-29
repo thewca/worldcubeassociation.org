@@ -1,0 +1,4 @@
+<% provide(:title, "WCA Live #{@competition_id} Schedule") %>
+<%= render layout: 'competitions/nav' do %>
+  <%= react_component('Live/Admin/Schedule', { competitionId: @competition_id, rounds: @rounds.as_json({ methods: [:event, :round_type, :name, :competitors_live_results_entered, :total_accepted_registrations, :score_taking_done?]}) }) %>
+<% end %>

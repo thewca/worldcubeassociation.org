@@ -21,10 +21,11 @@ module AdvancementConditions
 
     def max_advancing(results)
       return 0 if results.empty?
+
       field = results.first.format.sort_by == "single" ? :best : :average
-      results.select do |r|
+      results.count do |r|
         r.to_solve_time(field).complete? && r.send(field) < attempt_result
-      end.size
+      end
     end
   end
 end

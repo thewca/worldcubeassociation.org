@@ -11,12 +11,13 @@ RSpec.feature "Competition events management" do
 
   context "unconfirmed competition without schedule" do
     let!(:competition) { FactoryBot.create(:competition, :with_delegate, :registration_open, event_ids: ["333", "444"], with_rounds: true) }
+
     background do
       sign_in competition.delegates.first
       visit "/competitions/#{competition.id}/schedule/edit"
     end
 
-    scenario "can add a venue and a room", js: true do
+    scenario "can add a venue and a room", :js do
       find("div", class: 'title', text: 'Edit venues information').click
 
       within(:css, "#venues-edit-panel-body") do
@@ -42,12 +43,13 @@ RSpec.feature "Competition events management" do
 
   context "unconfirmed competition with schedule" do
     let!(:competition) { FactoryBot.create(:competition, :with_delegate, :registration_open, :with_valid_schedule, event_ids: ["333", "444"]) }
+
     background do
       sign_in competition.delegates.first
       visit "/competitions/#{competition.id}/schedule/edit"
     end
 
-    scenario "room calendar is rendered", js: true do
+    scenario "room calendar is rendered", :js do
       find("div", class: 'title', text: 'Edit schedules').click
 
       within(:css, "#schedules-edit-panel-body") do

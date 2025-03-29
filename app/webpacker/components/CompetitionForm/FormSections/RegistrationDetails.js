@@ -26,6 +26,12 @@ const guestMessageOptions = ['unclear', 'free', 'restricted'].map((status) => ({
   text: I18n.t(`competitions.competition_form.choices.registration.guest_entry_status.${status}`),
 }));
 
+const canCancelOptions = ['not_accepted', 'always', 'unpaid'].map((status) => ({
+  key: status,
+  value: status,
+  text: I18n.t(`competitions.competition_form.choices.registration.competitor_can_cancel.${status}`),
+}));
+
 export default function RegistrationDetails() {
   const { entryFees, registration } = useFormObject();
 
@@ -52,7 +58,7 @@ export default function RegistrationDetails() {
       <InputDate id="waitingListDeadlineDate" dateTime required ignoreDisabled={waitingListNotYetPast} />
       <InputDate id="eventChangeDeadlineDate" dateTime required ignoreDisabled={eventChangeNotYetPast} />
       <InputBooleanSelect id="allowOnTheSpot" required ignoreDisabled />
-      <InputBooleanSelect id="allowSelfDeleteAfterAcceptance" required ignoreDisabled />
+      <InputSelect id="competitorCanCancel" options={canCancelOptions} required ignoreDisabled />
       <InputBooleanSelect id="allowSelfEdits" required ignoreDisabled />
       <InputRadio id="guestsEnabled" options={guestsEnabledOptions} />
       <ConditionalSection showIf={guestsGoFree}>

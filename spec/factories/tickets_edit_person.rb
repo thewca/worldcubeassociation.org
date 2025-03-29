@@ -19,6 +19,13 @@ FactoryBot.define do
           connection: :assigned,
           is_active: true,
         )
+        FactoryBot.create(
+          :ticket_stakeholder,
+          ticket: edit_name_ticket.ticket,
+          stakeholder: FactoryBot.create(:user),
+          connection: :cc,
+          is_active: true,
+        )
       end
     end
 

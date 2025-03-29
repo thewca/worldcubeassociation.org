@@ -6,8 +6,8 @@ module MarkdownHelper
 
     def table(header, body)
       t = "<table class='table'>\n"
-      t += "<thead>" + header + "</thead>\n" if header
-      t += "<tbody>" + body + "</tbody>\n" if body
+      t += "<thead>#{header}</thead>\n" if header
+      t += "<tbody>#{body}</tbody>\n" if body
       t += "</table>"
       t
     end
@@ -32,13 +32,13 @@ module MarkdownHelper
     def postprocess(full_document)
       # Support embed Open Street Map
       full_document.gsub!(/map\(([^)]*)\)/) do
-        "<iframe width='600' height='450' style='overflow: hidden' frameborder='0' style='border:0' data-src=\"#{embedded_map_url($1)}\"></iframe>"
+        "<iframe width='600' height='450' style='overflow: hidden' frameborder='0' style='border:0' data-src=\"#{embedded_map_url(::Regexp.last_match(1))}\"></iframe>"
       end
 
       # Support embed YouTube videos
       # Note: the URL in parentheses is turned into an <a></a> tag by the `autolink` extension.
       full_document.gsub!(/youtube\(.*?href="([^)]*)".*?\)/) do
-        embed_url = $1.gsub("watch?v=", "embed/")
+        embed_url = ::Regexp.last_match(1).gsub("watch?v=", "embed/")
         "<iframe width='640' height='390' frameborder='0' src='#{embed_url}'></iframe>"
       end
 
@@ -47,9 +47,7 @@ module MarkdownHelper
   end
 
   def md(content, target_blank: false, toc: false)
-    if content.nil?
-      return ""
-    end
+    return "" if content.nil?
 
     options = {
       escape_html: true,
@@ -62,9 +60,7 @@ module MarkdownHelper
       strikethrough: true,
     }
 
-    if target_blank
-      options[:link_attributes] = { target: "_blank" }
-    end
+    options[:link_attributes] = { target: "_blank" } if target_blank
 
     output = "".html_safe
 

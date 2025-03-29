@@ -21,8 +21,8 @@ class Result < ApplicationRecord
 
   MARKERS = [nil, "NR", "ER", "WR", "AfR", "AsR", "NAR", "OcR", "SAR"].freeze
 
-  validates_inclusion_of :regionalSingleRecord, in: MARKERS
-  validates_inclusion_of :regionalAverageRecord, in: MARKERS
+  validates :regionalSingleRecord, inclusion: { in: MARKERS }
+  validates :regionalAverageRecord, inclusion: { in: MARKERS }
   alias_attribute :regional_single_record, :regionalSingleRecord
   alias_attribute :regional_average_record, :regionalAverageRecord
 
@@ -49,8 +49,8 @@ class Result < ApplicationRecord
   scope :average_succeeded, -> { where("average > 0") }
   scope :podium, -> { final.succeeded.where(pos: [1..3]) }
   scope :winners, -> { final.succeeded.where(pos: 1).joins(:event).order("Events.rank") }
-  scope :before, ->(date) { joins(:competition).where("end_date < ?", date) }
-  scope :on_or_before, ->(date) { joins(:competition).where("end_date <= ?", date) }
+  scope :before, ->(date) { joins(:competition).where(competition: { end_date: ...date }) }
+  scope :on_or_before, ->(date) { joins(:competition).where(competition: { end_date: ..date }) }
   scope :single_better_than, ->(time) { where("best < ? AND best > 0", time) }
   scope :average_better_than, ->(time) { where("average < ? AND average > 0", time) }
   scope :in_event, ->(event_id) { where(eventId: event_id) }
@@ -62,9 +62,7 @@ class Result < ApplicationRecord
     [value1, value2, value3, value4, value5]
   end
 
-  def country_iso2
-    country.iso2
-  end
+  delegate :iso2, to: :country, prefix: true
 
   DEFAULT_SERIALIZE_OPTIONS = {
     only: ["id", "pos", "best", "best_index", "worst_index", "average"],

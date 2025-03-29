@@ -19,7 +19,7 @@ RSpec.feature "Edit user" do
     find('input[type="submit"]').click
   end
 
-  scenario "entering wca id", js: true do
+  scenario "entering wca id", :js do
     sign_in admin
     navigate_to_form(new_user)
 

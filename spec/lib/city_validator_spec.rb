@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe CityValidator do
   context "US" do
-    let(:country) { Country.find_by_iso2!("US") }
+    let(:country) { Country.find_by!(iso2: "US") }
     let(:model) { TestModel.new(country: country) }
 
     it "requires city, state" do
@@ -30,7 +30,7 @@ RSpec.describe CityValidator do
   end
 
   context "CA" do
-    let(:country) { Country.find_by_iso2!("CA") }
+    let(:country) { Country.find_by!(iso2: "CA") }
     let(:model) { TestModel.new(country: country) }
 
     it "requires city, province" do
@@ -46,7 +46,7 @@ RSpec.describe CityValidator do
   end
 
   context "GB" do
-    let(:country) { Country.find_by_iso2!("GB") }
+    let(:country) { Country.find_by!(iso2: "GB") }
     let(:model) { TestModel.new(country: country) }
 
     it "requires city, county" do
@@ -62,7 +62,7 @@ RSpec.describe CityValidator do
   end
 
   context "AR" do
-    let(:country) { Country.find_by_iso2!("AR") }
+    let(:country) { Country.find_by!(iso2: "AR") }
     let(:model) { TestModel.new(country: country) }
 
     it "requires city, province" do
@@ -78,7 +78,7 @@ RSpec.describe CityValidator do
   end
 
   context "AU" do
-    let(:country) { Country.find_by_iso2!("AU") }
+    let(:country) { Country.find_by!(iso2: "AU") }
     let(:model) { TestModel.new(country: country) }
 
     it "requires city, state or territory" do
@@ -94,7 +94,7 @@ RSpec.describe CityValidator do
   end
 
   context "IN" do
-    let(:country) { Country.find_by_iso2!("IN") }
+    let(:country) { Country.find_by!(iso2: "IN") }
     let(:model) { TestModel.new(country: country) }
 
     it "requires city, state" do
@@ -110,7 +110,7 @@ RSpec.describe CityValidator do
   end
 
   context "BR" do
-    let(:country) { Country.find_by_iso2!("BR") }
+    let(:country) { Country.find_by!(iso2: "BR") }
     let(:model) { TestModel.new(country: country) }
 
     it "requires city, state" do
@@ -126,7 +126,7 @@ RSpec.describe CityValidator do
   end
 
   context "FR" do
-    let(:country) { Country.find_by_iso2!("FR") }
+    let(:country) { Country.find_by!(iso2: "FR") }
     let(:model) { TestModel.new(country: country) }
 
     it "anything goes" do
@@ -139,8 +139,7 @@ end
 class TestModel
   include ActiveModel::Model
 
-  attr_accessor :city
-  validates :city, city: true
+  attr_accessor :city, :country
 
-  attr_accessor :country
+  validates :city, city: true
 end

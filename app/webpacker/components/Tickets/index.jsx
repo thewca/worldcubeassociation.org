@@ -10,6 +10,8 @@ import TicketHeader from './TicketHeader';
 import TicketWorkbench from './TicketWorkbench';
 import TicketLogs from './TicketLogs';
 import useInputState from '../../lib/hooks/useInputState';
+import TicketComments from './TicketComments';
+import WCAQueryClientProvider from '../../lib/providers/WCAQueryClientProvider';
 
 function SkateholderSelector({ stakeholderList, setUserSelectedStakeholder }) {
   const [selectedOption, setSelectedOption] = useInputState(stakeholderList[0]);
@@ -51,12 +53,26 @@ function TicketContent({ ticketDetails, currentStakeholder, sync }) {
         sync={sync}
         currentStakeholder={currentStakeholder}
       />
-      <TicketLogs logs={ticketDetails.ticket.ticket_logs} />
+      <TicketComments
+        ticketId={ticketDetails.ticket.id}
+        currentStakeholder={currentStakeholder}
+      />
+      <TicketLogs
+        ticketId={ticketDetails.ticket.id}
+      />
     </>
   );
 }
 
-export default function Tickets({ id }) {
+export default function Wrapper({ id }) {
+  return (
+    <WCAQueryClientProvider>
+      <Tickets id={id} />
+    </WCAQueryClientProvider>
+  );
+}
+
+function Tickets({ id }) {
   const {
     data: ticketDetails, sync, loading, error,
   } = useLoadedData(actionUrls.tickets.show(id));

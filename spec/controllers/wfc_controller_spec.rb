@@ -7,6 +7,7 @@ RSpec.describe WfcController do
 
   context "logged in as WFC member" do
     let!(:wfc_member) { FactoryBot.create :user, :wfc_member }
+
     before :each do
       sign_in wfc_member
     end

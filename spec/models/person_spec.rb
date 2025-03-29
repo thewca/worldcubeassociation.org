@@ -153,7 +153,7 @@ RSpec.describe Person, type: :model do
       expect do
         FactoryBot.create :result, :blind_dnf_mo3, person: us_competitor, competition: us_nationals2017,
                                                    pos: 2, eventId: "555bf", best: SolveTime::DNF_VALUE
-      end.to_not change { us_competitor.championship_podiums[:national] }
+      end.not_to(change { us_competitor.championship_podiums[:national] })
     end
 
     context "when a person changed nationality and continent" do
@@ -167,7 +167,7 @@ RSpec.describe Person, type: :model do
         expect do
           fr_nationals2017 = FactoryBot.create :competition, championship_types: ["FR"], starts: Date.new(2017, 1, 1)
           FactoryBot.create :result, person: fr_competitor, competition: fr_nationals2017, pos: 1, eventId: "333"
-        end.to_not change { fr_competitor.championship_podiums[:national] }
+        end.not_to(change { fr_competitor.championship_podiums[:national] })
       end
 
       it "is eligible for championship title of the current continent" do

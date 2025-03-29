@@ -1,72 +1,75 @@
 import {
   Checkbox,
-  Dimmer,
   Header,
   List,
-  Segment,
 } from 'semantic-ui-react';
-import React, { useMemo } from 'react';
+import React, { useCallback } from 'react';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import I18n from '../../lib/i18n';
-import useLoadedData from '../../lib/hooks/useLoadedData';
-import {
-  competitionUserPreferencesUrl,
-  updateUserNotificationsUrl,
-} from '../../lib/requests/routes.js.erb';
+import { updateUserNotificationsUrl } from '../../lib/requests/routes.js.erb';
 import Loading from '../Requests/Loading';
-import useSaveAction from '../../lib/hooks/useSaveAction';
-import { useFormContext, useFormInitialObject } from '../wca/FormBuilder/provider/FormObjectProvider';
+import { userPreferencesQueryKey, useUserPreferences } from './api';
+import { fetchJsonOrError } from '../../lib/requests/fetchWithAuthenticityToken';
 
 function NotificationSettingsAction({
   competitionId,
-  data,
-  sync,
+  userPreferences,
 }) {
-  const { isReceivingNotifications } = data;
+  const { isReceivingNotifications } = userPreferences;
 
-  const { save, saving } = useSaveAction();
+  const queryClient = useQueryClient();
+  const mutation = useMutation({
+    mutationFn: ({
+      compId,
+      receiveNotifications,
+    }) => fetchJsonOrError(updateUserNotificationsUrl(compId), {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      method: 'PATCH',
+      body: JSON.stringify({
+        receive_registration_emails: receiveNotifications,
+      }),
+    }).then((raw) => raw.data),
+    onSuccess: (respData, variables) => queryClient.setQueryData(
+      userPreferencesQueryKey(variables.competitionId),
+      respData.data,
+    ),
+  });
 
-  const saveNotificationPreference = (_, { checked: receiveNotifications }) => {
-    save(updateUserNotificationsUrl(competitionId), {
-      receive_registration_emails: receiveNotifications,
-    }, sync);
-  };
+  const saveNotificationPreference = useCallback((_, { checked: receiveNotifications }) => {
+    mutation.mutate({ compId: competitionId, receiveNotifications });
+  }, [competitionId, mutation]);
 
   return (
     <List.Item>
       <Checkbox
         checked={isReceivingNotifications}
         onChange={saveNotificationPreference}
-        disabled={saving}
+        disabled={mutation.isPending}
         label={I18n.t('competitions.receive_registration_emails')}
       />
     </List.Item>
   );
 }
 
-export default function UserPreferences() {
-  const { competitionId } = useFormInitialObject();
-  const { unsavedChanges: disabled } = useFormContext();
-
-  const dataUrl = useMemo(() => competitionUserPreferencesUrl(competitionId), [competitionId]);
-
+export default function UserPreferences({ competitionId }) {
   const {
-    data,
-    loading,
-    sync,
-  } = useLoadedData(dataUrl);
+    data: userPreferences,
+    isLoading,
+  } = useUserPreferences(competitionId);
 
-  if (loading) return <Loading />;
+  if (isLoading) return <Loading />;
 
   return (
-    <Dimmer.Dimmable as={Segment} blurring dimmed={disabled}>
-      <Dimmer active={disabled}>
-        You have unsaved changes. Please save the competition before taking any other action.
-      </Dimmer>
-
+    <>
       <Header style={{ marginTop: 0 }}>{I18n.t('competitions.user_preferences')}</Header>
       <List verticalAlign="middle">
-        <NotificationSettingsAction competitionId={competitionId} data={data} sync={sync} />
+        <NotificationSettingsAction
+          competitionId={competitionId}
+          userPreferences={userPreferences}
+        />
       </List>
-    </Dimmer.Dimmable>
+    </>
   );
 }

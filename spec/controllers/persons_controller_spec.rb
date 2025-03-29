@@ -6,14 +6,14 @@ RSpec.describe PersonsController, type: :controller do
   describe "GET #index" do
     it "responds to HTML request successfully" do
       get :index
-      expect(response.status).to eq 200
+      expect(response).to have_http_status :ok
     end
 
     # See section titled "InnoDB Full-Text Index Transaction Handling"
     # on https://dev.mysql.com/doc/refman/5.7/en/innodb-fulltext-index.html.
     # "a FULLTEXT search can only see committed data", which means that
     # we cannot run these tests inside of a transaction (as is the default).
-    context "Ajax request", clean_db_with_truncation: true do
+    context "Ajax request", :clean_db_with_truncation do
       let!(:person1) { FactoryBot.create(:person, name: "Jennifer Lawrence", countryId: "USA", wca_id: "2016LAWR01") }
       let!(:person2) { FactoryBot.create(:person, name: "Benedict Cumberbatch", countryId: "United Kingdom", wca_id: "2016CUMB01") }
       let!(:competition) { FactoryBot.create(:competition) }
@@ -21,7 +21,7 @@ RSpec.describe PersonsController, type: :controller do
 
       it "responds with correct JSON when region and search are specified" do
         get :index, params: { search: "Jennifer", region: "USA" }, format: :json
-        json = JSON.parse(response.body)
+        json = response.parsed_body
         expect(json['total']).to eq 1
         json_person = json['rows'][0]
         expect(json_person['name']).to include "Jennifer Lawrence"
@@ -33,21 +33,21 @@ RSpec.describe PersonsController, type: :controller do
 
       it "selecting continent works" do
         get :index, params: { region: "_Europe" }, format: :json
-        json = JSON.parse(response.body)
+        json = response.parsed_body
         expect(json['total']).to eq 1
         expect(json['rows'].count).to eq 1
       end
 
       it "searching by WCA ID works" do
         get :index, params: { search: "2016" }, format: :json
-        json = JSON.parse(response.body)
+        json = response.parsed_body
         expect(json['total']).to eq 2
         expect(json['rows'].count).to eq 2
       end
 
       it "works well when parts of the name are given" do
         get :index, params: { search: "Law Jenn" }, format: :json
-        json = JSON.parse(response.body)
+        json = response.parsed_body
         expect(json['total']).to eq 1
         expect(json['rows'].count).to eq 1
         expect(json['rows'][0]['name']).to include "Jennifer Lawrence"

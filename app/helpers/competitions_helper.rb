@@ -8,9 +8,7 @@ module CompetitionsHelper
 
     messages_to_join = []
 
-    if competition.cancelled? # If the competition is cancelled, that's the only string we need to show the user.
-      return t('competitions.messages.cancelled')
-    end
+    return t('competitions.messages.cancelled') if competition.cancelled? # If the competition is cancelled, that's the only string we need to show the user.
 
     messages_to_join << get_registration_status_message_if_registered(competition, user, registration)
     messages_to_join << get_competition_status_message(competition)
@@ -63,28 +61,28 @@ module CompetitionsHelper
     top_three = competition.results.where(event: main_event).podium.order(:pos)
     results_by_place = top_three.group_by(&:pos)
 
-    return t('competitions.competition_info.no_winner', event_name: main_event.name) unless results_by_place.present?
+    return t('competitions.competition_info.no_winner', event_name: main_event.name) if results_by_place.blank?
 
     winners = results_by_place[1]
     text = t('competitions.competition_info.winner', winner: people_to_sentence(winners),
                                                      result_sentence: pretty_print_result(winners.first),
                                                      event_name: main_event.name)
     if results_by_place[2]
-      text += " " + t('competitions.competition_info.first_runner_up',
-                      first_runner_up: people_to_sentence(results_by_place[2]),
-                      first_runner_up_result: pretty_print_result(top_three.second, short: true))
+      text += " #{t('competitions.competition_info.first_runner_up',
+                    first_runner_up: people_to_sentence(results_by_place[2]),
+                    first_runner_up_result: pretty_print_result(top_three.second, short: true))}"
       if results_by_place[3]
-        text += " " + t('competitions.competition_info.and')
-        text += " " + t('competitions.competition_info.second_runner_up',
-                        second_runner_up: people_to_sentence(results_by_place[3]),
-                        second_runner_up_result: pretty_print_result(top_three.third, short: true))
+        text += " #{t('competitions.competition_info.and')}"
+        text += " #{t('competitions.competition_info.second_runner_up',
+                      second_runner_up: people_to_sentence(results_by_place[3]),
+                      second_runner_up_result: pretty_print_result(top_three.third, short: true))}"
       else
         text += "."
       end
     elsif results_by_place[3]
-      text += " " + t('competitions.competition_info.second_runner_up',
-                      second_runner_up: people_to_sentence(results_by_place[3]),
-                      second_runner_up_result: pretty_print_result(top_three.third, short: true))
+      text += " #{t('competitions.competition_info.second_runner_up',
+                    second_runner_up: people_to_sentence(results_by_place[3]),
+                    second_runner_up_result: pretty_print_result(top_three.third, short: true))}"
     end
 
     text
@@ -101,25 +99,21 @@ module CompetitionsHelper
         record_strs = comp_records.group_by(&:personName).sort.map do |personName, results_for_name|
           results_by_personId = results_for_name.group_by(&:personId).sort
           results_by_personId.map do |personId, results|
-            if results_by_personId.length > 1
-              # Two or more people with the same name set records at this competition!
-              # Append their WCA IDs to distinguish between them.
-              uniqueName = "[#{personName} (#{personId})](#{person_url personId})"
-            else
-              uniqueName = "[#{personName}](#{person_url personId})"
-            end
+            uniqueName = if results_by_personId.length > 1
+                           # Two or more people with the same name set records at this competition!
+                           # Append their WCA IDs to distinguish between them.
+                           "[#{personName} (#{personId})](#{person_url personId})"
+                         else
+                           "[#{personName}](#{person_url personId})"
+                         end
             record_strs = results.sort_by do |r|
               round_type = RoundType.c_find(r.roundTypeId)
               [Event.c_find(r.eventId).rank, round_type.rank]
             end.map do |result|
               event = Event.c_find(result.eventId)
               record_strs = []
-              if result.regionalSingleRecord == code
-                record_strs << t('competitions.competition_info.regional_single_record', event_name: event.name, result: (result.to_s :best))
-              end
-              if result.regionalAverageRecord == code
-                record_strs << t('competitions.competition_info.regional_average_record', event_name: event.name, result: (result.to_s :average))
-              end
+              record_strs << t('competitions.competition_info.regional_single_record', event_name: event.name, result: (result.to_s :best)) if result.regionalSingleRecord == code
+              record_strs << t('competitions.competition_info.regional_average_record', event_name: event.name, result: (result.to_s :average)) if result.regionalAverageRecord == code
               record_strs
             end.flatten
             "#{uniqueName}&lrm; #{record_strs.to_sentence}"
@@ -138,7 +132,7 @@ module CompetitionsHelper
 
   def announced_class(competition)
     if competition.announced_at
-      level = [Competition::ANNOUNCED_DAYS_WARNING, Competition::ANNOUNCED_DAYS_DANGER].select { |d| days_announced_before_competition(competition) > d }.count
+      level = [Competition::ANNOUNCED_DAYS_WARNING, Competition::ANNOUNCED_DAYS_DANGER].count { |d| days_announced_before_competition(competition) > d }
       ["alert-danger", "alert-orange", "alert-green"][level]
     else
       ""
@@ -146,7 +140,7 @@ module CompetitionsHelper
   end
 
   private def report_and_results_days_to_class(days)
-    level = [Competition::REPORT_AND_RESULTS_DAYS_OK, Competition::REPORT_AND_RESULTS_DAYS_WARNING, Competition::REPORT_AND_RESULTS_DAYS_DANGER].select { |d| days > d }.count
+    level = [Competition::REPORT_AND_RESULTS_DAYS_OK, Competition::REPORT_AND_RESULTS_DAYS_WARNING, Competition::REPORT_AND_RESULTS_DAYS_DANGER].count { |d| days > d }
     ["alert-green", "alert-success", "alert-orange", "alert-danger"][level]
   end
 
@@ -294,7 +288,7 @@ module CompetitionsHelper
   end
 
   def preload_competition_series(form_competition, preload_competition_id)
-    competition = Competition.find_by_id(preload_competition_id)
+    competition = Competition.find_by(id: preload_competition_id)
 
     if (series = competition.competition_series)
       form_competition.competition_series = series
@@ -322,8 +316,8 @@ module CompetitionsHelper
       # Helper function for `competition_message_for_user`
       # Determines what message to display to the user based on the state of their registration.
 
-      registration_status = registration || competition.registrations.find_by_user_id(user.id)
-      return unless registration_status.present?
+      registration_status = registration || competition.registrations.find_by(user_id: user.id)
+      return if registration_status.blank?
 
       if registration_status.accepted?
         t('competitions.messages.tooltip_registered')

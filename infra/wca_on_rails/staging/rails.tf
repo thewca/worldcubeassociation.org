@@ -13,6 +13,10 @@ locals {
       value = var.ROOT_URL
     },
     {
+      name  = "OIDC_ISSUER"
+      value = var.ROOT_URL
+    },
+    {
       name = "DATABASE_HOST"
       value = "staging-worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com"
     },
@@ -57,19 +61,11 @@ locals {
       value = aws_sqs_queue.this.url
     },
     {
-      name = "STORAGE_AWS_REGION"
-      value = var.region
+      name = "LIVE_QUEUE"
+      value = aws_sqs_queue.results.url
     },
     {
-      name = "VAULT_AWS_REGION"
-      value = var.region
-    },
-    {
-      name = "S3_AVATARS_REGION"
-      value = var.region
-    },
-    {
-      name = "DATABASE_AWS_REGION"
+      name = "AWS_REGION"
       value = var.region
     },
     {
@@ -222,7 +218,7 @@ data "aws_iam_policy_document" "task_policy" {
       "sqs:GetQueueAttributes",
       "sqs:GetQueueUrl"
     ]
-    resources = [aws_sqs_queue.this.arn]
+    resources = [aws_sqs_queue.this.arn, aws_sqs_queue.results.arn]
   }
 }
 

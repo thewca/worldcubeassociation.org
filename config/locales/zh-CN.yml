@@ -1090,10 +1090,14 @@ zh-CN:
       about: 关于 WCA
       #original_hash: ed97787
       documents: WCA 文档
+      #original_hash: c9bae18
+      officers_and_board: WCA干事与董事会
       #original_hash: d8fd3e4
       delegates: WCA 代表
       #original_hash: 37b8fdc
       organizations: 地区性组织
+      #original_hash: 959d354
+      translators: 翻译者
       #original_hash: d790b40
       faq: 常见问题
       #original_hash: cf1d2c9
@@ -1104,6 +1108,8 @@ zh-CN:
       education: 教育资源
       #original_hash: a34b69f
       contact: 联系信息
+      #original_hash: 8e12c09
+      speedcubing_history: 魔方速拧历史
       #original_hash: 4fa8cc8
       tools: 工具
       #original_hash: 83fce83
@@ -1134,6 +1140,8 @@ zh-CN:
       db_export: 数据导出
       #original_hash: 1fa73f3
       regulations: 规则
+      #original_hash: 3bb8751
+      regulations_full: 规则和指导
       #original_hash: 6bce1b5
       about_regulations: 关于规则
       #original_hash: 141d1d7
@@ -1182,6 +1190,16 @@ zh-CN:
       manage_app: 管理你的应用
       #original_hash: 0e8b212
       manage_auth_app: 管理授权的应用
+      #original_hash: acac109
+      media_submission: 上传媒体
+      #original_hash: cf01481
+      privacy: 隐私
+      #original_hash: 4c4a2e8
+      disclaimer: 免责声明
+      #original_hash: cfde9db
+      db_results_export: 成绩导出
+      #original_hash: 7533c29
+      db_dev_export: 开发者用导出
   page:
     translators:
       #original_hash: 959d354
@@ -1202,34 +1220,34 @@ zh-CN:
         WCA的团队和委员会是组织不可分割的一部分，执行保持其运作所需的日常任务。这些委员会由WCA社区成员组成，包括WCA代表和参赛人员。每个团队都有一个领导者，其作用是确保团队的正常运作并指导其他团队成员。理事会是一种特殊类型的团队，为WCA董事会发挥咨询作用，由社区成员组成，而不是WCA工作人员。当有委员会、团队或理事会空缺时，有关如何申请的信息会发布在首页上。
       groups_name:
         #original_hash: 90a1280
-        wat: WCA资料整理组
+        wat: WCA资料整理组 (WAT)
         #original_hash: 63a2388
-        wct: WCA通讯组
+        wct: WCA通讯组 (WCT)
         #original_hash: 2b81984
-        wcat: WCA比赛公示组
-        #original_hash: c97077a
-        wdc: WCA纪律委员会
-        #original_hash: 83bd1d0
-        wec: WCA道德委员会
+        wcat: WCA比赛公示组 (WCAT)
+        #original_hash: 94c2e42
+        wic: WCA廉政委员会 (WIC)
         #original_hash: d1dbb86
-        weat: WCA董事会助理团队
+        weat: WCA董事会助理团队 (WEAT)
         #original_hash: 9cb13de
-        wfc: WCA财务委员会
+        wfc: WCA财务委员会 (WFC)
         #original_hash: 2035811
-        wmt: WCA市场营销组
+        wmt: WCA市场营销组 (WMT)
         #original_hash: 8f32116
-        wqac: WCA质量保证委员会
+        wqac: WCA质量保证委员会 (WQAC)
         #original_hash: 3da1e85
-        wrc: WCA规则委员会
+        wrc: WCA规则委员会 (WRC)
         #original_hash: 67be768
-        wrt: WCA成绩组
+        wrt: WCA成绩组 (WRT)
         #original_hash: a14bc62
-        wst: WCA软件组
+        wst: WCA软件组 (WST)
         #original_hash: 58765c7
-        wsot: WCA体育组织团队
-        #original_hash: 1ce7604
-        wac: WCA顾问委员会
-      groups_description:groups_description:
+        wsot: WCA体育组织团队 (WSOT)
+        #original_hash: 78949a7
+        wapc: WCA申诉委员会 (WAPC)
+        #orginal_hash: c90653c
+        wmct: WCA大型锦标赛组 (WMCT)
+      groups_description:
         #original_hash: 5b1aade
         wat: >-
           WCA资料整理组是一个WCA的咨询委员会。这个团队的任务是协助并负责将WCA过去的资料作整理保存。
@@ -1239,12 +1257,9 @@ zh-CN:
         #original_hash: 3e5570f
         wcat: >-
           该组负责批准和宣布代表提交的WCA比赛，并确保此类公告符合WCA质量标准。该团队还负责维护比赛申请用的政策文件，如：《WCA赛事要求》。WCAT并不负责组织或监督各个比赛。
-        #original_hash: 41eb6fd
-        wdc: >-
-          该委员会对WCA比赛期间或WCA官方线上平台上的选手和事件进行独立调查。这些事件涉嫌可能违反了WCA的精神、行为守则、条例。
-        #original_hash: 6cdac80
-        wec: >-
-          该委员会的作用是确保WCA工作人员遵循的所有程序都遵守道德守则，如果这些成员的行为不符合守则，则进行独立调查。WEC是选手的知己，他们可能会报告担忧并要求调查。如果任何参与者不同意WCA纪律委员会的决定，该委员会也充当上诉委员会。
+        #original_hash: 5007698
+        wic: >-
+          该委员会负责对WCA社区成员以及WCA比赛期间或WCA官方在线平台上发生的事件进行独立调查。这些事件涉嫌违反WCA精神、行为准则、道德准则、规定。
         #original_hash: 889dd90
         weat: 该团队是负责执行处理WCA董事会的行政事务。
         #original_hash: 43e4e33
@@ -1264,8 +1279,12 @@ zh-CN:
         wst: 该组负责管理WCA软件（官网、打乱程序、管理工具等）。
         #original_hash: 8f888d6
         wsot: 该团队负责监督和协助WCA成为一个国际认可的体育组织。
-        #original_hash: 73d8df4
-        wac: 该委员会负责建立和维护WCA社群与WCA员工之间的双边沟通。他们负责维护WCA论坛和总结问卷调查以及试着拓展到更多全球魔方社群。
+        #original_hash: 9f45bfa
+        wapc: >-
+          该委员会负责审查和解决针对其他WCA员工所做决定的申诉。WAC提供独立、公正的审查流程，以确保决定公平、合理且符合WCA政策和规定。
+        #original_hash: e0dbf86
+        wmct: >-
+          该组负责监督WCA洲际和世界锦标赛的协调和推进，制定指导方针和战略计划，管理主办城市的选择，支持组织团队，并确保一致的锦标赛体验。
   homepage:
     #original_hash: 824d76b
     learn_more: 了解更多
@@ -1293,7 +1312,7 @@ zh-CN:
       #original_hash: 9ad68ce
       text_html: 看看我们新推出的官方商品，包括从T恤到连帽衫的一系列服装。
       #original_hash: b0fc6c4
-      link_title: 我想康康
+      link_title: 我想看看
     records:
       #original_hash: e51c552
       title: 纪录
@@ -1310,7 +1329,7 @@ zh-CN:
       #original_hash: d790b40
       faq: 常见问题
       #original_hash: 392f358
-      button: 带我去康康 WCA 的联系表
+      button: 带我去看看 WCA 的联系表
     support:
       #original_hash: 610edba
       title: 支持 WCA

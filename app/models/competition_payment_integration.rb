@@ -31,6 +31,6 @@ class CompetitionPaymentIntegration < ApplicationRecord
 
   def self.validate_integration_name!(integration_name)
     raise ArgumentError.new("Invalid integration name. Allowed values are: #{AVAILABLE_INTEGRATIONS.keys.join(', ')}") unless
-      AVAILABLE_INTEGRATIONS.keys.include?(integration_name)
+      AVAILABLE_INTEGRATIONS.key?(integration_name)
   end
 end

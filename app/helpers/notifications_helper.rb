@@ -61,7 +61,7 @@ module NotificationsHelper
 
     user.actually_delegated_competitions.order_by_date
         .includes(:delegate_report, :delegates).where(delegate_reports: { posted_at: nil })
-        .each do |competition|
+        .find_each do |competition|
           if competition.user_should_post_delegate_report?(user)
             notifications << {
               text: "The delegate report for #{competition.name} has not been submitted.",

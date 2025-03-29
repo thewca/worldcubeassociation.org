@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "competitions/show", type: :feature, js: true do
+RSpec.describe "competitions/show", :js, type: :feature do
   let(:competition) { FactoryBot.create(:competition, :visible, event_ids: %w(333 444)) }
   let(:sixty_second_2_attempt_cutoff) { Cutoff.new(number_of_attempts: 2, attempt_result: 1.minute.in_centiseconds) }
   let(:top_16_advance) { AdvancementConditions::RankingCondition.new(16) }

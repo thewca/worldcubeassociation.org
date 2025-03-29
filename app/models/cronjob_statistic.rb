@@ -4,7 +4,7 @@ class CronjobStatistic < ApplicationRecord
   self.primary_key = "name"
 
   def in_progress?
-    self.run_start.present? && !self.run_end.present?
+    self.run_start.present? && self.run_end.blank?
   end
 
   def finished?

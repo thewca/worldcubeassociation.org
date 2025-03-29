@@ -19,7 +19,7 @@ class RegistrationReminderJob < WcaCronjob
           users_to_email.concat(competition.managers)
           registered_users = competition.registrations.accepted.pluck(:user_id)
           pending_registered_users = competition.registrations.pending.pluck(:user_id)
-          users_to_email.select { |user| !registered_users.include?(user.id) }.uniq.each do |user|
+          users_to_email.select { |user| registered_users.exclude?(user.id) }.uniq.each do |user|
             CompetitionsMailer.registration_reminder(competition, user, pending_registered_users.include?(user.id)).deliver_later
           end
         end

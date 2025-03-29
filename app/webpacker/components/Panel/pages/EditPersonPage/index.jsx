@@ -36,7 +36,10 @@ export default function EditPersonPage() {
                 </Item.Description>
               </Item.Content>
             </Item>
-            <EditPersonForm wcaId={wcaId} />
+            <EditPersonForm
+              wcaId={wcaId}
+              showDestroyButton
+            />
           </>
         )
         : (

@@ -17,6 +17,7 @@ class RoundResult
   include ActiveModel::Validations
 
   attr_accessor :person_id, :ranking, :attempts, :best, :average
+
   validates :person_id, numericality: { only_integer: true }
   validates :ranking, numericality: { only_integer: true }, allow_nil: true
   validates :attempts, length: { maximum: 5, message: "must have at most 5 attempts" }
@@ -77,6 +78,7 @@ class Attempt
   include ActiveModel::Validations
 
   attr_accessor :result, :reconstruction
+
   validates :result, numericality: { only_integer: true }
 
   def initialize(result: nil, reconstruction: nil)

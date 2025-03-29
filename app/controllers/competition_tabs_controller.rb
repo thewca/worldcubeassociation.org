@@ -14,6 +14,11 @@ class CompetitionTabsController < ApplicationController
     @competition_tab = @competition.tabs.build
   end
 
+  def edit
+    @competition = competition_from_params
+    @competition_tab = @competition.tabs.find(params[:id])
+  end
+
   def create
     @competition = competition_from_params
     @competition_tab = @competition.tabs.build(competition_tab_params)
@@ -23,11 +28,6 @@ class CompetitionTabsController < ApplicationController
     else
       render :new
     end
-  end
-
-  def edit
-    @competition = competition_from_params
-    @competition_tab = @competition.tabs.find(params[:id])
   end
 
   def update

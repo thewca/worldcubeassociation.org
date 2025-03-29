@@ -12,12 +12,11 @@ import {
   Message,
   Segment,
 } from 'semantic-ui-react';
-import { getSingleRegistration } from '../api/registration/get/get_registrations';
 import updateRegistration from '../api/registration/patch/update_registration';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
-import { setMessage } from '../Register/RegistrationMessage';
+import { showMessage } from '../Register/RegistrationMessage';
 import Loading from '../../Requests/Loading';
-import { EventSelector } from '../../CompetitionsOverview/CompetitionsFilters';
+import EventSelector from '../../wca/EventSelector';
 import Refunds from './Refunds';
 import { editPersonUrl } from '../../../lib/requests/routes.js.erb';
 import { useConfirm } from '../../../lib/providers/ConfirmProvider';
@@ -25,7 +24,9 @@ import I18n from '../../../lib/i18n';
 import RegistrationHistory from './RegistrationHistory';
 import { hasPassed } from '../../../lib/utils/dates';
 import getUsersInfo from '../api/user/post/getUserInfo';
+import { useRegistration } from '../lib/RegistrationProvider';
 import I18nHTMLTranslate from '../../I18nHTMLTranslate';
+import useSet from '../../../lib/hooks/useSet';
 
 export default function RegistrationEditor({ competitor, competitionInfo }) {
   const dispatch = useDispatch();
@@ -33,26 +34,21 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
   const [adminComment, setAdminComment] = useState('');
   const [status, setStatus] = useState('');
   const [guests, setGuests] = useState(0);
-  const [selectedEvents, setSelectedEvents] = useState([]);
+  const selectedEventIds = useSet();
   const [registration, setRegistration] = useState({});
   const confirm = useConfirm();
 
   const queryClient = useQueryClient();
 
-  const { isLoading: isRegistrationLoading, data: serverRegistration, refetch } = useQuery({
-    queryKey: ['registration-admin', competitionInfo.id, competitor.id],
-    queryFn: () => getSingleRegistration(competitor.id, competitionInfo),
-    refetchOnWindowFocus: false,
-    refetchOnReconnect: false,
-    staleTime: Infinity,
-    refetchOnMount: 'always',
-  });
+  const {
+    isFetching: isRegistrationLoading,
+    registration: serverRegistration, refetchRegistration: refetch,
+  } = useRegistration();
 
   const { isLoading, data: competitorsInfo } = useQuery({
     queryKey: ['history-user', serverRegistration?.history],
     queryFn: () => getUsersInfo(_.uniq(serverRegistration.history.flatMap((e) => (
-      (e.actor_type === 'user' || e.actor_type === 'worker') ? Number(e.actor_id) : [])
-    ))),
+      (e.actor_type === 'user' || e.actor_type === 'worker') ? Number(e.actor_id) : [])))),
     enabled: Boolean(serverRegistration),
   });
 
@@ -60,14 +56,14 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
     mutationFn: updateRegistration,
     onError: (data) => {
       const { error } = data.json;
-      dispatch(setMessage(
+      dispatch(showMessage(
         `competitions.registration_v2.errors.${error}`,
         'negative',
       ));
     },
     onSuccess: (data) => {
       queryClient.setQueryData(
-        ['registration-admin', competitionInfo.id, competitor.id],
+        ['registration', competitionInfo.id, competitor.id],
         {
           ...data.registration,
           payment: serverRegistration.payment,
@@ -75,27 +71,29 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
       );
       // Going from cancelled -> pending
       if (registration.competing.registration_status === 'cancelled') {
-        dispatch(setMessage('registrations.flash.registered', 'positive'));
+        dispatch(showMessage('registrations.flash.registered', 'positive'));
         // Not changing status
       } else {
-        dispatch(setMessage('registrations.flash.updated', 'positive'));
+        dispatch(showMessage('registrations.flash.updated', 'positive'));
       }
     },
   });
 
+  // using selectedEventIds.update in dependency array causes warnings
+  const { update: setSelectedEventIds } = selectedEventIds;
   useEffect(() => {
     if (serverRegistration) {
       setRegistration(serverRegistration);
       setComment(serverRegistration.competing.comment ?? '');
       setStatus(serverRegistration.competing.registration_status);
-      setSelectedEvents(serverRegistration.competing.event_ids);
+      setSelectedEventIds(serverRegistration.competing.event_ids);
       setAdminComment(serverRegistration.competing.admin_comment ?? '');
       setGuests(serverRegistration.guests ?? 0);
     }
-  }, [serverRegistration]);
+  }, [serverRegistration, setSelectedEventIds]);
 
   const hasEventsChanged = serverRegistration
-    && _.xor(serverRegistration.competing.event_ids, selectedEvents).length > 0;
+    && _.xor(serverRegistration.competing.event_ids, selectedEventIds.asArray).length > 0;
   const hasCommentChanged = serverRegistration
     && comment !== (serverRegistration.competing.comment ?? '');
   const hasAdminCommentChanged = serverRegistration
@@ -112,24 +110,24 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
 
   const commentIsValid = comment || !competitionInfo.force_comment_in_registration;
   const maxEvents = competitionInfo.events_per_registration_limit ?? Infinity;
-  const eventsAreValid = selectedEvents.length > 0 && selectedEvents.length <= maxEvents;
+  const eventsAreValid = selectedEventIds.size > 0 && selectedEventIds.size <= maxEvents;
 
   const handleRegisterClick = useCallback(() => {
     if (!hasChanges) {
-      dispatch(setMessage('competitions.registration_v2.update.no_changes', 'basic'));
+      dispatch(showMessage('competitions.registration_v2.update.no_changes', 'basic'));
     } else if (!commentIsValid) {
       // i18n-tasks-use t('registrations.errors.cannot_register_without_comment')
-      dispatch(setMessage('registrations.errors.cannot_register_without_comment', 'negative'));
+      dispatch(showMessage('registrations.errors.cannot_register_without_comment', 'negative'));
     } else if (!eventsAreValid) {
       // i18n-tasks-use t('registrations.errors.must_register')
-      dispatch(setMessage(
+      dispatch(showMessage(
         maxEvents === Infinity
           ? 'registrations.errors.must_register'
           : 'registrations.errors.exceeds_event_limit.other',
         'negative',
       ));
     } else {
-      dispatch(setMessage('competitions.registration_v2.update.being_updated', 'positive'));
+      dispatch(showMessage('competitions.registration_v2.update.being_updated', 'positive'));
       // Only send changed values
       const body = {
         user_id: competitor.id,
@@ -137,7 +135,7 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
         competing: {},
       };
       if (hasEventsChanged) {
-        body.competing.event_ids = selectedEvents;
+        body.competing.event_ids = selectedEventIds.asArray;
       }
       if (hasCommentChanged) {
         body.competing.comment = comment;
@@ -157,7 +155,8 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
         updateRegistrationMutation(body);
       }).catch(() => {});
     }
-  }, [hasChanges,
+  }, [
+    hasChanges,
     confirm,
     commentIsValid,
     eventsAreValid,
@@ -171,26 +170,12 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
     hasStatusChanged,
     hasGuestsChanged,
     updateRegistrationMutation,
-    selectedEvents,
+    selectedEventIds.asArray,
     comment,
     adminComment,
     status,
-    guests]);
-
-  const handleEventSelection = ({ type, eventId }) => {
-    if (type === 'select_all_events') {
-      setSelectedEvents(competitionInfo.event_ids);
-    } else if (type === 'clear_events') {
-      setSelectedEvents([]);
-    } else if (type === 'toggle_event') {
-      const index = selectedEvents.indexOf(eventId);
-      if (index === -1) {
-        setSelectedEvents([...selectedEvents, eventId]);
-      } else {
-        setSelectedEvents(selectedEvents.toSpliced(index, 1));
-      }
-    }
-  };
+    guests,
+  ]);
 
   const registrationEditDeadlinePassed = Boolean(competitionInfo.event_change_deadline_date)
     && hasPassed(competitionInfo.event_change_deadline_date);
@@ -215,39 +200,43 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
         )}
         {registrationEditDeadlinePassed && (
           <Message>
-            The Registration Edit Deadline has passed! <strong>Changes should only be made in extraordinary circumstances</strong>
+            The Registration Edit Deadline has passed!
+            {' '}
+            <strong>Changes should only be made in extraordinary circumstances.</strong>
           </Message>
         )}
         <Header>{competitor.name}</Header>
-        <Form.Field required error={selectedEvents.length === 0}>
+        <Form.Field required error={selectedEventIds.size === 0}>
           <EventSelector
-            onEventSelection={handleEventSelection}
-            eventList={competitionInfo.event_ids}
-            selectedEvents={selectedEvents}
             id="event-selection"
+            eventList={competitionInfo.event_ids}
+            selectedEvents={selectedEventIds.asArray}
+            onEventClick={selectedEventIds.toggle}
+            onAllClick={() => selectedEventIds.update(competitionInfo.event_ids)}
+            onClearClick={selectedEventIds.clear}
             maxEvents={maxEvents}
             shouldErrorOnEmpty
           />
         </Form.Field>
 
-        <label>Comment</label>
         <Form.TextArea
+          label="Comment"
           id="competitor-comment"
           maxLength={240}
           value={comment}
           onChange={(event, data) => setComment(data.value)}
         />
 
-        <label>Administrative Notes</label>
         <Form.TextArea
+          label="Administrative Notes"
           id="admin-comment"
           maxLength={240}
           value={adminComment}
           onChange={(event, data) => setAdminComment(data.value)}
         />
 
+        <Header as="h6">Status</Header>
         <Form.Group inline>
-          <label>Status</label>
           <Form.Radio
             id="radio-status-pending"
             label="Pending"
@@ -290,8 +279,8 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
             onChange={(event, data) => setStatus(data.value)}
           />
         </Form.Group>
-        <label>Guests</label>
         <Form.Input
+          label="Guests"
           id="guest-dropdown"
           type="number"
           min={0}

@@ -18,7 +18,7 @@ class RegulationsTranslationsController < RegulationsController
   def translated_pdfs
     respond_to do |format|
       format.pdf do
-        return redirect_to "https://regulations.worldcubeassociation.org/translations/#{params[:language]}/#{params[:pdf]}.pdf", status: 302, allow_other_host: true
+        return redirect_to "https://regulations.worldcubeassociation.org/translations/#{params[:language]}/#{params[:pdf]}.pdf", status: :found, allow_other_host: true
       end
     end
   end

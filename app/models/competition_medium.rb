@@ -18,7 +18,7 @@ class CompetitionMedium < ApplicationRecord
   # https://github.com/thewca/worldcubeassociation.org/issues/2070
   # tracks adding this gem to our codebase.
   def self.types_i18n
-    self.types.keys.to_h { |k| [k, k.titleize] }
+    self.types.keys.index_with { |k| k.titleize }
   end
 
   scope :belongs_to_region, lambda { |region_id|
@@ -29,8 +29,6 @@ class CompetitionMedium < ApplicationRecord
 
   before_save :set_timestamp_decided
   private def set_timestamp_decided
-    if status_change && status == "accepted"
-      self.timestampDecided = Time.now
-    end
+    self.timestampDecided = Time.now if status_change && status == "accepted"
   end
 end

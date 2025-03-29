@@ -21,6 +21,7 @@ export default function ButtonActivatedModal({
   disabled,
   tooltip,
   reset = () => null,
+  contentScrolling = false,
   onOk,
   ...props
 }) {
@@ -93,7 +94,7 @@ export default function ButtonActivatedModal({
       {...props}
     >
       <Modal.Header>{title}</Modal.Header>
-      <Modal.Content scrolling>
+      <Modal.Content scrolling={contentScrolling}>
         <Modal.Description>
           {children}
         </Modal.Description>

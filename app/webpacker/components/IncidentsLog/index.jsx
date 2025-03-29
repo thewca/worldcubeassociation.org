@@ -1,4 +1,6 @@
-import React, { useContext, useState } from 'react';
+import React, {
+  useContext, useEffect, useMemo, useState,
+} from 'react';
 import {
   Button,
   Dropdown,
@@ -16,6 +18,7 @@ import { DelegateMattersContext } from '../../lib/contexts';
 import useLoadedData from '../../lib/hooks/useLoadedData';
 import useDebounce from '../../lib/hooks/useDebounce';
 import usePagination from '../../lib/hooks/usePagination';
+import useOrderedSet from '../../lib/hooks/useOrderedSet';
 
 import {
   incidentsUrl,
@@ -60,7 +63,7 @@ export default function IncidentsLog({
   const pagination = usePagination();
 
   // note: page will not render after setting url search params
-  const searchParams = new URLSearchParams(window.location.search);
+  const searchParams = useMemo(() => new URLSearchParams(window.location.search), []);
 
   const [searchString, setSearchStringState] = useState(
     searchParams.get(SEARCH) || '',
@@ -71,14 +74,13 @@ export default function IncidentsLog({
     window.history.replaceState({}, '', `${window.location.pathname}?${searchParams}`);
   };
 
-  const [filterTags, setFilterTagsState] = useState(
-    (searchParams.get(TAGS) || '').split(',').filter(Boolean),
-  );
-  const setFilterTags = (tagArray) => {
-    setFilterTagsState(tagArray);
-    searchParams.set(TAGS, tagArray.join(','));
+  // order isn't important, but it keeps the url consistent
+  const filterTags = useOrderedSet((searchParams.get(TAGS) || '').split(',').filter(Boolean));
+
+  useEffect(() => {
+    searchParams.set(TAGS, filterTags.asArray.join(','));
     window.history.replaceState({}, '', `${window.location.pathname}?${searchParams}`);
-  };
+  }, [filterTags.asArray, searchParams]);
 
   const debouncedSearchString = useDebounce(searchString, DEBOUNCE_MS);
 
@@ -90,7 +92,7 @@ export default function IncidentsLog({
   } = useLoadedData(incidentsUrl(
     pagination.entriesPerPage,
     pagination.activePage,
-    filterTags,
+    filterTags.asArray,
     debouncedSearchString,
   ));
   const totalEntries = parseInt(headers.get('total'), 10);
@@ -125,9 +127,9 @@ export default function IncidentsLog({
           search
           selection
           options={allTagsAsOptions}
-          value={filterTags}
+          value={filterTags.asArray}
           onChange={(_, newData) => {
-            setFilterTags(newData.value);
+            filterTags.update(newData.value);
             pagination.setActivePage(1);
           }}
         />
@@ -145,9 +147,7 @@ export default function IncidentsLog({
               <IncidentsLogBody
                 incidents={data}
                 addTagToSearch={(tag) => {
-                  setFilterTags(
-                    filterTags.includes(tag) ? filterTags : [...filterTags, tag],
-                  );
+                  filterTags.add(tag);
                   pagination.setActivePage(1);
                 }}
               />

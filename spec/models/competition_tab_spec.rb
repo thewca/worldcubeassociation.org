@@ -74,4 +74,18 @@ RSpec.describe CompetitionTab, type: :model do
       expect(competition.tabs.to_a).to eq [tab1, tab2, tab3]
     end
   end
+
+  context "#verify_if_full_urls" do
+    let(:competition_tab) { FactoryBot.build(:competition_tab) }
+
+    it "doesn't allow relative URLs" do
+      competition_tab.update(content: "[Link](/relative)")
+      expect(competition_tab).to be_invalid
+    end
+
+    it "allows full URLs" do
+      competition_tab.update(content: "[Link](http://full)")
+      expect(competition_tab).to be_valid
+    end
+  end
 end

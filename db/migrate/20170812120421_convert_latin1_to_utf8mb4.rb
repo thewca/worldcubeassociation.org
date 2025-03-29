@@ -1,3 +1,4 @@
+# rubocop:disable all
 # frozen_string_literal: true
 
 class ConvertLatin1ToUtf8mb4 < ActiveRecord::Migration[5.1]

@@ -96,7 +96,6 @@ module DbDumpHelper
 
     LogTask.log_task "Moving zipped file to 's3://#{s3_path}'" do
       bucket = Aws::S3::Resource.new(
-        region: EnvConfig.STORAGE_AWS_REGION,
         credentials: Aws::ECSCredentials.new,
       ).bucket(BUCKET_NAME)
       bucket.object(s3_path).upload_file(zip_filename)
@@ -106,8 +105,7 @@ module DbDumpHelper
 
       # Invalidate Export Route in Prod
       if EnvConfig.WCA_LIVE_SITE?
-        Aws::CloudFront::Client.new(region: EnvConfig.STORAGE_AWS_REGION,
-                                    credentials: Aws::ECSCredentials.new)
+        Aws::CloudFront::Client.new(credentials: Aws::ECSCredentials.new)
                                .create_invalidation({
                                                       distribution_id: EnvConfig.CDN_ASSETS_DISTRIBUTION_ID,
                                                       invalidation_batch: {

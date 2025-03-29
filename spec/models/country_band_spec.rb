@@ -14,7 +14,7 @@ RSpec.describe CountryBand do
   end
 
   it "invalidates band with invalid band id" do
-    cb = CountryBand.new(number: 6, iso2: "HELLO")
-    expect(cb).to be_invalid_with_errors(number: ["is not included in the list"])
+    cb = CountryBand.new(number: 6, iso2: "IN")
+    expect(cb).to be_invalid_with_errors(number: ["must be less than or equal to 5"])
   end
 end

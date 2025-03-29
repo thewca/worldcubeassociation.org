@@ -4,6 +4,7 @@ class Cutoff
   include ActiveModel::Validations
 
   attr_accessor :number_of_attempts, :attempt_result, :event
+
   validates :number_of_attempts, numericality: { only_integer: true }
   validates :attempt_result, numericality: { only_integer: true }
 

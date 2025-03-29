@@ -13,7 +13,7 @@ RSpec.describe CompetitionTabsController, type: :controller do
 
     it "can view the tabs index for his competition" do
       get :index, params: { competition_id: competition.id }
-      expect(response.status).to eq 200
+      expect(response).to have_http_status :ok
       expect(response).to render_template :index
     end
 

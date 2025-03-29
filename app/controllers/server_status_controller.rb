@@ -2,13 +2,11 @@
 
 class ServerStatusController < ApplicationController
   def index
-    @locale_stats = ApplicationController.locale_counts.sort_by { |locale, count| count }.reverse
+    @locale_stats = ApplicationController.locale_counts.sort_by { |_locale, count| count }.reverse
 
     @checks = checks
     @everything_good = @checks.all?(&:is_passing?)
-    if !@everything_good
-      render status: 503
-    end
+    render status: :service_unavailable unless @everything_good
   end
 
   def checks
@@ -50,7 +48,7 @@ class JobsCheck < StatusCheck
 
   protected def _status_description
     jobs_that_should_have_run_by_now = CronjobStatistic.where(recently_rejected: 0, run_start: nil)
-                                                       .where('enqueued_at < ?', MINUTES_IN_WHICH_A_JOB_SHOULD_HAVE_STARTED_RUNNING.minutes.ago)
+                                                       .where(enqueued_at: ...MINUTES_IN_WHICH_A_JOB_SHOULD_HAVE_STARTED_RUNNING.minutes.ago)
 
     oldest_job_that_should_have_run_by_now = jobs_that_should_have_run_by_now.order(:enqueued_at).first
 
@@ -92,9 +90,7 @@ class MysqlSettingsCheck < StatusCheck
   EXPECTED_MYSQL_SETTINGS = {
     "@@innodb_ft_min_token_size" => 2,
     "@@ft_min_word_len" => 2,
-    # The default server character set changed from latin1 to ut8mb4 in mysql 8.0, however our PHP didn't recognize it and failed to connect.
-    # We reverted it to latin1. The setting only affects the default charset for CREATE DATABASE statements that have no charset specified.
-    "@@character_set_server" => "latin1",
+    "@@character_set_server" => "utf8mb4",
   }.freeze
 
   def label

@@ -14,9 +14,7 @@ class CheckRegionalRecordsForm
   end
 
   def run_check
-    if self.refresh_index? && self.competition_id.present?
-      CheckRegionalRecords.add_to_lookup_table(self.competition_id)
-    end
+    CheckRegionalRecords.add_to_lookup_table(self.competition_id) if self.refresh_index? && self.competition_id.present?
 
     CheckRegionalRecords.check_records(self.check_event_id, self.competition_id)
   end

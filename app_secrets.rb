@@ -25,9 +25,7 @@ SuperConfig::Base.class_eval do
     File.delete(file_path) if refresh && File.exist?(file_path)
 
     self.vault(secret_name, cache: true) do |vault_secret|
-      unless File.exist? file_path
-        File.write file_path, vault_secret.to_json
-      end
+      File.write file_path, vault_secret.to_json unless File.exist? file_path
 
       File.expand_path file_path
     end
@@ -38,7 +36,7 @@ SuperConfig::Base.class_eval do
       puts "Received exception #{e} from Vault - attempt #{attempt}" if e.present?
 
       secret = Vault.logical.read("kv/data/#{EnvConfig.VAULT_APPLICATION}/#{secret_name}")
-      raise "Tried to read #{secret_name}, but doesn't exist" unless secret.present?
+      raise "Tried to read #{secret_name}, but doesn't exist" if secret.blank?
 
       secret.data[:data]
     end
@@ -82,6 +80,7 @@ AppSecrets = SuperConfig.new(raise_exception: !EnvConfig.ASSETS_COMPILATION?) do
     vault :TNOODLE_PUBLIC_KEY
     vault :WRC_WEBHOOK_USERNAME
     vault :WRC_WEBHOOK_PASSWORD
+    vault :CURRENCY_LAYER_API_KEY
 
     # To allow logging in to staging with your prod account
     unless EnvConfig.WCA_LIVE_SITE?
@@ -114,6 +113,7 @@ AppSecrets = SuperConfig.new(raise_exception: !EnvConfig.ASSETS_COMPILATION?) do
     optional :RECAPTCHA_PRIVATE_KEY, :string, ''
     optional :CDN_AVATARS_DISTRIBUTION_ID, :string, ''
     optional :STAGING_PASSWORD, :string, ''
+    optional :NEW_RELIC_LICENSE_KEY, :string, ''
     optional :SMTP_USERNAME, :string, ''
     optional :SMTP_PASSWORD, :string, ''
     optional :GOOGLE_APPLICATION_CREDENTIALS, :string, ''
@@ -124,5 +124,6 @@ AppSecrets = SuperConfig.new(raise_exception: !EnvConfig.ASSETS_COMPILATION?) do
     optional :TNOODLE_PUBLIC_KEY, :string, ''
     optional :WRC_WEBHOOK_USERNAME, :string, ''
     optional :WRC_WEBHOOK_PASSWORD, :string, ''
+    optional :CURRENCY_LAYER_API_KEY, :string, ''
   end
 end

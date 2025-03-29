@@ -3,6 +3,8 @@ resource "aws_cloudwatch_log_group" "this" {
 }
 
 locals {
+  sidekiq_environment = [
+  ]
   rails_environment = [
     {
       name  = "WCA_LIVE_SITE"
@@ -10,6 +12,10 @@ locals {
     },
     {
       name  = "ROOT_URL"
+      value = var.ROOT_URL
+    },
+    {
+      name  = "OIDC_ISSUER"
       value = var.ROOT_URL
     },
     {
@@ -53,19 +59,7 @@ locals {
       value = aws_s3_bucket.storage-bucket.id
     },
     {
-      name = "STORAGE_AWS_REGION"
-      value = var.region
-    },
-    {
-      name = "VAULT_AWS_REGION"
-      value = var.region
-    },
-    {
-      name = "S3_AVATARS_REGION"
-      value = var.region
-    },
-    {
-      name = "DATABASE_AWS_REGION"
+      name = "AWS_REGION"
       value = var.region
     },
     {
@@ -119,6 +113,10 @@ locals {
     {
       name = "REGISTRATION_QUEUE"
       value = aws_sqs_queue.this.url
+    },
+    {
+      name = "LIVE_QUEUE"
+      value = aws_sqs_queue.results.url
     },
     {
       name = "VAULT_APPLICATION"
@@ -218,7 +216,7 @@ data "aws_iam_policy_document" "task_policy" {
       "sqs:GetQueueAttributes",
       "sqs:GetQueueUrl"
     ]
-    resources = [aws_sqs_queue.this.arn]
+    resources = [aws_sqs_queue.this.arn, aws_sqs_queue.results.arn]
   }
 }
 

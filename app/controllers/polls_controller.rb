@@ -18,6 +18,10 @@ class PollsController < ApplicationController
     @poll = Poll.find(params[:id])
   end
 
+  def edit
+    @poll = Poll.find(params[:id])
+  end
+
   def create
     @poll = Poll.new(poll_params)
     @poll.multiple = false
@@ -31,18 +35,14 @@ class PollsController < ApplicationController
     end
   end
 
-  def edit
-    @poll = Poll.find(params[:id])
-  end
-
   def update
     @poll = Poll.find(params[:id])
     if @poll.update(poll_params)
-      if params[:commit] == "Confirm"
-        flash[:success] = "Poll confirmed and open to voting"
-      else
-        flash[:success] = "Updated poll"
-      end
+      flash[:success] = if params[:commit] == "Confirm"
+                          "Poll confirmed and open to voting"
+                        else
+                          "Updated poll"
+                        end
       redirect_to edit_poll_path(@poll)
     else
       render :edit
@@ -70,9 +70,7 @@ class PollsController < ApplicationController
       :confirmed_at,
       poll_options_attributes: [:id, :description, :_destroy],
     ).tap do |poll_params|
-      if params[:commit] == "Confirm" && current_user.can_create_poll?
-        poll_params[:confirmed_at] = Time.now
-      end
+      poll_params[:confirmed_at] = Time.now if params[:commit] == "Confirm" && current_user.can_create_poll?
     end
   end
 end

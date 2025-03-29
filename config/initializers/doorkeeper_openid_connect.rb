@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 Doorkeeper::OpenidConnect.configure do
-  issuer EnvConfig.ROOT_URL
+  issuer EnvConfig.OIDC_ISSUER
   subject do |resource_owner|
     resource_owner.id
   end
@@ -26,16 +26,28 @@ Doorkeeper::OpenidConnect.configure do
   expiration 300.seconds
 
   claims do
-    claim :email do |resource_owner|
+    claim :email, response: [:id_token, :user_info] do |resource_owner|
       resource_owner.email
     end
 
-    claim :full_name do |resource_owner|
-      "#{resource_owner.first_name} #{resource_owner.last_name}"
+    claim :name, response: [:id_token, :user_info] do |resource_owner|
+      resource_owner.name
     end
+  end
 
-    claim :teams, response: [:id_token, :user_info] do |resource_owner|
-      resource_owner.teams
-    end
+  discovery_url_options do
+    {
+      # Override the host only for the `authorization` endpoint, because
+      #   it's the only one that users need to manually access through a browser.
+      # All other endpoints follow ROOT_URL, and you (the developer) are responsible
+      #   for providing correct values there. In case of local development, we use Docker
+      #   which has independent but network-linked containers, so the ROOT_URL will probably
+      #   be something like `wca_on_rails:3000` (which is the way other containers talk to Rails).
+      #   However, that URL won't work when opening it in the browser, which is why we do this override.
+      # Note that the doorkeeper-openid_connect gem exposes this setting (probably) for exactly this
+      #   use-case. It's even a listed sample snippet in their documentation: Just ABOVE
+      #   https://github.com/doorkeeper-gem/doorkeeper-openid_connect?tab=readme-ov-file#scopes
+      authorization: { host: EnvConfig.ROOT_URL },
+    }
   end
 end

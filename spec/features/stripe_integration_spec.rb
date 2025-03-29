@@ -7,7 +7,7 @@ def give_donation_checkbox
   all(:css, "label[for='useDonationCheckbox']").last
 end
 
-RSpec.feature "Stripe PaymentElement integration", js: true do
+RSpec.feature "Stripe PaymentElement integration", :js do
   before :each do
     # Enable CSRF protection just for these tests.
     # See https://blog.tomoyukikashiro.me/post/test-csrf-in-feature-test-using-capybara/

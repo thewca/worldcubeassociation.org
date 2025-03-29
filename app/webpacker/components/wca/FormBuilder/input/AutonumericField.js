@@ -35,6 +35,7 @@ export default function AutonumericField({
       decimalPlaces: (currencyInfo.subunitToUnit === 1) ? 0 : 2,
       modifyValueOnWheel: false,
       minimumValue: 0,
+      onInvalidPaste: 'clamp',
     };
     if (max) {
       options.maximumValue = max / currencyInfo.subunitToUnit;

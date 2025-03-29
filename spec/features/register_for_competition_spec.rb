@@ -14,7 +14,7 @@ def within_modal(&)
   within(find_modal(&))
 end
 
-RSpec.feature "Registering for a competition", js: true do
+RSpec.feature "Registering for a competition", :js do
   let!(:user) { FactoryBot.create :user }
   let!(:delegate) { FactoryBot.create :delegate }
   let(:competition) { FactoryBot.create :competition, :registration_open, :visible, :editable_registrations, delegates: [delegate] }
@@ -33,7 +33,7 @@ RSpec.feature "Registering for a competition", js: true do
       expect(page).to have_text("Your registration is processing...")
       perform_enqueued_jobs
       expect(page).to have_text("Your registration is pending approval by the organizers.")
-      registration = competition.registrations.find_by_user_id(user.id)
+      registration = competition.registrations.find_by(user_id: user.id)
       expect(registration).not_to be_nil
     end
 
@@ -62,7 +62,7 @@ RSpec.feature "Registering for a competition", js: true do
       #   _why_ there is no registration found. It's enough to know that the registration wasn't successful.
       perform_enqueued_jobs
 
-      registration = competition.registrations.find_by_user_id(user.id)
+      registration = competition.registrations.find_by(user_id: user.id)
       expect(registration).to be_nil
     end
 
@@ -75,7 +75,7 @@ RSpec.feature "Registering for a competition", js: true do
       click_button "Continue to next Step"
       expect(find("#checkbox-444")).to match_selector(".active")
       expect(find("#checkbox-555")).to match_selector(".active")
-      expect(find("#checkbox-666")).to_not match_selector(".active")
+      expect(find("#checkbox-666")).not_to match_selector(".active")
     end
 
     context "editing registration" do
@@ -131,6 +131,7 @@ RSpec.feature "Registering for a competition", js: true do
   context "signed in as delegate" do
     let!(:registration) { FactoryBot.create(:registration, user: user, competition: competition) }
     let(:delegate_registration) { FactoryBot.create(:registration, :accepted, user: delegate, competition: competition) }
+
     before :each do
       sign_in delegate
     end
@@ -181,7 +182,7 @@ RSpec.feature "Registering for a competition", js: true do
       end
 
       expect(page).to have_text("Updated registration")
-      expect(Registration.find_by_id(registration.id).cancelled?).to eq true
+      expect(Registration.find_by(id: registration.id).cancelled?).to be true
     end
   end
 end

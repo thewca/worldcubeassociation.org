@@ -37,6 +37,6 @@ module I18nUtils
 
     collator = TwitterCldr::Collation::Collator.new(cldr_locale)
 
-    array.sort_by! { |element| collator.get_sort_key(block.call(element)) }
+    array.sort_by! { |element| collator.get_sort_key(yield(element)) }
   end
 end
