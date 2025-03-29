@@ -108,6 +108,7 @@ gem 'after_commit_everywhere'
 gem 'slack-ruby-client'
 gem 'puma'
 gem "tzf"
+gem 'hash_diff'
 
 group :development, :test do
   gem 'spring'
