@@ -60,6 +60,7 @@ export default function SelectRoundsModal({ timeLimit, excludeEventId, onOk }) {
       hasUnsavedChanges={hasUnsavedChanges()}
       onOk={handleOk}
       reset={reset}
+      contentScrolling
     >
       {wcifRounds.map((wcifRound) => {
         const roundId = wcifRound.id;

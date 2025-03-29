@@ -1,9 +1,10 @@
 import React from 'react';
 import {
-  Icon, Popup, Loader, Table, Flag, Label, Header, Container, Grid, List, Image, Button,
+  Icon, Popup, Loader, Table, Label, Header, Container, Grid, List, Image, Button,
 } from 'semantic-ui-react';
 
 import { BarLoader } from 'react-spinners';
+import { DateTime } from 'luxon';
 import I18n from '../../lib/i18n';
 import {
   computeAnnouncementStatus,
@@ -15,12 +16,14 @@ import {
   isProbablyOver,
   PseudoLinkMarkdown,
   reportAdminCellContent,
+  resultsSubmittedAtAdminCellContent,
   startYear,
-  timeDifferenceAfter,
   timeDifferenceBefore,
 } from '../../lib/utils/competition-table';
 import { countries } from '../../lib/wca-data.js.erb';
 import { adminCompetitionUrl, competitionUrl } from '../../lib/requests/routes.js.erb';
+import { dateRange, toRelativeOptions } from '../../lib/utils/dates';
+import RegionFlag from '../wca/RegionFlag';
 
 function ListViewSection({
   competitions,
@@ -154,17 +157,18 @@ export function CompetitionsTable({
                 />
               </Table.Cell>
               <Table.Cell textAlign="right" width={2}>
-                {comp.date_range}
+                {dateRange(comp.start_date, comp.end_date)}
               </Table.Cell>
-              <Table.Cell width={6}>
-                <Flag name={comp.country_iso2?.toLowerCase()} />
+              <Table.Cell width={5}>
+                {comp.country_iso2 && <RegionFlag iso2={comp.country_iso2} />}
+                {' '}
                 <a href={competitionUrl(comp.id)}>{comp.short_display_name}</a>
               </Table.Cell>
               <Table.Cell width={4}>
                 <strong>{countries.byIso2[comp.country_iso2].name}</strong>
                 {`, ${comp.city}`}
               </Table.Cell>
-              <Table.Cell width={4}>
+              <Table.Cell width={5}>
                 <PseudoLinkMarkdown text={comp.venue} />
               </Table.Cell>
             </Table.Row>
@@ -210,15 +214,18 @@ export function CompetitionsTabletTable({
                 />
               </Table.Cell>
               <Table.Cell textAlign="right" width={3}>
-                {comp.date_range}
+                {dateRange(comp.start_date, comp.end_date)}
               </Table.Cell>
               <Table.Cell width={6}>
-                <Flag name={comp.country_iso2?.toLowerCase()} />
+                {comp.country_iso2 && <RegionFlag iso2={comp.country_iso2} />}
+                {' '}
                 <a href={competitionUrl(comp.id)}>{comp.short_display_name}</a>
               </Table.Cell>
               <Table.Cell width={7}>
-                <strong>{countries.byIso2[comp.country_iso2].name}</strong>
-                {`, ${comp.city}`}
+                <span>
+                  <strong>{countries.byIso2[comp.country_iso2].name}</strong>
+                  {`, ${comp.city}`}
+                </span>
                 <PseudoLinkMarkdown text={comp.venue} />
               </Table.Cell>
             </Table.Row>
@@ -248,23 +255,32 @@ export function CompetitionsMobileTable({
             />
             <Table.Row error={isCancelled(comp)} className="competition-info mobile-compact">
               <Table.Cell>
-                <Label ribbon="right">
+                <Label ribbon="right" size="small">
                   <StatusIcon
                     comp={comp}
                     shouldShowRegStatus={shouldShowRegStatus}
                     isSortedByAnnouncement={isSortedByAnnouncement}
                     regStatusLoading={regStatusLoading}
                   />
-                  {comp.date_range}
+                  {dateRange(comp.start_date, comp.end_date)}
                 </Label>
-                <Flag name={comp.country_iso2?.toLowerCase()} />
-                <a href={competitionUrl(comp.id)}>{comp.short_display_name}</a>
+                {comp.country_iso2 && <RegionFlag iso2={comp.country_iso2} />}
                 {' '}
+                <a href={competitionUrl(comp.id)}>{comp.short_display_name}</a>
               </Table.Cell>
-              <Table.Cell>
-                <strong>{countries.byIso2[comp.country_iso2].name}</strong>
-                {`, ${comp.city}`}
-                <PseudoLinkMarkdown text={comp.venue} />
+              {
+                /* This "magical" 1px is necessary so that the long text from the venue
+                *   "clears" the floating date indicator from above. Otherwise, the text
+                *   would break too early. SemUI doesn't support "nicely" padding cells,
+                *   if anyone has a better idea then please shout. */
+              }
+              <Table.Cell style={{ marginTop: '1px' }}>
+                <span>
+                  <strong>{countries.byIso2[comp.country_iso2].name}</strong>
+                  {`, ${comp.city}`}
+                </span>
+                {' '}
+                <PseudoLinkMarkdown text={comp.venue} RenderAs="span" />
               </Table.Cell>
             </Table.Row>
           </React.Fragment>
@@ -329,7 +345,8 @@ function AdminCompetitionsTable({
                   />
                 </Table.Cell>
                 <Table.Cell width={4}>
-                  <Flag name={comp.country_iso2?.toLowerCase()} />
+                  {comp.country_iso2 && <RegionFlag iso2={comp.country_iso2} />}
+                  {' '}
                   <a href={competitionUrl(comp.id)}>{comp.short_display_name}</a>
                   <br />
                   <strong>{countries.byIso2[comp.country_iso2].name}</strong>
@@ -350,7 +367,7 @@ function AdminCompetitionsTable({
                   </List>
                 </Table.Cell>
                 <Table.Cell textAlign="center" width={3}>
-                  {comp.date_range}
+                  {dateRange(comp.start_date, comp.end_date)}
                 </Table.Cell>
                 <Table.Cell
                   textAlign="center"
@@ -378,11 +395,7 @@ function AdminCompetitionsTable({
                   warning={resultsPostedStatus === 'warning'}
                   error={resultsPostedStatus === 'danger'}
                 >
-                  {
-                    comp.results_posted_at
-                      ? timeDifferenceAfter(comp, comp.results_posted_at)
-                      : (isProbablyOver(comp) && I18n.t('competitions.competition_info.pending'))
-                  }
+                  {resultsSubmittedAtAdminCellContent(comp)}
                 </Table.Cell>
                 <Table.Cell collapsing>
                   <Button
@@ -419,7 +432,9 @@ function ConditionalYearHeader({
   ) {
     return (
       <Table.Row>
-        <Table.Cell textAlign="center" colSpan={colSpan}>{startYear(competitions[index])}</Table.Cell>
+        <Table.Cell textAlign="center" colSpan={colSpan} active>
+          <Header>{startYear(competitions[index])}</Header>
+        </Table.Cell>
       </Table.Row>
     );
   }
@@ -437,32 +452,53 @@ function RegistrationStatus({ comp, isLoading }) {
     return (
       <Popup
         trigger={<Icon name="clock" color="blue" />}
-        content={I18n.t('competitions.index.tooltips.registration.opens_in', { duration: comp.time_until_registration })}
+        content={
+          I18n.t(
+            'competitions.index.tooltips.registration.opens_in',
+            {
+              relativeDate: DateTime.fromISO(comp.registration_open).toRelative(
+                toRelativeOptions.default,
+              ),
+            },
+          )
+        }
         position="top center"
         size="tiny"
       />
     );
   }
+
   if (comp.registration_status === 'past') {
     return (
       <Popup
         trigger={<Icon name="user times" color="red" />}
-        content={I18n.t('competitions.index.tooltips.registration.closed', { days: I18n.t('common.days', { count: dayDifferenceFromToday(comp.start_date) }) })}
+        content={
+          I18n.t(
+            'competitions.index.tooltips.registration.closed',
+            {
+              relativeDate: DateTime.fromISO(comp.start_date).toRelative(
+                toRelativeOptions.roundUpAndAtBestDayPrecision,
+              ),
+            },
+          )
+        }
         position="top center"
         size="tiny"
       />
     );
   }
+
   if (comp.registration_status === 'full') {
     return (
       <Popup
-        trigger={<Icon name="user clock" color="orange" />}
+        trigger={<Icon className="user clock" color="orange" />}
         content={I18n.t('competitions.index.tooltips.registration.full')}
         position="top center"
         size="tiny"
       />
     );
   }
+
   if (comp.registration_status === 'open') {
     return (
       <Popup
@@ -502,7 +538,10 @@ function StatusIcon({
   } else if (shouldShowRegStatus) {
     return <RegistrationStatus comp={comp} isLoading={regStatusLoading} />;
   } else if (isSortedByAnnouncement) {
-    tooltipInfo = I18n.t('competitions.index.tooltips.hourglass.announced_on', { announcement_date: comp.announced_at });
+    const announcedAtLuxon = DateTime.fromISO(comp.announced_at);
+    const announcedAtFormatted = announcedAtLuxon.toLocaleString(DateTime.DATETIME_MED);
+
+    tooltipInfo = I18n.t('competitions.index.tooltips.hourglass.announced_on', { announcement_date: announcedAtFormatted });
     iconClass = 'hourglass start';
   } else {
     tooltipInfo = I18n.t('competitions.index.tooltips.hourglass.starts_in', { days: I18n.t('common.days', { count: dayDifferenceFromToday(comp.start_date) }) });

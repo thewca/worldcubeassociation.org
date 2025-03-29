@@ -31,7 +31,7 @@ module ApplicationHelper
 
   def link_to_google_maps_place(text, latitude, longitude)
     url = "https://www.google.com/maps/place/#{latitude},#{longitude}"
-    link_to text, url, target: "_blank"
+    link_to text, url, target: "_blank", rel: "noopener"
   end
 
   def link_to_competition_schedule_tab(comp)
@@ -49,11 +49,11 @@ module ApplicationHelper
     text = strip_tags(html)
     # Compute the first and last index where query parts appear and use the whole text between them for excerpt.
     search_in_me = ActiveSupport::Inflector.transliterate(text).downcase
-    first = phrases.map { |phrase| search_in_me.index(phrase.downcase) }.compact.min
-    last = phrases.map do |phrase|
+    first = phrases.filter_map { |phrase| search_in_me.index(phrase.downcase) }.min
+    last = phrases.filter_map do |phrase|
       index = search_in_me.index(phrase.downcase)
       index + phrase.length if index
-    end.compact.max
+    end.max
     excerpted = if first # At least one phrase matches the text.
                   excerpt(text, text[first..last], radius: WCA_EXCERPT_RADIUS)
                 else
@@ -88,18 +88,10 @@ module ApplicationHelper
   def wca_table(responsive: true, hover: true, striped: true, floatThead: true, table_class: "", data: {}, greedy: true, table_id: nil, &block)
     data[:locale] = I18n.locale
     table_classes = "table table-condensed #{table_class}"
-    if floatThead
-      table_classes += " floatThead"
-    end
-    if hover
-      table_classes += " table-hover"
-    end
-    if striped
-      table_classes += " table-striped"
-    end
-    if greedy
-      table_classes += " table-greedy-last-column"
-    end
+    table_classes += " floatThead" if floatThead
+    table_classes += " table-hover" if hover
+    table_classes += " table-striped" if striped
+    table_classes += " table-greedy-last-column" if greedy
 
     content_tag :div, class: (responsive ? "table-responsive" : "") do
       content_tag :table, id: table_id, class: table_classes, data: data, &block
@@ -128,9 +120,7 @@ module ApplicationHelper
 
   def alert(type, content = nil, note: false, &block)
     content = capture(&block) if block_given?
-    if note
-      content = content_tag(:strong, "Note:") + " " + content
-    end
+    content = content_tag(:strong, "Note:") + " " + content if note
     content_tag :div, content, class: "alert alert-#{type}"
   end
 
@@ -188,10 +178,10 @@ module ApplicationHelper
   end
 
   def wca_id_link(wca_id, **options)
-    if wca_id.present?
-      content_tag :span, class: "wca-id" do
-        link_to wca_id, person_url(wca_id), options
-      end
+    return if wca_id.blank?
+
+    content_tag :span, class: "wca-id" do
+      link_to wca_id, person_url(wca_id), options
     end
   end
 
@@ -243,7 +233,7 @@ module ApplicationHelper
   end
 
   def filter_css_packs(*names)
-    names.select { |pack| !current_shakapacker_instance.manifest.lookup_pack_with_chunks(pack, type: :stylesheet).nil? }
+    names.reject { |pack| current_shakapacker_instance.manifest.lookup_pack_with_chunks(pack, type: :stylesheet).nil? }
   end
 
   def add_to_css_assets(name)

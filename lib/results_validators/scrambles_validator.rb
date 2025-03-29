@@ -2,15 +2,13 @@
 
 module ResultsValidators
   class ScramblesValidator < GenericValidator
-    MISSING_SCRAMBLES_FOR_ROUND_ERROR = "[%{round_id}] Missing scrambles. Use Scrambles Matcher to add the correct scrambles to the round."
-    MISSING_SCRAMBLES_FOR_COMPETITION_ERROR = "Missing scrambles for the competition. Use Scrambles Matcher to add scrambles."
-    UNEXPECTED_SCRAMBLES_FOR_ROUND_ERROR = "[%{round_id}] Too many scrambles. Use Scrambles Matcher to uncheck the unused scrambles."
-    MISSING_SCRAMBLES_FOR_GROUP_ERROR = "[%{round_id}] Group %{group_id}: missing scrambles, detected only %{actual} instead of %{expected}."
-    MISSING_SCRAMBLES_FOR_MULTI_ERROR = "[%{round_id}] While you may have multiple groups in 3x3x3 Multi-Blind, at least one of the groups must contain scrambles for all attempts."
-    MULTIPLE_FMC_GROUPS_WARNING = "[%{round_id}] There are multiple groups of FMC used. If one group of FMC was used, please use the Scrambles Matcher to uncheck the unused " \
-                                  "scrambles. Otherwise, please include a comment to WRT explaining why multiple groups of FMC were used."
-    WRONG_NUMBER_OF_SCRAMBLE_SETS_ERROR = "[%{round_id}] This round has a different number of scramble sets than specified on the Manage Events tab. " \
-                                          "Please adjust the number of scramble sets in the Manage Events tab to the number of sets that were used."
+    MISSING_SCRAMBLES_FOR_ROUND_ERROR = :missing_scrambles_for_round_error
+    MISSING_SCRAMBLES_FOR_COMPETITION_ERROR = :missing_scrambles_for_competition_error
+    UNEXPECTED_SCRAMBLES_FOR_ROUND_ERROR = :unexpected_scrambles_for_round_error
+    MISSING_SCRAMBLES_FOR_GROUP_ERROR = :missing_scrambles_for_group_error
+    MISSING_SCRAMBLES_FOR_MULTI_ERROR = :missing_scrambles_for_multi_error
+    MULTIPLE_FMC_GROUPS_WARNING = :multiple_fmc_groups_warning
+    WRONG_NUMBER_OF_SCRAMBLE_SETS_ERROR = :wrong_number_of_scramble_sets_error
 
     def self.description
       "This validator checks that all results have matching scrambles, and if possible, checks that the scrambles have the correct number of attempts compared to the expected round format."
@@ -40,9 +38,9 @@ module ResultsValidators
         # Get actual round ids from results
         rounds_ids = results_for_comp.map { |r| "#{r.eventId}-#{r.roundTypeId}" }.uniq
 
-        if results_for_comp.any? && !scrambles.any?
-          @errors << ValidationError.new(:scrambles, competition.id,
-                                         MISSING_SCRAMBLES_FOR_COMPETITION_ERROR,
+        if results_for_comp.any? && scrambles.none?
+          @errors << ValidationError.new(MISSING_SCRAMBLES_FOR_COMPETITION_ERROR,
+                                         :scrambles, competition.id,
                                          competition_id: competition.id)
           next
         end
@@ -51,14 +49,14 @@ module ResultsValidators
         scrambles_by_round_id = scrambles.group_by { |s| "#{s.eventId}-#{s.roundTypeId}" }
         detected_scrambles_rounds_ids = scrambles_by_round_id.keys
         (rounds_ids - detected_scrambles_rounds_ids).each do |round_id|
-          @errors << ValidationError.new(:scrambles, competition.id,
-                                         MISSING_SCRAMBLES_FOR_ROUND_ERROR,
+          @errors << ValidationError.new(MISSING_SCRAMBLES_FOR_ROUND_ERROR,
+                                         :scrambles, competition.id,
                                          round_id: round_id)
         end
 
         (detected_scrambles_rounds_ids - rounds_ids).each do |round_id|
-          @errors << ValidationError.new(:scrambles, competition.id,
-                                         UNEXPECTED_SCRAMBLES_FOR_ROUND_ERROR,
+          @errors << ValidationError.new(UNEXPECTED_SCRAMBLES_FOR_ROUND_ERROR,
+                                         :scrambles, competition.id,
                                          round_id: round_id)
         end
 
@@ -73,10 +71,10 @@ module ResultsValidators
           errors_for_round = []
           scrambles_by_group_id.each do |group_id, scrambles_for_group|
             # filter out extra scrambles
-            actual_number_of_scrambles = scrambles_for_group.reject(&:isExtra).size
+            actual_number_of_scrambles = scrambles_for_group.count { |element| !element.isExtra }
             if actual_number_of_scrambles < expected_number_of_scrambles
-              errors_for_round << ValidationError.new(:scrambles, competition.id,
-                                                      MISSING_SCRAMBLES_FOR_GROUP_ERROR,
+              errors_for_round << ValidationError.new(MISSING_SCRAMBLES_FOR_GROUP_ERROR,
+                                                      :scrambles, competition.id,
                                                       round_id: round_id, group_id: group_id,
                                                       actual: actual_number_of_scrambles,
                                                       expected: expected_number_of_scrambles)
@@ -84,19 +82,19 @@ module ResultsValidators
           end
           # Check if the number of groups match the number of scramble sets specified.
           if scrambles_by_group_id.size != rounds_info_by_ids[round_id].scramble_set_count
-            errors_for_round << ValidationError.new(:scrambles, competition.id,
-                                                    WRONG_NUMBER_OF_SCRAMBLE_SETS_ERROR,
+            errors_for_round << ValidationError.new(WRONG_NUMBER_OF_SCRAMBLE_SETS_ERROR,
+                                                    :scrambles, competition.id,
                                                     round_id: round_id)
           end
           if round_id.start_with?("333fm") && scrambles_by_group_id.size > 1
-            @warnings << ValidationWarning.new(:scrambles, competition.id,
-                                               MULTIPLE_FMC_GROUPS_WARNING,
+            @warnings << ValidationWarning.new(MULTIPLE_FMC_GROUPS_WARNING,
+                                               :scrambles, competition.id,
                                                round_id: round_id)
           end
           if round_id.start_with?("333mbf")
             unless errors_for_round.size < scrambles_by_group_id.keys.size
-              @errors << ValidationError.new(:scrambles, competition.id,
-                                             MISSING_SCRAMBLES_FOR_MULTI_ERROR,
+              @errors << ValidationError.new(MISSING_SCRAMBLES_FOR_MULTI_ERROR,
+                                             :scrambles, competition.id,
                                              round_id: round_id)
             end
           else

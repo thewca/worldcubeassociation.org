@@ -102,23 +102,23 @@ RSpec.describe ResultsValidators::AdvancementConditionsValidator do
         if i == 20
           # Create a single attempt result over the attempt result condition.
           FactoryBot.create(:result, competition: competition2, eventId: "222", roundTypeId: "f", person: fake_person, best: 1800, average: 1800)
-          expected_errors << RV::ValidationError.new(:rounds, competition2.id,
-                                                     ACV::COMPETED_NOT_QUALIFIED_ERROR,
+          expected_errors << RV::ValidationError.new(ACV::COMPETED_NOT_QUALIFIED_ERROR,
+                                                     :rounds, competition2.id,
                                                      round_id: "222-f",
                                                      ids: fake_person.wca_id,
                                                      condition: first_round.advancement_condition.to_s(first_round))
         end
       end
-      expected_errors << RV::ValidationError.new(:rounds, competition2.id,
-                                                 ACV::ROUND_9P1_ERROR,
+      expected_errors << RV::ValidationError.new(ACV::ROUND_9P1_ERROR,
+                                                 :rounds, competition2.id,
                                                  round_id: "222-f",
                                                  condition: first_round.advancement_condition.to_s(first_round))
       expected_warnings = [
-        RV::ValidationWarning.new(:rounds, competition2.id,
-                                  ACV::NOT_ENOUGH_QUALIFIED_WARNING,
+        RV::ValidationWarning.new(ACV::NOT_ENOUGH_QUALIFIED_WARNING,
+                                  :rounds, competition2.id,
                                   round_id: "222-f", expected: 16, actual: 10),
-        RV::ValidationWarning.new(:rounds, competition3.id,
-                                  ACV::TOO_MANY_QUALIFIED_WARNING,
+        RV::ValidationWarning.new(ACV::TOO_MANY_QUALIFIED_WARNING,
+                                  :rounds, competition3.id,
                                   round_id: "333-f", actual: 9, expected: 4,
                                   condition: first_round2.advancement_condition.to_s(first_round2)),
       ]
@@ -138,9 +138,7 @@ RSpec.describe ResultsValidators::AdvancementConditionsValidator do
         fake_person = FactoryBot.create(:person)
         value = i > 10 ? -1 : i * 100
         FactoryBot.create(:result, competition: competition2, eventId: "222", roundTypeId: "1", person: fake_person, best: value, average: value)
-        if i <= 10
-          FactoryBot.create(:result, competition: competition2, eventId: "222", roundTypeId: "f", person: fake_person, best: value, average: value)
-        end
+        FactoryBot.create(:result, competition: competition2, eventId: "222", roundTypeId: "f", person: fake_person, best: value, average: value) if i <= 10
       end
 
       acv = ACV.new.validate(competition_ids: [competition2], model: Result)
@@ -172,20 +170,20 @@ RSpec.describe ResultsValidators::AdvancementConditionsValidator do
         model.import(results, validate: false)
       end
       expected_errors = [
-        RV::ValidationError.new(:rounds, competition1.id,
-                                ACV::REGULATION_9M1_ERROR,
+        RV::ValidationError.new(ACV::REGULATION_9M1_ERROR,
+                                :rounds, competition1.id,
                                 round_id: "333oh-1"),
-        RV::ValidationError.new(:rounds, competition1.id,
-                                ACV::REGULATION_9M2_ERROR,
+        RV::ValidationError.new(ACV::REGULATION_9M2_ERROR,
+                                :rounds, competition1.id,
                                 round_id: "333oh-2"),
-        RV::ValidationError.new(:rounds, competition1.id,
-                                ACV::REGULATION_9M3_ERROR,
+        RV::ValidationError.new(ACV::REGULATION_9M3_ERROR,
+                                :rounds, competition1.id,
                                 round_id: "333oh-3"),
-        RV::ValidationError.new(:rounds, competition1.id,
-                                ACV::OLD_REGULATION_9P_ERROR,
+        RV::ValidationError.new(ACV::OLD_REGULATION_9P_ERROR,
+                                :rounds, competition1.id,
                                 round_id: "333oh-f"),
-        RV::ValidationError.new(:rounds, competition2.id,
-                                ACV::REGULATION_9P1_ERROR,
+        RV::ValidationError.new(ACV::REGULATION_9P1_ERROR,
+                                :rounds, competition2.id,
                                 round_id: "222-f"),
       ]
 
@@ -207,8 +205,8 @@ RSpec.describe ResultsValidators::AdvancementConditionsValidator do
       Result.import([existent_result, nonexistent_result], validate: false)
 
       acv = ACV.new.validate(competition_ids: [competition1], model: Result)
-      expect(acv.errors).to include(RV::ValidationError.new(:rounds, competition1.id,
-                                                            ACV::ROUND_NOT_FOUND_ERROR,
+      expect(acv.errors).to include(RV::ValidationError.new(ACV::ROUND_NOT_FOUND_ERROR,
+                                                            :rounds, competition1.id,
                                                             round_id: "333bf-1"))
     end
   end

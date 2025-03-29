@@ -8,6 +8,8 @@ class Round < ApplicationRecord
   # CompetitionEvent uses the cached value
   delegate :event, to: :competition_event
 
+  has_many :registrations, through: :competition_event
+
   # For the following association, we want to keep it to be able to do some joins,
   # but we definitely want to use cached values when directly using the method.
   belongs_to :format
@@ -31,31 +33,29 @@ class Round < ApplicationRecord
 
   has_many :wcif_extensions, as: :extendable, dependent: :delete_all
 
+  has_many :live_results
+
   MAX_NUMBER = 4
-  validates_numericality_of :number,
-                            only_integer: true,
+  validates :number,
+            numericality: { only_integer: true,
                             greater_than_or_equal_to: 1,
                             less_than_or_equal_to: MAX_NUMBER,
-                            unless: :old_type
+                            unless: :old_type }
 
   # Qualification rounds/b-final are handled weirdly, they have round number 0
   # and do not count towards the total amount of rounds.
   OLD_TYPES=["0", "b"].freeze
-  validates_inclusion_of :old_type, in: OLD_TYPES, allow_nil: true
+  validates :old_type, inclusion: { in: OLD_TYPES, allow_nil: true }
   after_validation(if: :old_type) do
     self.number = 0
   end
 
   validate do
-    unless event.preferred_formats.find_by_format_id(format_id)
-      errors.add(:format, "'#{format_id}' is not allowed for '#{event.id}'")
-    end
+    errors.add(:format, "'#{format_id}' is not allowed for '#{event.id}'") unless event.preferred_formats.find_by(format_id: format_id)
   end
 
   validate do
-    if final_round? && advancement_condition
-      errors.add(:advancement_condition, "cannot be set on a final round")
-    end
+    errors.add(:advancement_condition, "cannot be set on a final round") if final_round? && advancement_condition
   end
 
   def initialize(attributes = nil)
@@ -87,6 +87,8 @@ class Round < ApplicationRecord
       cutoff ? "g" : "3"
     end
   end
+
+  delegate :id, to: :event, prefix: true
 
   def formats_used
     cutoff_format = Format.c_find!(cutoff.number_of_attempts.to_s) if cutoff
@@ -131,6 +133,56 @@ class Round < ApplicationRecord
 
   def advancement_condition_to_s(short: false)
     advancement_condition ? advancement_condition.to_s(self, short: short) : ""
+  end
+
+  def live_podium
+    live_results.where(ranking: 1..3)
+  end
+
+  def previous_round
+    return nil if number == 1
+
+    Round.joins(:competition_event).find_by(competition_event: competition_event, number: number - 1)
+  end
+
+  def accepted_registrations
+    if number == 1
+      registrations.accepted
+    else
+      advancing = previous_round.live_results.where(advancing: true).pluck(:registration_id)
+      Registration.find(advancing)
+    end
+  end
+
+  def accepted_registrations_with_wcif_id
+    if number == 1
+      registrations.includes(:user)
+                   .accepted
+                   .wcif_ordered
+                   .to_enum
+                   .with_index(1)
+                   .map { |r, registrant_id| r.as_json({ include: [user: { only: [:name], methods: [], include: [] }] }).merge("registration_id" => registrant_id) }
+    else
+      advancing = previous_round.live_results.where(advancing: true).pluck(:registration_id)
+      Registration.includes(:user)
+                  .where(id: advancing)
+                  .wcif_ordered
+                  .to_enum
+                  .with_index(1)
+                  .map { |r, registrant_id| r.as_json({ include: [user: { only: [:name], methods: [], include: [] }] }).merge("registration_id" => registrant_id) }
+    end
+  end
+
+  def total_accepted_registrations
+    accepted_registrations.count
+  end
+
+  def competitors_live_results_entered
+    live_results.count
+  end
+
+  def score_taking_done?
+    competitors_live_results_entered == total_accepted_registrations
   end
 
   def has_undef_tl?

@@ -13,7 +13,7 @@ RSpec.describe "competitions" do
         put competition_confirm_path(competition)
         expect(response).to be_successful
 
-        expect(competition.reload.confirmed?).to eq true
+        expect(competition.reload.confirmed?).to be true
       end
 
       context "when handling unconfirmed competitions" do
@@ -46,7 +46,7 @@ RSpec.describe "competitions" do
             competition.reload
             series.reload
 
-            expect(competition.part_of_competition_series?).to eq true
+            expect(competition.part_of_competition_series?).to be true
             expect(competition.series_sibling_competitions.count).to eq 1
             expect(series.competitions.count).to eq 2
           end
@@ -67,7 +67,7 @@ RSpec.describe "competitions" do
 
             competition.reload
 
-            expect(competition.part_of_competition_series?).to eq true
+            expect(competition.part_of_competition_series?).to be true
             expect(competition.series_sibling_competitions.count).to eq 1
             expect(competition.competition_series.id).not_to eq series.id
           end
@@ -88,7 +88,7 @@ RSpec.describe "competitions" do
 
               competition.reload
 
-              expect(competition.part_of_competition_series?).to eq false
+              expect(competition.part_of_competition_series?).to be false
               expect(competition.series_sibling_competitions.count).to eq 0
 
               persisted_series_id = series.id
@@ -109,7 +109,7 @@ RSpec.describe "competitions" do
 
               competition.reload
 
-              expect(competition.part_of_competition_series?).to eq false
+              expect(competition.part_of_competition_series?).to be false
               expect(competition.series_sibling_competitions.count).to eq 0
 
               expect { series.reload }.to raise_error(ActiveRecord::RecordNotFound)
@@ -148,7 +148,7 @@ RSpec.describe "competitions" do
 
             expect(response).to be_successful
 
-            expect(competition.reload.part_of_competition_series?).to eq true
+            expect(competition.reload.part_of_competition_series?).to be true
             expect(competition.reload.series_sibling_competitions.count).to eq 1
             expect(series.reload.competitions.count).to eq 2
           end
@@ -169,7 +169,7 @@ RSpec.describe "competitions" do
 
             competition.reload
 
-            expect(competition.part_of_competition_series?).to eq true
+            expect(competition.part_of_competition_series?).to be true
             expect(competition.series_sibling_competitions.count).to eq 1
             expect(competition.competition_series.id).not_to eq series.id
           end
@@ -190,7 +190,7 @@ RSpec.describe "competitions" do
 
               competition.reload
 
-              expect(competition.part_of_competition_series?).to eq false
+              expect(competition.part_of_competition_series?).to be false
               expect(competition.series_sibling_competitions.count).to eq 0
 
               persisted_series_id = series.id
@@ -211,7 +211,7 @@ RSpec.describe "competitions" do
 
               competition.reload
 
-              expect(competition.part_of_competition_series?).to eq false
+              expect(competition.part_of_competition_series?).to be false
               expect(competition.series_sibling_competitions.count).to eq 0
 
               expect { series.reload }.to raise_error(ActiveRecord::RecordNotFound)
@@ -257,7 +257,7 @@ RSpec.describe "competitions" do
             competition.reload
             series.reload
 
-            expect(competition.part_of_competition_series?).to eq true
+            expect(competition.part_of_competition_series?).to be true
             expect(competition.series_sibling_competitions.count).to eq 1
             expect(series.competitions.count).to eq 2
           end
@@ -278,7 +278,7 @@ RSpec.describe "competitions" do
 
             competition.reload
 
-            expect(competition.part_of_competition_series?).to eq true
+            expect(competition.part_of_competition_series?).to be true
             expect(competition.series_sibling_competitions.count).to eq 1
             expect(competition.competition_series.id).not_to eq series.id
           end
@@ -299,7 +299,7 @@ RSpec.describe "competitions" do
 
               competition.reload
 
-              expect(competition.part_of_competition_series?).to eq false
+              expect(competition.part_of_competition_series?).to be false
               expect(competition.series_sibling_competitions.count).to eq 0
 
               persisted_series_id = series.id
@@ -320,7 +320,7 @@ RSpec.describe "competitions" do
 
               competition.reload
 
-              expect(competition.part_of_competition_series?).to eq false
+              expect(competition.part_of_competition_series?).to be false
               expect(competition.series_sibling_competitions.count).to eq 0
 
               expect { series.reload }.to raise_error(ActiveRecord::RecordNotFound)
@@ -403,7 +403,7 @@ RSpec.describe "competitions" do
 
             competition.reload
 
-            expect(competition.part_of_competition_series?).to eq false
+            expect(competition.part_of_competition_series?).to be false
             expect(competition.series_sibling_competitions.count).to eq 0
           end
 
@@ -423,7 +423,7 @@ RSpec.describe "competitions" do
 
             competition.reload
 
-            expect(competition.part_of_competition_series?).to eq false
+            expect(competition.part_of_competition_series?).to be false
             expect(competition.series_sibling_competitions.count).to eq 0
           end
 
@@ -439,7 +439,7 @@ RSpec.describe "competitions" do
             competition.reload
             series.reload
 
-            expect(competition.part_of_competition_series?).to eq true
+            expect(competition.part_of_competition_series?).to be true
             expect(competition.series_sibling_competitions.count).to eq 1
             expect(series.competitions.count).to eq 2
             expect(series.competitions).to include(competition, partner_competition)

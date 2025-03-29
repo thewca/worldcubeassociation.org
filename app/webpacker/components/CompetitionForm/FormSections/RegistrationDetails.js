@@ -11,8 +11,7 @@ import {
 import ConditionalSection from './ConditionalSection';
 import I18n from '../../../lib/i18n';
 import SubSection from '../../wca/FormBuilder/SubSection';
-import { useFormObject } from '../../wca/FormBuilder/provider/FormObjectProvider';
-import { useFormObjectSection } from '../../wca/FormBuilder/EditForm';
+import { useFormObject, useFormObjectSection } from '../../wca/FormBuilder/provider/FormObjectProvider';
 import { hasNotPassed } from '../../../lib/utils/dates';
 
 const guestsEnabledOptions = [true, false].map((bool) => ({
@@ -24,6 +23,12 @@ const guestMessageOptions = ['unclear', 'free', 'restricted'].map((status) => ({
   key: status,
   value: status,
   text: I18n.t(`competitions.competition_form.choices.registration.guest_entry_status.${status}`),
+}));
+
+const canCancelOptions = ['not_accepted', 'always', 'unpaid'].map((status) => ({
+  key: status,
+  value: status,
+  text: I18n.t(`competitions.competition_form.choices.registration.competitor_can_cancel.${status}`),
 }));
 
 export default function RegistrationDetails() {
@@ -52,7 +57,7 @@ export default function RegistrationDetails() {
       <InputDate id="waitingListDeadlineDate" dateTime required ignoreDisabled={waitingListNotYetPast} />
       <InputDate id="eventChangeDeadlineDate" dateTime required ignoreDisabled={eventChangeNotYetPast} />
       <InputBooleanSelect id="allowOnTheSpot" required ignoreDisabled />
-      <InputBooleanSelect id="allowSelfDeleteAfterAcceptance" required ignoreDisabled />
+      <InputSelect id="competitorCanCancel" options={canCancelOptions} required ignoreDisabled />
       <InputBooleanSelect id="allowSelfEdits" required ignoreDisabled />
       <InputRadio id="guestsEnabled" options={guestsEnabledOptions} />
       <ConditionalSection showIf={guestsGoFree}>

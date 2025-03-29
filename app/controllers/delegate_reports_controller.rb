@@ -13,25 +13,24 @@ class DelegateReportsController < ApplicationController
 
   def show
     @competition = competition_from_params
-    redirect_to_root_unless_user(:can_view_delegate_report?, @competition.delegate_report) && return
+    return if redirect_to_root_unless_user(:can_view_delegate_report?, @competition.delegate_report)
 
     @delegate_report = @competition.delegate_report
   end
 
   def edit
     @competition = competition_from_params
-    redirect_to_root_unless_user(:can_edit_delegate_report?, @competition.delegate_report) && return
+    return if redirect_to_root_unless_user(:can_edit_delegate_report?, @competition.delegate_report)
 
     @delegate_report = @competition.delegate_report
   end
 
   def update
     @competition = competition_from_params
-    if (params[:delegate_report]) && (params[:delegate_report][:posted])
-      redirect_to_root_unless_user(:can_post_delegate_report?, @competition.delegate_report) && return
-    else
-      redirect_to_root_unless_user(:can_edit_delegate_report?, @competition.delegate_report) && return
-    end
+    return if params[:delegate_report]&.dig(:posted) &&
+              redirect_to_root_unless_user(:can_post_delegate_report?, @competition.delegate_report)
+
+    return if redirect_to_root_unless_user(:can_edit_delegate_report?, @competition.delegate_report)
 
     @delegate_report = @competition.delegate_report
     @delegate_report.current_user = current_user
@@ -39,9 +38,7 @@ class DelegateReportsController < ApplicationController
 
     @delegate_report.assign_attributes(delegate_report_params)
     is_posting = @delegate_report.posted? && !was_previously_posted
-    if is_posting
-      assign_wrc_users @delegate_report
-    end
+    assign_wrc_users @delegate_report if is_posting
 
     if @delegate_report.save
       flash[:success] = "Updated report"
@@ -66,6 +63,15 @@ class DelegateReportsController < ApplicationController
     end
   end
 
+  def delete_image
+    image = ActiveStorage::Attachment.find(params[:image_id])
+    image.purge
+
+    flash[:success] = "Image deleted successfully."
+
+    redirect_to delegate_report_edit_path(competition_from_params)
+  end
+
   private def delegate_report_params
     params.require(:delegate_report).permit(
       :discussion_url,
@@ -77,6 +83,7 @@ class DelegateReportsController < ApplicationController
       :wic_feedback_requested,
       :wic_incidents,
       *DelegateReport::AVAILABLE_SECTIONS,
+      setup_images: [],
     )
   end
 

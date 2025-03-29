@@ -8,35 +8,40 @@ import {
   FormField,
   Header,
   Label,
+  Message,
   Segment,
 } from 'semantic-ui-react';
-import { paymentFinishUrl, paymentTicketUrl } from '../../../lib/requests/routes.js.erb';
+import { paymentFinishUrl } from '../../../lib/requests/routes.js.erb';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
-import { setMessage } from './RegistrationMessage';
-import fetchWithJWTToken from '../../../lib/requests/fetchWithJWTToken';
+import { showMessage } from './RegistrationMessage';
 import Loading from '../../Requests/Loading';
 import I18n from '../../../lib/i18n';
 import useCheckboxState from '../../../lib/hooks/useCheckboxState';
+import { hasPassed } from '../../../lib/utils/dates';
 import AutonumericField from '../../wca/FormBuilder/input/AutonumericField';
 import getPaymentTicket from '../api/payment/get/getPaymentTicket';
+import { useRegistration } from '../lib/RegistrationProvider';
 
 export default function PaymentStep({
   competitionInfo,
   setDonationAmount,
   donationAmount,
   displayAmount,
-  registration,
   nextStep,
   conversionFetching,
 }) {
   const stripe = useStripe();
   const elements = useElements();
   const dispatch = useDispatch();
+
+  const { registration } = useRegistration();
+
   const [isLoading, setIsLoading] = useState(false);
   const [isDonationChecked, setDonationChecked] = useCheckboxState(false);
 
   useEffect(() => {
-    // TODO When we add per Event Payment this logic needs to also check if an additional payment is needed
+    // TODO When we add per Event Payment this logic needs to also check
+    //  if an additional payment is needed
     if (registration?.payment?.has_paid) {
       nextStep();
     }
@@ -76,7 +81,7 @@ export default function PaymentStep({
     // redirected to the `return_url`.
     if (error) {
       // i18n-tasks-use t('registrations.payment_form.errors.generic.failed')
-      dispatch(setMessage('registrations.payment_form.errors.generic.failed', 'error', {
+      dispatch(showMessage('registrations.payment_form.errors.generic.failed', 'error', {
         provider: I18n.t('payments.payment_providers.stripe'),
       }));
 
@@ -85,6 +90,11 @@ export default function PaymentStep({
 
     setIsLoading(false);
   };
+  if (hasPassed(competitionInfo.registration_close)) {
+    return (
+      <Message color="red">{I18n.t('registrations.payment_form.errors.registration_closed')}</Message>
+    );
+  }
 
   return (
     <Segment>

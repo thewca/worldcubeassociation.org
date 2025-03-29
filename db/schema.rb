@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_11_24_050607) do
+ActiveRecord::Schema[7.2].define(version: 2025_03_06_165113) do
   create_table "Competitions", id: { type: :string, limit: 32, default: "" }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", limit: 50, default: "", null: false
     t.string "cityName", limit: 50, default: "", null: false
@@ -81,7 +81,11 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_24_050607) do
     t.integer "posting_by"
     t.boolean "forbid_newcomers", default: false, null: false
     t.string "forbid_newcomers_reason"
-    t.integer "registration_version", default: 0, null: false
+    t.integer "competitor_can_cancel", default: 0, null: false
+    t.integer "newcomer_month_reserved_spots"
+    t.integer "auto_close_threshold"
+    t.boolean "auto_accept_registrations", default: false, null: false
+    t.integer "auto_accept_disable_threshold"
     t.index ["cancelled_at"], name: "index_Competitions_on_cancelled_at"
     t.index ["countryId"], name: "index_Competitions_on_countryId"
     t.index ["end_date"], name: "index_Competitions_on_end_date"
@@ -665,6 +669,16 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_24_050607) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "country_band_details", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.integer "number", null: false
+    t.date "start_date", null: false
+    t.date "end_date"
+    t.integer "due_amount_per_competitor_us_cents", null: false
+    t.integer "due_percent_registration_fee", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "country_bands", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.integer "number", null: false
     t.string "iso2", limit: 2, null: false
@@ -785,6 +799,43 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_24_050607) do
     t.index ["jti"], name: "index_jwt_denylist_on_jti"
   end
 
+  create_table "live_attempt_history_entries", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.datetime "entered_at", null: false
+    t.string "entered_by", null: false
+    t.bigint "live_attempt_id", null: false
+    t.integer "result", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["live_attempt_id"], name: "index_live_attempt_history_entries_on_live_attempt_id"
+  end
+
+  create_table "live_attempts", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.integer "result", null: false
+    t.integer "attempt_number", null: false
+    t.bigint "live_result_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["live_result_id"], name: "index_live_attempts_on_live_result_id"
+  end
+
+  create_table "live_results", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.bigint "registration_id", null: false
+    t.bigint "round_id", null: false
+    t.datetime "last_attempt_entered_at", null: false
+    t.integer "ranking"
+    t.integer "best", null: false
+    t.integer "average", null: false
+    t.string "single_record_tag", limit: 255
+    t.string "average_record_tag", limit: 255
+    t.boolean "advancing", default: false, null: false
+    t.boolean "advancing_questionable", default: false, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["registration_id", "round_id"], name: "index_live_results_on_registration_id_and_round_id", unique: true
+    t.index ["registration_id"], name: "index_live_results_on_registration_id"
+    t.index ["round_id"], name: "index_live_results_on_round_id"
+  end
+
   create_table "locations", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.integer "user_id", null: false
     t.integer "latitude_microdegrees"
@@ -792,17 +843,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_24_050607) do
     t.integer "notification_radius_km"
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
-  end
-
-  create_table "microservice_registrations", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
-    t.string "competition_id", limit: 32, null: false
-    t.integer "user_id", null: false
-    t.text "roles"
-    t.boolean "is_competing", default: true, null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["competition_id", "user_id"], name: "index_microservice_registrations_on_competition_id_and_user_id", unique: true
-    t.index ["user_id"], name: "fk_rails_dc6d05bc5e"
   end
 
   create_table "oauth_access_grants", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
@@ -975,8 +1015,10 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_24_050607) do
   create_table "registration_competition_events", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.integer "registration_id"
     t.integer "competition_event_id"
+    t.index ["competition_event_id"], name: "index_registration_competition_events_on_competition_event_id"
     t.index ["registration_id", "competition_event_id"], name: "idx_registration_competition_events_on_reg_id_and_comp_event_id", unique: true
     t.index ["registration_id", "competition_event_id"], name: "index_reg_events_reg_id_comp_event_id"
+    t.index ["registration_id"], name: "index_registration_competition_events_on_registration_id"
   end
 
   create_table "registration_history_changes", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
@@ -1031,6 +1073,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_24_050607) do
     t.boolean "is_competing", default: true
     t.text "administrative_notes"
     t.string "competing_status", default: "pending", null: false
+    t.datetime "registered_at", null: false
     t.index ["competition_id", "user_id"], name: "index_registrations_on_competition_id_and_user_id", unique: true
     t.index ["competition_id"], name: "index_registrations_on_competition_id"
     t.index ["user_id"], name: "index_registrations_on_user_id"
@@ -1177,6 +1220,18 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_24_050607) do
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
     t.index ["stripe_record_id"], name: "index_stripe_webhook_events_on_stripe_record_id"
+  end
+
+  create_table "ticket_comments", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.bigint "ticket_id", null: false
+    t.text "comment"
+    t.integer "acting_user_id", null: false
+    t.bigint "acting_stakeholder_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["acting_stakeholder_id"], name: "index_ticket_comments_on_acting_stakeholder_id"
+    t.index ["acting_user_id"], name: "index_ticket_comments_on_acting_user_id"
+    t.index ["ticket_id"], name: "index_ticket_comments_on_ticket_id"
   end
 
   create_table "ticket_logs", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
@@ -1394,8 +1449,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_24_050607) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
-  add_foreign_key "microservice_registrations", "Competitions", column: "competition_id", on_update: :cascade, on_delete: :cascade
-  add_foreign_key "microservice_registrations", "users"
+  add_foreign_key "live_attempt_history_entries", "live_attempts"
   add_foreign_key "oauth_openid_requests", "oauth_access_grants", column: "access_grant_id", on_delete: :cascade
   add_foreign_key "payment_intents", "users", column: "initiated_by_id"
   add_foreign_key "paypal_records", "paypal_records", column: "parent_record_id"
@@ -1405,6 +1459,9 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_24_050607) do
   add_foreign_key "sanity_checks", "sanity_check_categories"
   add_foreign_key "stripe_records", "stripe_records", column: "parent_record_id"
   add_foreign_key "stripe_webhook_events", "stripe_records"
+  add_foreign_key "ticket_comments", "ticket_stakeholders", column: "acting_stakeholder_id"
+  add_foreign_key "ticket_comments", "tickets"
+  add_foreign_key "ticket_comments", "users", column: "acting_user_id"
   add_foreign_key "ticket_logs", "ticket_stakeholders", column: "acting_stakeholder_id"
   add_foreign_key "ticket_logs", "users", column: "acting_user_id"
   add_foreign_key "user_avatars", "users"

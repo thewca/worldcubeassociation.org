@@ -14,7 +14,7 @@ module AuxiliaryDataComputation
       %w(average ConciseAverageResults),
     ].each do |field, table_name|
       DbHelper.with_temp_table(table_name) do |temp_table_name|
-        ActiveRecord::Base.connection.execute <<-SQL
+        ActiveRecord::Base.connection.execute <<-SQL.squish
           INSERT INTO #{temp_table_name} (id, #{field}, valueAndId, personId, eventId, countryId, continentId, year, month, day)
           SELECT
             result.id,
@@ -52,7 +52,7 @@ module AuxiliaryDataComputation
       DbHelper.with_temp_table(table_name) do |temp_table_name|
         current_country_by_wca_id = Person.current.pluck(:wca_id, :countryId).to_h
         # Get all personal records (note: people that changed their country appear once for each country).
-        personal_records_with_event = ActiveRecord::Base.connection.execute <<-SQL
+        personal_records_with_event = ActiveRecord::Base.connection.execute <<-SQL.squish
           SELECT eventId, personId, countryId, continentId, min(#{field}) value
           FROM #{concise_table_name}
           GROUP BY personId, countryId, continentId, eventId
@@ -69,6 +69,7 @@ module AuxiliaryDataComputation
             # e.g. 2008SEAR01 twice in North America and World because of his two countries).
             ["World", continent_id, country_id].each do |region|
               next if ranked[region][person_id]
+
               counter[region] += 1
               # As we ordered by value it can either be greater or tie the previous one.
               current_rank[region] = counter[region] if previous_value[region].nil? || value > previous_value[region]
@@ -80,15 +81,12 @@ module AuxiliaryDataComputation
             # in other words, the personId from the Concise*Results table is not found in the Persons table.
             # In the past, this has occurred when temporary results have been inserted for newcomers.
             next if cached_country.nil?
+
             # Set the person's data (first time the current location is matched).
             personal_rank[person_id][:best] ||= value
             personal_rank[person_id][:world_rank] ||= current_rank["World"]
-            if continent_id == cached_country.continentId
-              personal_rank[person_id][:continent_rank] ||= current_rank[continent_id]
-            end
-            if country_id == cached_country.id
-              personal_rank[person_id][:country_rank] ||= current_rank[country_id]
-            end
+            personal_rank[person_id][:continent_rank] ||= current_rank[continent_id] if continent_id == cached_country.continentId
+            personal_rank[person_id][:country_rank] ||= current_rank[country_id] if country_id == cached_country.id
           end
           values = personal_rank.map do |person_id, rank_data|
             # NOTE: continent_rank and country_rank may be not present because of a country change, in such case we default to 0.
@@ -96,7 +94,7 @@ module AuxiliaryDataComputation
           end
           # Insert 500 rows at once to avoid running into too long query.
           values.each_slice(500) do |values_subset|
-            ActiveRecord::Base.connection.execute <<-SQL
+            ActiveRecord::Base.connection.execute <<-SQL.squish
               INSERT INTO #{temp_table_name} (personId, eventId, best, worldRank, continentRank, countryRank) VALUES
               #{values_subset.join(",\n")}
             SQL

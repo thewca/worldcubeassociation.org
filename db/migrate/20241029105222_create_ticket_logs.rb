@@ -1,3 +1,4 @@
+# rubocop:disable all
 # frozen_string_literal: true
 
 class CreateTicketLogs < ActiveRecord::Migration[7.2]

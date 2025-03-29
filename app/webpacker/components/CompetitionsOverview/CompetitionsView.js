@@ -2,13 +2,21 @@ import React, {
   useEffect, useMemo, useReducer, useState,
 } from 'react';
 import { keepPreviousData, useInfiniteQuery, useQuery } from '@tanstack/react-query';
-import { Container, Header } from 'semantic-ui-react';
+import {
+  Button,
+  Container,
+  Form,
+  Header,
+  Icon,
+  Segment,
+  Transition,
+} from 'semantic-ui-react';
 
 import I18n from '../../lib/i18n';
 import { apiV0Urls, WCA_API_PAGINATION } from '../../lib/requests/routes.js.erb';
 import { fetchJsonOrError } from '../../lib/requests/fetchWithAuthenticityToken';
 
-import CompetitionsFilters from './CompetitionsFilters';
+import CompetitionsFilters, { CompDisplayCheckboxes, ToggleListOrMapDisplay } from './CompetitionsFilters';
 import ListView from './ListView';
 import MapView from './MapView';
 import {
@@ -106,21 +114,70 @@ function CompetitionsView({ canViewAdminDetails = false }) {
     })
   ) : baseCompetitions), [baseCompetitions, compRegistrationData, shouldShowRegStatus]);
 
+  const [showFilters, setShowFilters] = useState(true);
+
   return (
     <Container>
-      <Header as="h2">{I18n.t('competitions.index.title')}</Header>
-      <CompetitionsFilters
-        filterState={filterState}
-        dispatchFilter={dispatchFilter}
-        displayMode={displayMode}
-        setDisplayMode={setDisplayMode}
-        shouldShowRegStatus={shouldShowRegStatus}
-        setShouldShowRegStatus={setShouldShowRegStatus}
-        shouldShowAdminDetails={shouldShowAdminDetails}
-        canViewAdminDetails={canViewAdminDetails}
-      />
+      <Header as="h2">
+        <Button
+          floated="right"
+          icon
+          labelPosition="left"
+          toggle
+          // We want to make the button green to invite the user's attention
+          //   when the filters are *not* currently shown. When the filters are shown,
+          //   the button to disable/hide them should be "not-active-grey" to remove emphasis.
+          active={!showFilters}
+          onClick={() => setShowFilters((prev) => !prev)}
+        >
+          <Icon name="filter" />
+          {showFilters ? I18n.t('competitions.index.hide_filters') : I18n.t('competitions.index.show_filters')}
+        </Button>
+        {I18n.t('competitions.index.title')}
+      </Header>
+      <Transition visible={showFilters} animation="slide down">
+        <Segment raised>
+          <Button
+            floated="right"
+            icon
+            labelPosition="left"
+            size="tiny"
+            secondary
+            onClick={() => dispatchFilter({ type: 'reset' })}
+          >
+            <Icon name="repeat" />
+            {I18n.t('competitions.index.reset_filters')}
+          </Button>
+          <CompetitionsFilters
+            filterState={filterState}
+            dispatchFilter={dispatchFilter}
+            shouldShowAdminDetails={shouldShowAdminDetails}
+            canViewAdminDetails={canViewAdminDetails}
+          />
+        </Segment>
+      </Transition>
 
-      <Container fluid>
+      <Form>
+        <Form.Group inline>
+          <CompDisplayCheckboxes
+            shouldIncludeCancelled={filterState.shouldIncludeCancelled}
+            dispatchFilter={dispatchFilter}
+            shouldShowRegStatus={shouldShowRegStatus}
+            setShouldShowRegStatus={setShouldShowRegStatus}
+            shouldShowAdminDetails={shouldShowAdminDetails}
+            canViewAdminDetails={canViewAdminDetails}
+            displayMode={displayMode}
+          />
+        </Form.Group>
+        <Form.Field>
+          <ToggleListOrMapDisplay
+            displayMode={displayMode}
+            setDisplayMode={setDisplayMode}
+          />
+        </Form.Field>
+      </Form>
+
+      <Segment basic>
         {
           displayMode === 'list'
           && (
@@ -153,7 +210,7 @@ function CompetitionsView({ canViewAdminDetails = false }) {
             />
           )
         }
-      </Container>
+      </Segment>
     </Container>
   );
 }
