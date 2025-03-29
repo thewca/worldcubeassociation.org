@@ -1,3 +1,12 @@
+
+translate Internationalize
+Rubén
+
+
+
+2011/2011
+done Everything translated
+Raw data
 eu:
   countries:
     #original_hash: 530670d
@@ -1537,10 +1546,11 @@ eu:
           #original_hash: 54f0036
           label: Norekin nahi duzu harremanetan jarri?
           competition:
-            #original_hash: baa2425
+            #original_hash: 5a280ab
             label: >-
-              Lehiaketa baten antolatzaileekin/ordezkariekin harremanetan jarri
-              (lehiaketa partikular horri buruz galdetzeko)
+              Jarri harremanetan lehiaketa baten antolatzaile/ordezkariekin
+              (lehiaketa zehatz hori buruzko galdera bat egiteko, WCAko
+              webgunean argitaratuta ez dauden emaitzez barne)
           wct:
             #original_hash: b73e465
             label: >-
@@ -1548,15 +1558,15 @@ eu:
               edozein gauza ekar dezake, hala nola WCA ID/profila, lehiaketen
               antolaketa, lehia-arauak, lehia-bitartekoak, etab.)
           wrt:
-            #original_hash: 0f6b96b
+            #original_hash: 4dd66f7
             label: >-
-              Kontaktatu Emaitz Taldearekin (lehiaketa baten emaitzekin
-              zerikusia duen edozertarako)
+              Jarri harremanetan emaitza taldearekin (emaitzekin edota WCAko
+              webguneko profileko datuekin zerikusia duen edozertarako)
           wst:
-            #original_hash: 1d74033
+            #original_hash: 2be6d53
             label: >-
-              Kontaktatu Software Taldearekin (webgunean akatsen bat dagoela
-              jakinarazteko edo APIrekin lotutako edozein galdera egiteko)
+              Jarri harremanetan software taldearekin (WCAko webguneko arazoez
+              berri emateko edota softwarearekin zerikusia duten galderetarako)
         competition:
           competition:
             #original_hash: 1917f4f
@@ -3743,6 +3753,11 @@ eu:
           title: Baztertutako erregistroak
           #original_hash: 3fd2e0c
           information: Baztertutako lehiakideek ezin dira berriz erregistratu.
+        non_competing:
+          #original_hash: d4e453a
+          title: Lehiatzen ez direnen erregistroak
+          #original_hash: 2ed9c67
+          information: WCIFn staff lanak atxiki diezazkiokezun ez-lehiakideentzat
         payment:
           #original_hash: d6fbc7a
           refunded_status: Dirua itzuli da
