@@ -574,18 +574,7 @@ class CompetitionsController < ApplicationController
   def announcement_data
     competition = competition_from_params
 
-    render json: {
-      isAnnounced: competition.announced?,
-      announcedBy: competition.announced_by_user&.name,
-      announcedAt: competition.announced_at&.iso8601,
-      isCancelled: competition.cancelled?,
-      canBeCancelled: competition.can_be_cancelled?,
-      cancelledBy: competition.cancelled_by_user&.name,
-      cancelledAt: competition.cancelled_at&.iso8601,
-      isRegistrationPast: competition.registration_past?,
-      isRegistrationFull: competition.registration_full?,
-      canCloseFullRegistration: competition.orga_can_close_reg_full_limit?,
-    }
+    render json: competition.form_announcement_data
   end
 
   before_action -> { require_user_permission(:can_manage_competition?, competition_from_params) }, only: [:user_preferences]
@@ -593,9 +582,7 @@ class CompetitionsController < ApplicationController
   def user_preferences
     competition = competition_from_params
 
-    render json: {
-      isReceivingNotifications: competition.receiving_registration_emails?(current_user.id),
-    }
+    render json: competition.form_user_preferences(current_user)
   end
 
   before_action -> { require_user_permission(:can_manage_competition?, competition_from_params) }, only: [:announcement_data]
@@ -603,10 +590,25 @@ class CompetitionsController < ApplicationController
   def confirmation_data
     competition = competition_from_params
 
-    render json: {
-      canConfirm: current_user.can_confirm_competition?(competition),
-      cannotDeleteReason: current_user.get_cannot_delete_competition_reason(competition),
-    }
+    render json: competition.form_confirmation_data(current_user)
+  end
+
+  before_action -> { require_user_permission(:can_admin_competitions?) }, only: [:update_confirmation_data]
+
+  def update_confirmation_data
+    competition = competition_from_params
+
+    competition.confirmed = params[:isConfirmed] if params.key?(:isConfirmed)
+    competition.showAtAll = params[:isVisible] if params.key?(:isVisible)
+
+    if competition.save
+      render json: {
+        status: "ok",
+        data: competition.form_confirmation_data(current_user),
+      }
+    else
+      render status: :bad_request, json: competition.errors
+    end
   end
 
   before_action -> { require_user_permission(:get_cannot_delete_competition_reason, competition_from_params, is_message: true) }, only: [:destroy]
@@ -632,7 +634,11 @@ class CompetitionsController < ApplicationController
         CompetitionsMailer.notify_organizer_of_confirmed_competition(current_user, competition, organizer).deliver_later
       end
 
-      render json: { status: "ok", message: t('competitions.update.confirm_success') }
+      render json: {
+        status: "ok",
+        message: t('competitions.update.confirm_success'),
+        data: competition.form_confirmation_data(current_user),
+      }
     else
       render status: :bad_request, json: competition.form_errors
     end
@@ -643,7 +649,7 @@ class CompetitionsController < ApplicationController
   def announce
     competition = competition_from_params
 
-    return render json: { error: "Already announced" } if competition.announced?
+    return render json: { error: "Already announced" }, status: :bad_request if competition.announced?
 
     competition.update!(announced_at: Time.now, announced_by: current_user.id, showAtAll: true)
 
@@ -651,7 +657,11 @@ class CompetitionsController < ApplicationController
       CompetitionsMailer.notify_organizer_of_announced_competition(competition, organizer).deliver_later
     end
 
-    render json: { status: "ok", message: t('competitions.messages.announced_success') }
+    render json: {
+      status: "ok",
+      message: t('competitions.messages.announced_success'),
+      data: competition.form_announcement_data,
+    }
   end
 
   before_action -> { require_user_permission(:can_admin_competitions?) }, only: [:cancel_or_uncancel]
@@ -665,13 +675,22 @@ class CompetitionsController < ApplicationController
     if undo
       if competition.cancelled?
         competition.update!(cancelled_at: nil, cancelled_by: nil)
-        render json: { status: "ok", message: t('competitions.messages.uncancel_success') }
+
+        render json: {
+          status: "ok",
+          message: t('competitions.messages.uncancel_success'),
+          data: competition.form_announcement_data,
+        }
       else
         render json: { error: t('competitions.messages.uncancel_failure') }, status: :bad_request
       end
     elsif competition.can_be_cancelled?
       competition.update!(cancelled_at: Time.now, cancelled_by: current_user.id)
-      render json: { status: "ok", message: t('competitions.messages.cancel_success') }
+      render json: {
+        status: "ok",
+        message: t('competitions.messages.cancel_success'),
+        data: competition.form_announcement_data,
+      }
     else
       render json: { error: t('competitions.messages.cancel_failure') }, status: :bad_request
     end
@@ -689,7 +708,11 @@ class CompetitionsController < ApplicationController
         registration_close: Time.now,
       )
 
-      render json: { status: "ok", message: t('competitions.messages.orga_closed_reg_success') }
+      render json: {
+        status: "ok",
+        message: t('competitions.messages.orga_closed_reg_success'),
+        data: competition.form_announcement_data,
+      }
     else
       render json: { error: t('competitions.messages.orga_closed_reg_failure') }, status: :bad_request
     end
@@ -706,7 +729,7 @@ class CompetitionsController < ApplicationController
     competition.receive_registration_emails = receive_registration_emails
     competition.save!
 
-    render json: { status: "ok" }
+    render json: { status: "ok", data: competition.form_user_preferences(current_user) }
   end
 
   def my_competitions

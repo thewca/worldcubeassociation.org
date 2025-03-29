@@ -32,6 +32,7 @@ class Competition < ApplicationRecord
   has_many :bookmarked_users, through: :bookmarked_competitions, source: :user
   belongs_to :competition_series, optional: true
   has_many :series_competitions, -> { readonly }, through: :competition_series, source: :competitions
+  has_many :series_registrations, -> { readonly }, through: :series_competitions, source: :registrations
   belongs_to :posting_user, optional: true, foreign_key: 'posting_by', class_name: "User"
   has_many :inbox_results, foreign_key: "competitionId", dependent: :delete_all
   has_many :inbox_persons, foreign_key: "competitionId", dependent: :delete_all
@@ -693,6 +694,7 @@ class Competition < ApplicationRecord
              'bookmarked_users',
              'competition_series',
              'series_competitions',
+             'series_registrations',
              'posting_user',
              'inbox_results',
              'inbox_persons',
@@ -1856,7 +1858,7 @@ class Competition < ApplicationRecord
   end
 
   def other_series_ids
-    series_sibling_competitions.pluck(:id)
+    series_sibling_competitions.ids
   end
 
   def qualification_wcif
@@ -2240,6 +2242,13 @@ class Competition < ApplicationRecord
       .where.not(id: self.id)
   end
 
+  def series_sibling_registrations
+    return [] unless part_of_competition_series?
+
+    series_registrations
+      .where.not(competition: self)
+  end
+
   def find_round_for(event_id, round_type_id, format_id = nil)
     rounds.find do |r|
       r.event.id == event_id && r.round_type_id == round_type_id &&
@@ -2274,6 +2283,36 @@ class Competition < ApplicationRecord
 
   def dues_payer_is_combined_invoice?
     xero_dues_payer&.is_combined_invoice || false
+  end
+
+  def form_announcement_data
+    {
+      isAnnounced: self.announced?,
+      announcedBy: self.announced_by_user&.name,
+      announcedAt: self.announced_at&.iso8601,
+      isCancelled: self.cancelled?,
+      canBeCancelled: self.can_be_cancelled?,
+      cancelledBy: self.cancelled_by_user&.name,
+      cancelledAt: self.cancelled_at&.iso8601,
+      isRegistrationPast: self.registration_past?,
+      isRegistrationFull: self.registration_full?,
+      canCloseFullRegistration: self.orga_can_close_reg_full_limit?,
+    }
+  end
+
+  def form_confirmation_data(for_user)
+    {
+      isConfirmed: self.confirmed?,
+      canConfirm: for_user.can_confirm_competition?(self),
+      isVisible: self.showAtAll?,
+      cannotDeleteReason: for_user.get_cannot_delete_competition_reason(self),
+    }
+  end
+
+  def form_user_preferences(for_user)
+    {
+      isReceivingNotifications: self.receiving_registration_emails?(for_user.id),
+    }
   end
 
   def to_form_data
@@ -2365,10 +2404,6 @@ class Competition < ApplicationRecord
         "mainEventId" => main_event_id,
       },
       "remarks" => remarks,
-      "admin" => {
-        "isConfirmed" => confirmed?,
-        "isVisible" => showAtAll?,
-      },
       "cloning" => {
         "fromId" => being_cloned_from_id,
         "cloneTabs" => clone_tabs || false,
@@ -2474,10 +2509,6 @@ class Competition < ApplicationRecord
         "mainEventId" => errors[:main_event_id],
       },
       "remarks" => errors[:remarks],
-      "admin" => {
-        "isConfirmed" => errors[:confirmed_at],
-        "isVisible" => errors[:showAtAll],
-      },
       "cloning" => {
         "fromId" => errors[:being_cloned_from_id],
         "cloneTabs" => being_cloned_from_id.present? ? being_cloned_from&.association_errors(:tabs) : errors[:clone_tabs],
@@ -2582,8 +2613,6 @@ class Competition < ApplicationRecord
       guests_per_registration_limit: form_data.dig('registration', 'guestsPerRegistration'),
       events_per_registration_limit: form_data.dig('eventRestrictions', 'eventLimitation', 'perRegistrationLimit'),
       force_comment_in_registration: form_data.dig('registration', 'forceComment'),
-      confirmed: form_data.dig('admin', 'isConfirmed'),
-      showAtAll: form_data.dig('admin', 'isVisible'),
       being_cloned_from_id: form_data.dig('cloning', 'fromId'),
       clone_tabs: form_data.dig('cloning', 'cloneTabs'),
     }

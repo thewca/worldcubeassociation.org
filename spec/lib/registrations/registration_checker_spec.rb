@@ -617,7 +617,7 @@ RSpec.describe Registrations::RegistrationChecker do
         )
 
         expect {
-          Registrations::RegistrationChecker.update_registration_allowed!(update_request, default_registration, User.find(update_request['submitted_by']))
+          Registrations::RegistrationChecker.update_registration_allowed!(update_request, default_registration)
         }.not_to raise_error
 
         # We never actually fired the update, we just checked whether it _would_ be permissible to do so
@@ -634,7 +634,7 @@ RSpec.describe Registrations::RegistrationChecker do
           competing: { 'comment' => 'new comment' },
         )
 
-        expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, default_registration, User.find(update_request['submitted_by'])) }
+        expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, default_registration) }
           .not_to raise_error
       end
 
@@ -650,7 +650,7 @@ RSpec.describe Registrations::RegistrationChecker do
         )
 
         expect {
-          Registrations::RegistrationChecker.update_registration_allowed!(update_request, default_registration, User.find(update_request['submitted_by']))
+          Registrations::RegistrationChecker.update_registration_allowed!(update_request, default_registration)
         }.to raise_error(WcaExceptions::RegistrationError) do |error|
           expect(error.status).to eq(:unprocessable_entity)
           expect(error.error).to eq(Registrations::ErrorCodes::USER_COMMENT_TOO_LONG)
@@ -668,7 +668,7 @@ RSpec.describe Registrations::RegistrationChecker do
           competing: { 'comment' => at_character_limit },
         )
 
-        expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, default_registration, User.find(update_request['submitted_by'])) }
+        expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, default_registration) }
           .not_to raise_error
       end
 
@@ -680,7 +680,7 @@ RSpec.describe Registrations::RegistrationChecker do
           competing: { 'comment' => '' },
         )
 
-        expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, default_registration, User.find(update_request['submitted_by'])) }
+        expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, default_registration) }
           .not_to raise_error
       end
 
@@ -696,7 +696,7 @@ RSpec.describe Registrations::RegistrationChecker do
         )
 
         expect {
-          Registrations::RegistrationChecker.update_registration_allowed!(update_request, registration, User.find(update_request['submitted_by']))
+          Registrations::RegistrationChecker.update_registration_allowed!(update_request, registration)
         }.to raise_error(WcaExceptions::RegistrationError) do |error|
           expect(error.status).to eq(:unprocessable_entity)
           expect(error.error).to eq(Registrations::ErrorCodes::REQUIRED_COMMENT_MISSING)
@@ -713,7 +713,7 @@ RSpec.describe Registrations::RegistrationChecker do
           user_id: registration.user_id,
         )
 
-        expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, registration, User.find(update_request['submitted_by'])) }
+        expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, registration) }
           .not_to raise_error
       end
 
@@ -731,7 +731,7 @@ RSpec.describe Registrations::RegistrationChecker do
           competing: { 'status' => 'accepted' },
         )
 
-        expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, registration, User.find(update_request['submitted_by'])) }
+        expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, registration) }
           .not_to raise_error
       end
 
@@ -746,7 +746,7 @@ RSpec.describe Registrations::RegistrationChecker do
           competing: { 'comment' => 'heres a random different comment' },
         )
 
-        expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, registration, User.find(update_request['submitted_by'])) }
+        expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, registration) }
           .not_to raise_error
       end
 
@@ -763,7 +763,7 @@ RSpec.describe Registrations::RegistrationChecker do
         )
 
         expect {
-          Registrations::RegistrationChecker.update_registration_allowed!(update_request, default_registration, User.find(update_request['submitted_by']))
+          Registrations::RegistrationChecker.update_registration_allowed!(update_request, default_registration)
         }.to raise_error(WcaExceptions::RegistrationError) do |error|
           expect(error.status).to eq(:unprocessable_entity)
           expect(error.error).to eq(Registrations::ErrorCodes::USER_COMMENT_TOO_LONG)
@@ -781,7 +781,7 @@ RSpec.describe Registrations::RegistrationChecker do
           competing: { 'organizer_comment' => 'this is an admin comment' },
         )
 
-        expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, default_registration, User.find(update_request['submitted_by'])) }
+        expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, default_registration) }
           .not_to raise_error
       end
 
@@ -798,7 +798,7 @@ RSpec.describe Registrations::RegistrationChecker do
           competing: { 'organizer_comment' => 'this is an admin comment' },
         )
 
-        expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, registration, User.find(update_request['submitted_by'])) }
+        expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, registration) }
           .not_to raise_error
       end
     end
@@ -817,7 +817,7 @@ RSpec.describe Registrations::RegistrationChecker do
         )
 
         expect {
-          Registrations::RegistrationChecker.update_registration_allowed!(update_request, default_registration, User.find(update_request['submitted_by']))
+          Registrations::RegistrationChecker.update_registration_allowed!(update_request, default_registration)
         }.to raise_error(WcaExceptions::RegistrationError) do |error|
           expect(error.status).to eq(:unprocessable_entity)
           expect(error.error).to eq(Registrations::ErrorCodes::USER_COMMENT_TOO_LONG)
@@ -836,7 +836,7 @@ RSpec.describe Registrations::RegistrationChecker do
           competing: { 'organizer_comment' => at_character_limit },
         )
 
-        expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, default_registration, User.find(update_request['submitted_by'])) }
+        expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, default_registration) }
           .not_to raise_error
       end
     end
@@ -850,7 +850,7 @@ RSpec.describe Registrations::RegistrationChecker do
           guests: 4,
         )
 
-        expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, default_registration, User.find(update_request['submitted_by'])) }
+        expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, default_registration) }
           .not_to raise_error
       end
 
@@ -866,7 +866,7 @@ RSpec.describe Registrations::RegistrationChecker do
         )
 
         expect {
-          Registrations::RegistrationChecker.update_registration_allowed!(update_request, registration, User.find(update_request['submitted_by']))
+          Registrations::RegistrationChecker.update_registration_allowed!(update_request, registration)
         }.to raise_error(WcaExceptions::RegistrationError) do |error|
           expect(error.error).to eq(Registrations::ErrorCodes::GUEST_LIMIT_EXCEEDED)
           expect(error.status).to eq(:unprocessable_entity)
@@ -885,7 +885,7 @@ RSpec.describe Registrations::RegistrationChecker do
         )
 
         expect {
-          Registrations::RegistrationChecker.update_registration_allowed!(update_request, registration, User.find(update_request['submitted_by']))
+          Registrations::RegistrationChecker.update_registration_allowed!(update_request, registration)
         }.not_to raise_error
       end
 
@@ -900,7 +900,7 @@ RSpec.describe Registrations::RegistrationChecker do
           guests: 0,
         )
 
-        expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, registration, User.find(update_request['submitted_by'])) }
+        expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, registration) }
           .not_to raise_error
       end
 
@@ -916,7 +916,7 @@ RSpec.describe Registrations::RegistrationChecker do
         )
 
         expect {
-          Registrations::RegistrationChecker.update_registration_allowed!(update_request, registration, User.find(update_request['submitted_by']))
+          Registrations::RegistrationChecker.update_registration_allowed!(update_request, registration)
         }.to raise_error(WcaExceptions::RegistrationError) do |error|
           expect(error.status).to eq(:unprocessable_entity)
           expect(error.error).to eq(Registrations::ErrorCodes::INVALID_REQUEST_DATA)
@@ -931,7 +931,7 @@ RSpec.describe Registrations::RegistrationChecker do
           guests: 99,
         )
 
-        expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, default_registration, User.find(update_request['submitted_by'])) }
+        expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, default_registration) }
           .not_to raise_error
       end
 
@@ -944,7 +944,7 @@ RSpec.describe Registrations::RegistrationChecker do
         )
 
         expect {
-          Registrations::RegistrationChecker.update_registration_allowed!(update_request, default_registration, User.find(update_request['submitted_by']))
+          Registrations::RegistrationChecker.update_registration_allowed!(update_request, default_registration)
         }.to raise_error(WcaExceptions::RegistrationError) do |error|
           expect(error.status).to eq(:unprocessable_entity)
           expect(error.error).to eq(Registrations::ErrorCodes::UNREASONABLE_GUEST_COUNT)
@@ -960,7 +960,7 @@ RSpec.describe Registrations::RegistrationChecker do
           guests: 5,
         )
 
-        expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, default_registration, User.find(update_request['submitted_by'])) }
+        expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, default_registration) }
           .not_to raise_error
       end
 
@@ -976,7 +976,7 @@ RSpec.describe Registrations::RegistrationChecker do
           guests: 5,
         )
 
-        expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, registration, User.find(update_request['submitted_by'])) }
+        expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, registration) }
           .not_to raise_error
       end
     end
@@ -999,26 +999,8 @@ RSpec.describe Registrations::RegistrationChecker do
             competing: { 'status' => 'cancelled' },
           )
 
-          expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, not_accepted_reg, User.find(update_request['submitted_by'])) }
+          expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, not_accepted_reg) }
             .not_to raise_error
-        end
-
-        it 'stops accepted user from cancelling' do
-          accepted_reg = FactoryBot.create(:registration, :accepted, competition: accepted_cant_cancel)
-
-          update_request = FactoryBot.build(
-            :update_request,
-            user_id: accepted_reg.user_id,
-            competition_id: accepted_reg.competition_id,
-            competing: { 'status' => 'cancelled' },
-          )
-
-          expect {
-            Registrations::RegistrationChecker.update_registration_allowed!(update_request, accepted_reg, User.find(update_request['submitted_by']))
-          }.to raise_error(WcaExceptions::RegistrationError) do |error|
-            expect(error.status).to eq(:unauthorized)
-            expect(error.error).to eq(Registrations::ErrorCodes::ORGANIZER_MUST_CANCEL_REGISTRATION)
-          end
         end
 
         it 'lets organizer cancel accepted registration' do
@@ -1032,7 +1014,7 @@ RSpec.describe Registrations::RegistrationChecker do
             submitted_by: not_accepted_reg.competition.organizers.first.id,
           )
 
-          expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, not_accepted_reg, User.find(update_request['submitted_by'])) }
+          expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, not_accepted_reg) }
             .not_to raise_error
         end
       end
@@ -1054,44 +1036,8 @@ RSpec.describe Registrations::RegistrationChecker do
             competing: { 'status' => 'cancelled' },
           )
 
-          expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, not_paid_reg, User.find(update_request['submitted_by'])) }
+          expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, not_paid_reg) }
             .not_to raise_error
-        end
-
-        it 'stops user cancelling fully paid registration' do
-          paid_reg = FactoryBot.create(:registration, :paid, competition: paid_cant_cancel)
-
-          update_request = FactoryBot.build(
-            :update_request,
-            user_id: paid_reg.user_id,
-            competition_id: paid_reg.competition_id,
-            competing: { 'status' => 'cancelled' },
-          )
-
-          expect {
-            Registrations::RegistrationChecker.update_registration_allowed!(update_request, paid_reg, User.find(update_request['submitted_by']))
-          }.to raise_error(WcaExceptions::RegistrationError) do |error|
-            expect(error.status).to eq(:unauthorized)
-            expect(error.error).to eq(Registrations::ErrorCodes::ORGANIZER_MUST_CANCEL_REGISTRATION)
-          end
-        end
-
-        it 'stops user cancelling partially paid registration' do
-          paid_reg = FactoryBot.create(:registration, :partially_paid, competition: paid_cant_cancel)
-
-          update_request = FactoryBot.build(
-            :update_request,
-            user_id: paid_reg.user_id,
-            competition_id: paid_reg.competition_id,
-            competing: { 'status' => 'cancelled' },
-          )
-
-          expect {
-            Registrations::RegistrationChecker.update_registration_allowed!(update_request, paid_reg, User.find(update_request['submitted_by']))
-          }.to raise_error(WcaExceptions::RegistrationError) do |error|
-            expect(error.status).to eq(:unauthorized)
-            expect(error.error).to eq(Registrations::ErrorCodes::ORGANIZER_MUST_CANCEL_REGISTRATION)
-          end
         end
 
         it 'lets organizer cancel paid registration' do
@@ -1105,7 +1051,7 @@ RSpec.describe Registrations::RegistrationChecker do
             submitted_by: not_paid_reg.competition.organizers.first.id,
           )
 
-          expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, not_paid_reg, User.find(update_request['submitted_by'])) }
+          expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, not_paid_reg) }
             .not_to raise_error
         end
       end
@@ -1119,7 +1065,7 @@ RSpec.describe Registrations::RegistrationChecker do
         )
 
         expect {
-          Registrations::RegistrationChecker.update_registration_allowed!(update_request, default_registration, User.find(update_request['submitted_by']))
+          Registrations::RegistrationChecker.update_registration_allowed!(update_request, default_registration)
         }.to raise_error(WcaExceptions::RegistrationError) do |error|
           expect(error.status).to eq(:unprocessable_entity)
           expect(error.error).to eq(Registrations::ErrorCodes::INVALID_REQUEST_DATA)
@@ -1136,7 +1082,7 @@ RSpec.describe Registrations::RegistrationChecker do
         )
 
         expect {
-          Registrations::RegistrationChecker.update_registration_allowed!(update_request, default_registration, User.find(update_request['submitted_by']))
+          Registrations::RegistrationChecker.update_registration_allowed!(update_request, default_registration)
         }.to raise_error(WcaExceptions::RegistrationError) do |error|
           expect(error.status).to eq(:unprocessable_entity)
           expect(error.error).to eq(Registrations::ErrorCodes::INVALID_REQUEST_DATA)
@@ -1155,7 +1101,7 @@ RSpec.describe Registrations::RegistrationChecker do
           competing: { 'status' => 'accepted' },
         )
 
-        expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, registration, User.find(update_request['submitted_by'])) }
+        expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, registration) }
           .not_to raise_error
       end
 
@@ -1174,7 +1120,7 @@ RSpec.describe Registrations::RegistrationChecker do
         )
 
         expect {
-          Registrations::RegistrationChecker.update_registration_allowed!(update_request, limited_reg, User.find(update_request['submitted_by']))
+          Registrations::RegistrationChecker.update_registration_allowed!(update_request, limited_reg)
         }.not_to raise_error
       end
 
@@ -1193,7 +1139,7 @@ RSpec.describe Registrations::RegistrationChecker do
         )
 
         expect {
-          Registrations::RegistrationChecker.update_registration_allowed!(update_request, limited_reg, User.find(update_request['submitted_by']))
+          Registrations::RegistrationChecker.update_registration_allowed!(update_request, limited_reg)
         }.not_to raise_error
       end
 
@@ -1211,10 +1157,10 @@ RSpec.describe Registrations::RegistrationChecker do
         )
 
         expect {
-          Registrations::RegistrationChecker.update_registration_allowed!(update_request, limited_reg, User.find(update_request['submitted_by']))
+          Registrations::RegistrationChecker.update_registration_allowed!(update_request, limited_reg)
         }.to raise_error(WcaExceptions::RegistrationError) do |error|
           expect(error.error).to eq(Registrations::ErrorCodes::COMPETITOR_LIMIT_REACHED)
-          expect(error.status).to eq(:forbidden)
+          expect(error.status).to eq(:unprocessable_entity)
         end
       end
 
@@ -1232,10 +1178,10 @@ RSpec.describe Registrations::RegistrationChecker do
         )
 
         expect {
-          Registrations::RegistrationChecker.update_registration_allowed!(update_request, limited_reg, User.find(update_request['submitted_by']))
+          Registrations::RegistrationChecker.update_registration_allowed!(update_request, limited_reg)
         }.to raise_error(WcaExceptions::RegistrationError) do |error|
           expect(error.error).to eq(Registrations::ErrorCodes::COMPETITOR_LIMIT_REACHED)
-          expect(error.status).to eq(:forbidden)
+          expect(error.status).to eq(:unprocessable_entity)
         end
       end
 
@@ -1252,7 +1198,7 @@ RSpec.describe Registrations::RegistrationChecker do
           competing: { 'status' => 'accepted' },
         )
 
-        expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, limited_reg, User.find(update_request['submitted_by'])) }
+        expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, limited_reg) }
           .not_to raise_error
       end
 
@@ -1264,7 +1210,7 @@ RSpec.describe Registrations::RegistrationChecker do
           competing: { 'status' => 'cancelled' },
         )
 
-        expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, default_registration, User.find(update_request['submitted_by'])) }
+        expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, default_registration) }
           .not_to raise_error
       end
 
@@ -1277,7 +1223,7 @@ RSpec.describe Registrations::RegistrationChecker do
         )
 
         expect {
-          Registrations::RegistrationChecker.update_registration_allowed!(update_request, default_registration, User.find(update_request['submitted_by']))
+          Registrations::RegistrationChecker.update_registration_allowed!(update_request, default_registration)
         }.to raise_error(WcaExceptions::RegistrationError) do |error|
           expect(error.status).to eq(:unprocessable_entity)
           expect(error.error).to eq(Registrations::ErrorCodes::INVALID_REQUEST_DATA)
@@ -1295,7 +1241,7 @@ RSpec.describe Registrations::RegistrationChecker do
           competing: { 'status' => 'pending' },
         )
 
-        expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, cancelled_reg, User.find(update_request['submitted_by'])) }
+        expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, cancelled_reg) }
           .not_to raise_error
       end
 
@@ -1313,67 +1259,8 @@ RSpec.describe Registrations::RegistrationChecker do
           competing: { 'status' => 'cancelled' },
         )
 
-        expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, registration, User.find(update_request['submitted_by'])) }
+        expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, registration) }
           .not_to raise_error
-      end
-
-      it 'cancelled user cant re-register if registration is closed' do
-        closed_comp = FactoryBot.create(:competition, :registration_closed, :editable_registrations)
-        cancelled_reg = FactoryBot.create(:registration, :cancelled, competition: closed_comp)
-
-        update_request = FactoryBot.build(
-          :update_request,
-          user_id: cancelled_reg.user_id,
-          competition_id: cancelled_reg.competition_id,
-          competing: { 'status' => 'pending' },
-        )
-
-        expect {
-          Registrations::RegistrationChecker.update_registration_allowed!(update_request, cancelled_reg, User.find(update_request['submitted_by']))
-        }.to raise_error(WcaExceptions::RegistrationError) do |error|
-          expect(error.status).to eq(:forbidden)
-          expect(error.error).to eq(Registrations::ErrorCodes::REGISTRATION_CLOSED)
-        end
-      end
-
-      RSpec.shared_examples 'invalid user status updates' do |initial_status, new_status|
-        it "user cant change 'status' => #{initial_status} to: #{new_status}" do
-          registration = FactoryBot.create(:registration, initial_status, competition: default_competition)
-
-          update_request = FactoryBot.build(
-            :update_request,
-            user_id: registration.user_id,
-            competition_id: registration.competition_id,
-            competing: { 'status' => new_status },
-          )
-
-          expect {
-            Registrations::RegistrationChecker.update_registration_allowed!(update_request, registration, User.find(update_request['submitted_by']))
-          }.to raise_error(WcaExceptions::RegistrationError) do |error|
-            expect(error.status).to eq(:unauthorized)
-            expect(error.error).to eq(Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS)
-          end
-        end
-      end
-
-      [
-        { initial_status: :pending, new_status: 'accepted' },
-        { initial_status: :pending, new_status: 'waiting_list' },
-        { initial_status: :pending, new_status: 'pending' },
-        { initial_status: :pending, new_status: 'rejected' },
-        { initial_status: :waiting_list, new_status: 'pending' },
-        { initial_status: :waiting_list, new_status: 'waiting_list' },
-        { initial_status: :waiting_list, new_status: 'accepted' },
-        { initial_status: :waiting_list, new_status: 'rejected' },
-        { initial_status: :accepted, new_status: 'pending' },
-        { initial_status: :accepted, new_status: 'waiting_list' },
-        { initial_status: :accepted, new_status: 'accepted' },
-        { initial_status: :accepted, new_status: 'rejected' },
-        { initial_status: :cancelled, new_status: 'accepted' },
-        { initial_status: :cancelled, new_status: 'waiting_list' },
-        { initial_status: :cancelled, new_status: 'rejected' },
-      ].each do |params|
-        it_behaves_like 'invalid user status updates', params[:initial_status], params[:new_status]
       end
 
       RSpec.shared_examples 'valid organizer status updates' do |initial_status, new_status|
@@ -1388,7 +1275,7 @@ RSpec.describe Registrations::RegistrationChecker do
             submitted_by: default_competition.organizers.first.id,
           )
 
-          expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, registration, User.find(update_request['submitted_by'])) }
+          expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, registration) }
             .not_to raise_error
         end
 
@@ -1404,7 +1291,7 @@ RSpec.describe Registrations::RegistrationChecker do
             submitted_by: admin.id,
           )
 
-          expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, registration, User.find(update_request['submitted_by'])) }
+          expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, registration) }
             .not_to raise_error
         end
 
@@ -1420,7 +1307,7 @@ RSpec.describe Registrations::RegistrationChecker do
             submitted_by: competition.organizers.first.id,
           )
 
-          expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, registration, User.find(update_request['submitted_by'])) }
+          expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, registration) }
             .not_to raise_error
         end
       end
@@ -1467,7 +1354,7 @@ RSpec.describe Registrations::RegistrationChecker do
           competing: { 'event_ids' => ['333', '444', '555', 'minx'] },
         )
 
-        expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, default_registration, User.find(update_request['submitted_by'])) }
+        expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, default_registration) }
           .not_to raise_error
       end
 
@@ -1479,7 +1366,7 @@ RSpec.describe Registrations::RegistrationChecker do
           competing: { 'event_ids' => ['333'] },
         )
 
-        expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, default_registration, User.find(update_request['submitted_by'])) }
+        expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, default_registration) }
           .not_to raise_error
       end
 
@@ -1491,7 +1378,7 @@ RSpec.describe Registrations::RegistrationChecker do
           competing: { 'event_ids' => ['pyram', 'minx'] },
         )
 
-        expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, default_registration, User.find(update_request['submitted_by'])) }
+        expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, default_registration) }
           .not_to raise_error
       end
 
@@ -1504,7 +1391,7 @@ RSpec.describe Registrations::RegistrationChecker do
         )
 
         expect {
-          Registrations::RegistrationChecker.update_registration_allowed!(update_request, default_registration, User.find(update_request['submitted_by']))
+          Registrations::RegistrationChecker.update_registration_allowed!(update_request, default_registration)
         }.to raise_error(WcaExceptions::RegistrationError) do |error|
           expect(error.status).to eq(:unprocessable_entity)
           expect(error.error).to eq(Registrations::ErrorCodes::INVALID_EVENT_SELECTION)
@@ -1520,7 +1407,7 @@ RSpec.describe Registrations::RegistrationChecker do
         )
 
         expect {
-          Registrations::RegistrationChecker.update_registration_allowed!(update_request, default_registration, User.find(update_request['submitted_by']))
+          Registrations::RegistrationChecker.update_registration_allowed!(update_request, default_registration)
         }.to raise_error(WcaExceptions::RegistrationError) do |error|
           expect(error.status).to eq(:unprocessable_entity)
           expect(error.error).to eq(Registrations::ErrorCodes::INVALID_EVENT_SELECTION)
@@ -1536,7 +1423,7 @@ RSpec.describe Registrations::RegistrationChecker do
         )
 
         expect {
-          Registrations::RegistrationChecker.update_registration_allowed!(update_request, default_registration, User.find(update_request['submitted_by']))
+          Registrations::RegistrationChecker.update_registration_allowed!(update_request, default_registration)
         }.to raise_error(WcaExceptions::RegistrationError) do |error|
           expect(error.status).to eq(:unprocessable_entity)
           expect(error.error).to eq(Registrations::ErrorCodes::INVALID_EVENT_SELECTION)
@@ -1552,7 +1439,7 @@ RSpec.describe Registrations::RegistrationChecker do
           competing: { 'event_ids' => ['333', '555'] },
         )
 
-        expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, default_registration, User.find(update_request['submitted_by'])) }
+        expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, default_registration) }
           .not_to raise_error
       end
 
@@ -1566,7 +1453,7 @@ RSpec.describe Registrations::RegistrationChecker do
         )
 
         expect {
-          Registrations::RegistrationChecker.update_registration_allowed!(update_request, default_registration, User.find(update_request['submitted_by']))
+          Registrations::RegistrationChecker.update_registration_allowed!(update_request, default_registration)
         }.to raise_error(WcaExceptions::RegistrationError) do |error|
           expect(error.status).to eq(:unprocessable_entity)
           expect(error.error).to eq(Registrations::ErrorCodes::INVALID_EVENT_SELECTION)
@@ -1581,7 +1468,7 @@ RSpec.describe Registrations::RegistrationChecker do
           competing: { 'event_ids' => ['333', '333oh', '555', 'pyram', 'minx'] },
         )
 
-        expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, limited_registration, User.find(update_request['submitted_by'])) }
+        expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, limited_registration) }
           .not_to raise_error
       end
 
@@ -1594,7 +1481,7 @@ RSpec.describe Registrations::RegistrationChecker do
         )
 
         expect {
-          Registrations::RegistrationChecker.update_registration_allowed!(update_request, limited_registration, User.find(update_request['submitted_by']))
+          Registrations::RegistrationChecker.update_registration_allowed!(update_request, limited_registration)
         }.to raise_error(WcaExceptions::RegistrationError) do |error|
           expect(error.status).to eq(:unprocessable_entity)
           expect(error.error).to eq(Registrations::ErrorCodes::INVALID_EVENT_SELECTION)
@@ -1612,7 +1499,7 @@ RSpec.describe Registrations::RegistrationChecker do
         )
 
         expect {
-          Registrations::RegistrationChecker.update_registration_allowed!(update_request, organizer_reg, User.find(update_request['submitted_by']))
+          Registrations::RegistrationChecker.update_registration_allowed!(update_request, organizer_reg)
         }.to raise_error(WcaExceptions::RegistrationError) do |error|
           expect(error.status).to eq(:unprocessable_entity)
           expect(error.error).to eq(Registrations::ErrorCodes::INVALID_EVENT_SELECTION)
@@ -1638,7 +1525,7 @@ RSpec.describe Registrations::RegistrationChecker do
         )
 
         expect {
-          Registrations::RegistrationChecker.update_registration_allowed!(update_request, waitlisted_registration, User.find(update_request['submitted_by']))
+          Registrations::RegistrationChecker.update_registration_allowed!(update_request, waitlisted_registration)
         }.not_to raise_error
       end
 
@@ -1652,7 +1539,7 @@ RSpec.describe Registrations::RegistrationChecker do
         )
 
         expect {
-          Registrations::RegistrationChecker.update_registration_allowed!(update_request, waitlisted_registration, User.find(update_request['submitted_by']))
+          Registrations::RegistrationChecker.update_registration_allowed!(update_request, waitlisted_registration)
         }.to raise_error(WcaExceptions::RegistrationError) do |error|
           expect(error.status).to eq(:unprocessable_entity)
           expect(error.error).to eq(Registrations::ErrorCodes::INVALID_WAITING_LIST_POSITION)
@@ -1669,7 +1556,7 @@ RSpec.describe Registrations::RegistrationChecker do
         )
 
         expect {
-          Registrations::RegistrationChecker.update_registration_allowed!(update_request, waitlisted_registration, User.find(update_request['submitted_by']))
+          Registrations::RegistrationChecker.update_registration_allowed!(update_request, waitlisted_registration)
         }.not_to raise_error
       end
 
@@ -1683,7 +1570,7 @@ RSpec.describe Registrations::RegistrationChecker do
         )
 
         expect {
-          Registrations::RegistrationChecker.update_registration_allowed!(update_request, waitlisted_registration, User.find(update_request['submitted_by']))
+          Registrations::RegistrationChecker.update_registration_allowed!(update_request, waitlisted_registration)
         }.to raise_error(WcaExceptions::RegistrationError) do |error|
           expect(error.status).to eq(:unprocessable_entity)
           expect(error.error).to eq(Registrations::ErrorCodes::INVALID_WAITING_LIST_POSITION)
@@ -1700,9 +1587,9 @@ RSpec.describe Registrations::RegistrationChecker do
         )
 
         expect {
-          Registrations::RegistrationChecker.update_registration_allowed!(update_request, waitlisted_registration, User.find(update_request['submitted_by']))
+          Registrations::RegistrationChecker.update_registration_allowed!(update_request, waitlisted_registration)
         }.to raise_error(WcaExceptions::RegistrationError) do |error|
-          expect(error.status).to eq(:forbidden)
+          expect(error.status).to eq(:unprocessable_entity)
           expect(error.error).to eq(Registrations::ErrorCodes::INVALID_WAITING_LIST_POSITION)
         end
       end
@@ -1717,9 +1604,9 @@ RSpec.describe Registrations::RegistrationChecker do
         )
 
         expect {
-          Registrations::RegistrationChecker.update_registration_allowed!(update_request, waitlisted_registration, User.find(update_request['submitted_by']))
+          Registrations::RegistrationChecker.update_registration_allowed!(update_request, waitlisted_registration)
         }.to raise_error(WcaExceptions::RegistrationError) do |error|
-          expect(error.status).to eq(:forbidden)
+          expect(error.status).to eq(:unprocessable_entity)
           expect(error.error).to eq(Registrations::ErrorCodes::INVALID_WAITING_LIST_POSITION)
         end
       end
@@ -1734,7 +1621,7 @@ RSpec.describe Registrations::RegistrationChecker do
         )
 
         expect {
-          Registrations::RegistrationChecker.update_registration_allowed!(update_request, default_registration, User.find(update_request['submitted_by']))
+          Registrations::RegistrationChecker.update_registration_allowed!(update_request, default_registration)
         }.to raise_error(WcaExceptions::RegistrationError) do |error|
           expect(error.status).to eq(:unprocessable_entity)
           expect(error.error).to eq(Registrations::ErrorCodes::INVALID_REQUEST_DATA)
@@ -1788,7 +1675,7 @@ RSpec.describe Registrations::RegistrationChecker do
         )
 
         expect {
-          Registrations::RegistrationChecker.update_registration_allowed!(update_request, easy_registration_with_results_reg, User.find(update_request['submitted_by']))
+          Registrations::RegistrationChecker.update_registration_allowed!(update_request, easy_registration_with_results_reg)
         }.not_to raise_error
       end
 
@@ -1820,7 +1707,7 @@ RSpec.describe Registrations::RegistrationChecker do
           )
 
           expect {
-            Registrations::RegistrationChecker.update_registration_allowed!(update_request, reg_with_results_for_unenforced_hard_quali, User.find(update_request['submitted_by']))
+            Registrations::RegistrationChecker.update_registration_allowed!(update_request, reg_with_results_for_unenforced_hard_quali)
           }.not_to raise_error
         end
 
@@ -1833,7 +1720,7 @@ RSpec.describe Registrations::RegistrationChecker do
           )
 
           expect {
-            Registrations::RegistrationChecker.update_registration_allowed!(update_request, reg_with_no_results_for_unenforced_hard_quali, User.find(update_request['submitted_by']))
+            Registrations::RegistrationChecker.update_registration_allowed!(update_request, reg_with_no_results_for_unenforced_hard_quali)
           }.not_to raise_error
         end
 
@@ -1846,7 +1733,7 @@ RSpec.describe Registrations::RegistrationChecker do
           )
 
           expect {
-            Registrations::RegistrationChecker.update_registration_allowed!(update_request, reg_with_results_for_unenforced_easy_quali, User.find(update_request['submitted_by']))
+            Registrations::RegistrationChecker.update_registration_allowed!(update_request, reg_with_results_for_unenforced_easy_quali)
           }.not_to raise_error
         end
       end
@@ -1882,7 +1769,7 @@ RSpec.describe Registrations::RegistrationChecker do
           )
 
           expect {
-            Registrations::RegistrationChecker.update_registration_allowed!(update_request, reg_with_results_easy_quali, User.find(update_request['submitted_by']))
+            Registrations::RegistrationChecker.update_registration_allowed!(update_request, reg_with_results_easy_quali)
           }.not_to raise_error
         end
 
@@ -1895,7 +1782,7 @@ RSpec.describe Registrations::RegistrationChecker do
           )
 
           expect {
-            Registrations::RegistrationChecker.update_registration_allowed!(update_request, reg_with_results_future_easy_quali, User.find(update_request['submitted_by']))
+            Registrations::RegistrationChecker.update_registration_allowed!(update_request, reg_with_results_future_easy_quali)
           }.not_to raise_error
         end
       end
@@ -1937,7 +1824,7 @@ RSpec.describe Registrations::RegistrationChecker do
           )
 
           expect {
-            Registrations::RegistrationChecker.update_registration_allowed!(update_request, user_with_results_registering_for_past, User.find(update_request['submitted_by']))
+            Registrations::RegistrationChecker.update_registration_allowed!(update_request, user_with_results_registering_for_past)
           }.to raise_error(WcaExceptions::RegistrationError) do |error|
             expect(error.error).to eq(Registrations::ErrorCodes::QUALIFICATION_NOT_MET)
             expect(error.status).to eq(:unprocessable_entity)
@@ -1954,7 +1841,7 @@ RSpec.describe Registrations::RegistrationChecker do
           )
 
           expect {
-            Registrations::RegistrationChecker.update_registration_allowed!(update_request, user_without_results_easy_quali, User.find(update_request['submitted_by']))
+            Registrations::RegistrationChecker.update_registration_allowed!(update_request, user_without_results_easy_quali)
           }.to raise_error(WcaExceptions::RegistrationError) do |error|
             expect(error.error).to eq(Registrations::ErrorCodes::QUALIFICATION_NOT_MET)
             expect(error.status).to eq(:unprocessable_entity)
@@ -1971,7 +1858,7 @@ RSpec.describe Registrations::RegistrationChecker do
           )
 
           expect {
-            Registrations::RegistrationChecker.update_registration_allowed!(update_request, user_with_dnfs_easy_quali, User.find(update_request['submitted_by']))
+            Registrations::RegistrationChecker.update_registration_allowed!(update_request, user_with_dnfs_easy_quali)
           }.to raise_error(WcaExceptions::RegistrationError) do |error|
             expect(error.error).to eq(Registrations::ErrorCodes::QUALIFICATION_NOT_MET)
             expect(error.status).to eq(:unprocessable_entity)
@@ -2003,7 +1890,7 @@ RSpec.describe Registrations::RegistrationChecker do
           )
 
           expect {
-            Registrations::RegistrationChecker.update_registration_allowed!(update_request, slow_single_reg, User.find(update_request['submitted_by']))
+            Registrations::RegistrationChecker.update_registration_allowed!(update_request, slow_single_reg)
           }.to raise_error(WcaExceptions::RegistrationError) do |error|
             expect(error.error).to eq(Registrations::ErrorCodes::QUALIFICATION_NOT_MET)
             expect(error.status).to eq(:unprocessable_entity)
@@ -2024,7 +1911,7 @@ RSpec.describe Registrations::RegistrationChecker do
           )
 
           expect {
-            Registrations::RegistrationChecker.update_registration_allowed!(update_request, slow_single_reg, User.find(update_request['submitted_by']))
+            Registrations::RegistrationChecker.update_registration_allowed!(update_request, slow_single_reg)
           }.to raise_error(WcaExceptions::RegistrationError) do |error|
             expect(error.error).to eq(Registrations::ErrorCodes::QUALIFICATION_NOT_MET)
             expect(error.status).to eq(:unprocessable_entity)
@@ -2045,7 +1932,7 @@ RSpec.describe Registrations::RegistrationChecker do
           )
 
           expect {
-            Registrations::RegistrationChecker.update_registration_allowed!(update_request, slow_average_reg, User.find(update_request['submitted_by']))
+            Registrations::RegistrationChecker.update_registration_allowed!(update_request, slow_average_reg)
           }.to raise_error(WcaExceptions::RegistrationError) do |error|
             expect(error.error).to eq(Registrations::ErrorCodes::QUALIFICATION_NOT_MET)
             expect(error.status).to eq(:unprocessable_entity)
@@ -2066,7 +1953,7 @@ RSpec.describe Registrations::RegistrationChecker do
           )
 
           expect {
-            Registrations::RegistrationChecker.update_registration_allowed!(update_request, slow_average_reg, User.find(update_request['submitted_by']))
+            Registrations::RegistrationChecker.update_registration_allowed!(update_request, slow_average_reg)
           }.to raise_error(WcaExceptions::RegistrationError) do |error|
             expect(error.error).to eq(Registrations::ErrorCodes::QUALIFICATION_NOT_MET)
             expect(error.status).to eq(:unprocessable_entity)
@@ -2103,10 +1990,10 @@ RSpec.describe Registrations::RegistrationChecker do
         )
 
         expect {
-          Registrations::RegistrationChecker.update_registration_allowed!(update_request, registrationB, User.find(update_request['submitted_by']))
+          Registrations::RegistrationChecker.update_registration_allowed!(update_request, registrationB)
         }.to raise_error(WcaExceptions::RegistrationError) do |error|
           expect(error.error).to eq(Registrations::ErrorCodes::ALREADY_REGISTERED_IN_SERIES)
-          expect(error.status).to eq(:forbidden)
+          expect(error.status).to eq(:unprocessable_entity)
         end
       end
 
@@ -2120,7 +2007,7 @@ RSpec.describe Registrations::RegistrationChecker do
         )
 
         expect {
-          Registrations::RegistrationChecker.update_registration_allowed!(update_request, registrationB, User.find(update_request['submitted_by']))
+          Registrations::RegistrationChecker.update_registration_allowed!(update_request, registrationB)
         }.not_to raise_error
       end
     end
@@ -2146,10 +2033,10 @@ RSpec.describe Registrations::RegistrationChecker do
           )
 
           expect {
-            Registrations::RegistrationChecker.update_registration_allowed!(update_request, non_newcomer_reg, User.find(update_request['submitted_by']))
+            Registrations::RegistrationChecker.update_registration_allowed!(update_request, non_newcomer_reg)
           }.to raise_error(WcaExceptions::RegistrationError) do |error|
             expect(error.error).to eq(Registrations::ErrorCodes::NO_UNRESERVED_SPOTS_REMAINING)
-            expect(error.status).to eq(:forbidden)
+            expect(error.status).to eq(:unprocessable_entity)
           end
         end
 
@@ -2163,7 +2050,7 @@ RSpec.describe Registrations::RegistrationChecker do
           )
 
           expect {
-            Registrations::RegistrationChecker.update_registration_allowed!(update_request, newcomer_reg, User.find(update_request['submitted_by']))
+            Registrations::RegistrationChecker.update_registration_allowed!(update_request, newcomer_reg)
           }.not_to raise_error
         end
 
@@ -2177,7 +2064,7 @@ RSpec.describe Registrations::RegistrationChecker do
           )
 
           expect {
-            Registrations::RegistrationChecker.update_registration_allowed!(update_request, newcomer_month_eligible_reg, User.find(update_request['submitted_by']))
+            Registrations::RegistrationChecker.update_registration_allowed!(update_request, newcomer_month_eligible_reg)
           }.not_to raise_error
         end
       end
@@ -2197,7 +2084,7 @@ RSpec.describe Registrations::RegistrationChecker do
           )
 
           expect {
-            Registrations::RegistrationChecker.update_registration_allowed!(update_request, newcomer_reg, User.find(update_request['submitted_by']))
+            Registrations::RegistrationChecker.update_registration_allowed!(update_request, newcomer_reg)
           }.not_to raise_error
         end
 
@@ -2211,7 +2098,7 @@ RSpec.describe Registrations::RegistrationChecker do
           )
 
           expect {
-            Registrations::RegistrationChecker.update_registration_allowed!(update_request, newcomer_month_eligible_reg, User.find(update_request['submitted_by']))
+            Registrations::RegistrationChecker.update_registration_allowed!(update_request, newcomer_month_eligible_reg)
           }.not_to raise_error
         end
 
@@ -2225,7 +2112,7 @@ RSpec.describe Registrations::RegistrationChecker do
           )
 
           expect {
-            Registrations::RegistrationChecker.update_registration_allowed!(update_request, non_newcomer_reg, User.find(update_request['submitted_by']))
+            Registrations::RegistrationChecker.update_registration_allowed!(update_request, non_newcomer_reg)
           }.not_to raise_error
         end
       end
@@ -2242,10 +2129,10 @@ RSpec.describe Registrations::RegistrationChecker do
         )
 
         expect {
-          Registrations::RegistrationChecker.update_registration_allowed!(update_request, newcomer_reg, User.find(update_request['submitted_by']))
+          Registrations::RegistrationChecker.update_registration_allowed!(update_request, newcomer_reg)
         }.to raise_error(WcaExceptions::RegistrationError) do |error|
           expect(error.error).to eq(Registrations::ErrorCodes::COMPETITOR_LIMIT_REACHED)
-          expect(error.status).to eq(:forbidden)
+          expect(error.status).to eq(:unprocessable_entity)
         end
       end
 
@@ -2262,10 +2149,10 @@ RSpec.describe Registrations::RegistrationChecker do
         )
 
         expect {
-          Registrations::RegistrationChecker.update_registration_allowed!(update_request, non_newcomer_reg, User.find(update_request['submitted_by']))
+          Registrations::RegistrationChecker.update_registration_allowed!(update_request, non_newcomer_reg)
         }.to raise_error(WcaExceptions::RegistrationError) do |error|
           expect(error.error).to eq(Registrations::ErrorCodes::NO_UNRESERVED_SPOTS_REMAINING)
-          expect(error.status).to eq(:forbidden)
+          expect(error.status).to eq(:unprocessable_entity)
         end
       end
     end

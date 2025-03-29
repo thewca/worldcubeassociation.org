@@ -942,7 +942,7 @@ RSpec.describe Registration do
     expect(reg).not_to be_valid
     expect(reg.errors[:registered_at]).to include("can't be blank")
   end
-
+  
   describe '#does_not_exceed_competitor_limit' do
     let(:competition) { FactoryBot.create(:competition, :registration_open, competitor_limit: 3) }
     let(:accepted_reg) { FactoryBot.build(:registration, :accepted, competition: competition) }
@@ -954,6 +954,16 @@ RSpec.describe Registration do
     it 'does not include non-competing registrations in competitor limit' do
       FactoryBot.create(:registration, :non_competing, competition: competition)
       expect(accepted_reg).to be_valid
+    end
+  end
+  
+  describe '#entry_fee_with_donation' do
+    it 'returns a RubyMoney object' do
+      expect(registration.entry_fee_with_donation).to eq(Money.new(1000, "USD"))
+    end
+
+    it 'given a donation, sums the donation and entry fee' do
+      expect(registration.entry_fee_with_donation(1500)).to eq(Money.new(2500, "USD"))
     end
   end
 end
