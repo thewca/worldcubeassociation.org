@@ -1,12 +1,3 @@
-
-translate Internationalize
-Rubén
-
-
-
-2011/2011
-done Everything translated
-Raw data
 eu:
   countries:
     #original_hash: 530670d
@@ -4618,7 +4609,7 @@ eu:
         #original_hash: 53adda3
         stripe: >-
           Zure Stripe kontua konektatzeak WCAri salneurriak sor dezan ahalmena
-          ematen dio. Baita zure Stripe kontura zuzenean diru-itzulketak 
+          ematen dio. Baita zure Stripe kontura zuzenean diru-itzulketak
           jaulkitzea.
         #original_hash: 7cedd12
         paypal: >-
