@@ -78,6 +78,7 @@ function Information({ lastCadRunTime }) {
           <List.Item>
             <b>
               The detected records will not automatically be up-to-date with the
+              {' '}
               <code>Results</code>
               {' '}
               table by default.

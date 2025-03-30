@@ -9,7 +9,7 @@ import useInputState from '../../../../lib/hooks/useInputState';
 import useCheckboxState from '../../../../lib/hooks/useCheckboxState';
 import useQueryParams from '../../../../lib/hooks/useQueryParams';
 
-const ALL_EVENTS = events.all.map((event) => event.id);
+const ALL_EVENTS = Object.keys(events.byId);
 const ALL_EVENTS_KEY = 'all';
 
 export default function CheckRecordsForm() {

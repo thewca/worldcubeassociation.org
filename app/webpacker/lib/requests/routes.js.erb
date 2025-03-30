@@ -255,11 +255,7 @@ export const panelUrls = {
   },
 }
 
-export const panelPageUrl = (panelPage, queryParams = {}) => {
-  const queryString = jsonToQueryString(queryParams);
-  const urlSuffix = queryString ? `?${queryString}` : '';
-  return `<%= CGI.unescape(Rails.application.routes.url_helpers.panel_page_path(id: "${panelPage}")) %>${urlSuffix}`;
-}
+export const panelPageUrl = (panelPage, queryParams = {}) => `<%= CGI.unescape(Rails.application.routes.url_helpers.panel_page_path(id: "${panelPage}")) %>?${jsonToQueryString(queryParams)}`;
 
 export const viewUrls = {
   tickets: {
