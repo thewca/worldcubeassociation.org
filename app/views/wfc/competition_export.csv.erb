@@ -6,7 +6,7 @@
   "Currency Code", "Base Registration Fee", "Currency Subunit",
   "Championship Type", "Exempt from WCA Dues", "Organizers", "Calculated Dues",
   "Dues Payer Name", "Dues Payer Email", "Is Combined Invoice", "Dues Band",
-  "Error in Dues Calculation", "Error (Invalid Arguments)",
+  "Error (if any)",
 ] %>
 <%= CSV.generate_line(headers, col_sep: "\t").html_safe -%>
 <% @competitions.each do |c| %>
