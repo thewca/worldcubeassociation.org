@@ -103,6 +103,12 @@ GEM
       erubi (~> 1.11)
       rails-dom-testing (~> 2.2)
       rails-html-sanitizer (~> 1.6)
+    active_storage_validations (2.0.2)
+      activejob (>= 6.1.4)
+      activemodel (>= 6.1.4)
+      activestorage (>= 6.1.4)
+      activesupport (>= 6.1.4)
+      marcel (>= 1.0.3)
     activejob (7.2.2.1)
       activesupport (= 7.2.2.1)
       globalid (>= 0.3.6)
@@ -120,8 +126,6 @@ GEM
       activerecord (= 7.2.2.1)
       activesupport (= 7.2.2.1)
       marcel (~> 1.0)
-    activestorage-validator (0.4.0)
-      rails (>= 6.1.0)
     activesupport (7.2.2.1)
       base64
       benchmark (>= 0.3)
@@ -972,8 +976,8 @@ PLATFORMS
   x86_64-linux-musl
 
 DEPENDENCIES
+  active_storage_validations
   activerecord-import
-  activestorage-validator
   after_commit_everywhere
   api-pagination
   apparition!
