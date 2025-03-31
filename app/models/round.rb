@@ -185,7 +185,7 @@ class Round < ApplicationRecord
     competitors_live_results_entered == total_accepted_registrations
   end
 
-  def has_undef_tl?
+  def time_limit_undefined?
     can_change_time_limit? && time_limit == TimeLimit::UNDEF_TL
   end
 

@@ -19,7 +19,7 @@
           <% end %>
         </td>
         <td>
-        <% if ro.is_pending? %>
+        <% if ro.pending? %>
             <%= button_to regional_organization_path(ro),
                           title: t('common.delete'),
                           class: "btn btn-danger",
