@@ -8,9 +8,9 @@ class ApplicationController < ActionController::Base
 
   protect_from_forgery with: :exception
 
-  prepend_before_action :set_locale, unless: :is_api_request?
+  prepend_before_action :set_locale, unless: :ignore_client_language?
   # The API should only ever respond in English
-  prepend_before_action :set_default_locale, if: :is_api_request?
+  prepend_before_action :set_default_locale, if: :ignore_client_language?
 
   before_action :store_user_location!, if: :storable_location?
   before_action :add_new_relic_headers
@@ -116,8 +116,16 @@ class ApplicationController < ActionController::Base
       request.get? && is_navigational_format? && !devise_controller? && !request.xhr? && !is_api_request?
     end
 
+    def ignore_client_language?
+      is_api_request? || is_oauth_request?
+    end
+
+    def is_oauth_request?
+      request.fullpath.include?('/oauth/')
+    end
+
     def is_api_request?
-      request.fullpath.include?('/api/') || request.fullpath.include?('/oauth/')
+      request.fullpath.include?('/api/')
     end
 
     def store_user_location!
