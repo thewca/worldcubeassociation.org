@@ -5,6 +5,15 @@ module Registrations
     def self.apply_payload(registration, raw_payload)
       # Duplicate everything to make sure we don't trigger unwanted DB write operations
       registration.deep_dup.tap do |new_registration|
+        # Weird quirk in Rails: `deep_dup` initializes a "blank" Registration under the hood
+        #   and _then_ fills its attributes with the model it's being cloned from. In practice,
+        #   this means that an `accepted` competition which is being cloned will immediately(!) report
+        #   that its competing status changed, because the default of the enum is `pending` and the
+        #   cloning _then_ sets it to the `accepted` status of the original registration.
+        # In practice, this change is necessary so that verifying a registration update
+        #   of a full competition does not trigger registration limit checks.
+        new_registration.clear_changes_information
+
         guests = raw_payload['guests']
 
         new_registration.guests = guests.to_i if raw_payload.key?('guests')
