@@ -1,21 +1,15 @@
 # frozen_string_literal: true
 
-if Rails.env.local?
-  Rails.application.config.middleware.insert_before 0, Rack::Cors do
-    allow do
-      origins '*'
+Rails.application.config.middleware.insert_before 0, Rack::Cors do
+  allow do
+    origins '*'
 
+    if Rails.env.local?
       resource '*',
                headers: :any,
                expose: %i[Authorization Total Per-Page Link],
                methods: :any
-    end
-  end
-else
-  Rails.application.config.middleware.insert_before 0, Rack::Cors do
-    allow do
-      origins '*'
-
+    else
       resource(
         '/api/v0/*',
         headers: %w[Origin X-Requested-With Content-Type Accept Authorization],
@@ -23,7 +17,7 @@ else
         expose: %w[Total Per-Page Link],
         max_age: 0,
         credentials: false,
-      )
+        )
 
       resource(
         '/api/v1/*',
@@ -32,7 +26,7 @@ else
         expose: %w[Total Per-Page Link],
         max_age: 0,
         credentials: false,
-      )
+        )
     end
   end
 end
