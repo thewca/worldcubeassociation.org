@@ -117,7 +117,7 @@ class ApplicationController < ActionController::Base
     end
 
     def is_api_request?
-      request.fullpath.include?('/api/')
+      request.fullpath.include?('/api/') || request.fullpath.include?('/oauth/')
     end
 
     def store_user_location!
