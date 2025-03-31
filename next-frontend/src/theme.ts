@@ -1,4 +1,5 @@
 import { createSystem, defaultConfig, defineConfig } from "@chakra-ui/react";
+import SpotsLeftIconPreview from "./components/icons/SpotsLeftIcon";
 
 
 const customConfig = defineConfig({
@@ -244,6 +245,7 @@ const customConfig = defineConfig({
         bg: {
           DEFAULT: { value:  { _light: "colors.supplementary.bgs.white", _dark: "colors.supplementary.bgs.dark" }, },
           inverted: { value:  { _light: "colors.supplementary.bgs.white", _dark: "colors.supplementary.bgs.dark" }, },
+          muted: { value:  { _light: "colors.supplementary.bgs.medium", _dark: "colors.supplementary.texts.gray2" }, },
         },
         fg: {
           DEFAULT: { value:  { _light: "colors.supplementary.texts.dark", _dark: "colors.supplementary.texts.light" }, },
@@ -400,7 +402,7 @@ const customConfig = defineConfig({
                 right: "0",
                 width: "7px",
                 height: "12px",
-                backgroundImage: "url('/static/images/linkArrow.svg')",
+                backgroundImage: "url('/linkArrow.svg')",
                 backgroundRepeat: "no-repeat",
                 backgroundSize: "contain",
                 transform: "translateY(-50%) translateX(-8px)",
@@ -586,6 +588,102 @@ const customConfig = defineConfig({
               }
             }
           },
+        }
+      },
+      table: {
+        variants: {
+          variant: {
+            results: {
+              cell: {
+                padding: "0",
+              },
+            },
+            competitions: {
+              root: {
+                tableLayout: "auto",
+              },
+              cell: {
+                width: "1%",
+                whiteSpace: "noWrap",
+                padding: "0",
+              },
+              row: {
+                "& td": {
+                  transitionProperty: "background-color",
+                  transitionTimingFunction: "ease",
+                  transitionDuration: "150ms",
+                },
+                cursor: "pointer",
+                width: "100%",
+                "&:nth-of-type(odd) td": {
+                  bg: "bg.muted",
+                },
+                "&:hover td": {
+                  bg: "blue.400/60",
+                }
+              }
+            }
+          },
+          size: {
+            xs: {
+              root: {
+                textStyle: "sm",
+              },
+              columnHeader: {
+                px: "1",
+                py: "1",
+              },
+              cell: {
+                px: "1.5",
+                py: "1.5",
+              },
+            },
+          }
+        }
+      },
+      drawer: {
+        variants: {
+          variant: {
+            competitionInfo: {
+              content: {
+                borderRadius: "md",
+                shadow: "{shadows.wca}",
+                height: "max-content",
+              }
+            }
+          }
+        }
+      },
+      tabs: {
+        variants: {
+          variant: {
+            enclosed: {
+              list: {
+                bg: "bg",
+                shadow: "{shadows.wca}",
+                p: "3",
+                borderRadius: "xl",
+                gap: "3",
+              },
+              trigger: {
+                transitionProperty: "background-color",
+                transitionTimingFunction: "ease",
+                transitionDuration: "200ms",
+                _hover: {
+                  bg: "bg.muted/50"
+                },
+                _selected: {
+                  bg: "bg.muted"
+                },
+                _vertical: {
+                  justifyContent: "flex-start",
+                }
+              },
+              content: {
+                flexGrow: "1",
+              }
+            }
+          }
         }
       }
     },

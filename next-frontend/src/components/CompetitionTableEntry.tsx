@@ -1,10 +1,16 @@
 "use client"
 import React from 'react';
 import {Table, Text, Link} from "@chakra-ui/react";
-import { LuBadgePlus, LuHourglass, LuBadgeX, LuBadgeAlert } from 'react-icons/lu';
+import CompRegoFullButOpenOrangeIcon from "@/components/icons/CompRegoFullButOpen_orangeIcon";
+import CompRegoNotFullOpenGreenIcon from "@/components/icons/CompRegoNotFullOpen_greenIcon";
+import CompRegoNotOpenYetGreyIcon from "@/components/icons/CompRegoNotOpenYet_greyIcon";
+import CompRegoClosedRedIcon from "@/components/icons/CompRegoClosed_redIcon";
+
 
 import { Button, CloseButton, Drawer, Portal } from "@chakra-ui/react"
 import { useState } from "react"
+import EventIcon from "@/components/EventIcon"
+import CountryMap from "@/components/CountryMap"
 
 interface Comps {
     name: string;
@@ -16,13 +22,14 @@ interface Comps {
     regoStatus: string;
     competitorLimit: BigInteger;
     events: String[],
+    mainEvent: String,
 }
 
 const regoStatusIcons: Record<string, TSX.Element> = {
-    open: <LuBadgePlus/>,
-    notOpen: <LuHourglass/>,
-    closed: <LuBadgeX />,
-    full: <LuBadgeAlert />,
+    open: <CompRegoNotFullOpenGreenIcon/>,
+    notOpen: <CompRegoNotOpenYetGreyIcon/>,
+    closed: <CompRegoClosedRedIcon />,
+    full: <CompRegoFullButOpenOrangeIcon />,
   };
 
 interface CompsProps {
@@ -68,7 +75,7 @@ const CompetitionTableEntry: React.FC<CompsProps> = ({ comp }) => {
             <Text>{formatDateRange(comp.dateStart, comp.dateEnd)}</Text>
         </Table.Cell>
         <Table.Cell>
-            <Link hoverArrow href="{}" onClick={(e) => {
+            <Link hoverArrow href={"/competitions/" + comp.id} onClick={(e) => {
                 e.stopPropagation();
                 }}>
                 {comp.name}
@@ -78,7 +85,7 @@ const CompetitionTableEntry: React.FC<CompsProps> = ({ comp }) => {
             <Text>{comp.city}</Text>
         </Table.Cell>
         <Table.Cell>
-            <Text>{comp.country}</Text>
+           <CountryMap code={comp.country} bold />
         </Table.Cell>
         <Table.Cell>
             <Text>{comp.country}</Text>
@@ -94,8 +101,8 @@ const CompetitionTableEntry: React.FC<CompsProps> = ({ comp }) => {
                     <Drawer.Body>
                         <Text>Competitor Limit: {comp.competitorLimit}</Text>
                         <Text>Events:</Text>
-                        {comp.events.map((event) => (
-                            <Text>{event}</Text>
+                        {comp.events.map((eventIndividual) => (
+                            <EventIcon eventId={eventIndividual} key={eventIndividual} main={eventIndividual === comp.mainEvent}/>
                         ))}
                     </Drawer.Body>
                     <Drawer.Footer>

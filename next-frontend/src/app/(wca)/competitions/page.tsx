@@ -34,6 +34,7 @@ const getAllCompData = async () => {
       regoStatus: competitionInfo.registration_currently_open? "open" : "closed",
       competitorLimit: competitionInfo.competitor_limit,
       events: competitionInfo.event_ids,
+      mainEvent: competitionInfo.main_event_id,
     };
 
     compDataArray.push(formattedComp);
@@ -53,7 +54,7 @@ export default function Competitions() {
             <Table.Root size="xs" rounded="md" variant="competitions">
               <Table.Body>
               {competitions.map((comp, index) => (
-                <CompetitionTableEntry comp={comp}/>
+                <CompetitionTableEntry comp={comp} key={comp.id}/>
               ))}
               </Table.Body>
             </Table.Root>

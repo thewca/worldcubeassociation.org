@@ -6,6 +6,7 @@ import PermissionProvider from "@/providers/PermissionProvider";
 import { Provider as UiProvider } from "@/components/ui/provider";
 import Navbar from "./navbar";
 import localFont from 'next/font/local'
+import RandomBackground from "@/components/RandomBackground";
 
 
 const TTNormsPro = localFont({
@@ -60,6 +61,7 @@ export default function RootLayout({
           <AuthProvider>
             <UiProvider>
               <Navbar />
+              <RandomBackground numRows={8} numCols={18} />
               <PermissionProvider>{children}</PermissionProvider>
             </UiProvider>
           </AuthProvider>

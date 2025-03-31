@@ -1,10 +1,12 @@
-import { Container, Heading, Text, Card, FormatNumber, Link as ChakraLink, Button, SimpleGrid, HStack, VStack } from "@chakra-ui/react";
+import { Container, Heading, Text, Card, FormatNumber, Link as ChakraLink, Button, SimpleGrid, HStack, VStack, Tabs, Separator } from "@chakra-ui/react";
 import Link from "next/link";
 import PermissionProvider from "@/providers/PermissionProvider";
 import PermissionsTestMessage from "@/components/competitions/permissionsTestMessage";
 import { getCompetitionInfo } from "@/lib/wca/competitions/getCompetitionInfo";
 import { MarkdownProse } from "@/components/Markdown";
 import { MarkdownFirstImage } from "@/components/MarkdownFirstImage"
+import EventIcon from "@/components/EventIcon"
+
 
 import { LuBadgeDollarSign } from "react-icons/lu";
 
@@ -23,9 +25,38 @@ import VenueIcon from "@/components/icons/VenueIcon";
 import DetailsIcon from "@/components/icons/DetailsIcon";
 import CompetitorsIcon from "@/components/icons/CompetitorsIcon";
 
+import CountryMap from "@/components/CountryMap"
 
+import TabRegister from "@/components/competitions/TabRegister"
+import TabCompetitors from "@/components/competitions/TabCompetitors"
+import TabEvents from "@/components/competitions/TabEvents"
+import TabSchedule from "@/components/competitions/TabSchedule"
 
+function formatDateRange(start: Date, end: Date): string {
+  const sameDay = start.toDateString() === end.toDateString();
 
+  // Formatters
+  const dayFormatter = new Intl.DateTimeFormat('en-US', { day: 'numeric' });
+  const monthDayFormatter = new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric' });
+  const fullFormatter = new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+
+  if (sameDay) {
+    return fullFormatter.format(start);
+  }
+
+  const sameMonth = start.getMonth() === end.getMonth();
+  const sameYear = start.getFullYear() === end.getFullYear();
+
+  if (sameMonth && sameYear) {
+    return `${monthDayFormatter.format(start)} - ${dayFormatter.format(end)}, ${start.getFullYear()}`;
+  }
+
+  if (sameYear) {
+    return `${monthDayFormatter.format(start)} - ${monthDayFormatter.format(end)}, ${start.getFullYear()}`;
+  }
+
+  return `${fullFormatter.format(start)} - ${fullFormatter.format(end)}`;
+}
 
 export default async function CompetitionOverView({
   params,
@@ -64,9 +95,26 @@ export default async function CompetitionOverView({
   const formattedRegoClosedDate = regoClosedDate.toLocaleString("en-US", dateFormat);
   const formattedRefundDate = refundDate.toLocaleString("en-US", dateFormat);
 
+  
 
   return (
-    <Container minW="1800px" p="8">
+    <Container minW="80vw" p="8">
+      <PermissionProvider>
+        <PermissionsTestMessage competitionInfo={competitionInfo} />
+      </PermissionProvider>
+      <Tabs.Root variant="enclosed" w="100%" defaultValue={"general"} orientation="vertical" lazyMount unmountOnExit>
+      <Tabs.List height="fit-content" position="sticky" top="3">
+        <Tabs.Trigger value="general">General Info</Tabs.Trigger>
+        <Tabs.Trigger value="register">Register</Tabs.Trigger>
+        <Tabs.Trigger value="competitors">Competitors</Tabs.Trigger>
+        <Tabs.Trigger value="events">Events</Tabs.Trigger>
+        <Tabs.Trigger value="schedule">Schedule</Tabs.Trigger>
+        <Separator />
+        <Tabs.Trigger value="custom-1">Custom 1</Tabs.Trigger>
+        <Tabs.Trigger value="custom-2">Custom 2</Tabs.Trigger>
+        <Tabs.Trigger value="custom-3">Custom 3</Tabs.Trigger>
+      </Tabs.List>
+      <Tabs.Content value="general">
       <HStack gap="8" alignItems="stretch">
         <VStack maxW="45%" w="45%" gap="8">
       <Card.Root variant="plain">
@@ -80,7 +128,7 @@ export default async function CompetitionOverView({
                 Date
               </Card.Header>
               <Card.Body>
-                <FormatNumber value={competitionInfo.number_of_bookmarks}/> Times
+                <Text>{formatDateRange(new Date(competitionInfo.start_date), new Date(competitionInfo.end_date))}</Text>
               </Card.Body>
             </Card.Root>
 
@@ -90,7 +138,7 @@ export default async function CompetitionOverView({
                 Location
               </Card.Header>
               <Card.Body>
-                <Text>{competitionInfo.city}, {competitionInfo.country_iso2}</Text>
+                <Text>{competitionInfo.city}, </Text><CountryMap code={competitionInfo.country_iso2} bold/>
               </Card.Body>
             </Card.Root>
 
@@ -147,7 +195,18 @@ export default async function CompetitionOverView({
                 Spectators
               </Card.Header>
               <Card.Body>
-                <FormatNumber value={competitionInfo.guests_entry_fee_lowest_denomination/100} style="currency" currency={competitionInfo.currency_code} /> {competitionInfo.currency_code}
+              {competitionInfo.guests_entry_fee_lowest_denomination === 0 ? (
+                  "Free"
+                ) : (
+                  <>
+                    <FormatNumber
+                      value={competitionInfo.guests_entry_fee_lowest_denomination / 100}
+                      style="currency"
+                      currency={competitionInfo.currency_code}
+                    />{" "}
+                    {competitionInfo.currency_code}
+                  </>
+                )}
               </Card.Body>
             </Card.Root>
 
@@ -200,8 +259,8 @@ export default async function CompetitionOverView({
             <Text fontSize="md" textTransform="uppercase" fontWeight="medium" letterSpacing="wider">Events List</Text>
           </Card.Title>
           <Text>
-          {competitionInfo.event_ids.map((event_id, index) => (
-            <Text as="span" fontWeight={event_id === competitionInfo.main_event_id ? "bold" : undefined}>{event_id}, </Text>
+          {competitionInfo.event_ids.map((event_id) => (
+            <EventIcon eventId={event_id} main={event_id === competitionInfo.main_event_id} key={event_id}/>
           ))}
           </Text>
         </Card.Body>
@@ -209,7 +268,7 @@ export default async function CompetitionOverView({
 
       </VStack>
       <VStack maxW="55%" w="55%" gap="8">
-        <HStack gap="8" alignItems="stretch">
+        <HStack gap="8" alignItems="stretch" width="100%">
         <Card.Root variant="plain">
           <Card.Body>
             <Card.Title><Text fontSize="md" textTransform="uppercase" fontWeight="medium" letterSpacing="wider">Organisation Team</Text></Card.Title>
@@ -315,9 +374,23 @@ export default async function CompetitionOverView({
       </VStack>
       </HStack>
 
-      <PermissionProvider>
-        <PermissionsTestMessage competitionInfo={competitionInfo} />
-      </PermissionProvider>
+      <Card.Root variant="plain" mt="8">
+        <Card.Body>
+          <Card.Title><Text fontSize="md" textTransform="uppercase" fontWeight="medium" letterSpacing="wider">Information</Text></Card.Title>
+          <MarkdownProse content={competitionInfo.information} />
+        </Card.Body>
+      </Card.Root>
+      </Tabs.Content>
+      <Tabs.Content value="register"><TabRegister /></Tabs.Content>
+      <Tabs.Content value="competitors"><TabCompetitors id={competitionInfo.id}/></Tabs.Content>
+      <Tabs.Content value="events"><TabEvents /></Tabs.Content>
+      <Tabs.Content value="schedule"><TabSchedule /></Tabs.Content>
+      <Tabs.Content value="custom-1"><MarkdownProse content={competitionInfo.information} /></Tabs.Content>
+      <Tabs.Content value="custom-2"><MarkdownProse content={competitionInfo.information} /></Tabs.Content>
+      <Tabs.Content value="custom-3"><MarkdownProse content={competitionInfo.information} /></Tabs.Content>
+      </Tabs.Root>
+                
+      
     </Container>
   );
 }
