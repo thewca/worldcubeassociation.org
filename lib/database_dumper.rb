@@ -316,7 +316,7 @@ module DatabaseDumper
         ),
       ),
     }.freeze,
-    "RoundTypes" => {
+    "round_types" => {
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
@@ -998,7 +998,7 @@ module DatabaseDumper
         ),
       ),
     }.freeze,
-    "RoundTypes" => {
+    "round_types" => {
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
