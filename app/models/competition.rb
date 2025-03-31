@@ -507,7 +507,7 @@ class Competition < ApplicationRecord
   end
 
   def auto_accept_threshold_reached?
-    auto_accept_disable_threshold.present? &&
+    auto_accept_disable_threshold? &&
       auto_accept_disable_threshold > 0 &&
       auto_accept_disable_threshold <= registrations.competing_status_accepted.count
   end
