@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "build:types": "openapi-typescript wcaAPI.yaml -o src/lib/wca/wcaSchema.ts",
+    "build:types": "openapi-typescript public/wcaAPI.yaml -o src/lib/wca/wcaSchema.ts",
     "lint": "next lint",
     "lint:fix": "next lint --fix"
   },
