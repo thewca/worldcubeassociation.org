@@ -1876,10 +1876,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@cubing/icons@npm:^2.0.2":
-  version: 2.0.2
-  resolution: "@cubing/icons@npm:2.0.2"
-  checksum: 10c0/a4c35e91e1707229beab507d4e2c97511e3518376885d2de53a6603134bb8bc5213155843589abc0df3ca734f866c5baad5e840f2df1d480ea72454c53049ac7
+"@cubing/icons@npm:^3.0.4":
+  version: 3.0.4
+  resolution: "@cubing/icons@npm:3.0.4"
+  checksum: 10c0/4985d1f1c06c24eea0f5bcb44bab8d398c7a508b9dabdf191fc77e9cfd13a05d480ca2e2ae111b0cba688a52f78f40679922104460238d7a151a964635ac8db8
   languageName: node
   linkType: hard
 
@@ -10147,7 +10147,7 @@ __metadata:
     "@babel/preset-env": "npm:^7.26.9"
     "@babel/preset-react": "npm:^7.26.3"
     "@babel/runtime": "npm:^7.27.0"
-    "@cubing/icons": "npm:^2.0.2"
+    "@cubing/icons": "npm:^3.0.4"
     "@fullcalendar/core": "npm:^6.1.15"
     "@fullcalendar/interaction": "npm:^6.1.15"
     "@fullcalendar/luxon3": "npm:^6.1.15"
