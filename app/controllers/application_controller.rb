@@ -121,7 +121,7 @@ class ApplicationController < ActionController::Base
     end
 
     def is_oauth_request?
-      request.fullpath.include?('/oauth/')
+      request.fullpath.include?('/oauth/') && self.class.ancestors.include?(Doorkeeper::ApplicationMetalController)
     end
 
     def is_api_request?
