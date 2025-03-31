@@ -145,20 +145,21 @@ GEM
     autoprefixer-rails (9.4.7)
       execjs
     aws-eventstream (1.3.2)
-    aws-partitions (1.1063.0)
+    aws-partitions (1.1077.0)
     aws-sdk-cloudfront (1.114.0)
       aws-sdk-core (~> 3, >= 3.216.0)
       aws-sigv4 (~> 1.5)
-    aws-sdk-core (3.220.1)
+    aws-sdk-core (3.222.1)
       aws-eventstream (~> 1, >= 1.3.0)
       aws-partitions (~> 1, >= 1.992.0)
       aws-sigv4 (~> 1.9)
       base64
       jmespath (~> 1, >= 1.6.1)
+      logger
     aws-sdk-kms (1.99.0)
       aws-sdk-core (~> 3, >= 3.216.0)
       aws-sigv4 (~> 1.5)
-    aws-sdk-rds (1.272.0)
+    aws-sdk-rds (1.273.0)
       aws-sdk-core (~> 3, >= 3.216.0)
       aws-sigv4 (~> 1.5)
     aws-sdk-s3 (1.182.0)
@@ -1124,11 +1125,11 @@ CHECKSUMS
   ast (2.4.2) sha256=1e280232e6a33754cde542bc5ef85520b74db2aac73ec14acef453784447cc12
   autoprefixer-rails (9.4.7) sha256=7104f54efa89e6390391bd894498a9db92bffaf74474942c4152e6dc0775ab3b
   aws-eventstream (1.3.2) sha256=7e2c3a55ca70d7861d5d3c98e47daa463ed539c349caba22b48305b8919572d7
-  aws-partitions (1.1063.0) sha256=bec246d1174aa9e95d58265749705b578f94cc270323981cbaafc9c1f4f2eff4
+  aws-partitions (1.1077.0) sha256=ddbc299b98a1aa4117a6e47335d3ca239572e4a4f45f27a12f4ff87148f3f202
   aws-sdk-cloudfront (1.114.0) sha256=b0b459bfe5801fcf705162894683de90f7c5c1df9b1297cdb3d22c6636e71b66
-  aws-sdk-core (3.220.1) sha256=9e10ccfd63c8061fb70a0f1e26cf7dd81cb5070931301501fb6f49587cc54d32
+  aws-sdk-core (3.222.1) sha256=349f39840fca4300384bd6dc85a546a0ad9def81d48d1f99607a6b3ec27bcbb2
   aws-sdk-kms (1.99.0) sha256=ba292fc3ffd672532aae2601fe55ff424eee78da8e23c23ba6ce4037138275a8
-  aws-sdk-rds (1.272.0) sha256=dfacdb680651524ad90b15f1817d79bb50c31ff019016c0895781041ff2af720
+  aws-sdk-rds (1.273.0) sha256=84a873b5b771c724170b4c4d64c9b9cd36a42c8f67c6af1204e787a48fe754a0
   aws-sdk-s3 (1.182.0) sha256=d0fc3579395cb6cb69bf6e975240ce031fc673190e74c8dddbdd6c18572b450d
   aws-sdk-sqs (1.93.0) sha256=ef88962de36ad6af56ef07f4ed05433debc3d427325e6cad4174a4596d936599
   aws-sigv4 (1.11.0) sha256=50a8796991a862324442036ad7a395920572b84bb6cd29b945e5e1800e8da1db
