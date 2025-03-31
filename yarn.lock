@@ -3901,7 +3901,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"chalk@npm:^4.0.0, chalk@npm:^4.1.2":
+"chalk@npm:^4.0.0":
   version: 4.1.2
   resolution: "chalk@npm:4.1.2"
   dependencies:
@@ -7323,20 +7323,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lodash.get@npm:^4.4.2":
-  version: 4.4.2
-  resolution: "lodash.get@npm:4.4.2"
-  checksum: 10c0/48f40d471a1654397ed41685495acb31498d5ed696185ac8973daef424a749ca0c7871bf7b665d5c14f5cc479394479e0307e781f61d5573831769593411be6e
-  languageName: node
-  linkType: hard
-
-"lodash.has@npm:^4.5.2":
-  version: 4.5.2
-  resolution: "lodash.has@npm:4.5.2"
-  checksum: 10c0/3ffa9e549f321996a5fdf6204494c035ff550b2df703f936a448c553131bbb55492b4e7995bb13500648b50b268ed8afc974a7a0c0a43744d28d61cc95cb1ffe
-  languageName: node
-  linkType: hard
-
 "lodash.memoize@npm:^4.1.2":
   version: 4.1.2
   resolution: "lodash.memoize@npm:4.1.2"
@@ -10247,7 +10233,7 @@ __metadata:
     stylelint-scss: "npm:^6.11.1"
     terser-webpack-plugin: "npm:^5.3.14"
     webpack: "npm:^5.98.0"
-    webpack-assets-manifest: "npm:^5.2.1"
+    webpack-assets-manifest: "npm:^6.0.0"
     webpack-bundle-analyzer: "npm:^4.10.2"
     webpack-cli: "npm:^6.0.1"
     webpack-dev-server: "npm:^5.2.1"
@@ -10380,7 +10366,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"schema-utils@npm:^3.0.0, schema-utils@npm:^3.3.0":
+"schema-utils@npm:^3.0.0":
   version: 3.3.0
   resolution: "schema-utils@npm:3.3.0"
   dependencies:
@@ -11645,20 +11631,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webpack-assets-manifest@npm:^5.2.1":
-  version: 5.2.1
-  resolution: "webpack-assets-manifest@npm:5.2.1"
+"webpack-assets-manifest@npm:^6.0.0":
+  version: 6.0.0
+  resolution: "webpack-assets-manifest@npm:6.0.0"
   dependencies:
-    chalk: "npm:^4.1.2"
     deepmerge: "npm:^4.3.1"
     lockfile: "npm:^1.0.4"
-    lodash.get: "npm:^4.4.2"
-    lodash.has: "npm:^4.5.2"
-    schema-utils: "npm:^3.3.0"
+    schema-utils: "npm:^4.3.0"
     tapable: "npm:^2.2.1"
   peerDependencies:
-    webpack: ^5.2.0
-  checksum: 10c0/3ee9380d5d5efca3c3a3dd8c98dc06eeddddfb797d3e6714e1cef1bbdf4db10191ec9c6c6cca96ff698851336d5f64aa83a4fd64bc6530afc38fc27cf166cbdc
+    webpack: ^5.61.0
+  checksum: 10c0/ee930d8bb7bc710530e660a9c853b11f8a38d48a88e08dcf2bd99d96d21c20c3488a3bbdafbe0b579970d81cb8813f04c32693cc793d435da92aab04715e065d
   languageName: node
   linkType: hard
 
