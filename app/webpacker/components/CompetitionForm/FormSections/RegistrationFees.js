@@ -53,7 +53,7 @@ export default function RegistrationFees() {
       </ConditionalSection>
       <InputCurrencyAmount id="guestEntryFee" currency={currency} />
       <InputBoolean id="donationsEnabled" />
-      <InputNumber id="refundPolicyPercent" min={0} max={100} step={1} defaultValue={0} required />
+      <InputNumber id="refundPolicyPercent" min={0} max={100} step={1} required />
       <InputDate id="refundPolicyLimitDate" dateTime required />
     </SubSection>
   );

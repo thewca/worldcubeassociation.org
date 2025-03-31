@@ -260,15 +260,16 @@ class RegistrationsController < ApplicationController
   end
 
   def payment_denomination
-    ruby_denomination = params.require(:amount)
-    currency_iso = params.require(:currency_iso)
-
-    ruby_money = Money.new(ruby_denomination, currency_iso)
+    competition_id = params[:competition_id]
+    user_id = params[:user_id]
+    registration = Registration.find_by(competition_id: competition_id, user_id: user_id)
+    iso_donation_amount = params[:iso_donation_amount].to_i || 0
+    ruby_money = registration.entry_fee_with_donation(iso_donation_amount)
     human_amount = helpers.format_money(ruby_money)
 
     api_amounts = {
-      stripe: StripeRecord.amount_to_stripe(ruby_denomination, currency_iso),
-      paypal: PaypalRecord.amount_to_paypal(ruby_denomination, currency_iso),
+      stripe: StripeRecord.amount_to_stripe(ruby_money.cents, ruby_money.currency.iso_code),
+      paypal: PaypalRecord.amount_to_paypal(ruby_money.cents, ruby_money.currency.iso_code),
     }
 
     render json: { api_amounts: api_amounts, human_amount: human_amount }

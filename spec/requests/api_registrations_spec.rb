@@ -329,6 +329,16 @@ RSpec.describe 'API Registrations' do
     let(:user) { FactoryBot.create :user }
     let(:competition) { FactoryBot.create :competition, :registration_open, :editable_registrations, :with_organizer }
     let(:registration) { FactoryBot.create(:registration, competition: competition, user: user) }
+    let(:paid_cant_cancel) {
+      FactoryBot.create(
+        :competition, :registration_closed, :editable_registrations, :with_organizer, competitor_can_cancel: :unpaid
+      )
+    }
+    let(:accepted_cant_cancel) {
+      FactoryBot.create(
+        :competition, :registration_closed, :editable_registrations, :with_organizer, competitor_can_cancel: :not_accepted
+      )
+    }
 
     it 'updates a registration' do
       update_request = FactoryBot.build(
@@ -682,6 +692,131 @@ RSpec.describe 'API Registrations' do
 
       expect(response.body).to eq(error_json)
       expect(response).to have_http_status(:forbidden)
+    end
+
+    it 'cancelled user cant re-register if registration is closed' do
+      closed_comp = FactoryBot.create(:competition, :registration_closed, :editable_registrations)
+      cancelled_reg = FactoryBot.create(:registration, :cancelled, competition: closed_comp)
+
+      update_request = FactoryBot.build(
+        :update_request,
+        user_id: cancelled_reg.user_id,
+        competition_id: cancelled_reg.competition_id,
+        competing: { 'status' => 'pending' },
+      )
+
+      headers = { 'Authorization' => update_request['jwt_token'] }
+
+      patch api_v1_registrations_register_path, params: update_request, headers: headers
+      error_json = {
+        error: Registrations::ErrorCodes::REGISTRATION_CLOSED,
+      }.to_json
+
+      expect(response.body).to eq(error_json)
+      expect(response).to have_http_status(:forbidden)
+    end
+
+    it 'stops user cancelling fully paid registration' do
+      paid_reg = FactoryBot.create(:registration, :paid, competition: paid_cant_cancel)
+
+      update_request = FactoryBot.build(
+        :update_request,
+        user_id: paid_reg.user_id,
+        competition_id: paid_reg.competition_id,
+        competing: { 'status' => 'cancelled' },
+      )
+
+      headers = { 'Authorization' => update_request['jwt_token'] }
+
+      patch api_v1_registrations_register_path, params: update_request, headers: headers
+      error_json = {
+        error: Registrations::ErrorCodes::ORGANIZER_MUST_CANCEL_REGISTRATION,
+      }.to_json
+
+      expect(response.body).to eq(error_json)
+      expect(response).to have_http_status(:unauthorized)
+    end
+
+    it 'stops user cancelling partially paid registration' do
+      paid_reg = FactoryBot.create(:registration, :partially_paid, competition: paid_cant_cancel)
+
+      update_request = FactoryBot.build(
+        :update_request,
+        user_id: paid_reg.user_id,
+        competition_id: paid_reg.competition_id,
+        competing: { 'status' => 'cancelled' },
+      )
+      headers = { 'Authorization' => update_request['jwt_token'] }
+
+      patch api_v1_registrations_register_path, params: update_request, headers: headers
+      error_json = {
+        error: Registrations::ErrorCodes::ORGANIZER_MUST_CANCEL_REGISTRATION,
+      }.to_json
+
+      expect(response.body).to eq(error_json)
+      expect(response).to have_http_status(:unauthorized)
+    end
+
+    it 'stops accepted user from cancelling' do
+      accepted_reg = FactoryBot.create(:registration, :accepted, competition: accepted_cant_cancel)
+
+      update_request = FactoryBot.build(
+        :update_request,
+        user_id: accepted_reg.user_id,
+        competition_id: accepted_reg.competition_id,
+        competing: { 'status' => 'cancelled' },
+      )
+      headers = { 'Authorization' => update_request['jwt_token'] }
+
+      patch api_v1_registrations_register_path, params: update_request, headers: headers
+      error_json = {
+        error: Registrations::ErrorCodes::ORGANIZER_MUST_CANCEL_REGISTRATION,
+      }.to_json
+
+      expect(response.body).to eq(error_json)
+      expect(response).to have_http_status(:unauthorized)
+    end
+
+    RSpec.shared_examples 'invalid user status updates' do |initial_status, new_status|
+      it "user cant change 'status' => #{initial_status} to: #{new_status}" do
+        registration = FactoryBot.create(:registration, initial_status, competition: competition)
+
+        update_request = FactoryBot.build(
+          :update_request,
+          user_id: registration.user_id,
+          competition_id: registration.competition_id,
+          competing: { 'status' => new_status },
+        )
+        headers = { 'Authorization' => update_request['jwt_token'] }
+
+        patch api_v1_registrations_register_path, params: update_request, headers: headers
+        error_json = {
+          error: Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS,
+        }.to_json
+
+        expect(response.body).to eq(error_json)
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+
+    [
+      { initial_status: :pending, new_status: 'accepted' },
+      { initial_status: :pending, new_status: 'waiting_list' },
+      { initial_status: :pending, new_status: 'pending' },
+      { initial_status: :pending, new_status: 'rejected' },
+      { initial_status: :waiting_list, new_status: 'pending' },
+      { initial_status: :waiting_list, new_status: 'waiting_list' },
+      { initial_status: :waiting_list, new_status: 'accepted' },
+      { initial_status: :waiting_list, new_status: 'rejected' },
+      { initial_status: :accepted, new_status: 'pending' },
+      { initial_status: :accepted, new_status: 'waiting_list' },
+      { initial_status: :accepted, new_status: 'accepted' },
+      { initial_status: :accepted, new_status: 'rejected' },
+      { initial_status: :cancelled, new_status: 'accepted' },
+      { initial_status: :cancelled, new_status: 'waiting_list' },
+      { initial_status: :cancelled, new_status: 'rejected' },
+    ].each do |params|
+      it_behaves_like 'invalid user status updates', params[:initial_status], params[:new_status]
     end
 
     RSpec.shared_examples 'user cant update rejected registration' do |initial_status, new_status|
@@ -1140,16 +1275,82 @@ RSpec.describe 'API Registrations' do
   end
 
   describe 'GET #payment_ticket' do
+    let(:competition) { FactoryBot.create(:competition, :registration_open, :with_organizer, :stripe_connected) }
+    let(:reg) { FactoryBot.create(:registration, :pending, competition: competition) }
+    let(:headers) { { 'Authorization' => fetch_jwt_token(reg.user_id) } }
+
+    it 'successfully builds a payment_intent via Stripe API' do
+      get api_v1_registrations_payment_ticket_path(competition_id: competition.id), headers: headers
+      expect(response).to be_successful
+    end
+
+    context 'successful payment ticket' do
+      before do
+        get api_v1_registrations_payment_ticket_path(competition_id: competition.id), headers: headers
+      end
+
+      it 'returns a client secret' do
+        expect(response.parsed_body.keys).to include('client_secret')
+      end
+
+      it 'creates a payment intent' do
+        expect(PaymentIntent.find_by(holder_type: "Registration", holder_id: reg.id)).to be_present
+      end
+
+      it 'payment intent details match expected values' do
+        payment_record = PaymentIntent.find_by(holder_type: "Registration", holder_id: reg.id).payment_record
+        expect(payment_record.amount_stripe_denomination).to be(1000)
+        expect(payment_record.currency_code).to eq("usd")
+      end
+    end
+
+    it 'has the correct payment_intent properties when a donation is present' do
+      get api_v1_registrations_payment_ticket_path(competition_id: competition.id), headers: headers, params: { iso_donation_amount: 1300 }
+
+      payment_record = PaymentIntent.find_by(holder_type: "Registration", holder_id: reg.id).payment_record
+      expect(payment_record.amount_stripe_denomination).to be(2300)
+      expect(payment_record.currency_code).to eq("usd")
+    end
+
     it 'refuses ticket create request if registration is closed' do
       closed_comp = FactoryBot.create(:competition, :registration_closed, :with_organizer, :stripe_connected)
-      reg = FactoryBot.create(:registration, :pending, competition: closed_comp)
+      closed_reg = FactoryBot.create(:registration, :pending, competition: closed_comp)
 
-      headers = { 'Authorization' => fetch_jwt_token(reg.user_id) }
+      headers = { 'Authorization' => fetch_jwt_token(closed_reg.user_id) }
       get api_v1_registrations_payment_ticket_path(competition_id: closed_comp.id), headers: headers
 
       body = response.parsed_body
       expect(response).to have_http_status(:forbidden)
       expect(body).to eq({ error: Registrations::ErrorCodes::REGISTRATION_CLOSED }.with_indifferent_access)
+    end
+  end
+
+  describe 'GET #payment_denomination' do
+    let(:competition) {
+      FactoryBot.create(:competition,
+                        :registration_open,
+                        :with_organizer,
+                        :stripe_connected,
+                        currency_code: "SEK",
+                        base_entry_fee_lowest_denomination: 1500)
+    }
+    let(:reg) { FactoryBot.create(:registration, :pending, competition: competition) }
+    let(:headers) { { 'Authorization' => fetch_jwt_token(reg.user_id) } }
+
+    it 'returns a hash of amounts/currencies formatted for payment providers' do
+      expected_response = { api_amounts: { stripe: 1500, paypal: "15.00" }, human_amount: "15 kr (Swedish Krona)" }.with_indifferent_access
+      get registration_payment_denomination_path(competition_id: competition.id, user_id: reg.user_id), headers: headers
+
+      expect(response).to be_successful
+      expect(response.parsed_body).to eq(expected_response)
+    end
+
+    it 'allows a donation to be specified' do
+      expected_response = { api_amounts: { stripe: 2500, paypal: "25.00" }, human_amount: "25 kr (Swedish Krona)" }.with_indifferent_access
+      get registration_payment_denomination_path(competition_id: competition.id, user_id: reg.user_id), headers: headers, params: { iso_donation_amount: 1000 }
+
+      expect(response).to be_successful
+      expect(response.parsed_body).to eq(expected_response)
     end
   end
 end
