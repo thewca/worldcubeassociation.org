@@ -39,7 +39,7 @@ RSpec.describe Competition do
   context "when there is an entry fee" do
     it "correctly identifies there is a fee when there is only a base fee" do
       competition = FactoryBot.build :competition, name: "Foo: Test - 2015", base_entry_fee_lowest_denomination: 10
-      expect(competition.payment_required?).to be true
+      expect(competition.paid_entry?).to be true
       expect(competition.base_entry_fee_nonzero?).to eq competition.base_entry_fee
     end
 
@@ -47,7 +47,7 @@ RSpec.describe Competition do
       competition = FactoryBot.create :competition, name: "Foo: Test - 2015", base_entry_fee_lowest_denomination: 0
       competition.competition_events.first.update_attribute(:fee_lowest_denomination, 100)
       expect(competition.base_entry_fee_nonzero?).to be nil
-      expect(competition.payment_required?).to be true
+      expect(competition.paid_entry?).to be true
     end
   end
 
@@ -201,7 +201,7 @@ RSpec.describe Competition do
     expect(competition.probably_over?).to be false
     expect(competition.started?).to be false
     expect(competition.in_progress?).to be false
-    expect(competition.date_set?).to be false
+    expect(competition.dates_present?).to be false
     expect(competition.dangerously_close_to?(competition2)).to be false
   end
 
@@ -1224,12 +1224,12 @@ RSpec.describe Competition do
   describe "has_defined_dates" do
     it "is false when no start and end date" do
       competition = FactoryBot.create(:competition, start_date: nil, end_date: nil)
-      expect(competition.dates_set?).to be false
+      expect(competition.dates_present?).to be false
     end
 
     it "is true when has start and end date" do
       competition = FactoryBot.create(:competition)
-      expect(competition.dates_set?).to be true
+      expect(competition.dates_present?).to be true
     end
   end
 

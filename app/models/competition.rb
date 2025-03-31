@@ -360,7 +360,7 @@ class Competition < ApplicationRecord
   # Competitions after 2018-12-31 will have this check. All comps from 2019 onwards required a schedule.
   # Check added per "Support for cancelled competitions" and adding some old cancelled competitions to the website without a schedule.
   def schedule_must_match_rounds
-    errors.add(:competition_events, I18n.t('competitions.errors.schedule_must_match_rounds')) if start_date.present? && start_date > Date.new(2018, 12, 31) && !(no_round_empty? && schedule_includes_rounds?)
+    errors.add(:competition_events, I18n.t('competitions.errors.schedule_must_match_rounds')) if start_date.present? && start_date > Date.new(2018, 12, 31) && !(no_event_without_rounds? && schedule_includes_rounds?)
   end
 
   validate :advancement_condition_must_be_present_for_all_non_final_rounds, if: :confirmed_at_changed?, on: :update
@@ -403,7 +403,7 @@ class Competition < ApplicationRecord
       registrations.waitlisted.count > 0 && !registration_full_and_accepted?
   end
 
-  def no_round_empty?
+  def no_event_without_rounds?
     competition_events.map(&:rounds).none?(&:empty?)
   end
 
@@ -569,7 +569,7 @@ class Competition < ApplicationRecord
       # NOTE: this will show up on the edit schedule page, and stay even if the
       # schedule matches when saved. Should we add some logic to not show this
       # message on the edit schedule page?
-      warnings[:schedule] = I18n.t('competitions.messages.schedule_must_match_rounds') unless no_round_empty? && schedule_includes_rounds?
+      warnings[:schedule] = I18n.t('competitions.messages.schedule_must_match_rounds') unless no_event_without_rounds? && schedule_includes_rounds?
 
       warnings[:advancement_conditions] = I18n.t('competitions.messages.advancement_condition_must_be_present_for_all_non_final_rounds') unless rounds.all?(&:advancement_condition_is_valid?)
 
@@ -595,7 +595,7 @@ class Competition < ApplicationRecord
 
       warnings = championship_warnings.merge(warnings) if championship_warnings.any?
 
-      warnings[:registration_payment_info] = I18n.t('competitions.messages.registration_payment_info') if payment_required? && !competition_payment_integrations.exists?
+      warnings[:registration_payment_info] = I18n.t('competitions.messages.registration_payment_info') if paid_entry? && !competition_payment_integrations.exists?
     end
 
     warnings = reg_warnings.merge(warnings) if reg_warnings.any? && user&.can_manage_competition?(self)
@@ -811,7 +811,7 @@ class Competition < ApplicationRecord
     delegates.select(&:trainee_delegate?)
   end
 
-  def dates_set?
+  def dates_present?
     self.start_date.present? && self.end_date.present?
   end
 
@@ -976,7 +976,7 @@ class Competition < ApplicationRecord
   end
 
   def using_payment_integrations?
-    competition_payment_integrations.any? && payment_required?
+    competition_payment_integrations.any? && paid_entry?
   end
 
   def can_edit_registration_fees?
@@ -1056,7 +1056,7 @@ class Competition < ApplicationRecord
 
   delegate :nonzero?, to: :base_entry_fee, prefix: true
 
-  def payment_required?
+  def paid_entry?
     if base_entry_fee_lowest_denomination.nil?
       competition_events.sum(:fee_lowest_denomination) > 0
     else
@@ -1141,7 +1141,7 @@ class Competition < ApplicationRecord
   end
 
   # does the competition have this field (regardless of whether it's a date or blank)
-  def event_change_deadline_date_present?
+  def event_change_deadline_date_required?
     start_date.present? && start_date > Date.new(2021, 6, 24)
   end
 
@@ -1149,7 +1149,7 @@ class Competition < ApplicationRecord
   # must be allowed in general, and if the deadline field exists, is it a date and in the future
   def registration_edits_currently_permitted?
     !started? && self.allow_registration_edits &&
-      (!event_change_deadline_date_present? || event_change_deadline_date.blank? || event_change_deadline_date > DateTime.now)
+      (!event_change_deadline_date_required? || event_change_deadline_date.blank? || event_change_deadline_date > DateTime.now)
   end
 
   private def dates_must_be_valid
@@ -1245,10 +1245,6 @@ class Competition < ApplicationRecord
       )
   end
 
-  def date_set?
-    !start_date.nil? || !end_date.nil?
-  end
-
   def registration_start_date_present?
     registration_open.present?
   end
@@ -1283,7 +1279,7 @@ class Competition < ApplicationRecord
   end
 
   def days_until_competition?(competition)
-    return false if !competition.date_set? || !self.date_set?
+    return false if !competition.dates_present? || !self.dates_present?
 
     days_until = (competition.start_date - self.end_date).to_i
     days_until = (self.start_date - competition.end_date).to_i * -1 if days_until < 0
@@ -1299,7 +1295,7 @@ class Competition < ApplicationRecord
   end
 
   def start_date_adjacent_to?(competition, distance_days)
-    return false if !competition.date_set? || !self.date_set?
+    return false if !competition.dates_present? || !self.dates_present?
 
     self.days_until_competition?(competition).abs < distance_days
   end
