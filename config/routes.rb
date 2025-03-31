@@ -210,7 +210,6 @@ Rails.application.routes.draw do
   end
   get 'panel/:panel_id' => 'panel#index', as: :panel_index
   scope 'panel-page' do
-    get 'check-records' => 'admin#check_regional_records', as: :admin_check_regional_records
     get 'fix-results' => 'admin#fix_results', as: :admin_fix_results
     get 'merge-profiles' => 'admin#merge_people', as: :admin_merge_people
     get 'reassign-connected-wca-id' => 'admin#reassign_wca_id', as: :admin_reassign_wca_id
