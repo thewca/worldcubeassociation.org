@@ -188,7 +188,7 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
 
     # If this competition exists, but is not publicly visible, then only show it
     # to the user if they are able to manage the competition.
-    competition = nil if competition && !competition.showAtAll && !can_manage?(competition)
+    competition = nil if competition && !competition.show_at_all && !can_manage?(competition)
 
     raise WcaExceptions::NotFound.new("Competition with id #{id} not found") unless competition
 
