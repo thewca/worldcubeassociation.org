@@ -9,6 +9,9 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
   prepend_before_action :set_locale, unless: :api_request?
+  # The API should only ever respond in English
+  prepend_before_action :set_default_locale, if: :api_request?
+
   before_action :store_user_location!, if: :storable_location?
   before_action :add_new_relic_headers
   protected def add_new_relic_headers
@@ -31,6 +34,10 @@ class ApplicationController < ActionController::Base
 
     @@locale_counts ||= Hash.new(0)
     @@locale_counts[I18n.locale] += 1
+  end
+
+  def set_default_locale
+    I18n.locale = I18n.default_locale
   end
 
   def update_locale
@@ -110,7 +117,7 @@ class ApplicationController < ActionController::Base
     end
 
     def api_request?
-      request.fullpath.include?('/api/')
+      request.fullpath.include?('/api/') || request.fullpath.include?('/oauth/')
     end
 
     def store_user_location!

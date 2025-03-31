@@ -43,7 +43,7 @@ Rails.application.routes.draw do
   post 'competitions/:competition_id/refund/:payment_integration/:payment_id' => 'registrations#refund_payment', as: :registration_payment_refund
   get 'competitions/:competition_id/payment-completion/:payment_integration' => 'registrations#payment_completion', as: :registration_payment_completion
   post 'registration/stripe-webhook' => 'registrations#stripe_webhook', as: :registration_stripe_webhook
-  get 'registration/payment-denomination' => 'registrations#payment_denomination', as: :registration_payment_denomination
+  get 'registration/:competition_id/:user_id/payment-denomination' => 'registrations#payment_denomination', as: :registration_payment_denomination
   resources :users, only: [:index, :edit, :update]
   get 'profile/edit' => 'users#edit'
   post 'profile/enable-2fa' => 'users#enable_2fa'
@@ -76,6 +76,7 @@ Rails.application.routes.draw do
     get 'announcement_data' => 'competitions#announcement_data', as: :announcement_data
     get 'user_preferences' => 'competitions#user_preferences', as: :user_preferences
     get 'confirmation_data' => 'competitions#confirmation_data', as: :confirmation_data
+    patch 'confirmation_data' => 'competitions#update_confirmation_data', as: :update_confirmation_data
 
     put 'confirm' => 'competitions#confirm', as: :confirm
     put 'announce' => 'competitions#announce', as: :announce
@@ -209,7 +210,6 @@ Rails.application.routes.draw do
   end
   get 'panel/:panel_id' => 'panel#index', as: :panel_index
   scope 'panel-page' do
-    get 'check-records' => 'admin#check_regional_records', as: :admin_check_regional_records
     get 'fix-results' => 'admin#fix_results', as: :admin_fix_results
     get 'merge-profiles' => 'admin#merge_people', as: :admin_merge_people
     get 'reassign-connected-wca-id' => 'admin#reassign_wca_id', as: :admin_reassign_wca_id

@@ -1,145 +1,185 @@
 import React, {
-  useCallback, useMemo,
+  useCallback,
+  useEffect,
   useRef,
 } from 'react';
 import {
   Button,
-  Divider,
+  Dimmer, Divider,
   Form,
   Message,
+  Segment,
   Sticky,
 } from 'semantic-ui-react';
-import SectionProvider, { readValueRecursive, useSections } from './provider/FormSectionProvider';
-import { changesSaved, updateFormValue } from './store/actions';
 import FormErrors from './FormErrors';
-import useSaveAction from '../../../lib/hooks/useSaveAction';
-import FormObjectProvider, { useFormContext, useFormDispatch, useFormObject } from './provider/FormObjectProvider';
+import FormObjectProvider, { useFormContext, useFormObject } from './provider/FormObjectProvider';
+import ConfirmProvider, { useConfirm } from '../../../lib/providers/ConfirmProvider';
+
+function useSafeMutation(mutation, mutationArgs, unloadListener) {
+  const { onSuccess, onError } = useFormContext();
+
+  return useCallback(() => {
+    window.removeEventListener('beforeunload', unloadListener);
+
+    // The `saveMutation` may have side-effects like Redirects
+    //   that are not supposed to trigger the "are you sure" warning.
+    // TODO: Refactor `unsavedChanges` so that it doesn't fire in the first place
+    mutation.mutate(mutationArgs, { onSuccess, onError });
+  }, [unloadListener, mutation, mutationArgs, onSuccess, onError]);
+}
+
+export function FormActionButton({
+  mutation,
+  enabled = true,
+  confirmationMessage = null,
+  buttonText = null,
+  buttonProps,
+  onUnload,
+  children,
+}) {
+  const confirm = useConfirm();
+  const formObject = useFormObject();
+
+  const safeMutation = useSafeMutation(mutation, formObject, onUnload);
+
+  const handleClick = useCallback(() => {
+    if (confirmationMessage) {
+      confirm({
+        content: confirmationMessage,
+      }).then(safeMutation);
+    } else safeMutation();
+  }, [confirm, confirmationMessage, safeMutation]);
+
+  if (!enabled) return null;
+
+  /* eslint-disable react/jsx-props-no-spreading */
+  return (
+    <Button
+      onClick={handleClick}
+      disabled={mutation.isPending}
+      loading={mutation.isPending}
+      {...buttonProps}
+    >
+      {buttonText || children}
+    </Button>
+  );
+  /* eslint-enable react/jsx-props-no-spreading */
+}
 
 function EditForm({
   children,
-  backendUrlFn,
-  backendOptions,
+  saveMutation,
   CustomHeader = null,
-  CustomFooter = null,
-  disabledOverrideFn = null,
+  footerActions = [],
+  saveButtonText = null,
 }) {
   const {
-    object,
-    initialObject,
     unsavedChanges,
     errors,
-    onSuccess,
-    onError,
   } = useFormContext();
 
-  const { save, saving } = useSaveAction();
+  const onUnload = useCallback((e) => {
+    // Prompt the user before letting them navigate away from this page with unsaved changes.
+    if (unsavedChanges) {
+      const confirmationMessage = 'You have unsaved changes, are you sure you want to leave?';
+      e.returnValue = confirmationMessage;
+      return confirmationMessage;
+    }
 
-  const saveObject = useCallback(() => {
-    const saveUrl = backendUrlFn(object, initialObject);
-    const saveOptions = backendOptions || {};
+    return null;
+  }, [unsavedChanges]);
 
-    save(saveUrl, object, onSuccess, saveOptions, onError);
-  }, [backendUrlFn, backendOptions, object, initialObject, save, onError, onSuccess]);
+  useEffect(() => {
+    window.addEventListener('beforeunload', onUnload);
 
-  const renderUnsavedChangesAlert = () => (
+    return () => window.removeEventListener('beforeunload', onUnload);
+  }, [onUnload]);
+
+  const renderSaveButton = (buttonText) => (
+    <FormActionButton
+      mutation={saveMutation}
+      buttonText={buttonText}
+      buttonProps={{ primary: true }}
+      onUnload={onUnload}
+    />
+  );
+
+  const renderUnsavedChangesAlert = (showSaveButton = true) => (
     <Message info>
-      You have unsaved changes. Don&apos;t forget to
-      {' '}
-      <Button
-        onClick={saveObject}
-        disabled={saving}
-        loading={saving}
-        primary
-      >
-        save your changes!
-      </Button>
+      You have unsaved changes.
+      {showSaveButton && (
+        <>
+          {' '}
+          Don&apos;t forget to
+          {' '}
+          {renderSaveButton('save your changes!')}
+        </>
+      )}
     </Message>
   );
 
-  const sectionDisabled = useMemo(() => (
-    !disabledOverrideFn || disabledOverrideFn(object)
-  ), [disabledOverrideFn, object]);
-
   const stickyRef = useRef();
 
+  /* eslint-disable react/jsx-props-no-spreading */
   return (
-    <SectionProvider disabled={sectionDisabled}>
+    <>
       <div ref={stickyRef}>
+        <FormErrors errors={errors} />
+        {CustomHeader && (
+          <Dimmer.Dimmable as={Segment} blurring dimmed={unsavedChanges}>
+            <Dimmer active={unsavedChanges}>
+              You have unsaved changes. Please save the competition before taking any other action.
+            </Dimmer>
+
+            <CustomHeader />
+          </Dimmer.Dimmable>
+        )}
         {unsavedChanges && (
           <Sticky context={stickyRef} offset={20} styleElement={{ zIndex: 2000 }}>
             {renderUnsavedChangesAlert()}
           </Sticky>
         )}
-        <FormErrors errors={errors} />
-        {CustomHeader && <CustomHeader />}
         <Form>
           {children}
         </Form>
       </div>
-      {CustomFooter ? (
-        <>
-          <Divider />
-          <CustomFooter saveObject={saveObject} />
-        </>
-      ) : (unsavedChanges && renderUnsavedChangesAlert())}
-    </SectionProvider>
+      <Divider />
+      {unsavedChanges && renderUnsavedChangesAlert(false)}
+      <ConfirmProvider>
+        <Button.Group>
+          {renderSaveButton(saveButtonText || 'Save')}
+          {!unsavedChanges && footerActions.map((action) => (
+            <FormActionButton key={action.id} onUnload={onUnload} {...action} />
+          ))}
+        </Button.Group>
+      </ConfirmProvider>
+    </>
   );
+  /* eslint-enable react/jsx-props-no-spreading */
 }
 
 export default function Wrapper({
   children,
   initialObject,
-  backendUrlFn,
-  backendOptions,
+  saveMutation,
   CustomHeader = null,
-  CustomFooter = null,
-  disabledOverrideFn = null,
+  footerActions = [],
+  saveButtonText = null,
+  globalDisabled = false,
 }) {
   return (
-    <FormObjectProvider initialObject={initialObject}>
-      <SectionProvider>
-        <EditForm
-          backendUrlFn={backendUrlFn}
-          backendOptions={backendOptions}
-          CustomHeader={CustomHeader}
-          CustomFooter={CustomFooter}
-          disabledOverrideFn={disabledOverrideFn}
-        >
-          {children}
-        </EditForm>
-      </SectionProvider>
+    <FormObjectProvider
+      initialObject={initialObject}
+      globalDisabled={globalDisabled}
+    >
+      <EditForm
+        saveMutation={saveMutation}
+        CustomHeader={CustomHeader}
+        footerActions={footerActions}
+        saveButtonText={saveButtonText}
+      >
+        {children}
+      </EditForm>
     </FormObjectProvider>
   );
 }
-
-export const useFormObjectSection = () => {
-  const formObject = useFormObject();
-  const sections = useSections();
-
-  return readValueRecursive(formObject, sections);
-};
-
-export const useFormUpdateAction = () => {
-  const dispatch = useFormDispatch();
-
-  return useCallback((key, value, sections = []) => (
-    dispatch(updateFormValue(key, value, sections))
-  ), [dispatch]);
-};
-
-export const useFormSectionUpdateAction = () => {
-  const sections = useSections();
-  const dispatch = useFormDispatch();
-
-  return useCallback((key, value) => (
-    dispatch(updateFormValue(key, value, sections))
-  ), [dispatch, sections]);
-};
-
-export const useFormCommitAction = () => {
-  const dispatch = useFormDispatch();
-
-  return useCallback(() => (
-    dispatch(changesSaved())
-  ), [dispatch]);
-};
