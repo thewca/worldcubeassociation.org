@@ -6,7 +6,7 @@ class ApplicationController < ActionController::Base
   include TimeWillTell::Helpers::DateRangeHelper
   include Devise::Controllers::StoreLocation
 
-  protect_from_forgery with: :exception
+  protect_from_forgery with: :exception, unless: :is_oauth_request?
 
   prepend_before_action :set_locale, unless: :ignore_client_language?
   # The API should only ever respond in English
