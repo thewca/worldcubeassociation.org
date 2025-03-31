@@ -210,7 +210,7 @@ module DatabaseDumper
         ),
       ),
     }.freeze,
-    "Formats" => {
+    "formats" => {
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
@@ -1023,7 +1023,7 @@ module DatabaseDumper
         },
       ),
     }.freeze,
-    "Formats" => {
+    "formats" => {
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
