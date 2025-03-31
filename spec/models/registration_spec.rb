@@ -641,7 +641,7 @@ RSpec.describe Registration do
       expect(reg.reload.competing_status).to eq('accepted')
     end
 
-    it 'can auto-accept the first user on the waiting list' do
+    it 'can auto-accept the first user on the waiting list', :only do
       waiting_list_reg = FactoryBot.create(:registration, :waiting_list, competition: auto_accept_comp)
 
       FactoryBot.create(:registration_payment, :skip_create_hook, registration: waiting_list_reg, competition: auto_accept_comp)

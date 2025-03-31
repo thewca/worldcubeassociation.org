@@ -484,6 +484,7 @@ class Registration < ApplicationRecord
 
   validate :not_changing_events_when_cancelling, if: [:trying_to_cancel?, :tracked_event_ids?, :competition_events_changed?]
   private def not_changing_events_when_cancelling
+    puts "changing events when cancelled"
     errors.add(:competition_events, :cannot_change_events_when_cancelling, message: I18n.t('registrations.errors.cannot_change_events_when_cancelling'), frontend_code: Registrations::ErrorCodes::INVALID_REQUEST_DATA)
   end
 
@@ -529,6 +530,7 @@ class Registration < ApplicationRecord
 
     update_payload = build_auto_accept_payload
     auto_accepted_registration = Registrations::RegistrationChecker.apply_payload(self, update_payload)
+    byebug
     if auto_accepted_registration.valid?
       update_lanes!(
         update_payload,
