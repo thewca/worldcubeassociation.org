@@ -43,7 +43,35 @@ Capybara.register_driver :apparition do |app|
   Capybara::Apparition::Driver.new(app, js_errors: true, headless: true)
 end
 
-Capybara.javascript_driver = :apparition
+# To debug feature specs using apparition, set `Capybara.javascript_driver = :playwright_debug`
+# and then call `page.driver.with_playwright_page { it.context.enable_debug_console!;it.pause }` in your feature spec.
+# Yes, this snippet doesn't exactly roll off the tongue, but we need an upstream fix in the library to make it easier.
+Capybara.register_driver :playwright_debug do |app|
+  Capybara::Playwright::Driver.new(
+    app,
+    playwright_server_endpoint_url: EnvConfig.PLAYWRIGHT_SERVER_SOCKET_URL,
+    browser_type: :firefox, # Chrome can have issues rendering its GUI out of a Docker container
+    headless: false,
+    slowMo: 500,
+  )
+end
+
+Capybara.register_driver :playwright do |app|
+  Capybara::Playwright::Driver.new(app, playwright_server_endpoint_url: 'ws://localhost:8089')
+end
+
+Capybara.javascript_driver = :playwright
+
+# Recommended per https://playwright-ruby-client.vercel.app/docs/article/guides/rails_integration#update-timeout
+Capybara.default_max_wait_time = 15
+
+Capybara::Screenshot.register_driver :playwright do |driver, path|
+  driver.save_screenshot(path)
+end
+
+Capybara::Screenshot.register_driver :playwright_debug do |driver, path|
+  driver.save_screenshot(path)
+end
 
 RSpec.configure do |config|
   # enforce consistent locale behaviour across OSes, especially Linux
