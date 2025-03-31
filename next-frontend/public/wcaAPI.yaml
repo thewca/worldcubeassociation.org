@@ -286,7 +286,6 @@ components:
         - longitude_degrees
         - country_iso2
         - event_ids
-        - registration_currently_open?
         - main_event_id
         - number_of_bookmarks
         - using_payment_integrations?

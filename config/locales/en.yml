@@ -814,13 +814,13 @@ en:
         contact_recipient:
           label: "Who do you want to contact?"
           competition:
-            label: "Contact organizers/delegates of a competition (to ask query regarding that particular competition)"
+            label: "Contact organizers/delegates of a competition (to ask query regarding that particular competition, including results not yet published on the WCA website)"
           wct:
             label: "Contact WCA for general queries (this can involve anything like WCA ID/profile, organizing competitions, competition rules, competition media, etc)"
           wrt:
-            label: "Contact Results Team (for anything related to the results of a competition)"
+            label: "Contact Results Team (for anything related to results or profile data on the WCA website)"
           wst:
-            label: "Contact Software Team (to report some bug in website or any API related questions)"
+            label: "Contact Software Team (to report issues with the WCA website or for software-related questions)"
         competition:
           competition:
             label: "Competition"
@@ -1136,6 +1136,7 @@ en:
       undelete_banned: "is a banned competitor and cannot be undeleted"
       series_more_than_one_accepted: "You can only be accepted for one Series competition at a time."
       can_only_register_for_qualified_events: "You cannot register for events you are not qualified for."
+      cannot_change_events_when_cancelling: "You cannot change your events while cancelling your registration."
       cannot_register_without_comment: "You must make a comment. Please read the Registration Requirements above to see what must be included (e.g. in an FMC simultaneous competition, which location you will compete at)."
     registration_info_people:
       #context: pluralization of "x first-timer(s)"
