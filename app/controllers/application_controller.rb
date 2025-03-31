@@ -121,6 +121,9 @@ class ApplicationController < ActionController::Base
     end
 
     def is_oauth_request?
+      # Checking the fullpath alone is not enough: The user-facing UI to manage OAuth applications
+      #   and the "Approve" / "Deny" buttons for incoming OAuth requests also live under `/oauth/` routes.
+      #   So we also check the controller inheritance chain because Doorkeeper conveniently distinguishes the "metal" controller.
       request.fullpath.include?('/oauth/') && self.class.ancestors.include?(Doorkeeper::ApplicationMetalController)
     end
 
