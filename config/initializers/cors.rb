@@ -17,7 +17,7 @@ Rails.application.config.middleware.insert_before 0, Rack::Cors do
         expose: %w[Total Per-Page Link],
         max_age: 0,
         credentials: false,
-        )
+      )
 
       resource(
         '/api/v1/*',
@@ -26,7 +26,7 @@ Rails.application.config.middleware.insert_before 0, Rack::Cors do
         expose: %w[Total Per-Page Link],
         max_age: 0,
         credentials: false,
-        )
+      )
     end
   end
 end
