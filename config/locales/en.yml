@@ -2243,11 +2243,11 @@ en:
   notifications:
     connect_wca_id: "Connect your WCA ID to your account!"
   payments:
-    #context: localized names of payment providers
     labels:
       payment_statuses: "Payment Statuses"
       available_refunds: "Available Refunds"
       original_payment: "Original Payment"
+    #context: localized names of payment providers
     payment_providers:
       paypal: 'PayPal'
       stripe: 'Stripe'
