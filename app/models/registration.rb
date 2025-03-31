@@ -351,17 +351,6 @@ class Registration < ApplicationRecord
     errors.add(:user_id, cannot_register_reasons.to_sentence) if cannot_register_reasons.present?
   end
 
-  # TODO: This is a redunandant check with registration checker - switch to using this instead of registration_checker when
-  # functionality exists to use validations to raise errors on submitted registrations
-  validate :does_not_exceed_competitor_limit
-  private def does_not_exceed_competitor_limit
-    return if competition&.competitor_limit.blank?
-    return unless competing_status == Registrations::Helper::STATUS_ACCEPTED
-
-    errors.add(:competitor_limit, I18n.t('registrations.errors.competitor_limit_reached')) if
-      competition.registrations.accepted_and_competing_count >= competition.competitor_limit
-  end
-
   # TODO: V3-REG cleanup. All these Validations can be used instead of the registration_checker checks
   validate :cannot_be_undeleted_when_banned, if: :competing_status_changed?
   private def cannot_be_undeleted_when_banned
