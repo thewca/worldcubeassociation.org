@@ -61,7 +61,7 @@ RSpec.describe "AuxiliaryDataComputation" do
     let(:american_2) { FactoryBot.create :person, countryId: "USA" }
 
     def rank_333(person, ranks_type)
-      person.public_send(ranks_type).find_by(eventId: "333").attributes.symbolize_keys
+      person.public_send(ranks_type).find_by(event_id: "333").attributes.symbolize_keys
     end
 
     before do

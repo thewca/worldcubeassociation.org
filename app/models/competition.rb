@@ -1874,7 +1874,7 @@ class Competition < ApplicationRecord
     includes_associations = [
       { assignments: [:schedule_activity] },
       { user: {
-        person: [:rank_single, :ranks_average],
+        person: [:ranks_single, :ranks_average],
       } },
       :wcif_extensions,
       :events,
