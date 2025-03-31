@@ -68,7 +68,7 @@ module WcaOnRails
                          "World Cube Association"
                        end
 
-    config.middleware.insert_before 0, Rack::Cors, debug: false, logger: (-> { Rails.logger }) do
+    config.middleware.insert_before 0, Rack::Cors, debug: false, logger: -> { Rails.logger } do
       allow do
         origins '*'
 

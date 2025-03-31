@@ -9,9 +9,7 @@ module Admin
       # If a valid semi_id is provided, just use it.
       semi_id = SemiId.new(value: new_id_params[:semi_id])
       # Else try generating one from params
-      if semi_id.value.blank?
-        semi_id = SemiId.generate(new_id_params[:name], competition)
-      end
+      semi_id = SemiId.generate(new_id_params[:name], competition) if semi_id.value.blank?
 
       if semi_id.valid?
         # compute WCA ID
@@ -20,9 +18,7 @@ module Admin
           semiId: semi_id.value,
           wcaId: wca_id,
         }
-        if wca_id.blank?
-          json[:errors] = { wca_id: "could not generate a WCA ID for that semi, try another one" }
-        end
+        json[:errors] = { wca_id: "could not generate a WCA ID for that semi, try another one" } if wca_id.blank?
         render json: json
       else
         render json: { errors: { semi_id: semi_id.errors[:value] } }

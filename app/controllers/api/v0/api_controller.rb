@@ -24,12 +24,8 @@ class Api::V0::ApiController < ApplicationController
   end
 
   def auth_results
-    if !current_user
-      return render status: :unauthorized, json: { error: "Please log in" }
-    end
-    if !current_user.can_admin_results?
-      return render status: :forbidden, json: { error: "Cannot adminster results" }
-    end
+    return render status: :unauthorized, json: { error: "Please log in" } unless current_user
+    return render status: :forbidden, json: { error: "Cannot adminster results" } unless current_user.can_admin_results?
 
     render json: { status: "ok" }
   end
@@ -133,13 +129,13 @@ class Api::V0::ApiController < ApplicationController
       end
     end
 
-    if current_user && current_user.can_admin_results?
-      options = {
-        private_attributes: %w[incorrect_wca_id_claim_count dob],
-      }
-    else
-      options = {}
-    end
+    options = if current_user&.can_admin_results?
+                {
+                  private_attributes: %w[incorrect_wca_id_claim_count dob],
+                }
+              else
+                {}
+              end
 
     render status: :ok, json: { result: result.as_json(options) }
   end
@@ -239,11 +235,12 @@ class Api::V0::ApiController < ApplicationController
   # Find the user that owns the access token.
   # From: https://github.com/doorkeeper-gem/doorkeeper#authenticated-resource-owner
   private def current_api_user
-    @current_api_user ||= User.find_by_id(doorkeeper_token&.resource_owner_id) if doorkeeper_token&.accessible?
+    @current_api_user ||= User.find_by(id: doorkeeper_token&.resource_owner_id) if doorkeeper_token&.accessible?
   end
 
   private def require_user!
     raise WcaExceptions::MustLogIn.new if current_api_user.nil? && current_user.nil?
+
     current_api_user || current_user
   end
 
@@ -252,10 +249,9 @@ class Api::V0::ApiController < ApplicationController
   end
 
   def competition_series
-    competition_series = CompetitionSeries.find_by_wcif_id(params[:id])
-    if competition_series.blank? || competition_series.public_competitions.empty?
-      raise WcaExceptions::NotFound.new("Competition series with ID #{params[:id]} not found")
-    end
+    competition_series = CompetitionSeries.find_by(wcif_id: params[:id])
+    raise WcaExceptions::NotFound.new("Competition series with ID #{params[:id]} not found") if competition_series.blank? || competition_series.public_competitions.empty?
+
     render json: competition_series.to_wcif
   end
 end

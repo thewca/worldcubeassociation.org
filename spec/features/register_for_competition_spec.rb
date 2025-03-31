@@ -33,7 +33,7 @@ RSpec.feature "Registering for a competition", :js do
       expect(page).to have_text("Your registration is processing...")
       perform_enqueued_jobs
       expect(page).to have_text("Your registration is pending approval by the organizers.")
-      registration = competition.registrations.find_by_user_id(user.id)
+      registration = competition.registrations.find_by(user_id: user.id)
       expect(registration).not_to be_nil
     end
 
@@ -62,7 +62,7 @@ RSpec.feature "Registering for a competition", :js do
       #   _why_ there is no registration found. It's enough to know that the registration wasn't successful.
       perform_enqueued_jobs
 
-      registration = competition.registrations.find_by_user_id(user.id)
+      registration = competition.registrations.find_by(user_id: user.id)
       expect(registration).to be_nil
     end
 
@@ -182,7 +182,7 @@ RSpec.feature "Registering for a competition", :js do
       end
 
       expect(page).to have_text("Updated registration")
-      expect(Registration.find_by_id(registration.id).cancelled?).to be true
+      expect(Registration.find_by(id: registration.id).cancelled?).to be true
     end
   end
 end

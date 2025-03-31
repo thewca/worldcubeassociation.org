@@ -12,14 +12,14 @@ RSpec.describe "API Competitions" do
     let!(:competition4) { FactoryBot.create :competition, :visible, starts: 3.weeks.from_now, name: "Fourth 2019" }
 
     it "orders competitions by date descending by default" do
-      get api_v0_competitions_path, params: { start: 2.week.from_now }
+      get api_v0_competitions_path, params: { start: 2.weeks.from_now }
       expect(response).to be_successful
       ids = response.parsed_body.map { |c| c["id"] }
       expect(ids).to eq [competition4, competition3].map(&:id)
     end
 
     it "allows ordering by date ascending" do
-      get api_v0_competitions_path, params: { start: 2.week.from_now, sort: "start_date" }
+      get api_v0_competitions_path, params: { start: 2.weeks.from_now, sort: "start_date" }
       expect(response).to be_successful
       ids = response.parsed_body.map { |c| c["id"] }
       expect(ids).to eq [competition3, competition4].map(&:id)
@@ -193,7 +193,7 @@ RSpec.describe "API Competitions" do
         it "updates the competition events of an unconfirmed competition" do
           patch api_v0_competition_update_wcif_path(competition), params: create_wcif_with_events(%w(333)).to_json, headers: headers
           expect(response).to be_successful
-          expect(competition.reload.competition_events.find_by_event_id("333").rounds.length).to eq 1
+          expect(competition.reload.competition_events.find_by(event_id: "333").rounds.length).to eq 1
         end
 
         it "does not delete all rounds of an event if something is invalid" do
@@ -201,7 +201,7 @@ RSpec.describe "API Competitions" do
           FactoryBot.create :round, competition: competition, event_id: "333", number: 2
           competition.reload
 
-          ce = competition.competition_events.find_by_event_id("333")
+          ce = competition.competition_events.find_by(event_id: "333")
           expect(ce.rounds.length).to eq 2
           wcif = create_wcif_with_events(%w(333))
           wcif[:events][0][:rounds][0][:format] = "invalidformat"
@@ -209,7 +209,7 @@ RSpec.describe "API Competitions" do
           expect(response).to have_http_status(:bad_request)
           response_json = response.parsed_body
           expect(response_json["error"]).to eq "The property '#/events/0/rounds/0/format' value \"invalidformat\" did not match one of the following values: 1, 2, 3, a, m"
-          expect(competition.reload.competition_events.find_by_event_id("333").rounds.length).to eq 2
+          expect(competition.reload.competition_events.find_by(event_id: "333").rounds.length).to eq 2
         end
 
         context "confirmed competition" do
@@ -232,11 +232,11 @@ RSpec.describe "API Competitions" do
           let(:competition) { FactoryBot.create(:competition, :past, :with_delegate, :with_organizer, :visible, :confirmed, :results_posted, event_ids: %w(222 333)) }
 
           it "allows adding rounds to an event" do
-            competition.competition_events.find_by_event_id("333").rounds.delete_all
-            expect(competition.competition_events.find_by_event_id("333").rounds.length).to eq 0
+            competition.competition_events.find_by(event_id: "333").rounds.delete_all
+            expect(competition.competition_events.find_by(event_id: "333").rounds.length).to eq 0
             patch api_v0_competition_update_wcif_path(competition), params: create_wcif_with_events(%w(222 333)).to_json, headers: headers
             expect(response).to be_successful
-            expect(competition.competition_events.find_by_event_id("333").rounds.length).to eq 1
+            expect(competition.competition_events.find_by(event_id: "333").rounds.length).to eq 1
           end
         end
       end
@@ -248,11 +248,11 @@ RSpec.describe "API Competitions" do
           let!(:competition) { FactoryBot.create(:competition, :future, :with_delegate, :with_organizer, :visible, :confirmed, event_ids: %w(222 333)) }
 
           it "allows adding rounds to an event" do
-            competition.competition_events.find_by_event_id("333").rounds.delete_all
-            expect(competition.competition_events.find_by_event_id("333").rounds.length).to eq 0
+            competition.competition_events.find_by(event_id: "333").rounds.delete_all
+            expect(competition.competition_events.find_by(event_id: "333").rounds.length).to eq 0
             patch api_v0_competition_update_wcif_path(competition), params: create_wcif_with_events(%w(222 333)).to_json, headers: headers
             expect(response).to be_successful
-            expect(competition.competition_events.find_by_event_id("333").rounds.length).to eq 1
+            expect(competition.competition_events.find_by(event_id: "333").rounds.length).to eq 1
           end
 
           it "does not allow adding events" do
@@ -346,7 +346,7 @@ RSpec.describe "API Competitions" do
           }]
           expect {
             patch api_v0_competition_update_wcif_path(competition), params: { persons: persons }.to_json, headers: headers
-          }.not_to change { competition.reload.to_wcif["persons"] }
+          }.not_to(change { competition.reload.to_wcif["persons"] })
         end
       end
     end
@@ -364,7 +364,7 @@ RSpec.describe "API Competitions" do
             competition.competition_venues.destroy_all
             # Reconstruct everything from the saved WCIF
             patch api_v0_competition_update_wcif_path(competition), params: wcif.to_json, headers: headers
-          }.not_to change { competition.reload.to_wcif["schedule"] }
+          }.not_to(change { competition.reload.to_wcif["schedule"] })
         end
 
         it "can update venues and rooms" do
@@ -453,7 +453,7 @@ RSpec.describe "API Competitions" do
           wcif["schedule"]["startDate"] = nil
           expect {
             patch api_v0_competition_update_wcif_path(competition), params: wcif.to_json, headers: headers
-          }.not_to change { competition.reload.competition_venues.size }
+          }.not_to(change { competition.reload.competition_venues.size })
         end
       end
     end
@@ -504,7 +504,7 @@ RSpec.describe "API Competitions" do
           ]
           patch api_v0_competition_update_wcif_path(competition), params: wcif.to_json, headers: { "CONTENT_TYPE" => "application/json" }
           expect(response).to be_successful
-          rounds = competition.reload.competition_events.find_by_event_id("333").rounds
+          rounds = competition.reload.competition_events.find_by(event_id: "333").rounds
           expect(rounds.length).to eq 1
           expect(rounds.first.scramble_set_count).to eq 2
           expect(rounds.first.round_results.length).to eq 1
@@ -527,7 +527,7 @@ RSpec.describe "API Competitions" do
           expect(response).to have_http_status :forbidden
           response_json = response.parsed_body
           expect(response_json["error"]).to eq "Not authorized to manage competition"
-          expect(competition.reload.competition_events.find_by_event_id("333").rounds.length).to eq 0
+          expect(competition.reload.competition_events.find_by(event_id: "333").rounds.length).to eq 0
         end
       end
     end
@@ -569,6 +569,28 @@ RSpec.describe "API Competitions" do
           expect(response).to be_successful
         end
       end
+    end
+  end
+
+  describe "GET #competition_index" do
+    it 'returns a paginated list of competitions' do
+      FactoryBot.create_list(:competition, 5, :visible)
+      get api_v0_competition_index_path
+      expect(response).to be_successful
+
+      response_json = response.parsed_body
+      expect(response_json.length).to eq(5)
+    end
+
+    it 'takes parameter to filter by continent' do
+      FactoryBot.create_list(:competition, 6, :visible)
+      FactoryBot.create_list(:competition, 4, :visible, countryId: 'Afghanistan')
+
+      get api_v0_competition_index_path, params: { continent: '_North America' }
+      expect(response).to be_successful
+
+      response_json = response.parsed_body
+      expect(response_json.length).to eq(6)
     end
   end
 end

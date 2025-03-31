@@ -19,9 +19,7 @@ Rails.application.routes.draw do
   end
 
   # Don't expose Paypal routes in production until we're reading to launch
-  unless PaypalInterface.paypal_disabled?
-    post 'registration/:id/capture-paypal-payment' => 'registrations#capture_paypal_payment', as: :registration_capture_paypal_payment
-  end
+  post 'registration/:id/capture-paypal-payment' => 'registrations#capture_paypal_payment', as: :registration_capture_paypal_payment unless PaypalInterface.paypal_disabled?
 
   # Prevent account deletion, and overrides the sessions controller for 2FA.
   #  https://github.com/plataformatec/devise/wiki/How-To:-Disable-user-from-destroying-their-account
@@ -45,7 +43,7 @@ Rails.application.routes.draw do
   post 'competitions/:competition_id/refund/:payment_integration/:payment_id' => 'registrations#refund_payment', as: :registration_payment_refund
   get 'competitions/:competition_id/payment-completion/:payment_integration' => 'registrations#payment_completion', as: :registration_payment_completion
   post 'registration/stripe-webhook' => 'registrations#stripe_webhook', as: :registration_stripe_webhook
-  get 'registration/payment-denomination' => 'registrations#payment_denomination', as: :registration_payment_denomination
+  get 'registration/:competition_id/:user_id/payment-denomination' => 'registrations#payment_denomination', as: :registration_payment_denomination
   resources :users, only: [:index, :edit, :update]
   get 'profile/edit' => 'users#edit'
   post 'profile/enable-2fa' => 'users#enable_2fa'
@@ -78,6 +76,7 @@ Rails.application.routes.draw do
     get 'announcement_data' => 'competitions#announcement_data', as: :announcement_data
     get 'user_preferences' => 'competitions#user_preferences', as: :user_preferences
     get 'confirmation_data' => 'competitions#confirmation_data', as: :confirmation_data
+    patch 'confirmation_data' => 'competitions#update_confirmation_data', as: :update_confirmation_data
 
     put 'confirm' => 'competitions#confirm', as: :confirm
     put 'announce' => 'competitions#announce', as: :announce
@@ -164,7 +163,7 @@ Rails.application.routes.draw do
 
   get 'results/rankings', to: redirect('results/rankings/333/single', status: 302)
   get 'results/rankings/333mbf/average',
-      to: redirect(status: 302) { |params, request| URI.parse(request.original_url).query ? "results/rankings/333mbf/single?#{URI.parse(request.original_url).query}" : "results/rankings/333mbf/single" }
+      to: redirect(status: 302) { |_params, request| URI.parse(request.original_url).query ? "results/rankings/333mbf/single?#{URI.parse(request.original_url).query}" : "results/rankings/333mbf/single" }
   get 'results/rankings/:event_id', to: redirect('results/rankings/%{event_id}/single', status: 302)
   get 'results/rankings/:event_id/:type' => 'results#rankings', as: :rankings
   get 'results/records' => 'results#records', as: :records

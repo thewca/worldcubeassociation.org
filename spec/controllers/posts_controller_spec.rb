@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe PostsController do
-  let!(:post1) { FactoryBot.create(:post, created_at: 1.hours.ago) }
+  let!(:post1) { FactoryBot.create(:post, created_at: 1.hour.ago) }
   let!(:sticky_post) { FactoryBot.create(:post, sticky: true, created_at: 2.hours.ago) }
   let!(:wic_post) { FactoryBot.create(:post, created_at: 3.hours.ago, tags: "wic,othertag", show_on_homepage: false) }
 
@@ -81,7 +81,7 @@ RSpec.describe PostsController do
     describe "POST #create" do
       it "creates a post" do
         post :create, params: { post: { title: "Title", body: "body" } }
-        p = Post.find_by_slug("Title")
+        p = Post.find_by(slug: "Title")
         expect(p.title).to eq "Title"
         expect(p.body).to eq "body"
       end
@@ -101,7 +101,7 @@ RSpec.describe PostsController do
     describe "POST #create" do
       it "creates a tagged post" do
         post :create, params: { post: { title: "Title", body: "body", tags: "wic, notes" } }
-        p = Post.find_by_slug("Title")
+        p = Post.find_by(slug: "Title")
         expect(p.title).to eq "Title"
         expect(p.body).to eq "body"
         expect(p.tags_array).to match_array %w(wic notes)

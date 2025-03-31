@@ -29,8 +29,6 @@ class CompetitionMedium < ApplicationRecord
 
   before_save :set_timestamp_decided
   private def set_timestamp_decided
-    if status_change && status == "accepted"
-      self.timestampDecided = Time.now
-    end
+    self.timestampDecided = Time.now if status_change && status == "accepted"
   end
 end

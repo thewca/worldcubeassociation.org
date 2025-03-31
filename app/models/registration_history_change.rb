@@ -1,5 +1,5 @@
 # frozen_string_literal: true
 
-class RegistrationHistoryChange < ActiveRecord::Base
+class RegistrationHistoryChange < ApplicationRecord
   belongs_to :registration_history_entry
 end

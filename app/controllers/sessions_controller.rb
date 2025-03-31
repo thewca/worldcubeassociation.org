@@ -53,9 +53,8 @@ class SessionsController < Devise::SessionsController
   end
 
   def generate_email_otp
-    unless session[:otp_user_id] || current_user
-      return render json: { error: { message: I18n.t("devise.sessions.new.2fa.errors.cant_send_email") } }
-    end
+    return render json: { error: { message: I18n.t("devise.sessions.new.2fa.errors.cant_send_email") } } unless session[:otp_user_id] || current_user
+
     user = User.find(session[:otp_user_id] || current_user.id)
     TwoFactorMailer.send_otp_to_user(user).deliver_now
     render json: { status: "ok" }
@@ -65,7 +64,7 @@ class SessionsController < Devise::SessionsController
     # Overrides Devise's create sign in method and pass it a block executed
     # after sign in, to mark use as recently authenticated upon sign in.
     # See https://www.rubydoc.info/github/plataformatec/devise/Devise/SessionsController#create-instance_method
-    super do |resource|
+    super do |_resource|
       session[:last_authenticated_at] = Time.now
     end
   end
@@ -91,7 +90,7 @@ class SessionsController < Devise::SessionsController
       user = self.resource = find_user
       if user_params[:otp_attempt].present? && session[:otp_user_id]
         authenticate_via_otp(user)
-      elsif user && user.valid_password?(user_params[:password])
+      elsif user&.valid_password?(user_params[:password])
         prompt_for_two_factor(user)
       end
     end
