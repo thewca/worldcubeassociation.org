@@ -207,6 +207,10 @@ GEM
       rack-test (>= 0.6.3)
       regexp_parser (>= 1.5, < 3.0)
       xpath (~> 3.2)
+    capybara-playwright-driver (0.5.4)
+      addressable
+      capybara
+      playwright-ruby-client (>= 1.16.0)
     capybara-screenshot (1.0.26)
       capybara (>= 1.0, < 4)
       launchy
@@ -991,6 +995,7 @@ DEPENDENCIES
   bullet
   byebug
   capybara
+  capybara-playwright-driver
   capybara-screenshot
   cocoon
   cookies_eu
@@ -1150,6 +1155,7 @@ CHECKSUMS
   byebug (12.0.0) sha256=d4a150d291cca40b66ec9ca31f754e93fed8aa266a17335f71bb0afa7fca1a1e
   camertron-eprun (1.1.1) sha256=9a8e337916445e62648f6a4f35d229302fc44c50549cc881bff1e296ccf9ce4b
   capybara (3.40.0) sha256=42dba720578ea1ca65fd7a41d163dd368502c191804558f6e0f71b391054aeef
+  capybara-playwright-driver (0.5.4) sha256=a28183d8c2c8e9f19587130d5c1d9567515dbd6e4485eb7c3146443cb9069b6c
   capybara-screenshot (1.0.26) sha256=816b9370a07752097c82a05f568aaf5d3b7f45c3db5d3aab2014071e1b3c0c77
   childprocess (5.1.0) sha256=9a8d484be2fd4096a0e90a0cd3e449a05bc3aa33f8ac9e4d6dcef6ac1455b6ec
   chunky_png (1.4.0) sha256=89d5b31b55c0cf4da3cf89a2b4ebc3178d8abe8cbaf116a1dba95668502fdcfe

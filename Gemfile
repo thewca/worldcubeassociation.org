@@ -154,6 +154,7 @@ group :test do
   gem 'database_cleaner'
   gem 'rails-controller-testing'
   gem 'apparition', github: 'twalpole/apparition'
+  gem 'capybara-playwright-driver'
   gem 'simplecov', require: false
   gem 'simplecov-lcov', require: false
   gem 'timecop'
