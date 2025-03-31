@@ -392,12 +392,12 @@ class Competition < ApplicationRecord
 
     errors.add(:auto_accept_registrations, I18n.t('competitions.errors.auto_accept_limit')) if
       auto_accept_disable_threshold.present? &&
-      auto_accept_disable_threshold > 0 &&
+      auto_accept_disable_threshold.positive? &&
       competitor_limit.present? &&
       auto_accept_disable_threshold >= competitor_limit
 
     errors.add(:auto_accept_registrations, I18n.t('competitions.errors.auto_accept_not_negative')) if
-      auto_accept_disable_threshold.present? && auto_accept_disable_threshold < 0
+      auto_accept_disable_threshold.present? && auto_accept_disable_threshold.negative?
 
     # TODO: This logic belongs in a controller more appropriately than in the validation.
     # IF we build a controller endpoint specifically for auto_accept, this logic should be move there.
@@ -508,7 +508,7 @@ class Competition < ApplicationRecord
 
   def auto_accept_threshold_reached?
     auto_accept_disable_threshold? &&
-      auto_accept_disable_threshold > 0 &&
+      auto_accept_disable_threshold.positive? &&
       auto_accept_disable_threshold <= registrations.competing_status_accepted.count
   end
 
