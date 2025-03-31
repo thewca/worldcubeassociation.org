@@ -245,16 +245,16 @@ module DatabaseDumper
         },
       ),
     }.freeze,
-    "RanksAverage" => {
+    "ranks_average" => {
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
           best
-          continentRank
-          countryRank
-          eventId
-          personId
-          worldRank
+          continent_rank
+          country_rank
+          event_id
+          person_id
+          world_rank
         ),
       ),
     }.freeze,
@@ -263,11 +263,11 @@ module DatabaseDumper
         copy: %w(
           id
           best
-          continentRank
-          countryRank
-          eventId
-          personId
-          worldRank
+          continent_rank
+          country_rank
+          event_id
+          person_id
+          world_rank
         ),
       ),
     }.freeze,
@@ -974,27 +974,27 @@ module DatabaseDumper
         }.freeze,
       ),
     }.freeze,
-    "RanksSingle" => {
+    "ranks_single" => {
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
-          personId
-          eventId
+          person_id
+          event_id
           best
-          worldRank
-          continentRank
-          countryRank
+          world_rank
+          continent_rank
+          country_rank
         ),
       ),
     }.freeze,
-    "RanksAverage" => {
+    "ranks_average" => {
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
-          personId
-          eventId
+          person_id
+          event_id
           best
-          worldRank
-          continentRank
-          countryRank
+          world_rank
+          continent_rank
+          country_rank
         ),
       ),
     }.freeze,
