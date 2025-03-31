@@ -207,32 +207,9 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
         )}
         <Header>
           {`${competitor.name} `}
-          (
-          {/* The onClick functions prevent Semantic UI from rendering large icons indicating new
-          tabs */}
-          <a
-            href={personUrl(competitor.wca_id)}
-            onClick={(e) => {
-              e.preventDefault();
-              window.open(personUrl(competitor.wca_id), '_blank', 'noopener,noreferrer');
-            }}
-          >
-            {competitor.wca_id}
-          </a>
-          )
+          (<a href={personUrl(competitor.wca_id)} target="_blank" rel="noreferrer" className="hide-new-window-icon">{competitor.wca_id}</a>)
           {' ' /* Necessary to space the icon away from the wca_id */ }
-          <a
-            href={editPersonUrl(competitor.id)}
-            aria-label="Edit"
-            role="menuitem"
-            className="edit-link"
-            onClick={(e) => {
-              e.preventDefault();
-              window.open(editPersonUrl(competitor.id), '_blank', 'noopener,noreferrer');
-            }}
-          >
-            <Icon name="edit" />
-          </a>
+          <a href={personUrl(competitor.wca_id)} target="_blank" rel="noreferrer" className="hide-new-window-icon"><Icon name="edit"/></a>
         </Header>
         <Form.Field required error={selectedEventIds.size === 0}>
           <EventSelector
