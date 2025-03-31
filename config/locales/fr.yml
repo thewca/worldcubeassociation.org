@@ -1572,11 +1572,12 @@ fr:
           #original_hash: 54f0036
           label: Qui souhaitez-vous contacter ?
           competition:
-            #original_hash: baa2425
+            #original_hash: 5a280ab
             label: >-
               Contacter les organisateur·rice·s/Délégué·e·s d’une compétition
               (pour poser une question concernant cette compétition en
-              particulier)
+              particulier, y compris sur les résultats qui n'ont pas encore été
+              publiés sur le site web de la WCA)
           wct:
             #original_hash: b73e465
             label: >-
@@ -1584,15 +1585,17 @@ fr:
               des éléments comme l’ID/le profil WCA, l’organisation de
               compétitions, les règles de la compétition, les médias, etc.)
           wrt:
-            #original_hash: 0f6b96b
+            #original_hash: 4dd66f7
             label: >-
-              Contacter l'équipe de résultats de la WCA (pour toute chose
-              relative aux résultats d'une compétition)
+              Contacter l'équipe de résultats de la WCA (pour tout ce qui
+              concerne les résultats ou les données de profil sur le site web de
+              la WCA)
           wst:
-            #original_hash: 1d74033
+            #original_hash: 2be6d53
             label: >-
-              Contacter l'équipe logicielle de la WCA (pour signaler des bugs ou
-              toute question relative à l'API)
+              Contacter l'équipe logicielle de la WCA (pour signaler des
+              problèmes avec le site web de la WCA ou pour des questions
+              relatives aux logiciels)
         competition:
           competition:
             #original_hash: 1917f4f
@@ -2278,6 +2281,10 @@ fr:
       can_only_register_for_qualified_events: >-
         Vous ne pouvez pas vous inscrire pour des épreuves pour lesquelles vous
         ne vous qualifiez pas.
+      #original_hash: 93ed20e
+      cannot_change_events_when_cancelling: >-
+        Vous ne pouvez pas modifier vos événements lors de l'annulation de votre
+        inscription.
       #original_hash: 4025877
       cannot_register_without_comment: >-
         Vous devez faire un commentaire. Merci de lire les conditions
