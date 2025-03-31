@@ -9762,16 +9762,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-textarea-autosize@npm:^8.5.8":
-  version: 8.5.8
-  resolution: "react-textarea-autosize@npm:8.5.8"
+"react-textarea-autosize@npm:^8.5.9":
+  version: 8.5.9
+  resolution: "react-textarea-autosize@npm:8.5.9"
   dependencies:
     "@babel/runtime": "npm:^7.20.13"
     use-composed-ref: "npm:^1.3.0"
     use-latest: "npm:^1.2.1"
   peerDependencies:
     react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
-  checksum: 10c0/3d7add9773fd3dc189a6668efb82c1d2d5238ee5b7e933204f5f7da9df8daef81df50b36ca573a57beaa31b2727c6176ea806422790ad23be6cf7f5a5f71bbb9
+  checksum: 10c0/3a924db59259a6e3b834dcddc12a8661b43dcdaa1b43c41c732e0548bb2761e9a53dbc6db4e0d9e237728b4869e42c25e5417408b0391aec290c90874733a09f
   languageName: node
   linkType: hard
 
@@ -10233,7 +10233,7 @@ __metadata:
     react-refresh: "npm:^0.17.0"
     react-simplemde-editor: "npm:^5.2.0"
     react-spinners: "npm:^0.15.0"
-    react-textarea-autosize: "npm:^8.5.8"
+    react-textarea-autosize: "npm:^8.5.9"
     react_ujs: "npm:^3.2.1"
     regenerator-runtime: "npm:^0.14.1"
     resolve-url-loader: "npm:^5.0.0"
