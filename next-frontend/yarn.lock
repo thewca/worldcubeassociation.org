@@ -1968,22 +1968,22 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@payloadcms/live-preview-react@npm:^3.30.0":
-  version: 3.30.0
-  resolution: "@payloadcms/live-preview-react@npm:3.30.0"
+"@payloadcms/live-preview-react@npm:^3.31.0":
+  version: 3.31.0
+  resolution: "@payloadcms/live-preview-react@npm:3.31.0"
   dependencies:
-    "@payloadcms/live-preview": "npm:3.30.0"
+    "@payloadcms/live-preview": "npm:3.31.0"
   peerDependencies:
     react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0 || ^19.0.0-rc-65a56d0e-20241020
     react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0 || ^19.0.0-rc-65a56d0e-20241020
-  checksum: 10c0/860874cb79a8efabd7dcac805780159018d2f4c2fccbfcd18a12cb206c2a4560c3d11d5edf9ea1a674631adfe7b78e7fbdee6ab825eee60836eb29a727690793
+  checksum: 10c0/f9db0a03a8fa9481f4b1d04cb85955411b183ff9bdf8969880d12472c22cee47b3c23488ea59d7da159192b396fab62db7db64797393034f15dd98c4ef8aad3b
   languageName: node
   linkType: hard
 
-"@payloadcms/live-preview@npm:3.30.0":
-  version: 3.30.0
-  resolution: "@payloadcms/live-preview@npm:3.30.0"
-  checksum: 10c0/4bf6581f7929ba63892fbd8cee850e15dd655af545b39393c69365b6b6829344730b83224da43151508aa715ce3ca9a9d8095abb098da8be72225c90275ab1d3
+"@payloadcms/live-preview@npm:3.31.0":
+  version: 3.31.0
+  resolution: "@payloadcms/live-preview@npm:3.31.0"
+  checksum: 10c0/9f869115308f55055f7a79b6f3307b5430cf6d858df7d17e6f25c49f8ed6581c38d72ac8f0e18936ae713b4111e03f1ac091cb13841c9639d7a6a4729b6100d7
   languageName: node
   linkType: hard
 
@@ -6630,7 +6630,7 @@ __metadata:
     "@emotion/react": "npm:^11.14.0"
     "@eslint/eslintrc": "npm:^3"
     "@payloadcms/db-sqlite": "npm:^3.30.0"
-    "@payloadcms/live-preview-react": "npm:^3.30.0"
+    "@payloadcms/live-preview-react": "npm:^3.31.0"
     "@payloadcms/next": "npm:^3.30.0"
     "@stylistic/eslint-plugin": "npm:^4.2.0"
     "@tanstack/react-query": "npm:^5.71.0"
