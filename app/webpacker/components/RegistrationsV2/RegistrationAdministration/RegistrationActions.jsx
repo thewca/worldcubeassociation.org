@@ -140,14 +140,28 @@ export default function RegistrationActions({
     changeStatus(combined, 'waiting_list');
   };
 
+  const showOverLimitMessage = (count) => dispatch(
+    showMessage(
+      'competitions.registration_v2.update.too_many',
+      'negative',
+      { count },
+    ),
+  );
+
   const attemptToApprove = () => {
     const idsToAccept = [...pending, ...cancelled, ...waiting, ...rejected];
     const skippedWaitlistCount = getSkippedWaitlistCount(
       registrations,
       partitionedSelectedIds,
     );
+    const amountOverLimit = Math.max(idsToAccept.length - spotsRemaining, 0);
+    const goesOverLimit = amountOverLimit > 0;
 
-    if (skippedWaitlistCount > 0) {
+    if (goesOverLimit) {
+      showOverLimitMessage(amountOverLimit);
+    } else if (skippedWaitlistCount > 0) {
+      // note: if the user confirms (ignores the warning) then no further checks are done
+      //  in this `else-if` chain; we can't check that directly in the `if` condition
       confirm({
         content: I18n.t(
           'competitions.registration_v2.list.waitlist.skipped_warning',
@@ -156,14 +170,6 @@ export default function RegistrationActions({
       }).then(
         () => changeStatus(idsToAccept, 'accepted'),
       ).catch(() => null);
-    } else if (idsToAccept.length > spotsRemaining) {
-      dispatch(showMessage(
-        'competitions.registration_v2.update.too_many',
-        'negative',
-        {
-          count: idsToAccept.length - spotsRemaining,
-        },
-      ));
     } else {
       changeStatus(idsToAccept, 'accepted');
     }
