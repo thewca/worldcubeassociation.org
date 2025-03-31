@@ -546,7 +546,8 @@ class Registration < ApplicationRecord
     return 'Auto-accept is not enabled for this competition.' unless competition.auto_accept_registrations?
     return 'Can only auto-accept pending registrations or first position on waiting list' unless competing_status_pending? || (competing_status_waiting_list? && waiting_list_position == 1)
     return "Competition has reached auto_accept_disable_threshold of #{competition.auto_accept_disable_threshold} registrations" if competition.auto_accept_threshold_reached?
-    return 'Cant auto-accept while registration is not open' unless competition.registration_currently_open?
+
+    'Cant auto-accept while registration is not open' unless competition.registration_currently_open?
   end
 
   private def log_auto_accept_failure(reason)
@@ -560,10 +561,10 @@ class Registration < ApplicationRecord
 
   private def build_auto_accept_payload
     status = if competition.registration_full_and_accepted? && competing_status_pending?
-              Registrations::Helper::STATUS_WAITING_LIST
-            else
-              Registrations::Helper::STATUS_ACCEPTED
-            end
+               Registrations::Helper::STATUS_WAITING_LIST
+             else
+               Registrations::Helper::STATUS_ACCEPTED
+             end
 
     { user_id: user_id, competing: { status: status } }.with_indifferent_access
   end
