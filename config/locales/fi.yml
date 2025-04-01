@@ -496,7 +496,7 @@ fi:
         #original_hash: 8c41ae8
         wca_id: Henkilö
         #original_hash: fa4c045
-        countryId: Edustaa
+        country_id: Edustaa
         #original_hash: ab58155
         dob: Syntymäaika
         #original_hash: 8a754c6

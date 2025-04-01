@@ -534,7 +534,7 @@ pl:
         #original_hash: 8c41ae8
         wca_id: Osoba
         #original_hash: fa4c045
-        countryId: Państwo
+        country_id: Państwo
         #original_hash: ab58155
         dob: Data urodzenia
         #original_hash: 8a754c6

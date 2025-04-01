@@ -629,7 +629,7 @@ de:
         #original_hash: 8c41ae8
         wca_id: Person
         #original_hash: fa4c045
-        countryId: Repräsentiert
+        country_id: Repräsentiert
         #original_hash: ab58155
         dob: Geburtsdatum
         #original_hash: 8a754c6

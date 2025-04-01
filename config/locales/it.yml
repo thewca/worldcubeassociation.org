@@ -528,7 +528,7 @@ it:
         #original_hash: 8c41ae8
         wca_id: Persona
         #original_hash: fa4c045
-        countryId: Cittadinanza
+        country_id: Cittadinanza
         #original_hash: ab58155
         dob: Data di nascita
         #original_hash: 8a754c6

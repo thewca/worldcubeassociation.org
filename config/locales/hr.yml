@@ -524,7 +524,7 @@ hr:
         #original_hash: 8c41ae8
         wca_id: Osoba
         #original_hash: fa4c045
-        countryId: Državljanstvo
+        country_id: Državljanstvo
         #original_hash: ab58155
         dob: Datum rođenja
         #original_hash: 8a754c6
