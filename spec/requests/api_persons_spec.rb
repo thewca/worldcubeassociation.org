@@ -96,8 +96,8 @@ RSpec.describe "API Persons" do
       ]
 
       user = FactoryBot.create(:user_with_wca_id, person: FactoryBot.create(:person))
-      FactoryBot.create(:ranks_single, personId: user.wca_id)
-      FactoryBot.create(:ranks_average, personId: user.wca_id)
+      FactoryBot.create(:ranks_single, person_id: user.wca_id)
+      FactoryBot.create(:ranks_average, person_id: user.wca_id)
 
       get api_v0_personal_records_path(user.wca_id)
       expect(response.parsed_body).to eq(expected_response)

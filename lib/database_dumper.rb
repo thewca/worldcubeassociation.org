@@ -258,7 +258,7 @@ module DatabaseDumper
         ),
       ),
     }.freeze,
-    "RanksSingle" => {
+    "ranks_single" => {
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
