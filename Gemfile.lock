@@ -573,6 +573,9 @@ GEM
     parser (3.3.7.4)
       ast (~> 2.4.1)
       racc
+    playwright-ruby-client (1.51.0)
+      concurrent-ruby (>= 1.1.6)
+      mime-types (>= 3.0)
     pp (0.6.2)
       prettyprint
     premailer (1.22.0)
@@ -1046,6 +1049,7 @@ DEPENDENCIES
   oga
   openssl
   overcommit
+  playwright-ruby-client
   premailer-rails
   puma
   rack
@@ -1326,6 +1330,7 @@ CHECKSUMS
   package_json (0.1.0) sha256=20af98c0e45dadcd48b6f45a3324e948f578e7549365671b97faca4637770256
   parallel (1.26.3) sha256=d86babb7a2b814be9f4b81587bf0b6ce2da7d45969fab24d8ae4bf2bb4d4c7ef
   parser (3.3.7.4) sha256=2b26282274280e13f891080dc4ef3f65ce658d62e13255b246b28ec6754e98ab
+  playwright-ruby-client (1.51.0) sha256=67d8c1774049c5c9d9a200147a1eea9afc262b6885aa9614a7170847ddbb9f57
   pp (0.6.2) sha256=947ec3120c6f92195f8ee8aa25a7b2c5297bb106d83b41baa02983686577b6ff
   premailer (1.22.0) sha256=538935ebc4a75bfdd1aa624bd348e54986902b6caf08ceaaa6297fc7388227da
   premailer-rails (1.12.0) sha256=c13815d161b9bc7f7d3d81396b0bb0a61a90fa9bd89931548bf4e537c7710400
