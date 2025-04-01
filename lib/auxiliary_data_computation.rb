@@ -22,19 +22,19 @@ module AuxiliaryDataComputation
             valueAndId,
             personId,
             eventId,
-            countries.id countryId,
+            country.id countryId,
             continentId,
             YEAR(start_date) year,
             MONTH(start_date) month,
             DAY(start_date) day
           FROM (
-              SELECT MIN(#{field} * 1000000000 + result.id) value_and_id
+              SELECT MIN(#{field} * 1000000000 + result.id) valueAndId
               FROM Results result
               JOIN Competitions competition ON competition.id = competitionId
               WHERE #{field} > 0
               GROUP BY personId, result.countryId, eventId, YEAR(start_date)
-            ) min_values_with_id
-            JOIN Results result ON result.id = value_and_id % 1000000000
+            ) MinValuesWithId
+            JOIN Results result ON result.id = valueAndId % 1000000000
             JOIN Competitions competition ON competition.id = competitionId
             JOIN Countries country ON country.id = result.countryId
             JOIN Events event ON event.id = eventId
