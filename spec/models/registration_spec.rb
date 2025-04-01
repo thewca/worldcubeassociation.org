@@ -773,9 +773,11 @@ RSpec.describe Registration do
     end
 
     context 'log when auto accept is prevented by validations' do
-      let(:limited_comp) { FactoryBot.create(
-        :competition, :registration_open, :with_competitor_limit, :auto_accept, competitor_limit: 5, auto_accept_disable_threshold: nil
-      )}
+      let(:limited_comp) {
+        FactoryBot.create(
+          :competition, :registration_open, :with_competitor_limit, :auto_accept, competitor_limit: 5, auto_accept_disable_threshold: nil
+        )
+      }
       let!(:prevented_reg) { FactoryBot.create(:registration, competition: limited_comp) }
 
       # Fails because waiting_list_position persists when it shouldnt; #11173 should fix
@@ -803,7 +805,7 @@ RSpec.describe Registration do
         FactoryBot.create(:registration_payment, :skip_create_hook, registration: regB, competition: competitionB)
 
         regB.attempt_auto_accept
-        error_json = {competition_id: ['You can only be accepted for one Series competition at a time.']}.to_s
+        error_json = { competition_id: ['You can only be accepted for one Series competition at a time.'] }.to_s
         expect(regB.registration_history.last[:changed_attributes][:auto_accept_failure_reasons]).to eq(error_json)
         expect(regB.reload.competing_status).to eq('pending')
       end

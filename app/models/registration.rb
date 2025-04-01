@@ -529,7 +529,6 @@ class Registration < ApplicationRecord
 
     update_payload = build_auto_accept_payload
     auto_accepted_registration = Registrations::RegistrationChecker.apply_payload(self, update_payload)
-    byebug
 
     if auto_accepted_registration.valid?
       update_lanes!(
