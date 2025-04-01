@@ -50,7 +50,7 @@ module AuxiliaryDataComputation
       %w(average RanksAverage ConciseAverageResults),
     ].each do |field, table_name, concise_table_name|
       DbHelper.with_temp_table(table_name) do |temp_table_name|
-        current_country_by_wca_id = Person.current.pluck(:wca_id, :countryId).to_h
+        current_country_by_wca_id = Person.current.pluck(:wca_id, :country_id).to_h
         # Get all personal records (note: people that changed their country appear once for each country).
         personal_records_with_event = ActiveRecord::Base.connection.execute <<-SQL.squish
           SELECT eventId, personId, countryId, continentId, min(#{field}) value

@@ -40,9 +40,9 @@ RSpec.describe Result do
       ])
     end
 
-    it "person association always looks for subId 1" do
+    it "person association always looks for sub_id 1" do
       person1 = FactoryBot.create :person_with_multiple_sub_ids
-      person2 = Person.find_by!(wca_id: person1.wca_id, subId: 2)
+      person2 = Person.find_by!(wca_id: person1.wca_id, sub_id: 2)
       result1 = FactoryBot.create :result, person: person1
       result2 = FactoryBot.create :result, person: person2
       expect(result1.person).to eq person1

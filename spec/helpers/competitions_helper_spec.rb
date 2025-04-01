@@ -11,7 +11,7 @@ RSpec.describe CompetitionsHelper do
         person = FactoryBot.create(:person,
                                    wca_id: wca_id || "2006YOYO#{format('%.2d', pos)}",
                                    name: name,
-                                   countryId: "USA")
+                                   country_id: "USA")
         FactoryBot.create(:result,
                           pos: pos,
                           person: person,
@@ -96,7 +96,7 @@ RSpec.describe CompetitionsHelper do
         person = FactoryBot.create(:person,
                                    wca_id: "2006YOYO#{format('%.2d', pos)}",
                                    name: name,
-                                   countryId: "USA")
+                                   country_id: "USA")
         FactoryBot.create(:result,
                           pos: pos,
                           person: person,
@@ -130,7 +130,7 @@ RSpec.describe CompetitionsHelper do
         person = FactoryBot.create(:person,
                                    wca_id: "2006YOYO#{format('%.2d', pos)}",
                                    name: name,
-                                   countryId: "USA")
+                                   country_id: "USA")
         FactoryBot.create(:result,
                           pos: pos,
                           person: person,
@@ -179,7 +179,7 @@ RSpec.describe CompetitionsHelper do
         person = FactoryBot.create(:person,
                                    wca_id: "2006YOYO#{format('%.2d', pos)}",
                                    name: name,
-                                   countryId: "USA")
+                                   country_id: "USA")
         FactoryBot.create(:result,
                           pos: pos,
                           person: person,

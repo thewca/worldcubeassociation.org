@@ -217,7 +217,7 @@ RSpec.describe ResultsValidators::AdvancementConditionsValidator do
       if result_kind == :result
         FactoryBot.build(:person)
       else
-        FactoryBot.build(:inbox_person, competitionId: competition.id)
+        FactoryBot.build(:inbox_person, competition_id: competition.id)
       end
     end
 end

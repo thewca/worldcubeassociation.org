@@ -81,7 +81,7 @@ RSpec.describe UsersController do
     end
 
     it "can set id to something not claimed if the details match" do
-      person2 = FactoryBot.create :person, name: user.name, countryId: user.country.id,
+      person2 = FactoryBot.create :person, name: user.name, country_id: user.country.id,
                                            dob: user.dob, gender: user.gender
       patch :update, params: { id: user, user: { wca_id: person2.wca_id } }
       user.reload

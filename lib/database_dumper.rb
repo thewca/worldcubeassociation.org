@@ -223,18 +223,18 @@ module DatabaseDumper
         ),
       ),
     }.freeze,
-    "InboxPersons" => :skip_all_rows,
+    "inbox_persons" => :skip_all_rows,
     "InboxResults" => :skip_all_rows,
-    "Persons" => {
+    "persons" => {
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
           wca_id
           comments
-          countryId
+          country_id
           gender
           name
-          subId
+          sub_id
         ),
         db_default: %w(
           comments
@@ -1061,7 +1061,7 @@ module DatabaseDumper
     "Persons" => {
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
-          subid
+          sub_id
           name
           countryId
           gender
