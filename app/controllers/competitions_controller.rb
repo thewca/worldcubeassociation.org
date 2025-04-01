@@ -398,7 +398,7 @@ class CompetitionsController < ApplicationController
       delegates: users_to_sentence(other_comp.delegates),
       registrationOpen: other_comp.registration_open,
       minutesUntil: competition.minutes_until_other_registration_starts(other_comp),
-      cityName: other_comp.cityName,
+      cityName: other_comp.city_name,
       countryId: other_comp.country_id,
       events: other_comp.events.map { |event|
         event.id
