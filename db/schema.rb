@@ -162,20 +162,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_06_165113) do
     t.integer "trim_slowest_n", null: false
   end
 
-  create_table "InboxPersons", id: false, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
-    t.string "id", limit: 10, null: false
-    t.string "wcaId", limit: 10, default: "", null: false
-    t.string "name", limit: 80
-    t.string "countryId", limit: 2, default: "", null: false
-    t.string "gender", limit: 1, default: ""
-    t.date "dob", null: false
-    t.string "competitionId", limit: 32, null: false
-    t.index ["competitionId", "id"], name: "index_InboxPersons_on_competitionId_and_id", unique: true
-    t.index ["countryId"], name: "InboxPersons_fk_country"
-    t.index ["name"], name: "InboxPersons_name"
-    t.index ["wcaId"], name: "InboxPersons_id"
-  end
-
   create_table "InboxResults", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB PACK_KEYS=0", force: :cascade do |t|
     t.string "personId", limit: 20, null: false
     t.integer "pos", limit: 2, default: 0, null: false
@@ -194,22 +180,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_06_165113) do
     t.index ["eventId"], name: "InboxResults_fk_event"
     t.index ["formatId"], name: "InboxResults_fk_format"
     t.index ["roundTypeId"], name: "InboxResults_fk_round"
-  end
-
-  create_table "Persons", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
-    t.string "wca_id", limit: 10, default: "", null: false
-    t.integer "subId", limit: 1, default: 1, null: false
-    t.string "name", limit: 80
-    t.string "countryId", limit: 50, default: "", null: false
-    t.string "gender", limit: 1, default: ""
-    t.date "dob"
-    t.string "comments", limit: 40, default: "", null: false
-    t.integer "incorrect_wca_id_claim_count", default: 0, null: false
-    t.index ["countryId"], name: "Persons_fk_country"
-    t.index ["name"], name: "Persons_name"
-    t.index ["name"], name: "index_Persons_on_name", type: :fulltext
-    t.index ["wca_id", "subId"], name: "index_Persons_on_wca_id_and_subId", unique: true
-    t.index ["wca_id"], name: "index_Persons_on_wca_id"
   end
 
   create_table "RanksAverage", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
@@ -765,6 +735,20 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_06_165113) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "inbox_persons", id: false, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "id", limit: 10, null: false
+    t.string "wca_id", limit: 10, default: "", null: false
+    t.string "name", limit: 80
+    t.string "country_iso2", limit: 2, default: "", null: false
+    t.string "gender", limit: 1, default: ""
+    t.date "dob", null: false
+    t.string "competition_id", limit: 32, null: false
+    t.index ["competition_id", "id"], name: "index_inbox_persons_on_competition_id_and_id", unique: true
+    t.index ["country_iso2"], name: "InboxPersons_fk_country"
+    t.index ["name"], name: "InboxPersons_name"
+    t.index ["wca_id"], name: "InboxPersons_id"
+  end
+
   create_table "incident_competitions", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "incident_id", null: false
     t.string "competition_id", null: false
@@ -931,6 +915,22 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_06_165113) do
     t.datetime "created_at_remote"
     t.datetime "updated_at_remote"
     t.index ["parent_record_id"], name: "index_paypal_records_on_parent_record_id"
+  end
+
+  create_table "persons", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "wca_id", limit: 10, default: "", null: false
+    t.integer "sub_id", limit: 1, default: 1, null: false
+    t.string "name", limit: 80
+    t.string "country_id", limit: 50, default: "", null: false
+    t.string "gender", limit: 1, default: ""
+    t.date "dob"
+    t.string "comments", limit: 40, default: "", null: false
+    t.integer "incorrect_wca_id_claim_count", default: 0, null: false
+    t.index ["country_id"], name: "Persons_fk_country"
+    t.index ["name"], name: "Persons_name"
+    t.index ["name"], name: "index_persons_on_name", type: :fulltext
+    t.index ["wca_id", "sub_id"], name: "index_persons_on_wca_id_and_sub_id", unique: true
+    t.index ["wca_id"], name: "index_persons_on_wca_id"
   end
 
   create_table "poll_options", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
