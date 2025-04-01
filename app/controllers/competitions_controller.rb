@@ -194,10 +194,7 @@ class CompetitionsController < ApplicationController
         # We have a scheduled job to clear out old files
         cached_path = helpers.path_to_cached_pdf(@competition, @colored_schedule, @use_playwright)
 
-        if params[:raw_html] == '0xPlaywright'
-          @use_playwright = true
-          render content_type: 'text/html'
-        elsif File.exist?(cached_path)
+        if File.exist?(cached_path)
           File.open(cached_path) do |f|
             send_data f.read, filename: "#{helpers.pdf_name(@competition)}.pdf",
                               type: "application/pdf", disposition: "inline"
@@ -205,13 +202,13 @@ class CompetitionsController < ApplicationController
         else
           helpers.create_pdfs_directory
 
-          if params[:playwright] == '1'
-            redirect_url = competition_url(@competition, format: :pdf, raw_html: '0xPlaywright', host: 'http://wca_on_rails:3000')
+          if @use_playwright
+            raw_content = self.render_to_string
 
             Playwright.connect_to_playwright_server('ws://playwright:8089?browser=chromium') do |playwright|
               playwright.chromium.launch(headless: true) do |browser|
                 page = browser.new_page
-                page.goto(redirect_url)
+                page.set_content(raw_content)
 
                 page.pdf(
                   path: cached_path,

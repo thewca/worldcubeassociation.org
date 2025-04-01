@@ -2,6 +2,7 @@
 <html>
   <head>
     <% if @use_playwright %>
+      <base href="<%= EnvConfig.ASSET_HOST %>" />
       <%= stylesheet_link_tag "pdf" %>
     <% else %>
       <%= wicked_pdf_stylesheet_link_tag "pdf" %>
