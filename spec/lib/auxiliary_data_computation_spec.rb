@@ -40,13 +40,13 @@ RSpec.describe "AuxiliaryDataComputation" do
       FactoryBot.create :result, eventId: "333", best: 750, average: 850, competition: next_competition_2016, person: person
       AuxiliaryDataComputation.compute_concise_results
       # Concise single results
-      concise_single_results = ActiveRecord::Base.connection.execute "SELECT event_id, person_id, year, best FROM concise_single_results"
+      concise_single_results = ActiveRecord::Base.connection.execute "SELECT event_id, person_id, country_id, year, best FROM concise_single_results"
       expect(concise_single_results).to match_array [
         ["333", person.wca_id, "China", 2016, 700],
         ["333", person.wca_id, "Chile", 2016, 750],
       ]
       # Concise average results
-      concise_average_results = ActiveRecord::Base.connection.execute "SELECT event_id, person_id, year, average FROM concise_average_results"
+      concise_average_results = ActiveRecord::Base.connection.execute "SELECT event_id, person_id, country_id, year, average FROM concise_average_results"
       expect(concise_average_results).to match_array [
         ["333", person.wca_id, "China", 2016, 800],
         ["333", person.wca_id, "Chile", 2016, 850],
