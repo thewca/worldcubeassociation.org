@@ -193,7 +193,11 @@ class CompetitionsController < ApplicationController
         # We have a scheduled job to clear out old files
         cached_path = helpers.path_to_cached_pdf(@competition, @colored_schedule)
 
-        unless File.exist?(cached_path)
+        @stream_raw = params[:raw_html] == '0xPlaywright'
+
+        if @stream_raw
+          return render content_type: 'text/html'
+        elsif !File.exist?(cached_path)
           helpers.create_pdfs_directory
 
           raw_content = self.render_to_string
