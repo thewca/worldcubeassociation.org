@@ -1,22 +1,14 @@
 <!doctype html>
 <html>
   <head>
-    <% if @use_playwright %>
-      <base href="<%= EnvConfig.ASSET_HOST %>" />
-      <%= stylesheet_link_tag "pdf" %>
-    <% else %>
-      <%= wicked_pdf_stylesheet_link_tag "pdf" %>
-    <% end %>
+    <base href="<%= EnvConfig.ASSET_HOST %>" />
+    <%= stylesheet_link_tag "pdf" %>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
   </head>
   <body>
     <header>
       <div class="pdf-logo">
-        <% if @use_playwright %>
-          <%= image_tag "WCA Logo.svg" %>
-        <% else %>
-          <%= wicked_pdf_image_tag "WCA Logo.svg" %>
-        <% end %>
+        <%= image_tag "WCA Logo.svg" %>
       </div>
       <div class="pdf-title"><%= @competition.name %></div>
       <div class="comp-date">

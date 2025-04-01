@@ -185,50 +185,39 @@ class CompetitionsController < ApplicationController
           return redirect_to competition_path(@competition)
         end
         @colored_schedule = params.key?(:with_colors)
-        @use_playwright = params.key?(:playwright)
 
         # Manually cache the pdf on:
         #   - competiton.updated_at (touched by any change through WCIF)
         #   - locale
         #   - color or n&b
         # We have a scheduled job to clear out old files
-        cached_path = helpers.path_to_cached_pdf(@competition, @colored_schedule, @use_playwright)
+        cached_path = helpers.path_to_cached_pdf(@competition, @colored_schedule)
 
-        if File.exist?(cached_path)
-          File.open(cached_path) do |f|
-            send_data f.read, filename: "#{helpers.pdf_name(@competition)}.pdf",
-                              type: "application/pdf", disposition: "inline"
-          end
-        else
+        unless File.exist?(cached_path)
           helpers.create_pdfs_directory
 
-          if @use_playwright
-            raw_content = self.render_to_string
+          raw_content = self.render_to_string
 
-            Playwright.connect_to_playwright_server('ws://playwright:8089?browser=chromium') do |playwright|
-              playwright.chromium.launch(headless: true) do |browser|
-                page = browser.new_page
-                page.set_content(raw_content)
+          Playwright.connect_to_playwright_server('ws://playwright:8089?browser=chromium') do |playwright|
+            playwright.chromium.launch(headless: true) do |browser|
+              page = browser.new_page
+              page.set_content(raw_content)
 
-                page.pdf(
-                  path: cached_path,
-                  format: 'A4',
-                  landscape: true,
-                  # Use `scale` and `margins` to imitate WkHtmlToPdf look and feel
-                  scale: 0.8,
-                  margin: { top: '8mm', bottom: '8.5mm', left: '10mm', right: '10mm' },
-                )
-              end
+              page.pdf(
+                path: cached_path,
+                format: 'A4',
+                landscape: true,
+                # Use `scale` and `margins` to imitate WkHtmlToPdf look and feel
+                scale: 0.8,
+                margin: { top: '8mm', bottom: '8.5mm', left: '10mm', right: '10mm' },
+              )
             end
-
-            File.open(cached_path) do |f|
-              send_data f.read, filename: "#{helpers.pdf_name(@competition)}.pdf",
-                                type: "application/pdf", disposition: "inline"
-            end
-          else
-            render pdf: helpers.pdf_name(@competition), orientation: "Landscape",
-                   save_to_file: cached_path, disposition: "inline"
           end
+        end
+
+        File.open(cached_path) do |f|
+          send_data f.read, filename: "#{helpers.pdf_name(@competition)}.pdf",
+                            type: "application/pdf", disposition: "inline"
         end
       end
       format.ics do
