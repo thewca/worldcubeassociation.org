@@ -231,16 +231,16 @@ module CompetitionsHelper
     FileUtils.mkdir_p(CleanupPdfs::CACHE_DIRECTORY) unless File.directory?(CleanupPdfs::CACHE_DIRECTORY)
   end
 
-  def path_to_cached_pdf(competition, colors)
-    CleanupPdfs::CACHE_DIRECTORY.join("#{cached_pdf_name(competition, colors)}.pdf")
+  def path_to_cached_pdf(competition, colors, playwright)
+    CleanupPdfs::CACHE_DIRECTORY.join("#{cached_pdf_name(competition, colors, playwright)}.pdf")
   end
 
   def pdf_name(competition)
     "#{competition.id}_#{I18n.locale}"
   end
 
-  def cached_pdf_name(competition, colors)
-    "#{pdf_name(competition)}_#{competition.updated_at.iso8601}_#{colors}"
+  def cached_pdf_name(competition, colors, playwright)
+    "#{pdf_name(competition)}_#{competition.updated_at.iso8601}_#{colors}_#{playwright}"
   end
 
   def registration_status_icon(competition)

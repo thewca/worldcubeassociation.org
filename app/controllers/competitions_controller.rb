@@ -185,22 +185,51 @@ class CompetitionsController < ApplicationController
           return redirect_to competition_path(@competition)
         end
         @colored_schedule = params.key?(:with_colors)
+        @use_playwright = params.key?(:playwright)
+
         # Manually cache the pdf on:
         #   - competiton.updated_at (touched by any change through WCIF)
         #   - locale
         #   - color or n&b
         # We have a scheduled job to clear out old files
-        cached_path = helpers.path_to_cached_pdf(@competition, @colored_schedule)
-        begin
+        cached_path = helpers.path_to_cached_pdf(@competition, @colored_schedule, @use_playwright)
+
+        if params[:raw_html] == '0xPlaywright'
+          @use_playwright = true
+          render content_type: 'text/html'
+        elsif File.exist?(cached_path)
           File.open(cached_path) do |f|
             send_data f.read, filename: "#{helpers.pdf_name(@competition)}.pdf",
                               type: "application/pdf", disposition: "inline"
           end
-        rescue Errno::ENOENT
-          # This exception occurs when the file doesn't exist: let's create it!
+        else
           helpers.create_pdfs_directory
-          render pdf: helpers.pdf_name(@competition), orientation: "Landscape",
-                 save_to_file: cached_path, disposition: "inline"
+
+          if params[:playwright] == '1'
+            redirect_url = competition_url(@competition, format: :pdf, raw_html: '0xPlaywright', host: 'http://wca_on_rails:3000')
+
+            Playwright.connect_to_playwright_server('ws://playwright:8089?browser=chromium') do |playwright|
+              playwright.chromium.launch(headless: true) do |browser|
+                page = browser.new_page
+                page.goto(redirect_url)
+
+                page.pdf(
+                  path: cached_path,
+                  format: 'A4',
+                  landscape: true,
+                  margin: { top: '10mm', bottom: '10mm', left: '10mm', right: '10mm' },
+                )
+              end
+            end
+
+            File.open(cached_path) do |f|
+              send_data f.read, filename: "#{helpers.pdf_name(@competition)}.pdf",
+                                type: "application/pdf", disposition: "inline"
+            end
+          else
+            render pdf: helpers.pdf_name(@competition), orientation: "Landscape",
+                   save_to_file: cached_path, disposition: "inline"
+          end
         end
       end
       format.ics do
