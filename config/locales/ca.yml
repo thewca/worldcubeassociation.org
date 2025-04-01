@@ -445,23 +445,23 @@ ca:
         #original_hash: 7f3d889
         confirmed: No deixis als organitzadors editar aquesta competició
         #original_hash: d493e6a
-        showAtAll: Fer la competició visible per al públic
+        show_at_all: Fer la competició visible per al públic
         #original_hash: 709a232
         name: Nom
         #original_hash: f91b080
         name_reason: La raó del nom
         #original_hash: b649210
-        cellName: Sobrenom de la competició
+        cell_name: Sobrenom de la competició
         #original_hash: d523ebb
-        countryId: País
+        country_id: País
         #original_hash: 25b7b06
-        cityName: Nom de la ciutat
+        city_name: Nom de la ciutat
         #original_hash: 67cd406
         venue: Local
         #original_hash: 486f8fb
-        venueAddress: Adreça del lloc
+        venue_address: Adreça del lloc
         #original_hash: 08767af
-        venueDetails: Detalls del lloc
+        venue_details: Detalls del lloc
         #original_hash: ff99f5b
         start_date: Data d'inici
         #original_hash: 89d10cd
@@ -852,11 +852,11 @@ ca:
           Danish Open 2016). Revisa les majúscules. El nom ha de contenir només
           caràcters alfanumèrics, guions(-), ampersands(&), punts(.), dos punts(:), apòstrofs(') i espais().
         #original_hash: 525fcc8
-        cellName: >-
+        cell_name: >-
           Un nom curt per mostrar. Si el nom de la competició ja és curt, pots
           reutilitzar el nom (exemple: Europe 2006).
         #original_hash: bce4589
-        cityName: >-
+        city_name: >-
           Nom de la ciutat i estat (si és possible) on hi haurà la competició.
           No incloguis el país (exemple: París o San Francisco, Califòrnia).
         #original_hash: bb470cc
@@ -885,7 +885,7 @@ ca:
         #original_hash: da39a3e
         clone_tabs: ''
         #original_hash: da39a3e
-        countryId: ''
+        country_id: ''
         #original_hash: da39a3e
         end_date: ''
         #original_hash: da39a3e
@@ -920,7 +920,7 @@ ca:
         #original_hash: da39a3e
         registration_close: ''
         #original_hash: da39a3e
-        showAtAll: ''
+        show_at_all: ''
         #original_hash: da39a3e
         start_date: ''
         #original_hash: da39a3e
@@ -940,7 +940,7 @@ ca:
           Quina és la raó del límit de competidors? Si us plau, omple-ho en
           anglès!
         #original_hash: da39a3e
-        venueAddress: ''
+        venue_address: ''
         #original_hash: da39a3e
         championship_type: ''
         #original_hash: 3de153b
