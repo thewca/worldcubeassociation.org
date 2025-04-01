@@ -17,7 +17,7 @@ module AuxiliaryDataComputation
         ActiveRecord::Base.connection.execute <<-SQL.squish
           INSERT INTO #{temp_table_name} (id, #{field}, valueAndId, personId, eventId, countryId, continentId, year, month, day)
           SELECT
-            result.id,
+            results.id,
             #{field},
             valueAndId,
             personId,
@@ -28,16 +28,16 @@ module AuxiliaryDataComputation
             MONTH(start_date),
             DAY(start_date)
           FROM (
-              SELECT MIN(#{field} * 1000000000 + result.id) valueAndId
-              FROM Results result
-              JOIN Competitions competition ON competition.id = competitionId
+              SELECT MIN(#{field} * 1000000000 + results.id) valueAndId
+              FROM results
+              JOIN Competitions competition ON competition.id = competition_id
               WHERE #{field} > 0
-              GROUP BY personId, result.countryId, eventId, YEAR(start_date)
+              GROUP BY person_id, result.country_id, event_id, YEAR(start_date)
             ) MinValuesWithId
-            JOIN Results result ON result.id = valueAndId % 1000000000
-            JOIN Competitions competition ON competition.id = competitionId
-            JOIN Countries country ON country.id = result.countryId
-            JOIN Events event ON event.id = eventId
+            JOIN results ON result.id = valueAndId % 1000000000
+            JOIN Competitions competition ON competition.id = results.competition_id
+            JOIN Countries country ON country.id = results.country_id
+            JOIN Events event ON event.id = results.event_id
         SQL
       end
     end

@@ -224,7 +224,7 @@ module DatabaseDumper
       ),
     }.freeze,
     "InboxPersons" => :skip_all_rows,
-    "InboxResults" => :skip_all_rows,
+    "inbox_results" => :skip_all_rows,
     "Persons" => {
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
@@ -271,22 +271,22 @@ module DatabaseDumper
         ),
       ),
     }.freeze,
-    "Results" => {
+    "results" => {
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
           average
           best
-          competitionId
-          countryId
-          eventId
-          formatId
-          personId
-          personName
+          competition_id
+          country_id
+          event_id
+          format_id
+          person_id
+          person_name
           pos
-          regionalAverageRecord
-          regionalSingleRecord
-          roundTypeId
+          regional_average_record
+          regional_single_record
+          round_type_id
           updated_at
           value1
           value2
@@ -949,25 +949,25 @@ module DatabaseDumper
   }.freeze
 
   RESULTS_SANITIZERS = {
-    "Results" => {
+    "results" => {
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
-          competitionId
-          eventId
-          roundTypeId
+          competition_id
+          event_id
+          round_type_id
           pos
           best
           average
-          personName
-          personId
-          formatId
+          person_name
+          person_id
+          format_id
           value1
           value2
           value3
           value4
           value5
-          regionalSingleRecord
-          regionalAverageRecord
+          regional_single_record
+          regional_average_record
         ),
         fake_values: {
           "personCountryId" => "countryId",

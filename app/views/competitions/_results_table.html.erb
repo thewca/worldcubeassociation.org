@@ -41,8 +41,8 @@
       <tr class="sort-by-<%= result.format.sort_by.to_s %> <%= result.muted ? "text-muted" : "" %>">
         <% if !hide_event %>
           <td class="event">
-            <% if !result.muted && (i == 0 || result.eventId != results[i - 1].eventId) %>
-              <%= link_to competition_results_all_path(@competition, event: result.eventId) do %>
+            <% if !result.muted && (i == 0 || result.event_id != results[i - 1].event_id) %>
+              <%= link_to competition_results_all_path(@competition, event: result.event_id) do %>
                 <%= cubing_icon result.event.id %>
                 <%= result.event.name %>
               <% end %>
@@ -57,7 +57,7 @@
         <% if !hide_pos %>
           <% classes = "pos" %>
           <% previous_result = i > 0 ? results[i - 1] : nil %>
-          <% if previous_result && previous_result.eventId == result.eventId && previous_result.roundTypeId == result.roundTypeId && previous_result.pos == result.pos %>
+          <% if previous_result && previous_result.event_id == result.event_id && previous_result.round_type_id == result.round_type_id && previous_result.pos == result.pos %>
             <% classes << " tied-previous" %>
           <% end %>
           <td class="<%= classes %>">
@@ -71,18 +71,18 @@
         <% if !hide_name %>
           <td class="name">
             <% if result.wca_id %>
-              <%= link_to result.personName, person_path(result.wca_id) %>
+              <%= link_to result.person_name, person_path(result.wca_id) %>
             <% else %>
-              <%= result.personName %>
+              <%= result.person_name %>
             <% end %>
           </td>
         <% end %>
 
         <td class="single"><%= result.best_solve.clock_format %></td>
-        <td class="regionalSingleRecord"><%= result.regionalSingleRecord %></td>
+        <td class="regionalSingleRecord"><%= result.regional_single_record %></td>
 
         <td class="average"><%= result.average_solve.clock_format %></td>
-        <td class="regionalAverageRecord"><%= result.regionalAverageRecord %></td>
+        <td class="regionalAverageRecord"><%= result.regional_average_record %></td>
 
         <td class="country"><%= result.country.name %></td>
 

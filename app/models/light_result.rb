@@ -16,15 +16,15 @@ class LightResult
               :value5,
               :best,
               :average,
-              :personName,
+              :person_name,
               :event,
               :format,
               :id,
               :round_type,
               :pos,
-              :personId,
-              :regionalSingleRecord,
-              :regionalAverageRecord,
+              :person_id,
+              :regional_single_record,
+              :regional_average_record,
               :country
 
   def initialize(r)
@@ -36,22 +36,22 @@ class LightResult
     @value5 = r["value5"]
     @best = r["best"]
     @average = r["average"]
-    @personName = r["personName"]
+    @person_name = r["person_name"]
     @pos = r["pos"]
-    @personId = r["personId"]
-    @regionalSingleRecord = r["regionalSingleRecord"]
-    @regionalAverageRecord = r["regionalAverageRecord"]
-    @country = Country.c_find(r["countryId"])
-    @format = Format.c_find(r["formatId"])
-    @round_type = RoundType.c_find(r["roundTypeId"])
-    @event = Event.c_find(r["eventId"])
+    @person_id = r["person_id"]
+    @regional_single_record = r["regional_single_record"]
+    @regional_average_record = r["regional_average_record"]
+    @country = Country.c_find(r["country_id"])
+    @format = Format.c_find(r["format_id"])
+    @round_type = RoundType.c_find(r["round_type_id"])
+    @event = Event.c_find(r["event_id"])
   end
 
-  def eventId
+  def event_id
     event.id
   end
 
-  def roundTypeId
+  def round_type_id
     round_type.id
   end
 end

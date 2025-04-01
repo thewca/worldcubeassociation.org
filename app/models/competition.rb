@@ -8,7 +8,7 @@ class Competition < ApplicationRecord
   has_many :events, through: :competition_events
   has_many :rounds, through: :competition_events
   has_many :registrations, dependent: :destroy
-  has_many :results, foreign_key: "competitionId"
+  has_many :results
   has_many :scrambles, -> { order(:groupId, :isExtra, :scrambleNum) }, foreign_key: "competitionId"
   has_many :uploaded_jsons, dependent: :destroy
   has_many :competitors, -> { distinct }, through: :results, source: :person
@@ -34,7 +34,7 @@ class Competition < ApplicationRecord
   has_many :series_competitions, -> { readonly }, through: :competition_series, source: :competitions
   has_many :series_registrations, -> { readonly }, through: :series_competitions, source: :registrations
   belongs_to :posting_user, optional: true, foreign_key: 'posting_by', class_name: "User"
-  has_many :inbox_results, foreign_key: "competitionId", dependent: :delete_all
+  has_many :inbox_results, dependent: :delete_all
   has_many :inbox_persons, foreign_key: "competitionId", dependent: :delete_all
   belongs_to :announced_by_user, optional: true, foreign_key: "announced_by", class_name: "User"
   belongs_to :cancelled_by_user, optional: true, foreign_key: "cancelled_by", class_name: "User"
@@ -1477,9 +1477,9 @@ class Competition < ApplicationRecord
 
   def person_ids_with_results
     light_results_from_relation(results)
-      .group_by(&:personId)
-      .sort_by { |_personId, results| results.first.personName }
-      .map do |personId, results|
+      .group_by(&:person_id)
+      .sort_by { |_person_id, results| results.first.person_name }
+      .map do |person_id, results|
         results.sort_by! { |r| [r.event.rank, -r.round_type.rank] }
 
         # Mute (soften) each result that wasn't the competitor's last for the event.
@@ -1489,7 +1489,7 @@ class Competition < ApplicationRecord
           last_event = result.event
         end
 
-        [personId, results.sort_by { |r| [r.event.rank, -r.round_type.rank] }]
+        [person_id, results.sort_by { |r| [r.event.rank, -r.round_type.rank] }]
       end
   end
 
@@ -1501,7 +1501,7 @@ class Competition < ApplicationRecord
         round_types_with_results = results_for_event
                                    .group_by(&:round_type)
                                    .sort_by { |format, _results| format.rank }.reverse
-                                   .map { |round_type, results| [round_type, results.sort_by { |r| [r.pos, r.personName] }] }
+                                   .map { |round_type, results| [round_type, results.sort_by { |r| [r.pos, r.person_name] }] }
 
         [event, round_types_with_results]
       end
