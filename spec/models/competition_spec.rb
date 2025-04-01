@@ -8,7 +8,7 @@ RSpec.describe Competition do
     expect(competition).to be_valid
     expect(competition.id).to eq "FooTest2015"
     expect(competition.name).to eq "Foo: Test - 2015"
-    expect(competition.cellName).to eq "Foo: Test - 2015"
+    expect(competition.cell_name).to eq "Foo: Test - 2015"
   end
 
   it "rejects invalid names" do
@@ -28,12 +28,12 @@ RSpec.describe Competition do
 
   it "rejects invalid city names" do
     city = "San Diego"
-    expect(FactoryBot.build(:competition, countryId: "USA", cityName: city)).to be_invalid_with_errors(
+    expect(FactoryBot.build(:competition, country_id: "USA", city_name: city)).to be_invalid_with_errors(
       cityName: ["is not of the form 'city, state'"],
     )
 
     city = "San Diego, California"
-    expect(FactoryBot.build(:competition, countryId: "USA", cityName: city)).to be_valid
+    expect(FactoryBot.build(:competition, country_id: "USA", city_name: city)).to be_valid
   end
 
   context "when there is an entry fee" do
@@ -56,17 +56,17 @@ RSpec.describe Competition do
     competition.confirmed = true
 
     # Required for non-multi venue competitions.
-    competition.countryId = "USA"
+    competition.country_id = "USA"
     expect(competition.entry_fee_required?).to be true
     expect(competition.guests_entry_fee_required?).to be true
 
     # Not required for competitions in multiple countries
-    competition.countryId = "XA"
+    competition.country_id = "XA"
     expect(competition.entry_fee_required?).to be false
     expect(competition.guests_entry_fee_required?).to be false
 
     # Not required for with no country
-    competition.countryId = nil
+    competition.country_id = nil
     expect(competition.entry_fee_required?).to be false
     expect(competition.guests_entry_fee_required?).to be false
   end
@@ -228,12 +228,12 @@ RSpec.describe Competition do
     expect(competition).to be_invalid_with_errors(registration_close: ["required"])
   end
 
-  it "truncates name as necessary to produce id and cellName" do
+  it "truncates name as necessary to produce id and cell_name" do
     competition = FactoryBot.build :competition, name: "Alexander and the Terrible Horrible No Good 2015"
     expect(competition).to be_valid
     expect(competition.id).to eq "AlexanderandtheTerribleHorri2015"
     expect(competition.name).to eq "Alexander and the Terrible Horrible No Good 2015"
-    expect(competition.cellName).to eq "Alexander and the Terrib... 2015"
+    expect(competition.cell_name).to eq "Alexander and the Terrib... 2015"
   end
 
   it "saves without losing data" do
@@ -250,9 +250,9 @@ RSpec.describe Competition do
     )
   end
 
-  it "requires that cellName end in a year" do
-    competition = FactoryBot.build :competition, cellName: "Name no year"
-    expect(competition).to be_invalid_with_errors(cellName: ["must end with a year and must contain only alphanumeric characters, dashes(-), ampersands(&), periods(.), colons(:), apostrophes('), and spaces( )"])
+  it "requires that cell_name end in a year" do
+    competition = FactoryBot.build :competition, cell_name: "Name no year"
+    expect(competition).to be_invalid_with_errors(cell_name: ["must end with a year and must contain only alphanumeric characters, dashes(-), ampersands(&), periods(.), colons(:), apostrophes('), and spaces( )"])
   end
 
   describe "invalid date formats become nil" do
@@ -442,7 +442,7 @@ RSpec.describe Competition do
     let(:competition) { FactoryBot.create(:competition) }
 
     it "warns if competition name is greater than 32 characters and it's not publicly visible" do
-      competition = FactoryBot.build :competition, name: "A really long competition name 2016", showAtAll: false
+      competition = FactoryBot.build :competition, name: "A really long competition name 2016", show_at_all: false
       expect(competition).to be_valid
       expect(competition.warnings_for(nil)[:name]).to eq "The competition name is longer than 32 characters. Please edit the competition ID and short name appropriately."
     end
@@ -454,7 +454,7 @@ RSpec.describe Competition do
     end
 
     it "warns if competition is not visible" do
-      competition = FactoryBot.build :competition, showAtAll: false
+      competition = FactoryBot.build :competition, show_at_all: false
       expect(competition).to be_valid
       expect(competition.warnings_for(nil)[:invisible]).to eq "This competition is not visible to the public."
     end
@@ -787,13 +787,13 @@ RSpec.describe Competition do
     let(:competition_with_delegate) { FactoryBot.build :competition, :with_delegate, :with_organizer, generate_website: false }
     let(:competition_without_delegate) { FactoryBot.build :competition }
 
-    [:confirmed, :showAtAll].each do |action|
+    [:confirmed, :show_at_all].each do |action|
       it "can set #{action}" do
         competition_with_delegate.public_send :"#{action}=", true
         expect(competition_with_delegate).to be_valid
       end
 
-      [:cityName, :countryId, :venue, :venueAddress, :external_website, :latitude, :longitude].each do |field|
+      [:city_name, :country_id, :venue, :venue_address, :external_website, :latitude, :longitude].each do |field|
         it "requires #{field} when setting #{action}" do
           competition_with_delegate.assign_attributes field => "", action => true
           expect(competition_with_delegate).not_to be_valid
@@ -1071,7 +1071,7 @@ RSpec.describe Competition do
 
   describe "#contains" do
     let!(:delegate) { FactoryBot.create :delegate, name: 'Pedro' }
-    let!(:search_comp) { FactoryBot.create :competition, name: "Awesome Comp 2016", cityName: "Piracicaba, São Paulo", countryId: "Brazil", delegates: [delegate] }
+    let!(:search_comp) { FactoryBot.create :competition, name: "Awesome Comp 2016", cityName: "Piracicaba, São Paulo", country_id: "Brazil", delegates: [delegate] }
 
     it "searching with two words" do
       expect(Competition.contains('eso').contains('aci').first).to eq search_comp
@@ -1106,12 +1106,12 @@ RSpec.describe Competition do
   end
 
   describe "#serializable_hash" do
-    let(:competition) { FactoryBot.create :competition, countryId: "USA" }
+    let(:competition) { FactoryBot.create :competition, country_id: "USA" }
 
     it "sets iso2 to nil when country is missing" do
       expect(competition).to be_valid
 
-      competition.countryId = ""
+      competition.country_id = ""
       expect(competition).to be_invalid_with_errors(country: ["must exist"])
 
       expect(competition.serializable_hash[:country_iso2]).to be_nil
@@ -1245,42 +1245,42 @@ RSpec.describe Competition do
     let(:fmc) { Event.find "333fm" }
 
     it "is false when competition has no championships" do
-      competition = FactoryBot.create(:competition, events: [four_by_four], championship_types: [], countryId: "Canada", cityName: "Vancouver, British Columbia")
+      competition = FactoryBot.create(:competition, events: [four_by_four], championship_types: [], country_id: "Canada", cityName: "Vancouver, British Columbia")
       expect(competition.exempt_from_wca_dues?).to be false
     end
 
     it "is false when competition is a national championship" do
-      competition = FactoryBot.create(:competition, events: Event.official, championship_types: ["CA"], countryId: "Canada", cityName: "Vancouver, British Columbia")
+      competition = FactoryBot.create(:competition, events: Event.official, championship_types: ["CA"], country_id: "Canada", cityName: "Vancouver, British Columbia")
       expect(competition.exempt_from_wca_dues?).to be false
     end
 
     it "is false when 333fm is the only event and competition is in a single country" do
-      competition = FactoryBot.create(:competition, events: [fmc], championship_types: [], countryId: "Canada", cityName: "Vancouver, British Columbia")
+      competition = FactoryBot.create(:competition, events: [fmc], championship_types: [], country_id: "Canada", cityName: "Vancouver, British Columbia")
       expect(competition.exempt_from_wca_dues?).to be false
     end
 
     it "is true when 333fm is the only event and competition is in multiple countries" do
-      competition = FactoryBot.create(:competition, events: [fmc], championship_types: [], countryId: "XN")
+      competition = FactoryBot.create(:competition, events: [fmc], championship_types: [], country_id: "XN")
       expect(competition.exempt_from_wca_dues?).to be true
     end
 
     it "is true when 333fm is the only event and competition is in multiple continents" do
-      competition = FactoryBot.create(:competition, events: [fmc], championship_types: [], countryId: "XW")
+      competition = FactoryBot.create(:competition, events: [fmc], championship_types: [], country_id: "XW")
       expect(competition.exempt_from_wca_dues?).to be true
     end
 
     it "is true when competition is a national championship and a world championship" do
-      competition = FactoryBot.create(:competition, events: Event.official, championship_types: ["AU", "world"], countryId: "Australia", cityName: "Melbourne, Victoria")
+      competition = FactoryBot.create(:competition, events: Event.official, championship_types: ["AU", "world"], country_id: "Australia", cityName: "Melbourne, Victoria")
       expect(competition.exempt_from_wca_dues?).to be true
     end
 
     it "is true when competition is a continental championship" do
-      competition = FactoryBot.create(:competition, events: Event.official, championship_types: ["_North America"], countryId: "Canada", cityName: "Vancouver, British Columbia")
+      competition = FactoryBot.create(:competition, events: Event.official, championship_types: ["_North America"], country_id: "Canada", cityName: "Vancouver, British Columbia")
       expect(competition.exempt_from_wca_dues?).to be true
     end
 
     it "is true when competition is a world championship" do
-      competition = FactoryBot.create(:competition, events: Event.official, championship_types: ["world"], countryId: "Korea")
+      competition = FactoryBot.create(:competition, events: Event.official, championship_types: ["world"], country_id: "Korea")
       expect(competition.exempt_from_wca_dues?).to be true
     end
   end

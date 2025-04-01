@@ -3,7 +3,7 @@
 </p>
 
 <p>
-  <strong><%= @confirmer.name %> has confirmed <%= link_to @competition.name, competition_url(@competition) %> in <%= @competition.cityName %>, <%= @competition.country.name %>.</strong>
+  <strong><%= @confirmer.name %> has confirmed <%= link_to @competition.name, competition_url(@competition) %> in <%= @competition.city_name %>, <%= @competition.country.name %>.</strong>
 </p>
 
 <p class="<%= 'alert' if (@competition.days_until).to_i <= 30 %>">
