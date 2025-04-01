@@ -593,7 +593,7 @@ RSpec.describe Registration do
     end
   end
 
-  describe '#auto_accept', :tag do
+  describe '#auto_accept' do
     let(:auto_accept_comp) { FactoryBot.create(:competition, :auto_accept, :registration_open) }
     let!(:reg) { FactoryBot.create(:registration, competition: auto_accept_comp) }
 
