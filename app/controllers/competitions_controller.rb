@@ -214,7 +214,9 @@ class CompetitionsController < ApplicationController
                   path: cached_path,
                   format: 'A4',
                   landscape: true,
-                  margin: { top: '10mm', bottom: '10mm', left: '10mm', right: '10mm' },
+                  # Use `scale` and `margins` to imitate WkHtmlToPdf look and feel
+                  scale: 0.8,
+                  margin: { top: '8mm', bottom: '8.5mm', left: '10mm', right: '10mm' },
                 )
               end
             end
