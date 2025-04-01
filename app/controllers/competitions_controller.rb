@@ -205,7 +205,12 @@ class CompetitionsController < ApplicationController
           Playwright.connect_to_playwright_server('ws://playwright:8089?browser=chromium') do |playwright|
             playwright.chromium.launch(headless: true) do |browser|
               page = browser.new_page
-              page.set_content(raw_content)
+
+              # Inject the raw HTML and wait until it finished loading all network assets
+              page.set_content(raw_content, waitUntil: 'networkidle')
+
+              # Wait until the WOFF2 fonts have been extracted
+              page.evaluate_handle('document.fonts.ready')
 
               page.pdf(
                 path: cached_path,
