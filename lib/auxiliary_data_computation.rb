@@ -19,11 +19,11 @@ module AuxiliaryDataComputation
           SELECT
             result.id,
             #{field},
-            value_and_id,
-            person_id,
-            event_id,
-            countries.id country_id,
-            continent_id,
+            valueAndId,
+            personId,
+            eventId,
+            countries.id countryId,
+            continentId,
             YEAR(start_date) year,
             MONTH(start_date) month,
             DAY(start_date) day
