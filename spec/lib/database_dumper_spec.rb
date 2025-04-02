@@ -86,5 +86,19 @@ RSpec.describe "DatabaseDumper" do
         expect(DatabaseDumper::RESULTS_SANITIZERS.keys).to match_array actual_table_names
       end
     end
+
+    DatabaseDumper::RESULTS_SANITIZERS.each do |table_name, table_sanitizer|
+      it "defines a sanitizer of table '#{table_name}'" do
+        unless table_sanitizer == :skip_all_rows
+          where_clause = table_sanitizer[:where_clause]
+          expect(where_clause).to be_nil.or(match(/WHERE/)).or(match(/JOIN/))
+          where_clause = table_sanitizer[:order_by_clause]
+          expect(where_clause).to be_nil.or(match(/ORDER BY/))
+          column_sanitizers = table_sanitizer[:column_sanitizers]
+          column_names = with_database(:results_dump) { ActiveRecord::Base.connection.columns(table_name).map(&:name) }
+          expect(column_sanitizers.keys).to match_array(column_names)
+        end
+      end
+    end
   end
 end
