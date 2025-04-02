@@ -343,16 +343,6 @@ Rails.application.routes.draw do
 
   namespace :api do
     get '/', to: redirect('/help/api', status: 302)
-    namespace :internal do
-      namespace :v1 do
-        get '/users/:id/permissions' => 'permissions#index'
-        get '/competitions/:competition_id' => 'competitions#show'
-        get '/competitions/:competition_id/qualifications' => 'competitions#qualifications'
-        post '/users/competitor-info' => 'users#competitor_info'
-        post '/mailers/registration' => 'mailers#registration'
-        post '/payment/init_stripe' => 'payment#init_stripe'
-      end
-    end
 
     # While this is the start of a v1 API, this is currently not usable by outside developers as
     # getting a JWT token requires you to be logged in through the Website
