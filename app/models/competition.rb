@@ -325,7 +325,7 @@ class Competition < ApplicationRecord
   # 48 hours
   REGISTRATION_OPENING_EARLIEST = 172_800
 
-  validates :cityName, city: true
+  validates :city_name, city: true
 
   # We have stricter validations for confirming a competition
   validates :city_name, :country_id, :venue, :venue_address, :latitude, :longitude, presence: true, if: :confirmed_or_visible?
