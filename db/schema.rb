@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_03_06_165113) do
+ActiveRecord::Schema[7.2].define(version: 2025_04_01_174001) do
   create_table "Competitions", id: { type: :string, limit: 32, default: "" }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", limit: 50, default: "", null: false
     t.string "cityName", limit: 50, default: "", null: false
@@ -176,26 +176,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_06_165113) do
     t.index ["wcaId"], name: "InboxPersons_id"
   end
 
-  create_table "InboxResults", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB PACK_KEYS=0", force: :cascade do |t|
-    t.string "personId", limit: 20, null: false
-    t.integer "pos", limit: 2, default: 0, null: false
-    t.string "competitionId", limit: 32, default: "", null: false
-    t.string "eventId", limit: 6, default: "", null: false
-    t.string "roundTypeId", limit: 1, default: "", null: false
-    t.string "formatId", limit: 1, default: "", null: false
-    t.integer "value1", default: 0, null: false
-    t.integer "value2", default: 0, null: false
-    t.integer "value3", default: 0, null: false
-    t.integer "value4", default: 0, null: false
-    t.integer "value5", default: 0, null: false
-    t.integer "best", default: 0, null: false
-    t.integer "average", default: 0, null: false
-    t.index ["competitionId"], name: "InboxResults_fk_tournament"
-    t.index ["eventId"], name: "InboxResults_fk_event"
-    t.index ["formatId"], name: "InboxResults_fk_format"
-    t.index ["roundTypeId"], name: "InboxResults_fk_round"
-  end
-
   create_table "Persons", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "wca_id", limit: 10, default: "", null: false
     t.integer "subId", limit: 1, default: 1, null: false
@@ -232,52 +212,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_06_165113) do
     t.integer "countryRank", default: 0, null: false
     t.index ["eventId"], name: "fk_events"
     t.index ["personId"], name: "fk_persons"
-  end
-
-  create_table "Results", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB PACK_KEYS=1", force: :cascade do |t|
-    t.integer "pos", limit: 2, default: 0, null: false
-    t.string "personId", limit: 10, default: "", null: false
-    t.string "personName", limit: 80
-    t.string "countryId", limit: 50
-    t.string "competitionId", limit: 32, default: "", null: false
-    t.string "eventId", limit: 6, default: "", null: false
-    t.string "roundTypeId", limit: 1, default: "", null: false
-    t.string "formatId", limit: 1, default: "", null: false
-    t.integer "value1", default: 0, null: false
-    t.integer "value2", default: 0, null: false
-    t.integer "value3", default: 0, null: false
-    t.integer "value4", default: 0, null: false
-    t.integer "value5", default: 0, null: false
-    t.integer "best", default: 0, null: false
-    t.integer "average", default: 0, null: false
-    t.string "regionalSingleRecord", limit: 3
-    t.string "regionalAverageRecord", limit: 3
-    t.timestamp "updated_at", default: -> { "CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP" }, null: false
-    t.index ["competitionId", "updated_at"], name: "index_Results_on_competitionId_and_updated_at"
-    t.index ["competitionId"], name: "Results_fk_tournament"
-    t.index ["countryId"], name: "_tmp_index_Results_on_countryId"
-    t.index ["eventId", "average"], name: "Results_eventAndAverage"
-    t.index ["eventId", "best"], name: "Results_eventAndBest"
-    t.index ["eventId", "competitionId", "roundTypeId", "countryId", "average"], name: "Results_regionalAverageRecordCheckSpeedup"
-    t.index ["eventId", "competitionId", "roundTypeId", "countryId", "best"], name: "Results_regionalSingleRecordCheckSpeedup"
-    t.index ["eventId", "value1"], name: "index_Results_on_eventId_and_value1"
-    t.index ["eventId", "value2"], name: "index_Results_on_eventId_and_value2"
-    t.index ["eventId", "value3"], name: "index_Results_on_eventId_and_value3"
-    t.index ["eventId", "value4"], name: "index_Results_on_eventId_and_value4"
-    t.index ["eventId", "value5"], name: "index_Results_on_eventId_and_value5"
-    t.index ["eventId"], name: "Results_fk_event"
-    t.index ["formatId"], name: "Results_fk_format"
-    t.index ["personId"], name: "Results_fk_competitor"
-    t.index ["regionalAverageRecord", "eventId"], name: "index_Results_on_regionalAverageRecord_and_eventId"
-    t.index ["regionalSingleRecord", "eventId"], name: "index_Results_on_regionalSingleRecord_and_eventId"
-    t.index ["roundTypeId"], name: "Results_fk_round"
-  end
-
-  create_table "RoundTypes", id: { type: :string, limit: 1, default: "" }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
-    t.integer "rank", default: 0, null: false
-    t.string "name", limit: 50, default: "", null: false
-    t.string "cellName", limit: 45, default: "", null: false
-    t.boolean "final", null: false
   end
 
   create_table "Scrambles", primary_key: "scrambleId", id: { type: :integer, unsigned: true }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
@@ -765,6 +699,26 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_06_165113) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "inbox_results", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB PACK_KEYS=0", force: :cascade do |t|
+    t.string "person_id", limit: 20, null: false
+    t.integer "pos", limit: 2, default: 0, null: false
+    t.string "competition_id", limit: 32, default: "", null: false
+    t.string "event_id", limit: 6, default: "", null: false
+    t.string "round_type_id", limit: 1, default: "", null: false
+    t.string "format_id", limit: 1, default: "", null: false
+    t.integer "value1", default: 0, null: false
+    t.integer "value2", default: 0, null: false
+    t.integer "value3", default: 0, null: false
+    t.integer "value4", default: 0, null: false
+    t.integer "value5", default: 0, null: false
+    t.integer "best", default: 0, null: false
+    t.integer "average", default: 0, null: false
+    t.index ["competition_id"], name: "InboxResults_fk_tournament"
+    t.index ["event_id"], name: "InboxResults_fk_event"
+    t.index ["format_id"], name: "InboxResults_fk_format"
+    t.index ["round_type_id"], name: "InboxResults_fk_round"
+  end
+
   create_table "incident_competitions", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "incident_id", null: false
     t.string "competition_id", null: false
@@ -1077,6 +1031,45 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_06_165113) do
     t.index ["competition_id", "user_id"], name: "index_registrations_on_competition_id_and_user_id", unique: true
     t.index ["competition_id"], name: "index_registrations_on_competition_id"
     t.index ["user_id"], name: "index_registrations_on_user_id"
+  end
+
+  create_table "results", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB PACK_KEYS=1", force: :cascade do |t|
+    t.integer "pos", limit: 2, default: 0, null: false
+    t.string "person_id", limit: 10, default: "", null: false
+    t.string "person_name", limit: 80
+    t.string "country_id", limit: 50
+    t.string "competition_id", limit: 32, default: "", null: false
+    t.string "event_id", limit: 6, default: "", null: false
+    t.string "round_type_id", limit: 1, default: "", null: false
+    t.string "format_id", limit: 1, default: "", null: false
+    t.integer "value1", default: 0, null: false
+    t.integer "value2", default: 0, null: false
+    t.integer "value3", default: 0, null: false
+    t.integer "value4", default: 0, null: false
+    t.integer "value5", default: 0, null: false
+    t.integer "best", default: 0, null: false
+    t.integer "average", default: 0, null: false
+    t.string "regional_single_record", limit: 3
+    t.string "regional_average_record", limit: 3
+    t.timestamp "updated_at", default: -> { "CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP" }, null: false
+    t.index ["competition_id", "updated_at"], name: "index_Results_on_competitionId_and_updated_at"
+    t.index ["competition_id"], name: "Results_fk_tournament"
+    t.index ["country_id"], name: "_tmp_index_Results_on_countryId"
+    t.index ["event_id", "average"], name: "Results_eventAndAverage"
+    t.index ["event_id", "best"], name: "Results_eventAndBest"
+    t.index ["event_id", "competition_id", "round_type_id", "country_id", "average"], name: "Results_regionalAverageRecordCheckSpeedup"
+    t.index ["event_id", "competition_id", "round_type_id", "country_id", "best"], name: "Results_regionalSingleRecordCheckSpeedup"
+    t.index ["event_id", "value1"], name: "index_Results_on_eventId_and_value1"
+    t.index ["event_id", "value2"], name: "index_Results_on_eventId_and_value2"
+    t.index ["event_id", "value3"], name: "index_Results_on_eventId_and_value3"
+    t.index ["event_id", "value4"], name: "index_Results_on_eventId_and_value4"
+    t.index ["event_id", "value5"], name: "index_Results_on_eventId_and_value5"
+    t.index ["event_id"], name: "Results_fk_event"
+    t.index ["format_id"], name: "Results_fk_format"
+    t.index ["person_id"], name: "Results_fk_competitor"
+    t.index ["regional_average_record", "event_id"], name: "index_Results_on_regionalAverageRecord_and_eventId"
+    t.index ["regional_single_record", "event_id"], name: "index_Results_on_regionalSingleRecord_and_eventId"
+    t.index ["round_type_id"], name: "Results_fk_round"
   end
 
   create_table "roles_metadata_banned_competitors", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
@@ -1453,7 +1446,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_06_165113) do
   add_foreign_key "oauth_openid_requests", "oauth_access_grants", column: "access_grant_id", on_delete: :cascade
   add_foreign_key "payment_intents", "users", column: "initiated_by_id"
   add_foreign_key "paypal_records", "paypal_records", column: "parent_record_id"
-  add_foreign_key "regional_records_lookup", "Results", column: "resultId", on_update: :cascade, on_delete: :cascade
+  add_foreign_key "regional_records_lookup", "results", column: "resultId", on_update: :cascade, on_delete: :cascade
   add_foreign_key "registration_history_changes", "registration_history_entries"
   add_foreign_key "sanity_check_exclusions", "sanity_checks"
   add_foreign_key "sanity_checks", "sanity_check_categories"
