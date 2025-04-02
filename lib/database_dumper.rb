@@ -1036,26 +1036,32 @@ module DatabaseDumper
         ),
       ),
     }.freeze,
-    "countries" => {
+    "Countries" => {
       column_sanitizers: actions_to_column_sanitizers(
+        source_table: "countries",
         copy: %w(
           id
-          continent_id
           iso2
           name
         ),
+        fake_values: {
+          "continentId" => "continent_id",
+        }.freeze,
       ),
     }.freeze,
-    "continents" => {
+    "Continents" => {
       column_sanitizers: actions_to_column_sanitizers(
+        source_table: "continents",
         copy: %w(
           id
           latitude
           longitude
           name
-          record_name
           zoom
         ),
+        fake_values: {
+          "recordName" => "record_name",
+        }.freeze,
       ),
     }.freeze,
     "Persons" => {
