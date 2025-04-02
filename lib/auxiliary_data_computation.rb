@@ -46,8 +46,8 @@ module AuxiliaryDataComputation
   ## Build rank tables.
   def self.compute_rank_tables
     [
-      %w(best RanksSingle ConciseSingleResults),
-      %w(average RanksAverage ConciseAverageResults),
+      %w(best ranks_single ConciseSingleResults),
+      %w(average ranks_average ConciseAverageResults),
     ].each do |field, table_name, concise_table_name|
       DbHelper.with_temp_table(table_name) do |temp_table_name|
         current_country_by_wca_id = Person.current.pluck(:wca_id, :countryId).to_h
@@ -95,7 +95,7 @@ module AuxiliaryDataComputation
           # Insert 500 rows at once to avoid running into too long query.
           values.each_slice(500) do |values_subset|
             ActiveRecord::Base.connection.execute <<-SQL.squish
-              INSERT INTO #{temp_table_name} (personId, eventId, best, worldRank, continentRank, countryRank) VALUES
+              INSERT INTO #{temp_table_name} (person_id, event_id, best, world_rank, continent_rank, country_rank) VALUES
               #{values_subset.join(",\n")}
             SQL
           end
