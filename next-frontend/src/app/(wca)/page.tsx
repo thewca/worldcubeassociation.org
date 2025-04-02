@@ -129,30 +129,9 @@ export default function Home() {
           <Text fontSize="xl" fontWeight="bold">WCA Icon Gallery</Text>
         </Box>
         <SimpleGrid columns={{ base: 2, sm: 3, md: 4, lg: 6 }} spacing={6}>
-          <Box textAlign="center">
-            <LocationIcon size="lg" color="textPrimary" />
-            <Text mt="2" fontSize="sm">LocationIcon</Text>
-          </Box>
-          <Box textAlign="center">
-            <AboutTheWcaIcon size="lg" color="textPrimary" />
-            <Text mt="2" fontSize="sm">AboutTheWcaIcon</Text>
-          </Box>
-          <Box textAlign="center">
-            <WcaLiveIcon size="lg" color="textPrimary" />
-            <Text mt="2" fontSize="sm">WcaLiveIcon</Text>
-          </Box>
-          <Box textAlign="center">
-            <TwitchIcon size="lg" color="textPrimary" />
-            <Text mt="2" fontSize="sm">TwitchIcon</Text>
-          </Box>
-          <Box textAlign="center">
-            <MyResultsIcon size="lg" color="textPrimary" />
-            <Text mt="2" fontSize="sm">MyResultsIcon</Text>
-          </Box>
-          {/* Repeat the same structure for each icon */}
-          {/* Example for additional icons */}
           {[
             AboutTheRegulationsIcon,
+            AboutTheWcaIcon,
             AdminResultsIcon,
             AllCompsIcon,
             BookmarkIcon,
@@ -190,12 +169,14 @@ export default function Home() {
             InstagramIcon,
             LanguageIcon,
             ListIcon,
+            LocationIcon,
             ManageTabsIcon,
             MapIcon,
             MediaSubmissionIcon,
             MenuIcon,
             MultimediaIcon,
             MyCompsIcon,
+            MyResultsIcon,
             NationalChampionshipIcon,
             NewCompIcon,
             OnTheSpotRegistrationIcon,
@@ -219,11 +200,13 @@ export default function Home() {
             TeamsCommitteesAndCouncilsIcon,
             ToolsIcon,
             TranslatorsIcon,
+            TwitchIcon,
             UserIcon,
             UsersPersonsIcon,
             VenueIcon,
             WcaDelegatesIcon,
             WcaDocsIcon,
+            WcaLiveIcon,
             WcaOfficersAndBoardIcon,
             WeiboIcon,
             XIcon,
