@@ -91,7 +91,90 @@ import WeiboIcon from "@/components/icons/WeiboIcon";
 import XIcon from "@/components/icons/XIcon";
 import YouTubeIcon from "@/components/icons/YoutubeIcon";
 
-const iconMap: Record<string, React.ComponentType> = {
+export type IconName =
+  | "About the Regulations"
+  | "About the WCA"
+  | "Admin Results"
+  | "All Competitions"
+  | "Bookmark"
+  | "Clone"
+  | "Competition Not Started"
+  | "Registration Closed"
+  | "Registration Closed (Red)"
+  | "Registration Full but Open"
+  | "Registration Full but Open (Orange)"
+  | "Registration Not Full, Open"
+  | "Registration Not Full, Open (Green)"
+  | "Registration Not Open Yet"
+  | "Registration Not Open Yet (Grey)"
+  | "Registration Open Date"
+  | "Registration Close Date"
+  | "Competitors"
+  | "Contact"
+  | "Delegate Report"
+  | "Details"
+  | "Developer Export"
+  | "Disciplinary Log"
+  | "Disclaimer"
+  | "Download"
+  | "Edit"
+  | "Educational Resources"
+  | "Error"
+  | "External Link"
+  | "Facebook"
+  | "Filters"
+  | "GitHub"
+  | "Guidelines"
+  | "Help and FAQs"
+  | "Incidents Log"
+  | "Information"
+  | "Instagram"
+  | "Language"
+  | "List"
+  | "Location"
+  | "Manage Tabs"
+  | "Map"
+  | "Media Submission"
+  | "Menu"
+  | "Multimedia"
+  | "My Competitions"
+  | "My Results"
+  | "National Championship"
+  | "New Competition"
+  | "On-the-Spot Registration"
+  | "Payment"
+  | "Privacy"
+  | "Rankings"
+  | "Records"
+  | "Regional Organisations"
+  | "Register"
+  | "Registration"
+  | "Regulations and Guidelines"
+  | "Regulations History"
+  | "Regulations"
+  | "Results Export"
+  | "Scrambles"
+  | "Search"
+  | "Spectators"
+  | "Speedcubing History"
+  | "Spots Left"
+  | "Statistics"
+  | "Teams, Committees and Councils"
+  | "Tools"
+  | "Translators"
+  | "Twitch"
+  | "User"
+  | "Users / Persons"
+  | "Venue"
+  | "WCA Delegates"
+  | "WCA Documents"
+  | "WCA Live"
+  | "WCA Officers and Board"
+  | "Weibo"
+  | "X (formerly Twitter)"
+  | "YouTube";
+
+const iconMap: Record<IconName, React.ComponentType> = {
   "About the Regulations": AboutTheRegulationsIcon,
   "About the WCA": AboutTheWcaIcon,
   "Admin Results": AdminResultsIcon,
@@ -177,13 +260,14 @@ const iconMap: Record<string, React.ComponentType> = {
 
 interface IconDisplayProps {
   name: IconName;
+  fallback?: boolean;
 }
 
-const IconDisplay: React.FC<IconDisplayProps> = ({ name }) => {
+const IconDisplay = ({ name, fallback = true }: IconDisplayProps) => {
   const IconComponent = iconMap[name];
 
   if (!IconComponent) {
-    return <div>Icon not found</div>; // Optional fallback
+    return fallback ? <div>No_Icon</div> : null;
   }
 
   return <IconComponent />;
