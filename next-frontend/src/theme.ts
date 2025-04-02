@@ -146,7 +146,7 @@ const customConfig = defineConfig({
             }
           },
         },
-        green: { 
+        green: {
           solid: { value:  { _light: "colors.green.50", _dark: "colors.green.100" } },
           highContrast: { value:  { _light: "colors.green.50", _dark: "colors.green.300" } },
           contrast: { value: "{colors.supplementary.texts.light}" },
@@ -170,7 +170,7 @@ const customConfig = defineConfig({
             }
           },
         },
-        blue: { 
+        blue: {
           solid: { value:  { _light: "colors.blue.50", _dark: "colors.blue.100" } },
           highContrast: { value:  { _light: "colors.blue.50", _dark: "colors.blue.300" } },
           contrast: { value: "{colors.supplementary.texts.light}" },
@@ -194,7 +194,7 @@ const customConfig = defineConfig({
             }
           },
         },
-        red: { 
+        red: {
           solid: { value:  { _light: "colors.red.50", _dark: "colors.red.100" } },
           highContrast: { value:  { _light: "colors.red.50", _dark: "colors.red.300" } },
           contrast: { value: "{colors.supplementary.texts.light}" },
@@ -218,7 +218,7 @@ const customConfig = defineConfig({
             }
           },
         },
-        orange: { 
+        orange: {
           solid: { value:  { _light: "colors.orange.50", _dark: "colors.orange.100" } },
           highContrast: { value:  { _light: "colors.orange.50", _dark: "colors.orange.300" } },
           contrast: { value: { _light: "colors.supplementary.texts.dark", _dark: "colors.supplementary.texts.light" }, },
