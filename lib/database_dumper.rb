@@ -1059,15 +1059,16 @@ module DatabaseDumper
       ),
     }.freeze,
     "Persons" => {
+      source_table: "persons",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
-          sub_id
           name
-          countryId
           gender
         ),
         fake_values: {
           "id" => "wca_id",
+          "subId" => "sub_id",
+          "countryId" => "country_id",
         },
       ),
     }.freeze,
