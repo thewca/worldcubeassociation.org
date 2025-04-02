@@ -63,6 +63,10 @@ module Waitlistable
       false
     end
 
+    # Tiny hack: Calling `waiting_list_position` internally caches the result (like a Rails association would)
+    #   so if we ever want to explicitly trigger a cache, all we have to do is call the base method.
+    after_find :waiting_list_position, if: :waitlistable?
+
     def waiting_list_position
       @waiting_list_position ||= self.waiting_list&.position(self)
     end
