@@ -156,7 +156,7 @@ RSpec.describe CompetitionsController do
       sign_in { FactoryBot.create :admin }
 
       it "creates a new competition" do
-        creation_params = build_competition_update(Competition.new, name: "FatBoyXPC 2015", venue: { country_id: "USA" }, website: { usesWcaRegistration: false })
+        creation_params = build_competition_update(Competition.new, name: "FatBoyXPC 2015", venue: { countryId: "USA" }, website: { usesWcaRegistration: false })
         post :create, params: creation_params, as: :json
         expect(response).to be_successful
         new_comp = Competition.find("FatBoyXPC2015")
@@ -166,7 +166,7 @@ RSpec.describe CompetitionsController do
       end
 
       it "creates a competition with correct website when using WCA as competition's website" do
-        creation_params = build_competition_update(Competition.new, name: "Awesome Competition 2016", venue: { country_id: "USA" }, website: { generateWebsite: true, usesWcaRegistration: false, externalWebsite: nil })
+        creation_params = build_competition_update(Competition.new, name: "Awesome Competition 2016", venue: { countryId: "USA" }, website: { generateWebsite: true, usesWcaRegistration: false, externalWebsite: nil })
         post :create, params: creation_params, as: :json
         expect(response).to be_successful
         competition = Competition.find("AwesomeCompetition2016")
@@ -184,7 +184,7 @@ RSpec.describe CompetitionsController do
       it 'creates a new competition with organizers and expect them to receive a notification email' do
         organizer = FactoryBot.create :user
         expect(CompetitionsMailer).to receive(:notify_organizer_of_addition_to_competition).with(delegate, anything, organizer).and_call_original
-        creation_params = build_competition_update(Competition.new, name: "Test 2015", venue: { country_id: "USA" }, staff: { staffDelegateIds: [delegate.id], organizerIds: [organizer.id] }, website: { usesWcaRegistration: false })
+        creation_params = build_competition_update(Competition.new, name: "Test 2015", venue: { countryId: "USA" }, staff: { staffDelegateIds: [delegate.id], organizerIds: [organizer.id] }, website: { usesWcaRegistration: false })
         expect do
           post :create, params: creation_params, as: :json
         end.to change(enqueued_jobs, :size).by(1)
@@ -928,7 +928,7 @@ RSpec.describe CompetitionsController do
         person = user.person
         FactoryBot.create(:registration, :accepted, competition: competition, user: user)
         FactoryBot.create(:result, competition: competition, person: person, eventId: "333")
-        another_person = FactoryBot.create(:person, name: person.name, country_id: person.countryId, gender: person.gender, dob: person.dob)
+        another_person = FactoryBot.create(:person, name: person.name, countryId: person.countryId, gender: person.gender, dob: person.dob)
         FactoryBot.create(:result, competition: competition, person: another_person, eventId: "333")
 
         user.update(wca_id: nil)
