@@ -470,5 +470,5 @@ RSpec.describe Result do
 end
 
 def build_result(attrs)
-  FactoryBot.build :result, { competition: competition, round_type_id: roundTypeId, format_id: formatId, event_id: eventId }.merge(attrs)
+  FactoryBot.build :result, { competition: competition, round_type_id: round_type_id, format_id: format_id, event_id: event_id }.merge(attrs)
 end

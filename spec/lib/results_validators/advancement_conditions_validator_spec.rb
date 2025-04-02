@@ -199,8 +199,8 @@ RSpec.describe ResultsValidators::AdvancementConditionsValidator do
 
       fake_person = build_person(Result, competition1)
 
-      existent_result = FactoryBot.build(:result, competition: competition1, eventId: "333bf", format_id: "3", roundTypeId: "f", person: fake_person)
-      nonexistent_result = FactoryBot.build(:result, competition: competition1, eventId: "333bf", format_id: "3", roundTypeId: "1", person: fake_person, skip_round_creation: true)
+      existent_result = FactoryBot.build(:result, competition: competition1, event_id: "333bf", format_id: "3", round_type_id: "f", person: fake_person)
+      nonexistent_result = FactoryBot.build(:result, competition: competition1, event_id: "333bf", format_id: "3", round_type_id: "1", person: fake_person, skip_round_creation: true)
 
       Result.import([existent_result, nonexistent_result], validate: false)
 

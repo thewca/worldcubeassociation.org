@@ -63,7 +63,7 @@ class UploadJson
             # Pad the results with 0 up to 5 results
             individual_results.fill(0, individual_results.length...5)
             new_result_attributes = {
-              person_ud: result["personId"],
+              person_id: result["personId"],
               pos: result["position"],
               event_id: event["eventId"],
               round_type_id: round_type_id,

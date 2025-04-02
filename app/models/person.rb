@@ -282,11 +282,11 @@ class Person < ApplicationRecord
   end
 
   def best_singles_by(target_date)
-    self.results.on_or_before(target_date).succeeded.group(:eventId).minimum(:best)
+    self.results.on_or_before(target_date).succeeded.group(:event_id).minimum(:best)
   end
 
   def best_averages_by(target_date)
-    self.results.on_or_before(target_date).average_succeeded.group(:eventId).minimum(:average)
+    self.results.on_or_before(target_date).average_succeeded.group(:event_id).minimum(:average)
   end
 
   def anonymization_checks_with_message_args
@@ -318,7 +318,7 @@ class Person < ApplicationRecord
     raise "Error generating new WCA ID" if new_wca_id.nil?
 
     # Anonymize data in Results
-    results.update_all(personId: new_wca_id, personName: User::ANONYMOUS_NAME)
+    results.update_all(person_id: new_wca_id, person_name: User::ANONYMOUS_NAME)
 
     # Anonymize sub-IDs
     if sub_ids.length > 1

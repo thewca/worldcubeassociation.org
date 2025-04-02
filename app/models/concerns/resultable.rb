@@ -131,7 +131,7 @@ module Resultable
     #    - All events that allow "mean of 3" no longer allow "best of 3".
     #  - May 1, 2019
     #    - 444bf and 555bf mean are officially recognized
-    format_id == "a" || format_id == "m" || (format_id == "3" && %(333ft 333fm 333bf 444bf 555bf).include?(eventId))
+    format_id == "a" || format_id == "m" || (format_id == "3" && %(333ft 333fm 333bf 444bf 555bf).include?(event_id))
   end
 
   def compute_correct_best

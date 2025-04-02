@@ -106,8 +106,8 @@ RSpec.describe Person, type: :model do
       it "does not affect old results" do
         person.update_using_sub_id!(name: "Felix Zemdegs")
         person.update!(countryId: "New Zealand")
-        expect(person.results.pluck(:personName).uniq).to eq ["Feliks Zemdegs"]
-        expect(person.results.pluck(:countryId).uniq).to eq ["Australia"]
+        expect(person.results.pluck(:person_name).uniq).to eq ["Feliks Zemdegs"]
+        expect(person.results.pluck(:country_id).uniq).to eq ["Australia"]
       end
     end
   end
@@ -152,7 +152,7 @@ RSpec.describe Person, type: :model do
     it "ignores DNF results on the podium" do
       expect do
         FactoryBot.create :result, :blind_dnf_mo3, person: us_competitor, competition: us_nationals2017,
-                                                   pos: 2, eventId: "555bf", best: SolveTime::DNF_VALUE
+                                                   pos: 2, event_id: "555bf", best: SolveTime::DNF_VALUE
       end.not_to(change { us_competitor.championship_podiums[:national] })
     end
 

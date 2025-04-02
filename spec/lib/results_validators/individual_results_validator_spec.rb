@@ -98,7 +98,7 @@ RSpec.describe IRV do
         # Create a result which meets the cutoff but doesn't have all the necessary values
         res_fm = FactoryBot.create(result_kind, :over_cutoff,
                                    competition: competition2, cutoff: cutoff_fm,
-                                   formatId: "m", event_id: "333fm")
+                                   format_id: "m", event_id: "333fm")
         res_fm.update(value1: 30)
 
         errs << RV::ValidationError.new(IRV::MET_CUTOFF_MISSING_RESULTS_ERROR,

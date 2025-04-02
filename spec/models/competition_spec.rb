@@ -962,7 +962,7 @@ RSpec.describe Competition do
       result = competition.person_ids_with_results
       expect(result.size).to eq 4
       expect(result.map(&:first)).to eq [person_four, person_one, person_three, person_two].map(&:wca_id)
-      expect(result.second.last.map(&:roundTypeId)).to eq %w(f 1 c)
+      expect(result.second.last.map(&:round_type_id)).to eq %w(f 1 c)
 
       expect(result[1][1][1].muted).to be true
       expect(result[1][1][2].muted).to be false
