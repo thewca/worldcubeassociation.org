@@ -1,5 +1,4 @@
 import { createSystem, defaultConfig, defineConfig } from "@chakra-ui/react";
-import SpotsLeftIconPreview from "./components/icons/SpotsLeftIcon";
 
 const customConfig = defineConfig({
   globalCss: {
