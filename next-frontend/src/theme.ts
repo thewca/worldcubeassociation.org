@@ -372,7 +372,6 @@ const customConfig = defineConfig({
           transitionProperty: "color",
           transitionTimingFunction: "ease",
           transitionDuration: "200ms",
-          
         },
         variants: {
           variant: {
@@ -423,9 +422,6 @@ const customConfig = defineConfig({
                   opacity: 1,
                 },
               },
-            }, 
-            false: {
-              //empty recipe
             }
           }
         },
@@ -470,7 +466,6 @@ const customConfig = defineConfig({
           },
         }
       }
-      
     },
     slotRecipes: {
       card: {
