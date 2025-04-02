@@ -974,28 +974,36 @@ module DatabaseDumper
         }.freeze,
       ),
     }.freeze,
-    "ranks_single" => {
+    "RanksSingle" => {
+      source_table: "ranks_single",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
-          person_id
-          event_id
           best
-          world_rank
-          continent_rank
-          country_rank
         ),
+        fake_values: {
+          # Copy over column to keep backwards compatibility
+          "personId" => "person_id",
+          "eventId" => "event_id",
+          "worldRank" => "world_rank",
+          "continentRank" => "continent_rank",
+          "countryRank" => "country_rank",
+        },
       ),
     }.freeze,
-    "ranks_average" => {
+    "RanksAverage" => {
+      source_table: "ranks_average",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
-          person_id
-          event_id
           best
-          world_rank
-          continent_rank
-          country_rank
         ),
+        fake_values: {
+          # Copy over column to keep backwards compatibility
+          "personId" => "person_id",
+          "eventId" => "event_id",
+          "worldRank" => "world_rank",
+          "continentRank" => "continent_rank",
+          "countryRank" => "country_rank",
+        },
       ),
     }.freeze,
     "RoundTypes" => {
