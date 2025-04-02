@@ -654,32 +654,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_04_01_121013) do
     t.index ["start_date"], name: "index_competitions_on_start_date"
   end
 
-  create_table "concise_average_results", id: false, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
-    t.integer "id", default: 0, null: false
-    t.integer "average", default: 0, null: false
-    t.bigint "value_and_id"
-    t.string "person_id", limit: 10, default: "", null: false
-    t.string "event_id", limit: 6, default: "", null: false
-    t.string "country_id", limit: 50, default: "", null: false
-    t.string "continent_id", limit: 50, default: "", null: false
-    t.integer "year", limit: 2, default: 0, null: false, unsigned: true
-    t.integer "month", limit: 2, default: 0, null: false, unsigned: true
-    t.integer "day", limit: 2, default: 0, null: false, unsigned: true
-  end
-
-  create_table "concise_single_results", id: false, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
-    t.integer "id", default: 0, null: false
-    t.integer "best", default: 0, null: false
-    t.bigint "value_and_id"
-    t.string "person_id", limit: 10, default: "", null: false
-    t.string "event_id", limit: 6, default: "", null: false
-    t.string "country_id", limit: 50, default: "", null: false
-    t.string "continent_id", limit: 50, default: "", null: false
-    t.integer "year", limit: 2, default: 0, null: false, unsigned: true
-    t.integer "month", limit: 2, default: 0, null: false, unsigned: true
-    t.integer "day", limit: 2, default: 0, null: false, unsigned: true
-  end
-
   create_table "connected_paypal_accounts", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "paypal_merchant_id"
     t.string "permissions_granted"

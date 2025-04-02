@@ -1078,8 +1078,8 @@ module DatabaseDumper
         copy: %w(
           id
           name
-          city_name
           information
+          external_website
           venue
           latitude
           longitude
@@ -1089,7 +1089,6 @@ module DatabaseDumper
           "countryId" => "country_id",
           "venueAddress" => "venue_address",
           "venueDetails" => "venue_details",
-          "externalWebsite" => "external_website",
           "cellName" => "cell_name",
           "cancelled" => "(competitions.cancelled_at IS NOT NULL AND competitions.cancelled_by IS NOT NULL)",
           "eventSpecs" => "REPLACE(GROUP_CONCAT(DISTINCT competition_events.event_id), \",\", \" \")",
