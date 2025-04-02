@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import { createIcon } from "@chakra-ui/react"
+import { createIcon } from "@chakra-ui/react";
 
 const CompRegoOpenDateIcon = createIcon({
   displayName: "CompRegoOpenDateIcon",
@@ -13,10 +13,10 @@ const CompRegoOpenDateIcon = createIcon({
       />
     </>
   ),
-})
+});
 
 const CompRegoOpenDateIconPreview = () => {
-  return <CompRegoOpenDateIcon size="lg"  />
-}
+  return <CompRegoOpenDateIcon size="lg" />;
+};
 
-export default CompRegoOpenDateIconPreview
+export default CompRegoOpenDateIconPreview;

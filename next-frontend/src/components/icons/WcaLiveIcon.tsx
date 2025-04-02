@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import { createIcon } from "@chakra-ui/react"
+import { createIcon } from "@chakra-ui/react";
 
 const WcaLiveIcon = createIcon({
   displayName: "WcaLiveIcon",
@@ -10,10 +10,10 @@ const WcaLiveIcon = createIcon({
       <circle cx="22.5" cy="22.5" r="22.5" fill="currentColor" />
     </>
   ),
-})
+});
 
 const WcaLiveIconPreview = () => {
-  return <WcaLiveIcon size="lg"  />
-}
+  return <WcaLiveIcon size="lg" />;
+};
 
-export default WcaLiveIconPreview
+export default WcaLiveIconPreview;

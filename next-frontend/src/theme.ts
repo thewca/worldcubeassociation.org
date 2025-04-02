@@ -1,7 +1,6 @@
 import { createSystem, defaultConfig, defineConfig } from "@chakra-ui/react";
 import SpotsLeftIconPreview from "./components/icons/SpotsLeftIcon";
 
-
 const customConfig = defineConfig({
   globalCss: {
     html: {
@@ -11,16 +10,16 @@ const customConfig = defineConfig({
   theme: {
     keyframes: {
       slideInGradient: {
-        "0%": { backgroundSize: "0% 100%"},
-        "100%": {backgroundSize: "100% 100%"},
+        "0%": { backgroundSize: "0% 100%" },
+        "100%": { backgroundSize: "100% 100%" },
       },
       slideOutGradient: {
-        "0%": { backgroundSize: "100% 100%"},
-        "100%": {backgroundSize: "0% 100%"},
+        "0%": { backgroundSize: "100% 100%" },
+        "100%": { backgroundSize: "0% 100%" },
       },
       dontSlideGradient: {
-        "0%": { backgroundSize: "100% 100%"},
-        "100%": {backgroundSize: "100% 100%"},
+        "0%": { backgroundSize: "100% 100%" },
+        "100%": { backgroundSize: "100% 100%" },
       },
     },
     tokens: {
@@ -78,7 +77,7 @@ const customConfig = defineConfig({
             dark: { value: "#1E1E1E" },
             mid: { value: "#B8B8B8" },
             soft: { value: "#F9F9F9" },
-            transparent: {value: "rgba(0,0,0,0)"},
+            transparent: { value: "rgba(0,0,0,0)" },
           },
           links: {
             blue: { value: "#0051BA" },
@@ -91,13 +90,13 @@ const customConfig = defineConfig({
         "table.xs.cellPadding": { value: "{sizes.table-xs.cellPadding}" },
         "table.xs.fontSize": { value: "{sizes.table-xs.fontSize}" },
       },
-      shadows:{
+      shadows: {
         wca: {
           value: {
             _light: "rgba(17, 17, 26, 0.3) 0px 0px 16px",
-            _dark: "rgba(252, 252, 252, 0.4) 0px 0px 16px"
-          }
-        }
+            _dark: "rgba(252, 252, 252, 0.4) 0px 0px 16px",
+          },
+        },
       },
       colors: {
         primary: { value: "{colors.blue.50}" },
@@ -114,142 +113,242 @@ const customConfig = defineConfig({
         warning: { value: "{colors.yellow.50}" },
         success: { value: "{colors.green.100}" },
         grey: {
-          solid: { value: { _light: "colors.wcawhite.400", _dark: "colors.wcawhite.200" }, },
-          contrast: { value: { _light: "colors.supplementary.texts.dark", _dark: "colors.supplementary.texts.light" }, },
+          solid: {
+            value: {
+              _light: "colors.wcawhite.400",
+              _dark: "colors.wcawhite.200",
+            },
+          },
+          contrast: {
+            value: {
+              _light: "colors.supplementary.texts.dark",
+              _dark: "colors.supplementary.texts.light",
+            },
+          },
           fg: { value: "{colors.wcawhite.300}" },
           muted: { value: "{colors.wcawhite.200/90}" },
           subtle: { value: "{colors.wcawhite.200}" },
           emphasized: { value: "{colors.wcawhite.400}" },
-          focusRing: { value:  { _light: "colors.wcawhite.50", _dark: "colors.wcawhite.200" } },
+          focusRing: {
+            value: {
+              _light: "colors.wcawhite.50",
+              _dark: "colors.wcawhite.200",
+            },
+          },
         },
         yellow: {
-          solid: { value:  { _light: "colors.yellow.50", _dark: "colors.yellow.100" } },
-          highContrast: { value:  { _light: "colors.yellow.50", _dark: "colors.yellow.300" } },
-          contrast: { value: { _light: "colors.supplementary.texts.dark", _dark: "colors.supplementary.texts.light" }, },
+          solid: {
+            value: { _light: "colors.yellow.50", _dark: "colors.yellow.100" },
+          },
+          highContrast: {
+            value: { _light: "colors.yellow.50", _dark: "colors.yellow.300" },
+          },
+          contrast: {
+            value: {
+              _light: "colors.supplementary.texts.dark",
+              _dark: "colors.supplementary.texts.light",
+            },
+          },
           fg: { value: "{colors.yellow.400}" },
           muted: { value: "{colors.yellow.100/90}" },
           subtle: { value: "{colors.yellow.100}" },
           emphasized: { value: "{colors.yellow.300}" },
-          focusRing: { value:  { _light: "colors.yellow.50", _dark: "colors.yellow.100" } },
+          focusRing: {
+            value: { _light: "colors.yellow.50", _dark: "colors.yellow.100" },
+          },
           gradient: {
             default: {
               value: {
-                _light: "linear-gradient(90deg, {colors.yellow.fg} 0%, {colors.bg} 100%)",
-                _dark: "linear-gradient(90deg, {colors.yellow.muted} 0%, {colors.bg} 100%)"
+                _light:
+                  "linear-gradient(90deg, {colors.yellow.fg} 0%, {colors.bg} 100%)",
+                _dark:
+                  "linear-gradient(90deg, {colors.yellow.muted} 0%, {colors.bg} 100%)",
               },
             },
             hover: {
               value: {
-                _light: "linear-gradient(90deg, {colors.yellow.fg/80} 0%, {colors.bg} 100%)",
-                _dark: "linear-gradient(90deg, {colors.yellow.muted/80} 0%, {colors.bg} 100%)"
+                _light:
+                  "linear-gradient(90deg, {colors.yellow.fg/80} 0%, {colors.bg} 100%)",
+                _dark:
+                  "linear-gradient(90deg, {colors.yellow.muted/80} 0%, {colors.bg} 100%)",
               },
-            }
+            },
           },
         },
         green: {
-          solid: { value:  { _light: "colors.green.50", _dark: "colors.green.100" } },
-          highContrast: { value:  { _light: "colors.green.50", _dark: "colors.green.300" } },
+          solid: {
+            value: { _light: "colors.green.50", _dark: "colors.green.100" },
+          },
+          highContrast: {
+            value: { _light: "colors.green.50", _dark: "colors.green.300" },
+          },
           contrast: { value: "{colors.supplementary.texts.light}" },
           fg: { value: "{colors.green.400}" },
           muted: { value: "{colors.green.100/90}" },
           subtle: { value: "{colors.green.100}" },
           emphasized: { value: "{colors.green.300}" },
-          focusRing: { value:  { _light: "colors.green.50", _dark: "colors.green.100" } },
+          focusRing: {
+            value: { _light: "colors.green.50", _dark: "colors.green.100" },
+          },
           gradient: {
             default: {
               value: {
-                _light: "linear-gradient(90deg, {colors.green.fg} 0%, {colors.bg} 100%)",
-                _dark: "linear-gradient(90deg, {colors.green.muted} 0%, {colors.bg} 100%)"
+                _light:
+                  "linear-gradient(90deg, {colors.green.fg} 0%, {colors.bg} 100%)",
+                _dark:
+                  "linear-gradient(90deg, {colors.green.muted} 0%, {colors.bg} 100%)",
               },
             },
             hover: {
               value: {
-                _light: "linear-gradient(90deg, {colors.green.fg/80} 0%, {colors.bg} 100%)",
-                _dark: "linear-gradient(90deg, {colors.green.muted/80} 0%, {colors.bg} 100%)"
+                _light:
+                  "linear-gradient(90deg, {colors.green.fg/80} 0%, {colors.bg} 100%)",
+                _dark:
+                  "linear-gradient(90deg, {colors.green.muted/80} 0%, {colors.bg} 100%)",
               },
-            }
+            },
           },
         },
         blue: {
-          solid: { value:  { _light: "colors.blue.50", _dark: "colors.blue.100" } },
-          highContrast: { value:  { _light: "colors.blue.50", _dark: "colors.blue.300" } },
+          solid: {
+            value: { _light: "colors.blue.50", _dark: "colors.blue.100" },
+          },
+          highContrast: {
+            value: { _light: "colors.blue.50", _dark: "colors.blue.300" },
+          },
           contrast: { value: "{colors.supplementary.texts.light}" },
           fg: { value: "{colors.blue.400}" },
           muted: { value: "{colors.blue.100/90}" },
           subtle: { value: "{colors.blue.100}" },
           emphasized: { value: "{colors.blue.300}" },
-          focusRing: { value:  { _light: "colors.blue.50", _dark: "colors.blue.100" } },
+          focusRing: {
+            value: { _light: "colors.blue.50", _dark: "colors.blue.100" },
+          },
           gradient: {
             default: {
               value: {
-                _light: "linear-gradient(90deg, {colors.blue.fg} 0%, {colors.bg} 100%)",
-                _dark: "linear-gradient(90deg, {colors.blue.muted} 0%, {colors.bg} 100%)"
+                _light:
+                  "linear-gradient(90deg, {colors.blue.fg} 0%, {colors.bg} 100%)",
+                _dark:
+                  "linear-gradient(90deg, {colors.blue.muted} 0%, {colors.bg} 100%)",
               },
             },
             hover: {
               value: {
-                _light: "linear-gradient(90deg, {colors.blue.fg/80} 0%, {colors.bg} 100%)",
-                _dark: "linear-gradient(90deg, {colors.blue.muted/80} 0%, {colors.bg} 100%)"
+                _light:
+                  "linear-gradient(90deg, {colors.blue.fg/80} 0%, {colors.bg} 100%)",
+                _dark:
+                  "linear-gradient(90deg, {colors.blue.muted/80} 0%, {colors.bg} 100%)",
               },
-            }
+            },
           },
         },
         red: {
-          solid: { value:  { _light: "colors.red.50", _dark: "colors.red.100" } },
-          highContrast: { value:  { _light: "colors.red.50", _dark: "colors.red.300" } },
+          solid: {
+            value: { _light: "colors.red.50", _dark: "colors.red.100" },
+          },
+          highContrast: {
+            value: { _light: "colors.red.50", _dark: "colors.red.300" },
+          },
           contrast: { value: "{colors.supplementary.texts.light}" },
           fg: { value: "{colors.red.400}" },
           muted: { value: "{colors.red.100/90}" },
           subtle: { value: "{colors.red.100}" },
           emphasized: { value: "{colors.red.300}" },
-          focusRing: { value:  { _light: "colors.red.50", _dark: "colors.red.100" } },
+          focusRing: {
+            value: { _light: "colors.red.50", _dark: "colors.red.100" },
+          },
           gradient: {
             default: {
               value: {
-                _light: "linear-gradient(90deg, {colors.red.fg} 0%, {colors.bg} 100%)",
-                _dark: "linear-gradient(90deg, {colors.red.muted} 0%, {colors.bg} 100%)"
+                _light:
+                  "linear-gradient(90deg, {colors.red.fg} 0%, {colors.bg} 100%)",
+                _dark:
+                  "linear-gradient(90deg, {colors.red.muted} 0%, {colors.bg} 100%)",
               },
             },
             hover: {
               value: {
-                _light: "linear-gradient(90deg, {colors.red.fg/80} 0%, {colors.bg} 100%)",
-                _dark: "linear-gradient(90deg, {colors.red.muted/80} 0%, {colors.bg} 100%)"
+                _light:
+                  "linear-gradient(90deg, {colors.red.fg/80} 0%, {colors.bg} 100%)",
+                _dark:
+                  "linear-gradient(90deg, {colors.red.muted/80} 0%, {colors.bg} 100%)",
               },
-            }
+            },
           },
         },
         orange: {
-          solid: { value:  { _light: "colors.orange.50", _dark: "colors.orange.100" } },
-          highContrast: { value:  { _light: "colors.orange.50", _dark: "colors.orange.300" } },
-          contrast: { value: { _light: "colors.supplementary.texts.dark", _dark: "colors.supplementary.texts.light" }, },
+          solid: {
+            value: { _light: "colors.orange.50", _dark: "colors.orange.100" },
+          },
+          highContrast: {
+            value: { _light: "colors.orange.50", _dark: "colors.orange.300" },
+          },
+          contrast: {
+            value: {
+              _light: "colors.supplementary.texts.dark",
+              _dark: "colors.supplementary.texts.light",
+            },
+          },
           fg: { value: "{colors.orange.400}" },
           muted: { value: "{colors.orange.100/90}" },
           subtle: { value: "{colors.orange.100}" },
           emphasized: { value: "{colors.orange.300}" },
-          focusRing: { value:  { _light: "colors.orange.50", _dark: "colors.orange.100" } },
+          focusRing: {
+            value: { _light: "colors.orange.50", _dark: "colors.orange.100" },
+          },
           gradient: {
             default: {
               value: {
-                _light: "linear-gradient(90deg, {colors.orange.fg} 0%, {colors.bg} 100%)",
-                _dark: "linear-gradient(90deg, {colors.orange.muted} 0%, {colors.bg} 100%)"
+                _light:
+                  "linear-gradient(90deg, {colors.orange.fg} 0%, {colors.bg} 100%)",
+                _dark:
+                  "linear-gradient(90deg, {colors.orange.muted} 0%, {colors.bg} 100%)",
               },
             },
             hover: {
               value: {
-                _light: "linear-gradient(90deg, {colors.orange.fg/80} 0%, {colors.bg} 100%)",
-                _dark: "linear-gradient(90deg, {colors.orange.muted/80} 0%, {colors.bg} 100%)"
+                _light:
+                  "linear-gradient(90deg, {colors.orange.fg/80} 0%, {colors.bg} 100%)",
+                _dark:
+                  "linear-gradient(90deg, {colors.orange.muted/80} 0%, {colors.bg} 100%)",
               },
-            }
+            },
           },
         },
         bg: {
-          DEFAULT: { value:  { _light: "colors.supplementary.bgs.white", _dark: "colors.supplementary.bgs.dark" }, },
-          inverted: { value:  { _light: "colors.supplementary.bgs.white", _dark: "colors.supplementary.bgs.dark" }, },
-          muted: { value:  { _light: "colors.supplementary.bgs.medium", _dark: "colors.supplementary.texts.gray2" }, },
+          DEFAULT: {
+            value: {
+              _light: "colors.supplementary.bgs.white",
+              _dark: "colors.supplementary.bgs.dark",
+            },
+          },
+          inverted: {
+            value: {
+              _light: "colors.supplementary.bgs.white",
+              _dark: "colors.supplementary.bgs.dark",
+            },
+          },
+          muted: {
+            value: {
+              _light: "colors.supplementary.bgs.medium",
+              _dark: "colors.supplementary.texts.gray2",
+            },
+          },
         },
         fg: {
-          DEFAULT: { value:  { _light: "colors.supplementary.texts.dark", _dark: "colors.supplementary.texts.light" }, },
-          inverted: { value:  { _light: "colors.supplementary.texts.dark", _dark: "colors.supplementary.texts.light" }, },
+          DEFAULT: {
+            value: {
+              _light: "colors.supplementary.texts.dark",
+              _dark: "colors.supplementary.texts.light",
+            },
+          },
+          inverted: {
+            value: {
+              _light: "colors.supplementary.texts.dark",
+              _dark: "colors.supplementary.texts.light",
+            },
+          },
         },
       },
     },
@@ -261,7 +360,7 @@ const customConfig = defineConfig({
           transitionTimingFunction: "ease",
           borderRadius: "l3",
           lineHeight: "1.2",
-          colorPalette: "blue"
+          colorPalette: "blue",
         },
         variants: {
           variant: {
@@ -271,15 +370,15 @@ const customConfig = defineConfig({
               bg: "colorPalette.solid",
               color: "colorPalette.contrast",
               _hover: {
-                  bg: "colorPalette.muted",
-                  borderColor: "colorPalette.muted",
-                  color: "whiteText",
-                },
+                bg: "colorPalette.muted",
+                borderColor: "colorPalette.muted",
+                color: "whiteText",
+              },
               _expanded: {
-                  bg: "colorPalette.muted",
-                  borderColor: "colorPalette.muted",
-                },
-             },
+                bg: "colorPalette.muted",
+                borderColor: "colorPalette.muted",
+              },
+            },
             outline: {
               borderWidth: "2px",
               borderColor: "colorPalette.solid",
@@ -311,7 +410,7 @@ const customConfig = defineConfig({
               _hover: {
                 bg: "mediumBackground",
               },
-            }
+            },
           },
           size: {
             sm: {
@@ -331,42 +430,40 @@ const customConfig = defineConfig({
         },
       },
       heading: {
-        base: {
-
-        },
+        base: {},
         variants: {
           size: {
             sm: {
-              fontWeight: "medium",//Not used in styleguide
+              fontWeight: "medium", //Not used in styleguide
             },
             md: {
-              fontWeight: "medium",//Subheading 2
-              textStyle: "lg",//same size as lg, just thinner
+              fontWeight: "medium", //Subheading 2
+              textStyle: "lg", //same size as lg, just thinner
             },
             lg: {
-              fontWeight: "bold",//Subheading 1
+              fontWeight: "bold", //Subheading 1
             },
             xl: {
-              fontWeight: "bold",//Not used in styleguide
+              fontWeight: "bold", //Not used in styleguide
             },
             "2xl": {
-              fontWeight: "extrabold",//H4
+              fontWeight: "extrabold", //H4
             },
             "3xl": {
-              fontWeight: "extrabold",//H3
+              fontWeight: "extrabold", //H3
             },
             "4xl": {
-              fontWeight: "extrabold",//H2
+              fontWeight: "extrabold", //H2
             },
             "5xl": {
-              fontWeight: "extrabold",//H1
-              textTransform: "uppercase"
+              fontWeight: "extrabold", //H1
+              textTransform: "uppercase",
             },
             "6xl": {
-              fontWeight: "extrabold",//Not used in styleguide
-            }
-          }
-        }
+              fontWeight: "extrabold", //Not used in styleguide
+            },
+          },
+        },
       },
       link: {
         base: {
@@ -381,21 +478,21 @@ const customConfig = defineConfig({
               fontWeight: "medium",
               _hover: {
                 color: "{colors.blue.highContrast/80}",
-              }
+              },
             },
             plainLink: {
               color: "{fg.inverse}",
               fontWeight: "medium",
               _hover: {
                 color: "{colors.blue.highContrast}",
-              }
+              },
             },
             colouredLink: {
               color: "{fg.inverse}",
               fontWeight: "medium",
               _hover: {
                 color: "colorPalette.highContrast",
-              }
+              },
             },
           },
           hoverArrow: {
@@ -423,35 +520,35 @@ const customConfig = defineConfig({
                   opacity: 1,
                 },
               },
-            }
-          }
+            },
+          },
         },
         defaultVariants: {
           variant: "wcaLink",
           hoverArrow: "false",
-        }
+        },
       },
       badge: {
         variants: {
           variant: {
             achievement: {
               bg: "transparent",
-              color:"fg",
+              color: "fg",
               fontWeight: "bold",
               gap: "2",
               mr: "2.5",
-            }
-          }
+            },
+          },
         },
         compoundVariants: [
           {
             variant: "achievement",
             css: {
-              textStyle: "lg",//needed to supercede the default textStyle
-              "svg": {
+              textStyle: "lg", //needed to supercede the default textStyle
+              svg: {
                 height: "1.25em",
-                width: "1.25em"
-              }
+                width: "1.25em",
+              },
             },
           },
         ],
@@ -463,10 +560,10 @@ const customConfig = defineConfig({
             fontWeight: "medium",
             _hover: {
               color: "{colors.blue.highContrast/80}",
-            }
+            },
           },
-        }
-      }
+        },
+      },
     },
     slotRecipes: {
       card: {
@@ -475,7 +572,7 @@ const customConfig = defineConfig({
             shadow: "{shadows.wca}",
             colorPalette: "grey",
             borderRadius: "xl",
-          }
+          },
         },
         defaultVariants: {
           size: "sm",
@@ -485,8 +582,8 @@ const customConfig = defineConfig({
             hero: {
               body: {
                 bg: "colorPalette.solid",
-                color:  "colorPalette.contrast",
-              }
+                color: "colorPalette.contrast",
+              },
             },
             info: {
               root: {
@@ -494,15 +591,15 @@ const customConfig = defineConfig({
               },
               body: {
                 bg: "colorPalette.solid",
-                color:  "colorPalette.contrast",
+                color: "colorPalette.contrast",
                 gap: "4",
               },
               title: {
                 fontWeight: "extrabold",
               },
               description: {
-                color:  "colorPalette.contrast",
-              }
+                color: "colorPalette.contrast",
+              },
             },
             plain: {
               root: {
@@ -514,7 +611,7 @@ const customConfig = defineConfig({
               },
               body: {
                 gap: "4",
-              }
+              },
             },
             infoSnippet: {
               root: {
@@ -528,29 +625,29 @@ const customConfig = defineConfig({
                 fontWeight: "semibold",
                 flexDirection: "row",
                 alignItems: "center",
-                gap: "1"
-              }
-            }
-          }
+                gap: "1",
+              },
+            },
+          },
         },
         compoundVariants: [
           {
             variant: "info",
             css: {
-              title: {textStyle: "4xl",}//needed to supercede the default textStyle
+              title: { textStyle: "4xl" }, //needed to supercede the default textStyle
             },
           },
           {
             variant: "infoSnippet",
             css: {
               header: {
-                "svg": {
+                svg: {
                   height: "1.15em",
-                  width: "1.15em"
-                }
-              }
-            }
-          }
+                  width: "1.15em",
+                },
+              },
+            },
+          },
         ],
       },
       accordion: {
@@ -578,20 +675,22 @@ const customConfig = defineConfig({
                   animation: "slideInGradient 0.25s ease-in-out forwards",
                 },
                 _open: {
-                  bgImage: "var(--chakra-colors-color-palette-gradient-default)",
+                  bgImage:
+                    "var(--chakra-colors-color-palette-gradient-default)",
                   borderTopRadius: "var(--accordion-radius)",
                   borderBottomRadius: "0",
                   backgroundSize: "100% 100%",
                   animation: "dontSlideGradient 0.25s ease-in-out forwards",
                   _hover: {
-                    bgImage: "var(--chakra-colors-color-palette-gradient-hover)",
+                    bgImage:
+                      "var(--chakra-colors-color-palette-gradient-hover)",
                     animation: "dontSlideGradient 0.25s ease-in-out forwards",
-                  }
-                }
-              }
-            }
+                  },
+                },
+              },
+            },
           },
-        }
+        },
       },
       table: {
         variants: {
@@ -623,9 +722,9 @@ const customConfig = defineConfig({
                 },
                 "&:hover td": {
                   bg: "blue.400/60",
-                }
-              }
-            }
+                },
+              },
+            },
           },
           size: {
             xs: {
@@ -641,8 +740,8 @@ const customConfig = defineConfig({
                 py: "1.5",
               },
             },
-          }
-        }
+          },
+        },
       },
       drawer: {
         variants: {
@@ -652,10 +751,10 @@ const customConfig = defineConfig({
                 borderRadius: "md",
                 shadow: "{shadows.wca}",
                 height: "max-content",
-              }
-            }
-          }
-        }
+              },
+            },
+          },
+        },
       },
       tabs: {
         variants: {
@@ -673,22 +772,22 @@ const customConfig = defineConfig({
                 transitionTimingFunction: "ease",
                 transitionDuration: "200ms",
                 _hover: {
-                  bg: "bg.muted/50"
+                  bg: "bg.muted/50",
                 },
                 _selected: {
-                  bg: "bg.muted"
+                  bg: "bg.muted",
                 },
                 _vertical: {
                   justifyContent: "flex-start",
-                }
+                },
               },
               content: {
                 flexGrow: "1",
-              }
-            }
-          }
-        }
-      }
+              },
+            },
+          },
+        },
+      },
     },
   },
 });

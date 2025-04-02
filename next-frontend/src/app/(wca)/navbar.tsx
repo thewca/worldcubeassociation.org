@@ -96,8 +96,8 @@ const iconMap: Record<string, React.ComponentType> = {
   "About the WCA": AboutTheWcaIcon,
   "Admin Results": AdminResultsIcon,
   "All Competitions": AllCompsIcon,
-  "Bookmark": BookmarkIcon,
-  "Clone": CloneIcon,
+  Bookmark: BookmarkIcon,
+  Clone: CloneIcon,
   "Competition Not Started": CompNotStartedIcon,
   "Registration Closed": CompRegoClosedIcon,
   "Registration Closed (Red)": CompRegoClosedRedIcon,
@@ -109,70 +109,70 @@ const iconMap: Record<string, React.ComponentType> = {
   "Registration Not Open Yet (Grey)": CompRegoNotOpenYetGreyIcon,
   "Registration Open Date": CompRegoOpenDateIcon,
   "Registration Close Date": CompRegoCloseDateIcon,
-  "Competitors": CompetitorsIcon,
-  "Contact": ContactIcon,
+  Competitors: CompetitorsIcon,
+  Contact: ContactIcon,
   "Delegate Report": DelegateReportIcon,
-  "Details": DetailsIcon,
+  Details: DetailsIcon,
   "Developer Export": DeveloperExportIcon,
   "Disciplinary Log": DisciplinaryLogIcon,
-  "Disclaimer": DisclaimerIcon,
-  "Download": DownloadIcon,
-  "Edit": EditIcon,
+  Disclaimer: DisclaimerIcon,
+  Download: DownloadIcon,
+  Edit: EditIcon,
   "Educational Resources": EducationalResourcesIcon,
-  "Error": ErrorIcon,
+  Error: ErrorIcon,
   "External Link": ExternalLinkIcon,
-  "Facebook": FacebookIcon,
-  "Filters": FiltersIcon,
-  "GitHub": GitHubIcon,
-  "Guidelines": GuidelinesIcon,
+  Facebook: FacebookIcon,
+  Filters: FiltersIcon,
+  GitHub: GitHubIcon,
+  Guidelines: GuidelinesIcon,
   "Help and FAQs": HelpAndFaqsIcon,
   "Incidents Log": IncidentsLogIcon,
-  "Information": InformationIcon,
-  "Instagram": InstagramIcon,
-  "Language": LanguageIcon,
-  "List": ListIcon,
-  "Location": LocationIcon,
+  Information: InformationIcon,
+  Instagram: InstagramIcon,
+  Language: LanguageIcon,
+  List: ListIcon,
+  Location: LocationIcon,
   "Manage Tabs": ManageTabsIcon,
-  "Map": MapIcon,
+  Map: MapIcon,
   "Media Submission": MediaSubmissionIcon,
-  "Menu": MenuIcon,
-  "Multimedia": MultimediaIcon,
+  Menu: MenuIcon,
+  Multimedia: MultimediaIcon,
   "My Competitions": MyCompsIcon,
   "My Results": MyResultsIcon,
   "National Championship": NationalChampionshipIcon,
   "New Competition": NewCompIcon,
   "On-the-Spot Registration": OnTheSpotRegistrationIcon,
-  "Payment": PaymentIcon,
-  "Privacy": PrivacyIcon,
-  "Rankings": RankingsIcon,
-  "Records": RecordsIcon,
+  Payment: PaymentIcon,
+  Privacy: PrivacyIcon,
+  Rankings: RankingsIcon,
+  Records: RecordsIcon,
   "Regional Organisations": RegionalOrganisationsIcon,
-  "Register": RegisterIcon,
-  "Registration": RegistrationIcon,
+  Register: RegisterIcon,
+  Registration: RegistrationIcon,
   "Regulations and Guidelines": RegulationsAndGuidelinesIcon,
   "Regulations History": RegulationsHistoryIcon,
-  "Regulations": RegulationsIcon,
+  Regulations: RegulationsIcon,
   "Results Export": ResultsExportIcon,
-  "Scrambles": ScramblesIcon,
-  "Search": SearchIcon,
-  "Spectators": SpectatorsIcon,
+  Scrambles: ScramblesIcon,
+  Search: SearchIcon,
+  Spectators: SpectatorsIcon,
   "Speedcubing History": SpeedcubingHistoryIcon,
   "Spots Left": SpotsLeftIcon,
-  "Statistics": StatisticsIcon,
+  Statistics: StatisticsIcon,
   "Teams, Committees and Councils": TeamsCommitteesAndCouncilsIcon,
-  "Tools": ToolsIcon,
-  "Translators": TranslatorsIcon,
-  "Twitch": TwitchIcon,
-  "User": UserIcon,
+  Tools: ToolsIcon,
+  Translators: TranslatorsIcon,
+  Twitch: TwitchIcon,
+  User: UserIcon,
   "Users / Persons": UsersPersonsIcon,
-  "Venue": VenueIcon,
+  Venue: VenueIcon,
   "WCA Delegates": WcaDelegatesIcon,
   "WCA Documents": WcaDocsIcon,
   "WCA Live": WcaLiveIcon,
   "WCA Officers and Board": WcaOfficersAndBoardIcon,
-  "Weibo": WeiboIcon,
+  Weibo: WeiboIcon,
   "X (formerly Twitter)": XIcon,
-  "YouTube": YouTubeIcon
+  YouTube: YouTubeIcon,
 };
 
 interface IconDisplayProps {
@@ -189,13 +189,17 @@ const IconDisplay: React.FC<IconDisplayProps> = ({ name }) => {
   return <IconComponent />;
 };
 
-
 export default async function Navbar() {
   const payload = await getPayload({ config });
   const navbar = await payload.findGlobal({ slug: "nav" });
 
   return (
-    <HStack borderBottom="md" padding="3" justifyContent="space-between" bg="bg">
+    <HStack
+      borderBottom="md"
+      padding="3"
+      justifyContent="space-between"
+      bg="bg"
+    >
       <RefreshRouteOnSave />
       <HStack>
         <IconButton asChild variant="ghost">
@@ -229,7 +233,7 @@ export default async function Navbar() {
                         {subEntry.blockType === "LinkItem" && (
                           <Menu.Item value={subEntry.id!} asChild>
                             <Link href={subEntry.targetLink}>
-                             <IconDisplay name={navbarEntry.displayIcon} />
+                              <IconDisplay name={navbarEntry.displayIcon} />
                               {subEntry.displayText}
                             </Link>
                           </Menu.Item>
@@ -254,7 +258,9 @@ export default async function Navbar() {
                                     {nestedEntry.blockType === "LinkItem" && (
                                       <Menu.Item value={nestedEntry.id!}>
                                         <Link href={nestedEntry.targetLink}>
-                                          <IconDisplay name={navbarEntry.displayIcon} />
+                                          <IconDisplay
+                                            name={navbarEntry.displayIcon}
+                                          />
                                           {nestedEntry.displayText}
                                         </Link>
                                       </Menu.Item>

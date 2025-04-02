@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import React from "react";
 import {
@@ -7,7 +7,7 @@ import {
   IconButton,
   Link as ChakraLink,
   Image as ChakraImage,
-  VStack
+  VStack,
 } from "@chakra-ui/react";
 import InstagramIcon from "@/components/icons/InstagramIcon";
 import FacebookIcon from "@/components/icons/FacebookIcon";
@@ -25,52 +25,37 @@ export default function Footer() {
         {/* Social Media Icons */}
         <HStack>
           <ChakraLink asChild variant="plainLink">
-            <Link
-                href="https://instagram.com"
-                target="_blank"
-            >
+            <Link href="https://instagram.com" target="_blank">
               <IconButton variant="ghost">
-                <InstagramIcon/>
+                <InstagramIcon />
               </IconButton>
             </Link>
           </ChakraLink>
           <ChakraLink asChild variant="plainLink">
-            <Link
-                href="https://facebook.com"
-                target="_blank"
-            >
+            <Link href="https://facebook.com" target="_blank">
               <IconButton variant="ghost">
-                <FacebookIcon/>
+                <FacebookIcon />
               </IconButton>
             </Link>
           </ChakraLink>
           <ChakraLink asChild variant="plainLink">
-            <Link
-                href="https://twitter.com"
-                target="_blank"
-            >
+            <Link href="https://twitter.com" target="_blank">
               <IconButton variant="ghost">
-                <XIcon/>
+                <XIcon />
               </IconButton>
             </Link>
           </ChakraLink>
           <ChakraLink asChild variant="plainLink">
-            <Link
-                href="https://github.com"
-                target="_blank"
-            >
+            <Link href="https://github.com" target="_blank">
               <IconButton variant="ghost">
-                <GitHubIcon/>
+                <GitHubIcon />
               </IconButton>
             </Link>
           </ChakraLink>
           <ChakraLink asChild variant="plainLink">
-            <Link
-                href="https://youtube.com"
-                target="_blank"
-            >
+            <Link href="https://youtube.com" target="_blank">
               <IconButton variant="ghost">
-                <YouTubeIcon/>
+                <YouTubeIcon />
               </IconButton>
             </Link>
           </ChakraLink>
@@ -79,7 +64,7 @@ export default function Footer() {
         {/* Footer Links */}
         <HStack gap={5}>
           <ChakraImage asChild>
-            <Image src="/logo.png" alt="WCA Logo" height={50} width={50}/>
+            <Image src="/logo.png" alt="WCA Logo" height={50} width={50} />
           </ChakraImage>
           <ChakraLink asChild variant="plainLink">
             <Link href="/about">About Us</Link>
@@ -91,10 +76,7 @@ export default function Footer() {
             <Link href="/contact">Contact</Link>
           </ChakraLink>
           <ChakraLink asChild variant="plainLink">
-            <Link
-              href="https://github.com"
-              target="_blank"
-            >
+            <Link href="https://github.com" target="_blank">
               GitHub
             </Link>
           </ChakraLink>
@@ -106,7 +88,6 @@ export default function Footer() {
           </ChakraLink>
         </HStack>
       </VStack>
-
     </Center>
   );
 }

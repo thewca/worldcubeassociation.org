@@ -81,7 +81,7 @@ const iconOptions = [
   "WCA Officers and Board",
   "Weibo",
   "X (formerly Twitter)",
-  "YouTube"
+  "YouTube",
 ];
 
 const LinkItem: Block = {
@@ -101,8 +101,8 @@ const LinkItem: Block = {
     {
       name: "displayIcon",
       type: "select",
-      options: iconOptions
-    }
+      options: iconOptions,
+    },
   ],
 };
 
@@ -122,7 +122,7 @@ const NestedDropdown: Block = {
     {
       name: "displayIcon",
       type: "select",
-      options: iconOptions
+      options: iconOptions,
     },
     {
       name: "entries",
@@ -145,7 +145,7 @@ const Dropdown: Block = {
     {
       name: "displayIcon",
       type: "select",
-      options: iconOptions
+      options: iconOptions,
     },
     {
       name: "entries",

@@ -2,7 +2,17 @@
 
 import { useSession, signIn, signOut } from "next-auth/react";
 import { usePermissions } from "@/providers/PermissionProvider";
-import { Button, Code, Container, Text, Link as ChakraLink, HStack, Card, SimpleGrid, Box } from "@chakra-ui/react";
+import {
+  Button,
+  Code,
+  Container,
+  Text,
+  Link as ChakraLink,
+  HStack,
+  Card,
+  SimpleGrid,
+  Box,
+} from "@chakra-ui/react";
 import Link from "next/link";
 
 import AboutTheRegulationsIcon from "@/components/icons/AboutTheRegulationsIcon";
@@ -87,7 +97,6 @@ import WeiboIcon from "@/components/icons/WeiboIcon";
 import XIcon from "@/components/icons/XIcon";
 import YouTubeIcon from "@/components/icons/YoutubeIcon";
 
-
 export default function Home() {
   const { data: session } = useSession();
   const permissions = usePermissions();
@@ -103,123 +112,133 @@ export default function Home() {
           )}
         </>
       ) : (
-        <Button onClick={() => signIn("WCA")} colorPalette="blue">Sign in</Button>
+        <Button onClick={() => signIn("WCA")} colorPalette="blue">
+          Sign in
+        </Button>
       )}
       <Text>Test Links:</Text>
       <HStack>
-      <ChakraLink asChild variant="colouredLink" colorPalette="blue">
-        <Link href="competitions/OC2024">
-          <Button variant="outline">OC2024</Button>
-        </Link>
-      </ChakraLink>
-      <ChakraLink asChild variant="colouredLink" colorPalette="red">
-        <Link href="competitions/WC2025">
-          <Button variant="outline" colorPalette="red">WC2025</Button>
-        </Link>
-      </ChakraLink>
-      <ChakraLink asChild variant="colouredLink" colorPalette="red">
-        <Link href="persons/2022ANDE01">
-          <Button variant="outline" colorPalette="red">2022ANDE01</Button>
-        </Link>
-      </ChakraLink>
+        <ChakraLink asChild variant="colouredLink" colorPalette="blue">
+          <Link href="competitions/OC2024">
+            <Button variant="outline">OC2024</Button>
+          </Link>
+        </ChakraLink>
+        <ChakraLink asChild variant="colouredLink" colorPalette="red">
+          <Link href="competitions/WC2025">
+            <Button variant="outline" colorPalette="red">
+              WC2025
+            </Button>
+          </Link>
+        </ChakraLink>
+        <ChakraLink asChild variant="colouredLink" colorPalette="red">
+          <Link href="persons/2022ANDE01">
+            <Button variant="outline" colorPalette="red">
+              2022ANDE01
+            </Button>
+          </Link>
+        </ChakraLink>
       </HStack>
       <Card.Root>
-      <Card.Body>
-        <Box mb="4">
-          <Text fontSize="xl" fontWeight="bold">WCA Icon Gallery</Text>
-        </Box>
-        <SimpleGrid columns={{ base: 2, sm: 3, md: 4, lg: 6 }} spacing={6}>
-          {[
-            AboutTheRegulationsIcon,
-            AboutTheWcaIcon,
-            AdminResultsIcon,
-            AllCompsIcon,
-            BookmarkIcon,
-            CloneIcon,
-            CompNotStartedIcon,
-            CompRegoClosedIcon,
-            CompRegoClosedRedIcon,
-            CompRegoFullButOpenIcon,
-            CompRegoFullButOpenOrangeIcon,
-            CompRegoNotFullOpenIcon,
-            CompRegoNotFullOpenGreenIcon,
-            CompRegoNotOpenYetIcon,
-            CompRegoNotOpenYetGreyIcon,
-            CompRegoOpenDateIcon,
-            CompRegoCloseDateIcon,
-            CompetitorsIcon,
-            ContactIcon,
-            DelegateReportIcon,
-            DetailsIcon,
-            DeveloperExportIcon,
-            DisciplinaryLogIcon,
-            DisclaimerIcon,
-            DownloadIcon,
-            EditIcon,
-            EducationalResourcesIcon,
-            ErrorIcon,
-            ExternalLinkIcon,
-            FacebookIcon,
-            FiltersIcon,
-            GitHubIcon,
-            GuidelinesIcon,
-            HelpAndFaqsIcon,
-            IncidentsLogIcon,
-            InformationIcon,
-            InstagramIcon,
-            LanguageIcon,
-            ListIcon,
-            LocationIcon,
-            ManageTabsIcon,
-            MapIcon,
-            MediaSubmissionIcon,
-            MenuIcon,
-            MultimediaIcon,
-            MyCompsIcon,
-            MyResultsIcon,
-            NationalChampionshipIcon,
-            NewCompIcon,
-            OnTheSpotRegistrationIcon,
-            PaymentIcon,
-            PrivacyIcon,
-            RankingsIcon,
-            RecordsIcon,
-            RegionalOrganisationsIcon,
-            RegisterIcon,
-            RegistrationIcon,
-            RegulationsAndGuidelinesIcon,
-            RegulationsHistoryIcon,
-            RegulationsIcon,
-            ResultsExportIcon,
-            ScramblesIcon,
-            SearchIcon,
-            SpectatorsIcon,
-            SpeedcubingHistoryIcon,
-            SpotsLeftIcon,
-            StatisticsIcon,
-            TeamsCommitteesAndCouncilsIcon,
-            ToolsIcon,
-            TranslatorsIcon,
-            TwitchIcon,
-            UserIcon,
-            UsersPersonsIcon,
-            VenueIcon,
-            WcaDelegatesIcon,
-            WcaDocsIcon,
-            WcaLiveIcon,
-            WcaOfficersAndBoardIcon,
-            WeiboIcon,
-            XIcon,
-            YouTubeIcon
-          ].map((IconComponent, index) => (
-            <Box textAlign="center" key={index}>
-              <IconComponent size="lg" color="textPrimary" />
-              <Text mt="2" fontSize="sm">{IconComponent.name}</Text>
-            </Box>
-          ))}
-        </SimpleGrid>
-      </Card.Body>
-    </Card.Root>
+        <Card.Body>
+          <Box mb="4">
+            <Text fontSize="xl" fontWeight="bold">
+              WCA Icon Gallery
+            </Text>
+          </Box>
+          <SimpleGrid columns={{ base: 2, sm: 3, md: 4, lg: 6 }} spacing={6}>
+            {[
+              AboutTheRegulationsIcon,
+              AboutTheWcaIcon,
+              AdminResultsIcon,
+              AllCompsIcon,
+              BookmarkIcon,
+              CloneIcon,
+              CompNotStartedIcon,
+              CompRegoClosedIcon,
+              CompRegoClosedRedIcon,
+              CompRegoFullButOpenIcon,
+              CompRegoFullButOpenOrangeIcon,
+              CompRegoNotFullOpenIcon,
+              CompRegoNotFullOpenGreenIcon,
+              CompRegoNotOpenYetIcon,
+              CompRegoNotOpenYetGreyIcon,
+              CompRegoOpenDateIcon,
+              CompRegoCloseDateIcon,
+              CompetitorsIcon,
+              ContactIcon,
+              DelegateReportIcon,
+              DetailsIcon,
+              DeveloperExportIcon,
+              DisciplinaryLogIcon,
+              DisclaimerIcon,
+              DownloadIcon,
+              EditIcon,
+              EducationalResourcesIcon,
+              ErrorIcon,
+              ExternalLinkIcon,
+              FacebookIcon,
+              FiltersIcon,
+              GitHubIcon,
+              GuidelinesIcon,
+              HelpAndFaqsIcon,
+              IncidentsLogIcon,
+              InformationIcon,
+              InstagramIcon,
+              LanguageIcon,
+              ListIcon,
+              LocationIcon,
+              ManageTabsIcon,
+              MapIcon,
+              MediaSubmissionIcon,
+              MenuIcon,
+              MultimediaIcon,
+              MyCompsIcon,
+              MyResultsIcon,
+              NationalChampionshipIcon,
+              NewCompIcon,
+              OnTheSpotRegistrationIcon,
+              PaymentIcon,
+              PrivacyIcon,
+              RankingsIcon,
+              RecordsIcon,
+              RegionalOrganisationsIcon,
+              RegisterIcon,
+              RegistrationIcon,
+              RegulationsAndGuidelinesIcon,
+              RegulationsHistoryIcon,
+              RegulationsIcon,
+              ResultsExportIcon,
+              ScramblesIcon,
+              SearchIcon,
+              SpectatorsIcon,
+              SpeedcubingHistoryIcon,
+              SpotsLeftIcon,
+              StatisticsIcon,
+              TeamsCommitteesAndCouncilsIcon,
+              ToolsIcon,
+              TranslatorsIcon,
+              TwitchIcon,
+              UserIcon,
+              UsersPersonsIcon,
+              VenueIcon,
+              WcaDelegatesIcon,
+              WcaDocsIcon,
+              WcaLiveIcon,
+              WcaOfficersAndBoardIcon,
+              WeiboIcon,
+              XIcon,
+              YouTubeIcon,
+            ].map((IconComponent, index) => (
+              <Box textAlign="center" key={index}>
+                <IconComponent size="lg" color="textPrimary" />
+                <Text mt="2" fontSize="sm">
+                  {IconComponent.name}
+                </Text>
+              </Box>
+            ))}
+          </SimpleGrid>
+        </Card.Body>
+      </Card.Root>
     </Container>
   );
 }

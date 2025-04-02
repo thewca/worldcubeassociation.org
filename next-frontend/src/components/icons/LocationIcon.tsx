@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import { createIcon } from "@chakra-ui/react"
+import { createIcon } from "@chakra-ui/react";
 
 const LocationIcon = createIcon({
   displayName: "LocationIcon",
@@ -13,10 +13,10 @@ const LocationIcon = createIcon({
       />
     </>
   ),
-})
+});
 
 const LocationIconPreview = () => {
-  return <LocationIcon size="lg"  />
-}
+  return <LocationIcon size="lg" />;
+};
 
-export default LocationIconPreview
+export default LocationIconPreview;
