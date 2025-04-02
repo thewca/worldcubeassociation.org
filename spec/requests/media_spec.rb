@@ -58,7 +58,7 @@ RSpec.describe "media" do
   let!(:medium_2013) { FactoryBot.create(:competition_medium, :pending, competition: competition_2013, text: "i am from 2013 and pending") }
   let!(:accepted_medium_2013) { FactoryBot.create(:competition_medium, :accepted, competition: competition_2013, text: "i am from 2013 and accepted") }
 
-  let(:competition) { FactoryBot.create(:competition, :with_delegate, :visible, countryId: "United Kingdom", cityName: "Peterborough, Cambridgeshire", starts: Date.today) }
+  let(:competition) { FactoryBot.create(:competition, :with_delegate, :visible, country_id: "United Kingdom", city_name: "Peterborough, Cambridgeshire", starts: Date.today) }
   let!(:medium) { FactoryBot.create(:competition_medium, :pending, competition: competition, text: "i am pending") }
   let!(:accepted_medium) { FactoryBot.create(:competition_medium, :accepted, competition: competition, text: "i am accepted") }
 
@@ -120,7 +120,7 @@ RSpec.describe "media" do
     end
 
     describe "filter by region" do
-      let!(:competition_us) { FactoryBot.create(:competition, :with_delegate, :visible, countryId: "USA", starts: Date.today) }
+      let!(:competition_us) { FactoryBot.create(:competition, :with_delegate, :visible, country_id: "USA", starts: Date.today) }
       let!(:medium_us) { FactoryBot.create(:competition_medium, :accepted, competition: competition_us, text: "i am in the us and accepted") }
 
       it "filters by country" do

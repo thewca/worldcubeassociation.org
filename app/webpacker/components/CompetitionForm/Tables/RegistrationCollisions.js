@@ -91,9 +91,9 @@ function CollisionsTableCompRow({ comp, showEvents }) {
         />
       </Table.Cell>
       <Table.Cell name="location" width={2}>
-        {comp.cityName}
+        {comp.city_name}
         {' '}
-        {comp.countryId}
+        {comp.country_id}
       </Table.Cell>
       {showEvents && (
         <Table.Cell name="events" width={2}>

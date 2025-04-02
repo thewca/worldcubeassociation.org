@@ -10,7 +10,7 @@ RSpec.describe "Competition WCIF" do
       :with_competitor_limit,
       id: "TestComp2014",
       name: "Test Comp 2014",
-      cellName: "Test 2014",
+      cell_name: "Test 2014",
       start_date: "2014-02-03",
       end_date: "2014-02-05",
       external_website: "http://example.com",

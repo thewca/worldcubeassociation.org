@@ -185,6 +185,6 @@ class CompetitionSeries < ApplicationRecord
   end
 
   def public_competitions
-    self.competitions.where(showAtAll: true)
+    self.competitions.where(show_at_all: true)
   end
 end

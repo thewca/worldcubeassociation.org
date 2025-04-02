@@ -90,7 +90,7 @@ class ResultsController < ApplicationController
             average value
           FROM Results result
           #{@gender_condition.present? ? "JOIN Persons persons ON result.personId = persons.wca_id and persons.subId = 1" : ""}
-          #{@years_condition_competition.present? ? "JOIN Competitions competition on competition.id = competitionId" : ""}
+          #{@years_condition_competition.present? ? "JOIN competitions on competitions.id = competitionId" : ""}
           WHERE average > 0
             #{@event_condition}
             #{@years_condition_competition}
@@ -109,7 +109,7 @@ class ResultsController < ApplicationController
               value#{i} value
             FROM Results result
             #{@gender_condition.present? ? "JOIN Persons persons ON result.personId = persons.wca_id and persons.subId = 1" : ""}
-            #{@years_condition_competition.present? ? "JOIN Competitions competition on competition.id = competitionId" : ""}
+            #{@years_condition_competition.present? ? "JOIN competitions on competitions.id = competitionId" : ""}
             WHERE value#{i} > 0
               #{@event_condition}
               #{@years_condition_competition}
@@ -145,7 +145,7 @@ class ResultsController < ApplicationController
           GROUP BY result.countryId
         ) record
         JOIN Results result ON result.#{value} = recordValue AND result.countryId = recordCountryId
-        JOIN Competitions competition on competition.id = competitionId
+        JOIN competitions on competitions.id = competitionId
         #{@gender_condition.present? ? "JOIN Persons persons ON result.personId = persons.wca_id and persons.subId = 1" : ""}
         WHERE 1
           #{@event_condition}
@@ -197,25 +197,25 @@ class ResultsController < ApplicationController
 
       @query = <<-SQL.squish
         SELECT
-          competition.start_date,
-          YEAR(competition.start_date)  year,
-          MONTH(competition.start_date) month,
-          DAY(competition.start_date)   day,
-          event.id             eventId,
-          event.name           eventName,
-          result.id            id,
-          result.type          type,
-          result.value         value,
-          result.formatId      formatId,
-          result.roundTypeId   roundTypeId,
-          event.format         valueFormat,
-                               recordName,
-          result.personId      personId,
-          result.personName    personName,
-          result.countryId     countryId,
-          country.name         countryName,
-          competition.id       competitionId,
-          competition.cellName competitionName,
+          competitions.start_date,
+          YEAR(competitions.start_date)  year,
+          MONTH(competitions.start_date) month,
+          DAY(competitions.start_date)   day,
+          event.id              eventId,
+          event.name            eventName,
+          result.id             id,
+          result.type           type,
+          result.value          value,
+          result.formatId       formatId,
+          result.roundTypeId    roundTypeId,
+          event.format          valueFormat,
+                                recordName,
+          result.personId       personId,
+          result.personName     personName,
+          result.countryId      countryId,
+          country.name          countryName,
+          competitions.id       competitionId,
+          competitions.cellName competitionName,
           value1, value2, value3, value4, value5
         FROM
           (SELECT Results.*, 'single' type, best    value, regionalSingleRecord  recordName FROM Results WHERE regionalSingleRecord<>'' UNION
@@ -223,12 +223,12 @@ class ResultsController < ApplicationController
           #{@gender_condition.present? ? "JOIN Persons persons ON result.personId = persons.wca_id and persons.subId = 1," : ","}
           Events event,
           RoundTypes roundType,
-          Competitions competition,
+          competitions,
           Countries country
         WHERE event.id = eventId
           AND event.`rank` < 1000
           AND roundType.id = roundTypeId
-          AND competition.id = competitionId
+          AND competitions.id = competitionId
           AND country.id = result.countryId
           #{@region_condition}
           #{@event_condition}
@@ -259,18 +259,18 @@ class ResultsController < ApplicationController
   private def current_records_query(value, type)
     <<-SQL.squish
       SELECT
-        '#{type}'            type,
-                             result.*,
-                             value,
-        event.name           eventName,
-                             format,
-        country.name         countryName,
-        competition.cellName competitionName,
+        '#{type}'             type,
+                              result.*,
+                              value,
+        event.name            eventName,
+                              format,
+        country.name          countryName,
+        competitions.cellName competitionName,
                              `rank`,
-        competition.start_date,
-        YEAR(competition.start_date)  year,
-        MONTH(competition.start_date) month,
-        DAY(competition.start_date)   day
+        competitions.start_date,
+        YEAR(competitions.start_date)  year,
+        MONTH(competitions.start_date) month,
+        DAY(competitions.start_date)   day
       FROM
         (SELECT eventId recordEventId, MIN(valueAndId) DIV 1000000000 value
           FROM Concise#{type.capitalize}Results result
@@ -285,7 +285,7 @@ class ResultsController < ApplicationController
         #{@gender_condition.present? ? "JOIN Persons persons ON result.personId = persons.wca_id and persons.subId = 1," : ","}
         Events event,
         Countries country,
-        Competitions competition
+        competitions
       WHERE result.#{value} = value
         #{@event_condition}
         #{@region_condition}

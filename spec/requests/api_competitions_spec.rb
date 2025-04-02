@@ -584,7 +584,7 @@ RSpec.describe "API Competitions" do
 
     it 'takes parameter to filter by continent' do
       FactoryBot.create_list(:competition, 6, :visible)
-      FactoryBot.create_list(:competition, 4, :visible, countryId: 'Afghanistan')
+      FactoryBot.create_list(:competition, 4, :visible, country_id: 'Afghanistan')
 
       get api_v0_competition_index_path, params: { continent: '_North America' }
       expect(response).to be_successful
