@@ -75,6 +75,9 @@ module Waitlistable
         self.waiting_list.add(self) if should_add
         self.waiting_list.move_to_position(self, target_position) if should_move
         self.waiting_list.remove(self) if should_remove
+
+        # Keep track of the now-updated position
+        self.track_waitlist_position!
       else
         @tracked_waiting_list_position = target_position
       end
