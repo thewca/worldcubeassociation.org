@@ -26,12 +26,12 @@ module Registrations
 
         competing_payload = raw_payload['competing']
         comment = competing_payload&.dig('comment')
-        organizer_comment = competing_payload&.dig('organizer_comment')
+        organizer_comment = competing_payload&.dig('organizer_comment') || competing_payload&.dig('admin_comment')
         competing_status = competing_payload&.dig('status')
         waiting_list_position = competing_payload&.dig('waiting_list_position')
 
         new_registration.comments = comment if competing_payload&.key?('comment')
-        new_registration.administrative_notes = organizer_comment if competing_payload&.key?('organizer_comment')
+        new_registration.administrative_notes = organizer_comment if competing_payload&.key?('organizer_comment') || competing_payload&.key?('admin_comment')
         new_registration.competing_status = competing_status if competing_payload&.key?('status')
         new_registration.waiting_list_position = waiting_list_position if competing_payload&.key?('waiting_list_position')
 
