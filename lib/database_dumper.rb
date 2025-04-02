@@ -1107,21 +1107,22 @@ module DatabaseDumper
       ),
     }.freeze,
     "Scrambles" => {
+      source_table: "scrambles",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
-          competitionId
-          eventId
-          groupId
-          isExtra
-          roundTypeId
           scramble
-          scrambleId
-          scrambleNum
         ),
       ),
       tsv_sanitizers: actions_to_column_sanitizers(
         fake_values: {
           "scramble" => "IF(eventId='333mbf', REPLACE(scramble, '\\n', '|'), scramble)",
+          "competitionId" => "competition_id",
+          "eventId" => "event_id",
+          "groupId" => "group_id",
+          "isExtra" => "is_extra",
+          "roundTypeId" => "round_type_id",
+          "scrambleId" => "scramble_id",
+          "scrambleNum" => "scramble_num",
         },
       ),
     }.freeze,
