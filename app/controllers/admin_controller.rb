@@ -242,16 +242,6 @@ class AdminController < ApplicationController
     redirect_to panel_page_path(id: User.panel_pages[:computeAuxiliaryData])
   end
 
-  def check_regional_records
-    @check_records_request = CheckRegionalRecordsForm.new(
-      competition_id: params[:competition_id] || nil,
-      event_id: params[:event_id] || nil,
-      refresh_index: params[:refresh_index] || nil,
-    )
-
-    @cad_timestamp = ComputeAuxiliaryData.successful_start_date&.to_fs || 'never'
-  end
-
   def override_regional_records
     action_params = params.require(:check_regional_records_form)
                           .permit(:competition_id, :event_id, :refresh_index)
@@ -277,7 +267,7 @@ class AdminController < ApplicationController
     competition_id = params.dig(:regional_record_overrides, :competition_id)
     event_id = params.dig(:regional_record_overrides, :event_id)
 
-    redirect_to action: :check_regional_records, competition_id: competition_id, event_id: event_id
+    redirect_to panel_page_path(id: User.panel_pages[:checkRecords], competition_id: competition_id, event_id: event_id)
   end
 
   def all_voters

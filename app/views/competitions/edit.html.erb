@@ -1,5 +1,11 @@
 <% provide(:title, @competition.name) %>
+<% add_to_packs("wca_maps") %>
 
 <%= render layout: 'nav' do %>
-  <%= render 'competition_form' %>
+  <%= react_component("CompetitionForm/Edit", {
+    competition: @competition.to_form_data,
+    storedEvents: @competition.events,
+    isAdminView: @competition_admin_view,
+    isSeriesPersisted: @competition.competition_series&.persisted? || false,
+  }) %>
 <% end %>
