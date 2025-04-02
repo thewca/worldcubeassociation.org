@@ -60,6 +60,12 @@ Capybara.javascript_driver = :playwright
 # Recommended per https://playwright-ruby-client.vercel.app/docs/article/guides/rails_integration#update-timeout
 Capybara.default_max_wait_time = 15
 
+if EnvConfig.RUN_CAPYBARA_ON_HOST?
+  Capybara.server_host = '0.0.0.0'
+  Capybara.always_include_port = true
+  Capybara.app_host = "http://hostmachine"
+end
+
 Capybara::Screenshot.register_driver :playwright do |driver, path|
   driver.save_screenshot(path)
 end

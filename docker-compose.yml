@@ -165,6 +165,8 @@ services:
   wca_playwright:
     image: mcr.microsoft.com/playwright:v1.51.1
     container_name: "playwright"
+    extra_hosts:
+      - "hostmachine:host-gateway"
     # The following options `ipc`, `cap_add` and `init` are per Playwright's documentation: https://playwright.dev/docs/ci#docker
     ipc: "host"
     cap_add:
