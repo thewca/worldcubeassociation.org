@@ -11,6 +11,7 @@ ENV RAILS_LOG_TO_STDOUT="1" \
     RAILS_ENV="production" \
     BUNDLE_WITHOUT="development:test" \
     BUNDLE_DEPLOYMENT="1" \
+    PLAYWRIGHT_BROWSERS_PATH="/rails/pw-browsers" \
     BUILD_TAG=$BUILD_TAG \
     WCA_LIVE_SITE=$WCA_LIVE_SITE \
     SHAKAPACKER_ASSET_HOST=$SHAKAPACKER_ASSET_HOST
@@ -27,10 +28,10 @@ ARG NODE_MAJOR=20
 RUN curl -fsSL https://deb.nodesource.com/setup_${NODE_MAJOR}.x | bash && \
     apt-get install -y nodejs
 
-FROM base AS build
-
 # Enable 'corepack' feature that lets NPM download the package manager on-the-fly as required.
 RUN corepack enable
+
+FROM base AS build
 
 # Install native dependencies for Ruby:
 # libvips = image processing for Rails ActiveStorage attachments
@@ -68,6 +69,12 @@ RUN --mount=type=cache,sharing=private,target=/rails/.cache/bundle \
 COPY package.json yarn.lock .yarnrc.yml ./
 RUN ./bin/yarn install --immutable
 
+# Install Playwright browser executables. This is configured to land in /rails/pw-browsers
+#   via the `PLAYWRIGHT_BROWSERS_PATH` env variable declared at the top
+RUN --mount=type=cache,sharing=private,target=/rails/.cache/pw-browsers \
+  PLAYWRIGHT_BROWSERS_PATH="/rails/.cache/pw-browsers" ./bin/yarn playwright install chromium && \
+  cp -ar /rails/.cache/pw-browsers pw-browsers
+
 COPY . .
 
 RUN ASSETS_COMPILATION=true SECRET_KEY_BASE=1 RAILS_MAX_THREADS=4 NODE_OPTIONS="--max_old_space_size=4096" ./bin/bundle exec i18n export
@@ -98,10 +105,15 @@ RUN apt-get update -qq && \
       fonts-lmodern
 
 RUN useradd rails --create-home --shell /bin/bash
-USER rails:rails
 
-# Copy built artifacts: gems, application
+# Copy built artifacts: gems, application, PW browsers
 COPY --chown=rails:rails --from=build /rails .
+
+# We already need the `bin/yarn` file and our Yarn lockfile to pinpoint the Playwright version
+#   but we also still need `sudo` privileges to be able to install runtime dependencies through apt
+RUN ./bin/yarn dlx playwright install-deps chromium
+
+USER rails:rails
 
 FROM runtime AS sidekiq
 

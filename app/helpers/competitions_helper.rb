@@ -227,6 +227,14 @@ module CompetitionsHelper
     [first_time, last_time]
   end
 
+  def playwright_connection(&block)
+    if Rails.env.production? || EnvConfig.PLAYWRIGHT_RUN_LOCALLY?
+      Playwright.create(playwright_cli_executable_path: 'yarn dlx --quiet playwright', &block)
+    else
+      Playwright.connect_to_playwright_server(EnvConfig.PLAYWRIGHT_SERVER_SOCKET_URL, &block)
+    end
+  end
+
   def create_pdfs_directory
     FileUtils.mkdir_p(CleanupPdfs::CACHE_DIRECTORY) unless File.directory?(CleanupPdfs::CACHE_DIRECTORY)
   end

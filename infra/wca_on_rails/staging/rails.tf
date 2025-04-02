@@ -101,6 +101,10 @@ locals {
       value = "E3AXWQVI864TGL"
     },
     {
+      name = "PLAYWRIGHT_RUN_LOCALLY",
+      value = "true"
+    },
+    {
       name = "DATABASE_WRT_USER"
       value = var.DATABASE_WRT_USER
     },
