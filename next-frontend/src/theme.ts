@@ -265,42 +265,43 @@ const customConfig = defineConfig({
         },
         variants: {
           variant: {
-            solid: { 
-              borderWidth: "2px", 
-              borderColor: "colorPalette.solid", 
-              bg: "colorPalette.solid", 
+            solid: {
+              borderWidth: "2px",
+              borderColor: "colorPalette.solid",
+              bg: "colorPalette.solid",
               color: "colorPalette.contrast",
               _hover: {
                   bg: "colorPalette.muted",
-                  borderColor: "colorPalette.muted", 
+                  borderColor: "colorPalette.muted",
                   color: "whiteText",
                 },
               _expanded: {
                   bg: "colorPalette.muted",
-                  borderColor: "colorPalette.muted", 
+                  borderColor: "colorPalette.muted",
                 },
              },
             outline: {
-               borderWidth: "2px", 
-               borderColor: "colorPalette.solid", 
-               color: "fg.DEFAULT" ,
-               bg: "transparent",
-               _hover: {
-                  bg: "colorPalette.fg/30",
-                },},
-            ghost: { 
-              borderWidth: "0px", 
-              bg: "transparent", 
+              borderWidth: "2px",
+              borderColor: "colorPalette.solid",
+              color: "fg.DEFAULT",
+              bg: "transparent",
+              _hover: {
+                bg: "colorPalette.fg/30",
+              },
+            },
+            ghost: {
+              borderWidth: "0px",
+              bg: "transparent",
               color: "fg.DEFAULT",
               focusRing: "colorPalette.highContrast",
               _hover: {
-                  color: "colorPalette.highContrast", 
-                  bg: "transparent", 
-                },
-                _expanded: {
-                  bg: "transparent",
-                },
-                 },
+                color: "colorPalette.highContrast",
+                bg: "transparent",
+              },
+              _expanded: {
+                bg: "transparent",
+              },
+            },
             surface: {
               color: "whiteText",
             },
