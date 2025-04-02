@@ -57,7 +57,7 @@ Capybara.register_driver :playwright_debug do |app|
 end
 
 Capybara.register_driver :playwright do |app|
-  Capybara::Playwright::Driver.new(app, playwright_server_endpoint_url: 'ws://localhost:8089')
+  Capybara::Playwright::Driver.new(app, playwright_server_endpoint_url: EnvConfig.PLAYWRIGHT_SERVER_SOCKET_URL)
 end
 
 Capybara.javascript_driver = :playwright
