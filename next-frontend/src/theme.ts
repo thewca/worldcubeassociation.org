@@ -389,7 +389,14 @@ const customConfig = defineConfig({
               _hover: {
                 color: "{colors.blue.highContrast}",
               }
-            }
+            },
+            colouredLink: {
+              color: "{fg.inverse}",
+              fontWeight: "medium",
+              _hover: {
+                color: "colorPalette.highContrast",
+              }
+            },
           },
           hoverArrow: {
             true: {

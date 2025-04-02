@@ -93,7 +93,7 @@ export default function Home() {
   const permissions = usePermissions();
 
   return (
-    <Container centerContent>
+    <Container centerContent gap="3">
       {session ? (
         <>
           <Text>Welcome, {session.user?.name}</Text>
@@ -107,17 +107,17 @@ export default function Home() {
       )}
       <Text>Test Links:</Text>
       <HStack>
-      <ChakraLink asChild variant="plainLink">
+      <ChakraLink asChild variant="colouredLink" colorPalette="blue">
         <Link href="competitions/OC2024">
           <Button variant="outline">OC2024</Button>
         </Link>
       </ChakraLink>
-      <ChakraLink asChild variant="plainLink">
+      <ChakraLink asChild variant="colouredLink" colorPalette="red">
         <Link href="competitions/WC2025">
           <Button variant="outline" colorPalette="red">WC2025</Button>
         </Link>
       </ChakraLink>
-      <ChakraLink asChild variant="plainLink">
+      <ChakraLink asChild variant="colouredLink" colorPalette="red">
         <Link href="persons/2022ANDE01">
           <Button variant="outline" colorPalette="red">2022ANDE01</Button>
         </Link>
