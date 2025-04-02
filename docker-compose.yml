@@ -166,13 +166,14 @@ services:
     image: mcr.microsoft.com/playwright:v1.51.1
     container_name: "playwright"
     environment:
+      - DEBIAN_FRONTEND=noninteractive
       - DEBUG=pw:api
     ports:
       - "8089:8089"
     working_dir: /app
     command: >
-      bash -c 'apt update &&
-      apt install fonts-dejavu fonts-unfonts-core fonts-wqy-microhei fonts-ipafont fonts-thai-tlwg fonts-lmodern &&
+      bash -c 'corepack enable &&
+      ./package-install.dev.sh fonts.pdf.txt &&
       fc-cache -f -v &&
       yarn dlx playwright run-server --port 8089 --host=0.0.0.0'
     volumes:
