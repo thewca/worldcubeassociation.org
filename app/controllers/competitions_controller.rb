@@ -202,7 +202,7 @@ class CompetitionsController < ApplicationController
 
           raw_content = self.render_to_string
 
-          Playwright.connect_to_playwright_server('ws://playwright:8089?browser=chromium') do |playwright|
+          Playwright.connect_to_playwright_server(EnvConfig.PLAYWRIGHT_SERVER_SOCKET_URL) do |playwright|
             playwright.chromium.launch(headless: true) do |browser|
               page = browser.new_page
 

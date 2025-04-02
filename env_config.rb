@@ -107,6 +107,9 @@ EnvConfig = SuperConfig.new(raise_exception: !is_compiling_assets) do
   # For Asset Compilation
   optional :ASSETS_COMPILATION, :bool, false
 
+  # For local Playwright instances
+  optional :PLAYWRIGHT_SERVER_SOCKET_URL, :string, ''
+
   # For API Only Server
   optional :API_ONLY, :bool, false
 
