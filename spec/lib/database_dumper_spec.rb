@@ -74,4 +74,12 @@ RSpec.describe "DatabaseDumper" do
       expect(banned_group.roles).to be_empty
     end
   end
+
+  context "Results Export" do
+    it "defines sanitizers that match the expected output schema (backwards compatibility)" do
+      with_database :results_dump do
+        expect(DatabaseDumper::RESULTS_SANITIZERS.keys).to match_array ActiveRecord::Base.connection.data_sources
+      end
+    end
+  end
 end
