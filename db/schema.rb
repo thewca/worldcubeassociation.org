@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_03_06_165113) do
+ActiveRecord::Schema[7.2].define(version: 2025_03_28_121513) do
   create_table "Competitions", id: { type: :string, limit: 32, default: "" }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", limit: 50, default: "", null: false
     t.string "cityName", limit: 50, default: "", null: false
@@ -145,21 +145,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_06_165113) do
     t.string "iso2", limit: 2
     t.index ["continentId"], name: "fk_continents"
     t.index ["iso2"], name: "iso2", unique: true
-  end
-
-  create_table "Events", id: { type: :string, limit: 6, default: "" }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB PACK_KEYS=0", force: :cascade do |t|
-    t.string "name", limit: 54, default: "", null: false
-    t.integer "rank", default: 0, null: false
-    t.string "format", limit: 10, default: "", null: false
-  end
-
-  create_table "Formats", id: { type: :string, limit: 1, default: "" }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
-    t.string "name", limit: 50, default: "", null: false
-    t.string "sort_by", limit: 255, null: false
-    t.string "sort_by_second", limit: 255, null: false
-    t.integer "expected_solve_count", null: false
-    t.integer "trim_fastest_n", null: false
-    t.integer "trim_slowest_n", null: false
   end
 
   create_table "InboxPersons", id: false, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
@@ -729,6 +714,21 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_06_165113) do
     t.string "championship_type", null: false
     t.string "eligible_country_iso2", null: false
     t.index ["championship_type", "eligible_country_iso2"], name: "index_eligible_iso2s_for_championship_on_type_and_country_iso2", unique: true
+  end
+
+  create_table "events", id: { type: :string, limit: 6, default: "" }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB PACK_KEYS=0", force: :cascade do |t|
+    t.string "name", limit: 54, default: "", null: false
+    t.integer "rank", default: 0, null: false
+    t.string "format", limit: 10, default: "", null: false
+  end
+
+  create_table "formats", id: { type: :string, limit: 1, default: "" }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "name", limit: 50, default: "", null: false
+    t.string "sort_by", limit: 255, null: false
+    t.string "sort_by_second", limit: 255, null: false
+    t.integer "expected_solve_count", null: false
+    t.integer "trim_fastest_n", null: false
+    t.integer "trim_slowest_n", null: false
   end
 
   create_table "groups_metadata_board", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
