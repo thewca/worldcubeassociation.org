@@ -1037,8 +1037,8 @@ module DatabaseDumper
       ),
     }.freeze,
     "Countries" => {
+      source_table: "countries",
       column_sanitizers: actions_to_column_sanitizers(
-        source_table: "countries",
         copy: %w(
           id
           iso2
@@ -1050,8 +1050,8 @@ module DatabaseDumper
       ),
     }.freeze,
     "Continents" => {
+      source_table: "continents",
       column_sanitizers: actions_to_column_sanitizers(
-        source_table: "continents",
         copy: %w(
           id
           latitude
