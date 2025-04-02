@@ -7,9 +7,9 @@ module Waitlistable
 
   included do
     delegate :empty?, :length, to: :waiting_list, prefix: true
-    delegate :present?, to: :waiting_list, prefix: true, allow_nil: true
+    delegate :present?, :persisted?, to: :waiting_list, prefix: true, allow_nil: true
 
-    attr_writer :waiting_list_position
+    attr_accessor :tracked_waitlist_position
 
     validates :waiting_list_position, numericality: {
       only_integer: true,
@@ -36,25 +36,24 @@ module Waitlistable
     validates :waiting_list_present?, presence: { if: :waiting_list_position?, frontend_code: Registrations::ErrorCodes::INVALID_REQUEST_DATA }
 
     def waiting_list_position?
-      @waiting_list_position.present?
+      waiting_list_position.present?
     end
 
-    after_save :commit_waitlist_position
+    def waiting_list_position_changed?
+      @tracked_waiting_list_position != waiting_list_position
+    end
+
+    after_save :commit_waitlist_position, if: :waiting_list_persisted?
 
     def commit_waitlist_position
-      should_add = self.waitlistable? && !self.waiting_list_position?
-      should_move = self.waitlistable? && self.waiting_list_position?
-      should_remove = !self.waitlistable? && self.waiting_list_position?
-
-      self.waiting_list.add(self) if should_add
-      self.waiting_list.move_to_position(self, self.waiting_list_position) if should_move
-      self.waiting_list.remove(self) if should_remove
+      self.waiting_list_position = @tracked_waiting_list_position
     end
 
-    after_commit :clear_waitlist_position
+    after_find :track_waitlist_position! # TODO: This may need to be `after_initialize`, not sure about edge cases
+    after_commit :track_waitlist_position!
 
-    private def clear_waitlist_position
-      @waiting_list_position = nil
+    private def track_waitlist_position!
+      @tracked_waiting_list_position = self.waiting_list_position
     end
 
     # Tells the hooks whether the current entity
@@ -63,12 +62,22 @@ module Waitlistable
       false
     end
 
-    # Tiny hack: Calling `waiting_list_position` internally caches the result (like a Rails association would)
-    #   so if we ever want to explicitly trigger a cache, all we have to do is call the base method.
-    after_find :waiting_list_position, if: :waitlistable?
-
     def waiting_list_position
-      @waiting_list_position ||= self.waiting_list&.position(self)
+      self.waiting_list&.position(self)
+    end
+
+    def waiting_list_position=(target_position)
+      if waiting_list_persisted?
+        should_add = self.waitlistable? && target_position.nil?
+        should_move = self.waitlistable? && target_position.present?
+        should_remove = !self.waitlistable? && target_position.present?
+
+        self.waiting_list.add(self) if should_add
+        self.waiting_list.move_to_position(self, target_position) if should_move
+        self.waiting_list.remove(self) if should_remove
+      else
+        @tracked_waiting_list_position = target_position
+      end
     end
   end
 end
