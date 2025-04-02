@@ -22,16 +22,20 @@ module Registrations
         registration.add_history_entry(changes, "worker", user_id, "Worker processed")
       end
 
-      def self.update!(update_params, competition, current_user_id)
+      def self.update_raw!(update_params, competition, current_user_id)
         user_id = update_params[:user_id]
 
-        registration = Registration.find_by(competition: competition, user_id: user_id)
+        Registration.find_by(competition: competition, user_id: user_id)
+                    .tap { self.update!(update_params, it, current_user_id) }
+      end
+
+      def self.update!(update_params, registration, current_user_id)
         registration = Registrations::RegistrationChecker.apply_payload(registration, update_params, clone: false)
 
         ActiveRecord::Base.transaction do
           changes = registration.changes.transform_values { |change| change[1] }
 
-          changes[:waiting_list_position] = registration.waiting_list_position if registration.waiting_list_position?
+          changes[:waiting_list_position] = registration.waiting_list_position if registration.waiting_list_position_changed?
           changes[:event_ids] = registration.changed_event_ids if registration.changed_event_ids.present?
 
           registration.save!
@@ -39,9 +43,6 @@ module Registrations
         end
 
         send_status_change_email(registration, current_user_id) if registration.competing_status_previously_changed?
-
-        # TODO: V3-REG Cleanup Figure out a way to get rid of this reload
-        registration.reload
       end
 
       def self.send_status_change_email(registration, current_user_id)
