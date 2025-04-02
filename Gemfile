@@ -153,7 +153,6 @@ group :test do
   gem 'oga' # XML parsing library introduced for testing RSS feed
   gem 'database_cleaner'
   gem 'rails-controller-testing'
-  gem 'apparition', github: 'twalpole/apparition'
   gem 'capybara-playwright-driver'
   gem 'simplecov', require: false
   gem 'simplecov-lcov', require: false

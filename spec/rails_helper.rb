@@ -10,7 +10,6 @@ require 'rspec/rails'
 # From http://everydayrails.com/2012/04/24/testing-series-rspec-requests.html
 require "capybara/rspec"
 require 'capybara-screenshot/rspec'
-require 'capybara/apparition'
 
 require 'active_record/testing/query_assertions'
 
@@ -32,16 +31,6 @@ Rails.root.glob('spec/support/**/*.rb').each { |f| require f }
 # Checks for pending migrations before tests are run.
 # If you are not using ActiveRecord, you can remove this line.
 ActiveRecord::Migration.maintain_test_schema!
-
-# To debug feature specs using apparition, set `Capybara.javascript_driver = :apparition_debug`
-# and then call `page.driver.debug` in your feature spec.
-Capybara.register_driver :apparition_debug do |app|
-  Capybara::Apparition::Driver.new(app, inspector: true, debug: true, headless: false)
-end
-
-Capybara.register_driver :apparition do |app|
-  Capybara::Apparition::Driver.new(app, js_errors: true, headless: true)
-end
 
 # To debug feature specs using apparition, set `Capybara.javascript_driver = :playwright_debug`
 # and then call `page.driver.with_playwright_page { it.context.enable_debug_console!;it.pause }` in your feature spec.

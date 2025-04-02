@@ -41,14 +41,6 @@ GIT
       railties (>= 3.2)
 
 GIT
-  remote: https://github.com/twalpole/apparition.git
-  revision: ca86be4d54af835d531dbcd2b86e7b2c77f85f34
-  specs:
-    apparition (0.6.0)
-      capybara (~> 3.13, < 4)
-      websocket-driver (>= 0.6.5)
-
-GIT
   remote: https://github.com/zpaulovics/datetimepicker-rails.git
   revision: 7a4640cb932e55866500a86c4f78808a4fca46e6
   submodules: true
@@ -982,7 +974,6 @@ DEPENDENCIES
   activestorage-validator
   after_commit_everywhere
   api-pagination
-  apparition!
   aws-sdk-cloudfront
   aws-sdk-rds
   aws-sdk-s3
@@ -1126,7 +1117,6 @@ CHECKSUMS
   after_commit_everywhere (1.6.0) sha256=c8b3409a1172e43070d2e57f4b9d7b89dce5a7f057576b748cb9fe0a0dd4d917
   ansi (1.5.0) sha256=5408253274e33d9d27d4a98c46d2998266fd51cba58a7eb9d08f50e57ed23592
   api-pagination (6.0.0) sha256=4e8918fc36b7c1cb101f37ef291cae2f69dcb3f288c3c9243b3f403cc514be85
-  apparition (0.6.0)
   ast (2.4.3) sha256=954615157c1d6a382bc27d690d973195e79db7f55e9765ac7c481c60bdb4d383
   autoprefixer-rails (9.4.7) sha256=7104f54efa89e6390391bd894498a9db92bffaf74474942c4152e6dc0775ab3b
   aws-eventstream (1.3.2) sha256=7e2c3a55ca70d7861d5d3c98e47daa463ed539c349caba22b48305b8919572d7
