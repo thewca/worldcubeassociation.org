@@ -179,6 +179,7 @@ services:
     volumes:
       - .:/app
       - node_modules_volume:/app/node_modules
+      - pdf_fonts_volume:/usr/share/fonts
     networks:
       - wca-main
 
@@ -192,6 +193,8 @@ volumes:
   cache_volume:
     driver: local
   next_yarn_volume:
+    driver: local
+  pdf_fonts_volume:
     driver: local
 
 networks:
