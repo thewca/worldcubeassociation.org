@@ -41,7 +41,7 @@
                       <%= link_to result.competition.name, result.competition %>
                     <% end %>
                   </td>
-                  <td class="round"><%= t "rounds.#{result.roundTypeId}.cellName" %></td>
+                  <td class="round"><%= t "rounds.#{result.roundTypeId}.cell_name" %></td>
                   <td class="place"><%= result.pos %></td>
                   <td class="single <%= pb_type_class_for_result(result.regionalSingleRecord, pb_markers[result.id][:single]) %>">
                     <%= result.best_solve.clock_format %>

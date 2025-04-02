@@ -152,57 +152,57 @@ cs:
       #original_hash: 4d618bb
       name: Kvalifikační kolo
       #original_hash: 4d618bb
-      cellName: Kvalifikační kolo
+      cell_name: Kvalifikační kolo
     '1':
       #original_hash: 1e725b6
       name: První kolo
       #original_hash: 1e725b6
-      cellName: První kolo
+      cell_name: První kolo
     '2':
       #original_hash: 985c8d0
       name: Druhé kolo
       #original_hash: 985c8d0
-      cellName: Druhé kolo
+      cell_name: Druhé kolo
     '3':
       #original_hash: e2f74d2
       name: Semifinále
       #original_hash: e2f74d2
-      cellName: Semifinále
+      cell_name: Semifinále
     b:
       #original_hash: 327c999
       name: B Finále
       #original_hash: 327c999
-      cellName: B Finále
+      cell_name: B Finále
     c:
       #original_hash: 672b22c
       name: Finále
       #original_hash: 672b22c
-      cellName: Finále
+      cell_name: Finále
     d:
       #original_hash: 1e725b6
       name: První kolo
       #original_hash: 1e725b6
-      cellName: První kolo
+      cell_name: První kolo
     e:
       #original_hash: 985c8d0
       name: Druhé kolo
       #original_hash: 985c8d0
-      cellName: Druhé kolo
+      cell_name: Druhé kolo
     f:
       #original_hash: 672b22c
       name: Finále
       #original_hash: 672b22c
-      cellName: Finále
+      cell_name: Finále
     g:
       #original_hash: e2f74d2
       name: Semifinále
       #original_hash: e2f74d2
-      cellName: Semifinále
+      cell_name: Semifinále
     h:
       #original_hash: 4d618bb
       name: Kvalifikační kolo
       #original_hash: 4d618bb
-      cellName: Kvalifikační kolo
+      cell_name: Kvalifikační kolo
   attempts:
     #original_hash: 17dae1e
     attempt_name: 'Pokus %{number}'
@@ -456,7 +456,7 @@ cs:
         #original_hash: f91b080
         name_reason: Důvod pro název
         #original_hash: b649210
-        cellName: Přezdívka soutěže
+        cell_name: Přezdívka soutěže
         #original_hash: d523ebb
         countryId: Země
         #original_hash: 25b7b06
@@ -869,7 +869,7 @@ cs:
           pomlčky (-), ampersandy (&), tečky (.), dvojtečky (:), apostrofy (') a
           mezery ( ).
         #original_hash: 525fcc8
-        cellName: >-
+        cell_name: >-
           Zkrácený název pro zobrazení. Pokud je samotný název soutěže
           dostatečně krátký, můžete ho použít (např. Europe 2006).
         #original_hash: bce4589

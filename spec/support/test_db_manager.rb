@@ -9,7 +9,7 @@ class TestDbManager
     Formats
     cronjob_statistics
     preferred_formats
-    RoundTypes
+    round_types
     user_groups
     groups_metadata_delegate_regions
     groups_metadata_board
