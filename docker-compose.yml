@@ -165,10 +165,16 @@ services:
   wca_playwright:
     image: mcr.microsoft.com/playwright:v1.51.1
     container_name: "playwright"
+    # The following options `ipc`, `cap_add` and `init` are per Playwright's documentation: https://playwright.dev/docs/ci#docker
+    ipc: "host"
+    cap_add:
+      - SYS_ADMIN
+    init: true
     environment:
       - DEBIAN_FRONTEND=noninteractive
       - DEBUG=pw:api
       - DISPLAY=$DISPLAY
+      - GSK_RENDERER=cairo # For WebKit to work in headed debug mode
     ports:
       - "8089:8089"
     working_dir: /app
