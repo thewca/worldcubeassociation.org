@@ -10,6 +10,7 @@ Doorkeeper.configure do
   optional_scopes :dob, :email, :manage_competitions, :openid, :profile
 
   base_controller 'ApplicationController'
+  base_metal_controller 'ApplicationController'
 
   # Change the ORM that doorkeeper will use.
   # Currently supported options are :active_record, :mongoid2, :mongoid3,

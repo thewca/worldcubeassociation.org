@@ -879,8 +879,6 @@ eu:
         person1_wca_id: ''
         #original_hash: da39a3e
         person2_wca_id: ''
-        #original_hash: da39a3e
-        person_wca_id: ''
       poll:
         #original_hash: da39a3e
         comment: ''
@@ -1376,17 +1374,18 @@ eu:
     teams_committees_councils:
       #original_hash: 0d62207
       title: 'WCA Taldea, Komiteak eta Kontseiluak'
-      #original_hash: d54d953
+      #original_hash: 4701b90
       description: >-
-        WCAko Taldeak eta Batzarrak antolakundearen funtsezko parte dira, eta
-        egunez lan egiten dute martxan egoteko. Komite horiek WCA komunitateko
-        kideek osatzen dituzte, WCAko ordezkariak eta lehiakideak barne. Talde
-        bakoitzak lider bat du, zeinen lana taldearen funtzionamendu egokia
-        bermatza eta taldeko beste kide batzuk gidatzea den. Kontseiluak talde
-        berezi bat dira, zeregina WCAko Batzarrean aholku-emailea duena, eta
-        komunitateko kideek osatzen dituzte, ez WCAko langileek. Batzarran,
-        Taldean edo Kontseiluan sartzeko postuak irekitzen direnean, nola
-        aplikatzeko informazioa orri nagusian argitaratzen da.
+        WCAko Taldeak eta Komiteak antolakundearen funtsezko parte dira, eta
+        eguneroko lanak egiten dituzte martxan egoteko. Komite horiek WCA
+        komunitateko kideek osatzen dituzte, WCAko ordezkariak eta lehiakideak
+        barne. Talde bakoitzak lider bat du, zeinen lana taldearen
+        funtzionamendu egokia bermatza eta taldeko beste kide batzuk gidatzea
+        den. Kontseiluak talde mota berezi bat dira, zeregina WCAko Batzarrean
+        aholku-emailea izatea dutena, eta komunitateko kideek osatzen dituzte,
+        ez WCAko bolondresek. Komiteetan, Taldeetan edo Kontseiluetan sartzeko
+        postuak irekitzen direnean, nola aplikatzeko informazioa orri nagusian
+        argitaratzen da.
       #original_hash: b37456c
       contact_button: Kontaktatu
       #original_hash: ae7928f
@@ -1477,13 +1476,13 @@ eu:
           jarraibideak eta plangintza estrategikoak garatuz, hiri anfitroiaren
           hautaketa kudeatuz, antolatzaile taldeei lagunduz eta txapelketen
           bizipen erregularrak bermatuz.
-        #original_hash: 94e9ad1
+        #original_hash: 010e628
         wqac: >-
-          WCAko Kalitate Berme Komiteak (WQACk) kalitatearen etengabeko
+          WCAko Kalitate Bermatze Komiteak (WQACk) kalitatearen etengabeko
           hobekuntza babestu eta sustatzen du WCAren barruan, bai eta prozesuen
           kalitate handia ziurtatzeko kalitate-estandarren mundu mailako
-          aplikazioa ere, WCA Staff, Eskualdeko Erakundeak, Lehiaketen
-          Antolatzaileak eta Lehiaketen Staffa.
+          aplikazioa, WCA Staff, Eskualdeko Erakundeak, Lehiaketen
+          Antolatzaileak eta Lehiaketen Bolondresak ere.
         #original_hash: 355babe
         wrc: >-
           WCAko Erregulazio Komiteak (WRCk) WCAko erregulazioen aplikazioarekin,
@@ -1503,9 +1502,9 @@ eu:
         wsot: >-
           WCAko Kirol Organizazio Taldeak (WSOTk) WCA nazioarteko kirol-erakunde
           gisa aintzatesten gainbegiratzen eta laguntzen du.
-        #original_hash: 4882d55
+        #original_hash: 30d6048
         wapc: >-
-          WCAko Apelazio Komiteak (WACk) WCAko beste langile batzuek egindako
+          WCAko Apelazio Komiteak (WACk) WCAko beste bolondres batzuek egindako
           erabakiei buruzko apelazioak berrikusten eta konpontzen ditu. WACk
           berrikuskera prozesu inpartzial eta independiente bat eskaintzen du,
           erabakiak bidezkoak, arrazoizkoak direla bermatzeko, WCAko politikak
@@ -1538,10 +1537,11 @@ eu:
           #original_hash: 54f0036
           label: Norekin nahi duzu harremanetan jarri?
           competition:
-            #original_hash: baa2425
+            #original_hash: 5a280ab
             label: >-
-              Lehiaketa baten antolatzaileekin/ordezkariekin harremanetan jarri
-              (lehiaketa partikular horri buruz galdetzeko)
+              Jarri harremanetan lehiaketa baten antolatzaile/ordezkariekin
+              (lehiaketa zehatz hori buruzko galdera bat egiteko, WCAko
+              webgunean argitaratuta ez dauden emaitzez barne)
           wct:
             #original_hash: b73e465
             label: >-
@@ -1549,15 +1549,15 @@ eu:
               edozein gauza ekar dezake, hala nola WCA ID/profila, lehiaketen
               antolaketa, lehia-arauak, lehia-bitartekoak, etab.)
           wrt:
-            #original_hash: 0f6b96b
+            #original_hash: 4dd66f7
             label: >-
-              Kontaktatu Emaitz Taldearekin (lehiaketa baten emaitzekin
-              zerikusia duen edozertarako)
+              Jarri harremanetan emaitza taldearekin (emaitzekin edota WCAko
+              webguneko profileko datuekin zerikusia duen edozertarako)
           wst:
-            #original_hash: 1d74033
+            #original_hash: 2be6d53
             label: >-
-              Kontaktatu Software Taldearekin (webgunean akatsen bat dagoela
-              jakinarazteko edo APIrekin lotutako edozein galdera egiteko)
+              Jarri harremanetan software taldearekin (WCAko webguneko arazoez
+              berri emateko edota softwarearekin zerikusia duten galderetarako)
         competition:
           competition:
             #original_hash: 1917f4f
@@ -2038,8 +2038,10 @@ eu:
           Abatarrak ez du eduki iraingarririk izan behar (Adibidez: erasoko
           keinuak).
       staff_avatar_guidelines:
-        #original_hash: 5d5a47a
-        title: 'Langile kide eta Praktiketako Ordezkarientzako beste jarraibideak:'
+        #original_hash: f14a1fd
+        title: >-
+          Bolondresentzako eta Praktiketako Ordezkarientzako jarraibide
+          gehigarriak:
         paragraphs:
           #original_hash: ff6d2e8
           '1': >-
@@ -2306,7 +2308,7 @@ eu:
             kuota aldez aurretik ordaintzea edo probetan sailkatzeko denborak
             betetzea)
           #original_hash: 1e225f0
-          registrations_full: Lehiakideen muga iritsi da eta ez dago plaza gehiagorik
+          registrations_full: Lehiakide mugara iritsi da eta ez dago plaza gehiagorik
           #original_hash: 238f4ff
           multiple_registrations: Bitan edo gehiagotan eman duzu izena
           #original_hash: 70b1e2c
@@ -2336,12 +2338,6 @@ eu:
       export_csv: Esportatu CSVra
       #original_hash: 84add5b
       email: E-maila
-      #original_hash: 7b2c7f1
-      approve: Onartu
-      #original_hash: 92d40dc
-      waiting_list: Itxaron-zerrenda
-      #original_hash: 06f7d1a
-      approved_registrations: Onartutako matrikulak
       #original_hash: e86b1e1
       non_competing: Parte hartzen ez duten erregistroak
       #original_hash: ac5d958
@@ -2408,12 +2404,12 @@ eu:
       %{profile}n:
     #original_hash: f22ef22
     registration_full: >-
-      Lehiaketa honetako lehiakideen muga %{competitor_limit} da, eta dagoeneko
+      Lehiaketa honetako lehiakide muga %{competitor_limit} da, eta dagoeneko
       iritsi da. Izena emanez gero, zure erregistroa itxaron-zerrenda batean
       jarriko da. Baliteke ez onartzea plaza bat askatzen ez bada.
     #original_hash: cf29e85
     registration_full_include_waiting_list: >-
-      Lehiaketa honetako lehiakideen muga %{competitor_limit} da eta baliteke
+      Lehiaketa honetako lehiakide muga %{competitor_limit} da eta baliteke
       beteta egotea. Izena emanez gero, zure erregistroa itxaron zerrenda batean
       jarriko da. Baliteke ez onartzea plaza bat askatzen ez bada.
     #original_hash: bcd7d70
@@ -2560,7 +2556,7 @@ eu:
         #original_hash: 2454f20
         over_competitor_limit: >-
           Emandako fitxategiak onartutako %{accepted_count} erregistroak biltzen
-          ditu, hau da, %{limit} lehiakideen muga gainetik.
+          ditu, hau da, %{limit} lehiakide muga gainetik.
         #original_hash: e6d3197
         invalid_event_column: >-
           Proba zutabeek 0 edo 1 izan behar dute, %{value} aurkitutako %{column}
@@ -3258,6 +3254,10 @@ eu:
           count: Lehiaketa muga maximoa
           #original_hash: 4a8b6f1
           reason: Lehiakide mugarentzako arrazoia
+          #original_hash: e9e5b84
+          auto_close_threshold: Ataria automatikoki itxi
+          #original_hash: b1d5af4
+          newcomer_month_reserved_spots: Lehiakide berrientzako erreserbatu beharreko postu kopurua
         staff:
           #original_hash: 2e3ed8b
           staff_delegate_ids: WCAko ordezkaria(k)
@@ -3308,8 +3308,8 @@ eu:
           event_change_deadline_date: Lehiakideek beren erregistratutako probak aldatzeko epemuga
           #original_hash: 2529d04
           allow_on_the_spot: Unean bertan izena ematea
-          #original_hash: 3d47eca
-          allow_self_delete_after_acceptance: Erregistroa ezeztatzea
+          #original_hash: b6faf84
+          competitor_can_cancel: Lehiakideek euren erregistroak noiz ezeztatu ditzakete
           #original_hash: 7e53b96
           allow_self_edits: Erregistroa editatzea
           #original_hash: 3c23a67
@@ -3457,6 +3457,16 @@ eu:
           reason: >-
             Zein da lehiakide kopuruaren mugarako arrazoia? Mesedez eta faborez,
             bete hau ingelesez!
+          #original_hash: 045d250
+          auto_close_threshold: >-
+            Izen ematea ordaindutako erregistroen kopuru honetara iristen denean
+            automatikoki itxiko da. Utzi txuriz hau deuseztatzeko, integratutako
+            ordainketak erabiltzen ari ez bazara ez kasurik egin.
+          #original_hash: e1cf4fc
+          newcomer_month_reserved_spots: >-
+            Lehiakide berrien hilabetean zehar baimenduta besterik -
+            erreserbatutako postuak ezin dira lehiakide mugaren erdia baino
+            gehiago izan.
         staff:
           #original_hash: b4d020f
           staff_delegate_ids: Lehiaketarako WCAko ordezkariak.
@@ -3541,7 +3551,7 @@ eu:
           #original_hash: da39a3e
           allow_on_the_spot: ''
           #original_hash: da39a3e
-          allow_self_delete_after_acceptance: ''
+          competitor_can_cancel: ''
           #original_hash: da39a3e
           allow_self_edits: ''
           #original_hash: da39a3e
@@ -3636,15 +3646,13 @@ eu:
               eguneratzeko epemugara arte
             #original_hash: 2cbb80e
             'false': Erregistroa onartuz gero lehiakideak EZIN izanen du aldatu
-          allow_self_delete_after_acceptance:
-            #original_hash: 5c2e8c1
-            'true': >-
-              Lehiakideak bere erregistroa ezabatu ahal izanen du onartuta
-              badago ere
-            #original_hash: 3b77604
-            'false': >-
-              Lehiakideak bere erregistroa ez du ezabatu ahal izanen erregistroa
-              onartu ondoren
+          competitor_can_cancel:
+            #original_hash: a91bcce
+            always: Beti
+            #original_hash: b64ca70
+            not_accepted: Onartzen diren arte
+            #original_hash: 4435d55
+            unpaid: Ordaintzen duten arte
           guest_entry_status:
             #original_hash: 7e54323
             unclear: >-
@@ -3686,7 +3694,7 @@ eu:
         is_accepted: >-
           Egin itzazu zure erreserbazioak eta prestatu zure bagajea, lehiaketan
           toki bat duzu!
-        #original_hash: e29a4d3
+        #original_hash: 89448a8
         is_cancelled: >-
           Zure erregistroa ezeztatu da eta ez zara lehiatuko, baina izena
           berriro eman dezakezu.
@@ -3708,22 +3716,39 @@ eu:
           zero: ez da tokirik gelditzen
           one: '%{count} gelditzen da'
           other: '%{count} gelditzen dira'
-        cancelled:
-          #original_hash: e9c5a55
-          title: Ezeztatutako erregistroak
-          #original_hash: bb5b570
-          information: Ezeztatu diren lehiakideak berriro ere izena emateko aukera dute.
-        rejected:
-          #original_hash: 199b7c5
-          title: Baztertutako erregistroak
-          #original_hash: 3fd2e0c
-          information: Baztertutako lehiakideek ezin dira berriz erregistratu.
         pending:
+          #original_hash: 4210670
+          title: Zain dauden erregistroak
           #original_hash: 5e16c6d
           information: >-
             Zain uztea osatu gabeko (ordaindu gabea, adibidez) erregistroetarako
             da bakarrik, mesedez itxaron-zerrenda erabili zure lehiaketa beteegi
             badago lehiakide berriak onartzeko.
+        waitlist:
+          #original_hash: 3907ca4
+          title: Itxaron-zerrendako erregistroak
+          #original_hash: a6c86ec
+          skipped_warning: >-
+            Itxaron-zerrendako %{count} erregistro saltatu dituzu. Saltatutakoak
+            beharrean beste erregistroa(k) onartu nahi d(it)uzula ziur al zaude?
+        approved:
+          #original_hash: a59612c
+          title: Onartutako erregistroak
+        cancelled:
+          #original_hash: bd69c74
+          title: Ezeztatutako erregistroak
+          #original_hash: bb5b570
+          information: Ezeztatu diren lehiakideak berriro ere izena emateko aukera dute.
+        rejected:
+          #original_hash: 9cef5ae
+          title: Baztertutako erregistroak
+          #original_hash: 3fd2e0c
+          information: Baztertutako lehiakideek ezin dira berriz erregistratu.
+        non_competing:
+          #original_hash: d4e453a
+          title: Lehiatzen ez direnen erregistroak
+          #original_hash: 2ed9c67
+          information: WCIFn staff lanak atxiki diezazkiokezun ez-lehiakideentzat
         payment:
           #original_hash: d6fbc7a
           refunded_status: Dirua itzuli da
@@ -3782,20 +3807,27 @@ eu:
         email_copy: E-mailak kopiatu
         #original_hash: b83b663
         email_message: Arbelera kopiatu da. Gogoratu bcc erabiltzeaz!
-        #original_hash: 71327f1
-        move_pending: Onartu gabekoetara eraman
-        #original_hash: 9144dd6
-        move_waiting: Itxaron-zerrendara eraman
-        #original_hash: 284b24f
-        cancel: Erregistroa ezeztatu
-        #original_hash: df40450
-        reject: Erregistroa baztertu
+        #original_hash: beedd53
+        move_to:
+          zero: 'Mugitu hona:'
+          one: 'Mugitu %{count} hona:'
+          other: 'Mugitu %{count} hona:'
+        #original_hash: 96f608c
+        pending: Zain
+        #original_hash: 92d40dc
+        waitlist: Itxaron-zerrenda
+        #original_hash: 41b81eb
+        approved: Onartuta
+        #original_hash: a1bf92e
+        cancelled: Ezeztatuta
+        #original_hash: 27eeb7a
+        rejected: Baztertuta
         #original_hash: 43dc853
         amount: Kopurua
         #original_hash: 67b3c7d
         too_many: >-
           Erregistro hauek guztiak onartzeak lehiakide mugaren gainetik %{count}
-          egotea ekarriko luke
+          lehiakide egotea ekarriko luke
         #original_hash: 462376a
         no_self_update: >-
           Antolatzaile taldearekin harremanetan jarri nire erregistroa
@@ -3936,13 +3968,55 @@ eu:
         '-4011': Itxaron-zerrendako lehen pertsona onartu dezakezu soilik
         #original_hash: 8d089d6
         '-4012': Ez zara sailkatu aukeratutako probetan lehiatzeko
+        #original_hash: fb1d742
+        '-4013': >-
+          Ezin da lehiakide berria ez den norbait onartu bakarrik lehiakide
+          berrientzako erreserbatutako postuak gelditzen direnean
         #original_hash: a244fde
         '-4014': Lehiaketa honetarako izena eman duzu dagoeneko.
+        #original_hash: 369db78
+        '-4015': >-
+          Mesedez, sartu gonbidatu kopuru zentzudun bat, edo jarri harremanetan
+          antolatzaileekin gonbidatu kopuru ezohiko bat ekarri behar baduzu.
         #original_hash: 0df821f
         '-6001': WCAko ordainketa ez da gaitu lehiaketa honetarako
         #original_hash: 092da51
         '-6002': Zure erregistroa bukatu beharra daukazu ordaindu baino lehen
     errors:
+      #original_hash: b14d060
+      must_use_wca_registration: >-
+        WCAko orrialdea erregistroetarako erabiltzen arituz gero erabil dezakezu
+        automatikoki onartzea
+      #original_hash: 130c901
+      auto_accept_limit: >-
+        Automatikoki onartutako erregistroentzako muga lehiakide muga azpikoa
+        izan behar da
+      #original_hash: 42cd8e6
+      auto_accept_not_negative: Automatikoki onartutako erregistro kopurua ezin da 0 azpikoa izan.
+      #original_hash: 181d8d9
+      auto_accept_accept_paid_pending: >-
+        Ondaintzear dauden erregistroak badaude ezin da automatikoki onartzea
+        gaitu - edo onartu itzazu edo itxaron-zerrendara pasatu
+      #original_hash: 96db418
+      auto_accept_accept_waitlisted: >-
+        Ezin da automatikoki onartzea gaitu - onartu daitezkeen
+        itxaron-zerrendan dauden erabiltzaile adina onartu mesedez.
+      #original_hash: 6d11b4e
+      auto_close_exceed_paid: >-
+        Ataria automatikoki ixtea oraingoz ordainduta dauden erregistroen
+        kopurua baino handiagoa izan behar da
+      #original_hash: abee516
+      auto_close_positive_nonzero: Ataria automatikoki ixtea 0 gainetik izan behar da
+      #original_hash: b81ee7e
+      must_exceed_competitor_limit: Ataria automatikoki ixtea lehiakide muga baino handiagoa izan behar da
+      #original_hash: 148c1d4
+      use_wca_registration: Lehiaketak WCAko izen emate sistema erabili behar du
+      #original_hash: 2c41c57
+      newcomer_month_reservations_percentage: ezin da postuen %50a baino gehiago lehiakide berrientzat erreserbatu
+      #original_hash: 58d244e
+      newcomer_month_reservations_available: >-
+        Lehiakide berrien hilabeteagatik erreserbatutako postuak erreserbatu
+        daitezken postuen kopurua baina handiagoa da
       #original_hash: f7ef9f6
       invalid_name_message: >-
         urtearekin bukatu behar du eta karaktere alfanumerikoak, gidoiak (-),
@@ -4116,9 +4190,7 @@ eu:
     #original_hash: b2bfea9
     orga_close_reg_confirm: Erregistroa itxi nahi duzula ziur zaude? Ezin da hau desegin.
     #original_hash: ce5686a
-    note_reg_not_full_orga_close_reg: >-
-      Oharra: eregistroa soilik lehiakide kopurua mugara iritsi ostean itxi
-      dezakezu.
+    note_reg_not_full_orga_close_reg: 'Oharra: eregistroa soilik lehiakide mugara iritsi ostean itxi dezakezu.'
     #original_hash: c66488a
     user_preferences: Erabiltzailearen lehentasunak
     #original_hash: 089cbfd
@@ -4537,7 +4609,7 @@ eu:
         #original_hash: 53adda3
         stripe: >-
           Zure Stripe kontua konektatzeak WCAri salneurriak sor dezan ahalmena
-          ematen dio. Baita zure Stripe kontura zuzenean diru-itzulketak 
+          ematen dio. Baita zure Stripe kontura zuzenean diru-itzulketak
           jaulkitzea.
         #original_hash: 7cedd12
         paypal: >-
@@ -4821,7 +4893,7 @@ eu:
         content:
           #original_hash: 890d879
           '1': >-
-            Lehiaketa bat bukatzen denean, WCAko ordezkariak emaitza-papera
+            Lehiaketa bat bukatzen denean, WCAko ordezkariak denbora-orri
             guztiak eta pertsona data berraztertu behar ditu, gerta litekeen
             akatsak konpontzeko. Hau egin eta gero, emaitzak WCAko emaitza
             taldeari (WRTri) bidaltzen zaizkio, lehiaketetako emaitzetaz eta
@@ -5116,8 +5188,8 @@ eu:
           martxan jarraraztea
         #original_hash: 0c3576b
         '4': WCAko erregulazio guztiekin bat egitea
-        #original_hash: 1a9e6c5
-        '5': WCAko langileen erabakiak onartu eta berekin bat egitea
+        #original_hash: 88cf548
+        '5': WCAko bolondresen erabakiak onartu eta berekin bat egitea
         #original_hash: d4ae7c1
         '6': >-
           WCAn fitxategi bat mantentzea barruan organizazioaren momentuko
@@ -5175,11 +5247,11 @@ eu:
     before:
       #original_hash: 9850344
       title: Lehiaketa aurretik
-      #original_hash: 576e2f4
+      #original_hash: 6f64073
       desc: >-
         Lehiakideen erregistroak WCAko webgunean bertan antola daitezke. Taldeak
-        eta langileak eskuz antolatzeak denbora dezente har dezakeenez, azpiko
-        tresnak erabiltzean hausnartu dezakezu.
+        eta bolondresak eskuz antolatzeak denbora dezente har dezakeenez, azpiko
+        tresnak erabiltzea kontuan izan dezakezu.
     during:
       #original_hash: 9934200
       title: Lehiaketa aurrera doan heinean
@@ -5216,14 +5288,13 @@ eu:
           WCAko lehiaketetako antolatzaileentzako zeregin eta talde antolatze
           tresna. Ezaugarri nagusien artean hau aurkituko duzu: lehiakideak
           mailatzeen arabera sortatu, lanak esleitu (epaiketa, nahastea), zenbat
-          nahasketa behar diren erabaki, emaitza-paperak sortu, orri
-          pertsonalak, eta laburpenak... Zoaz webgunea begiratzeea gehiago
-          jakiteko.
+          nahasketa behar diren erabaki, denbora-orriak sortu, orri pertsonalak,
+          eta laburpenak... Zoaz webgunea begiratzeea gehiago jakiteko.
       scorecards:
         #original_hash: aa1b64d
-        title: Emaitza-paperak
+        title: Denbora-orriak
         #original_hash: 2b8e373
-        description: WCAko lehiaketetarako emaitza-paperak WCA Live bidez inprimatu
+        description: WCAko lehiaketetarako denbora-orriak WCA Live bidez inprimatu
       tnoodle:
         #original_hash: ba336a1
         title: TNoodle (Nahasketak)
@@ -5484,16 +5555,16 @@ eu:
     recommended:
       #original_hash: 6b843f3
       title: Gomendatutako dokumentuak
-      #original_hash: bfbd4bb
-      staff: Langileak estleitzea
+      #original_hash: 6e4fb29
+      staff: Bolondresak esleitzea
       #original_hash: 4735583
       emails: E-mailak
       #original_hash: 8e7ca09
       running-systems: Eramaile eta epaile sistemak
       #original_hash: 2b31c89
       new-competitors: Lehiakide berrienganako jarrera
-      #original_hash: 3408054
-      enhancing-experience: Lehiakide eta langile esperientzia areagotu
+      #original_hash: 00c4f78
+      enhancing-experience: Lehiakide eta bolondres esperientzia areagotu
       #original_hash: 2345aaa
       reflection: Antolatzaile isla
   organizer_guidelines:
@@ -5599,8 +5670,8 @@ eu:
       content_html: >-
         Lehiakideen kopuru muga probako edo lehiaketako muga daitezke (zoaz <a
         href='https://documents.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>lehiaketen
-        baldintzak</a> irakurtzera). Lehiaketako ordezkariak lehiakideen kopuru
-        muga WCATk onartua izan behar du. Lehiakide kopuru muga espero den
+        baldintzak</a> irakurtzera). Lehiaketako ordezkariak lehiakide muga
+        WCATk onartua izan behar du. Lehiakide kopuru muga espero den
         lehiakideen intersaren arabera ezarri beharko litzateke. Muga hau ez
         litzateke garrantzi gutxiko arrazoiengatik aldatu behar. Lehiakide muga
         hausnartua egon behar luke lehiaketarako leku aproposa bilatu aurretik.
@@ -5621,10 +5692,10 @@ eu:
       title: Itxaron-zerrenda maneiatzea
       #original_hash: 81ca3f3
       content1: >-
-        Behin lehiakide kopuru mugara iristen denean, itxaron-zerrenda bat
-        zabaldu behar da. Erregistratutako eta onartutako lehiakideek euren
-        erregistroa ezabatzen dutenean, itxaron-zerrendako hurrengo
-        lehiakideekin ordezkatu daitezke.
+        Behin lehiakide mugara iristen denean, itxaron-zerrenda bat zabaldu
+        behar da. Erregistratutako eta onartutako lehiakideek euren erregistroa
+        ezabatzen dutenean, itxaron-zerrendako hurrengo lehiakideekin ordezkatu
+        daitezke.
       #original_hash: 802b34f
       content2: >-
         Izen emate kuotak aurretik ordaintzen badira, itxaron-zerrendako
@@ -5649,11 +5720,10 @@ eu:
           behar da derrigorrez. Ordutegi hau geroago alda daiteke.
         #original_hash: e93d043
         '2': >-
-          Lehiakideak taldeka banatu behar lirateke, emaitza-paperak ere taldeen
-          distribuzioaren arabera inprimatu eta banatu behar liratekeela. Proba
-          bakoitzeko talde bakoitzean nork nahasten duen prestatzea gomendatzen
-          dugu, lehenengo txandetarako behintzat. Nahasleek fidagarriak izan
-          behar dute.
+          Lehiakideak taldeka banatzea komeni da, denbora-orriak ere taldeen
+          distribuzioaren arabera inprimatu eta banatuz. Proba bakoitzeko talde
+          bakoitzean nork nahasten duen prestatzea gomendatzen dugu, lehenengo
+          txandetarako behintzat. Nahasleak fidagarriak izan behar dira.
     paragraph9:
       #original_hash: ead44f5
       title: Lehiaketa aurrera doan bitarteko lanak
@@ -5668,7 +5738,7 @@ eu:
         #original_hash: c4388f3
         '2': Iragarpenak egitea
         #original_hash: 45c78ae
-        '3': Taldeak deitzea eta emaitza-paperak antolatzea
+        '3': Taldeak deitzea eta denbora-orriak antolatzea
         #original_hash: 0b31986
         '4': Emaitzak jaso eta inprimatzea
         #original_hash: 7ab2d4c
