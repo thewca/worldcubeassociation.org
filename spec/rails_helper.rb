@@ -48,7 +48,11 @@ Capybara.register_driver :playwright_debug do |app|
 end
 
 Capybara.register_driver :playwright do |app|
-  Capybara::Playwright::Driver.new(app, playwright_server_endpoint_url: EnvConfig.PLAYWRIGHT_SERVER_SOCKET_URL)
+  if ENV["CI"].present?
+    Capybara::Playwright::Driver.new(app, playwright_cli_executable_path: 'yarn playwright')
+  else
+    Capybara::Playwright::Driver.new(app, playwright_server_endpoint_url: EnvConfig.PLAYWRIGHT_SERVER_SOCKET_URL)
+  end
 end
 
 Capybara.javascript_driver = :playwright
