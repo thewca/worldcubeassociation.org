@@ -2662,19 +2662,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/express-serve-static-core@npm:*, @types/express-serve-static-core@npm:^4.17.33":
-  version: 4.17.43
-  resolution: "@types/express-serve-static-core@npm:4.17.43"
-  dependencies:
-    "@types/node": "npm:*"
-    "@types/qs": "npm:*"
-    "@types/range-parser": "npm:*"
-    "@types/send": "npm:*"
-  checksum: 10c0/12480527eef86ad9f748d785811c88e6bb89f4a76e531cf2e18f1f4f0743e46783cf4d27a939dec96aec8770c54c060d9e697bb8544ecd202098140688c3b222
-  languageName: node
-  linkType: hard
-
-"@types/express-serve-static-core@npm:^4.17.21":
+"@types/express-serve-static-core@npm:*, @types/express-serve-static-core@npm:^4.17.21, @types/express-serve-static-core@npm:^4.17.33":
   version: 4.19.6
   resolution: "@types/express-serve-static-core@npm:4.19.6"
   dependencies:
