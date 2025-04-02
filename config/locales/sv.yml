@@ -876,8 +876,6 @@ sv:
         person1_wca_id: ''
         #original_hash: da39a3e
         person2_wca_id: ''
-        #original_hash: da39a3e
-        person_wca_id: ''
       poll:
         #original_hash: da39a3e
         comment: ''
@@ -979,6 +977,9 @@ sv:
         dob: Korrekt födelsedatum
         #original_hash: e214b8a
         document: Dokument
+      contact_wrt:
+        #original_hash: 603a218
+        wca_id: WCA-ID
     errors:
       dob_contact:
         #original_hash: 79ccfe2
@@ -1364,7 +1365,7 @@ sv:
     teams_committees_councils:
       #original_hash: 0d62207
       title: 'WCA:s teams, kommittéer, och råd'
-      #original_hash: d54d953
+      #original_hash: 4701b90
       description: >-
         WCA:s team och kommittéer är en central del av organisationen och utför
         de dagliga uppgifter som krävs för att den ska fungera. Dessa kommittéer
@@ -1372,9 +1373,9 @@ sv:
         team har en ledare, vars roll är att se till att teamet fungerar korrekt
         och vägleda andra teammedlemmar. Råd är en särskild typ av team som har
         en rådgivande roll till WCA:s styrelse och består av
-        community-medlemmar, inte WCA:s personal. När det finns lediga platser i
-        kommittéer, team eller råd publiceras information om hur man ansöker på
-        förstasidan.
+        community-medlemmar, inte WCA:s funktionärer. När det finns lediga
+        platser i kommittéer, team eller råd publiceras information om hur man
+        ansöker på förstasidan.
       #original_hash: b37456c
       contact_button: Kontakt
       #original_hash: ae7928f
@@ -1411,28 +1412,26 @@ sv:
         #original_hash: 78949a7
         wapc: WCA Appeals Committee
       groups_description:
-        #original_hash: 5b1aade
+        #original_hash: d62001b
         wat: >-
-          WAT ansvarar för utveckling och underhåll av WCA:s historiska arkiv.
-          De dokumenterar viktiga speedcubing-händelser och anmärkningsvärda
-          WCA-milstolpar som ska presenteras som en del av en bredare
-          WCA-tidslinje, för att bevara arvet från WCA inom speedcubing.
-        #original_hash: 50fd091
+          WCA Archive Team (WAT) ansvarar för utveckling och underhåll av WCA:s
+          historiska arkiv. De dokumenterar viktiga speedcubing-händelser och
+          anmärkningsvärda WCA-milstolpar som ska presenteras som en del av en
+          bredare WCA-tidslinje, för att bevara arvet från WCA inom speedcubing.
+        #original_hash: 7803faf
         wct: >-
-          WCA:s kommunikationsteam (WCT) har till uppgift att övervaka och
-          stödja WCA:s kommunikation med communityt och allmänheten. WCA:s
-          kommunikation ska bidra till WCA:s mål och stödja en allmänt positiv
-          kultur av vänlighet, transparens, delaktighet, öppenhet, och
-          lyhördhet.
-        #original_hash: 3e5570f
+          WCA:s kommunikationsteam (WCT) övervakar och stödjer WCA:s
+          kommunikation med communityt och allmänheten. WCA:s kommunikation ska
+          bidra till WCA:s mål och stödja en allmänt positiv kultur av
+          vänlighet, transparens, delaktighet, öppenhet, och lyhördhet.
+        #original_hash: bd69012
         wcat: >-
-          WCA Competition Announcement Team (WCAT) har till uppgift att godkänna
-          och publicera WCA-tävlingar som skickats in av delegater, och se till
-          att sådana publiceringar följer WCA:s kvalitetsstandarder. Detta team
-          är också ansvarigt för att upprätthålla ett korrekt procedur för
-          inskickande av tävlingar, från dokument som WCA Competition
-          Requirements Policy. WCAT är INTE ansvarig för arrangering och
-          delegering av enskilda tävlingar.
+          WCA Competition Announcement Team (WCAT) godkänner och publicerar
+          WCA-tävlingar som skickats in av WCA-delegater, och se till att sådana
+          publiceringar följer WCA:s kvalitetsstandarder. Detta team är också
+          ansvarigt för att upprätthålla ett korrekt procedur för inskickande av
+          tävlingar, från dokument som WCA Competition Requirements Policy. WCAT
+          är INTE ansvarig för arrangering och delegering av enskilda tävlingar.
         #original_hash: 5007698
         wic: >-
           WCA Integrity Committee (WIC) utför oberoende utredningar gällande
@@ -1440,62 +1439,61 @@ sv:
           på officiella WCA-plattformar online. Dessa incidenter är påstådda
           överträdelser av WCA:s Spirit, uppförandekod, etikkod och/eller
           regler.
-        #original_hash: 889dd90
+        #original_hash: be491ec
         weat: >-
-          Denna grupp ansvarar för att utföra de administrativa uppgifter som
-          åligger WCA:s styrelse.
-        #original_hash: 43e4e33
+          WCA Executive Assistants Team (WEAT) ansvarar för att utföra de
+          administrativa uppgifter som åligger WCA:s styrelse.
+        #original_hash: fc67562
         wfc: >-
-          Denna kommitté ansvarar för att hantera WCA:s övergripande ekonomi,
-          inklusive budgetering, rapportering, analys, bokföring, och
-          skattedeklarationer. De hanterar också WCA:s största inkomstkälla, WCA
-          Dues, tillsammans med olika finansieringsprogram som ger stöd till
-          lokala communities i olika utvecklingsstadier, inklusive
+          WCA Financial Committee (WFC) ansvarar för att hantera WCA:s
+          övergripande ekonomi, inklusive budgetering, rapportering, analys,
+          bokföring, och skattedeklarationer. De hanterar också WCA:s största
+          inkomstkälla, WCA Dues, tillsammans med olika finansieringsprogram som
+          ger stöd till lokala communities i olika utvecklingsstadier, inklusive
           resefinansiering, utrustningsfinansiering, och stöd till regionala
           organisationer.
-        #original_hash: f2a0140
+        #original_hash: 88a00fa
         wmt: >-
-          Detta team ansvarar för att utveckla och förvalta WCA:s varumärke,
-          söka sponsorer, stödja distributionen av WCA:s tävlingsutrustning och
-          marknadsföra WCA:s merchandise.
-        #original_hash: e0dbf86
+          WCA Marketing Team (WMT) förvaltar WCA:s varumärke, söker sponsorer,
+          och marknadsför WCA:s merchandise.
+        #original_hash: fcaa701
         wmct: >-
-          WCA Major Championship Team övervakar samordningen och främjandet av
-          kontinentala mästerskap och världsmästerskap genom att utveckla
-          riktlinjer och strategiska planer, hantera valet av värdstad, stödja
-          arrangörsteam och säkerställa konsekventa mästerskapsupplevelser.
-        #original_hash: 0171b3b
+          WCA Major Championship Team (WMCT) övervakar samordningen och
+          främjandet av kontinentala mästerskap och världsmästerskap genom att
+          utveckla riktlinjer och strategiska planer, hantera valet av värdstad,
+          stödja arrangörsteam och säkerställa konsekventa
+          mästerskapsupplevelser.
+        #original_hash: 010e628
         wqac: >-
-          Denna kommitté har till uppgift att stödja och främja kontinuerlig
-          kvalitetsförbättring inom WCA, samt global tillämpning av
+          WCA Quality Assurance Committee (WQAC) stödjer och främjar
+          kontinuerlig kvalitetsförbättring inom WCA, samt global tillämpning av
           kvalitetsstandarder för att säkerställa konsekvent hög kvalitet på
-          processer, WCA-personal, regionala organisationer, tävlingsarrangörer,
-          och tävlingspersonal.
-        #original_hash: a1260bb
+          processer, WCA-funktionärer, regionala organisationer,
+          tävlingsarrangörer, och tävlingspersonal.
+        #original_hash: 355babe
         wrc: >-
-          WRC hanterar alla frågor som är relaterade till tillämpningen,
-          förbättringen, och utvecklingen av WCA-reglerna. De stöder
-          WCA-delegater i alla typer av procedurfrågor som inträffar vid
-          tävlingar och beslutar om olösta och oupptäckta incidenter.
-        #original_hash: 7bc588b
+          WCA Regulations Committee (WRC) hanterar alla frågor som är relaterade
+          till tillämpningen, förbättringen, och utvecklingen av WCA-reglerna.
+          De stöder WCA-delegater i alla typer av procedurfrågor som inträffar
+          vid tävlingar och beslutar om olösta och oupptäckta incidenter.
+        #original_hash: 7ca3e6f
         wrt: >-
-          WRT ansvarar för att hantera all data i WCA:s databaser, framför allt
-          tävlingsresultat och personuppgifter.
-        #original_hash: ec961e4
+          WCA Results Team (WRT) ansvarar för att hantera all data i WCA:s
+          databaser, inklusive tävlingsresultat och personuppgifter.
+        #original_hash: f905744
         wst: >-
-          Detta team ansvarar för att hantera WCA:s mjukvara (webbplats,
+          WCA Software Team (WST) hanterar WCA:s mjukvara (webbplats,
           blandningsprogram, arbetsböcker, administrationsverktyg).
-        #original_hash: 8f888d6
+        #original_hash: 638652c
         wsot: >-
-          Denna grupp har till uppgift att övervaka och stödja erkännandet av
-          WCA som en internationell idrottsorganisation.
-        #original_hash: 9f45bfa
+          WCA Sports Organization Team (WSOT) övervakar och stödjer erkännandet
+          av WCA som en internationell idrottsorganisation.
+        #original_hash: 30d6048
         wapc: >-
-          WCA Appeals Committee (WAC) är ansvarig för att granska och lösa
-          överklaganden av beslut som fattats av annan WCA-personal. WAC
-          tillhandahåller en oberoende och opartisk granskningsprocess för att
-          säkerställa att besluten är rättvisa, rimliga, och i enlighet med
-          WCA:s policyer och regler.
+          WCA Appeals Committee (WAC) granskar och löser överklaganden av beslut
+          som fattats av annan WCA-personal. WAC tillhandahåller en oberoende
+          och opartisk granskningsprocess för att säkerställa att besluten är
+          rättvisa, rimliga, och i enlighet med WCA:s policyer och regler.
     contacts:
       #original_hash: 4ef2aad
       title: Kontaktformulär
@@ -1524,10 +1522,11 @@ sv:
           #original_hash: 54f0036
           label: Vem vill du kontakta?
           competition:
-            #original_hash: baa2425
+            #original_hash: 5a280ab
             label: >-
               Kontakta arrangörer/delegater för en tävling (för att ställa
-              frågor om den specifika tävlingen)
+              frågor om den specifika tävlingen, inklusive resultat som ännu
+              inte publicerats på WCA:s hemsida)
           wct:
             #original_hash: b73e465
             label: >-
@@ -1535,13 +1534,15 @@ sv:
               som WCA ID/profil, arrangering av tävlingar, tävlingsregler,
               tävlingsmedia etc.)
           wrt:
-            #original_hash: 0f6b96b
-            label: Kontakta Results Team (för allt som rör resultaten av en tävling)
-          wst:
-            #original_hash: 1d74033
+            #original_hash: 4dd66f7
             label: >-
-              Kontakta Software Team (för att rapportera något fel på
-              webbplatsen eller några API-relaterade frågor)
+              Kontakta Results Team (för allt som rör resultat eller persondata
+              på WCA:s hemsida)
+          wst:
+            #original_hash: 2be6d53
+            label: >-
+              Kontakta Software Team (för att rapportera problem med webbplatsen
+              eller andra mjukvarurelaterade frågor)
         competition:
           competition:
             #original_hash: 1917f4f
@@ -2007,8 +2008,8 @@ sv:
           Profilbilden får inte innehålla stötande innehåll (t.ex. stötande
           gester).
       staff_avatar_guidelines:
-        #original_hash: 5d5a47a
-        title: 'Ytterligare riktlinjer för personal och trainee-delegater:'
+        #original_hash: f14a1fd
+        title: 'Ytterligare riktlinjer för funktionärer och trainee-delegater:'
         paragraphs:
           #original_hash: ff6d2e8
           '1': >-
@@ -2179,6 +2180,8 @@ sv:
       series_more_than_one_accepted: Du kan bara vara anmäld till en tävling i tävlingsserien.
       #original_hash: 13bfcd6
       can_only_register_for_qualified_events: Du kan inte anmäla dig till grenar du inte kvalificerat dig för.
+      #original_hash: 93ed20e
+      cannot_change_events_when_cancelling: Du kan inte ändra dina grenar samtidigt som du avanmäler dig.
       #original_hash: 4025877
       cannot_register_without_comment: >-
         Du måste lämna en kommentar. Vänligen läs anmälningskraven ovan för
@@ -2283,6 +2286,17 @@ sv:
           multiple_registrations: Du anmälde dig två eller fler gånger
           #original_hash: 70b1e2c
           competition_canceled: Tävlingen har ställts in
+      formerly_banned:
+        #original_hash: f2c70a9
+        ban_count: >-
+          Den tävlande har blivit avstängd %{ban_count} gång(er), med följande
+          omfattningar och anledningar:
+        #original_hash: 67e08fe
+        scope_and_reason: 'Omfattning: %{ban_scope}, Anledning: %{ban_reason}'
+        #original_hash: 2a246da
+        wic_message: >-
+          Om du har några frågor om den tävlandes disciplinära historik,
+          vänligen kontakta WIC genom att svara på detta mejl.
     list:
       #original_hash: 8b7631c
       title: 'Anmälningar för %{comp}'
@@ -2297,12 +2311,6 @@ sv:
       export_csv: Exportera som CSV
       #original_hash: 84add5b
       email: E-post
-      #original_hash: 7b2c7f1
-      approve: Godkänn
-      #original_hash: 92d40dc
-      waiting_list: Väntelista
-      #original_hash: 06f7d1a
-      approved_registrations: Godkända anmälningar
       #original_hash: e86b1e1
       non_competing: Icke-tävlande anmälningar
       #original_hash: ac5d958
@@ -2331,8 +2339,6 @@ sv:
     sign_in: Logga in
     #original_hash: 5d45a00
     profile: profil
-    #original_hash: 801b3e9
-    panel_title: Anmälningsdetaljer
     #original_hash: c0063c3
     register: Anmäl!
     #original_hash: f484f15
@@ -2364,8 +2370,6 @@ sv:
     please_sign_in_html: >-
       %{sign_in} för att anmäla dig till %{comp}. Om du inte har ett WCA-konto
       än kan du skapa ett %{here}.
-    #original_hash: 89b4e7f
-    greeting: 'Hej %{name}!'
     #original_hash: 322f646
     please_fix_profile_html: >-
       För att anmäla dig till %{comp} måste du åtgärda följande problem med din
@@ -2380,24 +2384,6 @@ sv:
       Gränsen för antalet tävlande på denna tävling är %{competitor_limit}, och
       tävlingen kan fyllas. Om du anmäler dig hamnar din anmälan då på
       väntelistan, och blir bara godkänd om det blir platser lediga.
-    #original_hash: 855ca9c
-    can_register: 'Du kan anmäla dig till %{comp} nedan.'
-    #original_hash: 4167ed7
-    check_registration_information: >-
-      Kontrollera informationen om anmälan för att ta reda på om du behöver göra
-      något mer, som att betala en anmälningsavgift.
-    #original_hash: 88ac7c3
-    have_registered: >-
-      Du har skickat in din anmälan för %{comp}. Du kan se dina
-      anmälningsuppgifter nedan.
-    #original_hash: 3c9141f
-    contact_organizer: Kontakta arrangören om du vill göra en förändring.
-    #original_hash: 59354fd
-    waiting_list: >-
-      Din anmälan väntar. För godkännande kan du behöva betala en
-      anmälningsavgift. Se tävlingens webbplats för mer information.
-    #original_hash: 58b1a3c
-    accepted: Din anmälan har godkänts!
     #original_hash: bcd7d70
     entry_fees_fully_paid: 'Du har betalat %{paid}, vilket täcker hela anmälningsavgiften.'
     #original_hash: 2e5d1b9
@@ -2414,8 +2400,6 @@ sv:
         #original_hash: 1cc5991
         refund_amount: Att återbetala
     payment_form:
-      #original_hash: 4de825f
-      title: Anmälningsavgift
       #original_hash: 8897f02
       payment_successful: Din betalning lyckades och din anmälan bör stå som betald nedan.
       #original_hash: 92dde77
@@ -3221,6 +3205,10 @@ sv:
           count: Maximalt antal tävlande
           #original_hash: 4a8b6f1
           reason: Anledningen för gränsen
+          #original_hash: e9e5b84
+          auto_close_threshold: Gränsvärde för automatisk stängning
+          #original_hash: b1d5af4
+          newcomer_month_reserved_spots: Antal platser att reservera för nybörjare
         staff:
           #original_hash: 2e3ed8b
           staff_delegate_ids: WCA-delegat(er)
@@ -3271,8 +3259,8 @@ sv:
           event_change_deadline_date: Deadline för tävlande att uppdatera vilka grenar de är anmälda till
           #original_hash: 2529d04
           allow_on_the_spot: Anmälan på plats
-          #original_hash: 3d47eca
-          allow_self_delete_after_acceptance: Avanmälningar
+          #original_hash: b6faf84
+          competitor_can_cancel: När kan tävlande avanmäla sig
           #original_hash: 7e53b96
           allow_self_edits: Redigering av anmälningar
           #original_hash: 3c23a67
@@ -3418,6 +3406,15 @@ sv:
           reason: >-
             Vad är anledningen till gränsen för antalet tävlande? Vänligen fyll
             i detta på engelska!
+          #original_hash: 045d250
+          auto_close_threshold: >-
+            Anmälan stängs automatiskt när detta antal betalda anmälningar har
+            mottagits. Lämna tomt för att inaktivera, ignorera om du inte
+            använder integrerade betalningar.
+          #original_hash: e1cf4fc
+          newcomer_month_reserved_spots: >-
+            Endast tillåtet under Newcomer Month - reserverade platser får inte
+            vara mer än halva deltagargränsen.
         staff:
           #original_hash: b4d020f
           staff_delegate_ids: WCA-delegater för tävlingen.
@@ -3499,7 +3496,7 @@ sv:
           #original_hash: da39a3e
           allow_on_the_spot: ''
           #original_hash: da39a3e
-          allow_self_delete_after_acceptance: ''
+          competitor_can_cancel: ''
           #original_hash: da39a3e
           allow_self_edits: ''
           #original_hash: da39a3e
@@ -3593,11 +3590,13 @@ sv:
               uppdatera grenar
             #original_hash: 2cbb80e
             'false': Tävlande får INTE redigera sin anmälan efter att den har godkänts
-          allow_self_delete_after_acceptance:
-            #original_hash: 5c2e8c1
-            'true': Tävlande får radera sin egen anmälan även efter att den godkänts
-            #original_hash: 3b77604
-            'false': Tävlande får INTE radera sin egen anmälan efter att den godkänts
+          competitor_can_cancel:
+            #original_hash: a91bcce
+            always: Alltid
+            #original_hash: b64ca70
+            not_accepted: Tills de accepteras
+            #original_hash: 4435d55
+            unpaid: Tills de betalar
           guest_entry_status:
             #original_hash: 7e54323
             unclear: Visa ingenting (utveckla gärna i sektionen "Extra anmälningskrav")
@@ -3634,7 +3633,7 @@ sv:
           anmälan manuellt. Detta kan ta lite tid.
         #original_hash: 6071fd9
         is_accepted: Boka din resa och packa väskorna - du har fått en plats på tävlingen!
-        #original_hash: e29a4d3
+        #original_hash: 89448a8
         is_cancelled: >-
           Din anmälan har tagits bort och du kommer inte att delta i tävlingen,
           men du kan anmäla dig igen
@@ -3656,22 +3655,42 @@ sv:
           zero: '%{count} platser kvar'
           one: '%{count} plats kvar'
           other: '%{count} platser kvar'
-        cancelled:
-          #original_hash: e9c5a55
-          title: Borttagna anmälningar
-          #original_hash: bb5b570
-          information: Tävlande med borttagna anmälningar kan anmäla sig igen.
-        rejected:
-          #original_hash: 199b7c5
-          title: Avslagna anmälningar
-          #original_hash: 3fd2e0c
-          information: Tävlande med avslagna anmälningar kan inte anmäla sig igen.
         pending:
+          #original_hash: 4210670
+          title: Väntande anmälningar
           #original_hash: 5e16c6d
           information: >-
             Ohanterade bör endast användas för ofullständiga (t.ex. obetalda)
             anmälningar - använd väntelistan om din tävling är för full för att
             ta emot nya deltagare.
+        waitlist:
+          #original_hash: 3907ca4
+          title: Väntelista
+          #original_hash: a6c86ec
+          skipped_warning: >-
+            Du har hoppat över %{count} anmälan(ar) på väntelistan. Är du säker
+            på att du vill godkänna den/de andra anmälningen/anmälningarna
+            istället?
+        approved:
+          #original_hash: a59612c
+          title: Godkända anmälningar
+        cancelled:
+          #original_hash: bd69c74
+          title: Borttagna anmälningar
+          #original_hash: bb5b570
+          information: Tävlande med borttagna anmälningar kan anmäla sig igen.
+        rejected:
+          #original_hash: 9cef5ae
+          title: Avslagna anmälningar
+          #original_hash: 3fd2e0c
+          information: Tävlande med avslagna anmälningar kan inte anmäla sig igen.
+        non_competing:
+          #original_hash: d4e453a
+          title: Icke-tävlande anmälningar
+          #original_hash: 2ed9c67
+          information: >-
+            För icke-tävlande som du kan tilldela funktionärsuppgifter till i
+            WCIF.
         payment:
           #original_hash: d6fbc7a
           refunded_status: Återbetalad
@@ -3730,14 +3749,21 @@ sv:
         email_copy: Kopiera mejladresser
         #original_hash: b83b663
         email_message: Kopierad till urklipp. Kom ihåg att använda "hemlig kopia" (bcc)!
-        #original_hash: 71327f1
-        move_pending: Flytta till väntande
-        #original_hash: 9144dd6
-        move_waiting: Flytta till väntelista
-        #original_hash: 284b24f
-        cancel: Ta bort anmälan
-        #original_hash: df40450
-        reject: Avslå anmälan
+        #original_hash: beedd53
+        move_to:
+          zero: Flytta till
+          one: 'Flytta %{count} till'
+          other: 'Flytta %{count} till'
+        #original_hash: 96f608c
+        pending: Väntande
+        #original_hash: 92d40dc
+        waitlist: Väntelista
+        #original_hash: 41b81eb
+        approved: Godkänd
+        #original_hash: a1bf92e
+        cancelled: Borttagna
+        #original_hash: 27eeb7a
+        rejected: Avslagna
         #original_hash: 67b3c7d
         too_many: >-
           Att acceptera alla dessa registreringar skulle överskrida
@@ -3749,6 +3775,10 @@ sv:
         will_open_countdown: >-
           Anmälan öppnar om %{minutes} minuter %{seconds} sekunder. Denna sida
           uppdateras automatiskt när anmälan öppnar.
+        #original_hash: 604d27a
+        will_close_countdown: >-
+          Anmälan stängs om %{minutes} minuter %{seconds} sekunder. Denna sida
+          uppdateras automatiskt när anmälan stänger.
         panel:
           approval:
             #original_hash: 8cc047a
@@ -3873,13 +3903,57 @@ sv:
         '-4011': Du kan endast acceptera den första personen på väntelistan
         #original_hash: 8d089d6
         '-4012': Du är inte kvalificerad att delta i de valda grenarna
+        #original_hash: fb1d742
+        '-4013': >-
+          Kan inte acceptera icke-nybörjare när endast reserverade platser för
+          nybörjare återstår
         #original_hash: a244fde
         '-4014': Du är redan anmäld till den här tävlingen.
+        #original_hash: 369db78
+        '-4015': >-
+          Vänligen ange ett rimligt antal gäster, eller kontakta arrangörerna om
+          du behöver ta med ett extraordinärt antal gäster.
         #original_hash: 0df821f
         '-6001': WCA-betalning är inte aktiverad för denna tävling
         #original_hash: 092da51
         '-6002': Du måste slutföra din anmälan innan du kan betala
     errors:
+      #original_hash: b14d060
+      must_use_wca_registration: >-
+        Automatisk godkännande kan endast användas om du använder WCA:s hemsida
+        för anmälningar
+      #original_hash: 130c901
+      auto_accept_limit: >-
+        Gränsen för automatiskt godkända anmälningar måste vara lägre än
+        deltagargränsen
+      #original_hash: 42cd8e6
+      auto_accept_not_negative: Gränsen för automatiskt godkända anmälningar kan inte vara mindre än 0.
+      #original_hash: 181d8d9
+      auto_accept_accept_paid_pending: >-
+        Kan inte aktivera automatisk godkännande om det finns betalda väntande
+        anmälningar - antingen godkänn dem eller flytta dem till väntelistan
+      #original_hash: 96db418
+      auto_accept_accept_waitlisted: >-
+        Kan inte aktivera automatisk godkännande - vänligen acceptera så många
+        tävlande från väntelistan som möjligt.
+      #original_hash: 6d11b4e
+      auto_close_exceed_paid: >-
+        Gränsvärdet för automatisk stängning måste vara större än det nuvarande
+        antalet betalda anmälningar
+      #original_hash: abee516
+      auto_close_positive_nonzero: Gränsvärdet för automatisk stängning måste vara större än 0
+      #original_hash: b81ee7e
+      must_exceed_competitor_limit: >-
+        Gränsvärdet för automatisk stängning måste vara större än
+        deltagargränsen
+      #original_hash: 148c1d4
+      use_wca_registration: 'Tävlingen måste använda anmälan på WCA:s hemsida'
+      #original_hash: 2c41c57
+      newcomer_month_reservations_percentage: kan inte reservera mer än 50% av platserna för nybörjare
+      #original_hash: 58d244e
+      newcomer_month_reservations_available: >-
+        Önskad antal platser att reservera för newcomer month överstiger antalet
+        platser som går att reservera
       #original_hash: f7ef9f6
       invalid_name_message: >-
         måste sluta med ett år och får endast innehålla alfanumeriska tecken,
@@ -5036,8 +5110,8 @@ sv:
         '3': 'Att respektera och utföra Målen i WCA:s Stadgar och Motioner'
         #original_hash: 0c3576b
         '4': Att följa alla tillämpliga WCA-regler
-        #original_hash: 1a9e6c5
-        '5': 'Att acceptera och följa beslut från WCA:s Personal'
+        #original_hash: 88cf548
+        '5': 'Att acceptera och följa beslut från WCA:s funktionärer'
         #original_hash: d4ae7c1
         '6': >-
           Att tillhandahålla WCA med en uppdaterad kopia av orgnisationens
@@ -5095,7 +5169,7 @@ sv:
     before:
       #original_hash: 9850344
       title: Före tävlingen
-      #original_hash: 576e2f4
+      #original_hash: 6f64073
       desc: >-
         Du kan hantera anmälningar direkt på WCA:s hemsida. Eftersom det kan
         vara tidskrävande att hantera grupper och funktionärer manuellt kan du
@@ -5405,16 +5479,16 @@ sv:
     recommended:
       #original_hash: 6b843f3
       title: Recommended documents
-      #original_hash: bfbd4bb
-      staff: Assigning staff
+      #original_hash: 6e4fb29
+      staff: Assigning volunteers
       #original_hash: 4735583
       emails: Emails
       #original_hash: 8e7ca09
       running-systems: Running and judging systems
       #original_hash: 2b31c89
       new-competitors: Attitude to new competitors
-      #original_hash: 3408054
-      enhancing-experience: Enhancing competitor and staff experience
+      #original_hash: 00c4f78
+      enhancing-experience: Enhancing competitor and volunteer experience
       #original_hash: 2345aaa
       reflection: Organizer reflection
   organizer_guidelines:

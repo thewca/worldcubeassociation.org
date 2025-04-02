@@ -1149,8 +1149,8 @@ fr-CA:
             et ne peuvent pas être affichés une nouvelle fois plus tard.
           #original_hash: b5e3ad8
           email_auth_desc: >-
-            Vous pouvez demander un code à usage unique par courriel lorsque vous
-            vous connectez.
+            Vous pouvez demander un code à usage unique par courriel lorsque
+            vous vous connectez.
           #original_hash: dd991ab
           disable_section_title: Désactiver l'authentification à deux facteurs
           #original_hash: 4569d81
@@ -1572,11 +1572,12 @@ fr-CA:
           #original_hash: 54f0036
           label: Qui souhaitez-vous contacter ?
           competition:
-            #original_hash: baa2425
+            #original_hash: 5a280ab
             label: >-
               Contacter les organisateur·rice·s/Délégué·e·s d’une compétition
               (pour poser une question concernant cette compétition en
-              particulier)
+              particulier, y compris sur les résultats qui n'ont pas encore été
+              publiés sur le site web de la WCA)
           wct:
             #original_hash: b73e465
             label: >-
@@ -1584,15 +1585,17 @@ fr-CA:
               des éléments comme l’ID/le profil WCA, l’organisation de
               compétitions, les règles de la compétition, les médias, etc.)
           wrt:
-            #original_hash: 0f6b96b
+            #original_hash: 4dd66f7
             label: >-
-              Contacter l'équipe de résultats de la WCA (pour toute chose
-              relative aux résultats d'une compétition)
+              Contacter l'équipe de résultats de la WCA (pour tout ce qui
+              concerne les résultats ou les données de profil sur le site web de
+              la WCA)
           wst:
-            #original_hash: 1d74033
+            #original_hash: 2be6d53
             label: >-
-              Contacter l'équipe logicielle de la WCA (pour signaler des bugs ou
-              toute question relative à l'API)
+              Contacter l'équipe logicielle de la WCA (pour signaler des
+              problèmes avec le site web de la WCA ou pour des questions
+              relatives aux logiciels)
         competition:
           competition:
             #original_hash: 1917f4f
@@ -1742,8 +1745,8 @@ fr-CA:
       ad_new: Nouveau
       #original_hash: 9ad68ce
       text_html: >-
-        Allez jeter un œil à nos nouveaux produits dérivés incluant une sélection
-        de vêtements (t-shirts, chandails à capuchon...)
+        Allez jeter un œil à nos nouveaux produits dérivés incluant une
+        sélection de vêtements (t-shirts, chandails à capuchon...)
       #original_hash: b0fc6c4
       link_title: Lien vers la boutique
     records:
@@ -2020,8 +2023,8 @@ fr-CA:
       #original_hash: e7554d8
       pending_claim_mail_confirmation_html: >-
         Cet utilisateur a réclamé l'ID WCA %{wca_id}. Le Délégué %{delegate}
-        sera informé de cette requête dès que l'adresse courriel de ce compte aura
-        été confirmée.
+        sera informé de cette requête dès que l'adresse courriel de ce compte
+        aura été confirmée.
       #original_hash: 1cde7e6
       your_thumbnail: 'Miniature de votre profil :'
       #original_hash: af18820
@@ -2055,8 +2058,8 @@ fr-CA:
         recommandations pour les photos de profil.
       #original_hash: 9a85f5e
       confirm_guidelines: >-
-        Veillez à lire les directives relatives aux photos de profil et à soumettre une
-        image valide.
+        Veillez à lire les directives relatives aux photos de profil et à
+        soumettre une image valide.
       #original_hash: efc007a
       save: Sauvegarder
       #original_hash: c3cd636
@@ -2082,16 +2085,16 @@ fr-CA:
         '2': Vous devez utiliser une photo récente.
         #original_hash: 8165cf0
         '3': >-
-          S'il y a plus d'une personne dans la photo de profil, il doit être clair
-          laquelle vous êtes.
+          S'il y a plus d'une personne dans la photo de profil, il doit être
+          clair laquelle vous êtes.
         #original_hash: 4083c00
         '4': >-
           Votre tête, mais pas nécessairement tout votre visage, devrait être
           visible.
         #original_hash: 14c72b2
         '5': >-
-          La photo de profil ne doit pas comporter de texte superposé, d'autocollants ou
-          de filtres non naturels, y compris des bordures.
+          La photo de profil ne doit pas comporter de texte superposé,
+          d'autocollants ou de filtres non naturels, y compris des bordures.
         #original_hash: 7f9c9c6
         '6': La photo de profil doit être présenté dans le bon sens.
         #original_hash: 1a18831
@@ -2110,10 +2113,10 @@ fr-CA:
             vous apparaîtriez à une compétition.
           #original_hash: f1f3854
           '2': >-
-            La photo de profil doit être cadré, recadré, incliné et éclairé de manière à
-            ce que tout compétiteur ou spectateur d'une compétition puisse
-            l'utiliser pour vous identifier sans ambiguïté sur le lieu de la
-            compétition.
+            La photo de profil doit être cadré, recadré, incliné et éclairé de
+            manière à ce que tout compétiteur ou spectateur d'une compétition
+            puisse l'utiliser pour vous identifier sans ambiguïté sur le lieu de
+            la compétition.
           #original_hash: 13fab02
           '3': >-
             La miniature de la photo de profil n'est qu'une partie de la photo
@@ -2189,8 +2192,8 @@ fr-CA:
       email_used_by_locked_account_html: >-
         est déjà utilisé par un autre compte. Il a été créé automatiquement à la
         suite de votre inscription à une compétition par l'intermédiaire d'un
-        service externe. Si vous êtes le propriétaire de ce courriel, vous pouvez
-        utiliser le compte après avoir réinitialisé votre mot de passe <a
+        service externe. Si vous êtes le propriétaire de ce courriel, vous
+        pouvez utiliser le compte après avoir réinitialisé votre mot de passe <a
         href='/users/password/new'>ici</a>.
       #original_hash: 50897d4
       must_match_person: doit correspondre aux détails de la personne correspondant à l'ID WCA
@@ -2200,8 +2203,8 @@ fr-CA:
         account_updated: Compte mis à jour
         #original_hash: 49e5851
         wca_id_claimed: >-
-          Vous avez réclamé l'ID WCA %{wca_id} avec succès. Vérifiez vos courriels
-          et attendez que %{user} l'approuve !
+          Vous avez réclamé l'ID WCA %{wca_id} avec succès. Vérifiez vos
+          courriels et attendez que %{user} l'approuve !
         #original_hash: dc89669
         account_updated_confirm: >-
           Compte mis à jour, un courriel a été envoyé à %{email} pour confirmer
@@ -2278,6 +2281,10 @@ fr-CA:
       can_only_register_for_qualified_events: >-
         Vous ne pouvez pas vous inscrire pour des épreuves pour lesquelles vous
         ne vous qualifiez pas.
+      #original_hash: 93ed20e
+      cannot_change_events_when_cancelling: >-
+        Vous ne pouvez pas modifier vos événements lors de l'annulation de votre
+        inscription.
       #original_hash: 4025877
       cannot_register_without_comment: >-
         Vous devez faire un commentaire. Merci de lire les conditions
@@ -3442,8 +3449,8 @@ fr-CA:
           early_puzzle_submission:
             #original_hash: 723cad9
             enabled: >-
-              Je voudrais imposer au compétiteur la soumission de leur casse-tête à
-              un moment précis avant le début prévu d'une épreuve
+              Je voudrais imposer au compétiteur la soumission de leur
+              casse-tête à un moment précis avant le début prévu d'une épreuve
             #original_hash: 78308cc
             reason: Raison et détails concernant la soumission avancée des casse-têtes
           qualification_results:
@@ -3490,10 +3497,10 @@ fr-CA:
         #original_hash: 2c812a0
         name: >-
           Le nom complet de la compétition, avec la date à la fin ex : Gros
-          Jouets à Montréal 2025. Pensez à mettre la première lettre des mots en majuscule.
-          Le nom doit contenir uniquement des caractères alphanumériques, ainsi
-          que des tirets (-), esperluettes (&), points (.), deux-points (:),
-          apostrophes ('), et espaces ( ).
+          Jouets à Montréal 2025. Pensez à mettre la première lettre des mots en
+          majuscule. Le nom doit contenir uniquement des caractères
+          alphanumériques, ainsi que des tirets (-), esperluettes (&), points
+          (.), deux-points (:), apostrophes ('), et espaces ( ).
         #original_hash: fbcda66
         short_name: >-
           Un nom court pour l’affichage. Si le nom de la compétition est que
@@ -3510,10 +3517,13 @@ fr-CA:
           country_id: ''
           #original_hash: bce4589
           city_name: >-
-            Nom de la ville où la compétition a lieu ainsi que la province / état (dans les pays où c'est l'usage). Ne pas mettre le pays. Exemple d'entrée valide : Montréal, Quebec
+            Nom de la ville où la compétition a lieu ainsi que la province /
+            état (dans les pays où c'est l'usage). Ne pas mettre le pays.
+            Exemple d'entrée valide : Montréal, Quebec
           #original_hash: 9d9126e
           name_html: >-
-            La salle où la compétition à lieu. %{md}. Par exemple : [École de Technologie Supérieure](https://www.etsmtl.ca)
+            La salle où la compétition à lieu. %{md}. Par exemple : [École de
+            Technologie Supérieure](https://www.etsmtl.ca)
           #original_hash: 2651d1a
           details_html: >-
             Détails concernant la salle (par exemple, au première étage au fond
@@ -3871,6 +3881,13 @@ fr-CA:
           title: Inscriptions rejetées
           #original_hash: 3fd2e0c
           information: Les compétiteurs rejetés ne peuvent pas se réinscrire.
+        non_competing:
+          #original_hash: d4e453a
+          title: Inscriptions hors compétition
+          #original_hash: 2ed9c67
+          information: >-
+            Pour les non-compétiteurs à qui vous pouvez confier des tâches de
+            staff au sein du WCIF.
         payment:
           #original_hash: d6fbc7a
           refunded_status: Remboursé
@@ -4255,8 +4272,8 @@ fr-CA:
       save_success: Compétition mise à jour avec succès.
       #original_hash: 5253c86
       confirm_success: >-
-        Compétition confirmée avec succès. Vérifiez vos courriels et attendez que
-        le WCAT l'annonce !
+        Compétition confirmée avec succès. Vérifiez vos courriels et attendez
+        que le WCAT l'annonce !
       #original_hash: 28567f0
       delete_success: 'La compétition %{id} a été supprimée avec succès.'
     time_until_competition:
@@ -5092,10 +5109,10 @@ fr-CA:
           '1': >-
             Vous pouvez trouver les règles concernant les casse-têtes dans l'<a
             href='https://www.worldcubeassociation.org/regulations/#3'>Article
-            3</a>. Tous les casse-têtes doivent être approuvés par un Délégué WCA.
-            Si vous n'êtes pas sûr, merci de demander au Délégué WCA de votre
-            compétition. Vous pouvez apporter un casse-tête de remplacement au cas
-            où vous ne soyez pas autorisé à l'utiliser.
+            3</a>. Tous les casse-têtes doivent être approuvés par un Délégué
+            WCA. Si vous n'êtes pas sûr, merci de demander au Délégué WCA de
+            votre compétition. Vous pouvez apporter un casse-tête de
+            remplacement au cas où vous ne soyez pas autorisé à l'utiliser.
       regulations2:
         #original_hash: 48f1234
         title: >-
@@ -5118,8 +5135,8 @@ fr-CA:
         content:
           #original_hash: 0d76323
           '1': >-
-            Vous n'êtes pas autorisé à utiliser ce casse-tête. Les casse-têtes ne
-            doivent pas être abîmés ou avoir de différences qui permettent
+            Vous n'êtes pas autorisé à utiliser ce casse-tête. Les casse-têtes
+            ne doivent pas être abîmés ou avoir de différences qui permettent
             d'identifier une pièce par rapport à une autre pièce similaire (voir
             la <a
             href='https://www.worldcubeassociation.org/regulations/#3j'>Règle
@@ -5150,18 +5167,18 @@ fr-CA:
     who_we_are_content_html: >-
       <p>La World Cube Association régit les compétitions de casse-têtes
       mécaniques fonctionnant par torsion de groupes de pièces, communément
-      appelés « twisty puzzles ». Le plus célèbre de ces casse-tête est le
-      cube Rubik, inventé par le professeur hongrois Rubik. Une sélection de
-      ces casse-têtes est choisie comme événements officiels de la WCA.</p>
-      <p>Au fil de l'évolution de la WCA au cours de la dernière décennie, plus
-      de 245 000 personnes ont participé à nos compétitions. Malgré cette
-      croissance, nous restons une organisation presque entièrement gérée par
-      des bénévoles, des organisateurs locaux, aux délégués de la WCA jusqu'à
-      son conseil d'administration. Nous sommes très reconnaissants envers tous
-      ceux qui prennent du temps sur leur vie pour permettre à la WCA de
-      fonctionner. Avec plus de soutien financier, nous espérons apporter un
-      niveau de professionnalisme encore plus grand à nos compétitions alors que
-      nous continuons à homologuer plus d'événements à travers le monde.</p>
+      appelés « twisty puzzles ». Le plus célèbre de ces casse-tête est le cube
+      Rubik, inventé par le professeur hongrois Rubik. Une sélection de ces
+      casse-têtes est choisie comme événements officiels de la WCA.</p> <p>Au
+      fil de l'évolution de la WCA au cours de la dernière décennie, plus de 245
+      000 personnes ont participé à nos compétitions. Malgré cette croissance,
+      nous restons une organisation presque entièrement gérée par des bénévoles,
+      des organisateurs locaux, aux délégués de la WCA jusqu'à son conseil
+      d'administration. Nous sommes très reconnaissants envers tous ceux qui
+      prennent du temps sur leur vie pour permettre à la WCA de fonctionner.
+      Avec plus de soutien financier, nous espérons apporter un niveau de
+      professionnalisme encore plus grand à nos compétitions alors que nous
+      continuons à homologuer plus d'événements à travers le monde.</p>
     #original_hash: bccd8c5
     spirit: >-
       Notre esprit est que des personnes venant de tout le globe puissent
@@ -6164,16 +6181,17 @@ fr-CA:
       #original_hash: 8a23af2
       '1': >-
         La WCA propose des produits dérivés exclusifs à la vente ! T- shirts,
-        chandails, stickers, stackmats, sacs à dos et bien plus ! Nos motifs sont
-        constamment mis à jour, y compris le logo classique de la WCA, les
-        produits dérivés officiels du championnat mondial et les motifs du record
-        mondial.
+        chandails, stickers, stackmats, sacs à dos et bien plus ! Nos motifs
+        sont constamment mis à jour, y compris le logo classique de la WCA, les
+        produits dérivés officiels du championnat mondial et les motifs du
+        record mondial.
       #original_hash: 2865e1d
       '2': >-
-        Acheter des produits dérivés WCA via notre boutique est l'un des meilleurs moyens de
-        supporter la WCA - un organisme bénévole à but non lucratif. Nous
-        utilisons tous les bénéfices des produits dérivés pour financer davantage les
-        championnats, l’équipement et d’autres activités liées à la WCA.
+        Acheter des produits dérivés WCA via notre boutique est l'un des
+        meilleurs moyens de supporter la WCA - un organisme bénévole à but non
+        lucratif. Nous utilisons tous les bénéfices des produits dérivés pour
+        financer davantage les championnats, l’équipement et d’autres activités
+        liées à la WCA.
       #original_hash: 8e57552
       '3': >-
         Vous pouvez acheter nos produits dérivés partout dans le monde -- avec
@@ -6354,9 +6372,9 @@ fr-CA:
       #original_hash: 4fc3fd7
       wrong_attempts_for_cutoff_error: >-
         Il manque à [%{round_id}] %{person_name} au moins une tentative avant le
-        un seuil. Veuillez modifier le résultat pour inclure la ou les tentatives
-        manquantes ou mettre à jour les informations relatives à la ronde dans
-        la page Gérer les événements de la compétition.
+        un seuil. Veuillez modifier le résultat pour inclure la ou les
+        tentatives manquantes ou mettre à jour les informations relatives à la
+        ronde dans la page Gérer les événements de la compétition.
       #original_hash: 24c10d3
       mismatched_result_format_error: >-
         [%{round_id}] Les résultats pour %{person_name} sont dans le mauvais
