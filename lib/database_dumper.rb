@@ -1112,10 +1112,7 @@ module DatabaseDumper
         copy: %w(
           scramble
         ),
-      ),
-      tsv_sanitizers: actions_to_column_sanitizers(
         fake_values: {
-          "scramble" => "IF(eventId='333mbf', REPLACE(scramble, '\\n', '|'), scramble)",
           "competitionId" => "competition_id",
           "eventId" => "event_id",
           "groupId" => "group_id",
@@ -1123,6 +1120,11 @@ module DatabaseDumper
           "roundTypeId" => "round_type_id",
           "scrambleId" => "scramble_id",
           "scrambleNum" => "scramble_num",
+        },
+      ),
+      tsv_sanitizers: actions_to_column_sanitizers(
+        fake_values: {
+          "scramble" => "IF(eventId='333mbf', REPLACE(scramble, '\\n', '|'), scramble)",
         },
       ),
     }.freeze,
