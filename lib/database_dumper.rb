@@ -1071,24 +1071,26 @@ module DatabaseDumper
         },
       ),
     }.freeze,
-    "competitions" => {
+    "Competitions" => {
+      source_table: "competitions",
       where_clause: PUBLIC_COMPETITION_JOIN,
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
           name
           city_name
-          country_id
           information
           venue
-          venue_address
-          venue_details
-          external_website
-          cell_name
           latitude
           longitude
         ),
         fake_values: {
+          "cityName" => "city_name",
+          "countryId" => "country_id",
+          "venueAddress" => "venue_address",
+          "venueDetails" => "venue_details",
+          "externalWebsite" => "external_website",
+          "cellName" => "cell_name",
           "cancelled" => "(competitions.cancelled_at IS NOT NULL AND competitions.cancelled_by IS NOT NULL)",
           "eventSpecs" => "REPLACE(GROUP_CONCAT(DISTINCT competition_events.event_id), \",\", \" \")",
           "wcaDelegate" => "GROUP_CONCAT(DISTINCT(CONCAT(\"[{\", users_delegates.name, \"}{mailto:\", users_delegates.email, \"}]\")) SEPARATOR \" \")",
