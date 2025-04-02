@@ -1009,7 +1009,8 @@ module DatabaseDumper
         ),
       ),
     }.freeze,
-    "events" => {
+    "Events" => {
+      source_table: "events",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
@@ -1023,7 +1024,8 @@ module DatabaseDumper
         },
       ),
     }.freeze,
-    "formats" => {
+    "Formats" => {
+      source_table: "formats",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
