@@ -37,7 +37,7 @@ RSpec.describe Person, type: :model do
 
     context "fixing the person" do
       it "fixing country_id fails if there exists an old person with the same wca id, greater sub_id and the same country_id" do
-        FactoryBot.create(:person, wca_id: person.wca_id, subId: 2, name: person.name, country_id: "New Zealand")
+        FactoryBot.create(:person, wca_id: person.wca_id, sub_id: 2, name: person.name, country_id: "New Zealand")
         person.country_id = "New Zealand"
         expect(person).to be_invalid_with_errors(country_id: ["Cannot change the region to a region the person has already represented in the past."])
       end

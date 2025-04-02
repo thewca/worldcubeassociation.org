@@ -224,7 +224,7 @@ FactoryBot.define do
       transient do
         person {
           FactoryBot.create(
-            :person, name: name, countryId: Country.find_by(iso2: country_iso2).id, gender: gender, dob: dob.strftime("%F"), wca_id_year: Time.current.year.to_s
+            :person, name: name, country_id: Country.find_by(iso2: country_iso2).id, gender: gender, dob: dob.strftime("%F"), wca_id_year: Time.current.year.to_s
           )
         }
       end

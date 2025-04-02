@@ -123,7 +123,7 @@ FactoryBot.define do
 
     personId { person.wca_id }
     personName { person.name }
-    countryId { person.country_id }
+    countryId { person.country_iso2 }
     regionalSingleRecord { nil }
     regionalAverageRecord { nil }
   end
