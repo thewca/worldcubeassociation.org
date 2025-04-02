@@ -35,7 +35,7 @@ class Result < ApplicationRecord
     errors.add(:person_id, "this WCA ID already has a result for that round") if has_result
   end
 
-  scope :final, -> { where(round_type_id: RoundType.final_rounds.pluck(:id)) }
+  scope :final, -> { where(round_type_id: RoundType.final_rounds.select(:id)) }
   scope :succeeded, -> { where("best > 0") }
   scope :average_succeeded, -> { where("average > 0") }
   scope :podium, -> { final.succeeded.where(pos: [1..3]) }

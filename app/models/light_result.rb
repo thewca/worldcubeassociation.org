@@ -47,11 +47,7 @@ class LightResult
     @event = Event.c_find(r["event_id"])
   end
 
-  def event_id
-    event.id
-  end
+  delegate :id, to: :event, prefix: true
 
-  def round_type_id
-    round_type.id
-  end
+  delegate :id, to: :round_type, prefix: true
 end

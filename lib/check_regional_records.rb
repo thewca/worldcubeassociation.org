@@ -99,12 +99,12 @@ module CheckRegionalRecords
     # Deliberately NOT using `results_scope` here, because the necessary event/competition filtering is
     # implicitly included via the `minimum_result_candidate` view (and doubling up would make the query much slower!)
     minimum_results = Result.includes(:competition)
-                          .from("results, (#{minimum_result_candidates.to_sql}) AS `helper`")
-                          .where("results.event_id = helper.event_id")
-                          .where("results.competition_id = helper.competition_id")
-                          .where("results.round_type_id = helper.round_type_id")
-                          .where("results.country_id = helper.country_id")
-                          .where("results.#{value_column} = helper.`value`")
+                            .from("results, (#{minimum_result_candidates.to_sql}) AS `helper`")
+                            .where("results.event_id = helper.event_id")
+                            .where("results.competition_id = helper.competition_id")
+                            .where("results.round_type_id = helper.round_type_id")
+                            .where("results.country_id = helper.country_id")
+                            .where("results.#{value_column} = helper.`value`")
 
     (marked_records + minimum_results).uniq(&:id)
                                       .sort_by do |r|
