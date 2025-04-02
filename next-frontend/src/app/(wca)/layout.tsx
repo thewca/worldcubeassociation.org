@@ -5,6 +5,7 @@ import WCAQueryClientProvider from "@/providers/WCAQueryClientProvider";
 import PermissionProvider from "@/providers/PermissionProvider";
 import { Provider as UiProvider } from "@/components/ui/provider";
 import Navbar from "./navbar";
+import Footer from "@/components/Footer"
 import localFont from 'next/font/local'
 import RandomBackground from "@/components/RandomBackground";
 
@@ -63,6 +64,7 @@ export default function RootLayout({
               <Navbar />
               <RandomBackground numRows={8} numCols={18} />
               <PermissionProvider>{children}</PermissionProvider>
+              <Footer />
             </UiProvider>
           </AuthProvider>
         </WCAQueryClientProvider>
