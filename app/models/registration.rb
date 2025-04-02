@@ -67,7 +67,7 @@ class Registration < ApplicationRecord
   end
 
   def update_lanes!(params, acting_user)
-    Registrations::Lanes::Competing.update!(params, self.competition, acting_user.id)
+    Registrations::Lanes::Competing.update!(params, self, acting_user.id)
   end
 
   def guest_limit
