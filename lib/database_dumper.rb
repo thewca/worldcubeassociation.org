@@ -949,27 +949,28 @@ module DatabaseDumper
   }.freeze
 
   RESULTS_SANITIZERS = {
-    "results" => {
+    "Results" => {
+      source_table: "results",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
-          competition_id
-          event_id
-          round_type_id
           pos
           best
           average
-          person_name
-          person_id
-          format_id
           value1
           value2
           value3
           value4
           value5
-          regional_single_record
-          regional_average_record
         ),
         fake_values: {
+          "competitionId" => "competition_id",
+          "eventId" => "event_id",
+          "roundTypeId" => "round_type_id",
+          "personName" => "person_name",
+          "personId" => "person_id",
+          "formatId" => "format_id",
+          "regionalSingleRecord" => "regional_single_record",
+          "regionalAverageRecord" => "regional_average_record",
           "personCountryId" => "countryId",
         }.freeze,
       ),
