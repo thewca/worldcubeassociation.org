@@ -998,7 +998,7 @@ module DatabaseDumper
         ),
       ),
     }.freeze,
-    "Round_types" => {
+    "RoundTypes" => {
       source_table: "round_types",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
