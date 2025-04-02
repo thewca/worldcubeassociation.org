@@ -267,7 +267,7 @@ class AdminController < ApplicationController
     competition_id = params.dig(:regional_record_overrides, :competition_id)
     event_id = params.dig(:regional_record_overrides, :event_id)
 
-    redirect_to action: :check_regional_records, competition_id: competition_id, event_id: event_id
+    redirect_to panel_page_path(id: User.panel_pages[:checkRecords], competition_id: competition_id, event_id: event_id)
   end
 
   def all_voters

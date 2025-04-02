@@ -1141,6 +1141,9 @@ module DatabaseDumper
           championship_type
           eligible_country_iso2
         ),
+        db_default: %w(
+          id
+        ),
       ),
     }.freeze,
   }.freeze
