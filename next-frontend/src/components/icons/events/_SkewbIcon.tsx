@@ -7,18 +7,16 @@ const _SkewbIcon = createIcon({
   viewBox: "0 0 500 500",
   path: (
     <>
-      <rect
-        x="105.573"
-        y="105.573"
-        transform="matrix(0.7071 0.7071 -0.7071 0.7071 250 -103.5534)"
+      <path
+        d="m215.48131-138.07208h276.13837v276.13837h-276.13837z"
+        strokeWidth=".955982"
+        transform="matrix(.70710678 .70710678 -.70710678 .70710678 0 0)"
         fill="currentColor"
-        width="288.853"
-        height="288.853"
       />
-      <polygon fill="currentColor" points="43,43.5 230.5,43.5 43,231 " />
-      <polygon fill="currentColor" points="43,456.5 43,269 230.5,456.5 " />
-      <polygon fill="currentColor" points="457,456.5 269.5,456.5 457,269 " />
-      <polygon fill="currentColor" points="457,43.5 457,231 269.5,43.5 " />
+      <path d="m43 43.5h187.5l-187.5 187.5z" fill="currentColor" />
+      <path d="m43 456.5v-187.5l187.5 187.5z" fill="currentColor" />
+      <path d="m457 456.5h-187.5l187.5-187.5z" fill="currentColor" />
+      <path d="m457 43.5v187.5l-187.5-187.5z" fill="currentColor" />
     </>
   ),
 });

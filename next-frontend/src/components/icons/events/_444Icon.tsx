@@ -7,133 +7,69 @@ const _444Icon = createIcon({
   viewBox: "0 0 500 500",
   path: (
     <>
-      <rect
-        x="23.38427"
-        y="20.337206"
-        width="87.087601"
-        height="87.087601"
-        id="rect43"
+      <path
+        d="m23.38427 20.337206h87.087601v87.087601h-87.087601z"
         fill="currentColor"
       />
-      <rect
-        x="145.11337"
-        y="20.338326"
-        width="87.08873"
-        height="87.08873"
-        id="rect45"
+      <path
+        d="m145.11337 20.338326h87.08873v87.08873h-87.08873z"
         fill="currentColor"
       />
-      <rect
-        x="23.38427"
-        y="144.35201"
-        width="87.087601"
-        height="87.086487"
-        id="rect47"
+      <path
+        d="m23.38427 144.35201h87.087601v87.086487h-87.087601z"
         fill="currentColor"
       />
-      <rect
-        x="145.11337"
-        y="144.35313"
-        width="87.08873"
-        height="87.087601"
-        id="rect49"
+      <path
+        d="m145.11337 144.35313h87.08873v87.087601h-87.08873z"
         fill="currentColor"
       />
-      <rect
-        x="267.2374"
-        y="20.712004"
-        width="87.087601"
-        height="87.087601"
-        id="rect51"
+      <path
+        d="m267.2374 20.712004h87.087601v87.087601h-87.087601z"
         fill="currentColor"
       />
-      <rect
-        x="388.96649"
-        y="20.713123"
+      <path
+        d="m388.96649 20.713123h87.089844v87.08873h-87.089844z"
         strokeMiterlimit="10"
-        width="87.089844"
-        height="87.08873"
-        id="rect53"
         fill="currentColor"
       />
-      <rect
-        x="267.2374"
-        y="144.72682"
-        width="87.087601"
-        height="87.086487"
-        id="rect55"
+      <path
+        d="m267.2374 144.72682h87.087601v87.086487h-87.087601z"
         fill="currentColor"
       />
-      <rect
-        x="388.96649"
-        y="144.72792"
-        width="87.089844"
-        height="87.087601"
-        id="rect57"
+      <path
+        d="m388.96649 144.72792h87.089844v87.087601h-87.089844z"
         fill="currentColor"
       />
-      <rect
-        x="23.38427"
-        y="268.74164"
-        width="87.087601"
-        height="87.089844"
-        id="rect59"
+      <path
+        d="m23.38427 268.74164h87.087601v87.089844h-87.087601z"
         fill="currentColor"
       />
-      <rect
-        x="145.11337"
-        y="268.74164"
-        width="87.08873"
-        height="87.089844"
-        id="rect61"
+      <path
+        d="m145.11337 268.74164h87.08873v87.089844h-87.08873z"
         fill="currentColor"
       />
-      <rect
-        x="23.38427"
-        y="392.75644"
-        width="87.087601"
-        height="87.087601"
-        id="rect63"
+      <path
+        d="m23.38427 392.75644h87.087601v87.087601h-87.087601z"
         fill="currentColor"
       />
-      <rect
-        x="145.11337"
-        y="392.7587"
-        width="87.08873"
-        height="87.087601"
-        id="rect65"
+      <path
+        d="m145.11337 392.7587h87.08873v87.087601h-87.08873z"
         fill="currentColor"
       />
-      <rect
-        x="267.2374"
-        y="268.74164"
-        width="87.087601"
-        height="87.087601"
-        id="rect67"
+      <path
+        d="m267.2374 268.74164h87.087601v87.087601h-87.087601z"
         fill="currentColor"
       />
-      <rect
-        x="388.96649"
-        y="268.74164"
-        width="87.089844"
-        height="87.089844"
-        id="rect69"
+      <path
+        d="m388.96649 268.74164h87.089844v87.089844h-87.089844z"
         fill="currentColor"
       />
-      <rect
-        x="267.2374"
-        y="392.75644"
-        width="87.087601"
-        height="87.087601"
-        id="rect71"
+      <path
+        d="m267.2374 392.75644h87.087601v87.087601h-87.087601z"
         fill="currentColor"
       />
-      <rect
-        x="388.96649"
-        y="392.7587"
-        width="87.089844"
-        height="87.087601"
-        id="rect73"
+      <path
+        d="m388.96649 392.7587h87.089844v87.087601h-87.089844z"
         fill="currentColor"
       />
     </>

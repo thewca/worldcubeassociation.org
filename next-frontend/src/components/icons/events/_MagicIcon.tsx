@@ -7,68 +7,36 @@ const _MagicIcon = createIcon({
   viewBox: "0 0 500 500",
   path: (
     <>
-      <rect
-        x="191.53624"
-        y="29.491526"
-        width="116.05709"
-        height="116.05709"
-        id="rect20"
+      <path
+        d="m191.53624 29.491526h116.05709v116.05709h-116.05709z"
         fill="currentColor"
       />
-      <rect
-        x="354.01617"
-        y="29.491526"
-        width="116.05709"
-        height="116.05709"
-        id="rect22"
+      <path
+        d="m354.01617 29.491526h116.05709v116.05709h-116.05709z"
         fill="currentColor"
       />
-      <rect
-        x="29.636597"
-        y="191.97145"
-        width="116.05709"
-        height="116.05709"
-        id="rect24"
+      <path
+        d="m29.636597 191.97145h116.05709v116.05709h-116.05709z"
         fill="currentColor"
       />
-      <rect
-        x="192.11653"
-        y="191.97145"
-        width="116.05709"
-        height="116.05709"
-        id="rect26"
+      <path
+        d="m192.11653 191.97145h116.05709v116.05709h-116.05709z"
         fill="currentColor"
       />
-      <rect
-        x="354.59647"
-        y="191.97145"
-        width="116.05709"
-        height="116.05709"
-        id="rect28"
+      <path
+        d="m354.59647 191.97145h116.05709v116.05709h-116.05709z"
         fill="currentColor"
       />
-      <rect
-        x="29.926739"
-        y="354.45139"
-        width="116.05709"
-        height="116.05709"
-        id="rect30"
+      <path
+        d="m29.926739 354.45139h116.05709v116.05709h-116.05709z"
         fill="currentColor"
       />
-      <rect
-        x="192.40666"
-        y="354.45139"
-        width="116.05709"
-        height="116.05709"
-        id="rect32"
+      <path
+        d="m192.40666 354.45139h116.05709v116.05709h-116.05709z"
         fill="currentColor"
       />
-      <rect
-        x="354.8866"
-        y="354.45139"
-        width="116.05709"
-        height="116.05709"
-        id="rect34"
+      <path
+        d="m354.8866 354.45139h116.05709v116.05709h-116.05709z"
         fill="currentColor"
       />
     </>

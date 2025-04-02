@@ -7,36 +7,20 @@ const _222Icon = createIcon({
   viewBox: "0 0 500 500",
   path: (
     <>
-      <rect
-        x="46.822033"
-        y="46.822033"
-        width="173.65401"
-        height="173.65401"
-        id="rect3"
+      <path
+        d="m46.822033 46.822033h173.65401v173.65401h-173.65401z"
         fill="currentColor"
       />
-      <rect
-        x="279.52396"
-        y="46.822033"
-        width="173.65401"
-        height="173.65401"
-        id="rect5"
+      <path
+        d="m279.52396 46.822033h173.65401v173.65401h-173.65401z"
         fill="currentColor"
       />
-      <rect
-        x="46.822033"
-        y="279.52396"
-        width="173.65401"
-        height="173.65401"
-        id="rect7"
+      <path
+        d="m46.822033 279.52396h173.65401v173.65401h-173.65401z"
         fill="currentColor"
       />
-      <rect
-        x="279.52396"
-        y="279.52396"
-        width="173.65401"
-        height="173.65401"
-        id="rect9"
+      <path
+        d="m279.52396 279.52396h173.65401v173.65401h-173.65401z"
         fill="currentColor"
       />
     </>
