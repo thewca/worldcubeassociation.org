@@ -1067,7 +1067,7 @@ module DatabaseDumper
         ),
         fake_values: {
           "id" => "wca_id",
-          "subId" => "sub_id",
+          "subid" => "sub_id",
           "countryId" => "country_id",
         },
       ),

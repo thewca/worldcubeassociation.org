@@ -113,6 +113,10 @@ FactoryBot.define do
     end
 
     personId { person.id }
+    # This is a custom method by us
+    # rubocop:disable Rails/DynamicFindBy
+    countryId { Country.find_by_iso2(person.country_iso2) }
+    # rubocop:enable Rails/DynamicFindBy
   end
 
   factory :result do
