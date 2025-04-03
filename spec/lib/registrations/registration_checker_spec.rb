@@ -1105,6 +1105,24 @@ RSpec.describe Registrations::RegistrationChecker do
           .not_to raise_error
       end
 
+      it 'organizer can edit accepted registration when competition is full' do
+        competitor_limit = FactoryBot.create(:competition, :with_competitor_limit, :with_organizer, competitor_limit: 3)
+        FactoryBot.create_list(:registration, 2, :accepted, competition: competitor_limit)
+        registration = FactoryBot.create(:registration, :accepted, competition: competitor_limit)
+
+        update_request = FactoryBot.build(
+          :update_request,
+          user_id: registration.user_id,
+          competition_id: registration.competition_id,
+          submitted_by: competitor_limit.organizers.first.id,
+          competing: { 'comment' => 'test comment' },
+        )
+
+        expect {
+          Registrations::RegistrationChecker.update_registration_allowed!(update_request, registration)
+        }.not_to raise_error
+      end
+
       it 'only considers regstrations from current comp when calculating accepted registrations' do
         competitor_limit = FactoryBot.create(:competition, :with_competitor_limit, :with_organizer, competitor_limit: 3)
         limited_reg = FactoryBot.create(:registration, competition: competitor_limit)
