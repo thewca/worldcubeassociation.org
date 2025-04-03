@@ -3,7 +3,7 @@ import React, {
   useMemo, useReducer, useRef,
 } from 'react';
 import {
-  Accordion, Checkbox, Form, Header, Icon, Segment, Sticky,
+  Accordion, Button, Checkbox, Form, Header, Icon, Segment, Sticky,
 } from 'semantic-ui-react';
 import { getAllRegistrations } from '../api/registration/get/get_registrations';
 import RegistrationActions from './RegistrationActions';
@@ -12,6 +12,7 @@ import { useDispatch } from '../../../lib/providers/StoreProvider';
 import I18n from '../../../lib/i18n';
 import Loading from '../../Requests/Loading';
 import { bulkUpdateRegistrations } from '../api/registration/patch/update_registration';
+import bulkAutoAccept from '../api/registration/patch/bulk_auto_accept';
 import RegistrationAdministrationTable from './RegistrationsAdministrationTable';
 import useCheckboxState from '../../../lib/hooks/useCheckboxState';
 import useOrderedSet from '../../../lib/hooks/useOrderedSet';
@@ -85,6 +86,20 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
           : 'registrations.flash.failed',
         'negative',
       ));
+    },
+  });
+
+  const { mutate: bulkAutoAcceptMutation, isPending: isAutoAccepting } = useMutation({
+    mutationFn: bulkAutoAccept,
+    onError: (data) => {
+      const { error } = data.json;
+      dispatchStore(setMessage(
+        `competitions.registration_v2.auto_accept.cant_bulk_auto_accept`,
+        'negative',
+      ));
+    },
+    onSuccess: () => {
+      dispatchStore(setMessage('competitions.registration_v2.auto_accept.bulk_auto_accepted', 'positive'));
     },
   });
 
@@ -391,6 +406,19 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
 
   return (
     <Segment loading={isMutating}>
+      <Button
+        disabled={isAutoAccepting}
+        color="green"
+        onClick={() => {
+          console.log("button clicked")
+          bulkAutoAcceptMutation(competitionInfo.id)
+        }}
+      >
+        <Icon name="check" />
+        {' '}
+        {I18n.t('competitions.registration_v2.auto_accept.bulk_auto_accept')}
+      </Button>
+
       <Form>
         <Form.Group unstackable widths="2">
           {Object.entries(expandableColumns).map(([id, name]) => (
