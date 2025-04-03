@@ -1346,12 +1346,15 @@ RSpec.describe 'API Registrations' do
     let(:headers) { { 'Authorization' => fetch_jwt_token(reg.user_id) } }
 
     it 'successfully builds a payment_intent via Stripe API' do
+      WebMock.allow_net_connect!
       get api_v1_registrations_payment_ticket_path(competition_id: competition.id), headers: headers
+      WebMock.disable_net_connect!(allow_localhost: true)
       expect(response).to be_successful
     end
 
     context 'successful payment ticket' do
       before do
+        stub_successful_stripe_payment_intent(1000, 'usd')
         get api_v1_registrations_payment_ticket_path(competition_id: competition.id), headers: headers
       end
 
@@ -1371,6 +1374,7 @@ RSpec.describe 'API Registrations' do
     end
 
     it 'has the correct payment_intent properties when a donation is present' do
+      stub_successful_stripe_payment_intent(2300, 'usd')
       get api_v1_registrations_payment_ticket_path(competition_id: competition.id), headers: headers, params: { iso_donation_amount: 1300 }
 
       payment_record = PaymentIntent.find_by(holder_type: "Registration", holder_id: reg.id).payment_record

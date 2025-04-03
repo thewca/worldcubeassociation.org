@@ -3,6 +3,7 @@
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 ENV['RAILS_ENV'] ||= 'test'
 require 'spec_helper'
+puts "connected allowed rails helper: #{WebMock.net_connect_allowed?}"
 require File.expand_path('../config/environment', __dir__)
 require 'rspec/rails'
 # Add additional requires below this line. Rails is not loaded until this point!
@@ -99,3 +100,4 @@ end
 
 # See: https://github.com/rspec/rspec-expectations/issues/664#issuecomment-58134735
 RSpec::Matchers.define_negated_matcher :not_change, :change
+puts "connected allowed rails helper 2: #{WebMock.net_connect_allowed?}"
