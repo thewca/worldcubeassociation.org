@@ -187,7 +187,9 @@ Rails.application.routes.draw do
   get 'wst/wca-developer-database-dump.zip', to: redirect(DbDumpHelper.public_s3_path(DbDumpHelper::DEVELOPER_EXPORT_SQL_PERMALINK))
 
   get 'persons/new_id' => 'admin/persons#generate_ids'
-  resources :persons, only: %i[index show]
+  get '/persons/:wca_id/:competition_id/events' => 'admin/persons#competition_events', as: :person_competition_events
+  get '/persons/:wca_id/:competition_id/:event_id/results' => 'admin/persons#competition_event_results', as: :person_competition_event_results
+  resources :persons, only: [:index, :show]
   post 'persons' => 'admin/persons#create'
 
   resources :polls, only: %i[edit new vote create update index destroy]
@@ -298,7 +300,6 @@ Rails.application.routes.draw do
   get '/admin/all-voters' => 'admin#all_voters', as: :eligible_voters
   get '/admin/leader-senior-voters' => 'admin#leader_senior_voters', as: :leader_senior_voters
   post '/admin/merge_people' => 'admin#do_merge_people', as: :admin_do_merge_people
-  get '/admin/fix_results_selector' => 'admin#fix_results_selector', as: :admin_fix_results_ajax
   get '/admin/person_data' => 'admin#person_data'
   get '/admin/do_compute_auxiliary_data' => 'admin#do_compute_auxiliary_data'
   get '/admin/generate_db_token' => 'admin#generate_db_token'

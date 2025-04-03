@@ -217,6 +217,7 @@ export const apiV0Urls = {
   },
   persons: {
     show: (wcaId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_persons_path) %>/${wcaId}`,
+    competitions: (wcaId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_person_competitions_path(wca_id: "${wcaId}")) %>`,
   },
   wrt: {
     edit: (wcaId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_wrt_person_path("${wcaId}"))%>`,
@@ -277,6 +278,10 @@ export const viewUrls = {
   },
   competitions: {
     countInRange: (startDate, endDate) => `<%= CGI.unescape(Rails.application.routes.url_helpers.panel_competition_count_path) %>?${jsonToQueryString({ startDate, endDate })}`,
+  },
+  persons: {
+    competitionEvents: (wcaId, competitionId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.person_competition_events_path(wca_id: "${wcaId}", competition_id: "${competitionId}")) %>`,
+    competitionEventResults: (wcaId, competitionId, eventId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.person_competition_event_results_path(wca_id: "${wcaId}", competition_id: "${competitionId}", event_id: "${eventId}")) %>`,
   },
   cronjob: {
     details: (cronjobName) => `<%= CGI.unescape(Rails.application.routes.url_helpers.panel_cronjob_details_path(cronjob_name: "${cronjobName}")) %>`,
@@ -366,8 +371,6 @@ export const rankingsUrl = (eventId, rankingType, region, gender, show) => {
 };
 
 export const serverStatusPageUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.server_status_path) %>`;
-
-export const fixResultsUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.admin_fix_results_path) %>`;
 
 export const mergeProfilesUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.admin_merge_people_path) %>`;
 

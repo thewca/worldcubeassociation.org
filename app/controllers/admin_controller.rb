@@ -209,13 +209,11 @@ class AdminController < ApplicationController
     )
   end
 
-  def fix_results_selector
-    action_params = params.require(:fix_results_selector)
-                          .permit(:person_id, :competition_id, :event_id, :round_type_id)
-
-    @result_selector = FixResultsSelector.new(action_params)
-
-    render partial: "fix_results_selector"
+  def edit_person
+    @person = Person.current.find_by(wca_id: params[:person].try(:[], :wca_id))
+    # If there isn't a person in the params, make an empty one that simple form have an object to work with.
+    # Note: most of the time persons are dynamically selected using user_id picker.
+    @person ||= Person.new
   end
 
   def person_data
