@@ -176,7 +176,6 @@ services:
       - DEBIAN_FRONTEND=noninteractive
       - DEBUG=pw:api
       - DISPLAY=$DISPLAY
-      - GSK_RENDERER=cairo # For WebKit to work in headed debug mode
     ports:
       - "8089:8089"
     working_dir: /app

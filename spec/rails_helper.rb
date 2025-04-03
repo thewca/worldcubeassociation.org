@@ -39,9 +39,7 @@ Capybara.register_driver :playwright_debug do |app|
   Capybara::Playwright::Driver.new(
     app,
     playwright_server_endpoint_url: EnvConfig.PLAYWRIGHT_SERVER_SOCKET_URL,
-    browser_type: :firefox,
-    # Under Linux with the mounted X11 socket, you will most likely need the following line to make Chromium work:
-    # args: ["--no-zygote"],
+    browser_type: :chromium,
     headless: false,
     slowMo: 500,
   )
