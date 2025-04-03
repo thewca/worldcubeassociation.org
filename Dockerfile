@@ -72,7 +72,7 @@ RUN ./bin/yarn install --immutable
 # Install Playwright browser executables. This is configured to land in /rails/pw-browsers
 #   via the `PLAYWRIGHT_BROWSERS_PATH` env variable declared at the top
 RUN --mount=type=cache,sharing=private,target=/rails/.cache/pw-browsers \
-  PLAYWRIGHT_BROWSERS_PATH="/rails/.cache/pw-browsers" ./bin/yarn playwright install chromium && \
+  PLAYWRIGHT_BROWSERS_PATH="/rails/.cache/pw-browsers" ./bin/yarn playwright install --no-shell chromium && \
   cp -ar /rails/.cache/pw-browsers pw-browsers
 
 COPY . .

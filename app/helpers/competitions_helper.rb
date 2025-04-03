@@ -229,9 +229,15 @@ module CompetitionsHelper
 
   def playwright_connection(&block)
     if Rails.env.production? || EnvConfig.PLAYWRIGHT_RUN_LOCALLY?
-      Playwright.create(playwright_cli_executable_path: 'yarn dlx --quiet playwright', &block)
+      Playwright.create(playwright_cli_executable_path: 'yarn dlx --quiet playwright') do |playwright|
+        playwright.chromium.launch(headless: true, channel: 'chromium', &block)
+      end
     else
-      Playwright.connect_to_playwright_server(EnvConfig.PLAYWRIGHT_SERVER_SOCKET_URL, &block)
+      endpoint_url = "#{EnvConfig.PLAYWRIGHT_SERVER_SOCKET_URL}?browser=chromium"
+
+      Playwright.connect_to_playwright_server(endpoint_url) do |playwright|
+        playwright.chromium.launch(headless: true, channel: 'chromium', &block)
+      end
     end
   end
 

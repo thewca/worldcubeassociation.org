@@ -202,25 +202,23 @@ class CompetitionsController < ApplicationController
 
           raw_content = self.render_to_string
 
-          helpers.playwright_connection do |playwright|
-            playwright.chromium.launch(headless: true) do |browser|
-              page = browser.new_page
+          helpers.playwright_connection do |browser|
+            page = browser.new_page
 
-              # Inject the raw HTML and wait until it finished loading all network assets
-              page.set_content(raw_content, waitUntil: 'networkidle')
+            # Inject the raw HTML and wait until it finished loading all network assets
+            page.set_content(raw_content, waitUntil: 'networkidle')
 
-              # Wait until the WOFF2 fonts have been extracted
-              page.evaluate_handle('document.fonts.ready')
+            # Wait until the WOFF2 fonts have been extracted
+            page.evaluate_handle('document.fonts.ready')
 
-              page.pdf(
-                path: cached_path,
-                format: 'A4',
-                landscape: true,
-                # Use `scale` and `margins` to imitate WkHtmlToPdf look and feel
-                scale: 0.8,
-                margin: { top: '8mm', bottom: '8.5mm', left: '10mm', right: '10mm' },
-              )
-            end
+            page.pdf(
+              path: cached_path,
+              format: 'A4',
+              landscape: true,
+              # Use `scale` and `margins` to imitate WkHtmlToPdf look and feel
+              scale: 0.8,
+              margin: { top: '8mm', bottom: '8.5mm', left: '10mm', right: '10mm' },
+            )
           end
         end
 
