@@ -27,6 +27,7 @@ import getUsersInfo from '../api/user/post/getUserInfo';
 import { useRegistration } from '../lib/RegistrationProvider';
 import I18nHTMLTranslate from '../../I18nHTMLTranslate';
 import useSet from '../../../lib/hooks/useSet';
+import DropdownSelection from '../Register/DropdownSelection';
 
 export default function RegistrationEditor({ competitor, competitionInfo }) {
   const dispatch = useDispatch();
@@ -34,6 +35,7 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
   const [adminComment, setAdminComment] = useState('');
   const [status, setStatus] = useState('');
   const [guests, setGuests] = useState(0);
+  const [dropdownSelection, setDropdownSelection] = useState('');
   const selectedEventIds = useSet();
   const [registration, setRegistration] = useState({});
   const confirm = useConfirm();
@@ -89,6 +91,7 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
       setSelectedEventIds(serverRegistration.competing.event_ids);
       setAdminComment(serverRegistration.competing.admin_comment ?? '');
       setGuests(serverRegistration.guests ?? 0);
+      setDropdownSelection(serverRegistration.competing.dropdown_selection ?? '');
     }
   }, [serverRegistration, setSelectedEventIds]);
 
@@ -101,12 +104,14 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
   const hasStatusChanged = serverRegistration
     && status !== serverRegistration.competing.registration_status;
   const hasGuestsChanged = serverRegistration && guests !== serverRegistration.guests;
+  const hasDropdownChanged = serverRegistration && dropdownSelection !== (serverRegistration.competing.dropdown_selection ?? '');
 
   const hasChanges = hasEventsChanged
     || hasCommentChanged
     || hasAdminCommentChanged
     || hasStatusChanged
-    || hasGuestsChanged;
+    || hasGuestsChanged
+    || hasDropdownChanged;
 
   const commentIsValid = comment || !competitionInfo.force_comment_in_registration;
   const maxEvents = competitionInfo.events_per_registration_limit ?? Infinity;
@@ -148,6 +153,9 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
       }
       if (hasGuestsChanged) {
         body.guests = guests;
+      }
+      if (hasDropdownChanged) {
+        body.dropdown_selection = dropdownSelection;
       }
       confirm({
         content: I18n.t('competitions.registration_v2.update.update_confirm'),
@@ -288,6 +296,13 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
           value={guests}
           onChange={(event, data) => setGuests(data.value)}
         />
+        {competitionInfo.registration_dropdown_enabled && (
+          <DropdownSelection
+            competitionInfo={competitionInfo}
+            value={dropdownSelection}
+            onChange={setDropdownSelection}
+          />
+        )}
         <Button
           color="blue"
           disabled={isUpdating || !hasChanges}

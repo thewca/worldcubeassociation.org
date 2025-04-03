@@ -29,6 +29,7 @@ import { eventQualificationToString } from '../../../lib/utils/wcif';
 import { hasNotPassed } from '../../../lib/utils/dates';
 import { useRegistration } from '../lib/RegistrationProvider';
 import useSet from '../../../lib/hooks/useSet';
+import DropdownSelection from './DropdownSelection';
 
 const maxCommentLength = 240;
 
@@ -81,6 +82,7 @@ export default function CompetingStep({
   const [hasInteracted, setHasInteracted] = useState(false);
 
   const [guests, setGuests] = useState(0);
+  const [dropdownSelection, setDropdownSelection] = useState('');
 
   // using selectedEventIds.update in dependency array causes warnings
   const { update: setSelectedEventIds } = selectedEventIds;
@@ -90,6 +92,7 @@ export default function CompetingStep({
       setComment(registration.competing.comment ?? '');
       setSelectedEventIds(registration.competing.event_ids);
       setGuests(registration.guests);
+      setDropdownSelection(registration.competing.dropdown_selection ?? '');
     }
   }, [isRegistered, registration, setSelectedEventIds]);
 
@@ -153,8 +156,11 @@ export default function CompetingStep({
   const hasCommentChanged = registration?.competing
     && comment !== (registration.competing.comment ?? '');
   const hasGuestsChanged = registration && guests !== registration.guests;
+  const hasDropdownChanged = registration?.competing
+    && registration.competing.dropdown_selection !== undefined
+    && dropdownSelection !== (registration.competing.dropdown_selection ?? '');
 
-  const hasChanges = hasEventsChanged || hasCommentChanged || hasGuestsChanged;
+  const hasChanges = hasEventsChanged || hasCommentChanged || hasGuestsChanged || hasDropdownChanged;
 
   const eventsAreValid = selectedEventIds.size > 0 && selectedEventIds.size <= maxEvents;
 
@@ -189,6 +195,7 @@ export default function CompetingStep({
         comment,
       },
       guests,
+      ...(dropdownSelection ? { dropdown_selection: dropdownSelection } : {}),
     });
   }, [
     createRegistrationMutation,
@@ -197,6 +204,7 @@ export default function CompetingStep({
     selectedEventIds.asArray,
     comment,
     guests,
+    dropdownSelection, // Always include dropdownSelection in the dependency array
   ]);
 
   const actionUpdateRegistration = useCallback(() => {
@@ -213,9 +221,10 @@ export default function CompetingStep({
             event_ids: hasEventsChanged ? selectedEventIds.asArray : undefined,
           },
           guests,
+          ...(hasDropdownChanged ? { dropdown_selection: dropdownSelection } : {}),
         });
       } else {
-        const updateMessage = `\n${hasCommentChanged ? `Comment: ${comment}\n` : ''}${hasEventsChanged ? `Events: ${selectedEventIds.asArray.map((eventId) => events.byId[eventId].name).join(', ')}\n` : ''}${hasGuestsChanged ? `Guests: ${guests}\n` : ''}`;
+        const updateMessage = `\n${hasCommentChanged ? `Comment: ${comment}\n` : ''}${hasEventsChanged ? `Events: ${selectedEventIds.asArray.map((eventId) => events.byId[eventId].name).join(', ')}\n` : ''}${hasGuestsChanged ? `Guests: ${guests}\n` : ''}${hasDropdownChanged ? `Dropdown Selection: ${dropdownSelection}\n` : ''}`;
         window.location = contactCompetitionUrl(competitionInfo.id, encodeURIComponent(I18n.t('competitions.registration_v2.update.update_contact_message', { update_params: updateMessage })));
       }
     }).catch(() => {
@@ -234,6 +243,8 @@ export default function CompetingStep({
     selectedEventIds.asArray,
     hasGuestsChanged,
     guests,
+    hasDropdownChanged,
+    dropdownSelection,
   ]);
 
   const actionReRegister = useCallback(() => {
@@ -246,6 +257,7 @@ export default function CompetingStep({
         status: 'pending',
       },
       guests,
+      dropdown_selection: dropdownSelection,
     });
   }, [
     updateRegistrationMutation,
@@ -254,6 +266,7 @@ export default function CompetingStep({
     comment,
     selectedEventIds.asArray,
     guests,
+    dropdownSelection,
   ]);
 
   const onEventClick = (eventId) => {
@@ -406,6 +419,11 @@ export default function CompetingStep({
               />
             </Form.Field>
           )}
+          <DropdownSelection
+            competitionInfo={competitionInfo}
+            value={dropdownSelection}
+            onChange={setDropdownSelection}
+          />
           {isRegistered ? (
             <ButtonGroup widths={2}>
               {shouldShowUpdateButton && (

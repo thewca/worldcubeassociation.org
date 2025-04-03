@@ -118,6 +118,15 @@ export default function RegistrationOverview({
                 {registration.guests}
               </List.Item>
             )}
+            {competitionInfo.registration_dropdown_enabled && registration.competing.dropdown_selection && (
+              <List.Item>
+                <List.Header>
+                  {I18n.t('competitions.registration_v2.register.dropdown_selection')}
+                  :
+                </List.Header>
+                {registration.competing.dropdown_selection}
+              </List.Item>
+            )}
             <ButtonGroup widths={2}>
               <Button
                 primary

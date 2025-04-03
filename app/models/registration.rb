@@ -284,6 +284,7 @@ class Registration < ApplicationRecord
                                 registered_on: registered_at,
                                 comment: comments || "",
                                 admin_comment: administrative_notes|| "",
+                                dropdown_selection: respond_to?(:dropdown_selection) ? (dropdown_selection || "") : "",
                               },
                             })
       base_json[:competing][:waiting_list_position] = waiting_list_position if competing_status_waiting_list?
@@ -388,8 +389,16 @@ class Registration < ApplicationRecord
 
   validates :administrative_notes, length: { maximum: COMMENT_CHARACTER_LIMIT, frontend_code: Registrations::ErrorCodes::USER_COMMENT_TOO_LONG }
 
+  validates :dropdown_selection, presence: { message: 'Please select an option from the dropdown', if: :dropdown_required? }
+
   def force_comment?
     competition&.force_comment_in_registration?
+  end
+
+  def dropdown_required?
+    competition&.respond_to?(:registration_dropdown_enabled?) &&
+      competition&.registration_dropdown_enabled? &&
+      competition&.registration_dropdown_required?
   end
 
   # For associated_events_picker

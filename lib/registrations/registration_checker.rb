@@ -15,8 +15,14 @@ module Registrations
         new_registration.clear_changes_information
 
         guests = raw_payload['guests']
+        dropdown_selection = raw_payload['dropdown_selection']
 
         new_registration.guests = guests.to_i if raw_payload.key?('guests')
+
+        # Only set dropdown_selection if the registration has the field
+        if raw_payload.key?('dropdown_selection') && new_registration.respond_to?(:dropdown_selection=)
+          new_registration.dropdown_selection = dropdown_selection
+        end
 
         competing_payload = raw_payload['competing']
         comment = competing_payload&.dig('comment')
@@ -49,6 +55,7 @@ module Registrations
       # Migrated to ActiveRecord-style validations
       validate_guests!(registration)
       validate_comment!(registration)
+      validate_dropdown_selection!(registration)
       validate_registration_events!(registration)
     end
 
@@ -58,6 +65,7 @@ module Registrations
       # Migrated to ActiveRecord-style validations
       validate_guests!(updated_registration)
       validate_comment!(updated_registration)
+      validate_dropdown_selection!(updated_registration)
       validate_organizer_comment!(updated_registration)
       validate_registration_events!(updated_registration)
       validate_status_value!(updated_registration)
@@ -114,6 +122,13 @@ module Registrations
 
       def validate_comment!(registration)
         process_validation_error!(registration, :comments)
+      end
+
+      def validate_dropdown_selection!(registration)
+        # Only validate if the registration has the dropdown_selection field
+        if registration.respond_to?(:dropdown_selection)
+          process_validation_error!(registration, :dropdown_selection)
+        end
       end
 
       def validate_organizer_comment!(registration)

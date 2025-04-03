@@ -134,6 +134,9 @@ class Competition < ApplicationRecord
     guests_entry_fee_lowest_denomination
     guest_entry_status
     competitor_can_cancel
+    registration_dropdown_enabled
+    registration_dropdown_options
+    registration_dropdown_required
   ).freeze
   UNCLONEABLE_ATTRIBUTES = %w(
     id
@@ -293,6 +296,14 @@ class Competition < ApplicationRecord
 
   def events_per_registration_limit_enabled?
     event_restrictions? && events_per_registration_limit.present?
+  end
+
+  def registration_dropdown_enabled?
+    self[:registration_dropdown_enabled].present? && self[:registration_dropdown_enabled]
+  end
+
+  def registration_dropdown_required?
+    self[:registration_dropdown_required].present? && self[:registration_dropdown_required]
   end
 
   def number_of_events
@@ -1838,7 +1849,8 @@ class Competition < ApplicationRecord
                base_entry_fee_lowest_denomination currency_code allow_registration_edits competitor_can_cancel
                allow_registration_without_qualification refund_policy_percent use_wca_registration guests_per_registration_limit venue contact
                force_comment_in_registration use_wca_registration external_registration_page guests_entry_fee_lowest_denomination guest_entry_status
-               information events_per_registration_limit guests_enabled auto_accept_registrations auto_accept_disable_threshold],
+               information events_per_registration_limit guests_enabled auto_accept_registrations auto_accept_disable_threshold
+               registration_dropdown_enabled registration_dropdown_options registration_dropdown_required],
       methods: %w[url website short_name city venue_address venue_details latitude_degrees longitude_degrees country_iso2 event_ids
                   main_event_id number_of_bookmarks using_payment_integrations? uses_qualification? uses_cutoff? competition_series_ids registration_full?
                   part_of_competition_series? registration_full_and_accepted?],
@@ -2379,6 +2391,9 @@ class Competition < ApplicationRecord
         "guestsPerRegistration" => guests_per_registration_limit,
         "extraRequirements" => extra_registration_requirements,
         "forceComment" => force_comment_in_registration,
+        "dropdownEnabled" => registration_dropdown_enabled,
+        "dropdownOptions" => registration_dropdown_options,
+        "dropdownRequired" => registration_dropdown_required,
       },
       "eventRestrictions" => {
         "forbidNewcomers" => {
@@ -2484,6 +2499,9 @@ class Competition < ApplicationRecord
         "guestsPerRegistration" => errors[:guests_per_registration_limit],
         "extraRequirements" => errors[:extra_registration_requirements],
         "forceComment" => errors[:force_comment_in_registration],
+        "dropdownEnabled" => errors[:registration_dropdown_enabled],
+        "dropdownOptions" => errors[:registration_dropdown_options],
+        "dropdownRequired" => errors[:registration_dropdown_required],
       },
       "eventRestrictions" => {
         "forbidNewcomers" => {
@@ -2611,6 +2629,9 @@ class Competition < ApplicationRecord
       guests_per_registration_limit: form_data.dig('registration', 'guestsPerRegistration'),
       events_per_registration_limit: form_data.dig('eventRestrictions', 'eventLimitation', 'perRegistrationLimit'),
       force_comment_in_registration: form_data.dig('registration', 'forceComment'),
+      registration_dropdown_enabled: form_data.dig('registration', 'dropdownEnabled'),
+      registration_dropdown_options: form_data.dig('registration', 'dropdownOptions'),
+      registration_dropdown_required: form_data.dig('registration', 'dropdownRequired'),
       being_cloned_from_id: form_data.dig('cloning', 'fromId'),
       clone_tabs: form_data.dig('cloning', 'cloneTabs'),
     }
@@ -2794,6 +2815,9 @@ class Competition < ApplicationRecord
             "guestsPerRegistration" => { "type" => ["integer", "null"] },
             "extraRequirements" => { "type" => ["string", "null"] },
             "forceComment" => { "type" => ["boolean", "null"] },
+            "dropdownEnabled" => { "type" => ["boolean", "null"] },
+            "dropdownOptions" => { "type" => ["string", "null"] },
+            "dropdownRequired" => { "type" => ["boolean", "null"] },
           },
         },
         "eventRestrictions" => {

@@ -62,6 +62,9 @@ export default function RegistrationAdministrationTableFooter({
         <Table.Cell />
       )}
       <Table.Cell>{guestCount}</Table.Cell>
+      {competitionInfo && competitionInfo.registration_dropdown_enabled && (
+        <Table.Cell key="dropdown" />
+      )}
       {commentsAreShown && (
         <>
           <Table.Cell key="comment" />
