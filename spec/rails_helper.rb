@@ -93,11 +93,8 @@ RSpec.configure do |config|
 
   if EnvConfig.DISABLE_WEBMOCK?
     WebMock.disable!
-  else
-    WebMock.allow_net_connect! unless EnvConfig.DISABLE_NET_CONNECT_IN_TESTS?
   end
 end
 
 # See: https://github.com/rspec/rspec-expectations/issues/664#issuecomment-58134735
 RSpec::Matchers.define_negated_matcher :not_change, :change
-puts "connected allowed rails helper 2: #{WebMock.net_connect_allowed?}"
