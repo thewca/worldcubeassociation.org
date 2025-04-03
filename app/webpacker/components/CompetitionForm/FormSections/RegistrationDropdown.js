@@ -2,6 +2,7 @@ import React from 'react';
 import {
   InputBoolean,
   InputBooleanSelect,
+  InputString,
   InputTextArea,
 } from '../../wca/FormBuilder/input/FormInputs';
 import ConditionalSection from './ConditionalSection';
@@ -20,10 +21,13 @@ export default function RegistrationDropdown() {
     <>
       <InputBooleanSelect id="dropdownEnabled" required />
       <ConditionalSection showIf={dropdownEnabled}>
+        <InputString
+          id="dropdownTitle"
+          required={false}
+        />
         <InputTextArea
           id="dropdownOptions"
           required={dropdownEnabled}
-          hint="Enter each option on a new line"
         />
         <InputBoolean id="dropdownRequired" />
       </ConditionalSection>

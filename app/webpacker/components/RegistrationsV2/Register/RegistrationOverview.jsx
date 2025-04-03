@@ -121,7 +121,7 @@ export default function RegistrationOverview({
             {competitionInfo.registration_dropdown_enabled && registration.competing.dropdown_selection && (
               <List.Item>
                 <List.Header>
-                  {I18n.t('competitions.registration_v2.register.dropdown_selection')}
+                  {competitionInfo.registration_dropdown_title || I18n.t('competitions.registration_v2.register.dropdown_selection')}
                   :
                 </List.Header>
                 {registration.competing.dropdown_selection}

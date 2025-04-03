@@ -40,7 +40,7 @@ export default function DropdownSelection({
   return (
     <Form.Field required={isRequired} error={hasError}>
       <label htmlFor="dropdown-selection">
-        {I18n.t('competitions.registration_v2.register.dropdown_selection')}
+        {competitionInfo.registration_dropdown_title || I18n.t('competitions.registration_v2.register.dropdown_selection')}
       </label>
       <Form.Select
         id="dropdown-selection"

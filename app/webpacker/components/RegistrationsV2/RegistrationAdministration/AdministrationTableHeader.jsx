@@ -110,7 +110,7 @@ export default function TableHeader({
             sorted={sortColumn === 'dropdown_selection' ? sortDirection : undefined}
             onClick={() => onColumnClick('dropdown_selection')}
           >
-            {I18n.t('competitions.registration_v2.register.dropdown_selection')}
+            {competitionInfo.registration_dropdown_title || I18n.t('competitions.registration_v2.register.dropdown_selection')}
           </Table.HeaderCell>
         )}
         {commentsAreShown && (

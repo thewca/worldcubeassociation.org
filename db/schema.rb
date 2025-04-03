@@ -87,6 +87,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_04_03_172545) do
     t.boolean "auto_accept_registrations", default: false, null: false
     t.integer "auto_accept_disable_threshold"
     t.boolean "registration_dropdown_enabled", default: false
+    t.string "registration_dropdown_title"
     t.text "registration_dropdown_options"
     t.boolean "registration_dropdown_required", default: false
     t.index ["cancelled_at"], name: "index_Competitions_on_cancelled_at"

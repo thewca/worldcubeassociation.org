@@ -1669,6 +1669,7 @@ en:
           extra_requirements: "Extra registration requirements"
           force_comment: "Force competitors to make a comment when registering"
           dropdown_enabled: "Enable dropdown menu for registrations"
+          dropdown_title: "Dropdown title"
           dropdown_options: "Dropdown options"
           dropdown_required: "Require dropdown selection"
         event_restrictions:
@@ -1759,6 +1760,7 @@ en:
           extra_requirements: "Please indicate here any extra registration requirements not covered above, like for example directions on how to pay. <br/>Please fill this out <b>in English</b> and whatever other languages your competitors speak; this will be displayed on the competition's information page, as well on the registration page if you are using the WCA website registrations."
           force_comment: ""
           dropdown_enabled: ""
+          dropdown_title: "Title for the dropdown menu"
           dropdown_options: "Enter each option on a new line"
           dropdown_required: ""
         event_restrictions:
