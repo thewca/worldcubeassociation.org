@@ -301,6 +301,7 @@ class Registration < ApplicationRecord
     authorized_fields = {
       "guests" => guests,
       "comments" => comments || '',
+      "dropdownSelection" => dropdown_selection || '',
       "administrativeNotes" => administrative_notes || '',
     }
     {
