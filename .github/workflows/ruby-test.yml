@@ -13,6 +13,7 @@ jobs:
       RACK_ENV: test
       RAILS_ENV: test
       NODE_ENV: test
+      PLAYWRIGHT_BROWSERS_PATH: ${{ env.GITHUB_WORKSPACE }}/pw-browsers
     steps:
       - uses: actions/checkout@v4
       - uses: fregante/setup-git-user@v2 # set up dummy user.name and user.email in git so that Overcommit doesn't explode
@@ -48,6 +49,11 @@ jobs:
         run: |
           bin/bundle exec i18n export
           bin/rake assets:precompile
+      - name: Cache Playwright runnables
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.PLAYWRIGHT_BROWSERS_PATH }}
+          key: ${{ runner.os }}-playwright-${{ hashFiles('**/node_modules/playwright*') }}
       - name: Install Playwright Browsers # as per https://playwright.dev/docs/ci#github-actions
         run: bin/yarn playwright install --with-deps --no-shell chromium
       - name: Run tests
