@@ -518,11 +518,40 @@ class Registration < ApplicationRecord
     super(DEFAULT_SERIALIZE_OPTIONS.merge(options || {}))
   end
 
+  def self.bulk_auto_accept(competition)
+    if competition.waiting_list.present?
+      competition.waiting_list.entries.each do |r_id|
+        Registration.find(r_id).attempt_auto_accept
+        # It isnt clear to me why this is needed - but without it, the auto-accepted items getting removed from the waiting list reappear
+        # on the waiting list in the test body, even when calling waiting_list.reload there
+        # I have also tried assigning competition.waiting_list.entries to a variable and iterating over that, but it didnt help
+        competition.waiting_list.reload
+      end
+    end
+
+    sorted_pending_registrations = competition
+                                   .registrations
+                                   .competing_status_pending
+                                   .with_payments
+                                   .sort_by { |registration| registration.last_positive_payment.updated_at }
+
+    sorted_pending_registrations.each { |r| r.attempt_auto_accept }
+  end
+
+  def last_positive_payment
+    registration_payments
+      .where('amount_lowest_denomination > 0')
+      .order(updated_at: :desc)
+      .limit(1)
+      .first
+  end
+
   def attempt_auto_accept
     return false if Rails.env.production? && EnvConfig.WCA_LIVE_SITE?
 
     failure_reason = auto_accept_failure_reason
     if failure_reason.present?
+      puts "failed because: #{failure_reason}"
       log_auto_accept_failure(failure_reason)
       return false
     end
@@ -531,12 +560,14 @@ class Registration < ApplicationRecord
     auto_accepted_registration = Registrations::RegistrationChecker.apply_payload(self, update_payload)
 
     if auto_accepted_registration.valid?
+      puts "auto accepting"
       update_lanes!(
         update_payload,
         'Auto-accept',
       )
       true
     else
+      puts "failed because: #{auto_accepted_registration.errors.as_json}"
       log_auto_accept_failure(auto_accepted_registration.errors.as_json)
       false
     end
