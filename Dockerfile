@@ -28,10 +28,10 @@ ARG NODE_MAJOR=20
 RUN curl -fsSL https://deb.nodesource.com/setup_${NODE_MAJOR}.x | bash && \
     apt-get install -y nodejs
 
+FROM base AS build
+
 # Enable 'corepack' feature that lets NPM download the package manager on-the-fly as required.
 RUN corepack enable
-
-FROM base AS build
 
 # Install native dependencies for Ruby:
 # libvips = image processing for Rails ActiveStorage attachments
@@ -69,8 +69,8 @@ RUN --mount=type=cache,sharing=private,target=/rails/.cache/bundle \
 COPY package.json yarn.lock .yarnrc.yml ./
 RUN ./bin/yarn install --immutable
 
-# Install Playwright browser executables. This is configured to land in /rails/pw-browsers
-#   via the `PLAYWRIGHT_BROWSERS_PATH` env variable declared at the top
+# Install Playwright browser executables. The target folder after the final cp
+#   matches the destination defined by $PLAYWRIGHT_BROWSERS_PATH above.
 RUN --mount=type=cache,sharing=private,target=/rails/.cache/pw-browsers \
   PLAYWRIGHT_BROWSERS_PATH="/rails/.cache/pw-browsers" ./bin/yarn playwright install --no-shell chromium && \
   cp -ar /rails/.cache/pw-browsers pw-browsers
@@ -79,6 +79,10 @@ COPY . .
 
 RUN ASSETS_COMPILATION=true SECRET_KEY_BASE=1 RAILS_MAX_THREADS=4 NODE_OPTIONS="--max_old_space_size=4096" ./bin/bundle exec i18n export
 RUN --mount=type=cache,uid=1000,target=/rails/tmp/cache ASSETS_COMPILATION=true SECRET_KEY_BASE=1 RAILS_MAX_THREADS=4 NODE_OPTIONS="--max_old_space_size=4096" ./bin/rake assets:precompile
+
+# Save the Playwright CLI from certain doom
+RUN mkdir -p "$PLAYWRIGHT_BROWSERS_PATH/node_modules"
+RUN cp -r node_modules/playwright* "$PLAYWRIGHT_BROWSERS_PATH/node_modules"
 
 RUN rm -rf node_modules
 
@@ -109,9 +113,9 @@ RUN useradd rails --create-home --shell /bin/bash
 # Copy built artifacts: gems, application, PW browsers
 COPY --chown=rails:rails --from=build /rails .
 
-# We already need the `bin/yarn` file and our Yarn lockfile to pinpoint the Playwright version
+# We already need the Playwright CLI which is part of the /rails folder,
 #   but we also still need `sudo` privileges to be able to install runtime dependencies through apt
-RUN ./bin/yarn dlx playwright install-deps chromium
+RUN "$PLAYWRIGHT_BROWSERS_PATH/node_modules/playwright/cli.js" install-deps chromium
 
 USER rails:rails
 

@@ -229,7 +229,9 @@ module CompetitionsHelper
 
   def playwright_connection(&block)
     if Rails.env.production? || EnvConfig.PLAYWRIGHT_RUN_LOCALLY?
-      Playwright.create(playwright_cli_executable_path: 'yarn dlx --quiet playwright') do |playwright|
+      local_cli_path = "#{EnvConfig.PLAYWRIGHT_BROWSERS_PATH}/node_modules/playwright/cli.js"
+
+      Playwright.create(playwright_cli_executable_path: local_cli_path) do |playwright|
         playwright.chromium.launch(headless: true, channel: 'chromium', &block)
       end
     else
