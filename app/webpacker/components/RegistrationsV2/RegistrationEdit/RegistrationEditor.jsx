@@ -114,6 +114,7 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
     || hasDropdownChanged;
 
   const commentIsValid = comment || !competitionInfo.force_comment_in_registration;
+  const dropdownIsValid = dropdownSelection || !competitionInfo.registration_dropdown_required;
   const maxEvents = competitionInfo.events_per_registration_limit ?? Infinity;
   const eventsAreValid = selectedEventIds.size > 0 && selectedEventIds.size <= maxEvents;
 
@@ -123,7 +124,10 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
     } else if (!commentIsValid) {
       // i18n-tasks-use t('registrations.errors.cannot_register_without_comment')
       dispatch(showMessage('registrations.errors.cannot_register_without_comment', 'negative'));
-    } else if (!eventsAreValid) {
+    } else if (!dropdownIsValid) {
+      // i18n-tasks-use t('registrations.errors.dropdown_selection_required')
+      dispatch(showMessage('registrations.errors.dropdown_selection_required', 'negative'));
+    }else if (!eventsAreValid) {
       // i18n-tasks-use t('registrations.errors.must_register')
       dispatch(showMessage(
         maxEvents === Infinity
@@ -167,6 +171,7 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
     hasChanges,
     confirm,
     commentIsValid,
+    dropdownIsValid,
     eventsAreValid,
     dispatch,
     maxEvents,
@@ -177,12 +182,14 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
     hasAdminCommentChanged,
     hasStatusChanged,
     hasGuestsChanged,
+    hasDropdownChanged,
     updateRegistrationMutation,
     selectedEventIds.asArray,
     comment,
     adminComment,
     status,
     guests,
+    dropdownSelection,
   ]);
 
   const registrationEditDeadlinePassed = Boolean(competitionInfo.event_change_deadline_date)
@@ -297,11 +304,19 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
           onChange={(event, data) => setGuests(data.value)}
         />
         {competitionInfo.registration_dropdown_enabled && (
-          <DropdownSelection
-            competitionInfo={competitionInfo}
-            value={dropdownSelection}
-            onChange={setDropdownSelection}
-          />
+          <Form.Field required={competitionInfo.registration_dropdown_required} error={!dropdownIsValid}>
+            <DropdownSelection
+              id="dropdown-selection"
+              competitionInfo={competitionInfo}
+              value={dropdownSelection}
+              onChange={setDropdownSelection}
+            />
+            {!dropdownIsValid && (
+              <Message error visible>
+                {I18n.t('registrations.errors.dropdown_selection_required')}
+              </Message>
+            )}
+          </Form.Field>
         )}
         <Button
           color="blue"

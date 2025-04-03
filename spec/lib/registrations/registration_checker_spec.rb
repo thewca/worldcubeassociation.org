@@ -210,6 +210,120 @@ RSpec.describe Registrations::RegistrationChecker do
           expect(error.error).to eq(Registrations::ErrorCodes::REQUIRED_COMMENT_MISSING)
         end
       end
+
+      describe 'validate_dropdown_selection!' do
+        it 'dropdown selection can be blank when not required' do
+          competition = FactoryBot.create(
+            :competition,
+            :registration_open,
+            registration_dropdown_enabled: true,
+            registration_dropdown_required: false,
+            registration_dropdown_title: 'T-Shirt Size',
+            registration_dropdown_options: "Small\nMedium\nLarge"
+          )
+
+          registration_request = FactoryBot.build(
+            :registration_request,
+            competition_id: competition.id,
+            user_id: default_user.id,
+            dropdown_selection: ''
+          )
+
+          expect {
+            Registrations::RegistrationChecker.create_registration_allowed!(
+              registration_request, User.find(registration_request['user_id']), competition
+            )
+          }.not_to raise_error
+        end
+
+        it 'dropdown selection can be valid option' do
+          competition = FactoryBot.create(
+            :competition,
+            :registration_open,
+            registration_dropdown_enabled: true,
+            registration_dropdown_required: true,
+            registration_dropdown_title: 'T-Shirt Size',
+            registration_dropdown_options: "Small\nMedium\nLarge"
+          )
+
+          registration_request = FactoryBot.build(
+            :registration_request,
+            competition_id: competition.id,
+            user_id: default_user.id,
+            dropdown_selection: 'Medium'
+          )
+
+          expect {
+            Registrations::RegistrationChecker.create_registration_allowed!(
+              registration_request, User.find(registration_request['user_id']), competition
+            )
+          }.not_to raise_error
+        end
+
+        it 'dropdown selection must be provided when required' do
+          competition = FactoryBot.create(
+            :competition,
+            :registration_open,
+            registration_dropdown_enabled: true,
+            registration_dropdown_required: true,
+            registration_dropdown_title: 'T-Shirt Size',
+            registration_dropdown_options: "Small\nMedium\nLarge"
+          )
+
+          registration_request = FactoryBot.build(
+            :registration_request,
+            competition_id: competition.id,
+            user_id: default_user.id,
+            dropdown_selection: ''
+          )
+
+          test_registration = Registration.new(
+            competition: competition,
+            user: default_user,
+            dropdown_selection: ''
+          )
+
+          expect(test_registration).to be_invalid
+          expect(test_registration.errors[:dropdown_selection]).to include("Please select an option from the dropdown menu.")
+
+          registration = Registration.new(
+            competition: competition,
+            user: User.find(registration_request['user_id']),
+            dropdown_selection: ''
+          )
+
+          expect(registration).to be_invalid
+          expect(registration.errors[:dropdown_selection]).to include("Please select an option from the dropdown menu.")
+
+          expect {
+            Registrations::RegistrationChecker.validate_dropdown_selection!(registration)
+          }.to raise_error(WcaExceptions::RegistrationError) do |error|
+            expect(error.status).to eq(:unprocessable_entity)
+            expect(error.error).to eq(Registrations::ErrorCodes::REQUIRED_DROPDOWN_MISSING)
+          end
+        end
+
+        it 'dropdown selection is ignored when feature is not enabled' do
+          competition = FactoryBot.create(
+            :competition,
+            :registration_open,
+            registration_dropdown_enabled: false
+          )
+
+          registration_request = FactoryBot.build(
+            :registration_request,
+            competition_id: competition.id,
+            user_id: default_user.id,
+            dropdown_selection: ''
+          )
+
+          expect {
+            Registrations::RegistrationChecker.create_registration_allowed!(
+              registration_request, User.find(registration_request['user_id']), competition
+            )
+          }.not_to raise_error
+        end
+      end
     end
 
     describe '#create_registration_allowed!.validate_create_events!' do
@@ -700,6 +814,134 @@ RSpec.describe Registrations::RegistrationChecker do
         }.to raise_error(WcaExceptions::RegistrationError) do |error|
           expect(error.status).to eq(:unprocessable_entity)
           expect(error.error).to eq(Registrations::ErrorCodes::REQUIRED_COMMENT_MISSING)
+        end
+      end
+
+      describe 'validate_dropdown_selection!' do
+        it 'user can update dropdown selection' do
+          competition = FactoryBot.create(
+            :competition,
+            :editable_registrations,
+            :registration_closed,
+            registration_dropdown_enabled: true,
+            registration_dropdown_required: true,
+            registration_dropdown_title: 'T-Shirt Size',
+            registration_dropdown_options: "Small\nMedium\nLarge"
+          )
+
+          registration = FactoryBot.build(:registration, competition: competition)
+          registration.dropdown_selection = 'Small'
+          registration.save!
+
+          update_request = FactoryBot.build(
+            :update_request,
+            competition_id: registration.competition_id,
+            user_id: registration.user_id,
+            competing: { 'dropdown_selection' => 'Medium' },
+          )
+
+          expect {
+            Registrations::RegistrationChecker.update_registration_allowed!(update_request, registration)
+          }.not_to raise_error
+        end
+
+        it 'user cant set dropdown selection to blank if required' do
+          competition = FactoryBot.create(
+            :competition,
+            :editable_registrations,
+            :registration_closed,
+            registration_dropdown_enabled: true,
+            registration_dropdown_required: true,
+            registration_dropdown_title: 'T-Shirt Size',
+            registration_dropdown_options: "Small\nMedium\nLarge"
+          )
+
+          registration = FactoryBot.build(:registration, competition: competition)
+          registration.dropdown_selection = 'Small'
+          registration.save!
+
+          update_request = FactoryBot.build(
+            :update_request,
+            competition_id: registration.competition_id,
+            user_id: registration.user_id,
+            competing: { 'dropdown_selection' => '' },
+          )
+
+          temp_registration = registration.dup
+          temp_registration.dropdown_selection = ''
+
+          expect(temp_registration).to be_invalid
+          expect(temp_registration.errors[:dropdown_selection]).to include("Please select an option from the dropdown menu.")
+
+          updated_registration = Registrations::RegistrationChecker.apply_payload(registration, update_request)
+
+          updated_registration.dropdown_selection = ''
+
+          expect(updated_registration).to be_invalid
+          expect(updated_registration.errors[:dropdown_selection]).to include("Please select an option from the dropdown menu.")
+
+          expect {
+            Registrations::RegistrationChecker.validate_dropdown_selection!(updated_registration)
+          }.to raise_error(WcaExceptions::RegistrationError) do |error|
+            expect(error.status).to eq(:unprocessable_entity)
+            expect(error.error).to eq(Registrations::ErrorCodes::REQUIRED_DROPDOWN_MISSING)
+          end
+        end
+
+        it 'user can set dropdown selection to blank if not required' do
+          competition = FactoryBot.create(
+            :competition,
+            :editable_registrations,
+            :registration_closed,
+            registration_dropdown_enabled: true,
+            registration_dropdown_required: false,
+            registration_dropdown_title: 'T-Shirt Size',
+            registration_dropdown_options: "Small\nMedium\nLarge"
+          )
+
+          registration = FactoryBot.create(:registration, competition: competition)
+          registration.dropdown_selection = 'Small'
+          registration.save!
+
+          update_request = FactoryBot.build(
+            :update_request,
+            competition_id: registration.competition_id,
+            user_id: registration.user_id,
+            competing: { 'dropdown_selection' => '' },
+          )
+
+          expect {
+            Registrations::RegistrationChecker.update_registration_allowed!(update_request, registration)
+          }.not_to raise_error
+        end
+
+        it 'organizer can update dropdown selection' do
+          competition = FactoryBot.create(
+            :competition,
+            :editable_registrations,
+            :registration_closed,
+            :with_organizer,
+            registration_dropdown_enabled: true,
+            registration_dropdown_required: true,
+            registration_dropdown_title: 'T-Shirt Size',
+            registration_dropdown_options: "Small\nMedium\nLarge"
+          )
+
+          registration = FactoryBot.build(:registration, competition: competition)
+          registration.dropdown_selection = 'Small'
+          registration.save!
+
+          update_request = FactoryBot.build(
+            :update_request,
+            competition_id: registration.competition_id,
+            user_id: registration.user_id,
+            submitted_by: competition.organizers.first.id,
+            competing: { 'dropdown_selection' => 'Large' },
+          )
+
+          expect {
+            Registrations::RegistrationChecker.update_registration_allowed!(update_request, registration)
+          }.not_to raise_error
         end
       end
 
