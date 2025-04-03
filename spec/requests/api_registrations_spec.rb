@@ -9,7 +9,7 @@ RSpec.describe 'API Registrations' do
   let(:headers) { { 'CONTENT_TYPE' => 'application/json' } }
 
   def stub_successful_stripe_payment_intent(amount, currency)
-   stub_request(:post, "https://api.stripe.com/v1/payment_intents")
+    stub_request(:post, "https://api.stripe.com/v1/payment_intents")
       .to_return(
         status: 200,
         headers: { 'Content-Type' => 'application/json' },
