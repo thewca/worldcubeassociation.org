@@ -9,13 +9,11 @@ module Registrations
           user_id: user_id,
           comments: lane_params[:competing][:comment] || '',
           guests: lane_params[:guests] || 0,
-          registered_at: Time.now.utc
+          registered_at: Time.now.utc,
         }
 
         # Only add dropdown_selection if it's supported
-        if Registration.column_names.include?('dropdown_selection')
-          registration_params[:dropdown_selection] = lane_params[:dropdown_selection] || ''
-        end
+        registration_params[:dropdown_selection] = lane_params[:dropdown_selection] || '' if Registration.column_names.include?('dropdown_selection')
 
         registration = Registration.build(registration_params)
 

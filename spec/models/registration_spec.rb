@@ -675,7 +675,7 @@ RSpec.describe Registration do
         registration_dropdown_enabled: true,
         registration_dropdown_required: false,
         registration_dropdown_title: 'T-Shirt Size',
-        registration_dropdown_options: "Small\nMedium\nLarge"
+        registration_dropdown_options: "Small\nMedium\nLarge",
       )
       registration = FactoryBot.build(:registration, competition: competition, dropdown_selection: '')
       expect(registration).to be_valid
@@ -687,7 +687,7 @@ RSpec.describe Registration do
         registration_dropdown_enabled: true,
         registration_dropdown_required: true,
         registration_dropdown_title: 'T-Shirt Size',
-        registration_dropdown_options: "Small\nMedium\nLarge"
+        registration_dropdown_options: "Small\nMedium\nLarge",
       )
       registration = FactoryBot.build(:registration, competition: competition, dropdown_selection: '')
       expect(registration).to be_invalid_with_errors(dropdown_selection: ["Please select an option from the dropdown menu."])
@@ -699,7 +699,7 @@ RSpec.describe Registration do
         registration_dropdown_enabled: true,
         registration_dropdown_required: true,
         registration_dropdown_title: 'T-Shirt Size',
-        registration_dropdown_options: "Small\nMedium\nLarge"
+        registration_dropdown_options: "Small\nMedium\nLarge",
       )
       registration = FactoryBot.build(:registration, competition: competition, dropdown_selection: 'Medium')
       expect(registration).to be_valid

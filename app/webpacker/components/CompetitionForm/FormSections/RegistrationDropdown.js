@@ -11,11 +11,9 @@ import { useFormObject } from '../../wca/FormBuilder/provider/FormObjectProvider
 export default function RegistrationDropdown() {
   const { registration } = useFormObject();
 
-  // Handle case where registration object doesn't have the dropdown fields yet
   if (!registration) return null;
 
-  // Ensure we have default values for the dropdown fields
-  const dropdownEnabled = registration.dropdownEnabled !== undefined ? registration.dropdownEnabled : false;
+  const dropdownEnabled = !!registration.dropdownEnabled;
 
   return (
     <>

@@ -9,29 +9,29 @@ export default function DropdownSelection({
 }) {
   const [hasInteracted, setHasInteracted] = useState(false);
 
-  // Handle cases where the competition doesn't have the dropdown fields yet
   if (!competitionInfo || !competitionInfo.registration_dropdown_enabled) {
     return null;
   }
 
   const options = competitionInfo.registration_dropdown_options
-    ? competitionInfo.registration_dropdown_options.split('\n').filter(option => option.trim())
+    ? competitionInfo.registration_dropdown_options
+      .split('\n')
+      .filter((option) => option.trim())
     : [];
 
-  // If there are no options, don't show the dropdown
   if (options.length === 0) {
     return null;
   }
 
-  const dropdownOptions = options.map(option => ({
+  const dropdownOptions = options.map((option) => ({
     key: option,
     text: option,
     value: option,
   }));
 
-  const handleChange = (e, { value }) => {
+  const handleChange = (e, { value: changeValue }) => {
     setHasInteracted(true);
-    onChange(value);
+    onChange(changeValue);
   };
 
   const isRequired = competitionInfo.registration_dropdown_required;

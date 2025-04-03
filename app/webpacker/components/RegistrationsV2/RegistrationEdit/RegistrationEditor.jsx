@@ -127,7 +127,7 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
     } else if (!dropdownIsValid) {
       // i18n-tasks-use t('registrations.errors.dropdown_selection_required')
       dispatch(showMessage('registrations.errors.dropdown_selection_required', 'negative'));
-    }else if (!eventsAreValid) {
+    } else if (!eventsAreValid) {
       // i18n-tasks-use t('registrations.errors.must_register')
       dispatch(showMessage(
         maxEvents === Infinity
@@ -304,7 +304,10 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
           onChange={(event, data) => setGuests(data.value)}
         />
         {competitionInfo.registration_dropdown_enabled && (
-          <Form.Field required={competitionInfo.registration_dropdown_required} error={!dropdownIsValid}>
+          <Form.Field
+            required={competitionInfo.registration_dropdown_required}
+            error={!dropdownIsValid}
+          >
             <DropdownSelection
               id="dropdown-selection"
               competitionInfo={competitionInfo}

@@ -390,16 +390,16 @@ class Registration < ApplicationRecord
 
   validates :administrative_notes, length: { maximum: COMMENT_CHARACTER_LIMIT, frontend_code: Registrations::ErrorCodes::USER_COMMENT_TOO_LONG }
 
-  validates :dropdown_selection, presence: { message: I18n.t('registrations.errors.dropdown_selection_required'), if: :dropdown_required?, frontend_code: Registrations::ErrorCodes::REQUIRED_DROPDOWN_MISSING }
+  validates :dropdown_selection, presence: { if: :dropdown_required?, message: I18n.t('registrations.errors.dropdown_selection_required'), frontend_code: Registrations::ErrorCodes::REQUIRED_DROPDOWN_MISSING }
 
   def force_comment?
     competition&.force_comment_in_registration?
   end
 
   def dropdown_required?
-    competition&.respond_to?(:registration_dropdown_enabled?) &&
-      competition&.registration_dropdown_enabled? &&
-      competition&.registration_dropdown_required?
+    competition.respond_to?(:registration_dropdown_enabled?) &&
+      competition.registration_dropdown_enabled? &&
+      competition.registration_dropdown_required?
   end
 
   # For associated_events_picker

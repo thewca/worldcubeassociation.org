@@ -20,9 +20,7 @@ module Registrations
         new_registration.guests = guests.to_i if raw_payload.key?('guests')
 
         # Only set dropdown_selection if the registration has the field
-        if raw_payload.key?('dropdown_selection') && new_registration.respond_to?(:dropdown_selection=)
-          new_registration.dropdown_selection = dropdown_selection
-        end
+        new_registration.dropdown_selection = dropdown_selection if raw_payload.key?('dropdown_selection') && new_registration.respond_to?(:dropdown_selection=)
 
         competing_payload = raw_payload['competing']
         comment = competing_payload&.dig('comment')
@@ -126,9 +124,9 @@ module Registrations
 
       def validate_dropdown_selection!(registration)
         # Only validate if the registration has the dropdown_selection field
-        if registration.respond_to?(:dropdown_selection)
-          process_validation_error!(registration, :dropdown_selection)
-        end
+        return unless registration.respond_to?(:dropdown_selection)
+
+        process_validation_error!(registration, :dropdown_selection)
       end
 
       def validate_organizer_comment!(registration)

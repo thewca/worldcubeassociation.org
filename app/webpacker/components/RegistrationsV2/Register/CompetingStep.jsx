@@ -160,7 +160,10 @@ export default function CompetingStep({
     && registration.competing.dropdown_selection !== undefined
     && dropdownSelection !== (registration.competing.dropdown_selection ?? '');
 
-  const hasChanges = hasEventsChanged || hasCommentChanged || hasGuestsChanged || hasDropdownChanged;
+  const hasChanges = hasEventsChanged
+    || hasCommentChanged
+    || hasGuestsChanged
+    || hasDropdownChanged;
 
   const eventsAreValid = selectedEventIds.size > 0 && selectedEventIds.size <= maxEvents;
 
