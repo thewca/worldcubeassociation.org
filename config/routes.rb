@@ -362,6 +362,7 @@ Rails.application.routes.draw do
         post '/register', to: 'registrations#create'
         patch '/register', to: 'registrations#update'
         patch '/bulk_update', to: 'registrations#bulk_update'
+        patch '/:competition_id/bulk_auto_accept', to: 'registrations#bulk_auto_accept', as: :bulk_auto_accept
         get '/:competition_id', to: 'registrations#list'
         get '/:competition_id/admin', to: 'registrations#list_admin', as: :list_admin
         get '/:competition_id/payment', to: 'registrations#payment_ticket', as: :payment_ticket
