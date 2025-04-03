@@ -49,7 +49,7 @@ jobs:
           bin/bundle exec i18n export
           bin/rake assets:precompile
       - name: Install Playwright Browsers # as per https://playwright.dev/docs/ci#github-actions
-        run: bin/yarn playwright install --with-deps chromium
+        run: bin/yarn playwright install --with-deps --no-shell chromium
       - name: Run tests
         id: rspec
         run: bin/rspec
