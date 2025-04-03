@@ -1805,6 +1805,8 @@ en:
               "false": "Competitors MUST be qualified to register for an event"
     #context: new registration system
     registration_v2:
+      auto_accept:
+        bulk_auto_accept: "Auto-Approve Competitors"
       pdf:
         #context: <0> indicates an html tag for internationalizing in React, see https://docs.worldcubeassociation.org/guides/translating_the_website.html#using-react
         link: "As a <0>%{pdfLink}</0>"

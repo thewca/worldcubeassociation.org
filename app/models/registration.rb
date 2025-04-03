@@ -67,7 +67,7 @@ class Registration < ApplicationRecord
   end
 
   def update_lanes!(params, acting_user)
-    Registrations::Lanes::Competing.update!(params, self.competition, acting_user.id)
+    Registrations::Lanes::Competing.update!(params, self.competition, acting_user)
   end
 
   def guest_limit
@@ -246,12 +246,12 @@ class Registration < ApplicationRecord
                             end
       end
       {
-        changed_attributes: changed_attributes,
+        changed_attributes: changed_attributes.with_indifferent_access,
         actor_type: r.actor_type,
         actor_id: r.actor_id,
         timestamp: r.created_at,
         action: r.action,
-      }
+      }.with_indifferent_access
     end
   end
 
@@ -516,5 +516,88 @@ class Registration < ApplicationRecord
 
   def serializable_hash(options = nil)
     super(DEFAULT_SERIALIZE_OPTIONS.merge(options || {}))
+  end
+
+  def self.bulk_auto_accept(competition)
+    if competition.waiting_list.present?
+      competition.waiting_list.entries.each do |r_id|
+        Registration.find(r_id).attempt_auto_accept
+        # It isnt clear to me why this is needed - but without it, the auto-accepted items getting removed from the waiting list reappear
+        # on the waiting list in the test body, even when calling waiting_list.reload there
+        # I have also tried assigning competition.waiting_list.entries to a variable and iterating over that, but it didnt help
+        competition.waiting_list.reload
+      end
+    end
+
+    sorted_pending_registrations = competition
+                                   .registrations
+                                   .competing_status_pending
+                                   .with_payments
+                                   .sort_by { |registration| registration.last_positive_payment.updated_at }
+
+    sorted_pending_registrations.each { |r| r.attempt_auto_accept }
+  end
+
+  def last_positive_payment
+    registration_payments
+      .where('amount_lowest_denomination > 0')
+      .order(updated_at: :desc)
+      .limit(1)
+      .first
+  end
+
+  def attempt_auto_accept
+    return false if Rails.env.production? && EnvConfig.WCA_LIVE_SITE?
+
+    failure_reason = auto_accept_failure_reason
+    if failure_reason.present?
+      puts "failed because: #{failure_reason}"
+      log_auto_accept_failure(failure_reason)
+      return false
+    end
+
+    update_payload = build_auto_accept_payload
+    auto_accepted_registration = Registrations::RegistrationChecker.apply_payload(self, update_payload)
+
+    if auto_accepted_registration.valid?
+      puts "auto accepting"
+      update_lanes!(
+        update_payload,
+        'Auto-accept',
+      )
+      true
+    else
+      puts "failed because: #{auto_accepted_registration.errors.as_json}"
+      log_auto_accept_failure(auto_accepted_registration.errors.as_json)
+      false
+    end
+  end
+
+  private def auto_accept_failure_reason
+    return 'Competitor still has outstanding registration fees' if outstanding_entry_fees > 0
+    return 'Auto-accept is not enabled for this competition.' unless competition.auto_accept_registrations?
+    return 'Can only auto-accept pending registrations or first position on waiting list' unless competing_status_pending? || (competing_status_waiting_list? && waiting_list_position == 1)
+    return "Competition has reached auto_accept_disable_threshold of #{competition.auto_accept_disable_threshold} registrations" if competition.auto_accept_threshold_reached?
+
+    'Cant auto-accept while registration is not open' unless competition.registration_currently_open?
+  end
+
+  private def log_auto_accept_failure(reason)
+    add_history_entry(
+      { auto_accept_failure_reasons: reason },
+      'System',
+      'Auto accept',
+      'System reject',
+    )
+  end
+
+  private def build_auto_accept_payload
+    status = if competition.registration_full_and_accepted? && competing_status_pending?
+               Registrations::Helper::STATUS_WAITING_LIST
+             else
+               Registrations::Helper::STATUS_ACCEPTED
+             end
+
+    { user_id: user_id, competing: { status: status } }.with_indifferent_access
   end
 end
