@@ -102,6 +102,10 @@ module DatabaseDumper
           waiting_list_deadline_date
           event_change_deadline_date
           force_comment_in_registration
+          registration_dropdown_enabled
+          registration_dropdown_title
+          registration_dropdown_options
+          registration_dropdown_required
           allow_registration_edits
           allow_registration_self_delete_after_acceptance
           competition_series_id
@@ -595,6 +599,7 @@ module DatabaseDumper
         db_default: %w(ip),
         fake_values: {
           "comments" => "''", # Can't use :db_default here because comments does not have a default value.
+          "dropdown_selection" => "''", # Can't use :db_default here because dropdown_selection does not have a default value.
           "administrative_notes" => "''", # Can't use :db_default here because administrative_notes does not have a default value.
         },
       ),
