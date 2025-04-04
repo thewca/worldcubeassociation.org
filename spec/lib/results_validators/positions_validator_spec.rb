@@ -137,8 +137,8 @@ RSpec.describe ResultsValidators::PositionsValidator do
         r1 = FactoryBot.create(:result, :blind_mo3, competition: competition1, pos: 1, best: 2000)
         r2 = FactoryBot.create(:result, :blind_dnf_mo3, competition: competition1, pos: 2, best: 1000)
         expected_errors = [
-          create_result_error(competition1.id, "333bf-f", r1.personName, 2, 1),
-          create_result_error(competition1.id, "333bf-f", r2.personName, 1, 2),
+          create_result_error(competition1.id, "333bf-f", r1.person_name, 2, 1),
+          create_result_error(competition1.id, "333bf-f", r2.person_name, 1, 2),
         ]
 
         pv = ResultsValidators::PositionsValidator.new.validate(competition_ids: competition1.id, model: Result)

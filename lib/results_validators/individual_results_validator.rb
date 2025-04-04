@@ -252,7 +252,7 @@ module ResultsValidators
           # NOTE: since we proceed with all checks even if some expected rounds
           # do not exist, we may have *expected* cumulative rounds that may
           # not exist in results.
-          results_by_round_id[id]&.find { |r| r.personId == result.personId }
+          results_by_round_id[id]&.find { |r| r.person_id == result.person_id }
         end.map(&:solve_times).flatten
         completed_solves_for_rounds = all_results_for_cumulative_rounds.select(&:complete?)
         number_of_dnf_solves = all_results_for_cumulative_rounds.count(&:dnf?)
