@@ -34,6 +34,21 @@ module Admin
       end
     end
 
+    def competition_events
+      person = Person.current.find_by!(wca_id: params[:wca_id])
+      competition_id = params.require(:competition_id)
+
+      render json: person.results.where(competition_id: competition_id).pluck(:eventId).uniq
+    end
+
+    def competition_event_results
+      person = Person.current.find_by!(wca_id: params[:wca_id])
+      competition_id = params.require(:competition_id)
+      event_id = params.require(:event_id)
+
+      render json: person.results.where(competition_id: competition_id, eventId: event_id)
+    end
+
     private def new_id_params
       params.permit(:name, :competition_id, :semi_id)
     end
