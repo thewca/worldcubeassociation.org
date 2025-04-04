@@ -623,7 +623,7 @@ cs:
         #original_hash: 8c41ae8
         wca_id: Osoba
         #original_hash: d523ebb
-        countryId: Země
+        country_id: Země
         #original_hash: ab58155
         dob: Datum narození
         #original_hash: 8a754c6
@@ -900,7 +900,7 @@ cs:
         #original_hash: da39a3e
         clone_tabs: ''
         #original_hash: da39a3e
-        countryId: ''
+        country_id: ''
         #original_hash: da39a3e
         end_date: ''
         #original_hash: da39a3e

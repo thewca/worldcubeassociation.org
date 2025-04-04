@@ -15,7 +15,7 @@ class Api::V0::Wrt::PersonsController < Api::V0::ApiController
 
     {
       name: name,
-      countryId: country_id,
+      country_id: country_id,
       gender: gender,
       dob: dob,
       incorrect_wca_id_claim_count: 0,

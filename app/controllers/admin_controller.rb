@@ -71,11 +71,11 @@ class AdminController < ApplicationController
       scramble: Scramble,
       inbox_result: InboxResult,
       inbox_person: InboxPerson,
-      newcomer_person: InboxPerson.where(wcaId: ''),
+      newcomer_person: InboxPerson.where(wca_id: ''),
       newcomer_result: Result.select(:personId).distinct.where("personId REGEXP '^[0-9]+$'"),
     }
 
-    @existing_data = data_tables.transform_values { |table| table.where(competitionId: @competition.id).count }
+    @existing_data = data_tables.transform_values { |table| table.where(competition_id: @competition.id).count }
     @inbox_step = RESULTS_POSTING_STEPS.find { |inbox| @existing_data[inbox] > 0 }
 
     yield if block_given?
@@ -101,8 +101,8 @@ class AdminController < ApplicationController
                                 .map do |inbox_res|
         inbox_person = inbox_res.inbox_person
 
-        person_id = inbox_person&.wcaId.presence || inbox_res.personId
-        person_country = Country.find_by(iso2: inbox_person&.countryId)
+        person_id = inbox_person&.wca_id.presence || inbox_res.personId
+        person_country = Country.find_by(iso2: inbox_person&.country_iso2)
 
         {
           pos: inbox_res.pos,
@@ -230,7 +230,7 @@ class AdminController < ApplicationController
 
     render json: {
       name: @person.name,
-      countryId: @person.countryId,
+      country_id: @person.country_id,
       gender: @person.gender,
       dob: @person.dob,
       incorrect_wca_id_claim_count: @person.incorrect_wca_id_claim_count,
@@ -336,7 +336,7 @@ class AdminController < ApplicationController
             inbox_person = InboxPerson.find_by(id: pending_person_id, competition_id: pending_competition_id)
 
             old_name = inbox_person.name
-            old_country = inbox_person.countryId
+            old_country = inbox_person.country_iso2
           end
 
           FinishUnfinishedPersons.insert_person(inbox_person, new_name, new_country, new_id)
@@ -348,7 +348,7 @@ class AdminController < ApplicationController
           # Has to exist because otherwise there would be nothing to merge
           new_person = Person.find(merge_id)
 
-          FinishUnfinishedPersons.adapt_results(pending_person_id.presence, old_name, old_country, new_person.wca_id, new_person.name, new_person.countryId, pending_competition_id)
+          FinishUnfinishedPersons.adapt_results(pending_person_id.presence, old_name, old_country, new_person.wca_id, new_person.name, new_person.country_id, pending_competition_id)
         end
       end
     end

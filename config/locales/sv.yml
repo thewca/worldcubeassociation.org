@@ -520,7 +520,7 @@ sv:
         #original_hash: 8c41ae8
         wca_id: Person
         #original_hash: fa4c045
-        countryId: Representerar
+        country_id: Representerar
         #original_hash: ab58155
         dob: Födelsedatum
         #original_hash: 8a754c6

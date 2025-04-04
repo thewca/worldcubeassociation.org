@@ -295,7 +295,7 @@ RSpec.describe Api::V0::ApiController, :clean_db_with_truncation do
       let(:person) do
         FactoryBot.create(
           :person,
-          countryId: "USA",
+          country_id: "USA",
           gender: "m",
           dob: '1987-12-04',
         )

@@ -522,7 +522,7 @@ eo:
         #original_hash: 8c41ae8
         wca_id: Persono
         #original_hash: fa4c045
-        countryId: Reprezentante
+        country_id: Reprezentante
         #original_hash: ab58155
         dob: Naskiĝtago
         #original_hash: 8a754c6

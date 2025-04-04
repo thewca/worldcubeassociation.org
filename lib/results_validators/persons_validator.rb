@@ -187,7 +187,7 @@ module ResultsValidators
                                                  :persons, competition.id,
                                                  name: p.name, wca_id: p.wca_id,
                                                  expected_country: existing_person.country_iso2,
-                                                 country: p.countryId)
+                                                 country: p.country_iso2)
             end
           else
             @errors << ValidationError.new(WRONG_WCA_ID_ERROR,

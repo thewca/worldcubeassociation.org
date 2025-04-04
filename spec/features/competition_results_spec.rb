@@ -4,8 +4,8 @@ require "rails_helper"
 
 RSpec.feature "competition results" do
   let(:competition) { FactoryBot.create :competition, :confirmed, :visible, :results_posted, events: Event.where(id: '333') }
-  let(:person_1) { FactoryBot.create :person, name: "Fast Cuber", countryId: "USA" }
-  let(:person_2) { FactoryBot.create :person, name: "Slow Cuber", countryId: "USA" }
+  let(:person_1) { FactoryBot.create :person, name: "Fast Cuber", country_id: "USA" }
+  let(:person_2) { FactoryBot.create :person, name: "Slow Cuber", country_id: "USA" }
 
   let!(:result_1) { FactoryBot.create :result, competition: competition, eventId: "333", roundTypeId: "f", pos: 1, person: person_1 }
   let!(:result_2) { FactoryBot.create :result, competition: competition, eventId: "333", roundTypeId: "f", pos: 2, person: person_2 }
