@@ -154,7 +154,7 @@ RSpec.describe Result do
           let(:competition) { FactoryBot.create(:competition, event_ids: ["777"]) }
 
           context "cutoff round" do
-            let(:roundTypeId) { "c" }
+            let(:round_type_id) { "c" }
             let!(:round) { FactoryBot.create(:round, competition: competition, cutoff: Cutoff.new(number_of_attempts: 2, attempt_result: 60*100), format_id: "m", event_id: "777") }
 
             it "all solves" do
