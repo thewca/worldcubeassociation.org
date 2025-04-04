@@ -667,4 +667,14 @@ RSpec.describe Registration do
     expect(reg).not_to be_valid
     expect(reg.errors[:registered_at]).to include("can't be blank")
   end
+
+  describe '#entry_fee_with_donation' do
+    it 'returns a RubyMoney object' do
+      expect(registration.entry_fee_with_donation).to eq(Money.new(1000, "USD"))
+    end
+
+    it 'given a donation, sums the donation and entry fee' do
+      expect(registration.entry_fee_with_donation(1500)).to eq(Money.new(2500, "USD"))
+    end
+  end
 end

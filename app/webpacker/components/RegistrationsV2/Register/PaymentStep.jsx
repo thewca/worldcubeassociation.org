@@ -24,8 +24,8 @@ import { useRegistration } from '../lib/RegistrationProvider';
 
 export default function PaymentStep({
   competitionInfo,
-  setDonationAmount,
-  donationAmount,
+  setIsoDonationAmount,
+  isoDonationAmount,
   displayAmount,
   nextStep,
   conversionFetching,
@@ -62,7 +62,7 @@ export default function PaymentStep({
     await elements.submit();
 
     // Create the PaymentIntent and obtain clientSecret
-    const data = await getPaymentTicket(competitionInfo, donationAmount);
+    const data = await getPaymentTicket(competitionInfo, isoDonationAmount);
 
     const { client_secret: clientSecret } = data;
 
@@ -108,16 +108,16 @@ export default function PaymentStep({
               value={isDonationChecked}
               onChange={(event, data) => {
                 setDonationChecked(event, data);
-                setDonationAmount(0);
+                setIsoDonationAmount(0);
               }}
               label={I18n.t('registrations.payment_form.labels.show_donation')}
             />
             { isDonationChecked && (
             <AutonumericField
               id="donationInputField"
-              onChange={(_, { value }) => setDonationAmount(value)}
+              onChange={(_, { value }) => setIsoDonationAmount(value)}
               currency={competitionInfo.currency_code}
-              value={donationAmount}
+              value={isoDonationAmount}
               label={(
                 <Label>
                   {I18n.t('registrations.payment_form.labels.donation')}

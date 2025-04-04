@@ -7,6 +7,7 @@ module Waitlistable
 
   included do
     delegate :empty?, :length, to: :waiting_list, prefix: true
+    delegate :present?, to: :waiting_list, prefix: true, allow_nil: true
 
     attr_writer :waiting_list_position
 
@@ -21,17 +22,18 @@ module Waitlistable
       equal_to: 1,
       allow_nil: true,
       frontend_code: Registrations::ErrorCodes::INVALID_WAITING_LIST_POSITION,
-      if: [:waitlistable?, :waiting_list_empty?],
+      if: [:waitlistable?, :waiting_list_present?, :waiting_list_empty?],
     }
     validates :waiting_list_position, numericality: {
       less_than_or_equal_to: :waiting_list_length,
       allow_nil: true,
       frontend_code: Registrations::ErrorCodes::INVALID_WAITING_LIST_POSITION,
-      if: :waitlistable?,
+      if: [:waitlistable?, :waiting_list_present?],
       unless: :waiting_list_empty?,
     }
 
     validates :waitlistable?, presence: { if: :waiting_list_position?, frontend_code: Registrations::ErrorCodes::INVALID_REQUEST_DATA }
+    validates :waiting_list_present?, presence: { if: :waiting_list_position?, frontend_code: Registrations::ErrorCodes::INVALID_REQUEST_DATA }
 
     def waiting_list_position?
       @waiting_list_position.present?
