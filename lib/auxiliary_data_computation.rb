@@ -34,7 +34,7 @@ module AuxiliaryDataComputation
               WHERE #{field} > 0
               GROUP BY person_id, results.country_id, event_id, YEAR(start_date)
             ) MinValuesWithId
-            JOIN results ON result.id = valueAndId % 1000000000
+            JOIN results ON results.id = valueAndId % 1000000000
             JOIN Competitions competition ON competition.id = results.competition_id
             JOIN Countries country ON country.id = results.country_id
             JOIN Events event ON event.id = results.event_id
