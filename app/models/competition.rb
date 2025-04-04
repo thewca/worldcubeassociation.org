@@ -1476,14 +1476,6 @@ class Competition < ApplicationRecord
            .sort_by { |_personId, results| results.first.personName }
            .map do |personId, results|
              results.sort_by! { |r| [r.event.rank, -r.round_type.rank] }
-
-             # Mute (soften) each result that wasn't the competitor's last for the event.
-             last_event = nil
-             results.each do |result|
-               result.muted = (result.event == last_event)
-               last_event = result.event
-             end
-
              [personId, results.sort_by { |r| [r.event.rank, -r.round_type.rank] }]
             end
   end
