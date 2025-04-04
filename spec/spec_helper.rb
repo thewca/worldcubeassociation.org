@@ -1,9 +1,10 @@
 # frozen_string_literal: true
 
 # Enable SimpleCov as per https://github.com/fortissimo1997/simplecov-lcov#output-report-as-single-file
+require 'webmock/rspec'
 require 'simplecov'
 require 'simplecov-lcov'
-require 'webmock/rspec'
+WebMock.disable_net_connect!(allow_localhost: true)
 SimpleCov::Formatter::LcovFormatter.config.report_with_single_file = true
 SimpleCov.formatter = SimpleCov::Formatter::LcovFormatter
 SimpleCov.start

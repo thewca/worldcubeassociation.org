@@ -8,6 +8,72 @@ RSpec.describe 'API Registrations' do
 
   let(:headers) { { 'CONTENT_TYPE' => 'application/json' } }
 
+  def stub_successful_stripe_payment_intent(amount, currency)
+    stub_request(:post, "https://api.stripe.com/v1/payment_intents")
+      .to_return(
+        status: 200,
+        headers: { 'Content-Type' => 'application/json' },
+        body: {
+          id: "pi_3MtwBwLkdIwHu7ix28a3tqPa",
+          object: "payment_intent",
+          amount: amount,
+          amount_capturable: 0,
+          amount_details: {
+            tip: {},
+          },
+          amount_received: 0,
+          application: nil,
+          application_fee_amount: nil,
+          automatic_payment_methods: {
+            enabled: true,
+          },
+          canceled_at: nil,
+          cancellation_reason: nil,
+          capture_method: "automatic",
+          client_secret: "pi_3MtwBwLkdIwHu7ix28a3tqPa_secret_YrKJUKribcBjcG8HVhfZluoGH",
+          confirmation_method: "automatic",
+          created: 1_680_800_504,
+          currency: currency,
+          customer: nil,
+          description: nil,
+          invoice: nil,
+          last_payment_error: nil,
+          latest_charge: nil,
+          livemode: false,
+          metadata: {},
+          next_action: nil,
+          on_behalf_of: nil,
+          payment_method: nil,
+          payment_method_options: {
+            card: {
+              installments: nil,
+              mandate_options: nil,
+              network: nil,
+              request_three_d_secure: "automatic",
+            },
+            link: {
+              persistent_token: nil,
+            },
+          },
+          payment_method_types: [
+            "card",
+            "link",
+          ],
+          processing: nil,
+          receipt_email: nil,
+          review: nil,
+          setup_future_usage: nil,
+          shipping: nil,
+          source: nil,
+          statement_descriptor: nil,
+          statement_descriptor_suffix: nil,
+          status: "requires_payment_method",
+          transfer_data: nil,
+          transfer_group: nil,
+        }.to_json,
+      )
+  end
+
   describe 'POST #create' do
     context 'when creating a registration' do
       let(:user) { FactoryBot.create :user }
@@ -1280,12 +1346,15 @@ RSpec.describe 'API Registrations' do
     let(:headers) { { 'Authorization' => fetch_jwt_token(reg.user_id) } }
 
     it 'successfully builds a payment_intent via Stripe API' do
+      WebMock.allow_net_connect!
       get api_v1_registrations_payment_ticket_path(competition_id: competition.id), headers: headers
+      WebMock.disable_net_connect!(allow_localhost: true)
       expect(response).to be_successful
     end
 
     context 'successful payment ticket' do
       before do
+        stub_successful_stripe_payment_intent(1000, 'usd')
         get api_v1_registrations_payment_ticket_path(competition_id: competition.id), headers: headers
       end
 
@@ -1305,6 +1374,7 @@ RSpec.describe 'API Registrations' do
     end
 
     it 'has the correct payment_intent properties when a donation is present' do
+      stub_successful_stripe_payment_intent(2300, 'usd')
       get api_v1_registrations_payment_ticket_path(competition_id: competition.id), headers: headers, params: { iso_donation_amount: 1300 }
 
       payment_record = PaymentIntent.find_by(holder_type: "Registration", holder_id: reg.id).payment_record
