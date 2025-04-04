@@ -573,6 +573,9 @@ GEM
     parser (3.3.7.4)
       ast (~> 2.4.1)
       racc
+    playwright-ruby-client (1.51.0)
+      concurrent-ruby (>= 1.1.6)
+      mime-types (>= 3.0)
     pp (0.6.2)
       prettyprint
     premailer (1.22.0)
@@ -941,10 +944,6 @@ GEM
     websocket-driver (0.7.6)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
-    wicked_pdf (2.8.2)
-      activesupport
-      ostruct
-    wkhtmltopdf-binary-ng (0.12.6.6)
     xpath (3.2.0)
       nokogiri (~> 1.8)
     zeitwerk (2.7.2)
@@ -1046,6 +1045,7 @@ DEPENDENCIES
   oga
   openssl
   overcommit
+  playwright-ruby-client
   premailer-rails
   puma
   rack
@@ -1102,8 +1102,6 @@ DEPENDENCIES
   wca_i18n
   web-console
   webmock
-  wicked_pdf
-  wkhtmltopdf-binary-ng
 
 CHECKSUMS
   actioncable (7.2.2.1) sha256=5b3b885075a80767d63cbf2b586cbf82466a241675b7985233f957abb01bffb4
@@ -1326,6 +1324,7 @@ CHECKSUMS
   package_json (0.1.0) sha256=20af98c0e45dadcd48b6f45a3324e948f578e7549365671b97faca4637770256
   parallel (1.26.3) sha256=d86babb7a2b814be9f4b81587bf0b6ce2da7d45969fab24d8ae4bf2bb4d4c7ef
   parser (3.3.7.4) sha256=2b26282274280e13f891080dc4ef3f65ce658d62e13255b246b28ec6754e98ab
+  playwright-ruby-client (1.51.0) sha256=67d8c1774049c5c9d9a200147a1eea9afc262b6885aa9614a7170847ddbb9f57
   pp (0.6.2) sha256=947ec3120c6f92195f8ee8aa25a7b2c5297bb106d83b41baa02983686577b6ff
   premailer (1.22.0) sha256=538935ebc4a75bfdd1aa624bd348e54986902b6caf08ceaaa6297fc7388227da
   premailer-rails (1.12.0) sha256=c13815d161b9bc7f7d3d81396b0bb0a61a90fa9bd89931548bf4e537c7710400
@@ -1473,8 +1472,6 @@ CHECKSUMS
   webmock (3.25.1) sha256=ab9d5d9353bcbe6322c83e1c60a7103988efc7b67cd72ffb9012629c3d396323
   websocket-driver (0.7.6) sha256=f69400be7bc197879726ad8e6f5869a61823147372fd8928836a53c2c741d0db
   websocket-extensions (0.1.5) sha256=1c6ba63092cda343eb53fc657110c71c754c56484aad42578495227d717a8241
-  wicked_pdf (2.8.2) sha256=648d9b0cec5a34adbc9bbf809731052a78119e2d6d323b9e4aa1383e1d683824
-  wkhtmltopdf-binary-ng (0.12.6.6) sha256=4d10982639aa674b656f0f4fdf9c2cc435bb57fb1548728ebf8ee2e1f127819f
   xpath (3.2.0) sha256=6dfda79d91bb3b949b947ecc5919f042ef2f399b904013eb3ef6d20dd3a4082e
   zeitwerk (2.7.2) sha256=842e067cb11eb923d747249badfb5fcdc9652d6f20a1f06453317920fdcd4673
 

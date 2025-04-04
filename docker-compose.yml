@@ -162,6 +162,28 @@ services:
     networks:
       - wca-main
 
+  wca_playwright:
+    image: mcr.microsoft.com/playwright:v1.51.1
+    container_name: "playwright"
+    environment:
+      - DEBIAN_FRONTEND=noninteractive
+      - DEBUG=pw:api
+    ports:
+      - "8089:8089"
+    working_dir: /app
+    command: >
+      bash -c 'corepack enable &&
+      ./package-install.dev.sh fonts.pdf.txt &&
+      fc-cache -f -v &&
+      yarn install &&
+      yarn playwright run-server --port 8089 --host=0.0.0.0'
+    volumes:
+      - .:/app
+      - node_modules_volume:/app/node_modules
+      - pdf_fonts_volume:/usr/share/fonts
+    networks:
+      - wca-main
+
 volumes:
   gems_volume:
     driver: local
@@ -172,6 +194,8 @@ volumes:
   cache_volume:
     driver: local
   next_yarn_volume:
+    driver: local
+  pdf_fonts_volume:
     driver: local
 
 networks:
