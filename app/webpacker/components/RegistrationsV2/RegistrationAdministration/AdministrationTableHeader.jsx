@@ -105,6 +105,14 @@ export default function TableHeader({
             'competitions.competition_form.labels.registration.guests_enabled',
           )}
         </Table.HeaderCell>
+        {competitionInfo && competitionInfo.registration_dropdown_enabled && (
+          <Table.HeaderCell
+            sorted={sortColumn === 'dropdown_selection' ? sortDirection : undefined}
+            onClick={() => onColumnClick('dropdown_selection')}
+          >
+            {competitionInfo.registration_dropdown_title || I18n.t('competitions.registration_v2.register.dropdown_selection')}
+          </Table.HeaderCell>
+        )}
         {commentsAreShown && (
           <>
             <Table.HeaderCell

@@ -45,7 +45,7 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
   def create
     # Currently we only have one lane
     if params[:competing]
-      competing_params = params.permit(:guests, competing: [:status, :comment, { event_ids: [] }, :admin_comment])
+      competing_params = params.permit(:guests, :dropdown_selection, competing: [:status, :comment, { event_ids: [] }, :admin_comment])
 
       user_id = registration_params['user_id']
       competition_id = registration_params['competition_id']
@@ -263,7 +263,7 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
 
     def update_params
       params.require([:user_id, :competition_id])
-      params.permit(:guests, competing: [:status, :comment, { event_ids: [] }, :admin_comment])
+      params.permit(:guests, :dropdown_selection, competing: [:status, :comment, { event_ids: [] }, :admin_comment])
       params
     end
 

@@ -27,6 +27,7 @@ import getUsersInfo from '../api/user/post/getUserInfo';
 import { useRegistration } from '../lib/RegistrationProvider';
 import I18nHTMLTranslate from '../../I18nHTMLTranslate';
 import useSet from '../../../lib/hooks/useSet';
+import DropdownSelection from '../Register/DropdownSelection';
 
 export default function RegistrationEditor({ competitor, competitionInfo }) {
   const dispatch = useDispatch();
@@ -34,6 +35,7 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
   const [adminComment, setAdminComment] = useState('');
   const [status, setStatus] = useState('');
   const [guests, setGuests] = useState(0);
+  const [dropdownSelection, setDropdownSelection] = useState('');
   const selectedEventIds = useSet();
   const [registration, setRegistration] = useState({});
   const confirm = useConfirm();
@@ -89,6 +91,7 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
       setSelectedEventIds(serverRegistration.competing.event_ids);
       setAdminComment(serverRegistration.competing.admin_comment ?? '');
       setGuests(serverRegistration.guests ?? 0);
+      setDropdownSelection(serverRegistration.competing.dropdown_selection ?? '');
     }
   }, [serverRegistration, setSelectedEventIds]);
 
@@ -101,14 +104,17 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
   const hasStatusChanged = serverRegistration
     && status !== serverRegistration.competing.registration_status;
   const hasGuestsChanged = serverRegistration && guests !== serverRegistration.guests;
+  const hasDropdownChanged = serverRegistration && dropdownSelection !== (serverRegistration.competing.dropdown_selection ?? '');
 
   const hasChanges = hasEventsChanged
     || hasCommentChanged
     || hasAdminCommentChanged
     || hasStatusChanged
-    || hasGuestsChanged;
+    || hasGuestsChanged
+    || hasDropdownChanged;
 
   const commentIsValid = comment || !competitionInfo.force_comment_in_registration;
+  const dropdownIsValid = dropdownSelection || !competitionInfo.registration_dropdown_required;
   const maxEvents = competitionInfo.events_per_registration_limit ?? Infinity;
   const eventsAreValid = selectedEventIds.size > 0 && selectedEventIds.size <= maxEvents;
 
@@ -118,6 +124,9 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
     } else if (!commentIsValid) {
       // i18n-tasks-use t('registrations.errors.cannot_register_without_comment')
       dispatch(showMessage('registrations.errors.cannot_register_without_comment', 'negative'));
+    } else if (!dropdownIsValid) {
+      // i18n-tasks-use t('registrations.errors.dropdown_selection_required')
+      dispatch(showMessage('registrations.errors.dropdown_selection_required', 'negative'));
     } else if (!eventsAreValid) {
       // i18n-tasks-use t('registrations.errors.must_register')
       dispatch(showMessage(
@@ -149,6 +158,9 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
       if (hasGuestsChanged) {
         body.guests = guests;
       }
+      if (hasDropdownChanged) {
+        body.dropdown_selection = dropdownSelection;
+      }
       confirm({
         content: I18n.t('competitions.registration_v2.update.update_confirm'),
       }).then(() => {
@@ -159,6 +171,7 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
     hasChanges,
     confirm,
     commentIsValid,
+    dropdownIsValid,
     eventsAreValid,
     dispatch,
     maxEvents,
@@ -169,12 +182,14 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
     hasAdminCommentChanged,
     hasStatusChanged,
     hasGuestsChanged,
+    hasDropdownChanged,
     updateRegistrationMutation,
     selectedEventIds.asArray,
     comment,
     adminComment,
     status,
     guests,
+    dropdownSelection,
   ]);
 
   const registrationEditDeadlinePassed = Boolean(competitionInfo.event_change_deadline_date)
@@ -288,6 +303,24 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
           value={guests}
           onChange={(event, data) => setGuests(data.value)}
         />
+        {competitionInfo.registration_dropdown_enabled && (
+          <Form.Field
+            required={competitionInfo.registration_dropdown_required}
+            error={!dropdownIsValid}
+          >
+            <DropdownSelection
+              id="dropdown-selection"
+              competitionInfo={competitionInfo}
+              value={dropdownSelection}
+              onChange={setDropdownSelection}
+            />
+            {!dropdownIsValid && (
+              <Message error visible>
+                {I18n.t('registrations.errors.dropdown_selection_required')}
+              </Message>
+            )}
+          </Form.Field>
+        )}
         <Button
           color="blue"
           disabled={isUpdating || !hasChanges}

@@ -4,11 +4,18 @@ module Registrations
   module Lanes
     module Competing
       def self.process!(lane_params, user_id, competition_id)
-        registration = Registration.build(competition_id: competition_id,
-                                          user_id: user_id,
-                                          comments: lane_params[:competing][:comment] || '',
-                                          guests: lane_params[:guests] || 0,
-                                          registered_at: Time.now.utc)
+        registration_params = {
+          competition_id: competition_id,
+          user_id: user_id,
+          comments: lane_params[:competing][:comment] || '',
+          guests: lane_params[:guests] || 0,
+          registered_at: Time.now.utc,
+        }
+
+        # Only add dropdown_selection if it's supported
+        registration_params[:dropdown_selection] = lane_params[:dropdown_selection] || '' if Registration.column_names.include?('dropdown_selection')
+
+        registration = Registration.build(registration_params)
 
         create_event_ids = lane_params[:competing][:event_ids]
 
@@ -31,6 +38,7 @@ module Registrations
         event_ids = update_params.dig('competing', 'event_ids')
         admin_comment = update_params.dig('competing', 'admin_comment')
         waiting_list_position = update_params.dig('competing', 'waiting_list_position')
+        dropdown_selection = update_params[:dropdown_selection]
         user_id = update_params[:user_id]
 
         registration = Registration.find_by(competition_id: competition.id, user_id: user_id)
@@ -41,6 +49,7 @@ module Registrations
           registration.comments = comment unless comment.nil?
           registration.administrative_notes = admin_comment unless admin_comment.nil?
           registration.guests = guests if guests.present?
+          registration.dropdown_selection = dropdown_selection if dropdown_selection.present? && registration.respond_to?(:dropdown_selection=)
 
           update_status(registration, status)
 
