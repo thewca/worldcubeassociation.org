@@ -175,7 +175,8 @@ services:
       bash -c 'corepack enable &&
       ./package-install.dev.sh fonts.pdf.txt &&
       fc-cache -f -v &&
-      yarn dlx playwright run-server --port 8089 --host=0.0.0.0'
+      yarn install &&
+      yarn playwright run-server --port 8089 --host=0.0.0.0'
     volumes:
       - .:/app
       - node_modules_volume:/app/node_modules
