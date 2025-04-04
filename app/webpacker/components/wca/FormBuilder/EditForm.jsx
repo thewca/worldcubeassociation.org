@@ -5,7 +5,8 @@ import React, {
 } from 'react';
 import {
   Button,
-  Dimmer, Divider,
+  Dimmer,
+  Divider,
   Form,
   Message,
   Segment,
@@ -166,11 +167,13 @@ export default function Wrapper({
   footerActions = [],
   saveButtonText = null,
   globalDisabled = false,
+  globalAllowDisabledOverride = true,
 }) {
   return (
     <FormObjectProvider
       initialObject={initialObject}
       globalDisabled={globalDisabled}
+      globalAllowDisabledOverride={globalAllowDisabledOverride}
     >
       <EditForm
         saveMutation={saveMutation}
