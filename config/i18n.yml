@@ -80,3 +80,4 @@ translations:
       - "*.results.*"
       - "*.validators.*"
       - "*.cronjobs.*"
+      - "*.payments.*"
