@@ -13,8 +13,8 @@
   <div id="collapse-preview-results" class="panel-body collapse <%= "in" if results_validator.has_results? %>" style="<%= "max-height: #{max_height}; overflow: scroll;" if max_height.present? %>">
     <p>Click on a round's name to display its preview.</p>
     <% if results_validator.has_results? %>
-      <% results_validator.results.group_by(&:eventId).each do |event_id, results_for_event| %>
-        <% results_for_event.group_by(&:roundTypeId).each do |round_type_id, results_for_round| %>
+      <% results_validator.results.group_by(&:event_id).each do |event_id, results_for_event| %>
+        <% results_for_event.group_by(&:round_type_id).each do |round_type_id, results_for_round| %>
           <%= render "results_submission/table_for_round", results: results_for_round, results_validator: results_validator, round_id: "#{event_id}-#{round_type_id}", expand_all: expand_all, unindent_solves: unindent_solves %>
         <% end %>
       <% end %>

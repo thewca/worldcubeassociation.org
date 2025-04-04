@@ -32,8 +32,8 @@ RSpec.describe SV do
       it "matches Result" do
         [Result, InboxResult].each do |model|
           result_kind = model.model_name.singular.to_sym
-          FactoryBot.create(result_kind, competition: competition1, eventId: "333oh")
-          FactoryBot.create(result_kind, competition: competition2, eventId: "222")
+          FactoryBot.create(result_kind, competition: competition1, event_id: "333oh")
+          FactoryBot.create(result_kind, competition: competition2, event_id: "222")
           FactoryBot.create(result_kind, :blind_mo3, competition: competition2)
         end
 
@@ -61,7 +61,7 @@ RSpec.describe SV do
       it "matches the competition's data" do
         [Result, InboxResult].each do |model|
           result_kind = model.model_name.singular.to_sym
-          FactoryBot.create(result_kind, competition: competition1, eventId: "333oh")
+          FactoryBot.create(result_kind, competition: competition1, event_id: "333oh")
           FactoryBot.create(result_kind, :blind_mo3, competition: competition2)
         end
 
@@ -89,7 +89,7 @@ RSpec.describe SV do
 
         [Result, InboxResult].each do |model|
           result_kind = model.model_name.singular.to_sym
-          FactoryBot.create(result_kind, competition: competition1, eventId: "333oh")
+          FactoryBot.create(result_kind, competition: competition1, event_id: "333oh")
         end
 
         # Create three groups of scrambles:

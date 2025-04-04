@@ -6,7 +6,7 @@ class RoundType < ApplicationRecord
 
   self.table_name = "RoundTypes"
 
-  has_many :results, foreign_key: :roundTypeId
+  has_many :results
   has_many :scrambles, foreign_key: :roundTypeId
 
   scope :final_rounds, -> { where("final = 1") }
