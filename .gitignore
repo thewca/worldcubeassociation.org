@@ -60,3 +60,6 @@ yarn-debug.log*
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
+
+# Ignore Font files in accordance to Licensing Agreement
+next-frontend/src/app/(wca)/fonts/TTNormsPro/*
