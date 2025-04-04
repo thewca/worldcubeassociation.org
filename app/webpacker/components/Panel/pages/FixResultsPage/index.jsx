@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
   Button, Form, Header, Loader,
 } from 'semantic-ui-react';
@@ -49,33 +49,38 @@ function FixResultsPage() {
     enabled: !!eventId,
   });
 
-  useEffect(() => setFormValues((prevFormValues) => {
-    if (prevFormValues.wcaId !== formValues.wcaId) {
-      return {
-        ...prevFormValues,
-        competitionId: undefined,
-        eventId: undefined,
-        resultId: undefined,
-      };
-    }
-    if (prevFormValues.competitionId !== formValues.competitionId) {
-      return {
-        ...prevFormValues,
-        eventId: undefined,
-        resultId: undefined,
-      };
-    }
-    if (prevFormValues.eventId !== formValues.eventId) {
-      return {
-        ...prevFormValues,
-        resultId: undefined,
-      };
-    }
-    return prevFormValues;
-  }), [formValues]);
+  const handleWcaIdChange = (_, { value: newWcaId }) => setFormValues(
+    (prev) => ({
+      ...prev,
+      wcaId: newWcaId,
+      competitionId: undefined,
+      eventId: undefined,
+      resultId: undefined,
+    }),
+  );
 
-  const handleFormChange = (_, { name, value }) => setFormValues(
-    (prev) => ({ ...prev, [name]: value }),
+  const handleCompetitionIdChange = (_, { value: newCompetitionId }) => setFormValues(
+    (prev) => ({
+      ...prev,
+      competitionId: newCompetitionId,
+      eventId: undefined,
+      resultId: undefined,
+    }),
+  );
+
+  const handleEventIdChange = (_, { value: newEventId }) => setFormValues(
+    (prev) => ({
+      ...prev,
+      eventId: newEventId,
+      resultId: undefined,
+    }),
+  );
+
+  const handleResultIdChange = (_, { value: newResultId }) => setFormValues(
+    (prev) => ({
+      ...prev,
+      resultId: newResultId,
+    }),
   );
 
   const anyLoading = competitionsFetching || eventsFetching || resultsFetching;
@@ -95,7 +100,7 @@ function FixResultsPage() {
           model={SEARCH_MODELS.person}
           multiple={false}
           value={formValues?.wcaId}
-          onChange={handleFormChange}
+          onChange={handleWcaIdChange}
           disabled={anyLoading}
         />
         <Form.Dropdown
@@ -111,7 +116,7 @@ function FixResultsPage() {
           }))}
           disabled={anyLoading}
           value={formValues?.competitionId}
-          onChange={handleFormChange}
+          onChange={handleCompetitionIdChange}
         />
         <Form.Dropdown
           label="Event"
@@ -126,7 +131,7 @@ function FixResultsPage() {
           }))}
           disabled={anyLoading}
           value={formValues?.eventId}
-          onChange={handleFormChange}
+          onChange={handleEventIdChange}
         />
         <Form.Dropdown
           label="Round"
@@ -141,7 +146,7 @@ function FixResultsPage() {
           }))}
           disabled={anyLoading}
           value={formValues?.resultId}
-          onChange={handleFormChange}
+          onChange={handleResultIdChange}
         />
         <Button
           content="Fix Results"
