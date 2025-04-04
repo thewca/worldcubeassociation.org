@@ -396,22 +396,22 @@ class ResultsController < ApplicationController
     world_rows = []
     continents_rows = []
     countries_rows = []
-    rows.each do |row|
-      result = LightResult.new(row)
-      value = row["value"]
+    rows.each do |result|
+      result_country = Country.c_find!(result["countryId"])
+      value = result["value"]
 
-      world_rows << row if value == best_value_of_world
+      world_rows << result if value == best_value_of_world
 
-      if best_values_of_continents[result.country.continent.id].nil? || value == best_values_of_continents[result.country.continent.id]
-        best_values_of_continents[result.country.continent.id] = value
+      if best_values_of_continents[result_country.continent.id].nil? || value == best_values_of_continents[result_country.continent.id]
+        best_values_of_continents[result_country.continent.id] = value
 
-        continents_rows << row if (country.present? && country.continent.id == result.country.continent.id) || (continent.present? && continent.id == result.country.continent.id) || params[:region] == "world"
+        continents_rows << result if (country.present? && country.continent.id == result_country.continent.id) || (continent.present? && continent.id == result_country.continent.id) || params[:region] == "world"
       end
 
-      if best_values_of_countries[result.country.id].nil? || value == best_values_of_countries[result.country.id]
-        best_values_of_countries[result.country.id] = value
+      if best_values_of_countries[result_country.id].nil? || value == best_values_of_countries[result_country.id]
+        best_values_of_countries[result_country.id] = value
 
-        countries_rows << row if (country.present? && country.id == result.country.id) || params[:region] == "world"
+        countries_rows << result if (country.present? && country.id == result_country.id) || params[:region] == "world"
       end
     end
 
