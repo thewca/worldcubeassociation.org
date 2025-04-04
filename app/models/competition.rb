@@ -1463,65 +1463,38 @@ class Competition < ApplicationRecord
   end
 
   def events_with_podium_results
-    light_results_from_relation(
-      results.podium.order(:pos),
-    ).group_by(&:event)
-      .sort_by { |event, _results| event.rank }
+    results.podium.order(:pos).group_by(&:event)
+           .sort_by { |event, _results| event.rank }
   end
 
   def winning_results
-    light_results_from_relation(
-      results.winners,
-    )
+    results.winners
   end
 
   def person_ids_with_results
-    light_results_from_relation(results)
-      .group_by(&:personId)
-      .sort_by { |_personId, results| results.first.personName }
-      .map do |personId, results|
-        results.sort_by! { |r| [r.event.rank, -r.round_type.rank] }
-
-        # Mute (soften) each result that wasn't the competitor's last for the event.
-        last_event = nil
-        results.each do |result|
-          result.muted = (result.event == last_event)
-          last_event = result.event
-        end
-
-        [personId, results.sort_by { |r| [r.event.rank, -r.round_type.rank] }]
-      end
+    results.group_by(&:personId)
+           .sort_by { |_personId, results| results.first.personName }
+           .map do |personId, results|
+      results.sort_by! { |r| [r.event.rank, -r.round_type.rank] }
+      [personId, results.sort_by { |r| [r.event.rank, -r.round_type.rank] }]
+    end
   end
 
   def events_with_round_types_with_results
-    light_results_from_relation(results)
-      .group_by(&:event)
-      .sort_by { |event, _results| event.rank }
-      .map do |event, results_for_event|
-        round_types_with_results = results_for_event
-                                   .group_by(&:round_type)
-                                   .sort_by { |format, _results| format.rank }.reverse
-                                   .map { |round_type, results| [round_type, results.sort_by { |r| [r.pos, r.personName] }] }
+    results.group_by(&:event)
+           .sort_by { |event, _results| event.rank }
+           .map do |event, results_for_event|
+             round_types_with_results = results_for_event
+                                        .group_by(&:round_type)
+                                        .sort_by { |format, _results| format.rank }.reverse
+                                        .map { |round_type, results| [round_type, results.sort_by { |r| [r.pos, r.personName] }] }
 
-        [event, round_types_with_results]
-      end
+             [event, round_types_with_results]
+           end
   end
 
   def ineligible_events(user)
     competition_events.reject { |ce| ce.can_register?(user) }.map(&:event)
-  end
-
-  # Profiling the rendering of _results_table.html.erb showed quite some
-  # time was spent in `ActiveRecord#read_attribute`. So, I load the results
-  # using raw SQL and instantiate a PORO. The code definitely got uglier,
-  # but the performance gains are worth it IMO. Not using ActiveRecord led
-  # to a 40% performance improvement.
-  private def light_results_from_relation(relation)
-    ActiveRecord::Base.connection
-                      .execute(relation.to_sql)
-                      .each(as: :hash).map do |r|
-                        LightResult.new(r)
-                      end
   end
 
   def started?
