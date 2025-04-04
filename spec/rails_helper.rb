@@ -90,10 +90,6 @@ RSpec.configure do |config|
 
   config.include ActiveJob::TestHelper
   config.include ActiveRecord::Assertions::QueryAssertions, type: :model
-
-  if EnvConfig.DISABLE_WEBMOCK?
-    WebMock.disable!
-  end
 end
 
 # See: https://github.com/rspec/rspec-expectations/issues/664#issuecomment-58134735
