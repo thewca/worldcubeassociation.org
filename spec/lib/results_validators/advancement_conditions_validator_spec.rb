@@ -197,7 +197,7 @@ RSpec.describe ResultsValidators::AdvancementConditionsValidator do
     it "does not explode when there are results for non-existent rounds" do
       FactoryBot.create(:round, competition: competition1, event_id: "333bf", format_id: "3", total_number_of_rounds: 1, number: 1)
 
-      fake_person = build_person(Result, competition1)
+      fake_person = build_person(:result, competition1)
 
       existent_result = FactoryBot.build(:result, competition: competition1, eventId: "333bf", format_id: "3", roundTypeId: "f", person: fake_person)
       nonexistent_result = FactoryBot.build(:result, competition: competition1, eventId: "333bf", format_id: "3", roundTypeId: "1", person: fake_person, skip_round_creation: true)
