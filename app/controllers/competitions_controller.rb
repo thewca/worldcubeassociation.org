@@ -185,22 +185,46 @@ class CompetitionsController < ApplicationController
           return redirect_to competition_path(@competition)
         end
         @colored_schedule = params.key?(:with_colors)
+
         # Manually cache the pdf on:
         #   - competiton.updated_at (touched by any change through WCIF)
         #   - locale
         #   - color or n&b
         # We have a scheduled job to clear out old files
         cached_path = helpers.path_to_cached_pdf(@competition, @colored_schedule)
-        begin
-          File.open(cached_path) do |f|
-            send_data f.read, filename: "#{helpers.pdf_name(@competition)}.pdf",
-                              type: "application/pdf", disposition: "inline"
-          end
-        rescue Errno::ENOENT
-          # This exception occurs when the file doesn't exist: let's create it!
+
+        @stream_raw = params[:raw_html] == '0xPlaywright'
+
+        if @stream_raw
+          return render content_type: 'text/html'
+        elsif !File.exist?(cached_path)
           helpers.create_pdfs_directory
-          render pdf: helpers.pdf_name(@competition), orientation: "Landscape",
-                 save_to_file: cached_path, disposition: "inline"
+
+          raw_content = self.render_to_string
+
+          helpers.playwright_connection do |browser|
+            page = browser.new_page
+
+            # Inject the raw HTML and wait until it finished loading all network assets
+            page.set_content(raw_content, waitUntil: 'networkidle')
+
+            # Wait until the WOFF2 fonts have been extracted
+            page.evaluate_handle('document.fonts.ready')
+
+            page.pdf(
+              path: cached_path,
+              format: 'A4',
+              landscape: true,
+              # Use `scale` and `margins` to imitate WkHtmlToPdf look and feel
+              scale: 0.8,
+              margin: { top: '8mm', bottom: '8.5mm', left: '10mm', right: '10mm' },
+            )
+          end
+        end
+
+        File.open(cached_path) do |f|
+          send_data f.read, filename: "#{helpers.pdf_name(@competition)}.pdf",
+                            type: "application/pdf", disposition: "inline"
         end
       end
       format.ics do
