@@ -723,7 +723,7 @@ GEM
       rubocop-ast (>= 1.43.0, < 2.0)
       ruby-progressbar (~> 1.7)
       unicode-display_width (>= 2.4.0, < 4.0)
-    rubocop-ast (1.43.0)
+    rubocop-ast (1.44.0)
       parser (>= 3.3.7.2)
       prism (~> 1.4)
     rubocop-capybara (2.22.1)
@@ -732,9 +732,9 @@ GEM
     rubocop-factory_bot (2.27.1)
       lint_roller (~> 1.1)
       rubocop (~> 1.72, >= 1.72.1)
-    rubocop-performance (1.24.0)
+    rubocop-performance (1.25.0)
       lint_roller (~> 1.1)
-      rubocop (>= 1.72.1, < 2.0)
+      rubocop (>= 1.75.0, < 2.0)
       rubocop-ast (>= 1.38.0, < 2.0)
     rubocop-rails (2.30.3)
       activesupport (>= 4.2.0)
@@ -1380,10 +1380,10 @@ CHECKSUMS
   rspec-retry (0.6.2) sha256=6101ba23a38809811ae3484acde4ab481c54d846ac66d5037ccb40131a60d858
   rspec-support (3.13.2) sha256=cea3a2463fd9b84b9dcc9685efd80ea701aa8f7b3decb3b3ce795ed67737dbec
   rubocop (1.75.1) sha256=c12900c55b0b52e6ed1384f7f7575beb92047019ce37ca14b9572d80239adc29
-  rubocop-ast (1.43.0) sha256=92cd649e336ce10212cb2f2b29028f487777ecc477f108f437a1dce1ee3db79a
+  rubocop-ast (1.44.0) sha256=77fdaf4aacf0c7d1ef887b075686124fb4ae5743d42ff7e73bb1c0d6b61b5d0a
   rubocop-capybara (2.22.1) sha256=ced88caef23efea53f46e098ff352f8fc1068c649606ca75cb74650970f51c0c
   rubocop-factory_bot (2.27.1) sha256=9d744b5916778c1848e5fe6777cc69855bd96548853554ec239ba9961b8573fe
-  rubocop-performance (1.24.0) sha256=e5bd39ff3e368395b9af886927cc37f5892f43db4bd6c8526594352d5b4440b5
+  rubocop-performance (1.25.0) sha256=6f7d03568a770054117a78d0a8e191cefeffb703b382871ca7743831b1a52ec1
   rubocop-rails (2.30.3) sha256=fc5a6506daa916d15e282cc806943afa64a020bf592b93a94025d89a2a78a715
   rubocop-rake (0.7.1) sha256=3797f2b6810c3e9df7376c26d5f44f3475eda59eb1adc38e6f62ecf027cbae4d
   rubocop-rspec (3.5.0) sha256=710c942fe1af884ba8eea75cbb8bdbb051929a2208880a6fc2e2dce1eed5304c
