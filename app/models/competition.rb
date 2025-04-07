@@ -2881,6 +2881,20 @@ class Competition < ApplicationRecord
     }
   end
 
+  # When comparing arrays through HashDiff, it implicitly converts the indices into keys.
+  #   For example, a diff of "before: [1,2,3] -- after: [1,2,3,4]" will be reported as "{3 => 4}"
+  #   because the element at index 3 on the right-hand side was added.
+  # This means that things which were numeric arrays in the original data appear as hashes
+  #   in the diff'ed data.
+  def self.array_change_json_schema(**additional_properties)
+    {
+      "type" => "object",
+      "additionalProperties" => additional_properties.deep_stringify_keys,
+      "propertyNames" => { "pattern" => /^\d+$/ },
+      "uniqueItems" => true,
+    }
+  end
+
   # Stuff that Delegates are allowed to edit even after the competition is announced,
   #   see also https://docs.google.com/document/d/1-GwE5OXurBUnR7EVBRTGIN_dGj3AaU7vvan_6RjOW7Q/edit
   def self.delegate_edits_json_schema
@@ -2893,21 +2907,9 @@ class Competition < ApplicationRecord
           "type" => "object",
           "additionalProperties" => false,
           "properties" => {
-            "staffDelegateIds" => {
-              "type" => "array",
-              "items" => { "type" => "integer" },
-              "uniqueItems" => true,
-            },
-            "traineeDelegateIds" => {
-              "type" => "array",
-              "items" => { "type" => "integer" },
-              "uniqueItems" => true,
-            },
-            "organizerIds" => {
-              "type" => "array",
-              "items" => { "type" => "integer" },
-              "uniqueItems" => true,
-            },
+            "staffDelegateIds" => self.array_change_json_schema(type: "integer"),
+            "traineeDelegateIds" => self.array_change_json_schema(type: "integer"),
+            "organizerIds" => self.array_change_json_schema(type: "integer"),
             "contact" => { "type" => ["string", "null"] },
           },
         },
