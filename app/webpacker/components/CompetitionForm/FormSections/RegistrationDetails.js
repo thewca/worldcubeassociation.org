@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import {
   InputBoolean,
   InputBooleanSelect,
@@ -11,7 +11,8 @@ import {
 import ConditionalSection from './ConditionalSection';
 import I18n from '../../../lib/i18n';
 import SubSection from '../../wca/FormBuilder/SubSection';
-import { useFormObject } from '../../wca/FormBuilder/provider/FormObjectProvider';
+import { useFormObject, useFormObjectSection } from '../../wca/FormBuilder/provider/FormObjectProvider';
+import { hasNotPassed } from '../../../lib/utils/dates';
 
 const guestsEnabledOptions = [true, false].map((bool) => ({
   value: bool,
@@ -33,16 +34,31 @@ const canCancelOptions = ['not_accepted', 'always', 'unpaid'].map((status) => ({
 export default function RegistrationDetails() {
   const { entryFees, registration } = useFormObject();
 
+  const {
+    waitingListDeadlineDate,
+    eventChangeDeadlineDate,
+  } = useFormObjectSection();
+
   const guestsGoFree = entryFees?.guestEntryFee === 0;
   const guestsRestricted = guestsGoFree && registration?.guestEntryStatus === 'restricted';
 
+  const waitingListNotYetPast = useMemo(
+    () => hasNotPassed(waitingListDeadlineDate, 'UTC'),
+    [waitingListDeadlineDate],
+  );
+
+  const eventChangeNotYetPast = useMemo(
+    () => hasNotPassed(eventChangeDeadlineDate, 'UTC'),
+    [eventChangeDeadlineDate],
+  );
+
   return (
     <SubSection section="registration">
-      <InputDate id="waitingListDeadlineDate" dateTime required />
-      <InputDate id="eventChangeDeadlineDate" dateTime required />
-      <InputBooleanSelect id="allowOnTheSpot" required />
-      <InputSelect id="competitorCanCancel" options={canCancelOptions} required />
-      <InputBooleanSelect id="allowSelfEdits" required />
+      <InputDate id="waitingListDeadlineDate" dateTime required ignoreDisabled={waitingListNotYetPast} />
+      <InputDate id="eventChangeDeadlineDate" dateTime required ignoreDisabled={eventChangeNotYetPast} />
+      <InputBooleanSelect id="allowOnTheSpot" required ignoreDisabled />
+      <InputSelect id="competitorCanCancel" options={canCancelOptions} required ignoreDisabled />
+      <InputBooleanSelect id="allowSelfEdits" required ignoreDisabled />
       <InputRadio id="guestsEnabled" options={guestsEnabledOptions} />
       <ConditionalSection showIf={guestsGoFree}>
         <InputSelect id="guestEntryStatus" options={guestMessageOptions} required={guestsGoFree} />
@@ -51,7 +67,7 @@ export default function RegistrationDetails() {
         <InputNumber id="guestsPerRegistration" required={guestsRestricted} />
       </ConditionalSection>
       <InputMarkdown id="extraRequirements" />
-      <InputBoolean id="forceComment" />
+      <InputBoolean id="forceComment" ignoreDisabled />
     </SubSection>
   );
 }
