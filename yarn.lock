@@ -7403,10 +7403,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"luxon@npm:^3.6.0":
-  version: 3.6.0
-  resolution: "luxon@npm:3.6.0"
-  checksum: 10c0/60cc3fe8f7dce51f0e406529b80eec815b335a7202d5c41e210a8acc8e698d8be797f3c77ed60efe581af07f2a88defbe7a77e506121e2f460a667690e71c0d1
+"luxon@npm:^3.6.1":
+  version: 3.6.1
+  resolution: "luxon@npm:3.6.1"
+  checksum: 10c0/906d57a9dc4d1de9383f2e9223e378c298607c1b4d17b6657b836a3cd120feb1c1de3b5d06d846a3417e1ca764de8476e8c23b3cd4083b5cdb870adcb06a99d5
   languageName: node
   linkType: hard
 
@@ -10197,7 +10197,7 @@ __metadata:
     leaflet: "npm:^1.9.4"
     leaflet-geosearch: "npm:^4.2.0"
     lodash: "npm:^4.17.21"
-    luxon: "npm:^3.6.0"
+    luxon: "npm:^3.6.1"
     make-plural: "npm:^7.4.0"
     mini-css-extract-plugin: "npm:^2.9.2"
     path-complete-extname: "npm:^1.0.0"
