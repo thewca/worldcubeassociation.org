@@ -2041,12 +2041,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fullcalendar/interaction@npm:^6.1.15":
-  version: 6.1.15
-  resolution: "@fullcalendar/interaction@npm:6.1.15"
+"@fullcalendar/interaction@npm:^6.1.17":
+  version: 6.1.17
+  resolution: "@fullcalendar/interaction@npm:6.1.17"
   peerDependencies:
-    "@fullcalendar/core": ~6.1.15
-  checksum: 10c0/f9e2542965b3d28a4eb65638a21d036d883399956781649f5442c2fb681ee59ea5fb071779be04acb88afed9278d38fc6f5758dc8a6dfa1d7b90cb6858a0115e
+    "@fullcalendar/core": ~6.1.17
+  checksum: 10c0/986f664890c4ee0a6008b7b9ce78880dbe3ef3754cae96736afa7c6df3f4263837f58c5c832408652d4b36e69ca785689e84e3f5e1f37d595221244341b98f55
   languageName: node
   linkType: hard
 
@@ -10149,7 +10149,7 @@ __metadata:
     "@babel/runtime": "npm:^7.27.0"
     "@cubing/icons": "npm:^2.0.2"
     "@fullcalendar/core": "npm:^6.1.15"
-    "@fullcalendar/interaction": "npm:^6.1.15"
+    "@fullcalendar/interaction": "npm:^6.1.17"
     "@fullcalendar/luxon3": "npm:^6.1.15"
     "@fullcalendar/react": "npm:^6.1.17"
     "@fullcalendar/timegrid": "npm:^6.1.15"
