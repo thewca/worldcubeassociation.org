@@ -2722,14 +2722,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tanstack/eslint-plugin-query@npm:^5.68.0":
-  version: 5.68.0
-  resolution: "@tanstack/eslint-plugin-query@npm:5.68.0"
+"@tanstack/eslint-plugin-query@npm:^5.72.0":
+  version: 5.72.0
+  resolution: "@tanstack/eslint-plugin-query@npm:5.72.0"
   dependencies:
     "@typescript-eslint/utils": "npm:^8.18.1"
   peerDependencies:
     eslint: ^8.57.0 || ^9.0.0
-  checksum: 10c0/4ed8e4842a513c1940c3626268ba28d3d7859970b4e5ff74f6358b064ddc9ddd76d4d18dd90ef3b85d5c95c72309747ea5e1de93504860e579da22cf414c7e8a
+  checksum: 10c0/e1d73f5f39330ea10c8bbcc02d4559719be003046ff561474be54aa482bff7f511c4568623e447fd4a63be646663a2bf990a0a84ae95064f7041d344ada9cc7e
   languageName: node
   linkType: hard
 
@@ -7604,7 +7604,7 @@ __metadata:
     "@payloadcms/live-preview-react": "npm:^3.31.0"
     "@payloadcms/next": "npm:^3.33.0"
     "@stylistic/eslint-plugin": "npm:^4.2.0"
-    "@tanstack/eslint-plugin-query": "npm:^5.68.0"
+    "@tanstack/eslint-plugin-query": "npm:^5.72.0"
     "@tanstack/react-query": "npm:^5.71.10"
     "@types/node": "npm:^22"
     "@types/react": "npm:^19"
