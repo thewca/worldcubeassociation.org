@@ -2050,13 +2050,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fullcalendar/luxon3@npm:^6.1.15":
-  version: 6.1.15
-  resolution: "@fullcalendar/luxon3@npm:6.1.15"
+"@fullcalendar/luxon3@npm:^6.1.17":
+  version: 6.1.17
+  resolution: "@fullcalendar/luxon3@npm:6.1.17"
   peerDependencies:
-    "@fullcalendar/core": ~6.1.15
+    "@fullcalendar/core": ~6.1.17
     luxon: ^3.0.0
-  checksum: 10c0/a6d446a676387fb7ebb4a0c174f93aadb2c0e90322892e1bd4b833d62a741e7664c88a1bb906e3215b13becf23cf0e68890a962352036ab7f1e9e201fd98d845
+  checksum: 10c0/7137f22c78a64cbf8c3e4a564585d8d19f1d2c3be77ae3376ba94273a0817cbdd5277cfd762a1364770d8f50cb73be2192e374cbf7f53e9a7c4b9cce7c4ed338
   languageName: node
   linkType: hard
 
@@ -10150,7 +10150,7 @@ __metadata:
     "@cubing/icons": "npm:^2.0.2"
     "@fullcalendar/core": "npm:^6.1.15"
     "@fullcalendar/interaction": "npm:^6.1.17"
-    "@fullcalendar/luxon3": "npm:^6.1.15"
+    "@fullcalendar/luxon3": "npm:^6.1.17"
     "@fullcalendar/react": "npm:^6.1.17"
     "@fullcalendar/timegrid": "npm:^6.1.15"
     "@pmmmwh/react-refresh-webpack-plugin": "npm:^0.5.16"
