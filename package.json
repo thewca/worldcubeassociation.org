@@ -22,7 +22,7 @@
     "@cubing/icons": "^2.0.2",
     "@fullcalendar/core": "^6.1.15",
     "@fullcalendar/interaction": "^6.1.17",
-    "@fullcalendar/luxon3": "^6.1.15",
+    "@fullcalendar/luxon3": "^6.1.17",
     "@fullcalendar/react": "^6.1.17",
     "@fullcalendar/timegrid": "^6.1.15",
     "@rails/actioncable": "^8.0.200",
