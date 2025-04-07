@@ -2023,12 +2023,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fullcalendar/core@npm:^6.1.15":
-  version: 6.1.15
-  resolution: "@fullcalendar/core@npm:6.1.15"
+"@fullcalendar/core@npm:^6.1.17":
+  version: 6.1.17
+  resolution: "@fullcalendar/core@npm:6.1.17"
   dependencies:
     preact: "npm:~10.12.1"
-  checksum: 10c0/628445dcbfcf9c5a4012cde3ba814af7b74db66c4ec71743fe9c5f5376f96d4b18922d257ad8d5ccf1211b2415d1094dd05e2f4f3324d4dbe880a94f7e5793b7
+  checksum: 10c0/211f5863eaadc8694c9d76084b2e0b65aade73ec8aa51c77f514060541406ed742070217ef66518c1f6065ea7ac2b5ef6e8c3e64dc9b421bb27388b90c0873b7
   languageName: node
   linkType: hard
 
@@ -10217,7 +10217,7 @@ __metadata:
     "@babel/preset-react": "npm:^7.26.3"
     "@babel/runtime": "npm:^7.27.0"
     "@cubing/icons": "npm:^2.0.2"
-    "@fullcalendar/core": "npm:^6.1.15"
+    "@fullcalendar/core": "npm:^6.1.17"
     "@fullcalendar/interaction": "npm:^6.1.17"
     "@fullcalendar/luxon3": "npm:^6.1.17"
     "@fullcalendar/react": "npm:^6.1.17"
