@@ -29,7 +29,7 @@ namespace :results do
   task :migrate_person_results, [:wca_id] => [:environment] do |_, args|
     wca_id = args[:wca_id]
 
-    abort "WCA id is required" if wca_id.blank?
+    abort "WCA ID is required" if wca_id.blank?
 
     person = Person.find_by(wca_id: wca_id)
 
