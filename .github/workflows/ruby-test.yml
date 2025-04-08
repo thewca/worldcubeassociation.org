@@ -14,6 +14,7 @@ jobs:
       RAILS_ENV: test
       NODE_ENV: test
       PLAYWRIGHT_BROWSERS_PATH: ./pw-browsers
+      CAPYBARA_APP_HOST: "" # Explicitly set a blank value to override our default Docker container setup
     steps:
       - uses: actions/checkout@v4
       - uses: fregante/setup-git-user@v2 # set up dummy user.name and user.email in git so that Overcommit doesn't explode
