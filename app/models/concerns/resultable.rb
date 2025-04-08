@@ -227,13 +227,9 @@ module Resultable
   end
 
   def counting_solve_times
-    unless @counting
-      @counting = []
-      solve_times.each_with_index do |solve_time, i|
-        @counting << solve_time if trimmed_indices.exclude?(i) && i < format.expected_solve_count
-      end
+    @counting ||= solve_times.each_with_index.with_object([]) do |(solve_time, i), arr|
+      arr << solve_time if i < format.expected_solve_count && trimmed_indices.exclude?(i)
     end
-    @counting
   end
 
   # When someone changes an attribute, clear our cached values.
