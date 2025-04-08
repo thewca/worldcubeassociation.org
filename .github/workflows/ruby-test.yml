@@ -13,7 +13,7 @@ jobs:
       RACK_ENV: test
       RAILS_ENV: test
       NODE_ENV: test
-      PLAYWRIGHT_BROWSERS_PATH: ${{ env.GITHUB_WORKSPACE }}/pw-browsers
+      PLAYWRIGHT_BROWSERS_PATH: ./pw-browsers
     steps:
       - uses: actions/checkout@v4
       - uses: fregante/setup-git-user@v2 # set up dummy user.name and user.email in git so that Overcommit doesn't explode
