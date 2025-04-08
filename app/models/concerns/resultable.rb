@@ -173,9 +173,7 @@ module Resultable
     ActionController::Base.helpers
   end
 
-  def wca_id
-    @personId || self.personId
-  end
+  alias_attribute :wca_id, :personId
 
   def best_solve
     SolveTime.new(eventId, :single, best)
