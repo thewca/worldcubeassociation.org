@@ -11,10 +11,10 @@ module SelectizeHelper
       selectize_input = page.find("div.#{for_id} .selectize-control input")
     end
 
-    selectize_input.native.send_key(with)
+    selectize_input.with_playwright_element_handle { it.type(with) }
     # Wait for selectize popup to appear.
     expect(page).to have_selector("div.selectize-dropdown", visible: true)
     # Select item with selectize.
-    selectize_input.native.send_key(:enter)
+    selectize_input.with_playwright_element_handle { it.press('Enter') }
   end
 end

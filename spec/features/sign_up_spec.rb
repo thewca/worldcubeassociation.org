@@ -10,7 +10,8 @@ RSpec.feature "Sign up" do
     # The cookie banner just gets in the way of these tests, and is already
     # tested elsewhere. Set a cookie that prevents the cookie banner from
     # appearing.
-    page.driver.set_cookie('cookie_eu_consented', 'true')
+    cookie_eu_consented = { name: 'cookie_eu_consented', value: 'true', domain: Capybara.app_host, path: '/' }
+    page.driver.with_playwright_page { it.context.add_cookies([cookie_eu_consented]) }
   end
 
   context 'when signing up as a returning competitor', :js do
@@ -300,7 +301,7 @@ RSpec.feature "Sign up" do
 
   context "when signing up as a non-english speaker", :js do
     it "stores the user's preferred locale" do
-      page.driver.headers = { 'Accept-Language' => 'es' }
+      page.driver.with_playwright_page { it.context.set_extra_http_headers({ 'Accept-Language' => 'es' }) }
       visit "/users/sign_up"
 
       fill_in "user[email]", with: "jack@example.com"
