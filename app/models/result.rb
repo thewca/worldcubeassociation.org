@@ -25,8 +25,8 @@ class Result < ApplicationRecord
 
   private def create_or_update_attempts
     (1..5).each do |n|
-      value = public_send("value#{n}")
-      return if value.zero?
+      value = public_send(:"value#{n}")
+      break if value.zero?
 
       Attempt.upsert({ value: value, attempt_number: n, result_id: id })
     end
