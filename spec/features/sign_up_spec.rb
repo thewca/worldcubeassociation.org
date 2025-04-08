@@ -10,7 +10,8 @@ RSpec.feature "Sign up" do
     # The cookie banner just gets in the way of these tests, and is already
     # tested elsewhere. Set a cookie that prevents the cookie banner from
     # appearing.
-    cookie_eu_consented = { name: 'cookie_eu_consented', value: 'true', domain: Capybara.app_host, path: '/' }
+    default_domain = Capybara.app_host || Capybara.server_host
+    cookie_eu_consented = { name: 'cookie_eu_consented', value: 'true', domain: default_domain, path: '/' }
     page.driver.with_playwright_page { it.context.add_cookies([cookie_eu_consented]) }
   end
 
