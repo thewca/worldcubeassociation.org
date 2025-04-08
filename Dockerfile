@@ -11,6 +11,7 @@ ENV RAILS_LOG_TO_STDOUT="1" \
     RAILS_ENV="production" \
     BUNDLE_WITHOUT="development:test" \
     BUNDLE_DEPLOYMENT="1" \
+    PLAYWRIGHT_BROWSERS_PATH="/rails/pw-browsers" \
     BUILD_TAG=$BUILD_TAG \
     WCA_LIVE_SITE=$WCA_LIVE_SITE \
     SHAKAPACKER_ASSET_HOST=$SHAKAPACKER_ASSET_HOST
@@ -68,10 +69,20 @@ RUN --mount=type=cache,sharing=private,target=/rails/.cache/bundle \
 COPY package.json yarn.lock .yarnrc.yml ./
 RUN ./bin/yarn install --immutable
 
+# Install Playwright browser executables. The target folder after the final cp
+#   matches the destination defined by $PLAYWRIGHT_BROWSERS_PATH above.
+RUN --mount=type=cache,sharing=private,target=/rails/.cache/pw-browsers \
+  PLAYWRIGHT_BROWSERS_PATH="/rails/.cache/pw-browsers" ./bin/yarn playwright install --no-shell chromium && \
+  cp -ar /rails/.cache/pw-browsers pw-browsers
+
 COPY . .
 
 RUN ASSETS_COMPILATION=true SECRET_KEY_BASE=1 RAILS_MAX_THREADS=4 NODE_OPTIONS="--max_old_space_size=4096" ./bin/bundle exec i18n export
 RUN --mount=type=cache,uid=1000,target=/rails/tmp/cache ASSETS_COMPILATION=true SECRET_KEY_BASE=1 RAILS_MAX_THREADS=4 NODE_OPTIONS="--max_old_space_size=4096" ./bin/rake assets:precompile
+
+# Save the Playwright CLI from certain doom
+RUN mkdir -p "$PLAYWRIGHT_BROWSERS_PATH/node_modules"
+RUN cp -r node_modules/playwright* "$PLAYWRIGHT_BROWSERS_PATH/node_modules"
 
 RUN rm -rf node_modules
 
@@ -98,10 +109,15 @@ RUN apt-get update -qq && \
       fonts-lmodern
 
 RUN useradd rails --create-home --shell /bin/bash
-USER rails:rails
 
-# Copy built artifacts: gems, application
+# Copy built artifacts: gems, application, PW browsers
 COPY --chown=rails:rails --from=build /rails .
+
+# We already need the Playwright CLI which is part of the /rails folder,
+#   but we also still need `sudo` privileges to be able to install runtime dependencies through apt
+RUN "$PLAYWRIGHT_BROWSERS_PATH/node_modules/playwright/cli.js" install-deps chromium
+
+USER rails:rails
 
 FROM runtime AS sidekiq
 
