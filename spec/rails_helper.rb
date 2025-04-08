@@ -40,6 +40,9 @@ Capybara.register_driver :playwright_debug do |app|
     app,
     playwright_server_endpoint_url: EnvConfig.PLAYWRIGHT_SERVER_SOCKET_URL,
     browser_type: :chromium,
+    # For running Playwright browsers in headed mode, there has to be a writable X11 socket under `/tmp/.X11-unix`
+    #   available in the container, and its user ID (file ownership) has to match the host system exactly.
+    # See also the comment in `docker-compose.yml` for a sample implementation.
     headless: false,
     slowMo: 500,
   )

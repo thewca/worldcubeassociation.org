@@ -189,7 +189,12 @@ services:
       - .:/app
       - node_modules_volume:/app/node_modules
       - pdf_fonts_volume:/usr/share/fonts
-      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+      # If you want to run tests in debug mode with a visible browser, you have to expose an X11 socket to Playwright
+      #   under `/tmp/.X11-unix` within the container. Chances are high that the original X11 socket on the host machine
+      #   lives in that exact same folder, but it's hard to be sure with all the different OSes that we want to support.
+      # Please enable the following mount at your own risk.
+      # You also have to make sure the owner's user ID matches the container's user ID to avoid X11 rendering glitches.
+      #  - /tmp/.X11-unix:/tmp/.X11-unix:rw
     networks:
       - wca-main
 
