@@ -144,34 +144,34 @@ module DatabaseDumper
         },
       ),
     }.freeze,
-    "ConciseAverageResults" => {
+    "concise_average_results" => {
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           average
-          continentId
-          countryId
+          continent_id
+          country_id
           day
-          eventId
+          event_id
           id
           month
-          personId
-          valueAndId
+          person_id
+          value_and_id
           year
         ),
       ),
     }.freeze,
-    "ConciseSingleResults" => {
+    "concise_single_results" => {
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           best
-          continentId
-          countryId
+          continent_id
+          country_id
           day
-          eventId
+          event_id
           id
           month
-          personId
-          valueAndId
+          person_id
+          value_and_id
           year
         ),
       ),
