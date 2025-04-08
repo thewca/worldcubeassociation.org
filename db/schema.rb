@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_03_06_165113) do
+ActiveRecord::Schema[7.2].define(version: 2025_04_07_122017) do
   create_table "Competitions", id: { type: :string, limit: 32, default: "" }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", limit: 50, default: "", null: false
     t.string "cityName", limit: 50, default: "", null: false
@@ -560,6 +560,15 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_06_165113) do
     t.string "assignment_code", null: false
     t.index ["registration_id", "registration_type"], name: "index_assignments_on_registration_id_and_registration_type"
     t.index ["schedule_activity_id"], name: "index_assignments_on_schedule_activity_id"
+  end
+
+  create_table "attempts", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.integer "value", null: false
+    t.integer "attempt_number", null: false
+    t.bigint "result_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["result_id"], name: "index_attempts_on_result_id"
   end
 
   create_table "bookmarked_competitions", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
