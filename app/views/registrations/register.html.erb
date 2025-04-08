@@ -30,8 +30,8 @@
                                                     qualifications: {
                                                       wcif: @competition.qualification_wcif,
                                                       personalRecords: {
-                                                        single: current_user.person&.ranksSingle&.map(&:to_wcif) || [],
-                                                        average: current_user.person&.ranksAverage&.map(&:to_wcif) || [],
+                                                        single: current_user.person&.ranks_single&.map(&:to_wcif) || [],
+                                                        average: current_user.person&.ranks_average&.map(&:to_wcif) || [],
                                                       }
                                                     },
                                                     cannotRegisterReasons: current_user.cannot_register_for_competition_reasons(@competition),

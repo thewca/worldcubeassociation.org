@@ -245,29 +245,29 @@ module DatabaseDumper
         },
       ),
     }.freeze,
-    "RanksAverage" => {
+    "ranks_average" => {
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
           best
-          continentRank
-          countryRank
-          eventId
-          personId
-          worldRank
+          continent_rank
+          country_rank
+          event_id
+          person_id
+          world_rank
         ),
       ),
     }.freeze,
-    "RanksSingle" => {
+    "ranks_single" => {
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
           best
-          continentRank
-          countryRank
-          eventId
-          personId
-          worldRank
+          continent_rank
+          country_rank
+          event_id
+          person_id
+          world_rank
         ),
       ),
     }.freeze,
@@ -975,27 +975,35 @@ module DatabaseDumper
       ),
     }.freeze,
     "RanksSingle" => {
+      source_table: "ranks_single",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
-          personId
-          eventId
           best
-          worldRank
-          continentRank
-          countryRank
         ),
+        fake_values: {
+          # Copy over column to keep backwards compatibility
+          "personId" => "person_id",
+          "eventId" => "event_id",
+          "worldRank" => "world_rank",
+          "continentRank" => "continent_rank",
+          "countryRank" => "country_rank",
+        },
       ),
     }.freeze,
     "RanksAverage" => {
+      source_table: "ranks_average",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
-          personId
-          eventId
           best
-          worldRank
-          continentRank
-          countryRank
         ),
+        fake_values: {
+          # Copy over column to keep backwards compatibility
+          "personId" => "person_id",
+          "eventId" => "event_id",
+          "worldRank" => "world_rank",
+          "continentRank" => "continent_rank",
+          "countryRank" => "country_rank",
+        },
       ),
     }.freeze,
     "RoundTypes" => {
