@@ -24,18 +24,12 @@ class Result < ApplicationRecord
   after_commit :create_or_update_attempts
 
   private def create_or_update_attempts
-    Attempt.upsert({ value: value1, attempt_number: 1, result_id: id })
+    (1..5).each do |n|
+      value = public_send("value#{n}")
+      return if value.zero?
 
-    Attempt.upsert({ value: value2, attempt_number: 2, result_id: id }) unless value2.zero?
-    return if value2.zero?
-
-    Attempt.upsert({ value: value3, attempt_number: 3, result_id: id }) unless value3.zero?
-    return if value3.zero?
-
-    Attempt.upsert({ value: value4, attempt_number: 4, result_id: id }) unless value4.zero?
-    return if value4.zero?
-
-    Attempt.upsert({ value: value5, attempt_number: 5, result_id: id }) unless value5.zero?
+      Attempt.upsert({ value: value, attempt_number: n, result_id: id })
+    end
   end
 
   MARKERS = [nil, "NR", "ER", "WR", "AfR", "AsR", "NAR", "OcR", "SAR"].freeze
