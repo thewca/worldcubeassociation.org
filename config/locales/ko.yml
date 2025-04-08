@@ -2475,7 +2475,7 @@ ko:
       use_stripe_below_html: 참가 신청 후 참가비는 아래의 Stripe를 통해 지불해야 합니다.
       #original_hash: d6bab8f
       refund_policy_html: >-
-        %{limit_date_and_time} 전에 참가 신청을 취소하면 참가비의 %{refund_policy_percent}이(가)
+        %{limit_date_and_time} 전에 참가 신청을 취소하면 참가비의 %{refund_policy_percent}가
         환불됩니다.
       #original_hash: 4aca553
       no_refunds: 참가비는 어떠한 경우에도 환불되지 않습니다.
@@ -2509,7 +2509,7 @@ ko:
       #original_hash: 35f892a
       guest_limit:
         zero: 선수는 관람객을 데려올 수 없습니다.
-        other: '선수는 최대 %{count}명의 관람객을 데려올 수 있습니다.'
+        other: '선수는 최대 %{count}명의 관람객을 동반할 수 있습니다.'
       #original_hash: bad09c8
       event_limit:
         zero: '선수는 최대 %{count}개의 종목에만 참가 신청할 수 있습니다.'
@@ -2542,17 +2542,17 @@ ko:
       #original_hash: f691bf2
       result: 결과
       #original_hash: acab754
-      single: 단일 솔브
+      single: 단일 기록
       #original_hash: e78d7c2
-      average: 평균
+      average: 평균 기록
       #original_hash: 083c83e
       mean: 평균
       #original_hash: 22bee3a
-      result_sentence: '%{result}의 %{a_win_by_word}(으)로'
+      result_sentence: '%{result}의 %{a_win_by_word}으로'
       #original_hash: 756603f
       no_winner: '주 종목은 %{event_name}이었습니다. 종목에서 완성된 결과를 달성한 선수가 없었기 때문에 우승자가 선언되지 않았습니다.'
       #original_hash: 6c3b236
-      winner: '%{winner}이(가) %{event_name} 종목에서 %{result_sentence}(으)로 우승하였습니다.'
+      winner: '%{winner}이(가) %{event_name} 종목에서 %{result_sentence} 우승하였습니다.'
       #original_hash: ec7f18a
       first_runner_up: '%{first_runner_up}이(가) 2위를 차지(%{first_runner_up_result})'
       #original_hash: cffa50a
