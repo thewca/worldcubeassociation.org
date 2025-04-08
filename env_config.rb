@@ -113,7 +113,8 @@ EnvConfig = SuperConfig.new(raise_exception: !is_compiling_assets) do
   optional :PLAYWRIGHT_RUN_LOCALLY, :bool, false
 
   # For developer setups who have a local Ruby runtime
-  optional :RUN_CAPYBARA_ON_HOST, :bool, false
+  optional :CAPYBARA_RUN_ON_HOST, :bool, false
+  optional :CAPYBARA_APP_HOST, :string, ''
 
   # For API Only Server
   optional :API_ONLY, :bool, false
