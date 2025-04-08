@@ -568,6 +568,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_04_07_122017) do
     t.bigint "result_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["result_id", "attempt_number"], name: "index_attempts_on_result_id_and_attempt_number", unique: true
     t.index ["result_id"], name: "index_attempts_on_result_id"
   end
 
