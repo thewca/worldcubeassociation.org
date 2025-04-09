@@ -259,6 +259,21 @@ class CompetitionsController < ApplicationController
     render :edit
   end
 
+  def payment_integration_manual_setup
+    @competition = competition_from_params
+  end
+
+  def add_manual_payment_setup
+    @competition = competition_from_params
+    payment_info = params[:payment_info]
+    payment_reference = params[:payment_reference]
+
+    ManualPaymentIntegration.create(payment_info: payment_info, payment_reference: payment_reference)
+
+    render json: { status: "ok" }
+  end
+
+
   def payment_integration_setup
     @competition = competition_from_params
 

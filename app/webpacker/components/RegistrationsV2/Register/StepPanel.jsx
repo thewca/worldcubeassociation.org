@@ -6,6 +6,7 @@ import StripeWrapper from './StripeWrapper';
 import I18n from '../../../lib/i18n';
 import RegistrationOverview from './RegistrationOverview';
 import { useRegistration } from '../lib/RegistrationProvider';
+import ManualPaymentStep from './ManualPaymentStep';
 
 const requirementsStepConfig = {
   key: 'requirements',
@@ -23,6 +24,12 @@ const paymentStepConfig = {
   key: 'payment',
   i18nKey: 'competitions.registration_v2.register.panel.payment',
   component: StripeWrapper,
+};
+
+const manualPaymentStepConfig = {
+  key: 'manual',
+  i18nKey: 'competitions.registration_v2.register.panel.payment',
+  component: ManualPaymentStep,
 };
 
 const registrationOverviewConfig = {
@@ -88,8 +95,12 @@ export default function StepPanel({
 
   const steps = useMemo(() => {
     const stepList = [requirementsStepConfig, competingStepConfig];
-    if (competitionInfo['using_payment_integrations?']) {
+    if (competitionInfo['using_payment_integrations?'] && competitionInfo.payment_integration === 'stripe') {
       stepList.push(paymentStepConfig);
+    }
+
+    if (competitionInfo['using_payment_integrations?'] && competitionInfo.payment_integration === 'manual') {
+      stepList.push(manualPaymentStepConfig);
     }
 
     if (isRegistered) {

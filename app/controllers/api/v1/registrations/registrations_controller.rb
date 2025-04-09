@@ -9,8 +9,8 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
   before_action :validate_create_request, only: [:create]
   before_action :validate_show_registration, only: [:show]
   before_action :validate_list_admin, only: [:list_admin]
-  before_action :ensure_registration_exists, only: [:update]
-  before_action :user_can_modify_registration, only: [:update]
+  before_action :ensure_registration_exists, only: [:update, :add_payment_reference]
+  before_action :user_can_modify_registration, only: [:update, :add_payment_reference]
   before_action :validate_update_request, only: [:update]
   before_action :user_can_bulk_modify_registrations, only: [:bulk_update]
   before_action :validate_bulk_update_request, only: [:bulk_update]
@@ -84,6 +84,12 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
       return render json: { status: 'ok', registration: updated_registration.to_v2_json(admin: true, history: true) }, status: :ok
     end
     render json: { status: 'bad request', message: 'You need to supply at least one lane' }, status: :bad_request
+  end
+
+  def add_payment_reference
+    ManualPaymentRecord.create(registration: @registration, payment_reference: params.require[:payment_reference])
+
+    render json: { status: 'ok' }, status: :ok
   end
 
   def ensure_registration_exists
