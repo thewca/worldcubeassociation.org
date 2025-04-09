@@ -63,7 +63,7 @@ module CountryCityValidators
   ).to_set
 
   US_DISTRICTS = %w(
-    District\ of\ Columbia.
+    District\ of\ Columbia
   ).to_set
 
   class UsCityValidator < CityCommaRegionValidator
