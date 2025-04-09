@@ -225,8 +225,8 @@ module Resultable
   end
 
   def counting_solve_times
-    @counting ||= solve_times.each_with_index.with_object([]) do |(solve_time, i), arr|
-      arr << solve_time if i < format.expected_solve_count && trimmed_indices.exclude?(i)
+    @counting_solve_times ||= solve_times.each_with_index.filter_map do |solve_time, i|
+      solve_time if i < format.expected_solve_count && !trimmed_indices.include?(i)
     end
   end
 
@@ -234,7 +234,7 @@ module Resultable
   def _write_attribute(attr, value)
     @sorted_solves_with_index = nil
     @solve_times = nil
-    @counting = nil
+    @counting_solve_times = nil
     super
   end
 end
