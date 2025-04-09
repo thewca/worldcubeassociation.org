@@ -63,7 +63,7 @@
   <p>
   Please pay attention to the warnings below.
   <% unless results_validator.check_real_results? %>
-    You may need to add a comment about them when submitting these results to the WRT!
+    For each warning, please fix the issue, or leave a comment for WRT explaining why it is a false positive.
   <% end %>
   </p>
   <% results_validator.warnings.group_by(&:kind).each do |type, warnings| %>

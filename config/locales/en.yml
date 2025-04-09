@@ -1124,6 +1124,7 @@ en:
   registrations:
     #context: and when an error is found
     errors:
+      edit_deadline_passed: "The Registration Edit Deadline has passed! Changes should only be made in extraordinary circumstances."
       need_name: "Need a name"
       need_gender: "Need a gender"
       need_dob: "Need a birthdate"
@@ -1160,6 +1161,7 @@ en:
     edit_registration:
       #context: the title for a specific registration to a competition
       title: "%{person} for %{comp}"
+
     #context: text appearing in mails sent to competitors during registration
     mailer:
       #context: "people" is replaced by the organizers and Delegates' names
@@ -1300,6 +1302,11 @@ en:
     preferred_events_prompt_html: "To speed up registration in the future, you can set your preferred events %{link}."
     preferred_events_populated_html: "We autopopulated this with your preferred events, which you can edit %{link}."
     registration_requirements: "Registration requirements for the competition:"
+    registration_history:
+      acting_user: "Acting User"
+      action: "Action"
+      changes: "Changes"
+      title: "Registration History"
     import:
       title: "Import registrations for %{comp}"
       info: "You can import registrations multiple times. Changes will be determined and the database will be updated accordingly."
@@ -2183,30 +2190,17 @@ en:
       title: "Records"
     last_updated_html: "Last updated: %{timestamp}"
     filters_fixes_underway: "Please note that some filters (such as past years) are temporarily disabled. The Software Team is working to restore these filters - we are sorry for the inconvenience."
-    tooltip_no_years: "Our database is too large to compute historical data"
-    tooltip_no_quantities: "Our database is too large to compute long rankings"
     selector_elements:
       events_selector:
         event: "Event"
-        all_events: "All events"
-      region: "Region"
       type_selector:
         type: "Type"
         single: "Single"
         average: "Average"
-      years_selector:
-        years: "Years"
-        all_years: "All years"
-        only: "Only"
-        only_html: "Only %{year}"
-        until: "Until"
-        until_html: "Until %{year}"
       show_selector:
         show: "Show"
         persons: "Persons"
-        persons_html: "%{quantity} persons"
         results: "Results"
-        results_html: "%{quantity} results"
         by_region: "By region"
         mixed: "Mixed"
         slim: "Slim"
@@ -2221,22 +2215,20 @@ en:
     table_elements:
       name: "Name"
       result: "Result"
-      representing: "Representing"
       competition: "Competition"
       solves: "Solves"
       region: "Region"
       world: "World"
-      type_options:
-        type: "Type"
-        single: "Single"
-        average: "Average"
       event: "Event"
       date_circa: "Date circa"
-      record: "Record"
   #context: User notifications
   notifications:
     connect_wca_id: "Connect your WCA ID to your account!"
   payments:
+    labels:
+      payment_statuses: "Payment Statuses"
+      available_refunds: "Available Refunds"
+      original_payment: "Original Payment"
     #context: localized names of payment providers
     payment_providers:
       paypal: 'PayPal'
@@ -2273,6 +2265,9 @@ en:
           display_name: "Name"
           primary_email: "Email"
         fallback_not_applicable: "N/A"
+    statuses:
+      succeeded: "Succeeded"
+      refunded: "Refunded"
   persons:
     #context: Person search page
     index:

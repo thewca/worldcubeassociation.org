@@ -1,0 +1,6 @@
+fonts-dejavu
+fonts-unfonts-core
+fonts-wqy-microhei
+fonts-ipafont
+fonts-thai-tlwg
+fonts-lmodern

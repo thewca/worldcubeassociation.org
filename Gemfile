@@ -95,7 +95,6 @@ gem 'google-apis-admin_directory_v1'
 gem 'activestorage-validator'
 gem 'image_processing'
 gem 'rest-client'
-gem 'wicked_pdf'
 gem 'icalendar'
 # pointing to our fork which has Rails 7 support enabled (aka monkey-patched)
 gem 'starburst', github: 'thewca/starburst'
@@ -108,6 +107,7 @@ gem 'after_commit_everywhere'
 gem 'slack-ruby-client'
 gem 'puma'
 gem "tzf"
+gem 'playwright-ruby-client', require: 'playwright'
 
 group :development, :test do
   gem 'spring'
@@ -163,6 +163,5 @@ end
 group :production do
   gem 'rack'
   gem 'newrelic_rpm'
-  gem 'wkhtmltopdf-binary-ng'
   gem 'shoryuken'
 end
