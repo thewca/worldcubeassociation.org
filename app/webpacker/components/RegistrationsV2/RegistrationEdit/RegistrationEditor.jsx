@@ -217,7 +217,7 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
               // i18n-tasks-use t('registrations.registered_with_account_html')
               i18nKey="registrations.registered_with_account_html"
               options={{
-                here: `<a href=${kditPersonUrl(competitor.id)}>here</a>`,
+                here: `<a href=${editPersonUrl(competitor.id)}>here</a>`,
               }}
             />
           </Message>
