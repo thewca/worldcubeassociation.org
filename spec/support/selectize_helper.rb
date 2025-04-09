@@ -11,7 +11,7 @@ module SelectizeHelper
       selectize_input = page.find("div.#{for_id} .selectize-control input")
     end
 
-    selectize_input.with_playwright_element_handle { it.type(with) }
+    selectize_input.send_keys(with)
     # Wait for selectize popup to appear.
     expect(page).to have_selector("div.selectize-dropdown", visible: true)
     # Select item with selectize.
