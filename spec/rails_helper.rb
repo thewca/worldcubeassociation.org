@@ -90,6 +90,9 @@ RSpec.configure do |config|
 
   config.include ActiveJob::TestHelper
   config.include ActiveRecord::Assertions::QueryAssertions, type: :model
+
+  # Make stripe_helper available globally
+  config.include StripeHelper
 end
 
 # See: https://github.com/rspec/rspec-expectations/issues/664#issuecomment-58134735
