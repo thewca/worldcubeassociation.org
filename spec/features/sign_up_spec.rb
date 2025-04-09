@@ -149,7 +149,7 @@ RSpec.feature "Sign up" do
       click_button "Sign up"
 
       # Verify that the custom delegate is still selected.
-      selectize_items = selectize.all("div.selectize-control .items")
+      selectize_items = selectize.all(".items")
       expect(selectize_items.length).to eq 1
       expect(selectize_items[0].find('.name').text).to eq custom_delegate.name
 

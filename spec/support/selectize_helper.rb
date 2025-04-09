@@ -3,7 +3,7 @@
 module SelectizeHelper
   def fill_in_selectize(label_or_node, with:)
     if label_or_node.instance_of? Capybara::Node::Element
-      selectize_input = label_or_node
+      selectize_input = label_or_node.find("input")
     else
       label = label_or_node
       label_node = find(:label, text: label, exact_text: true)
