@@ -40,8 +40,6 @@ RSpec.feature "Sign up" do
     end
 
     it 'finds people by name' do
-      pending('Date popup suddenly started obstruting sign-in button. Signed DH 30/Aug/2024')
-
       visit "/users/sign_up"
 
       fill_in "Email", with: "jack@example.com"
@@ -68,6 +66,9 @@ RSpec.feature "Sign up" do
       # First, intentionally fill in the incorrect birthdate,
       # to test out our validations.
       fill_in "Birthdate", with: "1900-01-01"
+      # Close the date selector popup: Depending on how long the month is, and how the days are distributed over the weeks,
+      #   the date popup may become too big (especially if 31-day months are spread out over 5 weeks), obstructing the submit button.
+      page.driver.with_playwright_page { it.press("body", "Escape") }
       click_button "Sign up"
 
       # Make sure we inform the user of the incorrect birthdate they just
