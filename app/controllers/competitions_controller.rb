@@ -273,7 +273,6 @@ class CompetitionsController < ApplicationController
     render json: { status: "ok" }
   end
 
-
   def payment_integration_setup
     @competition = competition_from_params
 
