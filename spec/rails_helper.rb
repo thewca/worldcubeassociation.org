@@ -3,6 +3,7 @@
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 ENV['RAILS_ENV'] ||= 'test'
 require 'spec_helper'
+puts "connected allowed rails helper: #{WebMock.net_connect_allowed?}"
 require File.expand_path('../config/environment', __dir__)
 require 'rspec/rails'
 # Add additional requires below this line. Rails is not loaded until this point!
@@ -90,11 +91,8 @@ RSpec.configure do |config|
   config.include ActiveJob::TestHelper
   config.include ActiveRecord::Assertions::QueryAssertions, type: :model
 
-  if EnvConfig.DISABLE_WEBMOCK?
-    WebMock.disable!
-  else
-    WebMock.allow_net_connect! unless EnvConfig.DISABLE_NET_CONNECT_IN_TESTS?
-  end
+  # Make stripe_helper available globally
+  config.include StripeHelper
 end
 
 # See: https://github.com/rspec/rspec-expectations/issues/664#issuecomment-58134735

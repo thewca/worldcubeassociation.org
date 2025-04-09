@@ -35,6 +35,7 @@ class PaymentIntent < ApplicationRecord
   scope :stripe, -> { where(payment_record_type: 'StripeRecord') }
 
   def update_status_and_charges(payment_account, api_intent, action_source, source_datetime = DateTime.current)
+    puts "updating status and charges"
     self.with_lock do
       # The order of operations here is critical:
       #   We need to update the underlying raw record first, so that `determine_wca_status` works correctly
@@ -43,6 +44,7 @@ class PaymentIntent < ApplicationRecord
 
       case updated_wca_status
       when PaymentIntent.wca_statuses[:succeeded]
+        puts "succeeded"
         # The payment didn't need any additional actions and is completed!
 
         # Record the success timestamp if not already done
@@ -55,6 +57,7 @@ class PaymentIntent < ApplicationRecord
         end
 
         payment_account.retrieve_payments(self) do |payment|
+          puts "payment: #{payment}"
           # Only trigger outer update blocks for charges that are actually successful. This is reasonable
           # because we only ever trigger this block for PIs that are marked "successful" in the first place
           charge_successful = payment.determine_wca_status.to_s == PaymentIntent.wca_statuses[:succeeded]
@@ -62,6 +65,7 @@ class PaymentIntent < ApplicationRecord
           yield payment if block_given? && charge_successful
         end
       when PaymentIntent.wca_statuses[:canceled]
+        puts "canceled"
         # Canceled by the gateway
 
         # Record the cancellation timestamp if not already done
@@ -74,6 +78,7 @@ class PaymentIntent < ApplicationRecord
         end
       when PaymentIntent.wca_statuses[:created],
         PaymentIntent.wca_statuses[:pending]
+        puts "created/pending"
         # Reset by the gateway
         self.update!(
           confirmed_at: nil,

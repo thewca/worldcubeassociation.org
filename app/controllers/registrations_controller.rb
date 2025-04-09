@@ -411,6 +411,7 @@ class RegistrationsController < ApplicationController
 
     registration = stored_intent.holder
 
+    puts "gets to update status and charges"
     stored_intent.update_status_and_charges(payment_account, remote_intent, current_user) do |charge_transaction|
       ruby_money = charge_transaction.money_amount
 

@@ -526,7 +526,7 @@ RSpec.describe "registrations" do
     end
   end
 
-  describe "POST #process_payment_intent" do
+  describe "POST #process_payment_intent", :tag do
     context "when not signed in" do
       let(:competition) { FactoryBot.create(:competition, :stripe_connected, :visible, :registration_open, events: Event.where(id: %w(222 333))) }
       let!(:user) { FactoryBot.create(:user, :wca_id) }
@@ -572,9 +572,14 @@ RSpec.describe "registrations" do
           expect(registration.reload.outstanding_entry_fees).to eq(outstanding_fees_money)
         end
 
-        it "processes sufficient payment when confirmed by redirect" do
+        it "processes sufficient payment when confirmed by redirect", :only do
           expect(registration.outstanding_entry_fees).to eq competition.base_entry_fee
 
+          stub_successful_stripe_payment_intent(1000, 'usd', user.email)
+          stub_stripe_pi_confirmation(1000, 'usd', user.email)
+          stub_stripe_pi_retrieval(1000, 'usd', user.email)
+          stub_charges_retrieval(1000, 'usd', user.email)
+          stub_charge_retrieval(1000, 'usd', user.email)
           post registration_payment_intent_path(registration.id, :stripe), params: {
             amount: registration.outstanding_entry_fees.cents,
           }
