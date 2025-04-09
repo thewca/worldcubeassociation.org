@@ -273,8 +273,10 @@ RSpec.feature "Sign up" do
       fill_in_selectize "WCA ID", with: person.wca_id
 
       click_button "Sign up"
-      click_on "I have never competed in a WCA competition."
       expect(page.find("#user_dob", visible: :hidden).value).to eq ""
+
+      click_on "I have never competed in a WCA competition."
+      expect(page.find("#user_dob", visible: :visible).value).to eq ""
     end
 
     it "does not allow both panels to be open after failed submission" do
