@@ -113,6 +113,7 @@ RSpec.configure do |config|
   # Make helpers available in feature specs
   config.include SessionHelper, type: :feature
   config.include SelectizeHelper, type: :feature
+  config.include AutonumericHelper, type: :feature
   config.include CookieBannerHelper, type: :feature
 
   # Make sign_in helper available in controller and request specs
