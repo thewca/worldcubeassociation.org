@@ -15,6 +15,6 @@ module SelectizeHelper
     # Wait for selectize popup to appear.
     expect(page).to have_selector("div.selectize-dropdown", visible: true)
     # Select item with selectize.
-    selectize_input.with_playwright_element_handle { it.press('Enter') }
+    selectize_input.send_keys(:enter)
   end
 end

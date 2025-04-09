@@ -65,10 +65,7 @@ RSpec.feature "Sign up" do
 
       # First, intentionally fill in the incorrect birthdate,
       # to test out our validations.
-      fill_in "Birthdate", with: "1900-01-01"
-      # Close the date selector popup: Depending on how long the month is, and how the days are distributed over the weeks,
-      #   the date popup may become too big (especially if 31-day months are spread out over 5 weeks), obstructing the submit button.
-      page.driver.with_playwright_page { it.press("body", "Escape") }
+      fill_in("Birthdate", with: "1900-01-01").send_keys(:escape)
       click_button "Sign up"
 
       # Make sure we inform the user of the incorrect birthdate they just
