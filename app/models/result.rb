@@ -23,13 +23,13 @@ class Result < ApplicationRecord
 
   after_commit :create_or_update_attempts
 
-  private def create_or_update_attempts
-    (1..5).each do |n|
+  def create_or_update_attempts
+    attempts = (1..5).filter_map do |n|
       value = public_send(:"value#{n}")
-      break if value.zero?
 
-      Attempt.upsert({ value: value, attempt_number: n, result_id: id })
+      { value: value, attempt_number: n, result_id: id } unless value.zero?
     end
+    Attempt.upsert_all(attempts)
   end
 
   MARKERS = [nil, "NR", "ER", "WR", "AfR", "AsR", "NAR", "OcR", "SAR"].freeze
