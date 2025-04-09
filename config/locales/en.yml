@@ -2233,6 +2233,7 @@ en:
     payment_providers:
       paypal: 'PayPal'
       stripe: 'Stripe'
+      manual: 'External Payment (Manual)'
     #context: Setting up and making payments
     payment_setup:
       external_dashboard: '%{provider} Dashboard'
@@ -2246,13 +2247,16 @@ en:
       supported_currencies: "%{provider} Supported Currencies"
       provider_heading: "%{provider} Payments"
       accept_payments_header: "Accept Registration Payments"
+      manual_payments_header: "Configure Manual Payments"
       connect_button: "Connect with %{provider}"
       connect_account_info:
         stripe: "In order to accept payments for this competition, you need to connect your own Stripe account with the WCA Stripe account by clicking the button below. If you don't already have your own Stripe account you can still click on the button below and it will guide you through the process."
         paypal: "A PayPal Business account is required to accept PayPal payments via the competition page. If you don't already have a PayPal business account, you can still click on the button below and it will guide you through the process."
+        manual: "Manual External Payments will enable you to track payments by the user submitting a payment reference as part of the registration process."
       connect_account_warning:
         stripe: "Connecting your Stripe account gives the WCA website the ability to create charges, and issue refunds directly on your Stripe account."
         paypal: "Connecting your PayPal account gives the WCA website the ability to route payments to you, and issue refunds directly on your PayPal account."
+        manual: ""
       currently_connected_info: "This competition is set up to accept payments through %{provider}. The Delegate(s) of the competition should contact WCAT to make any changes to connected accounts."
       before_disconnect_warning: "Disconnecting on this page will make our website forget the connection to your %{provider} account. But your %{provider} dashboard (see link below) may still list the WCA website based on the authorization that you previously granted. Note that revoking authorization in the %{provider} dashboard will also affect any other competition linked to accept payments through this account!"
       before_disconnect_info: "Keep in mind that disconnecting an account should only be done in exceptional situations, such as the current account being unable to receive payments."
@@ -2264,6 +2268,9 @@ en:
         paypal:
           display_name: "Name"
           primary_email: "Email"
+        manual:
+          payment_info: "Instructions for the competitor how they will pay"
+          payment_reference: "Reference that the competitor should enter after paying (could be Name, Mobile Phone Number, Payment ID, etc.)"
         fallback_not_applicable: "N/A"
     statuses:
       succeeded: "Succeeded"
