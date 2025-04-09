@@ -226,7 +226,7 @@ module Resultable
 
   def counting_solve_times
     @counting_solve_times ||= solve_times.each_with_index.filter_map do |solve_time, i|
-      solve_time if i < format.expected_solve_count && !trimmed_indices.include?(i)
+      solve_time if i < format.expected_solve_count && trimmed_indices.exclude?(i)
     end
   end
 
