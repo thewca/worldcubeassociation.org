@@ -9,7 +9,7 @@ module ResultsValidators
       "This validator checks that positions stored in results are correct with regard to the actual results."
     end
 
-    def self.has_automated_fix?
+    def self.automatically_fixable?
       true
     end
 

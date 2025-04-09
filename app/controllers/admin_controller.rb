@@ -218,13 +218,6 @@ class AdminController < ApplicationController
     render partial: "fix_results_selector"
   end
 
-  def edit_person
-    @person = Person.current.find_by(wca_id: params[:person].try(:[], :wca_id))
-    # If there isn't a person in the params, make an empty one that simple form have an object to work with.
-    # Note: most of the time persons are dynamically selected using user_id picker.
-    @person ||= Person.new
-  end
-
   def person_data
     @person = Person.current.find_by!(wca_id: params[:person_wca_id])
 

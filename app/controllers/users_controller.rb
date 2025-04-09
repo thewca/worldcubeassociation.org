@@ -349,16 +349,16 @@ class UsersController < ApplicationController
     end
   end
 
-  private def has_recent_authentication?
+  private def recently_authenticated?
     session[:last_authenticated_at] && session[:last_authenticated_at] > RECENT_AUTHENTICATION_DURATION.ago
   end
 
   private def set_recent_authentication!
-    @recently_authenticated = has_recent_authentication?
+    @recently_authenticated = recently_authenticated?
   end
 
   private def check_recent_authentication!
-    unless has_recent_authentication?
+    unless recently_authenticated?
       flash[:danger] = I18n.t("users.edit.sensitive.identity_error")
       redirect_to profile_edit_path(section: "2fa-check")
       return false

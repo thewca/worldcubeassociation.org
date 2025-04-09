@@ -557,19 +557,19 @@ RSpec.describe User, type: :model do
   describe "#is_special_account" do
     it "returns false for a normal user" do
       user = FactoryBot.create :user
-      expect(user.is_special_account?).to be false
+      expect(user.special_account?).to be false
     end
 
     it "returns true for users on a team" do
       board_member = FactoryBot.create :user, :board_member
       banned_person = FactoryBot.create :user, :banned
-      expect(board_member.is_special_account?).to be true
-      expect(banned_person.is_special_account?).to be true
+      expect(board_member.special_account?).to be true
+      expect(banned_person.special_account?).to be true
     end
 
     it "returns true for users that are delegates" do
       senior_delegate_role = FactoryBot.create :senior_delegate_role
-      expect(senior_delegate_role.user.is_special_account?).to be true
+      expect(senior_delegate_role.user.special_account?).to be true
     end
 
     it "returns true for users who organized or delegated a competition" do
@@ -577,9 +577,9 @@ RSpec.describe User, type: :model do
       delegate = FactoryBot.create :user # Intentionally not assigning a Delegate role as it is possible to Delegate a competition without being a current Delegate
       trainee_delegate = FactoryBot.create :user
       FactoryBot.create :competition, organizers: [organizer], delegates: [delegate, trainee_delegate]
-      expect(organizer.is_special_account?).to be true
-      expect(delegate.is_special_account?).to be true
-      expect(trainee_delegate.is_special_account?).to be true
+      expect(organizer.special_account?).to be true
+      expect(delegate.special_account?).to be true
+      expect(trainee_delegate.special_account?).to be true
     end
   end
 

@@ -7,7 +7,7 @@ class MediaController < ApplicationController
   def index
     params[:status] = "accepted"
     params[:year] ||= Date.today.year
-    @media = get_media
+    @media = all_media
     render :index
   end
 
@@ -36,7 +36,7 @@ class MediaController < ApplicationController
     end
   end
 
-  private def get_media
+  private def all_media
     params[:year] ||= "all years"
     params[:region] ||= "all"
 
@@ -49,7 +49,7 @@ class MediaController < ApplicationController
 
   def validate
     params[:status] ||= "pending"
-    @media = get_media
+    @media = all_media
     I18n.with_locale(:en) { render :validate }
   end
 

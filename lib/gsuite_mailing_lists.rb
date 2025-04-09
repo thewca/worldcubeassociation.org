@@ -13,7 +13,7 @@ module GsuiteMailingLists
   BOARD_PRIMARY_EMAIL = "board@worldcubeassociation.org"
 
   def self.sync_group(group, desired_emails)
-    service = get_service
+    service = directory_service
 
     desired_emails = desired_emails.map do |email|
       if email.include?("+")
@@ -63,7 +63,7 @@ module GsuiteMailingLists
     end
   end
 
-  def self.get_service
+  def self.directory_service
     scopes = [
       'https://www.googleapis.com/auth/admin.directory.group',
     ]

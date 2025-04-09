@@ -180,7 +180,7 @@ class CompetitionsController < ApplicationController
     respond_to do |format|
       format.html
       format.pdf do
-        unless @competition.has_schedule?
+        unless @competition.any_venues?
           flash[:danger] = t('.no_schedule')
           return redirect_to competition_path(@competition)
         end
@@ -376,7 +376,7 @@ class CompetitionsController < ApplicationController
         },
       },
       limit: other_comp.competitor_limit_enabled ? other_comp.competitor_limit : "",
-      competitors: other_comp.is_probably_over? ? other_comp.results.select('DISTINCT personId').count : "",
+      competitors: other_comp.probably_over? ? other_comp.results.select('DISTINCT personId').count : "",
       events: other_comp.events.map { |event|
         event.id
       },
@@ -774,7 +774,7 @@ class CompetitionsController < ApplicationController
       competitions = Competition.includes(:delegate_report, :championships)
                                 .where(id: competition_ids.uniq).where("cancelled_at is null or end_date >= curdate()")
                                 .sort_by { |comp| comp.start_date || (Date.today + 20.years) }.reverse
-      @past_competitions, @not_past_competitions = competitions.partition(&:is_probably_over?)
+      @past_competitions, @not_past_competitions = competitions.partition(&:probably_over?)
       bookmarked_ids = current_user.competitions_bookmarked.pluck(:competition_id)
       @bookmarked_competitions = Competition.not_over
                                             .where(id: bookmarked_ids.uniq)
@@ -786,6 +786,6 @@ class CompetitionsController < ApplicationController
   def for_senior
     user_id = params[:user_id] || current_user.id
     @user = User.find(user_id)
-    @competitions = @user.subordinate_delegates.map(&:delegated_competitions).flatten.uniq.reject(&:is_probably_over?).sort_by { |c| c.start_date || (Date.today + 20.years) }.reverse
+    @competitions = @user.subordinate_delegates.map(&:delegated_competitions).flatten.uniq.reject(&:probably_over?).sort_by { |c| c.start_date || (Date.today + 20.years) }.reverse
   end
 end

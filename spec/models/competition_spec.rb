@@ -39,15 +39,15 @@ RSpec.describe Competition do
   context "when there is an entry fee" do
     it "correctly identifies there is a fee when there is only a base fee" do
       competition = FactoryBot.build :competition, name: "Foo: Test - 2015", base_entry_fee_lowest_denomination: 10
-      expect(competition.has_fees?).to be true
-      expect(competition.has_base_entry_fee?).to eq competition.base_entry_fee
+      expect(competition.paid_entry?).to be true
+      expect(competition.base_entry_fee_nonzero?).to eq competition.base_entry_fee
     end
 
     it "correctly identifies there is a fee when there is only event fees" do
       competition = FactoryBot.create :competition, name: "Foo: Test - 2015", base_entry_fee_lowest_denomination: 0
       competition.competition_events.first.update_attribute(:fee_lowest_denomination, 100)
-      expect(competition.has_base_entry_fee?).to be nil
-      expect(competition.has_fees?).to be true
+      expect(competition.base_entry_fee_nonzero?).to be nil
+      expect(competition.paid_entry?).to be true
     end
   end
 
@@ -198,10 +198,10 @@ RSpec.describe Competition do
   it "handles missing start/end_date" do
     competition = FactoryBot.build :competition, start_date: nil, end_date: nil
     competition2 = FactoryBot.build :competition, start_date: nil, end_date: nil
-    expect(competition.is_probably_over?).to be false
+    expect(competition.probably_over?).to be false
     expect(competition.started?).to be false
     expect(competition.in_progress?).to be false
-    expect(competition.has_date?).to be false
+    expect(competition.dates_present?).to be false
     expect(competition.dangerously_close_to?(competition2)).to be false
   end
 
@@ -560,7 +560,7 @@ RSpec.describe Competition do
     it "displays info if competition is finished but results aren't posted" do
       competition = FactoryBot.build :competition, starts: 1.month.ago
       expect(competition).to be_valid
-      expect(competition.is_probably_over?).to be true
+      expect(competition.probably_over?).to be true
       expect(competition.results_posted?).to be false
       expect(competition.info_for(nil)[:upload_results]).to eq "This competition is over. We are working to upload the results as soon as possible!"
     end
@@ -1218,12 +1218,12 @@ RSpec.describe Competition do
   describe "has_defined_dates" do
     it "is false when no start and end date" do
       competition = FactoryBot.create(:competition, start_date: nil, end_date: nil)
-      expect(competition.has_defined_dates?).to be false
+      expect(competition.dates_present?).to be false
     end
 
     it "is true when has start and end date" do
       competition = FactoryBot.create(:competition)
-      expect(competition.has_defined_dates?).to be true
+      expect(competition.dates_present?).to be true
     end
   end
 

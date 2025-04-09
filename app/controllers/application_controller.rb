@@ -113,11 +113,11 @@ class ApplicationController < ActionController::Base
 
     # For redirecting user to source after login - https://github.com/heartcombo/devise/wiki/How-To:-Redirect-back-to-current-page-after-sign-in,-sign-out,-sign-up,-update
     def storable_location?
-      request.get? && is_navigational_format? && !devise_controller? && !request.xhr? && !is_api_request?
+      request.get? && is_navigational_format? && !devise_controller? && !request.xhr? && !api_request?
     end
 
     def ignore_client_language?
-      is_api_request? || is_oauth_request?
+      api_request? || is_oauth_request?
     end
 
     def is_oauth_request?
@@ -127,7 +127,7 @@ class ApplicationController < ActionController::Base
       request.fullpath.include?('/oauth/') && self.class.ancestors.include?(Doorkeeper::ApplicationMetalController)
     end
 
-    def is_api_request?
+    def api_request?
       request.fullpath.include?('/api/')
     end
 

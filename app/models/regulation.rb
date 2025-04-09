@@ -10,10 +10,10 @@ class Regulation < SimpleDelegator
     self.regulations.index_by { |r| r["id"] }
   end
 
-  def self.reload_regulations(s3)
+  def self.reload_regulations(s3_client)
     reset_regulations
 
-    self.regulations = JSON.parse(s3.bucket(RegulationTranslationsHelper::BUCKET_NAME).object(REGULATIONS_JSON_PATH).get.body.read).freeze
+    self.regulations = JSON.parse(s3_client.bucket(RegulationTranslationsHelper::BUCKET_NAME).object(REGULATIONS_JSON_PATH).get.body.read).freeze
   rescue StandardError => e
     self.regulations_load_error = e
   end

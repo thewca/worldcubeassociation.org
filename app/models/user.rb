@@ -81,14 +81,14 @@ class User < ApplicationRecord
       UserGroup.board,
       UserGroup.officers,
     ].flatten.flat_map(&:active_roles)
-      .select { |role| role.is_eligible_voter? }
+      .select { |role| role.eligible_voter? }
       .map { |role| role.user }
       .uniq
   end
 
   def self.leader_senior_voters
-    team_leaders = RolesMetadataTeamsCommittees.leader.includes(:user, :user_role).select { |role_metadata| role_metadata.user_role.is_active? }.map(&:user)
-    senior_delegates = RolesMetadataDelegateRegions.senior_delegate.includes(:user, :user_role).select { |role_metadata| role_metadata.user_role.is_active? }.map(&:user)
+    team_leaders = RolesMetadataTeamsCommittees.leader.includes(:user, :user_role).select { |role_metadata| role_metadata.user_role.active? }.map(&:user)
+    senior_delegates = RolesMetadataDelegateRegions.senior_delegate.includes(:user, :user_role).select { |role_metadata| role_metadata.user_role.active? }.map(&:user)
     (team_leaders + senior_delegates).uniq.compact
   end
 
@@ -447,7 +447,7 @@ class User < ApplicationRecord
   end
 
   def staff?
-    active_roles.any? { |role| role.is_staff? }
+    active_roles.any? { |role| role.staff? }
   end
 
   def admin?
@@ -486,7 +486,7 @@ class User < ApplicationRecord
     staff? || any_kind_of_delegate?
   end
 
-  def is_senior_delegate_for?(user)
+  def senior_delegate_for?(user)
     user.senior_delegates.include?(self)
   end
 
@@ -572,9 +572,9 @@ class User < ApplicationRecord
       group = role.group
       group_type = role.group_type
       if [UserGroup.group_types[:councils], UserGroup.group_types[:teams_committees]].include?(group_type)
-        groups << group.id if role.is_lead?
+        groups << group.id if role.lead?
       elsif group_type == UserGroup.group_types[:delegate_regions]
-        groups += [group.id, group.all_child_groups.map(&:id)].flatten.uniq if role.is_lead? && role.metadata.status == RolesMetadataDelegateRegions.statuses[:senior_delegate]
+        groups += [group.id, group.all_child_groups.map(&:id)].flatten.uniq if role.lead? && role.metadata.status == RolesMetadataDelegateRegions.statuses[:senior_delegate]
       end
     end
 
@@ -912,7 +912,7 @@ class User < ApplicationRecord
                          competition.staff_delegates.include?(self)
                        end
     appropriate_role = can_admin_results? || allowed_delegate
-    appropriate_time = competition.in_progress? || competition.is_probably_over?
+    appropriate_time = competition.in_progress? || competition.probably_over?
     competition.announced? && appropriate_role && appropriate_time && !competition.results_posted?
   end
 
@@ -1079,14 +1079,14 @@ class User < ApplicationRecord
       fields += %i(
         unconfirmed_wca_id
       )
-      fields += %i(wca_id) unless user.is_special_account?
+      fields += %i(wca_id) unless user.special_account?
     end
     fields
   end
 
   private def editable_avatar_fields(user)
     fields = Set.new
-    if user == self || admin? || results_team? || is_senior_delegate_for?(user)
+    if user == self || admin? || results_team? || senior_delegate_for?(user)
       fields += %i(pending_avatar avatar_thumbnail remove_avatar)
 
       fields += %i(current_avatar) if can_admin_results?
@@ -1137,7 +1137,7 @@ class User < ApplicationRecord
     CompetitionsMailer.notify_users_of_id_claim_possibility(self, competition).deliver_later if !wca_id && !unconfirmed_wca_id
   end
 
-  def is_bookmarked?(competition)
+  def competition_bookmarked?(competition)
     BookmarkedCompetition.where(competition: competition, user: self).present?
   end
 
@@ -1155,7 +1155,7 @@ class User < ApplicationRecord
     UserGroup
       .delegate_regions
       .flat_map(&:active_roles)
-      .select { |role| role.is_staff? }
+      .select { |role| role.staff? }
       .map { |role| role.user_id }
   end
 
@@ -1328,7 +1328,7 @@ class User < ApplicationRecord
   # Special Accounts are accounts where the WCA ID and user account should always be connected
   # These includes any teams, organizers, delegates
   # Note: Someone can Delegate a competition without ever being a Delegate.
-  def is_special_account?
+  def special_account?
     self.roles.any? ||
       !self.organized_competitions.empty? ||
       !delegated_competitions.empty? ||
@@ -1346,7 +1346,7 @@ class User < ApplicationRecord
         .map(&:competition)
   end
 
-  def is_delegate_in_probation
+  def delegate_in_probation?
     UserGroup.delegate_probation.flat_map(&:active_users).include?(self)
   end
 
@@ -1383,7 +1383,7 @@ class User < ApplicationRecord
     when :board
       board_member?
     when :leader
-      active_roles.any? { |role| role.is_lead? && (role.group.teams_committees? || role.group.councils?) }
+      active_roles.any? { |role| role.lead? && (role.group.teams_committees? || role.group.councils?) }
     when :senior_delegate
       senior_delegate?
     when :wapc
@@ -1399,7 +1399,7 @@ class User < ApplicationRecord
 
   def subordinate_delegates
     delegate_roles
-      .filter { |role| role.is_lead? }
+      .filter { |role| role.lead? }
       .flat_map { |role| role.group.active_users + role.group.active_all_child_users }
       .uniq
   end
@@ -1469,9 +1469,9 @@ class User < ApplicationRecord
       last_sign_in_ip: nil,
       # If the account associated with the WCA ID is a special account (delegate, organizer,
       # team member) then we want to keep the link between the Person and the account.
-      wca_id: is_special_account? ? new_wca_id : nil,
-      current_avatar_id: is_special_account? ? nil : current_avatar_id,
-      country_iso2: is_special_account? ? country_iso2 : nil,
+      wca_id: special_account? ? new_wca_id : nil,
+      current_avatar_id: special_account? ? nil : current_avatar_id,
+      country_iso2: special_account? ? country_iso2 : nil,
     )
   end
 end
