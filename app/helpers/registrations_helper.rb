@@ -29,7 +29,7 @@ module RegistrationsHelper
     sign_in = I18n.t('registrations.sign_in')
     here = I18n.t('common.here')
     args[:sign_in] = link_to(sign_in, new_user_session_path)
-    args[:here] = link_to(here, new_user_registration_path, target: "_blank")
+    args[:here] = link_to(here, new_user_registration_path, target: "_blank", rel: "noopener")
     raw(I18n.t(message_key, **args))
   end
 

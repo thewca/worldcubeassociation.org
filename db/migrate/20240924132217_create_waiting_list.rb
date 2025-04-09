@@ -1,3 +1,4 @@
+# rubocop:disable all
 # frozen_string_literal: true
 
 class CreateWaitingList < ActiveRecord::Migration[7.2]

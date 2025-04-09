@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   Button, Header, Message, Table,
 } from 'semantic-ui-react';
@@ -46,11 +46,11 @@ export default function Refunds({
 
   return (
     <>
-      <Header>Available Refunds:</Header>
+      <Header>{I18n.t('payments.labels.available_refunds')}</Header>
       <Table>
         <Table.Header>
           <Table.Row>
-            <Table.HeaderCell>Original Payment</Table.HeaderCell>
+            <Table.HeaderCell>{I18n.t('payments.labels.original_payment')}</Table.HeaderCell>
             <Table.HeaderCell>{I18n.t('registrations.refund_form.hints.refund_amount')}</Table.HeaderCell>
             <Table.HeaderCell>{I18n.t('registrations.refund_form.labels.refund_amount')}</Table.HeaderCell>
             <Table.HeaderCell />
@@ -77,6 +77,14 @@ function RefundRow({
   refund, refundMutation, isMutating, userId, competitionId,
 }) {
   const [amountToRefund, setAmountToRefund] = useInputState(refund.ruby_amount_refundable);
+
+  // React state persists across rerenders, so `amountToRefund` would keep old values
+  // which is problematic when refunding more than 50% of the original
+  // (because then the input exceeds the new max, leading to a whole new tragedy with AN)
+  useEffect(() => {
+    setAmountToRefund((prevAmount) => Math.min(prevAmount, refund.ruby_amount_refundable));
+  }, [refund.ruby_amount_refundable, setAmountToRefund]);
+
   const confirm = useConfirm();
 
   const attemptRefund = () => confirm({

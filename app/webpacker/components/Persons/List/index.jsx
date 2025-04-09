@@ -8,9 +8,9 @@ import useDebounce from '../../../lib/hooks/useDebounce';
 import { getPersons } from '../api/getPersons';
 import Loading from '../../Requests/Loading';
 import WCAQueryClientProvider from '../../../lib/providers/WCAQueryClientProvider';
-import { RegionSelector } from '../../CompetitionsOverview/CompetitionsFilters';
 import { personUrl } from '../../../lib/requests/routes.js.erb';
 import { countries } from '../../../lib/wca-data.js.erb';
+import RegionSelector, { ALL_REGIONS_VALUE } from '../../wca/RegionSelector';
 
 export default function Wrapper() {
   return (
@@ -23,7 +23,7 @@ export default function Wrapper() {
 function PersonList() {
   const [query, setQuery] = useState('');
   const [page, setPage] = useState(1);
-  const [region, setRegion] = useState('all');
+  const [region, setRegion] = useState(ALL_REGIONS_VALUE);
 
   const debouncedSearch = useDebounce(query, 600);
 
@@ -41,7 +41,7 @@ function PersonList() {
       <Header>
         {I18n.t('layouts.navigation.persons')}
       </Header>
-      <RegionSelector region={region} dispatchFilter={({ region: r }) => setRegion(r)} />
+      <RegionSelector region={region} onRegionChange={setRegion} />
       <Input type="text" placeholder={I18n.t('persons.index.name_or_wca_id')} value={query} onChange={(d) => setQuery(d.target.value)} />
       <Table striped>
         <Table.Header>

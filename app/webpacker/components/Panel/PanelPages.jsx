@@ -5,13 +5,8 @@ import {
   subordinateUpcomingCompetitionsUrl,
   generateDbTokenUrl,
   serverStatusPageUrl,
-  runValidatorsUrl,
-  checkRecordsUrl,
-  computeAuxiliaryDataUrl,
-  generateDataExportsUrl,
   fixResultsUrl,
   mergeProfilesUrl,
-  anonymizePersonUrl,
   reassignConnectedWcaIdUrl,
 } from '../../lib/requests/routes.js.erb';
 import PostingCompetitionsTable from '../PostingCompetitions';
@@ -39,6 +34,10 @@ import ApprovePictures from './pages/ApprovePictures';
 import EditPersonRequestsPage from './pages/EditPersonRequestsPage';
 import AnonymizationScriptPage from './pages/AnonymizationScriptPage';
 import CreateNewcomersPage from './pages/CreateNewcomersPage';
+import RunValidatorsForm from './pages/RunValidatorsPage/RunValidatorsForm';
+import ComputeAuxiliaryDataPage from './pages/ComputeAuxiliaryDataPage';
+import GenerateDataExportsPage from './pages/GenerateDataExportsPage';
+import CheckRecordsPage from './pages/CheckRecordsPage';
 
 export default {
   [PANEL_PAGES.postingDashboard]: {
@@ -159,7 +158,7 @@ export default {
   },
   [PANEL_PAGES.runValidators]: {
     name: 'Run Validators',
-    link: runValidatorsUrl,
+    component: RunValidatorsForm,
   },
   [PANEL_PAGES.createNewComers]: {
     name: 'Create Newcomers',
@@ -167,15 +166,15 @@ export default {
   },
   [PANEL_PAGES.checkRecords]: {
     name: 'Check Records',
-    link: checkRecordsUrl,
+    component: CheckRecordsPage,
   },
   [PANEL_PAGES.computeAuxiliaryData]: {
     name: 'Compute Auxiliary Data',
-    link: computeAuxiliaryDataUrl,
+    component: ComputeAuxiliaryDataPage,
   },
   [PANEL_PAGES.generateDataExports]: {
     name: 'Generate Data Exports',
-    link: generateDataExportsUrl,
+    component: GenerateDataExportsPage,
   },
   [PANEL_PAGES.fixResults]: {
     name: 'Fix Results',
@@ -184,10 +183,6 @@ export default {
   [PANEL_PAGES.mergeProfiles]: {
     name: 'Merge Profiles',
     link: mergeProfilesUrl,
-  },
-  [PANEL_PAGES.anonymizePerson]: {
-    name: 'Anonymize Person',
-    link: anonymizePersonUrl,
   },
   [PANEL_PAGES.reassignConnectedWcaId]: {
     name: 'Reassign Connected WCA ID',

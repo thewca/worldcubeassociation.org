@@ -26,7 +26,7 @@ RSpec.describe CompetitionSeries do
     competition.reload
 
     expect(competition.id).to eq previous_competition_id
-    expect(competition.destroyed?).to eq false
+    expect(competition.destroyed?).to be false
   end
 
   it "deletes the series when it is orphaned" do
@@ -43,6 +43,6 @@ RSpec.describe CompetitionSeries do
     competition.reload
 
     expect(competition.id).to eq previous_competition_id
-    expect(competition.destroyed?).to eq false
+    expect(competition.destroyed?).to be false
   end
 end

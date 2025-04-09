@@ -193,6 +193,10 @@ export const groupedChampionshipTypes = {
   national: _.map(_.sortBy(countries.real, 'name'), 'iso2'),
 }
 
+// ----- REGISTRATIONS  -----
+
+export const defaultGuestLimit = '<%= Registration::DEFAULT_GUEST_LIMIT %>'
+
 // ----- ROLES & GROUPS -----
 
 export const groupTypes = JSON.parse('<%= UserGroup.group_types.to_json.html_safe %>');
@@ -228,3 +232,10 @@ export const avatarImageTypes = <%= Rails.application.config.active_storage.web_
 export const ticketTypes = <%= Ticket::TICKET_TYPES.to_json %>;
 export const ticketStatuses = <%= Ticket::TICKET_TYPES.transform_values { |value| value.safe_constantize&.statuses }.to_json %>;
 export const ticketLogActionTypes = <%= TicketLog.action_types.to_json %>;
+
+// ----- VALIDATORS -----
+export const ALL_VALIDATORS = <%= ResultsValidators::Utils::ALL_VALIDATORS.map(&:class_name) %>;
+export const VALIDATORS_WITH_FIX = <%= ResultsValidators::Utils::VALIDATORS_WITH_FIX.map(&:class_name) %>;
+
+// ----- CRONJOBS -----
+export const cronjobs = <%= JobUtils::WCA_CRONJOBS.map(&:to_s).to_h { |item| [item, item] }.to_json.html_safe %>;

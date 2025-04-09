@@ -158,13 +158,13 @@ module ResultsValidators
         # Now let's try to find a DNS result followed by a non-DNS result
         first_index = all_solve_times.find_index(&:dns?)
         # Just use '5' here to get all of them
-        if first_index && all_solve_times[first_index, 5].any?(&:complete?)
-          competition_id, result, round_id, = context
-          @warnings << ValidationWarning.new(RESULT_AFTER_DNS_WARNING,
-                                             :results, competition_id,
-                                             round_id: round_id,
-                                             person_name: result.personName)
-        end
+        return unless first_index && all_solve_times[first_index, 5].any?(&:complete?)
+
+        competition_id, result, round_id, = context
+        @warnings << ValidationWarning.new(RESULT_AFTER_DNS_WARNING,
+                                           :results, competition_id,
+                                           round_id: round_id,
+                                           person_name: result.personName)
       end
 
       def check_format_matches(context)
@@ -172,14 +172,14 @@ module ResultsValidators
         # FIXME: maybe that can be part of the separate
         # "check consistency of roundTypeIds and formatIds" across a given round
         # Check that the result's format matches the round format
-        unless round_info.format.id == result.formatId
-          @errors << ValidationError.new(MISMATCHED_RESULT_FORMAT_ERROR,
-                                         :results, competition_id,
-                                         round_id: round_id,
-                                         person_name: result.personName,
-                                         expected_format: round_info.format.name,
-                                         format: Format.c_find(result.formatId).name)
-        end
+        return if round_info.format.id == result.formatId
+
+        @errors << ValidationError.new(MISMATCHED_RESULT_FORMAT_ERROR,
+                                       :results, competition_id,
+                                       round_id: round_id,
+                                       person_name: result.personName,
+                                       expected_format: round_info.format.name,
+                                       format: Format.c_find(result.formatId).name)
       end
 
       def check_results_for_cutoff(context, cutoff)
@@ -211,15 +211,13 @@ module ResultsValidators
                                            person_name: result.personName,
                                            cutoff: cutoff.to_s(round))
           end
-        else
+        elsif unskipped.any?
           # Doesn't meet the cutoff, all results should be SKIPPED
-          if unskipped.any?
-            @errors << ValidationError.new(DIDNT_MEET_CUTOFF_HAS_RESULTS_ERROR,
-                                           :results, competition_id,
-                                           round_id: round_id,
-                                           person_name: result.personName,
-                                           cutoff: cutoff.to_s(round))
-          end
+          @errors << ValidationError.new(DIDNT_MEET_CUTOFF_HAS_RESULTS_ERROR,
+                                         :results, competition_id,
+                                         round_id: round_id,
+                                         person_name: result.personName,
+                                         cutoff: cutoff.to_s(round))
         end
       end
 
@@ -233,11 +231,11 @@ module ResultsValidators
         #  - check for any suspicious DNF result
 
         # Match wcif round ids to "our" ids
-        cumulative_round_ids = cumulative_wcif_round_ids.map do |wcif_id|
+        cumulative_round_ids = cumulative_wcif_round_ids.filter_map do |wcif_id|
           parsed_wcif_id = Round.parse_wcif_id(wcif_id)
           # Get the actual round_id from our expected rounds by id
 
-          actual_round_id = rounds_by_ids.find do |id, round|
+          actual_round_id = rounds_by_ids.find do |_id, round|
             round.event.id == parsed_wcif_id[:event_id] && round.number == parsed_wcif_id[:round_number]
           end
           unless actual_round_id
@@ -247,17 +245,17 @@ module ResultsValidators
                                            wcif_id: wcif_id, original_round_id: round_id)
           end
           actual_round_id&.at(0)
-        end.compact
+        end
 
         # Get all solve times for all cumulative rounds for the current person
-        all_results_for_cumulative_rounds = cumulative_round_ids.map do |id|
+        all_results_for_cumulative_rounds = cumulative_round_ids.filter_map do |id|
           # NOTE: since we proceed with all checks even if some expected rounds
           # do not exist, we may have *expected* cumulative rounds that may
           # not exist in results.
           results_by_round_id[id]&.find { |r| r.personId == result.personId }
-        end.compact.map(&:solve_times).flatten
+        end.map(&:solve_times).flatten
         completed_solves_for_rounds = all_results_for_cumulative_rounds.select(&:complete?)
-        number_of_dnf_solves = all_results_for_cumulative_rounds.select(&:dnf?).size
+        number_of_dnf_solves = all_results_for_cumulative_rounds.count(&:dnf?)
         sum_of_times_for_rounds = completed_solves_for_rounds.sum(&:time_centiseconds)
 
         # Check the sum is below the limit
@@ -276,12 +274,12 @@ module ResultsValidators
         # Compute avg time per solve for the competitor
         avg_per_solve = sum_of_times_for_rounds.to_f / completed_solves_for_rounds.size
         # We want to issue a warning if the estimated time for all solves + DNFs goes roughly over the cumulative time limit by at least 20% (estimation tolerance to reduce false positive).
-        if (number_of_dnf_solves + completed_solves_for_rounds.size) * avg_per_solve >= 1.2 * time_limit_for_round.centiseconds
-          @warnings << ValidationWarning.new(SUSPICIOUS_DNF_WARNING,
-                                             :results, competition_id,
-                                             round_ids: cumulative_round_ids.join(","),
-                                             person_name: result.personName)
-        end
+        return unless (number_of_dnf_solves + completed_solves_for_rounds.size) * avg_per_solve >= 1.2 * time_limit_for_round.centiseconds
+
+        @warnings << ValidationWarning.new(SUSPICIOUS_DNF_WARNING,
+                                           :results, competition_id,
+                                           round_ids: cumulative_round_ids.join(","),
+                                           person_name: result.personName)
       end
 
       def results_similar_to(reference, reference_index, results)
@@ -296,14 +294,13 @@ module ResultsValidators
         # return (A, B), which is why we require A.id < B.id.
         results.each_with_index do |r, index|
           next if index >= reference_index
+
           # We attribute 1 point for each identical solve_time, we then just have to count the points.
           score = r.solve_times.zip(reference.solve_times).count do |solve_time, reference_solve_time|
             solve_time.complete? && solve_time == reference_solve_time
           end
           # We have at least 3 matching values, consider this similar
-          if score > 2
-            similar_results << r
-          end
+          similar_results << r if score > 2
         end
         similar_results
       end

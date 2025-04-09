@@ -15,9 +15,7 @@ module StaticData
 
       # Don't rewrite the file if it already exists and has the same content.
       # It helps the asset pipeline or webpack understand that file wasn't changed.
-      if File.exist?(file_path) && File.read(file_path) == json_output
-        return
-      end
+      return if File.exist?(file_path) && File.read(file_path) == json_output
 
       File.write(file_path, json_output)
     end

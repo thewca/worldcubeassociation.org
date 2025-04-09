@@ -8,26 +8,27 @@ import EventIcon from '../../wca/EventIcon';
 import { hasPassed } from '../../../lib/utils/dates';
 import { events } from '../../../lib/wca-data.js.erb';
 import updateRegistration from '../api/registration/patch/update_registration';
-import { setMessage } from './RegistrationMessage';
+import { showMessage } from './RegistrationMessage';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
 import { useConfirm } from '../../../lib/providers/ConfirmProvider';
 import { contactCompetitionUrl } from '../../../lib/requests/routes.js.erb';
 import RegistrationStatus from './RegistrationStatus';
+import { useRegistration } from '../lib/RegistrationProvider';
 
 export default function RegistrationOverview({
-  nextStep, registration, competitionInfo,
+  nextStep, competitionInfo,
 }) {
   const dispatch = useDispatch();
   const confirm = useConfirm();
+  const { registration, isRejected, isAccepted } = useRegistration();
 
   const hasRegistrationEditDeadlinePassed = hasPassed(
     competitionInfo.event_change_deadline_date ?? competitionInfo.start_date,
   );
 
-  const isRejected = registration.competing.registration_status === 'rejected';
-
-  const deleteAllowed = (registration.competing.registration_status !== 'accepted'
-    || competitionInfo.allow_registration_self_delete_after_acceptance);
+  const deleteAllowed = (competitionInfo.competitor_can_cancel === 'always')
+    || (competitionInfo.competitor_can_cancel === 'not_accepted' && !isAccepted)
+    || (competitionInfo.competitor_can_cancel === 'unpaid' && !registration.payment?.has_paid);
 
   const queryClient = useQueryClient();
 
@@ -41,7 +42,7 @@ export default function RegistrationOverview({
     }),
     onError: (data) => {
       const { error } = data.json;
-      dispatch(setMessage(
+      dispatch(showMessage(
         `competitions.registration_v2.errors.${error}`,
         'negative',
       ));
@@ -55,7 +56,7 @@ export default function RegistrationOverview({
           payment: registration.payment,
         },
       );
-      dispatch(setMessage('competitions.registration_v2.register.registration_status.cancelled', 'positive'));
+      dispatch(showMessage('competitions.registration_v2.register.registration_status.cancelled', 'positive'));
     },
   });
 
@@ -106,7 +107,7 @@ export default function RegistrationOverview({
                 {I18n.t('activerecord.attributes.registration.comments')}
                 :
               </List.Header>
-              {registration.competing.comment.length > 0 ? registration.competing.comment : I18n.t('competitions.schedule.rooms_panel.none')}
+              {registration.competing.comment?.length > 0 ? registration.competing.comment : I18n.t('competitions.schedule.rooms_panel.none')}
             </List.Item>
             {competitionInfo.guests_enabled && (
               <List.Item>

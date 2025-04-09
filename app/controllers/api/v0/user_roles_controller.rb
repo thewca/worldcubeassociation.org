@@ -21,21 +21,13 @@ class Api::V0::UserRolesController < Api::V0::ApiController
 
     # In next few lines, instead of foo.present? we are using !foo.nil? because foo.present? returns
     # false if foo is a boolean false but we need to actually check if the boolean is present or not.
-    if !is_active.nil?
+    unless is_active.nil?
       active_record = is_active ? active_record.active : active_record.inactive
     end
-    if !is_group_hidden.nil?
-      active_record = active_record.where(group: { is_hidden: is_group_hidden })
-    end
-    if group_type.present?
-      active_record = active_record.where(group: { group_type: group_type })
-    end
-    if group_id.present?
-      active_record = active_record.where(group_id: group_id)
-    end
-    if user_id.present?
-      active_record = active_record.where(user_id: user_id)
-    end
+    active_record = active_record.where(group: { is_hidden: is_group_hidden }) unless is_group_hidden.nil?
+    active_record = active_record.where(group: { group_type: group_type }) if group_type.present?
+    active_record = active_record.where(group_id: group_id) if group_id.present?
+    active_record = active_record.where(user_id: user_id) if user_id.present?
     active_record
   end
 
@@ -55,6 +47,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     id = params.require(:id)
     role = UserRole.find(id)
     return render status: :unauthorized, json: { error: "Cannot access role" } unless role.can_user_read?(current_user)
+
     render json: role
   end
 
@@ -75,26 +68,16 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     ]
     group = UserGroup.find(group_id)
 
-    if UserGroup.group_types_containing_status_metadata.include?(group.group_type)
-      status = params.require(:status)
-    else
-      status = nil
-    end
+    status = (params.require(:status) if UserGroup.group_types_containing_status_metadata.include?(group.group_type))
 
-    if group.group_type == UserGroup.group_types[:delegate_regions]
-      location = params[:location]
-    else
-      location = nil
-    end
+    location = (params[:location] if group.group_type == UserGroup.group_types[:delegate_regions])
 
     if group.banned_competitors?
       user = User.find(user_id)
       ban_reason = params[:banReason]
       scope = params[:scope]
       upcoming_comps_for_user = user.competitions_registered_for.not_over.merge(Registration.not_cancelled)
-      if end_date.present?
-        upcoming_comps_for_user = upcoming_comps_for_user.between_dates(Date.today, end_date)
-      end
+      upcoming_comps_for_user = upcoming_comps_for_user.between_dates(Date.today, end_date) if end_date.present?
       unless upcoming_comps_for_user.empty?
         return render status: :unprocessable_entity, json: {
           error: "The user has upcoming competitions: #{upcoming_comps_for_user.pluck(:id).join(', ')}. Before banning the user, make sure their registrations are deleted.",
@@ -111,24 +94,20 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     ActiveRecord::Base.transaction do
       if status.present? && group.unique_status?(status)
         role_to_end = group.lead_role
-        if role_to_end.present?
-          role_to_end.update!(end_date: Date.today)
-        end
+        role_to_end.update!(end_date: Date.today) if role_to_end.present?
       end
 
-      if group.group_type == UserGroup.group_types[:delegate_regions]
-        metadata = RolesMetadataDelegateRegions.create!(status: status, location: location)
-      elsif group.group_type == UserGroup.group_types[:officers]
-        metadata = RolesMetadataOfficers.create!(status: status)
-      elsif group.group_type == UserGroup.group_types[:teams_committees]
-        metadata = RolesMetadataTeamsCommittees.create!(status: status)
-      elsif group.group_type == UserGroup.group_types[:councils]
-        metadata = RolesMetadataCouncils.create!(status: status)
-      elsif group.group_type == UserGroup.group_types[:banned_competitors]
-        metadata = RolesMetadataBannedCompetitors.create!(ban_reason: ban_reason, scope: scope)
-      else
-        metadata = nil
-      end
+      metadata = if group.group_type == UserGroup.group_types[:delegate_regions]
+                   RolesMetadataDelegateRegions.create!(status: status, location: location)
+                 elsif group.group_type == UserGroup.group_types[:officers]
+                   RolesMetadataOfficers.create!(status: status)
+                 elsif group.group_type == UserGroup.group_types[:teams_committees]
+                   RolesMetadataTeamsCommittees.create!(status: status)
+                 elsif group.group_type == UserGroup.group_types[:councils]
+                   RolesMetadataCouncils.create!(status: status)
+                 elsif group.group_type == UserGroup.group_types[:banned_competitors]
+                   RolesMetadataBannedCompetitors.create!(ban_reason: ban_reason, scope: scope)
+                 end
 
       new_role = UserRole.create!(
         user_id: user_id,
@@ -147,16 +126,11 @@ class Api::V0::UserRolesController < Api::V0::ApiController
   end
 
   private def changed_key_to_human_readable(changed_key)
-    case changed_key
-    when 'end_date'
-      'End Date'
-    when 'ban_reason'
-      'Ban reason'
-    when 'scope'
-      'Ban scope'
-    else
-      nil
-    end
+    {
+      'end_date' => 'End Date',
+      'ban_reason' => 'Ban reason',
+      'scope' => 'Ban scope',
+    }[changed_key]
   end
 
   private def changed_value_to_human_readable(changed_value)
@@ -240,56 +214,48 @@ class Api::V0::UserRolesController < Api::V0::ApiController
         new_role.save!
       end
     elsif group_type == UserGroup.group_types[:delegate_probation]
-      if params.key?(:endDate)
-        end_date = params.require(:endDate)
-        changes << UserRole::UserRoleChange.new(
-          changed_parameter: 'End Date',
-          previous_value: role.end_date || 'Empty',
-          new_value: end_date,
-        )
+      return render status: :unprocessable_entity, json: { error: "Invalid parameter to be changed" } unless params.key?(:endDate)
 
-        role.update!(end_date: Date.safe_parse(end_date))
-      else
-        return render status: :unprocessable_entity, json: { error: "Invalid parameter to be changed" }
-      end
+      end_date = params.require(:endDate)
+      changes << UserRole::UserRoleChange.new(
+        changed_parameter: 'End Date',
+        previous_value: role.end_date || 'Empty',
+        new_value: end_date,
+      )
+
+      role.update!(end_date: Date.safe_parse(end_date))
+
     elsif [UserGroup.group_types[:teams_committees], UserGroup.group_types[:councils]].include?(group_type)
-      if params.key?(:status)
-        status = params.require(:status)
-        changes << UserRole::UserRoleChange.new(
-          changed_parameter: 'Status',
-          previous_value: I18n.t("enums.user_roles.status.#{group_type}.#{role.metadata.status}", locale: 'en'),
-          new_value: I18n.t("enums.user_roles.status.#{group_type}.#{status}", locale: 'en'),
-        )
+      return render status: :unprocessable_entity, json: { error: "Invalid parameter to be changed" } unless params.key?(:status)
 
-        ActiveRecord::Base.transaction do
-          role.update!(end_date: Date.today)
-          if group_type == UserGroup.group_types[:teams_committees]
-            metadata = RolesMetadataTeamsCommittees.create!(status: status)
-          elsif group_type == UserGroup.group_types[:councils]
-            metadata = RolesMetadataCouncils.create!(status: status)
-          end
-          role = UserRole.create!(
-            user_id: role.user.id,
-            group_id: role.group.id,
-            start_date: Date.today,
-            metadata: metadata,
-          )
+      status = params.require(:status)
+      changes << UserRole::UserRoleChange.new(
+        changed_parameter: 'Status',
+        previous_value: I18n.t("enums.user_roles.status.#{group_type}.#{role.metadata.status}", locale: 'en'),
+        new_value: I18n.t("enums.user_roles.status.#{group_type}.#{status}", locale: 'en'),
+      )
+
+      ActiveRecord::Base.transaction do
+        role.update!(end_date: Date.today)
+        if group_type == UserGroup.group_types[:teams_committees]
+          metadata = RolesMetadataTeamsCommittees.create!(status: status)
+        elsif group_type == UserGroup.group_types[:councils]
+          metadata = RolesMetadataCouncils.create!(status: status)
         end
-      else
-        return render status: :unprocessable_entity, json: { error: "Invalid parameter to be changed" }
+        role = UserRole.create!(
+          user_id: role.user.id,
+          group_id: role.group.id,
+          start_date: Date.today,
+          metadata: metadata,
+        )
       end
+
     elsif group_type == UserGroup.group_types[:banned_competitors]
-      if params.key?(:endDate)
-        role.end_date = params[:endDate]
-      end
+      role.end_date = params[:endDate] if params.key?(:endDate)
 
-      if params.key?(:banReason)
-        role.metadata.ban_reason = params[:banReason]
-      end
+      role.metadata.ban_reason = params[:banReason] if params.key?(:banReason)
 
-      if params.key?(:scope)
-        role.metadata.scope = params.require(:scope)
-      end
+      role.metadata.scope = params.require(:scope) if params.key?(:scope)
 
       ActiveRecord::Base.transaction do
         role.metadata&.save!
@@ -310,11 +276,10 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     role = UserRole.find(id)
 
     return head :unauthorized unless current_user.has_permission?(:can_edit_groups, role.group.id)
+
     role.update!(end_date: Date.today)
     RoleChangeMailer.notify_role_end(role, current_user).deliver_later
-    if role.group.delegate_regions? && !role.user.any_kind_of_delegate?
-      remove_pending_wca_id_claims(role)
-    end
+    remove_pending_wca_id_claims(role) if role.group.delegate_regions? && !role.user.any_kind_of_delegate?
     render json: {
       success: true,
     }

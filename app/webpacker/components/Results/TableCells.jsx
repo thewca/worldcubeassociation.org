@@ -1,14 +1,15 @@
 import React from 'react';
-import { Flag, Table } from 'semantic-ui-react';
+import { Table } from 'semantic-ui-react';
 import EventIcon from '../wca/EventIcon';
 import { competitionUrl, personUrl } from '../../lib/requests/routes.js.erb';
 import { formatAttemptResult } from '../../lib/wca-live/attempts';
 import { events } from '../../lib/wca-data.js.erb';
+import RegionFlag from '../wca/RegionFlag';
 
 export function CountryCell({ country }) {
   return (
     <>
-      {country.iso2 && <Flag name={country.iso2.toLowerCase()} />}
+      {country.iso2 && <RegionFlag iso2={country.iso2} withoutTooltip />}
       {' '}
       {country.name}
     </>
@@ -42,7 +43,7 @@ export function CompetitionCell({ competition, compatIso2 }) {
 
   return (
     <>
-      <Flag name={iso2.toLowerCase()} />
+      <RegionFlag iso2={iso2} />
       {' '}
       <a href={competitionUrl(competition.id)}>{competition.cellName}</a>
     </>

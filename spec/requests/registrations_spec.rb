@@ -44,7 +44,7 @@ RSpec.describe "registrations" do
         ]
         expect {
           post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
-        }.to_not change { competition.registrations.count }
+        }.not_to(change { competition.registrations.count })
         follow_redirect!
         expect(response.body).to include "The given file includes 2 accepted registrations, which is more than the competitor limit of 1."
       end
@@ -67,7 +67,7 @@ RSpec.describe "registrations" do
         ]
         expect {
           post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
-        }.to_not change { competition.registrations.count }
+        }.not_to(change { competition.registrations.count })
         follow_redirect!
         expect(response.body).to include "Error importing #{two_timer_dave.name}: Validation failed: Competition You can only be accepted for one Series competition at a time."
       end
@@ -80,7 +80,7 @@ RSpec.describe "registrations" do
         ]
         expect {
           post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
-        }.to_not change { competition.registrations.count }
+        }.not_to(change { competition.registrations.count })
         follow_redirect!
         expect(response.body).to include "Email must be unique, found the following duplicates: sherlock@example.com."
       end
@@ -93,7 +93,7 @@ RSpec.describe "registrations" do
         ]
         expect {
           post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
-        }.to_not change { competition.registrations.count }
+        }.not_to(change { competition.registrations.count })
         follow_redirect!
         expect(response.body).to include "WCA ID must be unique, found the following duplicates: 2019HOLM01."
       end
@@ -107,7 +107,7 @@ RSpec.describe "registrations" do
         ]
         expect {
           post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
-        }.to_not change { competition.registrations.count }
+        }.not_to(change { competition.registrations.count })
         follow_redirect!
         expect(response.body).to include "Birthdate must follow the YYYY-mm-dd format (year-month-day, for example 1944-07-13), found the following dates which cannot be parsed: 01.01.2000, Jan 01 2000."
       end
@@ -115,14 +115,14 @@ RSpec.describe "registrations" do
       describe "registrations import" do
         context "registrant has WCA ID" do
           it "renders an error if the WCA ID doesn't exist" do
-            expect(RegistrationsMailer).to_not receive(:notify_registrant_of_locked_account_creation)
+            expect(RegistrationsMailer).not_to receive(:notify_registrant_of_locked_account_creation)
             file = csv_file [
               ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
               ["a", "Sherlock Holmes", "United Kingdom", "1000DARN99", "2000-01-01", "m", "sherlock@example.com", "1", "0"],
             ]
             expect {
               post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
-            }.to_not change { competition.registrations.count }
+            }.not_to(change { competition.registrations.count })
             follow_redirect!
             expect(response.body).to match(/The WCA ID 1000DARN99 doesn.*t exist/)
           end
@@ -141,7 +141,7 @@ RSpec.describe "registrations" do
                     ]
                     expect {
                       post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
-                    }.to_not change { competition.registrations.count }
+                    }.not_to(change { competition.registrations.count })
                     follow_redirect!
                     expect(response.body).to include "There is already a user with email #{user.email}, but it has WCA ID of #{user.wca_id} instead of #{dummy_user.wca_id}."
                   end
@@ -156,7 +156,7 @@ RSpec.describe "registrations" do
                     ]
                     expect {
                       post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
-                    }.to change { User.count }.by(-1)
+                    }.to change(User, :count).by(-1)
                     expect(User.exists?(dummy_user.id)).to be false
                     user.reload
                     expect(user.wca_id).to eq dummy_user.wca_id
@@ -175,9 +175,9 @@ RSpec.describe "registrations" do
                   ]
                   expect {
                     post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
-                  }.to_not change { User.count }
+                  }.not_to change(User, :count)
                   user = dummy_user.reload
-                  expect(user).to_not be_dummy_account
+                  expect(user).not_to be_dummy_account
                   expect(user).to be_locked_account
                   expect(user.email).to eq "sherlock@example.com"
                   expect(user.registrations.first.events.map(&:id)).to eq %w(333)
@@ -195,7 +195,7 @@ RSpec.describe "registrations" do
                 ]
                 expect {
                   post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
-                }.to_not change { User.count }
+                }.not_to change(User, :count)
                 expect(user.registrations.first.events.map(&:id)).to eq %w(333)
                 expect(competition.registrations.count).to eq 1
               end
@@ -221,7 +221,7 @@ RSpec.describe "registrations" do
                   ]
                   expect {
                     post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
-                  }.to_not change { competition.registrations.count }
+                  }.not_to(change { competition.registrations.count })
                   follow_redirect!
                   expect(response.body).to include "There is already a user with email #{user.email}, but it has unconfirmed WCA ID of #{unconfirmed_person.wca_id} instead of #{person.wca_id}."
                 end
@@ -243,7 +243,7 @@ RSpec.describe "registrations" do
                   ]
                   expect {
                     post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
-                  }.to_not change { User.count }
+                  }.not_to change(User, :count)
                   expect(user.reload.wca_id).to eq person.wca_id
                   expect(user.reload.unconfirmed_wca_id).to be_nil
                   expect(user.reload.delegate_to_handle_wca_id_claim).to be_nil
@@ -262,7 +262,7 @@ RSpec.describe "registrations" do
                   ]
                   expect {
                     post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
-                  }.to_not change { User.count }
+                  }.not_to change(User, :count)
                   expect(user.reload.wca_id).to eq person.wca_id
                   expect(user.registrations.first.events.map(&:id)).to eq %w(333)
                   expect(competition.registrations.count).to eq 1
@@ -280,7 +280,7 @@ RSpec.describe "registrations" do
                 ]
                 expect {
                   post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
-                }.to change { User.count }.by(1)
+                }.to change(User, :count).by(1)
                 user = competition.registrations.first.user
                 expect(user.wca_id).to eq person.wca_id
                 expect(user).to be_locked_account
@@ -299,7 +299,7 @@ RSpec.describe "registrations" do
               ]
               expect {
                 post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
-              }.to_not change { User.count }
+              }.not_to change(User, :count)
               expect(user.registrations.first.events.map(&:id)).to eq %w(333)
               expect(competition.registrations.count).to eq 1
             end
@@ -312,7 +312,7 @@ RSpec.describe "registrations" do
               ]
               expect {
                 post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
-              }.to_not change { User.count }
+              }.not_to change(User, :count)
               expect(user.reload.name).to eq "Sherlock Holmes"
               expect(user.dob).to eq Date.new(2000, 1, 1)
               expect(user.country_iso2).to eq "GB"
@@ -328,7 +328,7 @@ RSpec.describe "registrations" do
               ]
               expect {
                 post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
-              }.to change { User.count }.by(1)
+              }.to change(User, :count).by(1)
               user = competition.registrations.first.user
               expect(user.wca_id).to be_blank
               expect(user).to be_locked_account
@@ -349,7 +349,7 @@ RSpec.describe "registrations" do
             expect {
               post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
             }.to not_change { competition.registrations.count }
-              .and not_change { registration.reload.competing_status }
+              .and(not_change { registration.reload.competing_status })
           end
         end
 
@@ -380,7 +380,7 @@ RSpec.describe "registrations" do
             expect {
               post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
             }.to not_change { competition.registrations.count }
-              .and change { registration.reload.competing_status }
+              .and(change { registration.reload.competing_status })
             expect(registration.reload).to be_accepted
           end
         end
@@ -394,7 +394,7 @@ RSpec.describe "registrations" do
             expect {
               post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
             }.to not_change { competition.registrations.count }
-              .and not_change { registration.reload.competing_status }
+              .and(not_change { registration.reload.competing_status })
             expect(registration.reload).to be_cancelled
           end
         end
@@ -456,7 +456,7 @@ RSpec.describe "registrations" do
                 gender: user.gender, email: user.email, event_ids: ["444"]
               },
             }
-          }.to not_change { competition.registrations.count }
+          }.to(not_change { competition.registrations.count })
           expect(response.body).to include "This person already has a registration."
         end
       end
@@ -481,7 +481,7 @@ RSpec.describe "registrations" do
                 gender: two_timer_dave.gender, email: two_timer_dave.email, event_ids: ["444"]
               },
             }
-          }.to_not change { competition.registrations.count }
+          }.not_to(change { competition.registrations.count })
           expect(response.body).to include "You can only be accepted for one Series competition at a time"
         end
       end
@@ -518,7 +518,7 @@ RSpec.describe "registrations" do
                 gender: "m", email: "sherlock@example.com", event_ids: ["444"]
               },
             }
-          }.to_not change { competition.registrations.count }
+          }.not_to(change { competition.registrations.count })
           follow_redirect!
           expect(response.body).to include "The competitor limit has been reached"
         end
@@ -531,6 +531,7 @@ RSpec.describe "registrations" do
       let(:competition) { FactoryBot.create(:competition, :stripe_connected, :visible, :registration_open, events: Event.where(id: %w(222 333))) }
       let!(:user) { FactoryBot.create(:user, :wca_id) }
       let!(:registration) { FactoryBot.create(:registration, competition: competition, user: user) }
+
       sign_out
 
       it "redirects to the sign in page" do
@@ -552,7 +553,7 @@ RSpec.describe "registrations" do
         user2 = FactoryBot.create(:user, :wca_id)
         registration2 = FactoryBot.create(:registration, competition: competition, user: user2)
         post registration_payment_intent_path(registration2.id, :stripe)
-        expect(response.status).to eq 403
+        expect(response).to have_http_status :forbidden
       end
 
       context "with a valid credit card without SCA" do
@@ -581,11 +582,8 @@ RSpec.describe "registrations" do
           payment_intent = registration.reload.payment_intents.first
 
           # mimic the user clicking through the interface
-          Stripe::PaymentIntent.confirm(
-            payment_intent.payment_record.stripe_id,
-            { payment_method: 'pm_card_visa' },
-            stripe_account: competition.payment_account_for(:stripe).account_id,
-          )
+          payment_intent.payment_record.confirm_remote_for_test("pm_card_visa")
+
           # mimic the response that Stripe sends to our return_url after completing the checkout UI
           get registration_payment_completion_path(competition.id, :stripe), params: {
             payment_intent: payment_intent.payment_record.stripe_id,
@@ -615,11 +613,7 @@ RSpec.describe "registrations" do
           stripe_account_id = competition.payment_account_for(:stripe).account_id
 
           # mimic the user clicking through the interface
-          Stripe::PaymentIntent.confirm(
-            payment_intent.payment_record.stripe_id,
-            { payment_method: 'pm_card_visa' },
-            stripe_account: stripe_account_id,
-          )
+          payment_intent.payment_record.confirm_remote_for_test("pm_card_visa")
 
           # mimic the response that Stripe sends to our webhook upon payment completion
           post registration_stripe_webhook_path, params: payment_confirmation_webhook_as_json(
@@ -649,11 +643,8 @@ RSpec.describe "registrations" do
           payment_intent = registration.reload.payment_intents.first
 
           # mimic the user clicking through the interface
-          Stripe::PaymentIntent.confirm(
-            payment_intent.payment_record.stripe_id,
-            { payment_method: 'pm_card_visa' },
-            stripe_account: competition.payment_account_for(:stripe).account_id,
-          )
+          payment_intent.payment_record.confirm_remote_for_test("pm_card_visa")
+
           # mimic the response that Stripe sends to our return_url after completing the checkout UI
           get registration_payment_completion_path(competition.id, :stripe), params: {
             payment_intent: payment_intent.payment_record.stripe_id,
@@ -675,18 +666,15 @@ RSpec.describe "registrations" do
           }
 
           payment_intent = registration.reload.payment_intents.first
-          expect(payment_intent).to_not be_nil
+          expect(payment_intent).not_to be_nil
 
           # Intent should not be confirmed at this stage, because we have never received a receipt charge from Stripe yet
           expect(payment_intent.confirmed_at).to be_nil
           expect(payment_intent.wca_status).not_to eq('succeeded')
 
           # mimic the user clicking through the interface
-          Stripe::PaymentIntent.confirm(
-            payment_intent.payment_record.stripe_id,
-            { payment_method: 'pm_card_visa' },
-            stripe_account: competition.payment_account_for(:stripe).account_id,
-          )
+          payment_intent.payment_record.confirm_remote_for_test("pm_card_visa")
+
           # mimic the response that Stripe sends to our return_url after completing the checkout UI
           get registration_payment_completion_path(competition.id, :stripe), params: {
             payment_intent: payment_intent.payment_record.stripe_id,
@@ -695,8 +683,8 @@ RSpec.describe "registrations" do
 
           stripe_record = payment_intent.reload.payment_record
           # Now we should have a confirmation after calling the return_url hook :)
-          expect(payment_intent.confirmed_at).to_not be_nil
-          expect(stripe_record).to_not be_nil
+          expect(payment_intent.confirmed_at).not_to be_nil
+          expect(stripe_record).not_to be_nil
           expect(stripe_record.stripe_status).to eq "succeeded"
           metadata = stripe_record.parameters["metadata"]
           expect(metadata["competition"]).to eq competition.id
@@ -717,17 +705,14 @@ RSpec.describe "registrations" do
           # but we cannot do that programmatically. So we just take the status quo as "stuck in SCA". (See also comment below)
           expect {
             # mimic the user clicking through the interface
-            Stripe::PaymentIntent.confirm(
-              payment_intent.payment_record.stripe_id,
-              { payment_method: 'pm_card_authenticationRequired' },
-              stripe_account: competition.payment_account_for(:stripe).account_id,
-            )
+            payment_intent.payment_record.confirm_remote_for_test("pm_card_authenticationRequired")
+
             # mimic the response that Stripe sends to our return_url after completing the checkout UI
             get registration_payment_completion_path(competition.id, :stripe), params: {
               payment_intent: payment_intent.payment_record.stripe_id,
               payment_intent_client_secret: payment_intent.client_secret,
             }
-          }.to_not change { registration.reload.outstanding_entry_fees }
+          }.not_to(change { registration.reload.outstanding_entry_fees })
 
           expect(registration.paid_entry_fees).to eq 0
           expect(payment_intent.payment_record.reload.stripe_status).to eq('requires_action')
@@ -744,17 +729,13 @@ RSpec.describe "registrations" do
           }
 
           payment_intent = registration.reload.payment_intents.first
-          expect(payment_intent).to_not be_nil
+          expect(payment_intent).not_to be_nil
 
           # Intent should not be confirmed at this stage, because we have never received a receipt charge from Stripe yet
           expect(payment_intent.confirmed_at).to be_nil
 
           # mimic the user clicking through the interface
-          Stripe::PaymentIntent.confirm(
-            payment_intent.payment_record.stripe_id,
-            { payment_method: 'pm_card_authenticationRequired' },
-            stripe_account: competition.payment_account_for(:stripe).account_id,
-          )
+          payment_intent.payment_record.confirm_remote_for_test("pm_card_authenticationRequired")
 
           # mimic the response that Stripe sends to our return_url after completing the checkout UI
           get registration_payment_completion_path(competition.id, :stripe), params: {
@@ -766,7 +747,7 @@ RSpec.describe "registrations" do
 
           # Now we should still wait for the confirmation because SCA hasn't been completed yet
           expect(payment_intent.confirmed_at).to be_nil
-          expect(stripe_record).to_not be_nil
+          expect(stripe_record).not_to be_nil
           expect(stripe_record.stripe_status).to eq 'requires_action'
           metadata = stripe_record.parameters["metadata"]
           expect(metadata["competition"]).to eq competition.id
@@ -785,11 +766,7 @@ RSpec.describe "registrations" do
 
           expect {
             # mimic the user clicking through the interface
-            Stripe::PaymentIntent.confirm(
-              payment_intent.payment_record.stripe_id,
-              { payment_method: 'pm_card_visa_chargeDeclined' },
-              stripe_account: competition.payment_account_for(:stripe).account_id,
-            )
+            payment_intent.payment_record.confirm_remote_for_test("pm_card_visa_chargeDeclined")
           }.to raise_error(Stripe::StripeError, "Your card was declined.")
 
           expect {
@@ -798,7 +775,7 @@ RSpec.describe "registrations" do
               payment_intent: payment_intent.payment_record.stripe_id,
               payment_intent_client_secret: payment_intent.client_secret,
             }
-          }.to_not change { registration.reload.outstanding_entry_fees }
+          }.not_to(change { registration.reload.outstanding_entry_fees })
 
           expect(registration.paid_entry_fees).to eq 0
           expect(payment_intent.confirmed_at).to be_nil
@@ -815,11 +792,7 @@ RSpec.describe "registrations" do
 
           expect {
             # mimic the user clicking through the interface
-            Stripe::PaymentIntent.confirm(
-              payment_intent.payment_record.stripe_id,
-              { payment_method: 'pm_card_visa_chargeDeclinedExpiredCard' },
-              stripe_account: competition.payment_account_for(:stripe).account_id,
-            )
+            payment_intent.payment_record.confirm_remote_for_test("pm_card_visa_chargeDeclinedExpiredCard")
           }.to raise_error(Stripe::StripeError, "Your card has expired.")
 
           expect {
@@ -828,7 +801,7 @@ RSpec.describe "registrations" do
               payment_intent: payment_intent.payment_record.stripe_id,
               payment_intent_client_secret: payment_intent.client_secret,
             }
-          }.to_not change { registration.reload.outstanding_entry_fees }
+          }.not_to(change { registration.reload.outstanding_entry_fees })
 
           expect(registration.paid_entry_fees).to eq 0
           expect(payment_intent.confirmed_at).to be_nil
@@ -845,11 +818,7 @@ RSpec.describe "registrations" do
 
           expect {
             # mimic the user clicking through the interface
-            Stripe::PaymentIntent.confirm(
-              payment_intent.payment_record.stripe_id,
-              { payment_method: 'pm_card_visa_chargeDeclinedIncorrectCvc' },
-              stripe_account: competition.payment_account_for(:stripe).account_id,
-            )
+            payment_intent.payment_record.confirm_remote_for_test("pm_card_visa_chargeDeclinedIncorrectCvc")
           }.to raise_error(Stripe::StripeError, "Your card's security code is incorrect.")
 
           expect {
@@ -858,7 +827,7 @@ RSpec.describe "registrations" do
               payment_intent: payment_intent.payment_record.stripe_id,
               payment_intent_client_secret: payment_intent.client_secret,
             }
-          }.to_not change { registration.reload.outstanding_entry_fees }
+          }.not_to(change { registration.reload.outstanding_entry_fees })
 
           expect(registration.paid_entry_fees).to eq 0
           expect(payment_intent.confirmed_at).to be_nil
@@ -875,11 +844,7 @@ RSpec.describe "registrations" do
 
           expect {
             # mimic the user clicking through the interface
-            Stripe::PaymentIntent.confirm(
-              payment_intent.payment_record.stripe_id,
-              { payment_method: 'pm_card_radarBlock' },
-              stripe_account: competition.payment_account_for(:stripe).account_id,
-            )
+            payment_intent.payment_record.confirm_remote_for_test("pm_card_radarBlock")
           }.to raise_error(Stripe::StripeError, "Your card was declined.")
 
           expect {
@@ -888,7 +853,7 @@ RSpec.describe "registrations" do
               payment_intent: payment_intent.payment_record.stripe_id,
               payment_intent_client_secret: payment_intent.client_secret,
             }
-          }.to_not change { registration.reload.outstanding_entry_fees }
+          }.not_to(change { registration.reload.outstanding_entry_fees })
 
           expect(registration.paid_entry_fees).to eq 0
           expect(payment_intent.confirmed_at).to be_nil
@@ -905,17 +870,14 @@ RSpec.describe "registrations" do
 
           expect {
             # mimic the user clicking through the interface
-            Stripe::PaymentIntent.confirm(
-              payment_intent.payment_record.stripe_id,
-              { payment_method: 'pm_card_authenticationRequiredChargeDeclinedInsufficientFunds' },
-              stripe_account: competition.payment_account_for(:stripe).account_id,
-            )
+            payment_intent.payment_record.confirm_remote_for_test("pm_card_authenticationRequiredChargeDeclinedInsufficientFunds")
+
             # mimick the response that Stripe sends to our return_url after completing the checkout UI
             get registration_payment_completion_path(competition.id, :stripe), params: {
               payment_intent: payment_intent.payment_record.stripe_id,
               payment_intent_client_secret: payment_intent.client_secret,
             }
-          }.to_not change { registration.reload.outstanding_entry_fees }
+          }.not_to(change { registration.reload.outstanding_entry_fees })
 
           expect(registration.paid_entry_fees).to eq 0
           expect(payment_intent.confirmed_at).to be_nil
@@ -932,18 +894,14 @@ RSpec.describe "registrations" do
           }
 
           payment_intent = registration.reload.payment_intents.first
-          expect(payment_intent).to_not be_nil
+          expect(payment_intent).not_to be_nil
 
           # Intent should not be confirmed at this stage, because we have never received a receipt charge from Stripe yet
           expect(payment_intent.confirmed_at).to be_nil
 
           expect {
             # mimic the user clicking through the interface
-            Stripe::PaymentIntent.confirm(
-              payment_intent.payment_record.stripe_id,
-              { payment_method: 'pm_card_visa_chargeDeclined' },
-              stripe_account: competition.payment_account_for(:stripe).account_id,
-            )
+            payment_intent.payment_record.confirm_remote_for_test("pm_card_visa_chargeDeclined")
           }.to raise_error(Stripe::StripeError, "Your card was declined.")
 
           # mimick the response that Stripe sends to our return_url after completing the checkout UI
@@ -955,9 +913,9 @@ RSpec.describe "registrations" do
           stripe_record = payment_intent.reload.payment_record
           # Now we should still wait for the confirmation because the card has been declined
           expect(payment_intent.confirmed_at).to be_nil
-          expect(stripe_record).to_not be_nil
+          expect(stripe_record).not_to be_nil
           expect(stripe_record.stripe_status).to eq "requires_payment_method"
-          expect(stripe_record.error).to_not be_nil
+          expect(stripe_record.error).not_to be_nil
           metadata = stripe_record.parameters["metadata"]
           expect(metadata["competition"]).to eq competition.id
         end
@@ -971,7 +929,7 @@ RSpec.describe "registrations" do
           }
 
           payment_intent = registration.reload.payment_intents.first
-          expect(payment_intent).to_not be_nil
+          expect(payment_intent).not_to be_nil
 
           # Intent should not be confirmed at this stage, because we have never received a receipt charge from Stripe yet
           expect(payment_intent.confirmed_at).to be_nil
@@ -981,11 +939,7 @@ RSpec.describe "registrations" do
 
           expect {
             # mimic the user clicking through the interface
-            Stripe::PaymentIntent.confirm(
-              payment_intent.payment_record.stripe_id,
-              { payment_method: 'pm_card_visa_chargeDeclined' },
-              stripe_account: competition.payment_account_for(:stripe).account_id,
-            )
+            payment_intent.payment_record.confirm_remote_for_test("pm_card_visa_chargeDeclined")
           }.to raise_error(Stripe::StripeError, "Your card was declined.")
 
           # mimick the response that Stripe sends to our return_url after completing the checkout UI
@@ -1018,7 +972,7 @@ RSpec.describe "registrations" do
           }
 
           payment_intent = registration.reload.payment_intents.first
-          expect(payment_intent).to_not be_nil
+          expect(payment_intent).not_to be_nil
 
           # Intent should not be confirmed at this stage, because we have never received a receipt charge from Stripe yet
           expect(payment_intent.confirmed_at).to be_nil
@@ -1028,11 +982,7 @@ RSpec.describe "registrations" do
 
           expect {
             # mimic the user clicking through the interface
-            Stripe::PaymentIntent.confirm(
-              payment_intent.payment_record.stripe_id,
-              { payment_method: 'pm_card_visa_chargeDeclined' },
-              stripe_account: competition.payment_account_for(:stripe).account_id,
-            )
+            payment_intent.payment_record.confirm_remote_for_test("pm_card_visa_chargeDeclined")
           }.to raise_error(Stripe::StripeError, "Your card was declined.")
 
           # mimick the response that Stripe sends to our return_url after completing the checkout UI
@@ -1067,7 +1017,7 @@ RSpec.describe "registrations" do
           }
 
           payment_intent = registration.reload.payment_intents.first
-          expect(payment_intent).to_not be_nil
+          expect(payment_intent).not_to be_nil
           # Intent should not be confirmed at this stage, because we have never received a receipt charge from Stripe yet
           expect(payment_intent.confirmed_at).to be_nil
 
@@ -1075,11 +1025,7 @@ RSpec.describe "registrations" do
           first_pi_parameters = payment_intent.payment_record.parameters
 
           # mimic the user clicking through the interface
-          Stripe::PaymentIntent.confirm(
-            payment_intent.payment_record.stripe_id,
-            { payment_method: 'pm_card_visa' },
-            stripe_account: competition.payment_account_for(:stripe).account_id,
-          )
+          payment_intent.payment_record.confirm_remote_for_test("pm_card_visa")
 
           # mimick the response that Stripe sends to our return_url after completing the checkout UI
           get registration_payment_completion_path(competition.id, :stripe), params: {
@@ -1135,11 +1081,11 @@ RSpec.describe "registrations" do
     end
 
     it 'creates a PaypalRecord' do
-      expect(PaypalRecord.all.count).to eq(1)
+      expect(PaypalRecord.count).to eq(1)
     end
 
     it 'PaypalRecord amount matches registration cost' do
-      expect(PaypalRecord.all.first.money_amount).to eq(registration.competition.base_entry_fee)
+      expect(PaypalRecord.first.money_amount).to eq(registration.competition.base_entry_fee)
     end
   end
 
@@ -1178,12 +1124,12 @@ RSpec.describe "registrations" do
     end
 
     it 'creates a PaypalRecord of type :capture' do
-      capture_id = JSON.parse(response.body)['purchase_units'][0]['payments']['captures'][0]['id']
+      capture_id = response.parsed_body['purchase_units'][0]['payments']['captures'][0]['id']
       expect(PaypalRecord.find_by(paypal_id: capture_id).paypal_record_type).to eq('capture')
     end
 
     it 'associates PaypalCapture to the PaypalRecord' do
-      paypal_record = PaypalRecord.find_by(paypal_id: JSON.parse(response.body)['id'])
+      paypal_record = PaypalRecord.find_by(paypal_id: response.parsed_body['id'])
       expect(paypal_record.child_records.count).to eq(1)
     end
 

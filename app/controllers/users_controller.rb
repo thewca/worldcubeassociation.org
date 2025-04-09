@@ -4,7 +4,6 @@ class UsersController < ApplicationController
   before_action :authenticate_user!, except: [:select_nearby_delegate, :acknowledge_cookies]
   before_action :check_recent_authentication!, only: [:enable_2fa, :disable_2fa, :regenerate_2fa_backup_codes]
   before_action :set_recent_authentication!, only: [:edit, :update, :enable_2fa, :disable_2fa]
-  before_action -> { redirect_to_root_unless_user(:can_admin_results?) }, only: [:anonymize]
 
   RECENT_AUTHENTICATION_DURATION = 10.minutes.freeze
 
@@ -17,19 +16,17 @@ class UsersController < ApplicationController
     end
 
     respond_to do |format|
-      format.html {}
+      format.html
       format.json do
         @users = User.in_region(params[:region])
         params[:search]&.split&.each do |part|
           like_query = %w(users.name wca_id email).map do |column|
-            column + " LIKE :part"
+            "#{column} LIKE :part"
           end.join(" OR ")
           @users = @users.where(like_query, part: "%#{part}%")
         end
         params[:sort] = params[:sort] == "country" ? :country_iso2 : params[:sort]
-        if params[:sort]
-          @users = @users.order(params[:sort] => params[:order])
-        end
+        @users = @users.order(params[:sort] => params[:order]) if params[:sort]
         render json: {
           total: @users.size,
           rows: @users.limit(params[:limit]).offset(params[:offset]).map do |user|
@@ -48,7 +45,7 @@ class UsersController < ApplicationController
   end
 
   private def user_to_edit
-    User.find_by_id(params[:id] || current_user.id)
+    User.find_by(id: params[:id] || current_user.id)
   end
 
   def enable_2fa
@@ -58,11 +55,11 @@ class UsersController < ApplicationController
     current_user.otp_required_for_login = true
     current_user.otp_secret = User.generate_otp_secret
     current_user.save!
-    if was_enabled
-      flash[:success] = I18n.t("devise.sessions.new.2fa.regenerated_secret")
-    else
-      flash[:success] = I18n.t("devise.sessions.new.2fa.enabled_success")
-    end
+    flash[:success] = if was_enabled
+                        I18n.t("devise.sessions.new.2fa.regenerated_secret")
+                      else
+                        I18n.t("devise.sessions.new.2fa.enabled_success")
+                      end
     @user = current_user
     render :edit
   end
@@ -89,9 +86,8 @@ class UsersController < ApplicationController
   end
 
   def regenerate_2fa_backup_codes
-    unless current_user.otp_required_for_login
-      return render json: { error: { message: I18n.t("devise.sessions.new.2fa.errors.not_enabled") } }
-    end
+    return render json: { error: { message: I18n.t("devise.sessions.new.2fa.errors.not_enabled") } } unless current_user.otp_required_for_login
+
     codes = current_user.generate_otp_backup_codes!
     current_user.save!
     render json: { codes: codes }
@@ -128,6 +124,7 @@ class UsersController < ApplicationController
 
     @user = user_to_edit
     return if redirect_if_cannot_edit_user(@user)
+
     @current_user = current_user
   end
 
@@ -184,7 +181,7 @@ class UsersController < ApplicationController
     avatar_id = params.require(:avatarId)
 
     user_avatar = user_to_edit.user_avatars.find(avatar_id)
-    return head :not_found unless user_avatar.present?
+    return head :not_found if user_avatar.blank?
 
     thumbnail = params.require(:thumbnail)
 
@@ -202,7 +199,7 @@ class UsersController < ApplicationController
     avatar_id = params.require(:avatarId)
 
     user_avatar = user_to_edit.user_avatars.find(avatar_id)
-    return head :not_found unless user_avatar.present?
+    return head :not_found if user_avatar.blank?
 
     reason = params.require(:reason)
 
@@ -221,9 +218,7 @@ class UsersController < ApplicationController
     return if redirect_if_cannot_edit_user(@user)
 
     dangerous_change = current_user == @user && [:password, :password_confirmation, :email].any? { |attribute| user_params.key? attribute }
-    if dangerous_change
-      return unless check_recent_authentication!
-    end
+    return if dangerous_change && !check_recent_authentication!
 
     old_confirmation_sent_at = @user.confirmation_sent_at
     if @user.update(user_params)
@@ -246,9 +241,7 @@ class UsersController < ApplicationController
         redirect_to edit_user_url(@user, params.permit(:section))
       end
       # Send notification email to user about avatar removal
-      if ActiveRecord::Type::Boolean.new.cast(user_params['remove_avatar'])
-        AvatarsMailer.notify_user_of_avatar_removal(@user.current_user, @user, params[:user][:removal_reason]).deliver_later
-      end
+      AvatarsMailer.notify_user_of_avatar_removal(@user.current_user, @user, params[:user][:removal_reason]).deliver_later if ActiveRecord::Type::Boolean.new.cast(user_params['remove_avatar'])
       # Clear preferred Events cache
       Rails.cache.delete("#{current_user.id}-preferred-events") if user_params.key? "user_preferred_events_attributes"
     elsif @user.claiming_wca_id
@@ -321,7 +314,7 @@ class UsersController < ApplicationController
   end
 
   def acknowledge_cookies
-    return render status: 401, json: { ok: false } if current_user.nil?
+    return render status: :unauthorized, json: { ok: false } if current_user.nil?
 
     current_user.update!(cookies_acknowledged: true)
     render json: { ok: true }
@@ -338,20 +331,18 @@ class UsersController < ApplicationController
 
   private def user_params
     params.require(:user).permit(current_user.editable_fields_of_user(user_to_edit).to_a).tap do |user_params|
-      if user_params.key?(:wca_id)
-        user_params[:wca_id] = user_params[:wca_id].upcase
-      end
+      user_params[:wca_id] = user_params[:wca_id].upcase if user_params.key?(:wca_id)
       if user_params.key?(:delegate_reports_region)
         raw_region = user_params.delete(:delegate_reports_region)
 
-        if raw_region.blank?
-          # Explicitly reset the region type column when "worldwide" (represented by a blank value) was selected
-          user_params[:delegate_reports_region_type] = nil
-        elsif raw_region.starts_with?('_')
-          user_params[:delegate_reports_region_type] = 'Continent'
-        else
-          user_params[:delegate_reports_region_type] = 'Country'
-        end
+        user_params[:delegate_reports_region_type] = if raw_region.blank?
+                                                       # Explicitly reset the region type column when "worldwide" (represented by a blank value) was selected
+                                                       nil
+                                                     elsif raw_region.starts_with?('_')
+                                                       'Continent'
+                                                     else
+                                                       'Country'
+                                                     end
 
         user_params[:delegate_reports_region_id] = raw_region.presence
       end
@@ -373,26 +364,5 @@ class UsersController < ApplicationController
       return false
     end
     true
-  end
-
-  def anonymize
-    user_id = params.require(:id)
-    user = User.find(user_id)
-
-    user.skip_reconfirmation!
-    user_update_success = user.update(
-      email: user_id.to_s + User::ANONYMOUS_ACCOUNT_EMAIL_ID_SUFFIX,
-      name: User::ANONYMOUS_ACCOUNT_NAME,
-      wca_id: nil,
-      unconfirmed_wca_id: nil,
-      delegate_id_to_handle_wca_id_claim: nil,
-      dob: User::ANONYMOUS_ACCOUNT_DOB,
-      gender: User::ANONYMOUS_ACCOUNT_GENDER,
-      country_iso2: User::ANONYMOUS_ACCOUNT_COUNTRY_ISO2,
-      current_sign_in_ip: nil,
-      last_sign_in_ip: nil,
-    )
-
-    render json: { success: user_update_success }
   end
 end

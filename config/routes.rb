@@ -19,9 +19,7 @@ Rails.application.routes.draw do
   end
 
   # Don't expose Paypal routes in production until we're reading to launch
-  unless PaypalInterface.paypal_disabled?
-    post 'registration/:id/capture-paypal-payment' => 'registrations#capture_paypal_payment', as: :registration_capture_paypal_payment
-  end
+  post 'registration/:id/capture-paypal-payment' => 'registrations#capture_paypal_payment', as: :registration_capture_paypal_payment unless PaypalInterface.paypal_disabled?
 
   # Prevent account deletion, and overrides the sessions controller for 2FA.
   #  https://github.com/plataformatec/devise/wiki/How-To:-Disable-user-from-destroying-their-account
@@ -45,7 +43,7 @@ Rails.application.routes.draw do
   post 'competitions/:competition_id/refund/:payment_integration/:payment_id' => 'registrations#refund_payment', as: :registration_payment_refund
   get 'competitions/:competition_id/payment-completion/:payment_integration' => 'registrations#payment_completion', as: :registration_payment_completion
   post 'registration/stripe-webhook' => 'registrations#stripe_webhook', as: :registration_stripe_webhook
-  get 'registration/payment-denomination' => 'registrations#payment_denomination', as: :registration_payment_denomination
+  get 'registration/:competition_id/:user_id/payment-denomination' => 'registrations#payment_denomination', as: :registration_payment_denomination
   resources :users, only: [:index, :edit, :update]
   get 'profile/edit' => 'users#edit'
   post 'profile/enable-2fa' => 'users#enable_2fa'
@@ -60,7 +58,6 @@ Rails.application.routes.draw do
   post 'users/:id/avatar' => 'users#upload_avatar'
   patch 'users/:id/avatar' => 'users#update_avatar'
   delete 'users/:id/avatar' => 'users#delete_avatar'
-  post 'users/:id/anonymize' => 'users#anonymize', as: :anonymize_user
   get 'admin/avatars/pending' => 'admin/avatars#pending_avatar_users', as: :pending_avatars
   post 'admin/avatars' => 'admin/avatars#update_avatar', as: :admin_update_avatar
 
@@ -79,6 +76,7 @@ Rails.application.routes.draw do
     get 'announcement_data' => 'competitions#announcement_data', as: :announcement_data
     get 'user_preferences' => 'competitions#user_preferences', as: :user_preferences
     get 'confirmation_data' => 'competitions#confirmation_data', as: :confirmation_data
+    patch 'confirmation_data' => 'competitions#update_confirmation_data', as: :update_confirmation_data
 
     put 'confirm' => 'competitions#confirm', as: :confirm
     put 'announce' => 'competitions#announce', as: :announce
@@ -112,7 +110,6 @@ Rails.application.routes.draw do
     # WRT views and action
     get '/admin/upload-results' => "admin#new_results", as: :admin_upload_results_edit
     get '/admin/check-existing-results' => "admin#check_competition_results", as: :admin_check_existing_results
-    post '/admin/check-existing-results' => "admin#do_check_competition_results", as: :admin_run_validators
     post '/admin/upload-json' => "admin#create_results", as: :admin_upload_results
     post '/admin/clear-submission' => "admin#clear_results_submission", as: :clear_results_submission
     get '/admin/import-results' => 'admin#import_results', as: :admin_import_results
@@ -166,7 +163,7 @@ Rails.application.routes.draw do
 
   get 'results/rankings', to: redirect('results/rankings/333/single', status: 302)
   get 'results/rankings/333mbf/average',
-      to: redirect(status: 302) { |params, request| URI.parse(request.original_url).query ? "results/rankings/333mbf/single?#{URI.parse(request.original_url).query}" : "results/rankings/333mbf/single" }
+      to: redirect(status: 302) { |_params, request| URI.parse(request.original_url).query ? "results/rankings/333mbf/single?#{URI.parse(request.original_url).query}" : "results/rankings/333mbf/single" }
   get 'results/rankings/:event_id', to: redirect('results/rankings/%{event_id}/single', status: 302)
   get 'results/rankings/:event_id/:type' => 'results#rankings', as: :rankings
   get 'results/records' => 'results#records', as: :records
@@ -204,22 +201,29 @@ Rails.application.routes.draw do
   scope 'panel' do
     get 'staff' => 'panel#staff', as: :panel_staff
     get 'generate_db_token' => 'panel#generate_db_token', as: :panel_generate_db_token
+    get 'competition_count' => 'panel#competition_count', as: :panel_competition_count
+    get 'validators_for_competition_list' => 'panel#validators_for_competition_list', as: :panel_validators_for_competition_list
+    get 'validators_for_competitions_in_range' => 'panel#validators_for_competitions_in_range', as: :panel_validators_for_competitions_in_range
+    get 'cronjob_details' => 'panel#cronjob_details', as: :panel_cronjob_details
+    post 'cronjob_run' => 'panel#cronjob_run', as: :panel_cronjob_run
+    post 'cronjob_reset' => 'panel#cronjob_reset', as: :panel_cronjob_reset
   end
   get 'panel/:panel_id' => 'panel#index', as: :panel_index
   scope 'panel-page' do
-    get 'run-validators' => 'admin#check_results', as: :admin_check_results
-    get 'check-records' => 'admin#check_regional_records', as: :admin_check_regional_records
-    get 'compute-auxiliary-data' => 'admin#compute_auxiliary_data', as: :admin_compute_auxiliary_data
-    get 'generate-data-exports' => 'admin#generate_exports', as: :admin_generate_exports
     get 'fix-results' => 'admin#fix_results', as: :admin_fix_results
     get 'merge-profiles' => 'admin#merge_people', as: :admin_merge_people
-    get 'anonymize-person' => 'admin#anonymize_person', as: :admin_anonymize_person
     get 'reassign-connected-wca-id' => 'admin#reassign_wca_id', as: :admin_reassign_wca_id
   end
   get 'panel-page/:id' => 'panel#panel_page', as: :panel_page
+  scope 'tickets' do
+    get 'details_before_anonymization' => 'tickets#details_before_anonymization', as: :tickets_details_before_anonymization
+    post 'anonymize' => 'tickets#anonymize', as: :tickets_anonymize
+  end
   resources :tickets, only: [:index, :show] do
     post 'update_status' => 'tickets#update_status', as: :update_status
     get 'edit_person_validators' => 'tickets#edit_person_validators', as: :edit_person_validators
+    resources :ticket_comments, only: [:index, :create], as: :comments
+    resources :ticket_logs, only: [:index], as: :logs
   end
   resources :notifications, only: [:index]
 
@@ -253,7 +257,7 @@ Rails.application.routes.draw do
   get 'privacy' => 'static_pages#privacy'
   get 'score-tools' => 'static_pages#score_tools'
   get 'speedcubing-history' => 'static_pages#speedcubing_history'
-  get 'teams-committees-councils' => 'static_pages#teams_committees_councils'
+  get 'teams-committees' => 'static_pages#teams_committees'
   get 'tutorial' => redirect('/education', status: 302)
   get 'translators' => 'static_pages#translators'
   get 'officers-and-board' => 'static_pages#officers_and_board'
@@ -292,22 +296,16 @@ Rails.application.routes.draw do
 
   get '/admin/all-voters' => 'admin#all_voters', as: :eligible_voters
   get '/admin/leader-senior-voters' => 'admin#leader_senior_voters', as: :leader_senior_voters
-  get '/admin/validation_competitions' => "admin#compute_validation_competitions"
-  post '/admin/check_results' => 'admin#do_check_results', as: :admin_do_check_results
   post '/admin/merge_people' => 'admin#do_merge_people', as: :admin_do_merge_people
   get '/admin/fix_results_selector' => 'admin#fix_results_selector', as: :admin_fix_results_ajax
   get '/admin/person_data' => 'admin#person_data'
   get '/admin/do_compute_auxiliary_data' => 'admin#do_compute_auxiliary_data'
-  get '/admin/reset_compute_auxiliary_data' => 'admin#reset_compute_auxiliary_data'
   get '/admin/generate_db_token' => 'admin#generate_db_token'
-  get '/admin/do_generate_dev_export' => 'admin#do_generate_dev_export'
-  get '/admin/do_generate_public_export' => 'admin#do_generate_public_export'
   get '/admin/override_regional_records' => 'admin#override_regional_records'
   post '/admin/override_regional_records' => 'admin#do_override_regional_records'
   get '/admin/complete_persons' => 'admin#complete_persons'
   post '/admin/complete_persons' => 'admin#do_complete_persons'
   get '/admin/peek_unfinished_results' => 'admin#peek_unfinished_results'
-  post '/admin/anonymize_person' => 'admin#do_anonymize_person', as: :admin_do_anonymize_person
   get '/admin/validate_reassign_wca_id' => 'admin#validate_reassign_wca_id', as: :admin_validate_reassign_wca_id
   post '/admin/reassign_wca_id' => 'admin#do_reassign_wca_id', as: :admin_do_reassign_wca_id
 
@@ -345,16 +343,6 @@ Rails.application.routes.draw do
 
   namespace :api do
     get '/', to: redirect('/help/api', status: 302)
-    namespace :internal do
-      namespace :v1 do
-        get '/users/:id/permissions' => 'permissions#index'
-        get '/competitions/:competition_id' => 'competitions#show'
-        get '/competitions/:competition_id/qualifications' => 'competitions#qualifications'
-        post '/users/competitor-info' => 'users#competitor_info'
-        post '/mailers/registration' => 'mailers#registration'
-        post '/payment/init_stripe' => 'payment#init_stripe'
-      end
-    end
 
     # While this is the start of a v1 API, this is currently not usable by outside developers as
     # getting a JWT token requires you to be logged in through the Website
@@ -401,7 +389,8 @@ Rails.application.routes.draw do
       get '/persons/:wca_id/results' => "persons#results", as: :person_results
       get '/persons/:wca_id/competitions' => "persons#competitions", as: :person_competitions
       get '/persons/:wca_id/personal_records' => "persons#personal_records", as: :personal_records
-      get '/geocoding/search' => 'geocoding#get_location_from_query', as: :geocoding_search
+      get '/geocoding/search' => 'geocoding#location_from_query', as: :geocoding_search
+      get '/geocoding/time_zone' => 'geocoding#time_zone_from_coordinates', as: :geocoding_time_zone
       get '/countries' => 'api#countries'
       get '/records' => "api#records"
       get '/results/:user_id/qualification_data' => 'api#user_qualification_data', as: :user_qualification_data

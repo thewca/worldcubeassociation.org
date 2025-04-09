@@ -14,10 +14,9 @@ import {
   Message,
   Segment,
 } from 'semantic-ui-react';
-import { getSingleRegistration } from '../api/registration/get/get_registrations';
 import updateRegistration from '../api/registration/patch/update_registration';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
-import { setMessage } from '../Register/RegistrationMessage';
+import { showMessage } from '../Register/RegistrationMessage';
 import Loading from '../../Requests/Loading';
 import EventSelector from '../../wca/EventSelector';
 import Refunds from './Refunds';
@@ -27,7 +26,9 @@ import I18n from '../../../lib/i18n';
 import RegistrationHistory from './RegistrationHistory';
 import { hasPassed } from '../../../lib/utils/dates';
 import getUsersInfo from '../api/user/post/getUserInfo';
+import { useRegistration } from '../lib/RegistrationProvider';
 import I18nHTMLTranslate from '../../I18nHTMLTranslate';
+import useSet from '../../../lib/hooks/useSet';
 
 export default function RegistrationEditor({ competitor, competitionInfo }) {
   const dispatch = useDispatch();
@@ -35,20 +36,16 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
   const [adminComment, setAdminComment] = useState('');
   const [status, setStatus] = useState('');
   const [guests, setGuests] = useState(0);
-  const [selectedEvents, setSelectedEvents] = useState([]);
+  const selectedEventIds = useSet();
   const [registration, setRegistration] = useState({});
   const confirm = useConfirm();
 
   const queryClient = useQueryClient();
 
-  const { isLoading: isRegistrationLoading, data: serverRegistration, refetch } = useQuery({
-    queryKey: ['registration-admin', competitionInfo.id, competitor.id],
-    queryFn: () => getSingleRegistration(competitor.id, competitionInfo),
-    refetchOnWindowFocus: false,
-    refetchOnReconnect: false,
-    staleTime: Infinity,
-    refetchOnMount: 'always',
-  });
+  const {
+    isFetching: isRegistrationLoading,
+    registration: serverRegistration, refetchRegistration: refetch,
+  } = useRegistration();
 
   const { isLoading, data: competitorsInfo } = useQuery({
     queryKey: ['history-user', serverRegistration?.history],
@@ -61,14 +58,14 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
     mutationFn: updateRegistration,
     onError: (data) => {
       const { error } = data.json;
-      dispatch(setMessage(
+      dispatch(showMessage(
         `competitions.registration_v2.errors.${error}`,
         'negative',
       ));
     },
     onSuccess: (data) => {
       queryClient.setQueryData(
-        ['registration-admin', competitionInfo.id, competitor.id],
+        ['registration', competitionInfo.id, competitor.id],
         {
           ...data.registration,
           payment: serverRegistration.payment,
@@ -76,27 +73,29 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
       );
       // Going from cancelled -> pending
       if (registration.competing.registration_status === 'cancelled') {
-        dispatch(setMessage('registrations.flash.registered', 'positive'));
+        dispatch(showMessage('registrations.flash.registered', 'positive'));
         // Not changing status
       } else {
-        dispatch(setMessage('registrations.flash.updated', 'positive'));
+        dispatch(showMessage('registrations.flash.updated', 'positive'));
       }
     },
   });
 
+  // using selectedEventIds.update in dependency array causes warnings
+  const { update: setSelectedEventIds } = selectedEventIds;
   useEffect(() => {
     if (serverRegistration) {
       setRegistration(serverRegistration);
       setComment(serverRegistration.competing.comment ?? '');
       setStatus(serverRegistration.competing.registration_status);
-      setSelectedEvents(serverRegistration.competing.event_ids);
+      setSelectedEventIds(serverRegistration.competing.event_ids);
       setAdminComment(serverRegistration.competing.admin_comment ?? '');
       setGuests(serverRegistration.guests ?? 0);
     }
-  }, [serverRegistration]);
+  }, [serverRegistration, setSelectedEventIds]);
 
   const hasEventsChanged = serverRegistration
-    && _.xor(serverRegistration.competing.event_ids, selectedEvents).length > 0;
+    && _.xor(serverRegistration.competing.event_ids, selectedEventIds.asArray).length > 0;
   const hasCommentChanged = serverRegistration
     && comment !== (serverRegistration.competing.comment ?? '');
   const hasAdminCommentChanged = serverRegistration
@@ -113,7 +112,7 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
 
   const commentIsValid = comment || !competitionInfo.force_comment_in_registration;
   const maxEvents = competitionInfo.events_per_registration_limit ?? Infinity;
-  const eventsAreValid = selectedEvents.length > 0 && selectedEvents.length <= maxEvents;
+  const eventsAreValid = selectedEventIds.size > 0 && selectedEventIds.size <= maxEvents;
 
   const formatBody = (body) => {
     const simplifiedBody = {
@@ -132,13 +131,13 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
 
   const handleRegisterClick = useCallback(() => {
     if (!hasChanges) {
-      dispatch(setMessage('competitions.registration_v2.update.no_changes', 'basic'));
+      dispatch(showMessage('competitions.registration_v2.update.no_changes', 'basic'));
     } else if (!commentIsValid) {
       // i18n-tasks-use t('registrations.errors.cannot_register_without_comment')
-      dispatch(setMessage('registrations.errors.cannot_register_without_comment', 'negative'));
+      dispatch(showMessage('registrations.errors.cannot_register_without_comment', 'negative'));
     } else if (!eventsAreValid) {
       // i18n-tasks-use t('registrations.errors.must_register')
-      dispatch(setMessage(
+      dispatch(showMessage(
         maxEvents === Infinity
           ? 'registrations.errors.must_register'
           : 'registrations.errors.exceeds_event_limit.other',
@@ -152,7 +151,7 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
         competing: {},
       };
       if (hasEventsChanged) {
-        body.competing.event_ids = selectedEvents;
+        body.competing.event_ids = selectedEventIds.asArray;
       }
       if (hasCommentChanged) {
         body.competing.comment = comment;
@@ -195,21 +194,12 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
     hasStatusChanged,
     hasGuestsChanged,
     updateRegistrationMutation,
-    selectedEvents,
+    selectedEventIds.asArray,
     comment,
     adminComment,
     status,
     guests,
   ]);
-
-  const onEventClick = (eventId) => {
-    const index = selectedEvents.indexOf(eventId);
-    if (index === -1) {
-      setSelectedEvents([...selectedEvents, eventId]);
-    } else {
-      setSelectedEvents(selectedEvents.toSpliced(index, 1));
-    }
-  };
 
   const registrationEditDeadlinePassed = Boolean(competitionInfo.event_change_deadline_date)
     && hasPassed(competitionInfo.event_change_deadline_date);
@@ -234,48 +224,32 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
         )}
         {registrationEditDeadlinePassed && (
           <Message>
-            The Registration Edit Deadline has passed!
-            {' '}
-            <strong>Changes should only be made in extraordinary circumstances</strong>
+            {I18n.t('registrations.errors.edit_deadline_passed')}
           </Message>
         )}
         <Header>
-          {/* The onClick functions are used to stop semUI rendering enormous icons which tell the user that links will open in a new tab*/}
-          {competitor.name + " "}
-
-          (<a href={personUrl(competitor.wca_id)} onClick={(e) => {
-            e.preventDefault();
-            window.open(personUrl(competitor.wca_id), "_blank", "noopener,noreferrer");
-          }}>{competitor.wca_id}</a>){" "}
-
-          <a
-            href={editPersonUrl(competitor.id)}
-            aria-label="Edit"
-            role="menuitem"
-            className="edit-link"
-            onClick={(e) => {
-              e.preventDefault();
-              window.open(personUrl(competitor.wca_id), "_blank", "noopener,noreferrer");
-            }}
-          ><Icon name="edit" /></a>
-
+          {`${competitor.name} `}
+          (
+          <a href={personUrl(competitor.wca_id)} target="_blank" rel="noreferrer" className="hide-new-window-icon">{competitor.wca_id}</a>
+          )
+          {' ' /* Necessary to space the icon away from the wca_id */ }
+          <a href={personUrl(competitor.wca_id)} target="_blank" rel="noreferrer" className="hide-new-window-icon"><Icon name="edit" /></a>
         </Header>
-
-        <Form.Field required error={selectedEvents.length === 0}>
+        <Form.Field required error={selectedEventIds.size === 0}>
           <EventSelector
             id="event-selection"
             eventList={competitionInfo.event_ids}
-            selectedEvents={selectedEvents}
-            onEventClick={onEventClick}
-            onAllClick={() => setSelectedEvents(competitionInfo.event_ids)}
-            onClearClick={() => setSelectedEvents([])}
+            selectedEvents={selectedEventIds.asArray}
+            onEventClick={selectedEventIds.toggle}
+            onAllClick={() => selectedEventIds.update(competitionInfo.event_ids)}
+            onClearClick={selectedEventIds.clear}
             maxEvents={maxEvents}
             shouldErrorOnEmpty
           />
         </Form.Field>
 
         <Form.TextArea
-          label="Comment"
+          label={I18n.t('activerecord.attributes.registration.comments')}
           id="competitor-comment"
           maxLength={240}
           value={comment}
@@ -283,18 +257,18 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
         />
 
         <Form.TextArea
-          label="Administrative Notes"
+          label={I18n.t('activerecord.attributes.registration.administrative_notes')}
           id="admin-comment"
           maxLength={240}
           value={adminComment}
           onChange={(event, data) => setAdminComment(data.value)}
         />
 
-        <Header as="h6">Status</Header>
+        <Header as="h6">{I18n.t('activerecord.attributes.registration.status')}</Header>
         <Form.Group inline>
           <Form.Radio
             id="radio-status-pending"
-            label="Pending"
+            label={I18n.t('competitions.registration_v2.update.pending')}
             name="regStatusRadioGroup"
             value="pending"
             checked={status === 'pending'}
@@ -302,7 +276,7 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
           />
           <Form.Radio
             id="radio-status-accepted"
-            label="Accepted"
+            label={I18n.t('competitions.registration_v2.update.approved')}
             name="regStatusRadioGroup"
             value="accepted"
             checked={status === 'accepted'}
@@ -310,7 +284,7 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
           />
           <Form.Radio
             id="radio-status-waiting-list"
-            label="Waiting List"
+            label={I18n.t('competitions.registration_v2.update.waitlist')}
             name="regStatusRadioGroup"
             value="waiting_list"
             checked={status === 'waiting_list'}
@@ -318,7 +292,7 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
           />
           <Form.Radio
             id="radio-status-cancelled"
-            label="Cancelled"
+            label={I18n.t('competitions.registration_v2.update.cancelled')}
             name="regStatusRadioGroup"
             value="cancelled"
             checked={status === 'cancelled'}
@@ -326,7 +300,7 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
           />
           <Form.Radio
             id="radio-status-rejected"
-            label="Rejected"
+            label={I18n.t('competitions.registration_v2.update.rejected')}
             name="regStatusRadioGroup"
             value="rejected"
             disabled={registrationEditDeadlinePassed}
@@ -335,7 +309,7 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
           />
         </Form.Group>
         <Form.Input
-          label="Guests"
+          label={I18n.t('activerecord.attributes.registration.guests')}
           id="guest-dropdown"
           type="number"
           min={0}
@@ -347,7 +321,7 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
           color="blue"
           disabled={isUpdating || !hasChanges}
         >
-          Update Registration
+          {I18n.t('registrations.update')}
         </Button>
       </Form>
 
@@ -356,11 +330,13 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
 
       {competitionInfo['using_payment_integrations?'] && (
         <>
+          <Message>{I18n.t('payments.labels.payment_statuses')}</Message>
           <List>
-            <List.Header>Payment statuses:</List.Header>
             {registration.payment.payment_statuses.map((paymentStatus) => (
               <List.Item key={paymentStatus}>
-                {paymentStatus}
+                {/* i18n-tasks-use t('payments.statuses.succeeded') */}
+                {/* i18n-tasks-use t('payments.statuses.refunded') */}
+                {I18n.t(`payments.statuses.${paymentStatus}`)}
               </List.Item>
             ))}
           </List>

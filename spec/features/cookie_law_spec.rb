@@ -4,7 +4,7 @@ require "rails_helper"
 
 RSpec.feature "cookie law" do
   context "not signed in" do
-    scenario "remembers acknowledgement", js: true do
+    scenario "remembers acknowledgement", :js do
       # Visit the homepage and accept the cookie warning.
       visit_homepage_and_wait_for_load
       acknowledge_cookie_banner
@@ -24,11 +24,12 @@ RSpec.feature "cookie law" do
 
   context "signed in" do
     let!(:admin) { FactoryBot.create(:admin, cookies_acknowledged: false) }
+
     background do
       sign_in admin
     end
 
-    scenario "remembers acknowledgement without cookies", js: true do
+    scenario "remembers acknowledgement without cookies", :js do
       visit_homepage_and_wait_for_load
       acknowledge_cookie_banner
 

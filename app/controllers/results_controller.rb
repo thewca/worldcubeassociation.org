@@ -43,7 +43,7 @@ class ResultsController < ApplicationController
 
     @quantities = ["100", "1000"]
 
-    if !@types.include?(params[:type])
+    if @types.exclude?(params[:type])
       flash[:danger] = t(".unknown_type")
       return redirect_to rankings_path(params[:event_id], "single")
     end
@@ -61,7 +61,7 @@ class ResultsController < ApplicationController
     @cache_params = ResultsController.compute_cache_key(MODE_RANKINGS, **params_for_cache)
 
     if @is_persons
-      @query = <<-SQL
+      @query = <<-SQL.squish
         SELECT
           result.*,
           result.#{value} value
@@ -84,7 +84,7 @@ class ResultsController < ApplicationController
 
     elsif @is_results
       if @is_average
-        @query = <<-SQL
+        @query = <<-SQL.squish
           SELECT
             result.*,
             average value
@@ -103,7 +103,7 @@ class ResultsController < ApplicationController
 
       else
         subqueries = (1..5).map do |i|
-          <<-SQL
+          <<-SQL.squish
             SELECT
               result.*,
               value#{i} value
@@ -119,8 +119,8 @@ class ResultsController < ApplicationController
             #{limit_condition}
           SQL
         end
-        subquery = "(" + subqueries.join(") UNION ALL (") + ")"
-        @query = <<-SQL
+        subquery = "(#{subqueries.join(") UNION ALL (")})"
+        @query = <<-SQL.squish
           SELECT *
           FROM (#{subquery}) result
           ORDER BY value, personName, competitionId, roundTypeId
@@ -128,7 +128,7 @@ class ResultsController < ApplicationController
         SQL
       end
     elsif @is_by_region
-      @query = <<-SQL
+      @query = <<-SQL.squish
         SELECT
           result.*,
           result.#{value} value
@@ -159,7 +159,7 @@ class ResultsController < ApplicationController
       return redirect_to rankings_path
     end
 
-    @ranking_timestamp = ComputeAuxiliaryData.successful_start_date || Date.current
+    @record_timestamp = ComputeAuxiliaryData.successful_start_date || Date.current
 
     respond_from_cache("results-page-api") do |rows|
       @is_by_region ? compute_rankings_by_region(rows, @continent, @country) : rows
@@ -189,13 +189,13 @@ class ResultsController < ApplicationController
     @cache_params = ResultsController.compute_cache_key(MODE_RECORDS, **params_for_cache)
 
     if @is_histories
-      if @is_history
-        order = 'event.`rank`, type desc, value, start_date desc, roundType.`rank` desc'
-      else
-        order = 'start_date desc, event.`rank`, type desc, value, roundType.`rank` desc'
-      end
+      order = if @is_history
+                'event.`rank`, type desc, value, start_date desc, roundType.`rank` desc'
+              else
+                'start_date desc, event.`rank`, type desc, value, roundType.`rank` desc'
+              end
 
-      @query = <<-SQL
+      @query = <<-SQL.squish
         SELECT
           competition.start_date,
           YEAR(competition.start_date)  year,
@@ -238,7 +238,7 @@ class ResultsController < ApplicationController
           #{order}
       SQL
     else
-      @query = <<-SQL
+      @query = <<-SQL.squish
         SELECT *
         FROM
           (#{current_records_query("best", "single")}
@@ -257,7 +257,7 @@ class ResultsController < ApplicationController
   end
 
   private def current_records_query(value, type)
-    <<-SQL
+    <<-SQL.squish
       SELECT
         '#{type}'            type,
                              result.*,
@@ -345,14 +345,14 @@ class ResultsController < ApplicationController
     end
 
     @gender = params[:gender]
-    case params[:gender]
-    when "Male"
-      @gender_condition = "AND gender = 'm'"
-    when "Female"
-      @gender_condition = "AND gender = 'f'"
-    else
-      @gender_condition = ""
-    end
+    @gender_condition = case params[:gender]
+                        when "Male"
+                          "AND gender = 'm'"
+                        when "Female"
+                          "AND gender = 'f'"
+                        else
+                          ""
+                        end
 
     @is_all_years = params[:years] == YEARS_ALL
     splitted_years_param = params[:years].split
@@ -374,53 +374,44 @@ class ResultsController < ApplicationController
 
   # Normalizes the params so that old links to rankings still work.
   private def support_old_links!
-    params[:event_id]&.gsub!("+", " ")
+    params[:event_id]&.tr!("+", " ")
 
-    params[:region]&.gsub!("+", " ")
+    params[:region]&.tr!("+", " ")
 
-    params[:years]&.gsub!("+", " ")
-    if params[:years] == "all"
-      params[:years] = nil
-    end
+    params[:years]&.tr!("+", " ")
+    params[:years] = nil if params[:years] == "all"
 
-    params[:show]&.gsub!("+", " ")
+    params[:show]&.tr!("+", " ")
     params[:show]&.downcase!
     # We are not supporting the all option anymore!
-    if params[:show]&.include?("all")
-      params[:show] = nil
-    end
+    params[:show] = nil if params[:show]&.include?("all")
   end
 
   private def compute_rankings_by_region(rows, continent, country)
-    if rows.empty?
-      return [[], 0, 0]
-    end
+    return [[], 0, 0] if rows.empty?
+
     best_value_of_world = rows.first["value"]
     best_values_of_continents = {}
     best_values_of_countries = {}
     world_rows = []
     continents_rows = []
     countries_rows = []
-    rows.each do |row|
-      result = LightResult.new(row)
-      value = row["value"]
+    rows.each do |result|
+      result_country = Country.c_find!(result["countryId"])
+      value = result["value"]
 
-      world_rows << row if value == best_value_of_world
+      world_rows << result if value == best_value_of_world
 
-      if best_values_of_continents[result.country.continent.id].nil? || value == best_values_of_continents[result.country.continent.id]
-        best_values_of_continents[result.country.continent.id] = value
+      if best_values_of_continents[result_country.continent.id].nil? || value == best_values_of_continents[result_country.continent.id]
+        best_values_of_continents[result_country.continent.id] = value
 
-        if (country.present? && country.continent.id == result.country.continent.id) || (continent.present? && continent.id == result.country.continent.id) || params[:region] == "world"
-          continents_rows << row
-        end
+        continents_rows << result if (country.present? && country.continent.id == result_country.continent.id) || (continent.present? && continent.id == result_country.continent.id) || params[:region] == "world"
       end
 
-      if best_values_of_countries[result.country.id].nil? || value == best_values_of_countries[result.country.id]
-        best_values_of_countries[result.country.id] = value
+      if best_values_of_countries[result_country.id].nil? || value == best_values_of_countries[result_country.id]
+        best_values_of_countries[result_country.id] = value
 
-        if (country.present? && country.id == result.country.id) || params[:region] == "world"
-          countries_rows << row
-        end
+        countries_rows << result if (country.present? && country.id == result_country.id) || params[:region] == "world"
       end
     end
 
@@ -432,7 +423,7 @@ class ResultsController < ApplicationController
 
   private def respond_from_cache(key_prefix, &)
     respond_to do |format|
-      format.html {}
+      format.html
       format.json do
         cached_data = Rails.cache.fetch [key_prefix, *@cache_params, @record_timestamp] do
           rows = DbHelper.execute_cached_query(@cache_params, @record_timestamp, @query)

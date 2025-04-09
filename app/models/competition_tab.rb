@@ -38,9 +38,7 @@ class CompetitionTab < ApplicationRecord
   private def verify_if_full_urls
     content.scan(/\[(.*?)\]\((.*?)\)/).any? do |match|
       url = match[1]
-      unless url.starts_with?('http://', 'https://')
-        errors.add(:content, I18n.t('competitions.errors.not_full_url', url: url))
-      end
+      errors.add(:content, I18n.t('competitions.errors.not_full_url', url: url)) unless url.starts_with?('http://', 'https://', 'mailto:')
     end
   end
 
@@ -48,12 +46,12 @@ class CompetitionTab < ApplicationRecord
     current_display_order = display_order
     other_display_order = display_order + (direction.to_s == "up" ? -1 : 1)
     other_tab = competition.tabs.find_by(display_order: other_display_order)
-    if other_tab
-      ActiveRecord::Base.transaction do
-        update_column :display_order, nil
-        other_tab.update_column :display_order, current_display_order
-        update_column :display_order, other_display_order
-      end
+    return unless other_tab
+
+    ActiveRecord::Base.transaction do
+      update_column :display_order, nil
+      other_tab.update_column :display_order, current_display_order
+      update_column :display_order, other_display_order
     end
   end
 end

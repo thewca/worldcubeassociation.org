@@ -107,9 +107,13 @@ module DatabaseDumper
           competition_series_id
           use_wca_live_for_scoretaking
           allow_registration_without_qualification
-          registration_version
           forbid_newcomers
           forbid_newcomers_reason
+          auto_close_threshold
+          auto_accept_registrations
+          auto_accept_disable_threshold
+          newcomer_month_reserved_spots
+          competitor_can_cancel
         ),
         db_default: %w(
           connected_stripe_account_id
@@ -586,6 +590,7 @@ module DatabaseDumper
           roles
           is_competing
           competing_status
+          registered_at
         ),
         db_default: %w(ip),
         fake_values: {
@@ -594,7 +599,6 @@ module DatabaseDumper
         },
       ),
     }.freeze,
-    "microservice_registrations" => :skip_all_rows,
     "registration_history_changes" => :skip_all_rows,
     "registration_history_entries" => :skip_all_rows,
     "waiting_lists" => {
@@ -937,6 +941,7 @@ module DatabaseDumper
     "wfc_xero_users" => :skip_all_rows,
     "wfc_dues_redirects" => :skip_all_rows,
     "ticket_logs" => :skip_all_rows,
+    "ticket_comments" => :skip_all_rows,
     "ticket_stakeholders" => :skip_all_rows,
     "tickets" => :skip_all_rows,
     "tickets_edit_person" => :skip_all_rows,
@@ -1136,6 +1141,9 @@ module DatabaseDumper
           championship_type
           eligible_country_iso2
         ),
+        db_default: %w(
+          id
+        ),
       ),
     }.freeze,
   }.freeze
@@ -1185,9 +1193,7 @@ module DatabaseDumper
         ActiveRecord::Base.connection.execute(populate_table_sql.strip)
       end
 
-      if dump_ts_name.present?
-        ActiveRecord::Base.connection.execute("INSERT INTO #{dump_db_name}.server_settings (name, value, created_at, updated_at) VALUES ('#{dump_ts_name}', UNIX_TIMESTAMP(), NOW(), NOW())")
-      end
+      ActiveRecord::Base.connection.execute("INSERT INTO #{dump_db_name}.server_settings (name, value, created_at, updated_at) VALUES ('#{dump_ts_name}', UNIX_TIMESTAMP(), NOW(), NOW())") if dump_ts_name.present?
     end
 
     yield dump_db_name

@@ -5,6 +5,7 @@ class Ticket < ApplicationRecord
     edit_person: "TicketsEditPerson",
   }.freeze
 
+  has_many :ticket_comments
   has_many :ticket_logs
   has_many :ticket_stakeholders
   belongs_to :metadata, polymorphic: true
@@ -18,15 +19,15 @@ class Ticket < ApplicationRecord
   # the user can be any of the two stakeholders.
   def user_stakeholders(user)
     return [] if user.nil?
+
     ticket_stakeholders.belongs_to_user(user).or(ticket_stakeholders.belongs_to_groups(user.active_groups))
   end
 
   def can_user_access?(user)
     return false if user.nil?
-    (
-      ticket_stakeholders.belongs_to_user(user).any? ||
+
+    ticket_stakeholders.belongs_to_user(user).any? ||
       ticket_stakeholders.belongs_to_groups(user.active_groups).any?
-    )
   end
 
   def action_allowed?(action, user)
@@ -36,7 +37,7 @@ class Ticket < ApplicationRecord
   end
 
   DEFAULT_SERIALIZE_OPTIONS = {
-    include: %w[ticket_logs metadata],
+    include: %w[metadata],
   }.freeze
 
   def serializable_hash(options = nil)

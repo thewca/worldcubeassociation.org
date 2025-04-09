@@ -2,6 +2,11 @@
 
 module Admin
   class ScramblesController < AdminController
+    def show
+      respond_to do |format|
+        format.json { render json: Scramble.find(params.require(:id)) }
+      end
+    end
     # NOTE: authentication is performed by admin controller
 
     def new
@@ -13,12 +18,6 @@ module Admin
         roundTypeId: round.round_type_id,
         eventId: round.event.id,
       }
-    end
-
-    def show
-      respond_to do |format|
-        format.json { render json: Scramble.find(params.require(:id)) }
-      end
     end
 
     def edit
@@ -56,9 +55,7 @@ module Admin
                else
                  ["The scramble was saved."]
                end
-        if competitions_to_validate.size > 1
-          info << "The scrambles was moved to another competition, make sure to check the competition validators for both of them."
-        end
+        info << "The scrambles was moved to another competition, make sure to check the competition validators for both of them." if competitions_to_validate.size > 1
         render json: {
           # Make sure we emit the competition's id next to the info, because we
           # may validate multiple competitions at the same time.

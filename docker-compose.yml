@@ -47,9 +47,9 @@ services:
     restart: no
     depends_on:
       wca_db:
-        condition: 'service_healthy'
+        condition: "service_healthy"
       wca_redis:
-        condition: 'service_started'
+        condition: "service_started"
 
   wca_on_rails:
     <<: *app
@@ -66,6 +66,25 @@ services:
     depends_on:
       wca_environment:
         condition: service_completed_successfully
+
+  wca_nextjs:
+    build:
+      dockerfile: Dockerfile.dev
+      context: .
+    container_name: "nextjs"
+    environment:
+      PORT: 3001
+    ports:
+      - "3001:3001"
+    working_dir: /app
+    command: >
+      bash -c 'corepack install && yarn install &&
+      yarn run dev'
+    volumes:
+      - ./next-frontend:/app
+      - next_yarn_volume:/app/node_modules
+    networks:
+      - wca-main
 
   wca_webpacker:
     <<: *app
@@ -96,7 +115,7 @@ services:
 
   wca_sidekiq:
     <<: *app
-    container_name: 'sidekiq'
+    container_name: "sidekiq"
     environment:
       <<: *appEnv
       # Cronjobs are disabled in development by default. If you wish to run cronjobs,
@@ -143,6 +162,28 @@ services:
     networks:
       - wca-main
 
+  wca_playwright:
+    image: mcr.microsoft.com/playwright:v1.51.1
+    container_name: "playwright"
+    environment:
+      - DEBIAN_FRONTEND=noninteractive
+      - DEBUG=pw:api
+    ports:
+      - "8089:8089"
+    working_dir: /app
+    command: >
+      bash -c 'corepack enable &&
+      ./package-install.dev.sh fonts.pdf.txt &&
+      fc-cache -f -v &&
+      yarn install &&
+      yarn playwright run-server --port 8089 --host=0.0.0.0'
+    volumes:
+      - .:/app
+      - node_modules_volume:/app/node_modules
+      - pdf_fonts_volume:/usr/share/fonts
+    networks:
+      - wca-main
+
 volumes:
   gems_volume:
     driver: local
@@ -151,6 +192,10 @@ volumes:
   wca_db_volume:
     driver: local
   cache_volume:
+    driver: local
+  next_yarn_volume:
+    driver: local
+  pdf_fonts_volume:
     driver: local
 
 networks:

@@ -33,72 +33,16 @@ class AdminController < ApplicationController
     @results_validator.validate(@competition.id)
   end
 
-  def check_results
-    with_results_validator
-  end
-
   def check_competition_results
     with_results_validator do
       @competition = competition_from_params
-      @result_validation.competition_ids = @competition.id
     end
-  end
-
-  def compute_validation_competitions
-    validation_form = ResultValidationForm.new(
-      competition_start_date: params[:start_date],
-      competition_end_date: params[:end_date],
-      competition_selection: ResultValidationForm::COMP_VALIDATION_ALL,
-    )
-
-    render json: {
-      competitions: validation_form.competitions,
-    }
   end
 
   def with_results_validator
-    @result_validation = ResultValidationForm.new(
-      competition_ids: params[:competition_ids] || "",
-      competition_start_date: params[:competition_start_date] || "",
-      competition_end_date: params[:competition_end_date] || "",
-      validator_classes: params[:validator_classes] || ResultValidationForm::ALL_VALIDATOR_NAMES.join(","),
-      competition_selection: params[:competition_selection] || ResultValidationForm::COMP_VALIDATION_MANUAL,
-      apply_fixes: params[:apply_fixes] || false,
-    )
-
     # For this view, we just build an empty validator: the WRT will decide what
     # to actually run (by default all validators will be selected).
     @results_validator = ResultsValidators::CompetitionsResultsValidator.new(check_real_results: true)
-    yield if block_given?
-  end
-
-  def do_check_results
-    running_validators do
-      render :check_results
-    end
-  end
-
-  def do_check_competition_results
-    running_validators do
-      uniq_id = @result_validation.competitions.first
-      @competition = Competition.find(uniq_id)
-
-      render :check_competition_results
-    end
-  end
-
-  def running_validators
-    action_params = params.require(:result_validation_form)
-                          .permit(:competition_ids, :validator_classes, :apply_fixes, :competition_selection, :competition_start_date, :competition_end_date)
-
-    @result_validation = ResultValidationForm.new(action_params)
-
-    if @result_validation.valid?
-      @results_validator = @result_validation.build_and_run
-    else
-      @results_validator = ResultsValidators::CompetitionsResultsValidator.new(check_real_results: true)
-    end
-
     yield if block_given?
   end
 
@@ -158,7 +102,7 @@ class AdminController < ApplicationController
         inbox_person = inbox_res.inbox_person
 
         person_id = inbox_person&.wcaId.presence || inbox_res.personId
-        person_country = Country.find_by_iso2(inbox_person&.countryId)
+        person_country = Country.find_by(iso2: inbox_person&.countryId)
 
         {
           pos: inbox_res.pos,
@@ -246,9 +190,7 @@ class AdminController < ApplicationController
 
     # This makes sure the json structure is valid!
     if @upload_json.import_to_inbox
-      if @competition.results_submitted_at.nil?
-        @competition.update!(results_submitted_at: Time.now)
-      end
+      @competition.update!(results_submitted_at: Time.now) if @competition.results_submitted_at.nil?
       flash[:success] = "JSON file has been imported."
       redirect_to competition_admin_upload_results_edit_path
     else
@@ -295,40 +237,9 @@ class AdminController < ApplicationController
     }
   end
 
-  def compute_auxiliary_data
-  end
-
   def do_compute_auxiliary_data
     ComputeAuxiliaryData.perform_later
-    redirect_to admin_compute_auxiliary_data_path
-  end
-
-  def reset_compute_auxiliary_data
-    ComputeAuxiliaryData.reset_error_state!
-    redirect_to admin_compute_auxiliary_data_path
-  end
-
-  def generate_exports
-  end
-
-  def do_generate_dev_export
-    DumpDeveloperDatabase.perform_later
-    redirect_to admin_generate_exports_path
-  end
-
-  def do_generate_public_export
-    DumpPublicResultsDatabase.perform_later
-    redirect_to admin_generate_exports_path
-  end
-
-  def check_regional_records
-    @check_records_request = CheckRegionalRecordsForm.new(
-      competition_id: params[:competition_id] || nil,
-      event_id: params[:event_id] || nil,
-      refresh_index: params[:refresh_index] || nil,
-    )
-
-    @cad_timestamp = ComputeAuxiliaryData.successful_start_date&.to_fs || 'never'
+    redirect_to panel_page_path(id: User.panel_pages[:computeAuxiliaryData])
   end
 
   def override_regional_records
@@ -344,7 +255,7 @@ class AdminController < ApplicationController
       params[:regional_record_overrides].each do |id_and_type, marker|
         next if [:competition_id, :event_id].include? id_and_type.to_sym
 
-        next unless marker.present?
+        next if marker.blank?
 
         result_id, result_type = id_and_type.split('-')
         record_marker = :"regional#{result_type}Record"
@@ -356,7 +267,7 @@ class AdminController < ApplicationController
     competition_id = params.dig(:regional_record_overrides, :competition_id)
     event_id = params.dig(:regional_record_overrides, :event_id)
 
-    redirect_to action: :check_regional_records, competition_id: competition_id, event_id: event_id
+    redirect_to panel_page_path(id: User.panel_pages[:checkRecords], competition_id: competition_id, event_id: event_id)
   end
 
   def all_voters
@@ -379,43 +290,7 @@ class AdminController < ApplicationController
   end
 
   private def competition_from_params(associations: {})
-    Competition.includes(associations).find_by_id!(params[:competition_id])
-  end
-
-  def anonymize_person
-    session[:anonymize_params] = {}
-    session[:anonymize_step] = nil
-    @anonymize_person = AnonymizePerson.new(session[:anonymize_params])
-    @anonymize_person.current_step = session[:anonymize_step]
-  end
-
-  def do_anonymize_person
-    session[:anonymize_params].deep_merge!((params[:anonymize_person]).permit(:person_wca_id)) if params[:anonymize_person]
-    @anonymize_person = AnonymizePerson.new(session[:anonymize_params])
-    @anonymize_person.current_step = session[:anonymize_step]
-
-    if @anonymize_person.valid?
-
-      if params[:back_button]
-        @anonymize_person.previous_step!
-      elsif @anonymize_person.last_step?
-        do_anonymize_person_response = @anonymize_person.do_anonymize_person
-
-        if do_anonymize_person_response && !do_anonymize_person_response[:error] && do_anonymize_person_response[:new_wca_id]
-          flash.now[:success] = "Successfully anonymized #{@anonymize_person.person_wca_id} to #{do_anonymize_person_response[:new_wca_id]}! Don't forget to run Compute Auxiliary Data and Export Public."
-          @anonymize_person = AnonymizePerson.new
-        else
-          flash.now[:danger] = do_anonymize_person_response[:error] || "Error anonymizing"
-        end
-
-      else
-        @anonymize_person.next_step!
-      end
-
-      session[:anonymize_step] = @anonymize_person.current_step
-    end
-
-    render 'anonymize_person'
+    Competition.includes(associations).find(params[:competition_id])
   end
 
   private def competition_list_from_string(competition_ids_string)
@@ -427,10 +302,10 @@ class AdminController < ApplicationController
     @competition_ids = competition_list_from_string(@competition_ids_string)
     @persons_to_finish = FinishUnfinishedPersons.search_persons(@competition_ids)
 
-    if @persons_to_finish.empty?
-      flash[:warning] = "There are no persons to complete for the selected competition"
-      redirect_to panel_page_path(id: User.panel_pages[:createNewComers], competition_ids: @competition_ids)
-    end
+    return unless @persons_to_finish.empty?
+
+    flash[:warning] = "There are no persons to complete for the selected competition"
+    redirect_to panel_page_path(id: User.panel_pages[:createNewComers], competition_ids: @competition_ids)
   end
 
   def do_complete_persons
@@ -486,9 +361,7 @@ class AdminController < ApplicationController
     if continue_batch
       can_continue = FinishUnfinishedPersons.unfinished_results_scope(competition_list_from_string(competition_ids)).any?
 
-      if can_continue
-        return redirect_to action: :complete_persons, competition_ids: competition_ids
-      end
+      return redirect_to action: :complete_persons, competition_ids: competition_ids if can_continue
     end
 
     redirect_to panel_page_path(id: User.panel_pages[:createNewComers], competition_ids: competition_ids)

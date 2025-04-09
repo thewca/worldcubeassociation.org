@@ -512,7 +512,6 @@ en:
       person:
         person1_wca_id: ""
         person2_wca_id: ""
-        person_wca_id: ""
       poll:
         comment: ""
         multiple: ""
@@ -572,6 +571,8 @@ en:
         wca_id: "Your WCA ID"
         dob: "Correct birthdate"
         document: "Document"
+      contact_wrt:
+        wca_id: "WCA ID"
     errors:
       dob_contact:
         dob_invalid: "is misformatted"
@@ -705,7 +706,7 @@ en:
       translators: "Translators"
       faq: "Frequently Asked Questions"
       forum: "Forum"
-      teams: "Teams, Committees, and Councils"
+      teams: "Teams and Committees"
       education: "Educational resources"
       wca_live: "WCA Live"
       contact: "Contact"
@@ -763,10 +764,10 @@ en:
     officers_and_board:
       title: "WCA Officers & Board"
       officers_description: "The officers of the WCA handle tasks relating to the non-profit status of the WCA. These officers are elected by the WCA Board. The Executive Director is the Chief Executive Officer of the WCA, the Chair presides over all Board meetings, the Secretary maintains the organization's documents, and the Treasurer manages financial matters of the WCA."
-      board_description: "The WCA Board is responsible for leading the organization as a whole, and fulfilling any duties not fulfilled by other Teams,  Committees, and Councils"
+      board_description: "The WCA Board is responsible for leading the organization as a whole, and fulfilling any duties not fulfilled by other Teams and Committees"
     teams_committees_councils:
-      title: "WCA Teams, Committees, and Councils"
-      description: "The WCA's teams and committees are an integral part of the organization and perform the day-to-day tasks that are required to keep it functioning. These committees are made up of WCA community members, including WCA Delegates and competitors. Each team has a leader, whose role is to ensure the proper functioning of the team and guide other team members. Councils are a special type of team that serve an advisory role to the WCA Board and are made up of community members, not WCA Staff members. When there are committee, team, or council openings, information about how to apply is posted on the front page."
+      title: "WCA Teams and Committees"
+      description: "The WCA's teams and committees are an integral part of the organization and perform the day-to-day tasks that are required to keep it functioning. These committees are made up of WCA community members, including WCA Delegates and competitors. Each team has a leader, whose role is to ensure the proper functioning of the team and guide other team members. When there are team or committee openings, information about how to apply is posted on the front page."
       contact_button: "Contact"
       no_contact_description: "The contact details of this team/committee is not publicly available."
       groups_name:
@@ -793,12 +794,12 @@ en:
         wfc: "The WCA Financial Committee (WFC) manages the overall finances of the WCA, including budgeting, reporting, analysis, bookkeeping, and tax filings. They also manage the WCA's largest source of income, the WCA Dues System, along with various funding programs that provide support to local communities at different stages of development, including Travel Funding, Equipment Funding, and Regional Organization Support."
         wmt: "The WCA Marketing Team (WMT) manages the WCA Brand, seeking sponsorships, and marketing WCA Merchandise."
         wmct: "The WCA Major Championship Team (WMCT) oversees the coordination and advancement of WCA Continental and World Championships by developing guidelines and strategic plans, managing host city selection, supporting organizing teams, and ensuring consistent championship experiences."
-        wqac: "The WCA Quality Assurance Committee (WQAC) promotes continuous quality improvement within the WCA, as well as worldwide application of quality standards to ensure consistent high quality of processes, WCA Staff, Regional Organizations, Competition Organizers, and Competition Staff."
+        wqac: "The WCA Quality Assurance Committee (WQAC) promotes continuous quality improvement within the WCA, as well as worldwide application of quality standards to ensure consistent high quality of processes, WCA Volunteers, Regional Organizations, Competition Organizers, and Competition Volunteers."
         wrc: "The WCA Regulations Committee (WRC) handles all issues which are related to the application, the improvement and the development of the WCA Regulations. They support WCA Delegates on any kind of procedural matters happening at competitions and decide on unresolved and uncovered incidents."
         wrt: "The WCA Results Team (WRT) manages all data in the databases of the WCA, including competition results and persons data."
         wst: "The WCA Software Team (WST) manages the WCA's software (website, scramblers, workbooks, admin tools)."
         wsot: "The WCA Sports Organization Team (WSOT) oversees and supports the recognition of the WCA as an international sports organization."
-        wapc: "The WCA Appeals Committee (WAC) reviews and resolves appeals regarding decisions made by other WCA Staff. The WAC provides an independent and impartial review process to ensure that decisions are fair, reasonable, and in accordance with WCA policies and regulations."
+        wapc: "The WCA Appeals Committee (WAC) reviews and resolves appeals regarding decisions made by other WCA Volunteers. The WAC provides an independent and impartial review process to ensure that decisions are fair, reasonable, and in accordance with WCA policies and regulations."
     contacts:
       title: "WCA Contact Form"
       faq_note_html: 'Before making an inquiry, you may wish to take a look at our <a href="/faq">Frequently Asked Questions</a>! If you wish to contact a specific committee or team not listed here, you may check their details on <a href="/teams-committees-councils">this page</a>.'
@@ -813,13 +814,13 @@ en:
         contact_recipient:
           label: "Who do you want to contact?"
           competition:
-            label: "Contact organizers/delegates of a competition (to ask query regarding that particular competition)"
+            label: "Contact organizers/delegates of a competition (to ask query regarding that particular competition, including results not yet published on the WCA website)"
           wct:
             label: "Contact WCA for general queries (this can involve anything like WCA ID/profile, organizing competitions, competition rules, competition media, etc)"
           wrt:
-            label: "Contact Results Team (for anything related to the results of a competition)"
+            label: "Contact Results Team (for anything related to results or profile data on the WCA website)"
           wst:
-            label: "Contact Software Team (to report some bug in website or any API related questions)"
+            label: "Contact Software Team (to report issues with the WCA website or for software-related questions)"
         competition:
           competition:
             label: "Competition"
@@ -1067,7 +1068,7 @@ en:
         '6': "The avatar must be submitted in the correct orientation."
         '7': "The avatar must not contain offensive content (e.g. offensive gestures)."
       staff_avatar_guidelines:
-        title: "Additional guidelines for Staff Members and Trainee Delegates:"
+        title: "Additional guidelines for Volunteers and Trainee Delegates:"
         paragraphs:
           '1': "The avatar must be of your current self, depicted in the same fashion as how you would appear at a competition."
           '2': "The avatar must be framed, cropped, angled, and lit so that any competitor or spectator at a competition can use it to unambiguously identify you at a competition venue."
@@ -1079,7 +1080,7 @@ en:
         failure: "Couldn't verify your identity"
         confirm_proceed: "Confirm and proceed"
         identity_error: "Cannot edit your data. Please confirm your identity below before trying again."
-    #context: when an error occured during the edition
+    #context: when an error occurred during the edition
     errors:
       not_found: "not found"
       already_assigned: "already assigned to a different user"
@@ -1123,6 +1124,7 @@ en:
   registrations:
     #context: and when an error is found
     errors:
+      edit_deadline_passed: "The Registration Edit Deadline has passed! Changes should only be made in extraordinary circumstances."
       need_name: "Need a name"
       need_gender: "Need a gender"
       need_dob: "Need a birthdate"
@@ -1135,6 +1137,7 @@ en:
       undelete_banned: "is a banned competitor and cannot be undeleted"
       series_more_than_one_accepted: "You can only be accepted for one Series competition at a time."
       can_only_register_for_qualified_events: "You cannot register for events you are not qualified for."
+      cannot_change_events_when_cancelling: "You cannot change your events while cancelling your registration."
       cannot_register_without_comment: "You must make a comment. Please read the Registration Requirements above to see what must be included (e.g. in an FMC simultaneous competition, which location you will compete at)."
     registration_info_people:
       #context: pluralization of "x first-timer(s)"
@@ -1158,6 +1161,7 @@ en:
     edit_registration:
       #context: the title for a specific registration to a competition
       title: "%{person} for %{comp}"
+
     #context: text appearing in mails sent to competitors during registration
     mailer:
       #context: "people" is replaced by the organizers and Delegates' names
@@ -1219,9 +1223,6 @@ en:
         other: "%{count} regions"
       export_csv: "Export to CSV"
       email: "Email"
-      approve: "Approve"
-      waiting_list: "Waiting List"
-      approved_registrations: "Approved registrations"
       non_competing: "Non-competing registrations"
       not_paid: "Not paid"
       registered:
@@ -1301,6 +1302,11 @@ en:
     preferred_events_prompt_html: "To speed up registration in the future, you can set your preferred events %{link}."
     preferred_events_populated_html: "We autopopulated this with your preferred events, which you can edit %{link}."
     registration_requirements: "Registration requirements for the competition:"
+    registration_history:
+      acting_user: "Acting User"
+      action: "Action"
+      changes: "Changes"
+      title: "Registration History"
     import:
       title: "Import registrations for %{comp}"
       info: "You can import registrations multiple times. Changes will be determined and the database will be updated accordingly."
@@ -1634,6 +1640,8 @@ en:
           enabled: "Competitor limit"
           count: "Maximum number of competitors"
           reason: "The reason for the competitor limit"
+          auto_close_threshold: "Auto-close threshold"
+          newcomer_month_reserved_spots: "Number of spots to reserve for newcomers"
         staff:
           staff_delegate_ids: "WCA Delegate(s)"
           trainee_delegate_ids: "WCA Trainee Delegate(s)"
@@ -1660,7 +1668,7 @@ en:
           waiting_list_deadline_date: "Deadline for accepting competitors from the waiting list"
           event_change_deadline_date: "Deadline for competitors to update their registered events"
           allow_on_the_spot: "On the spot registrations"
-          allow_self_delete_after_acceptance: "Registration cancellations"
+          competitor_can_cancel: "When can competitors cancel their registrations"
           allow_self_edits: "Registration edits"
           guests_enabled: "Guests"
           guest_entry_status: "Display message for free guest entry"
@@ -1718,6 +1726,8 @@ en:
           enabled: "A Competitor Limit is required. Only simultaneous FMC competitions with multiple locations can have no Competitor Limit."
           count: "The number of competitors allowed in this competition. For now this number is informational only, and does not yet prevent more people from registering. We are working on adding explicit support for this to the registration flow, but it requires some other work first."
           reason: "What is the reason for the limit on competitors? Please fill this out in English!"
+          auto_close_threshold: "Registration will automatically close when this number of paid registrations is received. Leave blank to disable, ignore if you aren't using integrated payments."
+          newcomer_month_reserved_spots: "Only allowed during Newcomer Month - reserved spots can't be more than half of the Competitor Limit."
         staff:
           staff_delegate_ids: "WCA Delegates for the competition."
           trainee_delegate_ids: "WCA Trainee Delegates for the competition."
@@ -1745,7 +1755,7 @@ en:
           waiting_list_deadline_date: "The date when waitlisted registrants will no longer be accepted. If you have a deadline for refunds, the deadline for being accepted should not be before the deadline for refunds."
           event_change_deadline_date: "Registered competitors have the right to update their registered events until this time by contacting the organization team. This deadline must not be set to a time before registration is set to close. Leaving this field blank means that competitors may add an event to their registered events up until that event is held. If you have on the spot registration, this must be set to the same day as the competition."
           allow_on_the_spot: ""
-          allow_self_delete_after_acceptance: ""
+          competitor_can_cancel: ""
           allow_self_edits: ""
           guests_enabled: ""
           guest_entry_status: ""
@@ -1787,9 +1797,10 @@ en:
           allow_self_edits:
             "true": "Competitors may edit their registration until the deadline for updating events"
             "false": "Competitors may NOT edit their registration once it has been accepted"
-          allow_self_delete_after_acceptance:
-            "true": "Competitors may delete their own registration even after it has been accepted"
-            "false": "Competitors may NOT delete their own registration once it has been accepted"
+          competitor_can_cancel:
+            "always": "Always"
+            "not_accepted": "Until they're accepted"
+            "unpaid": "Until they pay"
           guest_entry_status:
             unclear: 'Do not display anything (and perhaps elaborate in the "Extra registration requirements" section)'
             free: '"Any spectator can attend for free"'
@@ -1799,7 +1810,7 @@ en:
             allow_registration_without:
               "true": "Competitors will be allowed to register for events they're not qualified for (I'll remove them later)"
               "false": "Competitors MUST be qualified to register for an event"
-        #context: new registration system
+    #context: new registration system
     registration_v2:
       pdf:
         #context: <0> indicates an html tag for internationalizing in React, see https://docs.worldcubeassociation.org/guides/translating_the_website.html#using-react
@@ -1809,7 +1820,7 @@ en:
         payment_missing: "Your registration will not be approved until you pay for your registration, unless you have a special arrangement with the organizers or you paid through an alternative method."
         needs_approval: "Don't book your travel arrangements just yet - the organizers still have to manually approve your registration. This can take time."
         is_accepted: "Book your travel and pack your bags - you have a spot at the competition!"
-        is_cancelled: "Your registration has been cancelled and you will not be competing, but you can sign up again"
+        is_cancelled: "Your registration has been cancelled and you will not be competing, but you can sign up again."
         is_rejected: "Your registration has been rejected by the organizers. Please contact the organizing team if you believe this was a mistake."
         is_waitlisted: "Don't book your travel, but don't give up hope either. The competition is full, but you have been placed on a waiting list, and you will receive an email if enough spots open up for you to be able to attend."
       list:
@@ -1818,14 +1829,23 @@ en:
           zero: "no spots remaining"
           one: "%{count} spot remaining"
           other: "%{count} spots remaining"
+        pending:
+          title: "Pending Registrations"
+          information: "Pending should only be used for incomplete (eg, unpaid) registrations - please use the Waiting List if your competition is too full to accept new competitors."
+        waitlist:
+          title: "Waiting List Registrations"
+          skipped_warning: "You've skipped %{count} registration(s) on the Waiting List. Are you sure you want to approve the other registration(s) instead?"
+        approved:
+          title: "Approved Registrations"
         cancelled:
-          title: "Cancelled registrations"
+          title: "Cancelled Registrations"
           information: "Cancelled competitors are allowed to register again."
         rejected:
-          title: "Rejected registrations"
+          title: "Rejected Registrations"
           information: "Rejected competitors cannot re-register."
-        pending:
-          information: "Pending should only be used for incomplete (eg, unpaid) registrations - please use the Waiting List if your competition is too full to accept new competitors."
+        non_competing:
+          title: "Non-Competing Registrations"
+          information: "For non-competitors that you can assign staff duties to in the WCIF."
         payment:
          refunded_status: "Refunded"
          initialized: "Payment process was started on %{date}, but not finished."
@@ -1854,10 +1874,15 @@ en:
         email_send: "Send Email"
         email_copy: "Copy Emails"
         email_message: "Copied to clipboard. Remember to use bcc!"
-        move_pending: "Move to Pending"
-        move_waiting: "Move to Waiting List"
-        cancel: "Cancel Registration"
-        reject: "Reject Registration"
+        move_to:
+          zero: "Move to"
+          one: "Move %{count} to"
+          other: "Move %{count} to"
+        pending: "Pending"
+        waitlist: "Waiting List"
+        approved: "Approved"
+        cancelled: "Cancelled"
+        rejected: "Rejected"
         amount: "Amount"
         too_many: "Accepting all these registrations would go over the competitor limit by %{count}"
         no_self_update: "Contact the Organization Team to update your registration."
@@ -1924,11 +1949,24 @@ en:
         -4010: "The Waiting List Position is not Valid"
         -4011: "You can only accept the first person on the waiting list"
         -4012: "You are not qualified to compete in the selected events"
+        -4013: "Cant accept non-newcomer when only reserved newcomer spots remain"
         -4014: "You are already registered for this competition."
+        -4015: "Please enter a reasonable amount of guests, or contact the organizers if you need to bring an extraordinary amount of guests."
         -6001: "WCA Payment is not enabled for this competition"
         -6002: "You need to finish your registration before you can pay"
-    #context: and when an error occured
+    #context: and when an error occurred
     errors:
+      must_use_wca_registration: "Auto-accept can only be used if you are using the WCA website for registrations"
+      auto_accept_limit: "Limit for auto-accepted registrations must be less than the competitor limit"
+      auto_accept_not_negative: "Limit for auto-accepted registrations cannot be less than 0."
+      auto_accept_accept_paid_pending: "Can't enable auto-accept if there are paid-pending registrations - either accept them or move them to the waiting list"
+      auto_accept_accept_waitlisted: "Can't enable auto-accept - please accept as many users from the Waiting List as possible."
+      auto_close_exceed_paid: "Auto close threshold must be greater than the number of currently paid registrations"
+      auto_close_positive_nonzero: "Auto-close threshold must be greater than 0"
+      must_exceed_competitor_limit: "Auto-close threshold must be greater than the competitor limit"
+      use_wca_registration: "Competition must use WCA registration"
+      newcomer_month_reservations_percentage: 'cant reserve more than 50% of spots for newcomers'
+      newcomer_month_reservations_available: 'Desired newcomer month reserved spots exceeds number of spots reservable'
       invalid_name_message: "must end with a year and must contain only alphanumeric characters, dashes(-), ampersands(&), periods(.), colons(:), apostrophes('), and spaces( )"
       cannot_manage: "Cannot manage competition."
       cannot_delete_public: "Cannot delete a competition that is publicly visible."
@@ -2153,30 +2191,17 @@ en:
       title: "Records"
     last_updated_html: "Last updated: %{timestamp}"
     filters_fixes_underway: "Please note that some filters (such as past years) are temporarily disabled. The Software Team is working to restore these filters - we are sorry for the inconvenience."
-    tooltip_no_years: "Our database is too large to compute historical data"
-    tooltip_no_quantities: "Our database is too large to compute long rankings"
     selector_elements:
       events_selector:
         event: "Event"
-        all_events: "All events"
-      region: "Region"
       type_selector:
         type: "Type"
         single: "Single"
         average: "Average"
-      years_selector:
-        years: "Years"
-        all_years: "All years"
-        only: "Only"
-        only_html: "Only %{year}"
-        until: "Until"
-        until_html: "Until %{year}"
       show_selector:
         show: "Show"
         persons: "Persons"
-        persons_html: "%{quantity} persons"
         results: "Results"
-        results_html: "%{quantity} results"
         by_region: "By region"
         mixed: "Mixed"
         slim: "Slim"
@@ -2191,22 +2216,20 @@ en:
     table_elements:
       name: "Name"
       result: "Result"
-      representing: "Representing"
       competition: "Competition"
       solves: "Solves"
       region: "Region"
       world: "World"
-      type_options:
-        type: "Type"
-        single: "Single"
-        average: "Average"
       event: "Event"
       date_circa: "Date circa"
-      record: "Record"
   #context: User notifications
   notifications:
     connect_wca_id: "Connect your WCA ID to your account!"
   payments:
+    labels:
+      payment_statuses: "Payment Statuses"
+      available_refunds: "Available Refunds"
+      original_payment: "Original Payment"
     #context: localized names of payment providers
     payment_providers:
       paypal: 'PayPal'
@@ -2243,6 +2266,9 @@ en:
           display_name: "Name"
           primary_email: "Email"
         fallback_not_applicable: "N/A"
+    statuses:
+      succeeded: "Succeeded"
+      refunded: "Refunded"
   persons:
     #context: Person search page
     index:
@@ -2416,7 +2442,7 @@ en:
     structure:
       title: "Structure"
       board:
-        description: "The WCA Board is responsible for leading the organization as a whole, and fulfilling any duties not fulfilled by other Teams,  Committees, and Councils"
+        description: "The WCA Board is responsible for leading the organization as a whole, and fulfilling any duties not fulfilled by other Teams and Committees"
       users:
         profile: "%{user_name}'s profile"
       operations_html: "The day to day operations are run by the WCA's %{committees_and_teams}."
@@ -2477,7 +2503,7 @@ en:
         '2': To contribute to the Continental WCA Competitions that are held in the continent of the Regional Organization, if required by the corresponding Organization Team
         '3': To respect and operationalize the Objectives set out in the WCA Bylaws and Motions
         '4': To comply with all applicable WCA Regulations
-        '5': To accept and comply with decisions of WCA Staff
+        '5': To accept and comply with decisions of WCA Volunteers
         '6': To keep on file at the WCA a copy of its current bylaws and, if applicable, regulations in an electronic format
     application_instructions:
       title: Application Instructions
@@ -2504,7 +2530,7 @@ en:
     #context: tools used before the competition
     before:
       title: "Before the competition"
-      desc: "Managing competitors registrations can be done directly on the WCA website. Since managing groups and staff manually can be time-consuming, you may want to consider using one of the tools below."
+      desc: "Managing competitors registrations can be done directly on the WCA website. Since managing groups and volunteers manually can be time-consuming, you may want to consider using one of the tools below."
     #context: tools used during the competition
     during:
       title: "During the competition"
@@ -2639,11 +2665,11 @@ en:
       work-during-comp: "Organizer work during the competition"
     recommended:
       title: "Recommended documents"
-      staff: "Assigning staff"
+      staff: "Assigning volunteers"
       emails: "Emails"
       running-systems: "Running and judging systems"
       new-competitors: "Attitude to new competitors"
-      enhancing-experience: "Enhancing competitor and staff experience"
+      enhancing-experience: "Enhancing competitor and volunteer experience"
       reflection: "Organizer reflection"
   organizer_guidelines:
     title: "WCA Competition Organizer Guidelines"

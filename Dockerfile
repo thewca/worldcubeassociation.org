@@ -1,4 +1,4 @@
-FROM ruby:3.4.1 AS base
+FROM ruby:3.4.2 AS base
 ARG BUILD_TAG=local
 ARG WCA_LIVE_SITE
 ARG SHAKAPACKER_ASSET_HOST
@@ -11,6 +11,7 @@ ENV RAILS_LOG_TO_STDOUT="1" \
     RAILS_ENV="production" \
     BUNDLE_WITHOUT="development:test" \
     BUNDLE_DEPLOYMENT="1" \
+    PLAYWRIGHT_BROWSERS_PATH="/rails/pw-browsers" \
     BUILD_TAG=$BUILD_TAG \
     WCA_LIVE_SITE=$WCA_LIVE_SITE \
     SHAKAPACKER_ASSET_HOST=$SHAKAPACKER_ASSET_HOST
@@ -42,60 +43,50 @@ RUN apt-get update -qq && \
       build-essential \
       software-properties-common \
       git \
+      clang \
       pkg-config \
       libvips \
       libssl-dev \
       libyaml-dev \
       tzdata
 
+COPY bin ./bin
+
 # Install application gems
 COPY Gemfile Gemfile.lock ./
 RUN gem update --system && gem install bundler
 
-COPY . .
-RUN ./bin/bundle install && \
-    rm -rf ~/.bundle/ "${BUNDLE_PATH}"/ruby/*/cache "${BUNDLE_PATH}"/ruby/*/bundler/gems/*/.git
+RUN bundle config set --local path /rails/.cache/bundle
+
+# Use a cache mount to reuse old gems
+RUN --mount=type=cache,sharing=private,target=/rails/.cache/bundle \
+  mkdir -p vendor && \
+  bundle install && \
+  cp -ar /rails/.cache/bundle vendor/bundle && \
+  bundle config set path vendor/bundle
 
 # Install node dependencies
 COPY package.json yarn.lock .yarnrc.yml ./
 RUN ./bin/yarn install --immutable
 
-RUN ASSETS_COMPILATION=true SECRET_KEY_BASE=1 ./bin/bundle exec i18n export
-RUN ASSETS_COMPILATION=true SECRET_KEY_BASE=1 ./bin/rake assets:precompile
+# Install Playwright browser executables. The target folder after the final cp
+#   matches the destination defined by $PLAYWRIGHT_BROWSERS_PATH above.
+RUN --mount=type=cache,sharing=private,target=/rails/.cache/pw-browsers \
+  PLAYWRIGHT_BROWSERS_PATH="/rails/.cache/pw-browsers" ./bin/yarn playwright install --no-shell chromium && \
+  cp -ar /rails/.cache/pw-browsers pw-browsers
+
+COPY . .
+
+RUN ASSETS_COMPILATION=true SECRET_KEY_BASE=1 RAILS_MAX_THREADS=4 NODE_OPTIONS="--max_old_space_size=4096" ./bin/bundle exec i18n export
+RUN --mount=type=cache,uid=1000,target=/rails/tmp/cache ASSETS_COMPILATION=true SECRET_KEY_BASE=1 RAILS_MAX_THREADS=4 NODE_OPTIONS="--max_old_space_size=4096" ./bin/rake assets:precompile
+
+# Save the Playwright CLI from certain doom
+RUN mkdir -p "$PLAYWRIGHT_BROWSERS_PATH/node_modules"
+RUN cp -r node_modules/playwright* "$PLAYWRIGHT_BROWSERS_PATH/node_modules"
 
 RUN rm -rf node_modules
 
 FROM base AS runtime
-
-RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y \
-      mariadb-client \
-      zip \
-      python-is-python3
-
-# Copy built artifacts: gems, application
-COPY --from=build /rails .
-
-# Run and own only the runtime files as a non-root user for security
-RUN useradd rails --create-home --shell /bin/bash && \
-    chown -R rails:rails vendor db log tmp public app pids
-
-FROM runtime AS sidekiq
-
-USER rails:rails
-RUN gem install mailcatcher
-
-ENTRYPOINT ["/rails/bin/docker-entrypoint-sidekiq"]
-
-FROM runtime AS shoryuken
-
-USER rails:rails
-
-ENTRYPOINT ["/rails/bin/docker-entrypoint-shoryuken"]
-
-FROM runtime AS monolith
-
-EXPOSE 3000
 
 # Install fonts for rendering PDFs (mostly competition summary PDFs)
 # dejavu = Hebrew, Arabic, Greek
@@ -104,15 +95,42 @@ EXPOSE 3000
 # ipafont = Japanese
 # thai-tlwg = Thai (as the name suggests)
 # lmodern = Random accents and special symbols for Latin script
+
 RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y \
+      mariadb-client \
+      zip \
+      python-is-python3 \
       fonts-dejavu \
       fonts-unfonts-core \
       fonts-wqy-microhei \
       fonts-ipafont \
       fonts-thai-tlwg \
       fonts-lmodern
+
+RUN useradd rails --create-home --shell /bin/bash
+
+# Copy built artifacts: gems, application, PW browsers
+COPY --chown=rails:rails --from=build /rails .
+
+# We already need the Playwright CLI which is part of the /rails folder,
+#   but we also still need `sudo` privileges to be able to install runtime dependencies through apt
+RUN "$PLAYWRIGHT_BROWSERS_PATH/node_modules/playwright/cli.js" install-deps chromium
+
 USER rails:rails
+
+FROM runtime AS sidekiq
+
+ENTRYPOINT ["/rails/bin/docker-entrypoint-sidekiq"]
+
+FROM runtime AS shoryuken
+
+ENTRYPOINT ["/rails/bin/docker-entrypoint-shoryuken"]
+
+FROM runtime AS monolith
+
+EXPOSE 3000
+
 # Regenerate the font cache so WkHtmltopdf can find them
 # per https://dalibornasevic.com/posts/76-figuring-out-missing-fonts-for-wkhtmltopdf
 RUN fc-cache -f -v
@@ -128,6 +146,5 @@ FROM runtime AS monolith-api
 
 EXPOSE 3000
 
-USER rails:rails
 ENV API_ONLY="true"
 CMD ["./bin/rails", "server"]
