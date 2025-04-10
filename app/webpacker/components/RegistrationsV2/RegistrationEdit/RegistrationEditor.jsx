@@ -114,21 +114,6 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
   const maxEvents = competitionInfo.events_per_registration_limit ?? Infinity;
   const eventsAreValid = selectedEventIds.size > 0 && selectedEventIds.size <= maxEvents;
 
-  const formatBody = (body) => {
-    const simplifiedBody = {
-      events: body.competing.event_ids,
-      status: body.competing.status,
-      comment: body.competing.comment,
-      admin_comment: body.competing.adminComment,
-      guests: body.guests,
-    };
-
-    return Object.entries(simplifiedBody)
-      .filter(([_, value]) => value !== null && value !== undefined)
-      .map(([key, value]) => `${key}: ${value}`)
-      .join('\n');
-  };
-
   const handleRegisterClick = useCallback(() => {
     if (!hasChanges) {
       dispatch(showMessage('competitions.registration_v2.update.no_changes', 'basic'));
@@ -166,7 +151,7 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
         body.guests = guests;
       }
       confirm({
-        content: I18n.t('competitions.registration_v2.update.organizer_update_confirm') + '\n'
+        content: I18n.t('competitions.registration_v2.update.organizer_update_confirm')
       }).then(() => {
         updateRegistrationMutation(body);
         dispatch(showMessage('competitions.registration_v2.update.being_updated', 'positive'));
@@ -222,11 +207,11 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
         )}
         <Header>
           {`${competitor.name} `}
-          (
-          <a href={personUrl(competitor.wca_id)} target="_blank" rel="noreferrer" className="hide-new-window-icon">{competitor.wca_id}</a>
-          )
+          {competitor.wca_id && (
+            <a href={personUrl(competitor.wca_id)} target="_blank" rel="noreferrer" className="hide-new-window-icon">({competitor.wca_id})</a>
+          )}
           {' ' /* Necessary to space the icon away from the wca_id */ }
-          <a href={personUrl(competitor.wca_id)} target="_blank" rel="noreferrer" className="hide-new-window-icon"><Icon name="edit" /></a>
+          <a href={editPersonUrl(competitor.id)} target="_blank" rel="noreferrer" className="hide-new-window-icon"><Icon name="edit" /></a>
         </Header>
         <Form.Field required error={selectedEventIds.size === 0}>
           <EventSelector
