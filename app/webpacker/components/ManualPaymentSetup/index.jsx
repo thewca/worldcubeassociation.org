@@ -8,21 +8,33 @@ import MarkdownEditor from '../wca/FormBuilder/input/MarkdownEditor';
 import useInputState from '../../lib/hooks/useInputState';
 import { fetchJsonOrError } from '../../lib/requests/fetchWithAuthenticityToken';
 import { addManualPaymentIntegration } from '../../lib/requests/routes.js.erb';
+import WCAQueryClientProvider from '../../lib/providers/WCAQueryClientProvider';
 
-export default function ManualPaymentSetup({ competitionId }) {
+export default function Wrapper({ competitionId }) {
+  return (
+    <WCAQueryClientProvider>
+      <ManualPaymentSetup competitionId={competitionId} />
+    </WCAQueryClientProvider>
+  );
+}
+
+function ManualPaymentSetup({ competitionId }) {
   const [paymentInfo, setPaymentInfo] = useInputState('');
   const [paymentReference, setPaymentReference] = useInputState('');
-  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState(false);
 
-  const { mutate } = useMutation({
+  const { mutate, isSuccess } = useMutation({
     mutationFn: ({ info, reference }) => fetchJsonOrError(
       addManualPaymentIntegration(competitionId),
       {
         method: 'POST',
-        body: JSON.stringify({ paymentInfo: info, paymentReference: reference }),
+        body: JSON.stringify({ payment_info: info, payment_reference: reference }),
+        headers: {
+          'content-type': 'application/json',
+        },
       },
     ),
-    onSuccess: () => setSuccess(true),
+    onError: (responseError) => { setError(responseError.json.error); },
   });
 
   return (
@@ -30,9 +42,15 @@ export default function ManualPaymentSetup({ competitionId }) {
       <Header>
         {I18n.t('payments.payment_setup.manual_payments_header')}
       </Header>
-      { success && (
-        <Message possitve>
+      { isSuccess && (
+        <Message positive>
           Successfully created the manual payment integration.
+        </Message>
+      )}
+      { error && (
+        <Message negative>
+          <Message.Header>Failed with error</Message.Header>
+          {error}
         </Message>
       )}
       <Form onSubmit={() => mutate({ info: paymentInfo, reference: paymentReference })}>
@@ -44,6 +62,9 @@ export default function ManualPaymentSetup({ competitionId }) {
           <label htmlFor="paymentReference">{I18n.t('payments.payment_setup.account_details.manual.payment_reference')}</label>
           <Form.Input id="paymentReference" value={paymentReference} onChange={setPaymentReference} />
         </FormField>
+        <Form.Button type="submit">
+          Submit
+        </Form.Button>
       </Form>
     </>
   );

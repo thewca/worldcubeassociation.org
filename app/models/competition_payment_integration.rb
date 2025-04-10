@@ -15,11 +15,13 @@ class CompetitionPaymentIntegration < ApplicationRecord
   INTEGRATION_DASHBOARD_URLS = {
     paypal: "https://www.paypal.com/listing/customers",
     stripe: "https://dashboard.stripe.com/account/applications",
+    manual: nil,
   }.freeze
 
   INTEGRATION_CURRENCY_INFORMATION = {
     paypal: "https://developer.paypal.com/docs/reports/reference/paypal-supported-currencies/",
     stripe: "https://docs.stripe.com/currencies#supportedcurrencies",
+    manual: nil,
   }.freeze
 
   INTEGRATION_RECORD_TYPES = {

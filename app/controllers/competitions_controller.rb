@@ -265,10 +265,15 @@ class CompetitionsController < ApplicationController
 
   def add_manual_payment_setup
     @competition = competition_from_params
-    payment_info = params[:payment_info]
-    payment_reference = params[:payment_reference]
 
-    ManualPaymentIntegration.create(payment_info: payment_info, payment_reference: payment_reference)
+    return render json: { error: 'Already connected' }, status: :bad_request if @competition.payment_integration_connected?(:manual)
+
+    payment_info = params.require(:payment_info)
+    payment_reference = params.require(:payment_reference)
+
+    connection = ManualPaymentIntegration.create(payment_information: payment_info, payment_reference: payment_reference)
+
+    @competition.competition_payment_integrations.create(connected_account: connection)
 
     render json: { status: "ok" }
   end

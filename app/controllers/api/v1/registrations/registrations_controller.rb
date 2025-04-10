@@ -87,7 +87,7 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
   end
 
   def add_payment_reference
-    ManualPaymentRecord.create(registration: @registration, payment_reference: params.require[:payment_reference])
+    ManualPaymentRecord.create(registration: @registration, payment_reference: params.require(:payment_reference))
 
     render json: { status: 'ok' }, status: :ok
   end
