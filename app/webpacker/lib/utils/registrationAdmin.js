@@ -112,6 +112,9 @@ export function sortRegistrations(registrations, sortColumn, sortDirection) {
       case 'waiting_list_position':
         return a.competing.waiting_list_position - b.competing.waiting_list_position;
 
+      case 'dropdown_selection':
+        return (a.competing.dropdown_selection || '').localeCompare(b.competing.dropdown_selection || '');
+
       default: {
         if (WCA_EVENT_IDS.includes(sortColumn)) {
           const aHasEvent = a.competing.event_ids.includes(sortColumn);

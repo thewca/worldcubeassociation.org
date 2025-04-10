@@ -209,6 +209,12 @@ export default function TableRow({
 
             <Table.Cell>{registration.guests}</Table.Cell>
 
+            {competitionInfo && competitionInfo.registration_dropdown_enabled && (
+              <Table.Cell>
+                {registration.competing.dropdown_selection}
+              </Table.Cell>
+            )}
+
             {commentsAreShown && (
               <>
                 <Table.Cell>

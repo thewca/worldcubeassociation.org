@@ -22,6 +22,7 @@ export const sortReducer = createSortReducer([
   'events',
   'guests',
   'paid_on',
+  'dropdown_selection',
   'comment',
   'dob',
   ...WCA_EVENT_IDS,
