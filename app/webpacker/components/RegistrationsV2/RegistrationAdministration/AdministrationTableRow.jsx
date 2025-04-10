@@ -22,7 +22,8 @@ import RegionFlag from '../../wca/RegionFlag';
 const truncateComment = (comment) => (comment?.length > 12 ? `${comment.slice(0, 12)}...` : comment);
 
 function RegistrationTime({
-  timestamp, registeredOn, paymentStatuses, hasPaid, paidOn, usesPaymentIntegration,
+  timestamp,
+  registeredOn, paymentStatuses, hasPaid, paidOn, usesPaymentIntegration, usingManualPayment,
 }) {
   if (timestamp) {
     return getRegistrationTimestamp(paidOn ?? registeredOn);
@@ -30,7 +31,7 @@ function RegistrationTime({
 
   const mostRecentPaymentStatus = paymentStatuses ? paymentStatuses[0] : 'unpaid';
 
-  if (usesPaymentIntegration && !hasPaid) {
+  if (usesPaymentIntegration && !usingManualPayment && !hasPaid) {
     let content = I18n.t('registrations.list.payment_requested_on', { date: getRegistrationTimestamp(registeredOn) });
     let trigger = <span>{I18n.t('registrations.list.not_paid')}</span>;
 
@@ -96,6 +97,7 @@ export default function TableRow({
     has_paid: hasPaid,
   } = registration.payment ?? {};
   const usingPayment = competitionInfo['using_payment_integrations?'];
+  const usingManualPayment = usingPayment && competitionInfo.payment_integration_type === 'manual';
   const checkboxCellColor = !distinguishPaidUnpaid || !usingPayment || hasPaid
     ? color
     : undefined;
@@ -169,15 +171,22 @@ export default function TableRow({
                 registeredOn={registeredOn}
                 paymentStatuses={paymentStatuses}
                 usesPaymentIntegration={competitionInfo['using_payment_integrations?']}
+                usingManualPayment={usingManualPayment}
               />
             </Table.Cell>
 
-            {competitionInfo['using_payment_integrations?'] && (
+            {usingPayment && !usingManualPayment && (
             <Table.Cell>
               {paymentAmount !== 0
                 ? isoMoneyToHumanReadable(paymentAmount, competitionInfo.currency_code)
                 : ''}
             </Table.Cell>
+            )}
+
+            {usingManualPayment && (
+              <Table.Cell>
+                {registration.payment.payment_reference ?? I18n.t('registrations.list.not_paid')}
+              </Table.Cell>
             )}
 
             {eventsAreExpanded ? (

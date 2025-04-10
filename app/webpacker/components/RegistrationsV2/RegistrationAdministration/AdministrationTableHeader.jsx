@@ -3,6 +3,45 @@ import React from 'react';
 import I18n from '../../../lib/i18n';
 import EventIcon from '../../wca/EventIcon';
 
+function PaymentHeaders({
+  usingManualPayments, sortColumn, onColumnClick, sortDirection,
+}) {
+  if (usingManualPayments) {
+    return (
+      <>
+        <Table.HeaderCell
+          sorted={sortColumn === 'paid_on_with_registered_on_fallback' ? sortDirection : undefined}
+          onClick={() => onColumnClick('paid_on_with_registered_on_fallback')}
+        >
+          {I18n.t('registrations.list.registered.without_stripe')}
+        </Table.HeaderCell>
+        <Table.HeaderCell
+          sorted={sortColumn === 'payment_reference' ? sortDirection : undefined}
+          onClick={() => onColumnClick('payment_reference')}
+        >
+          {I18n.t('competitions.registration_v2.list.payment.payment_reference')}
+        </Table.HeaderCell>
+      </>
+    );
+  }
+  return (
+    <>
+      <Table.HeaderCell
+        sorted={sortColumn === 'paid_on_with_registered_on_fallback' ? sortDirection : undefined}
+        onClick={() => onColumnClick('paid_on_with_registered_on_fallback')}
+      >
+        {I18n.t('registrations.list.registered.with_stripe')}
+      </Table.HeaderCell>
+      <Table.HeaderCell
+        sorted={sortColumn === 'amount' ? sortDirection : undefined}
+        onClick={() => onColumnClick('amount')}
+      >
+        {I18n.t('competitions.registration_v2.update.amount')}
+      </Table.HeaderCell>
+    </>
+  );
+}
+
 export default function TableHeader({
   columnsExpanded,
   isChecked,
@@ -17,6 +56,9 @@ export default function TableHeader({
   const {
     dob: dobIsShown, events: eventsAreExpanded, comments: commentsAreShown,
   } = columnsExpanded;
+
+  const usingPayments = competitionInfo['using_payment_integrations?'];
+  const usingManualPayments = usingPayments && competitionInfo.payment_integration_type === 'manual';
 
   return (
     <Table.Header>
@@ -56,21 +98,13 @@ export default function TableHeader({
         >
           {I18n.t('common.user.representing')}
         </Table.HeaderCell>
-        {competitionInfo['using_payment_integrations?'] ? (
-          <>
-            <Table.HeaderCell
-              sorted={sortColumn === 'paid_on_with_registered_on_fallback' ? sortDirection : undefined}
-              onClick={() => onColumnClick('paid_on_with_registered_on_fallback')}
-            >
-              {I18n.t('registrations.list.registered.with_stripe')}
-            </Table.HeaderCell>
-            <Table.HeaderCell
-              sorted={sortColumn === 'amount' ? sortDirection : undefined}
-              onClick={() => onColumnClick('amount')}
-            >
-              {I18n.t('competitions.registration_v2.update.amount')}
-            </Table.HeaderCell>
-          </>
+        {usingPayments ? (
+          <PaymentHeaders
+            onColumnClick={onColumnClick}
+            sortColumn={sortColumn}
+            sortDirection={sortDirection}
+            usingManualPayments={usingManualPayments}
+          />
         ) : (
           <Table.HeaderCell
             sorted={sortColumn === 'registered_on' ? sortDirection : undefined}

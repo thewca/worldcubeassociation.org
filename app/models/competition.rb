@@ -985,6 +985,10 @@ class Competition < ApplicationRecord
     competition_payment_integrations.any? && has_fees?
   end
 
+  def using_manual_payment?
+    payment_integration_type == :manual
+  end
+
   def can_edit_registration_fees?
     # Quick workaround for https://github.com/thewca/worldcubeassociation.org/issues/2123
     # (We used to return `registrations.with_payments.empty?` here)

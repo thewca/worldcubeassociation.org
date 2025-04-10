@@ -23,6 +23,7 @@ class Registration < ApplicationRecord
   has_many :registration_history_entries, -> { order(:created_at) }, dependent: :destroy
   has_many :registration_competition_events
   has_many :registration_payments
+  has_one :manual_payment_record
   has_many :competition_events, through: :registration_competition_events
   has_many :events, through: :competition_events
   has_many :live_results
@@ -267,15 +268,24 @@ class Registration < ApplicationRecord
     }
     if admin
       if competition.using_payment_integrations?
-        base_json.deep_merge!({
-                                payment: {
-                                  has_paid: outstanding_entry_fees <= 0,
-                                  payment_statuses: registration_payments.sort_by(&:created_at).reverse.map(&:payment_status),
-                                  payment_amount_iso: paid_entry_fees.cents,
-                                  payment_amount_human_readable: "#{paid_entry_fees.format} (#{paid_entry_fees.currency.name})",
-                                  updated_at: last_payment_date,
-                                },
-                              })
+        if competition.using_manual_payment?
+          base_json.deep_merge!({
+                                  payment: {
+                                    has_paid: manual_payment_record.present?,
+                                    payment_reference: manual_payment_record&.payment_reference,
+                                  },
+                                })
+        else
+          base_json.deep_merge!({
+                                  payment: {
+                                    has_paid: outstanding_entry_fees <= 0,
+                                    payment_statuses: registration_payments.sort_by(&:created_at).reverse.map(&:payment_status),
+                                    payment_amount_iso: paid_entry_fees.cents,
+                                    payment_amount_human_readable: "#{paid_entry_fees.format} (#{paid_entry_fees.currency.name})",
+                                    updated_at: last_payment_date,
+                                  },
+                                })
+        end
       end
       base_json.deep_merge!({
                               guests: guests,
