@@ -2237,7 +2237,7 @@ en:
     payment_providers:
       paypal: 'PayPal'
       stripe: 'Stripe'
-      manual: 'External Payment (Manual)'
+      manual: 'Manual/External'
     #context: Setting up and making payments
     payment_setup:
       external_dashboard: '%{provider} Dashboard'
@@ -2252,11 +2252,11 @@ en:
       provider_heading: "%{provider} Payments"
       accept_payments_header: "Accept Registration Payments"
       manual_payments_header: "Configure Manual Payments"
-      connect_button: "Connect with %{provider}"
+      connect_button: "Set up %{provider}"
       connect_account_info:
         stripe: "In order to accept payments for this competition, you need to connect your own Stripe account with the WCA Stripe account by clicking the button below. If you don't already have your own Stripe account you can still click on the button below and it will guide you through the process."
         paypal: "A PayPal Business account is required to accept PayPal payments via the competition page. If you don't already have a PayPal business account, you can still click on the button below and it will guide you through the process."
-        manual: "Manual External Payments will enable you to track payments by the user submitting a payment reference as part of the registration process."
+        manual: "Define payment instructions for competitors. Competitors will be able to indicate when they have paid, and provide a payment reference for you to check against your records in the external payment service you use."
       connect_account_warning:
         stripe: "Connecting your Stripe account gives the WCA website the ability to create charges, and issue refunds directly on your Stripe account."
         paypal: "Connecting your PayPal account gives the WCA website the ability to route payments to you, and issue refunds directly on your PayPal account."
@@ -2273,8 +2273,8 @@ en:
           display_name: "Name"
           primary_email: "Email"
         manual:
-          payment_info: "Instructions for the competitor how they will pay"
-          payment_reference: "Reference that the competitor should enter after paying (could be Name, Mobile Phone Number, Payment ID, etc.)"
+          payment_info: "Payment instructions (will be displayed on Competition Page)"
+          payment_reference: "What information should the user provide for you to identify their payment? (eg, payment reference number / account ID / etc)"
         fallback_not_applicable: "N/A"
     statuses:
       succeeded: "Succeeded"
