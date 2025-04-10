@@ -13,14 +13,17 @@ import { addPaymentReferenceUrl } from '../../../lib/requests/routes.js.erb';
 import useCheckboxState from '../../../lib/hooks/useCheckboxState';
 import Markdown from '../../Markdown';
 import fetchWithJWTToken from '../../../lib/requests/fetchWithJWTToken';
+import { useRegistration } from '../lib/RegistrationProvider';
 
 export default function ManualPaymentStep({
   userInfo,
   competitionInfo,
   nextStep,
 }) {
-  const [paymentReference, setPaymentReference] = useInputState('');
-  const [paymentConfirmation, setPaymentConfirmation] = useCheckboxState(false);
+  const { hasPaid, registration } = useRegistration();
+
+  const [paymentReference, setPaymentReference] = useInputState(hasPaid ? registration.payment.payment_reference : '');
+  const [paymentConfirmation, setPaymentConfirmation] = useCheckboxState(hasPaid);
 
   const { mutate, isPending } = useMutation({
     mutationFn: ({ reference }) => fetchWithJWTToken(
@@ -52,15 +55,15 @@ export default function ManualPaymentStep({
         <Markdown id="paymentInfo" md={competitionInfo.manual_payment_details.payment_info} />
       </Message>
       <Form id="manual-payment-form" onSubmit={handleSubmit}>
-        <Form.Field required>
+        <Form.Field required disabled={hasPaid}>
           <label htmlFor="paymentReference">{I18n.t('competitions.registration_v2.list.payment.payment_reference')}</label>
           <Form.Checkbox id="paymentConfirm" onChange={setPaymentConfirmation} checked={paymentConfirmation} label={I18n.t('competitions.registration_v2.list.payment.confirmation')} />
         </Form.Field>
-        <Form.Field required>
+        <Form.Field required disabled={hasPaid}>
           <label htmlFor="paymentReference">{competitionInfo.manual_payment_details.payment_reference}</label>
           <Form.Input id="paymentReference" value={paymentReference} onChange={setPaymentReference} />
         </Form.Field>
-        <Form.Button type="submit" disabled={isPending}>
+        <Form.Button type="submit" disabled={isPending || hasPaid}>
           {I18n.t('competitions.registration_v2.list.payment.submit')}
         </Form.Button>
       </Form>
