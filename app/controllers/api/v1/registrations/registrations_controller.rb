@@ -269,7 +269,7 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
 
     def update_params
       params.require([:user_id, :competition_id])
-      params.permit(:guests, competing: [:status, :comment, { event_ids: [] }, :admin_comment])
+      params.permit(:guests, :user_id, :competition_id, :payment_reference, competing: [:status, :comment, { event_ids: [] }, :admin_comment])
       params
     end
 

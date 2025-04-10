@@ -2,11 +2,10 @@ import React, { useMemo, useState } from 'react';
 import { Step } from 'semantic-ui-react';
 import CompetingStep from './CompetingStep';
 import RegistrationRequirements from './RegistrationRequirements';
-import StripeWrapper from './StripeWrapper';
 import I18n from '../../../lib/i18n';
 import RegistrationOverview from './RegistrationOverview';
 import { useRegistration } from '../lib/RegistrationProvider';
-import ManualPaymentStep from './ManualPaymentStep';
+import PaymentStepWrapper from './PaymentStepWrapper';
 
 const requirementsStepConfig = {
   key: 'requirements',
@@ -23,13 +22,7 @@ const competingStepConfig = {
 const paymentStepConfig = {
   key: 'payment',
   i18nKey: 'competitions.registration_v2.register.panel.payment',
-  component: StripeWrapper,
-};
-
-const manualPaymentStepConfig = {
-  key: 'manual',
-  i18nKey: 'competitions.registration_v2.register.panel.payment',
-  component: ManualPaymentStep,
+  component: PaymentStepWrapper,
 };
 
 const registrationOverviewConfig = {
@@ -95,12 +88,8 @@ export default function StepPanel({
 
   const steps = useMemo(() => {
     const stepList = [requirementsStepConfig, competingStepConfig];
-    if (competitionInfo['using_payment_integrations?'] && competitionInfo.payment_integration === 'stripe') {
+    if (competitionInfo['using_payment_integrations?']) {
       stepList.push(paymentStepConfig);
-    }
-
-    if (competitionInfo['using_payment_integrations?'] && competitionInfo.payment_integration === 'manual') {
-      stepList.push(manualPaymentStepConfig);
     }
 
     if (isRegistered) {

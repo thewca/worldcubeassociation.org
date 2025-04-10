@@ -10,7 +10,7 @@ class AddManualCpiTables < ActiveRecord::Migration[7.2]
 
     create_table :manual_payment_records do |t|
       t.string :payment_reference, null: false
-      t.references :registrations, null: false
+      t.references :registration, null: false
       t.timestamps
     end
   end

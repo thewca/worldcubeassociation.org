@@ -1850,6 +1850,10 @@ en:
          refunded_status: "Refunded"
          initialized: "Payment process was started on %{date}, but not finished."
          refunded: "Payment was refunded on %{date}."
+         confirmation: "I confirm that I have followed the above steps and paid the registration fees."
+         payment_reference: "Payment Reference"
+         payment_info: "Payment Information"
+         submit: "Submit payment reference"
         psychsheets:
           show_me: "Show me"
           rank: "Rank: %{userPosition}"
