@@ -3,6 +3,8 @@
 <%= render layout: "nav" do %>
   <% if @competition.registration_full? %>
     <%= alert :warning, t('registrations.mailer.deleted.causes.registrations_full'), note: true %>
+  <% elsif !@competition.on_the_spot_registration? %>
+    <%= alert :warning, t('registrations.add.ots_not_enabled') %>
   <% else %>
     <%= alert :info, t('registrations.add.info'), note: true %>
     <%= simple_form_for :registration_data, url: competition_registrations_do_add_path(@competition) do |f| %>

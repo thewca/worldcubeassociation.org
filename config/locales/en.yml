@@ -1328,6 +1328,7 @@ en:
       title: "Add registration for %{comp}"
       info: "This will create an approved registration. Use this form to add walk-ins during the competition."
       add: "Add registration"
+      ots_not_enabled: "On-the-spot registration is not enabled - a Delegate must enable it from the Organizer View"
       errors:
         already_registered: "This person already has a registration."
   #context: Key used when managing competitions
