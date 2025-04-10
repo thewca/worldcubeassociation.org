@@ -151,6 +151,14 @@ class RegistrationsController < ApplicationController
       flash[:danger] = I18n.t("registrations.mailer.deleted.causes.registrations_full")
       redirect_to competition_path(@competition)
       return
+    elsif !@competition.on_the_spot_registration?
+      flash[:danger] = I18n.t("registrations.add.ots_not_enabled")
+      redirect_to competition_path(@competition)
+      return
+    elsif @competition.is_probably_over?
+      flash[:danger] = I18n.t("registrations.add.competition_over")
+      redirect_to competition_path(@competition)
+      return
     end
     ActiveRecord::Base.transaction do
       user, locked_account_created = user_for_registration!(params[:registration_data])
