@@ -151,7 +151,7 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
         body.guests = guests;
       }
       confirm({
-        content: I18n.t('competitions.registration_v2.update.organizer_update_confirm')
+        content: I18n.t('competitions.registration_v2.update.organizer_update_confirm'),
       }).then(() => {
         updateRegistrationMutation(body);
         dispatch(showMessage('competitions.registration_v2.update.being_updated', 'positive'));
@@ -208,7 +208,11 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
         <Header>
           {`${competitor.name} `}
           {competitor.wca_id && (
-            <a href={personUrl(competitor.wca_id)} target="_blank" rel="noreferrer" className="hide-new-window-icon">({competitor.wca_id})</a>
+            <a href={personUrl(competitor.wca_id)} target="_blank" rel="noreferrer" className="hide-new-window-icon">
+              (
+                {competitor.wca_id}
+              )
+            </a>
           )}
           {' ' /* Necessary to space the icon away from the wca_id */ }
           <a href={editPersonUrl(competitor.id)} target="_blank" rel="noreferrer" className="hide-new-window-icon"><Icon name="edit" /></a>
