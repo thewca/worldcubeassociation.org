@@ -432,6 +432,10 @@ RSpec.describe "registrations" do
   # Adding a registration reuses the logic behind importing CSV registrations
   # and that's tested thoroughly above.
   describe "POST #do_add" do
+    before do
+      competition.update!(on_the_spot_registration: true, on_the_spot_entry_fee_lowest_denomination: 500)
+    end
+
     context "when signed in as a normal user" do
       it "doesn't allow access" do
         sign_in FactoryBot.create(:user)
