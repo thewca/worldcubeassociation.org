@@ -2267,7 +2267,7 @@ en:
         fallback_not_applicable: "N/A"
     statuses:
       succeeded: "Succeeded"
-      refunded: "Refunded"
+      refund: "Refunded"
   persons:
     #context: Person search page
     index:

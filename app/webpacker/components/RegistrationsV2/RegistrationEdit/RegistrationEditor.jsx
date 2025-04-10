@@ -313,7 +313,7 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
             {registration.payment.payment_statuses.map((paymentStatus) => (
               <List.Item key={paymentStatus}>
                 {/* i18n-tasks-use t('payments.statuses.succeeded') */}
-                {/* i18n-tasks-use t('payments.statuses.refunded') */}
+                {/* i18n-tasks-use t('payments.statuses.refund') */}
                 {I18n.t(`payments.statuses.${paymentStatus}`)}
               </List.Item>
             ))}
