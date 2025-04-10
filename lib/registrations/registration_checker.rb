@@ -2,9 +2,8 @@
 
 module Registrations
   class RegistrationChecker
-    def self.apply_payload(registration, raw_payload)
-      # Duplicate everything to make sure we don't trigger unwanted DB write operations
-      registration.deep_dup.tap do |new_registration|
+    def self.build_copy(entity, clone: true)
+      if clone
         # Weird quirk in Rails: `deep_dup` initializes a "blank" Registration under the hood
         #   and _then_ fills its attributes with the model it's being cloned from. In practice,
         #   this means that an `accepted` competition which is being cloned will immediately(!) report
@@ -12,20 +11,27 @@ module Registrations
         #   cloning _then_ sets it to the `accepted` status of the original registration.
         # In practice, this change is necessary so that verifying a registration update
         #   of a full competition does not trigger registration limit checks.
-        new_registration.clear_changes_information
+        entity&.deep_dup&.tap { it.clear_changes_information }
+      else
+        entity
+      end
+    end
 
+    def self.apply_payload(registration, raw_payload, clone: true)
+      # Duplicate everything to make sure we don't trigger unwanted DB write operations
+      build_copy(registration, clone: clone).tap do |new_registration|
         guests = raw_payload['guests']
 
         new_registration.guests = guests.to_i if raw_payload.key?('guests')
 
         competing_payload = raw_payload['competing']
         comment = competing_payload&.dig('comment')
-        organizer_comment = competing_payload&.dig('organizer_comment')
+        organizer_comment = competing_payload&.dig('organizer_comment') || competing_payload&.dig('admin_comment')
         competing_status = competing_payload&.dig('status')
         waiting_list_position = competing_payload&.dig('waiting_list_position')
 
         new_registration.comments = comment if competing_payload&.key?('comment')
-        new_registration.administrative_notes = organizer_comment if competing_payload&.key?('organizer_comment')
+        new_registration.administrative_notes = organizer_comment if competing_payload&.key?('organizer_comment') || competing_payload&.key?('admin_comment')
         new_registration.competing_status = competing_status if competing_payload&.key?('status')
         new_registration.waiting_list_position = waiting_list_position if competing_payload&.key?('waiting_list_position')
 
@@ -35,7 +41,7 @@ module Registrations
         new_registration.tracked_event_ids = registration.event_ids
 
         competition_events_lookup = registration.competition.competition_events.where(event_id: desired_events).index_by(&:event_id)
-        competition_events = desired_events.map { competition_events_lookup[it]&.deep_dup }
+        competition_events = desired_events.map { build_copy(competition_events_lookup[it], clone: clone) }
 
         upserted_competition_events = competition_events.map { new_registration.registration_competition_events.build(competition_event: it) }
         new_registration.registration_competition_events = upserted_competition_events

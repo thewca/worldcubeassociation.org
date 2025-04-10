@@ -67,7 +67,7 @@ class Registration < ApplicationRecord
   end
 
   def update_lanes!(params, acting_user)
-    Registrations::Lanes::Competing.update!(params, self.competition, acting_user.id)
+    Registrations::Lanes::Competing.update!(params, self, acting_user.id)
   end
 
   def guest_limit
@@ -102,7 +102,9 @@ class Registration < ApplicationRecord
   #   that would screw us over with caching. Unfortunately, even `through` associations cache themselves
   #   so every registration of a competition then effectively has "its own" waiting list.
   #   (We might want to revisit this decision when we switch to hook-based committing in waitlistable.rb)
-  delegate :waiting_list, to: :competition, allow_nil: true
+  def waiting_list
+    competition&.waiting_list || competition&.create_waiting_list(entries: [])
+  end
 
   def waitlistable?
     waitlisted?
@@ -488,6 +490,12 @@ class Registration < ApplicationRecord
     @tracked_event_ids.present?
   end
 
+  after_commit :reset_tracked_event_ids
+
+  private def reset_tracked_event_ids
+    @tracked_event_ids = nil
+  end
+
   def tracked_event_ids
     @tracked_event_ids ||= self.event_ids
   end
@@ -497,6 +505,10 @@ class Registration < ApplicationRecord
     #   we want to avoid database writes at all cost. So we create an in-memory dummy registration,
     #   but unfortunately `through` association support is very limited for such volatile models.
     registration_competition_events.map(&:event_id)
+  end
+
+  def changed_event_ids
+    self.volatile_event_ids - self.tracked_event_ids
   end
 
   def competition_events_changed?
