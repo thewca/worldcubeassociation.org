@@ -164,6 +164,10 @@
           </p>
         </dd>
       <% end %>
+      <% if @competition.using_manual_payment? %>
+        <dt><%= t 'competitions.registration_v2.list.payment.payment_info' %></dt>
+        <dd><%= md(@competition.manual_payment_details[:payment_info]) %></dd>
+      <% end %>
       <dt><%= t '.registration_requirements' %></dt>
       <dd>
         <% collapse = @competition.is_probably_over? %>
