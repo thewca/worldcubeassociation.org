@@ -166,17 +166,10 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
         body.guests = guests;
       }
       confirm({
-        content: (
-          <>
-            <pre>
-              {I18n.t('competitions.registration_v2.update.organizer_update_confirm') + '\n'}
-              {formatBody(body)}
-            </pre>
-          </>
-        ),
+        content: I18n.t('competitions.registration_v2.update.organizer_update_confirm') + '\n'
       }).then(() => {
         updateRegistrationMutation(body);
-        dispatch(setMessage('competitions.registration_v2.update.being_updated', 'positive'));
+        dispatch(showMessage('competitions.registration_v2.update.being_updated', 'positive'));
       }).catch(() => {});
     }
   }, [
