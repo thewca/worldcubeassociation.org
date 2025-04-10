@@ -92,4 +92,18 @@ class RegistrationsMailer < ApplicationMailer
       subject: "A formerly-banned competitor just registered for #{registration.competition.name}",
     )
   end
+
+  def notify_delegates_of_registration_deletion_of_banned_competitor(registration, end_date)
+    @registration = registration
+    @end_date = end_date
+    to = registration.competition.competition_delegates.map { |x| x.user.email }
+    return if to.empty?
+
+    mail(
+      to: to,
+      cc: UserGroup.teams_committees_group_wic.metadata.email,
+      reply_to: UserGroup.teams_committees_group_wic.metadata.email,
+      subject: "Competitor Ban Notice – Registration Deleted for #{registration.competition.name}",
+    )
+  end
 end
