@@ -38,7 +38,8 @@ RSpec.describe CompetitionsController do
     end
 
     context 'when signed in as an admin' do
-      sign_in { create :admin }
+      let(:admin) { create :admin }
+      before { sign_in admin}
 
       it 'shows the competition creation form' do
         get :new
@@ -47,7 +48,8 @@ RSpec.describe CompetitionsController do
     end
 
     context 'when signed in as a delegate' do
-      sign_in { create :delegate }
+      let(:delegate) { create :delegate }
+      before { sign_in delegate}
 
       it 'shows the competition creation form' do
         get :new
@@ -56,7 +58,8 @@ RSpec.describe CompetitionsController do
     end
 
     context 'when signed in as a regular user' do
-      sign_in { create :user }
+      let(:user) { create :user }
+      before { sign_in user}
 
       it 'does not allow access' do
         get :new
@@ -76,7 +79,8 @@ RSpec.describe CompetitionsController do
     end
 
     context 'when signed in as a senior Delegate' do
-      sign_in { (create :senior_delegate_role).user }
+      let(:senior_delegate_role) { create :senior_delegate_role }
+      before { sign_in senior_delegate_role.user}
 
       it 'renders the for_senior page' do
         get :for_senior
@@ -85,7 +89,8 @@ RSpec.describe CompetitionsController do
     end
 
     context 'when signed in as a regular Delegate' do
-      sign_in { create :delegate }
+      let(:delegate) { create :delegate }
+      before { sign_in delegate}
 
       it 'does not allow access' do
         get :for_senior
@@ -145,7 +150,8 @@ RSpec.describe CompetitionsController do
     end
 
     context 'when signed in as a regular user' do
-      sign_in { create :user }
+      let(:user) { create :user }
+      before { sign_in user}
       it 'does not allow creation' do
         post :create, params: { competition: { name: "Test2015" } }
         expect(response).to have_http_status(:forbidden)
@@ -153,7 +159,8 @@ RSpec.describe CompetitionsController do
     end
 
     context 'when signed in as an admin' do
-      sign_in { create :admin }
+      let(:admin) { create :admin }
+      before { sign_in admin}
 
       it "creates a new competition" do
         creation_params = build_competition_update(Competition.new, name: "FatBoyXPC 2015", venue: { countryId: "USA" }, website: { usesWcaRegistration: false })
@@ -269,7 +276,8 @@ RSpec.describe CompetitionsController do
 
   describe 'POST #update' do
     context 'when signed in as an admin' do
-      sign_in { create :admin }
+      let(:admin) { create :admin }
+      before { sign_in admin}
 
       it 'can confirm competition' do
         put :confirm, params: { competition_id: competition }
@@ -858,7 +866,9 @@ RSpec.describe CompetitionsController do
     end
 
     context 'regular user trying to close registration via button' do
-      sign_in { create :user }
+      let(:user) { create :user }
+      before { sign_in user}
+
       it 'does not allow regular user to use organiser reg close button' do
         comp_with_full_reg = create(:competition, :registration_open, competitor_limit_enabled: true, competitor_limit: 1, competitor_limit_reason: "we have a tiny venue")
         create(:registration, :accepted, :newcomer, competition: comp_with_full_reg)
@@ -1119,7 +1129,8 @@ RSpec.describe CompetitionsController do
     end
 
     context 'when signed in as an admin' do
-      sign_in { create :admin }
+      let(:admin) { create :admin }
+      before { sign_in admin}
 
       it 'shows the edit competition events form' do
         get :edit_events, params: { id: competition.id }
@@ -1128,7 +1139,8 @@ RSpec.describe CompetitionsController do
     end
 
     context 'when signed in as a regular user' do
-      sign_in { create :user }
+      let(:user) { create :user }
+      before { sign_in user}
 
       it 'does not allow access' do
         expect {
@@ -1149,7 +1161,8 @@ RSpec.describe CompetitionsController do
     end
 
     context 'when signed in as an admin' do
-      sign_in { create :admin }
+      let(:admin) { create :admin }
+      before { sign_in admin }
 
       it 'displays payment setup status' do
         get :payment_integration_setup, params: { competition_id: competition }
@@ -1159,7 +1172,8 @@ RSpec.describe CompetitionsController do
     end
 
     context 'when signed in as a regular user' do
-      sign_in { create :user }
+      let(:user) { create :user }
+      before { sign_in user}
 
       it 'does not allow access' do
         expect {
@@ -1180,7 +1194,8 @@ RSpec.describe CompetitionsController do
     end
 
     context 'when signed in as a regular user' do
-      sign_in { create :user }
+      let(:user) { create :user }
+      before { sign_in user}
 
       it 'does not allow access' do
         expect {
@@ -1201,7 +1216,8 @@ RSpec.describe CompetitionsController do
     end
 
     context 'when signed in as a regular user' do
-      sign_in { create :user }
+      let(:user) { create :user }
+      before { sign_in user }
 
       it 'does not allow access' do
         expect {

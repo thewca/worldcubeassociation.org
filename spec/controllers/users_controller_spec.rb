@@ -6,7 +6,8 @@ RSpec.describe UsersController do
   describe "GET #edit" do
     let(:user) { create(:user_with_wca_id) }
 
-    sign_in { create :admin }
+    let(:admin) { create :admin }
+    before { sign_in admin }
 
     it "populates user" do
       get :edit, params: { id: user.id }
@@ -185,7 +186,8 @@ RSpec.describe UsersController do
   end
 
   describe "GET #index" do
-    sign_in { create :admin }
+    let(:admin) { create :admin }
+    before { sign_in admin }
 
     it "is injection safe" do
       get :index, params: { format: :json, sort: "country", order: "ASC -- HMM" }
