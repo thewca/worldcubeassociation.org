@@ -39,7 +39,8 @@ RSpec.describe Api::V0::UserRolesController do
 
     context 'when user is logged in as a normal user' do
       let(:user) { create(:user) }
-      before { sign_in user}
+
+      before { sign_in user }
 
       it 'fetches list of roles of a user' do
         get :index, params: { userId: user_whose_delegate_status_changes.id }
@@ -65,6 +66,7 @@ RSpec.describe Api::V0::UserRolesController do
 
     context 'when user is logged in as an admin' do
       let(:wst_admin_role) { create :wst_admin_role }
+
       before { sign_in wst_admin_role.user }
 
       it 'does return banned_competitors if isGroupHidden is true' do
@@ -107,7 +109,8 @@ RSpec.describe Api::V0::UserRolesController do
 
     context 'when signed in as a WIC Leader' do
       let(:wic_leader) { create(:user, :wic_leader) }
-      before { sign_in wic_leader}
+
+      before { sign_in wic_leader }
 
       it 'can ban a user if the user does not have any upcoming competitions' do
         post :create, params: {
@@ -172,6 +175,7 @@ RSpec.describe Api::V0::UserRolesController do
 
     context 'when signed in as a Senior Delegate' do
       let(:senior_delegate_role) { create :senior_delegate_role }
+
       before { sign_in senior_delegate_role.user }
 
       it 'can create a new trainee delegate' do
@@ -191,6 +195,7 @@ RSpec.describe Api::V0::UserRolesController do
 
     context 'when signed in as a Board member' do
       let(:board_member) { create(:user, :board_member) }
+
       before { sign_in board_member }
 
       it "creating a new role for leader ends old delegate's role" do
@@ -211,6 +216,7 @@ RSpec.describe Api::V0::UserRolesController do
   describe 'DELETE #destroy' do
     context 'when signed in as a Senior Delegate' do
       let(:senior_delegate_role) { create :senior_delegate_role }
+
       before { sign_in senior_delegate_role.user }
 
       it 'can end role of a junior delegate' do

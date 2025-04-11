@@ -7,6 +7,7 @@ RSpec.describe UsersController do
     let(:user) { create(:user_with_wca_id) }
 
     let(:admin) { create :admin }
+
     before { sign_in admin }
 
     it "populates user" do
@@ -187,6 +188,7 @@ RSpec.describe UsersController do
 
   describe "GET #index" do
     let(:admin) { create :admin }
+
     before { sign_in admin }
 
     it "is injection safe" do
