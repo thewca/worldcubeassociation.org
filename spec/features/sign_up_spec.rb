@@ -10,7 +10,9 @@ RSpec.feature "Sign up" do
     # The cookie banner just gets in the way of these tests, and is already
     # tested elsewhere. Set a cookie that prevents the cookie banner from
     # appearing.
-    page.driver.set_cookie('cookie_eu_consented', 'true')
+    default_domain = Capybara.app_host || Capybara.server_host
+    cookie_eu_consented = { name: 'cookie_eu_consented', value: 'true', domain: default_domain, path: '/' }
+    page.driver.with_playwright_page { it.context.add_cookies([cookie_eu_consented]) }
   end
 
   context 'when signing up as a returning competitor', :js do
@@ -38,8 +40,6 @@ RSpec.feature "Sign up" do
     end
 
     it 'finds people by name' do
-      pending('Date popup suddenly started obstruting sign-in button. Signed DH 30/Aug/2024')
-
       visit "/users/sign_up"
 
       fill_in "Email", with: "jack@example.com"
@@ -65,7 +65,7 @@ RSpec.feature "Sign up" do
 
       # First, intentionally fill in the incorrect birthdate,
       # to test out our validations.
-      fill_in "Birthdate", with: "1900-01-01"
+      fill_in("Birthdate", with: "1900-01-01").send_keys(:escape)
       click_button "Sign up"
 
       # Make sure we inform the user of the incorrect birthdate they just
@@ -146,7 +146,7 @@ RSpec.feature "Sign up" do
       click_button "Sign up"
 
       # Verify that the custom delegate is still selected.
-      selectize_items = selectize.all("div.selectize-control .items")
+      selectize_items = selectize.all(".items")
       expect(selectize_items.length).to eq 1
       expect(selectize_items[0].find('.name').text).to eq custom_delegate.name
 
@@ -271,8 +271,10 @@ RSpec.feature "Sign up" do
       fill_in_selectize "WCA ID", with: person.wca_id
 
       click_button "Sign up"
-      click_on "I have never competed in a WCA competition."
       expect(page.find("#user_dob", visible: :hidden).value).to eq ""
+
+      click_on "I have never competed in a WCA competition."
+      expect(page.find("#user_dob", visible: :visible).value).to eq ""
     end
 
     it "does not allow both panels to be open after failed submission" do
@@ -300,7 +302,7 @@ RSpec.feature "Sign up" do
 
   context "when signing up as a non-english speaker", :js do
     it "stores the user's preferred locale" do
-      page.driver.headers = { 'Accept-Language' => 'es' }
+      page.driver.with_playwright_page { it.context.set_extra_http_headers({ 'Accept-Language' => 'es' }) }
       visit "/users/sign_up"
 
       fill_in "user[email]", with: "jack@example.com"
