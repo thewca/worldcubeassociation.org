@@ -3,9 +3,9 @@
 require 'rails_helper'
 
 RSpec.describe Vote do
-  let(:poll) { FactoryBot.create(:poll, :confirmed) }
-  let(:delegate) { FactoryBot.create(:delegate) }
-  let(:vote) { FactoryBot.create(:vote, user: delegate, poll: poll, poll_options: [poll.poll_options.first]) }
+  let(:poll) { create(:poll, :confirmed) }
+  let(:delegate) { create(:delegate) }
+  let(:vote) { create(:vote, user: delegate, poll: poll, poll_options: [poll.poll_options.first]) }
 
   it "is valid" do
     expect(vote).to be_valid
@@ -44,7 +44,7 @@ RSpec.describe Vote do
   end
 
   it "can't vote with poll_option_id for different poll" do
-    other_poll = FactoryBot.create(:poll, :confirmed)
+    other_poll = create(:poll, :confirmed)
     vote.poll_option_ids = [other_poll.poll_options.first.id]
     expect(vote).to be_invalid_with_errors(poll_options: ["One or more poll_options don't match the poll"])
   end

@@ -4,12 +4,12 @@ require 'rails_helper'
 
 RSpec.describe Api::V0::UserRolesController do
   describe 'GET #list' do
-    let!(:user_senior_delegate_role) { FactoryBot.create(:senior_delegate_role) }
-    let!(:user_whose_delegate_status_changes) { FactoryBot.create(:junior_delegate_role, group_id: user_senior_delegate_role.group_id).user }
-    let!(:delegate) { FactoryBot.create :delegate_role, group_id: user_senior_delegate_role.group_id }
-    let!(:person) { FactoryBot.create :person, dob: '1990-01-02' }
+    let!(:user_senior_delegate_role) { create(:senior_delegate_role) }
+    let!(:user_whose_delegate_status_changes) { create(:junior_delegate_role, group_id: user_senior_delegate_role.group_id).user }
+    let!(:delegate) { create :delegate_role, group_id: user_senior_delegate_role.group_id }
+    let!(:person) { create :person, dob: '1990-01-02' }
     let!(:user_who_claims_wca_id) do
-      FactoryBot.create(
+      create(
         :user,
         unconfirmed_wca_id: person.wca_id,
         delegate_id_to_handle_wca_id_claim: user_whose_delegate_status_changes.id,
@@ -17,7 +17,7 @@ RSpec.describe Api::V0::UserRolesController do
         dob_verification: "1990-01-2",
       )
     end
-    let!(:banned_competitor) { FactoryBot.create(:banned_competitor_role) }
+    let!(:banned_competitor) { create(:banned_competitor_role) }
 
     context 'when user is logged in as senior delegate' do
       before do
@@ -38,7 +38,7 @@ RSpec.describe Api::V0::UserRolesController do
     end
 
     context 'when user is logged in as a normal user' do
-      sign_in { FactoryBot.create(:user) }
+      sign_in { create(:user) }
 
       it 'fetches list of roles of a user' do
         get :index, params: { userId: user_whose_delegate_status_changes.id }
@@ -63,7 +63,7 @@ RSpec.describe Api::V0::UserRolesController do
     end
 
     context 'when user is logged in as an admin' do
-      sign_in { FactoryBot.create(:wst_admin_role).user }
+      sign_in { create(:wst_admin_role).user }
 
       it 'does return banned_competitors if isGroupHidden is true' do
         get :index, params: { userId: banned_competitor.user.id, isGroupHidden: true }
@@ -80,8 +80,8 @@ RSpec.describe Api::V0::UserRolesController do
   end
 
   describe 'GET #show' do
-    let!(:delegate_role) { FactoryBot.create(:delegate_role) }
-    let!(:probation_role) { FactoryBot.create(:probation_role) }
+    let!(:delegate_role) { create(:delegate_role) }
+    let!(:probation_role) { create(:probation_role) }
 
     context 'when delegate role is requested' do
       it 'returns the role' do
@@ -99,12 +99,12 @@ RSpec.describe Api::V0::UserRolesController do
   end
 
   describe 'POST #create' do
-    let!(:user_to_be_banned_with_past_comps) { FactoryBot.create(:user, :with_past_competitions) }
-    let!(:user_to_be_banned_with_future_comps) { FactoryBot.create(:user, :with_future_competitions) }
-    let!(:user_to_be_banned_with_deleted_registration_in_future_comps) { FactoryBot.create(:user, :with_deleted_registration_in_future_comps) }
+    let!(:user_to_be_banned_with_past_comps) { create(:user, :with_past_competitions) }
+    let!(:user_to_be_banned_with_future_comps) { create(:user, :with_future_competitions) }
+    let!(:user_to_be_banned_with_deleted_registration_in_future_comps) { create(:user, :with_deleted_registration_in_future_comps) }
 
     context 'when signed in as a WIC Leader' do
-      sign_in { FactoryBot.create(:user, :wic_leader) }
+      sign_in { create(:user, :wic_leader) }
 
       it 'can ban a user if the user does not have any upcoming competitions' do
         post :create, params: {
@@ -143,7 +143,7 @@ RSpec.describe Api::V0::UserRolesController do
       end
 
       it 'can add a member to WIC' do
-        user = FactoryBot.create(:user)
+        user = create(:user)
 
         expect(user.wic_team?).to be false
         post :create, params: {
@@ -156,7 +156,7 @@ RSpec.describe Api::V0::UserRolesController do
       end
 
       it 'can remove a member from WIC' do
-        wic_role = FactoryBot.create(:wic_member_role, :active)
+        wic_role = create(:wic_member_role, :active)
 
         expect(wic_role.user.wic_team?).to be true
         post :destroy, params: {
@@ -168,11 +168,11 @@ RSpec.describe Api::V0::UserRolesController do
     end
 
     context 'when signed in as a Senior Delegate' do
-      sign_in { FactoryBot.create(:senior_delegate_role).user }
+      sign_in { create(:senior_delegate_role).user }
 
       it 'can create a new trainee delegate' do
-        user_to_be_made_delegate = FactoryBot.create(:user)
-        senior_delegate_role = FactoryBot.create(:senior_delegate_role)
+        user_to_be_made_delegate = create(:user)
+        senior_delegate_role = create(:senior_delegate_role)
 
         post :create, params: {
           userId: user_to_be_made_delegate.id,
@@ -186,11 +186,11 @@ RSpec.describe Api::V0::UserRolesController do
     end
 
     context 'when signed in as a Board member' do
-      sign_in { FactoryBot.create(:user, :board_member) }
+      sign_in { create(:user, :board_member) }
 
       it "creating a new role for leader ends old delegate's role" do
-        current_leader = FactoryBot.create(:wrt_leader_role)
-        new_leader = FactoryBot.create(:user)
+        current_leader = create(:wrt_leader_role)
+        new_leader = create(:user)
 
         post :create, params: {
           userId: new_leader.id,
@@ -205,12 +205,12 @@ RSpec.describe Api::V0::UserRolesController do
 
   describe 'DELETE #destroy' do
     context 'when signed in as a Senior Delegate' do
-      sign_in { FactoryBot.create(:senior_delegate_role).user }
+      sign_in { create(:senior_delegate_role).user }
 
       it 'can end role of a junior delegate' do
-        junior_delegate_role = FactoryBot.create(:junior_delegate_role)
-        person = FactoryBot.create(:person)
-        FactoryBot.create(:user, claiming_wca_id: true, dob_verification: person.dob, unconfirmed_wca_id: person.wca_id, delegate_id_to_handle_wca_id_claim: junior_delegate_role.user_id)
+        junior_delegate_role = create(:junior_delegate_role)
+        person = create(:person)
+        create(:user, claiming_wca_id: true, dob_verification: person.dob, unconfirmed_wca_id: person.wca_id, delegate_id_to_handle_wca_id_claim: junior_delegate_role.user_id)
 
         delete :destroy, params: {
           id: junior_delegate_role.id,

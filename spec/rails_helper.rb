@@ -90,6 +90,8 @@ RSpec.configure do |config|
   config.include ActiveJob::TestHelper
   config.include ActiveRecord::Assertions::QueryAssertions, type: :model
 
+  config.include FactoryBot::Syntax::Methods
+
   if EnvConfig.DISABLE_WEBMOCK?
     WebMock.disable!
   else

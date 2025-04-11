@@ -3,9 +3,9 @@
 require 'rails_helper'
 
 RSpec.describe PostsController do
-  let!(:post1) { FactoryBot.create(:post, created_at: 1.hour.ago) }
-  let!(:sticky_post) { FactoryBot.create(:post, sticky: true, created_at: 2.hours.ago) }
-  let!(:wic_post) { FactoryBot.create(:post, created_at: 3.hours.ago, tags: "wic,othertag", show_on_homepage: false) }
+  let!(:post1) { create(:post, created_at: 1.hour.ago) }
+  let!(:sticky_post) { create(:post, sticky: true, created_at: 2.hours.ago) }
+  let!(:wic_post) { create(:post, created_at: 3.hours.ago, tags: "wic,othertag", show_on_homepage: false) }
 
   context "not logged in" do
     describe "GET #index" do
@@ -39,10 +39,10 @@ RSpec.describe PostsController do
       end
 
       it "only matches exact ids" do
-        post2 = FactoryBot.create(:post)
+        post2 = create(:post)
         post2.update_attribute(:slug, "#{post1.id}-foo")
 
-        post1 = FactoryBot.create(:post)
+        post1 = create(:post)
         post1.update_attribute(:slug, "#{post2.id}-foo")
 
         get :show, params: { id: post2.slug }
@@ -69,7 +69,7 @@ RSpec.describe PostsController do
   end
 
   context "logged in as wrc member" do
-    sign_in { FactoryBot.create :user, :wrc_member }
+    sign_in { create :user, :wrc_member }
 
     describe "GET #new" do
       it "works" do
@@ -89,7 +89,7 @@ RSpec.describe PostsController do
   end
 
   context "logged in as wic member" do
-    sign_in { FactoryBot.create :user, :wic_member }
+    sign_in { create :user, :wic_member }
 
     describe "GET #new" do
       it "returns 200" do
