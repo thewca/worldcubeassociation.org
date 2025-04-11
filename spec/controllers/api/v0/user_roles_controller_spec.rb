@@ -38,7 +38,8 @@ RSpec.describe Api::V0::UserRolesController do
     end
 
     context 'when user is logged in as a normal user' do
-      sign_in { create(:user) }
+      let(:user) { create(:user) }
+      before { sign_in user}
 
       it 'fetches list of roles of a user' do
         get :index, params: { userId: user_whose_delegate_status_changes.id }
@@ -63,7 +64,8 @@ RSpec.describe Api::V0::UserRolesController do
     end
 
     context 'when user is logged in as an admin' do
-      sign_in { create(:wst_admin_role).user }
+      let(:wst_admin_role) { create :wst_admin_role }
+      before { sign_in wst_admin_role.user }
 
       it 'does return banned_competitors if isGroupHidden is true' do
         get :index, params: { userId: banned_competitor.user.id, isGroupHidden: true }
@@ -104,7 +106,8 @@ RSpec.describe Api::V0::UserRolesController do
     let!(:user_to_be_banned_with_deleted_registration_in_future_comps) { create(:user, :with_deleted_registration_in_future_comps) }
 
     context 'when signed in as a WIC Leader' do
-      sign_in { create(:user, :wic_leader) }
+      let(:wic_leader) { create(:user, :wic_leader) }
+      before { sign_in wic_leader}
 
       it 'can ban a user if the user does not have any upcoming competitions' do
         post :create, params: {
@@ -168,7 +171,8 @@ RSpec.describe Api::V0::UserRolesController do
     end
 
     context 'when signed in as a Senior Delegate' do
-      sign_in { create(:senior_delegate_role).user }
+      let(:senior_delegate_role) { create :senior_delegate_role }
+      before { sign_in senior_delegate_role.user }
 
       it 'can create a new trainee delegate' do
         user_to_be_made_delegate = create(:user)
@@ -186,7 +190,8 @@ RSpec.describe Api::V0::UserRolesController do
     end
 
     context 'when signed in as a Board member' do
-      sign_in { create(:user, :board_member) }
+      let(:board_member) { create(:user, :board_member) }
+      before { sign_in board_member }
 
       it "creating a new role for leader ends old delegate's role" do
         current_leader = create(:wrt_leader_role)
@@ -205,7 +210,8 @@ RSpec.describe Api::V0::UserRolesController do
 
   describe 'DELETE #destroy' do
     context 'when signed in as a Senior Delegate' do
-      sign_in { create(:senior_delegate_role).user }
+      let(:senior_delegate_role) { create :senior_delegate_role }
+      before { sign_in senior_delegate_role.user }
 
       it 'can end role of a junior delegate' do
         junior_delegate_role = create(:junior_delegate_role)
