@@ -16,7 +16,7 @@ import {
 import { useConfirm } from '../../../lib/providers/ConfirmProvider';
 
 function V3csvExport(selected, registrations, competition) {
-  let csvContent = `Status,Name,Country,WCA ID,Birth Date,Gender,${competition.event_ids.join(',')},Email,Guests,IP,Registration Date Time (UTC),Payment Date Time(UTC),User Id,Registration Status\n`;
+  let csvContent = `Status,Name,Country,WCA ID,Birth Date,Gender,${competition.event_ids.join(',')},Email,Guests,IP,Registration Date Time (UTC),Payment Date Time(UTC),Payment Reference,User Id,Registration Status\n`;
   registrations
     .filter((r) => selected.length === 0 || selected.includes(r.user_id))
     .forEach((registration) => {
@@ -33,8 +33,10 @@ function V3csvExport(selected, registrations, competition) {
       },"",${
         DateTime.fromISO(registration.competing.registered_on).setZone('UTC').toFormat('yyyy-MM-dd HH:mm:ss ZZZZ')
       },${
-        registration.payment?.has_paid ? DateTime.fromISO(registration.payment.updated_at).setZone('UTC').toFormat('yyyy-MM-dd HH:mm:ss ZZZZ') : ''
-      },${
+        registration.payment?.updated_at ? DateTime.fromISO(registration.payment.updated_at).setZone('UTC').toFormat('yyyy-MM-dd HH:mm:ss ZZZZ') : ''
+      },"${
+        registration.payment?.payment_reference ?? ''
+      }",${
         registration.user_id
       },${
         registration.competing.registration_status

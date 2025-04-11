@@ -1850,6 +1850,10 @@ en:
          refunded_status: "Refunded"
          initialized: "Payment process was started on %{date}, but not finished."
          refunded: "Payment was refunded on %{date}."
+         confirmation: "I confirm that I have followed the above steps and paid the registration fees."
+         payment_reference: "Payment Reference"
+         payment_info: "Payment Information"
+         submit: "Submit payment reference"
         psychsheets:
           show_me: "Show me"
           rank: "Rank: %{userPosition}"
@@ -1885,6 +1889,7 @@ en:
         amount: "Amount"
         too_many: "Accepting all these registrations would go over the competitor limit by %{count}"
         no_self_update: "Contact the Organization Team to update your registration."
+        admin_payment_reference_explanation: "This competition uses manual payment tracking. You can view and reset the competitors payment reference here."
       register:
         will_open_countdown: "Registration will open in %{minutes} minutes %{seconds} seconds. This page will refresh automatically when registration opens."
         will_close_countdown: "Registration closes in %{minutes} minutes %{seconds} seconds. This page will refresh automatically when registration closes."
@@ -2233,6 +2238,7 @@ en:
     payment_providers:
       paypal: 'PayPal'
       stripe: 'Stripe'
+      manual: 'Manual/External'
     #context: Setting up and making payments
     payment_setup:
       external_dashboard: '%{provider} Dashboard'
@@ -2246,13 +2252,16 @@ en:
       supported_currencies: "%{provider} Supported Currencies"
       provider_heading: "%{provider} Payments"
       accept_payments_header: "Accept Registration Payments"
-      connect_button: "Connect with %{provider}"
+      manual_payments_header: "Configure Manual Payments"
+      connect_button: "Set up %{provider}"
       connect_account_info:
         stripe: "In order to accept payments for this competition, you need to connect your own Stripe account with the WCA Stripe account by clicking the button below. If you don't already have your own Stripe account you can still click on the button below and it will guide you through the process."
         paypal: "A PayPal Business account is required to accept PayPal payments via the competition page. If you don't already have a PayPal business account, you can still click on the button below and it will guide you through the process."
+        manual: "Define payment instructions for competitors. Competitors will be able to indicate when they have paid, and provide a payment reference for you to check against your records in the external payment service you use."
       connect_account_warning:
         stripe: "Connecting your Stripe account gives the WCA website the ability to create charges, and issue refunds directly on your Stripe account."
         paypal: "Connecting your PayPal account gives the WCA website the ability to route payments to you, and issue refunds directly on your PayPal account."
+        manual: ""
       currently_connected_info: "This competition is set up to accept payments through %{provider}. The Delegate(s) of the competition should contact WCAT to make any changes to connected accounts."
       before_disconnect_warning: "Disconnecting on this page will make our website forget the connection to your %{provider} account. But your %{provider} dashboard (see link below) may still list the WCA website based on the authorization that you previously granted. Note that revoking authorization in the %{provider} dashboard will also affect any other competition linked to accept payments through this account!"
       before_disconnect_info: "Keep in mind that disconnecting an account should only be done in exceptional situations, such as the current account being unable to receive payments."
@@ -2264,6 +2273,9 @@ en:
         paypal:
           display_name: "Name"
           primary_email: "Email"
+        manual:
+          payment_info: "Payment instructions (will be displayed on Competition Page)"
+          payment_reference: "What information should the user provide for you to identify their payment? (eg, payment reference number / account ID / etc)"
         fallback_not_applicable: "N/A"
     statuses:
       succeeded: "Succeeded"
