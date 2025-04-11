@@ -1889,6 +1889,7 @@ en:
         amount: "Amount"
         too_many: "Accepting all these registrations would go over the competitor limit by %{count}"
         no_self_update: "Contact the Organization Team to update your registration."
+        admin_payment_reference_explanation: "This competition uses manual payment tracking. You can view and reset the competitors payment reference here."
       register:
         will_open_countdown: "Registration will open in %{minutes} minutes %{seconds} seconds. This page will refresh automatically when registration opens."
         will_close_countdown: "Registration closes in %{minutes} minutes %{seconds} seconds. This page will refresh automatically when registration closes."

@@ -1831,7 +1831,7 @@ class Competition < ApplicationRecord
   end
 
   def manual_payment_details
-    return nil unless payment_integration_type == :manual
+    return nil unless using_manual_payment?
 
     competition_payment_integrations.first.connected_account.account_details
   end

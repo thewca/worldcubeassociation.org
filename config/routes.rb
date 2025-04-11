@@ -358,6 +358,7 @@ Rails.application.routes.draw do
         get '/:competition_id/admin', to: 'registrations#list_admin', as: :list_admin
         get '/:competition_id/payment', to: 'registrations#payment_ticket', as: :payment_ticket
         post '/:competition_id/:user_id/payment_reference', to: 'registrations#add_payment_reference', as: :add_payment_reference
+        delete '/:competition_id/:user_id/payment_reference', to: 'registrations#delete_payment_reference'
       end
     end
 

@@ -8,39 +8,29 @@ import { useMutation } from '@tanstack/react-query';
 import I18n from '../../../lib/i18n';
 import { hasPassed } from '../../../lib/utils/dates';
 import useInputState from '../../../lib/hooks/useInputState';
-import { fetchJsonOrError } from '../../../lib/requests/fetchWithAuthenticityToken';
-import { addPaymentReferenceUrl } from '../../../lib/requests/routes.js.erb';
 import useCheckboxState from '../../../lib/hooks/useCheckboxState';
 import Markdown from '../../Markdown';
-import fetchWithJWTToken from '../../../lib/requests/fetchWithJWTToken';
 import { useRegistration } from '../lib/RegistrationProvider';
+import submitPaymentReference from '../api/registration/post/submit_payment_reference';
 
 export default function ManualPaymentStep({
   userInfo,
   competitionInfo,
-  nextStep,
 }) {
-  const { hasPaid, registration } = useRegistration();
+  const { hasPaid, registration, refetchRegistration } = useRegistration();
 
   const [paymentReference, setPaymentReference] = useInputState(hasPaid ? registration.payment.payment_reference : '');
   const [paymentConfirmation, setPaymentConfirmation] = useCheckboxState(hasPaid);
 
   const { mutate, isPending } = useMutation({
-    mutationFn: ({ reference }) => fetchWithJWTToken(
-      addPaymentReferenceUrl(competitionInfo.id, userInfo.id),
-      {
-        method: 'POST',
-        body: JSON.stringify({ payment_reference: reference }),
-        headers: { 'content-type': 'application/json' },
-      },
-    ),
-    onSuccess: () => nextStep(),
+    mutationFn: submitPaymentReference,
+    onSuccess: () => refetchRegistration(),
   });
 
   const handleSubmit = useCallback(async (e) => {
     e.preventDefault();
-    mutate({ reference: paymentReference });
-  }, [mutate, paymentReference]);
+    mutate({ reference: paymentReference, userId: userInfo.id, competitionId: competitionInfo.id });
+  }, [competitionInfo.id, mutate, paymentReference, userInfo.id]);
 
   if (hasPassed(competitionInfo.registration_close)) {
     return (

@@ -9,7 +9,7 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
   before_action :validate_create_request, only: [:create]
   before_action :validate_show_registration, only: [:show]
   before_action :validate_list_admin, only: [:list_admin]
-  before_action :ensure_registration_exists, only: [:update, :add_payment_reference]
+  before_action :ensure_registration_exists, only: [:update, :add_payment_reference, :delete_payment_reference]
   before_action :user_can_modify_registration, only: [:update, :add_payment_reference]
   before_action :validate_update_request, only: [:update]
   before_action :user_can_bulk_modify_registrations, only: [:bulk_update]
@@ -88,6 +88,12 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
 
   def add_payment_reference
     ManualPaymentRecord.create(registration: @registration, payment_reference: params.require(:payment_reference))
+
+    render json: { status: 'ok' }, status: :ok
+  end
+
+  def delete_payment_reference
+    ManualPaymentRecord.find_by!(registration: @registration).destroy!
 
     render json: { status: 'ok' }, status: :ok
   end
