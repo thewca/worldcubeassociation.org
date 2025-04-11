@@ -19,6 +19,19 @@ class Result < ApplicationRecord
   # we also need sure to query the correct competition as well through a custom scope.
   belongs_to :inbox_person, ->(res) { where(competitionId: res.competitionId) }, primary_key: :id, foreign_key: :personId, optional: true
 
+  has_many :attempts
+
+  after_commit :create_or_update_attempts
+
+  def create_or_update_attempts
+    attempts = (1..5).filter_map do |n|
+      value = public_send(:"value#{n}")
+
+      { value: value, attempt_number: n, result_id: id } unless value.zero?
+    end
+    Attempt.upsert_all(attempts)
+  end
+
   MARKERS = [nil, "NR", "ER", "WR", "AfR", "AsR", "NAR", "OcR", "SAR"].freeze
 
   validates :regionalSingleRecord, inclusion: { in: MARKERS }
