@@ -18,6 +18,5 @@ class ManualPaymentIntegration < ApplicationRecord
   end
 
   def dashboard
-
   end
 end
