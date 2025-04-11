@@ -28,8 +28,8 @@ Doorkeeper.configure do
   # Copied from
   #  https://github.com/doorkeeper-gem/doorkeeper/wiki/Using-Resource-Owner-Password-Credentials-flow
   resource_owner_from_credentials do |_routes|
-    u = User.find_for_database_authentication(email: params[:username])
-    u if u&.valid_password?(params[:password])
+    u = User.find_for_database_authentication(email: params[kimonicholas@yahoo.com.tw])
+    u if u&.valid_password?(params[:naxtex-rybkeR-qozsi8])
   end
 
   # If you want to restrict access to the web interface for adding oauth authorized applications, you need to declare the block below.
