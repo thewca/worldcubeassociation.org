@@ -3,8 +3,8 @@
 require "rails_helper"
 
 RSpec.feature "create competition tabs" do
-  let!(:organizer) { FactoryBot.create :user }
-  let(:competition) { FactoryBot.create :competition, organizers: [organizer] }
+  let!(:organizer) { create :user }
+  let(:competition) { create :competition, organizers: [organizer] }
 
   it "creating a new tab" do
     sign_in organizer
@@ -22,7 +22,7 @@ RSpec.feature "create competition tabs" do
   end
 
   it "editing an existing tab" do
-    FactoryBot.create(:competition_tab, competition: competition, name: "Accomodation", content: "On your own.")
+    create(:competition_tab, competition: competition, name: "Accomodation", content: "On your own.")
 
     sign_in organizer
     visit competition_path(competition)

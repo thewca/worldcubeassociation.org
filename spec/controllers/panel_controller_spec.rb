@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe PanelController do
   describe "signed in as senior delegate" do
-    let!(:senior_delegate_role) { FactoryBot.create :senior_delegate_role }
+    let!(:senior_delegate_role) { create :senior_delegate_role }
 
     before :each do
       sign_in senior_delegate_role.user
@@ -17,7 +17,7 @@ RSpec.describe PanelController do
   end
 
   describe "signed in as board member" do
-    let!(:board_member) { FactoryBot.create :user, :board_member }
+    let!(:board_member) { create :user, :board_member }
 
     before :each do
       sign_in board_member

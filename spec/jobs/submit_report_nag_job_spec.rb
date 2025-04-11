@@ -4,14 +4,14 @@ require 'rails_helper'
 
 RSpec.describe SubmitReportNagJob, type: :job do
   it "schedules report nag email" do
-    _unscheduled_competition = FactoryBot.create :competition, starts: nil
-    _recent_competition_missing_report = FactoryBot.create :competition, :visible, starts: 3.days.ago
-    old_competition_missing_report = FactoryBot.create :competition, :visible, starts: 3.weeks.ago
-    _very_old_competition_missing_report = FactoryBot.create :competition, :visible, starts: (DelegateReport::REPORTS_ENABLED_DATE - 1.year)
-    _older_competition_missing_report_but_already_nagged = FactoryBot.create(:competition, :visible, starts: 3.weeks.ago).tap do |competition|
+    _unscheduled_competition = create :competition, starts: nil
+    _recent_competition_missing_report = create :competition, :visible, starts: 3.days.ago
+    old_competition_missing_report = create :competition, :visible, starts: 3.weeks.ago
+    _very_old_competition_missing_report = create :competition, :visible, starts: (DelegateReport::REPORTS_ENABLED_DATE - 1.year)
+    _older_competition_missing_report_but_already_nagged = create(:competition, :visible, starts: 3.weeks.ago).tap do |competition|
       competition.delegate_report.update(nag_sent_at: 1.day.ago)
     end
-    older_competition_missing_report_nagged_a_long_time_ago = FactoryBot.create(:competition, :visible, starts: 3.weeks.ago).tap do |competition|
+    older_competition_missing_report_nagged_a_long_time_ago = create(:competition, :visible, starts: 3.weeks.ago).tap do |competition|
       competition.delegate_report.update(nag_sent_at: 8.days.ago)
     end
 
@@ -29,11 +29,11 @@ RSpec.describe SubmitReportNagJob, type: :job do
   end
 
   it "schedules report reminder email" do
-    _unscheduled_competition = FactoryBot.create :competition, starts: nil
-    _recent_competition_missing_report = FactoryBot.create :competition, :visible, starts: 3.days.ago
-    old_competition_missing_report = FactoryBot.create :competition, :visible, starts: 6.days.ago
-    _very_old_competition_missing_report = FactoryBot.create :competition, :visible, starts: (DelegateReport::REPORTS_ENABLED_DATE - 1.year)
-    _older_competition_missing_report_but_already_reminded = FactoryBot.create(:competition, :visible, starts: 6.days.ago).tap do |competition|
+    _unscheduled_competition = create :competition, starts: nil
+    _recent_competition_missing_report = create :competition, :visible, starts: 3.days.ago
+    old_competition_missing_report = create :competition, :visible, starts: 6.days.ago
+    _very_old_competition_missing_report = create :competition, :visible, starts: (DelegateReport::REPORTS_ENABLED_DATE - 1.year)
+    _older_competition_missing_report_but_already_reminded = create(:competition, :visible, starts: 6.days.ago).tap do |competition|
       competition.delegate_report.update(reminder_sent_at: 1.day.ago)
     end
 

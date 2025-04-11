@@ -12,79 +12,79 @@ RSpec.describe SyncMailingListsJob, type: :job do
     americas_region = GroupsMetadataDelegateRegions.find_by!(friendly_id: 'americas').user_group
 
     # Senior delegates
-    africa_senior_delegate = FactoryBot.create :senior_delegate_role, group: africa_region
-    asia_senior_delegate = FactoryBot.create :senior_delegate_role, group: asia_region
-    europe_senior_delegate = FactoryBot.create :senior_delegate_role, group: europe_region
-    oceania_senior_delegate = FactoryBot.create :senior_delegate_role, group: oceania_region
-    americas_senior_delegate = FactoryBot.create :senior_delegate_role, group: americas_region
+    africa_senior_delegate = create :senior_delegate_role, group: africa_region
+    asia_senior_delegate = create :senior_delegate_role, group: asia_region
+    europe_senior_delegate = create :senior_delegate_role, group: europe_region
+    oceania_senior_delegate = create :senior_delegate_role, group: oceania_region
+    americas_senior_delegate = create :senior_delegate_role, group: americas_region
 
     # Africa delegates
     reports_region_sample = Country.c_find!('Zimbabwe')
-    africa_delegate_1 = FactoryBot.create :delegate_role, group: africa_region
+    africa_delegate_1 = create :delegate_role, group: africa_region
     africa_delegate_1.user.update!(receive_delegate_reports: true)
-    africa_delegate_2 = FactoryBot.create :delegate_role, group: africa_region
+    africa_delegate_2 = create :delegate_role, group: africa_region
     africa_delegate_2.user.update!(receive_delegate_reports: true, delegate_reports_region: reports_region_sample.continent)
-    africa_delegate_3 = FactoryBot.create :junior_delegate_role, group: africa_region
+    africa_delegate_3 = create :junior_delegate_role, group: africa_region
     africa_delegate_3.user.update!(receive_delegate_reports: true, delegate_reports_region: reports_region_sample)
-    africa_delegate_4 = FactoryBot.create :trainee_delegate_role, group: africa_region
+    africa_delegate_4 = create :trainee_delegate_role, group: africa_region
 
     # Asia delegates
-    asia_delegate_1 = FactoryBot.create :delegate_role, group: asia_region
-    asia_delegate_2 = FactoryBot.create :delegate_role, group: asia_region
-    asia_delegate_3 = FactoryBot.create :junior_delegate_role, group: asia_region
-    asia_delegate_4 = FactoryBot.create :trainee_delegate_role, group: asia_region
+    asia_delegate_1 = create :delegate_role, group: asia_region
+    asia_delegate_2 = create :delegate_role, group: asia_region
+    asia_delegate_3 = create :junior_delegate_role, group: asia_region
+    asia_delegate_4 = create :trainee_delegate_role, group: asia_region
 
     # Europe delegates
-    europe_delegate_1 = FactoryBot.create :delegate_role, group: europe_region
-    europe_delegate_2 = FactoryBot.create :delegate_role, group: europe_region
-    europe_delegate_3 = FactoryBot.create :junior_delegate_role, group: europe_region
-    europe_delegate_4 = FactoryBot.create :trainee_delegate_role, group: europe_region
+    europe_delegate_1 = create :delegate_role, group: europe_region
+    europe_delegate_2 = create :delegate_role, group: europe_region
+    europe_delegate_3 = create :junior_delegate_role, group: europe_region
+    europe_delegate_4 = create :trainee_delegate_role, group: europe_region
 
     # Oceania delegates
-    oceania_delegate_1 = FactoryBot.create :delegate_role, group: oceania_region
-    oceania_delegate_2 = FactoryBot.create :delegate_role, group: oceania_region
-    oceania_delegate_3 = FactoryBot.create :junior_delegate_role, group: oceania_region
-    oceania_delegate_4 = FactoryBot.create :trainee_delegate_role, group: oceania_region
+    oceania_delegate_1 = create :delegate_role, group: oceania_region
+    oceania_delegate_2 = create :delegate_role, group: oceania_region
+    oceania_delegate_3 = create :junior_delegate_role, group: oceania_region
+    oceania_delegate_4 = create :trainee_delegate_role, group: oceania_region
 
     # Americas delegates
-    americas_delegate_1 = FactoryBot.create :delegate_role, group: americas_region
-    americas_delegate_2 = FactoryBot.create :delegate_role, group: americas_region
-    americas_delegate_3 = FactoryBot.create :junior_delegate_role, group: americas_region
-    americas_delegate_4 = FactoryBot.create :trainee_delegate_role, group: americas_region
+    americas_delegate_1 = create :delegate_role, group: americas_region
+    americas_delegate_2 = create :delegate_role, group: americas_region
+    americas_delegate_3 = create :junior_delegate_role, group: americas_region
+    americas_delegate_4 = create :trainee_delegate_role, group: americas_region
 
     # Translators
     translators_group = GroupsMetadataTranslators.find_by!(locale: 'ca').user_group
-    translator_1 = FactoryBot.create :translator_role, group_id: translators_group.id
-    translator_2 = FactoryBot.create :translator_role, group_id: translators_group.id
-    translator_3 = FactoryBot.create :translator_role, group_id: translators_group.id
+    translator_1 = create :translator_role, group_id: translators_group.id
+    translator_2 = create :translator_role, group_id: translators_group.id
+    translator_3 = create :translator_role, group_id: translators_group.id
 
     # leaders@ mailing list
-    board_member = FactoryBot.create :user, :board_member
-    wct_member = FactoryBot.create :user, :wct_member
-    wct_china_member = FactoryBot.create :user, :wct_china_member
-    wcat_member = FactoryBot.create :user, :wcat_member
-    wic_leader = FactoryBot.create :user, :wic_leader, receive_delegate_reports: true
-    wic_member = FactoryBot.create :user, :wic_member, receive_delegate_reports: true
-    weat_member = FactoryBot.create :user, :weat_member
-    wfc_member = FactoryBot.create :user, :wfc_member
-    wfc_leader = FactoryBot.create :user, :wfc_leader
-    wmt_member = FactoryBot.create :user, :wmt_member
-    wqac_member = FactoryBot.create :user, :wqac_member
-    wrc_member = FactoryBot.create :user, :wrc_member
-    wrt_leader = FactoryBot.create :user, :wrt_leader
-    wrt_member = FactoryBot.create :user, :wrt_member
-    wst_member = FactoryBot.create :user, :wst_member
-    wst_admin_member = FactoryBot.create :user, :wst_admin_member
-    wsot_member = FactoryBot.create :user, :wsot_member
-    wsot_leader = FactoryBot.create :user, :wsot_leader
-    wat_member = FactoryBot.create :user, :wat_member
-    wat_leader = FactoryBot.create :user, :wat_leader
-    wapc_member = FactoryBot.create :user, :wapc_member
-    treasurer_role = FactoryBot.create :treasurer_role
+    board_member = create :user, :board_member
+    wct_member = create :user, :wct_member
+    wct_china_member = create :user, :wct_china_member
+    wcat_member = create :user, :wcat_member
+    wic_leader = create :user, :wic_leader, receive_delegate_reports: true
+    wic_member = create :user, :wic_member, receive_delegate_reports: true
+    weat_member = create :user, :weat_member
+    wfc_member = create :user, :wfc_member
+    wfc_leader = create :user, :wfc_leader
+    wmt_member = create :user, :wmt_member
+    wqac_member = create :user, :wqac_member
+    wrc_member = create :user, :wrc_member
+    wrt_leader = create :user, :wrt_leader
+    wrt_member = create :user, :wrt_member
+    wst_member = create :user, :wst_member
+    wst_admin_member = create :user, :wst_admin_member
+    wsot_member = create :user, :wsot_member
+    wsot_leader = create :user, :wsot_leader
+    wat_member = create :user, :wat_member
+    wat_leader = create :user, :wat_leader
+    wapc_member = create :user, :wapc_member
+    treasurer_role = create :treasurer_role
 
     # organizations@ mailing list
-    regional_organization = FactoryBot.create :regional_organization
-    previously_acknowledged_regional_organization = FactoryBot.create :regional_organization
+    regional_organization = create :regional_organization
+    previously_acknowledged_regional_organization = create :regional_organization
     previously_acknowledged_regional_organization.update(start_date: 2.days.ago, end_date: 1.day.ago)
 
     expect(GsuiteMailingLists).to receive(:sync_group).with(

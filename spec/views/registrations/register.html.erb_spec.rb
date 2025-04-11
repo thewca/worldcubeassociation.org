@@ -6,10 +6,10 @@ RSpec.describe "registrations/register" do
   it "shows waiting list information" do
     pending("Until we find a better way to statically test React pages. Signed GB 11/13/2024")
 
-    competition = FactoryBot.create(:competition, :registration_open)
-    FactoryBot.create(:registration, competition: competition)
-    registration2 = FactoryBot.create(:registration, competition: competition)
-    FactoryBot.create(:registration, competition: competition)
+    competition = create(:competition, :registration_open)
+    create(:registration, competition: competition)
+    registration2 = create(:registration, competition: competition)
+    create(:registration, competition: competition)
 
     allow(view).to receive(:current_user) { registration2.user }
     assign(:registration, registration2)
@@ -24,12 +24,12 @@ RSpec.describe "registrations/register" do
   it "shows message about registration being past" do
     pending("Until we find a better way to statically test React pages. Signed GB 11/13/2024")
 
-    competition = FactoryBot.create(:competition,
-                                    use_wca_registration: true,
-                                    registration_open: 1.week.ago,
-                                    registration_close: Time.now.yesterday,
-                                    starts: 1.month.from_now,
-                                    ends: 1.month.from_now)
+    competition = create(:competition,
+                         use_wca_registration: true,
+                         registration_open: 1.week.ago,
+                         registration_close: Time.now.yesterday,
+                         starts: 1.month.from_now,
+                         ends: 1.month.from_now)
 
     assign(:competition, competition)
 
@@ -41,12 +41,12 @@ RSpec.describe "registrations/register" do
   it "shows message about registration not yet being open" do
     pending("Until we find a better way to statically test React pages. Signed GB 11/13/2024")
 
-    competition = FactoryBot.create(:competition,
-                                    use_wca_registration: true,
-                                    registration_open: 1.week.from_now,
-                                    registration_close: 2.weeks.from_now,
-                                    starts: 1.month.from_now,
-                                    ends: 1.month.from_now)
+    competition = create(:competition,
+                         use_wca_registration: true,
+                         registration_open: 1.week.from_now,
+                         registration_close: 2.weeks.from_now,
+                         starts: 1.month.from_now,
+                         ends: 1.month.from_now)
 
     assign(:competition, competition)
 
@@ -56,8 +56,8 @@ RSpec.describe "registrations/register" do
   end
 
   def setup(payment_status)
-    competition = FactoryBot.create(:competition, :stripe_connected, :visible, :registration_open)
-    registration = FactoryBot.create(:registration, payment_status, competition: competition, administrative_notes: "👽")
+    competition = create(:competition, :stripe_connected, :visible, :registration_open)
+    registration = create(:registration, payment_status, competition: competition, administrative_notes: "👽")
     allow(view).to receive(:current_user) { registration.user }
     assign(:competition, competition)
     assign(:registration, registration)

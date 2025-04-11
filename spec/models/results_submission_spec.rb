@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe ResultsSubmission do
-  let(:results_submission) { FactoryBot.build(:results_submission) }
+  let(:results_submission) { build(:results_submission) }
 
   it "is defines a valid factory" do
     expect(results_submission).to be_valid
