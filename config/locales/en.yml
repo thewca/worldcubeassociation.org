@@ -1236,7 +1236,6 @@ en:
       total: "Total"
     new_registration:
       title: "Register for %{comp}"
-    registered_with_account_html: "This person registered with an account. You can edit their personal information %{here}."
     sign_in: "Sign in"
     profile: "profile"
     register: "Register!"
