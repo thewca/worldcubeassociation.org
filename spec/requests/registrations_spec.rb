@@ -432,10 +432,6 @@ RSpec.describe "registrations" do
   # Adding a registration reuses the logic behind importing CSV registrations
   # and that's tested thoroughly above.
   describe "POST #do_add" do
-    before do
-      competition.update!(on_the_spot_registration: true, on_the_spot_entry_fee_lowest_denomination: 500)
-    end
-
     context "when signed in as a normal user" do
       it "doesn't allow access" do
         sign_in FactoryBot.create(:user)
@@ -509,6 +505,7 @@ RSpec.describe "registrations" do
         end
       end
 
+
       context "when competitor limit has been reached" do
         it "redirects to competition page" do
           FactoryBot.create(:registration, :accepted, competition: competition, events: %w(333))
@@ -525,6 +522,88 @@ RSpec.describe "registrations" do
           }.not_to(change { competition.registrations.count })
           follow_redirect!
           expect(response.body).to include "The competitor limit has been reached"
+        end
+      end
+
+      describe "on the spot behaviour", :tag do
+        let(:open_comp) { FactoryBot.create( :competition, :registration_open, delegates: [competition.delegates.first]) }
+        let(:closed_comp) { FactoryBot.create( :competition, :registration_closed, delegates: [competition.delegates.first]) }
+        let(:past_comp) { FactoryBot.create( :competition, :past, delegates: [competition.delegates.first]) }
+
+        context 'on-the-spot is enabled' do
+          it 'works when registration is open' do
+            open_comp.update!(on_the_spot_registration: true, on_the_spot_entry_fee_lowest_denomination: 500)
+
+            expect {
+              post competition_registrations_do_add_path(open_comp), params: {
+                registration_data: {
+                  name: "Sherlock Holmes", country: "United Kingdom", birth_date: "2000-01-01",
+                  gender: "m", email: "sherlock@example.com", event_ids: ["444"]
+                },
+              }
+            }.to(change { open_comp.registrations.count })
+          end
+
+          it 'works when registration is closed' do
+            closed_comp.update!(on_the_spot_registration: true, on_the_spot_entry_fee_lowest_denomination: 500)
+
+            expect {
+              post competition_registrations_do_add_path(closed_comp), params: {
+                registration_data: {
+                  name: "Sherlock Holmes", country: "United Kingdom", birth_date: "2000-01-01",
+                  gender: "m", email: "sherlock@example.com", event_ids: ["444"]
+                },
+              }
+            }.to(change { closed_comp.registrations.count })
+          end
+
+          it 'doesnt work after the end of the competition' do
+            past_comp.update!(on_the_spot_registration: true, on_the_spot_entry_fee_lowest_denomination: 500)
+
+            expect {
+              post competition_registrations_do_add_path(past_comp), params: {
+                registration_data: {
+                  name: "Sherlock Holmes", country: "United Kingdom", birth_date: "2000-01-01",
+                  gender: "m", email: "sherlock@example.com", event_ids: ["444"]
+                },
+              }
+            }.not_to(change { past_comp.registrations.count })
+          end
+        end
+
+        context 'on-the-spot is disabled' do
+          it 'works when registration is open' do
+            expect {
+              post competition_registrations_do_add_path(open_comp), params: {
+                registration_data: {
+                  name: "Sherlock Holmes", country: "United Kingdom", birth_date: "2000-01-01",
+                  gender: "m", email: "sherlock@example.com", event_ids: ["444"]
+                },
+              }
+            }.to(change { open_comp.registrations.count })
+          end
+
+          it 'doesnt work when registration is closed' do
+            expect {
+              post competition_registrations_do_add_path(closed_comp), params: {
+                registration_data: {
+                  name: "Sherlock Holmes", country: "United Kingdom", birth_date: "2000-01-01",
+                  gender: "m", email: "sherlock@example.com", event_ids: ["444"]
+                },
+              }
+            }.not_to(change { closed_comp.registrations.count })
+          end
+
+          it 'doesnt work after the end of the competition' do
+            expect {
+              post competition_registrations_do_add_path(past_comp), params: {
+                registration_data: {
+                  name: "Sherlock Holmes", country: "United Kingdom", birth_date: "2000-01-01",
+                  gender: "m", email: "sherlock@example.com", event_ids: ["444"]
+                },
+              }
+            }.not_to(change { past_comp.registrations.count })
+          end
         end
       end
     end
