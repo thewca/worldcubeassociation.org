@@ -26,7 +26,7 @@ RSpec.describe "wfc/competition_export.csv.erb" do
   end
 
   it "filters out trainee delegates" do
-    competition = create :competition, :with_valid_submitted_results, :with_delegates_and_trainee_delegate
+    competition = create(:competition, :with_valid_submitted_results, :with_delegates_and_trainee_delegate)
     competition.define_singleton_method(:num_competitors) do # mock count(distinct ...) from controller
       10
     end

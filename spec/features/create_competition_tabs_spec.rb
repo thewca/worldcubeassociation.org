@@ -3,8 +3,8 @@
 require "rails_helper"
 
 RSpec.feature "create competition tabs" do
-  let!(:organizer) { create :user }
-  let(:competition) { create :competition, organizers: [organizer] }
+  let!(:organizer) { create(:user) }
+  let(:competition) { create(:competition, organizers: [organizer]) }
 
   it "creating a new tab" do
     sign_in organizer

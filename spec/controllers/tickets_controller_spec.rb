@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe TicketsController do
   describe "POST #anonymize" do
-    let(:admin) { create :admin }
+    let(:admin) { create(:admin) }
 
     before { sign_in admin }
 

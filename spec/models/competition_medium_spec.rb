@@ -4,22 +4,22 @@ require 'rails_helper'
 
 RSpec.describe CompetitionMedium do
   it "defines a valid medium" do
-    medium = build :competition_medium
+    medium = build(:competition_medium)
     expect(medium).to be_valid
   end
 
   it "validates competitionId" do
-    medium = build :competition_medium, competitionId: "foo"
+    medium = build(:competition_medium, competitionId: "foo")
     expect(medium).to be_invalid_with_errors(competition: ["must exist"])
   end
 
   it "validates type" do
-    medium = build :competition_medium, type: ""
+    medium = build(:competition_medium, type: "")
     expect(medium).to be_invalid_with_errors(type: ["can't be blank"])
   end
 
   it "validates status" do
-    medium = build :competition_medium, status: ""
+    medium = build(:competition_medium, status: "")
     expect(medium).to be_invalid_with_errors(status: ["can't be blank"])
   end
 end

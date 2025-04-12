@@ -38,7 +38,7 @@ RSpec.describe CompetitionsController do
     end
 
     context 'when signed in as an admin' do
-      let(:admin) { create :admin }
+      let(:admin) { create(:admin) }
 
       before { sign_in admin }
 
@@ -49,7 +49,7 @@ RSpec.describe CompetitionsController do
     end
 
     context 'when signed in as a delegate' do
-      let(:delegate) { create :delegate }
+      let(:delegate) { create(:delegate) }
 
       before { sign_in delegate }
 
@@ -60,7 +60,7 @@ RSpec.describe CompetitionsController do
     end
 
     context 'when signed in as a regular user' do
-      let(:user) { create :user }
+      let(:user) { create(:user) }
 
       before { sign_in user }
 
@@ -82,7 +82,7 @@ RSpec.describe CompetitionsController do
     end
 
     context 'when signed in as a senior Delegate' do
-      let(:senior_delegate_role) { create :senior_delegate_role }
+      let(:senior_delegate_role) { create(:senior_delegate_role) }
 
       before { sign_in senior_delegate_role.user }
 
@@ -93,7 +93,7 @@ RSpec.describe CompetitionsController do
     end
 
     context 'when signed in as a regular Delegate' do
-      let(:delegate) { create :delegate }
+      let(:delegate) { create(:delegate) }
 
       before { sign_in delegate }
 
@@ -106,7 +106,7 @@ RSpec.describe CompetitionsController do
 
   describe 'GET #nearby_competitions' do
     let(:organizer) { create(:user) }
-    let(:admin) { create :admin }
+    let(:admin) { create(:admin) }
     let!(:my_competition) { create(:competition, :confirmed, latitude: 10.0, longitude: 10.0, organizers: [organizer], starts: 1.week.ago) }
     let!(:other_competition) {
       create(
@@ -155,7 +155,7 @@ RSpec.describe CompetitionsController do
     end
 
     context 'when signed in as a regular user' do
-      let(:user) { create :user }
+      let(:user) { create(:user) }
 
       before { sign_in user }
 
@@ -166,7 +166,7 @@ RSpec.describe CompetitionsController do
     end
 
     context 'when signed in as an admin' do
-      let(:admin) { create :admin }
+      let(:admin) { create(:admin) }
 
       before { sign_in admin }
 
@@ -190,14 +190,14 @@ RSpec.describe CompetitionsController do
     end
 
     context 'when signed in as a delegate' do
-      let(:delegate) { create :delegate }
+      let(:delegate) { create(:delegate) }
 
       before :each do
         sign_in delegate
       end
 
       it 'creates a new competition with organizers and expect them to receive a notification email' do
-        organizer = create :user
+        organizer = create(:user)
         expect(CompetitionsMailer).to receive(:notify_organizer_of_addition_to_competition).with(delegate, anything, organizer).and_call_original
         creation_params = build_competition_update(Competition.new, name: "Test 2015", venue: { countryId: "USA" }, staff: { staffDelegateIds: [delegate.id], organizerIds: [organizer.id] }, website: { usesWcaRegistration: false })
         expect do
@@ -211,7 +211,7 @@ RSpec.describe CompetitionsController do
       end
 
       it 'shows an error message under name when creating a competition with a duplicate id' do
-        competition = create :competition, :with_delegate
+        competition = create(:competition, :with_delegate)
         creation_params = build_competition_update(competition, staff: { staffDelegateIds: [delegate.id] }, eventRestrictions: { mainEventId: nil })
         post :create, params: creation_params, as: :json
         expect(response).to have_http_status(:bad_request)
@@ -284,7 +284,7 @@ RSpec.describe CompetitionsController do
 
   describe 'POST #update' do
     context 'when signed in as an admin' do
-      let(:admin) { create :admin }
+      let(:admin) { create(:admin) }
 
       before { sign_in admin }
 
@@ -479,7 +479,7 @@ RSpec.describe CompetitionsController do
       end
 
       it "adds another organizer and expects him to receive a notification email" do
-        new_organizer = create :user
+        new_organizer = create(:user)
         expect(CompetitionsMailer).to receive(:notify_organizer_of_addition_to_competition).with(competition.delegates.last, competition, new_organizer).and_call_original
         organizers = [competition.organizers.first, new_organizer]
         update_params = build_competition_update(competition, staff: { organizerIds: organizers.map(&:id) })
@@ -489,7 +489,7 @@ RSpec.describe CompetitionsController do
       end
 
       it "notifies organizers correctly when id changes" do
-        new_organizer = create :user
+        new_organizer = create(:user)
         update_params = build_competition_update(competition, competitionId: "NewId2018", staff: { organizerIds: [competition.organizers.last.id, new_organizer.id] })
         competition.id = "NewId2018"
         expect(CompetitionsMailer).to receive(:notify_organizer_of_addition_to_competition).with(competition.delegates.last, competition, new_organizer).and_call_original
@@ -649,7 +649,7 @@ RSpec.describe CompetitionsController do
       end
 
       it "adds another organizer and expects him to receive a notification email" do
-        new_organizer = create :user
+        new_organizer = create(:user)
         expect(CompetitionsMailer).to receive(:notify_organizer_of_addition_to_competition).with(competition.trainee_delegates.last, competition, new_organizer).and_call_original
         organizers = [competition.organizers.first, new_organizer]
         update_params = build_competition_update(competition, staff: { organizerIds: organizers.map(&:id) })
@@ -659,7 +659,7 @@ RSpec.describe CompetitionsController do
       end
 
       it "notifies organizers correctly when id changes" do
-        new_organizer = create :user
+        new_organizer = create(:user)
         update_params = build_competition_update(competition, competitionId: "NewId2018", staff: { organizerIds: [competition.organizers.last.id, new_organizer.id] })
         competition.id = "NewId2018"
         expect(CompetitionsMailer).to receive(:notify_organizer_of_addition_to_competition).with(competition.trainee_delegates.last, competition, new_organizer).and_call_original
@@ -875,7 +875,7 @@ RSpec.describe CompetitionsController do
     end
 
     context 'regular user trying to close registration via button' do
-      let(:user) { create :user }
+      let(:user) { create(:user) }
 
       before { sign_in user }
 
@@ -988,14 +988,14 @@ RSpec.describe CompetitionsController do
     let!(:past_competition3) { create(:competition, starts: 3.months.ago, delegates: [delegate], events: Event.where(id: %w(222 333))) }
     let!(:past_competition4) { create(:competition, :results_posted, starts: 4.months.ago, delegates: [delegate], events: Event.where(id: %w(222 333))) }
     let!(:unscheduled_competition1) { create(:competition, starts: nil, ends: nil, delegates: [delegate], events: Event.where(id: %w(222 333))) }
-    let(:registered_user) { create :user, name: "Jan-Ove Waldner" }
+    let(:registered_user) { create(:user, name: "Jan-Ove Waldner") }
     let!(:registration1) { create(:registration, :accepted, competition: future_competition1, user: registered_user) }
     let!(:registration2) { create(:registration, :accepted, competition: future_competition3, user: registered_user) }
     let!(:registration3) { create(:registration, :accepted, competition: past_competition1, user: registered_user) }
     let!(:registration4) { create(:registration, :accepted, competition: past_competition3, user: organizer) }
     let!(:registration5) { create(:registration, :accepted, competition: future_competition3, user: delegate) }
     let!(:results_person) { create(:person, wca_id: "2014PLUM01", name: "Jeff Plumb") }
-    let!(:results_user) { create :user, name: "Jeff Plumb", wca_id: "2014PLUM01" }
+    let!(:results_user) { create(:user, name: "Jeff Plumb", wca_id: "2014PLUM01") }
     let!(:result) { create(:result, person: results_person, competitionId: past_competition1.id) }
 
     context 'when not signed in' do
@@ -1139,7 +1139,7 @@ RSpec.describe CompetitionsController do
     end
 
     context 'when signed in as an admin' do
-      let(:admin) { create :admin }
+      let(:admin) { create(:admin) }
 
       before { sign_in admin }
 
@@ -1150,7 +1150,7 @@ RSpec.describe CompetitionsController do
     end
 
     context 'when signed in as a regular user' do
-      let(:user) { create :user }
+      let(:user) { create(:user) }
 
       before { sign_in user }
 
@@ -1173,7 +1173,7 @@ RSpec.describe CompetitionsController do
     end
 
     context 'when signed in as an admin' do
-      let(:admin) { create :admin }
+      let(:admin) { create(:admin) }
 
       before { sign_in admin }
 
@@ -1185,7 +1185,7 @@ RSpec.describe CompetitionsController do
     end
 
     context 'when signed in as a regular user' do
-      let(:user) { create :user }
+      let(:user) { create(:user) }
 
       before { sign_in user }
 
@@ -1208,7 +1208,7 @@ RSpec.describe CompetitionsController do
     end
 
     context 'when signed in as a regular user' do
-      let(:user) { create :user }
+      let(:user) { create(:user) }
 
       before { sign_in user }
 
@@ -1231,7 +1231,7 @@ RSpec.describe CompetitionsController do
     end
 
     context 'when signed in as a regular user' do
-      let(:user) { create :user }
+      let(:user) { create(:user) }
 
       before { sign_in user }
 

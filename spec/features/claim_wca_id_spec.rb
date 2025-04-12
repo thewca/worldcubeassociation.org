@@ -5,7 +5,7 @@ require "rails_helper"
 RSpec.feature "Claim WCA ID" do
   let!(:user) { create(:user) }
   let!(:person) { create(:person_who_has_competed_once, dob: '1988-02-03') }
-  let!(:person_without_dob) { create :person, :skip_validation, :missing_dob }
+  let!(:person_without_dob) { create(:person, :skip_validation, :missing_dob) }
 
   context 'when signed in as user without wca id', :js do
     before :each do

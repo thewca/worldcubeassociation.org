@@ -22,7 +22,7 @@ RSpec.describe PollsController do
   end
 
   context "logged in as an admin" do
-    let(:admin) { create :admin }
+    let(:admin) { create(:admin) }
 
     before { sign_in admin }
 
@@ -34,7 +34,7 @@ RSpec.describe PollsController do
   end
 
   context "logged in as a delegate" do
-    let(:delegate) { create :delegate }
+    let(:delegate) { create(:delegate) }
 
     before { sign_in delegate }
 
@@ -46,7 +46,7 @@ RSpec.describe PollsController do
   end
 
   context "logged in as a staff member" do
-    let(:wrt_member) { create :user, :wrt_member }
+    let(:wrt_member) { create(:user, :wrt_member) }
 
     before { sign_in wrt_member }
 
@@ -58,7 +58,7 @@ RSpec.describe PollsController do
   end
 
   context "logged in as board member" do
-    let!(:board_member) { create :user, :board_member }
+    let!(:board_member) { create(:user, :board_member) }
 
     before :each do
       sign_in board_member

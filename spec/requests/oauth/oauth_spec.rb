@@ -16,14 +16,14 @@ RSpec.describe "oauth api" do
     default_url_options[:protocol] = "http"
   end
 
-  let(:user) { create :user_with_wca_id }
+  let(:user) { create(:user_with_wca_id) }
 
   it "redirect uri doesn't require ssl for localhost" do
     expect(build(:oauth_application, redirect_uri: "http://localhost:3000")).to be_valid
   end
 
   it 'can authenticate with grant_type password' do
-    oauth_app = create :oauth_application
+    oauth_app = create(:oauth_application)
 
     post oauth_token_path, params: { grant_type: "password", client_id: oauth_app.uid, client_secret: oauth_app.secret, username: user.email, password: user.password, scope: "public email" }
     expect(response).to be_successful
@@ -165,7 +165,7 @@ RSpec.describe "oauth api" do
   end
 
   it 'can authenticate with response_type token (implicit authorization)' do
-    oauth_app = create :oauth_application
+    oauth_app = create(:oauth_application)
     visit oauth_authorization_path(
       client_id: oauth_app.uid,
       redirect_uri: oauth_app.redirect_uri,

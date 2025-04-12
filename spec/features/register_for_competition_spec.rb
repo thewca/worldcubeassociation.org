@@ -15,9 +15,9 @@ def within_modal(&)
 end
 
 RSpec.feature "Registering for a competition", :js do
-  let!(:user) { create :user }
-  let!(:delegate) { create :delegate }
-  let(:competition) { create :competition, :registration_open, :visible, :editable_registrations, delegates: [delegate] }
+  let!(:user) { create(:user) }
+  let!(:delegate) { create(:delegate) }
+  let(:competition) { create(:competition, :registration_open, :visible, :editable_registrations, delegates: [delegate]) }
 
   context "signed in as user" do
     before :each do

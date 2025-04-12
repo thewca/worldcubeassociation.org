@@ -15,7 +15,7 @@ RSpec.describe ResultsSubmissionController, type: :request do
   end
 
   context "signed in as delegate" do
-    let(:delegate) { create :delegate }
+    let(:delegate) { create(:delegate) }
 
     before { sign_in delegate }
 

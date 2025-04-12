@@ -7,7 +7,7 @@ RSpec.describe "competitions" do
 
   describe "PATCH #update_competition" do
     context "when signed in as admin" do
-      let(:admin) { create :admin }
+      let(:admin) { create(:admin) }
 
       before { sign_in admin }
 

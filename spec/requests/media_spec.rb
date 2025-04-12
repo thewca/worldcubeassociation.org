@@ -11,7 +11,7 @@ RSpec.shared_examples "only WCT" do |action, expect_success|
   end
 
   context "when signed in as regular user" do
-    let(:user) { create :user }
+    let(:user) { create(:user) }
 
     before { sign_in user }
 
@@ -42,7 +42,7 @@ RSpec.shared_examples "must sign in" do |action, expect_success|
   end
 
   context "when signed in as regular user" do
-    let!(:user) { create :user }
+    let!(:user) { create(:user) }
 
     before :each do
       sign_in user
@@ -197,7 +197,7 @@ RSpec.describe "media" do
       end
 
       it "can edit medium" do
-        competition = create :competition
+        competition = create(:competition)
         expect(medium.type).to eq 'article'
 
         patch_medium.call(

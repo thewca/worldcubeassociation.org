@@ -6,7 +6,7 @@ RSpec.describe "users" do
   include Capybara::DSL
 
   it 'can sign up and request confirmation' do
-    user = build :user
+    user = build(:user)
 
     post user_registration_path, params: {
       'user[email]' => user.email,
@@ -24,7 +24,7 @@ RSpec.describe "users" do
   end
 
   it 'cannot change password when not recently authenticated' do
-    user = create :user
+    user = create(:user)
 
     # Using sign_in here instead of the post action, as it does *not* trigger setting the
     # recently_authenticated_at session variable.
@@ -39,7 +39,7 @@ RSpec.describe "users" do
   end
 
   it 'can change password' do
-    user = create :user
+    user = create(:user)
 
     # sign in
     post user_session_path, params: { 'user[login]' => user.email, 'user[password]' => user.password }
@@ -72,7 +72,7 @@ RSpec.describe "users" do
   end
 
   it 'sign in shows conversion message for competitors missing accounts' do
-    person = create :person
+    person = create(:person)
 
     # attempt to sign in
     post user_session_path, params: { 'user[login]' => person.wca_id, 'user[password]' => "a password" }
@@ -81,7 +81,7 @@ RSpec.describe "users" do
   end
 
   it 'reset password shows conversion message for competitors missing accounts' do
-    person = create :person
+    person = create(:person)
 
     # attempt to reset password
     post user_password_path, params: { 'user[login]' => person.wca_id, 'user[password]' => "a password" }

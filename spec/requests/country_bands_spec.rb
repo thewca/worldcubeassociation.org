@@ -23,7 +23,7 @@ RSpec.describe "Country bands controller" do
     end
 
     context "when signed in as a regular user" do
-      let(:user) { create :user }
+      let(:user) { create(:user) }
 
       before { sign_in user }
 
@@ -34,7 +34,7 @@ RSpec.describe "Country bands controller" do
     end
 
     context "when signed in as a WFC member" do
-      let(:wfc_member) { create :user, :wfc_member }
+      let(:wfc_member) { create(:user, :wfc_member) }
 
       before { sign_in wfc_member }
 
@@ -49,7 +49,7 @@ RSpec.describe "Country bands controller" do
     let(:some_countries) { ["US", "AL"] }
 
     context "when signed in as a regular user" do
-      let(:user) { create :user }
+      let(:user) { create(:user) }
 
       before { sign_in user }
 

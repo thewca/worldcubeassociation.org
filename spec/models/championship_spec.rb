@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe Championship do
-  let!(:competition) { create :competition }
+  let!(:competition) { create(:competition) }
 
   describe "validations" do
     it "cannot create two same championship types to the one competition" do

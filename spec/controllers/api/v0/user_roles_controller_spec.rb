@@ -6,8 +6,8 @@ RSpec.describe Api::V0::UserRolesController do
   describe 'GET #list' do
     let!(:user_senior_delegate_role) { create(:senior_delegate_role) }
     let!(:user_whose_delegate_status_changes) { create(:junior_delegate_role, group_id: user_senior_delegate_role.group_id).user }
-    let!(:delegate) { create :delegate_role, group_id: user_senior_delegate_role.group_id }
-    let!(:person) { create :person, dob: '1990-01-02' }
+    let!(:delegate) { create(:delegate_role, group_id: user_senior_delegate_role.group_id) }
+    let!(:person) { create(:person, dob: '1990-01-02') }
     let!(:user_who_claims_wca_id) do
       create(
         :user,
@@ -65,7 +65,7 @@ RSpec.describe Api::V0::UserRolesController do
     end
 
     context 'when user is logged in as an admin' do
-      let(:wst_admin_role) { create :wst_admin_role }
+      let(:wst_admin_role) { create(:wst_admin_role) }
 
       before { sign_in wst_admin_role.user }
 
@@ -174,7 +174,7 @@ RSpec.describe Api::V0::UserRolesController do
     end
 
     context 'when signed in as a Senior Delegate' do
-      let(:senior_delegate_role) { create :senior_delegate_role }
+      let(:senior_delegate_role) { create(:senior_delegate_role) }
 
       before { sign_in senior_delegate_role.user }
 
@@ -215,7 +215,7 @@ RSpec.describe Api::V0::UserRolesController do
 
   describe 'DELETE #destroy' do
     context 'when signed in as a Senior Delegate' do
-      let(:senior_delegate_role) { create :senior_delegate_role }
+      let(:senior_delegate_role) { create(:senior_delegate_role) }
 
       before { sign_in senior_delegate_role.user }
 

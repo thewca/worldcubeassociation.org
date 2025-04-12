@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe Result do
   it "defines a valid result" do
-    result = build :result
+    result = build(:result)
     expect(result).to be_valid
   end
 
@@ -58,27 +58,27 @@ RSpec.describe Result do
 
   context "associations" do
     it "validates competitionId" do
-      result = build :result, competitionId: "foo", skip_round_creation: true
+      result = build(:result, competitionId: "foo", skip_round_creation: true)
       expect(result).to be_invalid_with_errors(competition: ["must exist"])
     end
 
     it "validates countryId" do
-      result = build :result, countryId: "foo"
+      result = build(:result, countryId: "foo")
       expect(result).to be_invalid_with_errors(country: ["must exist"])
     end
 
     it "validates eventId" do
-      result = build :result, eventId: "foo", skip_round_creation: true
+      result = build(:result, eventId: "foo", skip_round_creation: true)
       expect(result).to be_invalid_with_errors(event: ["must exist"])
     end
 
     it "validates formatId" do
-      result = build :result, formatId: "foo", skip_round_creation: true
+      result = build(:result, formatId: "foo", skip_round_creation: true)
       expect(result).to be_invalid_with_errors(format: ["must exist"])
     end
 
     it "validates roundTypeId" do
-      result = build :result, roundTypeId: "foo", skip_round_creation: true
+      result = build(:result, roundTypeId: "foo", skip_round_creation: true)
       # Skipping the round creation also creates a round validation error which
       # is reported on :round_type.
       expect(result).to be_invalid_with_errors(round_type:
@@ -89,10 +89,10 @@ RSpec.describe Result do
     end
 
     it "person association always looks for subId 1" do
-      person1 = create :person_with_multiple_sub_ids
+      person1 = create(:person_with_multiple_sub_ids)
       person2 = Person.find_by!(wca_id: person1.wca_id, subId: 2)
-      result1 = create :result, person: person1
-      result2 = create :result, person: person2
+      result1 = create(:result, person: person1)
+      result2 = create(:result, person: person2)
       expect(result1.person).to eq person1
       expect(result2.person).to eq person1
     end
@@ -100,27 +100,27 @@ RSpec.describe Result do
 
   context "valid" do
     it "skipped solves must all come at the end" do
-      result = build :result, value2: 0
+      result = build(:result, value2: 0)
       expect(result).to be_invalid_with_errors(base: ["Skipped solves must all come at the end."])
     end
 
     it "cannot skip all solves" do
-      result = build :result, value1: -2, value2: -2, value3: 0, value4: 0, value5: 0, best: -2
+      result = build(:result, value1: -2, value2: -2, value3: 0, value4: 0, value5: 0, best: -2)
       expect(result).to be_invalid_with_errors(base: ["All solves cannot be DNS/skipped."])
     end
 
     it "values must all be >= -2" do
-      result = build :result, value1: 0, value2: -3, value3: 0, value4: 0, value5: 0
+      result = build(:result, value1: 0, value2: -3, value3: 0, value4: 0, value5: 0)
       expect(result).to be_invalid(value2: ["invalid"])
     end
 
     it "position must be a number" do
-      result = build :result, pos: nil
+      result = build(:result, pos: nil)
       expect(result).to be_invalid(pos: ["The position is not a valid number. Did you clear all the empty rows and synchronized WCA Live?"])
     end
 
     it "correctly computes best" do
-      result = build :result, value1: 42, value2: 43, value3: 44, value4: 45, value5: 46, best: 42, average: 44
+      result = build(:result, value1: 42, value2: 43, value3: 44, value4: 45, value5: 46, best: 42, average: 44)
       expect(result).to be_valid
 
       result.best = 41
@@ -435,7 +435,7 @@ RSpec.describe Result do
 
     context "check number of non-zero solves" do
       def result_with_n_solves(n, options)
-        result = build :result, options
+        result = build(:result, options)
         (1..5).each do |i|
           result.send :"value#{i}=", i <= n ? 42 : 0
         end
@@ -500,7 +500,7 @@ RSpec.describe Result do
         solve_time.attempted = 30
         solve_time.time_centiseconds = 65*60*100
 
-        result = build :result, eventId: "333mbf", value1: solve_time.wca_value, formatId: "1"
+        result = build(:result, eventId: "333mbf", value1: solve_time.wca_value, formatId: "1")
         expect(result).to be_invalid_with_errors(value1: ["should be less than or equal to 60 minutes"])
       end
 
@@ -510,7 +510,7 @@ RSpec.describe Result do
         solve_time.attempted = 3
         solve_time.time_centiseconds = 32*60*100
 
-        result = build :result, eventId: "333mbf", value1: solve_time.wca_value, formatId: "1"
+        result = build(:result, eventId: "333mbf", value1: solve_time.wca_value, formatId: "1")
         expect(result).to be_invalid_with_errors(value1: ["should be less than or equal to 30 minutes"])
       end
     end
@@ -518,7 +518,7 @@ RSpec.describe Result do
 end
 
 def build_result(attrs)
-  FactoryBot.build :result, { competition: competition, roundTypeId: roundTypeId, formatId: formatId, eventId: eventId }.merge(attrs)
+  FactoryBot.build(:result, { competition: competition, roundTypeId: roundTypeId, formatId: formatId, eventId: eventId }.merge(attrs))
 end
 
 def solve_time(centis)

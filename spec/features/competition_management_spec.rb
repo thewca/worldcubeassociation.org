@@ -41,7 +41,7 @@ end
 # We can remove this `retry` count when we migrated to a "proper" browser engine in tests.
 RSpec.feature "Competition management", :js, retry: 10 do
   context "when signed in as admin" do
-    let!(:admin) { create :admin }
+    let!(:admin) { create(:admin) }
 
     before :each do
       sign_in admin
@@ -227,7 +227,7 @@ RSpec.feature "Competition management", :js, retry: 10 do
   context "when signed in as delegate" do
     let!(:delegate) { create(:delegate) }
     let(:cloned_delegate) { create(:delegate) }
-    let(:competition_to_clone) { create :competition, :visible, cityName: 'Melbourne, Victoria', countryId: "Australia", delegates: [cloned_delegate] }
+    let(:competition_to_clone) { create(:competition, :visible, cityName: 'Melbourne, Victoria', countryId: "Australia", delegates: [cloned_delegate]) }
 
     let(:threes) { Event.find("333") }
     let(:fours) { Event.find("444") }
@@ -302,7 +302,7 @@ RSpec.feature "Competition management", :js, retry: 10 do
     end
 
     feature "edit" do
-      let(:comp_with_fours) { create :competition, events: [fours], delegates: [delegate] }
+      let(:comp_with_fours) { create(:competition, events: [fours], delegates: [delegate]) }
 
       scenario 'can edit registration open datetime', :js do
         visit edit_competition_path(comp_with_fours)

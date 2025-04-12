@@ -232,7 +232,7 @@ RSpec.describe Api::V0::CompetitionsController do
     end
 
     it 'paginates' do
-      create_list :competition, 7, :confirmed, :visible
+      create_list(:competition, 7, :confirmed, :visible)
 
       get :index, params: { per_page: 5 }
       expect(response).to have_http_status :ok
@@ -255,7 +255,7 @@ RSpec.describe Api::V0::CompetitionsController do
   end
 
   describe 'wcif' do
-    let!(:series) { create :competition_series }
+    let!(:series) { create(:competition_series) }
 
     let!(:competition) {
       create(

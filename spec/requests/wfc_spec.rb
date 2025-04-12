@@ -13,7 +13,7 @@ RSpec.describe "WFC controller" do
     end
 
     context "when signed in as a regular user" do
-      let(:user) { create :user }
+      let(:user) { create(:user) }
 
       before { sign_in user }
 
@@ -24,7 +24,7 @@ RSpec.describe "WFC controller" do
     end
 
     context "when signed in as a WFC member" do
-      let(:wfc_member) { create :user, :wfc_member }
+      let(:wfc_member) { create(:user, :wfc_member) }
 
       before { sign_in wfc_member }
 
@@ -37,7 +37,7 @@ RSpec.describe "WFC controller" do
 
   describe "GET /competitions_export" do
     context "when signed in as a regular user" do
-      let(:user) { create :user }
+      let(:user) { create(:user) }
 
       before { sign_in user }
 
@@ -48,7 +48,7 @@ RSpec.describe "WFC controller" do
     end
 
     context "when signed in as a WFC member" do
-      let(:wfc_member) { create :user, :wfc_member }
+      let(:wfc_member) { create(:user, :wfc_member) }
 
       before { sign_in wfc_member }
 

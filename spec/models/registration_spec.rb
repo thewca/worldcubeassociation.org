@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe Registration do
-  let(:registration) { create :registration }
+  let(:registration) { create(:registration) }
 
   it "defines a valid registration" do
     expect(registration).to be_valid
@@ -27,7 +27,7 @@ RSpec.describe Registration do
   end
 
   describe "on create" do
-    let(:registration) { build :registration }
+    let(:registration) { build(:registration) }
 
     it "requires user on create" do
       expect(build(:registration, user_id: nil)).to be_invalid_with_errors(user: ["can't be blank"])
@@ -123,7 +123,7 @@ RSpec.describe Registration do
 
   context "upper guest limit enabled" do
     guest_limit = 2
-    let(:competition) { create :competition, :with_guest_limit, guests_per_registration_limit: guest_limit }
+    let(:competition) { create(:competition, :with_guest_limit, guests_per_registration_limit: guest_limit) }
 
     before :each do
       registration.competition = competition
@@ -158,7 +158,7 @@ RSpec.describe Registration do
   context "with upper guest limit not enabled" do
     it "allows guests greater than guest limit" do
       guest_limit = 1
-      competition = create :competition, guests_per_registration_limit: guest_limit, guest_entry_status: Competition.guest_entry_statuses['free']
+      competition = create(:competition, guests_per_registration_limit: guest_limit, guest_entry_status: Competition.guest_entry_statuses['free'])
       registration.competition = competition
       registration.guests = 10
       expect(registration.guests).to be > registration.guest_limit
@@ -167,7 +167,7 @@ RSpec.describe Registration do
 
     it "does not allow guests greater than guest hard limit" do
       guest_limit = 1
-      competition = create :competition, guests_per_registration_limit: guest_limit, guest_entry_status: Competition.guest_entry_statuses['free']
+      competition = create(:competition, guests_per_registration_limit: guest_limit, guest_entry_status: Competition.guest_entry_statuses['free'])
       registration.competition = competition
       registration.guests = 1_000_000
       expect(registration).to be_invalid_with_errors(guests: ["must be less than or equal to 99"])
@@ -184,7 +184,7 @@ RSpec.describe Registration do
     event_limit = event_ids.length - 2
 
     context "with event limit" do
-      let(:competition) { create :competition, :with_event_limit, events_per_registration_limit: event_limit, event_ids: event_ids }
+      let(:competition) { create(:competition, :with_event_limit, events_per_registration_limit: event_limit, event_ids: event_ids) }
 
       it "blocks registrations when zero events are selected" do
         registration = build(:registration, competition: competition, events: [])
@@ -213,7 +213,7 @@ RSpec.describe Registration do
     end
 
     context "without event limit" do
-      let(:competition) { create :competition, event_ids: event_ids }
+      let(:competition) { create(:competition, event_ids: event_ids) }
 
       it "blocks registrations when zero events are selected" do
         registration = build(:registration, competition: competition, events: [])
@@ -228,10 +228,10 @@ RSpec.describe Registration do
   end
 
   context "when the competition is part of a series" do
-    let!(:series) { create :competition_series, name: "Registration Test Series 2015" }
+    let!(:series) { create(:competition_series, name: "Registration Test Series 2015") }
 
-    let!(:partner_competition) { create :competition, series_base: registration.competition, competition_series: series }
-    let!(:partner_registration) { create :registration, :pending, competition: partner_competition, user: registration.user }
+    let!(:partner_competition) { create(:competition, series_base: registration.competition, competition_series: series) }
+    let!(:partner_registration) { create(:registration, :pending, competition: partner_competition, user: registration.user) }
 
     before { registration.competition.update!(competition_series: series) }
 

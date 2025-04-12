@@ -3,15 +3,15 @@
 require "rails_helper"
 
 RSpec.describe RegistrationsMailer, type: :mailer do
-  let(:delegate1) { create :delegate }
-  let(:delegate2) { create :trainee_delegate }
-  let(:organizer1) { create :user }
-  let(:organizer2) { create :user }
+  let(:delegate1) { create(:delegate) }
+  let(:delegate2) { create(:trainee_delegate) }
+  let(:organizer1) { create(:user) }
+  let(:organizer2) { create(:user) }
   let(:competition_without_organizers) { create(:competition, :registration_open, delegates: [delegate1, delegate2]) }
   let(:competition_with_organizers) { create(:competition, :registration_open, delegates: [delegate1, delegate2], organizers: [organizer1, organizer2]) }
 
   describe "notify registrants in their language" do
-    let(:french_user) { create :user, :wca_id, :french_locale }
+    let(:french_user) { create(:user, :wca_id, :french_locale) }
     let(:registration) { create(:registration, user: french_user, competition: competition_with_organizers) }
     let(:mail_new) { RegistrationsMailer.notify_registrant_of_new_registration(registration) }
     let(:mail_accepted) { RegistrationsMailer.notify_registrant_of_accepted_registration(registration) }

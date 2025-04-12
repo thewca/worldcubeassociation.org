@@ -69,7 +69,7 @@ RSpec.describe PostsController do
   end
 
   context "logged in as wrc member" do
-    let(:wrc_member) { create :user, :wrc_member }
+    let(:wrc_member) { create(:user, :wrc_member) }
 
     before { sign_in wrc_member }
 
@@ -91,7 +91,7 @@ RSpec.describe PostsController do
   end
 
   context "logged in as wic member" do
-    let(:wic_member) { create :user, :wic_member }
+    let(:wic_member) { create(:user, :wic_member) }
 
     before { sign_in wic_member }
 
