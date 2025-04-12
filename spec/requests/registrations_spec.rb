@@ -505,7 +505,6 @@ RSpec.describe "registrations" do
         end
       end
 
-
       context "when competitor limit has been reached" do
         it "redirects to competition page" do
           FactoryBot.create(:registration, :accepted, competition: competition, events: %w(333))
@@ -526,9 +525,9 @@ RSpec.describe "registrations" do
       end
 
       describe "on the spot behaviour", :tag do
-        let(:open_comp) { FactoryBot.create( :competition, :registration_open, delegates: [competition.delegates.first]) }
-        let(:closed_comp) { FactoryBot.create( :competition, :registration_closed, delegates: [competition.delegates.first]) }
-        let(:past_comp) { FactoryBot.create( :competition, :past, delegates: [competition.delegates.first]) }
+        let(:open_comp) { FactoryBot.create(:competition, :registration_open, delegates: [competition.delegates.first]) }
+        let(:closed_comp) { FactoryBot.create(:competition, :registration_closed, delegates: [competition.delegates.first]) }
+        let(:past_comp) { FactoryBot.create(:competition, :past, delegates: [competition.delegates.first]) }
 
         context 'on-the-spot is enabled' do
           it 'works when registration is open' do
