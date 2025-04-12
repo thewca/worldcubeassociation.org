@@ -13,7 +13,7 @@ RSpec.describe VotesController do
   end
 
   context "logged in as a regular user" do
-    let(:admin) { create(:user) }
+    let(:user) { create(:user) }
 
     before { sign_in user }
 
