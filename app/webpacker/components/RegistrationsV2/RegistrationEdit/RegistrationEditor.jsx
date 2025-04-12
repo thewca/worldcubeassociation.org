@@ -207,11 +207,15 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
         )}
         <Header>
           {`${competitor.name} `}
-          (
-          <a href={personUrl(competitor.wca_id)} target="_blank" rel="noreferrer" className="hide-new-window-icon">{competitor.wca_id}</a>
-          )
+          {competitor.wca_id && (
+              <>
+                (
+                <a href={personUrl(competitor.wca_id)} target="_blank" rel="noreferrer" className="hide-new-window-icon">{competitor.wca_id}</a>
+                )
+              </>
+            )}
           {' ' /* Necessary to space the icon away from the wca_id */ }
-          <a href={personUrl(competitor.wca_id)} target="_blank" rel="noreferrer" className="hide-new-window-icon"><Icon name="edit" /></a>
+          <a href={editPersonUrl(competitor.id)} target="_blank" rel="noreferrer" className="hide-new-window-icon"><Icon name="edit" /></a>
         </Header>
         <Form.Field required error={selectedEventIds.size === 0}>
           <EventSelector
