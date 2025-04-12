@@ -3,7 +3,7 @@
 <%= render layout: "nav" do %>
   <% if @competition.registration_full? %>
     <%= alert :warning, t('registrations.mailer.deleted.causes.registrations_full'), note: true %>
-  <% elsif !@competition.on_the_spot_registration? %>
+  <% elsif !@competition.registration_currently_open? && !@competition.on_the_spot_registration? %>
     <%= alert :warning, t('registrations.add.ots_not_enabled') %>
   <% elsif @competition.is_probably_over? %>
     <%= alert :warning, t('registrations.add.competition_over') %>
