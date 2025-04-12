@@ -4,7 +4,9 @@ require 'rails_helper'
 
 RSpec.describe TicketsController do
   describe "POST #anonymize" do
-    sign_in { create :admin }
+    let(:admin) { create :admin }
+
+    before { sign_in admin }
 
     it 'can anonymize person' do
       person = create(:person_who_has_competed_once)

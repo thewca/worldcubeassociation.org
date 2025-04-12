@@ -4,7 +4,8 @@ require 'rails_helper'
 
 RSpec.describe AdminController, type: :controller do
   describe 'merge_people' do
-    sign_in { create :admin }
+    let(:admin) { create :admin }
+    before { sign_in admin }
 
     let(:person1) { create(:person) }
     let(:person2) { create(:person, person1.attributes.symbolize_keys!.slice(:name, :countryId, :gender, :dob)) }
@@ -18,7 +19,8 @@ RSpec.describe AdminController, type: :controller do
   end
 
   describe 'reassign_wca_id' do
-    sign_in { create :admin }
+    let(:admin) { create :admin }
+    before { sign_in admin }
 
     let(:user1) { create(:user_with_wca_id) }
     let(:user2) { create(:user, user1.attributes.symbolize_keys!.slice(:name, :country_iso2, :gender, :dob)) }

@@ -4,7 +4,8 @@ require 'rails_helper'
 
 RSpec.describe Api::V0::Wrt::PersonsController, type: :controller do
   describe 'PATCH #update person' do
-    sign_in { create :admin }
+    let(:admin) { create :admin }
+    before { sign_in admin }
 
     let(:person) { create(:person_who_has_competed_once, name: "Feliks Zemdegs", countryId: "Australia") }
 
