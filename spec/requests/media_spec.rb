@@ -12,7 +12,8 @@ RSpec.shared_examples "only WCT" do |action, expect_success|
 
   context "when signed in as regular user" do
     let(:user) { create :user }
-    before { sign_in user}
+
+    before { sign_in user }
 
     it "redirects to home page" do
       self.instance_exec(&action)

@@ -20,7 +20,8 @@ RSpec.describe DelegateReportsController do
 
   context "logged in as a regular user" do
     let(:user) { create(:user) }
-    before { sign_in user}
+
+    before { sign_in user }
 
     it "redirects to home page" do
       get :show, params: { competition_id: comp.id }
@@ -30,7 +31,8 @@ RSpec.describe DelegateReportsController do
 
   context "logged in as a regular delegate" do
     let(:other_delegate) { create(:delegate) }
-    before { sign_in other_delegate}
+
+    before { sign_in other_delegate }
 
     it "redirects to home page" do
       get :edit, params: { competition_id: comp.id }

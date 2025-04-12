@@ -28,7 +28,10 @@ RSpec.describe "Incidents management", type: :request do
     let!(:pending_incident) { create(:incident) }
 
     context "when logged in as a user" do
-      sign_in { create(:user) }
+      let(:user) { create(:user) }
+
+      before { sign_in user }
+
       it "shows a resolved incident" do
         get incident_path(incident)
         expect(response).to be_successful
@@ -40,7 +43,10 @@ RSpec.describe "Incidents management", type: :request do
     end
 
     context "when logged in as a Delegate" do
-      sign_in { create(:delegate) }
+      let(:delegate) { create(:delegate) }
+
+      before { sign_in delegate }
+
       it "does not show a pending incident" do
         get incident_path(pending_incident)
         expect(response).not_to be_successful
@@ -48,7 +54,10 @@ RSpec.describe "Incidents management", type: :request do
     end
 
     context "when logged in as a WIC member" do
-      sign_in { create(:user, :wic_member) }
+      let(:wic_member) { create(:user, :wic_member) }
+
+      before { sign_in wic_member }
+
       it "does not show a pending incident" do
         get incident_path(pending_incident)
         expect(response).not_to be_successful
@@ -56,7 +65,10 @@ RSpec.describe "Incidents management", type: :request do
     end
 
     context "when logged in as a WQAC member" do
-      sign_in { create(:user, :wqac_member) }
+      let(:wqac_member) { create(:user, :wqac_member) }
+
+      before { sign_in wqac_member }
+
       it "does not show a pending incident" do
         get incident_path(pending_incident)
         expect(response).not_to be_successful
@@ -74,7 +86,10 @@ RSpec.describe "Incidents management", type: :request do
     end
 
     context "when signed in as a delegate" do
-      sign_in { create(:delegate) }
+      let(:delegate) { create(:delegate) }
+
+      before { sign_in delegate }
+
       it "does not allow access" do
         get new_incident_path
         expect(response).to redirect_to root_url
@@ -95,7 +110,10 @@ RSpec.describe "Incidents management", type: :request do
 
   describe "GET #edit" do
     context "when signed in as a delegate" do
-      sign_in { create(:delegate) }
+      let(:delegate) { create(:delegate) }
+
+      before { sign_in delegate }
+
       it "does not allow access" do
         get edit_incident_path(incident)
         expect(response).to redirect_to root_url
@@ -120,7 +138,10 @@ RSpec.describe "Incidents management", type: :request do
     end
 
     context "when signed in as a delegate" do
-      sign_in { create(:delegate) }
+      let(:delegate) { create(:delegate) }
+
+      before { sign_in delegate }
+
       it "does not allow access" do
         post incidents_path, params: { incident: valid_attributes }
         expect(response).to redirect_to root_url
@@ -158,7 +179,10 @@ RSpec.describe "Incidents management", type: :request do
     end
 
     context "when signed in as a delegate" do
-      sign_in { create(:delegate) }
+      let(:delegate) { create(:delegate) }
+
+      before { sign_in delegate }
+
       it "does not allow access" do
         put incident_path(incident), params: { incident: {} }
         expect(response).to redirect_to root_url
@@ -198,7 +222,10 @@ RSpec.describe "Incidents management", type: :request do
 
   describe "DELETE #destroy" do
     context "when signed in as a delegate" do
-      sign_in { create(:delegate) }
+      let(:delegate) { create(:delegate) }
+
+      before { sign_in delegate }
+
       it "does not allow access" do
         put incident_path(incident)
         expect(response).to redirect_to root_url
@@ -219,7 +246,10 @@ RSpec.describe "Incidents management", type: :request do
 
   describe "PATCH #mark_as" do
     context "when signed in as a delegate" do
-      sign_in { create(:delegate) }
+      let(:delegate) { create(:delegate) }
+
+      before { sign_in delegate }
+
       it "does not allow access" do
         patch incident_mark_as_path(incident_id: incident.id, kind: "resolved")
         expect(response).to redirect_to root_url
