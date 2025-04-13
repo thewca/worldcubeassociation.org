@@ -379,6 +379,48 @@ function EditActivities({
                 </Grid.Column>
                 <Grid.Column width={12}>
                   <Container text textAlign="center">
+                    <Popup
+                      trigger={<Button secondary icon="cog" />}
+                      on="click"
+                      position="right center"
+                      pinned
+                      flowing
+                    >
+                      <Popup.Header>Calendar settings</Popup.Header>
+                      <Popup.Content>
+                        <Form>
+                          <Form.Input
+                            label="Minutes per row"
+                            name="row-mins"
+                            type="number"
+                            min={5}
+                            max={30}
+                            step={5}
+                            value={minutesPerRow}
+                            onChange={setMinutesPerRow}
+                          />
+                          <Form.Input
+                            label="Calendar starts at"
+                            name="cal-start"
+                            type="number"
+                            min={0}
+                            max={24}
+                            value={calendarStart}
+                            onChange={setCalendarStart}
+                          />
+                          <Form.Input
+                            label="Calendar ends at"
+                            name="cal-end"
+                            type="number"
+                            min={0}
+                            max={24}
+                            value={calendarEnd}
+                            onChange={setCalendarEnd}
+                          />
+                        </Form>
+                      </Popup.Content>
+                    </Popup>
+                    {' '}
                     The timezone for this room is
                     {' '}
                     <b>
@@ -388,55 +430,6 @@ function EditActivities({
                         calendarLocale,
                       )}
                     </b>
-                  </Container>
-                  <Container fluid>
-                    <Grid textAlign="center" verticalAlign="middle">
-                      <Grid.Column width={1}>
-                        <Popup
-                          trigger={<Button secondary icon="cog" />}
-                          on="click"
-                          position="right center"
-                          pinned
-                          flowing
-                        >
-                          <Popup.Header>Calendar settings</Popup.Header>
-                          <Popup.Content>
-                            <Form>
-                              <Form.Input
-                                label="Minutes per row"
-                                name="row-mins"
-                                type="number"
-                                min={5}
-                                max={30}
-                                step={5}
-                                value={minutesPerRow}
-                                onChange={setMinutesPerRow}
-                              />
-                              <Form.Input
-                                label="Calendar starts at"
-                                name="cal-start"
-                                type="number"
-                                min={0}
-                                max={24}
-                                value={calendarStart}
-                                onChange={setCalendarStart}
-                              />
-                              <Form.Input
-                                label="Calendar ends at"
-                                name="cal-end"
-                                type="number"
-                                min={0}
-                                max={24}
-                                value={calendarEnd}
-                                onChange={setCalendarEnd}
-                              />
-                            </Form>
-                          </Popup.Content>
-                        </Popup>
-                      </Grid.Column>
-                      <Grid.Column width={15}>
-                      </Grid.Column>
-                    </Grid>
                   </Container>
                   <FullCalendar
                     // plugins for the basic FullCalendar implementation.
