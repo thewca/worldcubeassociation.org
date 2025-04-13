@@ -363,17 +363,17 @@ function EditActivities({
                 <Grid.Column width={4}>
                   <Sticky context={stickyRef} offset={10}>
                     <Segment>
+                      <Ref innerRef={dropToDeleteRef}>
+                        <Message negative floating>
+                          <Icon name="trash" />
+                          Drop an event here to remove it from the schedule.
+                        </Message>
+                      </Ref>
                       <ActivityPicker
                         wcifEvents={wcifEvents}
                         wcifRoom={wcifRoom}
                         listRef={activityPickerRef}
                       />
-                        <Ref innerRef={dropToDeleteRef}>
-                          <Message negative floating>
-                            <Icon name="trash" />
-                            Drop an event here to remove it from the schedule.
-                          </Message>
-                        </Ref>
                     </Segment>
                   </Sticky>
                 </Grid.Column>
