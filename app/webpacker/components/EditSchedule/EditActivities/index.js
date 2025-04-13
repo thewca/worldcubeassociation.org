@@ -365,6 +365,12 @@ function EditActivities({
                       wcifRoom={wcifRoom}
                       listRef={activityPickerRef}
                     />
+                      <Ref innerRef={dropToDeleteRef}>
+                        <Message negative floating>
+                          <Icon name="trash" />
+                          Drop an event here to remove it from the schedule.
+                        </Message>
+                      </Ref>
                   </Segment>
                 </Sticky>
               </Grid.Column>
@@ -426,13 +432,6 @@ function EditActivities({
                       </Popup>
                     </Grid.Column>
                     <Grid.Column width={15}>
-                      <Ref innerRef={dropToDeleteRef}>
-                        <Message negative floating>
-                          <Icon name="trash" />
-                          Drop an event here to remove it from the schedule.
-                          <Icon name="trash" />
-                        </Message>
-                      </Ref>
                     </Grid.Column>
                   </Grid>
                 </Container>
