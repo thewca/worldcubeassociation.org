@@ -111,6 +111,12 @@ const customConfig = defineConfig({
         danger: { value: "{colors.red.50}" },
         warning: { value: "{colors.yellow.50}" },
         success: { value: "{colors.green.100}" },
+        recordColors: {
+          personal: { value: "{colors.orange.50}"},
+          national: { value: "{colors.green.50}"},
+          continental: { value: "{colors.red.50}"},
+          world: { value: "{colors.blue.50}"},
+        },
         grey: {
           solid: {
             value: {
@@ -173,6 +179,11 @@ const customConfig = defineConfig({
               },
             },
           },
+          spanBg: { value: "#664d00" },
+          cls1: { value: "#664d00" },
+          cls2: { value: "#ffd313" },
+          cls3: { value: "#ffde55" },
+          cls4: { value: "#cea705" },
         },
         green: {
           solid: {
@@ -207,6 +218,11 @@ const customConfig = defineConfig({
               },
             },
           },
+          spanBg: { value: "#1B4D3E" },
+          cls1: { value: "#1B4D3E" },
+          cls2: { value: "#049347" },
+          cls3: { value: "#04632D" },
+          cls4: { value: "#1AB55C" },
         },
         blue: {
           solid: {
@@ -241,6 +257,11 @@ const customConfig = defineConfig({
               },
             },
           },
+          spanBg: { value: "#003366" },
+          cls1: { value: "#003366" },
+          cls2: { value: "#0051BA" },
+          cls3: { value: "#03458C" },
+          cls4: { value: "#066AC4" },
         },
         red: {
           solid: {
@@ -275,6 +296,11 @@ const customConfig = defineConfig({
               },
             },
           },
+          spanBg: { value: "#7A1220" },
+          cls1: { value: "#7A1220" },
+          cls2: { value: "#CF1A1B" },
+          cls3: { value: "#A3131A" },
+          cls4: { value: "#E53841" },
         },
         orange: {
           solid: {
@@ -314,6 +340,11 @@ const customConfig = defineConfig({
               },
             },
           },
+          spanBg: { value: "#7A2B00" },
+          cls1: { value: "#7A2B00" },
+          cls2: { value: "#FF5800" },
+          cls3: { value: "#D34405" },
+          cls4: { value: "#F96E32" },
         },
         bg: {
           DEFAULT: {
