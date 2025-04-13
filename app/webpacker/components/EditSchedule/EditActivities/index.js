@@ -159,6 +159,24 @@ function EditActivities({
 
   const dropToDeleteRef = useRef(null);
 
+  const removeEvent = (fcEvent) => {
+    const {
+      [FC_ACTIVITY_ATTACHMENT]: {
+        id: activityId,
+        name: activityName,
+      },
+      matchCount,
+    } = fcEvent.extendedProps;
+
+    const matchText = `all ${matchCount + 1} copies of `;
+
+    confirm({
+      content: `Are you sure you want to delete ${shouldUpdateMatches && matchCount > 1 ? matchText : ''}the event ${activityName}? THIS ACTION CANNOT BE UNDONE!`,
+    }).then(() => {
+      dispatch(removeActivity(activityId, shouldUpdateMatches));
+    });
+  };
+
   const removeIfOverDropzone = ({ event: fcEvent, jsEvent }) => {
     if (!dropToDeleteRef.current) return;
 
@@ -181,24 +199,6 @@ function EditActivities({
     ) {
       removeEvent(fcEvent);
     }
-  };
-
-  const removeEvent = (fcEvent) => {
-    const {
-      [FC_ACTIVITY_ATTACHMENT]: {
-        id: activityId,
-        name: activityName,
-      },
-      matchCount,
-    } = fcEvent.extendedProps;
-
-    const matchText = `all ${matchCount + 1} copies of `;
-
-    confirm({
-      content: `Are you sure you want to delete ${shouldUpdateMatches && matchCount > 1 ? matchText : ''}the event ${activityName}? THIS ACTION CANNOT BE UNDONE!`,
-    }).then(() => {
-      dispatch(removeActivity(activityId, shouldUpdateMatches));
-    });
   };
 
   const addActivityFromPicker = ({ event: fcEvent, view: { calendar } }) => {
