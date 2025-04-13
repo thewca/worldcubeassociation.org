@@ -179,7 +179,7 @@ function EditActivities({
         && jsEvent.pageY >= top
         && jsEvent.pageY <= bottom
     ) {
-      removeEvent(fcEvent)
+      removeEvent(fcEvent);
     }
   };
 
@@ -199,7 +199,7 @@ function EditActivities({
     }).then(() => {
       dispatch(removeActivity(activityId, shouldUpdateMatches));
     });
-  }
+  };
 
   const addActivityFromPicker = ({ event: fcEvent, view: { calendar } }) => {
     const { activity } = fcEventToActivityAndDates(fcEvent, calendar);
