@@ -177,10 +177,11 @@ export default async function PersonOverview({
 
   return (
     
-    <Container centerContent>
+    <Container centerContent maxW="1800px">
       {/* Profile Section */}
-      <SimpleGrid gap={5} columns={12} padding={5}>
-        <GridItem colSpan={3} h="80lvh" position="sticky" top="20px">
+      {/* TODO SLATE - stick the bottom of this Profile card to the bottom of the page*/}
+      <SimpleGrid gap={8} columns={24} padding={5}>
+        <GridItem colSpan={7} h="80lvh" position="sticky" top="0px" pt="20px">
           <ProfileCard
                 name={personDetails.person.name}
                 profilePicture={personDetails.person.avatar.url}
@@ -193,9 +194,9 @@ export default async function PersonOverview({
               />
         </GridItem>
         {/* Records and Medals */}
-        <GridItem colSpan={9}>
+        <GridItem colSpan={17} pt="20px">
           <PersonalRecordsTable records={transformPersonalRecords(personDetails.personal_records)}/>
-          <SimpleGrid gap={5} columns={6} padding={0} pt={5}>
+          <SimpleGrid gap={8} columns={6} padding={0} pt={8}>
           {hasMedals && (
             <GridItem colSpan={hasRecords ? 3 : 6}>
               <MedalSummaryCard

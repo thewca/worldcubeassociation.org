@@ -11,7 +11,7 @@ interface RecordSummaryCardProps {
 
 const RecordSummaryCard: React.FC<RecordSummaryCardProps> = ({ world, continental, national }) => {
   return (
-    <Card.Root variant="hero" colorPalette="green" overflow="hidden">
+    <Card.Root variant="summary" colorPalette="green" overflow="hidden">
       <Float placement="middle-end" offsetX="8">
         <Icon fontSize="10rem" color="green.100" opacity="0.3">
           <RecordsIcon />

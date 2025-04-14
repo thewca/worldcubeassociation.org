@@ -10,14 +10,14 @@ interface MedalSummaryCardProps {
 
 const MedalSummaryCard: React.FC<MedalSummaryCardProps> = ({ gold, silver, bronze }) => {
   return (
-    <Card.Root variant="hero" colorPalette="yellow" overflow="hidden">
+    <Card.Root variant="summary" colorPalette="yellow" overflow="hidden">
       <Float placement="middle-end" offsetX="8">
               <Icon fontSize="10rem" color="yellow.100" opacity="0.3">
                 <MyResultsIcon />
               </Icon>
             </Float>
       <Card.Body>
-        <Card.Title><Text fontSize="md" textTransform="uppercase" fontWeight="medium" letterSpacing="wider">Medal Collection</Text></Card.Title>
+        <Card.Title><Text fontSize="md" textTransform="uppercase" fontWeight="medium" letterSpacing="wider">Medals</Text></Card.Title>
         <StatGroup justifyContent="start" flexDirection="row" gap="5">
           {gold > 0 && (
             <Stat.Root flex="0">

@@ -564,7 +564,7 @@ const customConfig = defineConfig({
             achievement: {
               bg: "transparent",
               color: "fg",
-              fontWeight: "bold",
+              fontWeight: "medium",
               gap: "2",
               mr: "2.5",
             },
@@ -613,6 +613,14 @@ const customConfig = defineConfig({
               body: {
                 bg: "colorPalette.solid",
                 color: "colorPalette.contrast",
+              },
+            },
+            summary: {
+              body: {
+                bg: "colorPalette.solid",
+                color: "colorPalette.contrast",
+                p: "7",
+                gap: "3",
               },
             },
             info: {
@@ -728,6 +736,7 @@ const customConfig = defineConfig({
             results: {
               cell: {
                 padding: "0",
+                paddingBlock: "0px",
               },
             },
             competitions: {
@@ -818,6 +827,33 @@ const customConfig = defineConfig({
           },
         },
       },
+      dataList: {
+        variants: {
+          variant: {
+            profileStat: {
+              root: {
+                display: "grid",
+                gridTemplateColumns: "1fr 1fr",
+                columnGap: "2rem",
+                rowGap: "0.5rem",
+              },
+              item: {
+                flexDirection: "column-reverse",
+                alignItems: "flex-start", // default for left column
+                _even: {
+                  alignItems: "flex-end", // right column overrides
+                },
+              },
+              itemLabel: {
+                fontWeight: "regular",
+              },
+              itemValue: {
+                fontWeight: "semibold",
+              }
+            }
+          }
+        }
+      }
     },
   },
 });
