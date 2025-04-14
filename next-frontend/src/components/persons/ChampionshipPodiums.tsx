@@ -1,10 +1,10 @@
-import React from 'react';
-import {Table, Heading} from "@chakra-ui/react";
+import React from "react";
+import { Table, Heading } from "@chakra-ui/react";
 
 const ChampionshipPodiumsTab: React.FC = () => {
   const podiums = [
-    { event: '3x3x3 Cube', place: '1st', competition: 'Nationals 2022' },
-    { event: '2x2x2 Cube', place: '2nd', competition: 'Regionals 2023' },
+    { event: "3x3x3 Cube", place: "1st", competition: "Nationals 2022" },
+    { event: "2x2x2 Cube", place: "2nd", competition: "Regionals 2023" },
     // Add more podiums here
   ];
 

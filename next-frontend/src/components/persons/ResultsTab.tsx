@@ -1,10 +1,10 @@
-import React from 'react';
-import {Heading} from "@chakra-ui/react";
+import React from "react";
+import { Heading } from "@chakra-ui/react";
 import ResultsTable from "@/components/persons/resultsTable";
 
 interface ResultsTabProps {
-    wcaId: string; 
-  }
+  wcaId: string;
+}
 
 const ResultsTab: React.FC<ResultsTabProps> = ({ wcaId }) => {
   return (

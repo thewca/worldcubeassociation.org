@@ -112,10 +112,10 @@ const customConfig = defineConfig({
         warning: { value: "{colors.yellow.50}" },
         success: { value: "{colors.green.100}" },
         recordColors: {
-          personal: { value: "{colors.orange.50}"},
-          national: { value: "{colors.green.50}"},
-          continental: { value: "{colors.red.50}"},
-          world: { value: "{colors.blue.50}"},
+          personal: { value: "{colors.orange.50}" },
+          national: { value: "{colors.green.50}" },
+          continental: { value: "{colors.red.50}" },
+          world: { value: "{colors.blue.50}" },
         },
         grey: {
           solid: {
@@ -850,11 +850,11 @@ const customConfig = defineConfig({
                     display: "none", // Remove the line when selected
                   },
                 },
-                '&[data-selected] + &::before': {
-                  display: 'none',
+                "&[data-selected] + &::before": {
+                  display: "none",
                 },
               },
-            }
+            },
           },
         },
       },
@@ -880,11 +880,11 @@ const customConfig = defineConfig({
               },
               itemValue: {
                 fontWeight: "semibold",
-              }
-            }
-          }
-        }
-      }
+              },
+            },
+          },
+        },
+      },
     },
   },
 });
