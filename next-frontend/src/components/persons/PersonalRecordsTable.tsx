@@ -1,9 +1,10 @@
 import React from 'react';
-import {Card, Table, Flex, Icon, Text, Box} from "@chakra-ui/react";
+import {Card, Table, Flex, Icon, Text, Box, Button} from "@chakra-ui/react";
 import { Tooltip } from "@/components/ui/tooltip";
 import SpeedcubingHistoryIcon from "@/components/icons/SpeedcubingHistoryIcon";
 import _222Icon from "@/components/icons/events/_222Icon";
 import EventIconMap, { eventIconMap } from "@/components/icons/EventIconMap";
+import { LuShare2 } from "react-icons/lu";
 
 
 interface Record {
@@ -49,7 +50,7 @@ const PersonalRecordsTable: React.FC<RecordsProps> = ({ records }) => {
   return (
     <Card.Root bg="bg.inverted" color="fg.inverted" shadow="wca" overflow="hidden" width="full">
       <Card.Body p={0}>
-        <Card.Title p={5} fontSize="md" textTransform="uppercase" fontWeight="medium" letterSpacing="wider">Current Personal Records</Card.Title>
+        <Card.Header display="flex" flexDirection="row" alignItems="center"><Card.Title p={5} fontSize="md" textTransform="uppercase" fontWeight="medium" letterSpacing="wider">Current Personal Records</Card.Title><Button variant="ghost" ml="auto" p="0"><LuShare2 /></Button></Card.Header>
         {/* Tables don't seem to inherit styles correctly, normally all the extra bg and fg shouldn't be necessary */}
         <Table.Root size="sm" striped rounded="md" variant="results">
           <Table.Header>
