@@ -33,9 +33,9 @@ class ManualPaymentIntegration < ApplicationRecord
     # The client secret is just the id of the database model, but we override the payment_reference
     # from the new one, so we can update it in update_status. This is simulating getting an updated version
     # from a payment provider after paying
-    record = ManualPaymentRecord.find(params[:client_secret])
-    record.payment_reference = params[:payment_reference]
-    record
+    ManualPaymentRecord.find(params[:client_secret]).tap do |mpr|
+      mpr.payment_reference = params[:payment_reference]
+    end
   end
 
   def retrieve_payments(payment_intent)
