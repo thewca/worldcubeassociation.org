@@ -15,8 +15,8 @@ const RecordsIcon = createIcon({
   ),
 });
 
-const RecordsIconPreview = () => {
+export const RecordsIconPreview = () => {
   return <RecordsIcon size="lg" />;
 };
 
-export default RecordsIconPreview;
+export default RecordsIcon;
