@@ -60,6 +60,7 @@ services:
       <<: *appEnv
       SHAKAPACKER_DEV_SERVER_HOST: wca_webpacker
       CACHE_REDIS_URL: redis://wca_redis:6379/0
+      RUNNING_IN_DOCKER: true
     tty: true
     # Start the server and bind to 0.0.0.0 (vs 127.0.0.1) so Docker's port mappings work correctly
     command: bin/rails server -b 0.0.0.0
