@@ -668,6 +668,50 @@ RSpec.describe Registration do
     expect(reg.errors[:registered_at]).to include("can't be blank")
   end
 
+  context "dropdown selection" do
+    it "allows blank dropdown selection when not required" do
+      competition = FactoryBot.create(
+        :competition,
+        registration_dropdown_enabled: true,
+        registration_dropdown_required: false,
+        registration_dropdown_title: 'T-Shirt Size',
+        registration_dropdown_options: "Small\nMedium\nLarge",
+      )
+      registration = FactoryBot.build(:registration, competition: competition, dropdown_selection: '')
+      expect(registration).to be_valid
+    end
+
+    it "requires dropdown selection when required" do
+      competition = FactoryBot.create(
+        :competition,
+        registration_dropdown_enabled: true,
+        registration_dropdown_required: true,
+        registration_dropdown_title: 'T-Shirt Size',
+        registration_dropdown_options: "Small\nMedium\nLarge",
+      )
+      registration = FactoryBot.build(:registration, competition: competition, dropdown_selection: '')
+      expect(registration).to be_invalid_with_errors(dropdown_selection: ["Please select an option from the dropdown menu."])
+    end
+
+    it "allows valid dropdown selection when required" do
+      competition = FactoryBot.create(
+        :competition,
+        registration_dropdown_enabled: true,
+        registration_dropdown_required: true,
+        registration_dropdown_title: 'T-Shirt Size',
+        registration_dropdown_options: "Small\nMedium\nLarge",
+      )
+      registration = FactoryBot.build(:registration, competition: competition, dropdown_selection: 'Medium')
+      expect(registration).to be_valid
+    end
+
+    it "ignores dropdown validation when feature is not enabled" do
+      competition = FactoryBot.create(:competition, registration_dropdown_enabled: false)
+      registration = FactoryBot.build(:registration, competition: competition, dropdown_selection: '')
+      expect(registration).to be_valid
+    end
+  end
+
   describe '#entry_fee_with_donation' do
     it 'returns a RubyMoney object' do
       expect(registration.entry_fee_with_donation).to eq(Money.new(1000, "USD"))

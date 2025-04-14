@@ -1139,6 +1139,7 @@ en:
       can_only_register_for_qualified_events: "You cannot register for events you are not qualified for."
       cannot_change_events_when_cancelling: "You cannot change your events while cancelling your registration."
       cannot_register_without_comment: "You must make a comment. Please read the Registration Requirements above to see what must be included (e.g. in an FMC simultaneous competition, which location you will compete at)."
+      dropdown_selection_required: "Please select an option from the dropdown menu."
     registration_info_people:
       #context: pluralization of "x first-timer(s)"
       newcomer:
@@ -1674,6 +1675,10 @@ en:
           guests_per_registration: "Maximum number of guests per registration"
           extra_requirements: "Extra registration requirements"
           force_comment: "Force competitors to make a comment when registering"
+          dropdown_enabled: "Enable dropdown menu for registrations"
+          dropdown_title: "Dropdown title"
+          dropdown_options: "Dropdown options"
+          dropdown_required: "Require dropdown selection"
         event_restrictions:
           forbid_newcomers:
             enabled: "Prevent newcomers from registering"
@@ -1761,6 +1766,10 @@ en:
           guests_per_registration: "The number of guests per registration allowed at this competition. Registration with too many guests will be blocked. Leave blank if there is no limit."
           extra_requirements: "Please indicate here any extra registration requirements not covered above, like for example directions on how to pay. <br/>Please fill this out <b>in English</b> and whatever other languages your competitors speak; this will be displayed on the competition's information page, as well on the registration page if you are using the WCA website registrations."
           force_comment: ""
+          dropdown_enabled: ""
+          dropdown_title: "Title for the dropdown menu"
+          dropdown_options: "Enter each option on a new line"
+          dropdown_required: ""
         event_restrictions:
           forbid_newcomers:
             enabled: ""
@@ -1804,6 +1813,9 @@ en:
             unclear: 'Do not display anything (and perhaps elaborate in the "Extra registration requirements" section)'
             free: '"Any spectator can attend for free"'
             restricted: '"Spectators are only permitted as companions of competitors"'
+          dropdown_enabled:
+            "true": "Enable dropdown menu for registrations"
+            "false": "Disable dropdown menu for registrations"
         event_restrictions:
           qualification_results:
             allow_registration_without:
@@ -1887,6 +1899,9 @@ en:
       register:
         will_open_countdown: "Registration will open in %{minutes} minutes %{seconds} seconds. This page will refresh automatically when registration opens."
         will_close_countdown: "Registration closes in %{minutes} minutes %{seconds} seconds. This page will refresh automatically when registration closes."
+        dropdown_selection: "Dropdown Selection"
+        dropdown_placeholder: "Select an option"
+        dropdown_required: "Please select an option from the dropdown"
         panel:
           approval:
             title: "Approval"
@@ -1950,6 +1965,7 @@ en:
         -4013: "Cant accept non-newcomer when only reserved newcomer spots remain"
         -4014: "You are already registered for this competition."
         -4015: "Please enter a reasonable amount of guests, or contact the organizers if you need to bring an extraordinary amount of guests."
+        -4016: "Please select an option from the dropdown"
         -6001: "WCA Payment is not enabled for this competition"
         -6002: "You need to finish your registration before you can pay"
     #context: and when an error occurred

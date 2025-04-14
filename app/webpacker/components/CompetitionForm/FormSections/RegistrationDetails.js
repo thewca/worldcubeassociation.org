@@ -12,6 +12,7 @@ import ConditionalSection from './ConditionalSection';
 import I18n from '../../../lib/i18n';
 import SubSection from '../../wca/FormBuilder/SubSection';
 import { useFormObject } from '../../wca/FormBuilder/provider/FormObjectProvider';
+import RegistrationDropdown from './RegistrationDropdown';
 
 const guestsEnabledOptions = [true, false].map((bool) => ({
   value: bool,
@@ -52,6 +53,7 @@ export default function RegistrationDetails() {
       </ConditionalSection>
       <InputMarkdown id="extraRequirements" />
       <InputBoolean id="forceComment" />
+      <RegistrationDropdown />
     </SubSection>
   );
 }
