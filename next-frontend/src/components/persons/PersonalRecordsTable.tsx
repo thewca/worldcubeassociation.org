@@ -41,6 +41,12 @@ const PersonalRecordsTable: React.FC<RecordsProps> = ({ records }) => {
     sq1: "Square-1",
   };
 
+  const getColor = (pr: number) => {
+    if (pr === 1) return "recordColors.personal";
+    if (pr < 11) return "recordColors.national";
+    return "fg.inverted";
+  };
+
   return (
     <Card.Root
       bg="bg.inverted"
@@ -111,7 +117,11 @@ const PersonalRecordsTable: React.FC<RecordsProps> = ({ records }) => {
           <Table.Body>
             {records.map((record, index) => {
               const IconComponent = eventIconMap[record.event];
-              if (record.event == "magic" ||record.event == "mmagic" ||record.event == "mbo" ) {
+              if (
+                record.event == "magic" ||
+                record.event == "mmagic" ||
+                record.event == "mbo"
+              ) {
                 return null;
               }
               return (
@@ -125,27 +135,21 @@ const PersonalRecordsTable: React.FC<RecordsProps> = ({ records }) => {
                     </Flex>
                   </Table.Cell>
                   <Table.Cell
-                    color={
-                      record.snr < 11 ? "recordColors.national" : "fg.inverted"
-                    }
+                    color={getColor(record.snr)}
                     fontWeight={record.snr < 11 ? "bold" : "light"}
                     textAlign="right"
                   >
                     {record.snr}
                   </Table.Cell>
                   <Table.Cell
-                    color={
-                      record.scr < 11 ? "recordColors.national" : "fg.inverted"
-                    }
+                    color={getColor(record.scr)}
                     fontWeight={record.scr < 11 ? "bold" : "light"}
                     textAlign="right"
                   >
                     {record.scr}
                   </Table.Cell>
                   <Table.Cell
-                    color={
-                      record.swr < 11 ? "recordColors.national" : "fg.inverted"
-                    }
+                    color={getColor(record.swr)}
                     fontWeight={record.swr < 11 ? "bold" : "light"}
                     textAlign="right"
                   >
@@ -162,11 +166,7 @@ const PersonalRecordsTable: React.FC<RecordsProps> = ({ records }) => {
                     {record.average !== 0 ? record.average : ""}
                   </Table.Cell>
                   <Table.Cell
-                    color={
-                      record.awr !== 0 && record.awr < 11
-                        ? "recordColors.national"
-                        : "fg.inverted"
-                    }
+                    color={record.awr !== 0 && getColor(record.awr)}
                     fontWeight={
                       record.awr !== 0 && record.awr < 11 ? "bold" : "light"
                     }
@@ -174,11 +174,7 @@ const PersonalRecordsTable: React.FC<RecordsProps> = ({ records }) => {
                     {record.awr !== 0 ? record.awr : ""}
                   </Table.Cell>
                   <Table.Cell
-                    color={
-                      record.acr !== 0 && record.acr < 11
-                        ? "recordColors.national"
-                        : "fg.inverted"
-                    }
+                    color={record.acr !== 0 && getColor(record.acr)}
                     fontWeight={
                       record.acr !== 0 && record.acr < 11 ? "bold" : "light"
                     }
@@ -186,11 +182,7 @@ const PersonalRecordsTable: React.FC<RecordsProps> = ({ records }) => {
                     {record.acr !== 0 ? record.acr : ""}
                   </Table.Cell>
                   <Table.Cell
-                    color={
-                      record.anr !== 0 && record.anr < 11
-                        ? "recordColors.national"
-                        : "fg.inverted"
-                    }
+                    color={record.anr !== 0 && getColor(record.anr)}
                     fontWeight={
                       record.anr !== 0 && record.anr < 11 ? "bold" : "light"
                     }

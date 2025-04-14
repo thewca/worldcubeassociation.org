@@ -17,7 +17,7 @@ const RecordSummaryCard: React.FC<RecordSummaryCardProps> = ({
   return (
     <Card.Root variant="summary" colorPalette="green" overflow="hidden">
       <Float placement="middle-end" offsetX="20">
-          <RecordsIcon boxSize="13rem" color="colorPallete.200" opacity="0.3" />
+        <RecordsIcon boxSize="13rem" color="colorPallete.200" opacity="0.3" />
       </Float>
       <Card.Body>
         <Card.Title>
