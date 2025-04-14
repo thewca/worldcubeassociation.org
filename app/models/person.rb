@@ -9,27 +9,25 @@ class Person < ApplicationRecord
   has_many :ranksAverage, primary_key: "wca_id", foreign_key: "personId", class_name: "RanksAverage"
   has_many :ranksSingle, primary_key: "wca_id", foreign_key: "personId", class_name: "RanksSingle"
 
-  enum :gender, (User::ALLOWABLE_GENDERS.index_with(&:to_s))
+  enum :gender, User::ALLOWABLE_GENDERS.index_with(&:to_s)
 
   alias_attribute :ref_id, :wca_id
 
   scope :current, -> { where(subId: 1) }
 
   scope :in_region, lambda { |region_id|
-    unless region_id.blank? || region_id == 'all'
-      where(countryId: (Continent.country_ids(region_id) || region_id))
-    end
+    where(countryId: Continent.country_ids(region_id) || region_id) unless region_id.blank? || region_id == 'all'
   }
 
   validates :name, presence: true
-  validates_inclusion_of :countryId, in: Country::WCA_COUNTRY_IDS
+  validates :countryId, inclusion: { in: Country::WCA_COUNTRY_IDS }
 
   # If creating a brand new person (ie: with subId equal to 1), then the
   # WCA ID must be unique.
   # Note: in general WCA ID are not unique in the table, as one person with
   # the same WCA ID may have multiple subIds (eg: if they changed nationality).
-  validates_uniqueness_of :wca_id, if: -> { new_record? && subId == 1 }, case_sensitive: true
-  validates_format_of :wca_id, with: User::WCA_ID_RE
+  validates :wca_id, uniqueness: { if: -> { new_record? && subId == 1 }, case_sensitive: true }
+  validates :wca_id, format: { with: User::WCA_ID_RE }
 
   # After checking with the WRT there are still missing dob in the db.
   # Therefore we'll enforce dob validation only for new records.
@@ -38,16 +36,12 @@ class Person < ApplicationRecord
   # then fix them to a blank dob.
   validate :dob_must_be_valid
   private def dob_must_be_valid
-    if new_record? && !dob
-      errors.add(:dob, I18n.t('errors.messages.invalid'))
-    end
+    errors.add(:dob, I18n.t('errors.messages.invalid')) if new_record? && !dob
   end
 
   validate :dob_must_be_in_the_past
   private def dob_must_be_in_the_past
-    if dob && dob >= Date.today
-      errors.add(:dob, I18n.t('users.errors.dob_past'))
-    end
+    errors.add(:dob, I18n.t('users.errors.dob_past')) if dob && dob >= Date.today
   end
 
   # If someone represented country A, and now represents country B, it's
@@ -57,12 +51,10 @@ class Person < ApplicationRecord
   # to A, then we cannot go back, as all their results are now for country A.
   validate :cannot_change_country_to_country_represented_before
   private def cannot_change_country_to_country_represented_before
-    if countryId_changed? && !new_record? && !@updating_using_sub_id
-      has_represented_this_country_already = Person.exists?(wca_id: wca_id, countryId: countryId)
-      if has_represented_this_country_already
-        errors.add(:countryId, I18n.t('users.errors.already_represented_country'))
-      end
-    end
+    return unless countryId_changed? && !new_record? && !@updating_using_sub_id
+
+    has_represented_this_country_already = Person.exists?(wca_id: wca_id, countryId: countryId)
+    errors.add(:countryId, I18n.t('users.errors.already_represented_country')) if has_represented_this_country_already
   end
 
   # This is necessary because we use a view instead of a real table.
@@ -116,13 +108,11 @@ class Person < ApplicationRecord
   end
 
   def likely_delegates
-    all_delegates = competitions.order(:start_date).map(&:staff_delegates).flatten.select(&:any_kind_of_delegate?)
-    if all_delegates.empty?
-      return []
-    end
+    all_delegates = competitions.order(:start_date).flat_map(&:staff_delegates).select(&:any_kind_of_delegate?)
+    return [] if all_delegates.empty?
 
-    counts_by_delegate = all_delegates.each_with_object(Hash.new(0)) { |d, counts| counts[d] += 1 }
-    most_frequent_delegate, _count = counts_by_delegate.max_by { |delegate, count| count }
+    counts_by_delegate = all_delegates.group_by(&:itself).transform_values(&:count)
+    most_frequent_delegate, _count = counts_by_delegate.max_by { |_delegate, count| count }
     most_recent_delegate = all_delegates.last
 
     [most_frequent_delegate, most_recent_delegate].uniq
@@ -147,9 +137,9 @@ class Person < ApplicationRecord
   private def rank_for_event_type(event, type)
     case type
     when :single
-      ranksSingle.find_by_eventId(event.id)
+      ranksSingle.find_by(eventId: event.id)
     when :average
-      ranksAverage.find_by_eventId(event.id)
+      ranksAverage.find_by(eventId: event.id)
     else
       raise "Unrecognized type #{type}"
     end
@@ -157,7 +147,7 @@ class Person < ApplicationRecord
 
   def world_rank(event, type)
     rank = rank_for_event_type(event, type)
-    rank ? rank.worldRank : nil
+    rank&.worldRank
   end
 
   def best_solve(event, type)
@@ -202,6 +192,7 @@ class Person < ApplicationRecord
                 previous_old_pos = old_pos
                 previous_new_pos = result.pos
                 break if result.pos > 3
+
                 championship_podium_results.push result if result.personId == self.wca_id
               end
             end
@@ -219,7 +210,7 @@ class Person < ApplicationRecord
         podiums[championship_type.to_sym] = championship_podiums_with_condition do |results|
           results
             .joins(:country, competition: { championships: :eligible_country_iso2s_for_championship })
-            .where("eligible_country_iso2s_for_championship.championship_type = ?", championship_type)
+            .where(eligible_country_iso2s_for_championship: { championship_type: championship_type })
             .where("eligible_country_iso2s_for_championship.eligible_country_iso2 = Countries.iso2")
         end
       end
@@ -240,10 +231,10 @@ class Person < ApplicationRecord
   end
 
   def records
-    records = results.pluck(:regionalSingleRecord, :regionalAverageRecord).flatten.select(&:present?)
+    records = results.pluck(:regionalSingleRecord, :regionalAverageRecord).flatten.compact_blank
     {
       national: records.count("NR"),
-      continental: records.reject { |record| %w(NR WR).include?(record) }.count,
+      continental: records.count { |record| %w(NR WR).exclude?(record) },
       world: records.count("WR"),
       total: records.count,
     }
@@ -299,7 +290,7 @@ class Person < ApplicationRecord
   end
 
   def anonymization_checks_with_message_args
-    recent_competitions_3_months = competitions&.select { |c| c.start_date > (Date.today - 3.month) }
+    recent_competitions_3_months = competitions&.select { |c| c.start_date > (Date.today - 3.months) }
     competitions_with_external_website = competitions&.select { |c| c.external_website.present? }
 
     [
@@ -365,21 +356,27 @@ class Person < ApplicationRecord
     new_wca_id
   end
 
+  def private_attributes_for_user(user)
+    return [] if user.nil?
+
+    if user.wca_id == wca_id || user.any_kind_of_delegate?
+      %w[dob]
+    elsif user.can_admin_results?
+      %w[incorrect_wca_id_claim_count dob]
+    else
+      []
+    end
+  end
+
   def serializable_hash(options = nil)
     json = super(DEFAULT_SERIALIZE_OPTIONS.merge(options || {}))
-    json.merge!(
-      class: self.class.to_s.downcase,
-      id: self.wca_id,
-    )
+    json[:class] = self.class.to_s.downcase
+    json[:id] = self.wca_id
 
     private_attributes = options&.fetch(:private_attributes, []) || []
-    if private_attributes.include?("dob")
-      json[:dob] = dob.to_s
-    end
+    json[:dob] = dob.to_s if private_attributes.include?("dob")
 
-    if private_attributes.include?("incorrect_wca_id_claim_count")
-      json[:incorrect_wca_id_claim_count] = incorrect_wca_id_claim_count
-    end
+    json[:incorrect_wca_id_claim_count] = incorrect_wca_id_claim_count if private_attributes.include?("incorrect_wca_id_claim_count")
 
     # Passing down options from Person to User (which are completely different models in the DB!)
     #   is a horrible idea. Unfortunately, our external APIs have come to rely on it,

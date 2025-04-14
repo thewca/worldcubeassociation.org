@@ -16,29 +16,29 @@ RSpec.describe ServerSetting do
   context "parses booleans" do
     it "casts truthy values into actual boolean" do
       server_setting = ServerSetting.create!(name: 'dummy_true', value: '1')
-      expect(server_setting.as_boolean).to eq(true)
+      expect(server_setting.as_boolean).to be(true)
 
       server_setting.update!(value: 'true')
-      expect(server_setting.as_boolean).to eq(true)
+      expect(server_setting.as_boolean).to be(true)
 
       server_setting.update!(value: 'TRUE')
-      expect(server_setting.as_boolean).to eq(true)
+      expect(server_setting.as_boolean).to be(true)
     end
 
     it "casts false-y values into actual boolean" do
       server_setting = ServerSetting.create!(name: 'dummy_true', value: '0')
-      expect(server_setting.as_boolean).to eq(false)
+      expect(server_setting.as_boolean).to be(false)
 
       server_setting.update!(value: 'false')
-      expect(server_setting.as_boolean).to eq(false)
+      expect(server_setting.as_boolean).to be(false)
 
       server_setting.update!(value: 'FALSE')
-      expect(server_setting.as_boolean).to eq(false)
+      expect(server_setting.as_boolean).to be(false)
     end
 
     it "casts false-y values as being truthy" do
       server_setting = ServerSetting.create!(name: 'dummy_true', value: 'lol')
-      expect(server_setting.as_boolean).to eq(true)
+      expect(server_setting.as_boolean).to be(true)
     end
   end
 end

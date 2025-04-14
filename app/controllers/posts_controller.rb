@@ -10,11 +10,11 @@ class PostsController < ApplicationController
     respond_to do |format|
       format.json do
         tag = params[:tag]
-        if tag
-          @posts = Post.joins(:post_tags).where('post_tags.tag = ?', tag)
-        else
-          @posts = Post.where(show_on_homepage: true)
-        end
+        @posts = if tag
+                   Post.joins(:post_tags).where(post_tags: { tag: tag })
+                 else
+                   Post.where(show_on_homepage: true)
+                 end
         @posts = @posts
                  .order(sticky: :desc, created_at: :desc)
                  .includes(:author)
@@ -41,11 +41,11 @@ class PostsController < ApplicationController
 
   def rss
     tag = params[:tag]
-    if tag
-      @posts = Post.joins(:post_tags).where('post_tags.tag = ?', tag)
-    else
-      @posts = Post
-    end
+    @posts = if tag
+               Post.joins(:post_tags).where(post_tags: { tag: tag })
+             else
+               Post
+             end
     @posts = @posts.order(created_at: :desc).includes(:author).page(params[:page])
 
     # Force responding with xml, regardless of the given HTTP_ACCEPT headers.
@@ -61,6 +61,10 @@ class PostsController < ApplicationController
     @post = Post.new(params[:post] ? post_params : {})
   end
 
+  def edit
+    @post = find_post
+  end
+
   def create
     @post = Post.new(post_params)
     @post.author = current_user
@@ -72,14 +76,9 @@ class PostsController < ApplicationController
     end
   end
 
-  def edit
-    @post = find_post
-  end
-
   def update
     @post = find_post
     if @post.update(post_params)
-      puts(post_params.inspect)
       flash[:success] = "Updated post"
       render json: { status: 'ok', post: @post }
     else
@@ -113,10 +112,9 @@ class PostsController < ApplicationController
     #  | 2014 |
     #  +------+
     #  1 row in set, 1 warning (0.00 sec)
-    post = Post.find_by_slug(params[:id]) || Post.find_by_id(params[:id])
-    if !post
-      raise ActiveRecord::RecordNotFound.new("Couldn't find post")
-    end
+    post = Post.find_by(slug: params[:id]) || Post.find_by(id: params[:id])
+    raise ActiveRecord::RecordNotFound.new("Couldn't find post") unless post
+
     post
   end
 end

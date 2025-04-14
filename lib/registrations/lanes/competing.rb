@@ -20,9 +20,7 @@ module Registrations
         registration.save!
         RegistrationsMailer.notify_organizers_of_new_registration(registration).deliver_later
         RegistrationsMailer.notify_registrant_of_new_registration(registration).deliver_later
-        if registration.user.banned_in_past?
-          RegistrationsMailer.notify_delegates_of_formerly_banned_user_registration(registration).deliver_later
-        end
+        RegistrationsMailer.notify_delegates_of_formerly_banned_user_registration(registration).deliver_later if registration.user.banned_in_past?
         registration.add_history_entry(changes, "worker", user_id, "Worker processed")
       end
 
@@ -53,9 +51,7 @@ module Registrations
 
           changes = registration.changes.transform_values { |change| change[1] }
 
-          if waiting_list_position.present?
-            changes[:waiting_list_position] = waiting_list_position
-          end
+          changes[:waiting_list_position] = waiting_list_position if waiting_list_position.present?
 
           changes[:event_ids] = event_ids if event_ids.present?
 
@@ -84,7 +80,7 @@ module Registrations
       end
 
       def self.update_status(registration, status)
-        return unless status.present?
+        return if status.blank?
 
         registration.competing_status = status
       end
@@ -110,7 +106,7 @@ module Registrations
 
       def self.update_event_ids(registration, event_ids)
         # TODO: V3-REG Cleanup, this is probably why we need the reload above
-        return unless event_ids.present?
+        return if event_ids.blank?
 
         update_competition_events = registration.competition.competition_events.where(event_id: event_ids)
         registration.competition_events = update_competition_events

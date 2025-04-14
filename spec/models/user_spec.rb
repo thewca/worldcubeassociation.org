@@ -170,7 +170,7 @@ RSpec.describe User, type: :model do
       expect(user.name).to eq person_for_dummy.name
 
       # Check that the dummy account was deleted, and we inherited its avatar.
-      expect(User.find_by_id(dummy_user.id)).to be_nil
+      expect(User.find_by(id: dummy_user.id)).to be_nil
       expect(user.reload.avatar).to eq dummy_avatar
     end
 
@@ -430,20 +430,20 @@ RSpec.describe User, type: :model do
     it "when empty, is set to nil" do
       user = FactoryBot.create :user, unconfirmed_wca_id: nil
       user.update! unconfirmed_wca_id: ""
-      expect(user.reload.unconfirmed_wca_id).to eq nil
+      expect(user.reload.unconfirmed_wca_id).to be nil
     end
   end
 
   it 'banned? returns true for users who are actively banned' do
     banned_user = FactoryBot.create :user, :banned
 
-    expect(banned_user.banned?).to eq true
+    expect(banned_user.banned?).to be true
   end
 
   it 'banned? returns false for users who are banned in past' do
     formerly_banned_user = FactoryBot.create :user, :formerly_banned
 
-    expect(formerly_banned_user.banned?).to eq false
+    expect(formerly_banned_user.banned?).to be false
   end
 
   it 'current_ban returns data of current banned role' do
@@ -472,12 +472,12 @@ RSpec.describe User, type: :model do
 
       it "updates the password if the password_confirmation matches" do
         user.update(password: "new", password_confirmation: "new")
-        expect(user.reload.valid_password?("new")).to eq true
+        expect(user.reload.valid_password?("new")).to be true
       end
 
       it "does not update the password if the password_confirmation does not match" do
         user.update(password: "new", password_confirmation: "wrong")
-        expect(user.reload.valid_password?("new")).to eq false
+        expect(user.reload.valid_password?("new")).to be false
       end
 
       it "does not allow blank password" do
@@ -498,7 +498,7 @@ RSpec.describe User, type: :model do
 
     it "doesn't send the notification if the user has it disabled" do
       user = FactoryBot.build(:user_with_wca_id, results_notifications_enabled: false)
-      expect(CompetitionsMailer).to_not receive(:notify_users_of_results_presence).with(user, competition).and_call_original
+      expect(CompetitionsMailer).not_to receive(:notify_users_of_results_presence).with(user, competition).and_call_original
       user.notify_of_results_posted(competition)
     end
   end
@@ -508,17 +508,17 @@ RSpec.describe User, type: :model do
 
     it "returns false if the user is an organizer of an upcoming comp using registration system" do
       organizer = competition.organizers.first
-      expect(organizer.can_view_all_users?).to eq false
+      expect(organizer.can_view_all_users?).to be false
     end
 
     it "returns true for board" do
       board_member = FactoryBot.create :user, :board_member
-      expect(board_member.can_view_all_users?).to eq true
+      expect(board_member.can_view_all_users?).to be true
     end
 
     it "returns false for normal user" do
       normal_user = FactoryBot.create :user
-      expect(normal_user.can_view_all_users?).to eq false
+      expect(normal_user.can_view_all_users?).to be false
     end
   end
 
@@ -527,12 +527,12 @@ RSpec.describe User, type: :model do
 
     it "returns true for board" do
       board_member = FactoryBot.create :user, :board_member
-      expect(board_member.can_edit_user?(user)).to eq true
+      expect(board_member.can_edit_user?(user)).to be true
     end
 
     it "returns false for normal user" do
       normal_user = FactoryBot.create :user
-      expect(normal_user.can_edit_user?(user)).to eq false
+      expect(normal_user.can_edit_user?(user)).to be false
     end
   end
 
@@ -542,14 +542,14 @@ RSpec.describe User, type: :model do
 
     it "allows organizers of upcoming competitions to edit first-timer names" do
       organizer = competition.organizers.first
-      expect(organizer.can_edit_user?(registration.user)).to eq true
+      expect(organizer.can_edit_user?(registration.user)).to be true
       expect(organizer.editable_fields_of_user(registration.user).to_a).to eq [:name]
     end
 
     it "disallows delegates to edit WCA IDs of special accounts" do
       board_member = FactoryBot.create :user, :board_member
       delegate = FactoryBot.create :delegate
-      expect(delegate.can_edit_user?(board_member)).to eq true
+      expect(delegate.can_edit_user?(board_member)).to be true
       expect(delegate.editable_fields_of_user(board_member).to_a).not_to include(:wca_id)
     end
   end
@@ -557,19 +557,19 @@ RSpec.describe User, type: :model do
   describe "#is_special_account" do
     it "returns false for a normal user" do
       user = FactoryBot.create :user
-      expect(user.is_special_account?).to eq false
+      expect(user.special_account?).to be false
     end
 
     it "returns true for users on a team" do
       board_member = FactoryBot.create :user, :board_member
       banned_person = FactoryBot.create :user, :banned
-      expect(board_member.is_special_account?).to eq true
-      expect(banned_person.is_special_account?).to eq true
+      expect(board_member.special_account?).to be true
+      expect(banned_person.special_account?).to be true
     end
 
     it "returns true for users that are delegates" do
       senior_delegate_role = FactoryBot.create :senior_delegate_role
-      expect(senior_delegate_role.user.is_special_account?).to eq true
+      expect(senior_delegate_role.user.special_account?).to be true
     end
 
     it "returns true for users who organized or delegated a competition" do
@@ -577,9 +577,9 @@ RSpec.describe User, type: :model do
       delegate = FactoryBot.create :user # Intentionally not assigning a Delegate role as it is possible to Delegate a competition without being a current Delegate
       trainee_delegate = FactoryBot.create :user
       FactoryBot.create :competition, organizers: [organizer], delegates: [delegate, trainee_delegate]
-      expect(organizer.is_special_account?).to eq true
-      expect(delegate.is_special_account?).to eq true
-      expect(trainee_delegate.is_special_account?).to eq true
+      expect(organizer.special_account?).to be true
+      expect(delegate.special_account?).to be true
+      expect(trainee_delegate.special_account?).to be true
     end
   end
 
@@ -605,8 +605,8 @@ RSpec.describe User, type: :model do
     it "gets cleared if user is not eligible anymore" do
       former_staff_member = FactoryBot.create :user, receive_delegate_reports: true
       User.clear_receive_delegate_reports_if_not_eligible
-      expect(former_staff_member.reload.receive_delegate_reports).to eq false
-      expect(staff_member1.reload.receive_delegate_reports).to eq true
+      expect(former_staff_member.reload.receive_delegate_reports).to be false
+      expect(staff_member1.reload.receive_delegate_reports).to be true
     end
 
     it "adds to reports@ only current staff members who want to receive reports" do

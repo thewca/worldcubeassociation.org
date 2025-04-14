@@ -11,18 +11,14 @@ after "development:users", "development:user_roles" do
       r = rand(5000..100_000)
 
       # Solves over 10 minutes must be rounded to the nearest second.
-      if r > 10 * 60 * 100
-        r = 100 * (r / 100)
-      end
+      r = 100 * (r / 100) if r > 10 * 60 * 100
       r
     end
 
     def random_city(country)
       city = Faker::Address.city
       state_validator = CityValidator.get_validator_for_country(country.iso2)
-      if state_validator
-        city += ", #{state_validator.valid_regions.to_a.sample}"
-      end
+      city += ", #{state_validator.valid_regions.to_a.sample}" if state_validator
       city
     end
   end
@@ -48,7 +44,7 @@ after "development:users", "development:user_roles" do
       start_date: day.strftime("%F"),
       end_date: day.strftime("%F"),
       venue: Faker::Address.street_name,
-      venueAddress: Faker::Address.street_address + ", " + Faker::Address.city + " " + Faker::Address.postcode,
+      venueAddress: "#{Faker::Address.street_address}, #{Faker::Address.city} #{Faker::Address.postcode}",
       external_website: "https://www.worldcubeassociation.org",
       showAtAll: true,
       delegates: [delegate],
@@ -67,7 +63,7 @@ after "development:users", "development:user_roles" do
       event = competition_event.event
       round_types = %w(1 2 f).freeze
 
-      round_types.each_with_index do |roundTypeId, j|
+      round_types.each_with_index do |round_type_id, j|
         round_format = event.preferred_formats.first.format
         is_final = j == round_types.length - 1
 
@@ -91,13 +87,13 @@ after "development:users", "development:user_roles" do
             countryId: person.countryId,
             competitionId: competition.id,
             eventId: event.id,
-            roundTypeId: roundTypeId,
+            roundTypeId: round_type_id,
             formatId: round_format.id,
             regionalSingleRecord: k == 0 ? "WR" : nil,
             regionalAverageRecord: k == 0 ? "WR" : nil,
           )
           round_format.expected_solve_count.times do |v|
-            result.send("value#{v+1}=", random_wca_value)
+            result.send(:"value#{v+1}=", random_wca_value)
           end
           result.average = result.compute_correct_average
           result.best = result.compute_correct_best
@@ -126,7 +122,7 @@ after "development:users", "development:user_roles" do
       start_date: day.strftime("%F"),
       end_date: day.strftime("%F"),
       venue: Faker::Address.street_name,
-      venueAddress: Faker::Address.street_address + ", " + Faker::Address.city + " " + Faker::Address.postcode,
+      venueAddress: "#{Faker::Address.street_address}, #{Faker::Address.city} #{Faker::Address.postcode}",
       external_website: "https://www.worldcubeassociation.org",
       showAtAll: true,
       delegates: [delegate],
@@ -179,14 +175,14 @@ after "development:users", "development:user_roles" do
       start_date: start_day.strftime("%F"),
       end_date: end_day.strftime("%F"),
       venue: Faker::Address.street_name,
-      venueAddress: Faker::Address.street_address + ", " + Faker::Address.city + " " + Faker::Address.postcode,
+      venueAddress: "#{Faker::Address.street_address}, #{Faker::Address.city} #{Faker::Address.postcode}",
       external_website: "https://www.worldcubeassociation.org",
       showAtAll: true,
       delegates: [delegate],
       organizers: User.all.sample(2),
       use_wca_registration: true,
       registration_open: 1.week.ago,
-      registration_close: start_day - (1.week),
+      registration_close: start_day - 1.week,
       latitude_degrees: rand(-90.0..90.0),
       longitude_degrees: rand(-180.0..180.0),
     )
@@ -196,6 +192,7 @@ after "development:users", "development:user_roles" do
 
     # Create registrations for some competitions taking place far in the future
     next if i < 480
+
     users.each_with_index do |user, j|
       competing_status = j % 4 == 0 ? Registrations::Helper::STATUS_ACCEPTED : Registrations::Helper::STATUS_PENDING
       registration_competition_events = competition.competition_events.sample(rand(1..competition.competition_events.count))

@@ -374,13 +374,6 @@ pl:
       few: '%{count} dni'
       many: '%{count} dni'
       other: '%{count} dni'
-    #original_hash: 203e1b3
-    these_events:
-      zero: 0 konkurencji
-      one: ta konkurencja
-      few: 'te %{count} konkurencje'
-      many: 'te %{count} konkurencji'
-      other: 'te %{count} konkurencji'
     #original_hash: 51ef7d4
     search_site: Szukaj
     #original_hash: d7decf1
@@ -898,8 +891,6 @@ pl:
         person1_wca_id: ''
         #original_hash: da39a3e
         person2_wca_id: ''
-        #original_hash: da39a3e
-        person_wca_id: ''
       poll:
         #original_hash: da39a3e
         comment: ''
@@ -1003,6 +994,9 @@ pl:
         dob: Poprawna data urodzenia
         #original_hash: e214b8a
         document: Dokument
+      contact_wrt:
+        #original_hash: 603a218
+        wca_id: WCA ID
     errors:
       dob_contact:
         #original_hash: 79ccfe2
@@ -1015,6 +1009,8 @@ pl:
       size_too_small: 'jest zbyt małe (powinno mieć co najmniej %{file_size})'
       #original_hash: a2a43b3
       size_too_big: 'jest zbyt duże (powinno mieć co najwyżej %{file_size})'
+      #original_hash: de76004
+      no_permission: Nie masz wymaganych uprawnień aby uzyskać dostęp do tej strony.
   devise:
     passwords:
       edit:
@@ -1394,7 +1390,7 @@ pl:
     teams_committees_councils:
       #original_hash: 0d62207
       title: 'Zespoły, Komitety i Rady WCA'
-      #original_hash: d54d953
+      #original_hash: 4701b90
       description: >-
         Zespoły i Komitety WCA stanowią integralną część organizacji i wykonują
         codzienne zadania, które są wymagane do jej funkcjonowania. Komitety te
@@ -1402,9 +1398,9 @@ pl:
         zawodników. Każdy zespół ma lidera, którego rolą jest zapewnienie
         prawidłowego funkcjonowania zespołu i kierowanie innymi członkami
         zespołu. Rady to specjalny rodzaj zespołu, który pełni rolę doradczą dla
-        Zarządu WCA i składa się z członków społeczności, a nie personelu WCA.
-        Gdy są wolne miejsca w komitecie, zespole lub radzie, informacje o tym,
-        jak się zgłosić, są publikowane na stronie głównej.
+        Zarządu WCA i składa się z członków społeczności, a nie wolontariuszy
+        WCA. Gdy są wolne miejsca w komitecie, zespole lub radzie, informacje o
+        tym, jak się zgłosić, są publikowane na stronie głównej.
       #original_hash: b37456c
       contact_button: Kontakt
       #original_hash: ae7928f
@@ -1439,24 +1435,23 @@ pl:
         #original_hash: 78949a7
         wapc: Komitet Odwoławczy WCA
       groups_description:
-        #original_hash: 5b1aade
+        #original_hash: d62001b
         wat: >-
-          WAT jest odpowiedzialny za zarządzanie rozwojem i utrzymaniem archiwum
-          historycznego WCA. Dokumentują oni najważniejsze wydarzenia
-          speedcubingowe i warte odnotowania kamienie milowe WCA jako część
-          szerszej osi czasu WCA, aby zapewnić przetrwanie dziedzictwa WCA w
-          speedcubingu.
-        #original_hash: 50fd091
+          Zespół Archiwalny WCA (WAT) jest odpowiedzialny za zarządzanie
+          rozwojem i utrzymaniem archiwum historycznego WCA. Dokumentują oni
+          najważniejsze wydarzenia speedcubingowe i warte odnotowania kamienie
+          milowe WCA jako część szerszej osi czasu WCA, aby zapewnić przetrwanie
+          dziedzictwa WCA w speedcubingu.
+        #original_hash: 7803faf
         wct: >-
-          Rolą Zespołu WCA do Spraw Komunikacji (WCT) jest nadzorowanie i
-          wspieranie komunikacji WCA ze Społecznością i ogółem społeczeństwa.
-          Komunikacja WCA powinna przyczyniać się do osiągania Celów WCA i
-          wspierać ogólną kulturę przyjaźni, przejrzystości, inkluzywności,
-          otwartości i responsywności.
-        #original_hash: 3e5570f
+          Zespołu WCA do Spraw Komunikacji (WCT) nadzoruje i wspiera komunikację
+          WCA ze Społecznością i ogółem społeczeństwa. Komunikacja WCA powinna
+          przyczyniać się do osiągania Celów WCA i wspierać ogólną kulturę
+          przyjaźni, przejrzystości, inkluzywności, otwartości i responsywności.
+        #original_hash: bd69012
         wcat: >-
-          Rolą Zespołu WCA do Spraw Ogłaszania Zawodów (WCAT) jest zatwierdzanie
-          i ogłaszanie zawodów zgłoszonych przez delegatów i zapewnianie, że
+          Zespół WCA do Spraw Ogłaszania Zawodów (WCAT) jest zatwierdza i
+          ogłasza zawody zgłoszonych przez delegatów i zapewnianie, że
           przestrzegają one standardów jakości WCA. Zespół jest również
           odpowiedzialny za utrzymanie odpowiednich protokołów zgłoszeń przez
           dokumenty takie jak Polityka Wymagań co do Zawodów WCA. WCAT NIE jest
@@ -1468,64 +1463,66 @@ pl:
           podczas zawodów WCA lub na oficjalnych online'owych platformach WCA.
           Incydenty te stanowią domniemane naruszenia Ducha, Kodeksu
           Postępowania, Kodeksu Etyki i/lub Regulaminu WCA.
-        #original_hash: 889dd90
+        #original_hash: be491ec
         weat: >-
-          Ten zespoł jest odpowiedzialny za wykonywanie czynności
-          administracyjnych Zarządu WCA.
-        #original_hash: 43e4e33
+          Zespół Asystentów Kierownictwa WCA (WEAT) jest odpowiedzialny za
+          wykonywanie czynności administracyjnych Zarządu WCA.
+        #original_hash: fc67562
         wfc: >-
-          Ten komitet jest odpowiedzialny za zarządzanie ogólnymi finansami WCA,
-          w tym budżetowanie, sprawozdawczość, analiza, księgowość i rozliczanie
-          podatków. Zarządzają również największym źródłem dochod, Systemem
-          Podatków WCA oraz różnorakimi programami finansowania które pomagają
-          lokalnym społecznościom w różnych stadiach rozwoju, w tym Finansowanie
-          Podróży, Finansowanie Sprzętu i wspieranie Organizacji Regionalnych.
-        #original_hash: f2a0140
+          Komitet WCA do Spraw Finansów (WFC) jest odpowiedzialny za zarządzanie
+          ogólnymi finansami WCA, w tym budżetowanie, sprawozdawczość, analiza,
+          księgowość i rozliczanie podatków. Zarządzają również największym
+          źródłem dochodu, Systemem Podatków WCA oraz różnorakimi programami
+          finansowania które pomagają lokalnym społecznościom w różnych stadiach
+          rozwoju, w tym Finansowanie Podróży, Finansowanie Sprzętu i wspieranie
+          Organizacji Regionalnych.
+        #original_hash: 88a00fa
         wmt: >-
-          Ten zespół jest odpowiedzialny za rozwój i zarządzanie Marką WCA,
-          poszukiwaniem sponsorów, wspieraniem dystrybucji Sprzętu WCA i
-          marketing towarów WCA.
-        #original_hash: e0dbf86
+          Zespół WCA do Spraw Marketingu (WMT) jest odpowiedzialny za rozwój i
+          zarządzanie Marką WCA, poszukiwaniem sponsorów, wspieraniem
+          dystrybucji Sprzętu WCA i marketing towarów WCA.
+        #original_hash: fcaa701
         wmct: >-
-          Zespół WCA do Spraw Mistrzostw nadzoruje koordynację i rozwój
+          Zespół WCA do Spraw Mistrzostw (WMCT) nadzoruje koordynację i rozwój
           Mistrzostw Kontynentalnych i Mistrzostw Świata przez rozwój wytycznych
           i planów strategicznych, wybór miast gospodarzy, wspieranie zespołów
           organizacyjnych i zapewnienie spójnych doświadczeń na najważniejszych
           mistrzostwach.
-        #original_hash: 0171b3b
+        #original_hash: 010e628
         wqac: >-
-          Rolą tego komitetu jest wsparcie i promowanie ciągłego zwiększania
-          jakości wewnątrz WCA, a także zastosowanie standardów jakości na całym
-          świecie w celu zapewnienia ciągłej wysokiej jakości procesów,
-          Personelu WCA, Organizacji Regionalnych, Organizatorów zawodów i
-          obsługi zawodów.
-        #original_hash: a1260bb
+          Komitet WCA do Spraw Zapewniania Jakości (WQAC) wspiera i promuje
+          ciągłe zwiększania jakości wewnątrz WCA, a także zastosowanie
+          standardów jakości na całym świecie w celu zapewnienia ciągłej
+          wysokiej jakości procesów, Wolontariuszy WCA, Organizacji
+          Regionalnych, Organizatorów zawodów i wolontariuszy zawodów.
+        #original_hash: 355babe
         wrc: >-
-          WRC zajmuje się wszystkimi problemami odnoszącymi się do aplikacji,
-          polepszania i rozwoju Regulaminu WCA. Wspierają oni Delegatów WCA we
-          wszelkich sprawach proceduralnych występujących na zawodach oraz
-          decydują w nierozwiązanych i odkrytych incydentach.
-        #original_hash: 7bc588b
+          Komitet WCA do Spraw Regulaminu (WRC) zajmuje się wszystkimi
+          problemami odnoszącymi się do aplikacji, polepszania i rozwoju
+          Regulaminu WCA. Wspierają oni Delegatów WCA we wszelkich sprawach
+          proceduralnych występujących na zawodach oraz decydują w
+          nierozwiązanych i odkrytych incydentach.
+        #original_hash: 7ca3e6f
         wrt: >-
-          WRT jest odpowiedzialne za za zarządzanie wszystkimi danymi w bazach
-          danych WCA, ze szczególnym uwzględnieniem wyników zawodów oraz danych
-          osobowych.
-        #original_hash: ec961e4
+          Zespół WCA do Spraw Wyników (WRT) jest odpowiedzialny za zarządzanie
+          wszystkimi danymi w bazach danych WCA, w tym wyników zawodów oraz
+          danych osobowych.
+        #original_hash: f905744
         wst: >-
-          Ten zespół jest odpowiedzialny za zarządzanie oprogramowaniem WCA
-          (strona internetowa, generator algorytmów mieszających, arkusze,
-          narzędzia administratorskie).
-        #original_hash: 8f888d6
+          Zespół WCA do Spraw Oprogramowania (WST) jest odpowiedzialny za
+          zarządzanie oprogramowaniem WCA (strona internetowa, generator
+          algorytmów mieszających, arkusze, narzędzia administratorskie).
+        #original_hash: 638652c
         wsot: >-
-          Rolą tego zespołu jest nadzór i wsparcie działań prowadzących do
-          uznania WCA jako międzynarodową organizację sportową.
-        #original_hash: 9f45bfa
+          Zespół WCA do Spraw Organizacji Sportowej (WSOT) nadzoruje i wspiera
+          działania prowadzące do uznania WCA jako międzynarodową organizację
+          sportową.
+        #original_hash: 30d6048
         wapc: >-
-          Komitet Apelacyjny WCA (WAC) jest odpowiedzialny za rozpatrywanie i
-          rozstrzyganie odwołań dotyczących decyzji podjętych przez resztę
-          personelu WCA. WAC zapewnia niezależny i bezstronny proces przeglądu,
-          aby zapewnić, że decyzje są uczciwe, rozsądne i zgodne z Politykami i
-          Regulaminem WCA.
+          Komitet Apelacyjny WCA (WAC) rozpatruje i rozstrzyga odwołania
+          dotyczące decyzji podjętych przez resztę Wolontariuszy WCA. WAC
+          zapewnia niezależny i bezstronny proces przeglądu, aby zapewnić, że
+          decyzje są uczciwe, rozsądne i zgodne z Politykami i Regulaminem WCA.
     contacts:
       #original_hash: 4ef2aad
       title: Formularz kontaktowy WCA
@@ -1555,25 +1552,26 @@ pl:
           #original_hash: 54f0036
           label: Z kim chcesz się skontaktować?
           competition:
-            #original_hash: baa2425
+            #original_hash: 5a280ab
             label: >-
               Skontaktuj sie z organizatorami/delegatami zawodów (aby zapytać o
-              te konkretne zawody)
+              te konkretne zawody, w tym wyniki nie opublikowane jeszcze na
+              stronie WCA)
           wct:
             #original_hash: b73e465
             label: >-
               Skontaktuj się z WCA w celach ogólnych (może to być cokolwiek jak
               WCA ID/profil, organizacja zawodów, zasady, media, etc.)
           wrt:
-            #original_hash: 0f6b96b
+            #original_hash: 4dd66f7
             label: >-
               Skontaktuj się z Zespołem do Spraw Wyników (w celach związanych z
-              wynikami zawodów)
+              wynikami zawodów lub danymi profilu na stronie WCA)
           wst:
-            #original_hash: 1d74033
+            #original_hash: 2be6d53
             label: >-
               Skontaktuj się z Zespołem do Spraw Oprogramowania (aby zgłosić
-              błąd strony lub zapytać o API)
+              błąd strony lub zapytać o rzeczy związane z oprogramowaniem)
         competition:
           competition:
             #original_hash: 1917f4f
@@ -2051,8 +2049,8 @@ pl:
           Zdjęcie profilowe nie może zawierać żadnych obraźliwych treści (np.
           obraźliwych gestów).
       staff_avatar_guidelines:
-        #original_hash: 5d5a47a
-        title: 'Dodatkowe wytyczne dla Członków Personelu i Delegatów Praktykantów:'
+        #original_hash: f14a1fd
+        title: 'Dodatkowe wytyczne dla Wolontariuszy WCA i Delegatów Praktykantów:'
         paragraphs:
           #original_hash: ff6d2e8
           '1': >-
@@ -2307,27 +2305,24 @@ pl:
           możesz sprawdzić jej status %{here}.
         #original_hash: 1852cbf
         see_you_soon: 'Nie możemy doczekać się zobaczenia cię na %{comp_name}!'
-      pending:
-        #original_hash: 8d26297
-        mail_subject: 'Rejestracja przeniesiona na listę rezerwową: %{comp_name}'
-        #original_hash: 6fd0a8e
-        moved_html: >-
-          Twoja rejestracja na %{comp_name} została przeniesiona na listę
-          oczekujących. Możliwe powody:
-        causes:
-          #original_hash: eadfc0d
-          accepted: Została zaakceptowana przypadkowo
-          #original_hash: 2ac6d84
-          withdrawal: Poprosiłeś o jej wycofanie
+      waiting_list:
+        #original_hash: 54c2106
+        mail_subject: 'Jesteś na Liście Rezerwowej: %{comp_name}'
+        #original_hash: 2a0c44f
+        waitlisted_html: >-
+          Zawody osiągnęły limit zawodników, zostałeś umieszczony na liście
+          rezerwowej i otrzymasz email jeżeli znajdzie się wystarczająco dużo
+          miejsc abyś mógł uczestniczyć w zawodach. Sprawdź swoją pozycję na
+          liście rezerwowej %{here}.
         #original_hash: 8f7358f
-        email_if_error: >-
-          Jeżeli uważasz, że jest to błąd, prosimy o odpowiedzenie na tego
-          maila.
+        email_if_error: 'Jeżeli uważasz, że jest to błąd odpowiedz na tę wiadomość email.'
       deleted:
         #original_hash: 8cbc6c0
         mail_subject: 'Usunięta rejestracja: %{comp_name}'
         #original_hash: f66ae63
         message_html: 'Twoja rejestracja na %{comp_name} została usunięta. Możliwe przyczyny:'
+        #original_hash: 8f7358f
+        email_if_error: Jeżeli uważasz że to błąd odpowiedz na tę wiadomość email.
         causes:
           #original_hash: 978944c
           missing_info: Nie wysłałeś wszystkich wymaganych danych
@@ -2338,10 +2333,21 @@ pl:
             udziału w konkurencjach))
           #original_hash: 1e225f0
           registrations_full: Limit zawodników został osiągnięty i nie ma więcej dostępnych miejsc
-          #original_hash: 0d4cce9
+          #original_hash: 238f4ff
           multiple_registrations: Zarejestrowałeś się dwa lub więcej razy
           #original_hash: 70b1e2c
           competition_canceled: Te zawody zostały odwołane
+      formerly_banned:
+        #original_hash: f2c70a9
+        ban_count: >-
+          Zawodnik został zbanowany %{ban_count} razy, z następującymi zakresami
+          i powodami:
+        #original_hash: 67e08fe
+        scope_and_reason: 'Zakres: %{ban_scope}, Powód: %{ban_reason}'
+        #original_hash: 2a246da
+        wic_message: >-
+          Jeżeli masz pytania odnośnie historii dyscyplinarnej zawodnika,
+          prosimy skontaktuj się z WIC odpowiadając na tę wiadomość email.
     list:
       #original_hash: 8b7631c
       title: 'Rejestracje na %{comp}'
@@ -2358,12 +2364,6 @@ pl:
       export_csv: Eksportuj jako CSV
       #original_hash: 84add5b
       email: Adres email
-      #original_hash: 7b2c7f1
-      approve: Zaakceptuj
-      #original_hash: 92d40dc
-      waiting_list: Lista oczekujących
-      #original_hash: 06f7d1a
-      approved_registrations: Zaakceptowane rejestracje
       #original_hash: e86b1e1
       non_competing: Nieukładające rejestracje
       #original_hash: ac5d958
@@ -2392,8 +2392,6 @@ pl:
     sign_in: Zaloguj
     #original_hash: 5d45a00
     profile: profil
-    #original_hash: 801b3e9
-    panel_title: Szczegóły dotyczące rejestracji
     #original_hash: c0063c3
     register: Zarejestruj się!
     #original_hash: f484f15
@@ -2426,8 +2424,6 @@ pl:
     please_sign_in_html: >-
       %{sign_in}, aby zarejestrować się na %{comp}. Jeżeli nie masz jeszcze
       konta WCA, możesz założyć je %{here}.
-    #original_hash: 89b4e7f
-    greeting: 'Cześć, %{name}!'
     #original_hash: 322f646
     please_fix_profile_html: >-
       W celu zarejestrowania się na %{comp}, musisz rozwiązać następujące
@@ -2444,25 +2440,6 @@ pl:
       wypełniony. Jeżeli się zarejestrujesz, twoja rejestracja będzie
       umieszczona na liście rezerwowej. Nie zostanie ona zaakceptowana dopóki
       nie pojawi się wolne miejsce.
-    #original_hash: 855ca9c
-    can_register: 'Możesz się zarejestrować na %{comp} poniżej.'
-    #original_hash: 4167ed7
-    check_registration_information: >-
-      Prosimy o sprawdzenie informacji na temat rejestracji, w celu dowiedzenia
-      się czy należy zrobić coś jeszcze, na przykład wpłacić wpisowe.
-    #original_hash: 88ac7c3
-    have_registered: >-
-      Wysłałeś zgłoszenie rejestracyjne na %{comp}. Możesz zobaczyć dane swojej
-      rejestracji poniżej.
-    #original_hash: 3c9141f
-    contact_organizer: 'Skontaktuj się z organizatorem, jeżeli chciałbyś wprowadzić jakąś zmianę.'
-    #original_hash: 59354fd
-    waiting_list: >-
-      Aby twoja rejestracja została zaakceptowana, może być konieczne zapłacenie
-      wpisowego. Sprawdź stronę zawodów w celu uzyskania szczegółowych
-      informacji.
-    #original_hash: 58b1a3c
-    accepted: Twoja rejestracja została zaakceptowana!
     #original_hash: bcd7d70
     entry_fees_fully_paid: 'Zapłaciłeś %{paid}, co w pełni pogrywa koszty wpisowego.'
     #original_hash: 2e5d1b9
@@ -2479,8 +2456,6 @@ pl:
         #original_hash: 1cc5991
         refund_amount: Kwota Zwrotu
     payment_form:
-      #original_hash: 4de825f
-      title: Wpisowe
       #original_hash: 8897f02
       payment_successful: >-
         Płatność powiodła się, a twoja rejestracja powinna być widoczna poniżej
@@ -2530,6 +2505,8 @@ pl:
           Masz zamiar opłacić co najmniej dwukrotność tego co jest wymagane do
           zaakceptowania twojej rejestracji.
       errors:
+        #original_hash: c80ec45
+        registration_closed: Rejestracja jest zamknięta - płatności nie są już dozwolone.
         #original_hash: 166d48c
         already_paid: >-
           Opłata nie została naliczona, ponieważ opłata rejestracyjna została
@@ -2815,7 +2792,7 @@ pl:
       #original_hash: 4f05cd6
       add_to_calendar: Dodaj do kalendarza
       #original_hash: 709a232
-      name: Imię i nazwisko
+      name: Nazwa
       #original_hash: d219c68
       location: Miejsce
       #original_hash: 4271627
@@ -3143,8 +3120,6 @@ pl:
         custom: Zawody w wybranym przedziale czasowym
         #original_hash: 0933739
         by_announcement: 'Zawody posortowane według daty ogłoszenia, najnowsze na górze'
-      #original_hash: 6684214
-      no_access: Nie masz dostępu do tej strony!
       tooltips:
         hourglass:
           #original_hash: b5183e1
@@ -3162,13 +3137,13 @@ pl:
         #original_hash: 3bc8082
         recent: 'Ostatnie %{count} dni'
         registration:
-          #original_hash: 49d8169
-          opens_in: 'Rejestracja zostanie otwarta za %{duration}'
-          #original_hash: 2d601fa
-          closed: 'Rejestracja została zamknięta. Zawody zaczynają się za %{days}'
+          #original_hash: fe28f94
+          opens_in: 'Rejestracja zostanie otwarta %{relativeDate}'
+          #original_hash: f9f709e
+          closed: 'Rejestracja została zamknięta. Zawody zaczynają się %{relativeDate}'
           #original_hash: 2e17db8
           open: Rejestracja jest otwarta!
-          #original_hash: c098975
+          #original_hash: be2118d
           full: >-
             Limit zawodników został osiągnięty, nowe rejestracje będą
             umieszczane na liście rezerwowej
@@ -3176,10 +3151,6 @@ pl:
       no_more_comps: Brak dalszych zawodów.
       #original_hash: 8b09d74
       no_comp_found: Nie znaleziono żadnych zawodów.
-      #original_hash: 7008166
-      no_comp_match: >-
-        Nie znaleźliśmy żadnych zawodów mających %{events}! Spróbuj zmniejszyć
-        liczbę szukanych konkurencji.
     my_competitions_table:
       #original_hash: 5301648
       edit: Edytuj
@@ -3323,6 +3294,10 @@ pl:
           count: Maksymalna liczba zawodników
           #original_hash: 4a8b6f1
           reason: Powód określenia limitu zawodników
+          #original_hash: e9e5b84
+          auto_close_threshold: Próg automatycznego zamykania
+          #original_hash: b1d5af4
+          newcomer_month_reserved_spots: Liczba miejsc zarezerwowanych dla nowych zawodników
         staff:
           #original_hash: 2e3ed8b
           staff_delegate_ids: Delegat/Delegaci WCA
@@ -3377,8 +3352,8 @@ pl:
             rejestracjach.
           #original_hash: 2529d04
           allow_on_the_spot: Rejestracja na miejscu
-          #original_hash: 3d47eca
-          allow_self_delete_after_acceptance: Odwoływanie rejestracji
+          #original_hash: b6faf84
+          competitor_can_cancel: Kiedy zawodnicy mogą anulować swoją rejestrację
           #original_hash: 7e53b96
           allow_self_edits: Edytowanie rejestracji
           #original_hash: 3c23a67
@@ -3521,6 +3496,16 @@ pl:
           reason: >-
             Jaki jest powód wyznaczenia limitu zawodników dla tych zawodów?
             Prosimy o wypełnienie w języku angielskim!
+          #original_hash: 045d250
+          auto_close_threshold: >-
+            Rejestracja zamknie się automatycznie gdy pojawi się ta liczba
+            opłaconych rejestracji. Pozostaw puste aby nie korzystać, zignoruj
+            jeżeli nie korzystasz z zintegrowanych płatności.
+          #original_hash: e1cf4fc
+          newcomer_month_reserved_spots: >-
+            Dozwolone tylko podczas Miesiąca Nowych Zawodników - liczba
+            zarezerwowanych miejsc nie może być większa niż połowa limitu
+            zawodników.
         staff:
           #original_hash: b4d020f
           staff_delegate_ids: Delegaci WCA dla tych zawodów.
@@ -3611,7 +3596,7 @@ pl:
           #original_hash: da39a3e
           allow_on_the_spot: ''
           #original_hash: da39a3e
-          allow_self_delete_after_acceptance: ''
+          competitor_can_cancel: ''
           #original_hash: da39a3e
           allow_self_edits: ''
           #original_hash: da39a3e
@@ -3710,13 +3695,13 @@ pl:
             'false': >-
               Zawodnicy nie mogą edytować swoich rejestracji po ich
               zaakceptowaniu
-          allow_self_delete_after_acceptance:
-            #original_hash: 5c2e8c1
-            'true': >-
-              Zawodnicy mogą usunąć swoje rejestracje nawet jeżeli zostały
-              zaakceptowane
-            #original_hash: 3b77604
-            'false': Zawodnicy NIE mogą usunąć swojej rejestracji po jej zaakceptowaniu
+          competitor_can_cancel:
+            #original_hash: a91bcce
+            always: Zawsze
+            #original_hash: b64ca70
+            not_accepted: Dopóki nie zostaną zaakceptowani
+            #original_hash: 4435d55
+            unpaid: Dopóki nie zapłacą
           guest_entry_status:
             #original_hash: 7e54323
             unclear: >-
@@ -3755,7 +3740,7 @@ pl:
           zatwierdzić twoją rejestrację. To może zająć pewien czas.
         #original_hash: 6071fd9
         is_accepted: Planuj swoją podróż i pakuj się - masz miejsce na zawodach!
-        #original_hash: e29a4d3
+        #original_hash: 89448a8
         is_cancelled: >-
           Twoja rejestracja została anulowana i nie będziesz startował, ale
           możesz zapisać się ponownie
@@ -3778,23 +3763,42 @@ pl:
           few: 'pozostały %{count} miejsca'
           many: 'pozostało %{count} miejsc'
           other: 'pozostało %{count} miejsc'
-        cancelled:
-          #original_hash: e9c5a55
-          title: Anulowane rejestracje
-          #original_hash: bb5b570
-          information: Anulowani zawodnicy mogą się zarejestrować ponownie.
-        rejected:
-          #original_hash: 199b7c5
-          title: Odrzucone rejestracje
-          #original_hash: 3fd2e0c
-          information: Odrzuceni zawodnicy nie mogą zarejestrować się ponownie
         pending:
+          #original_hash: 4210670
+          title: Oczekujące Rejestracje
           #original_hash: 5e16c6d
           information: >-
             Oczekujące powinno być używane tylko dla niekompletnych (np.
             nieopłaconych) rejestracji - prosimy o użycie Listy Rezerwowej
             jeżeli twoje zawody są już zbyt pełne aby przyjmować nowych
             zawodników.
+        waitlist:
+          #original_hash: 3907ca4
+          title: Rejestracje na Liście Rezerwowej
+          #original_hash: a6c86ec
+          skipped_warning: >-
+            Pominąłeś %{count} rejestracji na Liście Rezerwowej. Czy na pewno
+            chcesz zaakceptować te rejestracje?
+        approved:
+          #original_hash: a59612c
+          title: Zaakceptowane Rejestracje
+        cancelled:
+          #original_hash: bd69c74
+          title: Anulowane Rejestracje
+          #original_hash: bb5b570
+          information: Anulowani zawodnicy mogą się zarejestrować ponownie.
+        rejected:
+          #original_hash: 9cef5ae
+          title: Odrzucone Rejestracje
+          #original_hash: 3fd2e0c
+          information: Odrzuceni zawodnicy nie mogą zarejestrować się ponownie
+        non_competing:
+          #original_hash: d4e453a
+          title: Nieukładające Rejestracje
+          #original_hash: 2ed9c67
+          information: >-
+            Dla nieukładających rejestracji możesz przypisać zadania poprzez
+            WCIF.
         payment:
           #original_hash: d6fbc7a
           refunded_status: Zrefundowane
@@ -3856,14 +3860,23 @@ pl:
         email_copy: Skopiuj adresy Email
         #original_hash: b83b663
         email_message: Skopiowano do schowka. Pamiętaj o użyciu UDW!
-        #original_hash: 71327f1
-        move_pending: Przenieś do oczekujących
-        #original_hash: 9144dd6
-        move_waiting: Przenieś na listę rezerwową
-        #original_hash: 284b24f
-        cancel: Anuluj rejestrację
-        #original_hash: df40450
-        reject: Odrzuć rejestrację
+        #original_hash: beedd53
+        move_to:
+          zero: Przenieś do
+          one: 'Przenieś %{count} do'
+          few: 'Przenieś %{count} do'
+          many: 'Przenieś %{count} do'
+          other: 'Przenieś %{count} do'
+        #original_hash: 96f608c
+        pending: Oczekujące
+        #original_hash: 92d40dc
+        waitlist: Lista Rezerwowa
+        #original_hash: 41b81eb
+        approved: Zaakceptowane
+        #original_hash: a1bf92e
+        cancelled: Anulowane
+        #original_hash: 27eeb7a
+        rejected: Odrzucone
         #original_hash: 43dc853
         amount: Kwota
         #original_hash: 67b3c7d
@@ -3877,6 +3890,10 @@ pl:
         will_open_countdown: >-
           Rejestracja otworzy się za %{minutes} minut %{seconds} sekund. Ta
           strona odświeży się automatycznie gdy rejestracja zostanie otwarta.
+        #original_hash: 604d27a
+        will_close_countdown: >-
+          Rejestracja zamyka się za %{minutes} minut i %{seconds} sekund. Ta
+          strona odświeży się automatycznie gdy rejestracja się zamknie.
         panel:
           approval:
             #original_hash: 8cc047a
@@ -4002,13 +4019,58 @@ pl:
         '-4011': Możesz zaakceptować jedynie pierwszą osobę na liście rezerwowej
         #original_hash: 8d089d6
         '-4012': Nie jesteś zakwalifikowany do startu w wybranych konkurencjach
+        #original_hash: fb1d742
+        '-4013': >-
+          Nie możesz zaakceptować powracającego zawodnika gdy pozostały jedynie
+          miejsca dla nowych zawodników
         #original_hash: a244fde
         '-4014': Jesteś już zarejestrowany na te zawody.
+        #original_hash: 369db78
+        '-4015': >-
+          Prosimy wpisać rozsądną liczbę gości lub skontaktować się z
+          organizatorami jeżeli potrzebujesz przyprowadzić ze sobą nadzwyczajną
+          liczbę gości.
         #original_hash: 0df821f
         '-6001': Płatność WCA nie jest włączona dla tych zawodów
         #original_hash: 092da51
         '-6002': Musisz zakończyć swoją rejestrację zanim będziesz mógł zapłacić
     errors:
+      #original_hash: b14d060
+      must_use_wca_registration: >-
+        Automatyczna akceptacja może być używana jedynie jeżeli używasz strony
+        WCA do rejestracji
+      #original_hash: 130c901
+      auto_accept_limit: >-
+        Limit dla automatycznie zaakceptowanych rejestracji musi być mniejszy
+        niż limit zawodników
+      #original_hash: 42cd8e6
+      auto_accept_not_negative: >-
+        Limit dla automatycznie akceptowanych rejestracji nie może być mniejszy
+        niż 0.
+      #original_hash: 181d8d9
+      auto_accept_accept_paid_pending: >-
+        Nie można włączyć automatycznego akceptowania jeżeli istnieją oczekujące
+        opłacone rejestracje - zaakceptuj je lub przenieś na listę rezerwową
+      #original_hash: 96db418
+      auto_accept_accept_waitlisted: >-
+        Nie można włączyć automatycznego akceptowania - prosimy zaakceptuj tak
+        wielu użytkowników z Listy Rezerwowej jak to możliwe.
+      #original_hash: 6d11b4e
+      auto_close_exceed_paid: >-
+        Próg automatycznego zamykania musi być większy niż liczba obecnie
+        opłaconych rejestracji
+      #original_hash: abee516
+      auto_close_positive_nonzero: Próg automatycznego zamykania musi być większy niż 0
+      #original_hash: b81ee7e
+      must_exceed_competitor_limit: Próg automatycznego zamykania musi być większy niż limit zawodników
+      #original_hash: 148c1d4
+      use_wca_registration: Zawody muszą używać rejestracji WCA
+      #original_hash: 2c41c57
+      newcomer_month_reservations_percentage: nie można zarezerwować więcej niż 50% miejsc dla nowych zawodników
+      #original_hash: 58d244e
+      newcomer_month_reservations_available: >-
+        Liczba miejsc zarezerwowanych dla miesiąca nowych zawodników przekracza
+        liczbę miejsc możliwych do zarezerwowania
       #original_hash: f7ef9f6
       invalid_name_message: >-
         może zawierać tylko znaki alfanumeryczne, myślniki (-), ampersandy (&),
@@ -4081,6 +4143,10 @@ pl:
       series_distance_days: 'Zawody są zaplanowane zbyt wiele dni od %{competition}.'
       #original_hash: 7fc8fba
       must_ask_about_guests_if_specifying_limit: Musisz zapytać o liczbę gości jeżeli ich limit jest ustawiony.
+      #original_hash: 000564d
+      not_full_url: >-
+        W zawartości znajduje się pośredni adres URL (%{url}). Prosimy wpisz
+        pełny adres z przedrostkiem http:// lub https://.
     new:
       #original_hash: 1208df7
       create_competition: Utwórz zawody
@@ -5189,8 +5255,8 @@ pl:
         '4': >-
           Spełnianie wszystkich obowiązujących przepisów określonych w
           Regulaminie WCA
-        #original_hash: 1a9e6c5
-        '5': Akceptowanie i stosowanie się do wszystkich decyzji Personelu WCA
+        #original_hash: 88cf548
+        '5': Akceptowanie i stosowanie się do wszystkich decyzji Wolontariuszy WCA
         #original_hash: d4ae7c1
         '6': >-
           Przechowywać na stronie WCA kopię obecnego Statutu oraz (jeżeli
@@ -5252,12 +5318,12 @@ pl:
     before:
       #original_hash: 9850344
       title: Przed zawodami
-      #original_hash: 576e2f4
+      #original_hash: 6f64073
       desc: >-
         Zarządzanie rejestracjami zawodników jest możliwe bezpośrednio na
-        stronie WCA. Ponieważ zarządzanie grupami zawodników oraz personelem
-        może zajmować dużo czasu zalecamy rozważenie skorzystania z jednego z
-        narzędzi wymienionych poniżej.
+        stronie WCA. Ponieważ zarządzanie grupami zawodników oraz
+        wolontariuszami może zajmować dużo czasu zalecamy rozważenie
+        skorzystania z jednego z narzędzi wymienionych poniżej.
     during:
       #original_hash: 9934200
       title: W trakcie zawodów
@@ -5563,7 +5629,7 @@ pl:
     recommended:
       #original_hash: 6b843f3
       title: Rekomendowane dokumenty
-      #original_hash: bfbd4bb
+      #original_hash: 6e4fb29
       staff: Przypisywanie zadań
       #original_hash: 4735583
       emails: E-maile
@@ -5571,8 +5637,8 @@ pl:
       running-systems: Systemy sędziowskie
       #original_hash: 2b31c89
       new-competitors: Podejście do nowych zawodników
-      #original_hash: 3408054
-      enhancing-experience: Ulepszanie doświadczeń dla zawodników i obsługi
+      #original_hash: 00c4f78
+      enhancing-experience: Ulepszanie doświadczeń dla zawodników i wolontariuszy
       #original_hash: 2345aaa
       reflection: Samoocena organizatora po zawodach
   organizer_guidelines:

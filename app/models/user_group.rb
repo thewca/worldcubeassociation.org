@@ -170,7 +170,7 @@ class UserGroup < ApplicationRecord
   end
 
   def lead_role
-    active_roles.includes(:group, :metadata).find { |role| role.is_lead? }
+    active_roles.includes(:group, :metadata).find { |role| role.lead? }
   end
 
   # TODO: Once the roles migration is done, add a validation to make sure there is only one lead_user per group.
@@ -189,7 +189,7 @@ class UserGroup < ApplicationRecord
     end
   end
 
-  def is_root_group?
+  def root_group?
     parent_group_id.nil?
   end
 
@@ -268,14 +268,12 @@ class UserGroup < ApplicationRecord
           else
             no_more_leaders.append("#{name} is no longer the Leader and no longer a member.")
           end
+        elsif new_member
+          no_more_leaders.append("#{name} was the Leader for few days and is continuing as member.")
+        elsif new_senior_member
+          no_more_leaders.append("#{name} was the Leader for few days and is continuing as Senior member.")
         else
-          if new_member
-            no_more_leaders.append("#{name} was the Leader for few days and is continuing as member.")
-          elsif new_senior_member
-            no_more_leaders.append("#{name} was the Leader for few days and is continuing as Senior member.")
-          else
-            no_more_leaders.append("#{name} was the Leader for few days and is no longer a member.")
-          end
+          no_more_leaders.append("#{name} was the Leader for few days and is no longer a member.")
         end
       else
         if new_senior_member || new_and_ex_senior_member
@@ -294,9 +292,7 @@ class UserGroup < ApplicationRecord
         elsif ex_senior_member || new_and_ex_senior_member
           no_more_senior_members.append(name)
         end
-        if (ex_member || new_and_ex_member) && !new_senior_member && !new_member
-          no_more_members.append(name)
-        end
+        no_more_members.append(name) if (ex_member || new_and_ex_member) && !new_senior_member && !new_member
       end
     end
 
@@ -305,31 +301,15 @@ class UserGroup < ApplicationRecord
       changes_of_last_month.push("<br><b>Changes in #{self.name}</b>")
       if leader_appointments.count + no_more_leaders.count > 0
         changes_of_last_month.push("<br><b>Leaders</b>")
-        if leader_appointments.count > 0
-          changes_of_last_month.push(leader_appointments.join("<br>"))
-        end
-        if no_more_leaders.count > 0
-          changes_of_last_month.push(no_more_leaders.join("<br>"))
-        end
+        changes_of_last_month.push(leader_appointments.join("<br>")) if leader_appointments.count > 0
+        changes_of_last_month.push(no_more_leaders.join("<br>")) if no_more_leaders.count > 0
       end
-      if promoted_senior_members.count > 0
-        changes_of_last_month.push("<br><b>Promoted Senior Members</b><br>#{promoted_senior_members.join("<br>")}")
-      end
-      if new_senior_members.count > 0
-        changes_of_last_month.push("<br><b>New Senior Members</b><br>#{new_senior_members.join("<br>")}")
-      end
-      if new_members.count > 0
-        changes_of_last_month.push("<br><b>New Members</b><br>#{new_members.join("<br>")}")
-      end
-      if demoted_senior_members.count > 0
-        changes_of_last_month.push("<br><b>Demotions from Senior Member to Member</b><br>#{demoted_senior_members.join("<br>")}")
-      end
-      if no_more_senior_members.count > 0
-        changes_of_last_month.push("<br><b>Resigned/Demoted Senior Members</b><br>#{no_more_senior_members.join("<br>")}")
-      end
-      if no_more_members.count > 0
-        changes_of_last_month.push("<br><b>Resigned/Demoted Members</b><br>#{no_more_members.join("<br>")}")
-      end
+      changes_of_last_month.push("<br><b>Promoted Senior Members</b><br>#{promoted_senior_members.join("<br>")}") if promoted_senior_members.count > 0
+      changes_of_last_month.push("<br><b>New Senior Members</b><br>#{new_senior_members.join("<br>")}") if new_senior_members.count > 0
+      changes_of_last_month.push("<br><b>New Members</b><br>#{new_members.join("<br>")}") if new_members.count > 0
+      changes_of_last_month.push("<br><b>Demotions from Senior Member to Member</b><br>#{demoted_senior_members.join("<br>")}") if demoted_senior_members.count > 0
+      changes_of_last_month.push("<br><b>Resigned/Demoted Senior Members</b><br>#{no_more_senior_members.join("<br>")}") if no_more_senior_members.count > 0
+      changes_of_last_month.push("<br><b>Resigned/Demoted Members</b><br>#{no_more_members.join("<br>")}") if no_more_members.count > 0
     end
     changes_of_last_month.join("<br>")
   end
@@ -340,14 +320,14 @@ class UserGroup < ApplicationRecord
     group_changes = []
     [UserGroup.teams_committees, UserGroup.councils].flatten!.each do |group|
       current_group_changes = group.changes_in_group_for_digest
-      if !current_group_changes.empty?
-        group_changes.push(current_group_changes)
-      end
+      group_changes.push(current_group_changes) unless current_group_changes.empty?
     end
-    if group_changes.empty?
-      group_changes.push("There are no changes to show.")
-    end
+    group_changes.push("There are no changes to show.") if group_changes.empty?
     group_changes.join("<br>")
+  end
+
+  def email
+    metadata&.email
   end
 
   DEFAULT_SERIALIZE_OPTIONS = {

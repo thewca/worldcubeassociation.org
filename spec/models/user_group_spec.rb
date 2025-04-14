@@ -144,11 +144,11 @@ RSpec.describe UserGroup, type: :model do
   end
 
   it "is_root_group? returns true for root group" do
-    expect(asia_region.is_root_group?).to eq(true)
+    expect(asia_region.root_group?).to be(true)
   end
 
   it "is_root_group? returns false for non-root group" do
-    expect(india_region.is_root_group?).to eq(false)
+    expect(india_region.root_group?).to be(false)
   end
 
   context "Monthly digest changes" do

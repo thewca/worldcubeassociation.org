@@ -14,7 +14,7 @@ module ResultsValidators
       "This validator checks that all results have matching scrambles, and if possible, checks that the scrambles have the correct number of attempts compared to the expected round format."
     end
 
-    def self.has_automated_fix?
+    def self.automatically_fixable?
       false
     end
 
@@ -38,7 +38,7 @@ module ResultsValidators
         # Get actual round ids from results
         rounds_ids = results_for_comp.map { |r| "#{r.eventId}-#{r.roundTypeId}" }.uniq
 
-        if results_for_comp.any? && !scrambles.any?
+        if results_for_comp.any? && scrambles.none?
           @errors << ValidationError.new(MISSING_SCRAMBLES_FOR_COMPETITION_ERROR,
                                          :scrambles, competition.id,
                                          competition_id: competition.id)
@@ -71,7 +71,7 @@ module ResultsValidators
           errors_for_round = []
           scrambles_by_group_id.each do |group_id, scrambles_for_group|
             # filter out extra scrambles
-            actual_number_of_scrambles = scrambles_for_group.reject(&:isExtra).size
+            actual_number_of_scrambles = scrambles_for_group.count { |element| !element.isExtra }
             if actual_number_of_scrambles < expected_number_of_scrambles
               errors_for_round << ValidationError.new(MISSING_SCRAMBLES_FOR_GROUP_ERROR,
                                                       :scrambles, competition.id,
