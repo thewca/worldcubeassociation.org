@@ -17,7 +17,9 @@ jobs:
       - uses: actions/checkout@v4
       - uses: fregante/setup-git-user@v2 # set up dummy user.name and user.email in git so that Overcommit doesn't explode
       - name: Set up ImageMagick and Libvips # This is not included in GitHub runners by default anymore
-        run: sudo apt install --no-install-recommends imagemagick libvips
+        run: |
+          sudo apt update
+          sudo apt install --no-install-recommends imagemagick libvips
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
