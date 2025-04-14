@@ -9,8 +9,8 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
   before_action :validate_create_request, only: [:create]
   before_action :validate_show_registration, only: [:show]
   before_action :validate_list_admin, only: [:list_admin]
-  before_action :ensure_registration_exists, only: [:update, :add_payment_reference, :delete_payment_reference]
-  before_action :user_can_modify_registration, only: [:update, :add_payment_reference]
+  before_action :ensure_registration_exists, only: [:update]
+  before_action :user_can_modify_registration, only: [:update]
   before_action :validate_update_request, only: [:update]
   before_action :user_can_bulk_modify_registrations, only: [:bulk_update]
   before_action :validate_bulk_update_request, only: [:bulk_update]
@@ -84,18 +84,6 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
       return render json: { status: 'ok', registration: updated_registration.to_v2_json(admin: true, history: true) }, status: :ok
     end
     render json: { status: 'bad request', message: 'You need to supply at least one lane' }, status: :bad_request
-  end
-
-  def add_payment_reference
-    ManualPaymentRecord.create(registration: @registration, payment_reference: params.require(:payment_reference))
-
-    render json: { status: 'ok' }, status: :ok
-  end
-
-  def delete_payment_reference
-    ManualPaymentRecord.find_by!(registration: @registration).destroy!
-
-    render json: { status: 'ok' }, status: :ok
   end
 
   def ensure_registration_exists
@@ -242,10 +230,14 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
 
   def payment_ticket
     iso_donation_amount = params[:iso_donation_amount].to_i || 0
+    payment_integration_type = params.require(:payment_integration_type)
     # We could delegate this call to the prepare_intent function given that we're already giving it registration - however,
     # in the long-term we want to decouple registrations from payments, so I'm deliberately not introducing any more tight coupling
     ruby_money = @registration.entry_fee_with_donation(iso_donation_amount)
-    payment_account = @competition.payment_account_for(:stripe)
+    payment_account = @competition.payment_account_for(payment_integration_type.to_sym)
+
+    render_error(:forbidden, Registrations::ErrorCodes::PAYMENT_NOT_ENABLED) if payment_account.nil?
+
     payment_intent = payment_account.prepare_intent(@registration, ruby_money.cents, ruby_money.currency.iso_code, @current_user)
     render json: { client_secret: payment_intent.client_secret }
   end
@@ -275,7 +267,7 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
 
     def update_params
       params.require([:user_id, :competition_id])
-      params.permit(:guests, :user_id, :competition_id, :payment_reference, competing: [:status, :comment, { event_ids: [] }, :admin_comment])
+      params.permit(:guests, competing: [:status, :comment, { event_ids: [] }, :admin_comment])
       params
     end
 
