@@ -263,15 +263,6 @@ class CompetitionsController < ApplicationController
     @competition = competition_from_params
   end
 
-  def add_manual_payment_setup
-    @competition = competition_from_params
-
-    return render json: { error: 'Already connected' }, status: :bad_request if @competition.payment_integration_connected?(:manual)
-
-
-    render json: { status: "ok" }
-  end
-
   def payment_integration_setup
     @competition = competition_from_params
 
