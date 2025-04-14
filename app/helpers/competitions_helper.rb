@@ -227,18 +227,18 @@ module CompetitionsHelper
     [first_time, last_time]
   end
 
-  def playwright_connection(&block)
+  def playwright_connection(&)
     if Rails.env.production? || EnvConfig.PLAYWRIGHT_RUN_LOCALLY?
       local_cli_path = "#{EnvConfig.PLAYWRIGHT_BROWSERS_PATH}/node_modules/playwright/cli.js"
 
       Playwright.create(playwright_cli_executable_path: local_cli_path) do |playwright|
-        playwright.chromium.launch(headless: true, channel: 'chromium', &block)
+        playwright.chromium.launch(headless: true, channel: 'chromium', &)
       end
     else
       endpoint_url = "#{EnvConfig.PLAYWRIGHT_SERVER_SOCKET_URL}?browser=chromium"
 
       Playwright.connect_to_playwright_server(endpoint_url) do |playwright|
-        playwright.chromium.launch(headless: true, channel: 'chromium', &block)
+        playwright.chromium.launch(headless: true, channel: 'chromium', &)
       end
     end
   end
