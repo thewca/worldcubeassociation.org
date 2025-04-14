@@ -16,7 +16,7 @@ RSpec.feature "cookie law" do
 
       # Clear cookies and visit the homepage again. The cookie banner should
       # show back up.
-      page.driver.clear_cookies
+      page.driver.with_playwright_page { it.context.clear_cookies }
       visit_homepage_and_wait_for_load
       expect(page).to have_selector(CookieBannerHelper::ACKNOWLEDGE_SELECTOR)
     end
@@ -35,7 +35,7 @@ RSpec.feature "cookie law" do
 
       # Clear cookies. This logs us out and clears the acknowledgement cookie.
       # The banner should come back.
-      page.driver.clear_cookies
+      page.driver.with_playwright_page { it.context.clear_cookies }
       visit_homepage_and_wait_for_load
       expect(page).to have_selector(CookieBannerHelper::ACKNOWLEDGE_SELECTOR)
 
