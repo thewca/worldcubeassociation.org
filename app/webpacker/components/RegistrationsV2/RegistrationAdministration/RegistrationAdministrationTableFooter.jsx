@@ -40,9 +40,6 @@ export default function RegistrationAdministrationTableFooter({
     }),
   );
 
-  const usingPayment = competitionInfo['using_payment_integrations?'];
-  const usingManualPayment = usingPayment && competitionInfo.payment_integration_type === 'manual';
-
   return (
     <Table.Row>
       <Table.Cell colSpan={withPosition ? 5 : 4}>
@@ -52,11 +49,8 @@ export default function RegistrationAdministrationTableFooter({
       </Table.Cell>
       <Table.Cell>{`${countryCount} Countries`}</Table.Cell>
       <Table.Cell key="registered on" />
-      {usingPayment && !usingManualPayment && (
+      {competitionInfo['using_payment_integrations?'] && (
         <Table.Cell>{moneyCountHumanReadable(registrations, competitionInfo)}</Table.Cell>
-      )}
-      {usingManualPayment && (
-        <Table.Cell />
       )}
       {eventsAreExpanded ? (
         competitionInfo.event_ids.map((evt) => (

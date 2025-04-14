@@ -29,7 +29,6 @@ import getUsersInfo from '../api/user/post/getUserInfo';
 import { useRegistration } from '../lib/RegistrationProvider';
 import I18nHTMLTranslate from '../../I18nHTMLTranslate';
 import useSet from '../../../lib/hooks/useSet';
-import deletePaymentReference from '../api/registration/delete/delete_payment_reference';
 
 export default function RegistrationEditor({ competitor, competitionInfo }) {
   const dispatch = useDispatch();
@@ -53,11 +52,6 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
     queryFn: () => getUsersInfo(_.uniq(serverRegistration.history.flatMap((e) => (
       (e.actor_type === 'user' || e.actor_type === 'worker') ? Number(e.actor_id) : [])))),
     enabled: Boolean(serverRegistration),
-  });
-
-  const { mutate: deletePaymentReferenceMutation, isPending: isDeleting } = useMutation({
-    mutationFn: deletePaymentReference,
-    onSuccess: refetch,
   });
 
   const { mutate: updateRegistrationMutation, isPending: isUpdating } = useMutation({
@@ -192,9 +186,6 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
     return <Loading />;
   }
 
-  const usingPayment = competitionInfo['using_payment_integrations?'];
-  const usingManualPayment = usingPayment && competitionInfo.payment_integration_type === 'manual';
-
   return (
     <Segment padded attached loading={isUpdating}>
       <Form onSubmit={handleRegisterClick}>
@@ -315,7 +306,7 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
       {/* TODO: Add information about Series Registration here */}
       {/* i18n-tasks-use t('registrations.list.series_registrations') */}
 
-      {usingPayment && !usingManualPayment && (
+      {competitionInfo['using_payment_integrations?'] && (
         <>
           <Message>{I18n.t('payments.labels.payment_statuses')}</Message>
           <List>
@@ -336,30 +327,6 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
           )}
         </>
       )}
-
-      {usingManualPayment && (
-        <>
-          <Message info>
-            {I18n.t('competitions.registration_v2.update.admin_payment_reference_explanation')}
-          </Message>
-          <b>{I18n.t('competitions.registration_v2.list.payment.payment_reference')}</b>
-          {': '}
-          {registration.payment.payment_reference ?? 'Unpaid'}
-          <br />
-          {registration.payment.payment_reference && (
-            <Button
-              negative
-              onClick={() => deletePaymentReferenceMutation({
-                userId: competitor.id,
-                competitionId: competitionInfo.id,
-              })}
-            >
-              Reset Payment Reference
-            </Button>
-          )}
-        </>
-      )}
-
       <RegistrationHistory
         history={registration.history.toReversed()}
         competitorsInfo={competitorsInfo}
