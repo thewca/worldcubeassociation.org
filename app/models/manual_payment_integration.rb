@@ -39,7 +39,7 @@ class ManualPaymentIntegration < ApplicationRecord
   end
 
   def retrieve_payments(payment_intent)
-    payment_intent.payment_record
+    yield payment_intent.payment_record
   end
 
   def self.generate_onboarding_link(competition_id)

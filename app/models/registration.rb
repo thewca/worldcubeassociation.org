@@ -256,7 +256,7 @@ class Registration < ApplicationRecord
   end
 
   def payment_reference
-    registration_payments.first&.payment_record&.payment_reference
+    registration_payments.first&.receipt&.payment_reference
   end
 
   def to_v2_json(admin: false, history: false, pii: false)
