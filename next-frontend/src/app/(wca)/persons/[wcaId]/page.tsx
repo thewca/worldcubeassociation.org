@@ -1,11 +1,15 @@
-import { Container, Heading, Text } from "@chakra-ui/react";
+import { Container, Tabs, Text, Card } from "@chakra-ui/react";
 import { getResultsByPerson } from "@/lib/wca/persons/getResultsByPerson";
-import ResultsTable from "@/components/persons/resultsTable";
 import ProfileCard from '@/components/persons/ProfileCard';
 import { GridItem, SimpleGrid } from "@chakra-ui/react";
 import PersonalRecordsTable from '@/components/persons/PersonalRecordsTable';
 import MedalSummaryCard from '@/components/persons/MedalSummaryCard';
 import RecordSummaryCard from '@/components/persons/RecordSummaryCard';
+import ResultsTab from "@/components/persons/ResultsTab";
+import CompetitionsTab from "@/components/persons/CompetitionsTab";
+import RecordsTab from "@/components/persons/RecordsTab";
+import MapTab from "@/components/persons/MapTab";
+import ChampionshipPodiumsTab from "@/components/persons/ChampionshipPodiums";
 
 export default async function PersonOverview({
   params,
@@ -219,13 +223,31 @@ export default async function PersonOverview({
 
             {/* Tabs */}
             <GridItem colSpan={6}>
-              <ResultsTable wcaId={wcaId} />
+            <Card.Root variant="plain" p={0}>
+              <Card.Body p={0}>
+              <Tabs.Root defaultValue="results" fitted variant="results" lazymount colorPalette="blue">
+                <Tabs.List>
+                  <Tabs.Trigger value="results">Results</Tabs.Trigger>
+                  <Tabs.Trigger value="competitions">Competitions</Tabs.Trigger>
+                  <Tabs.Trigger value="records">Records</Tabs.Trigger>
+                  <Tabs.Trigger value="championship-podiums">Championship Podiums</Tabs.Trigger>
+                  <Tabs.Trigger value="map">Map</Tabs.Trigger>
+                </Tabs.List>
+                <Tabs.Content value="results"><ResultsTab wcaId={wcaId}/></Tabs.Content>
+                <Tabs.Content value="competitions"><CompetitionsTab /><Text>{JSON.stringify(personDetails, null, 2)}</Text></Tabs.Content>
+                <Tabs.Content value="records"><RecordsTab /></Tabs.Content>
+                <Tabs.Content value="championship-podiums"><ChampionshipPodiumsTab /></Tabs.Content>
+                <Tabs.Content value="map"><MapTab /></Tabs.Content>
+              </Tabs.Root>
+              </Card.Body>
+            </Card.Root>
+            
+
             </GridItem>
           </SimpleGrid>
 
         </GridItem>
       </SimpleGrid>
-      <Text>{JSON.stringify(personDetails, null, 2)}</Text>
       
     </Container>
   );

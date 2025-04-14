@@ -824,6 +824,37 @@ const customConfig = defineConfig({
                 flexGrow: "1",
               },
             },
+            results: {
+              content: {
+                p: "8",
+              },
+              trigger: {
+                borderRadius: "0",
+                color: "fg",
+                _notFirst: {
+                  _before: {
+                    content: '""',
+                    position: "absolute",
+                    left: 0,
+                    top: "50%",
+                    transform: "translateY(-50%)",
+                    height: "1.5em",
+                    width: "1.5px",
+                    backgroundColor: "#D9D9D9",
+                  },
+                },
+                _selected: {
+                  bg: "colorPalette.solid",
+                  color: "colorPalette.contrast",
+                  _before: {
+                    display: "none", // Remove the line when selected
+                  },
+                },
+                '&[data-selected] + &::before': {
+                  display: 'none',
+                },
+              },
+            }
           },
         },
       },
