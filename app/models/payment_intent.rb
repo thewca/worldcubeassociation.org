@@ -101,13 +101,14 @@ class PaymentIntent < ApplicationRecord
 
     def wca_status_consistency
       # Check that payment_record's status is in sync with wca_status
-      if payment_record_type == 'StripeRecord'
+      case payment_record_type
+      when 'StripeRecord'
         errors.add(:wca_status, "#{wca_status} is not compatible with StripeRecord status: #{payment_record.stripe_status}") unless
           StripeRecord::WCA_TO_STRIPE_STATUS_MAP[wca_status.to_sym].include?(payment_record.stripe_status)
-      elsif payment_record_type == 'PaypalRecord'
+      when 'PaypalRecord'
         errors.add(:wca_status, "#{wca_status} is not compatible with PaypalRecord status: #{payment_record.paypal_status}") unless
           PaypalRecord::WCA_TO_PAYPAL_STATUS_MAP[wca_status.to_sym].include?(payment_record.paypal_status)
-      elsif payment_record_type == 'ManualPaymentRecord'
+      when 'ManualPaymentRecord'
         errors.add(:wca_status, "#{wca_status} is not compatible with ManualPaymentRecord status: #{payment_record.paypal_status}") unless
           ManualPaymentRecord::WCA_TO_MANUAL_PAYMENT_STATUS_MAP[wca_status.to_sym].include?(payment_record.status)
       else

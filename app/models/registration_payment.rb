@@ -22,7 +22,7 @@ class RegistrationPayment < ApplicationRecord
 
   def payment_status
     if receipt_type == "StripeRecord" && receipt.stripe_record_type == "refund"
-        "refund"
+      "refund"
     else
       receipt.determine_wca_status
     end

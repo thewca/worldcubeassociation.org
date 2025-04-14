@@ -22,7 +22,7 @@ class ManualPaymentIntegration < ApplicationRecord
       client_secret: manual_record.id,
       initiated_by: paying_user,
       wca_status: manual_record.determine_wca_status,
-      )
+    )
   end
 
   def find_payment(record_id)
