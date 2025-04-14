@@ -15,7 +15,7 @@ Rails.application.routes.draw do
   # Sidekiq web UI, see https://github.com/sidekiq/sidekiq/wiki/Devise
   # Specifically referring to results because WRT needs access to this on top of regular admins.
   authenticate :user, ->(user) { user.can_admin_results? } do
-    mount Sidekiq::Web => '/sidekiq'
+    mount Sidekiq::Web => '/sidekiq', as: 'sidekiq'
     mount RailsAdmin::Engine => '/rails_admin', as: 'rails_admin'
   end
 
