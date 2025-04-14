@@ -61,7 +61,7 @@ const PersonalRecordsTable: React.FC<RecordsProps> = ({ records }) => {
             Current Personal Records
           </Card.Title>
           <Button variant="ghost" ml="auto" p="0">
-            <LuShare2 />
+            <LuShare2 /> {/* TODO SLATE - implement share functionality */}
           </Button>
         </Card.Header>
         {/* Tables don't seem to inherit styles correctly, normally all the extra bg and fg shouldn't be necessary */}
