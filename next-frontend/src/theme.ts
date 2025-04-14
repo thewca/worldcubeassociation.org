@@ -735,8 +735,7 @@ const customConfig = defineConfig({
           variant: {
             results: {
               cell: {
-                padding: "0",
-                paddingBlock: "0px",
+                p: "0",
               },
             },
             competitions: {

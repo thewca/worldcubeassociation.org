@@ -65,7 +65,7 @@ const PersonalRecordsTable: React.FC<RecordsProps> = ({ records }) => {
           </Button>
         </Card.Header>
         {/* Tables don't seem to inherit styles correctly, normally all the extra bg and fg shouldn't be necessary */}
-        <Table.Root size="sm" striped rounded="md" variant="results">
+        <Table.Root size="xs" striped rounded="md" variant="results">
           <Table.Header>
             <Table.Row bg="bg.inverted">
               <Table.ColumnHeader color="fg.inverted" pl="3">
@@ -111,6 +111,9 @@ const PersonalRecordsTable: React.FC<RecordsProps> = ({ records }) => {
           <Table.Body>
             {records.map((record, index) => {
               const IconComponent = eventIconMap[record.event];
+              if (record.event == "magic" ||record.event == "mmagic" ||record.event == "mbo" ) {
+                return null;
+              }
               return (
                 <Table.Row key={index} bg="bg.inverted">
                   <Table.Cell color="fg.inverted" pl="3">
