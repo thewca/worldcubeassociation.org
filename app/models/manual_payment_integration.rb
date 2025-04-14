@@ -19,14 +19,27 @@ class ManualPaymentIntegration < ApplicationRecord
     PaymentIntent.create!(
       holder: registration,
       payment_record: manual_record,
-      client_secret: 'manual',
+      client_secret: manual_record.id,
       initiated_by: paying_user,
-      wca_status: stripe_record.determine_wca_status,
+      wca_status: manual_record.determine_wca_status,
       )
   end
 
   def find_payment(record_id)
     ManualPaymentRecord.find(record_id)
+  end
+
+  def find_payment_from_request(params)
+    # The client secret is just the id of the database model, but we override the payment_reference
+    # from the new one, so we can update it in update_status. This is simulating getting an updated version
+    # from a payment provider after paying
+    record = ManualPaymentRecord.find(params[:client_secret])
+    record.payment_reference = params[:payment_reference]
+    record
+  end
+
+  def retrieve_payments(payment_intent)
+    payment_intent.payment_record
   end
 
   def self.generate_onboarding_link(competition_id)

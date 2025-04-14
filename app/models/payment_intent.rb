@@ -33,6 +33,7 @@ class PaymentIntent < ApplicationRecord
   # See https://github.com/rails/rails/issues/17844 for reference.
   scope :paypal, -> { where(payment_record_type: 'PaypalRecord') }
   scope :stripe, -> { where(payment_record_type: 'StripeRecord') }
+  scope :manual, -> { where(payment_record_type: 'ManualPaymentRecord') }
 
   def update_status_and_charges(payment_account, api_intent, action_source, source_datetime = DateTime.current)
     self.with_lock do
@@ -106,6 +107,9 @@ class PaymentIntent < ApplicationRecord
       elsif payment_record_type == 'PaypalRecord'
         errors.add(:wca_status, "#{wca_status} is not compatible with PaypalRecord status: #{payment_record.paypal_status}") unless
           PaypalRecord::WCA_TO_PAYPAL_STATUS_MAP[wca_status.to_sym].include?(payment_record.paypal_status)
+      elsif payment_record_type == 'ManualPaymentRecord'
+        errors.add(:wca_status, "#{wca_status} is not compatible with ManualPaymentRecord status: #{payment_record.paypal_status}") unless
+          ManualPaymentRecord::WCA_TO_MANUAL_PAYMENT_STATUS_MAP[wca_status.to_sym].include?(payment_record.status)
       else
         raise "No status combination validation defined for: #{payment_record_type}"
       end
