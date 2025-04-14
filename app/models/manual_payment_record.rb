@@ -4,10 +4,8 @@ class ManualPaymentRecord < ApplicationRecord
   has_one :registration_payment, as: :receipt
   has_one :payment_intent, as: :payment_record
 
-  validates :payment_reference, presence: true
-
   def determine_wca_status
-    "succeeded"
+    payment_reference.present? ? "succeeded" : "created"
   end
 
   def retrieve_remote
