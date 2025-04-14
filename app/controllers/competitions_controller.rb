@@ -268,12 +268,6 @@ class CompetitionsController < ApplicationController
 
     return render json: { error: 'Already connected' }, status: :bad_request if @competition.payment_integration_connected?(:manual)
 
-    payment_info = params.require(:payment_info)
-    payment_reference = params.require(:payment_reference)
-
-    connection = ManualPaymentIntegration.create(payment_information: payment_info, payment_reference: payment_reference)
-
-    @competition.competition_payment_integrations.create(connected_account: connection)
 
     render json: { status: "ok" }
   end
@@ -301,11 +295,11 @@ class CompetitionsController < ApplicationController
     end
 
     connector = CompetitionPaymentIntegration::AVAILABLE_INTEGRATIONS[payment_integration.to_sym].safe_constantize
-    account_reference = connector&.connect_account(params)
+    integration_reference = connector&.connect_integration(params)
 
-    raise ActionController::RoutingError.new("Payment Integration #{payment_integration} not Found") if account_reference.blank?
+    raise ActionController::RoutingError.new("Payment Integration #{payment_integration} not Found") if integration_reference.blank?
 
-    competition.competition_payment_integrations.new(connected_account: account_reference)
+    competition.competition_payment_integrations.new(connected_account: integration_reference)
 
     if competition.save
       flash[:success] = t('payments.payment_setup.account_connected', provider: t("payments.payment_providers.#{payment_integration}"))
