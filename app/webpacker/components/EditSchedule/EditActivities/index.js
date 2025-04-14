@@ -430,6 +430,7 @@ function EditActivities({
                         calendarLocale,
                       )}
                     </b>
+                    .
                   </Container>
                   <FullCalendar
                     // plugins for the basic FullCalendar implementation.
