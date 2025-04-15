@@ -19,7 +19,7 @@ class Result < ApplicationRecord
   # we also need sure to query the correct competition as well through a custom scope.
   belongs_to :inbox_person, ->(res) { where(competitionId: res.competitionId) }, primary_key: :id, foreign_key: :personId, optional: true
 
-  has_many :attempts
+  has_many :result_attempts
 
   after_commit :create_or_update_attempts
 
@@ -29,7 +29,7 @@ class Result < ApplicationRecord
 
       { value: value, attempt_number: n, result_id: id } unless value.zero?
     end
-    Attempt.upsert_all(attempts)
+    ResultAttempt.upsert_all(attempts)
   end
 
   MARKERS = [nil, "NR", "ER", "WR", "AfR", "AsR", "NAR", "OcR", "SAR"].freeze

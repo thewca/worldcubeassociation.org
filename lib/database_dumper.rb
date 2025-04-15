@@ -345,7 +345,7 @@ module DatabaseDumper
     "active_storage_blobs" => :skip_all_rows,
     "active_storage_variant_records" => :skip_all_rows,
     "ar_internal_metadata" => :skip_all_rows,
-    "attempts" => {
+    "result_attempts" => {
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Attempt < ApplicationRecord
+class ResultAttempt < ApplicationRecord
   include Comparable
 
   default_scope { order(:attempt_number) }
