@@ -7,14 +7,14 @@ class Api::V0::PersonsController < Api::V0::ApiController
               else
                 Person.current.includes(:user)
               end
-    persons = persons.includes(:ranksSingle, :ranksAverage)
+    persons = persons.includes(:ranks_single, :ranks_average)
     persons = persons.where(wca_id: params[:wca_ids].split(',')) if params[:wca_ids].present?
     render json: paginate(persons).map { |person| person_to_json person }
   end
 
   def show
     wca_id = params[:wca_id]
-    person = Person.current.includes(:user, :ranksSingle, :ranksAverage).find_by!(wca_id: wca_id)
+    person = Person.current.includes(:user, :ranks_single, :ranks_average).find_by!(wca_id: wca_id)
     private_attributes = person.private_attributes_for_user(current_user)
     return unless stale?(person, public: true)
 
@@ -50,11 +50,11 @@ class Api::V0::PersonsController < Api::V0::ApiController
     {
       person: person.serializable_hash(only: [:wca_id, :name, :url, :gender, :country_iso2, :delegate_status, :teams, :avatar], private_attributes: private_attributes),
       competition_count: person.competitions.count,
-      personal_records: person.ranksSingle.index_by(&:event_id).transform_values do |rank_single|
+      personal_records: person.ranks_single.index_by(&:event_id).transform_values do |rank_single|
         # This rank may be nil: A person can have a single but not an average.
         # The other way around however (average with no single) is not possible,
         #   and that's why we use `ranksSingle` as a base for computing our lookup.
-        rank_average = person.ranksAverage.find { |rank| rank.event_id == rank_single.event_id }
+        rank_average = person.ranks_average.find { |rank| rank.event_id == rank_single.event_id }
 
         {
           single: rank_single,

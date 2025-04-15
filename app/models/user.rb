@@ -52,8 +52,8 @@ class User < ApplicationRecord
   has_many :competitions_results_posted, foreign_key: "results_posted_by", class_name: "Competition"
   has_many :confirmed_payment_intents, class_name: "PaymentIntent", as: :confirmation_source
   has_many :canceled_payment_intents, class_name: "PaymentIntent", as: :cancellation_source
-  has_many :ranksSingle, through: :person
-  has_many :ranksAverage, through: :person
+  has_many :ranks_single, through: :person
+  has_many :ranks_average, through: :person
   has_one :wfc_dues_redirect, as: :redirect_source
   belongs_to :delegate_reports_region, polymorphic: true, optional: true
   belongs_to :current_avatar, class_name: "UserAvatar", inverse_of: :current_user, optional: true

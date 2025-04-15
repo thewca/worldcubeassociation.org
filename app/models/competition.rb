@@ -1540,7 +1540,7 @@ class Competition < ApplicationRecord
         #   LEFT JOIN RanksSingle
         #   LEFT JOIN RanksAverage
         # WHERE users.id IN (...)
-        User.eager_load(:ranksSingle, :ranksAverage)
+        User.eager_load(:ranks_single, :ranks_average)
             .select(:name, :wca_id, :country_iso2)
             .find(registered_user_ids)
       end
@@ -1568,8 +1568,8 @@ class Competition < ApplicationRecord
 
       sorted_rankings = sorted_users.map.with_index { |user, i|
         # see comment about .find vs .find_by above.
-        single_ranking = user.ranksSingle.find { |r| r.event == event }
-        average_ranking = user.ranksAverage.find { |r| r.event == event }
+        single_ranking = user.ranks_single.find { |r| r.event == event }
+        average_ranking = user.ranks_average.find { |r| r.event == event }
 
         sort_by_ranking = sort_by == 'single' ? single_ranking : average_ranking
 
@@ -1820,7 +1820,7 @@ class Competition < ApplicationRecord
     includes_associations = [
       { assignments: [:schedule_activity] },
       { user: {
-        person: [:ranksSingle, :ranksAverage],
+        person: [:ranks_single, :ranks_average],
       } },
       :wcif_extensions,
       :events,
