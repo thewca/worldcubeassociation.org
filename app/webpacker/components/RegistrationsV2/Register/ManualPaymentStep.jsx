@@ -47,7 +47,7 @@ export default function ManualPaymentStep({
     <Segment>
       <Header as="h2">{I18n.t('competitions.registration_v2.list.payment.payment_info')}</Header>
       <Message>
-        <Markdown id="paymentInfo" md={competitionInfo.manual_payment_details.payment_info} />
+        <Markdown id="paymentInfo" md={competitionInfo.manual_payment_details.payment_information} />
       </Message>
       <Form id="manual-payment-form" action={paymentFinishUrl(competitionInfo.id, 'manual')} method="GET">
         <Form.Field required disabled={hasPaid}>
