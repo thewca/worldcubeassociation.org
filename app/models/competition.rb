@@ -1833,7 +1833,7 @@ class Competition < ApplicationRecord
   def manual_payment_details
     return nil unless using_manual_payment?
 
-    competition_payment_integrations.first.connected_account.account_details
+    competition_payment_integrations.first.connected_account.account_details.as_json
   end
 
   def competition_series_wcif(authorized: false)

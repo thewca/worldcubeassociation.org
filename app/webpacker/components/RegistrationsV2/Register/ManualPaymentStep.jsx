@@ -25,7 +25,7 @@ export default function ManualPaymentStep({
   const [paymentConfirmation, setPaymentConfirmation] = useCheckboxState(hasPaid);
 
   const { data, isLoading } = useQuery({
-    queryKey: ['manual-payment'],
+    queryKey: ['manual-payment', competitionInfo.id],
     queryFn: () => getPaymentTicket(
       competitionInfo,
       competitionInfo.base_entry_fee_lowest_denomination,

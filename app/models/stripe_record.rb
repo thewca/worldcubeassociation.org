@@ -61,6 +61,11 @@ class StripeRecord < ApplicationRecord
     parent_record&.root_record || self
   end
 
+  def payment_reference
+    # TODO intentionally return nil until we figure out what a good payment_reference for stripe should be
+    nil
+  end
+
   def update_status(api_transaction)
     stripe_error = nil
 

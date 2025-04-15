@@ -256,6 +256,7 @@ class Registration < ApplicationRecord
   end
 
   def payment_reference
+    # TODO: We currently have no
     registration_payments.first&.receipt&.payment_reference
   end
 

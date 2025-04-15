@@ -54,9 +54,6 @@ class ManualPaymentIntegration < ApplicationRecord
   end
 
   def self.connect_integration(params)
-    ManualPaymentIntegration.create(payment_information: params[:payment_information], payment_reference: params[:payment_reference])
-  end
-
-  def dashboard
+    ManualPaymentIntegration.create(params.permit(:payment_information, :payment_reference))
   end
 end

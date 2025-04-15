@@ -142,6 +142,11 @@ class PaypalRecord < ApplicationRecord
     DateTime.parse(raw_datetime)
   end
 
+  def payment_reference
+    # TODO intentionally return nil until we figure out what a good payment_reference for paypal should be
+    nil
+  end
+
   def self.create_from_api(api_record, record_type, parameters, merchant_id, parent_record = nil)
     default_unit = api_record.dig('purchase_units', 0) || api_record
 

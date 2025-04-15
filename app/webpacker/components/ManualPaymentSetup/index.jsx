@@ -1,13 +1,11 @@
-import React, { useState } from 'react';
+import React, from 'react';
 import {
-  Form, FormField, Header, Message,
+  Form, FormField, Header,
 } from 'semantic-ui-react';
-import { useMutation } from '@tanstack/react-query';
 import I18n from '../../lib/i18n';
 import MarkdownEditor from '../wca/FormBuilder/input/MarkdownEditor';
 import useInputState from '../../lib/hooks/useInputState';
-import { fetchJsonOrError } from '../../lib/requests/fetchWithAuthenticityToken';
-import { addManualPaymentIntegration, paymentSetupUrl } from '../../lib/requests/routes.js.erb';
+import { paymentSetupUrl } from '../../lib/requests/routes.js.erb';
 import WCAQueryClientProvider from '../../lib/providers/WCAQueryClientProvider';
 
 export default function Wrapper({ competitionId }) {
