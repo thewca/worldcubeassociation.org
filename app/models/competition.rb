@@ -17,7 +17,7 @@ class Competition < ApplicationRecord
   has_many :delegates, -> { includes(:delegate_roles, :delegate_role_metadata).distinct }, through: :competition_delegates
   has_many :competition_organizers, dependent: :delete_all
   has_many :organizers, through: :competition_organizers
-  has_many :media, class_name: "CompetitionMedium", foreign_key: "competitionId", dependent: :delete_all
+  has_many :media, class_name: "CompetitionMedium", dependent: :delete_all
   has_many :tabs, -> { order(:display_order) }, dependent: :delete_all, class_name: "CompetitionTab"
   has_one :delegate_report, dependent: :destroy
   has_one :waiting_list, dependent: :destroy, as: :holder

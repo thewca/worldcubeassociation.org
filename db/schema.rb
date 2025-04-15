@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_03_06_165113) do
+ActiveRecord::Schema[7.2].define(version: 2025_03_26_121913) do
   create_table "Competitions", id: { type: :string, limit: 32, default: "" }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", limit: 50, default: "", null: false
     t.string "cityName", limit: 50, default: "", null: false
@@ -90,19 +90,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_06_165113) do
     t.index ["countryId"], name: "index_Competitions_on_countryId"
     t.index ["end_date"], name: "index_Competitions_on_end_date"
     t.index ["start_date"], name: "index_Competitions_on_start_date"
-  end
-
-  create_table "CompetitionsMedia", id: { type: :integer, unsigned: true }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
-    t.string "competitionId", limit: 32, default: "", null: false
-    t.string "type", limit: 15, default: "", null: false
-    t.string "text", limit: 100, default: "", null: false
-    t.text "uri"
-    t.string "submitterName", default: "", null: false
-    t.text "submitterComment"
-    t.string "submitterEmail", default: "", null: false
-    t.timestamp "timestampSubmitted", default: -> { "CURRENT_TIMESTAMP" }, null: false
-    t.timestamp "timestampDecided"
-    t.string "status", limit: 10, default: "", null: false
   end
 
   create_table "ConciseAverageResults", id: false, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
@@ -600,6 +587,19 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_06_165113) do
     t.text "qualification"
     t.index ["competition_id", "event_id"], name: "index_competition_events_on_competition_id_and_event_id", unique: true
     t.index ["event_id"], name: "fk_rails_ba6cfdafb1"
+  end
+
+  create_table "competition_media", id: { type: :integer, unsigned: true }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "competition_id", limit: 32, default: "", null: false
+    t.string "media_type", limit: 15, default: "", null: false
+    t.string "text", limit: 100, default: "", null: false
+    t.text "uri"
+    t.string "submitter_name", default: "", null: false
+    t.text "submitter_comment"
+    t.string "submitter_email", default: "", null: false
+    t.timestamp "submitted_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.timestamp "decided_at"
+    t.string "status", limit: 10, default: "", null: false
   end
 
   create_table "competition_organizers", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
