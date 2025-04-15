@@ -5,7 +5,7 @@ import I18n from '../../lib/i18n';
 import {
   apiV0Urls,
   delegatesPageUrl,
-  teamsCommitteesCouncilsPageUrl,
+  teamsCommitteesPageUrl,
   translatorsPageUrl,
   officersAndBoardPageUrl,
 } from '../../lib/requests/routes.js.erb';
@@ -25,7 +25,7 @@ function badgeParams(role) {
       roleTitle: `${role.group.metadata.friendly_id.toUpperCase()} ${I18n.t(`enums.user_roles.status.${role.group.group_type}.${role.metadata.status}`)}`,
       groupTitle: role.group.name,
       badgeClass: `team-${role.metadata.status.replace('_', '-')}-badge`,
-      url: teamsCommitteesCouncilsPageUrl(role.group.metadata.friendly_id),
+      url: teamsCommitteesPageUrl(role.group.metadata.friendly_id),
     };
   }
   if (role.group.group_type === groupTypes.board) {

@@ -63,7 +63,7 @@ after "development:users", "development:user_roles" do
       event = competition_event.event
       round_types = %w(1 2 f).freeze
 
-      round_types.each_with_index do |roundTypeId, j|
+      round_types.each_with_index do |round_type_id, j|
         round_format = event.preferred_formats.first.format
         is_final = j == round_types.length - 1
 
@@ -87,7 +87,7 @@ after "development:users", "development:user_roles" do
             countryId: person.countryId,
             competitionId: competition.id,
             eventId: event.id,
-            roundTypeId: roundTypeId,
+            roundTypeId: round_type_id,
             formatId: round_format.id,
             regionalSingleRecord: k == 0 ? "WR" : nil,
             regionalAverageRecord: k == 0 ? "WR" : nil,
