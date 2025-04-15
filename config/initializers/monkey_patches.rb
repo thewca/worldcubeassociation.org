@@ -105,10 +105,10 @@ Rails.configuration.to_prepare do
   end
 
   Hash.class_eval do
-    def reject_values_recursive(&blk)
+    def reject_values_recursive(&)
       self.transform_values do |value|
         if value.is_a?(Hash)
-          value.reject_values_recursive(&blk)
+          value.reject_values_recursive(&)
         else
           value
         end
@@ -117,12 +117,12 @@ Rails.configuration.to_prepare do
       end
     end
 
-    def each_recursive(*prefixes, &blk)
+    def each_recursive(*prefixes, &)
       self.each do |key, value|
         next_prefixes = prefixes + [key]
 
         if value.is_a?(Hash)
-          value.each_recursive(*next_prefixes, &blk)
+          value.each_recursive(*next_prefixes, &)
         else
           yield key, value, *prefixes
         end
