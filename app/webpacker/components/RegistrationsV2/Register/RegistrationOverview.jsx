@@ -16,7 +16,7 @@ import RegistrationStatus from './RegistrationStatus';
 import { useRegistration } from '../lib/RegistrationProvider';
 
 export default function RegistrationOverview({
-  nextStep, competitionInfo,
+  stepReducer, competitionInfo,
 }) {
   const dispatch = useDispatch();
   const confirm = useConfirm();
@@ -48,7 +48,7 @@ export default function RegistrationOverview({
       ));
     },
     onSuccess: (data) => {
-      nextStep({ toStart: true });
+      stepReducer({ toStart: true });
       queryClient.setQueryData(
         ['registration', competitionInfo.id, registration.user_id],
         {
@@ -68,7 +68,7 @@ export default function RegistrationOverview({
       .then(() => (deleteAllowed
         ? deleteRegistrationMutation()
         : window.location = contactCompetitionUrl(competitionInfo.id, encodeURIComponent(I18n.t('competitions.registration_v2.update.delete_contact_message')))))
-      .catch(() => nextStep({ refresh: true }));
+      .catch(() => stepReducer({ refresh: true }));
   };
 
   if (isRejected) {
@@ -85,7 +85,7 @@ export default function RegistrationOverview({
       )}
       <Segment loading={isDeleting}>
         <Header>{I18n.t('competitions.nav.menu.registration')}</Header>
-        <Form onSubmit={nextStep} size="large">
+        <Form onSubmit={() => stepReducer({ toCompeting: true })} size="large">
           <List>
             <List.Item>
               <List.Header>

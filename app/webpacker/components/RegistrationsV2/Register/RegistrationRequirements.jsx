@@ -29,12 +29,12 @@ function RegistrationFullMessage({ competitionInfo }) {
   return null;
 }
 
-export default function RegistrationRequirements({ nextStep, competitionInfo }) {
+export default function RegistrationRequirements({ stepReducer, competitionInfo }) {
   const [infoAcknowledged, setInfoAcknowledged] = useCheckboxState(false);
 
   return (
     <Segment basic>
-      <Form onSubmit={nextStep} warning={competitionInfo['registration_full?']}>
+      <Form onSubmit={() => stepReducer({ next: true })} warning={competitionInfo['registration_full?']}>
         <RegistrationFullMessage competitionInfo={competitionInfo} />
         <Message positive>
           <Form.Checkbox

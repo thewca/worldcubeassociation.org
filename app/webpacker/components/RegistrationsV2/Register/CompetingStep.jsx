@@ -52,7 +52,7 @@ const potentialWarnings = (competitionInfo) => {
 };
 
 export default function CompetingStep({
-  nextStep,
+  stepReducer,
   competitionInfo,
   user,
   preferredEvents,
@@ -96,9 +96,9 @@ export default function CompetingStep({
   useEffect(() => {
     if (isPolling && !isProcessing) {
       refetchRegistration();
-      nextStep();
+      stepReducer({ next: true });
     }
-  }, [isPolling, isProcessing, nextStep, refetchRegistration]);
+  }, [isPolling, isProcessing, stepReducer, refetchRegistration]);
 
   const queryClient = useQueryClient();
   const { mutate: updateRegistrationMutation, isPending: isUpdating } = useMutation({
@@ -127,7 +127,7 @@ export default function CompetingStep({
         // i18n-tasks-use t('registrations.flash.updated')
         dispatch(showMessage('registrations.flash.updated', 'positive'));
       }
-      nextStep();
+      stepReducer({ next: true });
     },
   });
 
@@ -219,12 +219,12 @@ export default function CompetingStep({
         window.location = contactCompetitionUrl(competitionInfo.id, encodeURIComponent(I18n.t('competitions.registration_v2.update.update_contact_message', { update_params: updateMessage })));
       }
     }).catch(() => {
-      nextStep();
+      stepReducer({ next: true });
     });
   }, [
     confirm,
     dispatch,
-    nextStep,
+    stepReducer,
     updateRegistrationMutation,
     competitionInfo,
     registration?.user_id,
@@ -420,7 +420,7 @@ export default function CompetingStep({
                   {I18n.t('registrations.update')}
                 </Button>
                 <ButtonOr />
-                <Button secondary onClick={() => nextStep()}>
+                <Button secondary onClick={() => stepReducer({ next: true })}>
                   {I18n.t('competitions.registration_v2.register.view_registration')}
                 </Button>
               </>

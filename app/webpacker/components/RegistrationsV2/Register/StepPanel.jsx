@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useReducer } from 'react';
 import { Step } from 'semantic-ui-react';
 import CompetingStep from './CompetingStep';
 import RegistrationRequirements from './RegistrationRequirements';
@@ -71,24 +71,33 @@ export default function StepPanel({
     return stepList;
   }, [competitionInfo, isRegistered]);
 
-  const [activeIndex, setActiveIndex] = useState(() => {
-    // skip ahead to competingStep if we are processing
-    if (isPolling) {
+  const [activeIndex, dispatchStep] = useReducer(
+    (state, action) => {
+      switch (true) {
+        case action?.refresh: return state;
+        case action?.toStart: return 0;
+        case action?.toCompeting: return steps.findIndex((step) => step === competingStepConfig);
+        case action?.next: return state + 1;
+        case action?.set: return action.index;
+        default: throw Error('unrecognised action');
+      }
+    },
+    null,
+    () => {
+      if (isPolling) {
+        return steps.findIndex((step) => step === competingStepConfig);
+      }
+
+      if (registrationFinished || isAccepted || isRejected) {
+        return steps.findIndex((step) => step === registrationOverviewConfig);
+      }
+
       return steps.findIndex(
-        (step) => step === competingStepConfig,
+        (step) => step === (isRegistered ? paymentStepConfig : requirementsStepConfig),
       );
-    }
-    // Don't show payment panel if a user was accepted (for people with waived payment)
-    if (registrationFinished || isAccepted || isRejected) {
-      return steps.findIndex(
-        (step) => step === (registrationOverviewConfig),
-      );
-    }
-    // If the user has not paid but refreshes the page, we want to display the paymentStep again
-    return steps.findIndex(
-      (step) => step === (isRegistered ? paymentStepConfig : requirementsStepConfig),
-    );
-  });
+    },
+  );
+
   const CurrentStepPanel = steps[activeIndex].component;
   return (
     <>
@@ -110,7 +119,7 @@ export default function StepPanel({
               registrationCurrentlyOpen,
               isRejected,
             )}
-            onClick={() => setActiveIndex(index)}
+            onClick={() => dispatchStep({ set: true, index })}
           >
             <Step.Content>
               <Step.Title>{I18n.t(`${stepConfig.i18nKey}.title`)}</Step.Title>
@@ -126,28 +135,7 @@ export default function StepPanel({
         stripePublishableKey={stripePublishableKey}
         connectedAccountId={connectedAccountId}
         qualifications={qualifications}
-        nextStep={
-          (overwrites = {}) => setActiveIndex((oldActiveIndex) => {
-            if (overwrites?.refresh) {
-              return oldActiveIndex;
-            }
-            if (overwrites?.toStart) {
-              return 0;
-            }
-            if (overwrites?.goBack) {
-              return oldActiveIndex - 1;
-            }
-            const registrationOverviewIndex = steps.findIndex(
-              (step) => step === registrationOverviewConfig,
-            );
-            if (oldActiveIndex === registrationOverviewIndex) {
-              return steps.findIndex(
-                (step) => step === competingStepConfig,
-              );
-            }
-            return oldActiveIndex + 1;
-          })
-      }
+        stepReducer={(action) => dispatchStep(action)}
       />
     </>
   );

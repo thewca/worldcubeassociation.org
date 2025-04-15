@@ -27,7 +27,7 @@ export default function PaymentStep({
   setIsoDonationAmount,
   isoDonationAmount,
   displayAmount,
-  nextStep,
+  stepReducer,
   conversionFetching,
 }) {
   const stripe = useStripe();
@@ -43,9 +43,9 @@ export default function PaymentStep({
     // TODO When we add per Event Payment this logic needs to also check
     //  if an additional payment is needed
     if (registration?.payment?.has_paid) {
-      nextStep();
+      stepReducer({ next: true });
     }
-  }, [nextStep, registration]);
+  }, [stepReducer, registration]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
