@@ -603,12 +603,12 @@ RSpec.describe CompetitionsController do
 
       it "can extend registration close of locked competition when deadline hasn't passed" do
         old_open = 2.days.from_now.change(sec: 0)
-        # respect the fact that February can have exactly 4 weeks
-        # which is potentially colliding with the start_date set in the competition spec factory
-        old_close = 27.days.from_now.change(sec: 0)
+        old_close = 20.days.from_now.change(sec: 0)
         competition.update(confirmed: true, registration_open: old_open, registration_close: old_close)
 
-        new_close = 30.days.from_now.change(sec: 0)
+        # respect the fact that February can have exactly 4 weeks
+        # which is potentially colliding with the start_date set in the competition spec factory
+        new_close = 27.days.from_now.change(sec: 0)
         update_params = build_competition_update(competition, registration: { closingDateTime: new_close })
         patch :update, params: update_params, as: :json
         expect(competition.reload.registration_open).to eq old_open
@@ -775,12 +775,12 @@ RSpec.describe CompetitionsController do
 
       it "can extend registration close of locked competition when deadline hasn't passed" do
         old_open = 2.days.from_now.change(sec: 0)
-        # respect the fact that February can have exactly 4 weeks
-        # which is potentially colliding with the start_date set in the competition spec factory
-        old_close = 27.days.from_now.change(sec: 0)
+        old_close = 20.days.from_now.change(sec: 0)
         competition.update(confirmed: true, registration_open: old_open, registration_close: old_close)
 
-        new_close = 30.days.from_now.change(sec: 0)
+        # respect the fact that February can have exactly 4 weeks
+        # which is potentially colliding with the start_date set in the competition spec factory
+        new_close = 27.days.from_now.change(sec: 0)
         update_params = build_competition_update(competition, registration: { closingDateTime: new_close })
         patch :update, params: update_params, as: :json
         expect(competition.reload.registration_open).to eq old_open

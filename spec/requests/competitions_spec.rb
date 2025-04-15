@@ -376,10 +376,9 @@ RSpec.describe "competitions" do
         end
 
         it 'cannot shorten deadlines even if not yet past' do
-          competition.update!(registration_close: 3.days.from_now)
+          competition.update!(registration_close: 3.days.from_now, waiting_list_deadline_date: 1.week.from_now)
 
-          original_deadline_date = 1.week.from_now
-          competition.update!(waiting_list_deadline_date: original_deadline_date)
+          original_deadline_date = competition.waiting_list_deadline_date
 
           expect(competition.confirmed?).to be true
           new_deadline_date = competition.registration_close + 1.day
