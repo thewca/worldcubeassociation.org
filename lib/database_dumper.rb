@@ -124,54 +124,54 @@ module DatabaseDumper
       ),
     }.freeze,
     "competition_payment_integrations" => :skip_all_rows,
-    "CompetitionsMedia" => {
+    "competition_media" => {
       where_clause: "WHERE status = 'accepted'",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
-          competitionId
-          type
+          competition_id
+          media_type
           text
           uri
-          timestampSubmitted
-          timestampDecided
+          submitted_at
+          decided_at
           status
         ),
         fake_values: {
-          "submitterName" => "'mr. media submitter'",
-          "submitterComment" => "'a comment about this media'",
-          "submitterEmail" => "'mediasubmitter@example.com'",
+          "submitter_name" => "'mr. media submitter'",
+          "submitter_comment" => "'a comment about this media'",
+          "submitter_email" => "'mediasubmitter@example.com'",
         },
       ),
     }.freeze,
-    "ConciseAverageResults" => {
+    "concise_average_results" => {
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           average
-          continentId
-          countryId
+          continent_id
+          country_id
           day
-          eventId
+          event_id
           id
           month
-          personId
-          valueAndId
+          person_id
+          value_and_id
           year
         ),
       ),
     }.freeze,
-    "ConciseSingleResults" => {
+    "concise_single_results" => {
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           best
-          continentId
-          countryId
+          continent_id
+          country_id
           day
-          eventId
+          event_id
           id
           month
-          personId
-          valueAndId
+          person_id
+          value_and_id
           year
         ),
       ),
@@ -247,29 +247,29 @@ module DatabaseDumper
         },
       ),
     }.freeze,
-    "RanksAverage" => {
+    "ranks_average" => {
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
           best
-          continentRank
-          countryRank
-          eventId
-          personId
-          worldRank
+          continent_rank
+          country_rank
+          event_id
+          person_id
+          world_rank
         ),
       ),
     }.freeze,
-    "RanksSingle" => {
+    "ranks_single" => {
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
           best
-          continentRank
-          countryRank
-          eventId
-          personId
-          worldRank
+          continent_rank
+          country_rank
+          event_id
+          person_id
+          world_rank
         ),
       ),
     }.freeze,
@@ -977,27 +977,35 @@ module DatabaseDumper
       ),
     }.freeze,
     "RanksSingle" => {
+      source_table: "ranks_single",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
-          personId
-          eventId
           best
-          worldRank
-          continentRank
-          countryRank
         ),
+        fake_values: {
+          # Copy over column to keep backwards compatibility
+          "personId" => "person_id",
+          "eventId" => "event_id",
+          "worldRank" => "world_rank",
+          "continentRank" => "continent_rank",
+          "countryRank" => "country_rank",
+        },
       ),
     }.freeze,
     "RanksAverage" => {
+      source_table: "ranks_average",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
-          personId
-          eventId
           best
-          worldRank
-          continentRank
-          countryRank
         ),
+        fake_values: {
+          # Copy over column to keep backwards compatibility
+          "personId" => "person_id",
+          "eventId" => "event_id",
+          "worldRank" => "world_rank",
+          "continentRank" => "continent_rank",
+          "countryRank" => "country_rank",
+        },
       ),
     }.freeze,
     "RoundTypes" => {

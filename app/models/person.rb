@@ -6,8 +6,8 @@ class Person < ApplicationRecord
   has_one :user, primary_key: "wca_id", foreign_key: "wca_id"
   has_many :results, primary_key: "wca_id", foreign_key: "personId"
   has_many :competitions, -> { distinct }, through: :results
-  has_many :ranksAverage, primary_key: "wca_id", foreign_key: "personId", class_name: "RanksAverage"
-  has_many :ranksSingle, primary_key: "wca_id", foreign_key: "personId", class_name: "RanksSingle"
+  has_many :ranks_average, primary_key: "wca_id", class_name: "RanksAverage"
+  has_many :ranks_single, primary_key: "wca_id", class_name: "RanksSingle"
 
   enum :gender, User::ALLOWABLE_GENDERS.index_with(&:to_s)
 
@@ -108,10 +108,10 @@ class Person < ApplicationRecord
   end
 
   def likely_delegates
-    all_delegates = competitions.order(:start_date).map(&:staff_delegates).flatten.select(&:any_kind_of_delegate?)
+    all_delegates = competitions.order(:start_date).flat_map(&:staff_delegates).select(&:any_kind_of_delegate?)
     return [] if all_delegates.empty?
 
-    counts_by_delegate = all_delegates.each_with_object(Hash.new(0)) { |d, counts| counts[d] += 1 }
+    counts_by_delegate = all_delegates.group_by(&:itself).transform_values(&:count)
     most_frequent_delegate, _count = counts_by_delegate.max_by { |_delegate, count| count }
     most_recent_delegate = all_delegates.last
 
@@ -137,9 +137,9 @@ class Person < ApplicationRecord
   private def rank_for_event_type(event, type)
     case type
     when :single
-      ranksSingle.find_by(eventId: event.id)
+      ranks_single.find_by(eventId: event.id)
     when :average
-      ranksAverage.find_by(eventId: event.id)
+      ranks_average.find_by(eventId: event.id)
     else
       raise "Unrecognized type #{type}"
     end
@@ -147,7 +147,7 @@ class Person < ApplicationRecord
 
   def world_rank(event, type)
     rank = rank_for_event_type(event, type)
-    rank&.worldRank
+    rank&.world_rank
   end
 
   def best_solve(event, type)
@@ -278,7 +278,7 @@ class Person < ApplicationRecord
   }.freeze
 
   def personal_records
-    [self.ranksAverage, self.ranksSingle].compact.flatten
+    [self.ranks_average, self.ranks_single].compact.flatten
   end
 
   def best_singles_by(target_date)
