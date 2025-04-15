@@ -582,11 +582,8 @@ RSpec.describe "registrations" do
           payment_intent = registration.reload.payment_intents.first
 
           # mimic the user clicking through the interface
-          Stripe::PaymentIntent.confirm(
-            payment_intent.payment_record.stripe_id,
-            { payment_method: 'pm_card_visa' },
-            stripe_account: competition.payment_account_for(:stripe).account_id,
-          )
+          payment_intent.payment_record.confirm_remote_for_test("pm_card_visa")
+
           # mimic the response that Stripe sends to our return_url after completing the checkout UI
           get registration_payment_completion_path(competition.id, :stripe), params: {
             payment_intent: payment_intent.payment_record.stripe_id,
@@ -616,11 +613,7 @@ RSpec.describe "registrations" do
           stripe_account_id = competition.payment_account_for(:stripe).account_id
 
           # mimic the user clicking through the interface
-          Stripe::PaymentIntent.confirm(
-            payment_intent.payment_record.stripe_id,
-            { payment_method: 'pm_card_visa' },
-            stripe_account: stripe_account_id,
-          )
+          payment_intent.payment_record.confirm_remote_for_test("pm_card_visa")
 
           # mimic the response that Stripe sends to our webhook upon payment completion
           post registration_stripe_webhook_path, params: payment_confirmation_webhook_as_json(
@@ -650,11 +643,8 @@ RSpec.describe "registrations" do
           payment_intent = registration.reload.payment_intents.first
 
           # mimic the user clicking through the interface
-          Stripe::PaymentIntent.confirm(
-            payment_intent.payment_record.stripe_id,
-            { payment_method: 'pm_card_visa' },
-            stripe_account: competition.payment_account_for(:stripe).account_id,
-          )
+          payment_intent.payment_record.confirm_remote_for_test("pm_card_visa")
+
           # mimic the response that Stripe sends to our return_url after completing the checkout UI
           get registration_payment_completion_path(competition.id, :stripe), params: {
             payment_intent: payment_intent.payment_record.stripe_id,
@@ -683,11 +673,8 @@ RSpec.describe "registrations" do
           expect(payment_intent.wca_status).not_to eq('succeeded')
 
           # mimic the user clicking through the interface
-          Stripe::PaymentIntent.confirm(
-            payment_intent.payment_record.stripe_id,
-            { payment_method: 'pm_card_visa' },
-            stripe_account: competition.payment_account_for(:stripe).account_id,
-          )
+          payment_intent.payment_record.confirm_remote_for_test("pm_card_visa")
+
           # mimic the response that Stripe sends to our return_url after completing the checkout UI
           get registration_payment_completion_path(competition.id, :stripe), params: {
             payment_intent: payment_intent.payment_record.stripe_id,
@@ -718,11 +705,8 @@ RSpec.describe "registrations" do
           # but we cannot do that programmatically. So we just take the status quo as "stuck in SCA". (See also comment below)
           expect {
             # mimic the user clicking through the interface
-            Stripe::PaymentIntent.confirm(
-              payment_intent.payment_record.stripe_id,
-              { payment_method: 'pm_card_authenticationRequired' },
-              stripe_account: competition.payment_account_for(:stripe).account_id,
-            )
+            payment_intent.payment_record.confirm_remote_for_test("pm_card_authenticationRequired")
+
             # mimic the response that Stripe sends to our return_url after completing the checkout UI
             get registration_payment_completion_path(competition.id, :stripe), params: {
               payment_intent: payment_intent.payment_record.stripe_id,
@@ -751,11 +735,7 @@ RSpec.describe "registrations" do
           expect(payment_intent.confirmed_at).to be_nil
 
           # mimic the user clicking through the interface
-          Stripe::PaymentIntent.confirm(
-            payment_intent.payment_record.stripe_id,
-            { payment_method: 'pm_card_authenticationRequired' },
-            stripe_account: competition.payment_account_for(:stripe).account_id,
-          )
+          payment_intent.payment_record.confirm_remote_for_test("pm_card_authenticationRequired")
 
           # mimic the response that Stripe sends to our return_url after completing the checkout UI
           get registration_payment_completion_path(competition.id, :stripe), params: {
@@ -786,11 +766,7 @@ RSpec.describe "registrations" do
 
           expect {
             # mimic the user clicking through the interface
-            Stripe::PaymentIntent.confirm(
-              payment_intent.payment_record.stripe_id,
-              { payment_method: 'pm_card_visa_chargeDeclined' },
-              stripe_account: competition.payment_account_for(:stripe).account_id,
-            )
+            payment_intent.payment_record.confirm_remote_for_test("pm_card_visa_chargeDeclined")
           }.to raise_error(Stripe::StripeError, "Your card was declined.")
 
           expect {
@@ -816,11 +792,7 @@ RSpec.describe "registrations" do
 
           expect {
             # mimic the user clicking through the interface
-            Stripe::PaymentIntent.confirm(
-              payment_intent.payment_record.stripe_id,
-              { payment_method: 'pm_card_visa_chargeDeclinedExpiredCard' },
-              stripe_account: competition.payment_account_for(:stripe).account_id,
-            )
+            payment_intent.payment_record.confirm_remote_for_test("pm_card_visa_chargeDeclinedExpiredCard")
           }.to raise_error(Stripe::StripeError, "Your card has expired.")
 
           expect {
@@ -846,11 +818,7 @@ RSpec.describe "registrations" do
 
           expect {
             # mimic the user clicking through the interface
-            Stripe::PaymentIntent.confirm(
-              payment_intent.payment_record.stripe_id,
-              { payment_method: 'pm_card_visa_chargeDeclinedIncorrectCvc' },
-              stripe_account: competition.payment_account_for(:stripe).account_id,
-            )
+            payment_intent.payment_record.confirm_remote_for_test("pm_card_visa_chargeDeclinedIncorrectCvc")
           }.to raise_error(Stripe::StripeError, "Your card's security code is incorrect.")
 
           expect {
@@ -876,11 +844,7 @@ RSpec.describe "registrations" do
 
           expect {
             # mimic the user clicking through the interface
-            Stripe::PaymentIntent.confirm(
-              payment_intent.payment_record.stripe_id,
-              { payment_method: 'pm_card_radarBlock' },
-              stripe_account: competition.payment_account_for(:stripe).account_id,
-            )
+            payment_intent.payment_record.confirm_remote_for_test("pm_card_radarBlock")
           }.to raise_error(Stripe::StripeError, "Your card was declined.")
 
           expect {
@@ -906,11 +870,8 @@ RSpec.describe "registrations" do
 
           expect {
             # mimic the user clicking through the interface
-            Stripe::PaymentIntent.confirm(
-              payment_intent.payment_record.stripe_id,
-              { payment_method: 'pm_card_authenticationRequiredChargeDeclinedInsufficientFunds' },
-              stripe_account: competition.payment_account_for(:stripe).account_id,
-            )
+            payment_intent.payment_record.confirm_remote_for_test("pm_card_authenticationRequiredChargeDeclinedInsufficientFunds")
+
             # mimick the response that Stripe sends to our return_url after completing the checkout UI
             get registration_payment_completion_path(competition.id, :stripe), params: {
               payment_intent: payment_intent.payment_record.stripe_id,
@@ -940,11 +901,7 @@ RSpec.describe "registrations" do
 
           expect {
             # mimic the user clicking through the interface
-            Stripe::PaymentIntent.confirm(
-              payment_intent.payment_record.stripe_id,
-              { payment_method: 'pm_card_visa_chargeDeclined' },
-              stripe_account: competition.payment_account_for(:stripe).account_id,
-            )
+            payment_intent.payment_record.confirm_remote_for_test("pm_card_visa_chargeDeclined")
           }.to raise_error(Stripe::StripeError, "Your card was declined.")
 
           # mimick the response that Stripe sends to our return_url after completing the checkout UI
@@ -982,11 +939,7 @@ RSpec.describe "registrations" do
 
           expect {
             # mimic the user clicking through the interface
-            Stripe::PaymentIntent.confirm(
-              payment_intent.payment_record.stripe_id,
-              { payment_method: 'pm_card_visa_chargeDeclined' },
-              stripe_account: competition.payment_account_for(:stripe).account_id,
-            )
+            payment_intent.payment_record.confirm_remote_for_test("pm_card_visa_chargeDeclined")
           }.to raise_error(Stripe::StripeError, "Your card was declined.")
 
           # mimick the response that Stripe sends to our return_url after completing the checkout UI
@@ -1029,11 +982,7 @@ RSpec.describe "registrations" do
 
           expect {
             # mimic the user clicking through the interface
-            Stripe::PaymentIntent.confirm(
-              payment_intent.payment_record.stripe_id,
-              { payment_method: 'pm_card_visa_chargeDeclined' },
-              stripe_account: competition.payment_account_for(:stripe).account_id,
-            )
+            payment_intent.payment_record.confirm_remote_for_test("pm_card_visa_chargeDeclined")
           }.to raise_error(Stripe::StripeError, "Your card was declined.")
 
           # mimick the response that Stripe sends to our return_url after completing the checkout UI
@@ -1076,11 +1025,7 @@ RSpec.describe "registrations" do
           first_pi_parameters = payment_intent.payment_record.parameters
 
           # mimic the user clicking through the interface
-          Stripe::PaymentIntent.confirm(
-            payment_intent.payment_record.stripe_id,
-            { payment_method: 'pm_card_visa' },
-            stripe_account: competition.payment_account_for(:stripe).account_id,
-          )
+          payment_intent.payment_record.confirm_remote_for_test("pm_card_visa")
 
           # mimick the response that Stripe sends to our return_url after completing the checkout UI
           get registration_payment_completion_path(competition.id, :stripe), params: {
