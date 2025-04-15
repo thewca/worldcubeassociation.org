@@ -5,7 +5,7 @@ class RanksAverage < ApplicationRecord
   # ActiveRecord inflects the last word, so by default, this would be 'ranks_averages'
   self.table_name = 'ranks_average'
 
-  belongs_to :event, foreign_key: "eventId"
+  belongs_to :event
 
   def to_wcif
     rank_to_wcif("average")

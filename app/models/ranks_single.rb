@@ -5,7 +5,7 @@ class RanksSingle < ApplicationRecord
   # ActiveRecord inflects the last word, so by default, this would be 'ranks_singles'
   self.table_name = 'ranks_single'
 
-  belongs_to :event, foreign_key: "eventId"
+  belongs_to :event
 
   def to_wcif
     rank_to_wcif("single")

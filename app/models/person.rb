@@ -6,8 +6,8 @@ class Person < ApplicationRecord
   has_one :user, primary_key: "wca_id", foreign_key: "wca_id"
   has_many :results, primary_key: "wca_id", foreign_key: "personId"
   has_many :competitions, -> { distinct }, through: :results
-  has_many :ranks_average, primary_key: "wca_id", foreign_key: "person_id", class_name: "RanksAverage"
-  has_many :ranks_single, primary_key: "wca_id", foreign_key: "person_id", class_name: "RanksSingle"
+  has_many :ranks_average, primary_key: "wca_id", class_name: "RanksAverage"
+  has_many :ranks_single, primary_key: "wca_id", class_name: "RanksSingle"
 
   enum :gender, User::ALLOWABLE_GENDERS.index_with(&:to_s)
 
