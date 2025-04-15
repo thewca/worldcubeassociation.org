@@ -11,64 +11,37 @@ const requirementsStepConfig = {
   key: 'requirements',
   i18nKey: 'competitions.registration_v2.register.panel.requirements',
   component: RegistrationRequirements,
+  shouldShowCompleted: (isRegistered, hasPaid, isAccepted, index) => index > 0,
+  shouldBeDisabled: (hasPaid, activeIndex) => activeIndex !== 0,
 };
 
 const competingStepConfig = {
   key: 'competing',
   i18nKey: 'competitions.registration_v2.register.panel.competing',
   component: CompetingStep,
+  shouldShowCompleted: (isRegistered) => isRegistered,
+  shouldBeDisabled: (hasPaid, activeIndex, index) => index > activeIndex,
 };
 
 const paymentStepConfig = {
   key: 'payment',
   i18nKey: 'competitions.registration_v2.register.panel.payment',
   component: StripeWrapper,
+  shouldShowCompleted: (isRegistered, hasPaid) => hasPaid,
+  shouldBeDisabled: (
+    hasPaid,
+    activeIndex,
+    index,
+    registrationCurrentlyOpen,
+  ) => (!hasPaid && index > activeIndex) || !registrationCurrentlyOpen,
 };
 
 const registrationOverviewConfig = {
   key: 'approval',
   i18nKey: 'competitions.registration_v2.register.panel.approval',
   component: RegistrationOverview,
-};
-
-const shouldShowCompleted = (isRegistered, hasPaid, isAccepted, key, index) => {
-  if (key === paymentStepConfig.key) {
-    return hasPaid;
-  }
-  if (key === competingStepConfig.key) {
-    return isRegistered;
-  }
-  if (key === requirementsStepConfig.key) {
-    return index > 0;
-  }
-  if (key === registrationOverviewConfig.key) {
-    return isAccepted;
-  }
-  return false;
-};
-
-const shouldBeDisabled = (
-  hasPaid,
-  key,
-  activeIndex,
-  index,
-  registrationCurrentlyOpen,
-  isRejected,
-) => {
-  if (isRejected) {
-    return true;
-  }
-
-  if (key === paymentStepConfig.key) {
-    return (!hasPaid && index > activeIndex) || !registrationCurrentlyOpen;
-  }
-  if (key === competingStepConfig.key) {
-    return index > activeIndex;
-  }
-  if (key === requirementsStepConfig.key) {
-    return activeIndex !== 0;
-  }
-  return false;
+  shouldShowCompleted: (isRegistered, hasPaid, isAccepted) => isAccepted,
+  shouldBeDisabled: () => false,
 };
 
 export default function StepPanel({
@@ -116,8 +89,7 @@ export default function StepPanel({
       (step) => step === (isRegistered ? paymentStepConfig : requirementsStepConfig),
     );
   });
-  const CurrentStepPanel = activeIndex === registrationOverviewConfig.index
-    ? RegistrationOverview : steps[activeIndex].component;
+  const CurrentStepPanel = steps[activeIndex].component;
   return (
     <>
       <Step.Group fluid ordered stackable="tablet">
@@ -125,16 +97,14 @@ export default function StepPanel({
           <Step
             key={stepConfig.key}
             active={activeIndex === index}
-            completed={shouldShowCompleted(
+            completed={stepConfig.shouldShowCompleted(
               isRegistered,
               hasPaid,
               isAccepted,
-              stepConfig.key,
               activeIndex,
             )}
-            disabled={shouldBeDisabled(
+            disabled={isRejected || stepConfig.shouldBeDisabled(
               hasPaid,
-              stepConfig.key,
               activeIndex,
               index,
               registrationCurrentlyOpen,
