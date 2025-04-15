@@ -22,7 +22,6 @@ export default function StripeWrapper({
   stripePublishableKey,
   connectedAccountId,
   user,
-  stepReducer,
 }) {
   const [stripePromise, setStripePromise] = useState(null);
   const initialAmount = competitionInfo.base_entry_fee_lowest_denomination;
@@ -68,7 +67,6 @@ export default function StripeWrapper({
             isoDonationAmount={isoDonationAmount}
             displayAmount={data?.human_amount}
             registration={registration}
-            stepReducer={stepReducer}
             conversionFetching={isFetching}
           />
         </Elements>

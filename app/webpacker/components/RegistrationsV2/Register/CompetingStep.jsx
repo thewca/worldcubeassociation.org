@@ -29,6 +29,7 @@ import { eventQualificationToString } from '../../../lib/utils/wcif';
 import { hasNotPassed } from '../../../lib/utils/dates';
 import { useRegistration } from '../lib/RegistrationProvider';
 import useSet from '../../../lib/hooks/useSet';
+import { useSteps } from '../lib/StepProvider';
 
 const maxCommentLength = 240;
 
@@ -52,12 +53,12 @@ const potentialWarnings = (competitionInfo) => {
 };
 
 export default function CompetingStep({
-  stepReducer,
   competitionInfo,
   user,
   preferredEvents,
   qualifications,
 }) {
+  const { nextStep } = useSteps();
   const maxEvents = competitionInfo.events_per_registration_limit ?? Infinity;
   const {
     registration, isRegistered, hasPaid, isPolling, isProcessing, startPolling, refetchRegistration,
@@ -96,9 +97,9 @@ export default function CompetingStep({
   useEffect(() => {
     if (isPolling && !isProcessing) {
       refetchRegistration();
-      stepReducer({ next: true });
+      nextStep();
     }
-  }, [isPolling, isProcessing, stepReducer, refetchRegistration]);
+  }, [isPolling, isProcessing, nextStep, refetchRegistration]);
 
   const queryClient = useQueryClient();
   const { mutate: updateRegistrationMutation, isPending: isUpdating } = useMutation({
@@ -127,7 +128,7 @@ export default function CompetingStep({
         // i18n-tasks-use t('registrations.flash.updated')
         dispatch(showMessage('registrations.flash.updated', 'positive'));
       }
-      stepReducer({ next: true });
+      nextStep();
     },
   });
 
@@ -219,12 +220,11 @@ export default function CompetingStep({
         window.location = contactCompetitionUrl(competitionInfo.id, encodeURIComponent(I18n.t('competitions.registration_v2.update.update_contact_message', { update_params: updateMessage })));
       }
     }).catch(() => {
-      stepReducer({ next: true });
+      nextStep();
     });
   }, [
     confirm,
     dispatch,
-    stepReducer,
     updateRegistrationMutation,
     competitionInfo,
     registration?.user_id,
@@ -420,7 +420,7 @@ export default function CompetingStep({
                   {I18n.t('registrations.update')}
                 </Button>
                 <ButtonOr />
-                <Button secondary onClick={() => stepReducer({ next: true })}>
+                <Button secondary onClick={nextStep}>
                   {I18n.t('competitions.registration_v2.register.view_registration')}
                 </Button>
               </>

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
-  skip_before_action :validate_jwt_token, only: [:list]
+  skip_before_action :validate_jwt_token, only: [:list, :config]
   # The order of the validations is important to not leak any non public info via the API
   # That's why we should always validate a request first, before taking any other before action
   # before_actions are triggered in the order they are defined
@@ -40,6 +40,11 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
   def show
     registration = Registration.find_by!(user_id: @user_id, competition_id: @competition_id)
     render json: registration.to_v2_json(admin: true, history: true)
+  end
+
+  def config
+    @competition = Competition.find(params[:competition_id])
+    render json: ['requirements', 'competing']
   end
 
   def create
