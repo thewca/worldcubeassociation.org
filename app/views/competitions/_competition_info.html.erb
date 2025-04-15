@@ -53,7 +53,7 @@
       </dd>
     </dl>
 
-    <% if @competition.has_schedule? %>
+    <% if @competition.any_venues? %>
       <dl class="dl-horizontal">
         <dt><%= ui_icon("print") %></dt>
         <dd>
@@ -166,7 +166,7 @@
       <% end %>
       <dt><%= t '.registration_requirements' %></dt>
       <dd>
-        <% collapse = @competition.is_probably_over? %>
+        <% collapse = @competition.probably_over? %>
         <% if collapse %>
           <div id="show_registration_requirements">
             <%= t('competitions.competition_info.click_to_display_requirements_html', link_here: link_to(t('common.here'), "#")) %>

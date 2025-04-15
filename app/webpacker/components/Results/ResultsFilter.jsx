@@ -95,6 +95,9 @@ export default function ResultsFilter({
             <Header as="h6">{I18n.t('results.selector_elements.show_selector.show')}</Header>
             <ButtonGroup compact color="teal" widths={showCategories.length}>
               {showCategories.map((category) => (
+                // i18n-tasks-use t('results.selector_elements.show_selector.persons')
+                // i18n-tasks-use t('results.selector_elements.show_selector.results')
+                // i18n-tasks-use t('results.selector_elements.show_selector.by_region')
                 <Button key={category} active={show === category} onClick={() => setShow(category)}>{I18n.t(`results.selector_elements.show_selector.${_.snakeCase(category.replace(/^\d+/, '').trim())}`)}</Button>
               ))}
             </ButtonGroup>

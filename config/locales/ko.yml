@@ -2475,7 +2475,7 @@ ko:
       use_stripe_below_html: 참가 신청 후 참가비는 아래의 Stripe를 통해 지불해야 합니다.
       #original_hash: d6bab8f
       refund_policy_html: >-
-        %{limit_date_and_time} 전에 참가 신청을 취소하면 참가비의 %{refund_policy_percent}이(가)
+        %{limit_date_and_time} 전에 참가 신청을 취소하면 참가비의 %{refund_policy_percent}가
         환불됩니다.
       #original_hash: 4aca553
       no_refunds: 참가비는 어떠한 경우에도 환불되지 않습니다.
@@ -2509,7 +2509,7 @@ ko:
       #original_hash: 35f892a
       guest_limit:
         zero: 선수는 관람객을 데려올 수 없습니다.
-        other: '선수는 최대 %{count}명의 관람객을 데려올 수 있습니다.'
+        other: '선수는 최대 %{count}명의 관람객을 동반할 수 있습니다.'
       #original_hash: bad09c8
       event_limit:
         zero: '선수는 최대 %{count}개의 종목에만 참가 신청할 수 있습니다.'
@@ -2542,17 +2542,17 @@ ko:
       #original_hash: f691bf2
       result: 결과
       #original_hash: acab754
-      single: 단일 솔브
+      single: 단일 기록
       #original_hash: e78d7c2
-      average: 평균
+      average: 평균 기록
       #original_hash: 083c83e
       mean: 평균
       #original_hash: 22bee3a
-      result_sentence: '%{result}의 %{a_win_by_word}(으)로'
+      result_sentence: '%{result}의 %{a_win_by_word}으로'
       #original_hash: 756603f
       no_winner: '주 종목은 %{event_name}이었습니다. 종목에서 완성된 결과를 달성한 선수가 없었기 때문에 우승자가 선언되지 않았습니다.'
       #original_hash: 6c3b236
-      winner: '%{winner}이(가) %{event_name} 종목에서 %{result_sentence}(으)로 우승하였습니다.'
+      winner: '%{winner}이(가) %{event_name} 종목에서 %{result_sentence} 우승하였습니다.'
       #original_hash: ec7f18a
       first_runner_up: '%{first_runner_up}이(가) 2위를 차지(%{first_runner_up_result})'
       #original_hash: cffa50a
@@ -3844,18 +3844,10 @@ ko:
     filters_fixes_underway: >-
       일부 필터(예: 지난 해)는 일시적으로 비활성화되어 있습니다. 소프트웨어 팀은 이러한 필터를 복구하기 위해 노력하고 있습니다. 불편을
       끼쳐드려 죄송합니다.
-    #original_hash: e3710ed
-    tooltip_no_years: 저희의 데이터베이스가 너무 커서 과거 데이터를 산출할 수 없습니다
-    #original_hash: 357094b
-    tooltip_no_quantities: 저희의 데이터베이스가 너무 커서 긴 순위 목록을 산출할 수 없습니다
     selector_elements:
       events_selector:
         #original_hash: ad8919a
         event: 종목
-        #original_hash: 3e83afa
-        all_events: 모든 종목
-      #original_hash: 0f21717
-      region: 지역
       type_selector:
         #original_hash: 3deb745
         type: 유형
@@ -3863,30 +3855,13 @@ ko:
         single: 단일
         #original_hash: 15f86c0
         average: 평균
-      years_selector:
-        #original_hash: 96f997b
-        years: 연도
-        #original_hash: 0977c76
-        all_years: 모든 연도
-        #original_hash: 8737f09
-        only: 만
-        #original_hash: b3c0fe7
-        only_html: '%{year}년만'
-        #original_hash: 96bdb66
-        until: 까지
-        #original_hash: fa23930
-        until_html: '%{year}년까지'
       show_selector:
         #original_hash: d97d1ee
         show: 보기
         #original_hash: f3cf96e
         persons: 선수
-        #original_hash: 16d3376
-        persons_html: '%{quantity}명의 선수'
         #original_hash: 612e12d
         results: 결과
-        #original_hash: f3baa4a
-        results_html: '%{quantity}개의 결과'
         #original_hash: d46d2ee
         by_region: 지역
         #original_hash: c0dcb86
@@ -3913,8 +3888,6 @@ ko:
       name: 성명
       #original_hash: 5faa59d
       result: 결과
-      #original_hash: fa4c045
-      representing: 대표 지역
       #original_hash: 1917f4f
       competition: 대회
       #original_hash: e7f6fc5
@@ -3923,19 +3896,10 @@ ko:
       region: 지역
       #original_hash: 70c07ec
       world: 세계
-      type_options:
-        #original_hash: 3deb745
-        type: 유형
-        #original_hash: dd11868
-        single: 단일
-        #original_hash: 15f86c0
-        average: 평균
       #original_hash: ad8919a
       event: 종목
       #original_hash: dcf8b56
       date_circa: 대략적인 날짜
-      #original_hash: 1c54132
-      record: 기록
   notifications:
     #original_hash: 10bcdbd
     connect_wca_id: WCA 계정과 WCA ID를 연결하십시오!

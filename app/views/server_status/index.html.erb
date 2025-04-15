@@ -21,7 +21,7 @@
   <% end %>
 
   <% @checks.each do |check| %>
-    <% kind_class = check.is_passing? ? "success" : "danger" %>
+    <% kind_class = check.passing? ? "success" : "danger" %>
     <div class="panel panel-<%= kind_class %>">
       <div class="panel-heading">
         <h3 class="panel-title">
