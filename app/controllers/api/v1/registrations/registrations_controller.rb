@@ -43,8 +43,8 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
   end
 
   def registration_config
-    #competition = Competition.find(params[:competition_id])
-    render json: ['requirements', 'competing'], status: :ok
+    competition = Competition.find(params[:competition_id])
+    render json: ['requirements', 'competing', 'payment', 'approval'], status: :ok
   end
 
   def create

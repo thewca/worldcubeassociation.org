@@ -84,22 +84,26 @@ export default function StepProvider({ competitionInfo, children }) {
     },
     null,
     () => {
-      if (isPolling) {
-        return steps.findIndex((step) => step === competingStepConfig);
-      }
+      if (registrationConfig) {
+        if (isPolling) {
+          return steps.findIndex((step) => step === competingStepConfig);
+        }
 
-      if (registrationFinished || isAccepted || isRejected) {
-        return steps.findIndex((step) => step === registrationOverviewConfig);
-      }
+        if (registrationFinished || isAccepted || isRejected) {
+          return steps.findIndex((step) => step === registrationOverviewConfig);
+        }
 
-      return steps.findIndex(
-        (step) => step === (isRegistered ? paymentStepConfig : requirementsStepConfig),
-      );
+        return steps.findIndex(
+          (step) => step === (isRegistered ? paymentStepConfig : requirementsStepConfig),
+        );
+      }
+      return 0;
     },
   );
 
   const CurrentStepPanel = useMemo(() => {
     if (steps.length > 0) {
+      console.log(steps);
       return steps[activeIndex].component;
     }
     return null;
