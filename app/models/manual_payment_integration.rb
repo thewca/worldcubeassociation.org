@@ -47,7 +47,7 @@ class ManualPaymentIntegration < ApplicationRecord
   end
 
   def account_details
-    serializable_hash({ only: [:payment_information, :payment_reference]})
+    serializable_hash(only: [:payment_information, :payment_reference])
   end
 
   def self.connect_integration(params)
