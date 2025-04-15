@@ -1184,16 +1184,16 @@ RSpec.describe CompetitionsController do
       end
 
       it 'bookmarks a competition' do
-        expect(user.is_bookmarked?(competition)).to be false
+        expect(user.competition_bookmarked?(competition)).to be false
         post :bookmark, params: { id: competition.id }
-        expect(user.is_bookmarked?(competition)).to be true
+        expect(user.competition_bookmarked?(competition)).to be true
       end
 
       it 'unbookmarks a competition' do
         post :bookmark, params: { id: competition.id }
-        expect(user.is_bookmarked?(competition)).to be true
+        expect(user.competition_bookmarked?(competition)).to be true
         post :unbookmark, params: { id: competition.id }
-        expect(user.is_bookmarked?(competition)).to be false
+        expect(user.competition_bookmarked?(competition)).to be false
       end
     end
   end

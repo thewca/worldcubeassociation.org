@@ -5,7 +5,7 @@ class ServerStatusController < ApplicationController
     @locale_stats = ApplicationController.locale_counts.sort_by { |_locale, count| count }.reverse
 
     @checks = checks
-    @everything_good = @checks.all?(&:is_passing?)
+    @everything_good = @checks.all?(&:passing?)
     render status: :service_unavailable unless @everything_good
   end
 
@@ -19,7 +19,7 @@ class ServerStatusController < ApplicationController
 end
 
 class StatusCheck
-  def is_passing?
+  def passing?
     status == :success
   end
 

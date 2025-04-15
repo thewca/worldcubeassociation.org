@@ -50,11 +50,16 @@ class Api::V0::PersonsController < Api::V0::ApiController
     {
       person: person.serializable_hash(only: [:wca_id, :name, :url, :gender, :country_iso2, :delegate_status, :teams, :avatar], private_attributes: private_attributes),
       competition_count: person.competitions.count,
-      personal_records: person.ranksSingle.each_with_object({}) do |rank_single, ranks|
-        event_id = rank_single.event.id
-        rank_average = person.ranksAverage.find { |rank| rank.event_id == event_id }
-        ranks[event_id] = { single: rank_to_json(rank_single) }
-        ranks[event_id][:average] = rank_to_json(rank_average) if rank_average
+      personal_records: person.ranksSingle.index_by(&:event_id).transform_values do |rank_single|
+        # This rank may be nil: A person can have a single but not an average.
+        # The other way around however (average with no single) is not possible,
+        #   and that's why we use `ranksSingle` as a base for computing our lookup.
+        rank_average = person.ranksAverage.find { |rank| rank.event_id == rank_single.event_id }
+
+        {
+          single: rank_single,
+          average: rank_average,
+        }.compact
       end,
       medals: person.medals,
       records: person.records,
