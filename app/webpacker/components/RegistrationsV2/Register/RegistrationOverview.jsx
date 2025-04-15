@@ -14,7 +14,7 @@ import { useConfirm } from '../../../lib/providers/ConfirmProvider';
 import { contactCompetitionUrl } from '../../../lib/requests/routes.js.erb';
 import RegistrationStatus from './RegistrationStatus';
 import { useRegistration } from '../lib/RegistrationProvider';
-import { useSteps } from '../lib/StepProvider';
+import useSteps from '../hooks/useSteps';
 
 export default function RegistrationOverview({
   competitionInfo,
@@ -23,7 +23,7 @@ export default function RegistrationOverview({
   const confirm = useConfirm();
   const { registration, isRejected, isAccepted } = useRegistration();
   const {
-    nextStep, jumpToStart, jumpToStepByKey, refreshStep,
+    jumpToStart, jumpToStepByKey, refreshStep,
   } = useSteps();
 
   const hasRegistrationEditDeadlinePassed = hasPassed(

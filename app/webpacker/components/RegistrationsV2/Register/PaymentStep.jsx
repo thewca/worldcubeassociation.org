@@ -21,7 +21,7 @@ import { hasPassed } from '../../../lib/utils/dates';
 import AutonumericField from '../../wca/FormBuilder/input/AutonumericField';
 import getPaymentTicket from '../api/payment/get/getPaymentTicket';
 import { useRegistration } from '../lib/RegistrationProvider';
-import { useSteps } from '../lib/StepProvider';
+import useSteps from '../hooks/useSteps';
 
 export default function PaymentStep({
   competitionInfo,

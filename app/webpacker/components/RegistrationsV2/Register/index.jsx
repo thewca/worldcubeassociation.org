@@ -12,7 +12,8 @@ import { hasNotPassed, hasPassed } from '../../../lib/utils/dates';
 import RegistrationNotAllowedMessage from './RegistrationNotAllowedMessage';
 import RegistrationClosingMessage from './RegistrationClosingMessage';
 import usePerpetualState from '../hooks/usePerpetualState';
-import StepProvider, { useSteps } from '../lib/StepProvider';
+import StepProvider from '../lib/StepProvider';
+import useSteps from '../hooks/useSteps';
 
 // The following states should show the Panel even when registration is already closed.
 //   (You can think of this as "is there a non-cancelled, non-rejected registration?)

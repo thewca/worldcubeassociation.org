@@ -29,7 +29,7 @@ import { eventQualificationToString } from '../../../lib/utils/wcif';
 import { hasNotPassed } from '../../../lib/utils/dates';
 import { useRegistration } from '../lib/RegistrationProvider';
 import useSet from '../../../lib/hooks/useSet';
-import { useSteps } from '../lib/StepProvider';
+import useSteps from '../hooks/useSteps';
 
 const maxCommentLength = 240;
 

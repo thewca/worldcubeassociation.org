@@ -353,7 +353,7 @@ Rails.application.routes.draw do
         patch '/register', to: 'registrations#update'
         patch '/bulk_update', to: 'registrations#bulk_update'
         get '/:competition_id', to: 'registrations#list'
-        get '/:competition_id/config', to: 'registrations#config', as: :config
+        get '/:competition_id/config', to: 'registrations#registration_config', as: :registration_config
         get '/:competition_id/admin', to: 'registrations#list_admin', as: :list_admin
         get '/:competition_id/payment', to: 'registrations#payment_ticket', as: :payment_ticket
       end

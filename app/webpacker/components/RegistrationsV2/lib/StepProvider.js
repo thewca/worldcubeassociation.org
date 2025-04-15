@@ -1,5 +1,5 @@
 import React, {
-  createContext, useContext, useMemo, useReducer,
+  createContext, useMemo, useReducer,
 } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useRegistration } from './RegistrationProvider';
@@ -9,7 +9,7 @@ import CompetingStep from '../Register/CompetingStep';
 import StripeWrapper from '../Register/StripeWrapper';
 import RegistrationOverview from '../Register/RegistrationOverview';
 
-const StepContext = createContext();
+export const StepContext = createContext();
 
 const requirementsStepConfig = {
   key: 'requirements',
@@ -57,7 +57,7 @@ export default function StepProvider({ competitionInfo, children }) {
   } = useRegistration();
 
   const { data: registrationConfig, isLoading } = useQuery({
-    queryFn: getRegistrationConfig,
+    queryFn: () => getRegistrationConfig(competitionInfo),
     queryKey: ['registration-config', competitionInfo.id],
   });
 
@@ -65,7 +65,7 @@ export default function StepProvider({ competitionInfo, children }) {
 
   const steps = useMemo(() => {
     if (registrationConfig) {
-      return availableSteps.map(
+      return availableSteps.filter(
         (stepConfig) => registrationConfig.includes(stepConfig.key),
       );
     }
@@ -103,7 +103,7 @@ export default function StepProvider({ competitionInfo, children }) {
       return steps[activeIndex].component;
     }
     return null;
-  });
+  }, [activeIndex, steps]);
 
   const value = useMemo(() => ({
     steps,
@@ -120,11 +120,7 @@ export default function StepProvider({ competitionInfo, children }) {
     }),
     activeIndex,
     isLoading,
-  }), [
-    activeIndex,
-    isLoading,
-    steps,
-  ]);
+  }), [CurrentStepPanel, activeIndex, isLoading, steps]);
 
   return (
     <StepContext.Provider value={value}>
@@ -132,11 +128,3 @@ export default function StepProvider({ competitionInfo, children }) {
     </StepContext.Provider>
   );
 }
-
-export const useSteps = () => {
-  const context = useContext(StepContext);
-  if (!context) {
-    throw new Error('useSteps must be used within a StepsProvider');
-  }
-  return context;
-};
