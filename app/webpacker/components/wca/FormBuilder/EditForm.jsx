@@ -167,13 +167,13 @@ export default function Wrapper({
   footerActions = [],
   saveButtonText = null,
   globalDisabled = false,
-  globalAllowDisabledOverride = true,
+  globalAllowIgnoreDisabled = true,
 }) {
   return (
     <FormObjectProvider
       initialObject={initialObject}
       globalDisabled={globalDisabled}
-      globalAllowDisabledOverride={globalAllowDisabledOverride}
+      globalAllowIgnoreDisabled={globalAllowIgnoreDisabled}
     >
       <EditForm
         saveMutation={saveMutation}

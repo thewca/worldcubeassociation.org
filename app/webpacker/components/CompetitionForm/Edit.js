@@ -86,7 +86,7 @@ function EditCompetition({
     return isConfirmed && !isAdminView;
   }, [confirmationData, isAdminView, isLoading]);
 
-  const allowsDisabledOverride = useMemo(() => {
+  const allowIgnoreDisabled = useMemo(() => {
     const { staff: { staffDelegateIds, traineeDelegateIds } } = competition;
     const allDelegates = [...staffDelegateIds, ...traineeDelegateIds];
 
@@ -109,7 +109,7 @@ function EditCompetition({
         footerActions={footerActions}
         saveButtonText={I18n.t('competitions.competition_form.submit_update_value')}
         globalDisabled={isDisabled}
-        globalAllowDisabledOverride={allowsDisabledOverride}
+        globalAllowIgnoreDisabled={allowIgnoreDisabled}
       >
         <MainForm storedEvents={storedEvents} />
       </EditForm>

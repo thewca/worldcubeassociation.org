@@ -494,7 +494,7 @@ class CompetitionsController < ApplicationController
   def create
     competition = Competition.new
 
-    form_data = competition_form_params
+    form_data = params_for_competition_form
     competition.set_form_data(form_data, current_user)
 
     if competition.save
@@ -520,7 +520,7 @@ class CompetitionsController < ApplicationController
 
     old_organizers = competition.organizers.to_a
 
-    form_data = competition_form_params
+    form_data = params_for_competition_form
 
     #####
     # HACK BECAUSE WE DON'T HAVE PERSISTENT COMPETITION IDS
@@ -591,7 +591,7 @@ class CompetitionsController < ApplicationController
     end
   end
 
-  private def competition_form_params
+  private def params_for_competition_form
     # we're quite lax about reading params, because set_form_data! on the competition object does a comprehensive JSON-Schema check.
     #   Also, listing _all_ the possible params to `permit` here is annoying because the Competition model has _way_ too many columns.
     #   So we "only" remove the ActionController values, as well as all route params manually.

@@ -19,7 +19,7 @@ import { IdWcaSearch } from '../../../SearchWidget/WcaSearch';
 import SEARCH_MODELS from '../../../SearchWidget/SearchModel';
 import {
   readValueRecursive,
-  useSectionAllowDisabledOverride,
+  useSectionAllowIgnoreDisabled,
   useSectionDisabled,
   useSections,
 } from '../provider/FormSectionProvider';
@@ -110,7 +110,7 @@ const wrapInput = (
 
   const section = useSections();
   const sectionDisabled = useSectionDisabled();
-  const sectionAllowDisabledOverride = useSectionAllowDisabledOverride();
+  const sectionAllowIgnoreDisabled = useSectionAllowIgnoreDisabled();
 
   const formValues = useFormObjectSection();
   const updateFormValue = useFormUpdateAction();
@@ -145,7 +145,7 @@ const wrapInput = (
   const noLabel = passDownLabel ? 'ignore' : props.noLabel;
 
   const elementDisabled = sectionDisabled || props.disabled;
-  const elementIgnoreDisabled = sectionAllowDisabledOverride && props.ignoreDisabled;
+  const elementIgnoreDisabled = sectionAllowIgnoreDisabled && props.ignoreDisabled;
 
   const disabled = elementDisabled && !elementIgnoreDisabled;
 

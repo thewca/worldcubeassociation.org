@@ -6,13 +6,13 @@ export default function SectionProvider({
   children,
   section = [],
   disabled = false,
-  allowDisabledOverride = true,
+  allowIgnoreDisabled = true,
 }) {
   const store = useMemo(() => [
     section,
     disabled,
-    allowDisabledOverride,
-  ], [section, disabled, allowDisabledOverride]);
+    allowIgnoreDisabled,
+  ], [section, disabled, allowIgnoreDisabled]);
 
   return (
     <SectionContext.Provider value={store}>
@@ -23,7 +23,7 @@ export default function SectionProvider({
 
 export const useSections = () => useContext(SectionContext)[0];
 export const useSectionDisabled = () => useContext(SectionContext)[1];
-export const useSectionAllowDisabledOverride = () => useContext(SectionContext)[2];
+export const useSectionAllowIgnoreDisabled = () => useContext(SectionContext)[2];
 
 const headAndTail = (arr) => {
   const safetyClone = [...arr];

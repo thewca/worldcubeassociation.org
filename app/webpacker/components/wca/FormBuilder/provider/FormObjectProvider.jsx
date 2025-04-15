@@ -22,7 +22,7 @@ export default function FormObjectProvider({
   children,
   initialObject,
   globalDisabled = false,
-  globalAllowDisabledOverride = true,
+  globalAllowIgnoreDisabled = true,
 }) {
   const [formState, dispatch] = useReducer(formReducer, initialObject, createState);
 
@@ -72,7 +72,7 @@ export default function FormObjectProvider({
     <FormContext.Provider value={formContext}>
       <SectionProvider
         disabled={globalDisabled}
-        allowDisabledOverride={globalAllowDisabledOverride}
+        allowIgnoreDisabled={globalAllowIgnoreDisabled}
       >
         {children}
       </SectionProvider>

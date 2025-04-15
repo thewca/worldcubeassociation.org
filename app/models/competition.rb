@@ -2867,13 +2867,6 @@ class Competition < ApplicationRecord
             "usesWcaLive" => { "type" => "boolean" },
           },
         },
-        "userSettings" => {
-          "type" => "object",
-          "additionalProperties" => false,
-          "properties" => {
-            "receiveRegistrationEmails" => { "type" => "boolean" },
-          },
-        },
         "entryFees" => {
           "type" => "object",
           "additionalProperties" => false,
