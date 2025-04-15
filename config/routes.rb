@@ -257,7 +257,7 @@ Rails.application.routes.draw do
   get 'privacy' => 'static_pages#privacy'
   get 'score-tools' => 'static_pages#score_tools'
   get 'speedcubing-history' => 'static_pages#speedcubing_history'
-  get 'teams-committees-councils' => 'static_pages#teams_committees_councils'
+  get 'teams-committees' => 'static_pages#teams_committees'
   get 'tutorial' => redirect('/education', status: 302)
   get 'translators' => 'static_pages#translators'
   get 'officers-and-board' => 'static_pages#officers_and_board'

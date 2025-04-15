@@ -613,19 +613,19 @@ nl:
         competition_id: Gebeurde tijdens
       competition_medium:
         #original_hash: 1917f4f
-        competitionId: Wedstrijd
+        competition_id: Wedstrijd
         #original_hash: 3deb745
-        type: Type
+        media_type: Type
         #original_hash: c3328c3
         text: Tekst
         #original_hash: d051707
         uri: Link
         #original_hash: 1be755a
-        submitterName: Naam van instuurder
+        submitter_name: Naam van instuurder
         #original_hash: 78cdfee
-        submitterEmail: Mail van instuurder
+        submitter_email: Mail van instuurder
         #original_hash: 0d31f23
-        submitterComment: Commentaar van instuurder
+        submitter_comment: Commentaar van instuurder
         #original_hash: bae7d5b
         status: Status
       regional_organization:
@@ -691,7 +691,7 @@ nl:
         accepted: Geaccepteerd
         #original_hash: 96f608c
         pending: In bewerking
-      type:
+      media_type:
         #original_hash: ee45c30
         report: Rapportage
         #original_hash: 4360c2d
@@ -1081,19 +1081,19 @@ nl:
         comment: ''
       competition_medium:
         #original_hash: da39a3e
-        competitionId: ''
+        competition_id: ''
         #original_hash: da39a3e
-        type: ''
+        media_type: ''
         #original_hash: da39a3e
         text: ''
         #original_hash: da39a3e
         uri: ''
         #original_hash: da39a3e
-        submitterName: ''
+        submitter_name: ''
         #original_hash: da39a3e
-        submitterEmail: ''
+        submitter_email: ''
         #original_hash: da39a3e
-        submitterComment: ''
+        submitter_comment: ''
         #original_hash: da39a3e
         status: ''
       results_submission:
