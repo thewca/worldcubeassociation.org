@@ -14,9 +14,9 @@ export default function RegistrationDates() {
     },
   } = useFormObject();
 
-  const registrationNotYetPast = useMemo(
-    () => hasNotPassed(openingDateTime, 'UTC'),
-    [openingDateTime],
+  const registrationNotYetClosed = useMemo(
+    () => hasNotPassed(closingDateTime, 'UTC'),
+    [closingDateTime],
   );
 
   return (
@@ -38,7 +38,7 @@ export default function RegistrationDates() {
           startDate={openingDateTime}
           endDate={closingDateTime}
           minDate={openingDateTime}
-          ignoreDisabled={registrationNotYetPast}
+          ignoreDisabled={registrationNotYetClosed}
         />
       </Form.Group>
       <RegistrationCollisions />

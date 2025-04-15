@@ -2490,13 +2490,22 @@ class Competition < ApplicationRecord
       changed_form_data.each_recursive do |key, value, *prefixes|
         joined_key = (prefixes + [key]).join('.')
 
+        # These keys all represent timestamps. They may only be edited by non-admins if...
+        #   - the original value (pre-edit) has not yet passed
+        #   - the new value is in the future (extending deadlines is allowed, shortening them is not)
         if %w[registration.closingDateTime registration.waitingListDeadlineDate registration.eventChangeDeadlineDate].include?(joined_key)
           existing_value = current_state_form.dig(*prefixes, key)
 
           if existing_value.present?
-            date_model = DateTime.parse(existing_value).utc
+            existing_datetime = DateTime.parse(existing_value).utc
 
-            raise WcaExceptions::BadApiParameter.new("You're only allowed to change dates for deadlines that have not yet passed. #{joined_key} with value #{value} is not in the past.") unless date_model > DateTime.now.utc
+            raise WcaExceptions::BadApiParameter.new("You're only allowed to change dates for deadlines that have not yet passed. #{joined_key} with value #{value} is not in the past.") unless existing_datetime > DateTime.now.utc
+          end
+
+          if value.present?
+            new_datetime = DateTime.parse(value).utc
+
+            raise WcaExceptions::BadApiParameter.new("You're only allowed to extend deadlines, but #{joined_key} with value #{value} is set before the original value of #{existing_value}.") unless new_datetime >= existing_datetime
           end
         end
       end
