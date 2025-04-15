@@ -62,7 +62,7 @@ class StripeRecord < ApplicationRecord
   end
 
   def payment_reference
-    # TODO intentionally return nil until we figure out what a good payment_reference for stripe should be
+    # TODO: intentionally return nil until we figure out what a good payment_reference for stripe should be
     nil
   end
 
