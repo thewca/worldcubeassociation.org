@@ -601,18 +601,33 @@ RSpec.describe CompetitionsController do
         expect(competition.reload.registration_close).to eq old_close
       end
 
-      it "can change registration close of locked competition when deadline hasn't passed" do
+      it "can extend registration close of locked competition when deadline hasn't passed" do
         old_open = 2.days.from_now.change(sec: 0)
         # respect the fact that February can have exactly 4 weeks
         # which is potentially colliding with the start_date set in the competition spec factory
         old_close = 27.days.from_now.change(sec: 0)
         competition.update(confirmed: true, registration_open: old_open, registration_close: old_close)
 
-        new_close = 2.weeks.from_now.change(sec: 0)
+        new_close = 30.days.from_now.change(sec: 0)
         update_params = build_competition_update(competition, registration: { closingDateTime: new_close })
         patch :update, params: update_params, as: :json
         expect(competition.reload.registration_open).to eq old_open
         expect(competition.reload.registration_close).to eq new_close
+      end
+
+      it "cannot shorten registration close of locked competition when deadline hasn't passed" do
+        old_open = 2.days.from_now.change(sec: 0)
+        # respect the fact that February can have exactly 4 weeks
+        # which is potentially colliding with the start_date set in the competition spec factory
+        old_close = 27.days.from_now.change(sec: 0)
+        competition.update(confirmed: true, registration_open: old_open, registration_close: old_close)
+
+        # This is definitely less than the 27 days above, no matter which month
+        new_close = 2.weeks.from_now.change(sec: 0)
+        update_params = build_competition_update(competition, registration: { closingDateTime: new_close })
+        patch :update, params: update_params, as: :json
+        expect(competition.reload.registration_open).to eq old_open
+        expect(competition.reload.registration_close).to eq old_close
       end
 
       it "cannot change registration close of locked competition when deadline has passed" do
@@ -758,18 +773,33 @@ RSpec.describe CompetitionsController do
         expect(competition.reload.registration_close).to eq old_close
       end
 
-      it "can change registration close of locked competition when deadline hasn't passed" do
+      it "can extend registration close of locked competition when deadline hasn't passed" do
         old_open = 2.days.from_now.change(sec: 0)
         # respect the fact that February can have exactly 4 weeks
         # which is potentially colliding with the start_date set in the competition spec factory
         old_close = 27.days.from_now.change(sec: 0)
         competition.update(confirmed: true, registration_open: old_open, registration_close: old_close)
 
-        new_close = 2.weeks.from_now.change(sec: 0)
+        new_close = 30.days.from_now.change(sec: 0)
         update_params = build_competition_update(competition, registration: { closingDateTime: new_close })
         patch :update, params: update_params, as: :json
         expect(competition.reload.registration_open).to eq old_open
         expect(competition.reload.registration_close).to eq new_close
+      end
+
+      it "cannot shorten registration close of locked competition when deadline hasn't passed" do
+        old_open = 2.days.from_now.change(sec: 0)
+        # respect the fact that February can have exactly 4 weeks
+        # which is potentially colliding with the start_date set in the competition spec factory
+        old_close = 27.days.from_now.change(sec: 0)
+        competition.update(confirmed: true, registration_open: old_open, registration_close: old_close)
+
+        # This is definitely less than the 27 days above, no matter which month
+        new_close = 2.weeks.from_now.change(sec: 0)
+        update_params = build_competition_update(competition, registration: { closingDateTime: new_close })
+        patch :update, params: update_params, as: :json
+        expect(competition.reload.registration_open).to eq old_open
+        expect(competition.reload.registration_close).to eq old_close
       end
 
       it "cannot change registration close of locked competition when deadline has passed" do

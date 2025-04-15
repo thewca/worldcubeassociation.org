@@ -361,11 +361,11 @@ RSpec.describe "competitions" do
           expect(competition.reload.waiting_list_deadline_date).to eq original_deadline_date
         end
 
-        it 'can set deadlines if not yet past' do
-          competition.update!(registration_close: 3.days.from_now, waiting_list_deadline_date: 1.week.from_now)
+        it 'can extend deadlines if not yet past' do
+          competition.update!(registration_close: 3.days.from_now, waiting_list_deadline_date: 5.days.from_now)
 
           expect(competition.confirmed?).to be true
-          new_deadline_date = competition.registration_close + 3.days
+          new_deadline_date = competition.waiting_list_deadline_date + 2.days
 
           update_params = build_competition_update(competition, registration: { waitingListDeadlineDate: new_deadline_date.iso8601 })
           patch competition_path(competition), params: update_params, as: :json
@@ -373,6 +373,23 @@ RSpec.describe "competitions" do
           expect(response).to be_successful
 
           expect(competition.reload.waiting_list_deadline_date).to eq new_deadline_date
+        end
+
+        it 'cannot shorten deadlines even if not yet past' do
+          competition.update!(registration_close: 3.days.from_now)
+
+          original_deadline_date = 1.week.from_now
+          competition.update!(waiting_list_deadline_date: original_deadline_date)
+
+          expect(competition.confirmed?).to be true
+          new_deadline_date = competition.registration_close + 1.day
+
+          update_params = build_competition_update(competition, registration: { waitingListDeadlineDate: new_deadline_date.iso8601 })
+          patch competition_path(competition), params: update_params, as: :json
+
+          expect(response).to have_http_status(:unprocessable_entity)
+
+          expect(competition.reload.waiting_list_deadline_date).to eq original_deadline_date
         end
 
         it 'can set generic competition information' do
