@@ -66,11 +66,9 @@ module Waitlistable
     end
 
     def waiting_list_position=(target_position)
-      if self.persisted? && waiting_list_persisted?
-        self.apply_to_waiting_list(target_position)
-      else
-        self.tracked_waitlist_position = target_position
-      end
+      self.tracked_waitlist_position = target_position
+
+      self.apply_to_waiting_list(target_position) if self.persisted? && waiting_list_persisted?
     end
 
     private def apply_to_waiting_list(target_position)
