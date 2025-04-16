@@ -34,15 +34,15 @@ function RegistrationFullMessage({ competitionInfo }) {
 export default function RegistrationRequirements({ competitionInfo }) {
   const [infoAcknowledged, setInfoAcknowledged] = useCheckboxState(false);
   const { jumpToStepByKey, nextStep, jumpToFirstIncompleteStep } = useSteps();
-  const { isApproved, isRejected, isRegistered } = useRegistration();
+  const { isAccepted, isRejected, isRegistered } = useRegistration();
 
   useEffect(() => {
-    if (isApproved || isRejected) {
+    if (isAccepted || isRejected) {
       jumpToStepByKey('approval');
     } else if (isRegistered) {
       jumpToFirstIncompleteStep();
     }
-  }, [jumpToStepByKey, isApproved, isRejected, isRegistered, jumpToFirstIncompleteStep]);
+  }, [jumpToStepByKey, isAccepted, isRejected, isRegistered, jumpToFirstIncompleteStep]);
 
   return (
     <Segment basic>

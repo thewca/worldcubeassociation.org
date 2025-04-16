@@ -26,7 +26,7 @@ export default function StepPanel({
           <Step
             key={stepConfig.key}
             active={activeIndex === index}
-            completed={index < activeIndex && stepConfig.shouldShowCompleted(
+            completed={index < activeIndex || stepConfig.shouldShowCompleted(
               isRegistered,
               hasPaid,
               isAccepted,
