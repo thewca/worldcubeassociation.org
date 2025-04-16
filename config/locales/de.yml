@@ -456,7 +456,7 @@ de:
         #original_hash: f91b080
         name_reason: Der Grund für diesen Namen
         #original_hash: fdba578
-        cell_name: Competition-Kurzname
+        cellName: Competition-Kurzname
         #original_hash: 0f21717
         countryId: Region
         #original_hash: 25b7b06
@@ -892,7 +892,7 @@ de:
           alphanumerische Zeichen, Bindestriche(-), Und-Zeichen(&), Punkte(.),
           Doppelpunkte(:), Apostrophe(') und Leerzeichen( ) enthalten.
         #original_hash: fbcda66
-        cell_name: >-
+        cellName: >-
           Ein Kurzname zum Anzeigen. Falls der Name des Wettbewerbs weniger als
           %{short_name_limit} Zeichen hat, sollte dies nicht editiert werden und
           sollte mit dem normalen Namen übereinstimmen.

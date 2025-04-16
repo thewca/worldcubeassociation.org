@@ -458,7 +458,7 @@ ro:
         #original_hash: f91b080
         name_reason: Explicatie pentru nume
         #original_hash: fdba578
-        cell_name: Apelativ pentru competiție
+        cellName: Apelativ pentru competiție
         #original_hash: d523ebb
         countryId: Țară
         #original_hash: 25b7b06
@@ -881,7 +881,7 @@ ro:
           mare. Numele trebuie să conțină numai caractere alfanumerice, spații
           și următoareel caractere speciale  -  &  .  :  '
         #original_hash: fbcda66
-        cell_name: >-
+        cellName: >-
           Un nume mai scurt pentru a fi afișat. Dacă numele competiției are mai
           puțin de %{short_name_limit} caractere, nu trebuie să editezi acest
           câmp, întrucât trebuie să fie identic cu numele complet.

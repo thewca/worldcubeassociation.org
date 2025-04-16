@@ -404,7 +404,7 @@ nl:
         #original_hash: f91b080
         name_reason: De reden voor de naam
         #original_hash: b649210
-        cell_name: Verkorte naam van wedstrijd
+        cellName: Verkorte naam van wedstrijd
         #original_hash: d523ebb
         countryId: Land
         #original_hash: 25b7b06
@@ -799,7 +799,7 @@ nl:
           2016). Gebruik hoofdletters. De naam mag alleen letters, cijfers en
           spaties bevatten, en verder -&.:'.
         #original_hash: 525fcc8
-        cell_name: >-
+        cellName: >-
           Een verkorte naam. Als de wedstrijdnaam al kort is kun je die
           gebruiken (bijv. Euro 2006).
         #original_hash: bce4589

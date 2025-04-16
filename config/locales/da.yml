@@ -406,7 +406,7 @@ da:
         #original_hash: f91b080
         name_reason: Årsagen til navnet for konkurrencen
         #original_hash: b649210
-        cell_name: Kaldenavn for konkurrencen
+        cellName: Kaldenavn for konkurrencen
         #original_hash: d523ebb
         countryId: Land
         #original_hash: 25b7b06
@@ -800,7 +800,7 @@ da:
           alfanumeriske tegn, streger(-), og-tegn(&), punktummer(.),
           kolonner(:), apostroffer(') og mellemrum( ).
         #original_hash: 525fcc8
-        cell_name: >-
+        cellName: >-
           Et kort navn for visning. Hvis navnet på konkurrencen allerede er
           kort, kan du bruge navnet igen (eksempel, Europe 2006)
         #original_hash: bce4589

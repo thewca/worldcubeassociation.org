@@ -337,7 +337,7 @@ sl:
         #original_hash: 709a232
         name: Ime
         #original_hash: b649210
-        cell_name: Vzdevek tekmovanja
+        cellName: Vzdevek tekmovanja
         #original_hash: d523ebb
         countryId: Država
         #original_hash: 25b7b06
@@ -632,7 +632,7 @@ sl:
           alfa-numerične znake, vezaje(-), "and" znake(&), pike(.), dvopičja
           (:), apostrofe (') in presledke ( ).
         #original_hash: 525fcc8
-        cell_name: >-
+        cellName: >-
           Kratko ime za prikaz. Če je samo ime tekmovanja kratko, se lahko to
           tudi uporabi (primer Maribor 2017).
         #original_hash: bce4589

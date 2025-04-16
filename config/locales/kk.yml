@@ -404,7 +404,7 @@ kk:
         #original_hash: f91b080
         name_reason: Атаудың себебі
         #original_hash: b649210
-        cell_name: Қысқа аты
+        cellName: Қысқа аты
         #original_hash: d523ebb
         countryId: Ел
         #original_hash: 25b7b06
@@ -784,7 +784,7 @@ kk:
           амперсандаларды (&), нүктелерді (.), қос нүкте (:), апострофтар (')
           және бос орындар ( ).
         #original_hash: 525fcc8
-        cell_name: >-
+        cellName: >-
           Қысқа дисплей атауы (Мысалы, Moscow North-West Open 2011 орнына MNW
           Open 2011). Егер әдеттегі атау өте қысқа болса, оны осы жерде де
           қолдануға болады.
