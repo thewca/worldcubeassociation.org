@@ -79,57 +79,57 @@ sk:
       #original_hash: 4d618bb
       name: Kolo kvalifikácie
       #original_hash: 2ffe44e
-      cellName: Kvalifikácia
+      cell_name: Kvalifikácia
     '1':
       #original_hash: 1e725b6
       name: Prvé kolo
       #original_hash: 916a78d
-      cellName: Prvý
+      cell_name: Prvý
     '2':
       #original_hash: 985c8d0
       name: Druhé kolo
       #original_hash: 2a4bcae
-      cellName: Druhý
+      cell_name: Druhý
     '3':
       #original_hash: e2f74d2
       name: Semifinále
       #original_hash: e2f74d2
-      cellName: Semifinále
+      cell_name: Semifinále
     b:
       #original_hash: 327c999
       name: B Finále
       #original_hash: 327c999
-      cellName: B Finále
+      cell_name: B Finále
     c:
       #original_hash: b2d26f4
       name: Kombinované finále
       #original_hash: b2d26f4
-      cellName: Kombinované finále
+      cell_name: Kombinované finále
     d:
       #original_hash: c6136b1
       name: Kombinované Prvé kolo
       #original_hash: dffa9ea
-      cellName: Kombinované Prvé
+      cell_name: Kombinované Prvé
     e:
       #original_hash: 659c53f
       name: Kombinovane Druhé kolo
       #original_hash: b6e1e1c
-      cellName: Kombinovane Druhé
+      cell_name: Kombinovane Druhé
     f:
       #original_hash: 672b22c
       name: Finále
       #original_hash: 672b22c
-      cellName: Finále
+      cell_name: Finále
     g:
       #original_hash: e861dcf
       name: Kombinované tretie kolo
       #original_hash: 86f4b05
-      cellName: Kombinovane Tretie
+      cell_name: Kombinovane Tretie
     h:
       #original_hash: 4c66ad0
       name: Kombinovaná kvalifikácia
       #original_hash: 4c66ad0
-      cellName: Kombinovaná kvalifikácia
+      cell_name: Kombinovaná kvalifikácia
   cutoff:
     #original_hash: cf458e7
     time:

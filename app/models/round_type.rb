@@ -4,8 +4,6 @@ class RoundType < ApplicationRecord
   include Cachable
   include StaticData
 
-  self.table_name = "RoundTypes"
-
   has_many :results, foreign_key: :roundTypeId
   has_many :scrambles, foreign_key: :roundTypeId
 
@@ -15,8 +13,8 @@ class RoundType < ApplicationRecord
     I18n.t("rounds.#{id}.name")
   end
 
-  def cellName
-    I18n.t("rounds.#{id}.cellName")
+  def cell_name
+    I18n.t("rounds.#{id}.cell_name")
   end
 
   # TODO: move to database https://github.com/thewca/worldcubeassociation.org/issues/979

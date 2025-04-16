@@ -316,11 +316,11 @@ module DatabaseDumper
         ),
       ),
     }.freeze,
-    "RoundTypes" => {
+    "round_types" => {
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
-          cellName
+          cell_name
           final
           name
           rank
@@ -1007,14 +1007,18 @@ module DatabaseDumper
       ),
     }.freeze,
     "RoundTypes" => {
+      source_table: "round_types",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
-          cellName
           final
           name
           rank
         ),
+        fake_values: {
+          # Copy over column to keep backwards compatibility
+          "cellName" => "cell_name",
+        },
       ),
     }.freeze,
     "Events" => {

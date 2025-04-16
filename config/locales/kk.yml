@@ -152,57 +152,57 @@ kk:
       #original_hash: 4d618bb
       name: Квалификациялық раунд
       #original_hash: 4d618bb
-      cellName: Квалификациялық раунд
+      cell_name: Квалификациялық раунд
     '1':
       #original_hash: 1e725b6
       name: Бірінші раунд
       #original_hash: 1e725b6
-      cellName: Бірінші раунд
+      cell_name: Бірінші раунд
     '2':
       #original_hash: 985c8d0
       name: Екінші раунд
       #original_hash: 985c8d0
-      cellName: Екінші раунд
+      cell_name: Екінші раунд
     '3':
       #original_hash: e2f74d2
       name: Жартылай финал
       #original_hash: e2f74d2
-      cellName: Жартылай финал
+      cell_name: Жартылай финал
     b:
       #original_hash: 327c999
       name: Финалға
       #original_hash: 327c999
-      cellName: Финалға
+      cell_name: Финалға
     c:
       #original_hash: 672b22c
       name: Финал
       #original_hash: 672b22c
-      cellName: Финал
+      cell_name: Финал
     d:
       #original_hash: 1e725b6
       name: Бірінші раунд
       #original_hash: 1e725b6
-      cellName: Бірінші раунд
+      cell_name: Бірінші раунд
     e:
       #original_hash: 985c8d0
       name: Екінші раунд
       #original_hash: 985c8d0
-      cellName: Екінші раунд
+      cell_name: Екінші раунд
     f:
       #original_hash: 672b22c
       name: Финал
       #original_hash: 672b22c
-      cellName: Финал
+      cell_name: Финал
     g:
       #original_hash: ccf6f8e
       name: Үшінші раунд
       #original_hash: ccf6f8e
-      cellName: Үшінші раунд
+      cell_name: Үшінші раунд
     h:
       #original_hash: 4d618bb
       name: Квалификациялық раунд
       #original_hash: 4d618bb
-      cellName: Квалификациялық раунд
+      cell_name: Квалификациялық раунд
   attempts:
     #original_hash: 17dae1e
     attempt_name: 'Әрекет %{number}'

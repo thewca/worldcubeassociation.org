@@ -372,7 +372,7 @@ class AdminController < ApplicationController
                           countryId: @country_id,
                           personId: @person_id,
                         )
-                        .order("Events.rank, RoundTypes.rank DESC")
+                        .order("Events.rank, round_types.rank DESC")
 
     @results_by_competition = all_results.group_by(&:competition_id)
                                          .transform_keys { |id| Competition.find(id) }

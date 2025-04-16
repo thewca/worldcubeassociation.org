@@ -190,9 +190,9 @@ class ResultsController < ApplicationController
 
     if @is_histories
       order = if @is_history
-                'event.`rank`, type desc, value, start_date desc, roundType.`rank` desc'
+                'event.`rank`, type desc, value, start_date desc, round_types.`rank` desc'
               else
-                'start_date desc, event.`rank`, type desc, value, roundType.`rank` desc'
+                'start_date desc, event.`rank`, type desc, value, round_types.`rank` desc'
               end
 
       @query = <<-SQL.squish
@@ -222,12 +222,12 @@ class ResultsController < ApplicationController
             SELECT Results.*, 'average' type, average value, regionalAverageRecord recordName FROM Results WHERE regionalAverageRecord<>'') result
           #{@gender_condition.present? ? "JOIN Persons persons ON result.personId = persons.wca_id and persons.subId = 1," : ","}
           Events event,
-          RoundTypes roundType,
+          round_types,
           Competitions competition,
           countries
         WHERE event.id = eventId
           AND event.`rank` < 1000
-          AND roundType.id = roundTypeId
+          AND round_types.id = roundTypeId
           AND competition.id = competitionId
           AND countries.id = result.countryId
           #{@region_condition}
