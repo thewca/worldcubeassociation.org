@@ -48,7 +48,9 @@ module Registrations
         new_registration.tracked_event_ids = registration.event_ids
 
         competition_events_lookup = registration.competition.competition_events.where(event_id: desired_events).index_by(&:event_id)
-        competition_events = desired_events.map { build_copy(competition_events_lookup[it], clone: clone) }
+        # Cloning behavior is hard-coded to `false` here, because this line is working on the intermediary competition_events.
+        #   The entities actually related to the registration (the registration_competition_events) inherit the cloning behavior below.
+        competition_events = desired_events.map { build_copy(competition_events_lookup[it], clone: false) }
 
         upserted_competition_events = competition_events.map { build_association_copy(registration.registration_competition_events, clone: clone, competition_event: it) }
         new_registration.registration_competition_events = upserted_competition_events
