@@ -24,9 +24,7 @@ export default function Index({
   userInfo,
   userCanPreRegister,
   preferredEvents,
-  qualifications,
-  stripePublishableKey = '',
-  connectedAccountId = '',
+  personalRecords,
   cannotRegisterReasons,
   isProcessing = false,
 }) {
@@ -45,9 +43,7 @@ export default function Index({
                 userInfo={userInfo}
                 userCanPreRegister={userCanPreRegister}
                 preferredEvents={preferredEvents}
-                stripePublishableKey={stripePublishableKey}
-                connectedAccountId={connectedAccountId}
-                qualifications={qualifications}
+                personalRecords={personalRecords}
                 cannotRegisterReasons={cannotRegisterReasons}
               />
             </StepProvider>
@@ -61,11 +57,9 @@ export default function Index({
 function Register({
   userCanPreRegister,
   competitionInfo,
-  qualifications,
+  personalRecords,
   userInfo,
   preferredEvents,
-  connectedAccountId,
-  stripePublishableKey,
   cannotRegisterReasons,
 }) {
   const registrationAlreadyOpen = usePerpetualState(
@@ -118,9 +112,7 @@ function Register({
             preferredEvents={preferredEvents}
             competitionInfo={competitionInfo}
             registration={registration}
-            connectedAccountId={connectedAccountId}
-            stripePublishableKey={stripePublishableKey}
-            qualifications={qualifications}
+            personalRecords={personalRecords}
             registrationCurrentlyOpen={registrationCurrentlyOpen}
           />
         </>

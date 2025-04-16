@@ -8,9 +8,7 @@ export default function StepPanel({
   competitionInfo,
   preferredEvents,
   user,
-  stripePublishableKey,
-  connectedAccountId,
-  qualifications,
+  personalRecords,
   registrationCurrentlyOpen,
 }) {
   const {
@@ -54,9 +52,7 @@ export default function StepPanel({
         competitionInfo={competitionInfo}
         preferredEvents={preferredEvents}
         user={user}
-        stripePublishableKey={stripePublishableKey}
-        connectedAccountId={connectedAccountId}
-        qualifications={qualifications}
+        personalRecords={personalRecords}
       />
     </>
   );

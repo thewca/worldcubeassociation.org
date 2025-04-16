@@ -56,9 +56,9 @@ export default function CompetingStep({
   competitionInfo,
   user,
   preferredEvents,
-  qualifications,
+  personalRecords,
 }) {
-  const { nextStep } = useSteps();
+  const { nextStep, currentStepParameters } = useSteps();
   const maxEvents = competitionInfo.events_per_registration_limit ?? Infinity;
   const {
     registration, isRegistered, hasPaid, isPolling, isProcessing, startPolling, refetchRegistration,
@@ -68,15 +68,16 @@ export default function CompetingStep({
   const confirm = useConfirm();
 
   const [comment, setComment] = useState('');
-  const initialSelectedEvents = competitionInfo.events_per_registration_limit ? [] : preferredEvents
-    .filter((event) => {
-      const preferredEventHeld = competitionInfo.event_ids.includes(event);
-      if (competitionInfo['uses_qualification?']) {
-        return preferredEventHeld
-          && isQualifiedForEvent(event, qualifications.wcif, qualifications.personalRecords);
-      }
-      return preferredEventHeld;
-    });
+  const initialSelectedEvents = currentStepParameters.events_per_registration_limit
+    ? [] : preferredEvents
+      .filter((event) => {
+        const preferredEventHeld = currentStepParameters.event_ids.includes(event);
+        if (currentStepParameters.qualifications) {
+          return preferredEventHeld
+          && isQualifiedForEvent(event, currentStepParameters.qualifications, personalRecords);
+        }
+        return preferredEventHeld;
+      });
   const selectedEventIds = useSet(initialSelectedEvents);
   // Don't set an error state before the user has interacted with the eventPicker
   const [hasInteracted, setHasInteracted] = useState(false);
@@ -202,9 +203,9 @@ export default function CompetingStep({
 
   const actionUpdateRegistration = useCallback(() => {
     confirm({
-      content: I18n.t(competitionInfo.allow_registration_edits ? 'competitions.registration_v2.update.update_confirm' : 'competitions.registration_v2.update.update_confirm_contact'),
+      content: I18n.t(currentStepParameters.allow_registration_edits ? 'competitions.registration_v2.update.update_confirm' : 'competitions.registration_v2.update.update_confirm_contact'),
     }).then(() => {
-      if (competitionInfo.allow_registration_edits) {
+      if (currentStepParameters.allow_registration_edits) {
         dispatch(showMessage('competitions.registration_v2.update.being_updated', 'basic'));
         updateRegistrationMutation({
           user_id: registration.user_id,
@@ -235,6 +236,7 @@ export default function CompetingStep({
     hasGuestsChanged,
     guests,
     nextStep,
+    currentStepParameters,
   ]);
 
   const actionReRegister = useCallback(() => {
@@ -263,16 +265,16 @@ export default function CompetingStep({
   };
 
   const onAllEventsClick = () => {
-    if (competitionInfo['uses_qualification?']) {
+    if (currentStepParameters.qualifications) {
       selectedEventIds.update(
-        competitionInfo.event_ids.filter((e) => isQualifiedForEvent(
+        currentStepParameters.event_ids.filter((e) => isQualifiedForEvent(
           e,
-          qualifications.wcif,
-          qualifications.personalRecords,
+          currentStepParameters.qualifications,
+          personalRecords,
         )),
       );
     } else {
-      selectedEventIds.update(competitionInfo.event_ids);
+      selectedEventIds.update(currentStepParameters.event_ids);
     }
     setHasInteracted(true);
   };
@@ -305,9 +307,10 @@ export default function CompetingStep({
     shouldShowUpdateButton,
   ]);
 
-  const guestsRestricted = competitionInfo.guest_entry_status === 'restricted';
-  const guestLimit = competitionInfo.guests_per_registration_limit !== null && guestsRestricted
-    ? competitionInfo.guests_per_registration_limit
+  const guestsRestricted = currentStepParameters.guest_entry_status === 'restricted';
+  const guestLimit = currentStepParameters.guests_per_registration_limit !== null
+  && guestsRestricted
+    ? currentStepParameters.guests_per_registration_limit
     : defaultGuestLimit;
 
   const formWarnings = useMemo(() => potentialWarnings(competitionInfo), [competitionInfo]);
@@ -335,30 +338,30 @@ export default function CompetingStep({
           <Form.Field required error={hasInteracted && selectedEventIds.size === 0}>
             <EventSelector
               id="event-selection"
-              eventList={competitionInfo.event_ids}
+              eventList={currentStepParameters.event_ids}
               selectedEvents={selectedEventIds.asArray}
               onEventClick={onEventClick}
               onAllClick={onAllEventsClick}
               onClearClick={onClearEventsClick}
               maxEvents={maxEvents}
               eventsDisabled={
-                competitionInfo.allow_registration_without_qualification
+                currentStepParameters.allow_registration_without_qualification
                   ? []
                   : eventsNotQualifiedFor(
-                    competitionInfo.event_ids,
-                    qualifications.wcif,
-                    qualifications.personalRecords,
+                    currentStepParameters.event_ids,
+                    currentStepParameters.qualifications,
+                    personalRecords,
                   )
               }
               disabledText={(event) => eventQualificationToString(
                 { id: event },
-                qualifications.wcif[event],
+                currentStepParameters.qualifications[event],
                 { short: true },
               )}
               // Don't error if the user hasn't interacted with the form yet
               shouldErrorOnEmpty={hasInteracted}
             />
-            {!competitionInfo.events_per_registration_limit
+            {!currentStepParameters.events_per_registration_limit
               && (
                 <I18nHTMLTranslate
                   options={{
@@ -368,7 +371,7 @@ export default function CompetingStep({
                 />
               )}
           </Form.Field>
-          <Form.Field required={Boolean(competitionInfo.force_comment_in_registration)}>
+          <Form.Field required={Boolean(currentStepParameters.force_comment_in_registration)}>
             <label htmlFor="comment">
               {I18n.t('competitions.registration_v2.register.comment')}
               {' '}
@@ -383,15 +386,15 @@ export default function CompetingStep({
               </div>
             </label>
             <Form.TextArea
-              required={Boolean(competitionInfo.force_comment_in_registration)}
+              required={Boolean(currentStepParameters.force_comment_in_registration)}
               maxLength={maxCommentLength}
               onChange={(event, data) => setComment(data.value)}
               value={comment}
               id="comment"
-              error={competitionInfo.force_comment_in_registration && comment.trim().length === 0 && I18n.t('registrations.errors.cannot_register_without_comment')}
+              error={currentStepParameters.force_comment_in_registration && comment.trim().length === 0 && I18n.t('registrations.errors.cannot_register_without_comment')}
             />
           </Form.Field>
-          {competitionInfo.guests_enabled && (
+          {currentStepParameters.guests_enabled && (
             <Form.Field>
               <label htmlFor="guest-dropdown">{I18n.t('activerecord.attributes.registration.guests')}</label>
               <Form.Input
