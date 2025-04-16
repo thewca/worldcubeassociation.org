@@ -1744,6 +1744,35 @@ class Competition < ApplicationRecord
     competitions.includes(:delegates, :organizers, *previous_includes).order(**order)
   end
 
+  def competing_step_parameters
+    serializable_hash(only: [:events_per_registration_limit,
+                             :allow_registration_edits,
+                             :guest_entry_status,
+                             :guests_per_registration_limit,
+                             :guests_enabled,
+                             :allow_registration_without_qualification,
+                             :force_comment_in_registration],
+                      methods: [:qualification_wcif, :event_ids])
+  end
+
+  def payment_step_parameters
+    # Currently hardcoded to support stripe only
+    {
+      stripePublishableKey: AppSecrets.STRIPE_PUBLISHABLE_KEY,
+      connectedAccountId: @competition.payment_account_for(:stripe)&.account_id,
+    }.to_h
+  end
+
+  def available_registration_lanes
+    # There is currently only one lane, so this always returns the competitor lane
+    steps = []
+    steps >> { key: 'requirements', options: {} }
+    steps >> { key: 'competing', parameters: competing_step_parameters }
+    steps >> { key: 'payment', parameters: payment_step_parameters, post_step: true } if using_payment_integrations?
+
+    steps
+  end
+
   def all_activities
     competition_venues.includes(venue_rooms: { schedule_activities: [child_activities: [:child_activities]] }).map(&:all_activities).flatten
   end

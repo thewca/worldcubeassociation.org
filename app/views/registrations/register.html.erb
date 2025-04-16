@@ -25,14 +25,9 @@
                                                     userInfo: @current_user,
                                                     userCanPreRegister: @competition.user_can_pre_register?(@current_user),
                                                     preferredEvents: @current_user.preferred_events.pluck(:id),
-                                                    stripePublishableKey: AppSecrets.STRIPE_PUBLISHABLE_KEY,
-                                                    connectedAccountId: @competition.payment_account_for(:stripe)&.account_id,
-                                                    qualifications: {
-                                                      wcif: @competition.qualification_wcif,
-                                                      personalRecords: {
-                                                        single: current_user.person&.ranksSingle&.map(&:to_wcif) || [],
-                                                        average: current_user.person&.ranksAverage&.map(&:to_wcif) || [],
-                                                      }
+                                                    personalRecords: {
+                                                      single: current_user.person&.ranksSingle&.map(&:to_wcif) || [],
+                                                      average: current_user.person&.ranksAverage&.map(&:to_wcif) || [],
                                                     },
                                                     cannotRegisterReasons: current_user.cannot_register_for_competition_reasons(@competition),
                                                     isProcessing: @is_processing,

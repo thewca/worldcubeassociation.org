@@ -27,9 +27,9 @@ export default function StepProvider({ competitionInfo, children }) {
 
   const steps = useMemo(() => {
     if (registrationConfig) {
-      return availableSteps.filter(
-        (stepConfig) => registrationConfig.includes(stepConfig.key),
-      );
+      return registrationConfig.map(
+        (config) => availableSteps.find((stepConfig) => stepConfig.key === config.key),
+      ).concat([registrationOverviewConfig]);
     }
     return [];
   }, [registrationConfig]);
@@ -46,7 +46,7 @@ export default function StepProvider({ competitionInfo, children }) {
     },
     null,
     () => {
-      if (registrationConfig) {
+      if (steps.length > 0) {
         if (isPolling) {
           return steps.findIndex((step) => step === competingStepConfig);
         }
@@ -70,9 +70,17 @@ export default function StepProvider({ competitionInfo, children }) {
     return null;
   }, [activeIndex, steps]);
 
+  const currentStepParameters = useMemo(() => {
+    if (steps.length > 0) {
+      return registrationConfig.find((config) => config.key === steps[activeIndex].key).parameters;
+    }
+    return {};
+  }, [activeIndex, steps]);
+
   const value = useMemo(() => ({
     steps,
     CurrentStepPanel,
+    currentStepParameters,
     nextStep: () => dispatchStep({ next: true }),
     refreshStep: () => dispatchStep({ refresh: true }),
     jumpToStart: () => dispatchStep({ toStart: true }),
