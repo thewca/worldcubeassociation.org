@@ -36,11 +36,12 @@ module Waitlistable
     validates :waiting_list_present?, presence: { if: :waiting_list_position?, frontend_code: Registrations::ErrorCodes::INVALID_REQUEST_DATA }
 
     after_save :commit_waitlist_position, if: :waiting_list_persisted?
-    after_commit :clear_tracked_waitlist_position!, on: :update
 
-    def commit_waitlist_position
+    private def commit_waitlist_position
       self.waiting_list_position = self.tracked_waitlist_position
     end
+
+    after_commit :clear_tracked_waitlist_position!
 
     private def clear_tracked_waitlist_position!
       self.tracked_waitlist_position = nil
