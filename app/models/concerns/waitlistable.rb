@@ -11,20 +11,20 @@ module Waitlistable
 
     attr_accessor :tracked_waitlist_position
 
-    validates :waiting_list_position, numericality: {
+    validates :tracked_waiting_list_position, numericality: {
       only_integer: true,
       greater_than_or_equal_to: 1,
       allow_nil: true,
       frontend_code: Registrations::ErrorCodes::INVALID_WAITING_LIST_POSITION,
       if: :waitlistable?,
     }
-    validates :waiting_list_position, numericality: {
+    validates :tracked_waiting_list_position, numericality: {
       equal_to: 1,
       allow_nil: true,
       frontend_code: Registrations::ErrorCodes::INVALID_WAITING_LIST_POSITION,
       if: [:waitlistable?, :waiting_list_present?, :waiting_list_empty?],
     }
-    validates :waiting_list_position, numericality: {
+    validates :tracked_waiting_list_position, numericality: {
       less_than_or_equal_to: :waiting_list_length,
       allow_nil: true,
       frontend_code: Registrations::ErrorCodes::INVALID_WAITING_LIST_POSITION,
@@ -45,7 +45,7 @@ module Waitlistable
     after_commit :track_waitlist_position!
 
     private def track_waitlist_position!
-      @tracked_waiting_list_position = self.persisted_waiting_list_position
+      @tracked_waiting_list_position = self.waiting_list_position
     end
 
     # Tells the hooks whether the current entity
@@ -54,20 +54,20 @@ module Waitlistable
       false
     end
 
-    def persisted_waiting_list_position
+    def waiting_list_position
       self.waiting_list&.position(self)
     end
 
-    def waiting_list_position
-      @tracked_waiting_list_position || self.persisted_waiting_list_position
+    def tracked_waiting_list_position
+      @tracked_waiting_list_position || self.waiting_list_position
     end
 
     def waiting_list_position?
-      self.waiting_list_position.present?
+      self.tracked_waiting_list_position.present?
     end
 
     def waiting_list_position_changed?
-      @tracked_waiting_list_position != self.persisted_waiting_list_position
+      @tracked_waiting_list_position != self.waiting_list_position
     end
 
     def waiting_list_position=(target_position)
