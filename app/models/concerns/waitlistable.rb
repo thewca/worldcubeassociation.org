@@ -67,7 +67,7 @@ module Waitlistable
     end
 
     def waiting_list_position=(target_position)
-      if waiting_list_persisted?
+      if self.persisted? && waiting_list_persisted?
         should_add = self.waitlistable? && target_position.nil?
         should_move = self.waitlistable? && target_position.present?
         should_remove = !self.waitlistable? && target_position.present?
