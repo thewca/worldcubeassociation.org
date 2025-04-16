@@ -3,7 +3,7 @@ import { Form } from 'semantic-ui-react';
 import { InputDate } from '../../wca/FormBuilder/input/FormInputs';
 import RegistrationCollisions from '../Tables/RegistrationCollisions';
 import SubSection from '../../wca/FormBuilder/SubSection';
-import { useFormObject } from '../../wca/FormBuilder/provider/FormObjectProvider';
+import { useFormInitialObject, useFormObject } from '../../wca/FormBuilder/provider/FormObjectProvider';
 import { hasNotPassed } from '../../../lib/utils/dates';
 
 export default function RegistrationDates() {
@@ -14,9 +14,15 @@ export default function RegistrationDates() {
     },
   } = useFormObject();
 
+  const {
+    registration: {
+      closingDateTime: originalClosingDateTime,
+    },
+  } = useFormInitialObject();
+
   const registrationNotYetClosed = useMemo(
-    () => closingDateTime === null || hasNotPassed(closingDateTime, 'UTC'),
-    [closingDateTime],
+    () => originalClosingDateTime === null || hasNotPassed(originalClosingDateTime, 'UTC'),
+    [originalClosingDateTime],
   );
 
   return (

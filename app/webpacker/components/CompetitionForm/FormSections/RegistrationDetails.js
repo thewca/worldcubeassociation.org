@@ -11,7 +11,10 @@ import {
 import ConditionalSection from './ConditionalSection';
 import I18n from '../../../lib/i18n';
 import SubSection from '../../wca/FormBuilder/SubSection';
-import { useFormObject, useFormObjectSection } from '../../wca/FormBuilder/provider/FormObjectProvider';
+import {
+  useFormInitialObject,
+  useFormObject,
+} from '../../wca/FormBuilder/provider/FormObjectProvider';
 import { hasNotPassed } from '../../../lib/utils/dates';
 
 const guestsEnabledOptions = [true, false].map((bool) => ({
@@ -35,21 +38,23 @@ export default function RegistrationDetails() {
   const { entryFees, registration } = useFormObject();
 
   const {
-    waitingListDeadlineDate,
-    eventChangeDeadlineDate,
-  } = useFormObjectSection();
+    registration: {
+      waitingListDeadlineDate: originalWaitingListDeadlineDate,
+      eventChangeDeadlineDate: originalEventChangeDeadlineDate,
+    },
+  } = useFormInitialObject();
 
   const guestsGoFree = entryFees?.guestEntryFee === 0;
   const guestsRestricted = guestsGoFree && registration?.guestEntryStatus === 'restricted';
 
   const waitingListNotYetPast = useMemo(
-    () => waitingListDeadlineDate === null || hasNotPassed(waitingListDeadlineDate, 'UTC'),
-    [waitingListDeadlineDate],
+    () => originalWaitingListDeadlineDate === null || hasNotPassed(originalWaitingListDeadlineDate, 'UTC'),
+    [originalWaitingListDeadlineDate],
   );
 
   const eventChangeNotYetPast = useMemo(
-    () => eventChangeDeadlineDate === null || hasNotPassed(eventChangeDeadlineDate, 'UTC'),
-    [eventChangeDeadlineDate],
+    () => originalEventChangeDeadlineDate === null || hasNotPassed(originalEventChangeDeadlineDate, 'UTC'),
+    [originalEventChangeDeadlineDate],
   );
 
   return (
