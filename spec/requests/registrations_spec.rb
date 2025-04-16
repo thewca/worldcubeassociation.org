@@ -441,7 +441,7 @@ RSpec.describe "registrations" do
     end
 
     context "when signed in as competition manager" do
-      let (:do_add_competition) { FactoryBot.create(:competition, :registration_open, :with_delegate, :visible) }
+      let(:do_add_competition) { FactoryBot.create(:competition, :registration_open, :with_delegate, :visible) }
 
       before do
         sign_in do_add_competition.delegates.first
