@@ -25,7 +25,7 @@ class Competition < ApplicationRecord
   has_many :venue_countries, -> { distinct }, through: :competition_venues, source: :country
   has_many :venue_continents, -> { distinct }, through: :competition_venues, source: :continent
   belongs_to :country, foreign_key: :countryId
-  has_one :continent, foreign_key: :continentId, through: :country
+  has_one :continent, through: :country
   has_many :championships, dependent: :delete_all
   has_many :wcif_extensions, as: :extendable, dependent: :delete_all
   has_many :bookmarked_competitions, dependent: :delete_all
@@ -59,7 +59,7 @@ class Competition < ApplicationRecord
   scope :end_date_passed_since, lambda { |num_days| where(end_date: ...(num_days.days.ago)) }
   scope :belongs_to_region, lambda { |region_id|
     joins(:country).where(
-      "countryId = :region_id OR Countries.continentId = :region_id", region_id: region_id
+      "countryId = :region_id OR countries.continent_id = :region_id", region_id: region_id
     )
   }
   scope :contains, lambda { |search_term|

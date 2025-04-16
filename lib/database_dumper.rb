@@ -178,23 +178,23 @@ module DatabaseDumper
     }.freeze,
     "connected_paypal_accounts" => :skip_all_rows,
     "connected_stripe_accounts" => :skip_all_rows,
-    "Continents" => {
+    "continents" => {
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
           latitude
           longitude
           name
-          recordName
+          record_name
           zoom
         ),
       ),
     }.freeze,
-    "Countries" => {
+    "countries" => {
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
-          continentId
+          continent_id
           iso2
           name
         ),
@@ -1045,25 +1045,31 @@ module DatabaseDumper
       ),
     }.freeze,
     "Countries" => {
+      source_table: "countries",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
-          continentId
           iso2
           name
         ),
+        fake_values: {
+          "continentId" => "continent_id",
+        }.freeze,
       ),
     }.freeze,
     "Continents" => {
+      source_table: "continents",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
           latitude
           longitude
           name
-          recordName
           zoom
         ),
+        fake_values: {
+          "recordName" => "record_name",
+        }.freeze,
       ),
     }.freeze,
     "Persons" => {

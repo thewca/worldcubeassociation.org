@@ -213,7 +213,7 @@ class ResultsController < ApplicationController
           result.personId      personId,
           result.personName    personName,
           result.countryId     countryId,
-          country.name         countryName,
+          countries.name       countryName,
           competition.id       competitionId,
           competition.cellName competitionName,
           value1, value2, value3, value4, value5
@@ -224,12 +224,12 @@ class ResultsController < ApplicationController
           Events event,
           RoundTypes roundType,
           Competitions competition,
-          Countries country
+          countries
         WHERE event.id = eventId
           AND event.`rank` < 1000
           AND roundType.id = roundTypeId
           AND competition.id = competitionId
-          AND country.id = result.countryId
+          AND countries.id = result.countryId
           #{@region_condition}
           #{@event_condition}
           #{@years_condition_competition}
@@ -264,7 +264,7 @@ class ResultsController < ApplicationController
                              value,
         event.name           eventName,
                              format,
-        country.name         countryName,
+        countries.name       countryName,
         competition.cellName competitionName,
                              `rank`,
         competition.start_date,
@@ -284,7 +284,7 @@ class ResultsController < ApplicationController
         Results result
         #{@gender_condition.present? ? "JOIN Persons persons ON result.personId = persons.wca_id and persons.subId = 1," : ","}
         Events event,
-        Countries country,
+        countries,
         Competitions competition
       WHERE result.#{value} = value
         #{@event_condition}
@@ -293,7 +293,7 @@ class ResultsController < ApplicationController
         #{@gender_condition}
         AND result.eventId = recordEventId
         AND event.id       = result.eventId
-        AND country.id     = result.countryId
+        AND countries.id     = result.countryId
         AND competition.id = result.competitionId
         AND event.`rank` < 990
     SQL
@@ -335,7 +335,7 @@ class ResultsController < ApplicationController
     @country = Country.c_find(params[:region])
     if @continent.present?
       @region_condition = "AND result.countryId IN (#{@continent.country_ids.map { |id| "'#{id}'" }.join(',')})"
-      @region_condition += " AND recordName IN ('WR', '#{@continent.recordName}')" if @is_histories
+      @region_condition += " AND recordName IN ('WR', '#{@continent.record_name}')" if @is_histories
     elsif @country.present?
       @region_condition = "AND result.countryId = '#{@country.id}'"
       @region_condition += " AND recordName <> ''" if @is_histories
