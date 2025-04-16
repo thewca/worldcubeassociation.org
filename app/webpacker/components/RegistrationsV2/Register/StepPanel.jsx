@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Step } from 'semantic-ui-react';
 import I18n from '../../../lib/i18n';
 import { useRegistration } from '../lib/RegistrationProvider';
@@ -17,7 +17,16 @@ export default function StepPanel({
 
   const {
     steps, CurrentStepPanel, activeIndex, jumpToStepByIndex,
+    jumpToStepByKey, jumpToFirstIncompleteStep,
   } = useSteps();
+
+  useEffect(() => {
+    if (isAccepted || isRejected) {
+      jumpToStepByKey('approval');
+    } else if (isRegistered) {
+      jumpToFirstIncompleteStep();
+    }
+  }, [jumpToStepByKey, isAccepted, isRejected, isRegistered, jumpToFirstIncompleteStep]);
 
   return (
     <>
