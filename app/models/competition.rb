@@ -1752,7 +1752,8 @@ class Competition < ApplicationRecord
                              :guests_enabled,
                              :allow_registration_without_qualification,
                              :force_comment_in_registration],
-                      methods: [:qualification_wcif, :event_ids])
+                      methods: [:qualification_wcif, :event_ids],
+                      include: [])
   end
 
   def payment_step_parameters
@@ -1766,9 +1767,9 @@ class Competition < ApplicationRecord
   def available_registration_lanes
     # There is currently only one lane, so this always returns the competitor lane
     steps = []
-    steps >> { key: 'requirements', options: {} }
-    steps >> { key: 'competing', parameters: competing_step_parameters }
-    steps >> { key: 'payment', parameters: payment_step_parameters, post_step: true } if using_payment_integrations?
+    steps << { key: 'requirements', options: {} }
+    steps << { key: 'competing', parameters: competing_step_parameters }
+    steps << { key: 'payment', parameters: payment_step_parameters, post_step: true } if using_payment_integrations?
 
     steps
   end

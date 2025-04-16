@@ -75,7 +75,7 @@ export default function StepProvider({ competitionInfo, children }) {
       return registrationConfig.find((config) => config.key === steps[activeIndex].key).parameters;
     }
     return {};
-  }, [activeIndex, steps]);
+  }, [activeIndex, registrationConfig, steps]);
 
   const value = useMemo(() => ({
     steps,

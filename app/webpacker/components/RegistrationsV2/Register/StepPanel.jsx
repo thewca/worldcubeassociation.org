@@ -33,6 +33,7 @@ export default function StepPanel({
               activeIndex,
             )}
             disabled={isRejected || stepConfig.shouldBeDisabled(
+              isRegistered,
               hasPaid,
               activeIndex,
               index,

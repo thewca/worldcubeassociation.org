@@ -59,7 +59,7 @@ export default function CompetingStep({
   personalRecords,
 }) {
   const { nextStep, currentStepParameters } = useSteps();
-  const maxEvents = competitionInfo.events_per_registration_limit ?? Infinity;
+  const maxEvents = currentStepParameters.events_per_registration_limit ?? Infinity;
   const {
     registration, isRegistered, hasPaid, isPolling, isProcessing, startPolling, refetchRegistration,
   } = useRegistration();

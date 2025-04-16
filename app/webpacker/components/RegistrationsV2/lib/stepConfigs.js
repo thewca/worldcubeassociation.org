@@ -8,7 +8,7 @@ export const requirementsStepConfig = {
   i18nKey: 'competitions.registration_v2.register.panel.requirements',
   component: RegistrationRequirements,
   shouldShowCompleted: (isRegistered, hasPaid, isAccepted, index) => index > 0,
-  shouldBeDisabled: (hasPaid, activeIndex) => activeIndex !== 0,
+  shouldBeDisabled: (isRegistered, hasPaid, activeIndex) => activeIndex !== 0,
 };
 
 export const competingStepConfig = {
@@ -16,7 +16,7 @@ export const competingStepConfig = {
   i18nKey: 'competitions.registration_v2.register.panel.competing',
   component: CompetingStep,
   shouldShowCompleted: (isRegistered) => isRegistered,
-  shouldBeDisabled: (hasPaid, activeIndex, index) => index > activeIndex,
+  shouldBeDisabled: (isRegistered, hasPaid, activeIndex, index) => index > activeIndex,
 };
 
 export const paymentStepConfig = {
@@ -25,6 +25,7 @@ export const paymentStepConfig = {
   component: StripeWrapper,
   shouldShowCompleted: (isRegistered, hasPaid) => hasPaid,
   shouldBeDisabled: (
+    isRegistered,
     hasPaid,
     activeIndex,
     index,
@@ -37,7 +38,7 @@ export const registrationOverviewConfig = {
   i18nKey: 'competitions.registration_v2.register.panel.approval',
   component: RegistrationOverview,
   shouldShowCompleted: (isRegistered, hasPaid, isAccepted) => isAccepted,
-  shouldBeDisabled: () => false,
+  shouldBeDisabled: (isRegistered) => !isRegistered,
 };
 
 // eslint-disable-next-line import/prefer-default-export
