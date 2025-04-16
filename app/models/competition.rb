@@ -1545,8 +1545,8 @@ class Competition < ApplicationRecord
             .find(registered_user_ids)
       end
 
-      rank_symbol = :"ranks#{sort_by.capitalize}"
-      second_rank_symbol = :"ranks#{sort_by_second.capitalize}"
+      rank_symbol = :"ranks_#{sort_by}"
+      second_rank_symbol = :"ranks_#{sort_by_second}"
 
       sorted_users = users_with_rankings.sort_by { |user|
         # using '.find_by(event: ...)' fires another SQL query *despite* the ranks being pre-loaded :facepalm:
@@ -1557,9 +1557,9 @@ class Competition < ApplicationRecord
           # Competitors with ranks should appear first in the sorting,
           # competitors without ranks should appear last. That's why they get a higher number if rank is not present.
           rank.present? ? 0 : 1,
-          rank&.worldRank || 0,
+          rank&.world_rank || 0,
           second_rank.present? ? 0 : 1,
-          second_rank&.worldRank || 0,
+          second_rank&.world_rank || 0,
           user.name,
         ]
       }
@@ -1575,8 +1575,8 @@ class Competition < ApplicationRecord
 
         if sort_by_ranking.present?
           # Change position to previous if both single and average are tied with previous registration.
-          average_tied_previous = average_ranking&.worldRank == prev_sorted_ranking&.average_rank
-          single_tied_previous = single_ranking&.worldRank == prev_sorted_ranking&.single_rank
+          average_tied_previous = average_ranking&.world_rank == prev_sorted_ranking&.average_rank
+          single_tied_previous = single_ranking&.world_rank == prev_sorted_ranking&.single_rank
 
           tied_previous = single_tied_previous && average_tied_previous
 
@@ -1593,9 +1593,9 @@ class Competition < ApplicationRecord
           wca_id: user.wca_id,
           country_id: user.country.id,
           country_iso2: user.country_iso2,
-          average_rank: average_ranking&.worldRank,
+          average_rank: average_ranking&.world_rank,
           average_best: average_ranking&.best || 0,
-          single_rank: single_ranking&.worldRank,
+          single_rank: single_ranking&.world_rank,
           single_best: single_ranking&.best || 0,
           tied_previous: tied_previous,
           pos: pos,
