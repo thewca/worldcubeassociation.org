@@ -11,20 +11,20 @@ module Waitlistable
 
     attr_accessor :tracked_waitlist_position
 
-    validates :tracked_waiting_list_position, numericality: {
+    validates :waiting_list_position, numericality: {
       only_integer: true,
       greater_than_or_equal_to: 1,
       allow_nil: true,
       frontend_code: Registrations::ErrorCodes::INVALID_WAITING_LIST_POSITION,
       if: :waitlistable?,
     }
-    validates :tracked_waiting_list_position, numericality: {
+    validates :waiting_list_position, numericality: {
       equal_to: 1,
       allow_nil: true,
       frontend_code: Registrations::ErrorCodes::INVALID_WAITING_LIST_POSITION,
       if: [:waitlistable?, :waiting_list_present?, :waiting_list_empty?],
     }
-    validates :tracked_waiting_list_position, numericality: {
+    validates :waiting_list_position, numericality: {
       less_than_or_equal_to: :waiting_list_length,
       allow_nil: true,
       frontend_code: Registrations::ErrorCodes::INVALID_WAITING_LIST_POSITION,
@@ -41,11 +41,8 @@ module Waitlistable
       self.waiting_list_position = @tracked_waiting_list_position
     end
 
-    after_find :track_waitlist_position! # TODO: This may need to be `after_initialize`, not sure about edge cases
-    after_commit :track_waitlist_position!
-
-    private def track_waitlist_position!
-      @tracked_waiting_list_position = self.waiting_list_position
+    private def clear_tracked_waitlist_position!
+      @tracked_waiting_list_position = nil
     end
 
     # Tells the hooks whether the current entity
@@ -58,12 +55,8 @@ module Waitlistable
       self.waiting_list&.position(self)
     end
 
-    def tracked_waiting_list_position
-      @tracked_waiting_list_position || self.waiting_list_position
-    end
-
     def waiting_list_position?
-      self.tracked_waiting_list_position.present?
+      self.waiting_list_position.present?
     end
 
     def waiting_list_position_changed?
@@ -80,8 +73,8 @@ module Waitlistable
         self.waiting_list.move_to_position(self, target_position) if should_move
         self.waiting_list.remove(self) if should_remove
 
-        # Keep track of the now-updated position
-        self.track_waitlist_position!
+        # Make sure we're passing through the most recent state
+        self.clear_tracked_waitlist_position!
       else
         @tracked_waiting_list_position = target_position
       end
