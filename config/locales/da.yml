@@ -613,19 +613,19 @@ da:
         competition_id: Skete under
       competition_medium:
         #original_hash: 1917f4f
-        competitionId: Konkurrence
+        competition_id: Konkurrence
         #original_hash: 3deb745
-        type: Type
+        media_type: Type
         #original_hash: c3328c3
         text: Tekst
         #original_hash: d051707
         uri: Link
         #original_hash: 1be755a
-        submitterName: Afsenderens navn
+        submitter_name: Afsenderens navn
         #original_hash: 78cdfee
-        submitterEmail: Afsenderens email
+        submitter_email: Afsenderens email
         #original_hash: 0d31f23
-        submitterComment: Afsenderens kommentar
+        submitter_comment: Afsenderens kommentar
         #original_hash: bae7d5b
         status: Status
       regional_organization:
@@ -691,7 +691,7 @@ da:
         accepted: Accepteret
         #original_hash: 96f608c
         pending: Afventer
-      type:
+      media_type:
         #original_hash: ee45c30
         report: Rapport
         #original_hash: 4360c2d
@@ -1082,19 +1082,19 @@ da:
         comment: ''
       competition_medium:
         #original_hash: da39a3e
-        competitionId: ''
+        competition_id: ''
         #original_hash: da39a3e
-        type: ''
+        media_type: ''
         #original_hash: da39a3e
         text: ''
         #original_hash: da39a3e
         uri: ''
         #original_hash: da39a3e
-        submitterName: ''
+        submitter_name: ''
         #original_hash: da39a3e
-        submitterEmail: ''
+        submitter_email: ''
         #original_hash: da39a3e
-        submitterComment: ''
+        submitter_comment: ''
         #original_hash: da39a3e
         status: ''
       results_submission:

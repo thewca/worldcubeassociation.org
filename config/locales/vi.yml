@@ -568,7 +568,7 @@ vi:
         competition_id: Xảy ra khi
       competition_medium:
         #original_hash: 1917f4f
-        competitionId: Giải đấu
+        competition_id: Giải đấu
         #original_hash: 3deb745
         type: Thể loại
         #original_hash: c3328c3
@@ -576,11 +576,11 @@ vi:
         #original_hash: d051707
         uri: Link
         #original_hash: 1be755a
-        submitterName: Tên người nộp
+        submitter_name: Tên người nộp
         #original_hash: 78cdfee
-        submitterEmail: Email người nộp
+        submitter_mail: Email người nộp
         #original_hash: 0d31f23
-        submitterComment: Bình luận của người nộp
+        submitter_comment: Bình luận của người nộp
         #original_hash: bae7d5b
         status: Trạng thái
       regional_organization:
@@ -676,7 +676,7 @@ vi:
         accepted: Được chấp nhận
         #original_hash: 96f608c
         pending: Đang chờ
-      type:
+      media_type:
         #original_hash: ee45c30
         report: Báo cáo
         #original_hash: 4360c2d
@@ -880,7 +880,7 @@ vi:
         comment: ''
       competition_medium:
         #original_hash: da39a3e
-        competitionId: ''
+        competition_id: ''
         #original_hash: da39a3e
         type: ''
         #original_hash: da39a3e
@@ -888,11 +888,11 @@ vi:
         #original_hash: da39a3e
         uri: ''
         #original_hash: da39a3e
-        submitterName: ''
+        submitter_name: ''
         #original_hash: da39a3e
-        submitterEmail: ''
+        submitter_email: ''
         #original_hash: da39a3e
-        submitterComment: ''
+        submitter_comment: ''
         #original_hash: da39a3e
         status: ''
       results_submission:

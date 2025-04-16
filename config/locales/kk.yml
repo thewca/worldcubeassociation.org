@@ -601,19 +601,19 @@ kk:
         competition_id: Кезінде болған
       competition_medium:
         #original_hash: 1917f4f
-        competitionId: Жарыс
+        competition_id: Жарыс
         #original_hash: 3deb745
-        type: Түрі
+        media_type: Түрі
         #original_hash: c3328c3
         text: Мәтін
         #original_hash: d051707
         uri: Сілтеме
         #original_hash: 1be755a
-        submitterName: Жіберушінің аты
+        submitter_name: Жіберушінің аты
         #original_hash: 78cdfee
-        submitterEmail: Жіберушінің электрондық поштасы
+        submitter_email: Жіберушінің электрондық поштасы
         #original_hash: 0d31f23
-        submitterComment: Жіберушінің пікірі
+        submitter_comment: Жіберушінің пікірі
         #original_hash: bae7d5b
         status: Статус
       regional_organization:
@@ -679,7 +679,7 @@ kk:
         accepted: Мақұлданды
         #original_hash: 96f608c
         pending: Күту
-      type:
+      media_type:
         #original_hash: ee45c30
         report: Есеп
         #original_hash: 4360c2d
@@ -1043,19 +1043,19 @@ kk:
         comment: ''
       competition_medium:
         #original_hash: da39a3e
-        competitionId: ''
+        competition_id: ''
         #original_hash: da39a3e
-        type: ''
+        media_type: ''
         #original_hash: da39a3e
         text: ''
         #original_hash: da39a3e
         uri: ''
         #original_hash: da39a3e
-        submitterName: ''
+        submitter_name: ''
         #original_hash: da39a3e
-        submitterEmail: ''
+        submitter_email: ''
         #original_hash: da39a3e
-        submitterComment: ''
+        submitter_comment: ''
         #original_hash: da39a3e
         status: ''
       results_submission:

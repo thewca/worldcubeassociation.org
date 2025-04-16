@@ -6,7 +6,7 @@ class ApplicationController < ActionController::Base
   include TimeWillTell::Helpers::DateRangeHelper
   include Devise::Controllers::StoreLocation
 
-  protect_from_forgery with: :exception, unless: :is_oauth_request?
+  protect_from_forgery with: :exception, unless: :oauth_request?
 
   prepend_before_action :set_locale, unless: :ignore_client_language?
   # The API should only ever respond in English
@@ -113,21 +113,21 @@ class ApplicationController < ActionController::Base
 
     # For redirecting user to source after login - https://github.com/heartcombo/devise/wiki/How-To:-Redirect-back-to-current-page-after-sign-in,-sign-out,-sign-up,-update
     def storable_location?
-      request.get? && is_navigational_format? && !devise_controller? && !request.xhr? && !is_api_request?
+      request.get? && is_navigational_format? && !devise_controller? && !request.xhr? && !api_request?
     end
 
     def ignore_client_language?
-      is_api_request? || is_oauth_request?
+      api_request? || oauth_request?
     end
 
-    def is_oauth_request?
+    def oauth_request?
       # Checking the fullpath alone is not enough: The user-facing UI to manage OAuth applications
       #   and the "Approve" / "Deny" buttons for incoming OAuth requests also live under `/oauth/` routes.
       #   So we also check the controller inheritance chain because Doorkeeper conveniently distinguishes the "metal" controller.
       request.fullpath.include?('/oauth/') && self.class.ancestors.include?(Doorkeeper::ApplicationMetalController)
     end
 
-    def is_api_request?
+    def api_request?
       request.fullpath.include?('/api/')
     end
 

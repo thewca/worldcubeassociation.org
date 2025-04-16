@@ -17,11 +17,11 @@
   </div>
 
   <%= horizontal_simple_form_for @medium, url: media_path, html: { class: 'are-you-sure' } do |f| %>
-    <%= f.input :competitionId, as: :competition_id, only_one: true %>
-    <%= f.input :type, include_blank: false %>
+    <%= f.input :competition_id, as: :competition_id, only_one: true %>
+    <%= f.input :media_type, include_blank: false %>
     <%= f.input :text %>
     <%= f.input :uri %>
-    <%= f.input :submitterComment %>
+    <%= f.input :submitter_comment %>
 
     <%= f.button :submit %>
   <% end %>
