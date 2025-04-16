@@ -43,7 +43,7 @@ class CompetitionsController < ApplicationController
   ]
 
   rescue_from WcaExceptions::ApiException do |e|
-    render status: e.status, json: { error: e.to_s }
+    render status: e.status, json: { error: e.to_s }.reverse_merge(e.error_details.compact)
   end
 
   rescue_from JSON::Schema::ValidationError do |e|
@@ -494,8 +494,7 @@ class CompetitionsController < ApplicationController
   def create
     competition = Competition.new
 
-    # we're quite lax about reading params, because set_form_data! below does a comprehensive JSON-Schema check.
-    form_data = params.permit!.to_h
+    form_data = params_for_competition_form
     competition.set_form_data(form_data, current_user)
 
     if competition.save
@@ -521,8 +520,7 @@ class CompetitionsController < ApplicationController
 
     old_organizers = competition.organizers.to_a
 
-    # we're quite lax about reading params, because set_form_data! below does a comprehensive JSON-Schema check.
-    form_data = params.permit!.to_h
+    form_data = params_for_competition_form
 
     #####
     # HACK BECAUSE WE DON'T HAVE PERSISTENT COMPETITION IDS
@@ -591,6 +589,13 @@ class CompetitionsController < ApplicationController
     else
       render status: :bad_request, json: competition.form_errors
     end
+  end
+
+  private def params_for_competition_form
+    # we're quite lax about reading params, because set_form_data! on the competition object does a comprehensive JSON-Schema check.
+    #   Also, listing _all_ the possible params to `permit` here is annoying because the Competition model has _way_ too many columns.
+    #   So we "only" remove the ActionController values, as well as all route params manually.
+    params.permit!.to_h.except(:controller, :action, :id, :competition, :format)
   end
 
   before_action -> { require_user_permission(:can_manage_competition?, competition_from_params) }, only: [:announcement_data]

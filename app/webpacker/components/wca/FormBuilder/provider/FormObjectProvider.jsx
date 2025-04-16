@@ -22,6 +22,7 @@ export default function FormObjectProvider({
   children,
   initialObject,
   globalDisabled = false,
+  globalAllowIgnoreDisabled = true,
 }) {
   const [formState, dispatch] = useReducer(formReducer, initialObject, createState);
 
@@ -50,6 +51,14 @@ export default function FormObjectProvider({
           };
 
           dispatch(setErrors(jsonSchemaError));
+        } else {
+          const errorProperty = err.json.json_property || 'error';
+
+          const wrappedError = {
+            [errorProperty]: [err.json.error],
+          };
+
+          dispatch(setErrors(wrappedError));
         }
       } else {
         dispatch(setErrors(err.json));
@@ -69,7 +78,10 @@ export default function FormObjectProvider({
 
   return (
     <FormContext.Provider value={formContext}>
-      <SectionProvider disabled={globalDisabled}>
+      <SectionProvider
+        disabled={globalDisabled}
+        allowIgnoreDisabled={globalAllowIgnoreDisabled}
+      >
         {children}
       </SectionProvider>
     </FormContext.Provider>

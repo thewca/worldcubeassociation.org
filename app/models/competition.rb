@@ -1185,7 +1185,7 @@ class Competition < ApplicationRecord
   private def waiting_list_dates_must_be_valid
     return unless waiting_list_deadline_date?
 
-    errors.add(:waiting_list_deadline_date, I18n.t('competitions.errors.waiting_list_deadline_before_registration_close')) if waiting_list_deadline_date < registration_close
+    errors.add(:waiting_list_deadline_date, I18n.t('competitions.errors.waiting_list_deadline_before_registration_close')) if registration_range_specified? && waiting_list_deadline_date < registration_close
     errors.add(:waiting_list_deadline_date, I18n.t('competitions.errors.waiting_list_deadline_before_refund_date')) if refund_policy_limit_date? && waiting_list_deadline_date < refund_policy_limit_date
     errors.add(:waiting_list_deadline_date, I18n.t('competitions.errors.waiting_list_deadline_after_end')) if waiting_list_deadline_date > end_date
   end
@@ -1194,7 +1194,7 @@ class Competition < ApplicationRecord
   private def event_change_dates_must_be_valid
     return unless event_change_deadline_date?
 
-    errors.add(:event_change_deadline_date, I18n.t('competitions.errors.event_change_deadline_before_registration_close')) if event_change_deadline_date < registration_close
+    errors.add(:event_change_deadline_date, I18n.t('competitions.errors.event_change_deadline_before_registration_close')) if registration_range_specified? && event_change_deadline_date < registration_close
     errors.add(:event_change_deadline_date, I18n.t('competitions.errors.event_change_deadline_with_ots')) if on_the_spot_registration? && event_change_deadline_date < start_date
     errors.add(:event_change_deadline_date, I18n.t('competitions.errors.event_change_deadline_after_end_date')) if event_change_deadline_date > end_date.to_datetime.end_of_day
   end
@@ -2463,6 +2463,14 @@ class Competition < ApplicationRecord
     }
   end
 
+  def self.compute_diff(old_form, new_form)
+    compute_diff = HashDiff.left_diff(old_form, new_form)
+
+    compute_diff.reject_values_recursive do |value|
+      value == HashDiff::NO_VALUE
+    end
+  end
+
   def association_errors(association_name)
     self.public_send(association_name).map(&:errors).flat_map(&:to_a)
   end
@@ -2470,7 +2478,45 @@ class Competition < ApplicationRecord
   def set_form_data(form_data, current_user)
     JSON::Validator.validate!(Competition.form_data_json_schema, form_data)
 
-    raise WcaExceptions::BadApiParameter.new("Cannot change announced competition") if self.confirmed? && !current_user.can_admin_competitions?
+    if self.confirmed? && !current_user.can_admin_competitions?
+      current_state_form = self.to_form_data
+      changed_form_data = Competition.compute_diff(current_state_form, form_data)
+
+      # This is a much "stricter" version of the general schema above.
+      #    If the Delegate submits fields that they are not allowed to edit,
+      #    then these fields will not be included in the schema and validation will fail.
+      JSON::Validator.validate!(Competition.delegate_edits_json_schema, changed_form_data)
+
+      changed_form_data.each_recursive do |key, value, *prefixes|
+        joined_key = (prefixes + [key]).join('.')
+
+        # These keys all represent timestamps. They may only be edited by non-admins if...
+        #   - the original value (pre-edit) has not yet passed
+        #   - the new value is in the future (extending deadlines is allowed, shortening them is not)
+        if %w[registration.closingDateTime registration.waitingListDeadlineDate registration.eventChangeDeadlineDate].include?(joined_key)
+          existing_value = current_state_form.dig(*prefixes, key)
+
+          if existing_value.present?
+            existing_datetime = DateTime.parse(existing_value).utc
+
+            raise WcaExceptions::BadApiParameter.new(I18n.t('competitions.errors.editing_deadline_already_passed', timestamp: existing_datetime), json_property: joined_key) unless existing_datetime >= DateTime.now.utc
+
+            if value.present?
+              new_datetime = DateTime.parse(value).utc
+              new_after_existing = new_datetime >= existing_datetime
+
+              raise WcaExceptions::BadApiParameter.new(I18n.t('competitions.errors.edited_deadline_not_after_original', new_timestamp: new_datetime, timestamp: existing_datetime), json_property: joined_key) unless new_after_existing
+            end
+          end
+
+          if value.present?
+            new_datetime = DateTime.parse(value).utc
+
+            raise WcaExceptions::BadApiParameter.new(I18n.t('competitions.errors.edited_deadline_not_in_future', new_timestamp: new_datetime), json_property: joined_key) unless new_datetime > DateTime.now.utc
+          end
+        end
+      end
+    end
 
     ActiveRecord::Base.transaction do
       self.editing_user_id = current_user.id
@@ -2791,6 +2837,78 @@ class Competition < ApplicationRecord
           "properties" => {
             "fromId" => { "type" => ["string", "null"] },
             "cloneTabs" => { "type" => "boolean" },
+          },
+        },
+      },
+    }
+  end
+
+  # When comparing arrays through HashDiff, it implicitly converts the indices into keys.
+  #   For example, a diff of "before: [1,2,3] -- after: [1,2,3,4]" will be reported as "{3 => 4}"
+  #   because the element at index 3 on the right-hand side was added.
+  # This means that things which were numeric arrays in the original data appear as hashes
+  #   in the diff'ed data.
+  def self.array_change_json_schema(**additional_properties)
+    {
+      "type" => "object",
+      "additionalProperties" => additional_properties.deep_stringify_keys,
+      "propertyNames" => { "pattern" => /^\d+$/ },
+      "uniqueItems" => true,
+    }
+  end
+
+  # Stuff that Delegates are allowed to edit even after the competition is announced,
+  #   see also https://docs.google.com/document/d/1-GwE5OXurBUnR7EVBRTGIN_dGj3AaU7vvan_6RjOW7Q/edit
+  def self.delegate_edits_json_schema
+    {
+      "type" => "object",
+      "additionalProperties" => false,
+      "properties" => {
+        "information" => { "type" => ["string", "null"] },
+        "staff" => {
+          "type" => "object",
+          "additionalProperties" => false,
+          "properties" => {
+            "staffDelegateIds" => self.array_change_json_schema(type: "integer"),
+            "traineeDelegateIds" => self.array_change_json_schema(type: "integer"),
+            "organizerIds" => self.array_change_json_schema(type: "integer"),
+            "contact" => { "type" => ["string", "null"] },
+          },
+        },
+        "website" => {
+          "type" => "object",
+          "additionalProperties" => false,
+          "properties" => {
+            "externalWebsite" => { "type" => ["string", "null"] },
+            "usesWcaLive" => { "type" => "boolean" },
+          },
+        },
+        "entryFees" => {
+          "type" => "object",
+          "additionalProperties" => false,
+          "properties" => {
+            "onTheSpotEntryFee" => { "type" => ["integer", "null"] },
+            "donationsEnabled" => { "type" => ["boolean", "null"] },
+          },
+        },
+        "registration" => {
+          "type" => "object",
+          "additionalProperties" => false,
+          "properties" => {
+            "closingDateTime" => date_json_schema("date-time"),
+            "waitingListDeadlineDate" => date_json_schema("date-time"),
+            "eventChangeDeadlineDate" => date_json_schema("date-time"),
+            "allowOnTheSpot" => { "type" => ["boolean", "null"] },
+            "allowSelfDeleteAfterAcceptance" => { "type" => "boolean" },
+            "allowSelfEdits" => { "type" => "boolean" },
+            "forceComment" => { "type" => ["boolean", "null"] },
+          },
+        },
+        "eventRestrictions" => {
+          "type" => "object",
+          "additionalProperties" => false,
+          "properties" => {
+            "mainEventId" => { "type" => ["string", "null"] },
           },
         },
       },

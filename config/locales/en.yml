@@ -1994,6 +1994,9 @@ en:
       series_distance_days: "The competition is scheduled too many days away from %{competition}."
       must_ask_about_guests_if_specifying_limit: "Must ask about guests if a guest limit is specified."
       not_full_url: "You have a relative URL (%{url}) in the content. Please enter full URLs with prefix http:// or https://."
+      editing_deadline_already_passed: "You're only allowed to change dates for deadlines that have not yet passed, but the original value of %{timestamp} has already passed."
+      edited_deadline_not_after_original: "You're only allowed to extend deadlines, but %{new_timestamp} is set before the original value of %{timestamp}."
+      edited_deadline_not_in_future: "You're only allowed to introduce future deadlines, but %{new_timestamp} is not in the future."
     new:
       create_competition: "Create competition"
       note_clone: "To clone an existing competition visit the information page for that competition and click the \"Clone\" link in the menu."
