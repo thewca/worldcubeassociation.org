@@ -119,7 +119,7 @@ class ComputeAuxiliaryData < WcaCronjob
         '#{type}'            type,
                              result.*,
                              value,
-        event.name           eventName,
+        events.name          eventName,
                              format,
         countries.name       countryName,
         competition.cellName competitionName,
@@ -135,16 +135,16 @@ class ComputeAuxiliaryData < WcaCronjob
             #{event_condition_snake}
           GROUP BY event_id) record,
         Results result,
-        Events event,
+        events,
         countries,
         Competitions competition
       WHERE result.#{value} = value
         #{event_condition_camel}
         AND result.eventId = record_event_id
-        AND event.id       = result.eventId
+        AND events.id      = result.eventId
         AND countries.id   = result.countryId
         AND competition.id = result.competitionId
-        AND event.`rank` < 990
+        AND events.`rank` < 990
     SQL
   end
 end
