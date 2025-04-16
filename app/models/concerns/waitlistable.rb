@@ -38,7 +38,7 @@ module Waitlistable
     after_save :commit_waitlist_position, if: :waiting_list_persisted?
 
     private def commit_waitlist_position
-      self.waiting_list_position = self.tracked_waitlist_position
+      self.apply_to_waiting_list(self.waiting_list_position)
     end
 
     after_commit :clear_tracked_waitlist_position!
@@ -67,16 +67,20 @@ module Waitlistable
 
     def waiting_list_position=(target_position)
       if self.persisted? && waiting_list_persisted?
-        should_add = self.waitlistable? && target_position.nil?
-        should_move = self.waitlistable? && target_position.present?
-        should_remove = !self.waitlistable? && target_position.present?
-
-        self.waiting_list.add(self) if should_add
-        self.waiting_list.move_to_position(self, target_position) if should_move
-        self.waiting_list.remove(self) if should_remove
+        self.apply_to_waiting_list(target_position)
       else
         self.tracked_waitlist_position = target_position
       end
+    end
+
+    private def apply_to_waiting_list(target_position)
+      should_add = self.waitlistable? && target_position.nil?
+      should_move = self.waitlistable? && target_position.present?
+      should_remove = !self.waitlistable? && target_position.present?
+
+      self.waiting_list.add(self) if should_add
+      self.waiting_list.move_to_position(self, target_position) if should_move
+      self.waiting_list.remove(self) if should_remove
     end
   end
 end
