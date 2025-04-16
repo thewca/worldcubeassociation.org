@@ -36,7 +36,7 @@ RSpec.describe ResultsValidators::PositionsValidator do
       it "validates results correctly ordered on given competitions" do
         validator_args.each do |arg|
           pv = ResultsValidators::PositionsValidator.new.validate(**arg)
-          expect(pv.has_errors?).to be false
+          expect(pv.any_errors?).to be false
         end
       end
 
@@ -89,7 +89,7 @@ RSpec.describe ResultsValidators::PositionsValidator do
           arg[:model].where(pos: 1, eventId: "333oh").update(pos: 2)
           arg[:model].where(pos: 5, eventId: "222").update(pos: 7)
           pv = ResultsValidators::PositionsValidator.new(apply_fixes: true).validate(**arg)
-          expect(pv.has_errors?).to be false
+          expect(pv.any_errors?).to be false
           expect(pv.infos).to match_array(expected_infos[arg[:model].to_s])
         end
       end
@@ -101,7 +101,7 @@ RSpec.describe ResultsValidators::PositionsValidator do
         create_correct_tied_results(competition1, "333oh", kind: :inbox_result)
         validator_args.each do |arg|
           pv = ResultsValidators::PositionsValidator.new.validate(**arg)
-          expect(pv.has_errors?).to be false
+          expect(pv.any_errors?).to be false
         end
       end
       it "invalidates incorrectly tied results" do
@@ -129,7 +129,7 @@ RSpec.describe ResultsValidators::PositionsValidator do
         FactoryBot.create(:result, :blind_mo3, competition: competition1, pos: 1, best: 1000)
         FactoryBot.create(:result, :blind_mo3, competition: competition1, pos: 3, best: 2000)
         pv = ResultsValidators::PositionsValidator.new.validate(competition_ids: competition1.id, model: Result)
-        expect(pv.has_errors?).to be false
+        expect(pv.any_errors?).to be false
       end
 
       it "invalidates incorrectly ordered results" do

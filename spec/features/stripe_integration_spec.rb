@@ -59,7 +59,7 @@ RSpec.feature "Stripe PaymentElement integration", :js do
       donation_money = competition.base_entry_fee / 2
 
       give_donation_checkbox.click
-      fill_in with: donation_money.amount.to_s, id: 'donationInputField'
+      fill_in_autonumeric '#donationInputField', with: donation_money.amount.to_s
 
       format_money = format_money(registration.outstanding_entry_fees + donation_money)
       expect(subtotal_label).to have_text(format_money)
