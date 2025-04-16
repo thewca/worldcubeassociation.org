@@ -193,6 +193,11 @@ ja:
       name: 決勝
       #original_hash: 672b22c
       cell_name: 決勝
+    g:
+      #original_hash: e2f74d2
+      name: 準決勝
+      #original_hash: e2f74d2
+      cell_name: 準決勝
     h:
       #original_hash: 4d618bb
       name: 予選ラウンド
