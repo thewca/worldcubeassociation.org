@@ -1833,6 +1833,7 @@ en:
           information: "Pending should only be used for incomplete (eg, unpaid) registrations - please use the Waiting List if your competition is too full to accept new competitors."
         waitlist:
           title: "Waiting List Registrations"
+          information: "Competitors are added to the end of the Waiting List. If you add several at once, the paid competitors will be added to the end in the order that they paid, followed by the rest in the order that they registered. You can manually adjust the order in Edit Mode if necessary."
           skipped_warning: "You've skipped %{count} registration(s) on the Waiting List. Are you sure you want to approve the other registration(s) instead?"
         approved:
           title: "Approved Registrations"
