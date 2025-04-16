@@ -92,21 +92,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_31_170413) do
     t.index ["start_date"], name: "index_Competitions_on_start_date"
   end
 
-  create_table "Events", id: { type: :string, limit: 6, default: "" }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB PACK_KEYS=0", force: :cascade do |t|
-    t.string "name", limit: 54, default: "", null: false
-    t.integer "rank", default: 0, null: false
-    t.string "format", limit: 10, default: "", null: false
-  end
-
-  create_table "Formats", id: { type: :string, limit: 1, default: "" }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
-    t.string "name", limit: 50, default: "", null: false
-    t.string "sort_by", limit: 255, null: false
-    t.string "sort_by_second", limit: 255, null: false
-    t.integer "expected_solve_count", null: false
-    t.integer "trim_fastest_n", null: false
-    t.integer "trim_slowest_n", null: false
-  end
-
   create_table "InboxPersons", id: false, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "id", limit: 10, null: false
     t.string "wcaId", limit: 10, default: "", null: false
@@ -700,6 +685,21 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_31_170413) do
     t.string "championship_type", null: false
     t.string "eligible_country_iso2", null: false
     t.index ["championship_type", "eligible_country_iso2"], name: "index_eligible_iso2s_for_championship_on_type_and_country_iso2", unique: true
+  end
+
+  create_table "events", id: { type: :string, limit: 6, default: "" }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB PACK_KEYS=0", force: :cascade do |t|
+    t.string "name", limit: 54, default: "", null: false
+    t.integer "rank", default: 0, null: false
+    t.string "format", limit: 10, default: "", null: false
+  end
+
+  create_table "formats", id: { type: :string, limit: 1, default: "" }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "name", limit: 50, default: "", null: false
+    t.string "sort_by", limit: 255, null: false
+    t.string "sort_by_second", limit: 255, null: false
+    t.integer "expected_solve_count", null: false
+    t.integer "trim_fastest_n", null: false
+    t.integer "trim_slowest_n", null: false
   end
 
   create_table "groups_metadata_board", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|

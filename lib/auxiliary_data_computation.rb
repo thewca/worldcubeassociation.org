@@ -36,8 +36,8 @@ module AuxiliaryDataComputation
             ) MinValuesWithId
             JOIN Results result ON result.id = valueAndId % 1000000000
             JOIN Competitions competition ON competition.id = competitionId
-            JOIN countries countries ON countries.id = result.countryId
-            JOIN Events event ON event.id = eventId
+            JOIN countries ON countries.id = result.countryId
+            JOIN events ON events.id = eventId
         SQL
       end
     end

@@ -190,9 +190,9 @@ class ResultsController < ApplicationController
 
     if @is_histories
       order = if @is_history
-                'event.`rank`, type desc, value, start_date desc, round_types.`rank` desc'
+                'events.`rank`, type desc, value, start_date desc, round_types.`rank` desc'
               else
-                'start_date desc, event.`rank`, type desc, value, round_types.`rank` desc'
+                'start_date desc, events.`rank`, type desc, value, round_types.`rank` desc'
               end
 
       @query = <<-SQL.squish
@@ -201,14 +201,14 @@ class ResultsController < ApplicationController
           YEAR(competition.start_date)  year,
           MONTH(competition.start_date) month,
           DAY(competition.start_date)   day,
-          event.id             eventId,
-          event.name           eventName,
+          events.id            eventId,
+          events.name          eventName,
           result.id            id,
           result.type          type,
           result.value         value,
           result.formatId      formatId,
           result.roundTypeId   roundTypeId,
-          event.format         valueFormat,
+          events.format        valueFormat,
                                recordName,
           result.personId      personId,
           result.personName    personName,
@@ -221,12 +221,12 @@ class ResultsController < ApplicationController
           (SELECT Results.*, 'single' type, best    value, regionalSingleRecord  recordName FROM Results WHERE regionalSingleRecord<>'' UNION
             SELECT Results.*, 'average' type, average value, regionalAverageRecord recordName FROM Results WHERE regionalAverageRecord<>'') result
           #{@gender_condition.present? ? "JOIN Persons persons ON result.personId = persons.wca_id and persons.subId = 1," : ","}
-          Events event,
+          events,
           round_types,
           Competitions competition,
           countries
-        WHERE event.id = eventId
-          AND event.`rank` < 1000
+        WHERE events.id = eventId
+          AND events.`rank` < 1000
           AND round_types.id = roundTypeId
           AND competition.id = competitionId
           AND countries.id = result.countryId
@@ -262,7 +262,7 @@ class ResultsController < ApplicationController
         '#{type}'            type,
                              result.*,
                              value,
-        event.name           eventName,
+        events.name          eventName,
                              format,
         countries.name       countryName,
         competition.cellName competitionName,
@@ -283,7 +283,7 @@ class ResultsController < ApplicationController
           GROUP BY event_id) record,
         Results result
         #{@gender_condition.present? ? "JOIN Persons persons ON result.personId = persons.wca_id and persons.subId = 1," : ","}
-        Events event,
+        events,
         countries,
         Competitions competition
       WHERE result.#{value} = value
@@ -292,10 +292,10 @@ class ResultsController < ApplicationController
         #{@years_condition_competition}
         #{@gender_condition}
         AND result.eventId = recordEventId
-        AND event.id       = result.eventId
-        AND countries.id     = result.countryId
+        AND events.id      = result.eventId
+        AND countries.id   = result.countryId
         AND competition.id = result.competitionId
-        AND event.`rank` < 990
+        AND events.`rank` < 990
     SQL
   end
 
