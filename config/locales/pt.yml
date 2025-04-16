@@ -152,57 +152,57 @@ pt:
       #original_hash: 4d618bb
       name: Ronda de qualificação
       #original_hash: 4d618bb
-      cellName: Ronda de Qualificação
+      cell_name: Ronda de Qualificação
     '1':
       #original_hash: 1e725b6
       name: Primeira ronda
       #original_hash: 1e725b6
-      cellName: Primeira ronda
+      cell_name: Primeira ronda
     '2':
       #original_hash: 985c8d0
       name: Segunda Ronda
       #original_hash: 985c8d0
-      cellName: Segunda ronda
+      cell_name: Segunda ronda
     '3':
       #original_hash: e2f74d2
       name: Semifinal
       #original_hash: e2f74d2
-      cellName: Semifinal
+      cell_name: Semifinal
     b:
       #original_hash: 327c999
       name: Final B
       #original_hash: 327c999
-      cellName: Final B
+      cell_name: Final B
     c:
       #original_hash: 672b22c
       name: Final
       #original_hash: 672b22c
-      cellName: Final
+      cell_name: Final
     d:
       #original_hash: 1e725b6
       name: Primeira ronda
       #original_hash: 1e725b6
-      cellName: Primeira ronda
+      cell_name: Primeira ronda
     e:
       #original_hash: 985c8d0
       name: Segunda ronda
       #original_hash: 985c8d0
-      cellName: Segunda ronda
+      cell_name: Segunda ronda
     f:
       #original_hash: 672b22c
       name: Final
       #original_hash: 672b22c
-      cellName: Final
+      cell_name: Final
     g:
       #original_hash: e2f74d2
       name: Meia-Final
       #original_hash: e2f74d2
-      cellName: Meia-Final
+      cell_name: Meia-Final
     h:
       #original_hash: 4d618bb
       name: Ronda de qualificação
       #original_hash: 4d618bb
-      cellName: Ronda de qualificação
+      cell_name: Ronda de qualificação
   attempts:
     #original_hash: 17dae1e
     attempt_name: 'Tentativa %{number}'
@@ -573,19 +573,19 @@ pt:
         competition_id: Aconteceu durante
       competition_medium:
         #original_hash: 1917f4f
-        competitionId: Competição
+        competition_id: Competição
         #original_hash: 3deb745
-        type: Tipo
+        media_type: Tipo
         #original_hash: c3328c3
         text: Texto
         #original_hash: d051707
         uri: Hiperligação
         #original_hash: 1be755a
-        submitterName: Nome de quem submete
+        submitter_name: Nome de quem submete
         #original_hash: 78cdfee
-        submitterEmail: Email de quem submete
+        submitter_email: Email de quem submete
         #original_hash: 0d31f23
-        submitterComment: Comentário de quem submete
+        submitter_omment: Comentário de quem submete
         #original_hash: bae7d5b
         status: Estado
       regional_organization:
@@ -681,7 +681,7 @@ pt:
         accepted: Aceite
         #original_hash: 96f608c
         pending: Pendente
-      type:
+      media_type:
         #original_hash: ee45c30
         report: Relatório
         #original_hash: 4360c2d
@@ -891,7 +891,7 @@ pt:
         comment: ''
       competition_medium:
         #original_hash: da39a3e
-        competitionId: ''
+        competition_id: ''
         #original_hash: da39a3e
         type: ''
         #original_hash: da39a3e
@@ -899,11 +899,11 @@ pt:
         #original_hash: da39a3e
         uri: ''
         #original_hash: da39a3e
-        submitterName: ''
+        submitter_name: ''
         #original_hash: da39a3e
-        submitterEmail: ''
+        submitter_email: ''
         #original_hash: da39a3e
-        submitterComment: ''
+        submitter_comment: ''
         #original_hash: da39a3e
         status: ''
       results_submission:

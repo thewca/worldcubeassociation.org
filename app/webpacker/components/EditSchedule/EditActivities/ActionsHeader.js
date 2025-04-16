@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import {
   Button,
   Checkbox,
-  Container,
   Form,
   Icon,
   Modal,
+  Segment,
 } from 'semantic-ui-react';
 
 import { copyRoomActivities } from '../store/actions';
@@ -35,7 +35,7 @@ function ActionsHeader({
 
   return (
     otherRoomsWithNonEmptySchedules.length > 0 && (
-      <Container>
+      <Segment>
         <CopyRoomScheduleModal
           isOpen={isCopyModalOpen}
           selectedRoomId={selectedRoomId}
@@ -52,7 +52,7 @@ function ActionsHeader({
           checked={shouldUpdateMatches}
           onChange={setShouldUpdateMatches}
         />
-      </Container>
+      </Segment>
     )
   );
 }

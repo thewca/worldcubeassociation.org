@@ -289,7 +289,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     query = params.require(:query)
     group_type = params.require(:groupType)
     roles = UserGroup.roles_of_group_type(group_type)
-    active_roles = roles.select { |role| role.is_active? }
+    active_roles = roles.select { |role| role.active? }
 
     query.split.each do |part|
       active_roles = active_roles.select do |role|
