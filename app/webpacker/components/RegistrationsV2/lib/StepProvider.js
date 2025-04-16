@@ -1,55 +1,17 @@
 import React, {
-  createContext, useMemo, useReducer,
+  useMemo, useReducer,
 } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useRegistration } from './RegistrationProvider';
 import getRegistrationConfig from '../api/registration/get/get_registration_config';
-import RegistrationRequirements from '../Register/RegistrationRequirements';
-import CompetingStep from '../Register/CompetingStep';
-import StripeWrapper from '../Register/StripeWrapper';
-import RegistrationOverview from '../Register/RegistrationOverview';
-
-export const StepContext = createContext();
-
-const requirementsStepConfig = {
-  key: 'requirements',
-  i18nKey: 'competitions.registration_v2.register.panel.requirements',
-  component: RegistrationRequirements,
-  shouldShowCompleted: (isRegistered, hasPaid, isAccepted, index) => index > 0,
-  shouldBeDisabled: (hasPaid, activeIndex) => activeIndex !== 0,
-};
-
-const competingStepConfig = {
-  key: 'competing',
-  i18nKey: 'competitions.registration_v2.register.panel.competing',
-  component: CompetingStep,
-  shouldShowCompleted: (isRegistered) => isRegistered,
-  shouldBeDisabled: (hasPaid, activeIndex, index) => index > activeIndex,
-};
-
-const paymentStepConfig = {
-  key: 'payment',
-  i18nKey: 'competitions.registration_v2.register.panel.payment',
-  component: StripeWrapper,
-  shouldShowCompleted: (isRegistered, hasPaid) => hasPaid,
-  shouldBeDisabled: (
-    hasPaid,
-    activeIndex,
-    index,
-    registrationCurrentlyOpen,
-  ) => (!hasPaid && index > activeIndex) || !registrationCurrentlyOpen,
-};
-
-const registrationOverviewConfig = {
-  key: 'approval',
-  i18nKey: 'competitions.registration_v2.register.panel.approval',
-  component: RegistrationOverview,
-  shouldShowCompleted: (isRegistered, hasPaid, isAccepted) => isAccepted,
-  shouldBeDisabled: () => false,
-};
-
-const availableSteps = [requirementsStepConfig,
-  competingStepConfig, paymentStepConfig, registrationOverviewConfig];
+import {
+  availableSteps,
+  competingStepConfig,
+  paymentStepConfig,
+  registrationOverviewConfig,
+  requirementsStepConfig,
+} from './stepConfigs';
+import StepContext from './StepContext';
 
 export default function StepProvider({ competitionInfo, children }) {
   const {
@@ -103,7 +65,6 @@ export default function StepProvider({ competitionInfo, children }) {
 
   const CurrentStepPanel = useMemo(() => {
     if (steps.length > 0) {
-      console.log(steps);
       return steps[activeIndex].component;
     }
     return null;

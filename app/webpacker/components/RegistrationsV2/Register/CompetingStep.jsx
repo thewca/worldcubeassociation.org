@@ -234,6 +234,7 @@ export default function CompetingStep({
     selectedEventIds.asArray,
     hasGuestsChanged,
     guests,
+    nextStep,
   ]);
 
   const actionReRegister = useCallback(() => {

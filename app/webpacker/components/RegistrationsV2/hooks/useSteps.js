@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { StepContext } from '../lib/StepProvider';
+import StepContext from '../lib/StepContext';
 
 export default function useSteps() {
   const context = useContext(StepContext);
