@@ -2,28 +2,23 @@ import React, {
   useMemo, useReducer,
 } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { useRegistration } from './RegistrationProvider';
 import getRegistrationConfig from '../api/registration/get/get_registration_config';
 import {
   availableSteps,
-  competingStepConfig,
-  paymentStepConfig,
   registrationOverviewConfig,
-  requirementsStepConfig,
 } from './stepConfigs';
 import StepContext from './StepContext';
+import { useRegistration } from './RegistrationProvider';
 
 export default function StepProvider({ competitionInfo, children }) {
   const {
-    isRegistered, isAccepted, isRejected, hasPaid, isPolling,
+    isRegistered, isAccepted, hasPaid,
   } = useRegistration();
 
   const { data: registrationConfig, isLoading } = useQuery({
     queryFn: () => getRegistrationConfig(competitionInfo),
     queryKey: ['registration-config', competitionInfo.id],
   });
-
-  const registrationFinished = (isRegistered && hasPaid) || (isRegistered && !competitionInfo['using_payment_integrations?']);
 
   const steps = useMemo(() => {
     if (registrationConfig) {
@@ -44,23 +39,7 @@ export default function StepProvider({ competitionInfo, children }) {
         default: throw Error('unrecognised action');
       }
     },
-    null,
-    () => {
-      if (steps.length > 0) {
-        if (isPolling) {
-          return steps.findIndex((step) => step === competingStepConfig);
-        }
-
-        if (registrationFinished || isAccepted || isRejected) {
-          return steps.findIndex((step) => step === registrationOverviewConfig);
-        }
-
-        return steps.findIndex(
-          (step) => step === (isRegistered ? paymentStepConfig : requirementsStepConfig),
-        );
-      }
-      return 0;
-    },
+    0,
   );
 
   const CurrentStepPanel = useMemo(() => {
@@ -72,7 +51,7 @@ export default function StepProvider({ competitionInfo, children }) {
 
   const currentStepParameters = useMemo(() => {
     if (steps.length > 0) {
-      return registrationConfig.find((config) => config.key === steps[activeIndex].key).parameters;
+      return registrationConfig.find((config) => config.key === steps[activeIndex].key)?.parameters;
     }
     return {};
   }, [activeIndex, registrationConfig, steps]);
@@ -91,9 +70,24 @@ export default function StepProvider({ competitionInfo, children }) {
         (stepConfig) => stepConfig.key === key,
       ),
     }),
+    jumpToFirstIncompleteStep: () => {
+      dispatchStep({
+        set: true,
+        index: steps.findIndex(
+          (stepConfig) => !stepConfig.shouldShowCompleted(isRegistered, hasPaid, isAccepted, 1),
+        ),
+      });
+    },
     activeIndex,
     isLoading,
-  }), [CurrentStepPanel, activeIndex, isLoading, steps]);
+  }), [CurrentStepPanel,
+    activeIndex,
+    currentStepParameters,
+    hasPaid,
+    isAccepted,
+    isLoading,
+    isRegistered,
+    steps]);
 
   return (
     <StepContext.Provider value={value}>

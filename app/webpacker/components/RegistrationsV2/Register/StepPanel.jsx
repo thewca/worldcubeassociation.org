@@ -16,7 +16,7 @@ export default function StepPanel({
   } = useRegistration();
 
   const {
-    steps, CurrentStepPanel, activeIndex, jumpToIndex,
+    steps, CurrentStepPanel, activeIndex, jumpToStepByIndex,
   } = useSteps();
 
   return (
@@ -40,7 +40,7 @@ export default function StepPanel({
               registrationCurrentlyOpen,
               isRejected,
             )}
-            onClick={() => jumpToIndex(index)}
+            onClick={() => jumpToStepByIndex(index)}
           >
             <Step.Content>
               <Step.Title>{I18n.t(`${stepConfig.i18nKey}.title`)}</Step.Title>

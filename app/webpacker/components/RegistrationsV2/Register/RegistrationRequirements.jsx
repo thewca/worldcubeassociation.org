@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   Button,
   Form,
@@ -9,6 +9,7 @@ import I18n from '../../../lib/i18n';
 import useCheckboxState from '../../../lib/hooks/useCheckboxState';
 import I18nHTMLTranslate from '../../I18nHTMLTranslate';
 import useSteps from '../hooks/useSteps';
+import { useRegistration } from '../lib/RegistrationProvider';
 
 function RegistrationFullMessage({ competitionInfo }) {
   if (competitionInfo['registration_full_and_accepted?']) {
@@ -32,7 +33,16 @@ function RegistrationFullMessage({ competitionInfo }) {
 
 export default function RegistrationRequirements({ competitionInfo }) {
   const [infoAcknowledged, setInfoAcknowledged] = useCheckboxState(false);
-  const { nextStep } = useSteps();
+  const { jumpToStepByKey, nextStep, jumpToFirstIncompleteStep } = useSteps();
+  const { isApproved, isRejected, isRegistered } = useRegistration();
+
+  useEffect(() => {
+    if (isApproved || isRejected) {
+      jumpToStepByKey('approval');
+    } else if (isRegistered) {
+      jumpToFirstIncompleteStep();
+    }
+  }, [jumpToStepByKey, isApproved, isRejected, isRegistered, jumpToFirstIncompleteStep]);
 
   return (
     <Segment basic>
