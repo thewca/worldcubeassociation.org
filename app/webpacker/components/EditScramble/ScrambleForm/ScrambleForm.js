@@ -15,15 +15,15 @@ import {
 import './ScrambleForm.scss';
 
 const roundDataFromScramble = (scramble) => ({
-  competitionId: scramble.competitionId || '',
-  roundTypeId: scramble.roundTypeId || '',
-  eventId: scramble.eventId || '',
+  competitionId: scramble.competition_id || '',
+  roundTypeId: scramble.round_type_id || '',
+  eventId: scramble.event_id || '',
 });
 
 const scrambleInfoFromScramble = (scramble) => ({
-  groupId: scramble.groupId || '',
-  isExtra: scramble.isExtra || false,
-  scrambleNum: scramble.scrambleNum || '',
+  groupId: scramble.group_id || '',
+  isExtra: scramble.is_extra || false,
+  scrambleNum: scramble.scramble_num || '',
   scrambleStr: scramble.scramble || '',
 });
 
@@ -33,12 +33,12 @@ const dataToScramble = ({
   groupId, isExtra, scrambleNum, scrambleStr,
 }) => {
   const scramble = {
-    competitionId,
-    eventId,
-    roundTypeId,
-    groupId,
-    isExtra,
-    scrambleNum,
+    competition_id: competitionId,
+    event_id: eventId,
+    round_type_id: roundTypeId,
+    group_id: groupId,
+    is_extra: isExtra,
+    scramble_num: scrambleNum,
     scramble: scrambleStr,
   };
   return { scramble };
@@ -47,7 +47,7 @@ const dataToScramble = ({
 function ScrambleForm({
   scramble, save, saving, onCreate, onUpdate, onDelete,
 }) {
-  const { scrambleId: id } = scramble;
+  const { id } = scramble;
 
   // Round-related state.
   const [roundData, setRoundData] = useState(roundDataFromScramble(scramble));
@@ -104,7 +104,7 @@ function ScrambleForm({
 
   const deleteAction = useCallback(() => {
     save(
-      scrambleUrl(scramble.scrambleId),
+      scrambleUrl(scramble.id),
       {},
       (responseJson) => onDelete({ scramble, response: responseJson }),
       { method: 'DELETE' },
@@ -168,8 +168,8 @@ function ScrambleFormWrapper({ scramble, sync }) {
   if (created) {
     return (
       <AfterActionMessage
-        eventId={scramble.eventId}
-        competitionId={scramble.competitionId}
+        eventId={scramble.event_id}
+        competitionId={scramble.competition_id}
         response={created.response}
       />
     );
@@ -178,8 +178,8 @@ function ScrambleFormWrapper({ scramble, sync }) {
     return (
       <div>
         <AfterActionMessage
-          eventId={scramble.eventId}
-          competitionId={scramble.competitionId}
+          eventId={scramble.event_id}
+          competitionId={scramble.competition_id}
           response={edited.response}
         />
         <Button
@@ -196,8 +196,8 @@ function ScrambleFormWrapper({ scramble, sync }) {
   if (deleted) {
     return (
       <AfterActionMessage
-        eventId={scramble.eventId}
-        competitionId={scramble.competitionId}
+        eventId={scramble.event_id}
+        competitionId={scramble.competition_id}
         response={deleted.response}
       />
     );
