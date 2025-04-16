@@ -3,10 +3,10 @@
 require "rails_helper"
 
 RSpec.feature "Delegate Report" do
-  let!(:delegate) { FactoryBot.create :delegate, name: "Jeremy on Bart" }
-  let(:competition) { FactoryBot.create :competition, :with_valid_submitted_results, delegates: [delegate], name: "Submit Report 2017" }
-  let!(:delegate_report) { FactoryBot.create :delegate_report, :with_images, competition: competition, schedule_url: "http://example.com" }
-  let!(:wrc_members) { FactoryBot.create_list :user, 3, :wrc_member }
+  let!(:delegate) { create :delegate, name: "Jeremy on Bart" }
+  let(:competition) { create :competition, :with_valid_submitted_results, delegates: [delegate], name: "Submit Report 2017" }
+  let!(:delegate_report) { create :delegate_report, :with_images, competition: competition, schedule_url: "http://example.com" }
+  let!(:wrc_members) { create_list :user, 3, :wrc_member }
 
   context "when signed in as competition delegate" do
     before :each do
