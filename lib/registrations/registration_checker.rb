@@ -17,6 +17,13 @@ module Registrations
       end
     end
 
+    def self.build_association_copy(association, clone: true, **attributes)
+      # If we're NOT cloning, then it's safe (and even required) to search for an already existing entity
+      existing_association = association.find_by(**attributes) unless clone
+
+      existing_association || association.build(**attributes)
+    end
+
     def self.apply_payload(registration, raw_payload, clone: true)
       # Duplicate everything to make sure we don't trigger unwanted DB write operations
       build_copy(registration, clone: clone).tap do |new_registration|
@@ -43,7 +50,7 @@ module Registrations
         competition_events_lookup = registration.competition.competition_events.where(event_id: desired_events).index_by(&:event_id)
         competition_events = desired_events.map { build_copy(competition_events_lookup[it], clone: clone) }
 
-        upserted_competition_events = competition_events.map { new_registration.registration_competition_events.build(competition_event: it) }
+        upserted_competition_events = competition_events.map { build_association_copy(registration.registration_competition_events, clone: clone, competition_event: it) }
         new_registration.registration_competition_events = upserted_competition_events
       end
     end
