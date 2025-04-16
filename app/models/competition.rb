@@ -1185,7 +1185,7 @@ class Competition < ApplicationRecord
   private def waiting_list_dates_must_be_valid
     return unless waiting_list_deadline_date?
 
-    errors.add(:waiting_list_deadline_date, I18n.t('competitions.errors.waiting_list_deadline_before_registration_close')) if waiting_list_deadline_date < registration_close
+    errors.add(:waiting_list_deadline_date, I18n.t('competitions.errors.waiting_list_deadline_before_registration_close')) if registration_range_specified? && waiting_list_deadline_date < registration_close
     errors.add(:waiting_list_deadline_date, I18n.t('competitions.errors.waiting_list_deadline_before_refund_date')) if refund_policy_limit_date? && waiting_list_deadline_date < refund_policy_limit_date
     errors.add(:waiting_list_deadline_date, I18n.t('competitions.errors.waiting_list_deadline_after_end')) if waiting_list_deadline_date > end_date
   end
@@ -1194,7 +1194,7 @@ class Competition < ApplicationRecord
   private def event_change_dates_must_be_valid
     return unless event_change_deadline_date?
 
-    errors.add(:event_change_deadline_date, I18n.t('competitions.errors.event_change_deadline_before_registration_close')) if event_change_deadline_date < registration_close
+    errors.add(:event_change_deadline_date, I18n.t('competitions.errors.event_change_deadline_before_registration_close')) if registration_range_specified? && event_change_deadline_date < registration_close
     errors.add(:event_change_deadline_date, I18n.t('competitions.errors.event_change_deadline_with_ots')) if on_the_spot_registration? && event_change_deadline_date < start_date
     errors.add(:event_change_deadline_date, I18n.t('competitions.errors.event_change_deadline_after_end_date')) if event_change_deadline_date > end_date.to_datetime.end_of_day
   end

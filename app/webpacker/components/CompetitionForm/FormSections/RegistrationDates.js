@@ -15,7 +15,7 @@ export default function RegistrationDates() {
   } = useFormObject();
 
   const registrationNotYetClosed = useMemo(
-    () => hasNotPassed(closingDateTime, 'UTC'),
+    () => closingDateTime === null || hasNotPassed(closingDateTime, 'UTC'),
     [closingDateTime],
   );
 

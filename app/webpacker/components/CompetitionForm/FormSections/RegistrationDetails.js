@@ -43,12 +43,12 @@ export default function RegistrationDetails() {
   const guestsRestricted = guestsGoFree && registration?.guestEntryStatus === 'restricted';
 
   const waitingListNotYetPast = useMemo(
-    () => hasNotPassed(waitingListDeadlineDate, 'UTC'),
+    () => waitingListDeadlineDate === null || hasNotPassed(waitingListDeadlineDate, 'UTC'),
     [waitingListDeadlineDate],
   );
 
   const eventChangeNotYetPast = useMemo(
-    () => hasNotPassed(eventChangeDeadlineDate, 'UTC'),
+    () => eventChangeDeadlineDate === null || hasNotPassed(eventChangeDeadlineDate, 'UTC'),
     [eventChangeDeadlineDate],
   );
 
