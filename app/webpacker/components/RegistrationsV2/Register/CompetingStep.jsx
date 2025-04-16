@@ -72,9 +72,9 @@ export default function CompetingStep({
     ? [] : preferredEvents
       .filter((event) => {
         const preferredEventHeld = currentStepParameters.event_ids.includes(event);
-        if (currentStepParameters.qualifications) {
+        if (currentStepParameters.qualifications_wcif) {
           return preferredEventHeld
-          && isQualifiedForEvent(event, currentStepParameters.qualifications, personalRecords);
+          && isQualifiedForEvent(event, currentStepParameters.qualifications_wcif, personalRecords);
         }
         return preferredEventHeld;
       });
@@ -265,11 +265,11 @@ export default function CompetingStep({
   };
 
   const onAllEventsClick = () => {
-    if (currentStepParameters.qualifications) {
+    if (currentStepParameters.qualifications_wcif) {
       selectedEventIds.update(
         currentStepParameters.event_ids.filter((e) => isQualifiedForEvent(
           e,
-          currentStepParameters.qualifications,
+          currentStepParameters.qualifications_wcif,
           personalRecords,
         )),
       );
@@ -349,13 +349,13 @@ export default function CompetingStep({
                   ? []
                   : eventsNotQualifiedFor(
                     currentStepParameters.event_ids,
-                    currentStepParameters.qualifications,
+                    currentStepParameters.qualifications_wcif,
                     personalRecords,
                   )
               }
               disabledText={(event) => eventQualificationToString(
                 { id: event },
-                currentStepParameters.qualifications[event],
+                currentStepParameters.qualifications_wcif[event],
                 { short: true },
               )}
               // Don't error if the user hasn't interacted with the form yet
