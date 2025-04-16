@@ -156,7 +156,7 @@ class RegistrationsController < ApplicationController
       flash[:danger] = I18n.t("registrations.add.ots_not_enabled")
       redirect_to competition_path(@competition)
       return
-    elsif @competition.is_probably_over?
+    elsif @competition.probably_over?
       flash[:danger] = I18n.t("registrations.add.competition_over")
       redirect_to competition_path(@competition)
       return

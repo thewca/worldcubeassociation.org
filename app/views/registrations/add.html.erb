@@ -5,7 +5,7 @@
     <%= alert :warning, t('registrations.mailer.deleted.causes.registrations_full'), note: true %>
   <% elsif !@competition.registration_currently_open? && !@competition.on_the_spot_registration? %>
     <%= alert :warning, t('registrations.add.ots_not_enabled') %>
-  <% elsif @competition.is_probably_over? %>
+  <% elsif @competition.probably_over? %>
     <%= alert :warning, t('registrations.add.competition_over') %>
   <% else %>
     <%= alert :info, t('registrations.add.info'), note: true %>

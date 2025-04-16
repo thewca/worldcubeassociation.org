@@ -441,22 +441,24 @@ RSpec.describe "registrations" do
     end
 
     context "when signed in as competition manager" do
+      let (:do_add_competition) { FactoryBot.create(:competition, :registration_open, :with_delegate, :visible) }
+
       before do
-        sign_in competition.delegates.first
+        sign_in do_add_competition.delegates.first
       end
 
       context "when there is existing registration for the given person" do
         it "renders an error" do
-          registration = FactoryBot.create(:registration, :accepted, competition: competition, events: %w(333))
+          registration = FactoryBot.create(:registration, :accepted, competition: do_add_competition, events: %w(333))
           user = registration.user
           expect {
-            post competition_registrations_do_add_path(competition), params: {
+            post competition_registrations_do_add_path(do_add_competition), params: {
               registration_data: {
                 name: user.name, country: user.country.id, birth_date: user.dob,
                 gender: user.gender, email: user.email, event_ids: ["444"]
               },
             }
-          }.to(not_change { competition.registrations.count })
+          }.to(not_change { do_add_competition.registrations.count })
           expect(response.body).to include "This person already has a registration."
         end
       end
@@ -466,22 +468,22 @@ RSpec.describe "registrations" do
           two_timer_dave = FactoryBot.create(:user, name: "Two Timer Dave")
 
           series = FactoryBot.create(:competition_series)
-          competition.update!(competition_series: series)
+          do_add_competition.update!(competition_series: series)
 
           partner_competition = FactoryBot.create(:competition, :with_delegate, :visible, event_ids: %w(333 555),
-                                                                                          competition_series: series, series_base: competition)
+                                                                                          competition_series: series, series_base: do_add_competition)
 
           # make sure there is a dummy registration for the partner competition.
           FactoryBot.create(:registration, :accepted, competition: partner_competition, user: two_timer_dave)
 
           expect {
-            post competition_registrations_do_add_path(competition), params: {
+            post competition_registrations_do_add_path(do_add_competition), params: {
               registration_data: {
                 name: two_timer_dave.name, country: two_timer_dave.country.id, birth_date: two_timer_dave.dob,
                 gender: two_timer_dave.gender, email: two_timer_dave.email, event_ids: ["444"]
               },
             }
-          }.not_to(change { competition.registrations.count })
+          }.not_to(change { do_add_competition.registrations.count })
           expect(response.body).to include "You can only be accepted for one Series competition at a time"
         end
       end
@@ -489,14 +491,14 @@ RSpec.describe "registrations" do
       context "when there is no existing registration for the given person" do
         it "creates an accepted registration" do
           expect {
-            post competition_registrations_do_add_path(competition), params: {
+            post competition_registrations_do_add_path(do_add_competition), params: {
               registration_data: {
                 name: "Sherlock Holmes", country: "United Kingdom", birth_date: "2000-01-01",
                 gender: "m", email: "sherlock@example.com", event_ids: ["444"]
               },
             }
-          }.to change { competition.registrations.count }.by(1)
-          registration = competition.registrations.last
+          }.to change { do_add_competition.registrations.count }.by(1)
+          registration = do_add_competition.registrations.last
           expect(registration.user.name).to eq "Sherlock Holmes"
           expect(registration.events.map(&:id)).to eq ["444"]
           expect(registration).to be_accepted
@@ -507,27 +509,27 @@ RSpec.describe "registrations" do
 
       context "when competitor limit has been reached" do
         it "redirects to competition page" do
-          FactoryBot.create(:registration, :accepted, competition: competition, events: %w(333))
-          competition.update!(
+          FactoryBot.create(:registration, :accepted, competition: do_add_competition, events: %w(333))
+          do_add_competition.update!(
             competitor_limit_enabled: true, competitor_limit: 1, competitor_limit_reason: "So I take all the podiums",
           )
           expect {
-            post competition_registrations_do_add_path(competition), params: {
+            post competition_registrations_do_add_path(do_add_competition), params: {
               registration_data: {
                 name: "Sherlock Holmes", country: "United Kingdom", birth_date: "2000-01-01",
                 gender: "m", email: "sherlock@example.com", event_ids: ["444"]
               },
             }
-          }.not_to(change { competition.registrations.count })
+          }.not_to(change { do_add_competition.registrations.count })
           follow_redirect!
           expect(response.body).to include "The competitor limit has been reached"
         end
       end
 
-      describe "on the spot behaviour", :tag do
-        let(:open_comp) { FactoryBot.create(:competition, :registration_open, delegates: [competition.delegates.first]) }
-        let(:closed_comp) { FactoryBot.create(:competition, :registration_closed, delegates: [competition.delegates.first]) }
-        let(:past_comp) { FactoryBot.create(:competition, :past, delegates: [competition.delegates.first]) }
+      describe "on the spot behaviour" do
+        let(:open_comp) { FactoryBot.create(:competition, :registration_open, delegates: [do_add_competition.delegates.first]) }
+        let(:closed_comp) { FactoryBot.create(:competition, :registration_closed, delegates: [do_add_competition.delegates.first]) }
+        let(:past_comp) { FactoryBot.create(:competition, :past, delegates: [do_add_competition.delegates.first]) }
 
         context 'on-the-spot is enabled' do
           it 'works when registration is open' do
