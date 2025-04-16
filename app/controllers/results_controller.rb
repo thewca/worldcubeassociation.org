@@ -224,7 +224,7 @@ class ResultsController < ApplicationController
           Events event,
           RoundTypes roundType,
           Competitions competition,
-          countries countries
+          countries
         WHERE event.id = eventId
           AND event.`rank` < 1000
           AND roundType.id = roundTypeId
@@ -284,7 +284,7 @@ class ResultsController < ApplicationController
         Results result
         #{@gender_condition.present? ? "JOIN Persons persons ON result.personId = persons.wca_id and persons.subId = 1," : ","}
         Events event,
-        countries countries,
+        countries,
         Competitions competition
       WHERE result.#{value} = value
         #{@event_condition}
