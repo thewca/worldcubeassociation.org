@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module I18nUtils
-  def self.localized_sort_by!(wca_locale, array, &block)
+  def self.localized_sort_by!(wca_locale, array, &)
     # Unfortunately, it looks like the set of languages supported by
     # twitter-cldr-rb is not exactly the same as the languages we support, so I
     # had to add special mappings for pt-BR, zh-CN, and zh-TW.
@@ -37,6 +37,6 @@ module I18nUtils
 
     collator = TwitterCldr::Collation::Collator.new(cldr_locale)
 
-    array.sort_by! { |element| collator.get_sort_key(block.call(element)) }
+    array.sort_by! { |element| collator.get_sort_key(yield(element)) }
   end
 end

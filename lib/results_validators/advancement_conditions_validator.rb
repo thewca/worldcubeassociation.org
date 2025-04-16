@@ -24,7 +24,7 @@ module ResultsValidators
       "This validator checks that advancement between rounds is correct according to the regulations."
     end
 
-    def self.has_automated_fix?
+    def self.automatically_fixable?
       false
     end
 
@@ -109,8 +109,7 @@ module ResultsValidators
                 end
 
                 # Article 9p, since July 20, 2006 until April 13, 2010
-                if Date.new(2006, 7, 20) <= comp_start_date &&
-                   comp_start_date <= Date.new(2010, 4, 13)
+                if comp_start_date.between?(Date.new(2006, 7, 20), Date.new(2010, 4, 13))
                   if number_of_people_in_round >= number_of_people_in_previous_round
                     @errors << ValidationError.new(OLD_REGULATION_9P_ERROR,
                                                    :rounds, competition.id,

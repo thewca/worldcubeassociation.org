@@ -5,7 +5,7 @@ class RegionalOrganizationsController < ApplicationController
   before_action -> { redirect_to_root_unless_user(:can_manage_regional_organizations?) }, except: [:index, :new, :create]
 
   def admin
-    @regional_organizations = RegionalOrganization.all.order(country: :asc)
+    @regional_organizations = RegionalOrganization.order(country: :asc)
   end
 
   def index
@@ -18,31 +18,6 @@ class RegionalOrganizationsController < ApplicationController
 
   def edit
     @regional_organization = regional_organization_from_params
-  end
-
-  def update
-    @regional_organization = regional_organization_from_params
-
-    if @regional_organization.update(regional_organization_params)
-      flash[:success] = "Successfully updated Regional Organization!"
-      redirect_to edit_regional_organization_path(@regional_organization)
-    else
-      render :edit
-    end
-  end
-
-  def destroy
-    @regional_organization = regional_organization_from_params
-    if @regional_organization.is_pending?
-      if @regional_organization.destroy
-        flash[:success] = "Successfully deleted Regional Organization!"
-      else
-        flash[:danger] = "Unable to delete Regional Organization"
-      end
-    else
-      flash[:danger] = "Unable to delete Regional Organization because it is not pending"
-    end
-    redirect_to admin_regional_organizations_path
   end
 
   def create
@@ -63,6 +38,31 @@ class RegionalOrganizationsController < ApplicationController
       @regional_organization.errors[:id].each { |error| @regional_organization.errors.add(:name, error) }
       render :new
     end
+  end
+
+  def update
+    @regional_organization = regional_organization_from_params
+
+    if @regional_organization.update(regional_organization_params)
+      flash[:success] = "Successfully updated Regional Organization!"
+      redirect_to edit_regional_organization_path(@regional_organization)
+    else
+      render :edit
+    end
+  end
+
+  def destroy
+    @regional_organization = regional_organization_from_params
+    if @regional_organization.pending?
+      if @regional_organization.destroy
+        flash[:success] = "Successfully deleted Regional Organization!"
+      else
+        flash[:danger] = "Unable to delete Regional Organization"
+      end
+    else
+      flash[:danger] = "Unable to delete Regional Organization because it is not pending"
+    end
+    redirect_to admin_regional_organizations_path
   end
 
   private def regional_organization_params

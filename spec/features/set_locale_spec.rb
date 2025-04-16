@@ -3,10 +3,10 @@
 require "rails_helper"
 
 RSpec.feature "Set the locale" do
-  scenario "visiting the home page while not signed in and changing the locale", js: true do
+  scenario "visiting the home page while not signed in and changing the locale", :js do
     # Our navigation hide the language name on small resolutions, make sure we
     # use one wide enough.
-    page.driver.resize(1280, 1024)
+    page.driver.resize_window_to(page.driver.current_window_handle, 1280, 1024)
     visit "/#foo"
     expect(page).to have_content "English"
     expect(page).not_to have_content "Français"
@@ -21,8 +21,8 @@ RSpec.feature "Set the locale" do
     expect(page).to have_content "Français"
   end
 
-  scenario "signing in updates to the preferred_locale", js: true do
-    page.driver.resize(1280, 1024)
+  scenario "signing in updates to the preferred_locale", :js do
+    page.driver.resize_window_to(page.driver.current_window_handle, 1280, 1024)
     visit "/"
     expect(page).to have_content "English"
     expect(page).not_to have_content "Français"

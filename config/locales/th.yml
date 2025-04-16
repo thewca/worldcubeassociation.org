@@ -570,19 +570,19 @@ th:
         competition_id: เกิดขึ้นระหว่าง
       competition_medium:
         #original_hash: 1917f4f
-        competitionId: การแข่งขัน
+        competition_id: การแข่งขัน
         #original_hash: 3deb745
-        type: ประเภท
+        media_type: ประเภท
         #original_hash: c3328c3
         text: ข้อความ
         #original_hash: d051707
         uri: Link
         #original_hash: 1be755a
-        submitterName: ชื่อผู้ส่ง
+        submitter_name: ชื่อผู้ส่ง
         #original_hash: 78cdfee
-        submitterEmail: email ผู้ส่ง
+        submitter_email: email ผู้ส่ง
         #original_hash: 0d31f23
-        submitterComment: ผู้แสดงความเห็น
+        submitter_comment: ผู้แสดงความเห็น
         #original_hash: bae7d5b
         status: สถานะ
       regional_organization:
@@ -676,7 +676,7 @@ th:
         accepted: ได้รับการยืนยัน
         #original_hash: 96f608c
         pending: รอดำเนินการ
-      type:
+      media_type:
         #original_hash: ee45c30
         report: รายงาน
         #original_hash: 4360c2d
@@ -863,8 +863,6 @@ th:
         person1_wca_id: ''
         #original_hash: da39a3e
         person2_wca_id: ''
-        #original_hash: da39a3e
-        person_wca_id: ''
       poll:
         #original_hash: da39a3e
         comment: ''
@@ -877,19 +875,19 @@ th:
         comment: ''
       competition_medium:
         #original_hash: da39a3e
-        competitionId: ''
+        competition_id: ''
         #original_hash: da39a3e
-        type: ''
+        media_type: ''
         #original_hash: da39a3e
         text: ''
         #original_hash: da39a3e
         uri: ''
         #original_hash: da39a3e
-        submitterName: ''
+        submitter_name: ''
         #original_hash: da39a3e
-        submitterEmail: ''
+        submitter_email: ''
         #original_hash: da39a3e
-        submitterComment: ''
+        submitter_comment: ''
         #original_hash: da39a3e
         status: ''
       results_submission:
@@ -1024,7 +1022,7 @@ th:
             #original_hash: f82488f
             2fa_attempt: >-
               คุณกำลังเข้าระบบของ WCA, คุณได้เปิดการใช้งานการยืนยันตัวตน 2
-              ขั้นตอน และคุณเพิ่งจะขอให้ส่ง one-time password ด้วย email 
+              ขั้นตอน และคุณเพิ่งจะขอให้ส่ง one-time password ด้วย email
               กรุณาดูด้านล่าง
             #original_hash: 8aeccbf
             disclaimer: >-
@@ -1331,15 +1329,15 @@ th:
     teams_committees_councils:
       #original_hash: 0d62207
       title: 'WCA Teams, Committees, and Councils'
-      #original_hash: d54d953
+      #original_hash: 4701b90
       description: >-
         ทีมงานและคณะกรรมการของ WCA
         เป็นส่วนสำคัญขององค์กรและปฏิบัติงานในแต่ละวันที่จำเป็นเพื่อให้องค์กรยังคงดำเนินต่อไป
         คณะกรรมการเหล่านี้ประกอบด้วย WCA community members รวมถึง WCA Delegates
         และผู้เข้าแข่งขัน
-        แต่ละทีมจะมีผู้นำซึ่งมีบทบาทเพื่อให้แน่ใจว่าทีมทำงานอย่างเหมาะสมและชี้แนะสมาชิกในทีมคนอื่นๆ
-        สภาเป็นทีมประเภทพิเศษที่ทำหน้าที่ให้คำปรึกษาแก่ WCA Board
-        และประกอบด้วยสมาชิกในชุมชน ไม่ใช่สมาชิกเจ้าหน้าที่ WCA
+        โดยแต่ละทีมจะมีผู้นำซึ่งมีบทบาทเพื่อให้แน่ใจว่าทีมทำงานอย่างเหมาะสมและชี้แนะสมาชิกในทีมคนอื่น
+        ๆ สภาเป็นทีมประเภทพิเศษที่ทำหน้าที่ให้คำปรึกษาแก่ WCA Board
+        และประกอบด้วยสมาชิกในชุมชน ไม่ใช่อาสาสมัครของ WCA
         เมื่อมีการเปิดคณะกรรมการ ทีมงาน หรือสภา
         ข้อมูลเกี่ยวกับวิธีการสมัครจะโพสต์ไว้ที่หน้าแรก
       #original_hash: b37456c
@@ -1389,13 +1387,14 @@ th:
           กับชุมชนและประชาชนทั่วไป การสื่อสารของ WCA
           ควรมีส่วนสนับสนุนวัตถุประสงค์ของ WCA
           และสนับสนุนวัฒนธรรมเชิงบวกโดยทั่วไปในด้านความเป็นมิตร ความโปร่งใส
-          การไม่แบ่งแยก ความเปิดกว้าง และการตอบสนอง
+          การไม่แบ่งแยก ความเปิดกว้าง และตอบสนองต่อความคิดเห็นต่างๆ
         #original_hash: bd69012
         wcat: >-
           WCA Competition Announcement Team (WCAT) อนุมัติและประกาศการแข่งขัน
           WCA ที่ส่งโดย WCA Delegates
-          และให้แน่ใจว่าการประกาศดังกล่าวเป็นไปตามมาตรฐานคุณภาพ WCA
-          ทีมนี้ยังรับผิดชอบในการรักษาระเบียบการส่งการแข่งขันที่เหมาะสมจากเอกสารต่างๆ
+          และเพื่อให้แน่ใจว่าการประกาศดังกล่าวเป็นไปตามมาตรฐานคุณภาพ WCA
+          และทีมนี้
+          ยังรับผิดชอบในการรักษาระเบียบการส่งการแข่งขันที่เหมาะสมจากเอกสารต่าง ๆ
           เช่น นโยบายข้อกำหนดการแข่งขัน WCA โดย WCAT
           จะไม่รับผิดชอบต่อการจัดองค์กรและการมอบหมายการแข่งขันรายบุคคล
         #original_hash: 5007698
@@ -1429,13 +1428,13 @@ th:
           World Championships โดยการพัฒนากรอบแนวทางและแผนยุทธศาสตร์
           การจัดการการเลือกเมืองเจ้าภาพ การสนับสนุนทีมจัดงาน
           และการรับรองประสบการณ์การแข่งขันชิงแชมป์ที่สอดคล้องกัน
-        #original_hash: 94e9ad1
+        #original_hash: 010e628
         wqac: >-
           WCA Quality Assurance Committee (WQAC)
           สนับสนุนและส่งเสริมการปรับปรุงคุณภาพอย่างต่อเนื่องภายใน WCA
           เช่นเดียวกับการใช้มาตรฐานคุณภาพทั่วโลกเพื่อให้มั่นใจในคุณภาพของกระบวนการ
-          เจ้าหน้าที่ WCA องค์กรระดับภูมิภาค ผู้จัดการแข่งขัน
-          และเจ้าหน้าที่การแข่งขัน
+          อาสาสมัครของ WCA องค์กรระดับภูมิภาค ผู้จัดการแข่งขัน
+          และอาสาสมัครของการแข่งขัน
         #original_hash: 355babe
         wrc: >-
           WCA Regulations Committee (WRC)
@@ -1456,11 +1455,11 @@ th:
         wsot: >-
           WCA Sports Organization Team (WSOT) ดูแลและสนับสนุนให้ WCA
           เป็นองค์กรกีฬาระดับนานาชาติ
-        #original_hash: 4882d55
+        #original_hash: 30d6048
         wapc: >-
           The WCA Appeals Committee (WAC)
-          ตรวจสอบและแก้ไขการอุทธรณ์เกี่ยวกับการตัดสินใจที่ทำโดยเจ้าหน้าที่ WCA
-          อื่นๆ. WAC
+          ตรวจสอบและแก้ไขการอุทธรณ์เกี่ยวกับการตัดสินใจที่ทำโดยอาสาสมัครของ WCA
+          อื่น ๆ โดย WAC
           จัดให้มีกระบวนการตรวจสอบที่เป็นอิสระและเป็นกลางเพื่อให้แน่ใจว่าการตัดสินใจนั้นยุติธรรม
           สมเหตุสมผล และเป็นไปตามนโยบายและระเบียบข้อบังคับของ WCA
     contacts:
@@ -1686,7 +1685,8 @@ th:
       text: >-
         สมาคมลูกบาศก์โลกเป็นองค์กรที่ได้รับการยกเว้นภาษีประเภท 501(c)(3)
         ในฐานะองค์กรไม่แสวงหาผลกำไรที่ดำเนินการโดยอาสาสมัคร 100%
-        เรายินดีรับการบริจาคของคุณเพื่อช่วยให้เรามีวิสัยทัศน์ในการจัดการแข่งขันที่สนุกสนานมากขึ้นทั่วโลก
+        เรายินดีรับการบริจาคของคุณ
+        เพื่อช่วยให้เรามีวิสัยทัศน์ในการจัดการแข่งขันที่สนุกสนานมากขึ้นทั่วโลก
       #original_hash: 65c84ec
       button: เรียนรู้เกี่ยวกับการสนับสนุน WCA
   users:
@@ -1902,7 +1902,7 @@ th:
       have_wca_id_html: 'WCA ID ของคุณคือ %{link_id}'
       #original_hash: bf654e1
       account_is_special: >-
-        WCA ID และบัญชีผู้ใช้ได้เชื่อมต่อกันแล้วด้วยตำแหน่งพิเศษ (เช่น 
+        WCA ID และบัญชีผู้ใช้ได้เชื่อมต่อกันแล้วด้วยตำแหน่งพิเศษ (เช่น
         delegate, ผู้จัดการแข่งขัน, สมาชิกทีม) และไม่สามารถลบได้ กรุณาส่ง email
         มาที่ WCA Result Team เพื่อช่วยเปลี่ยน WCA ID ไปยังบัญชีผู้ใช้อื่น
       cannot_edit:
@@ -1957,8 +1957,8 @@ th:
         #original_hash: 1a18831
         '7': รูปแทนตัวจะต้องไม่มีเนื้อหาที่ไม่เหมาะสม (เช่น ท่าทางที่ไม่เหมาะสม)
       staff_avatar_guidelines:
-        #original_hash: 5d5a47a
-        title: 'แนวทางเพิ่มเติมสำหรับ Staff และ Trainee Delegates:'
+        #original_hash: f14a1fd
+        title: 'แนวทางเพิ่มเติมสำหรับ อาสาสมัครของ และ Trainee Delegates:'
         paragraphs:
           #original_hash: ff6d2e8
           '1': >-
@@ -3091,6 +3091,10 @@ th:
           count: จำนวนผู้เข้าแข่งขันสูงสุด
           #original_hash: 4a8b6f1
           reason: เหตุผลของการจำกัดจำนวนผู้เข้าแข่งขัน
+          #original_hash: e9e5b84
+          auto_close_threshold: เกณฑ์ปิดอัตโนมัติ
+          #original_hash: b1d5af4
+          newcomer_month_reserved_spots: จำนวนที่นั่งสำรองสำหรับผู้เข้าแข่งขันใหม่
         staff:
           #original_hash: 2e3ed8b
           staff_delegate_ids: WCA Delegate(s)
@@ -3270,6 +3274,15 @@ th:
             แต่จำเป็นต้องทำอย่างอื่นก่อน
           #original_hash: 4bd7102
           reason: เหตุผลในการจำกัดจำนวนผู้เข้าแข่งขัน กรุณากรอกเป็นภาษาอังกฤษ
+          #original_hash: 045d250
+          auto_close_threshold: >-
+            การรับสมัครจะปิดโดยอัตโนมัติเมื่อได้รับจำนวนการสมัครที่ชำระเงินแล้ว
+            ปล่อยว่างไว้เพื่อปิดใช้งาน
+            ไม่ต้องสนใจหากคุณไม่ได้ใช้การชำระเงินแบบรวม
+          #original_hash: e1cf4fc
+          newcomer_month_reserved_spots: >-
+            อนุญาตเฉพาะในช่วง Newcomer Month เท่านั้น -
+            ตำแหน่งที่จองไว้จะต้องไม่เกินครึ่งหนึ่งของขีดจำกัดผู้แข่งขัน
         staff:
           #original_hash: b4d020f
           staff_delegate_ids: WCA Delegates สำหรับการแข่งขัน
@@ -3515,6 +3528,10 @@ th:
         waitlist:
           #original_hash: 3907ca4
           title: Waiting List Registrations
+          #original_hash: a6c86ec
+          skipped_warning: >-
+            คุณได้ข้ามการสมัคร %{count} รายการใน waiting list
+            คุณแน่ใจหรือไม่ว่าต้องการอนุมัติการสมัครรายการอื่นแทน
         approved:
           #original_hash: a59612c
           title: การสมัครที่ได้รับการยอมรับแล้ว
@@ -3738,6 +3755,9 @@ th:
         '-4011': คุณสามารถยอมรับได้เฉพาะคนแรกที่อยู่ใน waiting list เท่านั้น
         #original_hash: 8d089d6
         '-4012': คุณไม่มีคุณสมบัติเข้าแข่งขันในประเภทที่เลือก
+        #original_hash: fb1d742
+        '-4013': >-
+          ไม่สามารถรับผู้ที่ไม่ใช่ผู้เข้าแข่งขันใหม่ได้เมื่อเหลือเพียงที่นั่งสำหรับผู้เข้าแข่งขันใหม่ที่จองไว้เท่านั้น
         #original_hash: a244fde
         '-4014': คุณได้สมัครเข้าร่วมการแข่งขันนี้แล้ว
         #original_hash: 369db78
@@ -3749,6 +3769,19 @@ th:
         #original_hash: 092da51
         '-6002': คุณต้องสมัครการแข่งขันให้เสร็จสิ้นก่อนจึงจะสามารถชำระเงินได้
     errors:
+      #original_hash: 6d11b4e
+      auto_close_exceed_paid: >-
+        เกณฑ์การปิดรับสมัครอัตโนมัติจะต้องมากกว่าจำนวนการสมัครที่ชำระเงินในปัจจุบัน
+      #original_hash: abee516
+      auto_close_positive_nonzero: เกณฑ์การปิดรับสมัครอัตโนมัติต้องมากกว่า 0
+      #original_hash: b81ee7e
+      must_exceed_competitor_limit: เกณฑ์การปิดรับสมัครอัตโนมัติจะต้องมากกว่าขีดจำกัดของผู้แข่งขัน
+      #original_hash: 148c1d4
+      use_wca_registration: การแข่งขันจะต้องใช้การสมัครของ WCA
+      #original_hash: 2c41c57
+      newcomer_month_reservations_percentage: ไม่สามารถสำรองที่นั่งสำหรับผู้เข้าแข่งขันใหม่ได้เกิน 50%
+      #original_hash: 58d244e
+      newcomer_month_reservations_available: จำนวนที่นั่งสำรองสำหรับผู้เข้าแข่งขันใหม่ที่เกินจำนวนที่จองได้
       #original_hash: f7ef9f6
       invalid_name_message: >-
         ต้องสิ้นสุดด้วยปี และต้องมีแค่ตัวอักษร, ตัวเลข, เครื่องหมายขีดคั่น (-),
@@ -4658,18 +4691,18 @@ th:
     who_we_are_title: เราคือใคร
     #original_hash: 303f17a
     who_we_are_content_html: >-
-      <p>สมาคมลูกบากศ์โลกควบคุมการแข่งขันสำหรับ puzzle
-      เชิงกลที่บิดชิ้นส่วนหรือที่รู้จักกันทั่วไปว่า 'twisty puzzles' Puzzle
-      ที่มีชื่อเสียงคือ Rubik's Cube
-      ที่ถูกคิดค้นขึ้นโดยศาสตราจารย์รูบิคจากประเทศฮังการี Puzzle
+      <p>สมาคมลูกบาศก์โลกควบคุมการแข่งขันสำหรับ puzzle
+      เชิงกลที่บิดชิ้นส่วนหรือที่รู้จักกันทั่วไปว่า 'twisty puzzles' โดย Puzzle
+      ที่มีชื่อเสียงคือ Rubik's Cube ที่ถูกคิดค้นขึ้นโดย
+      ศาสตราจารย์รูบิกจากประเทศฮังการี โดย Puzzle
       ที่ถูกเลือกจะเป็นการแข่งขันอย่างเป็นทางการของ WCA</p> <p>WCA
       พัฒนาขึ้นมากในช่วงทศวรรษที่ผ่านมา มีผู้เข้าร่วมการแข่งขันของเรามากกว่า
       245,000 คน แม้จะมีการเติบโตอย่างรวดเร็ว
       แต่เรายังคงเป็นองค์กรที่ดำเนินการโดยอาสาสมัครทั้งหมดตั้งแต่ผู้จัดงานในท้องถิ่นไปจนถึง
       WCA Delegates หรือแม้แต่ WCA Board เราขอขอบคุณทุกคนที่สละเวลาเพื่อทำงานให้
-      WCA
-      ด้วยการสนับสนุนทางการเงินที่มากขึ้นเราหวังว่าจะนำระดับความเป็นมืออาชีพมาสู่การแข่งขันของเรามากขึ้นในขณะที่เรายังคงอนุมัติการแข่งขันต่าง
-      ๆ ทั่วโลก</p>
+      WCA ด้วยการสนับสนุนทางการเงินที่มากขึ้น
+      เราหวังว่าจะนำระดับความเป็นมืออาชีพมาสู่การแข่งขันของเรามากขึ้น
+      ในขณะที่เรายังคงอนุมัติการแข่งขันต่าง ๆ ทั่วโลก</p>
     #original_hash: bccd8c5
     spirit: >-
       จิตวิญญาณของเราคือผู้คนจากทั่วโลกมาสนุกด้วยกันในบรรยากาศที่เป็นมิตร
@@ -4680,10 +4713,11 @@ th:
     our_goals_title: เป้าหมายของเรา
     #original_hash: 375db0f
     our_goals_content_html: >-
-      <p>สมาคมลูกบากศ์โลก
-      ต้องการที่จะนำโอกาสในการเป็นสมาชิกชุมชนและความเป็นผู้นำให้กับคนหนุ่มสาวทั่วโลกด้วยการเพิ่มการเข้าถึงการแข่งขัน
-      'twisty puzzle'
-      เราเชื่อว่าประสบการณ์ในการแข่งขันและในชุมชนของเราสร้างโอกาสการเติบโตสำหรับคนหนุ่มสาวที่เกี่ยวข้องและการแนะนำกิจกรรมนี้ให้กับกลุ่มคนใหม่
+      <p>สมาคมลูกบาศก์โลก
+      ต้องการที่จะนำโอกาสในการเป็นสมาชิกชุมชนและความเป็นผู้นำให้กับคนหนุ่มสาวทั่วโลก
+      ด้วยการเพิ่มการเข้าถึงการแข่งขัน 'twisty puzzle'
+      เราเชื่อว่าประสบการณ์ในการแข่งขันและในชุมชนของเรา
+      สร้างโอกาสการเติบโตสำหรับคนหนุ่มสาวที่เกี่ยวข้องและการแนะนำกิจกรรมนี้ให้กับกลุ่มคนใหม่
       ๆ ทำให้ชุมชนโดยรวมของเราแข็งแกร่งขึ้น
       เอกสารแสดงวิสัยทัศน์และกลยุทธ์ของคณะกรรมการ WCA สามารถอ่านได้ <a
       href="https://documents.worldcubeassociation.org/documents/WCA_Vision_and_Strategy.pdf">
@@ -4692,8 +4726,8 @@ th:
     whats_next_title: ก้าวต่อไปของ WCA
     #original_hash: 3312277
     whats_next_content_html: >-
-      <p>สมาคมลูกบากศ์โลกมีผู้เข้าแข่งขันกว่า 245,000 รายใน 158
-      ภูมิภาคและยังเพิ่มขึ้นอย่างต่อเนื่อง! ชุมชน cubing
+      <p>สมาคมลูกบาศก์โลกมีผู้เข้าแข่งขันกว่า 245,000 รายใน 158 ภูมิภาค
+      และยังเพิ่มขึ้นอย่างต่อเนื่อง! ชุมชน cubing
       มีการเติบโตอย่างต่อเนื่องตั้งแต่ก่อตั้งขึ้นในปี 2004
       และเราต้องการที่จะสนับสนุนให้สิ่งนี้ดำเนินต่อไปในอนาคต
       โดยเพิ่มการเข้าถึงการแข่งขันไปยังพื้นที่ใหม่
@@ -4709,22 +4743,21 @@ th:
     contributing_title: เงินสมทบ
     #original_hash: 538a82f
     contributing_content_html: >-
-      คุณสามารถบริจาคโดยบัตรเครดิตด้วย Guidestar <a%{here_credit},
-      href="https://www.nfggive.com/guidestar/82-3825954">ที่นี่</a> หรือโดย
-      Paypal %{here_paypal} หากคุณต้องการเขียนเช็คคุณสามารถเขียนถึง:
+      คุณสามารถบริจาคโดยบัตรเครดิตด้วย Guidestar %{here_credit}, หรือโดย Paypal
+      %{here_paypal} หากคุณต้องการเขียนเช็คคุณสามารถเขียนถึง:
     #original_hash: 2af9b71
     tax_deductible_note: การบริจาคลดหย่อนภาษีได้ในสหรัฐอเมริกา
     #original_hash: 6026d35
     other_help_title: ทางอื่นที่จะช่วยเหลือ
     #original_hash: cb228f6
     other_help_content_html: >-
-      <p>หากคุณเชื่อว่าคุณสามารถมีส่วนร่วมกับสมาคมลูกบากศ์โลกในรูปแบบที่ไม่แสวงผลกำไรได้
+      <p>หากคุณเชื่อว่าคุณสามารถมีส่วนร่วมกับสมาคมลูกบาศก์โลกในรูปแบบที่ไม่แสวงผลกำไรได้
       เรายินดีที่จะร่วมงานกับคุณ! กรุณาติดต่อเราที่ <a
-      href="mailto:communication@worldcubeassociation.org">communication@worldcubeassociation.org</a>.</p>
+      href="mailto:communication@worldcubeassociation.org">communication@worldcubeassociation.org</a></p>
     donation_banner:
       #original_hash: 1aaf818
       content: >-
-        สมาคมลูกบากศ์โลกเป็นองค์กรที่ได้รับการยกเว้นภาษี 501(c)(3)
+        สมาคมลูกบาศก์โลกเป็นองค์กรที่ได้รับการยกเว้นภาษี 501(c)(3)
         ในฐานะอาสาสมัครที่ไม่แสวงหากำไร 100%
         เรายินดีต้อนรับการบริจาคของคุณเพื่อช่วยให้เรามีวิสัยทัศน์ในการแข่งขันที่สนุกสนานมากขึ้นทั่วโลก
       #original_hash: 24c87db
@@ -4753,26 +4786,26 @@ th:
       delegates_html: >-
         <p><strong>WCA Delegate</strong>
         เป็นบทบาทที่กำหนดไว้ในเจตนารมณ์และในกติกาของ WCA หน้าที่หลักของ Delegate
-        คือดูแลการแข่งขันในนามของ WCA. WCA Delegate
+        คือดูแลการแข่งขันในนามของ WCA โดย WCA Delegate
         รับผิดชอบในการตรวจสอบให้แน่ใจว่าการแข่งขัน WCA
-        ทั้งหมดดำเนินการตามภารกิจวิญญาณและกติกาของ WCA. WCA ได้แยกบทบาทดังนี้
-        <strong>Senior Delegates</strong>,  <strong>Regional Delegates</strong>,
-        <strong>Full Delegates </strong>, <strong>Junior Delegates</strong>, และ
-        <strong>Trainee Delegates</strong>%{see_link}.</p>
-        <p>นอกเหนือจากการทำหน้าที่ของ WCA Delegate แล้ว WCA Senior Delegates
-        ยังมีหน้าที่ในการจัดการ WCA Delegates
+        ทั้งหมดดำเนินการตามภารกิจ, จิตวิญญาณและกติกาของ WCA โดย WCA
+        ได้แยกบทบาทดังนี้ <strong>Senior Delegates</strong>,  <strong>Regional
+        Delegates</strong>, <strong>Full Delegates </strong>, <strong>Junior
+        Delegates</strong>, และ <strong>Trainee
+        Delegates</strong>%{see_link}</p> <p>นอกเหนือจากการทำหน้าที่ของ WCA
+        Delegate แล้ว WCA Senior Delegates ยังมีหน้าที่ในการจัดการ WCA Delegates
         ในพื้นที่ของพวกเขาและสามารถติดต่อกับชุมชนเพื่อรับเรื่องระดับภูมิภาคได้</p>
         <p>Delegates ใหม่จะได้รับการแต่งตั้งเป็น WCA Candidate Delegates ก่อน
         หลังจากนั้นพวกเขาจะถูกขอให้แสดงความสามารถในการจัดการการแข่งขัน WCA
-        ก่อนที่จะได้รับการเลื่อนตำแหน่งให้เป็น WCA Delegates.</p><p>Trainee
+        ก่อนที่จะได้รับการเลื่อนตำแหน่งให้เป็น WCA Delegates</p><p>Trainee
         Delegates จะได้รับการฝึกสอนเพื่อที่จะเป็น WCA Delegate
         และสามารถดูแลได้แค่การแข่งขันที่มี WCA Delegate คนอื่นด้วยเท่านั้น</p>
       #original_hash: 27d18ac
       see_link_html: '(ดู%{link})'
       #original_hash: 5b01fcc
       members_html: >-
-        ผู้เข้าแข่งขันทุกคนจะกลายเป็น<strong>สมาชิก</strong>ของ WCA ในการแข่งขัน
-        WCA ครั้งแรกโดยอัตโนมัติ
+        ผู้เข้าแข่งขันทุกคนจะเข้าร่วมการเป็น<strong>สมาชิก</strong>ของ WCA
+        ในการแข่งขัน WCA ครั้งแรกโดยอัตโนมัติ
   speedcubing_history:
     #original_hash: 431e667
     title: ประวัติของชุมชน Speedcubing‌ และ WCA
@@ -4870,12 +4903,12 @@ th:
           หากเป็นความต้องการโดยทีมองค์กรที่เกี่ยวข้อง
         #original_hash: 3c07dd6
         '3': >-
-          พื่อเคารพและปฏิบัติตามวัตถุประสงค์ที่กำหนดไว้ในข้อบังคับและญัตติของ
+          เพื่อเคารพและปฏิบัติตามวัตถุประสงค์ที่กำหนดไว้ในข้อบังคับและญัตติของ
           WCA
         #original_hash: 0c3576b
         '4': เพื่อให้สอดคล้องกับระเบียบ WCA ที่ใช้บังคับทั้งหมด
-        #original_hash: 1a9e6c5
-        '5': เพื่อยอมรับและปฏิบัติตามการตัดสินใจของเจ้าหน้าที่ WCA
+        #original_hash: 88cf548
+        '5': เพื่อยอมรับและปฏิบัติตามการตัดสินใจของอาสาสมัครของ WCA
         #original_hash: d4ae7c1
         '6': >-
           เพื่อเก็บไว้ที่ WCA
@@ -4931,11 +4964,11 @@ th:
     before:
       #original_hash: 9850344
       title: ก่อนการแข่งขัน
-      #original_hash: 576e2f4
+      #original_hash: 6f64073
       desc: >-
         จัดการการสมัครการแข่งขันของผู้เข้าแข่งขันสามารถทำได้โดยตรงที่เว็บไซต์
-        WCA เนื่องจากการจัดการกลุ่มและ staff
-        ด้วยตนเองอาจใช้เวลานานคุณอาจต้องการพิจารณาใช้หนึ่งในเครื่องมือด้านล่าง
+        WCA
+        เนื่องจากการจัดการกลุ่มและอาสาสมัครของด้วยตนเองอาจใช้เวลานานคุณอาจต้องการพิจารณาใช้หนึ่งในเครื่องมือด้านล่าง
     during:
       #original_hash: 9934200
       title: ระหว่างการแข่งขัน
@@ -5222,16 +5255,16 @@ th:
     recommended:
       #original_hash: 6b843f3
       title: เอกสารแนะนำ
-      #original_hash: bfbd4bb
-      staff: การจัดตั้ง staff
+      #original_hash: 6e4fb29
+      staff: การจัดการอาสาสมัคร
       #original_hash: 4735583
       emails: Emails
       #original_hash: 8e7ca09
       running-systems: Running and judging systems
       #original_hash: 2b31c89
       new-competitors: ทัศนคติต่อผู้เข้าแข่งขันใหม่
-      #original_hash: 3408054
-      enhancing-experience: การเพิ่มพูนประสบการณ์ของผู้เข้าแข่งขันและ staff
+      #original_hash: 00c4f78
+      enhancing-experience: การเพิ่มพูนประสบการณ์ของผู้เข้าแข่งขันและอาสาสมัคร
       #original_hash: 2345aaa
       reflection: ผลของการจัดการแข่งขัน
   organizer_guidelines:

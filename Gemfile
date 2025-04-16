@@ -59,7 +59,6 @@ gem 'devise-jwt'
 gem 'jwt'
 gem 'iso', github: 'thewca/ruby-iso'
 gem 'csv'
-gem 'ostruct'
 
 # Pointing to jfly/selectize-rails which has a workaround for
 #  https://github.com/selectize/selectize.js/issues/953
@@ -88,7 +87,7 @@ gem 'i18n-country-translations', github: 'thewca/i18n-country-translations'
 gem 'http_accept_language'
 gem 'twitter_cldr'
 # version explicitly specified because Shakapacker wants to keep Gemfile and package.json in sync
-gem 'shakapacker', '8.1.0'
+gem 'shakapacker', '8.2.0'
 gem 'json-schema'
 gem 'translighterate'
 gem 'enum_help'
@@ -96,7 +95,6 @@ gem 'google-apis-admin_directory_v1'
 gem 'activestorage-validator'
 gem 'image_processing'
 gem 'rest-client'
-gem 'wicked_pdf'
 gem 'icalendar'
 # pointing to our fork which has Rails 7 support enabled (aka monkey-patched)
 gem 'starburst', github: 'thewca/starburst'
@@ -109,6 +107,7 @@ gem 'after_commit_everywhere'
 gem 'slack-ruby-client'
 gem 'puma'
 gem "tzf"
+gem 'playwright-ruby-client', require: 'playwright'
 
 group :development, :test do
   gem 'spring'
@@ -132,6 +131,13 @@ group :development do
   gem 'overcommit', require: false
   gem 'rubocop', require: false
   gem 'rubocop-thread_safety', require: false
+  gem 'rubocop-performance', require: false
+  gem 'rubocop-rails', require: false
+  gem 'rubocop-rspec', require: false
+  gem 'rubocop-rspec_rails', require: false
+  gem 'rubocop-factory_bot', require: false
+  gem 'rubocop-capybara', require: false
+  gem 'rubocop-rake', require: false
   gem 'better_errors'
   gem 'binding_of_caller'
   gem 'bullet'
@@ -147,7 +153,7 @@ group :test do
   gem 'oga' # XML parsing library introduced for testing RSS feed
   gem 'database_cleaner'
   gem 'rails-controller-testing'
-  gem 'apparition', github: 'twalpole/apparition'
+  gem 'capybara-playwright-driver'
   gem 'simplecov', require: false
   gem 'simplecov-lcov', require: false
   gem 'timecop'
@@ -157,6 +163,5 @@ end
 group :production do
   gem 'rack'
   gem 'newrelic_rpm'
-  gem 'wkhtmltopdf-binary-ng'
   gem 'shoryuken'
 end

@@ -65,7 +65,7 @@ RSpec.describe "media" do
   describe 'GET #new' do
     it_should_behave_like 'must sign in',
                           lambda { get new_medium_path },
-                          lambda { |current_user| expect(response).to be_successful }
+                          lambda { |_current_user| expect(response).to be_successful }
   end
 
   describe 'POST #create' do
@@ -76,21 +76,21 @@ RSpec.describe "media" do
           'competition_medium[status]': "accepted", # This should get ignored and set to 'pending'
 
           # These should get ignored and set to the current user's information.
-          'competition_medium[submitterName]': "Jeremy",
-          'competition_medium[submitterEmail]': "jeremy@jflei.com",
+          'competition_medium[submitter_name]': "Jeremy",
+          'competition_medium[submitter_email]': "jeremy@jflei.com",
 
-          'competition_medium[competitionId]': competition_2013.id,
-          'competition_medium[type]': 'report',
+          'competition_medium[competition_id]': competition_2013.id,
+          'competition_medium[media_type]': 'report',
           'competition_medium[text]': 'i was just created',
           'competition_medium[link]': "https://www.jflei.com",
-          'competition_medium[submitterComment]': "this is a comment",
+          'competition_medium[submitter_comment]': "this is a comment",
         }
       end,
       lambda do |current_user|
-        medium = CompetitionMedium.find_by_text!("i was just created")
+        medium = CompetitionMedium.find_by!(text: "i was just created")
         expect(medium.status).to eq "pending"
-        expect(medium.submitterName).to eq current_user.name
-        expect(medium.submitterEmail).to eq current_user.email
+        expect(medium.submitter_name).to eq current_user.name
+        expect(medium.submitter_email).to eq current_user.email
       end,
     )
   end
@@ -196,26 +196,26 @@ RSpec.describe "media" do
 
       it "can edit medium" do
         competition = FactoryBot.create :competition
-        expect(medium.type).to eq 'article'
+        expect(medium.media_type).to eq 'article'
 
         patch_medium.call(
-          competitionId: competition.id,
-          type: 'multimedia',
+          competition_id: competition.id,
+          media_type: 'multimedia',
           text: 'this is some new text',
           uri: 'http://newexample.com',
-          submitterName: 'New Jeremy',
-          submitterEmail: 'New@Jeremy',
-          submitterComment: 'this is a new comment',
+          submitter_name: 'New Jeremy',
+          submitter_email: 'New@Jeremy',
+          submitter_comment: 'this is a new comment',
         )
 
         medium.reload
         expect(medium.competition).to eq competition
-        expect(medium.type).to eq "multimedia"
+        expect(medium.media_type).to eq "multimedia"
         expect(medium.text).to eq "this is some new text"
         expect(medium.uri).to eq "http://newexample.com"
-        expect(medium.submitterName).to eq "New Jeremy"
-        expect(medium.submitterEmail).to eq "New@Jeremy"
-        expect(medium.submitterComment).to eq "this is a new comment"
+        expect(medium.submitter_name).to eq "New Jeremy"
+        expect(medium.submitter_email).to eq "New@Jeremy"
+        expect(medium.submitter_comment).to eq "this is a new comment"
       end
     end
   end
@@ -227,7 +227,7 @@ RSpec.describe "media" do
                           lambda { destroy_medium.call },
                           lambda {
                             expect(response).to redirect_to validate_media_path
-                            expect(CompetitionMedium.find_by_id(medium.id)).to be_nil
+                            expect(CompetitionMedium.find_by(id: medium.id)).to be_nil
                           }
   end
 end

@@ -16,8 +16,8 @@ class VenueRoom < ApplicationRecord
     self.color ||= DEFAULT_ROOM_COLOR
   end
 
-  validates_presence_of :name
-  validates_numericality_of :wcif_id, only_integer: true
+  validates :name, presence: true
+  validates :wcif_id, numericality: { only_integer: true }
 
   def all_activities
     schedule_activities.flat_map(&:all_activities)

@@ -62,9 +62,13 @@ module CountryCityValidators
     U.S.\ Virgin\ Islands
   ).to_set
 
+  US_DISTRICTS = %w(
+    District\ of\ Columbia
+  ).to_set
+
   class UsCityValidator < CityCommaRegionValidator
     def initialize
-      super(type_of_region: "state", valid_regions: (US_STATES | US_TERRITORIES))
+      super(type_of_region: "state", valid_regions: (US_STATES | US_TERRITORIES | US_DISTRICTS))
     end
 
     def self.country_iso_2

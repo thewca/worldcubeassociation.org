@@ -182,7 +182,7 @@ class UserAvatar < ApplicationRecord
 
     # If there is no old_status, it means we just inserted the record.
     # In that case, there is nothing to reattach.
-    return unless old_status.present?
+    return if old_status.blank?
 
     if new_status == UserAvatar.statuses[:approved]
       # We approved a new avatar! Take the previously private file and upload it to public storage.
@@ -223,7 +223,7 @@ class UserAvatar < ApplicationRecord
              unless: [:destroyed?, :thumbnail_previously_changed?]
 
   def invalidate_thumbnail_if_approved
-    return unless AppSecrets.CDN_AVATARS_DISTRIBUTION_ID.present?
+    return if AppSecrets.CDN_AVATARS_DISTRIBUTION_ID.blank?
 
     thumbnail_changed = self.thumbnail_crop_x_previously_changed? ||
                         self.thumbnail_crop_y_previously_changed? ||

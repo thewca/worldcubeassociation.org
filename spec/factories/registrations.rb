@@ -2,8 +2,8 @@
 
 FactoryBot.define do
   factory :registration do
-    association :competition, factory: [:competition, :registration_open]
-    association :user, factory: [:user, :wca_id]
+    competition factory: %i[competition registration_open]
+    user factory: %i[user wca_id]
     guests { 10 }
     comments { "" }
     created_at { Time.now }
@@ -24,6 +24,11 @@ FactoryBot.define do
       to_create { |instance| instance.save(validate: false) }
     end
 
+    trait :non_competing do
+      accepted # Must be accepted so that it shows up in WCIF
+      is_competing { false }
+    end
+
     trait :accepted do
       competing_status { Registrations::Helper::STATUS_ACCEPTED }
     end
@@ -41,11 +46,11 @@ FactoryBot.define do
     end
 
     trait :newcomer do
-      association :user, factory: [:user]
+      user
     end
 
     trait :newcomer_month_eligible do
-      association :user, factory: [:user, :current_year_wca_id]
+      user factory: %i[user current_year_wca_id]
     end
 
     trait :paid do

@@ -8,9 +8,7 @@ namespace :user_passwords do
   namespace :reset do
     desc 'Make sure that we never run this on the live site'
     task check_live: :environment do
-      if EnvConfig.WCA_LIVE_SITE?
-        abort "This actions is disabled for the production server!"
-      end
+      abort "This actions is disabled for the production server!" if EnvConfig.WCA_LIVE_SITE?
     end
 
     desc 'Reset all user passwords to the secret defined in Vault "STAGING_PASSWORD"'

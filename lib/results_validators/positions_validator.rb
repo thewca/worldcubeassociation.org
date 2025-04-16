@@ -9,7 +9,7 @@ module ResultsValidators
       "This validator checks that positions stored in results are correct with regard to the actual results."
     end
 
-    def self.has_automated_fix?
+    def self.automatically_fixable?
       true
     end
 
@@ -31,13 +31,13 @@ module ResultsValidators
             # Unless we find two exact same results, we increase the expected position
             tied = false
             if last_result
-              if %w[a m].include?(result.formatId)
-                # If the ranking is based on average, look at both average and best.
-                tied = result.average == last_result.average && result.best == last_result.best
-              else
-                # else we just compare the bests
-                tied = result.best == last_result.best
-              end
+              tied = if %w[a m].include?(result.formatId)
+                       # If the ranking is based on average, look at both average and best.
+                       result.average == last_result.average && result.best == last_result.best
+                     else
+                       # else we just compare the bests
+                       result.best == last_result.best
+                     end
             end
             if tied
               number_of_tied += 1

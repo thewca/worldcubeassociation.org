@@ -8,11 +8,12 @@
 module SimpleForm
   class FormBuilder
     attr_accessor :generated_attribute_inputs
+
     old_input = instance_method(:input)
     define_method(:input) do |attribute_name, options = {}, &block|
       @generated_attribute_inputs ||= []
       @generated_attribute_inputs << attribute_name
-      old_input.bind(self).call(attribute_name, **options, &block)
+      old_input.bind_call(self, attribute_name, **options, &block)
     end
   end
 end

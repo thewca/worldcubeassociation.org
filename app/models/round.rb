@@ -36,30 +36,26 @@ class Round < ApplicationRecord
   has_many :live_results
 
   MAX_NUMBER = 4
-  validates_numericality_of :number,
-                            only_integer: true,
+  validates :number,
+            numericality: { only_integer: true,
                             greater_than_or_equal_to: 1,
                             less_than_or_equal_to: MAX_NUMBER,
-                            unless: :old_type
+                            unless: :old_type }
 
   # Qualification rounds/b-final are handled weirdly, they have round number 0
   # and do not count towards the total amount of rounds.
   OLD_TYPES=["0", "b"].freeze
-  validates_inclusion_of :old_type, in: OLD_TYPES, allow_nil: true
+  validates :old_type, inclusion: { in: OLD_TYPES, allow_nil: true }
   after_validation(if: :old_type) do
     self.number = 0
   end
 
   validate do
-    unless event.preferred_formats.find_by_format_id(format_id)
-      errors.add(:format, "'#{format_id}' is not allowed for '#{event.id}'")
-    end
+    errors.add(:format, "'#{format_id}' is not allowed for '#{event.id}'") unless event.preferred_formats.find_by(format_id: format_id)
   end
 
   validate do
-    if final_round? && advancement_condition
-      errors.add(:advancement_condition, "cannot be set on a final round")
-    end
+    errors.add(:advancement_condition, "cannot be set on a final round") if final_round? && advancement_condition
   end
 
   def initialize(attributes = nil)
@@ -92,9 +88,7 @@ class Round < ApplicationRecord
     end
   end
 
-  def event_id
-    event.id
-  end
+  delegate :id, to: :event, prefix: true
 
   def formats_used
     cutoff_format = Format.c_find!(cutoff.number_of_attempts.to_s) if cutoff
@@ -147,6 +141,7 @@ class Round < ApplicationRecord
 
   def previous_round
     return nil if number == 1
+
     Round.joins(:competition_event).find_by(competition_event: competition_event, number: number - 1)
   end
 
@@ -190,7 +185,7 @@ class Round < ApplicationRecord
     competitors_live_results_entered == total_accepted_registrations
   end
 
-  def has_undef_tl?
+  def time_limit_undefined?
     can_change_time_limit? && time_limit == TimeLimit::UNDEF_TL
   end
 

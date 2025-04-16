@@ -3,6 +3,7 @@
 module WcaExceptions
   class ApiException < StandardError
     attr_reader :status
+
     def initialize(status, error_str)
       super(error_str)
       @status = status

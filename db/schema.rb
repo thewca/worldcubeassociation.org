@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_03_06_165113) do
+ActiveRecord::Schema[7.2].define(version: 2025_03_31_170413) do
   create_table "Competitions", id: { type: :string, limit: 32, default: "" }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", limit: 50, default: "", null: false
     t.string "cityName", limit: 50, default: "", null: false
@@ -81,7 +81,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_06_165113) do
     t.integer "posting_by"
     t.boolean "forbid_newcomers", default: false, null: false
     t.string "forbid_newcomers_reason"
-    t.integer "registration_version", default: 0, null: false
     t.integer "competitor_can_cancel", default: 0, null: false
     t.integer "newcomer_month_reserved_spots"
     t.integer "auto_close_threshold"
@@ -91,45 +90,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_06_165113) do
     t.index ["countryId"], name: "index_Competitions_on_countryId"
     t.index ["end_date"], name: "index_Competitions_on_end_date"
     t.index ["start_date"], name: "index_Competitions_on_start_date"
-  end
-
-  create_table "CompetitionsMedia", id: { type: :integer, unsigned: true }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
-    t.string "competitionId", limit: 32, default: "", null: false
-    t.string "type", limit: 15, default: "", null: false
-    t.string "text", limit: 100, default: "", null: false
-    t.text "uri"
-    t.string "submitterName", default: "", null: false
-    t.text "submitterComment"
-    t.string "submitterEmail", default: "", null: false
-    t.timestamp "timestampSubmitted", default: -> { "CURRENT_TIMESTAMP" }, null: false
-    t.timestamp "timestampDecided"
-    t.string "status", limit: 10, default: "", null: false
-  end
-
-  create_table "ConciseAverageResults", id: false, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
-    t.integer "id", default: 0, null: false
-    t.integer "average", default: 0, null: false
-    t.bigint "valueAndId"
-    t.string "personId", limit: 10, default: "", null: false
-    t.string "eventId", limit: 6, default: "", null: false
-    t.string "countryId", limit: 50, default: "", null: false
-    t.string "continentId", limit: 50, default: "", null: false
-    t.integer "year", limit: 2, default: 0, null: false, unsigned: true
-    t.integer "month", limit: 2, default: 0, null: false, unsigned: true
-    t.integer "day", limit: 2, default: 0, null: false, unsigned: true
-  end
-
-  create_table "ConciseSingleResults", id: false, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
-    t.integer "id", default: 0, null: false
-    t.integer "best", default: 0, null: false
-    t.bigint "valueAndId"
-    t.string "personId", limit: 10, default: "", null: false
-    t.string "eventId", limit: 6, default: "", null: false
-    t.string "countryId", limit: 50, default: "", null: false
-    t.string "continentId", limit: 50, default: "", null: false
-    t.integer "year", limit: 2, default: 0, null: false, unsigned: true
-    t.integer "month", limit: 2, default: 0, null: false, unsigned: true
-    t.integer "day", limit: 2, default: 0, null: false, unsigned: true
   end
 
   create_table "Continents", id: { type: :string, limit: 50, default: "" }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
@@ -211,28 +171,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_06_165113) do
     t.index ["name"], name: "index_Persons_on_name", type: :fulltext
     t.index ["wca_id", "subId"], name: "index_Persons_on_wca_id_and_subId", unique: true
     t.index ["wca_id"], name: "index_Persons_on_wca_id"
-  end
-
-  create_table "RanksAverage", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
-    t.string "personId", limit: 10, default: "", null: false
-    t.string "eventId", limit: 6, default: "", null: false
-    t.integer "best", default: 0, null: false
-    t.integer "worldRank", default: 0, null: false
-    t.integer "continentRank", default: 0, null: false
-    t.integer "countryRank", default: 0, null: false
-    t.index ["eventId"], name: "fk_events"
-    t.index ["personId"], name: "fk_persons"
-  end
-
-  create_table "RanksSingle", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
-    t.string "personId", limit: 10, default: "", null: false
-    t.string "eventId", limit: 6, default: "", null: false
-    t.integer "best", default: 0, null: false
-    t.integer "worldRank", default: 0, null: false
-    t.integer "continentRank", default: 0, null: false
-    t.integer "countryRank", default: 0, null: false
-    t.index ["eventId"], name: "fk_events"
-    t.index ["personId"], name: "fk_persons"
   end
 
   create_table "Results", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB PACK_KEYS=1", force: :cascade do |t|
@@ -603,6 +541,19 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_06_165113) do
     t.index ["event_id"], name: "fk_rails_ba6cfdafb1"
   end
 
+  create_table "competition_media", id: { type: :integer, unsigned: true }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "competition_id", limit: 32, default: "", null: false
+    t.string "media_type", limit: 15, default: "", null: false
+    t.string "text", limit: 100, default: "", null: false
+    t.text "uri"
+    t.string "submitter_name", default: "", null: false
+    t.text "submitter_comment"
+    t.string "submitter_email", default: "", null: false
+    t.timestamp "submitted_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.timestamp "decided_at"
+    t.string "status", limit: 10, default: "", null: false
+  end
+
   create_table "competition_organizers", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "competition_id"
     t.integer "organizer_id"
@@ -653,6 +604,32 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_06_165113) do
     t.string "country_iso2", null: false
     t.index ["competition_id", "wcif_id"], name: "index_competition_venues_on_competition_id_and_wcif_id", unique: true
     t.index ["competition_id"], name: "index_competition_venues_on_competition_id"
+  end
+
+  create_table "concise_average_results", id: false, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.integer "id", default: 0, null: false
+    t.integer "average", default: 0, null: false
+    t.bigint "value_and_id"
+    t.string "person_id", limit: 10, default: "", null: false
+    t.string "event_id", limit: 6, default: "", null: false
+    t.string "country_id", limit: 50, default: "", null: false
+    t.string "continent_id", limit: 50, default: "", null: false
+    t.integer "year", limit: 2, default: 0, null: false, unsigned: true
+    t.integer "month", limit: 2, default: 0, null: false, unsigned: true
+    t.integer "day", limit: 2, default: 0, null: false, unsigned: true
+  end
+
+  create_table "concise_single_results", id: false, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.integer "id", default: 0, null: false
+    t.integer "best", default: 0, null: false
+    t.bigint "value_and_id"
+    t.string "person_id", limit: 10, default: "", null: false
+    t.string "event_id", limit: 6, default: "", null: false
+    t.string "country_id", limit: 50, default: "", null: false
+    t.string "continent_id", limit: 50, default: "", null: false
+    t.integer "year", limit: 2, default: 0, null: false, unsigned: true
+    t.integer "month", limit: 2, default: 0, null: false, unsigned: true
+    t.integer "day", limit: 2, default: 0, null: false, unsigned: true
   end
 
   create_table "connected_paypal_accounts", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
@@ -846,17 +823,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_06_165113) do
     t.datetime "updated_at", precision: nil, null: false
   end
 
-  create_table "microservice_registrations", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
-    t.string "competition_id", limit: 32, null: false
-    t.integer "user_id", null: false
-    t.text "roles"
-    t.boolean "is_competing", default: true, null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["competition_id", "user_id"], name: "index_microservice_registrations_on_competition_id_and_user_id", unique: true
-    t.index ["user_id"], name: "fk_rails_dc6d05bc5e"
-  end
-
   create_table "oauth_access_grants", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.integer "resource_owner_id", null: false
     t.integer "application_id", null: false
@@ -991,6 +957,28 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_06_165113) do
     t.integer "ranking", null: false
     t.index ["event_id", "format_id"], name: "index_preferred_formats_on_event_id_and_format_id", unique: true
     t.index ["format_id"], name: "fk_rails_c3e0098ed3"
+  end
+
+  create_table "ranks_average", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "person_id", limit: 10, default: "", null: false
+    t.string "event_id", limit: 6, default: "", null: false
+    t.integer "best", default: 0, null: false
+    t.integer "world_rank", default: 0, null: false
+    t.integer "continent_rank", default: 0, null: false
+    t.integer "country_rank", default: 0, null: false
+    t.index ["event_id"], name: "fk_events"
+    t.index ["person_id"], name: "fk_persons"
+  end
+
+  create_table "ranks_single", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "person_id", limit: 10, default: "", null: false
+    t.string "event_id", limit: 6, default: "", null: false
+    t.integer "best", default: 0, null: false
+    t.integer "world_rank", default: 0, null: false
+    t.integer "continent_rank", default: 0, null: false
+    t.integer "country_rank", default: 0, null: false
+    t.index ["event_id"], name: "fk_events"
+    t.index ["person_id"], name: "fk_persons"
   end
 
   create_table "regional_organizations", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
@@ -1462,8 +1450,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_06_165113) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "live_attempt_history_entries", "live_attempts"
-  add_foreign_key "microservice_registrations", "Competitions", column: "competition_id", on_update: :cascade, on_delete: :cascade
-  add_foreign_key "microservice_registrations", "users"
   add_foreign_key "oauth_openid_requests", "oauth_access_grants", column: "access_grant_id", on_delete: :cascade
   add_foreign_key "payment_intents", "users", column: "initiated_by_id"
   add_foreign_key "paypal_records", "paypal_records", column: "parent_record_id"
