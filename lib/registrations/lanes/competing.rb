@@ -32,6 +32,9 @@ module Registrations
       def self.update!(update_params, registration, current_user_id)
         registration = Registrations::RegistrationChecker.apply_payload(registration, update_params, clone: false)
 
+        # Make sure that a waiting list always exists if you need one during the update
+        registration.competition.create_waiting_list(entries: []) if registration.waitlistable? && !registration.waiting_list_persisted?
+
         ActiveRecord::Base.transaction do
           changes = registration.changes.transform_values { |change| change[1] }
 
