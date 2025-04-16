@@ -2,9 +2,7 @@
 
 class ComputeAuxiliaryData < WcaCronjob
   def self.reason_not_to_run
-    if Result.exists?(personId: "")
-      "Some results are missing their corresponding WCA ID, which means that someone hasn't finished submitting results."
-    end
+    "Some results are missing their corresponding WCA ID, which means that someone hasn't finished submitting results." if Result.exists?(personId: "")
   end
 
   def perform
@@ -87,15 +85,15 @@ class ComputeAuxiliaryData < WcaCronjob
         result.*,
         result.#{column} value
       FROM (
-        SELECT MIN(valueAndId) valueAndId
-        FROM Concise#{type.capitalize}Results result
+        SELECT MIN(value_and_id) value_and_id
+        FROM concise_#{type}_results result
         WHERE #{column} > 0
-          AND eventId = '#{event_id}'
-        GROUP BY personId
-        ORDER BY valueAndId
+          AND event_id = '#{event_id}'
+        GROUP BY person_id
+        ORDER BY value_and_id
         LIMIT 100
       ) top
-      JOIN Results result ON result.id = valueAndId % 1000000000
+      JOIN Results result ON result.id = value_and_id % 1000000000
       ORDER BY value, personName
     SQL
   end
@@ -113,7 +111,8 @@ class ComputeAuxiliaryData < WcaCronjob
   end
 
   private def current_records_query(value, type, event_id: nil)
-    event_condition = event_id.present? ? "AND eventId = '#{event_id}'" : ""
+    event_condition_snake = event_id.present? ? "AND event_id = '#{event_id}'" : ""
+    event_condition_camel = event_id.present? ? "AND eventId = '#{event_id}'" : ""
 
     <<-SQL.squish
       SELECT
@@ -122,7 +121,7 @@ class ComputeAuxiliaryData < WcaCronjob
                              value,
         event.name           eventName,
                              format,
-        country.name         countryName,
+        countries.name       countryName,
         competition.cellName competitionName,
                              `rank`,
         competition.start_date,
@@ -130,20 +129,20 @@ class ComputeAuxiliaryData < WcaCronjob
         MONTH(competition.start_date) month,
         DAY(competition.start_date)   day
       FROM
-        (SELECT eventId recordEventId, MIN(valueAndId) DIV 1000000000 value
-          FROM Concise#{type.capitalize}Results result
+        (SELECT event_id record_event_id, MIN(value_and_id) DIV 1000000000 value
+          FROM concise_#{type}_results result
           WHERE 1
-            #{event_condition}
-          GROUP BY eventId) record,
+            #{event_condition_snake}
+          GROUP BY event_id) record,
         Results result,
         Events event,
-        Countries country,
+        countries,
         Competitions competition
       WHERE result.#{value} = value
-        #{event_condition}
-        AND result.eventId = recordEventId
+        #{event_condition_camel}
+        AND result.eventId = record_event_id
         AND event.id       = result.eventId
-        AND country.id     = result.countryId
+        AND countries.id   = result.countryId
         AND competition.id = result.competitionId
         AND event.`rank` < 990
     SQL

@@ -3,7 +3,8 @@ import {
   Button, Form, Header, Icon, Message,
 } from 'semantic-ui-react';
 import _ from 'lodash';
-import { adminCheckRecordsUrl, apiV0Urls, personUrl } from '../../../../lib/requests/routes.js.erb';
+import { panelPageUrl, apiV0Urls, personUrl } from '../../../../lib/requests/routes.js.erb';
+import { PANEL_PAGES } from '../../../../lib/wca-data.js.erb';
 import useSaveAction from '../../../../lib/hooks/useSaveAction';
 import Loading from '../../../Requests/Loading';
 import I18n from '../../../../lib/i18n';
@@ -118,7 +119,7 @@ export default function EditPersonForm({ wcaId, onSuccess, showDestroyButton = f
                 The change you made may have affected national and continental records, be sure to
                 run
                 {' '}
-                <a href={adminCheckRecordsUrl}>check_regional_record_markers</a>
+                <a href={panelPageUrl(PANEL_PAGES.checkRecords)}>check_regional_record_markers</a>
                 .
               </>
             )}

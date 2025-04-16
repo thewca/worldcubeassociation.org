@@ -55,7 +55,7 @@ Rails.configuration.to_prepare do
     def merge_serialization_opts(other = nil)
       self.to_h do |key, value|
         # Try to read `key` from the other hash, fall back to empty array.
-        other_value = (other&.fetch(key.to_s, []) || [])
+        other_value = other&.fetch(key.to_s, []) || []
 
         # Merge arrays together, making sure to respect the difference between symbols and strings.
         merged_value = value.map(&:to_sym) & other_value.map(&:to_sym)
@@ -101,6 +101,32 @@ Rails.configuration.to_prepare do
     # so because of the reversing we need to reverse the tie-breaker as well
     def stable_sort_by_desc
       sort_by.with_index { |x, idx| [yield(x), -idx] }.reverse
+    end
+  end
+
+  Hash.class_eval do
+    def reject_values_recursive(&)
+      self.transform_values do |value|
+        if value.is_a?(Hash)
+          value.reject_values_recursive(&)
+        else
+          value
+        end
+      end.reject do |_key, value|
+        yield value
+      end
+    end
+
+    def each_recursive(*prefixes, &)
+      self.each do |key, value|
+        next_prefixes = prefixes + [key]
+
+        if value.is_a?(Hash)
+          value.each_recursive(*next_prefixes, &)
+        else
+          yield key, value, *prefixes
+        end
+      end
     end
   end
 

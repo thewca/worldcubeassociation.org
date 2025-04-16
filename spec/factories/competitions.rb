@@ -184,7 +184,7 @@ FactoryBot.define do
     end
 
     trait :payment_disconnect_delay_not_elapsed do
-      starts { (ClearConnectedPaymentIntegrations::DELAY_IN_DAYS).days.ago }
+      starts { ClearConnectedPaymentIntegrations::DELAY_IN_DAYS.days.ago }
       ends { (ClearConnectedPaymentIntegrations::DELAY_IN_DAYS-1).days.ago }
     end
 
@@ -492,6 +492,7 @@ FactoryBot.define do
 
         events_wcif.each do |event|
           next unless qualification_data.key?(event['id'])
+
           event['qualification'] = qualification_data[event['id']]
         end
 
@@ -521,9 +522,7 @@ FactoryBot.define do
       create(:waiting_list, holder: competition)
 
       competition.delegates.each do |delegate|
-        if !delegate.region_id.nil? && UserGroup.find(delegate.region_id).lead_user.nil? # Allowing to manually create senior delegate for the delegate if needed.
-          FactoryBot.create(:senior_delegate_role, group_id: delegate.region_id)
-        end
+        FactoryBot.create(:senior_delegate_role, group_id: delegate.region_id) if !delegate.region_id.nil? && UserGroup.find(delegate.region_id).lead_user.nil? # Allowing to manually create senior delegate for the delegate if needed.
       end
     end
   end

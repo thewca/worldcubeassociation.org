@@ -12,7 +12,7 @@ class ResultsSubmission
   validates :schedule_url, presence: true, url: true
 
   validate do
-    if results_validator.has_errors?
+    if results_validator.any_errors?
       # this shouldn't actually happen through a "normal" usage of the website
       errors.add(:message, "submitted results contain errors")
     end

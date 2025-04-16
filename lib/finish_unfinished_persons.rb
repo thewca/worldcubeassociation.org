@@ -99,8 +99,8 @@ module FinishUnfinishedPersons
 
   # Original PHP implementation uses PHP stdlib `string_similarity` function, which is custom built
   # and "kinda like" Jaro-Winkler. I felt that the rewrite warrants a standardised matching algorithm.
-  def self.string_similarity(a, b)
-    JaroWinkler.similarity(a, b, ignore_case: true)
+  def self.string_similarity(string_a, string_b)
+    JaroWinkler.similarity(string_a, string_b, ignore_case: true)
   end
 
   def self.compute_semi_id(competition_year, person_name, available_per_semi = {})
@@ -126,12 +126,12 @@ module FinishUnfinishedPersons
                               .order(wca_id: :desc)
                               .pick(:wca_id)
 
-        if last_id_taken.present?
-          # 4 because the year prefix is 4 digits long
-          counter = last_id_taken[(4 + WCA_QUARTER_ID_LENGTH)..].to_i
-        else
-          counter = 0
-        end
+        counter = if last_id_taken.present?
+                    # 4 because the year prefix is 4 digits long
+                    last_id_taken[(4 + WCA_QUARTER_ID_LENGTH)..].to_i
+                  else
+                    0
+                  end
 
         available_per_semi[semi_id] = 99 - counter
       end
@@ -144,9 +144,7 @@ module FinishUnfinishedPersons
       end
     end
 
-    unless cleared_id
-      raise "Could not compute a semi-id for #{person_name}"
-    end
+    raise "Could not compute a semi-id for #{person_name}" unless cleared_id
 
     [semi_id, available_per_semi]
   end

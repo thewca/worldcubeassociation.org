@@ -124,77 +124,77 @@ module DatabaseDumper
       ),
     }.freeze,
     "competition_payment_integrations" => :skip_all_rows,
-    "CompetitionsMedia" => {
+    "competition_media" => {
       where_clause: "WHERE status = 'accepted'",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
-          competitionId
-          type
+          competition_id
+          media_type
           text
           uri
-          timestampSubmitted
-          timestampDecided
+          submitted_at
+          decided_at
           status
         ),
         fake_values: {
-          "submitterName" => "'mr. media submitter'",
-          "submitterComment" => "'a comment about this media'",
-          "submitterEmail" => "'mediasubmitter@example.com'",
+          "submitter_name" => "'mr. media submitter'",
+          "submitter_comment" => "'a comment about this media'",
+          "submitter_email" => "'mediasubmitter@example.com'",
         },
       ),
     }.freeze,
-    "ConciseAverageResults" => {
+    "concise_average_results" => {
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           average
-          continentId
-          countryId
+          continent_id
+          country_id
           day
-          eventId
+          event_id
           id
           month
-          personId
-          valueAndId
+          person_id
+          value_and_id
           year
         ),
       ),
     }.freeze,
-    "ConciseSingleResults" => {
+    "concise_single_results" => {
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           best
-          continentId
-          countryId
+          continent_id
+          country_id
           day
-          eventId
+          event_id
           id
           month
-          personId
-          valueAndId
+          person_id
+          value_and_id
           year
         ),
       ),
     }.freeze,
     "connected_paypal_accounts" => :skip_all_rows,
     "connected_stripe_accounts" => :skip_all_rows,
-    "Continents" => {
+    "continents" => {
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
           latitude
           longitude
           name
-          recordName
+          record_name
           zoom
         ),
       ),
     }.freeze,
-    "Countries" => {
+    "countries" => {
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
-          continentId
+          continent_id
           iso2
           name
         ),
@@ -245,29 +245,29 @@ module DatabaseDumper
         },
       ),
     }.freeze,
-    "RanksAverage" => {
+    "ranks_average" => {
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
           best
-          continentRank
-          countryRank
-          eventId
-          personId
-          worldRank
+          continent_rank
+          country_rank
+          event_id
+          person_id
+          world_rank
         ),
       ),
     }.freeze,
-    "RanksSingle" => {
+    "ranks_single" => {
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
           best
-          continentRank
-          countryRank
-          eventId
-          personId
-          worldRank
+          continent_rank
+          country_rank
+          event_id
+          person_id
+          world_rank
         ),
       ),
     }.freeze,
@@ -975,27 +975,35 @@ module DatabaseDumper
       ),
     }.freeze,
     "RanksSingle" => {
+      source_table: "ranks_single",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
-          personId
-          eventId
           best
-          worldRank
-          continentRank
-          countryRank
         ),
+        fake_values: {
+          # Copy over column to keep backwards compatibility
+          "personId" => "person_id",
+          "eventId" => "event_id",
+          "worldRank" => "world_rank",
+          "continentRank" => "continent_rank",
+          "countryRank" => "country_rank",
+        },
       ),
     }.freeze,
     "RanksAverage" => {
+      source_table: "ranks_average",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
-          personId
-          eventId
           best
-          worldRank
-          continentRank
-          countryRank
         ),
+        fake_values: {
+          # Copy over column to keep backwards compatibility
+          "personId" => "person_id",
+          "eventId" => "event_id",
+          "worldRank" => "world_rank",
+          "continentRank" => "continent_rank",
+          "countryRank" => "country_rank",
+        },
       ),
     }.freeze,
     "RoundTypes" => {
@@ -1037,25 +1045,31 @@ module DatabaseDumper
       ),
     }.freeze,
     "Countries" => {
+      source_table: "countries",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
-          continentId
           iso2
           name
         ),
+        fake_values: {
+          "continentId" => "continent_id",
+        }.freeze,
       ),
     }.freeze,
     "Continents" => {
+      source_table: "continents",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
           latitude
           longitude
           name
-          recordName
           zoom
         ),
+        fake_values: {
+          "recordName" => "record_name",
+        }.freeze,
       ),
     }.freeze,
     "Persons" => {
@@ -1141,6 +1155,9 @@ module DatabaseDumper
           championship_type
           eligible_country_iso2
         ),
+        db_default: %w(
+          id
+        ),
       ),
     }.freeze,
   }.freeze
@@ -1190,9 +1207,7 @@ module DatabaseDumper
         ActiveRecord::Base.connection.execute(populate_table_sql.strip)
       end
 
-      if dump_ts_name.present?
-        ActiveRecord::Base.connection.execute("INSERT INTO #{dump_db_name}.server_settings (name, value, created_at, updated_at) VALUES ('#{dump_ts_name}', UNIX_TIMESTAMP(), NOW(), NOW())")
-      end
+      ActiveRecord::Base.connection.execute("INSERT INTO #{dump_db_name}.server_settings (name, value, created_at, updated_at) VALUES ('#{dump_ts_name}', UNIX_TIMESTAMP(), NOW(), NOW())") if dump_ts_name.present?
     end
 
     yield dump_db_name

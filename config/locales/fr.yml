@@ -574,19 +574,19 @@ fr:
         competition_id: Est survenu au cours de
       competition_medium:
         #original_hash: 1917f4f
-        competitionId: Compétition
+        competition_id: Compétition
         #original_hash: 3deb745
-        type: Type
+        media_type: Type
         #original_hash: c3328c3
         text: Texte
         #original_hash: d051707
         uri: Lien
         #original_hash: 1be755a
-        submitterName: Nom du contributeur
+        submitter_name: Nom du contributeur
         #original_hash: 78cdfee
-        submitterEmail: Adresse e-mail du contributeur
+        submitter_email: Adresse e-mail du contributeur
         #original_hash: 0d31f23
-        submitterComment: Commentaire du contributeur
+        submitter_comment: Commentaire du contributeur
         #original_hash: bae7d5b
         status: Statut
       regional_organization:
@@ -682,7 +682,7 @@ fr:
         accepted: Accepté
         #original_hash: 96f608c
         pending: En attente
-      type:
+      media_type:
         #original_hash: ee45c30
         report: Rapport
         #original_hash: 4360c2d
@@ -896,19 +896,19 @@ fr:
         comment: ''
       competition_medium:
         #original_hash: da39a3e
-        competitionId: ''
+        competition_id: ''
         #original_hash: da39a3e
-        type: ''
+        media_type: ''
         #original_hash: da39a3e
         text: ''
         #original_hash: da39a3e
         uri: ''
         #original_hash: da39a3e
-        submitterName: ''
+        submitter_name: ''
         #original_hash: da39a3e
-        submitterEmail: ''
+        submitter_email: ''
         #original_hash: da39a3e
-        submitterComment: ''
+        submitter_comment: ''
         #original_hash: da39a3e
         status: ''
       results_submission:
@@ -1572,11 +1572,12 @@ fr:
           #original_hash: 54f0036
           label: Qui souhaitez-vous contacter ?
           competition:
-            #original_hash: baa2425
+            #original_hash: 5a280ab
             label: >-
               Contacter les organisateur·rice·s/Délégué·e·s d’une compétition
               (pour poser une question concernant cette compétition en
-              particulier)
+              particulier, y compris sur les résultats qui n'ont pas encore été
+              publiés sur le site web de la WCA)
           wct:
             #original_hash: b73e465
             label: >-
@@ -1584,15 +1585,17 @@ fr:
               des éléments comme l’ID/le profil WCA, l’organisation de
               compétitions, les règles de la compétition, les médias, etc.)
           wrt:
-            #original_hash: 0f6b96b
+            #original_hash: 4dd66f7
             label: >-
-              Contacter l'équipe de résultats de la WCA (pour toute chose
-              relative aux résultats d'une compétition)
+              Contacter l'équipe de résultats de la WCA (pour tout ce qui
+              concerne les résultats ou les données de profil sur le site web de
+              la WCA)
           wst:
-            #original_hash: 1d74033
+            #original_hash: 2be6d53
             label: >-
-              Contacter l'équipe logicielle de la WCA (pour signaler des bugs ou
-              toute question relative à l'API)
+              Contacter l'équipe logicielle de la WCA (pour signaler des
+              problèmes avec le site web de la WCA ou pour des questions
+              relatives aux logiciels)
         competition:
           competition:
             #original_hash: 1917f4f
@@ -1742,8 +1745,8 @@ fr:
       ad_new: Nouveau
       #original_hash: 9ad68ce
       text_html: >-
-        Allez jeter un œil à nos nouveaux produits dérivés incluant une sélection
-        de vêtements (t-shirts, sweats à capuche...)
+        Allez jeter un œil à nos nouveaux produits dérivés incluant une
+        sélection de vêtements (t-shirts, sweats à capuche...)
       #original_hash: b0fc6c4
       link_title: Lien vers la boutique
     records:
@@ -2082,16 +2085,16 @@ fr:
         '2': Vous devez utiliser une photo récente.
         #original_hash: 8165cf0
         '3': >-
-          S'il y a plus d'une personne dans la photo de profil, il doit être clair
-          laquelle vous êtes.
+          S'il y a plus d'une personne dans la photo de profil, il doit être
+          clair laquelle vous êtes.
         #original_hash: 4083c00
         '4': >-
           Votre tête, mais pas nécessairement tout votre visage, devrait être
           visible.
         #original_hash: 14c72b2
         '5': >-
-          La photo de profil ne doit pas comporter de texte superposé, d'autocollants ou
-          de filtres non naturels, y compris des bordures.
+          La photo de profil ne doit pas comporter de texte superposé,
+          d'autocollants ou de filtres non naturels, y compris des bordures.
         #original_hash: 7f9c9c6
         '6': La photo de profil doit être présenté dans le bon sens.
         #original_hash: 1a18831
@@ -2110,10 +2113,10 @@ fr:
             vous apparaîtriez à une compétition.
           #original_hash: f1f3854
           '2': >-
-            La photo de profil doit être cadré, recadré, incliné et éclairé de manière à
-            ce que tout compétiteur ou spectateur d'une compétition puisse
-            l'utiliser pour vous identifier sans ambiguïté sur le lieu de la
-            compétition.
+            La photo de profil doit être cadré, recadré, incliné et éclairé de
+            manière à ce que tout compétiteur ou spectateur d'une compétition
+            puisse l'utiliser pour vous identifier sans ambiguïté sur le lieu de
+            la compétition.
           #original_hash: 13fab02
           '3': >-
             La miniature de la photo de profil n'est qu'une partie de la photo
@@ -2278,6 +2281,10 @@ fr:
       can_only_register_for_qualified_events: >-
         Vous ne pouvez pas vous inscrire pour des épreuves pour lesquelles vous
         ne vous qualifiez pas.
+      #original_hash: 93ed20e
+      cannot_change_events_when_cancelling: >-
+        Vous ne pouvez pas modifier vos événements lors de l'annulation de votre
+        inscription.
       #original_hash: 4025877
       cannot_register_without_comment: >-
         Vous devez faire un commentaire. Merci de lire les conditions
@@ -3873,6 +3880,13 @@ fr:
           title: Inscriptions rejetées
           #original_hash: 3fd2e0c
           information: Les compétiteurs rejetés ne peuvent pas se réinscrire.
+        non_competing:
+          #original_hash: d4e453a
+          title: Inscriptions hors compétition
+          #original_hash: 2ed9c67
+          information: >-
+            Pour les non-compétiteurs à qui vous pouvez confier des tâches de
+            staff au sein du WCIF.
         payment:
           #original_hash: d6fbc7a
           refunded_status: Remboursé
@@ -5193,7 +5207,7 @@ fr:
       différentes et nous n'avons pas l'intention de ralentir de sitôt! La
       communauté du cube a connu une croissance constante depuis sa création en
       2004 et nous voulons l'encourager à continuer à l'avenir en augmentant
-      l'accessibilité des compétitions dans de nouvelles régions. 
+      l'accessibilité des compétitions dans de nouvelles régions.
 
       Dans le futur, nous espérons soutenir notre communauté encore plus à
       travers des collaborations et des contacts avec ceux qui s'intéressent aux
@@ -6168,14 +6182,15 @@ fr:
         La WCA propose des produits dérivés exclusifs à la vente ! T- shirts,
         hoodies, stickers, stackmats, sacs à dos et bien plus ! Nos designs sont
         constamment mis à jour, y compris le logo classique de la WCA, les
-        produits dérivés officiels du championnat du monde et les designs du record
-        du monde.
+        produits dérivés officiels du championnat du monde et les designs du
+        record du monde.
       #original_hash: 2865e1d
       '2': >-
-        Acheter des produits dérivés WCA via notre boutique est l'un des meilleurs moyens de
-        supporter la WCA - un organisme bénévole à but non lucratif. Nous
-        utilisons tous les bénéfices des produits dérivés pour financer davantage les
-        championnats, l’équipement et d’autres activités liées à la WCA.
+        Acheter des produits dérivés WCA via notre boutique est l'un des
+        meilleurs moyens de supporter la WCA - un organisme bénévole à but non
+        lucratif. Nous utilisons tous les bénéfices des produits dérivés pour
+        financer davantage les championnats, l’équipement et d’autres activités
+        liées à la WCA.
       #original_hash: 8e57552
       '3': >-
         Vous pouvez acheter nos produits dérivés partout dans le monde -- avec

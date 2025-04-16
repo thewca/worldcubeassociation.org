@@ -45,9 +45,6 @@ Bundler/OrderedGems:
 Lint/UnusedMethodArgument:
   Enabled: false
 
-Naming/AccessorMethodName:
-  Enabled: false
-
 Style/Alias:
   EnforcedStyle: prefer_alias_method
 
@@ -82,9 +79,6 @@ Style/TrailingCommaInHashLiteral:
   # non-empty array and hash literals.
   EnforcedStyleForMultiline: comma
 
-Style/GuardClause:
-  Enabled: false
-
 Metrics/AbcSize:
   Enabled: false
 
@@ -116,13 +110,7 @@ Metrics/MethodLength:
 Metrics/ModuleLength:
   Enabled: false
 
-Naming/MemoizedInstanceVariableName:
-  Enabled: false
-
 Style/AccessModifierDeclarations:
-  Enabled: false
-
-Style/AsciiComments:
   Enabled: false
 
 Style/BlockDelimiters:
@@ -134,34 +122,13 @@ Style/ClassAndModuleChildren:
 Style/ClassVars:
   Enabled: false
 
-Style/ConditionalAssignment:
-  Enabled: false
-
 Style/Documentation:
-  Enabled: false
-
-Style/DoubleNegation:
-  Enabled: false
-
-Style/EmptyElse:
-  EnforcedStyle: empty
-
-Style/IfInsideElse:
-  Enabled: false
-
-Style/IfUnlessModifier:
-  Enabled: false
-
-Style/InverseMethods:
   Enabled: false
 
 Style/Lambda:
   Enabled: false
 
 Style/MultilineBlockChain:
-  Enabled: false
-
-Style/NegatedIf:
   Enabled: false
 
 Style/Next:
@@ -173,14 +140,8 @@ Style/NumericPredicate:
 Style/PercentLiteralDelimiters:
   Enabled: false
 
-Style/PerlBackrefs:
-  Enabled: false
-
 Style/RaiseArgs:
   EnforcedStyle: compact
-
-Style/RedundantParentheses:
-  Enabled: false
 
 Style/SignalException:
   EnforcedStyle: only_raise
@@ -211,23 +172,18 @@ Style/WordArray:
 Style/SymbolProc:
   Enabled: false
 
-Naming/PredicateName:
-  Enabled: false
-
-Naming/BlockParameterName:
-  Enabled: false
-
 Naming/MethodParameterName:
-  Enabled: false
+  AllowedNames:
+    - n
+    - id
 
-Style/YodaCondition:
-  Enabled: false
-
-Style/FormatStringToken:
-  Enabled: false
-
-Layout/EmptyLineAfterGuardClause:
-  Enabled: false
+Naming/PredicateName:
+  AllowedMethods:
+    # These are database columns
+    - is_active?
+    - is_hidden?
+    # This one actually makes sense
+    - has_permission?
 
 Lint/EmptyFile:
   Exclude:
@@ -237,21 +193,12 @@ Lint/EmptyFile:
 Naming/VariableNumber:
   Enabled: false
 
-# If an external library requires us to use terms like "blacklist",
-# we have no choice but to follow their conventions until they update
-Naming/InclusiveLanguage:
-  Exclude:
-    - 'config/**/*'
-
 Style/OpenStructUse:
   Exclude:
     - 'spec/lib/middlewares/warden_user_logger_spec.rb'
 
 Style/HashSyntax:
   EnforcedShorthandSyntax: never
-
-Naming/BlockForwarding:
-  Enabled: false
 
 Style/ArgumentsForwarding:
   RedundantBlockArgumentNames: []
@@ -500,21 +447,4 @@ Capybara/RSpec/HaveSelector:
   Enabled: false
 
 Capybara/RSpec/PredicateMatcher:
-  Enabled: false
-
-# Rake
-
-Rake/ClassDefinitionInTask:
-  Enabled: false
-
-Rake/Desc:
-  Enabled: false
-
-Rake/DuplicateTask:
-  Enabled: false
-
-Rake/DuplicateNamespace:
-  Enabled: false
-
-Rake/MethodDefinitionInTask:
   Enabled: false

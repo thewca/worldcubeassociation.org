@@ -3,7 +3,7 @@ import {
   Button,
   Card,
   Container,
-  DropdownHeader,
+  Dropdown,
   Form,
   Icon,
   Image,
@@ -26,6 +26,11 @@ import { fetchWithAuthenticityToken } from '../../../lib/requests/fetchWithAuthe
 import { geocodingTimeZoneUrl } from '../../../lib/requests/routes.js.erb';
 import { getTimeZoneDropdownLabel, sortByOffset } from '../../../lib/utils/timezone';
 import RegionSelector from '../../wca/RegionSelector';
+
+// We need to keep track of which timezones the frontend can actually understand.
+//   Sometimes, package updates or Ruby runtime updates can introduce newly-fangled IANA timezones
+//   that the user's browser never heard about, leading to unpleasant runtime crashes.
+const frontendTimezones = Intl.supportedValuesOf('timeZone');
 
 function VenuePanel({
   venue,
@@ -72,25 +77,35 @@ function VenuePanel({
   // In the end the array should look like that:
   //   - country_zone_a, country_zone_b, [...], other_tz_a, other_tz_b, [...]
   const timezoneOptions = useMemo(() => {
-    // Stuff that is recommended based on the country list
-    const competitionZoneIds = _.uniq(countryZones);
+    const competitionZoneIds = _.intersection(
+      // Stuff that is recommended based on the country list
+      _.uniq(countryZones),
+      // ...but only if the current browser actually understands them
+      frontendTimezones,
+    );
+
     const sortedCompetitionZones = sortByOffset(competitionZoneIds, referenceTime);
 
-    // Stuff that is listed in our `backendTimezones` list but not in the preferred country list
-    const otherZoneIds = _.difference(backendTimezones, competitionZoneIds);
+    const otherZoneIds = _.intersection(
+      // Stuff that is listed in our `backendTimezones` list but not in the preferred country list
+      _.difference(backendTimezones, competitionZoneIds),
+      // ...but only if the current browser actually understands them
+      frontendTimezones,
+    );
+
     const sortedOtherZones = sortByOffset(otherZoneIds, referenceTime);
 
     // Both merged together, with the countryZone entries listed first.
     return [
       {
-        as: DropdownHeader,
+        as: Dropdown.Header,
         key: 'local-zones-header',
         text: 'Local time zones',
         disabled: true,
       },
       ...sortedCompetitionZones.map(makeTimeZoneOption),
       {
-        as: DropdownHeader,
+        as: Dropdown.Header,
         key: 'other-zones-header',
         text: 'Other time zones',
         disabled: true,

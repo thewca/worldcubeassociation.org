@@ -372,13 +372,13 @@ en:
         tags: "Tags"
         competition_id: "Happened during"
       competition_medium:
-        competitionId: "Competition"
-        type: "Type"
+        competition_id: "Competition"
+        media_type: "Type"
         text: "Text"
         uri: "Link"
-        submitterName: "Submitter name"
-        submitterEmail: "Submitter email"
-        submitterComment: "Submitter comment"
+        submitter_name: "Submitter name"
+        submitter_email: "Submitter email"
+        submitter_comment: "Submitter comment"
         status: "Status"
       regional_organization:
         name: "Name"
@@ -432,7 +432,7 @@ en:
       status:
         accepted: "Accepted"
         pending: "Pending"
-      type:
+      media_type:
         report: "Report"
         article: "Article"
         multimedia: "Multimedia"
@@ -519,13 +519,13 @@ en:
       vote:
         comment: ""
       competition_medium:
-        competitionId: ""
-        type: ""
+        competition_id: ""
+        media_type: ""
         text: ""
         uri: ""
-        submitterName: ""
-        submitterEmail: ""
-        submitterComment: ""
+        submitter_name: ""
+        submitter_email: ""
+        submitter_comment: ""
         status: ""
       results_submission:
         schedule_url: ""
@@ -706,7 +706,7 @@ en:
       translators: "Translators"
       faq: "Frequently Asked Questions"
       forum: "Forum"
-      teams: "Teams, Committees, and Councils"
+      teams: "Teams and Committees"
       education: "Educational resources"
       wca_live: "WCA Live"
       contact: "Contact"
@@ -764,10 +764,10 @@ en:
     officers_and_board:
       title: "WCA Officers & Board"
       officers_description: "The officers of the WCA handle tasks relating to the non-profit status of the WCA. These officers are elected by the WCA Board. The Executive Director is the Chief Executive Officer of the WCA, the Chair presides over all Board meetings, the Secretary maintains the organization's documents, and the Treasurer manages financial matters of the WCA."
-      board_description: "The WCA Board is responsible for leading the organization as a whole, and fulfilling any duties not fulfilled by other Teams,  Committees, and Councils"
+      board_description: "The WCA Board is responsible for leading the organization as a whole, and fulfilling any duties not fulfilled by other Teams and Committees"
     teams_committees_councils:
-      title: "WCA Teams, Committees, and Councils"
-      description: "The WCA's teams and committees are an integral part of the organization and perform the day-to-day tasks that are required to keep it functioning. These committees are made up of WCA community members, including WCA Delegates and competitors. Each team has a leader, whose role is to ensure the proper functioning of the team and guide other team members. Councils are a special type of team that serve an advisory role to the WCA Board and are made up of community members, not WCA Volunteers. When there are committee, team, or council openings, information about how to apply is posted on the front page."
+      title: "WCA Teams and Committees"
+      description: "The WCA's teams and committees are an integral part of the organization and perform the day-to-day tasks that are required to keep it functioning. These committees are made up of WCA community members, including WCA Delegates and competitors. Each team has a leader, whose role is to ensure the proper functioning of the team and guide other team members. When there are team or committee openings, information about how to apply is posted on the front page."
       contact_button: "Contact"
       no_contact_description: "The contact details of this team/committee is not publicly available."
       groups_name:
@@ -814,13 +814,13 @@ en:
         contact_recipient:
           label: "Who do you want to contact?"
           competition:
-            label: "Contact organizers/delegates of a competition (to ask query regarding that particular competition)"
+            label: "Contact organizers/delegates of a competition (to ask query regarding that particular competition, including results not yet published on the WCA website)"
           wct:
             label: "Contact WCA for general queries (this can involve anything like WCA ID/profile, organizing competitions, competition rules, competition media, etc)"
           wrt:
-            label: "Contact Results Team (for anything related to the results of a competition)"
+            label: "Contact Results Team (for anything related to results or profile data on the WCA website)"
           wst:
-            label: "Contact Software Team (to report some bug in website or any API related questions)"
+            label: "Contact Software Team (to report issues with the WCA website or for software-related questions)"
         competition:
           competition:
             label: "Competition"
@@ -1124,6 +1124,7 @@ en:
   registrations:
     #context: and when an error is found
     errors:
+      edit_deadline_passed: "The Registration Edit Deadline has passed! Changes should only be made in extraordinary circumstances."
       need_name: "Need a name"
       need_gender: "Need a gender"
       need_dob: "Need a birthdate"
@@ -1136,6 +1137,7 @@ en:
       undelete_banned: "is a banned competitor and cannot be undeleted"
       series_more_than_one_accepted: "You can only be accepted for one Series competition at a time."
       can_only_register_for_qualified_events: "You cannot register for events you are not qualified for."
+      cannot_change_events_when_cancelling: "You cannot change your events while cancelling your registration."
       cannot_register_without_comment: "You must make a comment. Please read the Registration Requirements above to see what must be included (e.g. in an FMC simultaneous competition, which location you will compete at)."
     registration_info_people:
       #context: pluralization of "x first-timer(s)"
@@ -1159,6 +1161,7 @@ en:
     edit_registration:
       #context: the title for a specific registration to a competition
       title: "%{person} for %{comp}"
+
     #context: text appearing in mails sent to competitors during registration
     mailer:
       #context: "people" is replaced by the organizers and Delegates' names
@@ -1233,7 +1236,6 @@ en:
       total: "Total"
     new_registration:
       title: "Register for %{comp}"
-    registered_with_account_html: "This person registered with an account. You can edit their personal information %{here}."
     sign_in: "Sign in"
     profile: "profile"
     register: "Register!"
@@ -1299,6 +1301,11 @@ en:
     preferred_events_prompt_html: "To speed up registration in the future, you can set your preferred events %{link}."
     preferred_events_populated_html: "We autopopulated this with your preferred events, which you can edit %{link}."
     registration_requirements: "Registration requirements for the competition:"
+    registration_history:
+      acting_user: "Acting User"
+      action: "Action"
+      changes: "Changes"
+      title: "Registration History"
     import:
       title: "Import registrations for %{comp}"
       info: "You can import registrations multiple times. Changes will be determined and the database will be updated accordingly."
@@ -1826,6 +1833,7 @@ en:
           information: "Pending should only be used for incomplete (eg, unpaid) registrations - please use the Waiting List if your competition is too full to accept new competitors."
         waitlist:
           title: "Waiting List Registrations"
+          information: "Competitors are added to the end of the Waiting List. If you add several at once, the paid competitors will be added to the end in the order that they paid, followed by the rest in the order that they registered. You can manually adjust the order in Edit Mode if necessary."
           skipped_warning: "You've skipped %{count} registration(s) on the Waiting List. Are you sure you want to approve the other registration(s) instead?"
         approved:
           title: "Approved Registrations"
@@ -1835,6 +1843,9 @@ en:
         rejected:
           title: "Rejected Registrations"
           information: "Rejected competitors cannot re-register."
+        non_competing:
+          title: "Non-Competing Registrations"
+          information: "For non-competitors that you can assign staff duties to in the WCIF."
         payment:
          refunded_status: "Refunded"
          initialized: "Payment process was started on %{date}, but not finished."
@@ -1983,6 +1994,9 @@ en:
       series_distance_days: "The competition is scheduled too many days away from %{competition}."
       must_ask_about_guests_if_specifying_limit: "Must ask about guests if a guest limit is specified."
       not_full_url: "You have a relative URL (%{url}) in the content. Please enter full URLs with prefix http:// or https://."
+      editing_deadline_already_passed: "You're only allowed to change dates for deadlines that have not yet passed, but the original value of %{timestamp} has already passed."
+      edited_deadline_not_after_original: "You're only allowed to extend deadlines, but %{new_timestamp} is set before the original value of %{timestamp}."
+      edited_deadline_not_in_future: "You're only allowed to introduce future deadlines, but %{new_timestamp} is not in the future."
     new:
       create_competition: "Create competition"
       note_clone: "To clone an existing competition visit the information page for that competition and click the \"Clone\" link in the menu."
@@ -2179,30 +2193,17 @@ en:
       title: "Records"
     last_updated_html: "Last updated: %{timestamp}"
     filters_fixes_underway: "Please note that some filters (such as past years) are temporarily disabled. The Software Team is working to restore these filters - we are sorry for the inconvenience."
-    tooltip_no_years: "Our database is too large to compute historical data"
-    tooltip_no_quantities: "Our database is too large to compute long rankings"
     selector_elements:
       events_selector:
         event: "Event"
-        all_events: "All events"
-      region: "Region"
       type_selector:
         type: "Type"
         single: "Single"
         average: "Average"
-      years_selector:
-        years: "Years"
-        all_years: "All years"
-        only: "Only"
-        only_html: "Only %{year}"
-        until: "Until"
-        until_html: "Until %{year}"
       show_selector:
         show: "Show"
         persons: "Persons"
-        persons_html: "%{quantity} persons"
         results: "Results"
-        results_html: "%{quantity} results"
         by_region: "By region"
         mixed: "Mixed"
         slim: "Slim"
@@ -2217,22 +2218,20 @@ en:
     table_elements:
       name: "Name"
       result: "Result"
-      representing: "Representing"
       competition: "Competition"
       solves: "Solves"
       region: "Region"
       world: "World"
-      type_options:
-        type: "Type"
-        single: "Single"
-        average: "Average"
       event: "Event"
       date_circa: "Date circa"
-      record: "Record"
   #context: User notifications
   notifications:
     connect_wca_id: "Connect your WCA ID to your account!"
   payments:
+    labels:
+      payment_statuses: "Payment Statuses"
+      available_refunds: "Available Refunds"
+      original_payment: "Original Payment"
     #context: localized names of payment providers
     payment_providers:
       paypal: 'PayPal'
@@ -2269,6 +2268,9 @@ en:
           display_name: "Name"
           primary_email: "Email"
         fallback_not_applicable: "N/A"
+    statuses:
+      succeeded: "Succeeded"
+      refund: "Refunded"
   persons:
     #context: Person search page
     index:
@@ -2442,7 +2444,7 @@ en:
     structure:
       title: "Structure"
       board:
-        description: "The WCA Board is responsible for leading the organization as a whole, and fulfilling any duties not fulfilled by other Teams,  Committees, and Councils"
+        description: "The WCA Board is responsible for leading the organization as a whole, and fulfilling any duties not fulfilled by other Teams and Committees"
       users:
         profile: "%{user_name}'s profile"
       operations_html: "The day to day operations are run by the WCA's %{committees_and_teams}."

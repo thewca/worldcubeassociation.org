@@ -1,9 +1,15 @@
 <% provide(:title, t('.create_competition')) %>
+<% add_to_packs("wca_maps") %>
 
 <div class="container">
   <h1><%= yield(:title) %></h1>
+
   <% if action_name == "new" %>
     <%= alert :info, t('.note_clone'), note: true %>
   <% end %>
-  <%= render 'competition_form' %>
+
+  <%= react_component("CompetitionForm/Create", {
+    competition: @competition.to_form_data,
+    isCloning: @competition.being_cloned_from.present?,
+  }) %>
 </div>

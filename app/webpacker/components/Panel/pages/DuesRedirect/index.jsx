@@ -8,7 +8,7 @@ import Errored from '../../../Requests/Errored';
 import Loading from '../../../Requests/Loading';
 import useSaveAction from '../../../../lib/hooks/useSaveAction';
 import RegionSelector from '../../../wca/RegionSelector';
-import WcaSearch from '../../../SearchWidget/WcaSearch';
+import { IdWcaSearch } from '../../../SearchWidget/WcaSearch';
 import SEARCH_MODELS from '../../../SearchWidget/SearchModel';
 
 export default function DuesRedirect() {
@@ -64,10 +64,7 @@ export default function DuesRedirect() {
           <Form onSubmit={() => {
             save(
               wfcDuesRedirectsUrl,
-              {
-                ...formData,
-                redirectFromOrganizerId: formData.redirectFromOrganizer?.id,
-              },
+              formData,
               () => {
                 setOpen(false);
                 sync();
@@ -97,9 +94,9 @@ export default function DuesRedirect() {
               />
             )}
             {formData.redirectType === 'User' && (
-              <WcaSearch
-                name="redirectFromOrganizer"
-                value={formData.redirectFromOrganizer}
+              <IdWcaSearch
+                name="redirectFromOrganizerId"
+                value={formData.redirectFromOrganizerId}
                 onChange={handleFormChange}
                 multiple={false}
                 model={SEARCH_MODELS.user}
