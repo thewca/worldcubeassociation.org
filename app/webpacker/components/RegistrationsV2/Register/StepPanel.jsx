@@ -20,6 +20,7 @@ export default function StepPanel({
     jumpToStepByKey, jumpToFirstIncompleteStep,
   } = useSteps();
 
+  // Now this runs every time we change Panels....
   useEffect(() => {
     if (isAccepted || isRejected) {
       jumpToStepByKey('approval');
@@ -35,16 +36,24 @@ export default function StepPanel({
           <Step
             key={stepConfig.key}
             active={activeIndex === index}
-            completed={index < activeIndex || stepConfig.shouldShowCompleted(
+            completed={(index < activeIndex && stepConfig.shouldShowCompletedAnd(
+              isRegistered,
+              hasPaid,
+              isAccepted,
+            )) || stepConfig.shouldShowCompletedOr(
               isRegistered,
               hasPaid,
               isAccepted,
             )}
-            disabled={isRejected || (index < activeIndex && stepConfig.shouldBeDisabled(
+            disabled={isRejected || (index > activeIndex && stepConfig.shouldBeDisabledAnd(
               isRegistered,
               hasPaid,
               registrationCurrentlyOpen,
-            ))}
+            )) || stepConfig.shouldBeDisabledOr(
+              isRegistered,
+              hasPaid,
+              registrationCurrentlyOpen,
+            )}
             onClick={() => jumpToStepByIndex(index)}
           >
             <Step.Content>

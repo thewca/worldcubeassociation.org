@@ -7,24 +7,30 @@ export const requirementsStepConfig = {
   key: 'requirements',
   i18nKey: 'competitions.registration_v2.register.panel.requirements',
   component: RegistrationRequirements,
-  shouldShowCompleted: (isRegistered) => isRegistered,
-  shouldBeDisabled: () => true,
+  shouldShowCompletedAnd: () => true,
+  shouldShowCompletedOr: (isRegistered) => isRegistered,
+  shouldBeDisabledAnd: () => false,
+  shouldBeDisabledOr: (isRegistered) => isRegistered,
 };
 
 export const competingStepConfig = {
   key: 'competing',
   i18nKey: 'competitions.registration_v2.register.panel.competing',
   component: CompetingStep,
-  shouldShowCompleted: (isRegistered) => isRegistered,
-  shouldBeDisabled: () => false,
+  shouldShowCompletedAnd: () => true,
+  shouldShowCompletedOr: (isRegistered) => isRegistered,
+  shouldBeDisabledAnd: () => false,
+  shouldBeDisabledOr: () => false,
 };
 
 export const paymentStepConfig = {
   key: 'payment',
   i18nKey: 'competitions.registration_v2.register.panel.payment',
   component: StripeWrapper,
-  shouldShowCompleted: (isRegistered, hasPaid) => hasPaid,
-  shouldBeDisabled: (
+  shouldShowCompletedAnd: (isRegistered, hasPaid) => hasPaid,
+  shouldShowCompletedOr: (isRegistered, hasPaid) => hasPaid,
+  shouldBeDisabledAnd: () => false,
+  shouldBeDisabledOr: (
     isRegistered,
     hasPaid,
     registrationCurrentlyOpen,
@@ -35,10 +41,11 @@ export const registrationOverviewConfig = {
   key: 'approval',
   i18nKey: 'competitions.registration_v2.register.panel.approval',
   component: RegistrationOverview,
-  shouldShowCompleted: (isRegistered, hasPaid, isAccepted) => isAccepted,
-  shouldBeDisabled: (isRegistered) => !isRegistered,
+  shouldShowCompletedAnd: () => true,
+  shouldShowCompletedOr: (isRegistered, hasPaid, isAccepted) => isAccepted,
+  shouldBeDisabledAnd: (isRegistered) => !isRegistered,
+  shouldBeDisabledOr: () => false,
 };
 
-// eslint-disable-next-line import/prefer-default-export
 export const availableSteps = [requirementsStepConfig,
   competingStepConfig, paymentStepConfig, registrationOverviewConfig];
