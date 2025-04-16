@@ -49,7 +49,7 @@ class ResultsController < ApplicationController
     end
     @is_average = params[:type] == @types[1]
     value = @is_average ? "average" : "best"
-    capitalized_type_param = params[:type].capitalize
+    type_param = params[:type]
 
     @is_by_region = params[:show] == "by region"
     splitted_show_param = params[:show].split
@@ -66,19 +66,19 @@ class ResultsController < ApplicationController
           result.*,
           result.#{value} value
         FROM (
-          SELECT MIN(valueAndId) valueAndId
-          FROM Concise#{capitalized_type_param}Results result
-          #{@gender_condition.present? ? "JOIN Persons persons ON result.personId = persons.wca_id and persons.subId = 1" : ""}
+          SELECT MIN(value_and_id) value_and_id
+          FROM concise_#{type_param}_results result
+          #{@gender_condition.present? ? "JOIN Persons persons ON result.person_id = persons.wca_id and persons.subId = 1" : ""}
           WHERE #{value} > 0
             #{@event_condition}
             #{@years_condition_result}
             #{@region_condition}
             #{@gender_condition}
-          GROUP BY personId
-          ORDER BY valueAndId
+          GROUP BY person_id
+          ORDER BY value_and_id
           #{limit_condition}
         ) top
-        JOIN Results result ON result.id = valueAndId % 1000000000
+        JOIN Results result ON result.id = value_and_id % 1000000000
         ORDER BY value, personName
       SQL
 
@@ -134,17 +134,17 @@ class ResultsController < ApplicationController
           result.#{value} value
         FROM (
           SELECT
-            result.countryId recordCountryId,
+            result.country_id record_country_id,
             MIN(#{value}) recordValue
-          FROM Concise#{capitalized_type_param}Results result
-          #{@gender_condition.present? ? "JOIN Persons persons ON result.personId = persons.wca_id and persons.subId = 1" : ""}
+          FROM concise_#{type_param}_results result
+          #{@gender_condition.present? ? "JOIN Persons persons ON result.person_id = persons.wca_id and persons.subId = 1" : ""}
           WHERE 1
             #{@event_condition}
             #{@years_condition_result}
             #{@gender_condition}
-          GROUP BY result.countryId
+          GROUP BY result.country_id
         ) record
-        JOIN Results result ON result.#{value} = recordValue AND result.countryId = recordCountryId
+        JOIN Results result ON result.#{value} = recordValue AND result.country_id = record_country_id
         JOIN Competitions competition on competition.id = competitionId
         #{@gender_condition.present? ? "JOIN Persons persons ON result.personId = persons.wca_id and persons.subId = 1" : ""}
         WHERE 1
@@ -272,15 +272,15 @@ class ResultsController < ApplicationController
         MONTH(competition.start_date) month,
         DAY(competition.start_date)   day
       FROM
-        (SELECT eventId recordEventId, MIN(valueAndId) DIV 1000000000 value
-          FROM Concise#{type.capitalize}Results result
-          #{@gender_condition.present? ? "JOIN Persons persons ON result.personId = persons.wca_id and persons.subId = 1" : ""}
+        (SELECT event_id record_event_id, MIN(value_and_id) DIV 1000000000 value
+          FROM concise_#{type}_results result
+          #{@gender_condition.present? ? "JOIN Persons persons ON result.person_id = persons.wca_id and persons.subId = 1" : ""}
           WHERE 1
           #{@event_condition}
           #{@region_condition}
           #{@years_condition_result}
           #{@gender_condition}
-          GROUP BY eventId) record,
+          GROUP BY event_id) record,
         Results result
         #{@gender_condition.present? ? "JOIN Persons persons ON result.personId = persons.wca_id and persons.subId = 1," : ","}
         Events event,
@@ -396,22 +396,22 @@ class ResultsController < ApplicationController
     world_rows = []
     continents_rows = []
     countries_rows = []
-    rows.each do |row|
-      result = LightResult.new(row)
-      value = row["value"]
+    rows.each do |result|
+      result_country = Country.c_find!(result["countryId"])
+      value = result["value"]
 
-      world_rows << row if value == best_value_of_world
+      world_rows << result if value == best_value_of_world
 
-      if best_values_of_continents[result.country.continent.id].nil? || value == best_values_of_continents[result.country.continent.id]
-        best_values_of_continents[result.country.continent.id] = value
+      if best_values_of_continents[result_country.continent.id].nil? || value == best_values_of_continents[result_country.continent.id]
+        best_values_of_continents[result_country.continent.id] = value
 
-        continents_rows << row if (country.present? && country.continent.id == result.country.continent.id) || (continent.present? && continent.id == result.country.continent.id) || params[:region] == "world"
+        continents_rows << result if (country.present? && country.continent.id == result_country.continent.id) || (continent.present? && continent.id == result_country.continent.id) || params[:region] == "world"
       end
 
-      if best_values_of_countries[result.country.id].nil? || value == best_values_of_countries[result.country.id]
-        best_values_of_countries[result.country.id] = value
+      if best_values_of_countries[result_country.id].nil? || value == best_values_of_countries[result_country.id]
+        best_values_of_countries[result_country.id] = value
 
-        countries_rows << row if (country.present? && country.id == result.country.id) || params[:region] == "world"
+        countries_rows << result if (country.present? && country.id == result_country.id) || params[:region] == "world"
       end
     end
 
