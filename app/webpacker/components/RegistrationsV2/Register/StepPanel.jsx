@@ -26,13 +26,13 @@ export default function StepPanel({
           <Step
             key={stepConfig.key}
             active={activeIndex === index}
-            completed={stepConfig.shouldShowCompleted(
+            completed={index < activeIndex || stepConfig.shouldShowCompleted(
               isRegistered,
               hasPaid,
               isAccepted,
               activeIndex,
             )}
-            disabled={isRejected || stepConfig.shouldBeDisabled(
+            disabled={isRejected || index > activeIndex || stepConfig.shouldBeDisabled(
               isRegistered,
               hasPaid,
               activeIndex,

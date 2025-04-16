@@ -1760,7 +1760,7 @@ class Competition < ApplicationRecord
     # Currently hardcoded to support stripe only
     {
       stripePublishableKey: AppSecrets.STRIPE_PUBLISHABLE_KEY,
-      connectedAccountId: @competition.payment_account_for(:stripe)&.account_id,
+      connectedAccountId: payment_account_for(:stripe)&.account_id,
     }.to_h
   end
 

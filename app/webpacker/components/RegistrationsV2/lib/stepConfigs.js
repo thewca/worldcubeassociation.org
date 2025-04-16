@@ -7,8 +7,8 @@ export const requirementsStepConfig = {
   key: 'requirements',
   i18nKey: 'competitions.registration_v2.register.panel.requirements',
   component: RegistrationRequirements,
-  shouldShowCompleted: (isRegistered, hasPaid, isAccepted, index) => index > 0,
-  shouldBeDisabled: (isRegistered, hasPaid, activeIndex) => activeIndex !== 0,
+  shouldShowCompleted: (isRegistered) => isRegistered,
+  shouldBeDisabled: () => false,
 };
 
 export const competingStepConfig = {
@@ -16,7 +16,7 @@ export const competingStepConfig = {
   i18nKey: 'competitions.registration_v2.register.panel.competing',
   component: CompetingStep,
   shouldShowCompleted: (isRegistered) => isRegistered,
-  shouldBeDisabled: (isRegistered, hasPaid, activeIndex, index) => index > activeIndex,
+  shouldBeDisabled: () => false,
 };
 
 export const paymentStepConfig = {
@@ -27,10 +27,8 @@ export const paymentStepConfig = {
   shouldBeDisabled: (
     isRegistered,
     hasPaid,
-    activeIndex,
-    index,
     registrationCurrentlyOpen,
-  ) => (!hasPaid && index > activeIndex) || !registrationCurrentlyOpen,
+  ) => hasPaid || !registrationCurrentlyOpen,
 };
 
 export const registrationOverviewConfig = {
