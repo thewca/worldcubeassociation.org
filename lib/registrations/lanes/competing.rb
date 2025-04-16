@@ -35,7 +35,7 @@ module Registrations
         ActiveRecord::Base.transaction do
           changes = registration.changes.transform_values { |change| change[1] }
 
-          changes[:waiting_list_position] = registration.waiting_list_position if registration.waiting_list_position_changed?
+          changes[:waiting_list_position] = registration.waiting_list_position if registration.waitlist_position_changed?
           changes[:event_ids] = registration.changed_event_ids if registration.changed_event_ids.present?
 
           registration.save!

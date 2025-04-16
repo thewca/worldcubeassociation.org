@@ -36,13 +36,14 @@ module Waitlistable
     validates :waiting_list_present?, presence: { if: :waiting_list_position?, frontend_code: Registrations::ErrorCodes::INVALID_REQUEST_DATA }
 
     after_save :commit_waitlist_position, if: :waiting_list_persisted?
+    after_commit :clear_tracked_waitlist_position!, on: :update
 
     def commit_waitlist_position
-      self.waiting_list_position = @tracked_waiting_list_position
+      self.waiting_list_position = self.tracked_waitlist_position
     end
 
     private def clear_tracked_waitlist_position!
-      @tracked_waiting_list_position = nil
+      self.tracked_waitlist_position = nil
     end
 
     # Tells the hooks whether the current entity
@@ -52,15 +53,15 @@ module Waitlistable
     end
 
     def waiting_list_position
-      self.waiting_list&.position(self)
+      self.tracked_waitlist_position || self.waiting_list&.position(self)
     end
 
     def waiting_list_position?
       self.waiting_list_position.present?
     end
 
-    def waiting_list_position_changed?
-      @tracked_waiting_list_position != self.waiting_list_position
+    def waitlist_position_changed?
+      self.tracked_waitlist_position.present?
     end
 
     def waiting_list_position=(target_position)
@@ -72,11 +73,8 @@ module Waitlistable
         self.waiting_list.add(self) if should_add
         self.waiting_list.move_to_position(self, target_position) if should_move
         self.waiting_list.remove(self) if should_remove
-
-        # Make sure we're passing through the most recent state
-        self.clear_tracked_waitlist_position!
       else
-        @tracked_waiting_list_position = target_position
+        self.tracked_waitlist_position = target_position
       end
     end
   end
