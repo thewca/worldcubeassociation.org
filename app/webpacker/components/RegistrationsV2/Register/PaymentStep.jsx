@@ -35,7 +35,7 @@ export default function PaymentStep({
   const dispatch = useDispatch();
   const { nextStep } = useSteps();
 
-  const { registration } = useRegistration();
+  const { hasPaid } = useRegistration();
 
   const [isLoading, setIsLoading] = useState(false);
   const [isDonationChecked, setDonationChecked] = useCheckboxState(false);
@@ -43,10 +43,10 @@ export default function PaymentStep({
   useEffect(() => {
     // TODO When we add per Event Payment this logic needs to also check
     //  if an additional payment is needed
-    if (registration?.payment?.has_paid) {
+    if (hasPaid) {
       nextStep();
     }
-  }, [nextStep, registration]);
+  }, [nextStep, hasPaid]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

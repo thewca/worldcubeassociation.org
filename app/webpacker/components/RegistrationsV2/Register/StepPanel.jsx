@@ -26,20 +26,16 @@ export default function StepPanel({
           <Step
             key={stepConfig.key}
             active={activeIndex === index}
-            completed={index < activeIndex || stepConfig.shouldShowCompleted(
+            completed={index < activeIndex && stepConfig.shouldShowCompleted(
               isRegistered,
               hasPaid,
               isAccepted,
-              activeIndex,
             )}
-            disabled={isRejected || index > activeIndex || stepConfig.shouldBeDisabled(
+            disabled={isRejected || (index < activeIndex && stepConfig.shouldBeDisabled(
               isRegistered,
               hasPaid,
-              activeIndex,
-              index,
               registrationCurrentlyOpen,
-              isRejected,
-            )}
+            ))}
             onClick={() => jumpToStepByIndex(index)}
           >
             <Step.Content>

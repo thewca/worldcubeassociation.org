@@ -8,7 +8,7 @@ export const requirementsStepConfig = {
   i18nKey: 'competitions.registration_v2.register.panel.requirements',
   component: RegistrationRequirements,
   shouldShowCompleted: (isRegistered) => isRegistered,
-  shouldBeDisabled: () => false,
+  shouldBeDisabled: () => true,
 };
 
 export const competingStepConfig = {
