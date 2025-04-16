@@ -14,6 +14,7 @@ RSpec.describe VotesController do
 
   context "logged in as a regular user" do
     before { sign_in create(:user) }
+
     it "redirects to home page" do
       post :create
       expect(response).to redirect_to(root_url)
@@ -21,7 +22,7 @@ RSpec.describe VotesController do
   end
 
   context "logged in as delegate" do
-    let!(:delegate) { create :delegate }
+    let!(:delegate) { create(:delegate) }
 
     before :each do
       sign_in delegate
@@ -55,7 +56,7 @@ RSpec.describe VotesController do
   end
 
   context "logged in as staff member" do
-    let!(:staff_member) { create :user, :wrt_member }
+    let!(:staff_member) { create(:user, :wrt_member) }
 
     before :each do
       sign_in staff_member

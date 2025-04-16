@@ -12,6 +12,7 @@ RSpec.describe PollsController do
 
   context "logged in as a regular user" do
     before { sign_in create(:user) }
+
     it "redirects to home page" do
       post :create
       expect(response).to redirect_to(root_url)
@@ -20,6 +21,7 @@ RSpec.describe PollsController do
 
   context "logged in as an admin" do
     before { sign_in create :admin }
+
     it "shows poll results" do
       poll = create(:poll)
       get :results, params: { id: poll.id }
@@ -29,6 +31,7 @@ RSpec.describe PollsController do
 
   context "logged in as a delegate" do
     before { sign_in create :delegate }
+
     it "shows poll results" do
       poll = create(:poll)
       get :results, params: { id: poll.id }
@@ -38,6 +41,7 @@ RSpec.describe PollsController do
 
   context "logged in as a staff member" do
     before { sign_in create :user, :wrt_member }
+
     it "shows poll results" do
       poll = create(:poll)
       get :results, params: { id: poll.id }
@@ -46,7 +50,7 @@ RSpec.describe PollsController do
   end
 
   context "logged in as board member" do
-    let!(:board_member) { create :user, :board_member }
+    let!(:board_member) { create(:user, :board_member) }
 
     before :each do
       sign_in board_member

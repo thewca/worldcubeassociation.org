@@ -53,7 +53,7 @@ RSpec.describe MergePeople do
   end
 
   it "requires person2 to not have an account" do
-    create :user, :wca_id, person: person2
+    create(:user, :wca_id, person: person2)
     expect(merge_people).to be_invalid_with_errors(person2_wca_id: ["Must not have an account"])
   end
 

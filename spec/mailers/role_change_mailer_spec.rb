@@ -60,7 +60,7 @@ RSpec.describe RoleChangeMailer, type: :mailer do
   end
 
   describe 'notify_role_end' do
-    let(:translator) { create :regional_delegate_role }
+    let(:translator) { create(:regional_delegate_role) }
     let(:user_who_made_the_change) { create(:user, name: 'Sherlock Holmes') }
     let(:mail) { described_class.notify_role_end(translator, user_who_made_the_change) }
 

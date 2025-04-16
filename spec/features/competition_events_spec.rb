@@ -224,11 +224,11 @@ RSpec.feature "Competition events management" do
   end
 
   context "competition with results posted" do
-    let!(:competition) { create :competition, :confirmed, :visible, :past, :results_posted, event_ids: Event.where(id: '333') }
+    let!(:competition) { create(:competition, :confirmed, :visible, :past, :results_posted, event_ids: Event.where(id: '333')) }
     let(:competition_event) { competition.competition_events.find_by(event_id: "333") }
 
     scenario "delegate cannot update events", :js do
-      create :round, number: 2, format_id: 'a', competition_event: competition_event, total_number_of_rounds: 2
+      create(:round, number: 2, format_id: 'a', competition_event: competition_event, total_number_of_rounds: 2)
       sign_in competition.delegates.first
       visit "/competitions/#{competition.id}/events/edit"
 

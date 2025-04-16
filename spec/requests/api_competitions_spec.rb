@@ -6,10 +6,10 @@ RSpec.describe "API Competitions" do
   let(:headers) { { "CONTENT_TYPE" => "application/json" } }
 
   describe "GET #index" do
-    let!(:competition1) { create :competition, :visible, starts: 1.week.from_now, name: "First 2019" }
-    let!(:competition2) { create :competition, :visible, starts: 1.week.from_now, name: "Second 2019" }
-    let!(:competition3) { create :competition, :visible, starts: 2.weeks.from_now, name: "Third 2019" }
-    let!(:competition4) { create :competition, :visible, starts: 3.weeks.from_now, name: "Fourth 2019" }
+    let!(:competition1) { create(:competition, :visible, starts: 1.week.from_now, name: "First 2019") }
+    let!(:competition2) { create(:competition, :visible, starts: 1.week.from_now, name: "Second 2019") }
+    let!(:competition3) { create(:competition, :visible, starts: 2.weeks.from_now, name: "Third 2019") }
+    let!(:competition4) { create(:competition, :visible, starts: 3.weeks.from_now, name: "Fourth 2019") }
 
     it "orders competitions by date descending by default" do
       get api_v0_competitions_path, params: { start: 2.weeks.from_now }
@@ -41,8 +41,8 @@ RSpec.describe "API Competitions" do
   end
 
   describe "GET #results" do
-    let!(:competition) { create :competition, :visible }
-    let!(:result) { create :result, competition: competition }
+    let!(:competition) { create(:competition, :visible) }
+    let!(:result) { create(:result, competition: competition) }
 
     it "renders properly" do
       get api_v0_competition_results_path(competition)
@@ -53,8 +53,8 @@ RSpec.describe "API Competitions" do
   end
 
   describe "GET #scrambles" do
-    let!(:competition) { create :competition, :visible }
-    let!(:scramble) { create :scramble, competition: competition }
+    let!(:competition) { create(:competition, :visible) }
+    let!(:scramble) { create(:scramble, competition: competition) }
 
     it "renders properly" do
       get api_v0_competition_scrambles_path(competition)
@@ -65,8 +65,8 @@ RSpec.describe "API Competitions" do
   end
 
   describe "GET #competitors" do
-    let!(:competition) { create :competition, :visible }
-    let!(:result) { create :result, competition: competition }
+    let!(:competition) { create(:competition, :visible) }
+    let!(:result) { create(:result, competition: competition) }
 
     it "renders properly" do
       get api_v0_competition_competitors_path(competition)
@@ -77,9 +77,9 @@ RSpec.describe "API Competitions" do
   end
 
   describe "GET #registrations" do
-    let!(:competition) { create :competition, :visible }
-    let!(:accepted_registration) { create :registration, :accepted, competition: competition }
-    let!(:pending_registration) { create :registration, competition: competition }
+    let!(:competition) { create(:competition, :visible) }
+    let!(:accepted_registration) { create(:registration, :accepted, competition: competition) }
+    let!(:pending_registration) { create(:registration, competition: competition) }
 
     it "renders properly" do
       get api_v0_competition_registrations_path(competition)
@@ -197,8 +197,8 @@ RSpec.describe "API Competitions" do
         end
 
         it "does not delete all rounds of an event if something is invalid" do
-          create :round, competition: competition, event_id: "333", number: 1
-          create :round, competition: competition, event_id: "333", number: 2
+          create(:round, competition: competition, event_id: "333", number: 1)
+          create(:round, competition: competition, event_id: "333", number: 2)
           competition.reload
 
           ce = competition.competition_events.find_by(event_id: "333")
@@ -513,7 +513,7 @@ RSpec.describe "API Competitions" do
       end
 
       context "as a normal user" do
-        let!(:user) { create :user }
+        let!(:user) { create(:user) }
         let(:scopes) { Doorkeeper::OAuth::Scopes.new }
 
         before :each do

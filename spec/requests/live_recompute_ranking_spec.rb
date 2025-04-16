@@ -4,7 +4,7 @@ require "rails_helper"
 
 RSpec.describe "WCA Live API" do
   describe "Ranking Recomputation" do
-    let!(:delegate) { create :delegate }
+    let!(:delegate) { create(:delegate) }
 
     it "Ranks results correctly by average" do
       competition = create(:competition, event_ids: ["333"], delegates: [delegate])
