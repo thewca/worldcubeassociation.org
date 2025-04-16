@@ -13,4 +13,13 @@ class Scramble < ApplicationRecord
   def round_type
     RoundType.c_find(round_type_id)
   end
+
+  DEFAULT_SERIALIZE_OPTIONS = {
+    only: ["id", "competition_id", "event_id", "round_type_id", "group_id",
+           "is_extra", "scramble_num", "scramble"],
+  }.freeze
+
+  def serializable_hash(options = nil)
+    super(DEFAULT_SERIALIZE_OPTIONS.merge(options || {}))
+  end
 end
