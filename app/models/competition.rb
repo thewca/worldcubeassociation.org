@@ -2499,19 +2499,19 @@ class Competition < ApplicationRecord
           if existing_value.present?
             existing_datetime = DateTime.parse(existing_value).utc
 
-            raise WcaExceptions::BadApiParameter.new("You're only allowed to change dates for deadlines that have not yet passed. #{joined_key} with value #{existing_value} has already passed.") unless existing_datetime >= DateTime.now.utc
+            raise WcaExceptions::BadApiParameter.new("You're only allowed to change dates for deadlines that have not yet passed. #{joined_key} with value #{existing_value} has already passed.", json_property: joined_key) unless existing_datetime >= DateTime.now.utc
 
             if value.present?
               new_datetime = DateTime.parse(value).utc
 
-              raise WcaExceptions::BadApiParameter.new("You're only allowed to extend deadlines, but #{joined_key} with value #{value} is set before the original value of #{existing_value}.") unless new_datetime >= existing_datetime
+              raise WcaExceptions::BadApiParameter.new("You're only allowed to extend deadlines, but #{joined_key} with value #{value} is set before the original value of #{existing_value}.", json_property: joined_key) unless new_datetime >= existing_datetime
             end
           end
 
           if value.present?
             new_datetime = DateTime.parse(value).utc
 
-            raise WcaExceptions::BadApiParameter.new("You're only allowed to introduce future deadlines. #{joined_key} with value #{value} is not in the future.") unless new_datetime > DateTime.now.utc
+            raise WcaExceptions::BadApiParameter.new("You're only allowed to introduce future deadlines. #{joined_key} with value #{value} is not in the future.", json_property: joined_key) unless new_datetime > DateTime.now.utc
           end
         end
       end

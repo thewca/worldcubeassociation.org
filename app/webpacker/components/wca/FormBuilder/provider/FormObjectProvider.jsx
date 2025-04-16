@@ -52,8 +52,10 @@ export default function FormObjectProvider({
 
           dispatch(setErrors(jsonSchemaError));
         } else {
+          const errorProperty = err.json.json_property || 'error';
+
           const wrappedError = {
-            error: [err.json.error],
+            [errorProperty]: [err.json.error],
           };
 
           dispatch(setErrors(wrappedError));
