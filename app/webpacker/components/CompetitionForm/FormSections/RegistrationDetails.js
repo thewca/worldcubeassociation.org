@@ -15,7 +15,7 @@ import {
   useFormInitialObject,
   useFormObject,
 } from '../../wca/FormBuilder/provider/FormObjectProvider';
-import { hasNotPassed } from '../../../lib/utils/dates';
+import { hasNotPassedOrNull } from '../../../lib/utils/dates';
 
 const guestsEnabledOptions = [true, false].map((bool) => ({
   value: bool,
@@ -48,12 +48,12 @@ export default function RegistrationDetails() {
   const guestsRestricted = guestsGoFree && registration?.guestEntryStatus === 'restricted';
 
   const waitingListNotYetPast = useMemo(
-    () => originalWaitingListDeadlineDate === null || hasNotPassed(originalWaitingListDeadlineDate, 'UTC'),
+    () => hasNotPassedOrNull(originalWaitingListDeadlineDate, 'UTC'),
     [originalWaitingListDeadlineDate],
   );
 
   const eventChangeNotYetPast = useMemo(
-    () => originalEventChangeDeadlineDate === null || hasNotPassed(originalEventChangeDeadlineDate, 'UTC'),
+    () => hasNotPassedOrNull(originalEventChangeDeadlineDate, 'UTC'),
     [originalEventChangeDeadlineDate],
   );
 

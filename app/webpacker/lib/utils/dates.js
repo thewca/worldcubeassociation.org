@@ -61,6 +61,10 @@ export function hasNotPassed(dateTime, timeZone = null) {
   return DateTime.now() < DateTime.fromISO(dateTime, { zone: timeZone });
 }
 
+export function hasNotPassedOrNull(dateTime, timeZone = null) {
+  return dateTime === null || hasNotPassed(dateTime, timeZone);
+}
+
 export const doesRangeCrossMidnight = (
   startDateTime,
   endDateTime,

@@ -4,7 +4,7 @@ import { InputDate } from '../../wca/FormBuilder/input/FormInputs';
 import RegistrationCollisions from '../Tables/RegistrationCollisions';
 import SubSection from '../../wca/FormBuilder/SubSection';
 import { useFormInitialObject, useFormObject } from '../../wca/FormBuilder/provider/FormObjectProvider';
-import { hasNotPassed } from '../../../lib/utils/dates';
+import { hasNotPassedOrNull } from '../../../lib/utils/dates';
 
 export default function RegistrationDates() {
   const {
@@ -21,7 +21,7 @@ export default function RegistrationDates() {
   } = useFormInitialObject();
 
   const registrationNotYetClosed = useMemo(
-    () => originalClosingDateTime === null || hasNotPassed(originalClosingDateTime, 'UTC'),
+    () => hasNotPassedOrNull(originalClosingDateTime, 'UTC'),
     [originalClosingDateTime],
   );
 
