@@ -8,6 +8,7 @@ import {
 import I18n from '../../../lib/i18n';
 import useCheckboxState from '../../../lib/hooks/useCheckboxState';
 import I18nHTMLTranslate from '../../I18nHTMLTranslate';
+import useSteps from '../hooks/useSteps';
 
 function RegistrationFullMessage({ competitionInfo }) {
   if (competitionInfo['registration_full_and_accepted?']) {
@@ -29,8 +30,9 @@ function RegistrationFullMessage({ competitionInfo }) {
   return null;
 }
 
-export default function RegistrationRequirements({ nextStep, competitionInfo }) {
+export default function RegistrationRequirements({ competitionInfo }) {
   const [infoAcknowledged, setInfoAcknowledged] = useCheckboxState(false);
+  const { nextStep } = useSteps();
 
   return (
     <Segment basic>

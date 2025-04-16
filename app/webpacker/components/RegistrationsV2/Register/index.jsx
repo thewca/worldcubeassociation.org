@@ -12,6 +12,8 @@ import { hasNotPassed, hasPassed } from '../../../lib/utils/dates';
 import RegistrationNotAllowedMessage from './RegistrationNotAllowedMessage';
 import RegistrationClosingMessage from './RegistrationClosingMessage';
 import usePerpetualState from '../hooks/usePerpetualState';
+import StepProvider from '../lib/StepProvider';
+import useSteps from '../hooks/useSteps';
 
 // The following states should show the Panel even when registration is already closed.
 //   (You can think of this as "is there a non-cancelled, non-rejected registration?)
@@ -37,16 +39,18 @@ export default function Index({
             userInfo={userInfo}
             isProcessing={isProcessing}
           >
-            <Register
-              competitionInfo={competitionInfo}
-              userInfo={userInfo}
-              userCanPreRegister={userCanPreRegister}
-              preferredEvents={preferredEvents}
-              stripePublishableKey={stripePublishableKey}
-              connectedAccountId={connectedAccountId}
-              qualifications={qualifications}
-              cannotRegisterReasons={cannotRegisterReasons}
-            />
+            <StepProvider competitionInfo={competitionInfo}>
+              <Register
+                competitionInfo={competitionInfo}
+                userInfo={userInfo}
+                userCanPreRegister={userCanPreRegister}
+                preferredEvents={preferredEvents}
+                stripePublishableKey={stripePublishableKey}
+                connectedAccountId={connectedAccountId}
+                qualifications={qualifications}
+                cannotRegisterReasons={cannotRegisterReasons}
+              />
+            </StepProvider>
           </RegistrationProvider>
         </ConfirmProvider>
       </StoreProvider>
@@ -74,7 +78,9 @@ function Register({
 
   const { isFetching, registration } = useRegistration();
 
-  if (isFetching) {
+  const { isLoading: stepConfigLoading } = useSteps();
+
+  if (isFetching || stepConfigLoading) {
     return <Loading />;
   }
 

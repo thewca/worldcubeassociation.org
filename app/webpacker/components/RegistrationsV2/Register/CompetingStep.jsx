@@ -29,6 +29,7 @@ import { eventQualificationToString } from '../../../lib/utils/wcif';
 import { hasNotPassed } from '../../../lib/utils/dates';
 import { useRegistration } from '../lib/RegistrationProvider';
 import useSet from '../../../lib/hooks/useSet';
+import useSteps from '../hooks/useSteps';
 
 const maxCommentLength = 240;
 
@@ -52,12 +53,12 @@ const potentialWarnings = (competitionInfo) => {
 };
 
 export default function CompetingStep({
-  nextStep,
   competitionInfo,
   user,
   preferredEvents,
   qualifications,
 }) {
+  const { nextStep } = useSteps();
   const maxEvents = competitionInfo.events_per_registration_limit ?? Infinity;
   const {
     registration, isRegistered, hasPaid, isPolling, isProcessing, startPolling, refetchRegistration,
@@ -224,7 +225,6 @@ export default function CompetingStep({
   }, [
     confirm,
     dispatch,
-    nextStep,
     updateRegistrationMutation,
     competitionInfo,
     registration?.user_id,
@@ -234,6 +234,7 @@ export default function CompetingStep({
     selectedEventIds.asArray,
     hasGuestsChanged,
     guests,
+    nextStep,
   ]);
 
   const actionReRegister = useCallback(() => {
@@ -420,7 +421,7 @@ export default function CompetingStep({
                   {I18n.t('registrations.update')}
                 </Button>
                 <ButtonOr />
-                <Button secondary onClick={() => nextStep()}>
+                <Button secondary onClick={nextStep}>
                   {I18n.t('competitions.registration_v2.register.view_registration')}
                 </Button>
               </>
