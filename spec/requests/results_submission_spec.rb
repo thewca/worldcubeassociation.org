@@ -3,8 +3,8 @@
 require 'rails_helper'
 
 RSpec.describe ResultsSubmissionController, type: :request do
-  let(:delegate) { FactoryBot.create :delegate }
-  let(:comp) { FactoryBot.create(:competition, :with_valid_submitted_results, delegates: [delegate]) }
+  let(:delegate) { create(:delegate) }
+  let(:comp) { create(:competition, :with_valid_submitted_results, delegates: [delegate]) }
 
   context "not logged in" do
     it "redirects to sign in" do
@@ -14,7 +14,7 @@ RSpec.describe ResultsSubmissionController, type: :request do
   end
 
   context "logged in as a regular user" do
-    sign_in { FactoryBot.create(:user) }
+    before { sign_in create(:user) }
 
     it "redirects to home page" do
       get competition_submit_results_edit_path(comp.id)
@@ -23,7 +23,7 @@ RSpec.describe ResultsSubmissionController, type: :request do
   end
 
   context "logged in as a regular delegate" do
-    sign_in { FactoryBot.create(:delegate) }
+    before { sign_in create(:delegate) }
 
     it "redirects to home page" do
       get competition_submit_results_edit_path(comp.id)

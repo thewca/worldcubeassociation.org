@@ -3,8 +3,8 @@
 require "rails_helper"
 
 RSpec.feature "Sign up" do
-  let!(:person) { FactoryBot.create(:person_who_has_competed_once, dob: '1988-02-03') }
-  let!(:custom_delegate) { FactoryBot.create(:delegate) }
+  let!(:person) { create(:person_who_has_competed_once, dob: '1988-02-03') }
+  let!(:custom_delegate) { create(:delegate) }
 
   before :each do
     # The cookie banner just gets in the way of these tests, and is already

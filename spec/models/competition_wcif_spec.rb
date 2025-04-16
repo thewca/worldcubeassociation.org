@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe "Competition WCIF" do
   let!(:competition) {
-    FactoryBot.create(
+    create(
       :competition,
       :visible,
       :with_competitor_limit,
@@ -22,7 +22,7 @@ RSpec.describe "Competition WCIF" do
     )
   }
   let(:partner_competition) {
-    FactoryBot.create(
+    create(
       :competition,
       :visible,
       id: "PartnerComp2014",
@@ -31,7 +31,7 @@ RSpec.describe "Competition WCIF" do
     )
   }
   let!(:competition_series) {
-    FactoryBot.create(
+    create(
       :competition_series,
       wcif_id: "SpectacularSeries2014",
       name: "The Spectacular Series 2014",
@@ -43,11 +43,11 @@ RSpec.describe "Competition WCIF" do
   let(:organizer) { competition.organizers.first }
   let(:sixty_second_2_attempt_cutoff) { Cutoff.new(number_of_attempts: 2, attempt_result: 1.minute.in_centiseconds) }
   let(:top_16_advance) { AdvancementConditions::RankingCondition.new(16) }
-  let!(:round333_1) { FactoryBot.create(:round, competition: competition, event_id: "333", number: 1, cutoff: sixty_second_2_attempt_cutoff, advancement_condition: top_16_advance, scramble_set_count: 16, total_number_of_rounds: 2) }
-  let!(:round333_2) { FactoryBot.create(:round, competition: competition, event_id: "333", number: 2, total_number_of_rounds: 2) }
-  let!(:round444_1) { FactoryBot.create(:round, competition: competition, event_id: "444", number: 1) }
-  let!(:round333fm_1) { FactoryBot.create(:round, competition: competition, event_id: "333fm", number: 1, format_id: "m") }
-  let!(:round333mbf_1) { FactoryBot.create(:round, competition: competition, event_id: "333mbf", number: 1, format_id: "3") }
+  let!(:round333_1) { create(:round, competition: competition, event_id: "333", number: 1, cutoff: sixty_second_2_attempt_cutoff, advancement_condition: top_16_advance, scramble_set_count: 16, total_number_of_rounds: 2) }
+  let!(:round333_2) { create(:round, competition: competition, event_id: "333", number: 2, total_number_of_rounds: 2) }
+  let!(:round444_1) { create(:round, competition: competition, event_id: "444", number: 1) }
+  let!(:round333fm_1) { create(:round, competition: competition, event_id: "333fm", number: 1, format_id: "m") }
+  let!(:round333mbf_1) { create(:round, competition: competition, event_id: "333mbf", number: 1, format_id: "3") }
   let!(:round333mbf_1_extension) { round333mbf_1.wcif_extensions.create!(extension_id: "com.third.party", spec_url: "https://example.com", data: { "tables" => 5 }) }
 
   before :each do
@@ -831,7 +831,7 @@ RSpec.describe "Competition WCIF" do
     end
 
     it "allows adding assignments for newly added activities" do
-      registration = FactoryBot.create(:registration, :accepted, competition: competition)
+      registration = create(:registration, :accepted, competition: competition)
       activities = wcif["schedule"]["venues"][0]["rooms"][0]["activities"]
       activities << {
         "id" => 1000,

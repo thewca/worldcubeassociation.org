@@ -3,29 +3,29 @@
 require 'rails_helper'
 
 RSpec.describe CompetitionsHelper do
-  let(:competition) { FactoryBot.create(:competition) }
+  let(:competition) { create(:competition) }
 
   describe "#winners" do
     context "333" do
       def add_result(pos, name, event_id: "333", dnf: false, wca_id: nil)
-        person = FactoryBot.create(:person,
-                                   wca_id: wca_id || "2006YOYO#{format('%.2d', pos)}",
-                                   name: name,
-                                   countryId: "USA")
-        FactoryBot.create(:result,
-                          pos: pos,
-                          person: person,
-                          competitionId: competition.id,
-                          eventId: event_id,
-                          roundTypeId: "f",
-                          formatId: "a",
-                          value1: dnf ? SolveTime::DNF_VALUE : 999,
-                          value2: 999,
-                          value3: 999,
-                          value4: dnf ? SolveTime::DNF_VALUE : 999,
-                          value5: 999,
-                          best: 999,
-                          average: dnf ? SolveTime::DNF_VALUE : 999)
+        person = create(:person,
+                        wca_id: wca_id || "2006YOYO#{format('%.2d', pos)}",
+                        name: name,
+                        countryId: "USA")
+        create(:result,
+               pos: pos,
+               person: person,
+               competitionId: competition.id,
+               eventId: event_id,
+               roundTypeId: "f",
+               formatId: "a",
+               value1: dnf ? SolveTime::DNF_VALUE : 999,
+               value2: 999,
+               value3: 999,
+               value4: dnf ? SolveTime::DNF_VALUE : 999,
+               value5: 999,
+               best: 999,
+               average: dnf ? SolveTime::DNF_VALUE : 999)
       end
 
       let!(:unrelated_podium_result) { add_result(1, "joe", event_id: "333oh", wca_id: "2006JOJO01") }
@@ -93,24 +93,24 @@ RSpec.describe CompetitionsHelper do
 
     context "333bf" do
       def add_result(pos, name)
-        person = FactoryBot.create(:person,
-                                   wca_id: "2006YOYO#{format('%.2d', pos)}",
-                                   name: name,
-                                   countryId: "USA")
-        FactoryBot.create(:result,
-                          pos: pos,
-                          person: person,
-                          competitionId: competition.id,
-                          eventId: "333bf",
-                          roundTypeId: "f",
-                          formatId: "3",
-                          value1: 60.seconds.in_centiseconds,
-                          value2: 60.seconds.in_centiseconds,
-                          value3: 60.seconds.in_centiseconds,
-                          value4: 0,
-                          value5: 0,
-                          best: 60.seconds.in_centiseconds,
-                          average: 60.seconds.in_centiseconds)
+        person = create(:person,
+                        wca_id: "2006YOYO#{format('%.2d', pos)}",
+                        name: name,
+                        countryId: "USA")
+        create(:result,
+               pos: pos,
+               person: person,
+               competitionId: competition.id,
+               eventId: "333bf",
+               roundTypeId: "f",
+               formatId: "3",
+               value1: 60.seconds.in_centiseconds,
+               value2: 60.seconds.in_centiseconds,
+               value3: 60.seconds.in_centiseconds,
+               value4: 0,
+               value5: 0,
+               best: 60.seconds.in_centiseconds,
+               average: 60.seconds.in_centiseconds)
       end
 
       it "announces top 3 in final" do
@@ -127,24 +127,24 @@ RSpec.describe CompetitionsHelper do
 
     context "333fm" do
       def add_result(pos, name, dnf: false)
-        person = FactoryBot.create(:person,
-                                   wca_id: "2006YOYO#{format('%.2d', pos)}",
-                                   name: name,
-                                   countryId: "USA")
-        FactoryBot.create(:result,
-                          pos: pos,
-                          person: person,
-                          competitionId: competition.id,
-                          eventId: "333fm",
-                          roundTypeId: "f",
-                          formatId: "m",
-                          value1: dnf ? SolveTime::DNF_VALUE : 29,
-                          value2: 24,
-                          value3: 30,
-                          value4: 0,
-                          value5: 0,
-                          best: 24,
-                          average: dnf ? SolveTime::DNF_VALUE : 2767)
+        person = create(:person,
+                        wca_id: "2006YOYO#{format('%.2d', pos)}",
+                        name: name,
+                        countryId: "USA")
+        create(:result,
+               pos: pos,
+               person: person,
+               competitionId: competition.id,
+               eventId: "333fm",
+               roundTypeId: "f",
+               formatId: "m",
+               value1: dnf ? SolveTime::DNF_VALUE : 29,
+               value2: 24,
+               value3: 30,
+               value4: 0,
+               value5: 0,
+               best: 24,
+               average: dnf ? SolveTime::DNF_VALUE : 2767)
       end
 
       it "announces top 3 in final" do
@@ -176,24 +176,24 @@ RSpec.describe CompetitionsHelper do
         solve_time.attempted = 9
         solve_time.solved = 8
         solve_time.time_centiseconds = (45.minutes + 32.seconds).in_centiseconds
-        person = FactoryBot.create(:person,
-                                   wca_id: "2006YOYO#{format('%.2d', pos)}",
-                                   name: name,
-                                   countryId: "USA")
-        FactoryBot.create(:result,
-                          pos: pos,
-                          person: person,
-                          competitionId: competition.id,
-                          eventId: "333mbf",
-                          roundTypeId: "f",
-                          formatId: "3",
-                          value1: solve_time.wca_value,
-                          value2: solve_time.wca_value,
-                          value3: solve_time.wca_value,
-                          value4: 0,
-                          value5: 0,
-                          best: solve_time.wca_value,
-                          average: 0)
+        person = create(:person,
+                        wca_id: "2006YOYO#{format('%.2d', pos)}",
+                        name: name,
+                        countryId: "USA")
+        create(:result,
+               pos: pos,
+               person: person,
+               competitionId: competition.id,
+               eventId: "333mbf",
+               roundTypeId: "f",
+               formatId: "3",
+               value1: solve_time.wca_value,
+               value2: solve_time.wca_value,
+               value3: solve_time.wca_value,
+               value4: 0,
+               value5: 0,
+               best: solve_time.wca_value,
+               average: 0)
       end
 
       it "announces top 3 in final" do
