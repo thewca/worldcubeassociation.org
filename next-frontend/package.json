@@ -11,37 +11,37 @@
     "lint:fix": "next lint --fix"
   },
   "dependencies": {
-    "@chakra-ui/react": "^3.15.0",
+    "@chakra-ui/react": "^3.15.1",
     "@emotion/react": "^11.14.0",
-    "@payloadcms/db-sqlite": "^3.31.0",
-    "@payloadcms/live-preview-react": "^3.31.0",
-    "@payloadcms/next": "^3.31.0",
-    "@tanstack/react-query": "^5.71.0",
+    "@payloadcms/db-sqlite": "^3.34.0",
+    "@payloadcms/live-preview-react": "^3.34.0",
+    "@payloadcms/next": "^3.34.0",
+    "@tanstack/react-query": "^5.74.0",
     "graphql": "^16.8.1",
-    "next": "15.2.4",
+    "next": "15.3.0",
     "next-auth": "5.0.0-beta.25",
     "next-themes": "^0.4.6",
     "openapi-fetch": "^0.13.5",
-    "payload": "^3.31.0",
-    "payload-authjs": "^0.7.1",
+    "payload": "^3.34.0",
+    "payload-authjs": "^0.8.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-icons": "^5.5.0",
-    "swagger-ui-react": "^5.20.2"
+    "swagger-ui-react": "^5.21.0"
   },
   "devDependencies": {
-    "@chakra-ui/cli": "^3.15.0",
+    "@chakra-ui/cli": "^3.15.1",
     "@eslint/eslintrc": "^3",
     "@stylistic/eslint-plugin": "^4.2.0",
-    "@tanstack/eslint-plugin-query": "^5.68.0",
+    "@tanstack/eslint-plugin-query": "^5.73.3",
     "@types/node": "^22",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@types/swagger-ui-react": "^5.18.0",
     "eslint": "^9",
-    "eslint-config-next": "15.2.4",
-    "eslint-config-prettier": "^10.1.1",
-    "eslint-plugin-prettier": "^5.2.5",
+    "eslint-config-next": "15.3.0",
+    "eslint-config-prettier": "^10.1.2",
+    "eslint-plugin-prettier": "^5.2.6",
     "openapi-typescript": "^7.6.1",
     "prettier": "^3.5.3",
     "typescript": "^5"
@@ -49,5 +49,5 @@
   "scarfSettings": {
     "enabled": false
   },
-  "packageManager": "yarn@4.8.1"
+  "packageManager": "yarn@4.9.1"
 }

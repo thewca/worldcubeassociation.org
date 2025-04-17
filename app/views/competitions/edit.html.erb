@@ -7,5 +7,6 @@
     storedEvents: @competition.events,
     isAdminView: @competition_admin_view,
     isSeriesPersisted: @competition.competition_series&.persisted? || false,
+    editingUserId: current_user.id,
   }) %>
 <% end %>

@@ -54,7 +54,7 @@ class RoundResult
     self.new(
       person_id: json_obj['personId'],
       ranking: json_obj['ranking'],
-      attempts: json_obj['attempts'].map(&Attempt.method(:load)),
+      attempts: json_obj['attempts'].map(&RoundResultsAttempt.method(:load)),
       best: json_obj['best'],
       average: json_obj['average'],
     )
@@ -66,7 +66,7 @@ class RoundResult
       "properties" => {
         "personId" => { "type" => "integer" },
         "ranking" => { "type" => ["integer", "null"] },
-        "attempts" => { "type" => "array", "items" => Attempt.wcif_json_schema },
+        "attempts" => { "type" => "array", "items" => RoundResultsAttempt.wcif_json_schema },
         "best" => { "type" => "integer" },
         "average" => { "type" => "integer" },
       },
@@ -74,7 +74,7 @@ class RoundResult
   end
 end
 
-class Attempt
+class RoundResultsAttempt
   include ActiveModel::Validations
 
   attr_accessor :result, :reconstruction

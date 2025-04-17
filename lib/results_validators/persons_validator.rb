@@ -29,7 +29,7 @@ module ResultsValidators
       "This validator checks that Persons data make sense with regard to the competition results and the WCA database."
     end
 
-    def self.has_automated_fix?
+    def self.automatically_fixable?
       false
     end
 
