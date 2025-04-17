@@ -116,18 +116,18 @@ class ComputeAuxiliaryData < WcaCronjob
 
     <<-SQL.squish
       SELECT
-        '#{type}'            type,
-                             result.*,
-                             value,
-        events.name          eventName,
-                             format,
-        countries.name       countryName,
-        competition.cellName competitionName,
-                             `rank`,
-        competition.start_date,
-        YEAR(competition.start_date)  year,
-        MONTH(competition.start_date) month,
-        DAY(competition.start_date)   day
+        '#{type}'              type,
+                               result.*,
+                               value,
+        events.name            eventName,
+                               format,
+        countries.name         countryName,
+        competitions.cell_name competitionName,
+                               `rank`,
+        competitions.start_date,
+        YEAR(competitions.start_date)  year,
+        MONTH(competitions.start_date) month,
+        DAY(competitions.start_date)   day
       FROM
         (SELECT event_id record_event_id, MIN(value_and_id) DIV 1000000000 value
           FROM concise_#{type}_results result
@@ -137,13 +137,13 @@ class ComputeAuxiliaryData < WcaCronjob
         Results result,
         events,
         countries,
-        Competitions competition
+        competitions
       WHERE result.#{value} = value
         #{event_condition_camel}
-        AND result.eventId = record_event_id
-        AND events.id      = result.eventId
-        AND countries.id   = result.countryId
-        AND competition.id = result.competitionId
+        AND result.eventId  = record_event_id
+        AND events.id       = result.eventId
+        AND countries.id    = result.countryId
+        AND competitions.id = result.competitionId
         AND events.`rank` < 990
     SQL
   end

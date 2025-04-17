@@ -202,21 +202,21 @@ class ResultsController < ApplicationController
           YEAR(competitions.start_date)  year,
           MONTH(competitions.start_date) month,
           DAY(competitions.start_date)   day,
-          events.id             eventId,
-          events.name           eventName,
-          result.id             id,
-          result.type           type,
-          result.value          value,
-          result.formatId       formatId,
-          result.roundTypeId    roundTypeId,
-          events.format         valueFormat,
-                                record_name,
-          result.personId       personId,
-          result.personName     personName,
-          result.countryId      countryId,
-          countries.name        countryName,
-          competitions.id       competitionId,
-          competitions.cellName competitionName,
+          events.id              eventId,
+          events.name            eventName,
+          result.id              id,
+          result.type            type,
+          result.value           value,
+          result.formatId        formatId,
+          result.roundTypeId     roundTypeId,
+          events.format          valueFormat,
+                                 record_name,
+          result.personId        personId,
+          result.personName      personName,
+          result.countryId       countryId,
+          countries.name         countryName,
+          competitions.id        competitionId,
+          competitions.cell_name competitionName,
           value1, value2, value3, value4, value5
         FROM
           (SELECT Results.*, 'single' type, best    value, regionalSingleRecord record_name FROM Results WHERE regionalSingleRecord<>'' UNION
@@ -260,14 +260,14 @@ class ResultsController < ApplicationController
   private def current_records_query(value, type)
     <<-SQL.squish
       SELECT
-        '#{type}'             type,
-                              result.*,
-                              value,
-        events.name           eventName,
-                              format,
-        countries.name        countryName,
-        competitions.cellName competitionName,
-                              `rank`,
+        '#{type}'              type,
+                               result.*,
+                               value,
+        events.name            eventName,
+                               format,
+        countries.name         countryName,
+        competitions.cell_name competitionName,
+                               `rank`,
         competitions.start_date,
         YEAR(competitions.start_date)  year,
         MONTH(competitions.start_date) month,
@@ -439,7 +439,7 @@ class ResultsController < ApplicationController
           comp_ids = rows.map { |r| r["competitionId"] }.uniq
           competitions_by_id = Competition.where(id: comp_ids)
                                           .index_by(&:id)
-                                          .transform_values { |comp| comp.as_json(methods: %w[country], include: [], only: %w[cellName id]) }
+                                          .transform_values { |comp| comp.as_json(methods: %w[country], include: [], only: %w[cell_name id]) }
 
           # Now that we've remembered all competitions, we can safely transform the rows
           rows = yield rows if block_given?
