@@ -9,7 +9,7 @@ function ScrambleRow({
   scramble, scrambles, adminMode, singleRowOverride = false,
 }) {
   const {
-    scrambleId, isExtra, groupId, scrambleNum, scramble: scrambleString,
+    id, is_extra: isExtra, group_id: groupId, scramble_num: scrambleNum, scramble: scrambleString,
   } = scramble;
 
   return (
@@ -20,7 +20,7 @@ function ScrambleRow({
         {isExtra ? 'Extra ' : ''}
         {scrambleNum}
         {adminMode && (
-          <a href={editScrambleUrl(scrambleId)} aria-label="Edit" role="menuitem" className="edit-link">
+          <a href={editScrambleUrl(id)} aria-label="Edit" role="menuitem" className="edit-link">
             <Icon name="pencil" />
           </a>
         )}

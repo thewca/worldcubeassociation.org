@@ -5,7 +5,7 @@ class RoundType < ApplicationRecord
   include StaticData
 
   has_many :results, foreign_key: :roundTypeId
-  has_many :scrambles, foreign_key: :roundTypeId
+  has_many :scrambles
 
   scope :final_rounds, -> { where("final = 1") }
 

@@ -327,17 +327,17 @@ module DatabaseDumper
         ),
       ),
     }.freeze,
-    "Scrambles" => {
+    "scrambles" => {
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
-          competitionId
-          eventId
-          groupId
-          isExtra
-          roundTypeId
+          competition_id
+          event_id
+          group_id
+          is_extra
+          round_type_id
           scramble
-          scrambleId
-          scrambleNum
+          id
+          scramble_num
         ),
       ),
     }.freeze,
@@ -1127,17 +1127,20 @@ module DatabaseDumper
       ),
     }.freeze,
     "Scrambles" => {
+      source_table: "scrambles",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
-          competitionId
-          eventId
-          groupId
-          isExtra
-          roundTypeId
           scramble
-          scrambleId
-          scrambleNum
         ),
+        fake_values: {
+          "competitionId" => "competition_id",
+          "eventId" => "event_id",
+          "groupId" => "group_id",
+          "isExtra" => "is_extra",
+          "roundTypeId" => "round_type_id",
+          "scrambleId" => "id",
+          "scrambleNum" => "scramble_num",
+        },
       ),
       tsv_sanitizers: actions_to_column_sanitizers(
         fake_values: {

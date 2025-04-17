@@ -181,17 +181,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_31_170413) do
     t.index ["roundTypeId"], name: "Results_fk_round"
   end
 
-  create_table "Scrambles", primary_key: "scrambleId", id: { type: :integer, unsigned: true }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
-    t.string "competitionId", limit: 32, null: false
-    t.string "eventId", limit: 6, null: false
-    t.string "roundTypeId", limit: 1, null: false
-    t.string "groupId", limit: 3, null: false
-    t.boolean "isExtra", null: false
-    t.integer "scrambleNum", null: false
-    t.text "scramble", null: false
-    t.index ["competitionId", "eventId"], name: "competitionId"
-  end
-
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -1165,6 +1154,17 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_31_170413) do
     t.datetime "updated_at", precision: nil, null: false
     t.index ["holder_type", "holder_id", "wcif_id"], name: "index_activities_on_their_id_within_holder", unique: true
     t.index ["holder_type", "holder_id"], name: "index_schedule_activities_on_holder_type_and_holder_id"
+  end
+
+  create_table "scrambles", id: { type: :integer, unsigned: true }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "competition_id", limit: 32, null: false
+    t.string "event_id", limit: 6, null: false
+    t.string "round_type_id", limit: 1, null: false
+    t.string "group_id", limit: 3, null: false
+    t.boolean "is_extra", null: false
+    t.integer "scramble_num", null: false
+    t.text "scramble", null: false
+    t.index ["competition_id", "event_id"], name: "competitionId"
   end
 
   create_table "server_settings", primary_key: "name", id: :string, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
