@@ -330,7 +330,7 @@ GEM
     glob (0.4.0)
     globalid (1.2.1)
       activesupport (>= 6.1)
-    google-apis-admin_directory_v1 (0.61.0)
+    google-apis-admin_directory_v1 (0.62.0)
       google-apis-core (>= 0.15.0, < 2.a)
     google-apis-core (0.16.0)
       addressable (~> 2.5, >= 2.5.1)
@@ -340,7 +340,8 @@ GEM
       mutex_m
       representable (~> 3.0)
       retriable (>= 2.0, < 4.a)
-    google-cloud-env (2.2.1)
+    google-cloud-env (2.2.2)
+      base64 (~> 0.2)
       faraday (>= 1.0, < 3.a)
     google-logging-utils (0.1.0)
     google-protobuf (4.29.3)
@@ -361,7 +362,7 @@ GEM
     google-protobuf (4.29.3-x86_64-linux)
       bigdecimal
       rake (>= 13)
-    googleauth (1.13.1)
+    googleauth (1.14.0)
       faraday (>= 1.0, < 3.a)
       google-cloud-env (~> 2.2)
       google-logging-utils (~> 0.1)
@@ -1219,9 +1220,9 @@ CHECKSUMS
   gli (2.22.2) sha256=580e8d6c88b0f0f0cb8e8b2ca18c3485ed0f742cece855de46bf8e36202f5db0
   glob (0.4.0) sha256=893dc9e2d24abe13dda907ce0cda576f680ff382f2a6cf9e543f98ecbe29238c
   globalid (1.2.1) sha256=70bf76711871f843dbba72beb8613229a49429d1866828476f9c9d6ccc327ce9
-  google-apis-admin_directory_v1 (0.61.0) sha256=a2d07e0dcd2c750e2b2001d466dfb8f29928457670f644a4ba18aa73deb6003b
+  google-apis-admin_directory_v1 (0.62.0) sha256=e339ea35413a71dfb561de791f03be86ce382e89b858897890cca8b2924bc061
   google-apis-core (0.16.0) sha256=046a2c30a5ec123b2a6bc5e64348be781ce5fcd18dd4e85982e7a6a8da9d0dcc
-  google-cloud-env (2.2.1) sha256=3c6062aee0b5c863b83f3ce125ea7831507aadf1af7c0d384b74a116c4f649cf
+  google-cloud-env (2.2.2) sha256=94bed40e05a67e9468ce1cb38389fba9a90aa8fc62fc9e173204c1dca59e21e7
   google-logging-utils (0.1.0) sha256=70950b1e49314273cf2e167adb47b62af7917a4691b580da7e9be67b9205fcd5
   google-protobuf (4.29.3) sha256=9a5576c0059f57d7e07107bda8287ac14d0c59c71fe939b260855d3f46b9b566
   google-protobuf (4.29.3-aarch64-linux) sha256=2b670a80eac7377f6055a48caa8db52561195a80718e0ea8289e8c8aeb4b2502
@@ -1229,7 +1230,7 @@ CHECKSUMS
   google-protobuf (4.29.3-x86-linux) sha256=d4e7406c9830e520504ea96aaf6daa55ce436dd403fa2c09b10c4b0fe4ae3023
   google-protobuf (4.29.3-x86_64-darwin) sha256=2d1051fd88ca2c7f6a09d2f12feabe8ded7b13f049799423b62d83ee88f968b4
   google-protobuf (4.29.3-x86_64-linux) sha256=4ac194b06c59559457ce1d1d57d03760b50e009dbcfe5ef065a1af48ce4a2d0e
-  googleauth (1.13.1) sha256=33448ce662e40afeb3e6db5eb9f4ee712467b1701f3857ef9c0aecac8447eca0
+  googleauth (1.14.0) sha256=62e7de11791890c3d3dc70582dfd9ab5516530e4e4f56d96451fd62c76475149
   guard (2.18.0) sha256=12f2b801a0c8d41e7480ab5c2c4283e439fbe0ac7574a0da1dee82ec484a1eff
   guard-compat (1.2.1) sha256=3ad21ab0070107f92edfd82610b5cdc2fb8e368851e72362ada9703443d646fe
   guard-rspec (4.7.3) sha256=a47ba03cbd1e3c71e6ae8645cea97e203098a248aede507461a43e906e2f75ca
