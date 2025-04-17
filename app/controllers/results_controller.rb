@@ -70,9 +70,9 @@ class ResultsController < ApplicationController
           FROM concise_#{type_param}_results result
           #{@gender_condition.present? ? "JOIN Persons persons ON result.person_id = persons.wca_id and persons.subId = 1" : ""}
           WHERE #{value} > 0
-            #{@event_condition_snake}
+            #{@event_condition}
             #{@years_condition_result}
-            #{@region_condition_snake}
+            #{@region_condition}
             #{@gender_condition}
           GROUP BY person_id
           ORDER BY value_and_id
@@ -92,9 +92,9 @@ class ResultsController < ApplicationController
           #{@gender_condition.present? ? "JOIN Persons persons ON results.person_id = persons.wca_id and persons.subId = 1" : ""}
           #{@years_condition_competition.present? ? "JOIN competitions on competitions.id = results.competition_id" : ""}
           WHERE average > 0
-            #{@event_condition_camel}
+            #{@event_condition}
             #{@years_condition_competition}
-            #{@region_condition_camel}
+            #{@region_condition}
             #{@gender_condition}
           ORDER BY
             average, person_name, competition_id, round_type_id
@@ -111,9 +111,9 @@ class ResultsController < ApplicationController
             #{@gender_condition.present? ? "JOIN Persons persons ON results.person_id = persons.wca_id and persons.subId = 1" : ""}
             #{@years_condition_competition.present? ? "JOIN competitions on competitions.id = results.competition_id" : ""}
             WHERE value#{i} > 0
-              #{@event_condition_camel}
+              #{@event_condition}
               #{@years_condition_competition}
-              #{@region_condition_camel}
+              #{@region_condition}
               #{@gender_condition}
             ORDER BY value
             #{limit_condition}
@@ -139,7 +139,7 @@ class ResultsController < ApplicationController
           FROM concise_#{type_param}_results result
           #{@gender_condition.present? ? "JOIN Persons persons ON result.person_id = persons.wca_id and persons.subId = 1" : ""}
           WHERE 1
-            #{@event_condition_snake}
+            #{@event_condition}
             #{@years_condition_result}
             #{@gender_condition}
           GROUP BY result.country_id
@@ -148,8 +148,7 @@ class ResultsController < ApplicationController
         JOIN competitions on competitions.id = results.competition_id
         #{@gender_condition.present? ? "JOIN Persons persons ON results.person_id = persons.wca_id and persons.subId = 1" : ""}
         WHERE 1
-          #{@event_condition_camel}
-          #{@event_condition_camel}
+          #{@event_condition}
           #{@years_condition_competition}
           #{@gender_condition}
         ORDER BY value, results.country_id, start_date, person_name
@@ -231,8 +230,8 @@ class ResultsController < ApplicationController
           AND round_types.id = round_type_id
           AND competitions.id = competition_id
           AND countries.id = result.country_id
-          #{@region_condition_camel}
-          #{@event_condition_camel}
+          #{@region_condition}
+          #{@event_condition}
           #{@years_condition_competition}
           #{@gender_condition}
         ORDER BY
@@ -277,8 +276,8 @@ class ResultsController < ApplicationController
           FROM concise_#{type}_results result
           #{@gender_condition.present? ? "JOIN Persons persons ON result.person_id = persons.wca_id and persons.subId = 1" : ""}
           WHERE 1
-          #{@event_condition_snake}
-          #{@region_condition_snake}
+          #{@event_condition}
+          #{@region_condition}
           #{@years_condition_result}
           #{@gender_condition}
           GROUP BY event_id) record,
@@ -288,8 +287,8 @@ class ResultsController < ApplicationController
         countries,
         competitions
       WHERE results.#{value} = value
-        #{@event_condition_camel}
-        #{@region_condition_camel}
+        #{@event_condition}
+        #{@region_condition}
         #{@years_condition_competition}
         #{@gender_condition}
         AND results.event_id = record_event_id
@@ -326,29 +325,23 @@ class ResultsController < ApplicationController
     @types = ["single", "average"]
 
     if params[:event_id] == EVENTS_ALL
-      @event_condition_camel = @event_condition_snake = ""
+      @event_condition = ""
     else
       event = Event.c_find!(params[:event_id])
-      @event_condition_camel = "AND eventId = '#{event.id}'"
-      @event_condition_snake = "AND event_id = '#{event.id}'"
+      @event_condition = "AND event_id = '#{event.id}'"
     end
 
     @continent = Continent.c_find(params[:region])
     @country = Country.c_find(params[:region])
     if @continent.present?
-      @region_condition_camel = "AND result.countryId IN (#{@continent.country_ids.map { |id| "'#{id}'" }.join(',')})"
-      @region_condition_camel += " AND record_name IN ('WR', '#{@continent.record_name}')" if @is_histories
-      @region_condition_snake = "AND result.country_id IN (#{@continent.country_ids.map { |id| "'#{id}'" }.join(',')})"
-      @region_condition_snake += " AND record_name IN ('WR', '#{@continent.record_name}')" if @is_histories
+      @region_condition = "AND result.country_id IN (#{@continent.country_ids.map { |id| "'#{id}'" }.join(',')})"
+      @region_condition += " AND record_name IN ('WR', '#{@continent.record_name}')" if @is_histories
     elsif @country.present?
-      @region_condition_camel = "AND result.countryId = '#{@country.id}'"
-      @region_condition_camel += " AND record_name <> ''" if @is_histories
-      @region_condition_snake = "AND result.country_id = '#{@country.id}'"
-      @region_condition_snake += " AND record_name <> ''" if @is_histories
+      @region_condition = "AND result.country_id = '#{@country.id}'"
+      @region_condition += " AND record_name <> ''" if @is_histories
     else
-      @region_condition_camel = @region_condition_snake = ""
-      @region_condition_camel += "AND record_name = 'WR'" if @is_histories
-      @region_condition_snake += "AND record_name = 'WR'" if @is_histories
+      @region_condition = ""
+      @region_condition += "AND record_name = 'WR'" if @is_histories
     end
 
     @gender = params[:gender]

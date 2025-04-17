@@ -111,8 +111,7 @@ class ComputeAuxiliaryData < WcaCronjob
   end
 
   private def current_records_query(value, type, event_id: nil)
-    event_condition_snake = event_id.present? ? "AND event_id = '#{event_id}'" : ""
-    event_condition_camel = event_id.present? ? "AND eventId = '#{event_id}'" : ""
+    event_condition = event_id.present? ? "AND event_id = '#{event_id}'" : ""
 
     <<-SQL.squish
       SELECT
@@ -132,14 +131,14 @@ class ComputeAuxiliaryData < WcaCronjob
         (SELECT event_id record_event_id, MIN(value_and_id) DIV 1000000000 value
           FROM concise_#{type}_results result
           WHERE 1
-            #{event_condition_snake}
+            #{event_condition}
           GROUP BY event_id) record,
         Results result,
         events,
         countries,
         competitions
       WHERE result.#{value} = value
-        #{event_condition_camel}
+        #{event_condition}
         AND result.eventId  = record_event_id
         AND events.id       = result.eventId
         AND countries.id    = result.countryId
