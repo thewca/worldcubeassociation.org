@@ -53,7 +53,7 @@ class RegionalOrganizationsController < ApplicationController
 
   def destroy
     @regional_organization = regional_organization_from_params
-    if @regional_organization.is_pending?
+    if @regional_organization.pending?
       if @regional_organization.destroy
         flash[:success] = "Successfully deleted Regional Organization!"
       else

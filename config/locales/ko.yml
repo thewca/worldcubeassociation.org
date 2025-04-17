@@ -152,57 +152,57 @@ ko:
       #original_hash: 4d618bb
       name: 예선 라운드
       #original_hash: 4d618bb
-      cellName: 예선 라운드
+      cell_name: 예선 라운드
     '1':
       #original_hash: 1e725b6
       name: 라운드 1
       #original_hash: 1e725b6
-      cellName: 라운드 1
+      cell_name: 라운드 1
     '2':
       #original_hash: 985c8d0
       name: 라운드 2
       #original_hash: 985c8d0
-      cellName: 라운드 2
+      cell_name: 라운드 2
     '3':
       #original_hash: e2f74d2
       name: 준결승
       #original_hash: e2f74d2
-      cellName: 준결승
+      cell_name: 준결승
     b:
       #original_hash: 327c999
       name: B 결승
       #original_hash: 327c999
-      cellName: B 결승
+      cell_name: B 결승
     c:
       #original_hash: 672b22c
       name: 결승
       #original_hash: 672b22c
-      cellName: 결승
+      cell_name: 결승
     d:
       #original_hash: 1e725b6
       name: 라운드 1
       #original_hash: 1e725b6
-      cellName: 라운드 1
+      cell_name: 라운드 1
     e:
       #original_hash: 985c8d0
       name: 라운드 2
       #original_hash: 985c8d0
-      cellName: 라운드 2
+      cell_name: 라운드 2
     f:
       #original_hash: 672b22c
       name: 결승
       #original_hash: 672b22c
-      cellName: 결승
+      cell_name: 결승
     g:
       #original_hash: e2f74d2
       name: 준결승
       #original_hash: e2f74d2
-      cellName: 준결승
+      cell_name: 준결승
     h:
       #original_hash: 4d618bb
       name: 예선 라운드
       #original_hash: 4d618bb
-      cellName: 예선 라운드
+      cell_name: 예선 라운드
   attempts:
     #original_hash: 17dae1e
     attempt_name: '%{number}회 차 시도'
@@ -566,19 +566,19 @@ ko:
         competition_id: 도중에 발생
       competition_medium:
         #original_hash: 1917f4f
-        competitionId: 대회
+        competition_ed: 대회
         #original_hash: 3deb745
-        type: 유형
+        media_type: 유형
         #original_hash: c3328c3
         text: 글
         #original_hash: d051707
         uri: 링크
         #original_hash: 1be755a
-        submitterName: 제출자 성명
+        submitter_name: 제출자 성명
         #original_hash: 78cdfee
-        submitterEmail: 제출자 이메일
+        submitter_email: 제출자 이메일
         #original_hash: 0d31f23
-        submitterComment: 제출자 코멘트
+        submitter_comment: 제출자 코멘트
         #original_hash: bae7d5b
         status: 상태
       regional_organization:
@@ -672,7 +672,7 @@ ko:
         accepted: 승인
         #original_hash: 96f608c
         pending: 대기
-      type:
+      media_type:
         #original_hash: ee45c30
         report: 보고
         #original_hash: 4360c2d
@@ -842,19 +842,19 @@ ko:
         comment: ''
       competition_medium:
         #original_hash: da39a3e
-        competitionId: ''
+        competition_id: ''
         #original_hash: da39a3e
-        type: ''
+        media_type: ''
         #original_hash: da39a3e
         text: ''
         #original_hash: da39a3e
         uri: ''
         #original_hash: da39a3e
-        submitterName: ''
+        submitter_name: ''
         #original_hash: da39a3e
-        submitterEmail: ''
+        submitter_email: ''
         #original_hash: da39a3e
-        submitterComment: ''
+        submitter_comment: ''
         #original_hash: da39a3e
         status: ''
       results_submission:
@@ -3844,18 +3844,10 @@ ko:
     filters_fixes_underway: >-
       일부 필터(예: 지난 해)는 일시적으로 비활성화되어 있습니다. 소프트웨어 팀은 이러한 필터를 복구하기 위해 노력하고 있습니다. 불편을
       끼쳐드려 죄송합니다.
-    #original_hash: e3710ed
-    tooltip_no_years: 저희의 데이터베이스가 너무 커서 과거 데이터를 산출할 수 없습니다
-    #original_hash: 357094b
-    tooltip_no_quantities: 저희의 데이터베이스가 너무 커서 긴 순위 목록을 산출할 수 없습니다
     selector_elements:
       events_selector:
         #original_hash: ad8919a
         event: 종목
-        #original_hash: 3e83afa
-        all_events: 모든 종목
-      #original_hash: 0f21717
-      region: 지역
       type_selector:
         #original_hash: 3deb745
         type: 유형
@@ -3863,30 +3855,13 @@ ko:
         single: 단일
         #original_hash: 15f86c0
         average: 평균
-      years_selector:
-        #original_hash: 96f997b
-        years: 연도
-        #original_hash: 0977c76
-        all_years: 모든 연도
-        #original_hash: 8737f09
-        only: 만
-        #original_hash: b3c0fe7
-        only_html: '%{year}년만'
-        #original_hash: 96bdb66
-        until: 까지
-        #original_hash: fa23930
-        until_html: '%{year}년까지'
       show_selector:
         #original_hash: d97d1ee
         show: 보기
         #original_hash: f3cf96e
         persons: 선수
-        #original_hash: 16d3376
-        persons_html: '%{quantity}명의 선수'
         #original_hash: 612e12d
         results: 결과
-        #original_hash: f3baa4a
-        results_html: '%{quantity}개의 결과'
         #original_hash: d46d2ee
         by_region: 지역
         #original_hash: c0dcb86
@@ -3913,8 +3888,6 @@ ko:
       name: 성명
       #original_hash: 5faa59d
       result: 결과
-      #original_hash: fa4c045
-      representing: 대표 지역
       #original_hash: 1917f4f
       competition: 대회
       #original_hash: e7f6fc5
@@ -3923,19 +3896,10 @@ ko:
       region: 지역
       #original_hash: 70c07ec
       world: 세계
-      type_options:
-        #original_hash: 3deb745
-        type: 유형
-        #original_hash: dd11868
-        single: 단일
-        #original_hash: 15f86c0
-        average: 평균
       #original_hash: ad8919a
       event: 종목
       #original_hash: dcf8b56
       date_circa: 대략적인 날짜
-      #original_hash: 1c54132
-      record: 기록
   notifications:
     #original_hash: 10bcdbd
     connect_wca_id: WCA 계정과 WCA ID를 연결하십시오!

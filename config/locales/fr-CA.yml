@@ -152,57 +152,57 @@ fr-CA:
       #original_hash: 9be00af
       name: Tour de qualification
       #original_hash: 9be00af
-      cellName: Tour de qualification
+      cell_name: Tour de qualification
     '1':
       #original_hash: 3df1a4a
       name: Premier tour
       #original_hash: 3df1a4a
-      cellName: Premier tour
+      cell_name: Premier tour
     '2':
       #original_hash: e5cac31
       name: Deuxième tour
       #original_hash: e5cac31
-      cellName: Deuxième tour
+      cell_name: Deuxième tour
     '3':
       #original_hash: 2ab0df7
       name: Demi-finale
       #original_hash: 2ab0df7
-      cellName: Demi-finale
+      cell_name: Demi-finale
     b:
       #original_hash: 0b2aeea
       name: Finale B
       #original_hash: 0b2aeea
-      cellName: Finale B
+      cell_name: Finale B
     c:
       #original_hash: ce20de3
       name: Finale
       #original_hash: ce20de3
-      cellName: Finale
+      cell_name: Finale
     d:
       #original_hash: 3df1a4a
       name: Premier tour
       #original_hash: 3df1a4a
-      cellName: Premier tour
+      cell_name: Premier tour
     e:
       #original_hash: e5cac31
       name: Deuxième tour
       #original_hash: e5cac31
-      cellName: Deuxième tour
+      cell_name: Deuxième tour
     f:
       #original_hash: ce20de3
       name: Finale
       #original_hash: ce20de3
-      cellName: Finale
+      cell_name: Finale
     g:
       #original_hash: 2ab0df7
       name: Demi-finale
       #original_hash: 2ab0df7
-      cellName: Demi-finale
+      cell_name: Demi-finale
     h:
       #original_hash: 9be00af
       name: Tour de qualification
       #original_hash: 9be00af
-      cellName: Tour de qualification
+      cell_name: Tour de qualification
   attempts:
     #original_hash: 7a23d81
     attempt_name: 'Essai %{number}'
@@ -574,19 +574,19 @@ fr-CA:
         competition_id: Est survenu au cours de
       competition_medium:
         #original_hash: 350d245
-        competitionId: Compétition
+        competition_id: Compétition
         #original_hash: 3deb745
-        type: Type
+        media_type: Type
         #original_hash: ff9afef
         text: Texte
         #original_hash: e2639e1
         uri: Lien
         #original_hash: e0b9211
-        submitterName: Nom du contributeur
+        submitter_name: Nom du contributeur
         #original_hash: 72fd8d2
-        submitterEmail: Adresse courriel du contributeur
+        submitter_email: Adresse courriel du contributeur
         #original_hash: a3afa29
-        submitterComment: Commentaire du contributeur
+        submitter_comment: Commentaire du contributeur
         #original_hash: 659499f
         status: Statut
       regional_organization:
@@ -682,7 +682,7 @@ fr-CA:
         accepted: Accepté
         #original_hash: 5231158
         pending: En attente
-      type:
+      media_type:
         #original_hash: f25c405
         report: Rapport
         #original_hash: 4360c2d
@@ -896,19 +896,19 @@ fr-CA:
         comment: ''
       competition_medium:
         #original_hash: da39a3e
-        competitionId: ''
+        competition_id: ''
         #original_hash: da39a3e
-        type: ''
+        media_type: ''
         #original_hash: da39a3e
         text: ''
         #original_hash: da39a3e
         uri: ''
         #original_hash: da39a3e
-        submitterName: ''
+        submitter_name: ''
         #original_hash: da39a3e
-        submitterEmail: ''
+        submitter_email: ''
         #original_hash: da39a3e
-        submitterComment: ''
+        submitter_comment: ''
         #original_hash: da39a3e
         status: ''
       results_submission:
@@ -5208,7 +5208,7 @@ fr-CA:
       différentes et nous n'avons pas l'intention de ralentir de sitôt! La
       communauté du cube a connu une croissance constante depuis sa création en
       2004 et nous voulons l'encourager à continuer à l'avenir en augmentant
-      l'accessibilité des compétitions dans de nouvelles régions. 
+      l'accessibilité des compétitions dans de nouvelles régions.
 
       Dans le futur, nous espérons soutenir notre communauté encore plus à
       travers des collaborations et des contacts avec ceux qui s'intéressent aux

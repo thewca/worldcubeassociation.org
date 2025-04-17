@@ -3,7 +3,7 @@
 <% hide_pos = defined?(hide_pos) && hide_pos %>
 <% hide_name = defined?(hide_name) && hide_name %>
 
-<%= wca_table table_class: "wca-results", floatThead: false do %>
+<%= wca_table table_class: "wca-results", float_thead: false do %>
   <thead>
     <tr>
       <% if !hide_event %>
@@ -53,7 +53,7 @@
         <% end %>
         <% last_event = result.event %>
         <% if !hide_round %>
-          <td class="round"><%= result.round_type.cellName %></td>
+          <td class="round"><%= result.round_type.cell_name %></td>
         <% end %>
 
         <% if !hide_pos %>
