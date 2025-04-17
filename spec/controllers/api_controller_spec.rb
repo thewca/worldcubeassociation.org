@@ -461,7 +461,7 @@ RSpec.describe Api::V0::ApiController, :clean_db_with_truncation do
     end
 
     it 'returns series portion of wcif json with only competitions that are publicly visible' do
-      competition2.update_column(:showAtAll, false)
+      competition2.update_column(:show_at_all, false)
       get :competition_series, params: { id: series.wcif_id }
       expect(response).to have_http_status :ok
       json = response.parsed_body
@@ -474,9 +474,9 @@ RSpec.describe Api::V0::ApiController, :clean_db_with_truncation do
     end
 
     it 'returns 404 when all competitions in series are not visible' do
-      competition1.update_column(:showAtAll, false)
-      competition2.update_column(:showAtAll, false)
-      competition3.update_column(:showAtAll, false)
+      competition1.update_column(:show_at_all, false)
+      competition2.update_column(:show_at_all, false)
+      competition3.update_column(:show_at_all, false)
       get :competition_series, params: { id: series.wcif_id }
       expect(response).to have_http_status :not_found
       json = response.parsed_body
@@ -600,14 +600,14 @@ RSpec.describe Api::V0::ApiController, :clean_db_with_truncation do
 
       it 'includes result achieved on the qualification date' do
         expected_response = [
-          { "best"=>399, "eventId"=>"333oh", "type"=>"single", "on_or_before"=> 1.days.ago.to_date.iso8601 },
-          { "best"=>499, "eventId"=>"333oh", "type"=>"average", "on_or_before"=> 1.days.ago.to_date.iso8601 },
+          { "best"=>399, "eventId"=>"333oh", "type"=>"single", "on_or_before"=> 1.day.ago.to_date.iso8601 },
+          { "best"=>499, "eventId"=>"333oh", "type"=>"average", "on_or_before"=> 1.day.ago.to_date.iso8601 },
         ]
 
-        competition = FactoryBot.create(:competition, starts: 1.days.ago)
+        competition = FactoryBot.create(:competition, starts: 1.day.ago)
         FactoryBot.create(:result, competition: competition, best: 399, average: 499, person: @result.person)
 
-        get :user_qualification_data, params: { user_id: @user.id, date: 1.days.ago }
+        get :user_qualification_data, params: { user_id: @user.id, date: 1.day.ago }
         expect(response.parsed_body).to eq(expected_response)
       end
 
@@ -617,7 +617,7 @@ RSpec.describe Api::V0::ApiController, :clean_db_with_truncation do
           { "best"=>500, "eventId"=>"333oh", "type"=>"average", "on_or_before"=> 2.days.ago.to_date.iso8601 },
         ]
 
-        competition = FactoryBot.create(:competition, starts: 1.days.ago)
+        competition = FactoryBot.create(:competition, starts: 1.day.ago)
         FactoryBot.create(:result, competition: competition, best: 399, average: 499, person: @result.person)
 
         get :user_qualification_data, params: { user_id: @user.id, date: 2.days.ago }
@@ -625,7 +625,7 @@ RSpec.describe Api::V0::ApiController, :clean_db_with_truncation do
       end
 
       it 'still returns PR when user has DNF result' do
-        competition = FactoryBot.create(:competition, starts: 1.days.ago)
+        competition = FactoryBot.create(:competition, starts: 1.day.ago)
         FactoryBot.create(:result, competition: competition, best: -1, average: -1, person: @result.person)
 
         get :user_qualification_data, params: { user_id: @user.id }

@@ -4,7 +4,6 @@ require 'active_support/concern'
 
 module Resultable
   extend ActiveSupport::Concern
-  include ResultMethods
 
   included do
     # NOTE: We use cached values instead of belongs_to to improve performances.
@@ -52,18 +51,16 @@ module Resultable
 
     validate :belongs_to_a_round
     def belongs_to_a_round
-      if round.blank?
-        errors.add(:round_type,
-                   "Result must belong to a valid round. Please check that the tuple (competitionId, eventId, roundTypeId, formatId) matches an existing round.")
-      end
+      return if round.present?
+
+      errors.add(:round_type,
+                 "Result must belong to a valid round. Please check that the tuple (competitionId, eventId, roundTypeId, formatId) matches an existing round.")
     end
 
     validate :validate_each_solve, if: :event
     def validate_each_solve
       solve_times.each_with_index do |solve_time, i|
-        unless solve_time.valid?
-          errors.add(:"value#{i + 1}", solve_time.errors.full_messages.join(" "))
-        end
+        errors.add(:"value#{i + 1}", solve_time.errors.full_messages.join(" ")) unless solve_time.valid?
       end
     end
 
@@ -92,19 +89,13 @@ module Resultable
     return "Invalid round_type" unless round_type
     return "All solves cannot be DNS/skipped." if solve_times.all? { |s| s.dns? || s.skipped? }
 
-    unless solve_times.drop_while(&:unskipped?).all?(&:skipped?)
-      return "Skipped solves must all come at the end."
-    end
+    return "Skipped solves must all come at the end." unless solve_times.drop_while(&:unskipped?).all?(&:skipped?)
 
     unskipped_count = solve_times.count(&:unskipped?)
     if round_type.combined?
-      if unskipped_count > format.expected_solve_count
-        "Expected at most #{hlp.pluralize(format.expected_solve_count, 'solve')}, but found #{unskipped_count}."
-      end
-    else
-      if unskipped_count != format.expected_solve_count
-        "Expected #{hlp.pluralize(format.expected_solve_count, 'solve')}, but found #{unskipped_count}."
-      end
+      "Expected at most #{hlp.pluralize(format.expected_solve_count, 'solve')}, but found #{unskipped_count}." if unskipped_count > format.expected_solve_count
+    elsif unskipped_count != format.expected_solve_count
+      "Expected #{hlp.pluralize(format.expected_solve_count, 'solve')}, but found #{unskipped_count}."
     end
   end
 
@@ -154,21 +145,19 @@ module Resultable
   def compute_correct_average
     if average_is_not_computable_reason || missed_combined_round_cutoff? || !should_compute_average?
       0
+    elsif counting_solve_times.any?(&:incomplete?)
+      SolveTime::DNF_VALUE
+    elsif eventId == "333fm"
+      sum_moves = counting_solve_times.sum(&:move_count).to_f
+      (100 * sum_moves / counting_solve_times.length).round
     else
-      if counting_solve_times.any?(&:incomplete?)
-        SolveTime::DNF_VALUE
-      elsif eventId == "333fm"
-        sum_moves = counting_solve_times.sum(&:move_count).to_f
-        (100 * sum_moves / counting_solve_times.length).round
-      else
-        # Cast at least one of the operands to float
-        sum_centis = counting_solve_times.sum(&:time_centiseconds).to_f
-        raw_average = sum_centis / counting_solve_times.length
-        # Round the result.
-        # If the average is above 10 minutes, round it to the nearest second as per
-        # https://www.worldcubeassociation.org/regulations/#9f2
-        raw_average > 60_000 ? raw_average.round(-2) : raw_average.round
-      end
+      # Cast at least one of the operands to float
+      sum_centis = counting_solve_times.sum(&:time_centiseconds).to_f
+      raw_average = sum_centis / counting_solve_times.length
+      # Round the result.
+      # If the average is above 10 minutes, round it to the nearest second as per
+      # https://www.worldcubeassociation.org/regulations/#9f2
+      raw_average > 60_000 ? raw_average.round(-2) : raw_average.round
     end
   end
 
@@ -182,5 +171,70 @@ module Resultable
 
   def hlp
     ActionController::Base.helpers
+  end
+
+  alias_attribute :wca_id, :personId
+
+  def best_solve
+    SolveTime.new(eventId, :single, best)
+  end
+
+  def average_solve
+    SolveTime.new(eventId, :average, average)
+  end
+
+  def best_index
+    sorted_solves_with_index.min[1]
+  end
+
+  def missed_combined_round_cutoff?
+    sorted_solves_with_index.length < format.expected_solve_count
+  end
+
+  private def sorted_solves
+    @sorted_solves ||= solve_times.reject(&:skipped?).sort.freeze
+  end
+
+  private def sorted_solves_with_index
+    @sorted_solves_with_index ||= solve_times.each_with_index.reject { |s, _| s.skipped? }.sort.freeze
+  end
+
+  def solve_times
+    @solve_times ||= [SolveTime.new(eventId, :single, value1),
+                      SolveTime.new(eventId, :single, value2),
+                      SolveTime.new(eventId, :single, value3),
+                      SolveTime.new(eventId, :single, value4),
+                      SolveTime.new(eventId, :single, value5)].freeze
+  end
+
+  def worst_index
+    sorted_solves_with_index.max[1]
+  end
+
+  def trimmed_indices
+    if missed_combined_round_cutoff?
+      # When you miss the cutoff for a cutoff round, you don't
+      # get an average, therefore none of the solves were trimmed.
+      []
+    else
+      sorted_solves = sorted_solves_with_index
+      trimmed_solves_with_index = sorted_solves[0...format.trim_fastest_n]
+      trimmed_solves_with_index += sorted_solves[(sorted_solves.length - format.trim_slowest_n)...sorted_solves.length]
+      trimmed_solves_with_index.map { |_, i| i }
+    end
+  end
+
+  def counting_solve_times
+    @counting_solve_times ||= solve_times.each_with_index.filter_map do |solve_time, i|
+      solve_time if i < format.expected_solve_count && trimmed_indices.exclude?(i)
+    end
+  end
+
+  # When someone changes an attribute, clear our cached values.
+  def _write_attribute(attr, value)
+    @sorted_solves_with_index = nil
+    @solve_times = nil
+    @counting_solve_times = nil
+    super
   end
 end

@@ -12,14 +12,14 @@ RSpec.describe "API Competitions" do
     let!(:competition4) { FactoryBot.create :competition, :visible, starts: 3.weeks.from_now, name: "Fourth 2019" }
 
     it "orders competitions by date descending by default" do
-      get api_v0_competitions_path, params: { start: 2.week.from_now }
+      get api_v0_competitions_path, params: { start: 2.weeks.from_now }
       expect(response).to be_successful
       ids = response.parsed_body.map { |c| c["id"] }
       expect(ids).to eq [competition4, competition3].map(&:id)
     end
 
     it "allows ordering by date ascending" do
-      get api_v0_competitions_path, params: { start: 2.week.from_now, sort: "start_date" }
+      get api_v0_competitions_path, params: { start: 2.weeks.from_now, sort: "start_date" }
       expect(response).to be_successful
       ids = response.parsed_body.map { |c| c["id"] }
       expect(ids).to eq [competition3, competition4].map(&:id)
@@ -60,7 +60,7 @@ RSpec.describe "API Competitions" do
       get api_v0_competition_scrambles_path(competition)
       expect(response).to be_successful
       json = response.parsed_body
-      expect(json[0]["scrambleId"]).to eq scramble.scrambleId
+      expect(json[0]["id"]).to eq scramble.id
     end
   end
 
@@ -569,6 +569,28 @@ RSpec.describe "API Competitions" do
           expect(response).to be_successful
         end
       end
+    end
+  end
+
+  describe "GET #competition_index" do
+    it 'returns a paginated list of competitions' do
+      FactoryBot.create_list(:competition, 5, :visible)
+      get api_v0_competition_index_path
+      expect(response).to be_successful
+
+      response_json = response.parsed_body
+      expect(response_json.length).to eq(5)
+    end
+
+    it 'takes parameter to filter by continent' do
+      FactoryBot.create_list(:competition, 6, :visible)
+      FactoryBot.create_list(:competition, 4, :visible, country_id: 'Afghanistan')
+
+      get api_v0_competition_index_path, params: { continent: '_North America' }
+      expect(response).to be_successful
+
+      response_json = response.parsed_body
+      expect(response_json.length).to eq(6)
     end
   end
 end

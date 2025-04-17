@@ -8,14 +8,14 @@ module CheckRegionalRecords
     ActiveRecord::Base.connection.execute <<-SQL.squish
       INSERT INTO #{table_name}
       (resultId, countryId, eventId, competitionEndDate, best, average)
-      SELECT Results.id, Results.countryId, Results.eventId, Competitions.end_date, Results.best, Results.average
+      SELECT Results.id, Results.countryId, Results.eventId, competitions.end_date, Results.best, Results.average
       FROM Results
-      INNER JOIN Competitions ON Results.competitionId = Competitions.id
+      INNER JOIN competitions ON Results.competitionId = competitions.id
       #{competition_id.present? ? "WHERE Results.competitionId = '#{competition_id}'" : ''}
       ON DUPLICATE KEY UPDATE
         countryId = Results.countryId,
         eventId = Results.eventId,
-        competitionEndDate = Competitions.end_date,
+        competitionEndDate = competitions.end_date,
         best = Results.best,
         average = Results.average
     SQL
@@ -59,9 +59,7 @@ module CheckRegionalRecords
       # there might be an overlap where the next competition started in the morning but the old competition set a record in the evening.
       if next_start_date > competition.end_date
         tentative_records.each do |region, record|
-          if !confirmed_records.key?(region) || record < confirmed_records[region]
-            confirmed_records[region] = record
-          end
+          confirmed_records[region] = record if !confirmed_records.key?(region) || record < confirmed_records[region]
         end
       else
         still_pending.push(cache)

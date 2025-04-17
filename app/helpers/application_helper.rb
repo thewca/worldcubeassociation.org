@@ -85,21 +85,13 @@ module ApplicationHelper
     end
   end
 
-  def wca_table(responsive: true, hover: true, striped: true, floatThead: true, table_class: "", data: {}, greedy: true, table_id: nil, &block)
+  def wca_table(responsive: true, hover: true, striped: true, float_thead: true, table_class: "", data: {}, greedy: true, table_id: nil, &block)
     data[:locale] = I18n.locale
     table_classes = "table table-condensed #{table_class}"
-    if floatThead
-      table_classes += " floatThead"
-    end
-    if hover
-      table_classes += " table-hover"
-    end
-    if striped
-      table_classes += " table-striped"
-    end
-    if greedy
-      table_classes += " table-greedy-last-column"
-    end
+    table_classes += " floatThead" if float_thead
+    table_classes += " table-hover" if hover
+    table_classes += " table-striped" if striped
+    table_classes += " table-greedy-last-column" if greedy
 
     content_tag :div, class: (responsive ? "table-responsive" : "") do
       content_tag :table, id: table_id, class: table_classes, data: data, &block
@@ -128,9 +120,7 @@ module ApplicationHelper
 
   def alert(type, content = nil, note: false, &block)
     content = capture(&block) if block_given?
-    if note
-      content = content_tag(:strong, "Note:") + " " + content
-    end
+    content = content_tag(:strong, "Note:") + " " + content if note
     content_tag :div, content, class: "alert alert-#{type}"
   end
 
@@ -157,9 +147,9 @@ module ApplicationHelper
     options_for_select((use_world ? [[t('common.world'), "world"]] : [[t('common.all_regions'), "all"]]), selected_id) + grouped_options_for_select(regions, selected_id)
   end
 
-  def simple_form_for(resource, **options, &block)
+  def simple_form_for(resource, **options, &)
     super do |f|
-      form = capture(f, &block)
+      form = capture(f, &)
       error_messages = render('shared/error_messages', f: f)
       error_messages + form
     end
@@ -188,10 +178,10 @@ module ApplicationHelper
   end
 
   def wca_id_link(wca_id, **options)
-    if wca_id.present?
-      content_tag :span, class: "wca-id" do
-        link_to wca_id, person_url(wca_id), options
-      end
+    return if wca_id.blank?
+
+    content_tag :span, class: "wca-id" do
+      link_to wca_id, person_url(wca_id), options
     end
   end
 
@@ -243,7 +233,7 @@ module ApplicationHelper
   end
 
   def filter_css_packs(*names)
-    names.select { |pack| !current_shakapacker_instance.manifest.lookup_pack_with_chunks(pack, type: :stylesheet).nil? }
+    names.reject { |pack| current_shakapacker_instance.manifest.lookup_pack_with_chunks(pack, type: :stylesheet).nil? }
   end
 
   def add_to_css_assets(name)

@@ -20,9 +20,8 @@ module Registrations
       if status == STATUS_CANCELLED
         return self_updating ? 'Competitor delete' : 'Admin delete'
       end
-      if status == STATUS_REJECTED
-        return 'Admin reject'
-      end
+      return 'Admin reject' if status == STATUS_REJECTED
+
       self_updating ? 'Competitor update' : 'Admin update'
     end
 
@@ -46,6 +45,7 @@ module Registrations
 
     def self.qualification_data(event, type, time, date)
       raise ArgumentError.new("'type' may only contain the symbols `:single` or `:average`") unless [:single, :average].include?(type)
+
       {
         eventId: event,
         type: type,

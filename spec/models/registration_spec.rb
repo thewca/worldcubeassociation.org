@@ -155,14 +155,22 @@ RSpec.describe Registration do
     end
   end
 
-  context "upper guest limit not enabled" do
+  context "with upper guest limit not enabled" do
     it "allows guests greater than guest limit" do
       guest_limit = 1
       competition = FactoryBot.create :competition, guests_per_registration_limit: guest_limit, guest_entry_status: Competition.guest_entry_statuses['free']
       registration.competition = competition
-      registration.guests = 1_000_000
+      registration.guests = 10
       expect(registration.guests).to be > registration.guest_limit
       expect(registration).to be_valid
+    end
+
+    it "does not allow guests greater than guest hard limit" do
+      guest_limit = 1
+      competition = FactoryBot.create :competition, guests_per_registration_limit: guest_limit, guest_entry_status: Competition.guest_entry_statuses['free']
+      registration.competition = competition
+      registration.guests = 1_000_000
+      expect(registration).to be_invalid_with_errors(guests: ["must be less than or equal to 99"])
     end
 
     it "requires guests greater than 0" do
@@ -334,7 +342,13 @@ RSpec.describe Registration do
       competition.allow_registration_without_qualification = false
       competition.save!
       registration.reload
-      expect(registration).to be_invalid_with_errors(registration_competition_events: ["You cannot register for events you are not qualified for."])
+      expect(registration).to be_invalid_with_errors(
+        registration_competition_events: ["is invalid"],
+      )
+      rce = registration.registration_competition_events.find_by(competition_event: competition_event)
+      expect(rce).to be_invalid_with_errors(
+        competition_event: ["You cannot register for events you are not qualified for."],
+      )
     end
   end
 
@@ -435,7 +449,7 @@ RSpec.describe Registration do
       ]
 
       it 'tests cover all possible status update combinations' do
-        combined_updates = (competing_status_updates).flatten
+        combined_updates = competing_status_updates.flatten
         expect(combined_updates).to match_array(REGISTRATION_TRANSITIONS)
       end
 
@@ -705,6 +719,16 @@ RSpec.describe Registration do
         FactoryBot.create_list(:invoice_item, 3, :entry, custom_registration: registration)
         expect(registration.invoice_items_total).to be(3000)
       end
+    end
+  end
+
+  describe '#entry_fee_with_donation' do
+    it 'returns a RubyMoney object' do
+      expect(registration.entry_fee_with_donation).to eq(Money.new(1000, "USD"))
+    end
+
+    it 'given a donation, sums the donation and entry fee' do
+      expect(registration.entry_fee_with_donation(1500)).to eq(Money.new(2500, "USD"))
     end
   end
 end

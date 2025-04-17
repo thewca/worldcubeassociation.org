@@ -6,12 +6,14 @@ export const WAITLIST_COLOR = 'yellow';
 export const APPROVED_COLOR = 'green';
 export const CANCELLED_COLOR = 'orange';
 export const REJECTED_COLOR = 'red';
+export const NON_COMPETING_COLOR = 'purple';
 
 export const PENDING_ICON = 'circle notched';
 export const WAITLIST_ICON = 'hourglass';
 export const APPROVED_ICON = 'check';
 export const CANCELLED_ICON = 'trash';
 export const REJECTED_ICON = 'x';
+export const NON_COMPETING_ICON = 'clipboard outline';
 
 export const partitionRegistrations = (registrations) => registrations.reduce(
   (result, registration) => {
@@ -31,13 +33,16 @@ export const partitionRegistrations = (registrations) => registrations.reduce(
       case 'rejected':
         result.rejected.push(registration);
         break;
+      case 'non_competing':
+        result.nonCompeting.push(registration);
+        break;
       default:
         break;
     }
     return result;
   },
   {
-    pending: [], waiting: [], accepted: [], cancelled: [], rejected: [],
+    pending: [], waiting: [], accepted: [], cancelled: [], rejected: [], nonCompeting: [],
   },
 );
 

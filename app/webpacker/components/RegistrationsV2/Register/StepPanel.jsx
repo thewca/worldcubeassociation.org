@@ -47,13 +47,20 @@ const shouldShowCompleted = (isRegistered, hasPaid, isAccepted, key, index) => {
   return false;
 };
 
-const shouldBeDisabled = (hasPaid, key, activeIndex, index, competitionInfo, isRejected) => {
+const shouldBeDisabled = (
+  hasPaid,
+  key,
+  activeIndex,
+  index,
+  registrationCurrentlyOpen,
+  isRejected,
+) => {
   if (isRejected) {
     return true;
   }
 
   if (key === paymentStepConfig.key) {
-    return (!hasPaid && index > activeIndex) || !competitionInfo['registration_currently_open?'];
+    return (!hasPaid && index > activeIndex) || !registrationCurrentlyOpen;
   }
   if (key === competingStepConfig.key) {
     return index > activeIndex;
@@ -71,9 +78,10 @@ export default function StepPanel({
   stripePublishableKey,
   connectedAccountId,
   qualifications,
+  registrationCurrentlyOpen,
 }) {
   const {
-    isRegistered, isAccepted, isRejected, hasPaid,
+    isRegistered, isAccepted, isRejected, hasPaid, isPolling,
   } = useRegistration();
 
   const registrationFinished = (isRegistered && hasPaid) || (isRegistered && !competitionInfo['using_payment_integrations?']);
@@ -91,6 +99,12 @@ export default function StepPanel({
   }, [competitionInfo, isRegistered]);
 
   const [activeIndex, setActiveIndex] = useState(() => {
+    // skip ahead to competingStep if we are processing
+    if (isPolling) {
+      return steps.findIndex(
+        (step) => step === competingStepConfig,
+      );
+    }
     // Don't show payment panel if a user was accepted (for people with waived payment)
     if (registrationFinished || isAccepted || isRejected) {
       return steps.findIndex(
@@ -123,7 +137,7 @@ export default function StepPanel({
               stepConfig.key,
               activeIndex,
               index,
-              competitionInfo,
+              registrationCurrentlyOpen,
               isRejected,
             )}
             onClick={() => setActiveIndex(index)}

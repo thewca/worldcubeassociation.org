@@ -14,9 +14,9 @@ module Admin
       round = Round.find(params[:round_id])
       # Create some basic attributes for that empty scramble.
       @scramble = {
-        competitionId: competition.id,
-        roundTypeId: round.round_type_id,
-        eventId: round.event.id,
+        competition_id: competition.id,
+        round_type_id: round.round_type_id,
+        event_id: round.event.id,
       }
     end
 
@@ -32,7 +32,7 @@ module Admin
       if scramble.save
         # We just inserted a new scramble, make sure we at least give it correct information.
         validator = ResultsValidators::ScramblesValidator.new(apply_fixes: true)
-        validator.validate(competition_ids: [scramble.competitionId])
+        validator.validate(competition_ids: [scramble.competition_id])
         json[:messages] = ["Scramble inserted!"].concat(validator.infos.map(&:to_s))
       else
         json[:errors] = scramble.errors.map(&:full_message)
@@ -44,9 +44,9 @@ module Admin
       scramble = Scramble.find(params.require(:id))
       # Since we may move the scramble to another competition, we want to validate
       # both competitions if needed.
-      competitions_to_validate = [scramble.competitionId]
+      competitions_to_validate = [scramble.competition_id]
       if scramble.update(scramble_params)
-        competitions_to_validate << scramble.competitionId
+        competitions_to_validate << scramble.competition_id
         competitions_to_validate.uniq!
         validator = ResultsValidators::ScramblesValidator.new(apply_fixes: true)
         validator.validate(competition_ids: competitions_to_validate)
@@ -55,9 +55,7 @@ module Admin
                else
                  ["The scramble was saved."]
                end
-        if competitions_to_validate.size > 1
-          info << "The scrambles was moved to another competition, make sure to check the competition validators for both of them."
-        end
+        info << "The scrambles was moved to another competition, make sure to check the competition validators for both of them." if competitions_to_validate.size > 1
         render json: {
           # Make sure we emit the competition's id next to the info, because we
           # may validate multiple competitions at the same time.
@@ -72,7 +70,7 @@ module Admin
 
     def destroy
       scramble = Scramble.find(params.require(:id))
-      competition_id = scramble.competitionId
+      competition_id = scramble.competition_id
       scramble.destroy!
 
       # Create a results validator to fix information if needed
@@ -85,8 +83,8 @@ module Admin
     end
 
     private def scramble_params
-      params.require(:scramble).permit(:competitionId, :roundTypeId, :eventId, :groupId,
-                                       :isExtra, :scrambleNum, :scramble)
+      params.require(:scramble).permit(:competition_id, :round_type_id, :event_id, :group_id,
+                                       :is_extra, :scramble_num, :scramble)
     end
   end
 end

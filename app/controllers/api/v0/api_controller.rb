@@ -24,12 +24,8 @@ class Api::V0::ApiController < ApplicationController
   end
 
   def auth_results
-    if !current_user
-      return render status: :unauthorized, json: { error: "Please log in" }
-    end
-    if !current_user.can_admin_results?
-      return render status: :forbidden, json: { error: "Cannot adminster results" }
-    end
+    return render status: :unauthorized, json: { error: "Please log in" } unless current_user
+    return render status: :forbidden, json: { error: "Cannot adminster results" } unless current_user.can_admin_results?
 
     render json: { status: "ok" }
   end
@@ -133,13 +129,13 @@ class Api::V0::ApiController < ApplicationController
       end
     end
 
-    if current_user&.can_admin_results?
-      options = {
-        private_attributes: %w[incorrect_wca_id_claim_count dob],
-      }
-    else
-      options = {}
-    end
+    options = if current_user&.can_admin_results?
+                {
+                  private_attributes: %w[incorrect_wca_id_claim_count dob],
+                }
+              else
+                {}
+              end
 
     render status: :ok, json: { result: result.as_json(options) }
   end
@@ -196,18 +192,18 @@ class Api::V0::ApiController < ApplicationController
     cache_key = ["records", concise_results_date.iso8601]
     json = Rails.cache.fetch(cache_key) do
       records = ActiveRecord::Base.connection.exec_query <<-SQL.squish
-        SELECT 'single' type, MIN(best) value, countryId country_id, eventId event_id
-        FROM ConciseSingleResults
-        GROUP BY countryId, eventId
+        SELECT 'single' type, MIN(best) value, country_id, event_id
+        FROM concise_single_results
+        GROUP BY country_id, event_id
         UNION ALL
-        SELECT 'average' type, MIN(average) value, countryId country_id, eventId event_id
-        FROM ConciseAverageResults
-        GROUP BY countryId, eventId
+        SELECT 'average' type, MIN(average) value, country_id, event_id
+        FROM concise_average_results
+        GROUP BY country_id, event_id
       SQL
       records = records.to_a
       {
         world_records: records_by_event(records),
-        continental_records: records.group_by { |record| Country.c_find(record["country_id"]).continentId }.transform_values!(&method(:records_by_event)),
+        continental_records: records.group_by { |record| Country.c_find(record["country_id"]).continent_id }.transform_values!(&method(:records_by_event)),
         national_records: records.group_by { |record| record["country_id"] }.transform_values!(&method(:records_by_event)),
       }
     end
@@ -244,6 +240,7 @@ class Api::V0::ApiController < ApplicationController
 
   private def require_user!
     raise WcaExceptions::MustLogIn.new if current_api_user.nil? && current_user.nil?
+
     current_api_user || current_user
   end
 
@@ -253,9 +250,8 @@ class Api::V0::ApiController < ApplicationController
 
   def competition_series
     competition_series = CompetitionSeries.find_by(wcif_id: params[:id])
-    if competition_series.blank? || competition_series.public_competitions.empty?
-      raise WcaExceptions::NotFound.new("Competition series with ID #{params[:id]} not found")
-    end
+    raise WcaExceptions::NotFound.new("Competition series with ID #{params[:id]} not found") if competition_series.blank? || competition_series.public_competitions.empty?
+
     render json: competition_series.to_wcif
   end
 end
