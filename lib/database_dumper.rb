@@ -1138,7 +1138,7 @@ module DatabaseDumper
           "groupId" => "group_id",
           "isExtra" => "is_extra",
           "roundTypeId" => "round_type_id",
-          "scrambleId" => "scramble_id",
+          "scrambleId" => "id",
           "scrambleNum" => "scramble_num",
         },
       ),
