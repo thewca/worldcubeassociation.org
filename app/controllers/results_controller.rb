@@ -292,10 +292,10 @@ class ResultsController < ApplicationController
         #{@region_condition_camel}
         #{@years_condition_competition}
         #{@gender_condition}
-        AND result.eventId = record_event_id
-        AND events.id      = result.eventId
-        AND countries.id   = result.countryId
-        AND competition.id = result.competitionId
+        AND result.eventId  = record_event_id
+        AND events.id       = result.eventId
+        AND countries.id    = result.countryId
+        AND competitions.id = result.competitionId
         AND events.`rank` < 990
     SQL
   end
@@ -368,10 +368,10 @@ class ResultsController < ApplicationController
     @year = splitted_years_param[1].to_i
 
     if @is_only
-      @years_condition_competition = "AND YEAR(competition.start_date) = #{@year}"
+      @years_condition_competition = "AND YEAR(competitions.start_date) = #{@year}"
       @years_condition_result = "AND result.year = #{@year}"
     elsif @is_until
-      @years_condition_competition = "AND YEAR(competition.start_date) <= #{@year}"
+      @years_condition_competition = "AND YEAR(competitions.start_date) <= #{@year}"
       @years_condition_result = "AND result.year <= #{@year}"
     else
       @years_condition_competition = ""
