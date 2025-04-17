@@ -12,6 +12,8 @@ class Scramble < ApplicationRecord
 
   # FIXME: GB Remove this after all other snake_case migrations are done
   alias_attribute :competitionId, :competition_id
+  alias_attribute :eventId, :event_id
+  alias_attribute :roundTypeId, :round_type_id
 
   def round_type
     RoundType.c_find(round_type_id)
