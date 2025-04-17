@@ -601,6 +601,49 @@ RSpec.describe CompetitionsController do
         expect(competition.reload.registration_close).to eq old_close
       end
 
+      it "can extend registration close of locked competition when deadline hasn't passed" do
+        old_open = 2.days.from_now.change(sec: 0)
+        old_close = 20.days.from_now.change(sec: 0)
+        competition.update(confirmed: true, registration_open: old_open, registration_close: old_close)
+
+        # respect the fact that February can have exactly 4 weeks
+        # which is potentially colliding with the start_date set in the competition spec factory
+        new_close = 27.days.from_now.change(sec: 0)
+        update_params = build_competition_update(competition, registration: { closingDateTime: new_close })
+        patch :update, params: update_params, as: :json
+        expect(competition.reload.registration_open).to eq old_open
+        expect(competition.reload.registration_close).to eq new_close
+      end
+
+      it "cannot shorten registration close of locked competition when deadline hasn't passed" do
+        old_open = 2.days.from_now.change(sec: 0)
+        # respect the fact that February can have exactly 4 weeks
+        # which is potentially colliding with the start_date set in the competition spec factory
+        old_close = 27.days.from_now.change(sec: 0)
+        competition.update(confirmed: true, registration_open: old_open, registration_close: old_close)
+
+        # This is definitely less than the 27 days above, no matter which month
+        new_close = 2.weeks.from_now.change(sec: 0)
+        update_params = build_competition_update(competition, registration: { closingDateTime: new_close })
+        patch :update, params: update_params, as: :json
+        expect(competition.reload.registration_open).to eq old_open
+        expect(competition.reload.registration_close).to eq old_close
+      end
+
+      it "cannot change registration close of locked competition when deadline has passed" do
+        old_open = 27.days.ago.change(sec: 0)
+        # respect the fact that February can have exactly 4 weeks
+        # which is potentially colliding with the start_date set in the competition spec factory
+        old_close = 2.days.ago.change(sec: 0)
+        competition.update(confirmed: true, registration_open: old_open, registration_close: old_close)
+
+        new_close = 2.weeks.from_now.change(sec: 0)
+        update_params = build_competition_update(competition, registration: { closingDateTime: new_close })
+        patch :update, params: update_params, as: :json
+        expect(competition.reload.registration_open).to eq old_open
+        expect(competition.reload.registration_close).to eq old_close
+      end
+
       it "can change extra registration requirements field before competition is confirmed" do
         new_requirements = "New extra requirements"
         update_params = build_competition_update(competition, registration: { extraRequirements: new_requirements })
@@ -616,6 +659,23 @@ RSpec.describe CompetitionsController do
         patch :update, params: update_params, as: :json
         comp.reload
         expect(comp.extra_registration_requirements).to eq "Extra requirements"
+      end
+
+      it "can change general information field before competition is confirmed" do
+        new_information = "New information"
+        update_params = build_competition_update(competition, information: new_information)
+        patch :update, params: update_params, as: :json
+        competition.reload
+        expect(competition.information).to eq new_information
+      end
+
+      it "can change general information field even after competition is confirmed" do
+        comp = FactoryBot.create(:competition, :confirmed, :registration_open, delegates: [delegate], information: "Old information")
+        new_information = "New information"
+        update_params = build_competition_update(comp, information: new_information)
+        patch :update, params: update_params, as: :json
+        comp.reload
+        expect(comp.information).to eq new_information
       end
     end
 
@@ -713,6 +773,49 @@ RSpec.describe CompetitionsController do
         expect(competition.reload.registration_close).to eq old_close
       end
 
+      it "can extend registration close of locked competition when deadline hasn't passed" do
+        old_open = 2.days.from_now.change(sec: 0)
+        old_close = 20.days.from_now.change(sec: 0)
+        competition.update(confirmed: true, registration_open: old_open, registration_close: old_close)
+
+        # respect the fact that February can have exactly 4 weeks
+        # which is potentially colliding with the start_date set in the competition spec factory
+        new_close = 27.days.from_now.change(sec: 0)
+        update_params = build_competition_update(competition, registration: { closingDateTime: new_close })
+        patch :update, params: update_params, as: :json
+        expect(competition.reload.registration_open).to eq old_open
+        expect(competition.reload.registration_close).to eq new_close
+      end
+
+      it "cannot shorten registration close of locked competition when deadline hasn't passed" do
+        old_open = 2.days.from_now.change(sec: 0)
+        # respect the fact that February can have exactly 4 weeks
+        # which is potentially colliding with the start_date set in the competition spec factory
+        old_close = 27.days.from_now.change(sec: 0)
+        competition.update(confirmed: true, registration_open: old_open, registration_close: old_close)
+
+        # This is definitely less than the 27 days above, no matter which month
+        new_close = 2.weeks.from_now.change(sec: 0)
+        update_params = build_competition_update(competition, registration: { closingDateTime: new_close })
+        patch :update, params: update_params, as: :json
+        expect(competition.reload.registration_open).to eq old_open
+        expect(competition.reload.registration_close).to eq old_close
+      end
+
+      it "cannot change registration close of locked competition when deadline has passed" do
+        old_open = 27.days.ago.change(sec: 0)
+        # respect the fact that February can have exactly 4 weeks
+        # which is potentially colliding with the start_date set in the competition spec factory
+        old_close = 2.days.ago.change(sec: 0)
+        competition.update(confirmed: true, registration_open: old_open, registration_close: old_close)
+
+        new_close = 2.weeks.from_now.change(sec: 0)
+        update_params = build_competition_update(competition, registration: { closingDateTime: new_close })
+        patch :update, params: update_params, as: :json
+        expect(competition.reload.registration_open).to eq old_open
+        expect(competition.reload.registration_close).to eq old_close
+      end
+
       it "can change extra registration requirements field before competition is confirmed" do
         new_requirements = "New extra requirements"
         update_params = build_competition_update(competition, registration: { extraRequirements: new_requirements })
@@ -722,12 +825,29 @@ RSpec.describe CompetitionsController do
       end
 
       it "cannot change extra registration requirements field after competition is confirmed" do
-        comp = FactoryBot.create(:competition, :confirmed, delegates: [delegate, trainee_delegate], extra_registration_requirements: "Extra requirements")
+        comp = FactoryBot.create(:competition, :confirmed, :registration_open, delegates: [delegate, trainee_delegate], extra_registration_requirements: "Extra requirements")
         new_requirements = "New extra requirements"
-        update_params = build_competition_update(competition, registration: { extraRequirements: new_requirements })
+        update_params = build_competition_update(comp, registration: { extraRequirements: new_requirements })
         patch :update, params: update_params, as: :json
         comp.reload
         expect(comp.extra_registration_requirements).to eq "Extra requirements"
+      end
+
+      it "can change general information field before competition is confirmed" do
+        new_information = "New information"
+        update_params = build_competition_update(competition, information: new_information)
+        patch :update, params: update_params, as: :json
+        competition.reload
+        expect(competition.information).to eq new_information
+      end
+
+      it "can change general information field even after competition is confirmed" do
+        comp = FactoryBot.create(:competition, :confirmed, :registration_open, delegates: [delegate, trainee_delegate], information: "Old information")
+        new_information = "New information"
+        update_params = build_competition_update(comp, information: new_information)
+        patch :update, params: update_params, as: :json
+        comp.reload
+        expect(comp.information).to eq new_information
       end
     end
 
@@ -1094,16 +1214,16 @@ RSpec.describe CompetitionsController do
       end
 
       it 'bookmarks a competition' do
-        expect(user.is_bookmarked?(competition)).to be false
+        expect(user.competition_bookmarked?(competition)).to be false
         post :bookmark, params: { id: competition.id }
-        expect(user.is_bookmarked?(competition)).to be true
+        expect(user.competition_bookmarked?(competition)).to be true
       end
 
       it 'unbookmarks a competition' do
         post :bookmark, params: { id: competition.id }
-        expect(user.is_bookmarked?(competition)).to be true
+        expect(user.competition_bookmarked?(competition)).to be true
         post :unbookmark, params: { id: competition.id }
-        expect(user.is_bookmarked?(competition)).to be false
+        expect(user.competition_bookmarked?(competition)).to be false
       end
     end
   end

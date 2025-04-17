@@ -150,57 +150,57 @@ ca:
       #original_hash: 4d618bb
       name: Ronda de qualificació
       #original_hash: 4d618bb
-      cellName: Ronda de qualificació
+      cell_name: Ronda de qualificació
     '1':
       #original_hash: 1e725b6
       name: Primera ronda
       #original_hash: 1e725b6
-      cellName: Primera ronda
+      cell_name: Primera ronda
     '2':
       #original_hash: 985c8d0
       name: Segona ronda
       #original_hash: 985c8d0
-      cellName: Segona ronda
+      cell_name: Segona ronda
     '3':
       #original_hash: e2f74d2
       name: Semifinal
       #original_hash: e2f74d2
-      cellName: Semi-final
+      cell_name: Semi-final
     b:
       #original_hash: 327c999
       name: Final B
       #original_hash: 327c999
-      cellName: Final B
+      cell_name: Final B
     c:
       #original_hash: 672b22c
       name: Final
       #original_hash: 672b22c
-      cellName: Final
+      cell_name: Final
     d:
       #original_hash: 1e725b6
       name: Primera ronda
       #original_hash: 1e725b6
-      cellName: Primera ronda
+      cell_name: Primera ronda
     e:
       #original_hash: 985c8d0
       name: Segona ronda
       #original_hash: 985c8d0
-      cellName: Segona ronda
+      cell_name: Segona ronda
     f:
       #original_hash: 672b22c
       name: Final
       #original_hash: 672b22c
-      cellName: Final
+      cell_name: Final
     g:
       #original_hash: ccf6f8e
       name: Tercera ronda
       #original_hash: ccf6f8e
-      cellName: Tercera ronda
+      cell_name: Tercera ronda
     h:
       #original_hash: 4d618bb
       name: Ronda de qualificació
       #original_hash: 4d618bb
-      cellName: Ronda de qualificació
+      cell_name: Ronda de qualificació
   attempts:
     #original_hash: 17dae1e
     attempt_name: 'Intent %{number}'
@@ -451,7 +451,7 @@ ca:
         #original_hash: f91b080
         name_reason: La raó del nom
         #original_hash: b649210
-        cellName: Sobrenom de la competició
+        cell_name: Sobrenom de la competició
         #original_hash: d523ebb
         countryId: País
         #original_hash: 25b7b06
@@ -659,19 +659,19 @@ ca:
         competition_id: Ha passat durant
       competition_medium:
         #original_hash: 1917f4f
-        competitionId: Competició
+        competition_id: Competició
         #original_hash: 3deb745
-        type: Tipus
+        media_type: Tipus
         #original_hash: c3328c3
         text: Text
         #original_hash: d051707
         uri: Enllaç
         #original_hash: 1be755a
-        submitterName: Nom de l'emissor
+        submitter_name: Nom de l'emissor
         #original_hash: 78cdfee
-        submitterEmail: Correu electrònic de l'emissor
+        submitter_email: Correu electrònic de l'emissor
         #original_hash: 0d31f23
-        submitterComment: Comentari de l'emissor
+        submitter_comment: Comentari de l'emissor
         #original_hash: bae7d5b
         status: Estat
       regional_organization:
@@ -739,7 +739,7 @@ ca:
         accepted: Acceptat
         #original_hash: 96f608c
         pending: Pendent
-      type:
+      media_type:
         #original_hash: ee45c30
         report: Denuncia
         #original_hash: 4360c2d
@@ -852,7 +852,7 @@ ca:
           Danish Open 2016). Revisa les majúscules. El nom ha de contenir només
           caràcters alfanumèrics, guions(-), ampersands(&), punts(.), dos punts(:), apòstrofs(') i espais().
         #original_hash: 525fcc8
-        cellName: >-
+        cell_name: >-
           Un nom curt per mostrar. Si el nom de la competició ja és curt, pots
           reutilitzar el nom (exemple: Europe 2006).
         #original_hash: bce4589
@@ -1150,19 +1150,19 @@ ca:
         comment: ''
       competition_medium:
         #original_hash: da39a3e
-        competitionId: ''
+        competition_id: ''
         #original_hash: da39a3e
-        type: ''
+        media_type: ''
         #original_hash: da39a3e
         text: ''
         #original_hash: da39a3e
         uri: ''
         #original_hash: da39a3e
-        submitterName: ''
+        submitter_name: ''
         #original_hash: da39a3e
-        submitterEmail: ''
+        submitter_email: ''
         #original_hash: da39a3e
-        submitterComment: ''
+        submitter_comment: ''
         #original_hash: da39a3e
         status: ''
       results_submission:

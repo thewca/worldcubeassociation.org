@@ -152,57 +152,57 @@ de:
       #original_hash: 4d618bb
       name: Qualifikationsrunde
       #original_hash: 4d618bb
-      cellName: Qualifikationsrunde
+      cell_name: Qualifikationsrunde
     '1':
       #original_hash: 1e725b6
       name: Erste Runde
       #original_hash: 1e725b6
-      cellName: Erste Runde
+      cell_name: Erste Runde
     '2':
       #original_hash: 985c8d0
       name: Zweite Runde
       #original_hash: 985c8d0
-      cellName: Zweite Runde
+      cell_name: Zweite Runde
     '3':
       #original_hash: e2f74d2
       name: Halbfinale
       #original_hash: e2f74d2
-      cellName: Halbfinale
+      cell_name: Halbfinale
     b:
       #original_hash: 327c999
       name: B-Finale
       #original_hash: 327c999
-      cellName: B-Finale
+      cell_name: B-Finale
     c:
       #original_hash: 672b22c
       name: Kombiniertes Finale
       #original_hash: 672b22c
-      cellName: Kombiniertes Finale
+      cell_name: Kombiniertes Finale
     d:
       #original_hash: 1e725b6
       name: Kombinierte Erste Runde
       #original_hash: 1e725b6
-      cellName: Erste Runde
+      cell_name: Erste Runde
     e:
       #original_hash: 985c8d0
       name: Zweite Runde
       #original_hash: 985c8d0
-      cellName: Zweite Runde
+      cell_name: Zweite Runde
     f:
       #original_hash: 672b22c
       name: Finale
       #original_hash: 672b22c
-      cellName: Finale
+      cell_name: Finale
     g:
       #original_hash: e2f74d2
       name: Halbfinale
       #original_hash: e2f74d2
-      cellName: Halbfinale
+      cell_name: Halbfinale
     h:
       #original_hash: 4d618bb
       name: Qualifikationsrunde
       #original_hash: 4d618bb
-      cellName: Qualifikationsrunde
+      cell_name: Qualifikationsrunde
   attempts:
     #original_hash: 17dae1e
     attempt_name: 'Versuch %{number}'
@@ -681,19 +681,19 @@ de:
         competition_id: Passierte bei
       competition_medium:
         #original_hash: 1917f4f
-        competitionId: Competition
+        competition_id: Competition
         #original_hash: 3deb745
-        type: Typ
+        media_type: Typ
         #original_hash: c3328c3
         text: Text
         #original_hash: d051707
         uri: Link
         #original_hash: 1be755a
-        submitterName: Name des Einreichers
+        submitter_name: Name des Einreichers
         #original_hash: 78cdfee
-        submitterEmail: E-Mail-Adresse des Einreichers
+        submitter_email: E-Mail-Adresse des Einreichers
         #original_hash: 0d31f23
-        submitterComment: Kommentar des Einreichers
+        submitter_comment: Kommentar des Einreichers
         #original_hash: bae7d5b
         status: Status
       regional_organization:
@@ -777,7 +777,7 @@ de:
         accepted: Akzeptiert
         #original_hash: 96f608c
         pending: Ausstehend
-      type:
+      media_type:
         #original_hash: ee45c30
         report: Report
         #original_hash: 4360c2d
@@ -1208,19 +1208,19 @@ de:
         comment: ''
       competition_medium:
         #original_hash: da39a3e
-        competitionId: ''
+        competition_id: ''
         #original_hash: da39a3e
-        type: ''
+        media_type: ''
         #original_hash: da39a3e
         text: ''
         #original_hash: da39a3e
         uri: ''
         #original_hash: da39a3e
-        submitterName: ''
+        submitter_name: ''
         #original_hash: da39a3e
-        submitterEmail: ''
+        submitter_email: ''
         #original_hash: da39a3e
-        submitterComment: ''
+        submitter_comment: ''
         #original_hash: da39a3e
         status: ''
       results_submission:

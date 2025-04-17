@@ -79,57 +79,57 @@ sk:
       #original_hash: 4d618bb
       name: Kolo kvalifikácie
       #original_hash: 2ffe44e
-      cellName: Kvalifikácia
+      cell_name: Kvalifikácia
     '1':
       #original_hash: 1e725b6
       name: Prvé kolo
       #original_hash: 916a78d
-      cellName: Prvý
+      cell_name: Prvý
     '2':
       #original_hash: 985c8d0
       name: Druhé kolo
       #original_hash: 2a4bcae
-      cellName: Druhý
+      cell_name: Druhý
     '3':
       #original_hash: e2f74d2
       name: Semifinále
       #original_hash: e2f74d2
-      cellName: Semifinále
+      cell_name: Semifinále
     b:
       #original_hash: 327c999
       name: B Finále
       #original_hash: 327c999
-      cellName: B Finále
+      cell_name: B Finále
     c:
       #original_hash: b2d26f4
       name: Kombinované finále
       #original_hash: b2d26f4
-      cellName: Kombinované finále
+      cell_name: Kombinované finále
     d:
       #original_hash: c6136b1
       name: Kombinované Prvé kolo
       #original_hash: dffa9ea
-      cellName: Kombinované Prvé
+      cell_name: Kombinované Prvé
     e:
       #original_hash: 659c53f
       name: Kombinovane Druhé kolo
       #original_hash: b6e1e1c
-      cellName: Kombinovane Druhé
+      cell_name: Kombinovane Druhé
     f:
       #original_hash: 672b22c
       name: Finále
       #original_hash: 672b22c
-      cellName: Finále
+      cell_name: Finále
     g:
       #original_hash: e861dcf
       name: Kombinované tretie kolo
       #original_hash: 86f4b05
-      cellName: Kombinovane Tretie
+      cell_name: Kombinovane Tretie
     h:
       #original_hash: 4c66ad0
       name: Kombinovaná kvalifikácia
       #original_hash: 4c66ad0
-      cellName: Kombinovaná kvalifikácia
+      cell_name: Kombinovaná kvalifikácia
   cutoff:
     #original_hash: cf458e7
     time:
@@ -442,19 +442,19 @@ sk:
         competition_id: Stalo sa počas
       competition_medium:
         #original_hash: 1917f4f
-        competitionId: Súťaž
+        competition_id: Súťaž
         #original_hash: 3deb745
-        type: Typ
+        media_type: Typ
         #original_hash: c3328c3
         text: Text
         #original_hash: d051707
         uri: Link
         #original_hash: 1be755a
-        submitterName: Meno zadávateľa
+        submitter_name: Meno zadávateľa
         #original_hash: 78cdfee
-        submitterEmail: Email zadávateľa
+        submitter_email: Email zadávateľa
         #original_hash: 0d31f23
-        submitterComment: Komentár zadávateľa
+        submitter_comment: Komentár zadávateľa
         #original_hash: bae7d5b
         status: Status
   enums:
@@ -487,7 +487,7 @@ sk:
         accepted: Prijatý
         #original_hash: 96f608c
         pending: Čakajúci
-      type:
+      media_type:
         #original_hash: ee45c30
         report: Nahlásiť
         #original_hash: 4360c2d
@@ -776,19 +776,19 @@ sk:
         comment: ''
       competition_medium:
         #original_hash: da39a3e
-        competitionId: ''
+        competition_id: ''
         #original_hash: da39a3e
-        type: ''
+        media_type: ''
         #original_hash: da39a3e
         text: ''
         #original_hash: da39a3e
         uri: ''
         #original_hash: da39a3e
-        submitterName: ''
+        submitter_name: ''
         #original_hash: da39a3e
-        submitterEmail: ''
+        submitter_email: ''
         #original_hash: da39a3e
-        submitterComment: ''
+        submitter_comment: ''
         #original_hash: da39a3e
         status: ''
     options:

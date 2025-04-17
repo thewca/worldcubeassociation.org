@@ -152,57 +152,57 @@ ru:
       #original_hash: 4d618bb
       name: Квалификационных раунд
       #original_hash: 4d618bb
-      cellName: Квалификационный раунд
+      cell_name: Квалификационный раунд
     '1':
       #original_hash: 1e725b6
       name: Первый раунд
       #original_hash: 1e725b6
-      cellName: Первый раунд
+      cell_name: Первый раунд
     '2':
       #original_hash: 985c8d0
       name: Второй раунд
       #original_hash: 985c8d0
-      cellName: Второй раунд
+      cell_name: Второй раунд
     '3':
       #original_hash: e2f74d2
       name: Полуфинал
       #original_hash: e2f74d2
-      cellName: Полуфинал
+      cell_name: Полуфинал
     b:
       #original_hash: 327c999
       name: B Финал
       #original_hash: 327c999
-      cellName: B Финал
+      cell_name: B Финал
     c:
       #original_hash: 672b22c
       name: Финал
       #original_hash: 672b22c
-      cellName: Финал
+      cell_name: Финал
     d:
       #original_hash: 1e725b6
       name: Первый раунд
       #original_hash: 1e725b6
-      cellName: Первый раунд
+      cell_name: Первый раунд
     e:
       #original_hash: 985c8d0
       name: Второй раунд
       #original_hash: 985c8d0
-      cellName: Второй раунд
+      cell_name: Второй раунд
     f:
       #original_hash: 672b22c
       name: Финал
       #original_hash: 672b22c
-      cellName: Финал
+      cell_name: Финал
     g:
       #original_hash: e2f74d2
       name: Полуфинал
       #original_hash: e2f74d2
-      cellName: Полуфинал
+      cell_name: Полуфинал
     h:
       #original_hash: 4d618bb
       name: Квалификационный раунд
       #original_hash: 4d618bb
-      cellName: Квалификационный раунд
+      cell_name: Квалификационный раунд
   attempts:
     #original_hash: 17dae1e
     attempt_name: 'Попытка %{number}'
@@ -678,19 +678,19 @@ ru:
         competition_id: Произошло во время
       competition_medium:
         #original_hash: 1917f4f
-        competitionId: Соревнование
+        competition_id: Соревнование
         #original_hash: 3deb745
-        type: Тип
+        media_type: Тип
         #original_hash: c3328c3
         text: Текст
         #original_hash: d051707
         uri: Ссылка
         #original_hash: 1be755a
-        submitterName: Имя отправителя
+        submitter_name: Имя отправителя
         #original_hash: 78cdfee
-        submitterEmail: Email отправителя
+        submitter_email: Email отправителя
         #original_hash: 0d31f23
-        submitterComment: Комментарий отправителя
+        submitter_comment: Комментарий отправителя
         #original_hash: bae7d5b
         status: Статус
       regional_organization:
@@ -756,7 +756,7 @@ ru:
         accepted: Одобрено
         #original_hash: 96f608c
         pending: В ожидании
-      type:
+      media_type:
         #original_hash: ee45c30
         report: Отчёт
         #original_hash: 4360c2d
@@ -1195,19 +1195,19 @@ ru:
         comment: ''
       competition_medium:
         #original_hash: da39a3e
-        competitionId: ''
+        competition_id: ''
         #original_hash: da39a3e
-        type: ''
+        media_type: ''
         #original_hash: da39a3e
         text: ''
         #original_hash: da39a3e
         uri: ''
         #original_hash: da39a3e
-        submitterName: ''
+        submitter_name: ''
         #original_hash: da39a3e
-        submitterEmail: ''
+        submitter_email: ''
         #original_hash: da39a3e
-        submitterComment: ''
+        submitter_comment: ''
         #original_hash: da39a3e
         status: ''
       results_submission:
