@@ -27,8 +27,8 @@ export default function Home() {
             </Accordion.ItemTrigger>
             <Accordion.ItemContent>
               You can find WCA competitions on the official WCA website under
-              the &quot;Competitions&quot; tab. There, you can filter competitions by
-              country, date, or type.
+              the &quot;Competitions&quot; tab. There, you can filter
+              competitions by country, date, or type.
             </Accordion.ItemContent>
           </Accordion.Item>
           <Accordion.Item value="register">
@@ -59,8 +59,8 @@ export default function Home() {
               How can I have a WCA competition in my hometown?
             </Accordion.ItemTrigger>
             <Accordion.ItemContent>
-              If you are interested in organizing a competition, it&apos;s highly
-              recommended to attend at least one or two competitions as a
+              If you are interested in organizing a competition, it&apos;s
+              highly recommended to attend at least one or two competitions as a
               competitor to learn from the experience. WCA Competitions must
               follow the <a href="#">WCA Regulations</a>. After that, the
               organization team must contact a nearby{" "}

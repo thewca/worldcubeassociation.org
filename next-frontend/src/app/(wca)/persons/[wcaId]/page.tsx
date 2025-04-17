@@ -271,7 +271,7 @@ export default async function PersonOverview({
                     defaultValue="results"
                     fitted
                     variant="results"
-                    lazymount
+                    lazyMount
                     colorPalette="blue"
                   >
                     <Tabs.List>
