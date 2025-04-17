@@ -111,7 +111,9 @@ services:
     ports:
       - "1080:1080"
     command: >
-      bash -c 'gem install mailcatcher &&
+      bash -c 'gem install eventmachine -v "~> 1.0" &&
+      gem install thin -v "~> 1.8" &&
+      gem install mailcatcher &&
       mailcatcher --foreground --ip=0.0.0.0'
 
   wca_sidekiq:
