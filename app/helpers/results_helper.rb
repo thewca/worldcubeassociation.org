@@ -2,6 +2,8 @@
 
 module ResultsHelper
   def solve_tds_for_result(result)
+    # It's ok to use map + reduce (:+) here because this is not an Integer
+    # rubocop:disable Performance/Sum
     result.solve_times.each_with_index.map do |solve_time, i|
       classes = ["solve", i.to_s]
       classes << "trimmed" if result.trimmed_indices.include?(i)
@@ -9,6 +11,7 @@ module ResultsHelper
       classes << "worst" if i == result.worst_index
       content_tag :td, solve_time.clock_format, class: classes.join(' ')
     end.reduce(:+)
+    # rubocop:enable Performance/Sum
   end
 
   # NOTE: PB markers are computed in the order in which results are given.
@@ -33,14 +36,14 @@ module ResultsHelper
     if pb_marker
       record_class = 'pb'
       if regional_record.present?
-        case regional_record
-        when 'WR'
-          record_class = 'wr'
-        when 'NR'
-          record_class = 'nr'
-        else
-          record_class = 'cr'
-        end
+        record_class = case regional_record
+                       when 'WR'
+                         'wr'
+                       when 'NR'
+                         'nr'
+                       else
+                         'cr'
+                       end
       end
     end
     record_class

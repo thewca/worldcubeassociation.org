@@ -13,13 +13,13 @@ module GsuiteMailingLists
   BOARD_PRIMARY_EMAIL = "board@worldcubeassociation.org"
 
   def self.sync_group(group, desired_emails)
-    service = get_service
+    service = directory_service
 
     desired_emails = desired_emails.map do |email|
       if email.include?("+")
         old_email = email
         email = email.gsub(/\+[^@]*/, '')
-        puts "Warning: '#{old_email}' contains a plus sign, and google groups seems to not support + signs in email addresses, so we're going to add '#{email}' instead."
+        Rails.logger.debug { "Warning: '#{old_email}' contains a plus sign, and google groups seems to not support + signs in email addresses, so we're going to add '#{email}' instead." }
       end
       email
     end
@@ -34,12 +34,12 @@ module GsuiteMailingLists
       # and doing it for them only for the sake of retrieving one key seems overkill.
       #
       # see https://github.com/googleapis/google-api-ruby-client/blob/google-api-client/v0.53.0/generated/google-apis-admin_directory_v1/lib/google/apis/admin_directory_v1/representations.rb#L555
-      board_aliases = board_aliases.aliases.map { |a| a['alias'] }
+      board_aliases = board_aliases.aliases.pluck('alias')
 
       contained_aliases = desired_emails & board_aliases
       unless contained_aliases.empty?
         desired_emails -= contained_aliases
-        puts "Warning: Board aliases are contained in the sync group. #{contained_aliases} have been removed."
+        Rails.logger.debug { "Warning: Board aliases are contained in the sync group. #{contained_aliases} have been removed." }
       end
     end
 
@@ -63,7 +63,7 @@ module GsuiteMailingLists
     end
   end
 
-  def self.get_service
+  def self.directory_service
     scopes = [
       'https://www.googleapis.com/auth/admin.directory.group',
     ]

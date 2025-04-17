@@ -1,3 +1,4 @@
+# rubocop:disable all
 # frozen_string_literal: true
 
 class ChangeLatitudeAndLongitudeDefault < ActiveRecord::Migration
@@ -7,7 +8,7 @@ class ChangeLatitudeAndLongitudeDefault < ActiveRecord::Migration
     change_column_default(:Competitions, :latitude, default: nil)
     change_column_default(:Competitions, :longitude, default: nil)
 
-    execute <<-SQL
+    execute <<-SQL.squish
       UPDATE Competitions
       SET latitude = NULL, longitude = NULL
       WHERE (latitude = 0 AND longitude = 0)

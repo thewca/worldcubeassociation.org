@@ -20,19 +20,22 @@ import useCheckboxState from '../../../lib/hooks/useCheckboxState';
 import { hasPassed } from '../../../lib/utils/dates';
 import AutonumericField from '../../wca/FormBuilder/input/AutonumericField';
 import getPaymentTicket from '../api/payment/get/getPaymentTicket';
+import { useRegistration } from '../lib/RegistrationProvider';
 
 export default function PaymentStep({
   competitionInfo,
-  setDonationAmount,
-  donationAmount,
+  setIsoDonationAmount,
+  isoDonationAmount,
   displayAmount,
-  registration,
   nextStep,
   conversionFetching,
 }) {
   const stripe = useStripe();
   const elements = useElements();
   const dispatch = useDispatch();
+
+  const { registration } = useRegistration();
+
   const [isLoading, setIsLoading] = useState(false);
   const [isDonationChecked, setDonationChecked] = useCheckboxState(false);
 
@@ -59,7 +62,7 @@ export default function PaymentStep({
     await elements.submit();
 
     // Create the PaymentIntent and obtain clientSecret
-    const data = await getPaymentTicket(competitionInfo, donationAmount);
+    const data = await getPaymentTicket(competitionInfo, isoDonationAmount);
 
     const { client_secret: clientSecret } = data;
 
@@ -105,16 +108,16 @@ export default function PaymentStep({
               value={isDonationChecked}
               onChange={(event, data) => {
                 setDonationChecked(event, data);
-                setDonationAmount(0);
+                setIsoDonationAmount(0);
               }}
               label={I18n.t('registrations.payment_form.labels.show_donation')}
             />
             { isDonationChecked && (
             <AutonumericField
               id="donationInputField"
-              onChange={(_, { value }) => setDonationAmount(value)}
+              onChange={(_, { value }) => setIsoDonationAmount(value)}
               currency={competitionInfo.currency_code}
-              value={donationAmount}
+              value={isoDonationAmount}
               label={(
                 <Label>
                   {I18n.t('registrations.payment_form.labels.donation')}

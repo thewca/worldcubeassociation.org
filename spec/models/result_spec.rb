@@ -8,6 +8,54 @@ RSpec.describe Result do
     expect(result).to be_valid
   end
 
+  context "with previous light_result methods" do
+    let(:competition) { FactoryBot.create(:competition) }
+    let(:formatId) { "a" }
+    let(:roundTypeId) { "c" }
+    let(:eventId) { "333" }
+
+    it "correctly computes best_index and worst_index" do
+      result = build_result("eventId" => "333", "value1" => 10, "value2" => 30, "value3" => 50, "value4" => 40, "value5" => 60)
+      expect(result.best_index).to eq 0
+      expect(result.worst_index).to eq 4
+    end
+
+    describe "trimmed_indices" do
+      it "trims best and worst for format: average" do
+        result = build_result "eventId" => "333", "value1" => 20, "value2" => 10, "value3" => 60, "value4" => 40, "value5" => 50, "formatId" => "a"
+        expect(result.trimmed_indices).to eq [1, 2]
+      end
+
+      it "does not trim anything for format: mean" do
+        result = build_result "eventId" => "666", "value1" => 20, "value2" => 10, "value3" => 60, "value4" => SolveTime::SKIPPED_VALUE, "value5" => SolveTime::SKIPPED_VALUE, "average" => 30, "formatId" => "m"
+        expect(result.trimmed_indices).to eq []
+      end
+
+      it "handles cutoff rounds" do
+        result = build_result "eventId" => "333", "value1" => 20, "value2" => 10, "value3" => 60, "value4" => SolveTime::SKIPPED_VALUE, "value5" => SolveTime::SKIPPED_VALUE, "average" => SolveTime::SKIPPED_VALUE, "formatId" => "a"
+        expect(result.trimmed_indices).to eq []
+      end
+    end
+
+    describe "solves" do
+      it "cutoff round and didn't make cutoff" do
+        result = build_result "eventId" => "333", "value1" => 20, "value2" => 10, "value3" => 60, "value4" => SolveTime::SKIPPED_VALUE, "value5" => SolveTime::SKIPPED_VALUE, "average" => SolveTime::SKIPPED_VALUE, "formatId" => "a"
+        expect(result.format.expected_solve_count).to eq 5
+        expect(result.solve_times).to eq [
+          solve_time(20), solve_time(10), solve_time(60), solve_time(SolveTime::SKIPPED_VALUE), solve_time(SolveTime::SKIPPED_VALUE)
+        ]
+      end
+
+      it "returns 5 SolveTimes even for a round with 3 solves" do
+        result = build_result "eventId" => "333bf", "value1" => 20, "value2" => 10, "value3" => 60, "value4" => SolveTime::SKIPPED_VALUE, "value5" => SolveTime::SKIPPED_VALUE, "average" => SolveTime::SKIPPED_VALUE, "formatId" => "3"
+        expect(result.format.expected_solve_count).to eq 3
+        expect(result.solve_times).to eq [
+          solve_time(20), solve_time(10), solve_time(60), solve_time(SolveTime::SKIPPED_VALUE), solve_time(SolveTime::SKIPPED_VALUE)
+        ]
+      end
+    end
+  end
+
   context "associations" do
     it "validates competitionId" do
       result = FactoryBot.build :result, competitionId: "foo", skip_round_creation: true
@@ -100,7 +148,7 @@ RSpec.describe Result do
 
           it "missing solves" do
             result = build_result(value1: 42, value2: 43, value3: 44, value4: 0, value5: 0, best: 42, average: 44)
-            expect(result.average_is_not_computable_reason).to eq nil
+            expect(result.average_is_not_computable_reason).to be nil
             expect(result.compute_correct_average).to eq 0
             expect(result).to be_invalid(average: ["should be 0"])
           end
@@ -389,7 +437,7 @@ RSpec.describe Result do
       def result_with_n_solves(n, options)
         result = FactoryBot.build :result, options
         (1..5).each do |i|
-          result.send "value#{i}=", i <= n ? 42 : 0
+          result.send :"value#{i}=", i <= n ? 42 : 0
         end
         result
       end
@@ -471,4 +519,8 @@ end
 
 def build_result(attrs)
   FactoryBot.build :result, { competition: competition, roundTypeId: roundTypeId, formatId: formatId, eventId: eventId }.merge(attrs)
+end
+
+def solve_time(centis)
+  SolveTime.new("333", :single, centis)
 end

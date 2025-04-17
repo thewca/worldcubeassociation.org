@@ -1,15 +1,13 @@
 # frozen_string_literal: true
 
 class Competition < ApplicationRecord
-  self.table_name = "Competitions"
-
   # We need this default order, tests rely on it.
   has_many :competition_events, -> { order(:event_id) }, dependent: :destroy
   has_many :events, through: :competition_events
   has_many :rounds, through: :competition_events
   has_many :registrations, dependent: :destroy
   has_many :results, foreign_key: "competitionId"
-  has_many :scrambles, -> { order(:groupId, :isExtra, :scrambleNum) }, foreign_key: "competitionId"
+  has_many :scrambles, -> { order(:group_id, :is_extra, :scramble_num) }
   has_many :uploaded_jsons, dependent: :destroy
   has_many :competitors, -> { distinct }, through: :results, source: :person
   has_many :competitor_users, -> { distinct }, through: :competitors, source: :user
@@ -17,21 +15,22 @@ class Competition < ApplicationRecord
   has_many :delegates, -> { includes(:delegate_roles, :delegate_role_metadata).distinct }, through: :competition_delegates
   has_many :competition_organizers, dependent: :delete_all
   has_many :organizers, through: :competition_organizers
-  has_many :media, class_name: "CompetitionMedium", foreign_key: "competitionId", dependent: :delete_all
+  has_many :media, class_name: "CompetitionMedium", dependent: :delete_all
   has_many :tabs, -> { order(:display_order) }, dependent: :delete_all, class_name: "CompetitionTab"
   has_one :delegate_report, dependent: :destroy
   has_one :waiting_list, dependent: :destroy, as: :holder
   has_many :competition_venues, dependent: :destroy
   has_many :venue_countries, -> { distinct }, through: :competition_venues, source: :country
   has_many :venue_continents, -> { distinct }, through: :competition_venues, source: :continent
-  belongs_to :country, foreign_key: :countryId
-  has_one :continent, foreign_key: :continentId, through: :country
+  belongs_to :country
+  has_one :continent, through: :country
   has_many :championships, dependent: :delete_all
   has_many :wcif_extensions, as: :extendable, dependent: :delete_all
   has_many :bookmarked_competitions, dependent: :delete_all
   has_many :bookmarked_users, through: :bookmarked_competitions, source: :user
   belongs_to :competition_series, optional: true
   has_many :series_competitions, -> { readonly }, through: :competition_series, source: :competitions
+  has_many :series_registrations, -> { readonly }, through: :series_competitions, source: :registrations
   belongs_to :posting_user, optional: true, foreign_key: 'posting_by', class_name: "User"
   has_many :inbox_results, foreign_key: "competitionId", dependent: :delete_all
   has_many :inbox_persons, foreign_key: "competitionId", dependent: :delete_all
@@ -43,40 +42,40 @@ class Competition < ApplicationRecord
   accepts_nested_attributes_for :championships, allow_destroy: true
   accepts_nested_attributes_for :competition_series, allow_destroy: false
 
-  validates_numericality_of :base_entry_fee_lowest_denomination, greater_than_or_equal_to: 0, if: :entry_fee_required?
+  validates :base_entry_fee_lowest_denomination, numericality: { greater_than_or_equal_to: 0, if: :entry_fee_required? }
   monetize :base_entry_fee_lowest_denomination,
            as: "base_entry_fee",
            allow_nil: true,
            with_model_currency: :currency_code
 
   scope :not_cancelled, -> { where(cancelled_at: nil) }
-  scope :visible, -> { where(showAtAll: true) }
-  scope :not_visible, -> { where(showAtAll: false) }
+  scope :visible, -> { where(show_at_all: true) }
+  scope :not_visible, -> { where(show_at_all: false) }
   scope :over, -> { where("results_posted_at IS NOT NULL OR end_date < ?", Date.today) }
   scope :not_over, -> { where("results_posted_at IS NULL AND end_date >= ?", Date.today) }
   scope :between_dates, ->(start_date, end_date) { where("start_date <= ? AND end_date >= ?", end_date, start_date) }
   scope :end_date_passed_since, lambda { |num_days| where(end_date: ...(num_days.days.ago)) }
   scope :belongs_to_region, lambda { |region_id|
     joins(:country).where(
-      "countryId = :region_id OR Countries.continentId = :region_id", region_id: region_id
+      "country_id = :region_id OR countries.continent_id = :region_id", region_id: region_id
     )
   }
   scope :contains, lambda { |search_term|
     where(
-      "Competitions.name like :search_term or
-      Competitions.cityName like :search_term",
+      "competitions.name like :search_term or
+      competitions.city_name like :search_term",
       search_term: "%#{search_term}%",
     )
   }
   scope :has_event, lambda { |event_id|
     joins(
-      "join competition_events ce#{event_id} ON ce#{event_id}.competition_id = Competitions.id
-      join Events e#{event_id} ON e#{event_id}.id = ce#{event_id}.event_id",
+      "join competition_events ce#{event_id} ON ce#{event_id}.competition_id = competitions.id
+      join events e#{event_id} ON e#{event_id}.id = ce#{event_id}.event_id",
     ).where("e#{event_id}.id = :event_id", event_id: event_id)
   }
   scope :managed_by, lambda { |user_id|
-    joins("LEFT JOIN competition_organizers ON competition_organizers.competition_id = Competitions.id")
-      .joins("LEFT JOIN competition_delegates ON competition_delegates.competition_id = Competitions.id")
+    joins("LEFT JOIN competition_organizers ON competition_organizers.competition_id = competitions.id")
+      .joins("LEFT JOIN competition_delegates ON competition_delegates.competition_id = competitions.id")
       .where(
         "delegate_id = :user_id OR organizer_id = :user_id",
         user_id: user_id,
@@ -97,17 +96,13 @@ class Competition < ApplicationRecord
 
   enum :competitor_can_cancel, [:not_accepted, :always, :unpaid], prefix: true
 
-  NEW_REG_SYSTEM_DEFAULT = :v3
-
-  enum :registration_version, [:v1, :v2, :v3], prefix: true, default: NEW_REG_SYSTEM_DEFAULT
-
   CLONEABLE_ATTRIBUTES = %w(
-    cityName
-    countryId
+    city_name
+    country_id
     information
     venue
-    venueAddress
-    venueDetails
+    venue_address
+    venue_details
     generate_website
     external_website
     latitude
@@ -144,8 +139,8 @@ class Competition < ApplicationRecord
     end_date
     name
     name_reason
-    cellName
-    showAtAll
+    cell_name
+    show_at_all
     external_registration_page
     confirmed_at
     registration_open
@@ -176,7 +171,8 @@ class Competition < ApplicationRecord
     waiting_list_deadline_date
     event_change_deadline_date
     competition_series_id
-    registration_version
+    auto_accept_registrations
+    auto_accept_disable_threshold
     newcomer_month_reserved_spots
   ).freeze
   VALID_NAME_RE = /\A([-&.:' [:alnum:]]+) (\d{4})\z/
@@ -197,12 +193,15 @@ class Competition < ApplicationRecord
   NEWCOMER_MONTH_ENABLED = true
   NEWCOMER_MONTH_RESERVATIONS_FRACTION = 0.5
 
-  validates_inclusion_of :competitor_limit_enabled, in: [true, false], if: :competitor_limit_required?
-  validates_numericality_of :competitor_limit, greater_than_or_equal_to: 1, less_than_or_equal_to: MAX_COMPETITOR_LIMIT, if: :competitor_limit_enabled?
+  validates :competitor_limit_enabled, inclusion: { in: [true, false], if: :competitor_limit_required? }
+  validates :competitor_limit, numericality: { greater_than_or_equal_to: 1, less_than_or_equal_to: MAX_COMPETITOR_LIMIT, if: :competitor_limit_enabled? }
   validates :competitor_limit_reason, presence: true, if: :competitor_limit_enabled?
   validates :guests_enabled, acceptance: { accept: true, message: I18n.t('competitions.errors.must_ask_about_guests_if_specifying_limit') }, if: :guests_per_registration_limit_enabled?
-  validates_numericality_of :guests_per_registration_limit, only_integer: true, greater_than_or_equal_to: 1, less_than_or_equal_to: MAX_GUEST_LIMIT, allow_blank: true, if: :some_guests_allowed?
-  validates_numericality_of :events_per_registration_limit, only_integer: true, greater_than_or_equal_to: 1, less_than_or_equal_to: :number_of_events, allow_blank: true, if: :event_restrictions?
+  validates :guests_per_registration_limit, numericality: { only_integer: true, greater_than_or_equal_to: 1, less_than_or_equal_to: MAX_GUEST_LIMIT, allow_blank: true, if: :some_guests_allowed? }
+  validates :events_per_registration_limit, absence: true, unless: :event_restrictions?
+  validates :events_per_registration_limit, numericality: { only_integer: true, greater_than_or_equal_to: 1, less_than_or_equal_to: :number_of_events, allow_blank: true, if: :event_restrictions? }
+  validates :guests_per_registration_limit, numericality: { only_integer: true, greater_than_or_equal_to: 1, less_than_or_equal_to: MAX_GUEST_LIMIT, allow_blank: true, if: :some_guests_allowed? }
+  validates :events_per_registration_limit, numericality: { only_integer: true, greater_than_or_equal_to: 1, less_than_or_equal_to: :number_of_events, allow_blank: true, if: :event_restrictions? }
   validates :id, presence: true, uniqueness: { case_sensitive: false }, length: { maximum: MAX_ID_LENGTH },
                  format: { with: VALID_ID_RE }, if: :name_valid_or_updating?
   private def name_valid_or_updating?
@@ -210,26 +209,26 @@ class Competition < ApplicationRecord
   end
   validates :name, length: { maximum: MAX_NAME_LENGTH },
                    format: { with: VALID_NAME_RE, message: proc { I18n.t('competitions.errors.invalid_name_message') } }
-  validates :cellName, length: { maximum: MAX_CELL_NAME_LENGTH },
-                       format: { with: VALID_NAME_RE, message: proc { I18n.t('competitions.errors.invalid_name_message') } }, if: :name_valid_or_updating?
+  validates :cell_name, length: { maximum: MAX_CELL_NAME_LENGTH },
+                        format: { with: VALID_NAME_RE, message: proc { I18n.t('competitions.errors.invalid_name_message') } }, if: :name_valid_or_updating?
   validates :venue, format: { with: PATTERN_TEXT_WITH_LINKS_RE }
   validates :external_website, format: { with: URL_RE }, allow_blank: true
   validates :external_registration_page, presence: true, format: { with: URL_RE }, if: :external_registration_page_required?
 
-  validates_inclusion_of :countryId, in: Country::ALL_COUNTRY_IDS
+  validates :country_id, inclusion: { in: Country::ALL_COUNTRY_IDS }
   validates :currency_code, inclusion: { in: Money::Currency, message: proc { I18n.t('competitions.errors.invalid_currency_code') } }
 
-  validates_numericality_of :refund_policy_percent, greater_than_or_equal_to: 0, less_than_or_equal_to: 100, if: :refund_policy_percent_required?
+  validates :refund_policy_percent, numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 100, if: :refund_policy_percent_required? }
   validates :refund_policy_limit_date, presence: true, if: :refund_policy_percent?
-  validates_inclusion_of :on_the_spot_registration, in: [true, false], if: :on_the_spot_registration_required?
-  validates_numericality_of :on_the_spot_entry_fee_lowest_denomination, greater_than_or_equal_to: 0, if: :on_the_spot_entry_fee_required?
-  validates_inclusion_of :allow_registration_edits, in: [true, false]
-  validates_inclusion_of :allow_registration_self_delete_after_acceptance, in: [true, false]
+  validates :on_the_spot_registration, inclusion: { in: [true, false], if: :on_the_spot_registration_required? }
+  validates :on_the_spot_entry_fee_lowest_denomination, numericality: { greater_than_or_equal_to: 0, if: :on_the_spot_entry_fee_required? }
+  validates :allow_registration_edits, inclusion: { in: [true, false] }
+  validates :allow_registration_self_delete_after_acceptance, inclusion: { in: [true, false] }
   monetize :on_the_spot_entry_fee_lowest_denomination,
            as: "on_the_spot_base_entry_fee",
            allow_nil: true,
            with_model_currency: :currency_code
-  validates_numericality_of :guests_entry_fee_lowest_denomination, greater_than_or_equal_to: 0, if: :guests_entry_fee_required?
+  validates :guests_entry_fee_lowest_denomination, numericality: { greater_than_or_equal_to: 0, if: :guests_entry_fee_required? }
   monetize :guests_entry_fee_lowest_denomination,
            as: "guests_base_fee",
            allow_nil: true,
@@ -240,14 +239,14 @@ class Competition < ApplicationRecord
   # where we legitimately don't know whether or not they used qualification times so we have to set them to NULL.
   validates :qualification_results_reason, presence: true, if: :persisted_uses_qualification?
   validates :event_restrictions_reason, presence: true, if: :event_restrictions?
-  validates_inclusion_of :main_event_id, in: ->(comp) { [nil].concat(comp.persisted_events_id) }
+  validates :main_event_id, inclusion: { in: ->(comp) { [nil].concat(comp.persisted_events_id) } }
 
   # Validations are used to show form errors to the user. If string columns aren't validated for length, it produces an unexplained error for the user
   validates :name, length: { maximum: MAX_NAME_LENGTH }
-  validates :cellName, length: { maximum: MAX_CELL_NAME_LENGTH }
-  validates :cityName, length: { maximum: MAX_CITY_NAME_LENGTH }
+  validates :cell_name, length: { maximum: MAX_CELL_NAME_LENGTH }
+  validates :city_name, length: { maximum: MAX_CITY_NAME_LENGTH }
   validates :venue, length: { maximum: MAX_VENUE_LENGTH }
-  validates :venueAddress, :venueDetails, :name_reason, :forbid_newcomers_reason, length: { maximum: MAX_FREETEXT_LENGTH }
+  validates :venue_address, :venue_details, :name_reason, :forbid_newcomers_reason, length: { maximum: MAX_FREETEXT_LENGTH }
   validates :external_website, :external_registration_page, length: { maximum: MAX_URL_LENGTH }
   validates :contact, length: { maximum: MAX_MARKDOWN_LENGTH }
 
@@ -287,7 +286,7 @@ class Competition < ApplicationRecord
   end
 
   def guests_per_registration_limit_enabled?
-    some_guests_allowed? && !guests_per_registration_limit.nil?
+    some_guests_allowed? && guests_per_registration_limit.present?
   end
 
   def events_per_registration_limit_enabled?
@@ -296,10 +295,6 @@ class Competition < ApplicationRecord
 
   def number_of_events
     persisted_events_id.length
-  end
-
-  def has_administrative_notes?
-    registrations.any? { |registration| !registration.administrative_notes.blank? }
   end
 
   NEARBY_DISTANCE_KM_WARNING = 250
@@ -326,10 +321,10 @@ class Competition < ApplicationRecord
   # 48 hours
   REGISTRATION_OPENING_EARLIEST = 172_800
 
-  validates :cityName, city: true
+  validates :city_name, city: true
 
   # We have stricter validations for confirming a competition
-  validates :cityName, :countryId, :venue, :venueAddress, :latitude, :longitude, presence: true, if: :confirmed_or_visible?
+  validates :city_name, :country_id, :venue, :venue_address, :latitude, :longitude, presence: true, if: :confirmed_or_visible?
   validates :name_reason, presence: true, if: :name_reason_required?
   validates :external_website, presence: true, if: -> { confirmed_or_visible? && !generate_website }
 
@@ -342,22 +337,20 @@ class Competition < ApplicationRecord
   # just added.
   validate :must_have_at_least_one_event, if: :confirmed_or_visible?
   private def must_have_at_least_one_event
-    if no_events?
-      errors.add(:competition_events, I18n.t('competitions.errors.must_contain_event'))
-    end
+    errors.add(:competition_events, I18n.t('competitions.errors.must_contain_event')) if no_events?
   end
 
   # We check for `present?` specifically so that a value of 0 will return true, and trigger the validation
   validate :auto_close_threshold_validations, if: -> { auto_close_threshold.present? }
   private def auto_close_threshold_validations
     errors.add(:auto_close_threshold, I18n.t('competitions.errors.auto_close_positive_nonzero')) unless auto_close_threshold > 0
-    if auto_close_threshold != 0
-      errors.add(:auto_close_threshold, I18n.t('competitions.errors.use_wca_registration')) unless use_wca_registration
-      errors.add(:auto_close_threshold, I18n.t('competitions.errors.must_exceed_competitor_limit')) if
-        competitor_limit.present? && auto_close_threshold <= competitor_limit
-      errors.add(:auto_close_threshold, I18n.t('competitions.errors.auto_close_exceed_paid')) if
-        will_save_change_to_auto_close_threshold? && auto_close_threshold <= registrations.with_payments.count
-    end
+    return unless auto_close_threshold != 0
+
+    errors.add(:auto_close_threshold, I18n.t('competitions.errors.use_wca_registration')) unless use_wca_registration
+    errors.add(:auto_close_threshold, I18n.t('competitions.errors.must_exceed_competitor_limit')) if
+      competitor_limit.present? && auto_close_threshold <= competitor_limit
+    errors.add(:auto_close_threshold, I18n.t('competitions.errors.auto_close_exceed_paid')) if
+      will_save_change_to_auto_close_threshold? && auto_close_threshold <= registrations.with_payments.count
   end
 
   # Only validate on update: nobody can confirm competition on creation.
@@ -366,21 +359,13 @@ class Competition < ApplicationRecord
   # Competitions after 2018-12-31 will have this check. All comps from 2019 onwards required a schedule.
   # Check added per "Support for cancelled competitions" and adding some old cancelled competitions to the website without a schedule.
   def schedule_must_match_rounds
-    if start_date.present? && start_date > Date.new(2018, 12, 31)
-      unless has_any_round_per_event? && schedule_includes_rounds?
-        errors.add(:competition_events, I18n.t('competitions.errors.schedule_must_match_rounds'))
-      end
-    end
+    errors.add(:competition_events, I18n.t('competitions.errors.schedule_must_match_rounds')) if start_date.present? && start_date > Date.new(2018, 12, 31) && !(no_event_without_rounds? && schedule_includes_rounds?)
   end
 
   validate :advancement_condition_must_be_present_for_all_non_final_rounds, if: :confirmed_at_changed?, on: :update
   def advancement_condition_must_be_present_for_all_non_final_rounds
-    unless rounds.all?(&:advancement_condition_is_valid?)
-      errors.add(:competition_events, I18n.t('competitions.errors.advancement_condition_must_be_present_for_all_non_final_rounds'))
-    end
+    errors.add(:competition_events, I18n.t('competitions.errors.advancement_condition_must_be_present_for_all_non_final_rounds')) unless rounds.all?(&:advancement_condition_is_valid?)
   end
-
-  attr_accessor :closing_full_registration
   private def should_validate_registration_closing?
     confirmed_or_visible? && (will_save_change_to_registration_close? || will_save_change_to_confirmed_at?) && !closing_full_registration
   end
@@ -388,15 +373,36 @@ class Competition < ApplicationRecord
   # Same comment as for start_date_must_be_28_days_in_advance
   validate :registation_must_not_be_past, if: :should_validate_registration_closing?
   private def registation_must_not_be_past
-    if editing_user_id
-      editing_user = User.find(editing_user_id)
-      if !editing_user.can_admin_competitions? && registration_range_specified? && registration_past?
-        errors.add(:registration_close, I18n.t('competitions.errors.registration_already_closed'))
-      end
-    end
+    return unless editing_user_id
+
+    editing_user = User.find(editing_user_id)
+    errors.add(:registration_close, I18n.t('competitions.errors.registration_already_closed')) if !editing_user.can_admin_competitions? && registration_range_specified? && registration_past?
   end
 
-  def has_any_round_per_event?
+  validate :auto_accept_validations
+  private def auto_accept_validations
+    errors.add(:auto_accept_registrations, I18n.t('competitions.errors.must_use_wca_registration')) if
+      auto_accept_registrations? && !use_wca_registration
+
+    errors.add(:auto_accept_registrations, I18n.t('competitions.errors.auto_accept_limit')) if
+      auto_accept_disable_threshold.present? &&
+      auto_accept_disable_threshold > 0 &&
+      competitor_limit.present? &&
+      auto_accept_disable_threshold >= competitor_limit
+
+    errors.add(:auto_accept_registrations, I18n.t('competitions.errors.auto_accept_not_negative')) if
+      auto_accept_disable_threshold.present? && auto_accept_disable_threshold < 0
+
+    # TODO: This logic belongs in a controller more appropriately than in the validation.
+    # IF we build a controller endpoint specifically for auto_accept, this logic should be move there.
+    return unless auto_accept_registrations_changed? && auto_accept_registrations?
+
+    errors.add(:auto_accept_registrations, I18n.t('competitions.errors.auto_accept_accept_paid_pending')) if registrations.pending.with_payments.count > 0
+    errors.add(:auto_accept_registrations, I18n.t('competitions.errors.auto_accept_accept_waitlisted')) if
+      registrations.waitlisted.count > 0 && !registration_full_and_accepted?
+  end
+
+  def no_event_without_rounds?
     competition_events.map(&:rounds).none?(&:empty?)
   end
 
@@ -456,13 +462,6 @@ class Competition < ApplicationRecord
     uses_qualification? && !allow_registration_without_qualification
   end
 
-  def guest_limit_exceeded?(guest_count)
-    guests_not_allowed_but_coming = !guests_enabled? && guest_count > 0
-    guests_exceeding_limit = guest_entry_status_restricted? && guests_per_registration_limit.present? && guest_count > guests_per_registration_limit
-
-    guests_not_allowed_but_coming || guests_exceeding_limit
-  end
-
   def with_old_id
     new_id = self.id
     self.id = id_was
@@ -479,20 +478,16 @@ class Competition < ApplicationRecord
 
   validate :must_have_at_least_one_delegate, if: :confirmed_or_visible?
   def must_have_at_least_one_delegate
-    if staff_delegate_ids.empty?
-      errors.add(:staff_delegate_ids, I18n.t('competitions.errors.must_contain_delegate'))
-    end
+    errors.add(:staff_delegate_ids, I18n.t('competitions.errors.must_contain_delegate')) if staff_delegate_ids.empty?
   end
 
   validate :must_have_at_least_one_organizer, if: :confirmed_or_visible?
   def must_have_at_least_one_organizer
-    if organizer_ids.empty?
-      errors.add(:organizer_ids, I18n.t('competitions.errors.must_contain_organizer'))
-    end
+    errors.add(:organizer_ids, I18n.t('competitions.errors.must_contain_organizer')) if organizer_ids.empty?
   end
 
   def confirmed_or_visible?
-    self.confirmed? || self.showAtAll
+    self.confirmed? || self.show_at_all?
   end
 
   def registration_full?
@@ -505,20 +500,22 @@ class Competition < ApplicationRecord
     competitor_limit_enabled? && competitor_count >= competitor_limit
   end
 
+  def auto_accept_threshold_reached?
+    auto_accept_disable_threshold > 0 && auto_accept_disable_threshold <= registrations.competing_status_accepted.count
+  end
+
   def number_of_bookmarks
     bookmarked_users.count
   end
 
   def country
-    Country.c_find(self.countryId)
+    Country.c_find(self.country_id)
   end
 
-  def continent
-    country.continent
-  end
+  delegate :continent, to: :country
 
   def main_event_id=(event_id)
-    super(event_id.blank? ? nil : event_id)
+    super(event_id.presence)
   end
 
   # Enforce that the users marked as delegates for this competition are
@@ -528,99 +525,79 @@ class Competition < ApplicationRecord
   # See https://github.com/thewca/worldcubeassociation.org/issues/185#issuecomment-168402252
   # for a discussion about tracking delegate history so we could tighten up
   # this validation.
-  validate :delegates_must_be_delegates, unless: :is_probably_over?
+  validate :delegates_must_be_delegates, unless: :probably_over?
   def delegates_must_be_delegates
-    unless self.delegates.all?(&:any_kind_of_delegate?)
-      errors.add(:staff_delegate_ids, I18n.t('competitions.errors.not_all_delegates'))
-      errors.add(:trainee_delegate_ids, I18n.t('competitions.errors.not_all_delegates'))
-    end
+    return if self.delegates.all?(&:any_kind_of_delegate?)
+
+    errors.add(:staff_delegate_ids, I18n.t('competitions.errors.not_all_delegates'))
+    errors.add(:trainee_delegate_ids, I18n.t('competitions.errors.not_all_delegates'))
   end
 
   def user_should_post_delegate_report?(user)
-    persisted? && is_probably_over? && !cancelled? && !delegate_report.posted? && delegates.include?(user)
+    persisted? && probably_over? && !cancelled? && !delegate_report.posted? && delegates.include?(user)
   end
 
   def user_should_post_competition_results?(user)
-    persisted? && is_probably_over? && !cancelled? && !self.results_submitted? && delegates.include?(user)
+    persisted? && probably_over? && !cancelled? && !self.results_submitted? && delegates.include?(user)
   end
 
   def warnings_for(user)
     warnings = {}
 
-    if self.showAtAll
-      unless self.announced?
-        warnings[:announcement] = I18n.t('competitions.messages.not_announced')
-      end
+    if self.show_at_all?
+      warnings[:announcement] = I18n.t('competitions.messages.not_announced') unless self.announced?
 
       if self.results.any? && !self.results_posted?
-        if user&.can_admin_results?
-          warnings[:results] = I18n.t('competitions.messages.results_not_posted')
-        else
-          warnings[:results] = I18n.t('competitions.messages.results_still_processing')
-        end
+        warnings[:results] = if user&.can_admin_results?
+                               I18n.t('competitions.messages.results_not_posted')
+                             else
+                               I18n.t('competitions.messages.results_still_processing')
+                             end
       end
     else
       warnings[:invisible] = I18n.t('competitions.messages.not_visible')
 
-      if self.name.length > 32
-        warnings[:name] = I18n.t('competitions.messages.name_too_long')
-      end
+      warnings[:name] = I18n.t('competitions.messages.name_too_long') if self.name.length > 32
 
-      unless /^[[:upper:]]|^\d/.match(self.id)
-        warnings[:id] = I18n.t('competitions.messages.id_starts_with_lowercase')
-      end
+      warnings[:id] = I18n.t('competitions.messages.id_starts_with_lowercase') unless /^[[:upper:]]|^\d/.match?(self.id)
 
-      if no_events?
-        warnings[:events] = I18n.t('competitions.messages.must_have_events')
-      end
+      warnings[:events] = I18n.t('competitions.messages.must_have_events') if no_events?
 
-      if !self.waiting_list_deadline_date
-        warnings[:waiting_list_deadline_missing] = I18n.t('competitions.messages.no_waiting_list_specified')
-      end
+      warnings[:waiting_list_deadline_missing] = I18n.t('competitions.messages.no_waiting_list_specified') unless self.waiting_list_deadline_date
 
       # NOTE: this will show up on the edit schedule page, and stay even if the
       # schedule matches when saved. Should we add some logic to not show this
       # message on the edit schedule page?
-      unless has_any_round_per_event? && schedule_includes_rounds?
-        warnings[:schedule] = I18n.t('competitions.messages.schedule_must_match_rounds')
-      end
+      warnings[:schedule] = I18n.t('competitions.messages.schedule_must_match_rounds') unless no_event_without_rounds? && schedule_includes_rounds?
 
-      unless rounds.all?(&:advancement_condition_is_valid?)
-        warnings[:advancement_conditions] = I18n.t('competitions.messages.advancement_condition_must_be_present_for_all_non_final_rounds')
-      end
+      warnings[:advancement_conditions] = I18n.t('competitions.messages.advancement_condition_must_be_present_for_all_non_final_rounds') unless rounds.all?(&:advancement_condition_is_valid?)
 
       rounds.select(&:cutoff_is_greater_than_time_limit?).each do |round|
-        warnings['cutoff_is_greater_than_time_limit' + round.id.to_s] = I18n.t('competitions.messages.cutoff_is_greater_than_time_limit', round_number: round.number, event: I18n.t('events.' + round.event.id))
+        warnings["cutoff_is_greater_than_time_limit#{round.id}"] = I18n.t('competitions.messages.cutoff_is_greater_than_time_limit', round_number: round.number, event: I18n.t("events.#{round.event.id}"))
       end
 
       rounds.select(&:cutoff_is_too_fast?).each do |round|
-        warnings['cutoff_is_too_fast' + round.id.to_s] = I18n.t('competitions.messages.cutoff_is_too_fast', round_number: round.number, event: I18n.t('events.' + round.event.id))
+        warnings["cutoff_is_too_fast#{round.id}"] = I18n.t('competitions.messages.cutoff_is_too_fast', round_number: round.number, event: I18n.t("events.#{round.event.id}"))
       end
 
       rounds.select(&:cutoff_is_too_slow?).each do |round|
-        warnings['cutoff_is_too_slow' + round.id.to_s] = I18n.t('competitions.messages.cutoff_is_too_slow', round_number: round.number, event: I18n.t('events.' + round.event.id))
+        warnings["cutoff_is_too_slow#{round.id}"] = I18n.t('competitions.messages.cutoff_is_too_slow', round_number: round.number, event: I18n.t("events.#{round.event.id}"))
       end
 
       rounds.select(&:time_limit_is_too_fast?).each do |round|
-        warnings['time_limit_is_too_fast' + round.id.to_s] = I18n.t('competitions.messages.time_limit_is_too_fast', round_number: round.number, event: I18n.t('events.' + round.event.id))
+        warnings["time_limit_is_too_fast#{round.id}"] = I18n.t('competitions.messages.time_limit_is_too_fast', round_number: round.number, event: I18n.t("events.#{round.event.id}"))
       end
 
       rounds.select(&:time_limit_is_too_slow?).each do |round|
-        warnings['time_limit_is_too_slow' + round.id.to_s] = I18n.t('competitions.messages.time_limit_is_too_slow', round_number: round.number, event: I18n.t('events.' + round.event.id))
+        warnings["time_limit_is_too_slow#{round.id}"] = I18n.t('competitions.messages.time_limit_is_too_slow', round_number: round.number, event: I18n.t("events.#{round.event.id}"))
       end
 
-      if championship_warnings.any?
-        warnings = championship_warnings.merge(warnings)
-      end
+      warnings = championship_warnings.merge(warnings) if championship_warnings.any?
 
-      if has_fees? && !competition_payment_integrations.exists?
-        warnings[:registration_payment_info] = I18n.t('competitions.messages.registration_payment_info')
-      end
+      warnings[:registration_payment_info] = I18n.t('competitions.messages.registration_payment_info') if paid_entry? && !competition_payment_integrations.exists?
     end
 
-    if reg_warnings.any? && user&.can_manage_competition?(self)
-      warnings = reg_warnings.merge(warnings)
-    end
+    warnings = reg_warnings.merge(warnings) if reg_warnings.any? && user&.can_manage_competition?(self)
 
     warnings
   end
@@ -639,20 +616,12 @@ class Competition < ApplicationRecord
     warnings = {}
     if registration_range_specified? && !registration_past?
       if self.announced?
-        if (self.registration_open - self.announced_at) < REGISTRATION_OPENING_EARLIEST
-          warnings[:regearly] = I18n.t('competitions.messages.reg_opens_too_early')
-        end
-      else
-        if (self.registration_open - Time.now.utc) < REGISTRATION_OPENING_EARLIEST
-          warnings[:regearly] = I18n.t('competitions.messages.reg_opens_too_early')
-        end
+        warnings[:regearly] = I18n.t('competitions.messages.reg_opens_too_early') if (self.registration_open - self.announced_at) < REGISTRATION_OPENING_EARLIEST
+      elsif (self.registration_open - Time.now.utc) < REGISTRATION_OPENING_EARLIEST
+        warnings[:regearly] = I18n.t('competitions.messages.reg_opens_too_early')
       end
     end
-    if registration_range_specified? && registration_past?
-      unless self.announced?
-        warnings[:regclosed] = I18n.t('competitions.messages.registration_already_closed')
-      end
-    end
+    warnings[:regclosed] = I18n.t('competitions.messages.registration_already_closed') if registration_range_specified? && registration_past? && !self.announced?
 
     warnings
   end
@@ -670,15 +639,13 @@ class Competition < ApplicationRecord
 
   def info_for(user)
     info = {}
-    if !self.results_posted? && self.is_probably_over? && !self.cancelled?
-      info[:upload_results] = I18n.t('competitions.messages.upload_results')
-    end
+    info[:upload_results] = I18n.t('competitions.messages.upload_results') if !self.results_posted? && self.probably_over? && !self.cancelled?
     if self.in_progress? && !self.cancelled?
-      if self.use_wca_live_for_scoretaking
-        info[:in_progress] = I18n.t('competitions.messages.in_progress_at_wca_live_html', link_here: self.wca_live_link).html_safe
-      else
-        info[:in_progress] = I18n.t('competitions.messages.in_progress', date: I18n.l(self.end_date, format: :long))
-      end
+      info[:in_progress] = if self.use_wca_live_for_scoretaking
+                             I18n.t('competitions.messages.in_progress_at_wca_live_html', link_here: self.wca_live_link).html_safe
+                           else
+                             I18n.t('competitions.messages.in_progress', date: I18n.l(self.end_date, format: :long))
+                           end
     end
     info
   end
@@ -688,9 +655,8 @@ class Competition < ApplicationRecord
     delegates.include?(user) || trainee_delegates.include?(user) || organizers.include?(user)
   end
 
-  attr_accessor :being_cloned_from_id, :being_cloned_from_cache
   def being_cloned_from
-    @being_cloned_from_cache ||= Competition.find_by(id: being_cloned_from_id)
+    @being_cloned_from ||= Competition.find_by(id: being_cloned_from_id)
   end
 
   def build_clone
@@ -720,6 +686,7 @@ class Competition < ApplicationRecord
              'bookmarked_users',
              'competition_series',
              'series_competitions',
+             'series_registrations',
              'posting_user',
              'inbox_results',
              'inbox_persons',
@@ -746,16 +713,17 @@ class Competition < ApplicationRecord
     end
   end
 
-  attr_accessor :clone_tabs
-
+  before_validation :compute_coordinates
+  before_validation :create_id_and_cell_name
+  before_validation :unpack_delegate_organizer_ids
   # After the cloned competition is created, clone other associations which cannot just be copied.
   after_create :clone_associations
   private def clone_associations
     # Clone competition tabs.
-    if clone_tabs
-      being_cloned_from&.tabs&.each do |tab|
-        tabs.create!(tab.attributes.slice(*CompetitionTab::CLONEABLE_ATTRIBUTES))
-      end
+    return unless clone_tabs
+
+    being_cloned_from&.tabs&.each do |tab|
+      tabs.create!(tab.attributes.slice(*CompetitionTab::CLONEABLE_ATTRIBUTES))
     end
   end
 
@@ -763,32 +731,31 @@ class Competition < ApplicationRecord
 
   validate :dates_must_be_valid
 
-  alias_attribute :visible, :showAtAll
+  alias_attribute :visible, :show_at_all
   alias_attribute :latitude_microdegrees, :latitude
   alias_attribute :longitude_microdegrees, :longitude
-  before_validation :compute_coordinates
 
-  before_validation :create_id_and_cell_name
   def create_id_and_cell_name(force_override: false)
     m = VALID_NAME_RE.match(name)
-    if m
-      name_without_year = m[1]
-      year = m[2]
-      if id.blank? || force_override
-        # Generate competition id from name
-        # By replacing accented chars with their ascii equivalents, and then
-        # removing everything that isn't a digit or a character.
-        safe_name_without_year = ActiveSupport::Inflector.transliterate(name_without_year, locale: :en).gsub(/[^a-z0-9]+/i, '')
-        self.id = safe_name_without_year[0...(MAX_ID_LENGTH - year.length)] + year
-      end
-      if cellName.blank? || force_override
-        year = " " + year
-        self.cellName = name_without_year.truncate(MAX_CELL_NAME_LENGTH - year.length) + year
-      end
+    return unless m
+
+    name_without_year = m[1]
+    year = m[2]
+    if id.blank? || force_override
+      # Generate competition id from name
+      # By replacing accented chars with their ascii equivalents, and then
+      # removing everything that isn't a digit or a character.
+      safe_name_without_year = ActiveSupport::Inflector.transliterate(name_without_year, locale: :en).gsub(/[^a-z0-9]+/i, '')
+      self.id = safe_name_without_year[0...(MAX_ID_LENGTH - year.length)] + year
     end
+    return unless cell_name.blank? || force_override
+
+    year = " #{year}"
+    self.cell_name = name_without_year.truncate(MAX_CELL_NAME_LENGTH - year.length) + year
   end
 
   attr_writer :staff_delegate_ids, :organizer_ids, :trainee_delegate_ids
+
   def staff_delegate_ids
     @staff_delegate_ids || staff_delegates.map(&:id).join(",")
   end
@@ -805,7 +772,6 @@ class Competition < ApplicationRecord
     user.cannot_register_for_competition_reasons(self).empty?
   end
 
-  before_validation :unpack_delegate_organizer_ids
   def unpack_delegate_organizer_ids
     # This is a mess. When changing competition ids, the calls to delegates=
     # and organizers= below will cause database writes with a new competition_id.
@@ -830,9 +796,7 @@ class Competition < ApplicationRecord
           self.delegates = self.staff_delegates | unpacked_trainee_delegates
         end
       end
-      if @organizer_ids
-        self.organizers = @organizer_ids.split(",").map { |id| User.find(id) }
-      end
+      self.organizers = @organizer_ids.split(",").map { |id| User.find(id) } if @organizer_ids
     end
   end
 
@@ -847,7 +811,7 @@ class Competition < ApplicationRecord
     delegates.select(&:trainee_delegate?)
   end
 
-  def has_defined_dates?
+  def dates_present?
     self.start_date.present? && self.end_date.present?
   end
 
@@ -857,10 +821,14 @@ class Competition < ApplicationRecord
     # so it won't be confused by the fact that our competition's id is changing.
     # See similar hack and comment in unpack_delegate_organizer_ids.
     with_old_id do
-      old_competition_events_attributes.bind(self).call(attributes)
+      old_competition_events_attributes.bind_call(self, attributes)
     end
   end
 
+  # We only do this after_update, because upon adding/removing a manager to a
+  # competition the attribute is automatically set to that manager's preference.
+  after_update :update_receive_registration_emails
+  after_update :clean_series_when_leaving
   # Workaround for PHP code that requires these tables to be clean.
   # Once we're in all railsland, this can go, and we can add a script
   # that checks our database sanity instead.
@@ -893,9 +861,7 @@ class Competition < ApplicationRecord
   def update_foreign_keys
     Competition.reflect_on_all_associations.uniq(&:klass).each do |association_reflection|
       foreign_key = association_reflection.foreign_key
-      if ["competition_id", "competitionId"].include?(foreign_key)
-        association_reflection.klass.where(foreign_key => id_before_last_save).update_all(foreign_key => id)
-      end
+      association_reflection.klass.where(foreign_key => id_before_last_save).update_all(foreign_key => id) if ["competition_id", "competitionId"].include?(foreign_key)
     end
   end
 
@@ -931,38 +897,36 @@ class Competition < ApplicationRecord
     end
   end
 
-  attr_accessor :editing_user_id
+  attr_accessor :closing_full_registration, :being_cloned_from_id, :clone_tabs, :editing_user_id
+
   validate :user_cannot_demote_themself
   def user_cannot_demote_themself
-    if editing_user_id
-      editing_user = User.find(editing_user_id)
-      unless editing_user.can_manage_competition?(self)
-        errors.add(:staff_delegate_ids, "You cannot demote yourself")
-        errors.add(:trainee_delegate_ids, "You cannot demote yourself")
-        errors.add(:organizer_ids, "You cannot demote yourself")
-      end
-    end
+    return unless editing_user_id
+
+    editing_user = User.find(editing_user_id)
+    return if editing_user.can_manage_competition?(self)
+
+    errors.add(:staff_delegate_ids, "You cannot demote yourself")
+    errors.add(:trainee_delegate_ids, "You cannot demote yourself")
+    errors.add(:organizer_ids, "You cannot demote yourself")
   end
 
   validate :organizers_can_organize_competition
   private def organizers_can_organize_competition
     organizers.each do |organizer|
-      if organizer&.cannot_organize_competition_reasons.present?
-        errors.add(:organizer_ids, "#{organizer.name}: #{organizer.cannot_organize_competition_reasons.to_sentence}")
-      end
+      errors.add(:organizer_ids, "#{organizer.name}: #{organizer.cannot_organize_competition_reasons.to_sentence}") if organizer&.cannot_organize_competition_reasons.present?
     end
   end
 
   validate :registration_must_close_after_it_opens
   def registration_must_close_after_it_opens
-    if registration_open && registration_close && !(registration_open < registration_close)
-      errors.add(:registration_close, I18n.t('competitions.errors.registration_close_after_open'))
-    end
+    errors.add(:registration_close, I18n.t('competitions.errors.registration_close_after_open')) if registration_open && registration_close && registration_open >= registration_close
   end
 
   attr_reader :receive_registration_emails
-  def receive_registration_emails=(r)
-    @receive_registration_emails = ActiveRecord::Type::Boolean.new.cast(r)
+
+  def receive_registration_emails=(registration)
+    @receive_registration_emails = ActiveRecord::Type::Boolean.new.cast(registration)
   end
 
   after_save :clear_external_website, if: :generate_website?
@@ -983,49 +947,36 @@ class Competition < ApplicationRecord
   end
 
   def receiving_registration_emails?(user_id)
-    competition_delegate = competition_delegates.find_by_delegate_id(user_id)
-    if competition_delegate&.receive_registration_emails
-      return true
-    end
-    competition_organizer = competition_organizers.find_by_organizer_id(user_id)
-    if competition_organizer&.receive_registration_emails
-      return true
-    end
+    competition_delegate = competition_delegates.find_by(delegate_id: user_id)
+    return true if competition_delegate&.receive_registration_emails
+
+    competition_organizer = competition_organizers.find_by(organizer_id: user_id)
+    return true if competition_organizer&.receive_registration_emails
 
     false
   end
 
   def can_receive_registration_emails?(user_id)
-    competition_delegate = competition_delegates.find_by_delegate_id(user_id)
-    if competition_delegate
-      return true
-    end
-    competition_organizer = competition_organizers.find_by_organizer_id(user_id)
-    if competition_organizer
-      return true
-    end
+    competition_delegate = competition_delegates.find_by(delegate_id: user_id)
+    return true if competition_delegate
+
+    competition_organizer = competition_organizers.find_by(organizer_id: user_id)
+    return true if competition_organizer
 
     false
   end
 
-  # We only do this after_update, because upon adding/removing a manager to a
-  # competition the attribute is automatically set to that manager's preference.
-  after_update :update_receive_registration_emails
   def update_receive_registration_emails
-    if editing_user_id && !@receive_registration_emails.nil?
-      competition_delegate = competition_delegates.find_by_delegate_id(editing_user_id)
-      if competition_delegate
-        competition_delegate.update_attribute(:receive_registration_emails, @receive_registration_emails)
-      end
-      competition_organizer = competition_organizers.find_by_organizer_id(editing_user_id)
-      if competition_organizer
-        competition_organizer.update_attribute(:receive_registration_emails, @receive_registration_emails)
-      end
-    end
+    return unless editing_user_id && !@receive_registration_emails.nil?
+
+    competition_delegate = competition_delegates.find_by(delegate_id: editing_user_id)
+    competition_delegate&.update_attribute(:receive_registration_emails, @receive_registration_emails)
+    competition_organizer = competition_organizers.find_by(organizer_id: editing_user_id)
+    competition_organizer&.update_attribute(:receive_registration_emails, @receive_registration_emails)
   end
 
   def using_payment_integrations?
-    competition_payment_integrations.any? && has_fees?
+    competition_payment_integrations.any? && paid_entry?
   end
 
   def can_edit_registration_fees?
@@ -1099,27 +1050,13 @@ class Competition < ApplicationRecord
   end
 
   private def compute_coordinates
-    unless @latitude_degrees.nil?
-      self.latitude_microdegrees = @latitude_degrees * 1e6
-    end
-    unless @longitude_degrees.nil?
-      self.longitude_microdegrees = @longitude_degrees * 1e6
-    end
+    self.latitude_microdegrees = @latitude_degrees * 1e6 unless @latitude_degrees.nil?
+    self.longitude_microdegrees = @longitude_degrees * 1e6 unless @longitude_degrees.nil?
   end
 
-  def has_events_with_ids?(event_ids)
-    (event_ids - events.ids).empty?
-  end
+  delegate :nonzero?, to: :base_entry_fee, prefix: true
 
-  def has_event?(event)
-    self.events.include?(event)
-  end
-
-  def has_base_entry_fee?
-    base_entry_fee.nonzero?
-  end
-
-  def has_fees?
+  def paid_entry?
     if base_entry_fee_lowest_denomination.nil?
       competition_events.sum(:fee_lowest_denomination) > 0
     else
@@ -1131,22 +1068,20 @@ class Competition < ApplicationRecord
     confirmed? && !use_wca_registration && created_at.present? && created_at > Date.new(2018, 12, 31)
   end
 
-  def has_rounds?
+  def any_rounds?
     rounds.any?
   end
 
-  def has_schedule?
+  def any_venues?
     competition_venues.any?
   end
 
   def entry_fee_required?
-    (
-      confirmed? && created_at.present? && created_at > Date.new(2018, 7, 17) &&
+    confirmed? && created_at.present? && created_at > Date.new(2018, 7, 17) &&
 
       # The different venues may have different entry fees. It's better for
       # people to leave this blank than to set an incorrect value here.
       country.present? && !country.multiple_countries?
-    )
   end
 
   def competitor_limit_required?
@@ -1158,33 +1093,27 @@ class Competition < ApplicationRecord
   end
 
   def on_the_spot_entry_fee_required?
-    (
-      on_the_spot_registration? &&
+    on_the_spot_registration? &&
 
       # The different venues may have different entry fees. It's better for
       # people to leave this blank than to set an incorrect value here.
       country.present? && !country.multiple_countries?
-    )
   end
 
   def refund_policy_percent_required?
-    (
-      confirmed? && created_at.present? && created_at > Date.new(2018, 8, 22) &&
+    confirmed? && created_at.present? && created_at > Date.new(2018, 8, 22) &&
 
       # The different venues may have different entry fees. It's better for
       # people to leave this blank than to set an incorrect value here.
       country.present? && !country.multiple_countries?
-    )
   end
 
   def guests_entry_fee_required?
-    (
-      confirmed? && created_at.present? && created_at > Date.new(2018, 8, 22) &&
+    confirmed? && created_at.present? && created_at > Date.new(2018, 8, 22) &&
 
       # The different venues may have different entry fees. It's better for
       # people to leave this blank than to set an incorrect value here.
       country.present? && !country.multiple_countries?
-    )
   end
 
   def all_guests_allowed?
@@ -1212,7 +1141,7 @@ class Competition < ApplicationRecord
   end
 
   # does the competition have this field (regardless of whether it's a date or blank)
-  def has_event_change_deadline_date?
+  def event_change_deadline_date_required?
     start_date.present? && start_date > Date.new(2021, 6, 24)
   end
 
@@ -1220,7 +1149,7 @@ class Competition < ApplicationRecord
   # must be allowed in general, and if the deadline field exists, is it a date and in the future
   def registration_edits_currently_permitted?
     !started? && self.allow_registration_edits &&
-      (!has_event_change_deadline_date? || !event_change_deadline_date.present? || event_change_deadline_date > DateTime.now)
+      (!event_change_deadline_date_required? || event_change_deadline_date.blank? || event_change_deadline_date > DateTime.now)
   end
 
   private def dates_must_be_valid
@@ -1232,23 +1161,17 @@ class Competition < ApplicationRecord
       return
     end
 
-    return errors.add(:start_date, I18n.t('common.errors.invalid')) unless start_date.present?
-    return errors.add(:end_date, I18n.t('common.errors.invalid')) unless end_date.present?
+    return errors.add(:start_date, I18n.t('common.errors.invalid')) if start_date.blank?
+    return errors.add(:end_date, I18n.t('common.errors.invalid')) if end_date.blank?
 
-    if end_date < start_date
-      errors.add(:end_date, I18n.t('competitions.errors.end_date_before_start'))
-    end
+    errors.add(:end_date, I18n.t('competitions.errors.end_date_before_start')) if end_date < start_date
 
-    if number_of_days > MAX_SPAN_DAYS
-      errors.add(:end_date, I18n.t('competitions.errors.span_too_many_days', max_days: MAX_SPAN_DAYS))
-    end
+    errors.add(:end_date, I18n.t('competitions.errors.span_too_many_days', max_days: MAX_SPAN_DAYS)) if number_of_days > MAX_SPAN_DAYS
   end
 
   validate :registration_dates_must_be_valid
   private def registration_dates_must_be_valid
-    if refund_policy_limit_date? && refund_policy_limit_date > start_date
-      errors.add(:refund_policy_limit_date, I18n.t('competitions.errors.refund_date_after_start'))
-    end
+    errors.add(:refund_policy_limit_date, I18n.t('competitions.errors.refund_date_after_start')) if refund_policy_limit_date? && refund_policy_limit_date > start_date
 
     if registration_period_required? && registration_open.present? && registration_close.present? &&
        (registration_open >= start_date || registration_close >= start_date)
@@ -1258,32 +1181,20 @@ class Competition < ApplicationRecord
 
   validate :waiting_list_dates_must_be_valid
   private def waiting_list_dates_must_be_valid
-    if waiting_list_deadline_date?
-      if waiting_list_deadline_date < registration_close
-        errors.add(:waiting_list_deadline_date, I18n.t('competitions.errors.waiting_list_deadline_before_registration_close'))
-      end
-      if refund_policy_limit_date? && waiting_list_deadline_date < refund_policy_limit_date
-        errors.add(:waiting_list_deadline_date, I18n.t('competitions.errors.waiting_list_deadline_before_refund_date'))
-      end
-      if waiting_list_deadline_date > end_date
-        errors.add(:waiting_list_deadline_date, I18n.t('competitions.errors.waiting_list_deadline_after_end'))
-      end
-    end
+    return unless waiting_list_deadline_date?
+
+    errors.add(:waiting_list_deadline_date, I18n.t('competitions.errors.waiting_list_deadline_before_registration_close')) if registration_range_specified? && waiting_list_deadline_date < registration_close
+    errors.add(:waiting_list_deadline_date, I18n.t('competitions.errors.waiting_list_deadline_before_refund_date')) if refund_policy_limit_date? && waiting_list_deadline_date < refund_policy_limit_date
+    errors.add(:waiting_list_deadline_date, I18n.t('competitions.errors.waiting_list_deadline_after_end')) if waiting_list_deadline_date > end_date
   end
 
   validate :event_change_dates_must_be_valid
   private def event_change_dates_must_be_valid
-    if event_change_deadline_date?
-      if event_change_deadline_date < registration_close
-        errors.add(:event_change_deadline_date, I18n.t('competitions.errors.event_change_deadline_before_registration_close'))
-      end
-      if on_the_spot_registration? && event_change_deadline_date < start_date
-        errors.add(:event_change_deadline_date, I18n.t('competitions.errors.event_change_deadline_with_ots'))
-      end
-      if event_change_deadline_date > end_date.to_datetime.end_of_day
-        errors.add(:event_change_deadline_date, I18n.t('competitions.errors.event_change_deadline_after_end_date'))
-      end
-    end
+    return unless event_change_deadline_date?
+
+    errors.add(:event_change_deadline_date, I18n.t('competitions.errors.event_change_deadline_before_registration_close')) if registration_range_specified? && event_change_deadline_date < registration_close
+    errors.add(:event_change_deadline_date, I18n.t('competitions.errors.event_change_deadline_with_ots')) if on_the_spot_registration? && event_change_deadline_date < start_date
+    errors.add(:event_change_deadline_date, I18n.t('competitions.errors.event_change_deadline_after_end_date')) if event_change_deadline_date > end_date.to_datetime.end_of_day
   end
 
   # Since Competition.events only includes saved events
@@ -1326,29 +1237,21 @@ class Competition < ApplicationRecord
   end
 
   # Source http://www.movable-type.co.uk/scripts/latlong.html
-  def kilometers_to(c)
+  def kilometers_to(competition)
     6371 *
       Math.sqrt(
-        (((c.longitude_radians - longitude_radians) * Math.cos((c.latitude_radians + latitude_radians)/2)) ** 2) +
-        ((c.latitude_radians - latitude_radians) ** 2),
+        (((competition.longitude_radians - longitude_radians) * Math.cos((competition.latitude_radians + latitude_radians)/2)) ** 2) +
+        ((competition.latitude_radians - latitude_radians) ** 2),
       )
   end
 
-  def has_date?
-    !start_date.nil? || !end_date.nil?
-  end
-
-  def has_registration_start_date?
-    !registration_open.nil?
-  end
-
-  def has_location?
-    latitude.present? && longitude.present?
+  def registration_start_date_present?
+    registration_open.present?
   end
 
   # The division is to convert the end result from secods to days. .to_date removed some hours from the subtraction
   def days_until
-    start_date ? ((start_date.to_time(:utc) - Time.now.utc)/(86_400)).to_i : nil
+    start_date ? ((start_date.to_time(:utc) - Time.now.utc)/86_400).to_i : nil
   end
 
   def time_until_registration
@@ -1359,74 +1262,59 @@ class Competition < ApplicationRecord
     ApplicationController.helpers.wca_date_range(self.start_date, self.end_date)
   end
 
-  def has_date_errors?
-    valid?
-    !errors[:start_date].empty? || !errors[:end_date].empty? || (!showAtAll && days_until && days_until < MUST_BE_ANNOUNCED_GTE_THIS_MANY_DAYS)
-  end
-
   # The competition must be at least 28 days in advance in order to confirm it. Admins are able to modify the competition despite being less than 28 days in advance.
   # We only run this validation if we're actually changing the start_date or
   # confirming the competition, to not prevent organizers/delegates from
   # updating competition-specific setttings, such as the receive notifications checkbox.
   validate :start_date_must_be_28_days_in_advance, if: :should_validate_start_date?
   def start_date_must_be_28_days_in_advance
-    if editing_user_id
-      editing_user = User.find(editing_user_id)
-      if !editing_user.can_admin_competitions? && start_date && days_until < MUST_BE_ANNOUNCED_GTE_THIS_MANY_DAYS
-        errors.add(:start_date, I18n.t('competitions.errors.start_date_must_be_28_days_in_advance'))
-      end
-    end
+    return unless editing_user_id
+
+    editing_user = User.find(editing_user_id)
+    errors.add(:start_date, I18n.t('competitions.errors.start_date_must_be_28_days_in_advance')) if !editing_user.can_admin_competitions? && start_date && days_until < MUST_BE_ANNOUNCED_GTE_THIS_MANY_DAYS
   end
 
   def should_validate_start_date?
     confirmed_or_visible? && (will_save_change_to_start_date? || will_save_change_to_confirmed_at?)
   end
 
-  def days_until_competition?(c)
-    if !c.has_date? || !self.has_date?
-      return false
-    end
-    days_until = (c.start_date - self.end_date).to_i
-    if days_until < 0
-      days_until = (self.start_date - c.end_date).to_i * -1
-    end
+  def days_until_competition?(competition)
+    return false if !competition.dates_present? || !self.dates_present?
+
+    days_until = (competition.start_date - self.end_date).to_i
+    days_until = (self.start_date - competition.end_date).to_i * -1 if days_until < 0
     days_until
   end
 
-  def dangerously_close_to?(c)
-    self.adjacent_to?(c, NEARBY_DISTANCE_KM_DANGER, NEARBY_DAYS_DANGER)
+  def dangerously_close_to?(competition)
+    self.adjacent_to?(competition, NEARBY_DISTANCE_KM_DANGER, NEARBY_DAYS_DANGER)
   end
 
-  def adjacent_to?(c, distance_km, distance_days)
-    self.distance_adjacent_to?(c, distance_km) && self.start_date_adjacent_to?(c, distance_days)
+  def adjacent_to?(competition, distance_km, distance_days)
+    self.distance_adjacent_to?(competition, distance_km) && self.start_date_adjacent_to?(competition, distance_days)
   end
 
-  def start_date_adjacent_to?(c, distance_days)
-    if !c.has_date? || !self.has_date?
-      return false
-    end
-    self.days_until_competition?(c).abs < distance_days
+  def start_date_adjacent_to?(competition, distance_days)
+    return false if !competition.dates_present? || !self.dates_present?
+
+    self.days_until_competition?(competition).abs < distance_days
   end
 
-  def distance_adjacent_to?(c, distance_km)
-    self.kilometers_to(c) < distance_km
+  def distance_adjacent_to?(competition, distance_km)
+    self.kilometers_to(competition) < distance_km
   end
 
-  def registration_open_adjacent_to?(c, distance_minutes)
-    if !c.has_registration_start_date? || !self.has_registration_start_date?
-      return false
-    end
-    self.minutes_until_other_registration_starts(c).abs < distance_minutes
+  def registration_open_adjacent_to?(competition, distance_minutes)
+    return false if !competition.registration_start_date_present? || !self.registration_start_date_present?
+
+    self.minutes_until_other_registration_starts(competition).abs < distance_minutes
   end
 
-  def minutes_until_other_registration_starts(c)
-    if !c.has_registration_start_date? || !self.has_registration_start_date?
-      return false
-    end
-    seconds_until = (c.registration_open - self.registration_open).to_i
-    if seconds_until < 0
-      seconds_until = (self.registration_open - c.registration_open).to_i * -1
-    end
+  def minutes_until_other_registration_starts(competition)
+    return false if !competition.registration_start_date_present? || !self.registration_start_date_present?
+
+    seconds_until = (competition.registration_open - self.registration_open).to_i
+    seconds_until = (self.registration_open - competition.registration_open).to_i * -1 if seconds_until < 0
     seconds_until / 60
   end
 
@@ -1447,7 +1335,7 @@ class Competition < ApplicationRecord
   end
 
   def display_name(short: false)
-    data = short ? cellName : name
+    data = short ? cell_name : name
     if cancelled?
       I18n.t("competitions.competition_info.display_name", name: data)
     else
@@ -1485,7 +1373,7 @@ class Competition < ApplicationRecord
   end
 
   def user_can_view?(user)
-    self.showAtAll || user&.can_manage_competition?(self)
+    self.show_at_all? || user&.can_manage_competition?(self)
   end
 
   def user_can_view_results?(user)
@@ -1533,7 +1421,7 @@ class Competition < ApplicationRecord
   # We don't actually know when competitions are over, because we don't know their schedules, nor
   # do we know their timezones.
   # See discussion here: https://github.com/thewca/worldcubeassociation.org/pull/1206/files#r98485399.
-  def is_probably_over?
+  def probably_over?
     !end_date.nil? && end_date < Date.today
   end
 
@@ -1542,69 +1430,42 @@ class Competition < ApplicationRecord
   end
 
   def city_and_country
-    [cityName, country&.name].compact.join(', ')
+    [city_name, country&.name].compact.join(', ')
   end
 
   def events_with_podium_results
-    light_results_from_relation(
-      results.podium.order(:pos),
-    ).group_by(&:event)
-      .sort_by { |event, _results| event.rank }
+    results.podium.order(:pos).group_by(&:event)
+           .sort_by { |event, _results| event.rank }
   end
 
   def winning_results
-    light_results_from_relation(
-      results.winners,
-    )
+    results.winners
   end
 
   def person_ids_with_results
-    light_results_from_relation(results)
-      .group_by(&:personId)
-      .sort_by { |_personId, results| results.first.personName }
-      .map do |personId, results|
-        results.sort_by! { |r| [r.event.rank, -r.round_type.rank] }
-
-        # Mute (soften) each result that wasn't the competitor's last for the event.
-        last_event = nil
-        results.each do |result|
-          result.muted = (result.event == last_event)
-          last_event = result.event
-        end
-
-        [personId, results.sort_by { |r| [r.event.rank, -r.round_type.rank] }]
-      end
+    results.group_by(&:personId)
+           .sort_by { |_person_id, results| results.first.personName }
+           .map do |person_id, results|
+      results.sort_by! { |r| [r.event.rank, -r.round_type.rank] }
+      [person_id, results.sort_by { |r| [r.event.rank, -r.round_type.rank] }]
+    end
   end
 
   def events_with_round_types_with_results
-    light_results_from_relation(results)
-      .group_by(&:event)
-      .sort_by { |event, _results| event.rank }
-      .map do |event, results_for_event|
-        round_types_with_results = results_for_event
-                                   .group_by(&:round_type)
-                                   .sort_by { |format, _results| format.rank }.reverse
-                                   .map { |round_type, results| [round_type, results.sort_by { |r| [r.pos, r.personName] }] }
+    results.group_by(&:event)
+           .sort_by { |event, _results| event.rank }
+           .map do |event, results_for_event|
+             round_types_with_results = results_for_event
+                                        .group_by(&:round_type)
+                                        .sort_by { |format, _results| format.rank }.reverse
+                                        .map { |round_type, results| [round_type, results.sort_by { |r| [r.pos, r.personName] }] }
 
-        [event, round_types_with_results]
-      end
+             [event, round_types_with_results]
+           end
   end
 
   def ineligible_events(user)
-    competition_events.select { |ce| !ce.can_register?(user) }.map(&:event)
-  end
-
-  # Profiling the rendering of _results_table.html.erb showed quite some
-  # time was spent in `ActiveRecord#read_attribute`. So, I load the results
-  # using raw SQL and instantiate a PORO. The code definitely got uglier,
-  # but the performance gains are worth it IMO. Not using ActiveRecord led
-  # to a 40% performance improvement.
-  private def light_results_from_relation(relation)
-    ActiveRecord::Base.connection
-                      .execute(relation.to_sql)
-                      .each(as: :hash).map do |r|
-                        LightResult.new(r)
-                      end
+    competition_events.reject { |ce| ce.can_register?(user) }.map(&:event)
   end
 
   def started?
@@ -1630,12 +1491,15 @@ class Competition < ApplicationRecord
     keyword_init: true,
   )
 
+  # rubocop:disable Lint/StructNewOverride
+  # this does overwrite sort_by because the frontend relies on the field, but as it's never used in an array, it should be fine
   PsychSheet = Struct.new(
     :sorted_rankings,
     :sort_by,
     :sort_by_second,
     keyword_init: true,
   )
+  # rubocop:enable Lint/StructNewOverride
 
   def psych_sheet_event(event, sort_by)
     ActiveRecord::Base.connected_to(role: :read_replica) do
@@ -1674,13 +1538,13 @@ class Competition < ApplicationRecord
         #   LEFT JOIN RanksSingle
         #   LEFT JOIN RanksAverage
         # WHERE users.id IN (...)
-        User.eager_load(:ranksSingle, :ranksAverage)
+        User.eager_load(:ranks_single, :ranks_average)
             .select(:name, :wca_id, :country_iso2)
             .find(registered_user_ids)
       end
 
-      rank_symbol = :"ranks#{sort_by.capitalize}"
-      second_rank_symbol = :"ranks#{sort_by_second.capitalize}"
+      rank_symbol = :"ranks_#{sort_by}"
+      second_rank_symbol = :"ranks_#{sort_by_second}"
 
       sorted_users = users_with_rankings.sort_by { |user|
         # using '.find_by(event: ...)' fires another SQL query *despite* the ranks being pre-loaded :facepalm:
@@ -1691,9 +1555,9 @@ class Competition < ApplicationRecord
           # Competitors with ranks should appear first in the sorting,
           # competitors without ranks should appear last. That's why they get a higher number if rank is not present.
           rank.present? ? 0 : 1,
-          rank&.worldRank || 0,
+          rank&.world_rank || 0,
           second_rank.present? ? 0 : 1,
-          second_rank&.worldRank || 0,
+          second_rank&.world_rank || 0,
           user.name,
         ]
       }
@@ -1702,15 +1566,15 @@ class Competition < ApplicationRecord
 
       sorted_rankings = sorted_users.map.with_index { |user, i|
         # see comment about .find vs .find_by above.
-        single_ranking = user.ranksSingle.find { |r| r.event == event }
-        average_ranking = user.ranksAverage.find { |r| r.event == event }
+        single_ranking = user.ranks_single.find { |r| r.event == event }
+        average_ranking = user.ranks_average.find { |r| r.event == event }
 
         sort_by_ranking = sort_by == 'single' ? single_ranking : average_ranking
 
         if sort_by_ranking.present?
           # Change position to previous if both single and average are tied with previous registration.
-          average_tied_previous = average_ranking&.worldRank == prev_sorted_ranking&.average_rank
-          single_tied_previous = single_ranking&.worldRank == prev_sorted_ranking&.single_rank
+          average_tied_previous = average_ranking&.world_rank == prev_sorted_ranking&.average_rank
+          single_tied_previous = single_ranking&.world_rank == prev_sorted_ranking&.single_rank
 
           tied_previous = single_tied_previous && average_tied_previous
 
@@ -1727,9 +1591,9 @@ class Competition < ApplicationRecord
           wca_id: user.wca_id,
           country_id: user.country.id,
           country_iso2: user.country_iso2,
-          average_rank: average_ranking&.worldRank,
+          average_rank: average_ranking&.world_rank,
           average_best: average_ranking&.best || 0,
-          single_rank: single_ranking&.worldRank,
+          single_rank: single_ranking&.world_rank,
           single_best: single_ranking&.best || 0,
           tied_previous: tied_previous,
           pos: pos,
@@ -1749,12 +1613,12 @@ class Competition < ApplicationRecord
   # For associated_events_picker
   def events_to_associated_events(events)
     events.map do |event|
-      competition_events.find_by_event_id(event.id) || competition_events.build(event_id: event.id)
+      competition_events.find_by(event_id: event.id) || competition_events.build(event_id: event.id)
     end
   end
 
   def self.years
-    Competition.where(showAtAll: true).pluck(:start_date).map(&:year).uniq.sort!.reverse!
+    Competition.where(show_at_all: true).pluck(:start_date).map(&:year).uniq.sort!.reverse!
   end
 
   def self.non_future_years
@@ -1762,11 +1626,11 @@ class Competition < ApplicationRecord
   end
 
   def self.search(query, params: {}, managed_by_user: nil)
-    if managed_by_user
-      competitions = Competition.managed_by(managed_by_user.id)
-    else
-      competitions = Competition.visible
-    end
+    competitions = if managed_by_user
+                     Competition.managed_by(managed_by_user.id)
+                   else
+                     Competition.visible
+                   end
 
     if params[:include_cancelled].present?
       include_cancelled = ActiveRecord::Type::Boolean.new.cast(params[:include_cancelled])
@@ -1775,35 +1639,31 @@ class Competition < ApplicationRecord
 
     if params[:continent].present?
       continent = Continent.find(params[:continent])
-      if !continent
-        raise WcaExceptions::BadApiParameter.new("Invalid continent: '#{params[:continent]}'")
-      end
-      competitions = competitions.joins('INNER JOIN Countries ON Competitions.countryId = Countries.id')
-                                 .where('continentId = ?', continent.id)
+      raise WcaExceptions::BadApiParameter.new("Invalid continent: '#{params[:continent]}'") unless continent
+
+      competitions = competitions.joins(:country)
+                                 .where(country: { continent: continent })
     end
 
     if params[:country_iso2].present?
-      country = Country.find_by_iso2(params[:country_iso2])
-      if !country
-        raise WcaExceptions::BadApiParameter.new("Invalid country_iso2: '#{params[:country_iso2]}'")
-      end
-      competitions = competitions.where(countryId: country.id)
+      country = Country.find_by(iso2: params[:country_iso2])
+      raise WcaExceptions::BadApiParameter.new("Invalid country_iso2: '#{params[:country_iso2]}'") unless country
+
+      competitions = competitions.where(country_id: country.id)
     end
 
     if params[:delegate].present?
       delegate_user = User.find_by(wca_id: params[:delegate]) || User.find(params[:delegate])
-      if !delegate_user || !delegate_user.delegate_status
-        raise WcaExceptions::BadApiParameter.new("Invalid delegate: '#{params[:delegate]}'")
-      end
+      raise WcaExceptions::BadApiParameter.new("Invalid delegate: '#{params[:delegate]}'") if !delegate_user || !delegate_user.delegate_status
+
       competitions = competitions.left_outer_joins(:delegates)
-                                 .where('competition_delegates.delegate_id = ?', delegate_user.id)
+                                 .where(competition_delegates: { delegate_id: delegate_user.id })
     end
 
     if params[:event_ids].present?
       event_ids = params[:event_ids].presence
-      unless event_ids.is_a?(Array)
-        raise WcaExceptions::BadApiParameter.new("Invalid event IDs: '#{params[:event_ids]}'")
-      end
+      raise WcaExceptions::BadApiParameter.new("Invalid event IDs: '#{params[:event_ids]}'") unless event_ids.is_a?(Array)
+
       event_ids.each do |event_id|
         # This looks completely crazy (why not just pass the array as a whole, to build a `WHERE event_id IN (...)`??)
         #   but is actually necessary to make sure that the competition holds ALL of the required events
@@ -1814,42 +1674,36 @@ class Competition < ApplicationRecord
 
     if params[:start].present?
       start_date = Date.safe_parse(params[:start])
-      if !start_date
-        raise WcaExceptions::BadApiParameter.new("Invalid start: '#{params[:start]}'")
-      end
-      competitions = competitions.where("start_date >= ?", start_date)
+      raise WcaExceptions::BadApiParameter.new("Invalid start: '#{params[:start]}'") unless start_date
+
+      competitions = competitions.where(start_date: start_date..)
     end
 
     if params[:end].present?
       end_date = Date.safe_parse(params[:end])
-      if !end_date
-        raise WcaExceptions::BadApiParameter.new("Invalid end: '#{params[:end]}'")
-      end
-      competitions = competitions.where("end_date <= ?", end_date)
+      raise WcaExceptions::BadApiParameter.new("Invalid end: '#{params[:end]}'") unless end_date
+
+      competitions = competitions.where(end_date: ..end_date)
     end
 
     if params[:ongoing_and_future].present?
       target_date = Date.safe_parse(params[:ongoing_and_future])
-      if !target_date
-        raise WcaExceptions::BadApiParameter.new("Invalid ongoing_and_future: '#{params[:ongoing_and_future]}'")
-      end
-      competitions = competitions.where("end_date >= ?", target_date)
+      raise WcaExceptions::BadApiParameter.new("Invalid ongoing_and_future: '#{params[:ongoing_and_future]}'") unless target_date
+
+      competitions = competitions.where(end_date: target_date..)
     end
 
     if params[:announced_after].present?
       announced_date = Date.safe_parse(params[:announced_after])
-      if !announced_date
-        raise WcaExceptions::BadApiParameter.new("Invalid announced date: '#{params[:announced_after]}'")
-      end
+      raise WcaExceptions::BadApiParameter.new("Invalid announced date: '#{params[:announced_after]}'") unless announced_date
+
       competitions = competitions.where("announced_at > ?", announced_date)
     end
 
     if params[:admin_status].present?
       admin_status = params[:admin_status].to_s
 
-      unless ["danger", "warning"].include?(admin_status)
-        raise WcaExceptions::BadApiParameter.new("Invalid admin status: '#{params[:admin_status]}'")
-      end
+      raise WcaExceptions::BadApiParameter.new("Invalid admin status: '#{params[:admin_status]}'") unless ["danger", "warning"].include?(admin_status)
 
       num_days = {
         warning: Competition::REPORT_AND_RESULTS_DAYS_WARNING,
@@ -1860,27 +1714,27 @@ class Competition < ApplicationRecord
     end
 
     query&.split&.each do |part|
-      like_query = %w(id name cellName cityName countryId).map { |column| "Competitions.#{column} LIKE :part" }.join(" OR ")
+      like_query = %w(id name cell_name city_name country_id).map { |column| "competitions.#{column} LIKE :part" }.join(" OR ")
       competitions = competitions.where(like_query, part: "%#{part}%")
     end
 
     orderable_fields = %i(name start_date end_date announced_at)
-    if params[:sort]
-      order = params[:sort].split(',')
+    order = if params[:sort]
+              params[:sort].split(',')
                            .map do |part|
-                             reverse, field = part.match(/^(-)?(\w+)$/).captures
-                             [field.to_sym, reverse ? :desc : :asc]
-                           end
-                           # rubocop:disable Style/HashSlice
-                           #   RuboCop suggests using `slice` here, which is a noble intention but breaks the order
-                           #   of sort arguments. However, this order is crucial (sorting by "name then start_date"
-                           #   is different from sorting by "start_date then name") so we insist on doing it our way.
-                           .select { |field, _| orderable_fields.include?(field) }
+                reverse, field = part.match(/^(-)?(\w+)$/).captures
+                [field.to_sym, reverse ? :desc : :asc]
+              end
+                                   # rubocop:disable Style/HashSlice
+                                   #   RuboCop suggests using `slice` here, which is a noble intention but breaks the order
+                                   #   of sort arguments. However, this order is crucial (sorting by "name then start_date"
+                                   #   is different from sorting by "start_date then name") so we insist on doing it our way.
+                                   .select { |field, _| orderable_fields.include?(field) }
                            # rubocop:enable Style/HashSlice
                            .to_h
-    else
-      order = { start_date: :desc }
-    end
+            else
+              { start_date: :desc }
+            end
 
     # Respect other `includes` associations that might have been specified ahead of time
     previous_includes = competitions.includes_values
@@ -1902,7 +1756,7 @@ class Competition < ApplicationRecord
       "formatVersion" => "1.0",
       "id" => id,
       "name" => name,
-      "shortName" => cellName,
+      "shortName" => cell_name,
       "series" => part_of_competition_series? ? competition_series_wcif(authorized: authorized) : nil,
       "persons" => persons_wcif(authorized: authorized),
       "events" => events_wcif,
@@ -1928,8 +1782,8 @@ class Competition < ApplicationRecord
                base_entry_fee_lowest_denomination currency_code allow_registration_edits competitor_can_cancel
                allow_registration_without_qualification refund_policy_percent use_wca_registration guests_per_registration_limit venue contact
                force_comment_in_registration use_wca_registration external_registration_page guests_entry_fee_lowest_denomination guest_entry_status
-               information events_per_registration_limit guests_enabled],
-      methods: %w[url website short_name city venue_address venue_details latitude_degrees longitude_degrees country_iso2 event_ids registration_currently_open?
+               information events_per_registration_limit guests_enabled auto_accept_registrations auto_accept_disable_threshold],
+      methods: %w[url website short_name city venue_address venue_details latitude_degrees longitude_degrees country_iso2 event_ids
                   main_event_id number_of_bookmarks using_payment_integrations? uses_qualification? uses_cutoff? competition_series_ids registration_full?
                   part_of_competition_series? registration_full_and_accepted?],
       include: %w[delegates organizers],
@@ -1946,11 +1800,12 @@ class Competition < ApplicationRecord
   end
 
   def other_series_ids
-    series_sibling_competitions.pluck(:id)
+    series_sibling_competitions.ids
   end
 
   def qualification_wcif
     return {} unless uses_qualification?
+
     competition_events
       .where.not(qualification: nil)
       .index_by(&:event_id)
@@ -1963,7 +1818,7 @@ class Competition < ApplicationRecord
     includes_associations = [
       { assignments: [:schedule_activity] },
       { user: {
-        person: [:ranksSingle, :ranksAverage],
+        person: [:ranks_single, :ranks_average],
       } },
       :wcif_extensions,
       :events,
@@ -1976,7 +1831,7 @@ class Competition < ApplicationRecord
                        .includes(includes_associations)
                        .to_enum
                        .with_index(1)
-                       .select { |r, registrant_id| authorized || r.wcif_status == "accepted" }
+                       .select { |r, _registrant_id| authorized || r.wcif_status == "accepted" }
                        .map do |r, registrant_id|
       managers.delete(r.user)
       r.user.to_wcif(self, r, registrant_id, authorized: authorized)
@@ -2044,31 +1899,21 @@ class Competition < ApplicationRecord
   def set_wcif_competitor_limit!(wcif_competitor_limit, current_user)
     return if wcif_competitor_limit == self.competitor_limit
 
-    if confirmed? && !current_user.can_admin_competitions?
-      raise WcaExceptions::BadApiParameter.new("Cannot edit the competitor limit because the competition has been confirmed by WCAT")
-    end
+    raise WcaExceptions::BadApiParameter.new("Cannot edit the competitor limit because the competition has been confirmed by WCAT") if confirmed? && !current_user.can_admin_competitions?
 
-    unless competitor_limit_enabled?
-      raise WcaExceptions::BadApiParameter.new("Cannot update the competitor limit because competitor limits are not enabled for this competition")
-    end
+    raise WcaExceptions::BadApiParameter.new("Cannot update the competitor limit because competitor limits are not enabled for this competition") unless competitor_limit_enabled?
 
-    unless wcif_competitor_limit.present?
-      raise WcaExceptions::BadApiParameter.new("Cannot remove competitor limit")
-    end
+    raise WcaExceptions::BadApiParameter.new("Cannot remove competitor limit") if wcif_competitor_limit.blank?
 
     self.competitor_limit = wcif_competitor_limit
   end
 
   def set_wcif_series!(wcif_series, current_user)
-    unless current_user.can_update_competition_series?(self)
-      raise WcaExceptions::BadApiParameter.new("Cannot change Competition Series")
-    end
+    raise WcaExceptions::BadApiParameter.new("Cannot change Competition Series") unless current_user.can_update_competition_series?(self)
 
-    unless wcif_series["competitionIds"].include?(self.id)
-      raise WcaExceptions::BadApiParameter.new("The Series must include the competition you're currently editing.")
-    end
+    raise WcaExceptions::BadApiParameter.new("The Series must include the competition you're currently editing.") unless wcif_series["competitionIds"].include?(self.id)
 
-    competition_series = CompetitionSeries.find_by_wcif_id(wcif_series["id"]) || CompetitionSeries.new
+    competition_series = CompetitionSeries.find_by(wcif_id: wcif_series["id"]) || CompetitionSeries.new
     competition_series.set_wcif!(wcif_series)
 
     self.competition_series = competition_series
@@ -2080,13 +1925,12 @@ class Competition < ApplicationRecord
       { rounds: [:competition_event, :wcif_extensions] },
       :wcif_extensions,
     ]
-    self.competition_events.includes(competition_events_includes_assotiations).each do |competition_event|
+    self.competition_events.includes(competition_events_includes_assotiations).find_each do |competition_event|
       wcif_event = wcif_events.find { |e| e["id"] == competition_event.event.id }
       event_to_be_removed = !wcif_event || !wcif_event["rounds"]
       if event_to_be_removed
-        unless current_user.can_add_and_remove_events?(self)
-          raise WcaExceptions::BadApiParameter.new("Cannot remove events")
-        end
+        raise WcaExceptions::BadApiParameter.new("Cannot remove events") unless current_user.can_add_and_remove_events?(self)
+
         competition_event.destroy!
       end
     end
@@ -2096,9 +1940,8 @@ class Competition < ApplicationRecord
       event_found = competition_events.find { |ce| ce.event_id == wcif_event["id"] }
       event_to_be_added = wcif_event["rounds"]
       if !event_found && event_to_be_added
-        unless current_user.can_add_and_remove_events?(self)
-          raise WcaExceptions::BadApiParameter.new("Cannot add events")
-        end
+        raise WcaExceptions::BadApiParameter.new("Cannot add events") unless current_user.can_add_and_remove_events?(self)
+
         competition_events.create!(event_id: wcif_event["id"])
       end
     end
@@ -2107,9 +1950,8 @@ class Competition < ApplicationRecord
     wcif_events.each do |wcif_event| # rubocop:disable Style/CombinableLoops
       event_to_be_updated = wcif_event["rounds"]
       if event_to_be_updated
-        unless current_user.can_update_events?(self)
-          raise WcaExceptions::BadApiParameter.new("Cannot update events")
-        end
+        raise WcaExceptions::BadApiParameter.new("Cannot update events") unless current_user.can_update_events?(self)
+
         competition_events.find { |ce| ce.event_id == wcif_event["id"] }.load_wcif!(wcif_event)
       end
     end
@@ -2141,7 +1983,8 @@ class Competition < ApplicationRecord
           is_competing: false,
         )
       end
-      next unless registration.present?
+      next if registration.blank?
+
       WcifExtension.update_wcif_extensions!(registration, wcif_person["extensions"]) if wcif_person["extensions"]
       # NOTE: person doesn't necessarily have corresponding registration (e.g. registratinless organizer/delegate).
       if wcif_person["roles"]
@@ -2150,33 +1993,28 @@ class Competition < ApplicationRecord
         # so we can safely skip validations by using update_attribute
         registration.update_attribute(:roles, roles)
       end
-      if wcif_person["assignments"]
-        wcif_person["assignments"].each do |assignment_wcif|
-          schedule_activity = competition_activities.find do |competition_activity|
-            competition_activity.wcif_id == assignment_wcif["activityId"]
-          end
-          unless schedule_activity
-            raise WcaExceptions::BadApiParameter.new("Cannot create assignment for non-existent activity with id #{assignment_wcif["activityId"]}")
-          end
-          assignment = registration.assignments.find do |a|
-            a.wcif_equal?(assignment_wcif)
-          end
-          # We need to be very careful about how we build the assignment:
-          # providing just the registration_id or the schedule_activity_id would
-          # actually trigger a select for each validation.
-          assignment ||= registration.assignments.build(
-            schedule_activity: schedule_activity,
-          )
-          assignment.assign_attributes(
-            station_number: assignment_wcif["stationNumber"],
-            assignment_code: assignment_wcif["assignmentCode"],
-          )
-          if assignment.valid?
-            local_assignments << assignment
-          else
-            raise WcaExceptions::BadApiParameter.new("Invalid assignment: #{a.errors.map(&:full_message)} for #{assignment_wcif}")
-          end
+      wcif_person["assignments"]&.each do |assignment_wcif|
+        schedule_activity = competition_activities.find do |competition_activity|
+          competition_activity.wcif_id == assignment_wcif["activityId"]
         end
+        raise WcaExceptions::BadApiParameter.new("Cannot create assignment for non-existent activity with id #{assignment_wcif["activityId"]}") unless schedule_activity
+
+        assignment = registration.assignments.find do |a|
+          a.wcif_equal?(assignment_wcif)
+        end
+        # We need to be very careful about how we build the assignment:
+        # providing just the registration_id or the schedule_activity_id would
+        # actually trigger a select for each validation.
+        assignment ||= registration.assignments.build(
+          schedule_activity: schedule_activity,
+        )
+        assignment.assign_attributes(
+          station_number: assignment_wcif["stationNumber"],
+          assignment_code: assignment_wcif["assignmentCode"],
+        )
+        raise WcaExceptions::BadApiParameter.new("Invalid assignment: #{a.errors.map(&:full_message)} for #{assignment_wcif}") unless assignment.valid?
+
+        local_assignments << assignment
       end
       new_assignments.concat(local_assignments.map(&:attributes))
       removed_assignments.concat(registration.assignments.ids - local_assignments.map(&:id))
@@ -2191,6 +2029,7 @@ class Competition < ApplicationRecord
     elsif wcif_schedule["numberOfDays"] != number_of_days
       raise WcaExceptions::BadApiParameter.new("Wrong number of days for competition")
     end
+
     competition_venues = self.competition_venues.includes [
       {
         venue_rooms: [
@@ -2247,10 +2086,8 @@ class Competition < ApplicationRecord
     }
   end
 
-  alias_attribute :venue_address, :venueAddress
-  alias_attribute :venue_details, :venueDetails
-  alias_attribute :short_name, :cellName
-  alias_attribute :city, :cityName
+  alias_attribute :short_name, :cell_name
+  alias_attribute :city, :city_name
 
   def country_iso2
     country&.iso2
@@ -2309,7 +2146,7 @@ class Competition < ApplicationRecord
   end
 
   def multi_country_fmc_competition?
-    events.length == 1 && events[0].fewest_moves? && Country::FICTIVE_IDS.include?(countryId)
+    events.length == 1 && events[0].fewest_moves? && Country::FICTIVE_IDS.include?(country_id)
   end
 
   def exempt_from_wca_dues?
@@ -2318,23 +2155,18 @@ class Competition < ApplicationRecord
 
   validate :series_siblings_must_be_valid
   private def series_siblings_must_be_valid
-    if part_of_competition_series?
-      series_sibling_competitions.each do |comp|
-        unless self.distance_adjacent_to?(comp, CompetitionSeries::MAX_SERIES_DISTANCE_KM)
-          errors.add(:competition_series, I18n.t('competitions.errors.series_distance_km', competition: comp.name))
-        end
-        unless self.start_date_adjacent_to?(comp, CompetitionSeries::MAX_SERIES_DISTANCE_DAYS)
-          errors.add(:competition_series, I18n.t('competitions.errors.series_distance_days', competition: comp.name))
-        end
-      end
+    return unless part_of_competition_series?
+
+    series_sibling_competitions.each do |comp|
+      errors.add(:competition_series, I18n.t('competitions.errors.series_distance_km', competition: comp.name)) unless self.distance_adjacent_to?(comp, CompetitionSeries::MAX_SERIES_DISTANCE_KM)
+      errors.add(:competition_series, I18n.t('competitions.errors.series_distance_days', competition: comp.name)) unless self.start_date_adjacent_to?(comp, CompetitionSeries::MAX_SERIES_DISTANCE_DAYS)
     end
   end
 
-  after_update :clean_series_when_leaving
   private def clean_series_when_leaving
     if competition_series_id.nil? && # if we just processed an update to remove the competition series
        (old_series_id = competition_series_id_previously_was) && # and we previously had an ID
-       (old_series = CompetitionSeries.find_by_id(old_series_id)) # and that series still exists
+       (old_series = CompetitionSeries.find_by(id: old_series_id)) # and that series still exists
       old_series.reload.destroy_if_orphaned # prompt it to check for orphaned state.
     end
   end
@@ -2350,6 +2182,13 @@ class Competition < ApplicationRecord
       .where.not(id: self.id)
   end
 
+  def series_sibling_registrations
+    return [] unless part_of_competition_series?
+
+    series_registrations
+      .where.not(competition: self)
+  end
+
   def find_round_for(event_id, round_type_id, format_id = nil)
     rounds.find do |r|
       r.event.id == event_id && r.round_type_id == round_type_id &&
@@ -2359,14 +2198,12 @@ class Competition < ApplicationRecord
 
   def dues_per_competitor_in_usd
     dues = DuesCalculator.dues_per_competitor_in_usd(self.country_iso2, self.base_entry_fee_lowest_denomination.to_i, self.currency_code)
-    dues.present? ? dues : 0
+    dues.presence || 0
   end
 
   private def xero_dues_payer
-    (
-      self.country&.wfc_dues_redirect&.redirect_to ||
-        self.organizers.find { |organizer| organizer.wfc_dues_redirect.present? }&.wfc_dues_redirect&.redirect_to
-    )
+    self.country&.wfc_dues_redirect&.redirect_to ||
+    self.organizers.find { |organizer| organizer.wfc_dues_redirect.present? }&.wfc_dues_redirect&.redirect_to
   end
 
   # WFC usually sends dues to the first staff delegate in alphabetical order if there are no redirects setup for the country or organizer.
@@ -2388,20 +2225,50 @@ class Competition < ApplicationRecord
     xero_dues_payer&.is_combined_invoice || false
   end
 
+  def form_announcement_data
+    {
+      isAnnounced: self.announced?,
+      announcedBy: self.announced_by_user&.name,
+      announcedAt: self.announced_at&.iso8601,
+      isCancelled: self.cancelled?,
+      canBeCancelled: self.can_be_cancelled?,
+      cancelledBy: self.cancelled_by_user&.name,
+      cancelledAt: self.cancelled_at&.iso8601,
+      isRegistrationPast: self.registration_past?,
+      isRegistrationFull: self.registration_full?,
+      canCloseFullRegistration: self.orga_can_close_reg_full_limit?,
+    }
+  end
+
+  def form_confirmation_data(for_user)
+    {
+      isConfirmed: self.confirmed?,
+      canConfirm: for_user.can_confirm_competition?(self),
+      isVisible: self.show_at_all?,
+      cannotDeleteReason: for_user.get_cannot_delete_competition_reason(self),
+    }
+  end
+
+  def form_user_preferences(for_user)
+    {
+      isReceivingNotifications: self.receiving_registration_emails?(for_user.id),
+    }
+  end
+
   def to_form_data
     {
       # TODO: enable this once we have persistent IDs
       # "id" => id,
       "competitionId" => id,
       "name" => name,
-      "shortName" => cellName,
+      "shortName" => cell_name,
       "nameReason" => name_reason,
       "venue" => {
-        "countryId" => countryId,
-        "cityName" => cityName,
+        "countryId" => country_id,
+        "cityName" => city_name,
         "name" => venue,
-        "details" => venueDetails,
-        "address" => venueAddress,
+        "details" => venue_details,
+        "address" => venue_address,
         "coordinates" => {
           "lat" => latitude_degrees || 0,
           "long" => longitude_degrees || 0,
@@ -2477,10 +2344,6 @@ class Competition < ApplicationRecord
         "mainEventId" => main_event_id,
       },
       "remarks" => remarks,
-      "admin" => {
-        "isConfirmed" => confirmed?,
-        "isVisible" => showAtAll?,
-      },
       "cloning" => {
         "fromId" => being_cloned_from_id,
         "cloneTabs" => clone_tabs || false,
@@ -2503,14 +2366,14 @@ class Competition < ApplicationRecord
       # for historic reasons, we keep 'name' errors listed under ID. Don't ask.
       "competitionId" => self.persisted? ? (errors[:id] + errors[:name]) : [],
       "name" => self.persisted? ? [] : (errors[:id] + errors[:name]),
-      "shortName" => errors[:cellName],
+      "shortName" => errors[:cell_name],
       "nameReason" => errors[:name_reason],
       "venue" => {
-        "countryId" => errors[:countryId],
-        "cityName" => errors[:cityName],
+        "countryId" => errors[:country_id],
+        "cityName" => errors[:city_name],
         "name" => errors[:venue],
-        "details" => errors[:venueDetails],
-        "address" => errors[:venueAddress],
+        "details" => errors[:venue_details],
+        "address" => errors[:venue_address],
         "coordinates" => {
           "lat" => errors[:latitude],
           "long" => errors[:longitude],
@@ -2586,10 +2449,6 @@ class Competition < ApplicationRecord
         "mainEventId" => errors[:main_event_id],
       },
       "remarks" => errors[:remarks],
-      "admin" => {
-        "isConfirmed" => errors[:confirmed_at],
-        "isVisible" => errors[:showAtAll],
-      },
       "cloning" => {
         "fromId" => errors[:being_cloned_from_id],
         "cloneTabs" => being_cloned_from_id.present? ? being_cloned_from&.association_errors(:tabs) : errors[:clone_tabs],
@@ -2600,6 +2459,14 @@ class Competition < ApplicationRecord
     }
   end
 
+  def self.compute_diff(old_form, new_form)
+    compute_diff = HashDiff.left_diff(old_form, new_form)
+
+    compute_diff.reject_values_recursive do |value|
+      value == HashDiff::NO_VALUE
+    end
+  end
+
   def association_errors(association_name)
     self.public_send(association_name).map(&:errors).flat_map(&:to_a)
   end
@@ -2608,7 +2475,43 @@ class Competition < ApplicationRecord
     JSON::Validator.validate!(Competition.form_data_json_schema, form_data)
 
     if self.confirmed? && !current_user.can_admin_competitions?
-      raise WcaExceptions::BadApiParameter.new("Cannot change announced competition")
+      current_state_form = self.to_form_data
+      changed_form_data = Competition.compute_diff(current_state_form, form_data)
+
+      # This is a much "stricter" version of the general schema above.
+      #    If the Delegate submits fields that they are not allowed to edit,
+      #    then these fields will not be included in the schema and validation will fail.
+      JSON::Validator.validate!(Competition.delegate_edits_json_schema, changed_form_data)
+
+      changed_form_data.each_recursive do |key, value, *prefixes|
+        joined_key = (prefixes + [key]).join('.')
+
+        # These keys all represent timestamps. They may only be edited by non-admins if...
+        #   - the original value (pre-edit) has not yet passed
+        #   - the new value is in the future (extending deadlines is allowed, shortening them is not)
+        if %w[registration.closingDateTime registration.waitingListDeadlineDate registration.eventChangeDeadlineDate].include?(joined_key)
+          existing_value = current_state_form.dig(*prefixes, key)
+
+          if existing_value.present?
+            existing_datetime = DateTime.parse(existing_value).utc
+
+            raise WcaExceptions::BadApiParameter.new(I18n.t('competitions.errors.editing_deadline_already_passed', timestamp: existing_datetime), json_property: joined_key) unless existing_datetime >= DateTime.now.utc
+
+            if value.present?
+              new_datetime = DateTime.parse(value).utc
+              new_after_existing = new_datetime >= existing_datetime
+
+              raise WcaExceptions::BadApiParameter.new(I18n.t('competitions.errors.edited_deadline_not_after_original', new_timestamp: new_datetime, timestamp: existing_datetime), json_property: joined_key) unless new_after_existing
+            end
+          end
+
+          if value.present?
+            new_datetime = DateTime.parse(value).utc
+
+            raise WcaExceptions::BadApiParameter.new(I18n.t('competitions.errors.edited_deadline_not_in_future', new_timestamp: new_datetime), json_property: joined_key) unless new_datetime > DateTime.now.utc
+          end
+        end
+      end
     end
 
     ActiveRecord::Base.transaction do
@@ -2620,16 +2523,16 @@ class Competition < ApplicationRecord
         self.competition_series = nil
       end
 
-      if (form_championships = form_data["championships"]).present?
-        self.championships = form_championships.map do |type|
-          Championship.new(championship_type: type)
-        end
-      else
-        # explicitly sending an empty array of championships
-        #   (which prominently happens when removing the only championship there is)
-        #   makes `present?` return `false`, so we explicitly set this default value.
-        self.championships = []
-      end
+      self.championships = if (form_championships = form_data["championships"]).present?
+                             form_championships.map do |type|
+                               Championship.new(championship_type: type)
+                             end
+                           else
+                             # explicitly sending an empty array of championships
+                             #   (which prominently happens when removing the only championship there is)
+                             #   makes `present?` return `false`, so we explicitly set this default value.
+                             []
+                           end
 
       assign_attributes(Competition.form_data_to_attributes(form_data))
     end
@@ -2639,14 +2542,14 @@ class Competition < ApplicationRecord
     {
       id: form_data['competitionId'],
       name: form_data['name'],
-      cityName: form_data.dig('venue', 'cityName'),
-      countryId: form_data.dig('venue', 'countryId'),
+      city_name: form_data.dig('venue', 'cityName'),
+      country_id: form_data.dig('venue', 'countryId'),
       information: form_data['information'],
       venue: form_data.dig('venue', 'name'),
-      venueAddress: form_data.dig('venue', 'address'),
-      venueDetails: form_data.dig('venue', 'details'),
+      venue_address: form_data.dig('venue', 'address'),
+      venue_details: form_data.dig('venue', 'details'),
       external_website: form_data.dig('website', 'externalWebsite'),
-      cellName: form_data['shortName'],
+      cell_name: form_data['shortName'],
       latitude_degrees: form_data.dig('venue', 'coordinates', 'lat'),
       longitude_degrees: form_data.dig('venue', 'coordinates', 'long'),
       staff_delegate_ids: form_data.dig('staff', 'staffDelegateIds')&.join(','),
@@ -2696,21 +2599,15 @@ class Competition < ApplicationRecord
       guests_per_registration_limit: form_data.dig('registration', 'guestsPerRegistration'),
       events_per_registration_limit: form_data.dig('eventRestrictions', 'eventLimitation', 'perRegistrationLimit'),
       force_comment_in_registration: form_data.dig('registration', 'forceComment'),
-      confirmed: form_data.dig('admin', 'isConfirmed'),
-      showAtAll: form_data.dig('admin', 'isVisible'),
       being_cloned_from_id: form_data.dig('cloning', 'fromId'),
       clone_tabs: form_data.dig('cloning', 'cloneTabs'),
     }
   end
 
   def set_form_data_series(form_data_series, current_user)
-    unless current_user.can_update_competition_series?(self)
-      raise WcaExceptions::BadApiParameter.new("Cannot change Competition Series")
-    end
+    raise WcaExceptions::BadApiParameter.new("Cannot change Competition Series") unless current_user.can_update_competition_series?(self)
 
-    unless form_data_series["competitionIds"].include?(self.id)
-      raise WcaExceptions::BadApiParameter.new("The Series must include the competition you're currently editing.")
-    end
+    raise WcaExceptions::BadApiParameter.new("The Series must include the competition you're currently editing.") unless form_data_series["competitionIds"].include?(self.id)
 
     competition_series = form_data_series["id"].present? ? CompetitionSeries.find(form_data_series["id"]) : CompetitionSeries.new
     competition_series.set_form_data(form_data_series)
@@ -2942,6 +2839,78 @@ class Competition < ApplicationRecord
     }
   end
 
+  # When comparing arrays through HashDiff, it implicitly converts the indices into keys.
+  #   For example, a diff of "before: [1,2,3] -- after: [1,2,3,4]" will be reported as "{3 => 4}"
+  #   because the element at index 3 on the right-hand side was added.
+  # This means that things which were numeric arrays in the original data appear as hashes
+  #   in the diff'ed data.
+  def self.array_change_json_schema(**additional_properties)
+    {
+      "type" => "object",
+      "additionalProperties" => additional_properties.deep_stringify_keys,
+      "propertyNames" => { "pattern" => /^\d+$/ },
+      "uniqueItems" => true,
+    }
+  end
+
+  # Stuff that Delegates are allowed to edit even after the competition is announced,
+  #   see also https://docs.google.com/document/d/1-GwE5OXurBUnR7EVBRTGIN_dGj3AaU7vvan_6RjOW7Q/edit
+  def self.delegate_edits_json_schema
+    {
+      "type" => "object",
+      "additionalProperties" => false,
+      "properties" => {
+        "information" => { "type" => ["string", "null"] },
+        "staff" => {
+          "type" => "object",
+          "additionalProperties" => false,
+          "properties" => {
+            "staffDelegateIds" => self.array_change_json_schema(type: "integer"),
+            "traineeDelegateIds" => self.array_change_json_schema(type: "integer"),
+            "organizerIds" => self.array_change_json_schema(type: "integer"),
+            "contact" => { "type" => ["string", "null"] },
+          },
+        },
+        "website" => {
+          "type" => "object",
+          "additionalProperties" => false,
+          "properties" => {
+            "externalWebsite" => { "type" => ["string", "null"] },
+            "usesWcaLive" => { "type" => "boolean" },
+          },
+        },
+        "entryFees" => {
+          "type" => "object",
+          "additionalProperties" => false,
+          "properties" => {
+            "onTheSpotEntryFee" => { "type" => ["integer", "null"] },
+            "donationsEnabled" => { "type" => ["boolean", "null"] },
+          },
+        },
+        "registration" => {
+          "type" => "object",
+          "additionalProperties" => false,
+          "properties" => {
+            "closingDateTime" => date_json_schema("date-time"),
+            "waitingListDeadlineDate" => date_json_schema("date-time"),
+            "eventChangeDeadlineDate" => date_json_schema("date-time"),
+            "allowOnTheSpot" => { "type" => ["boolean", "null"] },
+            "allowSelfDeleteAfterAcceptance" => { "type" => "boolean" },
+            "allowSelfEdits" => { "type" => "boolean" },
+            "forceComment" => { "type" => ["boolean", "null"] },
+          },
+        },
+        "eventRestrictions" => {
+          "type" => "object",
+          "additionalProperties" => false,
+          "properties" => {
+            "mainEventId" => { "type" => ["string", "null"] },
+          },
+        },
+      },
+    }
+  end
+
   def fully_paid_registrations_count
     registrations
       .joins(:registration_payments)
@@ -2952,6 +2921,7 @@ class Competition < ApplicationRecord
 
   def attempt_auto_close!
     return false if auto_close_threshold.nil?
+
     threshold_reached = fully_paid_registrations_count >= auto_close_threshold && auto_close_threshold > 0
     threshold_reached && update(closing_full_registration: true, registration_close: Time.now)
   end

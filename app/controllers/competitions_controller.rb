@@ -43,7 +43,7 @@ class CompetitionsController < ApplicationController
   ]
 
   rescue_from WcaExceptions::ApiException do |e|
-    render status: e.status, json: { error: e.to_s }
+    render status: e.status, json: { error: e.to_s }.reverse_merge(e.error_details.compact)
   end
 
   rescue_from JSON::Schema::ValidationError do |e|
@@ -71,9 +71,7 @@ class CompetitionsController < ApplicationController
 
   private def competition_from_params(includes: nil)
     Competition.includes(includes).find(params[:competition_id] || params[:id]).tap do |competition|
-      unless competition.user_can_view?(current_user)
-        raise ActionController::RoutingError.new('Not Found')
-      end
+      raise ActionController::RoutingError.new('Not Found') unless competition.user_can_view?(current_user)
 
       assign_editing_user(competition)
     end
@@ -157,6 +155,85 @@ class CompetitionsController < ApplicationController
     colliding_registration_start_competitions
   end
 
+  def show
+    associations = {
+      competition_venues: {
+        venue_rooms: [:schedule_activities],
+      },
+      # FIXME: this part is triggerred by the competition menu generator when generating the psychsheet event list, should we care?
+      competition_events: {
+        # NOTE: we hit this association through competition.has_fees?, which then calls 'has_fee?' on each competition_event, which then use the competition to get the currency.
+        competition: [],
+        event: [],
+        # NOTE: we eventually hit the rounds->competition->competition_event in the TimeLimit 'to_s' method when having cumulative limit across rounds
+        rounds: {
+          competition: { rounds: [:competition_event] },
+          competition_event: [],
+        },
+      },
+      rounds: {
+        # Used by TimeLimit, but this is a weird includes...
+        competition: { rounds: [:competition_event] },
+      },
+    }
+    @competition = competition_from_params(includes: associations)
+    respond_to do |format|
+      format.html
+      format.pdf do
+        unless @competition.any_venues?
+          flash[:danger] = t('.no_schedule')
+          return redirect_to competition_path(@competition)
+        end
+        @colored_schedule = params.key?(:with_colors)
+
+        # Manually cache the pdf on:
+        #   - competiton.updated_at (touched by any change through WCIF)
+        #   - locale
+        #   - color or n&b
+        # We have a scheduled job to clear out old files
+        cached_path = helpers.path_to_cached_pdf(@competition, @colored_schedule)
+
+        @stream_raw = params[:raw_html] == '0xPlaywright'
+
+        if @stream_raw
+          return render content_type: 'text/html'
+        elsif !File.exist?(cached_path)
+          helpers.create_pdfs_directory
+
+          raw_content = self.render_to_string
+
+          helpers.playwright_connection do |browser|
+            page = browser.new_page
+
+            # Inject the raw HTML and wait until it finished loading all network assets
+            page.set_content(raw_content, waitUntil: 'networkidle')
+
+            # Wait until the WOFF2 fonts have been extracted
+            page.evaluate_handle('document.fonts.ready')
+
+            page.pdf(
+              path: cached_path,
+              format: 'A4',
+              landscape: true,
+              # Use `scale` and `margins` to imitate WkHtmlToPdf look and feel
+              scale: 0.8,
+              margin: { top: '8mm', bottom: '8.5mm', left: '10mm', right: '10mm' },
+            )
+          end
+        end
+
+        File.open(cached_path) do |f|
+          send_data f.read, filename: "#{helpers.pdf_name(@competition)}.pdf",
+                            type: "application/pdf", disposition: "inline"
+        end
+      end
+      format.ics do
+        calendar = @competition.to_ics
+        render plain: calendar.to_ical, content_type: 'text/calendar'
+      end
+    end
+  end
+
   def new
     @competition = Competition.new(
       competitor_limit_enabled: true,
@@ -197,9 +274,7 @@ class CompetitionsController < ApplicationController
     competition = competition_from_params
     payment_integration = params.require(:payment_integration)
 
-    unless current_user&.can_manage_competition?(competition)
-      raise ActionController::RoutingError.new('Not Found')
-    end
+    raise ActionController::RoutingError.new('Not Found') unless current_user&.can_manage_competition?(competition)
 
     if payment_integration == 'paypal' && PaypalInterface.paypal_disabled?
       flash[:error] = 'PayPal is not yet available in production environments'
@@ -209,9 +284,7 @@ class CompetitionsController < ApplicationController
     connector = CompetitionPaymentIntegration::AVAILABLE_INTEGRATIONS[payment_integration.to_sym].safe_constantize
     account_reference = connector&.connect_account(params)
 
-    unless account_reference.present?
-      raise ActionController::RoutingError.new("Payment Integration #{payment_integration} not Found")
-    end
+    raise ActionController::RoutingError.new("Payment Integration #{payment_integration} not Found") if account_reference.blank?
 
     competition.competition_payment_integrations.new(connected_account: account_reference)
 
@@ -234,9 +307,7 @@ class CompetitionsController < ApplicationController
     competition_id = params.require(:state)
     competition = Competition.find(competition_id)
 
-    unless current_user&.can_manage_competition?(competition)
-      raise ActionController::RoutingError.new('Not Found')
-    end
+    raise ActionController::RoutingError.new('Not Found') unless current_user&.can_manage_competition?(competition)
 
     redirect_to competition_connect_payment_integration_path(
       competition_id,
@@ -274,11 +345,11 @@ class CompetitionsController < ApplicationController
   end
 
   def competition_form_nearby_json(competition, other_comp)
-    if current_user.can_admin_results?
-      comp_link = ActionController::Base.helpers.link_to(other_comp.name, competition_admin_edit_path(other_comp.id), target: "_blank")
-    else
-      comp_link = ActionController::Base.helpers.link_to(other_comp.name, competition_path(other_comp.id))
-    end
+    comp_link = if current_user.can_admin_results?
+                  ActionController::Base.helpers.link_to(other_comp.name, competition_admin_edit_path(other_comp.id), target: "_blank", rel: "noopener")
+                else
+                  ActionController::Base.helpers.link_to(other_comp.name, competition_path(other_comp.id))
+                end
 
     days_until = competition.days_until_competition?(other_comp)
 
@@ -292,7 +363,7 @@ class CompetitionsController < ApplicationController
       daysUntil: days_until,
       startDate: other_comp.start_date,
       endDate: other_comp.end_date,
-      location: "#{other_comp.cityName}, #{other_comp.countryId}",
+      location: "#{other_comp.city_name}, #{other_comp.country_id}",
       distance: {
         km: competition.kilometers_to(other_comp).round(2),
         from: {
@@ -305,7 +376,7 @@ class CompetitionsController < ApplicationController
         },
       },
       limit: other_comp.competitor_limit_enabled ? other_comp.competitor_limit : "",
-      competitors: other_comp.is_probably_over? ? other_comp.results.select('DISTINCT personId').count : "",
+      competitors: other_comp.probably_over? ? other_comp.results.select('DISTINCT personId').count : "",
       events: other_comp.events.map { |event|
         event.id
       },
@@ -337,11 +408,11 @@ class CompetitionsController < ApplicationController
   end
 
   def competition_form_registration_collision_json(competition, other_comp)
-    if current_user.can_admin_results?
-      comp_link = ActionController::Base.helpers.link_to(other_comp.name, competition_admin_edit_path(other_comp.id), target: "_blank")
-    else
-      comp_link = ActionController::Base.helpers.link_to(other_comp.name, competition_path(other_comp.id))
-    end
+    comp_link = if current_user.can_admin_results?
+                  ActionController::Base.helpers.link_to(other_comp.name, competition_admin_edit_path(other_comp.id), target: "_blank", rel: "noopener")
+                else
+                  ActionController::Base.helpers.link_to(other_comp.name, competition_path(other_comp.id))
+                end
 
     {
       id: other_comp.id,
@@ -351,8 +422,8 @@ class CompetitionsController < ApplicationController
       delegates: users_to_sentence(other_comp.delegates),
       registrationOpen: other_comp.registration_open,
       minutesUntil: competition.minutes_until_other_registration_starts(other_comp),
-      cityName: other_comp.cityName,
-      countryId: other_comp.countryId,
+      cityName: other_comp.city_name,
+      countryId: other_comp.country_id,
       events: other_comp.events.map { |event|
         event.id
       },
@@ -381,62 +452,6 @@ class CompetitionsController < ApplicationController
     render json: {
       dues_value: per_competitor_dues_in_lowest_denomination,
     }
-  end
-
-  def show
-    associations = {
-      competition_venues: {
-        venue_rooms: [:schedule_activities],
-      },
-      # FIXME: this part is triggerred by the competition menu generator when generating the psychsheet event list, should we care?
-      competition_events: {
-        # NOTE: we hit this association through competition.has_fees?, which then calls 'has_fee?' on each competition_event, which then use the competition to get the currency.
-        competition: [],
-        event: [],
-        # NOTE: we eventually hit the rounds->competition->competition_event in the TimeLimit 'to_s' method when having cumulative limit across rounds
-        rounds: {
-          competition: { rounds: [:competition_event] },
-          competition_event: [],
-        },
-      },
-      rounds: {
-        # Used by TimeLimit, but this is a weird includes...
-        competition: { rounds: [:competition_event] },
-      },
-    }
-    @competition = competition_from_params(includes: associations)
-    respond_to do |format|
-      format.html do
-      end
-      format.pdf do
-        unless @competition.has_schedule?
-          flash[:danger] = t('.no_schedule')
-          return redirect_to competition_path(@competition)
-        end
-        @colored_schedule = params.key?(:with_colors)
-        # Manually cache the pdf on:
-        #   - competiton.updated_at (touched by any change through WCIF)
-        #   - locale
-        #   - color or n&b
-        # We have a scheduled job to clear out old files
-        cached_path = helpers.path_to_cached_pdf(@competition, @colored_schedule)
-        begin
-          File.open(cached_path) do |f|
-            send_data f.read, filename: "#{helpers.pdf_name(@competition)}.pdf",
-                              type: "application/pdf", disposition: "inline"
-          end
-        rescue Errno::ENOENT
-          # This exception occurs when the file doesn't exist: let's create it!
-          helpers.create_pdfs_directory
-          render pdf: helpers.pdf_name(@competition), orientation: "Landscape",
-                 save_to_file: cached_path, disposition: "inline"
-        end
-      end
-      format.ics do
-        calendar = @competition.to_ics
-        render plain: calendar.to_ical, content_type: 'text/calendar'
-      end
-    end
   end
 
   def show_podiums
@@ -470,7 +485,7 @@ class CompetitionsController < ApplicationController
 
   def unbookmark
     @competition = competition_from_params
-    BookmarkedCompetition.where(competition: @competition, user: current_user).each(&:destroy!)
+    BookmarkedCompetition.where(competition: @competition, user: current_user).destroy_all
     Rails.cache.delete("#{current_user.id}-competitions-bookmarked")
     head :ok
   end
@@ -479,8 +494,7 @@ class CompetitionsController < ApplicationController
   def create
     competition = Competition.new
 
-    # we're quite lax about reading params, because set_form_data! below does a comprehensive JSON-Schema check.
-    form_data = params.permit!.to_h
+    form_data = params_for_competition_form
     competition.set_form_data(form_data, current_user)
 
     if competition.save
@@ -506,8 +520,7 @@ class CompetitionsController < ApplicationController
 
     old_organizers = competition.organizers.to_a
 
-    # we're quite lax about reading params, because set_form_data! below does a comprehensive JSON-Schema check.
-    form_data = params.permit!.to_h
+    form_data = params_for_competition_form
 
     #####
     # HACK BECAUSE WE DON'T HAVE PERSISTENT COMPETITION IDS
@@ -566,7 +579,7 @@ class CompetitionsController < ApplicationController
         CompetitionsMailer.notify_organizer_of_removal_from_competition(current_user, competition, removed_organizer).deliver_later
       end
 
-      response_data = { status: "ok", message: t('competitions.update.save_success') }
+      response_data = { status: "ok", message: t('.save_success') }
 
       if persisted_id != competition.id
         response_data[:redirect] = competition_admin_view ? competition_admin_edit_path(competition) : edit_competition_path(competition)
@@ -578,23 +591,19 @@ class CompetitionsController < ApplicationController
     end
   end
 
+  private def params_for_competition_form
+    # we're quite lax about reading params, because set_form_data! on the competition object does a comprehensive JSON-Schema check.
+    #   Also, listing _all_ the possible params to `permit` here is annoying because the Competition model has _way_ too many columns.
+    #   So we "only" remove the ActionController values, as well as all route params manually.
+    params.permit!.to_h.except(:controller, :action, :id, :competition, :format)
+  end
+
   before_action -> { require_user_permission(:can_manage_competition?, competition_from_params) }, only: [:announcement_data]
 
   def announcement_data
     competition = competition_from_params
 
-    render json: {
-      isAnnounced: competition.announced?,
-      announcedBy: competition.announced_by_user&.name,
-      announcedAt: competition.announced_at&.iso8601,
-      isCancelled: competition.cancelled?,
-      canBeCancelled: competition.can_be_cancelled?,
-      cancelledBy: competition.cancelled_by_user&.name,
-      cancelledAt: competition.cancelled_at&.iso8601,
-      isRegistrationPast: competition.registration_past?,
-      isRegistrationFull: competition.registration_full?,
-      canCloseFullRegistration: competition.orga_can_close_reg_full_limit?,
-    }
+    render json: competition.form_announcement_data
   end
 
   before_action -> { require_user_permission(:can_manage_competition?, competition_from_params) }, only: [:user_preferences]
@@ -602,9 +611,7 @@ class CompetitionsController < ApplicationController
   def user_preferences
     competition = competition_from_params
 
-    render json: {
-      isReceivingNotifications: competition.receiving_registration_emails?(current_user.id),
-    }
+    render json: competition.form_user_preferences(current_user)
   end
 
   before_action -> { require_user_permission(:can_manage_competition?, competition_from_params) }, only: [:announcement_data]
@@ -612,10 +619,25 @@ class CompetitionsController < ApplicationController
   def confirmation_data
     competition = competition_from_params
 
-    render json: {
-      canConfirm: current_user.can_confirm_competition?(competition),
-      cannotDeleteReason: current_user.get_cannot_delete_competition_reason(competition),
-    }
+    render json: competition.form_confirmation_data(current_user)
+  end
+
+  before_action -> { require_user_permission(:can_admin_competitions?) }, only: [:update_confirmation_data]
+
+  def update_confirmation_data
+    competition = competition_from_params
+
+    competition.confirmed = params[:isConfirmed] if params.key?(:isConfirmed)
+    competition.show_at_all = params[:isVisible] if params.key?(:isVisible)
+
+    if competition.save
+      render json: {
+        status: "ok",
+        data: competition.form_confirmation_data(current_user),
+      }
+    else
+      render status: :bad_request, json: competition.errors
+    end
   end
 
   before_action -> { require_user_permission(:get_cannot_delete_competition_reason, competition_from_params, is_message: true) }, only: [:destroy]
@@ -641,7 +663,11 @@ class CompetitionsController < ApplicationController
         CompetitionsMailer.notify_organizer_of_confirmed_competition(current_user, competition, organizer).deliver_later
       end
 
-      render json: { status: "ok", message: t('competitions.update.confirm_success') }
+      render json: {
+        status: "ok",
+        message: t('competitions.update.confirm_success'),
+        data: competition.form_confirmation_data(current_user),
+      }
     else
       render status: :bad_request, json: competition.form_errors
     end
@@ -652,17 +678,19 @@ class CompetitionsController < ApplicationController
   def announce
     competition = competition_from_params
 
-    if competition.announced?
-      return render json: { error: "Already announced" }
-    end
+    return render json: { error: "Already announced" }, status: :bad_request if competition.announced?
 
-    competition.update!(announced_at: Time.now, announced_by: current_user.id, showAtAll: true)
+    competition.update!(announced_at: Time.now, announced_by: current_user.id, show_at_all: true)
 
     competition.organizers.each do |organizer|
       CompetitionsMailer.notify_organizer_of_announced_competition(competition, organizer).deliver_later
     end
 
-    render json: { status: "ok", message: t('competitions.messages.announced_success') }
+    render json: {
+      status: "ok",
+      message: t('competitions.messages.announced_success'),
+      data: competition.form_announcement_data,
+    }
   end
 
   before_action -> { require_user_permission(:can_admin_competitions?) }, only: [:cancel_or_uncancel]
@@ -676,17 +704,24 @@ class CompetitionsController < ApplicationController
     if undo
       if competition.cancelled?
         competition.update!(cancelled_at: nil, cancelled_by: nil)
-        render json: { status: "ok", message: t('competitions.messages.uncancel_success') }
+
+        render json: {
+          status: "ok",
+          message: t('competitions.messages.uncancel_success'),
+          data: competition.form_announcement_data,
+        }
       else
         render json: { error: t('competitions.messages.uncancel_failure') }, status: :bad_request
       end
+    elsif competition.can_be_cancelled?
+      competition.update!(cancelled_at: Time.now, cancelled_by: current_user.id)
+      render json: {
+        status: "ok",
+        message: t('competitions.messages.cancel_success'),
+        data: competition.form_announcement_data,
+      }
     else
-      if competition.can_be_cancelled?
-        competition.update!(cancelled_at: Time.now, cancelled_by: current_user.id)
-        render json: { status: "ok", message: t('competitions.messages.cancel_success') }
-      else
-        render json: { error: t('competitions.messages.cancel_failure') }, status: :bad_request
-      end
+      render json: { error: t('competitions.messages.cancel_failure') }, status: :bad_request
     end
   end
 
@@ -702,7 +737,11 @@ class CompetitionsController < ApplicationController
         registration_close: Time.now,
       )
 
-      render json: { status: "ok", message: t('competitions.messages.orga_closed_reg_success') }
+      render json: {
+        status: "ok",
+        message: t('competitions.messages.orga_closed_reg_success'),
+        data: competition.form_announcement_data,
+      }
     else
       render json: { error: t('competitions.messages.orga_closed_reg_failure') }, status: :bad_request
     end
@@ -719,7 +758,7 @@ class CompetitionsController < ApplicationController
     competition.receive_registration_emails = receive_registration_emails
     competition.save!
 
-    render json: { status: "ok" }
+    render json: { status: "ok", data: competition.form_user_preferences(current_user) }
   end
 
   def my_competitions
@@ -733,16 +772,14 @@ class CompetitionsController < ApplicationController
         [r.competition_id, r.competing_status]
       end
       competition_ids.concat(@registered_for_by_competition_id.keys)
-      if current_user.person
-        competition_ids.concat(current_user.person.competitions.pluck(:competitionId))
-      end
+      competition_ids.concat(current_user.person.competitions.pluck(:competitionId)) if current_user.person
       # An organiser might still have duties to perform for a cancelled competition until the date of the competition has passed.
       # For example, mailing all competitors about the cancellation.
       # In general ensuring ease of access until it is certain that they won't need to frequently visit the page anymore.
       competitions = Competition.includes(:delegate_report, :championships)
                                 .where(id: competition_ids.uniq).where("cancelled_at is null or end_date >= curdate()")
-                                .sort_by { |comp| comp.start_date || (Date.today + 20.year) }.reverse
-      @past_competitions, @not_past_competitions = competitions.partition(&:is_probably_over?)
+                                .sort_by { |comp| comp.start_date || (Date.today + 20.years) }.reverse
+      @past_competitions, @not_past_competitions = competitions.partition(&:probably_over?)
       bookmarked_ids = current_user.competitions_bookmarked.pluck(:competition_id)
       @bookmarked_competitions = Competition.not_over
                                             .where(id: bookmarked_ids.uniq)
@@ -754,6 +791,6 @@ class CompetitionsController < ApplicationController
   def for_senior
     user_id = params[:user_id] || current_user.id
     @user = User.find(user_id)
-    @competitions = @user.subordinate_delegates.map(&:delegated_competitions).flatten.uniq.reject(&:is_probably_over?).sort_by { |c| c.start_date || (Date.today + 20.year) }.reverse
+    @competitions = @user.subordinate_delegates.map(&:delegated_competitions).flatten.uniq.reject(&:probably_over?).sort_by { |c| c.start_date || (Date.today + 20.years) }.reverse
   end
 end

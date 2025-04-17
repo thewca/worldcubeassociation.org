@@ -1,3 +1,4 @@
+# rubocop:disable all
 # frozen_string_literal: true
 
 # This migration comes from active_storage (originally 20190112182829)

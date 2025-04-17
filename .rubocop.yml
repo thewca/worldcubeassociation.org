@@ -2,6 +2,13 @@ inherit_from: .rubocop_todo.yml
 
 plugins:
   - rubocop-thread_safety
+  - rubocop-performance
+  - rubocop-rails
+  - rubocop-rspec
+  - rubocop-rspec_rails
+  - rubocop-factory_bot
+  - rubocop-capybara
+  - rubocop-rake
 
 AllCops:
   TargetRubyVersion: 3.4
@@ -17,32 +24,34 @@ AllCops:
     - 'db/schema.rb'
     - 'db/developer_dump_schema.rb'
     - 'db/results_dump_schema.rb'
+    - '.git-hooks/**/*'
+
+Style/StringConcatenation:
+  # We need to use + here because it's a custom operator TODO: At least until we only render from NExt
+  Exclude:
+  - 'app/helpers/application_helper.rb'
+
+Rails/RenderInline:
+  Exclude:
+    - 'app/controllers/regulations_controller.rb'
+
+Rails/I18nLocaleAssignment:
+  Exclude:
+    - 'spec/support/locale_reset.rb'
 
 Bundler/OrderedGems:
-  Enabled: false
-
-Lint/EmptyWhen:
-  Enabled: false
-
-Lint/UnusedBlockArgument:
   Enabled: false
 
 Lint/UnusedMethodArgument:
   Enabled: false
 
-Naming/AccessorMethodName:
-  Enabled: false
-
 Style/Alias:
-  Enabled: false
+  EnforcedStyle: prefer_alias_method
 
 Style/EmptyMethod:
   EnforcedStyle: expanded
 
 Style/RedundantSelf:
-  Enabled: false
-
-Style/SafeNavigation:
   Enabled: false
 
 Style/StringLiterals:
@@ -69,9 +78,6 @@ Style/TrailingCommaInHashLiteral:
   # If `consistent_comma`, the cop requires a comma after the last item of all
   # non-empty array and hash literals.
   EnforcedStyleForMultiline: comma
-
-Style/GuardClause:
-  Enabled: false
 
 Metrics/AbcSize:
   Enabled: false
@@ -104,13 +110,7 @@ Metrics/MethodLength:
 Metrics/ModuleLength:
   Enabled: false
 
-Naming/MemoizedInstanceVariableName:
-  Enabled: false
-
 Style/AccessModifierDeclarations:
-  Enabled: false
-
-Style/AsciiComments:
   Enabled: false
 
 Style/BlockDelimiters:
@@ -122,34 +122,13 @@ Style/ClassAndModuleChildren:
 Style/ClassVars:
   Enabled: false
 
-Style/ConditionalAssignment:
-  Enabled: false
-
 Style/Documentation:
-  Enabled: false
-
-Style/DoubleNegation:
-  Enabled: false
-
-Style/EmptyElse:
-  EnforcedStyle: empty
-
-Style/IfInsideElse:
-  Enabled: false
-
-Style/IfUnlessModifier:
-  Enabled: false
-
-Style/InverseMethods:
   Enabled: false
 
 Style/Lambda:
   Enabled: false
 
 Style/MultilineBlockChain:
-  Enabled: false
-
-Style/NegatedIf:
   Enabled: false
 
 Style/Next:
@@ -161,14 +140,8 @@ Style/NumericPredicate:
 Style/PercentLiteralDelimiters:
   Enabled: false
 
-Style/PerlBackrefs:
-  Enabled: false
-
 Style/RaiseArgs:
   EnforcedStyle: compact
-
-Style/RedundantParentheses:
-  Enabled: false
 
 Style/SignalException:
   EnforcedStyle: only_raise
@@ -185,29 +158,32 @@ Style/StringLiteralsInInterpolation:
 Style/SymbolArray:
   Enabled: false
 
+# This causes a bunch of false positives as of 2025-03-17
+Rails/ActionControllerFlashBeforeRender:
+  Enabled: false
+
+# We currently have a couple enums that are defined with Arrays, disabling for now
+Rails/EnumHash:
+  Enabled: false
+
 Style/WordArray:
   Enabled: false
 
 Style/SymbolProc:
   Enabled: false
 
-Naming/PredicateName:
-  Enabled: false
-
-Naming/BlockParameterName:
-  Enabled: false
-
 Naming/MethodParameterName:
-  Enabled: false
+  AllowedNames:
+    - n
+    - id
 
-Style/YodaCondition:
-  Enabled: false
-
-Style/FormatStringToken:
-  Enabled: false
-
-Layout/EmptyLineAfterGuardClause:
-  Enabled: false
+Naming/PredicateName:
+  AllowedMethods:
+    # These are database columns
+    - is_active?
+    - is_hidden?
+    # This one actually makes sense
+    - has_permission?
 
 Lint/EmptyFile:
   Exclude:
@@ -217,21 +193,12 @@ Lint/EmptyFile:
 Naming/VariableNumber:
   Enabled: false
 
-# If an external library requires us to use terms like "blacklist",
-# we have no choice but to follow their conventions until they update
-Naming/InclusiveLanguage:
-  Exclude:
-    - 'config/**/*'
-
 Style/OpenStructUse:
   Exclude:
     - 'spec/lib/middlewares/warden_user_logger_spec.rb'
 
 Style/HashSyntax:
   EnforcedShorthandSyntax: never
-
-Naming/BlockForwarding:
-  Enabled: false
 
 Style/ArgumentsForwarding:
   RedundantBlockArgumentNames: []
@@ -247,3 +214,237 @@ ThreadSafety/ClassAndModuleAttributes:
 
 ThreadSafety/DirChdir:
   AllowCallWithBlock: true
+
+# These are a list of temporarily disabled cops so we can turn them on in batches
+
+# Performance
+
+Performance/CollectionLiteralInLoop:
+  Enabled: false
+
+Performance/MethodObjectAsBlock:
+  Enabled: false
+
+# Rails
+
+Rails/TimeZone:
+  Enabled: false
+
+Rails/Date:
+  Enabled: false
+
+Rails/SkipsModelValidations:
+  Enabled: false
+
+Rails/RedundantForeignKey:
+  Enabled: false
+
+Rails/InverseOf:
+  Enabled: false
+
+Rails/HasManyOrHasOneDependent:
+  Enabled: false
+
+Rails/OutputSafety:
+  Enabled: false
+
+Rails/I18nLocaleTexts:
+  Enabled: false
+
+Rails/HelperInstanceVariable:
+  Enabled: false
+
+Rails/UniqueValidationWithoutIndex:
+  Enabled: false
+
+# Rspec
+
+RSpec/MultipleExpectations:
+ Enabled: false
+
+RSpec/ExampleLength:
+ Enabled: false
+
+RSpec/NoExpectationExample:
+  Enabled: false
+
+RSpec/IndexedLet:
+  Enabled: false
+
+RSpec/HookArgument:
+  Enabled: false
+
+RSpec/AnyInstance:
+  Enabled: false
+
+RSpec/VerifiedDoubles:
+  Enabled: false
+
+RSpec/DescribeClass:
+  Enabled: false
+
+RSpec/ContextWording:
+  Enabled: false
+
+RSpec/SpecFilePathFormat:
+  Enabled: false
+
+RSpec/LetSetup:
+  Enabled: false
+
+RSpec/ChangeByZero:
+  Enabled: false
+
+RSpec/MessageSpies:
+  Enabled: false
+
+RSpec/InstanceVariable:
+  Enabled: false
+
+RSpec/NestedGroups:
+  Enabled: false
+
+RSpec/BeforeAfterAll:
+  Enabled: false
+
+RSpec/MultipleMemoizedHelpers:
+  Enabled: false
+
+RSpec/ItBehavesLike:
+  Enabled: false
+
+RSpec/EmptyLineAfterExample:
+  Enabled: false
+
+RSpec/MatchArray:
+  Enabled: false
+
+RSpec/DescribedClass:
+  Enabled: false
+
+RSpec/VariableName:
+  Enabled: false
+
+RSpec/RepeatedDescription:
+  Enabled: false
+
+RSpec/ReceiveCounts:
+  Enabled: false
+
+RSpec/ContextMethod:
+  Enabled: false
+
+RSpec/BeNil:
+  Enabled: false
+
+RSpec/LetBeforeExamples:
+  Enabled: false
+
+RSpec/ExampleWording:
+  Enabled: false
+
+RSpec/Focus:
+  Enabled: false
+
+RSpec/ExpectInHook:
+  Enabled: false
+
+RSpec/PendingWithoutReason:
+  Enabled: false
+
+RSpec/MultipleDescribes:
+  Enabled: false
+
+RSpec/StubbedMock:
+  Enabled: false
+
+RSpec/SortMetadata:
+  Enabled: false
+
+RSpec/ScatteredSetup:
+  Enabled: false
+
+RSpec/ExcessiveDocstringSpacing:
+  Enabled: false
+
+RSpec/NamedSubject:
+  Enabled: false
+
+RSpec/Be:
+  Enabled: false
+
+RSpec/ScatteredLet:
+  Enabled: false
+
+RSpec/RepeatedExample:
+  Enabled: false
+
+RSpec/RepeatedExampleGroupDescription:
+  Enabled: false
+
+RSpec/ClassCheck:
+  Enabled: false
+
+RSpec/BeEmpty:
+  Enabled: false
+
+RSpecRails/NegationBeValid:
+  Enabled: false
+
+RSpecRails/InferredSpecType:
+  Enabled: false
+
+# Factory Bot
+
+FactoryBot/ConsistentParenthesesStyle:
+  Enabled: false
+
+FactoryBot/SyntaxMethods:
+  Enabled: false
+
+FactoryBot/ExcessiveCreateList:
+  Enabled: false
+
+# Capybara
+
+Capybara/AmbiguousClick:
+  Enabled: false
+
+Capybara/ClickLinkOrButtonStyle:
+  Enabled: false
+
+Capybara/CurrentPathExpectation:
+  Enabled: false
+
+Capybara/FindAllFirst:
+  Enabled: false
+
+Capybara/MatchStyle:
+  Enabled: false
+
+Capybara/NegationMatcher:
+  Enabled: false
+
+Capybara/NegationMatcherAfterVisit:
+  Enabled: false
+
+Capybara/RedundantWithinFind:
+  Enabled: false
+
+Capybara/SpecificActions:
+  Enabled: false
+
+Capybara/SpecificFinders:
+  Enabled: false
+
+Capybara/SpecificMatcher:
+  Enabled: false
+
+Capybara/VisibilityMatcher:
+  Enabled: false
+
+Capybara/RSpec/HaveSelector:
+  Enabled: false
+
+Capybara/RSpec/PredicateMatcher:
+  Enabled: false

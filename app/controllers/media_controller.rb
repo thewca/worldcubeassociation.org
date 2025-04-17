@@ -4,15 +4,27 @@ class MediaController < ApplicationController
   before_action :authenticate_user!, except: [:index]
   before_action -> { redirect_to_root_unless_user(:can_approve_media?) }, except: [:index, :new, :create]
 
+  def index
+    params[:status] = "accepted"
+    params[:year] ||= Date.today.year
+    @media = all_media
+    render :index
+  end
+
   def new
     @medium = CompetitionMedium.new
+  end
+
+  def edit
+    @medium = find_medium
+    I18n.with_locale(:en) { render :edit }
   end
 
   def create
     params = medium_params.merge(
       "status" => "pending",
-      "submitterName" => current_user.name,
-      "submitterEmail" => current_user.email,
+      "submitter_name" => current_user.name,
+      "submitter_email" => current_user.email,
     )
     @medium = CompetitionMedium.new(params)
 
@@ -24,33 +36,21 @@ class MediaController < ApplicationController
     end
   end
 
-  private def get_media
+  private def all_media
     params[:year] ||= "all years"
     params[:region] ||= "all"
 
-    media = CompetitionMedium.includes(:competition).where(status: params[:status]).order(timestampSubmitted: :desc)
-    media = media.joins(:competition).where("YEAR(Competitions.start_date) = :media_start", media_start: params[:year]) unless params[:year] == "all years"
+    media = CompetitionMedium.includes(:competition).where(status: params[:status]).order(submitted_at: :desc)
+    media = media.joins(:competition).where("YEAR(competitions.start_date) = :media_start", media_start: params[:year]) unless params[:year] == "all years"
     media = media.belongs_to_region(params[:region]) unless params[:region] == "all"
 
     media
   end
 
-  def index
-    params[:status] = "accepted"
-    params[:year] ||= Date.today.year
-    @media = get_media
-    render :index
-  end
-
   def validate
     params[:status] ||= "pending"
-    @media = get_media
+    @media = all_media
     I18n.with_locale(:en) { render :validate }
-  end
-
-  def edit
-    @medium = find_medium
-    I18n.with_locale(:en) { render :edit }
   end
 
   def update
@@ -75,13 +75,13 @@ class MediaController < ApplicationController
 
   private def medium_params
     params.require(:competition_medium).permit(
-      :competitionId,
-      :type,
+      :competition_id,
+      :media_type,
       :text,
       :uri,
-      :submitterName,
-      :submitterEmail,
-      :submitterComment,
+      :submitter_name,
+      :submitter_email,
+      :submitter_comment,
       :status,
     )
   end
