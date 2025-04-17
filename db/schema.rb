@@ -703,7 +703,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_04_01_150413) do
     t.string "gender", limit: 1, default: ""
     t.date "dob", null: false
     t.string "competition_id", limit: 32, null: false
-    t.index ["competition_id", "id"], name: "index_inbox_persons_on_competition_id_and_id", unique: true
+    t.index ["competition_id", "id"], name: "index_InboxPersons_on_competitionId_and_id", unique: true
     t.index ["country_iso2"], name: "InboxPersons_fk_country"
     t.index ["name"], name: "InboxPersons_name"
     t.index ["wca_id"], name: "InboxPersons_id"
@@ -889,7 +889,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_04_01_150413) do
     t.index ["country_id"], name: "Persons_fk_country"
     t.index ["name"], name: "Persons_name"
     t.index ["name"], name: "index_persons_on_name", type: :fulltext
-    t.index ["wca_id", "sub_id"], name: "index_persons_on_wca_id_and_sub_id", unique: true
+    t.index ["wca_id", "sub_id"], name: "index_Persons_on_wca_id_and_subId", unique: true
     t.index ["wca_id"], name: "index_persons_on_wca_id"
   end
 
