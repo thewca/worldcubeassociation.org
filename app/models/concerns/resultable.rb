@@ -9,7 +9,6 @@ module Resultable
     # NOTE: We use cached values instead of belongs_to to improve performances.
     belongs_to :competition
     belongs_to :round_type
-    # FIXME: shouldn't we take advantage of the fact that these are cached?
     belongs_to :event
     belongs_to :format
 
@@ -172,11 +171,11 @@ module Resultable
   alias_attribute :wca_id, :personId
 
   def best_solve
-    SolveTime.new(eventId, :single, best)
+    SolveTime.new(event_id, :single, best)
   end
 
   def average_solve
-    SolveTime.new(eventId, :average, average)
+    SolveTime.new(event_id, :average, average)
   end
 
   def best_index
@@ -196,11 +195,11 @@ module Resultable
   end
 
   def solve_times
-    @solve_times ||= [SolveTime.new(eventId, :single, value1),
-                      SolveTime.new(eventId, :single, value2),
-                      SolveTime.new(eventId, :single, value3),
-                      SolveTime.new(eventId, :single, value4),
-                      SolveTime.new(eventId, :single, value5)].freeze
+    @solve_times ||= [SolveTime.new(event_id, :single, value1),
+                      SolveTime.new(event_id, :single, value2),
+                      SolveTime.new(event_id, :single, value3),
+                      SolveTime.new(event_id, :single, value4),
+                      SolveTime.new(event_id, :single, value5)].freeze
   end
 
   def worst_index
