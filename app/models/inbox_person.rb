@@ -9,6 +9,9 @@ class InboxPerson < ApplicationRecord
   alias_attribute :ref_id, :id
   alias_method :wca_person, :person
 
+  # FIXME: GB Remove this after all other snake_case migrations are done
+  alias_attribute :competitionId, :competition_id
+
   validates :name, presence: true
   validates :dob, presence: true
   validates :country_iso2, presence: true
