@@ -10,88 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_03_31_170413) do
-  create_table "Competitions", id: { type: :string, limit: 32, default: "" }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
-    t.string "name", limit: 50, default: "", null: false
-    t.string "cityName", limit: 50, default: "", null: false
-    t.string "countryId", limit: 50, default: "", null: false
-    t.text "information", size: :medium
-    t.string "venue", limit: 240, default: "", null: false
-    t.string "venueAddress"
-    t.string "venueDetails"
-    t.string "external_website", limit: 200
-    t.string "cellName", limit: 45, default: "", null: false
-    t.boolean "showAtAll", default: false, null: false
-    t.integer "latitude"
-    t.integer "longitude"
-    t.string "contact", limit: 255
-    t.text "remarks"
-    t.datetime "registration_open", precision: nil
-    t.datetime "registration_close", precision: nil
-    t.boolean "use_wca_registration", default: true, null: false
-    t.boolean "guests_enabled", default: true, null: false
-    t.datetime "results_posted_at", precision: nil
-    t.datetime "results_nag_sent_at", precision: nil
-    t.boolean "generate_website"
-    t.datetime "announced_at", precision: nil
-    t.integer "base_entry_fee_lowest_denomination"
-    t.string "currency_code", limit: 255, default: "USD"
-    t.string "connected_stripe_account_id", limit: 255
-    t.date "start_date"
-    t.date "end_date"
-    t.boolean "enable_donations"
-    t.boolean "competitor_limit_enabled"
-    t.integer "competitor_limit"
-    t.text "competitor_limit_reason"
-    t.text "extra_registration_requirements"
-    t.boolean "on_the_spot_registration"
-    t.integer "on_the_spot_entry_fee_lowest_denomination"
-    t.integer "refund_policy_percent"
-    t.datetime "refund_policy_limit_date", precision: nil
-    t.integer "guests_entry_fee_lowest_denomination"
-    t.datetime "created_at", precision: nil
-    t.datetime "updated_at", precision: nil
-    t.datetime "results_submitted_at", precision: nil
-    t.boolean "early_puzzle_submission"
-    t.text "early_puzzle_submission_reason"
-    t.boolean "qualification_results"
-    t.text "qualification_results_reason"
-    t.string "name_reason"
-    t.string "external_registration_page", limit: 200
-    t.datetime "confirmed_at", precision: nil
-    t.boolean "event_restrictions"
-    t.text "event_restrictions_reason"
-    t.datetime "registration_reminder_sent_at", precision: nil
-    t.integer "announced_by"
-    t.integer "results_posted_by"
-    t.string "main_event_id"
-    t.datetime "cancelled_at", precision: nil
-    t.integer "cancelled_by"
-    t.datetime "waiting_list_deadline_date", precision: nil
-    t.datetime "event_change_deadline_date", precision: nil
-    t.integer "guest_entry_status", default: 0, null: false
-    t.boolean "allow_registration_edits", default: false, null: false
-    t.boolean "allow_registration_self_delete_after_acceptance", default: false, null: false
-    t.integer "competition_series_id"
-    t.boolean "use_wca_live_for_scoretaking", default: false, null: false
-    t.boolean "allow_registration_without_qualification", default: false
-    t.integer "guests_per_registration_limit"
-    t.integer "events_per_registration_limit"
-    t.boolean "force_comment_in_registration"
-    t.integer "posting_by"
-    t.boolean "forbid_newcomers", default: false, null: false
-    t.string "forbid_newcomers_reason"
-    t.integer "competitor_can_cancel", default: 0, null: false
-    t.integer "newcomer_month_reserved_spots"
-    t.integer "auto_close_threshold"
-    t.boolean "auto_accept_registrations", default: false, null: false
-    t.integer "auto_accept_disable_threshold"
-    t.index ["cancelled_at"], name: "index_Competitions_on_cancelled_at"
-    t.index ["countryId"], name: "index_Competitions_on_countryId"
-    t.index ["end_date"], name: "index_Competitions_on_end_date"
-    t.index ["start_date"], name: "index_Competitions_on_start_date"
-  end
-
+ActiveRecord::Schema[7.2].define(version: 2025_04_01_121013) do
   create_table "InboxPersons", id: false, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "id", limit: 10, null: false
     t.string "wcaId", limit: 10, default: "", null: false
@@ -555,6 +474,87 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_31_170413) do
     t.string "country_iso2", null: false
     t.index ["competition_id", "wcif_id"], name: "index_competition_venues_on_competition_id_and_wcif_id", unique: true
     t.index ["competition_id"], name: "index_competition_venues_on_competition_id"
+  end
+
+  create_table "competitions", id: { type: :string, limit: 32, default: "" }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "name", limit: 50, default: "", null: false
+    t.string "city_name", limit: 50, default: "", null: false
+    t.string "country_id", limit: 50, default: "", null: false
+    t.text "information", size: :medium
+    t.string "venue", limit: 240, default: "", null: false
+    t.string "venue_address"
+    t.string "venue_details"
+    t.string "external_website", limit: 200
+    t.string "cell_name", limit: 45, default: "", null: false
+    t.boolean "show_at_all", default: false, null: false
+    t.integer "latitude"
+    t.integer "longitude"
+    t.string "contact", limit: 255
+    t.text "remarks"
+    t.datetime "registration_open", precision: nil
+    t.datetime "registration_close", precision: nil
+    t.boolean "use_wca_registration", default: true, null: false
+    t.boolean "guests_enabled", default: true, null: false
+    t.datetime "results_posted_at", precision: nil
+    t.datetime "results_nag_sent_at", precision: nil
+    t.boolean "generate_website"
+    t.datetime "announced_at", precision: nil
+    t.integer "base_entry_fee_lowest_denomination"
+    t.string "currency_code", limit: 255, default: "USD"
+    t.string "connected_stripe_account_id", limit: 255
+    t.date "start_date"
+    t.date "end_date"
+    t.boolean "enable_donations"
+    t.boolean "competitor_limit_enabled"
+    t.integer "competitor_limit"
+    t.text "competitor_limit_reason"
+    t.text "extra_registration_requirements"
+    t.boolean "on_the_spot_registration"
+    t.integer "on_the_spot_entry_fee_lowest_denomination"
+    t.integer "refund_policy_percent"
+    t.datetime "refund_policy_limit_date", precision: nil
+    t.integer "guests_entry_fee_lowest_denomination"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
+    t.datetime "results_submitted_at", precision: nil
+    t.boolean "early_puzzle_submission"
+    t.text "early_puzzle_submission_reason"
+    t.boolean "qualification_results"
+    t.text "qualification_results_reason"
+    t.string "name_reason"
+    t.string "external_registration_page", limit: 200
+    t.datetime "confirmed_at", precision: nil
+    t.boolean "event_restrictions"
+    t.text "event_restrictions_reason"
+    t.datetime "registration_reminder_sent_at", precision: nil
+    t.integer "announced_by"
+    t.integer "results_posted_by"
+    t.string "main_event_id"
+    t.datetime "cancelled_at", precision: nil
+    t.integer "cancelled_by"
+    t.datetime "waiting_list_deadline_date", precision: nil
+    t.datetime "event_change_deadline_date", precision: nil
+    t.integer "guest_entry_status", default: 0, null: false
+    t.boolean "allow_registration_edits", default: false, null: false
+    t.boolean "allow_registration_self_delete_after_acceptance", default: false, null: false
+    t.integer "competition_series_id"
+    t.boolean "use_wca_live_for_scoretaking", default: false, null: false
+    t.boolean "allow_registration_without_qualification", default: false
+    t.integer "guests_per_registration_limit"
+    t.integer "events_per_registration_limit"
+    t.boolean "force_comment_in_registration"
+    t.integer "posting_by"
+    t.boolean "forbid_newcomers", default: false, null: false
+    t.string "forbid_newcomers_reason"
+    t.integer "competitor_can_cancel", default: 0, null: false
+    t.integer "newcomer_month_reserved_spots"
+    t.integer "auto_close_threshold"
+    t.boolean "auto_accept_registrations", default: false, null: false
+    t.integer "auto_accept_disable_threshold"
+    t.index ["cancelled_at"], name: "index_competitions_on_cancelled_at"
+    t.index ["country_id"], name: "index_Competitions_on_countryId"
+    t.index ["end_date"], name: "index_competitions_on_end_date"
+    t.index ["start_date"], name: "index_competitions_on_start_date"
   end
 
   create_table "concise_average_results", id: false, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|

@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 class Competition < ApplicationRecord
-  self.table_name = "Competitions"
-
   # We need this default order, tests rely on it.
   has_many :competition_events, -> { order(:event_id) }, dependent: :destroy
   has_many :events, through: :competition_events
@@ -24,7 +22,7 @@ class Competition < ApplicationRecord
   has_many :competition_venues, dependent: :destroy
   has_many :venue_countries, -> { distinct }, through: :competition_venues, source: :country
   has_many :venue_continents, -> { distinct }, through: :competition_venues, source: :continent
-  belongs_to :country, foreign_key: :countryId
+  belongs_to :country
   has_one :continent, through: :country
   has_many :championships, dependent: :delete_all
   has_many :wcif_extensions, as: :extendable, dependent: :delete_all
@@ -51,33 +49,33 @@ class Competition < ApplicationRecord
            with_model_currency: :currency_code
 
   scope :not_cancelled, -> { where(cancelled_at: nil) }
-  scope :visible, -> { where(showAtAll: true) }
-  scope :not_visible, -> { where(showAtAll: false) }
+  scope :visible, -> { where(show_at_all: true) }
+  scope :not_visible, -> { where(show_at_all: false) }
   scope :over, -> { where("results_posted_at IS NOT NULL OR end_date < ?", Date.today) }
   scope :not_over, -> { where("results_posted_at IS NULL AND end_date >= ?", Date.today) }
   scope :between_dates, ->(start_date, end_date) { where("start_date <= ? AND end_date >= ?", end_date, start_date) }
   scope :end_date_passed_since, lambda { |num_days| where(end_date: ...(num_days.days.ago)) }
   scope :belongs_to_region, lambda { |region_id|
     joins(:country).where(
-      "countryId = :region_id OR countries.continent_id = :region_id", region_id: region_id
+      "country_id = :region_id OR countries.continent_id = :region_id", region_id: region_id
     )
   }
   scope :contains, lambda { |search_term|
     where(
-      "Competitions.name like :search_term or
-      Competitions.cityName like :search_term",
+      "competitions.name like :search_term or
+      competitions.city_name like :search_term",
       search_term: "%#{search_term}%",
     )
   }
   scope :has_event, lambda { |event_id|
     joins(
-      "join competition_events ce#{event_id} ON ce#{event_id}.competition_id = Competitions.id
+      "join competition_events ce#{event_id} ON ce#{event_id}.competition_id = competitions.id
       join events e#{event_id} ON e#{event_id}.id = ce#{event_id}.event_id",
     ).where("e#{event_id}.id = :event_id", event_id: event_id)
   }
   scope :managed_by, lambda { |user_id|
-    joins("LEFT JOIN competition_organizers ON competition_organizers.competition_id = Competitions.id")
-      .joins("LEFT JOIN competition_delegates ON competition_delegates.competition_id = Competitions.id")
+    joins("LEFT JOIN competition_organizers ON competition_organizers.competition_id = competitions.id")
+      .joins("LEFT JOIN competition_delegates ON competition_delegates.competition_id = competitions.id")
       .where(
         "delegate_id = :user_id OR organizer_id = :user_id",
         user_id: user_id,
@@ -99,12 +97,12 @@ class Competition < ApplicationRecord
   enum :competitor_can_cancel, [:not_accepted, :always, :unpaid], prefix: true
 
   CLONEABLE_ATTRIBUTES = %w(
-    cityName
-    countryId
+    city_name
+    country_id
     information
     venue
-    venueAddress
-    venueDetails
+    venue_address
+    venue_details
     generate_website
     external_website
     latitude
@@ -141,8 +139,8 @@ class Competition < ApplicationRecord
     end_date
     name
     name_reason
-    cellName
-    showAtAll
+    cell_name
+    show_at_all
     external_registration_page
     confirmed_at
     registration_open
@@ -211,13 +209,13 @@ class Competition < ApplicationRecord
   end
   validates :name, length: { maximum: MAX_NAME_LENGTH },
                    format: { with: VALID_NAME_RE, message: proc { I18n.t('competitions.errors.invalid_name_message') } }
-  validates :cellName, length: { maximum: MAX_CELL_NAME_LENGTH },
-                       format: { with: VALID_NAME_RE, message: proc { I18n.t('competitions.errors.invalid_name_message') } }, if: :name_valid_or_updating?
+  validates :cell_name, length: { maximum: MAX_CELL_NAME_LENGTH },
+                        format: { with: VALID_NAME_RE, message: proc { I18n.t('competitions.errors.invalid_name_message') } }, if: :name_valid_or_updating?
   validates :venue, format: { with: PATTERN_TEXT_WITH_LINKS_RE }
   validates :external_website, format: { with: URL_RE }, allow_blank: true
   validates :external_registration_page, presence: true, format: { with: URL_RE }, if: :external_registration_page_required?
 
-  validates :countryId, inclusion: { in: Country::ALL_COUNTRY_IDS }
+  validates :country_id, inclusion: { in: Country::ALL_COUNTRY_IDS }
   validates :currency_code, inclusion: { in: Money::Currency, message: proc { I18n.t('competitions.errors.invalid_currency_code') } }
 
   validates :refund_policy_percent, numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 100, if: :refund_policy_percent_required? }
@@ -245,10 +243,10 @@ class Competition < ApplicationRecord
 
   # Validations are used to show form errors to the user. If string columns aren't validated for length, it produces an unexplained error for the user
   validates :name, length: { maximum: MAX_NAME_LENGTH }
-  validates :cellName, length: { maximum: MAX_CELL_NAME_LENGTH }
-  validates :cityName, length: { maximum: MAX_CITY_NAME_LENGTH }
+  validates :cell_name, length: { maximum: MAX_CELL_NAME_LENGTH }
+  validates :city_name, length: { maximum: MAX_CITY_NAME_LENGTH }
   validates :venue, length: { maximum: MAX_VENUE_LENGTH }
-  validates :venueAddress, :venueDetails, :name_reason, :forbid_newcomers_reason, length: { maximum: MAX_FREETEXT_LENGTH }
+  validates :venue_address, :venue_details, :name_reason, :forbid_newcomers_reason, length: { maximum: MAX_FREETEXT_LENGTH }
   validates :external_website, :external_registration_page, length: { maximum: MAX_URL_LENGTH }
   validates :contact, length: { maximum: MAX_MARKDOWN_LENGTH }
 
@@ -323,10 +321,10 @@ class Competition < ApplicationRecord
   # 48 hours
   REGISTRATION_OPENING_EARLIEST = 172_800
 
-  validates :cityName, city: true
+  validates :city_name, city: true
 
   # We have stricter validations for confirming a competition
-  validates :cityName, :countryId, :venue, :venueAddress, :latitude, :longitude, presence: true, if: :confirmed_or_visible?
+  validates :city_name, :country_id, :venue, :venue_address, :latitude, :longitude, presence: true, if: :confirmed_or_visible?
   validates :name_reason, presence: true, if: :name_reason_required?
   validates :external_website, presence: true, if: -> { confirmed_or_visible? && !generate_website }
 
@@ -489,7 +487,7 @@ class Competition < ApplicationRecord
   end
 
   def confirmed_or_visible?
-    self.confirmed? || self.showAtAll
+    self.confirmed? || self.show_at_all?
   end
 
   def registration_full?
@@ -511,7 +509,7 @@ class Competition < ApplicationRecord
   end
 
   def country
-    Country.c_find(self.countryId)
+    Country.c_find(self.country_id)
   end
 
   delegate :continent, to: :country
@@ -546,7 +544,7 @@ class Competition < ApplicationRecord
   def warnings_for(user)
     warnings = {}
 
-    if self.showAtAll
+    if self.show_at_all?
       warnings[:announcement] = I18n.t('competitions.messages.not_announced') unless self.announced?
 
       if self.results.any? && !self.results_posted?
@@ -733,7 +731,7 @@ class Competition < ApplicationRecord
 
   validate :dates_must_be_valid
 
-  alias_attribute :visible, :showAtAll
+  alias_attribute :visible, :show_at_all
   alias_attribute :latitude_microdegrees, :latitude
   alias_attribute :longitude_microdegrees, :longitude
 
@@ -750,10 +748,10 @@ class Competition < ApplicationRecord
       safe_name_without_year = ActiveSupport::Inflector.transliterate(name_without_year, locale: :en).gsub(/[^a-z0-9]+/i, '')
       self.id = safe_name_without_year[0...(MAX_ID_LENGTH - year.length)] + year
     end
-    return unless cellName.blank? || force_override
+    return unless cell_name.blank? || force_override
 
     year = " #{year}"
-    self.cellName = name_without_year.truncate(MAX_CELL_NAME_LENGTH - year.length) + year
+    self.cell_name = name_without_year.truncate(MAX_CELL_NAME_LENGTH - year.length) + year
   end
 
   attr_writer :staff_delegate_ids, :organizer_ids, :trainee_delegate_ids
@@ -1337,7 +1335,7 @@ class Competition < ApplicationRecord
   end
 
   def display_name(short: false)
-    data = short ? cellName : name
+    data = short ? cell_name : name
     if cancelled?
       I18n.t("competitions.competition_info.display_name", name: data)
     else
@@ -1375,7 +1373,7 @@ class Competition < ApplicationRecord
   end
 
   def user_can_view?(user)
-    self.showAtAll || user&.can_manage_competition?(self)
+    self.show_at_all? || user&.can_manage_competition?(self)
   end
 
   def user_can_view_results?(user)
@@ -1432,7 +1430,7 @@ class Competition < ApplicationRecord
   end
 
   def city_and_country
-    [cityName, country&.name].compact.join(', ')
+    [city_name, country&.name].compact.join(', ')
   end
 
   def events_with_podium_results
@@ -1620,7 +1618,7 @@ class Competition < ApplicationRecord
   end
 
   def self.years
-    Competition.where(showAtAll: true).pluck(:start_date).map(&:year).uniq.sort!.reverse!
+    Competition.where(show_at_all: true).pluck(:start_date).map(&:year).uniq.sort!.reverse!
   end
 
   def self.non_future_years
@@ -1651,7 +1649,7 @@ class Competition < ApplicationRecord
       country = Country.find_by(iso2: params[:country_iso2])
       raise WcaExceptions::BadApiParameter.new("Invalid country_iso2: '#{params[:country_iso2]}'") unless country
 
-      competitions = competitions.where(countryId: country.id)
+      competitions = competitions.where(country_id: country.id)
     end
 
     if params[:delegate].present?
@@ -1716,7 +1714,7 @@ class Competition < ApplicationRecord
     end
 
     query&.split&.each do |part|
-      like_query = %w(id name cellName cityName countryId).map { |column| "Competitions.#{column} LIKE :part" }.join(" OR ")
+      like_query = %w(id name cell_name city_name country_id).map { |column| "competitions.#{column} LIKE :part" }.join(" OR ")
       competitions = competitions.where(like_query, part: "%#{part}%")
     end
 
@@ -1758,7 +1756,7 @@ class Competition < ApplicationRecord
       "formatVersion" => "1.0",
       "id" => id,
       "name" => name,
-      "shortName" => cellName,
+      "shortName" => cell_name,
       "series" => part_of_competition_series? ? competition_series_wcif(authorized: authorized) : nil,
       "persons" => persons_wcif(authorized: authorized),
       "events" => events_wcif,
@@ -2088,10 +2086,8 @@ class Competition < ApplicationRecord
     }
   end
 
-  alias_attribute :venue_address, :venueAddress
-  alias_attribute :venue_details, :venueDetails
-  alias_attribute :short_name, :cellName
-  alias_attribute :city, :cityName
+  alias_attribute :short_name, :cell_name
+  alias_attribute :city, :city_name
 
   def country_iso2
     country&.iso2
@@ -2150,7 +2146,7 @@ class Competition < ApplicationRecord
   end
 
   def multi_country_fmc_competition?
-    events.length == 1 && events[0].fewest_moves? && Country::FICTIVE_IDS.include?(countryId)
+    events.length == 1 && events[0].fewest_moves? && Country::FICTIVE_IDS.include?(country_id)
   end
 
   def exempt_from_wca_dues?
@@ -2248,7 +2244,7 @@ class Competition < ApplicationRecord
     {
       isConfirmed: self.confirmed?,
       canConfirm: for_user.can_confirm_competition?(self),
-      isVisible: self.showAtAll?,
+      isVisible: self.show_at_all?,
       cannotDeleteReason: for_user.get_cannot_delete_competition_reason(self),
     }
   end
@@ -2265,14 +2261,14 @@ class Competition < ApplicationRecord
       # "id" => id,
       "competitionId" => id,
       "name" => name,
-      "shortName" => cellName,
+      "shortName" => cell_name,
       "nameReason" => name_reason,
       "venue" => {
-        "countryId" => countryId,
-        "cityName" => cityName,
+        "countryId" => country_id,
+        "cityName" => city_name,
         "name" => venue,
-        "details" => venueDetails,
-        "address" => venueAddress,
+        "details" => venue_details,
+        "address" => venue_address,
         "coordinates" => {
           "lat" => latitude_degrees || 0,
           "long" => longitude_degrees || 0,
@@ -2370,14 +2366,14 @@ class Competition < ApplicationRecord
       # for historic reasons, we keep 'name' errors listed under ID. Don't ask.
       "competitionId" => self.persisted? ? (errors[:id] + errors[:name]) : [],
       "name" => self.persisted? ? [] : (errors[:id] + errors[:name]),
-      "shortName" => errors[:cellName],
+      "shortName" => errors[:cell_name],
       "nameReason" => errors[:name_reason],
       "venue" => {
-        "countryId" => errors[:countryId],
-        "cityName" => errors[:cityName],
+        "countryId" => errors[:country_id],
+        "cityName" => errors[:city_name],
         "name" => errors[:venue],
-        "details" => errors[:venueDetails],
-        "address" => errors[:venueAddress],
+        "details" => errors[:venue_details],
+        "address" => errors[:venue_address],
         "coordinates" => {
           "lat" => errors[:latitude],
           "long" => errors[:longitude],
@@ -2546,14 +2542,14 @@ class Competition < ApplicationRecord
     {
       id: form_data['competitionId'],
       name: form_data['name'],
-      cityName: form_data.dig('venue', 'cityName'),
-      countryId: form_data.dig('venue', 'countryId'),
+      city_name: form_data.dig('venue', 'cityName'),
+      country_id: form_data.dig('venue', 'countryId'),
       information: form_data['information'],
       venue: form_data.dig('venue', 'name'),
-      venueAddress: form_data.dig('venue', 'address'),
-      venueDetails: form_data.dig('venue', 'details'),
+      venue_address: form_data.dig('venue', 'address'),
+      venue_details: form_data.dig('venue', 'details'),
       external_website: form_data.dig('website', 'externalWebsite'),
-      cellName: form_data['shortName'],
+      cell_name: form_data['shortName'],
       latitude_degrees: form_data.dig('venue', 'coordinates', 'lat'),
       longitude_degrees: form_data.dig('venue', 'coordinates', 'long'),
       staff_delegate_ids: form_data.dig('staff', 'staffDelegateIds')&.join(','),

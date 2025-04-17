@@ -66,7 +66,7 @@ class Country < ApplicationRecord
   end
 
   belongs_to :continent
-  has_many :competitions, foreign_key: :countryId
+  has_many :competitions, foreign_key: :country_id
   has_one :band, foreign_key: :iso2, primary_key: :iso2, class_name: "CountryBand"
 
   def continent
