@@ -133,57 +133,57 @@ zh-CN:
       #original_hash: 4d618bb
       name: 资格赛
       #original_hash: 4d618bb
-      cellName: 资格赛
+      cell_name: 资格赛
     '1':
       #original_hash: 1e725b6
       name: 初赛
       #original_hash: 1e725b6
-      cellName: 初赛
+      cell_name: 初赛
     '2':
       #original_hash: 985c8d0
       name: 复赛
       #original_hash: 985c8d0
-      cellName: 复赛
+      cell_name: 复赛
     '3':
       #original_hash: e2f74d2
       name: 半决赛
       #original_hash: e2f74d2
-      cellName: 半决赛
+      cell_name: 半决赛
     b:
       #original_hash: 327c999
       name: B组决赛
       #original_hash: 327c999
-      cellName: B组决赛
+      cell_name: B组决赛
     c:
       #original_hash: 672b22c
       name: 组合制决赛
       #original_hash: 672b22c
-      cellName: 组合制决赛
+      cell_name: 组合制决赛
     d:
       #original_hash: 1e725b6
       name: 组合制初赛
       #original_hash: 1e725b6
-      cellName: 组合制初赛
+      cell_name: 组合制初赛
     e:
       #original_hash: 985c8d0
       name: 组合制复赛
       #original_hash: 985c8d0
-      cellName: 组合制复赛
+      cell_name: 组合制复赛
     f:
       #original_hash: 672b22c
       name: 决赛
       #original_hash: 672b22c
-      cellName: 决赛
+      cell_name: 决赛
     g:
       #original_hash: ccf6f8e
       name: 组合制半决赛
       #original_hash: ccf6f8e
-      cellName: 组合制半决赛
+      cell_name: 组合制半决赛
     h:
       #original_hash: 4d618bb
       name: 组合制资格赛
       #original_hash: 4d618bb
-      cellName: 组合制资格赛
+      cell_name: 组合制资格赛
   cutoff:
     #original_hash: cf458e7
     time:
@@ -498,19 +498,19 @@ zh-CN:
         comment: 备注
       competition_medium:
         #original_hash: 1917f4f
-        competitionId: 比赛
+        competition_id: 比赛
         #original_hash: 3deb745
-        type: 类型
+        media_type: 类型
         #original_hash: c3328c3
         text: 文字
         #original_hash: d051707
         uri: 链接
         #original_hash: 1be755a
-        submitterName: 提交人姓名
+        submitter_name: 提交人姓名
         #original_hash: 78cdfee
-        submitterEmail: 提交人电邮
+        submitter_email: 提交人电邮
         #original_hash: 0d31f23
-        submitterComment: 提交人留言
+        submitter_comment: 提交人留言
         #original_hash: bae7d5b
         status: 状态
   enums:
@@ -571,7 +571,7 @@ zh-CN:
         accepted: 已接收
         #original_hash: 96f608c
         pending: 待接收
-      type:
+      media_type:
         #original_hash: ee45c30
         report: 报道
         #original_hash: 4360c2d
@@ -823,7 +823,7 @@ zh-CN:
         comment: ''
       competition_medium:
         #original_hash: da39a3e
-        competitionId: ''
+        competition_id: ''
         #original_hash: da39a3e
         type: ''
         #original_hash: da39a3e
@@ -831,11 +831,11 @@ zh-CN:
         #original_hash: da39a3e
         uri: ''
         #original_hash: da39a3e
-        submitterName: ''
+        submitter_name: ''
         #original_hash: da39a3e
-        submitterEmail: ''
+        submitter_email: ''
         #original_hash: da39a3e
-        submitterComment: ''
+        submitter_comment: ''
         #original_hash: da39a3e
         status: ''
       results_submission:

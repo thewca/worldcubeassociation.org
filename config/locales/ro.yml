@@ -152,57 +152,57 @@ ro:
       #original_hash: 4d618bb
       name: Runda de calificare
       #original_hash: 4d618bb
-      cellName: Calificări
+      cell_name: Calificări
     '1':
       #original_hash: 1e725b6
       name: Prima rundă
       #original_hash: 1e725b6
-      cellName: Runda 1
+      cell_name: Runda 1
     '2':
       #original_hash: 985c8d0
       name: A doua
       #original_hash: 985c8d0
-      cellName: Runda 2
+      cell_name: Runda 2
     '3':
       #original_hash: e2f74d2
       name: Semifinală
       #original_hash: e2f74d2
-      cellName: Semifinală
+      cell_name: Semifinală
     b:
       #original_hash: 327c999
       name: Finala B
       #original_hash: 327c999
-      cellName: Finala B
+      cell_name: Finala B
     c:
       #original_hash: 672b22c
       name: Finală
       #original_hash: 672b22c
-      cellName: Finală
+      cell_name: Finală
     d:
       #original_hash: 1e725b6
       name: Runda 1
       #original_hash: 1e725b6
-      cellName: Runda 1
+      cell_name: Runda 1
     e:
       #original_hash: 985c8d0
       name: Runda 2
       #original_hash: 985c8d0
-      cellName: Runda 2
+      cell_name: Runda 2
     f:
       #original_hash: 672b22c
       name: Finală
       #original_hash: 672b22c
-      cellName: Finală
+      cell_name: Finală
     g:
       #original_hash: e2f74d2
       name: Semifinală
       #original_hash: e2f74d2
-      cellName: Semifinală
+      cell_name: Semifinală
     h:
       #original_hash: 4d618bb
       name: Calificări
       #original_hash: 4d618bb
-      cellName: Calificări
+      cell_name: Calificări
   attempts:
     #original_hash: 17dae1e
     attempt_name: 'Încercarea %{number}'
@@ -685,7 +685,7 @@ ro:
         competition_id: S-a întâmplat în timpul
       competition_medium:
         #original_hash: 1917f4f
-        competitionId: Competiție
+        competition_id: Competiție
         #original_hash: 3deb745
         type: Tip
         #original_hash: c3328c3
@@ -693,11 +693,11 @@ ro:
         #original_hash: d051707
         uri: Link
         #original_hash: 1be755a
-        submitterName: Numele aplicantului
+        submitter_name: Numele aplicantului
         #original_hash: 78cdfee
-        submitterEmail: E-mailul aplicantului
+        submitter_email: E-mailul aplicantului
         #original_hash: 0d31f23
-        submitterComment: Comentariul aplicantului
+        submitter_comment: Comentariul aplicantului
         #original_hash: bae7d5b
         status: Status
       regional_organization:
@@ -765,7 +765,7 @@ ro:
         accepted: Acceptat
         #original_hash: 96f608c
         pending: În așteptare
-      type:
+      media_type:
         #original_hash: ee45c30
         report: Raport
         #original_hash: 4360c2d
@@ -1202,19 +1202,19 @@ ro:
         comment: ''
       competition_medium:
         #original_hash: da39a3e
-        competitionId: ''
+        competition_id: ''
         #original_hash: da39a3e
-        type: ''
+        media_type: ''
         #original_hash: da39a3e
         text: ''
         #original_hash: da39a3e
         uri: ''
         #original_hash: da39a3e
-        submitterName: ''
+        submitter_name: ''
         #original_hash: da39a3e
-        submitterEmail: ''
+        submitter_email: ''
         #original_hash: da39a3e
-        submitterComment: ''
+        submitter_comment: ''
         #original_hash: da39a3e
         status: ''
       results_submission:

@@ -6,7 +6,7 @@ class CompetitionVenue < ApplicationRecord
   has_many :wcif_extensions, as: :extendable, dependent: :delete_all
 
   belongs_to :country, foreign_key: :country_iso2, primary_key: :iso2
-  has_one :continent, foreign_key: :continentId, through: :country
+  has_one :continent, through: :country
 
   delegate :continent, to: :country, allow_nil: true
 

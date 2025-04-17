@@ -40,9 +40,9 @@
     <tr>
       <th data-sortable="true" data-field="submission-date" data-sort-name="_submission-date_data" data-sorter="sortBySorter">Submission Date</th>
       <th data-sortable="true" data-field="competition-date" data-sort-name="_competition-date_data" data-sorter="sortBySorter">Competition Date</th>
-      <th><%= t 'activerecord.attributes.competition_medium.competitionId' %></th>
+      <th><%= t 'activerecord.attributes.competition_medium.competition_id' %></th>
       <th><%= t '.location' %></th>
-      <th><%= t 'activerecord.attributes.competition_medium.type' %></th>
+      <th><%= t 'activerecord.attributes.competition_medium.media_type' %></th>
       <th><%= t 'activerecord.attributes.competition_medium.uri' %></th>
       <% if show_edit_buttons %>
         <th></th>
@@ -57,13 +57,13 @@
     <% media.each do |medium| %>
       <% competition = medium.competition %>
       <tr data-medium-id="<%= medium.id %>">
-        <td data-sort-by="<%= medium.timestampSubmitted.to_i %>"><%= medium.timestampSubmitted.to_formatted_s(:long_utc) %></td>
+        <td data-sort-by="<%= medium.submitted_at.to_i %>"><%= medium.submitted_at.to_formatted_s(:long_utc) %></td>
         <td data-sort-by="<%= competition.start_date.to_time.to_i %>">
           <%= wca_date_range(competition.start_date, competition.end_date) %>
         </td>
         <td><%= link_to competition.name, competition_path(competition) %></td>
         <td><strong><%= competition.country.name %></strong>, <%= competition.city_name %></td>
-        <td><%= medium.type %></td>
+        <td><%= medium.media_type %></td>
         <td><%= link_to medium.text, medium.uri %></td>
         <% if show_edit_buttons %>
           <td>
