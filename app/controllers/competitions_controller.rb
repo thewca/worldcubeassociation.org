@@ -363,7 +363,7 @@ class CompetitionsController < ApplicationController
       daysUntil: days_until,
       startDate: other_comp.start_date,
       endDate: other_comp.end_date,
-      location: "#{other_comp.cityName}, #{other_comp.countryId}",
+      location: "#{other_comp.city_name}, #{other_comp.country_id}",
       distance: {
         km: competition.kilometers_to(other_comp).round(2),
         from: {
@@ -422,8 +422,8 @@ class CompetitionsController < ApplicationController
       delegates: users_to_sentence(other_comp.delegates),
       registrationOpen: other_comp.registration_open,
       minutesUntil: competition.minutes_until_other_registration_starts(other_comp),
-      cityName: other_comp.cityName,
-      countryId: other_comp.countryId,
+      cityName: other_comp.city_name,
+      countryId: other_comp.country_id,
       events: other_comp.events.map { |event|
         event.id
       },
@@ -628,7 +628,7 @@ class CompetitionsController < ApplicationController
     competition = competition_from_params
 
     competition.confirmed = params[:isConfirmed] if params.key?(:isConfirmed)
-    competition.showAtAll = params[:isVisible] if params.key?(:isVisible)
+    competition.show_at_all = params[:isVisible] if params.key?(:isVisible)
 
     if competition.save
       render json: {
@@ -680,7 +680,7 @@ class CompetitionsController < ApplicationController
 
     return render json: { error: "Already announced" }, status: :bad_request if competition.announced?
 
-    competition.update!(announced_at: Time.now, announced_by: current_user.id, showAtAll: true)
+    competition.update!(announced_at: Time.now, announced_by: current_user.id, show_at_all: true)
 
     competition.organizers.each do |organizer|
       CompetitionsMailer.notify_organizer_of_announced_competition(competition, organizer).deliver_later
