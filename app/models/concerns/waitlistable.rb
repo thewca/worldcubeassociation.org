@@ -32,8 +32,8 @@ module Waitlistable
       unless: :waiting_list_empty?,
     }
 
-    validates :waitlistable?, presence: { if: :waiting_list_position?, frontend_code: Registrations::ErrorCodes::INVALID_REQUEST_DATA }
-    validates :waiting_list_present?, presence: { if: :waiting_list_position?, frontend_code: Registrations::ErrorCodes::INVALID_REQUEST_DATA }
+    validates :waitlistable?, presence: { if: :tracked_waitlist_position?, frontend_code: Registrations::ErrorCodes::INVALID_REQUEST_DATA }
+    validates :waiting_list_present?, presence: { if: :tracked_waitlist_position?, frontend_code: Registrations::ErrorCodes::INVALID_REQUEST_DATA }
 
     after_save :commit_waitlist_position, if: :waiting_list_persisted?
 
@@ -61,9 +61,11 @@ module Waitlistable
       self.waiting_list_position.present?
     end
 
-    def waitlist_position_changed?
+    def tracked_waitlist_position?
       self.tracked_waitlist_position.present?
     end
+
+    alias_method :waitlist_position_changed?, :tracked_waitlist_position?
 
     def waiting_list_position=(target_position)
       self.apply_to_waiting_list(target_position) if self.persisted? && waiting_list_persisted?
