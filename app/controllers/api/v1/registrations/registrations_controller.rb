@@ -229,19 +229,22 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
   end
 
   def payment_ticket
+    iso_donation_amount = params[:iso_donation_amount].to_i || 0
+
     if Rails.env.production? && EnvConfig.WCA_LIVE_SITE?
-      donation = params[:donation_iso].to_i || 0
-      amount_iso = @competition.base_entry_fee_lowest_denomination
-      currency_iso = @competition.currency_code
+      # We could delegate this call to the prepare_intent function given that we're already giving it registration - however,
+      # in the long-term we want to decouple registrations from payments, so I'm deliberately not introducing any more tight coupling
+      ruby_money = @registration.entry_fee_with_donation(iso_donation_amount)
     else
-      donation_amount = params[:donation_iso].to_i || 0
-      @registration.invoice_items.create(
-        amount_lowest_denomination: donation_amount,
-        currency_code: @competition.currency_code,
-        display_name: "Optional donation"
-      ) if donation_amount > 0
-      amount_iso = @registration.invoice_items_total
-      currency_iso = @registration.invoice_items_currency_code
+      if iso_donation_amount > 0
+        @registration.invoice_items.create(
+          amount_lowest_denomination: iso_donation_amount,
+          currency_code: @competition.currency_code,
+          display_name: "Optional donation",
+        )
+      end
+      @registration.invoice_items_total
+      @registration.invoice_items_currency_code
     end
 
     payment_account = @competition.payment_account_for(:stripe)

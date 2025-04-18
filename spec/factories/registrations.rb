@@ -124,11 +124,11 @@ FactoryBot.define do
     end
 
     trait :without_callbacks do
-      after(:build) do |registration|
+      after(:build) do |_registration|
         Registration.skip_callback(:create)
       end
 
-      after(:create) do |registration|
+      after(:create) do |_registration|
         Registration.reset_callbacks(:create)
       end
     end

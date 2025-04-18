@@ -2,7 +2,7 @@
 
 FactoryBot.define do
   factory :registration_payment do
-   transient do
+    transient do
       registration { nil }
       competition { registration.competition }
     end

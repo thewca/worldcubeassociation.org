@@ -692,7 +692,7 @@ RSpec.describe Registration do
 
         it 'populates with display name and status' do
           expect(reg.invoice_items.first.display_name).to eq("#{comp.id} registration")
-          expect(reg.invoice_items.first.status).to eq('unpaid') #TODO: Do we want to define the enum with integers or strings?
+          expect(reg.invoice_items.first.status).to eq('unpaid') # TODO: Do we want to define the enum with integers or strings?
         end
       end
 

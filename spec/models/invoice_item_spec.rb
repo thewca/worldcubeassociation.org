@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe InvoiceItem do
- describe "validations" do
+  describe "validations" do
     describe "consistent_currency_code" do
       context "when creating the first invoice item for a registration" do
         it "is valid with any currency code" do
@@ -62,7 +62,7 @@ RSpec.describe InvoiceItem do
   end
 
   describe "update status after payment" do
-    let(:registration) { FactoryBot.create(:registration)} # Registration automatically creates invoice_item for entry
+    let(:registration) { FactoryBot.create(:registration) } # Registration automatically creates invoice_item for entry
 
     context 'when payment matches invoice total' do
       it 'marks a single invoice_item as paid' do
@@ -92,7 +92,7 @@ RSpec.describe InvoiceItem do
 
     context 'when payment is greater than invoice total' do
       it 'single invoice item remains unpaid' do
-        FactoryBot.create(:registration_payment, registration: registration, amount_lowest_denomination: 10000)
+        FactoryBot.create(:registration_payment, registration: registration, amount_lowest_denomination: 10_000)
         expect(registration.invoice_items.first.status).to eq('unpaid')
       end
 
@@ -104,5 +104,3 @@ RSpec.describe InvoiceItem do
     end
   end
 end
-
-
