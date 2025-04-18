@@ -8,14 +8,14 @@ module CheckRegionalRecords
     ActiveRecord::Base.connection.execute <<-SQL.squish
       INSERT INTO #{table_name}
       (resultId, countryId, eventId, competitionEndDate, best, average)
-      SELECT Results.id, Results.countryId, Results.eventId, Competitions.end_date, Results.best, Results.average
+      SELECT Results.id, Results.countryId, Results.eventId, competitions.end_date, Results.best, Results.average
       FROM Results
-      INNER JOIN Competitions ON Results.competitionId = Competitions.id
+      INNER JOIN competitions ON Results.competitionId = competitions.id
       #{competition_id.present? ? "WHERE Results.competitionId = '#{competition_id}'" : ''}
       ON DUPLICATE KEY UPDATE
         countryId = Results.countryId,
         eventId = Results.eventId,
-        competitionEndDate = Competitions.end_date,
+        competitionEndDate = competitions.end_date,
         best = Results.best,
         average = Results.average
     SQL

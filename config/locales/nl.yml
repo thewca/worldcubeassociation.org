@@ -561,7 +561,7 @@ nl:
         #original_hash: 8c41ae8
         wca_id: Persoon
         #original_hash: d523ebb
-        countryId: Land
+        country_id: Land
         #original_hash: ab58155
         dob: Geboortedatum
         #original_hash: 8a754c6
@@ -1049,7 +1049,7 @@ nl:
         #original_hash: 498f4c5
         dob: Geboortedatum moet het formaat jjjj-mm-dd hebben.
         #original_hash: da39a3e
-        countryId: ''
+        country_id: ''
         #original_hash: da39a3e
         gender: ''
         #original_hash: da39a3e
