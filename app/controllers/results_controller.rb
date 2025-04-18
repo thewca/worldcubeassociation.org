@@ -130,11 +130,11 @@ class ResultsController < ApplicationController
     elsif @is_by_region
       @query = <<-SQL.squish
         SELECT
-          result.*,
-          result.#{value} value
+          results.*,
+          results.#{value} value
         FROM (
           SELECT
-            result.country_id record_country_id,
+            results.country_id record_country_id,
             MIN(#{value}) record_value
           FROM concise_#{type_param}_results results
           #{@gender_condition.present? ? "JOIN persons ON results.person_id = persons.wca_id and persons.sub_id = 1" : ""}
@@ -201,21 +201,21 @@ class ResultsController < ApplicationController
           YEAR(competitions.start_date)  year,
           MONTH(competitions.start_date) month,
           DAY(competitions.start_date)   day,
-          events.id              eventId,
-          events.name            eventName,
+          events.id              event_id,
+          events.name            event_name,
           result.id              id,
           result.type            type,
           result.value           value,
-          result.format_id       formatId,
-          result.round_type_id   roundTypeId,
-          events.format          valueFormat,
+          result.format_id       format_id,
+          result.round_type_id   round_type_id,
+          events.format          value_format,
                                  record_name,
-          result.person_id       personId,
-          result.person_name     personName,
-          result.country_id      countryId,
-          countries.name         countryName,
-          competitions.id        competitionId,
-          competitions.cell_name competitionName,
+          result.person_id       person_id,
+          result.person_name     person_name,
+          result.country_id      country_id,
+          countries.name         country_name,
+          competitions.id        competition_id,
+          competitions.cell_name competition_name,
           value1, value2, value3, value4, value5
         FROM
           (SELECT results.*, 'single' type, best value, regional_single_record record_name FROM results WHERE regional_single_record<>'' UNION
@@ -262,10 +262,10 @@ class ResultsController < ApplicationController
         '#{type}'              type,
                                results.*,
                                value,
-        events.name            eventName,
+        events.name            event_name,
                                format,
-        countries.name         countryName,
-        competitions.cell_name competitionName,
+        countries.name         country_name,
+        competitions.cell_name competition_name,
                                `rank`,
         competitions.start_date,
         YEAR(competitions.start_date)  year,
@@ -292,9 +292,9 @@ class ResultsController < ApplicationController
         #{@years_condition_competition}
         #{@gender_condition}
         AND results.event_id = record_event_id
-        AND events.id        = result.eventId
-        AND countries.id     = result.countryId
-        AND competitions.id  = result.competitionId
+        AND events.id        = results.event_id
+        AND countries.id     = results.country_id
+        AND competitions.id  = results.competition_id
         AND events.`rank` < 990
     SQL
   end
@@ -397,7 +397,7 @@ class ResultsController < ApplicationController
     continents_rows = []
     countries_rows = []
     rows.each do |result|
-      result_country = Country.c_find!(result["countryId"])
+      result_country = Country.c_find!(result["country_id"])
       value = result["value"]
 
       world_rows << result if value == best_value_of_world
@@ -429,7 +429,7 @@ class ResultsController < ApplicationController
           rows = DbHelper.execute_cached_query(@cache_params, @record_timestamp, @query)
 
           # First, extract unique competitions
-          comp_ids = rows.map { |r| r["competitionId"] }.uniq
+          comp_ids = rows.map { |r| r["competition_id"] }.uniq
           competitions_by_id = Competition.where(id: comp_ids)
                                           .index_by(&:id)
                                           .transform_values { |comp| comp.as_json(methods: %w[country], include: [], only: %w[cell_name id]) }

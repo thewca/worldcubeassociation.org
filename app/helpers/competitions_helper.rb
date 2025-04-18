@@ -107,7 +107,7 @@ module CompetitionsHelper
                             "[#{person_name}](#{person_url person_id})"
                           end
             record_strs = results.sort_by do |r|
-              round_type = RoundType.c_find(r.roundTypeId)
+              round_type = RoundType.c_find(r.round_type_id)
               [Event.c_find(r.event_id).rank, round_type.rank]
             end.map do |result|
               event = Event.c_find(result.event_id)
