@@ -13,7 +13,7 @@ module FinishUnfinishedPersons
 
   def self.unfinished_results_scope(competition_ids = nil)
     results_scope = Result.includes(:competition, :inbox_person)
-                          .select(:person_id, :person_name, :competition_id, :countryId)
+                          .select(:person_id, :person_name, :competition_id, :country_id)
 
     results_scope = results_scope.where(competition_id: competition_ids) if competition_ids.present?
 
@@ -28,7 +28,7 @@ module FinishUnfinishedPersons
     unfinished_persons = []
     available_id_spots = {} # to make sure that all of the newcomer IDs that we're creating in one batch are unique among each other
 
-    persons_cache = Person.select(:id, :wca_id, :name, :dob, :countryId)
+    persons_cache = Person.select(:id, :wca_id, :name, :dob, :country_id)
 
     unfinished_person_results.each do |res|
       next if unfinished_persons.length >= MAX_PER_BATCH
