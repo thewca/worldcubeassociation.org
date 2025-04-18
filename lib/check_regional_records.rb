@@ -138,7 +138,7 @@ module CheckRegionalRecords
         model_comp = Competition.find(competition_id)
         event_filter = event_id || model_comp.event_ids
 
-        previous_min_results = Result.select("r.event_id, r,country_id, MIN(#{value_column}) AS `value`")
+        previous_min_results = Result.select("r.event_id, r.country_id, MIN(#{value_column}) AS `value`")
                                      .from("#{LOOKUP_TABLE_NAME} AS r")
                                      .where.not(value_column => ..0)
                                      .where(competition_end_date: ...model_comp.start_date)
