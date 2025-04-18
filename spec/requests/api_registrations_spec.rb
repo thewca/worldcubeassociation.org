@@ -1274,54 +1274,56 @@ RSpec.describe 'API Registrations' do
     end
   end
 
-  describe 'GET #payment_ticket' do
+  describe 'GET #payment_ticket', :tag do
     let(:competition) { FactoryBot.create(:competition, :registration_open, :with_organizer, :stripe_connected) }
     let(:reg) { FactoryBot.create(:registration, :pending, competition: competition) }
     let(:headers) { { 'Authorization' => fetch_jwt_token(reg.user_id) } }
 
-    it 'successfully builds a payment_intent via Stripe API' do
-      get api_v1_registrations_payment_ticket_path(competition_id: competition.id), headers: headers
-      expect(response).to be_successful
-    end
-
-    context 'successful payment ticket' do
-      before do
+    context 'production environment behaviour' do
+      it 'successfully builds a payment_intent via Stripe API', :tag do
         get api_v1_registrations_payment_ticket_path(competition_id: competition.id), headers: headers
+        expect(response).to be_successful
       end
 
-      it 'returns a client secret' do
-        expect(response.parsed_body.keys).to include('client_secret')
+      context 'successful payment ticket' do
+        before do
+          get api_v1_registrations_payment_ticket_path(competition_id: competition.id), headers: headers
+        end
+
+        it 'returns a client secret' do
+          expect(response.parsed_body.keys).to include('client_secret')
+        end
+
+        it 'creates a payment intent' do
+          expect(PaymentIntent.find_by(holder_type: "Registration", holder_id: reg.id)).to be_present
+        end
+
+        it 'payment intent details match expected values' do
+          payment_record = PaymentIntent.find_by(holder_type: "Registration", holder_id: reg.id).payment_record
+          expect(payment_record.amount_stripe_denomination).to be(1000)
+          expect(payment_record.currency_code).to eq("usd")
+        end
       end
 
-      it 'creates a payment intent' do
-        expect(PaymentIntent.find_by(holder_type: "Registration", holder_id: reg.id)).to be_present
-      end
+      it 'has the correct payment_intent properties when a donation is present' do
+        get api_v1_registrations_payment_ticket_path(competition_id: competition.id), headers: headers, params: { iso_donation_amount: 1300 }
 
-      it 'payment intent details match expected values' do
         payment_record = PaymentIntent.find_by(holder_type: "Registration", holder_id: reg.id).payment_record
-        expect(payment_record.amount_stripe_denomination).to be(1000)
+        expect(payment_record.amount_stripe_denomination).to be(2300)
         expect(payment_record.currency_code).to eq("usd")
       end
-    end
 
-    it 'has the correct payment_intent properties when a donation is present' do
-      get api_v1_registrations_payment_ticket_path(competition_id: competition.id), headers: headers, params: { iso_donation_amount: 1300 }
+      it 'refuses ticket create request if registration is closed' do
+        closed_comp = FactoryBot.create(:competition, :registration_closed, :with_organizer, :stripe_connected)
+        closed_reg = FactoryBot.create(:registration, :pending, competition: closed_comp)
 
-      payment_record = PaymentIntent.find_by(holder_type: "Registration", holder_id: reg.id).payment_record
-      expect(payment_record.amount_stripe_denomination).to be(2300)
-      expect(payment_record.currency_code).to eq("usd")
-    end
+        headers = { 'Authorization' => fetch_jwt_token(closed_reg.user_id) }
+        get api_v1_registrations_payment_ticket_path(competition_id: closed_comp.id), headers: headers
 
-    it 'refuses ticket create request if registration is closed' do
-      closed_comp = FactoryBot.create(:competition, :registration_closed, :with_organizer, :stripe_connected)
-      closed_reg = FactoryBot.create(:registration, :pending, competition: closed_comp)
-
-      headers = { 'Authorization' => fetch_jwt_token(closed_reg.user_id) }
-      get api_v1_registrations_payment_ticket_path(competition_id: closed_comp.id), headers: headers
-
-      body = response.parsed_body
-      expect(response).to have_http_status(:forbidden)
-      expect(body).to eq({ error: Registrations::ErrorCodes::REGISTRATION_CLOSED }.with_indifferent_access)
+        body = response.parsed_body
+        expect(response).to have_http_status(:forbidden)
+        expect(body).to eq({ error: Registrations::ErrorCodes::REGISTRATION_CLOSED }.with_indifferent_access)
+      end
     end
   end
 
