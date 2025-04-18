@@ -65,11 +65,11 @@ class ContactsController < ApplicationController
   end
 
   def contact
-    formValues = JSON.parse(params.require(:formValues), symbolize_names: true)
-    contact_recipient = formValues[:contactRecipient]
+    form_values = JSON.parse(params.require(:formValues), symbolize_names: true)
+    contact_recipient = form_values[:contactRecipient]
     attachment = params[:attachment]
-    contact_params = formValues[contact_recipient.to_sym]
-    requestor_details = current_user || formValues[:userData]
+    contact_params = form_values[contact_recipient.to_sym]
+    requestor_details = current_user || form_values[:userData]
 
     return render status: :bad_request, json: { error: "Invalid arguments" } if contact_recipient.nil? || contact_params.nil? || requestor_details.nil?
 
@@ -120,11 +120,11 @@ class ContactsController < ApplicationController
   end
 
   def edit_profile_action
-    formValues = JSON.parse(params.require(:formValues), symbolize_names: true)
-    edited_profile_details = formValues[:editedProfileDetails]
-    edit_profile_reason = formValues[:editProfileReason]
+    form_values = JSON.parse(params.require(:formValues), symbolize_names: true)
+    edited_profile_details = form_values[:editedProfileDetails]
+    edit_profile_reason = form_values[:editProfileReason]
     attachment = params[:attachment]
-    wca_id = formValues[:wcaId]
+    wca_id = form_values[:wcaId]
     person = Person.find_by(wca_id: wca_id)
     edit_others_profile_mode = current_user&.wca_id != wca_id
 
