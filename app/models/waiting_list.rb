@@ -6,14 +6,14 @@ class WaitingList < ApplicationRecord
   delegate :empty?, :length, to: :entries
 
   def remove(entry)
-    return false unless entries.include?(entry.id)
+    return unless entries.include?(entry.id)
 
     update_column :entries, entries - [entry.id]
   end
 
   def add(entry)
     entry.try(:ensure_waitlist_eligibility!) # raises an error if not waitlistable
-    return false if entries.include?(entry.id)
+    return if entries.include?(entry.id)
 
     if entries.nil?
       update_column :entries, [entry.id]
@@ -26,7 +26,7 @@ class WaitingList < ApplicationRecord
     raise ArgumentError.new('Target position out of waiting list range') if new_position > entries.length || new_position < 1
 
     old_index = entries.find_index(entry.id)
-    return false if old_index == new_position - 1
+    return if old_index == new_position - 1
 
     update_column :entries, entries.insert(new_position - 1, entries.delete_at(old_index))
   end
