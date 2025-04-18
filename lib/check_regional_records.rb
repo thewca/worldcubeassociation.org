@@ -7,15 +7,15 @@ module CheckRegionalRecords
   def self.add_to_lookup_table(competition_id = nil, table_name: LOOKUP_TABLE_NAME)
     ActiveRecord::Base.connection.execute <<-SQL.squish
       INSERT INTO #{table_name}
-      (resultId, countryId, eventId, competitionEndDate, best, average)
+      (result_id, country_id, event_id, competition_end_date, best, average)
       SELECT results.id, results.country_id, results.event_id, competitions.end_date, results.best, results.average
       FROM results
       INNER JOIN competitions ON results.competition_id = competitions.id
       #{competition_id.present? ? "WHERE results.competition_id = '#{competition_id}'" : ''}
       ON DUPLICATE KEY UPDATE
-        countryId = results.country_id,
-        eventId = results.event_id,
-        competitionEndDate = competitions.end_date,
+        country_id = results.country_id,
+        event_id = results.event_id,
+        competition_end_date = competitions.end_date,
         best = results.best,
         average = results.average
     SQL
@@ -138,11 +138,10 @@ module CheckRegionalRecords
         model_comp = Competition.find(competition_id)
         event_filter = event_id || model_comp.event_ids
 
-        # TODO: This probably doesn't work because I have no idea of what belongs to the lookup table
         previous_min_results = Result.select("r.event_id, r,country_id, MIN(#{value_column}) AS `value`")
                                      .from("#{LOOKUP_TABLE_NAME} AS r")
                                      .where.not(value_column => ..0)
-                                     .where(competitionEndDate: ...model_comp.start_date)
+                                     .where(competition_end_date: ...model_comp.start_date)
                                      .where(event_id: event_filter)
                                      .group(:event_id, :country_id)
 

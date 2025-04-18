@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_04_01_174001) do
+ActiveRecord::Schema[7.2].define(version: 2025_04_18_024459) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -944,15 +944,15 @@ ActiveRecord::Schema[7.2].define(version: 2025_04_01_174001) do
   end
 
   create_table "regional_records_lookup", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
-    t.integer "resultId", null: false
-    t.string "countryId", null: false
-    t.string "eventId", null: false
-    t.date "competitionEndDate", null: false
+    t.integer "result_id", null: false
+    t.string "country_id", null: false
+    t.string "event_id", null: false
+    t.date "competition_end_date", null: false
     t.integer "best", default: 0, null: false
     t.integer "average", default: 0, null: false
-    t.index ["eventId", "countryId", "average", "competitionEndDate"], name: "idx_on_eventId_countryId_average_competitionEndDate_b424c59953"
-    t.index ["eventId", "countryId", "best", "competitionEndDate"], name: "idx_on_eventId_countryId_best_competitionEndDate_4e01b1ae38"
-    t.index ["resultId"], name: "index_regional_records_lookup_on_resultId"
+    t.index ["event_id", "country_id", "average", "competition_end_date"], name: "idx_on_eventId_countryId_average_competitionEndDate_b424c59953"
+    t.index ["event_id", "country_id", "best", "competition_end_date"], name: "idx_on_eventId_countryId_best_competitionEndDate_4e01b1ae38"
+    t.index ["result_id"], name: "index_regional_records_lookup_on_resultId"
   end
 
   create_table "registration_competition_events", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
@@ -1453,7 +1453,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_04_01_174001) do
   add_foreign_key "oauth_openid_requests", "oauth_access_grants", column: "access_grant_id", on_delete: :cascade
   add_foreign_key "payment_intents", "users", column: "initiated_by_id"
   add_foreign_key "paypal_records", "paypal_records", column: "parent_record_id"
-  add_foreign_key "regional_records_lookup", "results", column: "resultId", on_update: :cascade, on_delete: :cascade
+  add_foreign_key "regional_records_lookup", "results", column: "result_id", on_update: :cascade, on_delete: :cascade
   add_foreign_key "registration_history_changes", "registration_history_entries"
   add_foreign_key "sanity_check_exclusions", "sanity_checks"
   add_foreign_key "sanity_checks", "sanity_check_categories"
