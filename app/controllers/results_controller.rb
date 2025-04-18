@@ -303,7 +303,7 @@ class ResultsController < ApplicationController
     single_rows = []
     average_rows = []
     rows
-      .group_by { |row| row["eventId"] }
+      .group_by { |row| row["event_id"] }
       .each_value do |event_rows|
       singles, averages = event_rows.partition { |row| row["type"] == "single" }
       balance = singles.size - averages.size

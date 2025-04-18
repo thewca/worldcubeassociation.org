@@ -72,7 +72,7 @@ class AdminController < ApplicationController
       inbox_result: InboxResult,
       inbox_person: InboxPerson,
       newcomer_person: InboxPerson.where(wca_id: ''),
-      newcomer_result: Result.select(:person_id).distinct.where("personId REGEXP '^[0-9]+$'"),
+      newcomer_result: Result.select(:person_id).distinct.where("person_id REGEXP '^[0-9]+$'"),
     }
 
     @existing_data = data_tables.transform_values { |table| table.where(competition_id: @competition.id).count }
