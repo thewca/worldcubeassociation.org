@@ -78,11 +78,11 @@ module Waitlistable
       should_move = self.waitlistable? && target_position.present?
       should_remove = !self.waitlistable? && target_position.present?
 
-      self.waiting_list.add(self) if should_add
-      self.waiting_list.move_to_position(self, target_position) if should_move
-      self.waiting_list.remove(self) if should_remove
+      was_added = self.waiting_list.add(self) if should_add
+      was_moved = self.waiting_list.move_to_position(self, target_position) if should_move
+      was_removed = self.waiting_list.remove(self) if should_remove
 
-      nothing_happened = !should_add && !should_move && !should_remove
+      nothing_happened = !was_added && !was_moved && !was_removed
 
       # If there was no (reasonable) change to act on, then we don't want to track
       #   that the waiting list position actually changed.
