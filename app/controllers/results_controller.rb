@@ -67,8 +67,8 @@ class ResultsController < ApplicationController
           results.#{value} value
         FROM (
           SELECT MIN(value_and_id) value_and_id
-          FROM concise_#{type_param}_results result
-          #{@gender_condition.present? ? "JOIN persons ON result.personId = persons.wca_id and persons.sub_id = 1" : ""}
+          FROM concise_#{type_param}_results results
+          #{@gender_condition.present? ? "JOIN persons ON results.person_id = persons.wca_id and persons.sub_id = 1" : ""}
           WHERE #{value} > 0
             #{@event_condition}
             #{@years_condition_result}
@@ -122,7 +122,7 @@ class ResultsController < ApplicationController
         subquery = "(#{subqueries.join(") UNION ALL (")})"
         @query = <<-SQL.squish
           SELECT *
-          FROM (#{subquery}) result
+          FROM (#{subquery}) union_results
           ORDER BY value, person_name, competition_id, round_type_id
           #{limit_condition}
         SQL
@@ -135,16 +135,16 @@ class ResultsController < ApplicationController
         FROM (
           SELECT
             result.country_id record_country_id,
-            MIN(#{value}) recordValue
-          FROM concise_#{type_param}_results result
-          #{@gender_condition.present? ? "JOIN persons ON result.person_id = persons.wca_id and persons.sub_id = 1" : ""}
+            MIN(#{value}) record_value
+          FROM concise_#{type_param}_results results
+          #{@gender_condition.present? ? "JOIN persons ON results.person_id = persons.wca_id and persons.sub_id = 1" : ""}
           WHERE 1
             #{@event_condition}
             #{@years_condition_result}
             #{@gender_condition}
-          GROUP BY result.country_id
-        ) record
-        JOIN results ON results.#{value} = recordValue AND results.country_id = recordCountryId
+          GROUP BY results.country_id
+        ) records
+        JOIN results ON results.#{value} = record_value AND results.country_id = record_country_id
         JOIN competitions on competitions.id = results.competition_id
         #{@gender_condition.present? ? "JOIN persons ON results.person_id = persons.wca_id and persons.sub_id = 1" : ""}
         WHERE 1
@@ -218,7 +218,7 @@ class ResultsController < ApplicationController
           competitions.cell_name competitionName,
           value1, value2, value3, value4, value5
         FROM
-          (SELECT results.*, 'single' type, best value, regional_single_record  record_name FROM results WHERE regional_single_record<>'' UNION
+          (SELECT results.*, 'single' type, best value, regional_single_record record_name FROM results WHERE regional_single_record<>'' UNION
             SELECT results.*, 'average' type, average value, regional_average_record record_name FROM results WHERE regional_average_record<>'') result
           #{@gender_condition.present? ? "JOIN persons ON result.person_id = persons.wca_id and persons.sub_id = 1," : ","}
           events,
@@ -273,14 +273,14 @@ class ResultsController < ApplicationController
         DAY(competitions.start_date)   day
       FROM
         (SELECT event_id record_event_id, MIN(value_and_id) DIV 1000000000 value
-          FROM concise_#{type}_results result
-          #{@gender_condition.present? ? "JOIN persons ON result.personId = persons.wca_id and persons.sub_id = 1" : ""}
+          FROM concise_#{type}_results results
+          #{@gender_condition.present? ? "JOIN persons ON results.person_id = persons.wca_id and persons.sub_id = 1" : ""}
           WHERE 1
           #{@event_condition}
           #{@region_condition}
           #{@years_condition_result}
           #{@gender_condition}
-          GROUP BY event_id) record,
+          GROUP BY event_id) records,
         results
         #{@gender_condition.present? ? "JOIN persons ON results.person_id = persons.wca_id and persons.sub_id = 1," : ","}
         events,
@@ -334,10 +334,10 @@ class ResultsController < ApplicationController
     @continent = Continent.c_find(params[:region])
     @country = Country.c_find(params[:region])
     if @continent.present?
-      @region_condition = "AND result.country_id IN (#{@continent.country_ids.map { |id| "'#{id}'" }.join(',')})"
+      @region_condition = "AND results.country_id IN (#{@continent.country_ids.map { |id| "'#{id}'" }.join(',')})"
       @region_condition += " AND record_name IN ('WR', '#{@continent.record_name}')" if @is_histories
     elsif @country.present?
-      @region_condition = "AND result.country_id = '#{@country.id}'"
+      @region_condition = "AND results.country_id = '#{@country.id}'"
       @region_condition += " AND record_name <> ''" if @is_histories
     else
       @region_condition = ""
@@ -362,10 +362,10 @@ class ResultsController < ApplicationController
 
     if @is_only
       @years_condition_competition = "AND YEAR(competitions.start_date) = #{@year}"
-      @years_condition_result = "AND result.year = #{@year}"
+      @years_condition_result = "AND results.year = #{@year}"
     elsif @is_until
       @years_condition_competition = "AND YEAR(competitions.start_date) <= #{@year}"
-      @years_condition_result = "AND result.year <= #{@year}"
+      @years_condition_result = "AND results.year <= #{@year}"
     else
       @years_condition_competition = ""
       @years_condition_result = ""
