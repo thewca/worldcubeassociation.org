@@ -22,7 +22,8 @@ export default function ManualPaymentSetup({ competitionId, accountDetails = nul
           onChange={setPaymentInfo}
           imageUploadEnabled
         />
-        <input value={paymentInfo} name="payment_information" hidden />
+        {/* Transport the Markdown covertly through Base64 to maintain line breaks */}
+        <input value={btoa(paymentInfo)} name="payment_information" hidden />
         <Form.Input
           label={I18n.t('payments.payment_setup.account_details.manual.payment_reference')}
           name="payment_reference"
