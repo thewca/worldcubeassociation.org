@@ -68,11 +68,9 @@ module Waitlistable
     alias_method :waitlist_position_changed?, :tracked_waitlist_position?
 
     def waiting_list_position=(target_position)
-      self.apply_to_waiting_list(target_position) if self.persisted? && waiting_list_persisted?
-
-      # Keep track here so that even if we successfully persisted the position,
-      #   we can still track the change via `waitlist_position_changed?`
       self.tracked_waitlist_position = target_position
+
+      self.apply_to_waiting_list(target_position) if self.persisted? && waiting_list_persisted?
     end
 
     private def apply_to_waiting_list(target_position)
@@ -83,9 +81,6 @@ module Waitlistable
       self.waiting_list.add(self) if should_add
       self.waiting_list.move_to_position(self, target_position) if should_move
       self.waiting_list.remove(self) if should_remove
-
-      # Now that we definitely updated the "real" WL, we can forget about our tracking safely.
-      self.clear_tracked_waitlist_position!
     end
   end
 end
