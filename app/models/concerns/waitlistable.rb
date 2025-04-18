@@ -32,8 +32,8 @@ module Waitlistable
       unless: :waiting_list_empty?,
     }
 
-    validates :waitlistable?, presence: { if: :waitlist_position_changed?, frontend_code: Registrations::ErrorCodes::INVALID_REQUEST_DATA }
-    validates :waiting_list_present?, presence: { if: :waitlist_position_changed?, frontend_code: Registrations::ErrorCodes::INVALID_REQUEST_DATA }
+    validates :waitlistable?, presence: { if: :waiting_list_position?, frontend_code: Registrations::ErrorCodes::INVALID_REQUEST_DATA }
+    validates :waiting_list_present?, presence: { if: :waiting_list_position?, frontend_code: Registrations::ErrorCodes::INVALID_REQUEST_DATA }
 
     after_save :commit_waitlist_position, if: :waiting_list_persisted?
 
