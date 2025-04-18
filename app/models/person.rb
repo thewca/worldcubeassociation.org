@@ -138,9 +138,9 @@ class Person < ApplicationRecord
   private def rank_for_event_type(event, type)
     case type
     when :single
-      ranks_single.find_by(eventId: event.id)
+      ranks_single.find_by(event_id: event.id)
     when :average
-      ranks_average.find_by(eventId: event.id)
+      ranks_average.find_by(event_id: event.id)
     else
       raise "Unrecognized type #{type}"
     end

@@ -75,7 +75,7 @@ class AdminController < ApplicationController
       newcomer_result: Result.select(:person_id).distinct.where("personId REGEXP '^[0-9]+$'"),
     }
 
-    @existing_data = data_tables.transform_values { |table| table.where(competitionId: @competition.id).count }
+    @existing_data = data_tables.transform_values { |table| table.where(competition_id: @competition.id).count }
     @inbox_step = RESULTS_POSTING_STEPS.find { |inbox| @existing_data[inbox] > 0 }
 
     yield if block_given?

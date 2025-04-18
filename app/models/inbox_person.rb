@@ -14,9 +14,6 @@ class InboxPerson < ApplicationRecord
   # TODO: Get rid of this when we get rid of the inbox_* tables during results posting
   alias_attribute :country_id, :country_iso2
 
-  # FIXME: GB Remove this after all other snake_case migrations are done
-  alias_attribute :competitionId, :competition_id
-
   validates :name, presence: true
   validates :dob, presence: true
   validates :country_iso2, presence: true
