@@ -3,18 +3,18 @@ import { Form, Header } from 'semantic-ui-react';
 import I18n from '../../lib/i18n';
 import MarkdownEditor from '../wca/FormBuilder/input/MarkdownEditor';
 import useInputState from '../../lib/hooks/useInputState';
-import { paymentSetupUrl } from '../../lib/requests/routes.js.erb';
+import { connectPaymentIntegrationUrl } from '../../lib/requests/routes.js.erb';
 
-export default function ManualPaymentSetup({ competitionId }) {
-  const [paymentInfo, setPaymentInfo] = useInputState('');
-  const [paymentReference, setPaymentReference] = useInputState('');
+export default function ManualPaymentSetup({ competitionId, accountDetails = null }) {
+  const [paymentInfo, setPaymentInfo] = useInputState(accountDetails?.payment_information);
+  const [paymentReference, setPaymentReference] = useInputState(accountDetails?.payment_reference);
 
   return (
     <>
       <Header>
         {I18n.t('payments.payment_setup.manual_payments_header')}
       </Header>
-      <Form method="GET" action={paymentSetupUrl(competitionId, 'manual')}>
+      <Form method="GET" action={connectPaymentIntegrationUrl(competitionId, 'manual')}>
         <Form.Field
           label={I18n.t('payments.payment_setup.account_details.manual.payment_info')}
           control={MarkdownEditor}
@@ -29,7 +29,7 @@ export default function ManualPaymentSetup({ competitionId }) {
           value={paymentReference}
           onChange={setPaymentReference}
         />
-        <Form.Button type="submit">
+        <Form.Button primary type="submit">
           Submit
         </Form.Button>
       </Form>

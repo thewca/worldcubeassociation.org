@@ -276,21 +276,30 @@ class CompetitionsController < ApplicationController
 
   def connect_payment_integration
     competition = competition_from_params
-    payment_integration = params.require(:payment_integration)
+    payment_integration = params.require(:payment_integration).to_sym
 
     raise ActionController::RoutingError.new('Not Found') unless current_user&.can_manage_competition?(competition)
 
-    if payment_integration == 'paypal' && PaypalInterface.paypal_disabled?
+    if payment_integration == :paypal && PaypalInterface.paypal_disabled?
       flash[:error] = 'PayPal is not yet available in production environments'
       return redirect_to competitions_payment_setup_path(competition)
     end
 
-    connector = CompetitionPaymentIntegration::AVAILABLE_INTEGRATIONS[payment_integration.to_sym].safe_constantize
+    connector = CompetitionPaymentIntegration::AVAILABLE_INTEGRATIONS[payment_integration].safe_constantize
     integration_reference = connector&.connect_integration(params)
 
     raise ActionController::RoutingError.new("Payment Integration #{payment_integration} not Found") if integration_reference.blank?
 
-    competition.competition_payment_integrations.new(connected_account: integration_reference)
+    if payment_integration == :manual && competition.manual_payment_details.present?
+      existing_cpi = competition.competition_payment_integrations.first
+
+      # Small hack: We allow de-facto updates by "re-connecting" manual payment in the UI.
+      #   This is done to allow edits to a Manual CPI, but coding a proper `PATCH` form
+      #   would break the mold of the usual OAuth flow with "proper" payment providers.
+      existing_cpi.connected_account.update(**integration_reference.account_details)
+    else
+      competition.competition_payment_integrations.build(connected_account: integration_reference)
+    end
 
     if competition.save
       flash[:success] = t('payments.payment_setup.account_connected', provider: t("payments.payment_providers.#{payment_integration}"))

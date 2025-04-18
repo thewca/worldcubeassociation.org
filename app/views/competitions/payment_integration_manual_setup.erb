@@ -3,5 +3,6 @@
 <%= render layout: 'nav' do %>
   <%= react_component("ManualPaymentSetup", {
     competitionId: @competition.id,
+    accountDetails: @competition.manual_payment_details,
   }) %>
 <% end %>

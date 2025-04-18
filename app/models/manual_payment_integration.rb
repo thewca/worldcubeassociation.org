@@ -50,7 +50,9 @@ class ManualPaymentIntegration < ApplicationRecord
     serializable_hash(only: [:payment_information, :payment_reference])
   end
 
-  def self.connect_integration(params)
-    ManualPaymentIntegration.create(params.permit(:payment_information, :payment_reference))
+  def self.connect_integration(form_params)
+    model_attributes = form_params.permit(:payment_information, :payment_reference)
+
+    ManualPaymentIntegration.new(model_attributes)
   end
 end
