@@ -10,36 +10,36 @@ RSpec.describe Result do
 
   context "with previous light_result methods" do
     let(:competition) { FactoryBot.create(:competition) }
-    let(:formatId) { "a" }
-    let(:roundTypeId) { "c" }
-    let(:eventId) { "333" }
+    let(:format_id) { "a" }
+    let(:round_type_id) { "c" }
+    let(:event_id) { "333" }
 
     it "correctly computes best_index and worst_index" do
-      result = build_result("eventId" => "333", "value1" => 10, "value2" => 30, "value3" => 50, "value4" => 40, "value5" => 60)
+      result = build_result("event_id" => "333", "value1" => 10, "value2" => 30, "value3" => 50, "value4" => 40, "value5" => 60)
       expect(result.best_index).to eq 0
       expect(result.worst_index).to eq 4
     end
 
     describe "trimmed_indices" do
       it "trims best and worst for format: average" do
-        result = build_result "eventId" => "333", "value1" => 20, "value2" => 10, "value3" => 60, "value4" => 40, "value5" => 50, "formatId" => "a"
+        result = build_result "event_id" => "333", "value1" => 20, "value2" => 10, "value3" => 60, "value4" => 40, "value5" => 50, "format_id" => "a"
         expect(result.trimmed_indices).to eq [1, 2]
       end
 
       it "does not trim anything for format: mean" do
-        result = build_result "eventId" => "666", "value1" => 20, "value2" => 10, "value3" => 60, "value4" => SolveTime::SKIPPED_VALUE, "value5" => SolveTime::SKIPPED_VALUE, "average" => 30, "formatId" => "m"
+        result = build_result "event_id" => "666", "value1" => 20, "value2" => 10, "value3" => 60, "value4" => SolveTime::SKIPPED_VALUE, "value5" => SolveTime::SKIPPED_VALUE, "average" => 30, "format_id" => "m"
         expect(result.trimmed_indices).to eq []
       end
 
       it "handles cutoff rounds" do
-        result = build_result "eventId" => "333", "value1" => 20, "value2" => 10, "value3" => 60, "value4" => SolveTime::SKIPPED_VALUE, "value5" => SolveTime::SKIPPED_VALUE, "average" => SolveTime::SKIPPED_VALUE, "formatId" => "a"
+        result = build_result "event_id" => "333", "value1" => 20, "value2" => 10, "value3" => 60, "value4" => SolveTime::SKIPPED_VALUE, "value5" => SolveTime::SKIPPED_VALUE, "average" => SolveTime::SKIPPED_VALUE, "format_id" => "a"
         expect(result.trimmed_indices).to eq []
       end
     end
 
     describe "solves" do
       it "cutoff round and didn't make cutoff" do
-        result = build_result "eventId" => "333", "value1" => 20, "value2" => 10, "value3" => 60, "value4" => SolveTime::SKIPPED_VALUE, "value5" => SolveTime::SKIPPED_VALUE, "average" => SolveTime::SKIPPED_VALUE, "formatId" => "a"
+        result = build_result "event_id" => "333", "value1" => 20, "value2" => 10, "value3" => 60, "value4" => SolveTime::SKIPPED_VALUE, "value5" => SolveTime::SKIPPED_VALUE, "average" => SolveTime::SKIPPED_VALUE, "format_id" => "a"
         expect(result.format.expected_solve_count).to eq 5
         expect(result.solve_times).to eq [
           solve_time(20), solve_time(10), solve_time(60), solve_time(SolveTime::SKIPPED_VALUE), solve_time(SolveTime::SKIPPED_VALUE)
@@ -47,7 +47,7 @@ RSpec.describe Result do
       end
 
       it "returns 5 SolveTimes even for a round with 3 solves" do
-        result = build_result "eventId" => "333bf", "value1" => 20, "value2" => 10, "value3" => 60, "value4" => SolveTime::SKIPPED_VALUE, "value5" => SolveTime::SKIPPED_VALUE, "average" => SolveTime::SKIPPED_VALUE, "formatId" => "3"
+        result = build_result "event_id" => "333bf", "value1" => 20, "value2" => 10, "value3" => 60, "value4" => SolveTime::SKIPPED_VALUE, "value5" => SolveTime::SKIPPED_VALUE, "average" => SolveTime::SKIPPED_VALUE, "format_id" => "3"
         expect(result.format.expected_solve_count).to eq 3
         expect(result.solve_times).to eq [
           solve_time(20), solve_time(10), solve_time(60), solve_time(SolveTime::SKIPPED_VALUE), solve_time(SolveTime::SKIPPED_VALUE)
@@ -57,34 +57,34 @@ RSpec.describe Result do
   end
 
   context "associations" do
-    it "validates competitionId" do
-      result = FactoryBot.build :result, competitionId: "foo", skip_round_creation: true
+    it "validates competition_id" do
+      result = FactoryBot.build :result, competition_id: "foo", skip_round_creation: true
       expect(result).to be_invalid_with_errors(competition: ["must exist"])
     end
 
-    it "validates countryId" do
-      result = FactoryBot.build :result, countryId: "foo"
+    it "validates country_id" do
+      result = FactoryBot.build :result, country_id: "foo"
       expect(result).to be_invalid_with_errors(country: ["must exist"])
     end
 
-    it "validates eventId" do
-      result = FactoryBot.build :result, eventId: "foo", skip_round_creation: true
+    it "validates event_id" do
+      result = FactoryBot.build :result, event_id: "foo", skip_round_creation: true
       expect(result).to be_invalid_with_errors(event: ["must exist"])
     end
 
-    it "validates formatId" do
-      result = FactoryBot.build :result, formatId: "foo", skip_round_creation: true
+    it "validates format_id" do
+      result = FactoryBot.build :result, format_id: "foo", skip_round_creation: true
       expect(result).to be_invalid_with_errors(format: ["must exist"])
     end
 
-    it "validates roundTypeId" do
-      result = FactoryBot.build :result, roundTypeId: "foo", skip_round_creation: true
+    it "validates round_type_id" do
+      result = FactoryBot.build :result, round_type_id: "foo", skip_round_creation: true
       # Skipping the round creation also creates a round validation error which
       # is reported on :round_type.
       expect(result).to be_invalid_with_errors(round_type:
       [
         "must exist",
-        "Result must belong to a valid round. Please check that the tuple (competitionId, eventId, roundTypeId, formatId) matches an existing round.",
+        "Result must belong to a valid round. Please check that the tuple (competition_id, event_id, round_type_id, format_id) matches an existing round.",
       ])
     end
 
@@ -129,12 +129,12 @@ RSpec.describe Result do
 
     context "correctly computes average" do
       context "333 average 5" do
-        let(:eventId) { "333" }
-        let(:formatId) { "a" }
+        let(:event_id) { "333" }
+        let(:format_id) { "a" }
         let(:competition) { FactoryBot.create(:competition) }
 
         context "cutoff round" do
-          let(:roundTypeId) { "c" }
+          let(:round_type_id) { "c" }
           let!(:round) { FactoryBot.create(:round, competition: competition, cutoff: Cutoff.new(number_of_attempts: 2, attempt_result: 60*100)) }
 
           it "all solves" do
@@ -155,7 +155,7 @@ RSpec.describe Result do
         end
 
         context "uncutoff round" do
-          let(:roundTypeId) { "f" }
+          let(:round_type_id) { "f" }
           let!(:round) { FactoryBot.create(:round, competition: competition) }
 
           it "all solves with average below 10 minutes" do
@@ -195,14 +195,14 @@ RSpec.describe Result do
       end
 
       context "mean of 3" do
-        let(:formatId) { "m" }
+        let(:format_id) { "m" }
 
         context "777" do
-          let(:eventId) { "777" }
+          let(:event_id) { "777" }
           let(:competition) { FactoryBot.create(:competition, event_ids: ["777"]) }
 
           context "cutoff round" do
-            let(:roundTypeId) { "c" }
+            let(:round_type_id) { "c" }
             let!(:round) { FactoryBot.create(:round, competition: competition, cutoff: Cutoff.new(number_of_attempts: 2, attempt_result: 60*100), format_id: "m", event_id: "777") }
 
             it "all solves" do
@@ -231,7 +231,7 @@ RSpec.describe Result do
           end
 
           context "uncutoff round" do
-            let(:roundTypeId) { "f" }
+            let(:round_type_id) { "f" }
             let!(:round) { FactoryBot.create(:round, competition: competition, format_id: "m", event_id: "777") }
 
             it "all solves with average below 10 minutes" do
@@ -278,8 +278,8 @@ RSpec.describe Result do
         end
 
         context "333fm uncutoff round" do
-          let(:eventId) { "333fm" }
-          let(:roundTypeId) { "f" }
+          let(:event_id) { "333fm" }
+          let(:round_type_id) { "f" }
           let(:competition) { FactoryBot.create(:competition, event_ids: ["333fm"]) }
           let!(:round) { FactoryBot.create(:round, competition: competition, format_id: "m", event_id: "333fm") }
 
@@ -304,12 +304,12 @@ RSpec.describe Result do
       end
 
       context "best of 3" do
-        let(:roundTypeId) { "f" }
+        let(:round_type_id) { "f" }
         let(:competition) { FactoryBot.create(:competition, event_ids: ["333bf", "444bf", "555bf", "333mbf", "333ft", "333fm"]) }
 
         context "333bf" do
-          let(:formatId) { "3" }
-          let(:eventId) { "333bf" }
+          let(:format_id) { "3" }
+          let(:event_id) { "333bf" }
           let!(:round) { FactoryBot.create(:round, competition: competition, event_id: "333bf", format_id: "3") }
 
           it "does compute average" do
@@ -366,8 +366,8 @@ RSpec.describe Result do
         end
 
         context "444bf" do
-          let(:formatId) { "3" }
-          let(:eventId) { "444bf" }
+          let(:format_id) { "3" }
+          let(:event_id) { "444bf" }
           let!(:round) { FactoryBot.create(:round, competition: competition, event_id: "444bf", format_id: "3") }
 
           it "sets a valid average for 444bf if all three solves are completed" do
@@ -381,8 +381,8 @@ RSpec.describe Result do
         end
 
         context "555bf" do
-          let(:formatId) { "3" }
-          let(:eventId) { "555bf" }
+          let(:format_id) { "3" }
+          let(:event_id) { "555bf" }
           let!(:round) { FactoryBot.create(:round, competition: competition, event_id: "555bf", format_id: "3") }
 
           it "sets a valid average for 555bf if all three solves are completed" do
@@ -396,8 +396,8 @@ RSpec.describe Result do
         end
 
         context "333fm" do
-          let(:formatId) { "m" }
-          let(:eventId) { "333fm" }
+          let(:format_id) { "m" }
+          let(:event_id) { "333fm" }
           let!(:round) { FactoryBot.create(:round, competition: competition, event_id: "333fm", format_id: "m") }
 
           it "does compute average" do
@@ -411,8 +411,8 @@ RSpec.describe Result do
         end
 
         context "333mbf" do
-          let(:formatId) { "3" }
-          let(:eventId) { "333mbf" }
+          let(:format_id) { "3" }
+          let(:event_id) { "333mbf" }
           let!(:round) { FactoryBot.create(:round, competition: competition, event_id: "333mbf", format_id: "3") }
 
           it "does not compute average" do
@@ -444,44 +444,44 @@ RSpec.describe Result do
 
       context "non-cutoff rounds" do
         it "format 1" do
-          result = result_with_n_solves(2, roundTypeId: "1", formatId: "1", eventId: "333mbf")
+          result = result_with_n_solves(2, round_type_id: "1", format_id: "1", event_id: "333mbf")
           expect(result).to be_invalid_with_errors(base: ["Expected 1 solve, but found 2."])
         end
 
         it "format 2" do
-          result = result_with_n_solves(3, roundTypeId: "1", formatId: "2", eventId: "333mbf")
+          result = result_with_n_solves(3, round_type_id: "1", format_id: "2", event_id: "333mbf")
           expect(result).to be_invalid_with_errors(base: ["Expected 2 solves, but found 3."])
         end
 
         it "format 3" do
-          result = result_with_n_solves(2, roundTypeId: "1", formatId: "3", eventId: "333bf")
+          result = result_with_n_solves(2, round_type_id: "1", format_id: "3", event_id: "333bf")
           expect(result).to be_invalid_with_errors(base: ["Expected 3 solves, but found 2."])
         end
 
         it "format m" do
-          result = result_with_n_solves(2, roundTypeId: "1", formatId: "m", eventId: "333fm")
+          result = result_with_n_solves(2, round_type_id: "1", format_id: "m", event_id: "333fm")
           expect(result).to be_invalid_with_errors(base: ["Expected 3 solves, but found 2."])
         end
 
         it "format a" do
-          result = result_with_n_solves(2, roundTypeId: "1", formatId: "a")
+          result = result_with_n_solves(2, round_type_id: "1", format_id: "a")
           expect(result).to be_invalid_with_errors(base: ["Expected 5 solves, but found 2."])
         end
       end
 
       context "cutoff rounds" do
         it "format 2" do
-          result = result_with_n_solves(3, roundTypeId: "c", formatId: "2", eventId: "333mbf")
+          result = result_with_n_solves(3, round_type_id: "c", format_id: "2", event_id: "333mbf")
           expect(result).to be_invalid_with_errors(base: ["Expected at most 2 solves, but found 3."])
         end
 
         it "format 3" do
-          result = result_with_n_solves(4, roundTypeId: "c", formatId: "3", eventId: "333bf")
+          result = result_with_n_solves(4, round_type_id: "c", format_id: "3", event_id: "333bf")
           expect(result).to be_invalid_with_errors(base: ["Expected at most 3 solves, but found 4."])
         end
 
         it "format m" do
-          result = result_with_n_solves(4, roundTypeId: "c", formatId: "m", eventId: "777")
+          result = result_with_n_solves(4, round_type_id: "c", format_id: "m", event_id: "777")
           expect(result).to be_invalid_with_errors(base: ["Expected at most 3 solves, but found 4."])
         end
       end
@@ -500,7 +500,7 @@ RSpec.describe Result do
         solve_time.attempted = 30
         solve_time.time_centiseconds = 65*60*100
 
-        result = FactoryBot.build :result, eventId: "333mbf", value1: solve_time.wca_value, formatId: "1"
+        result = FactoryBot.build :result, event_id: "333mbf", value1: solve_time.wca_value, format_id: "1"
         expect(result).to be_invalid_with_errors(value1: ["should be less than or equal to 60 minutes"])
       end
 
@@ -510,7 +510,7 @@ RSpec.describe Result do
         solve_time.attempted = 3
         solve_time.time_centiseconds = 32*60*100
 
-        result = FactoryBot.build :result, eventId: "333mbf", value1: solve_time.wca_value, formatId: "1"
+        result = FactoryBot.build :result, event_id: "333mbf", value1: solve_time.wca_value, format_id: "1"
         expect(result).to be_invalid_with_errors(value1: ["should be less than or equal to 30 minutes"])
       end
     end
@@ -518,7 +518,7 @@ RSpec.describe Result do
 end
 
 def build_result(attrs)
-  FactoryBot.build :result, { competition: competition, roundTypeId: roundTypeId, formatId: formatId, eventId: eventId }.merge(attrs)
+  FactoryBot.build :result, { competition: competition, round_type_id: round_type_id, format_id: format_id, event_id: event_id }.merge(attrs)
 end
 
 def solve_time(centis)

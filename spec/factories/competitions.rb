@@ -263,7 +263,7 @@ FactoryBot.define do
         person = FactoryBot.create(:inbox_person, competition_id: competition.id)
         rounds = competition.competition_events.map(&:rounds).flatten
         rounds.each do |round|
-          FactoryBot.create(:inbox_result, competitionId: competition.id, personId: person.id, eventId: round.event.id, formatId: round.format.id)
+          FactoryBot.create(:inbox_result, competition_id: competition.id, person_id: person.id, event_id: round.event.id, format_id: round.format.id)
           FactoryBot.create_list(:scramble, 5, competition_id: competition.id, event_id: round.event.id)
         end
       end

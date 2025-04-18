@@ -224,7 +224,7 @@ module DatabaseDumper
       ),
     }.freeze,
     "inbox_persons" => :skip_all_rows,
-    "InboxResults" => :skip_all_rows,
+    "inbox_results" => :skip_all_rows,
     "persons" => {
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
@@ -271,22 +271,22 @@ module DatabaseDumper
         ),
       ),
     }.freeze,
-    "Results" => {
+    "results" => {
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
           average
           best
-          competitionId
-          countryId
-          eventId
-          formatId
-          personId
-          personName
+          competition_id
+          country_id
+          event_id
+          format_id
+          person_id
+          person_name
           pos
-          regionalAverageRecord
-          regionalSingleRecord
-          roundTypeId
+          regional_average_record
+          regional_single_record
+          round_type_id
           updated_at
           value1
           value2
@@ -950,26 +950,27 @@ module DatabaseDumper
 
   RESULTS_SANITIZERS = {
     "Results" => {
+      source_table: "results",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
-          competitionId
-          eventId
-          roundTypeId
           pos
           best
           average
-          personName
-          personId
-          formatId
           value1
           value2
           value3
           value4
           value5
-          regionalSingleRecord
-          regionalAverageRecord
         ),
         fake_values: {
+          "competitionId" => "competition_id",
+          "eventId" => "event_id",
+          "roundTypeId" => "round_type_id",
+          "personName" => "person_name",
+          "personId" => "person_id",
+          "formatId" => "format_id",
+          "regionalSingleRecord" => "regional_single_record",
+          "regionalAverageRecord" => "regional_average_record",
           "personCountryId" => "countryId",
         }.freeze,
       ),

@@ -5,7 +5,7 @@ class Person < ApplicationRecord
   self.table_name = 'persons'
 
   has_one :user, primary_key: "wca_id", foreign_key: "wca_id"
-  has_many :results, primary_key: "wca_id", foreign_key: "personId"
+  has_many :results, primary_key: "wca_id"
   has_many :competitions, -> { distinct }, through: :results
   has_many :ranks_average, primary_key: "wca_id", class_name: "RanksAverage"
   has_many :ranks_single, primary_key: "wca_id", class_name: "RanksSingle"
@@ -68,8 +68,8 @@ class Person < ApplicationRecord
   after_update :update_results_table_and_associated_user
   private def update_results_table_and_associated_user
     unless @updating_using_sub_id
-      results_for_most_recent_sub_id = results.where(personName: name_before_last_save, country_id: country_id_before_last_save)
-      results_for_most_recent_sub_id.update_all(personName: name, countryId: country_id) if saved_change_to_name? || saved_change_to_country_id?
+      results_for_most_recent_sub_id = results.where(person_name: name_before_last_save, country_id: country_id_before_last_save)
+      results_for_most_recent_sub_id.update_all(person_name: name, country_id: country_id) if saved_change_to_name? || saved_change_to_country_id?
     end
     user.save! if user # User copies data from the person before validation, so this will update him.
   end
@@ -183,7 +183,7 @@ class Person < ApplicationRecord
             .joins(:event)
             .order("events.rank, pos")
             .includes(:format, :competition)
-            .group_by(&:eventId)
+            .group_by(&:event_id)
             .each_value do |final_results|
               previous_old_pos = nil
               previous_new_pos = nil
@@ -194,7 +194,7 @@ class Person < ApplicationRecord
                 previous_new_pos = result.pos
                 break if result.pos > 3
 
-                championship_podium_results.push result if result.personId == self.wca_id
+                championship_podium_results.push result if result.person_id == self.wca_id
               end
             end
         end
@@ -232,7 +232,7 @@ class Person < ApplicationRecord
   end
 
   def records
-    records = results.pluck(:regionalSingleRecord, :regionalAverageRecord).flatten.compact_blank
+    records = results.pluck(:regional_single_record, :regional_average_record).flatten.compact_blank
     {
       national: records.count("NR"),
       continental: records.count { |record| %w(NR WR).exclude?(record) },
@@ -283,11 +283,11 @@ class Person < ApplicationRecord
   end
 
   def best_singles_by(target_date)
-    self.results.on_or_before(target_date).succeeded.group(:eventId).minimum(:best)
+    self.results.on_or_before(target_date).succeeded.group(:event_id).minimum(:best)
   end
 
   def best_averages_by(target_date)
-    self.results.on_or_before(target_date).average_succeeded.group(:eventId).minimum(:average)
+    self.results.on_or_before(target_date).average_succeeded.group(:event_id).minimum(:average)
   end
 
   def anonymization_checks_with_message_args
@@ -319,7 +319,7 @@ class Person < ApplicationRecord
     raise "Error generating new WCA ID" if new_wca_id.nil?
 
     # Anonymize data in Results
-    results.update_all(personId: new_wca_id, personName: User::ANONYMOUS_NAME)
+    results.update_all(person_id: new_wca_id, person_name: User::ANONYMOUS_NAME)
 
     # Anonymize sub-IDs
     if sub_ids.length > 1
