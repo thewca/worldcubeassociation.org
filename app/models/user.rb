@@ -16,8 +16,8 @@ class User < ApplicationRecord
   has_many :votes
   has_many :registrations
   has_many :competitions_registered_for, through: :registrations, source: "competition"
-  belongs_to :person, -> { where(sub_id: 1) }, primary_key: "wca_id", foreign_key: "wca_id", optional: true
-  belongs_to :unconfirmed_person, -> { where(sub_id: 1) }, primary_key: "wca_id", foreign_key: "unconfirmed_wca_id", class_name: "Person", optional: true
+  belongs_to :person, -> { current }, primary_key: "wca_id", foreign_key: "wca_id", optional: true
+  belongs_to :unconfirmed_person, -> { current }, primary_key: "wca_id", foreign_key: "unconfirmed_wca_id", class_name: "Person", optional: true
   belongs_to :delegate_to_handle_wca_id_claim, foreign_key: "delegate_id_to_handle_wca_id_claim", class_name: "User", optional: true
   belongs_to :region, class_name: "UserGroup", optional: true
   has_many :roles, class_name: "UserRole"
