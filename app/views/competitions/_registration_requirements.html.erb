@@ -29,7 +29,7 @@
   <%= t('competitions.competition_info.part_of_a_series_list', name: @competition.competition_series.name) %>
   <ul>
     <% @competition.series_sibling_competitions.each do |comp| %>
-      <% if comp.showAtAll? || @current_user&.can_manage_competition?(comp) %>
+      <% if comp.show_at_all? || @current_user&.can_manage_competition?(comp) %>
         <li><%= link_to comp.name, competition_path(comp.id) %></li>
       <% end %>
     <% end %>

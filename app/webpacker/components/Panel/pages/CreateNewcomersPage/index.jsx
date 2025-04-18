@@ -16,7 +16,7 @@ function Information() {
   return (
     <>
       <p>
-        In this script, a &quot;person&quot; always means a triple of (id,name,countryId) and
+        In this script, a &quot;person&quot; always means a triple of (id,name,country_id) and
         &quot;similar&quot; always means just name similarity. A person is called
         &quot;finished&quot; if it has a non-empty personId. A &quot;semi-id&quot; is the id
         without the running number at the end.
@@ -35,7 +35,7 @@ function Information() {
           &quot;romanName (localName)&quot;.
         </ListItem>
         <ListItem>
-          Choose another person. This will overwrite the person&apos;s (id,name,countryId)
+          Choose another person. This will overwrite the person&apos;s (id,name,country_id)
           triple in the Results table with those of the other person.
         </ListItem>
         <ListItem>

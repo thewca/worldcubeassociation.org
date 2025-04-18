@@ -43,7 +43,7 @@ class CompetitionsController < ApplicationController
   ]
 
   rescue_from WcaExceptions::ApiException do |e|
-    render status: e.status, json: { error: e.to_s }
+    render status: e.status, json: { error: e.to_s }.reverse_merge(e.error_details.compact)
   end
 
   rescue_from JSON::Schema::ValidationError do |e|
@@ -102,7 +102,7 @@ class CompetitionsController < ApplicationController
       return redirect_to competition_admin_import_results_path(comp)
     end
 
-    if comp.main_event && comp.results.where(eventId: comp.main_event_id).empty?
+    if comp.main_event && comp.results.where(event_id: comp.main_event_id).empty?
       flash[:danger] = t('competitions.messages.no_main_event_results', event_name: comp.main_event.name)
       return redirect_to competition_admin_import_results_path(comp)
     end
@@ -367,7 +367,7 @@ class CompetitionsController < ApplicationController
       daysUntil: days_until,
       startDate: other_comp.start_date,
       endDate: other_comp.end_date,
-      location: "#{other_comp.cityName}, #{other_comp.countryId}",
+      location: "#{other_comp.city_name}, #{other_comp.country_id}",
       distance: {
         km: competition.kilometers_to(other_comp).round(2),
         from: {
@@ -380,7 +380,7 @@ class CompetitionsController < ApplicationController
         },
       },
       limit: other_comp.competitor_limit_enabled ? other_comp.competitor_limit : "",
-      competitors: other_comp.probably_over? ? other_comp.results.select('DISTINCT personId').count : "",
+      competitors: other_comp.probably_over? ? other_comp.results.select('DISTINCT person_id').count : "",
       events: other_comp.events.map { |event|
         event.id
       },
@@ -426,8 +426,8 @@ class CompetitionsController < ApplicationController
       delegates: users_to_sentence(other_comp.delegates),
       registrationOpen: other_comp.registration_open,
       minutesUntil: competition.minutes_until_other_registration_starts(other_comp),
-      cityName: other_comp.cityName,
-      countryId: other_comp.countryId,
+      cityName: other_comp.city_name,
+      countryId: other_comp.country_id,
       events: other_comp.events.map { |event|
         event.id
       },
@@ -498,8 +498,7 @@ class CompetitionsController < ApplicationController
   def create
     competition = Competition.new
 
-    # we're quite lax about reading params, because set_form_data! below does a comprehensive JSON-Schema check.
-    form_data = params.permit!.to_h
+    form_data = params_for_competition_form
     competition.set_form_data(form_data, current_user)
 
     if competition.save
@@ -525,8 +524,7 @@ class CompetitionsController < ApplicationController
 
     old_organizers = competition.organizers.to_a
 
-    # we're quite lax about reading params, because set_form_data! below does a comprehensive JSON-Schema check.
-    form_data = params.permit!.to_h
+    form_data = params_for_competition_form
 
     #####
     # HACK BECAUSE WE DON'T HAVE PERSISTENT COMPETITION IDS
@@ -597,6 +595,13 @@ class CompetitionsController < ApplicationController
     end
   end
 
+  private def params_for_competition_form
+    # we're quite lax about reading params, because set_form_data! on the competition object does a comprehensive JSON-Schema check.
+    #   Also, listing _all_ the possible params to `permit` here is annoying because the Competition model has _way_ too many columns.
+    #   So we "only" remove the ActionController values, as well as all route params manually.
+    params.permit!.to_h.except(:controller, :action, :id, :competition, :format)
+  end
+
   before_action -> { require_user_permission(:can_manage_competition?, competition_from_params) }, only: [:announcement_data]
 
   def announcement_data
@@ -627,7 +632,7 @@ class CompetitionsController < ApplicationController
     competition = competition_from_params
 
     competition.confirmed = params[:isConfirmed] if params.key?(:isConfirmed)
-    competition.showAtAll = params[:isVisible] if params.key?(:isVisible)
+    competition.show_at_all = params[:isVisible] if params.key?(:isVisible)
 
     if competition.save
       render json: {
@@ -679,7 +684,7 @@ class CompetitionsController < ApplicationController
 
     return render json: { error: "Already announced" }, status: :bad_request if competition.announced?
 
-    competition.update!(announced_at: Time.now, announced_by: current_user.id, showAtAll: true)
+    competition.update!(announced_at: Time.now, announced_by: current_user.id, show_at_all: true)
 
     competition.organizers.each do |organizer|
       CompetitionsMailer.notify_organizer_of_announced_competition(competition, organizer).deliver_later
@@ -771,7 +776,7 @@ class CompetitionsController < ApplicationController
         [r.competition_id, r.competing_status]
       end
       competition_ids.concat(@registered_for_by_competition_id.keys)
-      competition_ids.concat(current_user.person.competitions.pluck(:competitionId)) if current_user.person
+      competition_ids.concat(current_user.person.competitions.pluck(:competition_id)) if current_user.person
       # An organiser might still have duties to perform for a cancelled competition until the date of the competition has passed.
       # For example, mailing all competitors about the cancellation.
       # In general ensuring ease of access until it is certain that they won't need to frequently visit the page anymore.
