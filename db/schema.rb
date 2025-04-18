@@ -759,6 +759,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_04_10_105513) do
     t.string "currency_code"
     t.integer "status"
     t.string "display_name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["registration_id"], name: "index_invoice_items_on_registration_id"
   end
 

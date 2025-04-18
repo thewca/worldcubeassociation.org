@@ -697,7 +697,8 @@ RSpec.describe Registration do
       end
 
       it 'doesnt add a competition entry if entry is free' do
-        expect(true).to be(false)
+        test = false
+        expect(test).to be(true)
       end
     end
   end

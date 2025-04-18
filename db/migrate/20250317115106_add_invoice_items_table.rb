@@ -8,6 +8,7 @@ class AddInvoiceItemsTable < ActiveRecord::Migration[7.2]
       t.string :currency_code
       t.integer :status
       t.string :display_name
+      t.timestamps
     end
   end
 end
