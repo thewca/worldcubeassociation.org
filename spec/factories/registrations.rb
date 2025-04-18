@@ -24,6 +24,11 @@ FactoryBot.define do
       to_create { |instance| instance.save(validate: false) }
     end
 
+    trait :non_competing do
+      accepted # Must be accepted so that it shows up in WCIF
+      is_competing { false }
+    end
+
     trait :accepted do
       competing_status { Registrations::Helper::STATUS_ACCEPTED }
     end

@@ -152,57 +152,57 @@ fi:
       #original_hash: 4d618bb
       name: Karsintakierros
       #original_hash: 4d618bb
-      cellName: Karsintakierros
+      cell_name: Karsintakierros
     '1':
       #original_hash: 1e725b6
       name: Ensimmäinen kierros
       #original_hash: 1e725b6
-      cellName: 1. kierros
+      cell_name: 1. kierros
     '2':
       #original_hash: 985c8d0
       name: Toinen kierros
       #original_hash: 985c8d0
-      cellName: 2. kierros
+      cell_name: 2. kierros
     '3':
       #original_hash: e2f74d2
       name: Semifinaali
       #original_hash: e2f74d2
-      cellName: Semifinaali
+      cell_name: Semifinaali
     b:
       #original_hash: 327c999
       name: B-finaali
       #original_hash: 327c999
-      cellName: B-finaali
+      cell_name: B-finaali
     c:
       #original_hash: 672b22c
       name: Finaali
       #original_hash: 672b22c
-      cellName: Finaali
+      cell_name: Finaali
     d:
       #original_hash: 1e725b6
       name: Ensimmäinen kierros
       #original_hash: 1e725b6
-      cellName: 1. kierros
+      cell_name: 1. kierros
     e:
       #original_hash: 985c8d0
       name: Toinen kierros
       #original_hash: 985c8d0
-      cellName: 2. kierros
+      cell_name: 2. kierros
     f:
       #original_hash: 672b22c
       name: Finaali
       #original_hash: 672b22c
-      cellName: Finaali
+      cell_name: Finaali
     g:
       #original_hash: e2f74d2
       name: Semifinaali
       #original_hash: e2f74d2
-      cellName: Semifinaali
+      cell_name: Semifinaali
     h:
       #original_hash: 4d618bb
       name: Karsintakierros
       #original_hash: 4d618bb
-      cellName: Karsintakierros
+      cell_name: Karsintakierros
   attempts:
     #original_hash: 17dae1e
     attempt_name: 'Yritys %{number}'
@@ -548,19 +548,19 @@ fi:
         competition_id: Minkä aikana tapahtui
       competition_medium:
         #original_hash: 1917f4f
-        competitionId: Kilpailu
+        competition_id: Kilpailu
         #original_hash: 3deb745
-        type: Tyyppi
+        media_type: Tyyppi
         #original_hash: c3328c3
         text: Teksti
         #original_hash: d051707
         uri: Linkki
         #original_hash: 1be755a
-        submitterName: Lähettäjän nimi
+        submitter_name: Lähettäjän nimi
         #original_hash: 78cdfee
-        submitterEmail: Lähettäjän sähköposti
+        submitter_email: Lähettäjän sähköposti
         #original_hash: 0d31f23
-        submitterComment: Lähettäjän kommentti
+        submitter_comment: Lähettäjän kommentti
         #original_hash: bae7d5b
         status: Tila
       regional_organization:
@@ -652,7 +652,7 @@ fi:
         accepted: Hyväksytty
         #original_hash: 96f608c
         pending: Odottaa
-      type:
+      media_type:
         #original_hash: ee45c30
         report: Raportti
         #original_hash: 4360c2d
@@ -862,19 +862,19 @@ fi:
         comment: ''
       competition_medium:
         #original_hash: da39a3e
-        competitionId: ''
+        competition_id: ''
         #original_hash: da39a3e
-        type: ''
+        media_type: ''
         #original_hash: da39a3e
         text: ''
         #original_hash: da39a3e
         uri: ''
         #original_hash: da39a3e
-        submitterName: ''
+        submitter_name: ''
         #original_hash: da39a3e
-        submitterEmail: ''
+        submitter_email: ''
         #original_hash: da39a3e
-        submitterComment: ''
+        submitter_comment: ''
         #original_hash: da39a3e
         status: ''
       results_submission:

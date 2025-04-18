@@ -3,7 +3,7 @@
 <% hide_pos = defined?(hide_pos) && hide_pos %>
 <% hide_name = defined?(hide_name) && hide_name %>
 
-<%= wca_table table_class: "wca-results", floatThead: false do %>
+<%= wca_table table_class: "wca-results", float_thead: false do %>
   <thead>
     <tr>
       <% if !hide_event %>
@@ -37,11 +37,13 @@
   </thead>
 
   <tbody>
+  <% last_event = nil %>
     <% results.each_with_index do |result, i| %>
-      <tr class="sort-by-<%= result.format.sort_by.to_s %> <%= result.muted ? "text-muted" : "" %>">
+      <% muted =  (result.event == last_event) %>
+      <tr class="sort-by-<%= result.format.sort_by.to_s %> <%= muted ? "text-muted" : "" %>">
         <% if !hide_event %>
           <td class="event">
-            <% if !result.muted && (i == 0 || result.eventId != results[i - 1].eventId) %>
+            <% if !muted && (i == 0 || result.eventId != results[i - 1].eventId) %>
               <%= link_to competition_results_all_path(@competition, event: result.eventId) do %>
                 <%= cubing_icon result.event.id %>
                 <%= result.event.name %>
@@ -49,9 +51,9 @@
             <% end %>
           </td>
         <% end %>
-
+        <% last_event = result.event %>
         <% if !hide_round %>
-          <td class="round"><%= result.round_type.cellName %></td>
+          <td class="round"><%= result.round_type.cell_name %></td>
         <% end %>
 
         <% if !hide_pos %>

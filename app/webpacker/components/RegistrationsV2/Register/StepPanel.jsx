@@ -47,13 +47,20 @@ const shouldShowCompleted = (isRegistered, hasPaid, isAccepted, key, index) => {
   return false;
 };
 
-const shouldBeDisabled = (hasPaid, key, activeIndex, index, competitionInfo, isRejected) => {
+const shouldBeDisabled = (
+  hasPaid,
+  key,
+  activeIndex,
+  index,
+  registrationCurrentlyOpen,
+  isRejected,
+) => {
   if (isRejected) {
     return true;
   }
 
   if (key === paymentStepConfig.key) {
-    return (!hasPaid && index > activeIndex) || !competitionInfo['registration_currently_open?'];
+    return (!hasPaid && index > activeIndex) || !registrationCurrentlyOpen;
   }
   if (key === competingStepConfig.key) {
     return index > activeIndex;
@@ -71,6 +78,7 @@ export default function StepPanel({
   stripePublishableKey,
   connectedAccountId,
   qualifications,
+  registrationCurrentlyOpen,
 }) {
   const {
     isRegistered, isAccepted, isRejected, hasPaid, isPolling,
@@ -129,7 +137,7 @@ export default function StepPanel({
               stepConfig.key,
               activeIndex,
               index,
-              competitionInfo,
+              registrationCurrentlyOpen,
               isRejected,
             )}
             onClick={() => setActiveIndex(index)}

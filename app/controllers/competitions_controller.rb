@@ -43,7 +43,7 @@ class CompetitionsController < ApplicationController
   ]
 
   rescue_from WcaExceptions::ApiException do |e|
-    render status: e.status, json: { error: e.to_s }
+    render status: e.status, json: { error: e.to_s }.reverse_merge(e.error_details.compact)
   end
 
   rescue_from JSON::Schema::ValidationError do |e|
@@ -180,27 +180,51 @@ class CompetitionsController < ApplicationController
     respond_to do |format|
       format.html
       format.pdf do
-        unless @competition.has_schedule?
+        unless @competition.any_venues?
           flash[:danger] = t('.no_schedule')
           return redirect_to competition_path(@competition)
         end
         @colored_schedule = params.key?(:with_colors)
+
         # Manually cache the pdf on:
         #   - competiton.updated_at (touched by any change through WCIF)
         #   - locale
         #   - color or n&b
         # We have a scheduled job to clear out old files
         cached_path = helpers.path_to_cached_pdf(@competition, @colored_schedule)
-        begin
-          File.open(cached_path) do |f|
-            send_data f.read, filename: "#{helpers.pdf_name(@competition)}.pdf",
-                              type: "application/pdf", disposition: "inline"
-          end
-        rescue Errno::ENOENT
-          # This exception occurs when the file doesn't exist: let's create it!
+
+        @stream_raw = params[:raw_html] == '0xPlaywright'
+
+        if @stream_raw
+          return render content_type: 'text/html'
+        elsif !File.exist?(cached_path)
           helpers.create_pdfs_directory
-          render pdf: helpers.pdf_name(@competition), orientation: "Landscape",
-                 save_to_file: cached_path, disposition: "inline"
+
+          raw_content = self.render_to_string
+
+          helpers.playwright_connection do |browser|
+            page = browser.new_page
+
+            # Inject the raw HTML and wait until it finished loading all network assets
+            page.set_content(raw_content, waitUntil: 'networkidle')
+
+            # Wait until the WOFF2 fonts have been extracted
+            page.evaluate_handle('document.fonts.ready')
+
+            page.pdf(
+              path: cached_path,
+              format: 'A4',
+              landscape: true,
+              # Use `scale` and `margins` to imitate WkHtmlToPdf look and feel
+              scale: 0.8,
+              margin: { top: '8mm', bottom: '8.5mm', left: '10mm', right: '10mm' },
+            )
+          end
+        end
+
+        File.open(cached_path) do |f|
+          send_data f.read, filename: "#{helpers.pdf_name(@competition)}.pdf",
+                            type: "application/pdf", disposition: "inline"
         end
       end
       format.ics do
@@ -339,7 +363,7 @@ class CompetitionsController < ApplicationController
       daysUntil: days_until,
       startDate: other_comp.start_date,
       endDate: other_comp.end_date,
-      location: "#{other_comp.cityName}, #{other_comp.countryId}",
+      location: "#{other_comp.city_name}, #{other_comp.country_id}",
       distance: {
         km: competition.kilometers_to(other_comp).round(2),
         from: {
@@ -352,7 +376,7 @@ class CompetitionsController < ApplicationController
         },
       },
       limit: other_comp.competitor_limit_enabled ? other_comp.competitor_limit : "",
-      competitors: other_comp.is_probably_over? ? other_comp.results.select('DISTINCT personId').count : "",
+      competitors: other_comp.probably_over? ? other_comp.results.select('DISTINCT personId').count : "",
       events: other_comp.events.map { |event|
         event.id
       },
@@ -398,8 +422,8 @@ class CompetitionsController < ApplicationController
       delegates: users_to_sentence(other_comp.delegates),
       registrationOpen: other_comp.registration_open,
       minutesUntil: competition.minutes_until_other_registration_starts(other_comp),
-      cityName: other_comp.cityName,
-      countryId: other_comp.countryId,
+      cityName: other_comp.city_name,
+      countryId: other_comp.country_id,
       events: other_comp.events.map { |event|
         event.id
       },
@@ -470,8 +494,7 @@ class CompetitionsController < ApplicationController
   def create
     competition = Competition.new
 
-    # we're quite lax about reading params, because set_form_data! below does a comprehensive JSON-Schema check.
-    form_data = params.permit!.to_h
+    form_data = params_for_competition_form
     competition.set_form_data(form_data, current_user)
 
     if competition.save
@@ -497,8 +520,7 @@ class CompetitionsController < ApplicationController
 
     old_organizers = competition.organizers.to_a
 
-    # we're quite lax about reading params, because set_form_data! below does a comprehensive JSON-Schema check.
-    form_data = params.permit!.to_h
+    form_data = params_for_competition_form
 
     #####
     # HACK BECAUSE WE DON'T HAVE PERSISTENT COMPETITION IDS
@@ -569,23 +591,19 @@ class CompetitionsController < ApplicationController
     end
   end
 
+  private def params_for_competition_form
+    # we're quite lax about reading params, because set_form_data! on the competition object does a comprehensive JSON-Schema check.
+    #   Also, listing _all_ the possible params to `permit` here is annoying because the Competition model has _way_ too many columns.
+    #   So we "only" remove the ActionController values, as well as all route params manually.
+    params.permit!.to_h.except(:controller, :action, :id, :competition, :format)
+  end
+
   before_action -> { require_user_permission(:can_manage_competition?, competition_from_params) }, only: [:announcement_data]
 
   def announcement_data
     competition = competition_from_params
 
-    render json: {
-      isAnnounced: competition.announced?,
-      announcedBy: competition.announced_by_user&.name,
-      announcedAt: competition.announced_at&.iso8601,
-      isCancelled: competition.cancelled?,
-      canBeCancelled: competition.can_be_cancelled?,
-      cancelledBy: competition.cancelled_by_user&.name,
-      cancelledAt: competition.cancelled_at&.iso8601,
-      isRegistrationPast: competition.registration_past?,
-      isRegistrationFull: competition.registration_full?,
-      canCloseFullRegistration: competition.orga_can_close_reg_full_limit?,
-    }
+    render json: competition.form_announcement_data
   end
 
   before_action -> { require_user_permission(:can_manage_competition?, competition_from_params) }, only: [:user_preferences]
@@ -593,9 +611,7 @@ class CompetitionsController < ApplicationController
   def user_preferences
     competition = competition_from_params
 
-    render json: {
-      isReceivingNotifications: competition.receiving_registration_emails?(current_user.id),
-    }
+    render json: competition.form_user_preferences(current_user)
   end
 
   before_action -> { require_user_permission(:can_manage_competition?, competition_from_params) }, only: [:announcement_data]
@@ -603,10 +619,25 @@ class CompetitionsController < ApplicationController
   def confirmation_data
     competition = competition_from_params
 
-    render json: {
-      canConfirm: current_user.can_confirm_competition?(competition),
-      cannotDeleteReason: current_user.get_cannot_delete_competition_reason(competition),
-    }
+    render json: competition.form_confirmation_data(current_user)
+  end
+
+  before_action -> { require_user_permission(:can_admin_competitions?) }, only: [:update_confirmation_data]
+
+  def update_confirmation_data
+    competition = competition_from_params
+
+    competition.confirmed = params[:isConfirmed] if params.key?(:isConfirmed)
+    competition.show_at_all = params[:isVisible] if params.key?(:isVisible)
+
+    if competition.save
+      render json: {
+        status: "ok",
+        data: competition.form_confirmation_data(current_user),
+      }
+    else
+      render status: :bad_request, json: competition.errors
+    end
   end
 
   before_action -> { require_user_permission(:get_cannot_delete_competition_reason, competition_from_params, is_message: true) }, only: [:destroy]
@@ -632,7 +663,11 @@ class CompetitionsController < ApplicationController
         CompetitionsMailer.notify_organizer_of_confirmed_competition(current_user, competition, organizer).deliver_later
       end
 
-      render json: { status: "ok", message: t('competitions.update.confirm_success') }
+      render json: {
+        status: "ok",
+        message: t('competitions.update.confirm_success'),
+        data: competition.form_confirmation_data(current_user),
+      }
     else
       render status: :bad_request, json: competition.form_errors
     end
@@ -643,15 +678,19 @@ class CompetitionsController < ApplicationController
   def announce
     competition = competition_from_params
 
-    return render json: { error: "Already announced" } if competition.announced?
+    return render json: { error: "Already announced" }, status: :bad_request if competition.announced?
 
-    competition.update!(announced_at: Time.now, announced_by: current_user.id, showAtAll: true)
+    competition.update!(announced_at: Time.now, announced_by: current_user.id, show_at_all: true)
 
     competition.organizers.each do |organizer|
       CompetitionsMailer.notify_organizer_of_announced_competition(competition, organizer).deliver_later
     end
 
-    render json: { status: "ok", message: t('competitions.messages.announced_success') }
+    render json: {
+      status: "ok",
+      message: t('competitions.messages.announced_success'),
+      data: competition.form_announcement_data,
+    }
   end
 
   before_action -> { require_user_permission(:can_admin_competitions?) }, only: [:cancel_or_uncancel]
@@ -665,13 +704,22 @@ class CompetitionsController < ApplicationController
     if undo
       if competition.cancelled?
         competition.update!(cancelled_at: nil, cancelled_by: nil)
-        render json: { status: "ok", message: t('competitions.messages.uncancel_success') }
+
+        render json: {
+          status: "ok",
+          message: t('competitions.messages.uncancel_success'),
+          data: competition.form_announcement_data,
+        }
       else
         render json: { error: t('competitions.messages.uncancel_failure') }, status: :bad_request
       end
     elsif competition.can_be_cancelled?
       competition.update!(cancelled_at: Time.now, cancelled_by: current_user.id)
-      render json: { status: "ok", message: t('competitions.messages.cancel_success') }
+      render json: {
+        status: "ok",
+        message: t('competitions.messages.cancel_success'),
+        data: competition.form_announcement_data,
+      }
     else
       render json: { error: t('competitions.messages.cancel_failure') }, status: :bad_request
     end
@@ -689,7 +737,11 @@ class CompetitionsController < ApplicationController
         registration_close: Time.now,
       )
 
-      render json: { status: "ok", message: t('competitions.messages.orga_closed_reg_success') }
+      render json: {
+        status: "ok",
+        message: t('competitions.messages.orga_closed_reg_success'),
+        data: competition.form_announcement_data,
+      }
     else
       render json: { error: t('competitions.messages.orga_closed_reg_failure') }, status: :bad_request
     end
@@ -706,7 +758,7 @@ class CompetitionsController < ApplicationController
     competition.receive_registration_emails = receive_registration_emails
     competition.save!
 
-    render json: { status: "ok" }
+    render json: { status: "ok", data: competition.form_user_preferences(current_user) }
   end
 
   def my_competitions
@@ -727,7 +779,7 @@ class CompetitionsController < ApplicationController
       competitions = Competition.includes(:delegate_report, :championships)
                                 .where(id: competition_ids.uniq).where("cancelled_at is null or end_date >= curdate()")
                                 .sort_by { |comp| comp.start_date || (Date.today + 20.years) }.reverse
-      @past_competitions, @not_past_competitions = competitions.partition(&:is_probably_over?)
+      @past_competitions, @not_past_competitions = competitions.partition(&:probably_over?)
       bookmarked_ids = current_user.competitions_bookmarked.pluck(:competition_id)
       @bookmarked_competitions = Competition.not_over
                                             .where(id: bookmarked_ids.uniq)
@@ -739,6 +791,6 @@ class CompetitionsController < ApplicationController
   def for_senior
     user_id = params[:user_id] || current_user.id
     @user = User.find(user_id)
-    @competitions = @user.subordinate_delegates.map(&:delegated_competitions).flatten.uniq.reject(&:is_probably_over?).sort_by { |c| c.start_date || (Date.today + 20.years) }.reverse
+    @competitions = @user.subordinate_delegates.map(&:delegated_competitions).flatten.uniq.reject(&:probably_over?).sort_by { |c| c.start_date || (Date.today + 20.years) }.reverse
   end
 end

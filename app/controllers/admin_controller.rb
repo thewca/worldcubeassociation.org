@@ -168,7 +168,7 @@ class AdminController < ApplicationController
       when Result.name
         Result.where(competitionId: @competition.id, eventId: event_id, roundTypeId: round_type_id).destroy_all
       when Scramble.name
-        Scramble.where(competitionId: @competition.id, eventId: event_id, roundTypeId: round_type_id).destroy_all
+        Scramble.where(competition_id: @competition.id, event_id: event_id, round_type_id: round_type_id).destroy_all
       else
         raise "Invalid table: #{params[:table]}"
       end
@@ -218,13 +218,6 @@ class AdminController < ApplicationController
     render partial: "fix_results_selector"
   end
 
-  def edit_person
-    @person = Person.current.find_by(wca_id: params[:person].try(:[], :wca_id))
-    # If there isn't a person in the params, make an empty one that simple form have an object to work with.
-    # Note: most of the time persons are dynamically selected using user_id picker.
-    @person ||= Person.new
-  end
-
   def person_data
     @person = Person.current.find_by!(wca_id: params[:person_wca_id])
 
@@ -240,16 +233,6 @@ class AdminController < ApplicationController
   def do_compute_auxiliary_data
     ComputeAuxiliaryData.perform_later
     redirect_to panel_page_path(id: User.panel_pages[:computeAuxiliaryData])
-  end
-
-  def check_regional_records
-    @check_records_request = CheckRegionalRecordsForm.new(
-      competition_id: params[:competition_id] || nil,
-      event_id: params[:event_id] || nil,
-      refresh_index: params[:refresh_index] || nil,
-    )
-
-    @cad_timestamp = ComputeAuxiliaryData.successful_start_date&.to_fs || 'never'
   end
 
   def override_regional_records
@@ -277,7 +260,7 @@ class AdminController < ApplicationController
     competition_id = params.dig(:regional_record_overrides, :competition_id)
     event_id = params.dig(:regional_record_overrides, :event_id)
 
-    redirect_to action: :check_regional_records, competition_id: competition_id, event_id: event_id
+    redirect_to panel_page_path(id: User.panel_pages[:checkRecords], competition_id: competition_id, event_id: event_id)
   end
 
   def all_voters
@@ -389,7 +372,7 @@ class AdminController < ApplicationController
                           countryId: @country_id,
                           personId: @person_id,
                         )
-                        .order("Events.rank, RoundTypes.rank DESC")
+                        .order("events.rank, round_types.rank DESC")
 
     @results_by_competition = all_results.group_by(&:competition_id)
                                          .transform_keys { |id| Competition.find(id) }

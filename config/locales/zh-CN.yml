@@ -133,57 +133,57 @@ zh-CN:
       #original_hash: 4d618bb
       name: 资格赛
       #original_hash: 4d618bb
-      cellName: 资格赛
+      cell_name: 资格赛
     '1':
       #original_hash: 1e725b6
       name: 初赛
       #original_hash: 1e725b6
-      cellName: 初赛
+      cell_name: 初赛
     '2':
       #original_hash: 985c8d0
       name: 复赛
       #original_hash: 985c8d0
-      cellName: 复赛
+      cell_name: 复赛
     '3':
       #original_hash: e2f74d2
       name: 半决赛
       #original_hash: e2f74d2
-      cellName: 半决赛
+      cell_name: 半决赛
     b:
       #original_hash: 327c999
       name: B组决赛
       #original_hash: 327c999
-      cellName: B组决赛
+      cell_name: B组决赛
     c:
       #original_hash: 672b22c
       name: 组合制决赛
       #original_hash: 672b22c
-      cellName: 组合制决赛
+      cell_name: 组合制决赛
     d:
       #original_hash: 1e725b6
       name: 组合制初赛
       #original_hash: 1e725b6
-      cellName: 组合制初赛
+      cell_name: 组合制初赛
     e:
       #original_hash: 985c8d0
       name: 组合制复赛
       #original_hash: 985c8d0
-      cellName: 组合制复赛
+      cell_name: 组合制复赛
     f:
       #original_hash: 672b22c
       name: 决赛
       #original_hash: 672b22c
-      cellName: 决赛
+      cell_name: 决赛
     g:
       #original_hash: ccf6f8e
       name: 组合制半决赛
       #original_hash: ccf6f8e
-      cellName: 组合制半决赛
+      cell_name: 组合制半决赛
     h:
       #original_hash: 4d618bb
       name: 组合制资格赛
       #original_hash: 4d618bb
-      cellName: 组合制资格赛
+      cell_name: 组合制资格赛
   cutoff:
     #original_hash: cf458e7
     time:
@@ -362,23 +362,23 @@ zh-CN:
         #original_hash: 7f3d889
         confirmed: 不要让组织者编辑这个比赛
         #original_hash: d493e6a
-        showAtAll: 公开比赛
+        show_at_all: 公开比赛
         #original_hash: 709a232
         name: 名字
         #original_hash: f91b080
         name_reason: 命名的原因
         #original_hash: b649210
-        cellName: 比赛昵称
+        cell_name: 比赛昵称
         #original_hash: d523ebb
-        countryId: 国家/地区
+        country_id: 国家/地区
         #original_hash: 25b7b06
-        cityName: 城市
+        city_name: 城市
         #original_hash: 67cd406
         venue: 地点
         #original_hash: 486f8fb
-        venueAddress: 地址
+        venue_address: 地址
         #original_hash: 08767af
-        venueDetails: 地点详情
+        venue_details: 地点详情
         #original_hash: ff99f5b
         start_date: 开始日期
         #original_hash: 89d10cd
@@ -498,19 +498,19 @@ zh-CN:
         comment: 备注
       competition_medium:
         #original_hash: 1917f4f
-        competitionId: 比赛
+        competition_id: 比赛
         #original_hash: 3deb745
-        type: 类型
+        media_type: 类型
         #original_hash: c3328c3
         text: 文字
         #original_hash: d051707
         uri: 链接
         #original_hash: 1be755a
-        submitterName: 提交人姓名
+        submitter_name: 提交人姓名
         #original_hash: 78cdfee
-        submitterEmail: 提交人电邮
+        submitter_email: 提交人电邮
         #original_hash: 0d31f23
-        submitterComment: 提交人留言
+        submitter_comment: 提交人留言
         #original_hash: bae7d5b
         status: 状态
   enums:
@@ -571,7 +571,7 @@ zh-CN:
         accepted: 已接收
         #original_hash: 96f608c
         pending: 待接收
-      type:
+      media_type:
         #original_hash: ee45c30
         report: 报道
         #original_hash: 4360c2d
@@ -642,9 +642,9 @@ zh-CN:
         #original_hash: 2c812a0
         name: '比赛全名需在结尾包含年份（例：Danish Open 2016）。注意大小写。名字只能包含字母、数字、标点（-&.:''）和空格。'
         #original_hash: 525fcc8
-        cellName: 用于显示的短名。如果比赛名字已经很短了，你可以重复使用（例：Europe 2006）。
+        cell_name: 用于显示的短名。如果比赛名字已经很短了，你可以重复使用（例：Europe 2006）。
         #original_hash: bce4589
-        cityName: '比赛举办地的城市名和省份名（如果有的话）。不要包括国家/地区（例：Paris OR San Francisco, California）。'
+        city_name: '比赛举办地的城市名和省份名（如果有的话）。不要包括国家/地区（例：Paris OR San Francisco, California）。'
         #original_hash: bb470cc
         information: 关于比赛人数限制、报名费、观众及其他相关细节的信息。
         #original_hash: b4d020f
@@ -660,7 +660,7 @@ zh-CN:
         #original_hash: da39a3e
         clone_tabs: ''
         #original_hash: da39a3e
-        countryId: ''
+        country_id: ''
         #original_hash: da39a3e
         end_date: ''
         #original_hash: da39a3e
@@ -685,7 +685,7 @@ zh-CN:
         #original_hash: da39a3e
         registration_close: ''
         #original_hash: da39a3e
-        showAtAll: ''
+        show_at_all: ''
         #original_hash: da39a3e
         start_date: ''
         #original_hash: da39a3e
@@ -699,7 +699,7 @@ zh-CN:
         #original_hash: 4bd7102
         competitor_limit_reason: 为啥限制比赛人数？请使用英文填写！
         #original_hash: da39a3e
-        venueAddress: ''
+        venue_address: ''
         #original_hash: da39a3e
         on_the_spot_registration: ''
         #original_hash: da39a3e
@@ -823,7 +823,7 @@ zh-CN:
         comment: ''
       competition_medium:
         #original_hash: da39a3e
-        competitionId: ''
+        competition_id: ''
         #original_hash: da39a3e
         type: ''
         #original_hash: da39a3e
@@ -831,11 +831,11 @@ zh-CN:
         #original_hash: da39a3e
         uri: ''
         #original_hash: da39a3e
-        submitterName: ''
+        submitter_name: ''
         #original_hash: da39a3e
-        submitterEmail: ''
+        submitter_email: ''
         #original_hash: da39a3e
-        submitterComment: ''
+        submitter_comment: ''
         #original_hash: da39a3e
         status: ''
       results_submission:

@@ -23,7 +23,6 @@ function EditScramble({
       dataType="scramble"
       DisplayTable={ShowSingleScramble}
       EditForm={InlineEditForm}
-      competitionIdKey="competitionId"
     />
   );
 }

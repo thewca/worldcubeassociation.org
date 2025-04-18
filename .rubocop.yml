@@ -45,9 +45,6 @@ Bundler/OrderedGems:
 Lint/UnusedMethodArgument:
   Enabled: false
 
-Naming/AccessorMethodName:
-  Enabled: false
-
 Style/Alias:
   EnforcedStyle: prefer_alias_method
 
@@ -113,9 +110,6 @@ Metrics/MethodLength:
 Metrics/ModuleLength:
   Enabled: false
 
-Naming/MemoizedInstanceVariableName:
-  Enabled: false
-
 Style/AccessModifierDeclarations:
   Enabled: false
 
@@ -178,14 +172,18 @@ Style/WordArray:
 Style/SymbolProc:
   Enabled: false
 
-Naming/PredicateName:
-  Enabled: false
-
-Naming/BlockParameterName:
-  Enabled: false
-
 Naming/MethodParameterName:
-  Enabled: false
+  AllowedNames:
+    - n
+    - id
+
+Naming/PredicateName:
+  AllowedMethods:
+    # These are database columns
+    - is_active?
+    - is_hidden?
+    # This one actually makes sense
+    - has_permission?
 
 Lint/EmptyFile:
   Exclude:
@@ -195,21 +193,12 @@ Lint/EmptyFile:
 Naming/VariableNumber:
   Enabled: false
 
-# If an external library requires us to use terms like "blacklist",
-# we have no choice but to follow their conventions until they update
-Naming/InclusiveLanguage:
-  Exclude:
-    - 'config/**/*'
-
 Style/OpenStructUse:
   Exclude:
     - 'spec/lib/middlewares/warden_user_logger_spec.rb'
 
 Style/HashSyntax:
   EnforcedShorthandSyntax: never
-
-Naming/BlockForwarding:
-  Enabled: false
 
 Style/ArgumentsForwarding:
   RedundantBlockArgumentNames: []

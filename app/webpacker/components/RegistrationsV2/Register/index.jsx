@@ -115,6 +115,7 @@ function Register({
             connectedAccountId={connectedAccountId}
             stripePublishableKey={stripePublishableKey}
             qualifications={qualifications}
+            registrationCurrentlyOpen={registrationCurrentlyOpen}
           />
         </>
       )}

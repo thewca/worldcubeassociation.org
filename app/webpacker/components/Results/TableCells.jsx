@@ -45,7 +45,7 @@ export function CompetitionCell({ competition, compatIso2 }) {
     <>
       <RegionFlag iso2={iso2} />
       {' '}
-      <a href={competitionUrl(competition.id)}>{competition.cellName}</a>
+      <a href={competitionUrl(competition.id)}>{competition.cell_name}</a>
     </>
   );
 }
