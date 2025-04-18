@@ -1,19 +1,19 @@
 # frozen_string_literal: true
 
 module DatabaseDumper
-  WHERE_VISIBLE_COMP = "WHERE Competitions.showAtAll = 1"
-  JOIN_WHERE_VISIBLE_COMP = "JOIN Competitions ON Competitions.id = competition_id #{WHERE_VISIBLE_COMP}".freeze
+  WHERE_VISIBLE_COMP = "WHERE competitions.show_at_all = 1"
+  JOIN_WHERE_VISIBLE_COMP = "JOIN competitions ON competitions.id = competition_id #{WHERE_VISIBLE_COMP}".freeze
   DEV_TIMESTAMP_NAME = "developer_dump_exported_at"
   RESULTS_TIMESTAMP_NAME = "public_results_exported_at"
   VISIBLE_ACTIVITY_IDS = "SELECT A.id FROM schedule_activities AS A " \
                          "JOIN venue_rooms ON (venue_rooms.id = holder_id AND holder_type = 'VenueRoom') " \
                          "JOIN competition_venues ON competition_venues.id = competition_venue_id #{JOIN_WHERE_VISIBLE_COMP}".freeze
-  PUBLIC_COMPETITION_JOIN = "LEFT JOIN competition_events ON Competitions.id = competition_events.competition_id " \
-                            "LEFT JOIN competition_delegates ON Competitions.id = competition_delegates.competition_id " \
+  PUBLIC_COMPETITION_JOIN = "LEFT JOIN competition_events ON competitions.id = competition_events.competition_id " \
+                            "LEFT JOIN competition_delegates ON competitions.id = competition_delegates.competition_id " \
                             "LEFT JOIN users AS users_delegates ON users_delegates.id = competition_delegates.delegate_id " \
-                            "LEFT JOIN competition_organizers ON Competitions.id = competition_organizers.competition_id " \
+                            "LEFT JOIN competition_organizers ON competitions.id = competition_organizers.competition_id " \
                             "LEFT JOIN users AS users_organizers ON users_organizers.id = competition_organizers.organizer_id #{WHERE_VISIBLE_COMP} " \
-                            "GROUP BY Competitions.id".freeze
+                            "GROUP BY competitions.id".freeze
 
   PUBLIC_RESULTS_VERSION = '1.0.0'
 
@@ -37,24 +37,24 @@ module DatabaseDumper
   end
 
   DEV_SANITIZERS = {
-    "Competitions" => {
+    "competitions" => {
       where_clause: WHERE_VISIBLE_COMP,
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
           name
           name_reason
-          cityName
-          countryId
+          city_name
+          country_id
           information
           start_date
           end_date
           venue
-          venueAddress
-          venueDetails
+          venue_address
+          venue_details
           external_website
-          cellName
-          showAtAll
+          cell_name
+          show_at_all
           latitude
           longitude
           confirmed_at
@@ -144,63 +144,63 @@ module DatabaseDumper
         },
       ),
     }.freeze,
-    "ConciseAverageResults" => {
+    "concise_average_results" => {
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           average
-          continentId
-          countryId
+          continent_id
+          country_id
           day
-          eventId
+          event_id
           id
           month
-          personId
-          valueAndId
+          person_id
+          value_and_id
           year
         ),
       ),
     }.freeze,
-    "ConciseSingleResults" => {
+    "concise_single_results" => {
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           best
-          continentId
-          countryId
+          continent_id
+          country_id
           day
-          eventId
+          event_id
           id
           month
-          personId
-          valueAndId
+          person_id
+          value_and_id
           year
         ),
       ),
     }.freeze,
     "connected_paypal_accounts" => :skip_all_rows,
     "connected_stripe_accounts" => :skip_all_rows,
-    "Continents" => {
+    "continents" => {
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
           latitude
           longitude
           name
-          recordName
+          record_name
           zoom
         ),
       ),
     }.freeze,
-    "Countries" => {
+    "countries" => {
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
-          continentId
+          continent_id
           iso2
           name
         ),
       ),
     }.freeze,
-    "Events" => {
+    "events" => {
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
@@ -210,7 +210,7 @@ module DatabaseDumper
         ),
       ),
     }.freeze,
-    "Formats" => {
+    "formats" => {
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
@@ -223,18 +223,18 @@ module DatabaseDumper
         ),
       ),
     }.freeze,
-    "InboxPersons" => :skip_all_rows,
-    "InboxResults" => :skip_all_rows,
-    "Persons" => {
+    "inbox_persons" => :skip_all_rows,
+    "inbox_results" => :skip_all_rows,
+    "persons" => {
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
           wca_id
           comments
-          countryId
+          country_id
           gender
           name
-          subId
+          sub_id
         ),
         db_default: %w(
           comments
@@ -245,48 +245,48 @@ module DatabaseDumper
         },
       ),
     }.freeze,
-    "RanksAverage" => {
+    "ranks_average" => {
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
           best
-          continentRank
-          countryRank
-          eventId
-          personId
-          worldRank
+          continent_rank
+          country_rank
+          event_id
+          person_id
+          world_rank
         ),
       ),
     }.freeze,
-    "RanksSingle" => {
+    "ranks_single" => {
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
           best
-          continentRank
-          countryRank
-          eventId
-          personId
-          worldRank
+          continent_rank
+          country_rank
+          event_id
+          person_id
+          world_rank
         ),
       ),
     }.freeze,
-    "Results" => {
+    "results" => {
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
           average
           best
-          competitionId
-          countryId
-          eventId
-          formatId
-          personId
-          personName
+          competition_id
+          country_id
+          event_id
+          format_id
+          person_id
+          person_name
           pos
-          regionalAverageRecord
-          regionalSingleRecord
-          roundTypeId
+          regional_average_record
+          regional_single_record
+          round_type_id
           updated_at
           value1
           value2
@@ -316,28 +316,28 @@ module DatabaseDumper
         ),
       ),
     }.freeze,
-    "RoundTypes" => {
+    "round_types" => {
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
-          cellName
+          cell_name
           final
           name
           rank
         ),
       ),
     }.freeze,
-    "Scrambles" => {
+    "scrambles" => {
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
-          competitionId
-          eventId
-          groupId
-          isExtra
-          roundTypeId
+          competition_id
+          event_id
+          group_id
+          is_extra
+          round_type_id
           scramble
-          scrambleId
-          scrambleNum
+          id
+          scramble_num
         ),
       ),
     }.freeze,
@@ -397,7 +397,7 @@ module DatabaseDumper
     }.freeze,
     "competition_series" => {
       # One Series can be associated with many competitions, so any JOIN will inherently produce duplicates. Get rid of them by using GROUP BY.
-      where_clause: "LEFT JOIN Competitions ON Competitions.competition_series_id=competition_series.id #{WHERE_VISIBLE_COMP} GROUP BY competition_series.id",
+      where_clause: "LEFT JOIN competitions ON competitions.competition_series_id=competition_series.id #{WHERE_VISIBLE_COMP} GROUP BY competition_series.id",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
@@ -962,66 +962,80 @@ module DatabaseDumper
 
   RESULTS_SANITIZERS = {
     "Results" => {
+      source_table: "results",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
-          competitionId
-          eventId
-          roundTypeId
           pos
           best
           average
-          personName
-          personId
-          formatId
           value1
           value2
           value3
           value4
           value5
-          regionalSingleRecord
-          regionalAverageRecord
         ),
         fake_values: {
+          "competitionId" => "competition_id",
+          "eventId" => "event_id",
+          "roundTypeId" => "round_type_id",
+          "personName" => "person_name",
+          "personId" => "person_id",
+          "formatId" => "format_id",
+          "regionalSingleRecord" => "regional_single_record",
+          "regionalAverageRecord" => "regional_average_record",
           "personCountryId" => "countryId",
         }.freeze,
       ),
     }.freeze,
     "RanksSingle" => {
+      source_table: "ranks_single",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
-          personId
-          eventId
           best
-          worldRank
-          continentRank
-          countryRank
         ),
+        fake_values: {
+          # Copy over column to keep backwards compatibility
+          "personId" => "person_id",
+          "eventId" => "event_id",
+          "worldRank" => "world_rank",
+          "continentRank" => "continent_rank",
+          "countryRank" => "country_rank",
+        },
       ),
     }.freeze,
     "RanksAverage" => {
+      source_table: "ranks_average",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
-          personId
-          eventId
           best
-          worldRank
-          continentRank
-          countryRank
         ),
+        fake_values: {
+          # Copy over column to keep backwards compatibility
+          "personId" => "person_id",
+          "eventId" => "event_id",
+          "worldRank" => "world_rank",
+          "continentRank" => "continent_rank",
+          "countryRank" => "country_rank",
+        },
       ),
     }.freeze,
     "RoundTypes" => {
+      source_table: "round_types",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
-          cellName
           final
           name
           rank
         ),
+        fake_values: {
+          # Copy over column to keep backwards compatibility
+          "cellName" => "cell_name",
+        },
       ),
     }.freeze,
     "Events" => {
+      source_table: "events",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
@@ -1036,6 +1050,7 @@ module DatabaseDumper
       ),
     }.freeze,
     "Formats" => {
+      source_table: "formats",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
@@ -1049,59 +1064,67 @@ module DatabaseDumper
       ),
     }.freeze,
     "Countries" => {
+      source_table: "countries",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
-          continentId
           iso2
           name
         ),
+        fake_values: {
+          "continentId" => "continent_id",
+        }.freeze,
       ),
     }.freeze,
     "Continents" => {
+      source_table: "continents",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
           latitude
           longitude
           name
-          recordName
           zoom
         ),
+        fake_values: {
+          "recordName" => "record_name",
+        }.freeze,
       ),
     }.freeze,
     "Persons" => {
+      source_table: "persons",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
-          subid
           name
-          countryId
           gender
         ),
         fake_values: {
           "id" => "wca_id",
+          "subid" => "sub_id",
+          "countryId" => "country_id",
         },
       ),
     }.freeze,
     "Competitions" => {
+      source_table: "competitions",
       where_clause: PUBLIC_COMPETITION_JOIN,
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
           name
-          cityName
-          countryId
           information
-          venue
-          venueAddress
-          venueDetails
           external_website
-          cellName
+          venue
           latitude
           longitude
         ),
         fake_values: {
-          "cancelled" => "(Competitions.cancelled_at IS NOT NULL AND Competitions.cancelled_by IS NOT NULL)",
+          "cityName" => "city_name",
+          "countryId" => "country_id",
+          "venueAddress" => "venue_address",
+          "venueDetails" => "venue_details",
+          "cellName" => "cell_name",
+          "cancelled" => "(competitions.cancelled_at IS NOT NULL AND competitions.cancelled_by IS NOT NULL)",
           "eventSpecs" => "REPLACE(GROUP_CONCAT(DISTINCT competition_events.event_id), \",\", \" \")",
           "wcaDelegate" => "GROUP_CONCAT(DISTINCT(CONCAT(\"[{\", users_delegates.name, \"}{mailto:\", users_delegates.email, \"}]\")) SEPARATOR \" \")",
           "organiser" => "GROUP_CONCAT(DISTINCT(CONCAT(\"[{\", users_organizers.name, \"}{mailto:\", users_organizers.email, \"}]\")) SEPARATOR \" \")",
@@ -1119,17 +1142,20 @@ module DatabaseDumper
       ),
     }.freeze,
     "Scrambles" => {
+      source_table: "scrambles",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
-          competitionId
-          eventId
-          groupId
-          isExtra
-          roundTypeId
           scramble
-          scrambleId
-          scrambleNum
         ),
+        fake_values: {
+          "competitionId" => "competition_id",
+          "eventId" => "event_id",
+          "groupId" => "group_id",
+          "isExtra" => "is_extra",
+          "roundTypeId" => "round_type_id",
+          "scrambleId" => "id",
+          "scrambleNum" => "scramble_num",
+        },
       ),
       tsv_sanitizers: actions_to_column_sanitizers(
         fake_values: {
