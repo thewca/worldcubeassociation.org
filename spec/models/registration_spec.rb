@@ -678,7 +678,7 @@ RSpec.describe Registration do
   describe 'invoice items' do
     describe 'competition entry invoice item' do
       context 'when a registration is created' do
-        let(:comp) { FactoryBot.create(:competition) }
+        let(:comp) { FactoryBot.create(:competition, :registration_open) }
         let(:reg) { FactoryBot.create(:registration, competition: comp) }
 
         it 'adds a competition entry invoice item on create' do
@@ -696,18 +696,26 @@ RSpec.describe Registration do
         end
       end
 
-      it 'doesnt add a competition entry if entry is free' do
-        test = false
-        expect(test).to be(true)
+      it 'doesnt add a competition entry item unless wca_registration is used' do
+        no_wca_reg_comp = FactoryBot.create(:competition)
+        imported_reg = FactoryBot.create(:registration, competition: no_wca_reg_comp)
+        expect(imported_reg.invoice_items).to be_empty
+      end
+
+      it 'doesnt add a competition entry item if entry is free' do
+        free_comp = FactoryBot.create(:competition, :registration_open, base_entry_fee_lowest_denomination: 0)
+        free_comp_reg = FactoryBot.create(:registration, competition: free_comp)
+        expect(free_comp_reg.invoice_items).to be_empty
       end
     end
   end
 
   describe 'order functions' do
-    describe '#invoice_items_total', :tag do
+    describe '#invoice_items_total' do
       let(:registration) { FactoryBot.build_stubbed(:registration) }
 
       it 'returns 0 if no invoice items exist' do
+        expect(registration.invoice_items).to be_empty # Confirm there are no invoice items
         expect(registration.invoice_items_total).to be(0)
       end
 
