@@ -145,7 +145,7 @@ class ConnectedStripeAccount < ApplicationRecord
     client.auth_code.authorize_url(oauth_params)
   end
 
-  def self.connect_account(oauth_return_params)
+  def self.connect_integration(oauth_return_params)
     client = self.oauth_client
 
     resp = client.auth_code.get_token(

@@ -249,6 +249,11 @@ class Registration < ApplicationRecord
     end
   end
 
+  def payment_reference
+    # TODO: We currently have no
+    registration_payments.first&.receipt&.payment_reference
+  end
+
   def to_v2_json(admin: false, history: false, pii: false)
     private_attributes = pii ? %w[dob email] : nil
 
@@ -265,6 +270,7 @@ class Registration < ApplicationRecord
                                 payment: {
                                   has_paid: outstanding_entry_fees <= 0,
                                   payment_statuses: registration_payments.sort_by(&:created_at).reverse.map(&:payment_status),
+                                  payment_reference: payment_reference,
                                   payment_amount_iso: paid_entry_fees.cents,
                                   payment_amount_human_readable: "#{paid_entry_fees.format} (#{paid_entry_fees.currency.name})",
                                   updated_at: last_payment_date,

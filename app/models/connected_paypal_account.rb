@@ -94,7 +94,7 @@ class ConnectedPaypalAccount < ApplicationRecord
     PaypalInterface.generate_paypal_onboarding_link(competition_id)
   end
 
-  def self.connect_account(oauth_return_params)
+  def self.connect_integration(oauth_return_params)
     ConnectedPaypalAccount.new(
       paypal_merchant_id: oauth_return_params[:merchantIdInPayPal],
       permissions_granted: oauth_return_params[:permissionsGranted],

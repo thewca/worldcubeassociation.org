@@ -979,6 +979,10 @@ class Competition < ApplicationRecord
     competition_payment_integrations.any? && paid_entry?
   end
 
+  def using_manual_payment?
+    payment_integration_type == :manual
+  end
+
   def can_edit_registration_fees?
     # Quick workaround for https://github.com/thewca/worldcubeassociation.org/issues/2123
     # (We used to return `registrations.with_payments.empty?` here)
@@ -1783,12 +1787,24 @@ class Competition < ApplicationRecord
                allow_registration_without_qualification refund_policy_percent use_wca_registration guests_per_registration_limit venue contact
                force_comment_in_registration use_wca_registration external_registration_page guests_entry_fee_lowest_denomination guest_entry_status
                information events_per_registration_limit guests_enabled auto_accept_registrations auto_accept_disable_threshold],
-      methods: %w[url website short_name city venue_address venue_details latitude_degrees longitude_degrees country_iso2 event_ids
-                  main_event_id number_of_bookmarks using_payment_integrations? uses_qualification? uses_cutoff? competition_series_ids registration_full?
+      methods: %w[url website short_name city venue_address venue_details latitude_degrees longitude_degrees country_iso2 event_ids payment_integration_type
+                  main_event_id number_of_bookmarks using_payment_integrations? uses_qualification? uses_cutoff? competition_series_ids registration_full? manual_payment_details
                   part_of_competition_series? registration_full_and_accepted?],
       include: %w[delegates organizers],
     }
     self.as_json(options)
+  end
+
+  def payment_integration_type
+    return nil unless using_payment_integrations?
+
+    CompetitionPaymentIntegration::AVAILABLE_INTEGRATIONS.key(competition_payment_integrations.first.connected_account_type)
+  end
+
+  def manual_payment_details
+    return nil unless using_manual_payment?
+
+    competition_payment_integrations.first.connected_account.account_details
   end
 
   def competition_series_wcif(authorized: false)
