@@ -84,7 +84,7 @@ after "development:users", "development:user_roles" do
             pos: k+1,
             personId: person.wca_id,
             personName: person.name,
-            countryId: person.countryId,
+            countryId: person.country_id,
             competitionId: competition.id,
             eventId: event.id,
             roundTypeId: round_type_id,
