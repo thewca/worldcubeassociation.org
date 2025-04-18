@@ -1280,13 +1280,13 @@ RSpec.describe 'API Registrations' do
     let(:headers) { { 'Authorization' => fetch_jwt_token(reg.user_id) } }
 
     it 'successfully builds a payment_intent via Stripe API' do
-      get api_v1_registrations_payment_ticket_path(competition_id: competition.id), headers: headers
+      get api_v1_registrations_payment_ticket_path(competition_id: competition.id), headers: headers, params: { payment_integration_type: :stripe }
       expect(response).to be_successful
     end
 
     context 'successful payment ticket' do
       before do
-        get api_v1_registrations_payment_ticket_path(competition_id: competition.id), headers: headers
+        get api_v1_registrations_payment_ticket_path(competition_id: competition.id), headers: headers, params: { payment_integration_type: :stripe }
       end
 
       it 'returns a client secret' do
@@ -1305,7 +1305,7 @@ RSpec.describe 'API Registrations' do
     end
 
     it 'has the correct payment_intent properties when a donation is present' do
-      get api_v1_registrations_payment_ticket_path(competition_id: competition.id), headers: headers, params: { iso_donation_amount: 1300 }
+      get api_v1_registrations_payment_ticket_path(competition_id: competition.id), headers: headers, params: { iso_donation_amount: 1300, payment_integration_type: :stripe }
 
       payment_record = PaymentIntent.find_by(holder_type: "Registration", holder_id: reg.id).payment_record
       expect(payment_record.amount_stripe_denomination).to be(2300)
