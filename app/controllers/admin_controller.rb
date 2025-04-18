@@ -329,7 +329,7 @@ class AdminController < ApplicationController
             inbox_person = InboxPerson.find_by(id: pending_person_id, competition_id: pending_competition_id)
 
             old_name = inbox_person.name
-            old_country = inbox_person.country_iso2
+            old_country = inbox_person.country_id
           end
 
           FinishUnfinishedPersons.insert_person(inbox_person, new_name, new_country, new_id)

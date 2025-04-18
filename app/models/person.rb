@@ -124,7 +124,7 @@ class Person < ApplicationRecord
   end
 
   def sub_ids
-    Person.where(wca_id: wca_id).pluck(&:sub_id)
+    Person.where(wca_id: wca_id).pluck(:sub_id)
   end
 
   def country
