@@ -66,8 +66,8 @@ RSpec.describe TicketsController do
       expect(response).to be_successful
       result.reload
       person.reload
-      expect(result.personId).to include('ANON')
-      expect(result.personName).to eq User::ANONYMOUS_NAME
+      expect(result.person_id).to include('ANON')
+      expect(result.person_name).to eq User::ANONYMOUS_NAME
       expect(person.wca_id).to include('ANON')
       expect(person.name).to eq User::ANONYMOUS_NAME
       expect(person.gender).to eq User::ANONYMOUS_GENDER

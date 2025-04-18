@@ -514,7 +514,7 @@ ko:
         #original_hash: 8c41ae8
         wca_id: 선수
         #original_hash: fa4c045
-        countryId: 대표 지역
+        country_id: 대표 지역
         #original_hash: ab58155
         dob: 생년월일
         #original_hash: 8a754c6

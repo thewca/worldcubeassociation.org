@@ -10,11 +10,6 @@ class Scramble < ApplicationRecord
   validates :scramble_num, numericality: { presence: true, greater_than: 0 }
   validates :is_extra, inclusion: { presence: true, in: [true, false] }
 
-  # FIXME: GB Remove this after all other snake_case migrations are done
-  alias_attribute :competitionId, :competition_id
-  alias_attribute :eventId, :event_id
-  alias_attribute :roundTypeId, :round_type_id
-
   def round_type
     RoundType.c_find(round_type_id)
   end

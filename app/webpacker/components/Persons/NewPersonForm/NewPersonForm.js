@@ -137,7 +137,7 @@ function NewPersonForm({
             name,
             dob,
             gender,
-            countryId: countryIdForIso2(countryIso2),
+            country_id: countryIdForIso2(countryIso2),
             wca_id: wcaId,
           },
         }, onSuccess, {

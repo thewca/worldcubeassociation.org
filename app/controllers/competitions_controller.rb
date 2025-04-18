@@ -102,7 +102,7 @@ class CompetitionsController < ApplicationController
       return redirect_to competition_admin_import_results_path(comp)
     end
 
-    if comp.main_event && comp.results.where(eventId: comp.main_event_id).empty?
+    if comp.main_event && comp.results.where(event_id: comp.main_event_id).empty?
       flash[:danger] = t('competitions.messages.no_main_event_results', event_name: comp.main_event.name)
       return redirect_to competition_admin_import_results_path(comp)
     end
@@ -376,7 +376,7 @@ class CompetitionsController < ApplicationController
         },
       },
       limit: other_comp.competitor_limit_enabled ? other_comp.competitor_limit : "",
-      competitors: other_comp.probably_over? ? other_comp.results.select('DISTINCT personId').count : "",
+      competitors: other_comp.probably_over? ? other_comp.results.select('DISTINCT person_id').count : "",
       events: other_comp.events.map { |event|
         event.id
       },
@@ -772,7 +772,7 @@ class CompetitionsController < ApplicationController
         [r.competition_id, r.competing_status]
       end
       competition_ids.concat(@registered_for_by_competition_id.keys)
-      competition_ids.concat(current_user.person.competitions.pluck(:competitionId)) if current_user.person
+      competition_ids.concat(current_user.person.competitions.pluck(:competition_id)) if current_user.person
       # An organiser might still have duties to perform for a cancelled competition until the date of the competition has passed.
       # For example, mailing all competitors about the cancellation.
       # In general ensuring ease of access until it is certain that they won't need to frequently visit the page anymore.

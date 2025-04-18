@@ -522,7 +522,7 @@ fr-CA:
         #original_hash: 6691d67
         wca_id: Personne
         #original_hash: c2c9678
-        countryId: Représentant
+        country_id: Représentant
         #original_hash: 8851f38
         dob: Date de naissance
         #original_hash: 2aa31fc

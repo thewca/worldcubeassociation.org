@@ -3,8 +3,8 @@
 require 'rails_helper'
 
 RSpec.describe MergePeople do
-  let(:person1) { FactoryBot.create(:person, countryId: "USA") }
-  let(:shared_attributes) { person1.attributes.symbolize_keys.slice(:name, :countryId, :gender, :dob) }
+  let(:person1) { FactoryBot.create(:person, country_id: "USA") }
+  let(:shared_attributes) { person1.attributes.symbolize_keys.slice(:name, :country_id, :gender, :dob) }
   let(:person2) { FactoryBot.create(:person, shared_attributes) }
   let(:merge_people) { MergePeople.new(person1_wca_id: person1.wca_id, person2_wca_id: person2.wca_id) }
 
@@ -17,14 +17,14 @@ RSpec.describe MergePeople do
     expect(merge_people).to be_invalid_with_errors(person2_wca_id: ["Cannot merge a person with themself!"])
   end
 
-  it "requires person1 not have multiple subIds" do
+  it "requires person1 not have multiple sub_ids" do
     merge_people.person1_wca_id = FactoryBot.create(:person_with_multiple_sub_ids, shared_attributes).wca_id
-    expect(merge_people).to be_invalid_with_errors(person1_wca_id: ["This person has multiple subIds"])
+    expect(merge_people).to be_invalid_with_errors(person1_wca_id: ["This person has multiple sub_ids"])
   end
 
-  it "requires person2 not have multiple subIds" do
+  it "requires person2 not have multiple sub_ids" do
     merge_people.person2_wca_id = FactoryBot.create(:person_with_multiple_sub_ids, shared_attributes).wca_id
-    expect(merge_people).to be_invalid_with_errors(person2_wca_id: ["This person has multiple subIds"])
+    expect(merge_people).to be_invalid_with_errors(person2_wca_id: ["This person has multiple sub_ids"])
   end
 
   it "requires same name" do
@@ -33,7 +33,7 @@ RSpec.describe MergePeople do
   end
 
   it "requires same country" do
-    person2.update_attribute(:countryId, "Israel")
+    person2.update_attribute(:country_id, "Israel")
     expect(merge_people).to be_invalid_with_errors(person2_wca_id: ["Countries don't match"])
   end
 
@@ -62,10 +62,10 @@ RSpec.describe MergePeople do
     result2 = FactoryBot.create(:result, person: person2)
     decoy_result = FactoryBot.create(:result)
 
-    old_decoy_personId = decoy_result.personId
+    old_decoy_person_id = decoy_result.person_id
     expect(merge_people.do_merge).to be true
-    expect(result1.reload.personId).to eq person1.wca_id
-    expect(result2.reload.personId).to eq person1.wca_id
-    expect(decoy_result.reload.personId).to eq old_decoy_personId
+    expect(result1.reload.person_id).to eq person1.wca_id
+    expect(result2.reload.person_id).to eq person1.wca_id
+    expect(decoy_result.reload.person_id).to eq old_decoy_person_id
   end
 end
