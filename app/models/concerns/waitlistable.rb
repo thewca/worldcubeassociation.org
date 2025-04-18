@@ -81,6 +81,12 @@ module Waitlistable
       self.waiting_list.add(self) if should_add
       self.waiting_list.move_to_position(self, target_position) if should_move
       self.waiting_list.remove(self) if should_remove
+
+      nothing_happened = !should_add && !should_move && !should_remove
+
+      # If there was no (reasonable) change to act on, then we don't want to track
+      #   that the waiting list position actually changed.
+      self.clear_tracked_waitlist_position! if nothing_happened
     end
   end
 end
