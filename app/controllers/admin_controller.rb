@@ -251,7 +251,7 @@ class AdminController < ApplicationController
         next if marker.blank?
 
         result_id, result_type = id_and_type.split('-')
-        record_marker = :"regional#{result_type}Record"
+        record_marker = :"regional_#{result_type}_record"
 
         Result.where(id: result_id).update_all(record_marker => marker)
       end

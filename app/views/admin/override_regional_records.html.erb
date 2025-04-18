@@ -95,7 +95,7 @@
                 <% value_solve = result.send("#{value_column}_solve".to_sym) %>
 
                 <% computed_marker = row[:computed_marker] %>
-                <% stored_marker = result.send("regional#{value_name}Record") %>
+                <% stored_marker = result.send("regional_#{value_name}_record") %>
 
                 <% markers_same = computed_marker == stored_marker %>
 
