@@ -243,8 +243,8 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
           display_name: "Optional donation",
         )
       end
-      @registration.invoice_items_total
-      @registration.invoice_items_currency_code
+
+      ruby_money = @registration.invoice_items_total
     end
 
     payment_account = @competition.payment_account_for(:stripe)
