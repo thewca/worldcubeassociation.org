@@ -265,11 +265,11 @@ class RegistrationsController < ApplicationController
     registration = Registration.find_by(competition_id: competition_id, user_id: user_id)
     iso_donation_amount = params[:iso_donation_amount].to_i || 0
 
-    ruby_money = if (Rails.env.production? && EnvConfig.WCA_LIVE_SITE?)
-                  registration.entry_fee_with_donation(iso_donation_amount)
+    ruby_money = if Rails.env.production? && EnvConfig.WCA_LIVE_SITE?
+                   registration.entry_fee_with_donation(iso_donation_amount)
                  else
-                  currency_code = registration.invoice_items_total.currency.iso_code
-                  registration.invoice_items_total + Money.new(iso_donation_amount, currency_code)
+                   currency_code = registration.invoice_items_total.currency.iso_code
+                   registration.invoice_items_total + Money.new(iso_donation_amount, currency_code)
                  end
 
     human_amount = helpers.format_money(ruby_money)

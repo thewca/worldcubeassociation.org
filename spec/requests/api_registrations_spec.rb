@@ -1382,8 +1382,6 @@ RSpec.describe 'API Registrations' do
         expect(body).to eq({ error: Registrations::ErrorCodes::REGISTRATION_CLOSED }.with_indifferent_access)
       end
     end
-
-
   end
 
   describe 'GET #payment_denomination' do

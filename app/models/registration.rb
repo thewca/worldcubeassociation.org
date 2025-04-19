@@ -64,6 +64,7 @@ class Registration < ApplicationRecord
   after_create :add_competition_entry_invoice_item
   def add_competition_entry_invoice_item
     return unless competition.use_wca_registration && competition.base_entry_fee_lowest_denomination > 0
+
     invoice_items.create(
       amount_lowest_denomination: competition.base_entry_fee_lowest_denomination,
       currency_code: competition.currency_code,
