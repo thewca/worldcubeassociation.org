@@ -971,7 +971,7 @@ module DatabaseDumper
           "formatId" => "format_id",
           "regionalSingleRecord" => "regional_single_record",
           "regionalAverageRecord" => "regional_average_record",
-          "personCountryId" => "countryId",
+          "personCountryId" => "country_id",
         }.freeze,
       ),
     }.freeze,
