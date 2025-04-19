@@ -29,6 +29,7 @@ class Registration < ApplicationRecord
   has_many :assignments, as: :registration, dependent: :delete_all
   has_many :wcif_extensions, as: :extendable, dependent: :delete_all
   has_many :payment_intents, as: :holder, dependent: :delete_all
+  has_many :invoice_items
 
   enum :competing_status, {
     pending: Registrations::Helper::STATUS_PENDING,
@@ -59,6 +60,18 @@ class Registration < ApplicationRecord
   validates :guests, numericality: { less_than_or_equal_to: :guest_limit, if: :check_guest_limit?, frontend_code: Registrations::ErrorCodes::GUEST_LIMIT_EXCEEDED }
   validates :guests, numericality: { equal_to: 0, unless: :guests_allowed?, frontend_code: Registrations::ErrorCodes::GUEST_LIMIT_EXCEEDED }
   validates :guests, numericality: { less_than_or_equal_to: DEFAULT_GUEST_LIMIT, if: :guests_unrestricted?, frontend_code: Registrations::ErrorCodes::UNREASONABLE_GUEST_COUNT }
+
+  after_create :add_competition_entry_invoice_item
+  def add_competition_entry_invoice_item
+    return unless competition.use_wca_registration && competition.base_entry_fee_lowest_denomination > 0
+
+    invoice_items.create(
+      amount_lowest_denomination: competition.base_entry_fee_lowest_denomination,
+      currency_code: competition.currency_code,
+      status: :unpaid,
+      display_name: "#{competition_id} registration",
+    )
+  end
 
   after_save :mark_registration_processing_as_done
 
@@ -174,6 +187,14 @@ class Registration < ApplicationRecord
 
   def to_be_paid_through_wca?
     !new_record? && (pending? || accepted?) && competition.using_payment_integrations? && outstanding_entry_fees > 0
+  end
+
+  def invoice_items_total
+    Money.new(invoice_items.sum(:amount_lowest_denomination), entry_fee.currency)
+  end
+
+  def invoice_items_currency_code
+    invoice_items.first.currency_code
   end
 
   def record_payment(
