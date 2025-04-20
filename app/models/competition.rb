@@ -126,7 +126,6 @@ class Competition < ApplicationRecord
     on_the_spot_registration
     on_the_spot_entry_fee_lowest_denomination
     allow_registration_edits
-    allow_registration_self_delete_after_acceptance
     allow_registration_without_qualification
     refund_policy_percent
     guests_entry_fee_lowest_denomination
@@ -223,7 +222,6 @@ class Competition < ApplicationRecord
   validates :on_the_spot_registration, inclusion: { in: [true, false], if: :on_the_spot_registration_required? }
   validates :on_the_spot_entry_fee_lowest_denomination, numericality: { greater_than_or_equal_to: 0, if: :on_the_spot_entry_fee_required? }
   validates :allow_registration_edits, inclusion: { in: [true, false] }
-  validates :allow_registration_self_delete_after_acceptance, inclusion: { in: [true, false] }
   monetize :on_the_spot_entry_fee_lowest_denomination,
            as: "on_the_spot_base_entry_fee",
            allow_nil: true,
