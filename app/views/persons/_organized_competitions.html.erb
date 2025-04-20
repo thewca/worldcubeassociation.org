@@ -1,0 +1,16 @@
+<div id="organized-competitions">
+  <table class="table table-striped floatThead">
+    <thead>
+    <tr>
+      <th class="competition"><%= t 'persons.show.competition' %></th>
+    </tr>
+    </thead>
+    <tbody>
+    <% @organized_competitions.each do |competition| %>
+      <tr>
+        <td><%= link_to competition.name, competition_path(competition) %></td>
+      </tr>
+    <% end %>
+    </tbody>
+  </table>
+</div>
