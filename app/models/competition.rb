@@ -382,6 +382,7 @@ class Competition < ApplicationRecord
   validate :payments_nil_to_change_currency
   private def payments_nil_to_change_currency
     return unless currency_code_changed?
+
     errors.add(:currency_code, I18n.t('competitions.errors.currency_cant_change')) if total_payment_amount != 0
   end
 

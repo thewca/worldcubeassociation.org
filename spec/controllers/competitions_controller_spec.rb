@@ -421,7 +421,6 @@ RSpec.describe CompetitionsController do
         expect(response).not_to be_successful
         competition.reload
         expect(competition.currency_code).to eq "USD"
-
       end
     end
 
