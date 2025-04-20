@@ -3,7 +3,7 @@
   <% if @registration.user.wca_id %>
     (<%= wca_id_link @registration.user.wca_id -%>)
   <% end %>
-  just deleted their registration for <%= @registration.competition.name %>.
+  just deleted their registration for <%= link_to @registration.competition.name, competition_url(@registration.competition.id) %>.
 </p>
 
 <p>
