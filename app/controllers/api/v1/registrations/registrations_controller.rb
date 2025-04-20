@@ -236,15 +236,15 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
       # in the long-term we want to decouple registrations from payments, so I'm deliberately not introducing any more tight coupling
       ruby_money = @registration.entry_fee_with_donation(iso_donation_amount)
     else
-      if iso_donation_amount > 0
-        @registration.invoice_items.create(
-          amount_lowest_denomination: iso_donation_amount,
-          currency_code: @competition.currency_code,
-          display_name: "Optional donation",
-        )
-      end
+      # if iso_donation_amount > 0
+      #   @registration.invoice_items.create(
+      #     amount_lowest_denomination: iso_donation_amount,
+      #     currency_code: @competition.currency_code,
+      #     display_name: "Optional donation",
+      #   )
+      # end
 
-      ruby_money = @registration.invoice_items_total
+      # ruby_money = @registration.invoice_items_total
     end
 
     payment_account = @competition.payment_account_for(:stripe)

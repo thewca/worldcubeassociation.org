@@ -268,8 +268,8 @@ class RegistrationsController < ApplicationController
     ruby_money = if Rails.env.production? && EnvConfig.WCA_LIVE_SITE?
                    registration.entry_fee_with_donation(iso_donation_amount)
                  else
-                   currency_code = registration.invoice_items_total.currency.iso_code
-                   registration.invoice_items_total + Money.new(iso_donation_amount, currency_code)
+                   # currency_code = registration.invoice_items_total.currency.iso_code
+                   # registration.invoice_items_total + Money.new(iso_donation_amount, currency_code)
                  end
 
     human_amount = helpers.format_money(ruby_money)

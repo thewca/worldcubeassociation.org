@@ -61,7 +61,7 @@ class Registration < ApplicationRecord
   validates :guests, numericality: { equal_to: 0, unless: :guests_allowed?, frontend_code: Registrations::ErrorCodes::GUEST_LIMIT_EXCEEDED }
   validates :guests, numericality: { less_than_or_equal_to: DEFAULT_GUEST_LIMIT, if: :guests_unrestricted?, frontend_code: Registrations::ErrorCodes::UNREASONABLE_GUEST_COUNT }
 
-  after_create :add_competition_entry_invoice_item
+  # after_create :add_competition_entry_invoice_item
   def add_competition_entry_invoice_item
     return unless competition.use_wca_registration && competition.base_entry_fee_lowest_denomination > 0
 
