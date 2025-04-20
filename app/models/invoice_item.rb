@@ -5,12 +5,11 @@ class InvoiceItem < ApplicationRecord
 
   enum :status, { unpaid: 0, paid: 1, waived: 2 }
 
-  validate :consistent_currency_code
-
   monetize :amount_lowest_denomination,
            as: 'amount',
            with_model_currency: :currency_code
 
+  validate :consistent_currency_code
   def consistent_currency_code
     existing_items = registration.invoice_items.where.not(id: id)
     return if existing_items.empty?
