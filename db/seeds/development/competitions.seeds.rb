@@ -87,7 +87,7 @@ after "development:users", "development:user_roles" do
             country_id: person.country_id,
             competition_id: competition.id,
             event_id: event.id,
-            round_type_id: round_type_id,
+            round_type_id: _round_type_id,
             format_id: round_format.id,
             regional_single_record: k == 0 ? "WR" : nil,
             regional_average_record: k == 0 ? "WR" : nil,
