@@ -7,3 +7,16 @@ tr.senior-delegate {
 tr.candidate-delegate {
   font-style: italic;
 }
+
+i.sorting-indicator {
+  margin-left: 4px;
+}
+
+i.sorting-indicator_hidden {
+  opacity: 0;
+}
+
+.ui.table>thead>tr>th.sortable-column-header-cell {
+  cursor: pointer;
+  white-space: nowrap;
+}

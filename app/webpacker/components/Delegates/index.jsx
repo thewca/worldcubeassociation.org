@@ -21,7 +21,7 @@ import useLoggedInUserPermissions from '../../lib/hooks/useLoggedInUserPermissio
 import { groupTypes } from '../../lib/wca-data.js.erb';
 import DelegatesOfRegion, { ALL_REGIONS } from './DelegatesOfRegion';
 import useHash from '../../lib/hooks/useHash';
-import DelegatesOfAllRegion from './DelegatesOfAllRegion';
+import DelegatesOfAllRegions from './DelegatesOfAllRegion';
 
 // let i18n-tasks know the key is used
 // i18n-tasks-use t('delegates_page.acknowledges')
@@ -156,7 +156,7 @@ export default function Delegates() {
                 <Grid.Row>
                   <Grid.Column>
                     {isAllRegions
-                      ? <DelegatesOfAllRegion />
+                      ? <DelegatesOfAllRegions />
                       : (
                         <DelegatesOfRegion
                           activeRegion={activeRegion}

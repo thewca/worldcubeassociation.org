@@ -21,7 +21,7 @@ const otherDelegatesHeaders = [
   { label: 'Date Since Last Delegated', key: 'date_since_last_delegated' },
 ];
 
-export default function DelegatesOfAllRegion() {
+export default function DelegatesOfAllRegions() {
   const {
     data: leadDelegates,
     loading: leadDelegatesLoading,
