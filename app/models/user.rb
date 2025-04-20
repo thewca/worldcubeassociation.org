@@ -16,8 +16,8 @@ class User < ApplicationRecord
   has_many :votes
   has_many :registrations
   has_many :competitions_registered_for, through: :registrations, source: "competition"
-  belongs_to :person, -> { where(subId: 1) }, primary_key: "wca_id", foreign_key: "wca_id", optional: true
-  belongs_to :unconfirmed_person, -> { where(subId: 1) }, primary_key: "wca_id", foreign_key: "unconfirmed_wca_id", class_name: "Person", optional: true
+  belongs_to :person, -> { current }, primary_key: "wca_id", foreign_key: "wca_id", optional: true
+  belongs_to :unconfirmed_person, -> { current }, primary_key: "wca_id", foreign_key: "unconfirmed_wca_id", class_name: "Person", optional: true
   belongs_to :delegate_to_handle_wca_id_claim, foreign_key: "delegate_id_to_handle_wca_id_claim", class_name: "User", optional: true
   belongs_to :region, class_name: "UserGroup", optional: true
   has_many :roles, class_name: "UserRole"
@@ -52,8 +52,8 @@ class User < ApplicationRecord
   has_many :competitions_results_posted, foreign_key: "results_posted_by", class_name: "Competition"
   has_many :confirmed_payment_intents, class_name: "PaymentIntent", as: :confirmation_source
   has_many :canceled_payment_intents, class_name: "PaymentIntent", as: :cancellation_source
-  has_many :ranksSingle, through: :person
-  has_many :ranksAverage, through: :person
+  has_many :ranks_single, through: :person
+  has_many :ranks_average, through: :person
   has_one :wfc_dues_redirect, as: :redirect_source
   belongs_to :delegate_reports_region, polymorphic: true, optional: true
   belongs_to :current_avatar, class_name: "UserAvatar", inverse_of: :current_user, optional: true
@@ -986,7 +986,7 @@ class User < ApplicationRecord
     # Only allow results admins and competition delegates to delete competitions.
     if !can_manage_competition?(competition)
       I18n.t('competitions.errors.cannot_manage')
-    elsif competition.showAtAll
+    elsif competition.show_at_all?
       I18n.t('competitions.errors.cannot_delete_public')
     elsif competition.confirmed? && !self.can_admin_results?
       I18n.t('competitions.errors.cannot_delete_confirmed')
@@ -1125,7 +1125,7 @@ class User < ApplicationRecord
     return unless !wca_id && !unconfirmed_wca_id
 
     matches = []
-    matches = competition.competitors.where(name: name, dob: dob, gender: gender, countryId: country.id).to_a unless country.nil? || dob.nil?
+    matches = competition.competitors.where(name: name, dob: dob, gender: gender, country_id: country.id).to_a unless country.nil? || dob.nil?
     if matches.size == 1 && matches.first.user.nil?
       update(wca_id: matches.first.wca_id)
     elsif notify

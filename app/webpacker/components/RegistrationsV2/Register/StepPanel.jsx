@@ -3,7 +3,7 @@ import { Step } from 'semantic-ui-react';
 import I18n from '../../../lib/i18n';
 import { useRegistration } from '../lib/RegistrationProvider';
 import useSteps from '../hooks/useSteps';
-
+r
 export default function StepPanel({
   competitionInfo,
   preferredEvents,

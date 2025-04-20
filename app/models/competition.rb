@@ -1,15 +1,13 @@
 # frozen_string_literal: true
 
 class Competition < ApplicationRecord
-  self.table_name = "Competitions"
-
   # We need this default order, tests rely on it.
   has_many :competition_events, -> { order(:event_id) }, dependent: :destroy
   has_many :events, through: :competition_events
   has_many :rounds, through: :competition_events
   has_many :registrations, dependent: :destroy
-  has_many :results, foreign_key: "competitionId"
-  has_many :scrambles, -> { order(:groupId, :isExtra, :scrambleNum) }, foreign_key: "competitionId"
+  has_many :results
+  has_many :scrambles, -> { order(:group_id, :is_extra, :scramble_num) }
   has_many :uploaded_jsons, dependent: :destroy
   has_many :competitors, -> { distinct }, through: :results, source: :person
   has_many :competitor_users, -> { distinct }, through: :competitors, source: :user
@@ -17,15 +15,15 @@ class Competition < ApplicationRecord
   has_many :delegates, -> { includes(:delegate_roles, :delegate_role_metadata).distinct }, through: :competition_delegates
   has_many :competition_organizers, dependent: :delete_all
   has_many :organizers, through: :competition_organizers
-  has_many :media, class_name: "CompetitionMedium", foreign_key: "competitionId", dependent: :delete_all
+  has_many :media, class_name: "CompetitionMedium", dependent: :delete_all
   has_many :tabs, -> { order(:display_order) }, dependent: :delete_all, class_name: "CompetitionTab"
   has_one :delegate_report, dependent: :destroy
   has_one :waiting_list, dependent: :destroy, as: :holder
   has_many :competition_venues, dependent: :destroy
   has_many :venue_countries, -> { distinct }, through: :competition_venues, source: :country
   has_many :venue_continents, -> { distinct }, through: :competition_venues, source: :continent
-  belongs_to :country, foreign_key: :countryId
-  has_one :continent, foreign_key: :continentId, through: :country
+  belongs_to :country
+  has_one :continent, through: :country
   has_many :championships, dependent: :delete_all
   has_many :wcif_extensions, as: :extendable, dependent: :delete_all
   has_many :bookmarked_competitions, dependent: :delete_all
@@ -34,8 +32,8 @@ class Competition < ApplicationRecord
   has_many :series_competitions, -> { readonly }, through: :competition_series, source: :competitions
   has_many :series_registrations, -> { readonly }, through: :series_competitions, source: :registrations
   belongs_to :posting_user, optional: true, foreign_key: 'posting_by', class_name: "User"
-  has_many :inbox_results, foreign_key: "competitionId", dependent: :delete_all
-  has_many :inbox_persons, foreign_key: "competitionId", dependent: :delete_all
+  has_many :inbox_results, dependent: :delete_all
+  has_many :inbox_persons, dependent: :delete_all
   belongs_to :announced_by_user, optional: true, foreign_key: "announced_by", class_name: "User"
   belongs_to :cancelled_by_user, optional: true, foreign_key: "cancelled_by", class_name: "User"
   has_many :competition_payment_integrations
@@ -51,33 +49,33 @@ class Competition < ApplicationRecord
            with_model_currency: :currency_code
 
   scope :not_cancelled, -> { where(cancelled_at: nil) }
-  scope :visible, -> { where(showAtAll: true) }
-  scope :not_visible, -> { where(showAtAll: false) }
+  scope :visible, -> { where(show_at_all: true) }
+  scope :not_visible, -> { where(show_at_all: false) }
   scope :over, -> { where("results_posted_at IS NOT NULL OR end_date < ?", Date.today) }
   scope :not_over, -> { where("results_posted_at IS NULL AND end_date >= ?", Date.today) }
   scope :between_dates, ->(start_date, end_date) { where("start_date <= ? AND end_date >= ?", end_date, start_date) }
   scope :end_date_passed_since, lambda { |num_days| where(end_date: ...(num_days.days.ago)) }
   scope :belongs_to_region, lambda { |region_id|
     joins(:country).where(
-      "countryId = :region_id OR Countries.continentId = :region_id", region_id: region_id
+      "country_id = :region_id OR countries.continent_id = :region_id", region_id: region_id
     )
   }
   scope :contains, lambda { |search_term|
     where(
-      "Competitions.name like :search_term or
-      Competitions.cityName like :search_term",
+      "competitions.name like :search_term or
+      competitions.city_name like :search_term",
       search_term: "%#{search_term}%",
     )
   }
   scope :has_event, lambda { |event_id|
     joins(
-      "join competition_events ce#{event_id} ON ce#{event_id}.competition_id = Competitions.id
-      join Events e#{event_id} ON e#{event_id}.id = ce#{event_id}.event_id",
+      "join competition_events ce#{event_id} ON ce#{event_id}.competition_id = competitions.id
+      join events e#{event_id} ON e#{event_id}.id = ce#{event_id}.event_id",
     ).where("e#{event_id}.id = :event_id", event_id: event_id)
   }
   scope :managed_by, lambda { |user_id|
-    joins("LEFT JOIN competition_organizers ON competition_organizers.competition_id = Competitions.id")
-      .joins("LEFT JOIN competition_delegates ON competition_delegates.competition_id = Competitions.id")
+    joins("LEFT JOIN competition_organizers ON competition_organizers.competition_id = competitions.id")
+      .joins("LEFT JOIN competition_delegates ON competition_delegates.competition_id = competitions.id")
       .where(
         "delegate_id = :user_id OR organizer_id = :user_id",
         user_id: user_id,
@@ -99,12 +97,12 @@ class Competition < ApplicationRecord
   enum :competitor_can_cancel, [:not_accepted, :always, :unpaid], prefix: true
 
   CLONEABLE_ATTRIBUTES = %w(
-    cityName
-    countryId
+    city_name
+    country_id
     information
     venue
-    venueAddress
-    venueDetails
+    venue_address
+    venue_details
     generate_website
     external_website
     latitude
@@ -141,8 +139,8 @@ class Competition < ApplicationRecord
     end_date
     name
     name_reason
-    cellName
-    showAtAll
+    cell_name
+    show_at_all
     external_registration_page
     confirmed_at
     registration_open
@@ -211,13 +209,13 @@ class Competition < ApplicationRecord
   end
   validates :name, length: { maximum: MAX_NAME_LENGTH },
                    format: { with: VALID_NAME_RE, message: proc { I18n.t('competitions.errors.invalid_name_message') } }
-  validates :cellName, length: { maximum: MAX_CELL_NAME_LENGTH },
-                       format: { with: VALID_NAME_RE, message: proc { I18n.t('competitions.errors.invalid_name_message') } }, if: :name_valid_or_updating?
+  validates :cell_name, length: { maximum: MAX_CELL_NAME_LENGTH },
+                        format: { with: VALID_NAME_RE, message: proc { I18n.t('competitions.errors.invalid_name_message') } }, if: :name_valid_or_updating?
   validates :venue, format: { with: PATTERN_TEXT_WITH_LINKS_RE }
   validates :external_website, format: { with: URL_RE }, allow_blank: true
   validates :external_registration_page, presence: true, format: { with: URL_RE }, if: :external_registration_page_required?
 
-  validates :countryId, inclusion: { in: Country::ALL_COUNTRY_IDS }
+  validates :country_id, inclusion: { in: Country::ALL_COUNTRY_IDS }
   validates :currency_code, inclusion: { in: Money::Currency, message: proc { I18n.t('competitions.errors.invalid_currency_code') } }
 
   validates :refund_policy_percent, numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 100, if: :refund_policy_percent_required? }
@@ -245,10 +243,10 @@ class Competition < ApplicationRecord
 
   # Validations are used to show form errors to the user. If string columns aren't validated for length, it produces an unexplained error for the user
   validates :name, length: { maximum: MAX_NAME_LENGTH }
-  validates :cellName, length: { maximum: MAX_CELL_NAME_LENGTH }
-  validates :cityName, length: { maximum: MAX_CITY_NAME_LENGTH }
+  validates :cell_name, length: { maximum: MAX_CELL_NAME_LENGTH }
+  validates :city_name, length: { maximum: MAX_CITY_NAME_LENGTH }
   validates :venue, length: { maximum: MAX_VENUE_LENGTH }
-  validates :venueAddress, :venueDetails, :name_reason, :forbid_newcomers_reason, length: { maximum: MAX_FREETEXT_LENGTH }
+  validates :venue_address, :venue_details, :name_reason, :forbid_newcomers_reason, length: { maximum: MAX_FREETEXT_LENGTH }
   validates :external_website, :external_registration_page, length: { maximum: MAX_URL_LENGTH }
   validates :contact, length: { maximum: MAX_MARKDOWN_LENGTH }
 
@@ -323,10 +321,10 @@ class Competition < ApplicationRecord
   # 48 hours
   REGISTRATION_OPENING_EARLIEST = 172_800
 
-  validates :cityName, city: true
+  validates :city_name, city: true
 
   # We have stricter validations for confirming a competition
-  validates :cityName, :countryId, :venue, :venueAddress, :latitude, :longitude, presence: true, if: :confirmed_or_visible?
+  validates :city_name, :country_id, :venue, :venue_address, :latitude, :longitude, presence: true, if: :confirmed_or_visible?
   validates :name_reason, presence: true, if: :name_reason_required?
   validates :external_website, presence: true, if: -> { confirmed_or_visible? && !generate_website }
 
@@ -489,7 +487,7 @@ class Competition < ApplicationRecord
   end
 
   def confirmed_or_visible?
-    self.confirmed? || self.showAtAll
+    self.confirmed? || self.show_at_all?
   end
 
   def registration_full?
@@ -511,7 +509,7 @@ class Competition < ApplicationRecord
   end
 
   def country
-    Country.c_find(self.countryId)
+    Country.c_find(self.country_id)
   end
 
   delegate :continent, to: :country
@@ -546,7 +544,7 @@ class Competition < ApplicationRecord
   def warnings_for(user)
     warnings = {}
 
-    if self.showAtAll
+    if self.show_at_all?
       warnings[:announcement] = I18n.t('competitions.messages.not_announced') unless self.announced?
 
       if self.results.any? && !self.results_posted?
@@ -733,7 +731,7 @@ class Competition < ApplicationRecord
 
   validate :dates_must_be_valid
 
-  alias_attribute :visible, :showAtAll
+  alias_attribute :visible, :show_at_all
   alias_attribute :latitude_microdegrees, :latitude
   alias_attribute :longitude_microdegrees, :longitude
 
@@ -750,10 +748,10 @@ class Competition < ApplicationRecord
       safe_name_without_year = ActiveSupport::Inflector.transliterate(name_without_year, locale: :en).gsub(/[^a-z0-9]+/i, '')
       self.id = safe_name_without_year[0...(MAX_ID_LENGTH - year.length)] + year
     end
-    return unless cellName.blank? || force_override
+    return unless cell_name.blank? || force_override
 
     year = " #{year}"
-    self.cellName = name_without_year.truncate(MAX_CELL_NAME_LENGTH - year.length) + year
+    self.cell_name = name_without_year.truncate(MAX_CELL_NAME_LENGTH - year.length) + year
   end
 
   attr_writer :staff_delegate_ids, :organizer_ids, :trainee_delegate_ids
@@ -1185,7 +1183,7 @@ class Competition < ApplicationRecord
   private def waiting_list_dates_must_be_valid
     return unless waiting_list_deadline_date?
 
-    errors.add(:waiting_list_deadline_date, I18n.t('competitions.errors.waiting_list_deadline_before_registration_close')) if waiting_list_deadline_date < registration_close
+    errors.add(:waiting_list_deadline_date, I18n.t('competitions.errors.waiting_list_deadline_before_registration_close')) if registration_range_specified? && waiting_list_deadline_date < registration_close
     errors.add(:waiting_list_deadline_date, I18n.t('competitions.errors.waiting_list_deadline_before_refund_date')) if refund_policy_limit_date? && waiting_list_deadline_date < refund_policy_limit_date
     errors.add(:waiting_list_deadline_date, I18n.t('competitions.errors.waiting_list_deadline_after_end')) if waiting_list_deadline_date > end_date
   end
@@ -1194,7 +1192,7 @@ class Competition < ApplicationRecord
   private def event_change_dates_must_be_valid
     return unless event_change_deadline_date?
 
-    errors.add(:event_change_deadline_date, I18n.t('competitions.errors.event_change_deadline_before_registration_close')) if event_change_deadline_date < registration_close
+    errors.add(:event_change_deadline_date, I18n.t('competitions.errors.event_change_deadline_before_registration_close')) if registration_range_specified? && event_change_deadline_date < registration_close
     errors.add(:event_change_deadline_date, I18n.t('competitions.errors.event_change_deadline_with_ots')) if on_the_spot_registration? && event_change_deadline_date < start_date
     errors.add(:event_change_deadline_date, I18n.t('competitions.errors.event_change_deadline_after_end_date')) if event_change_deadline_date > end_date.to_datetime.end_of_day
   end
@@ -1337,7 +1335,7 @@ class Competition < ApplicationRecord
   end
 
   def display_name(short: false)
-    data = short ? cellName : name
+    data = short ? cell_name : name
     if cancelled?
       I18n.t("competitions.competition_info.display_name", name: data)
     else
@@ -1375,7 +1373,7 @@ class Competition < ApplicationRecord
   end
 
   def user_can_view?(user)
-    self.showAtAll || user&.can_manage_competition?(self)
+    self.show_at_all? || user&.can_manage_competition?(self)
   end
 
   def user_can_view_results?(user)
@@ -1432,7 +1430,7 @@ class Competition < ApplicationRecord
   end
 
   def city_and_country
-    [cityName, country&.name].compact.join(', ')
+    [city_name, country&.name].compact.join(', ')
   end
 
   def events_with_podium_results
@@ -1445,8 +1443,8 @@ class Competition < ApplicationRecord
   end
 
   def person_ids_with_results
-    results.group_by(&:personId)
-           .sort_by { |_person_id, results| results.first.personName }
+    results.group_by(&:person_id)
+           .sort_by { |_person_id, results| results.first.person_name }
            .map do |person_id, results|
       results.sort_by! { |r| [r.event.rank, -r.round_type.rank] }
       [person_id, results.sort_by { |r| [r.event.rank, -r.round_type.rank] }]
@@ -1460,7 +1458,7 @@ class Competition < ApplicationRecord
              round_types_with_results = results_for_event
                                         .group_by(&:round_type)
                                         .sort_by { |format, _results| format.rank }.reverse
-                                        .map { |round_type, results| [round_type, results.sort_by { |r| [r.pos, r.personName] }] }
+                                        .map { |round_type, results| [round_type, results.sort_by { |r| [r.pos, r.person_name] }] }
 
              [event, round_types_with_results]
            end
@@ -1540,13 +1538,13 @@ class Competition < ApplicationRecord
         #   LEFT JOIN RanksSingle
         #   LEFT JOIN RanksAverage
         # WHERE users.id IN (...)
-        User.eager_load(:ranksSingle, :ranksAverage)
+        User.eager_load(:ranks_single, :ranks_average)
             .select(:name, :wca_id, :country_iso2)
             .find(registered_user_ids)
       end
 
-      rank_symbol = :"ranks#{sort_by.capitalize}"
-      second_rank_symbol = :"ranks#{sort_by_second.capitalize}"
+      rank_symbol = :"ranks_#{sort_by}"
+      second_rank_symbol = :"ranks_#{sort_by_second}"
 
       sorted_users = users_with_rankings.sort_by { |user|
         # using '.find_by(event: ...)' fires another SQL query *despite* the ranks being pre-loaded :facepalm:
@@ -1557,9 +1555,9 @@ class Competition < ApplicationRecord
           # Competitors with ranks should appear first in the sorting,
           # competitors without ranks should appear last. That's why they get a higher number if rank is not present.
           rank.present? ? 0 : 1,
-          rank&.worldRank || 0,
+          rank&.world_rank || 0,
           second_rank.present? ? 0 : 1,
-          second_rank&.worldRank || 0,
+          second_rank&.world_rank || 0,
           user.name,
         ]
       }
@@ -1568,15 +1566,15 @@ class Competition < ApplicationRecord
 
       sorted_rankings = sorted_users.map.with_index { |user, i|
         # see comment about .find vs .find_by above.
-        single_ranking = user.ranksSingle.find { |r| r.event == event }
-        average_ranking = user.ranksAverage.find { |r| r.event == event }
+        single_ranking = user.ranks_single.find { |r| r.event == event }
+        average_ranking = user.ranks_average.find { |r| r.event == event }
 
         sort_by_ranking = sort_by == 'single' ? single_ranking : average_ranking
 
         if sort_by_ranking.present?
           # Change position to previous if both single and average are tied with previous registration.
-          average_tied_previous = average_ranking&.worldRank == prev_sorted_ranking&.average_rank
-          single_tied_previous = single_ranking&.worldRank == prev_sorted_ranking&.single_rank
+          average_tied_previous = average_ranking&.world_rank == prev_sorted_ranking&.average_rank
+          single_tied_previous = single_ranking&.world_rank == prev_sorted_ranking&.single_rank
 
           tied_previous = single_tied_previous && average_tied_previous
 
@@ -1593,9 +1591,9 @@ class Competition < ApplicationRecord
           wca_id: user.wca_id,
           country_id: user.country.id,
           country_iso2: user.country_iso2,
-          average_rank: average_ranking&.worldRank,
+          average_rank: average_ranking&.world_rank,
           average_best: average_ranking&.best || 0,
-          single_rank: single_ranking&.worldRank,
+          single_rank: single_ranking&.world_rank,
           single_best: single_ranking&.best || 0,
           tied_previous: tied_previous,
           pos: pos,
@@ -1620,7 +1618,7 @@ class Competition < ApplicationRecord
   end
 
   def self.years
-    Competition.where(showAtAll: true).pluck(:start_date).map(&:year).uniq.sort!.reverse!
+    Competition.where(show_at_all: true).pluck(:start_date).map(&:year).uniq.sort!.reverse!
   end
 
   def self.non_future_years
@@ -1651,7 +1649,7 @@ class Competition < ApplicationRecord
       country = Country.find_by(iso2: params[:country_iso2])
       raise WcaExceptions::BadApiParameter.new("Invalid country_iso2: '#{params[:country_iso2]}'") unless country
 
-      competitions = competitions.where(countryId: country.id)
+      competitions = competitions.where(country_id: country.id)
     end
 
     if params[:delegate].present?
@@ -1716,7 +1714,7 @@ class Competition < ApplicationRecord
     end
 
     query&.split&.each do |part|
-      like_query = %w(id name cellName cityName countryId).map { |column| "Competitions.#{column} LIKE :part" }.join(" OR ")
+      like_query = %w(id name cell_name city_name country_id).map { |column| "competitions.#{column} LIKE :part" }.join(" OR ")
       competitions = competitions.where(like_query, part: "%#{part}%")
     end
 
@@ -1788,7 +1786,7 @@ class Competition < ApplicationRecord
       "formatVersion" => "1.0",
       "id" => id,
       "name" => name,
-      "shortName" => cellName,
+      "shortName" => cell_name,
       "series" => part_of_competition_series? ? competition_series_wcif(authorized: authorized) : nil,
       "persons" => persons_wcif(authorized: authorized),
       "events" => events_wcif,
@@ -1850,7 +1848,7 @@ class Competition < ApplicationRecord
     includes_associations = [
       { assignments: [:schedule_activity] },
       { user: {
-        person: [:ranksSingle, :ranksAverage],
+        person: [:ranks_single, :ranks_average],
       } },
       :wcif_extensions,
       :events,
@@ -2118,10 +2116,8 @@ class Competition < ApplicationRecord
     }
   end
 
-  alias_attribute :venue_address, :venueAddress
-  alias_attribute :venue_details, :venueDetails
-  alias_attribute :short_name, :cellName
-  alias_attribute :city, :cityName
+  alias_attribute :short_name, :cell_name
+  alias_attribute :city, :city_name
 
   def country_iso2
     country&.iso2
@@ -2180,7 +2176,7 @@ class Competition < ApplicationRecord
   end
 
   def multi_country_fmc_competition?
-    events.length == 1 && events[0].fewest_moves? && Country::FICTIVE_IDS.include?(countryId)
+    events.length == 1 && events[0].fewest_moves? && Country::FICTIVE_IDS.include?(country_id)
   end
 
   def exempt_from_wca_dues?
@@ -2278,7 +2274,7 @@ class Competition < ApplicationRecord
     {
       isConfirmed: self.confirmed?,
       canConfirm: for_user.can_confirm_competition?(self),
-      isVisible: self.showAtAll?,
+      isVisible: self.show_at_all?,
       cannotDeleteReason: for_user.get_cannot_delete_competition_reason(self),
     }
   end
@@ -2295,14 +2291,14 @@ class Competition < ApplicationRecord
       # "id" => id,
       "competitionId" => id,
       "name" => name,
-      "shortName" => cellName,
+      "shortName" => cell_name,
       "nameReason" => name_reason,
       "venue" => {
-        "countryId" => countryId,
-        "cityName" => cityName,
+        "countryId" => country_id,
+        "cityName" => city_name,
         "name" => venue,
-        "details" => venueDetails,
-        "address" => venueAddress,
+        "details" => venue_details,
+        "address" => venue_address,
         "coordinates" => {
           "lat" => latitude_degrees || 0,
           "long" => longitude_degrees || 0,
@@ -2400,14 +2396,14 @@ class Competition < ApplicationRecord
       # for historic reasons, we keep 'name' errors listed under ID. Don't ask.
       "competitionId" => self.persisted? ? (errors[:id] + errors[:name]) : [],
       "name" => self.persisted? ? [] : (errors[:id] + errors[:name]),
-      "shortName" => errors[:cellName],
+      "shortName" => errors[:cell_name],
       "nameReason" => errors[:name_reason],
       "venue" => {
-        "countryId" => errors[:countryId],
-        "cityName" => errors[:cityName],
+        "countryId" => errors[:country_id],
+        "cityName" => errors[:city_name],
         "name" => errors[:venue],
-        "details" => errors[:venueDetails],
-        "address" => errors[:venueAddress],
+        "details" => errors[:venue_details],
+        "address" => errors[:venue_address],
         "coordinates" => {
           "lat" => errors[:latitude],
           "long" => errors[:longitude],
@@ -2493,6 +2489,14 @@ class Competition < ApplicationRecord
     }
   end
 
+  def self.compute_diff(old_form, new_form)
+    compute_diff = HashDiff.left_diff(old_form, new_form)
+
+    compute_diff.reject_values_recursive do |value|
+      value == HashDiff::NO_VALUE
+    end
+  end
+
   def association_errors(association_name)
     self.public_send(association_name).map(&:errors).flat_map(&:to_a)
   end
@@ -2500,7 +2504,45 @@ class Competition < ApplicationRecord
   def set_form_data(form_data, current_user)
     JSON::Validator.validate!(Competition.form_data_json_schema, form_data)
 
-    raise WcaExceptions::BadApiParameter.new("Cannot change announced competition") if self.confirmed? && !current_user.can_admin_competitions?
+    if self.confirmed? && !current_user.can_admin_competitions?
+      current_state_form = self.to_form_data
+      changed_form_data = Competition.compute_diff(current_state_form, form_data)
+
+      # This is a much "stricter" version of the general schema above.
+      #    If the Delegate submits fields that they are not allowed to edit,
+      #    then these fields will not be included in the schema and validation will fail.
+      JSON::Validator.validate!(Competition.delegate_edits_json_schema, changed_form_data)
+
+      changed_form_data.each_recursive do |key, value, *prefixes|
+        joined_key = (prefixes + [key]).join('.')
+
+        # These keys all represent timestamps. They may only be edited by non-admins if...
+        #   - the original value (pre-edit) has not yet passed
+        #   - the new value is in the future (extending deadlines is allowed, shortening them is not)
+        if %w[registration.closingDateTime registration.waitingListDeadlineDate registration.eventChangeDeadlineDate].include?(joined_key)
+          existing_value = current_state_form.dig(*prefixes, key)
+
+          if existing_value.present?
+            existing_datetime = DateTime.parse(existing_value).utc
+
+            raise WcaExceptions::BadApiParameter.new(I18n.t('competitions.errors.editing_deadline_already_passed', timestamp: existing_datetime), json_property: joined_key) unless existing_datetime >= DateTime.now.utc
+
+            if value.present?
+              new_datetime = DateTime.parse(value).utc
+              new_after_existing = new_datetime >= existing_datetime
+
+              raise WcaExceptions::BadApiParameter.new(I18n.t('competitions.errors.edited_deadline_not_after_original', new_timestamp: new_datetime, timestamp: existing_datetime), json_property: joined_key) unless new_after_existing
+            end
+          end
+
+          if value.present?
+            new_datetime = DateTime.parse(value).utc
+
+            raise WcaExceptions::BadApiParameter.new(I18n.t('competitions.errors.edited_deadline_not_in_future', new_timestamp: new_datetime), json_property: joined_key) unless new_datetime > DateTime.now.utc
+          end
+        end
+      end
+    end
 
     ActiveRecord::Base.transaction do
       self.editing_user_id = current_user.id
@@ -2530,14 +2572,14 @@ class Competition < ApplicationRecord
     {
       id: form_data['competitionId'],
       name: form_data['name'],
-      cityName: form_data.dig('venue', 'cityName'),
-      countryId: form_data.dig('venue', 'countryId'),
+      city_name: form_data.dig('venue', 'cityName'),
+      country_id: form_data.dig('venue', 'countryId'),
       information: form_data['information'],
       venue: form_data.dig('venue', 'name'),
-      venueAddress: form_data.dig('venue', 'address'),
-      venueDetails: form_data.dig('venue', 'details'),
+      venue_address: form_data.dig('venue', 'address'),
+      venue_details: form_data.dig('venue', 'details'),
       external_website: form_data.dig('website', 'externalWebsite'),
-      cellName: form_data['shortName'],
+      cell_name: form_data['shortName'],
       latitude_degrees: form_data.dig('venue', 'coordinates', 'lat'),
       longitude_degrees: form_data.dig('venue', 'coordinates', 'long'),
       staff_delegate_ids: form_data.dig('staff', 'staffDelegateIds')&.join(','),
@@ -2821,6 +2863,78 @@ class Competition < ApplicationRecord
           "properties" => {
             "fromId" => { "type" => ["string", "null"] },
             "cloneTabs" => { "type" => "boolean" },
+          },
+        },
+      },
+    }
+  end
+
+  # When comparing arrays through HashDiff, it implicitly converts the indices into keys.
+  #   For example, a diff of "before: [1,2,3] -- after: [1,2,3,4]" will be reported as "{3 => 4}"
+  #   because the element at index 3 on the right-hand side was added.
+  # This means that things which were numeric arrays in the original data appear as hashes
+  #   in the diff'ed data.
+  def self.array_change_json_schema(**additional_properties)
+    {
+      "type" => "object",
+      "additionalProperties" => additional_properties.deep_stringify_keys,
+      "propertyNames" => { "pattern" => /^\d+$/ },
+      "uniqueItems" => true,
+    }
+  end
+
+  # Stuff that Delegates are allowed to edit even after the competition is announced,
+  #   see also https://docs.google.com/document/d/1-GwE5OXurBUnR7EVBRTGIN_dGj3AaU7vvan_6RjOW7Q/edit
+  def self.delegate_edits_json_schema
+    {
+      "type" => "object",
+      "additionalProperties" => false,
+      "properties" => {
+        "information" => { "type" => ["string", "null"] },
+        "staff" => {
+          "type" => "object",
+          "additionalProperties" => false,
+          "properties" => {
+            "staffDelegateIds" => self.array_change_json_schema(type: "integer"),
+            "traineeDelegateIds" => self.array_change_json_schema(type: "integer"),
+            "organizerIds" => self.array_change_json_schema(type: "integer"),
+            "contact" => { "type" => ["string", "null"] },
+          },
+        },
+        "website" => {
+          "type" => "object",
+          "additionalProperties" => false,
+          "properties" => {
+            "externalWebsite" => { "type" => ["string", "null"] },
+            "usesWcaLive" => { "type" => "boolean" },
+          },
+        },
+        "entryFees" => {
+          "type" => "object",
+          "additionalProperties" => false,
+          "properties" => {
+            "onTheSpotEntryFee" => { "type" => ["integer", "null"] },
+            "donationsEnabled" => { "type" => ["boolean", "null"] },
+          },
+        },
+        "registration" => {
+          "type" => "object",
+          "additionalProperties" => false,
+          "properties" => {
+            "closingDateTime" => date_json_schema("date-time"),
+            "waitingListDeadlineDate" => date_json_schema("date-time"),
+            "eventChangeDeadlineDate" => date_json_schema("date-time"),
+            "allowOnTheSpot" => { "type" => ["boolean", "null"] },
+            "allowSelfDeleteAfterAcceptance" => { "type" => "boolean" },
+            "allowSelfEdits" => { "type" => "boolean" },
+            "forceComment" => { "type" => ["boolean", "null"] },
+          },
+        },
+        "eventRestrictions" => {
+          "type" => "object",
+          "additionalProperties" => false,
+          "properties" => {
+            "mainEventId" => { "type" => ["string", "null"] },
           },
         },
       },

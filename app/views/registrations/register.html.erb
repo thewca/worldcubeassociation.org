@@ -26,8 +26,8 @@
                                                     userCanPreRegister: @competition.user_can_pre_register?(@current_user),
                                                     preferredEvents: @current_user.preferred_events.pluck(:id),
                                                     personalRecords: {
-                                                      single: current_user.person&.ranksSingle&.map(&:to_wcif) || [],
-                                                      average: current_user.person&.ranksAverage&.map(&:to_wcif) || [],
+                                                      single: current_user&.ranks_single&.map(&:to_wcif) || [],
+                                                      average: current_user&.ranks_average&.map(&:to_wcif) || [],
                                                     },
                                                     cannotRegisterReasons: current_user.cannot_register_for_competition_reasons(@competition),
                                                     isProcessing: @is_processing,
