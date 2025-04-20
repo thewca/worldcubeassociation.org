@@ -401,17 +401,26 @@ RSpec.describe CompetitionsController do
         expect(competition.currency_code).to eq "EUR"
       end
 
-      it "can update the registration fees when there is any payment" do
+      it "can update the registration fee amount when there is any payment", :only do
         # See https://github.com/thewca/worldcubeassociation.org/issues/2123
 
         previous_fees = competition.base_entry_fee_lowest_denomination
         FactoryBot.create(:registration, :paid, competition: competition)
-        update_params = build_competition_update(competition, entryFees: { baseEntryFee: previous_fees + 10, currencyCode: "EUR" })
+        update_params = build_competition_update(competition, entryFees: { baseEntryFee: previous_fees + 10 })
         patch :update, params: update_params, as: :json
         expect(response).to be_successful
         competition.reload
         expect(competition.base_entry_fee_lowest_denomination).to eq previous_fees + 10
-        expect(competition.currency_code).to eq "EUR"
+      end
+
+      # We rely on a consistent currency code for many functions - such as summing total registration fees
+      it "cannot update the registration fee currency when there is any payment", :only do
+        FactoryBot.create(:registration, :paid, competition: competition)
+        update_params = build_competition_update(competition, entryFees: { currencyCode: "EUR" })
+        patch :update, params: update_params, as: :json
+        expect(response).not_to be_successful
+        competition.reload
+        expect(competition.currency_code).to eq "USD"
       end
     end
 
