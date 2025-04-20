@@ -62,7 +62,7 @@ RSpec.describe InvoiceItem do
   end
 
   describe "update status after payment" do
-    let(:registration) { FactoryBot.create(:registration) } # Registration automatically creates invoice_item for entry
+    let!(:registration) { FactoryBot.create(:registration) } # Registration automatically creates invoice_item for entry
 
     context 'when payment matches invoice total' do
       it 'marks a single invoice_item as paid' do
@@ -71,8 +71,8 @@ RSpec.describe InvoiceItem do
       end
 
       it 'updates all invoice_items to paid if invoice fully paid' do
-        FactoryBot.create(:invoice_item, display_name: "arbitrary payment", amount_lowest_denomination: 350)
-        FactoryBot.create(:registration_payment, registration: registration, amount_lowest_denomination: registration.invoice_items_total)
+        FactoryBot.create(:invoice_item, display_name: "arbitrary payment", amount_lowest_denomination: 350, registration: registration)
+        FactoryBot.create(:registration_payment, registration: registration, amount_lowest_denomination: registration.invoice_items_total.cents)
         registration.invoice_items.each { |i| expect(i.status).to eq('paid') }
       end
     end
@@ -84,21 +84,24 @@ RSpec.describe InvoiceItem do
       end
 
       it 'all invoice_items remain unpaid' do
-        FactoryBot.create(:invoice_item, display_name: "arbitrary payment", amount_lowest_denomination: 350)
-        FactoryBot.create(:registration_payment, registration: registration, amount_lowest_denomination: registration.invoice_items_total-100)
+        FactoryBot.create(:invoice_item, display_name: "arbitrary payment", amount_lowest_denomination: 350, registration: registration)
+        FactoryBot.create(:registration_payment, registration: registration, amount_lowest_denomination: registration.invoice_items_total.cents-100)
         registration.invoice_items.each { |i| expect(i.status).to eq('unpaid') }
       end
     end
 
     context 'when payment is greater than invoice total' do
+      # For now, we dont have apportionment logic implemented - so we take the most conservative approach, of not marking the invoice_item paid
+      # even if the payment amount exceeds the invoice_item total_amount - because this should not be possible in the first place
+      # In future, we will introduce payment apportionment logic that handles this case
       it 'single invoice item remains unpaid' do
         FactoryBot.create(:registration_payment, registration: registration, amount_lowest_denomination: 10_000)
         expect(registration.invoice_items.first.status).to eq('unpaid')
       end
 
       it 'all invoice_items remain unpaid' do
-        FactoryBot.create(:invoice_item, display_name: "arbitrary payment", amount_lowest_denomination: 350)
-        FactoryBot.create(:registration_payment, registration: registration, amount_lowest_denomination: registration.invoice_items_total+100)
+        FactoryBot.create(:invoice_item, display_name: "arbitrary payment", amount_lowest_denomination: 350, registration: registration)
+        FactoryBot.create(:registration_payment, registration: registration, amount_lowest_denomination: registration.invoice_items_total.cents+100)
         registration.invoice_items.each { |i| expect(i.status).to eq('unpaid') }
       end
     end

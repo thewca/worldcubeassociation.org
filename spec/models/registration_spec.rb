@@ -716,17 +716,17 @@ RSpec.describe Registration do
 
       it 'returns 0 if no invoice items exist' do
         expect(registration.invoice_items).to be_empty # Confirm there are no invoice items
-        expect(registration.invoice_items_total).to be(0)
+        expect(registration.invoice_items_total.cents).to be(0)
       end
 
       it 'returns total if one invoice_item exists' do
         FactoryBot.create(:invoice_item, :entry, custom_registration: registration)
-        expect(registration.invoice_items_total).to be(1000)
+        expect(registration.invoice_items_total.cents).to be(1000)
       end
 
       it 'returns the total of 3 invoice items' do
         FactoryBot.create_list(:invoice_item, 3, :entry, custom_registration: registration)
-        expect(registration.invoice_items_total).to be(3000)
+        expect(registration.invoice_items_total.cents).to be(3000)
       end
     end
   end
