@@ -6,9 +6,9 @@ RSpec.describe Api::V0::Wrt::PersonsController, type: :controller do
   describe 'PATCH #update person' do
     sign_in { FactoryBot.create :admin }
 
-    let(:person) { FactoryBot.create(:person_who_has_competed_once, name: "Feliks Zemdegs", countryId: "Australia") }
+    let(:person) { FactoryBot.create(:person_who_has_competed_once, name: "Feliks Zemdegs", country_id: "Australia") }
 
-    it "shows a message with link to the check_regional_record_markers script if the person has been fixed and countryId has changed" do
+    it "shows a message with link to the check_regional_record_markers script if the person has been fixed and country_id has changed" do
       patch :update, params: { id: person.wca_id, method: "fix", person: {
         wcaId: person.wca_id,
         name: "New Name",
@@ -16,7 +16,7 @@ RSpec.describe Api::V0::Wrt::PersonsController, type: :controller do
         representing: 'NZ',
         dob: "2000-01-01",
       } }
-      expect(response.status).to eq 200
+      expect(response).to have_http_status :ok
     end
 
     it "shows a successful message when the person has been changed" do
@@ -27,8 +27,8 @@ RSpec.describe Api::V0::Wrt::PersonsController, type: :controller do
         representing: person.country_iso2,
         dob: "2000-01-01",
       } }
-      expect(response.status).to eq 200
-      response_json = JSON.parse(response.body)
+      expect(response).to have_http_status :ok
+      response_json = response.parsed_body
       expect(response_json['success']).to eq "Successfully fixed New Name."
     end
   end

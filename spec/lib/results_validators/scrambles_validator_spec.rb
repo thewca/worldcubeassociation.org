@@ -32,24 +32,24 @@ RSpec.describe SV do
       it "matches Result" do
         [Result, InboxResult].each do |model|
           result_kind = model.model_name.singular.to_sym
-          FactoryBot.create(result_kind, competition: competition1, eventId: "333oh")
-          FactoryBot.create(result_kind, competition: competition2, eventId: "222")
+          FactoryBot.create(result_kind, competition: competition1, event_id: "333oh")
+          FactoryBot.create(result_kind, competition: competition2, event_id: "222")
           FactoryBot.create(result_kind, :blind_mo3, competition: competition2)
         end
 
         expected_errors = [
-          RV::ValidationError.new(:scrambles, competition1.id,
-                                  SV::UNEXPECTED_SCRAMBLES_FOR_ROUND_ERROR,
+          RV::ValidationError.new(SV::UNEXPECTED_SCRAMBLES_FOR_ROUND_ERROR,
+                                  :scrambles, competition1.id,
                                   round_id: "333-f"),
-          RV::ValidationError.new(:scrambles, competition2.id,
-                                  SV::MISSING_SCRAMBLES_FOR_ROUND_ERROR,
+          RV::ValidationError.new(SV::MISSING_SCRAMBLES_FOR_ROUND_ERROR,
+                                  :scrambles, competition2.id,
                                   round_id: "333bf-f"),
         ]
 
         # Scrambles are shared between InboxResult and Result
-        create_scramble_set(5, competitionId: competition1.id, eventId: "333oh")
-        create_scramble_set(5, competitionId: competition1.id, eventId: "333")
-        create_scramble_set(5, competitionId: competition2.id, eventId: "222")
+        create_scramble_set(5, competition_id: competition1.id, event_id: "333oh")
+        create_scramble_set(5, competition_id: competition1.id, event_id: "333")
+        create_scramble_set(5, competition_id: competition2.id, event_id: "222")
 
         validator_args.each do |arg|
           sv = SV.new.validate(**arg)
@@ -61,18 +61,18 @@ RSpec.describe SV do
       it "matches the competition's data" do
         [Result, InboxResult].each do |model|
           result_kind = model.model_name.singular.to_sym
-          FactoryBot.create(result_kind, competition: competition1, eventId: "333oh")
+          FactoryBot.create(result_kind, competition: competition1, event_id: "333oh")
           FactoryBot.create(result_kind, :blind_mo3, competition: competition2)
         end
 
-        create_scramble_set(2, competitionId: competition2.id, eventId: "333bf")
+        create_scramble_set(2, competition_id: competition2.id, event_id: "333bf")
 
         expected_errors = [
-          RV::ValidationError.new(:scrambles, competition1.id,
-                                  SV::MISSING_SCRAMBLES_FOR_COMPETITION_ERROR,
+          RV::ValidationError.new(SV::MISSING_SCRAMBLES_FOR_COMPETITION_ERROR,
+                                  :scrambles, competition1.id,
                                   competition_id: competition1.id),
-          RV::ValidationError.new(:scrambles, competition2.id,
-                                  SV::MISSING_SCRAMBLES_FOR_GROUP_ERROR,
+          RV::ValidationError.new(SV::MISSING_SCRAMBLES_FOR_GROUP_ERROR,
+                                  :scrambles, competition2.id,
                                   round_id: "333bf-f", group_id: "A",
                                   actual: 2, expected: 3),
         ]
@@ -89,17 +89,17 @@ RSpec.describe SV do
 
         [Result, InboxResult].each do |model|
           result_kind = model.model_name.singular.to_sym
-          FactoryBot.create(result_kind, competition: competition1, eventId: "333oh")
+          FactoryBot.create(result_kind, competition: competition1, event_id: "333oh")
         end
 
         # Create three groups of scrambles:
-        create_scramble_set(5, competitionId: competition1.id, eventId: "333oh", groupId: "A")
-        create_scramble_set(5, competitionId: competition1.id, eventId: "333oh", groupId: "B")
-        create_scramble_set(5, competitionId: competition1.id, eventId: "333oh", groupId: "C")
+        create_scramble_set(5, competition_id: competition1.id, event_id: "333oh", group_id: "A")
+        create_scramble_set(5, competition_id: competition1.id, event_id: "333oh", group_id: "B")
+        create_scramble_set(5, competition_id: competition1.id, event_id: "333oh", group_id: "C")
 
         expected_errors = [
-          RV::ValidationError.new(:scrambles, competition1.id,
-                                  SV::WRONG_NUMBER_OF_SCRAMBLE_SETS_ERROR,
+          RV::ValidationError.new(SV::WRONG_NUMBER_OF_SCRAMBLE_SETS_ERROR,
+                                  :scrambles, competition1.id,
                                   round_id: "333oh-f"),
         ]
 
@@ -119,12 +119,12 @@ RSpec.describe SV do
         end
 
         # Create two groups in fmc:
-        create_scramble_set(3, competitionId: competition3.id, eventId: "333fm", groupId: "A")
-        create_scramble_set(3, competitionId: competition3.id, eventId: "333fm", groupId: "B")
+        create_scramble_set(3, competition_id: competition3.id, event_id: "333fm", group_id: "A")
+        create_scramble_set(3, competition_id: competition3.id, event_id: "333fm", group_id: "B")
 
         expected_warnings = [
-          RV::ValidationWarning.new(:scrambles, competition3.id,
-                                    SV::MULTIPLE_FMC_GROUPS_WARNING,
+          RV::ValidationWarning.new(SV::MULTIPLE_FMC_GROUPS_WARNING,
+                                    :scrambles, competition3.id,
                                     round_id: "333fm-f"),
         ]
 
@@ -147,17 +147,17 @@ RSpec.describe SV do
 
         # Create two groups in multi: for attempt 1 they did 2 groups,
         # for the others they just did one.
-        create_scramble_set(3, competitionId: competition1.id, eventId: "333mbf", groupId: "A")
-        create_scramble_set(1, competitionId: competition1.id, eventId: "333mbf", groupId: "B")
+        create_scramble_set(3, competition_id: competition1.id, event_id: "333mbf", group_id: "A")
+        create_scramble_set(1, competition_id: competition1.id, event_id: "333mbf", group_id: "B")
 
         # Now for competition2, both groups have only two scrambles but the format
         # is bo3, so the round is missing scrambles.
-        create_scramble_set(2, competitionId: competition2.id, eventId: "333mbf", groupId: "A")
-        create_scramble_set(2, competitionId: competition2.id, eventId: "333mbf", groupId: "B")
+        create_scramble_set(2, competition_id: competition2.id, event_id: "333mbf", group_id: "A")
+        create_scramble_set(2, competition_id: competition2.id, event_id: "333mbf", group_id: "B")
 
         expected_errors = [
-          RV::ValidationError.new(:scrambles, competition2.id,
-                                  SV::MISSING_SCRAMBLES_FOR_MULTI_ERROR,
+          RV::ValidationError.new(SV::MISSING_SCRAMBLES_FOR_MULTI_ERROR,
+                                  :scrambles, competition2.id,
                                   round_id: "333mbf-f"),
         ]
 
@@ -170,9 +170,9 @@ RSpec.describe SV do
     end
   end
 
-  def create_scramble_set(n, **kwargs)
+  def create_scramble_set(n, **)
     1.upto(n) do |i|
-      FactoryBot.create(:scramble, scrambleNum: i, **kwargs)
+      FactoryBot.create(:scramble, scramble_num: i, **)
     end
   end
 end

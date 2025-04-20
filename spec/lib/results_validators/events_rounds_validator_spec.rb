@@ -31,31 +31,31 @@ RSpec.describe ERV do
       # UNEXPECTED_COMBINED_ROUND_ERROR
       [Result, InboxResult].each do |model|
         result_kind = model.model_name.singular.to_sym
-        FactoryBot.create(result_kind, competition: competition1, eventId: "333oh")
-        FactoryBot.create(result_kind, competition: competition2, eventId: "222")
-        FactoryBot.create(result_kind, :skip_validation, competition: competition2, eventId: "444", skip_round_creation: true)
+        FactoryBot.create(result_kind, competition: competition1, event_id: "333oh")
+        FactoryBot.create(result_kind, competition: competition2, event_id: "222")
+        FactoryBot.create(result_kind, :skip_validation, competition: competition2, event_id: "444", skip_round_creation: true)
       end
 
       expected_warnings = [
-        RV::ValidationWarning.new(:events, competition1.id,
-                                  ERV::NO_MAIN_EVENT_WARNING),
-        RV::ValidationWarning.new(:events, competition2.id,
-                                  ERV::NOT_333_MAIN_EVENT_WARNING,
+        RV::ValidationWarning.new(ERV::NO_MAIN_EVENT_WARNING,
+                                  :events, competition1.id),
+        RV::ValidationWarning.new(ERV::NOT_333_MAIN_EVENT_WARNING,
+                                  :events, competition2.id,
                                   main_event_id: "222"),
-        RV::ValidationWarning.new(:events, competition2.id,
-                                  ERV::MISSING_RESULTS_WARNING,
+        RV::ValidationWarning.new(ERV::MISSING_RESULTS_WARNING,
+                                  :events, competition2.id,
                                   event_id: "555"),
-        RV::ValidationWarning.new(:events, competition1.id,
-                                  ERV::MISSING_RESULTS_WARNING,
+        RV::ValidationWarning.new(ERV::MISSING_RESULTS_WARNING,
+                                  :events, competition1.id,
                                   event_id: "333"),
       ]
 
       expected_errors = [
-        RV::ValidationError.new(:events, competition2.id,
-                                ERV::UNEXPECTED_RESULTS_ERROR,
+        RV::ValidationError.new(ERV::UNEXPECTED_RESULTS_ERROR,
+                                :events, competition2.id,
                                 event_id: "444"),
-        RV::ValidationError.new(:rounds, competition2.id,
-                                ERV::UNEXPECTED_ROUND_RESULTS_ERROR,
+        RV::ValidationError.new(ERV::UNEXPECTED_ROUND_RESULTS_ERROR,
+                                :rounds, competition2.id,
                                 round_id: '444-f'),
       ]
 
@@ -89,34 +89,34 @@ RSpec.describe ERV do
         result_kind = model.model_name.singular.to_sym
         # Create a result over a cutoff which does not exist in rounds data.
         FactoryBot.create(result_kind, :over_cutoff, :skip_validation,
-                          competition: competition1, eventId: "333oh",
+                          competition: competition1, event_id: "333oh",
                           cutoff: cutoff, skip_round_creation: true)
-        FactoryBot.create(result_kind, competition: competition1, eventId: "333")
+        FactoryBot.create(result_kind, competition: competition1, event_id: "333")
         # This creates results below the cutoff for 5x5, which effectively turns
         # it into a "regular" round instead of a cutoff round.
         FactoryBot.create(result_kind, :skip_validation,
-                          competition: competition2, eventId: "555", skip_round_creation: true)
+                          competition: competition2, event_id: "555", skip_round_creation: true)
         FactoryBot.create(result_kind, :skip_validation,
-                          competition: competition2, eventId: "222", roundTypeId: "c",
+                          competition: competition2, event_id: "222", round_type_id: "c",
                           skip_round_creation: true)
       end
       expected_errors = [
-        RV::ValidationError.new(:rounds, competition1.id,
-                                ERV::UNEXPECTED_COMBINED_ROUND_ERROR,
+        RV::ValidationError.new(ERV::UNEXPECTED_COMBINED_ROUND_ERROR,
+                                :rounds, competition1.id,
                                 round_name: "3x3x3 One-Handed Final"),
-        RV::ValidationError.new(:rounds, competition1.id,
-                                ERV::MISSING_ROUND_RESULTS_ERROR,
+        RV::ValidationError.new(ERV::MISSING_ROUND_RESULTS_ERROR,
+                                :rounds, competition1.id,
                                 round_id: "333oh-1"),
-        RV::ValidationError.new(:rounds, competition2.id,
-                                ERV::UNEXPECTED_ROUND_RESULTS_ERROR,
+        RV::ValidationError.new(ERV::UNEXPECTED_ROUND_RESULTS_ERROR,
+                                :rounds, competition2.id,
                                 round_id: "222-c"),
       ]
 
       expected_warnings = [
-        RV::ValidationWarning.new(:events, competition1.id,
-                                  ERV::NO_MAIN_EVENT_WARNING),
-        RV::ValidationWarning.new(:events, competition2.id,
-                                  ERV::NOT_333_MAIN_EVENT_WARNING,
+        RV::ValidationWarning.new(ERV::NO_MAIN_EVENT_WARNING,
+                                  :events, competition1.id),
+        RV::ValidationWarning.new(ERV::NOT_333_MAIN_EVENT_WARNING,
+                                  :events, competition2.id,
                                   main_event_id: "222"),
       ]
       validator_args.each do |arg|

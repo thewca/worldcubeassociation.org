@@ -28,10 +28,10 @@ module ResultsValidators
     end
 
     def self.from_results(validator, results)
-      results.group_by(&:competitionId)
+      results.group_by(&:competition_id)
              .map do |competition_id, comp_results|
         # TODO: A bit hacky to check this, but fair given the assumptions of the previous default `validate` method.
-        check_real_results = comp_results.any? { |r| r.is_a? Result }
+        check_real_results = comp_results.any?(Result)
 
         competition_scope = self.load_competition_includes(validator, check_real_results: check_real_results)
         model_competition = competition_scope.find(competition_id)

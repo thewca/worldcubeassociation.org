@@ -4,8 +4,6 @@ class Event < ApplicationRecord
   include Cachable
   include StaticData
 
-  self.table_name = "Events"
-
   OFFICIAL = self.all_raw.select { |e| e[:is_official] }.freeze
   OFFICIAL_IDS = OFFICIAL.pluck(:id).freeze
 
@@ -42,7 +40,7 @@ class Event < ApplicationRecord
   end
 
   def deprecated?
-    990 <= rank && rank < 1000
+    rank >= 990 && rank < 1000
   end
 
   # See https://www.worldcubeassociation.org/regulations/#9f12
@@ -55,7 +53,7 @@ class Event < ApplicationRecord
   end
 
   def multiple_blindfolded?
-    self.id == "333mbf" || self.id == "333mbo"
+    ["333mbf", "333mbo"].include?(self.id)
   end
 
   def can_change_time_limit?

@@ -29,14 +29,14 @@ RSpec.describe ResultsHelper do
       results << FactoryBot.create(:result, person: person, best: 1000, average: 1300)
 
       pb_markers = helper.historical_pb_markers results
-      expect(pb_markers[results[1].id][:single]).to eq true
+      expect(pb_markers[results[1].id][:single]).to be true
     end
 
     it "doesn't mark uncompleted solves as PB" do
       combined_round = FactoryBot.create(:round, cutoff: Cutoff.new(number_of_attempts: 2, attempt_result: 60*100))
       combined_final = RoundType.find("c")
       results = []
-      results << FactoryBot.create(:result, competition: combined_round.competition, person: person, best: SolveTime::DNF_VALUE, average: SolveTime::SKIPPED_VALUE, round_type: combined_final, eventId: "333")
+      results << FactoryBot.create(:result, competition: combined_round.competition, person: person, best: SolveTime::DNF_VALUE, average: SolveTime::SKIPPED_VALUE, round_type: combined_final, event_id: "333")
 
       pb_markers = helper.historical_pb_markers results
       expect(pb_markers).to eq({})

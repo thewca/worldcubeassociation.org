@@ -1,8 +1,9 @@
+# rubocop:disable all
 # frozen_string_literal: true
 
 class CleanDuplicatedRegistrationCompetitionEvents < ActiveRecord::Migration
   def up
-    execute <<-SQL
+    execute <<-SQL.squish
       DELETE FROM registration_competition_events
       WHERE registration_competition_events.id NOT IN (
         SELECT minid

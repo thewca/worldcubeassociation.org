@@ -10,7 +10,7 @@ RSpec.describe "Competition WCIF" do
       :with_competitor_limit,
       id: "TestComp2014",
       name: "Test Comp 2014",
-      cellName: "Test 2014",
+      cell_name: "Test 2014",
       start_date: "2014-02-03",
       end_date: "2014-02-05",
       external_website: "http://example.com",
@@ -49,6 +49,7 @@ RSpec.describe "Competition WCIF" do
   let!(:round333fm_1) { FactoryBot.create(:round, competition: competition, event_id: "333fm", number: 1, format_id: "m") }
   let!(:round333mbf_1) { FactoryBot.create(:round, competition: competition, event_id: "333mbf", number: 1, format_id: "3") }
   let!(:round333mbf_1_extension) { round333mbf_1.wcif_extensions.create!(extension_id: "com.third.party", spec_url: "https://example.com", data: { "tables" => 5 }) }
+
   before :each do
     # Load all the rounds we just created.
     competition.reload
@@ -284,7 +285,7 @@ RSpec.describe "Competition WCIF" do
     it "rendered WCIF matches JSON Schema definition" do
       expect {
         JSON::Validator.validate!(Competition.wcif_json_schema, competition.to_wcif)
-      }.to_not raise_error
+      }.not_to raise_error
     end
   end
 
@@ -296,7 +297,7 @@ RSpec.describe "Competition WCIF" do
 
       competition.set_wcif_competitor_limit!(competitor_limit_wcif, delegate)
 
-      expect(competition.competitor_limit_enabled?).to eq(true)
+      expect(competition.competitor_limit_enabled?).to be(true)
       expect(competition.to_wcif["competitorLimit"]).to eq(competitor_limit_wcif)
     end
 

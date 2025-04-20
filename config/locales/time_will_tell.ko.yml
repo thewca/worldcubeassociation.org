@@ -1,0 +1,24 @@
+ko:
+  time_will_tell:
+    date_range:
+      different_months_same_year: "%{from_month} %{from_day} %{sep} %{to_month} %{to_day}"
+      different_years: "%{from_year} %{from_month} %{from_day}, %{sep} %{to_year} %{to_month} %{to_day}"
+      same_month: "%{month} %{from_day} %{sep} %{to_day}"
+      same_date: "%{month} %{from_day}"
+      with_year: "%{year} %{date_range}"
+
+    distance_in_words:
+      template: "%{count} %{unit}"
+      template_long: "%{rest} 그리고 %{last}"
+
+      units:
+        second: 초
+        minute: 분
+        hour: 시간
+        day: 일
+        month: 개월
+        year: 년
+
+      special:
+        half_an_hour: 0.5시간
+        and_a_half: 반

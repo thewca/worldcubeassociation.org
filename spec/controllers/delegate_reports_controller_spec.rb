@@ -6,9 +6,9 @@ RSpec.describe DelegateReportsController do
   let(:delegate) { FactoryBot.create :delegate }
   let(:trainee_delegate) { FactoryBot.create :trainee_delegate }
   let(:comp) { FactoryBot.create(:competition, delegates: [delegate, trainee_delegate], starts: 2.days.ago) }
-  let!(:delegate_report1) { FactoryBot.create :delegate_report, competition: comp, schedule_url: "http://example.com" }
+  let!(:delegate_report1) { FactoryBot.create :delegate_report, :with_images, competition: comp, schedule_url: "http://example.com" }
   let(:pre_delegate_reports_form_comp) { FactoryBot.create(:competition, delegates: [delegate], starts: Date.new(2015, 1, 1)) }
-  let!(:delegate_report2) { FactoryBot.create :delegate_report, competition: pre_delegate_reports_form_comp, schedule_url: "http://example.com" }
+  let!(:delegate_report2) { FactoryBot.create :delegate_report, :with_images, competition: pre_delegate_reports_form_comp, schedule_url: "http://example.com" }
   let!(:wrc_members) { FactoryBot.create_list :user, 3, :wrc_member }
 
   context "not logged in" do
@@ -43,13 +43,14 @@ RSpec.describe DelegateReportsController do
 
   context "logged in as THE delegate" do
     let!(:user) { comp.delegates.first }
+
     before :each do
       sign_in user
     end
 
     it "can view edit page" do
       get :edit, params: { competition_id: comp.id }
-      expect(response.status).to eq 200
+      expect(response).to have_http_status :ok
     end
 
     it "can edit report" do
@@ -64,17 +65,17 @@ RSpec.describe DelegateReportsController do
       comp.start_date = 1.day.from_now.strftime("%F")
       comp.end_date = 1.day.from_now.strftime("%F")
       comp.save!
-      expect(comp.is_probably_over?).to eq false
+      expect(comp.probably_over?).to be false
 
       post :update, params: { competition_id: comp.id, delegate_report: { remarks: "My new remarks", posted: false } }
       comp.reload
       expect(comp.delegate_report.remarks).to eq "My new remarks"
-      expect(comp.delegate_report.posted?).to eq false
+      expect(comp.delegate_report.posted?).to be false
 
       post :update, params: { competition_id: comp.id, delegate_report: { remarks: "My newer remarks", posted: true } }
       comp.reload
       expect(comp.delegate_report.remarks).to eq "My newer remarks"
-      expect(comp.delegate_report.posted?).to eq true
+      expect(comp.delegate_report.posted?).to be true
     end
 
     it "can post report and cannot edit report if it's posted" do
@@ -85,11 +86,12 @@ RSpec.describe DelegateReportsController do
       post :update, params: { competition_id: comp.id, delegate_report: { remarks: "My newer remarks", posted: true } }
 
       expect(response).to redirect_to(delegate_report_path(comp))
-      assert_enqueued_jobs 3
+      assert_enqueued_jobs 2, queue: :mailers
+      assert_enqueued_jobs 1, only: SendWrcReportNotification
       expect(flash[:info]).to eq "Your report has been posted and emailed!"
       comp.reload
       expect(comp.delegate_report.remarks).to eq "My newer remarks"
-      expect(comp.delegate_report.posted?).to eq true
+      expect(comp.delegate_report.posted?).to be true
       expect(comp.delegate_report.posted_by_user_id).to eq user.id
 
       # Try to update the report when it's posted.
@@ -114,19 +116,21 @@ RSpec.describe DelegateReportsController do
       post :update, params: { competition_id: pre_delegate_reports_form_comp.id, delegate_report: { remarks: "My newer remarks", posted: true } }
       expect(response).to redirect_to(delegate_report_path(pre_delegate_reports_form_comp))
       expect(flash[:info]).to eq "Your report has been posted but not emailed because it is for a pre June 2016 competition."
-      assert_enqueued_jobs 0
+      assert_enqueued_jobs 0, queue: :mailers
+      assert_enqueued_jobs 0, only: SendWrcReportNotification
     end
   end
 
   context "logged in as THE trainee delegate" do
     let!(:user) { comp.trainee_delegates.first }
+
     before :each do
       sign_in user
     end
 
     it "can view edit page" do
       get :edit, params: { competition_id: comp.id }
-      expect(response.status).to eq 200
+      expect(response).to have_http_status :ok
     end
 
     it "can edit report" do
@@ -139,7 +143,7 @@ RSpec.describe DelegateReportsController do
     it "cannot post the report" do
       post :update, params: { competition_id: comp.id, delegate_report: { remarks: "My newer remarks", posted: true } }
       comp.reload
-      expect(comp.delegate_report.posted?).to eq false
+      expect(comp.delegate_report.posted?).to be false
       expect(response).to redirect_to(root_url)
     end
   end

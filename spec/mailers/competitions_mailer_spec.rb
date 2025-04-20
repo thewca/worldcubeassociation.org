@@ -11,8 +11,9 @@ RSpec.describe CompetitionsMailer, type: :mailer do
     let(:third_delegate_role) { FactoryBot.create :trainee_delegate_role, group: second_senior_delegate_role.group }
     let(:competition) { FactoryBot.create :competition, :with_competitor_limit, championship_types: %w(world PL), delegates: [delegate_role.user, second_delegate_role.user, third_delegate_role.user] }
     let(:mail) do
-      I18n.locale = :pl
-      CompetitionsMailer.notify_wcat_of_confirmed_competition(delegate_role.user, competition)
+      I18n.with_locale(:pl) do
+        CompetitionsMailer.notify_wcat_of_confirmed_competition(delegate_role.user, competition)
+      end
     end
 
     it "renders in English" do
@@ -183,8 +184,8 @@ RSpec.describe CompetitionsMailer, type: :mailer do
     let(:trainee_delegate) { FactoryBot.create(:trainee_delegate_role) }
     let(:competition) do
       competition = FactoryBot.create(:competition, :with_delegate_report,
-                                      countryId: "Australia",
-                                      cityName: "Perth, Western Australia",
+                                      country_id: "Australia",
+                                      city_name: "Perth, Western Australia",
                                       name: "Comp of the Future 2016",
                                       delegates: [delegate.user, trainee_delegate.user],
                                       starts: Date.new(2016, 2, 1),
@@ -194,8 +195,9 @@ RSpec.describe CompetitionsMailer, type: :mailer do
     end
     let(:mail) do
       # Let's pick a foreign locale to make sure it's not localized
-      I18n.locale = :fr
-      CompetitionsMailer.notify_of_delegate_report_submission(competition)
+      I18n.with_locale(:fr) do
+        CompetitionsMailer.notify_of_delegate_report_submission(competition)
+      end
     end
 
     context "wrc & wic feedback requested" do
@@ -279,8 +281,8 @@ RSpec.describe CompetitionsMailer, type: :mailer do
         FactoryBot.create(:competition,
                           :with_delegate_report,
                           :with_valid_schedule,
-                          countryId: "XE",
-                          cityName: "Multiple Cities",
+                          country_id: "XE",
+                          city_name: "Multiple Cities",
                           name: "FMC Europe 2016",
                           delegates: [delegate.user, trainee_delegate.user],
                           starts: Date.new(2016, 2, 1),
@@ -295,7 +297,7 @@ RSpec.describe CompetitionsMailer, type: :mailer do
         end
 
         expect(mail.subject).to eq "[wca-report] [Europe] FMC Europe 2016"
-        expect(mail.to).to eq countries.map { |c| DelegateReport.country_mailing_list(c) }
+        expect(mail.to).to eq(countries.map { |c| DelegateReport.country_mailing_list(c) })
         expect(mail.cc).to match_array competition.delegates.pluck(:email)
         expect(mail.from).to eq ["reports@worldcubeassociation.org"]
         expect(mail.reply_to).to match_array competition.delegates.pluck(:email)
@@ -307,8 +309,8 @@ RSpec.describe CompetitionsMailer, type: :mailer do
         FactoryBot.create(:competition,
                           :with_delegate_report,
                           :with_valid_schedule,
-                          countryId: "XW",
-                          cityName: "Multiple Cities",
+                          country_id: "XW",
+                          city_name: "Multiple Cities",
                           name: "FMC World 2016",
                           delegates: [delegate.user, trainee_delegate.user],
                           starts: Date.new(2016, 2, 1),
@@ -324,7 +326,7 @@ RSpec.describe CompetitionsMailer, type: :mailer do
         end
 
         expect(mail.subject).to eq "[wca-report] [Multiple Continents] FMC World 2016"
-        expect(mail.to).to eq competition.venue_continents.map { |c| DelegateReport.continent_mailing_list(c) }
+        expect(mail.to).to eq(competition.venue_continents.map { |c| DelegateReport.continent_mailing_list(c) })
         expect(mail.cc).to match_array competition.delegates.pluck(:email)
         expect(mail.from).to eq ["reports@worldcubeassociation.org"]
         expect(mail.reply_to).to match_array competition.delegates.pluck(:email)
@@ -339,7 +341,7 @@ RSpec.describe CompetitionsMailer, type: :mailer do
 
   describe "wrc_delegate_report_followup" do
     let(:competition) do
-      competition = FactoryBot.create(:competition, :with_delegate_report, countryId: "Australia", cityName: "Perth, Western Australia", name: "Comp of the Future 2016", starts: Date.new(2016, 2, 1), ends: Date.new(2016, 2, 2))
+      competition = FactoryBot.create(:competition, :with_delegate_report, country_id: "Australia", city_name: "Perth, Western Australia", name: "Comp of the Future 2016", starts: Date.new(2016, 2, 1), ends: Date.new(2016, 2, 2))
       competition.delegate_report.update!(remarks: "This was a great competition")
       competition.delegate_report.wrc_primary_user = FactoryBot.create :user, :wrc_member, name: "Jean"
       competition.delegate_report.wrc_secondary_user = FactoryBot.create :user, :wrc_member, name: "Michel"
@@ -411,7 +413,7 @@ RSpec.describe CompetitionsMailer, type: :mailer do
 
       it "renders the body" do
         expect(mail.body.encoded).to match(/This is a reminder that registration/)
-        expect(mail.body.encoded).to_not match(/You have registered/)
+        expect(mail.body.encoded).not_to match(/You have registered/)
         expect(mail.body.encoded).to include(competition_url(competition))
       end
     end

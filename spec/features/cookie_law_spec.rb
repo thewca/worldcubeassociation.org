@@ -4,7 +4,7 @@ require "rails_helper"
 
 RSpec.feature "cookie law" do
   context "not signed in" do
-    scenario "remembers acknowledgement", js: true do
+    scenario "remembers acknowledgement", :js do
       # Visit the homepage and accept the cookie warning.
       visit_homepage_and_wait_for_load
       acknowledge_cookie_banner
@@ -16,7 +16,7 @@ RSpec.feature "cookie law" do
 
       # Clear cookies and visit the homepage again. The cookie banner should
       # show back up.
-      page.driver.clear_cookies
+      page.driver.with_playwright_page { it.context.clear_cookies }
       visit_homepage_and_wait_for_load
       expect(page).to have_selector(CookieBannerHelper::ACKNOWLEDGE_SELECTOR)
     end
@@ -24,17 +24,18 @@ RSpec.feature "cookie law" do
 
   context "signed in" do
     let!(:admin) { FactoryBot.create(:admin, cookies_acknowledged: false) }
+
     background do
       sign_in admin
     end
 
-    scenario "remembers acknowledgement without cookies", js: true do
+    scenario "remembers acknowledgement without cookies", :js do
       visit_homepage_and_wait_for_load
       acknowledge_cookie_banner
 
       # Clear cookies. This logs us out and clears the acknowledgement cookie.
       # The banner should come back.
-      page.driver.clear_cookies
+      page.driver.with_playwright_page { it.context.clear_cookies }
       visit_homepage_and_wait_for_load
       expect(page).to have_selector(CookieBannerHelper::ACKNOWLEDGE_SELECTOR)
 

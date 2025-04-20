@@ -20,9 +20,9 @@ RSpec.describe Qualification do
   let!(:first_333_result) {
     FactoryBot.create(
       :result,
-      personId: user.wca_id,
-      competitionId: first_competition.id,
-      eventId: '333',
+      person_id: user.wca_id,
+      competition_id: first_competition.id,
+      event_id: '333',
       best: 1200,
       average: 1500,
     )
@@ -30,9 +30,9 @@ RSpec.describe Qualification do
   let!(:second_333_result) {
     FactoryBot.create(
       :result,
-      personId: user.wca_id,
-      competitionId: second_competition.id,
-      eventId: '333',
+      person_id: user.wca_id,
+      competition_id: second_competition.id,
+      event_id: '333',
       best: 1100,
       average: 1200,
     )
@@ -40,9 +40,9 @@ RSpec.describe Qualification do
   let!(:first_oh_result_no_single) {
     FactoryBot.create(
       :result,
-      personId: user.wca_id,
-      competitionId: first_competition.id,
-      eventId: '333oh',
+      person_id: user.wca_id,
+      competition_id: first_competition.id,
+      event_id: '333oh',
       best: -1,
       average: -1,
     )
@@ -50,9 +50,9 @@ RSpec.describe Qualification do
   let!(:second_oh_result) {
     FactoryBot.create(
       :result,
-      personId: user.wca_id,
-      competitionId: second_competition.id,
-      eventId: '333oh',
+      person_id: user.wca_id,
+      competition_id: second_competition.id,
+      event_id: '333oh',
       best: 1700,
       average: 2000,
     )
@@ -60,9 +60,9 @@ RSpec.describe Qualification do
   let!(:first_444_result_no_average) {
     FactoryBot.create(
       :result,
-      personId: user.wca_id,
-      competitionId: first_competition.id,
-      eventId: '444',
+      person_id: user.wca_id,
+      competition_id: first_competition.id,
+      event_id: '444',
       best: 4500,
       average: -1,
     )
@@ -70,9 +70,9 @@ RSpec.describe Qualification do
   let!(:second_444_result) {
     FactoryBot.create(
       :result,
-      personId: user.wca_id,
-      competitionId: second_competition.id,
-      eventId: '444',
+      person_id: user.wca_id,
+      competition_id: second_competition.id,
+      event_id: '444',
       best: 4500,
       average: 4800,
     )

@@ -3,8 +3,36 @@ import { DateTime, Interval } from 'luxon';
 import I18n from '../i18n';
 
 function parseDateString(yyyymmddDateString) {
-  return DateTime.fromFormat(yyyymmddDateString, 'yyyy-MM-dd');
+  return DateTime.fromFormat(yyyymmddDateString, 'yyyy-MM-dd', { zone: 'utc' });
 }
+
+const registrationStatusHint = (competingStatus) => {
+  if (competingStatus === 'waiting_list') {
+    return I18n.t('competitions.messages.tooltip_waiting_list');
+  } if (competingStatus === 'accepted') {
+    return I18n.t('competitions.messages.tooltip_registered');
+  } if (competingStatus === 'cancelled' || competingStatus === 'rejected') {
+    return I18n.t('competitions.messages.tooltip_deleted');
+  } if (competingStatus === 'pending') {
+    return I18n.t('competitions.messages.tooltip_pending');
+  }
+  return '';
+};
+
+const competitionStatusHint = (competition) => {
+  let text = '';
+  if (competition['confirmed?']) {
+    text += I18n.t('competitions.messages.confirmed_visible');
+  } else if (competition['visible?']) {
+    text += I18n.t('competitions.messages.confirmed_not_visible');
+  } else {
+    text += I18n.t('competitions.messages.not_confirmed_not_visible');
+  }
+
+  return text;
+};
+
+export const competitionStatusText = (competition, registrationStatus) => `${registrationStatusHint(registrationStatus)} ${competitionStatusHint(competition)}`;
 
 export function dayDifferenceFromToday(yyyymmddDateString) {
   const dateLuxon = parseDateString(yyyymmddDateString);
@@ -66,7 +94,8 @@ export function numberOfDaysAfter(competition, refDate) {
 
   const numberOfDays = parsedStartDate.diff(parsedRefDate, 'days').days;
 
-  return Math.ceil(Math.abs(numberOfDays));
+  // Floor is used here because we want to show 0 days after the competition if it's the same day
+  return Math.floor(Math.abs(numberOfDays));
 }
 
 export function timeDifferenceAfter(competition, refDate) {
@@ -81,6 +110,19 @@ export function reportAdminCellContent(comp) {
     return delegateIds.includes(comp.report_posted_by_user)
       ? timeDifferenceAfter(comp, comp.report_posted_at)
       : I18n.t('competitions.competition_info.submitted_by_other');
+  }
+
+  if (isProbablyOver(comp)) {
+    return I18n.t('competitions.competition_info.pending');
+  }
+
+  return null;
+}
+
+export function resultsSubmittedAtAdminCellContent(comp) {
+  if (comp.results_posted_at) {
+    const date = comp.results_submitted_at ? comp.results_submitted_at : comp.results_posted_at;
+    return timeDifferenceAfter(comp, date);
   }
 
   if (isProbablyOver(comp)) {

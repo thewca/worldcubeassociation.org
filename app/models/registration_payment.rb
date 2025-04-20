@@ -9,6 +9,8 @@ class RegistrationPayment < ApplicationRecord
   belongs_to :refunded_registration_payment, class_name: 'RegistrationPayment', optional: true
   has_many :refunding_registration_payments, class_name: 'RegistrationPayment', inverse_of: :refunded_registration_payment, foreign_key: :refunded_registration_payment_id, dependent: :destroy
 
+  after_create :auto_close_hook, unless: :refunded_registration_payment_id?
+
   monetize :amount_lowest_denomination,
            as: "amount",
            allow_nil: true,
@@ -25,5 +27,9 @@ class RegistrationPayment < ApplicationRecord
     else
       receipt.determine_wca_status
     end
+  end
+
+  private def auto_close_hook
+    registration.consider_auto_close
   end
 end

@@ -152,57 +152,57 @@ fr:
       #original_hash: 4d618bb
       name: Tour de qualification
       #original_hash: 4d618bb
-      cellName: Tour de qualification
+      cell_name: Tour de qualification
     '1':
       #original_hash: 1e725b6
       name: Premier tour
       #original_hash: 1e725b6
-      cellName: Premier tour
+      cell_name: Premier tour
     '2':
       #original_hash: 985c8d0
       name: Deuxième tour
       #original_hash: 985c8d0
-      cellName: Deuxième tour
+      cell_name: Deuxième tour
     '3':
       #original_hash: e2f74d2
       name: Demi-finale
       #original_hash: e2f74d2
-      cellName: Demi-finale
+      cell_name: Demi-finale
     b:
       #original_hash: 327c999
       name: Finale B
       #original_hash: 327c999
-      cellName: Finale B
+      cell_name: Finale B
     c:
       #original_hash: 672b22c
       name: Finale
       #original_hash: 672b22c
-      cellName: Finale
+      cell_name: Finale
     d:
       #original_hash: 1e725b6
       name: Premier tour
       #original_hash: 1e725b6
-      cellName: Premier tour
+      cell_name: Premier tour
     e:
       #original_hash: 985c8d0
       name: Deuxième tour
       #original_hash: 985c8d0
-      cellName: Deuxième tour
+      cell_name: Deuxième tour
     f:
       #original_hash: 672b22c
       name: Finale
       #original_hash: 672b22c
-      cellName: Finale
+      cell_name: Finale
     g:
       #original_hash: e2f74d2
       name: Demi-finale
       #original_hash: e2f74d2
-      cellName: Demi-finale
+      cell_name: Demi-finale
     h:
       #original_hash: 4d618bb
       name: Tour de qualification
       #original_hash: 4d618bb
-      cellName: Tour de qualification
+      cell_name: Tour de qualification
   attempts:
     #original_hash: 17dae1e
     attempt_name: 'Essai %{number}'
@@ -323,6 +323,10 @@ fr:
     dinner: Dîner
     #original_hash: 75226d7
     awards: Cérémonie des récompenses
+    #original_hash: cdd7bb2
+    setup: Mise en place
+    #original_hash: 0b28e08
+    teardown: Démontage
     #original_hash: 6e6a6f2
     misc: Autre
   common:
@@ -362,11 +366,6 @@ fr:
       zero: 0 jour
       one: 1 jour
       other: '%{count} jours'
-    #original_hash: 203e1b3
-    these_events:
-      zero: pas d'épreuve
-      one: cette épreuve
-      other: 'ces %{count} épreuves'
     #original_hash: 51ef7d4
     search_site: Rechercher sur le site
     #original_hash: d7decf1
@@ -460,6 +459,10 @@ fr:
         subRegion: Sous-région
         #original_hash: 730db33
         receive_delegate_reports: Je souhaite recevoir les rapports des compétitions WCA par e-mail
+        #original_hash: 8667157
+        delegate_reports_region: >-
+          Je souhaite uniquement recevoir les rapports des délégués pour la
+          région suivante
         #original_hash: 57eaf24
         user_preferred_events: Épreuves favorites
         #original_hash: e632fbf
@@ -503,6 +506,8 @@ fr:
         organization: Organisation
         #original_hash: 5e326b1
         incidents: Incidents
+        #original_hash: 7106c2d
+        setup_images: Images de l'organisation de la compétition
         #original_hash: 1362470
         wrc_feedback_requested: Je souhaite avoir l'avis du WRC sur certains incidents ci-dessus.
         #original_hash: 0c7191d
@@ -517,7 +522,7 @@ fr:
         #original_hash: 8c41ae8
         wca_id: Personne
         #original_hash: fa4c045
-        countryId: Représentant
+        country_id: Représentant
         #original_hash: ab58155
         dob: Date de naissance
         #original_hash: 8a754c6
@@ -569,19 +574,19 @@ fr:
         competition_id: Est survenu au cours de
       competition_medium:
         #original_hash: 1917f4f
-        competitionId: Compétition
+        competition_id: Compétition
         #original_hash: 3deb745
-        type: Type
+        media_type: Type
         #original_hash: c3328c3
         text: Texte
         #original_hash: d051707
         uri: Lien
         #original_hash: 1be755a
-        submitterName: Nom du contributeur
+        submitter_name: Nom du contributeur
         #original_hash: 78cdfee
-        submitterEmail: Adresse e-mail du contributeur
+        submitter_email: Adresse e-mail du contributeur
         #original_hash: 0d31f23
-        submitterComment: Commentaire du contributeur
+        submitter_comment: Commentaire du contributeur
         #original_hash: bae7d5b
         status: Statut
       regional_organization:
@@ -669,13 +674,15 @@ fr:
         competing_only: Participation seulement
         #original_hash: 35a6012
         competing_and_attending: Participation et Présence
+        #original_hash: 4f30c10
+        competing_and_attending_and_forums: 'Participation, Présence et Utilisation des forums'
     competition_medium:
       status:
         #original_hash: 61a0572
         accepted: Accepté
         #original_hash: 96f608c
         pending: En attente
-      type:
+      media_type:
         #original_hash: ee45c30
         report: Rapport
         #original_hash: 4360c2d
@@ -766,6 +773,11 @@ fr:
           Si vous êtes un Délégué Senior, membre du WRC ou du WQAC, vous recevez
           les rapports par défaut. Note : le changement peut prendre jusqu'à une
           heure pour être pris en compte.
+        #original_hash: 364624c
+        delegate_reports_region: >-
+          Si vous souhaitez recevoir tous les rapports, laissez ce champ vide
+          (l'option du menu déroulant se trouve tout en haut). Remarque : la
+          modification peut prendre jusqu'à une heure pour être prise en compte.
         #original_hash: 0627e5c
         otp_attempt: >-
           Consultez l'application mobile que vous avez configuré pour obtenir un
@@ -796,14 +808,6 @@ fr:
           Utilisez la balise &lt;!-- break --&gt; pour afficher un extrait sur
           la page d'accueil. Un post sur la page d'accueil affichera tout le
           texte jusqu'à cette balise. Le post complet affichera tout le texte.
-        #original_hash: da39a3e
-        sticky: ''
-        #original_hash: da39a3e
-        unstick_at: ''
-        #original_hash: da39a3e
-        title: ''
-        #original_hash: da39a3e
-        tags: ''
         #original_hash: 0e3764f
         show_on_homepage: >-
           Attention ! Cela ne permet pas de rendre ce post privé mais uniquement
@@ -841,6 +845,15 @@ fr:
           Délégués puissent les référencer dans leurs commentaires. Même s'ils
           semblent courants, listez au moins les incidents principaux. Merci de
           cocher les cases ci-dessous si vous avez besoin d'un avis.
+        #original_hash: 8af00aa
+        setup_images: >-
+          Veuillez choisir au moins %{image_count} d'images qui illustrent
+          l'organisation de la compétition (zone de mélange, zone de
+          compétition, etc.). Vous pouvez sélectionner plusieurs fichiers à la
+          fois. Vous ne pouvez supprimer des images que lorsque suffisamment
+          d'autres images ont été téléchargées (si vous souhaitez remplacer une
+          image, vous devez d'abord télécharger la nouvelle image, puis
+          supprimer l'ancienne).
         #original_hash: da39a3e
         wrc_feedback_requested: ''
         #original_hash: 98bb5cd
@@ -871,8 +884,6 @@ fr:
         person1_wca_id: ''
         #original_hash: da39a3e
         person2_wca_id: ''
-        #original_hash: da39a3e
-        person_wca_id: ''
       poll:
         #original_hash: da39a3e
         comment: ''
@@ -880,35 +891,24 @@ fr:
         multiple: ''
         #original_hash: da39a3e
         question: ''
-      registration:
-        #original_hash: da39a3e
-        comments: ''
-        #original_hash: da39a3e
-        guests: ''
-        #original_hash: da39a3e
-        status: ''
-        #original_hash: 34ef763
-        administrative_notes: >-
-          Notes supplémentaires conservées dans le cadre de la gestion de cette
-          inscription. Elles ne peuvent pas être consultées par le compétiteur.
       vote:
         #original_hash: da39a3e
         comment: ''
       competition_medium:
         #original_hash: da39a3e
-        competitionId: ''
+        competition_id: ''
         #original_hash: da39a3e
-        type: ''
+        media_type: ''
         #original_hash: da39a3e
         text: ''
         #original_hash: da39a3e
         uri: ''
         #original_hash: da39a3e
-        submitterName: ''
+        submitter_name: ''
         #original_hash: da39a3e
-        submitterEmail: ''
+        submitter_email: ''
         #original_hash: da39a3e
-        submitterComment: ''
+        submitter_comment: ''
         #original_hash: da39a3e
         status: ''
       results_submission:
@@ -926,7 +926,7 @@ fr:
         #original_hash: da39a3e
         country: ''
         #original_hash: 72448d6
-        website: Doit être uneURLl http(s) valide. HTTPS est recommandé
+        website: Doit être une URL http(s) valide. HTTPS est recommandé
         #original_hash: 2ace571
         logo: >-
           Doit être au format PNG, avec une bonne résolution et un fond
@@ -985,6 +985,9 @@ fr:
         dob: Date de naissance correcte
         #original_hash: e214b8a
         document: Document
+      contact_wrt:
+        #original_hash: 603a218
+        wca_id: ID WCA
     errors:
       dob_contact:
         #original_hash: 79ccfe2
@@ -997,6 +1000,10 @@ fr:
       size_too_small: 'est trop petit (il devrait faire au moins %{file_size})'
       #original_hash: a2a43b3
       size_too_big: 'est trop gros (il devrait faire au plus %{file_size})'
+      #original_hash: de76004
+      no_permission: >-
+        Vous ne disposez pas des autorisations nécessaires pour accéder à cette
+        page.
   devise:
     passwords:
       edit:
@@ -1051,12 +1058,12 @@ fr:
               L'authentification à deux facteur est activée pour votre compte,
               et vous venez de demander que l'on vous envoie un mot de passe à
               usage unique par e-mail. Vous le trouverez ci-dessous :
-            #original_hash: e27e540
+            #original_hash: 8aeccbf
             disclaimer: >-
-              Si vous n'avez pas demandé ce code, merci de contacter l'équipe
-              logicielle de la WCA (WST) immédiatement en répondant à cet e-mail
-              : vous avez peut être une session ouverte quelque part ou votre
-              mot de passe est peut être compromis.
+              Si vous n'avez pas demandé ce code d'authentification, veuillez
+              contacter le WST immédiatement en répondant à cet e-mail : il se
+              peut que vous ayez une session ouverte quelque part ou que votre
+              mot de passe soit compromis.
           #original_hash: 8c13694
           name: Authentification à deux facteurs (2FA)
           #original_hash: d28c3b6
@@ -1264,8 +1271,8 @@ fr:
       faq: Questions Fréquentes
       #original_hash: cf1d2c9
       forum: Forum
-      #original_hash: 3ad28c0
-      teams: 'Équipes, Comités et Conseils'
+      #original_hash: 0e7a036
+      teams: Équipes et Comités
       #original_hash: 7981fb3
       education: Ressources Éducatives
       #original_hash: c66444f
@@ -1334,8 +1341,6 @@ fr:
       polls: Sondages
       #original_hash: d3a928c
       results_team: Équipe de résultats
-      #original_hash: 4e7afeb
-      results_admin: Admin
       #original_hash: 61074f1
       results_database: Base de donnée
       #original_hash: 54e0548
@@ -1383,27 +1388,25 @@ fr:
         Président préside toutes les réunions du Bureau, le Secrétaire assure le
         maintien des documents de l'association et le Trésorier gère les
         affaires financières de la WCA.
-      #original_hash: e0d37a2
+      #original_hash: 19d4bbb
       board_description: >-
-        La World Cube Association est dirigée par le Bureau de la WCA, constitué
-        des membres suivants :
+        Le Conseil d'administration de la WCA est chargé de diriger
+        l'organisation dans son ensemble et de remplir toutes les fonctions qui
+        ne sont pas remplies par d'autres équipes et comités.
     teams_committees_councils:
-      #original_hash: 0d62207
-      title: 'Équipes, Comités et Conseils'
-      #original_hash: d54d953
+      #original_hash: 1d14e2f
+      title: Équipes et Comités
+      #original_hash: 9fdee8f
       description: >-
         Les équipes et les comités de la WCA font partie intégrante de
-        l’organisation et exécutent les tâches quotidiennes qui sont nécessaires
-        pour qu’elle continue de fonctionner. Ces comités sont composés de
-        membres de la communauté WCA, y compris des Délégués WCA et des
-        compétiteurs. Chaque équipe a un Leader, dont le rôle est d’assurer le
-        bon fonctionnement de l’équipe et de guider les autres membres. Les
-        conseils sont un type particulier d’équipe qui joue un rôle consultatif
-        auprès du conseil d’administration de la WCA et sont composés de membres
-        de la communauté, et non de membres du Staff de la WCA. Lorsqu’il y a
-        des ouvertures de poste pour les comités, équipes ou conseils,
-        l’information sur la façon de postuler est affichée sur la première
-        page.
+        l'organisation et effectuent les tâches quotidiennes nécessaires à son
+        fonctionnement. Ces comités sont composés de membres de la communauté de
+        la WCA, y compris des délégués de la WCA et des compétiteurs. Chaque
+        équipe a un responsable, dont le rôle est d'assurer le bon
+        fonctionnement de l'équipe et de guider les autres membres de l'équipe.
+        Lorsque des postes sont à pourvoir au sein d'une équipe ou d'un comité,
+        les informations concernant les modalités de candidature sont affichées
+        sur la page d'accueil.
       #original_hash: b37456c
       contact_button: Contact
       #original_hash: ae7928f
@@ -1425,6 +1428,8 @@ fr:
         wfc: Comité financier de la WCA (WFC)
         #original_hash: 2035811
         wmt: Équipe marketing de la WCA (WMT)
+        #original_hash: c90653c
+        wmct: Équipe des championnats majeurs de la WCA
         #original_hash: 8f32116
         wqac: Comité d'assurance qualité de la WCA (WQAC)
         #original_hash: 3da1e85
@@ -1438,31 +1443,31 @@ fr:
         #original_hash: 78949a7
         wapc: Comité d'appels de la WCA
       groups_description:
-        #original_hash: 5b1aade
+        #original_hash: d62001b
         wat: >-
-          L'équipe des archives de la WCA (WAT) est responsable de la gestion du
-          développement et de la maintenance des archives historiques de la WCA.
-          Elle documente les principaux événements du speedcubing et les étapes
-          importantes de la WCA à présenter dans le cadre d’un calendrier plus
-          large, afin de préserver l’héritage de la WCA dans le speedcubing.
-        #original_hash: 50fd091
+          L'équipe d'archivage de la WCA (WAT) gère le développement et la
+          maintenance des archives historiques de la WCA. Elle documente les
+          événements clés du speedcubing et les étapes importantes de la WCA
+          pour les présenter dans le cadre d'une chronologie plus large de la
+          WCA, afin de préserver l'héritage de la WCA dans le domaine du
+          speedcubing.
+        #original_hash: 7803faf
         wct: >-
-          L’équipe de communication de la WCA (WCT) a pour rôle de superviser et
-          de soutenir les communications de la WCA avec la communauté et le
-          grand public. La communication de la WCA devrait contribuer aux
-          objectifs de la WCA et soutenir une culture positive générale de
-          convivialité, de transparence, d’inclusion, d’ouverture et de
-          réactivité.
-        #original_hash: 3e5570f
+          L'équipe de communication de la WCA (WCT) supervise et soutient la
+          communication de la WCA avec la communauté et le grand public. La
+          communication de la WCA doit contribuer aux objectifs de la WCA et
+          soutenir une culture générale positive de convivialité, de
+          transparence, d'inclusion, d'ouverture et de réactivité.
+        #original_hash: bd69012
         wcat: >-
-          L’équipe des annonces de compétitions de la WCA (WCAT) a pour rôle
-          d’approuver et d’annoncer les compétitions WCA soumises par les
-          Délégués et de s’assurer que ces annonces respectent les normes de
-          qualité de la WCA. Cette équipe est également responsable de maintenir
-          un protocole de soumission de compétitions approprié à partir de
-          documents tels que la politique sur les exigences de compétitions de
-          la WCA. Le WCAT n’est PAS responsable de l’organisation et de la
-          délégation des compétitions individuelles.
+          L'équipe d'annonce des compétitions de la WCA (WCAT) approuve et
+          annonce les compétitions de la WCA soumises par les délégués de la
+          WCA, et s'assure que ces annonces respectent les standards de qualité
+          de la WCA. Cette équipe est également responsable du maintien d'un
+          protocole de soumission de compétition approprié à partir de documents
+          tels que la politique d'exigences de compétition de la WCA. Le WCAT
+          n'est PAS responsable de l'organisation et de la délégation des
+          compétitions individuelles.
         #original_hash: 5007698
         wic: >-
           Le Comité d’intégrité de la WCA (WIC) effectue des enquêtes
@@ -1471,63 +1476,70 @@ fr:
           en ligne de la WCA. Ces incidents sont des violations présumées de
           l’esprit, du code de conduite, du code de déontologie et/ou du
           règlement de la WCA.
-        #original_hash: 889dd90
+        #original_hash: be491ec
         weat: >-
-          Cette équipe est responsable de l’exécution des tâches administratives
-          du conseil d’administration de la WCA.
-        #original_hash: 43e4e33
+          L'équipe des assistants exécutifs de la WCA (WEAT) s'occupe des tâches
+          administratives du Conseil d'administration de la WCA.
+        #original_hash: fc67562
         wfc: >-
-          Ce comité est chargé de gérer les finances générales de la WCA, y
-          compris la budgétisation, les rapports, l’analyse, la tenue de comptes
-          et les déclarations fiscales. Il gère également la plus grande source
-          de revenus de la WCA, le système de dues, ainsi que divers programmes
-          de financement qui fournissent un soutien aux communautés locales à
-          différents stades de développement, comme le financement des
-          déplacements, le financement de l’équipement et le soutien aux
-          organisations régionales.
-        #original_hash: f2a0140
+          Le Comité Financier de la WCA (WFC) gère l'ensemble des finances de la
+          WCA, y compris la budgétisation, les rapports, l'analyse, la
+          comptabilité et les déclarations d'impôts. Il gère également la plus
+          grande source de revenus de la WCA, le système de cotisations de la
+          WCA, ainsi que divers programmes de financement qui apportent un
+          soutien aux communautés locales à différents stades de développement,
+          y compris le financement des voyages, le financement de l'équipement
+          et le soutien aux organisations régionales.
+        #original_hash: 88a00fa
         wmt: >-
-          Cette équipe est responsable du développement et de la gestion de la
-          marque WCA, de la recherche de sponsors, du soutien à la distribution
-          du matériel de compétition WCA et de la commercialisation des
-          merchandising WCA.
-        #original_hash: 0171b3b
+          L'équipe marketing de la WCA (WMT) gère la marque WCA, la recherche de
+          sponsors et la commercialisation des marchandises de la WCA.
+        #original_hash: fcaa701
+        wmct: >-
+          L'équipe des grands championnats de la WCA (WMCT) supervise la
+          coordination et la promotion des championnats continentaux et mondiaux
+          de la WCA en développant des lignes directrices et des plans
+          stratégiques, en gérant la sélection des villes hôtes, en soutenant
+          les équipes organisatrices et en garantissant des expériences de
+          championnat cohérentes.
+        #original_hash: 010e628
         wqac: >-
-          Ce comité a pour rôle de soutenir et de promouvoir l’amélioration
-          continue de la qualité au sein de la WCA, ainsi que l’application à
-          l’échelle mondiale de normes de qualité pour assurer une qualité
-          élevée constante des processus, du Staff de la WCA, des organisations
-          régionales, des organisateurs de compétitions et du staff de la
-          compétition.
-        #original_hash: a1260bb
+          Le comité d'assurance qualité de la WCA (WQAC) promeut l'amélioration
+          continue de la qualité au sein de la WCA, ainsi que l'application
+          mondiale de normes de qualité afin de garantir une qualité élevée et
+          constante des processus, des bénévoles de la WCA, des organisations
+          régionales, des organisateurs de compétitions et des bénévoles des
+          compétitions.
+        #original_hash: 355babe
         wrc: >-
-          Le comité réglementaire de la WCA (WRC) s’occupe de toutes les
-          questions liées à l’application, à l’amélioration et à l’élaboration
-          du règlement de la WCA. Il soutient les Délégués de la WCA sur tout
-          type de questions de procédure survenant lors des compétitions et
-          prendr des décisions sur les incidents non résolus ou non
-          spécifiquement couverts par le règlement.
-        #original_hash: 7bc588b
+          Le comité des règlements de la WCA (WRC) s'occupe de toutes les
+          questions liées à l'application, à l'amélioration et au développement
+          des règlements de la WCA. Elle soutient les délégués de la WCA sur
+          toutes les questions de procédure qui se produisent lors des
+          compétitions et prend des décisions sur les incidents non résolus et
+          non découverts.
+        #original_hash: 7ca3e6f
         wrt: >-
-          L'équipe de résultats de la WCA (WRT) est responsable de la gestion de
-          toutes les données dans les bases de données de la WCA, surtout les
-          résultats des compétitions et les données sur les personnes.
-        #original_hash: ec961e4
+          L'équipe des résultats de la WCA (WRT) gère toutes les données des
+          bases de données de la WCA, y compris les résultats des compétitions
+          et les données relatives aux personnes.
+        #original_hash: f905744
         wst: >-
-          Cette équipe est responsable de la gestion des logiciels de la WCA
-          (site Web, mélanges, workbooks, outils d’administration).
-        #original_hash: 8f888d6
+          L'équipe logicielle de la WCA (WST) gère les logiciels de la WCA (site
+          web, générateur de mélanges, outils de travail, outils
+          d'administration).
+        #original_hash: 638652c
         wsot: >-
-          Cette équipe a pour rôle de superviser et de soutenir la
-          reconnaissance de la WCA en tant qu’organisation sportive
+          L'équipe de l'organisation sportive de la WCA (WSOT) supervise et
+          soutient la reconnaissance de la WCA en tant qu'organisation sportive
           internationale.
-        #original_hash: 9f45bfa
+        #original_hash: 30d6048
         wapc: >-
-          Le Comité d’appel de la WCA (WAPC) est responsable de l’examen et du
-          règlement des appels concernant les décisions prises par d’autres
-          membres de la WCA. La WAPC offre un processus d’examen indépendant et
-          impartial pour s’assurer que les décisions sont justes, raisonnables
-          et conformes aux politiques et règlements de la WCA.
+          Le Comité d'appel de la WCA (WAC) examine et résout les appels
+          concernant les décisions prises par d'autres volontaires de la WCA. Le
+          WAC fournit un processus de révision indépendant et impartial pour
+          s'assurer que les décisions sont justes, raisonnables et conformes aux
+          politiques et règlements de la WCA.
     contacts:
       #original_hash: 4ef2aad
       title: Formulaire de contact WCA
@@ -1540,6 +1552,12 @@ fr:
         href="/teams-committees-councils">cette page</a>.
       #original_hash: ea20be0
       success_message: E-mail envoyé - nous vous répondrons sous peu.
+      #original_hash: 8fa6b95
+      prefilled: >-
+        Pour mettre à jour votre inscription, vous devez contacter les
+        organisateurs de la compétition. Nous avons pré-rempli le formulaire de
+        contact avec les modifications souhaitées - veuillez soumettre le
+        formulaire.
       form:
         user_data:
           name:
@@ -1552,11 +1570,12 @@ fr:
           #original_hash: 54f0036
           label: Qui souhaitez-vous contacter ?
           competition:
-            #original_hash: baa2425
+            #original_hash: 5a280ab
             label: >-
               Contacter les organisateur·rice·s/Délégué·e·s d’une compétition
               (pour poser une question concernant cette compétition en
-              particulier)
+              particulier, y compris sur les résultats qui n'ont pas encore été
+              publiés sur le site web de la WCA)
           wct:
             #original_hash: b73e465
             label: >-
@@ -1564,15 +1583,17 @@ fr:
               des éléments comme l’ID/le profil WCA, l’organisation de
               compétitions, les règles de la compétition, les médias, etc.)
           wrt:
-            #original_hash: 0f6b96b
+            #original_hash: 4dd66f7
             label: >-
-              Contacter l'équipe de résultats de la WCA (pour toute chose
-              relative aux résultats d'une compétition)
+              Contacter l'équipe de résultats de la WCA (pour tout ce qui
+              concerne les résultats ou les données de profil sur le site web de
+              la WCA)
           wst:
-            #original_hash: 1d74033
+            #original_hash: 2be6d53
             label: >-
-              Contacter l'équipe logicielle de la WCA (pour signaler des bugs ou
-              toute question relative à l'API)
+              Contacter l'équipe logicielle de la WCA (pour signaler des
+              problèmes avec le site web de la WCA ou pour des questions
+              relatives aux logiciels)
         competition:
           competition:
             #original_hash: 1917f4f
@@ -1593,6 +1614,9 @@ fr:
               label: >-
                 Modifier les données de mon profil (nom, pays, genre ou date de
                 naissance)
+            edit_others_profile:
+              #original_hash: d08e8eb
+              label: Modifier les données du profil d'une autre personne
             report_result_issue:
               #original_hash: 2edbb52
               label: Signaler un problème dans un résultat
@@ -1639,8 +1663,53 @@ fr:
         captcha:
           #original_hash: 58c1271
           validation_error: Merci de vérifier que vous n'êtes pas un robot.
+        #original_hash: bc98198
+        next_button: Suivant
         #original_hash: 2dacf65
         submit_button: Envoyer
+    contact_edit_profile:
+      #original_hash: 460577c
+      title: Formulaire de modification du profil
+      #original_hash: f01c4c7
+      not_logged_in_error: >-
+        Il semblerait que vous ne soyez pas connecté. Veuillez vous connecter
+        pour modifier votre profil. Pour toute autre question, veuillez <a
+        href="https://www.worldcubeassociation.org/contact?contactRecipient=wrt">nous
+        contacter</a>.
+      #original_hash: 0afb595
+      no_profile_error: >-
+        Il semblerait que vous n'ayez pas encore de profil WCA car vous n'avez
+        participé à aucune compétition. Pour toute autre question, veuillez <a
+        href="https://www.worldcubeassociation.org/contact?contactRecipient=wrt">nous
+        contacter</a>.
+      #original_hash: 43f15fd
+      no_permission_error: >-
+        Vous n'avez pas la permission de demander la modification du profil
+        d'autres personnes.
+      form:
+        contact_email:
+          #original_hash: 3142970
+          label: Email de contact
+        wca_id:
+          #original_hash: 6344c9e
+          label: Saisir l'identifiant WCA
+        wca_id_search:
+          #original_hash: fbba19d
+          label: Recherchez l'identifiant WCA que vous souhaitez modifier.
+        edit_reason:
+          #original_hash: fdfcccf
+          label: Raison du changement
+        proof_attach:
+          #original_hash: a9645b1
+          label: Joindre une preuve
+        submit_edit_request_button:
+          #original_hash: ab529a9
+          label: Soumettre une demande de modification
+        captcha:
+          #original_hash: 58c1271
+          validation_error: Veuillez vérifier que vous n'êtes pas un robot.
+      #original_hash: 126541e
+      success_message: Demande soumise - nous vous contacterons bientôt.
   homepage:
     #original_hash: 824d76b
     learn_more: En savoir plus
@@ -1669,13 +1738,13 @@ fr:
         consulter les résultats ? Direction %{wca_live_link} !
     merchandise:
       #original_hash: 698cfc8
-      title: Merchandising
+      title: Produits Dérivés
       #original_hash: 6403f2b
       ad_new: Nouveau
       #original_hash: 9ad68ce
       text_html: >-
-        Allez jeter un œil à notre nouveau merchandising incluant une sélection
-        de vêtements (t-shirts, sweats à capuche...)
+        Allez jeter un œil à nos nouveaux produits dérivés incluant une
+        sélection de vêtements (t-shirts, sweats à capuche...)
       #original_hash: b0fc6c4
       link_title: Lien vers la boutique
     records:
@@ -1906,6 +1975,8 @@ fr:
       new: 'Nouvelle miniature :'
       #original_hash: efc007a
       save: Sauvegarder
+      #original_hash: 44c57ab
+      reset: Réinitialiser
     edit:
       #original_hash: 9239ee2
       general: Général
@@ -1933,12 +2004,16 @@ fr:
       confirm_new_email: >-
         Si vous changez votre adresse e-mail, vous devrez la confirmer avant
         qu'elle puisse être effective.
-      #original_hash: 8a770cf
+      #original_hash: ff43ee2
       pending_mail_confirmation: >-
-        Ce compte est en attente de confirmation de la nouvelle adresse e-mail
+        Ce compte est en attente de confirmation de la nouvelle adresse email
         %{email}.
       #original_hash: 0340b0b
       pending_avatar_confirmation: Ce compte est en attente de confirmation d'une nouvelle photo de profil.
+      #original_hash: 81fa5f9
+      pending_avatar_edit_action: 'Cliquez ici si vous souhaitez l''éditer à la place :'
+      #original_hash: 73cebb8
+      pending_avatar_edit_warning: Modification de la photo de profil en attente !
       #original_hash: 7b06f03
       pending_claim_confirmation_html: >-
         Ce compte est en attente de %{delegate} pour confirmer l'ID WCA
@@ -1979,10 +2054,10 @@ fr:
       guidelines_confirmation: >-
         Je confirme que ma photo de profil est conforme à toutes les
         recommandations pour les photos de profil.
-      #original_hash: d677ceb
+      #original_hash: 9a85f5e
       confirm_guidelines: >-
-        Merci de bien lire les recommandations pour les photos de profil et de
-        soumettre une image valide.
+        Veillez à lire les directives relatives aux avatars et à soumettre une
+        image valide.
       #original_hash: efc007a
       save: Sauvegarder
       #original_hash: c3cd636
@@ -2006,39 +2081,40 @@ fr:
           réelles.
         #original_hash: b12d293
         '2': Vous devez utiliser une photo récente.
-        #original_hash: de9b742
+        #original_hash: 8165cf0
         '3': >-
-          S'il y a plus d'une personne sur la photo, il devrait être facile de
-          vous identifier.
+          S'il y a plus d'une personne dans la photo de profil, il doit être
+          clair laquelle vous êtes.
         #original_hash: 4083c00
         '4': >-
           Votre tête, mais pas nécessairement tout votre visage, devrait être
           visible.
-        #original_hash: 7c0aab3
+        #original_hash: 14c72b2
         '5': >-
-          Il ne devrait pas y avoir de textes, filtres ou bordures appliqués sur
-          la photo.
-        #original_hash: cc5f23a
-        '6': La photo doit être soumise avec la bonne orientation.
+          La photo de profil ne doit pas comporter de texte superposé,
+          d'autocollants ou de filtres non naturels, y compris des bordures.
+        #original_hash: 7f9c9c6
+        '6': La photo de profil doit être présenté dans le bon sens.
         #original_hash: 1a18831
         '7': >-
           La photo de profil ne doit pas contenir de contenu offensant (ex :
           gestes offensants).
       staff_avatar_guidelines:
-        #original_hash: 5d5a47a
+        #original_hash: f14a1fd
         title: >-
-          Recommandations additionnelles pour les membres du Staff et les
-          Apprentis Délégués :
+          Lignes directrices supplémentaires pour les bénévoles et les délégués
+          stagiaires :
         paragraphs:
           #original_hash: ff6d2e8
           '1': >-
             La photo de profil doit vous représenter, de la même manière dont
             vous apparaîtriez à une compétition.
-          #original_hash: 64ded69
+          #original_hash: f1f3854
           '2': >-
-            La photo de profil doit être cadrée et ajustée de manière à ce que
-            n'importe quel compétiteur ou spectateur à une compétition puisse
-            l'utiliser pour vous identifier clairement.
+            La photo de profil doit être cadré, recadré, incliné et éclairé de
+            manière à ce que tout compétiteur ou spectateur d'une compétition
+            puisse l'utiliser pour vous identifier sans ambiguïté sur le lieu de
+            la compétition.
           #original_hash: 13fab02
           '3': >-
             La miniature de la photo de profil n'est qu'une partie de la photo
@@ -2046,20 +2122,20 @@ fr:
             La miniature doit être ajustée de manière à ce que vous puissiez
             être reconnu grâce à elle, et doit donc contenir votre visage.
       sensitive:
-        #original_hash: 267ac87
+        #original_hash: 3f0a787
         info: >-
-          Cette section vous permet d'éditer des données sensibles, pour pouvoir
-          y accéder merci de confirmer votre identité ci-dessous.
+          Cette section vous permet de modifier des données sensibles. Pour ce
+          faire, veuillez confirmer votre identité ci-dessous.
         #original_hash: f19af51
         success: Identité vérifiée avec succès
         #original_hash: 52ebf9c
         failure: Impossible de vérifier votre identité
         #original_hash: 4324c73
         confirm_proceed: Confirmer
-        #original_hash: d395f1f
+        #original_hash: 10a90b7
         identity_error: >-
-          Impossible d'éditer vos informations, merci de confirmer votre
-          identité ci-dessous avant de recommencer.
+          Impossible de modifier vos données. Veuillez confirmer votre identité
+          ci-dessous avant de réessayer.
     errors:
       #original_hash: 094b763
       not_found: introuvable
@@ -2110,14 +2186,12 @@ fr:
         Nous n'avons pas de nom enregistré pour cet ID WCA. Merci de contacter
         <a href='%{wrt_contact_path}' target='_blank'>l'équipe de résultats de
         la WCA (WRT)</a> (en Anglais) pour résoudre ce problème.
-      #original_hash: d02c03b
-      avatar_requires_wca_id: nécessite d'avoir un ID WCA
-      #original_hash: 8f785ea
+      #original_hash: d2f4856
       email_used_by_locked_account_html: >-
-        est déjà utilisé par un autre compte. Il a été créé automatiquement
-        lorsque vous vous êtes inscrit à une compétition sur un site externe. Si
-        vous êtes le propriétaire de cet e-mail, vous pouvez utiliser ce compte
-        après avoir réinitialisé votre mot de passe <a
+        est déjà utilisé par un autre compte. Il a été créé automatiquement à la
+        suite de votre inscription à une compétition par l'intermédiaire d'un
+        service externe. Si vous êtes le propriétaire de cet e-mail, vous pouvez
+        utiliser le compte après avoir réinitialisé votre mot de passe <a
         href='/users/password/new'>ici</a>.
       #original_hash: 50897d4
       must_match_person: doit correspondre aux détails de la personne correspondant à l'ID WCA
@@ -2175,6 +2249,11 @@ fr:
       translators: Traducteur·rice·s
   registrations:
     errors:
+      #original_hash: 51c7156
+      edit_deadline_passed: >-
+        La date limite de modification des inscriptions est passée ! Les
+        modifications ne doivent être effectuées que dans des circonstances
+        exceptionnelles.
       #original_hash: 44ab952
       need_name: Nom obligatoire
       #original_hash: 6f64c57
@@ -2183,8 +2262,6 @@ fr:
       need_dob: Date de naissance obligatoire
       #original_hash: aab7355
       need_country: Nécessite une région
-      #original_hash: e0bb243
-      cannot_be_deleted_and_accepted: Une inscription ne peut pas être à la fois supprimée et acceptée.
       #original_hash: 820bcf7
       must_register: Vous devez vous inscrire au moins à une épreuve.
       #original_hash: ef9b4ad
@@ -2207,6 +2284,10 @@ fr:
       can_only_register_for_qualified_events: >-
         Vous ne pouvez pas vous inscrire pour des épreuves pour lesquelles vous
         ne vous qualifiez pas.
+      #original_hash: 93ed20e
+      cannot_change_events_when_cancelling: >-
+        Vous ne pouvez pas modifier vos événements lors de l'annulation de votre
+        inscription.
       #original_hash: 4025877
       cannot_register_without_comment: >-
         Vous devez faire un commentaire. Merci de lire les conditions
@@ -2232,31 +2313,8 @@ fr:
     flash:
       #original_hash: da7ec53
       not_using_wca: Cette compétition n'utilise pas les inscriptions WCA.
-      #original_hash: d528030
-      accepted_and_mailed:
-        zero: Pas d'inscription acceptée.
-        one: Inscription acceptée ! E-mail de notification envoyé.
-        other: Inscriptions acceptées ! E-mails de notification envoyés.
-      #original_hash: 42ea8de
-      rejected_and_mailed:
-        zero: Pas d'inscription déplacée
-        one: Inscription déplacée en liste d'attente
-        other: Inscriptions déplacées en liste d'attente
-      #original_hash: a360b31
-      deleted_and_mailed:
-        zero: Pas d'inscription supprimée
-        one: Inscription supprimée
-        other: Inscriptions supprimées
-      #original_hash: c3aa289
-      single_deletion_and_mail: 'Inscription supprimée et e-mail envoyé à %{mail}'
-      #original_hash: d8f067f
-      cannot_delete: Vous ne pouvez pas supprimer votre inscription.
       #original_hash: 82b3899
       updated: Inscription mise à jour
-      #original_hash: 856484a
-      failed: Impossible de mettre à jour l'inscription
-      #original_hash: 016b4ae
-      deleted: 'Votre inscription à %{comp} a été supprimée avec succès'
       #original_hash: 7707307
       registered: >-
         Formulaire d’inscription envoyé - vérifiez que vous avez suivi toutes
@@ -2302,20 +2360,19 @@ fr:
           toujours, vous pouvez vérifier le statut de votre inscription %{here}.
         #original_hash: 1852cbf
         see_you_soon: 'À bientôt pour le %{comp_name} !'
-      pending:
-        #original_hash: 8d26297
-        mail_subject: 'Inscription Mise en Liste d''Attente : %{comp_name}'
-        #original_hash: 6fd0a8e
-        moved_html: >-
-          Votre inscription pour la compétition %{comp_name} a été placée sur
-          liste d'attente. Voici une liste de raisons possibles :
-        causes:
-          #original_hash: eadfc0d
-          accepted: Votre inscription a été accidentellement acceptée
-          #original_hash: 2ac6d84
-          withdrawal: Vous avez demandé a être retiré·e
+      waiting_list:
+        #original_hash: 54c2106
+        mail_subject: Vous êtes sur la liste d'attente
+        #original_hash: 2a0c44f
+        waitlisted_html: >-
+          La compétition est pleine, mais vous avez été placé sur une liste
+          d'attente, et vous recevrez un email si suffisamment de places se
+          libèrent pour que vous puissiez y participer. Vérifiez votre position
+          sur la liste d'attente %{here}.
         #original_hash: 8f7358f
-        email_if_error: 'Si vous pensez que c''est une erreur, merci de répondre à cet e-mail.'
+        email_if_error: >-
+          Si vous pensez qu'il s'agit d'une erreur, veuillez répondre à cet
+          e-mail.
       deleted:
         #original_hash: 8cbc6c0
         mail_subject: 'Inscription Supprimée : %{comp_name}'
@@ -2323,6 +2380,10 @@ fr:
         message_html: >-
           Votre inscription à la compétition %{comp_name} a été supprimée. Voici
           une liste de raisons possibles :
+        #original_hash: 8f7358f
+        email_if_error: >-
+          Si vous pensez qu'il s'agit d'une erreur, veuillez répondre à cet
+          e-mail.
         causes:
           #original_hash: 978944c
           missing_info: Vous n'avez pas indiqué tous les détails demandés
@@ -2335,10 +2396,21 @@ fr:
           registrations_full: >-
             La limite du nombre de compétiteurs a été atteinte et il n'y a plus
             de place disponible
-          #original_hash: 0d4cce9
-          multiple_registrations: Vous vous êtes inscrits plusieurs fois
+          #original_hash: 238f4ff
+          multiple_registrations: Vous vous êtes inscrit(e) deux fois ou plus
           #original_hash: 70b1e2c
           competition_canceled: La compétition a été annulée
+      formerly_banned:
+        #original_hash: f2c70a9
+        ban_count: >-
+          Le compétiteur a été banni %{ban_count} fois(s), avec les champs
+          d'application et les motifs suivants :
+        #original_hash: 67e08fe
+        scope_and_reason: 'Portée : %{ban_scope}, Raison : %{ban_reason}'
+        #original_hash: 2a246da
+        wic_message: >-
+          Si vous avez des questions concernant les antécédents disciplinaires
+          du compétiteur, veuillez contacter le WIC en répondant à ce courriel.
     list:
       #original_hash: 8b7631c
       title: 'Inscriptions pour %{comp}'
@@ -2353,18 +2425,6 @@ fr:
       export_csv: Exporter en CSV
       #original_hash: 84add5b
       email: Adresse e-mail
-      #original_hash: 7b2c7f1
-      approve: Accepter
-      #original_hash: 2b03b59
-      reject: Rejeter
-      #original_hash: f6fdbe4
-      delete: Supprimer
-      #original_hash: 92d40dc
-      waiting_list: Liste d'attente
-      #original_hash: 06f7d1a
-      approved_registrations: Inscriptions acceptées
-      #original_hash: bff04e8
-      deleted_registrations: Inscriptions supprimées
       #original_hash: e86b1e1
       non_competing: Inscriptions de non compétiteurs
       #original_hash: ac5d958
@@ -2380,25 +2440,15 @@ fr:
       payment_completed_on: 'Paiement terminé le : %{date}'
       #original_hash: 3141a14
       series_registrations: Inscriptions à une série
-      #original_hash: 845bb47
-      series_registrations_hint_html: "Astuce\_: Les inscriptions à une série s’affichent sous la forme <i>%{description}</i>"
       #original_hash: b25928c
       total: Total
-      #original_hash: df036fe
-      n_events: Nombre d'épreuves
     new_registration:
       #original_hash: 8b9f726
       title: 'S''inscrire pour %{comp}'
-    #original_hash: 7cae988
-    registered_with_account_html: >-
-      Cette personne s'est inscrite avec un compte. Vous pouvez éditer ses
-      données personnelles %{here}.
     #original_hash: ada2e9e
     sign_in: Connectez-vous
     #original_hash: 5d45a00
     profile: profil
-    #original_hash: 801b3e9
-    panel_title: Détails de l'inscription
     #original_hash: c0063c3
     register: Je m'inscris !
     #original_hash: f484f15
@@ -2407,12 +2457,10 @@ fr:
     refund_confirmation: Êtes-vous sûr·e de vouloir rembourser ce paiement ?
     #original_hash: a9af643
     update: Mettre à jour l'inscription
-    #original_hash: f6fdbe4
-    delete: Supprimer
     #original_hash: b72119a
     delete_confirm: Êtes-vous sûr·e de vouloir supprimer votre inscription ?
-    #original_hash: cfc4865
-    delete_registration: Supprimer l'inscription.
+    #original_hash: bbcc3dc
+    delete_registration: Supprimer l'inscription
     #original_hash: e9ddc6e
     will_open_html: 'Les inscriptions ouvriront dans <strong>%{days}</strong> le %{time}.'
     #original_hash: 34eb009
@@ -2433,8 +2481,6 @@ fr:
     please_sign_in_html: >-
       %{sign_in} pour vous inscrire à %{comp}. Si vous n'avez pas de compte WCA,
       vous pouvez en créer un %{here}.
-    #original_hash: 89b4e7f
-    greeting: 'Bonjour, %{name} !'
     #original_hash: 322f646
     please_fix_profile_html: >-
       Pour pouvoir vous inscrire à %{comp}, vous devez d'abord corriger les
@@ -2451,73 +2497,47 @@ fr:
       %{competitor_limit} et elle est peut-être atteinte. Si vous vous
       inscrivez, votre inscription sera placée sur une liste d’attente. Elle ne
       sera pas approuvée avant qu'une place ne se libère.
-    #original_hash: 855ca9c
-    can_register: 'Vous pouvez vous inscrire à %{comp} ci-dessous.'
-    #original_hash: 4167ed7
-    check_registration_information: >-
-      Merci de vérifier les informations à propos de l'inscription, afin de
-      déterminer si vous devez faire quelque chose d'autre, comme payer les
-      frais d'inscriptions si la compétition est payante.
-    #original_hash: 88ac7c3
-    have_registered: >-
-      Vous avez soumis votre inscription à %{comp}. Vous pouvez voir les détails
-      de votre inscription ci-dessous.
-    #original_hash: 3c9141f
-    contact_organizer: >-
-      Contactez l'équipe organisatrice si vous souhaitez effectuer des
-      changements.
-    #original_hash: 59354fd
-    waiting_list: >-
-      Votre inscription est en attente. Pour qu'elle soit acceptée et si la
-      compétition est payante, vous devez peut être payer les frais
-      d'inscriptions. Les détails concernant l'inscription sont sur le site
-      internet de la compétition.
-    #original_hash: 58b1a3c
-    accepted: Votre inscription a été effectuée !
     #original_hash: bcd7d70
     entry_fees_fully_paid: 'Vous avez payé %{paid}, ce qui couvre entièrement les frais d''inscription.'
     #original_hash: 2e5d1b9
     will_pay_here: Vous les paierez ici après avoir soumis votre inscription
-    #original_hash: b7ef562
+    #original_hash: 86877d4
     wont_pay_here: >-
-      Merci de consulter les informations de la compétition pour les
-      instructions concernant le paiement des frais d'inscription
-    #original_hash: be4b39d
-    not_qualified: Pas qualifié
+      Veuillez consulter les informations relatives à la compétition pour
+      connaître les modalités de paiement.
     refund_form:
       hints:
-        #original_hash: d97186d
+        #original_hash: 38c904c
         refund_amount: >-
-          Le montant à rembourser au compétiteur peut être n'importe quel
-          montant inférieur ou égal au montant déjà payé.
+          Le montant à rembourser au compétiteur. Il peut s'agir de n'importe
+          quelle valeur dans la limite du montant déjà payé.
       labels:
         #original_hash: 1cc5991
         refund_amount: Montant à rembourser
     payment_form:
-      #original_hash: 4de825f
-      title: Frais d'inscription
-      #original_hash: d1569e6
+      #original_hash: 8897f02
       payment_successful: >-
-        Votre paiement a été effectué avec succès, votre inscription devrait
+        Votre paiement a été effectué avec succès et votre inscription devrait
         apparaître comme payée ci-dessous.
       #original_hash: 92dde77
       payment_processing: >-
         Votre paiement a été confirmé, mais la transaction est toujours en
         attente.
+      #original_hash: a8f253d
+      payment_partial: >-
+        Votre paiement a été confirmé, mais il ne couvre pas la totalité du
+        montant. Veuillez également payer le montant restant.
       #original_hash: 62d7351
       button_text: Payer maintenant !
       hints:
         #original_hash: bf3a39e
         donation: Don facultatif à destination de l'équipe organisatrice
-        #original_hash: f7fa263
+        #original_hash: 737c228
         payment_button: >-
-          Vos informations de paiement ne transitent jamais sur via site
-          internet de la WCA. Elles sont envoyées en toute sécurité à Stripe,
-          qui gère le processus de paiement et nous renvoie seulement les
-          informations nécessaires.
+          Vos informations de paiement ne parviennent jamais au site web de la
+          WCA. Elles sont envoyées en toute sécurité à Stripe, qui s'occupe du
+          processus de paiement et nous retourne le résultat.
       labels:
-        #original_hash: 4de825f
-        entry_fees: Frais d'inscription
         #original_hash: dc9d458
         fees_paid: Payé
         #original_hash: cc632b5
@@ -2530,8 +2550,6 @@ fr:
           uniquement à l’équipe organisatrice
         #original_hash: 4930c06
         payment_information: Informations de paiement
-        #original_hash: de0fc95
-        payment_button: Payer vos frais avec Stripe
         #original_hash: f94d00f
         ajax_error: Erreur du serveur de la WCA
         #original_hash: d9185e8
@@ -2539,50 +2557,59 @@ fr:
         #original_hash: 97f7359
         subtotal: Sous-total
       alerts:
-        #original_hash: a34940e
-        not_a_number: Merci d'entrer un montant valide.
         #original_hash: 707b9ca
         amount_too_low: >-
           Le montant total doit être supérieur ou égal au montant de
           l'inscription à payer.
-        #original_hash: 5cf6ce2
+        #original_hash: b245028
         amount_rather_high: >-
           Vous êtes sur le point de payer au moins le double du montant requis
-          pour votre inscription. Veuillez confirmer le paiement en appuyant sur
-          OK.
+          pour que votre inscription soit prise en compte.
       errors:
+        #original_hash: c80ec45
+        registration_closed: L'inscription est terminée - aucun autre paiement n'est autorisé.
         #original_hash: 166d48c
         already_paid: >-
           Le paiement n'a pas été effectué car les frais d'inscription sont déjà
           payés.
         #original_hash: f10c80c
         not_allowed: Vous ne pouvez pas payer pour cette inscription.
-        #original_hash: a073600
-        stripe_failed: Merci de vérifier la transaction Stripe
-        #original_hash: d571a4e
-        paypal_failed: Veuillez vérifier la commande PayPal.
+        #original_hash: 967eaed
+        cpi_disconnected: >-
+          Nous avons essayé de confirmer un paiement mais l'intégration des
+          paiements a été désactivée. Veuillez contacter les organisateurs de la
+          compétition.
+        generic:
+          #original_hash: 9896987
+          failed: 'Veuillez vérifier la transaction %{provider}.'
+          #original_hash: 715f918
+          not_found: '%{provider} a renvoyé un ID de transaction introuvable.'
+          #original_hash: d56a75d
+          intent_not_found: >-
+            %{provider} a renvoyé un ID de transaction pour lequel nous n'avons
+            pas de tentative de paiement dans nos dossiers.
+          #original_hash: 187a402
+          remote_not_found: >-
+            %{provider} n'a pas réussi à fournir les détails de l'API pour
+            l'identifiant de transaction qu'il a déclaré.
+          #original_hash: 3e7e6fc
+          secret_invalid: >-
+            %{provider} a renvoyé un secret de transaction qui ne correspond pas
+            à nos dossiers.
         #original_hash: df1a70e
         paypal_canceled: >-
           PayPal a signalé que la commande a été annulée manuellement. Veuillez
           réessayer.
-        #original_hash: a32e40f
-        stripe_not_found: Stripe a renvoyé un ID de transaction introuvable.
-        #original_hash: aaa8ab7
-        stripe_secret_invalid: >-
-          Stripe a renvoyé une clé de transaction qui ne correspond pas à nos
-          données.
-        #original_hash: f808249
-        stripe_not_an_intent: >-
-          Stripe a rapporté un ID de transaction qui n’est pas en fait une
-          intention de paiement.
         #original_hash: 8d1a199
         payment_reset: Le paiement a été rejeté par Stripe.
         #original_hash: bcf6a93
         payment_pending: Le paiement n'a pas encore été complété.
-        #original_hash: c3f8d65
-        registration_unreachable: >-
-          Il y a eu un problème avec le service d’inscription, veuillez
-          contacter l’équipe logicielle.
+        #original_hash: 4c5ef13
+        payment_failed: >-
+          Le paiement n'a pas abouti. Veuillez vérifier les détails de votre
+          paiement et réessayer.
+        #original_hash: 7fb8be2
+        payment_canceled: Le paiement a été annulé et ne sera pas effectué.
     #original_hash: 4cf01a2
     preferred_events_prompt_html: >-
       Pour accélérer vos prochaines inscriptions, vous pouvez définir vos
@@ -2593,12 +2620,21 @@ fr:
       pouvez éditer %{link}.
     #original_hash: ee89a3e
     registration_requirements: 'Conditions d''inscription pour la compétition :'
+    registration_history:
+      #original_hash: 342fa25
+      acting_user: Utilisateur faisant l'action
+      #original_hash: 97c89a4
+      action: Action
+      #original_hash: 8aa57de
+      changes: Changements
+      #original_hash: cec61a5
+      title: Historique de l'inscription
     import:
       #original_hash: 5a394f3
       title: 'Importer les inscriptions pour %{comp}'
-      #original_hash: ccda564
+      #original_hash: 620f5ce
       info: >-
-        Vous pouvez importer les inscriptions plusieurs fois, les changements
+        Vous pouvez importer des inscriptions plusieurs fois. Les changements
         seront détectés et la base de données sera mise à jour en conséquence.
       #original_hash: 779b272
       registrations_file_label: Fichier des inscriptions
@@ -2668,19 +2704,20 @@ fr:
         qu'il commence par une majuscule.
       #original_hash: 1a20fae
       must_have_events: Merci d'ajouter au moins une épreuve avant de confirmer la compétition.
-      #original_hash: a3aea56
+      #original_hash: fd91320
       schedule_must_match_rounds: >-
-        Avant de confirmer la compétition, merci de vérifier que la compétition
-        a au moins un tour par épreuve et que le planning que vous avez créé
-        inclue tous les tours que vous avez déclaré.
-      #original_hash: aeb5f2a
+        Veuillez vous assurer que la compétition comporte au moins un tour par
+        épreuve et que le calendrier que vous avez créé comprend tous les tours
+        que vous avez déclarés avant de confirmer la compétition.
+      #original_hash: 4fe4dee
       advancement_condition_must_be_present_for_all_non_final_rounds: >-
-        Merci de vérifier que tous les tours qui ne sont pas des finales ont des
-        conditions d'avancement spécifiées.
-      #original_hash: f50ffd8
+        Veillez à ce que toutes les rondes non finales soient assorties d'une
+        condition d'avancement.
+      #original_hash: a00f441
       cutoff_is_greater_than_time_limit: >-
-        Le tour %{round_number} du %{event} a une cutoff supérieure à la limite
-        de temps. Merci de corriger la cutoff ou la limite de temps.
+        La ronde %{round_number} de %{event} a une cutoff supérieure à la limite
+        de temps. Veuillez vous assurer que la cutoff n'est pas supérieure à la
+        limite de temps.
       #original_hash: c1580b1
       cutoff_is_too_fast: >-
         Le tour %{round_number} de %{event} a une cutoff de moins de 5 secondes.
@@ -2700,13 +2737,13 @@ fr:
         correct.
       #original_hash: e390250
       create_success: Nouvelle compétition créée avec succès !
-      #original_hash: bc3e673
+      #original_hash: 5e1ea86
       registration_payment_info: >-
-        Cette compétition comporte des frais d’inscription mais aucun compte
-        Stripe n’est lié. Si vous utilisez Stripe via le site de la WCA,
-        n’oubliez pas de lier votre compte Stripe. Si vous utilisez un système
-        de paiement externe, n’oubliez pas d’ajouter tous les détails pertinents
-        dans les conditions d’inscription.
+        Cette compétition comporte des frais d'inscription mais aucun compte
+        Stripe n'est lié. Si vous utilisez Stripe via le site web de la WCA,
+        n'oubliez pas de lier votre compte Stripe. Si vous utilisez un système
+        de paiement externe, n'oubliez pas d'ajouter tous les détails pertinents
+        aux conditions d'inscription.
       #original_hash: ba067f0
       not_announced: >-
         Cette compétition est visible publiquement mais n'a pas encore été
@@ -2739,10 +2776,10 @@ fr:
       results_posted: Résultats postés avec succès !
       #original_hash: afe3a23
       results_preview_alert: Vous visualisez des résultats qui n'ont pas encore été postés.
-      #original_hash: 07de612
+      #original_hash: 16dd227
       upload_results: >-
-        Cette compétition est terminée, nous travaillons à mettre les résultats
-        en ligne dès que possible !
+        La compétition est terminée. Nous nous efforçons de mettre en ligne les
+        résultats dès que possible !
       #original_hash: 68dd436
       computing_auxiliary_data: >-
         Merci de patienter jusqu'à ce que le traitement des données soit
@@ -2765,13 +2802,13 @@ fr:
       registration_already_closed: >-
         La date limite pour s’inscrire est déjà passée. Veuillez la fixer à une
         date ultérieure.
-      #original_hash: 9a07b42
-      uses_v2_registrations: >-
-        Cette compétition utilise le nouveau système d’inscription. Veuillez
-        communiquer avec le WCAT si vous croyez que l’ancien système devrait
-        être utilisé.
       #original_hash: 3322400
       tooltip_registered: Vous êtes inscrit·e.
+      #original_hash: b10c8d6
+      tooltip_pending: >-
+        Votre inscription est en attente d'approbation manuelle. Veuillez vous
+        assurer que vous avez suivi toutes les instructions (par exemple, le
+        paiement) énumérées dans la page de la compétition.
       #original_hash: f2d092f
       tooltip_waiting_list: Vous êtes sur liste d'attente.
       #original_hash: f97246a
@@ -2788,8 +2825,8 @@ fr:
       not_confirmed_not_visible: Cette compétition n'est ni confirmée ni visible.
       #original_hash: 1b92d16
       championship_exists: 'Un %{championship_type} existe déjà en %{year}.'
-      #original_hash: 0644bdc
-      orga_closed_reg_success: Inscriptions fermées avec succès.
+      #original_hash: e871f03
+      orga_closed_reg_success: Fermeture des inscriptions réussie.
       #original_hash: 7f197a0
       orga_closed_reg_failure: Impossible de fermer les inscriptions.
       #original_hash: 74caf1a
@@ -3100,7 +3137,7 @@ fr:
       #original_hash: b3946b2
       sort_by_announcement: Trier par date d'annonce
       #original_hash: e63dc91
-      admin_status: Statut admin
+      admin_status: Statut administrateur
       status_flags:
         #original_hash: 6a72085
         all: Tous
@@ -3112,6 +3149,10 @@ fr:
       from_date: Du
       #original_hash: ae79ea1
       to_date: Au
+      #original_hash: 17fd5f4
+      show_filters: Afficher les filtres
+      #original_hash: 0d781a3
+      hide_filters: Masquer les filtres
       #original_hash: 5be6985
       reset_filters: Effacer les filtres
       #original_hash: 52c30f8
@@ -3149,8 +3190,6 @@ fr:
         by_announcement: >-
           Compétitions triées par date d'annonce, en commençant par la plus
           récente
-      #original_hash: 6684214
-      no_access: Vous n'avez pas accès à cette page !
       tooltips:
         hourglass:
           #original_hash: b5183e1
@@ -3168,24 +3207,22 @@ fr:
         #original_hash: 3bc8082
         recent: '%{count} derniers jours'
         registration:
-          #original_hash: 49d8169
-          opens_in: 'Les inscriptions ouvrent dans %{duration}'
-          #original_hash: 2d601fa
-          closed: 'Les inscriptions sont fermées. La compétitions commence dans %{days}'
+          #original_hash: fe28f94
+          opens_in: 'Les inscriptions ouvriront %{relativeDate}.'
+          #original_hash: f9f709e
+          closed: >-
+            Les inscriptions sont terminées. La compétition débutera
+            %{relativeDate}.
           #original_hash: 2e17db8
           open: Les inscriptions sont ouvertes !
-          #original_hash: c098975
+          #original_hash: be2118d
           full: >-
-            La limite de compétiteurs est atteinte, les nouvelles inscriptions
-            seront ajoutée à la liste d'attente
+            Limite de compétiteurs atteinte, les nouvelles inscriptions seront
+            inscrites sur la liste d'attente.
       #original_hash: 28531af
       no_more_comps: Plus aucune compétition.
       #original_hash: 8b09d74
       no_comp_found: Pas de compétition trouvée.
-      #original_hash: 7008166
-      no_comp_match: >-
-        Nous n'avons pas trouvé de compétition avec %{events} ! Essayez une
-        recherche avec moins d'épreuves.
     my_competitions_table:
       #original_hash: 5301648
       edit: Éditer
@@ -3293,7 +3330,7 @@ fr:
           #original_hash: d493e6a
           is_visible: Rendre la compétition publique
           #original_hash: e7daccb
-          uses_v_2_registrations: Utiliser le nouveau système d'inscription
+          uses_new_registration_system: Utiliser le nouveau système d'inscription
         #original_hash: 89f89c0
         competition_id: ID
         #original_hash: 709a232
@@ -3337,6 +3374,10 @@ fr:
           count: Nombre maximum de compétiteurs
           #original_hash: 4a8b6f1
           reason: Raison pour la limite au nombre de compétiteurs
+          #original_hash: e9e5b84
+          auto_close_threshold: Seuil de fermeture automatique
+          #original_hash: b1d5af4
+          newcomer_month_reserved_spots: Nombre de places à réserver aux nouveaux compétiteurs
         staff:
           #original_hash: 2e3ed8b
           staff_delegate_ids: Délégué·s WCA
@@ -3389,8 +3430,8 @@ fr:
           event_change_deadline_date: Date limite pour que les compétiteurs mettent à jour leurs épreuves
           #original_hash: 2529d04
           allow_on_the_spot: Inscriptions sur place
-          #original_hash: 3d47eca
-          allow_self_delete_after_acceptance: Annulations d'inscription
+          #original_hash: b6faf84
+          competitor_can_cancel: Quand les compétiteurs peuvent-ils annuler leur inscription ?
           #original_hash: 7e53b96
           allow_self_edits: Modifications d'inscription
           #original_hash: 3c23a67
@@ -3454,11 +3495,11 @@ fr:
           #original_hash: da39a3e
           is_visible: ''
           #original_hash: 68d3cc6
-          uses_v_2_registrations: >-
-            Si cette option est désactivée, le changement du système
-            d’enregistrement entraînera des problèmes techniques. Veuillez
-            communiquer avec le WST pour obtenir de l’aide si vous devez encore
-            modifier le système d’inscription.
+          uses_new_registration_system: >-
+            Si cette option est désactivée, le fait de changer de système
+            d'inscription entraînera des problèmes techniques. Veuillez
+            contacter WST pour obtenir de l'aide si vous avez toujours besoin de
+            modifier le système d'inscription.
         #original_hash: da39a3e
         competition_id: ''
         #original_hash: 2c812a0
@@ -3530,10 +3571,11 @@ fr:
           de remplir ces informations <b>en Anglais</b> et dans les langues que
           vos compétiteurs parlent.
         competitor_limit:
-          #original_hash: dc47c39
+          #original_hash: 945da5b
           enabled: >-
-            Bien que le règlement n'impose pas de fournir une limite au nombre
-            de compétiteurs, il est vivement recommandé de le faire.
+            Une limite de compétiteurs est requise. Seules les compétitions FMC
+            simultanées avec plusieurs emplacements peuvent ne pas avoir de
+            limite de compétiteurs.
           #original_hash: b7b599b
           count: >-
             Le nombre de compétiteurs autorisés dans cette compétition. Pour
@@ -3545,6 +3587,16 @@ fr:
           reason: >-
             Quelle est la raison pour la limite au nombre de compétiteurs ?
             Merci de l'indiquer en Anglais !
+          #original_hash: 045d250
+          auto_close_threshold: >-
+            L'inscription sera automatiquement clôturée lorsque ce nombre
+            d'inscriptions payées aura été reçu. Laisser vide pour désactiver,
+            ignorer si vous n'utilisez pas les paiements intégrés.
+          #original_hash: e1cf4fc
+          newcomer_month_reserved_spots: >-
+            Uniquement autorisé pendant le mois des nouveaux venus - les places
+            réservées ne peuvent pas être supérieures à la moitié de la limite
+            de compétiteurs.
         staff:
           #original_hash: b4d020f
           staff_delegate_ids: Délégué·s WCA pour la compétition.
@@ -3630,7 +3682,7 @@ fr:
           #original_hash: da39a3e
           allow_on_the_spot: ''
           #original_hash: da39a3e
-          allow_self_delete_after_acceptance: ''
+          competitor_can_cancel: ''
           #original_hash: da39a3e
           allow_self_edits: ''
           #original_hash: da39a3e
@@ -3716,8 +3768,8 @@ fr:
           enabled:
             #original_hash: d9c05cc
             'true': Je veux spécifier une limite au nombre de compétiteurs
-            #original_hash: 5b581b5
-            'false': Je NE VEUX PAS spécifier de limite au nombre de compétiteurs
+            #original_hash: 53397ec
+            'false': Je ne veux PAS spécifier de limite pour les compétiteurs.
         registration:
           allow_on_the_spot:
             #original_hash: 0c521ca
@@ -3733,15 +3785,13 @@ fr:
             'false': >-
               Les compétiteurs ne peuvent PAS modifier leur inscription une fois
               qu'elle a été acceptée
-          allow_self_delete_after_acceptance:
-            #original_hash: 5c2e8c1
-            'true': >-
-              Les compétiteurs peuvent supprimer leur propre inscription, même
-              après qu'elle ait été acceptée
-            #original_hash: 3b77604
-            'false': >-
-              Les compétiteurs ne peuvent PAS supprimer leur propre inscription
-              une fois qu'elle a été acceptée
+          competitor_can_cancel:
+            #original_hash: a91bcce
+            always: Toujours
+            #original_hash: b64ca70
+            not_accepted: Jusqu'à ce qu'ils soient acceptés
+            #original_hash: 4435d55
+            unpaid: Jusqu'à ce qu'ils paient
           guest_entry_status:
             #original_hash: 7e54323
             unclear: >-
@@ -3785,10 +3835,10 @@ fr:
         is_accepted: >-
           Réservez votre voyage et faites vos valises - vous avez une place à la
           compétition !
-        #original_hash: e29a4d3
+        #original_hash: 89448a8
         is_cancelled: >-
-          Votre inscription a été annulée et vous ne serez pas en compétition,
-          mais vous pouvez vous inscrire à nouveau
+          Votre inscription a été annulée et vous ne participerez pas à la
+          compétition, mais vous pouvez vous réinscrire.
         #original_hash: 2a88d10
         is_rejected: >-
           Votre inscription a été rejetée par les organisateurs. Veuillez
@@ -3808,16 +3858,50 @@ fr:
           zero: Aucune place disponible
           one: '%{count} place disponible'
           other: '%{count} places disponibles'
+        pending:
+          #original_hash: 4210670
+          title: Inscriptions en cours
+          #original_hash: 5e16c6d
+          information: >-
+            La liste des inscriptions en cours ne doit être utilisée que pour
+            les inscriptions incomplètes (par exemple, non payées). Veuillez
+            utiliser la liste d'attente si votre compétition est trop pleine
+            pour que de nouveaux compétiteurs puissent s'y inscrire.
+        waitlist:
+          #original_hash: 3907ca4
+          title: Inscriptions sur liste d'attente
+          #original_hash: de3f9d4
+          information: >-
+            Les compétiteurs sont ajoutés à la fin de la liste d'attente. Si
+            vous en ajoutez plusieurs en même temps, les compétiteurs ayant payé
+            seront ajoutés à la fin dans l'ordre où ils ont payé, suivis par les
+            autres dans l'ordre où ils se sont inscrits. Vous pouvez ajuster
+            manuellement l'ordre en mode édition si nécessaire.
+          #original_hash: a6c86ec
+          skipped_warning: >-
+            Vous avez ignoré %{count} inscription(s) sur la liste d'attente.
+            Êtes-vous sûr de vouloir approuver l'autre (les autres)
+            inscription(s) à la place ?
+        approved:
+          #original_hash: a59612c
+          title: Inscriptions approuvées
         cancelled:
-          #original_hash: e9c5a55
-          title: Inscriptions supprimées
+          #original_hash: bd69c74
+          title: Inscriptions annulées
           #original_hash: bb5b570
           information: Les compétiteurs ayant annulé peuvent se réinscrire
         rejected:
-          #original_hash: 199b7c5
+          #original_hash: 9cef5ae
           title: Inscriptions rejetées
           #original_hash: 3fd2e0c
           information: Les compétiteurs rejetés ne peuvent pas se réinscrire.
+        non_competing:
+          #original_hash: d4e453a
+          title: Inscriptions hors compétition
+          #original_hash: 2ed9c67
+          information: >-
+            Pour les non-compétiteurs à qui vous pouvez confier des tâches de
+            staff au sein du WCIF.
         payment:
           #original_hash: d6fbc7a
           refunded_status: Remboursé
@@ -3828,8 +3912,10 @@ fr:
           #original_hash: 3a16c0d
           refunded: 'Paiement remboursé le %{date}.'
         psychsheets:
-          #original_hash: f03e2d0
-          go_back: Retour
+          #original_hash: ded0a5d
+          show_me: Montrer
+          #original_hash: a23dc2b
+          rank: 'Rang : %{userPosition}'
         #original_hash: 19eabc9
         timestamp: Horodatage
         #original_hash: 5e0207a
@@ -3854,6 +3940,20 @@ fr:
         being_deleted: L'inscription est en cours de suppression...
         #original_hash: cbf13af
         update_confirm: Êtes-vous sûr·e de vouloir mettre à jour votre inscription?
+        #original_hash: 9b92912
+        update_confirm_contact: >-
+          Vous devez contacter les organisateurs pour mettre à jour votre
+          inscription. Cliquez sur Oui pour accéder au formulaire de contact.
+        #original_hash: d54056b
+        delete_confirm_contact: >-
+          Vous devez contacter les organisateurs pour supprimer votre
+          inscription. Cliquez sur Oui pour accéder au formulaire de contact.
+        #original_hash: 7fbb20c
+        update_contact_message: >-
+          Je souhaite mettre à jour mes données d'inscription comme suit :
+          %{update_params}
+        #original_hash: 8bf02a9
+        delete_contact_message: Je souhaite supprimer mon inscription
         #original_hash: 65bbb07
         no_changes: Aucun changement
         #original_hash: be4e8e2
@@ -3862,14 +3962,21 @@ fr:
         email_copy: Copier les adresses e-mails
         #original_hash: b83b663
         email_message: 'Copié dans le presse-papiers. N’oubliez pas d’utiliser le cci: !'
-        #original_hash: 71327f1
-        move_pending: Déplacer vers En attente
-        #original_hash: 9144dd6
-        move_waiting: Déplacer vers la liste d'attente
-        #original_hash: 284b24f
-        cancel: Supprimer l'inscription
-        #original_hash: df40450
-        reject: Rejeter l'inscription
+        #original_hash: beedd53
+        move_to:
+          zero: Déplacer vers
+          one: 'Déplacer %{count} vers'
+          other: 'Déplacer %{count} vers'
+        #original_hash: 96f608c
+        pending: En cours
+        #original_hash: 92d40dc
+        waitlist: Liste d'attente
+        #original_hash: 41b81eb
+        approved: Approuvée(s)
+        #original_hash: a1bf92e
+        cancelled: Annulée(s)
+        #original_hash: 27eeb7a
+        rejected: Rejetée(s)
         #original_hash: 43dc853
         amount: Montant
         #original_hash: 67b3c7d
@@ -3879,6 +3986,16 @@ fr:
         #original_hash: 462376a
         no_self_update: Contactez l’équipe organisatrice pour mettre à jour votre inscription.
       register:
+        #original_hash: e8cc296
+        will_open_countdown: >-
+          Les inscriptions seront ouvertes dans %{minutes} minutes %{seconds}
+          secondes. Cette page sera actualisée automatiquement dès l'ouverture
+          des inscriptions.
+        #original_hash: 604d27a
+        will_close_countdown: >-
+          L'inscription sera clôturée dans %{minutes} minutes %{seconds}
+          secondes. Cette page sera actualisée automatiquement à la clôture des
+          inscriptions.
         panel:
           approval:
             #original_hash: 8cc047a
@@ -3939,8 +4056,10 @@ fr:
           l’approbation à concourir
         #original_hash: 8fe68a1
         processing: Votre inscription est en cours de traitement...
-        #original_hash: 897f272
-        processing_longer: 'Le traitement prend plus de temps que d’habitude, ne partez pas !'
+        #original_hash: c7f124a
+        processing_longer: >-
+          Votre inscription a été reçue et sera bientôt traitée - cela peut
+          prendre un certain temps si nos serveurs sont occupés.
         #original_hash: 79ba42a
         processing_queue: >-
           De nombreuses inscriptions sont en cours de traitement, %{queueCount}
@@ -4017,11 +4136,61 @@ fr:
           d’attente
         #original_hash: 8d089d6
         '-4012': Vous n’êtes pas qualifié pour participer aux épreuves sélectionnées
+        #original_hash: fb1d742
+        '-4013': >-
+          Ne peut accepter un non-nouveau venu lorsqu'il ne reste que des places
+          réservées aux nouveaux venus.
+        #original_hash: a244fde
+        '-4014': Vous êtes déjà inscrit à cette compétition.
+        #original_hash: 369db78
+        '-4015': >-
+          Veuillez indiquer un nombre raisonnable d'invités, ou contactez les
+          organisateurs si vous avez besoin d'un nombre extraordinaire
+          d'invités.
         #original_hash: 0df821f
         '-6001': Le paiement WCA n’est pas activé pour cette compétition
         #original_hash: 092da51
         '-6002': Vous devez terminer votre inscription avant de pouvoir payer
     errors:
+      #original_hash: b14d060
+      must_use_wca_registration: >-
+        L'acceptation automatique ne peut être utilisée que si vous utilisez le
+        site web de la WCA pour les inscriptions.
+      #original_hash: 130c901
+      auto_accept_limit: >-
+        La limite d'inscriptions acceptées automatiquement doit être inférieure
+        à la limite de compétiteurs.
+      #original_hash: 42cd8e6
+      auto_accept_not_negative: >-
+        La limite d'inscriptions acceptées automatiquement ne peut être
+        inférieure à 0.
+      #original_hash: 181d8d9
+      auto_accept_accept_paid_pending: >-
+        Impossible d'activer l'acceptation automatique s'il y a des inscriptions
+        payées en cours - il faut soit les accepter, soit les placer sur la
+        liste d'attente.
+      #original_hash: 96db418
+      auto_accept_accept_waitlisted: >-
+        Impossible d'activer l'acceptation automatique - veuillez accepter
+        autant d'utilisateurs de la liste d'attente que possible.
+      #original_hash: 6d11b4e
+      auto_close_exceed_paid: >-
+        Le seuil de fermeture automatique doit être supérieur au nombre
+        d'inscriptions actuellement payées.
+      #original_hash: abee516
+      auto_close_positive_nonzero: Le seuil de fermeture automatique doit être supérieur à 0
+      #original_hash: b81ee7e
+      must_exceed_competitor_limit: >-
+        Le seuil de fermeture automatique doit être supérieur à la limite de
+        compétiteurs
+      #original_hash: 148c1d4
+      use_wca_registration: La compétition doit utiliser le système d'inscription de la WCA
+      #original_hash: 2c41c57
+      newcomer_month_reservations_percentage: ne pas réserver plus de 50 % des places aux nouveaux venus
+      #original_hash: 58d244e
+      newcomer_month_reservations_available: >-
+        Le nombre de places réservées pour le mois des nouveaux venus souhaité
+        dépasse le nombre de places réservables.
       #original_hash: f7ef9f6
       invalid_name_message: >-
         doit se terminer par une année et doit contenir uniquement des
@@ -4069,10 +4238,10 @@ fr:
       registration_period_after_start: >-
         La période d'inscription ne peut pas être définie après la date de début
         de la compétition.
-      #original_hash: f6b244b
+      #original_hash: 2a26c1c
       waiting_list_deadline_before_registration_close: >-
-        La date limite pour la liste d'attente ne peut pas être définie avant la
-        date de fermeture des inscriptions.
+        La date limite de la liste d'attente ne peut être antérieure à la date
+        de clôture des inscriptions.
       #original_hash: ececa98
       waiting_list_deadline_before_refund_date: >-
         La date limite pour la liste d'attente ne peut pas être définie avant la
@@ -4101,6 +4270,23 @@ fr:
       must_ask_about_guests_if_specifying_limit: >-
         Demander obligatoirement le nombre d'accompagnateurs si une limite
         d'accompagnateurs est spécifiée.
+      #original_hash: 000564d
+      not_full_url: >-
+        Le contenu contient une URL relative (%{url}). Veuillez saisir des URL
+        pleines avec le préfixe http:// ou https://.
+      #original_hash: e8ff0ef
+      editing_deadline_already_passed: >-
+        Vous n'êtes autorisé à modifier les dates que pour les échéances qui ne
+        sont pas encore passées, mais la valeur originale de %{timestamp} est
+        déjà passée.
+      #original_hash: e12883e
+      edited_deadline_not_after_original: >-
+        Vous ne pouvez que prolonger les délais, mais %{new_timestamp} est placé
+        avant la valeur originale de %{timestamp}.
+      #original_hash: d79fbb4
+      edited_deadline_not_in_future: >-
+        Vous ne pouvez introduire que des dates limites futures, mais
+        %{new_timestamp} n'est pas dans le futur.
     new:
       #original_hash: 1208df7
       create_competition: Créer une compétition
@@ -4260,12 +4446,14 @@ fr:
         qualification_html: >-
           Des temps qualificatifs doivent être établis dans d'autres
           compétitions WCA pour pouvoir concourir.
-        #original_hash: 51dfad5
-        qualification_all_events_html: 'Des temps qualificatifs doivent être établies avant le <b>%{date}</b>.'
-        #original_hash: 5eac9e5
+        #original_hash: 6ab548b
+        qualification_all_events_html: >-
+          Les temps de qualification doivent être fixés au plus tard le
+          <b>%{date}</b>.
+        #original_hash: b701c2a
         qualification_some_events_html: >-
-          Des temps qualificatifs pour les épreuves %{events} doivent être
-          établis avant le <b>%{date}</b>.
+          Les temps de qualification aux %{events} doivent être fixés au plus
+          tard le <b>%{date}</b>.
       #original_hash: 041a5de
       format: Format
       #original_hash: 0d1fcc3
@@ -4476,20 +4664,10 @@ fr:
       Veuillez noter que certains filtres (comme les années précédentes) sont
       temporairement désactivés. L’équipe logicielle de la WCA (WST) travaille à
       restaurer ces filtres - nous sommes désolés pour les inconvénients.
-    #original_hash: e3710ed
-    tooltip_no_years: >-
-      Notre base de données est trop grande pour calculer des données
-      historiques
-    #original_hash: 357094b
-    tooltip_no_quantities: Notre base de données est trop grande pour calculer des classements longs
     selector_elements:
       events_selector:
         #original_hash: ad8919a
         event: Épreuve
-        #original_hash: 3e83afa
-        all_events: Toutes les épreuves
-      #original_hash: 0f21717
-      region: Région
       type_selector:
         #original_hash: 3deb745
         type: Type
@@ -4497,30 +4675,13 @@ fr:
         single: Single
         #original_hash: 15f86c0
         average: Moyenne
-      years_selector:
-        #original_hash: 96f997b
-        years: Années
-        #original_hash: 0977c76
-        all_years: Toutes les années
-        #original_hash: 8737f09
-        only: Seulement
-        #original_hash: b3c0fe7
-        only_html: 'Seulement %{year}'
-        #original_hash: 96bdb66
-        until: Jusqu'à
-        #original_hash: fa23930
-        until_html: 'Jusqu''à %{year}'
       show_selector:
         #original_hash: d97d1ee
         show: Afficher
         #original_hash: f3cf96e
         persons: Personnes
-        #original_hash: 16d3376
-        persons_html: '%{quantity} personnes'
         #original_hash: 612e12d
         results: Résultats
-        #original_hash: f3baa4a
-        results_html: '%{quantity} résultats'
         #original_hash: d46d2ee
         by_region: Par région
         #original_hash: c0dcb86
@@ -4547,8 +4708,6 @@ fr:
       name: Nom
       #original_hash: 5faa59d
       result: Résultat
-      #original_hash: fa4c045
-      representing: Représentant
       #original_hash: 1917f4f
       competition: Compétition
       #original_hash: e7f6fc5
@@ -4557,23 +4716,21 @@ fr:
       region: Région
       #original_hash: 70c07ec
       world: Monde
-      type_options:
-        #original_hash: 3deb745
-        type: Type
-        #original_hash: dd11868
-        single: Single
-        #original_hash: 15f86c0
-        average: Moyenne
       #original_hash: ad8919a
       event: Épreuve
       #original_hash: dcf8b56
       date_circa: Date circa
-      #original_hash: 1c54132
-      record: Record
   notifications:
     #original_hash: 10bcdbd
     connect_wca_id: Associez votre ID WCA à votre compte !
   payments:
+    labels:
+      #original_hash: cccf678
+      payment_statuses: Statuts de paiement
+      #original_hash: 312b6b6
+      available_refunds: Remboursements disponibles
+      #original_hash: ef3cd45
+      original_payment: Paiement initial
     payment_providers:
       #original_hash: 559ef55
       paypal: PayPal
@@ -4586,11 +4743,11 @@ fr:
       account_connected: >-
         Vous avez connecté votre compte %{provider} avec succès et pouvez
         maintenant recevoir les paiements d’inscription pour cette compétition.
-      #original_hash: 18d1326
-      account_disconnected_success: 'Votre compte %{provider} a été déconnecté avec succès.'
+      #original_hash: b83891e
+      account_disconnected_success: 'Déconnexion réussie de votre compte %{provider}.'
       #original_hash: 6b934e2
       account_disconnected_failure: >-
-        Une erruer s'est produite en tentant de déconnecter votre compte
+        Une erreur s'est produite en tentant de déconnecter votre compte
         %{provider}.
       #original_hash: 340bba4
       account_not_connected: >-
@@ -4672,6 +4829,11 @@ fr:
           primary_email: Adresse e-mail
         #original_hash: 08d2e98
         fallback_not_applicable: N/A
+    statuses:
+      #original_hash: c8fbda9
+      succeeded: Réussi
+      #original_hash: d6fbc7a
+      refund: Remboursé
   persons:
     index:
       #original_hash: 5934b4c
@@ -5002,8 +5164,22 @@ fr:
     mission_footer: But de la WCA
     #original_hash: cdab446
     who_we_are_title: Qui sommes nous
-    #original_hash: c0d9a3e
-    who_we_are_content_html: "<p>La World Cube Association régit les compétitions pour les puzzles mécaniques, communément appelées \"twisty puzzles\". Le plus célèbre de ces puzzles est le Rubik’s cube, inventée par le professeur Rubik en Hongrie. Une sélection de ces puzzles est choisie comme épreuves officielles de la WCA.</p><p>La WCA a évolué au cours de la dernière décennie, plus de 200\_000 personnes ayant participé à nos compétitions. Malgré cette croissance, nous demeurons une organisation qui est presque entièrement dirigée par des bénévoles, des organisateurs locaux aux délégués de la WCA, en passant par le conseil d’administration de la WCA. Nous sommes très reconnaissants à tous ceux qui prennent de leur temps libre pour permettre à la WCA de fonctionner. Avec plus de soutien financier, nous espérons apporter un niveau de professionnalisme encore plus élevé à nos compétitions alors que nous continuons de sanctionner davantage de compétitions à travers le monde.</p>"
+    #original_hash: 303f17a
+    who_we_are_content_html: >-
+      <p>La World Cube Association régit les compétitions de casse-têtes
+      mécaniques fonctionnant par torsion de groupes de pièces, communément
+      appelés « twisty puzzles ». Le plus célèbre de ces casse-tête est le
+      Rubik's Cube, inventé par le professeur hongrois Rubik. Une sélection de
+      ces casse-têtes est choisie comme événements officiels de la WCA.</p>
+      <p>Au fil de l'évolution de la WCA au cours de la dernière décennie, plus
+      de 245 000 personnes ont participé à nos compétitions. Malgré cette
+      croissance, nous restons une organisation presque entièrement gérée par
+      des bénévoles, des organisateurs locaux, aux délégués de la WCA jusqu'à
+      son conseil d'administration. Nous sommes très reconnaissants envers tous
+      ceux qui prennent du temps sur leur vie pour permettre à la WCA de
+      fonctionner. Avec plus de soutien financier, nous espérons apporter un
+      niveau de professionnalisme encore plus grand à nos compétitions alors que
+      nous continuons à homologuer plus d'événements à travers le monde.</p>
     #original_hash: bccd8c5
     spirit: >-
       Notre esprit est que des personnes venant de tout le globe puissent
@@ -5027,8 +5203,17 @@ fr:
       href="https://documents.worldcubeassociation.org/documents/WCA_Vision_and_Strategy.pdf">ici</a>.</p>
     #original_hash: f64ccc7
     whats_next_title: Le futur pour la WCA ?
-    #original_hash: 487c6a1
-    whats_next_content_html: "<p>La World Cube Association a réuni plus de 200\_000 concurrents uniques dans 158 régions différentes et nous ne prévoyons pas de ralentir ! La communauté du cubing ne cesse de croître depuis notre création en 2004 et nous voulons encourager cela à continuer dans l’avenir en augmentant l’accessibilité des compétitions à de nouvelles zones. À l’avenir, nous espérons soutenir encore plus notre communauté grâce à des collaborations et à la sensibilisation de ceux qui se soucient des puzzles.</p>"
+    #original_hash: 3312277
+    whats_next_content_html: >-
+      <p>La WCA a eu plus de 245 000 compétiteurs uniques dans 158 régions
+      différentes et nous n'avons pas l'intention de ralentir de sitôt! La
+      communauté du cube a connu une croissance constante depuis sa création en
+      2004 et nous voulons l'encourager à continuer à l'avenir en augmentant
+      l'accessibilité des compétitions dans de nouvelles régions. 
+
+      Dans le futur, nous espérons soutenir notre communauté encore plus à
+      travers des collaborations et des contacts avec ceux qui s'intéressent aux
+      casse-têtes.</p>
     #original_hash: dc71704
     world_championship_title: Championnats du Monde
     #original_hash: 57cf7f7
@@ -5072,14 +5257,14 @@ fr:
       #original_hash: 9482c5d
       title: Structure
       board:
-        #original_hash: e0d37a2
+        #original_hash: 19d4bbb
         description: >-
-          La World Cube Association est dirigée par le bureau de la WCA,
-          constitué des membres suivants :
+          Le conseil d'administration de la WCA est chargé de diriger
+          l'organisation dans son ensemble et de remplir toutes les fonctions
+          qui ne sont pas remplies par d'autres équipes et comités.
       users:
         #original_hash: 57bbaad
         profile: 'Profil de %{user_name}'
-
       #original_hash: f8c3f3c
       operations_html: >-
         Les tâches quotidiennes de la WCA sont assurées par les
@@ -5215,8 +5400,8 @@ fr:
           les motions de la WCA
         #original_hash: 0c3576b
         '4': Respecter l'ensemble des règles WCA applicables
-        #original_hash: 1a9e6c5
-        '5': Accepter et se conformer aux décisions du Staff de la WCA
+        #original_hash: 88cf548
+        '5': Accepter et respecter les décisions des bénévoles de la WCA
         #original_hash: d4ae7c1
         '6': >-
           Garder et fournir à la WCA une copie électronique de ses statuts et,
@@ -5279,12 +5464,12 @@ fr:
     before:
       #original_hash: 9850344
       title: Avant la compétition
-      #original_hash: 576e2f4
+      #original_hash: 6f64073
       desc: >-
-        La gestion des inscriptions des compétiteurs peut être faite directement
-        sur le site de la WCA. Étant donné que la gestion des groupes et des
-        bénévoles peut prendre du temps, vous pourriez vouloir utiliser l'un des
-        outils ci-dessous pour vous aider.
+        La gestion des inscriptions des compétiteurs peut se faire directement
+        sur le site de la WCA. Comme la gestion manuelle des groupes et des
+        volontaires peut prendre beaucoup de temps, vous pouvez envisager
+        d'utiliser l'un des outils ci-dessous.
     during:
       #original_hash: 9934200
       title: Pendant la compétition
@@ -5601,16 +5786,16 @@ fr:
     recommended:
       #original_hash: 6b843f3
       title: Documents recommandés
-      #original_hash: bfbd4bb
-      staff: Assigner les rôles de staff
+      #original_hash: 6e4fb29
+      staff: Affectation des bénévoles
       #original_hash: 4735583
       emails: E-mails
       #original_hash: 8e7ca09
       running-systems: 'Runner et juger : les différents systèmes'
       #original_hash: 2b31c89
       new-competitors: Attitude envers les nouveaux compétiteurs
-      #original_hash: 3408054
-      enhancing-experience: Améliorer l'expérience des compétiteurs et du staff
+      #original_hash: 00c4f78
+      enhancing-experience: Améliorer l'expérience des compétiteurs et des bénévoles
       #original_hash: 2345aaa
       reflection: Pistes de réflexion
   organizer_guidelines:
@@ -5993,24 +6178,25 @@ fr:
     login_message: Veuillez vous connecter
   merch:
     #original_hash: 96a95a1
-    title: Merchandising WCA
+    title: Produits Dérivés WCA
     paragraphs:
       #original_hash: 8a23af2
       '1': >-
-        La WCA propose du merchandising exclusif à la vente ! T- shirts,
+        La WCA propose des produits dérivés exclusifs à la vente ! T- shirts,
         hoodies, stickers, stackmats, sacs à dos et bien plus ! Nos designs sont
-        constamment mis à jour, y compris le logo classique de la WCA, le
-        merchandising officiel du championnat du monde et les designs du record
-        du monde.
+        constamment mis à jour, y compris le logo classique de la WCA, les
+        produits dérivés officiels du championnat du monde et les designs du
+        record du monde.
       #original_hash: 2865e1d
       '2': >-
-        Acheter du merch WCA via notre boutique est l'un des meilleurs moyens de
-        supporter la WCA - un organisme bénévole à but non lucratif. Nous
-        utilisons tous les bénéfices du merch pour financer davantage les
-        championnats, l’équipement et d’autres activités liées à la WCA.
+        Acheter des produits dérivés WCA via notre boutique est l'un des
+        meilleurs moyens de supporter la WCA - un organisme bénévole à but non
+        lucratif. Nous utilisons tous les bénéfices des produits dérivés pour
+        financer davantage les championnats, l’équipement et d’autres activités
+        liées à la WCA.
       #original_hash: 8e57552
       '3': >-
-        Vous pouvez acheter notre merchandising partout dans le monde -- avec
+        Vous pouvez acheter nos produits dérivés partout dans le monde -- avec
         des magasins directs en Europe, en Amérique, en Inde et plus à venir
         bientôt !
   database:
@@ -6046,3 +6232,321 @@ fr:
         %{github_link}.
       #original_hash: a479c9c
       download: Télécharger
+  validators:
+    persons:
+      #original_hash: 847f614
+      dob_is_jan_one_warning: >-
+        La date de naissance de %{name} est le 1er janvier, veuillez vous
+        assurer qu'elle est correcte.
+      #original_hash: b4b736a
+      dob_is_too_young_warning: >-
+        %{name} semble avoir moins de 3 ans, veuillez vous assurer que
+        l'information est correcte.
+      #original_hash: b7c88ef
+      dob_is_too_old_warning: >-
+        %{name} semble avoir environ 100 ans, veuillez vous assurer que
+        l'information est correcte.
+      #original_hash: 809f305
+      person_doesnt_have_any_results_error: >-
+        Il n'y a pas de résultats pour %{person_name} avec l'identifiant
+        %{person_id}
+      #original_hash: ebc1b15
+      results_not_associated_with_any_person_error: >-
+        Il y a des résultats pour une personne inconnue avec l'identifiant
+        %{person_id}
+      #original_hash: c29e35d
+      whitespace_in_name_error: >-
+        La personne « %{name} » a des caractères espace en début ou en fin de
+        ligne ou deux caractères espace consécutifs.
+      #original_hash: 9b1ae5f
+      person_with_non_existing_wca_id_error: 'La personne %{name} a un identifiant WCA qui n''existe pas : %{wca_id}.'
+      #original_hash: 924d832
+      no_space_before_parenthesis_error: 'La parenthèse ouvrante dans « %{name} » doit être précédée d''un espace.'
+      #original_hash: 6daf706
+      same_person_name_warning: >-
+        Il existe déjà au moins une personne portant le nom « %{name} » dans la
+        base de données de la WCA (%{wca_ids}). Veuillez vous assurer que votre
+        « %{name} » est une personne différente. Si ce n'est pas le cas,
+        veuillez attribuer le bon identifiant WCA au compte utilisateur et
+        régénérer le JSON des résultats.
+      #original_hash: eeb688a
+      non_matching_dob_warning: >-
+        La date de naissance '%{dob}' fournie pour %{name} (%{wca_id}) ne
+        correspond pas à l'enregistrement actuel dans la base de données WCA
+        ('%{expected_dob}'). S'il s'agit d'une erreur, corrigez-la. Sinon,
+        laissez un commentaire au WRT à ce sujet.
+      #original_hash: 6a81cc0
+      non_matching_gender_warning: >-
+        Le genre '%{gender}' fourni pour %{name} (%{wca_id}) ne correspond pas à
+        l'enregistrement actuel dans la base de données WCA
+        ('%{expected_gender}'). S'il s'agit d'une erreur, corrigez-la. Sinon,
+        laissez un commentaire au WRT à ce sujet.
+      #original_hash: da398a2
+      empty_gender_warning: >-
+        Le genre du nouveau venu %{name} est vide. Les valeurs valides pour le
+        genre sont ''femme'', ''homme'' et ''autre''. Veuillez laisser un
+        commentaire au WRT à ce sujet.
+      #original_hash: 050c7e2
+      non_matching_name_warning: >-
+        Le nom '%{name}' fourni pour %{wca_id} ne correspond pas à
+        l'enregistrement actuel dans la base de données WCA
+        ('%{expected_name}').
+      #original_hash: 333a035
+      non_matching_country_warning: >-
+        Le pays '%{country}' fourni pour %{name} (%{wca_id}) ne correspond pas à
+        l'enregistrement actuel dans la base de données WCA
+        ('%{expected_country}'). S'il s'agit d'une erreur, corrigez-la. Sinon,
+        laissez un commentaire au WRT à ce sujet.
+      #original_hash: e15e700
+      multiple_newcomers_with_same_name_warning: >-
+        Il y a plusieurs nouveaux compétiteurs qui portent exactement le même
+        nom : %{name}. Veuillez vous assurer que tous les résultats sont
+        corrects pour ces compétiteurs et que tous les résultats sont
+        correctement séparés par leur identifiant correspondant.
+      #original_hash: 7732038
+      wrong_parenthesis_type_error: >-
+        Le caractère parenthèse utilisé dans « %{name} » est un caractère
+        irrégulier, veuillez le remplacer par une parenthèse régulière '(' ou
+        ')' et avec un espacement approprié.
+      #original_hash: 4b90583
+      successive_uppercase_name_warning: >-
+        Le nom de '%{name}' comporte plusieurs lettres majuscules successives.
+        Veuillez confirmer qu'il s'agit bien de l'orthographe correcte ou
+        corriger le nom.
+      #original_hash: 654b60d
+      lowercase_name_warning: >-
+        Le nom de '%{name}' est en minuscules. Veuillez confirmer qu'il s'agit
+        bien de l'orthographe correcte ou corriger le nom.
+      #original_hash: 4ea44b6
+      missing_period_in_single_letter_middle_name_warning: >-
+        Le deuxième prénom de '%{name}' ne comporte qu'une seule lettre et n'est
+        pas accompagné d'un point d'abréviation. Veuillez confirmer qu'il s'agit
+        bien de l'orthographe correcte ou corriger le nom.
+      #original_hash: cbd3bd6
+      letter_after_period_warning: >-
+        Il manque un espace après un point dans le nom de '%{name}'. Veuillez
+        confirmer qu'il s'agit bien de l'orthographe correcte ou corriger le
+        nom.
+      #original_hash: d7803d4
+      single_letter_first_or_last_name_warning: >-
+        Le nom ou le prénom de '%{name}' est composé d'une seule lettre.
+        Veuillez corriger le nom ou confirmer qu'il s'agit bien du nom correct
+        du compétiteur selon un document officiel.
+      #original_hash: 9adb87f
+      single_name_warning: >-
+        '%{name}' n'a qu'un seul nom. Veuillez confirmer qu'il s'agit bien du
+        nom complet du compétiteur selon un document officiel.
+      #original_hash: 39c7f3d
+      competitor_limit_exceeded_warning: >-
+        Le nombre de personnes participant à la compétition (%{n_competitors})
+        est supérieur à la limite de compétiteurs (%{competitor_limit}). Les
+        résultats des compétiteurs enregistrés après que la limite de
+        compétiteurs a été atteinte doivent être supprimés.
+    results:
+      #original_hash: 5685ae8
+      automatically_position_fixed_info: >-
+        [%{round_id}] Fixe automatiquement la position de %{person_name} de
+        %{pos} à %{expected_pos}.
+      #original_hash: e895bf5
+      mbf_result_over_time_limit_warning: >-
+        [%{round_id}] Le résultat '%{result}' pour %{person_name} a dépassé la
+        limite de temps. Veuillez vous assurer que cela est dû à des pénalités
+        de temps avant d'envoyer les résultats, ou corrigez le résultat en DNF.
+      #original_hash: c74c2c6
+      result_after_dns_warning: >-
+        [%{round_id}] %{person_name} a au moins un résultat DNS suivi d'un
+        résultat valide. Veuillez vous assurer qu'il s'agit bien d'un DNS et si
+        c'est le cas, expliquez ce qui est arrivé au WRT.
+      #original_hash: a2032e9
+      similar_results_warning: >-
+        [%{round_id}] Les résultats de %{person_name} sont similaires à ceux de
+        %{similar_person_name}. Veuillez vous assurer que ces résultats sont
+        correctement enregistrés pour les deux compétiteurs.
+      #original_hash: ebbab6f
+      met_cutoff_but_missing_results_error: >-
+        [%{round_id}] %{person_name} a atteint la cutoff mais il manque des
+        résultats pour la deuxième phase de la ronde. La cutoff était %{cutoff}.
+      #original_hash: cc0b47b
+      didnt_meet_cutoff_but_has_results_error: >-
+        [%{round_id}] %{person_name} a au moins un résultat pour la deuxième
+        phase de la ronde mais n'a pas atteint la cutoff. Le seuil était
+        %{cutoff}.
+      #original_hash: 4fc3fd7
+      wrong_attempts_for_cutoff_error: >-
+        Il manque à [%{round_id}] %{person_name} au moins une tentative avant la
+        cutoff. Veuillez modifier le résultat pour inclure la ou les tentatives
+        manquantes ou mettre à jour les informations relatives à la ronde dans
+        la page Gérer les événements de la compétition.
+      #original_hash: 24c10d3
+      mismatched_result_format_error: >-
+        [%{round_id}] Les résultats pour %{person_name} sont dans le mauvais
+        format : attendu %{expected_format}, mais obtenu %{format}.
+      #original_hash: 32ea6be
+      result_over_time_limit_error: >-
+        [%{round_id}] Au moins un résultat pour %{person_name} dépasse le temps
+        limite de la ronde, qui est de %{time_limit} par tentative. Toutes les
+        solutions dépassant la limite de temps doivent être transformées en DNF.
+      #original_hash: 1678105
+      results_over_cumulative_time_limit_error: >-
+        [%{round_ids}] La somme des résultats pour %{person_name} est supérieure
+        à la limite de temps cumulée, qui était de %{time_limit}.
+      #original_hash: 3fbb505
+      no_round_information_warning: >-
+        [%{round_id}] Il n'y a pas d'information sur la limite de temps pour
+        cette ronde. Ces validations ont été ignorées. Veuillez mettre à jour
+        les informations relatives à la ronde dans la page Gérer les événements
+        de la compétition.
+      #original_hash: 76dc4e7
+      undefined_time_limit_warning: >-
+        [%{round_id}] La limite de temps pour cette ronde est indéfinie, les
+        validations de limite de temps ont été ignorées. Ceci n'est attendu que
+        pour les compétitions antérieures à 2013.
+      #original_hash: 10ad25f
+      suspicious_dnf_warning: >-
+        [%{round_ids}] La ronde a une limite de temps cumulée, et en extrapolant
+        sur la base des résolutions réussies de %{person_name}, il ne leur
+        restait que très peu de temps pour au moins l'un de leurs DNF. Veuillez
+        vous assurer que chaque DNF et DNS est effectivement correct. Si le
+        compétiteur n'a pas commencé une tentative ou s'il ne lui restait plus
+        de temps avant de commencer une tentative, celle-ci doit être inscrite
+        comme DNS.
+      #original_hash: 8057a12
+      missing_cumulative_round_id_error: >-
+        [%{original_round_id}] Impossible de trouver la ronde %{wcif_id} pour la
+        limite de temps cumulée spécifiée dans le WCIF. Veuillez vous rendre sur
+        la page Gérer les événements de la compétition et supprimer %{wcif_id}
+        de la limite de temps cumulée pour %{original_round_id}. WST est au
+        courant de ce bogue (GitHub issue #3254).
+      #original_hash: ad200c1
+      wrong_position_in_results_error: >-
+        [%{round_id}] %{person_name} est en mauvaise position : attendu
+        %{expected_pos}, mais obtenu %{pos}.
+    rounds:
+      #original_hash: 517fd54
+      too_many_qualified_warning: >-
+        Ronde %{round_id} : plus de compétiteurs se sont qualifiés que ce que la
+        condition d'avancement prévoyait (%{actual} au lieu de %{expected}, la
+        condition était : %{condition}). Veuillez mettre à jour les informations
+        relatives à la ronde dans la page de gestion des événements.
+      #original_hash: 09d3568
+      unexpected_round_results_error: >-
+        La ronde %{round_id} est présente dans les résultats mais n'a pas été
+        créée dans l'onglet des événements. Veuillez inclure les informations
+        relatives à la ronde dans la page de gestion des événements de la
+        compétition.
+      #original_hash: 5b5f9ee
+      regulation_9m1_error: >-
+        La ronde %{round_id} compte 99 compétiteurs ou moins mais a plus de deux
+        rondes suivantes, ce qui n'est pas autorisé par le règlement 9m1.
+      #original_hash: 892e0d5
+      regulation_9m2_error: >-
+        La ronde %{round_id} compte 15 compétiteurs ou moins mais comporte plus
+        d'une ronde suivante, ce qui n'est pas autorisé par le règlement 9m2.
+      #original_hash: cb8522e
+      regulation_9m3_error: >-
+        La ronde %{round_id} compte 7 compétiteurs ou moins mais comporte au
+        moins une ronde suivante, ce qui n'est pas autorisé par le règlement
+        9m3.
+      #original_hash: e12138a
+      regulation_9p1_error: >-
+        Ronde %{round_id} : Moins de 25% des compétiteurs ont été éliminés, ce
+        qui n'est pas autorisé selon le règlement 9p1.
+      #original_hash: f5d8ae9
+      no_competitor_eliminated_error: >-
+        Ronde %{round_id} : Il doit y avoir au moins un compétiteur éliminé, ce
+        qui est exigé par le règlement 9p (compétitions antérieures à avril
+        2010).
+      #original_hash: b868019
+      less_than_twenty_five_percent_eliminated_error: >-
+        Ronde %{round_id} : selon la condition d'avancement (%{condition}),
+        moins de 25% des compétiteurs seraient éliminés, ce qui n'est pas
+        autorisé selon le règlement 9p1. Veuillez mettre à jour les informations
+        relatives à la ronde dans la page de gestion des événements.
+      #original_hash: d6fc805
+      not_enough_qualified_warning: >-
+        Manche %{round_id} : selon les données de l'événement, au plus
+        %{expected} aurait pu procéder, mais seulement %{actual} a participé à
+        la ronde. Veuillez laisser un commentaire à ce sujet (ou corriger les
+        données relatives aux événements si vous avez appliqué une condition
+        d'avancement différente).
+      #original_hash: 7915e13
+      competed_not_qualified_error: >-
+        La ronde %{round_id} : %{ids} a concouru mais n'a pas rempli la
+        condition d'avancement du résultat de la tentative (%{condition}).
+        Veuillez vous assurer que la condition d'avancement correspond à ce qui
+        a été utilisé pendant la compétition, et supprimez les résultats si
+        nécessaire.
+      #original_hash: c4a7f11
+      round_not_found_error: >-
+        La ronde %{round_id} n'a pas été trouvée. Veuillez vous assurer que le
+        panneau d'édition des événements du site web de la WCA et WCA Live sont
+        synchronisés.
+      #original_hash: 3c739f3
+      missing_round_results_error: >-
+        Il n'y a pas de résultats pour la ronde %{round_id} mais elle est listée
+        dans l'onglet événements. Si cette ronde n'a pas eu lieu, veuillez la
+        supprimer dans la page de gestion des événements de la compétition.
+      #original_hash: dcf92d3
+      unexpected_combined_round_error: >-
+        Aucun seuil n'a été annoncé pour '%{round_name}', mais elle a été
+        détectée comme une ronde à seuil dans les résultats. Veuillez mettre à
+        jour les informations relatives à la ronde dans la page de gestion des
+        événements de la compétition.
+    events:
+      #original_hash: e87f8a0
+      not_333_main_event_warning: >-
+        L'événement principal sélectionné pour cette compétition est
+        %{main_event_id}. Comment cet événement a-t-il été traité comme
+        l'événement principal de la compétition ? Veuillez donner une brève
+        explication au WRT (par exemple, nombre de rondes, prix, vainqueur
+        déclaré de la compétition, ...).
+      #original_hash: 1d4e297
+      no_main_event_warning: >-
+        Il n'y a pas d'épreuve principale sélectionné pour cette compétition.
+        Veuillez indiquer au WRT que cela est correct.
+      #original_hash: 6fa46ad
+      unexpected_results_error: >-
+        Des résultats sont présents pour %{event_id}, mais il n'est pas
+        répertorié comme un événement officiel. Veuillez supprimer l'événement
+        des résultats ou contacter le WCAT pour demander l'ajout de l'événement
+        sur le site web de la WCA.
+      #original_hash: fde208d
+      missing_results_warning: >-
+        Il n'y a pas de résultats pour %{event_id}, mais il est répertorié comme
+        un événement officiel. Si l'événement a eu lieu, veuillez télécharger à
+        nouveau votre JSON avec les résultats inclus. Si l'événement n'a pas eu
+        lieu, laissez un commentaire pour le WRT.
+    scrambles:
+      #original_hash: ff7e063
+      missing_scrambles_for_round_error: >-
+        [%{round_id}] Mélanges manquants. Utilisez Scrambles Matcher pour
+        ajouter les bon mélanges à la ronde.
+      #original_hash: 340d2f3
+      missing_scrambles_for_competition_error: >-
+        Il manque des mélanges pour la compétition. Utilisez Scrambles Matcher
+        pour ajouter des mélanges.
+      #original_hash: 0f334fd
+      unexpected_scrambles_for_round_error: >-
+        [%{round_id}] Trop de mélanges. Utilisez Scrambles Matcher pour décocher
+        les mélanges inutilisés.
+      #original_hash: 22706c5
+      missing_scrambles_for_group_error: >-
+        [%{round_id}] Groupe %{group_id} : mélange manquant, détecté seulement
+        %{actual} au lieu de %{expected}.
+      #original_hash: 665014c
+      missing_scrambles_for_multi_error: >-
+        [%{round_id}] Bien que vous puissiez avoir plusieurs groupes dans le
+        3x3x3 Multi-Blind, au moins un des groupes doit contenir des mélanges
+        pour toutes les tentatives.
+      #original_hash: 3d5255d
+      multiple_fmc_groups_warning: >-
+        [%{round_id}] Plusieurs groupes de FMC ont été utilisés. Si un seul
+        groupe de FMC a été utilisé, veuillez utiliser Scrambles Matcher pour
+        décocher les mélanges inutilisés. Sinon, veuillez inclure un commentaire
+        au WRT expliquant pourquoi plusieurs groupes de FMC ont été utilisés.
+      #original_hash: d6830c0
+      wrong_number_of_scramble_sets_error: >-
+        [%{round_id}] Cette ronde a un nombre de mélanges différent de celui
+        indiqué dans l'onglet Gérer les événements. Veuillez ajuster le nombre
+        de sets de mélanges dans l'onglet Gérer les événements en fonction du
+        nombre de sets utilisés.

@@ -107,13 +107,13 @@ FactoryBot.define do
     end
 
     trait :wrc_member do
-      after(:create) do |user, options|
+      after(:create) do |user, _options|
         FactoryBot.create(:wrc_member_role, user_id: user.id)
       end
     end
 
     trait :wrc_senior_member do
-      after(:create) do |user, options|
+      after(:create) do |user, _options|
         FactoryBot.create(:wrc_senior_member_role, user_id: user.id)
       end
     end
@@ -125,25 +125,25 @@ FactoryBot.define do
     end
 
     trait :wct_member do
-      after(:create) do |user, options|
+      after(:create) do |user, _options|
         FactoryBot.create(:wct_member_role, user_id: user.id)
       end
     end
 
     trait :wct_china_member do
-      after(:create) do |user, options|
+      after(:create) do |user, _options|
         FactoryBot.create(:wct_china_role, user_id: user.id)
       end
     end
 
     trait :wqac_member do
-      after(:create) do |user, options|
+      after(:create) do |user, _options|
         FactoryBot.create(:wqac_member_role, user_id: user.id)
       end
     end
 
     trait :wcat_member do
-      after(:create) do |user, options|
+      after(:create) do |user, _options|
         FactoryBot.create(:wcat_member_role, user_id: user.id)
       end
     end
@@ -216,7 +216,17 @@ FactoryBot.define do
 
     trait :wca_id do
       transient do
-        person { FactoryBot.create(:person, name: name, countryId: Country.find_by_iso2(country_iso2).id, gender: gender, dob: dob.strftime("%F")) }
+        person { FactoryBot.create(:person, name: name, country_id: Country.find_by(iso2: country_iso2).id, gender: gender, dob: dob.strftime("%F")) }
+      end
+    end
+
+    trait :current_year_wca_id do
+      transient do
+        person {
+          FactoryBot.create(
+            :person, name: name, country_id: Country.find_by(iso2: country_iso2).id, gender: gender, dob: dob.strftime("%F"), wca_id_year: Time.current.year.to_s
+          )
+        }
       end
     end
 

@@ -17,7 +17,7 @@ RSpec.describe UploadJson do
     expect(upload_json).to be_invalid_with_errors(results_file: ["must be a JSON file from the Workbook Assistant"])
   end
 
-  it "fixes roundTypeId in case it doesn't match the actual competition round data" do
+  it "fixes round_type_id in case it doesn't match the actual competition round data" do
     round = FactoryBot.create(:round, number: 1, event_id: "333", cutoff: nil)
     competition = round.competition
 
@@ -59,10 +59,10 @@ RSpec.describe UploadJson do
 
     upload_json = FactoryBot.build(:upload_json, competition_id: competition.id, results_json_str: results_json)
 
-    expect(upload_json.import_to_inbox).to eq true
+    expect(upload_json.import_to_inbox).to be true
     expect(InboxResult.count).to eq 1
     inbox_result = InboxResult.first
-    # There is no cutoff, so the incoming roundTypeId "c" should be converted to "f"
-    expect(inbox_result.roundTypeId).to eq "f"
+    # There is no cutoff, so the incoming round_type_id "c" should be converted to "f"
+    expect(inbox_result.round_type_id).to eq "f"
   end
 end

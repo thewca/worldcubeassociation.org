@@ -43,7 +43,7 @@ RSpec.describe ResultsSubmissionController, type: :request do
       it "returns http success" do
         get competition_submit_results_edit_path(comp.id)
         # Checking the response status: we want a successful get without redirect.
-        expect(response.status).to eq(200)
+        expect(response).to have_http_status(:ok)
       end
 
       it "redirects to homepage if competition is not announced" do

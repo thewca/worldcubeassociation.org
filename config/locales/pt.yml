@@ -152,57 +152,57 @@ pt:
       #original_hash: 4d618bb
       name: Ronda de qualificação
       #original_hash: 4d618bb
-      cellName: Ronda de Qualificação
+      cell_name: Ronda de Qualificação
     '1':
       #original_hash: 1e725b6
       name: Primeira ronda
       #original_hash: 1e725b6
-      cellName: Primeira ronda
+      cell_name: Primeira ronda
     '2':
       #original_hash: 985c8d0
       name: Segunda Ronda
       #original_hash: 985c8d0
-      cellName: Segunda ronda
+      cell_name: Segunda ronda
     '3':
       #original_hash: e2f74d2
       name: Semifinal
       #original_hash: e2f74d2
-      cellName: Semifinal
+      cell_name: Semifinal
     b:
       #original_hash: 327c999
       name: Final B
       #original_hash: 327c999
-      cellName: Final B
+      cell_name: Final B
     c:
       #original_hash: 672b22c
       name: Final
       #original_hash: 672b22c
-      cellName: Final
+      cell_name: Final
     d:
       #original_hash: 1e725b6
       name: Primeira ronda
       #original_hash: 1e725b6
-      cellName: Primeira ronda
+      cell_name: Primeira ronda
     e:
       #original_hash: 985c8d0
       name: Segunda ronda
       #original_hash: 985c8d0
-      cellName: Segunda ronda
+      cell_name: Segunda ronda
     f:
       #original_hash: 672b22c
       name: Final
       #original_hash: 672b22c
-      cellName: Final
+      cell_name: Final
     g:
       #original_hash: e2f74d2
       name: Meia-Final
       #original_hash: e2f74d2
-      cellName: Meia-Final
+      cell_name: Meia-Final
     h:
       #original_hash: 4d618bb
       name: Ronda de qualificação
       #original_hash: 4d618bb
-      cellName: Ronda de qualificação
+      cell_name: Ronda de qualificação
   attempts:
     #original_hash: 17dae1e
     attempt_name: 'Tentativa %{number}'
@@ -521,7 +521,7 @@ pt:
         #original_hash: 8c41ae8
         wca_id: Pessoa
         #original_hash: fa4c045
-        countryId: Representando
+        country_id: Representando
         #original_hash: ab58155
         dob: Data de nascimento
         #original_hash: 8a754c6
@@ -573,19 +573,19 @@ pt:
         competition_id: Aconteceu durante
       competition_medium:
         #original_hash: 1917f4f
-        competitionId: Competição
+        competition_id: Competição
         #original_hash: 3deb745
-        type: Tipo
+        media_type: Tipo
         #original_hash: c3328c3
         text: Texto
         #original_hash: d051707
         uri: Hiperligação
         #original_hash: 1be755a
-        submitterName: Nome de quem submete
+        submitter_name: Nome de quem submete
         #original_hash: 78cdfee
-        submitterEmail: Email de quem submete
+        submitter_email: Email de quem submete
         #original_hash: 0d31f23
-        submitterComment: Comentário de quem submete
+        submitter_omment: Comentário de quem submete
         #original_hash: bae7d5b
         status: Estado
       regional_organization:
@@ -681,7 +681,7 @@ pt:
         accepted: Aceite
         #original_hash: 96f608c
         pending: Pendente
-      type:
+      media_type:
         #original_hash: ee45c30
         report: Relatório
         #original_hash: 4360c2d
@@ -891,7 +891,7 @@ pt:
         comment: ''
       competition_medium:
         #original_hash: da39a3e
-        competitionId: ''
+        competition_id: ''
         #original_hash: da39a3e
         type: ''
         #original_hash: da39a3e
@@ -899,11 +899,11 @@ pt:
         #original_hash: da39a3e
         uri: ''
         #original_hash: da39a3e
-        submitterName: ''
+        submitter_name: ''
         #original_hash: da39a3e
-        submitterEmail: ''
+        submitter_email: ''
         #original_hash: da39a3e
-        submitterComment: ''
+        submitter_comment: ''
         #original_hash: da39a3e
         status: ''
       results_submission:
@@ -1574,6 +1574,9 @@ pt:
               label: >-
                 Editar os dados do meu perfil (nome, país, sexo ou data de
                 nascimento)
+            edit_others_profile:
+              #original_hash: d08e8eb
+              label: Editar os dados de perfil de outra pessoa
             report_result_issue:
               #original_hash: 2edbb52
               label: Reportar um problema num resultado
@@ -1637,6 +1640,8 @@ pt:
         Parece que ainda não tem um perfil WCA porque não participou em nenhuma
         competição. Para qualquer outra questão, por favor <a
         href="https://www.worldcubeassociation.org/contact?contactRecipient=wrt">contacte-nos</a>.
+      #original_hash: 43f15fd
+      no_permission_error: Não tem permissões para solicitar a edição do perfil de outras pessoas.
       form:
         contact_email:
           #original_hash: 3142970
@@ -1644,6 +1649,9 @@ pt:
         wca_id:
           #original_hash: 6344c9e
           label: Introduza o ID da WCA
+        wca_id_search:
+          #original_hash: fbba19d
+          label: Procure pelo ID da WCA de quem pretende editar.
         edit_reason:
           #original_hash: fdfcccf
           label: Motivo para a alteração
@@ -2677,9 +2685,9 @@ pt:
       results_posted: Resultados publicados com sucesso!
       #original_hash: afe3a23
       results_preview_alert: Está a visualizar resultados que ainda não foram publicados.
-      #original_hash: 07de612
+      #original_hash: 16dd227
       upload_results: >-
-        Esta competição já terminou, estamos a trabalhar para publicar os
+        Esta competição já terminou. Estamos a trabalhar para publicar os
         resultados o mais rápido possível!
       #original_hash: 68dd436
       computing_auxiliary_data: Por favor aguarde enquanto dados auxiliares são processados.
@@ -3035,6 +3043,10 @@ pt:
       from_date: De
       #original_hash: ae79ea1
       to_date: Para
+      #original_hash: 17fd5f4
+      show_filters: Mostrar Filtros
+      #original_hash: 0d781a3
+      hide_filters: Esconder Filtros
       #original_hash: 5be6985
       reset_filters: Limpar Filtros
       #original_hash: 52c30f8
@@ -3438,10 +3450,11 @@ pt:
           na página principal da competição. <br/>Preencha este formulário <b>em
           inglês</b> e em qualquer outro idioma que seus competidores falem.
         competitor_limit:
-          #original_hash: dc47c39
+          #original_hash: 945da5b
           enabled: >-
-            Embora não seja exigido pelos Regulamentos fornecer um limite de
-            competidores, é altamente recomendável fazê-lo.
+            É necessário estabelecer um Limite de Competidores. Apenas as
+            competições FMC simultâneas com múltiplos locais podem não ter
+            Limite de Competidores.
           #original_hash: b7b599b
           count: >-
             O número de competidores permitidos nesta competição. Por enquanto
@@ -3620,7 +3633,7 @@ pt:
           enabled:
             #original_hash: d9c05cc
             'true': Quero especificar um limite de competidores
-            #original_hash: 5b581b5
+            #original_hash: 53397ec
             'false': NÃO QUERO especificar um limite de competidores
         registration:
           allow_on_the_spot:
@@ -3979,7 +3992,7 @@ pt:
       advancement_condition_must_be_present_for_all_non_final_rounds: deve ter uma condição de avanço para todas as rondas não finais.
       #original_hash: da17c99
       registration_period_after_start: Período de registo não pode ser depois da data de início.
-      #original_hash: f6b244b
+      #original_hash: 2a26c1c
       waiting_list_deadline_before_registration_close: >-
         Prazo limite de lista de espera não pode ser antes da data de fecho de
         registo.
@@ -4165,12 +4178,14 @@ pt:
         qualification_html: >-
           Tempos de Qualificação têm que ser estabelecidos noutras competições
           da WCA para poder competir.
-        #original_hash: 51dfad5
-        qualification_all_events_html: 'Tempos de qualificação têm que ser definidos antes de  <b>%{date}</b>.'
-        #original_hash: 5eac9e5
+        #original_hash: 6ab548b
+        qualification_all_events_html: >-
+          Tempos de qualificação têm que ser definidos até <b>%{date}</b>
+          inclusivé.
+        #original_hash: b701c2a
         qualification_some_events_html: >-
-          Tempos de qualificação em %{events} têm que ser obtidos antes de
-          <b>%{date}</b>.
+          Tempos de qualificação em %{events} têm que ser obtidos até
+          <b>%{date}</b> inclusivé.
       #original_hash: 041a5de
       format: Formato
       #original_hash: 0d1fcc3

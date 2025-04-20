@@ -26,8 +26,8 @@ RSpec.describe PV do
       it "doesn't complain when it's fine" do
         [Result, InboxResult].each do |model|
           result_kind = model.model_name.singular.to_sym
-          FactoryBot.create_list(result_kind, 10, competition: competition1, eventId: "333oh")
-          FactoryBot.create_list(result_kind, 10, competition: competition2, eventId: "222")
+          FactoryBot.create_list(result_kind, 10, competition: competition1, event_id: "333oh")
+          FactoryBot.create_list(result_kind, 10, competition: competition2, event_id: "222")
         end
 
         validator_args.each do |arg|
@@ -47,12 +47,12 @@ RSpec.describe PV do
         [Result, InboxResult].each do |model|
           result_kind = model.model_name.singular.to_sym
           res1 = FactoryBot.create(result_kind, competition: competition1,
-                                                eventId: "333oh")
+                                                event_id: "333oh")
           res1.person.delete
           expected_errors[model.to_s] = [
-            RV::ValidationError.new(:persons, competition1.id,
-                                    PV::RESULTS_WITHOUT_PERSON_ERROR,
-                                    person_id: res1.personId),
+            RV::ValidationError.new(PV::RESULTS_WITHOUT_PERSON_ERROR,
+                                    :persons, competition1.id,
+                                    person_id: res1.person_id),
           ]
         end
         validator_args.each do |arg|
@@ -71,37 +71,37 @@ RSpec.describe PV do
       # NON_MATCHING_NAME_WARNING
       # NON_MATCHING_COUNTRY_WARNING
       it "validates against existing person data" do
-        person = FactoryBot.create(:person, countryId: "Spain")
-        dup_name = FactoryBot.create(:inbox_person, name: person.name, competitionId: competition1.id)
+        person = FactoryBot.create(:person, country_id: "Spain")
+        dup_name = FactoryBot.create(:inbox_person, name: person.name, competition_id: competition1.id)
         FactoryBot.create(:inbox_result,
                           person: dup_name, competition: competition1,
-                          eventId: "333oh")
+                          event_id: "333oh")
         res1 = FactoryBot.create(:inbox_result,
                                  :for_existing_person,
                                  real_person: person,
-                                 competition: competition2, eventId: "222")
-        res1.person.update(dob: 90.years.ago, gender: "a", name: "Hey", countryId: "FR")
+                                 competition: competition2, event_id: "222")
+        res1.person.update(dob: 90.years.ago, gender: "a", name: "Hey", country_iso2: "FR")
 
         expected_warnings = [
-          RV::ValidationWarning.new(:persons, competition1.id,
-                                    PV::SAME_PERSON_NAME_WARNING,
+          RV::ValidationWarning.new(PV::SAME_PERSON_NAME_WARNING,
+                                    :persons, competition1.id,
                                     name: person.name, wca_ids: person.wca_id),
-          RV::ValidationWarning.new(:persons, competition2.id,
-                                    PV::NON_MATCHING_DOB_WARNING,
+          RV::ValidationWarning.new(PV::NON_MATCHING_DOB_WARNING,
+                                    :persons, competition2.id,
                                     name: res1.person.name, wca_id: person.wca_id,
                                     expected_dob: person.dob,
                                     dob: res1.person.dob),
-          RV::ValidationWarning.new(:persons, competition2.id,
-                                    PV::NON_MATCHING_NAME_WARNING,
+          RV::ValidationWarning.new(PV::NON_MATCHING_NAME_WARNING,
+                                    :persons, competition2.id,
                                     name: res1.person.name, wca_id: person.wca_id,
                                     expected_name: person.name),
-          RV::ValidationWarning.new(:persons, competition2.id,
-                                    PV::NON_MATCHING_GENDER_WARNING,
+          RV::ValidationWarning.new(PV::NON_MATCHING_GENDER_WARNING,
+                                    :persons, competition2.id,
                                     name: res1.person.name, wca_id: person.wca_id,
                                     expected_gender: person.gender,
                                     gender: res1.person.gender),
-          RV::ValidationWarning.new(:persons, competition2.id,
-                                    PV::NON_MATCHING_COUNTRY_WARNING,
+          RV::ValidationWarning.new(PV::NON_MATCHING_COUNTRY_WARNING,
+                                    :persons, competition2.id,
                                     name: res1.person.name, wca_id: person.wca_id,
                                     expected_country: person.country.iso2,
                                     country: res1.person.country.iso2),
@@ -135,122 +135,122 @@ RSpec.describe PV do
       # SINGLE_LETTER_FIRST_OR_LAST_NAME_WARNING
       # SINGLE_NAME_WARNING
       it "validates person data" do
-        FactoryBot.create(:inbox_result, competition: competition2, eventId: "222")
-        res1 = FactoryBot.create(:inbox_result, competition: competition2, eventId: "222")
+        FactoryBot.create(:inbox_result, competition: competition2, event_id: "222")
+        res1 = FactoryBot.create(:inbox_result, competition: competition2, event_id: "222")
         res1.delete
 
         res0101 = FactoryBot.create(:inbox_result,
-                                    competition: competition1, eventId: "333oh")
+                                    competition: competition1, event_id: "333oh")
         # To the person reading that in 2100: haha, enjoy my 80+ years old joke :)
         # Just bump that date to make the "not_so_young" warning go away.
         res0101.person.update(dob: Date.new(2000, 1, 1))
         res_too_young = FactoryBot.create(:inbox_result,
                                           competition: competition1,
-                                          eventId: "333oh")
+                                          event_id: "333oh")
         res_too_young.person.update(dob: 2.years.ago)
         res_not_young = FactoryBot.create(:inbox_result,
                                           competition: competition1,
-                                          eventId: "333oh")
+                                          event_id: "333oh")
         res_not_young.person.update(dob: 101.years.ago)
         res_whitespace = FactoryBot.create(:inbox_result,
                                            competition: competition1,
-                                           eventId: "333oh")
+                                           event_id: "333oh")
         res_whitespace.person.update(name: "Hey(  There)", gender: nil)
         res_bad_parenthesis = FactoryBot.create(:inbox_result,
                                                 competition: competition1,
-                                                eventId: "333oh")
+                                                event_id: "333oh")
         res_bad_parenthesis.person.update(name: "Bad Parenthesis Guy（test）")
         res_lowercase1 = FactoryBot.create(:inbox_result,
                                            competition: competition1,
-                                           eventId: "333oh")
+                                           event_id: "333oh")
         res_lowercase1.person.update(name: "Yamada taro (山田太郎)")
         res_lowercase2 = FactoryBot.create(:inbox_result,
                                            competition: competition1,
-                                           eventId: "333oh")
+                                           event_id: "333oh")
         res_lowercase2.person.update(name: "ilis Xocavənd")
         res_missing_period = FactoryBot.create(:inbox_result,
                                                competition: competition1,
-                                               eventId: "333oh")
+                                               event_id: "333oh")
         res_missing_period.person.update(name: "Missing A Period")
         res_single_letter = FactoryBot.create(:inbox_result,
                                               competition: competition1,
-                                              eventId: "333oh")
+                                              event_id: "333oh")
         res_single_letter.person.update(name: "A. B. van der Doe")
         res_bad_period_upcase = FactoryBot.create(:inbox_result,
                                                   competition: competition1,
-                                                  eventId: "333oh")
+                                                  event_id: "333oh")
         res_bad_period_upcase.person.update(name: "David K.J. RAmsey")
         res_same_name1 = FactoryBot.create(:inbox_result,
                                            competition: competition1,
-                                           eventId: "333oh")
+                                           event_id: "333oh")
         res_same_name1.person.update(name: "Tester")
         res_same_name2 = FactoryBot.create(:inbox_result,
                                            competition: competition1,
-                                           eventId: "333oh")
+                                           event_id: "333oh")
         res_same_name2.person.update(name: "Tester")
         res_wrong_wca_id = FactoryBot.create(:inbox_result,
                                              competition: competition1,
-                                             eventId: "333oh")
-        res_wrong_wca_id.person.update(wcaId: "ERR")
+                                             event_id: "333oh")
+        res_wrong_wca_id.person.update(wca_id: "ERR")
 
         expected_errors = [
-          RV::ValidationError.new(:persons, competition2.id,
-                                  PV::PERSON_WITHOUT_RESULTS_ERROR,
+          RV::ValidationError.new(PV::PERSON_WITHOUT_RESULTS_ERROR,
+                                  :persons, competition2.id,
                                   person_name: res1.person.name,
                                   person_id: res1.person.id),
-          RV::ValidationError.new(:persons, competition1.id,
-                                  PV::WHITESPACE_IN_NAME_ERROR,
+          RV::ValidationError.new(PV::WHITESPACE_IN_NAME_ERROR,
+                                  :persons, competition1.id,
                                   name: res_whitespace.person.name),
-          RV::ValidationError.new(:persons, competition1.id,
-                                  PV::WRONG_WCA_ID_ERROR,
+          RV::ValidationError.new(PV::WRONG_WCA_ID_ERROR,
+                                  :persons, competition1.id,
                                   name: res_wrong_wca_id.person.name,
                                   wca_id: res_wrong_wca_id.person.wca_id),
-          RV::ValidationError.new(:persons, competition1.id,
-                                  PV::WRONG_PARENTHESIS_FORMAT_ERROR,
+          RV::ValidationError.new(PV::WRONG_PARENTHESIS_FORMAT_ERROR,
+                                  :persons, competition1.id,
                                   name: res_whitespace.person.name),
-          RV::ValidationError.new(:persons, competition1.id,
-                                  PV::WRONG_PARENTHESIS_TYPE_ERROR,
+          RV::ValidationError.new(PV::WRONG_PARENTHESIS_TYPE_ERROR,
+                                  :persons, competition1.id,
                                   name: res_bad_parenthesis.person.name),
         ]
         expected_warnings = [
-          RV::ValidationWarning.new(:persons, competition1.id,
-                                    PV::DOB_0101_WARNING,
+          RV::ValidationWarning.new(PV::DOB_0101_WARNING,
+                                    :persons, competition1.id,
                                     name: res0101.person.name),
-          RV::ValidationWarning.new(:persons, competition1.id,
-                                    PV::VERY_YOUNG_PERSON_WARNING,
+          RV::ValidationWarning.new(PV::VERY_YOUNG_PERSON_WARNING,
+                                    :persons, competition1.id,
                                     name: res_too_young.person.name),
-          RV::ValidationWarning.new(:persons, competition1.id,
-                                    PV::NOT_SO_YOUNG_PERSON_WARNING,
+          RV::ValidationWarning.new(PV::NOT_SO_YOUNG_PERSON_WARNING,
+                                    :persons, competition1.id,
                                     name: res_not_young.person.name),
-          RV::ValidationWarning.new(:persons, competition1.id,
-                                    PV::EMPTY_GENDER_WARNING,
+          RV::ValidationWarning.new(PV::EMPTY_GENDER_WARNING,
+                                    :persons, competition1.id,
                                     name: res_whitespace.person.name),
-          RV::ValidationWarning.new(:persons, competition1.id,
-                                    PV::MULTIPLE_NEWCOMERS_WITH_SAME_NAME_WARNING,
+          RV::ValidationWarning.new(PV::MULTIPLE_NEWCOMERS_WITH_SAME_NAME_WARNING,
+                                    :persons, competition1.id,
                                     name: res_same_name1.person.name),
-          RV::ValidationWarning.new(:persons, competition1.id,
-                                    PV::LOWERCASE_NAME_WARNING,
+          RV::ValidationWarning.new(PV::LOWERCASE_NAME_WARNING,
+                                    :persons, competition1.id,
                                     name: res_lowercase1.person.name),
-          RV::ValidationWarning.new(:persons, competition1.id,
-                                    PV::LOWERCASE_NAME_WARNING,
+          RV::ValidationWarning.new(PV::LOWERCASE_NAME_WARNING,
+                                    :persons, competition1.id,
                                     name: res_lowercase2.person.name),
-          RV::ValidationWarning.new(:persons, competition1.id,
-                                    PV::UPPERCASE_NAME_WARNING,
+          RV::ValidationWarning.new(PV::UPPERCASE_NAME_WARNING,
+                                    :persons, competition1.id,
                                     name: res_bad_period_upcase.person.name),
-          RV::ValidationWarning.new(:persons, competition1.id,
-                                    PV::LETTER_AFTER_PERIOD_WARNING,
+          RV::ValidationWarning.new(PV::LETTER_AFTER_PERIOD_WARNING,
+                                    :persons, competition1.id,
                                     name: res_bad_period_upcase.person.name),
-          RV::ValidationWarning.new(:persons, competition1.id,
-                                    PV::MISSING_PERIOD_WARNING,
+          RV::ValidationWarning.new(PV::MISSING_PERIOD_WARNING,
+                                    :persons, competition1.id,
                                     name: res_missing_period.person.name),
-          RV::ValidationWarning.new(:persons, competition1.id,
-                                    PV::SINGLE_LETTER_FIRST_OR_LAST_NAME_WARNING,
+          RV::ValidationWarning.new(PV::SINGLE_LETTER_FIRST_OR_LAST_NAME_WARNING,
+                                    :persons, competition1.id,
                                     name: res_single_letter.person.name),
-          RV::ValidationWarning.new(:persons, competition1.id,
-                                    PV::SINGLE_NAME_WARNING,
+          RV::ValidationWarning.new(PV::SINGLE_NAME_WARNING,
+                                    :persons, competition1.id,
                                     name: res_same_name1.person.name),
-          RV::ValidationWarning.new(:persons, competition1.id,
-                                    PV::SINGLE_NAME_WARNING,
+          RV::ValidationWarning.new(PV::SINGLE_NAME_WARNING,
+                                    :persons, competition1.id,
                                     name: res_same_name2.person.name),
         ]
         validator_args = [

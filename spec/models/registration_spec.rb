@@ -155,14 +155,22 @@ RSpec.describe Registration do
     end
   end
 
-  context "upper guest limit not enabled" do
+  context "with upper guest limit not enabled" do
     it "allows guests greater than guest limit" do
       guest_limit = 1
       competition = FactoryBot.create :competition, guests_per_registration_limit: guest_limit, guest_entry_status: Competition.guest_entry_statuses['free']
       registration.competition = competition
-      registration.guests = 1_000_000
+      registration.guests = 10
       expect(registration.guests).to be > registration.guest_limit
       expect(registration).to be_valid
+    end
+
+    it "does not allow guests greater than guest hard limit" do
+      guest_limit = 1
+      competition = FactoryBot.create :competition, guests_per_registration_limit: guest_limit, guest_entry_status: Competition.guest_entry_statuses['free']
+      registration.competition = competition
+      registration.guests = 1_000_000
+      expect(registration).to be_invalid_with_errors(guests: ["must be less than or equal to 99"])
     end
 
     it "requires guests greater than 0" do
@@ -268,9 +276,9 @@ RSpec.describe Registration do
     let!(:result) {
       FactoryBot.create(
         :result,
-        personId: user.wca_id,
-        competitionId: previous_competition.id,
-        eventId: '333',
+        person_id: user.wca_id,
+        competition_id: previous_competition.id,
+        event_id: '333',
         best: 1200,
         average: 1500,
       )
@@ -334,7 +342,13 @@ RSpec.describe Registration do
       competition.allow_registration_without_qualification = false
       competition.save!
       registration.reload
-      expect(registration).to be_invalid_with_errors(registration_competition_events: ["You cannot register for events you are not qualified for."])
+      expect(registration).to be_invalid_with_errors(
+        registration_competition_events: ["is invalid"],
+      )
+      rce = registration.registration_competition_events.find_by(competition_event: competition_event)
+      expect(rce).to be_invalid_with_errors(
+        competition_event: ["You cannot register for events you are not qualified for."],
+      )
     end
   end
 
@@ -353,35 +367,35 @@ RSpec.describe Registration do
     it 'deleted state returns deleted status' do
       registration = FactoryBot.create(:registration, :cancelled)
 
-      expect(registration.cancelled?).to eq(true)
+      expect(registration.cancelled?).to be(true)
       expect(registration.to_wcif['status']).to eq('deleted')
     end
 
     it 'rejected state returns deleted status' do
       registration = FactoryBot.create(:registration, :rejected)
 
-      expect(registration.rejected?).to eq(true)
+      expect(registration.rejected?).to be(true)
       expect(registration.to_wcif['status']).to eq('deleted')
     end
 
     it 'accepted state returns accepted status' do
       registration = FactoryBot.create(:registration, :accepted)
 
-      expect(registration.accepted?).to eq(true)
+      expect(registration.accepted?).to be(true)
       expect(registration.to_wcif['status']).to eq('accepted')
     end
 
     it 'pending state returns pending status' do
       registration = FactoryBot.create(:registration, :pending)
 
-      expect(registration.pending?).to eq(true)
+      expect(registration.pending?).to be(true)
       expect(registration.to_wcif['status']).to eq('pending')
     end
 
     it 'waitlisted state returns pending status' do
       registration = FactoryBot.create(:registration, :waiting_list)
 
-      expect(registration.waitlisted?).to eq(true)
+      expect(registration.waitlisted?).to be(true)
       expect(registration.to_wcif['status']).to eq('pending')
     end
   end
@@ -435,7 +449,7 @@ RSpec.describe Registration do
       ]
 
       it 'tests cover all possible status update combinations' do
-        combined_updates = (competing_status_updates).flatten
+        combined_updates = competing_status_updates.flatten
         expect(combined_updates).to match_array(REGISTRATION_TRANSITIONS)
       end
 
@@ -509,10 +523,22 @@ RSpec.describe Registration do
         expect(reg.waiting_list_position).to eq(6)
       end
 
+      it 'no change if we try to add a registration on the waiting list' do
+        reg1.update_lanes!({ user_id: reg1.user.id, competing: { status: 'waiting_list' } }.with_indifferent_access, reg1.user)
+
+        expect(reg1.waiting_list_position).to eq(1)
+        expect(reg2.waiting_list_position).to eq(2)
+        expect(reg3.waiting_list_position).to eq(3)
+        expect(reg4.waiting_list_position).to eq(4)
+        expect(reg5.waiting_list_position).to eq(5)
+
+        expect(waiting_list.entries.count).to eq(5)
+      end
+
       it 'removes from waiting list' do
         reg4.update_lanes!({ user_id: reg4.user.id, competing: { status: 'pending' } }.with_indifferent_access, reg4.user)
 
-        expect(reg4.waiting_list_position).to eq(nil)
+        expect(reg4.waiting_list_position).to be(nil)
         expect(waiting_list.entries.count).to eq(4)
       end
 
@@ -539,6 +565,116 @@ RSpec.describe Registration do
 
         expect(waiting_list.entries.count).to eq(5)
       end
+
+      it 'moves to the same position' do
+        reg5.update_lanes!({ user_id: reg5.user.id, competing: { waiting_list_position: 5 } }.with_indifferent_access, reg5.user)
+
+        expect(reg1.waiting_list_position).to eq(1)
+        expect(reg2.waiting_list_position).to eq(2)
+        expect(reg3.waiting_list_position).to eq(3)
+        expect(reg4.waiting_list_position).to eq(4)
+        expect(reg5.waiting_list_position).to eq(5)
+
+        expect(waiting_list.entries.count).to eq(5)
+      end
+
+      it 'move request for a registration that isnt in the waiting list' do
+        reg = FactoryBot.create(:registration, competition: competition)
+        reg.update_lanes!({ user_id: reg.user.id, competing: { waiting_list_position: 3 } }.with_indifferent_access, reg.user)
+
+        expect(reg.waiting_list_position).to be(nil)
+
+        expect(reg1.waiting_list_position).to eq(1)
+        expect(reg2.waiting_list_position).to eq(2)
+        expect(reg3.waiting_list_position).to eq(3)
+        expect(reg4.waiting_list_position).to eq(4)
+        expect(reg5.waiting_list_position).to eq(5)
+      end
+    end
+  end
+
+  describe 'hooks' do
+    it 'positive registration_payment calls registration.consider_auto_close' do
+      competition = FactoryBot.create(:competition)
+      reg = FactoryBot.create(:registration, competition: competition)
+      expect(reg).to receive(:consider_auto_close)
+
+      FactoryBot.create(
+        :registration_payment,
+        registration: reg,
+        user: reg.user,
+        amount_lowest_denomination: reg.competition.base_entry_fee_lowest_denomination,
+      )
+    end
+
+    it 'doesnt call registration.auto_close! after a refund is created' do
+      competition = FactoryBot.create(:competition)
+      reg = FactoryBot.create(:registration, :paid, competition: competition)
+      expect(reg).to receive(:consider_auto_close).exactly(0).times
+
+      FactoryBot.create(
+        :registration_payment,
+        registration: reg,
+        user: reg.user,
+        amount_lowest_denomination: -reg.competition.base_entry_fee_lowest_denomination,
+        refunded_registration_payment_id: reg.registration_payments.first.id,
+      )
+    end
+
+    it 'doesnt competition.attempt_auto_close! if reg is partially paid' do
+      competition = FactoryBot.create(:competition)
+      expect(competition).to receive(:attempt_auto_close!).exactly(0).times
+
+      reg = FactoryBot.create(:registration, :partially_paid, competition: competition)
+      reg.consider_auto_close
+    end
+
+    it 'calls competition.attempt_auto_close! if reg is fully paid' do
+      competition = FactoryBot.create(:competition)
+      expect(competition).to receive(:attempt_auto_close!).exactly(1).times
+
+      FactoryBot.create(:registration, :paid, competition: competition)
+    end
+  end
+
+  describe '#newcomer_month_eligible_competitors_count' do
+    let(:newcomer_month_comp) { FactoryBot.create(:competition, :newcomer_month) }
+    let!(:newcomer_reg) { FactoryBot.create(:registration, :newcomer, :accepted, competition: newcomer_month_comp) }
+
+    before do
+      FactoryBot.create_list(:registration, 2, :accepted, competition: newcomer_month_comp)
+    end
+
+    it 'doesnt include non-newcomers in count' do
+      newcomer_reg.competing_status = "accepted"
+      expect(newcomer_month_comp.registrations.count).to eq(3)
+      expect(newcomer_month_comp.registrations.newcomer_month_eligible_competitors_count).to eq(1)
+    end
+
+    it 'doesnt include newcomers in non-accepted states' do
+      FactoryBot.create(:registration, :newcomer, competition: newcomer_month_comp)
+      FactoryBot.create(:registration, :newcomer, :cancelled, competition: newcomer_month_comp)
+      FactoryBot.create(:registration, :newcomer, :rejected, competition: newcomer_month_comp)
+      FactoryBot.create(:registration, :newcomer, :waiting_list, competition: newcomer_month_comp)
+
+      expect(newcomer_month_comp.registrations.count).to eq(7)
+      expect(newcomer_month_comp.registrations.newcomer_month_eligible_competitors_count).to eq(1)
+    end
+  end
+
+  it 'validates presence of registered_at' do
+    reg = FactoryBot.build(:registration, registered_at: nil)
+    expect(reg).not_to be_valid
+    expect(reg.errors[:registered_at]).to include("can't be blank")
+  end
+
+  describe '#entry_fee_with_donation' do
+    it 'returns a RubyMoney object' do
+      expect(registration.entry_fee_with_donation).to eq(Money.new(1000, "USD"))
+    end
+
+    it 'given a donation, sums the donation and entry fee' do
+      expect(registration.entry_fee_with_donation(1500)).to eq(Money.new(2500, "USD"))
     end
   end
 end

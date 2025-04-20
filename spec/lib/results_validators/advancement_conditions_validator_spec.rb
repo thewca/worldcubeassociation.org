@@ -32,12 +32,12 @@ RSpec.describe ResultsValidators::AdvancementConditionsValidator do
         fake_person = build_person(result_kind, competition1)
         # Collecting all the results and using bulk import for better performance.
         results = []
-        results += FactoryBot.build_list(result_kind, 100, competition: competition1, eventId: "333oh", roundTypeId: "1", person: fake_person)
-        results += FactoryBot.build_list(result_kind, 16, competition: competition1, eventId: "333oh", roundTypeId: "2", person: fake_person)
-        results += FactoryBot.build_list(result_kind, 8, competition: competition1, eventId: "333oh", roundTypeId: "3", person: fake_person)
-        results += FactoryBot.build_list(result_kind, 7, competition: competition1, eventId: "333oh", roundTypeId: "f", person: fake_person)
-        results += FactoryBot.build_list(result_kind, 8, competition: competition2, eventId: "222", roundTypeId: "1", person: fake_person)
-        results += FactoryBot.build_list(result_kind, 5, competition: competition2, eventId: "222", roundTypeId: "f", person: fake_person)
+        results += FactoryBot.build_list(result_kind, 100, competition: competition1, event_id: "333oh", round_type_id: "1", person: fake_person)
+        results += FactoryBot.build_list(result_kind, 16, competition: competition1, event_id: "333oh", round_type_id: "2", person: fake_person)
+        results += FactoryBot.build_list(result_kind, 8, competition: competition1, event_id: "333oh", round_type_id: "3", person: fake_person)
+        results += FactoryBot.build_list(result_kind, 7, competition: competition1, event_id: "333oh", round_type_id: "f", person: fake_person)
+        results += FactoryBot.build_list(result_kind, 8, competition: competition2, event_id: "222", round_type_id: "1", person: fake_person)
+        results += FactoryBot.build_list(result_kind, 5, competition: competition2, event_id: "222", round_type_id: "f", person: fake_person)
         model.import(results)
       end
 
@@ -55,9 +55,9 @@ RSpec.describe ResultsValidators::AdvancementConditionsValidator do
       fake_person = build_person(:result, competition1)
       # Collecting all the results and using bulk import for better performance.
       results = []
-      results += FactoryBot.build_list(:result, 100, competition: competition1, eventId: "333oh", roundTypeId: "1", person: fake_person)
-      results += FactoryBot.build_list(:result, 8, competition: competition1, eventId: "333oh", roundTypeId: "b", person: fake_person)
-      results += FactoryBot.build_list(:result, 32, competition: competition1, eventId: "333oh", roundTypeId: "f", person: fake_person)
+      results += FactoryBot.build_list(:result, 100, competition: competition1, event_id: "333oh", round_type_id: "1", person: fake_person)
+      results += FactoryBot.build_list(:result, 8, competition: competition1, event_id: "333oh", round_type_id: "b", person: fake_person)
+      results += FactoryBot.build_list(:result, 32, competition: competition1, event_id: "333oh", round_type_id: "f", person: fake_person)
       Result.import(results, validate: false)
 
       validator_args.each do |arg|
@@ -93,32 +93,32 @@ RSpec.describe ResultsValidators::AdvancementConditionsValidator do
       (1..20).each do |i|
         fake_person = FactoryBot.create(:person)
         value = i * 100
-        FactoryBot.create(:result, competition: competition2, eventId: "222", roundTypeId: "1", person: fake_person, best: value, average: value)
-        FactoryBot.create(:result, competition: competition3, eventId: "333", roundTypeId: "1", person: fake_person, best: value, average: value)
+        FactoryBot.create(:result, competition: competition2, event_id: "222", round_type_id: "1", person: fake_person, best: value, average: value)
+        FactoryBot.create(:result, competition: competition3, event_id: "333", round_type_id: "1", person: fake_person, best: value, average: value)
         if i < 10
-          FactoryBot.create(:result, competition: competition2, eventId: "222", roundTypeId: "f", person: fake_person, best: value, average: value)
-          FactoryBot.create(:result, competition: competition3, eventId: "333", roundTypeId: "f", person: fake_person, best: value, average: value)
+          FactoryBot.create(:result, competition: competition2, event_id: "222", round_type_id: "f", person: fake_person, best: value, average: value)
+          FactoryBot.create(:result, competition: competition3, event_id: "333", round_type_id: "f", person: fake_person, best: value, average: value)
         end
         if i == 20
           # Create a single attempt result over the attempt result condition.
-          FactoryBot.create(:result, competition: competition2, eventId: "222", roundTypeId: "f", person: fake_person, best: 1800, average: 1800)
-          expected_errors << RV::ValidationError.new(:rounds, competition2.id,
-                                                     ACV::COMPETED_NOT_QUALIFIED_ERROR,
+          FactoryBot.create(:result, competition: competition2, event_id: "222", round_type_id: "f", person: fake_person, best: 1800, average: 1800)
+          expected_errors << RV::ValidationError.new(ACV::COMPETED_NOT_QUALIFIED_ERROR,
+                                                     :rounds, competition2.id,
                                                      round_id: "222-f",
                                                      ids: fake_person.wca_id,
                                                      condition: first_round.advancement_condition.to_s(first_round))
         end
       end
-      expected_errors << RV::ValidationError.new(:rounds, competition2.id,
-                                                 ACV::ROUND_9P1_ERROR,
+      expected_errors << RV::ValidationError.new(ACV::ROUND_9P1_ERROR,
+                                                 :rounds, competition2.id,
                                                  round_id: "222-f",
                                                  condition: first_round.advancement_condition.to_s(first_round))
       expected_warnings = [
-        RV::ValidationWarning.new(:rounds, competition2.id,
-                                  ACV::NOT_ENOUGH_QUALIFIED_WARNING,
+        RV::ValidationWarning.new(ACV::NOT_ENOUGH_QUALIFIED_WARNING,
+                                  :rounds, competition2.id,
                                   round_id: "222-f", expected: 16, actual: 10),
-        RV::ValidationWarning.new(:rounds, competition3.id,
-                                  ACV::TOO_MANY_QUALIFIED_WARNING,
+        RV::ValidationWarning.new(ACV::TOO_MANY_QUALIFIED_WARNING,
+                                  :rounds, competition3.id,
                                   round_id: "333-f", actual: 9, expected: 4,
                                   condition: first_round2.advancement_condition.to_s(first_round2)),
       ]
@@ -137,10 +137,8 @@ RSpec.describe ResultsValidators::AdvancementConditionsValidator do
       (1..20).each do |i|
         fake_person = FactoryBot.create(:person)
         value = i > 10 ? -1 : i * 100
-        FactoryBot.create(:result, competition: competition2, eventId: "222", roundTypeId: "1", person: fake_person, best: value, average: value)
-        if i <= 10
-          FactoryBot.create(:result, competition: competition2, eventId: "222", roundTypeId: "f", person: fake_person, best: value, average: value)
-        end
+        FactoryBot.create(:result, competition: competition2, event_id: "222", round_type_id: "1", person: fake_person, best: value, average: value)
+        FactoryBot.create(:result, competition: competition2, event_id: "222", round_type_id: "f", person: fake_person, best: value, average: value) if i <= 10
       end
 
       acv = ACV.new.validate(competition_ids: [competition2], model: Result)
@@ -163,29 +161,29 @@ RSpec.describe ResultsValidators::AdvancementConditionsValidator do
         fake_person = build_person(result_kind, competition1)
         # Collecting all the results and using bulk import for better performance.
         results = []
-        results += FactoryBot.build_list(result_kind, 99, competition: competition1, eventId: "333oh", roundTypeId: "1", person: fake_person)
-        results += FactoryBot.build_list(result_kind, 15, competition: competition1, eventId: "333oh", roundTypeId: "2", person: fake_person)
-        results += FactoryBot.build_list(result_kind, 7, competition: competition1, eventId: "333oh", roundTypeId: "3", person: fake_person)
-        results += FactoryBot.build_list(result_kind, 7, competition: competition1, eventId: "333oh", roundTypeId: "f", person: fake_person)
-        results += FactoryBot.build_list(result_kind, 8, competition: competition2, eventId: "222", roundTypeId: "1", person: fake_person)
-        results += FactoryBot.build_list(result_kind, 7, competition: competition2, eventId: "222", roundTypeId: "f", person: fake_person)
+        results += FactoryBot.build_list(result_kind, 99, competition: competition1, event_id: "333oh", round_type_id: "1", person: fake_person)
+        results += FactoryBot.build_list(result_kind, 15, competition: competition1, event_id: "333oh", round_type_id: "2", person: fake_person)
+        results += FactoryBot.build_list(result_kind, 7, competition: competition1, event_id: "333oh", round_type_id: "3", person: fake_person)
+        results += FactoryBot.build_list(result_kind, 7, competition: competition1, event_id: "333oh", round_type_id: "f", person: fake_person)
+        results += FactoryBot.build_list(result_kind, 8, competition: competition2, event_id: "222", round_type_id: "1", person: fake_person)
+        results += FactoryBot.build_list(result_kind, 7, competition: competition2, event_id: "222", round_type_id: "f", person: fake_person)
         model.import(results, validate: false)
       end
       expected_errors = [
-        RV::ValidationError.new(:rounds, competition1.id,
-                                ACV::REGULATION_9M1_ERROR,
+        RV::ValidationError.new(ACV::REGULATION_9M1_ERROR,
+                                :rounds, competition1.id,
                                 round_id: "333oh-1"),
-        RV::ValidationError.new(:rounds, competition1.id,
-                                ACV::REGULATION_9M2_ERROR,
+        RV::ValidationError.new(ACV::REGULATION_9M2_ERROR,
+                                :rounds, competition1.id,
                                 round_id: "333oh-2"),
-        RV::ValidationError.new(:rounds, competition1.id,
-                                ACV::REGULATION_9M3_ERROR,
+        RV::ValidationError.new(ACV::REGULATION_9M3_ERROR,
+                                :rounds, competition1.id,
                                 round_id: "333oh-3"),
-        RV::ValidationError.new(:rounds, competition1.id,
-                                ACV::OLD_REGULATION_9P_ERROR,
+        RV::ValidationError.new(ACV::OLD_REGULATION_9P_ERROR,
+                                :rounds, competition1.id,
                                 round_id: "333oh-f"),
-        RV::ValidationError.new(:rounds, competition2.id,
-                                ACV::REGULATION_9P1_ERROR,
+        RV::ValidationError.new(ACV::REGULATION_9P1_ERROR,
+                                :rounds, competition2.id,
                                 round_id: "222-f"),
       ]
 
@@ -199,16 +197,16 @@ RSpec.describe ResultsValidators::AdvancementConditionsValidator do
     it "does not explode when there are results for non-existent rounds" do
       FactoryBot.create(:round, competition: competition1, event_id: "333bf", format_id: "3", total_number_of_rounds: 1, number: 1)
 
-      fake_person = build_person(Result, competition1)
+      fake_person = build_person(:result, competition1)
 
-      existent_result = FactoryBot.build(:result, competition: competition1, eventId: "333bf", format_id: "3", roundTypeId: "f", person: fake_person)
-      nonexistent_result = FactoryBot.build(:result, competition: competition1, eventId: "333bf", format_id: "3", roundTypeId: "1", person: fake_person, skip_round_creation: true)
+      existent_result = FactoryBot.build(:result, competition: competition1, event_id: "333bf", format_id: "3", round_type_id: "f", person: fake_person)
+      nonexistent_result = FactoryBot.build(:result, competition: competition1, event_id: "333bf", format_id: "3", round_type_id: "1", person: fake_person, skip_round_creation: true)
 
       Result.import([existent_result, nonexistent_result], validate: false)
 
       acv = ACV.new.validate(competition_ids: [competition1], model: Result)
-      expect(acv.errors).to include(RV::ValidationError.new(:rounds, competition1.id,
-                                                            ACV::ROUND_NOT_FOUND_ERROR,
+      expect(acv.errors).to include(RV::ValidationError.new(ACV::ROUND_NOT_FOUND_ERROR,
+                                                            :rounds, competition1.id,
                                                             round_id: "333bf-1"))
     end
   end
@@ -219,7 +217,7 @@ RSpec.describe ResultsValidators::AdvancementConditionsValidator do
       if result_kind == :result
         FactoryBot.build(:person)
       else
-        FactoryBot.build(:inbox_person, competitionId: competition.id)
+        FactoryBot.build(:inbox_person, competition_id: competition.id)
       end
     end
 end

@@ -23,7 +23,7 @@ Rails.configuration.to_prepare do
         last_word_connector: ', and ',
       }
       if defined?(I18n)
-        i18n_connectors = I18n.translate(:'support.array', locale: options[:locale], default: {})
+        i18n_connectors = I18n.t(:'support.array', locale: options[:locale], default: {})
         default_connectors.merge!(i18n_connectors)
       end
       options = default_connectors.merge!(options)
@@ -51,6 +51,21 @@ Rails.configuration.to_prepare do
     end
   end
 
+  Hash.class_eval do
+    def merge_serialization_opts(other = nil)
+      self.to_h do |key, value|
+        # Try to read `key` from the other hash, fall back to empty array.
+        other_value = other&.fetch(key.to_s, []) || []
+
+        # Merge arrays together, making sure to respect the difference between symbols and strings.
+        merged_value = value.map(&:to_sym) & other_value.map(&:to_sym)
+
+        # Return the merged result associated with the original (common) key
+        [key, merged_value]
+      end
+    end
+  end
+
   ActiveSupport::Duration.class_eval do
     def in_seconds
       self.to_i
@@ -72,7 +87,7 @@ Rails.configuration.to_prepare do
   Doorkeeper::OAuth::PreAuthorization.class_eval do
     old_validate_redirect_uri = instance_method(:validate_redirect_uri)
     define_method(:validate_redirect_uri) do
-      @client.application.dangerously_allow_any_redirect_uri ? true : old_validate_redirect_uri.bind(self).call
+      @client.application.dangerously_allow_any_redirect_uri ? true : old_validate_redirect_uri.bind_call(self)
     end
   end
 
@@ -86,6 +101,32 @@ Rails.configuration.to_prepare do
     # so because of the reversing we need to reverse the tie-breaker as well
     def stable_sort_by_desc
       sort_by.with_index { |x, idx| [yield(x), -idx] }.reverse
+    end
+  end
+
+  Hash.class_eval do
+    def reject_values_recursive(&)
+      self.transform_values do |value|
+        if value.is_a?(Hash)
+          value.reject_values_recursive(&)
+        else
+          value
+        end
+      end.reject do |_key, value|
+        yield value
+      end
+    end
+
+    def each_recursive(*prefixes, &)
+      self.each do |key, value|
+        next_prefixes = prefixes + [key]
+
+        if value.is_a?(Hash)
+          value.each_recursive(*next_prefixes, &)
+        else
+          yield key, value, *prefixes
+        end
+      end
     end
   end
 

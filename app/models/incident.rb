@@ -3,14 +3,14 @@
 class Incident < ApplicationRecord
   has_many :incident_tags, autosave: true, dependent: :destroy
   has_many :incident_competitions, dependent: :destroy
-  has_many :competitions, -> { order("Competitions.start_date asc") }, through: :incident_competitions
+  has_many :competitions, -> { order("competitions.start_date asc") }, through: :incident_competitions
 
   accepts_nested_attributes_for :incident_competitions, allow_destroy: true
 
   scope :resolved, -> { where.not(resolved_at: nil) }
 
   validate :digest_sent_at_consistent
-  validates_presence_of :title
+  validates :title, presence: true
 
   include Taggable
 
@@ -31,12 +31,8 @@ class Incident < ApplicationRecord
   end
 
   def digest_sent_at_consistent
-    if digest_sent_at && !digest_worthy
-      errors.add(:digest_sent_at, "can't be set if digest_worthy is false.")
-    end
-    if digest_sent_at && !resolved_at
-      errors.add(:digest_sent_at, "can't be set if incident is not resolved.")
-    end
+    errors.add(:digest_sent_at, "can't be set if digest_worthy is false.") if digest_sent_at && !digest_worthy
+    errors.add(:digest_sent_at, "can't be set if incident is not resolved.") if digest_sent_at && !resolved_at
   end
 
   def url
@@ -49,12 +45,8 @@ class Incident < ApplicationRecord
       like_query = %w(public_summary title).map { |col| "#{col} LIKE :part" }.join(" OR ")
       incidents = incidents.where(like_query, part: "%#{part}%")
     end
-    if params[:tags]
-      incidents = incidents.where(incident_tags: IncidentTag.where(tag: params[:tags].split(",")))
-    end
-    if params[:competitions]
-      incidents = incidents.where(incident_competitions: IncidentCompetition.where(competition_id: params[:competitions].split(",")))
-    end
+    incidents = incidents.where(incident_tags: IncidentTag.where(tag: params[:tags].split(","))) if params[:tags]
+    incidents = incidents.where(incident_competitions: IncidentCompetition.where(competition_id: params[:competitions].split(","))) if params[:competitions]
     incidents.order(created_at: :desc)
   end
 
@@ -70,16 +62,14 @@ class Incident < ApplicationRecord
   }.freeze
 
   def serializable_hash(options = nil)
-    if options && options[:can_view_delegate_matters]
-      options = DEFAULT_DELEGATE_MATTERS_SERIALIZE_OPTIONS.merge(options || {})
-    else
-      options = DEFAULT_PUBLIC_SERIALIZE_OPTIONS.merge(options || {})
-    end
+    options = if options && options[:can_view_delegate_matters]
+                DEFAULT_DELEGATE_MATTERS_SERIALIZE_OPTIONS.merge(options || {})
+              else
+                DEFAULT_PUBLIC_SERIALIZE_OPTIONS.merge(options || {})
+              end
 
     json = super
-    json.merge!(
-      class: self.class.to_s.downcase,
-    )
+    json[:class] = self.class.to_s.downcase
 
     json[:tags] = tags_array.map { |tag|
       { name: tag }.merge(Regulation.find_or_nil(tag) || {})

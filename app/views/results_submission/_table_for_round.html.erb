@@ -6,7 +6,7 @@
 <% unindent_solves ||= false %>
 
 <h3><%= link_to round_name, "##{round_id}", "data-toggle": "collapse" %></h3>
-<%= wca_table table_class: "wca-results collapse #{"in" if expand_all}", floatThead: false, table_id: round_id do %>
+<%= wca_table table_class: "wca-results collapse #{"in" if expand_all}", float_thead: false, table_id: round_id do %>
   <thead>
     <tr>
       <th class="pos">#</th>
@@ -22,7 +22,7 @@
 
   <tbody>
     <% results.each do |result| %>
-      <% person = persons_by_id[result.personId] %>
+      <% person = persons_by_id[result.person_id] %>
       <tr>
         <td class="pos">
           <%= result.pos %>

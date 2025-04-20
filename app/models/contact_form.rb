@@ -16,9 +16,7 @@ class ContactForm < MailForm::Base
 
   def validate_to_email
     # Handle both email string and an array of those.
-    if to_email.blank? || Array(to_email).any? { |email| !ValidateEmail.valid?(email) }
-      errors.add(:to_email, I18n.t('common.errors.invalid'))
-    end
+    errors.add(:to_email, I18n.t('common.errors.invalid')) if to_email.blank? || Array(to_email).any? { |email| !ValidateEmail.valid?(email) }
   end
 
   def headers

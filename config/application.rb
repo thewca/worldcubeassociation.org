@@ -2,8 +2,6 @@
 
 require_relative 'boot'
 require_relative 'locales/locales'
-require_relative '../lib/middlewares/fix_accept_header'
-require_relative '../lib/middlewares/warden_user_logger'
 
 require 'rails/all'
 
@@ -70,30 +68,12 @@ module WcaOnRails
                          "World Cube Association"
                        end
 
-    config.middleware.insert_before 0, Rack::Cors, debug: false, logger: (-> { Rails.logger }) do
-      allow do
-        origins '*'
-
-        resource(
-          '/api/*',
-          headers: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept', 'Authorization'],
-          methods: [:get, :post, :delete, :put, :patch, :options, :head],
-          expose: ['Total', 'Per-Page', 'Link'],
-          max_age: 0,
-          credentials: false,
-        )
-      end
-    end
-
     # Setup available locales
     I18n.available_locales = Locales::AVAILABLE.keys
 
     # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
     # the I18n.default_locale when a translation cannot be found).
     config.i18n.fallbacks = [:en]
-
-    config.middleware.use Middlewares::FixAcceptHeader
-    config.middleware.use Middlewares::WardenUserLogger, logger: ->(s) { Rails.logger.info(s) }
 
     config.autoload_paths << Rails.root.join('lib')
     config.eager_load_paths << Rails.root.join('lib')

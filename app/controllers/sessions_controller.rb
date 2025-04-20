@@ -15,7 +15,7 @@ class SessionsController < Devise::SessionsController
                                 site: EnvConfig.STAGING_OAUTH_URL)
     redirect_uri = staging_login_url
 
-    unless params[:code].present?
+    if params[:code].blank?
       return redirect_to client.auth_code.authorize_url(
         redirect_uri: redirect_uri,
       ), allow_other_host: true
@@ -53,9 +53,8 @@ class SessionsController < Devise::SessionsController
   end
 
   def generate_email_otp
-    unless session[:otp_user_id] || current_user
-      return render json: { error: { message: I18n.t("devise.sessions.new.2fa.errors.cant_send_email") } }
-    end
+    return render json: { error: { message: I18n.t("devise.sessions.new.2fa.errors.cant_send_email") } } unless session[:otp_user_id] || current_user
+
     user = User.find(session[:otp_user_id] || current_user.id)
     TwoFactorMailer.send_otp_to_user(user).deliver_now
     render json: { status: "ok" }
@@ -65,7 +64,7 @@ class SessionsController < Devise::SessionsController
     # Overrides Devise's create sign in method and pass it a block executed
     # after sign in, to mark use as recently authenticated upon sign in.
     # See https://www.rubydoc.info/github/plataformatec/devise/Devise/SessionsController#create-instance_method
-    super do |resource|
+    super do |_resource|
       session[:last_authenticated_at] = Time.now
     end
   end
@@ -88,10 +87,19 @@ class SessionsController < Devise::SessionsController
     end
 
     def authenticate_with_two_factor
+      # The method we're currently in gets called as a `prepend_before_action`
+      #   with the purpose to "intercept" users who need to enter 2FA codes.
+      # Unfortunately, rendering out the 2FA form halts any Rails action filter chain,
+      #   so the `set_locale` that is normally (correctly!) set up in the top-level `ApplicationController`
+      #   is not called in this instance. The "cheapest" fix is just to call it manually here.
+      # (The basic notiong of "halting" is described at https://guides.rubyonrails.org/action_controller_overview.html#before-action
+      #   although not in very great detail. The server also logs a message about "was halted because ... rendered something" during runtime.)
+      set_locale
+
       user = self.resource = find_user
       if user_params[:otp_attempt].present? && session[:otp_user_id]
         authenticate_via_otp(user)
-      elsif user && user.valid_password?(user_params[:password])
+      elsif user&.valid_password?(user_params[:password])
         prompt_for_two_factor(user)
       end
     end

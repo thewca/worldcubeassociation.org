@@ -4,6 +4,7 @@ class ContactEditProfile < ContactForm
   attribute :wca_id
   attribute :changes_requested
   attribute :edit_profile_reason
+  attribute :requestor
   attribute :ticket
   attribute :document, attachment: true
 
@@ -18,7 +19,7 @@ class ContactEditProfile < ContactForm
   end
 
   def subject
-    Time.now.strftime("Edit Profile request by #{wca_id} on %d %b %Y at %R")
+    Time.now.strftime("Edit Profile request for the profile of #{wca_id} at %d %b %Y at %R")
   end
 
   def headers

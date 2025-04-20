@@ -1,34 +1,70 @@
+import React, { useMemo, useReducer } from 'react';
 import {
   Ref, Segment, Table, TableFooter,
 } from 'semantic-ui-react';
-import React from 'react';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
+import { noop } from 'lodash';
 import I18n from '../../../lib/i18n';
 import TableHeader from './AdministrationTableHeader';
 import TableRow from './AdministrationTableRow';
 import RegistrationAdministrationTableFooter from './RegistrationAdministrationTableFooter';
+import { sortRegistrations } from '../../../lib/utils/registrationAdmin';
+import { WCA_EVENT_IDS } from '../../../lib/wca-data.js.erb';
+import createSortReducer from '../reducers/sortReducer';
+
+export const sortReducer = createSortReducer([
+  'name',
+  'wca_id',
+  'country',
+  'paid_on_with_registered_on_fallback',
+  'registered_on',
+  'amount',
+  'events',
+  'guests',
+  'paid_on',
+  'comment',
+  'dob',
+  ...WCA_EVENT_IDS,
+]);
 
 export default function RegistrationAdministrationTable({
   columnsExpanded,
   registrations,
   selected,
-  select,
-  unselect,
-  sortDirection,
-  sortColumn,
-  changeSortColumn,
+  onSelect,
+  onUnselect,
+  onToggle,
+  initialSortColumn,
+  initialSortDirection = 'ascending',
   competitionInfo,
   draggable = false,
   sortable = true,
+  withPosition = false,
   handleOnDragEnd,
+  color,
+  distinguishPaidUnpaid = false,
 }) {
+  const [{ sortColumn, sortDirection }, dispatchSort] = useReducer(sortReducer, {
+    sortColumn: initialSortColumn ?? (competitionInfo['using_payment_integrations?']
+      ? 'paid_on_with_registered_on_fallback'
+      : 'registered_on'
+    ),
+    sortDirection: initialSortDirection,
+  });
+  const changeSortColumn = (name) => dispatchSort({ type: 'CHANGE_SORT', sortColumn: name });
+
   const handleHeaderCheck = (_, data) => {
     if (data.checked) {
-      select(registrations.map(({ user }) => user.id));
+      onSelect(...registrations.map(({ user }) => user.id));
     } else {
-      unselect(registrations.map(({ user }) => user.id));
+      onUnselect(...registrations.map(({ user }) => user.id));
     }
   };
+
+  const sortedRegistrations = useMemo(
+    () => sortRegistrations(registrations, sortColumn, sortDirection),
+    [registrations, sortColumn, sortDirection],
+  );
 
   if (registrations.length === 0) {
     return (
@@ -40,53 +76,62 @@ export default function RegistrationAdministrationTable({
   // TODO: use native ref= when we switch to semantic v3
   /* eslint-disable react/jsx-props-no-spreading */
   return (
-    <Table sortable={sortable} striped unstackable singleLine textAlign="left">
-      <TableHeader
-        columnsExpanded={columnsExpanded}
-        isChecked={registrations.length === selected.length}
-        onCheckboxChanged={handleHeaderCheck}
-        sortDirection={sortDirection}
-        sortColumn={sortColumn}
-        changeSortColumn={changeSortColumn}
-        competitionInfo={competitionInfo}
-        draggable={draggable}
-      />
-
-      <DragDropContext onDragEnd={handleOnDragEnd}>
-        <Droppable droppableId="droppable-table">
-          {(providedDroppable) => (
-            <Ref innerRef={providedDroppable.innerRef}>
-              <Table.Body {...providedDroppable.droppableProps}>
-                {registrations.map((w, i) => (
-                  <TableRow
-                    competitionInfo={competitionInfo}
-                    columnsExpanded={columnsExpanded}
-                    registration={w}
-                    onCheckboxChange={(_, data) => {
-                      if (data.checked) {
-                        select([w.user.id]);
-                      } else {
-                        unselect([w.user.id]);
-                      }
-                    }}
-                    index={i}
-                    draggable={draggable}
-                    isSelected={selected.includes(w.user.id)}
-                  />
-                ))}
-                {providedDroppable.placeholder}
-              </Table.Body>
-            </Ref>
-          )}
-        </Droppable>
-      </DragDropContext>
-      <TableFooter>
-        <RegistrationAdministrationTableFooter
-          registrations={registrations}
+    <div style={{ overflowX: 'auto' }}>
+      <Table
+        sortable={sortable}
+        striped
+        unstackable
+        compact
+        singleLine
+        textAlign="left"
+        color={color}
+      >
+        <TableHeader
+          columnsExpanded={columnsExpanded}
+          isChecked={registrations.length === selected.length}
+          onCheckboxChanged={handleHeaderCheck}
+          sortDirection={sortDirection}
+          sortColumn={sortColumn}
+          onColumnClick={sortable ? changeSortColumn : noop}
           competitionInfo={competitionInfo}
-          eventsToggled={columnsExpanded.events}
+          withCheckbox={!draggable}
+          withPosition={withPosition}
         />
-      </TableFooter>
-    </Table>
+
+        <DragDropContext onDragEnd={handleOnDragEnd}>
+          <Droppable droppableId="droppable-table">
+            {(providedDroppable) => (
+              <Ref innerRef={providedDroppable.innerRef}>
+                <Table.Body {...providedDroppable.droppableProps}>
+                  {sortedRegistrations.map((w, i) => (
+                    <TableRow
+                      competitionInfo={competitionInfo}
+                      columnsExpanded={columnsExpanded}
+                      registration={w}
+                      onCheckboxChange={() => onToggle(w.user.id)}
+                      index={i}
+                      draggable={draggable}
+                      isSelected={selected.includes(w.user.id)}
+                      withPosition={withPosition}
+                      color={color}
+                      distinguishPaidUnpaid={distinguishPaidUnpaid}
+                    />
+                  ))}
+                  {providedDroppable.placeholder}
+                </Table.Body>
+              </Ref>
+            )}
+          </Droppable>
+        </DragDropContext>
+        <TableFooter>
+          <RegistrationAdministrationTableFooter
+            columnsExpanded={columnsExpanded}
+            registrations={registrations}
+            competitionInfo={competitionInfo}
+            withPosition={withPosition}
+          />
+        </TableFooter>
+      </Table>
+    </div>
   );
 }

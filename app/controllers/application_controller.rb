@@ -6,9 +6,12 @@ class ApplicationController < ActionController::Base
   include TimeWillTell::Helpers::DateRangeHelper
   include Devise::Controllers::StoreLocation
 
-  protect_from_forgery with: :exception
+  protect_from_forgery with: :exception, unless: :oauth_request?
 
-  prepend_before_action :set_locale, unless: :is_api_request?
+  prepend_before_action :set_locale, unless: :ignore_client_language?
+  # The API should only ever respond in English
+  prepend_before_action :set_default_locale, if: :ignore_client_language?
+
   before_action :store_user_location!, if: :storable_location?
   before_action :add_new_relic_headers
   protected def add_new_relic_headers
@@ -31,6 +34,10 @@ class ApplicationController < ActionController::Base
 
     @@locale_counts ||= Hash.new(0)
     @@locale_counts[I18n.locale] += 1
+  end
+
+  def set_default_locale
+    I18n.locale = I18n.default_locale
   end
 
   def update_locale
@@ -94,7 +101,11 @@ class ApplicationController < ActionController::Base
     def redirect_to_root_unless_user(action, *)
       redirecting = !current_user&.send(action, *)
       if redirecting
-        flash[:danger] = "You are not allowed to #{action.to_s.sub(/^can_/, '').chomp('?').humanize.downcase}"
+        flash[:danger] = if action == :has_permission?
+                           t("errors.messages.no_permission")
+                         else
+                           "You are not allowed to #{action.to_s.sub(/^can_/, '').chomp('?').humanize.downcase}"
+                         end
         redirect_to root_url
       end
       redirecting
@@ -102,10 +113,21 @@ class ApplicationController < ActionController::Base
 
     # For redirecting user to source after login - https://github.com/heartcombo/devise/wiki/How-To:-Redirect-back-to-current-page-after-sign-in,-sign-out,-sign-up,-update
     def storable_location?
-      request.get? && is_navigational_format? && !devise_controller? && !request.xhr? && !is_api_request?
+      request.get? && is_navigational_format? && !devise_controller? && !request.xhr? && !api_request?
     end
 
-    def is_api_request?
+    def ignore_client_language?
+      api_request? || oauth_request?
+    end
+
+    def oauth_request?
+      # Checking the fullpath alone is not enough: The user-facing UI to manage OAuth applications
+      #   and the "Approve" / "Deny" buttons for incoming OAuth requests also live under `/oauth/` routes.
+      #   So we also check the controller inheritance chain because Doorkeeper conveniently distinguishes the "metal" controller.
+      request.fullpath.include?('/oauth/') && self.class.ancestors.include?(Doorkeeper::ApplicationMetalController)
+    end
+
+    def api_request?
       request.fullpath.include?('/api/')
     end
 

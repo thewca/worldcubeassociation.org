@@ -47,9 +47,9 @@ services:
     restart: no
     depends_on:
       wca_db:
-        condition: 'service_healthy'
+        condition: "service_healthy"
       wca_redis:
-        condition: 'service_started'
+        condition: "service_started"
 
   wca_on_rails:
     <<: *app
@@ -60,12 +60,32 @@ services:
       <<: *appEnv
       SHAKAPACKER_DEV_SERVER_HOST: wca_webpacker
       CACHE_REDIS_URL: redis://wca_redis:6379/0
+      RUNNING_IN_DOCKER: true
     tty: true
     # Start the server and bind to 0.0.0.0 (vs 127.0.0.1) so Docker's port mappings work correctly
     command: bin/rails server -b 0.0.0.0
     depends_on:
       wca_environment:
         condition: service_completed_successfully
+
+  wca_nextjs:
+    build:
+      dockerfile: Dockerfile.dev
+      context: .
+    container_name: "nextjs"
+    environment:
+      PORT: 3001
+    ports:
+      - "3001:3001"
+    working_dir: /app
+    command: >
+      bash -c 'corepack install && yarn install &&
+      yarn run dev'
+    volumes:
+      - ./next-frontend:/app
+      - next_yarn_volume:/app/node_modules
+    networks:
+      - wca-main
 
   wca_webpacker:
     <<: *app
@@ -96,7 +116,7 @@ services:
 
   wca_sidekiq:
     <<: *app
-    container_name: 'sidekiq'
+    container_name: "sidekiq"
     environment:
       <<: *appEnv
       # Cronjobs are disabled in development by default. If you wish to run cronjobs,
@@ -108,11 +128,14 @@ services:
         condition: service_completed_successfully
 
   wca_db:
-    image: mysql:8.0
+    # You will have to run docker exec -it database mysql to connect to the database and then
+    # ALTER USER 'root'@'%' IDENTIFIED WITH caching_sha2_password BY '';
+    # To upgrade your DB from mysql8.0 to mysql8.4
+    image: mysql:8.4
     container_name: "database"
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD: "true"
-    command: --authentication-policy=mysql_native_password
+    command: --mysql-native-password=ON
     ports:
       - "3306:3306"
     volumes:
@@ -140,6 +163,42 @@ services:
     networks:
       - wca-main
 
+  wca_playwright:
+    image: mcr.microsoft.com/playwright:v1.51.1
+    container_name: "playwright"
+    extra_hosts:
+      - "hostmachine:host-gateway"
+    # The following options `ipc`, `cap_add` and `init` are per Playwright's documentation: https://playwright.dev/docs/ci#docker
+    ipc: "host"
+    cap_add:
+      - SYS_ADMIN
+    init: true
+    environment:
+      - DEBIAN_FRONTEND=noninteractive
+      - DEBUG=pw:api
+      - DISPLAY=$DISPLAY
+    ports:
+      - "8089:8089"
+    working_dir: /app
+    command: >
+      bash -c 'corepack enable &&
+      ./package-install.dev.sh fonts.pdf.txt &&
+      fc-cache -f -v &&
+      yarn install &&
+      yarn playwright run-server --port 8089 --host=0.0.0.0'
+    volumes:
+      - .:/app
+      - node_modules_volume:/app/node_modules
+      - pdf_fonts_volume:/usr/share/fonts
+      # If you want to run tests in debug mode with a visible browser, you have to expose an X11 socket to Playwright
+      #   under `/tmp/.X11-unix` within the container. Chances are high that the original X11 socket on the host machine
+      #   lives in that exact same folder, but it's hard to be sure with all the different OSes that we want to support.
+      # Please enable the following mount at your own risk.
+      # You also have to make sure the owner's user ID matches the container's user ID to avoid X11 rendering glitches.
+      #  - /tmp/.X11-unix:/tmp/.X11-unix:rw
+    networks:
+      - wca-main
+
 volumes:
   gems_volume:
     driver: local
@@ -148,6 +207,10 @@ volumes:
   wca_db_volume:
     driver: local
   cache_volume:
+    driver: local
+  next_yarn_volume:
+    driver: local
+  pdf_fonts_volume:
     driver: local
 
 networks:

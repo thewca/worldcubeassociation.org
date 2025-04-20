@@ -1,8 +1,9 @@
+# rubocop:disable all
 # frozen_string_literal: true
 
 class AddDelegateRoles < ActiveRecord::Migration[7.1]
   def change
-    User.where.not(delegate_status: nil).each do |user|
+    User.where.not(delegate_status: nil).find_each do |user|
       UserRole.create!(
         user_id: user.id,
         group_id: user.read_attribute(:region_id),

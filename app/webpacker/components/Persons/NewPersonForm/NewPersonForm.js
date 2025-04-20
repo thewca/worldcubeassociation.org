@@ -5,7 +5,7 @@ import {
 } from 'semantic-ui-react';
 
 import CountrySelector from '../../CountrySelector/CountrySelector';
-import GenderSelector from '../../GenderSelector/GenderSelector';
+import GenderSelector from '../../wca/GenderSelector';
 import { adminGenerateIds, personsUrl } from '../../../lib/requests/routes.js.erb';
 import { fetchJsonOrError } from '../../../lib/requests/fetchWithAuthenticityToken';
 import { countries } from '../../../lib/wca-data.js.erb';
@@ -137,7 +137,7 @@ function NewPersonForm({
             name,
             dob,
             gender,
-            countryId: countryIdForIso2(countryIso2),
+            country_id: countryIdForIso2(countryIso2),
             wca_id: wcaId,
           },
         }, onSuccess, {
