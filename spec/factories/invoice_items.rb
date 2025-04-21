@@ -2,7 +2,8 @@
 
 FactoryBot.define do
   factory :invoice_item do
-    registration factory: %i[registration without_callbacks]
+    # registration factory: %i[registration without_callbacks]
+    registration factory: %i[registration]
     amount_lowest_denomination { 0 }
     currency_code { registration.competition.currency_code }
     status { 0 }
