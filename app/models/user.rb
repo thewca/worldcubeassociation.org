@@ -493,9 +493,9 @@ class User < ApplicationRecord
   end
 
   def age_in_years
-    age = Date.today.year - dob.year
-    age -= 1 if Date.today < dob.advance(years: age)
-    age
+    years_since_birth = Date.today.year - dob.year
+    birthday_happened = Date.today.day >= dob.day && Date.today.month >= dob.month
+    birthday_happened ? years_since_birth : years_since_birth - 1
   end
 
   def below_forum_age_requirement?
