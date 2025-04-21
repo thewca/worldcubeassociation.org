@@ -6,46 +6,38 @@ import RegistrationOverview from '../Register/RegistrationOverview';
 export const requirementsStepConfig = {
   key: 'requirements',
   i18nKey: 'competitions.registration_v2.register.panel.requirements',
-  component: RegistrationRequirements,
-  shouldShowCompletedAnd: () => true,
-  shouldShowCompletedOr: (isRegistered) => isRegistered,
-  shouldBeDisabledAnd: () => false,
-  shouldBeDisabledOr: (isRegistered) => isRegistered,
+  Component: RegistrationRequirements,
+  isCompleted: (stepPayload) => true, // TODO transmit this information as a dummy
+  isEditable: false,
 };
 
 export const competingStepConfig = {
   key: 'competing',
   i18nKey: 'competitions.registration_v2.register.panel.competing',
-  component: CompetingStep,
-  shouldShowCompletedAnd: () => true,
-  shouldShowCompletedOr: (isRegistered) => isRegistered,
-  shouldBeDisabledAnd: () => false,
-  shouldBeDisabledOr: () => false,
+  Component: CompetingStep,
+  isCompleted: (stepPayload) => stepPayload.isRegistered,
+  isEditable: true,
 };
 
 export const paymentStepConfig = {
   key: 'payment',
   i18nKey: 'competitions.registration_v2.register.panel.payment',
-  component: StripeWrapper,
-  shouldShowCompletedAnd: (isRegistered, hasPaid) => hasPaid,
-  shouldShowCompletedOr: (isRegistered, hasPaid) => hasPaid,
-  shouldBeDisabledAnd: () => false,
-  shouldBeDisabledOr: (
-    isRegistered,
-    hasPaid,
-    registrationCurrentlyOpen,
-  ) => hasPaid || !registrationCurrentlyOpen,
+  Component: StripeWrapper,
+  isCompleted: (stepPayload) => stepPayload.hasPaid,
+  isEditable: true,
 };
 
 export const registrationOverviewConfig = {
   key: 'approval',
   i18nKey: 'competitions.registration_v2.register.panel.approval',
-  component: RegistrationOverview,
-  shouldShowCompletedAnd: () => true,
-  shouldShowCompletedOr: (isRegistered, hasPaid, isAccepted) => isAccepted,
-  shouldBeDisabledAnd: (isRegistered) => !isRegistered,
-  shouldBeDisabledOr: () => false,
+  Component: RegistrationOverview,
+  isCompleted: (stepPayload) => stepPayload.isAccepted,
+  isEditable: true,
 };
 
-export const availableSteps = [requirementsStepConfig,
-  competingStepConfig, paymentStepConfig, registrationOverviewConfig];
+export const availableSteps = [
+  requirementsStepConfig,
+  competingStepConfig,
+  paymentStepConfig,
+  registrationOverviewConfig,
+];

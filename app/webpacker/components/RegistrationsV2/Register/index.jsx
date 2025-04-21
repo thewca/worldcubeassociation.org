@@ -12,8 +12,9 @@ import { hasNotPassed, hasPassed } from '../../../lib/utils/dates';
 import RegistrationNotAllowedMessage from './RegistrationNotAllowedMessage';
 import RegistrationClosingMessage from './RegistrationClosingMessage';
 import usePerpetualState from '../hooks/usePerpetualState';
-import StepProvider from '../lib/StepProvider';
-import useSteps from '../hooks/useSteps';
+import StepConfigProvider, { useStepConfig } from '../lib/StepConfigProvider';
+import StepNavigationProvider from '../lib/StepNavigationProvider';
+import { availableSteps, registrationOverviewConfig } from '../lib/stepConfigs';
 
 // The following states should show the Panel even when registration is already closed.
 //   (You can think of this as "is there a non-cancelled, non-rejected registration?)
@@ -32,13 +33,13 @@ export default function Index({
     <WCAQueryClientProvider>
       <StoreProvider reducer={messageReducer} initialState={{ messages: [] }}>
         <ConfirmProvider>
-          <RegistrationProvider
-            competitionInfo={competitionInfo}
-            userInfo={userInfo}
-            isProcessing={isProcessing}
-          >
-            <StepProvider competitionInfo={competitionInfo}>
-              <Register
+          <StepConfigProvider competitionId={competitionInfo.id}>
+            <RegistrationProvider
+              competitionInfo={competitionInfo}
+              userInfo={userInfo}
+              isProcessing={isProcessing}
+            >
+              <RegisterNavigationWrapper
                 competitionInfo={competitionInfo}
                 userInfo={userInfo}
                 userCanPreRegister={userCanPreRegister}
@@ -46,11 +47,47 @@ export default function Index({
                 personalRecords={personalRecords}
                 cannotRegisterReasons={cannotRegisterReasons}
               />
-            </StepProvider>
-          </RegistrationProvider>
+            </RegistrationProvider>
+          </StepConfigProvider>
         </ConfirmProvider>
       </StoreProvider>
     </WCAQueryClientProvider>
+  );
+}
+
+function RegisterNavigationWrapper({
+  competitionInfo,
+  userInfo,
+  userCanPreRegister,
+  preferredEvents,
+  personalRecords,
+  cannotRegisterReasons,
+}) {
+  const registrationPayload = useRegistration();
+
+  const { steps, isLoading } = useStepConfig();
+
+  if (isLoading) {
+    return <Loading />;
+  }
+
+  return (
+    <StepNavigationProvider
+      stepsConfiguration={steps}
+      availableSteps={availableSteps}
+      payload={registrationPayload}
+      navigationDisabled={registrationPayload.isRejected}
+      summaryPanelKey={registrationOverviewConfig.key}
+    >
+      <Register
+        competitionInfo={competitionInfo}
+        userInfo={userInfo}
+        userCanPreRegister={userCanPreRegister}
+        preferredEvents={preferredEvents}
+        personalRecords={personalRecords}
+        cannotRegisterReasons={cannotRegisterReasons}
+      />
+    </StepNavigationProvider>
   );
 }
 
@@ -72,9 +109,7 @@ function Register({
 
   const { isFetching, registration } = useRegistration();
 
-  const { isLoading: stepConfigLoading } = useSteps();
-
-  if (isFetching || stepConfigLoading) {
+  if (isFetching) {
     return <Loading />;
   }
 

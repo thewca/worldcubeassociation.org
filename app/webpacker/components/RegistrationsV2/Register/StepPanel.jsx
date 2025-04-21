@@ -1,9 +1,8 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Step } from 'semantic-ui-react';
 import I18n from '../../../lib/i18n';
-import { useRegistration } from '../lib/RegistrationProvider';
-import useSteps from '../hooks/useSteps';
-r
+import { useStepNavigation } from '../lib/StepNavigationProvider';
+
 export default function StepPanel({
   competitionInfo,
   preferredEvents,
@@ -12,22 +11,13 @@ export default function StepPanel({
   registrationCurrentlyOpen,
 }) {
   const {
-    isRegistered, isAccepted, isRejected, hasPaid,
-  } = useRegistration();
-
-  const {
-    steps, CurrentStepPanel, activeIndex, jumpToStepByIndex,
-    jumpToStepByKey, jumpToFirstIncompleteStep,
-  } = useSteps();
-
-  // Now this runs every time we change Panels....
-  useEffect(() => {
-    if (isAccepted || isRejected) {
-      jumpToStepByKey('approval');
-    } else if (isRegistered) {
-      jumpToFirstIncompleteStep();
-    }
-  }, [jumpToStepByKey, isAccepted, isRejected, isRegistered, jumpToFirstIncompleteStep]);
+    steps,
+    currentStep: {
+      Component: CurrentStepPanel,
+    },
+    activeIndex,
+    jumpToStepByIndex,
+  } = useStepNavigation();
 
   return (
     <>
@@ -36,24 +26,8 @@ export default function StepPanel({
           <Step
             key={stepConfig.key}
             active={activeIndex === index}
-            completed={(index < activeIndex && stepConfig.shouldShowCompletedAnd(
-              isRegistered,
-              hasPaid,
-              isAccepted,
-            )) || stepConfig.shouldShowCompletedOr(
-              isRegistered,
-              hasPaid,
-              isAccepted,
-            )}
-            disabled={isRejected || (index > activeIndex && stepConfig.shouldBeDisabledAnd(
-              isRegistered,
-              hasPaid,
-              registrationCurrentlyOpen,
-            )) || stepConfig.shouldBeDisabledOr(
-              isRegistered,
-              hasPaid,
-              registrationCurrentlyOpen,
-            )}
+            completed={stepConfig.isCompleted}
+            disabled={stepConfig.isDisabled}
             onClick={() => jumpToStepByIndex(index)}
           >
             <Step.Content>

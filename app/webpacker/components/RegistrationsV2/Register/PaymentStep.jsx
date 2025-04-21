@@ -21,7 +21,7 @@ import { hasPassed } from '../../../lib/utils/dates';
 import AutonumericField from '../../wca/FormBuilder/input/AutonumericField';
 import getPaymentTicket from '../api/payment/get/getPaymentTicket';
 import { useRegistration } from '../lib/RegistrationProvider';
-import useSteps from '../hooks/useSteps';
+import { useStepNavigation } from '../lib/StepNavigationProvider';
 
 export default function PaymentStep({
   competitionInfo,
@@ -33,7 +33,7 @@ export default function PaymentStep({
   const stripe = useStripe();
   const elements = useElements();
   const dispatch = useDispatch();
-  const { nextStep } = useSteps();
+  const { nextStep } = useStepNavigation();
 
   const { hasPaid } = useRegistration();
 

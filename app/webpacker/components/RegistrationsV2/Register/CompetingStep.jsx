@@ -29,7 +29,7 @@ import { eventQualificationToString } from '../../../lib/utils/wcif';
 import { hasNotPassed } from '../../../lib/utils/dates';
 import { useRegistration } from '../lib/RegistrationProvider';
 import useSet from '../../../lib/hooks/useSet';
-import useSteps from '../hooks/useSteps';
+import { useStepNavigation } from '../lib/StepNavigationProvider';
 
 const maxCommentLength = 240;
 
@@ -58,7 +58,7 @@ export default function CompetingStep({
   preferredEvents,
   personalRecords,
 }) {
-  const { nextStep, currentStepParameters } = useSteps();
+  const { nextStep, currentStep: { parameters: currentStepParameters } } = useStepNavigation();
   const maxEvents = currentStepParameters.events_per_registration_limit ?? Infinity;
   const {
     registration, isRegistered, hasPaid, isPolling, isProcessing, startPolling, refetchRegistration,

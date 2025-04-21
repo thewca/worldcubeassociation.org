@@ -2,9 +2,9 @@ import { getRegistrationConfigUrl } from '../../../../../lib/requests/routes.js.
 import { fetchJsonOrError } from '../../../../../lib/requests/fetchWithAuthenticityToken';
 
 export default async function getRegistrationConfig(
-  competition,
+  competitionId,
 ) {
-  const route = getRegistrationConfigUrl(competition.id);
+  const route = getRegistrationConfigUrl(competitionId);
   const { data } = await fetchJsonOrError(route);
   return data;
 }
