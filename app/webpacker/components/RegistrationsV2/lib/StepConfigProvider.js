@@ -24,7 +24,7 @@ export default function StepConfigProvider({
       (config) => {
         const currentStep = availableSteps.find((stepConfig) => stepConfig.key === config.key);
 
-        return { ...currentStep, parameters: config.parameters };
+        return { ...config, ...currentStep };
       },
     )
   ), [registrationConfig]);

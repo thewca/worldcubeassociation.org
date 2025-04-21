@@ -1765,9 +1765,9 @@ class Competition < ApplicationRecord
   def available_registration_lanes
     # There is currently only one lane, so this always returns the competitor lane
     steps = []
-    steps << { key: 'requirements', options: {} }
-    steps << { key: 'competing', parameters: competing_step_parameters }
-    steps << { key: 'payment', parameters: payment_step_parameters, post_step: true } if using_payment_integrations?
+    steps << { key: 'requirements', isEditable: false }
+    steps << { key: 'competing', parameters: competing_step_parameters, isEditable: true }
+    steps << { key: 'payment', parameters: payment_step_parameters, isEditable: true } if using_payment_integrations?
 
     steps
   end
