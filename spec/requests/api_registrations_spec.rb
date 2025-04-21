@@ -1360,14 +1360,28 @@ RSpec.describe 'API Registrations' do
           expect(payment_record.amount_stripe_denomination).to be(2250)
           expect(payment_record.currency_code).to eq("usd")
         end
+
+        it 'persists an invoice item to the database' do
+          expect(reg.invoice_items.count).to be(2)
+          expect(reg.invoice_items.last.display_name).to eq("#{reg.competition_id} registration")
+        end
       end
 
-      it 'has the correct payment_intent properties when a donation is present' do
-        get api_v1_registrations_payment_ticket_path(competition_id: competition.id), headers: headers, params: { iso_donation_amount: 1300 }
+      context 'when a donation is present' do
+        before do
+          get api_v1_registrations_payment_ticket_path(competition_id: competition.id), headers: headers, params: { iso_donation_amount: 1300 }
+        end
 
-        payment_record = PaymentIntent.find_by(holder_type: "Registration", holder_id: reg.id).payment_record
-        expect(payment_record.amount_stripe_denomination).to be(3550)
-        expect(payment_record.currency_code).to eq("usd")
+        it 'has the correct payment_intent properties' do
+          payment_record = PaymentIntent.find_by(holder_type: "Registration", holder_id: reg.id).payment_record
+          expect(payment_record.amount_stripe_denomination).to be(3550)
+          expect(payment_record.currency_code).to eq("usd")
+        end
+
+        it 'persists a donation to the database' do
+          expect(reg.invoice_items.count).to eq(3)
+          expect(reg.invoice_items.exists?(display_name: "Optional donation"))
+        end
       end
 
       it 'refuses ticket create request if registration is closed' do
@@ -1410,6 +1424,18 @@ RSpec.describe 'API Registrations' do
 
       expect(response).to be_successful
       expect(response.parsed_body).to eq(expected_response)
+    end
+
+    it 'does not persist competition entry to database' do
+      get registration_payment_denomination_path(competition_id: competition.id, user_id: reg.user_id), headers: headers
+      expect(response).to be_successful
+      expect(InvoiceItem.all.count).to be(0)
+    end
+
+    it 'does not persist a donation to database' do
+      get registration_payment_denomination_path(competition_id: competition.id, user_id: reg.user_id), headers: headers, params: { iso_donation_amount: 1000 }
+      expect(response).to be_successful
+      expect(InvoiceItem.all.count).to be(0)
     end
 
     context 'with a custom invoice_item added' do
