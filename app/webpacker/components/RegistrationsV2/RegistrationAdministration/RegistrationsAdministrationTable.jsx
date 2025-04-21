@@ -10,7 +10,7 @@ import TableRow from './AdministrationTableRow';
 import RegistrationAdministrationTableFooter from './RegistrationAdministrationTableFooter';
 import { sortRegistrations } from '../../../lib/utils/registrationAdmin';
 import { WCA_EVENT_IDS } from '../../../lib/wca-data.js.erb';
-import createSortReducer from '../reducers/sortReducer';
+import { createSortReducer } from '../../../lib/reducers/sortReducer';
 
 export const sortReducer = createSortReducer([
   'name',
@@ -44,14 +44,13 @@ export default function RegistrationAdministrationTable({
   color,
   distinguishPaidUnpaid = false,
 }) {
-  const [{ sortColumn, sortDirection }, dispatchSort] = useReducer(sortReducer, {
-    sortColumn: initialSortColumn ?? (competitionInfo['using_payment_integrations?']
+  const [sortState, dispatchSortChange] = useReducer(sortReducer, {
+    column: initialSortColumn ?? (competitionInfo['using_payment_integrations?']
       ? 'paid_on_with_registered_on_fallback'
       : 'registered_on'
     ),
-    sortDirection: initialSortDirection,
+    direction: initialSortDirection,
   });
-  const changeSortColumn = (name) => dispatchSort({ type: 'CHANGE_SORT', sortColumn: name });
 
   const handleHeaderCheck = (_, data) => {
     if (data.checked) {
@@ -62,8 +61,8 @@ export default function RegistrationAdministrationTable({
   };
 
   const sortedRegistrations = useMemo(
-    () => sortRegistrations(registrations, sortColumn, sortDirection),
-    [registrations, sortColumn, sortDirection],
+    () => sortRegistrations(registrations, sortState.column, sortState.direction),
+    [registrations, sortState],
   );
 
   if (registrations.length === 0) {
@@ -90,9 +89,8 @@ export default function RegistrationAdministrationTable({
           columnsExpanded={columnsExpanded}
           isChecked={registrations.length === selected.length}
           onCheckboxChanged={handleHeaderCheck}
-          sortDirection={sortDirection}
-          sortColumn={sortColumn}
-          onColumnClick={sortable ? changeSortColumn : noop}
+          sortState={sortState}
+          onColumnClick={sortable ? dispatchSortChange : noop}
           competitionInfo={competitionInfo}
           withCheckbox={!draggable}
           withPosition={withPosition}

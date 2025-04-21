@@ -19,6 +19,9 @@ const COLUMN_TO_FIELD_PATH = {
   total_delegated: 'metadata.total_delegated',
 };
 
+/**
+ * @param {{sortState: {column: string, direction: 'ascending' | 'descending'}}} props
+ */
 function DelegatesTableHeaderCell({
   onSortChange,
   column,

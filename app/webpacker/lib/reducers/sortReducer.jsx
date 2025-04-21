@@ -1,12 +1,11 @@
 /**
- * @template T extends string
- * @param {T[]} columns
+ * @param {string[]} columns
  */
 export function createSortReducer(columns) {
   /**
-   * @param {{column: T}} state
-   * @param {T} column
-   * @returns {{column: T, direction: 'ascending' | 'descending'}}
+   * @param {{column: string, direction: 'ascending' | 'descending'}} state
+   * @param {string} column
+   * @returns {{column: string, direction: 'ascending' | 'descending'}}
    */
   return (state, column) => {
     if (!columns.includes(column)) throw new Error(`Unknown column ${column}. Expected ${columns.join(' | ')}`);

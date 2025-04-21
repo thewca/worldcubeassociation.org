@@ -3,12 +3,14 @@ import React from 'react';
 import I18n from '../../../lib/i18n';
 import EventIcon from '../../wca/EventIcon';
 
+/**
+ * @param {{sortState: {column: string, direction: 'ascending' | 'descending'}}} props
+ */
 export default function TableHeader({
   columnsExpanded,
   isChecked,
   onCheckboxChanged,
-  sortDirection,
-  sortColumn,
+  sortState,
   onColumnClick,
   competitionInfo,
   withCheckbox = true,
@@ -31,27 +33,27 @@ export default function TableHeader({
         )}
         <Table.HeaderCell disabled />
         <Table.HeaderCell
-          sorted={sortColumn === 'wca_id' ? sortDirection : undefined}
+          sorted={sortState.column === 'wca_id' ? sortState.direction : undefined}
           onClick={() => onColumnClick('wca_id')}
         >
           {I18n.t('common.user.wca_id')}
         </Table.HeaderCell>
         <Table.HeaderCell
-          sorted={sortColumn === 'name' ? sortDirection : undefined}
+          sorted={sortState.column === 'name' ? sortState.direction : undefined}
           onClick={() => onColumnClick('name')}
         >
           {I18n.t('delegates_page.table.name')}
         </Table.HeaderCell>
         {dobIsShown && (
           <Table.HeaderCell
-            sorted={sortColumn === 'dob' ? sortDirection : undefined}
+            sorted={sortState.column === 'dob' ? sortState.direction : undefined}
             onClick={() => onColumnClick('dob')}
           >
             {I18n.t('activerecord.attributes.user.dob')}
           </Table.HeaderCell>
         )}
         <Table.HeaderCell
-          sorted={sortColumn === 'country' ? sortDirection : undefined}
+          sorted={sortState.column === 'country' ? sortState.direction : undefined}
           onClick={() => onColumnClick('country')}
         >
           {I18n.t('common.user.representing')}
@@ -59,13 +61,13 @@ export default function TableHeader({
         {competitionInfo['using_payment_integrations?'] ? (
           <>
             <Table.HeaderCell
-              sorted={sortColumn === 'paid_on_with_registered_on_fallback' ? sortDirection : undefined}
+              sorted={sortState.column === 'paid_on_with_registered_on_fallback' ? sortState.direction : undefined}
               onClick={() => onColumnClick('paid_on_with_registered_on_fallback')}
             >
               {I18n.t('registrations.list.registered.with_stripe')}
             </Table.HeaderCell>
             <Table.HeaderCell
-              sorted={sortColumn === 'amount' ? sortDirection : undefined}
+              sorted={sortState.column === 'amount' ? sortState.direction : undefined}
               onClick={() => onColumnClick('amount')}
             >
               {I18n.t('competitions.registration_v2.update.amount')}
@@ -73,7 +75,7 @@ export default function TableHeader({
           </>
         ) : (
           <Table.HeaderCell
-            sorted={sortColumn === 'registered_on' ? sortDirection : undefined}
+            sorted={sortState.column === 'registered_on' ? sortState.direction : undefined}
             onClick={() => onColumnClick('registered_on')}
           >
             {I18n.t('registrations.list.registered.without_stripe')}
@@ -83,7 +85,7 @@ export default function TableHeader({
           competitionInfo.event_ids.map((eventId) => (
             <Table.HeaderCell
               key={`event-${eventId}`}
-              sorted={sortColumn === eventId ? sortDirection : undefined}
+              sorted={sortState.column === eventId ? sortState.direction : undefined}
               onClick={() => onColumnClick(eventId)}
             >
               <EventIcon id={eventId} size="1em" />
@@ -91,14 +93,14 @@ export default function TableHeader({
           ))
         ) : (
           <Table.HeaderCell
-            sorted={sortColumn === 'events' ? sortDirection : undefined}
+            sorted={sortState.column === 'events' ? sortState.direction : undefined}
             onClick={() => onColumnClick('events')}
           >
             {I18n.t('competitions.competition_info.events')}
           </Table.HeaderCell>
         )}
         <Table.HeaderCell
-          sorted={sortColumn === 'guests' ? sortDirection : undefined}
+          sorted={sortState.column === 'guests' ? sortState.direction : undefined}
           onClick={() => onColumnClick('guests')}
         >
           {I18n.t(
@@ -108,7 +110,7 @@ export default function TableHeader({
         {commentsAreShown && (
           <>
             <Table.HeaderCell
-              sorted={sortColumn === 'comment' ? sortDirection : undefined}
+              sorted={sortState.column === 'comment' ? sortState.direction : undefined}
               onClick={() => onColumnClick('comment')}
             >
               {I18n.t('activerecord.attributes.registration.comments')}

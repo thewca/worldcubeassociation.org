@@ -5,7 +5,7 @@ import _ from 'lodash';
 import {
   getConfirmedRegistrations,
 } from '../api/registration/get/get_registrations';
-import createSortReducer from '../reducers/sortReducer';
+import { createSortReducer } from '../../../lib/reducers/sortReducer';
 import EventIcon from '../../wca/EventIcon';
 import { personUrl } from '../../../lib/requests/routes.js.erb';
 import I18n from '../../../lib/i18n';
@@ -15,8 +15,6 @@ import PreTableInfo from './PreTableInfo';
 import Errored from '../../Requests/Errored';
 import Loading from '../../Requests/Loading';
 import RegionFlag from '../../wca/RegionFlag';
-
-const sortReducer = createSortReducer(['name', 'country', 'total']);
 
 export default function Competitors({
   competitionInfo,
@@ -32,18 +30,16 @@ export default function Competitors({
     retry: false,
   });
 
-  const [sortState, sortDispatch] = useReducer(sortReducer, {
+  const [sortState, dispatchSortChange] = useReducer(createSortReducer(['name', 'country', 'total']), {
     sortColumn: 'name',
     sortDirection: 'ascending',
   });
-  const { sortColumn: sortedColumn, sortDirection: sortedDirection } = sortState;
-  const changeSortColumn = (name) => sortDispatch({ type: 'CHANGE_SORT', sortColumn: name });
 
   // TODO: use react table (future PR)
   const data = useMemo(() => {
     if (registrations) {
       let orderBy = [];
-      switch (sortedColumn) {
+      switch (sortState.column) {
         case 'country':
           orderBy = [
             (item) => countries.byIso2[item.user.country.iso2].name,
@@ -59,12 +55,12 @@ export default function Competitors({
       }
       // always sort by user name as a fallback
       orderBy.push('user.name');
-      const direction = sortedDirection === 'descending' ? 'desc' : 'asc';
+      const direction = sortState.direction === 'descending' ? 'desc' : 'asc';
 
       return _.orderBy(registrations, orderBy, [direction]);
     }
     return [];
-  }, [registrations, sortedColumn, sortedDirection]);
+  }, [registrations, sortState]);
 
   if (isError) {
     return (
@@ -100,9 +96,8 @@ export default function Competitors({
         <Table striped sortable unstackable compact singleLine textAlign="left">
           <CompetitorsHeader
             eventIds={eventIds}
-            sortedColumn={sortedColumn}
-            sortedDirection={sortedDirection}
-            onSortableColumnClick={changeSortColumn}
+            sortState={sortState}
+            onSortableColumnClick={dispatchSortChange}
             onEventColumnClick={onEventClick}
           />
           <CompetitorsBody
@@ -121,10 +116,12 @@ export default function Competitors({
   );
 }
 
+/**
+ * @param {{sortState: {column: string, direction: 'ascending' | 'descending'}}} props
+ */
 function CompetitorsHeader({
   eventIds,
-  sortedColumn,
-  sortedDirection,
+  sortState,
   onSortableColumnClick,
   onEventColumnClick,
 }) {
@@ -132,13 +129,13 @@ function CompetitorsHeader({
     <Table.Header>
       <Table.Row>
         <Table.HeaderCell
-          sorted={sortedColumn === 'name' ? sortedDirection : undefined}
+          sorted={sortState.column === 'name' ? sortState.direction : undefined}
           onClick={() => onSortableColumnClick('name')}
         >
           {I18n.t('activerecord.attributes.registration.name')}
         </Table.HeaderCell>
         <Table.HeaderCell
-          sorted={sortedColumn === 'country' ? sortedDirection : undefined}
+          sorted={sortState.column === 'country' ? sortState.direction : undefined}
           onClick={() => onSortableColumnClick('country')}
         >
           {I18n.t('activerecord.attributes.user.country_iso2')}
@@ -154,7 +151,7 @@ function CompetitorsHeader({
         ))}
         <Table.HeaderCell
           textAlign="center"
-          sorted={sortedColumn === 'total' ? sortedDirection : undefined}
+          sorted={sortState.column === 'total' ? sortState.direction : undefined}
           onClick={() => onSortableColumnClick('total')}
         >
           {I18n.t('registrations.list.total')}
