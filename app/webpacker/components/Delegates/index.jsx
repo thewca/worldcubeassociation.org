@@ -21,7 +21,7 @@ import useLoggedInUserPermissions from '../../lib/hooks/useLoggedInUserPermissio
 import { groupTypes } from '../../lib/wca-data.js.erb';
 import DelegatesOfRegion, { ALL_REGIONS } from './DelegatesOfRegion';
 import useHash from '../../lib/hooks/useHash';
-import DelegatesOfAllRegions from './DelegatesOfAllRegion';
+import DelegatesOfAllRegions from './DelegatesOfAllRegions';
 
 // let i18n-tasks know the key is used
 // i18n-tasks-use t('delegates_page.acknowledges')

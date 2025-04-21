@@ -8,15 +8,8 @@ tr.candidate-delegate {
   font-style: italic;
 }
 
-i.sorting-indicator {
-  margin-left: 4px;
-}
-
-i.sorting-indicator_hidden {
+.ui.sortable.table>thead>tr>th:not(.sorted)::after {
+  content: "\f0d8";
+  display: inline-block;
   opacity: 0;
-}
-
-.ui.table>thead>tr>th.sortable-column-header-cell {
-  cursor: pointer;
-  white-space: nowrap;
 }
