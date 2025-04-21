@@ -88,13 +88,15 @@ export default function StepNavigationProvider({
 
     // The step in question is still in the future.
     if (stepIndex > activeIndex) {
-      return stepConfig.key !== summaryPanelKey;
+      const completeAndEditable = stepConfig.isCompleted(payload) && stepConfig.isEditable;
+
+      return stepConfig.key !== summaryPanelKey && !completeAndEditable;
     }
 
     // If we reach here, this implicitly means `stepIndex == activeIndex`.
     //   The current step should never be locked, to avoid awkward situations.
     return false;
-  }, [navigationDisabled, activeIndex, summaryPanelKey]);
+  }, [navigationDisabled, activeIndex, summaryPanelKey, payload]);
 
   const steps = useMemo(() => (
     extendedStepsConfig.map((step, index) => ({
