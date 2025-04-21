@@ -105,7 +105,7 @@ RSpec.describe RegistrationsMailer, type: :mailer do
       competition_delegate2.receive_registration_emails = true
       competition_delegate2.save!
 
-      expect(mail.body.encoded).to match("just deleted their registration for .{1,200}#{registration.competition.name}.{1,200}")
+      expect(mail.body.encoded).to match("just deleted their registration for #{registration.competition.name}")
     end
   end
 
