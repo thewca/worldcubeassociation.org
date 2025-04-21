@@ -1759,7 +1759,7 @@ class Competition < ApplicationRecord
     {
       stripePublishableKey: AppSecrets.STRIPE_PUBLISHABLE_KEY,
       connectedAccountId: payment_account_for(:stripe)&.account_id,
-    }.to_h
+    }
   end
 
   def available_registration_lanes
@@ -1767,7 +1767,7 @@ class Competition < ApplicationRecord
     steps = []
     steps << { key: 'requirements', isEditable: false }
     steps << { key: 'competing', parameters: competing_step_parameters, isEditable: true }
-    steps << { key: 'payment', parameters: payment_step_parameters, isEditable: true } if using_payment_integrations?
+    steps << { key: 'payment', parameters: payment_step_parameters, isEditable: true, deadline: self.registration_close } if using_payment_integrations?
 
     steps
   end

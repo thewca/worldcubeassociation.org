@@ -5,6 +5,9 @@ import React, {
   useMemo,
   useReducer,
 } from 'react';
+import _ from 'lodash';
+import usePerpetualState from '../hooks/usePerpetualState';
+import { hasPassed } from '../../../lib/utils/dates';
 
 const StepNavigationContext = createContext();
 
@@ -76,9 +79,22 @@ export default function StepNavigationProvider({
     defaultStepIndex,
   );
 
+  const stepDeadlines = useMemo(
+    () => stepsConfiguration
+      .filter((stepConfig) => (stepConfig.deadline !== undefined))
+      .reduce((acc, dlStepConfig) => ({ ...acc, [dlStepConfig.key]: dlStepConfig.deadline }), {}),
+    [stepsConfiguration],
+  );
+
+  const stepDeadlinesPassed = usePerpetualState(() => _.mapValues(stepDeadlines, hasPassed));
+
   const isStepDisabled = useCallback((stepConfig, stepIndex) => {
     if (navigationDisabled) {
       return stepConfig.key !== summaryPanelKey;
+    }
+
+    if (stepDeadlinesPassed[stepConfig.key] && stepConfig.isCompleted(payload)) {
+      return true;
     }
 
     // The step in question already passed.
@@ -96,7 +112,7 @@ export default function StepNavigationProvider({
     // If we reach here, this implicitly means `stepIndex == activeIndex`.
     //   The current step should never be locked, to avoid awkward situations.
     return false;
-  }, [navigationDisabled, activeIndex, summaryPanelKey, payload]);
+  }, [navigationDisabled, activeIndex, summaryPanelKey, stepDeadlinesPassed, payload]);
 
   const steps = useMemo(() => (
     extendedStepsConfig.map((step, index) => ({
