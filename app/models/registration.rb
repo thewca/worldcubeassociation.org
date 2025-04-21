@@ -61,40 +61,6 @@ class Registration < ApplicationRecord
   validates :guests, numericality: { equal_to: 0, unless: :guests_allowed?, frontend_code: Registrations::ErrorCodes::GUEST_LIMIT_EXCEEDED }
   validates :guests, numericality: { less_than_or_equal_to: DEFAULT_GUEST_LIMIT, if: :guests_unrestricted?, frontend_code: Registrations::ErrorCodes::UNREASONABLE_GUEST_COUNT }
 
-  def build_competition_entry
-    invoice_items.build(
-      amount_lowest_denomination: competition.base_entry_fee_lowest_denomination,
-      currency_code: competition.currency_code,
-      status: :unpaid,
-      display_name: "#{competition_id} registration",
-    )
-  end
-
-  def add_competition_entry
-    invoice_items.create(
-      amount_lowest_denomination: competition.base_entry_fee_lowest_denomination,
-      currency_code: competition.currency_code,
-      status: :unpaid,
-      display_name: "#{competition_id} registration",
-    )
-  end
-
-  def build_donation(iso_amount)
-    invoice_items.build(
-      amount_lowest_denomination: iso_amount,
-      currency_code: competition.currency_code,
-      display_name: "Optional donation",
-    )
-  end
-
-  def add_donation(iso_amount)
-    invoice_items.create(
-      amount_lowest_denomination: iso_amount,
-      currency_code: competition.currency_code,
-      display_name: "Optional donation",
-    )
-  end
-
   after_save :mark_registration_processing_as_done
 
   private def mark_registration_processing_as_done
@@ -218,6 +184,41 @@ class Registration < ApplicationRecord
   def invoice_items_currency_code
     invoice_items.first.currency_code
   end
+
+  def build_competition_entry
+    invoice_items.build(
+      amount_lowest_denomination: competition.base_entry_fee_lowest_denomination,
+      currency_code: competition.currency_code,
+      status: :unpaid,
+      display_name: "#{competition_id} registration",
+    )
+  end
+
+  def add_competition_entry
+    invoice_items.create(
+      amount_lowest_denomination: competition.base_entry_fee_lowest_denomination,
+      currency_code: competition.currency_code,
+      status: :unpaid,
+      display_name: "#{competition_id} registration",
+    )
+  end
+
+  def build_donation(iso_amount)
+    invoice_items.build(
+      amount_lowest_denomination: iso_amount,
+      currency_code: competition.currency_code,
+      display_name: "Optional donation",
+    )
+  end
+
+  def add_donation(iso_amount)
+    invoice_items.create(
+      amount_lowest_denomination: iso_amount,
+      currency_code: competition.currency_code,
+      display_name: "Optional donation",
+    )
+  end
+
 
   def record_payment(
     amount_lowest_denomination,
