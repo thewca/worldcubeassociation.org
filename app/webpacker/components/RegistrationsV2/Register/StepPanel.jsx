@@ -8,7 +8,6 @@ export default function StepPanel({
   preferredEvents,
   user,
   personalRecords,
-  registrationCurrentlyOpen,
 }) {
   const {
     steps,

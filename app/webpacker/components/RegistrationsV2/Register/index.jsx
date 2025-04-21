@@ -151,9 +151,7 @@ function Register({
             user={userInfo}
             preferredEvents={preferredEvents}
             competitionInfo={competitionInfo}
-            registration={registration}
             personalRecords={personalRecords}
-            registrationCurrentlyOpen={registrationCurrentlyOpen}
           />
         </>
       )}
