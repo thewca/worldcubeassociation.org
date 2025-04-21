@@ -13,7 +13,7 @@ export default function StepConfigProvider({
   competitionId,
   children,
 }) {
-  const { data: registrationConfig, isLoading } = useQuery({
+  const { data: registrationConfig, isFetching } = useQuery({
     queryFn: () => getRegistrationConfig(competitionId),
     queryKey: ['registration-step-config', competitionId],
     placeholderData: [],
@@ -31,10 +31,10 @@ export default function StepConfigProvider({
 
   const value = useMemo(() => ({
     steps,
-    isLoading,
+    isFetching,
   }), [
     steps,
-    isLoading,
+    isFetching,
   ]);
 
   return (

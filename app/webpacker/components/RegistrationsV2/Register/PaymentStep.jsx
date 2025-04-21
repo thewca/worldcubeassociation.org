@@ -123,7 +123,7 @@ export default function PaymentStep({
                 <Label>
                   {I18n.t('registrations.payment_form.labels.donation')}
                 </Label>
-)}
+              )}
             />
             )}
           </FormField>

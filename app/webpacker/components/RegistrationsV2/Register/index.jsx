@@ -65,9 +65,14 @@ function RegisterNavigationWrapper({
 }) {
   const registrationPayload = useRegistration();
 
-  const { steps, isLoading } = useStepConfig();
+  const {
+    isFetching: registrationFetching,
+    isRejected: registrationRejected,
+  } = registrationPayload;
 
-  if (isLoading) {
+  const { steps, isFetching } = useStepConfig();
+
+  if (isFetching || registrationFetching) {
     return <Loading />;
   }
 
@@ -76,7 +81,7 @@ function RegisterNavigationWrapper({
       stepsConfiguration={steps}
       availableSteps={availableSteps}
       payload={registrationPayload}
-      navigationDisabled={registrationPayload.isRejected}
+      navigationDisabled={registrationRejected}
       summaryPanelKey={registrationOverviewConfig.key}
     >
       <Register
