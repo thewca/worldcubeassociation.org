@@ -238,7 +238,6 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
     else
       @registration.add_competition_entry
       @registration.add_donation(iso_donation_amount) if iso_donation_amount > 0
-
       ruby_money = @registration.invoice_items_total
     end
 

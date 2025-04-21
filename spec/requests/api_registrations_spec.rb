@@ -1384,7 +1384,7 @@ RSpec.describe 'API Registrations' do
     end
   end
 
-  describe 'GET #payment_denomination', :tag do
+  describe 'GET #payment_denomination' do
     let(:competition) {
       FactoryBot.create(:competition,
                         :registration_open,

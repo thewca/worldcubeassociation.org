@@ -123,16 +123,6 @@ FactoryBot.define do
       paid
     end
 
-    # trait :without_callbacks do
-    #   after(:build) do |_registration|
-    #     Registration.skip_callback(:create)
-    #   end
-
-    #   after(:create) do |_registration|
-    #     Registration.reset_callbacks(:create)
-    #   end
-    # end
-
     after(:create) do |registration|
       registration.competition.waiting_list.add(registration) if registration.competing_status == Registrations::Helper::STATUS_WAITING_LIST
     end
