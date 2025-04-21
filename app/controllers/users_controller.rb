@@ -265,7 +265,7 @@ class UsersController < ApplicationController
       flash[:alert] = I18n.t('registrations.errors.banned_html').html_safe
       return redirect_to new_user_session_path
     elsif current_user.below_forum_age_requirement?
-      flash[:alert] = I18n.t('registrations.errors.forum_age_requirement').html_safe # TODO: Consider alternative i18n key path
+      flash[:alert] = I18n.t('misc.forum_age_requirement').html_safe
       return redirect_to new_user_session_path
     end
 

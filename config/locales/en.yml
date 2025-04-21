@@ -2323,7 +2323,9 @@ en:
     messages:
       success: "Thank you for your message. We will contact you soon!"
       delivery_error: "Error sending message."
-
+  #context: for keys which don't fit into another category, and don't justify a category of their own
+  misc:
+    forum_age_requirement: "You must be 13 years old to access the WCA Forum."
   #context: FAQ page
   faq:
     title: "Frequently Asked Questions"
