@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_04_18_024459) do
+ActiveRecord::Schema[7.2].define(version: 2025_04_21_053202) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -447,7 +447,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_04_18_024459) do
     t.datetime "event_change_deadline_date", precision: nil
     t.integer "guest_entry_status", default: 0, null: false
     t.boolean "allow_registration_edits", default: false, null: false
-    t.boolean "allow_registration_self_delete_after_acceptance", default: false, null: false
     t.integer "competition_series_id"
     t.boolean "use_wca_live_for_scoretaking", default: false, null: false
     t.boolean "allow_registration_without_qualification", default: false
@@ -462,6 +461,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_04_18_024459) do
     t.integer "auto_close_threshold"
     t.boolean "auto_accept_registrations", default: false, null: false
     t.integer "auto_accept_disable_threshold"
+    t.boolean "allow_registration_self_delete_after_acceptance"
     t.index ["cancelled_at"], name: "index_competitions_on_cancelled_at"
     t.index ["country_id"], name: "index_Competitions_on_countryId"
     t.index ["end_date"], name: "index_competitions_on_end_date"
@@ -696,6 +696,17 @@ ActiveRecord::Schema[7.2].define(version: 2025_04_18_024459) do
     t.datetime "resolved_at", precision: nil
     t.boolean "digest_worthy", default: false
     t.datetime "digest_sent_at", precision: nil
+  end
+
+  create_table "invoice_items", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.bigint "registration_id"
+    t.integer "amount_lowest_denomination"
+    t.string "currency_code"
+    t.integer "status"
+    t.string "display_name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["registration_id"], name: "index_invoice_items_on_registration_id"
   end
 
   create_table "jwt_denylist", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
