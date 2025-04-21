@@ -765,4 +765,46 @@ RSpec.describe User, type: :model do
       expect(user.teams_committees_at_least_senior_roles).not_to include(wrt_role)
     end
   end
+
+  describe '#age_in_years' do
+    let(:user) { FactoryBot.create(:user) }
+
+    it 'returns an integer' do
+      expect(user.age_in_years.class).to be(Integer)
+    end
+
+    it 'counts the year if after user birthday' do
+      user.dob = Date.today.advance(days: -1, years: -10)
+      expect(user.age_in_years).to be(10)
+    end
+
+    it 'counts the year if on user birthday' do
+      user.dob = Date.today.advance(years: -10)
+      expect(user.age_in_years).to be(10)
+    end
+
+    it 'doesnt count the year if before user birthday' do
+      user.dob = Date.today.advance(years: -10, days: 1)
+      expect(user.age_in_years).to be(9)
+    end
+  end
+
+  describe '#below_forum_age_requirement?' do
+    let(:user) { FactoryBot.create(:user) }
+
+    it 'true when user under 13' do
+      user.dob = Date.today.advance(days: 1, years: -13)
+      expect(user.below_forum_age_requirement?).to be(true)
+    end
+
+    it 'false when user is 13' do
+      user.dob = Date.today.advance(years: -13)
+      expect(user.below_forum_age_requirement?).to be(false)
+    end
+
+    it 'false when user older than 13' do
+      user.dob = Date.today.advance(years: -27)
+      expect(user.below_forum_age_requirement?).to be(false)
+    end
+  end
 end

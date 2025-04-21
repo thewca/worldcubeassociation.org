@@ -74,6 +74,8 @@ class User < ApplicationRecord
   ANONYMOUS_GENDER = 'o'
   ANONYMOUS_COUNTRY_ISO2 = 'US'
 
+  FORUM_AGE_REQUIREMENT = 13
+
   def self.eligible_voters
     [
       UserGroup.delegate_regions,
@@ -490,12 +492,22 @@ class User < ApplicationRecord
     user.senior_delegates.include?(self)
   end
 
-  def banned?
-    group_member?(UserGroup.banned_competitors.first)
+  def age_in_years
+    age = Date.today.year - dob.year
+    age -= 1 if Date.today < dob.advance(years: age)
+    age
+  end
+
+  def below_forum_age_requirement?
+    age_in_years < FORUM_AGE_REQUIREMENT
   end
 
   def forum_banned?
     current_ban&.metadata&.scope == 'competing_and_attending_and_forums'
+  end
+
+  def banned?
+    group_member?(UserGroup.banned_competitors.first)
   end
 
   def banned_in_past?
