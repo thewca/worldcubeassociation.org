@@ -78,7 +78,7 @@
     "react-datepicker": "^8.3.0",
     "react-dom": "^18.3.1",
     "react-google-recaptcha": "^3.1.0",
-    "react-image-crop": "^11.0.7",
+    "react-image-crop": "^11.0.10",
     "react-intersection-observer": "^9.16.0",
     "react-leaflet": "^4.2.1",
     "react-simplemde-editor": "^5.2.0",
