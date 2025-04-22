@@ -325,22 +325,22 @@ class Person < ApplicationRecord
     if sub_ids.length > 1
       # if an updated person is due to a name change, this will delete the previous person.
       # if an updated person is due to a country change, this will keep the sub person with an appropriate subId
-      previous_persons = Person.where(wca_id: wca_id).where.not(subId: 1).order(:subId)
+      previous_persons = Person.where(wca_id: wca_id).where.not(sub_id: 1).order(:sub_id)
       current_sub_id = 1
-      current_country_id = countryId
+      current_country_id = self.country_id
 
       previous_persons.each do |p|
-        if p.countryId == current_country_id
+        if p.country_id == current_country_id
           p.delete
         else
           current_sub_id += 1
-          current_country_id = p.countryId
+          current_country_id = p.country_id
           p.update(
             wca_id: new_wca_id,
             name: User::ANONYMOUS_NAME,
             gender: User::ANONYMOUS_GENDER,
             dob: User::ANONYMOUS_DOB,
-            subId: current_sub_id,
+            sub_id: current_sub_id,
           )
         end
       end
