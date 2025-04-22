@@ -2775,7 +2775,7 @@ class Competition < ApplicationRecord
             "waitingListDeadlineDate" => date_json_schema("date-time"),
             "eventChangeDeadlineDate" => date_json_schema("date-time"),
             "allowOnTheSpot" => { "type" => ["boolean", "null"] },
-            "allowSelfDeleteAfterAcceptance" => { "type" => "boolean" },
+            "competitorCanCancel" => { "type" => "string" },
             "allowSelfEdits" => { "type" => "boolean" },
             "guestsEnabled" => { "type" => "boolean" },
             "guestEntryStatus" => { "type" => "string" },
