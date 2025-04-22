@@ -440,6 +440,7 @@ module DatabaseDumper
         ),
       ),
     }.freeze,
+    "invoice_items" => :skip_all_rows,
     "live_results" => :skip_all_rows,
     "live_attempts" => :skip_all_rows,
     "live_attempt_history_entries" => :skip_all_rows,
