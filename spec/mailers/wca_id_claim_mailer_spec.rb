@@ -4,9 +4,9 @@ require "rails_helper"
 
 RSpec.describe WcaIdClaimMailer, type: :mailer do
   describe "notify_wcat_of_confirmed_competition" do
-    let(:delegate) { FactoryBot.create :delegate }
-    let(:person) { FactoryBot.create :person }
-    let(:user_claiming_wca_id) { FactoryBot.create :user, unconfirmed_wca_id: person.wca_id, delegate_to_handle_wca_id_claim: delegate, dob_verification: person.dob }
+    let(:delegate) { create(:delegate) }
+    let(:person) { create(:person) }
+    let(:user_claiming_wca_id) { create(:user, unconfirmed_wca_id: person.wca_id, delegate_to_handle_wca_id_claim: delegate, dob_verification: person.dob) }
     let(:mail) { WcaIdClaimMailer.notify_delegate_of_wca_id_claim(user_claiming_wca_id) }
 
     it "renders" do
@@ -21,9 +21,9 @@ RSpec.describe WcaIdClaimMailer, type: :mailer do
   end
 
   describe "notify_user_of_delegate_demotion" do
-    let(:senior_delegate) { (FactoryBot.create :senior_delegate_role).user }
-    let(:demoted_delegate) { FactoryBot.create :user, name: "Sherlock Holmes" }
-    let(:user_claiming_wca_id) { FactoryBot.create :user, name: "Bilbo Baggins" }
+    let(:senior_delegate) { create(:senior_delegate_role).user }
+    let(:demoted_delegate) { create(:user, name: "Sherlock Holmes") }
+    let(:user_claiming_wca_id) { create(:user, name: "Bilbo Baggins") }
     let(:mail) { WcaIdClaimMailer.notify_user_of_delegate_demotion(user_claiming_wca_id, demoted_delegate) }
     let(:mail_with_senior) { WcaIdClaimMailer.notify_user_of_delegate_demotion(user_claiming_wca_id, demoted_delegate, senior_delegate) }
 

@@ -4,10 +4,10 @@ require "rails_helper"
 
 RSpec.describe RoleChangeMailer, type: :mailer do
   describe 'notify_role_start for delegate probation' do
-    let(:user_who_made_the_change) { FactoryBot.create(:user) }
-    let(:senior_delegate) { FactoryBot.create(:senior_delegate_role) }
-    let(:delegate) { FactoryBot.create(:delegate_role, group: senior_delegate.group) }
-    let(:role) { FactoryBot.create(:probation_role, user: delegate.user) }
+    let(:user_who_made_the_change) { create(:user) }
+    let(:senior_delegate) { create(:senior_delegate_role) }
+    let(:delegate) { create(:delegate_role, group: senior_delegate.group) }
+    let(:role) { create(:probation_role, user: delegate.user) }
     let(:mail) { described_class.notify_role_start(role, user_who_made_the_change) }
 
     it 'renders the headers' do
@@ -23,9 +23,9 @@ RSpec.describe RoleChangeMailer, type: :mailer do
   end
 
   describe 'notify_role_start where senior_delegate and user_who_made_the_change are same' do
-    let(:senior_delegate) { FactoryBot.create(:senior_delegate_role) }
-    let(:delegate) { FactoryBot.create(:delegate_role, group: senior_delegate.group) }
-    let(:role) { FactoryBot.create(:probation_role, user: delegate.user) }
+    let(:senior_delegate) { create(:senior_delegate_role) }
+    let(:delegate) { create(:delegate_role, group: senior_delegate.group) }
+    let(:role) { create(:probation_role, user: delegate.user) }
     let(:mail) { described_class.notify_role_start(role, senior_delegate.user) }
 
     it 'renders the headers' do
@@ -41,10 +41,10 @@ RSpec.describe RoleChangeMailer, type: :mailer do
   end
 
   describe 'notify_role_change for delegate probation' do
-    let(:user_who_made_the_change) { FactoryBot.create(:user) }
-    let(:senior_delegate) { FactoryBot.create(:senior_delegate_role) }
-    let(:delegate) { FactoryBot.create(:delegate_role, group: senior_delegate.group) }
-    let(:role) { FactoryBot.create(:probation_role, user: delegate.user) }
+    let(:user_who_made_the_change) { create(:user) }
+    let(:senior_delegate) { create(:senior_delegate_role) }
+    let(:delegate) { create(:delegate_role, group: senior_delegate.group) }
+    let(:role) { create(:probation_role, user: delegate.user) }
     let(:mail) { described_class.notify_role_change(role, user_who_made_the_change, [UserRole::UserRoleChange.new(changed_parameter: 'End Date', previous_value: 'Empty', new_value: '01-01-2024')].to_json) }
 
     it 'renders the headers' do
@@ -60,8 +60,8 @@ RSpec.describe RoleChangeMailer, type: :mailer do
   end
 
   describe 'notify_role_end' do
-    let(:translator) { FactoryBot.create :regional_delegate_role }
-    let(:user_who_made_the_change) { FactoryBot.create(:user, name: 'Sherlock Holmes') }
+    let(:translator) { create(:regional_delegate_role) }
+    let(:user_who_made_the_change) { create(:user, name: 'Sherlock Holmes') }
     let(:mail) { described_class.notify_role_end(translator, user_who_made_the_change) }
 
     it 'renders the headers' do
