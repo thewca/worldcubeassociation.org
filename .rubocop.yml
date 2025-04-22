@@ -404,8 +404,3 @@ FactoryBot/SyntaxMethods:
 
 FactoryBot/ExcessiveCreateList:
   Enabled: false
-
-# Capybara
-
-Capybara/SpecificFinders:
-  Enabled: false

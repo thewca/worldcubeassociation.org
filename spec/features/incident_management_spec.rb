@@ -24,7 +24,7 @@ RSpec.feature "Incident Management", :js do
 
       scenario "filters by tag" do
         visit "/incidents?tags=misscramble"
-        page.find("#incidents-log-tags-container", visible: :all).has_content?("misscramble")
+        page.find_by_id('incidents-log-tags-container', visible: :all).has_content?("misscramble")
         expect(page).to have_content("First incident")
         expect(page).to have_no_content("Custom title")
         expect(page).to have_no_content("Second incident")
@@ -39,7 +39,7 @@ RSpec.feature "Incident Management", :js do
 
       scenario "filters by both" do
         visit "/incidents?tags=4b&search=Custom"
-        page.find("#incidents-log-tags-container", visible: :all).has_content?("4b")
+        page.find_by_id('incidents-log-tags-container', visible: :all).has_content?("4b")
         expect(page).to have_content("Custom title")
         expect(page).to have_no_content("Second incident")
       end

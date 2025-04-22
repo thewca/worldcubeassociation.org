@@ -54,7 +54,7 @@ RSpec.feature "Sign up" do
       fill_in_selectize "WCA ID", with: person.wca_id
 
       # Wait for select delegate area to load via ajax.
-      expect(page.find("#select-nearby-delegate-area")).to have_content "In order to assign you your WCA ID"
+      expect(page.find_by_id('select-nearby-delegate-area')).to have_content "In order to assign you your WCA ID"
 
       # Now that they've selected a valid WCA ID, make sure the birthdate
       # verification field is visible.
@@ -110,7 +110,7 @@ RSpec.feature "Sign up" do
       fill_in_selectize "WCA ID", with: person.wca_id
 
       # Wait for select delegate area to load via ajax.
-      expect(page.find("#select-nearby-delegate-area")).to have_content "In order to assign you your WCA ID"
+      expect(page.find_by_id('select-nearby-delegate-area')).to have_content "In order to assign you your WCA ID"
 
       # Now that they've selected a valid WCA ID, make sure the birthdate
       # verification field is visible.
@@ -133,7 +133,7 @@ RSpec.feature "Sign up" do
       fill_in_selectize "WCA ID", with: person.wca_id
 
       # Wait for select delegate area to load via ajax.
-      expect(page.find("#select-nearby-delegate-area")).to have_content "In order to assign you your WCA ID"
+      expect(page.find_by_id('select-nearby-delegate-area')).to have_content "In order to assign you your WCA ID"
 
       # Now that they've selected a valid WCA ID, make sure the birthdate
       # verification field is visible.
@@ -218,7 +218,7 @@ RSpec.feature "Sign up" do
       fill_in_selectize "WCA ID", with: person.wca_id
 
       # Wait for select delegate area to load via ajax.
-      expect(page.find("#select-nearby-delegate-area")).to have_content "In order to assign you your WCA ID"
+      expect(page.find_by_id('select-nearby-delegate-area')).to have_content "In order to assign you your WCA ID"
       # Now that they've selected a valid WCA ID, make sure the birthdate
       # verification field is visible.
       expect(page).to have_css("div.user_dob_verification", visible: :visible)
@@ -271,10 +271,10 @@ RSpec.feature "Sign up" do
       fill_in_selectize "WCA ID", with: person.wca_id
 
       click_button "Sign up"
-      expect(page.find("#user_dob", visible: :hidden).value).to eq ""
+      expect(page.find_by_id('user_dob', visible: :hidden).value).to eq ""
 
       click_on "I have never competed in a WCA competition."
-      expect(page.find("#user_dob", visible: :visible).value).to eq ""
+      expect(page.find_by_id('user_dob', visible: :visible).value).to eq ""
     end
 
     it "does not allow both panels to be open after failed submission" do
@@ -287,7 +287,7 @@ RSpec.feature "Sign up" do
       click_on "I have competed in a WCA competition."
 
       click_button "Sign up"
-      page.find('#have-competed.collapse.in') # ensure page loads completely
+      page.find_by_id('have-competed', class: ["collapse", "in"]) # ensure page loads completely
 
       expect(page).to have_css('#have-competed', visible: :visible)
       expect(page).to have_css('#never-competed', visible: :hidden)

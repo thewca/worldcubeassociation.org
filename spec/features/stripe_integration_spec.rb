@@ -50,7 +50,7 @@ RSpec.feature "Stripe PaymentElement integration", :js do
     end
 
     it "changes subtotal when using a donation" do
-      subtotal_label = page.find('#money-subtotal')
+      subtotal_label = page.find_by_id('money-subtotal')
 
       format_money = format_money(registration.outstanding_entry_fees)
       expect(subtotal_label).to have_text(format_money)
@@ -88,7 +88,7 @@ RSpec.feature "Stripe PaymentElement integration", :js do
       end
 
       format_money = format_money(registration.outstanding_entry_fees + donation_money)
-      expect(page.find('#money-subtotal')).to have_text(format_money)
+      expect(page.find_by_id('money-subtotal')).to have_text(format_money)
     end
   end
 end
