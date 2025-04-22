@@ -62,7 +62,7 @@ RSpec.describe InvoiceItem do
   end
 
   describe "update status after payment" do
-    let!(:registration) { FactoryBot.create(:registration) } # Registration automatically creates invoice_item for entry
+    let!(:registration) { FactoryBot.create(:registration, :invoice_item) }
 
     context 'when payment matches invoice total' do
       it 'marks a single invoice_item as paid' do
@@ -73,7 +73,7 @@ RSpec.describe InvoiceItem do
       it 'updates all invoice_items to paid if invoice fully paid' do
         FactoryBot.create(:invoice_item, display_name: "arbitrary payment", amount_lowest_denomination: 350, registration: registration)
         FactoryBot.create(:registration_payment, registration: registration, amount_lowest_denomination: registration.invoice_items_total.cents)
-        registration.invoice_items.each { |i| expect(i.status).to eq('paid') }
+        registration.reload.invoice_items.each { |i| expect(i.status).to eq('paid') }
       end
     end
 

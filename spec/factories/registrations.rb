@@ -20,6 +20,10 @@ FactoryBot.define do
 
     competing_status { Registrations::Helper::STATUS_PENDING }
 
+    trait :invoice_item do
+      after(:create) { it.add_competition_entry }
+    end
+
     trait :skip_validations do
       to_create { |instance| instance.save(validate: false) }
     end
