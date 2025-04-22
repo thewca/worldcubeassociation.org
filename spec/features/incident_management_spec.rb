@@ -104,10 +104,10 @@ RSpec.feature "Incident Management", :js do
 
       scenario "delegates cant see information from pending incidents" do
         visit incident_path(incident1)
-        expect(page).to have_content(incident1.title)
-        expect(page).to have_no_content(incident3.public_summary)
-        expect(page).to have_no_content(incident3.private_description)
-        expect(page).to have_no_content(incident3.private_wrc_decision)
+        expect(page).to have_current_path "/"
+        expect(page).to have_no_content(incident1.public_summary)
+        expect(page).to have_no_content(incident1.private_description)
+        expect(page).to have_no_content(incident1.private_wrc_decision)
       end
     end
   end
