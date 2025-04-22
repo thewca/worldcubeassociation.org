@@ -82,15 +82,15 @@ after "development:users", "development:user_roles" do
           person = competitor.person
           result = Result.new(
             pos: k+1,
-            personId: person.wca_id,
-            personName: person.name,
-            countryId: person.countryId,
-            competitionId: competition.id,
-            eventId: event.id,
-            roundTypeId: round_type_id,
-            formatId: round_format.id,
-            regionalSingleRecord: k == 0 ? "WR" : nil,
-            regionalAverageRecord: k == 0 ? "WR" : nil,
+            person_id: person.wca_id,
+            person_name: person.name,
+            country_id: person.country_id,
+            competition_id: competition.id,
+            event_id: event.id,
+            round_type_id: round_type_id,
+            format_id: round_format.id,
+            regional_single_record: k == 0 ? "WR" : nil,
+            regional_average_record: k == 0 ? "WR" : nil,
           )
           round_format.expected_solve_count.times do |v|
             result.send(:"value#{v+1}=", random_wca_value)

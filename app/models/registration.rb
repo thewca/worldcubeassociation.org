@@ -67,7 +67,7 @@ class Registration < ApplicationRecord
   end
 
   def update_lanes!(params, acting_user)
-    Registrations::Lanes::Competing.update!(params, self.competition, acting_user.id)
+    Registrations::Lanes::Competing.update!(params, self, acting_user.id)
   end
 
   def guest_limit
@@ -127,10 +127,9 @@ class Registration < ApplicationRecord
   delegate :name, :gender, :country, :email, :dob, :wca_id, to: :user
 
   alias_method :birthday, :dob
-  alias_method :personId, :wca_id
 
   def person
-    Person.find_by(wca_id: personId)
+    Person.find_by(wca_id: wca_id)
   end
 
   def world_rank(event, type)
@@ -488,6 +487,12 @@ class Registration < ApplicationRecord
     @tracked_event_ids.present?
   end
 
+  after_commit :reset_tracked_event_ids
+
+  private def reset_tracked_event_ids
+    @tracked_event_ids = nil
+  end
+
   def tracked_event_ids
     @tracked_event_ids ||= self.event_ids
   end
@@ -497,6 +502,10 @@ class Registration < ApplicationRecord
     #   we want to avoid database writes at all cost. So we create an in-memory dummy registration,
     #   but unfortunately `through` association support is very limited for such volatile models.
     registration_competition_events.map(&:event_id)
+  end
+
+  def changed_event_ids
+    self.volatile_event_ids - self.tracked_event_ids
   end
 
   def competition_events_changed?

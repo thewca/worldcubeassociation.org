@@ -21,12 +21,12 @@ const registrationStatusHint = (competingStatus) => {
 
 const competitionStatusHint = (competition) => {
   let text = '';
-  if (competition['confirmed?']) {
-    text += I18n.t('competitions.messages.confirmed_visible');
-  } else if (competition['visible?']) {
+  if (!competition['confirmed?']) {
+    text += I18n.t('competitions.messages.not_confirmed_not_visible');
+  } else if (!competition['visible?']) {
     text += I18n.t('competitions.messages.confirmed_not_visible');
   } else {
-    text += I18n.t('competitions.messages.not_confirmed_not_visible');
+    text += I18n.t('competitions.messages.confirmed_visible');
   }
 
   return text;

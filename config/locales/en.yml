@@ -338,7 +338,7 @@ en:
       #context: a person
       person:
         wca_id: "Person"
-        countryId: "Representing"
+        country_id: "Representing"
         dob: "Birthdate"
         gender: "Gender"
         name: "Name"

@@ -12,9 +12,9 @@ FactoryBot.define do
       id = id.next while Person.exists?(wca_id: id)
       id
     end
-    subId { 1 }
+    sub_id { 1 }
     name { Faker::Name.name }
-    countryId { Country.real.sample.id }
+    country_id { Country.real.sample.id }
     gender { "m" }
     dob { '1966-04-04' }
 
@@ -41,7 +41,7 @@ FactoryBot.define do
     factory :person_who_has_competed_once do
       after(:create) do |person|
         competition = FactoryBot.create(:competition, :with_delegate)
-        FactoryBot.create :result, person: person, competitionId: competition.id
+        FactoryBot.create :result, person: person, competition_id: competition.id
       end
     end
   end
