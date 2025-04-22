@@ -407,11 +407,5 @@ FactoryBot/ExcessiveCreateList:
 
 # Capybara
 
-Capybara/NegationMatcher:
-  Enabled: false
-
-Capybara/NegationMatcherAfterVisit:
-  Enabled: false
-
 Capybara/SpecificFinders:
   Enabled: false

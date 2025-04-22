@@ -17,7 +17,7 @@ RSpec.feature "Competitions list", :js do
         # Wait for the Delegate index to start loading
         expect(page).to have_css("#delegate-pulse")
         # …and then wait for it to finish loading
-        expect(page).not_to have_css("#delegate-pulse")
+        expect(page).to have_no_css("#delegate-pulse")
         within(:css, "#delegate") do
           find(".search").set(delegate.name)
           find(".search").send_keys(:enter)
