@@ -407,19 +407,7 @@ FactoryBot/ExcessiveCreateList:
 
 # Capybara
 
-Capybara/AmbiguousClick:
-  Enabled: false
-
-Capybara/ClickLinkOrButtonStyle:
-  Enabled: false
-
 Capybara/CurrentPathExpectation:
-  Enabled: false
-
-Capybara/FindAllFirst:
-  Enabled: false
-
-Capybara/MatchStyle:
   Enabled: false
 
 Capybara/NegationMatcher:
@@ -428,16 +416,7 @@ Capybara/NegationMatcher:
 Capybara/NegationMatcherAfterVisit:
   Enabled: false
 
-Capybara/RedundantWithinFind:
-  Enabled: false
-
-Capybara/SpecificActions:
-  Enabled: false
-
 Capybara/SpecificFinders:
-  Enabled: false
-
-Capybara/SpecificMatcher:
   Enabled: false
 
 Capybara/VisibilityMatcher:
