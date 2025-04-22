@@ -4,12 +4,12 @@ require "rails_helper"
 
 RSpec.describe CompetitionsMailer, type: :mailer do
   describe "notify_wcat_of_confirmed_competition" do
-    let(:senior_delegate_role) { create :senior_delegate_role }
-    let(:delegate_role) { create :delegate_role, group: senior_delegate_role.group }
-    let(:second_senior_delegate_role) { create :senior_delegate_role, group: GroupsMetadataDelegateRegions.find_by!(friendly_id: 'asia').user_group }
-    let(:second_delegate_role) { create :delegate_role, group: senior_delegate_role.group }
-    let(:third_delegate_role) { create :trainee_delegate_role, group: second_senior_delegate_role.group }
-    let(:competition) { create :competition, :with_competitor_limit, championship_types: %w(world PL), delegates: [delegate_role.user, second_delegate_role.user, third_delegate_role.user] }
+    let(:senior_delegate_role) { create(:senior_delegate_role) }
+    let(:delegate_role) { create(:delegate_role, group: senior_delegate_role.group) }
+    let(:second_senior_delegate_role) { create(:senior_delegate_role, group: GroupsMetadataDelegateRegions.find_by!(friendly_id: 'asia').user_group) }
+    let(:second_delegate_role) { create(:delegate_role, group: senior_delegate_role.group) }
+    let(:third_delegate_role) { create(:trainee_delegate_role, group: second_senior_delegate_role.group) }
+    let(:competition) { create(:competition, :with_competitor_limit, championship_types: %w(world PL), delegates: [delegate_role.user, second_delegate_role.user, third_delegate_role.user]) }
     let(:mail) do
       I18n.with_locale(:pl) do
         CompetitionsMailer.notify_wcat_of_confirmed_competition(delegate_role.user, competition)
@@ -34,10 +34,10 @@ RSpec.describe CompetitionsMailer, type: :mailer do
   end
 
   describe "notify_organizer_of_confirmed_competition" do
-    let(:delegate) { create :delegate, name: "Adam Smith" }
-    let(:trainee_delegate) { create :trainee_delegate }
-    let(:organizer) { create :user, name: "Will Johnson", preferred_locale: :en }
-    let(:competition) { create :competition, organizers: [organizer], delegates: [delegate, trainee_delegate] }
+    let(:delegate) { create(:delegate, name: "Adam Smith") }
+    let(:trainee_delegate) { create(:trainee_delegate) }
+    let(:organizer) { create(:user, name: "Will Johnson", preferred_locale: :en) }
+    let(:competition) { create(:competition, organizers: [organizer], delegates: [delegate, trainee_delegate]) }
     let(:mail) { CompetitionsMailer.notify_organizer_of_confirmed_competition(delegate, competition, organizer) }
 
     it "renders" do
@@ -52,9 +52,9 @@ RSpec.describe CompetitionsMailer, type: :mailer do
   end
 
   describe "notify_organizer_of_announced_competition" do
-    let(:delegate) { create :delegate, name: "Adam Smith" }
-    let(:organizer) { create :user, name: "Will Johnson", preferred_locale: :en }
-    let(:competition) { create :competition, organizers: [organizer], delegates: [delegate] }
+    let(:delegate) { create(:delegate, name: "Adam Smith") }
+    let(:organizer) { create(:user, name: "Will Johnson", preferred_locale: :en) }
+    let(:competition) { create(:competition, organizers: [organizer], delegates: [delegate]) }
     let(:mail) { CompetitionsMailer.notify_organizer_of_announced_competition(competition, organizer) }
 
     it "renders" do
@@ -69,10 +69,10 @@ RSpec.describe CompetitionsMailer, type: :mailer do
   end
 
   describe "notify_organizer_of_addition_to_competition" do
-    let(:delegate) { create :delegate, name: "Adam Smith" }
-    let(:trainee_delegate) { create :trainee_delegate }
-    let(:organizer) { create :user, name: "Will Johnson", preferred_locale: :en }
-    let(:competition) { create :competition, organizers: [organizer], delegates: [delegate, trainee_delegate] }
+    let(:delegate) { create(:delegate, name: "Adam Smith") }
+    let(:trainee_delegate) { create(:trainee_delegate) }
+    let(:organizer) { create(:user, name: "Will Johnson", preferred_locale: :en) }
+    let(:competition) { create(:competition, organizers: [organizer], delegates: [delegate, trainee_delegate]) }
     let(:mail) { CompetitionsMailer.notify_organizer_of_addition_to_competition(delegate, competition, organizer) }
 
     it "renders" do
@@ -87,10 +87,10 @@ RSpec.describe CompetitionsMailer, type: :mailer do
   end
 
   describe "notify_organizer_of_removal_from_competition" do
-    let(:delegate) { create :delegate, name: "Adam Smith" }
-    let(:trainee_delegate) { create :trainee_delegate }
-    let(:organizer) { create :user, name: "Will Johnson", preferred_locale: :en }
-    let(:competition) { create :competition, organizers: [organizer], delegates: [delegate, trainee_delegate] }
+    let(:delegate) { create(:delegate, name: "Adam Smith") }
+    let(:trainee_delegate) { create(:trainee_delegate) }
+    let(:organizer) { create(:user, name: "Will Johnson", preferred_locale: :en) }
+    let(:competition) { create(:competition, organizers: [organizer], delegates: [delegate, trainee_delegate]) }
     let(:mail) { CompetitionsMailer.notify_organizer_of_removal_from_competition(delegate, competition, organizer) }
 
     it "renders" do
@@ -105,8 +105,8 @@ RSpec.describe CompetitionsMailer, type: :mailer do
   end
 
   describe "notify_users_of_results_presence" do
-    let(:competition) { create :competition, :with_delegate, :with_trainee_delegate }
-    let(:competitor_user) { create :user, :wca_id }
+    let(:competition) { create(:competition, :with_delegate, :with_trainee_delegate) }
+    let(:competitor_user) { create(:user, :wca_id) }
     let(:mail) { CompetitionsMailer.notify_users_of_results_presence(competitor_user, competition) }
 
     it "renders" do
@@ -121,8 +121,8 @@ RSpec.describe CompetitionsMailer, type: :mailer do
   end
 
   describe "notify_users_of_id_claim_possibility" do
-    let(:competition) { create :competition, :with_delegate, :with_trainee_delegate }
-    let(:newcomer_user) { create :user }
+    let(:competition) { create(:competition, :with_delegate, :with_trainee_delegate) }
+    let(:newcomer_user) { create(:user) }
     let(:mail) { CompetitionsMailer.notify_users_of_id_claim_possibility(newcomer_user, competition) }
 
     it "renders" do
@@ -400,7 +400,7 @@ RSpec.describe CompetitionsMailer, type: :mailer do
 
   describe "registration_reminder_email" do
     let(:competitor) { create(:user) }
-    let(:competition) { create :competition, :with_organizer, :with_delegate, name: "Comp of the future 2020", id: "CompFut2020" }
+    let(:competition) { create(:competition, :with_organizer, :with_delegate, name: "Comp of the future 2020", id: "CompFut2020") }
 
     context "non-registered user" do
       let(:mail) { CompetitionsMailer.registration_reminder(competition, competitor, false) }

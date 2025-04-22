@@ -9,7 +9,7 @@ RSpec.describe Poll do
 
   describe "confirming a poll" do
     it "can confirm a poll" do
-      poll = create :poll
+      poll = create(:poll)
       create(:poll_option, poll_id: poll.id)
       create(:poll_option, poll_id: poll.id)
       poll.confirmed_at = Time.now
@@ -17,7 +17,7 @@ RSpec.describe Poll do
     end
 
     it "requires two options" do
-      poll = create :poll
+      poll = create(:poll)
       poll.confirmed_at = Time.now
       expect(poll).to be_invalid_with_errors(poll_options: ["Poll must have at least two options"])
 

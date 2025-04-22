@@ -4,7 +4,7 @@ require "rails_helper"
 
 RSpec.describe "WCA Live API" do
   describe "POST #add_result" do
-    let!(:delegate) { create :delegate }
+    let!(:delegate) { create(:delegate) }
 
     it "Updates a Live Result Correctly" do
       sign_in delegate

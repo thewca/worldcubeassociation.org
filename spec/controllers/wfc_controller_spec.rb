@@ -6,7 +6,7 @@ RSpec.describe WfcController do
   let(:competitions) { create_list(:competition, 3) }
 
   context "logged in as WFC member" do
-    let!(:wfc_member) { create :user, :wfc_member }
+    let!(:wfc_member) { create(:user, :wfc_member) }
 
     before :each do
       sign_in wfc_member

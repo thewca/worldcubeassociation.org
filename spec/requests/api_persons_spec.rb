@@ -3,10 +3,10 @@
 require "rails_helper"
 
 RSpec.describe "API Persons" do
-  let!(:person) { create :person }
+  let!(:person) { create(:person) }
 
   describe "GET #index" do
-    let!(:other_people) { create_list :person, 3 }
+    let!(:other_people) { create_list(:person, 3) }
 
     it "renders properly" do
       get api_v0_persons_path
@@ -54,8 +54,8 @@ RSpec.describe "API Persons" do
     end
 
     it "includes personal records in the response" do
-      create :ranks_single, person_id: person.wca_id, event_id: "333", best: 450
-      create :ranks_average, person_id: person.wca_id, event_id: "333", best: 590
+      create(:ranks_single, person_id: person.wca_id, event_id: "333", best: 450)
+      create(:ranks_average, person_id: person.wca_id, event_id: "333", best: 590)
       get api_v0_person_path(person.wca_id)
       expect(response).to be_successful
       json = response.parsed_body
@@ -64,7 +64,7 @@ RSpec.describe "API Persons" do
     end
 
     it "includes teams, but not hidden teams" do
-      user = create :user, :wca_id, :banned, :wst_member
+      user = create(:user, :wca_id, :banned, :wst_member)
 
       get api_v0_person_path(user.wca_id)
 
@@ -78,7 +78,7 @@ RSpec.describe "API Persons" do
   end
 
   describe "GET #results" do
-    let!(:result) { create :result, person: person }
+    let!(:result) { create(:result, person: person) }
 
     it "renders properly" do
       get api_v0_person_results_path(person.wca_id)

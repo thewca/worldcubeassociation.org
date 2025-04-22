@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe Person, type: :model do
-  let!(:person) { create :person_who_has_competed_once }
+  let!(:person) { create(:person_who_has_competed_once) }
 
   it "defines a valid person" do
     expect(person).to be_valid
@@ -11,7 +11,7 @@ RSpec.describe Person, type: :model do
 
   context "likely_delegates" do
     it "never competed" do
-      person = create :person
+      person = create(:person)
       expect(person.likely_delegates).to eq []
     end
 
@@ -20,13 +20,13 @@ RSpec.describe Person, type: :model do
       delegate = competition.delegates.first
       expect(person.likely_delegates).to eq [delegate]
 
-      competition2 = create :competition, delegates: [delegate], starts: 3.days.ago
-      create :result, person: person, competition_id: competition2.id
+      competition2 = create(:competition, delegates: [delegate], starts: 3.days.ago)
+      create(:result, person: person, competition_id: competition2.id)
       expect(person.likely_delegates).to eq [delegate]
 
-      new_delegate = create :delegate
-      competition3 = create :competition, delegates: [new_delegate], starts: 2.days.ago
-      create :result, person: person, competition_id: competition3.id
+      new_delegate = create(:delegate)
+      competition3 = create(:competition, delegates: [new_delegate], starts: 2.days.ago)
+      create(:result, person: person, competition_id: competition3.id)
       expect(person.likely_delegates).to eq [delegate, new_delegate]
     end
   end
@@ -113,11 +113,11 @@ RSpec.describe Person, type: :model do
   end
 
   describe "#world_championship_podiums" do
-    let!(:wc2015) { create :competition, championship_types: ["world"], starts: Date.new(2015, 1, 1) }
-    let!(:wc2017) { create :competition, championship_types: ["world"], starts: Date.new(2017, 1, 1) }
-    let!(:result1) { create :result, person: person, competition: wc2015, pos: 2, event_id: "333" }
-    let!(:result2) { create :result, person: person, competition: wc2015, pos: 1, event_id: "333oh" }
-    let!(:result3) { create :result, person: person, competition: wc2017, pos: 3, event_id: "444" }
+    let!(:wc2015) { create(:competition, championship_types: ["world"], starts: Date.new(2015, 1, 1)) }
+    let!(:wc2017) { create(:competition, championship_types: ["world"], starts: Date.new(2017, 1, 1)) }
+    let!(:result1) { create(:result, person: person, competition: wc2015, pos: 2, event_id: "333") }
+    let!(:result2) { create(:result, person: person, competition: wc2015, pos: 1, event_id: "333oh") }
+    let!(:result3) { create(:result, person: person, competition: wc2017, pos: 3, event_id: "444") }
 
     it "return results ordered by year and event" do
       expect(person.world_championship_podiums.to_a).to eq [result3, result1, result2]
@@ -125,17 +125,17 @@ RSpec.describe Person, type: :model do
   end
 
   describe "#championship_podiums" do
-    let!(:fr_nationals2016) { create :competition, championship_types: ["FR"], starts: Date.new(2016, 1, 1) }
-    let!(:us_nationals2017) { create :competition, championship_types: ["US"], starts: Date.new(2017, 1, 1) }
+    let!(:fr_nationals2016) { create(:competition, championship_types: ["FR"], starts: Date.new(2016, 1, 1)) }
+    let!(:us_nationals2017) { create(:competition, championship_types: ["US"], starts: Date.new(2017, 1, 1)) }
     let!(:fr_competitor) do
       create(:person, country_id: "France").tap do |fr_competitor|
-        create :result, person: fr_competitor, competition: fr_nationals2016, pos: 1, event_id: "333"
-        create :result, person: fr_competitor, competition: us_nationals2017, pos: 1, event_id: "333"
+        create(:result, person: fr_competitor, competition: fr_nationals2016, pos: 1, event_id: "333")
+        create(:result, person: fr_competitor, competition: us_nationals2017, pos: 1, event_id: "333")
       end
     end
     let!(:us_competitor) do
       create(:person, country_id: "USA").tap do |us_competitor|
-        create :result, person: us_competitor, competition: us_nationals2017, pos: 2, event_id: "333"
+        create(:result, person: us_competitor, competition: us_nationals2017, pos: 2, event_id: "333")
       end
     end
 
@@ -151,8 +151,8 @@ RSpec.describe Person, type: :model do
 
     it "ignores DNF results on the podium" do
       expect do
-        create :result, :blind_dnf_mo3, person: us_competitor, competition: us_nationals2017,
-                                        pos: 2, event_id: "555bf", best: SolveTime::DNF_VALUE
+        create(:result, :blind_dnf_mo3, person: us_competitor, competition: us_nationals2017,
+                                        pos: 2, event_id: "555bf", best: SolveTime::DNF_VALUE)
       end.not_to(change { us_competitor.championship_podiums[:national] })
     end
 
@@ -165,27 +165,27 @@ RSpec.describe Person, type: :model do
 
       it "does no longer treat the person as eligible for championship title related to previous nationality" do
         expect do
-          fr_nationals2017 = create :competition, championship_types: ["FR"], starts: Date.new(2017, 1, 1)
-          create :result, person: fr_competitor, competition: fr_nationals2017, pos: 1, event_id: "333"
+          fr_nationals2017 = create(:competition, championship_types: ["FR"], starts: Date.new(2017, 1, 1))
+          create(:result, person: fr_competitor, competition: fr_nationals2017, pos: 1, event_id: "333")
         end.not_to(change { fr_competitor.championship_podiums[:national] })
       end
 
       it "is eligible for championship title of the current continent" do
         expect do
-          na_championship2017 = create :competition, championship_types: ["_North America"], starts: Date.new(2017, 1, 1)
-          create :result, person: fr_competitor, competition: na_championship2017, pos: 1, event_id: "333"
+          na_championship2017 = create(:competition, championship_types: ["_North America"], starts: Date.new(2017, 1, 1))
+          create(:result, person: fr_competitor, competition: na_championship2017, pos: 1, event_id: "333")
         end.to change { fr_competitor.championship_podiums[:continental].count }.by 1
       end
     end
 
     it "reassigns positions correctly in the case of a tie" do
-      us_competitor1 = create :person, country_id: "USA"
-      us_competitor2 = create :person, country_id: "USA"
-      us_competitor3 = create :person, country_id: "USA"
-      create :result, person: fr_competitor, competition: us_nationals2017, pos: 1, event_id: "222"
-      create :result, person: us_competitor1, competition: us_nationals2017, pos: 2, event_id: "222"
-      create :result, person: us_competitor2, competition: us_nationals2017, pos: 2, event_id: "222"
-      create :result, person: us_competitor3, competition: us_nationals2017, pos: 4, event_id: "222"
+      us_competitor1 = create(:person, country_id: "USA")
+      us_competitor2 = create(:person, country_id: "USA")
+      us_competitor3 = create(:person, country_id: "USA")
+      create(:result, person: fr_competitor, competition: us_nationals2017, pos: 1, event_id: "222")
+      create(:result, person: us_competitor1, competition: us_nationals2017, pos: 2, event_id: "222")
+      create(:result, person: us_competitor2, competition: us_nationals2017, pos: 2, event_id: "222")
+      create(:result, person: us_competitor3, competition: us_nationals2017, pos: 4, event_id: "222")
 
       expect(us_competitor1.championship_podiums[:national].first.pos).to eq 1
       expect(us_competitor2.championship_podiums[:national].first.pos).to eq 1

@@ -47,7 +47,7 @@ RSpec.describe ApplicationHelper do
 
   describe "#simple_form_for" do
     it "error messages link to attribute input field" do
-      user = create :user
+      user = create(:user)
       user.wca_id = '1999FLEI01'
       user.dob = 2.days.from_now
       expect(user).to be_invalid_with_errors(

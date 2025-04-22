@@ -3,12 +3,12 @@
 require 'rails_helper'
 
 RSpec.describe CompetitionSeries do
-  let!(:series) { create :competition_series }
-  let!(:competition) { create :competition, competition_series: series }
+  let!(:series) { create(:competition_series) }
+  let!(:competition) { create(:competition, competition_series: series) }
 
   describe "validations" do
     it "cannot create two series with the same ID" do
-      series_duplicate = build :competition_series, wcif_id: series.wcif_id
+      series_duplicate = build(:competition_series, wcif_id: series.wcif_id)
       expect(series_duplicate).to be_invalid_with_errors(wcif_id: ["has already been taken"])
     end
   end

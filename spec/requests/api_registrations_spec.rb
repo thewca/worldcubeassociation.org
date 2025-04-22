@@ -10,8 +10,8 @@ RSpec.describe 'API Registrations' do
 
   describe 'POST #create' do
     context 'when creating a registration' do
-      let(:user) { create :user }
-      let(:competition) { create :competition, :registration_open }
+      let(:user) { create(:user) }
+      let(:competition) { create(:competition, :registration_open) }
       let(:headers) { { 'Authorization' => registration_request['jwt_token'] } }
       let(:registration_request) { build(:registration_request, competition_id: competition.id, user_id: user.id) }
 
@@ -326,8 +326,8 @@ RSpec.describe 'API Registrations' do
   end
 
   describe 'PATCH #update' do
-    let(:user) { create :user }
-    let(:competition) { create :competition, :registration_open, :editable_registrations, :with_organizer }
+    let(:user) { create(:user) }
+    let(:competition) { create(:competition, :registration_open, :editable_registrations, :with_organizer) }
     let(:registration) { create(:registration, competition: competition, user: user) }
     let(:paid_cant_cancel) {
       create(
@@ -852,11 +852,11 @@ RSpec.describe 'API Registrations' do
   end
 
   describe 'PATCH #bulk_update' do
-    let(:competition) { create :competition, :registration_open, :editable_registrations, :with_competitor_limit, :with_organizer }
+    let(:competition) { create(:competition, :registration_open, :editable_registrations, :with_competitor_limit, :with_organizer) }
 
-    let(:user1) { create :user }
-    let(:user2) { create :user }
-    let(:user3) { create :user }
+    let(:user1) { create(:user) }
+    let(:user2) { create(:user) }
+    let(:user3) { create(:user) }
 
     let(:registration1) { create(:registration, competition: competition, user: user1) }
     let(:registration2) { create(:registration, competition: competition, user: user2) }
@@ -1232,14 +1232,14 @@ RSpec.describe 'API Registrations' do
   end
 
   describe 'GET #list_admin' do
-    let(:competition) { create :competition, :registration_open, :editable_registrations, :with_organizer }
+    let(:competition) { create(:competition, :registration_open, :editable_registrations, :with_organizer) }
 
-    let(:user1) { create :user }
-    let(:user2) { create :user }
-    let(:user3) { create :user }
-    let(:user4) { create :user }
-    let(:user5) { create :user }
-    let(:user6) { create :user }
+    let(:user1) { create(:user) }
+    let(:user2) { create(:user) }
+    let(:user3) { create(:user) }
+    let(:user4) { create(:user) }
+    let(:user5) { create(:user) }
+    let(:user6) { create(:user) }
 
     let!(:registration1) { create(:registration, :accepted, competition: competition, user: user1) }
     let!(:registration2) { create(:registration, :accepted, competition: competition, user: user2) }

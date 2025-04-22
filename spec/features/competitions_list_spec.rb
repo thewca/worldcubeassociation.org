@@ -9,7 +9,7 @@ RSpec.feature "Competitions list", :js do
     end
 
     context "when a delegate is set in the params" do
-      let(:competition) { create :competition, :visible, :future }
+      let(:competition) { create(:competition, :visible, :future) }
       let!(:delegate) { competition.delegates.first }
 
       before do

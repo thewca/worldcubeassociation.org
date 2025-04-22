@@ -4,8 +4,8 @@ require "rails_helper"
 
 RSpec.describe "Admin Results" do
   describe "Posting Check In" do
-    let!(:competition) { create :competition, :with_valid_submitted_results }
-    let!(:wrt_member) { create :user, :wrt_member }
+    let!(:competition) { create(:competition, :with_valid_submitted_results) }
+    let!(:wrt_member) { create(:user, :wrt_member) }
 
     it "locks a competition and returns the correct attributes" do
       sign_in wrt_member
