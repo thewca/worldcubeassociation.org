@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_04_20_065218) do
+ActiveRecord::Schema[7.2].define(version: 2025_04_21_053202) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -697,6 +697,17 @@ ActiveRecord::Schema[7.2].define(version: 2025_04_20_065218) do
     t.datetime "digest_sent_at", precision: nil
   end
 
+  create_table "invoice_items", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.bigint "registration_id"
+    t.integer "amount_lowest_denomination"
+    t.string "currency_code"
+    t.integer "status"
+    t.string "display_name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["registration_id"], name: "index_invoice_items_on_registration_id"
+  end
+
   create_table "jwt_denylist", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "jti", null: false
     t.datetime "exp", null: false
@@ -747,6 +758,21 @@ ActiveRecord::Schema[7.2].define(version: 2025_04_20_065218) do
     t.integer "notification_radius_km"
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
+  end
+
+  create_table "manual_payment_integrations", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "payment_reference", null: false
+    t.text "payment_information", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "manual_payment_records", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "payment_reference", null: false
+    t.bigint "registration_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["registration_id"], name: "index_manual_payment_records_on_registration_id"
   end
 
   create_table "oauth_access_grants", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
