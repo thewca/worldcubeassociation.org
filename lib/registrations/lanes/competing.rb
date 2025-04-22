@@ -49,7 +49,7 @@ module Registrations
           end
         end
 
-        send_status_change_email(registration, current_user_id) if registration.competing_status_previously_changed?f
+        send_status_change_email(registration, current_user_id) if registration.competing_status_previously_changed? f
       end
 
       def self.send_status_change_email(registration, current_user_id)
