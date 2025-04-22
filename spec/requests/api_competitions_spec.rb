@@ -60,7 +60,7 @@ RSpec.describe "API Competitions" do
       get api_v0_competition_scrambles_path(competition)
       expect(response).to be_successful
       json = response.parsed_body
-      expect(json[0]["scrambleId"]).to eq scramble.scrambleId
+      expect(json[0]["id"]).to eq scramble.id
     end
   end
 
@@ -584,7 +584,7 @@ RSpec.describe "API Competitions" do
 
     it 'takes parameter to filter by continent' do
       FactoryBot.create_list(:competition, 6, :visible)
-      FactoryBot.create_list(:competition, 4, :visible, countryId: 'Afghanistan')
+      FactoryBot.create_list(:competition, 4, :visible, country_id: 'Afghanistan')
 
       get api_v0_competition_index_path, params: { continent: '_North America' }
       expect(response).to be_successful

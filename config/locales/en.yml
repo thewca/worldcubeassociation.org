@@ -108,37 +108,37 @@ en:
   rounds:
     "0":
       name: "Qualification round"
-      cellName: "Qualification round"
+      cell_name: "Qualification round"
     "1":
       name: "First round"
-      cellName: "First round"
+      cell_name: "First round"
     "2":
       name: "Second round"
-      cellName: "Second round"
+      cell_name: "Second round"
     "3":
       name: "Semi Final"
-      cellName: "Semi Final"
+      cell_name: "Semi Final"
     "b":
       name: "B Final"
-      cellName: "B Final"
+      cell_name: "B Final"
     "c":
       name: "Final"
-      cellName: "Final"
+      cell_name: "Final"
     "d":
       name: "First round"
-      cellName: "First round"
+      cell_name: "First round"
     "e":
       name: "Second round"
-      cellName: "Second round"
+      cell_name: "Second round"
     "f":
       name: "Final"
-      cellName: "Final"
+      cell_name: "Final"
     "g":
       name: "Semi Final"
-      cellName: "Semi Final"
+      cell_name: "Semi Final"
     "h":
       name: "Qualification round"
-      cellName: "Qualification round"
+      cell_name: "Qualification round"
   #context: attempt name
   attempts:
     attempt_name: "Attempt %{number}"
@@ -338,7 +338,7 @@ en:
       #context: a person
       person:
         wca_id: "Person"
-        countryId: "Representing"
+        country_id: "Representing"
         dob: "Birthdate"
         gender: "Gender"
         name: "Name"
@@ -1835,6 +1835,7 @@ en:
           information: "Pending should only be used for incomplete (eg, unpaid) registrations - please use the Waiting List if your competition is too full to accept new competitors."
         waitlist:
           title: "Waiting List Registrations"
+          information: "Competitors are added to the end of the Waiting List. If you add several at once, the paid competitors will be added to the end in the order that they paid, followed by the rest in the order that they registered. You can manually adjust the order in Edit Mode if necessary."
           skipped_warning: "You've skipped %{count} registration(s) on the Waiting List. Are you sure you want to approve the other registration(s) instead?"
         approved:
           title: "Approved Registrations"
@@ -1995,6 +1996,9 @@ en:
       series_distance_days: "The competition is scheduled too many days away from %{competition}."
       must_ask_about_guests_if_specifying_limit: "Must ask about guests if a guest limit is specified."
       not_full_url: "You have a relative URL (%{url}) in the content. Please enter full URLs with prefix http:// or https://."
+      editing_deadline_already_passed: "You're only allowed to change dates for deadlines that have not yet passed, but the original value of %{timestamp} has already passed."
+      edited_deadline_not_after_original: "You're only allowed to extend deadlines, but %{new_timestamp} is set before the original value of %{timestamp}."
+      edited_deadline_not_in_future: "You're only allowed to introduce future deadlines, but %{new_timestamp} is not in the future."
     new:
       create_competition: "Create competition"
       note_clone: "To clone an existing competition visit the information page for that competition and click the \"Clone\" link in the menu."
