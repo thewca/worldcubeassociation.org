@@ -441,7 +441,7 @@ RSpec.describe "registrations" do
     end
 
     context "when signed in as competition manager" do
-      let(:ots_competition) { FactoryBot.create(:competition, :registration_open, :with_delegate, :visible) }
+      let(:ots_competition) { create(:competition, :registration_open, :with_delegate, :visible) }
 
       before do
         sign_in ots_competition.delegates.first
@@ -527,9 +527,9 @@ RSpec.describe "registrations" do
       end
 
       describe "on the spot behaviour" do
-        let(:open_comp) { FactoryBot.create(:competition, :registration_open, delegates: [ots_competition.delegates.first]) }
-        let(:closed_comp) { FactoryBot.create(:competition, :registration_closed, delegates: [ots_competition.delegates.first]) }
-        let(:past_comp) { FactoryBot.create(:competition, :past, delegates: [ots_competition.delegates.first]) }
+        let(:open_comp) { create(:competition, :registration_open, delegates: [ots_competition.delegates.first]) }
+        let(:closed_comp) { create(:competition, :registration_closed, delegates: [ots_competition.delegates.first]) }
+        let(:past_comp) { create(:competition, :past, delegates: [ots_competition.delegates.first]) }
 
         context 'on-the-spot is enabled' do
           it 'works when registration is open' do
