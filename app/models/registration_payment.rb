@@ -35,6 +35,6 @@ class RegistrationPayment < ApplicationRecord
   end
 
   private def attempt_invoice_item_status_update
-    registration.invoice_items.each { |i| i.update(status: 'paid') } if amount_lowest_denomination == registration.invoice_items_total.cents
+    registration.invoice_items.each { it.update(status: 'paid') } if amount_lowest_denomination == registration.invoice_items_total.cents
   end
 end
