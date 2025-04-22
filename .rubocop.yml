@@ -415,6 +415,3 @@ Capybara/NegationMatcherAfterVisit:
 
 Capybara/SpecificFinders:
   Enabled: false
-
-Capybara/VisibilityMatcher:
-  Enabled: false
