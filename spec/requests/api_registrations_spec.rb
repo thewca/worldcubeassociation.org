@@ -1363,7 +1363,7 @@ RSpec.describe 'API Registrations' do
 
         it 'persists an invoice item to the database' do
           expect(reg.invoice_items.count).to be(2)
-          expect(reg.invoice_items.last.display_name).to eq("#{reg.competition_id} registration")
+          expect(reg.invoice_items.last.display_name).to eq("#{reg.competition_id} Registration")
         end
       end
 
@@ -1380,7 +1380,7 @@ RSpec.describe 'API Registrations' do
 
         it 'persists a donation to the database' do
           expect(reg.invoice_items.count).to eq(3)
-          expect(reg.invoice_items.exists?(display_name: "Optional donation")).to be(true)
+          expect(reg.invoice_items.exists?(display_name: "Donation")).to be(true)
         end
       end
 

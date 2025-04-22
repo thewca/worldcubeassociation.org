@@ -190,7 +190,7 @@ class Registration < ApplicationRecord
       amount_lowest_denomination: competition.base_entry_fee_lowest_denomination,
       currency_code: competition.currency_code,
       status: :unpaid,
-      display_name: "#{competition_id} registration",
+      display_name: "#{competition_id} #{I18n.t('competitions.nav.menu.registration')}",
     )
   end
 
@@ -199,7 +199,7 @@ class Registration < ApplicationRecord
       amount_lowest_denomination: competition.base_entry_fee_lowest_denomination,
       currency_code: competition.currency_code,
       status: :unpaid,
-      display_name: "#{competition_id} registration",
+      display_name: "#{competition_id} #{I18n.t('competitions.nav.menu.registration')}",
     )
   end
 
@@ -207,7 +207,7 @@ class Registration < ApplicationRecord
     invoice_items.build(
       amount_lowest_denomination: iso_amount,
       currency_code: competition.currency_code,
-      display_name: "Optional donation",
+      display_name: I18n.t('registrations.payment_form.labels.donation'),
     )
   end
 
@@ -215,7 +215,7 @@ class Registration < ApplicationRecord
     invoice_items.create(
       amount_lowest_denomination: iso_amount,
       currency_code: competition.currency_code,
-      display_name: "Optional donation",
+      display_name: I18n.t('registrations.payment_form.labels.donation'),
     )
   end
 
