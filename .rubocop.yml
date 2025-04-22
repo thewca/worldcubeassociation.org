@@ -407,9 +407,6 @@ FactoryBot/ExcessiveCreateList:
 
 # Capybara
 
-Capybara/CurrentPathExpectation:
-  Enabled: false
-
 Capybara/NegationMatcher:
   Enabled: false
 

@@ -14,7 +14,7 @@ RSpec.feature "Set the locale" do
     click_on "English" # Activate the locale selection dropdown.
     click_on "Français"
 
-    expect(page.current_path).to eq "/"
+    expect(page).to have_current_path "/", ignore_query: true
     expect(URI.parse(page.current_url).fragment).to eq "foo"
 
     expect(page).not_to have_content "English"
