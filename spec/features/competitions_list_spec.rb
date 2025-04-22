@@ -15,9 +15,9 @@ RSpec.feature "Competitions list", :js do
       before do
         visit "/competitions?show_admin_details=yes"
         # Wait for the Delegate index to start loading
-        expect(page).to have_selector("#delegate-pulse")
+        expect(page).to have_css("#delegate-pulse")
         # …and then wait for it to finish loading
-        expect(page).not_to have_selector("#delegate-pulse")
+        expect(page).not_to have_css("#delegate-pulse")
         within(:css, "#delegate") do
           find(".search").set(delegate.name)
           find(".search").send_keys(:enter)
@@ -29,7 +29,7 @@ RSpec.feature "Competitions list", :js do
       end
 
       it "only competitions delegated by the given delegate are shown" do
-        expect(page).to have_selector(".competition-info", count: 1)
+        expect(page).to have_css(".competition-info", count: 1)
       end
     end
 

@@ -51,5 +51,5 @@ end
 def visit_homepage_and_wait_for_load
   # Go to the homepage and wait for something to show up.
   visit "/"
-  expect(page).to have_selector("footer")
+  expect(page).to have_css("footer")
 end

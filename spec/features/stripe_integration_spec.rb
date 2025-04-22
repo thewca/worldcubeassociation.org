@@ -26,7 +26,7 @@ RSpec.feature "Stripe PaymentElement integration", :js do
     background do
       sign_in user
       visit competition_register_path(competition)
-      expect(page).to have_selector("#payment-element iframe")
+      expect(page).to have_css("#payment-element iframe")
     end
 
     it "loads the PaymentElement" do

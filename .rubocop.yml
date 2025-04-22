@@ -442,9 +442,3 @@ Capybara/SpecificMatcher:
 
 Capybara/VisibilityMatcher:
   Enabled: false
-
-Capybara/RSpec/HaveSelector:
-  Enabled: false
-
-Capybara/RSpec/PredicateMatcher:
-  Enabled: false
