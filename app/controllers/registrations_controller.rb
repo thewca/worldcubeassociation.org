@@ -271,7 +271,6 @@ class RegistrationsController < ApplicationController
       registration.build_competition_entry
       registration.build_donation(iso_donation_amount) if iso_donation_amount > 0
 
-      currency_code = registration.invoice_items_total.currency.iso_code
       ruby_money = registration.invoice_items_total
     end
 

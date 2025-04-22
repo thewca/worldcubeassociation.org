@@ -1380,7 +1380,7 @@ RSpec.describe 'API Registrations' do
 
         it 'persists a donation to the database' do
           expect(reg.invoice_items.count).to eq(3)
-          expect(reg.invoice_items.exists?(display_name: "Optional donation"))
+          expect(reg.invoice_items.exists?(display_name: "Optional donation")).to be(true)
         end
       end
 
@@ -1429,13 +1429,13 @@ RSpec.describe 'API Registrations' do
     it 'does not persist competition entry to database' do
       get registration_payment_denomination_path(competition_id: competition.id, user_id: reg.user_id), headers: headers
       expect(response).to be_successful
-      expect(InvoiceItem.all.count).to be(0)
+      expect(InvoiceItem.count).to be(0)
     end
 
     it 'does not persist a donation to database' do
       get registration_payment_denomination_path(competition_id: competition.id, user_id: reg.user_id), headers: headers, params: { iso_donation_amount: 1000 }
       expect(response).to be_successful
-      expect(InvoiceItem.all.count).to be(0)
+      expect(InvoiceItem.count).to be(0)
     end
 
     context 'with a custom invoice_item added' do

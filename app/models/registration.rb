@@ -219,7 +219,6 @@ class Registration < ApplicationRecord
     )
   end
 
-
   def record_payment(
     amount_lowest_denomination,
     currency_code,
