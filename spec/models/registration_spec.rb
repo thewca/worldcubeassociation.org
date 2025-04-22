@@ -476,7 +476,7 @@ RSpec.describe Registration do
     end
 
     it 'updates guests' do
-      registration.update_lanes!({ user_id: registration.user.id, guests: 5 }, registration.user)
+      registration.update_lanes!({ user_id: registration.user.id, guests: 5 }.with_indifferent_access, registration.user)
       registration.reload
       expect(registration.guests).to eq(5)
     end
