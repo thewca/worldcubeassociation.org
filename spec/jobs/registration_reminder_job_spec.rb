@@ -4,10 +4,10 @@ require 'rails_helper'
 
 RSpec.describe RegistrationReminderJob, type: :job do
   describe "registration reminder job" do
-    let(:user) { FactoryBot.create :user }
-    let(:delegate) { FactoryBot.create :delegate }
-    let(:organizers) { FactoryBot.create_list :user, 3 }
-    let(:competition) { FactoryBot.create :competition, :visible, organizers: organizers, delegates: [delegate] }
+    let(:user) { create :user }
+    let(:delegate) { create :delegate }
+    let(:organizers) { create_list :user, 3 }
+    let(:competition) { create :competition, :visible, organizers: organizers, delegates: [delegate] }
 
     it "does not send more than 24h in advance" do
       competition.registration_open = 2.days.from_now
@@ -55,8 +55,8 @@ RSpec.describe RegistrationReminderJob, type: :job do
 
     it "does not send to registered and accepted users" do
       BookmarkedCompetition.create(competition: competition, user: user)
-      FactoryBot.create(:registration, :accepted, competition: competition, user: user)
-      FactoryBot.create(:registration, :pending, competition: competition, user: delegate)
+      create(:registration, :accepted, competition: competition, user: user)
+      create(:registration, :pending, competition: competition, user: delegate)
       competition.update_column(:registration_open, 12.hours.from_now)
 
       expect(CompetitionsMailer).to receive(:registration_reminder).with(competition, delegate, true).and_call_original

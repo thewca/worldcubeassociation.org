@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe "Regional Organizations management", type: :request do
-  let(:regional_organization) { FactoryBot.create(:regional_organization, created_at: Time.now) }
+  let(:regional_organization) { create(:regional_organization, created_at: Time.now) }
   let(:valid_attributes) {
     {
       name: "World Cube Association",
@@ -40,8 +40,8 @@ RSpec.describe "Regional Organizations management", type: :request do
     }
   }
 
-  let!(:board_member) { FactoryBot.create(:user, :board_member) }
-  let!(:user) { FactoryBot.create(:user) }
+  let!(:board_member) { create(:user, :board_member) }
+  let!(:user) { create(:user) }
 
   describe "GET #index" do
     context "when logged in as a user" do

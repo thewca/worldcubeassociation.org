@@ -3,9 +3,9 @@
 require 'rails_helper'
 
 RSpec.describe MergePeople do
-  let(:person1) { FactoryBot.create(:person, country_id: "USA") }
+  let(:person1) { create(:person, country_id: "USA") }
   let(:shared_attributes) { person1.attributes.symbolize_keys.slice(:name, :country_id, :gender, :dob) }
-  let(:person2) { FactoryBot.create(:person, shared_attributes) }
+  let(:person2) { create(:person, shared_attributes) }
   let(:merge_people) { MergePeople.new(person1_wca_id: person1.wca_id, person2_wca_id: person2.wca_id) }
 
   it "is valid" do
@@ -18,12 +18,12 @@ RSpec.describe MergePeople do
   end
 
   it "requires person1 not have multiple sub_ids" do
-    merge_people.person1_wca_id = FactoryBot.create(:person_with_multiple_sub_ids, shared_attributes).wca_id
+    merge_people.person1_wca_id = create(:person_with_multiple_sub_ids, shared_attributes).wca_id
     expect(merge_people).to be_invalid_with_errors(person1_wca_id: ["This person has multiple sub_ids"])
   end
 
   it "requires person2 not have multiple sub_ids" do
-    merge_people.person2_wca_id = FactoryBot.create(:person_with_multiple_sub_ids, shared_attributes).wca_id
+    merge_people.person2_wca_id = create(:person_with_multiple_sub_ids, shared_attributes).wca_id
     expect(merge_people).to be_invalid_with_errors(person2_wca_id: ["This person has multiple sub_ids"])
   end
 
@@ -53,14 +53,14 @@ RSpec.describe MergePeople do
   end
 
   it "requires person2 to not have an account" do
-    FactoryBot.create :user, :wca_id, person: person2
+    create :user, :wca_id, person: person2
     expect(merge_people).to be_invalid_with_errors(person2_wca_id: ["Must not have an account"])
   end
 
   it "can actually merge people" do
-    result1 = FactoryBot.create(:result, person: person1)
-    result2 = FactoryBot.create(:result, person: person2)
-    decoy_result = FactoryBot.create(:result)
+    result1 = create(:result, person: person1)
+    result2 = create(:result, person: person2)
+    decoy_result = create(:result)
 
     old_decoy_person_id = decoy_result.person_id
     expect(merge_people.do_merge).to be true
