@@ -797,17 +797,17 @@ RSpec.describe Registration do
         registration = create(:registration, :accepted)
 
         series = create(:competition_series)
-        competitionA = registration.competition
-        competitionA.update!(competition_series: series)
-        competitionB = create(:competition, :registration_open, :auto_accept, competition_series: series, series_base: competitionA)
-        regB = create(:registration, user: registration.user, competition: competitionB)
+        competition_a = registration.competition
+        competition_a.update!(competition_series: series)
+        competition_b = create(:competition, :registration_open, :auto_accept, competition_series: series, series_base: competition_a)
+        reg_b = create(:registration, user: registration.user, competition: competition_b)
 
-        create(:registration_payment, :skip_create_hook, registration: regB, competition: competitionB)
+        create(:registration_payment, :skip_create_hook, registration: reg_b, competition: competition_b)
 
-        regB.attempt_auto_accept
+        reg_b.attempt_auto_accept
         error_json = { competition_id: ['You can only be accepted for one Series competition at a time.'] }.to_s
-        expect(regB.registration_history.last[:changed_attributes][:auto_accept_failure_reasons]).to eq(error_json)
-        expect(regB.reload.competing_status).to eq('pending')
+        expect(reg_b.registration_history.last[:changed_attributes][:auto_accept_failure_reasons]).to eq(error_json)
+        expect(reg_b.reload.competing_status).to eq('pending')
       end
     end
 
