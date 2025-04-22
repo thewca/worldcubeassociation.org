@@ -67,9 +67,9 @@ FactoryBot.define do
 
     sequence(:name) { |n| "Foo Comp #{n} 2015" }
 
-    cityName { "San Francisco, California" }
+    city_name { "San Francisco, California" }
     name_reason { "Foo sounds cool, right?" }
-    countryId { "USA" }
+    country_id { "USA" }
     currency_code { "USD" }
     base_entry_fee_lowest_denomination { 1000 }
     information { "Information!" }
@@ -87,9 +87,9 @@ FactoryBot.define do
     main_event_id { events.first.id if events.any? }
 
     venue { "My backyard" }
-    venueAddress { "My backyard street" }
+    venue_address { "My backyard street" }
     external_website { "https://www.worldcubeassociation.org" }
-    showAtAll { false }
+    show_at_all { false }
     confirmed_at { nil }
 
     external_registration_page { "https://www.worldcubeassociation.org" }
@@ -238,7 +238,7 @@ FactoryBot.define do
 
     trait :with_delegate_report do
       after(:create) do |competition|
-        FactoryBot.create :delegate_report, :posted, competition: competition
+        FactoryBot.create(:delegate_report, :posted, competition: competition)
       end
     end
 
@@ -266,11 +266,11 @@ FactoryBot.define do
       with_rounds { true }
       results_submitted_at { Time.now }
       after(:create) do |competition|
-        person = FactoryBot.create(:inbox_person, competitionId: competition.id)
+        person = FactoryBot.create(:inbox_person, competition_id: competition.id)
         rounds = competition.competition_events.map(&:rounds).flatten
         rounds.each do |round|
-          FactoryBot.create(:inbox_result, competitionId: competition.id, personId: person.id, eventId: round.event.id, formatId: round.format.id)
-          FactoryBot.create_list(:scramble, 5, competitionId: competition.id, eventId: round.event.id)
+          FactoryBot.create(:inbox_result, competition_id: competition.id, person_id: person.id, event_id: round.event.id, format_id: round.format.id)
+          FactoryBot.create_list(:scramble, 5, competition_id: competition.id, event_id: round.event.id)
         end
       end
     end
@@ -317,13 +317,13 @@ FactoryBot.define do
     end
 
     trait :not_visible do
-      showAtAll { false }
+      show_at_all { false }
     end
 
     trait :visible do
       with_delegate
       with_organizer
-      showAtAll { true }
+      show_at_all { true }
     end
 
     trait :announced do

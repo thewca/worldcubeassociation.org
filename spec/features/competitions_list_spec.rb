@@ -5,11 +5,11 @@ require "rails_helper"
 RSpec.feature "Competitions list", :js do
   context "admin view" do
     before :each do
-      sign_in FactoryBot.create(:admin)
+      sign_in create(:admin)
     end
 
     context "when a delegate is set in the params" do
-      let(:competition) { FactoryBot.create :competition, :visible, :future }
+      let(:competition) { create(:competition, :visible, :future) }
       let!(:delegate) { competition.delegates.first }
 
       before do
@@ -34,8 +34,8 @@ RSpec.feature "Competitions list", :js do
     end
 
     it 'renders finished competition without results' do
-      FactoryBot.create(:competition, :visible, starts: 2.days.ago, name: "Test Comp 2017")
-      visit '/competitions?state=recent&display=admin'
+      create(:competition, :visible, starts: 2.days.ago, name: "Test Comp 2017")
+      visit '/competitions?state=recent&show_admin_details=yes'
       expect(page).to have_http_status(:ok)
       expect(page).to have_text "Test Comp 2017"
       tr = page.find("tr", text: "Test Comp 2017")

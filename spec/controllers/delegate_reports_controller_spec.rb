@@ -3,13 +3,13 @@
 require 'rails_helper'
 
 RSpec.describe DelegateReportsController do
-  let(:delegate) { FactoryBot.create :delegate }
-  let(:trainee_delegate) { FactoryBot.create :trainee_delegate }
-  let(:comp) { FactoryBot.create(:competition, delegates: [delegate, trainee_delegate], starts: 2.days.ago) }
-  let!(:delegate_report1) { FactoryBot.create :delegate_report, :with_images, competition: comp, schedule_url: "http://example.com" }
-  let(:pre_delegate_reports_form_comp) { FactoryBot.create(:competition, delegates: [delegate], starts: Date.new(2015, 1, 1)) }
-  let!(:delegate_report2) { FactoryBot.create :delegate_report, :with_images, competition: pre_delegate_reports_form_comp, schedule_url: "http://example.com" }
-  let!(:wrc_members) { FactoryBot.create_list :user, 3, :wrc_member }
+  let(:delegate) { create(:delegate) }
+  let(:trainee_delegate) { create(:trainee_delegate) }
+  let(:comp) { create(:competition, delegates: [delegate, trainee_delegate], starts: 2.days.ago) }
+  let!(:delegate_report1) { create(:delegate_report, :with_images, competition: comp, schedule_url: "http://example.com") }
+  let(:pre_delegate_reports_form_comp) { create(:competition, delegates: [delegate], starts: Date.new(2015, 1, 1)) }
+  let!(:delegate_report2) { create(:delegate_report, :with_images, competition: pre_delegate_reports_form_comp, schedule_url: "http://example.com") }
+  let!(:wrc_members) { create_list(:user, 3, :wrc_member) }
 
   context "not logged in" do
     it "redirects to sign in" do
@@ -19,7 +19,7 @@ RSpec.describe DelegateReportsController do
   end
 
   context "logged in as a regular user" do
-    sign_in { FactoryBot.create(:user) }
+    before { sign_in create(:user) }
 
     it "redirects to home page" do
       get :show, params: { competition_id: comp.id }
@@ -28,7 +28,7 @@ RSpec.describe DelegateReportsController do
   end
 
   context "logged in as a regular delegate" do
-    sign_in { FactoryBot.create(:delegate) }
+    before { sign_in create(:delegate) }
 
     it "redirects to home page" do
       get :edit, params: { competition_id: comp.id }
@@ -65,7 +65,7 @@ RSpec.describe DelegateReportsController do
       comp.start_date = 1.day.from_now.strftime("%F")
       comp.end_date = 1.day.from_now.strftime("%F")
       comp.save!
-      expect(comp.is_probably_over?).to be false
+      expect(comp.probably_over?).to be false
 
       post :update, params: { competition_id: comp.id, delegate_report: { remarks: "My new remarks", posted: false } }
       comp.reload

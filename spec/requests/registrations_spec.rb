@@ -4,12 +4,12 @@ require "rails_helper"
 require "csv"
 
 RSpec.describe "registrations" do
-  let!(:competition) { FactoryBot.create(:competition, :with_delegate, :future, :visible, event_ids: %w(333 444)) }
+  let!(:competition) { create(:competition, :with_delegate, :future, :visible, event_ids: %w(333 444)) }
 
   describe "POST #do_import" do
     context "when signed in as a normal user" do
       it "doesn't allow access" do
-        sign_in FactoryBot.create(:user)
+        sign_in create(:user)
         post competition_registrations_do_import_path(competition)
         expect(response).to redirect_to root_url
       end
@@ -50,16 +50,16 @@ RSpec.describe "registrations" do
       end
 
       it "renders an error when there are active registrations for other Series competitions" do
-        two_timer_dave = FactoryBot.create(:user, :wca_id, name: "Two Timer Dave")
+        two_timer_dave = create(:user, :wca_id, name: "Two Timer Dave")
 
-        series = FactoryBot.create(:competition_series)
+        series = create(:competition_series)
         competition.update!(competition_series: series)
 
-        partner_competition = FactoryBot.create(:competition, :with_delegate, :visible, event_ids: %w(333 555),
-                                                                                        competition_series: series, series_base: competition)
+        partner_competition = create(:competition, :with_delegate, :visible, event_ids: %w(333 555),
+                                                                             competition_series: series, series_base: competition)
 
         # make sure there is a dummy registration for the partner competition.
-        FactoryBot.create(:registration, :accepted, competition: partner_competition, user: two_timer_dave)
+        create(:registration, :accepted, competition: partner_competition, user: two_timer_dave)
 
         file = csv_file [
           ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
@@ -129,12 +129,12 @@ RSpec.describe "registrations" do
 
           context "user exists with the given WCA ID" do
             context "the user is a dummy account" do
-              let!(:dummy_user) { FactoryBot.create(:dummy_user) }
+              let!(:dummy_user) { create(:dummy_user) }
 
               context "user exists with registrant's email" do
                 context "the user already has WCA ID" do
                   it "renders an error" do
-                    user = FactoryBot.create(:user, :wca_id)
+                    user = create(:user, :wca_id)
                     file = csv_file [
                       ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
                       ["a", dummy_user.name, dummy_user.country.id, dummy_user.wca_id, dummy_user.dob, dummy_user.gender, user.email, "1", "0"],
@@ -149,7 +149,7 @@ RSpec.describe "registrations" do
 
                 context "the user doesn't have WCA ID" do
                   it "merges the user with the dummy one and registers him" do
-                    user = FactoryBot.create(:user)
+                    user = create(:user)
                     file = csv_file [
                       ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
                       ["a", dummy_user.name, dummy_user.country.id, dummy_user.wca_id, dummy_user.dob, dummy_user.gender, user.email, "1", "0"],
@@ -188,7 +188,7 @@ RSpec.describe "registrations" do
 
             context "the user is not a dummy account" do
               it "registers this user" do
-                user = FactoryBot.create(:user, :wca_id)
+                user = create(:user, :wca_id)
                 file = csv_file [
                   ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
                   ["a", user.name, user.country.id, user.wca_id, user.dob, user.gender, "sherlock@example.com", "1", "0"],
@@ -206,10 +206,10 @@ RSpec.describe "registrations" do
             context "user exists with registrant's email" do
               context "the user has unconfirmed WCA ID different from the given WCA ID" do
                 it "renders an error" do
-                  person = FactoryBot.create(:person)
-                  unconfirmed_person = FactoryBot.create(:person)
-                  delegate = FactoryBot.create(:delegate_role)
-                  user = FactoryBot.create(
+                  person = create(:person)
+                  unconfirmed_person = create(:person)
+                  delegate = create(:delegate_role)
+                  user = create(
                     :user,
                     unconfirmed_wca_id: unconfirmed_person.wca_id,
                     dob_verification: unconfirmed_person.dob,
@@ -229,9 +229,9 @@ RSpec.describe "registrations" do
 
               context "the user has unconfirmed WCA ID same as the given WCA ID" do
                 it "claims the WCA ID and registers the user" do
-                  person = FactoryBot.create(:person)
-                  delegate = FactoryBot.create(:delegate_role)
-                  user = FactoryBot.create(
+                  person = create(:person)
+                  delegate = create(:delegate_role)
+                  user = create(
                     :user,
                     unconfirmed_wca_id: person.wca_id,
                     dob_verification: person.dob,
@@ -254,8 +254,8 @@ RSpec.describe "registrations" do
 
               context "the user has no unconfirmed WCA ID" do
                 it "updates this user with the WCA ID and registers him" do
-                  person = FactoryBot.create(:person)
-                  user = FactoryBot.create(:user)
+                  person = create(:person)
+                  user = create(:user)
                   file = csv_file [
                     ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
                     ["a", person.name, person.country.id, person.wca_id, person.dob, person.gender, user.email, "1", "0"],
@@ -273,7 +273,7 @@ RSpec.describe "registrations" do
             context "no user exists with registrant's email" do
               it "creates a locked user with this WCA ID, registers and notifies him" do
                 expect(RegistrationsMailer).to receive(:notify_registrant_of_locked_account_creation)
-                person = FactoryBot.create(:person)
+                person = create(:person)
                 file = csv_file [
                   ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
                   ["a", person.name, person.country.id, person.wca_id, person.dob, person.gender, "sherlock@example.com", "1", "0"],
@@ -292,7 +292,7 @@ RSpec.describe "registrations" do
         context "registrant doesn't have WCA ID" do
           context "user exists with registrant's email" do
             it "registers this user" do
-              user = FactoryBot.create(:user)
+              user = create(:user)
               file = csv_file [
                 ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
                 ["a", "Sherlock Holmes", "United Kingdom", "", "2000-01-01", "m", user.email, "1", "0"],
@@ -305,7 +305,7 @@ RSpec.describe "registrations" do
             end
 
             it "updates user data unless it has WCA ID" do
-              user = FactoryBot.create(:user)
+              user = create(:user)
               file = csv_file [
                 ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
                 ["a", "Sherlock Holmes", "United Kingdom", "", "2000-01-01", "m", user.email, "1", "0"],
@@ -340,7 +340,7 @@ RSpec.describe "registrations" do
       describe "registrations re-import" do
         context "CSV registrant already accepted in the database" do
           it "leaves existing registration unchanged" do
-            registration = FactoryBot.create(:registration, :accepted, competition: competition, events: %w(333))
+            registration = create(:registration, :accepted, competition: competition, events: %w(333))
             user = registration.user
             file = csv_file [
               ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
@@ -355,7 +355,7 @@ RSpec.describe "registrations" do
 
         context "CSV registrant already accepted in the database, but with different events" do
           it "only updates registration events" do
-            registration = FactoryBot.create(:registration, :accepted, competition: competition, events: %(333))
+            registration = create(:registration, :accepted, competition: competition, events: %(333))
             user = registration.user
             file = csv_file [
               ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
@@ -371,7 +371,7 @@ RSpec.describe "registrations" do
 
         context "CSV registrant already in the database, but deleted" do
           it "acceptes the registration again" do
-            registration = FactoryBot.create(:registration, :cancelled, competition: competition)
+            registration = create(:registration, :cancelled, competition: competition)
             user = registration.user
             file = csv_file [
               ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
@@ -387,7 +387,7 @@ RSpec.describe "registrations" do
 
         context "registrant deleted in the database, but not in the CSV file" do
           it "leaves the registration unchanged" do
-            registration = FactoryBot.create(:registration, :cancelled, competition: competition)
+            registration = create(:registration, :cancelled, competition: competition)
             file = csv_file [
               ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
             ]
@@ -401,7 +401,7 @@ RSpec.describe "registrations" do
 
         context "registrant accepted in the database, but not in the CSV file" do
           it "deletes the registration" do
-            registration = FactoryBot.create(:registration, :accepted, competition: competition)
+            registration = create(:registration, :accepted, competition: competition)
             file = csv_file [
               ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
             ]
@@ -434,7 +434,7 @@ RSpec.describe "registrations" do
   describe "POST #do_add" do
     context "when signed in as a normal user" do
       it "doesn't allow access" do
-        sign_in FactoryBot.create(:user)
+        sign_in create(:user)
         post competition_registrations_do_import_path(competition)
         expect(response).to redirect_to root_url
       end
@@ -447,7 +447,7 @@ RSpec.describe "registrations" do
 
       context "when there is existing registration for the given person" do
         it "renders an error" do
-          registration = FactoryBot.create(:registration, :accepted, competition: competition, events: %w(333))
+          registration = create(:registration, :accepted, competition: competition, events: %w(333))
           user = registration.user
           expect {
             post competition_registrations_do_add_path(competition), params: {
@@ -463,16 +463,16 @@ RSpec.describe "registrations" do
 
       context "when there is another registration in the same series" do
         it "renders an error" do
-          two_timer_dave = FactoryBot.create(:user, name: "Two Timer Dave")
+          two_timer_dave = create(:user, name: "Two Timer Dave")
 
-          series = FactoryBot.create(:competition_series)
+          series = create(:competition_series)
           competition.update!(competition_series: series)
 
-          partner_competition = FactoryBot.create(:competition, :with_delegate, :visible, event_ids: %w(333 555),
-                                                                                          competition_series: series, series_base: competition)
+          partner_competition = create(:competition, :with_delegate, :visible, event_ids: %w(333 555),
+                                                                               competition_series: series, series_base: competition)
 
           # make sure there is a dummy registration for the partner competition.
-          FactoryBot.create(:registration, :accepted, competition: partner_competition, user: two_timer_dave)
+          create(:registration, :accepted, competition: partner_competition, user: two_timer_dave)
 
           expect {
             post competition_registrations_do_add_path(competition), params: {
@@ -507,7 +507,7 @@ RSpec.describe "registrations" do
 
       context "when competitor limit has been reached" do
         it "redirects to competition page" do
-          FactoryBot.create(:registration, :accepted, competition: competition, events: %w(333))
+          create(:registration, :accepted, competition: competition, events: %w(333))
           competition.update!(
             competitor_limit_enabled: true, competitor_limit: 1, competitor_limit_reason: "So I take all the podiums",
           )
@@ -528,9 +528,9 @@ RSpec.describe "registrations" do
 
   describe "POST #process_payment_intent" do
     context "when not signed in" do
-      let(:competition) { FactoryBot.create(:competition, :stripe_connected, :visible, :registration_open, events: Event.where(id: %w(222 333))) }
-      let!(:user) { FactoryBot.create(:user, :wca_id) }
-      let!(:registration) { FactoryBot.create(:registration, competition: competition, user: user) }
+      let(:competition) { create(:competition, :stripe_connected, :visible, :registration_open, events: Event.where(id: %w(222 333))) }
+      let!(:user) { create(:user, :wca_id) }
+      let!(:registration) { create(:registration, competition: competition, user: user) }
 
       sign_out
 
@@ -541,17 +541,17 @@ RSpec.describe "registrations" do
     end
 
     context "when signed in" do
-      let(:competition) { FactoryBot.create(:competition, :stripe_connected, :visible, :registration_open, events: Event.where(id: %w(222 333)), base_entry_fee_lowest_denomination: 1000) }
-      let!(:user) { FactoryBot.create(:user, :wca_id) }
-      let!(:registration) { FactoryBot.create(:registration, competition: competition, user: user) }
+      let(:competition) { create(:competition, :stripe_connected, :visible, :registration_open, events: Event.where(id: %w(222 333)), base_entry_fee_lowest_denomination: 1000) }
+      let!(:user) { create(:user, :wca_id) }
+      let!(:registration) { create(:registration, competition: competition, user: user) }
 
       before :each do
         sign_in user
       end
 
       it "restricts access to the registration's owner" do
-        user2 = FactoryBot.create(:user, :wca_id)
-        registration2 = FactoryBot.create(:registration, competition: competition, user: user2)
+        user2 = create(:user, :wca_id)
+        registration2 = create(:registration, competition: competition, user: user2)
         post registration_payment_intent_path(registration2.id, :stripe)
         expect(response).to have_http_status :forbidden
       end
@@ -582,11 +582,8 @@ RSpec.describe "registrations" do
           payment_intent = registration.reload.payment_intents.first
 
           # mimic the user clicking through the interface
-          Stripe::PaymentIntent.confirm(
-            payment_intent.payment_record.stripe_id,
-            { payment_method: 'pm_card_visa' },
-            stripe_account: competition.payment_account_for(:stripe).account_id,
-          )
+          payment_intent.payment_record.confirm_remote_for_test("pm_card_visa")
+
           # mimic the response that Stripe sends to our return_url after completing the checkout UI
           get registration_payment_completion_path(competition.id, :stripe), params: {
             payment_intent: payment_intent.payment_record.stripe_id,
@@ -616,11 +613,7 @@ RSpec.describe "registrations" do
           stripe_account_id = competition.payment_account_for(:stripe).account_id
 
           # mimic the user clicking through the interface
-          Stripe::PaymentIntent.confirm(
-            payment_intent.payment_record.stripe_id,
-            { payment_method: 'pm_card_visa' },
-            stripe_account: stripe_account_id,
-          )
+          payment_intent.payment_record.confirm_remote_for_test("pm_card_visa")
 
           # mimic the response that Stripe sends to our webhook upon payment completion
           post registration_stripe_webhook_path, params: payment_confirmation_webhook_as_json(
@@ -650,11 +643,8 @@ RSpec.describe "registrations" do
           payment_intent = registration.reload.payment_intents.first
 
           # mimic the user clicking through the interface
-          Stripe::PaymentIntent.confirm(
-            payment_intent.payment_record.stripe_id,
-            { payment_method: 'pm_card_visa' },
-            stripe_account: competition.payment_account_for(:stripe).account_id,
-          )
+          payment_intent.payment_record.confirm_remote_for_test("pm_card_visa")
+
           # mimic the response that Stripe sends to our return_url after completing the checkout UI
           get registration_payment_completion_path(competition.id, :stripe), params: {
             payment_intent: payment_intent.payment_record.stripe_id,
@@ -683,11 +673,8 @@ RSpec.describe "registrations" do
           expect(payment_intent.wca_status).not_to eq('succeeded')
 
           # mimic the user clicking through the interface
-          Stripe::PaymentIntent.confirm(
-            payment_intent.payment_record.stripe_id,
-            { payment_method: 'pm_card_visa' },
-            stripe_account: competition.payment_account_for(:stripe).account_id,
-          )
+          payment_intent.payment_record.confirm_remote_for_test("pm_card_visa")
+
           # mimic the response that Stripe sends to our return_url after completing the checkout UI
           get registration_payment_completion_path(competition.id, :stripe), params: {
             payment_intent: payment_intent.payment_record.stripe_id,
@@ -718,11 +705,8 @@ RSpec.describe "registrations" do
           # but we cannot do that programmatically. So we just take the status quo as "stuck in SCA". (See also comment below)
           expect {
             # mimic the user clicking through the interface
-            Stripe::PaymentIntent.confirm(
-              payment_intent.payment_record.stripe_id,
-              { payment_method: 'pm_card_authenticationRequired' },
-              stripe_account: competition.payment_account_for(:stripe).account_id,
-            )
+            payment_intent.payment_record.confirm_remote_for_test("pm_card_authenticationRequired")
+
             # mimic the response that Stripe sends to our return_url after completing the checkout UI
             get registration_payment_completion_path(competition.id, :stripe), params: {
               payment_intent: payment_intent.payment_record.stripe_id,
@@ -751,11 +735,7 @@ RSpec.describe "registrations" do
           expect(payment_intent.confirmed_at).to be_nil
 
           # mimic the user clicking through the interface
-          Stripe::PaymentIntent.confirm(
-            payment_intent.payment_record.stripe_id,
-            { payment_method: 'pm_card_authenticationRequired' },
-            stripe_account: competition.payment_account_for(:stripe).account_id,
-          )
+          payment_intent.payment_record.confirm_remote_for_test("pm_card_authenticationRequired")
 
           # mimic the response that Stripe sends to our return_url after completing the checkout UI
           get registration_payment_completion_path(competition.id, :stripe), params: {
@@ -786,11 +766,7 @@ RSpec.describe "registrations" do
 
           expect {
             # mimic the user clicking through the interface
-            Stripe::PaymentIntent.confirm(
-              payment_intent.payment_record.stripe_id,
-              { payment_method: 'pm_card_visa_chargeDeclined' },
-              stripe_account: competition.payment_account_for(:stripe).account_id,
-            )
+            payment_intent.payment_record.confirm_remote_for_test("pm_card_visa_chargeDeclined")
           }.to raise_error(Stripe::StripeError, "Your card was declined.")
 
           expect {
@@ -816,11 +792,7 @@ RSpec.describe "registrations" do
 
           expect {
             # mimic the user clicking through the interface
-            Stripe::PaymentIntent.confirm(
-              payment_intent.payment_record.stripe_id,
-              { payment_method: 'pm_card_visa_chargeDeclinedExpiredCard' },
-              stripe_account: competition.payment_account_for(:stripe).account_id,
-            )
+            payment_intent.payment_record.confirm_remote_for_test("pm_card_visa_chargeDeclinedExpiredCard")
           }.to raise_error(Stripe::StripeError, "Your card has expired.")
 
           expect {
@@ -846,11 +818,7 @@ RSpec.describe "registrations" do
 
           expect {
             # mimic the user clicking through the interface
-            Stripe::PaymentIntent.confirm(
-              payment_intent.payment_record.stripe_id,
-              { payment_method: 'pm_card_visa_chargeDeclinedIncorrectCvc' },
-              stripe_account: competition.payment_account_for(:stripe).account_id,
-            )
+            payment_intent.payment_record.confirm_remote_for_test("pm_card_visa_chargeDeclinedIncorrectCvc")
           }.to raise_error(Stripe::StripeError, "Your card's security code is incorrect.")
 
           expect {
@@ -876,11 +844,7 @@ RSpec.describe "registrations" do
 
           expect {
             # mimic the user clicking through the interface
-            Stripe::PaymentIntent.confirm(
-              payment_intent.payment_record.stripe_id,
-              { payment_method: 'pm_card_radarBlock' },
-              stripe_account: competition.payment_account_for(:stripe).account_id,
-            )
+            payment_intent.payment_record.confirm_remote_for_test("pm_card_radarBlock")
           }.to raise_error(Stripe::StripeError, "Your card was declined.")
 
           expect {
@@ -906,11 +870,8 @@ RSpec.describe "registrations" do
 
           expect {
             # mimic the user clicking through the interface
-            Stripe::PaymentIntent.confirm(
-              payment_intent.payment_record.stripe_id,
-              { payment_method: 'pm_card_authenticationRequiredChargeDeclinedInsufficientFunds' },
-              stripe_account: competition.payment_account_for(:stripe).account_id,
-            )
+            payment_intent.payment_record.confirm_remote_for_test("pm_card_authenticationRequiredChargeDeclinedInsufficientFunds")
+
             # mimick the response that Stripe sends to our return_url after completing the checkout UI
             get registration_payment_completion_path(competition.id, :stripe), params: {
               payment_intent: payment_intent.payment_record.stripe_id,
@@ -940,11 +901,7 @@ RSpec.describe "registrations" do
 
           expect {
             # mimic the user clicking through the interface
-            Stripe::PaymentIntent.confirm(
-              payment_intent.payment_record.stripe_id,
-              { payment_method: 'pm_card_visa_chargeDeclined' },
-              stripe_account: competition.payment_account_for(:stripe).account_id,
-            )
+            payment_intent.payment_record.confirm_remote_for_test("pm_card_visa_chargeDeclined")
           }.to raise_error(Stripe::StripeError, "Your card was declined.")
 
           # mimick the response that Stripe sends to our return_url after completing the checkout UI
@@ -982,11 +939,7 @@ RSpec.describe "registrations" do
 
           expect {
             # mimic the user clicking through the interface
-            Stripe::PaymentIntent.confirm(
-              payment_intent.payment_record.stripe_id,
-              { payment_method: 'pm_card_visa_chargeDeclined' },
-              stripe_account: competition.payment_account_for(:stripe).account_id,
-            )
+            payment_intent.payment_record.confirm_remote_for_test("pm_card_visa_chargeDeclined")
           }.to raise_error(Stripe::StripeError, "Your card was declined.")
 
           # mimick the response that Stripe sends to our return_url after completing the checkout UI
@@ -1029,11 +982,7 @@ RSpec.describe "registrations" do
 
           expect {
             # mimic the user clicking through the interface
-            Stripe::PaymentIntent.confirm(
-              payment_intent.payment_record.stripe_id,
-              { payment_method: 'pm_card_visa_chargeDeclined' },
-              stripe_account: competition.payment_account_for(:stripe).account_id,
-            )
+            payment_intent.payment_record.confirm_remote_for_test("pm_card_visa_chargeDeclined")
           }.to raise_error(Stripe::StripeError, "Your card was declined.")
 
           # mimick the response that Stripe sends to our return_url after completing the checkout UI
@@ -1076,11 +1025,7 @@ RSpec.describe "registrations" do
           first_pi_parameters = payment_intent.payment_record.parameters
 
           # mimic the user clicking through the interface
-          Stripe::PaymentIntent.confirm(
-            payment_intent.payment_record.stripe_id,
-            { payment_method: 'pm_card_visa' },
-            stripe_account: competition.payment_account_for(:stripe).account_id,
-          )
+          payment_intent.payment_record.confirm_remote_for_test("pm_card_visa")
 
           # mimick the response that Stripe sends to our return_url after completing the checkout UI
           get registration_payment_completion_path(competition.id, :stripe), params: {
@@ -1115,9 +1060,9 @@ RSpec.describe "registrations" do
   end
 
   describe "POST #create_paypal_order" do
-    let(:competition) { FactoryBot.create(:competition, :paypal_connected, :visible, :registration_open, events: Event.where(id: %w(222 333)), base_entry_fee_lowest_denomination: 1000) }
-    let!(:user) { FactoryBot.create(:user, :wca_id) }
-    let!(:registration) { FactoryBot.create(:registration, competition: competition, user: user) }
+    let(:competition) { create(:competition, :paypal_connected, :visible, :registration_open, events: Event.where(id: %w(222 333)), base_entry_fee_lowest_denomination: 1000) }
+    let!(:user) { create(:user, :wca_id) }
+    let!(:registration) { create(:registration, competition: competition, user: user) }
 
     before :each do
       sign_in user # TODO: Why do we need to sign in here?
@@ -1145,9 +1090,9 @@ RSpec.describe "registrations" do
   end
 
   describe "POST #capture_paypal_payment" do
-    let(:competition) { FactoryBot.create(:competition, :paypal_connected, :visible, :registration_open, events: Event.where(id: %w(222 333)), base_entry_fee_lowest_denomination: 1000) }
-    let!(:user) { FactoryBot.create(:user, :wca_id) }
-    let!(:registration) { FactoryBot.create(:registration, competition: competition, user: user) }
+    let(:competition) { create(:competition, :paypal_connected, :visible, :registration_open, events: Event.where(id: %w(222 333)), base_entry_fee_lowest_denomination: 1000) }
+    let!(:user) { create(:user, :wca_id) }
+    let!(:registration) { create(:registration, competition: competition, user: user) }
 
     before :each do
       sign_in user
@@ -1203,10 +1148,10 @@ RSpec.describe "registrations" do
 
   # TODO: Add cases for partial refunds
   describe "POST #issue_paypal_refund" do
-    let(:competition) { FactoryBot.create(:competition, :paypal_connected, :visible, :registration_open, events: Event.where(id: %w(222 333)), base_entry_fee_lowest_denomination: 1000) }
-    let!(:user) { FactoryBot.create(:user, :wca_id) }
-    let!(:admin_user) { FactoryBot.create(:admin) }
-    let!(:registration) { FactoryBot.create(:registration, competition: competition, user: user) }
+    let(:competition) { create(:competition, :paypal_connected, :visible, :registration_open, events: Event.where(id: %w(222 333)), base_entry_fee_lowest_denomination: 1000) }
+    let!(:user) { create(:user, :wca_id) }
+    let!(:admin_user) { create(:admin) }
+    let!(:registration) { create(:registration, competition: competition, user: user) }
 
     before :each do
       sign_in user

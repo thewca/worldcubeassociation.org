@@ -6,10 +6,10 @@ RSpec.describe "API Competitions" do
   let(:headers) { { "CONTENT_TYPE" => "application/json" } }
 
   describe "GET #index" do
-    let!(:competition1) { FactoryBot.create :competition, :visible, starts: 1.week.from_now, name: "First 2019" }
-    let!(:competition2) { FactoryBot.create :competition, :visible, starts: 1.week.from_now, name: "Second 2019" }
-    let!(:competition3) { FactoryBot.create :competition, :visible, starts: 2.weeks.from_now, name: "Third 2019" }
-    let!(:competition4) { FactoryBot.create :competition, :visible, starts: 3.weeks.from_now, name: "Fourth 2019" }
+    let!(:competition1) { create(:competition, :visible, starts: 1.week.from_now, name: "First 2019") }
+    let!(:competition2) { create(:competition, :visible, starts: 1.week.from_now, name: "Second 2019") }
+    let!(:competition3) { create(:competition, :visible, starts: 2.weeks.from_now, name: "Third 2019") }
+    let!(:competition4) { create(:competition, :visible, starts: 3.weeks.from_now, name: "Fourth 2019") }
 
     it "orders competitions by date descending by default" do
       get api_v0_competitions_path, params: { start: 2.weeks.from_now }
@@ -41,8 +41,8 @@ RSpec.describe "API Competitions" do
   end
 
   describe "GET #results" do
-    let!(:competition) { FactoryBot.create :competition, :visible }
-    let!(:result) { FactoryBot.create :result, competition: competition }
+    let!(:competition) { create(:competition, :visible) }
+    let!(:result) { create(:result, competition: competition) }
 
     it "renders properly" do
       get api_v0_competition_results_path(competition)
@@ -53,20 +53,20 @@ RSpec.describe "API Competitions" do
   end
 
   describe "GET #scrambles" do
-    let!(:competition) { FactoryBot.create :competition, :visible }
-    let!(:scramble) { FactoryBot.create :scramble, competition: competition }
+    let!(:competition) { create(:competition, :visible) }
+    let!(:scramble) { create(:scramble, competition: competition) }
 
     it "renders properly" do
       get api_v0_competition_scrambles_path(competition)
       expect(response).to be_successful
       json = response.parsed_body
-      expect(json[0]["scrambleId"]).to eq scramble.scrambleId
+      expect(json[0]["id"]).to eq scramble.id
     end
   end
 
   describe "GET #competitors" do
-    let!(:competition) { FactoryBot.create :competition, :visible }
-    let!(:result) { FactoryBot.create :result, competition: competition }
+    let!(:competition) { create(:competition, :visible) }
+    let!(:result) { create(:result, competition: competition) }
 
     it "renders properly" do
       get api_v0_competition_competitors_path(competition)
@@ -77,9 +77,9 @@ RSpec.describe "API Competitions" do
   end
 
   describe "GET #registrations" do
-    let!(:competition) { FactoryBot.create :competition, :visible }
-    let!(:accepted_registration) { FactoryBot.create :registration, :accepted, competition: competition }
-    let!(:pending_registration) { FactoryBot.create :registration, competition: competition }
+    let!(:competition) { create(:competition, :visible) }
+    let!(:accepted_registration) { create(:registration, :accepted, competition: competition) }
+    let!(:pending_registration) { create(:registration, competition: competition) }
 
     it "renders properly" do
       get api_v0_competition_registrations_path(competition)
@@ -90,7 +90,7 @@ RSpec.describe "API Competitions" do
   end
 
   describe "GET #show_wcif" do
-    let!(:competition) { FactoryBot.create(:competition, :visible) }
+    let!(:competition) { create(:competition, :visible) }
 
     context "when not signed in" do
       it "does not allow access" do
@@ -102,7 +102,7 @@ RSpec.describe "API Competitions" do
     end
 
     context "when signed in as not a competition manager" do
-      sign_in { FactoryBot.create :user }
+      before { sign_in create :user }
 
       it "does not allow access" do
         patch api_v0_competition_update_wcif_path(competition)
@@ -116,7 +116,7 @@ RSpec.describe "API Competitions" do
       before { sign_in competition.delegates.first }
 
       let!(:registration) do
-        FactoryBot.create(:registration, :accepted, competition: competition, user: competition.delegates.first)
+        create(:registration, :accepted, competition: competition, user: competition.delegates.first)
       end
 
       it "returns confidential person data" do
@@ -127,8 +127,8 @@ RSpec.describe "API Competitions" do
       end
 
       it "returns people with all registrations statues" do
-        FactoryBot.create(:registration, :cancelled, competition: competition)
-        FactoryBot.create(:registration, :pending, competition: competition)
+        create(:registration, :cancelled, competition: competition)
+        create(:registration, :pending, competition: competition)
         get api_v0_competition_wcif_path(competition)
         response_json = response.parsed_body
         expect(response_json["persons"].length).to eq 4
@@ -137,9 +137,9 @@ RSpec.describe "API Competitions" do
   end
 
   describe "GET #show_wcif_public" do
-    let!(:competition) { FactoryBot.create(:competition, :visible) }
+    let!(:competition) { create(:competition, :visible) }
     let!(:registration) do
-      FactoryBot.create(:registration, :accepted, competition: competition, user: competition.delegates.first)
+      create(:registration, :accepted, competition: competition, user: competition.delegates.first)
     end
 
     it "does not return confidential person data" do
@@ -150,8 +150,8 @@ RSpec.describe "API Competitions" do
     end
 
     it "returns people with accepted registrations only" do
-      FactoryBot.create(:registration, :cancelled, competition: competition)
-      FactoryBot.create(:registration, :pending, competition: competition)
+      create(:registration, :cancelled, competition: competition)
+      create(:registration, :pending, competition: competition)
       get api_v0_competition_wcif_public_path(competition)
       response_json = response.parsed_body
       expect(response_json["persons"].length).to eq 2
@@ -161,7 +161,7 @@ RSpec.describe "API Competitions" do
 
   describe "PATCH #update_wcif" do
     context "when not signed in" do
-      let(:competition) { FactoryBot.create(:competition, :visible) }
+      let(:competition) { create(:competition, :visible) }
 
       it "does not allow access" do
         patch api_v0_competition_update_wcif_path(competition)
@@ -172,9 +172,9 @@ RSpec.describe "API Competitions" do
     end
 
     context "when signed in as not a competition manager" do
-      let(:competition) { FactoryBot.create(:competition, :visible) }
+      let(:competition) { create(:competition, :visible) }
 
-      sign_in { FactoryBot.create :user }
+      before { sign_in create :user }
 
       it "does not allow access" do
         patch api_v0_competition_update_wcif_path(competition)
@@ -185,10 +185,10 @@ RSpec.describe "API Competitions" do
     end
 
     describe "events" do
-      let!(:competition) { FactoryBot.create(:competition, :future, :with_delegate, :with_organizer, :visible) }
+      let!(:competition) { create(:competition, :future, :with_delegate, :with_organizer, :visible) }
 
       context "when signed in as a board member" do
-        sign_in { FactoryBot.create :user, :board_member }
+        before { sign_in create :user, :board_member }
 
         it "updates the competition events of an unconfirmed competition" do
           patch api_v0_competition_update_wcif_path(competition), params: create_wcif_with_events(%w(333)).to_json, headers: headers
@@ -197,8 +197,8 @@ RSpec.describe "API Competitions" do
         end
 
         it "does not delete all rounds of an event if something is invalid" do
-          FactoryBot.create :round, competition: competition, event_id: "333", number: 1
-          FactoryBot.create :round, competition: competition, event_id: "333", number: 2
+          create(:round, competition: competition, event_id: "333", number: 1)
+          create(:round, competition: competition, event_id: "333", number: 2)
           competition.reload
 
           ce = competition.competition_events.find_by(event_id: "333")
@@ -213,7 +213,7 @@ RSpec.describe "API Competitions" do
         end
 
         context "confirmed competition" do
-          let(:competition) { FactoryBot.create(:competition, :future, :with_delegate, :with_organizer, :visible, :confirmed, event_ids: %w(222 333)) }
+          let(:competition) { create(:competition, :future, :with_delegate, :with_organizer, :visible, :confirmed, event_ids: %w(222 333)) }
 
           it "can add events" do
             patch api_v0_competition_update_wcif_path(competition), params: create_wcif_with_events(%w(333 333oh 222)).to_json, headers: headers
@@ -229,7 +229,7 @@ RSpec.describe "API Competitions" do
         end
 
         context "competition with results posted" do
-          let(:competition) { FactoryBot.create(:competition, :past, :with_delegate, :with_organizer, :visible, :confirmed, :results_posted, event_ids: %w(222 333)) }
+          let(:competition) { create(:competition, :past, :with_delegate, :with_organizer, :visible, :confirmed, :results_posted, event_ids: %w(222 333)) }
 
           it "allows adding rounds to an event" do
             competition.competition_events.find_by(event_id: "333").rounds.delete_all
@@ -245,7 +245,7 @@ RSpec.describe "API Competitions" do
         before { sign_in competition.delegates.first }
 
         context "confirmed competition" do
-          let!(:competition) { FactoryBot.create(:competition, :future, :with_delegate, :with_organizer, :visible, :confirmed, event_ids: %w(222 333)) }
+          let!(:competition) { create(:competition, :future, :with_delegate, :with_organizer, :visible, :confirmed, event_ids: %w(222 333)) }
 
           it "allows adding rounds to an event" do
             competition.competition_events.find_by(event_id: "333").rounds.delete_all
@@ -285,7 +285,7 @@ RSpec.describe "API Competitions" do
         end
 
         context "competition with results posted" do
-          let(:competition) { FactoryBot.create(:competition, :with_delegate, :with_organizer, :visible, :confirmed, :results_posted, event_ids: %w(222 333)) }
+          let(:competition) { create(:competition, :with_delegate, :with_organizer, :visible, :confirmed, :results_posted, event_ids: %w(222 333)) }
 
           it "does not allow updating events" do
             patch api_v0_competition_update_wcif_path(competition), params: create_wcif_with_events(%w(222 333)).to_json, headers: headers
@@ -298,9 +298,9 @@ RSpec.describe "API Competitions" do
     end
 
     describe "persons" do
-      let!(:competition) { FactoryBot.create(:competition, :with_delegate, :with_organizer, :visible, :registration_open, with_schedule: true) }
-      let!(:registration) { FactoryBot.create(:registration, :accepted, competition: competition) }
-      let!(:organizer_registration) { FactoryBot.create(:registration, :accepted, competition: competition, user: competition.organizers.first) }
+      let!(:competition) { create(:competition, :with_delegate, :with_organizer, :visible, :registration_open, with_schedule: true) }
+      let!(:registration) { create(:registration, :accepted, competition: competition) }
+      let!(:organizer_registration) { create(:registration, :accepted, competition: competition, user: competition.organizers.first) }
 
       context "when signed in as a competition manager" do
         before { sign_in competition.organizers.first }
@@ -352,7 +352,7 @@ RSpec.describe "API Competitions" do
     end
 
     describe "schedule" do
-      let!(:competition) { FactoryBot.create(:competition, :with_delegate, :with_organizer, :visible, :registration_open, with_schedule: true) }
+      let!(:competition) { create(:competition, :with_delegate, :with_organizer, :visible, :registration_open, with_schedule: true) }
       let!(:wcif) { competition.to_wcif.slice("schedule") }
 
       context "when signed in as a competition manager" do
@@ -459,7 +459,7 @@ RSpec.describe "API Competitions" do
     end
 
     describe "extensions" do
-      let!(:competition) { FactoryBot.create(:competition, :with_organizer, :visible) }
+      let!(:competition) { create(:competition, :with_organizer, :visible) }
 
       context "when signed in as a competition manager" do
         before { sign_in competition.organizers.first }
@@ -479,7 +479,7 @@ RSpec.describe "API Competitions" do
     end
 
     describe "OAuth user" do
-      let!(:competition) { FactoryBot.create(:competition, :with_delegate, :with_organizer, :visible) }
+      let!(:competition) { create(:competition, :with_delegate, :with_organizer, :visible) }
 
       context "as a competition manager" do
         let(:scopes) { Doorkeeper::OAuth::Scopes.new }
@@ -513,7 +513,7 @@ RSpec.describe "API Competitions" do
       end
 
       context "as a normal user" do
-        let!(:user) { FactoryBot.create :user }
+        let!(:user) { create(:user) }
         let(:scopes) { Doorkeeper::OAuth::Scopes.new }
 
         before :each do
@@ -533,7 +533,7 @@ RSpec.describe "API Competitions" do
     end
 
     describe "CSRF" do
-      let!(:competition) { FactoryBot.create(:competition, :with_delegate, :with_organizer, :visible) }
+      let!(:competition) { create(:competition, :with_delegate, :with_organizer, :visible) }
 
       # CSRF protection is always disabled for tests, enable it for this these requests.
       around(:each) do |example|
@@ -543,7 +543,7 @@ RSpec.describe "API Competitions" do
       end
 
       context "cookies based user" do
-        sign_in { FactoryBot.create :user }
+        before { sign_in create :user }
 
         it "prevents from CSRF attacks" do
           headers["ACCESS_TOKEN"] = "INVALID"
@@ -574,7 +574,7 @@ RSpec.describe "API Competitions" do
 
   describe "GET #competition_index" do
     it 'returns a paginated list of competitions' do
-      FactoryBot.create_list(:competition, 5, :visible)
+      create_list(:competition, 5, :visible)
       get api_v0_competition_index_path
       expect(response).to be_successful
 
@@ -583,8 +583,8 @@ RSpec.describe "API Competitions" do
     end
 
     it 'takes parameter to filter by continent' do
-      FactoryBot.create_list(:competition, 6, :visible)
-      FactoryBot.create_list(:competition, 4, :visible, countryId: 'Afghanistan')
+      create_list(:competition, 6, :visible)
+      create_list(:competition, 4, :visible, country_id: 'Afghanistan')
 
       get api_v0_competition_index_path, params: { continent: '_North America' }
       expect(response).to be_successful

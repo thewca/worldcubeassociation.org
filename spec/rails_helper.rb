@@ -10,7 +10,6 @@ require 'rspec/rails'
 # From http://everydayrails.com/2012/04/24/testing-series-rspec-requests.html
 require "capybara/rspec"
 require 'capybara-screenshot/rspec'
-require 'capybara/apparition'
 
 require 'active_record/testing/query_assertions'
 
@@ -33,17 +32,52 @@ Rails.root.glob('spec/support/**/*.rb').each { |f| require f }
 # If you are not using ActiveRecord, you can remove this line.
 ActiveRecord::Migration.maintain_test_schema!
 
-# To debug feature specs using apparition, set `Capybara.javascript_driver = :apparition_debug`
-# and then call `page.driver.debug` in your feature spec.
-Capybara.register_driver :apparition_debug do |app|
-  Capybara::Apparition::Driver.new(app, inspector: true, debug: true, headless: false)
+# To debug feature specs using apparition, set `Capybara.javascript_driver = :playwright_debug`
+# and then call `page.driver.with_playwright_page { it.context.enable_debug_console!;it.pause }` in your feature spec.
+# Yes, this snippet doesn't exactly roll off the tongue, but we need an upstream fix in the library to make it easier.
+Capybara.register_driver :playwright_debug do |app|
+  Capybara::Playwright::Driver.new(
+    app,
+    playwright_server_endpoint_url: EnvConfig.PLAYWRIGHT_SERVER_SOCKET_URL,
+    browser_type: :chromium,
+    # For running Playwright browsers in headed mode, there has to be a writable X11 socket under `/tmp/.X11-unix`
+    #   available in the container, and its user ID (file ownership) has to match the host system exactly.
+    # See also the comment in `docker-compose.yml` for a sample implementation.
+    headless: false,
+    slowMo: 500,
+  )
 end
 
-Capybara.register_driver :apparition do |app|
-  Capybara::Apparition::Driver.new(app, js_errors: true, headless: true)
+Capybara.register_driver :playwright do |app|
+  if ENV["CI"].present?
+    Capybara::Playwright::Driver.new(app, playwright_cli_executable_path: 'yarn playwright', channel: :chromium)
+  else
+    Capybara::Playwright::Driver.new(app, playwright_server_endpoint_url: EnvConfig.PLAYWRIGHT_SERVER_SOCKET_URL, channel: :chromium)
+  end
 end
 
-Capybara.javascript_driver = :apparition
+Capybara.javascript_driver = :playwright
+
+# Recommended per https://playwright-ruby-client.vercel.app/docs/article/guides/rails_integration#update-timeout
+Capybara.default_max_wait_time = 15
+
+Capybara.app_host = EnvConfig.CAPYBARA_APP_HOST.presence
+
+if EnvConfig.CAPYBARA_RUN_ON_HOST?
+  Capybara.server_host = '0.0.0.0'
+  Capybara.always_include_port = true
+  Capybara.app_host = "http://hostmachine"
+else
+  Capybara.run_server = EnvConfig.CAPYBARA_APP_HOST.blank?
+end
+
+Capybara::Screenshot.register_driver :playwright do |driver, path|
+  driver.save_screenshot(path)
+end
+
+Capybara::Screenshot.register_driver :playwright_debug do |driver, path|
+  driver.save_screenshot(path)
+end
 
 RSpec.configure do |config|
   # enforce consistent locale behaviour across OSes, especially Linux
@@ -79,6 +113,7 @@ RSpec.configure do |config|
   # Make helpers available in feature specs
   config.include SessionHelper, type: :feature
   config.include SelectizeHelper, type: :feature
+  config.include AutonumericHelper, type: :feature
   config.include CookieBannerHelper, type: :feature
 
   # Make sign_in helper available in controller and request specs
@@ -89,6 +124,8 @@ RSpec.configure do |config|
 
   config.include ActiveJob::TestHelper
   config.include ActiveRecord::Assertions::QueryAssertions, type: :model
+
+  config.include FactoryBot::Syntax::Methods
 
   if EnvConfig.DISABLE_WEBMOCK?
     WebMock.disable!

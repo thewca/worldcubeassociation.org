@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe Api::V0::ApiController, :clean_db_with_truncation do
   describe 'GET #competitions_search' do
-    let!(:comp) { FactoryBot.create(:competition, :confirmed, :visible, name: "Jfly's Competition 2015") }
+    let!(:comp) { create(:competition, :confirmed, :visible, name: "Jfly's Competition 2015") }
 
     it 'requires query parameter' do
       get :competitions_search
@@ -29,7 +29,7 @@ RSpec.describe Api::V0::ApiController, :clean_db_with_truncation do
   end
 
   describe 'GET #posts_search' do
-    let!(:post) { FactoryBot.create(:post, title: "post title", body: "post body") }
+    let!(:post) { create(:post, title: "post title", body: "post body") }
 
     it 'requires query parameter' do
       get :posts_search
@@ -55,8 +55,8 @@ RSpec.describe Api::V0::ApiController, :clean_db_with_truncation do
       Rails.cache.delete_matched 'search/User*'
     end
 
-    let(:person) { FactoryBot.create(:person, name: "Jeremy", wca_id: "2005FLEI01") }
-    let!(:user) { FactoryBot.create(:user, person: person, email: "example@email.com") }
+    let(:person) { create(:person, name: "Jeremy", wca_id: "2005FLEI01") }
+    let!(:user) { create(:user, person: person, email: "example@email.com") }
 
     it 'requires query parameter' do
       get :users_search
@@ -73,7 +73,7 @@ RSpec.describe Api::V0::ApiController, :clean_db_with_truncation do
     end
 
     it 'does not find dummy accounts' do
-      FactoryBot.create :dummy_user, name: "Aaron"
+      create(:dummy_user, name: "Aaron")
       get :users_search, params: { q: "aaron" }
       expect(response).to have_http_status :ok
       json = response.parsed_body
@@ -106,7 +106,7 @@ RSpec.describe Api::V0::ApiController, :clean_db_with_truncation do
     end
 
     context 'Person without User' do
-      let!(:userless_person) { FactoryBot.create(:person, name: "Bob") }
+      let!(:userless_person) { create(:person, name: "Bob") }
 
       it "can find by wca_id" do
         get :users_search, params: { q: userless_person.wca_id, persons_table: true }
@@ -140,7 +140,7 @@ RSpec.describe Api::V0::ApiController, :clean_db_with_truncation do
     end
 
     it 'can only find delegates' do
-      delegate = FactoryBot.create(:delegate, name: "Jeremy")
+      delegate = create(:delegate, name: "Jeremy")
       get :users_search, params: { q: "erem", only_staff_delegates: true }
       expect(response).to have_http_status :ok
       json = response.parsed_body
@@ -150,9 +150,9 @@ RSpec.describe Api::V0::ApiController, :clean_db_with_truncation do
   end
 
   describe 'GET #omni_search' do
-    let!(:user) { FactoryBot.create(:delegate, name: "Jeremy Fleischman") }
-    let!(:comp) { FactoryBot.create(:competition, :confirmed, :visible, name: "jeremy Jfly's Competition 2015", delegates: [user]) }
-    let!(:post) { FactoryBot.create(:post, title: "jeremy post title", body: "post body", author: user) }
+    let!(:user) { create(:delegate, name: "Jeremy Fleischman") }
+    let!(:comp) { create(:competition, :confirmed, :visible, name: "jeremy Jfly's Competition 2015", delegates: [user]) }
+    let!(:post) { create(:post, title: "jeremy post title", body: "post body", author: user) }
 
     s3 = Aws::S3::Client.new(stub_responses: true)
     s3.stub_responses(:get_object, ->(_) { { body: "{}" } })
@@ -187,8 +187,8 @@ RSpec.describe Api::V0::ApiController, :clean_db_with_truncation do
 
   describe 'GET #delegates' do
     it 'includes emails and regions' do
-      senior_delegate = FactoryBot.create :senior_delegate_role
-      delegate = FactoryBot.create :delegate_role, group_id: senior_delegate.group.id
+      senior_delegate = create(:senior_delegate_role)
+      delegate = create(:delegate_role, group_id: senior_delegate.group.id)
 
       get :delegates
       expect(response).to have_http_status :ok
@@ -225,7 +225,7 @@ RSpec.describe Api::V0::ApiController, :clean_db_with_truncation do
 
     context 'signed in as board member' do
       before :each do
-        api_sign_in_as(FactoryBot.create(:user, :board_member))
+        api_sign_in_as(create(:user, :board_member))
       end
 
       it 'has correct team membership' do
@@ -242,7 +242,7 @@ RSpec.describe Api::V0::ApiController, :clean_db_with_truncation do
 
     context 'signed in as Junior delegate' do
       before :each do
-        api_sign_in_as(FactoryBot.create(:junior_delegate))
+        api_sign_in_as(create(:junior_delegate))
       end
 
       it 'has correct delegate_status' do
@@ -256,7 +256,7 @@ RSpec.describe Api::V0::ApiController, :clean_db_with_truncation do
 
     context 'signed in as delegate' do
       before :each do
-        api_sign_in_as(FactoryBot.create(:delegate))
+        api_sign_in_as(create(:delegate))
       end
 
       it 'has correct delegate_status' do
@@ -270,7 +270,7 @@ RSpec.describe Api::V0::ApiController, :clean_db_with_truncation do
 
     context 'signed in as a member of some teams and a leader of others' do
       before :each do
-        user = FactoryBot.create(:user, :with_avatar, :wic_leader, :wrc_member)
+        user = create(:user, :with_avatar, :wic_leader, :wrc_member)
         api_sign_in_as(user)
       end
 
@@ -293,15 +293,15 @@ RSpec.describe Api::V0::ApiController, :clean_db_with_truncation do
 
     context 'signed in with valid wca id' do
       let(:person) do
-        FactoryBot.create(
+        create(
           :person,
-          countryId: "USA",
+          country_id: "USA",
           gender: "m",
           dob: '1987-12-04',
         )
       end
       let(:user) do
-        FactoryBot.create(
+        create(
           :user,
           :with_avatar,
           wca_id: person.wca_id,
@@ -365,7 +365,7 @@ RSpec.describe Api::V0::ApiController, :clean_db_with_truncation do
 
     context 'signed in with invalid wca id' do
       let(:user) do
-        u = FactoryBot.create :user, country_iso2: "US"
+        u = create(:user, country_iso2: "US")
         u.update_column(:wca_id, "fooooo")
         u
       end
@@ -397,7 +397,7 @@ RSpec.describe Api::V0::ApiController, :clean_db_with_truncation do
     end
 
     context 'signed in without wca id' do
-      let(:user) { FactoryBot.create :user, country_iso2: "US" }
+      let(:user) { create(:user, country_iso2: "US") }
       let(:scopes) { Doorkeeper::OAuth::Scopes.new }
       let(:token) { double acceptable?: true, accessible?: true, resource_owner_id: user.id, scopes: scopes }
 
@@ -443,10 +443,10 @@ RSpec.describe Api::V0::ApiController, :clean_db_with_truncation do
   end
 
   describe 'GET #competition_series/:id' do
-    let!(:series) { FactoryBot.create :competition_series }
-    let!(:competition1) { FactoryBot.create :competition, :confirmed, :visible, competition_series: series, latitude: 43_641_740, longitude: -79_376_902, start_date: '2023-01-01', end_date: '2023-01-01' }
-    let!(:competition2) { FactoryBot.create :competition, :confirmed, :visible, competition_series: series, latitude: 43_641_740, longitude: -79_376_902, start_date: '2023-01-02', end_date: '2023-01-02' }
-    let!(:competition3) { FactoryBot.create :competition, :confirmed, :visible, competition_series: series, latitude: 43_641_740, longitude: -79_376_902, start_date: '2023-01-03', end_date: '2023-01-03' }
+    let!(:series) { create(:competition_series) }
+    let!(:competition1) { create(:competition, :confirmed, :visible, competition_series: series, latitude: 43_641_740, longitude: -79_376_902, start_date: '2023-01-01', end_date: '2023-01-01') }
+    let!(:competition2) { create(:competition, :confirmed, :visible, competition_series: series, latitude: 43_641_740, longitude: -79_376_902, start_date: '2023-01-02', end_date: '2023-01-02') }
+    let!(:competition3) { create(:competition, :confirmed, :visible, competition_series: series, latitude: 43_641_740, longitude: -79_376_902, start_date: '2023-01-03', end_date: '2023-01-03') }
 
     it 'returns series portion of wcif json' do
       get :competition_series, params: { id: series.wcif_id }
@@ -461,7 +461,7 @@ RSpec.describe Api::V0::ApiController, :clean_db_with_truncation do
     end
 
     it 'returns series portion of wcif json with only competitions that are publicly visible' do
-      competition2.update_column(:showAtAll, false)
+      competition2.update_column(:show_at_all, false)
       get :competition_series, params: { id: series.wcif_id }
       expect(response).to have_http_status :ok
       json = response.parsed_body
@@ -474,9 +474,9 @@ RSpec.describe Api::V0::ApiController, :clean_db_with_truncation do
     end
 
     it 'returns 404 when all competitions in series are not visible' do
-      competition1.update_column(:showAtAll, false)
-      competition2.update_column(:showAtAll, false)
-      competition3.update_column(:showAtAll, false)
+      competition1.update_column(:show_at_all, false)
+      competition2.update_column(:show_at_all, false)
+      competition3.update_column(:show_at_all, false)
       get :competition_series, params: { id: series.wcif_id }
       expect(response).to have_http_status :not_found
       json = response.parsed_body
@@ -493,13 +493,13 @@ RSpec.describe Api::V0::ApiController, :clean_db_with_truncation do
 
   describe 'GET #user_qualification_data', :focus do
     it 'returns empty JSON if user has never competed' do
-      user = FactoryBot.create(:user)
+      user = create(:user)
       get :user_qualification_data, params: { user_id: user.id }
       expect(response.parsed_body).to eq([])
     end
 
     it 'returns error if date is not iso8601 formatted' do
-      user = FactoryBot.create(:user)
+      user = create(:user)
       get :user_qualification_data, params: { user_id: user.id, date: 'bad data' }
 
       expect(response).to have_http_status(:bad_request)
@@ -507,7 +507,7 @@ RSpec.describe Api::V0::ApiController, :clean_db_with_truncation do
     end
 
     it 'fails if date is in the future' do
-      user = FactoryBot.create(:user)
+      user = create(:user)
       get :user_qualification_data, params: { user_id: user.id, date: 1.day.from_now }
 
       expect(response).to have_http_status(:bad_request)
@@ -519,18 +519,18 @@ RSpec.describe Api::V0::ApiController, :clean_db_with_truncation do
         { "best"=>400, "eventId"=>"333oh", "type"=>"single", "on_or_before"=>Date.current.iso8601 },
       ]
 
-      @competition = FactoryBot.create(:competition) # Results will be achieved 1.year.ago - see factory definition
-      @result = FactoryBot.create(:result, competition: @competition, best: 400, average: -1)
-      @user = FactoryBot.create(:user_with_wca_id, person: @result.person)
+      @competition = create(:competition) # Results will be achieved 1.year.ago - see factory definition
+      @result = create(:result, competition: @competition, best: 400, average: -1)
+      @user = create(:user_with_wca_id, person: @result.person)
 
       get :user_qualification_data, params: { user_id: @user.id }
       expect(response.parsed_body).to eq(expected_response)
     end
 
     it 'returns empty array if the user only has a DNF' do
-      @competition = FactoryBot.create(:competition)
-      @result = FactoryBot.create(:result, competition: @competition, best: -1, average: -1)
-      @user = FactoryBot.create(:user_with_wca_id, person: @result.person)
+      @competition = create(:competition)
+      @result = create(:result, competition: @competition, best: -1, average: -1)
+      @user = create(:user_with_wca_id, person: @result.person)
 
       get :user_qualification_data, params: { user_id: @user.id }
       expect(response.parsed_body).to eq([])
@@ -538,9 +538,9 @@ RSpec.describe Api::V0::ApiController, :clean_db_with_truncation do
 
     context 'user has competed' do
       before do
-        @competition = FactoryBot.create(:competition) # Results will be achieved 1.year.ago - see factory definition
-        @result = FactoryBot.create(:result, competition: @competition, best: 400, average: 500)
-        @user = FactoryBot.create(:user_with_wca_id, person: @result.person)
+        @competition = create(:competition) # Results will be achieved 1.year.ago - see factory definition
+        @result = create(:result, competition: @competition, best: 400, average: 500)
+        @user = create(:user_with_wca_id, person: @result.person)
 
         @default_expected_response = [
           { "best"=>400, "eventId"=>"333oh", "type"=>"single", "on_or_before"=>Date.current.iso8601 },
@@ -581,8 +581,8 @@ RSpec.describe Api::V0::ApiController, :clean_db_with_truncation do
           { "best"=>500, "eventId"=>"333oh", "type"=>"average", "on_or_before"=>Date.current.iso8601 },
         ]
 
-        competition = FactoryBot.create(:competition, starts: 200.days.ago)
-        FactoryBot.create(:result, competition: competition, best: 400, average: 500)
+        competition = create(:competition, starts: 200.days.ago)
+        create(:result, competition: competition, best: 400, average: 500)
 
         get :user_qualification_data, params: { user_id: @user.id }
         expect(response.parsed_body).to eq(expected_response)
@@ -604,8 +604,8 @@ RSpec.describe Api::V0::ApiController, :clean_db_with_truncation do
           { "best"=>499, "eventId"=>"333oh", "type"=>"average", "on_or_before"=> 1.day.ago.to_date.iso8601 },
         ]
 
-        competition = FactoryBot.create(:competition, starts: 1.day.ago)
-        FactoryBot.create(:result, competition: competition, best: 399, average: 499, person: @result.person)
+        competition = create(:competition, starts: 1.day.ago)
+        create(:result, competition: competition, best: 399, average: 499, person: @result.person)
 
         get :user_qualification_data, params: { user_id: @user.id, date: 1.day.ago }
         expect(response.parsed_body).to eq(expected_response)
@@ -617,16 +617,16 @@ RSpec.describe Api::V0::ApiController, :clean_db_with_truncation do
           { "best"=>500, "eventId"=>"333oh", "type"=>"average", "on_or_before"=> 2.days.ago.to_date.iso8601 },
         ]
 
-        competition = FactoryBot.create(:competition, starts: 1.day.ago)
-        FactoryBot.create(:result, competition: competition, best: 399, average: 499, person: @result.person)
+        competition = create(:competition, starts: 1.day.ago)
+        create(:result, competition: competition, best: 399, average: 499, person: @result.person)
 
         get :user_qualification_data, params: { user_id: @user.id, date: 2.days.ago }
         expect(response.parsed_body).to eq(expected_response)
       end
 
       it 'still returns PR when user has DNF result' do
-        competition = FactoryBot.create(:competition, starts: 1.day.ago)
-        FactoryBot.create(:result, competition: competition, best: -1, average: -1, person: @result.person)
+        competition = create(:competition, starts: 1.day.ago)
+        create(:result, competition: competition, best: -1, average: -1, person: @result.person)
 
         get :user_qualification_data, params: { user_id: @user.id }
         expect(response.parsed_body).to eq(@default_expected_response)

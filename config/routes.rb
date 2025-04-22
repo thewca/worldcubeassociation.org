@@ -199,7 +199,7 @@ Rails.application.routes.draw do
 
   get 'panel/pending-claims(/:user_id)' => 'panel#pending_claims_for_subordinate_delegates', as: 'pending_claims'
   scope 'panel' do
-    get 'staff' => 'panel#staff', as: :panel_staff
+    get 'volunteer' => 'panel#volunteer', as: :panel_volunteer
     get 'generate_db_token' => 'panel#generate_db_token', as: :panel_generate_db_token
     get 'competition_count' => 'panel#competition_count', as: :panel_competition_count
     get 'validators_for_competition_list' => 'panel#validators_for_competition_list', as: :panel_validators_for_competition_list
@@ -252,12 +252,12 @@ Rails.application.routes.draw do
   get 'faq' => 'static_pages#faq'
   get 'logo' => 'static_pages#logo'
   get 'media-instagram' => 'static_pages#media_instagram'
-  get 'merch' => 'static_pages#merch'
+  get 'merch', to: redirect('https://shop.worldcubeassociation.org/')
   get 'organizer-guidelines' => 'static_pages#organizer_guidelines'
   get 'privacy' => 'static_pages#privacy'
   get 'score-tools' => 'static_pages#score_tools'
   get 'speedcubing-history' => 'static_pages#speedcubing_history'
-  get 'teams-committees-councils' => 'static_pages#teams_committees_councils'
+  get 'teams-committees' => 'static_pages#teams_committees'
   get 'tutorial' => redirect('/education', status: 302)
   get 'translators' => 'static_pages#translators'
   get 'officers-and-board' => 'static_pages#officers_and_board'
@@ -343,16 +343,6 @@ Rails.application.routes.draw do
 
   namespace :api do
     get '/', to: redirect('/help/api', status: 302)
-    namespace :internal do
-      namespace :v1 do
-        get '/users/:id/permissions' => 'permissions#index'
-        get '/competitions/:competition_id' => 'competitions#show'
-        get '/competitions/:competition_id/qualifications' => 'competitions#qualifications'
-        post '/users/competitor-info' => 'users#competitor_info'
-        post '/mailers/registration' => 'mailers#registration'
-        post '/payment/init_stripe' => 'payment#init_stripe'
-      end
-    end
 
     # While this is the start of a v1 API, this is currently not usable by outside developers as
     # getting a JWT token requires you to be logged in through the Website

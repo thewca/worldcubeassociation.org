@@ -152,57 +152,57 @@ fr:
       #original_hash: 4d618bb
       name: Tour de qualification
       #original_hash: 4d618bb
-      cellName: Tour de qualification
+      cell_name: Tour de qualification
     '1':
       #original_hash: 1e725b6
       name: Premier tour
       #original_hash: 1e725b6
-      cellName: Premier tour
+      cell_name: Premier tour
     '2':
       #original_hash: 985c8d0
       name: Deuxième tour
       #original_hash: 985c8d0
-      cellName: Deuxième tour
+      cell_name: Deuxième tour
     '3':
       #original_hash: e2f74d2
       name: Demi-finale
       #original_hash: e2f74d2
-      cellName: Demi-finale
+      cell_name: Demi-finale
     b:
       #original_hash: 327c999
       name: Finale B
       #original_hash: 327c999
-      cellName: Finale B
+      cell_name: Finale B
     c:
       #original_hash: 672b22c
       name: Finale
       #original_hash: 672b22c
-      cellName: Finale
+      cell_name: Finale
     d:
       #original_hash: 1e725b6
       name: Premier tour
       #original_hash: 1e725b6
-      cellName: Premier tour
+      cell_name: Premier tour
     e:
       #original_hash: 985c8d0
       name: Deuxième tour
       #original_hash: 985c8d0
-      cellName: Deuxième tour
+      cell_name: Deuxième tour
     f:
       #original_hash: 672b22c
       name: Finale
       #original_hash: 672b22c
-      cellName: Finale
+      cell_name: Finale
     g:
       #original_hash: e2f74d2
       name: Demi-finale
       #original_hash: e2f74d2
-      cellName: Demi-finale
+      cell_name: Demi-finale
     h:
       #original_hash: 4d618bb
       name: Tour de qualification
       #original_hash: 4d618bb
-      cellName: Tour de qualification
+      cell_name: Tour de qualification
   attempts:
     #original_hash: 17dae1e
     attempt_name: 'Essai %{number}'
@@ -522,7 +522,7 @@ fr:
         #original_hash: 8c41ae8
         wca_id: Personne
         #original_hash: fa4c045
-        countryId: Représentant
+        country_id: Représentant
         #original_hash: ab58155
         dob: Date de naissance
         #original_hash: 8a754c6
@@ -574,19 +574,19 @@ fr:
         competition_id: Est survenu au cours de
       competition_medium:
         #original_hash: 1917f4f
-        competitionId: Compétition
+        competition_id: Compétition
         #original_hash: 3deb745
-        type: Type
+        media_type: Type
         #original_hash: c3328c3
         text: Texte
         #original_hash: d051707
         uri: Lien
         #original_hash: 1be755a
-        submitterName: Nom du contributeur
+        submitter_name: Nom du contributeur
         #original_hash: 78cdfee
-        submitterEmail: Adresse e-mail du contributeur
+        submitter_email: Adresse e-mail du contributeur
         #original_hash: 0d31f23
-        submitterComment: Commentaire du contributeur
+        submitter_comment: Commentaire du contributeur
         #original_hash: bae7d5b
         status: Statut
       regional_organization:
@@ -682,7 +682,7 @@ fr:
         accepted: Accepté
         #original_hash: 96f608c
         pending: En attente
-      type:
+      media_type:
         #original_hash: ee45c30
         report: Rapport
         #original_hash: 4360c2d
@@ -896,19 +896,19 @@ fr:
         comment: ''
       competition_medium:
         #original_hash: da39a3e
-        competitionId: ''
+        competition_id: ''
         #original_hash: da39a3e
-        type: ''
+        media_type: ''
         #original_hash: da39a3e
         text: ''
         #original_hash: da39a3e
         uri: ''
         #original_hash: da39a3e
-        submitterName: ''
+        submitter_name: ''
         #original_hash: da39a3e
-        submitterEmail: ''
+        submitter_email: ''
         #original_hash: da39a3e
-        submitterComment: ''
+        submitter_comment: ''
         #original_hash: da39a3e
         status: ''
       results_submission:
@@ -1271,8 +1271,8 @@ fr:
       faq: Questions Fréquentes
       #original_hash: cf1d2c9
       forum: Forum
-      #original_hash: 3ad28c0
-      teams: 'Équipes, Comités et Conseils'
+      #original_hash: 0e7a036
+      teams: Équipes et Comités
       #original_hash: 7981fb3
       education: Ressources Éducatives
       #original_hash: c66444f
@@ -1388,14 +1388,15 @@ fr:
         Président préside toutes les réunions du Bureau, le Secrétaire assure le
         maintien des documents de l'association et le Trésorier gère les
         affaires financières de la WCA.
-      #original_hash: e0d37a2
+      #original_hash: 19d4bbb
       board_description: >-
-        La World Cube Association est dirigée par le Bureau de la WCA, constitué
-        des membres suivants :
+        Le Conseil d'administration de la WCA est chargé de diriger
+        l'organisation dans son ensemble et de remplir toutes les fonctions qui
+        ne sont pas remplies par d'autres équipes et comités.
     teams_committees_councils:
-      #original_hash: 0d62207
-      title: 'Équipes, Comités et Conseils'
-      #original_hash: 4701b90
+      #original_hash: 1d14e2f
+      title: Équipes et Comités
+      #original_hash: 9fdee8f
       description: >-
         Les équipes et les comités de la WCA font partie intégrante de
         l'organisation et effectuent les tâches quotidiennes nécessaires à son
@@ -1403,12 +1404,9 @@ fr:
         la WCA, y compris des délégués de la WCA et des compétiteurs. Chaque
         équipe a un responsable, dont le rôle est d'assurer le bon
         fonctionnement de l'équipe et de guider les autres membres de l'équipe.
-        Les Conseils sont un type particulier d'équipe qui joue un rôle
-        consultatif auprès du Conseil d'administration de la WCA et sont
-        constitués de membres de la communauté, et non de bénévoles de la WCA.
-        Lorsque des postes sont à pourvoir au sein d'un comité, d'une équipe ou
-        d'un conseil, les informations concernant les modalités de candidature
-        sont affichées sur la page d'accueil.
+        Lorsque des postes sont à pourvoir au sein d'une équipe ou d'un comité,
+        les informations concernant les modalités de candidature sont affichées
+        sur la page d'accueil.
       #original_hash: b37456c
       contact_button: Contact
       #original_hash: ae7928f
@@ -1572,11 +1570,12 @@ fr:
           #original_hash: 54f0036
           label: Qui souhaitez-vous contacter ?
           competition:
-            #original_hash: baa2425
+            #original_hash: 5a280ab
             label: >-
               Contacter les organisateur·rice·s/Délégué·e·s d’une compétition
               (pour poser une question concernant cette compétition en
-              particulier)
+              particulier, y compris sur les résultats qui n'ont pas encore été
+              publiés sur le site web de la WCA)
           wct:
             #original_hash: b73e465
             label: >-
@@ -1584,15 +1583,17 @@ fr:
               des éléments comme l’ID/le profil WCA, l’organisation de
               compétitions, les règles de la compétition, les médias, etc.)
           wrt:
-            #original_hash: 0f6b96b
+            #original_hash: 4dd66f7
             label: >-
-              Contacter l'équipe de résultats de la WCA (pour toute chose
-              relative aux résultats d'une compétition)
+              Contacter l'équipe de résultats de la WCA (pour tout ce qui
+              concerne les résultats ou les données de profil sur le site web de
+              la WCA)
           wst:
-            #original_hash: 1d74033
+            #original_hash: 2be6d53
             label: >-
-              Contacter l'équipe logicielle de la WCA (pour signaler des bugs ou
-              toute question relative à l'API)
+              Contacter l'équipe logicielle de la WCA (pour signaler des
+              problèmes avec le site web de la WCA ou pour des questions
+              relatives aux logiciels)
         competition:
           competition:
             #original_hash: 1917f4f
@@ -1742,8 +1743,8 @@ fr:
       ad_new: Nouveau
       #original_hash: 9ad68ce
       text_html: >-
-        Allez jeter un œil à nos nouveaux produits dérivés incluant une sélection
-        de vêtements (t-shirts, sweats à capuche...)
+        Allez jeter un œil à nos nouveaux produits dérivés incluant une
+        sélection de vêtements (t-shirts, sweats à capuche...)
       #original_hash: b0fc6c4
       link_title: Lien vers la boutique
     records:
@@ -2082,16 +2083,16 @@ fr:
         '2': Vous devez utiliser une photo récente.
         #original_hash: 8165cf0
         '3': >-
-          S'il y a plus d'une personne dans la photo de profil, il doit être clair
-          laquelle vous êtes.
+          S'il y a plus d'une personne dans la photo de profil, il doit être
+          clair laquelle vous êtes.
         #original_hash: 4083c00
         '4': >-
           Votre tête, mais pas nécessairement tout votre visage, devrait être
           visible.
         #original_hash: 14c72b2
         '5': >-
-          La photo de profil ne doit pas comporter de texte superposé, d'autocollants ou
-          de filtres non naturels, y compris des bordures.
+          La photo de profil ne doit pas comporter de texte superposé,
+          d'autocollants ou de filtres non naturels, y compris des bordures.
         #original_hash: 7f9c9c6
         '6': La photo de profil doit être présenté dans le bon sens.
         #original_hash: 1a18831
@@ -2110,10 +2111,10 @@ fr:
             vous apparaîtriez à une compétition.
           #original_hash: f1f3854
           '2': >-
-            La photo de profil doit être cadré, recadré, incliné et éclairé de manière à
-            ce que tout compétiteur ou spectateur d'une compétition puisse
-            l'utiliser pour vous identifier sans ambiguïté sur le lieu de la
-            compétition.
+            La photo de profil doit être cadré, recadré, incliné et éclairé de
+            manière à ce que tout compétiteur ou spectateur d'une compétition
+            puisse l'utiliser pour vous identifier sans ambiguïté sur le lieu de
+            la compétition.
           #original_hash: 13fab02
           '3': >-
             La miniature de la photo de profil n'est qu'une partie de la photo
@@ -2248,6 +2249,11 @@ fr:
       translators: Traducteur·rice·s
   registrations:
     errors:
+      #original_hash: 51c7156
+      edit_deadline_passed: >-
+        La date limite de modification des inscriptions est passée ! Les
+        modifications ne doivent être effectuées que dans des circonstances
+        exceptionnelles.
       #original_hash: 44ab952
       need_name: Nom obligatoire
       #original_hash: 6f64c57
@@ -2278,6 +2284,10 @@ fr:
       can_only_register_for_qualified_events: >-
         Vous ne pouvez pas vous inscrire pour des épreuves pour lesquelles vous
         ne vous qualifiez pas.
+      #original_hash: 93ed20e
+      cannot_change_events_when_cancelling: >-
+        Vous ne pouvez pas modifier vos événements lors de l'annulation de votre
+        inscription.
       #original_hash: 4025877
       cannot_register_without_comment: >-
         Vous devez faire un commentaire. Merci de lire les conditions
@@ -2435,10 +2445,6 @@ fr:
     new_registration:
       #original_hash: 8b9f726
       title: 'S''inscrire pour %{comp}'
-    #original_hash: 7cae988
-    registered_with_account_html: >-
-      Cette personne s'est inscrite avec un compte. Vous pouvez éditer ses
-      données personnelles %{here}.
     #original_hash: ada2e9e
     sign_in: Connectez-vous
     #original_hash: 5d45a00
@@ -2614,6 +2620,15 @@ fr:
       pouvez éditer %{link}.
     #original_hash: ee89a3e
     registration_requirements: 'Conditions d''inscription pour la compétition :'
+    registration_history:
+      #original_hash: 342fa25
+      acting_user: Utilisateur faisant l'action
+      #original_hash: 97c89a4
+      action: Action
+      #original_hash: 8aa57de
+      changes: Changements
+      #original_hash: cec61a5
+      title: Historique de l'inscription
     import:
       #original_hash: 5a394f3
       title: 'Importer les inscriptions pour %{comp}'
@@ -3855,6 +3870,13 @@ fr:
         waitlist:
           #original_hash: 3907ca4
           title: Inscriptions sur liste d'attente
+          #original_hash: de3f9d4
+          information: >-
+            Les compétiteurs sont ajoutés à la fin de la liste d'attente. Si
+            vous en ajoutez plusieurs en même temps, les compétiteurs ayant payé
+            seront ajoutés à la fin dans l'ordre où ils ont payé, suivis par les
+            autres dans l'ordre où ils se sont inscrits. Vous pouvez ajuster
+            manuellement l'ordre en mode édition si nécessaire.
           #original_hash: a6c86ec
           skipped_warning: >-
             Vous avez ignoré %{count} inscription(s) sur la liste d'attente.
@@ -3873,6 +3895,13 @@ fr:
           title: Inscriptions rejetées
           #original_hash: 3fd2e0c
           information: Les compétiteurs rejetés ne peuvent pas se réinscrire.
+        non_competing:
+          #original_hash: d4e453a
+          title: Inscriptions hors compétition
+          #original_hash: 2ed9c67
+          information: >-
+            Pour les non-compétiteurs à qui vous pouvez confier des tâches de
+            staff au sein du WCIF.
         payment:
           #original_hash: d6fbc7a
           refunded_status: Remboursé
@@ -4245,6 +4274,19 @@ fr:
       not_full_url: >-
         Le contenu contient une URL relative (%{url}). Veuillez saisir des URL
         pleines avec le préfixe http:// ou https://.
+      #original_hash: e8ff0ef
+      editing_deadline_already_passed: >-
+        Vous n'êtes autorisé à modifier les dates que pour les échéances qui ne
+        sont pas encore passées, mais la valeur originale de %{timestamp} est
+        déjà passée.
+      #original_hash: e12883e
+      edited_deadline_not_after_original: >-
+        Vous ne pouvez que prolonger les délais, mais %{new_timestamp} est placé
+        avant la valeur originale de %{timestamp}.
+      #original_hash: d79fbb4
+      edited_deadline_not_in_future: >-
+        Vous ne pouvez introduire que des dates limites futures, mais
+        %{new_timestamp} n'est pas dans le futur.
     new:
       #original_hash: 1208df7
       create_competition: Créer une compétition
@@ -4622,20 +4664,10 @@ fr:
       Veuillez noter que certains filtres (comme les années précédentes) sont
       temporairement désactivés. L’équipe logicielle de la WCA (WST) travaille à
       restaurer ces filtres - nous sommes désolés pour les inconvénients.
-    #original_hash: e3710ed
-    tooltip_no_years: >-
-      Notre base de données est trop grande pour calculer des données
-      historiques
-    #original_hash: 357094b
-    tooltip_no_quantities: Notre base de données est trop grande pour calculer des classements longs
     selector_elements:
       events_selector:
         #original_hash: ad8919a
         event: Épreuve
-        #original_hash: 3e83afa
-        all_events: Toutes les épreuves
-      #original_hash: 0f21717
-      region: Région
       type_selector:
         #original_hash: 3deb745
         type: Type
@@ -4643,30 +4675,13 @@ fr:
         single: Single
         #original_hash: 15f86c0
         average: Moyenne
-      years_selector:
-        #original_hash: 96f997b
-        years: Années
-        #original_hash: 0977c76
-        all_years: Toutes les années
-        #original_hash: 8737f09
-        only: Seulement
-        #original_hash: b3c0fe7
-        only_html: 'Seulement %{year}'
-        #original_hash: 96bdb66
-        until: Jusqu'à
-        #original_hash: fa23930
-        until_html: 'Jusqu''à %{year}'
       show_selector:
         #original_hash: d97d1ee
         show: Afficher
         #original_hash: f3cf96e
         persons: Personnes
-        #original_hash: 16d3376
-        persons_html: '%{quantity} personnes'
         #original_hash: 612e12d
         results: Résultats
-        #original_hash: f3baa4a
-        results_html: '%{quantity} résultats'
         #original_hash: d46d2ee
         by_region: Par région
         #original_hash: c0dcb86
@@ -4693,8 +4708,6 @@ fr:
       name: Nom
       #original_hash: 5faa59d
       result: Résultat
-      #original_hash: fa4c045
-      representing: Représentant
       #original_hash: 1917f4f
       competition: Compétition
       #original_hash: e7f6fc5
@@ -4703,23 +4716,21 @@ fr:
       region: Région
       #original_hash: 70c07ec
       world: Monde
-      type_options:
-        #original_hash: 3deb745
-        type: Type
-        #original_hash: dd11868
-        single: Single
-        #original_hash: 15f86c0
-        average: Moyenne
       #original_hash: ad8919a
       event: Épreuve
       #original_hash: dcf8b56
       date_circa: Date circa
-      #original_hash: 1c54132
-      record: Record
   notifications:
     #original_hash: 10bcdbd
     connect_wca_id: Associez votre ID WCA à votre compte !
   payments:
+    labels:
+      #original_hash: cccf678
+      payment_statuses: Statuts de paiement
+      #original_hash: 312b6b6
+      available_refunds: Remboursements disponibles
+      #original_hash: ef3cd45
+      original_payment: Paiement initial
     payment_providers:
       #original_hash: 559ef55
       paypal: PayPal
@@ -4818,6 +4829,11 @@ fr:
           primary_email: Adresse e-mail
         #original_hash: 08d2e98
         fallback_not_applicable: N/A
+    statuses:
+      #original_hash: c8fbda9
+      succeeded: Réussi
+      #original_hash: d6fbc7a
+      refund: Remboursé
   persons:
     index:
       #original_hash: 5934b4c
@@ -5241,10 +5257,11 @@ fr:
       #original_hash: 9482c5d
       title: Structure
       board:
-        #original_hash: e0d37a2
+        #original_hash: 19d4bbb
         description: >-
-          La World Cube Association est dirigée par le bureau de la WCA,
-          constitué des membres suivants :
+          Le conseil d'administration de la WCA est chargé de diriger
+          l'organisation dans son ensemble et de remplir toutes les fonctions
+          qui ne sont pas remplies par d'autres équipes et comités.
       users:
         #original_hash: 57bbaad
         profile: 'Profil de %{user_name}'
@@ -6168,14 +6185,15 @@ fr:
         La WCA propose des produits dérivés exclusifs à la vente ! T- shirts,
         hoodies, stickers, stackmats, sacs à dos et bien plus ! Nos designs sont
         constamment mis à jour, y compris le logo classique de la WCA, les
-        produits dérivés officiels du championnat du monde et les designs du record
-        du monde.
+        produits dérivés officiels du championnat du monde et les designs du
+        record du monde.
       #original_hash: 2865e1d
       '2': >-
-        Acheter des produits dérivés WCA via notre boutique est l'un des meilleurs moyens de
-        supporter la WCA - un organisme bénévole à but non lucratif. Nous
-        utilisons tous les bénéfices des produits dérivés pour financer davantage les
-        championnats, l’équipement et d’autres activités liées à la WCA.
+        Acheter des produits dérivés WCA via notre boutique est l'un des
+        meilleurs moyens de supporter la WCA - un organisme bénévole à but non
+        lucratif. Nous utilisons tous les bénéfices des produits dérivés pour
+        financer davantage les championnats, l’équipement et d’autres activités
+        liées à la WCA.
       #original_hash: 8e57552
       '3': >-
         Vous pouvez acheter nos produits dérivés partout dans le monde -- avec
