@@ -18,7 +18,7 @@
       var delimiter = ',';
       var searchFields = window.wca.lodashUniq([
         'wca_id', 'name', // user search fields
-        'id', 'cellName', 'cityName', 'countryId', 'name', // competition search fields
+        'id', 'cell_name', 'city_name', 'country_id', 'name', // competition search fields
         'title', 'body', // post search fields
         'id', 'content_html', // regulation search fields
       ]);

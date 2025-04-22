@@ -6,6 +6,8 @@ class WaitingList < ApplicationRecord
   delegate :empty?, :length, to: :entries
 
   def remove(entry)
+    return unless entries.include?(entry.id)
+
     update_column :entries, entries - [entry.id]
   end
 

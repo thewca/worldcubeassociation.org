@@ -12,7 +12,7 @@
 
   <h1>
     <%= yield(:title) %>
-    <%= link_to "Go back", admin_check_regional_records_path(competition_id: competition_id, event_id: event_id), class: "btn btn-default" %>
+    <%= link_to "Go back", panel_page_path(id: User.panel_pages[:checkRecords], competition_id: competition_id, event_id: event_id), class: "btn btn-default" %>
   </h1>
 
   <% if diff_mode %>
@@ -95,7 +95,7 @@
                 <% value_solve = result.send("#{value_column}_solve".to_sym) %>
 
                 <% computed_marker = row[:computed_marker] %>
-                <% stored_marker = result.send("regional#{value_name}Record") %>
+                <% stored_marker = result.send("regional_#{value_name}_record") %>
 
                 <% markers_same = computed_marker == stored_marker %>
 
@@ -168,7 +168,7 @@
     <% end %>
 
     <%= f.button :submit, value: "Submit overrides", class: "btn-primary" %>
-    <%= link_to "Go back", admin_check_regional_records_path(competition_id: competition_id, event_id: event_id), class: "btn btn-default" %>
+    <%= link_to "Go back", panel_page_path(id: User.panel_pages[:checkRecords], competition_id: competition_id, event_id: event_id), class: "btn btn-default" %>
   <% end %>
 </div>
 

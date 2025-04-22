@@ -27,14 +27,14 @@ RSpec.describe User, type: :model do
     expect(users.first).to eq user
   end
 
-  it "search returns only people with subId 1" do
-    FactoryBot.create :person, wca_id: "2005FLEI01", subId: 1
-    FactoryBot.create :person, wca_id: "2005FLEI01", subId: 2
+  it "search returns only people with sub_id 1" do
+    FactoryBot.create :person, wca_id: "2005FLEI01", sub_id: 1
+    FactoryBot.create :person, wca_id: "2005FLEI01", sub_id: 2
     FactoryBot.create :user, wca_id: "2005FLEI01"
 
     users = User.search("2005FLEI01", params: { persons_table: true })
     expect(users.count).to eq 1
-    expect(users[0].subId).to eq 1
+    expect(users[0].sub_id).to eq 1
   end
 
   it "allows empty country" do
@@ -183,7 +183,7 @@ RSpec.describe User, type: :model do
 
     it "does not allows assigning WCA ID if user and person details don't match" do
       user = FactoryBot.create(:user, name: "Whatever", country_iso2: "US", dob: Date.new(1950, 12, 12), gender: "m")
-      person = FactoryBot.create(:person, name: "Else", countryId: "United Kingdom", dob: '1900-01-01', gender: "f")
+      person = FactoryBot.create(:person, name: "Else", country_id: "United Kingdom", dob: '1900-01-01', gender: "f")
       user.wca_id = person.wca_id
       expect(user).to be_invalid_with_errors(
         name: [I18n.t('users.errors.must_match_person')],
@@ -557,19 +557,19 @@ RSpec.describe User, type: :model do
   describe "#is_special_account" do
     it "returns false for a normal user" do
       user = FactoryBot.create :user
-      expect(user.is_special_account?).to be false
+      expect(user.special_account?).to be false
     end
 
     it "returns true for users on a team" do
       board_member = FactoryBot.create :user, :board_member
       banned_person = FactoryBot.create :user, :banned
-      expect(board_member.is_special_account?).to be true
-      expect(banned_person.is_special_account?).to be true
+      expect(board_member.special_account?).to be true
+      expect(banned_person.special_account?).to be true
     end
 
     it "returns true for users that are delegates" do
       senior_delegate_role = FactoryBot.create :senior_delegate_role
-      expect(senior_delegate_role.user.is_special_account?).to be true
+      expect(senior_delegate_role.user.special_account?).to be true
     end
 
     it "returns true for users who organized or delegated a competition" do
@@ -577,9 +577,9 @@ RSpec.describe User, type: :model do
       delegate = FactoryBot.create :user # Intentionally not assigning a Delegate role as it is possible to Delegate a competition without being a current Delegate
       trainee_delegate = FactoryBot.create :user
       FactoryBot.create :competition, organizers: [organizer], delegates: [delegate, trainee_delegate]
-      expect(organizer.is_special_account?).to be true
-      expect(delegate.is_special_account?).to be true
-      expect(trainee_delegate.is_special_account?).to be true
+      expect(organizer.special_account?).to be true
+      expect(delegate.special_account?).to be true
+      expect(trainee_delegate.special_account?).to be true
     end
   end
 

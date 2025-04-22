@@ -326,19 +326,19 @@ RSpec.describe Registrations::RegistrationChecker do
       let(:dnfs_only) { FactoryBot.create(:user, :wca_id) }
 
       before do
-        FactoryBot.create(:result, competition: past_competition, person: user_with_results.person, eventId: '222', best: 400, average: 500)
-        FactoryBot.create(:result, competition: past_competition, person: user_with_results.person, eventId: '333', best: 410, average: 510)
-        FactoryBot.create(:result, competition: past_competition, person: user_with_results.person, eventId: '555', best: 420, average: 520)
-        FactoryBot.create(:result, competition: past_competition, person: user_with_results.person, eventId: '444', best: 430, average: 530)
-        FactoryBot.create(:result, competition: past_competition, person: user_with_results.person, eventId: 'pyram', best: 440, average: 540)
-        FactoryBot.create(:result, competition: past_competition, person: user_with_results.person, eventId: 'minx', best: 450, average: 550)
+        FactoryBot.create(:result, competition: past_competition, person: user_with_results.person, event_id: '222', best: 400, average: 500)
+        FactoryBot.create(:result, competition: past_competition, person: user_with_results.person, event_id: '333', best: 410, average: 510)
+        FactoryBot.create(:result, competition: past_competition, person: user_with_results.person, event_id: '555', best: 420, average: 520)
+        FactoryBot.create(:result, competition: past_competition, person: user_with_results.person, event_id: '444', best: 430, average: 530)
+        FactoryBot.create(:result, competition: past_competition, person: user_with_results.person, event_id: 'pyram', best: 440, average: 540)
+        FactoryBot.create(:result, competition: past_competition, person: user_with_results.person, event_id: 'minx', best: 450, average: 550)
 
-        FactoryBot.create(:result, competition: past_competition, person: dnfs_only.person, eventId: '222', best: -1, average: -1)
-        FactoryBot.create(:result, competition: past_competition, person: dnfs_only.person, eventId: '333', best: -1, average: -1)
-        FactoryBot.create(:result, competition: past_competition, person: dnfs_only.person, eventId: '555', best: -1, average: -1)
-        FactoryBot.create(:result, competition: past_competition, person: dnfs_only.person, eventId: '444', best: -1, average: -1)
-        FactoryBot.create(:result, competition: past_competition, person: dnfs_only.person, eventId: 'pyram', best: -1, average: -1)
-        FactoryBot.create(:result, competition: past_competition, person: dnfs_only.person, eventId: 'minx', best: -1, average: -1)
+        FactoryBot.create(:result, competition: past_competition, person: dnfs_only.person, event_id: '222', best: -1, average: -1)
+        FactoryBot.create(:result, competition: past_competition, person: dnfs_only.person, event_id: '333', best: -1, average: -1)
+        FactoryBot.create(:result, competition: past_competition, person: dnfs_only.person, event_id: '555', best: -1, average: -1)
+        FactoryBot.create(:result, competition: past_competition, person: dnfs_only.person, event_id: '444', best: -1, average: -1)
+        FactoryBot.create(:result, competition: past_competition, person: dnfs_only.person, event_id: 'pyram', best: -1, average: -1)
+        FactoryBot.create(:result, competition: past_competition, person: dnfs_only.person, event_id: 'minx', best: -1, average: -1)
       end
 
       it 'smoketest - succeeds when all qualifications are met' do
@@ -523,7 +523,7 @@ RSpec.describe Registrations::RegistrationChecker do
       context 'fail: attemptResult not met' do
         it 'cant register when 333 slower than attemptResult-single' do
           slow_single = FactoryBot.create(:user, :wca_id)
-          FactoryBot.create(:result, competition: past_competition, person: slow_single.person, eventId: '333', best: 4000, average: 5000)
+          FactoryBot.create(:result, competition: past_competition, person: slow_single.person, event_id: '333', best: 4000, average: 5000)
 
           registration_request = FactoryBot.build(
             :registration_request,
@@ -543,7 +543,7 @@ RSpec.describe Registrations::RegistrationChecker do
 
         it 'cant register when 333 equal to attemptResult-single' do
           slow_single = FactoryBot.create(:user, :wca_id)
-          FactoryBot.create(:result, competition: past_competition, person: slow_single.person, eventId: '333', best: 1000, average: 1500)
+          FactoryBot.create(:result, competition: past_competition, person: slow_single.person, event_id: '333', best: 1000, average: 1500)
 
           registration_request = FactoryBot.build(
             :registration_request,
@@ -563,7 +563,7 @@ RSpec.describe Registrations::RegistrationChecker do
 
         it 'cant register when 555 slower than attemptResult-average' do
           slow_single = FactoryBot.create(:user, :wca_id)
-          FactoryBot.create(:result, competition: past_competition, person: slow_single.person, eventId: '555', best: 1000, average: 6001)
+          FactoryBot.create(:result, competition: past_competition, person: slow_single.person, event_id: '555', best: 1000, average: 6001)
 
           registration_request = FactoryBot.build(
             :registration_request,
@@ -583,7 +583,7 @@ RSpec.describe Registrations::RegistrationChecker do
 
         it 'cant register when 555 equal to attemptResult-average' do
           slow_single = FactoryBot.create(:user, :wca_id)
-          FactoryBot.create(:result, competition: past_competition, person: slow_single.person, eventId: '555', best: 1000, average: 6000)
+          FactoryBot.create(:result, competition: past_competition, person: slow_single.person, event_id: '555', best: 1000, average: 6000)
 
           registration_request = FactoryBot.build(
             :registration_request,
@@ -1103,6 +1103,24 @@ RSpec.describe Registrations::RegistrationChecker do
 
         expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, registration) }
           .not_to raise_error
+      end
+
+      it 'organizer can edit accepted registration when competition is full' do
+        competitor_limit = FactoryBot.create(:competition, :with_competitor_limit, :with_organizer, competitor_limit: 3)
+        FactoryBot.create_list(:registration, 2, :accepted, competition: competitor_limit)
+        registration = FactoryBot.create(:registration, :accepted, competition: competitor_limit)
+
+        update_request = FactoryBot.build(
+          :update_request,
+          user_id: registration.user_id,
+          competition_id: registration.competition_id,
+          submitted_by: competitor_limit.organizers.first.id,
+          competing: { 'comment' => 'test comment' },
+        )
+
+        expect {
+          Registrations::RegistrationChecker.update_registration_allowed!(update_request, registration)
+        }.not_to raise_error
       end
 
       it 'only considers regstrations from current comp when calculating accepted registrations' do
@@ -1651,19 +1669,19 @@ RSpec.describe Registrations::RegistrationChecker do
       }
 
       before do
-        FactoryBot.create(:result, competition: past_competition, person: user_with_results.person, eventId: '222', best: 400, average: 500)
-        FactoryBot.create(:result, competition: past_competition, person: user_with_results.person, eventId: '333', best: 410, average: 510)
-        FactoryBot.create(:result, competition: past_competition, person: user_with_results.person, eventId: '555', best: 420, average: 520)
-        FactoryBot.create(:result, competition: past_competition, person: user_with_results.person, eventId: '444', best: 430, average: 530)
-        FactoryBot.create(:result, competition: past_competition, person: user_with_results.person, eventId: 'pyram', best: 440, average: 540)
-        FactoryBot.create(:result, competition: past_competition, person: user_with_results.person, eventId: 'minx', best: 450, average: 550)
+        FactoryBot.create(:result, competition: past_competition, person: user_with_results.person, event_id: '222', best: 400, average: 500)
+        FactoryBot.create(:result, competition: past_competition, person: user_with_results.person, event_id: '333', best: 410, average: 510)
+        FactoryBot.create(:result, competition: past_competition, person: user_with_results.person, event_id: '555', best: 420, average: 520)
+        FactoryBot.create(:result, competition: past_competition, person: user_with_results.person, event_id: '444', best: 430, average: 530)
+        FactoryBot.create(:result, competition: past_competition, person: user_with_results.person, event_id: 'pyram', best: 440, average: 540)
+        FactoryBot.create(:result, competition: past_competition, person: user_with_results.person, event_id: 'minx', best: 450, average: 550)
 
-        FactoryBot.create(:result, competition: past_competition, person: dnfs_only.person, eventId: '222', best: -1, average: -1)
-        FactoryBot.create(:result, competition: past_competition, person: dnfs_only.person, eventId: '333', best: -1, average: -1)
-        FactoryBot.create(:result, competition: past_competition, person: dnfs_only.person, eventId: '555', best: -1, average: -1)
-        FactoryBot.create(:result, competition: past_competition, person: dnfs_only.person, eventId: '444', best: -1, average: -1)
-        FactoryBot.create(:result, competition: past_competition, person: dnfs_only.person, eventId: 'pyram', best: -1, average: -1)
-        FactoryBot.create(:result, competition: past_competition, person: dnfs_only.person, eventId: 'minx', best: -1, average: -1)
+        FactoryBot.create(:result, competition: past_competition, person: dnfs_only.person, event_id: '222', best: -1, average: -1)
+        FactoryBot.create(:result, competition: past_competition, person: dnfs_only.person, event_id: '333', best: -1, average: -1)
+        FactoryBot.create(:result, competition: past_competition, person: dnfs_only.person, event_id: '555', best: -1, average: -1)
+        FactoryBot.create(:result, competition: past_competition, person: dnfs_only.person, event_id: '444', best: -1, average: -1)
+        FactoryBot.create(:result, competition: past_competition, person: dnfs_only.person, event_id: 'pyram', best: -1, average: -1)
+        FactoryBot.create(:result, competition: past_competition, person: dnfs_only.person, event_id: 'minx', best: -1, average: -1)
       end
 
       it 'smoketest - succeeds when all qualifications are met' do
@@ -1879,7 +1897,7 @@ RSpec.describe Registrations::RegistrationChecker do
       context 'fail: attemptResult not met' do
         it 'cant register when 333 slower than attemptResult-single' do
           slow_single = FactoryBot.create(:user, :wca_id)
-          FactoryBot.create(:result, competition: past_competition, person: slow_single.person, eventId: '333', best: 1001, average: 5000)
+          FactoryBot.create(:result, competition: past_competition, person: slow_single.person, event_id: '333', best: 1001, average: 5000)
           slow_single_reg = FactoryBot.create(:registration, :skip_validations, user: slow_single, competition: easy_qualifications)
 
           update_request = FactoryBot.build(
@@ -1900,7 +1918,7 @@ RSpec.describe Registrations::RegistrationChecker do
 
         it 'cant register when 333 equal to attemptResult-single' do
           slow_single = FactoryBot.create(:user, :wca_id)
-          FactoryBot.create(:result, competition: past_competition, person: slow_single.person, eventId: '333', best: 1000, average: 1500)
+          FactoryBot.create(:result, competition: past_competition, person: slow_single.person, event_id: '333', best: 1000, average: 1500)
           slow_single_reg = FactoryBot.create(:registration, :skip_validations, user: slow_single, competition: easy_qualifications)
 
           update_request = FactoryBot.build(
@@ -1921,7 +1939,7 @@ RSpec.describe Registrations::RegistrationChecker do
 
         it 'cant register when 555 slower than attemptResult-average' do
           slow_average = FactoryBot.create(:user, :wca_id)
-          FactoryBot.create(:result, competition: past_competition, person: slow_average.person, eventId: '555', best: 1000, average: 6001)
+          FactoryBot.create(:result, competition: past_competition, person: slow_average.person, event_id: '555', best: 1000, average: 6001)
           slow_average_reg = FactoryBot.create(:registration, :skip_validations, user: slow_average, competition: easy_qualifications)
 
           update_request = FactoryBot.build(
@@ -1942,7 +1960,7 @@ RSpec.describe Registrations::RegistrationChecker do
 
         it 'cant register when 555 equal to attemptResult-average' do
           slow_average = FactoryBot.create(:user, :wca_id)
-          FactoryBot.create(:result, competition: past_competition, person: slow_average.person, eventId: '555', best: 1000, average: 6000)
+          FactoryBot.create(:result, competition: past_competition, person: slow_average.person, event_id: '555', best: 1000, average: 6000)
           slow_average_reg = FactoryBot.create(:registration, :skip_validations, user: slow_average, competition: easy_qualifications)
 
           update_request = FactoryBot.build(

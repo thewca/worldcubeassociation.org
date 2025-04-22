@@ -210,7 +210,6 @@ Rails.application.routes.draw do
   end
   get 'panel/:panel_id' => 'panel#index', as: :panel_index
   scope 'panel-page' do
-    get 'check-records' => 'admin#check_regional_records', as: :admin_check_regional_records
     get 'fix-results' => 'admin#fix_results', as: :admin_fix_results
     get 'merge-profiles' => 'admin#merge_people', as: :admin_merge_people
     get 'reassign-connected-wca-id' => 'admin#reassign_wca_id', as: :admin_reassign_wca_id
@@ -253,12 +252,12 @@ Rails.application.routes.draw do
   get 'faq' => 'static_pages#faq'
   get 'logo' => 'static_pages#logo'
   get 'media-instagram' => 'static_pages#media_instagram'
-  get 'merch' => 'static_pages#merch'
+  get 'merch', to: redirect('https://shop.worldcubeassociation.org/')
   get 'organizer-guidelines' => 'static_pages#organizer_guidelines'
   get 'privacy' => 'static_pages#privacy'
   get 'score-tools' => 'static_pages#score_tools'
   get 'speedcubing-history' => 'static_pages#speedcubing_history'
-  get 'teams-committees-councils' => 'static_pages#teams_committees_councils'
+  get 'teams-committees' => 'static_pages#teams_committees'
   get 'tutorial' => redirect('/education', status: 302)
   get 'translators' => 'static_pages#translators'
   get 'officers-and-board' => 'static_pages#officers_and_board'
@@ -344,16 +343,6 @@ Rails.application.routes.draw do
 
   namespace :api do
     get '/', to: redirect('/help/api', status: 302)
-    namespace :internal do
-      namespace :v1 do
-        get '/users/:id/permissions' => 'permissions#index'
-        get '/competitions/:competition_id' => 'competitions#show'
-        get '/competitions/:competition_id/qualifications' => 'competitions#qualifications'
-        post '/users/competitor-info' => 'users#competitor_info'
-        post '/mailers/registration' => 'mailers#registration'
-        post '/payment/init_stripe' => 'payment#init_stripe'
-      end
-    end
 
     # While this is the start of a v1 API, this is currently not usable by outside developers as
     # getting a JWT token requires you to be logged in through the Website

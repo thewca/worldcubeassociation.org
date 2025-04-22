@@ -13,11 +13,15 @@ jobs:
       RACK_ENV: test
       RAILS_ENV: test
       NODE_ENV: test
+      PLAYWRIGHT_BROWSERS_PATH: ./pw-browsers
+      CAPYBARA_APP_HOST: "" # Explicitly set a blank value to override our default Docker container setup
     steps:
       - uses: actions/checkout@v4
       - uses: fregante/setup-git-user@v2 # set up dummy user.name and user.email in git so that Overcommit doesn't explode
       - name: Set up ImageMagick and Libvips # This is not included in GitHub runners by default anymore
-        run: sudo apt install --no-install-recommends imagemagick libvips
+        run: |
+          sudo apt update
+          sudo apt install --no-install-recommends imagemagick libvips
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
@@ -48,6 +52,13 @@ jobs:
         run: |
           bin/bundle exec i18n export
           bin/rake assets:precompile
+      - name: Cache Playwright runnables
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.PLAYWRIGHT_BROWSERS_PATH }}
+          key: ${{ runner.os }}-playwright-${{ hashFiles('**/node_modules/playwright*') }}
+      - name: Install Playwright Browsers # as per https://playwright.dev/docs/ci#github-actions
+        run: bin/yarn playwright install --with-deps --no-shell chromium
       - name: Run tests
         id: rspec
         run: bin/rspec
@@ -56,6 +67,7 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           path-to-lcov: 'coverage/lcov/worldcubeassociation.org.lcov'
+          fail-on-error: false
       - uses: actions/upload-artifact@v4
         if: always() && steps.rspec.outcome == 'failure'
         with:
