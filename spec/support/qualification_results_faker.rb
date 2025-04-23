@@ -4,7 +4,7 @@ class QualificationResultsFaker
   attr_accessor :qualification_results
 
   def initialize(
-    date = (Time.now.utc-1).iso8601,
+    date = (Time.now.utc - 1).iso8601,
     results_inputs = [
       ['222', 'single', '200'],
       ['333', 'single', '900'],

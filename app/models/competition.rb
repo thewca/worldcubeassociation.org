@@ -1238,8 +1238,8 @@ class Competition < ApplicationRecord
   def kilometers_to(competition)
     6371 *
       Math.sqrt(
-        (((competition.longitude_radians - longitude_radians) * Math.cos((competition.latitude_radians + latitude_radians)/2)) ** 2) +
-        ((competition.latitude_radians - latitude_radians) ** 2),
+        (((competition.longitude_radians - longitude_radians) * Math.cos((competition.latitude_radians + latitude_radians) / 2))**2) +
+        ((competition.latitude_radians - latitude_radians)**2),
       )
   end
 
@@ -1249,7 +1249,7 @@ class Competition < ApplicationRecord
 
   # The division is to convert the end result from secods to days. .to_date removed some hours from the subtraction
   def days_until
-    start_date ? ((start_date.to_time(:utc) - Time.now.utc)/86_400).to_i : nil
+    start_date ? ((start_date.to_time(:utc) - Time.now.utc) / 86_400).to_i : nil
   end
 
   def time_until_registration

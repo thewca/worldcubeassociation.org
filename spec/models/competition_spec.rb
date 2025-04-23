@@ -542,14 +542,14 @@ RSpec.describe Competition do
     end
 
     it "warns if the time limit is very fast" do
-      round =create(:round, competition: competition, event_id: "333", time_limit: TimeLimit.new(centiseconds: 9.seconds.in_centiseconds))
+      round = create(:round, competition: competition, event_id: "333", time_limit: TimeLimit.new(centiseconds: 9.seconds.in_centiseconds))
 
       expect(competition).to be_valid
       expect(competition.warnings_for(nil)["time_limit_is_too_fast#{round.id}"]).to eq I18n.t('competitions.messages.time_limit_is_too_fast', round_number: 1, event: I18n.t('events.333'))
     end
 
     it "warns if the time limit is very slow" do
-      round =create(:round, competition: competition, event_id: "333", time_limit: TimeLimit.new(centiseconds: 11.minutes.in_centiseconds))
+      round = create(:round, competition: competition, event_id: "333", time_limit: TimeLimit.new(centiseconds: 11.minutes.in_centiseconds))
 
       expect(competition).to be_valid
       expect(competition.warnings_for(nil)["time_limit_is_too_slow#{round.id}"]).to eq I18n.t('competitions.messages.time_limit_is_too_slow', round_number: 1, event: I18n.t('events.333'))
@@ -614,8 +614,8 @@ RSpec.describe Competition do
 
   it "converts microdegrees to degrees" do
     competition = build(:competition, latitude: 40, longitude: 30)
-    expect(competition.latitude_degrees).to eq 40/1e6
-    expect(competition.longitude_degrees).to eq 30/1e6
+    expect(competition.latitude_degrees).to eq 40 / 1e6
+    expect(competition.longitude_degrees).to eq 30 / 1e6
   end
 
   it "converts degrees to microdegrees when saving" do
@@ -623,8 +623,8 @@ RSpec.describe Competition do
     competition.latitude_degrees = 3.5
     competition.longitude_degrees = 4.6
     competition.save!
-    expect(competition.latitude).to eq 3.5*1e6
-    expect(competition.longitude).to eq 4.6*1e6
+    expect(competition.latitude).to eq 3.5 * 1e6
+    expect(competition.longitude).to eq 4.6 * 1e6
   end
 
   it "ensures all attributes are defined as either cloneable or uncloneable" do
@@ -722,8 +722,8 @@ RSpec.describe Competition do
       competition.update!(
         id: "MyerComp2016",
         competition_events_attributes: [
-          { "id"=> comp_events[0].id, "event_id"=>comp_events[0].event_id, "_destroy"=>"0" },
-          { "id"=> comp_events[1].id, "event_id"=>comp_events[1].event_id, "_destroy"=>"0" },
+          { "id" => comp_events[0].id, "event_id" => comp_events[0].event_id, "_destroy" => "0" },
+          { "id" => comp_events[1].id, "event_id" => comp_events[1].event_id, "_destroy" => "0" },
         ],
       )
       new_events = competition.events
@@ -915,7 +915,7 @@ RSpec.describe Competition do
       # Create the results rounds right now so that we can use them later.
       create(:round, competition: c, total_number_of_rounds: 2, number: 1, event_id: "333")
       create(:round, competition: c, total_number_of_rounds: 2, number: 2, event_id: "333")
-      create(:round, competition: c, total_number_of_rounds: 1, number: 1, event_id: "222", cutoff: Cutoff.new(number_of_attempts: 2, attempt_result: 60*100))
+      create(:round, competition: c, total_number_of_rounds: 1, number: 1, event_id: "222", cutoff: Cutoff.new(number_of_attempts: 2, attempt_result: 60 * 100))
       c
     }
 

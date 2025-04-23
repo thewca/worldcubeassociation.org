@@ -31,7 +31,7 @@ RSpec.describe IRV do
       # MISSING_CUMULATIVE_ROUND_ID_ERROR
       # WRONG_ATTEMPTS_FOR_CUTOFF_ERROR
 
-      cutoff = Cutoff.new(number_of_attempts: 2, attempt_result: 50*100)
+      cutoff = Cutoff.new(number_of_attempts: 2, attempt_result: 50 * 100)
       cutoff_fm = Cutoff.new(number_of_attempts: 2, attempt_result: 35)
       time_limit = TimeLimit.new(centiseconds: 2.minutes.in_centiseconds, cumulative_round_ids: [])
       round44 = create(:round, competition: competition1, event_id: "444", cutoff: cutoff, time_limit: time_limit)
