@@ -7,7 +7,7 @@ class TicketsController < ApplicationController
 
   SORT_WEIGHT_LAMBDAS = {
     createdAt:
-      lambda { |ticket| ticket.created_at },
+      ->(ticket) { ticket.created_at },
   }.freeze
 
   def index

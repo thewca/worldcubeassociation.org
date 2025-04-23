@@ -125,9 +125,6 @@ Style/ClassVars:
 Style/Documentation:
   Enabled: false
 
-Style/Lambda:
-  Enabled: false
-
 Style/MultilineBlockChain:
   Enabled: false
 

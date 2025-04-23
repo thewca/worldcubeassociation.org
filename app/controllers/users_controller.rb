@@ -97,11 +97,11 @@ class UsersController < ApplicationController
     action_params = params.require(:user).permit(:otp_attempt, :password)
     # This methods store the current time in the "last_authenticated_at" session
     # variable, if password matches, or if 2FA check matches.
-    on_success = -> do
+    on_success = lambda do
       flash[:success] = I18n.t("users.edit.sensitive.success")
       session[:last_authenticated_at] = Time.now
     end
-    on_failure = -> do
+    on_failure = lambda do
       flash[:danger] = I18n.t("users.edit.sensitive.failure")
     end
     if current_user.two_factor_enabled?

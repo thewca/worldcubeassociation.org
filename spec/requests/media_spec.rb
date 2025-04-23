@@ -64,8 +64,8 @@ RSpec.describe "media" do
 
   describe 'GET #new' do
     it_should_behave_like 'must sign in',
-                          lambda { get new_medium_path },
-                          lambda { |_current_user| expect(response).to be_successful }
+                          -> { get new_medium_path },
+                          ->(_current_user) { expect(response).to be_successful }
   end
 
   describe 'POST #create' do
@@ -141,8 +141,8 @@ RSpec.describe "media" do
 
   describe 'GET #validate' do
     it_should_behave_like 'only WCT',
-                          lambda { get validate_media_path },
-                          lambda { expect(response).to be_successful }
+                          -> { get validate_media_path },
+                          -> { expect(response).to be_successful }
 
     context "signed in as WCT member" do
       before :each do
@@ -166,8 +166,8 @@ RSpec.describe "media" do
 
   describe "GET #edit" do
     it_should_behave_like 'only WCT',
-                          lambda { get edit_medium_path(medium) },
-                          lambda { expect(response).to be_successful }
+                          -> { get edit_medium_path(medium) },
+                          -> { expect(response).to be_successful }
   end
 
   describe "PATCH #update" do
@@ -180,8 +180,8 @@ RSpec.describe "media" do
     end
 
     it_should_behave_like 'only WCT',
-                          lambda { patch_medium.call(text: 'new text') },
-                          lambda { expect(response).to redirect_to edit_medium_path(medium) }
+                          -> { patch_medium.call(text: 'new text') },
+                          -> { expect(response).to redirect_to edit_medium_path(medium) }
 
     context "signed in as WCT member" do
       before :each do
@@ -221,10 +221,10 @@ RSpec.describe "media" do
   end
 
   describe "DELETE #destroy" do
-    let(:destroy_medium) { lambda { delete medium_path(medium) } }
+    let(:destroy_medium) { -> { delete medium_path(medium) } }
 
     it_should_behave_like 'only WCT',
-                          lambda { destroy_medium.call },
+                          -> { destroy_medium.call },
                           lambda {
                             expect(response).to redirect_to validate_media_path
                             expect(CompetitionMedium.find_by(id: medium.id)).to be_nil
