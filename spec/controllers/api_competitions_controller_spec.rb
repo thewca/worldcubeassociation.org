@@ -369,7 +369,7 @@ RSpec.describe Api::V0::CompetitionsController do
         get :show_wcif, params: { competition_id: 'TestComp2014' }
         expect(response).to have_http_status :ok
         parsed_body = response.parsed_body
-        expect(parsed_body['series']['competitionIds']).to eq ['HiddenComp2014', 'TestComp2014']
+        expect(parsed_body['series']['competitionIds']).to eq %w[HiddenComp2014 TestComp2014]
       end
     end
 

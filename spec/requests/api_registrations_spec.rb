@@ -34,7 +34,7 @@ RSpec.describe 'API Registrations' do
 
         registration = Registration.find_by(user_id: user.id)
         expect(registration).to be_present
-        expect(registration.events.map(&:id).sort).to eq(['333', '333oh'])
+        expect(registration.events.map(&:id).sort).to eq(%w[333 333oh])
       end
 
       it 'creates a registration history' do
@@ -267,7 +267,7 @@ RSpec.describe 'API Registrations' do
     end
 
     context 'register with qualifications' do
-      let(:events) { ['222', '333', '444', '555', 'minx', 'pyram'] }
+      let(:events) { %w[222 333 444 555 minx pyram] }
       let(:past_competition) { create(:competition, :past) }
 
       let(:comp_with_qualifications) { create(:competition, :registration_open, :enforces_easy_qualifications) }
@@ -905,7 +905,7 @@ RSpec.describe 'API Registrations' do
         :update_request,
         user_id: registration3.user_id,
         competition_id: registration3.competition.id,
-        competing: { 'event_ids' => ['333', '444'] },
+        competing: { 'event_ids' => %w[333 444] },
       )
 
       bulk_update_request = build(
@@ -926,7 +926,7 @@ RSpec.describe 'API Registrations' do
 
       expect(Registration.find_by(user_id: update_request1['user_id']).competing_status).to eq('cancelled')
       expect(Registration.find_by(user_id: update_request2['user_id']).guests).to eq(3)
-      expect(Registration.find_by(user_id: update_request3['user_id']).events.pluck(:id)).to eq(['333', '444'])
+      expect(Registration.find_by(user_id: update_request3['user_id']).events.pluck(:id)).to eq(%w[333 444])
     end
 
     it 'fails if there are validation errors' do
@@ -966,7 +966,7 @@ RSpec.describe 'API Registrations' do
 
       expect(Registration.find_by(user_id: update_request1['user_id']).competing_status).to eq('pending')
       expect(Registration.find_by(user_id: update_request2['user_id']).guests).to eq(10)
-      expect(Registration.find_by(user_id: update_request3['user_id']).events.pluck(:id)).to eq(['333', '333oh'])
+      expect(Registration.find_by(user_id: update_request3['user_id']).events.pluck(:id)).to eq(%w[333 333oh])
     end
 
     it 'returns 400 if blank JSON submitted' do

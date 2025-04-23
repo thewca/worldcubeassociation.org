@@ -7,8 +7,8 @@ ERV = RV::EventsRoundsValidator
 
 RSpec.describe ERV do
   context "on InboxResult and Result" do
-    let!(:competition1) { create(:competition, :past, event_ids: ["333", "333oh"], main_event_id: nil) }
-    let!(:competition2) { create(:competition, :past, event_ids: ["222", "555"], main_event_id: "222") }
+    let!(:competition1) { create(:competition, :past, event_ids: %w[333 333oh], main_event_id: nil) }
+    let!(:competition2) { create(:competition, :past, event_ids: %w[222 555], main_event_id: "222") }
 
     # The idea behind this variable is the following: the validator can be applied
     # on either a particular model for given competition ids, or on a set of results.

@@ -7,8 +7,8 @@ IRV = RV::IndividualResultsValidator
 
 RSpec.describe IRV do
   context "on InboxResult and Result" do
-    let!(:competition1) { create(:competition, :past, event_ids: ["333oh", "444", "333mbf", "333bf"]) }
-    let!(:competition2) { create(:competition, :past, event_ids: ["222", "555", "666", "777", "333fm"]) }
+    let!(:competition1) { create(:competition, :past, event_ids: %w[333oh 444 333mbf 333bf]) }
+    let!(:competition2) { create(:competition, :past, event_ids: %w[222 555 666 777 333fm]) }
 
     # The idea behind this variable is the following: the validator can be applied
     # on either a particular model for given competition ids, or on a set of results.
@@ -36,14 +36,14 @@ RSpec.describe IRV do
       time_limit = TimeLimit.new(centiseconds: 2.minutes.in_centiseconds, cumulative_round_ids: [])
       round44 = create(:round, competition: competition1, event_id: "444", cutoff: cutoff, time_limit: time_limit)
       round_fm = create(:round, competition: competition2, event_id: "333fm", cutoff: cutoff_fm, format_id: "m")
-      cumul_valid = TimeLimit.new(centiseconds: 8.minutes.in_centiseconds, cumulative_round_ids: ["555-r1", "666-r1"])
+      cumul_valid = TimeLimit.new(centiseconds: 8.minutes.in_centiseconds, cumulative_round_ids: %w[555-r1 666-r1])
       round55 = create(:round, competition: competition2, event_id: "555", time_limit: cumul_valid)
       create(:round, competition: competition2, event_id: "666", time_limit: cumul_valid, format_id: "m")
 
       # This cumulative time limit is invalid as it refers to an unexisting round.
       # It can happen at the moment see:
       # https://github.com/thewca/worldcubeassociation.org/issues/3254
-      cumul_invalid = TimeLimit.new(centiseconds: 8.minutes.in_centiseconds, cumulative_round_ids: ["444-r1", "777-r1"])
+      cumul_invalid = TimeLimit.new(centiseconds: 8.minutes.in_centiseconds, cumulative_round_ids: %w[444-r1 777-r1])
       create(:round, competition: competition2, event_id: "777", time_limit: cumul_invalid, format_id: "m")
 
       expected_errors = {

@@ -157,9 +157,6 @@ Rails/ActionControllerFlashBeforeRender:
 Rails/EnumHash:
   Enabled: false
 
-Style/WordArray:
-  Enabled: false
-
 Style/SymbolProc:
   AllowedMethods:
     # Capybara DSL plugins

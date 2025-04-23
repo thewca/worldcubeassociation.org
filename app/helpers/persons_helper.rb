@@ -21,7 +21,7 @@ module PersonsHelper
   end
 
   def return_podium_class(result)
-    return unless ['f', 'c'].include?(result.round_type_id) && !result.best_solve.dnf?
+    return unless %w[f c].include?(result.round_type_id) && !result.best_solve.dnf?
 
     case result.pos
     when 1

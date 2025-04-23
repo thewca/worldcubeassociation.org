@@ -1212,10 +1212,10 @@ class User < ApplicationRecord
   end
 
   DEFAULT_SERIALIZE_OPTIONS = {
-    only: ["id", "wca_id", "name", "gender",
-           "country_iso2", "created_at", "updated_at"],
-    methods: ["url", "country", "delegate_status"],
-    include: ["avatar", "teams"],
+    only: %w[id wca_id name gender
+             country_iso2 created_at updated_at],
+    methods: %w[url country delegate_status],
+    include: %w[avatar teams],
   }.freeze
 
   def serializable_hash(options = nil)
@@ -1276,10 +1276,10 @@ class User < ApplicationRecord
     {
       "type" => "object",
       "properties" => {
-        "registrantId" => { "type" => ["integer", "null"] }, # NOTE: for now registrantId may be null if the person doesn't compete.
+        "registrantId" => { "type" => %w[integer null] }, # NOTE: for now registrantId may be null if the person doesn't compete.
         "name" => { "type" => "string" },
         "wcaUserId" => { "type" => "integer" },
-        "wcaId" => { "type" => ["string", "null"] },
+        "wcaId" => { "type" => %w[string null] },
         "countryIso2" => { "type" => "string" },
         "gender" => { "type" => "string", "enum" => %w(m f o) },
         "birthdate" => { "type" => "string" },

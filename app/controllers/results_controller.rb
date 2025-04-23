@@ -41,7 +41,7 @@ class ResultsController < ApplicationController
 
     shared_constants_and_conditions
 
-    @quantities = ["100", "1000"]
+    @quantities = %w[100 1000]
 
     if @types.exclude?(params[:type])
       flash[:danger] = t(".unknown_type")
@@ -322,7 +322,7 @@ class ResultsController < ApplicationController
 
   private def shared_constants_and_conditions
     @years = Competition.non_future_years
-    @types = ["single", "average"]
+    @types = %w[single average]
 
     if params[:event_id] == EVENTS_ALL
       @event_condition = ""

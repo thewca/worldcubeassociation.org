@@ -137,7 +137,7 @@ class ScheduleActivity < ApplicationRecord
         "childActivities" => { "type" => "array", "items" => { "$ref" => "activity" } },
         "extensions" => { "type" => "array", "items" => WcifExtension.wcif_json_schema },
       },
-      "required" => ["id", "name", "activityCode", "startTime", "endTime", "childActivities"],
+      "required" => %w[id name activityCode startTime endTime childActivities],
     }
   end
 

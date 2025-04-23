@@ -144,7 +144,7 @@ RSpec.feature "Competition events management" do
   end
 
   context "confirmed competition" do
-    let!(:competition) { create(:competition, :future, :confirmed, event_ids: ["222", "444"]) }
+    let!(:competition) { create(:competition, :future, :confirmed, event_ids: %w[222 444]) }
 
     scenario "delegate cannot add events", :js do
       sign_in competition.delegates.first

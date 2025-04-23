@@ -266,12 +266,12 @@ class Person < ApplicationRecord
   end
 
   DEFAULT_SERIALIZE_OPTIONS = {
-    only: ["wca_id", "name", "gender"],
-    methods: ["url", "country_iso2"],
+    only: %w[wca_id name gender],
+    methods: %w[url country_iso2],
   }.freeze
 
   USER_COMMON_SERIALIZE_OPTIONS = {
-    only: ["name", "gender"],
+    only: %w[name gender],
     methods: ["country_iso2"],
     # grrr… some tests (and apparently also API endpoints) rely on serializing this data _through_ person.
     #   Not a good code design decision, but very cumbersome to properly refactor. Signed GB 2025-01-09

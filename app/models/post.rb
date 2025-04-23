@@ -55,8 +55,8 @@ class Post < ApplicationRecord
   end
 
   DEFAULT_SERIALIZE_OPTIONS = {
-    only: ["id", "slug", "title", "sticky", "created_at"],
-    methods: ["url", "author_name"],
+    only: %w[id slug title sticky created_at],
+    methods: %w[url author_name],
   }.freeze
 
   def serializable_hash(options = nil)

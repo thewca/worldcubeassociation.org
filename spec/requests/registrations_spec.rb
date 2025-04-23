@@ -1277,9 +1277,9 @@ def capture_order_response(record_id, amount, currency)
               "disbursement_mode" => "INSTANT",
               "seller_protection" => {
                 "status" => "ELIGIBLE",
-                "dispute_categories" => [
-                  "ITEM_NOT_RECEIVED",
-                  "UNAUTHORIZED_TRANSACTION",
+                "dispute_categories" => %w[
+                  ITEM_NOT_RECEIVED
+                  UNAUTHORIZED_TRANSACTION
                 ],
               },
               "links" => [

@@ -16,7 +16,7 @@ class Registration < ApplicationRecord
   scope :not_cancelled, -> { where.not(competing_status: 'cancelled') }
   scope :with_payments, -> { joins(:registration_payments).distinct }
   scope :wcif_ordered, -> { order(:id) }
-  scope :might_attend, -> { where(competing_status: ['accepted', 'waiting_list']) }
+  scope :might_attend, -> { where(competing_status: %w[accepted waiting_list]) }
 
   belongs_to :competition
   belongs_to :user, optional: true # A user may be deleted later. We only enforce validation directly on creation further down below.
@@ -306,7 +306,7 @@ class Registration < ApplicationRecord
 
   def self.wcif_json_schema
     {
-      "type" => ["object", "null"], # NOTE: for now there may be WCIF persons without registration.
+      "type" => %w[object null], # NOTE: for now there may be WCIF persons without registration.
       "properties" => {
         "wcaRegistrationId" => { "type" => "integer" },
         "eventIds" => { "type" => "array", "items" => { "type" => "string", "enum" => Event.pluck(:id) } },
@@ -514,7 +514,7 @@ class Registration < ApplicationRecord
   end
 
   DEFAULT_SERIALIZE_OPTIONS = {
-    only: ["id", "competition_id", "user_id"],
+    only: %w[id competition_id user_id],
     methods: ["event_ids"],
   }.freeze
 

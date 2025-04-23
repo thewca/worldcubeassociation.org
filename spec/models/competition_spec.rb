@@ -493,7 +493,7 @@ RSpec.describe Competition do
     end
 
     it "warns if championship already exists" do
-      create(:competition, :confirmed, :visible, starts: Date.new(2019, 5, 6), championship_types: ["world", "_Oceania"])
+      create(:competition, :confirmed, :visible, starts: Date.new(2019, 5, 6), championship_types: %w[world _Oceania])
 
       competition = create(:competition, starts: Date.new(2019, 10, 1), championship_types: ["world"])
       expect(competition).to be_valid
@@ -1264,7 +1264,7 @@ RSpec.describe Competition do
     end
 
     it "is true when competition is a national championship and a world championship" do
-      competition = create(:competition, events: Event.official, championship_types: ["AU", "world"], country_id: "Australia", city_name: "Melbourne, Victoria")
+      competition = create(:competition, events: Event.official, championship_types: %w[AU world], country_id: "Australia", city_name: "Melbourne, Victoria")
       expect(competition.exempt_from_wca_dues?).to be true
     end
 
@@ -1337,7 +1337,7 @@ RSpec.describe Competition do
   end
 
   context "event restrictions and limits" do
-    event_ids = ["222", "333", "444", "555"]
+    event_ids = %w[222 333 444 555]
     number_of_events = event_ids.length
     let(:competition) { build(:competition, :with_event_limit, event_ids: event_ids) }
 

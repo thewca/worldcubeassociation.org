@@ -90,7 +90,7 @@ module CompetitionsHelper
 
   def records(competition)
     text = ""
-    codes = ["WR", "AfR", "AsR", "OcR", "ER", "NAR", "SAR"]
+    codes = %w[WR AfR AsR OcR ER NAR SAR]
     codes.each do |code|
       comp_records = competition.results.where('regional_single_record=:code OR regional_average_record=:code', code: code)
       unless comp_records.empty?
@@ -133,7 +133,7 @@ module CompetitionsHelper
   def announced_class(competition)
     if competition.announced_at
       level = [Competition::ANNOUNCED_DAYS_WARNING, Competition::ANNOUNCED_DAYS_DANGER].count { |d| days_announced_before_competition(competition) > d }
-      ["alert-danger", "alert-orange", "alert-green"][level]
+      %w[alert-danger alert-orange alert-green][level]
     else
       ""
     end
@@ -141,7 +141,7 @@ module CompetitionsHelper
 
   private def report_and_results_days_to_class(days)
     level = [Competition::REPORT_AND_RESULTS_DAYS_OK, Competition::REPORT_AND_RESULTS_DAYS_WARNING, Competition::REPORT_AND_RESULTS_DAYS_DANGER].count { |d| days > d }
-    ["alert-green", "alert-success", "alert-orange", "alert-danger"][level]
+    %w[alert-green alert-success alert-orange alert-danger][level]
   end
 
   def report_content(competition)

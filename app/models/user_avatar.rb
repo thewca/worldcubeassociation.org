@@ -277,7 +277,7 @@ class UserAvatar < ApplicationRecord
 
   def self.wcif_json_schema
     {
-      "type" => ["object", "null"],
+      "type" => %w[object null],
       "properties" => {
         "url" => { "type" => "string" },
         "thumbUrl" => { "type" => "string" },
@@ -301,8 +301,8 @@ class UserAvatar < ApplicationRecord
   end
 
   DEFAULT_SERIALIZE_OPTIONS = {
-    only: ["id", "status", "thumbnail_crop_x", "thumbnail_crop_y", "thumbnail_crop_w", "thumbnail_crop_h"],
-    methods: ["url", "thumb_url", "is_default", "can_edit_thumbnail"],
+    only: %w[id status thumbnail_crop_x thumbnail_crop_y thumbnail_crop_w thumbnail_crop_h],
+    methods: %w[url thumb_url is_default can_edit_thumbnail],
   }.freeze
 
   def serializable_hash(options = nil)

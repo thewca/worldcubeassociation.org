@@ -306,9 +306,9 @@ RSpec.describe "API Competitions" do
         before { sign_in competition.organizers.first }
 
         it "can change roles for a person" do
-          persons = [{ wcaUserId: registration.user.id, roles: ["scrambler", "dataentry"] }]
+          persons = [{ wcaUserId: registration.user.id, roles: %w[scrambler dataentry] }]
           patch api_v0_competition_update_wcif_path(competition), params: { persons: persons }.to_json, headers: headers
-          expect(registration.reload.roles).to eq ["scrambler", "dataentry"]
+          expect(registration.reload.roles).to eq %w[scrambler dataentry]
         end
 
         it "cannot override organizer role" do
@@ -316,7 +316,7 @@ RSpec.describe "API Competitions" do
           patch api_v0_competition_update_wcif_path(competition), params: { persons: persons }.to_json, headers: headers
           expect(organizer_registration.reload.roles).to eq ["scrambler"]
           person_wcif = competition.reload.to_wcif["persons"].find { |person| person["wcaUserId"] == organizer_registration.user.id }
-          expect(person_wcif["roles"]).to match_array ["scrambler", "organizer"]
+          expect(person_wcif["roles"]).to match_array %w[scrambler organizer]
         end
 
         it "can change assignments for a person" do

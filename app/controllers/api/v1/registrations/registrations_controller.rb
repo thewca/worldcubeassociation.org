@@ -311,7 +311,7 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
     end
 
     def contains_organizer_fields?(request)
-      organizer_fields = ['organizer_comment', 'waiting_list_position']
+      organizer_fields = %w[organizer_comment waiting_list_position]
 
       request['competing']&.keys&.any? { |key| organizer_fields.include?(key) }
     end
