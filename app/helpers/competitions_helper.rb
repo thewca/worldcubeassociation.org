@@ -93,34 +93,34 @@ module CompetitionsHelper
     codes = ["WR", "AfR", "AsR", "OcR", "ER", "NAR", "SAR"]
     codes.each do |code|
       comp_records = competition.results.where('regional_single_record=:code OR regional_average_record=:code', code: code)
-      unless comp_records.empty?
-        text += t("competitions.competition_info.records.#{code.downcase}")
-        text += ": "
-        record_strs = comp_records.group_by(&:person_name).sort.map do |person_name, results_for_name|
-          results_by_person_id = results_for_name.group_by(&:person_id).sort
-          results_by_person_id.map do |person_id, results|
-            unique_name = if results_by_person_id.length > 1
-                            # Two or more people with the same name set records at this competition!
-                            # Append their WCA IDs to distinguish between them.
-                            "[#{person_name} (#{person_id})](#{person_url person_id})"
-                          else
-                            "[#{person_name}](#{person_url person_id})"
-                          end
-            record_strs = results.sort_by do |r|
-              round_type = RoundType.c_find(r.round_type_id)
-              [Event.c_find(r.event_id).rank, round_type.rank]
-            end.map do |result|
-              event = Event.c_find(result.event_id)
-              record_strs = []
-              record_strs << t('competitions.competition_info.regional_single_record', event_name: event.name, result: (result.to_s :best)) if result.regional_single_record == code
-              record_strs << t('competitions.competition_info.regional_average_record', event_name: event.name, result: (result.to_s :average)) if result.regional_average_record == code
-              record_strs
-            end.flatten
-            "#{unique_name}&lrm; #{record_strs.to_sentence}"
-          end
+      next if comp_records.empty?
+
+      text += t("competitions.competition_info.records.#{code.downcase}")
+      text += ": "
+      record_strs = comp_records.group_by(&:person_name).sort.map do |person_name, results_for_name|
+        results_by_person_id = results_for_name.group_by(&:person_id).sort
+        results_by_person_id.map do |person_id, results|
+          unique_name = if results_by_person_id.length > 1
+                          # Two or more people with the same name set records at this competition!
+                          # Append their WCA IDs to distinguish between them.
+                          "[#{person_name} (#{person_id})](#{person_url person_id})"
+                        else
+                          "[#{person_name}](#{person_url person_id})"
+                        end
+          record_strs = results.sort_by do |r|
+            round_type = RoundType.c_find(r.round_type_id)
+            [Event.c_find(r.event_id).rank, round_type.rank]
+          end.map do |result|
+            event = Event.c_find(result.event_id)
+            record_strs = []
+            record_strs << t('competitions.competition_info.regional_single_record', event_name: event.name, result: (result.to_s :best)) if result.regional_single_record == code
+            record_strs << t('competitions.competition_info.regional_average_record', event_name: event.name, result: (result.to_s :average)) if result.regional_average_record == code
+            record_strs
+          end.flatten
+          "#{unique_name}&lrm; #{record_strs.to_sentence}"
         end
-        text += "#{record_strs.join("; ")}.  \n" # Trailing spaces for markdown give us a <br>
       end
+      text += "#{record_strs.join("; ")}.  \n" # Trailing spaces for markdown give us a <br>
     end
 
     text

@@ -72,12 +72,12 @@ module NotificationsHelper
 
     user.actually_delegated_competitions.order_by_date
         .each do |competition|
-          if competition.user_should_post_competition_results?(user)
-            notifications << {
-              text: "The competition results for #{competition.name} have not been submitted.",
-              url: competition_submit_results_edit_path(competition),
-            }
-          end
+          next unless competition.user_should_post_competition_results?(user)
+
+          notifications << {
+            text: "The competition results for #{competition.name} have not been submitted.",
+            url: competition_submit_results_edit_path(competition),
+          }
         end
 
     notifications

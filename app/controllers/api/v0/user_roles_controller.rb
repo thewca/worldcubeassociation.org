@@ -140,13 +140,13 @@ class Api::V0::UserRolesController < Api::V0::ApiController
   private def changes_in_model(previous_changes)
     previous_changes&.map do |changed_key, values|
       changed_parameter = changed_key_to_human_readable(changed_key)
-      if changed_parameter.present?
-        UserRole::UserRoleChange.new(
-          changed_parameter: changed_parameter,
-          previous_value: changed_value_to_human_readable(values[0]),
-          new_value: changed_value_to_human_readable(values[1]),
-        )
-      end
+      next if changed_parameter.blank?
+
+      UserRole::UserRoleChange.new(
+        changed_parameter: changed_parameter,
+        previous_value: changed_value_to_human_readable(values[0]),
+        new_value: changed_value_to_human_readable(values[1]),
+      )
     end
   end
 
