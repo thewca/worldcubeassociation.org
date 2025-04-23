@@ -401,7 +401,6 @@ en:
         registration:
           attributes:
             competing_status:
-              # i18n-tasks-use t('activerecord.errors.models.registration.attributes.competing_status.exceeding_competitor_limit')
               exceeding_competitor_limit: "Competitor limit reached."
   enums:
     user:
