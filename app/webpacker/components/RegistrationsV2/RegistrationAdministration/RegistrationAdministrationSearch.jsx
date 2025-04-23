@@ -63,14 +63,14 @@ export default function RegistrationAdministrationSearch({
       const regExp = new RegExp(_.escapeRegExp(debouncedSearchText), 'i');
       const isMatch = ({ searchable }) => Object.values(searchable).some((str) => regExp.test(str));
 
-      return Object.fromEntries(
-        Object.entries(options).map(([status, { name, results }]) => [
-          status,
-          {
-            name,
-            results: _.filter(results, isMatch),
-          },
-        ]).filter(([, { results }]) => results.length > 0),
+      return _.mapValues(
+        options,
+        ({ name, results }) => ({
+          name,
+          results: _.filter(results, isMatch),
+        }),
+      ).filter(
+        ([, { results }]) => results.length > 0,
       );
     },
     [debouncedSearchText, options],
