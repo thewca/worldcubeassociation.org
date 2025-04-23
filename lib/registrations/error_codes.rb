@@ -42,5 +42,6 @@ module Registrations
     # Payment Errors
     PAYMENT_NOT_ENABLED = -6001
     PAYMENT_NOT_READY = -6002
+    DUPLICATE_PAYMENT = -6003
   end
 end
