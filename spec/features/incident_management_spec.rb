@@ -24,7 +24,7 @@ RSpec.feature "Incident Management", :js do
 
       scenario "filters by tag" do
         visit "/incidents?tags=misscramble"
-        page.find("#incidents-log-tags-container", visible: :all).has_content?("misscramble")
+        page.find_by_id('incidents-log-tags-container', visible: :all).has_content?("misscramble")
         expect(page).to have_content("First incident")
         expect(page).to have_no_content("Custom title")
         expect(page).to have_no_content("Second incident")
@@ -39,7 +39,7 @@ RSpec.feature "Incident Management", :js do
 
       scenario "filters by both" do
         visit "/incidents?tags=4b&search=Custom"
-        page.find("#incidents-log-tags-container", visible: :all).has_content?("4b")
+        page.find_by_id('incidents-log-tags-container', visible: :all).has_content?("4b")
         expect(page).to have_content("Custom title")
         expect(page).to have_no_content("Second incident")
       end
@@ -86,9 +86,9 @@ RSpec.feature "Incident Management", :js do
     feature "shows incidents log" do
       scenario "shows only resolved incidents" do
         visit "/incidents"
-        expect(page).to have_no_content("First incident")
         expect(page).to have_content("Custom title")
         expect(page).to have_content("Second incident")
+        expect(page).to have_no_content("First incident")
       end
     end
 
@@ -104,9 +104,10 @@ RSpec.feature "Incident Management", :js do
 
       scenario "delegates cant see information from pending incidents" do
         visit incident_path(incident1)
-        expect(page).to have_no_content(incident3.public_summary)
-        expect(page).to have_no_content(incident3.private_description)
-        expect(page).to have_no_content(incident3.private_wrc_decision)
+        expect(page).to have_current_path "/"
+        expect(page).to have_no_content(incident1.public_summary)
+        expect(page).to have_no_content(incident1.private_description)
+        expect(page).to have_no_content(incident1.private_wrc_decision)
       end
     end
   end
@@ -121,9 +122,9 @@ RSpec.feature "Incident Management", :js do
     feature "shows incidents log" do
       scenario "shows only resolved incidents" do
         visit "/incidents"
-        expect(page).to have_no_content("First incident")
         expect(page).to have_content("Custom title")
         expect(page).to have_content("Second incident")
+        expect(page).to have_no_content("First incident")
       end
     end
 
@@ -141,9 +142,9 @@ RSpec.feature "Incident Management", :js do
     feature "shows incidents log" do
       scenario "shows only resolved incidents" do
         visit "/incidents"
-        expect(page).to have_no_content("First incident")
         expect(page).to have_content("Custom title")
         expect(page).to have_content("Second incident")
+        expect(page).to have_no_content("First incident")
       end
     end
 
