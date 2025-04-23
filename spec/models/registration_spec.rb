@@ -781,7 +781,7 @@ RSpec.describe Registration do
       let!(:prevented_reg) { create(:registration, competition: limited_comp) }
 
       # Fails because waiting_list_position persists when it shouldnt; #11173 should fix
-      it 'if competitor limit is reached and first on waiting list', :exclude do
+      it 'if competitor limit is reached and first on waiting list' do
         create_list(:registration, 5, :accepted, competition: limited_comp)
 
         waiting_list_reg = create(:registration, :waiting_list, competition: limited_comp)
@@ -789,11 +789,11 @@ RSpec.describe Registration do
         expect(waiting_list_reg.reload.competing_status).to eq('waiting_list')
 
         waiting_list_reg.attempt_auto_accept
-        expect(waiting_list_reg.registration_history.last[:changed_attributes][:auto_accept_failure_reasons]).to eq('Validation failed: Competitor limit The competition is full.')
+        expect(waiting_list_reg.registration_history.last[:changed_attributes][:auto_accept_failure_reasons]).to eq(['Competitor limit reached.'].to_s)
         expect(waiting_list_reg.reload.competing_status).to eq('waiting_list')
       end
 
-      it 'if registration is part of a series with an already-accepted registration' do
+      it 'if registration is part of a series with an already-accepted registration', :only do
         registration = create(:registration, :accepted)
 
         series = create(:competition_series)
@@ -805,8 +805,8 @@ RSpec.describe Registration do
         create(:registration_payment, :skip_create_hook, registration: reg_b, competition: competition_b)
 
         reg_b.attempt_auto_accept
-        error_json = { competition_id: ['You can only be accepted for one Series competition at a time.'] }.to_s
-        expect(reg_b.registration_history.last[:changed_attributes][:auto_accept_failure_reasons]).to eq(error_json)
+        error_string = ['You can only be accepted for one Series competition at a time.'].to_s
+        expect(reg_b.registration_history.last[:changed_attributes][:auto_accept_failure_reasons]).to eq(error_string)
         expect(reg_b.reload.competing_status).to eq('pending')
       end
     end

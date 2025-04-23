@@ -396,6 +396,12 @@ en:
         extra_file: "Any extra file?"
         start_date: "Acknowledged since"
         end_date: "Acknowledged until"
+    errors:
+      models:
+        registration:
+          attributes:
+            competing_status:
+              exceeding_competitor_limit: "Competitor limit reached."
   enums:
     user:
       gender:

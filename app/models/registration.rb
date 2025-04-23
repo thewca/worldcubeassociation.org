@@ -541,7 +541,7 @@ class Registration < ApplicationRecord
       )
       true
     else
-      log_auto_accept_failure(auto_accepted_registration.errors.as_json)
+      log_auto_accept_failure(auto_accepted_registration.errors.messages.values.flatten)
       false
     end
   end
