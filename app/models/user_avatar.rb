@@ -174,7 +174,7 @@ class UserAvatar < ApplicationRecord
              # In the long run, the active_storage? check should disappear.
              #   The local-fs enum entry is only used for the dummy avatar, and that one is never deleted.
              #   The s3-legacy-cdn will be replaced/migrated in the future.
-             if: [:active_storage?, :status_previously_changed?],
+             if: %i[active_storage? status_previously_changed?],
              unless: :destroyed?
 
   def move_image_if_approved
@@ -216,11 +216,11 @@ class UserAvatar < ApplicationRecord
   end
 
   after_save :invalidate_thumbnail_if_approved,
-             if: [:using_cdn?, :approved?],
+             if: %i[using_cdn? approved?],
              # If the thumbnail details changed, Rails will generate a new key anyways,
              #   and it is not necessary to manually invalidate
              #   because the new ActiveStorage key will result in a new, fresh URL
-             unless: [:destroyed?, :thumbnail_previously_changed?]
+             unless: %i[destroyed? thumbnail_previously_changed?]
 
   def invalidate_thumbnail_if_approved
     return if AppSecrets.CDN_AVATARS_DISTRIBUTION_ID.blank?

@@ -94,7 +94,7 @@ class Competition < ApplicationRecord
     restricted: 2,
   }, prefix: true
 
-  enum :competitor_can_cancel, [:not_accepted, :always, :unpaid], prefix: true
+  enum :competitor_can_cancel, %i[not_accepted always unpaid], prefix: true
 
   CLONEABLE_ATTRIBUTES = %w(
     city_name
@@ -1816,7 +1816,7 @@ class Competition < ApplicationRecord
     includes_associations = [
       { assignments: [:schedule_activity] },
       { user: {
-        person: [:ranks_single, :ranks_average],
+        person: %i[ranks_single ranks_average],
       } },
       :wcif_extensions,
       :events,
@@ -1841,7 +1841,7 @@ class Competition < ApplicationRecord
 
   def events_wcif
     includes_associations = [
-      { rounds: [:competition_event, :wcif_extensions] },
+      { rounds: %i[competition_event wcif_extensions] },
       :wcif_extensions,
     ]
     competition_events
@@ -1855,7 +1855,7 @@ class Competition < ApplicationRecord
       {
         venue_rooms: [
           :wcif_extensions,
-          { schedule_activities: [{ child_activities: [:child_activities, :wcif_extensions] }, :wcif_extensions] },
+          { schedule_activities: [{ child_activities: %i[child_activities wcif_extensions] }, :wcif_extensions] },
         ],
       },
       :wcif_extensions,
@@ -1920,7 +1920,7 @@ class Competition < ApplicationRecord
   def set_wcif_events!(wcif_events, current_user)
     # Remove extra events.
     competition_events_includes_assotiations = [
-      { rounds: [:competition_event, :wcif_extensions] },
+      { rounds: %i[competition_event wcif_extensions] },
       :wcif_extensions,
     ]
     self.competition_events.includes(competition_events_includes_assotiations).find_each do |competition_event|
@@ -2032,7 +2032,7 @@ class Competition < ApplicationRecord
       {
         venue_rooms: [
           :wcif_extensions,
-          { schedule_activities: [{ child_activities: [:child_activities, :wcif_extensions] }, :wcif_extensions] },
+          { schedule_activities: [{ child_activities: %i[child_activities wcif_extensions] }, :wcif_extensions] },
         ],
       },
       :wcif_extensions,

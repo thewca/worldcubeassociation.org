@@ -98,7 +98,7 @@ class User < ApplicationRecord
 
   accepts_nested_attributes_for :user_preferred_events, allow_destroy: true
 
-  strip_attributes only: [:wca_id, :country_iso2]
+  strip_attributes only: %i[wca_id country_iso2]
 
   devise :registerable,
          :recoverable, :rememberable, :trackable, :validatable,
@@ -145,7 +145,7 @@ class User < ApplicationRecord
   # signing up for an account.
   attr_accessor :sign_up_panel_to_show
 
-  ALLOWABLE_GENDERS = [:m, :f, :o].freeze
+  ALLOWABLE_GENDERS = %i[m f o].freeze
   enum :gender, ALLOWABLE_GENDERS.index_with(&:to_s)
   GENDER_LABEL_METHOD = lambda do |g|
     {
@@ -588,44 +588,44 @@ class User < ApplicationRecord
   end
 
   def self.panel_pages
-    [
-      :postingDashboard,
-      :editPerson,
-      :regionsManager,
-      :groupsManagerAdmin,
-      :bannedCompetitors,
-      :translators,
-      :duesExport,
-      :countryBands,
-      :delegateProbations,
-      :xeroUsers,
-      :duesRedirect,
-      :delegateForms,
-      :regions,
-      :subordinateDelegateClaims,
-      :subordinateUpcomingCompetitions,
-      :leaderForms,
-      :groupsManager,
-      :importantLinks,
-      :seniorDelegatesList,
-      :leadersAdmin,
-      :boardEditor,
-      :officersEditor,
-      :regionsAdmin,
-      :downloadVoters,
-      :generateDbToken,
-      :approveAvatars,
-      :editPersonRequests,
-      :anonymizationScript,
-      :serverStatus,
-      :runValidators,
-      :createNewComers,
-      :checkRecords,
-      :computeAuxiliaryData,
-      :generateDataExports,
-      :fixResults,
-      :mergeProfiles,
-      :reassignConnectedWcaId,
+    %i[
+      postingDashboard
+      editPerson
+      regionsManager
+      groupsManagerAdmin
+      bannedCompetitors
+      translators
+      duesExport
+      countryBands
+      delegateProbations
+      xeroUsers
+      duesRedirect
+      delegateForms
+      regions
+      subordinateDelegateClaims
+      subordinateUpcomingCompetitions
+      leaderForms
+      groupsManager
+      importantLinks
+      seniorDelegatesList
+      leadersAdmin
+      boardEditor
+      officersEditor
+      regionsAdmin
+      downloadVoters
+      generateDbToken
+      approveAvatars
+      editPersonRequests
+      anonymizationScript
+      serverStatus
+      runValidators
+      createNewComers
+      checkRecords
+      computeAuxiliaryData
+      generateDataExports
+      fixResults
+      mergeProfiles
+      reassignConnectedWcaId
     ].index_with { |panel_page| panel_page.to_s.underscore.dasherize }
   end
 
@@ -1034,11 +1034,11 @@ class User < ApplicationRecord
            delegate_url: Rails.application.routes.url_helpers.delegates_path).html_safe
   end
 
-  CLAIM_WCA_ID_PARAMS = [
-    :claiming_wca_id,
-    :unconfirmed_wca_id,
-    :delegate_id_to_handle_wca_id_claim,
-    :dob_verification,
+  CLAIM_WCA_ID_PARAMS = %i[
+    claiming_wca_id
+    unconfirmed_wca_id
+    delegate_id_to_handle_wca_id_claim
+    dob_verification
   ].freeze
 
   def editable_fields_of_user(user)
@@ -1062,7 +1062,7 @@ class User < ApplicationRecord
         email preferred_events results_notifications_enabled
         registration_notifications_enabled
       )
-      fields << { user_preferred_events_attributes: [:id, :event_id, :_destroy] }
+      fields << { user_preferred_events_attributes: %i[id event_id _destroy] }
       fields += %i(receive_delegate_reports delegate_reports_region) if user.staff_or_any_delegate?
     end
     fields
@@ -1342,7 +1342,7 @@ class User < ApplicationRecord
 
   def accepted_competitions
     self.accepted_registrations
-        .includes(competition: [:delegates, :organizers, :events])
+        .includes(competition: %i[delegates organizers events])
         .map(&:competition)
   end
 
@@ -1431,10 +1431,10 @@ class User < ApplicationRecord
                       access_grant.as_json(
                         include: {
                           application: {
-                            only: [:name, :redirect_uri],
+                            only: %i[name redirect_uri],
                             include: {
                               owner: {
-                                only: [:name, :email],
+                                only: %i[name email],
                               },
                             },
                           },

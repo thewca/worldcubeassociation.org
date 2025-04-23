@@ -262,7 +262,7 @@ class Person < ApplicationRecord
   end
 
   def self.fields_edit_requestable
-    [:name, :country_iso2, :gender, :dob].freeze
+    %i[name country_iso2 gender dob].freeze
   end
 
   DEFAULT_SERIALIZE_OPTIONS = {

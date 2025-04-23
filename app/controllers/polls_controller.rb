@@ -2,8 +2,8 @@
 
 class PollsController < ApplicationController
   before_action :authenticate_user!
-  before_action -> { redirect_to_root_unless_user(:can_create_poll?) }, only: [:new, :create, :update, :destroy]
-  before_action -> { redirect_to_root_unless_user(:can_view_poll?) }, only: [:index, :results]
+  before_action -> { redirect_to_root_unless_user(:can_create_poll?) }, only: %i[new create update destroy]
+  before_action -> { redirect_to_root_unless_user(:can_view_poll?) }, only: %i[index results]
 
   def index
     @polls = current_user.can_create_poll? ? Poll.all : Poll.confirmed
@@ -68,7 +68,7 @@ class PollsController < ApplicationController
       :multiple,
       :deadline,
       :confirmed_at,
-      poll_options_attributes: [:id, :description, :_destroy],
+      poll_options_attributes: %i[id description _destroy],
     ).tap do |poll_params|
       poll_params[:confirmed_at] = Time.now if params[:commit] == "Confirm" && current_user.can_create_poll?
     end

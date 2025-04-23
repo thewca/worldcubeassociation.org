@@ -146,9 +146,6 @@ Layout/IndentationConsistency:
 Style/StringLiteralsInInterpolation:
   Enabled: false
 
-Style/SymbolArray:
-  Enabled: false
-
 # This causes a bunch of false positives as of 2025-03-17
 Rails/ActionControllerFlashBeforeRender:
   Enabled: false

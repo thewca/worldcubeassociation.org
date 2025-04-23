@@ -375,7 +375,7 @@ class Registration < ApplicationRecord
 
   delegate :allow_registration_without_qualification?, to: :competition, allow_nil: true
 
-  strip_attributes only: [:comments, :administrative_notes]
+  strip_attributes only: %i[comments administrative_notes]
 
   validates :comments, length: { maximum: COMMENT_CHARACTER_LIMIT, frontend_code: Registrations::ErrorCodes::USER_COMMENT_TOO_LONG },
                        presence: { message: I18n.t('registrations.errors.cannot_register_without_comment'), if: :force_comment?, frontend_code: Registrations::ErrorCodes::REQUIRED_COMMENT_MISSING }
@@ -415,10 +415,10 @@ class Registration < ApplicationRecord
 
   delegate :newcomer_month_eligible?, to: :user
 
-  validate :cannot_exceed_newcomer_limit, if: [
-    :trying_to_accept?,
-    :competitor_limit_enabled?,
-    :enforce_newcomer_month_reservations?,
+  validate :cannot_exceed_newcomer_limit, if: %i[
+    trying_to_accept?
+    competitor_limit_enabled?
+    enforce_newcomer_month_reservations?
   ], unless: :newcomer_month_eligible?
 
   private def cannot_exceed_newcomer_limit
@@ -435,7 +435,7 @@ class Registration < ApplicationRecord
 
   delegate :competitor_limit_enabled?, :enforce_newcomer_month_reservations?, to: :competition
 
-  validate :cannot_exceed_competitor_limit, if: [:trying_to_accept?, :competitor_limit_enabled?]
+  validate :cannot_exceed_competitor_limit, if: %i[trying_to_accept? competitor_limit_enabled?]
   private def cannot_exceed_competitor_limit
     return unless competition.registrations.accepted_and_competing_count >= competition.competitor_limit
 
@@ -446,7 +446,7 @@ class Registration < ApplicationRecord
     )
   end
 
-  validate :only_one_accepted_per_series, if: [:part_of_competition_series?, :trying_to_accept?]
+  validate :only_one_accepted_per_series, if: %i[part_of_competition_series? trying_to_accept?]
   private def only_one_accepted_per_series
     return unless series_sibling_registrations.accepted.any?
 
@@ -476,7 +476,7 @@ class Registration < ApplicationRecord
     competing_status_changed? && (competing_status_cancelled? || competing_status_rejected?)
   end
 
-  validate :not_changing_events_when_cancelling, if: [:trying_to_cancel?, :tracked_event_ids?, :competition_events_changed?]
+  validate :not_changing_events_when_cancelling, if: %i[trying_to_cancel? tracked_event_ids? competition_events_changed?]
   private def not_changing_events_when_cancelling
     errors.add(:competition_events, :cannot_change_events_when_cancelling, message: I18n.t('registrations.errors.cannot_change_events_when_cancelling'), frontend_code: Registrations::ErrorCodes::INVALID_REQUEST_DATA)
   end

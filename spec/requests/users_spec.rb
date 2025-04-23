@@ -174,7 +174,7 @@ RSpec.describe "users" do
       answer_sso = SingleSignOn.parse(query_string_from_location(response.location))
       expect(answer_sso.moderator).to be true
       expect(answer_sso.external_id).to eq user.id.to_s
-      [:name, :email, :avatar_url].each do |a|
+      %i[name email avatar_url].each do |a|
         expect(answer_sso.send(a)).to eq user.send(a)
       end
       expect(answer_sso.add_groups).to eq "wct"
