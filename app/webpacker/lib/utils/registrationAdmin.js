@@ -32,6 +32,9 @@ export const getStatusColor = (key) => {
     case 'rejected':
       return REJECTED_COLOR;
 
+    case 'nonCompeting':
+      return NON_COMPETING_COLOR;
+
     default:
       return undefined;
   }
@@ -53,6 +56,9 @@ export const getStatusIcon = (key) => {
 
     case 'rejected':
       return REJECTED_ICON;
+
+    case 'nonCompeting':
+      return NON_COMPETING_ICON;
 
     default:
       return undefined;
