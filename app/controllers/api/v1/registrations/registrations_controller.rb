@@ -306,7 +306,7 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
       total_accepted_registrations_after_update = competition.registrations.accepted_and_competing_count + registrations_to_be_accepted
 
       competition.competitor_limit_enabled &&
-        registrations_to_be_accepted > 0 &&
+        registrations_to_be_accepted.positive? &&
         total_accepted_registrations_after_update > competition.competitor_limit
     end
 

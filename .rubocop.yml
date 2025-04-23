@@ -134,9 +134,6 @@ Style/MultilineBlockChain:
 Style/Next:
   Enabled: false
 
-Style/NumericPredicate:
-  Enabled: false
-
 Style/PercentLiteralDelimiters:
   Enabled: false
 

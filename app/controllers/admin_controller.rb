@@ -76,7 +76,7 @@ class AdminController < ApplicationController
     }
 
     @existing_data = data_tables.transform_values { |table| table.where(competition_id: @competition.id).count }
-    @inbox_step = RESULTS_POSTING_STEPS.find { |inbox| @existing_data[inbox] > 0 }
+    @inbox_step = RESULTS_POSTING_STEPS.find { |inbox| @existing_data[inbox].positive? }
 
     yield if block_given?
   end
