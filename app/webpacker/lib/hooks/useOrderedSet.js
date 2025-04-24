@@ -74,10 +74,17 @@ export default function useOrderedSet(initialArray = []) {
   return useOrderedSetInternal(array, dispatch);
 }
 
-export const useOrderedSetWrapper = (arrayState, setArrayState) => {
-  const dispatchExternal = useCallback((action) => {
-    setArrayState((array) => reducer({ array }, action).array);
-  }, [setArrayState]);
+export const useOrderedSetWrapper = (arrayState, setArrayState, referenceSet = undefined) => {
+  const dispatchExternal = useCallback((action) => setArrayState((array) => {
+    const nextState = reducer({ array }, action).array;
+
+    if (referenceSet) {
+      // cheap way of sorting `nextState` by the order of elements determined in `referenceSet`,
+      return _.intersection(referenceSet, nextState);
+    }
+
+    return nextState;
+  }), [setArrayState, referenceSet]);
 
   return useOrderedSetInternal(arrayState, dispatchExternal);
 };
