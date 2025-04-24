@@ -112,7 +112,7 @@ export default function CompetingStep({
         'negative',
       ));
     },
-    onSuccess: (data) => {
+    onSuccess: (data, variables) => {
       queryClient.setQueryData(
         ['registration', competitionInfo.id, user.id],
         (prevRegistration) => ({
@@ -121,8 +121,12 @@ export default function CompetingStep({
         }),
       );
       formSuccess(data.registration);
+
+      const competingStatus = variables.competing.registration_status
+        || data.registration.competing.registration_status;
+
       // Going from cancelled -> pending
-      if (registration.competing.registration_status === 'cancelled') {
+      if (competingStatus === 'cancelled') {
         // i18n-tasks-use t('registrations.flash.registered')
         dispatch(showMessage('registrations.flash.registered', 'positive'));
         // Not changing status
@@ -208,7 +212,7 @@ export default function CompetingStep({
       if (competitionInfo.allow_registration_edits) {
         dispatch(showMessage('competitions.registration_v2.update.being_updated', 'basic'));
         updateRegistrationMutation({
-          user_id: registration.user_id,
+          user_id: user.id,
           competition_id: competitionInfo.id,
           competing: {
             comment: hasCommentChanged ? comment : undefined,
@@ -229,7 +233,7 @@ export default function CompetingStep({
     nextStep,
     updateRegistrationMutation,
     competitionInfo,
-    registration?.user_id,
+    user,
     hasCommentChanged,
     comment,
     hasEventsChanged,
@@ -240,7 +244,7 @@ export default function CompetingStep({
 
   const actionReRegister = useCallback(() => {
     updateRegistrationMutation({
-      user_id: registration.user_id,
+      user_id: user.id,
       competition_id: competitionInfo.id,
       competing: {
         comment,
@@ -251,7 +255,7 @@ export default function CompetingStep({
     });
   }, [
     updateRegistrationMutation,
-    registration?.user_id,
+    user.id,
     competitionInfo.id,
     comment,
     selectedEventIds.asArray,
