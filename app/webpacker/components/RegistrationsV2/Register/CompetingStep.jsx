@@ -29,6 +29,8 @@ import { eventQualificationToString } from '../../../lib/utils/wcif';
 import { hasNotPassed } from '../../../lib/utils/dates';
 import { useRegistration } from '../lib/RegistrationProvider';
 import useSet from '../../../lib/hooks/useSet';
+import { useFormObjectState } from '../../wca/FormBuilder/provider/FormObjectProvider';
+import { useInputUpdater } from '../../../lib/hooks/useInputState';
 
 const maxCommentLength = 240;
 
@@ -66,7 +68,9 @@ export default function CompetingStep({
 
   const confirm = useConfirm();
 
-  const [comment, setComment] = useState('');
+  const [comment, setCommentRaw] = useFormObjectState('comment', ['competing']);
+  const setComment = useInputUpdater(setCommentRaw);
+
   const initialSelectedEvents = competitionInfo.events_per_registration_limit ? [] : preferredEvents
     .filter((event) => {
       const preferredEventHeld = competitionInfo.event_ids.includes(event);
@@ -80,16 +84,15 @@ export default function CompetingStep({
   // Don't set an error state before the user has interacted with the eventPicker
   const [hasInteracted, setHasInteracted] = useState(false);
 
-  const [guests, setGuests] = useState(0);
+  const [guests, setGuestsRaw] = useFormObjectState('guests');
+  const setGuests = useInputUpdater(setGuestsRaw, true);
 
   // using selectedEventIds.update in dependency array causes warnings
   const { update: setSelectedEventIds } = selectedEventIds;
 
   useEffect(() => {
     if (isRegistered && registration.competing.registration_status !== 'cancelled') {
-      setComment(registration.competing.comment ?? '');
       setSelectedEventIds(registration.competing.event_ids);
-      setGuests(registration.guests);
     }
   }, [isRegistered, registration, setSelectedEventIds]);
 
@@ -384,7 +387,7 @@ export default function CompetingStep({
             <Form.TextArea
               required={Boolean(competitionInfo.force_comment_in_registration)}
               maxLength={maxCommentLength}
-              onChange={(event, data) => setComment(data.value)}
+              onChange={setComment}
               value={comment}
               id="comment"
               error={competitionInfo.force_comment_in_registration && comment.trim().length === 0 && I18n.t('registrations.errors.cannot_register_without_comment')}
@@ -397,9 +400,7 @@ export default function CompetingStep({
                 id="guest-dropdown"
                 type="number"
                 value={guests}
-                onChange={(event, data) => {
-                  setGuests(Number.parseInt(data.value, 10));
-                }}
+                onChange={setGuests}
                 min="0"
                 max={guestLimit}
                 error={guestsRestricted && guests > guestLimit && I18n.t('competitions.competition_info.guest_limit', { count: guestLimit })}

@@ -12,6 +12,7 @@ import { hasNotPassed, hasPassed } from '../../../lib/utils/dates';
 import RegistrationNotAllowedMessage from './RegistrationNotAllowedMessage';
 import RegistrationClosingMessage from './RegistrationClosingMessage';
 import usePerpetualState from '../hooks/usePerpetualState';
+import FormObjectProvider from "../../wca/FormBuilder/provider/FormObjectProvider";
 
 // The following states should show the Panel even when registration is already closed.
 //   (You can think of this as "is there a non-cancelled, non-rejected registration?)
@@ -105,7 +106,7 @@ function Register({
       <RegistrationOpeningMessage registrationStart={competitionInfo.registration_open} />
       <RegistrationClosingMessage registrationEnd={competitionInfo.registration_close} />
       {showRegistrationPanel && (
-        <>
+        <FormObjectProvider initialObject={registration}>
           <RegistrationMessage />
           <StepPanel
             user={userInfo}
@@ -117,7 +118,7 @@ function Register({
             qualifications={qualifications}
             registrationCurrentlyOpen={registrationCurrentlyOpen}
           />
-        </>
+        </FormObjectProvider>
       )}
     </>
   );

@@ -95,6 +95,7 @@ export const useFormDispatch = () => useFormContext().dispatch;
 export const useFormObject = () => useFormContext().object;
 export const useFormInitialObject = () => useFormContext().initialObject;
 
+export const useFormSuccessHandler = () => useFormContext().onSuccess;
 export const useFormErrorHandler = () => useFormContext().onError;
 
 export const useFormObjectSection = () => {
@@ -110,4 +111,19 @@ export const useFormUpdateAction = () => {
   return useCallback((key, value, sections = []) => (
     dispatch(updateFormValue(key, value, sections))
   ), [dispatch]);
+};
+
+export const useFormObjectState = (key, sections = []) => {
+  const formObject = useFormObject();
+
+  const formSection = readValueRecursive(formObject, sections);
+  const formValue = formSection[key];
+
+  const formUpdater = useFormUpdateAction();
+  const setFormValue = useCallback(
+    (value) => formUpdater(key, value, sections),
+    [formUpdater, key, sections],
+  );
+
+  return [formValue, setFormValue];
 };
