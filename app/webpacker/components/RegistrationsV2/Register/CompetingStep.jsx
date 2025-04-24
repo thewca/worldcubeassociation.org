@@ -29,7 +29,11 @@ import { eventQualificationToString } from '../../../lib/utils/wcif';
 import { hasNotPassed } from '../../../lib/utils/dates';
 import { useRegistration } from '../lib/RegistrationProvider';
 import useSet from '../../../lib/hooks/useSet';
-import { useFormObjectState, useHasFormValueChanged } from '../../wca/FormBuilder/provider/FormObjectProvider';
+import {
+  useFormObjectState,
+  useFormSuccessHandler,
+  useHasFormValueChanged
+} from '../../wca/FormBuilder/provider/FormObjectProvider';
 import { useInputUpdater } from '../../../lib/hooks/useInputState';
 
 const maxCommentLength = 240;
@@ -104,6 +108,8 @@ export default function CompetingStep({
   }, [isPolling, isProcessing, nextStep, refetchRegistration]);
 
   const queryClient = useQueryClient();
+  const formSuccess = useFormSuccessHandler();
+
   const { mutate: updateRegistrationMutation, isPending: isUpdating } = useMutation({
     mutationFn: updateRegistration,
     onError: (data) => {
@@ -121,6 +127,7 @@ export default function CompetingStep({
           payment: registration.payment,
         },
       );
+      formSuccess(data.registration);
       // Going from cancelled -> pending
       if (registration.competing.registration_status === 'cancelled') {
         // i18n-tasks-use t('registrations.flash.registered')
@@ -147,6 +154,7 @@ export default function CompetingStep({
       // We can't update the registration yet, because there might be more steps needed
       // And the Registration might still be processing
       dispatch(showMessage('registrations.flash.registered', 'positive'));
+      formSuccess();
       startPolling();
     },
   });
