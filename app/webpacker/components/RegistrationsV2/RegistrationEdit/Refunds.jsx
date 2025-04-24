@@ -41,7 +41,7 @@ export default function Refunds({
   }
 
   if (refunds.length === 0) {
-    return <Message warning>All charges have been refunded</Message>;
+    return <Message warning>{I18n.t('payments.messages.charges_refunded')}</Message>;
   }
 
   return (

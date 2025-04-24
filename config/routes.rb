@@ -199,7 +199,7 @@ Rails.application.routes.draw do
 
   get 'panel/pending-claims(/:user_id)' => 'panel#pending_claims_for_subordinate_delegates', as: 'pending_claims'
   scope 'panel' do
-    get 'staff' => 'panel#staff', as: :panel_staff
+    get 'volunteer' => 'panel#volunteer', as: :panel_volunteer
     get 'generate_db_token' => 'panel#generate_db_token', as: :panel_generate_db_token
     get 'competition_count' => 'panel#competition_count', as: :panel_competition_count
     get 'validators_for_competition_list' => 'panel#validators_for_competition_list', as: :panel_validators_for_competition_list
