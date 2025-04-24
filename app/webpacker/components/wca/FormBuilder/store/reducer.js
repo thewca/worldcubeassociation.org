@@ -18,9 +18,9 @@ const updateValueRecursive = (formValues, key, value, sectionKeys = []) => {
 };
 
 const reducers = {
-  [ChangesSaved]: (state) => ({
+  [ChangesSaved]: (state, { payload }) => ({
     ...state,
-    initialObject: state.object,
+    initialObject: payload.override || state.object,
   }),
 
   [SetErrors]: (state, { payload }) => ({
