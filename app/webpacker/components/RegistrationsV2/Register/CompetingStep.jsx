@@ -32,7 +32,7 @@ import useSet from '../../../lib/hooks/useSet';
 import {
   useFormObjectState,
   useFormSuccessHandler,
-  useHasFormValueChanged
+  useHasFormValueChanged,
 } from '../../wca/FormBuilder/provider/FormObjectProvider';
 import { useInputUpdater } from '../../../lib/hooks/useInputState';
 
@@ -222,7 +222,7 @@ export default function CompetingStep({
             comment: hasCommentChanged ? comment : undefined,
             event_ids: hasEventsChanged ? selectedEventIds.asArray : undefined,
           },
-          guests,
+          guests: hasGuestsChanged ? guests : undefined,
         });
       } else {
         const updateMessage = `\n${hasCommentChanged ? `Comment: ${comment}\n` : ''}${hasEventsChanged ? `Events: ${selectedEventIds.asArray.map((eventId) => events.byId[eventId].name).join(', ')}\n` : ''}${hasGuestsChanged ? `Guests: ${guests}\n` : ''}`;
