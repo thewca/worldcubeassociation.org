@@ -105,6 +105,7 @@ export default function CompetingStep({
 
   const { mutate: updateRegistrationMutation, isPending: isUpdating } = useMutation({
     mutationFn: updateRegistration,
+    onMutate: () => dispatch(showMessage('competitions.registration_v2.update.being_updated', 'basic')),
     onError: (data) => {
       const { error } = data.json;
       dispatch(showMessage(
@@ -210,7 +211,6 @@ export default function CompetingStep({
       content: I18n.t(competitionInfo.allow_registration_edits ? 'competitions.registration_v2.update.update_confirm' : 'competitions.registration_v2.update.update_confirm_contact'),
     }).then(() => {
       if (competitionInfo.allow_registration_edits) {
-        dispatch(showMessage('competitions.registration_v2.update.being_updated', 'basic'));
         updateRegistrationMutation({
           user_id: user.id,
           competition_id: competitionInfo.id,
@@ -229,7 +229,6 @@ export default function CompetingStep({
     });
   }, [
     confirm,
-    dispatch,
     nextStep,
     updateRegistrationMutation,
     competitionInfo,
