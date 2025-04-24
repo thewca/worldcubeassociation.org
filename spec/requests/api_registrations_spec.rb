@@ -1319,7 +1319,7 @@ RSpec.describe 'API Registrations' do
 
         body = response.parsed_body
         expect(response).to have_http_status(:forbidden)
-        expect(body).to eq({ error: Registrations::ErrorCodes::DUPLICATE_PAYMENT }.with_indifferent_access)
+        expect(body).to eq({ error: Registrations::ErrorCodes::NO_OUTSTANDING_PAYMENT }.with_indifferent_access)
       end
 
       it 'refuses ticket create request if registration is closed' do

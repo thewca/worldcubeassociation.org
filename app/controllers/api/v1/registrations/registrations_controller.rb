@@ -225,7 +225,7 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
 
     @registration = Registration.find_by(user: @current_user, competition: @competition)
     return render_error(:forbidden, Registrations::ErrorCodes::PAYMENT_NOT_READY) if @registration.nil?
-    render_error(:forbidden, Registrations::ErrorCodes::DUPLICATE_PAYMENT) if @registration.outstanding_entry_fees == 0
+    render_error(:forbidden, Registrations::ErrorCodes::NO_OUTSTANDING_PAYMENT) if @registration.outstanding_entry_fees == 0
   end
 
   def payment_ticket
