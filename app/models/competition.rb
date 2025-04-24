@@ -54,7 +54,7 @@ class Competition < ApplicationRecord
   scope :over, -> { where("results_posted_at IS NOT NULL OR end_date < ?", Date.today) }
   scope :not_over, -> { where("results_posted_at IS NULL AND end_date >= ?", Date.today) }
   scope :between_dates, ->(start_date, end_date) { where("start_date <= ? AND end_date >= ?", end_date, start_date) }
-  scope :end_date_passed_since, lambda { |num_days| where(end_date: ...(num_days.days.ago)) }
+  scope :end_date_passed_since, ->(num_days) { where(end_date: ...(num_days.days.ago)) }
   scope :belongs_to_region, lambda { |region_id|
     joins(:country).where(
       "country_id = :region_id OR countries.continent_id = :region_id", region_id: region_id

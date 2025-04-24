@@ -631,7 +631,7 @@ class User < ApplicationRecord
 
   def self.panel_notifications
     {
-      self.panel_pages[:approveAvatars] => lambda { User.where.not(pending_avatar: nil).count },
+      self.panel_pages[:approveAvatars] => -> { User.where.not(pending_avatar: nil).count },
     }
   end
 

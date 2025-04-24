@@ -16,8 +16,8 @@ RSpec.describe SortHelper do
     }
     let(:sort_weight_lambdas) {
       {
-        name: lambda { |e| e[:name] },
-        age: lambda { |e| e[:age] },
+        name: ->(e) { e[:name] },
+        age: ->(e) { e[:age] },
       }
     }
 
