@@ -174,7 +174,7 @@ module ApplicationHelper
     minutes = ((total_seconds % 3600) / 60).floor
     seconds = total_seconds % 60
 
-    [hours > 0 ? "#{hours}h " : '', minutes > 0 ? "#{minutes}m " : '', format('%.2f', seconds), 's'].join
+    [hours.positive? ? "#{hours}h " : '', minutes.positive? ? "#{minutes}m " : '', format('%.2f', seconds), 's'].join
   end
 
   def wca_id_link(wca_id, **options)

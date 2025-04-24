@@ -89,8 +89,8 @@ after "development:users", "development:user_roles" do
             event_id: event.id,
             round_type_id: round_type_id,
             format_id: round_format.id,
-            regional_single_record: k == 0 ? "WR" : nil,
-            regional_average_record: k == 0 ? "WR" : nil,
+            regional_single_record: k.zero? ? "WR" : nil,
+            regional_average_record: k.zero? ? "WR" : nil,
           )
           round_format.expected_solve_count.times do |v|
             result.send(:"value#{v + 1}=", random_wca_value)
@@ -194,7 +194,7 @@ after "development:users", "development:user_roles" do
     next if i < 480
 
     users.each_with_index do |user, j|
-      competing_status = j % 4 == 0 ? Registrations::Helper::STATUS_ACCEPTED : Registrations::Helper::STATUS_PENDING
+      competing_status = (j % 4).zero? ? Registrations::Helper::STATUS_ACCEPTED : Registrations::Helper::STATUS_PENDING
       registration_competition_events = competition.competition_events.sample(rand(1..competition.competition_events.count))
       FactoryBot.create(:registration, user: user, competition: competition, competing_status: competing_status, competition_events: registration_competition_events)
     end
