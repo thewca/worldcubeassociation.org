@@ -1,4 +1,4 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import React, {
   useCallback, useEffect, useMemo, useState,
 } from 'react';
@@ -12,7 +12,6 @@ import {
   Popup,
   Segment,
 } from 'semantic-ui-react';
-import updateRegistration from '../api/registration/patch/update_registration';
 import submitEventRegistration from '../api/registration/post/submit_registration';
 import Processing from './Processing';
 import { contactCompetitionUrl, userPreferencesRoute } from '../../../lib/requests/routes.js.erb';
@@ -34,6 +33,7 @@ import {
   useHasFormValueChanged,
 } from '../../wca/FormBuilder/provider/FormObjectProvider';
 import { useInputUpdater } from '../../../lib/hooks/useInputState';
+import { useRegistrationMutationErrorHandler, useUpdateRegistrationMutation } from '../lib/mutations';
 
 const maxCommentLength = 240;
 
@@ -89,54 +89,23 @@ export default function CompetingStep({
     }
   }, [isPolling, isProcessing, nextStep, refetchRegistration]);
 
-  const queryClient = useQueryClient();
   const formSuccess = useFormSuccessHandler();
 
-  const { mutate: updateRegistrationMutation, isPending: isUpdating } = useMutation({
-    mutationFn: updateRegistration,
-    onMutate: () => dispatch(showMessage('competitions.registration_v2.update.being_updated', 'basic')),
-    onError: (data) => {
-      const { error } = data.json;
-      dispatch(showMessage(
-        `competitions.registration_v2.errors.${error}`,
-        'negative',
-      ));
-    },
-    onSuccess: (data, variables) => {
-      queryClient.setQueryData(
-        ['registration', competitionInfo.id, user.id],
-        (prevRegistration) => ({
-          ...data.registration,
-          payment: prevRegistration.payment,
-        }),
-      );
-      formSuccess(data.registration);
+  const {
+    mutate: updateRegistrationMutation,
+    isPending: isUpdating,
+  } = useUpdateRegistrationMutation(competitionInfo, user, 'basic');
 
-      const competingStatus = variables.competing.registration_status
-        || data.registration.competing.registration_status;
+  const onUpdateSuccess = useCallback((data) => {
+    formSuccess(data.registration);
+    nextStep();
+  }, [formSuccess, nextStep]);
 
-      // Going from cancelled -> pending
-      if (competingStatus === 'cancelled') {
-        // i18n-tasks-use t('registrations.flash.registered')
-        dispatch(showMessage('registrations.flash.registered', 'positive'));
-        // Not changing status
-      } else {
-        // i18n-tasks-use t('registrations.flash.updated')
-        dispatch(showMessage('registrations.flash.updated', 'positive'));
-      }
-      nextStep();
-    },
-  });
+  const onRegistrationError = useRegistrationMutationErrorHandler();
 
   const { mutate: createRegistrationMutation, isLoading: isCreating } = useMutation({
     mutationFn: submitEventRegistration,
-    onError: (data) => {
-      const { error } = data.json;
-      dispatch(showMessage(
-        `competitions.registration_v2.errors.${error}`,
-        'negative',
-      ));
-    },
+    onError: onRegistrationError,
     onSuccess: () => {
       // We can't update the registration yet, because there might be more steps needed
       // And the Registration might still be processing
@@ -208,7 +177,7 @@ export default function CompetingStep({
             event_ids: hasEventsChanged ? selectedEventIds.asArray : undefined,
           },
           guests: hasGuestsChanged ? guests : undefined,
-        });
+        }, { onSuccess: onUpdateSuccess });
       } else {
         const updateMessage = `\n${hasCommentChanged ? `Comment: ${comment}\n` : ''}${hasEventsChanged ? `Events: ${selectedEventIds.asArray.map((eventId) => events.byId[eventId].name).join(', ')}\n` : ''}${hasGuestsChanged ? `Guests: ${guests}\n` : ''}`;
         window.location = contactCompetitionUrl(competitionInfo.id, encodeURIComponent(I18n.t('competitions.registration_v2.update.update_contact_message', { update_params: updateMessage })));
@@ -228,6 +197,7 @@ export default function CompetingStep({
     selectedEventIds.asArray,
     hasGuestsChanged,
     guests,
+    onUpdateSuccess,
   ]);
 
   const actionReRegister = useCallback(() => {
@@ -240,7 +210,7 @@ export default function CompetingStep({
         status: 'pending',
       },
       guests,
-    });
+    }, { onSuccess: onUpdateSuccess });
   }, [
     updateRegistrationMutation,
     user.id,
@@ -248,6 +218,7 @@ export default function CompetingStep({
     comment,
     selectedEventIds.asArray,
     guests,
+    onUpdateSuccess,
   ]);
 
   const onEventClick = (eventId) => {

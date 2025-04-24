@@ -1,4 +1,3 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
 import React, { useCallback } from 'react';
 import {
   Button,
@@ -8,7 +7,6 @@ import {
   Message,
   Segment,
 } from 'semantic-ui-react';
-import updateRegistration from '../api/registration/patch/update_registration';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
 import { showMessage } from '../Register/RegistrationMessage';
 import EventSelector from '../../wca/EventSelector';
@@ -27,6 +25,7 @@ import {
 import { useInputUpdater } from '../../../lib/hooks/useInputState';
 import { useOrderedSetWrapper } from '../../../lib/hooks/useOrderedSet';
 import { WCA_EVENT_IDS } from '../../../lib/wca-data.js.erb';
+import { useUpdateRegistrationMutation } from '../lib/mutations';
 
 export default function RegistrationEditor({ registrationId, competitor, competitionInfo }) {
   const dispatch = useDispatch();
@@ -48,43 +47,14 @@ export default function RegistrationEditor({ registrationId, competitor, competi
 
   const confirm = useConfirm();
 
-  const queryClient = useQueryClient();
   const formSuccess = useFormSuccessHandler();
 
   const { registration, refetchRegistration } = useRegistration();
 
-  const { mutate: updateRegistrationMutation, isPending: isUpdating } = useMutation({
-    mutationFn: updateRegistration,
-    onMutate: () => dispatch(showMessage('competitions.registration_v2.update.being_updated', 'positive')),
-    onError: (data) => {
-      const { error } = data.json;
-      dispatch(showMessage(
-        `competitions.registration_v2.errors.${error}`,
-        'negative',
-      ));
-    },
-    onSuccess: (data, variables) => {
-      queryClient.setQueryData(
-        ['registration', competitionInfo.id, competitor.id],
-        (prevRegistration) => ({
-          ...data.registration,
-          payment: prevRegistration.payment,
-        }),
-      );
-      formSuccess(data.registration);
-
-      const competingStatus = variables.competing.registration_status
-        || data.registration.competing.registration_status;
-
-      // Going from cancelled -> pending
-      if (competingStatus === 'cancelled') {
-        dispatch(showMessage('registrations.flash.registered', 'positive'));
-        // Not changing status
-      } else {
-        dispatch(showMessage('registrations.flash.updated', 'positive'));
-      }
-    },
-  });
+  const {
+    mutate: updateRegistrationMutation,
+    isPending: isUpdating,
+  } = useUpdateRegistrationMutation(competitionInfo, competitor);
 
   const hasEventsChanged = useHasFormValueChanged('event_ids', ['competing']);
   const hasCommentChanged = useHasFormValueChanged('comment', ['competing']);
@@ -141,8 +111,9 @@ export default function RegistrationEditor({ registrationId, competitor, competi
       confirm({
         content: I18n.t('competitions.registration_v2.update.organizer_update_confirm'),
       }).then(() => {
-        updateRegistrationMutation(body);
-        dispatch(showMessage('competitions.registration_v2.update.being_updated', 'positive'));
+        updateRegistrationMutation(body, {
+          onSuccess: (data) => formSuccess(data.registration),
+        });
       }).catch(() => {});
     }
   }, [
@@ -165,6 +136,7 @@ export default function RegistrationEditor({ registrationId, competitor, competi
     adminComment,
     status,
     guests,
+    formSuccess,
   ]);
 
   const registrationEditDeadlinePassed = Boolean(competitionInfo.event_change_deadline_date)
