@@ -24,7 +24,7 @@ export default function RegistrationEdit({ registrationId, competitionInfo, user
               <RegEditWrapper
                 registrationId={registrationId}
                 competitionInfo={competitionInfo}
-                competitor={user}
+                user={user}
               />
             </RegistrationProvider>
           </ConfirmProvider>
