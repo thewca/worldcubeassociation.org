@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import _ from 'lodash';
 import React, {
   useCallback,
@@ -24,7 +24,6 @@ import { useConfirm } from '../../../lib/providers/ConfirmProvider';
 import I18n from '../../../lib/i18n';
 import RegistrationHistory from './RegistrationHistory';
 import { hasPassed } from '../../../lib/utils/dates';
-import getUsersInfo from '../api/user/post/getUserInfo';
 import { useRegistration } from '../lib/RegistrationProvider';
 import useSet from '../../../lib/hooks/useSet';
 
@@ -44,13 +43,6 @@ export default function RegistrationEditor({ registrationId, competitor, competi
     isFetching: isRegistrationLoading,
     registration: serverRegistration, refetchRegistration: refetch,
   } = useRegistration();
-
-  const { isLoading, data: competitorsInfo } = useQuery({
-    queryKey: ['history-user', serverRegistration?.history],
-    queryFn: () => getUsersInfo(_.uniq(serverRegistration.history.flatMap((e) => (
-      (e.actor_type === 'user' || e.actor_type === 'worker') ? Number(e.actor_id) : [])))),
-    enabled: Boolean(serverRegistration),
-  });
 
   const { mutate: updateRegistrationMutation, isPending: isUpdating } = useMutation({
     mutationFn: updateRegistration,
@@ -180,7 +172,7 @@ export default function RegistrationEditor({ registrationId, competitor, competi
   const registrationEditDeadlinePassed = Boolean(competitionInfo.event_change_deadline_date)
     && hasPassed(competitionInfo.event_change_deadline_date);
 
-  if (isLoading || isRegistrationLoading) {
+  if (isRegistrationLoading) {
     return <Loading />;
   }
 
@@ -309,10 +301,7 @@ export default function RegistrationEditor({ registrationId, competitor, competi
           )}
         </>
       )}
-      <RegistrationHistory
-        history={registration.history.toReversed()}
-        competitorsInfo={competitorsInfo}
-      />
+      <RegistrationHistory history={registration.history.toReversed()} />
     </Segment>
   );
 }

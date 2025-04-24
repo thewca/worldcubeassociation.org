@@ -1,9 +1,13 @@
 import React from 'react';
 import { Header, Popup, Table } from 'semantic-ui-react';
+import { useQuery } from '@tanstack/react-query';
+import _ from 'lodash';
 import { getIsoDateString, getShortTimeString, getTimeWithSecondsString } from '../../../lib/utils/dates';
 import { events } from '../../../lib/wca-data.js.erb';
 import EventIcon from '../../wca/EventIcon';
 import I18n from '../../../lib/i18n';
+import getUsersInfo from '../api/user/post/getUserInfo';
+import Loading from '../../Requests/Loading';
 
 const formatHistoryColumn = (key, value) => {
   if (key === 'event_ids') {
@@ -12,7 +16,17 @@ const formatHistoryColumn = (key, value) => {
   return value;
 };
 
-export default function RegistrationHistory({ history, competitorsInfo }) {
+export default function RegistrationHistory({ history }) {
+  const { isFetching, data: competitorsInfo } = useQuery({
+    queryKey: ['history-user', history],
+    queryFn: () => getUsersInfo(_.uniq(history.flatMap((e) => (
+      (e.actor_type === 'user' || e.actor_type === 'worker') ? Number(e.actor_id) : [])))),
+  });
+
+  if (isFetching) {
+    return (<Loading />);
+  }
+
   return (
     <>
       <Header>{I18n.t('registrations.registration_history.title')}</Header>
