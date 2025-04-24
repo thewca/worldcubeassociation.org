@@ -600,7 +600,7 @@ RSpec.describe 'API Registrations' do
         :update_request,
         user_id: registration.user_id,
         competition_id: registration.competition_id,
-        competing: { 'organizer_comment' => 'this is an admin comment' },
+        competing: { 'admin_comment' => 'this is an admin comment' },
       )
 
       headers = { 'Authorization' => update_request['jwt_token'] }
