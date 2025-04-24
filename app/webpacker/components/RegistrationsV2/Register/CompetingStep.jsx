@@ -60,7 +60,6 @@ export default function CompetingStep({
   nextStep,
   competitionInfo,
   user,
-  preferredEvents,
   qualifications,
 }) {
   const maxEvents = competitionInfo.events_per_registration_limit ?? Infinity;
@@ -74,24 +73,14 @@ export default function CompetingStep({
   const [comment, setCommentRaw] = useFormObjectState('comment', ['competing']);
   const setComment = useInputUpdater(setCommentRaw);
 
-  const initialSelectedEvents = competitionInfo.events_per_registration_limit ? [] : preferredEvents
-    .filter((event) => {
-      const preferredEventHeld = competitionInfo.event_ids.includes(event);
-      if (competitionInfo['uses_qualification?']) {
-        return preferredEventHeld
-          && isQualifiedForEvent(event, qualifications.wcif, qualifications.personalRecords);
-      }
-      return preferredEventHeld;
-    });
-
   const [nativeEventIds, setNativeEventIds] = useFormObjectState('event_ids', ['competing']);
   const selectedEventIds = useOrderedSetWrapper(nativeEventIds, setNativeEventIds, WCA_EVENT_IDS);
 
-  // Don't set an error state before the user has interacted with the eventPicker
-  const [hasInteracted, setHasInteracted] = useState(false);
-
   const [guests, setGuestsRaw] = useFormObjectState('guests');
   const setGuests = useInputUpdater(setGuestsRaw, true);
+
+  // Don't set an error state before the user has interacted with the eventPicker
+  const [hasInteracted, setHasInteracted] = useState(false);
 
   useEffect(() => {
     if (isPolling && !isProcessing) {
@@ -286,10 +275,10 @@ export default function CompetingStep({
     setHasInteracted(true);
   };
 
-  const shouldShowUpdateButton = isRegistered
-    && registration.competing.registration_status !== 'cancelled';
+  const [competingStatus] = useFormObjectState('registration_status', ['competing']);
 
-  const shouldShowReRegisterButton = registration?.competing?.registration_status === 'cancelled';
+  const shouldShowReRegisterButton = competingStatus === 'cancelled';
+  const shouldShowUpdateButton = isRegistered && !shouldShowReRegisterButton;
 
   const handleSubmit = useCallback((event) => {
     event.preventDefault();

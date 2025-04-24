@@ -13,10 +13,48 @@ import RegistrationNotAllowedMessage from './RegistrationNotAllowedMessage';
 import RegistrationClosingMessage from './RegistrationClosingMessage';
 import usePerpetualState from '../hooks/usePerpetualState';
 import FormObjectProvider from '../../wca/FormBuilder/provider/FormObjectProvider';
+import { isQualifiedForEvent } from '../../../lib/helpers/qualifications';
 
 // The following states should show the Panel even when registration is already closed.
 //   (You can think of this as "is there a non-cancelled, non-rejected registration?)
 const editableRegistrationStates = ['accepted', 'pending', 'waiting_list'];
+
+const defaultRegistration = (defaultEvents = []) => ({
+  competing: {
+    event_ids: defaultEvents,
+    comment: null,
+  },
+  guests: 0,
+});
+
+const buildFormRegistration = ({
+  registration: serverRegistration,
+  competitionInfo,
+  preferredEvents,
+  qualifications,
+}) => {
+  const initialSelectedEvents = competitionInfo.events_per_registration_limit ? [] : preferredEvents
+    .filter((event) => competitionInfo.event_ids.includes(event))
+    .filter((event) => !competitionInfo['uses_qualification?'] || isQualifiedForEvent(event, qualifications.wcif, qualifications.personalRecords));
+
+  if (serverRegistration) {
+    if (serverRegistration.competing.registration_status === 'cancelled') {
+      const dummyRegistration = defaultRegistration(initialSelectedEvents);
+
+      return {
+        ...dummyRegistration,
+        competing: {
+          ...dummyRegistration.competing,
+          registration_status: 'cancelled',
+        },
+      };
+    }
+
+    return serverRegistration;
+  }
+
+  return defaultRegistration(initialSelectedEvents);
+};
 
 export default function Index({
   competitionInfo,
@@ -101,12 +139,14 @@ function Register({
     || (userCanPreRegister && registrationNotYetClosed)
     || hasEditableRegistration;
 
+  const formRegistration = buildFormRegistration(registration);
+
   return (
     <>
       <RegistrationOpeningMessage registrationStart={competitionInfo.registration_open} />
       <RegistrationClosingMessage registrationEnd={competitionInfo.registration_close} />
       {showRegistrationPanel && (
-        <FormObjectProvider initialObject={registration}>
+        <FormObjectProvider initialObject={formRegistration}>
           <RegistrationMessage />
           <StepPanel
             user={userInfo}
