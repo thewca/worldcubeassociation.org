@@ -127,3 +127,17 @@ export const useFormObjectState = (key, sections = []) => {
 
   return [formValue, setFormValue];
 };
+
+export const useHasFormValueChanged = (key, sections = []) => {
+  const formObject = useFormObject();
+
+  const formSection = readValueRecursive(formObject, sections);
+  const formValue = formSection[key];
+
+  const initialFormObject = useFormInitialObject();
+
+  const formInitialSection = readValueRecursive(initialFormObject, sections);
+  const formInitialValue = formInitialSection[key];
+
+  return !_.isEqual(formValue, formInitialValue);
+};

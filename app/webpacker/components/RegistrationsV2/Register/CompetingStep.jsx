@@ -29,7 +29,7 @@ import { eventQualificationToString } from '../../../lib/utils/wcif';
 import { hasNotPassed } from '../../../lib/utils/dates';
 import { useRegistration } from '../lib/RegistrationProvider';
 import useSet from '../../../lib/hooks/useSet';
-import { useFormObjectState } from '../../wca/FormBuilder/provider/FormObjectProvider';
+import { useFormObjectState, useHasFormValueChanged } from '../../wca/FormBuilder/provider/FormObjectProvider';
 import { useInputUpdater } from '../../../lib/hooks/useInputState';
 
 const maxCommentLength = 240;
@@ -153,9 +153,8 @@ export default function CompetingStep({
 
   const hasEventsChanged = registration?.competing
     && _.xor(registration.competing.event_ids, selectedEventIds.asArray).length > 0;
-  const hasCommentChanged = registration?.competing
-    && comment !== (registration.competing.comment ?? '');
-  const hasGuestsChanged = registration && guests !== registration.guests;
+  const hasCommentChanged = useHasFormValueChanged('comment', ['competing']);
+  const hasGuestsChanged = useHasFormValueChanged('guests');
 
   const hasChanges = hasEventsChanged || hasCommentChanged || hasGuestsChanged;
 
