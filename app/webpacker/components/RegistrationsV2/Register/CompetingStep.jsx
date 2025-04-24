@@ -1,5 +1,4 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import _ from 'lodash';
 import React, {
   useCallback, useEffect, useMemo, useState,
 } from 'react';
@@ -28,7 +27,7 @@ import { eventsNotQualifiedFor, isQualifiedForEvent } from '../../../lib/helpers
 import { eventQualificationToString } from '../../../lib/utils/wcif';
 import { hasNotPassed } from '../../../lib/utils/dates';
 import { useRegistration } from '../lib/RegistrationProvider';
-import useSet from '../../../lib/hooks/useSet';
+import { useOrderedSetWrapper } from '../../../lib/hooks/useOrderedSet';
 import {
   useFormObjectState,
   useFormSuccessHandler,
@@ -84,21 +83,15 @@ export default function CompetingStep({
       }
       return preferredEventHeld;
     });
-  const selectedEventIds = useSet(initialSelectedEvents);
+
+  const [nativeEventIds, setNativeEventIds] = useFormObjectState('event_ids', ['competing']);
+  const selectedEventIds = useOrderedSetWrapper(nativeEventIds, setNativeEventIds);
+
   // Don't set an error state before the user has interacted with the eventPicker
   const [hasInteracted, setHasInteracted] = useState(false);
 
   const [guests, setGuestsRaw] = useFormObjectState('guests');
   const setGuests = useInputUpdater(setGuestsRaw, true);
-
-  // using selectedEventIds.update in dependency array causes warnings
-  const { update: setSelectedEventIds } = selectedEventIds;
-
-  useEffect(() => {
-    if (isRegistered && registration.competing.registration_status !== 'cancelled') {
-      setSelectedEventIds(registration.competing.event_ids);
-    }
-  }, [isRegistered, registration, setSelectedEventIds]);
 
   useEffect(() => {
     if (isPolling && !isProcessing) {
@@ -122,10 +115,10 @@ export default function CompetingStep({
     onSuccess: (data) => {
       queryClient.setQueryData(
         ['registration', competitionInfo.id, user.id],
-        {
+        (prevRegistration) => ({
           ...data.registration,
-          payment: registration.payment,
-        },
+          payment: prevRegistration.payment,
+        }),
       );
       formSuccess(data.registration);
       // Going from cancelled -> pending
@@ -159,8 +152,7 @@ export default function CompetingStep({
     },
   });
 
-  const hasEventsChanged = registration?.competing
-    && _.xor(registration.competing.event_ids, selectedEventIds.asArray).length > 0;
+  const hasEventsChanged = useHasFormValueChanged('event_ids', ['competing']);
   const hasCommentChanged = useHasFormValueChanged('comment', ['competing']);
   const hasGuestsChanged = useHasFormValueChanged('guests');
 

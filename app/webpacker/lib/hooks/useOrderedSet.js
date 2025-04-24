@@ -43,23 +43,16 @@ const reducer = (state, {
   return state;
 };
 
-/** Maintains an ordered set as an array without duplicates. */
-export default function useOrderedSet(initialArray = []) {
-  const [{ array }, dispatch] = useReducer(
-    reducer,
-    initialArray,
-    (arr) => ({ array: _.uniq(arr) }),
-  );
+function useOrderedSetInternal(array, dispatch) {
+  const clear = useCallback(() => dispatch({ type: 'clear' }), [dispatch]);
 
-  const clear = useCallback(() => dispatch({ type: 'clear' }), []);
+  const update = useCallback((newArray) => dispatch({ type: 'override', array: newArray }), [dispatch]);
 
-  const update = useCallback((newArray) => dispatch({ type: 'override', array: newArray }), []);
+  const add = useCallback((...elements) => dispatch({ type: 'add', elements }), [dispatch]);
 
-  const add = useCallback((...elements) => dispatch({ type: 'add', elements }), []);
+  const remove = useCallback((...elements) => dispatch({ type: 'remove', elements }), [dispatch]);
 
-  const remove = useCallback((...elements) => dispatch({ type: 'remove', elements }), []);
-
-  const toggle = useCallback((...elements) => dispatch({ type: 'toggle', elements }), []);
+  const toggle = useCallback((...elements) => dispatch({ type: 'toggle', elements }), [dispatch]);
 
   const size = array.length;
 
@@ -69,3 +62,22 @@ export default function useOrderedSet(initialArray = []) {
     asArray: array, size, has, clear, update, add, remove, toggle,
   };
 }
+
+/** Maintains an ordered set as an array without duplicates. */
+export default function useOrderedSet(initialArray = []) {
+  const [{ array }, dispatch] = useReducer(
+    reducer,
+    initialArray,
+    (arr) => ({ array: _.uniq(arr) }),
+  );
+
+  return useOrderedSetInternal(array, dispatch);
+}
+
+export const useOrderedSetWrapper = (arrayState, setArrayState) => {
+  const dispatchExternal = useCallback((action) => {
+    setArrayState((array) => reducer({ array }, action).array);
+  }, [setArrayState]);
+
+  return useOrderedSetInternal(arrayState, dispatchExternal);
+};
