@@ -9775,13 +9775,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-spinners@npm:^0.16.1":
-  version: 0.16.1
-  resolution: "react-spinners@npm:0.16.1"
+"react-spinners@npm:^0.17.0":
+  version: 0.17.0
+  resolution: "react-spinners@npm:0.17.0"
   peerDependencies:
     react: ^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
     react-dom: ^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
-  checksum: 10c0/191e73b23bc097772e847de3cd9cc4385963e9bfd80c339747e69d9e12d75241badee5cfbe2fe2820040ce01d247c6309a3fa05ad77d50c2816ef436bad28604
+  checksum: 10c0/175107ba7b9ab2954559376ebe12c7561d4856402773b044c74972e9ba3e8c274454910bf23eb21000064e827a269ef4e48e69432a57395a1fa7edd05a428e7c
   languageName: node
   linkType: hard
 
@@ -10256,7 +10256,7 @@ __metadata:
     react-leaflet: "npm:^4.2.1"
     react-refresh: "npm:^0.17.0"
     react-simplemde-editor: "npm:^5.2.0"
-    react-spinners: "npm:^0.16.1"
+    react-spinners: "npm:^0.17.0"
     react-textarea-autosize: "npm:^8.5.9"
     react_ujs: "npm:^3.2.1"
     regenerator-runtime: "npm:^0.14.1"
