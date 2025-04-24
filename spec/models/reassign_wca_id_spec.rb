@@ -40,7 +40,7 @@ RSpec.describe ReassignWcaId do
   end
 
   it "requires same gender" do
-    account2.update_attribute(:gender, { "m"=>"f", "f"=>"m" }[account1.gender])
+    account2.update_attribute(:gender, { "m" => "f", "f" => "m" }[account1.gender])
     expect(reassign_wca_id).to be_invalid_with_errors(account2: ["Genders don't match"])
   end
 

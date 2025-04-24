@@ -102,7 +102,7 @@ class UploadJson
                   round_type_id: round["roundId"],
                   group_id: group["group"],
                   is_extra: scramble_type == "extraScrambles",
-                  scramble_num: index+1,
+                  scramble_num: index + 1,
                   scramble: scramble,
                 }
                 scrambles_to_import << Scramble.new(new_scramble_attributes)

@@ -143,9 +143,6 @@ Style/RaiseArgs:
 Style/SignalException:
   EnforcedStyle: only_raise
 
-Layout/SpaceAroundOperators:
-  Enabled: false
-
 Layout/IndentationConsistency:
   EnforcedStyle: indented_internal_methods
 

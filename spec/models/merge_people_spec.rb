@@ -38,7 +38,7 @@ RSpec.describe MergePeople do
   end
 
   it "requires same gender" do
-    person2.update_attribute(:gender, { "m"=>"f", "f"=>"m" }[person1.gender])
+    person2.update_attribute(:gender, { "m" => "f", "f" => "m" }[person1.gender])
     expect(merge_people).to be_invalid_with_errors(person2_wca_id: ["Genders don't match"])
   end
 

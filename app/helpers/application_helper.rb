@@ -171,7 +171,7 @@ module ApplicationHelper
 
   def duration_to_s(total_seconds)
     hours = (total_seconds / 3600).floor
-    minutes = ((total_seconds % 3600)/60).floor
+    minutes = ((total_seconds % 3600) / 60).floor
     seconds = total_seconds % 60
 
     [hours > 0 ? "#{hours}h " : '', minutes > 0 ? "#{minutes}m " : '', format('%.2f', seconds), 's'].join

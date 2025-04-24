@@ -61,19 +61,19 @@ RSpec.describe Round do
       end
 
       it "2 attempts to break 50 seconds" do
-        round.update!(cutoff: Cutoff.new(number_of_attempts: 2, attempt_result: 50*100))
+        round.update!(cutoff: Cutoff.new(number_of_attempts: 2, attempt_result: 50 * 100))
         expect(round.cutoff.number_of_attempts).to eq 2
-        expect(round.cutoff.attempt_result).to eq 50*100
+        expect(round.cutoff.attempt_result).to eq 50 * 100
         expect(round.cutoff_to_s).to eq "2 attempts to get < 50.00"
       end
 
       it "1 attempt to break 43 seconds" do
-        round.update!(cutoff: Cutoff.new(number_of_attempts: 1, attempt_result: 43*100))
+        round.update!(cutoff: Cutoff.new(number_of_attempts: 1, attempt_result: 43 * 100))
         expect(round.cutoff_to_s).to eq "1 attempt to get < 43.00"
       end
 
       it "times over 1 minute" do
-        round.update!(cutoff: Cutoff.new(number_of_attempts: 3, attempt_result: 63*100))
+        round.update!(cutoff: Cutoff.new(number_of_attempts: 3, attempt_result: 63 * 100))
         expect(round.cutoff_to_s).to eq "3 attempts to get < 1:03.00"
       end
 
