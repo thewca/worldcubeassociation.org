@@ -6,7 +6,9 @@ import messageReducer from '../reducers/messageReducer';
 import StoreProvider from '../../../lib/providers/StoreProvider';
 import WCAQueryClientProvider from '../../../lib/providers/WCAQueryClientProvider';
 import ConfirmProvider from '../../../lib/providers/ConfirmProvider';
-import RegistrationProvider from '../lib/RegistrationProvider';
+import RegistrationProvider, { useRegistration } from '../lib/RegistrationProvider';
+import FormObjectProvider from '../../wca/FormBuilder/provider/FormObjectProvider';
+import Loading from '../../Requests/Loading';
 
 export default function RegistrationEdit({ registrationId, competitionInfo, user }) {
   const ref = useRef();
@@ -19,7 +21,7 @@ export default function RegistrationEdit({ registrationId, competitionInfo, user
               <Sticky context={ref}>
                 <RegistrationMessage />
               </Sticky>
-              <RegistrationEditor
+              <RegEditWrapper
                 registrationId={registrationId}
                 competitionInfo={competitionInfo}
                 competitor={user}
@@ -29,5 +31,23 @@ export default function RegistrationEdit({ registrationId, competitionInfo, user
         </StoreProvider>
       </WCAQueryClientProvider>
     </div>
+  );
+}
+
+function RegEditWrapper({ registrationId, competitionInfo, user }) {
+  const { registration, isFetching } = useRegistration();
+
+  if (isFetching) {
+    return (<Loading />);
+  }
+
+  return (
+    <FormObjectProvider initialObject={registration}>
+      <RegistrationEditor
+        registrationId={registrationId}
+        competitionInfo={competitionInfo}
+        competitor={user}
+      />
+    </FormObjectProvider>
   );
 }

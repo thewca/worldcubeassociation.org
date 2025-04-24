@@ -1,10 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import _ from 'lodash';
-import React, {
-  useCallback,
-  useEffect,
-  useState,
-} from 'react';
+import React, { useCallback } from 'react';
 import {
   Button,
   Form,
@@ -16,7 +11,6 @@ import {
 import updateRegistration from '../api/registration/patch/update_registration';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
 import { showMessage } from '../Register/RegistrationMessage';
-import Loading from '../../Requests/Loading';
 import EventSelector from '../../wca/EventSelector';
 import Payments from './Payments';
 import { personUrl, editPersonUrl } from '../../../lib/requests/routes.js.erb';
@@ -25,27 +19,43 @@ import I18n from '../../../lib/i18n';
 import RegistrationHistory from './RegistrationHistory';
 import { hasPassed } from '../../../lib/utils/dates';
 import { useRegistration } from '../lib/RegistrationProvider';
-import useSet from '../../../lib/hooks/useSet';
+import {
+  useFormObjectState,
+  useFormSuccessHandler,
+  useHasFormValueChanged,
+} from '../../wca/FormBuilder/provider/FormObjectProvider';
+import { useInputUpdater } from '../../../lib/hooks/useInputState';
+import { useOrderedSetWrapper } from '../../../lib/hooks/useOrderedSet';
+import { WCA_EVENT_IDS } from '../../../lib/wca-data.js.erb';
 
 export default function RegistrationEditor({ registrationId, competitor, competitionInfo }) {
   const dispatch = useDispatch();
-  const [comment, setComment] = useState('');
-  const [adminComment, setAdminComment] = useState('');
-  const [status, setStatus] = useState('');
-  const [guests, setGuests] = useState(0);
-  const selectedEventIds = useSet();
-  const [registration, setRegistration] = useState({});
+
+  const [comment, setCommentRaw] = useFormObjectState('comment', ['competing']);
+  const setComment = useInputUpdater(setCommentRaw);
+
+  const [adminComment, setAdminCommentRaw] = useFormObjectState('admin_comment', ['competing']);
+  const setAdminComment = useInputUpdater(setAdminCommentRaw);
+
+  const [guests, setGuestsRaw] = useFormObjectState('guests');
+  const setGuests = useInputUpdater(setGuestsRaw, true);
+
+  const [nativeEventIds, setNativeEventIds] = useFormObjectState('event_ids', ['competing']);
+  const selectedEventIds = useOrderedSetWrapper(nativeEventIds, setNativeEventIds, WCA_EVENT_IDS);
+
+  const [status, setStatusRaw] = useFormObjectState('registration_status', ['competing']);
+  const setStatus = useInputUpdater(setStatusRaw);
+
   const confirm = useConfirm();
 
   const queryClient = useQueryClient();
+  const formSuccess = useFormSuccessHandler();
 
-  const {
-    isFetching: isRegistrationLoading,
-    registration: serverRegistration, refetchRegistration: refetch,
-  } = useRegistration();
+  const { registration, refetchRegistration } = useRegistration();
 
   const { mutate: updateRegistrationMutation, isPending: isUpdating } = useMutation({
     mutationFn: updateRegistration,
+    onMutate: () => dispatch(showMessage('competitions.registration_v2.update.being_updated', 'positive')),
     onError: (data) => {
       const { error } = data.json;
       dispatch(showMessage(
@@ -53,16 +63,21 @@ export default function RegistrationEditor({ registrationId, competitor, competi
         'negative',
       ));
     },
-    onSuccess: (data) => {
+    onSuccess: (data, variables) => {
       queryClient.setQueryData(
         ['registration', competitionInfo.id, competitor.id],
-        {
+        (prevRegistration) => ({
           ...data.registration,
-          payment: serverRegistration.payment,
-        },
+          payment: prevRegistration.payment,
+        }),
       );
+      formSuccess(data.registration);
+
+      const competingStatus = variables.competing.registration_status
+        || data.registration.competing.registration_status;
+
       // Going from cancelled -> pending
-      if (registration.competing.registration_status === 'cancelled') {
+      if (competingStatus === 'cancelled') {
         dispatch(showMessage('registrations.flash.registered', 'positive'));
         // Not changing status
       } else {
@@ -71,28 +86,11 @@ export default function RegistrationEditor({ registrationId, competitor, competi
     },
   });
 
-  // using selectedEventIds.update in dependency array causes warnings
-  const { update: setSelectedEventIds } = selectedEventIds;
-  useEffect(() => {
-    if (serverRegistration) {
-      setRegistration(serverRegistration);
-      setComment(serverRegistration.competing.comment ?? '');
-      setStatus(serverRegistration.competing.registration_status);
-      setSelectedEventIds(serverRegistration.competing.event_ids);
-      setAdminComment(serverRegistration.competing.admin_comment ?? '');
-      setGuests(serverRegistration.guests ?? 0);
-    }
-  }, [serverRegistration, setSelectedEventIds]);
-
-  const hasEventsChanged = serverRegistration
-    && _.xor(serverRegistration.competing.event_ids, selectedEventIds.asArray).length > 0;
-  const hasCommentChanged = serverRegistration
-    && comment !== (serverRegistration.competing.comment ?? '');
-  const hasAdminCommentChanged = serverRegistration
-    && adminComment !== (serverRegistration.competing.admin_comment ?? '');
-  const hasStatusChanged = serverRegistration
-    && status !== serverRegistration.competing.registration_status;
-  const hasGuestsChanged = serverRegistration && guests !== serverRegistration.guests;
+  const hasEventsChanged = useHasFormValueChanged('event_ids', ['competing']);
+  const hasCommentChanged = useHasFormValueChanged('comment', ['competing']);
+  const hasAdminCommentChanged = useHasFormValueChanged('admin_comment', ['competing']);
+  const hasStatusChanged = useHasFormValueChanged('registration_status', ['competing']);
+  const hasGuestsChanged = useHasFormValueChanged('guests');
 
   const hasChanges = hasEventsChanged
     || hasCommentChanged
@@ -172,10 +170,6 @@ export default function RegistrationEditor({ registrationId, competitor, competi
   const registrationEditDeadlinePassed = Boolean(competitionInfo.event_change_deadline_date)
     && hasPassed(competitionInfo.event_change_deadline_date);
 
-  if (isRegistrationLoading) {
-    return <Loading />;
-  }
-
   return (
     <Segment padded attached loading={isUpdating}>
       <Form onSubmit={handleRegisterClick}>
@@ -213,7 +207,7 @@ export default function RegistrationEditor({ registrationId, competitor, competi
           id="competitor-comment"
           maxLength={240}
           value={comment}
-          onChange={(event, data) => setComment(data.value)}
+          onChange={setComment}
         />
 
         <Form.TextArea
@@ -221,7 +215,7 @@ export default function RegistrationEditor({ registrationId, competitor, competi
           id="admin-comment"
           maxLength={240}
           value={adminComment}
-          onChange={(event, data) => setAdminComment(data.value)}
+          onChange={setAdminComment}
         />
 
         <Header as="h6">{I18n.t('activerecord.attributes.registration.status')}</Header>
@@ -232,7 +226,7 @@ export default function RegistrationEditor({ registrationId, competitor, competi
             name="regStatusRadioGroup"
             value="pending"
             checked={status === 'pending'}
-            onChange={(event, data) => setStatus(data.value)}
+            onChange={setStatus}
           />
           <Form.Radio
             id="radio-status-accepted"
@@ -240,7 +234,7 @@ export default function RegistrationEditor({ registrationId, competitor, competi
             name="regStatusRadioGroup"
             value="accepted"
             checked={status === 'accepted'}
-            onChange={(event, data) => setStatus(data.value)}
+            onChange={setStatus}
           />
           <Form.Radio
             id="radio-status-waiting-list"
@@ -248,7 +242,7 @@ export default function RegistrationEditor({ registrationId, competitor, competi
             name="regStatusRadioGroup"
             value="waiting_list"
             checked={status === 'waiting_list'}
-            onChange={(event, data) => setStatus(data.value)}
+            onChange={setStatus}
           />
           <Form.Radio
             id="radio-status-cancelled"
@@ -256,7 +250,7 @@ export default function RegistrationEditor({ registrationId, competitor, competi
             name="regStatusRadioGroup"
             value="cancelled"
             checked={status === 'cancelled'}
-            onChange={(event, data) => setStatus(data.value)}
+            onChange={setStatus}
           />
           <Form.Radio
             id="radio-status-rejected"
@@ -265,7 +259,7 @@ export default function RegistrationEditor({ registrationId, competitor, competi
             value="rejected"
             disabled={registrationEditDeadlinePassed}
             checked={status === 'rejected'}
-            onChange={(event, data) => setStatus(data.value)}
+            onChange={setStatus}
           />
         </Form.Group>
         <Form.Input
@@ -275,7 +269,7 @@ export default function RegistrationEditor({ registrationId, competitor, competi
           min={0}
           max={99}
           value={guests}
-          onChange={(event, data) => setGuests(data.value)}
+          onChange={setGuests}
         />
         <Button
           color="blue"
@@ -295,7 +289,7 @@ export default function RegistrationEditor({ registrationId, competitor, competi
             <Payments
               competitionId={competitionInfo.id}
               registrationId={registrationId}
-              onSuccess={refetch}
+              onSuccess={refetchRegistration}
               competitorsInfo={competitorsInfo}
             />
           )}
