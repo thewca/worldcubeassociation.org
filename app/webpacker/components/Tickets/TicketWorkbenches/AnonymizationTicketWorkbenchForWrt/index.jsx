@@ -133,6 +133,8 @@ function NonActionItemContent({ nonActionItem }) {
       return 'There are no competitions with external websites.';
     case 'recent_competitions_data_to_be_removed_wca_live':
       return 'There are no recent competitions data to be removed from WCA Live.';
+    case 'user_has_upcoming_registered_competitions':
+      return 'This user has no upcoming registered competitions.';
     default:
       return `Unknown data (${nonActionItem}), please contact WST.`;
   }
