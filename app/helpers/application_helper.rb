@@ -144,7 +144,7 @@ module ApplicationHelper
 
   def region_option_tags(selected_id: nil, real_only: false, use_world: false)
     regions = region_options_hash(real_only: real_only)
-    options_for_select((use_world ? [[t('common.world'), "world"]] : [[t('common.all_regions'), "all"]]), selected_id) + grouped_options_for_select(regions, selected_id)
+    options_for_select(use_world ? [[t('common.world'), "world"]] : [[t('common.all_regions'), "all"]], selected_id) + grouped_options_for_select(regions, selected_id)
   end
 
   def simple_form_for(resource, **options, &)
