@@ -4,11 +4,11 @@ require 'rails_helper'
 
 RSpec.describe Post do
   it "has a valid factory" do
-    expect(FactoryBot.create(:post)).to be_valid
+    expect(create(:post)).to be_valid
   end
 
   it "displays body teaser and body full when break present" do
-    post = FactoryBot.build :post, title: "My First Post", slug: "my-first-post", body: "This post has a preview.<!--break--> And some more text."
+    post = build(:post, title: "My First Post", slug: "my-first-post", body: "This post has a preview.<!--break--> And some more text.")
     expect(post.body_teaser).to eq "This post has a preview."
     expect(post.body_full).to eq "This post has a preview. And some more text."
     post.body = "This post also has a preview.<!-- break --> And then some more text."
@@ -20,13 +20,13 @@ RSpec.describe Post do
   end
 
   it "displays body teaser and body full when break not present" do
-    post = FactoryBot.build :post, title: "My Second Post", slug: "my-second-post", body: "This post does not have a preview."
+    post = build(:post, title: "My Second Post", slug: "my-second-post", body: "This post does not have a preview.")
     expect(post.body_teaser).to eq post.body
     expect(post.body_full).to eq post.body
   end
 
   context "tags" do
-    let(:post) { FactoryBot.create(:post) }
+    let(:post) { create(:post) }
 
     it "can tag posts with a comma separated list" do
       expect(post.tags_array).to match_array %w()

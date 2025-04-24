@@ -642,7 +642,7 @@ class User < ApplicationRecord
         name: 'Admin panel',
         pages: panel_pages.values,
       },
-      staff: {
+      volunteer: {
         name: 'Volunteer panel',
         pages: [],
       },
@@ -1370,7 +1370,7 @@ class User < ApplicationRecord
     case panel_id
     when :admin
       admin? || senior_results_team?
-    when :staff
+    when :volunteer
       staff?
     when :delegate
       any_kind_of_delegate?
