@@ -152,57 +152,57 @@ da:
       #original_hash: 4d618bb
       name: Kvalificerende runde
       #original_hash: 4d618bb
-      cellName: Kvalifikationsrunde
+      cell_name: Kvalifikationsrunde
     '1':
       #original_hash: 1e725b6
       name: Første runde
       #original_hash: 1e725b6
-      cellName: Første runde
+      cell_name: Første runde
     '2':
       #original_hash: 985c8d0
       name: Anden runde
       #original_hash: 985c8d0
-      cellName: Anden runde
+      cell_name: Anden runde
     '3':
       #original_hash: e2f74d2
       name: Semi Finale
       #original_hash: e2f74d2
-      cellName: Semi Finale
+      cell_name: Semi Finale
     b:
       #original_hash: 327c999
       name: B Finale
       #original_hash: 327c999
-      cellName: B Finale
+      cell_name: B Finale
     c:
       #original_hash: 672b22c
       name: Finale
       #original_hash: 672b22c
-      cellName: Finale
+      cell_name: Finale
     d:
       #original_hash: 1e725b6
       name: Første runde
       #original_hash: 1e725b6
-      cellName: Første runde
+      cell_name: Første runde
     e:
       #original_hash: 985c8d0
       name: Anden runde
       #original_hash: 985c8d0
-      cellName: Anden runde
+      cell_name: Anden runde
     f:
       #original_hash: 672b22c
       name: Finale
       #original_hash: 672b22c
-      cellName: Finale
+      cell_name: Finale
     g:
       #original_hash: ccf6f8e
       name: Tredje runde
       #original_hash: ccf6f8e
-      cellName: Tredje runde
+      cell_name: Tredje runde
     h:
       #original_hash: 4d618bb
       name: Kvalifikationsrunde
       #original_hash: 4d618bb
-      cellName: Kvalifikationsrunde
+      cell_name: Kvalifikationsrunde
   attempts:
     #original_hash: 17dae1e
     attempt_name: '%{number}. forsøg'
@@ -400,23 +400,23 @@ da:
         #original_hash: 7f3d889
         confirmed: Lad ikke arrangørerne redigere konkurrencen
         #original_hash: d493e6a
-        showAtAll: Gør konkurrencen offentlig
+        show_at_all: Gør konkurrencen offentlig
         #original_hash: 709a232
         name: Navn
         #original_hash: f91b080
         name_reason: Årsagen til navnet for konkurrencen
         #original_hash: b649210
-        cellName: Kaldenavn for konkurrencen
+        cell_name: Kaldenavn for konkurrencen
         #original_hash: d523ebb
-        countryId: Land
+        country_id: Land
         #original_hash: 25b7b06
-        cityName: By navn
+        city_name: By navn
         #original_hash: 67cd406
         venue: Lokale
         #original_hash: 486f8fb
-        venueAddress: Lokale adresse
+        venue_address: Lokale adresse
         #original_hash: 08767af
-        venueDetails: Lokale detaljer
+        venue_details: Lokale detaljer
         #original_hash: ff99f5b
         start_date: Start dato
         #original_hash: 89d10cd
@@ -561,7 +561,7 @@ da:
         #original_hash: 8c41ae8
         wca_id: Person
         #original_hash: d523ebb
-        countryId: Land
+        country_id: Land
         #original_hash: ab58155
         dob: Fødselsdag
         #original_hash: 8a754c6
@@ -800,11 +800,11 @@ da:
           alfanumeriske tegn, streger(-), og-tegn(&), punktummer(.),
           kolonner(:), apostroffer(') og mellemrum( ).
         #original_hash: 525fcc8
-        cellName: >-
+        cell_name: >-
           Et kort navn for visning. Hvis navnet på konkurrencen allerede er
           kort, kan du bruge navnet igen (eksempel, Europe 2006)
         #original_hash: bce4589
-        cityName: >-
+        city_name: >-
           Byens navn og stat (hvis det er relevant) hvor konkurrencen bliver
           afholdt. Inkluder ikke land (eksempel, Paris eller San Francisco,
           California).
@@ -833,7 +833,7 @@ da:
         #original_hash: da39a3e
         clone_tabs: ''
         #original_hash: da39a3e
-        countryId: ''
+        country_id: ''
         #original_hash: da39a3e
         end_date: ''
         #original_hash: da39a3e
@@ -863,7 +863,7 @@ da:
         #original_hash: da39a3e
         registration_close: ''
         #original_hash: da39a3e
-        showAtAll: ''
+        show_at_all: ''
         #original_hash: da39a3e
         start_date: ''
         #original_hash: da39a3e
@@ -880,7 +880,7 @@ da:
         #original_hash: 4bd7102
         competitor_limit_reason: Hvad er grunden til deltagergrænsen? Udfyld det her på engelsk!
         #original_hash: da39a3e
-        venueAddress: ''
+        venue_address: ''
         #original_hash: da39a3e
         championship_type: ''
         #original_hash: 3de153b
@@ -1048,7 +1048,7 @@ da:
         #original_hash: 498f4c5
         dob: Fødselsdatoer skal have formatet ÅÅÅÅ-MM-DD
         #original_hash: da39a3e
-        countryId: ''
+        country_id: ''
         #original_hash: da39a3e
         gender: ''
         #original_hash: da39a3e

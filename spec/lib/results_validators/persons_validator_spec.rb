@@ -7,8 +7,8 @@ PV = RV::PersonsValidator
 
 RSpec.describe PV do
   context "on InboxResult and Result" do
-    let!(:competition1) { FactoryBot.create(:competition, :past, event_ids: ["333oh"]) }
-    let!(:competition2) { FactoryBot.create(:competition, :past, event_ids: ["222"]) }
+    let!(:competition1) { create(:competition, :past, event_ids: ["333oh"]) }
+    let!(:competition2) { create(:competition, :past, event_ids: ["222"]) }
 
     # The idea behind this variable is the following: the validator can be applied
     # on either a particular model for given competition ids, or on a set of results.
@@ -26,8 +26,8 @@ RSpec.describe PV do
       it "doesn't complain when it's fine" do
         [Result, InboxResult].each do |model|
           result_kind = model.model_name.singular.to_sym
-          FactoryBot.create_list(result_kind, 10, competition: competition1, eventId: "333oh")
-          FactoryBot.create_list(result_kind, 10, competition: competition2, eventId: "222")
+          create_list(result_kind, 10, competition: competition1, event_id: "333oh")
+          create_list(result_kind, 10, competition: competition2, event_id: "222")
         end
 
         validator_args.each do |arg|
@@ -46,13 +46,13 @@ RSpec.describe PV do
         }
         [Result, InboxResult].each do |model|
           result_kind = model.model_name.singular.to_sym
-          res1 = FactoryBot.create(result_kind, competition: competition1,
-                                                eventId: "333oh")
+          res1 = create(result_kind, competition: competition1,
+                                     event_id: "333oh")
           res1.person.delete
           expected_errors[model.to_s] = [
             RV::ValidationError.new(PV::RESULTS_WITHOUT_PERSON_ERROR,
                                     :persons, competition1.id,
-                                    person_id: res1.personId),
+                                    person_id: res1.person_id),
           ]
         end
         validator_args.each do |arg|
@@ -71,16 +71,16 @@ RSpec.describe PV do
       # NON_MATCHING_NAME_WARNING
       # NON_MATCHING_COUNTRY_WARNING
       it "validates against existing person data" do
-        person = FactoryBot.create(:person, countryId: "Spain")
-        dup_name = FactoryBot.create(:inbox_person, name: person.name, competitionId: competition1.id)
-        FactoryBot.create(:inbox_result,
-                          person: dup_name, competition: competition1,
-                          eventId: "333oh")
-        res1 = FactoryBot.create(:inbox_result,
-                                 :for_existing_person,
-                                 real_person: person,
-                                 competition: competition2, eventId: "222")
-        res1.person.update(dob: 90.years.ago, gender: "a", name: "Hey", countryId: "FR")
+        person = create(:person, country_id: "Spain")
+        dup_name = create(:inbox_person, name: person.name, competition_id: competition1.id)
+        create(:inbox_result,
+               person: dup_name, competition: competition1,
+               event_id: "333oh")
+        res1 = create(:inbox_result,
+                      :for_existing_person,
+                      real_person: person,
+                      competition: competition2, event_id: "222")
+        res1.person.update(dob: 90.years.ago, gender: "a", name: "Hey", country_iso2: "FR")
 
         expected_warnings = [
           RV::ValidationWarning.new(PV::SAME_PERSON_NAME_WARNING,
@@ -135,63 +135,63 @@ RSpec.describe PV do
       # SINGLE_LETTER_FIRST_OR_LAST_NAME_WARNING
       # SINGLE_NAME_WARNING
       it "validates person data" do
-        FactoryBot.create(:inbox_result, competition: competition2, eventId: "222")
-        res1 = FactoryBot.create(:inbox_result, competition: competition2, eventId: "222")
+        create(:inbox_result, competition: competition2, event_id: "222")
+        res1 = create(:inbox_result, competition: competition2, event_id: "222")
         res1.delete
 
-        res0101 = FactoryBot.create(:inbox_result,
-                                    competition: competition1, eventId: "333oh")
+        res0101 = create(:inbox_result,
+                         competition: competition1, event_id: "333oh")
         # To the person reading that in 2100: haha, enjoy my 80+ years old joke :)
         # Just bump that date to make the "not_so_young" warning go away.
         res0101.person.update(dob: Date.new(2000, 1, 1))
-        res_too_young = FactoryBot.create(:inbox_result,
-                                          competition: competition1,
-                                          eventId: "333oh")
+        res_too_young = create(:inbox_result,
+                               competition: competition1,
+                               event_id: "333oh")
         res_too_young.person.update(dob: 2.years.ago)
-        res_not_young = FactoryBot.create(:inbox_result,
-                                          competition: competition1,
-                                          eventId: "333oh")
+        res_not_young = create(:inbox_result,
+                               competition: competition1,
+                               event_id: "333oh")
         res_not_young.person.update(dob: 101.years.ago)
-        res_whitespace = FactoryBot.create(:inbox_result,
-                                           competition: competition1,
-                                           eventId: "333oh")
+        res_whitespace = create(:inbox_result,
+                                competition: competition1,
+                                event_id: "333oh")
         res_whitespace.person.update(name: "Hey(  There)", gender: nil)
-        res_bad_parenthesis = FactoryBot.create(:inbox_result,
-                                                competition: competition1,
-                                                eventId: "333oh")
+        res_bad_parenthesis = create(:inbox_result,
+                                     competition: competition1,
+                                     event_id: "333oh")
         res_bad_parenthesis.person.update(name: "Bad Parenthesis Guy（test）")
-        res_lowercase1 = FactoryBot.create(:inbox_result,
-                                           competition: competition1,
-                                           eventId: "333oh")
+        res_lowercase1 = create(:inbox_result,
+                                competition: competition1,
+                                event_id: "333oh")
         res_lowercase1.person.update(name: "Yamada taro (山田太郎)")
-        res_lowercase2 = FactoryBot.create(:inbox_result,
-                                           competition: competition1,
-                                           eventId: "333oh")
+        res_lowercase2 = create(:inbox_result,
+                                competition: competition1,
+                                event_id: "333oh")
         res_lowercase2.person.update(name: "ilis Xocavənd")
-        res_missing_period = FactoryBot.create(:inbox_result,
-                                               competition: competition1,
-                                               eventId: "333oh")
+        res_missing_period = create(:inbox_result,
+                                    competition: competition1,
+                                    event_id: "333oh")
         res_missing_period.person.update(name: "Missing A Period")
-        res_single_letter = FactoryBot.create(:inbox_result,
-                                              competition: competition1,
-                                              eventId: "333oh")
+        res_single_letter = create(:inbox_result,
+                                   competition: competition1,
+                                   event_id: "333oh")
         res_single_letter.person.update(name: "A. B. van der Doe")
-        res_bad_period_upcase = FactoryBot.create(:inbox_result,
-                                                  competition: competition1,
-                                                  eventId: "333oh")
+        res_bad_period_upcase = create(:inbox_result,
+                                       competition: competition1,
+                                       event_id: "333oh")
         res_bad_period_upcase.person.update(name: "David K.J. RAmsey")
-        res_same_name1 = FactoryBot.create(:inbox_result,
-                                           competition: competition1,
-                                           eventId: "333oh")
+        res_same_name1 = create(:inbox_result,
+                                competition: competition1,
+                                event_id: "333oh")
         res_same_name1.person.update(name: "Tester")
-        res_same_name2 = FactoryBot.create(:inbox_result,
-                                           competition: competition1,
-                                           eventId: "333oh")
+        res_same_name2 = create(:inbox_result,
+                                competition: competition1,
+                                event_id: "333oh")
         res_same_name2.person.update(name: "Tester")
-        res_wrong_wca_id = FactoryBot.create(:inbox_result,
-                                             competition: competition1,
-                                             eventId: "333oh")
-        res_wrong_wca_id.person.update(wcaId: "ERR")
+        res_wrong_wca_id = create(:inbox_result,
+                                  competition: competition1,
+                                  event_id: "333oh")
+        res_wrong_wca_id.person.update(wca_id: "ERR")
 
         expected_errors = [
           RV::ValidationError.new(PV::PERSON_WITHOUT_RESULTS_ERROR,

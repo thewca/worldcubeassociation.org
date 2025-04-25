@@ -44,7 +44,7 @@ Rails.configuration.to_prepare do
     def xss_aware_join(delimiter = '')
       ''.html_safe.tap do |str|
         each_with_index do |element, i|
-          str << delimiter if i > 0
+          str << delimiter if i.positive?
           str << element
         end
       end
@@ -101,6 +101,32 @@ Rails.configuration.to_prepare do
     # so because of the reversing we need to reverse the tie-breaker as well
     def stable_sort_by_desc
       sort_by.with_index { |x, idx| [yield(x), -idx] }.reverse
+    end
+  end
+
+  Hash.class_eval do
+    def reject_values_recursive(&)
+      self.transform_values do |value|
+        if value.is_a?(Hash)
+          value.reject_values_recursive(&)
+        else
+          value
+        end
+      end.reject do |_key, value|
+        yield value
+      end
+    end
+
+    def each_recursive(*prefixes, &)
+      self.each do |key, value|
+        next_prefixes = prefixes + [key]
+
+        if value.is_a?(Hash)
+          value.each_recursive(*next_prefixes, &)
+        else
+          yield key, value, *prefixes
+        end
+      end
     end
   end
 

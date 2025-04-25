@@ -71,21 +71,21 @@ class UserRole < ApplicationRecord
 
   SORT_WEIGHT_LAMBDAS = {
     startDate:
-      lambda { |role| role.start_date.to_time.to_i },
+      ->(role) { role.start_date.to_time.to_i },
     lead:
-      lambda { |role| role.lead? ? 0 : 1 },
+      ->(role) { role.lead? ? 0 : 1 },
     eligibleVoter:
-      lambda { |role| role.eligible_voter? ? 0 : 1 },
+      ->(role) { role.eligible_voter? ? 0 : 1 },
     groupTypeRank:
-      lambda { |role| GROUP_TYPE_RANK_ORDER.find_index(role.group_type) || GROUP_TYPE_RANK_ORDER.length },
+      ->(role) { GROUP_TYPE_RANK_ORDER.find_index(role.group_type) || GROUP_TYPE_RANK_ORDER.length },
     status:
-      lambda { |role| role.status_rank },
+      ->(role) { role.status_rank },
     name:
-      lambda { |role| role.user.name },
+      ->(role) { role.user.name },
     groupName:
-      lambda { |role| role.group.name },
+      ->(role) { role.group.name },
     location:
-      lambda { |role| role.metadata.location || '' },
+      ->(role) { role.metadata.location || '' },
   }.freeze
 
   def self.status_rank(group_type, status)

@@ -53,12 +53,16 @@ export const fullTimeDiff = (luxonDate) => {
 
 /// / string parameters
 
-export function hasPassed(dateTime) {
-  return DateTime.fromISO(dateTime) < DateTime.now();
+export function hasPassed(dateTime, timeZone = null) {
+  return DateTime.fromISO(dateTime, { zone: timeZone }) < DateTime.now();
 }
 
-export function hasNotPassed(dateTime) {
-  return DateTime.now() < DateTime.fromISO(dateTime);
+export function hasNotPassed(dateTime, timeZone = null) {
+  return DateTime.now() < DateTime.fromISO(dateTime, { zone: timeZone });
+}
+
+export function hasNotPassedOrNull(dateTime, timeZone = null) {
+  return dateTime === null || hasNotPassed(dateTime, timeZone);
 }
 
 export const doesRangeCrossMidnight = (

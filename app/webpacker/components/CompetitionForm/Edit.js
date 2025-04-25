@@ -18,6 +18,7 @@ import I18n from '../../lib/i18n';
 
 function EditCompetition({
   competition,
+  editingUserId,
   storedEvents,
   isAdminView,
   isSeriesPersisted,
@@ -85,6 +86,13 @@ function EditCompetition({
     return isConfirmed && !isAdminView;
   }, [confirmationData, isAdminView, isLoading]);
 
+  const allowIgnoreDisabled = useMemo(() => {
+    const { staff: { staffDelegateIds, traineeDelegateIds } } = competition;
+    const allDelegates = [...staffDelegateIds, ...traineeDelegateIds];
+
+    return isAdminView || allDelegates.includes(editingUserId);
+  }, [competition, editingUserId, isAdminView]);
+
   return (
     <StoreProvider
       reducer={_.identity}
@@ -101,6 +109,7 @@ function EditCompetition({
         footerActions={footerActions}
         saveButtonText={I18n.t('competitions.competition_form.submit_update_value')}
         globalDisabled={isDisabled}
+        globalAllowIgnoreDisabled={allowIgnoreDisabled}
       >
         <MainForm storedEvents={storedEvents} />
       </EditForm>
@@ -110,6 +119,7 @@ function EditCompetition({
 
 export default function Wrapper({
   competition,
+  editingUserId,
   storedEvents = [],
   isAdminView = false,
   isSeriesPersisted = false,
@@ -118,6 +128,7 @@ export default function Wrapper({
     <WCAQueryClientProvider>
       <EditCompetition
         competition={competition}
+        editingUserId={editingUserId}
         storedEvents={storedEvents}
         isAdminView={isAdminView}
         isSeriesPersisted={isSeriesPersisted}

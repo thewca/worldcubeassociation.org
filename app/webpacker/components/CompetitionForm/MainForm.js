@@ -37,7 +37,7 @@ export default function MainForm({
 
       <RegistrationDates />
 
-      <InputMarkdown id="information" required />
+      <InputMarkdown id="information" required ignoreDisabled />
 
       <CompetitorLimit />
       <Staff />
