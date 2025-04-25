@@ -7,7 +7,7 @@ export default function GroupedEventsTable({
   results,
   children,
 }) {
-  const resultsByEvent = _.groupBy(results, 'result.eventId');
+  const resultsByEvent = _.groupBy(results, 'result.event_id');
 
   const eventIds = Object.keys(resultsByEvent);
   const eventsToRender = WCA_EVENT_IDS.filter((id) => eventIds.includes(id));

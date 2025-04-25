@@ -108,37 +108,37 @@ en:
   rounds:
     "0":
       name: "Qualification round"
-      cellName: "Qualification round"
+      cell_name: "Qualification round"
     "1":
       name: "First round"
-      cellName: "First round"
+      cell_name: "First round"
     "2":
       name: "Second round"
-      cellName: "Second round"
+      cell_name: "Second round"
     "3":
       name: "Semi Final"
-      cellName: "Semi Final"
+      cell_name: "Semi Final"
     "b":
       name: "B Final"
-      cellName: "B Final"
+      cell_name: "B Final"
     "c":
       name: "Final"
-      cellName: "Final"
+      cell_name: "Final"
     "d":
       name: "First round"
-      cellName: "First round"
+      cell_name: "First round"
     "e":
       name: "Second round"
-      cellName: "Second round"
+      cell_name: "Second round"
     "f":
       name: "Final"
-      cellName: "Final"
+      cell_name: "Final"
     "g":
       name: "Semi Final"
-      cellName: "Semi Final"
+      cell_name: "Semi Final"
     "h":
       name: "Qualification round"
-      cellName: "Qualification round"
+      cell_name: "Qualification round"
   #context: attempt name
   attempts:
     attempt_name: "Attempt %{number}"
@@ -338,7 +338,7 @@ en:
       #context: a person
       person:
         wca_id: "Person"
-        countryId: "Representing"
+        country_id: "Representing"
         dob: "Birthdate"
         gender: "Gender"
         name: "Name"
@@ -2228,6 +2228,8 @@ en:
   notifications:
     connect_wca_id: "Connect your WCA ID to your account!"
   payments:
+    messages:
+      charges_refunded: "All charges have been refunded"
     labels:
       payment_statuses: "Payment Statuses"
       available_refunds: "Available Refunds"

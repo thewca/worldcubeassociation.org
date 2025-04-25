@@ -138,7 +138,7 @@ Rails.application.configure do
   config.active_record.dump_schema_after_migration = false
 
   # Error pages for production
-  config.exceptions_app = ->(env) {
+  config.exceptions_app = lambda { |env|
     if EnvConfig.API_ONLY?
       ApiErrorsController.action(:show).call(env)
     else

@@ -218,7 +218,7 @@ class UserGroup < ApplicationRecord
       .sort_by { |role| [role.user.name, role.updated_at] } # Sorts the members alphabetically.
       .each do |role|
         user = role.user
-        if sorted_users.count == 0 || sorted_users.last.id != user.id
+        if sorted_users.count.zero? || sorted_users.last.id != user.id
           sorted_users.append(user)
           team_member_changes[user.id] = [role]
         else
@@ -297,19 +297,19 @@ class UserGroup < ApplicationRecord
     end
 
     changes_of_last_month = []
-    if leader_appointments.count + no_more_leaders.count + promoted_senior_members.count + new_senior_members.count + new_members.count + demoted_senior_members.count + no_more_senior_members.count + no_more_members.count > 0
+    if (leader_appointments.count + no_more_leaders.count + promoted_senior_members.count + new_senior_members.count + new_members.count + demoted_senior_members.count + no_more_senior_members.count + no_more_members.count).positive?
       changes_of_last_month.push("<br><b>Changes in #{self.name}</b>")
-      if leader_appointments.count + no_more_leaders.count > 0
+      if (leader_appointments.count + no_more_leaders.count).positive?
         changes_of_last_month.push("<br><b>Leaders</b>")
-        changes_of_last_month.push(leader_appointments.join("<br>")) if leader_appointments.count > 0
-        changes_of_last_month.push(no_more_leaders.join("<br>")) if no_more_leaders.count > 0
+        changes_of_last_month.push(leader_appointments.join("<br>")) if leader_appointments.count.positive?
+        changes_of_last_month.push(no_more_leaders.join("<br>")) if no_more_leaders.count.positive?
       end
-      changes_of_last_month.push("<br><b>Promoted Senior Members</b><br>#{promoted_senior_members.join("<br>")}") if promoted_senior_members.count > 0
-      changes_of_last_month.push("<br><b>New Senior Members</b><br>#{new_senior_members.join("<br>")}") if new_senior_members.count > 0
-      changes_of_last_month.push("<br><b>New Members</b><br>#{new_members.join("<br>")}") if new_members.count > 0
-      changes_of_last_month.push("<br><b>Demotions from Senior Member to Member</b><br>#{demoted_senior_members.join("<br>")}") if demoted_senior_members.count > 0
-      changes_of_last_month.push("<br><b>Resigned/Demoted Senior Members</b><br>#{no_more_senior_members.join("<br>")}") if no_more_senior_members.count > 0
-      changes_of_last_month.push("<br><b>Resigned/Demoted Members</b><br>#{no_more_members.join("<br>")}") if no_more_members.count > 0
+      changes_of_last_month.push("<br><b>Promoted Senior Members</b><br>#{promoted_senior_members.join("<br>")}") if promoted_senior_members.count.positive?
+      changes_of_last_month.push("<br><b>New Senior Members</b><br>#{new_senior_members.join("<br>")}") if new_senior_members.count.positive?
+      changes_of_last_month.push("<br><b>New Members</b><br>#{new_members.join("<br>")}") if new_members.count.positive?
+      changes_of_last_month.push("<br><b>Demotions from Senior Member to Member</b><br>#{demoted_senior_members.join("<br>")}") if demoted_senior_members.count.positive?
+      changes_of_last_month.push("<br><b>Resigned/Demoted Senior Members</b><br>#{no_more_senior_members.join("<br>")}") if no_more_senior_members.count.positive?
+      changes_of_last_month.push("<br><b>Resigned/Demoted Members</b><br>#{no_more_members.join("<br>")}") if no_more_members.count.positive?
     end
     changes_of_last_month.join("<br>")
   end

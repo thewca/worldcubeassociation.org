@@ -152,57 +152,57 @@ eu:
       #original_hash: 4d618bb
       name: Sailkatze txanda
       #original_hash: 4d618bb
-      cellName: Sailkatze txanda
+      cell_name: Sailkatze txanda
     '1':
       #original_hash: 1e725b6
       name: Lehenengo txanda
       #original_hash: 1e725b6
-      cellName: Lehenengo txanda
+      cell_name: Lehenengo txanda
     '2':
       #original_hash: 985c8d0
       name: Bigarren txanda
       #original_hash: 985c8d0
-      cellName: Bigarren txanda
+      cell_name: Bigarren txanda
     '3':
       #original_hash: e2f74d2
       name: Finalaurrekoa
       #original_hash: e2f74d2
-      cellName: Finalaurrekoa
+      cell_name: Finalaurrekoa
     b:
       #original_hash: 327c999
       name: B Finala
       #original_hash: 327c999
-      cellName: B Finala
+      cell_name: B Finala
     c:
       #original_hash: 672b22c
       name: Finala
       #original_hash: 672b22c
-      cellName: Finala
+      cell_name: Finala
     d:
       #original_hash: 1e725b6
       name: Lehenengo txanda
       #original_hash: 1e725b6
-      cellName: Lehenengo txanda
+      cell_name: Lehenengo txanda
     e:
       #original_hash: 985c8d0
       name: Bigarren txanda
       #original_hash: 985c8d0
-      cellName: Bigarren txanda
+      cell_name: Bigarren txanda
     f:
       #original_hash: 672b22c
       name: Finala
       #original_hash: 672b22c
-      cellName: Finala
+      cell_name: Finala
     g:
       #original_hash: e2f74d2
       name: Semifinala
       #original_hash: e2f74d2
-      cellName: Semifinala
+      cell_name: Semifinala
     h:
       #original_hash: 4d618bb
       name: Sailkatze txanda
       #original_hash: 4d618bb
-      cellName: Sailkatze txanda
+      cell_name: Sailkatze txanda
   attempts:
     #original_hash: 17dae1e
     attempt_name: '%{number}. saiakera'
@@ -522,7 +522,7 @@ eu:
         #original_hash: 8c41ae8
         wca_id: Pertsona
         #original_hash: fa4c045
-        countryId: Ordezkatzen
+        country_id: Ordezkatzen
         #original_hash: ab58155
         dob: Jaiotza-data
         #original_hash: 8a754c6

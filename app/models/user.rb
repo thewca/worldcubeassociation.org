@@ -16,8 +16,8 @@ class User < ApplicationRecord
   has_many :votes
   has_many :registrations
   has_many :competitions_registered_for, through: :registrations, source: "competition"
-  belongs_to :person, -> { where(subId: 1) }, primary_key: "wca_id", foreign_key: "wca_id", optional: true
-  belongs_to :unconfirmed_person, -> { where(subId: 1) }, primary_key: "wca_id", foreign_key: "unconfirmed_wca_id", class_name: "Person", optional: true
+  belongs_to :person, -> { current }, primary_key: "wca_id", foreign_key: "wca_id", optional: true
+  belongs_to :unconfirmed_person, -> { current }, primary_key: "wca_id", foreign_key: "unconfirmed_wca_id", class_name: "Person", optional: true
   belongs_to :delegate_to_handle_wca_id_claim, foreign_key: "delegate_id_to_handle_wca_id_claim", class_name: "User", optional: true
   belongs_to :region, class_name: "UserGroup", optional: true
   has_many :roles, class_name: "UserRole"
@@ -236,7 +236,7 @@ class User < ApplicationRecord
       dob_form_path = Rails.application.routes.url_helpers.contact_dob_path
       wrt_contact_path = Rails.application.routes.url_helpers.contact_path(contactRecipient: 'wrt')
       remaining_wca_id_claims = [0, MAX_INCORRECT_WCA_ID_CLAIM_COUNT - unconfirmed_person.incorrect_wca_id_claim_count].max
-      if remaining_wca_id_claims == 0 || !unconfirmed_person.dob
+      if remaining_wca_id_claims.zero? || !unconfirmed_person.dob
         errors.add(:dob_verification, I18n.t('users.errors.wca_id_no_birthdate_html', dob_form_path: dob_form_path).html_safe)
       elsif unconfirmed_person.gender.blank?
         errors.add(:gender, I18n.t('users.errors.wca_id_no_gender_html', wrt_contact_path: wrt_contact_path).html_safe)
@@ -631,7 +631,7 @@ class User < ApplicationRecord
 
   def self.panel_notifications
     {
-      self.panel_pages[:approveAvatars] => lambda { User.where.not(pending_avatar: nil).count },
+      self.panel_pages[:approveAvatars] => -> { User.where.not(pending_avatar: nil).count },
     }
   end
 
@@ -642,7 +642,7 @@ class User < ApplicationRecord
         name: 'Admin panel',
         pages: panel_pages.values,
       },
-      staff: {
+      volunteer: {
         name: 'Volunteer panel',
         pages: [],
       },
@@ -986,7 +986,7 @@ class User < ApplicationRecord
     # Only allow results admins and competition delegates to delete competitions.
     if !can_manage_competition?(competition)
       I18n.t('competitions.errors.cannot_manage')
-    elsif competition.showAtAll
+    elsif competition.show_at_all?
       I18n.t('competitions.errors.cannot_delete_public')
     elsif competition.confirmed? && !self.can_admin_results?
       I18n.t('competitions.errors.cannot_delete_confirmed')
@@ -1023,7 +1023,7 @@ class User < ApplicationRecord
                            # Not using _html suffix as automatic html_safe is available only from
                            # the view helper
                            I18n.t('users.edit.cannot_edit.reason.assigned')
-                         elsif user_to_edit == self && !(admin? || any_kind_of_delegate?) && user_to_edit.registrations.accepted.count > 0
+                         elsif user_to_edit == self && !(admin? || any_kind_of_delegate?) && user_to_edit.registrations.accepted.count.positive?
                            I18n.t('users.edit.cannot_edit.reason.registered')
                          end
     return unless cannot_edit_reason
@@ -1125,7 +1125,7 @@ class User < ApplicationRecord
     return unless !wca_id && !unconfirmed_wca_id
 
     matches = []
-    matches = competition.competitors.where(name: name, dob: dob, gender: gender, countryId: country.id).to_a unless country.nil? || dob.nil?
+    matches = competition.competitors.where(name: name, dob: dob, gender: gender, country_id: country.id).to_a unless country.nil? || dob.nil?
     if matches.size == 1 && matches.first.user.nil?
       update(wca_id: matches.first.wca_id)
     elsif notify
@@ -1370,7 +1370,7 @@ class User < ApplicationRecord
     case panel_id
     when :admin
       admin? || senior_results_team?
-    when :staff
+    when :volunteer
       staff?
     when :delegate
       any_kind_of_delegate?

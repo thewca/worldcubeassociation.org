@@ -3,7 +3,6 @@ import _ from 'lodash';
 import { Table } from 'semantic-ui-react';
 import { formatAttemptResult } from '../../lib/wca-live/attempts';
 import I18n from '../../lib/i18n';
-import { countries } from '../../lib/wca-data.js.erb';
 import {
   AttemptsCells,
   CompetitionCell,
@@ -54,7 +53,7 @@ export const resultsFiveWideColumn = {
         attempts={attempts}
         bestResultIndex={bestResultIndex}
         worstResultIndex={worstResultIndex}
-        eventId={result.eventId}
+        eventId={result.event_id}
       />
     );
   },
@@ -64,10 +63,7 @@ export const competitionColumn = {
   accessorKey: 'competition',
   header: I18n.t('results.table_elements.competition'),
   cell: ({ getValue }) => (
-    <CompetitionCell
-      competition={getValue()}
-      compatIso2={countries.byId[getValue().countryId]?.iso2}
-    />
+    <CompetitionCell competition={getValue()} />
   ),
 };
 
@@ -90,22 +86,22 @@ export const representingColumn = {
 export const attemptResultColumn = {
   accessorKey: 'result.value',
   header: I18n.t('results.table_elements.result'),
-  cell: ({ row, getValue }) => formatAttemptResult(getValue(), row.original.result.eventId),
+  cell: ({ row, getValue }) => formatAttemptResult(getValue(), row.original.result.event_id),
 };
 
 export const personColumn = {
-  accessorKey: 'result.personName',
+  accessorKey: 'result.person_name',
   header: I18n.t('results.table_elements.name'),
   cell: ({ row, getValue }) => (
     <PersonCell
-      personId={row.original.result.personId}
+      personId={row.original.result.person_id}
       personName={getValue()}
     />
   ),
 };
 
 export const eventColumn = {
-  accessorKey: 'result.eventId',
+  accessorKey: 'result.event_id',
   header: I18n.t('results.table_elements.event'),
   cell: ({ getValue }) => <EventCell eventId={getValue()} />,
 };
