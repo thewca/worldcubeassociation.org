@@ -17,7 +17,7 @@ FactoryBot.define do
     end
 
     trait :with_donation do
-      amount_lowest_denomination { competition.base_entry_fee_lowest_denomination*2 }
+      amount_lowest_denomination { competition.base_entry_fee_lowest_denomination * 2 }
     end
   end
 end
