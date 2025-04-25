@@ -201,9 +201,9 @@ export default function CompetingStep({
 
   const actionUpdateRegistration = useCallback(() => {
     confirm({
-      content: I18n.t(competitionInfo.allow_registration_edits ? 'competitions.registration_v2.update.update_confirm' : 'competitions.registration_v2.update.update_confirm_contact'),
+      content: I18n.t(canEditRegistration(competitionInfo, registration) ? 'competitions.registration_v2.update.update_confirm' : 'competitions.registration_v2.update.update_confirm_contact'),
     }).then(() => {
-      if (competitionInfo.allow_registration_edits) {
+      if (canEditRegistration(competitionInfo, registration)) {
         dispatch(showMessage('competitions.registration_v2.update.being_updated', 'basic'));
         updateRegistrationMutation({
           user_id: registration.user_id,
@@ -235,6 +235,13 @@ export default function CompetingStep({
     hasGuestsChanged,
     guests,
   ]);
+
+  const canEditRegistration = (competitionInfo, registration) => {
+    return (
+      competitionInfo.allow_registration_edits ||
+      ['pending', 'waiting_list'].includes(registration.competing.registration_status)
+    );
+  };
 
   const actionReRegister = useCallback(() => {
     updateRegistrationMutation({
