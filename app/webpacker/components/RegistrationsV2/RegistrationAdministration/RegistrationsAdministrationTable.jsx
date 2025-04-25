@@ -105,6 +105,7 @@ export default function RegistrationAdministrationTable({
                 <Table.Body {...providedDroppable.droppableProps}>
                   {sortedRegistrations.map((w, i) => (
                     <TableRow
+                      key={w.user.id}
                       competitionInfo={competitionInfo}
                       columnsExpanded={columnsExpanded}
                       registration={w}
