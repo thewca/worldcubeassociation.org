@@ -60,7 +60,7 @@ export default function CompetingStep({
 }) {
   const maxEvents = competitionInfo.events_per_registration_limit ?? Infinity;
   const {
-    registration, isRegistered, hasPaid, isPolling, isProcessing, startPolling, refetchRegistration,
+    registration, isRegistered, hasPaid, isPolling, isProcessing, startPolling, refetchRegistration, isPending, isWaitingList,
   } = useRegistration();
   const dispatch = useDispatch();
 
@@ -199,15 +199,15 @@ export default function CompetingStep({
     guests,
   ]);
 
-  const canEditRegistration = (compInfo, regInfo) => (
-    compInfo.allow_registration_edits || ['pending', 'waiting_list'].includes(regInfo.competing.registration_status)
+  const canEditRegistration = (compInfo) => (
+    compInfo.allow_registration_edits || isPending || isWaitingList
   );
 
   const actionUpdateRegistration = useCallback(() => {
     confirm({
-      content: I18n.t(canEditRegistration(competitionInfo, registration) ? 'competitions.registration_v2.update.update_confirm' : 'competitions.registration_v2.update.update_confirm_contact'),
+      content: I18n.t(canEditRegistration(competitionInfo) ? 'competitions.registration_v2.update.update_confirm' : 'competitions.registration_v2.update.update_confirm_contact'),
     }).then(() => {
-      if (canEditRegistration(competitionInfo, registration)) {
+      if (canEditRegistration(competitionInfo)) {
         dispatch(showMessage('competitions.registration_v2.update.being_updated', 'basic'));
         updateRegistrationMutation({
           user_id: registration.user_id,
