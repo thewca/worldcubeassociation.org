@@ -1313,7 +1313,7 @@ RSpec.describe 'API Registrations' do
     end
 
     describe 'refuse ticket create request' do
-      it 'refuses ticket if registration already paid', :only do
+      it 'refuses ticket if registration already paid' do
         create(:registration_payment, registration: reg)
         get api_v1_registrations_payment_ticket_path(competition_id: competition.id), headers: headers
 
