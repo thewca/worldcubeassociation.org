@@ -1313,7 +1313,7 @@ RSpec.describe 'API Registrations' do
     end
 
     describe 'refuse ticket create request' do
-      it 'refuses ticket if registration already paid' do
+      it 'if registration already paid' do
         create(:registration_payment, registration: reg)
         get api_v1_registrations_payment_ticket_path(competition_id: competition.id), headers: headers
 
@@ -1322,7 +1322,7 @@ RSpec.describe 'API Registrations' do
         expect(body).to eq({ error: Registrations::ErrorCodes::NO_OUTSTANDING_PAYMENT }.with_indifferent_access)
       end
 
-      it 'refuses ticket create request if registration is closed' do
+      it 'if registration is closed' do
         closed_comp = create(:competition, :registration_closed, :with_organizer, :stripe_connected)
         closed_reg = create(:registration, :pending, competition: closed_comp)
 
