@@ -199,11 +199,8 @@ export default function CompetingStep({
     guests,
   ]);
 
-  const canEditRegistration = (competitionInfo, registration) => {
-    return (
-      competitionInfo.allow_registration_edits || ['pending', 'waiting_list'].includes(registration.competing.registration_status)
-    );
-  };
+  const canEditRegistration = (competitionInfo, registration) =>
+    competitionInfo.allow_registration_edits || ['pending', 'waiting_list'].includes(registration.competing.registration_status);
 
 
   const actionUpdateRegistration = useCallback(() => {
