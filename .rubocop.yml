@@ -125,16 +125,10 @@ Style/ClassVars:
 Style/Documentation:
   Enabled: false
 
-Style/Lambda:
-  Enabled: false
-
 Style/MultilineBlockChain:
   Enabled: false
 
 Style/Next:
-  Enabled: false
-
-Style/NumericPredicate:
   Enabled: false
 
 Style/PercentLiteralDelimiters:
@@ -145,9 +139,6 @@ Style/RaiseArgs:
 
 Style/SignalException:
   EnforcedStyle: only_raise
-
-Layout/SpaceAroundOperators:
-  Enabled: false
 
 Layout/IndentationConsistency:
   EnforcedStyle: indented_internal_methods
@@ -392,9 +383,4 @@ RSpecRails/NegationBeValid:
   Enabled: false
 
 RSpecRails/InferredSpecType:
-  Enabled: false
-
-# Factory Bot
-
-FactoryBot/ExcessiveCreateList:
   Enabled: false

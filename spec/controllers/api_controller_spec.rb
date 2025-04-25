@@ -516,7 +516,7 @@ RSpec.describe Api::V0::ApiController, :clean_db_with_truncation do
 
     it 'returns only single if the user has no average' do
       expected_response = [
-        { "best"=>400, "eventId"=>"333oh", "type"=>"single", "on_or_before"=>Date.current.iso8601 },
+        { "best" => 400, "eventId" => "333oh", "type" => "single", "on_or_before" => Date.current.iso8601 },
       ]
 
       @competition = create(:competition) # Results will be achieved 1.year.ago - see factory definition
@@ -543,15 +543,15 @@ RSpec.describe Api::V0::ApiController, :clean_db_with_truncation do
         @user = create(:user_with_wca_id, person: @result.person)
 
         @default_expected_response = [
-          { "best"=>400, "eventId"=>"333oh", "type"=>"single", "on_or_before"=>Date.current.iso8601 },
-          { "best"=>500, "eventId"=>"333oh", "type"=>"average", "on_or_before"=>Date.current.iso8601 },
+          { "best" => 400, "eventId" => "333oh", "type" => "single", "on_or_before" => Date.current.iso8601 },
+          { "best" => 500, "eventId" => "333oh", "type" => "average", "on_or_before" => Date.current.iso8601 },
         ]
       end
 
       it 'if no date is specified, returns qualification up until the current date' do
         expected_response = [
-          { "best"=>400, "eventId"=>"333oh", "type"=>"single", "on_or_before"=>Date.current.iso8601 },
-          { "best"=>500, "eventId"=>"333oh", "type"=>"average", "on_or_before"=>Date.current.iso8601 },
+          { "best" => 400, "eventId" => "333oh", "type" => "single", "on_or_before" => Date.current.iso8601 },
+          { "best" => 500, "eventId" => "333oh", "type" => "average", "on_or_before" => Date.current.iso8601 },
         ]
 
         get :user_qualification_data, params: { user_id: @user.id }
@@ -560,8 +560,8 @@ RSpec.describe Api::V0::ApiController, :clean_db_with_truncation do
 
       it 'returns qualification up to and including the given date' do
         expected_response = [
-          { "best"=>400, "eventId"=>"333oh", "type"=>"single", "on_or_before"=>100.days.ago.to_date.iso8601 },
-          { "best"=>500, "eventId"=>"333oh", "type"=>"average", "on_or_before"=>100.days.ago.to_date.iso8601 },
+          { "best" => 400, "eventId" => "333oh", "type" => "single", "on_or_before" => 100.days.ago.to_date.iso8601 },
+          { "best" => 500, "eventId" => "333oh", "type" => "average", "on_or_before" => 100.days.ago.to_date.iso8601 },
         ]
 
         get :user_qualification_data, params: { user_id: @user.id, date: 100.days.ago }
@@ -577,8 +577,8 @@ RSpec.describe Api::V0::ApiController, :clean_db_with_truncation do
 
       it 'works as expected when the user has 2 identical PRs' do
         expected_response = [
-          { "best"=>400, "eventId"=>"333oh", "type"=>"single", "on_or_before"=>Date.current.iso8601 },
-          { "best"=>500, "eventId"=>"333oh", "type"=>"average", "on_or_before"=>Date.current.iso8601 },
+          { "best" => 400, "eventId" => "333oh", "type" => "single", "on_or_before" => Date.current.iso8601 },
+          { "best" => 500, "eventId" => "333oh", "type" => "average", "on_or_before" => Date.current.iso8601 },
         ]
 
         competition = create(:competition, starts: 200.days.ago)
@@ -590,8 +590,8 @@ RSpec.describe Api::V0::ApiController, :clean_db_with_truncation do
 
       it 'includes result achieved before the qualification date' do
         expected_response = [
-          { "best"=>400, "eventId"=>"333oh", "type"=>"single", "on_or_before"=> 2.days.ago.to_date.iso8601 },
-          { "best"=>500, "eventId"=>"333oh", "type"=>"average", "on_or_before"=> 2.days.ago.to_date.iso8601 },
+          { "best" => 400, "eventId" => "333oh", "type" => "single", "on_or_before" => 2.days.ago.to_date.iso8601 },
+          { "best" => 500, "eventId" => "333oh", "type" => "average", "on_or_before" => 2.days.ago.to_date.iso8601 },
         ]
 
         get :user_qualification_data, params: { user_id: @user.id, date: 2.days.ago }
@@ -600,8 +600,8 @@ RSpec.describe Api::V0::ApiController, :clean_db_with_truncation do
 
       it 'includes result achieved on the qualification date' do
         expected_response = [
-          { "best"=>399, "eventId"=>"333oh", "type"=>"single", "on_or_before"=> 1.day.ago.to_date.iso8601 },
-          { "best"=>499, "eventId"=>"333oh", "type"=>"average", "on_or_before"=> 1.day.ago.to_date.iso8601 },
+          { "best" => 399, "eventId" => "333oh", "type" => "single", "on_or_before" => 1.day.ago.to_date.iso8601 },
+          { "best" => 499, "eventId" => "333oh", "type" => "average", "on_or_before" => 1.day.ago.to_date.iso8601 },
         ]
 
         competition = create(:competition, starts: 1.day.ago)
@@ -613,8 +613,8 @@ RSpec.describe Api::V0::ApiController, :clean_db_with_truncation do
 
       it 'does not include result achieved after the qualification date' do
         expected_response = [
-          { "best"=>400, "eventId"=>"333oh", "type"=>"single", "on_or_before"=> 2.days.ago.to_date.iso8601 },
-          { "best"=>500, "eventId"=>"333oh", "type"=>"average", "on_or_before"=> 2.days.ago.to_date.iso8601 },
+          { "best" => 400, "eventId" => "333oh", "type" => "single", "on_or_before" => 2.days.ago.to_date.iso8601 },
+          { "best" => 500, "eventId" => "333oh", "type" => "average", "on_or_before" => 2.days.ago.to_date.iso8601 },
         ]
 
         competition = create(:competition, starts: 1.day.ago)

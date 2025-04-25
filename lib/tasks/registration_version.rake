@@ -34,7 +34,7 @@ namespace :registration_version do
       ActiveRecord::Base.transaction do
         competition.registrations.includes(:registration_payments, :registration_history_entries).find_each do |registration|
           registration.update_column :competing_status, registration.compute_competing_status
-          if registration.paid_entry_fees > 0
+          if registration.paid_entry_fees.positive?
             registration.registration_payments.each do |payment|
               # If the payments were made after November 6th we already have history entries for it
               registration.add_history_entry({ payment_status: payment.payment_status, iso_amount: payment.amount_lowest_denomination }, "user", payment.user_id, "V2 Migration", payment.created_at) if payment.created_at < Time.new(2024, 11, 6)

@@ -242,7 +242,7 @@ class Person < ApplicationRecord
   end
 
   def completed_solves_count
-    results.pluck("value1, value2, value3, value4, value5").flatten.count { |value| value > 0 }
+    results.pluck("value1, value2, value3, value4, value5").flatten.count { |value| value.positive? }
   end
 
   def gender_visible?
@@ -296,7 +296,7 @@ class Person < ApplicationRecord
 
     [
       {
-        person_has_records_in_past: records.present? && records[:total] > 0,
+        person_has_records_in_past: records.present? && records[:total].positive?,
         person_held_championship_podiums: championship_podiums&.values_at(:world, :continental, :national)&.any?(&:present?),
         person_competed_in_last_3_months: recent_competitions_3_months&.any?,
         competitions_with_external_website: competitions_with_external_website&.any?,

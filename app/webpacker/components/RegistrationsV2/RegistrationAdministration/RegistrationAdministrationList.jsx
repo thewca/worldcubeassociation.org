@@ -3,9 +3,10 @@ import React, {
   useMemo, useReducer, useRef,
 } from 'react';
 import {
-  Accordion, Checkbox, Form, Header, Icon, Segment, Sticky,
+  Accordion, Checkbox, Divider, Form, Header, Icon, Segment, Sticky,
 } from 'semantic-ui-react';
 import { getAllRegistrations } from '../api/registration/get/get_registrations';
+import RegistrationAdministrationSearch from './RegistrationAdministrationSearch';
 import RegistrationActions from './RegistrationActions';
 import { showMessage, showMessages } from '../Register/RegistrationMessage';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
@@ -110,12 +111,13 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
     },
   });
 
-  const {
-    waiting, accepted, cancelled, pending, rejected, nonCompeting,
-  } = useMemo(
+  const partitionedRegistrations = useMemo(
     () => partitionRegistrations(registrations ?? []),
     [registrations],
   );
+  const {
+    waiting, accepted, cancelled, pending, rejected, nonCompeting,
+  } = partitionedRegistrations;
 
   const selectedIds = useOrderedSet();
   const partitionedSelectedIds = useMemo(
@@ -221,7 +223,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
             </Header.Subheader>
             <Checkbox
               toggle
-              value={waitlistEditModeEnabled}
+              checked={waitlistEditModeEnabled}
               onChange={setWaitlistEditModeEnabled}
               label={I18n.t('competitions.registration_v2.list.edit_waiting_list')}
             />
@@ -409,6 +411,17 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
         </Form.Group>
       </Form>
 
+      <Divider />
+
+      <RegistrationAdministrationSearch
+        partitionedRegistrations={partitionedRegistrations}
+        competitionId={competitionInfo.id}
+        usingPayments={competitionInfo['using_payment_integrations?']}
+        currencyCode={competitionInfo.currency_code}
+      />
+
+      <Divider />
+
       <div ref={actionsRef}>
         <Sticky context={actionsRef} offset={20}>
           <RegistrationActions
@@ -420,6 +433,8 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
             updateRegistrationMutation={updateRegistrationMutation}
           />
         </Sticky>
+
+        <Divider />
 
         <Accordion
           defaultActiveIndex={nonEmptyTableIndices}
