@@ -199,6 +199,13 @@ export default function CompetingStep({
     guests,
   ]);
 
+  const canEditRegistration = (competitionInfo, registration) => {
+    return (
+      competitionInfo.allow_registration_edits || ['pending', 'waiting_list'].includes(registration.competing.registration_status)
+    );
+  };
+
+
   const actionUpdateRegistration = useCallback(() => {
     confirm({
       content: I18n.t(canEditRegistration(competitionInfo, registration) ? 'competitions.registration_v2.update.update_confirm' : 'competitions.registration_v2.update.update_confirm_contact'),
@@ -235,13 +242,6 @@ export default function CompetingStep({
     hasGuestsChanged,
     guests,
   ]);
-
-  const canEditRegistration = (competitionInfo, registration) => {
-    return (
-      competitionInfo.allow_registration_edits ||
-      ['pending', 'waiting_list'].includes(registration.competing.registration_status)
-    );
-  };
 
   const actionReRegister = useCallback(() => {
     updateRegistrationMutation({
