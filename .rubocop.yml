@@ -384,8 +384,3 @@ RSpecRails/NegationBeValid:
 
 RSpecRails/InferredSpecType:
   Enabled: false
-
-# Factory Bot
-
-FactoryBot/ExcessiveCreateList:
-  Enabled: false
