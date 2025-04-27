@@ -275,7 +275,7 @@ class UsersController < ApplicationController
     all_groups = User.all_discourse_groups
 
     # Get the teams/councils/Delegate status for user
-    user_groups = current_user.active_roles.map { |role| role.discourse_user_group }.uniq.compact.sort
+    user_groups = current_user.active_roles.map(&:discourse_user_group).uniq.compact.sort
 
     sso.external_id = current_user.id
     sso.name = current_user.name

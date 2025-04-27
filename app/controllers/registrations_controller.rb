@@ -251,7 +251,7 @@ class RegistrationsController < ApplicationController
       country_iso2: Country.c_find(registration_row[:country]).iso2,
       gender: registration_row[:gender],
       dob: registration_row[:birth_date],
-    ).tap { |user| user.save! }
+    ).tap(&:save!)
   end
 
   def register
