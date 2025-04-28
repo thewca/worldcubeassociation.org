@@ -408,7 +408,7 @@ RSpec.describe Registration do
             admin_comment: 'updated admin comment', comment: 'user comment', status: 'accepted', event_ids: ['333', '555']
           }
         }.with_indifferent_access,
-        registration.user,
+        registration.user.id,
       )
 
       registration.reload
@@ -456,7 +456,7 @@ RSpec.describe Registration do
       RSpec.shared_examples 'update competing status' do |initial_status, input_status|
         it "given #{input_status}, #{initial_status} updates as expected" do
           registration = create(:registration, initial_status.to_sym)
-          registration.update_lanes!({ user_id: registration.user.id, competing: { status: input_status } }.with_indifferent_access, registration.user)
+          registration.update_lanes!({ user_id: registration.user.id, competing: { status: input_status } }.with_indifferent_access, registration.user.id)
           registration.reload
           expect(registration.competing_status).to eq(input_status)
         end
@@ -465,7 +465,7 @@ RSpec.describe Registration do
       RSpec.shared_examples 'update competing status: deleted cases' do |initial_status, input_status|
         it "given #{input_status}, #{initial_status} updates as expected" do
           registration = create(:registration, input_status.to_sym)
-          registration.update_lanes!({ user_id: registration.user.id, competing: { status: input_status } }.with_indifferent_access, registration.user)
+          registration.update_lanes!({ user_id: registration.user.id, competing: { status: input_status } }.with_indifferent_access, registration.user.id)
           expect(registration.competing_status).to eq(Registrations::Helper::STATUS_CANCELLED)
         end
       end
@@ -476,34 +476,42 @@ RSpec.describe Registration do
     end
 
     it 'updates guests' do
-      registration.update_lanes!({ user_id: registration.user.id, guests: 5 }.with_indifferent_access, registration.user)
+      registration.update_lanes!({ user_id: registration.user.id, guests: 5 }.with_indifferent_access, registration.user.id)
       registration.reload
       expect(registration.guests).to eq(5)
     end
 
     # TODO: Should we change "comments" db field to "competing_comments"?
     it 'updates competing comment' do
-      registration.update_lanes!({ user_id: registration.user.id, competing: { comment: 'test comment' } }.with_indifferent_access, registration.user)
+      registration.update_lanes!({ user_id: registration.user.id, competing: { comment: 'test comment' } }.with_indifferent_access, registration.user.id)
       registration.reload
       expect(registration.comments).to eq('test comment')
     end
 
     it 'updates admin comment' do
-      registration.update_lanes!({ user_id: registration.user.id, competing: { admin_comment: 'test admin comment' } }.with_indifferent_access, registration.user)
+      registration.update_lanes!({ user_id: registration.user.id, competing: { admin_comment: 'test admin comment' } }.with_indifferent_access, registration.user.id)
       registration.reload
       expect(registration.administrative_notes).to eq('test admin comment')
     end
 
     it 'removes events' do
-      registration.update_lanes!({ user_id: registration.user.id, competing: { event_ids: ['333'] } }.with_indifferent_access, registration.user)
+      registration.update_lanes!({ user_id: registration.user.id, competing: { event_ids: ['333'] } }.with_indifferent_access, registration.user.id)
       registration.reload
       expect(registration.event_ids).to eq(['333'])
     end
 
     it 'adds events' do
-      registration.update_lanes!({ user_id: registration.user.id, competing: { event_ids: ['333', '444', '555'] } }.with_indifferent_access, registration.user)
+      registration.update_lanes!({ user_id: registration.user.id, competing: { event_ids: ['333', '444', '555'] } }.with_indifferent_access, registration.user.id)
       registration.reload
       expect(registration.event_ids).to eq(['333', '444', '555'])
+    end
+
+    it 'updates registration history' do
+      registration.update_lanes!({ user_id: registration.user.id, competing: { event_ids: ['333', '444', '555'] } }.with_indifferent_access, registration.user.id)
+      last_entry = registration.reload.registration_history.entries.last
+      expect(last_entry['actor_type']).to eq('user')
+      expect(last_entry['actor_id'].to_i).to eq(registration.user.id)
+      expect(last_entry['changed_attributes']).to eq({"event_ids" => ["444", "555"]})
     end
 
     describe 'update waiting list position' do
@@ -518,13 +526,13 @@ RSpec.describe Registration do
 
       it 'adds to waiting list' do
         reg = create(:registration, competition: competition)
-        reg.update_lanes!({ user_id: reg.user.id, competing: { status: 'waiting_list' } }.with_indifferent_access, reg.user)
+        reg.update_lanes!({ user_id: reg.user.id, competing: { status: 'waiting_list' } }.with_indifferent_access, reg.user.id)
 
         expect(reg.waiting_list_position).to eq(6)
       end
 
       it 'no change if we try to add a registration on the waiting list' do
-        reg1.update_lanes!({ user_id: reg1.user.id, competing: { status: 'waiting_list' } }.with_indifferent_access, reg1.user)
+        reg1.update_lanes!({ user_id: reg1.user.id, competing: { status: 'waiting_list' } }.with_indifferent_access, reg1.user.id)
 
         expect(reg1.waiting_list_position).to eq(1)
         expect(reg2.waiting_list_position).to eq(2)
@@ -536,14 +544,14 @@ RSpec.describe Registration do
       end
 
       it 'removes from waiting list' do
-        reg4.update_lanes!({ user_id: reg4.user.id, competing: { status: 'pending' } }.with_indifferent_access, reg4.user)
+        reg4.update_lanes!({ user_id: reg4.user.id, competing: { status: 'pending' } }.with_indifferent_access, reg4.user.id)
 
         expect(reg4.waiting_list_position).to be(nil)
         expect(waiting_list.entries.count).to eq(4)
       end
 
       it 'moves backwards in waiting list' do
-        reg2.update_lanes!({ user_id: reg2.user.id, competing: { waiting_list_position: 5 } }.with_indifferent_access, reg2.user)
+        reg2.update_lanes!({ user_id: reg2.user.id, competing: { waiting_list_position: 5 } }.with_indifferent_access, reg2.user.id)
 
         expect(reg1.waiting_list_position).to eq(1)
         expect(reg2.waiting_list_position).to eq(5)
@@ -555,7 +563,7 @@ RSpec.describe Registration do
       end
 
       it 'moves forwards in waiting list' do
-        reg5.update_lanes!({ user_id: reg5.user.id, competing: { waiting_list_position: 1 } }.with_indifferent_access, reg5.user)
+        reg5.update_lanes!({ user_id: reg5.user.id, competing: { waiting_list_position: 1 } }.with_indifferent_access, reg5.user.id)
 
         expect(reg1.waiting_list_position).to eq(2)
         expect(reg2.waiting_list_position).to eq(3)
@@ -567,7 +575,7 @@ RSpec.describe Registration do
       end
 
       it 'moves to the same position' do
-        reg5.update_lanes!({ user_id: reg5.user.id, competing: { waiting_list_position: 5 } }.with_indifferent_access, reg5.user)
+        reg5.update_lanes!({ user_id: reg5.user.id, competing: { waiting_list_position: 5 } }.with_indifferent_access, reg5.user.id)
 
         expect(reg1.waiting_list_position).to eq(1)
         expect(reg2.waiting_list_position).to eq(2)
@@ -580,7 +588,7 @@ RSpec.describe Registration do
 
       it 'move request for a registration that isnt in the waiting list' do
         reg = create(:registration, competition: competition)
-        reg.update_lanes!({ user_id: reg.user.id, competing: { waiting_list_position: 3 } }.with_indifferent_access, reg.user)
+        reg.update_lanes!({ user_id: reg.user.id, competing: { waiting_list_position: 3 } }.with_indifferent_access, reg.user.id)
 
         expect(reg.waiting_list_position).to be(nil)
 
@@ -793,7 +801,7 @@ RSpec.describe Registration do
         expect(waiting_list_reg.reload.competing_status).to eq('waiting_list')
       end
 
-      it 'if registration is part of a series with an already-accepted registration', :only do
+      it 'if registration is part of a series with an already-accepted registration' do
         registration = create(:registration, :accepted)
 
         series = create(:competition_series)
