@@ -522,8 +522,12 @@ class Registration < ApplicationRecord
     super(DEFAULT_SERIALIZE_OPTIONS.merge(options || {}))
   end
 
+  def auto_accept_enabled?
+    Rails.env.production? && EnvConfig.WCA_LIVE_SITE?
+  end
+
   def attempt_auto_accept
-    return false if Rails.env.production? && EnvConfig.WCA_LIVE_SITE?
+    return false unless auto_accept_enabled
 
     failure_reason = auto_accept_failure_reason
     if failure_reason.present?
