@@ -131,9 +131,6 @@ Style/MultilineBlockChain:
 Style/Next:
   Enabled: false
 
-Style/PercentLiteralDelimiters:
-  Enabled: false
-
 Style/RaiseArgs:
   EnforcedStyle: compact
 

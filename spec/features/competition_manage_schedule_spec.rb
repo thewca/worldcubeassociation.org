@@ -36,8 +36,8 @@ RSpec.feature "Competition events management" do
 
       save_schedule_react
 
-      expect(competition.competition_venues.map(&:name)).to match_array %w(Venue)
-      expect(competition.competition_venues.flat_map(&:venue_rooms).map(&:name)).to match_array %w(Youpitralala)
+      expect(competition.competition_venues.map(&:name)).to match_array %w[Venue]
+      expect(competition.competition_venues.flat_map(&:venue_rooms).map(&:name)).to match_array %w[Youpitralala]
     end
   end
 

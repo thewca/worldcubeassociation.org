@@ -26,7 +26,7 @@ RSpec.feature "Competition events management" do
     end
 
     scenario "adds 1 round of 333", :js do
-      expect(competition.events.map(&:id)).to match_array %w(333)
+      expect(competition.events.map(&:id)).to match_array %w[333]
     end
 
     scenario "remove event", :js do
@@ -170,7 +170,7 @@ RSpec.feature "Competition events management" do
       end
       save_events_react
 
-      expect(competition.reload.events.map(&:id)).to match_array %w(222 333 444)
+      expect(competition.reload.events.map(&:id)).to match_array %w[222 333 444]
     end
 
     scenario "board member can remove events", :js do
@@ -187,7 +187,7 @@ RSpec.feature "Competition events management" do
 
       save_events_react
 
-      expect(competition.reload.events.map(&:id)).to match_array %w(222)
+      expect(competition.reload.events.map(&:id)).to match_array %w[222]
     end
 
     context "even admin cannot create inconsistent competition state" do
@@ -211,7 +211,7 @@ RSpec.feature "Competition events management" do
           save_events_react(wait_for_completion: false)
         end
 
-        expect(competition.reload.events.map(&:id)).to match_array %w(222 444)
+        expect(competition.reload.events.map(&:id)).to match_array %w[222 444]
       end
 
       scenario "by inserting a qualification when they were not originally applied for", :js do

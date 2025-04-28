@@ -1045,7 +1045,7 @@ class User < ApplicationRecord
     fields = Set.new
     if user.dummy_account?
       # That's the only field we want to be able to edit for these accounts
-      return %i(remove_avatar)
+      return %i[remove_avatar]
     end
 
     fields += editable_personal_preference_fields(user)
@@ -1057,13 +1057,13 @@ class User < ApplicationRecord
   private def editable_personal_preference_fields(user)
     fields = Set.new
     if user == self
-      fields += %i(
+      fields += %i[
         password password_confirmation
         email preferred_events results_notifications_enabled
         registration_notifications_enabled
-      )
+      ]
       fields << { user_preferred_events_attributes: %i[id event_id _destroy] }
-      fields += %i(receive_delegate_reports delegate_reports_region) if user.staff_or_any_delegate?
+      fields += %i[receive_delegate_reports delegate_reports_region] if user.staff_or_any_delegate?
     end
     fields
   end
@@ -1071,15 +1071,15 @@ class User < ApplicationRecord
   private def editable_competitor_info_fields(user)
     fields = Set.new
     if user == self || can_edit_any_user?
-      fields += %i(name dob gender country_iso2) unless cannot_edit_data_reason_html(user)
+      fields += %i[name dob gender country_iso2] unless cannot_edit_data_reason_html(user)
       fields += CLAIM_WCA_ID_PARAMS
     end
     fields << :name if user.wca_id.blank? && organizer_for?(user)
     if can_edit_any_user?
-      fields += %i(
+      fields += %i[
         unconfirmed_wca_id
-      )
-      fields += %i(wca_id) unless user.special_account?
+      ]
+      fields += %i[wca_id] unless user.special_account?
     end
     fields
   end
@@ -1087,9 +1087,9 @@ class User < ApplicationRecord
   private def editable_avatar_fields(user)
     fields = Set.new
     if user == self || admin? || results_team? || senior_delegate_for?(user)
-      fields += %i(pending_avatar avatar_thumbnail remove_avatar)
+      fields += %i[pending_avatar avatar_thumbnail remove_avatar]
 
-      fields += %i(current_avatar) if can_admin_results?
+      fields += %i[current_avatar] if can_admin_results?
     end
     fields
   end
@@ -1110,11 +1110,11 @@ class User < ApplicationRecord
   end
 
   def self.default_report_receivers
-    %w(
+    %w[
       seniors@worldcubeassociation.org
       quality@worldcubeassociation.org
       regulations@worldcubeassociation.org
-    )
+    ]
   end
 
   def notify_of_results_posted(competition)
@@ -1281,7 +1281,7 @@ class User < ApplicationRecord
         "wcaUserId" => { "type" => "integer" },
         "wcaId" => { "type" => %w[string null] },
         "countryIso2" => { "type" => "string" },
-        "gender" => { "type" => "string", "enum" => %w(m f o) },
+        "gender" => { "type" => "string", "enum" => %w[m f o] },
         "birthdate" => { "type" => "string" },
         "email" => { "type" => "string" },
         "avatar" => UserAvatar.wcif_json_schema,

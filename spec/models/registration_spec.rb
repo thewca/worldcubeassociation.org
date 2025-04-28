@@ -286,7 +286,7 @@ RSpec.describe Registration do
     let!(:competition) {
       create(
         :competition,
-        event_ids: %w(333),
+        event_ids: %w[333],
       )
     }
     let!(:competition_event) {

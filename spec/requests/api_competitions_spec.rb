@@ -191,7 +191,7 @@ RSpec.describe "API Competitions" do
         before { sign_in create :user, :board_member }
 
         it "updates the competition events of an unconfirmed competition" do
-          patch api_v0_competition_update_wcif_path(competition), params: create_wcif_with_events(%w(333)).to_json, headers: headers
+          patch api_v0_competition_update_wcif_path(competition), params: create_wcif_with_events(%w[333]).to_json, headers: headers
           expect(response).to be_successful
           expect(competition.reload.competition_events.find_by(event_id: "333").rounds.length).to eq 1
         end
@@ -203,7 +203,7 @@ RSpec.describe "API Competitions" do
 
           ce = competition.competition_events.find_by(event_id: "333")
           expect(ce.rounds.length).to eq 2
-          wcif = create_wcif_with_events(%w(333))
+          wcif = create_wcif_with_events(%w[333])
           wcif[:events][0][:rounds][0][:format] = "invalidformat"
           patch api_v0_competition_update_wcif_path(competition), params: wcif.to_json, headers: headers
           expect(response).to have_http_status(:bad_request)
@@ -213,28 +213,28 @@ RSpec.describe "API Competitions" do
         end
 
         context "confirmed competition" do
-          let(:competition) { create(:competition, :future, :with_delegate, :with_organizer, :visible, :confirmed, event_ids: %w(222 333)) }
+          let(:competition) { create(:competition, :future, :with_delegate, :with_organizer, :visible, :confirmed, event_ids: %w[222 333]) }
 
           it "can add events" do
-            patch api_v0_competition_update_wcif_path(competition), params: create_wcif_with_events(%w(333 333oh 222)).to_json, headers: headers
+            patch api_v0_competition_update_wcif_path(competition), params: create_wcif_with_events(%w[333 333oh 222]).to_json, headers: headers
             expect(response).to have_http_status(:ok)
-            expect(competition.reload.events.map(&:id)).to match_array %w(222 333 333oh)
+            expect(competition.reload.events.map(&:id)).to match_array %w[222 333 333oh]
           end
 
           it "can remove events" do
-            patch api_v0_competition_update_wcif_path(competition), params: create_wcif_with_events(%w(333)).to_json, headers: headers
+            patch api_v0_competition_update_wcif_path(competition), params: create_wcif_with_events(%w[333]).to_json, headers: headers
             expect(response).to have_http_status(:ok)
-            expect(competition.reload.events.map(&:id)).to match_array %w(333)
+            expect(competition.reload.events.map(&:id)).to match_array %w[333]
           end
         end
 
         context "competition with results posted" do
-          let(:competition) { create(:competition, :past, :with_delegate, :with_organizer, :visible, :confirmed, :results_posted, event_ids: %w(222 333)) }
+          let(:competition) { create(:competition, :past, :with_delegate, :with_organizer, :visible, :confirmed, :results_posted, event_ids: %w[222 333]) }
 
           it "allows adding rounds to an event" do
             competition.competition_events.find_by(event_id: "333").rounds.delete_all
             expect(competition.competition_events.find_by(event_id: "333").rounds.length).to eq 0
-            patch api_v0_competition_update_wcif_path(competition), params: create_wcif_with_events(%w(222 333)).to_json, headers: headers
+            patch api_v0_competition_update_wcif_path(competition), params: create_wcif_with_events(%w[222 333]).to_json, headers: headers
             expect(response).to be_successful
             expect(competition.competition_events.find_by(event_id: "333").rounds.length).to eq 1
           end
@@ -245,25 +245,25 @@ RSpec.describe "API Competitions" do
         before { sign_in competition.delegates.first }
 
         context "confirmed competition" do
-          let!(:competition) { create(:competition, :future, :with_delegate, :with_organizer, :visible, :confirmed, event_ids: %w(222 333)) }
+          let!(:competition) { create(:competition, :future, :with_delegate, :with_organizer, :visible, :confirmed, event_ids: %w[222 333]) }
 
           it "allows adding rounds to an event" do
             competition.competition_events.find_by(event_id: "333").rounds.delete_all
             expect(competition.competition_events.find_by(event_id: "333").rounds.length).to eq 0
-            patch api_v0_competition_update_wcif_path(competition), params: create_wcif_with_events(%w(222 333)).to_json, headers: headers
+            patch api_v0_competition_update_wcif_path(competition), params: create_wcif_with_events(%w[222 333]).to_json, headers: headers
             expect(response).to be_successful
             expect(competition.competition_events.find_by(event_id: "333").rounds.length).to eq 1
           end
 
           it "does not allow adding events" do
-            patch api_v0_competition_update_wcif_path(competition), params: create_wcif_with_events(%w(333 333oh 222)).to_json, headers: headers
+            patch api_v0_competition_update_wcif_path(competition), params: create_wcif_with_events(%w[333 333oh 222]).to_json, headers: headers
             expect(response).to have_http_status(:unprocessable_content)
             response_json = response.parsed_body
             expect(response_json["error"]).to eq "Cannot add events"
           end
 
           it "does not allow removing events" do
-            patch api_v0_competition_update_wcif_path(competition), params: create_wcif_with_events(%w(333)).to_json, headers: headers
+            patch api_v0_competition_update_wcif_path(competition), params: create_wcif_with_events(%w[333]).to_json, headers: headers
             expect(response).to have_http_status(:unprocessable_content)
             response_json = response.parsed_body
             expect(response_json["error"]).to eq "Cannot remove events"
@@ -272,23 +272,23 @@ RSpec.describe "API Competitions" do
 
         context "unconfirmed competition" do
           it "allows adding events" do
-            patch api_v0_competition_update_wcif_path(competition), params: create_wcif_with_events(%w(333 333oh 222)).to_json, headers: headers
+            patch api_v0_competition_update_wcif_path(competition), params: create_wcif_with_events(%w[333 333oh 222]).to_json, headers: headers
             expect(response).to have_http_status(:ok)
-            expect(competition.reload.events.map(&:id)).to match_array %w(222 333 333oh)
+            expect(competition.reload.events.map(&:id)).to match_array %w[222 333 333oh]
           end
 
           it "allows removing events" do
-            patch api_v0_competition_update_wcif_path(competition), params: create_wcif_with_events(%w(333)).to_json, headers: headers
+            patch api_v0_competition_update_wcif_path(competition), params: create_wcif_with_events(%w[333]).to_json, headers: headers
             expect(response).to have_http_status(:ok)
-            expect(competition.reload.events.map(&:id)).to match_array %w(333)
+            expect(competition.reload.events.map(&:id)).to match_array %w[333]
           end
         end
 
         context "competition with results posted" do
-          let(:competition) { create(:competition, :with_delegate, :with_organizer, :visible, :confirmed, :results_posted, event_ids: %w(222 333)) }
+          let(:competition) { create(:competition, :with_delegate, :with_organizer, :visible, :confirmed, :results_posted, event_ids: %w[222 333]) }
 
           it "does not allow updating events" do
-            patch api_v0_competition_update_wcif_path(competition), params: create_wcif_with_events(%w(222 333)).to_json, headers: headers
+            patch api_v0_competition_update_wcif_path(competition), params: create_wcif_with_events(%w[222 333]).to_json, headers: headers
             expect(response).to have_http_status(:unprocessable_content)
             response_json = response.parsed_body
             expect(response_json["error"]).to eq "Cannot update events"
@@ -490,7 +490,7 @@ RSpec.describe "API Competitions" do
         end
 
         it "can update wcif" do
-          wcif = create_wcif_with_events(%w(333))
+          wcif = create_wcif_with_events(%w[333])
           round333_first = wcif[:events][0][:rounds][0]
           round333_first[:scrambleSetCount] = 2
           round333_first[:results] = [
@@ -522,7 +522,7 @@ RSpec.describe "API Competitions" do
         end
 
         it "can't update wcif" do
-          wcif = create_wcif_with_events(%w(333))
+          wcif = create_wcif_with_events(%w[333])
           patch api_v0_competition_update_wcif_path(competition), params: wcif.to_json, headers: { "CONTENT_TYPE" => "application/json" }
           expect(response).to have_http_status :forbidden
           response_json = response.parsed_body
@@ -547,7 +547,7 @@ RSpec.describe "API Competitions" do
 
         it "prevents from CSRF attacks" do
           headers["ACCESS_TOKEN"] = "INVALID"
-          wcif = create_wcif_with_events(%w(333))
+          wcif = create_wcif_with_events(%w[333])
           expect {
             patch api_v0_competition_update_wcif_path(competition), params: wcif.to_json, headers: headers
           }.to raise_exception ActionController::InvalidAuthenticityToken
@@ -564,7 +564,7 @@ RSpec.describe "API Competitions" do
 
         it "does not use CSRF protection as we use oauth token" do
           headers["ACCESS_TOKEN"] = nil
-          wcif = create_wcif_with_events(%w(333))
+          wcif = create_wcif_with_events(%w[333])
           patch api_v0_competition_update_wcif_path(competition), params: wcif.to_json, headers: headers
           expect(response).to be_successful
         end

@@ -21,7 +21,7 @@ RSpec.describe Round do
   end
 
   context "time limit" do
-    let(:competition) { create(:competition, event_ids: %w(333 444bf 555bf)) }
+    let(:competition) { create(:competition, event_ids: %w[333 444bf 555bf]) }
     let(:round) { create(:round, competition: competition, event_id: "333") }
     let(:round_undef) { create(:round, competition: competition, event_id: "333", time_limit: nil) }
 

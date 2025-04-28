@@ -42,7 +42,7 @@ class Incident < ApplicationRecord
   def self.search(query, params: {})
     incidents = Incident
     query&.split&.each do |part|
-      like_query = %w(public_summary title).map { |col| "#{col} LIKE :part" }.join(" OR ")
+      like_query = %w[public_summary title].map { |col| "#{col} LIKE :part" }.join(" OR ")
       incidents = incidents.where(like_query, part: "%#{part}%")
     end
     incidents = incidents.where(incident_tags: IncidentTag.where(tag: params[:tags].split(","))) if params[:tags]

@@ -9,7 +9,7 @@ RSpec.describe CompetitionsMailer, type: :mailer do
     let(:second_senior_delegate_role) { create(:senior_delegate_role, group: GroupsMetadataDelegateRegions.find_by!(friendly_id: 'asia').user_group) }
     let(:second_delegate_role) { create(:delegate_role, group: senior_delegate_role.group) }
     let(:third_delegate_role) { create(:trainee_delegate_role, group: second_senior_delegate_role.group) }
-    let(:competition) { create(:competition, :with_competitor_limit, championship_types: %w(world PL), delegates: [delegate_role.user, second_delegate_role.user, third_delegate_role.user]) }
+    let(:competition) { create(:competition, :with_competitor_limit, championship_types: %w[world PL], delegates: [delegate_role.user, second_delegate_role.user, third_delegate_role.user]) }
     let(:mail) do
       I18n.with_locale(:pl) do
         CompetitionsMailer.notify_wcat_of_confirmed_competition(delegate_role.user, competition)

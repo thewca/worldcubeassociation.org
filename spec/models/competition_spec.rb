@@ -962,7 +962,7 @@ RSpec.describe Competition do
       result = competition.person_ids_with_results
       expect(result.size).to eq 4
       expect(result.map(&:first)).to eq [person_four, person_one, person_three, person_two].map(&:wca_id)
-      expect(result.second.last.map(&:round_type_id)).to eq %w(f 1 c)
+      expect(result.second.last.map(&:round_type_id)).to eq %w[f 1 c]
     end
 
     it "events_with_round_types_with_results" do
@@ -979,7 +979,7 @@ RSpec.describe Competition do
       expect(results[1].second.first.last.map(&:value1)).to eq [3000, 3000]
 
       # Orders results which tied by person name.
-      expect(results[1].second.first.last.map(&:person_name)).to eq %w(One Two)
+      expect(results[1].second.first.last.map(&:person_name)).to eq %w[One Two]
     end
 
     it "winning_results and events_with_podium_results don't include results with DNF as best" do

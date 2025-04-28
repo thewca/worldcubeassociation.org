@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.describe RegistrationsController, :clean_db_with_truncation do
   context "signed in as organizer" do
     let!(:organizer) { create(:user) }
-    let(:competition) { create(:competition, :registration_open, :visible, organizers: [organizer], events: Event.where(id: %w(222 333))) }
+    let(:competition) { create(:competition, :registration_open, :visible, organizers: [organizer], events: Event.where(id: %w[222 333])) }
     let(:zzyzx_user) { create(:user, name: "Zzyzx") }
     let(:registration) { create(:registration, competition: competition, user: zzyzx_user) }
 
@@ -39,7 +39,7 @@ RSpec.describe RegistrationsController, :clean_db_with_truncation do
 
   describe 'POST #refund_payment' do
     context 'when signed in as a competitor' do
-      let(:competition) { create(:competition, :stripe_connected, :visible, :registration_open, events: Event.where(id: %w(222 333))) }
+      let(:competition) { create(:competition, :stripe_connected, :visible, :registration_open, events: Event.where(id: %w[222 333])) }
       let!(:user) { create(:user, :wca_id) }
       let!(:registration) { create(:registration, competition: competition, user: user) }
 
@@ -61,7 +61,7 @@ RSpec.describe RegistrationsController, :clean_db_with_truncation do
       let(:competition) {
         create(:competition, :stripe_connected, :visible,
                organizers: [organizer],
-               events: Event.where(id: %w(222 333)),
+               events: Event.where(id: %w[222 333]),
                use_wca_registration: true,
                starts: (ClearConnectedPaymentIntegrations::DELAY_IN_DAYS + 1).days.ago,
                registration_close: (ClearConnectedPaymentIntegrations::DELAY_IN_DAYS + 3).days.ago)

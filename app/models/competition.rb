@@ -96,7 +96,7 @@ class Competition < ApplicationRecord
 
   enum :competitor_can_cancel, %i[not_accepted always unpaid], prefix: true
 
-  CLONEABLE_ATTRIBUTES = %w(
+  CLONEABLE_ATTRIBUTES = %w[
     city_name
     country_id
     information
@@ -131,8 +131,8 @@ class Competition < ApplicationRecord
     guests_entry_fee_lowest_denomination
     guest_entry_status
     competitor_can_cancel
-  ).freeze
-  UNCLONEABLE_ATTRIBUTES = %w(
+  ].freeze
+  UNCLONEABLE_ATTRIBUTES = %w[
     id
     start_date
     end_date
@@ -173,7 +173,7 @@ class Competition < ApplicationRecord
     auto_accept_registrations
     auto_accept_disable_threshold
     newcomer_month_reserved_spots
-  ).freeze
+  ].freeze
   VALID_NAME_RE = /\A([-&.:' [:alnum:]]+) (\d{4})\z/
   VALID_ID_RE = /\A[a-zA-Z0-9]+\Z/
   PATTERN_LINK_RE = /\[\{([^}]+)}\{((https?:|mailto:)[^}]+)}\]/
@@ -1712,11 +1712,11 @@ class Competition < ApplicationRecord
     end
 
     query&.split&.each do |part|
-      like_query = %w(id name cell_name city_name country_id).map { |column| "competitions.#{column} LIKE :part" }.join(" OR ")
+      like_query = %w[id name cell_name city_name country_id].map { |column| "competitions.#{column} LIKE :part" }.join(" OR ")
       competitions = competitions.where(like_query, part: "%#{part}%")
     end
 
-    orderable_fields = %i(name start_date end_date announced_at)
+    orderable_fields = %i[name start_date end_date announced_at]
     order = if params[:sort]
               params[:sort].split(',')
                            .map do |part|

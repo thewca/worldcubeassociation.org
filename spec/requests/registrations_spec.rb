@@ -4,7 +4,7 @@ require "rails_helper"
 require "csv"
 
 RSpec.describe "registrations" do
-  let!(:competition) { create(:competition, :with_delegate, :future, :visible, event_ids: %w(333 444)) }
+  let!(:competition) { create(:competition, :with_delegate, :future, :visible, event_ids: %w[333 444]) }
 
   describe "POST #do_import" do
     context "when signed in as a normal user" do
@@ -55,7 +55,7 @@ RSpec.describe "registrations" do
         series = create(:competition_series)
         competition.update!(competition_series: series)
 
-        partner_competition = create(:competition, :with_delegate, :visible, event_ids: %w(333 555),
+        partner_competition = create(:competition, :with_delegate, :visible, event_ids: %w[333 555],
                                                                              competition_series: series, series_base: competition)
 
         # make sure there is a dummy registration for the partner competition.
@@ -160,7 +160,7 @@ RSpec.describe "registrations" do
                     expect(User.exists?(dummy_user.id)).to be false
                     user.reload
                     expect(user.wca_id).to eq dummy_user.wca_id
-                    expect(user.registrations.first.events.map(&:id)).to eq %w(333)
+                    expect(user.registrations.first.events.map(&:id)).to eq %w[333]
                     expect(competition.registrations.count).to eq 1
                   end
                 end
@@ -180,7 +180,7 @@ RSpec.describe "registrations" do
                   expect(user).not_to be_dummy_account
                   expect(user).to be_locked_account
                   expect(user.email).to eq "sherlock@example.com"
-                  expect(user.registrations.first.events.map(&:id)).to eq %w(333)
+                  expect(user.registrations.first.events.map(&:id)).to eq %w[333]
                   expect(competition.registrations.count).to eq 1
                 end
               end
@@ -196,7 +196,7 @@ RSpec.describe "registrations" do
                 expect {
                   post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
                 }.not_to change(User, :count)
-                expect(user.registrations.first.events.map(&:id)).to eq %w(333)
+                expect(user.registrations.first.events.map(&:id)).to eq %w[333]
                 expect(competition.registrations.count).to eq 1
               end
             end
@@ -247,7 +247,7 @@ RSpec.describe "registrations" do
                   expect(user.reload.wca_id).to eq person.wca_id
                   expect(user.reload.unconfirmed_wca_id).to be_nil
                   expect(user.reload.delegate_to_handle_wca_id_claim).to be_nil
-                  expect(user.registrations.first.events.map(&:id)).to eq %w(333)
+                  expect(user.registrations.first.events.map(&:id)).to eq %w[333]
                   expect(competition.registrations.count).to eq 1
                 end
               end
@@ -264,7 +264,7 @@ RSpec.describe "registrations" do
                     post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
                   }.not_to change(User, :count)
                   expect(user.reload.wca_id).to eq person.wca_id
-                  expect(user.registrations.first.events.map(&:id)).to eq %w(333)
+                  expect(user.registrations.first.events.map(&:id)).to eq %w[333]
                   expect(competition.registrations.count).to eq 1
                 end
               end
@@ -300,7 +300,7 @@ RSpec.describe "registrations" do
               expect {
                 post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
               }.not_to change(User, :count)
-              expect(user.registrations.first.events.map(&:id)).to eq %w(333)
+              expect(user.registrations.first.events.map(&:id)).to eq %w[333]
               expect(competition.registrations.count).to eq 1
             end
 
@@ -340,7 +340,7 @@ RSpec.describe "registrations" do
       describe "registrations re-import" do
         context "CSV registrant already accepted in the database" do
           it "leaves existing registration unchanged" do
-            registration = create(:registration, :accepted, competition: competition, events: %w(333))
+            registration = create(:registration, :accepted, competition: competition, events: %w[333])
             user = registration.user
             file = csv_file [
               ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
@@ -365,7 +365,7 @@ RSpec.describe "registrations" do
               post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
             }.to not_change { competition.registrations.count }
               .and not_change { registration.reload.competing_status }
-              .and change { registration.reload.events.map(&:id) }.from(%w(333)).to(%w(333 444))
+              .and change { registration.reload.events.map(&:id) }.from(%w[333]).to(%w[333 444])
           end
         end
 
@@ -447,7 +447,7 @@ RSpec.describe "registrations" do
 
       context "when there is existing registration for the given person" do
         it "renders an error" do
-          registration = create(:registration, :accepted, competition: competition, events: %w(333))
+          registration = create(:registration, :accepted, competition: competition, events: %w[333])
           user = registration.user
           expect {
             post competition_registrations_do_add_path(competition), params: {
@@ -468,7 +468,7 @@ RSpec.describe "registrations" do
           series = create(:competition_series)
           competition.update!(competition_series: series)
 
-          partner_competition = create(:competition, :with_delegate, :visible, event_ids: %w(333 555),
+          partner_competition = create(:competition, :with_delegate, :visible, event_ids: %w[333 555],
                                                                                competition_series: series, series_base: competition)
 
           # make sure there is a dummy registration for the partner competition.
@@ -507,7 +507,7 @@ RSpec.describe "registrations" do
 
       context "when competitor limit has been reached" do
         it "redirects to competition page" do
-          create(:registration, :accepted, competition: competition, events: %w(333))
+          create(:registration, :accepted, competition: competition, events: %w[333])
           competition.update!(
             competitor_limit_enabled: true, competitor_limit: 1, competitor_limit_reason: "So I take all the podiums",
           )
@@ -528,7 +528,7 @@ RSpec.describe "registrations" do
 
   describe "POST #process_payment_intent" do
     context "when not signed in" do
-      let(:competition) { create(:competition, :stripe_connected, :visible, :registration_open, events: Event.where(id: %w(222 333))) }
+      let(:competition) { create(:competition, :stripe_connected, :visible, :registration_open, events: Event.where(id: %w[222 333])) }
       let!(:user) { create(:user, :wca_id) }
       let!(:registration) { create(:registration, competition: competition, user: user) }
 
@@ -541,7 +541,7 @@ RSpec.describe "registrations" do
     end
 
     context "when signed in" do
-      let(:competition) { create(:competition, :stripe_connected, :visible, :registration_open, events: Event.where(id: %w(222 333)), base_entry_fee_lowest_denomination: 1000) }
+      let(:competition) { create(:competition, :stripe_connected, :visible, :registration_open, events: Event.where(id: %w[222 333]), base_entry_fee_lowest_denomination: 1000) }
       let!(:user) { create(:user, :wca_id) }
       let!(:registration) { create(:registration, competition: competition, user: user) }
 
@@ -1060,7 +1060,7 @@ RSpec.describe "registrations" do
   end
 
   describe "POST #create_paypal_order" do
-    let(:competition) { create(:competition, :paypal_connected, :visible, :registration_open, events: Event.where(id: %w(222 333)), base_entry_fee_lowest_denomination: 1000) }
+    let(:competition) { create(:competition, :paypal_connected, :visible, :registration_open, events: Event.where(id: %w[222 333]), base_entry_fee_lowest_denomination: 1000) }
     let!(:user) { create(:user, :wca_id) }
     let!(:registration) { create(:registration, competition: competition, user: user) }
 
@@ -1090,7 +1090,7 @@ RSpec.describe "registrations" do
   end
 
   describe "POST #capture_paypal_payment" do
-    let(:competition) { create(:competition, :paypal_connected, :visible, :registration_open, events: Event.where(id: %w(222 333)), base_entry_fee_lowest_denomination: 1000) }
+    let(:competition) { create(:competition, :paypal_connected, :visible, :registration_open, events: Event.where(id: %w[222 333]), base_entry_fee_lowest_denomination: 1000) }
     let!(:user) { create(:user, :wca_id) }
     let!(:registration) { create(:registration, competition: competition, user: user) }
 
@@ -1148,7 +1148,7 @@ RSpec.describe "registrations" do
 
   # TODO: Add cases for partial refunds
   describe "POST #issue_paypal_refund" do
-    let(:competition) { create(:competition, :paypal_connected, :visible, :registration_open, events: Event.where(id: %w(222 333)), base_entry_fee_lowest_denomination: 1000) }
+    let(:competition) { create(:competition, :paypal_connected, :visible, :registration_open, events: Event.where(id: %w[222 333]), base_entry_fee_lowest_denomination: 1000) }
     let!(:user) { create(:user, :wca_id) }
     let!(:admin_user) { create(:admin) }
     let!(:registration) { create(:registration, competition: competition, user: user) }

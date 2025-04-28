@@ -235,7 +235,7 @@ class Person < ApplicationRecord
     records = results.pluck(:regional_single_record, :regional_average_record).flatten.compact_blank
     {
       national: records.count("NR"),
-      continental: records.count { |record| %w(NR WR).exclude?(record) },
+      continental: records.count { |record| %w[NR WR].exclude?(record) },
       world: records.count("WR"),
       total: records.count,
     }
@@ -246,7 +246,7 @@ class Person < ApplicationRecord
   end
 
   def gender_visible?
-    %w(m f).include? gender
+    %w[m f].include? gender
   end
 
   def self.search(query, params: {})

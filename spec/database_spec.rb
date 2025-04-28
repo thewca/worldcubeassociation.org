@@ -64,7 +64,7 @@ RSpec.describe "database" do
               AND column_name='#{column.name}'
           SQL
 
-          if %i(text string).include?(column.type)
+          if %i[text string].include?(column.type)
             it "charset is set to utf8mb4" do
               expect(column_info["CHARACTER_SET_NAME"]).to eq "utf8mb4"
             end
