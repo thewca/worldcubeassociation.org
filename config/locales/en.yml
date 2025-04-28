@@ -1330,7 +1330,7 @@ en:
       title: "Add registration for %{comp}"
       info: "This will create an approved registration. Use this form to add walk-ins during the competition."
       add: "Add registration"
-      ots_not_enabled: "Registration is closed and on-the-spot registration is not enabled - a Delegate must enable it from the Organizer View"
+      ots_not_enabled: "Registration is closed and on-the-spot registration is not enabled - you must edit the competition to enable it first"
       competition_over: You cannot add on-the-spot registrations after the competition has ended.
       errors:
         already_registered: "This person already has a registration."
