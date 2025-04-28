@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 import {
   Button, Header, Message, Table,
 } from 'semantic-ui-react';
-import getAvailableRefunds from '../api/payment/get/getAvailableRefunds';
+import getRegistrationPayments from '../api/payment/get/getRegistrationPayments';
 import refundPayment from '../api/payment/get/refundPayment';
 import Loading from '../../Requests/Loading';
 import AutonumericField from '../../wca/FormBuilder/input/AutonumericField';
@@ -11,16 +11,16 @@ import useInputState from '../../../lib/hooks/useInputState';
 import { useConfirm } from '../../../lib/providers/ConfirmProvider';
 import I18n from '../../../lib/i18n';
 
-export default function Refunds({
-  onSuccess, userId, competitionId,
+export default function Payments({
+  onSuccess, registrationId, competitionId,
 }) {
   const {
     data: refunds,
     isLoading: refundsLoading,
     refetch,
   } = useQuery({
-    queryKey: ['refunds', competitionId, userId],
-    queryFn: () => getAvailableRefunds(competitionId, userId),
+    queryKey: ['refunds', registrationId],
+    queryFn: () => getRegistrationPayments(registrationId),
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
     staleTime: Infinity,
@@ -62,7 +62,6 @@ export default function Refunds({
               refund={refund}
               refundMutation={refundMutation}
               isMutating={isMutating}
-              userId={userId}
               competitionId={competitionId}
               key={refund.payment_id}
             />
@@ -74,7 +73,7 @@ export default function Refunds({
 }
 
 function RefundRow({
-  refund, refundMutation, isMutating, userId, competitionId,
+  refund, refundMutation, isMutating, competitionId,
 }) {
   const [amountToRefund, setAmountToRefund] = useInputState(refund.ruby_amount_refundable);
 
@@ -92,7 +91,6 @@ function RefundRow({
   }).then(() => {
     refundMutation({
       competitionId,
-      userId,
       paymentId: refund.payment_id,
       paymentProvider: refund.payment_provider,
       amount: amountToRefund,
