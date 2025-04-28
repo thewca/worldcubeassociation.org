@@ -399,12 +399,6 @@ en:
         extra_file: "Any extra file?"
         start_date: "Acknowledged since"
         end_date: "Acknowledged until"
-    errors:
-      models:
-        registration:
-          attributes:
-            competing_status:
-              exceeding_competitor_limit: "Competitor limit reached."
   enums:
     user:
       gender:
@@ -1133,6 +1127,7 @@ en:
   registrations:
     #context: and when an error is found
     errors:
+      exceeding_competitor_limit: "Competitor limit reached."
       edit_deadline_passed: "The Registration Edit Deadline has passed! Changes should only be made in extraordinary circumstances."
       need_name: "Need a name"
       need_gender: "Need a gender"

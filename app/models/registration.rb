@@ -447,6 +447,7 @@ class Registration < ApplicationRecord
     errors.add(
       :competing_status,
       :exceeding_competitor_limit,
+      message: I18n.t('registrations.errors.exceeding_competitor_limit'),
       frontend_code: Registrations::ErrorCodes::COMPETITOR_LIMIT_REACHED,
     )
   end
