@@ -7,27 +7,14 @@ import {
   SKIPPED_VALUE,
   DNS_VALUE,
   centisecondsToClockFormat,
+  reformatInput,
+  clockFormatToCentiseconds,
 } from '../../../../lib/wca-live/attempts';
 
-function reformatInput(input) {
-  const number = _.toInteger(input.replace(/\D/g, '')) || 0;
-  if (number === 0) return '';
-  const str = `00000000${number.toString().slice(0, 8)}`;
-  const [, hh, mm, ss, cc] = str.match(/(\d\d)(\d\d)(\d\d)(\d\d)$/);
-  return `${hh}:${mm}:${ss}.${cc}`.replace(/^[0:]*(?!\.)/g, '');
-}
-
 function inputToAttemptResult(input) {
-  if (input === '') return SKIPPED_VALUE;
   if (input === 'DNF') return DNF_VALUE;
   if (input === 'DNS') return DNS_VALUE;
-  const num = _.toInteger(input.replace(/\D/g, '')) || 0;
-  return (
-    Math.floor(num / 1000000) * 360000
-    + Math.floor((num % 1000000) / 10000) * 6000
-    + Math.floor((num % 10000) / 100) * 100
-    + (num % 100)
-  );
+  return clockFormatToCentiseconds(input);
 }
 
 function attemptResultToInput(attemptResult) {
