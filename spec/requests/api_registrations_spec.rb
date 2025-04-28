@@ -1279,122 +1279,68 @@ RSpec.describe 'API Registrations' do
     let(:reg) { create(:registration, :pending, competition: competition) }
     let(:headers) { { 'Authorization' => fetch_jwt_token(reg.user_id) } }
 
-    context 'production environment behaviour' do
+    before do
+      # Create an invoice item to make sure we're looking at invoice_items, not just base_registration_fee
+      FactoryBot.create(:invoice_item, registration: reg, amount_lowest_denomination: 1250, currency_code: "USD")
+    end
+
+    it 'successfully builds a payment_intent via Stripe API' do
+      get api_v1_registrations_payment_ticket_path(competition_id: competition.id), headers: headers
+      expect(response).to be_successful
+    end
+
+    context 'successful payment ticket' do
       before do
-        allow(Rails.env).to receive(:production?).and_return(true)
-        allow(EnvConfig).to receive(:WCA_LIVE_SITE?).and_return(true)
-      end
-
-      it 'successfully builds a payment_intent via Stripe API' do
         get api_v1_registrations_payment_ticket_path(competition_id: competition.id), headers: headers
-        expect(response).to be_successful
       end
 
-      context 'successful payment ticket' do
-        before do
-          get api_v1_registrations_payment_ticket_path(competition_id: competition.id), headers: headers
-        end
-
-        it 'returns a client secret' do
-          expect(response.parsed_body.keys).to include('client_secret')
-        end
-
-        it 'creates a payment intent' do
-          expect(PaymentIntent.find_by(holder_type: "Registration", holder_id: reg.id)).to be_present
-        end
-
-        it 'payment intent details match expected values' do
-          payment_record = PaymentIntent.find_by(holder_type: "Registration", holder_id: reg.id).payment_record
-          expect(payment_record.amount_stripe_denomination).to be(1000)
-          expect(payment_record.currency_code).to eq("usd")
-        end
+      it 'returns a client secret' do
+        expect(response.parsed_body.keys).to include('client_secret')
       end
 
-      it 'has the correct payment_intent properties when a donation is present' do
-        get api_v1_registrations_payment_ticket_path(competition_id: competition.id), headers: headers, params: { iso_donation_amount: 1300 }
+      it 'creates a payment intent' do
+        expect(PaymentIntent.find_by(holder_type: "Registration", holder_id: reg.id)).to be_present
+      end
 
+      it 'payment intent details match expected values' do
         payment_record = PaymentIntent.find_by(holder_type: "Registration", holder_id: reg.id).payment_record
-        expect(payment_record.amount_stripe_denomination).to be(2300)
+        expect(payment_record.amount_stripe_denomination).to be(2250)
         expect(payment_record.currency_code).to eq("usd")
       end
 
-      it 'refuses ticket create request if registration is closed' do
-        closed_comp = FactoryBot.create(:competition, :registration_closed, :with_organizer, :stripe_connected)
-        closed_reg = FactoryBot.create(:registration, :pending, competition: closed_comp)
-
-        headers = { 'Authorization' => fetch_jwt_token(closed_reg.user_id) }
-        get api_v1_registrations_payment_ticket_path(competition_id: closed_comp.id), headers: headers
-
-        body = response.parsed_body
-        expect(response).to have_http_status(:forbidden)
-        expect(body).to eq({ error: Registrations::ErrorCodes::REGISTRATION_CLOSED }.with_indifferent_access)
+      it 'persists an invoice item to the database' do
+        expect(reg.invoice_items.count).to be(2)
+        expect(reg.invoice_items.last.display_name).to eq("#{reg.competition_id} Registration")
       end
     end
 
-    context 'test environment behaviour' do
+    context 'when a donation is present' do
       before do
-        # Create an invoice item to make sure we're looking at invoice_items, not just base_registration_fee
-        FactoryBot.create(:invoice_item, registration: reg, amount_lowest_denomination: 1250, currency_code: "USD")
+        get api_v1_registrations_payment_ticket_path(competition_id: competition.id), headers: headers, params: { iso_donation_amount: 1300 }
       end
 
-      it 'successfully builds a payment_intent via Stripe API' do
-        get api_v1_registrations_payment_ticket_path(competition_id: competition.id), headers: headers
-        expect(response).to be_successful
+      it 'has the correct payment_intent properties' do
+        payment_record = PaymentIntent.find_by(holder_type: "Registration", holder_id: reg.id).payment_record
+        expect(payment_record.amount_stripe_denomination).to be(3550)
+        expect(payment_record.currency_code).to eq("usd")
       end
 
-      context 'successful payment ticket' do
-        before do
-          get api_v1_registrations_payment_ticket_path(competition_id: competition.id), headers: headers
-        end
-
-        it 'returns a client secret' do
-          expect(response.parsed_body.keys).to include('client_secret')
-        end
-
-        it 'creates a payment intent' do
-          expect(PaymentIntent.find_by(holder_type: "Registration", holder_id: reg.id)).to be_present
-        end
-
-        it 'payment intent details match expected values' do
-          payment_record = PaymentIntent.find_by(holder_type: "Registration", holder_id: reg.id).payment_record
-          expect(payment_record.amount_stripe_denomination).to be(2250)
-          expect(payment_record.currency_code).to eq("usd")
-        end
-
-        it 'persists an invoice item to the database' do
-          expect(reg.invoice_items.count).to be(2)
-          expect(reg.invoice_items.last.display_name).to eq("#{reg.competition_id} Registration")
-        end
+      it 'persists a donation to the database' do
+        expect(reg.invoice_items.count).to eq(3)
+        expect(reg.invoice_items.exists?(display_name: "Donation")).to be(true)
       end
+    end
 
-      context 'when a donation is present' do
-        before do
-          get api_v1_registrations_payment_ticket_path(competition_id: competition.id), headers: headers, params: { iso_donation_amount: 1300 }
-        end
+    it 'refuses ticket create request if registration is closed' do
+      closed_comp = FactoryBot.create(:competition, :registration_closed, :with_organizer, :stripe_connected)
+      closed_reg = FactoryBot.create(:registration, :pending, competition: closed_comp)
 
-        it 'has the correct payment_intent properties' do
-          payment_record = PaymentIntent.find_by(holder_type: "Registration", holder_id: reg.id).payment_record
-          expect(payment_record.amount_stripe_denomination).to be(3550)
-          expect(payment_record.currency_code).to eq("usd")
-        end
+      headers = { 'Authorization' => fetch_jwt_token(closed_reg.user_id) }
+      get api_v1_registrations_payment_ticket_path(competition_id: closed_comp.id), headers: headers
 
-        it 'persists a donation to the database' do
-          expect(reg.invoice_items.count).to eq(3)
-          expect(reg.invoice_items.exists?(display_name: "Donation")).to be(true)
-        end
-      end
-
-      it 'refuses ticket create request if registration is closed' do
-        closed_comp = FactoryBot.create(:competition, :registration_closed, :with_organizer, :stripe_connected)
-        closed_reg = FactoryBot.create(:registration, :pending, competition: closed_comp)
-
-        headers = { 'Authorization' => fetch_jwt_token(closed_reg.user_id) }
-        get api_v1_registrations_payment_ticket_path(competition_id: closed_comp.id), headers: headers
-
-        body = response.parsed_body
-        expect(response).to have_http_status(:forbidden)
-        expect(body).to eq({ error: Registrations::ErrorCodes::REGISTRATION_CLOSED }.with_indifferent_access)
-      end
+      body = response.parsed_body
+      expect(response).to have_http_status(:forbidden)
+      expect(body).to eq({ error: Registrations::ErrorCodes::REGISTRATION_CLOSED }.with_indifferent_access)
     end
   end
 
