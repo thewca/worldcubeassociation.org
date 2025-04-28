@@ -2496,7 +2496,7 @@ class Competition < ApplicationRecord
         # These keys all represent timestamps. They may only be edited by non-admins if...
         #   - the original value (pre-edit) has not yet passed
         #   - the new value is in the future (extending deadlines is allowed, shortening them is not)
-        if %w[registration.closingDateTime registration.waitingListDeadlineDate registration.eventChangeDeadlineDate].include?(joined_key)
+        if %w[registration.closingDateTime registration.eventChangeDeadlineDate].include?(joined_key)
           existing_value = current_state_form.dig(*prefixes, key)
 
           if existing_value.present?
