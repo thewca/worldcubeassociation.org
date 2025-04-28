@@ -1084,7 +1084,7 @@ RSpec.describe 'API Registrations' do
     end
 
     it 'returns an error if the registration isnt found' do
-      missing_registration_user_id = (registration1.user_id-1)
+      missing_registration_user_id = (registration1.user_id - 1)
       failed_update = build(:update_request, user_id: missing_registration_user_id, competition_id: registration1.competition.id)
       bulk_update_request = build(
         :bulk_update_request,
@@ -1260,7 +1260,7 @@ RSpec.describe 'API Registrations' do
       user_ids = [user1.id, user2.id, user3.id, user4.id, user5.id, user6.id]
       body.each do |data|
         expect(user_ids.include?(data['user_id'])).to be(true)
-        if data['user_id'] == registration1[:user_id] || data['user_id'] == registration2[:user_id] ||data['user_id'] == registration3[:user_id]
+        if data['user_id'] == registration1[:user_id] || data['user_id'] == registration2[:user_id] || data['user_id'] == registration3[:user_id]
           expect(data.dig('competing', 'registration_status')).to eq('accepted')
           expect(data.dig('competing', 'waiting_list_position')).to be(nil)
         elsif data['user_id'] == registration4[:user_id]

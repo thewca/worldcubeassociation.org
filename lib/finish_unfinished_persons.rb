@@ -136,7 +136,7 @@ module FinishUnfinishedPersons
         available_per_semi[semi_id] = 99 - counter
       end
 
-      if available_per_semi.key?(semi_id) && available_per_semi[semi_id] > 0
+      if available_per_semi.key?(semi_id) && available_per_semi[semi_id].positive?
         available_per_semi[semi_id] -= 1
         cleared_id = true
       else

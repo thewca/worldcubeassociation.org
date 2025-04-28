@@ -316,6 +316,9 @@ en:
         birthday: "Birthday"
         registration_competition_events: "Events"
         email: "Email"
+        search: "Search..."
+        too_few_chars: "Too few characters"
+        no_results: "No results"
       #context: a competition tab
       competition_tab:
         content: "Content"
@@ -2234,6 +2237,8 @@ en:
   notifications:
     connect_wca_id: "Connect your WCA ID to your account!"
   payments:
+    messages:
+      charges_refunded: "All charges have been refunded"
     labels:
       payment_statuses: "Payment Statuses"
       available_refunds: "Available Refunds"

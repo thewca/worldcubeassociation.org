@@ -97,11 +97,11 @@ class UsersController < ApplicationController
     action_params = params.require(:user).permit(:otp_attempt, :password)
     # This methods store the current time in the "last_authenticated_at" session
     # variable, if password matches, or if 2FA check matches.
-    on_success = -> do
+    on_success = lambda do
       flash[:success] = I18n.t("users.edit.sensitive.success")
       session[:last_authenticated_at] = Time.now
     end
-    on_failure = -> do
+    on_failure = lambda do
       flash[:danger] = I18n.t("users.edit.sensitive.failure")
     end
     if current_user.two_factor_enabled?
@@ -275,7 +275,7 @@ class UsersController < ApplicationController
     all_groups = User.all_discourse_groups
 
     # Get the teams/councils/Delegate status for user
-    user_groups = current_user.active_roles.map { |role| role.discourse_user_group }.uniq.compact.sort
+    user_groups = current_user.active_roles.map(&:discourse_user_group).uniq.compact.sort
 
     sso.external_id = current_user.id
     sso.name = current_user.name

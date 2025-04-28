@@ -173,7 +173,7 @@ class Registration < ApplicationRecord
   end
 
   def to_be_paid_through_wca?
-    !new_record? && (pending? || accepted?) && competition.using_payment_integrations? && outstanding_entry_fees > 0
+    !new_record? && (pending? || accepted?) && competition.using_payment_integrations? && outstanding_entry_fees.positive?
   end
 
   def record_payment(
@@ -277,7 +277,7 @@ class Registration < ApplicationRecord
                                 registration_status: is_competing ? competing_status : 'non_competing',
                                 registered_on: registered_at,
                                 comment: comments || "",
-                                admin_comment: administrative_notes|| "",
+                                admin_comment: administrative_notes || "",
                               },
                             })
       base_json[:competing][:waiting_list_position] = waiting_list_position if competing_status_waiting_list?
@@ -359,7 +359,7 @@ class Registration < ApplicationRecord
                                               length: {
                                                 maximum: :events_limit,
                                                 if: :events_limit_enabled?,
-                                                message: ->(registration, _data) {
+                                                message: lambda { |registration, _data|
                                                   I18n.t('registrations.errors.exceeds_event_limit', count: registration.events_limit)
                                                 },
                                                 frontend_code: Registrations::ErrorCodes::INVALID_EVENT_SELECTION,
@@ -401,7 +401,7 @@ class Registration < ApplicationRecord
     when :not_accepted
       !accepted?
     when :unpaid
-      paid_entry_fees == 0
+      paid_entry_fees.zero?
     end
   end
 

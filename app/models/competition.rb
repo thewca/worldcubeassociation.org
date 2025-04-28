@@ -54,7 +54,7 @@ class Competition < ApplicationRecord
   scope :over, -> { where("results_posted_at IS NOT NULL OR end_date < ?", Date.today) }
   scope :not_over, -> { where("results_posted_at IS NULL AND end_date >= ?", Date.today) }
   scope :between_dates, ->(start_date, end_date) { where("start_date <= ? AND end_date >= ?", end_date, start_date) }
-  scope :end_date_passed_since, lambda { |num_days| where(end_date: ...(num_days.days.ago)) }
+  scope :end_date_passed_since, ->(num_days) { where(end_date: ...(num_days.days.ago)) }
   scope :belongs_to_region, lambda { |region_id|
     joins(:country).where(
       "country_id = :region_id OR countries.continent_id = :region_id", region_id: region_id
@@ -258,7 +258,7 @@ class Competition < ApplicationRecord
   end
 
   def enforce_newcomer_month_reservations?
-    newcomer_month_reserved_spots.present? && newcomer_month_reserved_spots > 0 && NEWCOMER_MONTH_ENABLED
+    newcomer_month_reserved_spots.present? && newcomer_month_reserved_spots.positive? && NEWCOMER_MONTH_ENABLED
   end
 
   def newcomer_month_spots_reservable
@@ -341,7 +341,7 @@ class Competition < ApplicationRecord
   # We check for `present?` specifically so that a value of 0 will return true, and trigger the validation
   validate :auto_close_threshold_validations, if: -> { auto_close_threshold.present? }
   private def auto_close_threshold_validations
-    errors.add(:auto_close_threshold, I18n.t('competitions.errors.auto_close_positive_nonzero')) unless auto_close_threshold > 0
+    errors.add(:auto_close_threshold, I18n.t('competitions.errors.auto_close_positive_nonzero')) unless auto_close_threshold.positive?
     return unless auto_close_threshold != 0
 
     errors.add(:auto_close_threshold, I18n.t('competitions.errors.use_wca_registration')) unless use_wca_registration
@@ -395,9 +395,9 @@ class Competition < ApplicationRecord
     # IF we build a controller endpoint specifically for auto_accept, this logic should be move there.
     return unless auto_accept_registrations_changed? && auto_accept_registrations?
 
-    errors.add(:auto_accept_registrations, I18n.t('competitions.errors.auto_accept_accept_paid_pending')) if registrations.pending.with_payments.count > 0
+    errors.add(:auto_accept_registrations, I18n.t('competitions.errors.auto_accept_accept_paid_pending')) if registrations.pending.with_payments.count.positive?
     errors.add(:auto_accept_registrations, I18n.t('competitions.errors.auto_accept_accept_waitlisted')) if
-      registrations.waitlisted.count > 0 && !registration_full_and_accepted?
+      registrations.waitlisted.count.positive? && !registration_full_and_accepted?
   end
 
   def no_event_without_rounds?
@@ -499,9 +499,7 @@ class Competition < ApplicationRecord
   end
 
   def auto_accept_threshold_reached?
-    auto_accept_disable_threshold? &&
-      auto_accept_disable_threshold.positive? &&
-      auto_accept_disable_threshold <= registrations.accepted_and_competing_count
+    auto_accept_disable_threshold.positive? && auto_accept_disable_threshold <= registrations.competing_status_accepted.count
   end
 
   def number_of_bookmarks
@@ -1058,9 +1056,9 @@ class Competition < ApplicationRecord
 
   def paid_entry?
     if base_entry_fee_lowest_denomination.nil?
-      competition_events.sum(:fee_lowest_denomination) > 0
+      competition_events.sum(:fee_lowest_denomination).positive?
     else
-      base_entry_fee_lowest_denomination + competition_events.sum(:fee_lowest_denomination) > 0
+      (base_entry_fee_lowest_denomination + competition_events.sum(:fee_lowest_denomination)).positive?
     end
   end
 
@@ -1240,8 +1238,8 @@ class Competition < ApplicationRecord
   def kilometers_to(competition)
     6371 *
       Math.sqrt(
-        (((competition.longitude_radians - longitude_radians) * Math.cos((competition.latitude_radians + latitude_radians)/2)) ** 2) +
-        ((competition.latitude_radians - latitude_radians) ** 2),
+        (((competition.longitude_radians - longitude_radians) * Math.cos((competition.latitude_radians + latitude_radians) / 2))**2) +
+        ((competition.latitude_radians - latitude_radians)**2),
       )
   end
 
@@ -1251,7 +1249,7 @@ class Competition < ApplicationRecord
 
   # The division is to convert the end result from secods to days. .to_date removed some hours from the subtraction
   def days_until
-    start_date ? ((start_date.to_time(:utc) - Time.now.utc)/86_400).to_i : nil
+    start_date ? ((start_date.to_time(:utc) - Time.now.utc) / 86_400).to_i : nil
   end
 
   def time_until_registration
@@ -1282,7 +1280,7 @@ class Competition < ApplicationRecord
     return false if !competition.dates_present? || !self.dates_present?
 
     days_until = (competition.start_date - self.end_date).to_i
-    days_until = (self.start_date - competition.end_date).to_i * -1 if days_until < 0
+    days_until = (self.start_date - competition.end_date).to_i * -1 if days_until.negative?
     days_until
   end
 
@@ -1314,7 +1312,7 @@ class Competition < ApplicationRecord
     return false if !competition.registration_start_date_present? || !self.registration_start_date_present?
 
     seconds_until = (competition.registration_open - self.registration_open).to_i
-    seconds_until = (self.registration_open - competition.registration_open).to_i * -1 if seconds_until < 0
+    seconds_until = (self.registration_open - competition.registration_open).to_i * -1 if seconds_until.negative?
     seconds_until / 60
   end
 
@@ -2922,7 +2920,7 @@ class Competition < ApplicationRecord
   def attempt_auto_close!
     return false if auto_close_threshold.nil?
 
-    threshold_reached = fully_paid_registrations_count >= auto_close_threshold && auto_close_threshold > 0
+    threshold_reached = fully_paid_registrations_count >= auto_close_threshold && auto_close_threshold.positive?
     threshold_reached && update(closing_full_registration: true, registration_close: Time.now)
   end
 end

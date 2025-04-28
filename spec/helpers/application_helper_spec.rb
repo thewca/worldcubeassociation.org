@@ -86,7 +86,7 @@ RSpec.describe ApplicationHelper do
     end
 
     it "formats 135 Czech Korunas" do
-      expect(format_money(Money.new(135*100, "CZK"))).to eq "135 Kč (Czech Koruna)"
+      expect(format_money(Money.new(135 * 100, "CZK"))).to eq "135 Kč (Czech Koruna)"
     end
 
     it "formats 135 New Taiwanese Dollars" do

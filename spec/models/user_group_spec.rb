@@ -12,7 +12,7 @@ RSpec.describe UserGroup, type: :model do
   let(:asia_west_region) { GroupsMetadataDelegateRegions.find_by!(friendly_id: 'asia-west').user_group }
   let(:india_region) { GroupsMetadataDelegateRegions.find_by!(friendly_id: 'india').user_group }
   let(:australia_region) { GroupsMetadataDelegateRegions.find_by!(friendly_id: 'australia').user_group }
-  let(:delegate_roles) { create_list(:delegate_role, 44) }
+  let(:delegate_roles) { create_list(:delegate_role, 44) } # rubocop:disable FactoryBot/ExcessiveCreateList
   let(:delegate_users) { delegate_roles.map(&:user) }
   let(:users) { create_list(:user_with_wca_id, 10) }
 

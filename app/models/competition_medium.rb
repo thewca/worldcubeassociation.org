@@ -13,7 +13,7 @@ class CompetitionMedium < ApplicationRecord
   # https://github.com/thewca/worldcubeassociation.org/issues/2070
   # tracks adding this gem to our codebase.
   def self.media_types_i18n
-    self.media_types.keys.index_with { |k| k.titleize }
+    self.media_types.keys.index_with(&:titleize)
   end
 
   scope :belongs_to_region, lambda { |region_id|

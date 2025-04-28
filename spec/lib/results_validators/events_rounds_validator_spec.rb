@@ -72,7 +72,7 @@ RSpec.describe ERV do
       # NO_MAIN_EVENT_WARNING
       # UNEXPECTED_ROUND_RESULTS_ERROR
       # MISSING_ROUND_RESULTS_ERROR
-      cutoff = Cutoff.new(number_of_attempts: 2, attempt_result: 50*100)
+      cutoff = Cutoff.new(number_of_attempts: 2, attempt_result: 50 * 100)
       # Add some rounds to trigger the rounds validation.
       create(:round,
              competition: competition1, event_id: "333oh",

@@ -1127,7 +1127,7 @@ RSpec.describe Registrations::RegistrationChecker do
         competitor_limit = create(:competition, :with_competitor_limit, :with_organizer, competitor_limit: 3)
         limited_reg = create(:registration, competition: competitor_limit)
         create_list(:registration, 2, :accepted, competition: competitor_limit)
-        create_list(:registration, 17, :accepted)
+        create_list(:registration, 10, :accepted)
 
         update_request = build(
           :update_request,

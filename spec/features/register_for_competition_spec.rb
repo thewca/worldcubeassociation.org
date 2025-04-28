@@ -73,9 +73,9 @@ RSpec.feature "Registering for a competition", :js do
       visit competition_register_path(competition)
       reg_requirements_checkbox.click
       click_button "Continue to next Step"
-      expect(find("#checkbox-444")).to match_selector(".active")
-      expect(find("#checkbox-555")).to match_selector(".active")
-      expect(find("#checkbox-666")).not_to match_selector(".active")
+      expect(find_by_id('checkbox-444')).to match_selector(".active")
+      expect(find_by_id('checkbox-555')).to match_selector(".active")
+      expect(find_by_id('checkbox-666')).not_to match_selector(".active")
     end
 
     context "editing registration" do
