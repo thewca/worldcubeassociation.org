@@ -313,18 +313,24 @@ class RegistrationsController < ApplicationController
     stripe_intent = event.data.object # contains a polymorphic type that depends on the event
     stored_record = StripeRecord.find_by(stripe_id: stripe_intent.id)
 
-    if StripeWebhookEvent::HANDLED_EVENTS.include?(event.type)
-      if stored_record.nil?
-        logger.error "Stripe webhook reported event on entity #{stripe_intent.id} but we have no matching transaction."
-        return head :not_found
-      else
-        audit_event.update!(stripe_record: stored_record, handled: true)
-      end
+    handling_event = StripeWebhookEvent::HANDLED_EVENTS.include?(event.type)
+
+    if stored_record.nil?
+      logger.error "Stripe webhook reported event on entity #{stripe_intent.id} but we have no matching transaction."
+
+      # If this is an event that we actually want to handle, but we did not find the Stripe transaction in our records,
+      #   additionally notify the alarms channel on Slack.
+      # If this happens too much, we can think about other ways for monitoring the Webhook. Signed GB 2025-04-28
+      SlackBot.send_alarm_message("Stripe webhook reported event on entity #{stripe_intent.id} but we have no matching transaction.") if handling_event
+
+      return head :not_found
+    else
+      audit_event.update!(stripe_record: stored_record, handled: handling_event)
     end
 
     connected_account = ConnectedStripeAccount.find_by(account_id: stored_record.account_id)
 
-    if connected_account.blank?
+    if connected_account.nil?
       logger.error "Stripe webhook reported event for account '#{stored_record.account_id}' but we are not connected to that account."
       return head :not_found
     end
