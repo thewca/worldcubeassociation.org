@@ -1195,6 +1195,15 @@ class Competition < ApplicationRecord
     errors.add(:event_change_deadline_date, I18n.t('competitions.errors.event_change_deadline_after_end_date')) if event_change_deadline_date > end_date.to_datetime.end_of_day
   end
 
+  def enabling_on_the_spot_registration?
+    self.on_the_spot_registration_changed? && self.on_the_spot_registration?
+  end
+
+  validate :on_the_spot_registration_must_be_valid
+  private def on_the_spot_registration_must_be_valid
+    errors.add(:on_the_spot_registration, I18n.t('competitions.errors.on_the_spot_with_past_event_change_deadline')) if enabling_on_the_spot_registration? && event_change_deadline_date&.past?
+  end
+
   # Since Competition.events only includes saved events
   # this method is required to ensure that in any forms which
   # select events, unsaved events are still presented if
