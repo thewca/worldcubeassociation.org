@@ -66,8 +66,8 @@ class Registration < ApplicationRecord
     Rails.cache.delete(CacheAccess.registration_processing_cache_key(competition_id, user_id))
   end
 
-  def update_lanes!(params, acting_user)
-    Registrations::Lanes::Competing.update!(params, self, acting_user)
+  def update_lanes!(params, acting_entity_id)
+    Registrations::Lanes::Competing.update!(params, self, acting_entity_id)
   end
 
   def guest_limit
