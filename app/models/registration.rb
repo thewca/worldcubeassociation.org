@@ -178,15 +178,13 @@ class Registration < ApplicationRecord
   end
 
   def invoice_items_total
-    Money.new(invoice_items.sum(&:amount_lowest_denomination), entry_fee.currency)
+    Money.new(invoice_items.sum(&:amount_lowest_denomination), competition.currency_code)
   end
 
-  def invoice_items_currency_code
-    invoice_items.first.currency_code
-  end
+  def add_competition_entry(build_only: false)
+    method = build_only ? :build : :create
 
-  def build_competition_entry
-    invoice_items.build(
+    invoice_items.public_send(method,
       amount_lowest_denomination: competition.base_entry_fee_lowest_denomination,
       currency_code: competition.currency_code,
       status: :unpaid,
@@ -194,25 +192,10 @@ class Registration < ApplicationRecord
     )
   end
 
-  def add_competition_entry
-    invoice_items.create(
-      amount_lowest_denomination: competition.base_entry_fee_lowest_denomination,
-      currency_code: competition.currency_code,
-      status: :unpaid,
-      display_name: "#{competition_id} #{I18n.t('competitions.nav.menu.registration')}",
-    )
-  end
+  def add_donation(iso_amount, build_only: false)
+    method = build_only ? :build : :create
 
-  def build_donation(iso_amount)
-    invoice_items.build(
-      amount_lowest_denomination: iso_amount,
-      currency_code: competition.currency_code,
-      display_name: I18n.t('registrations.payment_form.labels.donation'),
-    )
-  end
-
-  def add_donation(iso_amount)
-    invoice_items.create(
+    invoice_items.public_send(method,
       amount_lowest_denomination: iso_amount,
       currency_code: competition.currency_code,
       display_name: I18n.t('registrations.payment_form.labels.donation'),
