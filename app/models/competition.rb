@@ -2500,22 +2500,25 @@ class Competition < ApplicationRecord
           existing_value = current_state_form.dig(*prefixes, key)
 
           if existing_value.present?
-            existing_datetime = DateTime.parse(existing_value).utc
+            existing_datetime = DateTime.parse(existing_value)
 
-            raise WcaExceptions::BadApiParameter.new(I18n.t('competitions.errors.editing_deadline_already_passed', timestamp: existing_datetime), json_property: joined_key) unless existing_datetime >= DateTime.now.utc
+            # Complain if the existing timestamp lies in the past
+            raise WcaExceptions::BadApiParameter.new(I18n.t('competitions.errors.editing_deadline_already_passed', timestamp: existing_datetime), json_property: joined_key) if existing_datetime.past?
 
             if value.present?
-              new_datetime = DateTime.parse(value).utc
-              new_after_existing = new_datetime >= existing_datetime
+              new_datetime = DateTime.parse(value)
+              new_before_existing = new_datetime < existing_datetime
 
-              raise WcaExceptions::BadApiParameter.new(I18n.t('competitions.errors.edited_deadline_not_after_original', new_timestamp: new_datetime, timestamp: existing_datetime), json_property: joined_key) unless new_after_existing
+              # Complain if the new value lies before the old value (the user is trying to move something into the past)
+              raise WcaExceptions::BadApiParameter.new(I18n.t('competitions.errors.edited_deadline_not_after_original', new_timestamp: new_datetime, timestamp: existing_datetime), json_property: joined_key) if new_before_existing
             end
           end
 
           if value.present?
-            new_datetime = DateTime.parse(value).utc
+            new_datetime = DateTime.parse(value)
 
-            raise WcaExceptions::BadApiParameter.new(I18n.t('competitions.errors.edited_deadline_not_in_future', new_timestamp: new_datetime), json_property: joined_key) unless new_datetime > DateTime.now.utc
+            # Complain if the new timestamp lies in the past
+            raise WcaExceptions::BadApiParameter.new(I18n.t('competitions.errors.edited_deadline_not_in_future', new_timestamp: new_datetime), json_property: joined_key) if new_datetime.past?
           end
         end
       end
