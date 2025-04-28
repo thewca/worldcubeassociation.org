@@ -185,21 +185,19 @@ class Registration < ApplicationRecord
     method = build_only ? :build : :create
 
     invoice_items.public_send(method,
-      amount_lowest_denomination: competition.base_entry_fee_lowest_denomination,
-      currency_code: competition.currency_code,
-      status: :unpaid,
-      display_name: "#{competition_id} #{I18n.t('competitions.nav.menu.registration')}",
-    )
+                              amount_lowest_denomination: competition.base_entry_fee_lowest_denomination,
+                              currency_code: competition.currency_code,
+                              status: :unpaid,
+                              display_name: "#{competition_id} #{I18n.t('competitions.nav.menu.registration')}")
   end
 
   def add_donation(iso_amount, build_only: false)
     method = build_only ? :build : :create
 
     invoice_items.public_send(method,
-      amount_lowest_denomination: iso_amount,
-      currency_code: competition.currency_code,
-      display_name: I18n.t('registrations.payment_form.labels.donation'),
-    )
+                              amount_lowest_denomination: iso_amount,
+                              currency_code: competition.currency_code,
+                              display_name: I18n.t('registrations.payment_form.labels.donation'))
   end
 
   def record_payment(

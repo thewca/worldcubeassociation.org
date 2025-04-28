@@ -266,7 +266,7 @@ class RegistrationsController < ApplicationController
     iso_donation_amount = params[:iso_donation_amount].to_i || 0
 
     registration.add_competition_entry(build_only: true)
-    registration.add_donation(iso_donation_amount, build_only: true) if iso_donation_amount > 0
+    registration.add_donation(iso_donation_amount, build_only: true) if iso_donation_amount.positive?
 
     ruby_money = registration.invoice_items_total
 

@@ -1281,7 +1281,7 @@ RSpec.describe 'API Registrations' do
 
     before do
       # Create an invoice item to make sure we're looking at invoice_items, not just base_registration_fee
-      FactoryBot.create(:invoice_item, registration: reg, amount_lowest_denomination: 1250, currency_code: "USD")
+      create(:invoice_item, registration: reg, amount_lowest_denomination: 1250, currency_code: "USD")
     end
 
     it 'successfully builds a payment_intent via Stripe API' do
@@ -1332,8 +1332,8 @@ RSpec.describe 'API Registrations' do
     end
 
     it 'refuses ticket create request if registration is closed' do
-      closed_comp = FactoryBot.create(:competition, :registration_closed, :with_organizer, :stripe_connected)
-      closed_reg = FactoryBot.create(:registration, :pending, competition: closed_comp)
+      closed_comp = create(:competition, :registration_closed, :with_organizer, :stripe_connected)
+      closed_reg = create(:registration, :pending, competition: closed_comp)
 
       headers = { 'Authorization' => fetch_jwt_token(closed_reg.user_id) }
       get api_v1_registrations_payment_ticket_path(competition_id: closed_comp.id), headers: headers
@@ -1386,7 +1386,7 @@ RSpec.describe 'API Registrations' do
 
     context 'with a custom invoice_item added' do
       before do
-        FactoryBot.create(:invoice_item, registration: reg, amount_lowest_denomination: 1250, currency_code: "SEK")
+        create(:invoice_item, registration: reg, amount_lowest_denomination: 1250, currency_code: "SEK")
       end
 
       it 'returns total value of invoice_items' do

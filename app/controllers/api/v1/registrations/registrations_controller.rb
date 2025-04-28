@@ -232,7 +232,7 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
     iso_donation_amount = params[:iso_donation_amount].to_i || 0
 
     @registration.add_competition_entry
-    @registration.add_donation(iso_donation_amount) if iso_donation_amount > 0
+    @registration.add_donation(iso_donation_amount) if iso_donation_amount.positive?
     ruby_money = @registration.invoice_items_total
 
     payment_account = @competition.payment_account_for(:stripe)
