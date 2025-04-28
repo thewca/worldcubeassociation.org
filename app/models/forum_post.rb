@@ -6,5 +6,5 @@ class ForumPost < ApplicationRecord
   self.table_name = "archive_phpbb3_posts"
   self.primary_key = "post_id"
 
-  belongs_to :poster, class_name: "ForumUser", foreign_key: :poster_id
+  belongs_to :poster, class_name: "ForumUser"
 end

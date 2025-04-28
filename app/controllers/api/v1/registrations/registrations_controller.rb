@@ -80,7 +80,7 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
 
   def update
     if params[:competing]
-      updated_registration = Registrations::Lanes::Competing.update!(params, @competition, @current_user.id)
+      updated_registration = Registrations::Lanes::Competing.update_raw!(params, @competition, @current_user.id)
       return render json: { status: 'ok', registration: updated_registration.to_v2_json(admin: true, history: true) }, status: :ok
     end
     render json: { status: 'bad request', message: 'You need to supply at least one lane' }, status: :bad_request
@@ -175,7 +175,7 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
     updated_registrations = {}
 
     @update_requests.each do |update|
-      updated_registrations[update['user_id']] = Registrations::Lanes::Competing.update!(update, @competition, @current_user.id)
+      updated_registrations[update['user_id']] = Registrations::Lanes::Competing.update_raw!(update, @competition, @current_user.id)
     end
 
     render json: { status: 'ok', updated_registrations: updated_registrations }
@@ -191,7 +191,7 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
                                   competition.event_ids,
                                   registrations.joins(:user).order(:id).pluck(:id, :updated_at, user: [:updated_at]),
                                 ]) do
-      registrations.includes(:user).map { |r| r.to_v2_json }
+      registrations.includes(:user).map(&:to_v2_json)
     end
     render json: payload
   end
@@ -314,7 +314,7 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
       total_accepted_registrations_after_update = competition.registrations.accepted_and_competing_count + registrations_to_be_accepted
 
       competition.competitor_limit_enabled &&
-        registrations_to_be_accepted > 0 &&
+        registrations_to_be_accepted.positive? &&
         total_accepted_registrations_after_update > competition.competitor_limit
     end
 

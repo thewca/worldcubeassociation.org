@@ -58,7 +58,7 @@ export const slimConfig = [
     header: I18n.t('results.table_elements.name'),
     cell: ({ row, getValue }) => getValue() && (
       <PersonCell
-        personId={row.original.single.personId}
+        personId={row.original.single.person_id}
         personName={getValue()}
       />
     ),
@@ -87,7 +87,7 @@ export const slimConfig = [
     header: I18n.t('results.table_elements.name'),
     cell: ({ row, getValue }) => getValue && (
       <PersonCell
-        personId={row.original.average?.personId}
+        personId={row.original.average?.person_id}
         personName={getValue()}
       />
     ),

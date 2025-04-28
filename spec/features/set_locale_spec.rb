@@ -9,15 +9,15 @@ RSpec.feature "Set the locale" do
     page.driver.resize_window_to(page.driver.current_window_handle, 1280, 1024)
     visit "/#foo"
     expect(page).to have_content "English"
-    expect(page).not_to have_content "Français"
+    expect(page).to have_no_content "Français"
 
     click_on "English" # Activate the locale selection dropdown.
     click_on "Français"
 
-    expect(page.current_path).to eq "/"
+    expect(page).to have_current_path "/", ignore_query: true
     expect(URI.parse(page.current_url).fragment).to eq "foo"
 
-    expect(page).not_to have_content "English"
+    expect(page).to have_no_content "English"
     expect(page).to have_content "Français"
   end
 
@@ -25,13 +25,13 @@ RSpec.feature "Set the locale" do
     page.driver.resize_window_to(page.driver.current_window_handle, 1280, 1024)
     visit "/"
     expect(page).to have_content "English"
-    expect(page).not_to have_content "Français"
+    expect(page).to have_no_content "Français"
 
-    user = FactoryBot.create :user, preferred_locale: "fr"
+    user = create(:user, preferred_locale: "fr")
     sign_in user
     visit "/"
 
-    expect(page).not_to have_content "English"
     expect(page).to have_content "Français"
+    expect(page).to have_no_content "English"
   end
 end

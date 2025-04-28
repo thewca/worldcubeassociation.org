@@ -81,8 +81,8 @@ class User < ApplicationRecord
       UserGroup.board,
       UserGroup.officers,
     ].flatten.flat_map(&:active_roles)
-      .select { |role| role.eligible_voter? }
-      .map { |role| role.user }
+      .select(&:eligible_voter?)
+      .map(&:user)
       .uniq
   end
 
@@ -236,7 +236,7 @@ class User < ApplicationRecord
       dob_form_path = Rails.application.routes.url_helpers.contact_dob_path
       wrt_contact_path = Rails.application.routes.url_helpers.contact_path(contactRecipient: 'wrt')
       remaining_wca_id_claims = [0, MAX_INCORRECT_WCA_ID_CLAIM_COUNT - unconfirmed_person.incorrect_wca_id_claim_count].max
-      if remaining_wca_id_claims == 0 || !unconfirmed_person.dob
+      if remaining_wca_id_claims.zero? || !unconfirmed_person.dob
         errors.add(:dob_verification, I18n.t('users.errors.wca_id_no_birthdate_html', dob_form_path: dob_form_path).html_safe)
       elsif unconfirmed_person.gender.blank?
         errors.add(:gender, I18n.t('users.errors.wca_id_no_gender_html', wrt_contact_path: wrt_contact_path).html_safe)
@@ -447,7 +447,7 @@ class User < ApplicationRecord
   end
 
   def staff?
-    active_roles.any? { |role| role.staff? }
+    active_roles.any?(&:staff?)
   end
 
   def admin?
@@ -631,7 +631,7 @@ class User < ApplicationRecord
 
   def self.panel_notifications
     {
-      self.panel_pages[:approveAvatars] => lambda { User.where.not(pending_avatar: nil).count },
+      self.panel_pages[:approveAvatars] => -> { User.where.not(pending_avatar: nil).count },
     }
   end
 
@@ -642,7 +642,7 @@ class User < ApplicationRecord
         name: 'Admin panel',
         pages: panel_pages.values,
       },
-      staff: {
+      volunteer: {
         name: 'Volunteer panel',
         pages: [],
       },
@@ -1023,7 +1023,7 @@ class User < ApplicationRecord
                            # Not using _html suffix as automatic html_safe is available only from
                            # the view helper
                            I18n.t('users.edit.cannot_edit.reason.assigned')
-                         elsif user_to_edit == self && !(admin? || any_kind_of_delegate?) && user_to_edit.registrations.accepted.count > 0
+                         elsif user_to_edit == self && !(admin? || any_kind_of_delegate?) && user_to_edit.registrations.accepted.count.positive?
                            I18n.t('users.edit.cannot_edit.reason.registered')
                          end
     return unless cannot_edit_reason
@@ -1155,8 +1155,8 @@ class User < ApplicationRecord
     UserGroup
       .delegate_regions
       .flat_map(&:active_roles)
-      .select { |role| role.staff? }
-      .map { |role| role.user_id }
+      .select(&:staff?)
+      .map(&:user_id)
   end
 
   def self.trainee_delegate_ids
@@ -1164,7 +1164,7 @@ class User < ApplicationRecord
       .delegate_regions
       .flat_map(&:active_roles)
       .select { |role| role.metadata.status == RolesMetadataDelegateRegions.statuses[:trainee_delegate] }
-      .map { |role| role.user_id }
+      .map(&:user_id)
   end
 
   def self.search(query, params: {})
@@ -1208,7 +1208,7 @@ class User < ApplicationRecord
         ].include?(role.group_type)
       }
       .reject { |role| role.group.is_hidden }
-      .map { |role| role.deprecated_team_role }
+      .map(&:deprecated_team_role)
   end
 
   DEFAULT_SERIALIZE_OPTIONS = {
@@ -1370,7 +1370,7 @@ class User < ApplicationRecord
     case panel_id
     when :admin
       admin? || senior_results_team?
-    when :staff
+    when :volunteer
       staff?
     when :delegate
       any_kind_of_delegate?
@@ -1399,7 +1399,7 @@ class User < ApplicationRecord
 
   def subordinate_delegates
     delegate_roles
-      .filter { |role| role.lead? }
+      .filter(&:lead?)
       .flat_map { |role| role.group.active_users + role.group.active_all_child_users }
       .uniq
   end
@@ -1409,7 +1409,7 @@ class User < ApplicationRecord
   end
 
   private def highest_delegate_role
-    delegate_roles.max_by { |role| role.status_rank }
+    delegate_roles.max_by(&:status_rank)
   end
 
   def delegate_status

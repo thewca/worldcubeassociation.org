@@ -242,7 +242,7 @@ class Person < ApplicationRecord
   end
 
   def completed_solves_count
-    results.pluck("value1, value2, value3, value4, value5").flatten.count { |value| value > 0 }
+    results.pluck("value1, value2, value3, value4, value5").flatten.count(&:positive?)
   end
 
   def gender_visible?
@@ -296,7 +296,7 @@ class Person < ApplicationRecord
 
     [
       {
-        person_has_records_in_past: records.present? && records[:total] > 0,
+        person_has_records_in_past: records.present? && records[:total].positive?,
         person_held_championship_podiums: championship_podiums&.values_at(:world, :continental, :national)&.any?(&:present?),
         person_competed_in_last_3_months: recent_competitions_3_months&.any?,
         competitions_with_external_website: competitions_with_external_website&.any?,
@@ -325,22 +325,22 @@ class Person < ApplicationRecord
     if sub_ids.length > 1
       # if an updated person is due to a name change, this will delete the previous person.
       # if an updated person is due to a country change, this will keep the sub person with an appropriate subId
-      previous_persons = Person.where(wca_id: wca_id).where.not(subId: 1).order(:subId)
+      previous_persons = Person.where(wca_id: wca_id).where.not(sub_id: 1).order(:sub_id)
       current_sub_id = 1
-      current_country_id = countryId
+      current_country_id = self.country_id
 
       previous_persons.each do |p|
-        if p.countryId == current_country_id
+        if p.country_id == current_country_id
           p.delete
         else
           current_sub_id += 1
-          current_country_id = p.countryId
+          current_country_id = p.country_id
           p.update(
             wca_id: new_wca_id,
             name: User::ANONYMOUS_NAME,
             gender: User::ANONYMOUS_GENDER,
             dob: User::ANONYMOUS_DOB,
-            subId: current_sub_id,
+            sub_id: current_sub_id,
           )
         end
       end

@@ -2,7 +2,7 @@
 
 FactoryBot.define do
   factory :delegate_report do
-    competition { FactoryBot.create :competition }
+    competition { FactoryBot.create(:competition) }
 
     trait :posted do
       schedule_url { "http://example.com" }

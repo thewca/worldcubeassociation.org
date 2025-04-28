@@ -32,7 +32,7 @@ namespace :db do
       end
       ActiveRecord::Base.logger.level = original_log_level
 
-      exit error_count > 0 ? 1 : 0
+      exit error_count.positive? ? 1 : 0
     end
   end
 

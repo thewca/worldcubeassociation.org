@@ -3,7 +3,7 @@
 after "development:users" do
   wct_users = UserGroup.teams_committees_group_wct.active_users
   100.times do
-    sticky = (rand(25) == 0)
+    sticky = rand(25).zero?
     title = Faker::Hacker.say_something_smart
     Post.create!(
       sticky: sticky,

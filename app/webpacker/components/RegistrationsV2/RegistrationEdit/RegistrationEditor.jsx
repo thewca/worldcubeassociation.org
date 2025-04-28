@@ -128,7 +128,6 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
         'negative',
       ));
     } else {
-      dispatch(showMessage('competitions.registration_v2.update.being_updated', 'positive'));
       // Only send changed values
       const body = {
         user_id: competitor.id,
@@ -151,9 +150,10 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
         body.guests = guests;
       }
       confirm({
-        content: I18n.t('competitions.registration_v2.update.update_confirm'),
+        content: I18n.t('competitions.registration_v2.update.organizer_update_confirm'),
       }).then(() => {
         updateRegistrationMutation(body);
+        dispatch(showMessage('competitions.registration_v2.update.being_updated', 'positive'));
       }).catch(() => {});
     }
   }, [

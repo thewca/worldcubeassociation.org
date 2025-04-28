@@ -103,7 +103,6 @@ module DatabaseDumper
           event_change_deadline_date
           force_comment_in_registration
           allow_registration_edits
-          allow_registration_self_delete_after_acceptance
           competition_series_id
           use_wca_live_for_scoretaking
           allow_registration_without_qualification
@@ -972,7 +971,7 @@ module DatabaseDumper
           "formatId" => "format_id",
           "regionalSingleRecord" => "regional_single_record",
           "regionalAverageRecord" => "regional_average_record",
-          "personCountryId" => "countryId",
+          "personCountryId" => "country_id",
         }.freeze,
       ),
     }.freeze,

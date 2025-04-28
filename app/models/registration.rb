@@ -68,7 +68,7 @@ class Registration < ApplicationRecord
   end
 
   def update_lanes!(params, acting_user)
-    Registrations::Lanes::Competing.update!(params, self.competition, acting_user.id)
+    Registrations::Lanes::Competing.update!(params, self, acting_user.id)
   end
 
   def guest_limit
@@ -174,7 +174,7 @@ class Registration < ApplicationRecord
   end
 
   def to_be_paid_through_wca?
-    !new_record? && (pending? || accepted?) && competition.using_payment_integrations? && outstanding_entry_fees > 0
+    !new_record? && (pending? || accepted?) && competition.using_payment_integrations? && outstanding_entry_fees.positive?
   end
 
   def invoice_items_total
@@ -320,7 +320,7 @@ class Registration < ApplicationRecord
                                 registration_status: is_competing ? competing_status : 'non_competing',
                                 registered_on: registered_at,
                                 comment: comments || "",
-                                admin_comment: administrative_notes|| "",
+                                admin_comment: administrative_notes || "",
                               },
                             })
       base_json[:competing][:waiting_list_position] = waiting_list_position if competing_status_waiting_list?
@@ -402,7 +402,7 @@ class Registration < ApplicationRecord
                                               length: {
                                                 maximum: :events_limit,
                                                 if: :events_limit_enabled?,
-                                                message: ->(registration, _data) {
+                                                message: lambda { |registration, _data|
                                                   I18n.t('registrations.errors.exceeds_event_limit', count: registration.events_limit)
                                                 },
                                                 frontend_code: Registrations::ErrorCodes::INVALID_EVENT_SELECTION,
@@ -444,7 +444,7 @@ class Registration < ApplicationRecord
     when :not_accepted
       !accepted?
     when :unpaid
-      paid_entry_fees == 0
+      paid_entry_fees.zero?
     end
   end
 
@@ -530,6 +530,12 @@ class Registration < ApplicationRecord
     @tracked_event_ids.present?
   end
 
+  after_commit :reset_tracked_event_ids
+
+  private def reset_tracked_event_ids
+    @tracked_event_ids = nil
+  end
+
   def tracked_event_ids
     @tracked_event_ids ||= self.event_ids
   end
@@ -539,6 +545,10 @@ class Registration < ApplicationRecord
     #   we want to avoid database writes at all cost. So we create an in-memory dummy registration,
     #   but unfortunately `through` association support is very limited for such volatile models.
     registration_competition_events.map(&:event_id)
+  end
+
+  def changed_event_ids
+    self.volatile_event_ids - self.tracked_event_ids
   end
 
   def competition_events_changed?
