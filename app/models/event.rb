@@ -4,8 +4,6 @@ class Event < ApplicationRecord
   include Cachable
   include StaticData
 
-  self.table_name = "Events"
-
   OFFICIAL = self.all_raw.select { |e| e[:is_official] }.freeze
   OFFICIAL_IDS = OFFICIAL.pluck(:id).freeze
 

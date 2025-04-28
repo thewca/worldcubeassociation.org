@@ -29,7 +29,7 @@ module ResultsValidators
       "This validator checks that Persons data make sense with regard to the competition results and the WCA database."
     end
 
-    def self.has_automated_fix?
+    def self.automatically_fixable?
       false
     end
 
@@ -39,7 +39,7 @@ module ResultsValidators
 
     def self.roman_readable_part(name)
       if name.include? " ("
-        name[0, name.index('(')-1]
+        name[0, name.index('(') - 1]
       else
         name
       end
@@ -84,7 +84,7 @@ module ResultsValidators
       validation_issues << ValidationWarning.new(SINGLE_NAME_WARNING, :persons, competition_id, name: name) if split_name.length == 1
 
       # Check for missing period in single letter middle name.
-      validation_issues << ValidationWarning.new(MISSING_PERIOD_WARNING, :persons, competition_id, name: name) if split_name.length > 2 && split_name[1, split_name.length-2].any? { |n| n.length == 1 }
+      validation_issues << ValidationWarning.new(MISSING_PERIOD_WARNING, :persons, competition_id, name: name) if split_name.length > 2 && split_name[1, split_name.length - 2].any? { |n| n.length == 1 }
 
       # Check for letter after period.
       validation_issues << ValidationWarning.new(LETTER_AFTER_PERIOD_WARNING, :persons, competition_id, name: name) if split_name.any? { |n| n.chop.include? '.' }
@@ -106,7 +106,7 @@ module ResultsValidators
         persons_by_id = competition_data.persons.index_by(&:ref_id)
 
         detected_person_ids = persons_by_id.keys
-        persons_with_results = results_for_comp.map(&:personId)
+        persons_with_results = results_for_comp.map(&:person_id)
         (detected_person_ids - persons_with_results).each do |person_id|
           @errors << ValidationError.new(PERSON_WITHOUT_RESULTS_ERROR,
                                          :persons, competition.id,
@@ -187,7 +187,7 @@ module ResultsValidators
                                                  :persons, competition.id,
                                                  name: p.name, wca_id: p.wca_id,
                                                  expected_country: existing_person.country_iso2,
-                                                 country: p.countryId)
+                                                 country: p.country_iso2)
             end
           else
             @errors << ValidationError.new(WRONG_WCA_ID_ERROR,

@@ -37,16 +37,16 @@ after "development:users", "development:user_roles" do
     competition = Competition.new(
       id: "My#{i}ResultsComp#{day.year}",
       name: "My #{i} Comp With Results #{day.year}",
-      cellName: "My #{i} Comp With Results #{day.year}",
-      cityName: random_city(country),
-      countryId: country.id,
+      cell_name: "My #{i} Comp With Results #{day.year}",
+      city_name: random_city(country),
+      country_id: country.id,
       information: "Information!",
       start_date: day.strftime("%F"),
       end_date: day.strftime("%F"),
       venue: Faker::Address.street_name,
-      venueAddress: "#{Faker::Address.street_address}, #{Faker::Address.city} #{Faker::Address.postcode}",
+      venue_address: "#{Faker::Address.street_address}, #{Faker::Address.city} #{Faker::Address.postcode}",
       external_website: "https://www.worldcubeassociation.org",
-      showAtAll: true,
+      show_at_all: true,
       delegates: [delegate],
       organizers: User.all.sample(2),
       use_wca_registration: true,
@@ -63,14 +63,14 @@ after "development:users", "development:user_roles" do
       event = competition_event.event
       round_types = %w(1 2 f).freeze
 
-      round_types.each_with_index do |roundTypeId, j|
+      round_types.each_with_index do |round_type_id, j|
         round_format = event.preferred_formats.first.format
         is_final = j == round_types.length - 1
 
         Round.create!(
           competition_event: competition_event,
           format: round_format,
-          number: j+1,
+          number: j + 1,
           total_number_of_rounds: round_types.length,
           time_limit: event.can_change_time_limit? ? TimeLimit.new : nil,
           cutoff: nil,
@@ -81,19 +81,19 @@ after "development:users", "development:user_roles" do
         users.each_with_index do |competitor, k|
           person = competitor.person
           result = Result.new(
-            pos: k+1,
-            personId: person.wca_id,
-            personName: person.name,
-            countryId: person.countryId,
-            competitionId: competition.id,
-            eventId: event.id,
-            roundTypeId: roundTypeId,
-            formatId: round_format.id,
-            regionalSingleRecord: k == 0 ? "WR" : nil,
-            regionalAverageRecord: k == 0 ? "WR" : nil,
+            pos: k + 1,
+            person_id: person.wca_id,
+            person_name: person.name,
+            country_id: person.country_id,
+            competition_id: competition.id,
+            event_id: event.id,
+            round_type_id: round_type_id,
+            format_id: round_format.id,
+            regional_single_record: k.zero? ? "WR" : nil,
+            regional_average_record: k.zero? ? "WR" : nil,
           )
           round_format.expected_solve_count.times do |v|
-            result.send(:"value#{v+1}=", random_wca_value)
+            result.send(:"value#{v + 1}=", random_wca_value)
           end
           result.average = result.compute_correct_average
           result.best = result.compute_correct_best
@@ -115,16 +115,16 @@ after "development:users", "development:user_roles" do
     competition = Competition.new(
       id: "My#{i}Comp#{day.year}",
       name: "My #{i} Best Comp #{day.year}",
-      cellName: "My #{i} Comp #{day.year}",
-      cityName: random_city(country),
-      countryId: country.id,
+      cell_name: "My #{i} Comp #{day.year}",
+      city_name: random_city(country),
+      country_id: country.id,
       information: "Information!",
       start_date: day.strftime("%F"),
       end_date: day.strftime("%F"),
       venue: Faker::Address.street_name,
-      venueAddress: "#{Faker::Address.street_address}, #{Faker::Address.city} #{Faker::Address.postcode}",
+      venue_address: "#{Faker::Address.street_address}, #{Faker::Address.city} #{Faker::Address.postcode}",
       external_website: "https://www.worldcubeassociation.org",
-      showAtAll: true,
+      show_at_all: true,
       delegates: [delegate],
       organizers: User.all.sample(2),
       use_wca_registration: true,
@@ -140,44 +140,44 @@ after "development:users", "development:user_roles" do
 
   users.each_with_index do |user, i|
     RanksAverage.create!(
-      personId: user.wca_id,
-      eventId: "333",
+      person_id: user.wca_id,
+      event_id: "333",
       best: "4242",
-      worldRank: i,
-      continentRank: i,
-      countryRank: i,
+      world_rank: i,
+      continent_rank: i,
+      country_rank: i,
     )
 
     RanksSingle.create!(
-      personId: user.wca_id,
-      eventId: "333",
+      person_id: user.wca_id,
+      event_id: "333",
       best: "2000",
-      worldRank: i,
-      continentRank: i,
-      countryRank: i,
+      world_rank: i,
+      continent_rank: i,
+      country_rank: i,
     )
   end
 
   # Upcoming competitions
   500.times do |i|
-    start_day = (i+1).days.from_now
+    start_day = (i + 1).days.from_now
     end_day = start_day + (0..5).to_a.sample.days
     end_day = start_day if start_day.year != end_day.year
     country = countries.sample
 
     competition = Competition.new(
-      id: "MyComp#{i+1}#{start_day.year}",
-      name: "My #{i+1} Comp #{start_day.year}",
-      cellName: "My #{i+1} Comp #{start_day.year}",
-      cityName: random_city(country),
-      countryId: country.id,
+      id: "MyComp#{i + 1}#{start_day.year}",
+      name: "My #{i + 1} Comp #{start_day.year}",
+      cell_name: "My #{i + 1} Comp #{start_day.year}",
+      city_name: random_city(country),
+      country_id: country.id,
       information: "Information!",
       start_date: start_day.strftime("%F"),
       end_date: end_day.strftime("%F"),
       venue: Faker::Address.street_name,
-      venueAddress: "#{Faker::Address.street_address}, #{Faker::Address.city} #{Faker::Address.postcode}",
+      venue_address: "#{Faker::Address.street_address}, #{Faker::Address.city} #{Faker::Address.postcode}",
       external_website: "https://www.worldcubeassociation.org",
-      showAtAll: true,
+      show_at_all: true,
       delegates: [delegate],
       organizers: User.all.sample(2),
       use_wca_registration: true,
@@ -194,7 +194,7 @@ after "development:users", "development:user_roles" do
     next if i < 480
 
     users.each_with_index do |user, j|
-      competing_status = j % 4 == 0 ? Registrations::Helper::STATUS_ACCEPTED : Registrations::Helper::STATUS_PENDING
+      competing_status = (j % 4).zero? ? Registrations::Helper::STATUS_ACCEPTED : Registrations::Helper::STATUS_PENDING
       registration_competition_events = competition.competition_events.sample(rand(1..competition.competition_events.count))
       FactoryBot.create(:registration, user: user, competition: competition, competing_status: competing_status, competition_events: registration_competition_events)
     end

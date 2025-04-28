@@ -52,8 +52,8 @@ module CompetitionsHelper
 
   def people_to_sentence(results)
     results
-      .sort_by(&:personName)
-      .map { |result| "[#{result.personName}](#{person_url result.personId})" }
+      .sort_by(&:person_name)
+      .map { |result| "[#{result.person_name}](#{person_url result.person_id})" }
       .to_sentence
   end
 
@@ -92,31 +92,31 @@ module CompetitionsHelper
     text = ""
     codes = ["WR", "AfR", "AsR", "OcR", "ER", "NAR", "SAR"]
     codes.each do |code|
-      comp_records = competition.results.where('regionalSingleRecord=:code OR regionalAverageRecord=:code', code: code)
+      comp_records = competition.results.where('regional_single_record=:code OR regional_average_record=:code', code: code)
       unless comp_records.empty?
         text += t("competitions.competition_info.records.#{code.downcase}")
         text += ": "
-        record_strs = comp_records.group_by(&:personName).sort.map do |personName, results_for_name|
-          results_by_personId = results_for_name.group_by(&:personId).sort
-          results_by_personId.map do |personId, results|
-            uniqueName = if results_by_personId.length > 1
-                           # Two or more people with the same name set records at this competition!
-                           # Append their WCA IDs to distinguish between them.
-                           "[#{personName} (#{personId})](#{person_url personId})"
-                         else
-                           "[#{personName}](#{person_url personId})"
-                         end
+        record_strs = comp_records.group_by(&:person_name).sort.map do |person_name, results_for_name|
+          results_by_person_id = results_for_name.group_by(&:person_id).sort
+          results_by_person_id.map do |person_id, results|
+            unique_name = if results_by_person_id.length > 1
+                            # Two or more people with the same name set records at this competition!
+                            # Append their WCA IDs to distinguish between them.
+                            "[#{person_name} (#{person_id})](#{person_url person_id})"
+                          else
+                            "[#{person_name}](#{person_url person_id})"
+                          end
             record_strs = results.sort_by do |r|
-              round_type = RoundType.c_find(r.roundTypeId)
-              [Event.c_find(r.eventId).rank, round_type.rank]
+              round_type = RoundType.c_find(r.round_type_id)
+              [Event.c_find(r.event_id).rank, round_type.rank]
             end.map do |result|
-              event = Event.c_find(result.eventId)
+              event = Event.c_find(result.event_id)
               record_strs = []
-              record_strs << t('competitions.competition_info.regional_single_record', event_name: event.name, result: (result.to_s :best)) if result.regionalSingleRecord == code
-              record_strs << t('competitions.competition_info.regional_average_record', event_name: event.name, result: (result.to_s :average)) if result.regionalAverageRecord == code
+              record_strs << t('competitions.competition_info.regional_single_record', event_name: event.name, result: (result.to_s :best)) if result.regional_single_record == code
+              record_strs << t('competitions.competition_info.regional_average_record', event_name: event.name, result: (result.to_s :average)) if result.regional_average_record == code
               record_strs
             end.flatten
-            "#{uniqueName}&lrm; #{record_strs.to_sentence}"
+            "#{unique_name}&lrm; #{record_strs.to_sentence}"
           end
         end
         text += "#{record_strs.join("; ")}.  \n" # Trailing spaces for markdown give us a <br>
@@ -150,7 +150,7 @@ module CompetitionsHelper
       submitted_by_competition_delegate = competition.delegates.include?(competition.delegate_report.posted_by_user)
       submitted_by_competition_delegate ? "#{pluralize(days_report, "day")} after" : "submitted by other"
     else
-      competition.is_probably_over? ? "pending" : ""
+      competition.probably_over? ? "pending" : ""
     end
   end
 
@@ -158,7 +158,7 @@ module CompetitionsHelper
     days_report = days_after_competition(competition.delegate_report.posted_at, competition)
     if days_report
       report_and_results_days_to_class(days_report)
-    elsif competition.is_probably_over?
+    elsif competition.probably_over?
       days_report = days_after_competition(Date.today, competition)
       report_and_results_days_to_class(days_report)
     else
@@ -171,12 +171,12 @@ module CompetitionsHelper
     if days_results
       "#{pluralize(days_results, "day")} after"
     else
-      competition.is_probably_over? ? "pending" : ""
+      competition.probably_over? ? "pending" : ""
     end
   end
 
   def results_class(competition)
-    return "" unless competition.is_probably_over?
+    return "" unless competition.probably_over?
 
     days_results = days_after_competition(competition.results_posted_at, competition)
     days_results ? report_and_results_days_to_class(days_results) : ""
@@ -193,9 +193,9 @@ module CompetitionsHelper
         name: c.name,
         latitude_degrees: c.latitude_degrees,
         longitude_degrees: c.longitude_degrees,
-        cityName: c.cityName,
+        city_name: c.city_name,
         marker_date: wca_date_range(c.start_date, c.end_date),
-        is_probably_over: c.is_probably_over?,
+        is_probably_over: c.probably_over?,
         url: competition_path(c),
       }
     end.to_json.html_safe
@@ -216,7 +216,7 @@ module CompetitionsHelper
     last_activity = sorted_activities.last
     last_time = if last_activity
                   last_timestamp = last_activity.end_time.in_time_zone(timezone)
-                  if last_timestamp.hour == 0 && last_timestamp.min == 0
+                  if last_timestamp.hour.zero? && last_timestamp.min.zero?
                     "23:59:59"
                   else
                     last_timestamp.strftime("%H:59:59")
@@ -227,18 +227,18 @@ module CompetitionsHelper
     [first_time, last_time]
   end
 
-  def playwright_connection(&block)
+  def playwright_connection(&)
     if Rails.env.production? || EnvConfig.PLAYWRIGHT_RUN_LOCALLY?
       local_cli_path = "#{EnvConfig.PLAYWRIGHT_BROWSERS_PATH}/node_modules/playwright/cli.js"
 
       Playwright.create(playwright_cli_executable_path: local_cli_path) do |playwright|
-        playwright.chromium.launch(headless: true, channel: 'chromium', &block)
+        playwright.chromium.launch(headless: true, channel: 'chromium', &)
       end
     else
       endpoint_url = "#{EnvConfig.PLAYWRIGHT_SERVER_SOCKET_URL}?browser=chromium"
 
       Playwright.connect_to_playwright_server(endpoint_url) do |playwright|
-        playwright.chromium.launch(headless: true, channel: 'chromium', &block)
+        playwright.chromium.launch(headless: true, channel: 'chromium', &)
       end
     end
   end
@@ -351,7 +351,7 @@ module CompetitionsHelper
       # Returns a string indicating (a) whether the competition is visible, and
       # (b) whether the competition is confirmed, based on the competition's state.
 
-      visible = competition.showAtAll?
+      visible = competition.show_at_all?
 
       if competition.confirmed?
         visible ? t('competitions.messages.confirmed_visible') : t('competitions.messages.confirmed_not_visible')

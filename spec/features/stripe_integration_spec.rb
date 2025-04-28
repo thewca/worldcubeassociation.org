@@ -19,14 +19,14 @@ RSpec.feature "Stripe PaymentElement integration", :js do
   #   (as per https://stripe.com/docs/automated-testing)
   # We simply test that we can boot the interface, and we test that the PIs are processed in requests/registrations_spec.rb
   context "on the 'register' page of a visible competition" do
-    let(:competition) { FactoryBot.create(:competition, :stripe_connected, :accepts_donations, :visible, :registration_open, events: Event.where(id: %w(222 333))) }
-    let!(:user) { FactoryBot.create(:user, :wca_id) }
-    let!(:registration) { FactoryBot.create(:registration, competition: competition, user: user) }
+    let(:competition) { create(:competition, :stripe_connected, :accepts_donations, :visible, :registration_open, events: Event.where(id: %w(222 333))) }
+    let!(:user) { create(:user, :wca_id) }
+    let!(:registration) { create(:registration, competition: competition, user: user) }
 
     background do
       sign_in user
       visit competition_register_path(competition)
-      expect(page).to have_selector("#payment-element iframe")
+      expect(page).to have_css("#payment-element iframe")
     end
 
     it "loads the PaymentElement" do
@@ -50,7 +50,7 @@ RSpec.feature "Stripe PaymentElement integration", :js do
     end
 
     it "changes subtotal when using a donation" do
-      subtotal_label = page.find('#money-subtotal')
+      subtotal_label = page.find_by_id('money-subtotal')
 
       format_money = format_money(registration.outstanding_entry_fees)
       expect(subtotal_label).to have_text(format_money)
@@ -59,7 +59,7 @@ RSpec.feature "Stripe PaymentElement integration", :js do
       donation_money = competition.base_entry_fee / 2
 
       give_donation_checkbox.click
-      fill_in with: donation_money.amount.to_s, id: 'donationInputField'
+      fill_in_autonumeric '#donationInputField', with: donation_money.amount.to_s
 
       format_money = format_money(registration.outstanding_entry_fees + donation_money)
       expect(subtotal_label).to have_text(format_money)
@@ -88,7 +88,7 @@ RSpec.feature "Stripe PaymentElement integration", :js do
       end
 
       format_money = format_money(registration.outstanding_entry_fees + donation_money)
-      expect(page.find('#money-subtotal')).to have_text(format_money)
+      expect(page.find_by_id('money-subtotal')).to have_text(format_money)
     end
   end
 end

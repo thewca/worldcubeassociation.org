@@ -15,9 +15,9 @@ def within_modal(&)
 end
 
 RSpec.feature "Registering for a competition", :js do
-  let!(:user) { FactoryBot.create :user }
-  let!(:delegate) { FactoryBot.create :delegate }
-  let(:competition) { FactoryBot.create :competition, :registration_open, :visible, :editable_registrations, delegates: [delegate] }
+  let!(:user) { create(:user) }
+  let!(:delegate) { create(:delegate) }
+  let(:competition) { create(:competition, :registration_open, :visible, :editable_registrations, delegates: [delegate]) }
 
   context "signed in as user" do
     before :each do
@@ -73,13 +73,13 @@ RSpec.feature "Registering for a competition", :js do
       visit competition_register_path(competition)
       reg_requirements_checkbox.click
       click_button "Continue to next Step"
-      expect(find("#checkbox-444")).to match_selector(".active")
-      expect(find("#checkbox-555")).to match_selector(".active")
-      expect(find("#checkbox-666")).not_to match_selector(".active")
+      expect(find_by_id('checkbox-444')).to match_selector(".active")
+      expect(find_by_id('checkbox-555')).to match_selector(".active")
+      expect(find_by_id('checkbox-666')).not_to match_selector(".active")
     end
 
     context "editing registration" do
-      let!(:registration) { FactoryBot.create(:registration, user: user, competition: competition, guests: 0) }
+      let!(:registration) { create(:registration, user: user, competition: competition, guests: 0) }
 
       scenario "Users changes number of guests" do
         expect(registration.guests).to eq 0
@@ -129,8 +129,8 @@ RSpec.feature "Registering for a competition", :js do
   end
 
   context "signed in as delegate" do
-    let!(:registration) { FactoryBot.create(:registration, user: user, competition: competition) }
-    let(:delegate_registration) { FactoryBot.create(:registration, :accepted, user: delegate, competition: competition) }
+    let!(:registration) { create(:registration, user: user, competition: competition) }
+    let(:delegate_registration) { create(:registration, :accepted, user: delegate, competition: competition) }
 
     before :each do
       sign_in delegate

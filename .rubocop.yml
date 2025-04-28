@@ -45,9 +45,6 @@ Bundler/OrderedGems:
 Lint/UnusedMethodArgument:
   Enabled: false
 
-Naming/AccessorMethodName:
-  Enabled: false
-
 Style/Alias:
   EnforcedStyle: prefer_alias_method
 
@@ -113,9 +110,6 @@ Metrics/MethodLength:
 Metrics/ModuleLength:
   Enabled: false
 
-Naming/MemoizedInstanceVariableName:
-  Enabled: false
-
 Style/AccessModifierDeclarations:
   Enabled: false
 
@@ -131,16 +125,10 @@ Style/ClassVars:
 Style/Documentation:
   Enabled: false
 
-Style/Lambda:
-  Enabled: false
-
 Style/MultilineBlockChain:
   Enabled: false
 
 Style/Next:
-  Enabled: false
-
-Style/NumericPredicate:
   Enabled: false
 
 Style/PercentLiteralDelimiters:
@@ -151,9 +139,6 @@ Style/RaiseArgs:
 
 Style/SignalException:
   EnforcedStyle: only_raise
-
-Layout/SpaceAroundOperators:
-  Enabled: false
 
 Layout/IndentationConsistency:
   EnforcedStyle: indented_internal_methods
@@ -176,16 +161,28 @@ Style/WordArray:
   Enabled: false
 
 Style/SymbolProc:
-  Enabled: false
-
-Naming/PredicateName:
-  Enabled: false
-
-Naming/BlockParameterName:
-  Enabled: false
+  AllowedMethods:
+    # Capybara DSL plugins
+    - with_playwright_element_handle
+    - with_playwright_page
+  Exclude:
+    # 3rd-party libraries often use configuration DSLs
+    #   that look like we might pass a proc, but actually we want to
+    #   stick as close to their README as possible
+    - 'config/initializers/**/*.rb'
 
 Naming/MethodParameterName:
-  Enabled: false
+  AllowedNames:
+    - n
+    - id
+
+Naming/PredicateName:
+  AllowedMethods:
+    # These are database columns
+    - is_active?
+    - is_hidden?
+    # This one actually makes sense
+    - has_permission?
 
 Lint/EmptyFile:
   Exclude:
@@ -195,21 +192,12 @@ Lint/EmptyFile:
 Naming/VariableNumber:
   Enabled: false
 
-# If an external library requires us to use terms like "blacklist",
-# we have no choice but to follow their conventions until they update
-Naming/InclusiveLanguage:
-  Exclude:
-    - 'config/**/*'
-
 Style/OpenStructUse:
   Exclude:
     - 'spec/lib/middlewares/warden_user_logger_spec.rb'
 
 Style/HashSyntax:
   EnforcedShorthandSyntax: never
-
-Naming/BlockForwarding:
-  Enabled: false
 
 Style/ArgumentsForwarding:
   RedundantBlockArgumentNames: []
@@ -403,59 +391,4 @@ RSpecRails/NegationBeValid:
   Enabled: false
 
 RSpecRails/InferredSpecType:
-  Enabled: false
-
-# Factory Bot
-
-FactoryBot/ConsistentParenthesesStyle:
-  Enabled: false
-
-FactoryBot/SyntaxMethods:
-  Enabled: false
-
-FactoryBot/ExcessiveCreateList:
-  Enabled: false
-
-# Capybara
-
-Capybara/AmbiguousClick:
-  Enabled: false
-
-Capybara/ClickLinkOrButtonStyle:
-  Enabled: false
-
-Capybara/CurrentPathExpectation:
-  Enabled: false
-
-Capybara/FindAllFirst:
-  Enabled: false
-
-Capybara/MatchStyle:
-  Enabled: false
-
-Capybara/NegationMatcher:
-  Enabled: false
-
-Capybara/NegationMatcherAfterVisit:
-  Enabled: false
-
-Capybara/RedundantWithinFind:
-  Enabled: false
-
-Capybara/SpecificActions:
-  Enabled: false
-
-Capybara/SpecificFinders:
-  Enabled: false
-
-Capybara/SpecificMatcher:
-  Enabled: false
-
-Capybara/VisibilityMatcher:
-  Enabled: false
-
-Capybara/RSpec/HaveSelector:
-  Enabled: false
-
-Capybara/RSpec/PredicateMatcher:
   Enabled: false

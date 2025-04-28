@@ -7,4 +7,6 @@ import 'regenerator-runtime/runtime';
 // Until their fix is released, we force some polyfills manually.
 //   (cf. https://github.com/shakacode/shakapacker/pull/556/files)
 import 'core-js/es/typed-array/to-sorted';
+import 'core-js/es/array/to-sorted';
 import 'core-js/es/typed-array/to-reversed';
+import 'core-js/es/array/to-reversed';

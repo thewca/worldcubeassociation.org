@@ -22,8 +22,8 @@ function augmentResults(results, competitionsById) {
     //   where we iterate over [single, average] tuples and the average does not exist.
     if (result === null) return null;
 
-    const competition = competitionsById[result.competitionId];
-    const country = countries.real.find((c) => c.id === result.countryId);
+    const competition = competitionsById[result.competition_id];
+    const country = countries.real.find((c) => c.id === result.country_id);
 
     return {
       result,
@@ -54,11 +54,11 @@ export function augmentApiResults(data, show) {
 
 export const slimConfig = [
   {
-    accessorKey: 'single.personName',
+    accessorKey: 'single.person_name',
     header: I18n.t('results.table_elements.name'),
     cell: ({ row, getValue }) => getValue() && (
       <PersonCell
-        personId={row.original.single.personId}
+        personId={row.original.single.person_id}
         personName={getValue()}
       />
     ),
@@ -67,11 +67,11 @@ export const slimConfig = [
     accessorKey: 'single.value',
     header: I18n.t('common.single'),
     cell: ({ row, getValue }) => (
-      getValue() && formatAttemptResult(getValue(), row.original.single.eventId)
+      getValue() && formatAttemptResult(getValue(), row.original.single.event_id)
     ),
   },
   {
-    accessorKey: 'single.eventId',
+    accessorKey: 'single.event_id',
     header: I18n.t('results.table_elements.event'),
     cell: ({ getValue }) => getValue() && <EventCell eventId={getValue()} />,
   },
@@ -79,15 +79,15 @@ export const slimConfig = [
     accessorKey: 'average.value',
     header: I18n.t('common.average'),
     cell: ({ row, getValue }) => (
-      getValue() && formatAttemptResult(getValue(), row.original.average?.eventId)
+      getValue() && formatAttemptResult(getValue(), row.original.average?.event_id)
     ),
   },
   {
-    accessorKey: 'average.personName',
+    accessorKey: 'average.person_name',
     header: I18n.t('results.table_elements.name'),
     cell: ({ row, getValue }) => getValue && (
       <PersonCell
-        personId={row.original.average?.personId}
+        personId={row.original.average?.person_id}
         personName={getValue()}
       />
     ),
@@ -121,7 +121,7 @@ export const historyConfig = (isMixed) => [
     header: I18n.t('common.single'),
     cell: ({ row, getValue }) => (
       row.original.result.type === 'single'
-        && formatAttemptResult(getValue(), row.original.result.eventId)
+        && formatAttemptResult(getValue(), row.original.result.event_id)
     ),
   },
   {
@@ -130,7 +130,7 @@ export const historyConfig = (isMixed) => [
     header: I18n.t('common.average'),
     cell: ({ row, getValue }) => (
       row.original.result.type === 'average'
-        && formatAttemptResult(getValue(), row.original.result.eventId)
+        && formatAttemptResult(getValue(), row.original.result.event_id)
     ),
   },
   regionColumn,

@@ -19,7 +19,7 @@ class SemiId
     last_index = last_wca_id.last(2).to_i
 
     if last_index < 99
-      "#{value}#{(last_index+1).to_s.rjust(2, "0")}"
+      "#{value}#{(last_index + 1).to_s.rjust(2, "0")}"
     else
       # Sometimes we run out of indices (like for "2019ZHAO"), there is nothing
       # we can do but to return an empty one...

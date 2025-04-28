@@ -3,43 +3,43 @@
 require "rails_helper"
 
 RSpec.feature "Sign up" do
-  let!(:person) { FactoryBot.create(:person_who_has_competed_once, dob: '1988-02-03') }
-  let!(:custom_delegate) { FactoryBot.create(:delegate) }
+  let!(:person) { create(:person_who_has_competed_once, dob: '1988-02-03') }
+  let!(:custom_delegate) { create(:delegate) }
 
   before :each do
     # The cookie banner just gets in the way of these tests, and is already
     # tested elsewhere. Set a cookie that prevents the cookie banner from
     # appearing.
-    page.driver.set_cookie('cookie_eu_consented', 'true')
+    default_domain = Capybara.app_host || Capybara.server_host
+    cookie_eu_consented = { name: 'cookie_eu_consented', value: 'true', domain: default_domain, path: '/' }
+    page.driver.with_playwright_page { it.context.add_cookies([cookie_eu_consented]) }
   end
 
   context 'when signing up as a returning competitor', :js do
     it 'disables sign up button until the user selects "have competed"' do
       visit "/users/sign_up"
 
-      expect(page).to have_selector('#have-competed', visible: :hidden)
+      expect(page).to have_css('#have-competed', visible: :hidden)
       expect(page).to have_button("Sign up", disabled: true)
       click_on "I have competed in a WCA competition."
-      expect(page).to have_selector('#have-competed', visible: :visible)
+      expect(page).to have_css('#have-competed', visible: :visible)
       expect(page).to have_button("Sign up")
     end
 
     it 'disables sign up button after opening and then closing "have competed"' do
       visit "/users/sign_up"
 
-      expect(page).to have_selector('#have-competed', visible: :hidden)
+      expect(page).to have_css('#have-competed', visible: :hidden)
       expect(page).to have_button("Sign up", disabled: true)
       click_on "I have competed in a WCA competition."
-      expect(page).to have_selector('#have-competed', visible: :visible)
+      expect(page).to have_css('#have-competed', visible: :visible)
       expect(page).to have_button("Sign up", disabled: false)
       click_on "I have competed in a WCA competition."
-      expect(page).to have_selector('#have-competed', visible: :hidden)
+      expect(page).to have_css('#have-competed', visible: :hidden)
       expect(page).to have_button("Sign up", disabled: true)
     end
 
     it 'finds people by name' do
-      pending('Date popup suddenly started obstruting sign-in button. Signed DH 30/Aug/2024')
-
       visit "/users/sign_up"
 
       fill_in "Email", with: "jack@example.com"
@@ -49,23 +49,23 @@ RSpec.feature "Sign up" do
 
       # They have not selected a valid WCA ID yet, so don't show the birthdate verification
       # field.
-      expect(page).to have_selector("div.user_dob_verification", visible: :hidden)
+      expect(page).to have_css("div.user_dob_verification", visible: :hidden)
 
       fill_in_selectize "WCA ID", with: person.wca_id
 
       # Wait for select delegate area to load via ajax.
-      expect(page.find("#select-nearby-delegate-area")).to have_content "In order to assign you your WCA ID"
+      expect(page.find_by_id('select-nearby-delegate-area')).to have_content "In order to assign you your WCA ID"
 
       # Now that they've selected a valid WCA ID, make sure the birthdate
       # verification field is visible.
-      expect(page).to have_selector("div.user_dob_verification", visible: :visible)
+      expect(page).to have_css("div.user_dob_verification", visible: :visible)
 
       delegate = person.competitions.first.delegates.first
       choose("user_delegate_id_to_handle_wca_id_claim_#{delegate.id}")
 
       # First, intentionally fill in the incorrect birthdate,
       # to test out our validations.
-      fill_in "Birthdate", with: "1900-01-01"
+      fill_in("Birthdate", with: "1900-01-01").send_keys(:escape)
       click_button "Sign up"
 
       # Make sure we inform the user of the incorrect birthdate they just
@@ -97,7 +97,7 @@ RSpec.feature "Sign up" do
       click_on "I have competed in a WCA competition."
       click_button "Sign up"
 
-      expect(page).to have_selector('#have-competed', visible: :visible)
+      expect(page).to have_css('#have-competed', visible: :visible)
     end
 
     it "remembers their selected wca id on validation error" do
@@ -105,22 +105,22 @@ RSpec.feature "Sign up" do
       click_on "I have competed in a WCA competition."
       # They have not selected a valid WCA ID yet, so don't show the birthdate verification
       # field.
-      expect(page).to have_selector("div.user_dob_verification", visible: :hidden)
+      expect(page).to have_css("div.user_dob_verification", visible: :hidden)
 
       fill_in_selectize "WCA ID", with: person.wca_id
 
       # Wait for select delegate area to load via ajax.
-      expect(page.find("#select-nearby-delegate-area")).to have_content "In order to assign you your WCA ID"
+      expect(page.find_by_id('select-nearby-delegate-area')).to have_content "In order to assign you your WCA ID"
 
       # Now that they've selected a valid WCA ID, make sure the birthdate
       # verification field is visible.
-      expect(page).to have_selector("div.user_dob_verification", visible: :visible)
+      expect(page).to have_css("div.user_dob_verification", visible: :visible)
 
       # Submit the form without selecting a delegate.
       click_button "Sign up"
 
-      expect(page).to have_selector('#have-competed', visible: :visible)
-      expect(page).to have_selector("div.user_dob_verification", visible: :visible)
+      expect(page).to have_css('#have-competed', visible: :visible)
+      expect(page).to have_css("div.user_dob_verification", visible: :visible)
     end
 
     it "remembers their selected wca id and custom delegate on validation error" do
@@ -128,16 +128,16 @@ RSpec.feature "Sign up" do
       click_on "I have competed in a WCA competition."
       # They have not selected a valid WCA ID yet, so don't show the birthdate verification
       # field.
-      expect(page).to have_selector("div.user_dob_verification", visible: :hidden)
+      expect(page).to have_css("div.user_dob_verification", visible: :hidden)
 
       fill_in_selectize "WCA ID", with: person.wca_id
 
       # Wait for select delegate area to load via ajax.
-      expect(page.find("#select-nearby-delegate-area")).to have_content "In order to assign you your WCA ID"
+      expect(page.find_by_id('select-nearby-delegate-area')).to have_content "In order to assign you your WCA ID"
 
       # Now that they've selected a valid WCA ID, make sure the birthdate
       # verification field is visible.
-      expect(page).to have_selector("div.user_dob_verification", visible: :visible)
+      expect(page).to have_css("div.user_dob_verification", visible: :visible)
 
       # Select a custom delegate.
       selectize = page.find("#nearby-delegate-search + div.selectize-control")
@@ -146,12 +146,12 @@ RSpec.feature "Sign up" do
       click_button "Sign up"
 
       # Verify that the custom delegate is still selected.
-      selectize_items = selectize.all("div.selectize-control .items")
+      selectize_items = selectize.all(".items")
       expect(selectize_items.length).to eq 1
       expect(selectize_items[0].find('.name').text).to eq custom_delegate.name
 
-      expect(page).to have_selector('#have-competed', visible: :visible)
-      expect(page).to have_selector("div.user_dob_verification", visible: :visible)
+      expect(page).to have_css('#have-competed', visible: :visible)
+      expect(page).to have_css("div.user_dob_verification", visible: :visible)
     end
   end
 
@@ -165,10 +165,10 @@ RSpec.feature "Sign up" do
 
       # Check that we disable the sign up button until the user selects
       # "never competed".
-      expect(page).to have_selector('#never-competed', visible: :hidden)
+      expect(page).to have_css('#never-competed', visible: :hidden)
       expect(page).to have_button("Sign up", disabled: true)
       click_on "I have never competed in a WCA competition."
-      expect(page).to have_selector('#never-competed', visible: :visible)
+      expect(page).to have_css('#never-competed', visible: :visible)
       expect(page).to have_button("Sign up")
 
       fill_in "Full name", with: "Jack Johnson"
@@ -187,13 +187,13 @@ RSpec.feature "Sign up" do
     it 'disables sign up button after opening and then closing "never competed"' do
       visit "/users/sign_up"
 
-      expect(page).to have_selector('#never-competed', visible: :hidden)
+      expect(page).to have_css('#never-competed', visible: :hidden)
       expect(page).to have_button("Sign up", disabled: true)
       click_on "I have never competed in a WCA competition."
-      expect(page).to have_selector('#never-competed', visible: :visible)
+      expect(page).to have_css('#never-competed', visible: :visible)
       expect(page).to have_button("Sign up", disabled: false)
       click_on "I have never competed in a WCA competition."
-      expect(page).to have_selector('#never-competed', visible: :hidden)
+      expect(page).to have_css('#never-competed', visible: :hidden)
       expect(page).to have_button("Sign up", disabled: true)
     end
 
@@ -202,7 +202,7 @@ RSpec.feature "Sign up" do
       click_on "I have never competed in a WCA competition."
       click_button "Sign up"
 
-      expect(page).to have_selector('#never-competed', visible: :visible)
+      expect(page).to have_css('#never-competed', visible: :visible)
     end
   end
 
@@ -218,10 +218,10 @@ RSpec.feature "Sign up" do
       fill_in_selectize "WCA ID", with: person.wca_id
 
       # Wait for select delegate area to load via ajax.
-      expect(page.find("#select-nearby-delegate-area")).to have_content "In order to assign you your WCA ID"
+      expect(page.find_by_id('select-nearby-delegate-area')).to have_content "In order to assign you your WCA ID"
       # Now that they've selected a valid WCA ID, make sure the birthdate
       # verification field is visible.
-      expect(page).to have_selector("div.user_dob_verification", visible: :visible)
+      expect(page).to have_css("div.user_dob_verification", visible: :visible)
       delegate = person.competitions.first.delegates.first
       choose("user_delegate_id_to_handle_wca_id_claim_#{delegate.id}")
       # Now enter the wrong birthdate.
@@ -232,7 +232,7 @@ RSpec.feature "Sign up" do
       # an error message about the full name.
       click_on "I have never competed in a WCA competition."
       click_button "Sign up"
-      expect(page).to have_selector(".alert.alert-danger li", count: 1)
+      expect(page).to have_css(".alert.alert-danger li", count: 1)
       expect(page.find(".user_name span.help-block")).to have_content "can't be blank"
 
       fill_in "Full name", with: "Jackson John"
@@ -252,7 +252,7 @@ RSpec.feature "Sign up" do
 
       click_on "I have competed in a WCA competition."
       click_button "Sign up"
-      expect(page).to have_selector(".alert.alert-danger li", count: 3)
+      expect(page).to have_css(".alert.alert-danger li", count: 3)
       expect(page.find(".alert.alert-danger")).to have_content "Delegate id to handle wca id claim required"
       expect(page.find(".alert.alert-danger")).to have_content "Unconfirmed WCA ID required"
       expect(page.find(".alert.alert-danger")).to have_content "Unconfirmed WCA ID is invalid"
@@ -271,8 +271,10 @@ RSpec.feature "Sign up" do
       fill_in_selectize "WCA ID", with: person.wca_id
 
       click_button "Sign up"
+      expect(page.find_by_id('user_dob', visible: :hidden).value).to eq ""
+
       click_on "I have never competed in a WCA competition."
-      expect(page.find("#user_dob", visible: :hidden).value).to eq ""
+      expect(page.find_by_id('user_dob', visible: :visible).value).to eq ""
     end
 
     it "does not allow both panels to be open after failed submission" do
@@ -285,22 +287,22 @@ RSpec.feature "Sign up" do
       click_on "I have competed in a WCA competition."
 
       click_button "Sign up"
-      page.find('#have-competed.collapse.in') # ensure page loads completely
+      page.find_by_id('have-competed', class: ["collapse", "in"]) # ensure page loads completely
 
-      expect(page).to have_selector('#have-competed', visible: :visible)
-      expect(page).to have_selector('#never-competed', visible: :hidden)
+      expect(page).to have_css('#have-competed', visible: :visible)
+      expect(page).to have_css('#never-competed', visible: :hidden)
       click_on "I have never competed in a WCA competition."
-      expect(page).to have_selector('#have-competed', visible: :hidden)
-      expect(page).to have_selector('#never-competed', visible: :visible)
+      expect(page).to have_css('#have-competed', visible: :hidden)
+      expect(page).to have_css('#never-competed', visible: :visible)
       click_on "I have competed in a WCA competition."
-      expect(page).to have_selector('#have-competed', visible: :visible)
-      expect(page).to have_selector('#never-competed', visible: :hidden)
+      expect(page).to have_css('#have-competed', visible: :visible)
+      expect(page).to have_css('#never-competed', visible: :hidden)
     end
   end
 
   context "when signing up as a non-english speaker", :js do
     it "stores the user's preferred locale" do
-      page.driver.headers = { 'Accept-Language' => 'es' }
+      page.driver.with_playwright_page { it.context.set_extra_http_headers({ 'Accept-Language' => 'es' }) }
       visit "/users/sign_up"
 
       fill_in "user[email]", with: "jack@example.com"

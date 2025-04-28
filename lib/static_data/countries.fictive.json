@@ -2,49 +2,49 @@
   {
     "id": "XA",
     "name": "Multiple Countries (Asia)",
-    "continentId": "_Asia",
+    "continent_id": "_Asia",
     "iso2": "XA"
   },
   {
     "id": "XE",
     "name": "Multiple Countries (Europe)",
-    "continentId": "_Europe",
+    "continent_id": "_Europe",
     "iso2": "XE"
   },
   {
     "id": "XF",
     "name": "Multiple Countries (Africa)",
-    "continentId": "_Africa",
+    "continent_id": "_Africa",
     "iso2": "XF"
   },
   {
     "id": "XM",
     "name": "Multiple Countries (Americas)",
-    "continentId": "_Multiple Continents",
+    "continent_id": "_Multiple Continents",
     "iso2": "XM"
   },
   {
     "id": "XN",
     "name": "Multiple Countries (North America)",
-    "continentId": "_North America",
+    "continent_id": "_North America",
     "iso2": "XN"
   },
   {
     "id": "XO",
     "name": "Multiple Countries (Oceania)",
-    "continentId": "_Oceania",
+    "continent_id": "_Oceania",
     "iso2": "XO"
   },
   {
     "id": "XS",
     "name": "Multiple Countries (South America)",
-    "continentId": "_South America",
+    "continent_id": "_South America",
     "iso2": "XS"
   },
   {
     "id": "XW",
     "name": "Multiple Countries (World)",
-    "continentId": "_Multiple Continents",
+    "continent_id": "_Multiple Continents",
     "iso2": "XW"
   }
 ]

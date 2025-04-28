@@ -2,12 +2,6 @@
 
 source 'https://rubygems.org'
 
-# From https://github.com/bundler/bundler/issues/4978#issuecomment-272248627
-git_source(:github) do |repo_name|
-  repo_name = "#{repo_name}/#{repo_name}" unless repo_name.include?("/")
-  "https://github.com/#{repo_name}.git"
-end
-
 gem 'rails'
 gem 'rails-i18n'
 gem 'i18n-js'
@@ -108,6 +102,7 @@ gem 'slack-ruby-client'
 gem 'puma'
 gem "tzf"
 gem 'playwright-ruby-client', require: 'playwright'
+gem 'hash_diff'
 
 group :development, :test do
   gem 'spring'
@@ -153,7 +148,7 @@ group :test do
   gem 'oga' # XML parsing library introduced for testing RSS feed
   gem 'database_cleaner'
   gem 'rails-controller-testing'
-  gem 'apparition', github: 'twalpole/apparition'
+  gem 'capybara-playwright-driver'
   gem 'simplecov', require: false
   gem 'simplecov-lcov', require: false
   gem 'timecop'

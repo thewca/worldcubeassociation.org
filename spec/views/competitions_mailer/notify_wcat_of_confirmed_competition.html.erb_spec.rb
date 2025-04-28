@@ -8,7 +8,7 @@ EVENTS_PER_REGISTRATION_LIMIT_REGEX = %r{The Delegates? requested an <b>events p
 RSpec.describe "competitions_mailer/notify_wcat_of_confirmed_competition" do
   context "event restrictions" do
     it "does not render bold text regarding event restrictions and events per registration limit" do
-      competition = FactoryBot.build(:competition, :confirmed)
+      competition = build(:competition, :confirmed)
       assign(:competition, competition)
       assign(:confirmer, competition.delegates.first)
       render
@@ -18,7 +18,7 @@ RSpec.describe "competitions_mailer/notify_wcat_of_confirmed_competition" do
     end
 
     it "renders bold text regarding event restrictions and events per registration limit" do
-      competition = FactoryBot.build(:competition, :confirmed, :with_event_limit)
+      competition = build(:competition, :confirmed, :with_event_limit)
       assign(:competition, competition)
       assign(:confirmer, competition.delegates.first)
       render
@@ -28,7 +28,7 @@ RSpec.describe "competitions_mailer/notify_wcat_of_confirmed_competition" do
     end
 
     it "renders bold text regarding event restrictions, but not events per registration limit" do
-      competition = FactoryBot.build(:competition, :confirmed, event_restrictions: true, event_restrictions_reason: "reasoning")
+      competition = build(:competition, :confirmed, event_restrictions: true, event_restrictions_reason: "reasoning")
       assign(:competition, competition)
       assign(:confirmer, competition.delegates.first)
       render

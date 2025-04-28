@@ -106,15 +106,15 @@ FactoryBot.define do
 
     trait :paid_no_hooks do
       after(:create) do |registration|
-        payment = FactoryBot.build :registration_payment, registration: registration, user: registration.user,
-                                                          amount_lowest_denomination: registration.competition.base_entry_fee_lowest_denomination
+        payment = FactoryBot.build(:registration_payment, registration: registration, user: registration.user,
+                                                          amount_lowest_denomination: registration.competition.base_entry_fee_lowest_denomination)
         payment.save(validate: false)
       end
     end
 
     trait :unpaid do
       after(:create) do |registration|
-        FactoryBot.create :registration_payment, registration: registration, user: registration.user
+        FactoryBot.create(:registration_payment, registration: registration, user: registration.user)
       end
     end
 
@@ -124,7 +124,7 @@ FactoryBot.define do
     end
 
     after(:create) do |registration|
-      registration.competition.waiting_list.add(registration) if registration.competing_status == Registrations::Helper::STATUS_WAITING_LIST
+      registration.waiting_list.add(registration) if registration.competing_status == Registrations::Helper::STATUS_WAITING_LIST
     end
   end
 end

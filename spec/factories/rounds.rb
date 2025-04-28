@@ -3,7 +3,7 @@
 FactoryBot.define do
   factory :round do
     transient do
-      competition { FactoryBot.create :competition, event_ids: [event_id] }
+      competition { FactoryBot.create(:competition, event_ids: [event_id]) }
       event_id { "333" }
       format_id { "a" }
     end

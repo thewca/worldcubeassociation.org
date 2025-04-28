@@ -44,7 +44,7 @@ class Round < ApplicationRecord
 
   # Qualification rounds/b-final are handled weirdly, they have round number 0
   # and do not count towards the total amount of rounds.
-  OLD_TYPES=["0", "b"].freeze
+  OLD_TYPES = ["0", "b"].freeze
   validates :old_type, inclusion: { in: OLD_TYPES, allow_nil: true }
   after_validation(if: :old_type) do
     self.number = 0
@@ -185,7 +185,7 @@ class Round < ApplicationRecord
     competitors_live_results_entered == total_accepted_registrations
   end
 
-  def has_undef_tl?
+  def time_limit_undefined?
     can_change_time_limit? && time_limit == TimeLimit::UNDEF_TL
   end
 
