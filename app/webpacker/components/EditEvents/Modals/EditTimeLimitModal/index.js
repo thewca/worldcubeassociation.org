@@ -107,24 +107,22 @@ export default function EditTimeLimitModal({ wcifEvent, wcifRound, disabled }) {
         autoFocus
       />
       <br />
-      <Form>
-        <Form.Field inline>
-          <Radio
-            label="per-solve"
-            name="timeLimitType"
-            value="per-solve"
-            checked={cumulativeRoundIds.length === 0}
-            onChange={() => setCumulativeRoundIds([])}
-          />
-          <Radio
-            label="cumulative"
-            name="timeLimitType"
-            value="per-solve"
-            checked={cumulativeRoundIds.length > 0}
-            onChange={() => setCumulativeRoundIds([wcifRound.id])}
-          />
-        </Form.Field>
-      </Form>
+      <Form.Field inline>
+        <Radio
+          label="per-solve"
+          name="timeLimitType"
+          value="per-solve"
+          checked={cumulativeRoundIds.length === 0}
+          onChange={() => setCumulativeRoundIds([])}
+        />
+        <Radio
+          label="cumulative"
+          name="timeLimitType"
+          value="per-solve"
+          checked={cumulativeRoundIds.length > 0}
+          onChange={() => setCumulativeRoundIds([wcifRound.id])}
+        />
+      </Form.Field>
 
       <TimeLimitDescription
         wcifRound={wcifRound}
