@@ -613,7 +613,7 @@ RSpec.describe Registration do
       reg.attempt_auto_accept
       expect(reg.reload.competing_status).to eq('accepted')
       expect(reg.registration_history_entries.last.actor_type).to eq('System')
-      expect(reg.registration_history_entries.last.actor_id).to eq('Auto-accept')
+      expect(reg.registration_history_entries.last.actor_id).to eq('auto-accept')
     end
 
     it 'auto accepts a competitor who included a donation in their payment' do
@@ -625,7 +625,7 @@ RSpec.describe Registration do
       expect(reg.reload.competing_status).to eq('accepted')
     end
 
-    it 'doesnt auto accept a competitor who gets refunded', :only do
+    it 'doesnt auto accept a competitor who gets refunded' do
       expect(reg.competing_status).to eq('pending')
 
       create(:registration_payment, :refund, :skip_create_hook, registration: reg, competition: auto_accept_comp)
@@ -650,7 +650,7 @@ RSpec.describe Registration do
     end
 
     # Fails because waiting_list_position persists when it shouldnt; #11173 should fix
-    it 'can auto-accept the first user on the waiting list', :exclude do
+    it 'can auto-accept the first user on the waiting list' do
       waiting_list_reg = create(:registration, :waiting_list, competition: auto_accept_comp)
 
       create(:registration_payment, :skip_create_hook, registration: waiting_list_reg, competition: auto_accept_comp)
@@ -832,7 +832,7 @@ RSpec.describe Registration do
         expect(reg.reload.competing_status).to eq('waiting_list')
         expect(reg.waiting_list_position).to eq(1)
         expect(reg.registration_history_entries.last.actor_type).to eq('System')
-        expect(reg.registration_history_entries.last.actor_id).to eq('Auto-accept')
+        expect(reg.registration_history_entries.last.actor_id).to eq('auto-accept')
       end
 
       it 'gets prevented by auto-accept threshold' do
