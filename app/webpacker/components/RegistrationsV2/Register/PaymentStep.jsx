@@ -21,20 +21,21 @@ import { hasPassed } from '../../../lib/utils/dates';
 import AutonumericField from '../../wca/FormBuilder/input/AutonumericField';
 import getPaymentTicket from '../api/payment/get/getPaymentTicket';
 import { useRegistration } from '../lib/RegistrationProvider';
+import { useStepNavigation } from '../lib/StepNavigationProvider';
 
 export default function PaymentStep({
   competitionInfo,
   setIsoDonationAmount,
   isoDonationAmount,
   displayAmount,
-  nextStep,
   conversionFetching,
 }) {
   const stripe = useStripe();
   const elements = useElements();
   const dispatch = useDispatch();
+  const { nextStep } = useStepNavigation();
 
-  const { registration } = useRegistration();
+  const { hasPaid } = useRegistration();
 
   const [isLoading, setIsLoading] = useState(false);
   const [isDonationChecked, setDonationChecked] = useCheckboxState(false);
@@ -42,10 +43,10 @@ export default function PaymentStep({
   useEffect(() => {
     // TODO When we add per Event Payment this logic needs to also check
     //  if an additional payment is needed
-    if (registration?.payment?.has_paid) {
+    if (hasPaid) {
       nextStep();
     }
-  }, [nextStep, registration]);
+  }, [nextStep, hasPaid]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -122,7 +123,7 @@ export default function PaymentStep({
                 <Label>
                   {I18n.t('registrations.payment_form.labels.donation')}
                 </Label>
-)}
+              )}
             />
             )}
           </FormField>

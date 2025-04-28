@@ -12,6 +12,9 @@ import { hasNotPassed, hasPassed } from '../../../lib/utils/dates';
 import RegistrationNotAllowedMessage from './RegistrationNotAllowedMessage';
 import RegistrationClosingMessage from './RegistrationClosingMessage';
 import usePerpetualState from '../hooks/usePerpetualState';
+import StepConfigProvider, { useStepConfig } from '../lib/StepConfigProvider';
+import StepNavigationProvider from '../lib/StepNavigationProvider';
+import { availableSteps, registrationOverviewConfig } from '../lib/stepConfigs';
 
 // The following states should show the Panel even when registration is already closed.
 //   (You can think of this as "is there a non-cancelled, non-rejected registration?)
@@ -22,9 +25,7 @@ export default function Index({
   userInfo,
   userCanPreRegister,
   preferredEvents,
-  qualifications,
-  stripePublishableKey = '',
-  connectedAccountId = '',
+  personalRecords,
   cannotRegisterReasons,
   isProcessing = false,
 }) {
@@ -32,36 +33,75 @@ export default function Index({
     <WCAQueryClientProvider>
       <StoreProvider reducer={messageReducer} initialState={{ messages: [] }}>
         <ConfirmProvider>
-          <RegistrationProvider
-            competitionInfo={competitionInfo}
-            userInfo={userInfo}
-            isProcessing={isProcessing}
-          >
-            <Register
+          <StepConfigProvider competitionId={competitionInfo.id}>
+            <RegistrationProvider
               competitionInfo={competitionInfo}
               userInfo={userInfo}
-              userCanPreRegister={userCanPreRegister}
-              preferredEvents={preferredEvents}
-              stripePublishableKey={stripePublishableKey}
-              connectedAccountId={connectedAccountId}
-              qualifications={qualifications}
-              cannotRegisterReasons={cannotRegisterReasons}
-            />
-          </RegistrationProvider>
+              isProcessing={isProcessing}
+            >
+              <RegisterNavigationWrapper
+                competitionInfo={competitionInfo}
+                userInfo={userInfo}
+                userCanPreRegister={userCanPreRegister}
+                preferredEvents={preferredEvents}
+                personalRecords={personalRecords}
+                cannotRegisterReasons={cannotRegisterReasons}
+              />
+            </RegistrationProvider>
+          </StepConfigProvider>
         </ConfirmProvider>
       </StoreProvider>
     </WCAQueryClientProvider>
   );
 }
 
+function RegisterNavigationWrapper({
+  competitionInfo,
+  userInfo,
+  userCanPreRegister,
+  preferredEvents,
+  personalRecords,
+  cannotRegisterReasons,
+}) {
+  const registrationPayload = useRegistration();
+
+  const {
+    isFetching: registrationFetching,
+    isRejected: registrationRejected,
+  } = registrationPayload;
+
+  const { steps, isFetching } = useStepConfig();
+
+  if (isFetching || registrationFetching) {
+    return <Loading />;
+  }
+
+  return (
+    <StepNavigationProvider
+      stepsConfiguration={steps}
+      availableSteps={availableSteps}
+      payload={registrationPayload}
+      navigationDisabled={registrationRejected}
+      summaryPanelKey={registrationOverviewConfig.key}
+    >
+      <Register
+        competitionInfo={competitionInfo}
+        userInfo={userInfo}
+        userCanPreRegister={userCanPreRegister}
+        preferredEvents={preferredEvents}
+        personalRecords={personalRecords}
+        cannotRegisterReasons={cannotRegisterReasons}
+      />
+    </StepNavigationProvider>
+  );
+}
+
 function Register({
   userCanPreRegister,
   competitionInfo,
-  qualifications,
+  personalRecords,
   userInfo,
   preferredEvents,
-  connectedAccountId,
-  stripePublishableKey,
   cannotRegisterReasons,
 }) {
   const registrationAlreadyOpen = usePerpetualState(
@@ -111,11 +151,7 @@ function Register({
             user={userInfo}
             preferredEvents={preferredEvents}
             competitionInfo={competitionInfo}
-            registration={registration}
-            connectedAccountId={connectedAccountId}
-            stripePublishableKey={stripePublishableKey}
-            qualifications={qualifications}
-            registrationCurrentlyOpen={registrationCurrentlyOpen}
+            personalRecords={personalRecords}
           />
         </>
       )}

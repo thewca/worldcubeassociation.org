@@ -9,6 +9,7 @@ import PaymentStep from './PaymentStep';
 import { fetchJsonOrError } from '../../../lib/requests/fetchWithAuthenticityToken';
 import { paymentDenominationUrl } from '../../../lib/requests/routes.js.erb';
 import { useRegistration } from '../lib/RegistrationProvider';
+import { useStepNavigation } from '../lib/StepNavigationProvider';
 
 const convertISOAmount = async (competitionId, userId, isoDonationAmount) => {
   const { data } = await fetchJsonOrError(
@@ -19,14 +20,12 @@ const convertISOAmount = async (competitionId, userId, isoDonationAmount) => {
 
 export default function StripeWrapper({
   competitionInfo,
-  stripePublishableKey,
-  connectedAccountId,
   user,
-  nextStep,
 }) {
   const [stripePromise, setStripePromise] = useState(null);
   const initialAmount = competitionInfo.base_entry_fee_lowest_denomination;
   const [isoDonationAmount, setIsoDonationAmount] = useState(0);
+  const { currentStep: { parameters: currentStepParameters } } = useStepNavigation();
 
   const { registration } = useRegistration();
 
@@ -39,11 +38,11 @@ export default function StripeWrapper({
 
   useEffect(() => {
     setStripePromise(
-      loadStripe(stripePublishableKey, {
-        stripeAccount: connectedAccountId,
+      loadStripe(currentStepParameters.stripePublishableKey, {
+        stripeAccount: currentStepParameters.connectedAccountId,
       }),
     );
-  }, [connectedAccountId, stripePublishableKey]);
+  }, [currentStepParameters]);
 
   return (
     <>
@@ -68,7 +67,6 @@ export default function StripeWrapper({
             isoDonationAmount={isoDonationAmount}
             displayAmount={data?.human_amount}
             registration={registration}
-            nextStep={nextStep}
             conversionFetching={isFetching}
           />
         </Elements>
