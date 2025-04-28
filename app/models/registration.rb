@@ -5,6 +5,7 @@ class Registration < ApplicationRecord
 
   COMMENT_CHARACTER_LIMIT = 240
   DEFAULT_GUEST_LIMIT = 99
+  AUTO_ACCEPT_ENTITY_ID = 'auto-accept'
 
   scope :pending, -> { where(competing_status: 'pending') }
   scope :accepted, -> { where(competing_status: 'accepted') }
@@ -96,6 +97,10 @@ class Registration < ApplicationRecord
 
   def waitlisted?
     competing_status_waiting_list?
+  end
+
+  def waiting_list_leader?
+    competing_status_waiting_list? && waiting_list_position == 1
   end
 
   # Can NOT use a `has_one :waiting_list, through: :competition` association here, because
@@ -527,7 +532,7 @@ class Registration < ApplicationRecord
   end
 
   def attempt_auto_accept
-    return false unless auto_accept_enabled
+    return false if auto_accept_enabled?
 
     failure_reason = auto_accept_failure_reason
     if failure_reason.present?
@@ -541,7 +546,7 @@ class Registration < ApplicationRecord
     if auto_accepted_registration.valid?
       update_lanes!(
         update_payload,
-        'Auto-accept',
+        AUTO_ACCEPT_ENTITY_ID,
       )
       true
     else
@@ -553,7 +558,7 @@ class Registration < ApplicationRecord
   private def auto_accept_failure_reason
     return 'Competitor still has outstanding registration fees' if outstanding_entry_fees.positive?
     return 'Auto-accept is not enabled for this competition.' unless competition.auto_accept_registrations?
-    return 'Can only auto-accept pending registrations or first position on waiting list' unless competing_status_pending? || (competing_status_waiting_list? && waiting_list_position == 1)
+    return 'Can only auto-accept pending registrations or first position on waiting list' unless competing_status_pending? || waiting_list_leader?
     return "Competition has reached auto_accept_disable_threshold of #{competition.auto_accept_disable_threshold} registrations" if competition.auto_accept_threshold_reached?
 
     'Cant auto-accept while registration is not open' unless competition.registration_currently_open?
@@ -563,7 +568,7 @@ class Registration < ApplicationRecord
     add_history_entry(
       { auto_accept_failure_reasons: reason },
       'System',
-      'Auto accept',
+      AUTO_ACCEPT_ENTITY_ID,
       'System reject',
     )
   end

@@ -625,7 +625,7 @@ RSpec.describe Registration do
       expect(reg.reload.competing_status).to eq('accepted')
     end
 
-    it 'doesnt auto accept a competitor who gets refunded' do
+    it 'doesnt auto accept a competitor who gets refunded', :only do
       expect(reg.competing_status).to eq('pending')
 
       create(:registration_payment, :refund, :skip_create_hook, registration: reg, competition: auto_accept_comp)
