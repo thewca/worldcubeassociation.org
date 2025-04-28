@@ -511,7 +511,7 @@ RSpec.describe Registration do
       last_entry = registration.reload.registration_history.entries.last
       expect(last_entry['actor_type']).to eq('user')
       expect(last_entry['actor_id'].to_i).to eq(registration.user.id)
-      expect(last_entry['changed_attributes']).to eq({"event_ids" => ["444", "555"]})
+      expect(last_entry['changed_attributes']).to eq({ "event_ids" => ["444", "555"] })
     end
 
     describe 'update waiting list position' do
