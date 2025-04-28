@@ -178,7 +178,7 @@ class Registration < ApplicationRecord
   end
 
   def invoice_items_total
-    Money.new(invoice_items.sum { it.amount_lowest_denomination }, entry_fee.currency)
+    Money.new(invoice_items.sum(&:amount_lowest_denomination), entry_fee.currency)
   end
 
   def invoice_items_currency_code

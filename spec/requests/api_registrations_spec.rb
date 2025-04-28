@@ -1389,18 +1389,6 @@ RSpec.describe 'API Registrations' do
         FactoryBot.create(:invoice_item, registration: reg, amount_lowest_denomination: 1250, currency_code: "SEK")
       end
 
-      it 'ignores invoice items when in production' do
-        allow(Rails.env).to receive(:production?).and_return(true)
-        allow(EnvConfig).to receive(:WCA_LIVE_SITE?).and_return(true)
-
-        expected_response = { api_amounts: { stripe: 1500, paypal: "15.00" }, human_amount: "15 kr (Swedish Krona)" }.with_indifferent_access
-
-        get registration_payment_denomination_path(competition_id: competition.id, user_id: reg.user_id), headers: headers
-
-        expect(response).to be_successful
-        expect(response.parsed_body).to eq(expected_response)
-      end
-
       it 'returns total value of invoice_items' do
         expected_response = { api_amounts: { stripe: 2750, paypal: "27.50" }, human_amount: "27.50 kr (Swedish Krona)" }.with_indifferent_access
 

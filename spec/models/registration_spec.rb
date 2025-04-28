@@ -629,10 +629,10 @@ RSpec.describe Registration do
       reg.consider_auto_close
     end
 
-    it 'calls competition.attempt_auto_close! if reg is fully paid' do=
+    it 'calls competition.attempt_auto_close! if reg is fully paid' do
       competition = create(:competition)
       expect(competition).to receive(:attempt_auto_close!).exactly(1).times
-      
+
       create(:registration, :paid, competition: competition)
     end
   end
