@@ -191,7 +191,7 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
                                   competition.event_ids,
                                   registrations.joins(:user).order(:id).pluck(:id, :updated_at, user: [:updated_at]),
                                 ]) do
-      registrations.includes(:user).map { |r| r.to_v2_json }
+      registrations.includes(:user).map(&:to_v2_json)
     end
     render json: payload
   end
@@ -306,7 +306,7 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
       total_accepted_registrations_after_update = competition.registrations.accepted_and_competing_count + registrations_to_be_accepted
 
       competition.competitor_limit_enabled &&
-        registrations_to_be_accepted > 0 &&
+        registrations_to_be_accepted.positive? &&
         total_accepted_registrations_after_update > competition.competitor_limit
     end
 

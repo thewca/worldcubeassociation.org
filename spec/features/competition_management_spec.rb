@@ -111,7 +111,7 @@ RSpec.feature "Competition management", :js do
       expect(page).to have_current_path(edit_competition_path("NewId2016"), wait: SLUGGISH_WAIT_TIME)
 
       expect(page).to have_text("This competition is not visible to the public.")
-      expect(page).not_to have_text("You have unsaved changes")
+      expect(page).to have_no_text("You have unsaved changes")
 
       expect(Competition.find("NewId2016")).not_to be_nil
     end
@@ -193,7 +193,8 @@ RSpec.feature "Competition management", :js do
       competition = create(:competition, :with_delegate, id: "OldId2016", guests_entry_fee_lowest_denomination: 666)
       visit edit_competition_path(competition)
 
-      expect(page).not_to have_text("Display message for free guest entry")
+      expect(page).to have_text(competition.name)
+      expect(page).to have_no_text("Display message for free guest entry")
     end
 
     scenario "select free guest entry status" do

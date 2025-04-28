@@ -15,6 +15,56 @@ export const CANCELLED_ICON = 'trash';
 export const REJECTED_ICON = 'x';
 export const NON_COMPETING_ICON = 'clipboard outline';
 
+export const getStatusColor = (key) => {
+  switch (key) {
+    case 'pending':
+      return PENDING_COLOR;
+
+    case 'waiting':
+      return WAITLIST_COLOR;
+
+    case 'accepted':
+      return APPROVED_COLOR;
+
+    case 'cancelled':
+      return CANCELLED_COLOR;
+
+    case 'rejected':
+      return REJECTED_COLOR;
+
+    case 'nonCompeting':
+      return NON_COMPETING_COLOR;
+
+    default:
+      return undefined;
+  }
+};
+
+export const getStatusIcon = (key) => {
+  switch (key) {
+    case 'pending':
+      return PENDING_ICON;
+
+    case 'waiting':
+      return WAITLIST_ICON;
+
+    case 'accepted':
+      return APPROVED_ICON;
+
+    case 'cancelled':
+      return CANCELLED_ICON;
+
+    case 'rejected':
+      return REJECTED_ICON;
+
+    case 'nonCompeting':
+      return NON_COMPETING_ICON;
+
+    default:
+      return undefined;
+  }
+};
+
 export const partitionRegistrations = (registrations) => registrations.reduce(
   (result, registration) => {
     switch (registration.competing.registration_status) {

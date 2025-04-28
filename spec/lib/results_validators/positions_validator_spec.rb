@@ -153,7 +153,7 @@ def create_results(competition, number, event_id, kind: :result)
   1.upto(number) do |i|
     # By default the factory creates a predefined best/average, to have increasing
     # time we need to provide some arbitrary times increasing with the position.
-    results << FactoryBot.create(kind, competition: competition, pos: i, best: i*1000, average: i*2000, event_id: event_id)
+    results << FactoryBot.create(kind, competition: competition, pos: i, best: i * 1000, average: i * 2000, event_id: event_id)
   end
   results
 end

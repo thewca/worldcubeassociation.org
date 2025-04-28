@@ -36,7 +36,7 @@ RSpec.feature "create competition tabs" do
     visit competition_path(competition)
     expect(page).to have_content "Travel!"
     expect(page).to have_content "Travel informations."
-    expect(page).not_to have_content "Accomodation"
-    expect(page).not_to have_content "On your own."
+    expect(page).to have_no_content "Accomodation"
+    expect(page).to have_no_content "On your own."
   end
 end

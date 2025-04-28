@@ -135,7 +135,7 @@ RSpec.describe Result do
 
         context "cutoff round" do
           let(:round_type_id) { "c" }
-          let!(:round) { create(:round, competition: competition, cutoff: Cutoff.new(number_of_attempts: 2, attempt_result: 60*100)) }
+          let!(:round) { create(:round, competition: competition, cutoff: Cutoff.new(number_of_attempts: 2, attempt_result: 60 * 100)) }
 
           it "all solves" do
             result = build_result(value1: 42, value2: 43, value3: 44, value4: 45, value5: 46, best: 42, average: 44)
@@ -203,7 +203,7 @@ RSpec.describe Result do
 
           context "cutoff round" do
             let(:round_type_id) { "c" }
-            let!(:round) { create(:round, competition: competition, cutoff: Cutoff.new(number_of_attempts: 2, attempt_result: 60*100), format_id: "m", event_id: "777") }
+            let!(:round) { create(:round, competition: competition, cutoff: Cutoff.new(number_of_attempts: 2, attempt_result: 60 * 100), format_id: "m", event_id: "777") }
 
             it "all solves" do
               result = build_result(value1: 42, value2: 43, value3: 44, value4: 0, value5: 0, best: 42, average: 43)
@@ -488,8 +488,8 @@ RSpec.describe Result do
     end
 
     it "times over 10 minutes must be rounded" do
-      expect(build(:result, value2: (10*6000) + 4343)).to be_invalid_with_errors(value2: ["times over 10 minutes should be rounded"])
-      expect(build(:result, value2: (10*6000) + 4300)).to be_valid
+      expect(build(:result, value2: (10 * 6000) + 4343)).to be_invalid_with_errors(value2: ["times over 10 minutes should be rounded"])
+      expect(build(:result, value2: (10 * 6000) + 4300)).to be_valid
     end
 
     context "multibld" do
@@ -498,7 +498,7 @@ RSpec.describe Result do
         solve_time = SolveTime.new("333mbf", :single, 0)
         solve_time.solved = 28
         solve_time.attempted = 30
-        solve_time.time_centiseconds = 65*60*100
+        solve_time.time_centiseconds = 65 * 60 * 100
 
         result = build(:result, event_id: "333mbf", value1: solve_time.wca_value, format_id: "1")
         expect(result).to be_invalid_with_errors(value1: ["should be less than or equal to 60 minutes"])
@@ -508,7 +508,7 @@ RSpec.describe Result do
         solve_time = SolveTime.new("333mbf", :single, 0)
         solve_time.solved = 2
         solve_time.attempted = 3
-        solve_time.time_centiseconds = 32*60*100
+        solve_time.time_centiseconds = 32 * 60 * 100
 
         result = build(:result, event_id: "333mbf", value1: solve_time.wca_value, format_id: "1")
         expect(result).to be_invalid_with_errors(value1: ["should be less than or equal to 30 minutes"])

@@ -385,7 +385,7 @@ RSpec.describe "Competition WCIF" do
             "id" => "555-r1",
             "format" => "a",
             "timeLimit" => {
-              "centiseconds" => 3*60*100,
+              "centiseconds" => 3 * 60 * 100,
               "cumulativeRoundIds" => [],
             },
             "cutoff" => nil,

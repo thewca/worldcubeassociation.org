@@ -33,7 +33,7 @@ RSpec.describe ResultsHelper do
     end
 
     it "doesn't mark uncompleted solves as PB" do
-      combined_round = create(:round, cutoff: Cutoff.new(number_of_attempts: 2, attempt_result: 60*100))
+      combined_round = create(:round, cutoff: Cutoff.new(number_of_attempts: 2, attempt_result: 60 * 100))
       combined_final = RoundType.find("c")
       results = []
       results << create(:result, competition: combined_round.competition, person: person, best: SolveTime::DNF_VALUE, average: SolveTime::SKIPPED_VALUE, round_type: combined_final, event_id: "333")
