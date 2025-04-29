@@ -10,7 +10,6 @@ import {
   Form,
   Header,
   Icon,
-  List,
   Message,
   Segment,
 } from 'semantic-ui-react';
