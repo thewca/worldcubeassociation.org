@@ -439,7 +439,18 @@ module DatabaseDumper
         ),
       ),
     }.freeze,
-    "invoice_items" => :skip_all_rows,
+    "invoice_items" => {
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w(
+          id
+          registration_id
+          amount_lowest_denomination
+          currency_code
+          status
+          display_name
+        ),
+      ),
+    }.freeze,
     "live_results" => :skip_all_rows,
     "live_attempts" => :skip_all_rows,
     "live_attempt_history_entries" => :skip_all_rows,
