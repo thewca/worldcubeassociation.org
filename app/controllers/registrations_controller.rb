@@ -69,6 +69,13 @@ class RegistrationsController < ApplicationController
     @user = @registration.user
   end
 
+  def redirect_v2_attendee
+    search_params = params.permit(:competition_id, :user_id)
+    registration = Registration.find_by!(**search_params)
+
+    redirect_to edit_registration_path(registration)
+  end
+
   def import
     @competition = competition_from_params
   end
