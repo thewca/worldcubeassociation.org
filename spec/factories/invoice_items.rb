@@ -5,7 +5,7 @@ FactoryBot.define do
     registration factory: %i[registration]
     amount_lowest_denomination { 0 }
     currency_code { registration.competition.currency_code }
-    status { 0 }
+    status { :unpaid }
     display_name { "invoice_item_factory" }
 
     trait :entry do
