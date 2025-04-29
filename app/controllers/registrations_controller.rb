@@ -63,8 +63,10 @@ class RegistrationsController < ApplicationController
   end
 
   def edit
-    @competition = Competition.find(params[:competition_id])
-    @user = User.find(params[:user_id])
+    @registration = registration_from_params
+
+    @competition = @registration.competition
+    @user = @registration.user
   end
 
   def import
@@ -489,7 +491,7 @@ class RegistrationsController < ApplicationController
 
     registration = payment_record.root_record.payment_intent.holder
 
-    redirect_path = edit_registration_v2_path(competition_id, registration.user_id)
+    redirect_path = edit_registration_path(registration)
 
     refund_amount_param = params.require(:payment).require(:refund_amount)
     refund_amount = refund_amount_param.to_i
