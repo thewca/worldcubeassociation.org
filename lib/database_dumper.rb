@@ -551,8 +551,8 @@ module DatabaseDumper
           created_at
           updated_at
         ),
-        "email" => "'contact@regional-organization.org'",
         fake_values: {
+          "email" => "'contact@regional-organization.org'",
           "address" => "'Street and Number, City, State, Postal code, Country'",
           "directors_and_officers" => "'Directors and Officers'",
           "area_description" => "'Area'",
