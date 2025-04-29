@@ -4,8 +4,10 @@ class UsersController < ApplicationController
   before_action :authenticate_user!, except: [:select_nearby_delegate, :acknowledge_cookies]
   before_action :check_recent_authentication!, only: [:enable_2fa, :disable_2fa, :regenerate_2fa_backup_codes]
   before_action :set_recent_authentication!, only: [:edit, :update, :enable_2fa, :disable_2fa]
+  before_action -> { redirect_to_root_unless_user(:can_admin_results?) }, only: [:admin_search]
 
   RECENT_AUTHENTICATION_DURATION = 10.minutes.freeze
+  DEFAULT_SEARCH_RESULT_LIMIT = 20
 
   def index
     params[:order] = params[:order] == "asc" ? "asc" : "desc"
@@ -364,5 +366,15 @@ class UsersController < ApplicationController
       return false
     end
     true
+  end
+
+  def admin_search
+    query = params[:q]&.slice(0...SearchResultsController::SEARCH_QUERY_LIMIT)
+
+    return render status: :bad_request, json: { error: "No query specified" } unless query
+
+    render status: :ok, json: {
+      result: User.search(query, params: params).limit(DEFAULT_SEARCH_RESULT_LIMIT),
+    }
   end
 end
