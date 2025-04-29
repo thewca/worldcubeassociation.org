@@ -2235,8 +2235,7 @@ en:
     messages:
       charges_refunded: "All charges have been refunded"
     labels:
-      payment_statuses: "Payment Statuses"
-      available_refunds: "Available Refunds"
+      net_payment: "Net Payment"
       original_payment: "Original Payment"
     #context: localized names of payment providers
     payment_providers:
@@ -2274,9 +2273,6 @@ en:
           display_name: "Name"
           primary_email: "Email"
         fallback_not_applicable: "N/A"
-    statuses:
-      succeeded: "Succeeded"
-      refund: "Refunded"
   persons:
     #context: Person search page
     index:

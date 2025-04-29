@@ -45,7 +45,7 @@ export default function Payments({
     <Table>
       <Table.Header>
         <Table.Row>
-          <Table.HeaderCell>Net Payment</Table.HeaderCell>
+          <Table.HeaderCell>{I18n.t('payments.labels.net_payment')}</Table.HeaderCell>
           <Table.HeaderCell>{I18n.t('payments.labels.original_payment')}</Table.HeaderCell>
           <Table.HeaderCell>{I18n.t('registrations.refund_form.labels.refund_amount')}</Table.HeaderCell>
           <Table.HeaderCell />
