@@ -12,15 +12,15 @@ import { useConfirm } from '../../../lib/providers/ConfirmProvider';
 import I18n from '../../../lib/i18n';
 
 export default function Refunds({
-  onSuccess, userId, competitionId,
+  onSuccess, registrationId, competitionId,
 }) {
   const {
     data: refunds,
     isLoading: refundsLoading,
     refetch,
   } = useQuery({
-    queryKey: ['refunds', competitionId, userId],
-    queryFn: () => getAvailableRefunds(competitionId, userId),
+    queryKey: ['refunds', registrationId],
+    queryFn: () => getAvailableRefunds(registrationId),
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
     staleTime: Infinity,
@@ -62,7 +62,6 @@ export default function Refunds({
               refund={refund}
               refundMutation={refundMutation}
               isMutating={isMutating}
-              userId={userId}
               competitionId={competitionId}
               key={refund.payment_id}
             />
@@ -74,7 +73,7 @@ export default function Refunds({
 }
 
 function RefundRow({
-  refund, refundMutation, isMutating, userId, competitionId,
+  refund, refundMutation, isMutating, competitionId,
 }) {
   const [amountToRefund, setAmountToRefund] = useInputState(refund.ruby_amount_refundable);
 
@@ -92,7 +91,6 @@ function RefundRow({
   }).then(() => {
     refundMutation({
       competitionId,
-      userId,
       paymentId: refund.payment_id,
       paymentProvider: refund.payment_provider,
       amount: amountToRefund,

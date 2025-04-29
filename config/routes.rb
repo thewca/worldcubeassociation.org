@@ -123,7 +123,7 @@ Rails.application.routes.draw do
     post '/payment_integration/:payment_integration/disconnect' => 'competitions#disconnect_payment_integration', as: :disconnect_payment_integration
   end
   scope :payment do
-    get '/refunds' => 'payment#available_refunds'
+    get '/refunds/:registration_id' => 'payment#available_refunds', as: :available_refunds
   end
 
   get 'competitions/:competition_id/report/edit' => 'delegate_reports#edit', as: :delegate_report_edit
