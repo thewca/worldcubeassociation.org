@@ -21,7 +21,7 @@ export default function Payments({
     refetch,
   } = useQuery({
     queryKey: ['payments', registrationId],
-    queryFn: () => getRegistrationPayments(competitionId, registrationId),
+    queryFn: () => getRegistrationPayments(registrationId),
     select: (data) => data.charges.filter((r) => r.ruby_amount_refundable !== 0),
   });
   const { mutate: refundMutation, isPending: isMutating } = useMutation({

@@ -2,9 +2,8 @@ import { fetchJsonOrError } from '../../../../../lib/requests/fetchWithAuthentic
 import { registrationPaymentsUrl } from '../../../../../lib/requests/routes.js.erb';
 
 export default async function getRegistrationPayments(
-  competitionId,
   registrationId,
 ) {
-  const { data } = await fetchJsonOrError(registrationPaymentsUrl(competitionId, registrationId));
+  const { data } = await fetchJsonOrError(registrationPaymentsUrl(registrationId));
   return data;
 }
