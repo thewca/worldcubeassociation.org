@@ -231,9 +231,15 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
   def payment_ticket
     iso_donation_amount = params[:iso_donation_amount].to_i || 0
 
-    @registration.add_competition_entry
-    @registration.add_donation(iso_donation_amount) if iso_donation_amount.positive?
-    ruby_money = @registration.invoice_items_total
+    if Rails.env.production? && EnvConfig.WCA_LIVE_SITE?
+      # We could delegate this call to the prepare_intent function given that we're already giving it registration - however,
+      # in the long-term we want to decouple registrations from payments, so I'm deliberately not introducing any more tight coupling
+      ruby_money = @registration.entry_fee_with_donation(iso_donation_amount)
+    else
+      @registration.add_competition_entry
+      @registration.add_donation(iso_donation_amount) if iso_donation_amount.positive?
+      ruby_money = @registration.invoice_items_total
+    end
 
     payment_account = @competition.payment_account_for(:stripe)
     payment_intent = payment_account.prepare_intent(@registration, ruby_money.cents, ruby_money.currency.iso_code, @current_user)
