@@ -1,7 +1,7 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import React, { useEffect } from 'react';
 import {
-  Button, List, Message, Table,
+  Button, Message, Table,
 } from 'semantic-ui-react';
 import getRegistrationPayments from '../api/payment/get/getRegistrationPayments';
 import refundPayment from '../api/payment/get/refundPayment';
@@ -13,7 +13,7 @@ import I18n from '../../../lib/i18n';
 import { isoMoneyToHumanReadable } from '../../../lib/helpers/money';
 
 export default function Payments({
-  onSuccess, registrationId, competitionId,
+  onSuccess, registrationId, competitionId, competitorsInfo,
 }) {
   const {
     data: payments,
@@ -22,10 +22,6 @@ export default function Payments({
   } = useQuery({
     queryKey: ['payments', registrationId],
     queryFn: () => getRegistrationPayments(competitionId, registrationId),
-    refetchOnWindowFocus: false,
-    refetchOnReconnect: false,
-    staleTime: Infinity,
-    refetchOnMount: 'always',
     select: (data) => data.charges.filter((r) => r.ruby_amount_refundable !== 0),
   });
   const { mutate: refundMutation, isPending: isMutating } = useMutation({
@@ -51,7 +47,6 @@ export default function Payments({
         <Table.Row>
           <Table.HeaderCell>Net Payment</Table.HeaderCell>
           <Table.HeaderCell>{I18n.t('payments.labels.original_payment')}</Table.HeaderCell>
-          <Table.HeaderCell>Refunds</Table.HeaderCell>
           <Table.HeaderCell>{I18n.t('registrations.refund_form.labels.refund_amount')}</Table.HeaderCell>
           <Table.HeaderCell />
         </Table.Row>
@@ -64,6 +59,7 @@ export default function Payments({
             isMutating={isMutating}
             competitionId={competitionId}
             key={refund.payment_id}
+            competitorsInfo={competitorsInfo}
           />
         ))}
       </Table.Body>
@@ -72,7 +68,7 @@ export default function Payments({
 }
 
 function PaymentRow({
-  payment, refundMutation, isMutating, competitionId,
+  payment, refundMutation, isMutating, competitionId, competitorsInfo,
 }) {
   const [amountToRefund, setAmountToRefund] = useInputState(payment.ruby_amount_refundable);
 
@@ -97,38 +93,47 @@ function PaymentRow({
   });
 
   return (
-    <Table.Row>
-      <Table.Cell>
-        {payment.human_amount_refundable}
-      </Table.Cell>
-      <Table.Cell>
-        {payment.human_amount_payment}
-      </Table.Cell>
-      <Table.Cell>
-        <List bulleted>
-          {payment.refunding_payments.map((p) => (
-            <List.Item>
-              {isoMoneyToHumanReadable(p.amount_lowest_denomination, p.currency_code)}
-            </List.Item>
-          ))}
-        </List>
-      </Table.Cell>
-      <Table.Cell>
-        <AutonumericField
-          currency={payment.currency_code.toUpperCase()}
-          value={amountToRefund}
-          onChange={setAmountToRefund}
-          max={payment.ruby_amount_refundable}
-        />
-      </Table.Cell>
-      <Table.Cell>
-        <Button
-          onClick={attemptRefund}
-          disabled={isMutating}
-        >
-          {I18n.t('registrations.refund')}
-        </Button>
-      </Table.Cell>
-    </Table.Row>
+    <>
+      <Table.Row>
+        <Table.Cell>
+          {payment.human_amount_refundable}
+        </Table.Cell>
+        <Table.Cell>
+          {payment.human_amount_payment}
+        </Table.Cell>
+        <Table.Cell>
+          <AutonumericField
+            currency={payment.currency_code.toUpperCase()}
+            value={amountToRefund}
+            onChange={setAmountToRefund}
+            max={payment.ruby_amount_refundable}
+          />
+        </Table.Cell>
+        <Table.Cell>
+          <Button
+            onClick={attemptRefund}
+            disabled={isMutating}
+          >
+            {I18n.t('registrations.refund')}
+          </Button>
+        </Table.Cell>
+      </Table.Row>
+      {payment.refunding_payments.map((p) => (
+        <Table.Row>
+          <Table.Cell />
+          <Table.Cell />
+          <Table.Cell>
+            {isoMoneyToHumanReadable(Math.abs(p.amount_lowest_denomination), p.currency_code)}
+          </Table.Cell>
+          <Table.Cell>
+            Refunded by
+            {' '}
+            {competitorsInfo.find(
+              (c) => c.id === Number(p.user_id),
+            )?.name}
+          </Table.Cell>
+        </Table.Row>
+      ))}
+    </>
   );
 }
