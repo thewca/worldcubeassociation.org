@@ -3,12 +3,12 @@
 class PaymentController < ApplicationController
   def registration_payments
     if current_user
-      registration = Registration.includes(:registration_payments, :competition).find(params.require(:registration_id))
-      competition = registration.competition
+      registration_id = params.require(:registration_id)
+      registration = Registration.includes(:registration_payments, :competition).find(registration_id)
 
       return render status: :bad_request, json: { error: "Registration not found" } if registration.blank?
 
-      return render status: :unauthorized, json: { error: 'unauthorized' } unless current_user.can_manage_competition?(competition)
+      return render status: :unauthorized, json: { error: 'unauthorized' } unless current_user.can_manage_competition?(registration.competition)
 
       # Use `filter` here on purpose because the whole `registration_payments` list has been included above.
       #   Using `where` would create an SQL query, but it would also break (i.e. make redundant) the `includes` call above.

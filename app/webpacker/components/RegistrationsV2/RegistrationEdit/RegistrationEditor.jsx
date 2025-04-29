@@ -28,7 +28,7 @@ import getUsersInfo from '../api/user/post/getUserInfo';
 import { useRegistration } from '../lib/RegistrationProvider';
 import useSet from '../../../lib/hooks/useSet';
 
-export default function RegistrationEditor({ competitor, competitionInfo }) {
+export default function RegistrationEditor({ registrationId, competitor, competitionInfo }) {
   const dispatch = useDispatch();
   const [comment, setComment] = useState('');
   const [adminComment, setAdminComment] = useState('');
@@ -302,7 +302,7 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
           {(registration.payment.payment_statuses.includes('succeeded') || registration.payment.payment_statuses.includes('refund')) && (
             <Payments
               competitionId={competitionInfo.id}
-              registrationId={registration.id}
+              registrationId={registrationId}
               onSuccess={refetch}
               competitorsInfo={competitorsInfo}
             />
