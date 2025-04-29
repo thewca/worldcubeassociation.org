@@ -307,10 +307,12 @@ class RegistrationsController < ApplicationController
       logger.warn "Stripe webhook error while parsing basic request. #{e.message}"
       return head :bad_request
     end
+
     # Check if webhook signing is configured.
     if AppSecrets.STRIPE_WEBHOOK_SECRET.present?
       # Retrieve the event by verifying the signature using the raw body and secret.
       signature = request.env['HTTP_STRIPE_SIGNATURE']
+
       begin
         event = Stripe::Webhook.construct_event(
           payload, signature, AppSecrets.STRIPE_WEBHOOK_SECRET
@@ -328,22 +330,23 @@ class RegistrationsController < ApplicationController
     audit_event = StripeWebhookEvent.create_from_api(event)
     audit_remote_timestamp = audit_event.created_at_remote
 
+    connected_account = ConnectedStripeAccount.find_by(account_id: audit_event.account_id)
+
+    if connected_account.nil?
+      logger.error "Stripe webhook reported event for account '#{audit_event.account_id}' but we are not connected to that account."
+      return head :not_found
+    end
+
     stripe_intent = event.data.object # contains a polymorphic type that depends on the event
     stored_record = StripeRecord.find_by(stripe_id: stripe_intent.id)
 
     handling_event = StripeWebhookEvent::HANDLED_EVENTS.include?(event.type)
+    incoming_event = StripeWebhookEvent::INCOMING_EVENTS.include?(event.type)
+
+    stored_record ||= StripeRecord.create_from_api(stripe_intent, {}, audit_event.account_id) if incoming_event
 
     if stored_record.nil?
       logger.error "Stripe webhook reported event on entity #{stripe_intent.id} but we have no matching transaction."
-      return head :not_found
-    else
-      audit_event.update!(stripe_record: stored_record, handled: handling_event)
-    end
-
-    connected_account = ConnectedStripeAccount.find_by(account_id: stored_record.account_id)
-
-    if connected_account.nil?
-      logger.error "Stripe webhook reported event for account '#{stored_record.account_id}' but we are not connected to that account."
       return head :not_found
     end
 
@@ -381,6 +384,9 @@ class RegistrationsController < ApplicationController
     else
       logger.info "Unhandled Stripe event type: #{event.type}"
     end
+
+    # Finally, mark the event as being handled.
+    audit_event.update!(stripe_record: stored_record, handled: handling_event)
 
     head :ok
   end
