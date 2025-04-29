@@ -92,9 +92,7 @@ export function numberOfDaysAfter(competition, refDate) {
   const parsedEndDate = parseDateString(competition.end_date).startOf('day');
   const parsedRefDate = DateTime.fromISO(refDate, { zone: 'utc' }).startOf('day');
 
-  const numberOfDays = parsedRefDate.diff(parsedEndDate, 'days').days;
-
-  return Math.abs(numberOfDays);
+  return parsedRefDate.diff(parsedEndDate, 'days').days;
 }
 
 export function timeDifferenceAfter(competition, refDate) {
