@@ -94,7 +94,7 @@ export function numberOfDaysAfter(competition, refDate) {
 
   const numberOfDays = parsedRefDate.diff(parsedEndDate, 'days').days;
 
-  return Math.max(0, numberOfDays);
+  return Math.abs(numberOfDays);
 }
 
 export function timeDifferenceAfter(competition, refDate) {
