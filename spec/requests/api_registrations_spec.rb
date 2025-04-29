@@ -595,7 +595,7 @@ RSpec.describe 'API Registrations' do
       expect(response).to have_http_status(:forbidden)
     end
 
-    it 'user cant submit an organizer comment' do
+    it 'user cant submit an admin comment' do
       update_request = build(
         :update_request,
         user_id: registration.user_id,

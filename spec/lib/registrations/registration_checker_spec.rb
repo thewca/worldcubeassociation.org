@@ -787,7 +787,7 @@ RSpec.describe Registrations::RegistrationChecker do
 
       it 'organizer can change admin_comment' do
         registration = create(
-          :registration, user_id: default_user.id, competition_id: default_competition.id, administrative_notes: 'organizer comment'
+          :registration, user_id: default_user.id, competition_id: default_competition.id, administrative_notes: 'admin comment'
         )
 
         update_request = build(
@@ -804,7 +804,7 @@ RSpec.describe Registrations::RegistrationChecker do
     end
 
     describe '#update_registration_allowed!.validate_admin_comment!' do
-      it 'organizer comment cant exceed 240 characters' do
+      it 'admin comment cant exceed 240 characters' do
         long_comment = 'comment longer than 240 characterscomment longer than 240 characterscomment longer than 240 characterscomment longer than 240 characterscomment longer than 240 characterscomment longer than 240 characterscomment longer
         than 240 characterscomment longer than 240 characters'
 
@@ -824,7 +824,7 @@ RSpec.describe Registrations::RegistrationChecker do
         end
       end
 
-      it 'organizer comment can match 240 characters' do
+      it 'admin comment can match 240 characters' do
         at_character_limit = 'comment longer than 240 characterscomment longer than 240 characterscomment longer than 240 characterscomment longer than 240 characterscomment longer than 240 characterscomment longer than' \
                              '240 characterscomment longer longer than 240 12345'
 
