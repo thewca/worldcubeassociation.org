@@ -415,7 +415,6 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
 
       <RegistrationAdministrationSearch
         partitionedRegistrations={partitionedRegistrations}
-        competitionId={competitionInfo.id}
         usingPayments={competitionInfo['using_payment_integrations?']}
         currencyCode={competitionInfo.currency_code}
       />
