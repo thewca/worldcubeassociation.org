@@ -264,9 +264,17 @@ class RegistrationsController < ApplicationController
     user_id = params[:user_id]
     registration = Registration.find_by(competition_id: competition_id, user_id: user_id)
     iso_donation_amount = params[:iso_donation_amount].to_i || 0
-    ruby_money = registration.entry_fee_with_donation(iso_donation_amount)
-    human_amount = helpers.format_money(ruby_money)
 
+    if Rails.env.production? && EnvConfig.WCA_LIVE_SITE?
+      ruby_money = registration.entry_fee_with_donation(iso_donation_amount)
+    else
+      registration.add_competition_entry(build_only: true)
+      registration.add_donation(iso_donation_amount, build_only: true) if iso_donation_amount.positive?
+
+      ruby_money = registration.invoice_items_total
+    end
+
+    human_amount = helpers.format_money(ruby_money)
     api_amounts = {
       stripe: StripeRecord.amount_to_stripe(ruby_money.cents, ruby_money.currency.iso_code),
       paypal: PaypalRecord.amount_to_paypal(ruby_money.cents, ruby_money.currency.iso_code),

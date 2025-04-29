@@ -668,6 +668,27 @@ RSpec.describe Registration do
     expect(reg.errors[:registered_at]).to include("can't be blank")
   end
 
+  describe 'order functions' do
+    describe '#invoice_items_total' do
+      let(:registration) { build_stubbed(:registration) }
+
+      it 'returns 0 if no invoice items exist' do
+        expect(registration.invoice_items).to be_empty # Confirm there are no invoice items
+        expect(registration.invoice_items_total.cents).to be(0)
+      end
+
+      it 'returns total if one invoice_item exists' do
+        create(:invoice_item, :entry, registration: registration)
+        expect(registration.invoice_items_total.cents).to be(1000)
+      end
+
+      it 'returns the total of 3 invoice items' do
+        create_list(:invoice_item, 3, :entry, registration: registration)
+        expect(registration.invoice_items_total.cents).to be(3000)
+      end
+    end
+  end
+
   describe '#entry_fee_with_donation' do
     it 'returns a RubyMoney object' do
       expect(registration.entry_fee_with_donation).to eq(Money.new(1000, "USD"))

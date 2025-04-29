@@ -29,6 +29,7 @@ class Registration < ApplicationRecord
   has_many :assignments, as: :registration, dependent: :delete_all
   has_many :wcif_extensions, as: :extendable, dependent: :delete_all
   has_many :payment_intents, as: :holder, dependent: :delete_all
+  has_many :invoice_items
 
   enum :competing_status, {
     pending: Registrations::Helper::STATUS_PENDING,
@@ -174,6 +175,29 @@ class Registration < ApplicationRecord
 
   def to_be_paid_through_wca?
     !new_record? && (pending? || accepted?) && competition.using_payment_integrations? && outstanding_entry_fees.positive?
+  end
+
+  def invoice_items_total
+    Money.new(invoice_items.sum(&:amount_lowest_denomination), competition.currency_code)
+  end
+
+  def add_competition_entry(build_only: false)
+    method = build_only ? :build : :create
+
+    invoice_items.public_send(method,
+                              amount_lowest_denomination: competition.base_entry_fee_lowest_denomination,
+                              currency_code: competition.currency_code,
+                              status: :unpaid,
+                              display_name: "#{competition_id} #{I18n.t('competitions.nav.menu.registration')}")
+  end
+
+  def add_donation(iso_amount, build_only: false)
+    method = build_only ? :build : :create
+
+    invoice_items.public_send(method,
+                              amount_lowest_denomination: iso_amount,
+                              currency_code: competition.currency_code,
+                              display_name: I18n.t('registrations.payment_form.labels.donation'))
   end
 
   def record_payment(
