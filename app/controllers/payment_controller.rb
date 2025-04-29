@@ -4,7 +4,7 @@ class PaymentController < ApplicationController
   def registration_payments
     if current_user
       registration_id = params.require(:registration_id)
-      registration = Registration.includes(:registration_payments, :competition).find(registration_id)
+      registration = Registration.includes(:competition, registration_payments: [:refunding_registration_payments]).find(registration_id)
 
       return render status: :bad_request, json: { error: "Registration not found" } if registration.blank?
 
