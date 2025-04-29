@@ -1,7 +1,7 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import React, { useEffect } from 'react';
 import {
-  Button, List, Message, Tab, Table,
+  Button, List, Message, Table,
 } from 'semantic-ui-react';
 import getRegistrationPayments from '../api/payment/get/getRegistrationPayments';
 import refundPayment from '../api/payment/get/refundPayment';
@@ -21,7 +21,7 @@ export default function Payments({
     refetch,
   } = useQuery({
     queryKey: ['payments', registrationId],
-    queryFn: () => getRegistrationPayments(registrationId),
+    queryFn: () => getRegistrationPayments(competitionId, registrationId),
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
     staleTime: Infinity,
