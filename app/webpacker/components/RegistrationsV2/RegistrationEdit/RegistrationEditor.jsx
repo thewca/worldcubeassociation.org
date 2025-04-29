@@ -299,16 +299,7 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
 
       {competitionInfo['using_payment_integrations?'] && (
         <>
-          <Message>{I18n.t('payments.labels.payment_statuses')}</Message>
-          <List>
-            {registration.payment.payment_statuses.map((paymentStatus) => (
-              <List.Item key={paymentStatus}>
-                {/* i18n-tasks-use t('payments.statuses.succeeded') */}
-                {/* i18n-tasks-use t('payments.statuses.refund') */}
-                {I18n.t(`payments.statuses.${paymentStatus}`)}
-              </List.Item>
-            ))}
-          </List>
+          <Header>Payments</Header>
           {(registration.payment.payment_statuses.includes('succeeded') || registration.payment.payment_statuses.includes('refund')) && (
             <Payments
               competitionId={competitionInfo.id}

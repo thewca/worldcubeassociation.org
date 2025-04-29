@@ -258,6 +258,7 @@ class Registration < ApplicationRecord
       competing: {
         event_ids: event_ids,
       },
+      id: id,
     }
     if admin
       if competition.using_payment_integrations?

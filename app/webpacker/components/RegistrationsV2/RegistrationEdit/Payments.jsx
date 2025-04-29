@@ -1,7 +1,7 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import React, { useEffect } from 'react';
 import {
-  Button, Header, Message, Table,
+  Button, List, Message, Tab, Table,
 } from 'semantic-ui-react';
 import getRegistrationPayments from '../api/payment/get/getRegistrationPayments';
 import refundPayment from '../api/payment/get/refundPayment';
@@ -10,16 +10,17 @@ import AutonumericField from '../../wca/FormBuilder/input/AutonumericField';
 import useInputState from '../../../lib/hooks/useInputState';
 import { useConfirm } from '../../../lib/providers/ConfirmProvider';
 import I18n from '../../../lib/i18n';
+import { isoMoneyToHumanReadable } from '../../../lib/helpers/money';
 
 export default function Payments({
   onSuccess, registrationId, competitionId,
 }) {
   const {
-    data: refunds,
-    isLoading: refundsLoading,
+    data: payments,
+    isLoading: paymentsLoading,
     refetch,
   } = useQuery({
-    queryKey: ['refunds', registrationId],
+    queryKey: ['payments', registrationId],
     queryFn: () => getRegistrationPayments(registrationId),
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
@@ -36,53 +37,51 @@ export default function Payments({
     },
   });
 
-  if (refundsLoading) {
+  if (paymentsLoading) {
     return <Loading />;
   }
 
-  if (refunds.length === 0) {
+  if (payments.length === 0) {
     return <Message warning>{I18n.t('payments.messages.charges_refunded')}</Message>;
   }
 
   return (
-    <>
-      <Header>{I18n.t('payments.labels.available_refunds')}</Header>
-      <Table>
-        <Table.Header>
-          <Table.Row>
-            <Table.HeaderCell>{I18n.t('payments.labels.original_payment')}</Table.HeaderCell>
-            <Table.HeaderCell>{I18n.t('registrations.refund_form.hints.refund_amount')}</Table.HeaderCell>
-            <Table.HeaderCell>{I18n.t('registrations.refund_form.labels.refund_amount')}</Table.HeaderCell>
-            <Table.HeaderCell />
-          </Table.Row>
-        </Table.Header>
-        <Table.Body>
-          {refunds.map((refund) => (
-            <RefundRow
-              refund={refund}
-              refundMutation={refundMutation}
-              isMutating={isMutating}
-              competitionId={competitionId}
-              key={refund.payment_id}
-            />
-          ))}
-        </Table.Body>
-      </Table>
-    </>
+    <Table>
+      <Table.Header>
+        <Table.Row>
+          <Table.HeaderCell>Net Payment</Table.HeaderCell>
+          <Table.HeaderCell>{I18n.t('payments.labels.original_payment')}</Table.HeaderCell>
+          <Table.HeaderCell>Refunds</Table.HeaderCell>
+          <Table.HeaderCell>{I18n.t('registrations.refund_form.labels.refund_amount')}</Table.HeaderCell>
+          <Table.HeaderCell />
+        </Table.Row>
+      </Table.Header>
+      <Table.Body>
+        {payments.map((refund) => (
+          <PaymentRow
+            payment={refund}
+            refundMutation={refundMutation}
+            isMutating={isMutating}
+            competitionId={competitionId}
+            key={refund.payment_id}
+          />
+        ))}
+      </Table.Body>
+    </Table>
   );
 }
 
-function RefundRow({
-  refund, refundMutation, isMutating, competitionId,
+function PaymentRow({
+  payment, refundMutation, isMutating, competitionId,
 }) {
-  const [amountToRefund, setAmountToRefund] = useInputState(refund.ruby_amount_refundable);
+  const [amountToRefund, setAmountToRefund] = useInputState(payment.ruby_amount_refundable);
 
   // React state persists across rerenders, so `amountToRefund` would keep old values
   // which is problematic when refunding more than 50% of the original
   // (because then the input exceeds the new max, leading to a whole new tragedy with AN)
   useEffect(() => {
-    setAmountToRefund((prevAmount) => Math.min(prevAmount, refund.ruby_amount_refundable));
-  }, [refund.ruby_amount_refundable, setAmountToRefund]);
+    setAmountToRefund((prevAmount) => Math.min(prevAmount, payment.ruby_amount_refundable));
+  }, [payment.ruby_amount_refundable, setAmountToRefund]);
 
   const confirm = useConfirm();
 
@@ -91,8 +90,8 @@ function RefundRow({
   }).then(() => {
     refundMutation({
       competitionId,
-      paymentId: refund.payment_id,
-      paymentProvider: refund.payment_provider,
+      paymentId: payment.payment_id,
+      paymentProvider: payment.payment_provider,
       amount: amountToRefund,
     });
   });
@@ -100,17 +99,26 @@ function RefundRow({
   return (
     <Table.Row>
       <Table.Cell>
-        {refund.human_amount_payment}
+        {payment.human_amount_refundable}
       </Table.Cell>
       <Table.Cell>
-        {refund.human_amount_refundable}
+        {payment.human_amount_payment}
+      </Table.Cell>
+      <Table.Cell>
+        <List bulleted>
+          {payment.refunding_payments.map((p) => (
+            <List.Item>
+              {isoMoneyToHumanReadable(p.amount_lowest_denomination, p.currency_code)}
+            </List.Item>
+          ))}
+        </List>
       </Table.Cell>
       <Table.Cell>
         <AutonumericField
-          currency={refund.currency_code.toUpperCase()}
+          currency={payment.currency_code.toUpperCase()}
           value={amountToRefund}
           onChange={setAmountToRefund}
-          max={refund.ruby_amount_refundable}
+          max={payment.ruby_amount_refundable}
         />
       </Table.Cell>
       <Table.Cell>

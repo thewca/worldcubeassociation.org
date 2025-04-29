@@ -30,6 +30,7 @@ class PaymentController < ApplicationController
           human_amount_refundable: human_amount_refundable,
           human_amount_payment: human_amount_payment,
           currency_code: reg_payment.currency_code,
+          refunding_payments: reg_payment.refunding_registration_payments,
         }
       }
 
