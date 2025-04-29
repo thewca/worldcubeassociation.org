@@ -2,9 +2,8 @@ import { fetchJsonOrError } from '../../../../../lib/requests/fetchWithAuthentic
 import { availableRefundsUrl } from '../../../../../lib/requests/routes.js.erb';
 
 export default async function getAvailableRefunds(
-  competitionId,
-  userId,
+  registrationId,
 ) {
-  const { data } = await fetchJsonOrError(availableRefundsUrl(competitionId, userId));
+  const { data } = await fetchJsonOrError(availableRefundsUrl(registrationId));
   return data;
 }

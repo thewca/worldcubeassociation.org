@@ -125,7 +125,7 @@ export default function ResultsTable({
               </Table.Cell>
               )}
               <Table.Cell>
-                <a href={isAdmin ? editRegistrationUrl(competitor.user_id, competitionId)
+                <a href={isAdmin ? editRegistrationUrl(competitor.id)
                   : liveUrls.personResults(competitionId, competitor.id)}
                 >
                   {competitor.user.name}

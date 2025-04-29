@@ -65,10 +65,9 @@ Rails.application.routes.draw do
 
   get 'competitions/mine' => 'competitions#my_competitions', as: :my_comps
   get 'competitions/for_senior(/:user_id)' => 'competitions#for_senior', as: :competitions_for_senior
-  get 'competitions/:id/enable_v2' => "competitions#enable_v2", as: :enable_v2
   post 'competitions/bookmark' => 'competitions#bookmark', as: :bookmark
   post 'competitions/unbookmark' => 'competitions#unbookmark', as: :unbookmark
-  get 'competitions/registrations_v2/:competition_id/:user_id/edit' => 'registrations#edit', as: :edit_registration_v2
+  get 'competitions/registrations_v2/:competition_id/:user_id/edit' => 'registrations#redirect_v2_attendee'
 
   resources :competitions do
     get 'edit/admin' => 'competitions#admin_edit', as: :admin_edit
@@ -125,7 +124,7 @@ Rails.application.routes.draw do
     post '/payment_integration/:payment_integration/disconnect' => 'competitions#disconnect_payment_integration', as: :disconnect_payment_integration
   end
   scope :payment do
-    get '/refunds' => 'payment#available_refunds'
+    get '/refunds/:registration_id' => 'payment#available_refunds', as: :available_refunds
   end
 
   get 'competitions/:competition_id/report/edit' => 'delegate_reports#edit', as: :delegate_report_edit
