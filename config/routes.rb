@@ -65,7 +65,6 @@ Rails.application.routes.draw do
 
   get 'competitions/mine' => 'competitions#my_competitions', as: :my_comps
   get 'competitions/for_senior(/:user_id)' => 'competitions#for_senior', as: :competitions_for_senior
-  get 'competitions/:id/enable_v2' => "competitions#enable_v2", as: :enable_v2
   post 'competitions/bookmark' => 'competitions#bookmark', as: :bookmark
   post 'competitions/unbookmark' => 'competitions#unbookmark', as: :unbookmark
   get 'competitions/registrations_v2/:competition_id/:user_id/edit' => 'registrations#edit', as: :edit_registration_v2
