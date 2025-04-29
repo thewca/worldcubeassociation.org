@@ -2505,7 +2505,9 @@ class Competition < ApplicationRecord
           # Complain if the existing timestamp lies in the past
           #   Note: Some timestamps are less strict than others (see https://github.com/thewca/worldcubeassociation.org/issues/11416)
           #   so we only enforce this validation on a subset of timestamps.
-          if previously_had_value && %w[registration.closingDateTime registration.waitingListDeadlineDate].include?(joined_key)
+          edits_forbidden_if_past = %w[registration.closingDateTime registration.waitingListDeadlineDate].include?(joined_key)
+
+          if previously_had_value && edits_forbidden_if_past
             existing_datetime = DateTime.parse(existing_value)
 
             raise WcaExceptions::BadApiParameter.new(I18n.t('competitions.errors.editing_deadline_already_passed', timestamp: existing_datetime), json_property: joined_key) if existing_datetime.past?
@@ -2524,7 +2526,8 @@ class Competition < ApplicationRecord
 
             new_before_existing = new_datetime < existing_datetime
 
-            # Complain if the new value lies before the old value (the user is trying to move something into the past)
+            # Complain if the new value lies before the old value
+            #   (i.e. the user is trying to move some deadline to end earlier)
             raise WcaExceptions::BadApiParameter.new(I18n.t('competitions.errors.edited_deadline_not_after_original', new_timestamp: new_datetime, timestamp: existing_datetime), json_property: joined_key) if new_before_existing
           end
         end
