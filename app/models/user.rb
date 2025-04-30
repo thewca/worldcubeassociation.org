@@ -81,8 +81,8 @@ class User < ApplicationRecord
       UserGroup.board,
       UserGroup.officers,
     ].flatten.flat_map(&:active_roles)
-      .select { |role| role.eligible_voter? }
-      .map { |role| role.user }
+      .select(&:eligible_voter?)
+      .map(&:user)
       .uniq
   end
 
@@ -447,7 +447,7 @@ class User < ApplicationRecord
   end
 
   def staff?
-    active_roles.any? { |role| role.staff? }
+    active_roles.any?(&:staff?)
   end
 
   def admin?
@@ -1155,8 +1155,8 @@ class User < ApplicationRecord
     UserGroup
       .delegate_regions
       .flat_map(&:active_roles)
-      .select { |role| role.staff? }
-      .map { |role| role.user_id }
+      .select(&:staff?)
+      .map(&:user_id)
   end
 
   def self.trainee_delegate_ids
@@ -1164,7 +1164,7 @@ class User < ApplicationRecord
       .delegate_regions
       .flat_map(&:active_roles)
       .select { |role| role.metadata.status == RolesMetadataDelegateRegions.statuses[:trainee_delegate] }
-      .map { |role| role.user_id }
+      .map(&:user_id)
   end
 
   def self.search(query, params: {})
@@ -1208,7 +1208,7 @@ class User < ApplicationRecord
         ].include?(role.group_type)
       }
       .reject { |role| role.group.is_hidden }
-      .map { |role| role.deprecated_team_role }
+      .map(&:deprecated_team_role)
   end
 
   DEFAULT_SERIALIZE_OPTIONS = {
@@ -1399,7 +1399,7 @@ class User < ApplicationRecord
 
   def subordinate_delegates
     delegate_roles
-      .filter { |role| role.lead? }
+      .filter(&:lead?)
       .flat_map { |role| role.group.active_users + role.group.active_all_child_users }
       .uniq
   end
@@ -1409,7 +1409,7 @@ class User < ApplicationRecord
   end
 
   private def highest_delegate_role
-    delegate_roles.max_by { |role| role.status_rank }
+    delegate_roles.max_by(&:status_rank)
   end
 
   def delegate_status

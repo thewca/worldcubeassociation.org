@@ -316,6 +316,9 @@ en:
         birthday: "Birthday"
         registration_competition_events: "Events"
         email: "Email"
+        search: "Search..."
+        too_few_chars: "Too few characters"
+        no_results: "No results"
       #context: a competition tab
       competition_tab:
         content: "Content"
@@ -1257,8 +1260,6 @@ en:
     will_pay_here: "You will pay them here after submitting your registration"
     wont_pay_here: "Please check the competition's information for instructions about how to pay"
     refund_form:
-      hints:
-        refund_amount: "The amount to refund to the competitor. Can be any value up to the amount already paid."
       labels:
         refund_amount: "Refund Amount"
     #context: on the payment form, when registering to a competition
@@ -1865,6 +1866,7 @@ en:
         being_updated: "Registration is being updated..."
         being_deleted: "Registration is being deleted..."
         update_confirm: "Are you sure you want to update your registration?"
+        organizer_update_confirm: "Are you sure you want to update the user's registration?"
         update_confirm_contact: "You need to contact the organizers to update your registration, click Yes to be taken to the contact form."
         delete_confirm_contact: "You need to contact the organizers to delete your registration, click Yes to be taken to the contact form."
         update_contact_message: "I would like to update my registration details as follows: %{update_params}"
@@ -2231,8 +2233,7 @@ en:
     messages:
       charges_refunded: "All charges have been refunded"
     labels:
-      payment_statuses: "Payment Statuses"
-      available_refunds: "Available Refunds"
+      net_payment: "Net Payment"
       original_payment: "Original Payment"
     #context: localized names of payment providers
     payment_providers:
@@ -2270,9 +2271,6 @@ en:
           display_name: "Name"
           primary_email: "Email"
         fallback_not_applicable: "N/A"
-    statuses:
-      succeeded: "Succeeded"
-      refund: "Refunded"
   persons:
     #context: Person search page
     index:
