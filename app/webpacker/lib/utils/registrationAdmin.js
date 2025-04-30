@@ -134,6 +134,9 @@ export function sortRegistrations(registrations, sortColumn, sortDirection) {
       case 'comment':
         return a.competing.comment.localeCompare(b.competing.comment);
 
+      case 'administrative_notes':
+        return a.competing.admin_comment.localeCompare(b.competing.admin_comment);
+
       case 'registered_on':
         return DateTime.fromISO(a.competing.registered_on).toMillis()
           - DateTime.fromISO(b.competing.registered_on).toMillis();
