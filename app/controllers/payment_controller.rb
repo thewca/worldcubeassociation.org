@@ -1,17 +1,14 @@
 # frozen_string_literal: true
 
 class PaymentController < ApplicationController
-  def available_refunds
+  def registration_payments
     if current_user
-      attendee_id = params.require(:attendee_id)
-      competition_id, user_id = attendee_id.split("-")
-      competition = Competition.find(competition_id)
-
-      registration = Registration.includes(:registration_payments).find_by(competition: competition, user_id: user_id)
+      registration_id = params.require(:registration_id)
+      registration = Registration.includes(:competition, registration_payments: [:refunding_registration_payments]).find(registration_id)
 
       return render status: :bad_request, json: { error: "Registration not found" } if registration.blank?
 
-      return render status: :unauthorized, json: { error: 'unauthorized' } unless current_user.can_manage_competition?(competition)
+      return render status: :unauthorized, json: { error: 'unauthorized' } unless current_user.can_manage_competition?(registration.competition)
 
       # Use `filter` here on purpose because the whole `registration_payments` list has been included above.
       #   Using `where` would create an SQL query, but it would also break (i.e. make redundant) the `includes` call above.
@@ -33,6 +30,7 @@ class PaymentController < ApplicationController
           human_amount_refundable: human_amount_refundable,
           human_amount_payment: human_amount_payment,
           currency_code: reg_payment.currency_code,
+          refunding_payments: reg_payment.refunding_registration_payments,
         }
       }
 

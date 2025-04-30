@@ -2718,32 +2718,32 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tanstack/eslint-plugin-query@npm:^5.73.3":
-  version: 5.73.3
-  resolution: "@tanstack/eslint-plugin-query@npm:5.73.3"
+"@tanstack/eslint-plugin-query@npm:^5.74.7":
+  version: 5.74.7
+  resolution: "@tanstack/eslint-plugin-query@npm:5.74.7"
   dependencies:
     "@typescript-eslint/utils": "npm:^8.18.1"
   peerDependencies:
     eslint: ^8.57.0 || ^9.0.0
-  checksum: 10c0/82cfa9bc3ebc47adb995f6ca57cdd1b498a66af1dc4e7f9329bed1168f1e72bdebb09db316fba9cb8e3a60b5da0b1edda174c5efa51c3a0f61f29955d64cae19
+  checksum: 10c0/7f026af15918e0f77e1032c0e53d70fd952d32735b0987a84d0df2b1c6b47ac01773da3812d579c999c398dd677d45400e133a1b3c2979e3f125028743451850
   languageName: node
   linkType: hard
 
-"@tanstack/query-core@npm:5.74.4":
-  version: 5.74.4
-  resolution: "@tanstack/query-core@npm:5.74.4"
-  checksum: 10c0/e74d0520b2ee14c8a65f9ff00e335cb9d25453b8af08d776ff3f7a6ba24178cbf4d6a884412df5a0747737e4ca87f637dafaad2c0f0e6afd7cd22e32e0d7dced
+"@tanstack/query-core@npm:5.74.7":
+  version: 5.74.7
+  resolution: "@tanstack/query-core@npm:5.74.7"
+  checksum: 10c0/192ac5238b74d17d62c55e072bdf534b7e309b432b9bc9a41eeb2eb84adfe29adf7b5edb8bf1371d995225db69c6a4092673b03bb206b4212ce55847170d6e74
   languageName: node
   linkType: hard
 
-"@tanstack/react-query@npm:^5.74.4":
-  version: 5.74.4
-  resolution: "@tanstack/react-query@npm:5.74.4"
+"@tanstack/react-query@npm:^5.74.7":
+  version: 5.74.7
+  resolution: "@tanstack/react-query@npm:5.74.7"
   dependencies:
-    "@tanstack/query-core": "npm:5.74.4"
+    "@tanstack/query-core": "npm:5.74.7"
   peerDependencies:
     react: ^18 || ^19
-  checksum: 10c0/4434b1764efd5e5a7f35046e7411fed06d42372ebbd6e784dcfd81c3d107b41c86fec2b59652fccadb1bab25ca35ef9b6720c7f5c89d6e4302cf1d2f60291200
+  checksum: 10c0/83455915126fcb8ab467d0071f1802c9b6f5d73c7a257be2f80cb76d3c616f3e38d4a61e22dc4c3bc81060c153988200244a5d4b68e365aacd205645ad4a3a09
   languageName: node
   linkType: hard
 
@@ -2840,11 +2840,11 @@ __metadata:
   linkType: hard
 
 "@types/node@npm:*, @types/node@npm:^22":
-  version: 22.14.1
-  resolution: "@types/node@npm:22.14.1"
+  version: 22.15.2
+  resolution: "@types/node@npm:22.15.2"
   dependencies:
     undici-types: "npm:~6.21.0"
-  checksum: 10c0/d49c4d00403b1c2348cf0701b505fd636d80aabe18102105998dc62fdd36dcaf911e73c7a868c48c21c1022b825c67b475b65b1222d84b704d8244d152bb7f86
+  checksum: 10c0/39da31d5fc63b14fabd217bb8a921c4a7fc3d99f233440209f9fc2d5d736e8773f7efc65223e2fd0e8db8390b0baab9c0cd2e951c2ece8b237f07313ab3cf295
   languageName: node
   linkType: hard
 
@@ -6401,10 +6401,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"graphql@npm:^16.8.1":
-  version: 16.10.0
-  resolution: "graphql@npm:16.10.0"
-  checksum: 10c0/303730675538c8bd6c76b447dc6f03e61242e2d2596b408c34759666ec4877409e5593a7a0467d590ac5407b8c663b093b599556a77f24f281abea69ddc53de6
+"graphql@npm:^16.11.0":
+  version: 16.11.0
+  resolution: "graphql@npm:16.11.0"
+  checksum: 10c0/124da7860a2292e9acf2fed0c71fc0f6a9b9ca865d390d112bdd563c1f474357141501c12891f4164fe984315764736ad67f705219c62f7580681d431a85db88
   languageName: node
   linkType: hard
 
@@ -7569,9 +7569,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"next-auth@npm:5.0.0-beta.26":
-  version: 5.0.0-beta.26
-  resolution: "next-auth@npm:5.0.0-beta.26"
+"next-auth@npm:5.0.0-beta.27":
+  version: 5.0.0-beta.27
+  resolution: "next-auth@npm:5.0.0-beta.27"
   dependencies:
     "@auth/core": "npm:0.39.0"
   peerDependencies:
@@ -7587,7 +7587,7 @@ __metadata:
       optional: true
     nodemailer:
       optional: true
-  checksum: 10c0/c781382091f1ca595b01eb6551d72a8f19f450c765769378726cdce62f12493ca8b0f3c8654ab8dd676a00f66206da7a6dfcd2d423eb2c9985258baa91ab83f4
+  checksum: 10c0/6f13e4d7d44bf0327cea017d7adb8cf9e9bca32bf030dd147ed5dd8301bcd1cf521b577615454b969643a08389b260347cc83c3e3c421dfa593f3ab7b126295a
   languageName: node
   linkType: hard
 
@@ -7603,8 +7603,8 @@ __metadata:
     "@payloadcms/live-preview-react": "npm:^3.35.1"
     "@payloadcms/next": "npm:^3.35.1"
     "@stylistic/eslint-plugin": "npm:^4.2.0"
-    "@tanstack/eslint-plugin-query": "npm:^5.73.3"
-    "@tanstack/react-query": "npm:^5.74.4"
+    "@tanstack/eslint-plugin-query": "npm:^5.74.7"
+    "@tanstack/react-query": "npm:^5.74.7"
     "@types/node": "npm:^22"
     "@types/react": "npm:^19"
     "@types/react-dom": "npm:^19"
@@ -7613,9 +7613,9 @@ __metadata:
     eslint-config-next: "npm:15.3.1"
     eslint-config-prettier: "npm:^10.1.2"
     eslint-plugin-prettier: "npm:^5.2.6"
-    graphql: "npm:^16.8.1"
+    graphql: "npm:^16.11.0"
     next: "npm:15.3.1"
-    next-auth: "npm:5.0.0-beta.26"
+    next-auth: "npm:5.0.0-beta.27"
     next-themes: "npm:^0.4.6"
     openapi-fetch: "npm:^0.13.5"
     openapi-typescript: "npm:^7.6.1"

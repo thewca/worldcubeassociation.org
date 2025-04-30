@@ -2544,21 +2544,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tanstack/query-core@npm:5.74.4":
-  version: 5.74.4
-  resolution: "@tanstack/query-core@npm:5.74.4"
-  checksum: 10c0/e74d0520b2ee14c8a65f9ff00e335cb9d25453b8af08d776ff3f7a6ba24178cbf4d6a884412df5a0747737e4ca87f637dafaad2c0f0e6afd7cd22e32e0d7dced
+"@tanstack/query-core@npm:5.74.7":
+  version: 5.74.7
+  resolution: "@tanstack/query-core@npm:5.74.7"
+  checksum: 10c0/192ac5238b74d17d62c55e072bdf534b7e309b432b9bc9a41eeb2eb84adfe29adf7b5edb8bf1371d995225db69c6a4092673b03bb206b4212ce55847170d6e74
   languageName: node
   linkType: hard
 
-"@tanstack/react-query@npm:^5.74.4":
-  version: 5.74.4
-  resolution: "@tanstack/react-query@npm:5.74.4"
+"@tanstack/react-query@npm:^5.74.7":
+  version: 5.74.7
+  resolution: "@tanstack/react-query@npm:5.74.7"
   dependencies:
-    "@tanstack/query-core": "npm:5.74.4"
+    "@tanstack/query-core": "npm:5.74.7"
   peerDependencies:
     react: ^18 || ^19
-  checksum: 10c0/4434b1764efd5e5a7f35046e7411fed06d42372ebbd6e784dcfd81c3d107b41c86fec2b59652fccadb1bab25ca35ef9b6720c7f5c89d6e4302cf1d2f60291200
+  checksum: 10c0/83455915126fcb8ab467d0071f1802c9b6f5d73c7a257be2f80cb76d3c616f3e38d4a61e22dc4c3bc81060c153988200244a5d4b68e365aacd205645ad4a3a09
   languageName: node
   linkType: hard
 
@@ -2737,7 +2737,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/json-schema@npm:*, @types/json-schema@npm:^7.0.8, @types/json-schema@npm:^7.0.9":
+"@types/json-schema@npm:*, @types/json-schema@npm:^7.0.15, @types/json-schema@npm:^7.0.8, @types/json-schema@npm:^7.0.9":
   version: 7.0.15
   resolution: "@types/json-schema@npm:7.0.15"
   checksum: 10c0/a996a745e6c5d60292f36731dd41341339d4eeed8180bb09226e5c8d23759067692b1d88e5d91d72ee83dfc00d3aca8e7bd43ea120516c17922cbcb7c3e252db
@@ -3889,7 +3889,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"chalk@npm:^4.0.0, chalk@npm:^4.1.2":
+"chalk@npm:^4.0.0":
   version: 4.1.2
   resolution: "chalk@npm:4.1.2"
   dependencies:
@@ -7335,20 +7335,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lodash.get@npm:^4.4.2":
-  version: 4.4.2
-  resolution: "lodash.get@npm:4.4.2"
-  checksum: 10c0/48f40d471a1654397ed41685495acb31498d5ed696185ac8973daef424a749ca0c7871bf7b665d5c14f5cc479394479e0307e781f61d5573831769593411be6e
-  languageName: node
-  linkType: hard
-
-"lodash.has@npm:^4.5.2":
-  version: 4.5.2
-  resolution: "lodash.has@npm:4.5.2"
-  checksum: 10c0/3ffa9e549f321996a5fdf6204494c035ff550b2df703f936a448c553131bbb55492b4e7995bb13500648b50b268ed8afc974a7a0c0a43744d28d61cc95cb1ffe
-  languageName: node
-  linkType: hard
-
 "lodash.memoize@npm:^4.1.2":
   version: 4.1.2
   resolution: "lodash.memoize@npm:4.1.2"
@@ -10207,7 +10193,7 @@ __metadata:
     "@rails/ujs": "npm:^7.1.501"
     "@stripe/react-stripe-js": "npm:^3.6.0"
     "@stripe/stripe-js": "npm:^7.2.0"
-    "@tanstack/react-query": "npm:^5.74.4"
+    "@tanstack/react-query": "npm:^5.74.7"
     "@tanstack/react-table": "npm:^8.21.3"
     "@wca/helpers": "npm:^1.1.5"
     autonumeric: "npm:^4.10.8"
@@ -10278,14 +10264,14 @@ __metadata:
     sass: "npm:^1.87.0"
     sass-loader: "npm:^16.0.5"
     semantic-ui-react: "npm:^2.1.5"
-    shakapacker: "npm:8.2.0"
+    shakapacker: "npm:8.3.0"
     style-loader: "npm:^4.0.0"
-    stylelint: "npm:^16.19.0"
+    stylelint: "npm:^16.19.1"
     stylelint-config-recommended-scss: "npm:^14.1.0"
     stylelint-scss: "npm:^6.11.1"
     terser-webpack-plugin: "npm:^5.3.14"
-    webpack: "npm:^5.99.6"
-    webpack-assets-manifest: "npm:^5.2.1"
+    webpack: "npm:^5.99.7"
+    webpack-assets-manifest: "npm:^6.0.2"
     webpack-bundle-analyzer: "npm:^4.10.2"
     webpack-cli: "npm:^6.0.1"
     webpack-dev-server: "npm:^5.2.1"
@@ -10418,7 +10404,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"schema-utils@npm:^3.0.0, schema-utils@npm:^3.3.0":
+"schema-utils@npm:^3.0.0":
   version: 3.3.0
   resolution: "schema-utils@npm:3.3.0"
   dependencies:
@@ -10438,6 +10424,18 @@ __metadata:
     ajv-formats: "npm:^2.1.1"
     ajv-keywords: "npm:^5.1.0"
   checksum: 10c0/c23f0fa73ef71a01d4a2bb7af4c91e0d356ec640e071aa2d06ea5e67f042962bb7ac7c29a60a295bb0125878801bc3209197a2b8a833dd25bd38e37c3ed21427
+  languageName: node
+  linkType: hard
+
+"schema-utils@npm:^4.3.2":
+  version: 4.3.2
+  resolution: "schema-utils@npm:4.3.2"
+  dependencies:
+    "@types/json-schema": "npm:^7.0.9"
+    ajv: "npm:^8.9.0"
+    ajv-formats: "npm:^2.1.1"
+    ajv-keywords: "npm:^5.1.0"
+  checksum: 10c0/981632f9bf59f35b15a9bcdac671dd183f4946fe4b055ae71a301e66a9797b95e5dd450de581eb6cca56fb6583ce8f24d67b2d9f8e1b2936612209697f6c277e
   languageName: node
   linkType: hard
 
@@ -10599,9 +10597,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"shakapacker@npm:8.2.0":
-  version: 8.2.0
-  resolution: "shakapacker@npm:8.2.0"
+"shakapacker@npm:8.3.0":
+  version: 8.3.0
+  resolution: "shakapacker@npm:8.3.0"
   dependencies:
     js-yaml: "npm:^4.1.0"
     path-complete-extname: "npm:^1.0.0"
@@ -10615,8 +10613,8 @@ __metadata:
     babel-loader: ^8.2.4 || ^9.0.0 || ^10.0.0
     compression-webpack-plugin: ^9.0.0 || ^10.0.0|| ^11.0.0
     terser-webpack-plugin: ^5.3.1
-    webpack: ^5.72.0
-    webpack-assets-manifest: ^5.0.6
+    webpack: ^5.76.0
+    webpack-assets-manifest: ^5.0.6 || ^6.0.0
     webpack-cli: ^4.9.2 || ^5.0.0 || ^6.0.0
     webpack-dev-server: ^4.9.0 || ^5.0.0
     webpack-merge: ^5.8.0 || ^6.0.0
@@ -10625,7 +10623,7 @@ __metadata:
       optional: true
     "@types/webpack":
       optional: true
-  checksum: 10c0/934ec9e903447cf16e2e1ba568331f3a2ba8377d8a98094477a090e68d3ceed8bb2ad3a889ff639b127dcd96c2561214cddad1ab208ac35c3d588ac329197e80
+  checksum: 10c0/ddcac57f13458eabdb2ca1a021013acc28b6d3dc74e82dece3a485e64f0e3b6ab789d4ba725c8f748c78bcbfe8427ef82782f7cd8024c954ffd4c12a0cd25a22
   languageName: node
   linkType: hard
 
@@ -11147,9 +11145,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"stylelint@npm:^16.19.0":
-  version: 16.19.0
-  resolution: "stylelint@npm:16.19.0"
+"stylelint@npm:^16.19.1":
+  version: 16.19.1
+  resolution: "stylelint@npm:16.19.1"
   dependencies:
     "@csstools/css-parser-algorithms": "npm:^3.0.4"
     "@csstools/css-tokenizer": "npm:^3.0.3"
@@ -11191,7 +11189,7 @@ __metadata:
     write-file-atomic: "npm:^5.0.1"
   bin:
     stylelint: bin/stylelint.mjs
-  checksum: 10c0/15a8c2f5c1ece526672eec05b8c69e2cb0fb41c9d77e22577d19d88610de2f1f59fd5926b067166d0d8d30cca8c745401fa119c31d2525335d631bd58c75a7a0
+  checksum: 10c0/e633f323ff730e8f2ac982067e4caa9a6c98b81a519e7adff96fa7a7d047f68a24c0dd2d81f3511b0943d99c915f20f19da911d16d47336705ea70d46e960c89
   languageName: node
   linkType: hard
 
@@ -11683,20 +11681,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webpack-assets-manifest@npm:^5.2.1":
-  version: 5.2.1
-  resolution: "webpack-assets-manifest@npm:5.2.1"
+"webpack-assets-manifest@npm:^6.0.2":
+  version: 6.0.2
+  resolution: "webpack-assets-manifest@npm:6.0.2"
   dependencies:
-    chalk: "npm:^4.1.2"
     deepmerge: "npm:^4.3.1"
     lockfile: "npm:^1.0.4"
-    lodash.get: "npm:^4.4.2"
-    lodash.has: "npm:^4.5.2"
-    schema-utils: "npm:^3.3.0"
+    schema-utils: "npm:^4.3.0"
     tapable: "npm:^2.2.1"
   peerDependencies:
-    webpack: ^5.2.0
-  checksum: 10c0/3ee9380d5d5efca3c3a3dd8c98dc06eeddddfb797d3e6714e1cef1bbdf4db10191ec9c6c6cca96ff698851336d5f64aa83a4fd64bc6530afc38fc27cf166cbdc
+    webpack: ^5.61.0
+  checksum: 10c0/43084376c7601c776eb1a53c0cf3058d18254b6746319e90cc7ad7ec1996c92472a3eef54746d4c97b69465282dd4a5014b9127f16f6bc5334f02b2914272cbb
   languageName: node
   linkType: hard
 
@@ -11856,12 +11851,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webpack@npm:^5.99.6":
-  version: 5.99.6
-  resolution: "webpack@npm:5.99.6"
+"webpack@npm:^5.99.7":
+  version: 5.99.7
+  resolution: "webpack@npm:5.99.7"
   dependencies:
     "@types/eslint-scope": "npm:^3.7.7"
     "@types/estree": "npm:^1.0.6"
+    "@types/json-schema": "npm:^7.0.15"
     "@webassemblyjs/ast": "npm:^1.14.1"
     "@webassemblyjs/wasm-edit": "npm:^1.14.1"
     "@webassemblyjs/wasm-parser": "npm:^1.14.1"
@@ -11878,7 +11874,7 @@ __metadata:
     loader-runner: "npm:^4.2.0"
     mime-types: "npm:^2.1.27"
     neo-async: "npm:^2.6.2"
-    schema-utils: "npm:^4.3.0"
+    schema-utils: "npm:^4.3.2"
     tapable: "npm:^2.1.1"
     terser-webpack-plugin: "npm:^5.3.11"
     watchpack: "npm:^2.4.1"
@@ -11888,7 +11884,7 @@ __metadata:
       optional: true
   bin:
     webpack: bin/webpack.js
-  checksum: 10c0/b8b44b16933a0dd83e185ad42f292bbdfa9c47e245cbe786c48520d681556ece9af6ea7fff33059fafdf3d2cd62674715308d70a6f15eda6c6de7e03ef01842a
+  checksum: 10c0/e121880d921d5500e9dd61c3428f5d8dca4786c559e7f37488173186447cd22079be677d470a4db1643febf8031b9be900f501c9b95ba94ffe3d2065ad486d31
   languageName: node
   linkType: hard
 

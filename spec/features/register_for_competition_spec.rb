@@ -137,7 +137,7 @@ RSpec.feature "Registering for a competition", :js do
     end
 
     scenario "updating registration" do
-      visit edit_registration_v2_path(competition_id: competition.id, user_id: user.id)
+      visit edit_registration_path(registration)
 
       fill_in "guest-dropdown", with: 1
       click_button "Update Registration"
@@ -171,7 +171,7 @@ RSpec.feature "Registering for a competition", :js do
     end
 
     scenario "deleting registration" do
-      visit edit_registration_v2_path(competition_id: competition.id, user_id: user.id)
+      visit edit_registration_path(registration)
 
       # SemUI render the actual radio inputs as `hidden` in CSS, so we have to take a detour via the label
       find('label[for="radio-status-cancelled"]').click
