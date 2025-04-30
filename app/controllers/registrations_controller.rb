@@ -77,8 +77,7 @@ class RegistrationsController < ApplicationController
   end
 
   def registration_history
-    registration_id = params.require(:registration_id)
-    registration = Registration.find(registration_id)
+    registration = registration_from_params
 
     return head :unauthorized unless current_user.id == registration.user_id || current_user.can_manage_competition?(registration.competition)
 
