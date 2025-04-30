@@ -20,6 +20,7 @@ const editableRegistrationStates = ['accepted', 'pending', 'waiting_list'];
 export default function Index({
   competitionInfo,
   userInfo,
+  serverRegistration,
   userCanPreRegister,
   preferredEvents,
   qualifications,
@@ -35,6 +36,7 @@ export default function Index({
           <RegistrationProvider
             competitionInfo={competitionInfo}
             userInfo={userInfo}
+            serverRegistration={serverRegistration}
             isProcessing={isProcessing}
           >
             <Register

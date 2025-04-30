@@ -151,7 +151,7 @@ export default function RegistrationEditor({ registrationId, competitor, competi
       confirm({
         content: I18n.t('competitions.registration_v2.update.organizer_update_confirm'),
       }).then(() => {
-        updateRegistrationMutation(body);
+        updateRegistrationMutation({ registrationId: registration.id, payload: body });
         dispatch(showMessage('competitions.registration_v2.update.being_updated', 'positive'));
       }).catch(() => {});
     }
@@ -162,6 +162,7 @@ export default function RegistrationEditor({ registrationId, competitor, competi
     eventsAreValid,
     dispatch,
     maxEvents,
+    registration?.id,
     competitor.id,
     competitionInfo.id,
     hasEventsChanged,

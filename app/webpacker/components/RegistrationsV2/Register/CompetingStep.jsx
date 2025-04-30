@@ -183,13 +183,16 @@ export default function CompetingStep({
 
   const actionCreateRegistration = useCallback(() => {
     createRegistrationMutation({
-      user_id: user.id,
-      competition_id: competitionInfo.id,
-      competing: {
-        event_ids: selectedEventIds.asArray,
-        comment,
+      competitionId: competitionInfo.id,
+      payload: {
+        user_id: user.id,
+        competition_id: competitionInfo.id,
+        competing: {
+          event_ids: selectedEventIds.asArray,
+          comment,
+        },
+        guests,
       },
-      guests,
     });
   }, [
     createRegistrationMutation,
@@ -211,13 +214,16 @@ export default function CompetingStep({
       if (canEditRegistration) {
         dispatch(showMessage('competitions.registration_v2.update.being_updated', 'basic'));
         updateRegistrationMutation({
-          user_id: registration.user_id,
-          competition_id: competitionInfo.id,
-          competing: {
-            comment: hasCommentChanged ? comment : undefined,
-            event_ids: hasEventsChanged ? selectedEventIds.asArray : undefined,
+          registrationId: registration.id,
+          payload: {
+            user_id: registration.user_id,
+            competition_id: competitionInfo.id,
+            competing: {
+              comment: hasCommentChanged ? comment : undefined,
+              event_ids: hasEventsChanged ? selectedEventIds.asArray : undefined,
+            },
+            guests,
           },
-          guests,
         });
       } else {
         const updateMessage = `\n${hasCommentChanged ? `Comment: ${comment}\n` : ''}${hasEventsChanged ? `Events: ${selectedEventIds.asArray.map((eventId) => events.byId[eventId].name).join(', ')}\n` : ''}${hasGuestsChanged ? `Guests: ${guests}\n` : ''}`;
@@ -232,6 +238,7 @@ export default function CompetingStep({
     nextStep,
     updateRegistrationMutation,
     competitionInfo,
+    registration?.id,
     registration?.user_id,
     hasCommentChanged,
     comment,
@@ -244,17 +251,21 @@ export default function CompetingStep({
 
   const actionReRegister = useCallback(() => {
     updateRegistrationMutation({
-      user_id: registration.user_id,
-      competition_id: competitionInfo.id,
-      competing: {
-        comment,
-        event_ids: selectedEventIds.asArray,
-        status: 'pending',
+      registrationId: registration.id,
+      payload: {
+        user_id: registration.user_id,
+        competition_id: competitionInfo.id,
+        competing: {
+          comment,
+          event_ids: selectedEventIds.asArray,
+          status: 'pending',
+        },
+        guests,
       },
-      guests,
     });
   }, [
     updateRegistrationMutation,
+    registration?.id,
     registration?.user_id,
     competitionInfo.id,
     comment,

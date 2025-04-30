@@ -2,9 +2,7 @@ import React, {
   createContext, useCallback, useContext, useEffect, useMemo, useState,
 } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { useDispatch } from '../../../lib/providers/StoreProvider';
 import { getSingleRegistration } from '../api/registration/get/get_registrations';
-import { showMessage } from '../Register/RegistrationMessage';
 import pollRegistrations from '../api/registration/get/poll_registrations';
 
 const REFETCH_INTERVAL = 3000;
@@ -14,10 +12,10 @@ const RegistrationContext = createContext();
 export default function RegistrationProvider({
   competitionInfo,
   userInfo,
+  serverRegistration,
   isProcessing,
   children,
 }) {
-  const dispatch = useDispatch();
   const [isPolling, setIsPolling] = useState(isProcessing);
   const [pollCounter, setPollCounter] = useState(0);
 
@@ -50,16 +48,10 @@ export default function RegistrationProvider({
     isFetching,
     refetch: refetchRegistration,
   } = useQuery({
-    queryKey: ['registration', competitionInfo.id, userInfo.id],
-    queryFn: () => getSingleRegistration(userInfo.id, competitionInfo),
-    onError: (error) => {
-      dispatch(
-        showMessage(
-          `competitions.registration_v2.errors.${error?.response?.data?.json?.error || 'unknown'}`,
-          'negative',
-        ),
-      );
-    },
+    queryKey: ['registration', serverRegistration.id],
+    queryFn: () => getSingleRegistration(serverRegistration.id),
+    enabled: Boolean(serverRegistration),
+    initialData: serverRegistration,
   });
 
   const isRegistered = registration && registration.competing.registration_status !== 'cancelled';

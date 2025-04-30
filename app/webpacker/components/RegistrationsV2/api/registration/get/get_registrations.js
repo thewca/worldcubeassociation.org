@@ -27,7 +27,7 @@ export async function getAllRegistrations(competition) {
   return data;
 }
 
-export async function getSingleRegistration(
+export async function getRegistrationByUser(
   userId,
   competition,
 ) {
@@ -42,4 +42,13 @@ export async function getSingleRegistration(
     }
     throw e;
   }
+}
+
+export async function getSingleRegistration(
+  registrationId,
+) {
+  const route = singleRegistrationUrl(registrationId);
+  const { data } = await fetchWithJWTToken(route);
+
+  return data;
 }
