@@ -30,7 +30,7 @@ class RegistrationPayment < ApplicationRecord
   end
 
   def to_v2_json(refunds: false)
-    payment_provider = CompetitionPaymentIntegration::INTEGRATION_RECORD_TYPES.invert[self.receipt_type]
+    payment_provider = CompetitionPaymentIntegration::INTEGRATION_RECORD_TYPES.key(self.receipt_type)
 
     v2_json = {
       user_id: self.user_id,
