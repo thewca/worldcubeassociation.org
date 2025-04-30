@@ -54,6 +54,9 @@ export default function Payments({
     },
     onError: (data) => {
       const { error } = data.json;
+      // i18n-tasks-use t('payments.errors.refund.provider_disconnected')
+      // i18n-tasks-use t('payments.errors.refund.refund_amount_too_high')
+      // i18n-tasks-use t('payments.errors.refund.refund_amount_too_low')
       dispatch(showMessage(
         `payments.errors.refund.${error}`,
         'negative',
