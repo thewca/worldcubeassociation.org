@@ -22,15 +22,6 @@ class RegistrationPayment < ApplicationRecord
     amount_lowest_denomination + refunding_registration_payments.sum(:amount_lowest_denomination)
   end
 
-  def payment_status
-    case receipt.stripe_record_type
-    when "refund"
-      "refund"
-    else
-      receipt.determine_wca_status
-    end
-  end
-
   private def auto_accept_hook
     registration.attempt_auto_accept
   end

@@ -175,6 +175,15 @@ class Registration < ApplicationRecord
     registration_payments.maximum(:created_at)
   end
 
+  def last_payment_status
+    most_recent_payment = registration_payments.order(:created_at).last
+
+    return nil if most_recent_payment.blank?
+    return "refund" if most_recent_payment.refunded_registration_payment_id?
+
+    most_recent_payment.receipt.determine_wca_status
+  end
+
   def outstanding_entry_fees
     entry_fee - paid_entry_fees
   end
@@ -272,7 +281,7 @@ class Registration < ApplicationRecord
         base_json.deep_merge!({
                                 payment: {
                                   has_paid: outstanding_entry_fees <= 0,
-                                  payment_statuses: registration_payments.sort_by(&:created_at).reverse.map(&:payment_status),
+                                  payment_status: last_payment_status,
                                   paid_amount_iso: paid_entry_fees.cents,
                                   currency_code: paid_entry_fees.currency.code,
                                   updated_at: last_payment_date,
