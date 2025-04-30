@@ -56,9 +56,9 @@ export default function EditPersonForm({ wcaId, onSuccess, showDestroyButton = f
     value: date,
   });
 
-  const handleCountryChange = (country) => handleFormChange(null, {
+  const handleCountryChange = (e, { value }) => handleFormChange(e, {
     name: 'representing',
-    value: country,
+    value,
   });
 
   const editPerson = (method) => {

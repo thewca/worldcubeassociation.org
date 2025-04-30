@@ -76,8 +76,11 @@ export default function RegionSelector({
       }
       value={region}
       options={onlyCountries ? countryOptions : regionsOptions}
-      // clearing calls onChange with the empty string; catch and replace it
-      onChange={(_, data) => onRegionChange(data.value || defaultValue)}
+      onChange={(e, data) => {
+        // clearing calls onChange with the empty string; catch and replace it
+        const modifiedData = { ...data, value: data.value || defaultValue };
+        onRegionChange(e, modifiedData);
+      }}
       disabled={disabled}
       error={error}
     />

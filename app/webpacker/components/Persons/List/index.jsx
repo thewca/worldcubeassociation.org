@@ -41,7 +41,7 @@ function PersonList() {
       <Header>
         {I18n.t('layouts.navigation.persons')}
       </Header>
-      <RegionSelector region={region} onRegionChange={setRegion} />
+      <RegionSelector region={region} onRegionChange={(e, { value }) => setRegion(value)} />
       <Input type="text" placeholder={I18n.t('persons.index.name_or_wca_id')} value={query} onChange={(d) => setQuery(d.target.value)} />
       <Table striped>
         <Table.Header>

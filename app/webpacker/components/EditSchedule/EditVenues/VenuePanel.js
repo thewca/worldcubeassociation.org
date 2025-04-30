@@ -145,8 +145,9 @@ function VenuePanel({
     }
   };
 
-  const handleRegionChange = (country) => handleVenueChange(null, {
-    name: 'countryIso2', value: country,
+  const handleRegionChange = (e, { value }) => handleVenueChange(e, {
+    name: 'countryIso2',
+    value,
   });
 
   return (

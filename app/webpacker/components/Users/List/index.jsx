@@ -40,7 +40,7 @@ function PersonList() {
       <Header>
         Users
       </Header>
-      <RegionSelector region={region} onRegionChange={setRegion} />
+      <RegionSelector region={region} onRegionChange={(e, { value }) => setRegion(value)} />
       <Input type="text" placeholder="Type name, WCA ID, or email. Use a space to separate them." value={query} onChange={(d) => setQuery(d.target.value)} />
       <Table striped>
         <Table.Header>

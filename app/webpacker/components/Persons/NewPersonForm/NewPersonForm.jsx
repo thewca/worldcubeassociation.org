@@ -90,7 +90,7 @@ function NewPersonForm({
             label={I18n.t('activerecord.attributes.user.country_iso2')}
             onlyCountries
             region={countryIso2}
-            onRegionChange={setCountryIso2}
+            onRegionChange={(e, { value }) => setCountryIso2(value)}
             error={errors.countryId}
           />
         </Form.Group>

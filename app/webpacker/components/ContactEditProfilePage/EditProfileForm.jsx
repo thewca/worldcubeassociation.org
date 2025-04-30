@@ -80,9 +80,9 @@ export default function EditProfileForm({
     value: date,
   });
 
-  const handleCountryChange = (country) => handleFormChange(null, {
+  const handleCountryChange = (e, { value }) => handleFormChange(e, {
     name: 'country_iso2',
-    value: country,
+    value,
   });
 
   if (saving || isLoading) return <Loading />;
