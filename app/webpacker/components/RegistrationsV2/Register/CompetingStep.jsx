@@ -29,6 +29,7 @@ import { eventQualificationToString } from '../../../lib/utils/wcif';
 import { hasNotPassed } from '../../../lib/utils/dates';
 import { useRegistration } from '../lib/RegistrationProvider';
 import useSet from '../../../lib/hooks/useSet';
+import {isoMoneyToHumanReadable} from "../../../lib/helpers/money";
 
 const maxCommentLength = 240;
 
@@ -328,7 +329,7 @@ export default function CompetingStep({
       <>
         {hasPaid && (
           <Message success>
-            {I18n.t('registrations.entry_fees_fully_paid', { paid: registration?.payment.payment_amount_human_readable })}
+            {I18n.t('registrations.entry_fees_fully_paid', { paid: isoMoneyToHumanReadable(registration.payment.paid_amount_iso, registration.payment.currency_code) })}
           </Message>
         )}
 

@@ -90,7 +90,7 @@ export default function TableRow({
     waiting_list_position: position,
   } = registration.competing;
   const {
-    payment_amount_iso: paymentAmount,
+    paid_amount_iso: paymentAmount,
     updated_at: updatedAt,
     payment_statuses: paymentStatuses,
     has_paid: hasPaid,
