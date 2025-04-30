@@ -35,6 +35,7 @@ export default function Payments({
     onSuccess: (data) => {
       const { message, refunded_charge: refundedCharge } = data;
 
+      // i18n-tasks-use t('payments.messages.charge_refunded')
       dispatch(showMessage(
         `payments.messages.${message}`,
         'positive',
