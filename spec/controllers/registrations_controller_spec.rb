@@ -4,10 +4,10 @@ require 'rails_helper'
 
 RSpec.describe RegistrationsController, :clean_db_with_truncation do
   context "signed in as organizer" do
-    let!(:organizer) { FactoryBot.create(:user) }
-    let(:competition) { FactoryBot.create(:competition, :registration_open, :visible, organizers: [organizer], events: Event.where(id: %w(222 333))) }
-    let(:zzyzx_user) { FactoryBot.create :user, name: "Zzyzx" }
-    let(:registration) { FactoryBot.create(:registration, competition: competition, user: zzyzx_user) }
+    let!(:organizer) { create(:user) }
+    let(:competition) { create(:competition, :registration_open, :visible, organizers: [organizer], events: Event.where(id: %w(222 333))) }
+    let(:zzyzx_user) { create(:user, name: "Zzyzx") }
+    let(:registration) { create(:registration, competition: competition, user: zzyzx_user) }
 
     before :each do
       sign_in organizer
@@ -20,7 +20,7 @@ RSpec.describe RegistrationsController, :clean_db_with_truncation do
   end
 
   context "register" do
-    let(:competition) { FactoryBot.create :competition, :confirmed, :visible, :registration_open }
+    let(:competition) { create(:competition, :confirmed, :visible, :registration_open) }
 
     it "redirects to competition root if competition is not using WCA registration" do
       competition.use_wca_registration = false
@@ -39,9 +39,9 @@ RSpec.describe RegistrationsController, :clean_db_with_truncation do
 
   describe 'POST #refund_payment' do
     context 'when signed in as a competitor' do
-      let(:competition) { FactoryBot.create(:competition, :stripe_connected, :visible, :registration_open, events: Event.where(id: %w(222 333))) }
-      let!(:user) { FactoryBot.create(:user, :wca_id) }
-      let!(:registration) { FactoryBot.create(:registration, competition: competition, user: user) }
+      let(:competition) { create(:competition, :stripe_connected, :visible, :registration_open, events: Event.where(id: %w(222 333))) }
+      let!(:user) { create(:user, :wca_id) }
+      let!(:registration) { create(:registration, competition: competition, user: user) }
 
       it 'does not allow access and redirects to root_url' do
         sign_in user
@@ -57,16 +57,16 @@ RSpec.describe RegistrationsController, :clean_db_with_truncation do
     end
 
     context 'when signed in as organizer' do
-      let(:organizer) { FactoryBot.create(:user) }
+      let(:organizer) { create(:user) }
       let(:competition) {
-        FactoryBot.create(:competition, :stripe_connected, :visible,
-                          organizers: [organizer],
-                          events: Event.where(id: %w(222 333)),
-                          use_wca_registration: true,
-                          starts: (ClearConnectedPaymentIntegrations::DELAY_IN_DAYS + 1).days.ago,
-                          registration_close: (ClearConnectedPaymentIntegrations::DELAY_IN_DAYS + 3).days.ago)
+        create(:competition, :stripe_connected, :visible,
+               organizers: [organizer],
+               events: Event.where(id: %w(222 333)),
+               use_wca_registration: true,
+               starts: (ClearConnectedPaymentIntegrations::DELAY_IN_DAYS + 1).days.ago,
+               registration_close: (ClearConnectedPaymentIntegrations::DELAY_IN_DAYS + 3).days.ago)
       }
-      let!(:registration) { FactoryBot.create(:registration, competition: competition, user: organizer) }
+      let!(:registration) { create(:registration, competition: competition, user: organizer) }
 
       context "processes a payment" do
         before :each do
@@ -93,7 +93,7 @@ RSpec.describe RegistrationsController, :clean_db_with_truncation do
 
         it 'issues a full refund' do
           post :refund_payment, params: { competition_id: competition.id, payment_integration: :stripe, payment_id: @payment.receipt.id, payment: { refund_amount: competition.base_entry_fee.cents } }
-          expect(response).to redirect_to edit_registration_v2_path(competition, registration.user)
+          expect(response).to redirect_to edit_registration_path(registration)
           refund = registration.reload.registration_payments.last.receipt.retrieve_stripe
           expect(competition.base_entry_fee).to be > 0
           expect(registration.outstanding_entry_fees).to eq competition.base_entry_fee
@@ -107,7 +107,7 @@ RSpec.describe RegistrationsController, :clean_db_with_truncation do
         it 'issues a 50% refund' do
           refund_amount = competition.base_entry_fee.cents / 2
           post :refund_payment, params: { competition_id: competition.id, payment_integration: :stripe, payment_id: @payment.receipt.id, payment: { refund_amount: refund_amount } }
-          expect(response).to redirect_to edit_registration_v2_path(competition, registration.user)
+          expect(response).to redirect_to edit_registration_path(registration)
           refund = registration.reload.registration_payments.last.receipt.retrieve_stripe
           expect(competition.base_entry_fee).to be > 0
           expect(registration.outstanding_entry_fees).to eq competition.base_entry_fee / 2
@@ -119,7 +119,7 @@ RSpec.describe RegistrationsController, :clean_db_with_truncation do
         it 'disallows negative refund' do
           refund_amount = -1
           post :refund_payment, params: { competition_id: competition.id, payment_integration: :stripe, payment_id: @payment.receipt.id, payment: { refund_amount: refund_amount } }
-          expect(response).to redirect_to edit_registration_v2_path(competition, registration.user)
+          expect(response).to redirect_to edit_registration_path(registration)
           expect(competition.base_entry_fee).to be > 0
           expect(registration.outstanding_entry_fees).to eq 0
           expect(flash[:danger]).to eq "The refund amount must be greater than zero."
@@ -129,7 +129,7 @@ RSpec.describe RegistrationsController, :clean_db_with_truncation do
         it 'disallows a refund more than the payment' do
           refund_amount = competition.base_entry_fee.cents * 2
           post :refund_payment, params: { competition_id: competition.id, payment_integration: :stripe, payment_id: @payment.receipt.id, payment: { refund_amount: refund_amount } }
-          expect(response).to redirect_to edit_registration_v2_path(competition, registration.user)
+          expect(response).to redirect_to edit_registration_path(registration)
           expect(competition.base_entry_fee).to be > 0
           expect(registration.outstanding_entry_fees).to eq 0
           expect(flash[:danger]).to eq "You are not allowed to refund more than the competitor has paid."

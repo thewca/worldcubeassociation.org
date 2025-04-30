@@ -223,7 +223,7 @@ function ResultFormWrapper({ result, sync }) {
   if (created) {
     return (
       <AfterActionMessage
-        wcaId={created.result.personId}
+        wcaId={created.result.person_id}
         eventId={result.event_id}
         competitionId={result.competition_id}
         response={created.response}
@@ -234,7 +234,7 @@ function ResultFormWrapper({ result, sync }) {
     return (
       <div>
         <AfterActionMessage
-          wcaId={edited.result.personId}
+          wcaId={edited.result.person_id}
           eventId={result.event_id}
           competitionId={result.competition_id}
           response={edited.response}

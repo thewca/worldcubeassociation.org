@@ -63,8 +63,17 @@ class RegistrationsController < ApplicationController
   end
 
   def edit
-    @competition = Competition.find(params[:competition_id])
-    @user = User.find(params[:user_id])
+    @registration = registration_from_params
+
+    @competition = @registration.competition
+    @user = @registration.user
+  end
+
+  def redirect_v2_attendee
+    search_params = params.permit(:competition_id, :user_id)
+    registration = Registration.find_by!(**search_params)
+
+    redirect_to edit_registration_path(registration)
   end
 
   def import
@@ -251,7 +260,7 @@ class RegistrationsController < ApplicationController
       country_iso2: Country.c_find(registration_row[:country]).iso2,
       gender: registration_row[:gender],
       dob: registration_row[:birth_date],
-    ).tap { |user| user.save! }
+    ).tap(&:save!)
   end
 
   def register
@@ -313,18 +322,18 @@ class RegistrationsController < ApplicationController
     stripe_intent = event.data.object # contains a polymorphic type that depends on the event
     stored_record = StripeRecord.find_by(stripe_id: stripe_intent.id)
 
-    if StripeWebhookEvent::HANDLED_EVENTS.include?(event.type)
-      if stored_record.nil?
-        logger.error "Stripe webhook reported event on entity #{stripe_intent.id} but we have no matching transaction."
-        return head :not_found
-      else
-        audit_event.update!(stripe_record: stored_record, handled: true)
-      end
+    handling_event = StripeWebhookEvent::HANDLED_EVENTS.include?(event.type)
+
+    if stored_record.nil?
+      logger.error "Stripe webhook reported event on entity #{stripe_intent.id} but we have no matching transaction."
+      return head :not_found
+    else
+      audit_event.update!(stripe_record: stored_record, handled: handling_event)
     end
 
     connected_account = ConnectedStripeAccount.find_by(account_id: stored_record.account_id)
 
-    if connected_account.blank?
+    if connected_account.nil?
       logger.error "Stripe webhook reported event for account '#{stored_record.account_id}' but we are not connected to that account."
       return head :not_found
     end
@@ -488,7 +497,7 @@ class RegistrationsController < ApplicationController
 
     registration = payment_record.root_record.payment_intent.holder
 
-    redirect_path = edit_registration_v2_path(competition_id, registration.user_id)
+    redirect_path = edit_registration_path(registration)
 
     refund_amount_param = params.require(:payment).require(:refund_amount)
     refund_amount = refund_amount_param.to_i

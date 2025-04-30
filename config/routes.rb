@@ -65,10 +65,9 @@ Rails.application.routes.draw do
 
   get 'competitions/mine' => 'competitions#my_competitions', as: :my_comps
   get 'competitions/for_senior(/:user_id)' => 'competitions#for_senior', as: :competitions_for_senior
-  get 'competitions/:id/enable_v2' => "competitions#enable_v2", as: :enable_v2
   post 'competitions/bookmark' => 'competitions#bookmark', as: :bookmark
   post 'competitions/unbookmark' => 'competitions#unbookmark', as: :unbookmark
-  get 'competitions/registrations_v2/:competition_id/:user_id/edit' => 'registrations#edit', as: :edit_registration_v2
+  get 'competitions/registrations_v2/:competition_id/:user_id/edit' => 'registrations#redirect_v2_attendee'
 
   resources :competitions do
     get 'edit/admin' => 'competitions#admin_edit', as: :admin_edit
@@ -98,7 +97,9 @@ Rails.application.routes.draw do
     post 'registrations/add' => 'registrations#do_add', as: :registrations_do_add
     get 'registrations/psych-sheet' => 'registrations#psych_sheet', as: :psych_sheet
     get 'registrations/psych-sheet/:event_id' => 'registrations#psych_sheet_event', as: :psych_sheet_event
-    resources :registrations, only: [:index, :update, :create, :edit, :destroy], shallow: true
+    resources :registrations, only: [:index, :update, :create, :edit, :destroy], shallow: true do
+      get 'payments' => 'payment#registration_payments', as: :payments
+    end
     get 'edit/registrations' => 'registrations#edit_registrations'
     get 'register' => 'registrations#register'
     resources :competition_tabs, except: [:show], as: :tabs, path: :tabs
@@ -124,9 +125,6 @@ Rails.application.routes.draw do
     get '/payment_integration/setup/manual' => 'competitions#payment_integration_manual_setup', as: :manual_payment_setup
     get '/payment_integration/:payment_integration/connect' => 'competitions#connect_payment_integration', as: :connect_payment_integration
     post '/payment_integration/:payment_integration/disconnect' => 'competitions#disconnect_payment_integration', as: :disconnect_payment_integration
-  end
-  scope :payment do
-    get '/refunds' => 'payment#available_refunds'
   end
 
   get 'competitions/:competition_id/report/edit' => 'delegate_reports#edit', as: :delegate_report_edit
@@ -200,7 +198,7 @@ Rails.application.routes.draw do
 
   get 'panel/pending-claims(/:user_id)' => 'panel#pending_claims_for_subordinate_delegates', as: 'pending_claims'
   scope 'panel' do
-    get 'staff' => 'panel#staff', as: :panel_staff
+    get 'volunteer' => 'panel#volunteer', as: :panel_volunteer
     get 'generate_db_token' => 'panel#generate_db_token', as: :panel_generate_db_token
     get 'competition_count' => 'panel#competition_count', as: :panel_competition_count
     get 'validators_for_competition_list' => 'panel#validators_for_competition_list', as: :panel_validators_for_competition_list

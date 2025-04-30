@@ -1271,8 +1271,8 @@ fr:
       faq: Questions Fréquentes
       #original_hash: cf1d2c9
       forum: Forum
-      #original_hash: 3ad28c0
-      teams: 'Équipes, Comités et Conseils'
+      #original_hash: 0e7a036
+      teams: Équipes et Comités
       #original_hash: 7981fb3
       education: Ressources Éducatives
       #original_hash: c66444f
@@ -1388,14 +1388,15 @@ fr:
         Président préside toutes les réunions du Bureau, le Secrétaire assure le
         maintien des documents de l'association et le Trésorier gère les
         affaires financières de la WCA.
-      #original_hash: e0d37a2
+      #original_hash: 19d4bbb
       board_description: >-
-        La World Cube Association est dirigée par le Bureau de la WCA, constitué
-        des membres suivants :
+        Le Conseil d'administration de la WCA est chargé de diriger
+        l'organisation dans son ensemble et de remplir toutes les fonctions qui
+        ne sont pas remplies par d'autres équipes et comités.
     teams_committees_councils:
-      #original_hash: 0d62207
-      title: 'Équipes, Comités et Conseils'
-      #original_hash: 4701b90
+      #original_hash: 1d14e2f
+      title: Équipes et Comités
+      #original_hash: 9fdee8f
       description: >-
         Les équipes et les comités de la WCA font partie intégrante de
         l'organisation et effectuent les tâches quotidiennes nécessaires à son
@@ -1403,12 +1404,9 @@ fr:
         la WCA, y compris des délégués de la WCA et des compétiteurs. Chaque
         équipe a un responsable, dont le rôle est d'assurer le bon
         fonctionnement de l'équipe et de guider les autres membres de l'équipe.
-        Les Conseils sont un type particulier d'équipe qui joue un rôle
-        consultatif auprès du Conseil d'administration de la WCA et sont
-        constitués de membres de la communauté, et non de bénévoles de la WCA.
-        Lorsque des postes sont à pourvoir au sein d'un comité, d'une équipe ou
-        d'un conseil, les informations concernant les modalités de candidature
-        sont affichées sur la page d'accueil.
+        Lorsque des postes sont à pourvoir au sein d'une équipe ou d'un comité,
+        les informations concernant les modalités de candidature sont affichées
+        sur la page d'accueil.
       #original_hash: b37456c
       contact_button: Contact
       #original_hash: ae7928f
@@ -2251,6 +2249,11 @@ fr:
       translators: Traducteur·rice·s
   registrations:
     errors:
+      #original_hash: 51c7156
+      edit_deadline_passed: >-
+        La date limite de modification des inscriptions est passée ! Les
+        modifications ne doivent être effectuées que dans des circonstances
+        exceptionnelles.
       #original_hash: 44ab952
       need_name: Nom obligatoire
       #original_hash: 6f64c57
@@ -2442,10 +2445,6 @@ fr:
     new_registration:
       #original_hash: 8b9f726
       title: 'S''inscrire pour %{comp}'
-    #original_hash: 7cae988
-    registered_with_account_html: >-
-      Cette personne s'est inscrite avec un compte. Vous pouvez éditer ses
-      données personnelles %{here}.
     #original_hash: ada2e9e
     sign_in: Connectez-vous
     #original_hash: 5d45a00
@@ -2621,6 +2620,15 @@ fr:
       pouvez éditer %{link}.
     #original_hash: ee89a3e
     registration_requirements: 'Conditions d''inscription pour la compétition :'
+    registration_history:
+      #original_hash: 342fa25
+      acting_user: Utilisateur faisant l'action
+      #original_hash: 97c89a4
+      action: Action
+      #original_hash: 8aa57de
+      changes: Changements
+      #original_hash: cec61a5
+      title: Historique de l'inscription
     import:
       #original_hash: 5a394f3
       title: 'Importer les inscriptions pour %{comp}'
@@ -3862,6 +3870,13 @@ fr:
         waitlist:
           #original_hash: 3907ca4
           title: Inscriptions sur liste d'attente
+          #original_hash: de3f9d4
+          information: >-
+            Les compétiteurs sont ajoutés à la fin de la liste d'attente. Si
+            vous en ajoutez plusieurs en même temps, les compétiteurs ayant payé
+            seront ajoutés à la fin dans l'ordre où ils ont payé, suivis par les
+            autres dans l'ordre où ils se sont inscrits. Vous pouvez ajuster
+            manuellement l'ordre en mode édition si nécessaire.
           #original_hash: a6c86ec
           skipped_warning: >-
             Vous avez ignoré %{count} inscription(s) sur la liste d'attente.
@@ -4259,6 +4274,19 @@ fr:
       not_full_url: >-
         Le contenu contient une URL relative (%{url}). Veuillez saisir des URL
         pleines avec le préfixe http:// ou https://.
+      #original_hash: e8ff0ef
+      editing_deadline_already_passed: >-
+        Vous n'êtes autorisé à modifier les dates que pour les échéances qui ne
+        sont pas encore passées, mais la valeur originale de %{timestamp} est
+        déjà passée.
+      #original_hash: e12883e
+      edited_deadline_not_after_original: >-
+        Vous ne pouvez que prolonger les délais, mais %{new_timestamp} est placé
+        avant la valeur originale de %{timestamp}.
+      #original_hash: d79fbb4
+      edited_deadline_not_in_future: >-
+        Vous ne pouvez introduire que des dates limites futures, mais
+        %{new_timestamp} n'est pas dans le futur.
     new:
       #original_hash: 1208df7
       create_competition: Créer une compétition
@@ -4636,20 +4664,10 @@ fr:
       Veuillez noter que certains filtres (comme les années précédentes) sont
       temporairement désactivés. L’équipe logicielle de la WCA (WST) travaille à
       restaurer ces filtres - nous sommes désolés pour les inconvénients.
-    #original_hash: e3710ed
-    tooltip_no_years: >-
-      Notre base de données est trop grande pour calculer des données
-      historiques
-    #original_hash: 357094b
-    tooltip_no_quantities: Notre base de données est trop grande pour calculer des classements longs
     selector_elements:
       events_selector:
         #original_hash: ad8919a
         event: Épreuve
-        #original_hash: 3e83afa
-        all_events: Toutes les épreuves
-      #original_hash: 0f21717
-      region: Région
       type_selector:
         #original_hash: 3deb745
         type: Type
@@ -4657,30 +4675,13 @@ fr:
         single: Single
         #original_hash: 15f86c0
         average: Moyenne
-      years_selector:
-        #original_hash: 96f997b
-        years: Années
-        #original_hash: 0977c76
-        all_years: Toutes les années
-        #original_hash: 8737f09
-        only: Seulement
-        #original_hash: b3c0fe7
-        only_html: 'Seulement %{year}'
-        #original_hash: 96bdb66
-        until: Jusqu'à
-        #original_hash: fa23930
-        until_html: 'Jusqu''à %{year}'
       show_selector:
         #original_hash: d97d1ee
         show: Afficher
         #original_hash: f3cf96e
         persons: Personnes
-        #original_hash: 16d3376
-        persons_html: '%{quantity} personnes'
         #original_hash: 612e12d
         results: Résultats
-        #original_hash: f3baa4a
-        results_html: '%{quantity} résultats'
         #original_hash: d46d2ee
         by_region: Par région
         #original_hash: c0dcb86
@@ -4707,8 +4708,6 @@ fr:
       name: Nom
       #original_hash: 5faa59d
       result: Résultat
-      #original_hash: fa4c045
-      representing: Représentant
       #original_hash: 1917f4f
       competition: Compétition
       #original_hash: e7f6fc5
@@ -4717,23 +4716,21 @@ fr:
       region: Région
       #original_hash: 70c07ec
       world: Monde
-      type_options:
-        #original_hash: 3deb745
-        type: Type
-        #original_hash: dd11868
-        single: Single
-        #original_hash: 15f86c0
-        average: Moyenne
       #original_hash: ad8919a
       event: Épreuve
       #original_hash: dcf8b56
       date_circa: Date circa
-      #original_hash: 1c54132
-      record: Record
   notifications:
     #original_hash: 10bcdbd
     connect_wca_id: Associez votre ID WCA à votre compte !
   payments:
+    labels:
+      #original_hash: cccf678
+      payment_statuses: Statuts de paiement
+      #original_hash: 312b6b6
+      available_refunds: Remboursements disponibles
+      #original_hash: ef3cd45
+      original_payment: Paiement initial
     payment_providers:
       #original_hash: 559ef55
       paypal: PayPal
@@ -4832,6 +4829,11 @@ fr:
           primary_email: Adresse e-mail
         #original_hash: 08d2e98
         fallback_not_applicable: N/A
+    statuses:
+      #original_hash: c8fbda9
+      succeeded: Réussi
+      #original_hash: d6fbc7a
+      refund: Remboursé
   persons:
     index:
       #original_hash: 5934b4c
@@ -5207,7 +5209,7 @@ fr:
       différentes et nous n'avons pas l'intention de ralentir de sitôt! La
       communauté du cube a connu une croissance constante depuis sa création en
       2004 et nous voulons l'encourager à continuer à l'avenir en augmentant
-      l'accessibilité des compétitions dans de nouvelles régions.
+      l'accessibilité des compétitions dans de nouvelles régions. 
 
       Dans le futur, nous espérons soutenir notre communauté encore plus à
       travers des collaborations et des contacts avec ceux qui s'intéressent aux
@@ -5255,10 +5257,11 @@ fr:
       #original_hash: 9482c5d
       title: Structure
       board:
-        #original_hash: e0d37a2
+        #original_hash: 19d4bbb
         description: >-
-          La World Cube Association est dirigée par le bureau de la WCA,
-          constitué des membres suivants :
+          Le conseil d'administration de la WCA est chargé de diriger
+          l'organisation dans son ensemble et de remplir toutes les fonctions
+          qui ne sont pas remplies par d'autres équipes et comités.
       users:
         #original_hash: 57bbaad
         profile: 'Profil de %{user_name}'

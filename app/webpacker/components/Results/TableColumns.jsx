@@ -94,7 +94,7 @@ export const personColumn = {
   header: I18n.t('results.table_elements.name'),
   cell: ({ row, getValue }) => (
     <PersonCell
-      personId={row.original.result.personId}
+      personId={row.original.result.person_id}
       personName={getValue()}
     />
   ),

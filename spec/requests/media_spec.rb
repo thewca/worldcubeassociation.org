@@ -11,7 +11,7 @@ RSpec.shared_examples "only WCT" do |action, expect_success|
   end
 
   context "when signed in as regular user" do
-    sign_in { FactoryBot.create :user }
+    before { sign_in create :user }
 
     it "redirects to home page" do
       self.instance_exec(&action)
@@ -21,7 +21,7 @@ RSpec.shared_examples "only WCT" do |action, expect_success|
 
   context "when signed in as a WCT member" do
     before :each do
-      sign_in FactoryBot.create :user, :wct_member
+      sign_in create :user, :wct_member
     end
 
     it 'can perform action' do
@@ -40,7 +40,7 @@ RSpec.shared_examples "must sign in" do |action, expect_success|
   end
 
   context "when signed in as regular user" do
-    let!(:user) { FactoryBot.create :user }
+    let!(:user) { create(:user) }
 
     before :each do
       sign_in user
@@ -54,18 +54,18 @@ RSpec.shared_examples "must sign in" do |action, expect_success|
 end
 
 RSpec.describe "media" do
-  let(:competition_2013) { FactoryBot.create(:competition, :with_delegate, :visible, starts: Date.new(2013, 4, 4)) }
-  let!(:medium_2013) { FactoryBot.create(:competition_medium, :pending, competition: competition_2013, text: "i am from 2013 and pending") }
-  let!(:accepted_medium_2013) { FactoryBot.create(:competition_medium, :accepted, competition: competition_2013, text: "i am from 2013 and accepted") }
+  let(:competition_2013) { create(:competition, :with_delegate, :visible, starts: Date.new(2013, 4, 4)) }
+  let!(:medium_2013) { create(:competition_medium, :pending, competition: competition_2013, text: "i am from 2013 and pending") }
+  let!(:accepted_medium_2013) { create(:competition_medium, :accepted, competition: competition_2013, text: "i am from 2013 and accepted") }
 
-  let(:competition) { FactoryBot.create(:competition, :with_delegate, :visible, country_id: "United Kingdom", city_name: "Peterborough, Cambridgeshire", starts: Date.today) }
-  let!(:medium) { FactoryBot.create(:competition_medium, :pending, competition: competition, text: "i am pending") }
-  let!(:accepted_medium) { FactoryBot.create(:competition_medium, :accepted, competition: competition, text: "i am accepted") }
+  let(:competition) { create(:competition, :with_delegate, :visible, country_id: "United Kingdom", city_name: "Peterborough, Cambridgeshire", starts: Date.today) }
+  let!(:medium) { create(:competition_medium, :pending, competition: competition, text: "i am pending") }
+  let!(:accepted_medium) { create(:competition_medium, :accepted, competition: competition, text: "i am accepted") }
 
   describe 'GET #new' do
     it_should_behave_like 'must sign in',
-                          lambda { get new_medium_path },
-                          lambda { |_current_user| expect(response).to be_successful }
+                          -> { get new_medium_path },
+                          ->(_current_user) { expect(response).to be_successful }
   end
 
   describe 'POST #create' do
@@ -120,8 +120,8 @@ RSpec.describe "media" do
     end
 
     describe "filter by region" do
-      let!(:competition_us) { FactoryBot.create(:competition, :with_delegate, :visible, country_id: "USA", starts: Date.today) }
-      let!(:medium_us) { FactoryBot.create(:competition_medium, :accepted, competition: competition_us, text: "i am in the us and accepted") }
+      let!(:competition_us) { create(:competition, :with_delegate, :visible, country_id: "USA", starts: Date.today) }
+      let!(:medium_us) { create(:competition_medium, :accepted, competition: competition_us, text: "i am in the us and accepted") }
 
       it "filters by country" do
         get media_path, params: { region: "USA" }
@@ -141,12 +141,12 @@ RSpec.describe "media" do
 
   describe 'GET #validate' do
     it_should_behave_like 'only WCT',
-                          lambda { get validate_media_path },
-                          lambda { expect(response).to be_successful }
+                          -> { get validate_media_path },
+                          -> { expect(response).to be_successful }
 
     context "signed in as WCT member" do
       before :each do
-        sign_in FactoryBot.create :user, :wct_member
+        sign_in create :user, :wct_member
       end
 
       it "default shows only pending media for all years" do
@@ -166,8 +166,8 @@ RSpec.describe "media" do
 
   describe "GET #edit" do
     it_should_behave_like 'only WCT',
-                          lambda { get edit_medium_path(medium) },
-                          lambda { expect(response).to be_successful }
+                          -> { get edit_medium_path(medium) },
+                          -> { expect(response).to be_successful }
   end
 
   describe "PATCH #update" do
@@ -180,12 +180,12 @@ RSpec.describe "media" do
     end
 
     it_should_behave_like 'only WCT',
-                          lambda { patch_medium.call(text: 'new text') },
-                          lambda { expect(response).to redirect_to edit_medium_path(medium) }
+                          -> { patch_medium.call(text: 'new text') },
+                          -> { expect(response).to redirect_to edit_medium_path(medium) }
 
     context "signed in as WCT member" do
       before :each do
-        sign_in FactoryBot.create :user, :wct_member
+        sign_in create :user, :wct_member
       end
 
       it "can accept medium" do
@@ -195,7 +195,7 @@ RSpec.describe "media" do
       end
 
       it "can edit medium" do
-        competition = FactoryBot.create :competition
+        competition = create(:competition)
         expect(medium.media_type).to eq 'article'
 
         patch_medium.call(
@@ -221,10 +221,10 @@ RSpec.describe "media" do
   end
 
   describe "DELETE #destroy" do
-    let(:destroy_medium) { lambda { delete medium_path(medium) } }
+    let(:destroy_medium) { -> { delete medium_path(medium) } }
 
     it_should_behave_like 'only WCT',
-                          lambda { destroy_medium.call },
+                          -> { destroy_medium.call },
                           lambda {
                             expect(response).to redirect_to validate_media_path
                             expect(CompetitionMedium.find_by(id: medium.id)).to be_nil

@@ -72,11 +72,11 @@ class AdminController < ApplicationController
       inbox_result: InboxResult,
       inbox_person: InboxPerson,
       newcomer_person: InboxPerson.where(wca_id: ''),
-      newcomer_result: Result.select(:person_id).distinct.where("personId REGEXP '^[0-9]+$'"),
+      newcomer_result: Result.select(:person_id).distinct.where("person_id REGEXP '^[0-9]+$'"),
     }
 
     @existing_data = data_tables.transform_values { |table| table.where(competition_id: @competition.id).count }
-    @inbox_step = RESULTS_POSTING_STEPS.find { |inbox| @existing_data[inbox] > 0 }
+    @inbox_step = RESULTS_POSTING_STEPS.find { |inbox| @existing_data[inbox].positive? }
 
     yield if block_given?
   end
@@ -251,7 +251,7 @@ class AdminController < ApplicationController
         next if marker.blank?
 
         result_id, result_type = id_and_type.split('-')
-        record_marker = :"regional#{result_type}Record"
+        record_marker = :"regional_#{result_type}_record"
 
         Result.where(id: result_id).update_all(record_marker => marker)
       end

@@ -4,15 +4,15 @@ require "rails_helper"
 
 RSpec.describe "WCA Live API" do
   describe "POST #add_result" do
-    let!(:delegate) { FactoryBot.create :delegate }
+    let!(:delegate) { create(:delegate) }
 
     it "Updates a Live Result Correctly" do
       sign_in delegate
 
-      competition = FactoryBot.create(:competition, event_ids: ["333"], delegates: [delegate])
-      round = FactoryBot.create(:round, competition: competition, event_id: "333")
-      registration = FactoryBot.create(:registration, :accepted, competition: competition)
-      FactoryBot.create(:live_result, round: round, registration: registration)
+      competition = create(:competition, event_ids: ["333"], delegates: [delegate])
+      round = create(:round, competition: competition, event_id: "333")
+      registration = create(:registration, :accepted, competition: competition)
+      create(:live_result, round: round, registration: registration)
       live_request = {
         attempts: [111, 222, 333, 444, 555],
         registration_id: registration.id,
@@ -36,9 +36,9 @@ RSpec.describe "WCA Live API" do
     it "Can't update result if it doesn't exist" do
       sign_in delegate
 
-      competition = FactoryBot.create(:competition, event_ids: ["333"], delegates: [delegate])
-      round = FactoryBot.create(:round, competition: competition, event_id: "333")
-      registration = FactoryBot.create(:registration, :accepted, competition: competition)
+      competition = create(:competition, event_ids: ["333"], delegates: [delegate])
+      round = create(:round, competition: competition, event_id: "333")
+      registration = create(:registration, :accepted, competition: competition)
 
       live_request = {
         attempts: [111, 222, 333, 444, 555],
