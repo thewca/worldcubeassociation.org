@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
 class PaymentController < ApplicationController
-  def available_refunds
+  def registration_payments
     if current_user
       registration_id = params.require(:registration_id)
-      registration = Registration.includes(:registration_payments).find(registration_id)
+      registration = Registration.includes(:competition, registration_payments: [:refunding_registration_payments]).find(registration_id)
 
       return render status: :bad_request, json: { error: "Registration not found" } if registration.blank?
 
@@ -30,6 +30,7 @@ class PaymentController < ApplicationController
           human_amount_refundable: human_amount_refundable,
           human_amount_payment: human_amount_payment,
           currency_code: reg_payment.currency_code,
+          refunding_payments: reg_payment.refunding_registration_payments,
         }
       }
 
