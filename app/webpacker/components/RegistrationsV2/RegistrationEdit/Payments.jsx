@@ -32,7 +32,7 @@ export default function Payments({
     mutationFn: refundPayment,
     // The Backend will set a flash error on success or error
     onSuccess: (data) => {
-      const { message, refunded_charge: refundedCharge } = data.json;
+      const { message, refunded_charge: refundedCharge } = data;
 
       dispatch(showMessage(
         `payments.messages.${message}`,
@@ -111,7 +111,7 @@ function PaymentRow({
       amount: amountToRefund,
     }, {
       onSuccess: (data) => {
-        const { refunded_charge: refundedCharge } = data.json;
+        const { refunded_charge: refundedCharge } = data;
 
         setAmountToRefund(
           (prevAmount) => Math.min(prevAmount, refundedCharge.ruby_amount_refundable),
