@@ -15,7 +15,7 @@ import { useDispatch } from '../../../lib/providers/StoreProvider';
 import { isoMoneyToHumanReadable } from '../../../lib/helpers/money';
 
 export default function Payments({
-  onSuccess, registrationId, competitionId, competitorsInfo,
+  registrationId, competitionId, competitorsInfo,
 }) {
   const dispatch = useDispatch();
   const queryClient = useQueryClient();
@@ -50,8 +50,6 @@ export default function Payments({
           ],
         }),
       );
-
-      onSuccess();
     },
     onError: (data) => {
       const { error } = data.json;

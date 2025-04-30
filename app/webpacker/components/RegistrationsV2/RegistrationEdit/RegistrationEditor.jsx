@@ -43,7 +43,7 @@ export default function RegistrationEditor({ registrationId, competitor, competi
 
   const {
     isFetching: isRegistrationLoading,
-    registration: serverRegistration, refetchRegistration: refetch,
+    registration: serverRegistration,
   } = useRegistration();
 
   const { isLoading: historyLoading, data: registrationHistory } = useQuery({
@@ -309,7 +309,6 @@ export default function RegistrationEditor({ registrationId, competitor, competi
             <Payments
               competitionId={competitionInfo.id}
               registrationId={registrationId}
-              onSuccess={refetch}
               competitorsInfo={competitorsInfo}
             />
           )}
