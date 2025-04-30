@@ -29,6 +29,26 @@ class RegistrationPayment < ApplicationRecord
     end
   end
 
+  def to_v2_json
+    payment_provider = CompetitionPaymentIntegration::INTEGRATION_RECORD_TYPES.invert[self.receipt_type]
+
+    available_amount = self.amount_available_for_refund
+    full_amount_ruby = self.amount_lowest_denomination
+
+    human_amount_refundable = helpers.ruby_money_to_human_readable(available_amount, self.currency_code)
+    human_amount_payment = helpers.ruby_money_to_human_readable(full_amount_ruby, self.currency_code)
+
+    {
+      payment_id: self.receipt_id,
+      payment_provider: payment_provider,
+      ruby_amount_refundable: available_amount,
+      human_amount_refundable: human_amount_refundable,
+      human_amount_payment: human_amount_payment,
+      currency_code: self.currency_code,
+      refunding_payments: self.refunding_registration_payments,
+    }
+  end
+
   private def auto_close_hook
     registration.consider_auto_close
   end
