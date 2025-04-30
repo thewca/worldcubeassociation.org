@@ -311,7 +311,8 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
     end
 
     def contains_admin_fields?(request)
-      organizer_fields = %w[admin_comment waiting_list_position]
-      request['competing']&.keys&.any? { |key| organizer_fields.include?(key) }
+      admin_fields = %w[admin_comment waiting_list_position]
+      
+      request['competing']&.keys&.any? { |key| admin_fields.include?(key) }
     end
 end
