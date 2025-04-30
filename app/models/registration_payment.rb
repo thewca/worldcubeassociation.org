@@ -29,24 +29,35 @@ class RegistrationPayment < ApplicationRecord
     end
   end
 
-  def to_v2_json(helpers)
+  def to_v2_json(helpers, refunds: false)
     payment_provider = CompetitionPaymentIntegration::INTEGRATION_RECORD_TYPES.invert[self.receipt_type]
 
-    available_amount = self.amount_available_for_refund
-    full_amount_ruby = self.amount_lowest_denomination
+    full_amount_ruby = self.amount_lowest_denomination.abs
 
-    human_amount_refundable = helpers.ruby_money_to_human_readable(available_amount, self.currency_code)
     human_amount_payment = helpers.ruby_money_to_human_readable(full_amount_ruby, self.currency_code)
 
-    {
+    v2_json = {
+      user_id: self.user_id,
       payment_id: self.receipt_id,
       payment_provider: payment_provider,
-      ruby_amount_refundable: available_amount,
-      human_amount_refundable: human_amount_refundable,
       human_amount_payment: human_amount_payment,
       currency_code: self.currency_code,
-      refunding_payments: self.refunding_registration_payments,
     }
+
+    if refunds
+      available_amount = self.amount_available_for_refund
+      human_amount_refundable = helpers.ruby_money_to_human_readable(available_amount, self.currency_code)
+
+      refunding_payments_json = self.refunding_registration_payments.map { it.to_v2_json(helpers, refunds: false) }
+
+      v2_json.deep_merge!({
+                            ruby_amount_refundable: available_amount,
+                            human_amount_refundable: human_amount_refundable,
+                            refunding_payments: refunding_payments_json,
+                          })
+    end
+
+    v2_json
   end
 
   private def auto_close_hook

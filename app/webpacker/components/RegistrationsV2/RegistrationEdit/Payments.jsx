@@ -10,7 +10,6 @@ import AutonumericField from '../../wca/FormBuilder/input/AutonumericField';
 import useInputState from '../../../lib/hooks/useInputState';
 import { useConfirm } from '../../../lib/providers/ConfirmProvider';
 import I18n from '../../../lib/i18n';
-import { isoMoneyToHumanReadable } from '../../../lib/helpers/money';
 import { showMessage } from '../Register/RegistrationMessage';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
 
@@ -37,7 +36,7 @@ export default function Payments({
 
       dispatch(showMessage(
         `payments.messages.${message}`,
-        'negative',
+        'positive',
       ));
 
       queryClient.setQueryData(
@@ -148,11 +147,11 @@ function PaymentRow({
         </Table.Cell>
       </Table.Row>
       {payment.refunding_payments.map((p) => (
-        <Table.Row>
+        <Table.Row key={p.payment_id}>
           <Table.Cell />
           <Table.Cell />
           <Table.Cell>
-            {isoMoneyToHumanReadable(Math.abs(p.amount_lowest_denomination), p.currency_code)}
+            {p.human_amount_payment}
           </Table.Cell>
           <Table.Cell>
             Refunded by
