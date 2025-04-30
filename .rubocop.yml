@@ -161,7 +161,15 @@ Style/WordArray:
   Enabled: false
 
 Style/SymbolProc:
-  Enabled: false
+  AllowedMethods:
+    # Capybara DSL plugins
+    - with_playwright_element_handle
+    - with_playwright_page
+  Exclude:
+    # 3rd-party libraries often use configuration DSLs
+    #   that look like we might pass a proc, but actually we want to
+    #   stick as close to their README as possible
+    - 'config/initializers/**/*.rb'
 
 Naming/MethodParameterName:
   AllowedNames:
@@ -225,9 +233,6 @@ Rails/Date:
   Enabled: false
 
 Rails/SkipsModelValidations:
-  Enabled: false
-
-Rails/RedundantForeignKey:
   Enabled: false
 
 Rails/InverseOf:

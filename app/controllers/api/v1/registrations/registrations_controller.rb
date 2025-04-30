@@ -109,7 +109,7 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
     raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::ALREADY_REGISTERED_IN_SERIES) if
       existing_registration_in_series?(@competition, target_user) && !current_user.can_manage_competition?(@competition)
 
-    raise WcaExceptions::RegistrationError.new(:unauthorized, Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) if contains_organizer_fields?(@request) && !@current_user.can_manage_competition?(@competition)
+    raise WcaExceptions::RegistrationError.new(:unauthorized, Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) if contains_admin_fields?(@request) && !@current_user.can_manage_competition?(@competition)
 
     # The rest of these are status + normal user related
     return if @current_user.can_manage_competition?(@competition)
@@ -191,7 +191,7 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
                                   competition.event_ids,
                                   registrations.joins(:user).order(:id).pluck(:id, :updated_at, user: [:updated_at]),
                                 ]) do
-      registrations.includes(:user).map { |r| r.to_v2_json }
+      registrations.includes(:user).map(&:to_v2_json)
     end
     render json: payload
   end
@@ -311,8 +311,8 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
         total_accepted_registrations_after_update > competition.competitor_limit
     end
 
-    def contains_organizer_fields?(request)
-      organizer_fields = ['organizer_comment', 'waiting_list_position']
+    def contains_admin_fields?(request)
+      organizer_fields = ['admin_comment', 'waiting_list_position']
 
       request['competing']&.keys&.any? { |key| organizer_fields.include?(key) }
     end
