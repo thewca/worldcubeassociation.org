@@ -1,5 +1,7 @@
 import React from 'react';
-import { Header, Popup, Table } from 'semantic-ui-react';
+import {
+  Button, Header, Popup, Table,
+} from 'semantic-ui-react';
 import { getIsoDateString, getShortTimeString, getTimeWithSecondsString } from '../../../lib/utils/dates';
 import { events } from '../../../lib/wca-data.js.erb';
 import EventIcon from '../../wca/EventIcon';
@@ -12,10 +14,13 @@ const formatHistoryColumn = (key, value) => {
   return value;
 };
 
-export default function RegistrationHistory({ history, competitorsInfo }) {
+export default function RegistrationHistory({ history, competitorsInfo, refetchHistory }) {
   return (
     <>
-      <Header>{I18n.t('registrations.registration_history.title')}</Header>
+      <Header>
+        {I18n.t('registrations.registration_history.title')}
+        <Button floated="right" onClick={refetchHistory}>Refresh</Button>
+      </Header>
       <Table>
         <Table.Header>
           <Table.Row>

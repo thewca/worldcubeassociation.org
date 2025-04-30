@@ -46,7 +46,11 @@ export default function RegistrationEditor({ registrationId, competitor, competi
     registration: serverRegistration,
   } = useRegistration();
 
-  const { isLoading: historyLoading, data: registrationHistory } = useQuery({
+  const {
+    isLoading: historyLoading,
+    data: registrationHistory,
+    refetch: refetchHistory,
+  } = useQuery({
     queryKey: ['registration-history', registrationId],
     queryFn: () => getRegistrationHistory(registrationId),
   });
@@ -317,6 +321,7 @@ export default function RegistrationEditor({ registrationId, competitor, competi
       <RegistrationHistory
         history={registrationHistory.toReversed()}
         competitorsInfo={competitorsInfo}
+        refetchHistory={refetchHistory}
       />
     </Segment>
   );
