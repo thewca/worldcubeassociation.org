@@ -12,6 +12,7 @@ import { useConfirm } from '../../../lib/providers/ConfirmProvider';
 import I18n from '../../../lib/i18n';
 import { showMessage } from '../Register/RegistrationMessage';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
+import {isoMoneyToHumanReadable} from "../../../lib/helpers/money";
 
 export default function Payments({
   onSuccess, registrationId, competitionId, competitorsInfo,
@@ -25,7 +26,7 @@ export default function Payments({
   } = useQuery({
     queryKey: ['payments', registrationId],
     queryFn: () => getRegistrationPayments(registrationId),
-    select: (data) => data.charges.filter((r) => r.ruby_amount_refundable !== 0),
+    select: (data) => data.charges.filter((r) => r.iso_amount_refundable !== 0),
   });
 
   const { mutate: refundMutation, isPending: isMutating } = useMutation({
@@ -97,7 +98,7 @@ export default function Payments({
 function PaymentRow({
   payment, refundMutation, isMutating, competitionId, competitorsInfo,
 }) {
-  const [amountToRefund, setAmountToRefund] = useInputState(payment.ruby_amount_refundable);
+  const [amountToRefund, setAmountToRefund] = useInputState(payment.iso_amount_refundable);
 
   const confirm = useConfirm();
 
@@ -114,7 +115,7 @@ function PaymentRow({
         const { refunded_charge: refundedCharge } = data;
 
         setAmountToRefund(
-          (prevAmount) => Math.min(prevAmount, refundedCharge.ruby_amount_refundable),
+          (prevAmount) => Math.min(prevAmount, refundedCharge.iso_amount_refundable),
         );
       },
     });
@@ -124,17 +125,17 @@ function PaymentRow({
     <>
       <Table.Row>
         <Table.Cell>
-          {payment.human_amount_refundable}
+          {isoMoneyToHumanReadable(payment.iso_amount_refundable, payment.currency_code)}
         </Table.Cell>
         <Table.Cell>
-          {payment.human_amount_payment}
+          {isoMoneyToHumanReadable(payment.iso_amount_payment, payment.currency_code)}
         </Table.Cell>
         <Table.Cell>
           <AutonumericField
             currency={payment.currency_code.toUpperCase()}
             value={amountToRefund}
             onChange={setAmountToRefund}
-            max={payment.ruby_amount_refundable}
+            max={payment.iso_amount_refundable}
           />
         </Table.Cell>
         <Table.Cell>
@@ -151,7 +152,7 @@ function PaymentRow({
           <Table.Cell />
           <Table.Cell />
           <Table.Cell>
-            {p.human_amount_payment}
+            {isoMoneyToHumanReadable(p.iso_amount_payment, p.currency_code)}
           </Table.Cell>
           <Table.Cell>
             Refunded by
