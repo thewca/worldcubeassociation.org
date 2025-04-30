@@ -1,5 +1,5 @@
-import { useMutation, useQuery } from '@tanstack/react-query';
-import React, { useEffect } from 'react';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import React from 'react';
 import {
   Button, Message, Table,
 } from 'semantic-ui-react';
@@ -18,11 +18,11 @@ export default function Payments({
   onSuccess, registrationId, competitionId, competitorsInfo,
 }) {
   const dispatch = useDispatch();
+  const queryClient = useQueryClient();
 
   const {
     data: payments,
     isLoading: paymentsLoading,
-    refetch,
   } = useQuery({
     queryKey: ['payments', registrationId],
     queryFn: () => getRegistrationPayments(registrationId),
@@ -33,14 +33,23 @@ export default function Payments({
     mutationFn: refundPayment,
     // The Backend will set a flash error on success or error
     onSuccess: (data) => {
-      const { message } = data.json;
+      const { message, refunded_charge: refundedCharge } = data.json;
 
       dispatch(showMessage(
         `payments.messages.${message}`,
         'negative',
       ));
 
-      refetch();
+      queryClient.setQueryData(
+        ['payments', registrationId],
+        (prevData) => ({
+          charges: [
+            ...prevData.charges.filter((ch) => ch.payment_id !== refundedCharge.payment_id),
+            refundedCharge,
+          ],
+        }),
+      );
+
       onSuccess();
     },
     onError: (data) => {
@@ -91,13 +100,6 @@ function PaymentRow({
 }) {
   const [amountToRefund, setAmountToRefund] = useInputState(payment.ruby_amount_refundable);
 
-  // React state persists across rerenders, so `amountToRefund` would keep old values
-  // which is problematic when refunding more than 50% of the original
-  // (because then the input exceeds the new max, leading to a whole new tragedy with AN)
-  useEffect(() => {
-    setAmountToRefund((prevAmount) => Math.min(prevAmount, payment.ruby_amount_refundable));
-  }, [payment.ruby_amount_refundable, setAmountToRefund]);
-
   const confirm = useConfirm();
 
   const attemptRefund = () => confirm({
@@ -108,6 +110,14 @@ function PaymentRow({
       paymentId: payment.payment_id,
       paymentProvider: payment.payment_provider,
       amount: amountToRefund,
+    }, {
+      onSuccess: (data) => {
+        const { refunded_charge: refundedCharge } = data.json;
+
+        setAmountToRefund(
+          (prevAmount) => Math.min(prevAmount, refundedCharge.ruby_amount_refundable),
+        );
+      },
     });
   });
 

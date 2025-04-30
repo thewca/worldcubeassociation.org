@@ -13,7 +13,7 @@ class PaymentController < ApplicationController
       # Use `filter` here on purpose because the whole `registration_payments` list has been included above.
       #   Using `where` would create an SQL query, but it would also break (i.e. make redundant) the `includes` call above.
       root_payments = registration.registration_payments.filter { |rp| rp.refunded_registration_payment_id.nil? }
-      serialized_payments = root_payments.map(&:to_v2_json)
+      serialized_payments = root_payments.map { it.to_v2_json(helpers) }
 
       render json: { charges: serialized_payments }, status: :ok
     else

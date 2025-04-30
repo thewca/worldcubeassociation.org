@@ -516,7 +516,11 @@ class RegistrationsController < ApplicationController
       current_user.id,
     )
 
-    render json: { status: :ok, message: :charge_refunded }
+    # The `reload` is necessary here, because we just inserted a refund payment
+    #   through the original `registration`. So the parent payment doesn't know about it yet.
+    refunded_payment = payment_record.registration_payment.reload
+
+    render json: { status: :ok, message: :charge_refunded, refunded_charge: refunded_payment.to_v2_json(helpers) }
   end
 
   private def registration_from_params

@@ -29,7 +29,7 @@ class RegistrationPayment < ApplicationRecord
     end
   end
 
-  def to_v2_json
+  def to_v2_json(helpers)
     payment_provider = CompetitionPaymentIntegration::INTEGRATION_RECORD_TYPES.invert[self.receipt_type]
 
     available_amount = self.amount_available_for_refund
