@@ -29,7 +29,7 @@ import { eventQualificationToString } from '../../../lib/utils/wcif';
 import { hasNotPassed } from '../../../lib/utils/dates';
 import { useRegistration } from '../lib/RegistrationProvider';
 import useSet from '../../../lib/hooks/useSet';
-import {isoMoneyToHumanReadable} from "../../../lib/helpers/money";
+import { isoMoneyToHumanReadable } from '../../../lib/helpers/money';
 
 const maxCommentLength = 240;
 
