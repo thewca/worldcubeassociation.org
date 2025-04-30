@@ -99,15 +99,15 @@ RSpec.describe ResultsValidators::AdvancementConditionsValidator do
           create(:result, competition: competition2, event_id: "222", round_type_id: "f", person: fake_person, best: value, average: value)
           create(:result, competition: competition3, event_id: "333", round_type_id: "f", person: fake_person, best: value, average: value)
         end
-        if i == 20
-          # Create a single attempt result over the attempt result condition.
-          create(:result, competition: competition2, event_id: "222", round_type_id: "f", person: fake_person, best: 1800, average: 1800)
-          expected_errors << RV::ValidationError.new(ACV::COMPETED_NOT_QUALIFIED_ERROR,
-                                                     :rounds, competition2.id,
-                                                     round_id: "222-f",
-                                                     ids: fake_person.wca_id,
-                                                     condition: first_round.advancement_condition.to_s(first_round))
-        end
+        next unless i == 20
+
+        # Create a single attempt result over the attempt result condition.
+        create(:result, competition: competition2, event_id: "222", round_type_id: "f", person: fake_person, best: 1800, average: 1800)
+        expected_errors << RV::ValidationError.new(ACV::COMPETED_NOT_QUALIFIED_ERROR,
+                                                   :rounds, competition2.id,
+                                                   round_id: "222-f",
+                                                   ids: fake_person.wca_id,
+                                                   condition: first_round.advancement_condition.to_s(first_round))
       end
       expected_errors << RV::ValidationError.new(ACV::ROUND_9P1_ERROR,
                                                  :rounds, competition2.id,

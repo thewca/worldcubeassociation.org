@@ -132,13 +132,13 @@ module ResultsValidators
         _, result, = context
         completed_solves.each do |solve_time|
           time_limit_seconds = [3600, solve_time.attempted * 600].min
-          if solve_time.time_seconds > time_limit_seconds
-            @warnings << ValidationWarning.new(MBF_RESULT_OVER_TIME_LIMIT_WARNING,
-                                               :results, competition_id,
-                                               round_id: round_id,
-                                               result: solve_time.clock_format,
-                                               person_name: result.person_name)
-          end
+          next unless solve_time.time_seconds > time_limit_seconds
+
+          @warnings << ValidationWarning.new(MBF_RESULT_OVER_TIME_LIMIT_WARNING,
+                                             :results, competition_id,
+                                             round_id: round_id,
+                                             result: solve_time.clock_format,
+                                             person_name: result.person_name)
         end
       end
 
