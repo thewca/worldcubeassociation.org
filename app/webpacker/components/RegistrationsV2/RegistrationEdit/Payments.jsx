@@ -11,10 +11,14 @@ import useInputState from '../../../lib/hooks/useInputState';
 import { useConfirm } from '../../../lib/providers/ConfirmProvider';
 import I18n from '../../../lib/i18n';
 import { isoMoneyToHumanReadable } from '../../../lib/helpers/money';
+import { showMessage } from '../Register/RegistrationMessage';
+import { useDispatch } from '../../../lib/providers/StoreProvider';
 
 export default function Payments({
   onSuccess, registrationId, competitionId, competitorsInfo,
 }) {
+  const dispatch = useDispatch();
+
   const {
     data: payments,
     isLoading: paymentsLoading,
@@ -24,12 +28,27 @@ export default function Payments({
     queryFn: () => getRegistrationPayments(registrationId),
     select: (data) => data.charges.filter((r) => r.ruby_amount_refundable !== 0),
   });
+
   const { mutate: refundMutation, isPending: isMutating } = useMutation({
     mutationFn: refundPayment,
     // The Backend will set a flash error on success or error
-    onSuccess: () => {
+    onSuccess: (data) => {
+      const { message } = data.json;
+
+      dispatch(showMessage(
+        `payments.messages.${message}`,
+        'negative',
+      ));
+
       refetch();
       onSuccess();
+    },
+    onError: (data) => {
+      const { error } = data.json;
+      dispatch(showMessage(
+        `payments.errors.refund.${error}`,
+        'negative',
+      ));
     },
   });
 
