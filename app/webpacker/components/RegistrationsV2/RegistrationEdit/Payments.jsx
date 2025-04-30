@@ -1,5 +1,5 @@
-import { useMutation, useQuery } from '@tanstack/react-query';
-import React, { useEffect } from 'react';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import React from 'react';
 import {
   Button, Message, Table,
 } from 'semantic-ui-react';
@@ -10,26 +10,58 @@ import AutonumericField from '../../wca/FormBuilder/input/AutonumericField';
 import useInputState from '../../../lib/hooks/useInputState';
 import { useConfirm } from '../../../lib/providers/ConfirmProvider';
 import I18n from '../../../lib/i18n';
+import { showMessage } from '../Register/RegistrationMessage';
+import { useDispatch } from '../../../lib/providers/StoreProvider';
 import { isoMoneyToHumanReadable } from '../../../lib/helpers/money';
 
 export default function Payments({
   onSuccess, registrationId, competitionId, competitorsInfo,
 }) {
+  const dispatch = useDispatch();
+  const queryClient = useQueryClient();
+
   const {
     data: payments,
     isLoading: paymentsLoading,
-    refetch,
   } = useQuery({
     queryKey: ['payments', registrationId],
     queryFn: () => getRegistrationPayments(registrationId),
-    select: (data) => data.charges.filter((r) => r.ruby_amount_refundable !== 0),
+    select: (data) => data.charges.filter((r) => r.iso_amount_refundable !== 0),
   });
+
   const { mutate: refundMutation, isPending: isMutating } = useMutation({
     mutationFn: refundPayment,
     // The Backend will set a flash error on success or error
-    onSuccess: () => {
-      refetch();
+    onSuccess: (data) => {
+      const { message, refunded_charge: refundedCharge } = data;
+
+      // i18n-tasks-use t('payments.messages.charge_refunded')
+      dispatch(showMessage(
+        `payments.messages.${message}`,
+        'positive',
+      ));
+
+      queryClient.setQueryData(
+        ['payments', registrationId],
+        (prevData) => ({
+          charges: [
+            ...prevData.charges.filter((ch) => ch.payment_id !== refundedCharge.payment_id),
+            refundedCharge,
+          ],
+        }),
+      );
+
       onSuccess();
+    },
+    onError: (data) => {
+      const { error } = data.json;
+      // i18n-tasks-use t('payments.errors.refund.provider_disconnected')
+      // i18n-tasks-use t('payments.errors.refund.refund_amount_too_high')
+      // i18n-tasks-use t('payments.errors.refund.refund_amount_too_low')
+      dispatch(showMessage(
+        `payments.errors.refund.${error}`,
+        'negative',
+      ));
     },
   });
 
@@ -70,14 +102,7 @@ export default function Payments({
 function PaymentRow({
   payment, refundMutation, isMutating, competitionId, competitorsInfo,
 }) {
-  const [amountToRefund, setAmountToRefund] = useInputState(payment.ruby_amount_refundable);
-
-  // React state persists across rerenders, so `amountToRefund` would keep old values
-  // which is problematic when refunding more than 50% of the original
-  // (because then the input exceeds the new max, leading to a whole new tragedy with AN)
-  useEffect(() => {
-    setAmountToRefund((prevAmount) => Math.min(prevAmount, payment.ruby_amount_refundable));
-  }, [payment.ruby_amount_refundable, setAmountToRefund]);
+  const [amountToRefund, setAmountToRefund] = useInputState(payment.iso_amount_refundable);
 
   const confirm = useConfirm();
 
@@ -89,6 +114,14 @@ function PaymentRow({
       paymentId: payment.payment_id,
       paymentProvider: payment.payment_provider,
       amount: amountToRefund,
+    }, {
+      onSuccess: (data) => {
+        const { refunded_charge: refundedCharge } = data;
+
+        setAmountToRefund(
+          (prevAmount) => Math.min(prevAmount, refundedCharge.iso_amount_refundable),
+        );
+      },
     });
   });
 
@@ -96,17 +129,17 @@ function PaymentRow({
     <>
       <Table.Row>
         <Table.Cell>
-          {payment.human_amount_refundable}
+          {isoMoneyToHumanReadable(payment.iso_amount_refundable, payment.currency_code)}
         </Table.Cell>
         <Table.Cell>
-          {payment.human_amount_payment}
+          {isoMoneyToHumanReadable(payment.iso_amount_payment, payment.currency_code)}
         </Table.Cell>
         <Table.Cell>
           <AutonumericField
             currency={payment.currency_code.toUpperCase()}
             value={amountToRefund}
             onChange={setAmountToRefund}
-            max={payment.ruby_amount_refundable}
+            max={payment.iso_amount_refundable}
           />
         </Table.Cell>
         <Table.Cell>
@@ -119,11 +152,11 @@ function PaymentRow({
         </Table.Cell>
       </Table.Row>
       {payment.refunding_payments.map((p) => (
-        <Table.Row>
+        <Table.Row key={p.payment_id}>
           <Table.Cell />
           <Table.Cell />
           <Table.Cell>
-            {isoMoneyToHumanReadable(Math.abs(p.amount_lowest_denomination), p.currency_code)}
+            {isoMoneyToHumanReadable(p.iso_amount_payment, p.currency_code)}
           </Table.Cell>
           <Table.Cell>
             Refunded by

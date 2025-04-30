@@ -304,12 +304,12 @@ class UserGroup < ApplicationRecord
         changes_of_last_month.push(leader_appointments.join("<br>")) if leader_appointments.count.positive?
         changes_of_last_month.push(no_more_leaders.join("<br>")) if no_more_leaders.count.positive?
       end
-      changes_of_last_month.push("<br><b>Promoted Senior Members</b><br>#{promoted_senior_members.join("<br>")}") if promoted_senior_members.count.positive?
-      changes_of_last_month.push("<br><b>New Senior Members</b><br>#{new_senior_members.join("<br>")}") if new_senior_members.count.positive?
-      changes_of_last_month.push("<br><b>New Members</b><br>#{new_members.join("<br>")}") if new_members.count.positive?
-      changes_of_last_month.push("<br><b>Demotions from Senior Member to Member</b><br>#{demoted_senior_members.join("<br>")}") if demoted_senior_members.count.positive?
-      changes_of_last_month.push("<br><b>Resigned/Demoted Senior Members</b><br>#{no_more_senior_members.join("<br>")}") if no_more_senior_members.count.positive?
-      changes_of_last_month.push("<br><b>Resigned/Demoted Members</b><br>#{no_more_members.join("<br>")}") if no_more_members.count.positive?
+      changes_of_last_month.push("<br><b>Promoted Senior Members</b><br>#{promoted_senior_members.join('<br>')}") if promoted_senior_members.count.positive?
+      changes_of_last_month.push("<br><b>New Senior Members</b><br>#{new_senior_members.join('<br>')}") if new_senior_members.count.positive?
+      changes_of_last_month.push("<br><b>New Members</b><br>#{new_members.join('<br>')}") if new_members.count.positive?
+      changes_of_last_month.push("<br><b>Demotions from Senior Member to Member</b><br>#{demoted_senior_members.join('<br>')}") if demoted_senior_members.count.positive?
+      changes_of_last_month.push("<br><b>Resigned/Demoted Senior Members</b><br>#{no_more_senior_members.join('<br>')}") if no_more_senior_members.count.positive?
+      changes_of_last_month.push("<br><b>Resigned/Demoted Members</b><br>#{no_more_members.join('<br>')}") if no_more_members.count.positive?
     end
     changes_of_last_month.join("<br>")
   end

@@ -49,7 +49,7 @@ RSpec.describe TicketsController do
       year = wca_id.first(4)
 
       (1..99).each do |i|
-        create(:person_who_has_competed_once, wca_id: "#{year}ANON#{i.to_s.rjust(2, "0")}")
+        create(:person_who_has_competed_once, wca_id: "#{year}ANON#{i.to_s.rjust(2, '0')}")
       end
 
       post :anonymize, params: { wcaId: wca_id }

@@ -68,7 +68,7 @@ class ResultsController < ApplicationController
         FROM (
           SELECT MIN(value_and_id) value_and_id
           FROM concise_#{type_param}_results results
-          #{@gender_condition.present? ? "JOIN persons ON results.person_id = persons.wca_id and persons.sub_id = 1" : ""}
+          #{@gender_condition.present? ? 'JOIN persons ON results.person_id = persons.wca_id and persons.sub_id = 1' : ''}
           WHERE #{value} > 0
             #{@event_condition}
             #{@years_condition_result}
@@ -89,8 +89,8 @@ class ResultsController < ApplicationController
             results.*,
             average value
           FROM results
-          #{@gender_condition.present? ? "JOIN persons ON results.person_id = persons.wca_id and persons.sub_id = 1" : ""}
-          #{@years_condition_competition.present? ? "JOIN competitions on competitions.id = results.competition_id" : ""}
+          #{@gender_condition.present? ? 'JOIN persons ON results.person_id = persons.wca_id and persons.sub_id = 1' : ''}
+          #{@years_condition_competition.present? ? 'JOIN competitions on competitions.id = results.competition_id' : ''}
           WHERE average > 0
             #{@event_condition}
             #{@years_condition_competition}
@@ -108,8 +108,8 @@ class ResultsController < ApplicationController
               results.*,
               value#{i} value
             FROM results
-            #{@gender_condition.present? ? "JOIN persons ON results.person_id = persons.wca_id and persons.sub_id = 1" : ""}
-            #{@years_condition_competition.present? ? "JOIN competitions on competitions.id = results.competition_id" : ""}
+            #{@gender_condition.present? ? 'JOIN persons ON results.person_id = persons.wca_id and persons.sub_id = 1' : ''}
+            #{@years_condition_competition.present? ? 'JOIN competitions on competitions.id = results.competition_id' : ''}
             WHERE value#{i} > 0
               #{@event_condition}
               #{@years_condition_competition}
@@ -119,7 +119,7 @@ class ResultsController < ApplicationController
             #{limit_condition}
           SQL
         end
-        subquery = "(#{subqueries.join(") UNION ALL (")})"
+        subquery = "(#{subqueries.join(') UNION ALL (')})"
         @query = <<-SQL.squish
           SELECT *
           FROM (#{subquery}) union_results
@@ -137,7 +137,7 @@ class ResultsController < ApplicationController
             results.country_id record_country_id,
             MIN(#{value}) record_value
           FROM concise_#{type_param}_results results
-          #{@gender_condition.present? ? "JOIN persons ON results.person_id = persons.wca_id and persons.sub_id = 1" : ""}
+          #{@gender_condition.present? ? 'JOIN persons ON results.person_id = persons.wca_id and persons.sub_id = 1' : ''}
           WHERE 1
             #{@event_condition}
             #{@years_condition_result}
@@ -146,7 +146,7 @@ class ResultsController < ApplicationController
         ) records
         JOIN results ON results.#{value} = record_value AND results.country_id = record_country_id
         JOIN competitions on competitions.id = results.competition_id
-        #{@gender_condition.present? ? "JOIN persons ON results.person_id = persons.wca_id and persons.sub_id = 1" : ""}
+        #{@gender_condition.present? ? 'JOIN persons ON results.person_id = persons.wca_id and persons.sub_id = 1' : ''}
         WHERE 1
           #{@event_condition}
           #{@years_condition_competition}
@@ -220,7 +220,7 @@ class ResultsController < ApplicationController
         FROM
           (SELECT results.*, 'single' type, best value, regional_single_record record_name FROM results WHERE regional_single_record<>'' UNION
             SELECT results.*, 'average' type, average value, regional_average_record record_name FROM results WHERE regional_average_record<>'') result
-          #{@gender_condition.present? ? "JOIN persons ON result.person_id = persons.wca_id and persons.sub_id = 1," : ","}
+          #{@gender_condition.present? ? 'JOIN persons ON result.person_id = persons.wca_id and persons.sub_id = 1,' : ','}
           events,
           round_types,
           competitions,
@@ -241,9 +241,9 @@ class ResultsController < ApplicationController
       @query = <<-SQL.squish
         SELECT *
         FROM
-          (#{current_records_query("best", "single")}
+          (#{current_records_query('best', 'single')}
           UNION
-          #{current_records_query("average", "average")}) helper
+          #{current_records_query('average', 'average')}) helper
         ORDER BY
           `rank`, type DESC, start_date, round_type_id, person_name
       SQL
@@ -274,7 +274,7 @@ class ResultsController < ApplicationController
       FROM
         (SELECT event_id record_event_id, MIN(value_and_id) DIV 1000000000 value
           FROM concise_#{type}_results results
-          #{@gender_condition.present? ? "JOIN persons ON results.person_id = persons.wca_id and persons.sub_id = 1" : ""}
+          #{@gender_condition.present? ? 'JOIN persons ON results.person_id = persons.wca_id and persons.sub_id = 1' : ''}
           WHERE 1
           #{@event_condition}
           #{@region_condition}
@@ -282,7 +282,7 @@ class ResultsController < ApplicationController
           #{@gender_condition}
           GROUP BY event_id) records,
         results
-        #{@gender_condition.present? ? "JOIN persons ON results.person_id = persons.wca_id and persons.sub_id = 1," : ","}
+        #{@gender_condition.present? ? 'JOIN persons ON results.person_id = persons.wca_id and persons.sub_id = 1,' : ','}
         events,
         countries,
         competitions
