@@ -171,12 +171,25 @@ class Registration < ApplicationRecord
     )
   end
 
+  private def last_payment
+    if registration_payments.loaded?
+      registration_payments.max_by(&:created_at)
+    else
+      registration_payments.order(:created_at).last
+    end
+  end
+
   def last_payment_date
-    registration_payments.maximum(:created_at)
+    if registration_payments.loaded?
+      last_payment&.created_at
+    else
+      registration_payments.maximum(:created_at)
+    end
   end
 
   def last_payment_status
-    most_recent_payment = registration_payments.order(:created_at).last
+    # Store this in a variable so we don't have to recompute over and over
+    most_recent_payment = self.last_payment
 
     return nil if most_recent_payment.blank?
     return "refund" if most_recent_payment.refunded_registration_payment_id?
