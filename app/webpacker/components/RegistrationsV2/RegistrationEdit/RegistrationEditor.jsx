@@ -27,6 +27,7 @@ import { hasPassed } from '../../../lib/utils/dates';
 import getUsersInfo from '../api/user/post/getUserInfo';
 import { useRegistration } from '../lib/RegistrationProvider';
 import useSet from '../../../lib/hooks/useSet';
+import { getRegistrationHistory } from '../api/registration/get/get_registrations';
 
 export default function RegistrationEditor({ registrationId, competitor, competitionInfo }) {
   const dispatch = useDispatch();
@@ -45,11 +46,16 @@ export default function RegistrationEditor({ registrationId, competitor, competi
     registration: serverRegistration, refetchRegistration: refetch,
   } = useRegistration();
 
-  const { isLoading, data: competitorsInfo } = useQuery({
-    queryKey: ['history-user', serverRegistration?.history],
-    queryFn: () => getUsersInfo(_.uniq(serverRegistration.history.flatMap((e) => (
+  const { isLoading: historyLoading, data: registrationHistory } = useQuery({
+    queryKey: ['registration-history', registrationId],
+    queryFn: () => getRegistrationHistory(registrationId),
+  });
+
+  const { isLoading: competitorsInfoLoading, data: competitorsInfo } = useQuery({
+    queryKey: ['history-user', registrationHistory],
+    queryFn: () => getUsersInfo(_.uniq(registrationHistory.flatMap((e) => (
       (e.actor_type === 'user' || e.actor_type === 'worker') ? Number(e.actor_id) : [])))),
-    enabled: Boolean(serverRegistration),
+    enabled: Boolean(registrationHistory),
   });
 
   const { mutate: updateRegistrationMutation, isPending: isUpdating } = useMutation({
@@ -180,7 +186,7 @@ export default function RegistrationEditor({ registrationId, competitor, competi
   const registrationEditDeadlinePassed = Boolean(competitionInfo.event_change_deadline_date)
     && hasPassed(competitionInfo.event_change_deadline_date);
 
-  if (isLoading || isRegistrationLoading) {
+  if (isRegistrationLoading || historyLoading || competitorsInfoLoading) {
     return <Loading />;
   }
 
@@ -310,7 +316,7 @@ export default function RegistrationEditor({ registrationId, competitor, competi
         </>
       )}
       <RegistrationHistory
-        history={registration.history.toReversed()}
+        history={registrationHistory.toReversed()}
         competitorsInfo={competitorsInfo}
       />
     </Segment>
