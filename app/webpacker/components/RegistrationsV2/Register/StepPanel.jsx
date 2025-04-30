@@ -60,7 +60,7 @@ const shouldBeDisabled = (
   }
 
   if (key === paymentStepConfig.key) {
-    return (!hasPaid && index > activeIndex) || !registrationCurrentlyOpen;
+    return (!hasPaid && index > activeIndex);
   }
   if (key === competingStepConfig.key) {
     return index > activeIndex;
