@@ -76,14 +76,6 @@ class RegistrationsController < ApplicationController
     redirect_to edit_registration_path(registration)
   end
 
-  def registration_history
-    registration = registration_from_params
-
-    return head :unauthorized unless current_user.id == registration.user_id || current_user.can_manage_competition?(registration.competition)
-
-    render json: registration.registration_history
-  end
-
   def import
     @competition = competition_from_params
   end
