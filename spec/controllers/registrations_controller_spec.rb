@@ -93,12 +93,10 @@ RSpec.describe RegistrationsController, :clean_db_with_truncation do
 
         it 'issues a full refund' do
           post :refund_payment, params: { competition_id: competition.id, payment_integration: :stripe, payment_id: @payment.receipt.id, payment: { refund_amount: competition.base_entry_fee.cents } }
-          expect(response).to redirect_to edit_registration_path(registration)
           refund = registration.reload.registration_payments.last.receipt.retrieve_stripe
           expect(competition.base_entry_fee).to be > 0
           expect(registration.outstanding_entry_fees).to eq competition.base_entry_fee
           expect(refund.amount).to eq competition.base_entry_fee.cents
-          expect(flash[:success]).to eq "Payment was refunded"
           expect(@payment.reload.amount_available_for_refund).to eq 0
           # Check that the website actually records who made the refund
           expect(registration.registration_payments.last.user).to eq organizer
@@ -107,40 +105,38 @@ RSpec.describe RegistrationsController, :clean_db_with_truncation do
         it 'issues a 50% refund' do
           refund_amount = competition.base_entry_fee.cents / 2
           post :refund_payment, params: { competition_id: competition.id, payment_integration: :stripe, payment_id: @payment.receipt.id, payment: { refund_amount: refund_amount } }
-          expect(response).to redirect_to edit_registration_path(registration)
           refund = registration.reload.registration_payments.last.receipt.retrieve_stripe
           expect(competition.base_entry_fee).to be > 0
           expect(registration.outstanding_entry_fees).to eq competition.base_entry_fee / 2
           expect(refund.amount).to eq competition.base_entry_fee.cents / 2
-          expect(flash[:success]).to eq "Payment was refunded"
           expect(@payment.reload.amount_available_for_refund).to eq competition.base_entry_fee.cents / 2
         end
 
         it 'disallows negative refund' do
           refund_amount = -1
           post :refund_payment, params: { competition_id: competition.id, payment_integration: :stripe, payment_id: @payment.receipt.id, payment: { refund_amount: refund_amount } }
-          expect(response).to redirect_to edit_registration_path(registration)
+          expect(response).to have_http_status(:bad_request)
+          expect(response.parsed_body).to eq { "error" => "refund_amount_too_low" }
           expect(competition.base_entry_fee).to be > 0
           expect(registration.outstanding_entry_fees).to eq 0
-          expect(flash[:danger]).to eq "The refund amount must be greater than zero."
           expect(@payment.reload.amount_available_for_refund).to eq competition.base_entry_fee.cents
         end
 
         it 'disallows a refund more than the payment' do
           refund_amount = competition.base_entry_fee.cents * 2
           post :refund_payment, params: { competition_id: competition.id, payment_integration: :stripe, payment_id: @payment.receipt.id, payment: { refund_amount: refund_amount } }
-          expect(response).to redirect_to edit_registration_path(registration)
+          expect(response).to have_http_status(:bad_request)
+          expect(response.parsed_body).to eq { "error" => "refund_amount_too_high" }
           expect(competition.base_entry_fee).to be > 0
           expect(registration.outstanding_entry_fees).to eq 0
-          expect(flash[:danger]).to eq "You are not allowed to refund more than the competitor has paid."
           expect(@payment.reload.amount_available_for_refund).to eq competition.base_entry_fee.cents
         end
 
         it "disallows a refund after clearing the Stripe account id" do
           ClearConnectedPaymentIntegrations.perform_now
           post :refund_payment, params: { competition_id: competition.id, payment_integration: :stripe, payment_id: @payment.receipt.id, payment: { refund_amount: competition.base_entry_fee.cents } }
-          expect(response).to redirect_to competition_registrations_path(competition)
-          expect(flash[:danger]).to eq "You cannot issue a refund for this competition anymore. Please use your payment provider's dashboard to do so."
+          expect(response).to have_http_status(:not_found)
+          expect(response.parsed_body).to eq { "error" => "provider_disconnected" }
           expect(@payment.reload.amount_available_for_refund).to eq competition.base_entry_fee.cents
         end
       end
