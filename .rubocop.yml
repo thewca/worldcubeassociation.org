@@ -143,9 +143,6 @@ Style/SignalException:
 Layout/IndentationConsistency:
   EnforcedStyle: indented_internal_methods
 
-Style/StringLiteralsInInterpolation:
-  Enabled: false
-
 Style/SymbolArray:
   Enabled: false
 

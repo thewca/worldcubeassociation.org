@@ -55,7 +55,7 @@ class ScheduleActivity < ApplicationRecord
       inferred_name = Event.c_find(parts[:event_id]).name
       round = rounds_by_wcif_id["#{parts[:event_id]}-r#{parts[:round_number]}"]
       inferred_name = round[:name] if round
-      inferred_name += " (#{I18n.t("attempts.attempt_name", number: parts[:attempt_number])})" if parts[:attempt_number]
+      inferred_name += " (#{I18n.t('attempts.attempt_name', number: parts[:attempt_number])})" if parts[:attempt_number]
       inferred_name
     end
   end

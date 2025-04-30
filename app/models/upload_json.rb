@@ -12,7 +12,7 @@ class UploadJson
       begin
         # Parse the json first
         JSON::Validator.validate!(ResultsValidators::JSONSchemas::RESULT_JSON_SCHEMA, parsed_json)
-        errors.add(:results_file, "is not for this competition but for #{parsed_json["competitionId"]}!") if parsed_json["competitionId"] != competition_id
+        errors.add(:results_file, "is not for this competition but for #{parsed_json['competitionId']}!") if parsed_json["competitionId"] != competition_id
       rescue JSON::ParserError
         errors.add(:results_file, "must be a JSON file from the Workbook Assistant")
       rescue JSON::Schema::ValidationError => e

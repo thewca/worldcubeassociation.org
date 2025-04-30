@@ -9,7 +9,7 @@ class ChoreMailer < ApplicationMailer
 
     @month_name = start_of_month.strftime("%B")
 
-    @pr_merged_this_month_url = "https://github.com/thewca/worldcubeassociation.org/pulls?utf8=%E2%9C%93&q=is%3Apr%20sort%3Amerged-desc%20merged%3A#{start_of_month.strftime("%F")}..#{end_of_month.strftime("%F")}"
+    @pr_merged_this_month_url = "https://github.com/thewca/worldcubeassociation.org/pulls?utf8=%E2%9C%93&q=is%3Apr%20sort%3Amerged-desc%20merged%3A#{start_of_month.strftime('%F')}..#{end_of_month.strftime('%F')}"
     mail(
       to: "software@worldcubeassociation.org",
       cc: @assignee.email,

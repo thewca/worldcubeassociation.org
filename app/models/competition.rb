@@ -1995,7 +1995,7 @@ class Competition < ApplicationRecord
         schedule_activity = competition_activities.find do |competition_activity|
           competition_activity.wcif_id == assignment_wcif["activityId"]
         end
-        raise WcaExceptions::BadApiParameter.new("Cannot create assignment for non-existent activity with id #{assignment_wcif["activityId"]}") unless schedule_activity
+        raise WcaExceptions::BadApiParameter.new("Cannot create assignment for non-existent activity with id #{assignment_wcif['activityId']}") unless schedule_activity
 
         assignment = registration.assignments.find do |a|
           a.wcif_equal?(assignment_wcif)

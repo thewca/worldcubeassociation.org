@@ -119,7 +119,7 @@ module CompetitionsHelper
             "#{unique_name}&lrm; #{record_strs.to_sentence}"
           end
         end
-        text += "#{record_strs.join("; ")}.  \n" # Trailing spaces for markdown give us a <br>
+        text += "#{record_strs.join('; ')}.  \n" # Trailing spaces for markdown give us a <br>
       end
     end
 
@@ -127,7 +127,7 @@ module CompetitionsHelper
   end
 
   def announced_content(competition)
-    competition.announced_at ? "#{pluralize(days_announced_before_competition(competition), "day")} before" : ""
+    competition.announced_at ? "#{pluralize(days_announced_before_competition(competition), 'day')} before" : ""
   end
 
   def announced_class(competition)
@@ -148,7 +148,7 @@ module CompetitionsHelper
     days_report = days_after_competition(competition.delegate_report.posted_at, competition)
     if days_report
       submitted_by_competition_delegate = competition.delegates.include?(competition.delegate_report.posted_by_user)
-      submitted_by_competition_delegate ? "#{pluralize(days_report, "day")} after" : "submitted by other"
+      submitted_by_competition_delegate ? "#{pluralize(days_report, 'day')} after" : "submitted by other"
     else
       competition.probably_over? ? "pending" : ""
     end
@@ -169,7 +169,7 @@ module CompetitionsHelper
   def results_content(competition)
     days_results = days_after_competition(competition.results_submitted_at, competition)
     if days_results
-      "#{pluralize(days_results, "day")} after"
+      "#{pluralize(days_results, 'day')} after"
     else
       competition.probably_over? ? "pending" : ""
     end
