@@ -249,7 +249,7 @@ class Registration < ApplicationRecord
     end
   end
 
-  def to_v2_json(admin: false, history: false, pii: false)
+  def to_v2_json(admin: false, pii: false)
     private_attributes = pii ? %w[dob email] : nil
 
     base_json = {
@@ -282,11 +282,6 @@ class Registration < ApplicationRecord
                               },
                             })
       base_json[:competing][:waiting_list_position] = waiting_list_position if competing_status_waiting_list?
-    end
-    if history
-      base_json.deep_merge!({
-                              history: registration_history,
-                            })
     end
     base_json
   end
