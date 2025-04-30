@@ -1,14 +1,15 @@
 # frozen_string_literal: true
 
-class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
-  skip_before_action :validate_jwt_token, only: [:list]
+class Api::V1::RegistrationsController < Api::V1::ApiController
+  skip_before_action :validate_jwt_token, only: [:index]
   # The order of the validations is important to not leak any non public info via the API
   # That's why we should always validate a request first, before taking any other before action
   # before_actions are triggered in the order they are defined
   before_action :user_can_create_registration, only: [:create]
   before_action :validate_create_request, only: [:create]
+  before_action :validate_show_registration_by_user, only: [:show_by_user]
   before_action :validate_show_registration, only: [:show]
-  before_action :validate_list_admin, only: [:list_admin]
+  before_action :validate_index_admin, only: [:index_admin]
   before_action :ensure_registration_exists, only: [:update]
   before_action :user_can_modify_registration, only: [:update]
   before_action :validate_update_request, only: [:update]
@@ -37,9 +38,28 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
     render_error(:unauthorized, Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) unless @current_user.id == @user_id.to_i || @current_user.can_manage_competition?(@competition)
   end
 
+  def index
+    competition_id = list_params
+    competition = Competition.find(competition_id)
+    registrations = competition.registrations.accepted.competing
+    payload = Rails.cache.fetch([
+                                  "registrations_v2_list",
+                                  competition.id,
+                                  competition.event_ids,
+                                  registrations.joins(:user).order(:id).pluck(:id, :updated_at, user: [:updated_at]),
+                                ]) do
+      registrations.includes(:user).map(&:to_v2_json)
+    end
+    render json: payload
+  end
+
   def show
     registration = Registration.find_by!(user_id: @user_id, competition_id: @competition_id)
     render json: registration.to_v2_json(admin: true, history: true)
+  end
+
+  def show_by_user
+
   end
 
   def create
@@ -181,30 +201,15 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
     render json: { status: 'ok', updated_registrations: updated_registrations }
   end
 
-  def list
-    competition_id = list_params
-    competition = Competition.find(competition_id)
-    registrations = competition.registrations.accepted.competing
-    payload = Rails.cache.fetch([
-                                  "registrations_v2_list",
-                                  competition.id,
-                                  competition.event_ids,
-                                  registrations.joins(:user).order(:id).pluck(:id, :updated_at, user: [:updated_at]),
-                                ]) do
-      registrations.includes(:user).map(&:to_v2_json)
-    end
-    render json: payload
-  end
-
   # To list Registrations in the admin view you need to be able to administer the competition
-  def validate_list_admin
+  def validate_index_admin
     competition_id = list_params
     # TODO: Do we set this as an instance variable here so we can use it below?
     @competition = Competition.find(competition_id)
     render_error(:unauthorized, Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) unless @current_user.can_manage_competition?(@competition)
   end
 
-  def list_admin
+  def index_admin
     registrations = Registration.where(competition: @competition)
     render json: registrations.includes(
       :events,

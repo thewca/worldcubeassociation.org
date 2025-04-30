@@ -345,14 +345,17 @@ Rails.application.routes.draw do
     # While this is the start of a v1 API, this is currently not usable by outside developers as
     # getting a JWT token requires you to be logged in through the Website
     namespace :v1 do
-      namespace :registrations do
-        get '/register', to: 'registrations#show'
-        post '/register', to: 'registrations#create'
-        patch '/register', to: 'registrations#update'
-        patch '/bulk_update', to: 'registrations#bulk_update'
-        get '/:competition_id', to: 'registrations#list'
-        get '/:competition_id/admin', to: 'registrations#list_admin', as: :list_admin
-        get '/:competition_id/payment', to: 'registrations#payment_ticket', as: :payment_ticket
+      patch 'registrations/bulk_update', to: 'registrations#bulk_update'
+
+      resources :competitions, only: [] do
+        resources :registrations, only: %i[index show create update], shallow: true do
+          get 'payment_ticket', to: 'registrations#payment_ticket'
+
+          collection do
+            get 'admin', to: 'registrations#index_admin'
+            get ':user_id', to: 'registrations#show_by_user', as: :show_by_user
+          end
+        end
       end
     end
 
