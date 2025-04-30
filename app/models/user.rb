@@ -367,7 +367,7 @@ class User < ApplicationRecord
   end
 
   def country
-    Country.find_by(iso2: country_iso2)
+    Country.c_find_by_iso2(country_iso2)
   end
 
   def newcomer_month_eligible?

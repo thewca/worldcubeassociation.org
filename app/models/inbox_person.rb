@@ -24,9 +24,7 @@ class InboxPerson < ApplicationRecord
   end
 
   def country
-    # We disable RuboCop because `find_by_iso2` is actually a manually created method
-    #   by us that just "happens to" sound like a dynamic finder.
-    Country.find_by_iso2(self.country_iso2) # rubocop:disable Rails/DynamicFindBy
+    Country.c_find_by_iso2(self.country_iso2)
   end
 
   # NOTE: silly method overriding: we don't have an id on that table.
