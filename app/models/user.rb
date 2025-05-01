@@ -1425,7 +1425,7 @@ class User < ApplicationRecord
   end
 
   def anonymization_checks_with_message_args
-    upcoming_registered_competitions = competitions_registered_for.not_over.merge(Registration.where.not(competing_status: ['cancelled', 'rejected'])).pluck(:id, :name).map { |id, name| { id: id, name: name } }
+    upcoming_registered_competitions = competitions_registered_for.not_over.merge(Registration.where.not(competing_status: %w[cancelled rejected])).pluck(:id, :name).map { |id, name| { id: id, name: name } }
     access_grants = oauth_access_grants
                     .where.not(revoked_at: nil)
                     .map do |access_grant|
