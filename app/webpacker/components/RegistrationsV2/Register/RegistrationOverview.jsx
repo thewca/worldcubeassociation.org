@@ -14,13 +14,16 @@ import { useConfirm } from '../../../lib/providers/ConfirmProvider';
 import { contactCompetitionUrl } from '../../../lib/requests/routes.js.erb';
 import RegistrationStatus from './RegistrationStatus';
 import { useRegistration } from '../lib/RegistrationProvider';
+import { isoMoneyToHumanReadable } from '../../../lib/helpers/money';
 
 export default function RegistrationOverview({
   nextStep, competitionInfo,
 }) {
   const dispatch = useDispatch();
   const confirm = useConfirm();
-  const { registration, isRejected, isAccepted } = useRegistration();
+  const {
+    registration, isRejected, isAccepted, hasPaid,
+  } = useRegistration();
 
   const hasRegistrationEditDeadlinePassed = hasPassed(
     competitionInfo.event_change_deadline_date ?? competitionInfo.start_date,
@@ -116,6 +119,15 @@ export default function RegistrationOverview({
                   :
                 </List.Header>
                 {registration.guests}
+              </List.Item>
+            )}
+            { registration.payment && (
+              <List.Item>
+                <List.Header>
+                  {I18n.t('payments.labels.net_payment')}
+                  :
+                </List.Header>
+                {registration.payment.payment_amount_human_readable}
               </List.Item>
             )}
             <ButtonGroup widths={2}>
