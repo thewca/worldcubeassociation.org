@@ -678,6 +678,51 @@ RSpec.describe CompetitionsController do
         comp.reload
         expect(comp.information).to eq new_information
       end
+
+      it "can extend edit events deadline of locked competition when original deadline hasn't passed" do
+        old_deadline = competition.start_date.to_datetime - 3.days
+        competition.update(confirmed: true, event_change_deadline_date: old_deadline)
+
+        new_deadline = competition.start_date.to_datetime - 1.day
+        update_params = build_competition_update(competition, registration: { eventChangeDeadlineDate: new_deadline })
+        patch :update, params: update_params, as: :json
+        expect(competition.reload.event_change_deadline_date).to eq new_deadline
+      end
+
+      it "can change edit events deadline of locked competition even when deadline has passed" do
+        old_open = 27.days.ago.change(sec: 0)
+        # respect the fact that February can have exactly 4 weeks
+        # which is potentially colliding with the start_date set in the competition spec factory
+        old_close = 2.days.ago.change(sec: 0)
+        competition.update(confirmed: true, registration_open: old_open, registration_close: old_close, event_change_deadline_date: old_close.to_datetime)
+
+        new_deadline = competition.start_date.to_datetime
+        update_params = build_competition_update(competition, registration: { eventChangeDeadlineDate: new_deadline })
+        patch :update, params: update_params, as: :json
+        expect(competition.reload.event_change_deadline_date).to eq new_deadline
+      end
+
+      it "can remove edit events deadline of locked competition even when deadline has passed" do
+        old_open = 27.days.ago.change(sec: 0)
+        # respect the fact that February can have exactly 4 weeks
+        # which is potentially colliding with the start_date set in the competition spec factory
+        old_close = 2.days.ago.change(sec: 0)
+        competition.update(confirmed: true, registration_open: old_open, registration_close: old_close, event_change_deadline_date: old_close.to_datetime)
+
+        update_params = build_competition_update(competition, registration: { eventChangeDeadlineDate: '' })
+        patch :update, params: update_params, as: :json
+        expect(competition.reload.event_change_deadline_date).to be_nil
+      end
+
+      it "cannot shorten edit events deadline of locked competition when deadline hasn't passed" do
+        old_deadline = competition.start_date.to_datetime - 3.days
+        competition.update(confirmed: true, event_change_deadline_date: old_deadline)
+
+        new_close = competition.start_date.to_datetime - 5.days
+        update_params = build_competition_update(competition, registration: { eventChangeDeadlineDate: new_close })
+        patch :update, params: update_params, as: :json
+        expect(competition.reload.event_change_deadline_date).to eq old_deadline
+      end
     end
 
     context "when signed in as a trainee delegate" do

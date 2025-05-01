@@ -441,22 +441,24 @@ RSpec.describe "registrations" do
     end
 
     context "when signed in as competition manager" do
+      let(:ots_competition) { create(:competition, :registration_open, :with_delegate, :visible) }
+
       before do
-        sign_in competition.delegates.first
+        sign_in ots_competition.delegates.first
       end
 
       context "when there is existing registration for the given person" do
         it "renders an error" do
-          registration = create(:registration, :accepted, competition: competition, events: %w[333])
+          registration = create(:registration, :accepted, competition: ots_competition, events: %w[333])
           user = registration.user
           expect {
-            post competition_registrations_do_add_path(competition), params: {
+            post competition_registrations_do_add_path(ots_competition), params: {
               registration_data: {
                 name: user.name, country: user.country.id, birth_date: user.dob,
                 gender: user.gender, email: user.email, event_ids: ["444"]
               },
             }
-          }.to(not_change { competition.registrations.count })
+          }.to(not_change { ots_competition.registrations.count })
           expect(response.body).to include "This person already has a registration."
         end
       end
@@ -466,22 +468,22 @@ RSpec.describe "registrations" do
           two_timer_dave = create(:user, name: "Two Timer Dave")
 
           series = create(:competition_series)
-          competition.update!(competition_series: series)
+          ots_competition.update!(competition_series: series)
 
           partner_competition = create(:competition, :with_delegate, :visible, event_ids: %w[333 555],
-                                                                               competition_series: series, series_base: competition)
+                                                                               competition_series: series, series_base: ots_competition)
 
           # make sure there is a dummy registration for the partner competition.
           create(:registration, :accepted, competition: partner_competition, user: two_timer_dave)
 
           expect {
-            post competition_registrations_do_add_path(competition), params: {
+            post competition_registrations_do_add_path(ots_competition), params: {
               registration_data: {
                 name: two_timer_dave.name, country: two_timer_dave.country.id, birth_date: two_timer_dave.dob,
                 gender: two_timer_dave.gender, email: two_timer_dave.email, event_ids: ["444"]
               },
             }
-          }.not_to(change { competition.registrations.count })
+          }.not_to(change { ots_competition.registrations.count })
           expect(response.body).to include "You can only be accepted for one Series competition at a time"
         end
       end
@@ -489,14 +491,14 @@ RSpec.describe "registrations" do
       context "when there is no existing registration for the given person" do
         it "creates an accepted registration" do
           expect {
-            post competition_registrations_do_add_path(competition), params: {
+            post competition_registrations_do_add_path(ots_competition), params: {
               registration_data: {
                 name: "Sherlock Holmes", country: "United Kingdom", birth_date: "2000-01-01",
                 gender: "m", email: "sherlock@example.com", event_ids: ["444"]
               },
             }
-          }.to change { competition.registrations.count }.by(1)
-          registration = competition.registrations.last
+          }.to change { ots_competition.registrations.count }.by(1)
+          registration = ots_competition.registrations.last
           expect(registration.user.name).to eq "Sherlock Holmes"
           expect(registration.events.map(&:id)).to eq ["444"]
           expect(registration).to be_accepted
@@ -507,20 +509,102 @@ RSpec.describe "registrations" do
 
       context "when competitor limit has been reached" do
         it "redirects to competition page" do
-          create(:registration, :accepted, competition: competition, events: %w[333])
-          competition.update!(
+          create(:registration, :accepted, competition: ots_competition, events: %w[333])
+          ots_competition.update!(
             competitor_limit_enabled: true, competitor_limit: 1, competitor_limit_reason: "So I take all the podiums",
           )
           expect {
-            post competition_registrations_do_add_path(competition), params: {
+            post competition_registrations_do_add_path(ots_competition), params: {
               registration_data: {
                 name: "Sherlock Holmes", country: "United Kingdom", birth_date: "2000-01-01",
                 gender: "m", email: "sherlock@example.com", event_ids: ["444"]
               },
             }
-          }.not_to(change { competition.registrations.count })
+          }.not_to(change { ots_competition.registrations.count })
           follow_redirect!
           expect(response.body).to include "The competitor limit has been reached"
+        end
+      end
+
+      describe "on the spot behaviour" do
+        let(:open_comp) { create(:competition, :registration_open, delegates: [ots_competition.delegates.first]) }
+        let(:closed_comp) { create(:competition, :registration_closed, delegates: [ots_competition.delegates.first]) }
+        let(:past_comp) { create(:competition, :past, delegates: [ots_competition.delegates.first]) }
+
+        context 'on-the-spot is enabled' do
+          it 'works when registration is open' do
+            open_comp.update!(on_the_spot_registration: true, on_the_spot_entry_fee_lowest_denomination: 500)
+
+            expect {
+              post competition_registrations_do_add_path(open_comp), params: {
+                registration_data: {
+                  name: "Sherlock Holmes", country: "United Kingdom", birth_date: "2000-01-01",
+                  gender: "m", email: "sherlock@example.com", event_ids: ["444"]
+                },
+              }
+            }.to(change { open_comp.registrations.count })
+          end
+
+          it 'works when registration is closed' do
+            closed_comp.update!(on_the_spot_registration: true, on_the_spot_entry_fee_lowest_denomination: 500)
+
+            expect {
+              post competition_registrations_do_add_path(closed_comp), params: {
+                registration_data: {
+                  name: "Sherlock Holmes", country: "United Kingdom", birth_date: "2000-01-01",
+                  gender: "m", email: "sherlock@example.com", event_ids: ["444"]
+                },
+              }
+            }.to(change { closed_comp.registrations.count })
+          end
+
+          it 'doesnt work after the end of the competition' do
+            past_comp.update!(on_the_spot_registration: true, on_the_spot_entry_fee_lowest_denomination: 500)
+
+            expect {
+              post competition_registrations_do_add_path(past_comp), params: {
+                registration_data: {
+                  name: "Sherlock Holmes", country: "United Kingdom", birth_date: "2000-01-01",
+                  gender: "m", email: "sherlock@example.com", event_ids: ["444"]
+                },
+              }
+            }.not_to(change { past_comp.registrations.count })
+          end
+        end
+
+        context 'on-the-spot is disabled' do
+          it 'works when registration is open' do
+            expect {
+              post competition_registrations_do_add_path(open_comp), params: {
+                registration_data: {
+                  name: "Sherlock Holmes", country: "United Kingdom", birth_date: "2000-01-01",
+                  gender: "m", email: "sherlock@example.com", event_ids: ["444"]
+                },
+              }
+            }.to(change { open_comp.registrations.count })
+          end
+
+          it 'doesnt work when registration is closed' do
+            expect {
+              post competition_registrations_do_add_path(closed_comp), params: {
+                registration_data: {
+                  name: "Sherlock Holmes", country: "United Kingdom", birth_date: "2000-01-01",
+                  gender: "m", email: "sherlock@example.com", event_ids: ["444"]
+                },
+              }
+            }.not_to(change { closed_comp.registrations.count })
+          end
+
+          it 'doesnt work after the end of the competition' do
+            expect {
+              post competition_registrations_do_add_path(past_comp), params: {
+                registration_data: {
+                  name: "Sherlock Holmes", country: "United Kingdom", birth_date: "2000-01-01",
+                  gender: "m", email: "sherlock@example.com", event_ids: ["444"]
+                },
+              }
+            }.not_to(change { past_comp.registrations.count })
+          end
         end
       end
     end
