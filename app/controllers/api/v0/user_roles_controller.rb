@@ -76,7 +76,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
       user = User.find(user_id)
       ban_reason = params[:banReason]
       scope = params[:scope]
-      upcoming_comps_for_user = user.competitions_registered_for.not_over.joins(:registrations).where.not(registrations: { competing_status: ['rejected', 'cancelled',] }).distinct
+      upcoming_comps_for_user = user.competitions_registered_for.not_over.joins(:registrations).where.not(registrations: { competing_status: %w[rejected cancelled] }).distinct
       upcoming_comps_for_user = upcoming_comps_for_user.between_dates(Date.today, end_date) if end_date.present?
       unless upcoming_comps_for_user.empty?
         return render status: :unprocessable_entity, json: {
