@@ -14,7 +14,6 @@ import { useConfirm } from '../../../lib/providers/ConfirmProvider';
 import { contactCompetitionUrl } from '../../../lib/requests/routes.js.erb';
 import RegistrationStatus from './RegistrationStatus';
 import { useRegistration } from '../lib/RegistrationProvider';
-import { isoMoneyToHumanReadable } from '../../../lib/helpers/money';
 
 export default function RegistrationOverview({
   nextStep, competitionInfo,
@@ -22,7 +21,7 @@ export default function RegistrationOverview({
   const dispatch = useDispatch();
   const confirm = useConfirm();
   const {
-    registration, isRejected, isAccepted, hasPaid,
+    registration, isRejected, isAccepted,
   } = useRegistration();
 
   const hasRegistrationEditDeadlinePassed = hasPassed(

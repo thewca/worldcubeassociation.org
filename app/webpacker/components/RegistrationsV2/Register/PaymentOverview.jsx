@@ -3,6 +3,7 @@ import {
   Accordion,
   Icon, Message,
 } from 'semantic-ui-react';
+import _ from 'lodash';
 import I18n from '../../../lib/i18n';
 import { useRegistration } from '../lib/RegistrationProvider';
 import { isoMoneyToHumanReadable } from '../../../lib/helpers/money';
