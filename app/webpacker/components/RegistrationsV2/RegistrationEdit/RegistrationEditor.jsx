@@ -91,23 +91,15 @@ export default function RegistrationEditor({ registrationId, competitor, competi
       const body = {
         user_id: competitor.id,
         competition_id: competitionInfo.id,
-        competing: {},
+        competing: {
+          comment: hasCommentChanged ? comment : undefined,
+          event_ids: hasEventsChanged ? selectedEventIds.asArray : undefined,
+          admin_comment: hasAdminCommentChanged ? adminComment : undefined,
+          status: hasStatusChanged ? status : undefined,
+        },
+        guests: hasGuestsChanged ? guests : undefined,
       };
-      if (hasEventsChanged) {
-        body.competing.event_ids = selectedEventIds.asArray;
-      }
-      if (hasCommentChanged) {
-        body.competing.comment = comment;
-      }
-      if (hasAdminCommentChanged) {
-        body.competing.admin_comment = adminComment;
-      }
-      if (hasStatusChanged) {
-        body.competing.status = status;
-      }
-      if (hasGuestsChanged) {
-        body.guests = guests;
-      }
+
       confirm({
         content: I18n.t('competitions.registration_v2.update.organizer_update_confirm'),
       }).then(() => {

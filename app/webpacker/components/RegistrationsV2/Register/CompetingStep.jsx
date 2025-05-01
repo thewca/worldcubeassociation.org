@@ -63,12 +63,11 @@ export default function CompetingStep({
   user,
   qualifications,
 }) {
-  const maxEvents = competitionInfo.events_per_registration_limit ?? Infinity;
   const {
     registration, isRegistered, hasPaid, isPolling, isProcessing, startPolling, refetchRegistration,
   } = useRegistration();
-  const dispatch = useDispatch();
 
+  const dispatch = useDispatch();
   const confirm = useConfirm();
 
   const [comment, setCommentRaw] = useFormObjectState('comment', ['competing']);
@@ -124,6 +123,7 @@ export default function CompetingStep({
 
   const hasChanges = hasEventsChanged || hasCommentChanged || hasGuestsChanged;
 
+  const maxEvents = competitionInfo.events_per_registration_limit ?? Infinity;
   const eventsAreValid = selectedEventIds.size > 0 && selectedEventIds.size <= maxEvents;
 
   const attemptAction = useCallback(
@@ -369,9 +369,7 @@ export default function CompetingStep({
               <>
                 <Button
                   primary
-                  disabled={
-                        isUpdating || !hasChanges
-                      }
+                  disabled={isUpdating || !hasChanges}
                   type="submit"
                 >
                   {I18n.t('registrations.update')}
