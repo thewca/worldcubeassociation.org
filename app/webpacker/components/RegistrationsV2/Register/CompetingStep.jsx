@@ -60,7 +60,7 @@ export default function CompetingStep({
 }) {
   const maxEvents = competitionInfo.events_per_registration_limit ?? Infinity;
   const {
-    registration, isRegistered, hasPaid, isPolling, isProcessing, startPolling, refetchRegistration,
+    registration, isRegistered, isPolling, isProcessing, startPolling, refetchRegistration,
   } = useRegistration();
   const dispatch = useDispatch();
 
