@@ -44,7 +44,7 @@
     <%= f.input :wrc_feedback_requested, as: :boolean %>
     <%= f.input :wrc_incidents %>
     <%= f.input :wic_feedback_requested, as: :boolean, input_html: {id:"wic_feedback_checkbox", data: {confirm_message: I18n.t("simple_form.hints.delegate_report.wic_incident_alert")}} %>
-    <%= f.input :wic_incidents, hint: I18n.t("simple_form.hints.delegate_report.wic_incidents", wic_incident_alert: I18n.t("simple_form.hints.delegate_report.wic_incident_alert")).html_safe %>
+    <%= f.input :wic_incidents, hint: t("simple_form.hints.delegate_report.wic_incidents_html", wic_incident_alert: t("simple_form.hints.delegate_report.wic_incident_alert")) %>
     <%# 'remarks' is the only Report section without a fixed template, so we include it irrespective of the version %>
     <%= f.input :remarks, input_html: { class: "markdown-editor markdown-editor-image-upload" } %>
 
