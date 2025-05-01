@@ -597,9 +597,7 @@ RSpec.describe Registration do
     it 'positive registration_payment calls registration.consider_auto_close' do
       competition = create(:competition)
       reg = create(:registration, competition: competition)
-      expect_any_instance_of(Registration).to receive(:consider_auto_close) do |instance|
-        expect(instance.id).to eq(reg.id)
-      end
+      expect(reg).to receive(:consider_auto_close)
 
       create(
         :registration_payment,
@@ -633,9 +631,7 @@ RSpec.describe Registration do
 
     it 'calls competition.attempt_auto_close! if reg is fully paid' do
       competition = create(:competition)
-      expect_any_instance_of(Competition).to receive(:attempt_auto_close!) do |instance|
-        expect(instance.id).to eq(competition.id)
-      end
+      expect(competition).to receive(:attempt_auto_close!)
 
       create(:registration, :paid, competition: competition)
     end
