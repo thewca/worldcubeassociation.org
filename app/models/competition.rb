@@ -2924,10 +2924,9 @@ class Competition < ApplicationRecord
     threshold_reached && update(closing_full_registration: true, registration_close: Time.now)
   end
 
-  def wcif_registrant_id_for(registration)
-    registrations.wcif_ordered.each.with_index(1) do |r, idx|
-      return idx if r.id == registration.id
+  def registrant_ids_map
+    @registrant_ids_map ||= registrations.wcif_ordered.each.with_index(1).to_h do |registration, idx|
+      [registration.id, idx]
     end
-    nil
   end
 end
