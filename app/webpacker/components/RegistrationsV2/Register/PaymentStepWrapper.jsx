@@ -32,7 +32,16 @@ export default function PaymentStepWrapper({
   }
 
   if (payments.length > 0) {
-    return <PaymentOverview payments={payments} />;
+    return (
+      <PaymentOverview
+        payments={payments}
+        competitionInfo={competitionInfo}
+        connectedAccountId={connectedAccountId}
+        nextStep={nextStep}
+        stripePublishableKey={stripePublishableKey}
+        user={user}
+      />
+    );
   }
 
   if (hasPassed(competitionInfo.registration_close)) {

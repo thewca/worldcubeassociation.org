@@ -1257,6 +1257,9 @@ en:
     registration_full: "The competitor limit for this competition is %{competitor_limit} and it has already been reached. If you register, your registration will be placed on a waiting list. It may not be approved unless a spot frees up."
     registration_full_include_waiting_list: "The competitor limit for this competition is %{competitor_limit} and it may be filled. If you register, your registration will be placed on a waiting list. It may not be approved unless a spot frees up."
     entry_fees_fully_paid: "You have paid %{paid}, which fully covers the registration fees."
+    entry_fees_partially_paid: "You have paid %{paid} of %{total}. Check with the organizers if you need to pay the rest."
+    entry_fees_fully_refunded: "Your registration fees were fully refunded. If you need to pay again, you can do so below"
+    entry_fees_pay_again: "I want to pay again"
     will_pay_here: "You will pay them here after submitting your registration"
     wont_pay_here: "Please check the competition's information for instructions about how to pay"
     refund_form:
