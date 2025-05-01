@@ -501,7 +501,7 @@ en:
         wrc_feedback_requested: ""
         wrc_incidents: "List of numbers referencing any incidents that you would like the WRC's feedback on."
         wic_feedback_requested: ""
-        wic_incidents_html: "List of numbers referencing any incidents that you would like the WIC's feedback on. <strong>%{wic_incident_alert}</strong>"
+        wic_incidents_html: "List of numbers referencing any incidents that you would like the WIC's feedback on. <br> <strong>%{wic_incident_alert}</strong>"
         wic_incident_alert: "If the WIC incident is sensitive (including but not limited to crimes, harassment, assault, etc.), please exclude this from your report and email the WIC separately. For other WIC incidents, default to a brief, anonymized version of the incident and follow-up with the WIC privately with further details. The WIC will still provide feedback on anonymized versions for general awareness. For all WIC incidents involving a WCA Volunteer, please exclude all details from the report, and contact the WIC privately."
         remarks: "Talk about any other detail that you'd like to share (e.g., improvement/regression within the community, future plans for this region). If for the sake of conciseness you left something unsaid in the previous sections, feel free to comment them here."
         discussion_url: ""
