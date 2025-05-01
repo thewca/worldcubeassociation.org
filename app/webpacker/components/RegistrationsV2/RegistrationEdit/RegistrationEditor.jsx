@@ -262,7 +262,6 @@ export default function RegistrationEditor({ registrationId, competitor, competi
               competitionId={competitionInfo.id}
               registrationId={registrationId}
               onSuccess={refetchRegistration}
-              competitorsInfo={competitorsInfo}
             />
           )}
         </>
