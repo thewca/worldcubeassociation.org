@@ -22,7 +22,7 @@ const editableRegistrationStates = ['accepted', 'pending', 'waiting_list'];
 const defaultRegistration = (defaultEvents = []) => ({
   competing: {
     event_ids: defaultEvents,
-    comment: null,
+    comment: '',
   },
   guests: 0,
 });
@@ -139,7 +139,12 @@ function Register({
     || (userCanPreRegister && registrationNotYetClosed)
     || hasEditableRegistration;
 
-  const formRegistration = buildFormRegistration(registration);
+  const formRegistration = buildFormRegistration({
+    registration,
+    competitionInfo,
+    preferredEvents,
+    qualifications,
+  });
 
   return (
     <>
