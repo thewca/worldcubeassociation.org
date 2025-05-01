@@ -1199,8 +1199,8 @@ class Competition < ApplicationRecord
     self.on_the_spot_registration_changed? && self.on_the_spot_registration?
   end
 
-  validate :on_the_spot_registration_must_be_valid
-  private def on_the_spot_registration_must_be_valid
+  validate :enforce_edit_deadline_ots_consistency
+  private def enforce_edit_deadline_ots_consistency
     errors.add(:on_the_spot_registration, I18n.t('competitions.errors.on_the_spot_with_past_event_change_deadline')) if enabling_on_the_spot_registration? && event_change_deadline_date&.past?
   end
 
