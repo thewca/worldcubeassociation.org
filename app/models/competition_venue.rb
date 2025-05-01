@@ -75,7 +75,7 @@ class CompetitionVenue < ApplicationRecord
         "rooms" => { "type" => "array", "items" => VenueRoom.wcif_json_schema },
         "extensions" => { "type" => "array", "items" => WcifExtension.wcif_json_schema },
       },
-      "required" => ["id", "name", "latitudeMicrodegrees", "countryIso2", "longitudeMicrodegrees", "timezone", "rooms"],
+      "required" => %w[id name latitudeMicrodegrees countryIso2 longitudeMicrodegrees timezone rooms],
     }
   end
 

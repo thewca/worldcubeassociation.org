@@ -27,7 +27,7 @@ Rails.application.routes.draw do
   devise_scope :user do
     get 'staging_login', to: 'sessions#staging_oauth_login' unless EnvConfig.WCA_LIVE_SITE?
     resource :registration,
-             only: [:new, :create],
+             only: %i[new create],
              path: 'users',
              path_names: { new: 'sign_up' },
              controller: 'accounts/registrations',
@@ -44,7 +44,7 @@ Rails.application.routes.draw do
   get 'competitions/:competition_id/payment-completion/:payment_integration' => 'registrations#payment_completion', as: :registration_payment_completion
   post 'registration/stripe-webhook' => 'registrations#stripe_webhook', as: :registration_stripe_webhook
   get 'registration/:competition_id/:user_id/payment-denomination' => 'registrations#payment_denomination', as: :registration_payment_denomination
-  resources :users, only: [:index, :edit, :update]
+  resources :users, only: %i[index edit update]
   get 'profile/edit' => 'users#edit'
   post 'profile/enable-2fa' => 'users#enable_2fa'
   post 'profile/disable-2fa' => 'users#disable_2fa'
@@ -97,7 +97,7 @@ Rails.application.routes.draw do
     post 'registrations/add' => 'registrations#do_add', as: :registrations_do_add
     get 'registrations/psych-sheet' => 'registrations#psych_sheet', as: :psych_sheet
     get 'registrations/psych-sheet/:event_id' => 'registrations#psych_sheet_event', as: :psych_sheet_event
-    resources :registrations, only: [:index, :update, :create, :edit, :destroy], shallow: true do
+    resources :registrations, only: %i[index update create edit destroy], shallow: true do
       get 'payments' => 'payment#registration_payments', as: :payments
     end
     get 'edit/registrations' => 'registrations#edit_registrations'
@@ -167,13 +167,13 @@ Rails.application.routes.draw do
   get 'results/records' => 'results#records', as: :records
 
   scope '/admin' do
-    resources :results, except: [:index, :new], controller: 'admin/results'
-    resources :scrambles, except: [:index, :new], controller: 'admin/scrambles'
+    resources :results, except: %i[index new], controller: 'admin/results'
+    resources :scrambles, except: %i[index new], controller: 'admin/scrambles'
     get 'events_data/:competition_id' => 'admin/results#show_events_data', as: :competition_events_data
   end
 
   get "media/validate" => 'media#validate', as: :validate_media
-  resources :media, only: [:index, :new, :create, :edit, :update, :destroy]
+  resources :media, only: %i[index new create edit update destroy]
 
   get 'export/results' => 'database#results_export', as: :db_results_export
   get 'export/results/WCA_export.sql' => 'database#sql_permalink', as: :sql_permalink
@@ -184,14 +184,14 @@ Rails.application.routes.draw do
   get 'wst/wca-developer-database-dump.zip', to: redirect(DbDumpHelper.public_s3_path(DbDumpHelper::DEVELOPER_EXPORT_SQL_PERMALINK))
 
   get 'persons/new_id' => 'admin/persons#generate_ids'
-  resources :persons, only: [:index, :show]
+  resources :persons, only: %i[index show]
   post 'persons' => 'admin/persons#create'
 
-  resources :polls, only: [:edit, :new, :vote, :create, :update, :index, :destroy]
+  resources :polls, only: %i[edit new vote create update index destroy]
   get 'polls/:id/vote' => 'votes#vote', as: 'polls_vote'
   get 'polls/:id/results' => 'polls#results', as: 'polls_results'
 
-  resources :votes, only: [:create, :update]
+  resources :votes, only: %i[create update]
 
   post 'competitions/:id/post_results' => 'competitions#post_results', as: :competition_post_results
 
@@ -217,10 +217,10 @@ Rails.application.routes.draw do
     get 'details_before_anonymization' => 'tickets#details_before_anonymization', as: :tickets_details_before_anonymization
     post 'anonymize' => 'tickets#anonymize', as: :tickets_anonymize
   end
-  resources :tickets, only: [:index, :show] do
+  resources :tickets, only: %i[index show] do
     post 'update_status' => 'tickets#update_status', as: :update_status
     get 'edit_person_validators' => 'tickets#edit_person_validators', as: :edit_person_validators
-    resources :ticket_comments, only: [:index, :create], as: :comments
+    resources :ticket_comments, only: %i[index create], as: :comments
     resources :ticket_logs, only: [:index], as: :logs
   end
   resources :notifications, only: [:index]
@@ -260,7 +260,7 @@ Rails.application.routes.draw do
   get 'translators' => 'static_pages#translators'
   get 'officers-and-board' => 'static_pages#officers_and_board'
 
-  resources :regional_organizations, only: [:new, :create, :update, :edit, :destroy], path: '/regional-organizations'
+  resources :regional_organizations, only: %i[new create update edit destroy], path: '/regional-organizations'
   get 'organizations' => 'regional_organizations#index'
   get 'admin/regional-organizations' => 'regional_organizations#admin'
 
@@ -318,12 +318,12 @@ Rails.application.routes.draw do
   # WFC section
   scope 'wfc' do
     get '/competitions_export' => 'wfc#competition_export', defaults: { format: :csv }, as: :wfc_competitions_export
-    resources :country_bands, only: [:index, :update, :edit], path: '/country-bands'
+    resources :country_bands, only: %i[index update edit], path: '/country-bands'
   end
 
   scope :archive do
     # NOTE: This is meant for displaying old content of the phpBB forum. It is DEPRECATED!
-    resources :forums, only: [:index, :show]
+    resources :forums, only: %i[index show]
     resources :forum_topics, only: [:show]
   end
 
@@ -395,7 +395,7 @@ Rails.application.routes.draw do
       get '/competition_series/:id' => 'api#competition_series'
       get '/competition_index' => 'competitions#competition_index', as: :competition_index
 
-      resources :competitions, only: [:index, :show] do
+      resources :competitions, only: %i[index show] do
         get '/wcif' => 'competitions#show_wcif'
         get '/wcif/public' => 'competitions#show_wcif_public'
         get '/results' => 'competitions#results', as: :results
@@ -415,16 +415,16 @@ Rails.application.routes.draw do
       scope 'user_roles' do
         get '/search' => 'user_roles#search', as: :user_roles_search
       end
-      resources :user_roles, only: [:index, :show, :create, :update, :destroy]
-      resources :user_groups, only: [:index, :create, :update]
+      resources :user_roles, only: %i[index show create update destroy]
+      resources :user_groups, only: %i[index create update]
       namespace :wrt do
-        resources :persons, only: [:update, :destroy] do
+        resources :persons, only: %i[update destroy] do
           put '/reset_claim_count' => 'persons#reset_claim_count', as: :reset_claim_count
         end
       end
       namespace :wfc do
-        resources :xero_users, only: [:index, :create, :update]
-        resources :dues_redirects, only: [:index, :create, :destroy]
+        resources :xero_users, only: %i[index create update]
+        resources :dues_redirects, only: %i[index create destroy]
       end
     end
   end

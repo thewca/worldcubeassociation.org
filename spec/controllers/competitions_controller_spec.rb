@@ -1126,15 +1126,15 @@ RSpec.describe CompetitionsController do
   describe 'GET #my_competitions', :clean_db_with_truncation do
     let(:delegate) { create(:delegate) }
     let(:organizer) { create(:user) }
-    let!(:future_competition1) { create(:competition, :registration_open, starts: 5.weeks.from_now, organizers: [organizer], delegates: [delegate], events: Event.where(id: %w(222 333))) }
-    let!(:future_competition2) { create(:competition, :registration_open, starts: 4.weeks.from_now, organizers: [organizer], events: Event.where(id: %w(222 333))) }
-    let!(:future_competition3) { create(:competition, :registration_open, starts: 3.weeks.from_now, organizers: [organizer], events: Event.where(id: %w(222 333))) }
-    let!(:future_competition4) { create(:competition, :registration_open, starts: 3.weeks.from_now, organizers: [], events: Event.where(id: %w(222 333))) }
-    let!(:past_competition1) { create(:competition, starts: 1.month.ago, organizers: [organizer], events: Event.where(id: %w(222 333))) }
-    let!(:past_competition2) { create(:competition, starts: 2.months.ago, delegates: [delegate], events: Event.where(id: %w(222 333))) }
-    let!(:past_competition3) { create(:competition, starts: 3.months.ago, delegates: [delegate], events: Event.where(id: %w(222 333))) }
-    let!(:past_competition4) { create(:competition, :results_posted, starts: 4.months.ago, delegates: [delegate], events: Event.where(id: %w(222 333))) }
-    let!(:unscheduled_competition1) { create(:competition, starts: nil, ends: nil, delegates: [delegate], events: Event.where(id: %w(222 333))) }
+    let!(:future_competition1) { create(:competition, :registration_open, starts: 5.weeks.from_now, organizers: [organizer], delegates: [delegate], events: Event.where(id: %w[222 333])) }
+    let!(:future_competition2) { create(:competition, :registration_open, starts: 4.weeks.from_now, organizers: [organizer], events: Event.where(id: %w[222 333])) }
+    let!(:future_competition3) { create(:competition, :registration_open, starts: 3.weeks.from_now, organizers: [organizer], events: Event.where(id: %w[222 333])) }
+    let!(:future_competition4) { create(:competition, :registration_open, starts: 3.weeks.from_now, organizers: [], events: Event.where(id: %w[222 333])) }
+    let!(:past_competition1) { create(:competition, starts: 1.month.ago, organizers: [organizer], events: Event.where(id: %w[222 333])) }
+    let!(:past_competition2) { create(:competition, starts: 2.months.ago, delegates: [delegate], events: Event.where(id: %w[222 333])) }
+    let!(:past_competition3) { create(:competition, starts: 3.months.ago, delegates: [delegate], events: Event.where(id: %w[222 333])) }
+    let!(:past_competition4) { create(:competition, :results_posted, starts: 4.months.ago, delegates: [delegate], events: Event.where(id: %w[222 333])) }
+    let!(:unscheduled_competition1) { create(:competition, starts: nil, ends: nil, delegates: [delegate], events: Event.where(id: %w[222 333])) }
     let(:registered_user) { create(:user, name: "Jan-Ove Waldner") }
     let!(:registration1) { create(:registration, :accepted, competition: future_competition1, user: registered_user) }
     let!(:registration2) { create(:registration, :accepted, competition: future_competition3, user: registered_user) }

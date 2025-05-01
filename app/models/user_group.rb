@@ -181,7 +181,7 @@ class UserGroup < ApplicationRecord
   # Unique status means that there can only be one active user with this status in the group.
   def unique_status?(status)
     if self.group_type == UserGroup.group_types[:delegate_regions]
-      ["senior_delegate", "regional_delegate"].include?(status)
+      %w[senior_delegate regional_delegate].include?(status)
     elsif [UserGroup.group_types[:teams_committees], UserGroup.group_types[:councils]].include?(self.group_type)
       status == "leader"
     else

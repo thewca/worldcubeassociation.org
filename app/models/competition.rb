@@ -94,9 +94,9 @@ class Competition < ApplicationRecord
     restricted: 2,
   }, prefix: true
 
-  enum :competitor_can_cancel, [:not_accepted, :always, :unpaid], prefix: true
+  enum :competitor_can_cancel, %i[not_accepted always unpaid], prefix: true
 
-  CLONEABLE_ATTRIBUTES = %w(
+  CLONEABLE_ATTRIBUTES = %w[
     city_name
     country_id
     information
@@ -131,8 +131,8 @@ class Competition < ApplicationRecord
     guests_entry_fee_lowest_denomination
     guest_entry_status
     competitor_can_cancel
-  ).freeze
-  UNCLONEABLE_ATTRIBUTES = %w(
+  ].freeze
+  UNCLONEABLE_ATTRIBUTES = %w[
     id
     start_date
     end_date
@@ -173,7 +173,7 @@ class Competition < ApplicationRecord
     auto_accept_registrations
     auto_accept_disable_threshold
     newcomer_month_reserved_spots
-  ).freeze
+  ].freeze
   VALID_NAME_RE = /\A([-&.:' [:alnum:]]+) (\d{4})\z/
   VALID_ID_RE = /\A[a-zA-Z0-9]+\Z/
   PATTERN_LINK_RE = /\[\{([^}]+)}\{((https?:|mailto:)[^}]+)}\]/
@@ -410,7 +410,7 @@ class Competition < ApplicationRecord
     expected_activity_codes = rounds.flat_map do |r|
       # Logic similar to "ActivitiesForRound"
       # from app/javascript/edit-schedule/SchedulesEditor/ActivityPicker.jsx
-      if ["333mbf", "333fm"].include?(r.event.id)
+      if %w[333mbf 333fm].include?(r.event.id)
         (1..r.format.expected_solve_count).map do |i|
           "#{r.wcif_id}-a#{i}"
         end
@@ -859,7 +859,7 @@ class Competition < ApplicationRecord
   def update_foreign_keys
     Competition.reflect_on_all_associations.uniq(&:klass).each do |association_reflection|
       foreign_key = association_reflection.foreign_key
-      association_reflection.klass.where(foreign_key => id_before_last_save).update_all(foreign_key => id) if ["competition_id", "competitionId"].include?(foreign_key)
+      association_reflection.klass.where(foreign_key => id_before_last_save).update_all(foreign_key => id) if %w[competition_id competitionId].include?(foreign_key)
     end
   end
 
@@ -1710,7 +1710,7 @@ class Competition < ApplicationRecord
     if params[:admin_status].present?
       admin_status = params[:admin_status].to_s
 
-      raise WcaExceptions::BadApiParameter.new("Invalid admin status: '#{params[:admin_status]}'") unless ["danger", "warning"].include?(admin_status)
+      raise WcaExceptions::BadApiParameter.new("Invalid admin status: '#{params[:admin_status]}'") unless %w[danger warning].include?(admin_status)
 
       num_days = {
         warning: Competition::REPORT_AND_RESULTS_DAYS_WARNING,
@@ -1721,11 +1721,11 @@ class Competition < ApplicationRecord
     end
 
     query&.split&.each do |part|
-      like_query = %w(id name cell_name city_name country_id).map { |column| "competitions.#{column} LIKE :part" }.join(" OR ")
+      like_query = %w[id name cell_name city_name country_id].map { |column| "competitions.#{column} LIKE :part" }.join(" OR ")
       competitions = competitions.where(like_query, part: "%#{part}%")
     end
 
-    orderable_fields = %i(name start_date end_date announced_at)
+    orderable_fields = %i[name start_date end_date announced_at]
     order = if params[:sort]
               params[:sort].split(',')
                            .map do |part|
@@ -1825,7 +1825,7 @@ class Competition < ApplicationRecord
     includes_associations = [
       { assignments: [:schedule_activity] },
       { user: {
-        person: [:ranks_single, :ranks_average],
+        person: %i[ranks_single ranks_average],
       } },
       :wcif_extensions,
       :events,
@@ -1850,7 +1850,7 @@ class Competition < ApplicationRecord
 
   def events_wcif
     includes_associations = [
-      { rounds: [:competition_event, :wcif_extensions] },
+      { rounds: %i[competition_event wcif_extensions] },
       :wcif_extensions,
     ]
     competition_events
@@ -1864,7 +1864,7 @@ class Competition < ApplicationRecord
       {
         venue_rooms: [
           :wcif_extensions,
-          { schedule_activities: [{ child_activities: [:child_activities, :wcif_extensions] }, :wcif_extensions] },
+          { schedule_activities: [{ child_activities: %i[child_activities wcif_extensions] }, :wcif_extensions] },
         ],
       },
       :wcif_extensions,
@@ -1929,7 +1929,7 @@ class Competition < ApplicationRecord
   def set_wcif_events!(wcif_events, current_user)
     # Remove extra events.
     competition_events_includes_assotiations = [
-      { rounds: [:competition_event, :wcif_extensions] },
+      { rounds: %i[competition_event wcif_extensions] },
       :wcif_extensions,
     ]
     self.competition_events.includes(competition_events_includes_assotiations).find_each do |competition_event|
@@ -1995,7 +1995,7 @@ class Competition < ApplicationRecord
       WcifExtension.update_wcif_extensions!(registration, wcif_person["extensions"]) if wcif_person["extensions"]
       # NOTE: person doesn't necessarily have corresponding registration (e.g. registratinless organizer/delegate).
       if wcif_person["roles"]
-        roles = wcif_person["roles"] - ["delegate", "trainee-delegate", "organizer"] # These three are added on the fly.
+        roles = wcif_person["roles"] - %w[delegate trainee-delegate organizer] # These three are added on the fly.
         # The additional roles are only for WCIF purposes and we don't validate them,
         # so we can safely skip validations by using update_attribute
         registration.update_attribute(:roles, roles)
@@ -2041,7 +2041,7 @@ class Competition < ApplicationRecord
       {
         venue_rooms: [
           :wcif_extensions,
-          { schedule_activities: [{ child_activities: [:child_activities, :wcif_extensions] }, :wcif_extensions] },
+          { schedule_activities: [{ child_activities: %i[child_activities wcif_extensions] }, :wcif_extensions] },
         ],
       },
       :wcif_extensions,
@@ -2076,7 +2076,7 @@ class Competition < ApplicationRecord
             "numberOfDays" => { "type" => "integer" },
           },
         },
-        "competitorLimit" => { "type" => ["integer", "null"] },
+        "competitorLimit" => { "type" => %w[integer null] },
         "extensions" => { "type" => "array", "items" => WcifExtension.wcif_json_schema },
         "registrationInfo" => {
           "type" => "object",
@@ -2105,13 +2105,13 @@ class Competition < ApplicationRecord
   end
 
   DEFAULT_SERIALIZE_OPTIONS = {
-    only: ["id", "name", "website", "start_date", "end_date",
-           "registration_open", "registration_close", "announced_at",
-           "cancelled_at", "results_posted_at", "competitor_limit", "venue"],
-    methods: ["url", "website", "short_name", "short_display_name", "city",
-              "venue_address", "venue_details", "latitude_degrees", "longitude_degrees",
-              "country_iso2", "event_ids", "time_until_registration", "date_range"],
-    include: ["delegates", "organizers"],
+    only: %w[id name website start_date end_date
+             registration_open registration_close announced_at
+             cancelled_at results_posted_at competitor_limit venue],
+    methods: %w[url website short_name short_display_name city
+                venue_address venue_details latitude_degrees longitude_degrees
+                country_iso2 event_ids time_until_registration date_range],
+    include: %w[delegates organizers],
   }.freeze
 
   def serializable_hash(options = nil)
@@ -2701,20 +2701,20 @@ class Competition < ApplicationRecord
         "competitionId" => { "type" => "string" },
         "name" => { "type" => "string" },
         "shortName" => { "type" => "string" },
-        "nameReason" => { "type" => ["string", "null"] },
+        "nameReason" => { "type" => %w[string null] },
         "venue" => {
           "type" => "object",
           "properties" => {
             "name" => { "type" => "string" },
             "cityName" => { "type" => "string" },
             "countryId" => { "type" => "string" },
-            "details" => { "type" => ["string", "null"] },
-            "address" => { "type" => ["string", "null"] },
+            "details" => { "type" => %w[string null] },
+            "address" => { "type" => %w[string null] },
             "coordinates" => {
               "type" => "object",
               "properties" => {
-                "lat" => { "type" => ["number", "string"] },
-                "long" => { "type" => ["number", "string"] },
+                "lat" => { "type" => %w[number string] },
+                "long" => { "type" => %w[number string] },
               },
             },
           },
@@ -2722,15 +2722,15 @@ class Competition < ApplicationRecord
         "startDate" => date_json_schema("date"),
         "endDate" => date_json_schema("date"),
         "series" => CompetitionSeries.form_data_json_schema,
-        "information" => { "type" => ["string", "null"] },
+        "information" => { "type" => %w[string null] },
         "competitorLimit" => {
           "type" => "object",
           "properties" => {
-            "enabled" => { "type" => ["boolean", "null"] },
-            "count" => { "type" => ["integer", "null"] },
-            "reason" => { "type" => ["string", "null"] },
-            "autoCloseThreshold" => { "type" => ["integer", "null"] },
-            "newcomerMonthReservedSpots" => { "type" => ["integer", "null"] },
+            "enabled" => { "type" => %w[boolean null] },
+            "count" => { "type" => %w[integer null] },
+            "reason" => { "type" => %w[string null] },
+            "autoCloseThreshold" => { "type" => %w[integer null] },
+            "newcomerMonthReservedSpots" => { "type" => %w[integer null] },
           },
         },
         "staff" => {
@@ -2751,7 +2751,7 @@ class Competition < ApplicationRecord
               "items" => { "type" => "integer" },
               "uniqueItems" => true,
             },
-            "contact" => { "type" => ["string", "null"] },
+            "contact" => { "type" => %w[string null] },
           },
         },
         "championships" => {
@@ -2762,9 +2762,9 @@ class Competition < ApplicationRecord
         "website" => {
           "type" => "object",
           "properties" => {
-            "generateWebsite" => { "type" => ["boolean", "null"] },
-            "externalWebsite" => { "type" => ["string", "null"] },
-            "externalRegistrationPage" => { "type" => ["string", "null"] },
+            "generateWebsite" => { "type" => %w[boolean null] },
+            "externalWebsite" => { "type" => %w[string null] },
+            "externalRegistrationPage" => { "type" => %w[string null] },
             "usesWcaRegistration" => { "type" => "boolean" },
             "usesWcaLive" => { "type" => "boolean" },
           },
@@ -2779,11 +2779,11 @@ class Competition < ApplicationRecord
           "type" => "object",
           "properties" => {
             "currencyCode" => { "type" => "string" },
-            "baseEntryFee" => { "type" => ["integer", "null"] },
-            "onTheSpotEntryFee" => { "type" => ["integer", "null"] },
-            "guestEntryFee" => { "type" => ["integer", "null"] },
-            "donationsEnabled" => { "type" => ["boolean", "null"] },
-            "refundPolicyPercent" => { "type" => ["integer", "null"] },
+            "baseEntryFee" => { "type" => %w[integer null] },
+            "onTheSpotEntryFee" => { "type" => %w[integer null] },
+            "guestEntryFee" => { "type" => %w[integer null] },
+            "donationsEnabled" => { "type" => %w[boolean null] },
+            "refundPolicyPercent" => { "type" => %w[integer null] },
             "refundPolicyLimitDate" => date_json_schema("date-time"),
           },
         },
@@ -2794,14 +2794,14 @@ class Competition < ApplicationRecord
             "closingDateTime" => date_json_schema("date-time"),
             "waitingListDeadlineDate" => date_json_schema("date-time"),
             "eventChangeDeadlineDate" => date_json_schema("date-time"),
-            "allowOnTheSpot" => { "type" => ["boolean", "null"] },
+            "allowOnTheSpot" => { "type" => %w[boolean null] },
             "competitorCanCancel" => { "type" => "string", "enum" => Competition.competitor_can_cancels.keys },
             "allowSelfEdits" => { "type" => "boolean" },
             "guestsEnabled" => { "type" => "boolean" },
             "guestEntryStatus" => { "type" => "string" },
-            "guestsPerRegistration" => { "type" => ["integer", "null"] },
-            "extraRequirements" => { "type" => ["string", "null"] },
-            "forceComment" => { "type" => ["boolean", "null"] },
+            "guestsPerRegistration" => { "type" => %w[integer null] },
+            "extraRequirements" => { "type" => %w[string null] },
+            "forceComment" => { "type" => %w[boolean null] },
           },
         },
         "eventRestrictions" => {
@@ -2811,36 +2811,36 @@ class Competition < ApplicationRecord
               "type" => "object",
               "properties" => {
                 "enabled" => { "type" => "boolean" },
-                "reason" => { "type" => ["string", "null"] },
+                "reason" => { "type" => %w[string null] },
               },
             },
             "earlyPuzzleSubmission" => {
               "type" => "object",
               "properties" => {
                 "enabled" => { "type" => "boolean" },
-                "reason" => { "type" => ["string", "null"] },
+                "reason" => { "type" => %w[string null] },
               },
             },
             "qualificationResults" => {
               "type" => "object",
               "properties" => {
                 "enabled" => { "type" => "boolean" },
-                "reason" => { "type" => ["string", "null"] },
-                "allowRegistrationWithout" => { "type" => ["boolean", "null"] },
+                "reason" => { "type" => %w[string null] },
+                "allowRegistrationWithout" => { "type" => %w[boolean null] },
               },
             },
             "eventLimitation" => {
               "type" => "object",
               "properties" => {
                 "enabled" => { "type" => "boolean" },
-                "reason" => { "type" => ["string", "null"] },
-                "perRegistrationLimit" => { "type" => ["integer", "null"] },
+                "reason" => { "type" => %w[string null] },
+                "perRegistrationLimit" => { "type" => %w[integer null] },
               },
             },
-            "mainEventId" => { "type" => ["string", "null"] },
+            "mainEventId" => { "type" => %w[string null] },
           },
         },
-        "remarks" => { "type" => ["string", "null"] },
+        "remarks" => { "type" => %w[string null] },
         "admin" => {
           "type" => "object",
           "properties" => {
@@ -2851,7 +2851,7 @@ class Competition < ApplicationRecord
         "cloning" => {
           "type" => "object",
           "properties" => {
-            "fromId" => { "type" => ["string", "null"] },
+            "fromId" => { "type" => %w[string null] },
             "cloneTabs" => { "type" => "boolean" },
           },
         },
@@ -2880,7 +2880,7 @@ class Competition < ApplicationRecord
       "type" => "object",
       "additionalProperties" => false,
       "properties" => {
-        "information" => { "type" => ["string", "null"] },
+        "information" => { "type" => %w[string null] },
         "staff" => {
           "type" => "object",
           "additionalProperties" => false,
@@ -2888,14 +2888,14 @@ class Competition < ApplicationRecord
             "staffDelegateIds" => self.array_change_json_schema(type: "integer"),
             "traineeDelegateIds" => self.array_change_json_schema(type: "integer"),
             "organizerIds" => self.array_change_json_schema(type: "integer"),
-            "contact" => { "type" => ["string", "null"] },
+            "contact" => { "type" => %w[string null] },
           },
         },
         "website" => {
           "type" => "object",
           "additionalProperties" => false,
           "properties" => {
-            "externalWebsite" => { "type" => ["string", "null"] },
+            "externalWebsite" => { "type" => %w[string null] },
             "usesWcaLive" => { "type" => "boolean" },
           },
         },
@@ -2903,8 +2903,8 @@ class Competition < ApplicationRecord
           "type" => "object",
           "additionalProperties" => false,
           "properties" => {
-            "onTheSpotEntryFee" => { "type" => ["integer", "null"] },
-            "donationsEnabled" => { "type" => ["boolean", "null"] },
+            "onTheSpotEntryFee" => { "type" => %w[integer null] },
+            "donationsEnabled" => { "type" => %w[boolean null] },
           },
         },
         "registration" => {
@@ -2914,17 +2914,17 @@ class Competition < ApplicationRecord
             "closingDateTime" => date_json_schema("date-time"),
             "waitingListDeadlineDate" => date_json_schema("date-time"),
             "eventChangeDeadlineDate" => date_json_schema("date-time"),
-            "allowOnTheSpot" => { "type" => ["boolean", "null"] },
+            "allowOnTheSpot" => { "type" => %w[boolean null] },
             "competitorCanCancel" => { "type" => "string", "enum" => Competition.competitor_can_cancels.keys },
             "allowSelfEdits" => { "type" => "boolean" },
-            "forceComment" => { "type" => ["boolean", "null"] },
+            "forceComment" => { "type" => %w[boolean null] },
           },
         },
         "eventRestrictions" => {
           "type" => "object",
           "additionalProperties" => false,
           "properties" => {
-            "mainEventId" => { "type" => ["string", "null"] },
+            "mainEventId" => { "type" => %w[string null] },
           },
         },
       },
