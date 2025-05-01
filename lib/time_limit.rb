@@ -72,7 +72,7 @@ class TimeLimit
 
   def self.wcif_json_schema
     {
-      "type" => ["object", "null"],
+      "type" => %w[object null],
       "properties" => {
         "centiseconds" => { "type" => "integer" },
         "cumulativeRoundIds" => { "type" => "array", "items" => { "type" => "string" } },

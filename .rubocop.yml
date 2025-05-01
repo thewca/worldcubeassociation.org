@@ -131,9 +131,6 @@ Style/MultilineBlockChain:
 Style/Next:
   Enabled: false
 
-Style/PercentLiteralDelimiters:
-  Enabled: false
-
 Style/RaiseArgs:
   EnforcedStyle: compact
 
@@ -143,21 +140,12 @@ Style/SignalException:
 Layout/IndentationConsistency:
   EnforcedStyle: indented_internal_methods
 
-Style/StringLiteralsInInterpolation:
-  Enabled: false
-
-Style/SymbolArray:
-  Enabled: false
-
 # This causes a bunch of false positives as of 2025-03-17
 Rails/ActionControllerFlashBeforeRender:
   Enabled: false
 
 # We currently have a couple enums that are defined with Arrays, disabling for now
 Rails/EnumHash:
-  Enabled: false
-
-Style/WordArray:
   Enabled: false
 
 Style/SymbolProc:

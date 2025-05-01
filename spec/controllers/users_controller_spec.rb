@@ -143,7 +143,7 @@ RSpec.describe UsersController do
     it "user can change his preferred events" do
       sign_in user
       patch :update, params: { id: user.id, user: { user_preferred_events_attributes: [{ event_id: "333" }, { event_id: "444" }, { event_id: "clock" }] } }
-      expect(user.reload.preferred_events.map(&:id)).to eq %w(333 444 clock)
+      expect(user.reload.preferred_events.map(&:id)).to eq %w[333 444 clock]
     end
 
     context "after creating a pending registration" do

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class TestDbManager
-  CONSTANT_TABLES = %w(
+  CONSTANT_TABLES = %w[
     continents
     countries
     eligible_country_iso2s_for_championship
@@ -17,7 +17,7 @@ class TestDbManager
     groups_metadata_teams_committees
     groups_metadata_translators
     country_band_details
-  ).freeze
+  ].freeze
 
   def self.fill_tables
     Rails.application.load_tasks

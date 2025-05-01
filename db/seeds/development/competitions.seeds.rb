@@ -61,7 +61,7 @@ after "development:users", "development:user_roles" do
 
     competition.competition_events.each do |competition_event|
       event = competition_event.event
-      round_types = %w(1 2 f).freeze
+      round_types = %w[1 2 f].freeze
 
       round_types.each_with_index do |round_type_id, j|
         round_format = event.preferred_formats.first.format

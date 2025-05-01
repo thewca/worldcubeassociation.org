@@ -4,8 +4,8 @@ require 'rails_helper'
 
 RSpec.describe LiveResult do
   describe "calculates if live results are complete" do
-    let(:competition) { create(:competition, :registration_open, event_ids: ["333", "666"]) }
-    let(:registration) { create(:registration, :accepted, competition: competition, event_ids: ["333", "666"]) }
+    let(:competition) { create(:competition, :registration_open, event_ids: %w[333 666]) }
+    let(:registration) { create(:registration, :accepted, competition: competition, event_ids: %w[333 666]) }
 
     it "for rounds with means" do
       round = create(:round, competition: competition, event_id: "666", format_id: 'm')

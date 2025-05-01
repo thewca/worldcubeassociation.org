@@ -16,7 +16,7 @@ module UsersHelper
   end
 
   def tab_to_show(section)
-    if !@recently_authenticated && %w(email password 2fa).include?(section)
+    if !@recently_authenticated && %w[email password 2fa].include?(section)
       "2fa-check"
     else
       section

@@ -44,7 +44,7 @@ module Registrations
     end
 
     def self.qualification_data(event, type, time, date)
-      raise ArgumentError.new("'type' may only contain the symbols `:single` or `:average`") unless [:single, :average].include?(type)
+      raise ArgumentError.new("'type' may only contain the symbols `:single` or `:average`") unless %i[single average].include?(type)
 
       {
         eventId: event,

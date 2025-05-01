@@ -3,7 +3,7 @@
 # Copied from https://github.com/doorkeeper-gem/doorkeeper/wiki/Associate-users-to-OAuth-applications-%28ownership%29#controllers
 class Oauth::ApplicationsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_application, only: [:show, :edit, :update, :destroy]
+  before_action :set_application, only: %i[show edit update destroy]
 
   def index
     @applications = current_user.admin? ? Doorkeeper::Application.all : current_user.oauth_applications
