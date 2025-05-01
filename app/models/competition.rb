@@ -2923,4 +2923,11 @@ class Competition < ApplicationRecord
     threshold_reached = fully_paid_registrations_count >= auto_close_threshold && auto_close_threshold.positive?
     threshold_reached && update(closing_full_registration: true, registration_close: Time.now)
   end
+
+  def wcif_registrant_id_for(registration)
+    registrations.wcif_ordered.each.with_index(1) do |r, idx|
+      return idx if r.id == registration.id
+    end
+    nil
+  end
 end

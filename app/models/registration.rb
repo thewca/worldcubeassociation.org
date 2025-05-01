@@ -255,6 +255,7 @@ class Registration < ApplicationRecord
     base_json = {
       id: id,
       user: user.as_json(only: %w[id wca_id name gender country_iso2], methods: %w[country], include: [], private_attributes: private_attributes),
+      registrant_id: competition.wcif_registrant_id_for(self),
       user_id: user_id,
       competing: {
         event_ids: event_ids,
