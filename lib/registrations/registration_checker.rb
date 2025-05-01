@@ -33,12 +33,12 @@ module Registrations
 
         competing_payload = raw_payload['competing']
         comment = competing_payload&.dig('comment')
-        admin_comment = competing_payload&.dig('admin_comment')
+        organizer_comment = competing_payload&.dig('organizer_comment')
         competing_status = competing_payload&.dig('status')
         waiting_list_position = competing_payload&.dig('waiting_list_position')
 
         new_registration.comments = comment if competing_payload&.key?('comment')
-        new_registration.administrative_notes = admin_comment if competing_payload&.key?('admin_comment')
+        new_registration.administrative_notes = organizer_comment if competing_payload&.key?('organizer_comment')
         new_registration.competing_status = competing_status if competing_payload&.key?('status')
         new_registration.waiting_list_position = waiting_list_position if competing_payload&.key?('waiting_list_position')
 
@@ -73,7 +73,7 @@ module Registrations
       # Migrated to ActiveRecord-style validations
       validate_guests!(updated_registration)
       validate_comment!(updated_registration)
-      validate_admin_comment!(updated_registration)
+      validate_organizer_comment!(updated_registration)
       validate_registration_events!(updated_registration)
       validate_status_value!(updated_registration)
       validate_waiting_list_position!(updated_registration)
@@ -131,7 +131,7 @@ module Registrations
         process_validation_error!(registration, :comments)
       end
 
-      def validate_admin_comment!(registration)
+      def validate_organizer_comment!(registration)
         process_validation_error!(registration, :administrative_notes)
       end
 

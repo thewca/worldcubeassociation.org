@@ -31,7 +31,7 @@ import useSet from '../../../lib/hooks/useSet';
 export default function RegistrationEditor({ registrationId, competitor, competitionInfo }) {
   const dispatch = useDispatch();
   const [comment, setComment] = useState('');
-  const [adminComment, setAdminComment] = useState('');
+  const [organizerComment, setOrganizerComment] = useState('');
   const [status, setStatus] = useState('');
   const [guests, setGuests] = useState(0);
   const selectedEventIds = useSet();
@@ -87,7 +87,7 @@ export default function RegistrationEditor({ registrationId, competitor, competi
       setComment(serverRegistration.competing.comment ?? '');
       setStatus(serverRegistration.competing.registration_status);
       setSelectedEventIds(serverRegistration.competing.event_ids);
-      setAdminComment(serverRegistration.competing.admin_comment ?? '');
+      setOrganizerComment(serverRegistration.competing.organizer_comment ?? '');
       setGuests(serverRegistration.guests ?? 0);
     }
   }, [serverRegistration, setSelectedEventIds]);
@@ -96,15 +96,15 @@ export default function RegistrationEditor({ registrationId, competitor, competi
     && _.xor(serverRegistration.competing.event_ids, selectedEventIds.asArray).length > 0;
   const hasCommentChanged = serverRegistration
     && comment !== (serverRegistration.competing.comment ?? '');
-  const hasAdminCommentChanged = serverRegistration
-    && adminComment !== (serverRegistration.competing.admin_comment ?? '');
+  const hasOrganizerCommentChanged = serverRegistration
+    && organizerComment !== (serverRegistration.competing.organizer_comment ?? '');
   const hasStatusChanged = serverRegistration
     && status !== serverRegistration.competing.registration_status;
   const hasGuestsChanged = serverRegistration && guests !== serverRegistration.guests;
 
   const hasChanges = hasEventsChanged
     || hasCommentChanged
-    || hasAdminCommentChanged
+    || hasOrganizerCommentChanged
     || hasStatusChanged
     || hasGuestsChanged;
 
@@ -139,8 +139,8 @@ export default function RegistrationEditor({ registrationId, competitor, competi
       if (hasCommentChanged) {
         body.competing.comment = comment;
       }
-      if (hasAdminCommentChanged) {
-        body.competing.admin_comment = adminComment;
+      if (hasOrganizerCommentChanged) {
+        body.competing.organizer_comment = organizerComment;
       }
       if (hasStatusChanged) {
         body.competing.status = status;
@@ -166,13 +166,13 @@ export default function RegistrationEditor({ registrationId, competitor, competi
     competitionInfo.id,
     hasEventsChanged,
     hasCommentChanged,
-    hasAdminCommentChanged,
+    hasOrganizerCommentChanged,
     hasStatusChanged,
     hasGuestsChanged,
     updateRegistrationMutation,
     selectedEventIds.asArray,
     comment,
-    adminComment,
+    organizerComment,
     status,
     guests,
   ]);
@@ -228,8 +228,8 @@ export default function RegistrationEditor({ registrationId, competitor, competi
           label={I18n.t('activerecord.attributes.registration.administrative_notes')}
           id="admin-comment"
           maxLength={240}
-          value={adminComment}
-          onChange={(event, data) => setAdminComment(data.value)}
+          value={organizerComment}
+          onChange={(event, data) => setOrganizerComment(data.value)}
         />
 
         <Header as="h6">{I18n.t('activerecord.attributes.registration.status')}</Header>

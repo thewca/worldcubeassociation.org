@@ -35,8 +35,8 @@ export default function RegistrationAdministrationSearch({
                 ? ` ${I18n.t('activerecord.attributes.registration.comments')}: ${competing.comment}`
                 : ''
             }${
-              competing.admin_comment
-                ? ` ${I18n.t('activerecord.attributes.registration.administrative_notes')}: ${competing.admin_comment}`
+              competing.organizer_comment
+                ? ` ${I18n.t('activerecord.attributes.registration.administrative_notes')}: ${competing.organizer_comment}`
                 : ''
             }`,
             price: usingPayments
@@ -48,7 +48,7 @@ export default function RegistrationAdministrationSearch({
               wcaId: user.wca_id,
               email: user.email,
               comment: competing.comment,
-              note: competing.admin_comment,
+              note: competing.organizer_comment,
             },
           })),
         },

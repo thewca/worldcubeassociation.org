@@ -772,22 +772,22 @@ RSpec.describe Registrations::RegistrationChecker do
     end
 
     describe '#update_registration_allowed!.validate_organizer_fields!' do
-      it 'organizer can add admin_comment' do
+      it 'organizer can add organizer_comment' do
         update_request = build(
           :update_request,
           user_id: default_registration.user_id,
           competition_id: default_registration.competition_id,
           submitted_by: default_competition.organizers.first.id,
-          competing: { 'admin_comment' => 'this is an admin comment' },
+          competing: { 'organizer_comment' => 'this is an organizer comment' },
         )
 
         expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, default_registration) }
           .not_to raise_error
       end
 
-      it 'organizer can change admin_comment' do
+      it 'organizer can change organizer_comment' do
         registration = create(
-          :registration, user_id: default_user.id, competition_id: default_competition.id, administrative_notes: 'admin comment'
+          :registration, user_id: default_user.id, competition_id: default_competition.id, administrative_notes: 'organizer comment'
         )
 
         update_request = build(
@@ -795,7 +795,7 @@ RSpec.describe Registrations::RegistrationChecker do
           user_id: registration.user_id,
           competition_id: registration.competition_id,
           submitted_by: default_competition.organizers.first.id,
-          competing: { 'admin_comment' => 'this is an admin comment' },
+          competing: { 'organizer_comment' => 'this is an organizer comment' },
         )
 
         expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, registration) }
@@ -803,8 +803,8 @@ RSpec.describe Registrations::RegistrationChecker do
       end
     end
 
-    describe '#update_registration_allowed!.validate_admin_comment!' do
-      it 'admin comment cant exceed 240 characters' do
+    describe '#update_registration_allowed!.validate_organizer_comment!' do
+      it 'organizer comment cant exceed 240 characters' do
         long_comment = 'comment longer than 240 characterscomment longer than 240 characterscomment longer than 240 characterscomment longer than 240 characterscomment longer than 240 characterscomment longer than 240 characterscomment longer
         than 240 characterscomment longer than 240 characters'
 
@@ -813,7 +813,7 @@ RSpec.describe Registrations::RegistrationChecker do
           user_id: default_registration.user_id,
           competition_id: default_registration.competition_id,
           submitted_by: default_competition.organizers.first.id,
-          competing: { 'admin_comment' => long_comment },
+          competing: { 'organizer_comment' => long_comment },
         )
 
         expect {
@@ -824,7 +824,7 @@ RSpec.describe Registrations::RegistrationChecker do
         end
       end
 
-      it 'admin comment can match 240 characters' do
+      it 'organizer comment can match 240 characters' do
         at_character_limit = 'comment longer than 240 characterscomment longer than 240 characterscomment longer than 240 characterscomment longer than 240 characterscomment longer than 240 characterscomment longer than' \
                              '240 characterscomment longer longer than 240 12345'
 
@@ -833,7 +833,7 @@ RSpec.describe Registrations::RegistrationChecker do
           user_id: default_registration.user_id,
           competition_id: default_registration.competition_id,
           submitted_by: default_competition.organizers.first.id,
-          competing: { 'admin_comment' => at_character_limit },
+          competing: { 'organizer_comment' => at_character_limit },
         )
 
         expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, default_registration) }
@@ -2015,13 +2015,13 @@ RSpec.describe Registrations::RegistrationChecker do
         end
       end
 
-      it 'organizer can update admin comment in attendees non-accepted series comp registration' do
+      it 'organizer can update organizer comment in attendees non-accepted series comp registration' do
         update_request = build(
           :update_request,
           user_id: registrationB.user_id,
           competition_id: registrationB.competition_id,
           submitted_by: competitionB.organizers.first.id,
-          competing: { 'admin_comment' => 'why they were cancelled' },
+          competing: { 'organizer_comment' => 'why they were cancelled' },
         )
 
         expect {
