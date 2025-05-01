@@ -28,6 +28,7 @@ import { hasNotPassed } from '../../../lib/utils/dates';
 import { useRegistration } from '../lib/RegistrationProvider';
 import { useOrderedSetWrapper } from '../../../lib/hooks/useOrderedSet';
 import {
+  useFormObject,
   useFormObjectState,
   useFormSuccessHandler,
   useHasFormValueChanged,
@@ -78,6 +79,8 @@ export default function CompetingStep({
 
   const [guests, setGuestsRaw] = useFormObjectState('guests');
   const setGuests = useInputUpdater(setGuestsRaw, true);
+
+  const formState = useFormObject();
 
   // Don't set an error state before the user has interacted with the eventPicker
   const [hasInteracted, setHasInteracted] = useState(false);
@@ -147,21 +150,15 @@ export default function CompetingStep({
 
   const actionCreateRegistration = useCallback(() => {
     createRegistrationMutation({
+      ...formState,
       user_id: user.id,
       competition_id: competitionInfo.id,
-      competing: {
-        event_ids: selectedEventIds.asArray,
-        comment,
-      },
-      guests,
     });
   }, [
     createRegistrationMutation,
+    formState,
     user.id,
     competitionInfo.id,
-    selectedEventIds.asArray,
-    comment,
-    guests,
   ]);
 
   const actionUpdateRegistration = useCallback(() => {
@@ -202,22 +199,19 @@ export default function CompetingStep({
 
   const actionReRegister = useCallback(() => {
     updateRegistrationMutation({
-      user_id: user.id,
-      competition_id: competitionInfo.id,
+      ...formState,
       competing: {
-        comment,
-        event_ids: selectedEventIds.asArray,
+        ...formState.competing,
         status: 'pending',
       },
-      guests,
+      user_id: user.id,
+      competition_id: competitionInfo.id,
     }, { onSuccess: onUpdateSuccess });
   }, [
     updateRegistrationMutation,
+    formState,
     user.id,
     competitionInfo.id,
-    comment,
-    selectedEventIds.asArray,
-    guests,
     onUpdateSuccess,
   ]);
 
