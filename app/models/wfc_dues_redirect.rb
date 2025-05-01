@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class WfcDuesRedirect < ApplicationRecord
-  belongs_to :redirect_to, class_name: "WfcXeroUser", foreign_key: "redirect_to_id"
+  belongs_to :redirect_to, class_name: "WfcXeroUser"
   belongs_to :redirect_source, polymorphic: true
 
   enum :redirect_source_type, {

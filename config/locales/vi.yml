@@ -516,7 +516,7 @@ vi:
         #original_hash: 8c41ae8
         wca_id: Cá nhân
         #original_hash: fa4c045
-        countryId: Đại diện cho
+        country_id: Đại diện cho
         #original_hash: ab58155
         dob: Ngày sinh
         #original_hash: 8a754c6

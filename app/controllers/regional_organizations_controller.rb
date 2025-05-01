@@ -2,7 +2,7 @@
 
 class RegionalOrganizationsController < ApplicationController
   before_action :authenticate_user!, except: [:index]
-  before_action -> { redirect_to_root_unless_user(:can_manage_regional_organizations?) }, except: [:index, :new, :create]
+  before_action -> { redirect_to_root_unless_user(:can_manage_regional_organizations?) }, except: %i[index new create]
 
   def admin
     @regional_organizations = RegionalOrganization.order(country: :asc)
@@ -66,26 +66,26 @@ class RegionalOrganizationsController < ApplicationController
   end
 
   private def regional_organization_params
-    permitted_regional_organization_params = [
-      :name,
-      :country,
-      :website,
-      :logo,
-      :email,
-      :address,
-      :bylaws,
-      :directors_and_officers,
-      :area_description,
-      :past_and_current_activities,
-      :future_plans,
-      :extra_information,
-      :extra_file,
+    permitted_regional_organization_params = %i[
+      name
+      country
+      website
+      logo
+      email
+      address
+      bylaws
+      directors_and_officers
+      area_description
+      past_and_current_activities
+      future_plans
+      extra_information
+      extra_file
     ]
 
     if current_user.can_manage_regional_organizations?
-      permitted_regional_organization_params += [
-        :start_date,
-        :end_date,
+      permitted_regional_organization_params += %i[
+        start_date
+        end_date
       ]
     end
 

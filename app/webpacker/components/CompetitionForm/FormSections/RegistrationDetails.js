@@ -40,7 +40,6 @@ export default function RegistrationDetails() {
   const {
     registration: {
       waitingListDeadlineDate: originalWaitingListDeadlineDate,
-      eventChangeDeadlineDate: originalEventChangeDeadlineDate,
     },
   } = useFormInitialObject();
 
@@ -52,15 +51,10 @@ export default function RegistrationDetails() {
     [originalWaitingListDeadlineDate],
   );
 
-  const eventChangeNotYetPast = useMemo(
-    () => hasNotPassedOrNull(originalEventChangeDeadlineDate, 'UTC'),
-    [originalEventChangeDeadlineDate],
-  );
-
   return (
     <SubSection section="registration">
       <InputDate id="waitingListDeadlineDate" dateTime required ignoreDisabled={waitingListNotYetPast} />
-      <InputDate id="eventChangeDeadlineDate" dateTime required ignoreDisabled={eventChangeNotYetPast} />
+      <InputDate id="eventChangeDeadlineDate" dateTime required ignoreDisabled />
       <InputBooleanSelect id="allowOnTheSpot" required ignoreDisabled />
       <InputSelect id="competitorCanCancel" options={canCancelOptions} required ignoreDisabled />
       <InputBooleanSelect id="allowSelfEdits" required ignoreDisabled />

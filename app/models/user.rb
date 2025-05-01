@@ -16,8 +16,8 @@ class User < ApplicationRecord
   has_many :votes
   has_many :registrations
   has_many :competitions_registered_for, through: :registrations, source: "competition"
-  belongs_to :person, -> { where(subId: 1) }, primary_key: "wca_id", foreign_key: "wca_id", optional: true
-  belongs_to :unconfirmed_person, -> { where(subId: 1) }, primary_key: "wca_id", foreign_key: "unconfirmed_wca_id", class_name: "Person", optional: true
+  belongs_to :person, -> { current }, primary_key: "wca_id", foreign_key: "wca_id", optional: true
+  belongs_to :unconfirmed_person, -> { current }, primary_key: "wca_id", foreign_key: "unconfirmed_wca_id", class_name: "Person", optional: true
   belongs_to :delegate_to_handle_wca_id_claim, foreign_key: "delegate_id_to_handle_wca_id_claim", class_name: "User", optional: true
   belongs_to :region, class_name: "UserGroup", optional: true
   has_many :roles, class_name: "UserRole"
@@ -81,8 +81,8 @@ class User < ApplicationRecord
       UserGroup.board,
       UserGroup.officers,
     ].flatten.flat_map(&:active_roles)
-      .select { |role| role.eligible_voter? }
-      .map { |role| role.user }
+      .select(&:eligible_voter?)
+      .map(&:user)
       .uniq
   end
 
@@ -98,7 +98,7 @@ class User < ApplicationRecord
 
   accepts_nested_attributes_for :user_preferred_events, allow_destroy: true
 
-  strip_attributes only: [:wca_id, :country_iso2]
+  strip_attributes only: %i[wca_id country_iso2]
 
   devise :registerable,
          :recoverable, :rememberable, :trackable, :validatable,
@@ -145,7 +145,7 @@ class User < ApplicationRecord
   # signing up for an account.
   attr_accessor :sign_up_panel_to_show
 
-  ALLOWABLE_GENDERS = [:m, :f, :o].freeze
+  ALLOWABLE_GENDERS = %i[m f o].freeze
   enum :gender, ALLOWABLE_GENDERS.index_with(&:to_s)
   GENDER_LABEL_METHOD = lambda do |g|
     {
@@ -236,7 +236,7 @@ class User < ApplicationRecord
       dob_form_path = Rails.application.routes.url_helpers.contact_dob_path
       wrt_contact_path = Rails.application.routes.url_helpers.contact_path(contactRecipient: 'wrt')
       remaining_wca_id_claims = [0, MAX_INCORRECT_WCA_ID_CLAIM_COUNT - unconfirmed_person.incorrect_wca_id_claim_count].max
-      if remaining_wca_id_claims == 0 || !unconfirmed_person.dob
+      if remaining_wca_id_claims.zero? || !unconfirmed_person.dob
         errors.add(:dob_verification, I18n.t('users.errors.wca_id_no_birthdate_html', dob_form_path: dob_form_path).html_safe)
       elsif unconfirmed_person.gender.blank?
         errors.add(:gender, I18n.t('users.errors.wca_id_no_gender_html', wrt_contact_path: wrt_contact_path).html_safe)
@@ -447,7 +447,7 @@ class User < ApplicationRecord
   end
 
   def staff?
-    active_roles.any? { |role| role.staff? }
+    active_roles.any?(&:staff?)
   end
 
   def admin?
@@ -588,50 +588,50 @@ class User < ApplicationRecord
   end
 
   def self.panel_pages
-    [
-      :postingDashboard,
-      :editPerson,
-      :regionsManager,
-      :groupsManagerAdmin,
-      :bannedCompetitors,
-      :translators,
-      :duesExport,
-      :countryBands,
-      :delegateProbations,
-      :xeroUsers,
-      :duesRedirect,
-      :delegateForms,
-      :regions,
-      :subordinateDelegateClaims,
-      :subordinateUpcomingCompetitions,
-      :leaderForms,
-      :groupsManager,
-      :importantLinks,
-      :seniorDelegatesList,
-      :leadersAdmin,
-      :boardEditor,
-      :officersEditor,
-      :regionsAdmin,
-      :downloadVoters,
-      :generateDbToken,
-      :approveAvatars,
-      :editPersonRequests,
-      :anonymizationScript,
-      :serverStatus,
-      :runValidators,
-      :createNewComers,
-      :checkRecords,
-      :computeAuxiliaryData,
-      :generateDataExports,
-      :fixResults,
-      :mergeProfiles,
-      :reassignConnectedWcaId,
+    %i[
+      postingDashboard
+      editPerson
+      regionsManager
+      groupsManagerAdmin
+      bannedCompetitors
+      translators
+      duesExport
+      countryBands
+      delegateProbations
+      xeroUsers
+      duesRedirect
+      delegateForms
+      regions
+      subordinateDelegateClaims
+      subordinateUpcomingCompetitions
+      leaderForms
+      groupsManager
+      importantLinks
+      seniorDelegatesList
+      leadersAdmin
+      boardEditor
+      officersEditor
+      regionsAdmin
+      downloadVoters
+      generateDbToken
+      approveAvatars
+      editPersonRequests
+      anonymizationScript
+      serverStatus
+      runValidators
+      createNewComers
+      checkRecords
+      computeAuxiliaryData
+      generateDataExports
+      fixResults
+      mergeProfiles
+      reassignConnectedWcaId
     ].index_with { |panel_page| panel_page.to_s.underscore.dasherize }
   end
 
   def self.panel_notifications
     {
-      self.panel_pages[:approveAvatars] => lambda { User.where.not(pending_avatar: nil).count },
+      self.panel_pages[:approveAvatars] => -> { User.where.not(pending_avatar: nil).count },
     }
   end
 
@@ -642,7 +642,7 @@ class User < ApplicationRecord
         name: 'Admin panel',
         pages: panel_pages.values,
       },
-      staff: {
+      volunteer: {
         name: 'Volunteer panel',
         pages: [],
       },
@@ -1023,7 +1023,7 @@ class User < ApplicationRecord
                            # Not using _html suffix as automatic html_safe is available only from
                            # the view helper
                            I18n.t('users.edit.cannot_edit.reason.assigned')
-                         elsif user_to_edit == self && !(admin? || any_kind_of_delegate?) && user_to_edit.registrations.accepted.count > 0
+                         elsif user_to_edit == self && !(admin? || any_kind_of_delegate?) && user_to_edit.registrations.accepted.count.positive?
                            I18n.t('users.edit.cannot_edit.reason.registered')
                          end
     return unless cannot_edit_reason
@@ -1034,18 +1034,18 @@ class User < ApplicationRecord
            delegate_url: Rails.application.routes.url_helpers.delegates_path).html_safe
   end
 
-  CLAIM_WCA_ID_PARAMS = [
-    :claiming_wca_id,
-    :unconfirmed_wca_id,
-    :delegate_id_to_handle_wca_id_claim,
-    :dob_verification,
+  CLAIM_WCA_ID_PARAMS = %i[
+    claiming_wca_id
+    unconfirmed_wca_id
+    delegate_id_to_handle_wca_id_claim
+    dob_verification
   ].freeze
 
   def editable_fields_of_user(user)
     fields = Set.new
     if user.dummy_account?
       # That's the only field we want to be able to edit for these accounts
-      return %i(remove_avatar)
+      return %i[remove_avatar]
     end
 
     fields += editable_personal_preference_fields(user)
@@ -1057,13 +1057,13 @@ class User < ApplicationRecord
   private def editable_personal_preference_fields(user)
     fields = Set.new
     if user == self
-      fields += %i(
+      fields += %i[
         password password_confirmation
         email preferred_events results_notifications_enabled
         registration_notifications_enabled
-      )
-      fields << { user_preferred_events_attributes: [:id, :event_id, :_destroy] }
-      fields += %i(receive_delegate_reports delegate_reports_region) if user.staff_or_any_delegate?
+      ]
+      fields << { user_preferred_events_attributes: %i[id event_id _destroy] }
+      fields += %i[receive_delegate_reports delegate_reports_region] if user.staff_or_any_delegate?
     end
     fields
   end
@@ -1071,15 +1071,15 @@ class User < ApplicationRecord
   private def editable_competitor_info_fields(user)
     fields = Set.new
     if user == self || can_edit_any_user?
-      fields += %i(name dob gender country_iso2) unless cannot_edit_data_reason_html(user)
+      fields += %i[name dob gender country_iso2] unless cannot_edit_data_reason_html(user)
       fields += CLAIM_WCA_ID_PARAMS
     end
     fields << :name if user.wca_id.blank? && organizer_for?(user)
     if can_edit_any_user?
-      fields += %i(
+      fields += %i[
         unconfirmed_wca_id
-      )
-      fields += %i(wca_id) unless user.special_account?
+      ]
+      fields += %i[wca_id] unless user.special_account?
     end
     fields
   end
@@ -1087,9 +1087,9 @@ class User < ApplicationRecord
   private def editable_avatar_fields(user)
     fields = Set.new
     if user == self || admin? || results_team? || senior_delegate_for?(user)
-      fields += %i(pending_avatar avatar_thumbnail remove_avatar)
+      fields += %i[pending_avatar avatar_thumbnail remove_avatar]
 
-      fields += %i(current_avatar) if can_admin_results?
+      fields += %i[current_avatar] if can_admin_results?
     end
     fields
   end
@@ -1110,11 +1110,11 @@ class User < ApplicationRecord
   end
 
   def self.default_report_receivers
-    %w(
+    %w[
       seniors@worldcubeassociation.org
       quality@worldcubeassociation.org
       regulations@worldcubeassociation.org
-    )
+    ]
   end
 
   def notify_of_results_posted(competition)
@@ -1125,7 +1125,7 @@ class User < ApplicationRecord
     return unless !wca_id && !unconfirmed_wca_id
 
     matches = []
-    matches = competition.competitors.where(name: name, dob: dob, gender: gender, countryId: country.id).to_a unless country.nil? || dob.nil?
+    matches = competition.competitors.where(name: name, dob: dob, gender: gender, country_id: country.id).to_a unless country.nil? || dob.nil?
     if matches.size == 1 && matches.first.user.nil?
       update(wca_id: matches.first.wca_id)
     elsif notify
@@ -1155,8 +1155,8 @@ class User < ApplicationRecord
     UserGroup
       .delegate_regions
       .flat_map(&:active_roles)
-      .select { |role| role.staff? }
-      .map { |role| role.user_id }
+      .select(&:staff?)
+      .map(&:user_id)
   end
 
   def self.trainee_delegate_ids
@@ -1164,7 +1164,7 @@ class User < ApplicationRecord
       .delegate_regions
       .flat_map(&:active_roles)
       .select { |role| role.metadata.status == RolesMetadataDelegateRegions.statuses[:trainee_delegate] }
-      .map { |role| role.user_id }
+      .map(&:user_id)
   end
 
   def self.search(query, params: {})
@@ -1183,7 +1183,7 @@ class User < ApplicationRecord
     end
 
     query.split.each do |part|
-      users = users.where("name LIKE :part OR wca_id LIKE :part #{"OR email LIKE :part" if search_by_email}", part: "%#{part}%")
+      users = users.where("name LIKE :part OR wca_id LIKE :part #{'OR email LIKE :part' if search_by_email}", part: "%#{part}%")
     end
 
     users.order(:name)
@@ -1208,14 +1208,14 @@ class User < ApplicationRecord
         ].include?(role.group_type)
       }
       .reject { |role| role.group.is_hidden }
-      .map { |role| role.deprecated_team_role }
+      .map(&:deprecated_team_role)
   end
 
   DEFAULT_SERIALIZE_OPTIONS = {
-    only: ["id", "wca_id", "name", "gender",
-           "country_iso2", "created_at", "updated_at"],
-    methods: ["url", "country", "delegate_status"],
-    include: ["avatar", "teams"],
+    only: %w[id wca_id name gender
+             country_iso2 created_at updated_at],
+    methods: %w[url country delegate_status],
+    include: %w[avatar teams],
   }.freeze
 
   def serializable_hash(options = nil)
@@ -1276,12 +1276,12 @@ class User < ApplicationRecord
     {
       "type" => "object",
       "properties" => {
-        "registrantId" => { "type" => ["integer", "null"] }, # NOTE: for now registrantId may be null if the person doesn't compete.
+        "registrantId" => { "type" => %w[integer null] }, # NOTE: for now registrantId may be null if the person doesn't compete.
         "name" => { "type" => "string" },
         "wcaUserId" => { "type" => "integer" },
-        "wcaId" => { "type" => ["string", "null"] },
+        "wcaId" => { "type" => %w[string null] },
         "countryIso2" => { "type" => "string" },
-        "gender" => { "type" => "string", "enum" => %w(m f o) },
+        "gender" => { "type" => "string", "enum" => %w[m f o] },
         "birthdate" => { "type" => "string" },
         "email" => { "type" => "string" },
         "avatar" => UserAvatar.wcif_json_schema,
@@ -1342,7 +1342,7 @@ class User < ApplicationRecord
 
   def accepted_competitions
     self.accepted_registrations
-        .includes(competition: [:delegates, :organizers, :events])
+        .includes(competition: %i[delegates organizers events])
         .map(&:competition)
   end
 
@@ -1370,7 +1370,7 @@ class User < ApplicationRecord
     case panel_id
     when :admin
       admin? || senior_results_team?
-    when :staff
+    when :volunteer
       staff?
     when :delegate
       any_kind_of_delegate?
@@ -1399,7 +1399,7 @@ class User < ApplicationRecord
 
   def subordinate_delegates
     delegate_roles
-      .filter { |role| role.lead? }
+      .filter(&:lead?)
       .flat_map { |role| role.group.active_users + role.group.active_all_child_users }
       .uniq
   end
@@ -1409,7 +1409,7 @@ class User < ApplicationRecord
   end
 
   private def highest_delegate_role
-    delegate_roles.max_by { |role| role.status_rank }
+    delegate_roles.max_by(&:status_rank)
   end
 
   def delegate_status
@@ -1425,16 +1425,17 @@ class User < ApplicationRecord
   end
 
   def anonymization_checks_with_message_args
+    upcoming_registered_competitions = competitions_registered_for.not_over.merge(Registration.where.not(competing_status: %w[cancelled rejected])).pluck(:id, :name).map { |id, name| { id: id, name: name } }
     access_grants = oauth_access_grants
                     .where.not(revoked_at: nil)
                     .map do |access_grant|
                       access_grant.as_json(
                         include: {
                           application: {
-                            only: [:name, :redirect_uri],
+                            only: %i[name redirect_uri],
                             include: {
                               owner: {
-                                only: [:name, :email],
+                                only: %i[name email],
                               },
                             },
                           },
@@ -1448,10 +1449,12 @@ class User < ApplicationRecord
         user_banned_in_past: banned_in_past?,
         user_may_have_forum_account: true,
         user_has_active_oauth_access_grants: access_grants.any?,
+        user_has_upcoming_registered_competitions: upcoming_registered_competitions.any?,
       },
       {
         access_grants: access_grants,
         oauth_applications: oauth_applications,
+        upcoming_registered_competitions: upcoming_registered_competitions,
       },
     ]
   end

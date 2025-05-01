@@ -47,7 +47,7 @@ eo:
     #original_hash: 9af4622
     XF: Pluraj landoj (Afriko)
     #original_hash: 374ac0d
-    XM: Pluraj landoj (Abya Yala / Ameriko)
+    XM: Pluraj landoj (Abjajalo / Ameriko)
     #original_hash: 3f8c9de
     XA: Pluraj landoj (Azio)
     #original_hash: 090f3ce
@@ -486,6 +486,12 @@ eo:
         registration_competition_events: Konkurseroj
         #original_hash: 84add5b
         email: Retpoŝtadreso
+        #original_hash: 6d7a30a
+        search: Serĉi…
+        #original_hash: dfd309d
+        too_few_chars: Tro malmulte da signoj
+        #original_hash: b993b0c
+        no_results: Neniu rezulto
       competition_tab:
         #original_hash: 4f9be05
         content: Enhavo
@@ -522,7 +528,7 @@ eo:
         #original_hash: 8c41ae8
         wca_id: Persono
         #original_hash: fa4c045
-        countryId: Reprezentante
+        country_id: Reprezentante
         #original_hash: ab58155
         dob: Naskiĝtago
         #original_hash: 8a754c6
@@ -679,7 +685,7 @@ eo:
         #original_hash: 61a0572
         accepted: Akceptata
         #original_hash: 96f608c
-        pending: Pritraktata
+        pending: Pritraktota
       media_type:
         #original_hash: ee45c30
         report: Raporto
@@ -2326,10 +2332,6 @@ eo:
     new_registration:
       #original_hash: 8b9f726
       title: 'Registriĝi por %{comp}'
-    #original_hash: 7cae988
-    registered_with_account_html: >-
-      Tiu persono registriĝis kun konto. Vi povas redakti siajn personajn
-      datumojn %{here}.
     #original_hash: ada2e9e
     sign_in: Ensalutu
     #original_hash: 5d45a00
@@ -3677,6 +3679,13 @@ eo:
         waitlist:
           #original_hash: 3907ca4
           title: Registriĝoj en atendolisto
+          #original_hash: de3f9d4
+          information: >-
+            Konkursantoj estas aldonataj al la fino de la atendolisto. Se vi
+            aldonas plurajn el ili samtempe, la konkursantoj kiuj pagis estos
+            aldonitaj laŭ ordo de pagdato, kaj poste sekvos la aliaj laŭ ordo de
+            registriĝdato. Vi povas aranĝi la ordon permane uzante la redakta
+            reĝimo laŭnecese.
           #original_hash: a6c86ec
           skipped_warning: >-
             Vi ignoris %{count} registriĝo(j)n en la atendolisto. Ĉu vi certas
@@ -4032,6 +4041,18 @@ eo:
       not_full_url: >-
         Vi havas relativan retejan adreson (%{url}) en la enhavo. Bonvolu
         entajpi kompletan retejan adreson kun prefikso http:// aŭ https://.
+      #original_hash: e8ff0ef
+      editing_deadline_already_passed: >-
+        Vi povas ŝanĝi datojn nur por limdatoj kiuj ankoraŭ ne okazis, sed la
+        origina valoro %{timestamp} jam okazis.
+      #original_hash: e12883e
+      edited_deadline_not_after_original: >-
+        Vi povas nur plilongigi limdatojn, sed %{new_timestamp} okazos antaŭ la
+        origina valoro %{timestamp}.
+      #original_hash: d79fbb4
+      edited_deadline_not_in_future: >-
+        Vi povas enkonduki nur venontajn limdatojn, sed %{new_timestamp} ne
+        estas en la estonteco.
     new:
       #original_hash: 1208df7
       create_competition: Krei konkurson
@@ -4464,6 +4485,9 @@ eo:
     #original_hash: 10bcdbd
     connect_wca_id: Ligu vian WCA-ID-n kun via konto!
   payments:
+    messages:
+      #original_hash: 1e1d219
+      charges_refunded: Ĉiuj pagoj estis repagitaj
     labels:
       #original_hash: cccf678
       payment_statuses: Pagstatoj
@@ -4565,7 +4589,7 @@ eo:
       #original_hash: c8fbda9
       succeeded: Sukcesa
       #original_hash: d6fbc7a
-      refunded: Repagita
+      refund: Repagita
   persons:
     index:
       #original_hash: 5934b4c
@@ -5857,7 +5881,7 @@ eo:
       #original_hash: 8e57552
       '3': >-
         Vi povas aĉeti niajn varojn tra la tuta mondo -- kun rektaj vendejoj en
-        Eŭropo, Abya Yala (Ameriko) kaj Hindio kaj pliaj baldaŭ venos!
+        Eŭropo, Abjajalo (Ameriko) kaj Hindio kaj pliaj baldaŭ venos!
   database:
     results_export:
       #original_hash: 15d00e1

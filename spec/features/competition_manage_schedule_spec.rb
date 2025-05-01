@@ -10,7 +10,7 @@ RSpec.feature "Competition events management" do
   end
 
   context "unconfirmed competition without schedule" do
-    let!(:competition) { FactoryBot.create(:competition, :with_delegate, :registration_open, event_ids: ["333", "444"], with_rounds: true) }
+    let!(:competition) { create(:competition, :with_delegate, :registration_open, event_ids: %w[333 444], with_rounds: true) }
 
     background do
       sign_in competition.delegates.first
@@ -36,13 +36,13 @@ RSpec.feature "Competition events management" do
 
       save_schedule_react
 
-      expect(competition.competition_venues.map(&:name)).to match_array %w(Venue)
-      expect(competition.competition_venues.flat_map(&:venue_rooms).map(&:name)).to match_array %w(Youpitralala)
+      expect(competition.competition_venues.map(&:name)).to match_array %w[Venue]
+      expect(competition.competition_venues.flat_map(&:venue_rooms).map(&:name)).to match_array %w[Youpitralala]
     end
   end
 
   context "unconfirmed competition with schedule" do
-    let!(:competition) { FactoryBot.create(:competition, :with_delegate, :registration_open, :with_valid_schedule, event_ids: ["333", "444"]) }
+    let!(:competition) { create(:competition, :with_delegate, :registration_open, :with_valid_schedule, event_ids: %w[333 444]) }
 
     background do
       sign_in competition.delegates.first

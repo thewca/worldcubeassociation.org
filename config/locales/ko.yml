@@ -478,6 +478,12 @@ ko:
         registration_competition_events: 종목
         #original_hash: 84add5b
         email: 이메일
+        #original_hash: 6d7a30a
+        search: 검색...
+        #original_hash: dfd309d
+        too_few_chars: 글자 수가 너무 적습니다
+        #original_hash: b993b0c
+        no_results: 결과 없음
       competition_tab:
         #original_hash: 4f9be05
         content: 내용
@@ -514,7 +520,7 @@ ko:
         #original_hash: 8c41ae8
         wca_id: 선수
         #original_hash: fa4c045
-        countryId: 대표 지역
+        country_id: 대표 지역
         #original_hash: ab58155
         dob: 생년월일
         #original_hash: 8a754c6
@@ -566,7 +572,7 @@ ko:
         competition_id: 도중에 발생
       competition_medium:
         #original_hash: 1917f4f
-        competition_ed: 대회
+        competition_id: 대회
         #original_hash: 3deb745
         media_type: 유형
         #original_hash: c3328c3
@@ -674,7 +680,7 @@ ko:
         pending: 대기
       media_type:
         #original_hash: ee45c30
-        report: 보고
+        report: 보고서
         #original_hash: 4360c2d
         article: 기사
         #original_hash: 82dabd0
@@ -1154,8 +1160,8 @@ ko:
       faq: 자주 묻는 질문들
       #original_hash: cf1d2c9
       forum: 포럼
-      #original_hash: 3ad28c0
-      teams: '팀, 위원회 및 협의회'
+      #original_hash: 0e7a036
+      teams: 팀 및 위원회
       #original_hash: 7981fb3
       education: 교육 자료
       #original_hash: c66444f
@@ -1268,18 +1274,16 @@ ko:
         WCA 임원은 WCA의 비영리 지위와 관련된 업무를 처리합니다. 임원은 WCA 이사회에서 선출합니다. 전무 이사는 WCA의 최고
         경영자이고, 회장은 모든 이사회 회의를 주재하고, 사무국장은 조직의 문서를 관리하며, 회계 담당자는 WCA의 재정 문제를
         관리합니다.
-      #original_hash: e0d37a2
-      board_description: 'WCA 이사회는 조직 전체를 이끌고 다른 팀, 위원회 및 협의회가 수행하지 않는 모든 의무를 수행할 책임이 있습니다'
+      #original_hash: 19d4bbb
+      board_description: WCA 이사회는 조직 전체를 이끌고 다른 팀 및 위원회가 수행하지 않는 모든 의무를 수행할 책임이 있습니다
     teams_committees_councils:
-      #original_hash: 0d62207
-      title: 'WCA 팀, 위원회 및 협의회'
-      #original_hash: 4701b90
+      #original_hash: 1d14e2f
+      title: WCA 팀 및 위원회
+      #original_hash: 9fdee8f
       description: >-
         WCA의 팀과 위원회는 조직의 필수적인 부분이며 조직의 기능을 유지하는 데 필요한 일상적인 업무를 수행합니다. 위원회는 WCA
         파견위원과 선수를 포함한 WCA 커뮤니티 구성원으로 구성됩니다. 각 팀에는 대표가 있으며, 대표의 역할은 팀의 적절한 기능을
-        보장하고 팀의 다른 구성원을 지도하는 것입니다. 협의회는 WCA 이사회에 자문 역할을 하는 특별한 유형의 팀이며 WCA
-        자원봉사자가 아닌 커뮤니티 구성원으로 구성됩니다. 위원회, 팀 또는 협의회가 공석일 경우 지원 방법에 대한 정보가 첫 페이지에
-        게시됩니다.
+        보장하고 팀의 다른 구성원을 지도하는 것입니다. 팀 또는 위원회가 공석일 경우 지원 방법에 대한 정보가 첫 페이지에 게시됩니다.
       #original_hash: b37456c
       contact_button: 문의하기
       #original_hash: ae7928f
@@ -1928,6 +1932,8 @@ ko:
       translators: 번역가
   registrations:
     errors:
+      #original_hash: 51c7156
+      edit_deadline_passed: 참가 신청 수정 기한이 지났습니다! 특별한 상황에만 수정할 수 있습니다.
       #original_hash: 44ab952
       need_name: 성명이 필요합니다
       #original_hash: 6f64c57
@@ -2075,8 +2081,6 @@ ko:
     new_registration:
       #original_hash: 8b9f726
       title: '%{comp} 참가 신청'
-    #original_hash: 7cae988
-    registered_with_account_html: '이 사람은 WCA 홈페이지 계정으로 참가 신청을 하였습니다. %{here}에서 개인 정보를 편집할 수 있습니다.'
     #original_hash: ada2e9e
     sign_in: 로그인
     #original_hash: 5d45a00
@@ -2206,6 +2210,15 @@ ko:
     preferred_events_populated_html: '귀하의 참가 신청 종목을 선호하는 종목으로 자동 선택하였으며, %{link}에서 수정할 수 있습니다.'
     #original_hash: ee89a3e
     registration_requirements: '이 대회의 참가 신청 요건:'
+    registration_history:
+      #original_hash: 342fa25
+      acting_user: 액터 사용자
+      #original_hash: 97c89a4
+      action: 동작
+      #original_hash: 8aa57de
+      changes: 변동 사항
+      #original_hash: cec61a5
+      title: 신청 내역
     import:
       #original_hash: 5a394f3
       title: '%{comp}에 대한 참가자 명단 가져오기'
@@ -2554,11 +2567,11 @@ ko:
       #original_hash: 6c3b236
       winner: '%{winner}이(가) %{event_name} 종목에서 %{result_sentence} 우승하였습니다.'
       #original_hash: ec7f18a
-      first_runner_up: '%{first_runner_up}이(가) 2위를 차지(%{first_runner_up_result})'
+      first_runner_up: '%{first_runner_up}이(가) 2위(%{first_runner_up_result})를 차지'
       #original_hash: cffa50a
       and: 하였으며
       #original_hash: 67d285c
-      second_runner_up: '%{second_runner_up}이(가) 3위를 차지했습니다(%{second_runner_up_result}).'
+      second_runner_up: '%{second_runner_up}이(가) 3위(%{second_runner_up_result})를 차지했습니다.'
       records:
         #original_hash: 0658e11
         wr: 세계 신기록
@@ -3205,6 +3218,10 @@ ko:
         waitlist:
           #original_hash: 3907ca4
           title: 대기 명단 참가 신청
+          #original_hash: de3f9d4
+          information: >-
+            선수는 대기자 명단 맨 마지막에 추가됩니다. 여러 선수를 한꺼번에 추가하는 경우, 참가비를 결제한 선수는 결제 순서대로 맨
+            뒤부터 추가되고, 나머지 선수는 등록 순서대로 추가됩니다. 필요한 경우 편집 모드에서 순서를 직접 조정할 수 있습니다.
           #original_hash: a6c86ec
           skipped_warning: '대기 명단에서 %{count}개의 참가 신청을 건너뛰었습니다. 대신 다른 참가 신청을 승인하시겠습니까?'
         approved:
@@ -3507,6 +3524,12 @@ ko:
       must_ask_about_guests_if_specifying_limit: 참관객 제한이 설정되어 있는 경우에는 참관객 수에 대해 반드시 물어보십시오.
       #original_hash: 000564d
       not_full_url: '콘텐츠에 상대 URL(%{url})이 있습니다. 접두사 http:// 또는 https://를 사용하여 전체 URL을 입력하십시오.'
+      #original_hash: e8ff0ef
+      editing_deadline_already_passed: '아직 지나지 않은 마감일의 날짜만 변경할 수 있는데, %{timestamp}의 원래 값은 이미 과거입니다.'
+      #original_hash: e12883e
+      edited_deadline_not_after_original: '마감일을 연장하는 것만 허용되지만, %{new_timestamp}는 %{timestamp}의 원래 값보다 앞서 설정되었습니다.'
+      #original_hash: d79fbb4
+      edited_deadline_not_in_future: '미래의 마감일만 입력할 수 있지만, %{new_timestamp}는 미래의 값이 아닙니다.'
     new:
       #original_hash: 1208df7
       create_competition: 대회 생성하기
@@ -3723,7 +3746,7 @@ ko:
       schedule_for_full_date: '%{date}의 일정'
       #original_hash: eb1090e
       schedule_change_warning: >-
-        일정은 조정될 수 있으며, 특히 참가 신청 총합이 확정된 후 변경될 가능성이 있습니다. 주요 변경 사항이 발생하면 참가 신청한
+        일정은 조정될 수 있으며, 특히 참가자 수가 확정된 후 변경될 가능성이 있습니다. 주요 변경 사항이 발생하면 참가 신청한
         선수들에게 이메일로 안내됩니다.
     nav:
       menu:
@@ -3904,6 +3927,16 @@ ko:
     #original_hash: 10bcdbd
     connect_wca_id: WCA 계정과 WCA ID를 연결하십시오!
   payments:
+    messages:
+      #original_hash: 1e1d219
+      charges_refunded: 모든 비용이 환불되었습니다
+    labels:
+      #original_hash: cccf678
+      payment_statuses: 결제 상태
+      #original_hash: 312b6b6
+      available_refunds: 가능한 환불
+      #original_hash: ef3cd45
+      original_payment: 원결제
     payment_providers:
       #original_hash: 559ef55
       paypal: PayPal
@@ -3978,6 +4011,11 @@ ko:
           primary_email: 이메일
         #original_hash: 08d2e98
         fallback_not_applicable: N/A
+    statuses:
+      #original_hash: c8fbda9
+      succeeded: 성공
+      #original_hash: d6fbc7a
+      refund: 환불됨
   persons:
     index:
       #original_hash: 5934b4c
@@ -4308,8 +4346,8 @@ ko:
       #original_hash: 9482c5d
       title: 조직도
       board:
-        #original_hash: e0d37a2
-        description: 'WCA 이사회는 조직 전체를 이끌고 다른 팀, 위헌회 및 협의회가 수행하지 않는 모든 의무를 수행할 책임이 있습니다.'
+        #original_hash: 19d4bbb
+        description: WCA 이사회는 조직 전체를 이끌고 다른 팀 및 위원회가 수행하지 않는 모든 의무를 수행할 책임이 있습니다.
       users:
         #original_hash: 57bbaad
         profile: '%{user_name}의 프로필'

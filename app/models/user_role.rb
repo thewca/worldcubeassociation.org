@@ -71,21 +71,21 @@ class UserRole < ApplicationRecord
 
   SORT_WEIGHT_LAMBDAS = {
     startDate:
-      lambda { |role| role.start_date.to_time.to_i },
+      ->(role) { role.start_date.to_time.to_i },
     lead:
-      lambda { |role| role.lead? ? 0 : 1 },
+      ->(role) { role.lead? ? 0 : 1 },
     eligibleVoter:
-      lambda { |role| role.eligible_voter? ? 0 : 1 },
+      ->(role) { role.eligible_voter? ? 0 : 1 },
     groupTypeRank:
-      lambda { |role| GROUP_TYPE_RANK_ORDER.find_index(role.group_type) || GROUP_TYPE_RANK_ORDER.length },
+      ->(role) { GROUP_TYPE_RANK_ORDER.find_index(role.group_type) || GROUP_TYPE_RANK_ORDER.length },
     status:
-      lambda { |role| role.status_rank },
+      ->(role) { role.status_rank },
     name:
-      lambda { |role| role.user.name },
+      ->(role) { role.user.name },
     groupName:
-      lambda { |role| role.group.name },
+      ->(role) { role.group.name },
     location:
-      lambda { |role| role.metadata.location || '' },
+      ->(role) { role.metadata.location || '' },
   }.freeze
 
   def self.status_rank(group_type, status)
@@ -105,7 +105,7 @@ class UserRole < ApplicationRecord
     status = metadata ? metadata[:status] : nil
     case group_type
     when UserGroup.group_types[:delegate_regions]
-      ["senior_delegate", "regional_delegate"].include?(status)
+      %w[senior_delegate regional_delegate].include?(status)
     when UserGroup.group_types[:teams_committees], UserGroup.group_types[:councils]
       ["leader"].include?(status)
     when UserGroup.group_types[:board], UserGroup.group_types[:officers]
@@ -118,7 +118,7 @@ class UserRole < ApplicationRecord
   def staff?
     case group_type
     when UserGroup.group_types[:delegate_regions]
-      ["senior_delegate", "regional_delegate", "delegate", "junior_delegate"].include?(metadata.status)
+      %w[senior_delegate regional_delegate delegate junior_delegate].include?(metadata.status)
     when UserGroup.group_types[:board], UserGroup.group_types[:officers], UserGroup.group_types[:teams_committees]
       true
     else
@@ -130,9 +130,9 @@ class UserRole < ApplicationRecord
     status = metadata&.status
     case group_type
     when UserGroup.group_types[:delegate_regions]
-      ["senior_delegate", "regional_delegate", "delegate"].include?(status)
+      %w[senior_delegate regional_delegate delegate].include?(status)
     when UserGroup.group_types[:teams_committees]
-      ["leader", "senior_member"].include?(status)
+      %w[leader senior_member].include?(status)
     when UserGroup.group_types[:board], UserGroup.group_types[:officers]
       true # All board members & officers are considered as eligible voters.
     else

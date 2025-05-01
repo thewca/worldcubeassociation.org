@@ -13,18 +13,18 @@ RSpec.describe ApplicationHelper do
   describe "#users_to_sentence" do
     it "escapes name" do
       users = []
-      users << FactoryBot.create(:user, name: "Jonatan")
-      users << FactoryBot.create(:user, name: "Pedro")
-      users << FactoryBot.create(:user, name: "Jeremy O'Fleischman")
+      users << create(:user, name: "Jonatan")
+      users << create(:user, name: "Pedro")
+      users << create(:user, name: "Jeremy O'Fleischman")
       string = helper.users_to_sentence(users)
       expect(string).to eq 'Jeremy O&#39;Fleischman, Jonatan, and Pedro'
     end
 
     it "includes email" do
       users = []
-      FactoryBot.create(:person, name: "Jonatan O'Klosko", wca_id: "2013KOSK01")
-      users << FactoryBot.create(:user_with_wca_id, name: "Jonatan O'Klosko", wca_id: "2013KOSK01")
-      users << FactoryBot.create(:user, name: "Jeremy")
+      create(:person, name: "Jonatan O'Klosko", wca_id: "2013KOSK01")
+      users << create(:user_with_wca_id, name: "Jonatan O'Klosko", wca_id: "2013KOSK01")
+      users << create(:user, name: "Jeremy")
       string = helper.users_to_sentence(users, include_profile: true)
       expect(string).to eq 'Jeremy and <a href="/persons/2013KOSK01">Jonatan O&#39;Klosko</a>'
     end
@@ -34,20 +34,20 @@ RSpec.describe ApplicationHelper do
     it "handles multiple phrases correctly highlighting them" do
       text = "A long text with a super word in the middle (directly here) followed by the rest of an awesome and peculiar sentence. What do you think?"
       expected = "...t with a super word in the middle (directly here) <strong>followed</strong> by the rest of an awesome and peculiar sentence. What do you <strong>think</strong>?"
-      expect(helper.wca_excerpt(text, %w(followed think))).to eq expected
+      expect(helper.wca_excerpt(text, %w[followed think])).to eq expected
     end
 
     it "is case insensitive" do
       divider = (["thing"] * 15).join(' ')
       text = "Some #{divider} match #{divider} end."
       expected = "<strong>Some</strong> #{divider} <strong>match</strong> #{divider} <strong>end</strong>."
-      expect(helper.wca_excerpt(text, %w(some match END))).to eq expected
+      expect(helper.wca_excerpt(text, %w[some match END])).to eq expected
     end
   end
 
   describe "#simple_form_for" do
     it "error messages link to attribute input field" do
-      user = FactoryBot.create :user
+      user = create(:user)
       user.wca_id = '1999FLEI01'
       user.dob = 2.days.from_now
       expect(user).to be_invalid_with_errors(
@@ -76,7 +76,7 @@ RSpec.describe ApplicationHelper do
 
   describe "#wca_id_link" do
     it "links to a person's WCA profile page" do
-      expect(wca_id_link("2005FLEI01")).to eq "<span class=\"wca-id\"><a href=\"#{person_url "2005FLEI01"}\">2005FLEI01</a></span>"
+      expect(wca_id_link("2005FLEI01")).to eq "<span class=\"wca-id\"><a href=\"#{person_url '2005FLEI01'}\">2005FLEI01</a></span>"
     end
   end
 
@@ -86,7 +86,7 @@ RSpec.describe ApplicationHelper do
     end
 
     it "formats 135 Czech Korunas" do
-      expect(format_money(Money.new(135*100, "CZK"))).to eq "135 Kč (Czech Koruna)"
+      expect(format_money(Money.new(135 * 100, "CZK"))).to eq "135 Kč (Czech Koruna)"
     end
 
     it "formats 135 New Taiwanese Dollars" do

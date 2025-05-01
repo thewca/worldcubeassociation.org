@@ -316,6 +316,9 @@ en:
         birthday: "Birthday"
         registration_competition_events: "Events"
         email: "Email"
+        search: "Search..."
+        too_few_chars: "Too few characters"
+        no_results: "No results"
       #context: a competition tab
       competition_tab:
         content: "Content"
@@ -338,7 +341,7 @@ en:
       #context: a person
       person:
         wca_id: "Person"
-        countryId: "Representing"
+        country_id: "Representing"
         dob: "Birthdate"
         gender: "Gender"
         name: "Name"
@@ -1257,8 +1260,6 @@ en:
     will_pay_here: "You will pay them here after submitting your registration"
     wont_pay_here: "Please check the competition's information for instructions about how to pay"
     refund_form:
-      hints:
-        refund_amount: "The amount to refund to the competitor. Can be any value up to the amount already paid."
       labels:
         refund_amount: "Refund Amount"
     #context: on the payment form, when registering to a competition
@@ -1327,6 +1328,8 @@ en:
       title: "Add registration for %{comp}"
       info: "This will create an approved registration. Use this form to add walk-ins during the competition."
       add: "Add registration"
+      ots_not_enabled: "Registration is closed and on-the-spot registration is not enabled - you must edit the competition to enable it first"
+      competition_over: You cannot add on-the-spot registrations after the competition has ended.
       errors:
         already_registered: "This person already has a registration."
   #context: Key used when managing competitions
@@ -1865,6 +1868,7 @@ en:
         being_updated: "Registration is being updated..."
         being_deleted: "Registration is being deleted..."
         update_confirm: "Are you sure you want to update your registration?"
+        organizer_update_confirm: "Are you sure you want to update the user's registration?"
         update_confirm_contact: "You need to contact the organizers to update your registration, click Yes to be taken to the contact form."
         delete_confirm_contact: "You need to contact the organizers to delete your registration, click Yes to be taken to the contact form."
         update_contact_message: "I would like to update my registration details as follows: %{update_params}"
@@ -1990,6 +1994,7 @@ en:
       event_change_deadline_before_registration_close: "Deadline for updating events cannot be before registration close date."
       event_change_deadline_after_end_date: "Deadline for updating events cannot be after the competition."
       event_change_deadline_with_ots: "Deadline for updating events must be during the competition if on the spot registrations are accepted."
+      on_the_spot_with_past_event_change_deadline: "Cannot enable on the spot registrations if the deadline for updating events is in the past."
       series_distance_km: "The competition is located too far away from %{competition}."
       series_distance_days: "The competition is scheduled too many days away from %{competition}."
       must_ask_about_guests_if_specifying_limit: "Must ask about guests if a guest limit is specified."
@@ -2228,9 +2233,16 @@ en:
   notifications:
     connect_wca_id: "Connect your WCA ID to your account!"
   payments:
+    messages:
+      charge_refunded: "Payment was refunded"
+      charges_refunded: "All charges have been refunded"
+    errors:
+      refund:
+        provider_disconnected: "You cannot issue a refund for this competition anymore. Please use your payment provider's dashboard to do so."
+        refund_amount_too_high: "You are not allowed to refund more than the competitor has paid."
+        refund_amount_too_low: "The refund amount must be greater than zero."
     labels:
-      payment_statuses: "Payment Statuses"
-      available_refunds: "Available Refunds"
+      net_payment: "Net Payment"
       original_payment: "Original Payment"
     #context: localized names of payment providers
     payment_providers:
@@ -2268,9 +2280,6 @@ en:
           display_name: "Name"
           primary_email: "Email"
         fallback_not_applicable: "N/A"
-    statuses:
-      succeeded: "Succeeded"
-      refund: "Refunded"
   persons:
     #context: Person search page
     index:
