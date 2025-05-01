@@ -7,22 +7,7 @@ import I18n from '../../../lib/i18n';
 import { useRegistration } from '../lib/RegistrationProvider';
 import { isoMoneyToHumanReadable } from '../../../lib/helpers/money';
 
-export default function PaymentOverview() {
-  const { registration } = useRegistration();
-
-  const {
-    data: payments,
-    isLoading,
-  } = useQuery({
-    queryKey: ['payments', registration.id],
-    queryFn: () => getRegistrationPayments(registration.id),
-    select: (data) => data.charges.filter((r) => r.ruby_amount_refundable !== 0),
-  });
-
-  if (isLoading) {
-    return <Loading />;
-  }
-
+export default function PaymentOverview({ payments }) {
   return (
     <Message success icon>
       <Icon name="checkmark" />
