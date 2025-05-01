@@ -413,7 +413,7 @@ RSpec.describe Registration do
 
       registration.reload
       expect(registration.comments).to eq('user comment')
-      expect(registration.administrative_notes).to eq('updated organizer comment')
+      expect(registration.organizer_comment).to eq('updated organizer comment')
       expect(registration.guests).to eq(3)
       expect(registration.competing_status).to eq('accepted')
       expect(registration.event_ids).to eq(['333', '555'])
@@ -491,7 +491,7 @@ RSpec.describe Registration do
     it 'updates organizer comment' do
       registration.update_lanes!({ user_id: registration.user.id, competing: { organizer_comment: 'test organizer comment' } }.with_indifferent_access, registration.user)
       registration.reload
-      expect(registration.administrative_notes).to eq('test organizer comment')
+      expect(registration.organizer_comment).to eq('test organizer comment')
     end
 
     it 'removes events' do

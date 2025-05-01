@@ -787,7 +787,7 @@ RSpec.describe Registrations::RegistrationChecker do
 
       it 'organizer can change organizer_comment' do
         registration = create(
-          :registration, user_id: default_user.id, competition_id: default_competition.id, administrative_notes: 'organizer comment'
+          :registration, user_id: default_user.id, competition_id: default_competition.id, organizer_comment: 'organizer comment'
         )
 
         update_request = build(
