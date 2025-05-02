@@ -9,7 +9,8 @@ class RegistrationPayment < ApplicationRecord
   belongs_to :refunded_registration_payment, class_name: 'RegistrationPayment', optional: true
   has_many :refunding_registration_payments, class_name: 'RegistrationPayment', inverse_of: :refunded_registration_payment, foreign_key: :refunded_registration_payment_id, dependent: :destroy
 
-  after_create :auto_accept_hook, if: -> { registration.auto_accept_in_current_env? && registration.competition.auto_accept_registrations? }
+  delegate :auto_accept_in_current_env?, :auto_accept_registrations?, to: :registration
+  after_create :auto_accept_hook, if: [:auto_accept_in_current_env?, :auto_accept_registrations?]
   after_create :auto_close_hook, unless: :refunded_registration_payment_id?
 
   monetize :amount_lowest_denomination,

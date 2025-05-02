@@ -528,6 +528,8 @@ class Registration < ApplicationRecord
     super(DEFAULT_SERIALIZE_OPTIONS.merge(options || {}))
   end
 
+  delegate auto_accept_registrations?, to: :competition
+
   def auto_accept_in_current_env?
     !(Rails.env.production? && EnvConfig.WCA_LIVE_SITE?)
   end
