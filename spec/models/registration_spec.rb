@@ -601,7 +601,7 @@ RSpec.describe Registration do
     end
   end
 
-  describe '#auto_accept', :tag do
+  describe '#auto_accept' do
     let(:auto_accept_comp) { create(:competition, :auto_accept, :registration_open) }
     let!(:reg) { create(:registration, competition: auto_accept_comp) }
 
@@ -612,7 +612,7 @@ RSpec.describe Registration do
 
       reg.attempt_auto_accept
       expect(reg.reload.competing_status).to eq('accepted')
-      expect(reg.registration_history_entries.last.actor_type).to eq('System')
+      expect(reg.registration_history_entries.last.actor_type).to eq('system')
       expect(reg.registration_history_entries.last.actor_id).to eq('auto-accept')
     end
 
@@ -825,7 +825,7 @@ RSpec.describe Registration do
         reg.attempt_auto_accept
         expect(reg.reload.competing_status).to eq('waiting_list')
         expect(reg.waiting_list_position).to eq(1)
-        expect(reg.registration_history_entries.last.actor_type).to eq('System')
+        expect(reg.registration_history_entries.last.actor_type).to eq('system')
         expect(reg.registration_history_entries.last.actor_id).to eq('auto-accept')
       end
 

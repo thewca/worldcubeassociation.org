@@ -43,9 +43,9 @@ module Registrations
 
           registration.save!
           if acting_entity_id == Registration::AUTO_ACCEPT_ENTITY_ID
-            registration.add_history_entry(changes, 'System', acting_entity_id, Registrations::Helper.action_type(update_params, acting_entity_id))
+            registration.add_history_entry(changes, Registration::SYSTEM_ENTITY_ID, acting_entity_id, Registrations::Helper.action_type(update_params, acting_entity_id))
           else
-            registration.add_history_entry(changes, 'user', acting_entity_id, Registrations::Helper.action_type(update_params, acting_entity_id))
+            registration.add_history_entry(changes, Registration::USER_ENTITY_ID, acting_entity_id, Registrations::Helper.action_type(update_params, acting_entity_id))
           end
         end
 

@@ -6,6 +6,8 @@ class Registration < ApplicationRecord
   COMMENT_CHARACTER_LIMIT = 240
   DEFAULT_GUEST_LIMIT = 99
   AUTO_ACCEPT_ENTITY_ID = 'auto-accept'
+  SYSTEM_ENTITY_ID = 'system'
+  USER_ENTITY_ID = 'user'
 
   scope :pending, -> { where(competing_status: 'pending') }
   scope :accepted, -> { where(competing_status: 'accepted') }
@@ -528,7 +530,7 @@ class Registration < ApplicationRecord
     super(DEFAULT_SERIALIZE_OPTIONS.merge(options || {}))
   end
 
-  delegate auto_accept_registrations?, to: :competition
+  delegate :auto_accept_registrations, to: :competition
 
   def auto_accept_in_current_env?
     !(Rails.env.production? && EnvConfig.WCA_LIVE_SITE?)
