@@ -6,16 +6,16 @@ class CompetitionTab < ApplicationRecord
   validates :name, presence: true
   validates :display_order, uniqueness: { scope: :competition_id, case_sensitive: false }
 
-  CLONEABLE_ATTRIBUTES = %w(
+  CLONEABLE_ATTRIBUTES = %w[
     name
     content
     display_order
-  ).freeze
+  ].freeze
 
-  UNCLONEABLE_ATTRIBUTES = %w(
+  UNCLONEABLE_ATTRIBUTES = %w[
     id
     competition_id
-  ).freeze
+  ].freeze
 
   def slug
     # parameterization behaves differently under different locales. However, we

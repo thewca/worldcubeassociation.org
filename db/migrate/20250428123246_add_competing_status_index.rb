@@ -2,6 +2,6 @@
 
 class AddCompetingStatusIndex < ActiveRecord::Migration[7.2]
   def change
-    add_index :registrations, [:competition_id, :competing_status]
+    add_index :registrations, %i[competition_id competing_status]
   end
 end

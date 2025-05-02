@@ -10,8 +10,8 @@ module AuxiliaryDataComputation
   ## Build 'concise results' tables.
   def self.compute_concise_results
     [
-      %w(best concise_single_results),
-      %w(average concise_average_results),
+      %w[best concise_single_results],
+      %w[average concise_average_results],
     ].each do |field, table_name|
       DbHelper.with_temp_table(table_name) do |temp_table_name|
         ActiveRecord::Base.connection.execute <<-SQL.squish
@@ -46,8 +46,8 @@ module AuxiliaryDataComputation
   ## Build rank tables.
   def self.compute_rank_tables
     [
-      %w(best ranks_single concise_single_results),
-      %w(average ranks_average concise_average_results),
+      %w[best ranks_single concise_single_results],
+      %w[average ranks_average concise_average_results],
     ].each do |field, table_name, concise_table_name|
       DbHelper.with_temp_table(table_name) do |temp_table_name|
         current_country_by_wca_id = Person.current.pluck(:wca_id, :country_id).to_h

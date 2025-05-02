@@ -678,6 +678,51 @@ RSpec.describe CompetitionsController do
         comp.reload
         expect(comp.information).to eq new_information
       end
+
+      it "can extend edit events deadline of locked competition when original deadline hasn't passed" do
+        old_deadline = competition.start_date.to_datetime - 3.days
+        competition.update(confirmed: true, event_change_deadline_date: old_deadline)
+
+        new_deadline = competition.start_date.to_datetime - 1.day
+        update_params = build_competition_update(competition, registration: { eventChangeDeadlineDate: new_deadline })
+        patch :update, params: update_params, as: :json
+        expect(competition.reload.event_change_deadline_date).to eq new_deadline
+      end
+
+      it "can change edit events deadline of locked competition even when deadline has passed" do
+        old_open = 27.days.ago.change(sec: 0)
+        # respect the fact that February can have exactly 4 weeks
+        # which is potentially colliding with the start_date set in the competition spec factory
+        old_close = 2.days.ago.change(sec: 0)
+        competition.update(confirmed: true, registration_open: old_open, registration_close: old_close, event_change_deadline_date: old_close.to_datetime)
+
+        new_deadline = competition.start_date.to_datetime
+        update_params = build_competition_update(competition, registration: { eventChangeDeadlineDate: new_deadline })
+        patch :update, params: update_params, as: :json
+        expect(competition.reload.event_change_deadline_date).to eq new_deadline
+      end
+
+      it "can remove edit events deadline of locked competition even when deadline has passed" do
+        old_open = 27.days.ago.change(sec: 0)
+        # respect the fact that February can have exactly 4 weeks
+        # which is potentially colliding with the start_date set in the competition spec factory
+        old_close = 2.days.ago.change(sec: 0)
+        competition.update(confirmed: true, registration_open: old_open, registration_close: old_close, event_change_deadline_date: old_close.to_datetime)
+
+        update_params = build_competition_update(competition, registration: { eventChangeDeadlineDate: '' })
+        patch :update, params: update_params, as: :json
+        expect(competition.reload.event_change_deadline_date).to be_nil
+      end
+
+      it "cannot shorten edit events deadline of locked competition when deadline hasn't passed" do
+        old_deadline = competition.start_date.to_datetime - 3.days
+        competition.update(confirmed: true, event_change_deadline_date: old_deadline)
+
+        new_close = competition.start_date.to_datetime - 5.days
+        update_params = build_competition_update(competition, registration: { eventChangeDeadlineDate: new_close })
+        patch :update, params: update_params, as: :json
+        expect(competition.reload.event_change_deadline_date).to eq old_deadline
+      end
     end
 
     context "when signed in as a trainee delegate" do
@@ -1081,15 +1126,15 @@ RSpec.describe CompetitionsController do
   describe 'GET #my_competitions', :clean_db_with_truncation do
     let(:delegate) { create(:delegate) }
     let(:organizer) { create(:user) }
-    let!(:future_competition1) { create(:competition, :registration_open, starts: 5.weeks.from_now, organizers: [organizer], delegates: [delegate], events: Event.where(id: %w(222 333))) }
-    let!(:future_competition2) { create(:competition, :registration_open, starts: 4.weeks.from_now, organizers: [organizer], events: Event.where(id: %w(222 333))) }
-    let!(:future_competition3) { create(:competition, :registration_open, starts: 3.weeks.from_now, organizers: [organizer], events: Event.where(id: %w(222 333))) }
-    let!(:future_competition4) { create(:competition, :registration_open, starts: 3.weeks.from_now, organizers: [], events: Event.where(id: %w(222 333))) }
-    let!(:past_competition1) { create(:competition, starts: 1.month.ago, organizers: [organizer], events: Event.where(id: %w(222 333))) }
-    let!(:past_competition2) { create(:competition, starts: 2.months.ago, delegates: [delegate], events: Event.where(id: %w(222 333))) }
-    let!(:past_competition3) { create(:competition, starts: 3.months.ago, delegates: [delegate], events: Event.where(id: %w(222 333))) }
-    let!(:past_competition4) { create(:competition, :results_posted, starts: 4.months.ago, delegates: [delegate], events: Event.where(id: %w(222 333))) }
-    let!(:unscheduled_competition1) { create(:competition, starts: nil, ends: nil, delegates: [delegate], events: Event.where(id: %w(222 333))) }
+    let!(:future_competition1) { create(:competition, :registration_open, starts: 5.weeks.from_now, organizers: [organizer], delegates: [delegate], events: Event.where(id: %w[222 333])) }
+    let!(:future_competition2) { create(:competition, :registration_open, starts: 4.weeks.from_now, organizers: [organizer], events: Event.where(id: %w[222 333])) }
+    let!(:future_competition3) { create(:competition, :registration_open, starts: 3.weeks.from_now, organizers: [organizer], events: Event.where(id: %w[222 333])) }
+    let!(:future_competition4) { create(:competition, :registration_open, starts: 3.weeks.from_now, organizers: [], events: Event.where(id: %w[222 333])) }
+    let!(:past_competition1) { create(:competition, starts: 1.month.ago, organizers: [organizer], events: Event.where(id: %w[222 333])) }
+    let!(:past_competition2) { create(:competition, starts: 2.months.ago, delegates: [delegate], events: Event.where(id: %w[222 333])) }
+    let!(:past_competition3) { create(:competition, starts: 3.months.ago, delegates: [delegate], events: Event.where(id: %w[222 333])) }
+    let!(:past_competition4) { create(:competition, :results_posted, starts: 4.months.ago, delegates: [delegate], events: Event.where(id: %w[222 333])) }
+    let!(:unscheduled_competition1) { create(:competition, starts: nil, ends: nil, delegates: [delegate], events: Event.where(id: %w[222 333])) }
     let(:registered_user) { create(:user, name: "Jan-Ove Waldner") }
     let!(:registration1) { create(:registration, :accepted, competition: future_competition1, user: registered_user) }
     let!(:registration2) { create(:registration, :accepted, competition: future_competition3, user: registered_user) }
