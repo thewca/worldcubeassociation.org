@@ -54,7 +54,7 @@ class ManualPaymentIntegration < ApplicationRecord
     model_attributes = form_params.permit(:payment_information, :payment_reference)
 
     # We need to pipe the `payment_information` field through Markdown, because otherwise line breaks are lost :(
-    model_attributes[:payment_information] = Base64.decode64(form_params[:payment_information].to_s)
+    model_attributes[:payment_information] = Base64.decode64(form_params[:payment_information].to_s).force_encoding("UTF-8")
 
     ManualPaymentIntegration.new(model_attributes)
   end
