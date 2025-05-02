@@ -42,5 +42,12 @@ module Registrations
     # Payment Errors
     PAYMENT_NOT_ENABLED = -6001
     PAYMENT_NOT_READY = -6002
+
+    # Auto accept errors
+    OUTSTANDING_FEES = -7001
+    AUTO_ACCEPT_NOT_ENABLED = -7002
+    INELIGIBLE_FOR_AUTO_ACCEPT = -7003
+    AUTO_ACCEPT_DISABLE_THRESHOLD = -7004
+    REGISTRATION_NOT_OPEN = -7005
   end
 end

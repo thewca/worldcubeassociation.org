@@ -557,12 +557,12 @@ class Registration < ApplicationRecord
   end
 
   private def auto_accept_failure_reason
-    return 'Competitor still has outstanding registration fees' if outstanding_entry_fees.positive?
-    return 'Auto-accept is not enabled for this competition.' unless competition.auto_accept_registrations?
-    return 'Can only auto-accept pending registrations or first position on waiting list' unless competing_status_pending? || waiting_list_leader?
-    return "Competition has reached auto_accept_disable_threshold of #{competition.auto_accept_disable_threshold} registrations" if competition.auto_accept_threshold_reached?
+    return Registrations::ErrorCodes::OUTSTANDING_FEES if outstanding_entry_fees.positive?
+    return Registrations::ErrorCodes::AUTO_ACCEPT_NOT_ENABLED unless competition.auto_accept_registrations?
+    return Registrations::ErrorCodes::INELIGIBLE_FOR_AUTO_ACCEPT unless competing_status_pending? || waiting_list_leader?
+    return Registrations::ErrorCodes::AUTO_ACCEPT_DISABLE_THRESHOLD if competition.auto_accept_threshold_reached?
 
-    'Cant auto-accept while registration is not open' unless competition.registration_currently_open?
+    Registrations::ErrorCodes::REGISTRATION_NOT_OPEN unless competition.registration_currently_open?
   end
 
   private def log_auto_accept_failure(reason)

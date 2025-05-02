@@ -601,7 +601,7 @@ RSpec.describe Registration do
     end
   end
 
-  describe '#auto_accept' do
+  describe '#auto_accept', :tag do
     let(:auto_accept_comp) { create(:competition, :auto_accept, :registration_open) }
     let!(:reg) { create(:registration, competition: auto_accept_comp) }
 
@@ -632,7 +632,7 @@ RSpec.describe Registration do
 
       reg.attempt_auto_accept
       expect(reg.reload.competing_status).to eq('pending')
-      expect(reg.registration_history.last[:changed_attributes][:auto_accept_failure_reasons]).to eq('Competitor still has outstanding registration fees')
+      expect(reg.registration_history.last[:changed_attributes][:auto_accept_failure_reasons]).to eq("-7001")
     end
 
     it 'accepts the last competitor on the auto-accept disable threshold' do
@@ -669,9 +669,7 @@ RSpec.describe Registration do
 
         waiting_list_reg.attempt_auto_accept
         expect(waiting_list_reg.reload.competing_status).to eq('waiting_list')
-        expect(waiting_list_reg.registration_history.last[:changed_attributes][:auto_accept_failure_reasons]).to eq(
-          'Can only auto-accept pending registrations or first position on waiting list',
-        )
+        expect(waiting_list_reg.registration_history.last[:changed_attributes][:auto_accept_failure_reasons]).to eq("-7003",)
       end
 
       it 'if status is cancelled' do
@@ -681,7 +679,7 @@ RSpec.describe Registration do
 
         reg.attempt_auto_accept
         expect(reg.reload.competing_status).to eq('cancelled')
-        expect(reg.registration_history.last[:changed_attributes][:auto_accept_failure_reasons]).to eq('Can only auto-accept pending registrations or first position on waiting list')
+        expect(reg.registration_history.last[:changed_attributes][:auto_accept_failure_reasons]).to eq("-7003")
       end
 
       it 'if status is rejected' do
@@ -690,7 +688,7 @@ RSpec.describe Registration do
 
         reg.attempt_auto_accept
         expect(reg.reload.competing_status).to eq('rejected')
-        expect(reg.registration_history.last[:changed_attributes][:auto_accept_failure_reasons]).to eq('Can only auto-accept pending registrations or first position on waiting list')
+        expect(reg.registration_history.last[:changed_attributes][:auto_accept_failure_reasons]).to eq("-7003")
       end
 
       it 'if status is accepted' do
@@ -698,7 +696,7 @@ RSpec.describe Registration do
         reg.update(competing_status: 'accepted')
 
         reg.attempt_auto_accept
-        expect(reg.registration_history.last[:changed_attributes][:auto_accept_failure_reasons]).to eq('Can only auto-accept pending registrations or first position on waiting list')
+        expect(reg.registration_history.last[:changed_attributes][:auto_accept_failure_reasons]).to eq("-7003")
       end
 
       it 'if status is waiting_list and position isnt first' do
@@ -709,7 +707,7 @@ RSpec.describe Registration do
 
         reg.attempt_auto_accept
         expect(reg.reload.competing_status).to eq('waiting_list')
-        expect(reg.registration_history.last[:changed_attributes][:auto_accept_failure_reasons]).to eq('Can only auto-accept pending registrations or first position on waiting list')
+        expect(reg.registration_history.last[:changed_attributes][:auto_accept_failure_reasons]).to eq("-7003")
       end
 
       it 'before registration has opened' do
@@ -722,7 +720,7 @@ RSpec.describe Registration do
 
         unopened_reg.attempt_auto_accept
         expect(unopened_reg.reload.competing_status).to eq('pending')
-        expect(unopened_reg.registration_history.last[:changed_attributes][:auto_accept_failure_reasons]).to eq('Cant auto-accept while registration is not open')
+        expect(unopened_reg.registration_history.last[:changed_attributes][:auto_accept_failure_reasons]).to eq("-7005")
       end
 
       it 'after registration has closed' do
@@ -735,7 +733,7 @@ RSpec.describe Registration do
 
         closed_reg.attempt_auto_accept
         expect(closed_reg.reload.competing_status).to eq('pending')
-        expect(closed_reg.registration_history.last[:changed_attributes][:auto_accept_failure_reasons]).to eq('Cant auto-accept while registration is not open')
+        expect(closed_reg.registration_history.last[:changed_attributes][:auto_accept_failure_reasons]).to eq("-7005")
       end
 
       it 'unless auto-accept is enabled' do
@@ -748,7 +746,7 @@ RSpec.describe Registration do
 
         no_auto_reg.attempt_auto_accept
         expect(no_auto_reg.reload.competing_status).to eq('pending')
-        expect(no_auto_reg.registration_history.last[:changed_attributes][:auto_accept_failure_reasons]).to eq('Auto-accept is not enabled for this competition.')
+        expect(no_auto_reg.registration_history.last[:changed_attributes][:auto_accept_failure_reasons]).to eq("-7002")
       end
 
       it 'when accepted registrations match the auto-accept disable threshold' do
@@ -760,9 +758,7 @@ RSpec.describe Registration do
 
         reg.attempt_auto_accept
         expect(reg.reload.competing_status).to eq('pending')
-        expect(reg.registration_history.last[:changed_attributes][:auto_accept_failure_reasons]).to eq(
-          'Competition has reached auto_accept_disable_threshold of 5 registrations',
-        )
+        expect(reg.registration_history.last[:changed_attributes][:auto_accept_failure_reasons]).to eq("-7004")
       end
 
       it 'when accepted registrations exceed the auto-accept disable threshold' do
@@ -774,9 +770,7 @@ RSpec.describe Registration do
 
         reg.attempt_auto_accept
         expect(reg.reload.competing_status).to eq('pending')
-        expect(reg.registration_history.last[:changed_attributes][:auto_accept_failure_reasons]).to eq(
-          'Competition has reached auto_accept_disable_threshold of 5 registrations',
-        )
+        expect(reg.registration_history.last[:changed_attributes][:auto_accept_failure_reasons]).to eq("-7004")
       end
     end
 
