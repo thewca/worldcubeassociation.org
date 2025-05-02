@@ -278,7 +278,7 @@ class Registration < ApplicationRecord
                                 registration_status: is_competing ? competing_status : 'non_competing',
                                 registered_on: registered_at,
                                 comment: comments || "",
-                                organizer_comment: administrative_notes || "",
+                                organizer_comment: organizer_comment || "",
                               },
                             })
       base_json[:competing][:waiting_list_position] = waiting_list_position if competing_status_waiting_list?
@@ -295,7 +295,7 @@ class Registration < ApplicationRecord
     authorized_fields = {
       "guests" => guests,
       "comments" => comments || '',
-      "administrativeNotes" => administrative_notes || '',
+      "administrativeNotes" => organizer_comment || '',
     }
     {
       "wcaRegistrationId" => id,
@@ -376,12 +376,12 @@ class Registration < ApplicationRecord
 
   delegate :allow_registration_without_qualification?, to: :competition, allow_nil: true
 
-  strip_attributes only: %i[comments administrative_notes]
+  strip_attributes only: %i[comments organizer_comment]
 
   validates :comments, length: { maximum: COMMENT_CHARACTER_LIMIT, frontend_code: Registrations::ErrorCodes::USER_COMMENT_TOO_LONG },
                        presence: { message: I18n.t('registrations.errors.cannot_register_without_comment'), if: :force_comment?, frontend_code: Registrations::ErrorCodes::REQUIRED_COMMENT_MISSING }
 
-  validates :administrative_notes, length: { maximum: COMMENT_CHARACTER_LIMIT, frontend_code: Registrations::ErrorCodes::USER_COMMENT_TOO_LONG }
+  validates :organizer_comment, length: { maximum: COMMENT_CHARACTER_LIMIT, frontend_code: Registrations::ErrorCodes::USER_COMMENT_TOO_LONG }
 
   def force_comment?
     competition&.force_comment_in_registration?

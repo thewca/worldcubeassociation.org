@@ -8,7 +8,7 @@ FactoryBot.define do
     comments { "" }
     created_at { Time.now }
     registered_at { Time.now }
-    administrative_notes { "" }
+    organizer_comment { "" }
 
     transient do
       # TODO: Consider refactoring registration event definitions to be less reliant on hardcoded event IDs?
