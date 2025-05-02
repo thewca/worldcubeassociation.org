@@ -1957,6 +1957,7 @@ en:
         -4015: "Please enter a reasonable amount of guests, or contact the organizers if you need to bring an extraordinary amount of guests."
         -6001: "WCA Payment is not enabled for this competition"
         -6002: "You need to finish your registration before you can pay"
+        -6003: "No outstanding payment found - this is probably because you have already paid for your registration."
     #context: and when an error occurred
     errors:
       must_use_wca_registration: "Auto-accept can only be used if you are using the WCA website for registrations"
