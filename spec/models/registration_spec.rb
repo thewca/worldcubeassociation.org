@@ -594,7 +594,7 @@ RSpec.describe Registration do
   end
 
   describe 'hooks' do
-    it 'positive registration_payment calls registration.consider_auto_close', :tag do
+    it 'positive registration_payment calls registration.consider_auto_close' do
       competition = create(:competition)
       reg = create(:registration, competition: competition)
       expect(reg).to receive(:consider_auto_close).exactly(1).times
@@ -629,7 +629,7 @@ RSpec.describe Registration do
       reg.consider_auto_close
     end
 
-    it 'calls competition.attempt_auto_close! if reg is fully paid', :tag do
+    it 'calls competition.attempt_auto_close! if reg is fully paid' do
       competition = create(:competition)
       expect(competition).to receive(:attempt_auto_close!).exactly(1).times
 
