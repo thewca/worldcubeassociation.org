@@ -62,10 +62,10 @@ class RoundResult
 
   def self.wcif_json_schema
     {
-      "type" => ["object", "null"],
+      "type" => %w[object null],
       "properties" => {
         "personId" => { "type" => "integer" },
-        "ranking" => { "type" => ["integer", "null"] },
+        "ranking" => { "type" => %w[integer null] },
         "attempts" => { "type" => "array", "items" => RoundResultsAttempt.wcif_json_schema },
         "best" => { "type" => "integer" },
         "average" => { "type" => "integer" },
@@ -96,10 +96,10 @@ class RoundResultsAttempt
 
   def self.wcif_json_schema
     {
-      "type" => ["object", "null"],
+      "type" => %w[object null],
       "properties" => {
         "result" => { "type" => "integer" },
-        "reconstruction" => { "type" => ["string", "null"] },
+        "reconstruction" => { "type" => %w[string null] },
       },
     }
   end

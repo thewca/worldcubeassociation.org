@@ -17,7 +17,7 @@ module PaypalInterface
               integration_method: 'PAYPAL',
               integration_type: 'THIRD_PARTY',
               third_party_details: {
-                features: ['PAYMENT', 'REFUND'],
+                features: %w[PAYMENT REFUND],
               },
             },
           },

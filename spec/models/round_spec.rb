@@ -21,7 +21,7 @@ RSpec.describe Round do
   end
 
   context "time limit" do
-    let(:competition) { create(:competition, event_ids: %w(333 444bf 555bf)) }
+    let(:competition) { create(:competition, event_ids: %w[333 444bf 555bf]) }
     let(:round) { create(:round, competition: competition, event_id: "333") }
     let(:round_undef) { create(:round, competition: competition, event_id: "333", time_limit: nil) }
 
@@ -45,7 +45,7 @@ RSpec.describe Round do
     end
 
     it "set to 60 minutes shared between 444bf and 555bf" do
-      four_blind_round.update!(time_limit: TimeLimit.new(centiseconds: 5.minutes.in_centiseconds, cumulative_round_ids: ["444bf-r1", "555bf-r1"]))
+      four_blind_round.update!(time_limit: TimeLimit.new(centiseconds: 5.minutes.in_centiseconds, cumulative_round_ids: %w[444bf-r1 555bf-r1]))
       expect(four_blind_round.time_limit.centiseconds).to eq 5.minutes.in_centiseconds
       expect(four_blind_round.time_limit_to_s).to eq "5:00.00 total for 4x4x4 Blindfolded Final and 5x5x5 Blindfolded Final"
     end

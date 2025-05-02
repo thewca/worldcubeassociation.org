@@ -180,7 +180,7 @@ RSpec.describe Registration do
   end
 
   context "number of events selected" do
-    event_ids = ["222", "333", "444", "555", "666", "777"]
+    event_ids = %w[222 333 444 555 666 777]
     event_limit = event_ids.length - 2
 
     context "with event limit" do
@@ -286,7 +286,7 @@ RSpec.describe Registration do
     let!(:competition) {
       create(
         :competition,
-        event_ids: %w(333),
+        event_ids: %w[333],
       )
     }
     let!(:competition_event) {
@@ -405,7 +405,7 @@ RSpec.describe Registration do
       registration.update_lanes!(
         {
           user_id: registration.user.id, guests: 3, competing: {
-            organizer_comment: 'updated organizer comment', comment: 'user comment', status: 'accepted', event_ids: '333', '555']
+            organizer_comment: 'updated organizer comment', comment: 'user comment', status: 'accepted', event_ids: %w[333 555]
           }
         }.with_indifferent_access,
         registration.user,
@@ -416,7 +416,7 @@ RSpec.describe Registration do
       expect(registration.organizer_comment).to eq('updated organizer comment')
       expect(registration.guests).to eq(3)
       expect(registration.competing_status).to eq('accepted')
-      expect(registration.event_ids).to eq(['333', '555'])
+      expect(registration.event_ids).to eq(%w[333 555])
     end
 
     describe 'update statuses' do
@@ -501,9 +501,9 @@ RSpec.describe Registration do
     end
 
     it 'adds events' do
-      registration.update_lanes!({ user_id: registration.user.id, competing: { event_ids: ['333', '444', '555'] } }.with_indifferent_access, registration.user)
+      registration.update_lanes!({ user_id: registration.user.id, competing: { event_ids: %w[333 444 555] } }.with_indifferent_access, registration.user)
       registration.reload
-      expect(registration.event_ids).to eq(['333', '444', '555'])
+      expect(registration.event_ids).to eq(%w[333 444 555])
     end
 
     describe 'update waiting list position' do
