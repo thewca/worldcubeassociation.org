@@ -203,24 +203,24 @@ class ResultsController < ApplicationController
           DAY(competitions.start_date)   day,
           events.id              event_id,
           events.name            event_name,
-          result.id              id,
-          result.type            type,
-          result.value           value,
-          result.format_id       format_id,
-          result.round_type_id   round_type_id,
+          results.id              id,
+          results.type            type,
+          results.value           value,
+          results.format_id       format_id,
+          results.round_type_id   round_type_id,
           events.format          value_format,
                                  record_name,
-          result.person_id       person_id,
-          result.person_name     person_name,
-          result.country_id      country_id,
+          results.person_id       person_id,
+          results.person_name     person_name,
+          results.country_id      country_id,
           countries.name         country_name,
           competitions.id        competition_id,
           competitions.cell_name competition_name,
           value1, value2, value3, value4, value5
         FROM
           (SELECT results.*, 'single' type, best value, regional_single_record record_name FROM results WHERE regional_single_record<>'' UNION
-            SELECT results.*, 'average' type, average value, regional_average_record record_name FROM results WHERE regional_average_record<>'') result
-          #{@gender_condition.present? ? 'JOIN persons ON result.person_id = persons.wca_id and persons.sub_id = 1,' : ','}
+            SELECT results.*, 'average' type, average value, regional_average_record record_name FROM results WHERE regional_average_record<>'') results
+          #{@gender_condition.present? ? 'JOIN persons ON results.person_id = persons.wca_id and persons.sub_id = 1,' : ','}
           events,
           round_types,
           competitions,
@@ -229,7 +229,7 @@ class ResultsController < ApplicationController
           AND events.`rank` < 1000
           AND round_types.id = round_type_id
           AND competitions.id = competition_id
-          AND countries.id = result.country_id
+          AND countries.id = results.country_id
           #{@region_condition}
           #{@event_condition}
           #{@years_condition_competition}
