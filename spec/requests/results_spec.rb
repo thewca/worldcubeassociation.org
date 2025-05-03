@@ -41,12 +41,12 @@ RSpec.describe "results" do
       let(:headers) { { 'CONTENT_TYPE' => 'application/json', 'ACCEPT' => 'application/json' } }
 
       it 'shows history for Africa' do
-        get records_path, headers: headers, params: { region: '_Africa' , show: 'history'}
+        get records_path, headers: headers, params: { region: '_Africa', show: 'history' }
         expect(response).to be_successful
       end
 
       it 'shows history for South Africa' do
-        get records_path, headers: headers, params: { region: 'South Africa' , show: 'history'}
+        get records_path, headers: headers, params: { region: 'South Africa', show: 'history' }
         expect(response).to be_successful
       end
     end
