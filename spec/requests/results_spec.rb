@@ -30,9 +30,23 @@ RSpec.describe "results" do
   end
 
   describe "GET #records" do
-    context "with default params" do
-      it "shows records" do
+    context 'html request format' do
+      it "show records given default params" do
         get records_path
+        expect(response).to be_successful
+      end
+    end
+
+    context 'json' do
+      let(:headers) { { 'CONTENT_TYPE' => 'application/json', 'ACCEPT' => 'application/json' } }
+
+      it 'shows history for Africa' do
+        get records_path, headers: headers, params: { region: '_Africa' , show: 'history'}
+        expect(response).to be_successful
+      end
+
+      it 'shows history for South Africa', :tag do
+        get records_path, headers: headers, params: { region: 'South Africa' , show: 'history'}
         expect(response).to be_successful
       end
     end

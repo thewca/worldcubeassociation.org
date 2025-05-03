@@ -334,10 +334,10 @@ class ResultsController < ApplicationController
     @continent = Continent.c_find(params[:region])
     @country = Country.c_find(params[:region])
     if @continent.present?
-      @region_condition = "AND results.country_id IN (#{@continent.country_ids.map { |id| "'#{id}'" }.join(',')})"
+      @region_condition = "AND result.country_id IN (#{@continent.country_ids.map { |id| "'#{id}'" }.join(',')})"
       @region_condition += " AND record_name IN ('WR', '#{@continent.record_name}')" if @is_histories
     elsif @country.present?
-      @region_condition = "AND results.country_id = '#{@country.id}'"
+      @region_condition = "AND result.country_id = '#{@country.id}'"
       @region_condition += " AND record_name <> ''" if @is_histories
     else
       @region_condition = ""
