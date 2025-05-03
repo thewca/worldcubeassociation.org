@@ -45,7 +45,7 @@ RSpec.describe "results" do
         expect(response).to be_successful
       end
 
-      it 'shows history for South Africa', :tag do
+      it 'shows history for South Africa' do
         get records_path, headers: headers, params: { region: 'South Africa' , show: 'history'}
         expect(response).to be_successful
       end
