@@ -216,6 +216,7 @@ Rails.application.routes.draw do
   get 'about' => 'static_pages#about'
   get 'documents' => 'static_pages#documents'
   get 'education' => 'static_pages#education'
+  get 'education/competitor-tutorial' => 'static_pages#competitor_tutorial', as: :competitor_tutorial
   get 'delegates' => 'static_pages#delegates'
   get 'disclaimer' => 'static_pages#disclaimer'
   get 'faq' => 'static_pages#faq'

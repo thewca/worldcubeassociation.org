@@ -19,6 +19,9 @@ class StaticPagesController < ApplicationController
   def logo
   end
 
+  def competitor_tutorial
+  end
+
   def api_help
   end
 
