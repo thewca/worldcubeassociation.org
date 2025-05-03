@@ -7,3 +7,9 @@ tr.senior-delegate {
 tr.candidate-delegate {
   font-style: italic;
 }
+
+.ui.sortable.table>thead>tr>th:not(.sorted)::after {
+  content: "\f0d8";
+  display: inline-block;
+  opacity: 0;
+}
