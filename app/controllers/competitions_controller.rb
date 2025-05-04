@@ -285,9 +285,7 @@ class CompetitionsController < ApplicationController
       return redirect_to competitions_payment_setup_path(competition)
     end
 
-    if CompetitionPaymentIntegration::AVAILABLE_INTEGRATIONS[payment_integration].nil?
-      render plain: "Payment Integration #{payment_integration} not Found", status: :not_found and return
-    end
+    render plain: "Payment Integration #{payment_integration} not Found", status: :not_found and return if CompetitionPaymentIntegration::AVAILABLE_INTEGRATIONS[payment_integration].nil?
 
     connector = CompetitionPaymentIntegration::AVAILABLE_INTEGRATIONS[payment_integration].safe_constantize
     integration_reference = connector&.connect_integration(params)

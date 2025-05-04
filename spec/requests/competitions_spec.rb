@@ -490,7 +490,7 @@ RSpec.describe "competitions" do
       end
 
       it 'creates a connected_payment_integration record' do
-        expect(ManualPaymentIntegration.all.count).to eq(1)
+        expect(ManualPaymentIntegration.count).to eq(1)
       end
 
       it 'populates the integration with the submitted data' do
