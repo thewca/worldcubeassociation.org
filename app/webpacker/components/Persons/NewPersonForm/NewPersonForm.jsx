@@ -25,7 +25,7 @@ function NewPersonForm({
   const [semiId, setSemiId] = useInputState('');
   const [wcaId, setWcaId] = useInputState('');
   const [name, setName] = useInputState('');
-  const [countryIso2, setCountryIso2] = useState('');
+  const [countryIso2, setCountryIso2] = useInputState('');
   const [gender, setGender] = useInputState('');
   const [dob, setDob] = useInputState('');
 
@@ -90,7 +90,7 @@ function NewPersonForm({
             label={I18n.t('activerecord.attributes.user.country_iso2')}
             onlyCountries
             region={countryIso2}
-            onRegionChange={(e, { value }) => setCountryIso2(value)}
+            onRegionChange={setCountryIso2}
             error={errors.countryId}
           />
         </Form.Group>
