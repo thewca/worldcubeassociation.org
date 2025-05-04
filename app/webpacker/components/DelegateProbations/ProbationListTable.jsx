@@ -5,7 +5,7 @@ import UtcDatePicker from '../wca/UtcDatePicker';
 import { apiV0Urls } from '../../lib/requests/routes.js.erb';
 
 export default function ProbationListTable({
-  roleList, isActive, save, sync
+  roleList, isActive, save, sync,
 }) {
   const [confirmOpen, setConfirmOpen] = React.useState(false);
   const [endProbationParams, setEndProbationParams] = React.useState();
