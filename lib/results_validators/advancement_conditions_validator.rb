@@ -18,7 +18,7 @@ module ResultsValidators
 
     # These are the old "(combined) qualification" and "b-final" rounds.
     # They are not taken into account in advancement conditions.
-    IGNORE_ROUND_TYPES = ["0", "h", "b"].freeze
+    IGNORE_ROUND_TYPES = %w[0 h b].freeze
 
     def self.description
       "This validator checks that advancement between rounds is correct according to the regulations."

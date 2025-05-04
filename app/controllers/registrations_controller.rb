@@ -3,7 +3,7 @@
 require "csv"
 
 class RegistrationsController < ApplicationController
-  before_action :authenticate_user!, except: [:index, :psych_sheet, :psych_sheet_event, :register, :stripe_webhook, :payment_denomination]
+  before_action :authenticate_user!, except: %i[index psych_sheet psych_sheet_event register stripe_webhook payment_denomination]
   # Stripe has its own authenticity mechanism with Webhook Secrets.
   protect_from_forgery except: [:stripe_webhook]
 
@@ -19,9 +19,9 @@ class RegistrationsController < ApplicationController
   end
 
   before_action -> { redirect_to_root_unless_user(:can_manage_competition?, competition_from_params) },
-                except: [:index, :psych_sheet, :psych_sheet_event, :register, :payment_completion, :load_payment_intent, :stripe_webhook, :payment_denomination, :capture_paypal_payment]
+                except: %i[index psych_sheet psych_sheet_event register payment_completion load_payment_intent stripe_webhook payment_denomination capture_paypal_payment]
 
-  before_action :competition_must_be_using_wca_registration!, except: [:import, :do_import, :add, :do_add, :index, :psych_sheet, :psych_sheet_event, :stripe_webhook, :payment_denomination]
+  before_action :competition_must_be_using_wca_registration!, except: %i[import do_import add do_add index psych_sheet psych_sheet_event stripe_webhook payment_denomination]
   private def competition_must_be_using_wca_registration!
     return if competition_from_params.use_wca_registration?
 
@@ -29,7 +29,7 @@ class RegistrationsController < ApplicationController
     redirect_to competition_path(competition_from_params)
   end
 
-  before_action :competition_must_not_be_using_wca_registration!, only: [:import, :do_import]
+  before_action :competition_must_not_be_using_wca_registration!, only: %i[import do_import]
   private def competition_must_not_be_using_wca_registration!
     redirect_to competition_path(competition_from_params) if competition_from_params.use_wca_registration?
   end
@@ -156,11 +156,18 @@ class RegistrationsController < ApplicationController
 
   def do_add
     @competition = competition_from_params
+
     if @competition.registration_full?
       flash[:danger] = I18n.t("registrations.mailer.deleted.causes.registrations_full")
-      redirect_to competition_path(@competition)
-      return
+      return redirect_to competition_path(@competition)
+    elsif !@competition.registration_currently_open? && !@competition.on_the_spot_registration?
+      flash[:danger] = I18n.t("registrations.add.ots_not_enabled")
+      return redirect_to competition_path(@competition)
+    elsif @competition.probably_over?
+      flash[:danger] = I18n.t("registrations.add.competition_over")
+      return redirect_to competition_path(@competition)
     end
+
     ActiveRecord::Base.transaction do
       user, locked_account_created = user_for_registration!(params[:registration_data])
       registration = @competition.registrations.find_or_initialize_by(user_id: user.id) do |reg|
@@ -489,30 +496,18 @@ class RegistrationsController < ApplicationController
     payment_integration = params[:payment_integration].to_sym
     payment_account = competition.payment_account_for(payment_integration)
 
-    if payment_account.blank?
-      flash[:danger] = "You cannot issue a refund for this competition anymore. Please use your payment provider's dashboard to do so."
-      return redirect_to competition_registrations_path(competition)
-    end
+    return render status: :not_found, json: { error: :provider_disconnected } if payment_account.blank?
 
     payment_record = payment_account.find_payment(params[:payment_id])
 
     registration = payment_record.root_record.payment_intent.holder
 
-    redirect_path = edit_registration_path(registration)
-
     refund_amount_param = params.require(:payment).require(:refund_amount)
     refund_amount = refund_amount_param.to_i
     amount_left = payment_record.ruby_amount_available_for_refund - refund_amount
 
-    if amount_left.negative?
-      flash[:danger] = "You are not allowed to refund more than the competitor has paid."
-      return redirect_to redirect_path
-    end
-
-    if refund_amount.negative?
-      flash[:danger] = "The refund amount must be greater than zero."
-      return redirect_to redirect_path
-    end
+    return render status: :bad_request, json: { error: :refund_amount_too_high } if amount_left.negative?
+    return render status: :bad_request, json: { error: :refund_amount_too_low } if refund_amount.negative?
 
     refund_receipt = payment_account.issue_refund(payment_record, refund_amount)
 
@@ -528,8 +523,12 @@ class RegistrationsController < ApplicationController
       current_user.id,
     )
 
-    flash[:success] = 'Payment was refunded'
-    redirect_to redirect_path
+    # The `reload` is necessary here, because we just inserted a refund payment
+    #   through the original `registration`. So the parent payment doesn't know about it yet.
+    refunded_payment = payment_record.registration_payment.reload
+    refund_json = refunded_payment.to_v2_json(refunds: true)
+
+    render json: { status: :ok, message: :charge_refunded, refunded_charge: refund_json }
   end
 
   private def registration_from_params

@@ -74,7 +74,7 @@ RSpec.describe "AuxiliaryDataComputation" do
     it "computes world, continental, and national ranking position" do
       AuxiliaryDataComputation.compute_concise_results # Rank tables computation require concise results to be present.
       AuxiliaryDataComputation.compute_rank_tables
-      %w(ranks_single ranks_average).each do |ranks_type|
+      %w[ranks_single ranks_average].each do |ranks_type|
         expect(rank_333(australian, ranks_type)).to include(world_rank: 1, continent_rank: 1, country_rank: 1)
         expect(rank_333(american_1, ranks_type)).to include(world_rank: 2, continent_rank: 1, country_rank: 1)
         expect(rank_333(canadian, ranks_type)).to include(world_rank: 3, continent_rank: 2, country_rank: 1)
@@ -90,7 +90,7 @@ RSpec.describe "AuxiliaryDataComputation" do
       create(:result, event_id: "333", best: 900, average: 1000, person: new_canadian)
       AuxiliaryDataComputation.compute_concise_results # Rank tables computation require concise results to be present.
       AuxiliaryDataComputation.compute_rank_tables
-      %w(ranks_single ranks_average).each do |ranks_type|
+      %w[ranks_single ranks_average].each do |ranks_type|
         # NOTE: this person hasn't got any results in Europe/France yet.
         expect(rank_333(new_french, ranks_type)).to include(world_rank: 1, continent_rank: 0, country_rank: 0)
         # NOTE: the only change is the country_rank of new_canadian (previously american_1).

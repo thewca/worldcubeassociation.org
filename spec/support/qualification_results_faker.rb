@@ -6,12 +6,12 @@ class QualificationResultsFaker
   def initialize(
     date = (Time.now.utc - 1).iso8601,
     results_inputs = [
-      ['222', 'single', '200'],
-      ['333', 'single', '900'],
-      ['pyram', 'single', '1625'],
-      ['555', 'average', '5000'],
-      ['555bf', 'average', '189700'],
-      ['minx', 'average', '13887'],
+      %w[222 single 200],
+      %w[333 single 900],
+      %w[pyram single 1625],
+      %w[555 average 5000],
+      %w[555bf average 189700],
+      %w[minx average 13887],
     ]
   )
     @date = date
