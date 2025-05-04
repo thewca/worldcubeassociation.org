@@ -1,4 +1,5 @@
 import React from 'react';
+import { DateTime } from 'luxon';
 import useLoadedData from '../../lib/hooks/useLoadedData';
 import useSaveAction from '../../lib/hooks/useSaveAction';
 import { apiV0Urls } from '../../lib/requests/routes.js.erb';
@@ -7,7 +8,6 @@ import Errored from '../Requests/Errored';
 
 import ProbationForm from './ProbationForm';
 import ProbationListTable from './ProbationListTable';
-import { DateTime } from 'luxon';
 
 export default function DelegateProbations() {
   const {
@@ -21,10 +21,10 @@ export default function DelegateProbations() {
   const now = DateTime.now();
 
   const activeRoles = probationRoles.filter(
-    (r) => !r.end_date || DateTime.fromISO(r.end_date, { zone: 'UTC' }) > now
+    (r) => !r.end_date || DateTime.fromISO(r.end_date, { zone: 'UTC' }) > now,
   );
   const pastRoles = probationRoles.filter(
-    (r) => r.end_date && DateTime.fromISO(r.end_date, { zone: 'UTC' }) <= now
+    (r) => r.end_date && DateTime.fromISO(r.end_date, { zone: 'UTC' }) <= now,
   );
 
   return (
