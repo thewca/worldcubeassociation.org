@@ -23,11 +23,6 @@ export default function DuesRedirect() {
 
   const handleFormChange = (_, { name, value }) => setFormData({ ...formData, [name]: value });
 
-  const handleRegionChange = (e, { value }) => handleFormChange(e, {
-    name: 'redirectFromCountryIso2',
-    value,
-  });
-
   if (loading || saving || xeroUsersFetch.loading) return <Loading />;
   if (error || xeroUsersFetch.err) return <Errored />;
   return (
@@ -88,10 +83,11 @@ export default function DuesRedirect() {
             {formData.redirectType === 'Country' && (
               <RegionSelector
                 label="From"
+                name="redirectFromCountryIso2"
                 onlyCountries
                 nullable
                 region={formData.redirectFromCountryIso2}
-                onRegionChange={handleRegionChange}
+                onRegionChange={handleFormChange}
               />
             )}
             {formData.redirectType === 'User' && (

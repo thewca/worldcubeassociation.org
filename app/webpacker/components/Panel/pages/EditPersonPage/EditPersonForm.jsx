@@ -56,11 +56,6 @@ export default function EditPersonForm({ wcaId, onSuccess, showDestroyButton = f
     value: date,
   });
 
-  const handleCountryChange = (e, { value }) => handleFormChange(e, {
-    name: 'representing',
-    value,
-  });
-
   const editPerson = (method) => {
     save(apiV0Urls.wrt.edit(wcaId), {
       person: editedUserDetails,
@@ -144,10 +139,11 @@ export default function EditPersonForm({ wcaId, onSuccess, showDestroyButton = f
         />
         <RegionSelector
           label={I18n.t('activerecord.attributes.user.country_iso2')}
+          name="representing"
           onlyCountries
           disabled={!editedUserDetails}
           region={editedUserDetails?.representing || ''}
-          onRegionChange={handleCountryChange}
+          onRegionChange={handleFormChange}
         />
         <GenderSelector
           name="gender"

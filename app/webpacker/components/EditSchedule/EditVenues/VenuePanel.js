@@ -145,11 +145,6 @@ function VenuePanel({
     }
   };
 
-  const handleRegionChange = (e, { value }) => handleVenueChange(e, {
-    name: 'countryIso2',
-    value,
-  });
-
   return (
     <Card fluid raised>
       { /* Needs the className 'image' so that SemUI fills the top of the card */ }
@@ -192,7 +187,7 @@ function VenuePanel({
               name="countryIso2"
               onlyCountries
               region={venue.countryIso2}
-              onRegionChange={handleRegionChange}
+              onRegionChange={handleVenueChange}
             />
             {bestMatch && (
               <Button

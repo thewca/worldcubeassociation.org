@@ -80,11 +80,6 @@ export default function EditProfileForm({
     value: date,
   });
 
-  const handleCountryChange = (e, { value }) => handleFormChange(e, {
-    name: 'country_iso2',
-    value,
-  });
-
   if (saving || isLoading) return <Loading />;
   if (saveError || isError) return <Errored />;
 
@@ -99,9 +94,10 @@ export default function EditProfileForm({
       />
       <RegionSelector
         label={I18n.t('activerecord.attributes.user.country_iso2')}
+        name="country_iso2"
         onlyCountries
         region={editedProfileDetails?.country_iso2}
-        onRegionChange={handleCountryChange}
+        onRegionChange={handleFormChange}
       />
       <GenderSelector
         name="gender"
