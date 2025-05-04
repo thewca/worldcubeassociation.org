@@ -464,6 +464,42 @@ RSpec.describe "competitions" do
       end
     end
   end
+
+  describe "GET #connect_payment_integration" do
+    before do
+      sign_in competition.delegates.first
+    end
+
+    it 'rejects an invalid payment integration type' do
+      get competition_connect_payment_integration_path(competition, 'invalid')
+      expect(response).not_to be_successful
+    end
+
+    context 'connecting a manual integration' do
+      let(:unencoded_payment_information) { 'example instructions' }
+      let(:manual_payment_reference) { 'test ref' }
+
+      before do
+        get competition_connect_payment_integration_path(competition, 'manual'), params: {
+          payment_information: "ZXhhbXBsZSBpbnN0cnVjdGlvbnM", payment_reference: "test ref"
+        }
+      end
+
+      it 'returns redirects to confirmation page response' do
+        expect(response).to redirect_to(competition_payment_integration_setup_path(competition))
+      end
+
+      it 'creates a connected_payment_integration record' do
+        expect(ManualPaymentIntegration.all.count).to eq(1)
+      end
+
+      it 'populates the integration with the submitted data' do
+        integration = ManualPaymentIntegration.first
+        expect(integration.payment_information).to eq(unencoded_payment_information)
+        expect(integration.payment_reference).to eq(manual_payment_reference)
+      end
+    end
+  end
 end
 
 def build_competition_update(comp, **override_params)

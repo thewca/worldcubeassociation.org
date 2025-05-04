@@ -285,10 +285,14 @@ class CompetitionsController < ApplicationController
       return redirect_to competitions_payment_setup_path(competition)
     end
 
+    if CompetitionPaymentIntegration::AVAILABLE_INTEGRATIONS[payment_integration].nil?
+      render plain: "Payment Integration #{payment_integration} not Found", status: :not_found and return
+    end
+
     connector = CompetitionPaymentIntegration::AVAILABLE_INTEGRATIONS[payment_integration].safe_constantize
     integration_reference = connector&.connect_integration(params)
 
-    raise ActionController::RoutingError.new("Payment Integration #{payment_integration} not Found") if integration_reference.blank?
+    raise ActionController::RoutingError.new("No integration reference submitted") if integration_reference.blank?
 
     if payment_integration == :manual && competition.manual_payment_details.present?
       existing_cpi = competition.competition_payment_integrations.first
