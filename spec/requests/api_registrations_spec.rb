@@ -1407,4 +1407,29 @@ RSpec.describe 'API Registrations' do
       expect(response.parsed_body).to eq(expected_response)
     end
   end
+
+  describe 'GET #payment_completion' do
+    context 'manual payment integration' do
+      let(:competition) { create(:competition, :registration_open, :with_organizer, :manual_payments, :visible) }
+      let(:reg) { create(:registration, :pending, competition: competition) }
+      let(:payment_intent) { create(:payment_intent, :manual, holder: reg)}
+
+      context 'successful completion' do
+        before do
+          sign_in create :user
+          get registration_payment_completion_path(competition, 'manual'), params: {
+            client_secret: payment_intent.payment_record.id, payment_reference: 't2345'
+          }
+        end
+
+        it 'returns a success response' do
+          expect(response).to redirect_to(competition_register_path(competition))
+        end
+
+        it 'updates the payment_reference of the payment record', :only do
+          expect(payment_intent.payment_record.payment_reference).to eq('t2345')
+        end
+      end
+    end
+  end
 end

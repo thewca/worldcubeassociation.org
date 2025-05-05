@@ -109,7 +109,7 @@ class PaymentIntent < ApplicationRecord
         errors.add(:wca_status, "#{wca_status} is not compatible with PaypalRecord status: #{payment_record.paypal_status}") unless
           PaypalRecord::WCA_TO_PAYPAL_STATUS_MAP[wca_status.to_sym].include?(payment_record.paypal_status)
       when 'ManualPaymentRecord'
-        errors.add(:wca_status, "#{wca_status} is not compatible with ManualPaymentRecord status: #{payment_record.paypal_status}") unless
+        errors.add(:wca_status, "#{wca_status} is not compatible with ManualPaymentRecord status: #{payment_record.status}") unless
           ManualPaymentRecord::WCA_TO_MANUAL_PAYMENT_STATUS_MAP[wca_status.to_sym].include?(payment_record.status)
       else
         raise "No status combination validation defined for: #{payment_record_type}"
