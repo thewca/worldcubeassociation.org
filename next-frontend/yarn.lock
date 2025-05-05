@@ -105,7 +105,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/code-frame@npm:^7.0.0, @babel/code-frame@npm:^7.22.13, @babel/code-frame@npm:^7.26.2":
+"@babel/code-frame@npm:^7.0.0, @babel/code-frame@npm:^7.26.2":
   version: 7.26.2
   resolution: "@babel/code-frame@npm:7.26.2"
   dependencies:
@@ -2106,9 +2106,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@redocly/openapi-core@npm:^1.28.0":
-  version: 1.33.0
-  resolution: "@redocly/openapi-core@npm:1.33.0"
+"@redocly/openapi-core@npm:^1.34.2":
+  version: 1.34.3
+  resolution: "@redocly/openapi-core@npm:1.34.3"
   dependencies:
     "@redocly/ajv": "npm:^8.11.2"
     "@redocly/config": "npm:^0.22.0"
@@ -2119,7 +2119,7 @@ __metadata:
     minimatch: "npm:^5.0.1"
     pluralize: "npm:^8.0.0"
     yaml-ast-parser: "npm:0.0.43"
-  checksum: 10c0/d30f94e352153a059deae89a341ac36baf8ce98a36bf85c70b787e1f00ba0106710994e9202e6578b43c9dad1e836453ee677befe733923d9042a65e39627a37
+  checksum: 10c0/09a089c206419f716dd66009ac9cf90f1de8b44537828e8e23be7846f28c64190a6733d53974d8cbe17d455309b12dbff3b136ec64d7932f9183c01c9e6a777b
   languageName: node
   linkType: hard
 
@@ -6612,10 +6612,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"index-to-position@npm:^0.1.2":
-  version: 0.1.2
-  resolution: "index-to-position@npm:0.1.2"
-  checksum: 10c0/7c91bde8bafc22684b74a7a24915bee4691cba48352ddb4ebe3b20a3a87bc0fa7a05f586137245ca8f92222a11f341f7631ff7f38cd78a523505d2d02dbfa257
+"index-to-position@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "index-to-position@npm:1.1.0"
+  checksum: 10c0/77ef140f0218df0486a08cff204de4d382e8c43892039aaa441ac5b87f0c8d8a72af633c8a1c49f1b1ec4177bd809e4e045958a9aebe65545f203342b95886b3
   languageName: node
   linkType: hard
 
@@ -7618,7 +7618,7 @@ __metadata:
     next-auth: "npm:5.0.0-beta.27"
     next-themes: "npm:^0.4.6"
     openapi-fetch: "npm:^0.13.5"
-    openapi-typescript: "npm:^7.6.1"
+    openapi-typescript: "npm:^7.7.1"
     payload: "npm:^3.35.1"
     payload-authjs: "npm:^0.8.1"
     prettier: "npm:^3.5.3"
@@ -7948,21 +7948,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"openapi-typescript@npm:^7.6.1":
-  version: 7.6.1
-  resolution: "openapi-typescript@npm:7.6.1"
+"openapi-typescript@npm:^7.7.1":
+  version: 7.7.1
+  resolution: "openapi-typescript@npm:7.7.1"
   dependencies:
-    "@redocly/openapi-core": "npm:^1.28.0"
+    "@redocly/openapi-core": "npm:^1.34.2"
     ansi-colors: "npm:^4.1.3"
     change-case: "npm:^5.4.4"
-    parse-json: "npm:^8.1.0"
+    parse-json: "npm:^8.3.0"
     supports-color: "npm:^9.4.0"
     yargs-parser: "npm:^21.1.1"
   peerDependencies:
     typescript: ^5.x
   bin:
     openapi-typescript: bin/cli.js
-  checksum: 10c0/3591be796ac5eb1fe051b765c29e7cc5fcf9bb59e83eb43e13b4c98f25957d78523a5c8922eb52f1785b3fab6f5e269bc02892d72350ac7274d41192a36673c9
+  checksum: 10c0/18136f017d5bb7eef475688321f127a65691f6de80b5c2df466d34deb73f2ce8efe1c7e24b5dc53fdafb61bef38868a2c27f9f6e92f6fc26d3a7ad82dffa92d8
   languageName: node
   linkType: hard
 
@@ -8065,14 +8065,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"parse-json@npm:^8.1.0":
-  version: 8.1.0
-  resolution: "parse-json@npm:8.1.0"
+"parse-json@npm:^8.3.0":
+  version: 8.3.0
+  resolution: "parse-json@npm:8.3.0"
   dependencies:
-    "@babel/code-frame": "npm:^7.22.13"
-    index-to-position: "npm:^0.1.2"
-    type-fest: "npm:^4.7.1"
-  checksum: 10c0/39a49acafc1c41a763df2599a826eb77873a44b098a5f2ba548843229b334a16ff9d613d0381328e58031b0afaabc18ed2a01337a6522911ac7a81828df58bcb
+    "@babel/code-frame": "npm:^7.26.2"
+    index-to-position: "npm:^1.1.0"
+    type-fest: "npm:^4.39.1"
+  checksum: 10c0/0eb5a50f88b8428c8f7a9cf021636c16664f0c62190323652d39e7bdf62953e7c50f9957e55e17dc2d74fc05c89c11f5553f381dbc686735b537ea9b101c7153
   languageName: node
   linkType: hard
 
@@ -10016,10 +10016,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"type-fest@npm:^4.7.1":
-  version: 4.37.0
-  resolution: "type-fest@npm:4.37.0"
-  checksum: 10c0/5bad189f66fbe3431e5d36befa08cab6010e56be68b7467530b7ef94c3cf81ef775a8ac3047c8bbda4dd3159929285870357498d7bc1df062714f9c5c3a84926
+"type-fest@npm:^4.39.1":
+  version: 4.40.1
+  resolution: "type-fest@npm:4.40.1"
+  checksum: 10c0/590cb7d4dcd3da83efe49b5b52cd041661f6fa29f18cb76650fe1fdeb4090688e92955656e9d981e606abb13d25c0418be8c6c6504d80e87fe18dc9ca0888392
   languageName: node
   linkType: hard
 
