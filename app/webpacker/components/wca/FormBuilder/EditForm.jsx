@@ -17,7 +17,7 @@ import FormObjectProvider, { useFormContext, useFormObject } from './provider/Fo
 import ConfirmProvider, { useConfirm } from '../../../lib/providers/ConfirmProvider';
 
 function useSafeMutation(mutation, mutationArgs, unloadListener) {
-  const { onSuccess, onError } = useFormContext();
+  const { onSuccess: onFormSuccess, onError } = useFormContext();
 
   return useCallback(() => {
     window.removeEventListener('beforeunload', unloadListener);
@@ -25,8 +25,8 @@ function useSafeMutation(mutation, mutationArgs, unloadListener) {
     // The `saveMutation` may have side-effects like Redirects
     //   that are not supposed to trigger the "are you sure" warning.
     // TODO: Refactor `unsavedChanges` so that it doesn't fire in the first place
-    mutation.mutate(mutationArgs, { onSuccess, onError });
-  }, [unloadListener, mutation, mutationArgs, onSuccess, onError]);
+    mutation.mutate(mutationArgs, { onSuccess: () => onFormSuccess(), onError });
+  }, [unloadListener, mutation, mutationArgs, onFormSuccess, onError]);
 }
 
 export function FormActionButton({
