@@ -539,6 +539,10 @@ class User < ApplicationRecord
     can_view_past_banned_competitors? || staff_delegate? || appeals_committee?
   end
 
+  private def can_view_delegate_probations?
+    wic_team?
+  end
+
   private def can_view_past_banned_competitors?
     wic_team? || board_member? || weat_team? || results_team? || admin?
   end
@@ -560,13 +564,15 @@ class User < ApplicationRecord
 
     groups += UserGroup.banned_competitors.ids if can_view_past_banned_competitors?
 
+    groups += UserGroup.delegate_probation.ids if can_view_delegate_probations?
+
     groups
   end
 
   private def groups_with_edit_access
     return "*" if can_edit_any_groups?
 
-    groups = []
+    groups = Set.new
 
     active_roles.select do |role|
       group = role.group
@@ -731,6 +737,7 @@ class User < ApplicationRecord
         pages: [
           panel_pages[:bannedCompetitors],
           panel_pages[:downloadVoters],
+          panel_pages[:delegateProbations],
         ],
       },
       weat: {
@@ -1351,7 +1358,7 @@ class User < ApplicationRecord
   end
 
   private def can_manage_delegate_probation?
-    admin? || board_member? || senior_delegate? || can_access_wfc_senior_matters?
+    admin? || board_member? || senior_delegate? || can_access_wfc_senior_matters? || group_leader?(UserGroup.teams_committees_group_wic)
   end
 
   def senior_delegates
