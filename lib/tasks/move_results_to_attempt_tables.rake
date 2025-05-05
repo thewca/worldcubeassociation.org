@@ -4,8 +4,7 @@ namespace :results do
   desc "Migrates all results to attempts"
   task migrate_attempts: [:environment] do
     Result.find_each do |result|
-      # This will trigger the after_commit hook, which upserts the values into the table
-      result.touch
+      result.create_or_update_attempts
     end
   end
 
@@ -20,8 +19,7 @@ namespace :results do
     abort "Competition #{competition_id} not found" if competition.nil?
 
     competition.results.find_each do |result|
-      # This will trigger the after_commit hook, which upserts the values into the table
-      result.touch
+      result.create_or_update_attempts
     end
   end
 
@@ -36,8 +34,7 @@ namespace :results do
     abort "Person #{wca_id} not found" if person.nil?
 
     person.results.find_each do |result|
-      # This will trigger the after_commit hook, which upserts the values into the table
-      result.touch
+      result.create_or_update_attempts
     end
   end
 end
