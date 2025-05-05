@@ -90,7 +90,7 @@ class ContactsController < ApplicationController
   private def value_humanized(value, field)
     case field
     when :country_iso2
-      Country.find_by(iso2: value).name_in(:en)
+      Country.c_find_by_iso2(value).name_in(:en)
     when :gender
       User::GENDER_LABEL_METHOD.call(value.to_sym)
     else
