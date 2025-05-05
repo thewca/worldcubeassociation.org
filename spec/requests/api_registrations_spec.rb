@@ -1312,16 +1312,27 @@ RSpec.describe 'API Registrations' do
       expect(payment_record.currency_code).to eq("usd")
     end
 
-    it 'refuses ticket create request if registration is closed' do
-      closed_comp = create(:competition, :registration_closed, :with_organizer, :stripe_connected)
-      closed_reg = create(:registration, :pending, competition: closed_comp)
+    describe 'refuse ticket create request' do
+      it 'if registration already paid' do
+        create(:registration_payment, registration: reg)
+        get api_v1_registrations_payment_ticket_path(competition_id: competition.id), headers: headers
 
-      headers = { 'Authorization' => fetch_jwt_token(closed_reg.user_id) }
-      get api_v1_registrations_payment_ticket_path(competition_id: closed_comp.id), headers: headers
+        body = response.parsed_body
+        expect(response).to have_http_status(:forbidden)
+        expect(body).to eq({ error: Registrations::ErrorCodes::NO_OUTSTANDING_PAYMENT }.with_indifferent_access)
+      end
 
-      body = response.parsed_body
-      expect(response).to have_http_status(:forbidden)
-      expect(body).to eq({ error: Registrations::ErrorCodes::REGISTRATION_CLOSED }.with_indifferent_access)
+      it 'if registration is closed' do
+        closed_comp = create(:competition, :registration_closed, :with_organizer, :stripe_connected)
+        closed_reg = create(:registration, :pending, competition: closed_comp)
+
+        headers = { 'Authorization' => fetch_jwt_token(closed_reg.user_id) }
+        get api_v1_registrations_payment_ticket_path(competition_id: closed_comp.id), headers: headers
+
+        body = response.parsed_body
+        expect(response).to have_http_status(:forbidden)
+        expect(body).to eq({ error: Registrations::ErrorCodes::REGISTRATION_CLOSED }.with_indifferent_access)
+      end
     end
   end
 

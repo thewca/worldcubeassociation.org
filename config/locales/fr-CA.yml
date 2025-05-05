@@ -486,6 +486,12 @@ fr-CA:
         registration_competition_events: Épreuves
         #original_hash: e0edc01
         email: Adresse courriel
+        #original_hash: 9786ec4
+        search: Recherche...
+        #original_hash: 8ef2d22
+        too_few_chars: Trop peu de caractères
+        #original_hash: 9e524fe
+        no_results: Aucun résultat
       competition_tab:
         #original_hash: f3cb82a
         content: Contenu
@@ -2506,11 +2512,6 @@ fr-CA:
       Veuillez consulter les informations relatives à la compétition pour
       connaître les modalités de paiement.
     refund_form:
-      hints:
-        #original_hash: b19aecf
-        refund_amount: >-
-          Le montant à rembourser au compétiteur. Il peut s'agir de n'importe
-          quelle valeur dans la limite du montant déjà payé.
       labels:
         #original_hash: b8f9c93
         refund_amount: Montant à rembourser
@@ -2687,6 +2688,14 @@ fr-CA:
         ajouter les inscriptions ayant lieu sur place.
       #original_hash: 109f028
       add: Ajouter l'inscription
+      #original_hash: 667dea6
+      ots_not_enabled: >-
+        Les inscriptions sont terminées et l'inscription sur place n'est pas
+        activée - vous devez d'abord modifier la compétition pour l'activer.
+      #original_hash: 5b63451
+      competition_over: >-
+        Il n'est pas possible d'ajouter des inscriptions sur place après la fin
+        de la compétition.
       errors:
         #original_hash: 1425cd8
         already_registered: Cette personne a déjà une inscription.
@@ -3941,6 +3950,10 @@ fr-CA:
         being_deleted: L'inscription est en cours de suppression...
         #original_hash: 5bf36a0
         update_confirm: Êtes-vous sûr·e de vouloir mettre à jour votre inscription?
+        #original_hash: 0802cc5
+        organizer_update_confirm: >-
+          Êtes-vous sûr de vouloir mettre à jour l'inscription de l'utilisateur
+          ?
         #original_hash: 9e6ebb3
         update_confirm_contact: >-
           Vous devez contacter les organisateurs pour mettre à jour votre
@@ -4152,6 +4165,10 @@ fr-CA:
         '-6001': Le paiement WCA n’est pas activé pour cette compétition
         #original_hash: 2a5d0da
         '-6002': Vous devez terminer votre inscription avant de pouvoir payer
+        #original_hash: f6a4a00
+        '-6003': >-
+          Aucun paiement en suspens n'a été trouvé - ceci est probablement dû au
+          fait que vous avez déjà payé votre inscription.
     errors:
       #original_hash: 921dcb4
       must_use_wca_registration: >-
@@ -4263,6 +4280,10 @@ fr-CA:
       event_change_deadline_with_ots: >-
         La date limite pour mettre à jour les épreuves doit être placée durant
         la compétition si les inscriptions sur place sont acceptées.
+      #original_hash: 261ffa3
+      on_the_spot_with_past_event_change_deadline: >-
+        Impossible d'autoriser les inscriptions sur place si la date limite de
+        mise à jour des événements est dépassée.
       #original_hash: 2370e54
       series_distance_km: 'La compétition est située trop loin de %{competition}.'
       #original_hash: 082fd72
@@ -4725,11 +4746,27 @@ fr-CA:
     #original_hash: 3f641b6
     connect_wca_id: Associez votre ID WCA à votre compte !
   payments:
+    messages:
+      #original_hash: 0311575
+      charge_refunded: Le paiement a été remboursé
+      #original_hash: f22cac8
+      charges_refunded: Tous les frais ont été remboursés
+    errors:
+      refund:
+        #original_hash: af69c11
+        provider_disconnected: >-
+          Vous ne pouvez plus effectuer de remboursement pour cette compétition.
+          Veuillez utiliser le tableau de bord de votre fournisseur de paiement
+          pour le faire.
+        #original_hash: 8db3ddd
+        refund_amount_too_high: >-
+          Vous n'êtes pas autorisé à rembourser plus que ce que le compétiteur a
+          payé.
+        #original_hash: 35ef125
+        refund_amount_too_low: Le montant du remboursement doit être supérieur à zéro.
     labels:
-      #original_hash: 10decdd
-      payment_statuses: Statuts de paiement
-      #original_hash: f01ad2f
-      available_refunds: Remboursements disponibles
+      #original_hash: df5e902
+      net_payment: Paiement net
       #original_hash: e2d4ff4
       original_payment: Paiement initial
     payment_providers:
@@ -4830,11 +4867,6 @@ fr-CA:
           primary_email: Adresse courriel
         #original_hash: 08d2e98
         fallback_not_applicable: N/A
-    statuses:
-      #original_hash: 7f34230
-      succeeded: Réussi
-      #original_hash: 8d7916c
-      refund: Remboursé
   persons:
     index:
       #original_hash: 665ab2d

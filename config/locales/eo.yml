@@ -2389,11 +2389,6 @@ eo:
     #original_hash: 86877d4
     wont_pay_here: Bonvolu kontroli konkursajn informojn por scii kiel pagi
     refund_form:
-      hints:
-        #original_hash: 38c904c
-        refund_amount: >-
-          La sumo repagota al la konkursanto. Tio povas esti ajna kiomo ĝis la
-          jam pagita sumo.
       labels:
         #original_hash: 1cc5991
         refund_amount: Repagota Sumo
@@ -2563,6 +2558,12 @@ eo:
         registriĝon.
       #original_hash: a11edb8
       add: Aldoni registriĝon
+      #original_hash: fd52980
+      ots_not_enabled: >-
+        Registriĝperiodo finiĝis kaj surlokaj registriĝoj ne estas permesataj -
+        unue vi devas redakti la konkurson kaj ŝalti tion
+      #original_hash: 61125b5
+      competition_over: Vi ne povas aldoni surlokajn registriĝojn post la fino de la konkurso.
       errors:
         #original_hash: d6dcf5c
         already_registered: Tiu persono jam havas registriĝon.
@@ -3744,6 +3745,8 @@ eo:
         being_deleted: Registriĝo estas foriganta...
         #original_hash: cbf13af
         update_confirm: Ĉu vi certas ke vi volas ĝisdatigi vian registriĝon?
+        #original_hash: 604da8b
+        organizer_update_confirm: Ĉu vi certas ke vi volas ĝisdatigi ĉi tiun registriĝon?
         #original_hash: 9b92912
         update_confirm_contact: >-
           Vi devas kontakti la organizantojn por ĝisdatigi vian registriĝon,
@@ -4031,6 +4034,10 @@ eo:
       event_change_deadline_with_ots: >-
         Limdato por ĝisdatigi konkurserojn devas esti dum la konkurso se
         surlokaj registriĝoj eblas.
+      #original_hash: e6400f7
+      on_the_spot_with_past_event_change_deadline: >-
+        Ne eblas ŝalti surlokajn registriĝojn se la limdato por ĝisdatigi
+        konkurserojn estas pasintece.
       #original_hash: 5ae2437
       series_distance_km: 'La konkurso troviĝas tro malproksime de %{competition}.'
       #original_hash: 4a5d7c5
@@ -4486,13 +4493,23 @@ eo:
     connect_wca_id: Ligu vian WCA-ID-n kun via konto!
   payments:
     messages:
+      #original_hash: 2eac1cb
+      charge_refunded: Pago estis repagita
       #original_hash: 1e1d219
       charges_refunded: Ĉiuj pagoj estis repagitaj
+    errors:
+      refund:
+        #original_hash: 66475ae
+        provider_disconnected: >-
+          Vi ne plu rajtas sendi repagojn por ĉi tiu konkurso. Bonvolu uzi la
+          panelon de via provizanto por fari tion.
+        #original_hash: 73e93ee
+        refund_amount_too_high: Vi ne rajtas repagi pli ol kiom la konkursanto pagis.
+        #original_hash: 6368ffc
+        refund_amount_too_low: La repagitan sumon devas esti pli granda ol nulo.
     labels:
-      #original_hash: cccf678
-      payment_statuses: Pagstatoj
-      #original_hash: 312b6b6
-      available_refunds: Disponeblaj repagoj
+      #original_hash: b6370d7
+      net_payment: Neta pago
       #original_hash: ef3cd45
       original_payment: Origina pago
     payment_providers:
@@ -4585,11 +4602,6 @@ eo:
           primary_email: Retpoŝtadreso
         #original_hash: 08d2e98
         fallback_not_applicable: Neaplikebla
-    statuses:
-      #original_hash: c8fbda9
-      succeeded: Sukcesa
-      #original_hash: d6fbc7a
-      refund: Repagita
   persons:
     index:
       #original_hash: 5934b4c

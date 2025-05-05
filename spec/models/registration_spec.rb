@@ -597,7 +597,7 @@ RSpec.describe Registration do
     it 'positive registration_payment calls registration.consider_auto_close' do
       competition = create(:competition)
       reg = create(:registration, competition: competition)
-      expect(reg).to receive(:consider_auto_close)
+      expect(reg).to receive(:consider_auto_close).exactly(1).times
 
       create(
         :registration_payment,
