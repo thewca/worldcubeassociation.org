@@ -525,7 +525,7 @@ FactoryBot.define do
 
       if defined?(evaluator.manual_payment_reference)
         manual_payment_account = ManualPaymentIntegration.new(
-          payment_information: evaluator.manual_payment_reference, payment_reference: "test reference"
+          payment_information: evaluator.manual_payment_reference, payment_reference: "test reference",
         )
         competition.competition_payment_integrations.new(connected_account: manual_payment_account)
         competition.save
