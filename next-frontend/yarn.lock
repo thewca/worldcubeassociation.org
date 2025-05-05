@@ -2050,15 +2050,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@payloadcms/translations@npm:3.35.1":
-  version: 3.35.1
-  resolution: "@payloadcms/translations@npm:3.35.1"
-  dependencies:
-    date-fns: "npm:4.1.0"
-  checksum: 10c0/5945566fbe0e9effc54a50de8294ca0c831535041bde8d44a72d0b59163a53eb13ab4494ef26fc3ed5c058f018830f1bbf2714cda80c4ef025bce756fd1e0d53
-  languageName: node
-  linkType: hard
-
 "@payloadcms/translations@npm:3.36.1":
   version: 3.36.1
   resolution: "@payloadcms/translations@npm:3.36.1"
@@ -2068,7 +2059,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@payloadcms/ui@npm:3.36.1":
+"@payloadcms/ui@npm:3.36.1, @payloadcms/ui@npm:^3.16.0":
   version: 3.36.1
   resolution: "@payloadcms/ui@npm:3.36.1"
   dependencies:
@@ -2100,41 +2091,6 @@ __metadata:
     react: ^19.0.0 || ^19.0.0-rc-65a56d0e-20241020
     react-dom: ^19.0.0 || ^19.0.0-rc-65a56d0e-20241020
   checksum: 10c0/755a95d9e42f78232730b67203fd1260a7595e3fe971fa85c813f6f1ab9bc3bef2ec3125957be72225607f32049f5b4d801f570632081bd355022ccc7177fe16
-  languageName: node
-  linkType: hard
-
-"@payloadcms/ui@npm:^3.16.0":
-  version: 3.35.1
-  resolution: "@payloadcms/ui@npm:3.35.1"
-  dependencies:
-    "@date-fns/tz": "npm:1.2.0"
-    "@dnd-kit/core": "npm:6.0.8"
-    "@dnd-kit/sortable": "npm:7.0.2"
-    "@faceless-ui/modal": "npm:3.0.0-beta.2"
-    "@faceless-ui/scroll-info": "npm:2.0.0"
-    "@faceless-ui/window-info": "npm:3.0.1"
-    "@monaco-editor/react": "npm:4.7.0"
-    "@payloadcms/translations": "npm:3.35.1"
-    bson-objectid: "npm:2.0.4"
-    date-fns: "npm:4.1.0"
-    dequal: "npm:2.0.3"
-    md5: "npm:2.3.0"
-    object-to-formdata: "npm:4.5.1"
-    qs-esm: "npm:7.0.2"
-    react-datepicker: "npm:7.6.0"
-    react-image-crop: "npm:10.1.8"
-    react-select: "npm:5.9.0"
-    scheduler: "npm:0.25.0"
-    sonner: "npm:^1.7.2"
-    ts-essentials: "npm:10.0.3"
-    use-context-selector: "npm:2.0.0"
-    uuid: "npm:10.0.0"
-  peerDependencies:
-    next: ^15.2.3
-    payload: 3.35.1
-    react: ^19.0.0 || ^19.0.0-rc-65a56d0e-20241020
-    react-dom: ^19.0.0 || ^19.0.0-rc-65a56d0e-20241020
-  checksum: 10c0/41dd2c87b0d8fa11994a4677f62552841f5b44267572c23115643e7265b080f72bdcb870da623432b7691b96315cd3b5d4e24c6e82eb7eae6b53b26320d11eac
   languageName: node
   linkType: hard
 
@@ -10980,14 +10936,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"zod@npm:^3.23.8":
-  version: 3.24.2
-  resolution: "zod@npm:3.24.2"
-  checksum: 10c0/c638c7220150847f13ad90635b3e7d0321b36cce36f3fc6050ed960689594c949c326dfe2c6fa87c14b126ee5d370ccdebd6efb304f41ef5557a4aaca2824565
-  languageName: node
-  linkType: hard
-
-"zod@npm:^3.24.2, zod@npm:^3.24.3":
+"zod@npm:^3.23.8, zod@npm:^3.24.2, zod@npm:^3.24.3":
   version: 3.24.4
   resolution: "zod@npm:3.24.4"
   checksum: 10c0/ab3112f017562180a41a0f83d870b333677f7d6b77f106696c56894567051b91154714a088149d8387a4f50806a2520efcb666f108cd384a35c236a191186d91
