@@ -493,7 +493,7 @@ RSpec.describe Competition do
     end
 
     it "warns if championship already exists" do
-      create(:competition, :confirmed, :visible, starts: Date.new(2019, 5, 6), championship_types: ["world", "_Oceania"])
+      create(:competition, :confirmed, :visible, starts: Date.new(2019, 5, 6), championship_types: %w[world _Oceania])
 
       competition = create(:competition, starts: Date.new(2019, 10, 1), championship_types: ["world"])
       expect(competition).to be_valid
@@ -787,13 +787,13 @@ RSpec.describe Competition do
     let(:competition_with_delegate) { build(:competition, :with_delegate, :with_organizer, generate_website: false) }
     let(:competition_without_delegate) { build(:competition) }
 
-    [:confirmed, :show_at_all].each do |action|
+    %i[confirmed show_at_all].each do |action|
       it "can set #{action}" do
         competition_with_delegate.public_send :"#{action}=", true
         expect(competition_with_delegate).to be_valid
       end
 
-      [:city_name, :country_id, :venue, :venue_address, :external_website, :latitude, :longitude].each do |field|
+      %i[city_name country_id venue venue_address external_website latitude longitude].each do |field|
         it "requires #{field} when setting #{action}" do
           competition_with_delegate.assign_attributes field => "", action => true
           expect(competition_with_delegate).not_to be_valid
@@ -962,7 +962,7 @@ RSpec.describe Competition do
       result = competition.person_ids_with_results
       expect(result.size).to eq 4
       expect(result.map(&:first)).to eq [person_four, person_one, person_three, person_two].map(&:wca_id)
-      expect(result.second.last.map(&:round_type_id)).to eq %w(f 1 c)
+      expect(result.second.last.map(&:round_type_id)).to eq %w[f 1 c]
     end
 
     it "events_with_round_types_with_results" do
@@ -979,7 +979,7 @@ RSpec.describe Competition do
       expect(results[1].second.first.last.map(&:value1)).to eq [3000, 3000]
 
       # Orders results which tied by person name.
-      expect(results[1].second.first.last.map(&:person_name)).to eq %w(One Two)
+      expect(results[1].second.first.last.map(&:person_name)).to eq %w[One Two]
     end
 
     it "winning_results and events_with_podium_results don't include results with DNF as best" do
@@ -998,7 +998,7 @@ RSpec.describe Competition do
     expect do
       competition.update_attribute(:id, "NewName2016")
     end.not_to(change {
-      [:results, :organizers, :delegates, :tabs, :registrations, :delegate_report].map do |associated|
+      %i[results organizers delegates tabs registrations delegate_report].map do |associated|
         competition.send(associated)
       end
     })
@@ -1264,7 +1264,7 @@ RSpec.describe Competition do
     end
 
     it "is true when competition is a national championship and a world championship" do
-      competition = create(:competition, events: Event.official, championship_types: ["AU", "world"], country_id: "Australia", city_name: "Melbourne, Victoria")
+      competition = create(:competition, events: Event.official, championship_types: %w[AU world], country_id: "Australia", city_name: "Melbourne, Victoria")
       expect(competition.exempt_from_wca_dues?).to be true
     end
 
@@ -1337,7 +1337,7 @@ RSpec.describe Competition do
   end
 
   context "event restrictions and limits" do
-    event_ids = ["222", "333", "444", "555"]
+    event_ids = %w[222 333 444 555]
     number_of_events = event_ids.length
     let(:competition) { build(:competition, :with_event_limit, event_ids: event_ids) }
 

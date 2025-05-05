@@ -18,7 +18,7 @@ RSpec.describe "API misc" do
       expect(json['world_records']['333']['single']).to eq 444
       expect(json['continental_records']['_North America']['333']['single']).to eq 555
       expect(json['national_records']['USA']['333']['single']).to eq 555
-      expect(json['national_records']['USA'].keys).to eq %w(333)
+      expect(json['national_records']['USA'].keys).to eq %w[333]
     end
   end
 end

@@ -12,15 +12,15 @@ module Admin
         format.json do
           @pending_competitions = Competition.pending_posting.order(results_submitted_at: :asc)
           user_attributes = {
-            only: ["id", "name"],
+            only: %w[id name],
             methods: [],
             include: [],
           }
           render json: {
             current_user: current_user.as_json(user_attributes),
             competitions: @pending_competitions.as_json(
-              only: ["id", "name", "results_submitted_at"],
-              methods: ["city", "country_iso2"],
+              only: %w[id name results_submitted_at],
+              methods: %w[city country_iso2],
               include: { posting_user: user_attributes },
             ),
           }
