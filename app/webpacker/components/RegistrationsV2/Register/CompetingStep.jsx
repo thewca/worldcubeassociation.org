@@ -191,9 +191,11 @@ export default function CompetingStep({
 
             if (initialRegistrationStatus === 'cancelled' && newCompetingStatus === 'pending') {
               // Going from cancelled -> pending
+              // i18n-tasks-use t('registrations.flash.registered')
               dispatch(showMessage('registrations.flash.registered', 'positive'));
             } else {
               // Not changing status
+              // i18n-tasks-use t('registrations.flash.updated')
               dispatch(showMessage('registrations.flash.updated', 'positive'));
             }
           },
