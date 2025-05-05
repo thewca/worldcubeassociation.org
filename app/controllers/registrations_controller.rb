@@ -384,7 +384,6 @@ class RegistrationsController < ApplicationController
   end
 
   def payment_completion
-    puts "here"
     competition_id = params[:competition_id]
     competition = Competition.find(competition_id)
 
