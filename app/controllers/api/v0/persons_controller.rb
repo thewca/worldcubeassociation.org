@@ -48,7 +48,7 @@ class Api::V0::PersonsController < Api::V0::ApiController
 
   private def person_to_json(person, private_attributes = [])
     {
-      person: person.serializable_hash(only: [:wca_id, :name, :url, :gender, :country_iso2, :delegate_status, :teams, :avatar], private_attributes: private_attributes),
+      person: person.serializable_hash(only: %i[wca_id name url gender country_iso2 delegate_status teams avatar], private_attributes: private_attributes),
       competition_count: person.competitions.count,
       personal_records: person.ranks_single.index_by(&:event_id).transform_values do |rank_single|
         # This rank may be nil: A person can have a single but not an average.

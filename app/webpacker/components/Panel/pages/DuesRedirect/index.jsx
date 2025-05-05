@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Button, Confirm, Form, Icon, Modal, Table,
 } from 'semantic-ui-react';
@@ -7,7 +7,7 @@ import { wfcDuesRedirectsUrl, wfcXeroUsersUrl } from '../../../../lib/requests/r
 import Errored from '../../../Requests/Errored';
 import Loading from '../../../Requests/Loading';
 import useSaveAction from '../../../../lib/hooks/useSaveAction';
-import CountrySelector from '../../../CountrySelector/CountrySelector';
+import RegionSelector from '../../../wca/RegionSelector';
 import { IdWcaSearch } from '../../../SearchWidget/WcaSearch';
 import SEARCH_MODELS from '../../../SearchWidget/SearchModel';
 
@@ -17,9 +17,9 @@ export default function DuesRedirect() {
   } = useLoadedData(wfcDuesRedirectsUrl);
   const xeroUsersFetch = useLoadedData(wfcXeroUsersUrl);
   const { save, saving } = useSaveAction();
-  const [open, setOpen] = React.useState(false);
-  const [toDeleteId, setToDeleteId] = React.useState();
-  const [formData, setFormData] = React.useState({ redirectType: 'Country' });
+  const [open, setOpen] = useState(false);
+  const [toDeleteId, setToDeleteId] = useState();
+  const [formData, setFormData] = useState({ redirectType: 'Country' });
 
   const handleFormChange = (_, { name, value }) => setFormData({ ...formData, [name]: value });
 
@@ -81,11 +81,13 @@ export default function DuesRedirect() {
               onChange={handleFormChange}
             />
             {formData.redirectType === 'Country' && (
-              <CountrySelector
+              <RegionSelector
                 label="From"
                 name="redirectFromCountryIso2"
-                value={formData.redirectFromCountryIso2}
-                onChange={handleFormChange}
+                onlyCountries
+                nullable
+                region={formData.redirectFromCountryIso2}
+                onRegionChange={handleFormChange}
               />
             )}
             {formData.redirectType === 'User' && (

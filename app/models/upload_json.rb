@@ -12,7 +12,7 @@ class UploadJson
       begin
         # Parse the json first
         JSON::Validator.validate!(ResultsValidators::JSONSchemas::RESULT_JSON_SCHEMA, parsed_json)
-        errors.add(:results_file, "is not for this competition but for #{parsed_json["competitionId"]}!") if parsed_json["competitionId"] != competition_id
+        errors.add(:results_file, "is not for this competition but for #{parsed_json['competitionId']}!") if parsed_json["competitionId"] != competition_id
       rescue JSON::ParserError
         errors.add(:results_file, "must be a JSON file from the Workbook Assistant")
       rescue JSON::Schema::ValidationError => e
@@ -94,7 +94,7 @@ class UploadJson
 
           # Import scrambles for round
           round["groups"].each do |group|
-            ["scrambles", "extraScrambles"].each do |scramble_type|
+            %w[scrambles extraScrambles].each do |scramble_type|
               group[scramble_type]&.each_with_index do |scramble, index|
                 new_scramble_attributes = {
                   competition_id: competition_id,

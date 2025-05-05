@@ -6,9 +6,9 @@ class IncidentsController < ApplicationController
 
   # Incident should have a public summary when resolved, so not everything is
   # WRC/Delegates-only.
-  before_action -> { authenticate_user! && redirect_to_root_unless_user(:can_manage_incidents?) }, except: [
-    :index,
-    :show,
+  before_action -> { authenticate_user! && redirect_to_root_unless_user(:can_manage_incidents?) }, except: %i[
+    index
+    show
   ]
 
   def index
@@ -118,7 +118,7 @@ class IncidentsController < ApplicationController
         :public_summary,
         :tags,
         :digest_worthy,
-        incident_competitions_attributes: [:id, :competition_id, :comments, :_destroy],
+        incident_competitions_attributes: %i[id competition_id comments _destroy],
       )
     end
 end
