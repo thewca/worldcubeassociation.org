@@ -250,7 +250,7 @@ class Registration < ApplicationRecord
   end
 
   def payment_reference
-    # TODO: We currently have no
+    # TODO: We currently have no concept of payment reference for stripe or paypal
     registration_payments.first&.receipt&.payment_reference
   end
 

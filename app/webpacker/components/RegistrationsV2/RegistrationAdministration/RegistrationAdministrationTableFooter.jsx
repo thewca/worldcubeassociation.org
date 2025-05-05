@@ -4,6 +4,10 @@ import React from 'react';
 import { isoMoneyToHumanReadable } from '../../../lib/helpers/money';
 
 const moneyCountHumanReadable = (registrations, competitionInfo) => {
+  if (competitionInfo.payment_integration_type === 'manual') {
+    return '';
+  }
+
   const moneyCount = _.sum(registrations.map((r) => r.payment.payment_amount_iso));
 
   return isoMoneyToHumanReadable(

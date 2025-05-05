@@ -68,7 +68,9 @@ export default function TableHeader({
               sorted={sortColumn === 'amount' ? sortDirection : undefined}
               onClick={() => onColumnClick('amount')}
             >
-              {I18n.t('competitions.registration_v2.update.amount')}
+              {competitionInfo.payment_integration_type === 'manual'
+                ? I18n.t('competitions.registration_v2.list.payment.payment_reference')
+                : I18n.t('competitions.registration_v2.update.amount')}
             </Table.HeaderCell>
           </>
         ) : (
