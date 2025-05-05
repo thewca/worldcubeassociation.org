@@ -27,7 +27,7 @@ export const useUpdateRegistrationMutation = (competitionInfo, userInfo, inProgr
     mutationFn: updateRegistration,
     onMutate: () => dispatch(showMessage('competitions.registration_v2.update.being_updated', inProgressMessageType)),
     onError,
-    onSuccess: (data, variables) => {
+    onSuccess: (data) => {
       queryClient.setQueryData(
         ['registration', competitionInfo.id, userInfo.id],
         (prevRegistration) => ({
@@ -35,17 +35,6 @@ export const useUpdateRegistrationMutation = (competitionInfo, userInfo, inProgr
           payment: prevRegistration.payment,
         }),
       );
-
-      const competingStatus = variables.competing.registration_status
-        || data.registration.competing.registration_status;
-
-      // Going from cancelled -> pending
-      if (competingStatus === 'cancelled') {
-        dispatch(showMessage('registrations.flash.registered', 'positive'));
-        // Not changing status
-      } else {
-        dispatch(showMessage('registrations.flash.updated', 'positive'));
-      }
     },
   });
 };

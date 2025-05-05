@@ -104,7 +104,10 @@ export default function RegistrationEditor({ registrationId, competitor, competi
         content: I18n.t('competitions.registration_v2.update.organizer_update_confirm'),
       }).then(() => {
         updateRegistrationMutation(body, {
-          onSuccess: (data) => formSuccess(data.registration),
+          onSuccess: (data) => {
+            dispatch(showMessage('registrations.flash.updated', 'positive'));
+            formSuccess(data.registration);
+          },
         });
       }).catch(() => {});
     }

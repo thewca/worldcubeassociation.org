@@ -105,6 +105,20 @@ export const useFormObjectSection = () => {
   return readValueRecursive(formObject, sections);
 };
 
+export const useFormValue = (key, sections = []) => {
+  const formObject = useFormObject();
+
+  const formSection = readValueRecursive(formObject, sections);
+  return useMemo(() => formSection[key], [formSection, key]);
+};
+
+export const useFormInitialValue = (key, sections = []) => {
+  const initialFormObject = useFormInitialObject();
+
+  const initialFormSection = readValueRecursive(initialFormObject, sections);
+  return useMemo(() => initialFormSection[key], [initialFormSection, key]);
+};
+
 export const useFormUpdateAction = () => {
   const dispatch = useFormDispatch();
 
@@ -120,6 +134,7 @@ export const useFormObjectState = (key, sections = []) => {
   const formValue = formSection[key];
 
   const formUpdater = useFormUpdateAction();
+
   const setFormValue = useCallback(
     (value) => formUpdater(key, value, sections),
     [formUpdater, key, sections],
@@ -129,15 +144,8 @@ export const useFormObjectState = (key, sections = []) => {
 };
 
 export const useHasFormValueChanged = (key, sections = []) => {
-  const formObject = useFormObject();
-
-  const formSection = readValueRecursive(formObject, sections);
-  const formValue = formSection[key];
-
-  const initialFormObject = useFormInitialObject();
-
-  const formInitialSection = readValueRecursive(initialFormObject, sections);
-  const formInitialValue = formInitialSection[key];
+  const formValue = useFormValue(key, sections);
+  const formInitialValue = useFormInitialValue(key, sections);
 
   return !_.isEqual(formValue, formInitialValue);
 };

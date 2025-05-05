@@ -28,6 +28,7 @@ import { hasNotPassed } from '../../../lib/utils/dates';
 import { useRegistration } from '../lib/RegistrationProvider';
 import { useOrderedSetWrapper } from '../../../lib/hooks/useOrderedSet';
 import {
+  useFormInitialValue,
   useFormObject,
   useFormObjectState,
   useFormSuccessHandler,
@@ -79,6 +80,8 @@ export default function CompetingStep({
 
   const [guests, setGuestsRaw] = useFormObjectState('guests');
   const setGuests = useInputUpdater(setGuestsRaw, true);
+
+  const initialRegistrationStatus = useFormInitialValue('status', ['competing']);
 
   const formState = useFormObject();
 
@@ -179,7 +182,22 @@ export default function CompetingStep({
             event_ids: hasEventsChanged ? selectedEventIds.asArray : undefined,
           },
           guests: hasGuestsChanged ? guests : undefined,
-        }, { onSuccess: onUpdateSuccess });
+        }, {
+          onSuccess: (data, variables) => {
+            onUpdateSuccess(data);
+
+            const newCompetingStatus = variables.competing.registration_status
+              || data.registration.competing.registration_status;
+
+            if (initialRegistrationStatus === 'cancelled' && newCompetingStatus === 'pending') {
+              // Going from cancelled -> pending
+              dispatch(showMessage('registrations.flash.registered', 'positive'));
+            } else {
+              // Not changing status
+              dispatch(showMessage('registrations.flash.updated', 'positive'));
+            }
+          },
+        });
       } else {
         const updateMessage = `\n${hasCommentChanged ? `Comment: ${comment}\n` : ''}${hasEventsChanged ? `Events: ${selectedEventIds.asArray.map((eventId) => events.byId[eventId].name).join(', ')}\n` : ''}${hasGuestsChanged ? `Guests: ${guests}\n` : ''}`;
         window.location = contactCompetitionUrl(competitionInfo.id, encodeURIComponent(I18n.t('competitions.registration_v2.update.update_contact_message', { update_params: updateMessage })));
