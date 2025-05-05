@@ -1412,7 +1412,7 @@ RSpec.describe 'API Registrations' do
     context 'manual payment integration' do
       let(:competition) { create(:competition, :registration_open, :with_organizer, :manual_payments, :visible) }
       let(:reg) { create(:registration, :pending, competition: competition) }
-      let(:payment_intent) { create(:payment_intent, :manual, holder: reg)}
+      let(:payment_intent) { create(:payment_intent, :manual, holder: reg) }
 
       context 'successful completion' do
         before do
