@@ -1426,7 +1426,7 @@ RSpec.describe 'API Registrations' do
           expect(response).to redirect_to(competition_register_path(competition))
         end
 
-        it 'updates the payment_reference of the payment record', :only do
+        it 'updates the payment_reference of the payment record' do
           expect(payment_intent.payment_record.payment_reference).to eq('t2345')
         end
       end
