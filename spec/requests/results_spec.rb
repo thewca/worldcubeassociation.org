@@ -49,6 +49,12 @@ RSpec.describe "results" do
         get records_path, headers: headers, params: { region: 'South Africa', show: 'history' }
         expect(response).to be_successful
       end
+
+      it 'shows female records for Africa' do
+      end
+
+      it 'shows female records for South Africa' do
+      end
     end
   end
 end
