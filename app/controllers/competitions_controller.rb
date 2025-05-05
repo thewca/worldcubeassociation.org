@@ -282,10 +282,13 @@ class CompetitionsController < ApplicationController
 
     if payment_integration == :paypal && PaypalInterface.paypal_disabled?
       flash[:error] = 'PayPal is not yet available in production environments'
-      return redirect_to competitions_payment_setup_path(competition)
+      return redirect_to competition_payment_integration_setup_path(competition)
     end
 
-    render plain: "Payment Integration #{payment_integration} not Found", status: :not_found and return if CompetitionPaymentIntegration::AVAILABLE_INTEGRATIONS[payment_integration].nil?
+    if CompetitionPaymentIntegration::AVAILABLE_INTEGRATIONS[payment_integration].nil?
+      flash[:error] = "Payment Integration #{payment_integration} not found"
+      return redirect_to competition_payment_integration_setup_path(competition)
+    end
 
     connector = CompetitionPaymentIntegration::AVAILABLE_INTEGRATIONS[payment_integration].safe_constantize
     integration_reference = connector&.connect_integration(params)
