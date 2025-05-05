@@ -9,12 +9,13 @@ import Errored from '../Requests/Errored';
 import ProbationForm from './ProbationForm';
 import ProbationListTable from './ProbationListTable';
 import useLoggedInUserPermissions from '../../lib/hooks/useLoggedInUserPermissions';
+
 export default function DelegateProbations() {
   const {
     data: probationRoles, loading, error, sync,
   } = useLoadedData(apiV0Urls.userRoles.list({ groupType: groupTypes.delegate_probation }));
   const { save, saving } = useSaveAction();
-  const { loggedInUserPermissions, permissionsLoading } = useLoggedInUserPermissions();
+  const { loggedInUserPermissions } = useLoggedInUserPermissions();
 
   if (loading || saving) return 'Loading...';
   if (error) return <Errored />;
@@ -28,16 +29,16 @@ export default function DelegateProbations() {
     (r) => r.end_date && DateTime.fromISO(r.end_date, { zone: 'UTC' }) <= now,
   );
 
-  const canEditDelegateProbation = probationRoles
-  .some((probationRole) => loggedInUserPermissions.canEditGroup(probationRole.id));
+  const canEditProbation = probationRoles
+    .some((probationRole) => loggedInUserPermissions.canEditGroup(probationRole.id));
 
   return (
     <>
       <h1>Delegate Probations</h1>
-      {canEditDelegateProbation && <ProbationForm save={save} sync={sync} />}
+      {canEditProbation && <ProbationForm save={save} sync={sync} />}
 
       <h2>Active Probations</h2>
-      <ProbationListTable roleList={activeRoles} isActive={canEditDelegateProbation} save={save} sync={sync} />
+      <ProbationListTable roleList={activeRoles} isActive={canEditProbation} save={save} sync={sync} />
 
       <h2>Past Probations</h2>
       <ProbationListTable roleList={pastRoles} isActive={false} />
