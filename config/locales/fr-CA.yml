@@ -5475,7 +5475,7 @@ fr-CA:
     create:
       #original_hash: eb455e0
       create_success: >-
-        Demande soumise avec avec succès ! Merci de vérifier vos e-mails et
+        Demande soumise avec avec succès ! Merci de vérifier vos courriels et
         d'attendre que le Conseil d'administration de la WCA l'évalue.
     delete:
       #original_hash: 11dceba
