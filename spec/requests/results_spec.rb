@@ -3,9 +3,6 @@
 require 'rails_helper'
 
 RSpec.describe "results" do
-  TEST_EVENTS = %w[333 333mbf 333fm].freeze
-  TEST_REGIONS = ['_Africa', 'South Africa'].freeze
-
   describe "GET #rankings" do
     context "with valid params" do
       it "shows rankings" do
@@ -59,11 +56,11 @@ RSpec.describe "results" do
         it_behaves_like 'single parameter', 'gender', gender
       end
 
-      TEST_EVENTS.each do |event|
+      TestConstants::RESULT_TEST_EVENTS.each do |event|
         it_behaves_like 'single parameter', 'event_id', event
       end
 
-      TEST_REGIONS.each do |region|
+      TestConstants::RESULT_TEST_REGIONS.each do |region|
         it_behaves_like 'single parameter', 'region', region
       end
 
@@ -75,7 +72,7 @@ RSpec.describe "results" do
       end
 
       ResultsController::SHOWS.each do |show|
-        TEST_REGIONS.each do |region|
+        TestConstants::RESULT_TEST_REGIONS.each do |region|
           it_behaves_like 'two parameters', 'show', 'region', show, region
         end
       end
