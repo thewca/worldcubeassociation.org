@@ -2336,6 +2336,7 @@ en:
   #context: for keys which don't fit into another category, and don't justify a category of their own
   misc:
     forum_age_requirement: "You must be 13 years old to access the WCA Forum."
+    forum_enter_dob: "A date of birth is required before accessing the forum. Please enter your date of birth, and then try and access the forum again."
   #context: FAQ page
   faq:
     title: "Frequently Asked Questions"

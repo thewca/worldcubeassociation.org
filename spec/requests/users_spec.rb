@@ -230,7 +230,7 @@ RSpec.describe "users" do
       sign_in user
       sso.nonce = 1234
       get "#{sso_discourse_path}?#{sso.payload}"
-      expect(response).to redirect_to
+      expect(response).to redirect_to edit_user_path(user)
     end
 
     it 'doesnt authenticate user under 13' do
