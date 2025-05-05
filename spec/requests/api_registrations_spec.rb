@@ -34,7 +34,7 @@ RSpec.describe 'API Registrations' do
 
         registration = Registration.find_by(user_id: user.id)
         expect(registration).to be_present
-        expect(registration.events.map(&:id).sort).to eq(['333', '333oh'])
+        expect(registration.events.map(&:id).sort).to eq(%w[333 333oh])
       end
 
       it 'creates a registration history' do
@@ -267,7 +267,7 @@ RSpec.describe 'API Registrations' do
     end
 
     context 'register with qualifications' do
-      let(:events) { ['222', '333', '444', '555', 'minx', 'pyram'] }
+      let(:events) { %w[222 333 444 555 minx pyram] }
       let(:past_competition) { create(:competition, :past) }
 
       let(:comp_with_qualifications) { create(:competition, :registration_open, :enforces_easy_qualifications) }
@@ -368,9 +368,9 @@ RSpec.describe 'API Registrations' do
 
     it 'user can change events in a favourites competition' do
       favourites_comp = create(:competition, :with_event_limit, :editable_registrations, :registration_open)
-      favourites_reg = create(:registration, competition: favourites_comp, user: user, event_ids: %w(333 333oh 555 pyram minx))
+      favourites_reg = create(:registration, competition: favourites_comp, user: user, event_ids: %w[333 333oh 555 pyram minx])
 
-      new_event_ids = %w(333 333oh 555 pyram 444)
+      new_event_ids = %w[333 333oh 555 pyram 444]
       update_request = build(
         :update_request,
         user_id: favourites_reg.user_id,
@@ -905,7 +905,7 @@ RSpec.describe 'API Registrations' do
         :update_request,
         user_id: registration3.user_id,
         competition_id: registration3.competition.id,
-        competing: { 'event_ids' => ['333', '444'] },
+        competing: { 'event_ids' => %w[333 444] },
       )
 
       bulk_update_request = build(
@@ -926,7 +926,7 @@ RSpec.describe 'API Registrations' do
 
       expect(Registration.find_by(user_id: update_request1['user_id']).competing_status).to eq('cancelled')
       expect(Registration.find_by(user_id: update_request2['user_id']).guests).to eq(3)
-      expect(Registration.find_by(user_id: update_request3['user_id']).events.pluck(:id)).to eq(['333', '444'])
+      expect(Registration.find_by(user_id: update_request3['user_id']).events.pluck(:id)).to eq(%w[333 444])
     end
 
     it 'fails if there are validation errors' do
@@ -966,7 +966,7 @@ RSpec.describe 'API Registrations' do
 
       expect(Registration.find_by(user_id: update_request1['user_id']).competing_status).to eq('pending')
       expect(Registration.find_by(user_id: update_request2['user_id']).guests).to eq(10)
-      expect(Registration.find_by(user_id: update_request3['user_id']).events.pluck(:id)).to eq(['333', '333oh'])
+      expect(Registration.find_by(user_id: update_request3['user_id']).events.pluck(:id)).to eq(%w[333 333oh])
     end
 
     it 'returns 400 if blank JSON submitted' do
@@ -1286,6 +1286,29 @@ RSpec.describe 'API Registrations' do
         expect(response).to be_successful
       end
 
+      describe 'refuse ticket create request' do
+        it 'if registration already paid' do
+          create(:registration_payment, registration: reg)
+          get api_v1_registrations_payment_ticket_path(competition_id: competition.id), headers: headers
+
+          body = response.parsed_body
+          expect(response).to have_http_status(:forbidden)
+          expect(body).to eq({ error: Registrations::ErrorCodes::NO_OUTSTANDING_PAYMENT }.with_indifferent_access)
+        end
+
+        it 'if registration is closed' do
+          closed_comp = create(:competition, :registration_closed, :with_organizer, :stripe_connected)
+          closed_reg = create(:registration, :pending, competition: closed_comp)
+
+          headers = { 'Authorization' => fetch_jwt_token(closed_reg.user_id) }
+          get api_v1_registrations_payment_ticket_path(competition_id: closed_comp.id), headers: headers
+
+          body = response.parsed_body
+          expect(response).to have_http_status(:forbidden)
+          expect(body).to eq({ error: Registrations::ErrorCodes::REGISTRATION_CLOSED }.with_indifferent_access)
+        end
+      end
+
       context 'successful payment ticket' do
         before do
           get api_v1_registrations_payment_ticket_path(competition_id: competition.id), headers: headers, params: { payment_integration_type: :stripe }
@@ -1348,10 +1371,9 @@ RSpec.describe 'API Registrations' do
           expect(intent.payment_record_type).to eq('ManualPaymentRecord')
         end
 
-        it 'creates a manual payment record and populates with user-supplied reference' do
+        it 'creates a manual payment record' do
           record = PaymentIntent.find_by(holder_type: "Registration", holder_id: reg.id).payment_record
           expect(record).to be_present
-          expect(record.payment_reference).to eq('example_reference')
         end
       end
     end

@@ -57,16 +57,16 @@ class JobsCheck < StatusCheck
     else
       [
         :danger,
-        %{
+        %(
           Uh oh!
           Job #{oldest_job_that_should_have_run_by_now.id} was enqueued
           #{time_ago_in_words oldest_job_that_should_have_run_by_now.enqueued_at}
           ago and still has not run.
           #{jobs_that_should_have_run_by_now.count}
-          #{"job".pluralize(jobs_that_should_have_run_by_now.count)}
-          #{"is".pluralize(jobs_that_should_have_run_by_now.count)}
+          #{'job'.pluralize(jobs_that_should_have_run_by_now.count)}
+          #{'is'.pluralize(jobs_that_should_have_run_by_now.count)}
           waiting to run.
-        }.squish,
+        ).squish,
       ]
     end
   end
@@ -98,7 +98,7 @@ class MysqlSettingsCheck < StatusCheck
   end
 
   protected def _status_description
-    actual_mysql_settings = ActiveRecord::Base.connection.select_one("SELECT #{EXPECTED_MYSQL_SETTINGS.keys.join(", ")};")
+    actual_mysql_settings = ActiveRecord::Base.connection.select_one("SELECT #{EXPECTED_MYSQL_SETTINGS.keys.join(', ')};")
     mysql_settings_good = true
     description = ""
     EXPECTED_MYSQL_SETTINGS.each do |setting, expected_value|

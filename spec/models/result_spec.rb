@@ -305,7 +305,7 @@ RSpec.describe Result do
 
       context "best of 3" do
         let(:round_type_id) { "f" }
-        let(:competition) { create(:competition, event_ids: ["333bf", "444bf", "555bf", "333mbf", "333ft", "333fm"]) }
+        let(:competition) { create(:competition, event_ids: %w[333bf 444bf 555bf 333mbf 333ft 333fm]) }
 
         context "333bf" do
           let(:format_id) { "3" }

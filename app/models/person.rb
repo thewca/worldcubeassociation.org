@@ -235,7 +235,7 @@ class Person < ApplicationRecord
     records = results.pluck(:regional_single_record, :regional_average_record).flatten.compact_blank
     {
       national: records.count("NR"),
-      continental: records.count { |record| %w(NR WR).exclude?(record) },
+      continental: records.count { |record| %w[NR WR].exclude?(record) },
       world: records.count("WR"),
       total: records.count,
     }
@@ -246,7 +246,7 @@ class Person < ApplicationRecord
   end
 
   def gender_visible?
-    %w(m f).include? gender
+    %w[m f].include? gender
   end
 
   def self.search(query, params: {})
@@ -262,16 +262,16 @@ class Person < ApplicationRecord
   end
 
   def self.fields_edit_requestable
-    [:name, :country_iso2, :gender, :dob].freeze
+    %i[name country_iso2 gender dob].freeze
   end
 
   DEFAULT_SERIALIZE_OPTIONS = {
-    only: ["wca_id", "name", "gender"],
-    methods: ["url", "country_iso2"],
+    only: %w[wca_id name gender],
+    methods: %w[url country_iso2],
   }.freeze
 
   USER_COMMON_SERIALIZE_OPTIONS = {
-    only: ["name", "gender"],
+    only: %w[name gender],
     methods: ["country_iso2"],
     # grrr… some tests (and apparently also API endpoints) rely on serializing this data _through_ person.
     #   Not a good code design decision, but very cumbersome to properly refactor. Signed GB 2025-01-09

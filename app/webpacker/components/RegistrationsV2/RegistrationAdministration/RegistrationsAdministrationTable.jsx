@@ -24,6 +24,7 @@ export const sortReducer = createSortReducer([
   'paid_on',
   'comment',
   'dob',
+  'administrative_notes',
   ...WCA_EVENT_IDS,
 ]);
 

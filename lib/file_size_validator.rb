@@ -8,7 +8,7 @@ class FileSizeValidator < ActiveModel::EachValidator
   CHECKS = { is: :==, minimum: :>=, maximum: :<= }.freeze
 
   DEFAULT_TOKENIZER = ->(value) { value.chars }
-  RESERVED_OPTIONS = [:minimum, :maximum, :within, :is, :tokenizer, :too_short, :too_long].freeze
+  RESERVED_OPTIONS = %i[minimum maximum within is tokenizer too_short too_long].freeze
 
   def initialize(options)
     range = options.delete(:in) || options.delete(:within)

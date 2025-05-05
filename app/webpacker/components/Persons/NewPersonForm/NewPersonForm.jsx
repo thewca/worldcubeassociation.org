@@ -4,12 +4,13 @@ import {
   Button, Icon, Form, Message,
 } from 'semantic-ui-react';
 
-import CountrySelector from '../../CountrySelector/CountrySelector';
+import RegionSelector from '../../wca/RegionSelector';
 import GenderSelector from '../../wca/GenderSelector';
 import { adminGenerateIds, personsUrl } from '../../../lib/requests/routes.js.erb';
 import { fetchJsonOrError } from '../../../lib/requests/fetchWithAuthenticityToken';
 import { countries } from '../../../lib/wca-data.js.erb';
 import useInputState from '../../../lib/hooks/useInputState';
+import I18n from '../../../lib/i18n';
 
 const countryIdForIso2 = (iso2) => {
   const country = countries.byIso2[iso2];
@@ -85,10 +86,12 @@ function NewPersonForm({
             gender={gender}
             onChange={setGender}
           />
-          <CountrySelector
-            countryIso2={countryIso2}
+          <RegionSelector
+            label={I18n.t('activerecord.attributes.user.country_iso2')}
+            onlyCountries
+            region={countryIso2}
+            onRegionChange={setCountryIso2}
             error={errors.countryId}
-            onChange={setCountryIso2}
           />
         </Form.Group>
         <Form.Group widths={2}>

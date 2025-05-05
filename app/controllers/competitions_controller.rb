@@ -13,18 +13,18 @@ class CompetitionsController < ApplicationController
     },
   }.freeze
 
-  before_action :authenticate_user!, except: [
-    :index,
-    :show,
-    :embedable_map,
-    :show_podiums,
-    :show_all_results,
-    :show_results_by_person,
-    :show_scrambles,
+  before_action :authenticate_user!, except: %i[
+    index
+    show
+    embedable_map
+    show_podiums
+    show_all_results
+    show_results_by_person
+    show_scrambles
   ]
-  before_action -> { redirect_to_root_unless_user(:can_admin_competitions?) }, only: [
-    :admin_edit,
-    :disconnect_payment_integration,
+  before_action -> { redirect_to_root_unless_user(:can_admin_competitions?) }, only: %i[
+    admin_edit
+    disconnect_payment_integration
   ]
   before_action -> { redirect_to_root_unless_user(:can_admin_results?) }, only: [
     :post_results,
@@ -35,11 +35,11 @@ class CompetitionsController < ApplicationController
   before_action -> { redirect_to_root_unless_user(:can_access_senior_delegate_panel?) }, only: [
     :for_senior,
   ]
-  before_action -> { redirect_to_root_unless_user(:can_manage_competition?, competition_from_params) }, only: [
-    :edit,
-    :edit_events,
-    :edit_schedule,
-    :payment_integration_setup,
+  before_action -> { redirect_to_root_unless_user(:can_manage_competition?, competition_from_params) }, only: %i[
+    edit
+    edit_events
+    edit_schedule
+    payment_integration_setup
   ]
 
   rescue_from WcaExceptions::ApiException do |e|
@@ -282,10 +282,13 @@ class CompetitionsController < ApplicationController
 
     if payment_integration == :paypal && PaypalInterface.paypal_disabled?
       flash[:error] = 'PayPal is not yet available in production environments'
-      return redirect_to competitions_payment_setup_path(competition)
+      return redirect_to competition_payment_integration_setup_path(competition)
     end
 
-    render plain: "Payment Integration #{payment_integration} not Found", status: :not_found and return if CompetitionPaymentIntegration::AVAILABLE_INTEGRATIONS[payment_integration].nil?
+    if CompetitionPaymentIntegration::AVAILABLE_INTEGRATIONS[payment_integration].nil?
+      flash[:error] = "Payment Integration #{payment_integration} not found"
+      return redirect_to competition_payment_integration_setup_path(competition)
+    end
 
     connector = CompetitionPaymentIntegration::AVAILABLE_INTEGRATIONS[payment_integration].safe_constantize
     integration_reference = connector&.connect_integration(params)

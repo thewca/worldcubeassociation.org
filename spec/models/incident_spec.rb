@@ -17,7 +17,7 @@ RSpec.describe Incident do
   end
 
   it "creates custom tags" do
-    tags = ["one", "two"]
+    tags = %w[one two]
     incident = create(:incident, tags: tags)
     expect(incident.incident_tags.map(&:tag)).to eq tags
   end

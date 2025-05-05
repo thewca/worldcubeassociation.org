@@ -12,7 +12,7 @@ FactoryBot.define do
       distance_direction_deg { rand(360) }
       starts { 1.year.ago }
       ends { starts }
-      event_ids { %w(333 333oh 555 pyram minx 222 444) }
+      event_ids { %w[333 333oh 555 pyram minx 222 444] }
 
       today { Time.now.utc.iso8601 }
       next_month { 1.month.from_now.iso8601 }
@@ -120,7 +120,7 @@ FactoryBot.define do
       with_organizer
       qualification_results { true }
       qualification_results_reason { 'testing' }
-      event_ids { %w(333 333oh 555 pyram minx 222 444) }
+      event_ids { %w[333 333oh 555 pyram minx 222 444] }
     end
 
     trait :enforces_easy_qualifications do
@@ -171,7 +171,7 @@ FactoryBot.define do
     trait :easy_future_qualifications do
       qualification_results { true }
       qualification_results_reason { 'testing' }
-      event_ids { %w(333 333oh 555 pyram minx 222 444) }
+      event_ids { %w[333 333oh 555 pyram minx 222 444] }
       allow_registration_without_qualification { true }
 
       transient do
@@ -243,7 +243,7 @@ FactoryBot.define do
 
     # TODO: Analyze the tests that rely on this, and see if they can be rewritten in a more logical/less awkward way
     trait :with_meaningless_event_limit do
-      event_ids { %w(333 333oh) }
+      event_ids { %w[333 333oh] }
       event_restrictions { true }
       event_restrictions_reason { "this is a favourites competition" }
       events_per_registration_limit { events.length }
