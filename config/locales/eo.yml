@@ -856,10 +856,20 @@ eo:
           de la WRC.
         #original_hash: da39a3e
         wic_feedback_requested: ''
-        #original_hash: 0aca3b0
-        wic_incidents: >-
+        #original_hash: 74a092e
+        wic_incidents_html: >-
           Listo de la numeroj de la incidentoj por kiuj vi ŝatus ricevi opinion
-          de la WIC.
+          de la WIC. <br> <strong>%{wic_incident_alert}</strong>
+        #original_hash: c4fd7a6
+        wic_incident_alert: >-
+          Se la WIC-incidento estas tikla (inkluzive sed ne limigita al krimoj,
+          ĝenado, perfortoj, ktp.), bonvolu ekskludi ĝin de via raporto kaj
+          retpoŝti la WIC aparte. Por aliaj WIC-incidentoj, skribu mallonga,
+          anonima versio de la incidento kaj detalu private kun la WIC. Tamen,
+          la WIC ja prikomentos la anoniman version por sciigi la ĝeneralan
+          publikon. Por ĉiuj WIC-incidentoj kiuj koncernas WCA-volontulon,
+          bonvolu ekskludi ĉiujn detalojn de la raporto kaj kontaktu la WIC
+          private.
         #original_hash: f30abdc
         remarks: >-
           Parolu pri ajna alia detalo kiun vi ŝatus diskonigi (ekz.,
@@ -3938,6 +3948,10 @@ eo:
         '-6001': WCA-pagoj ne estas ŝaltitaj por ĉi tiu konkurso
         #original_hash: 092da51
         '-6002': Vi devas finregistriĝi antaŭ ol vi povas pagi
+        #original_hash: ee2c9c4
+        '-6003': >-
+          Neniu nepagita pago trovita - ĉi tio verŝajne estas ĉar vi jam pagis
+          vian registriĝon.
     errors:
       #original_hash: b14d060
       must_use_wca_registration: >-
