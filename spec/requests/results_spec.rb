@@ -3,8 +3,8 @@
 require 'rails_helper'
 
 RSpec.describe "results" do
-  TEST_EVENTS = %w[333 333mbf 333fm]
-  TEST_REGIONS = ['_Africa', 'South Africa']
+  TEST_EVENTS = %w[333 333mbf 333fm].freeze
+  TEST_REGIONS = ['_Africa', 'South Africa'].freeze
 
   describe "GET #rankings" do
     context "with valid params" do
@@ -42,7 +42,7 @@ RSpec.describe "results" do
 
     context 'json' do
       let(:headers) { { 'CONTENT_TYPE' => 'application/json', 'ACCEPT' => 'application/json' } }
-      let(:genders) { ['Male', 'Female'] }
+      let(:genders) { %w[Male Female] }
 
       RSpec.shared_examples 'single parameter' do |param_name, param_value|
         it "returns success for param #{param_name} with value: #{param_value}" do

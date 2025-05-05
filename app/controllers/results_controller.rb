@@ -4,8 +4,8 @@ class ResultsController < ApplicationController
   REGION_WORLD = "world"
   YEARS_ALL = "all years"
   SHOW_100_PERSONS = "100 persons"
-  SHOWS = ['mixed' 'slim' 'separate' 'history' 'mixed history']
-  GENDERS = %w[Male Female]
+  SHOWS = ["mixedslimseparatehistorymixed history"].freeze
+  GENDERS = %w[Male Female].freeze
   SHOW_MIXED = "mixed"
   GENDER_ALL = "All"
   EVENTS_ALL = "all events"
