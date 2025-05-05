@@ -192,6 +192,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@babel/helper-plugin-utils@npm:^7.27.1":
+  version: 7.27.1
+  resolution: "@babel/helper-plugin-utils@npm:7.27.1"
+  checksum: 10c0/94cf22c81a0c11a09b197b41ab488d416ff62254ce13c57e62912c85700dc2e99e555225787a4099ff6bae7a1812d622c80fbaeda824b79baa10a6c5ac4cf69b
+  languageName: node
+  linkType: hard
+
 "@babel/helper-remap-async-to-generator@npm:^7.25.9":
   version: 7.25.9
   resolution: "@babel/helper-remap-async-to-generator@npm:7.25.9"
@@ -1079,7 +1086,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-transform-regenerator@npm:^7.25.9, @babel/plugin-transform-regenerator@npm:^7.27.0":
+"@babel/plugin-transform-regenerator@npm:^7.25.9":
   version: 7.27.0
   resolution: "@babel/plugin-transform-regenerator@npm:7.27.0"
   dependencies:
@@ -1088,6 +1095,17 @@ __metadata:
   peerDependencies:
     "@babel/core": ^7.0.0-0
   checksum: 10c0/aa1c6a1592338df96034e0c3933d9c84d0ae25e9768413fda90d4896470192a11e2ab146dbcb92005c5059bbea67aea3d11936de8e4be382613efceafc9c92b5
+  languageName: node
+  linkType: hard
+
+"@babel/plugin-transform-regenerator@npm:^7.27.1":
+  version: 7.27.1
+  resolution: "@babel/plugin-transform-regenerator@npm:7.27.1"
+  dependencies:
+    "@babel/helper-plugin-utils": "npm:^7.27.1"
+  peerDependencies:
+    "@babel/core": ^7.0.0-0
+  checksum: 10c0/42395908899310bb107d9ca31ebd4c302e14c582e3ad3ebfe1498fabafc43155c8f10850265c1e686a2afcf50d1f402cc5c5218fba72e167852607a4d8d6492e
   languageName: node
   linkType: hard
 
@@ -10177,7 +10195,7 @@ __metadata:
     "@babel/plugin-syntax-import-meta": "npm:^7.10.4"
     "@babel/plugin-transform-destructuring": "npm:^7.25.7"
     "@babel/plugin-transform-object-rest-spread": "npm:^7.25.9"
-    "@babel/plugin-transform-regenerator": "npm:^7.27.0"
+    "@babel/plugin-transform-regenerator": "npm:^7.27.1"
     "@babel/plugin-transform-runtime": "npm:^7.26.10"
     "@babel/preset-env": "npm:^7.26.9"
     "@babel/preset-react": "npm:^7.26.3"
