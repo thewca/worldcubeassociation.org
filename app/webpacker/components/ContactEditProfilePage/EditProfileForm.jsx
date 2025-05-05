@@ -10,7 +10,7 @@ import Errored from '../Requests/Errored';
 import useSaveAction from '../../lib/hooks/useSaveAction';
 import { fetchJsonOrError } from '../../lib/requests/fetchWithAuthenticityToken';
 import UtcDatePicker from '../wca/UtcDatePicker';
-import CountrySelector from '../CountrySelector/CountrySelector';
+import RegionSelector from '../wca/RegionSelector';
 import GenderSelector from '../wca/GenderSelector';
 
 const CONTACT_EDIT_PROFILE_FORM_QUERY_CLIENT = new QueryClient();
@@ -92,10 +92,12 @@ export default function EditProfileForm({
         onChange={handleFormChange}
         required
       />
-      <CountrySelector
+      <RegionSelector
+        label={I18n.t('activerecord.attributes.user.country_iso2')}
         name="country_iso2"
-        countryIso2={editedProfileDetails?.country_iso2}
-        onChange={handleFormChange}
+        onlyCountries
+        region={editedProfileDetails?.country_iso2}
+        onRegionChange={handleFormChange}
       />
       <GenderSelector
         name="gender"
