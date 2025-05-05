@@ -6,7 +6,7 @@ class CreateAttemptsTable < ActiveRecord::Migration[7.2]
       t.integer :value, null: false
       t.integer :attempt_number, null: false
       t.references :result, null: false
-      t.index [:result_id, :attempt_number], unique: true
+      t.index %i[result_id attempt_number], unique: true
       t.timestamps
     end
   end

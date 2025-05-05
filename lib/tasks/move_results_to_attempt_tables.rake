@@ -3,9 +3,7 @@
 namespace :results do
   desc "Migrates all results to attempts"
   task migrate_attempts: [:environment] do
-    Result.find_each do |result|
-      result.create_or_update_attempts
-    end
+    Result.find_each(&:create_or_update_attempts)
   end
 
   desc "Migrates results from one competition to attempts"
@@ -18,9 +16,7 @@ namespace :results do
 
     abort "Competition #{competition_id} not found" if competition.nil?
 
-    competition.results.find_each do |result|
-      result.create_or_update_attempts
-    end
+    competition.results.find_each(&:create_or_update_attempts)
   end
 
   desc "Migrates results from one person to attempts"
@@ -33,8 +29,6 @@ namespace :results do
 
     abort "Person #{wca_id} not found" if person.nil?
 
-    person.results.find_each do |result|
-      result.create_or_update_attempts
-    end
+    person.results.find_each(&:create_or_update_attempts)
   end
 end

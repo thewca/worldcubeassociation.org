@@ -347,14 +347,14 @@ module DatabaseDumper
     "ar_internal_metadata" => :skip_all_rows,
     "result_attempts" => {
       column_sanitizers: actions_to_column_sanitizers(
-        copy: %w(
+        copy: %w[
           id
           value
           attempt_number
           result_id
           created_at
           updated_at
-        ),
+        ],
       ),
     }.freeze,
     "competition_delegates" => {
