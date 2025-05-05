@@ -5,9 +5,9 @@ require 'rails_helper'
 RSpec.describe PaymentIntent do
   describe 'scopes' do
     before(:each) do
-      create_list(:payment_intent, 5)
-      create_list(:payment_intent, 2, :canceled)
-      create_list(:payment_intent, 3, :confirmed)
+      create_list(:payment_intent, 5, :stripe)
+      create_list(:payment_intent, 2, :stripe_canceled)
+      create_list(:payment_intent, 3, :stripe_confirmed)
     end
 
     it '#pending returns all records not canceled or confirmed' do
@@ -15,7 +15,7 @@ RSpec.describe PaymentIntent do
     end
 
     it '#started returns all records where a payment method has been selected' do
-      create_list(:payment_intent, 4, :not_started)
+      create_list(:payment_intent, 4, :stripe, :not_started)
 
       expect(PaymentIntent.started.length).to eq(10)
     end
@@ -52,25 +52,25 @@ RSpec.describe PaymentIntent do
       it_behaves_like '#create incompatible PaymentIntent', 'succeeded', 'canceled'
 
       it 'cannot have confirmed_at without the `succeeded` status' do
-        intent = build(:payment_intent, :canceled)
+        intent = build(:payment_intent, :stripe_canceled)
         intent.assign_attributes(confirmed_at: DateTime.now)
         expect(intent).not_to be_valid
       end
 
       it 'cannot be `succeeded` with nil confirmed_at' do
-        intent = build(:payment_intent, :confirmed)
+        intent = build(:payment_intent, :stripe_confirmed)
         intent.assign_attributes(confirmed_at: nil)
         expect(intent).not_to be_valid
       end
 
       it 'cannot have canceled_at without the `canceled` status' do
-        intent = build(:payment_intent, :confirmed)
+        intent = build(:payment_intent, :stripe_confirmed)
         intent.assign_attributes(canceled_at: DateTime.now)
         expect(intent).not_to be_valid
       end
 
       it 'cannot be `canceled` with nil canceled_at' do
-        intent = build(:payment_intent, :canceled)
+        intent = build(:payment_intent, :stripe_canceled)
         intent.assign_attributes(canceled_at: nil)
         expect(intent).not_to be_valid
       end

@@ -10,7 +10,7 @@ class ManualPaymentRecord < ApplicationRecord
   has_one :payment_intent, as: :payment_record
 
   def determine_wca_status
-    WCA_TO_MANUAL_PAYMENT_STATUS_MAP[status.to_sym]
+    WCA_TO_MANUAL_PAYMENT_STATUS_MAP.find { |_key, values| values.include?(self.status) }.first
   end
 
   def retrieve_remote

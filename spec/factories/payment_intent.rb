@@ -8,23 +8,23 @@ FactoryBot.define do
     wca_status { 'pending' }
 
     trait :stripe do
-      payment_record { FactoryBot.create(:stripe_record, :payment_intent) }
+      payment_record { FactoryBot.create(:stripe_record) }
     end
 
-    trait :canceled do
+    trait :stripe_canceled do
       canceled_at { DateTime.now }
       wca_status { 'canceled' }
-      payment_record { FactoryBot.create(:stripe_record, :payment_intent, stripe_status: 'canceled') }
+      payment_record { FactoryBot.create(:stripe_record, stripe_status: 'canceled') }
     end
 
-    trait :confirmed do
+    trait :stripe_confirmed do
       confirmed_at { DateTime.now }
       wca_status { 'succeeded' }
-      payment_record { FactoryBot.create(:stripe_record, :payment_intent, stripe_status: 'succeeded') }
+      payment_record { FactoryBot.create(:stripe_record, stripe_status: 'succeeded') }
     end
 
-    trait :not_started do
-      payment_record { FactoryBot.create(:stripe_record, :payment_intent, :not_started) }
+    trait :stripe_not_started do
+      payment_record { FactoryBot.create(:stripe_record, :not_started) }
       wca_status { 'created' }
     end
 
