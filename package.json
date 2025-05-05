@@ -17,7 +17,7 @@
     "@babel/plugin-transform-regenerator": "^7.27.1",
     "@babel/plugin-transform-runtime": "^7.26.10",
     "@babel/preset-env": "^7.26.9",
-    "@babel/preset-react": "^7.26.3",
+    "@babel/preset-react": "^7.27.1",
     "@babel/runtime": "^7.27.1",
     "@cubing/icons": "^3.0.4",
     "@fullcalendar/core": "^6.1.17",
