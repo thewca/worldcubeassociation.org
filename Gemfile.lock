@@ -524,7 +524,7 @@ GEM
     net-smtp (0.5.0)
       net-protocol
     netrc (0.11.0)
-    newrelic_rpm (9.18.0)
+    newrelic_rpm (9.19.0)
     nio4r (2.7.4)
     nokogiri (1.18.8)
       mini_portile2 (~> 2.8.2)
@@ -1304,7 +1304,7 @@ CHECKSUMS
   net-protocol (0.2.2) sha256=aa73e0cba6a125369de9837b8d8ef82a61849360eba0521900e2c3713aa162a8
   net-smtp (0.5.0) sha256=5fc0415e6ea1cc0b3dfea7270438ec22b278ca8d524986a3ae4e5ae8d087b42a
   netrc (0.11.0) sha256=de1ce33da8c99ab1d97871726cba75151113f117146becbe45aa85cb3dabee3f
-  newrelic_rpm (9.18.0) sha256=83fe40b19486998384c3b03b1651363dad15ba3acf978988ed8e93385b8e30c0
+  newrelic_rpm (9.19.0) sha256=b07bfbdb3526899c0e36ad7db7b83d258b89ce7d4e4bcf8d9e5368207f7da24f
   nio4r (2.7.4) sha256=d95dee68e0bb251b8ff90ac3423a511e3b784124e5db7ff5f4813a220ae73ca9
   nokogiri (1.18.8) sha256=8c7464875d9ca7f71080c24c0db7bcaa3940e8be3c6fc4bcebccf8b9a0016365
   nokogiri (1.18.8-aarch64-linux-gnu) sha256=36badd2eb281fca6214a5188e24a34399b15d89730639a068d12931e2adc210e
