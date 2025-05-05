@@ -4,10 +4,10 @@ require 'rails_helper'
 
 RSpec.describe TicketsController do
   describe "POST #anonymize" do
-    sign_in { FactoryBot.create :admin }
+    before { sign_in create :admin }
 
     it 'can anonymize person' do
-      person = FactoryBot.create(:person_who_has_competed_once)
+      person = create(:person_who_has_competed_once)
       wca_id = person.wca_id
 
       post :anonymize, params: { wcaId: wca_id }
@@ -17,7 +17,7 @@ RSpec.describe TicketsController do
     end
 
     it 'cannot anonymize banned person' do
-      banned_user = FactoryBot.create(:user, :banned, :wca_id)
+      banned_user = create(:user, :banned, :wca_id)
       banned_person = banned_user.person
 
       post :anonymize, params: { wcaId: banned_person.wca_id }
@@ -34,8 +34,8 @@ RSpec.describe TicketsController do
     end
 
     it 'cannot anonymize if user ID connected with WCA ID is not the user ID provided' do
-      person = FactoryBot.create(:person_who_has_competed_once)
-      user = FactoryBot.create(:user)
+      person = create(:person_who_has_competed_once)
+      user = create(:user)
 
       post :anonymize, params: { userId: user.id, wcaId: person.wca_id }
 
@@ -44,12 +44,12 @@ RSpec.describe TicketsController do
     end
 
     it 'generates padded wca id for a year with 99 ANON ids already' do
-      person = FactoryBot.create(:person_who_has_competed_once)
+      person = create(:person_who_has_competed_once)
       wca_id = person.wca_id
       year = wca_id.first(4)
 
       (1..99).each do |i|
-        FactoryBot.create(:person_who_has_competed_once, wca_id: "#{year}ANON#{i.to_s.rjust(2, "0")}")
+        create(:person_who_has_competed_once, wca_id: "#{year}ANON#{i.to_s.rjust(2, '0')}")
       end
 
       post :anonymize, params: { wcaId: wca_id }
@@ -58,8 +58,8 @@ RSpec.describe TicketsController do
     end
 
     it "can anonymize person and results" do
-      person = FactoryBot.create(:person_who_has_competed_once)
-      result = FactoryBot.create(:result, person: person)
+      person = create(:person_who_has_competed_once)
+      result = create(:result, person: person)
 
       post :anonymize, params: { wcaId: person.wca_id }
 
@@ -75,8 +75,8 @@ RSpec.describe TicketsController do
     end
 
     it "can anonymize account data" do
-      user = FactoryBot.create(:user_with_wca_id)
-      FactoryBot.create(:result, person: user.person)
+      user = create(:user_with_wca_id)
+      create(:result, person: user.person)
 
       post :anonymize, params: { userId: user.id }
 

@@ -3,11 +3,11 @@
 require "rails_helper"
 
 RSpec.describe "competitions" do
-  let!(:competition) { FactoryBot.create(:competition, :with_delegate, :future, :visible, :with_valid_schedule) }
+  let!(:competition) { create(:competition, :with_delegate, :future, :visible, :with_valid_schedule) }
 
   describe "PATCH #update_competition" do
     context "when signed in as admin" do
-      sign_in { FactoryBot.create :admin }
+      before { sign_in create :admin }
 
       it 'can confirm competition' do
         put competition_confirm_path(competition)
@@ -20,7 +20,7 @@ RSpec.describe "competitions" do
         it 'can set championship types' do
           expect(competition.confirmed?).to be false
 
-          update_params = build_competition_update(competition, championships: ["world", "_Europe"])
+          update_params = build_competition_update(competition, championships: %w[world _Europe])
           patch competition_path(competition), params: update_params, as: :json
 
           expect(response).to be_successful
@@ -28,10 +28,10 @@ RSpec.describe "competitions" do
         end
 
         context "when handling Series competitions" do
-          let!(:series) { FactoryBot.create(:competition_series) }
+          let!(:series) { create(:competition_series) }
           let!(:partner_competition) {
-            FactoryBot.create(:competition, :with_delegate, :visible, :with_valid_schedule,
-                              competition_series: series, series_base: competition)
+            create(:competition, :with_delegate, :visible, :with_valid_schedule,
+                   competition_series: series, series_base: competition)
           }
 
           it "can add competition to an existing Series" do
@@ -78,8 +78,8 @@ RSpec.describe "competitions" do
             it 'and Series has other competitions so it persists' do
               expect(competition.confirmed?).to be false
 
-              other_partner_competition = FactoryBot.create(:competition, :with_delegate, :visible, :with_valid_schedule,
-                                                            competition_series: series, series_base: competition)
+              other_partner_competition = create(:competition, :with_delegate, :visible, :with_valid_schedule,
+                                                 competition_series: series, series_base: competition)
 
               update_params = build_competition_update(competition, series: nil)
               patch competition_path(competition), params: update_params, as: :json
@@ -124,7 +124,7 @@ RSpec.describe "competitions" do
         it 'can set championship types' do
           expect(competition.confirmed?).to be true
 
-          update_params = build_competition_update(competition, championships: ["world", "_Europe"])
+          update_params = build_competition_update(competition, championships: %w[world _Europe])
           patch competition_path(competition), params: update_params, as: :json
 
           expect(response).to be_successful
@@ -133,10 +133,10 @@ RSpec.describe "competitions" do
         end
 
         context "when handling Series competitions" do
-          let!(:series) { FactoryBot.create(:competition_series) }
+          let!(:series) { create(:competition_series) }
           let!(:partner_competition) {
-            FactoryBot.create(:competition, :with_delegate, :visible, :with_valid_schedule,
-                              competition_series: series, series_base: competition)
+            create(:competition, :with_delegate, :visible, :with_valid_schedule,
+                   competition_series: series, series_base: competition)
           }
 
           it "can add competition to an existing Series" do
@@ -180,8 +180,8 @@ RSpec.describe "competitions" do
             it "and Series has other competitions so it persists" do
               expect(competition.confirmed?).to be true
 
-              other_partner_competition = FactoryBot.create(:competition, :with_delegate, :visible, :with_valid_schedule,
-                                                            competition_series: series, series_base: competition)
+              other_partner_competition = create(:competition, :with_delegate, :visible, :with_valid_schedule,
+                                                 competition_series: series, series_base: competition)
 
               update_params = build_competition_update(competition, series: nil)
               patch competition_path(competition), params: update_params, as: :json
@@ -231,7 +231,7 @@ RSpec.describe "competitions" do
         it 'can set championship types' do
           expect(competition.confirmed?).to be false
 
-          update_params = build_competition_update(competition, championships: ["world", "_Europe"])
+          update_params = build_competition_update(competition, championships: %w[world _Europe])
           patch competition_path(competition), params: update_params, as: :json
 
           expect(response).to be_successful
@@ -239,10 +239,10 @@ RSpec.describe "competitions" do
         end
 
         context "when handling Series competitions" do
-          let!(:series) { FactoryBot.create(:competition_series) }
+          let!(:series) { create(:competition_series) }
           let!(:partner_competition) {
-            FactoryBot.create(:competition, :with_delegate, :visible, :with_valid_schedule,
-                              competition_series: series, series_base: competition)
+            create(:competition, :with_delegate, :visible, :with_valid_schedule,
+                   competition_series: series, series_base: competition)
           }
 
           it "can add competition to an existing Series" do
@@ -289,8 +289,8 @@ RSpec.describe "competitions" do
             it 'and Series has other competitions so it persists' do
               expect(competition.confirmed?).to be false
 
-              other_partner_competition = FactoryBot.create(:competition, :with_delegate, :visible, :with_valid_schedule,
-                                                            competition_series: series, series_base: competition)
+              other_partner_competition = create(:competition, :with_delegate, :visible, :with_valid_schedule,
+                                                 competition_series: series, series_base: competition)
 
               update_params = build_competition_update(competition, series: nil)
               patch competition_path(competition), params: update_params, as: :json
@@ -335,7 +335,7 @@ RSpec.describe "competitions" do
         it 'cannot set championship types' do
           expect(competition.confirmed?).to be true
 
-          update_params = build_competition_update(competition, championships: ["world", "_Europe"])
+          update_params = build_competition_update(competition, championships: %w[world _Europe])
           patch competition_path(competition), params: update_params, as: :json
 
           expect(response).to have_http_status(:unprocessable_entity)
@@ -403,10 +403,10 @@ RSpec.describe "competitions" do
         end
 
         context "when handling Series competitions" do
-          let!(:series) { FactoryBot.create(:competition_series) }
+          let!(:series) { create(:competition_series) }
           let!(:partner_competition) {
-            FactoryBot.create(:competition, :with_delegate, :visible, :with_valid_schedule,
-                              competition_series: series, series_base: competition)
+            create(:competition, :with_delegate, :visible, :with_valid_schedule,
+                   competition_series: series, series_base: competition)
           }
 
           it 'cannot add competition to an existing Series' do

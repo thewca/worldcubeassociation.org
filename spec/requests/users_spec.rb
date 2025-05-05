@@ -6,7 +6,7 @@ RSpec.describe "users" do
   include Capybara::DSL
 
   it 'can sign up and request confirmation' do
-    user = FactoryBot.build :user
+    user = build(:user)
 
     post user_registration_path, params: {
       'user[email]' => user.email,
@@ -24,7 +24,7 @@ RSpec.describe "users" do
   end
 
   it 'cannot change password when not recently authenticated' do
-    user = FactoryBot.create :user
+    user = create(:user)
 
     # Using sign_in here instead of the post action, as it does *not* trigger setting the
     # recently_authenticated_at session variable.
@@ -39,7 +39,7 @@ RSpec.describe "users" do
   end
 
   it 'can change password' do
-    user = FactoryBot.create :user
+    user = create(:user)
 
     # sign in
     post user_session_path, params: { 'user[login]' => user.email, 'user[password]' => user.password }
@@ -72,7 +72,7 @@ RSpec.describe "users" do
   end
 
   it 'sign in shows conversion message for competitors missing accounts' do
-    person = FactoryBot.create :person
+    person = create(:person)
 
     # attempt to sign in
     post user_session_path, params: { 'user[login]' => person.wca_id, 'user[password]' => "a password" }
@@ -81,7 +81,7 @@ RSpec.describe "users" do
   end
 
   it 'reset password shows conversion message for competitors missing accounts' do
-    person = FactoryBot.create :person
+    person = create(:person)
 
     # attempt to reset password
     post user_password_path, params: { 'user[login]' => person.wca_id, 'user[password]' => "a password" }
@@ -90,7 +90,7 @@ RSpec.describe "users" do
   end
 
   context "user without 2FA" do
-    let!(:user) { FactoryBot.create(:user) }
+    let!(:user) { create(:user) }
 
     before { sign_in user }
 
@@ -131,7 +131,7 @@ RSpec.describe "users" do
   end
 
   context "user with 2FA" do
-    let!(:user) { FactoryBot.create(:user, :with_2fa) }
+    let!(:user) { create(:user, :with_2fa) }
 
     before { sign_in user }
 
@@ -166,7 +166,7 @@ RSpec.describe "users" do
     let(:sso) { SingleSignOn.new }
 
     it "authenticates WCT user and validates user attributes" do
-      user = FactoryBot.create(:wct_member_role, user: FactoryBot.create(:user_with_wca_id)).user
+      user = create(:wct_member_role, user: create(:user_with_wca_id)).user
       sign_in user
       sso.nonce = 1234
       get "#{sso_discourse_path}?#{sso.payload}"
@@ -174,7 +174,7 @@ RSpec.describe "users" do
       answer_sso = SingleSignOn.parse(query_string_from_location(response.location))
       expect(answer_sso.moderator).to be true
       expect(answer_sso.external_id).to eq user.id.to_s
-      [:name, :email, :avatar_url].each do |a|
+      %i[name email avatar_url].each do |a|
         expect(answer_sso.send(a)).to eq user.send(a)
       end
       expect(answer_sso.add_groups).to eq "wct"
@@ -183,7 +183,7 @@ RSpec.describe "users" do
     end
 
     it "authenticates regular user" do
-      user = FactoryBot.create(:user)
+      user = create(:user)
       sign_in user
       sso.nonce = 1234
       get "#{sso_discourse_path}?#{sso.payload}"
@@ -196,7 +196,7 @@ RSpec.describe "users" do
     end
 
     it "authenticates admin delegate" do
-      user = FactoryBot.create(:delegate, :wst_member)
+      user = create(:delegate, :wst_member)
       sign_in user
       sso.nonce = 1234
       get "#{sso_discourse_path}?#{sso.payload}"
@@ -206,11 +206,11 @@ RSpec.describe "users" do
       # Discourse
       expect(answer_sso.moderator).to be false
       expect(answer_sso.add_groups).to eq "delegate,wst"
-      expect(answer_sso.remove_groups).to eq((User.all_discourse_groups - ["wst", "delegate"]).join(","))
+      expect(answer_sso.remove_groups).to eq((User.all_discourse_groups - %w[wst delegate]).join(","))
     end
 
     it "doesn't authenticate unconfirmed user" do
-      user = FactoryBot.create(:user, confirmed: false)
+      user = create(:user, confirmed: false)
       sign_in user
       sso.nonce = 1234
       get "#{sso_discourse_path}?#{sso.payload}"
@@ -218,7 +218,7 @@ RSpec.describe "users" do
     end
 
     it 'doesnt authenticate user banned from discourse' do
-      user = FactoryBot.create(:user, :banned)
+      user = create(:user, :banned)
       sign_in user
       sso.nonce = 1234
       get "#{sso_discourse_path}?#{sso.payload}"

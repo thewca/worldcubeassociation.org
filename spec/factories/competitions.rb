@@ -12,7 +12,7 @@ FactoryBot.define do
       distance_direction_deg { rand(360) }
       starts { 1.year.ago }
       ends { starts }
-      event_ids { %w(333 333oh 555 pyram minx 222 444) }
+      event_ids { %w[333 333oh 555 pyram minx 222 444] }
 
       today { Time.now.utc.iso8601 }
       next_month { 1.month.from_now.iso8601 }
@@ -24,7 +24,7 @@ FactoryBot.define do
         {
           '333' => { 'type' => 'attemptResult', 'resultType' => 'single', 'whenDate' => today, 'level' => 1 },
           '555' => { 'type' => 'attemptResult', 'resultType' => 'average', 'whenDate' => today, 'level' => 6 },
-          'pyram' => { 'type' => 'ranking', 'resultType' => 'single', 'whenDate' => (Time.now.utc-2).iso8601, 'level' => 1 },
+          'pyram' => { 'type' => 'ranking', 'resultType' => 'single', 'whenDate' => (Time.now.utc - 2).iso8601, 'level' => 1 },
           'minx' => { 'type' => 'ranking', 'resultType' => 'average', 'whenDate' => today, 'level' => 2 },
           '222' => { 'type' => 'anyResult', 'resultType' => 'single', 'whenDate' => today, 'level' => 0 },
           '444' => { 'type' => 'anyResult', 'resultType' => 'average', 'whenDate' => today, 'level' => 0 },
@@ -35,7 +35,7 @@ FactoryBot.define do
         {
           '333' => { 'type' => 'attemptResult', 'resultType' => 'single', 'whenDate' => today, 'level' => 1000 },
           '555' => { 'type' => 'attemptResult', 'resultType' => 'average', 'whenDate' => today, 'level' => 6000 },
-          'pyram' => { 'type' => 'ranking', 'resultType' => 'single', 'whenDate' => (Time.now.utc-2).iso8601, 'level' => 100 },
+          'pyram' => { 'type' => 'ranking', 'resultType' => 'single', 'whenDate' => (Time.now.utc - 2).iso8601, 'level' => 100 },
           'minx' => { 'type' => 'ranking', 'resultType' => 'average', 'whenDate' => today, 'level' => 200 },
           '222' => { 'type' => 'anyResult', 'resultType' => 'single', 'whenDate' => today, 'level' => 0 },
           '444' => { 'type' => 'anyResult', 'resultType' => 'average', 'whenDate' => today, 'level' => 0 },
@@ -120,7 +120,7 @@ FactoryBot.define do
       with_organizer
       qualification_results { true }
       qualification_results_reason { 'testing' }
-      event_ids { %w(333 333oh 555 pyram minx 222 444) }
+      event_ids { %w[333 333oh 555 pyram minx 222 444] }
     end
 
     trait :enforces_easy_qualifications do
@@ -171,7 +171,7 @@ FactoryBot.define do
     trait :easy_future_qualifications do
       qualification_results { true }
       qualification_results_reason { 'testing' }
-      event_ids { %w(333 333oh 555 pyram minx 222 444) }
+      event_ids { %w[333 333oh 555 pyram minx 222 444] }
       allow_registration_without_qualification { true }
 
       transient do
@@ -185,12 +185,12 @@ FactoryBot.define do
 
     trait :payment_disconnect_delay_not_elapsed do
       starts { ClearConnectedPaymentIntegrations::DELAY_IN_DAYS.days.ago }
-      ends { (ClearConnectedPaymentIntegrations::DELAY_IN_DAYS-1).days.ago }
+      ends { (ClearConnectedPaymentIntegrations::DELAY_IN_DAYS - 1).days.ago }
     end
 
     trait :payment_disconnect_delay_elapsed do
-      starts { (ClearConnectedPaymentIntegrations::DELAY_IN_DAYS+2).days.ago }
-      ends { (ClearConnectedPaymentIntegrations::DELAY_IN_DAYS+1).days.ago }
+      starts { (ClearConnectedPaymentIntegrations::DELAY_IN_DAYS + 2).days.ago }
+      ends { (ClearConnectedPaymentIntegrations::DELAY_IN_DAYS + 1).days.ago }
     end
 
     trait :ongoing do
@@ -232,7 +232,7 @@ FactoryBot.define do
 
     trait :with_delegate_report do
       after(:create) do |competition|
-        FactoryBot.create :delegate_report, :posted, competition: competition
+        FactoryBot.create(:delegate_report, :posted, competition: competition)
       end
     end
 
@@ -243,7 +243,7 @@ FactoryBot.define do
 
     # TODO: Analyze the tests that rely on this, and see if they can be rewritten in a more logical/less awkward way
     trait :with_meaningless_event_limit do
-      event_ids { %w(333 333oh) }
+      event_ids { %w[333 333oh] }
       event_restrictions { true }
       event_restrictions_reason { "this is a favourites competition" }
       events_per_registration_limit { events.length }
@@ -252,7 +252,7 @@ FactoryBot.define do
     trait :with_event_limit do
       event_restrictions { true }
       event_restrictions_reason { "this is a favourites competition" }
-      events_per_registration_limit { events.length-2 }
+      events_per_registration_limit { events.length - 2 }
     end
 
     trait :with_valid_submitted_results do
@@ -405,18 +405,18 @@ FactoryBot.define do
         current_room_id = 1
         2.times do |i|
           venue_attributes = {
-            name: "Venue #{i+1}",
-            wcif_id: i+1,
+            name: "Venue #{i + 1}",
+            wcif_id: i + 1,
             country_iso2: competition.country.iso2,
             latitude_microdegrees: 123_456,
             longitude_microdegrees: 123_456,
             timezone_id: "Europe/Paris",
           }
           venue = competition.competition_venues.create!(venue_attributes)
-          (i+1).times do |j|
+          (i + 1).times do |j|
             room_attributes = {
               wcif_id: current_room_id,
-              name: "Room #{j+1} for venue #{i+1}",
+              name: "Room #{j + 1} for venue #{i + 1}",
             }
             current_room_id += 1
             venue.venue_rooms.create!(room_attributes)

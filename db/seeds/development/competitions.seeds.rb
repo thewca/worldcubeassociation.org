@@ -61,7 +61,7 @@ after "development:users", "development:user_roles" do
 
     competition.competition_events.each do |competition_event|
       event = competition_event.event
-      round_types = %w(1 2 f).freeze
+      round_types = %w[1 2 f].freeze
 
       round_types.each_with_index do |round_type_id, j|
         round_format = event.preferred_formats.first.format
@@ -70,7 +70,7 @@ after "development:users", "development:user_roles" do
         Round.create!(
           competition_event: competition_event,
           format: round_format,
-          number: j+1,
+          number: j + 1,
           total_number_of_rounds: round_types.length,
           time_limit: event.can_change_time_limit? ? TimeLimit.new : nil,
           cutoff: nil,
@@ -81,7 +81,7 @@ after "development:users", "development:user_roles" do
         users.each_with_index do |competitor, k|
           person = competitor.person
           result = Result.new(
-            pos: k+1,
+            pos: k + 1,
             person_id: person.wca_id,
             person_name: person.name,
             country_id: person.country_id,
@@ -89,11 +89,11 @@ after "development:users", "development:user_roles" do
             event_id: event.id,
             round_type_id: round_type_id,
             format_id: round_format.id,
-            regional_single_record: k == 0 ? "WR" : nil,
-            regional_average_record: k == 0 ? "WR" : nil,
+            regional_single_record: k.zero? ? "WR" : nil,
+            regional_average_record: k.zero? ? "WR" : nil,
           )
           round_format.expected_solve_count.times do |v|
-            result.send(:"value#{v+1}=", random_wca_value)
+            result.send(:"value#{v + 1}=", random_wca_value)
           end
           result.average = result.compute_correct_average
           result.best = result.compute_correct_best
@@ -160,15 +160,15 @@ after "development:users", "development:user_roles" do
 
   # Upcoming competitions
   500.times do |i|
-    start_day = (i+1).days.from_now
+    start_day = (i + 1).days.from_now
     end_day = start_day + (0..5).to_a.sample.days
     end_day = start_day if start_day.year != end_day.year
     country = countries.sample
 
     competition = Competition.new(
-      id: "MyComp#{i+1}#{start_day.year}",
-      name: "My #{i+1} Comp #{start_day.year}",
-      cell_name: "My #{i+1} Comp #{start_day.year}",
+      id: "MyComp#{i + 1}#{start_day.year}",
+      name: "My #{i + 1} Comp #{start_day.year}",
+      cell_name: "My #{i + 1} Comp #{start_day.year}",
       city_name: random_city(country),
       country_id: country.id,
       information: "Information!",
@@ -194,7 +194,7 @@ after "development:users", "development:user_roles" do
     next if i < 480
 
     users.each_with_index do |user, j|
-      competing_status = j % 4 == 0 ? Registrations::Helper::STATUS_ACCEPTED : Registrations::Helper::STATUS_PENDING
+      competing_status = (j % 4).zero? ? Registrations::Helper::STATUS_ACCEPTED : Registrations::Helper::STATUS_PENDING
       registration_competition_events = competition.competition_events.sample(rand(1..competition.competition_events.count))
       FactoryBot.create(:registration, user: user, competition: competition, competing_status: competing_status, competition_events: registration_competition_events)
     end

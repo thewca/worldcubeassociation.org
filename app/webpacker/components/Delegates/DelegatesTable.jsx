@@ -89,6 +89,7 @@ export default function DelegatesTable({
                     display: 'admin',
                     years: 'all',
                     delegate: delegate.user.id,
+                    state: 'past',
                   })}
                   >
                     {I18n.t('delegates_page.table.history')}

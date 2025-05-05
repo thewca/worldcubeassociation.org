@@ -223,9 +223,9 @@ class SolveTime
     if incomplete?
       ""
     elsif @event.timed_event?
-      time_minutes >= 1 ? "" : " #{I18n.t("common.solve_time.unit_seconds")}"
+      time_minutes >= 1 ? "" : " #{I18n.t('common.solve_time.unit_seconds')}"
     elsif @event.fewest_moves?
-      " #{I18n.t("common.solve_time.unit_moves")}"
+      " #{I18n.t('common.solve_time.unit_moves')}"
     elsif @event.multiple_blindfolded? # rubocop:disable Lint/DuplicateBranch
       ""
     else
@@ -267,7 +267,7 @@ class SolveTime
     # See validation for nil time_centiseconds above
     return if incomplete? || time_centiseconds.nil?
 
-    errors.add(:base, "times over 10 minutes should be rounded") if (@event.timed_event? || @event.multiple_blindfolded?) && time_minutes > 10 && time_centiseconds % 100 > 0
+    errors.add(:base, "times over 10 minutes should be rounded") if (@event.timed_event? || @event.multiple_blindfolded?) && time_minutes > 10 && (time_centiseconds % 100).positive?
   end
 
   DNF_VALUE = -1

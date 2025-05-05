@@ -478,6 +478,12 @@ ko:
         registration_competition_events: 종목
         #original_hash: 84add5b
         email: 이메일
+        #original_hash: 6d7a30a
+        search: 검색...
+        #original_hash: dfd309d
+        too_few_chars: 글자 수가 너무 적습니다
+        #original_hash: b993b0c
+        no_results: 결과 없음
       competition_tab:
         #original_hash: 4f9be05
         content: 내용
@@ -3921,6 +3927,9 @@ ko:
     #original_hash: 10bcdbd
     connect_wca_id: WCA 계정과 WCA ID를 연결하십시오!
   payments:
+    messages:
+      #original_hash: 1e1d219
+      charges_refunded: 모든 비용이 환불되었습니다
     labels:
       #original_hash: cccf678
       payment_statuses: 결제 상태

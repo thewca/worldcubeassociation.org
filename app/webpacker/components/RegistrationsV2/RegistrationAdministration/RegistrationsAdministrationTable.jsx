@@ -24,6 +24,7 @@ export const sortReducer = createSortReducer([
   'paid_on',
   'comment',
   'dob',
+  'administrative_notes',
   ...WCA_EVENT_IDS,
 ]);
 
@@ -105,6 +106,7 @@ export default function RegistrationAdministrationTable({
                 <Table.Body {...providedDroppable.droppableProps}>
                   {sortedRegistrations.map((w, i) => (
                     <TableRow
+                      key={w.user.id}
                       competitionInfo={competitionInfo}
                       columnsExpanded={columnsExpanded}
                       registration={w}

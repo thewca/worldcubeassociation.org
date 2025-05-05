@@ -235,18 +235,18 @@ class Person < ApplicationRecord
     records = results.pluck(:regional_single_record, :regional_average_record).flatten.compact_blank
     {
       national: records.count("NR"),
-      continental: records.count { |record| %w(NR WR).exclude?(record) },
+      continental: records.count { |record| %w[NR WR].exclude?(record) },
       world: records.count("WR"),
       total: records.count,
     }
   end
 
   def completed_solves_count
-    results.pluck("value1, value2, value3, value4, value5").flatten.count { |value| value > 0 }
+    results.pluck("value1, value2, value3, value4, value5").flatten.count(&:positive?)
   end
 
   def gender_visible?
-    %w(m f).include? gender
+    %w[m f].include? gender
   end
 
   def self.search(query, params: {})
@@ -262,16 +262,16 @@ class Person < ApplicationRecord
   end
 
   def self.fields_edit_requestable
-    [:name, :country_iso2, :gender, :dob].freeze
+    %i[name country_iso2 gender dob].freeze
   end
 
   DEFAULT_SERIALIZE_OPTIONS = {
-    only: ["wca_id", "name", "gender"],
-    methods: ["url", "country_iso2"],
+    only: %w[wca_id name gender],
+    methods: %w[url country_iso2],
   }.freeze
 
   USER_COMMON_SERIALIZE_OPTIONS = {
-    only: ["name", "gender"],
+    only: %w[name gender],
     methods: ["country_iso2"],
     # grrr… some tests (and apparently also API endpoints) rely on serializing this data _through_ person.
     #   Not a good code design decision, but very cumbersome to properly refactor. Signed GB 2025-01-09
@@ -296,7 +296,7 @@ class Person < ApplicationRecord
 
     [
       {
-        person_has_records_in_past: records.present? && records[:total] > 0,
+        person_has_records_in_past: records.present? && records[:total].positive?,
         person_held_championship_podiums: championship_podiums&.values_at(:world, :continental, :national)&.any?(&:present?),
         person_competed_in_last_3_months: recent_competitions_3_months&.any?,
         competitions_with_external_website: competitions_with_external_website&.any?,
@@ -325,22 +325,22 @@ class Person < ApplicationRecord
     if sub_ids.length > 1
       # if an updated person is due to a name change, this will delete the previous person.
       # if an updated person is due to a country change, this will keep the sub person with an appropriate subId
-      previous_persons = Person.where(wca_id: wca_id).where.not(subId: 1).order(:subId)
+      previous_persons = Person.where(wca_id: wca_id).where.not(sub_id: 1).order(:sub_id)
       current_sub_id = 1
-      current_country_id = countryId
+      current_country_id = self.country_id
 
       previous_persons.each do |p|
-        if p.countryId == current_country_id
+        if p.country_id == current_country_id
           p.delete
         else
           current_sub_id += 1
-          current_country_id = p.countryId
+          current_country_id = p.country_id
           p.update(
             wca_id: new_wca_id,
             name: User::ANONYMOUS_NAME,
             gender: User::ANONYMOUS_GENDER,
             dob: User::ANONYMOUS_DOB,
-            subId: current_sub_id,
+            sub_id: current_sub_id,
           )
         end
       end

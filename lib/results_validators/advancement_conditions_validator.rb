@@ -18,7 +18,7 @@ module ResultsValidators
 
     # These are the old "(combined) qualification" and "b-final" rounds.
     # They are not taken into account in advancement conditions.
-    IGNORE_ROUND_TYPES = ["0", "h", "b"].freeze
+    IGNORE_ROUND_TYPES = %w[0 h b].freeze
 
     def self.description
       "This validator checks that advancement between rounds is correct according to the regulations."
@@ -56,7 +56,7 @@ module ResultsValidators
             remaining_number_of_rounds -= 1
             number_of_people_in_round = results_by_round_type_id[round_type_id].size
             round_id = "#{event_id}-#{round_type_id}"
-            if number_of_people_in_round <= 7 && remaining_number_of_rounds > 0
+            if number_of_people_in_round <= 7 && remaining_number_of_rounds.positive?
               # https://www.worldcubeassociation.org/regulations/#9m3: Rounds with 7 or fewer competitors must not have subsequent rounds.
               @errors << ValidationError.new(REGULATION_9M3_ERROR,
                                              :rounds, competition.id,

@@ -16,7 +16,7 @@ class Registration < ApplicationRecord
   scope :not_cancelled, -> { where.not(competing_status: 'cancelled') }
   scope :with_payments, -> { joins(:registration_payments).distinct }
   scope :wcif_ordered, -> { order(:id) }
-  scope :might_attend, -> { where(competing_status: ['accepted', 'waiting_list']) }
+  scope :might_attend, -> { where(competing_status: %w[accepted waiting_list]) }
 
   belongs_to :competition
   belongs_to :user, optional: true # A user may be deleted later. We only enforce validation directly on creation further down below.
@@ -67,7 +67,7 @@ class Registration < ApplicationRecord
   end
 
   def update_lanes!(params, acting_user)
-    Registrations::Lanes::Competing.update!(params, self.competition, acting_user.id)
+    Registrations::Lanes::Competing.update!(params, self, acting_user.id)
   end
 
   def guest_limit
@@ -173,7 +173,7 @@ class Registration < ApplicationRecord
   end
 
   def to_be_paid_through_wca?
-    !new_record? && (pending? || accepted?) && competition.using_payment_integrations? && outstanding_entry_fees > 0
+    !new_record? && (pending? || accepted?) && competition.using_payment_integrations? && outstanding_entry_fees.positive?
   end
 
   def record_payment(
@@ -253,6 +253,7 @@ class Registration < ApplicationRecord
     private_attributes = pii ? %w[dob email] : nil
 
     base_json = {
+      id: id,
       user: user.as_json(only: %w[id wca_id name gender country_iso2], methods: %w[country], include: [], private_attributes: private_attributes),
       user_id: user_id,
       competing: {
@@ -277,7 +278,7 @@ class Registration < ApplicationRecord
                                 registration_status: is_competing ? competing_status : 'non_competing',
                                 registered_on: registered_at,
                                 comment: comments || "",
-                                admin_comment: administrative_notes|| "",
+                                admin_comment: administrative_notes || "",
                               },
                             })
       base_json[:competing][:waiting_list_position] = waiting_list_position if competing_status_waiting_list?
@@ -306,11 +307,11 @@ class Registration < ApplicationRecord
 
   def self.wcif_json_schema
     {
-      "type" => ["object", "null"], # NOTE: for now there may be WCIF persons without registration.
+      "type" => %w[object null], # NOTE: for now there may be WCIF persons without registration.
       "properties" => {
         "wcaRegistrationId" => { "type" => "integer" },
         "eventIds" => { "type" => "array", "items" => { "type" => "string", "enum" => Event.pluck(:id) } },
-        "status" => { "type" => "string", "enum" => %w(accepted deleted pending) },
+        "status" => { "type" => "string", "enum" => %w[accepted deleted pending] },
         "guests" => { "type" => "integer" },
         "comments" => { "type" => "string" },
         "administrativeNotes" => { "type" => "string" },
@@ -359,7 +360,7 @@ class Registration < ApplicationRecord
                                               length: {
                                                 maximum: :events_limit,
                                                 if: :events_limit_enabled?,
-                                                message: ->(registration, _data) {
+                                                message: lambda { |registration, _data|
                                                   I18n.t('registrations.errors.exceeds_event_limit', count: registration.events_limit)
                                                 },
                                                 frontend_code: Registrations::ErrorCodes::INVALID_EVENT_SELECTION,
@@ -375,7 +376,7 @@ class Registration < ApplicationRecord
 
   delegate :allow_registration_without_qualification?, to: :competition, allow_nil: true
 
-  strip_attributes only: [:comments, :administrative_notes]
+  strip_attributes only: %i[comments administrative_notes]
 
   validates :comments, length: { maximum: COMMENT_CHARACTER_LIMIT, frontend_code: Registrations::ErrorCodes::USER_COMMENT_TOO_LONG },
                        presence: { message: I18n.t('registrations.errors.cannot_register_without_comment'), if: :force_comment?, frontend_code: Registrations::ErrorCodes::REQUIRED_COMMENT_MISSING }
@@ -401,7 +402,7 @@ class Registration < ApplicationRecord
     when :not_accepted
       !accepted?
     when :unpaid
-      paid_entry_fees == 0
+      paid_entry_fees.zero?
     end
   end
 
@@ -415,10 +416,10 @@ class Registration < ApplicationRecord
 
   delegate :newcomer_month_eligible?, to: :user
 
-  validate :cannot_exceed_newcomer_limit, if: [
-    :trying_to_accept?,
-    :competitor_limit_enabled?,
-    :enforce_newcomer_month_reservations?,
+  validate :cannot_exceed_newcomer_limit, if: %i[
+    trying_to_accept?
+    competitor_limit_enabled?
+    enforce_newcomer_month_reservations?
   ], unless: :newcomer_month_eligible?
 
   private def cannot_exceed_newcomer_limit
@@ -435,7 +436,7 @@ class Registration < ApplicationRecord
 
   delegate :competitor_limit_enabled?, :enforce_newcomer_month_reservations?, to: :competition
 
-  validate :cannot_exceed_competitor_limit, if: [:trying_to_accept?, :competitor_limit_enabled?]
+  validate :cannot_exceed_competitor_limit, if: %i[trying_to_accept? competitor_limit_enabled?]
   private def cannot_exceed_competitor_limit
     return unless competition.registrations.accepted_and_competing_count >= competition.competitor_limit
 
@@ -446,7 +447,7 @@ class Registration < ApplicationRecord
     )
   end
 
-  validate :only_one_accepted_per_series, if: [:part_of_competition_series?, :trying_to_accept?]
+  validate :only_one_accepted_per_series, if: %i[part_of_competition_series? trying_to_accept?]
   private def only_one_accepted_per_series
     return unless series_sibling_registrations.accepted.any?
 
@@ -476,7 +477,7 @@ class Registration < ApplicationRecord
     competing_status_changed? && (competing_status_cancelled? || competing_status_rejected?)
   end
 
-  validate :not_changing_events_when_cancelling, if: [:trying_to_cancel?, :tracked_event_ids?, :competition_events_changed?]
+  validate :not_changing_events_when_cancelling, if: %i[trying_to_cancel? tracked_event_ids? competition_events_changed?]
   private def not_changing_events_when_cancelling
     errors.add(:competition_events, :cannot_change_events_when_cancelling, message: I18n.t('registrations.errors.cannot_change_events_when_cancelling'), frontend_code: Registrations::ErrorCodes::INVALID_REQUEST_DATA)
   end
@@ -485,6 +486,12 @@ class Registration < ApplicationRecord
 
   def tracked_event_ids?
     @tracked_event_ids.present?
+  end
+
+  after_commit :reset_tracked_event_ids
+
+  private def reset_tracked_event_ids
+    @tracked_event_ids = nil
   end
 
   def tracked_event_ids
@@ -498,13 +505,17 @@ class Registration < ApplicationRecord
     registration_competition_events.map(&:event_id)
   end
 
+  def changed_event_ids
+    self.volatile_event_ids - self.tracked_event_ids
+  end
+
   def competition_events_changed?
     self.tracked_event_ids.sort != self.volatile_event_ids.sort ||
       self.competition_events.any?(&:changed?)
   end
 
   DEFAULT_SERIALIZE_OPTIONS = {
-    only: ["id", "competition_id", "user_id"],
+    only: %w[id competition_id user_id],
     methods: ["event_ids"],
   }.freeze
 

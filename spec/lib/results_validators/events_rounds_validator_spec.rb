@@ -7,8 +7,8 @@ ERV = RV::EventsRoundsValidator
 
 RSpec.describe ERV do
   context "on InboxResult and Result" do
-    let!(:competition1) { FactoryBot.create(:competition, :past, event_ids: ["333", "333oh"], main_event_id: nil) }
-    let!(:competition2) { FactoryBot.create(:competition, :past, event_ids: ["222", "555"], main_event_id: "222") }
+    let!(:competition1) { create(:competition, :past, event_ids: %w[333 333oh], main_event_id: nil) }
+    let!(:competition2) { create(:competition, :past, event_ids: %w[222 555], main_event_id: "222") }
 
     # The idea behind this variable is the following: the validator can be applied
     # on either a particular model for given competition ids, or on a set of results.
@@ -31,9 +31,9 @@ RSpec.describe ERV do
       # UNEXPECTED_COMBINED_ROUND_ERROR
       [Result, InboxResult].each do |model|
         result_kind = model.model_name.singular.to_sym
-        FactoryBot.create(result_kind, competition: competition1, event_id: "333oh")
-        FactoryBot.create(result_kind, competition: competition2, event_id: "222")
-        FactoryBot.create(result_kind, :skip_validation, competition: competition2, event_id: "444", skip_round_creation: true)
+        create(result_kind, competition: competition1, event_id: "333oh")
+        create(result_kind, competition: competition2, event_id: "222")
+        create(result_kind, :skip_validation, competition: competition2, event_id: "444", skip_round_creation: true)
       end
 
       expected_warnings = [
@@ -72,33 +72,33 @@ RSpec.describe ERV do
       # NO_MAIN_EVENT_WARNING
       # UNEXPECTED_ROUND_RESULTS_ERROR
       # MISSING_ROUND_RESULTS_ERROR
-      cutoff = Cutoff.new(number_of_attempts: 2, attempt_result: 50*100)
+      cutoff = Cutoff.new(number_of_attempts: 2, attempt_result: 50 * 100)
       # Add some rounds to trigger the rounds validation.
-      FactoryBot.create(:round,
-                        competition: competition1, event_id: "333oh",
-                        total_number_of_rounds: 2)
+      create(:round,
+             competition: competition1, event_id: "333oh",
+             total_number_of_rounds: 2)
       # This round is added to trigger the missing round error.
-      FactoryBot.create(:round,
-                        competition: competition1, event_id: "333oh",
-                        number: 2, total_number_of_rounds: 2)
-      FactoryBot.create(:round, competition: competition1, event_id: "333")
-      FactoryBot.create(:round, competition: competition2, event_id: "555",
-                                cutoff: cutoff)
+      create(:round,
+             competition: competition1, event_id: "333oh",
+             number: 2, total_number_of_rounds: 2)
+      create(:round, competition: competition1, event_id: "333")
+      create(:round, competition: competition2, event_id: "555",
+                     cutoff: cutoff)
 
       [Result, InboxResult].each do |model|
         result_kind = model.model_name.singular.to_sym
         # Create a result over a cutoff which does not exist in rounds data.
-        FactoryBot.create(result_kind, :over_cutoff, :skip_validation,
-                          competition: competition1, event_id: "333oh",
-                          cutoff: cutoff, skip_round_creation: true)
-        FactoryBot.create(result_kind, competition: competition1, event_id: "333")
+        create(result_kind, :over_cutoff, :skip_validation,
+               competition: competition1, event_id: "333oh",
+               cutoff: cutoff, skip_round_creation: true)
+        create(result_kind, competition: competition1, event_id: "333")
         # This creates results below the cutoff for 5x5, which effectively turns
         # it into a "regular" round instead of a cutoff round.
-        FactoryBot.create(result_kind, :skip_validation,
-                          competition: competition2, event_id: "555", skip_round_creation: true)
-        FactoryBot.create(result_kind, :skip_validation,
-                          competition: competition2, event_id: "222", round_type_id: "c",
-                          skip_round_creation: true)
+        create(result_kind, :skip_validation,
+               competition: competition2, event_id: "555", skip_round_creation: true)
+        create(result_kind, :skip_validation,
+               competition: competition2, event_id: "222", round_type_id: "c",
+               skip_round_creation: true)
       end
       expected_errors = [
         RV::ValidationError.new(ERV::UNEXPECTED_COMBINED_ROUND_ERROR,

@@ -5,19 +5,19 @@ require "rails_helper"
 RSpec.feature "Competitions list", :js do
   context "admin view" do
     before :each do
-      sign_in FactoryBot.create(:admin)
+      sign_in create(:admin)
     end
 
     context "when a delegate is set in the params" do
-      let(:competition) { FactoryBot.create :competition, :visible, :future }
+      let(:competition) { create(:competition, :visible, :future) }
       let!(:delegate) { competition.delegates.first }
 
       before do
         visit "/competitions?show_admin_details=yes"
         # Wait for the Delegate index to start loading
-        expect(page).to have_selector("#delegate-pulse")
+        expect(page).to have_css("#delegate-pulse")
         # …and then wait for it to finish loading
-        expect(page).not_to have_selector("#delegate-pulse")
+        expect(page).to have_no_css("#delegate-pulse")
         within(:css, "#delegate") do
           find(".search").set(delegate.name)
           find(".search").send_keys(:enter)
@@ -29,12 +29,12 @@ RSpec.feature "Competitions list", :js do
       end
 
       it "only competitions delegated by the given delegate are shown" do
-        expect(page).to have_selector(".competition-info", count: 1)
+        expect(page).to have_css(".competition-info", count: 1)
       end
     end
 
     it 'renders finished competition without results' do
-      FactoryBot.create(:competition, :visible, starts: 2.days.ago, name: "Test Comp 2017")
+      create(:competition, :visible, starts: 2.days.ago, name: "Test Comp 2017")
       visit '/competitions?state=recent&show_admin_details=yes'
       expect(page).to have_http_status(:ok)
       expect(page).to have_text "Test Comp 2017"

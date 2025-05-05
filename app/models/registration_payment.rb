@@ -29,6 +29,32 @@ class RegistrationPayment < ApplicationRecord
     end
   end
 
+  def to_v2_json(refunds: false)
+    payment_provider = CompetitionPaymentIntegration::INTEGRATION_RECORD_TYPES.key(self.receipt_type)
+
+    v2_json = {
+      user_id: self.user_id,
+      payment_id: self.receipt_id,
+      payment_provider: payment_provider,
+      iso_amount_payment: self.amount_lowest_denomination.abs,
+      currency_code: self.currency_code,
+    }
+
+    if refunds
+      available_amount = self.amount_available_for_refund
+
+      # refunds don't have their own nested refunds, so we can safely hard-code `false` here
+      refunding_payments_json = self.refunding_registration_payments.map { it.to_v2_json(refunds: false) }
+
+      v2_json.deep_merge!({
+                            iso_amount_refundable: available_amount,
+                            refunding_payments: refunding_payments_json,
+                          })
+    end
+
+    v2_json
+  end
+
   private def auto_close_hook
     registration.consider_auto_close
   end

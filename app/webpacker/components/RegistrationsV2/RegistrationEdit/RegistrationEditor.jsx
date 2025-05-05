@@ -10,7 +10,6 @@ import {
   Form,
   Header,
   Icon,
-  List,
   Message,
   Segment,
 } from 'semantic-ui-react';
@@ -19,7 +18,7 @@ import { useDispatch } from '../../../lib/providers/StoreProvider';
 import { showMessage } from '../Register/RegistrationMessage';
 import Loading from '../../Requests/Loading';
 import EventSelector from '../../wca/EventSelector';
-import Refunds from './Refunds';
+import Payments from './Payments';
 import { personUrl, editPersonUrl } from '../../../lib/requests/routes.js.erb';
 import { useConfirm } from '../../../lib/providers/ConfirmProvider';
 import I18n from '../../../lib/i18n';
@@ -29,7 +28,7 @@ import getUsersInfo from '../api/user/post/getUserInfo';
 import { useRegistration } from '../lib/RegistrationProvider';
 import useSet from '../../../lib/hooks/useSet';
 
-export default function RegistrationEditor({ competitor, competitionInfo }) {
+export default function RegistrationEditor({ registrationId, competitor, competitionInfo }) {
   const dispatch = useDispatch();
   const [comment, setComment] = useState('');
   const [adminComment, setAdminComment] = useState('');
@@ -128,7 +127,6 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
         'negative',
       ));
     } else {
-      dispatch(showMessage('competitions.registration_v2.update.being_updated', 'positive'));
       // Only send changed values
       const body = {
         user_id: competitor.id,
@@ -151,9 +149,10 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
         body.guests = guests;
       }
       confirm({
-        content: I18n.t('competitions.registration_v2.update.update_confirm'),
+        content: I18n.t('competitions.registration_v2.update.organizer_update_confirm'),
       }).then(() => {
         updateRegistrationMutation(body);
+        dispatch(showMessage('competitions.registration_v2.update.being_updated', 'positive'));
       }).catch(() => {});
     }
   }, [
@@ -299,21 +298,13 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
 
       {competitionInfo['using_payment_integrations?'] && (
         <>
-          <Message>{I18n.t('payments.labels.payment_statuses')}</Message>
-          <List>
-            {registration.payment.payment_statuses.map((paymentStatus) => (
-              <List.Item key={paymentStatus}>
-                {/* i18n-tasks-use t('payments.statuses.succeeded') */}
-                {/* i18n-tasks-use t('payments.statuses.refund') */}
-                {I18n.t(`payments.statuses.${paymentStatus}`)}
-              </List.Item>
-            ))}
-          </List>
+          <Header>Payments</Header>
           {(registration.payment.payment_statuses.includes('succeeded') || registration.payment.payment_statuses.includes('refund')) && (
-            <Refunds
+            <Payments
               competitionId={competitionInfo.id}
-              userId={competitor.id}
+              registrationId={registrationId}
               onSuccess={refetch}
+              competitorsInfo={competitorsInfo}
             />
           )}
         </>
