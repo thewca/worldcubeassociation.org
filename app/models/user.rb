@@ -572,7 +572,7 @@ class User < ApplicationRecord
   private def groups_with_edit_access
     return "*" if can_edit_any_groups?
 
-    groups = Set.new
+    groups = []
 
     active_roles.select do |role|
       group = role.group
