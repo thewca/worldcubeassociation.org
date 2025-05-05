@@ -2130,9 +2130,6 @@ ko:
     #original_hash: 86877d4
     wont_pay_here: 결제 방법에 대한 지침은 대회 정보를 확인하십시오.
     refund_form:
-      hints:
-        #original_hash: 38c904c
-        refund_amount: 선수에게 환불할 금액입니다. 결제한 금액까지 모든 금액이 가능합니다.
       labels:
         #original_hash: 1cc5991
         refund_amount: 환불 금액
@@ -2266,6 +2263,10 @@ ko:
       info: 이로써 승인된 참가 신청이 생성됩니다. 이 양식을 사용하여 대회 기간 동안 현장 참가 신청 내역을 추가할 수 있습니다.
       #original_hash: a11edb8
       add: 참가 신청 추가하기
+      #original_hash: fd52980
+      ots_not_enabled: 참가 신청이 마감되었으며 현장 참가 신청이 활성화되지 않았습니다 - 먼저 대회를 편집하여 활성화해야 합니다.
+      #original_hash: 61125b5
+      competition_over: 대회가 종료된 후에는 현장 참가 신청을 추가할 수 없습니다.
       errors:
         #original_hash: d6dcf5c
         already_registered: 이미 참가 신청을 한 사람입니다.
@@ -3275,6 +3276,8 @@ ko:
         being_deleted: 참가 신청을 삭제하고 있습니다...
         #original_hash: cbf13af
         update_confirm: 참가 신청을 업데이트하시겠습니까?
+        #original_hash: 604da8b
+        organizer_update_confirm: 사용자의 참가 신청을 업데이트 하시겠습니까?
         #original_hash: 9b92912
         update_confirm_contact: 참가 신청을 업데이트하려면 주최측에 문의해야 합니다. '예'를 클릭하면 문의 양식으로 이동합니다.
         #original_hash: d54056b
@@ -3441,6 +3444,8 @@ ko:
         '-6001': 이 대회는 WCA 결제 기능이 활성화되지 않았습니다
         #original_hash: 092da51
         '-6002': 결제를 진행하기 전에 참가 신청을 완료해야 합니다
+        #original_hash: ee2c9c4
+        '-6003': 미지불 금액을 찾을 수 없습니다 - 이는 귀하가 이미 참가비를 지불했기 때문일 수 있습니다.
     errors:
       #original_hash: b14d060
       must_use_wca_registration: 자동 승인 기능은 WCA 웹사이트를 통해 참가 신청을 하는 경우에만 사용할 수 있습니다
@@ -3516,6 +3521,8 @@ ko:
       event_change_deadline_after_end_date: 종목 업데이트 마감일은 대회 종료 후일 수 없습니다.
       #original_hash: a2e4fc9
       event_change_deadline_with_ots: '현장 참가 신청이 허용되는 경우, 종목 업데이트 마감일은 대회 기간 중이어야 합니다.'
+      #original_hash: e6400f7
+      on_the_spot_with_past_event_change_deadline: 종목 수정 마감일이 지난 경우 현장 참가 신청을 활성화할 수 없습니다.
       #original_hash: 5ae2437
       series_distance_km: '대회가 %{competition}(으)로부터 너무 멀리 떨어져 있습니다.'
       #original_hash: 4a5d7c5
@@ -3928,13 +3935,21 @@ ko:
     connect_wca_id: WCA 계정과 WCA ID를 연결하십시오!
   payments:
     messages:
+      #original_hash: 2eac1cb
+      charge_refunded: 결제가 환불되었습니다
       #original_hash: 1e1d219
       charges_refunded: 모든 비용이 환불되었습니다
+    errors:
+      refund:
+        #original_hash: 66475ae
+        provider_disconnected: 이 대회에 대한 환불은 더 이상 불가능합니다. 결제 서비스 제공업체의 대시보드를 이용해 환불해 주세요.
+        #original_hash: 73e93ee
+        refund_amount_too_high: 선수가 지불한 금액보다 더 많은 금액을 환불할 수 없습니다.
+        #original_hash: 6368ffc
+        refund_amount_too_low: 환불 금액은 0보다 커야 합니다.
     labels:
-      #original_hash: cccf678
-      payment_statuses: 결제 상태
-      #original_hash: 312b6b6
-      available_refunds: 가능한 환불
+      #original_hash: b6370d7
+      net_payment: 순 지불액
       #original_hash: ef3cd45
       original_payment: 원결제
     payment_providers:
@@ -4011,11 +4026,6 @@ ko:
           primary_email: 이메일
         #original_hash: 08d2e98
         fallback_not_applicable: N/A
-    statuses:
-      #original_hash: c8fbda9
-      succeeded: 성공
-      #original_hash: d6fbc7a
-      refund: 환불됨
   persons:
     index:
       #original_hash: 5934b4c
