@@ -1174,7 +1174,7 @@ module DatabaseDumper
   }.freeze
 
   # NOTE: The parameter dump_config_name has to correspond exactly to the desired key in config/database.yml
-  def self.with_dumped_db(dump_config_name, dump_sanitizers, dump_ts_name = nil, drop_db_after_dump = true)
+  def self.with_dumped_db(dump_config_name, dump_sanitizers, dump_ts_name = nil, drop_db_after_dump: true)
     primary_db_config = ActiveRecord::Base.connection_db_config
 
     config = ActiveRecord::Base.configurations.configs_for(name: dump_config_name.to_s, include_hidden: true)
@@ -1230,7 +1230,7 @@ module DatabaseDumper
   end
 
   def self.development_dump(dump_filename)
-    self.with_dumped_db(:developer_dump, DEV_SANITIZERS, DEV_TIMESTAMP_NAME, false) do |dump_db|
+    self.with_dumped_db(:developer_dump, DEV_SANITIZERS, DEV_TIMESTAMP_NAME, drop_db_after_dump: false) do |dump_db|
       LogTask.log_task "Running SQL dump to '#{dump_filename}'" do
         self.mysqldump(dump_db, dump_filename)
       end
