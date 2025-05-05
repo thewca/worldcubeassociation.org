@@ -425,17 +425,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/helper-wrap-function@npm:^7.25.9":
-  version: 7.25.9
-  resolution: "@babel/helper-wrap-function@npm:7.25.9"
-  dependencies:
-    "@babel/template": "npm:^7.25.9"
-    "@babel/traverse": "npm:^7.25.9"
-    "@babel/types": "npm:^7.25.9"
-  checksum: 10c0/b6627d83291e7b80df020f8ee2890c52b8d49272962cac0114ef90f189889c90f1027985873d1b5261a4e986e109b2754292dc112392f0b1fcbfc91cc08bd003
-  languageName: node
-  linkType: hard
-
 "@babel/helper-wrap-function@npm:^7.27.1":
   version: 7.27.1
   resolution: "@babel/helper-wrap-function@npm:7.27.1"
@@ -1630,7 +1619,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/template@npm:^7.25.9, @babel/template@npm:^7.26.9":
+"@babel/template@npm:^7.26.9":
   version: 7.26.9
   resolution: "@babel/template@npm:7.26.9"
   dependencies:
@@ -2859,21 +2848,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tanstack/query-core@npm:5.74.7":
-  version: 5.74.7
-  resolution: "@tanstack/query-core@npm:5.74.7"
-  checksum: 10c0/192ac5238b74d17d62c55e072bdf534b7e309b432b9bc9a41eeb2eb84adfe29adf7b5edb8bf1371d995225db69c6a4092673b03bb206b4212ce55847170d6e74
+"@tanstack/query-core@npm:5.75.0":
+  version: 5.75.0
+  resolution: "@tanstack/query-core@npm:5.75.0"
+  checksum: 10c0/1c90d5f463fe5b4dac4525279300cd950acaef670b8589ba406df833bee3bdb4dcb58fba78c9a5424e7d19a317590eecad838fb389f37a91edb781f9c90af358
   languageName: node
   linkType: hard
 
-"@tanstack/react-query@npm:^5.74.7":
-  version: 5.74.7
-  resolution: "@tanstack/react-query@npm:5.74.7"
+"@tanstack/react-query@npm:^5.75.2":
+  version: 5.75.2
+  resolution: "@tanstack/react-query@npm:5.75.2"
   dependencies:
-    "@tanstack/query-core": "npm:5.74.7"
+    "@tanstack/query-core": "npm:5.75.0"
   peerDependencies:
     react: ^18 || ^19
-  checksum: 10c0/83455915126fcb8ab467d0071f1802c9b6f5d73c7a257be2f80cb76d3c616f3e38d4a61e22dc4c3bc81060c153988200244a5d4b68e365aacd205645ad4a3a09
+  checksum: 10c0/b265a89f9166747589ce80019505be24a43a6cffc7af09700fadb35a91d28a0da380f7e18bcf2ffb7396cd0f2ca45d3322f5f3758d3265b68533a59dad6dd487
   languageName: node
   linkType: hard
 
@@ -10522,7 +10511,7 @@ __metadata:
     "@rails/ujs": "npm:^7.1.501"
     "@stripe/react-stripe-js": "npm:^3.7.0"
     "@stripe/stripe-js": "npm:^7.3.0"
-    "@tanstack/react-query": "npm:^5.74.7"
+    "@tanstack/react-query": "npm:^5.75.2"
     "@tanstack/react-table": "npm:^8.21.3"
     "@wca/helpers": "npm:^1.1.5"
     autonumeric: "npm:^4.10.8"
