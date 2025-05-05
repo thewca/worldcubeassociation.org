@@ -4,7 +4,7 @@ class ResultsController < ApplicationController
   REGION_WORLD = "world"
   YEARS_ALL = "all years"
   SHOW_100_PERSONS = "100 persons"
-  SHOWS = %w[mixed slim separate history mixed_history]
+  SHOWS = ['mixed' 'slim' 'separate' 'history' 'mixed history']
   GENDERS = %w[Male Female]
   SHOW_MIXED = "mixed"
   GENDER_ALL = "All"
