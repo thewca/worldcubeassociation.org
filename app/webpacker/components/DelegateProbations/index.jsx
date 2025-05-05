@@ -30,7 +30,7 @@ export default function DelegateProbations() {
   );
 
   const canEditProbation = probationRoles
-    .some((probationRole) => loggedInUserPermissions.canEditGroup(probationRole.id));
+    .some((probationRole) => loggedInUserPermissions.canEditGroup(probationRole.group.id));
 
   return (
     <>
