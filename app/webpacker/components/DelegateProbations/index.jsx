@@ -39,16 +39,16 @@ export default function DelegateProbations() {
 
       <h2>Active Probations</h2>
       <ProbationListTable
-      roleList={activeRoles}
-      isActive={canEditProbation}
-      save={save}
-      sync={sync}
+        roleList={activeRoles}
+        isActive={canEditProbation}
+        save={save}
+        sync={sync}
       />
 
       <h2>Past Probations</h2>
       <ProbationListTable
-      roleList={pastRoles}
-      isActive={false}
+        roleList={pastRoles}
+        isActive={false}
       />
     </>
   );
