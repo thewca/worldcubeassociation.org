@@ -351,6 +351,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@babel/helper-wrap-function@npm:^7.27.1":
+  version: 7.27.1
+  resolution: "@babel/helper-wrap-function@npm:7.27.1"
+  dependencies:
+    "@babel/template": "npm:^7.27.1"
+    "@babel/traverse": "npm:^7.27.1"
+    "@babel/types": "npm:^7.27.1"
+  checksum: 10c0/c472f75c0951bc657ab0a117538c7c116566ae7579ed47ac3f572c42dc78bd6f1e18f52ebe80d38300c991c3fcaa06979e2f8864ee919369dabd59072288de30
+  languageName: node
+  linkType: hard
+
 "@babel/helpers@npm:^7.26.10":
   version: 7.26.10
   resolution: "@babel/helpers@npm:7.26.10"
@@ -479,15 +490,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-proposal-function-sent@npm:^7.25.9":
-  version: 7.25.9
-  resolution: "@babel/plugin-proposal-function-sent@npm:7.25.9"
+"@babel/plugin-proposal-function-sent@npm:^7.27.1":
+  version: 7.27.1
+  resolution: "@babel/plugin-proposal-function-sent@npm:7.27.1"
   dependencies:
-    "@babel/helper-plugin-utils": "npm:^7.25.9"
-    "@babel/helper-wrap-function": "npm:^7.25.9"
+    "@babel/helper-plugin-utils": "npm:^7.27.1"
+    "@babel/helper-wrap-function": "npm:^7.27.1"
   peerDependencies:
     "@babel/core": ^7.0.0-0
-  checksum: 10c0/f98680b7df8276743c090a480e9648d691e19adac89179a6b06c741e85e2c855e6a065e2a539b4073b15bd2d50c239c4c0a5de519904998eecb9e784469c2a81
+  checksum: 10c0/8c577929717233e462c3e13ce2da068059217ddae574c73feb79c207d879c45530a114fad3d5e4722fb637516a58ff065a4286a62cc13375a054ef103532d363
   languageName: node
   linkType: hard
 
@@ -10431,7 +10442,7 @@ __metadata:
     "@babel/plugin-proposal-class-properties": "npm:^7.17.12"
     "@babel/plugin-proposal-decorators": "npm:^7.25.9"
     "@babel/plugin-proposal-export-namespace-from": "npm:^7.18.9"
-    "@babel/plugin-proposal-function-sent": "npm:^7.25.9"
+    "@babel/plugin-proposal-function-sent": "npm:^7.27.1"
     "@babel/plugin-proposal-json-strings": "npm:^7.14.5"
     "@babel/plugin-proposal-numeric-separator": "npm:^7.14.5"
     "@babel/plugin-proposal-private-methods": "npm:^7.18.6"
