@@ -3,6 +3,9 @@
 require 'rails_helper'
 
 RSpec.describe "results" do
+  TEST_EVENTS = %w[333 333mbf 333fm]
+  TEST_REGIONS = ['_Africa', 'South Africa']
+
   describe "GET #rankings" do
     context "with valid params" do
       it "shows rankings" do
@@ -39,21 +42,42 @@ RSpec.describe "results" do
 
     context 'json' do
       let(:headers) { { 'CONTENT_TYPE' => 'application/json', 'ACCEPT' => 'application/json' } }
+      let(:genders) { ['Male', 'Female'] }
 
-      it 'shows history for Africa' do
-        get records_path, headers: headers, params: { region: '_Africa', show: 'history' }
-        expect(response).to be_successful
+      RSpec.shared_examples 'single parameter' do |param_name, param_value|
+        it "returns success for param #{param_name} with value: #{param_value}" do
+          get records_path, headers: headers, params: { **{ param_name => param_value } }
+          expect(response).to be_successful
+        end
       end
 
-      it 'shows history for South Africa' do
-        get records_path, headers: headers, params: { region: 'South Africa', show: 'history' }
-        expect(response).to be_successful
+      ResultsController::SHOWS.each do |show|
+        it_behaves_like 'single parameter', 'show', show
       end
 
-      it 'shows female records for Africa' do
+      ResultsController::GENDERS.each do |gender|
+        it_behaves_like 'single parameter', 'gender', gender
       end
 
-      it 'shows female records for South Africa' do
+      TEST_EVENTS.each do |event|
+        it_behaves_like 'single parameter', 'event_id', event
+      end
+
+      TEST_REGIONS.each do |region|
+        it_behaves_like 'single parameter', 'region', region
+      end
+
+      RSpec.shared_examples 'two parameters' do |param_1, param_2, value_1, value_2|
+        it "returns success for params #{param_1}/#{param_2} with values: #{value_1}/#{value_2}" do
+          get records_path, headers: headers, params: { ** { param_1 => value_1, param_2 => value_2 } }
+          expect(response).to be_successful
+        end
+      end
+
+      ResultsController::SHOWS.each do |show|
+        TEST_REGIONS.each do |region|
+          it_behaves_like 'two parameters', 'show', 'region', show, region
+        end
       end
     end
   end
