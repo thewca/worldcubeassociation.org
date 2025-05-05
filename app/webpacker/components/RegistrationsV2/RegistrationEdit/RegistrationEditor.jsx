@@ -79,6 +79,7 @@ export default function RegistrationEditor({ registrationId, competitor, competi
           payment: serverRegistration.payment,
         },
       );
+
       // Going from cancelled -> pending
       if (registration.competing.registration_status === 'cancelled') {
         dispatch(showMessage('registrations.flash.registered', 'positive'));
@@ -86,6 +87,8 @@ export default function RegistrationEditor({ registrationId, competitor, competi
       } else {
         dispatch(showMessage('registrations.flash.updated', 'positive'));
       }
+
+      refetchHistory();
     },
   });
 
@@ -314,6 +317,7 @@ export default function RegistrationEditor({ registrationId, competitor, competi
               competitionId={competitionInfo.id}
               registrationId={registrationId}
               competitorsInfo={competitorsInfo}
+              refetchHistory={refetchHistory}
             />
           )}
         </>
