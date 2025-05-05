@@ -225,6 +225,14 @@ RSpec.describe "users" do
       expect(response).to redirect_to new_user_session_path
     end
 
+    it 'redirects user with no dob to profile page' do
+      user = FactoryBot.create(:user, dob: nil)
+      sign_in user
+      sso.nonce = 1234
+      get "#{sso_discourse_path}?#{sso.payload}"
+      expect(response).to redirect_to
+    end
+
     it 'doesnt authenticate user under 13' do
       user = FactoryBot.create(:user, dob: Date.today.advance(years: -13, days: 1))
       sign_in user
