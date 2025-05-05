@@ -1427,7 +1427,7 @@ RSpec.describe 'API Registrations' do
         end
 
         it 'updates the payment_reference of the payment record' do
-          expect(payment_intent.payment_record.payment_reference).to eq('t2345')
+          expect(payment_intent.payment_record.reload.payment_reference).to eq('t2345')
         end
       end
     end
