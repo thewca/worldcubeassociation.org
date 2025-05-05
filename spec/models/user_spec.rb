@@ -767,7 +767,7 @@ RSpec.describe User, type: :model do
   end
 
   describe '#age_in_years' do
-    let(:user) { FactoryBot.create(:user) }
+    let(:user) { create(:user) }
 
     it 'returns an integer' do
       expect(user.age_in_years.class).to be(Integer)
@@ -790,7 +790,7 @@ RSpec.describe User, type: :model do
   end
 
   describe '#below_forum_age_requirement?' do
-    let(:user) { FactoryBot.create(:user) }
+    let(:user) { create(:user) }
 
     it 'true when user under 13' do
       user.dob = Date.today.advance(days: 1, years: -13)
