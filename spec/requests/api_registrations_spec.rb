@@ -1275,53 +1275,85 @@ RSpec.describe 'API Registrations' do
   end
 
   describe 'GET #payment_ticket' do
-    let(:competition) { create(:competition, :registration_open, :with_organizer, :stripe_connected) }
-    let(:reg) { create(:registration, :pending, competition: competition) }
     let(:headers) { { 'Authorization' => fetch_jwt_token(reg.user_id) } }
 
-    it 'successfully builds a payment_intent via Stripe API' do
-      get api_v1_registrations_payment_ticket_path(competition_id: competition.id), headers: headers, params: { payment_integration_type: :stripe }
-      expect(response).to be_successful
-    end
+    context 'stripe connect payment integration' do
+      let(:competition) { create(:competition, :registration_open, :with_organizer, :stripe_connected) }
+      let(:reg) { create(:registration, :pending, competition: competition) }
 
-    context 'successful payment ticket' do
-      before do
+      it 'successfully builds a payment_intent via Stripe API' do
         get api_v1_registrations_payment_ticket_path(competition_id: competition.id), headers: headers, params: { payment_integration_type: :stripe }
+        expect(response).to be_successful
       end
 
-      it 'returns a client secret' do
-        expect(response.parsed_body.keys).to include('client_secret')
+      context 'successful payment ticket' do
+        before do
+          get api_v1_registrations_payment_ticket_path(competition_id: competition.id), headers: headers, params: { payment_integration_type: :stripe }
+        end
+
+        it 'returns a client secret' do
+          expect(response.parsed_body.keys).to include('client_secret')
+        end
+
+        it 'creates a payment intent' do
+          expect(PaymentIntent.find_by(holder_type: "Registration", holder_id: reg.id)).to be_present
+        end
+
+        it 'payment intent details match expected values' do
+          payment_record = PaymentIntent.find_by(holder_type: "Registration", holder_id: reg.id).payment_record
+          expect(payment_record.amount_stripe_denomination).to be(1000)
+          expect(payment_record.currency_code).to eq("usd")
+        end
       end
 
-      it 'creates a payment intent' do
-        expect(PaymentIntent.find_by(holder_type: "Registration", holder_id: reg.id)).to be_present
-      end
+      it 'has the correct payment_intent properties when a donation is present' do
+        get api_v1_registrations_payment_ticket_path(competition_id: competition.id), headers: headers, params: { iso_donation_amount: 1300, payment_integration_type: :stripe }
 
-      it 'payment intent details match expected values' do
         payment_record = PaymentIntent.find_by(holder_type: "Registration", holder_id: reg.id).payment_record
-        expect(payment_record.amount_stripe_denomination).to be(1000)
+        expect(payment_record.amount_stripe_denomination).to be(2300)
         expect(payment_record.currency_code).to eq("usd")
       end
+
+      it 'refuses ticket create request if registration is closed' do
+        closed_comp = create(:competition, :registration_closed, :with_organizer, :stripe_connected)
+        closed_reg = create(:registration, :pending, competition: closed_comp)
+
+        headers = { 'Authorization' => fetch_jwt_token(closed_reg.user_id) }
+        get api_v1_registrations_payment_ticket_path(competition_id: closed_comp.id), headers: headers
+
+        body = response.parsed_body
+        expect(response).to have_http_status(:forbidden)
+        expect(body).to eq({ error: Registrations::ErrorCodes::REGISTRATION_CLOSED }.with_indifferent_access)
+      end
     end
 
-    it 'has the correct payment_intent properties when a donation is present' do
-      get api_v1_registrations_payment_ticket_path(competition_id: competition.id), headers: headers, params: { iso_donation_amount: 1300, payment_integration_type: :stripe }
+    context 'manual payment integration' do
+      let(:competition) { create(:competition, :registration_open, :with_organizer, :manual_payments) }
+      let(:reg) { create(:registration, :pending, competition: competition) }
 
-      payment_record = PaymentIntent.find_by(holder_type: "Registration", holder_id: reg.id).payment_record
-      expect(payment_record.amount_stripe_denomination).to be(2300)
-      expect(payment_record.currency_code).to eq("usd")
-    end
+      context 'successful payment ticket' do
+        before do
+          get api_v1_registrations_payment_ticket_path(competition_id: competition.id), headers: headers, params: {
+            iso_donation_amount: 0, payment_integration_type: :manual
+          }
+        end
 
-    it 'refuses ticket create request if registration is closed' do
-      closed_comp = create(:competition, :registration_closed, :with_organizer, :stripe_connected)
-      closed_reg = create(:registration, :pending, competition: closed_comp)
+        it 'returns a success response' do
+          expect(response).to be_successful
+        end
 
-      headers = { 'Authorization' => fetch_jwt_token(closed_reg.user_id) }
-      get api_v1_registrations_payment_ticket_path(competition_id: closed_comp.id), headers: headers
+        it 'creates a WCA payment intent' do
+          intent = PaymentIntent.find_by(holder_type: "Registration", holder_id: reg.id)
+          expect(intent).to be_present
+          expect(intent.payment_record_type).to eq('ManualPaymentRecord')
+        end
 
-      body = response.parsed_body
-      expect(response).to have_http_status(:forbidden)
-      expect(body).to eq({ error: Registrations::ErrorCodes::REGISTRATION_CLOSED }.with_indifferent_access)
+        it 'creates a manual payment record and populates with user-supplied reference' do
+          record = PaymentIntent.find_by(holder_type: "Registration", holder_id: reg.id).payment_record
+          expect(record).to be_present
+          expect(record.payment_reference).to eq('example_reference')
+        end
+      end
     end
   end
 

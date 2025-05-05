@@ -350,6 +350,12 @@ FactoryBot.define do
       end
     end
 
+    trait :manual_payments do
+      transient do
+        manual_payment_reference { 'Manual payment instructions' }
+      end
+    end
+
     trait :accepts_donations do
       enable_donations { true }
     end
@@ -514,6 +520,14 @@ FactoryBot.define do
           consent_status: "test",
         )
         competition.competition_payment_integrations.new(connected_account: paypal_account)
+        competition.save
+      end
+
+      if defined?(evaluator.manual_payment_reference)
+        manual_payment_account = ManualPaymentIntegration.new(
+          payment_information: evaluator.manual_payment_reference, payment_reference: "test reference"
+        )
+        competition.competition_payment_integrations.new(connected_account: manual_payment_account)
         competition.save
       end
     end

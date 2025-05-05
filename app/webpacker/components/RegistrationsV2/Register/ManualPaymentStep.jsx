@@ -28,7 +28,7 @@ export default function ManualPaymentStep({
     queryKey: ['manual-payment', competitionInfo.id],
     queryFn: () => getPaymentTicket(
       competitionInfo,
-      competitionInfo.base_entry_fee_lowest_denomination,
+      0,
       'manual',
     ),
   });
