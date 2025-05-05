@@ -44,7 +44,7 @@ class Cutoff
 
   def self.wcif_json_schema
     {
-      "type" => ["object", "null"],
+      "type" => %w[object null],
       "properties" => {
         "numberOfAttempts" => { "type" => "integer" },
         "attemptResult" => { "type" => "integer" },

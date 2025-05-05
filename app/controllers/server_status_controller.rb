@@ -57,7 +57,7 @@ class JobsCheck < StatusCheck
     else
       [
         :danger,
-        %{
+        %(
           Uh oh!
           Job #{oldest_job_that_should_have_run_by_now.id} was enqueued
           #{time_ago_in_words oldest_job_that_should_have_run_by_now.enqueued_at}
@@ -66,7 +66,7 @@ class JobsCheck < StatusCheck
           #{'job'.pluralize(jobs_that_should_have_run_by_now.count)}
           #{'is'.pluralize(jobs_that_should_have_run_by_now.count)}
           waiting to run.
-        }.squish,
+        ).squish,
       ]
     end
   end

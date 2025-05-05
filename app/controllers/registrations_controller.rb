@@ -3,7 +3,7 @@
 require "csv"
 
 class RegistrationsController < ApplicationController
-  before_action :authenticate_user!, except: [:index, :psych_sheet, :psych_sheet_event, :register, :stripe_webhook, :payment_denomination]
+  before_action :authenticate_user!, except: %i[index psych_sheet psych_sheet_event register stripe_webhook payment_denomination]
   # Stripe has its own authenticity mechanism with Webhook Secrets.
   protect_from_forgery except: [:stripe_webhook]
 
@@ -19,9 +19,9 @@ class RegistrationsController < ApplicationController
   end
 
   before_action -> { redirect_to_root_unless_user(:can_manage_competition?, competition_from_params) },
-                except: [:index, :psych_sheet, :psych_sheet_event, :register, :payment_completion, :load_payment_intent, :stripe_webhook, :payment_denomination, :capture_paypal_payment]
+                except: %i[index psych_sheet psych_sheet_event register payment_completion load_payment_intent stripe_webhook payment_denomination capture_paypal_payment]
 
-  before_action :competition_must_be_using_wca_registration!, except: [:import, :do_import, :add, :do_add, :index, :psych_sheet, :psych_sheet_event, :stripe_webhook, :payment_denomination]
+  before_action :competition_must_be_using_wca_registration!, except: %i[import do_import add do_add index psych_sheet psych_sheet_event stripe_webhook payment_denomination]
   private def competition_must_be_using_wca_registration!
     return if competition_from_params.use_wca_registration?
 
@@ -29,7 +29,7 @@ class RegistrationsController < ApplicationController
     redirect_to competition_path(competition_from_params)
   end
 
-  before_action :competition_must_not_be_using_wca_registration!, only: [:import, :do_import]
+  before_action :competition_must_not_be_using_wca_registration!, only: %i[import do_import]
   private def competition_must_not_be_using_wca_registration!
     redirect_to competition_path(competition_from_params) if competition_from_params.use_wca_registration?
   end
@@ -156,11 +156,18 @@ class RegistrationsController < ApplicationController
 
   def do_add
     @competition = competition_from_params
+
     if @competition.registration_full?
       flash[:danger] = I18n.t("registrations.mailer.deleted.causes.registrations_full")
-      redirect_to competition_path(@competition)
-      return
+      return redirect_to competition_path(@competition)
+    elsif !@competition.registration_currently_open? && !@competition.on_the_spot_registration?
+      flash[:danger] = I18n.t("registrations.add.ots_not_enabled")
+      return redirect_to competition_path(@competition)
+    elsif @competition.probably_over?
+      flash[:danger] = I18n.t("registrations.add.competition_over")
+      return redirect_to competition_path(@competition)
     end
+
     ActiveRecord::Base.transaction do
       user, locked_account_created = user_for_registration!(params[:registration_data])
       registration = @competition.registrations.find_or_initialize_by(user_id: user.id) do |reg|

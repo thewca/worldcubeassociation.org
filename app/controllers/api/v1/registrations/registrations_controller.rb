@@ -221,11 +221,12 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
     competition_id = params[:competition_id]
     @competition = Competition.find(competition_id)
     return render_error(:forbidden, Registrations::ErrorCodes::PAYMENT_NOT_ENABLED) unless @competition.using_payment_integrations?
-
     return render_error(:forbidden, Registrations::ErrorCodes::REGISTRATION_CLOSED) if @competition.registration_past?
 
     @registration = Registration.find_by(user: @current_user, competition: @competition)
-    render_error(:forbidden, Registrations::ErrorCodes::PAYMENT_NOT_READY) if @registration.nil?
+    return render_error(:forbidden, Registrations::ErrorCodes::PAYMENT_NOT_READY) if @registration.nil?
+
+    render_error(:forbidden, Registrations::ErrorCodes::NO_OUTSTANDING_PAYMENT) if @registration.outstanding_entry_fees.zero?
   end
 
   def payment_ticket
@@ -251,18 +252,18 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
     end
 
     def registration_params
-      params.require([:user_id, :competition_id])
+      params.require(%i[user_id competition_id])
       params.require(:competing).require(:event_ids)
       params
     end
 
     def show_params
-      user_id, competition_id = params.require([:user_id, :competition_id])
+      user_id, competition_id = params.require(%i[user_id competition_id])
       [user_id.to_i, competition_id]
     end
 
     def update_params
-      params.require([:user_id, :competition_id])
+      params.require(%i[user_id competition_id])
       params.permit(:guests, competing: [:status, :comment, { event_ids: [] }, :admin_comment])
       params
     end
@@ -311,7 +312,7 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
     end
 
     def contains_admin_fields?(request)
-      organizer_fields = ['admin_comment', 'waiting_list_position']
+      organizer_fields = %w[admin_comment waiting_list_position]
 
       request['competing']&.keys&.any? { |key| organizer_fields.include?(key) }
     end

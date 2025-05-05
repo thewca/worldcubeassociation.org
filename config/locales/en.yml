@@ -504,7 +504,8 @@ en:
         wrc_feedback_requested: ""
         wrc_incidents: "List of numbers referencing any incidents that you would like the WRC's feedback on."
         wic_feedback_requested: ""
-        wic_incidents: "List of numbers referencing any incidents that you would like the WIC's feedback on."
+        wic_incidents_html: "List of numbers referencing any incidents that you would like the WIC's feedback on. <br> <strong>%{wic_incident_alert}</strong>"
+        wic_incident_alert: "If the WIC incident is sensitive (including but not limited to crimes, harassment, assault, etc.), please exclude this from your report and email the WIC separately. For other WIC incidents, default to a brief, anonymized version of the incident and follow-up with the WIC privately with further details. The WIC will still provide feedback on anonymized versions for general awareness. For all WIC incidents involving a WCA Volunteer, please exclude all details from the report, and contact the WIC privately."
         remarks: "Talk about any other detail that you'd like to share (e.g., improvement/regression within the community, future plans for this region). If for the sake of conciseness you left something unsaid in the previous sections, feel free to comment them here."
         discussion_url: ""
       #context: for a competition tab
@@ -1328,6 +1329,8 @@ en:
       title: "Add registration for %{comp}"
       info: "This will create an approved registration. Use this form to add walk-ins during the competition."
       add: "Add registration"
+      ots_not_enabled: "Registration is closed and on-the-spot registration is not enabled - you must edit the competition to enable it first"
+      competition_over: You cannot add on-the-spot registrations after the competition has ended.
       errors:
         already_registered: "This person already has a registration."
   #context: Key used when managing competitions
@@ -1955,6 +1958,7 @@ en:
         -4015: "Please enter a reasonable amount of guests, or contact the organizers if you need to bring an extraordinary amount of guests."
         -6001: "WCA Payment is not enabled for this competition"
         -6002: "You need to finish your registration before you can pay"
+        -6003: "No outstanding payment found - this is probably because you have already paid for your registration."
     #context: and when an error occurred
     errors:
       must_use_wca_registration: "Auto-accept can only be used if you are using the WCA website for registrations"
@@ -1992,6 +1996,7 @@ en:
       event_change_deadline_before_registration_close: "Deadline for updating events cannot be before registration close date."
       event_change_deadline_after_end_date: "Deadline for updating events cannot be after the competition."
       event_change_deadline_with_ots: "Deadline for updating events must be during the competition if on the spot registrations are accepted."
+      on_the_spot_with_past_event_change_deadline: "Cannot enable on the spot registrations if the deadline for updating events is in the past."
       series_distance_km: "The competition is located too far away from %{competition}."
       series_distance_days: "The competition is scheduled too many days away from %{competition}."
       must_ask_about_guests_if_specifying_limit: "Must ask about guests if a guest limit is specified."

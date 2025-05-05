@@ -66,12 +66,16 @@ export default function RegistrationProvider({
   const isAccepted = isRegistered && registration.competing.registration_status === 'accepted';
   const isRejected = isRegistered && registration.competing.registration_status === 'rejected';
   const hasPaid = registration?.payment?.has_paid;
+  const isPending = isRegistered && registration.competing.registration_status === 'pending';
+  const isWaitingList = isRegistered && registration.competing.registration_status === 'waiting_list';
 
   const value = useMemo(() => ({
     isRegistered,
     isAccepted,
     isRejected,
     hasPaid,
+    isPending,
+    isWaitingList,
     registration,
     refetchRegistration,
     isFetching,
@@ -87,6 +91,8 @@ export default function RegistrationProvider({
     isFetching,
     isRegistered,
     isRejected,
+    isPending,
+    isWaitingList,
     isPolling,
     refetchRegistration,
     registration,

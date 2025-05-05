@@ -5,7 +5,7 @@ require 'factory_bot_rails'
 FactoryBot.define do
   factory :registration_request, class: Hash do
     transient do
-      events { ['333', '333oh'] }
+      events { %w[333 333oh] }
       raw_comment { nil }
     end
 

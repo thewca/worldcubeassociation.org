@@ -10,6 +10,7 @@ import WCAQueryClientProvider from '../../../lib/providers/WCAQueryClientProvide
 import { personUrl, editPersonUrl } from '../../../lib/requests/routes.js.erb';
 import { countries } from '../../../lib/wca-data.js.erb';
 import RegionSelector, { ALL_REGIONS_VALUE } from '../../wca/RegionSelector';
+import useInputState from '../../../lib/hooks/useInputState';
 
 export default function Wrapper() {
   return (
@@ -22,7 +23,7 @@ export default function Wrapper() {
 function PersonList() {
   const [query, setQuery] = useState('');
   const [page, setPage] = useState(1);
-  const [region, setRegion] = useState(ALL_REGIONS_VALUE);
+  const [region, setRegion] = useInputState(ALL_REGIONS_VALUE);
 
   const debouncedSearch = useDebounce(query, 600);
 
