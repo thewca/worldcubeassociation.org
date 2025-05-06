@@ -29,7 +29,6 @@ import { eventQualificationToString } from '../../../lib/utils/wcif';
 import { hasNotPassed } from '../../../lib/utils/dates';
 import { useRegistration } from '../lib/RegistrationProvider';
 import useSet from '../../../lib/hooks/useSet';
-import { isoMoneyToHumanReadable } from '../../../lib/helpers/money';
 
 const maxCommentLength = 240;
 
@@ -326,21 +325,21 @@ export default function CompetingStep({
         />
       )}
 
-        <Form onSubmit={handleSubmit} warning={formWarnings.length > 0} size="large">
-          <Message
-            warning
-            list={formWarnings}
-          />
-          <Form.Field required error={hasInteracted && selectedEventIds.size === 0}>
-            <EventSelector
-              id="event-selection"
-              eventList={competitionInfo.event_ids}
-              selectedEvents={selectedEventIds.asArray}
-              onEventClick={onEventClick}
-              onAllClick={onAllEventsClick}
-              onClearClick={onClearEventsClick}
-              maxEvents={maxEvents}
-              eventsDisabled={
+      <Form onSubmit={handleSubmit} warning={formWarnings.length > 0} size="large">
+        <Message
+          warning
+          list={formWarnings}
+        />
+        <Form.Field required error={hasInteracted && selectedEventIds.size === 0}>
+          <EventSelector
+            id="event-selection"
+            eventList={competitionInfo.event_ids}
+            selectedEvents={selectedEventIds.asArray}
+            onEventClick={onEventClick}
+            onAllClick={onAllEventsClick}
+            onClearClick={onClearEventsClick}
+            maxEvents={maxEvents}
+            eventsDisabled={
                 competitionInfo.allow_registration_without_qualification
                   ? []
                   : eventsNotQualifiedFor(
@@ -391,20 +390,20 @@ export default function CompetingStep({
           />
         </Form.Field>
         {competitionInfo.guests_enabled && (
-        <Form.Field>
-          <label htmlFor="guest-dropdown">{I18n.t('activerecord.attributes.registration.guests')}</label>
-          <Form.Input
-            id="guest-dropdown"
-            type="number"
-            value={guests}
-            onChange={(event, data) => {
-              setGuests(Number.parseInt(data.value, 10));
-            }}
-            min="0"
-            max={guestLimit}
-            error={guestsRestricted && guests > guestLimit && I18n.t('competitions.competition_info.guest_limit', { count: guestLimit })}
-          />
-        </Form.Field>
+          <Form.Field>
+            <label htmlFor="guest-dropdown">{I18n.t('activerecord.attributes.registration.guests')}</label>
+            <Form.Input
+              id="guest-dropdown"
+              type="number"
+              value={guests}
+              onChange={(event, data) => {
+                setGuests(Number.parseInt(data.value, 10));
+              }}
+              min="0"
+              max={guestLimit}
+              error={guestsRestricted && guests > guestLimit && I18n.t('competitions.competition_info.guest_limit', { count: guestLimit })}
+            />
+          </Form.Field>
         )}
         {isRegistered ? (
           <ButtonGroup widths={2}>
