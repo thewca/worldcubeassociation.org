@@ -244,7 +244,7 @@ class Registration < ApplicationRecord
 
   def registration_history
     registration_history_entries.map do |r|
-      changed_attributes = r.registration_history_changes.index_by(&:key).transform_values(&:parsed_value)
+      changed_attributes = r.registration_history_changes.index_by(&:key).transform_values(&:parsed_value).symbolize_keys
 
       {
         changed_attributes: changed_attributes,
@@ -252,7 +252,7 @@ class Registration < ApplicationRecord
         actor_id: r.actor_id,
         timestamp: r.created_at,
         action: r.action,
-      }.with_indifferent_access
+      }
     end
   end
 
