@@ -22,14 +22,14 @@ module Registrations
         registration.add_history_entry(changes, "worker", user_id, "Worker processed")
       end
 
-      def self.update_raw!(update_params, competition, current_user_id)
+      def self.update_raw!(update_params, competition, acting_entity_id)
         user_id = update_params[:user_id]
 
         Registration.find_by(competition: competition, user_id: user_id)
-                    .tap { self.update!(update_params, it, current_user_id) }
+                    .tap { self.update!(update_params, it, acting_entity_id) }
       end
 
-      def self.update!(update_params, registration, current_user_id)
+      def self.update!(update_params, registration, acting_entity_id)
         registration = Registrations::RegistrationChecker.apply_payload(registration, update_params, clone: false)
 
         # Make sure that a waiting list always exists if you need one during the update
@@ -42,13 +42,23 @@ module Registrations
           changes[:event_ids] = registration.changed_event_ids if registration.changed_event_ids.present?
 
           registration.save!
-          registration.add_history_entry(changes, 'user', current_user_id, Registrations::Helper.action_type(update_params, current_user_id))
+
+          # Make Rails forget about any in-memory cached values of the `has_many :events` association.
+          # This is (unfortunately) necessary even after a `save!`, because Rails still caches the association
+          #   from when we called `event_ids` in the `apply_payload` method above.
+          registration.events.reset
+
+          if acting_entity_id == Registration::AUTO_ACCEPT_ENTITY_ID
+            registration.add_history_entry(changes, Registration::SYSTEM_ENTITY_ID, acting_entity_id, Registrations::Helper.action_type(update_params, acting_entity_id))
+          else
+            registration.add_history_entry(changes, Registration::USER_ENTITY_ID, acting_entity_id, Registrations::Helper.action_type(update_params, acting_entity_id))
+          end
         end
 
-        send_status_change_email(registration, current_user_id) if registration.competing_status_previously_changed?
+        send_status_change_email(registration, acting_entity_id) if registration.competing_status_previously_changed?
       end
 
-      def self.send_status_change_email(registration, current_user_id)
+      def self.send_status_change_email(registration, acting_entity_id)
         case registration.competing_status
         when Registrations::Helper::STATUS_WAITING_LIST
           RegistrationsMailer.notify_registrant_of_waitlisted_registration(registration).deliver_later
@@ -57,7 +67,7 @@ module Registrations
         when Registrations::Helper::STATUS_ACCEPTED
           RegistrationsMailer.notify_registrant_of_accepted_registration(registration).deliver_later
         when Registrations::Helper::STATUS_REJECTED, Registrations::Helper::STATUS_DELETED, Registrations::Helper::STATUS_CANCELLED
-          if registration.user_id == current_user_id
+          if registration.user_id == acting_entity_id
             RegistrationsMailer.notify_organizers_of_deleted_registration(registration).deliver_later
           else
             RegistrationsMailer.notify_registrant_of_deleted_registration(registration).deliver_later

@@ -63,7 +63,7 @@ function PersonList() {
         </Table.Header>
         <Table.Body>
           {data.rows.map((row) => (
-            <Table.Row key={`${row.wca_id}-${row.name}`}>
+            <Table.Row key={row.user_id}>
               <Table.Cell>
                 {row.wca_id && <a href={personUrl(row.wca_id)}>{row.wca_id}</a>}
               </Table.Cell>

@@ -5,6 +5,9 @@ class Registration < ApplicationRecord
 
   COMMENT_CHARACTER_LIMIT = 240
   DEFAULT_GUEST_LIMIT = 99
+  AUTO_ACCEPT_ENTITY_ID = 'auto-accept'
+  SYSTEM_ENTITY_ID = 'system'
+  USER_ENTITY_ID = 'user'
 
   scope :pending, -> { where(competing_status: 'pending') }
   scope :accepted, -> { where(competing_status: 'accepted') }
@@ -66,8 +69,8 @@ class Registration < ApplicationRecord
     Rails.cache.delete(CacheAccess.registration_processing_cache_key(competition_id, user_id))
   end
 
-  def update_lanes!(params, acting_user)
-    Registrations::Lanes::Competing.update!(params, self, acting_user.id)
+  def update_lanes!(params, acting_entity_id)
+    Registrations::Lanes::Competing.update!(params, self, acting_entity_id)
   end
 
   def guest_limit
@@ -96,6 +99,10 @@ class Registration < ApplicationRecord
 
   def waitlisted?
     competing_status_waiting_list?
+  end
+
+  def waiting_list_leader?
+    competing_status_waiting_list? && waiting_list_position == 1
   end
 
   # Can NOT use a `has_one :waiting_list, through: :competition` association here, because
@@ -237,7 +244,7 @@ class Registration < ApplicationRecord
 
   def registration_history
     registration_history_entries.map do |r|
-      changed_attributes = r.registration_history_changes.index_by(&:key).transform_values(&:parsed_value)
+      changed_attributes = r.registration_history_changes.index_by(&:key).transform_values(&:parsed_value).symbolize_keys
 
       {
         changed_attributes: changed_attributes,
@@ -443,6 +450,7 @@ class Registration < ApplicationRecord
     errors.add(
       :competing_status,
       :exceeding_competitor_limit,
+      message: I18n.t('registrations.errors.exceeding_competitor_limit'),
       frontend_code: Registrations::ErrorCodes::COMPETITOR_LIMIT_REACHED,
     )
   end
@@ -521,5 +529,64 @@ class Registration < ApplicationRecord
 
   def serializable_hash(options = nil)
     super(DEFAULT_SERIALIZE_OPTIONS.merge(options || {}))
+  end
+
+  delegate :auto_accept_registrations, to: :competition
+
+  def auto_accept_in_current_env?
+    !(Rails.env.production? && EnvConfig.WCA_LIVE_SITE?)
+  end
+
+  def attempt_auto_accept
+    return false unless auto_accept_in_current_env?
+
+    failure_reason = auto_accept_failure_reason
+    if failure_reason.present?
+      log_auto_accept_failure(failure_reason)
+      return false
+    end
+
+    update_payload = build_auto_accept_payload
+    auto_accepted_registration = Registrations::RegistrationChecker.apply_payload(self, update_payload, clone: false)
+
+    if auto_accepted_registration.valid?
+      update_lanes!(
+        update_payload,
+        AUTO_ACCEPT_ENTITY_ID,
+      )
+      true
+    else
+      log_auto_accept_failure(auto_accepted_registration.errors.messages.values.flatten)
+      false
+    end
+  end
+
+  private def auto_accept_failure_reason
+    return Registrations::ErrorCodes::OUTSTANDING_FEES if outstanding_entry_fees.positive?
+    return Registrations::ErrorCodes::AUTO_ACCEPT_NOT_ENABLED unless competition.auto_accept_registrations?
+    return Registrations::ErrorCodes::INELIGIBLE_FOR_AUTO_ACCEPT unless competing_status_pending? || waiting_list_leader?
+    return Registrations::ErrorCodes::AUTO_ACCEPT_DISABLE_THRESHOLD if competition.auto_accept_threshold_reached?
+
+    Registrations::ErrorCodes::REGISTRATION_NOT_OPEN unless competition.registration_currently_open?
+  end
+
+  private def log_auto_accept_failure(reason)
+    add_history_entry(
+      { auto_accept_failure_reasons: reason },
+      'System',
+      AUTO_ACCEPT_ENTITY_ID,
+      'System reject',
+    )
+  end
+
+  private def build_auto_accept_payload
+    status = if competition.registration_full_and_accepted? && competing_status_pending?
+               Registrations::Helper::STATUS_WAITING_LIST
+             else
+               Registrations::Helper::STATUS_ACCEPTED
+             end
+
+    # String keys because this is mimicing a params payload
+    { 'user_id' => user_id, 'competing' => { 'status' => status } }
   end
 end
