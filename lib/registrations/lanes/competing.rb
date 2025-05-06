@@ -42,7 +42,9 @@ module Registrations
           changes[:event_ids] = registration.changed_event_ids if registration.changed_event_ids.present?
 
           registration.save!
-          registration.add_history_entry(changes, 'user', current_user_id, Registrations::Helper.action_type(update_params, current_user_id))
+
+          history_action_type = Registrations::Helper.action_type(update_params, registration.user_id, current_user_id)
+          registration.add_history_entry(changes, 'user', current_user_id, history_action_type)
         end
 
         send_status_change_email(registration, current_user_id) if registration.competing_status_previously_changed?
