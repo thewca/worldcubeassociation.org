@@ -117,6 +117,18 @@ export const latestTimeOfDayWithBuffer = (
   return result;
 };
 
+/** e.g. '15:00:00' -> 15 */
+export const getHour = (timeString, options = {}) => {
+  if (timeString) {
+    const [h, m] = timeString.split(':');
+    if (options.roundForward && m !== '00') {
+      return Number(h) + 1;
+    }
+    return Number(h);
+  }
+  return undefined;
+};
+
 export const localizeActivityName = (activity, wcifEvents) => {
   const activityEvent = findActivityEvent(activity, wcifEvents);
   const activityRound = findActivityRound(activity, activityEvent.rounds);

@@ -52,7 +52,7 @@ import {
 import EditActivityModal from './EditActivityModal';
 import ActionsHeader from './ActionsHeader';
 import { getTimeZoneDropdownLabel } from '../../../lib/utils/timezone';
-import { earliestTimeOfDayWithBuffer } from '../../../lib/utils/activities';
+import { earliestTimeOfDayWithBuffer, getHour, latestTimeOfDayWithBuffer } from '../../../lib/utils/activities';
 
 function EditActivities({
   wcifEvents,
@@ -71,6 +71,32 @@ function EditActivities({
   const [minutesPerRow, setMinutesPerRow] = useInputState(15);
   const [calendarStart, setCalendarStart] = useInputState(8);
   const [calendarEnd, setCalendarEnd] = useInputState(20);
+
+  const setReasonableCalendarBounds = (room) => {
+    const roomWcif = roomWcifFromId(wcifSchedule, room.id);
+    const activities = roomWcif?.activities;
+    const timezone = venueWcifFromRoomId(wcifSchedule, room.id)?.timezone;
+
+    if (activities?.length) {
+      setCalendarStart(
+        Math.min(
+          getHour(earliestTimeOfDayWithBuffer(activities, timezone)),
+          8,
+        ),
+      );
+      setCalendarEnd(
+        Math.max(
+          getHour(latestTimeOfDayWithBuffer(activities, timezone), { roundForward: true }),
+          20,
+        ),
+      );
+    }
+  };
+
+  const onSelectRoom = (room) => {
+    setReasonableCalendarBounds(room);
+    setSelectedRoomId(room.id);
+  };
 
   // This part is ugly because Semantic-UI and Fullcalendar disagree
   //   about how modals should be handled.
@@ -326,7 +352,7 @@ function EditActivities({
                     <List.Item
                       key={room.id}
                       as="a"
-                      onClick={() => setSelectedRoomId(room.id)}
+                      onClick={() => onSelectRoom(room)}
                     >
                       {room.id === wcifRoom?.id ? <b>{room.name}</b> : room.name}
                     </List.Item>
