@@ -42,6 +42,10 @@ module Registrations
           changes[:event_ids] = registration.changed_event_ids if registration.changed_event_ids.present?
 
           registration.save!
+
+          # Make Rails forget about any in-memory cached values of the `has_many :events` association.
+          # This is (unfortunately) necessary even after a `save!`, because Rails still caches the association
+          #   from when we called `event_ids` in the `apply_payload` method above.
           registration.events.reset
 
           if acting_entity_id == Registration::AUTO_ACCEPT_ENTITY_ID
