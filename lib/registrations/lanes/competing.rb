@@ -42,6 +42,8 @@ module Registrations
           changes[:event_ids] = registration.changed_event_ids if registration.changed_event_ids.present?
 
           registration.save!
+          registration.events.reset
+
           if acting_entity_id == Registration::AUTO_ACCEPT_ENTITY_ID
             registration.add_history_entry(changes, Registration::SYSTEM_ENTITY_ID, acting_entity_id, Registrations::Helper.action_type(update_params, acting_entity_id))
           else
