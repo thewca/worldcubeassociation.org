@@ -1,4 +1,4 @@
-import { DateTime } from 'luxon';
+import { DateTime, Duration } from 'luxon';
 import {
   addEndBufferWithinDay,
   areOnSameDate,
@@ -120,11 +120,11 @@ export const latestTimeOfDayWithBuffer = (
 /** e.g. '15:00:00' -> 15 */
 export const getHour = (timeString, options = {}) => {
   if (timeString) {
-    const [h, m] = timeString.split(':');
-    if (options.roundForward && m !== '00') {
-      return Number(h) + 1;
+    const { hours, minutes } = Duration.fromISOTime(timeString).toObject();
+    if (options.roundForward && minutes !== 0) {
+      return hours + 1;
     }
-    return Number(h);
+    return hours;
   }
   return undefined;
 };
