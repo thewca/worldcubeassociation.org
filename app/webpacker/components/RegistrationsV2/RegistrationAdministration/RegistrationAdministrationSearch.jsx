@@ -40,7 +40,7 @@ export default function RegistrationAdministrationSearch({
                 : ''
             }`,
             price: usingPayments
-              ? isoMoneyToHumanReadable(payment.payment_amount_iso, currencyCode)
+              ? isoMoneyToHumanReadable(payment.paid_amount_iso, currencyCode)
               : undefined,
             id,
             searchable: {

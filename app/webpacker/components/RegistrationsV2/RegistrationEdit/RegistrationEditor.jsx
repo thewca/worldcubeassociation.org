@@ -312,14 +312,12 @@ export default function RegistrationEditor({ registrationId, competitor, competi
       {competitionInfo['using_payment_integrations?'] && (
         <>
           <Header>Payments</Header>
-          {(registration.payment.payment_statuses.includes('succeeded') || registration.payment.payment_statuses.includes('refund')) && (
-            <Payments
-              competitionId={competitionInfo.id}
-              registrationId={registrationId}
-              competitorsInfo={competitorsInfo}
-              refetchHistory={refetchHistory}
-            />
-          )}
+          <Payments
+            competitionId={competitionInfo.id}
+            registrationId={registrationId}
+            competitorsInfo={competitorsInfo}
+            refetchHistory={refetchHistory}
+          />
         </>
       )}
       <RegistrationHistory
