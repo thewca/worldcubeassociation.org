@@ -177,6 +177,7 @@ module DatabaseDumper
     }.freeze,
     "connected_paypal_accounts" => :skip_all_rows,
     "connected_stripe_accounts" => :skip_all_rows,
+    "manual_payment_integrations" => :skip_all_rows,
     "continents" => {
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w[
@@ -851,6 +852,7 @@ module DatabaseDumper
     }.freeze,
     "paypal_records" => :skip_all_rows,
     "stripe_records" => :skip_all_rows,
+    "manual_payment_records" => :skip_all_rows,
     "payment_intents" => :skip_all_rows,
     "stripe_webhook_events" => :skip_all_rows,
     "uploaded_jsons" => :skip_all_rows,

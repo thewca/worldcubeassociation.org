@@ -62,7 +62,7 @@ export default function PaymentStep({
     await elements.submit();
 
     // Create the PaymentIntent and obtain clientSecret
-    const data = await getPaymentTicket(competitionInfo, isoDonationAmount);
+    const data = await getPaymentTicket(competitionInfo, isoDonationAmount, 'stripe');
 
     const { client_secret: clientSecret } = data;
 

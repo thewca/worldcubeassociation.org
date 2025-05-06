@@ -2,10 +2,10 @@ import React, { useMemo, useState } from 'react';
 import { Step } from 'semantic-ui-react';
 import CompetingStep from './CompetingStep';
 import RegistrationRequirements from './RegistrationRequirements';
-import StripeWrapper from './StripeWrapper';
 import I18n from '../../../lib/i18n';
 import RegistrationOverview from './RegistrationOverview';
 import { useRegistration } from '../lib/RegistrationProvider';
+import PaymentStepWrapper from './PaymentStepWrapper';
 
 const requirementsStepConfig = {
   key: 'requirements',
@@ -22,7 +22,7 @@ const competingStepConfig = {
 const paymentStepConfig = {
   key: 'payment',
   i18nKey: 'competitions.registration_v2.register.panel.payment',
-  component: StripeWrapper,
+  component: PaymentStepWrapper,
 };
 
 const registrationOverviewConfig = {

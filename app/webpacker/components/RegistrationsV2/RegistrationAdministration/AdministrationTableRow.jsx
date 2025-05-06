@@ -94,6 +94,7 @@ export default function TableRow({
     updated_at: updatedAt,
     payment_statuses: paymentStatuses,
     has_paid: hasPaid,
+    payment_reference: paymentReference,
   } = registration.payment ?? {};
   const usingPayment = competitionInfo['using_payment_integrations?'];
   const checkboxCellColor = !distinguishPaidUnpaid || !usingPayment || hasPaid
@@ -174,9 +175,12 @@ export default function TableRow({
 
             {competitionInfo['using_payment_integrations?'] && (
             <Table.Cell>
-              {paymentAmount !== 0
-                ? isoMoneyToHumanReadable(paymentAmount, competitionInfo.currency_code)
-                : ''}
+              {/* eslint-disable-next-line no-nested-ternary */}
+              {competitionInfo.payment_integration_type === 'manual'
+                ? paymentReference
+                : paymentAmount !== 0
+                  ? isoMoneyToHumanReadable(paymentAmount, competitionInfo.currency_code)
+                  : ''}
             </Table.Cell>
             )}
 
