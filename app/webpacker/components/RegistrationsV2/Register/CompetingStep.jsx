@@ -209,6 +209,7 @@ export default function CompetingStep({
     });
   }, [
     confirm,
+    dispatch,
     nextStep,
     updateRegistrationMutation,
     competitionInfo,
@@ -219,6 +220,7 @@ export default function CompetingStep({
     selectedEventIds.asArray,
     hasGuestsChanged,
     guests,
+    initialRegistrationStatus,
     onUpdateSuccess,
     canEditRegistration,
   ]);
