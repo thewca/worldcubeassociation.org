@@ -868,10 +868,22 @@ fr:
           WRC.
         #original_hash: da39a3e
         wic_feedback_requested: ''
-        #original_hash: 0aca3b0
-        wic_incidents: >-
-          Listes numérotée des incidents pour lesquels vous souhaitez l'avis du
-          WIC.
+        #original_hash: 74a092e
+        wic_incidents_html: >-
+          Liste des numéros faisant référence à tout incident pour lequel vous
+          souhaiteriez obtenir un retour de la part du WIC. <br>
+          <strong>%{wic_incident_alert}</strong>
+        #original_hash: c4fd7a6
+        wic_incident_alert: >-
+          Si l'incident WIC est délicat (y compris, mais sans s'y limiter, les
+          crimes, le harcèlement, les agressions, etc.), veuillez l'exclure de
+          votre rapport et envoyer un email séparé au WIC. Pour les autres
+          incidents WIC, choisissez par défaut une version brève et anonyme de
+          l'incident et contactez le WIC en privé pour obtenir plus de détails.
+          Le WIC continuera à fournir un retour sur les versions anonymes à des
+          fins de sensibilisation générale. Pour tous les incidents WIC
+          impliquant un membre de la WCA, veuillez exclure tous les détails du
+          rapport et contacter le WIC en privé.
         #original_hash: f30abdc
         remarks: >-
           Parlez de tous les autres détails que vous souhaiteriez partager (ex :
@@ -1389,11 +1401,11 @@ fr:
       #original_hash: 312e799
       officers_description: >-
         Les dirigeants de la WCA gèrent les tâches liés au statut d'association
-        à but non lucratif de la WCA. Ces dirigeants sont élus par le Bureau de
-        la WCA. Le Directeur exécutif est le Directeur général de la WCA, le
-        Président préside toutes les réunions du Bureau, le Secrétaire assure le
-        maintien des documents de l'association et le Trésorier gère les
-        affaires financières de la WCA.
+        à but non lucratif de la WCA. Ces dirigeants sont élus par le Conseil
+        d'administration de la WCA. Le Directeur exécutif est le Directeur
+        général de la WCA, le Président préside toutes les réunions du Bureau,
+        le Secrétaire assure le maintien des documents de l'association et le
+        Trésorier gère les affaires financières de la WCA.
       #original_hash: 19d4bbb
       board_description: >-
         Le Conseil d'administration de la WCA est chargé de diriger
@@ -2248,7 +2260,7 @@ fr:
   user_groups:
     group_types:
       #original_hash: abd2828
-      board: Bureau des Directeurs de la WCA
+      board: Conseil d'administration de la WCA
       #original_hash: d79bd00
       officers: Dirigeants de la WCA
       #original_hash: 959d354
@@ -2623,7 +2635,7 @@ fr:
     registration_requirements: 'Conditions d''inscription pour la compétition :'
     registration_history:
       #original_hash: 342fa25
-      acting_user: Utilisateur faisant l'action
+      acting_user: Action faite par
       #original_hash: 97c89a4
       action: Action
       #original_hash: 8aa57de
@@ -5291,7 +5303,7 @@ fr:
       board:
         #original_hash: 19d4bbb
         description: >-
-          Le conseil d'administration de la WCA est chargé de diriger
+          Le Conseil d'administration de la WCA est chargé de diriger
           l'organisation dans son ensemble et de remplir toutes les fonctions
           qui ne sont pas remplies par d'autres équipes et comités.
       users:
@@ -5454,8 +5466,8 @@ fr:
       private_information: Informations privées
       #original_hash: 87a1c7e
       private_information_disclaimer: >-
-        Les informations ci-dessous ne seront visibles que par le Bureau de la
-        WCA
+        Les informations ci-dessous ne seront visibles que par le Conseil
+        d'administration de la WCA
     errors:
       #original_hash: 08122c4
       end_date_after_start_date: ne peut pas être après "Reconnue jusqu'à"
@@ -5463,7 +5475,7 @@ fr:
       #original_hash: 60cdccc
       create_success: >-
         Demande soumise avec avec succès ! Merci de vérifier vos e-mails et
-        d'attendre que le Bureau des Directeurs de la WCA l'évalue.
+        d'attendre que le Conseil d'administration de la WCA l'évalue.
     delete:
       #original_hash: 6588652
       confirm_delete: >-

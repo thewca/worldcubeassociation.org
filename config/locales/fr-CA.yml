@@ -868,10 +868,22 @@ fr-CA:
           WRC.
         #original_hash: da39a3e
         wic_feedback_requested: ''
-        #original_hash: dbaac3d
-        wic_incidents: >-
-          Listes numérotée des incidents pour lesquels vous souhaitez l'avis du
-          WIC.
+        #original_hash: a54581f
+        wic_incidents_html: >-
+          Liste des numéros faisant référence à tout incident pour lequel vous
+          souhaiteriez obtenir un retour de la part du WIC. <br>
+          <strong>%{wic_incident_alert}</strong>
+        #original_hash: b3928c0
+        wic_incident_alert: >-
+          Si l'incident WIC est délicat (y compris, mais sans s'y limiter, les
+          crimes, le harcèlement, les agressions, etc.), veuillez l'exclure de
+          votre rapport et envoyer un courriel séparé au WIC. Pour les autres
+          incidents WIC, choisissez par défaut une version brève et anonyme de
+          l'incident et contactez le WIC en privé pour obtenir plus de détails.
+          Le WIC continuera à fournir un retour sur les versions anonymes à des
+          fins de sensibilisation générale. Pour tous les incidents WIC
+          impliquant un membre de la WCA, veuillez exclure tous les détails du
+          rapport et contacter le WIC en privé.
         #original_hash: 2c10649
         remarks: >-
           Parlez de tous les autres détails que vous souhaiteriez partager (ex :
@@ -1386,14 +1398,14 @@ fr-CA:
     officers_and_board:
       #original_hash: 3f4e889
       title: Responsables et Bureau de la WCA
-      #original_hash: 69c911e
+      #original_hash: 58aef25
       officers_description: >-
         Les dirigeants de la WCA gèrent les tâches liés au statut d'association
-        à but non lucratif de la WCA. Ces dirigeants sont élus par le Bureau de
-        la WCA. Le Directeur exécutif est le Directeur général de la WCA, le
-        Président préside toutes les réunions du Bureau, le Secrétaire assure le
-        maintien des documents de l'association et le Trésorier gère les
-        affaires financières de la WCA.
+        à but non lucratif de la WCA. Ces dirigeants sont élus par le Conseil
+        d'administration de la WCA. Le Directeur exécutif est le Directeur
+        général de la WCA, le Président préside toutes les réunions du Bureau,
+        le Secrétaire assure le maintien des documents de l'association et le
+        Trésorier gère les affaires financières de la WCA.
       #original_hash: 1f539a3
       board_description: >-
         Le Conseil d'administration de la WCA est chargé de diriger
@@ -2247,8 +2259,8 @@ fr-CA:
         delegated_competitions_count: Nombre de compétition déléguées
   user_groups:
     group_types:
-      #original_hash: 43be45f
-      board: Bureau des Directeurs de la WCA
+      #original_hash: e6e554c
+      board: Conseil d'administration de la WCA
       #original_hash: 70c5e00
       officers: Dirigeants de la WCA
       #original_hash: 7b6be73
@@ -2622,8 +2634,8 @@ fr-CA:
     #original_hash: 51a2c1e
     registration_requirements: 'Conditions d''inscription pour la compétition :'
     registration_history:
-      #original_hash: a19d984
-      acting_user: Utilisateur faisant l'action
+      #original_hash: 2843e57
+      acting_user: Action faite par
       #original_hash: 97c89a4
       action: Action
       #original_hash: b741119
@@ -5290,9 +5302,9 @@ fr-CA:
       #original_hash: 9482c5d
       title: Structure
       board:
-        #original_hash: 3611088
+        #original_hash: 1f539a3
         description: >-
-          Le conseil d'administration de la WCA est chargé de diriger
+          Le Conseil d'administration de la WCA est chargé de diriger
           l'organisation dans son ensemble et de remplir toutes les fonctions
           qui ne sont pas remplies par d'autres équipes et comités.
       users:
@@ -5453,18 +5465,18 @@ fr-CA:
       public_information: Informations publiques
       #original_hash: b8a18b2
       private_information: Informations privées
-      #original_hash: e5dcf6c
+      #original_hash: 35ab055
       private_information_disclaimer: >-
-        Les informations ci-dessous ne seront visibles que par le Bureau de la
-        WCA
+        Les informations ci-dessous ne seront visibles que par le Conseil
+        d'administration de la WCA
     errors:
       #original_hash: f135157
       end_date_after_start_date: ne peut pas être après "Reconnue jusqu'à"
     create:
-      #original_hash: 20426ac
+      #original_hash: eb455e0
       create_success: >-
         Demande soumise avec avec succès ! Merci de vérifier vos courriels et
-        d'attendre que le Bureau des Directeurs de la WCA l'évalue.
+        d'attendre que le Conseil d'administration de la WCA l'évalue.
     delete:
       #original_hash: 11dceba
       confirm_delete: >-
