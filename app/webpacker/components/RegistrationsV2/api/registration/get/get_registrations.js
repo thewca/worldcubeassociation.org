@@ -1,6 +1,9 @@
 import {
-  allRegistrationsUrl, confirmedRegistrationsUrl,
-  getPsychSheetForEventUrl, singleRegistrationUrl,
+  allRegistrationsUrl,
+  confirmedRegistrationsUrl,
+  getPsychSheetForEventUrl,
+  registrationByUserUrl,
+  singleRegistrationUrl,
 } from '../../../../../lib/requests/routes.js.erb';
 import fetchWithJWTToken from '../../../../../lib/requests/fetchWithJWTToken';
 import { fetchJsonOrError } from '../../../../../lib/requests/fetchWithAuthenticityToken';
@@ -29,9 +32,9 @@ export async function getAllRegistrations(competition) {
 
 export async function getRegistrationByUser(
   userId,
-  competition,
+  competitionId,
 ) {
-  const route = singleRegistrationUrl(competition.id, userId);
+  const route = registrationByUserUrl(competitionId, userId);
   try {
     const { data } = await fetchWithJWTToken(route);
     return data;

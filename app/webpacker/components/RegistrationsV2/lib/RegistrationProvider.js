@@ -45,7 +45,7 @@ export default function RegistrationProvider({
 
   const { data: pollingData, status: pollingStatus } = useQuery({
     queryKey: ['registration-status-polling', userInfo.id, competitionInfo.id],
-    queryFn: async () => pollRegistrations(userInfo.id, competitionInfo),
+    queryFn: async () => pollRegistrations(userInfo.id, competitionInfo.id),
     refetchInterval: REFETCH_INTERVAL,
     onSuccess: () => {
       setPollCounter((prevCounter) => prevCounter + 1);
