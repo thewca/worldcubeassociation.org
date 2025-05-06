@@ -344,7 +344,7 @@ RSpec.describe 'API Registrations' do
       update_request = build(
         :update_request,
         user_id: registration.user_id,
-        competition_id: registration.competition.id,
+        competition_id: registration.competition_id,
         competing: { 'status' => 'cancelled' },
         guests: 3,
       )
@@ -354,7 +354,11 @@ RSpec.describe 'API Registrations' do
 
       expect(response).to have_http_status(:ok)
 
-      registration = Registration.find_by(user_id: user.id)
+      response_v2_reg = response.parsed_body[:registration]
+      expect(response_v2_reg[:guests]).to eq(3)
+      expect(response_v2_reg[:competing][:registration_status]).to eq('cancelled')
+
+      registration = Registration.find_by(user_id: user.id, competition_id: competition.id)
 
       expect(registration.guests).to eq(3)
       expect(registration.competing_status).to eq('cancelled')
@@ -382,6 +386,9 @@ RSpec.describe 'API Registrations' do
       patch api_v1_registrations_register_path, params: update_request, headers: headers
 
       expect(response).to have_http_status(:ok)
+
+      response_v2_reg = response.parsed_body[:registration]
+      expect(response_v2_reg[:competing][:event_ids].sort).to eq(new_event_ids.sort)
 
       registration = Registration.find_by(user_id: user.id, competition_id: favourites_reg.competition.id)
       expect(registration.event_ids.sort).to eq(new_event_ids.sort)
