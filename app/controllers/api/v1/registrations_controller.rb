@@ -17,6 +17,7 @@ class Api::V1::RegistrationsController < Api::V1::ApiController
   before_action :user_can_bulk_modify_registrations, only: [:bulk_update]
   before_action :validate_bulk_update_request, only: [:bulk_update]
   before_action :validate_payment_ticket_request, only: [:payment_ticket]
+  before_action :validate_payments_request, only: [:registration_payments]
 
   rescue_from ActiveRecord::RecordNotFound do
     render_error(:not_found, Registrations::ErrorCodes::REGISTRATION_NOT_FOUND)
@@ -260,6 +261,22 @@ class Api::V1::RegistrationsController < Api::V1::ApiController
     payment_account = @competition.payment_account_for(:stripe)
     payment_intent = payment_account.prepare_intent(@registration, ruby_money.cents, ruby_money.currency.iso_code, @current_user)
     render json: { client_secret: payment_intent.client_secret }
+  end
+
+  def validate_payments_request
+    @registration = Registration.includes(:competition, registration_payments: [:refunding_registration_payments]).find(show_params)
+    @competition = @registration.competition
+
+    render_error(:unauthorized, Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) unless current_user.can_manage_competition?(@competition)
+  end
+
+  def registration_payments
+    # Use `filter` here on purpose because the whole `registration_payments` list has been included above.
+    #   Using `where` would create an SQL query, but it would also break (i.e. make redundant) the `includes` call above.
+    root_payments = @registration.registration_payments.filter { it.refunded_registration_payment_id.nil? }
+    serialized_payments = root_payments.map { it.to_v2_json(refunds: true) }
+
+    render json: { charges: serialized_payments }, status: :ok
   end
 
   private

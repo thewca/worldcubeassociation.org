@@ -97,9 +97,7 @@ Rails.application.routes.draw do
     post 'registrations/add' => 'registrations#do_add', as: :registrations_do_add
     get 'registrations/psych-sheet' => 'registrations#psych_sheet', as: :psych_sheet
     get 'registrations/psych-sheet/:event_id' => 'registrations#psych_sheet_event', as: :psych_sheet_event
-    resources :registrations, only: %i[index update create edit destroy], shallow: true do
-      get 'payments' => 'payment#registration_payments', as: :payments
-    end
+    resources :registrations, only: %i[index update create edit destroy], shallow: true
     get 'edit/registrations' => 'registrations#edit_registrations'
     get 'register' => 'registrations#register'
     resources :competition_tabs, except: [:show], as: :tabs, path: :tabs
@@ -348,6 +346,7 @@ Rails.application.routes.draw do
       resources :competitions, only: [] do
         resources :registrations, only: %i[index show create update], shallow: true do
           member do
+            get 'payments', to: 'registrations#registration_payments'
             get 'payment_ticket', to: 'registrations#payment_ticket'
           end
 
