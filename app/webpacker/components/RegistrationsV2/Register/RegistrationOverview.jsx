@@ -129,7 +129,7 @@ export default function RegistrationOverview({
                 </List.Header>
                 {isoMoneyToHumanReadable(
                   registration.payment.paid_amount_iso,
-                  competitionInfo.currency_code,
+                  registration.payment.currency_code,
                 )}
               </List.Item>
             )}
