@@ -2,7 +2,9 @@ import React, {
   createContext, useCallback, useContext, useEffect, useMemo, useState,
 } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { useDispatch } from '../../../lib/providers/StoreProvider';
 import { getRegistrationByUser, getSingleRegistration } from '../api/registration/get/get_registrations';
+import { showMessage } from '../Register/RegistrationMessage';
 import pollRegistrations from '../api/registration/get/poll_registrations';
 
 const REFETCH_INTERVAL = 3000;
@@ -28,6 +30,8 @@ export default function RegistrationProvider({
   isProcessing,
   children,
 }) {
+  const dispatch = useDispatch();
+
   const [isPolling, setIsPolling] = useState(isProcessing);
   const [pollCounter, setPollCounter] = useState(0);
 
@@ -66,6 +70,14 @@ export default function RegistrationProvider({
       userId: userInfo.id,
       registrationId,
     }),
+    onError: (error) => {
+      dispatch(
+        showMessage(
+          `competitions.registration_v2.errors.${error?.response?.data?.json?.error || 'unknown'}`,
+          'negative',
+        ),
+      );
+    },
   });
 
   const isRegistered = registration && registration.competing.registration_status !== 'cancelled';
