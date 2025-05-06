@@ -35,7 +35,7 @@ class Api::V1::RegistrationsController < Api::V1::ApiController
   end
 
   def index
-    competition_id = list_params
+    competition_id = params_competition_id
     competition = Competition.find(competition_id)
     registrations = competition.registrations.accepted.competing
     payload = Rails.cache.fetch([
@@ -50,7 +50,7 @@ class Api::V1::RegistrationsController < Api::V1::ApiController
   end
 
   def validate_show_registration
-    @registration_id = show_params
+    @registration_id = params_id
     @registration = Registration.find(@registration_id)
     @competition_id = @registration.competition_id
     @competition = @registration.competition
@@ -63,20 +63,18 @@ class Api::V1::RegistrationsController < Api::V1::ApiController
   end
 
   def ensure_registration_exists
-    @competition_id, @user_id = show_by_user_params
+    @competition_id, @user_id = params_by_user_id
     @registration = Registration.find_by(competition_id: @competition_id, user_id: @user_id)
     raise WcaExceptions::RegistrationError.new(:not_found, Registrations::ErrorCodes::REGISTRATION_NOT_FOUND) if @registration.blank?
   end
 
   def validate_show_registration_by_user
-    @competition_id, @user_id = show_by_user_params
     @competition = Competition.find(@competition_id)
     render_error(:unauthorized, Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) unless @current_user.id == @user_id || @current_user.can_manage_competition?(@competition)
   end
 
   def show_by_user
-    registration = Registration.find_by!(user_id: @user_id, competition_id: @competition_id)
-    render json: registration.to_v2_json(admin: true, history: true)
+    render json: @registration.to_v2_json(admin: true, history: true)
   end
 
   def create
@@ -94,10 +92,11 @@ class Api::V1::RegistrationsController < Api::V1::ApiController
   end
 
   def user_can_create_registration
-    @request = create_params
+    @request = payload_params
+    competition_id, user_id = params_by_user_id
 
-    @target_user = User.find(@request.require(:user_id))
-    @competition = Competition.find(@request.require(:competition_id))
+    @target_user = User.find(user_id)
+    @competition = Competition.find(competition_id)
 
     raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::REGISTRATION_ALREADY_EXISTS) if
       Registration.exists?(competition: @competition, user: @target_user)
@@ -118,16 +117,18 @@ class Api::V1::RegistrationsController < Api::V1::ApiController
 
   def update
     if params[:competing]
-      updated_registration = Registrations::Lanes::Competing.update_raw!(@request, @competition, @current_user.id)
-      return render json: { status: 'ok', registration: updated_registration.to_v2_json(admin: true, history: true) }, status: :ok
+      @registration.update_lanes!(@request, @current_user)
+      return render json: { status: 'ok', registration: @registration.to_v2_json(admin: true, history: true) }, status: :ok
     end
     render json: { status: 'bad request', message: 'You need to supply at least one lane' }, status: :bad_request
   end
 
   def load_registration_from_request
-    @request = update_params
+    @request = payload_params
 
-    @registration = Registration.find(@request.require(:id))
+    registration_id = params_id
+    @registration = Registration.includes(:competition).find(registration_id)
+
     @competition = @registration.competition
   end
 
@@ -223,7 +224,7 @@ class Api::V1::RegistrationsController < Api::V1::ApiController
 
   # To list Registrations in the admin view you need to be able to administer the competition
   def validate_index_admin
-    competition_id = list_params
+    competition_id = params_competition_id
     @competition = Competition.find(competition_id)
 
     render_error(:unauthorized, Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) unless @current_user.can_manage_competition?(@competition)
@@ -242,7 +243,7 @@ class Api::V1::RegistrationsController < Api::V1::ApiController
   end
 
   def validate_payment_ticket_request
-    @registration = Registration.find(show_params)
+    @registration = Registration.find(params_id)
     @competition = @registration.competition
 
     return render_error(:forbidden, Registrations::ErrorCodes::PAYMENT_NOT_ENABLED) unless @competition.using_payment_integrations?
@@ -264,7 +265,7 @@ class Api::V1::RegistrationsController < Api::V1::ApiController
   end
 
   def validate_payments_request
-    @registration = Registration.includes(:competition, registration_payments: [:refunding_registration_payments]).find(show_params)
+    @registration = Registration.includes(:competition, registration_payments: [:refunding_registration_payments]).find(params_id)
     @competition = @registration.competition
 
     render_error(:unauthorized, Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) unless current_user.can_manage_competition?(@competition)
@@ -291,27 +292,21 @@ class Api::V1::RegistrationsController < Api::V1::ApiController
       self_updating ? 'Competitor update' : 'Admin update'
     end
 
-    def show_by_user_params
+    def params_by_user_id
       competition_id, user_id = params.require(%i[competition_id user_id])
       [competition_id, user_id.to_i]
     end
 
-    def show_params
+    def params_id
       params.require(:id).to_i
     end
 
-    def create_params
-      params.require(%i[user_id competition_id])
-      params.permit(:guests, competing: [:status, :comment, { event_ids: [] }, :admin_comment])
-    end
-
-    def update_params
-      params.require(:id)
-      params.permit(:guests, competing: [:status, :comment, { event_ids: [] }, :admin_comment])
-    end
-
-    def list_params
+    def params_competition_id
       params.require(:competition_id)
+    end
+
+    def payload_params
+      params.permit(:guests, competing: [:status, :comment, { event_ids: [] }, :admin_comment, :waiting_list_position])
     end
 
     # Some of these are currently duplicated while migrating from registration_checker
