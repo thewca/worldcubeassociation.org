@@ -79,15 +79,15 @@ function EditActivities({
 
     if (activities?.length) {
       setCalendarStart(
-        Math.min(
-          getHour(earliestTimeOfDayWithBuffer(activities, timezone)),
-          8,
+        Math.max(
+          getHour(earliestTimeOfDayWithBuffer(activities, timezone)) - 1,
+          0,
         ),
       );
       setCalendarEnd(
-        Math.max(
-          getHour(latestTimeOfDayWithBuffer(activities, timezone), { roundForward: true }),
-          20,
+        Math.min(
+          getHour(latestTimeOfDayWithBuffer(activities, timezone), { roundForward: true }) + 1,
+          24,
         ),
       );
     }
