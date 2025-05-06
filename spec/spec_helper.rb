@@ -6,10 +6,7 @@ require 'simplecov-lcov'
 require 'webmock/rspec'
 SimpleCov::Formatter::LcovFormatter.config.report_with_single_file = true
 SimpleCov.formatter = SimpleCov::Formatter::LcovFormatter
-SimpleCov.start do
-  track_files 'app/**/*.rb'
-  add_filter '/spec/'
-end
+SimpleCov.start 'rails'
 
 # Include rspec/retry for the few randomly failing tests
 require 'rspec/retry'
