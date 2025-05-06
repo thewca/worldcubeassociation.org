@@ -106,6 +106,12 @@ FactoryBot.define do
     trait :auto_accept do
       use_wca_registration { true }
       auto_accept_registrations { true }
+      competitor_limit { 5 }
+      auto_accept_disable_threshold { 4 }
+    end
+
+    trait :allow_self_delete do
+      competitor_can_cancel { :always }
     end
 
     trait :newcomer_month do

@@ -1,4 +1,4 @@
-import { DateTime } from 'luxon';
+import { DateTime, Duration } from 'luxon';
 import {
   addEndBufferWithinDay,
   areOnSameDate,
@@ -115,6 +115,18 @@ export const latestTimeOfDayWithBuffer = (
   }
 
   return result;
+};
+
+/** e.g. '15:00:00' -> 15 */
+export const getHour = (timeString, options = {}) => {
+  if (timeString) {
+    const { hours, minutes } = Duration.fromISOTime(timeString).toObject();
+    if (options.roundForward && minutes !== 0) {
+      return hours + 1;
+    }
+    return hours;
+  }
+  return undefined;
 };
 
 export const localizeActivityName = (activity, wcifEvents) => {

@@ -29,6 +29,7 @@ import { eventQualificationToString } from '../../../lib/utils/wcif';
 import { hasNotPassed } from '../../../lib/utils/dates';
 import { useRegistration } from '../lib/RegistrationProvider';
 import useSet from '../../../lib/hooks/useSet';
+import { isoMoneyToHumanReadable } from '../../../lib/helpers/money';
 
 const maxCommentLength = 240;
 
@@ -325,21 +326,21 @@ export default function CompetingStep({
         />
       )}
 
-      <Form onSubmit={handleSubmit} warning={formWarnings.length > 0} size="large">
-        <Message
-          warning
-          list={formWarnings}
-        />
-        <Form.Field required error={hasInteracted && selectedEventIds.size === 0}>
-          <EventSelector
-            id="event-selection"
-            eventList={competitionInfo.event_ids}
-            selectedEvents={selectedEventIds.asArray}
-            onEventClick={onEventClick}
-            onAllClick={onAllEventsClick}
-            onClearClick={onClearEventsClick}
-            maxEvents={maxEvents}
-            eventsDisabled={
+        <Form onSubmit={handleSubmit} warning={formWarnings.length > 0} size="large">
+          <Message
+            warning
+            list={formWarnings}
+          />
+          <Form.Field required error={hasInteracted && selectedEventIds.size === 0}>
+            <EventSelector
+              id="event-selection"
+              eventList={competitionInfo.event_ids}
+              selectedEvents={selectedEventIds.asArray}
+              onEventClick={onEventClick}
+              onAllClick={onAllEventsClick}
+              onClearClick={onClearEventsClick}
+              maxEvents={maxEvents}
+              eventsDisabled={
                 competitionInfo.allow_registration_without_qualification
                   ? []
                   : eventsNotQualifiedFor(
