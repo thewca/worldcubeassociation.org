@@ -2,17 +2,29 @@ import React, {
   createContext, useCallback, useContext, useEffect, useMemo, useState,
 } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { getSingleRegistration } from '../api/registration/get/get_registrations';
+import { getRegistrationByUser, getSingleRegistration } from '../api/registration/get/get_registrations';
 import pollRegistrations from '../api/registration/get/poll_registrations';
 
 const REFETCH_INTERVAL = 3000;
 
 const RegistrationContext = createContext();
 
+const getRegistrationFromParams = ({
+  competitionId,
+  userId,
+  registrationId = null,
+}) => {
+  if (registrationId) {
+    return getSingleRegistration(registrationId);
+  }
+
+  return getRegistrationByUser(userId, competitionId);
+};
+
 export default function RegistrationProvider({
   competitionInfo,
   userInfo,
-  serverRegistration,
+  registrationId = null,
   isProcessing,
   children,
 }) {
@@ -48,10 +60,12 @@ export default function RegistrationProvider({
     isFetching,
     refetch: refetchRegistration,
   } = useQuery({
-    queryKey: ['registration', serverRegistration.id],
-    queryFn: () => getSingleRegistration(serverRegistration.id),
-    enabled: Boolean(serverRegistration),
-    initialData: serverRegistration,
+    queryKey: ['registration', competitionInfo.id, userInfo.id, registrationId],
+    queryFn: () => getRegistrationFromParams({
+      competitionId: competitionInfo.id,
+      userId: userInfo.id,
+      registrationId,
+    }),
   });
 
   const isRegistered = registration && registration.competing.registration_status !== 'cancelled';

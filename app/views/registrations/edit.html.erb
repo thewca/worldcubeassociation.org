@@ -1,6 +1,6 @@
 <% provide(:title, t('registrations.edit_registration.title', person: @user.name, comp: @competition.name)) %>
 <%= render layout: 'nav' do %>
-  <%= react_component('RegistrationsV2/RegistrationEdit', { serverRegistration: @registration.to_v2_json(admin: true, history: true),
+  <%= react_component('RegistrationsV2/RegistrationEdit', { registrationId: @registration.id,
                                                             competitionInfo: @competition.to_competition_info ,
                                                             user: @user }) %>
 <% end %>
