@@ -47,7 +47,7 @@ eo:
     #original_hash: 9af4622
     XF: Pluraj landoj (Afriko)
     #original_hash: 374ac0d
-    XM: Pluraj landoj (Abya Yala / Ameriko)
+    XM: Pluraj landoj (Abjajalo / Ameriko)
     #original_hash: 3f8c9de
     XA: Pluraj landoj (Azio)
     #original_hash: 090f3ce
@@ -57,7 +57,7 @@ eo:
     #original_hash: 428e7af
     XO: Pluraj landoj (Oceanio)
     #original_hash: 459f987
-    XS: Pluraj landoj (Suda Abya Yala / Sudameriko)
+    XS: Pluraj landoj (Suda Abjajalo / Sudameriko)
     #original_hash: 9027fe6
     XW: Pluraj landoj (Mondo)
   continents:
@@ -74,7 +74,7 @@ eo:
     #original_hash: 3642950
     Oceania: Oceanio
     #original_hash: b1ffb4c
-    South America: Suda Abya Yala (Sudameriko)
+    South America: Suda Abjajalo (Sudameriko)
   country_bands:
     #original_hash: 2b5976e
     title: Lando-kategorioj de la WCA
@@ -152,57 +152,57 @@ eo:
       #original_hash: 4d618bb
       name: Kvalifika raŭndo
       #original_hash: 4d618bb
-      cellName: Kvalifika raŭndo
+      cell_name: Kvalifika raŭndo
     '1':
       #original_hash: 1e725b6
       name: Unua raŭndo
       #original_hash: 1e725b6
-      cellName: Unua raŭndo
+      cell_name: Unua raŭndo
     '2':
       #original_hash: 985c8d0
       name: Dua raŭndo
       #original_hash: 985c8d0
-      cellName: Dua raŭndo
+      cell_name: Dua raŭndo
     '3':
       #original_hash: e2f74d2
       name: Duonfinalo
       #original_hash: e2f74d2
-      cellName: Duonfinalo
+      cell_name: Duonfinalo
     b:
       #original_hash: 327c999
       name: B-Finalo
       #original_hash: 327c999
-      cellName: B-Finalo
+      cell_name: B-Finalo
     c:
       #original_hash: 672b22c
       name: Finalo
       #original_hash: 672b22c
-      cellName: Finalo
+      cell_name: Finalo
     d:
       #original_hash: 1e725b6
       name: Unua raŭndo
       #original_hash: 1e725b6
-      cellName: Unua raŭndo
+      cell_name: Unua raŭndo
     e:
       #original_hash: 985c8d0
       name: Dua raŭndo
       #original_hash: 985c8d0
-      cellName: Dua raŭndo
+      cell_name: Dua raŭndo
     f:
       #original_hash: 672b22c
       name: Finalo
       #original_hash: 672b22c
-      cellName: Finalo
+      cell_name: Finalo
     g:
       #original_hash: e2f74d2
       name: Duonfinalo
       #original_hash: e2f74d2
-      cellName: Duonfinalo
+      cell_name: Duonfinalo
     h:
       #original_hash: 4d618bb
       name: Kvalifika raŭndo
       #original_hash: 4d618bb
-      cellName: Kvalifika raŭndo
+      cell_name: Kvalifika raŭndo
   attempts:
     #original_hash: 17dae1e
     attempt_name: 'Provo %{number}'
@@ -486,6 +486,12 @@ eo:
         registration_competition_events: Konkurseroj
         #original_hash: 84add5b
         email: Retpoŝtadreso
+        #original_hash: 6d7a30a
+        search: Serĉi…
+        #original_hash: dfd309d
+        too_few_chars: Tro malmulte da signoj
+        #original_hash: b993b0c
+        no_results: Neniu rezulto
       competition_tab:
         #original_hash: 4f9be05
         content: Enhavo
@@ -522,7 +528,7 @@ eo:
         #original_hash: 8c41ae8
         wca_id: Persono
         #original_hash: fa4c045
-        countryId: Reprezentante
+        country_id: Reprezentante
         #original_hash: ab58155
         dob: Naskiĝtago
         #original_hash: 8a754c6
@@ -574,19 +580,19 @@ eo:
         competition_id: Okazis dum
       competition_medium:
         #original_hash: 1917f4f
-        competitionId: Konkurso
+        competition_id: Konkurso
         #original_hash: 3deb745
-        type: Tipo
+        media_type: Tipo
         #original_hash: c3328c3
         text: Teksto
         #original_hash: d051707
         uri: Ligilo
         #original_hash: 1be755a
-        submitterName: Nomo de la sendanto
+        submitter_name: Nomo de la sendanto
         #original_hash: 78cdfee
-        submitterEmail: Retpoŝtadreso de la sendanto
+        submitter_email: Retpoŝtadreso de la sendanto
         #original_hash: 0d31f23
-        submitterComment: Komento de la sendanto
+        submitter_comment: Komento de la sendanto
         #original_hash: bae7d5b
         status: Stato
       regional_organization:
@@ -680,7 +686,7 @@ eo:
         accepted: Akceptata
         #original_hash: 96f608c
         pending: Pritraktota
-      type:
+      media_type:
         #original_hash: ee45c30
         report: Raporto
         #original_hash: 4360c2d
@@ -850,10 +856,20 @@ eo:
           de la WRC.
         #original_hash: da39a3e
         wic_feedback_requested: ''
-        #original_hash: 0aca3b0
-        wic_incidents: >-
+        #original_hash: 74a092e
+        wic_incidents_html: >-
           Listo de la numeroj de la incidentoj por kiuj vi ŝatus ricevi opinion
-          de la WIC.
+          de la WIC. <br> <strong>%{wic_incident_alert}</strong>
+        #original_hash: c4fd7a6
+        wic_incident_alert: >-
+          Se la WIC-incidento estas tikla (inkluzive sed ne limigita al krimoj,
+          ĝenado, perfortoj, ktp.), bonvolu ekskludi ĝin de via raporto kaj
+          retpoŝti la WIC aparte. Por aliaj WIC-incidentoj, skribu mallonga,
+          anonima versio de la incidento kaj detalu private kun la WIC. Tamen,
+          la WIC ja prikomentos la anoniman version por sciigi la ĝeneralan
+          publikon. Por ĉiuj WIC-incidentoj kiuj koncernas WCA-volontulon,
+          bonvolu ekskludi ĉiujn detalojn de la raporto kaj kontaktu la WIC
+          private.
         #original_hash: f30abdc
         remarks: >-
           Parolu pri ajna alia detalo kiun vi ŝatus diskonigi (ekz.,
@@ -884,19 +900,19 @@ eo:
         comment: ''
       competition_medium:
         #original_hash: da39a3e
-        competitionId: ''
+        competition_id: ''
         #original_hash: da39a3e
-        type: ''
+        media_type: ''
         #original_hash: da39a3e
         text: ''
         #original_hash: da39a3e
         uri: ''
         #original_hash: da39a3e
-        submitterName: ''
+        submitter_name: ''
         #original_hash: da39a3e
-        submitterEmail: ''
+        submitter_email: ''
         #original_hash: da39a3e
-        submitterComment: ''
+        submitter_comment: ''
         #original_hash: da39a3e
         status: ''
       results_submission:
@@ -1236,8 +1252,8 @@ eo:
       faq: Plej Oftaj Demandoj
       #original_hash: cf1d2c9
       forum: Forumo
-      #original_hash: 3ad28c0
-      teams: 'Teamoj, Komitatoj kaj Konsilioj'
+      #original_hash: 0e7a036
+      teams: Teamoj kaj komitatoj
       #original_hash: 7981fb3
       education: Edukaj rimedoj
       #original_hash: c66444f
@@ -1353,25 +1369,22 @@ eo:
         Prezidanto prezidas ĉiujn estrarkunvenojn, la Sekretario prizorgas la
         dokumentojn de la organizo, kaj la Kasisto administras financajn aferojn
         de la WCA.
-      #original_hash: e0d37a2
+      #original_hash: 19d4bbb
       board_description: >-
         La WCA-Estraro respondecas pri gvidado de la organizo kiel tutaĵo, kaj
-        plenumado de ajnaj devoj ne plenumitaj de aliaj Teamoj, Komisionoj kaj
-        Konsilioj.
+        plenumado de ajnaj devoj ne plenumitaj de aliaj Teamoj kaj komitatoj.
     teams_committees_councils:
-      #original_hash: 0d62207
-      title: 'Teamoj, Komitatoj kaj Konsilioj de la WCA'
-      #original_hash: 4701b90
+      #original_hash: 1d14e2f
+      title: Teamoj kaj komitatoj de la WCA
+      #original_hash: 9fdee8f
       description: >-
         La teamoj kaj komitatoj de la WCA estas plena parto de la organizo kaj
         plenumas la ĉiutagajn taskojn, kiuj estas bezonataj por ke ĝi funkciu.
         Ĉi tiuj komitatoj konsistas el WCA-komunumanoj, inkluzive WCA-Delegitojn
         kaj konkursantojn. Ĉiu teamo havas ĉefon, kies rolo estas certigi la
-        taŭgan funkciadon de la teamo kaj gvidi la aliajn membrojn. Konsilioj
-        estas specialaj specoj de teamoj, kiuj havas konsilan rolon al la
-        WCA-Estraro kaj konsistas el komunumanoj, ne WCA-volontuloj. Kiam estas
-        komitataj, teamaj aŭ konsiliaj postenoj, informoj pri kiel kandidatiĝi
-        estas afiŝitaj sur la ĉefpaĝo.
+        taŭgan funkciadon de la teamo kaj gvidi la aliajn membrojn. Kiam estas
+        komitataj aŭ teamaj postenoj, informoj pri kiel kandidatiĝi estas
+        afiŝitaj sur la ĉefpaĝo.
       #original_hash: b37456c
       contact_button: Kontakto
       #original_hash: ae7928f
@@ -2153,6 +2166,10 @@ eo:
       translators: Tradukantoj
   registrations:
     errors:
+      #original_hash: 51c7156
+      edit_deadline_passed: >-
+        La limdato por redakti registriĝojn jam okazis! Ŝanĝoj devus esti
+        faritaj nur pro eksterordinaraj cirkonstancoj.
       #original_hash: 44ab952
       need_name: Bezonas nomon
       #original_hash: 6f64c57
@@ -2325,10 +2342,6 @@ eo:
     new_registration:
       #original_hash: 8b9f726
       title: 'Registriĝi por %{comp}'
-    #original_hash: 7cae988
-    registered_with_account_html: >-
-      Tiu persono registriĝis kun konto. Vi povas redakti siajn personajn
-      datumojn %{here}.
     #original_hash: ada2e9e
     sign_in: Ensalutu
     #original_hash: 5d45a00
@@ -2386,11 +2399,6 @@ eo:
     #original_hash: 86877d4
     wont_pay_here: Bonvolu kontroli konkursajn informojn por scii kiel pagi
     refund_form:
-      hints:
-        #original_hash: 38c904c
-        refund_amount: >-
-          La sumo repagota al la konkursanto. Tio povas esti ajna kiomo ĝis la
-          jam pagita sumo.
       labels:
         #original_hash: 1cc5991
         refund_amount: Repagota Sumo
@@ -2492,6 +2500,15 @@ eo:
       redakteblas %{link}.
     #original_hash: ee89a3e
     registration_requirements: 'Registriĝaj postuloj por la konkurso:'
+    registration_history:
+      #original_hash: 342fa25
+      acting_user: Ago farita de
+      #original_hash: 97c89a4
+      action: Ago
+      #original_hash: 8aa57de
+      changes: Ŝanĝoj
+      #original_hash: cec61a5
+      title: Registriĝhistorio
     import:
       #original_hash: 5a394f3
       title: 'Importi registriĝojn por %{comp}'
@@ -2551,6 +2568,12 @@ eo:
         registriĝon.
       #original_hash: a11edb8
       add: Aldoni registriĝon
+      #original_hash: fd52980
+      ots_not_enabled: >-
+        Registriĝperiodo finiĝis kaj surlokaj registriĝoj ne estas permesataj -
+        unue vi devas redakti la konkurson kaj ŝalti tion
+      #original_hash: 61125b5
+      competition_over: Vi ne povas aldoni surlokajn registriĝojn post la fino de la konkurso.
       errors:
         #original_hash: d6dcf5c
         already_registered: Tiu persono jam havas registriĝon.
@@ -2930,7 +2953,7 @@ eo:
         #original_hash: d26cf99
         nar: Rekordoj de Insulo de la Testudo (Nordameriko)
         #original_hash: 270c007
-        sar: Rekordoj de Suda Abya Yala (Sudameriko)
+        sar: Rekordoj de Suda Abjajalo (Sudameriko)
       #original_hash: 43d56f3
       regional_single_record: '%{event_name} %{result} (unuopo)'
       #original_hash: 2444261
@@ -3667,6 +3690,13 @@ eo:
         waitlist:
           #original_hash: 3907ca4
           title: Registriĝoj en atendolisto
+          #original_hash: de3f9d4
+          information: >-
+            Konkursantoj estas aldonataj al la fino de la atendolisto. Se vi
+            aldonas plurajn el ili samtempe, la konkursantoj kiuj pagis estos
+            aldonitaj laŭ ordo de pagdato, kaj poste sekvos la aliaj laŭ ordo de
+            registriĝdato. Vi povas aranĝi la ordon permane uzante la redakta
+            reĝimo laŭnecese.
           #original_hash: a6c86ec
           skipped_warning: >-
             Vi ignoris %{count} registriĝo(j)n en la atendolisto. Ĉu vi certas
@@ -3725,6 +3755,8 @@ eo:
         being_deleted: Registriĝo estas foriganta...
         #original_hash: cbf13af
         update_confirm: Ĉu vi certas ke vi volas ĝisdatigi vian registriĝon?
+        #original_hash: 604da8b
+        organizer_update_confirm: Ĉu vi certas ke vi volas ĝisdatigi ĉi tiun registriĝon?
         #original_hash: 9b92912
         update_confirm_contact: >-
           Vi devas kontakti la organizantojn por ĝisdatigi vian registriĝon,
@@ -3916,6 +3948,10 @@ eo:
         '-6001': WCA-pagoj ne estas ŝaltitaj por ĉi tiu konkurso
         #original_hash: 092da51
         '-6002': Vi devas finregistriĝi antaŭ ol vi povas pagi
+        #original_hash: ee2c9c4
+        '-6003': >-
+          Neniu nepagita pago trovita - ĉi tio verŝajne estas ĉar vi jam pagis
+          vian registriĝon.
     errors:
       #original_hash: b14d060
       must_use_wca_registration: >-
@@ -4012,6 +4048,10 @@ eo:
       event_change_deadline_with_ots: >-
         Limdato por ĝisdatigi konkurserojn devas esti dum la konkurso se
         surlokaj registriĝoj eblas.
+      #original_hash: e6400f7
+      on_the_spot_with_past_event_change_deadline: >-
+        Ne eblas ŝalti surlokajn registriĝojn se la limdato por ĝisdatigi
+        konkurserojn estas pasintece.
       #original_hash: 5ae2437
       series_distance_km: 'La konkurso troviĝas tro malproksime de %{competition}.'
       #original_hash: 4a5d7c5
@@ -4022,6 +4062,18 @@ eo:
       not_full_url: >-
         Vi havas relativan retejan adreson (%{url}) en la enhavo. Bonvolu
         entajpi kompletan retejan adreson kun prefikso http:// aŭ https://.
+      #original_hash: e8ff0ef
+      editing_deadline_already_passed: >-
+        Vi povas ŝanĝi datojn nur por limdatoj kiuj ankoraŭ ne okazis, sed la
+        origina valoro %{timestamp} jam okazis.
+      #original_hash: e12883e
+      edited_deadline_not_after_original: >-
+        Vi povas nur plilongigi limdatojn, sed %{new_timestamp} okazos antaŭ la
+        origina valoro %{timestamp}.
+      #original_hash: d79fbb4
+      edited_deadline_not_in_future: >-
+        Vi povas enkonduki nur venontajn limdatojn, sed %{new_timestamp} ne
+        estas en la estonteco.
     new:
       #original_hash: 1208df7
       create_competition: Krei konkurson
@@ -4394,18 +4446,10 @@ eo:
       Bonvolu noti, ke iuj filtriloj (kiel pasintaj jaroj) estas provizore
       neuzeblaj. La Programara Teamo laboras por restarigi ĉi tiujn filtrilojn -
       ni bedaŭras la ĝenon.
-    #original_hash: e3710ed
-    tooltip_no_years: Nia datumbazo estas tro granda por komputi historiajn datumojn
-    #original_hash: 357094b
-    tooltip_no_quantities: Nia datumbazo estas tro granda por komputi longajn rangotabelojn
     selector_elements:
       events_selector:
         #original_hash: ad8919a
         event: Konkursero
-        #original_hash: 3e83afa
-        all_events: Ĉiuj konkurseroj
-      #original_hash: 0f21717
-      region: Regiono
       type_selector:
         #original_hash: 3deb745
         type: Tipo
@@ -4413,30 +4457,13 @@ eo:
         single: Unuopo
         #original_hash: 15f86c0
         average: Averaĝo
-      years_selector:
-        #original_hash: 96f997b
-        years: Jaroj
-        #original_hash: 0977c76
-        all_years: Ĉiuj jaroj
-        #original_hash: 8737f09
-        only: Nur
-        #original_hash: b3c0fe7
-        only_html: 'Nur %{year}'
-        #original_hash: 96bdb66
-        until: Ĝis
-        #original_hash: fa23930
-        until_html: 'Ĝis %{year}'
       show_selector:
         #original_hash: d97d1ee
         show: Montri
         #original_hash: f3cf96e
         persons: Personoj
-        #original_hash: 16d3376
-        persons_html: '%{quantity} personoj'
         #original_hash: 612e12d
         results: Rezultoj
-        #original_hash: f3baa4a
-        results_html: '%{quantity} rezultoj'
         #original_hash: d46d2ee
         by_region: Per regiono
         #original_hash: c0dcb86
@@ -4463,8 +4490,6 @@ eo:
       name: Nomo
       #original_hash: 5faa59d
       result: Rezulto
-      #original_hash: fa4c045
-      representing: Reprezentante
       #original_hash: 1917f4f
       competition: Konkurso
       #original_hash: e7f6fc5
@@ -4473,23 +4498,34 @@ eo:
       region: Regiono
       #original_hash: 70c07ec
       world: Mondo
-      type_options:
-        #original_hash: 3deb745
-        type: Tipo
-        #original_hash: dd11868
-        single: Unuopo
-        #original_hash: 15f86c0
-        average: Averaĝo
       #original_hash: ad8919a
       event: Konkursero
       #original_hash: dcf8b56
       date_circa: Dato
-      #original_hash: 1c54132
-      record: Rekordo
   notifications:
     #original_hash: 10bcdbd
     connect_wca_id: Ligu vian WCA-ID-n kun via konto!
   payments:
+    messages:
+      #original_hash: 2eac1cb
+      charge_refunded: Pago estis repagita
+      #original_hash: 1e1d219
+      charges_refunded: Ĉiuj pagoj estis repagitaj
+    errors:
+      refund:
+        #original_hash: 66475ae
+        provider_disconnected: >-
+          Vi ne plu rajtas sendi repagojn por ĉi tiu konkurso. Bonvolu uzi la
+          panelon de via provizanto por fari tion.
+        #original_hash: 73e93ee
+        refund_amount_too_high: Vi ne rajtas repagi pli ol kiom la konkursanto pagis.
+        #original_hash: 6368ffc
+        refund_amount_too_low: La repagitan sumon devas esti pli granda ol nulo.
+    labels:
+      #original_hash: b6370d7
+      net_payment: Neta pago
+      #original_hash: ef3cd45
+      original_payment: Origina pago
     payment_providers:
       #original_hash: 559ef55
       paypal: PayPal
@@ -4974,11 +5010,11 @@ eo:
       #original_hash: 9482c5d
       title: Strukturo
       board:
-        #original_hash: e0d37a2
+        #original_hash: 19d4bbb
         description: >-
           La Estraro de la WCA respondecas pri gvidado de la organizo kaj
-          plenumigo de taskoj pri kiuj ne respondecas la aliaj Teamoj, Komitatoj
-          kaj Konsilioj
+          plenumigo de taskoj pri kiuj ne respondecas la aliaj Teamoj kaj
+          komitatoj
       users:
         #original_hash: 57bbaad
         profile: 'Profilo de %{user_name}'
@@ -5871,7 +5907,7 @@ eo:
       #original_hash: 8e57552
       '3': >-
         Vi povas aĉeti niajn varojn tra la tuta mondo -- kun rektaj vendejoj en
-        Eŭropo, Abya Yala (Ameriko) kaj Hindio kaj pliaj baldaŭ venos!
+        Eŭropo, Abjajalo (Ameriko) kaj Hindio kaj pliaj baldaŭ venos!
   database:
     results_export:
       #original_hash: 15d00e1

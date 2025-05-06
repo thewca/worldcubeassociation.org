@@ -8,7 +8,8 @@ import React, {
 import {
   Button,
   Form,
-  Header, List,
+  Header,
+  Icon,
   Message,
   Segment,
 } from 'semantic-ui-react';
@@ -17,18 +18,17 @@ import { useDispatch } from '../../../lib/providers/StoreProvider';
 import { showMessage } from '../Register/RegistrationMessage';
 import Loading from '../../Requests/Loading';
 import EventSelector from '../../wca/EventSelector';
-import Refunds from './Refunds';
-import { editPersonUrl } from '../../../lib/requests/routes.js.erb';
+import Payments from './Payments';
+import { personUrl, editPersonUrl } from '../../../lib/requests/routes.js.erb';
 import { useConfirm } from '../../../lib/providers/ConfirmProvider';
 import I18n from '../../../lib/i18n';
 import RegistrationHistory from './RegistrationHistory';
 import { hasPassed } from '../../../lib/utils/dates';
 import getUsersInfo from '../api/user/post/getUserInfo';
 import { useRegistration } from '../lib/RegistrationProvider';
-import I18nHTMLTranslate from '../../I18nHTMLTranslate';
 import useSet from '../../../lib/hooks/useSet';
 
-export default function RegistrationEditor({ competitor, competitionInfo }) {
+export default function RegistrationEditor({ registrationId, competitor, competitionInfo }) {
   const dispatch = useDispatch();
   const [comment, setComment] = useState('');
   const [adminComment, setAdminComment] = useState('');
@@ -127,7 +127,6 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
         'negative',
       ));
     } else {
-      dispatch(showMessage('competitions.registration_v2.update.being_updated', 'positive'));
       // Only send changed values
       const body = {
         user_id: competitor.id,
@@ -150,9 +149,10 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
         body.guests = guests;
       }
       confirm({
-        content: I18n.t('competitions.registration_v2.update.update_confirm'),
+        content: I18n.t('competitions.registration_v2.update.organizer_update_confirm'),
       }).then(() => {
         updateRegistrationMutation(body);
+        dispatch(showMessage('competitions.registration_v2.update.being_updated', 'positive'));
       }).catch(() => {});
     }
   }, [
@@ -187,25 +187,22 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
   return (
     <Segment padded attached loading={isUpdating}>
       <Form onSubmit={handleRegisterClick}>
-        {!competitor.wca_id && (
-          <Message>
-            <I18nHTMLTranslate
-              // i18n-tasks-use t('registrations.registered_with_account_html')
-              i18nKey="registrations.registered_with_account_html"
-              options={{
-                here: `<a href=${editPersonUrl(competitor.id)}>here</a>`,
-              }}
-            />
-          </Message>
-        )}
         {registrationEditDeadlinePassed && (
           <Message>
-            The Registration Edit Deadline has passed!
-            {' '}
-            <strong>Changes should only be made in extraordinary circumstances.</strong>
+            {I18n.t('registrations.errors.edit_deadline_passed')}
           </Message>
         )}
-        <Header>{competitor.name}</Header>
+        <Header>
+          {competitor.name}
+          {' ('}
+          {competitor.wca_id ? (
+            <a href={personUrl(competitor.wca_id)} target="_blank" rel="noreferrer" className="hide-new-window-icon">{competitor.wca_id}</a>
+          ) : (
+            I18n.t('registrations.registration_info_people.newcomer.one')
+          )}
+          {') '}
+          <a href={editPersonUrl(competitor.id)} target="_blank" rel="noreferrer" className="hide-new-window-icon"><Icon name="edit" /></a>
+        </Header>
         <Form.Field required error={selectedEventIds.size === 0}>
           <EventSelector
             id="event-selection"
@@ -220,7 +217,7 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
         </Form.Field>
 
         <Form.TextArea
-          label="Comment"
+          label={I18n.t('activerecord.attributes.registration.comments')}
           id="competitor-comment"
           maxLength={240}
           value={comment}
@@ -228,18 +225,18 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
         />
 
         <Form.TextArea
-          label="Administrative Notes"
+          label={I18n.t('activerecord.attributes.registration.administrative_notes')}
           id="admin-comment"
           maxLength={240}
           value={adminComment}
           onChange={(event, data) => setAdminComment(data.value)}
         />
 
-        <Header as="h6">Status</Header>
+        <Header as="h6">{I18n.t('activerecord.attributes.registration.status')}</Header>
         <Form.Group inline>
           <Form.Radio
             id="radio-status-pending"
-            label="Pending"
+            label={I18n.t('competitions.registration_v2.update.pending')}
             name="regStatusRadioGroup"
             value="pending"
             checked={status === 'pending'}
@@ -247,7 +244,7 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
           />
           <Form.Radio
             id="radio-status-accepted"
-            label="Accepted"
+            label={I18n.t('competitions.registration_v2.update.approved')}
             name="regStatusRadioGroup"
             value="accepted"
             checked={status === 'accepted'}
@@ -255,7 +252,7 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
           />
           <Form.Radio
             id="radio-status-waiting-list"
-            label="Waiting List"
+            label={I18n.t('competitions.registration_v2.update.waitlist')}
             name="regStatusRadioGroup"
             value="waiting_list"
             checked={status === 'waiting_list'}
@@ -263,7 +260,7 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
           />
           <Form.Radio
             id="radio-status-cancelled"
-            label="Cancelled"
+            label={I18n.t('competitions.registration_v2.update.cancelled')}
             name="regStatusRadioGroup"
             value="cancelled"
             checked={status === 'cancelled'}
@@ -271,7 +268,7 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
           />
           <Form.Radio
             id="radio-status-rejected"
-            label="Rejected"
+            label={I18n.t('competitions.registration_v2.update.rejected')}
             name="regStatusRadioGroup"
             value="rejected"
             disabled={registrationEditDeadlinePassed}
@@ -280,7 +277,7 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
           />
         </Form.Group>
         <Form.Input
-          label="Guests"
+          label={I18n.t('activerecord.attributes.registration.guests')}
           id="guest-dropdown"
           type="number"
           min={0}
@@ -292,7 +289,7 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
           color="blue"
           disabled={isUpdating || !hasChanges}
         >
-          Update Registration
+          {I18n.t('registrations.update')}
         </Button>
       </Form>
 
@@ -301,19 +298,13 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
 
       {competitionInfo['using_payment_integrations?'] && (
         <>
-          <List>
-            <List.Header>Payment statuses:</List.Header>
-            {registration.payment.payment_statuses.map((paymentStatus) => (
-              <List.Item key={paymentStatus}>
-                {paymentStatus}
-              </List.Item>
-            ))}
-          </List>
+          <Header>Payments</Header>
           {(registration.payment.payment_statuses.includes('succeeded') || registration.payment.payment_statuses.includes('refund')) && (
-            <Refunds
+            <Payments
               competitionId={competitionInfo.id}
-              userId={competitor.id}
+              registrationId={registrationId}
               onSuccess={refetch}
+              competitorsInfo={competitorsInfo}
             />
           )}
         </>

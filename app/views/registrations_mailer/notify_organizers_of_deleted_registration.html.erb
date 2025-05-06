@@ -7,6 +7,11 @@
 </p>
 
 <p>
+  You can manage the registrations of this competition
+  <%= link_to "here", competition_edit_registrations_url(@registration.competition) %>.
+</p>
+
+<p>
   You can opt out of receiving registration emails
   <%= link_to "here", edit_competition_url(@registration.competition), anchor: "opt-out-registration-email" %>.
 </p>

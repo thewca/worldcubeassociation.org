@@ -3,11 +3,10 @@
 FactoryBot.define do
   factory :registration_payment do
     transient do
-      registration { nil }
-      competition { nil }
+      competition { registration.competition }
     end
 
-    registration_id { registration&.id }
+    registration { nil }
     user_id { registration&.user_id }
     amount_lowest_denomination { competition&.base_entry_fee_lowest_denomination }
     currency_code { competition&.currency_code }
@@ -17,7 +16,7 @@ FactoryBot.define do
     end
 
     trait :with_donation do
-      amount_lowest_denomination { competition.base_entry_fee_lowest_denomination*2 }
+      amount_lowest_denomination { competition.base_entry_fee_lowest_denomination * 2 }
     end
 
     trait :skip_create_hook do

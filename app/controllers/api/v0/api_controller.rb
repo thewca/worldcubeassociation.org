@@ -192,18 +192,18 @@ class Api::V0::ApiController < ApplicationController
     cache_key = ["records", concise_results_date.iso8601]
     json = Rails.cache.fetch(cache_key) do
       records = ActiveRecord::Base.connection.exec_query <<-SQL.squish
-        SELECT 'single' type, MIN(best) value, countryId country_id, eventId event_id
-        FROM ConciseSingleResults
-        GROUP BY countryId, eventId
+        SELECT 'single' type, MIN(best) value, country_id, event_id
+        FROM concise_single_results
+        GROUP BY country_id, event_id
         UNION ALL
-        SELECT 'average' type, MIN(average) value, countryId country_id, eventId event_id
-        FROM ConciseAverageResults
-        GROUP BY countryId, eventId
+        SELECT 'average' type, MIN(average) value, country_id, event_id
+        FROM concise_average_results
+        GROUP BY country_id, event_id
       SQL
       records = records.to_a
       {
         world_records: records_by_event(records),
-        continental_records: records.group_by { |record| Country.c_find(record["country_id"]).continentId }.transform_values!(&method(:records_by_event)),
+        continental_records: records.group_by { |record| Country.c_find(record["country_id"]).continent_id }.transform_values!(&method(:records_by_event)),
         national_records: records.group_by { |record| record["country_id"] }.transform_values!(&method(:records_by_event)),
       }
     end

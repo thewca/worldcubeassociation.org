@@ -113,7 +113,10 @@ export default function TableHeader({
             >
               {I18n.t('activerecord.attributes.registration.comments')}
             </Table.HeaderCell>
-            <Table.HeaderCell disabled>
+            <Table.HeaderCell
+              sorted={sortColumn === 'administrative_notes' ? sortDirection : undefined}
+              onClick={() => onColumnClick('administrative_notes')}
+            >
               {I18n.t('activerecord.attributes.registration.administrative_notes')}
             </Table.HeaderCell>
           </>

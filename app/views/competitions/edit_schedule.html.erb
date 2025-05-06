@@ -2,7 +2,7 @@
 <% add_to_packs("wca_maps") %>
 
 <%= render layout: 'nav' do %>
-  <% if !@competition.has_defined_dates? %>
+  <% if !@competition.dates_present? %>
     <div class="alert alert-danger">
       There is no start and/or end date assigned to this competition yet.
       Before you can manage your schedule, you have to add them

@@ -85,10 +85,10 @@ module ApplicationHelper
     end
   end
 
-  def wca_table(responsive: true, hover: true, striped: true, floatThead: true, table_class: "", data: {}, greedy: true, table_id: nil, &block)
+  def wca_table(responsive: true, hover: true, striped: true, float_thead: true, table_class: "", data: {}, greedy: true, table_id: nil, &block)
     data[:locale] = I18n.locale
     table_classes = "table table-condensed #{table_class}"
-    table_classes += " floatThead" if floatThead
+    table_classes += " floatThead" if float_thead
     table_classes += " table-hover" if hover
     table_classes += " table-striped" if striped
     table_classes += " table-greedy-last-column" if greedy
@@ -144,12 +144,12 @@ module ApplicationHelper
 
   def region_option_tags(selected_id: nil, real_only: false, use_world: false)
     regions = region_options_hash(real_only: real_only)
-    options_for_select((use_world ? [[t('common.world'), "world"]] : [[t('common.all_regions'), "all"]]), selected_id) + grouped_options_for_select(regions, selected_id)
+    options_for_select(use_world ? [[t('common.world'), "world"]] : [[t('common.all_regions'), "all"]], selected_id) + grouped_options_for_select(regions, selected_id)
   end
 
-  def simple_form_for(resource, **options, &block)
+  def simple_form_for(resource, **options, &)
     super do |f|
-      form = capture(f, &block)
+      form = capture(f, &)
       error_messages = render('shared/error_messages', f: f)
       error_messages + form
     end
@@ -171,10 +171,10 @@ module ApplicationHelper
 
   def duration_to_s(total_seconds)
     hours = (total_seconds / 3600).floor
-    minutes = ((total_seconds % 3600)/60).floor
+    minutes = ((total_seconds % 3600) / 60).floor
     seconds = total_seconds % 60
 
-    [hours > 0 ? "#{hours}h " : '', minutes > 0 ? "#{minutes}m " : '', format('%.2f', seconds), 's'].join
+    [hours.positive? ? "#{hours}h " : '', minutes.positive? ? "#{minutes}m " : '', format('%.2f', seconds), 's'].join
   end
 
   def wca_id_link(wca_id, **options)

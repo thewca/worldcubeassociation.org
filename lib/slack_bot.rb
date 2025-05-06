@@ -16,4 +16,11 @@ module SlackBot
       initial_comment: message,
     )
   end
+
+  def self.send_alarm_message(message)
+    self.client.chat_postMessage(
+      channel: ALARMS_CHANNEL_ID,
+      text: message,
+    )
+  end
 end

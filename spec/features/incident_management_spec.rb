@@ -3,12 +3,12 @@
 require "rails_helper"
 
 RSpec.feature "Incident Management", :js do
-  let!(:incident1) { FactoryBot.create(:incident, title: "First incident", tags: ["3l", "misscramble"], incident_competitions_attributes: { '0': { competition_id: FactoryBot.create(:competition, :confirmed).id } }) }
-  let!(:incident2) { FactoryBot.create(:incident, :resolved, title: "Second incident", tags: ["3l", "4b", "1a"]) }
-  let!(:incident3) { FactoryBot.create(:incident, :resolved, title: "Custom title", tags: ["4b"]) }
+  let!(:incident1) { create(:incident, title: "First incident", tags: %w[3l misscramble], incident_competitions_attributes: { '0': { competition_id: create(:competition, :confirmed).id } }) }
+  let!(:incident2) { create(:incident, :resolved, title: "Second incident", tags: %w[3l 4b 1a]) }
+  let!(:incident3) { create(:incident, :resolved, title: "Custom title", tags: ["4b"]) }
 
   context "when signed in as a WRC member" do
-    let!(:wrc_member) { FactoryBot.create(:user, :wrc_member) }
+    let!(:wrc_member) { create(:user, :wrc_member) }
 
     before(:each) do
       sign_in wrc_member
@@ -24,7 +24,7 @@ RSpec.feature "Incident Management", :js do
 
       scenario "filters by tag" do
         visit "/incidents?tags=misscramble"
-        page.find("#incidents-log-tags-container", visible: :all).has_content?("misscramble")
+        page.find_by_id('incidents-log-tags-container', visible: :all).has_content?("misscramble")
         expect(page).to have_content("First incident")
         expect(page).to have_no_content("Custom title")
         expect(page).to have_no_content("Second incident")
@@ -39,7 +39,7 @@ RSpec.feature "Incident Management", :js do
 
       scenario "filters by both" do
         visit "/incidents?tags=4b&search=Custom"
-        page.find("#incidents-log-tags-container", visible: :all).has_content?("4b")
+        page.find_by_id('incidents-log-tags-container', visible: :all).has_content?("4b")
         expect(page).to have_content("Custom title")
         expect(page).to have_no_content("Second incident")
       end
@@ -77,7 +77,7 @@ RSpec.feature "Incident Management", :js do
   end
 
   context "when signed in as a Delegate" do
-    let!(:delegate) { FactoryBot.create(:delegate) }
+    let!(:delegate) { create(:delegate) }
 
     before(:each) do
       sign_in delegate
@@ -86,9 +86,9 @@ RSpec.feature "Incident Management", :js do
     feature "shows incidents log" do
       scenario "shows only resolved incidents" do
         visit "/incidents"
-        expect(page).to have_no_content("First incident")
         expect(page).to have_content("Custom title")
         expect(page).to have_content("Second incident")
+        expect(page).to have_no_content("First incident")
       end
     end
 
@@ -104,15 +104,16 @@ RSpec.feature "Incident Management", :js do
 
       scenario "delegates cant see information from pending incidents" do
         visit incident_path(incident1)
-        expect(page).to have_no_content(incident3.public_summary)
-        expect(page).to have_no_content(incident3.private_description)
-        expect(page).to have_no_content(incident3.private_wrc_decision)
+        expect(page).to have_current_path "/"
+        expect(page).to have_no_content(incident1.public_summary)
+        expect(page).to have_no_content(incident1.private_description)
+        expect(page).to have_no_content(incident1.private_wrc_decision)
       end
     end
   end
 
   context "when signed in as a User" do
-    let!(:user) { FactoryBot.create(:user) }
+    let!(:user) { create(:user) }
 
     before(:each) do
       sign_in user
@@ -121,9 +122,9 @@ RSpec.feature "Incident Management", :js do
     feature "shows incidents log" do
       scenario "shows only resolved incidents" do
         visit "/incidents"
-        expect(page).to have_no_content("First incident")
         expect(page).to have_content("Custom title")
         expect(page).to have_content("Second incident")
+        expect(page).to have_no_content("First incident")
       end
     end
 
@@ -141,9 +142,9 @@ RSpec.feature "Incident Management", :js do
     feature "shows incidents log" do
       scenario "shows only resolved incidents" do
         visit "/incidents"
-        expect(page).to have_no_content("First incident")
         expect(page).to have_content("Custom title")
         expect(page).to have_content("Second incident")
+        expect(page).to have_no_content("First incident")
       end
     end
 

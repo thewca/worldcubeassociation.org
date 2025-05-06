@@ -72,7 +72,7 @@ class TimeLimit
 
   def self.wcif_json_schema
     {
-      "type" => ["object", "null"],
+      "type" => %w[object null],
       "properties" => {
         "centiseconds" => { "type" => "integer" },
         "cumulativeRoundIds" => { "type" => "array", "items" => { "type" => "string" } },
@@ -81,7 +81,7 @@ class TimeLimit
   end
 
   def to_s(round)
-    return "" if round.has_undef_tl?
+    return "" if round.time_limit_undefined?
 
     time_str = SolveTime.new(round.event.id, :best, self.centiseconds).clock_format
     case self.cumulative_round_ids.length

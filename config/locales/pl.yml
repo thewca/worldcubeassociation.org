@@ -152,57 +152,57 @@ pl:
       #original_hash: 4d618bb
       name: Runda kwalifikacyjna
       #original_hash: 4d618bb
-      cellName: Runda kwalifikacyjna
+      cell_name: Runda kwalifikacyjna
     '1':
       #original_hash: 1e725b6
       name: Pierwsza runda
       #original_hash: 1e725b6
-      cellName: Pierwsza runda
+      cell_name: Pierwsza runda
     '2':
       #original_hash: 985c8d0
       name: Druga runda
       #original_hash: 985c8d0
-      cellName: Druga runda
+      cell_name: Druga runda
     '3':
       #original_hash: e2f74d2
       name: Półfinał
       #original_hash: e2f74d2
-      cellName: Półfinał
+      cell_name: Półfinał
     b:
       #original_hash: 327c999
       name: Finał B
       #original_hash: 327c999
-      cellName: Finał B
+      cell_name: Finał B
     c:
       #original_hash: 672b22c
       name: Finał
       #original_hash: 672b22c
-      cellName: Finał
+      cell_name: Finał
     d:
       #original_hash: 1e725b6
       name: Pierwsza Runda
       #original_hash: 1e725b6
-      cellName: Pierwsza runda
+      cell_name: Pierwsza runda
     e:
       #original_hash: 985c8d0
       name: Druga runda
       #original_hash: 985c8d0
-      cellName: Druga runda
+      cell_name: Druga runda
     f:
       #original_hash: 672b22c
       name: Finał
       #original_hash: 672b22c
-      cellName: Finał
+      cell_name: Finał
     g:
       #original_hash: e2f74d2
       name: Półfinał
       #original_hash: e2f74d2
-      cellName: Półfinał
+      cell_name: Półfinał
     h:
       #original_hash: 4d618bb
       name: Runda kwalifikacyjna
       #original_hash: 4d618bb
-      cellName: Runda kwalifikacyjna
+      cell_name: Runda kwalifikacyjna
   attempts:
     #original_hash: 17dae1e
     attempt_name: 'Próba %{number}'
@@ -534,7 +534,7 @@ pl:
         #original_hash: 8c41ae8
         wca_id: Osoba
         #original_hash: fa4c045
-        countryId: Państwo
+        country_id: Państwo
         #original_hash: ab58155
         dob: Data urodzenia
         #original_hash: 8a754c6
@@ -586,19 +586,19 @@ pl:
         competition_id: Miał miejsce podczas
       competition_medium:
         #original_hash: 1917f4f
-        competitionId: Zawody
+        competition_id: Zawody
         #original_hash: 3deb745
-        type: Typ
+        media_type: Typ
         #original_hash: c3328c3
         text: Tekst
         #original_hash: d051707
         uri: Link
         #original_hash: 1be755a
-        submitterName: Imię i nazwisko zgłaszającego
+        submitter_name: Imię i nazwisko zgłaszającego
         #original_hash: 78cdfee
-        submitterEmail: Email zgłaszającego
+        submitter_email: Email zgłaszającego
         #original_hash: 0d31f23
-        submitterComment: Komentarz zgłaszającego
+        submitter_comment: Komentarz zgłaszającego
         #original_hash: bae7d5b
         status: Status
       regional_organization:
@@ -692,7 +692,7 @@ pl:
         accepted: Zaakceptowane
         #original_hash: 96f608c
         pending: Oczekujące
-      type:
+      media_type:
         #original_hash: ee45c30
         report: Reportaż
         #original_hash: 4360c2d
@@ -903,19 +903,19 @@ pl:
         comment: ''
       competition_medium:
         #original_hash: da39a3e
-        competitionId: ''
+        competition_id: ''
         #original_hash: da39a3e
-        type: ''
+        media_type: ''
         #original_hash: da39a3e
         text: ''
         #original_hash: da39a3e
         uri: ''
         #original_hash: da39a3e
-        submitterName: ''
+        submitter_name: ''
         #original_hash: da39a3e
-        submitterEmail: ''
+        submitter_email: ''
         #original_hash: da39a3e
-        submitterComment: ''
+        submitter_comment: ''
         #original_hash: da39a3e
         status: ''
       results_submission:

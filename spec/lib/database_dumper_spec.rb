@@ -44,10 +44,10 @@ RSpec.describe "DatabaseDumper" do
   # The default database cleaning method of transation does not work well when it comes to creating tables,
   # which is what we do in this test. Use truncation so we don't leave a dirty database behind.
   it "dumps the database according to sanitizers", :clean_db_with_truncation do
-    not_visible_competition = FactoryBot.create :competition, :not_visible, :with_delegate
-    visible_competition = FactoryBot.create :competition, :visible, remarks: "Super secret message to the Board"
-    user = FactoryBot.create :user, dob: Date.new(1989, 1, 1)
-    FactoryBot.create :user, :banned
+    not_visible_competition = create(:competition, :not_visible, :with_delegate)
+    visible_competition = create(:competition, :visible, remarks: "Super secret message to the Board")
+    user = create(:user, dob: Date.new(1989, 1, 1))
+    create(:user, :banned)
 
     dump_file = Tempfile.new
     before_dump = Time.now.change(usec: 0) # Truncate the sub second part of the datetime, since mysql only stores 1 second granularity.
@@ -72,6 +72,33 @@ RSpec.describe "DatabaseDumper" do
       banned_group = UserGroup.banned_competitors_group
       expect(banned_group).not_to be_nil
       expect(banned_group.roles).to be_empty
+    end
+  end
+
+  context "Results Export" do
+    it "defines sanitizers that match the expected output schema (backwards compatibility)" do
+      with_database :results_dump do
+        # Rails *always* includes a `schema_migrations` table when loading any pre-defined schema file.
+        #   You can _change_ the name in the database configuration file, but you cannot turn it off / disable the table entirely.
+        #   But since we don't care about Rails-ian specifics in our Results Export, we manually skip the table here.
+        actual_table_names = ActiveRecord::Base.connection.data_sources - ["schema_migrations"]
+
+        expect(DatabaseDumper::RESULTS_SANITIZERS.keys).to match_array actual_table_names
+      end
+    end
+
+    DatabaseDumper::RESULTS_SANITIZERS.each do |table_name, table_sanitizer|
+      it "defines a sanitizer of table '#{table_name}'" do
+        unless table_sanitizer == :skip_all_rows
+          where_clause = table_sanitizer[:where_clause]
+          expect(where_clause).to be_nil.or(match(/WHERE/)).or(match(/JOIN/))
+          where_clause = table_sanitizer[:order_by_clause]
+          expect(where_clause).to be_nil.or(match(/ORDER BY/))
+          column_sanitizers = table_sanitizer[:column_sanitizers]
+          column_names = with_database(:results_dump) { ActiveRecord::Base.connection.columns(table_name).map(&:name) }
+          expect(column_sanitizers.keys).to match_array(column_names)
+        end
+      end
     end
   end
 end

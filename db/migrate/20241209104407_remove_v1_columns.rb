@@ -9,7 +9,7 @@ class RemoveV1Columns < ActiveRecord::Migration[7.2]
 
       t.timestamps
 
-      t.index [:competition_id, :user_id], unique: true
+      t.index %i[competition_id user_id], unique: true
     end
   end
 end

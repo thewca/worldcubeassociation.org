@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-  resultable_instance_members = ->(*_args) {
+  resultable_instance_members = lambda { |*_args|
     transient do
       competition { FactoryBot.create(:competition, event_ids: ["333oh"]) }
       skip_round_creation { false }
@@ -14,14 +14,14 @@ FactoryBot.define do
     after(:build) do |result, options|
       # In order to be valid, a result must have a round.
       # Make sure it exists before going through validations.
-      FactoryBot.create(:round, competition: result.competition, event_id: result.eventId, format_id: result.formatId) if !result.round && !options.skip_round_creation
+      FactoryBot.create(:round, competition: result.competition, event_id: result.event_id, format_id: result.format_id) if !result.round && !options.skip_round_creation
     end
 
-    competitionId { competition.id }
+    competition_id { competition.id }
     pos { 1 }
-    eventId { "333oh" }
-    roundTypeId { "f" }
-    formatId { "a" }
+    event_id { "333oh" }
+    round_type_id { "f" }
+    format_id { "a" }
     value1 { best }
     value2 { average }
     value3 { average }
@@ -31,8 +31,8 @@ FactoryBot.define do
     average { 5000 }
 
     trait :mbf do
-      eventId { "333mbf" }
-      formatId { "3" }
+      event_id { "333mbf" }
+      format_id { "3" }
       average { 0 }
       # 9 points in 4 minutes
       best { 900_024_000 }
@@ -45,8 +45,8 @@ FactoryBot.define do
     end
 
     trait :fm do
-      eventId { "333fm" }
-      formatId { "m" }
+      event_id { "333fm" }
+      format_id { "m" }
       average { 3500 }
       best { 35 }
       value1 { best }
@@ -57,7 +57,7 @@ FactoryBot.define do
     end
 
     trait :mo3 do
-      formatId { "m" }
+      format_id { "m" }
       average { best }
       value1 { best }
       value2 { best }
@@ -68,8 +68,8 @@ FactoryBot.define do
 
     trait :blind_mo3 do
       mo3
-      eventId { "333bf" }
-      formatId { "3" }
+      event_id { "333bf" }
+      format_id { "3" }
     end
 
     trait :blind_dnf_mo3 do
@@ -89,14 +89,14 @@ FactoryBot.define do
       value5 { 0 }
       best { cutoff.attempt_result + 100 }
       average { 0 }
-      roundTypeId { "c" }
+      round_type_id { "c" }
     end
   }
 
   factory :inbox_result do
     instance_eval(&resultable_instance_members)
     transient do
-      person { FactoryBot.create(:inbox_person, competitionId: competition.id) }
+      person { FactoryBot.create(:inbox_person, competition_id: competition.id) }
     end
 
     trait :for_existing_person do
@@ -105,14 +105,14 @@ FactoryBot.define do
       end
       person {
         FactoryBot.create(:inbox_person,
-                          competitionId: competition.id,
-                          name: real_person.name, wcaId: real_person.wca_id,
+                          competition_id: competition.id,
+                          name: real_person.name, wca_id: real_person.wca_id,
                           gender: real_person.gender, dob: real_person.dob,
-                          countryId: real_person.country.iso2)
+                          country_iso2: real_person.country.iso2)
       }
     end
 
-    personId { person.id }
+    person_id { person.id }
   end
 
   factory :result do
@@ -121,10 +121,10 @@ FactoryBot.define do
       person { FactoryBot.create(:person) }
     end
 
-    personId { person.wca_id }
-    personName { person.name }
-    countryId { person.countryId }
-    regionalSingleRecord { nil }
-    regionalAverageRecord { nil }
+    person_id { person.wca_id }
+    person_name { person.name }
+    country_id { person.country_id }
+    regional_single_record { nil }
+    regional_average_record { nil }
   end
 end

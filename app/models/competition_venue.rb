@@ -6,7 +6,7 @@ class CompetitionVenue < ApplicationRecord
   has_many :wcif_extensions, as: :extendable, dependent: :delete_all
 
   belongs_to :country, foreign_key: :country_iso2, primary_key: :iso2
-  has_one :continent, foreign_key: :continentId, through: :country
+  has_one :continent, through: :country
 
   delegate :continent, to: :country, allow_nil: true
 
@@ -19,7 +19,7 @@ class CompetitionVenue < ApplicationRecord
   validates :timezone_id, inclusion: { in: VALID_TIMEZONES }
 
   def country
-    Country.find_by(iso2: self.country_iso2)
+    Country.c_find_by_iso2(self.country_iso2)
   end
 
   def load_wcif!(wcif)
@@ -75,7 +75,7 @@ class CompetitionVenue < ApplicationRecord
         "rooms" => { "type" => "array", "items" => VenueRoom.wcif_json_schema },
         "extensions" => { "type" => "array", "items" => WcifExtension.wcif_json_schema },
       },
-      "required" => ["id", "name", "latitudeMicrodegrees", "countryIso2", "longitudeMicrodegrees", "timezone", "rooms"],
+      "required" => %w[id name latitudeMicrodegrees countryIso2 longitudeMicrodegrees timezone rooms],
     }
   end
 
