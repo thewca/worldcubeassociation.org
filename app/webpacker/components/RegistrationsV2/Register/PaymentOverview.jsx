@@ -74,7 +74,13 @@ export default function PaymentOverview({
       />
       { !hasPaid && !hasPassed(competitionInfo.registration_close) && (
       <Accordion styled fluid>
-        <Accordion.Title active={payAgain} index={0} onClick={() => setPayAgain((prev) => !prev)}>
+        <Accordion.Title
+          icon
+          active={payAgain}
+          index={0}
+          onClick={() => setPayAgain((prev) => !prev)}
+        >
+          <Icon name="dropdown" />
           {I18n.t('registrations.entry_fees_pay_again')}
         </Accordion.Title>
         <Accordion.Content active={payAgain}>
