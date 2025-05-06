@@ -105,7 +105,7 @@ class UserRole < ApplicationRecord
     status = metadata ? metadata[:status] : nil
     case group_type
     when UserGroup.group_types[:delegate_regions]
-      ["senior_delegate", "regional_delegate"].include?(status)
+      %w[senior_delegate regional_delegate].include?(status)
     when UserGroup.group_types[:teams_committees], UserGroup.group_types[:councils]
       ["leader"].include?(status)
     when UserGroup.group_types[:board], UserGroup.group_types[:officers]
@@ -118,7 +118,7 @@ class UserRole < ApplicationRecord
   def staff?
     case group_type
     when UserGroup.group_types[:delegate_regions]
-      ["senior_delegate", "regional_delegate", "delegate", "junior_delegate"].include?(metadata.status)
+      %w[senior_delegate regional_delegate delegate junior_delegate].include?(metadata.status)
     when UserGroup.group_types[:board], UserGroup.group_types[:officers], UserGroup.group_types[:teams_committees]
       true
     else
@@ -130,9 +130,9 @@ class UserRole < ApplicationRecord
     status = metadata&.status
     case group_type
     when UserGroup.group_types[:delegate_regions]
-      ["senior_delegate", "regional_delegate", "delegate"].include?(status)
+      %w[senior_delegate regional_delegate delegate].include?(status)
     when UserGroup.group_types[:teams_committees]
-      ["leader", "senior_member"].include?(status)
+      %w[leader senior_member].include?(status)
     when UserGroup.group_types[:board], UserGroup.group_types[:officers]
       true # All board members & officers are considered as eligible voters.
     else

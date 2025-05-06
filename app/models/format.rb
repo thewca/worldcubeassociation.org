@@ -19,16 +19,16 @@ class Format < ApplicationRecord
     {
       "1" => [],
       "2" => ["1"],
-      "3" => ["1", "2"],
-      "m" => ["1", "2"],
+      "3" => %w[1 2],
+      "m" => %w[1 2],
       "a" => ["2"], # https://www.worldcubeassociation.org/regulations/#9b1
     }[self.id]
   end
 
   DEFAULT_SERIALIZE_OPTIONS = {
-    only: ["id", "sort_by", "sort_by_second", "expected_solve_count",
-           "trim_fastest_n", "trim_slowest_n"],
-    methods: ["name", "short_name", "allowed_first_phase_formats"],
+    only: %w[id sort_by sort_by_second expected_solve_count
+             trim_fastest_n trim_slowest_n],
+    methods: %w[name short_name allowed_first_phase_formats],
   }.freeze
 
   def serializable_hash(options = nil)

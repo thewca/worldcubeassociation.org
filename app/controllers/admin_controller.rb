@@ -4,8 +4,8 @@ require 'csv'
 
 class AdminController < ApplicationController
   before_action :authenticate_user!
-  before_action -> { redirect_to_root_unless_user(:can_admin_results?) }, except: [:all_voters, :leader_senior_voters]
-  before_action -> { redirect_to_root_unless_user(:can_see_eligible_voters?) }, only: [:all_voters, :leader_senior_voters]
+  before_action -> { redirect_to_root_unless_user(:can_admin_results?) }, except: %i[all_voters leader_senior_voters]
+  before_action -> { redirect_to_root_unless_user(:can_see_eligible_voters?) }, only: %i[all_voters leader_senior_voters]
 
   def index
   end
@@ -64,7 +64,7 @@ class AdminController < ApplicationController
   RESULTS_POSTING_STEPS = %i[inbox_result inbox_person].freeze
 
   private def load_result_posting_steps
-    @competition = competition_from_params(associations: [:events, :rounds])
+    @competition = competition_from_params(associations: %i[events rounds])
 
     data_tables = {
       result: Result,
@@ -246,7 +246,7 @@ class AdminController < ApplicationController
   def do_override_regional_records
     ActiveRecord::Base.transaction do
       params[:regional_record_overrides].each do |id_and_type, marker|
-        next if [:competition_id, :event_id].include? id_and_type.to_sym
+        next if %i[competition_id event_id].include? id_and_type.to_sym
 
         next if marker.blank?
 
@@ -308,7 +308,7 @@ class AdminController < ApplicationController
 
     ActiveRecord::Base.transaction do
       params[:person_completions].each do |person_key, procedure|
-        next if [:competition_ids, :continue_batch].include? person_key.to_sym
+        next if %i[competition_ids continue_batch].include? person_key.to_sym
 
         old_name, old_country, pending_person_id, pending_competition_id = person_key.split '|'
 

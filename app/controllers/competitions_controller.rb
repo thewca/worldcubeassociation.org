@@ -13,18 +13,18 @@ class CompetitionsController < ApplicationController
     },
   }.freeze
 
-  before_action :authenticate_user!, except: [
-    :index,
-    :show,
-    :embedable_map,
-    :show_podiums,
-    :show_all_results,
-    :show_results_by_person,
-    :show_scrambles,
+  before_action :authenticate_user!, except: %i[
+    index
+    show
+    embedable_map
+    show_podiums
+    show_all_results
+    show_results_by_person
+    show_scrambles
   ]
-  before_action -> { redirect_to_root_unless_user(:can_admin_competitions?) }, only: [
-    :admin_edit,
-    :disconnect_payment_integration,
+  before_action -> { redirect_to_root_unless_user(:can_admin_competitions?) }, only: %i[
+    admin_edit
+    disconnect_payment_integration
   ]
   before_action -> { redirect_to_root_unless_user(:can_admin_results?) }, only: [
     :post_results,
@@ -35,11 +35,11 @@ class CompetitionsController < ApplicationController
   before_action -> { redirect_to_root_unless_user(:can_access_senior_delegate_panel?) }, only: [
     :for_senior,
   ]
-  before_action -> { redirect_to_root_unless_user(:can_manage_competition?, competition_from_params) }, only: [
-    :edit,
-    :edit_events,
-    :edit_schedule,
-    :payment_integration_setup,
+  before_action -> { redirect_to_root_unless_user(:can_manage_competition?, competition_from_params) }, only: %i[
+    edit
+    edit_events
+    edit_schedule
+    payment_integration_setup
   ]
 
   rescue_from WcaExceptions::ApiException do |e|

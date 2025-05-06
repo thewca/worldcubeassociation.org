@@ -12,7 +12,6 @@ const MIN_SEARCH_TEXT_LEN = 2;
 
 export default function RegistrationAdministrationSearch({
   partitionedRegistrations,
-  competitionId,
   usingPayments,
   currencyCode,
 }) {
@@ -25,7 +24,9 @@ export default function RegistrationAdministrationSearch({
         status,
         {
           name: status,
-          results: registrations.map(({ user, competing, payment }) => ({
+          results: registrations.map(({
+            id, user, competing, payment,
+          }) => ({
             title: `${user.name}${user.wca_id ? ` (${user.wca_id})` : ''}`,
             description: `${
               user.email
@@ -41,7 +42,7 @@ export default function RegistrationAdministrationSearch({
             price: usingPayments
               ? isoMoneyToHumanReadable(payment.payment_amount_iso, currencyCode)
               : undefined,
-            userId: user.id,
+            id,
             searchable: {
               name: user.name,
               wcaId: user.wca_id,
@@ -77,8 +78,8 @@ export default function RegistrationAdministrationSearch({
     [debouncedSearchText, options],
   );
 
-  const navigateToRegistrationEdit = ({ userId }) => {
-    window.location.href = editRegistrationUrl(userId, competitionId);
+  const navigateToRegistrationEdit = ({ id }) => {
+    window.location.href = editRegistrationUrl(id);
   };
 
   const renderStatusIcon = ({ name: status }) => (

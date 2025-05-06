@@ -80,7 +80,7 @@ export default function TableRow({
     timestamp: timestampIsShown,
   } = columnsExpanded;
   const {
-    id, wca_id: wcaId, name, country, dob: dateOfBirth, email: emailAddress,
+    id: userId, wca_id: wcaId, name, country, dob: dateOfBirth, email: emailAddress,
   } = registration.user;
   const {
     registered_on: registeredOn,
@@ -116,7 +116,7 @@ export default function TableRow({
       {(provided) => (
         <Ref innerRef={provided.innerRef}>
           <Table.Row
-            key={id}
+            key={userId}
             active={isSelected}
             {...provided.draggableProps}
             {...provided.dragHandleProps}
@@ -135,7 +135,7 @@ export default function TableRow({
             )}
 
             <Table.Cell>
-              <a href={editRegistrationUrl(id, competitionInfo.id)}>
+              <a href={editRegistrationUrl(registration.id)}>
                 {I18n.t('registrations.list.edit')}
               </a>
             </Table.Cell>
@@ -144,7 +144,7 @@ export default function TableRow({
               {wcaId ? (
                 <a href={personUrl(wcaId)}>{wcaId}</a>
               ) : (
-                <a href={editPersonUrl(id)}>
+                <a href={editPersonUrl(userId)}>
                   <Icon name="edit" />
                   {I18n.t('users.edit.profile')}
                 </a>

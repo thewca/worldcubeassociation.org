@@ -3,7 +3,7 @@
 class SessionsController < Devise::SessionsController
   prepend_before_action :authenticate_with_two_factor,
                         if: -> { action_name == 'create' && two_factor_enabled? }
-  skip_before_action :require_no_authentication, only: [:new, :create]
+  skip_before_action :require_no_authentication, only: %i[new create]
 
   # Make sure this happens always before any before_action
   protect_from_forgery with: :exception, prepend: true

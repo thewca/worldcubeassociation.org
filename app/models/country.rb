@@ -66,14 +66,14 @@ class Country < ApplicationRecord
   end
 
   belongs_to :continent
-  has_many :competitions, foreign_key: :country_id
+  has_many :competitions
   has_one :band, foreign_key: :iso2, primary_key: :iso2, class_name: "CountryBand"
 
   def continent
     Continent.c_find(self.continent_id)
   end
 
-  def self.find_by_iso2(iso2)
+  def self.c_find_by_iso2(iso2)
     c_values.find { |c| c.iso2 == iso2 }
   end
 

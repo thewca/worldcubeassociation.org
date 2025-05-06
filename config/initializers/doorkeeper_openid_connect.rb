@@ -26,11 +26,11 @@ Doorkeeper::OpenidConnect.configure do
   expiration 300.seconds
 
   claims do
-    claim :email, response: [:id_token, :user_info] do |resource_owner|
+    claim :email, response: %i[id_token user_info] do |resource_owner|
       resource_owner.email
     end
 
-    claim :name, response: [:id_token, :user_info] do |resource_owner|
+    claim :name, response: %i[id_token user_info] do |resource_owner|
       resource_owner.name
     end
   end

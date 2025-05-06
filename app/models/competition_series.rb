@@ -62,7 +62,7 @@ class CompetitionSeries < ApplicationRecord
   end
 
   DEFAULT_SERIALIZE_OPTIONS = {
-    only: ["name", "short_name"],
+    only: %w[name short_name],
     include: ["competitions"],
   }.freeze
 
@@ -118,9 +118,9 @@ class CompetitionSeries < ApplicationRecord
 
   def self.form_data_json_schema
     {
-      "type" => ["object", "null"],
+      "type" => %w[object null],
       "properties" => {
-        "id" => { "type" => ["integer", "null"] },
+        "id" => { "type" => %w[integer null] },
         "seriesId" => { "type" => "string" },
         "name" => { "type" => "string" },
         "shortName" => { "type" => "string" },
@@ -144,7 +144,7 @@ class CompetitionSeries < ApplicationRecord
 
   def self.wcif_json_schema
     {
-      "type" => ["object", "null"],
+      "type" => %w[object null],
       "properties" => {
         "id" => { "type" => "string" },
         "name" => { "type" => "string" },

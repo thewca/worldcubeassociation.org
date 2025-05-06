@@ -3,7 +3,7 @@
 module PersonsHelper
   def rank_td(rank_object, type)
     rank = rank_object&.public_send("#{type}_rank")
-    rank = "-" if rank.blank?
+    rank = "-" if rank&.zero?
     content_tag :td, rank, class: "#{type}-rank #{'record' if rank == 1}"
   end
 
@@ -21,7 +21,7 @@ module PersonsHelper
   end
 
   def return_podium_class(result)
-    return unless ['f', 'c'].include?(result.round_type_id) && !result.best_solve.dnf?
+    return unless %w[f c].include?(result.round_type_id) && !result.best_solve.dnf?
 
     case result.pos
     when 1

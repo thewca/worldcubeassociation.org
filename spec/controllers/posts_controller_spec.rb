@@ -104,7 +104,7 @@ RSpec.describe PostsController do
         p = Post.find_by(slug: "Title")
         expect(p.title).to eq "Title"
         expect(p.body).to eq "body"
-        expect(p.tags_array).to match_array %w(wic notes)
+        expect(p.tags_array).to match_array %w[wic notes]
       end
     end
   end

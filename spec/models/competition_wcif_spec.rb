@@ -14,7 +14,7 @@ RSpec.describe "Competition WCIF" do
       start_date: "2014-02-03",
       end_date: "2014-02-05",
       external_website: "http://example.com",
-      event_ids: %w(333 444 333fm 333mbf),
+      event_ids: %w[333 444 333fm 333mbf],
       with_schedule: true,
       competitor_limit: 50,
       registration_open: "2013-12-01",
@@ -353,7 +353,7 @@ RSpec.describe "Competition WCIF" do
       competition.set_wcif_events!(wcif["events"], delegate)
 
       expect(competition.to_wcif["events"]).to eq(wcif["events"])
-      expect(competition.events.map(&:id)).to match_array %w(333 333fm 333mbf 444)
+      expect(competition.events.map(&:id)).to match_array %w[333 333fm 333mbf 444]
     end
 
     it "does remove competition event when wcif rounds are nil" do
@@ -364,7 +364,7 @@ RSpec.describe "Competition WCIF" do
 
       wcif["events"].reject! { |e| e["id"] == "444" }
       expect(competition.to_wcif["events"]).to eq(wcif["events"])
-      expect(competition.events.map(&:id)).to match_array %w(333 333fm 333mbf)
+      expect(competition.events.map(&:id)).to match_array %w[333 333fm 333mbf]
     end
 
     it "removes competition event when wcif event is missing" do
@@ -373,7 +373,7 @@ RSpec.describe "Competition WCIF" do
       competition.set_wcif_events!(wcif["events"], delegate)
 
       expect(competition.to_wcif["events"]).to eq(wcif["events"])
-      expect(competition.events.map(&:id)).to match_array %w(333 333fm 333mbf)
+      expect(competition.events.map(&:id)).to match_array %w[333 333fm 333mbf]
     end
 
     it "creates competition event when adding round to previously nonexistent event" do
@@ -803,7 +803,7 @@ RSpec.describe "Competition WCIF" do
 
     context "validates the given data with JSON Schema definition" do
       it "Doesn't update invalid venue" do
-        %w(id name latitudeMicrodegrees longitudeMicrodegrees timezone rooms).each do |attr|
+        %w[id name latitudeMicrodegrees longitudeMicrodegrees timezone rooms].each do |attr|
           save_attr = wcif["schedule"]["venues"][0][attr]
           wcif["schedule"]["venues"][0][attr] = nil
           expect { competition.set_wcif!(wcif, delegate) }.to raise_error(JSON::Schema::ValidationError)
@@ -812,7 +812,7 @@ RSpec.describe "Competition WCIF" do
       end
 
       it "Doesn't update invalid activity" do
-        %w(id name childActivities activityCode startTime endTime).each do |attr|
+        %w[id name childActivities activityCode startTime endTime].each do |attr|
           save_attr = wcif["schedule"]["venues"][0]["rooms"][0]["activities"][0][attr]
           wcif["schedule"]["venues"][0]["rooms"][0]["activities"][0][attr] = nil
           expect { competition.set_wcif!(wcif, delegate) }.to raise_error(JSON::Schema::ValidationError)
@@ -821,7 +821,7 @@ RSpec.describe "Competition WCIF" do
       end
 
       it "Doesn't update invalid room" do
-        %w(id name activities).each do |attr|
+        %w[id name activities].each do |attr|
           save_attr = wcif["schedule"]["venues"][0]["rooms"][0][attr]
           wcif["schedule"]["venues"][0]["rooms"][0][attr] = nil
           expect { competition.set_wcif!(wcif, delegate) }.to raise_error(JSON::Schema::ValidationError)

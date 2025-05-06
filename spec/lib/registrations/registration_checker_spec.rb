@@ -17,7 +17,7 @@ RSpec.describe Registrations::RegistrationChecker do
           user_id: default_user.id,
           guests: 10,
           raw_comment: 'This is a perfectly legitimate registration',
-          events: ['222', '333', 'pyram'],
+          events: %w[222 333 pyram],
         )
 
         ActiveRecord::Base.connected_to(role: :reading, prevent_writes: true) do
@@ -218,7 +218,7 @@ RSpec.describe Registrations::RegistrationChecker do
           :competition,
           :registration_open,
           :with_event_limit,
-          event_ids: ['333', '333oh', '222', '444', '555', '666', '777'],
+          event_ids: %w[333 333oh 222 444 555 666 777],
         )
       }
 
@@ -239,7 +239,7 @@ RSpec.describe Registrations::RegistrationChecker do
 
       it 'events must be held at the competition' do
         registration_request = build(
-          :registration_request, events: ['333', '333fm'], competition_id: default_competition.id, user_id: default_user.id
+          :registration_request, events: %w[333 333fm], competition_id: default_competition.id, user_id: default_user.id
         )
 
         expect {
@@ -254,7 +254,7 @@ RSpec.describe Registrations::RegistrationChecker do
 
       it 'competitor can register up to the events_per_registration_limit limit' do
         registration_request = build(
-          :registration_request, events: ['333', '222', '444', '555', '666'], competition_id: event_limit_comp.id, user_id: default_user.id
+          :registration_request, events: %w[333 222 444 555 666], competition_id: event_limit_comp.id, user_id: default_user.id
         )
 
         expect {
@@ -264,7 +264,7 @@ RSpec.describe Registrations::RegistrationChecker do
 
       it 'competitor cant register more events than the events_per_registration_limit' do
         registration_request = build(
-          :registration_request, events: ['333', '222', '444', '555', '666', '777'], competition_id: event_limit_comp.id, user_id: default_user.id
+          :registration_request, events: %w[333 222 444 555 666 777], competition_id: event_limit_comp.id, user_id: default_user.id
         )
 
         expect {
@@ -282,11 +282,11 @@ RSpec.describe Registrations::RegistrationChecker do
           :with_event_limit,
           :skip_validations,
           event_restrictions: false,
-          event_ids: ['333', '333oh', '222', '444', '555', '666', '777'],
+          event_ids: %w[333 333oh 222 444 555 666 777],
         )
 
         registration_request = build(
-          :registration_request, events: ['333', '222', '444', '555', '666', '777'],
+          :registration_request, events: %w[333 222 444 555 666 777],
                                  competition_id: unenforced_event_limit_comp.id,
                                  user_id: default_user.id
         )
@@ -298,7 +298,7 @@ RSpec.describe Registrations::RegistrationChecker do
 
       it 'organizer cant register more events than the events_per_registration_limit' do
         registration_request = build(
-          :registration_request, events: ['333', '222', '444', '555', '666', '777'], competition_id: event_limit_comp.id, user_id: default_user.id
+          :registration_request, events: %w[333 222 444 555 666 777], competition_id: event_limit_comp.id, user_id: default_user.id
         )
 
         expect {
@@ -344,7 +344,7 @@ RSpec.describe Registrations::RegistrationChecker do
       it 'smoketest - succeeds when all qualifications are met' do
         registration_request = build(
           :registration_request,
-          events: ['222', '333oh', '333', '555', '444', 'pyram', 'minx'],
+          events: %w[222 333oh 333 555 444 pyram minx],
           user_id: user_with_results.id,
           competition_id: comp_with_qualifications.id,
         )
@@ -357,7 +357,7 @@ RSpec.describe Registrations::RegistrationChecker do
       it 'smoketest - all qualifications unmet' do
         registration_request = build(
           :registration_request,
-          events: ['222', '333oh', '333', '555', '444', 'pyram', 'minx'],
+          events: %w[222 333oh 333 555 444 pyram minx],
           user_id: default_user.id,
           competition_id: enforced_hard_qualifications.id,
         )
@@ -367,7 +367,7 @@ RSpec.describe Registrations::RegistrationChecker do
         }.to raise_error(WcaExceptions::RegistrationError) do |error|
           expect(error.error).to eq(Registrations::ErrorCodes::QUALIFICATION_NOT_MET)
           expect(error.status).to eq(:unprocessable_entity)
-          expect(error.data.sort).to eq(['333', '222', 'pyram', 'minx', '555', '444'].sort)
+          expect(error.data.sort).to eq(%w[333 222 pyram minx 555 444].sort)
         end
       end
 
@@ -621,7 +621,7 @@ RSpec.describe Registrations::RegistrationChecker do
         }.not_to raise_error
 
         # We never actually fired the update, we just checked whether it _would_ be permissible to do so
-        expect(default_registration.reload.event_ids).to eq(['333', '333oh'])
+        expect(default_registration.reload.event_ids).to eq(%w[333 333oh])
       end
     end
 
@@ -772,22 +772,22 @@ RSpec.describe Registrations::RegistrationChecker do
     end
 
     describe '#update_registration_allowed!.validate_organizer_fields!' do
-      it 'organizer can add organizer_comment' do
+      it 'organizer can add admin_comment' do
         update_request = build(
           :update_request,
           user_id: default_registration.user_id,
           competition_id: default_registration.competition_id,
           submitted_by: default_competition.organizers.first.id,
-          competing: { 'organizer_comment' => 'this is an admin comment' },
+          competing: { 'admin_comment' => 'this is an admin comment' },
         )
 
         expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, default_registration) }
           .not_to raise_error
       end
 
-      it 'organizer can change organizer_comment' do
+      it 'organizer can change admin_comment' do
         registration = create(
-          :registration, user_id: default_user.id, competition_id: default_competition.id, administrative_notes: 'organizer comment'
+          :registration, user_id: default_user.id, competition_id: default_competition.id, administrative_notes: 'admin comment'
         )
 
         update_request = build(
@@ -795,7 +795,7 @@ RSpec.describe Registrations::RegistrationChecker do
           user_id: registration.user_id,
           competition_id: registration.competition_id,
           submitted_by: default_competition.organizers.first.id,
-          competing: { 'organizer_comment' => 'this is an admin comment' },
+          competing: { 'admin_comment' => 'this is an admin comment' },
         )
 
         expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, registration) }
@@ -803,8 +803,8 @@ RSpec.describe Registrations::RegistrationChecker do
       end
     end
 
-    describe '#update_registration_allowed!.validate_organizer_comment!' do
-      it 'organizer comment cant exceed 240 characters' do
+    describe '#update_registration_allowed!.validate_admin_comment!' do
+      it 'admin comment cant exceed 240 characters' do
         long_comment = 'comment longer than 240 characterscomment longer than 240 characterscomment longer than 240 characterscomment longer than 240 characterscomment longer than 240 characterscomment longer than 240 characterscomment longer
         than 240 characterscomment longer than 240 characters'
 
@@ -813,7 +813,7 @@ RSpec.describe Registrations::RegistrationChecker do
           user_id: default_registration.user_id,
           competition_id: default_registration.competition_id,
           submitted_by: default_competition.organizers.first.id,
-          competing: { 'organizer_comment' => long_comment },
+          competing: { 'admin_comment' => long_comment },
         )
 
         expect {
@@ -824,7 +824,7 @@ RSpec.describe Registrations::RegistrationChecker do
         end
       end
 
-      it 'organizer comment can match 240 characters' do
+      it 'admin comment can match 240 characters' do
         at_character_limit = 'comment longer than 240 characterscomment longer than 240 characterscomment longer than 240 characterscomment longer than 240 characterscomment longer than 240 characterscomment longer than' \
                              '240 characterscomment longer longer than 240 12345'
 
@@ -833,7 +833,7 @@ RSpec.describe Registrations::RegistrationChecker do
           user_id: default_registration.user_id,
           competition_id: default_registration.competition_id,
           submitted_by: default_competition.organizers.first.id,
-          competing: { 'organizer_comment' => at_character_limit },
+          competing: { 'admin_comment' => at_character_limit },
         )
 
         expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, default_registration) }
@@ -1369,7 +1369,7 @@ RSpec.describe Registrations::RegistrationChecker do
           :update_request,
           user_id: default_registration.user_id,
           competition_id: default_registration.competition_id,
-          competing: { 'event_ids' => ['333', '444', '555', 'minx'] },
+          competing: { 'event_ids' => %w[333 444 555 minx] },
         )
 
         expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, default_registration) }
@@ -1393,7 +1393,7 @@ RSpec.describe Registrations::RegistrationChecker do
           :update_request,
           user_id: default_registration.user_id,
           competition_id: default_registration.competition_id,
-          competing: { 'event_ids' => ['pyram', 'minx'] },
+          competing: { 'event_ids' => %w[pyram minx] },
         )
 
         expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, default_registration) }
@@ -1421,7 +1421,7 @@ RSpec.describe Registrations::RegistrationChecker do
           :update_request,
           user_id: default_registration.user_id,
           competition_id: default_registration.competition_id,
-          competing: { 'event_ids' => ['333', '333fm'] },
+          competing: { 'event_ids' => %w[333 333fm] },
         )
 
         expect {
@@ -1437,7 +1437,7 @@ RSpec.describe Registrations::RegistrationChecker do
           :update_request,
           user_id: default_registration.user_id,
           competition_id: default_registration.competition_id,
-          competing: { 'event_ids' => ['888', '333'] },
+          competing: { 'event_ids' => %w[888 333] },
         )
 
         expect {
@@ -1454,7 +1454,7 @@ RSpec.describe Registrations::RegistrationChecker do
           user_id: default_registration.user_id,
           competition_id: default_registration.competition_id,
           submitted_by: default_competition.organizers.first.id,
-          competing: { 'event_ids' => ['333', '555'] },
+          competing: { 'event_ids' => %w[333 555] },
         )
 
         expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, default_registration) }
@@ -1467,7 +1467,7 @@ RSpec.describe Registrations::RegistrationChecker do
           user_id: default_registration.user_id,
           competition_id: default_registration.competition_id,
           submitted_by: default_competition.organizers.first.id,
-          competing: { 'event_ids' => ['333', '333fm'] },
+          competing: { 'event_ids' => %w[333 333fm] },
         )
 
         expect {
@@ -1483,7 +1483,7 @@ RSpec.describe Registrations::RegistrationChecker do
           :update_request,
           user_id: limited_registration.user_id,
           competition_id: limited_registration.competition_id,
-          competing: { 'event_ids' => ['333', '333oh', '555', 'pyram', 'minx'] },
+          competing: { 'event_ids' => %w[333 333oh 555 pyram minx] },
         )
 
         expect { Registrations::RegistrationChecker.update_registration_allowed!(update_request, limited_registration) }
@@ -1495,7 +1495,7 @@ RSpec.describe Registrations::RegistrationChecker do
           :update_request,
           user_id: limited_registration.user_id,
           competition_id: limited_registration.competition_id,
-          competing: { 'event_ids' => ['333', '333oh', '555', 'pyram', 'minx', '222'] },
+          competing: { 'event_ids' => %w[333 333oh 555 pyram minx 222] },
         )
 
         expect {
@@ -1513,7 +1513,7 @@ RSpec.describe Registrations::RegistrationChecker do
           :update_request,
           user_id: organizer_reg.user_id,
           competition_id: organizer_reg.competition_id,
-          competing: { 'event_ids' => ['333', '333oh', '555', 'pyram', 'minx', '222'] },
+          competing: { 'event_ids' => %w[333 333oh 555 pyram minx 222] },
         )
 
         expect {
@@ -1689,7 +1689,7 @@ RSpec.describe Registrations::RegistrationChecker do
           :update_request,
           user_id: easy_registration_with_results_reg.user_id,
           competition_id: easy_registration_with_results_reg.competition_id,
-          competing: { 'event_ids' => ['222', '333', '555', '444', 'pyram', 'minx'] },
+          competing: { 'event_ids' => %w[222 333 555 444 pyram minx] },
         )
 
         expect {

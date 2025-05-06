@@ -22,13 +22,13 @@ module Waitlistable
       equal_to: 1,
       allow_nil: true,
       frontend_code: Registrations::ErrorCodes::INVALID_WAITING_LIST_POSITION,
-      if: [:waitlistable?, :waiting_list_present?, :waiting_list_empty?],
+      if: %i[waitlistable? waiting_list_present? waiting_list_empty?],
     }
     validates :waiting_list_position, numericality: {
       less_than_or_equal_to: :waiting_list_length,
       allow_nil: true,
       frontend_code: Registrations::ErrorCodes::INVALID_WAITING_LIST_POSITION,
-      if: [:waitlistable?, :waiting_list_present?],
+      if: %i[waitlistable? waiting_list_present?],
       unless: :waiting_list_empty?,
     }
 

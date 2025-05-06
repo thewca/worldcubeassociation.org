@@ -3,8 +3,8 @@
 require "rails_helper"
 
 RSpec.feature "Incident Management", :js do
-  let!(:incident1) { create(:incident, title: "First incident", tags: ["3l", "misscramble"], incident_competitions_attributes: { '0': { competition_id: create(:competition, :confirmed).id } }) }
-  let!(:incident2) { create(:incident, :resolved, title: "Second incident", tags: ["3l", "4b", "1a"]) }
+  let!(:incident1) { create(:incident, title: "First incident", tags: %w[3l misscramble], incident_competitions_attributes: { '0': { competition_id: create(:competition, :confirmed).id } }) }
+  let!(:incident2) { create(:incident, :resolved, title: "Second incident", tags: %w[3l 4b 1a]) }
   let!(:incident3) { create(:incident, :resolved, title: "Custom title", tags: ["4b"]) }
 
   context "when signed in as a WRC member" do

@@ -8,7 +8,7 @@ import WCAQueryClientProvider from '../../../lib/providers/WCAQueryClientProvide
 import ConfirmProvider from '../../../lib/providers/ConfirmProvider';
 import RegistrationProvider from '../lib/RegistrationProvider';
 
-export default function RegistrationEdit({ competitionInfo, user }) {
+export default function RegistrationEdit({ registrationId, competitionInfo, user }) {
   const ref = useRef();
   return (
     <div ref={ref}>
@@ -19,7 +19,11 @@ export default function RegistrationEdit({ competitionInfo, user }) {
               <Sticky context={ref}>
                 <RegistrationMessage />
               </Sticky>
-              <RegistrationEditor competitionInfo={competitionInfo} competitor={user} />
+              <RegistrationEditor
+                registrationId={registrationId}
+                competitionInfo={competitionInfo}
+                competitor={user}
+              />
             </RegistrationProvider>
           </ConfirmProvider>
         </StoreProvider>

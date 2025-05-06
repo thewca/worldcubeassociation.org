@@ -2,7 +2,7 @@
 
 class MediaController < ApplicationController
   before_action :authenticate_user!, except: [:index]
-  before_action -> { redirect_to_root_unless_user(:can_approve_media?) }, except: [:index, :new, :create]
+  before_action -> { redirect_to_root_unless_user(:can_approve_media?) }, except: %i[index new create]
 
   def index
     params[:status] = "accepted"

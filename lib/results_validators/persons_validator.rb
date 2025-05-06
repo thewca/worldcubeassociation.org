@@ -91,7 +91,7 @@ module ResultsValidators
 
       # Check for single letter first or last name.
       non_word_after_first_letter = [' ', '.'].include?(roman_readable[1])
-      space_before_last_letter = (roman_readable[-2] == " ") && ['I', 'V'].exclude?(roman_readable[-1]) # Roman numerals are allowed as suffixes
+      space_before_last_letter = (roman_readable[-2] == " ") && %w[I V].exclude?(roman_readable[-1]) # Roman numerals are allowed as suffixes
       abbreviated_last_name = (roman_readable[-1] == ".") && (roman_readable[-3] == " ")
       validation_issues << ValidationWarning.new(SINGLE_LETTER_FIRST_OR_LAST_NAME_WARNING, :persons, competition_id, name: name) if non_word_after_first_letter || space_before_last_letter || abbreviated_last_name
 
