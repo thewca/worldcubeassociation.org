@@ -586,6 +586,7 @@ class Registration < ApplicationRecord
                Registrations::Helper::STATUS_ACCEPTED
              end
 
-    { user_id: user_id, competing: { status: status } }.deep_stringify_keys
+    # String keys because this is mimicing a params payload
+    { 'user_id' => user_id, 'competing' => { 'status' => status } }
   end
 end
