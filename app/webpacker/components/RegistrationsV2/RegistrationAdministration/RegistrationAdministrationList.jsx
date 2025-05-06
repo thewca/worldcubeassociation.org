@@ -93,14 +93,14 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
   const { mutate: bulkAutoAcceptMutation, isPending: isAutoAccepting } = useMutation({
     mutationFn: bulkAutoAccept,
     onError: (data) => {
-      const { error } = data.json;
-      dispatchStore(setMessage(
+      const {} = data.json;
+      dispatchStore(showMessage(
         `competitions.registration_v2.auto_accept.cant_bulk_auto_accept`,
         'negative',
       ));
     },
     onSuccess: () => {
-      dispatchStore(setMessage('competitions.registration_v2.auto_accept.bulk_auto_accepted', 'positive'));
+      dispatchStore(showMessage('competitions.registration_v2.auto_accept.bulk_auto_accepted', 'positive'));
     },
   });
 
@@ -415,8 +415,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
         disabled={isAutoAccepting}
         color="green"
         onClick={() => {
-          console.log("button clicked")
-          bulkAutoAcceptMutation(competitionInfo.id)
+          bulkAutoAcceptMutation(competitionInfo.id);
         }}
       >
         <Icon name="check" />
