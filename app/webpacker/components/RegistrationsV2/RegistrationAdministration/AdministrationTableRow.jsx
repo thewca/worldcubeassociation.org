@@ -86,7 +86,7 @@ export default function TableRow({
     registered_on: registeredOn,
     event_ids: eventIds,
     comment,
-    admin_comment: adminComment,
+    organizer_comment: organizerComment,
     waiting_list_position: position,
   } = registration.competing;
   const {
@@ -220,8 +220,8 @@ export default function TableRow({
 
                 <Table.Cell>
                   <Popup
-                    content={adminComment}
-                    trigger={<span>{truncateComment(adminComment)}</span>}
+                    content={organizerComment}
+                    trigger={<span>{truncateComment(organizerComment)}</span>}
                   />
                 </Table.Cell>
               </>

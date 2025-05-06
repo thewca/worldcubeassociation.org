@@ -57,7 +57,7 @@ RSpec.describe "registrations/register" do
 
   def setup(payment_status)
     competition = create(:competition, :stripe_connected, :visible, :registration_open)
-    registration = create(:registration, payment_status, competition: competition, administrative_notes: "👽")
+    registration = create(:registration, payment_status, competition: competition, organizer_comment: "👽")
     allow(view).to receive(:current_user) { registration.user }
     assign(:competition, competition)
     assign(:registration, registration)
