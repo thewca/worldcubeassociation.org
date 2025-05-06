@@ -361,8 +361,8 @@ RSpec.describe 'API Registrations' do
 
       history = registration.registration_history
       expect(history.length).to eq(1)
-      expect(history.first[:changed_attributes]['guests']).to eq('3')
-      expect(history.first[:changed_attributes]['competing_status']).to be_present
+      expect(history.first[:changed_attributes][:guests]).to eq('3')
+      expect(history.first[:changed_attributes][:competing_status]).to be_present
       expect(history.first[:action]).to eq('Competitor delete')
     end
 
@@ -882,7 +882,7 @@ RSpec.describe 'API Registrations' do
 
       history = registration.registration_history
       expect(history.length).to eq(1)
-      expect(history.first[:changed_attributes]['competing_status']).to be_present
+      expect(history.first[:changed_attributes][:competing_status]).to be_present
       expect(history.first[:action]).to eq('Admin delete')
     end
 
