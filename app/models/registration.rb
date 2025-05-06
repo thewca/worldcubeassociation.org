@@ -585,6 +585,6 @@ class Registration < ApplicationRecord
                Registrations::Helper::STATUS_ACCEPTED
              end
 
-    { user_id: user_id, competing: { status: status } }.with_indifferent_access
+    { user_id: user_id, competing: { status: status } }.deep_stringify_keys
   end
 end
