@@ -1,6 +1,6 @@
 import {
   allRegistrationsUrl, confirmedRegistrationsUrl,
-  getPsychSheetForEventUrl, singleRegistrationUrl,
+  getPsychSheetForEventUrl, registrationHistoryUrl, singleRegistrationUrl,
 } from '../../../../../lib/requests/routes.js.erb';
 import fetchWithJWTToken from '../../../../../lib/requests/fetchWithJWTToken';
 import { fetchJsonOrError } from '../../../../../lib/requests/fetchWithAuthenticityToken';
@@ -42,4 +42,11 @@ export async function getSingleRegistration(
     }
     throw e;
   }
+}
+
+export async function getRegistrationHistory(
+  registrationId,
+) {
+  const { data } = await fetchJsonOrError(registrationHistoryUrl(registrationId));
+  return data;
 }

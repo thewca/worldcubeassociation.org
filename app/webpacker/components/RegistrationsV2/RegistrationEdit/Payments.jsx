@@ -17,7 +17,9 @@ import { isoMoneyToHumanReadable } from '../../../lib/helpers/money';
 import getUsersInfo from '../api/user/post/getUserInfo';
 
 export default function Payments({
-  onSuccess, registrationId, competitionId,
+  registrationId,
+  competitionId,
+  refetchHistory,
 }) {
   const dispatch = useDispatch();
   const queryClient = useQueryClient();
@@ -59,7 +61,7 @@ export default function Payments({
         }),
       );
 
-      onSuccess();
+      refetchHistory();
     },
     onError: (data) => {
       const { error } = data.json;

@@ -7,6 +7,7 @@ import {
   Message,
   Segment,
 } from 'semantic-ui-react';
+import { useQuery } from '@tanstack/react-query';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
 import { showMessage } from '../Register/RegistrationMessage';
 import EventSelector from '../../wca/EventSelector';
@@ -16,7 +17,6 @@ import { useConfirm } from '../../../lib/providers/ConfirmProvider';
 import I18n from '../../../lib/i18n';
 import RegistrationHistory from './RegistrationHistory';
 import { hasPassed } from '../../../lib/utils/dates';
-import { useRegistration } from '../lib/RegistrationProvider';
 import {
   useFormObjectState,
   useFormSuccessHandler,
@@ -26,6 +26,9 @@ import { useInputUpdater } from '../../../lib/hooks/useInputState';
 import { useOrderedSetWrapper } from '../../../lib/hooks/useOrderedSet';
 import { WCA_EVENT_IDS } from '../../../lib/wca-data.js.erb';
 import { useUpdateRegistrationMutation } from '../lib/mutations';
+import { getRegistrationHistory } from '../api/registration/get/get_registrations';
+import getUsersInfo from '../api/user/post/getUserInfo';
+import Loading from '../../Requests/Loading';
 
 export default function RegistrationEditor({ registrationId, competitor, competitionInfo }) {
   const dispatch = useDispatch();
@@ -49,7 +52,21 @@ export default function RegistrationEditor({ registrationId, competitor, competi
 
   const formSuccess = useFormSuccessHandler();
 
-  const { registration, refetchRegistration } = useRegistration();
+  const {
+    isLoading: historyLoading,
+    data: registrationHistory,
+    refetch: refetchHistory,
+  } = useQuery({
+    queryKey: ['registration-history', registrationId],
+    queryFn: () => getRegistrationHistory(registrationId),
+  });
+
+  const { isLoading: competitorsInfoLoading, data: competitorsInfo } = useQuery({
+    queryKey: ['history-user', registrationHistory],
+    queryFn: () => getUsersInfo(_.uniq(registrationHistory.flatMap((e) => (
+      (e.actor_type === 'user' || e.actor_type === 'worker') ? Number(e.actor_id) : [])))),
+    enabled: Boolean(registrationHistory),
+  });
 
   const {
     mutate: updateRegistrationMutation,
@@ -107,6 +124,8 @@ export default function RegistrationEditor({ registrationId, competitor, competi
           onSuccess: (data) => {
             dispatch(showMessage('registrations.flash.updated', 'positive'));
             formSuccess(data.registration);
+
+            refetchHistory();
           },
         });
       }).catch(() => {});
@@ -132,10 +151,15 @@ export default function RegistrationEditor({ registrationId, competitor, competi
     status,
     guests,
     formSuccess,
+    refetchHistory,
   ]);
 
   const registrationEditDeadlinePassed = Boolean(competitionInfo.event_change_deadline_date)
     && hasPassed(competitionInfo.event_change_deadline_date);
+
+  if (historyLoading || competitorsInfoLoading) {
+    return <Loading />;
+  }
 
   return (
     <Segment padded attached loading={isUpdating}>
@@ -252,16 +276,18 @@ export default function RegistrationEditor({ registrationId, competitor, competi
       {competitionInfo['using_payment_integrations?'] && (
         <>
           <Header>Payments</Header>
-          {(registration.payment.payment_statuses.includes('succeeded') || registration.payment.payment_statuses.includes('refund')) && (
-            <Payments
-              competitionId={competitionInfo.id}
-              registrationId={registrationId}
-              onSuccess={refetchRegistration}
-            />
-          )}
+          <Payments
+            competitionId={competitionInfo.id}
+            registrationId={registrationId}
+            refetchHistory={refetchHistory}
+          />
         </>
       )}
-      <RegistrationHistory history={registration.history.toReversed()} />
+      <RegistrationHistory
+        history={registrationHistory.toReversed()}
+        competitorsInfo={competitorsInfo}
+        refetchHistory={refetchHistory}
+      />
     </Segment>
   );
 }
