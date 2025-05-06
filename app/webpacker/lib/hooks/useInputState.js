@@ -4,7 +4,7 @@ export const useInputUpdater = (setState, isNumeric = false) => (
   useCallback((ev, data = undefined) => {
     if (data) {
       if (isNumeric) {
-        const parsedValue = Number.parseInt(data.value, 10);
+        const parsedValue = Number(data.value);
         setState(parsedValue);
       } else {
         setState(data.value);
