@@ -296,7 +296,7 @@ class Registration < ApplicationRecord
                                   has_paid: outstanding_entry_fees <= 0,
                                   payment_status: last_payment_status,
                                   paid_amount_iso: paid_entry_fees.cents,
-                                  currency_code: paid_entry_fees.currency.code,
+                                  currency_code: paid_entry_fees.currency.iso_code,
                                   updated_at: last_payment_date,
                                 },
                               })
