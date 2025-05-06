@@ -507,11 +507,11 @@ RSpec.describe Registration do
     end
 
     it 'updates registration history' do
-      registration.update_lanes!({ user_id: registration.user.id, competing: { event_ids: ['333', '444', '555'] } }.with_indifferent_access, registration.user.id)
+      registration.update_lanes!({ user_id: registration.user.id, competing: { event_ids: %w[333 444 555] } }.with_indifferent_access, registration.user.id)
       last_entry = registration.reload.registration_history.entries.last
       expect(last_entry[:actor_type]).to eq('user')
       expect(last_entry[:actor_id].to_i).to eq(registration.user.id)
-      expect(last_entry[:changed_attributes]).to eq({ event_ids: ["444", "555"] })
+      expect(last_entry[:changed_attributes]).to eq({ event_ids: %w[444 555] })
     end
 
     describe 'update waiting list position' do
