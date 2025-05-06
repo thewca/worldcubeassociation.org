@@ -27,7 +27,6 @@ import { useOrderedSetWrapper } from '../../../lib/hooks/useOrderedSet';
 import { WCA_EVENT_IDS } from '../../../lib/wca-data.js.erb';
 import { useUpdateRegistrationMutation } from '../lib/mutations';
 import { getRegistrationHistory } from '../api/registration/get/get_registrations';
-import getUsersInfo from '../api/user/post/getUserInfo';
 import Loading from '../../Requests/Loading';
 
 export default function RegistrationEditor({ registrationId, competitor, competitionInfo }) {
@@ -59,13 +58,6 @@ export default function RegistrationEditor({ registrationId, competitor, competi
   } = useQuery({
     queryKey: ['registration-history', registrationId],
     queryFn: () => getRegistrationHistory(registrationId),
-  });
-
-  const { isLoading: competitorsInfoLoading, data: competitorsInfo } = useQuery({
-    queryKey: ['history-user', registrationHistory],
-    queryFn: () => getUsersInfo(_.uniq(registrationHistory.flatMap((e) => (
-      (e.actor_type === 'user' || e.actor_type === 'worker') ? Number(e.actor_id) : [])))),
-    enabled: Boolean(registrationHistory),
   });
 
   const {
@@ -156,10 +148,6 @@ export default function RegistrationEditor({ registrationId, competitor, competi
 
   const registrationEditDeadlinePassed = Boolean(competitionInfo.event_change_deadline_date)
     && hasPassed(competitionInfo.event_change_deadline_date);
-
-  if (historyLoading || competitorsInfoLoading) {
-    return <Loading />;
-  }
 
   return (
     <Segment padded attached loading={isUpdating}>
@@ -283,11 +271,12 @@ export default function RegistrationEditor({ registrationId, competitor, competi
           />
         </>
       )}
-      <RegistrationHistory
-        history={registrationHistory.toReversed()}
-        competitorsInfo={competitorsInfo}
-        refetchHistory={refetchHistory}
-      />
+      {historyLoading ? <Loading /> : (
+        <RegistrationHistory
+          history={registrationHistory.toReversed()}
+          refetchHistory={refetchHistory}
+        />
+      )}
     </Segment>
   );
 }
