@@ -531,7 +531,6 @@ class Registration < ApplicationRecord
     super(DEFAULT_SERIALIZE_OPTIONS.merge(options || {}))
   end
 
-<<<<<<< HEAD
   def self.bulk_auto_accept(competition)
     if competition.waiting_list.present?
       competition.waiting_list.entries.each do |r_id|
@@ -549,7 +548,7 @@ class Registration < ApplicationRecord
                                    .with_payments
                                    .sort_by { |registration| registration.last_positive_payment.updated_at }
 
-    sorted_pending_registrations.each { |r| r.attempt_auto_accept }
+    sorted_pending_registrations.each(&:attempt_auto_accept)
   end
 
   def last_positive_payment
