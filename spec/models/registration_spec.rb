@@ -669,7 +669,7 @@ RSpec.describe Registration do
 
         waiting_list_reg.attempt_auto_accept
         expect(waiting_list_reg.reload.competing_status).to eq('waiting_list')
-        expect(waiting_list_reg.registration_history.last[:changed_attributes][:auto_accept_failure_reasons]).to eq("-7003",)
+        expect(waiting_list_reg.registration_history.last[:changed_attributes][:auto_accept_failure_reasons]).to eq("-7003")
       end
 
       it 'if status is cancelled' do
