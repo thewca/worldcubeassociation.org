@@ -10,6 +10,7 @@ import EventIcon from '../../wca/EventIcon';
 import I18n from '../../../lib/i18n';
 import getUsersInfo from '../api/user/post/getUserInfo';
 import Loading from '../../Requests/Loading';
+import { getRegistrationHistory } from '../api/registration/get/get_registrations';
 
 const formatHistoryColumn = (key, value) => {
   if (key === 'event_ids') {
@@ -18,7 +19,16 @@ const formatHistoryColumn = (key, value) => {
   return value;
 };
 
-export default function RegistrationHistory({ history, refetchHistory }) {
+export default function RegistrationHistory({ registrationId }) {
+  const {
+    isLoading: historyLoading,
+    data: history,
+    refetch: refetchHistory,
+  } = useQuery({
+    queryKey: ['registration-history', registrationId],
+    queryFn: () => getRegistrationHistory(registrationId),
+  });
+
   const { data: competitorsInfo, isLoading: competitorsInfoLoading } = useQuery({
     queryKey: ['history-user', history],
     queryFn: () => getUsersInfo(_.uniq(history.flatMap((e) => (
@@ -26,7 +36,7 @@ export default function RegistrationHistory({ history, refetchHistory }) {
     enabled: Boolean(history),
   });
 
-  if (competitorsInfoLoading) {
+  if (historyLoading || competitorsInfoLoading) {
     return <Loading />;
   }
 

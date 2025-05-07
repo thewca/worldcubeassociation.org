@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import _ from 'lodash';
 import React, {
   useCallback,
@@ -26,7 +26,6 @@ import RegistrationHistory from './RegistrationHistory';
 import { hasPassed } from '../../../lib/utils/dates';
 import { useRegistration } from '../lib/RegistrationProvider';
 import useSet from '../../../lib/hooks/useSet';
-import { getRegistrationHistory } from '../api/registration/get/get_registrations';
 
 export default function RegistrationEditor({ registrationId, competitor, competitionInfo }) {
   const dispatch = useDispatch();
@@ -44,15 +43,6 @@ export default function RegistrationEditor({ registrationId, competitor, competi
     isFetching: isRegistrationLoading,
     registration: serverRegistration,
   } = useRegistration();
-
-  const {
-    isLoading: historyLoading,
-    data: registrationHistory,
-    refetch: refetchHistory,
-  } = useQuery({
-    queryKey: ['registration-history', registrationId],
-    queryFn: () => getRegistrationHistory(registrationId),
-  });
 
   const { mutate: updateRegistrationMutation, isPending: isUpdating } = useMutation({
     mutationFn: updateRegistration,
@@ -80,7 +70,7 @@ export default function RegistrationEditor({ registrationId, competitor, competi
         dispatch(showMessage('registrations.flash.updated', 'positive'));
       }
 
-      refetchHistory();
+      queryClient.invalidateQueries({ queryKey: ['registration-history', registrationId] });
     },
   });
 
@@ -185,7 +175,7 @@ export default function RegistrationEditor({ registrationId, competitor, competi
   const registrationEditDeadlinePassed = Boolean(competitionInfo.event_change_deadline_date)
     && hasPassed(competitionInfo.event_change_deadline_date);
 
-  if (isRegistrationLoading || historyLoading) {
+  if (isRegistrationLoading) {
     return <Loading />;
   }
 
@@ -305,13 +295,9 @@ export default function RegistrationEditor({ registrationId, competitor, competi
         <RegistrationPayments
           competitionId={competitionInfo.id}
           registrationId={registrationId}
-          refetchHistory={refetchHistory}
         />
       )}
-      <RegistrationHistory
-        history={registrationHistory.toReversed()}
-        refetchHistory={refetchHistory}
-      />
+      <RegistrationHistory registrationId={registrationId} />
     </Segment>
   );
 }

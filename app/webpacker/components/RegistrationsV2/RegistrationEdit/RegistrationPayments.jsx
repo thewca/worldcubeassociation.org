@@ -19,7 +19,6 @@ import getUsersInfo from '../api/user/post/getUserInfo';
 export default function RegistrationPayments({
   registrationId,
   competitionId,
-  refetchHistory,
 }) {
   const {
     data: payments,
@@ -52,7 +51,6 @@ export default function RegistrationPayments({
         payments={payments}
         competitionId={competitionId}
         userInfo={userInfo}
-        refetchHistory={refetchHistory}
       />
     </>
   );
@@ -63,7 +61,6 @@ function PaymentsMainBody({
   payments,
   competitionId,
   userInfo,
-  refetchHistory,
 }) {
   const dispatch = useDispatch();
   const queryClient = useQueryClient();
@@ -90,7 +87,7 @@ function PaymentsMainBody({
         }),
       );
 
-      refetchHistory();
+      queryClient.invalidateQueries({ queryKey: ['registration-history', registrationId] });
     },
     onError: (data) => {
       const { error } = data.json;
