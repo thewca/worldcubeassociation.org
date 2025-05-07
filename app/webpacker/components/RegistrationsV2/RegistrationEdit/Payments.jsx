@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import React from 'react';
 import {
-  Button, Message, Table,
+  Button, Header, Message, Table,
 } from 'semantic-ui-react';
 import _ from 'lodash';
 import getRegistrationPayments from '../api/payment/get/getRegistrationPayments';
@@ -27,6 +27,7 @@ export default function Payments({
   const {
     data: payments,
     isLoading: paymentsLoading,
+    refetch: refetchPayments,
   } = useQuery({
     queryKey: ['payments', registrationId],
     queryFn: () => getRegistrationPayments(registrationId),
@@ -79,6 +80,30 @@ export default function Payments({
     return <Loading />;
   }
 
+  return (
+    <>
+      <Header>
+        Payments
+        <Button floated="right" onClick={refetchPayments}>Refresh</Button>
+      </Header>
+      <PaymentsMainBody
+        payments={payments}
+        refundMutation={refundMutation}
+        isMutating={isMutating}
+        competitionId={competitionId}
+        userInfo={userInfo}
+      />
+    </>
+  );
+}
+
+function PaymentsMainBody({
+  payments,
+  refundMutation,
+  isMutating,
+  competitionId,
+  userInfo,
+}) {
   if (payments.length === 0) {
     return <Message warning>{I18n.t('payments.messages.charges_refunded')}</Message>;
   }

@@ -302,14 +302,11 @@ export default function RegistrationEditor({ registrationId, competitor, competi
       {/* i18n-tasks-use t('registrations.list.series_registrations') */}
 
       {competitionInfo['using_payment_integrations?'] && (
-        <>
-          <Header>Payments</Header>
-          <Payments
-            competitionId={competitionInfo.id}
-            registrationId={registrationId}
-            refetchHistory={refetchHistory}
-          />
-        </>
+        <Payments
+          competitionId={competitionInfo.id}
+          registrationId={registrationId}
+          refetchHistory={refetchHistory}
+        />
       )}
       <RegistrationHistory
         history={registrationHistory.toReversed()}
