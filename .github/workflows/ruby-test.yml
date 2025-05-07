@@ -13,6 +13,7 @@ jobs:
       RACK_ENV: test
       RAILS_ENV: test
       NODE_ENV: test
+      DISABLE_SPRING: 1
       PLAYWRIGHT_BROWSERS_PATH: ./pw-browsers
       CAPYBARA_APP_HOST: "" # Explicitly set a blank value to override our default Docker container setup
     steps:
@@ -47,8 +48,6 @@ jobs:
       - name: Populate database with seeds
         run: bin/rake db:reset
       - name: Pre-compile assets for frontend tests
-        env:
-          DISABLE_SPRING: 1
         run: |
           bin/bundle exec i18n export
           bin/rake assets:precompile
@@ -60,8 +59,6 @@ jobs:
       - name: Install Playwright Browsers # as per https://playwright.dev/docs/ci#github-actions
         run: bin/yarn playwright install --with-deps --no-shell chromium
       - name: Run tests
-        env:
-          DISABLE_SPRING: 1
         id: rspec
         run: bin/rspec
       - name: Push coverage data to Coveralls
