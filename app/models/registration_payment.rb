@@ -33,6 +33,7 @@ class RegistrationPayment < ApplicationRecord
 
   private def auto_accept_hook
     return unless Registration::LIVE_AUTO_ACCEPT_ENABLED
+
     registration.attempt_auto_accept
   end
 
