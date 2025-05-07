@@ -99,11 +99,7 @@ class DelegateReport < ApplicationRecord
     new_posted = ActiveRecord::Type::Boolean.new.cast(new_posted)
     self.posted_at = (new_posted ? Time.now : nil)
     self.posted_by_user_id = current_user&.id
-
-    if new_posted && self.discussion_url.blank?
-      self.discussion_url = "https://groups.google.com/a/worldcubeassociation.org/forum/#!topicsearchin/reports/#{URI.encode_www_form_component(competition.name)}"
-    end
-
+    self.discussion_url = "https://groups.google.com/a/worldcubeassociation.org/forum/#!topicsearchin/reports/#{URI.encode_www_form_component(competition.name)}" if new_posted && self.discussion_url.blank?
   end
 
   GLOBAL_MAILING_LIST = "reports@worldcubeassociation.org"
