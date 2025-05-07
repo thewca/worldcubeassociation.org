@@ -427,6 +427,21 @@ RSpec.describe 'API Registrations' do
       expect(email.subject).to eq(I18n.t('registrations.mailer.new.mail_subject', comp_name: registration.competition.name))
     end
 
+    it 'raises error if registration doesnt exist' do
+      update_request = build(:update_request, competition_id: competition.id, user_id: user.id)
+      headers = { 'Authorization' => update_request['jwt_token'] }
+
+      # Assuming that we're never generating one-thousand three-hundred persisted registrations during tests…
+      patch api_v1_registration_path(1337), params: update_request, headers: headers
+
+      error_json = {
+        error: Registrations::ErrorCodes::REGISTRATION_NOT_FOUND,
+      }.to_json
+
+      expect(response.body).to eq(error_json)
+      expect(response).to have_http_status(:not_found)
+    end
+
     it 'User A cant change User Bs registration' do
       update_request = build(
         :update_request,
