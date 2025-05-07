@@ -25,11 +25,6 @@ class DelegateReport < ApplicationRecord
 
   attr_accessor :current_user
 
-  before_create :set_discussion_url
-  def set_discussion_url
-    self.discussion_url = "https://groups.google.com/a/worldcubeassociation.org/forum/#!topicsearchin/reports/#{URI.encode_www_form_component(competition.name)}"
-  end
-
   private def render_section_template(section)
     ActionController::Base.new.render_to_string(template: "delegate_reports/#{self.version}/_#{section}_default", formats: :md)
   end
@@ -104,6 +99,11 @@ class DelegateReport < ApplicationRecord
     new_posted = ActiveRecord::Type::Boolean.new.cast(new_posted)
     self.posted_at = (new_posted ? Time.now : nil)
     self.posted_by_user_id = current_user&.id
+
+    if new_posted && self.discussion_url.blank?
+      self.discussion_url = "https://groups.google.com/a/worldcubeassociation.org/forum/#!topicsearchin/reports/#{URI.encode_www_form_component(competition.name)}"
+    end
+
   end
 
   GLOBAL_MAILING_LIST = "reports@worldcubeassociation.org"
