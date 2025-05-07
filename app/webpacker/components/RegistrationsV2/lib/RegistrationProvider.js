@@ -26,7 +26,7 @@ const getRegistrationFromParams = ({
 export default function RegistrationProvider({
   competitionInfo,
   userInfo,
-  registrationId = null,
+  registrationId,
   isProcessing,
   children,
 }) {

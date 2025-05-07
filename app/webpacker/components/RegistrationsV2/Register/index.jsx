@@ -59,7 +59,7 @@ const buildFormRegistration = ({
 export default function Index({
   competitionInfo,
   userInfo,
-  registrationId = null,
+  registrationId,
   userCanPreRegister,
   preferredEvents,
   qualifications,
