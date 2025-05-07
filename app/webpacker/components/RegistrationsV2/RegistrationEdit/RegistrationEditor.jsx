@@ -70,7 +70,8 @@ export default function RegistrationEditor({ registrationId, competitor, competi
         dispatch(showMessage('registrations.flash.updated', 'positive'));
       }
 
-      queryClient.invalidateQueries({ queryKey: ['registration-history', registrationId] });
+      queryClient.refetchQueries({ queryKey: ['registration-history', registrationId], exact: true });
+      queryClient.refetchQueries({ queryKey: ['registration-payments', registrationId], exact: true });
     },
   });
 

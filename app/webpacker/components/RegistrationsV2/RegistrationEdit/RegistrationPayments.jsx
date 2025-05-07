@@ -25,7 +25,7 @@ export default function RegistrationPayments({
     isLoading: paymentsLoading,
     refetch: refetchPayments,
   } = useQuery({
-    queryKey: ['payments', registrationId],
+    queryKey: ['registration-payments', registrationId],
     queryFn: () => getRegistrationPayments(registrationId),
     select: (data) => data.charges.filter((r) => r.iso_amount_refundable !== 0),
   });
