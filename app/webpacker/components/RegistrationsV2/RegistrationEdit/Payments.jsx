@@ -3,6 +3,7 @@ import React from 'react';
 import {
   Button, Message, Table,
 } from 'semantic-ui-react';
+import _ from 'lodash';
 import getRegistrationPayments from '../api/payment/get/getRegistrationPayments';
 import refundPayment from '../api/payment/get/refundPayment';
 import Loading from '../../Requests/Loading';
@@ -13,11 +14,11 @@ import I18n from '../../../lib/i18n';
 import { showMessage } from '../Register/RegistrationMessage';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
 import { isoMoneyToHumanReadable } from '../../../lib/helpers/money';
+import getUsersInfo from '../api/user/post/getUserInfo';
 
 export default function Payments({
   registrationId,
   competitionId,
-  competitorsInfo,
   refetchHistory,
 }) {
   const dispatch = useDispatch();
@@ -30,6 +31,12 @@ export default function Payments({
     queryKey: ['payments', registrationId],
     queryFn: () => getRegistrationPayments(registrationId),
     select: (data) => data.charges.filter((r) => r.iso_amount_refundable !== 0),
+  });
+
+  const { data: userInfo, isLoading: userInfoLoading } = useQuery({
+    queryKey: ['payments-user', payments],
+    queryFn: () => getUsersInfo(_.uniq(payments.map((p) => p.user_id))),
+    enabled: Boolean(payments),
   });
 
   const { mutate: refundMutation, isPending: isMutating } = useMutation({
@@ -68,7 +75,7 @@ export default function Payments({
     },
   });
 
-  if (paymentsLoading) {
+  if (paymentsLoading || userInfoLoading) {
     return <Loading />;
   }
 
@@ -94,7 +101,7 @@ export default function Payments({
             isMutating={isMutating}
             competitionId={competitionId}
             key={refund.payment_id}
-            competitorsInfo={competitorsInfo}
+            userinfo={userInfo}
           />
         ))}
       </Table.Body>
@@ -103,7 +110,7 @@ export default function Payments({
 }
 
 function PaymentRow({
-  payment, refundMutation, isMutating, competitionId, competitorsInfo,
+  payment, refundMutation, isMutating, competitionId, userInfo,
 }) {
   const [amountToRefund, setAmountToRefund] = useInputState(payment.iso_amount_refundable);
 
@@ -164,7 +171,7 @@ function PaymentRow({
           <Table.Cell>
             Refunded by
             {' '}
-            {competitorsInfo.find(
+            {userInfo.find(
               (c) => c.id === Number(p.user_id),
             )?.name}
           </Table.Cell>

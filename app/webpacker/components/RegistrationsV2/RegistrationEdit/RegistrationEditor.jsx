@@ -24,7 +24,6 @@ import { useConfirm } from '../../../lib/providers/ConfirmProvider';
 import I18n from '../../../lib/i18n';
 import RegistrationHistory from './RegistrationHistory';
 import { hasPassed } from '../../../lib/utils/dates';
-import getUsersInfo from '../api/user/post/getUserInfo';
 import { useRegistration } from '../lib/RegistrationProvider';
 import useSet from '../../../lib/hooks/useSet';
 import { getRegistrationHistory } from '../api/registration/get/get_registrations';
@@ -53,13 +52,6 @@ export default function RegistrationEditor({ registrationId, competitor, competi
   } = useQuery({
     queryKey: ['registration-history', registrationId],
     queryFn: () => getRegistrationHistory(registrationId),
-  });
-
-  const { isLoading: competitorsInfoLoading, data: competitorsInfo } = useQuery({
-    queryKey: ['history-user', registrationHistory],
-    queryFn: () => getUsersInfo(_.uniq(registrationHistory.flatMap((e) => (
-      (e.actor_type === 'user' || e.actor_type === 'worker') ? Number(e.actor_id) : [])))),
-    enabled: Boolean(registrationHistory),
   });
 
   const { mutate: updateRegistrationMutation, isPending: isUpdating } = useMutation({
@@ -193,7 +185,7 @@ export default function RegistrationEditor({ registrationId, competitor, competi
   const registrationEditDeadlinePassed = Boolean(competitionInfo.event_change_deadline_date)
     && hasPassed(competitionInfo.event_change_deadline_date);
 
-  if (isRegistrationLoading || historyLoading || competitorsInfoLoading) {
+  if (isRegistrationLoading || historyLoading) {
     return <Loading />;
   }
 
@@ -315,14 +307,12 @@ export default function RegistrationEditor({ registrationId, competitor, competi
           <Payments
             competitionId={competitionInfo.id}
             registrationId={registrationId}
-            competitorsInfo={competitorsInfo}
             refetchHistory={refetchHistory}
           />
         </>
       )}
       <RegistrationHistory
         history={registrationHistory.toReversed()}
-        competitorsInfo={competitorsInfo}
         refetchHistory={refetchHistory}
       />
     </Segment>
