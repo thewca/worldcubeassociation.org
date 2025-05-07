@@ -21,9 +21,6 @@ export default function RegistrationPayments({
   competitionId,
   refetchHistory,
 }) {
-  const dispatch = useDispatch();
-  const queryClient = useQueryClient();
-
   const {
     data: payments,
     isLoading: paymentsLoading,
@@ -39,6 +36,37 @@ export default function RegistrationPayments({
     queryFn: () => getUsersInfo(_.uniq(payments.map((p) => p.user_id))),
     enabled: Boolean(payments),
   });
+
+  if (paymentsLoading || userInfoLoading) {
+    return <Loading />;
+  }
+
+  return (
+    <>
+      <Header>
+        Payments
+        <Button floated="right" onClick={refetchPayments}>Refresh</Button>
+      </Header>
+      <PaymentsMainBody
+        registrationId={registrationId}
+        payments={payments}
+        competitionId={competitionId}
+        userInfo={userInfo}
+        refetchHistory={refetchHistory}
+      />
+    </>
+  );
+}
+
+function PaymentsMainBody({
+  registrationId,
+  payments,
+  competitionId,
+  userInfo,
+  refetchHistory,
+}) {
+  const dispatch = useDispatch();
+  const queryClient = useQueryClient();
 
   const { mutate: refundMutation, isPending: isMutating } = useMutation({
     mutationFn: refundPayment,
@@ -76,34 +104,6 @@ export default function RegistrationPayments({
     },
   });
 
-  if (paymentsLoading || userInfoLoading) {
-    return <Loading />;
-  }
-
-  return (
-    <>
-      <Header>
-        Payments
-        <Button floated="right" onClick={refetchPayments}>Refresh</Button>
-      </Header>
-      <PaymentsMainBody
-        payments={payments}
-        refundMutation={refundMutation}
-        isMutating={isMutating}
-        competitionId={competitionId}
-        userInfo={userInfo}
-      />
-    </>
-  );
-}
-
-function PaymentsMainBody({
-  payments,
-  refundMutation,
-  isMutating,
-  competitionId,
-  userInfo,
-}) {
   if (payments.length === 0) {
     return <Message warning>{I18n.t('payments.messages.charges_refunded')}</Message>;
   }
