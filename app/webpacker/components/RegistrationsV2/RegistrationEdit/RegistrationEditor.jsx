@@ -7,11 +7,10 @@ import {
   Message,
   Segment,
 } from 'semantic-ui-react';
-import { useQuery } from '@tanstack/react-query';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
 import { showMessage } from '../Register/RegistrationMessage';
 import EventSelector from '../../wca/EventSelector';
-import Payments from './Payments';
+import RegistrationPayments from './RegistrationPayments';
 import { personUrl, editPersonUrl } from '../../../lib/requests/routes.js.erb';
 import { useConfirm } from '../../../lib/providers/ConfirmProvider';
 import I18n from '../../../lib/i18n';
@@ -26,8 +25,6 @@ import { useInputUpdater } from '../../../lib/hooks/useInputState';
 import { useOrderedSetWrapper } from '../../../lib/hooks/useOrderedSet';
 import { WCA_EVENT_IDS } from '../../../lib/wca-data.js.erb';
 import { useUpdateRegistrationMutation } from '../lib/mutations';
-import { getRegistrationHistory } from '../api/registration/get/get_registrations';
-import Loading from '../../Requests/Loading';
 
 export default function RegistrationEditor({ registrationId, competitor, competitionInfo }) {
   const dispatch = useDispatch();
@@ -50,15 +47,6 @@ export default function RegistrationEditor({ registrationId, competitor, competi
   const confirm = useConfirm();
 
   const formSuccess = useFormSuccessHandler();
-
-  const {
-    isLoading: historyLoading,
-    data: registrationHistory,
-    refetch: refetchHistory,
-  } = useQuery({
-    queryKey: ['registration-history', registrationId],
-    queryFn: () => getRegistrationHistory(registrationId),
-  });
 
   const {
     mutate: updateRegistrationMutation,
@@ -116,8 +104,6 @@ export default function RegistrationEditor({ registrationId, competitor, competi
           onSuccess: (data) => {
             dispatch(showMessage('registrations.flash.updated', 'positive'));
             formSuccess(data.registration);
-
-            refetchHistory();
           },
         });
       }).catch(() => {});
@@ -143,7 +129,6 @@ export default function RegistrationEditor({ registrationId, competitor, competi
     status,
     guests,
     formSuccess,
-    refetchHistory,
   ]);
 
   const registrationEditDeadlinePassed = Boolean(competitionInfo.event_change_deadline_date)
@@ -262,21 +247,12 @@ export default function RegistrationEditor({ registrationId, competitor, competi
       {/* i18n-tasks-use t('registrations.list.series_registrations') */}
 
       {competitionInfo['using_payment_integrations?'] && (
-        <>
-          <Header>Payments</Header>
-          <Payments
-            competitionId={competitionInfo.id}
-            registrationId={registrationId}
-            refetchHistory={refetchHistory}
-          />
-        </>
-      )}
-      {historyLoading ? <Loading /> : (
-        <RegistrationHistory
-          history={registrationHistory.toReversed()}
-          refetchHistory={refetchHistory}
+        <RegistrationPayments
+          competitionId={competitionInfo.id}
+          registrationId={registrationId}
         />
       )}
+      <RegistrationHistory registrationId={registrationId} />
     </Segment>
   );
 }

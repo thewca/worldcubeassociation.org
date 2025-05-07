@@ -1,43 +1,69 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import React from 'react';
 import {
-  Button, Message, Table,
+  Button, Header, Message, Table,
 } from 'semantic-ui-react';
 import _ from 'lodash';
 import getRegistrationPayments from '../api/payment/get/getRegistrationPayments';
 import refundPayment from '../api/payment/get/refundPayment';
 import Loading from '../../Requests/Loading';
 import AutonumericField from '../../wca/FormBuilder/input/AutonumericField';
-import useInputState from '../../../lib/hooks/useInputState';
-import { useConfirm } from '../../../lib/providers/ConfirmProvider';
 import I18n from '../../../lib/i18n';
 import { showMessage } from '../Register/RegistrationMessage';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
 import { isoMoneyToHumanReadable } from '../../../lib/helpers/money';
 import getUsersInfo from '../api/user/post/getUserInfo';
+import useInputState from '../../../lib/hooks/useInputState';
+import { useConfirm } from '../../../lib/providers/ConfirmProvider';
 
-export default function Payments({
+export default function RegistrationPayments({
   registrationId,
   competitionId,
-  refetchHistory,
 }) {
-  const dispatch = useDispatch();
-  const queryClient = useQueryClient();
-
   const {
     data: payments,
     isLoading: paymentsLoading,
+    refetch: refetchPayments,
   } = useQuery({
-    queryKey: ['payments', registrationId],
+    queryKey: ['registration-payments', registrationId],
     queryFn: () => getRegistrationPayments(registrationId),
     select: (data) => data.charges.filter((r) => r.iso_amount_refundable !== 0),
   });
 
-  const { isLoading: userInfoLoading, data: userInfo } = useQuery({
+  const { data: userInfo, isLoading: userInfoLoading } = useQuery({
     queryKey: ['payments-user', payments],
     queryFn: () => getUsersInfo(_.uniq(payments.map((p) => p.user_id))),
     enabled: Boolean(payments),
   });
+
+  if (paymentsLoading || userInfoLoading) {
+    return <Loading />;
+  }
+
+  return (
+    <>
+      <Header>
+        Payments
+        <Button floated="right" onClick={refetchPayments}>Refresh</Button>
+      </Header>
+      <PaymentsMainBody
+        registrationId={registrationId}
+        payments={payments}
+        competitionId={competitionId}
+        userInfo={userInfo}
+      />
+    </>
+  );
+}
+
+function PaymentsMainBody({
+  registrationId,
+  payments,
+  competitionId,
+  userInfo,
+}) {
+  const dispatch = useDispatch();
+  const queryClient = useQueryClient();
 
   const { mutate: refundMutation, isPending: isMutating } = useMutation({
     mutationFn: refundPayment,
@@ -61,7 +87,7 @@ export default function Payments({
         }),
       );
 
-      refetchHistory();
+      queryClient.invalidateQueries({ queryKey: ['registration-history', registrationId] });
     },
     onError: (data) => {
       const { error } = data.json;
@@ -74,10 +100,6 @@ export default function Payments({
       ));
     },
   });
-
-  if (paymentsLoading || userInfoLoading) {
-    return <Loading />;
-  }
 
   if (payments.length === 0) {
     return <Message warning>{I18n.t('payments.messages.charges_refunded')}</Message>;
