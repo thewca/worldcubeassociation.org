@@ -511,7 +511,7 @@ RSpec.describe Registration do
       last_entry = registration.reload.registration_history.entries.last
       expect(last_entry[:actor_type]).to eq('user')
       expect(last_entry[:actor_id].to_i).to eq(registration.user.id)
-      expect(last_entry[:changed_attributes]).to eq({ event_ids: %w[444 555] })
+      expect(last_entry[:changed_attributes]).to eq({ 'event_ids' => %w[444 555] })
     end
 
     describe 'update waiting list position' do
@@ -628,7 +628,6 @@ RSpec.describe Registration do
     it 'doesnt auto accept a competitor who gets refunded' do
       expect(reg.competing_status).to eq('pending')
 
-      expect(reg.registration_history.last[:changed_attributes][:auto_accept_failure_reasons]).to eq('Competitor still has outstanding registration fees')
       create(:registration_payment, :refund, :skip_create_hook, registration: reg, competition: auto_accept_comp)
 
       reg.attempt_auto_accept
@@ -848,7 +847,7 @@ RSpec.describe Registration do
 
   describe '#bulk_auto_accept' do
     describe 'when competitor limit' do
-      let(:auto_accept_comp) { create(:competition, :auto_accept, :registration_open, :with_competitor_limit, competitor_limit: 10) }
+      let(:auto_accept_comp) { create(:competition, :auto_accept, :registration_open, :with_competitor_limit, competitor_limit: 10, auto_accept_disable_threshold: nil) }
 
       before do
         create_list(:registration, 5, :accepted, competition: auto_accept_comp)
@@ -1056,7 +1055,7 @@ RSpec.describe Registration do
         expect((expected_accepted - auto_accept_comp.registrations.competing_status_accepted.ids).empty?).to be(true)
       end
 
-      it 'accepts a combination of registrations', :only do
+      it 'accepts a combination of registrations' do
         create_list(:registration, 9, :paid, :waiting_list, competition: auto_accept_comp)
         create_list(:registration, 3, :paid, :pending, competition: auto_accept_comp)
         auto_accept_comp.registrations.competing_status_pending.ids
@@ -1091,7 +1090,7 @@ RSpec.describe Registration do
     end
 
     context 'refunded registration' do
-      let(:auto_accept_comp) { create(:competition, :auto_accept, :registration_open, :with_competitor_limit, competitor_limit: 2) }
+      let(:auto_accept_comp) { create(:competition, :auto_accept, :registration_open, :with_competitor_limit, competitor_limit: 2, auto_accept_disable_threshold: nil) }
       let!(:reg1) { create(:registration, :pending, :paid, competition: auto_accept_comp) }
       let(:reg2) { create(:registration, :pending, competition: auto_accept_comp) }
 

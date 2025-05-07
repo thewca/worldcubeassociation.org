@@ -1368,7 +1368,7 @@ RSpec.describe 'API Registrations' do
   describe 'PATCH #bulk_accept' do
     let(:auto_accept_comp) {
       create(
-        :competition, :auto_accept, :registration_open, :with_organizer, :with_competitor_limit, competitor_limit: 10
+        :competition, :auto_accept, :registration_open, :with_organizer, :with_competitor_limit, competitor_limit: 10, auto_accept_disable_threshold: nil
       )
     }
 
@@ -1376,7 +1376,7 @@ RSpec.describe 'API Registrations' do
       create_list(:registration, 5, :accepted, competition: auto_accept_comp)
     end
 
-    it 'triggers bulk auto accept via API route', :tag do
+    it 'triggers bulk auto accept via API route' do
       headers['Authorization'] = fetch_jwt_token(auto_accept_comp.organizers.first.id)
 
       create_list(:registration, 9, :paid, :waiting_list, competition: auto_accept_comp)

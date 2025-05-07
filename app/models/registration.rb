@@ -8,6 +8,9 @@ class Registration < ApplicationRecord
   AUTO_ACCEPT_ENTITY_ID = 'auto-accept'
   SYSTEM_ENTITY_ID = 'system'
   USER_ENTITY_ID = 'user'
+  # Live auto accept means that auto accept is triggered at the point where payment occurs
+  # As opposed to being manually triggered by an organizer hitting the "Bulk Auto Accept" button
+  LIVE_AUTO_ACCEPT_ENABLED = false
 
   scope :pending, -> { where(competing_status: 'pending') }
   scope :accepted, -> { where(competing_status: 'accepted') }
