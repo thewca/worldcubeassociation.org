@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Api::V1::RegistrationPaymentsController < ApplicationController
+class Api::V1::RegistrationPaymentsController < Api::V1::ApiController
   def show
     registration_id = params.require(:registration_id)
     registration = Registration.includes(:competition, registration_payments: [:refunding_registration_payments]).find(registration_id)

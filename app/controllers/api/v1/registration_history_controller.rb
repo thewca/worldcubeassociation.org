@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Api::V1::RegistrationHistoryController < ApplicationController
+class Api::V1::RegistrationHistoryController < Api::V1::ApiController
   def show
     registration_id = params.require(:registration_id)
     registration = Registration.find(registration_id)
