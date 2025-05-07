@@ -9,6 +9,8 @@ class RegistrationPayment < ApplicationRecord
   belongs_to :refunded_registration_payment, class_name: 'RegistrationPayment', optional: true
   has_many :refunding_registration_payments, class_name: 'RegistrationPayment', inverse_of: :refunded_registration_payment, foreign_key: :refunded_registration_payment_id, dependent: :destroy
 
+  delegate :auto_accept_in_current_env?, :auto_accept_registrations, to: :registration
+  after_create :auto_accept_hook, if: %i[auto_accept_in_current_env? auto_accept_registrations]
   after_create :auto_close_hook, unless: :refunded_registration_payment_id?
 
   monetize :amount_lowest_denomination,
@@ -20,13 +22,12 @@ class RegistrationPayment < ApplicationRecord
     amount_lowest_denomination + refunding_registration_payments.sum(:amount_lowest_denomination)
   end
 
-  def payment_status
-    case receipt.stripe_record_type
-    when "refund"
-      "refund"
-    else
-      receipt.determine_wca_status
-    end
+  private def auto_accept_hook
+    registration.attempt_auto_accept
+  end
+
+  private def auto_close_hook
+    registration.consider_auto_close
   end
 
   def to_v2_json(refunds: false)
@@ -53,9 +54,5 @@ class RegistrationPayment < ApplicationRecord
     end
 
     v2_json
-  end
-
-  private def auto_close_hook
-    registration.consider_auto_close
   end
 end

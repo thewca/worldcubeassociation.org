@@ -59,7 +59,7 @@ class Api::V1::RegistrationsController < Api::V1::ApiController
   end
 
   def show
-    render json: @registration.to_v2_json(admin: true, history: true)
+    render json: @registration.to_v2_json(admin: true)
   end
 
   def ensure_registration_exists
@@ -74,7 +74,7 @@ class Api::V1::RegistrationsController < Api::V1::ApiController
   end
 
   def show_by_user
-    render json: @registration.to_v2_json(admin: true, history: true)
+    render json: @registration.to_v2_json(admin: true)
   end
 
   def create
@@ -118,7 +118,7 @@ class Api::V1::RegistrationsController < Api::V1::ApiController
   def update
     if params[:competing]
       @registration.update_lanes!(@request, @current_user)
-      return render json: { status: 'ok', registration: @registration.to_v2_json(admin: true, history: true) }, status: :ok
+      return render json: { status: 'ok', registration: @registration.to_v2_json(admin: true) }, status: :ok
     end
     render json: { status: 'bad request', message: 'You need to supply at least one lane' }, status: :bad_request
   end
@@ -239,7 +239,7 @@ class Api::V1::RegistrationsController < Api::V1::ApiController
       user: :delegate_role_metadata,
       registration_payments: :receipt,
       registration_history_entries: :registration_history_changes,
-    ).map { |r| r.to_v2_json(admin: true, history: true, pii: true) }
+    ).map { |r| r.to_v2_json(admin: true, pii: true) }
   end
 
   def validate_payment_ticket_request

@@ -1,9 +1,16 @@
 import React from 'react';
-import { Header, Popup, Table } from 'semantic-ui-react';
+import {
+  Button, Header, Popup, Table,
+} from 'semantic-ui-react';
+import { useQuery } from '@tanstack/react-query';
+import _ from 'lodash';
 import { getIsoDateString, getShortTimeString, getTimeWithSecondsString } from '../../../lib/utils/dates';
 import { events } from '../../../lib/wca-data.js.erb';
 import EventIcon from '../../wca/EventIcon';
 import I18n from '../../../lib/i18n';
+import getUsersInfo from '../api/user/post/getUserInfo';
+import Loading from '../../Requests/Loading';
+import { getRegistrationHistory } from '../api/registration/get/get_registrations';
 
 const formatHistoryColumn = (key, value) => {
   if (key === 'event_ids') {
@@ -12,10 +19,33 @@ const formatHistoryColumn = (key, value) => {
   return value;
 };
 
-export default function RegistrationHistory({ history, competitorsInfo }) {
+export default function RegistrationHistory({ registrationId }) {
+  const {
+    isLoading: historyLoading,
+    data: history,
+    refetch: refetchHistory,
+  } = useQuery({
+    queryKey: ['registration-history', registrationId],
+    queryFn: () => getRegistrationHistory(registrationId),
+  });
+
+  const { data: competitorsInfo, isLoading: competitorsInfoLoading } = useQuery({
+    queryKey: ['history-user', history],
+    queryFn: () => getUsersInfo(_.uniq(history.flatMap((e) => (
+      (e.actor_type === 'user' || e.actor_type === 'worker') ? Number(e.actor_id) : [])))),
+    enabled: Boolean(history),
+  });
+
+  if (historyLoading || competitorsInfoLoading) {
+    return <Loading />;
+  }
+
   return (
     <>
-      <Header>{I18n.t('registrations.registration_history.title')}</Header>
+      <Header>
+        {I18n.t('registrations.registration_history.title')}
+        <Button floated="right" onClick={refetchHistory}>Refresh</Button>
+      </Header>
       <Table>
         <Table.Header>
           <Table.Row>

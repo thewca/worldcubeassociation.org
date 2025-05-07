@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import _ from 'lodash';
 import React, {
   useCallback,
@@ -18,13 +18,12 @@ import { useDispatch } from '../../../lib/providers/StoreProvider';
 import { showMessage } from '../Register/RegistrationMessage';
 import Loading from '../../Requests/Loading';
 import EventSelector from '../../wca/EventSelector';
-import Payments from './Payments';
+import RegistrationPayments from './RegistrationPayments';
 import { personUrl, editPersonUrl } from '../../../lib/requests/routes.js.erb';
 import { useConfirm } from '../../../lib/providers/ConfirmProvider';
 import I18n from '../../../lib/i18n';
 import RegistrationHistory from './RegistrationHistory';
 import { hasPassed } from '../../../lib/utils/dates';
-import getUsersInfo from '../api/user/post/getUserInfo';
 import { useRegistration } from '../lib/RegistrationProvider';
 import useSet from '../../../lib/hooks/useSet';
 
@@ -42,15 +41,8 @@ export default function RegistrationEditor({ registrationId, competitor, competi
 
   const {
     isFetching: isRegistrationLoading,
-    registration: serverRegistration, refetchRegistration: refetch,
+    registration: serverRegistration,
   } = useRegistration();
-
-  const { isLoading, data: competitorsInfo } = useQuery({
-    queryKey: ['history-user', serverRegistration?.history],
-    queryFn: () => getUsersInfo(_.uniq(serverRegistration.history.flatMap((e) => (
-      (e.actor_type === 'user' || e.actor_type === 'worker') ? Number(e.actor_id) : [])))),
-    enabled: Boolean(serverRegistration),
-  });
 
   const { mutate: updateRegistrationMutation, isPending: isUpdating } = useMutation({
     mutationFn: updateRegistration,
@@ -69,6 +61,7 @@ export default function RegistrationEditor({ registrationId, competitor, competi
           payment: serverRegistration.payment,
         },
       );
+
       // Going from cancelled -> pending
       if (registration.competing.registration_status === 'cancelled') {
         dispatch(showMessage('registrations.flash.registered', 'positive'));
@@ -76,6 +69,9 @@ export default function RegistrationEditor({ registrationId, competitor, competi
       } else {
         dispatch(showMessage('registrations.flash.updated', 'positive'));
       }
+
+      queryClient.refetchQueries({ queryKey: ['registration-history', registrationId], exact: true });
+      queryClient.refetchQueries({ queryKey: ['registration-payments', registrationId], exact: true });
     },
   });
 
@@ -181,7 +177,7 @@ export default function RegistrationEditor({ registrationId, competitor, competi
   const registrationEditDeadlinePassed = Boolean(competitionInfo.event_change_deadline_date)
     && hasPassed(competitionInfo.event_change_deadline_date);
 
-  if (isLoading || isRegistrationLoading) {
+  if (isRegistrationLoading) {
     return <Loading />;
   }
 
@@ -298,22 +294,12 @@ export default function RegistrationEditor({ registrationId, competitor, competi
       {/* i18n-tasks-use t('registrations.list.series_registrations') */}
 
       {competitionInfo['using_payment_integrations?'] && (
-        <>
-          <Header>Payments</Header>
-          {(registration.payment.payment_statuses.includes('succeeded') || registration.payment.payment_statuses.includes('refund')) && (
-            <Payments
-              competitionId={competitionInfo.id}
-              registrationId={registrationId}
-              onSuccess={refetch}
-              competitorsInfo={competitorsInfo}
-            />
-          )}
-        </>
+        <RegistrationPayments
+          competitionId={competitionInfo.id}
+          registrationId={registrationId}
+        />
       )}
-      <RegistrationHistory
-        history={registration.history.toReversed()}
-        competitorsInfo={competitorsInfo}
-      />
+      <RegistrationHistory registrationId={registrationId} />
     </Segment>
   );
 }

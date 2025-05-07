@@ -1022,6 +1022,16 @@ ActiveRecord::Schema[7.2].define(version: 2025_04_28_123246) do
     t.index ["user_id"], name: "index_registrations_on_user_id"
   end
 
+  create_table "result_attempts", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.integer "value", null: false
+    t.integer "attempt_number", null: false
+    t.bigint "result_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["result_id", "attempt_number"], name: "index_result_attempts_on_result_id_and_attempt_number", unique: true
+    t.index ["result_id"], name: "index_result_attempts_on_result_id"
+  end
+
   create_table "results", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB PACK_KEYS=1", force: :cascade do |t|
     t.integer "pos", limit: 2, default: 0, null: false
     t.string "person_id", limit: 10, default: "", null: false

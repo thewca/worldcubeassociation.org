@@ -4,6 +4,7 @@ import {
   getPsychSheetForEventUrl,
   registrationByUserUrl,
   singleRegistrationUrl,
+  registrationHistoryUrl,
 } from '../../../../../lib/requests/routes.js.erb';
 import fetchWithJWTToken from '../../../../../lib/requests/fetchWithJWTToken';
 import { fetchJsonOrError } from '../../../../../lib/requests/fetchWithAuthenticityToken';
@@ -53,5 +54,12 @@ export async function getSingleRegistration(
   const route = singleRegistrationUrl(registrationId);
   const { data } = await fetchWithJWTToken(route);
 
+  return data;
+}
+
+export async function getRegistrationHistory(
+  registrationId,
+) {
+  const { data } = await fetchJsonOrError(registrationHistoryUrl(registrationId));
   return data;
 }

@@ -345,6 +345,8 @@ Rails.application.routes.draw do
     namespace :v1 do
       resources :competitions, only: [] do
         resources :registrations, only: %i[index show create update], shallow: true do
+          resource :history, only: %i[show], controller: :registration_history
+
           member do
             get 'payments', to: 'registrations#registration_payments'
             get 'payment_ticket', to: 'registrations#payment_ticket'
