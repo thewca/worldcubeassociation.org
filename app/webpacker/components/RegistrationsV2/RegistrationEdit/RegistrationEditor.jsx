@@ -18,7 +18,7 @@ import { useDispatch } from '../../../lib/providers/StoreProvider';
 import { showMessage } from '../Register/RegistrationMessage';
 import Loading from '../../Requests/Loading';
 import EventSelector from '../../wca/EventSelector';
-import Payments from './Payments';
+import RegistrationPayments from './RegistrationPayments';
 import { personUrl, editPersonUrl } from '../../../lib/requests/routes.js.erb';
 import { useConfirm } from '../../../lib/providers/ConfirmProvider';
 import I18n from '../../../lib/i18n';
@@ -302,7 +302,7 @@ export default function RegistrationEditor({ registrationId, competitor, competi
       {/* i18n-tasks-use t('registrations.list.series_registrations') */}
 
       {competitionInfo['using_payment_integrations?'] && (
-        <Payments
+        <RegistrationPayments
           competitionId={competitionInfo.id}
           registrationId={registrationId}
           refetchHistory={refetchHistory}

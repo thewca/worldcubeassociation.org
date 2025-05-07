@@ -16,7 +16,7 @@ import { useDispatch } from '../../../lib/providers/StoreProvider';
 import { isoMoneyToHumanReadable } from '../../../lib/helpers/money';
 import getUsersInfo from '../api/user/post/getUserInfo';
 
-export default function Payments({
+export default function RegistrationPayments({
   registrationId,
   competitionId,
   refetchHistory,
