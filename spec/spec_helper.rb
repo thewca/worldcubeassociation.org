@@ -5,7 +5,7 @@
 require 'simplecov'
 
 SimpleCov.start 'rails' do
-  if ENV["CI"].present?
+  if ENV["CI"] # Cannot use `.present?` here because Rails isn't loaded yet
     require 'simplecov-lcov'
 
     SimpleCov::Formatter::LcovFormatter.config do |c|
