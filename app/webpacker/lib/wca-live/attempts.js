@@ -128,7 +128,7 @@ export function decodeMbldAttemptResult(value) {
   const attempted = solved + missed;
   const centiseconds = seconds === 99999 ? null : seconds * 100;
   return {
-    solved, attempted, centiseconds, points
+    solved, attempted, centiseconds, points,
   };
 }
 
@@ -168,7 +168,7 @@ export function centisecondsToClockFormat(centiseconds) {
 
 function formatMbldAttemptResult(attemptResult) {
   const {
-    solved, attempted, centiseconds, points
+    solved, attempted, centiseconds, points,
   } = decodeMbldAttemptResult(
     attemptResult,
   );
