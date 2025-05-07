@@ -419,7 +419,7 @@ RSpec.describe Competition do
 
     it "does not warn for posted reports" do
       competition = create(:competition, :visible, :with_delegate, starts: 2.days.ago)
-      posted_dummy_dr = create(:delegate_report, :posted, competition: competition)
+      posted_dummy_dr = create(:delegate_report, :posted, competition: competition, discussion_url: "http://example.com")
       competition.delegate_report.update!(schedule_url: "http://example.com", posted: true, setup_images: posted_dummy_dr.setup_images_blobs)
       delegate = competition.delegates.first
       expect(competition.user_should_post_delegate_report?(delegate)).to be false
