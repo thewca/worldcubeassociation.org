@@ -25,7 +25,18 @@ function useSafeMutation(mutation, mutationArgs, unloadListener) {
     // The `saveMutation` may have side-effects like Redirects
     //   that are not supposed to trigger the "are you sure" warning.
     // TODO: Refactor `unsavedChanges` so that it doesn't fire in the first place
-    mutation.mutate(mutationArgs, { onSuccess: () => onFormSuccess(), onError });
+    mutation.mutate(mutationArgs, {
+      onSuccess: (data) => {
+        if (!data.redirect) {
+          // We only want to call the form success handler, if we''re not being redirected.
+          //   If a redirect is set, then the navigation takes a few milliseconds
+          //   even on fast systems. These few ms might by enough to trigger
+          //   corrupt follow-up behavior, especially when changing IDs.
+          onFormSuccess();
+        }
+      },
+      onError,
+    });
   }, [unloadListener, mutation, mutationArgs, onFormSuccess, onError]);
 }
 

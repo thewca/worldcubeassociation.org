@@ -13,6 +13,7 @@ jobs:
       RACK_ENV: test
       RAILS_ENV: test
       NODE_ENV: test
+      DISABLE_SPRING: 1
       PLAYWRIGHT_BROWSERS_PATH: ./pw-browsers
       CAPYBARA_APP_HOST: "" # Explicitly set a blank value to override our default Docker container setup
     steps:
@@ -47,8 +48,6 @@ jobs:
       - name: Populate database with seeds
         run: bin/rake db:reset
       - name: Pre-compile assets for frontend tests
-        env:
-          DISABLE_SPRING: 1
         run: |
           bin/bundle exec i18n export
           bin/rake assets:precompile
@@ -66,7 +65,6 @@ jobs:
         uses: coverallsapp/github-action@v2
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          path-to-lcov: 'coverage/lcov/worldcubeassociation.org.lcov'
           fail-on-error: false
       - uses: actions/upload-artifact@v4
         if: always() && steps.rspec.outcome == 'failure'
