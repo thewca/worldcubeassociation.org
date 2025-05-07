@@ -5,7 +5,7 @@ class Api::V1::RegistrationPaymentsController < Api::V1::ApiController
     registration_id = params.require(:registration_id)
     registration = Registration.includes(:competition, registration_payments: [:refunding_registration_payments]).find(registration_id)
 
-    return head :unauthorized unless current_user.id == registration.user_id || current_user.can_manage_competition?(registration.competition)
+    return head :unauthorized unless @current_user.id == registration.user_id || @current_user.can_manage_competition?(registration.competition)
 
     # Use `filter` here on purpose because the whole `registration_payments` list has been included above.
     #   Using `where` would create an SQL query, but it would also break (i.e. make redundant) the `includes` call above.
