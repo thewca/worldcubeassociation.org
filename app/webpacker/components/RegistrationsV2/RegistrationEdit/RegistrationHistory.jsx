@@ -29,14 +29,14 @@ export default function RegistrationHistory({ registrationId }) {
     queryFn: () => getRegistrationHistory(registrationId),
   });
 
-  const { data: competitorsInfo, isLoading: competitorsInfoLoading } = useQuery({
+  const { data: userInfo, isLoading: userInfoLoading } = useQuery({
     queryKey: ['history-user', history],
     queryFn: () => getUsersInfo(_.uniq(history.flatMap((e) => (
       (e.actor_type === 'user' || e.actor_type === 'worker') ? Number(e.actor_id) : [])))),
     enabled: Boolean(history),
   });
 
-  if (historyLoading || competitorsInfoLoading) {
+  if (historyLoading || userInfoLoading) {
     return <Loading />;
   }
 
@@ -85,7 +85,7 @@ export default function RegistrationHistory({ registrationId }) {
               </Table.Cell>
               <Table.Cell>
                 {
-                  competitorsInfo.find(
+                  userInfo.find(
                     (c) => c.id === Number(entry.actor_id),
                   )?.name ?? entry.actor_id
                 }

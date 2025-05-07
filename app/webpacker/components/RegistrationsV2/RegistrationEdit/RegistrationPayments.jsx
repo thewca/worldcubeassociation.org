@@ -8,13 +8,13 @@ import getRegistrationPayments from '../api/payment/get/getRegistrationPayments'
 import refundPayment from '../api/payment/get/refundPayment';
 import Loading from '../../Requests/Loading';
 import AutonumericField from '../../wca/FormBuilder/input/AutonumericField';
-import useInputState from '../../../lib/hooks/useInputState';
-import { useConfirm } from '../../../lib/providers/ConfirmProvider';
 import I18n from '../../../lib/i18n';
 import { showMessage } from '../Register/RegistrationMessage';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
 import { isoMoneyToHumanReadable } from '../../../lib/helpers/money';
 import getUsersInfo from '../api/user/post/getUserInfo';
+import useInputState from '../../../lib/hooks/useInputState';
+import { useConfirm } from '../../../lib/providers/ConfirmProvider';
 
 export default function RegistrationPayments({
   registrationId,
@@ -123,7 +123,7 @@ function PaymentsMainBody({
             isMutating={isMutating}
             competitionId={competitionId}
             key={refund.payment_id}
-            userinfo={userInfo}
+            userInfo={userInfo}
           />
         ))}
       </Table.Body>
