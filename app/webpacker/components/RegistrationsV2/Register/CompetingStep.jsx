@@ -193,7 +193,7 @@ export default function CompetingStep({
           onSuccess: (data, variables) => {
             onUpdateSuccess(data);
 
-            const newCompetingStatus = variables.competing.registration_status
+            const newCompetingStatus = variables.payload.competing?.registration_status
               || data.registration.competing.registration_status;
 
             if (initialRegistrationStatus === 'cancelled' && newCompetingStatus === 'pending') {
