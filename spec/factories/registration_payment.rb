@@ -3,6 +3,7 @@
 FactoryBot.define do
   factory :registration_payment do
     transient do
+      skip_auto_accept_hook { false }
       competition { registration.competition }
     end
 
@@ -20,8 +21,15 @@ FactoryBot.define do
     end
 
     trait :skip_create_hook do
-      after(:build) { |payment| payment.class.skip_callback(:create, :after, :auto_accept_hook) }
-      after(:create) { |payment| payment.class.set_callback(:create, :after, :auto_accept_hook) }
+      skip_auto_accept_hook { true }
+    end
+
+    after(:build) do |payment, evaluator|
+      evaluator.competition.auto_accept_registrations = false if evaluator.skip_auto_accept_hook
+    end
+
+    after(:create) do |payment, evaluator|
+      evaluator.competition.auto_accept_registrations = true if evaluator.skip_auto_accept_hook
     end
   end
 end

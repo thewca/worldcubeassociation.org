@@ -743,7 +743,7 @@ RSpec.describe Registration do
 
         expect(no_auto_reg.competing_status).to eq('pending')
 
-        create(:registration_payment, :skip_create_hook, registration: no_auto_reg, competition: no_auto_accept)
+        create(:registration_payment, registration: no_auto_reg, competition: no_auto_accept)
 
         no_auto_reg.attempt_auto_accept
         expect(no_auto_reg.reload.competing_status).to eq('pending')
