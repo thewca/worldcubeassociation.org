@@ -874,7 +874,7 @@ RSpec.describe Registration do
         end
       end
 
-      it 'accepts waitlisted registrations' do
+      it 'accepts waitlisted registrations', :only do
         create_list(:registration, 9, :paid, :waiting_list, competition: auto_accept_comp)
         expected_accepted = auto_accept_comp.waiting_list.entries[..4]
         expected_remaining = auto_accept_comp.waiting_list.entries[5..]
