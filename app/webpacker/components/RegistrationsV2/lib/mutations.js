@@ -37,9 +37,6 @@ export const useUpdateRegistrationMutation = (competitionInfo, userInfo, inProgr
           payment: prevRegistration.payment,
         }),
       );
-
-      queryClient.refetchQueries({ queryKey: ['registration-history', registrationId], exact: true });
-      queryClient.refetchQueries({ queryKey: ['registration-payments', registrationId], exact: true });
     },
   });
 };
