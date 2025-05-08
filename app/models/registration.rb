@@ -535,14 +535,12 @@ class Registration < ApplicationRecord
   end
 
   def self.bulk_auto_accept(competition)
-    if competition.waiting_list.present?
-      competition.waiting_list.entries.each do |r_id|
-        Registration.find(r_id).attempt_auto_accept
-        # It isnt clear to me why this is needed - but without it, the auto-accepted items getting removed from the waiting list reappear
-        # on the waiting list in the test body, even when calling waiting_list.reload there
-        # I have also tried assigning competition.waiting_list.entries to a variable and iterating over that, but it didnt help
-        competition.waiting_list.reload
-      end
+    competition.waiting_list&.entries&.each do |r_id|
+      Registration.find(r_id).attempt_auto_accept
+      # It isnt clear to me why this is needed - but without it, the auto-accepted items getting removed from the waiting list reappear
+      # on the waiting list in the test body, even when calling waiting_list.reload there
+      # I have also tried assigning competition.waiting_list.entries to a variable and iterating over that, but it didnt help
+      competition.waiting_list.reload
     end
 
     sorted_pending_registrations = competition
