@@ -28,15 +28,15 @@ export const useUpdateRegistrationMutation = (competitionInfo, userInfo, inProgr
     onMutate: () => dispatch(showMessage('competitions.registration_v2.update.being_updated', inProgressMessageType)),
     onError,
     onSuccess: (data) => {
+      const registrationId = data.registration.id;
+
       queryClient.setQueryData(
-        ['registration', competitionInfo.id, userInfo.id],
+        ['registration', competitionInfo.id, userInfo.id, registrationId],
         (prevRegistration) => ({
           ...data.registration,
           payment: prevRegistration.payment,
         }),
       );
-
-      const registrationId = data.registration.id;
 
       queryClient.refetchQueries({ queryKey: ['registration-history', registrationId], exact: true });
       queryClient.refetchQueries({ queryKey: ['registration-payments', registrationId], exact: true });
