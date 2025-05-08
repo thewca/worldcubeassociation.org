@@ -250,12 +250,12 @@ class Registration < ApplicationRecord
       changed_attributes = r.registration_history_changes.index_by(&:key).transform_values(&:parsed_value).symbolize_keys
 
       {
-        changed_attributes: changed_attributes.with_indifferent_access,
+        changed_attributes: changed_attributes,
         actor_type: r.actor_type,
         actor_id: r.actor_id,
         timestamp: r.created_at,
         action: r.action,
-      }.with_indifferent_access
+      }
     end
   end
 

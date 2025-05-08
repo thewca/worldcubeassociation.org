@@ -511,7 +511,7 @@ RSpec.describe Registration do
       last_entry = registration.reload.registration_history.entries.last
       expect(last_entry[:actor_type]).to eq('user')
       expect(last_entry[:actor_id].to_i).to eq(registration.user.id)
-      expect(last_entry[:changed_attributes]).to eq({ 'event_ids' => %w[444 555] })
+      expect(last_entry[:changed_attributes]).to eq({ event_ids: %w[444 555] })
     end
 
     describe 'update waiting list position' do
@@ -874,7 +874,7 @@ RSpec.describe Registration do
         end
       end
 
-      it 'accepts waitlisted registrations', :only do
+      it 'accepts waitlisted registrations' do
         create_list(:registration, 9, :paid, :waiting_list, competition: auto_accept_comp)
         expected_accepted = auto_accept_comp.waiting_list.entries[..4]
         expected_remaining = auto_accept_comp.waiting_list.entries[5..]
