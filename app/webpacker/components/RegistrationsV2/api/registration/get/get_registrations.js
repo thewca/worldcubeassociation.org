@@ -60,6 +60,6 @@ export async function getSingleRegistration(
 export async function getRegistrationHistory(
   registrationId,
 ) {
-  const { data } = await fetchJsonOrError(registrationHistoryUrl(registrationId));
+  const { data } = await fetchWithJWTToken(registrationHistoryUrl(registrationId));
   return data;
 }
