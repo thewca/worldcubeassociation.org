@@ -98,8 +98,9 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
         'negative',
       ));
     },
-    onSuccess: () => {
+    onSuccess: async () => {
       dispatchStore(showMessage('competitions.registration_v2.auto_accept.bulk_auto_accepted', 'positive'));
+      await refetch();
     },
   });
 
@@ -409,7 +410,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
   );
 
   return (
-    <Segment loading={isMutating}>
+    <Segment loading={isMutating || isAutoAccepting}>
       <Button
         disabled={isAutoAccepting}
         color="green"
