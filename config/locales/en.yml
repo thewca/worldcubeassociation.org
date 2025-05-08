@@ -1972,6 +1972,7 @@ en:
     #context: and when an error occurred
     errors:
       must_use_wca_registration: "Auto-accept can only be used if you are using the WCA website for registrations"
+      must_use_payment_integration: "You must enable a payment integration (eg, Stripe) in order to use auto-accept"
       auto_accept_limit: "Limit for auto-accepted registrations must be less than the competitor limit"
       auto_accept_not_negative: "Limit for auto-accepted registrations cannot be less than 0."
       auto_accept_accept_paid_pending: "Can't enable auto-accept if there are paid-pending registrations - either accept them or move them to the waiting list"

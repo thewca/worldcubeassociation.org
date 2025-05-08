@@ -382,6 +382,9 @@ class Competition < ApplicationRecord
     errors.add(:auto_accept_registrations, I18n.t('competitions.errors.must_use_wca_registration')) if
       auto_accept_registrations? && !use_wca_registration
 
+    errors.add(:auto_accept_registrations, I18n.t('competitions.errors.must_use_payment_integration')) if
+      auto_accept_registrations? && confirmed_or_visible? && competition_payment_integrations.where(connected_account_type: "ConnectedStripeAccount").none?
+
     errors.add(:auto_accept_registrations, I18n.t('competitions.errors.auto_accept_limit')) if
       auto_accept_disable_threshold.present? &&
       auto_accept_disable_threshold.positive? &&
@@ -2847,7 +2850,8 @@ class Competition < ApplicationRecord
           "type" => "object",
           "properties" => {
             "isConfirmed" => { "type" => "boolean" },
-            "isVisible" => { "type" => "boolean" },
+            "autoAcceptEnabled" => { "type" => ["boolean", "null"] },
+            "autoAcceptDisableThreshold" => { "type" => ["integer", "null"] },"isVisible" => { "type" => "boolean" },
           },
         },
         "cloning" => {

@@ -1600,6 +1600,12 @@ RSpec.describe Competition do
         expect(auto_accept_comp.errors[:auto_accept_registrations]).to include("Auto-accept can only be used if you are using the WCA website for registrations")
       end
 
+      it 'integrated payment not enabled when competition is confirmed' do
+        confirmed_comp = build(:competition, :confirmed, :auto_accept)
+        expect(confirmed_comp).not_to be_valid
+        expect(confirmed_comp.errors[:auto_accept_registrations]).to include("You must enable a payment integration (eg, Stripe) in order to use auto-accept")
+      end
+
       it 'any paid-pending registrations exist' do
         create(:registration, :paid, :pending, competition: competition)
         competition.auto_accept_registrations = true
