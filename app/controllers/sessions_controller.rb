@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class SessionsController < Devise::SessionsController
-  rate_limit to: 10, within: 1.minute, only: [:new, :create] if Rails.env.production?
+  rate_limit to: 10, within: 1.minute, only: %i[new create] if Rails.env.production?
 
   prepend_before_action :authenticate_with_two_factor,
                         if: -> { action_name == 'create' && two_factor_enabled? }
