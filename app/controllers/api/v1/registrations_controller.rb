@@ -116,7 +116,7 @@ class Api::V1::RegistrationsController < Api::V1::ApiController
 
   def update
     if params[:competing]
-      @registration.update_lanes!(@request, @current_user)
+      @registration.update_lanes!(@request, @current_user.id)
       return render json: { status: 'ok', registration: @registration.to_v2_json(admin: true) }, status: :ok
     end
     render json: { status: 'bad request', message: 'You need to supply at least one lane' }, status: :bad_request
