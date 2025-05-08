@@ -2,6 +2,13 @@ import { ChangesSaved, SetErrors, UpdateFormValue } from './actions';
 
 const updateValueRecursive = (formValues, key, value, sectionKeys = []) => {
   if (sectionKeys.length === 0) {
+    if (typeof value === 'function') {
+      return {
+        ...formValues,
+        [key]: value(formValues[key]),
+      };
+    }
+
     return {
       ...formValues,
       [key]: value,
@@ -18,9 +25,9 @@ const updateValueRecursive = (formValues, key, value, sectionKeys = []) => {
 };
 
 const reducers = {
-  [ChangesSaved]: (state) => ({
+  [ChangesSaved]: (state, { payload }) => ({
     ...state,
-    initialObject: state.object,
+    initialObject: payload.override || state.object,
   }),
 
   [SetErrors]: (state, { payload }) => ({
