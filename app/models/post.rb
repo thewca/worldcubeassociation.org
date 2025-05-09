@@ -38,7 +38,7 @@ class Post < ApplicationRecord
     self.slug = title.parameterize
   end
 
-  def self.search(query, params: {})
+  def self.search(query, _params: {})
     posts = Post
     query&.split&.each do |part|
       posts = posts.where("title LIKE :part OR body LIKE :part", part: "%#{part}%")

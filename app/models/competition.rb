@@ -637,7 +637,7 @@ class Competition < ApplicationRecord
     warnings
   end
 
-  def info_for(user)
+  def info_for(_user)
     info = {}
     info[:upload_results] = I18n.t('competitions.messages.upload_results') if !self.results_posted? && self.probably_over? && !self.cancelled?
     if self.in_progress? && !self.cancelled?
@@ -1969,7 +1969,7 @@ class Competition < ApplicationRecord
   end
 
   # Takes an array of partial Person WCIF and updates the fields that are not immutable.
-  def update_persons_wcif!(wcif_persons, current_user)
+  def update_persons_wcif!(wcif_persons, _current_user)
     registration_includes = [
       { assignments: [:schedule_activity] },
       :user,
@@ -2032,7 +2032,7 @@ class Competition < ApplicationRecord
     Assignment.upsert_all(new_assignments) if new_assignments.any?
   end
 
-  def set_wcif_schedule!(wcif_schedule, current_user)
+  def set_wcif_schedule!(wcif_schedule, _current_user)
     if wcif_schedule["startDate"] != start_date.strftime("%F")
       raise WcaExceptions::BadApiParameter.new("Wrong start date for competition")
     elsif wcif_schedule["numberOfDays"] != number_of_days

@@ -25,6 +25,7 @@ AllCops:
     - 'db/developer_dump_schema.rb'
     - 'db/results_dump_schema.rb'
     - '.git-hooks/**/*'
+    - 'infra/wca_on_rails/lambda/*'
 
 Style/StringConcatenation:
   # We need to use + here because it's a custom operator TODO: At least until we only render from NExt
@@ -40,9 +41,6 @@ Rails/I18nLocaleAssignment:
     - 'spec/support/locale_reset.rb'
 
 Bundler/OrderedGems:
-  Enabled: false
-
-Lint/UnusedMethodArgument:
   Enabled: false
 
 Style/Alias:

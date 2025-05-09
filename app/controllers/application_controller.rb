@@ -58,7 +58,7 @@ class ApplicationController < ActionController::Base
   end
 
   # https://github.com/doorkeeper-gem/doorkeeper/wiki/Customizing-the-response-body-when-unauthorized
-  def doorkeeper_unauthorized_render_options(error: nil)
+  def doorkeeper_unauthorized_render_options(_error: nil)
     { json: { error: "Not authorized" } }
   end
 
