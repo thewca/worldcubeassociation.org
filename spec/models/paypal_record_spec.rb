@@ -20,9 +20,9 @@ RSpec.describe PaypalRecord do
     end
 
     it 'does not allow an invalid status' do
-      expect {
+      expect do
         PaypalRecord.new(paypal_status: 'random_invalid_status')
-      }.to raise_error(ArgumentError)
+      end.to raise_error(ArgumentError)
     end
   end
 

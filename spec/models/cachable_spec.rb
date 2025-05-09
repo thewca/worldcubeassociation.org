@@ -8,17 +8,17 @@ RSpec.describe Cachable do
     #   in which case there might be zero queries and the test could fail
     Country.models_by_id = nil
 
-    assert_queries_count(1) {
+    assert_queries_count(1) do
       Country.c_find('USA')
       Country.c_find('USA')
-    }
+    end
   end
 
   it "Reads twice when accessing a cached entity directly" do
-    assert_queries_count(2) {
+    assert_queries_count(2) do
       Country.find('USA')
       Country.find('USA')
-    }
+    end
   end
 
   it "Correctly invalidates caches when an entity is updated" do

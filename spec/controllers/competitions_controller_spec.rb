@@ -20,9 +20,9 @@ RSpec.describe CompetitionsController do
       it '404s when competition is not visible' do
         competition.update_column(:show_at_all, false)
 
-        expect {
+        expect do
           get :show, params: { id: competition.id }
-        }.to raise_error(ActionController::RoutingError)
+        end.to raise_error(ActionController::RoutingError)
       end
     end
   end
@@ -98,11 +98,11 @@ RSpec.describe CompetitionsController do
     let(:organizer) { create(:user) }
     let(:admin) { create(:admin) }
     let!(:my_competition) { create(:competition, :confirmed, latitude: 10.0, longitude: 10.0, organizers: [organizer], starts: 1.week.ago) }
-    let!(:other_competition) {
+    let!(:other_competition) do
       create(
         :competition, :with_delegate, :with_valid_schedule, latitude: 10.005, longitude: 10.005, starts: 4.days.ago, registration_close: 5.days.ago
       )
-    }
+    end
 
     context 'when signed in as an organizer' do
       before :each do
@@ -1029,9 +1029,9 @@ RSpec.describe CompetitionsController do
       it 'does not allow regular user to use organiser reg close button' do
         comp_with_full_reg = create(:competition, :registration_open, competitor_limit_enabled: true, competitor_limit: 1, competitor_limit_reason: "we have a tiny venue")
         create(:registration, :accepted, :newcomer, competition: comp_with_full_reg)
-        expect {
+        expect do
           put :close_full_registration, params: { competition_id: comp_with_full_reg }
-        }.to raise_error(ActionController::RoutingError)
+        end.to raise_error(ActionController::RoutingError)
         expect(comp_with_full_reg.reload.registration_close).to be > Time.now
       end
     end
@@ -1298,9 +1298,9 @@ RSpec.describe CompetitionsController do
       before { sign_in create :user }
 
       it 'does not allow access' do
-        expect {
+        expect do
           get :edit_events, params: { id: competition.id }
-        }.to raise_error(ActionController::RoutingError)
+        end.to raise_error(ActionController::RoutingError)
       end
     end
   end
@@ -1329,9 +1329,9 @@ RSpec.describe CompetitionsController do
       before { sign_in create :user }
 
       it 'does not allow access' do
-        expect {
+        expect do
           get :payment_integration_setup, params: { competition_id: competition }
-        }.to raise_error(ActionController::RoutingError)
+        end.to raise_error(ActionController::RoutingError)
       end
     end
   end
@@ -1350,9 +1350,9 @@ RSpec.describe CompetitionsController do
       before { sign_in create :user }
 
       it 'does not allow access' do
-        expect {
+        expect do
           get :stripe_connect, params: { state: competition }
-        }.to raise_error(ActionController::RoutingError)
+        end.to raise_error(ActionController::RoutingError)
       end
     end
   end
@@ -1371,9 +1371,9 @@ RSpec.describe CompetitionsController do
       before { sign_in create :user }
 
       it 'does not allow access' do
-        expect {
+        expect do
           get :edit_schedule, params: { id: competition }
-        }.to raise_error(ActionController::RoutingError)
+        end.to raise_error(ActionController::RoutingError)
       end
     end
 

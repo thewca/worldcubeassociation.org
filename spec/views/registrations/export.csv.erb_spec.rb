@@ -4,7 +4,7 @@ require "rails_helper"
 
 RSpec.describe "registrations/export.csv.erb" do
   let(:competition) { create(:competition, :registration_open, event_ids: %w[333 333oh]) }
-  let!(:user) {
+  let!(:user) do
     create(
       :user,
       name: "Bob",
@@ -23,7 +23,7 @@ RSpec.describe "registrations/export.csv.erb" do
         guests: 1,
       )
     end
-  }
+  end
 
   it "renders valid csv" do
     assign(:competition, competition)

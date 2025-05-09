@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe "Competition WCIF" do
-  let!(:competition) {
+  let!(:competition) do
     create(
       :competition,
       :visible,
@@ -20,8 +20,8 @@ RSpec.describe "Competition WCIF" do
       registration_open: "2013-12-01",
       registration_close: "2013-12-31",
     )
-  }
-  let(:partner_competition) {
+  end
+  let(:partner_competition) do
     create(
       :competition,
       :visible,
@@ -29,8 +29,8 @@ RSpec.describe "Competition WCIF" do
       series_base: competition,
       series_distance_days: 3,
     )
-  }
-  let!(:competition_series) {
+  end
+  let!(:competition_series) do
     create(
       :competition_series,
       wcif_id: "SpectacularSeries2014",
@@ -38,7 +38,7 @@ RSpec.describe "Competition WCIF" do
       short_name: "Spectacular 2014",
       competitions: [competition, partner_competition],
     )
-  }
+  end
   let(:delegate) { competition.delegates.first }
   let(:organizer) { competition.organizers.first }
   let(:sixty_second_2_attempt_cutoff) { Cutoff.new(number_of_attempts: 2, attempt_result: 1.minute.in_centiseconds) }
@@ -283,9 +283,9 @@ RSpec.describe "Competition WCIF" do
     end
 
     it "rendered WCIF matches JSON Schema definition" do
-      expect {
+      expect do
         JSON::Validator.validate!(Competition.wcif_json_schema, competition.to_wcif)
-      }.not_to raise_error
+      end.not_to raise_error
     end
   end
 

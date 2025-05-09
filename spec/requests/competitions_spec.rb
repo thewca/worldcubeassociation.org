@@ -29,10 +29,10 @@ RSpec.describe "competitions" do
 
         context "when handling Series competitions" do
           let!(:series) { create(:competition_series) }
-          let!(:partner_competition) {
+          let!(:partner_competition) do
             create(:competition, :with_delegate, :visible, :with_valid_schedule,
                    competition_series: series, series_base: competition)
-          }
+          end
 
           it "can add competition to an existing Series" do
             expect(competition.confirmed?).to be false
@@ -134,10 +134,10 @@ RSpec.describe "competitions" do
 
         context "when handling Series competitions" do
           let!(:series) { create(:competition_series) }
-          let!(:partner_competition) {
+          let!(:partner_competition) do
             create(:competition, :with_delegate, :visible, :with_valid_schedule,
                    competition_series: series, series_base: competition)
-          }
+          end
 
           it "can add competition to an existing Series" do
             expect(competition.confirmed?).to be true
@@ -240,10 +240,10 @@ RSpec.describe "competitions" do
 
         context "when handling Series competitions" do
           let!(:series) { create(:competition_series) }
-          let!(:partner_competition) {
+          let!(:partner_competition) do
             create(:competition, :with_delegate, :visible, :with_valid_schedule,
                    competition_series: series, series_base: competition)
-          }
+          end
 
           it "can add competition to an existing Series" do
             expect(competition.confirmed?).to be false
@@ -404,10 +404,10 @@ RSpec.describe "competitions" do
 
         context "when handling Series competitions" do
           let!(:series) { create(:competition_series) }
-          let!(:partner_competition) {
+          let!(:partner_competition) do
             create(:competition, :with_delegate, :visible, :with_valid_schedule,
                    competition_series: series, series_base: competition)
-          }
+          end
 
           it 'cannot add competition to an existing Series' do
             expect(competition.confirmed?).to be true

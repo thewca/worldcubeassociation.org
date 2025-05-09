@@ -5,9 +5,9 @@ class AddLiveResultJob < ApplicationJob
   queue_as EnvConfig.LIVE_QUEUE if WcaLive.sqs_queued?
 
   def perform(results, round_id, registration_id, entered_by)
-    attempts = results.map.with_index(1) { |r, i|
+    attempts = results.map.with_index(1) do |r, i|
       LiveAttempt.build_with_history_entry(r, i, entered_by)
-    }
+    end
     round = Round.find(round_id)
     event = round.event
     format = round.format

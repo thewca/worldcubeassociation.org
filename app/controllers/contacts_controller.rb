@@ -142,13 +142,13 @@ class ContactsController < ApplicationController
     }
     changes_requested = Person.fields_edit_requestable
                               .reject { |field| profile_to_edit[field].to_s == edited_profile_details[field].to_s }
-                              .map { |field|
+                              .map do |field|
                                 ContactEditProfile::EditProfileChange.new(
                                   field: field,
                                   from: profile_to_edit[field],
                                   to: edited_profile_details[field],
                                 )
-                              }
+                              end
 
     ticket = TicketsEditPerson.create_ticket(wca_id, changes_requested, current_user)
 

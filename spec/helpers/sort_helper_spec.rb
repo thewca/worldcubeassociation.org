@@ -4,7 +4,7 @@ require "rails_helper"
 
 RSpec.describe SortHelper do
   describe "#sort" do
-    let(:array) {
+    let(:array) do
       [
         { name: "a", age: 1 },
         { name: "b", age: 2 },
@@ -13,13 +13,13 @@ RSpec.describe SortHelper do
         { name: "c", age: 3 },
         { name: "c", age: 5 },
       ]
-    }
-    let(:sort_weight_lambdas) {
+    end
+    let(:sort_weight_lambdas) do
       {
         name: ->(e) { e[:name] },
         age: ->(e) { e[:age] },
       }
-    }
+    end
 
     it "sorts the array based on just name" do
       sort_param = "name"
