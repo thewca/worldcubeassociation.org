@@ -9,7 +9,7 @@ export default function CompetitorLimit() {
   const {
     competitorLimit: {
       enabled: hasLimit,
-      autoAcceptEnabled: autoAcceptEnabled,
+      autoAcceptEnabled,
     },
   } = useFormObject();
 
