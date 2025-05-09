@@ -2252,7 +2252,7 @@ class Competition < ApplicationRecord
     }
   end
 
-  def form_admin_actions()
+  def form_admin_actions
     {
       autoAcceptEnabled: self.auto_accept_registrations,
       autoAcceptDisableThreshold: self.auto_accept_disable_threshold,
@@ -2749,8 +2749,8 @@ class Competition < ApplicationRecord
             "reason" => { "type" => %w[string null] },
             "autoCloseThreshold" => { "type" => %w[integer null] },
             "newcomerMonthReservedSpots" => { "type" => %w[integer null] },
-            "autoAcceptEnabled" => { "type" => ["boolean", "null"] },
-            "autoAcceptDisableThreshold" => { "type" => ["integer", "null"] },
+            "autoAcceptEnabled" => { "type" => %w[boolean null] },
+            "autoAcceptDisableThreshold" => { "type" => %w[integer null] },
           },
         },
         "staff" => {
