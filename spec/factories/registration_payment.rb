@@ -24,11 +24,11 @@ FactoryBot.define do
       skip_auto_accept_hook { true }
     end
 
-    after(:build) do |payment, evaluator|
+    after(:build) do |_payment, evaluator|
       evaluator.competition.auto_accept_registrations = false if evaluator.skip_auto_accept_hook
     end
 
-    after(:create) do |payment, evaluator|
+    after(:create) do |_payment, evaluator|
       evaluator.competition.auto_accept_registrations = true if evaluator.skip_auto_accept_hook
     end
   end

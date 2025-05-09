@@ -537,8 +537,8 @@ class Registration < ApplicationRecord
   def self.bulk_auto_accept(competition)
     if competition.waiting_list.present?
       competition.registrations
-        .find(competition.waiting_list.entries)
-        .each { it.attempt_auto_accept }
+                 .find(competition.waiting_list.entries)
+                 .each(&:attempt_auto_accept)
     end
 
     sorted_pending_registrations = competition
