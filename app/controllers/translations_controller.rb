@@ -6,8 +6,6 @@ class TranslationsController < ApplicationController
   def self.compute_bad_i18n_keys
     base_locales = load_base_locales
   
-    english = locale_to_translation('en')
-  
     (I18n.available_locales - [:en]).index_with do |locale|
       base_locale = base_locales[locale.to_s] || 'en'  # Default to 'en' if not specified
       base_translation = locale_to_translation(base_locale)
