@@ -49,6 +49,11 @@ class RoleChangeMailer < ApplicationMailer
           email: role.user.senior_delegates.map(&:email),
           message: 'Informing as one of the Delegates under you has been put in probation.',
         ),
+        UserRole.UserRoleEmailRecipient.new(
+          name: UserGroup.teams_committees_group_wic.name,
+          email: UserGroup.teams_committees_group_wic.metadata.email,
+          message: 'Informing as a Delegate has been put in probation.',
+        ),
       )
     when UserGroup.group_types[:delegate_regions]
       @to_list.push(
@@ -160,6 +165,11 @@ class RoleChangeMailer < ApplicationMailer
           email: role.user.senior_delegates.map(&:email),
           message: 'Informing as there was a change in the probation status for one of the Delegates under you.',
         ),
+        UserRole::UserRoleEmailRecipient.new(
+          name: UserGroup.teams_committees_group_wic.name,
+          email: UserGroup.teams_committees_group_wic.metadata.email,
+          message: 'Informing as there was a change in Delegate probations.',
+        ),
       )
     when UserGroup.group_types[:delegate_regions]
       @to_list.push(
@@ -237,6 +247,11 @@ class RoleChangeMailer < ApplicationMailer
           name: UserGroup.teams_committees_group_wfc.name,
           email: UserGroup.teams_committees_group_wfc.metadata.email,
           message: 'Please take necessary action if there is a pending dues for the Delegate whose role is ended.',
+        ),
+        UserRole::UserRoleEmailRecipient.new(
+          name: UserGroup.teams_committees_group_wic.name,
+          email: UserGroup.teams_committees_group_wic.metadata.email,
+          message: 'Informing as there is a role end action for a Delegate.',
         ),
       )
     when UserGroup.group_types[:translators]
