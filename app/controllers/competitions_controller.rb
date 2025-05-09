@@ -610,7 +610,7 @@ class CompetitionsController < ApplicationController
     render json: competition.form_user_preferences(current_user)
   end
 
-  before_action -> { require_user_permission(:can_manage_competition?, competition_from_params) }, only: [:announcement_data]
+  before_action -> { require_user_permission(:can_manage_competition?, competition_from_params) }, only: [:confirmation_data]
 
   def confirmation_data
     competition = competition_from_params

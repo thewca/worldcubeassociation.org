@@ -1369,7 +1369,7 @@ RSpec.describe Competition do
         expect(comp.valid?).to be(false)
       end
 
-      it 'rejects non-nil value if event_restrictions is false', :tag do
+      it 'rejects non-nil value if event_restrictions is false' do
         comp = create(:competition)
         comp.events_per_registration_limit = 1
         expect(comp.valid?).to be(false)
@@ -1598,6 +1598,12 @@ RSpec.describe Competition do
         auto_accept_comp.use_wca_registration = false
         expect(auto_accept_comp).not_to be_valid
         expect(auto_accept_comp.errors[:auto_accept_registrations]).to include("Auto-accept can only be used if you are using the WCA website for registrations")
+      end
+
+      it 'integrated payment not enabled when competition is confirmed' do
+        confirmed_comp = build(:competition, :confirmed, :auto_accept)
+        expect(confirmed_comp).not_to be_valid
+        expect(confirmed_comp.errors[:auto_accept_registrations]).to include("You must enable a payment integration (eg, Stripe) in order to use auto-accept")
       end
 
       it 'any paid-pending registrations exist' do

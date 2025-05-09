@@ -8,6 +8,9 @@ class Registration < ApplicationRecord
   AUTO_ACCEPT_ENTITY_ID = 'auto-accept'
   SYSTEM_ENTITY_ID = 'system'
   USER_ENTITY_ID = 'user'
+  # Live auto accept means that auto accept is triggered at the point where payment occurs
+  # As opposed to being manually triggered by an organizer hitting the "Bulk Auto Accept" button
+  LIVE_AUTO_ACCEPT_ENABLED = false
 
   scope :pending, -> { where(competing_status: 'pending') }
   scope :accepted, -> { where(competing_status: 'accepted') }
@@ -548,6 +551,29 @@ class Registration < ApplicationRecord
     super(DEFAULT_SERIALIZE_OPTIONS.merge(options || {}))
   end
 
+  def self.bulk_auto_accept(competition)
+    if competition.waiting_list.present?
+      competition.registrations
+                 .find(competition.waiting_list.entries)
+                 .each(&:attempt_auto_accept)
+    end
+
+    sorted_pending_registrations = competition
+                                   .registrations
+                                   .competing_status_pending
+                                   .with_payments
+                                   .sort_by { |registration| registration.last_positive_payment.updated_at }
+
+    sorted_pending_registrations.each(&:attempt_auto_accept)
+  end
+
+  def last_positive_payment
+    registration_payments
+      .where.not(amount_lowest_denomination: ..0)
+      .order(updated_at: :desc)
+      .first
+  end
+
   delegate :auto_accept_registrations, to: :competition
 
   def auto_accept_in_current_env?
@@ -590,7 +616,7 @@ class Registration < ApplicationRecord
   private def log_auto_accept_failure(reason)
     add_history_entry(
       { auto_accept_failure_reasons: reason },
-      'System',
+      SYSTEM_ENTITY_ID,
       AUTO_ACCEPT_ENTITY_ID,
       'System reject',
     )
