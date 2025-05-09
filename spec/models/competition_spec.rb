@@ -1369,7 +1369,7 @@ RSpec.describe Competition do
         expect(comp.valid?).to be(false)
       end
 
-      it 'rejects non-nil value if event_restrictions is false', :tag do
+      it 'rejects non-nil value if event_restrictions is false' do
         comp = create(:competition)
         comp.events_per_registration_limit = 1
         expect(comp.valid?).to be(false)
