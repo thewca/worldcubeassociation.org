@@ -97,10 +97,7 @@ Rails.application.routes.draw do
     post 'registrations/add' => 'registrations#do_add', as: :registrations_do_add
     get 'registrations/psych-sheet' => 'registrations#psych_sheet', as: :psych_sheet
     get 'registrations/psych-sheet/:event_id' => 'registrations#psych_sheet_event', as: :psych_sheet_event
-    resources :registrations, only: %i[index update create edit destroy], shallow: true do
-      get 'payments' => 'payment#registration_payments', as: :payments
-      resource :history, only: [:show], controller: :registration_history
-    end
+    resources :registrations, only: %i[index update create edit destroy], shallow: true
     get 'edit/registrations' => 'registrations#edit_registrations'
     get 'register' => 'registrations#register'
     resources :competition_tabs, except: [:show], as: :tabs, path: :tabs
@@ -346,14 +343,21 @@ Rails.application.routes.draw do
     # While this is the start of a v1 API, this is currently not usable by outside developers as
     # getting a JWT token requires you to be logged in through the Website
     namespace :v1 do
-      namespace :registrations do
-        get '/register', to: 'registrations#show'
-        post '/register', to: 'registrations#create'
-        patch '/register', to: 'registrations#update'
-        patch '/bulk_update', to: 'registrations#bulk_update'
-        get '/:competition_id', to: 'registrations#list'
-        get '/:competition_id/admin', to: 'registrations#list_admin', as: :list_admin
-        get '/:competition_id/payment', to: 'registrations#payment_ticket', as: :payment_ticket
+      resources :competitions, only: [] do
+        resources :registrations, only: %i[index show create update], shallow: true do
+          resource :history, only: %i[show], controller: :registration_history
+          resource :payments, only: %i[show], controller: :registration_payments
+
+          member do
+            get 'payment_ticket', to: 'registrations#payment_ticket'
+          end
+
+          collection do
+            patch 'bulk_update', to: 'registrations#bulk_update'
+            get 'admin', to: 'registrations#index_admin'
+            get ':user_id', to: 'registrations#show_by_user', as: :show_by_user
+          end
+        end
       end
     end
 

@@ -40,10 +40,13 @@ export default function RegistrationOverview({
 
   const { mutate: deleteRegistrationMutation, isPending: isDeleting } = useMutation({
     mutationFn: () => updateRegistration({
-      user_id: registration.user_id,
-      competition_id: competitionInfo.id,
-      competing: {
-        status: 'cancelled',
+      registrationId: registration.id,
+      payload: {
+        user_id: registration.user_id,
+        competition_id: competitionInfo.id,
+        competing: {
+          status: 'cancelled',
+        },
       },
     }),
     onError: (data) => {
