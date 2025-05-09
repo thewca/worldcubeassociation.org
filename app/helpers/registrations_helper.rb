@@ -25,7 +25,7 @@ module RegistrationsHelper
     end
   end
 
-  def please_sign_in(message_key, comp, **args)
+  def please_sign_in(message_key, _comp, **args)
     sign_in = I18n.t('registrations.sign_in')
     here = I18n.t('common.here')
     args[:sign_in] = link_to(sign_in, new_user_session_path)
@@ -33,7 +33,7 @@ module RegistrationsHelper
     raw(I18n.t(message_key, **args))
   end
 
-  def registration_date_and_tooltip(competition, registration)
+  def registration_date_and_tooltip(_competition, registration)
     if @competition.using_payment_integrations?
       [registration.last_payment_date&.to_date || I18n.t('registrations.list.not_paid'),
        registration.last_payment_date ? I18n.t('registrations.list.payment_completed_on', date: registration.last_payment_date) : I18n.t('registrations.list.payment_requested_on', date: registration.created_at)]

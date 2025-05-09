@@ -60,7 +60,7 @@ module ResultsValidators
       validation_issues
     end
 
-    def self.name_validations(name, competition_id = nil, **message_args)
+    def self.name_validations(name, competition_id = nil, **_message_args)
       validation_issues = []
       roman_readable = PersonsValidator.roman_readable_part(name)
       split_name = roman_readable.split
