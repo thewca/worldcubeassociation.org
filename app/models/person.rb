@@ -249,13 +249,16 @@ class Person < ApplicationRecord
     %w[m f].include? gender
   end
 
-  def self.search(query, _params: {})
+  # Deactivate rubocop, because the method signature is the same for all search functions
+  # rubocop:disable Lint/UnusedMethodArgument
+  def self.search(query, params: {})
     persons = Person.current.includes(:user)
     query.split.each do |part|
       persons = persons.where("name LIKE :part OR wca_id LIKE :part", part: "%#{part}%")
     end
     persons.order(:name)
   end
+  # rubocop:enable Lint/UnusedMethodArgument
 
   def url
     Rails.application.routes.url_helpers.person_url(wca_id, host: EnvConfig.ROOT_URL)

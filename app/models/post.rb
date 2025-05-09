@@ -38,13 +38,16 @@ class Post < ApplicationRecord
     self.slug = title.parameterize
   end
 
-  def self.search(query, _params: {})
+  # Deactivate rubocop, because the method signature is the same for all search functions
+  # rubocop:disable Lint/UnusedMethodArgument
+  def self.search(query, params: {})
     posts = Post
     query&.split&.each do |part|
       posts = posts.where("title LIKE :part OR body LIKE :part", part: "%#{part}%")
     end
     posts.order(created_at: :desc)
   end
+  # rubocop:enable Lint/UnusedMethodArgument
 
   def url
     Rails.application.routes.url_helpers.post_path(slug)
