@@ -266,14 +266,14 @@ RSpec.describe Registration do
 
   describe "qualification" do
     let!(:user) { create(:user_with_wca_id) }
-    let!(:previous_competition) {
+    let!(:previous_competition) do
       create(
         :competition,
         start_date: '2021-02-01',
         end_date: '2021-02-01',
       )
-    }
-    let!(:result) {
+    end
+    let!(:result) do
       create(
         :result,
         person_id: user.wca_id,
@@ -282,23 +282,23 @@ RSpec.describe Registration do
         best: 1200,
         average: 1500,
       )
-    }
-    let!(:competition) {
+    end
+    let!(:competition) do
       create(
         :competition,
         event_ids: %w[333],
       )
-    }
-    let!(:competition_event) {
+    end
+    let!(:competition_event) do
       CompetitionEvent.find_by(competition_id: competition.id, event_id: '333')
-    }
-    let!(:registration) {
+    end
+    let!(:registration) do
       create(
         :registration,
         competition: competition,
         user: user,
       )
-    }
+    end
 
     it "allows unqualified registration when not required" do
       input = {
@@ -775,11 +775,11 @@ RSpec.describe Registration do
     end
 
     context 'log when auto accept is prevented by validations' do
-      let(:limited_comp) {
+      let(:limited_comp) do
         create(
           :competition, :registration_open, :with_competitor_limit, :auto_accept, competitor_limit: 5, auto_accept_disable_threshold: nil
         )
-      }
+      end
       let!(:prevented_reg) { create(:registration, competition: limited_comp) }
 
       # Fails because waiting_list_position persists when it shouldnt; #11173 should fix

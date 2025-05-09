@@ -277,7 +277,7 @@ RSpec.describe CompetitionsMailer, type: :mailer do
     end
 
     context "multi-national competition" do
-      let(:competition) {
+      let(:competition) do
         create(:competition,
                :with_delegate_report,
                :with_valid_schedule,
@@ -287,7 +287,7 @@ RSpec.describe CompetitionsMailer, type: :mailer do
                delegates: [delegate.user, trainee_delegate.user],
                starts: Date.new(2016, 2, 1),
                ends: Date.new(2016, 2, 2))
-      }
+      end
 
       it "renders the headers" do
         countries = competition.continent.countries.sample(competition.competition_venues.count)
@@ -305,7 +305,7 @@ RSpec.describe CompetitionsMailer, type: :mailer do
     end
 
     context "multi-continent competition" do
-      let(:competition) {
+      let(:competition) do
         create(:competition,
                :with_delegate_report,
                :with_valid_schedule,
@@ -315,7 +315,7 @@ RSpec.describe CompetitionsMailer, type: :mailer do
                delegates: [delegate.user, trainee_delegate.user],
                starts: Date.new(2016, 2, 1),
                ends: Date.new(2016, 2, 2))
-      }
+      end
 
       it "renders the headers" do
         continents = Continent.real.sample(competition.competition_venues.count)
@@ -370,13 +370,13 @@ RSpec.describe CompetitionsMailer, type: :mailer do
     let(:delegates) { create_list(:delegate, 3) }
     let(:trainee_delegates) { create_list(:trainee_delegate, 3) }
     let(:competition) { create(:competition, name: "Comp of the future 2017", id: "CompFut2017", delegates: delegates + trainee_delegates) }
-    let(:results_submission) {
+    let(:results_submission) do
       build(
         :results_submission,
         schedule_url: link_to_competition_schedule_tab(competition),
         message: "Hello, here are the results",
       )
-    }
+    end
     let(:mail) { CompetitionsMailer.results_submitted(competition, results_submission, delegates.first) }
     let(:utc_now) { Time.utc(2018, 2, 23, 22, 3, 32) }
 
