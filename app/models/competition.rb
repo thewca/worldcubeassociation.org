@@ -2252,13 +2252,6 @@ class Competition < ApplicationRecord
     }
   end
 
-  def form_admin_actions
-    {
-      autoAcceptEnabled: self.auto_accept_registrations,
-      autoAcceptDisableThreshold: self.auto_accept_disable_threshold,
-    }
-  end
-
   def form_confirmation_data(for_user)
     {
       isConfirmed: self.confirmed?,
