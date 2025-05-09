@@ -2,6 +2,7 @@ import { useCallback } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { fetchJsonOrError } from '../../lib/requests/fetchWithAuthenticityToken';
 import {
+  competitionAdminActionsUrl,
   competitionAnnouncementDataUrl,
   competitionConfirmationDataUrl,
   competitionUserPreferencesUrl,
@@ -15,6 +16,18 @@ export function useAnnouncementData(competitionId) {
   return useQuery({
     queryKey: announcementDataQueryKey(competitionId),
     queryFn: () => fetchJsonOrError(competitionAnnouncementDataUrl(competitionId))
+      .then((raw) => raw.data),
+  });
+}
+
+export function adminActionsQueryKey(competitionId) {
+  return ['admin-actions', competitionId];
+}
+
+export function useAdminActions(competitionId) {
+  return useQuery({
+    queryKey: adminActionsQueryKey(competitionId),
+    queryFn: () => fetchJsonOrError(competitionAdminActionsUrl(competitionId))
       .then((raw) => raw.data),
   });
 }

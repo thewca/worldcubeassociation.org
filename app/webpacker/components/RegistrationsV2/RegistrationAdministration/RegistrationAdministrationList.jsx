@@ -98,9 +98,9 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
         'negative',
       ));
     },
-    onSuccess: async () => {
+    onSuccess: () => {
       dispatchStore(showMessage('competitions.registration_v2.auto_accept.bulk_auto_accepted', 'positive'));
-      await refetch();
+      return refetch();
     },
   });
 

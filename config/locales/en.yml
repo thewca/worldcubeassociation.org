@@ -1617,6 +1617,8 @@ en:
         per_competitor: "The estimated WCA Dues per competitor are %{estimate}"
         ajax_error: "There is an error with Dues estimation, possibly because there are no available exchange rates for the selected currency."
       labels:
+        auto_accept_enabled: "Automatic registration acceptance"
+        auto_accept_disable_threshold: "Limit for automatically accepting registrations"
         admin:
           is_confirmed: "Do not let organizers edit this competition"
           is_visible: "Make competition visible to the public"
@@ -1700,6 +1702,8 @@ en:
           clone_tabs: "I would like to clone all tabs with additional information as well"
       #context: for a competition
       hints:
+        auto_accept_enabled: "This will automatically accept any user who registers and pays. Use at your own risk, and set a disable threshold to have control over the final registrations which get accepted."
+        auto_accept_disable_threshold: "When this number of accepted registrations is reached, auto-accept will disable itself - allowing organizers to manually approve the final registrations. Must be less than the competitor limit. Leave blank if not desired."
         admin:
           is_confirmed: ""
           is_visible: ""
@@ -1786,6 +1790,9 @@ en:
         cloning:
           clone_tabs: ""
       choices:
+        auto_accept_enabled:
+            "true": "Automatically accept users once they have paid"
+            "false": "Do not auto-accept users - registrations must be manually accepted"
         #context: about guests
         guests_enabled:
           "true": "Ask about guests"
@@ -2053,6 +2060,7 @@ en:
       no_registration_start_date_yet: "You have not assigned a registration start date for this competition yet."
       opens_registration_at: "opens registration at"
     announcements: "Announcements"
+    admin_settings: "Admin Settings"
     post_announcement: "Announce the competition"
     announced_by_html: "Announced by %{announcer_name} on %{date_time}"
     announce_confirm: "Are you sure you want to announce this competition?"
