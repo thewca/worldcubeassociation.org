@@ -1,35 +1,41 @@
 # frozen_string_literal: true
 
-class Api::V0::Wfc::XeroUsersController < Api::V0::ApiController
-  before_action :current_user_can_admin_finances!, only: %i[index create]
-  private def current_user_can_admin_finances!
-    render json: {}, status: :unauthorized unless current_user.can_admin_finances?
-  end
+module Api
+  module V0
+    module Wfc
+      class XeroUsersController < Api::V0::ApiController
+        before_action :current_user_can_admin_finances!, only: %i[index create]
+        private def current_user_can_admin_finances!
+          render json: {}, status: :unauthorized unless current_user.can_admin_finances?
+        end
 
-  def index
-    render json: WfcXeroUser.all
-  end
+        def index
+          render json: WfcXeroUser.all
+        end
 
-  def create
-    name = params.require(:name)
-    email = params.require(:email)
-    is_combined_invoice = ActiveRecord::Type::Boolean.new.cast(params.require(:is_combined_invoice))
-    wfc_xero_user = WfcXeroUser.new(name: name, email: email, is_combined_invoice: is_combined_invoice)
-    if wfc_xero_user.save
-      render json: wfc_xero_user, status: :created
-    else
-      render json: wfc_xero_user.errors, status: :unprocessable_entity
+        def create
+          name = params.require(:name)
+          email = params.require(:email)
+          is_combined_invoice = ActiveRecord::Type::Boolean.new.cast(params.require(:is_combined_invoice))
+          wfc_xero_user = WfcXeroUser.new(name: name, email: email, is_combined_invoice: is_combined_invoice)
+          if wfc_xero_user.save
+            render json: wfc_xero_user, status: :created
+          else
+            render json: wfc_xero_user.errors, status: :unprocessable_entity
+          end
+        end
+
+        def update
+          id = params.require(:id)
+          wfc_xero_user = WfcXeroUser.find(id)
+          wfc_xero_user.update!(
+            name: params.require(:name),
+            email: params.require(:email),
+            is_combined_invoice: ActiveRecord::Type::Boolean.new.cast(params.require(:is_combined_invoice)),
+          )
+          render json: { success: true }
+        end
+      end
     end
-  end
-
-  def update
-    id = params.require(:id)
-    wfc_xero_user = WfcXeroUser.find(id)
-    wfc_xero_user.update!(
-      name: params.require(:name),
-      email: params.require(:email),
-      is_combined_invoice: ActiveRecord::Type::Boolean.new.cast(params.require(:is_combined_invoice)),
-    )
-    render json: { success: true }
   end
 end
