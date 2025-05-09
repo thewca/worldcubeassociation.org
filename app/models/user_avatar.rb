@@ -32,8 +32,8 @@ class UserAvatar < ApplicationRecord
 
   MAX_UPLOAD_SIZE = 2.megabytes
 
-  validates :public_image, blob: { content_type: :web_image, size_range: 0..MAX_UPLOAD_SIZE }
-  validates :private_image, blob: { content_type: :web_image, size_range: 0..MAX_UPLOAD_SIZE }
+  validates :public_image, content_type: ActiveStorage.web_image_content_types, size: { less_than_or_equal_to: MAX_UPLOAD_SIZE }, processable_file: true
+  validates :private_image, content_type: ActiveStorage.web_image_content_types, size: { less_than_or_equal_to: MAX_UPLOAD_SIZE }, processable_file: true
 
   private def linked_user
     # Make sure that we're traversing back the correct association (using `inverse_of`)
