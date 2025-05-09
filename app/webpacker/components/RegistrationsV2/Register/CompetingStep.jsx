@@ -347,47 +347,47 @@ export default function CompetingStep({
                   i18nKey="registrations.preferred_events_prompt_html"
                 />
               )}
-          </Form.Field>
-          <Form.Field required={Boolean(competitionInfo.force_comment_in_registration)}>
-            <label htmlFor="comment">
-              {I18n.t('competitions.registration_v2.register.comment')}
-              {' '}
-              <div style={{ float: 'right', fontSize: '0.8em' }}>
-                <i>
-                  (
-                  {comment.length}
-                  /
-                  {maxCommentLength}
-                  )
-                </i>
-              </div>
-            </label>
-            <Form.TextArea
-              required={Boolean(competitionInfo.force_comment_in_registration)}
-              maxLength={maxCommentLength}
-              onChange={setComment}
-              value={comment}
-              id="comment"
-              error={competitionInfo.force_comment_in_registration && comment.trim().length === 0 && I18n.t('registrations.errors.cannot_register_without_comment')}
-            />
-          </Form.Field>
-          {competitionInfo.guests_enabled && (
-            <Form.Field>
-              <label htmlFor="guest-dropdown">{I18n.t('activerecord.attributes.registration.guests')}</label>
-              <Form.Input
-                id="guest-dropdown"
-                type="number"
-                value={guests}
-                onChange={setGuests}
-                min="0"
-                max={guestLimit}
-                error={guestsRestricted && guests > guestLimit && I18n.t('competitions.competition_info.guest_limit', { count: guestLimit })}
-              />
-            </Form.Field>
-          )}
-          {isRegistered ? (
-            <ButtonGroup widths={2}>
-              {shouldShowUpdateButton && (
+        </Form.Field>
+        <Form.Field required={Boolean(competitionInfo.force_comment_in_registration)}>
+          <label htmlFor="comment">
+            {I18n.t('competitions.registration_v2.register.comment')}
+            {' '}
+            <div style={{ float: 'right', fontSize: '0.8em' }}>
+              <i>
+                (
+                {comment.length}
+                /
+                {maxCommentLength}
+                )
+              </i>
+            </div>
+          </label>
+          <Form.TextArea
+            required={Boolean(competitionInfo.force_comment_in_registration)}
+            maxLength={maxCommentLength}
+            onChange={setComment}
+            value={comment}
+            id="comment"
+            error={competitionInfo.force_comment_in_registration && comment.trim().length === 0 && I18n.t('registrations.errors.cannot_register_without_comment')}
+          />
+        </Form.Field>
+        {competitionInfo.guests_enabled && (
+        <Form.Field>
+          <label htmlFor="guest-dropdown">{I18n.t('activerecord.attributes.registration.guests')}</label>
+          <Form.Input
+            id="guest-dropdown"
+            type="number"
+            value={guests}
+            onChange={setGuests}
+            min="0"
+            max={guestLimit}
+            error={guestsRestricted && guests > guestLimit && I18n.t('competitions.competition_info.guest_limit', { count: guestLimit })}
+          />
+        </Form.Field>
+        )}
+        {isRegistered ? (
+          <ButtonGroup widths={2}>
+            {shouldShowUpdateButton && (
               <>
                 <Button
                   primary
