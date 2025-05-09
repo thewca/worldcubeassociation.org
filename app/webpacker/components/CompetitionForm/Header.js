@@ -1,7 +1,6 @@
 import React from 'react';
 import { Message } from 'semantic-ui-react';
 import { useStore } from '../../lib/providers/StoreProvider';
-import AdminSettings from './AdminSettings';
 import AnnouncementActions from './AnnouncementActions';
 import UserPreferences from './UserPreferences';
 import { useFormInitialObject } from '../wca/FormBuilder/provider/FormObjectProvider';
@@ -70,7 +69,6 @@ export default function Header() {
       <UserPreferences competitionId={competitionId} />
       <AnnouncementMessage competitionId={competitionId} />
       <ConfirmationToggles competitionId={competitionId} />
-      <AdminSettings competitionId={competitionId} />
     </>
   );
 }

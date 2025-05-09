@@ -2303,6 +2303,8 @@ class Competition < ApplicationRecord
         "reason" => competitor_limit_reason,
         "autoCloseThreshold" => auto_close_threshold,
         "newcomerMonthReservedSpots" => newcomer_month_reserved_spots,
+        "autoAcceptEnabled" => auto_accept_registrations,
+        "autoAcceptDisableThreshold" => auto_accept_disable_threshold,
       },
       "staff" => {
         "staffDelegateIds" => staff_delegates.to_a.pluck(:id),
@@ -2408,6 +2410,8 @@ class Competition < ApplicationRecord
         "reason" => errors[:competitor_limit_reason],
         "autoCloseThreshold" => errors[:auto_close_threshold],
         "newcomer_month_reserved_spots" => errors[:newcomer_month_reserved_spots],
+        "autoAcceptEnabled" => errors[:auto_accept_registrations],
+        "autoAcceptDisableThreshold" => errors[:auto_accept_disable_threshold],
       },
       "staff" => {
         "staffDelegateIds" => errors[:staff_delegate_ids],
@@ -2604,6 +2608,8 @@ class Competition < ApplicationRecord
       competitor_limit_reason: form_data.dig('competitorLimit', 'reason'),
       auto_close_threshold: form_data.dig('competitorLimit', 'autoCloseThreshold'),
       newcomer_month_reserved_spots: form_data.dig('competitorLimit', 'newcomerMonthReservedSpots'),
+      auto_accept_registrations: form_data.dig('competitorLimit', 'autoAcceptEnabled'),
+      auto_accept_disable_threshold: form_data.dig('competitorLimit', 'autoAcceptDisableThreshold'),
       extra_registration_requirements: form_data.dig('registration', 'extraRequirements'),
       on_the_spot_registration: form_data.dig('registration', 'allowOnTheSpot'),
       on_the_spot_entry_fee_lowest_denomination: form_data.dig('entryFees', 'onTheSpotEntryFee'),
@@ -2743,6 +2749,8 @@ class Competition < ApplicationRecord
             "reason" => { "type" => %w[string null] },
             "autoCloseThreshold" => { "type" => %w[integer null] },
             "newcomerMonthReservedSpots" => { "type" => %w[integer null] },
+            "autoAcceptEnabled" => { "type" => ["boolean", "null"] },
+            "autoAcceptDisableThreshold" => { "type" => ["integer", "null"] },
           },
         },
         "staff" => {

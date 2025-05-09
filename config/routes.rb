@@ -73,7 +73,6 @@ Rails.application.routes.draw do
     get 'edit/admin' => 'competitions#admin_edit', as: :admin_edit
 
     get 'announcement_data' => 'competitions#announcement_data', as: :announcement_data
-    get 'admin_actions' => 'competitions#admin_actions', as: :admin_actions
     get 'user_preferences' => 'competitions#user_preferences', as: :user_preferences
     get 'confirmation_data' => 'competitions#confirmation_data', as: :confirmation_data
     patch 'confirmation_data' => 'competitions#update_confirmation_data', as: :update_confirmation_data

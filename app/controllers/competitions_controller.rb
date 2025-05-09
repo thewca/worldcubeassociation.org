@@ -603,13 +603,6 @@ class CompetitionsController < ApplicationController
   end
 
   before_action -> { require_user_permission(:can_manage_competition?, competition_from_params) }, only: [:user_preferences]
-  def admin_actions
-    competition = competition_from_params
-
-    render json: competition.form_admin_actions
-  end
-
-  before_action -> { require_user_permission(:can_manage_competition?, competition_from_params) }, only: [:user_preferences]
 
   def user_preferences
     competition = competition_from_params
