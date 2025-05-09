@@ -410,18 +410,20 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
   );
 
   return (
-    <Segment loading={isMutating || isAutoAccepting}>
-      <Button
-        disabled={isAutoAccepting}
-        color="green"
-        onClick={() => {
-          bulkAutoAcceptMutation(competitionInfo.id);
-        }}
-      >
-        <Icon name="check" />
-        {' '}
-        {I18n.t('competitions.registration_v2.auto_accept.bulk_auto_accept')}
-      </Button>
+      <Segment loading={isMutating || isAutoAccepting}>
+        {competitionInfo.auto_accept_registrations && (
+          <Button
+            disabled={isAutoAccepting}
+            color="green"
+            onClick={() => {
+              bulkAutoAcceptMutation(competitionInfo.id);
+            }}
+          >
+            <Icon name="check" />
+            {' '}
+            {I18n.t('competitions.registration_v2.auto_accept.bulk_auto_accept')}
+          </Button>
+        )}
 
       <Form>
         <Form.Group unstackable widths="2">

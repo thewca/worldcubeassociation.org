@@ -1646,7 +1646,7 @@ en:
           reason: "The reason for the competitor limit"
           auto_close_threshold: "Auto-close threshold"
           newcomer_month_reserved_spots: "Number of spots to reserve for newcomers"
-          auto_accept_enabled: "Automatic registration acceptance"
+          auto_accept_enabled: "Bulk automatic registration acceptance"
           auto_accept_disable_threshold: "Limit for automatically accepting registrations"
         staff:
           staff_delegate_ids: "WCA Delegate(s)"
@@ -1799,8 +1799,8 @@ en:
             "true": "I want to specify a competitor limit"
             "false": "I DO NOT want to specify a competitor limit"
           auto_accept_enabled:
-            "true": "Automatically accept users once they have paid"
-            "false": "Do not auto-accept users - registrations must be manually accepted"
+            "true": "Enable 'Bulk Auto Accept' button in Registrations menu"
+            "false": "Disable 'Bulk Auto Accept' button"
         registration:
           allow_on_the_spot:
             "true": "On the spot registrations will be accepted"
