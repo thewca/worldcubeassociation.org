@@ -5,7 +5,7 @@ class TranslationsController < ApplicationController
 
   def self.compute_bad_i18n_keys
     base_locales = load_base_locales
-  
+
     (I18n.available_locales - [:en]).index_with do |locale|
       base_locale = base_locales[locale.to_s] || 'en' # Default to 'en' if not specified
       base_translation = locale_to_translation(base_locale)
@@ -14,8 +14,9 @@ class TranslationsController < ApplicationController
   end
 
   def self.load_base_locales
-    filename = Rails.root.join('config','i18n_config','locale_base.yml')
+    filename = Rails.root.join('config/i18n_config/locale_base.yml')
     return {} unless File.exist?(filename)
+
     YAML.load_file(filename) || {}
   end
 
