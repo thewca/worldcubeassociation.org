@@ -81,7 +81,7 @@ class RoleChangeMailer < ApplicationMailer
         UserRole::UserRoleEmailRecipient.new(
           name: UserGroup.board_group.name,
           email: GroupsMetadataBoard.email,
-          message: 'Informing as there is a new appointment in a Team/Committee/Council.',
+          message: 'Informing as there is a new appointment in a Team/Committee.',
         ),
         UserRole::UserRoleEmailRecipient.new(
           name: UserGroup.teams_committees_group_weat.name,
@@ -89,9 +89,9 @@ class RoleChangeMailer < ApplicationMailer
           message: 'Please add this to monthly digest.',
         ),
         UserRole::UserRoleEmailRecipient.new(
-          name: 'Team/Committee/Council Leader',
+          name: 'Team/Committee Leader',
           email: role.group.lead_user.email,
-          message: 'Informing as there is a new appointment in your Team/Committee/Council.',
+          message: 'Informing as there is a new appointment in your Team/Committee.',
         ),
         UserRole::UserRoleEmailRecipient.new(
           name: UserGroup.teams_committees_group_wic.name,
@@ -179,7 +179,7 @@ class RoleChangeMailer < ApplicationMailer
         UserRole::UserRoleEmailRecipient.new(
           name: UserGroup.board_group.name,
           email: GroupsMetadataBoard.email,
-          message: 'Informing as there was a change in a Team/Committee/Council.',
+          message: 'Informing as there was a change in a Team/Committee.',
         ),
         UserRole::UserRoleEmailRecipient.new(
           name: UserGroup.teams_committees_group_weat.name,
@@ -187,9 +187,9 @@ class RoleChangeMailer < ApplicationMailer
           message: 'Please add this to monthly digest.',
         ),
         UserRole::UserRoleEmailRecipient.new(
-          name: 'Team/Committee/Council Leader',
+          name: 'Team/Committee Leader',
           email: role.group.lead_user.email,
-          message: 'Informing as there was a change in your Team/Committee/Council.',
+          message: 'Informing as there was a change in your Team/Committee.',
         ),
       )
     when UserGroup.group_types[:banned_competitors]
@@ -252,7 +252,7 @@ class RoleChangeMailer < ApplicationMailer
         UserRole::UserRoleEmailRecipient.new(
           name: UserGroup.board_group.name,
           email: GroupsMetadataBoard.email,
-          message: 'Informing as there was a role end in a Team/Committee/Council.',
+          message: 'Informing as there was a role end in a Team/Committee.',
         ),
         UserRole::UserRoleEmailRecipient.new(
           name: UserGroup.teams_committees_group_weat.name,
@@ -260,9 +260,9 @@ class RoleChangeMailer < ApplicationMailer
           message: 'Please add this to monthly digest and if necessary suspend the GSuite & Slack account.',
         ),
         UserRole::UserRoleEmailRecipient.new(
-          name: 'Team/Committee/Council Leader',
+          name: 'Team/Committee Leader',
           email: role.group.lead_user.email,
-          message: 'Informing as there is a role end in your Team/Committee/Council.',
+          message: 'Informing as there is a role end in your Team/Committee.',
         ),
       )
     when UserGroup.group_types[:board], UserGroup.group_types[:officers]
