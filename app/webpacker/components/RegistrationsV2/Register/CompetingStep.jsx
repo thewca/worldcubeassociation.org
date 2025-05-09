@@ -36,7 +36,6 @@ import {
 } from '../../wca/FormBuilder/provider/FormObjectProvider';
 import { useInputUpdater } from '../../../lib/hooks/useInputState';
 import { useRegistrationMutationErrorHandler, useUpdateRegistrationMutation } from '../lib/mutations';
-import { isoMoneyToHumanReadable } from '../../../lib/helpers/money';
 
 const maxCommentLength = 240;
 
@@ -66,7 +65,7 @@ export default function CompetingStep({
   qualifications,
 }) {
   const {
-    registration, isRegistered, isPolling, isProcessing, startPolling, refetchRegistration,
+    isRegistered, isPolling, isProcessing, startPolling, refetchRegistration,
     isPending, isWaitingList,
   } = useRegistration();
 

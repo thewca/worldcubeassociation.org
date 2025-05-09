@@ -26,6 +26,7 @@ export default function RegistrationOverview({
     registration,
     isRejected,
     isAccepted,
+    hasPaid,
   } = useRegistration();
 
   const hasRegistrationEditDeadlinePassed = hasPassed(
