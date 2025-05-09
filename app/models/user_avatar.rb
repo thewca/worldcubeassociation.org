@@ -35,13 +35,6 @@ class UserAvatar < ApplicationRecord
   validates :public_image, blob: { content_type: :web_image, size_range: 0..MAX_UPLOAD_SIZE }
   validates :private_image, blob: { content_type: :web_image, size_range: 0..MAX_UPLOAD_SIZE }
 
-  private def linked_user
-    # Make sure that we're traversing back the correct association (using `inverse_of`)
-    #   when accessing current profile pictures. Marked as `private` because this is a pure
-    #   convenience method to leverage pre-loaded associations
-    self.approved? ? self.current_user : self.user
-  end
-
   def url
     case self.backend
     when 's3_legacy_cdn'
@@ -199,22 +192,6 @@ class UserAvatar < ApplicationRecord
     end
   end
 
-  private def reattach_image(from_file, to_file)
-    return unless from_file.attached?
-
-    # ActiveStorage is a bit inconvenient when moving files around.
-    #   Simply writing `to_file.attach(from_file.blob)` makes the code execute successfully,
-    #   but under the hood the file is not actually moved because AS thinks that it's already uploaded :/
-    # Thus, we have to download the whole thing and re-upload again…
-    to_file.attach(
-      io: StringIO.new(from_file.download),
-      filename: from_file.filename,
-      content_type: from_file.content_type,
-    )
-
-    from_file.purge_later
-  end
-
   after_save :invalidate_thumbnail_if_approved,
              if: %i[using_cdn? approved?],
              # If the thumbnail details changed, Rails will generate a new key anyways,
@@ -308,4 +285,29 @@ class UserAvatar < ApplicationRecord
   def serializable_hash(options = nil)
     super(DEFAULT_SERIALIZE_OPTIONS.merge(options || {}))
   end
+
+  private
+
+    def linked_user
+      # Make sure that we're traversing back the correct association (using `inverse_of`)
+      #   when accessing current profile pictures. Marked as `private` because this is a pure
+      #   convenience method to leverage pre-loaded associations
+      self.approved? ? self.current_user : self.user
+    end
+
+    def reattach_image(from_file, to_file)
+      return unless from_file.attached?
+
+      # ActiveStorage is a bit inconvenient when moving files around.
+      #   Simply writing `to_file.attach(from_file.blob)` makes the code execute successfully,
+      #   but under the hood the file is not actually moved because AS thinks that it's already uploaded :/
+      # Thus, we have to download the whole thing and re-upload again…
+      to_file.attach(
+        io: StringIO.new(from_file.download),
+        filename: from_file.filename,
+        content_type: from_file.content_type,
+      )
+
+      from_file.purge_later
+    end
 end

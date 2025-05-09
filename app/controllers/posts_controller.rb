@@ -93,28 +93,31 @@ class PostsController < ApplicationController
     redirect_to root_url
   end
 
-  private def editable_post_fields
-    %i[title body sticky unstick_at tags show_on_homepage]
-  end
   helper_method :editable_post_fields
 
-  private def post_params
-    params.require(:post).permit(*editable_post_fields)
-  end
+  private
 
-  private def find_post
-    # We explicitly query for slug rather than using an OR, because mysql does
-    # weird things when searching for an id using a string:
-    #  mysql> select id from posts where id="2014-foo";
-    #  +------+
-    #  | id   |
-    #  +------+
-    #  | 2014 |
-    #  +------+
-    #  1 row in set, 1 warning (0.00 sec)
-    post = Post.find_by(slug: params[:id]) || Post.find_by(id: params[:id])
-    raise ActiveRecord::RecordNotFound.new("Couldn't find post") unless post
+    def editable_post_fields
+      %i[title body sticky unstick_at tags show_on_homepage]
+    end
 
-    post
-  end
+    def post_params
+      params.require(:post).permit(*editable_post_fields)
+    end
+
+    def find_post
+      # We explicitly query for slug rather than using an OR, because mysql does
+      # weird things when searching for an id using a string:
+      #  mysql> select id from posts where id="2014-foo";
+      #  +------+
+      #  | id   |
+      #  +------+
+      #  | 2014 |
+      #  +------+
+      #  1 row in set, 1 warning (0.00 sec)
+      post = Post.find_by(slug: params[:id]) || Post.find_by(id: params[:id])
+      raise ActiveRecord::RecordNotFound.new("Couldn't find post") unless post
+
+      post
+    end
 end

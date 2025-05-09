@@ -44,14 +44,16 @@ class Oauth::ApplicationsController < ApplicationController
     redirect_to oauth_applications_url
   end
 
-  private def set_application
-    @application = Doorkeeper::Application.find(params[:id])
-    # Don't let users view or edit applications they don't own,
-    # unless they're an admin.
-    raise ActionController::RoutingError.new('Not Found') if @application.owner != current_user && !current_user.admin?
-  end
+  private
 
-  private def application_params
-    params.require(:doorkeeper_application).permit(:name, :redirect_uri, :scopes)
-  end
+    def set_application
+      @application = Doorkeeper::Application.find(params[:id])
+      # Don't let users view or edit applications they don't own,
+      # unless they're an admin.
+      raise ActionController::RoutingError.new('Not Found') if @application.owner != current_user && !current_user.admin?
+    end
+
+    def application_params
+      params.require(:doorkeeper_application).permit(:name, :redirect_uri, :scopes)
+    end
 end

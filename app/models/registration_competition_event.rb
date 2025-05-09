@@ -17,7 +17,10 @@ class RegistrationCompetitionEvent < ApplicationRecord
   delegate :allow_registration_without_qualification?, to: :registration
 
   validate :meets_qualifications, if: :competition_event, unless: :allow_registration_without_qualification?
-  private def meets_qualifications
-    errors.add(:competition_event, :not_qualified, message: I18n.t('registrations.errors.can_only_register_for_qualified_events'), frontend_code: Registrations::ErrorCodes::QUALIFICATION_NOT_MET) unless competition_event&.can_register?(user)
-  end
+
+  private
+
+    def meets_qualifications
+      errors.add(:competition_event, :not_qualified, message: I18n.t('registrations.errors.can_only_register_for_qualified_events'), frontend_code: Registrations::ErrorCodes::QUALIFICATION_NOT_MET) unless competition_event&.can_register?(user)
+    end
 end

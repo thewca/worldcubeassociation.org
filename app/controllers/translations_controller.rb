@@ -54,21 +54,23 @@ class TranslationsController < ApplicationController
     @pr_url = Octokit.create_pull_request(upstream_repo, "main", "#{user_login}:#{branch_name}", message, pr_description_for(current_user, locale))[:html_url]
   end
 
-  private def pr_description_for(user, locale)
-    info = ["WCA Account ID: *#{user.id}*"]
-    info.unshift("WCA ID: *[#{user.wca_id}](#{person_url(user.wca_id)})*") if user.wca_id
-    is_verified_translator = false
-    UserGroup.translators.each do |translators_group|
-      if translators_group.roles.any? { |role| role.user_id == user.id && role.group.metadata.locale == locale }
-        is_verified_translator = true
-        break
+  private
+
+    def pr_description_for(user, locale)
+      info = ["WCA Account ID: *#{user.id}*"]
+      info.unshift("WCA ID: *[#{user.wca_id}](#{person_url(user.wca_id)})*") if user.wca_id
+      is_verified_translator = false
+      UserGroup.translators.each do |translators_group|
+        if translators_group.roles.any? { |role| role.user_id == user.id && role.group.metadata.locale == locale }
+          is_verified_translator = true
+          break
+        end
       end
+      verification_info = if is_verified_translator
+                            ":heavy_check_mark: This translation comes from a verified translator for this language."
+                          else
+                            ":warning: This translation doesn't come from a verified translator for this language."
+                          end
+      "Submitted by #{user.name} (#{info.join(', ')}).\n\n#{verification_info}"
     end
-    verification_info = if is_verified_translator
-                          ":heavy_check_mark: This translation comes from a verified translator for this language."
-                        else
-                          ":warning: This translation doesn't come from a verified translator for this language."
-                        end
-    "Submitted by #{user.name} (#{info.join(', ')}).\n\n#{verification_info}"
-  end
 end

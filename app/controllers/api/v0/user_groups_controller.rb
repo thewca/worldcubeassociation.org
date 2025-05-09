@@ -1,26 +1,6 @@
 # frozen_string_literal: true
 
 class Api::V0::UserGroupsController < Api::V0::ApiController
-  # Don't list hidden groups if the user doesn't have edit permission.
-  private def filter_groups_for_logged_in_user(groups)
-    groups.reject do |group|
-      group.is_hidden && !current_user&.has_permission?(:can_edit_groups, group.id)
-    end
-  end
-
-  # Filters the list of groups based on given parameters.
-  private def filter_groups_for_parameters(groups: [], is_active: nil, is_hidden: nil, parent_group_id: nil, is_root_group: nil)
-    groups.reject do |group|
-      # Here, instead of foo.present? we are using !foo.nil? because foo.present? returns false if
-      # foo is a boolean false but we need to actually check if the boolean is present or not.
-
-      (!is_active.nil? && is_active != group.is_active) ||
-        (!is_hidden.nil? && is_hidden != group.is_hidden) ||
-        (!parent_group_id.nil? && parent_group_id != group.parent_group_id) ||
-        (!is_root_group.nil? && is_root_group != group.root_group?)
-    end
-  end
-
   def index
     group_type = params.require(:groupType)
     groups = UserGroup.where(group_type: group_type)
@@ -75,4 +55,26 @@ class Api::V0::UserGroupsController < Api::V0::ApiController
       success: true,
     }
   end
+
+  private
+
+    # Don't list hidden groups if the user doesn't have edit permission.
+    def filter_groups_for_logged_in_user(groups)
+      groups.reject do |group|
+        group.is_hidden && !current_user&.has_permission?(:can_edit_groups, group.id)
+      end
+    end
+
+    # Filters the list of groups based on given parameters.
+    def filter_groups_for_parameters(groups: [], is_active: nil, is_hidden: nil, parent_group_id: nil, is_root_group: nil)
+      groups.reject do |group|
+        # Here, instead of foo.present? we are using !foo.nil? because foo.present? returns false if
+        # foo is a boolean false but we need to actually check if the boolean is present or not.
+
+        (!is_active.nil? && is_active != group.is_active) ||
+          (!is_hidden.nil? && is_hidden != group.is_hidden) ||
+          (!parent_group_id.nil? && parent_group_id != group.parent_group_id) ||
+          (!is_root_group.nil? && is_root_group != group.root_group?)
+      end
+    end
 end

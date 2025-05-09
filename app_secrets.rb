@@ -31,16 +31,18 @@ SuperConfig::Base.class_eval do
     end
   end
 
-  private def vault_read(secret_name)
-    Vault.with_retries(Vault::HTTPConnectionError, Vault::HTTPError) do |attempt, e|
-      puts "Received exception #{e} from Vault - attempt #{attempt}" if e.present?
+  private
 
-      secret = Vault.logical.read("kv/data/#{EnvConfig.VAULT_APPLICATION}/#{secret_name}")
-      raise "Tried to read #{secret_name}, but doesn't exist" if secret.blank?
+    def vault_read(secret_name)
+      Vault.with_retries(Vault::HTTPConnectionError, Vault::HTTPError) do |attempt, e|
+        puts "Received exception #{e} from Vault - attempt #{attempt}" if e.present?
 
-      secret.data[:data]
+        secret = Vault.logical.read("kv/data/#{EnvConfig.VAULT_APPLICATION}/#{secret_name}")
+        raise "Tried to read #{secret_name}, but doesn't exist" if secret.blank?
+
+        secret.data[:data]
+      end
     end
-  end
 end
 
 AppSecrets = SuperConfig.new(raise_exception: !EnvConfig.ASSETS_COMPILATION?) do

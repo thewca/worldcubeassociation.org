@@ -49,34 +49,6 @@ class PanelController < ApplicationController
     }
   end
 
-  private def validators_for_competition_ids(competition_ids)
-    validators = params.require(:selectedValidators).split(',').map do |validator_name|
-      ResultsValidators::Utils.validator_class_from_name(validator_name)
-    end
-    apply_fix_when_possible = params.require(:applyFixWhenPossible)
-
-    results_validator = ResultsValidators::CompetitionsResultsValidator.new(
-      validators,
-      check_real_results: true,
-      apply_fixes: apply_fix_when_possible,
-    )
-    results_validator.validate(competition_ids)
-    render json: {
-      has_results: results_validator.any_results?,
-      validators: results_validator.validators,
-      infos: results_validator.infos,
-      errors: results_validator.errors,
-      warnings: results_validator.warnings,
-    }
-  end
-
-  private def competitions_between(start_date, end_date)
-    Competition.over
-               .not_cancelled
-               .between_dates(start_date, end_date)
-               .order(:start_date)
-  end
-
   def competition_count
     start_date = params.require(:startDate)
     end_date = params.require(:endDate)
@@ -128,4 +100,34 @@ class PanelController < ApplicationController
 
     render json: JobUtils.cronjob_statistics_from_cronjob_name(cronjob_name)
   end
+
+  private
+
+    def validators_for_competition_ids(competition_ids)
+      validators = params.require(:selectedValidators).split(',').map do |validator_name|
+        ResultsValidators::Utils.validator_class_from_name(validator_name)
+      end
+      apply_fix_when_possible = params.require(:applyFixWhenPossible)
+
+      results_validator = ResultsValidators::CompetitionsResultsValidator.new(
+        validators,
+        check_real_results: true,
+        apply_fixes: apply_fix_when_possible,
+      )
+      results_validator.validate(competition_ids)
+      render json: {
+        has_results: results_validator.any_results?,
+        validators: results_validator.validators,
+        infos: results_validator.infos,
+        errors: results_validator.errors,
+        warnings: results_validator.warnings,
+      }
+    end
+
+    def competitions_between(start_date, end_date)
+      Competition.over
+                 .not_cancelled
+                 .between_dates(start_date, end_date)
+                 .order(:start_date)
+    end
 end

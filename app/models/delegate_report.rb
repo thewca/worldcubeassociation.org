@@ -30,10 +30,6 @@ class DelegateReport < ApplicationRecord
     self.discussion_url = "https://groups.google.com/a/worldcubeassociation.org/forum/#!topicsearchin/reports/#{URI.encode_www_form_component(competition.name)}"
   end
 
-  private def render_section_template(section)
-    ActionController::Base.new.render_to_string(template: "delegate_reports/#{self.version}/_#{section}_default", formats: :md)
-  end
-
   before_create :md_section_defaults!
   def md_section_defaults!
     # Make sure that sections which are NOT being used are explicitly set to `nil`
@@ -55,9 +51,6 @@ class DelegateReport < ApplicationRecord
   validates :wic_incidents, presence: true, if: :wic_feedback_requested
 
   validate :setup_image_count, if: %i[posted? requires_setup_images?]
-  private def setup_image_count
-    errors.add(:setup_images, "Needs at least #{self.required_setup_images_count} images") if self.setup_images.count < self.required_setup_images_count
-  end
 
   validates :setup_images, blob: { content_type: :web_image }
 
@@ -145,4 +138,14 @@ class DelegateReport < ApplicationRecord
       },
     }
   end
+
+  private
+
+    def render_section_template(section)
+      ActionController::Base.new.render_to_string(template: "delegate_reports/#{self.version}/_#{section}_default", formats: :md)
+    end
+
+    def setup_image_count
+      errors.add(:setup_images, "Needs at least #{self.required_setup_images_count} images") if self.setup_images.count < self.required_setup_images_count
+    end
 end

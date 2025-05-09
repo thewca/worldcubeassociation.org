@@ -7,10 +7,6 @@ class Assignment < ApplicationRecord
   validates :station_number, numericality: { only_integer: true }, allow_nil: true
   validate :validate_assignment_code
 
-  private def validate_assignment_code
-    errors.add(:activity_code, "should be a valid assignment code") unless assignment_code.match?(/^(competitor|staff-\w+)$/)
-  end
-
   def wcif_equal?(other_wcif)
     to_wcif.all? { |key, value| value == other_wcif[key] }
   end
@@ -33,4 +29,10 @@ class Assignment < ApplicationRecord
       },
     }
   end
+
+  private
+
+    def validate_assignment_code
+      errors.add(:activity_code, "should be a valid assignment code") unless assignment_code.match?(/^(competitor|staff-\w+)$/)
+    end
 end

@@ -36,14 +36,8 @@ class Person < ApplicationRecord
   # a workaround to this validation would be to create them with any dob,
   # then fix them to a blank dob.
   validate :dob_must_be_valid
-  private def dob_must_be_valid
-    errors.add(:dob, I18n.t('errors.messages.invalid')) if new_record? && !dob
-  end
 
   validate :dob_must_be_in_the_past
-  private def dob_must_be_in_the_past
-    errors.add(:dob, I18n.t('users.errors.dob_past')) if dob && dob >= Date.today
-  end
 
   # If someone represented country A, and now represents country B, it's
   # easy to tell which solves are which (results have a country_id).
@@ -51,12 +45,6 @@ class Person < ApplicationRecord
   # all Cs to Bs. However, if someone accidentally fixes their country from B
   # to A, then we cannot go back, as all their results are now for country A.
   validate :cannot_change_country_to_country_represented_before
-  private def cannot_change_country_to_country_represented_before
-    return unless country_id_changed? && !new_record? && !@updating_using_sub_id
-
-    has_represented_this_country_already = Person.exists?(wca_id: wca_id, country_id: country_id)
-    errors.add(:country_id, I18n.t('users.errors.already_represented_country')) if has_represented_this_country_already
-  end
 
   # This is necessary because we use a view instead of a real table.
   # Using `select` statement with `id` column causes MySQL to set a default value of 0,
@@ -66,13 +54,6 @@ class Person < ApplicationRecord
   before_create -> { self.id = nil }
 
   after_update :update_results_table_and_associated_user
-  private def update_results_table_and_associated_user
-    unless @updating_using_sub_id
-      results_for_most_recent_sub_id = results.where(person_name: name_before_last_save, country_id: country_id_before_last_save)
-      results_for_most_recent_sub_id.update_all(person_name: name, country_id: country_id) if saved_change_to_name? || saved_change_to_country_id?
-    end
-    user.save! if user # User copies data from the person before validation, so this will update him.
-  end
 
   def update_using_sub_id!(attributes)
     raise unless update_using_sub_id(attributes)
@@ -133,17 +114,6 @@ class Person < ApplicationRecord
 
   def country_iso2
     country&.iso2
-  end
-
-  private def rank_for_event_type(event, type)
-    case type
-    when :single
-      ranks_single.find_by(event_id: event.id)
-    when :average
-      ranks_average.find_by(event_id: event.id)
-    else
-      raise "Unrecognized type #{type}"
-    end
   end
 
   def world_rank(event, type)
@@ -397,4 +367,40 @@ class Person < ApplicationRecord
     # the Person's data takes priority, though.
     (user || User.new).serializable_hash(user_override_options).merge(json)
   end
+
+  private
+
+    def dob_must_be_valid
+      errors.add(:dob, I18n.t('errors.messages.invalid')) if new_record? && !dob
+    end
+
+    def dob_must_be_in_the_past
+      errors.add(:dob, I18n.t('users.errors.dob_past')) if dob && dob >= Date.today
+    end
+
+    def cannot_change_country_to_country_represented_before
+      return unless country_id_changed? && !new_record? && !@updating_using_sub_id
+
+      has_represented_this_country_already = Person.exists?(wca_id: wca_id, country_id: country_id)
+      errors.add(:country_id, I18n.t('users.errors.already_represented_country')) if has_represented_this_country_already
+    end
+
+    def update_results_table_and_associated_user
+      unless @updating_using_sub_id
+        results_for_most_recent_sub_id = results.where(person_name: name_before_last_save, country_id: country_id_before_last_save)
+        results_for_most_recent_sub_id.update_all(person_name: name, country_id: country_id) if saved_change_to_name? || saved_change_to_country_id?
+      end
+      user&.save! # User copies data from the person before validation, so this will update him.
+    end
+
+    def rank_for_event_type(event, type)
+      case type
+      when :single
+        ranks_single.find_by(event_id: event.id)
+      when :average
+        ranks_average.find_by(event_id: event.id)
+      else
+        raise "Unrecognized type #{type}"
+      end
+    end
 end

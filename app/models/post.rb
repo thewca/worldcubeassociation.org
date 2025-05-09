@@ -13,14 +13,8 @@ class Post < ApplicationRecord
   validates :slug, presence: true, uniqueness: { case_sensitive: true }
 
   validate :unstick_at_must_be_in_the_future, if: :unstick_at
-  private def unstick_at_must_be_in_the_future
-    errors.add(:unstick_at, I18n.t('posts.errors.unstick_at_future')) if unstick_at <= Date.today
-  end
 
   before_validation :clear_unstick_at, unless: :sticky?
-  private def clear_unstick_at
-    self.unstick_at = nil
-  end
 
   BREAK_TAG_RE = /<!--\s*break\s*-->/
 
@@ -34,9 +28,6 @@ class Post < ApplicationRecord
   end
 
   before_validation :compute_slug
-  private def compute_slug
-    self.slug = title.parameterize
-  end
 
   def self.search(query, params: {})
     posts = Post
@@ -71,4 +62,18 @@ class Post < ApplicationRecord
 
     json
   end
+
+  private
+
+    def unstick_at_must_be_in_the_future
+      errors.add(:unstick_at, I18n.t('posts.errors.unstick_at_future')) if unstick_at <= Date.today
+    end
+
+    def clear_unstick_at
+      self.unstick_at = nil
+    end
+
+    def compute_slug
+      self.slug = title.parameterize
+    end
 end

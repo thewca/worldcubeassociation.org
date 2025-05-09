@@ -62,25 +62,26 @@ class ComputeAuxiliaryData < WcaCronjob
     )
   end
 
-  ######
-  # WARNING: Shameless copy-paste ahead!
-  #
-  # These queries originate from results_controller.rb. The cleanest solution would be to provide a method
-  #   which -- given an event ID, a region, a gender, etc. -- returns the SQL query string to the caller.
-  #   Both the controller as well as this job could then use that method.
-  # However, coming up with that method would require significant refactoring because of how all the
-  #   SQL `AND` conditions are currently glued together in different formats and different places,
-  #   and because of how deeply intertwined the query build process is with the `@var` global variables in the controller.
-  # Since we're only ever using the `event_id` filter here, and all other filters that the results_controller supports
-  #   are obsolete for this job, we would end up with an overblown solution that isn't really used except in one
-  #   place to its full potential (and here in a very, very trimmed-down version).
-  # So this shameless copy-pasta is the most time-efficient way I could come up with (and the next time we need to
-  #   touch these queries we will most likely redesign the schema so fundamentally that we can get rid of the current
-  #   caching approach anyways, so maintenance is at a minimum here.)
-  ######
+  private
 
-  private def rankings_query(type, column, event_id)
-    <<-SQL.squish
+    ######
+    # WARNING: Shameless copy-paste ahead!
+    #
+    # These queries originate from results_controller.rb. The cleanest solution would be to provide a method
+    #   which -- given an event ID, a region, a gender, etc. -- returns the SQL query string to the caller.
+    #   Both the controller as well as this job could then use that method.
+    # However, coming up with that method would require significant refactoring because of how all the
+    #   SQL `AND` conditions are currently glued together in different formats and different places,
+    #   and because of how deeply intertwined the query build process is with the `@var` global variables in the controller.
+    # Since we're only ever using the `event_id` filter here, and all other filters that the results_controller supports
+    #   are obsolete for this job, we would end up with an overblown solution that isn't really used except in one
+    #   place to its full potential (and here in a very, very trimmed-down version).
+    # So this shameless copy-pasta is the most time-efficient way I could come up with (and the next time we need to
+    #   touch these queries we will most likely redesign the schema so fundamentally that we can get rid of the current
+    #   caching approach anyways, so maintenance is at a minimum here.)
+    ######
+    def rankings_query(type, column, event_id)
+      <<-SQL.squish
       SELECT
         results.*,
         results.#{column} value
@@ -95,11 +96,11 @@ class ComputeAuxiliaryData < WcaCronjob
       ) top
       JOIN results ON results.id = value_and_id % 1000000000
       ORDER BY value, person_name
-    SQL
-  end
+      SQL
+    end
 
-  private def mixed_records_query(event_id: nil)
-    <<-SQL.squish
+    def mixed_records_query(event_id: nil)
+      <<-SQL.squish
       SELECT *
       FROM
         (#{self.current_records_query('best', 'single', event_id: event_id)}
@@ -107,13 +108,13 @@ class ComputeAuxiliaryData < WcaCronjob
         #{self.current_records_query('average', 'average', event_id: event_id)}) helper
       ORDER BY
         `rank`, type DESC, start_date, round_type_id, person_name
-    SQL
-  end
+      SQL
+    end
 
-  private def current_records_query(value, type, event_id: nil)
-    event_condition = event_id.present? ? "AND results.event_id = '#{event_id}'" : ""
+    def current_records_query(value, type, event_id: nil)
+      event_condition = event_id.present? ? "AND results.event_id = '#{event_id}'" : ""
 
-    <<-SQL.squish
+      <<-SQL.squish
       SELECT
         '#{type}'              type,
                                results.*,
@@ -144,6 +145,6 @@ class ComputeAuxiliaryData < WcaCronjob
         AND countries.id     = results.country_id
         AND competitions.id  = results.competition_id
         AND events.`rank` < 990
-    SQL
-  end
+      SQL
+    end
 end

@@ -65,34 +65,36 @@ class RegionalOrganizationsController < ApplicationController
     redirect_to admin_regional_organizations_path
   end
 
-  private def regional_organization_params
-    permitted_regional_organization_params = %i[
-      name
-      country
-      website
-      logo
-      email
-      address
-      bylaws
-      directors_and_officers
-      area_description
-      past_and_current_activities
-      future_plans
-      extra_information
-      extra_file
-    ]
+  private
 
-    if current_user.can_manage_regional_organizations?
-      permitted_regional_organization_params += %i[
-        start_date
-        end_date
+    def regional_organization_params
+      permitted_regional_organization_params = %i[
+        name
+        country
+        website
+        logo
+        email
+        address
+        bylaws
+        directors_and_officers
+        area_description
+        past_and_current_activities
+        future_plans
+        extra_information
+        extra_file
       ]
+
+      if current_user.can_manage_regional_organizations?
+        permitted_regional_organization_params += %i[
+          start_date
+          end_date
+        ]
+      end
+
+      params.require(:regional_organization).permit(*permitted_regional_organization_params)
     end
 
-    params.require(:regional_organization).permit(*permitted_regional_organization_params)
-  end
-
-  private def regional_organization_from_params
-    RegionalOrganization.find(params[:id])
-  end
+    def regional_organization_from_params
+      RegionalOrganization.find(params[:id])
+    end
 end

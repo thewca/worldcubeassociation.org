@@ -14,12 +14,6 @@ class ApplicationController < ActionController::Base
 
   before_action :store_user_location!, if: :storable_location?
   before_action :add_new_relic_headers
-  protected def add_new_relic_headers
-    ::NewRelic::Agent.add_custom_attributes(user_id: current_user ? current_user.id : nil)
-    ::NewRelic::Agent.add_custom_attributes(HTTP_REFERER: request.headers['HTTP_REFERER'])
-    ::NewRelic::Agent.add_custom_attributes(HTTP_ACCEPT: request.headers['HTTP_ACCEPT'])
-    ::NewRelic::Agent.add_custom_attributes(HTTP_USER_AGENT: request.user_agent)
-  end
 
   def self.locale_counts
     @@locale_counts
@@ -63,35 +57,6 @@ class ApplicationController < ActionController::Base
   end
 
   before_action :configure_permitted_parameters, if: :devise_controller?
-  protected def configure_permitted_parameters
-    devise_parameter_sanitizer.permit(:sign_up, keys: %i[
-      name
-      email
-      dob
-      gender
-      country_iso2
-    ] + User::CLAIM_WCA_ID_PARAMS)
-    devise_parameter_sanitizer.permit(:sign_in, keys: %i[login otp_attempt])
-    devise_parameter_sanitizer.permit(:account_update, keys: %i[name email])
-  end
-
-  # This method is called by devise after a successful login to know the redirect path
-  # We override it to do some action after signing in, but we want to use the original path
-  protected def after_sign_in_path_for(resource_or_scope)
-    # When the user signs in, 'session[:locale]' is not cleared, so we need to clear it
-    # and compute again the user's preferred_locale
-    session[:locale] = nil
-    set_locale
-
-    super
-  end
-
-  # This method is called by devise after a successful logout to know the redirect path
-  # We override it to do some action after signing out, but we want to use the original path
-  protected def after_sign_out_path_for(resource_or_scope)
-    session[:should_reset_jwt] = true
-    super
-  end
 
   # Starburst announcements, see https://github.com/starburstgem/starburst#installation
   helper Starburst::AnnouncementsHelper
@@ -134,5 +99,44 @@ class ApplicationController < ActionController::Base
     def store_user_location!
       # :user is the scope we are authenticating
       store_location_for(:user, request.fullpath)
+    end
+
+  protected
+
+    def add_new_relic_headers
+      ::NewRelic::Agent.add_custom_attributes(user_id: current_user&.id)
+      ::NewRelic::Agent.add_custom_attributes(HTTP_REFERER: request.headers['HTTP_REFERER'])
+      ::NewRelic::Agent.add_custom_attributes(HTTP_ACCEPT: request.headers['HTTP_ACCEPT'])
+      ::NewRelic::Agent.add_custom_attributes(HTTP_USER_AGENT: request.user_agent)
+    end
+
+    def configure_permitted_parameters
+      devise_parameter_sanitizer.permit(:sign_up, keys: %i[
+        name
+        email
+        dob
+        gender
+        country_iso2
+      ] + User::CLAIM_WCA_ID_PARAMS)
+      devise_parameter_sanitizer.permit(:sign_in, keys: %i[login otp_attempt])
+      devise_parameter_sanitizer.permit(:account_update, keys: %i[name email])
+    end
+
+    # This method is called by devise after a successful login to know the redirect path
+    # We override it to do some action after signing in, but we want to use the original path
+    def after_sign_in_path_for(resource_or_scope)
+      # When the user signs in, 'session[:locale]' is not cleared, so we need to clear it
+      # and compute again the user's preferred_locale
+      session[:locale] = nil
+      set_locale
+
+      super
+    end
+
+    # This method is called by devise after a successful logout to know the redirect path
+    # We override it to do some action after signing out, but we want to use the original path
+    def after_sign_out_path_for(resource_or_scope)
+      session[:should_reset_jwt] = true
+      super
     end
 end

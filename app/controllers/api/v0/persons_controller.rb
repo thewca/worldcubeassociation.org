@@ -46,32 +46,34 @@ class Api::V0::PersonsController < Api::V0::ApiController
     render json: person.personal_records.map(&:to_wcif)
   end
 
-  private def person_to_json(person, private_attributes = [])
-    {
-      person: person.serializable_hash(only: %i[wca_id name url gender country_iso2 delegate_status teams avatar], private_attributes: private_attributes),
-      competition_count: person.competitions.count,
-      personal_records: person.ranks_single.index_by(&:event_id).transform_values do |rank_single|
-        # This rank may be nil: A person can have a single but not an average.
-        # The other way around however (average with no single) is not possible,
-        #   and that's why we use `ranksSingle` as a base for computing our lookup.
-        rank_average = person.ranks_average.find { |rank| rank.event_id == rank_single.event_id }
+  private
 
-        {
-          single: rank_single,
-          average: rank_average,
-        }.compact
-      end,
-      medals: person.medals,
-      records: person.records,
-    }
-  end
+    def person_to_json(person, private_attributes = [])
+      {
+        person: person.serializable_hash(only: %i[wca_id name url gender country_iso2 delegate_status teams avatar], private_attributes: private_attributes),
+        competition_count: person.competitions.count,
+        personal_records: person.ranks_single.index_by(&:event_id).transform_values do |rank_single|
+          # This rank may be nil: A person can have a single but not an average.
+          # The other way around however (average with no single) is not possible,
+          #   and that's why we use `ranksSingle` as a base for computing our lookup.
+          rank_average = person.ranks_average.find { |rank| rank.event_id == rank_single.event_id }
 
-  private def rank_to_json(rank)
-    {
-      best: rank.best,
-      world_rank: rank.world_rank,
-      continent_rank: rank.continent_rank,
-      country_rank: rank.country_rank,
-    }
-  end
+          {
+            single: rank_single,
+            average: rank_average,
+          }.compact
+        end,
+        medals: person.medals,
+        records: person.records,
+      }
+    end
+
+    def rank_to_json(rank)
+      {
+        best: rank.best,
+        world_rank: rank.world_rank,
+        continent_rank: rank.continent_rank,
+        country_rank: rank.country_rank,
+      }
+    end
 end

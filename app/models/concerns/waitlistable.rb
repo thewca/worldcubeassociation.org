@@ -37,15 +37,7 @@ module Waitlistable
 
     after_save :commit_waitlist_position, if: :waiting_list_persisted?
 
-    private def commit_waitlist_position
-      self.apply_to_waiting_list(self.waiting_list_position)
-    end
-
     after_commit :clear_tracked_waitlist_position!
-
-    private def clear_tracked_waitlist_position!
-      self.tracked_waitlist_position = nil
-    end
 
     # Tells the hooks whether the current entity
     #   can be put on the waitlist in the first place.
@@ -72,8 +64,11 @@ module Waitlistable
 
       self.apply_to_waiting_list(target_position) if self.persisted? && waiting_list_persisted?
     end
+  end
 
-    private def apply_to_waiting_list(target_position)
+  private
+
+    def apply_to_waiting_list(target_position)
       should_add = self.waitlistable? && target_position.nil?
       should_move = self.waitlistable? && target_position.present?
       should_remove = !self.waitlistable? && target_position.present?
@@ -88,5 +83,12 @@ module Waitlistable
       #   that the waiting list position actually changed.
       self.clear_tracked_waitlist_position! if nothing_happened
     end
-  end
+
+    def clear_tracked_waitlist_position!
+      self.tracked_waitlist_position = nil
+    end
+
+    def commit_waitlist_position
+      self.apply_to_waiting_list(self.waiting_list_position)
+    end
 end

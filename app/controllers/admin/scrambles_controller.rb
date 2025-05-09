@@ -82,9 +82,11 @@ module Admin
       }
     end
 
-    private def scramble_params
-      params.require(:scramble).permit(:competition_id, :round_type_id, :event_id, :group_id,
-                                       :is_extra, :scramble_num, :scramble)
-    end
+    private
+
+      def scramble_params
+        params.require(:scramble).permit(:competition_id, :round_type_id, :event_id, :group_id,
+                                         :is_extra, :scramble_num, :scramble)
+      end
   end
 end

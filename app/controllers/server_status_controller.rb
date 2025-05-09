@@ -46,18 +46,20 @@ class JobsCheck < StatusCheck
     "Jobs"
   end
 
-  protected def _status_description
-    jobs_that_should_have_run_by_now = CronjobStatistic.where(recently_rejected: 0, run_start: nil)
-                                                       .where(enqueued_at: ...MINUTES_IN_WHICH_A_JOB_SHOULD_HAVE_STARTED_RUNNING.minutes.ago)
+  protected
 
-    oldest_job_that_should_have_run_by_now = jobs_that_should_have_run_by_now.order(:enqueued_at).first
+    def _status_description
+      jobs_that_should_have_run_by_now = CronjobStatistic.where(recently_rejected: 0, run_start: nil)
+                                                         .where(enqueued_at: ...MINUTES_IN_WHICH_A_JOB_SHOULD_HAVE_STARTED_RUNNING.minutes.ago)
 
-    if oldest_job_that_should_have_run_by_now.nil?
-      [:success, nil]
-    else
-      [
-        :danger,
-        %(
+      oldest_job_that_should_have_run_by_now = jobs_that_should_have_run_by_now.order(:enqueued_at).first
+
+      if oldest_job_that_should_have_run_by_now.nil?
+        [:success, nil]
+      else
+        [
+          :danger,
+          %(
           Uh oh!
           Job #{oldest_job_that_should_have_run_by_now.id} was enqueued
           #{time_ago_in_words oldest_job_that_should_have_run_by_now.enqueued_at}
@@ -67,9 +69,9 @@ class JobsCheck < StatusCheck
           #{'is'.pluralize(jobs_that_should_have_run_by_now.count)}
           waiting to run.
         ).squish,
-      ]
+        ]
+      end
     end
-  end
 end
 
 class RegulationsCheck < StatusCheck
@@ -77,13 +79,15 @@ class RegulationsCheck < StatusCheck
     "Regulations"
   end
 
-  protected def _status_description
-    if Regulation.regulations_load_error.nil?
-      [:success, nil]
-    else
-      [:danger, "Error while loading regulations: #{Regulation.regulations_load_error} from #{Regulation.regulations_load_error.class}"]
+  protected
+
+    def _status_description
+      if Regulation.regulations_load_error.nil?
+        [:success, nil]
+      else
+        [:danger, "Error while loading regulations: #{Regulation.regulations_load_error} from #{Regulation.regulations_load_error.class}"]
+      end
     end
-  end
 end
 
 class MysqlSettingsCheck < StatusCheck
@@ -97,22 +101,24 @@ class MysqlSettingsCheck < StatusCheck
     "MySQL"
   end
 
-  protected def _status_description
-    actual_mysql_settings = ActiveRecord::Base.connection.select_one("SELECT #{EXPECTED_MYSQL_SETTINGS.keys.join(', ')};")
-    mysql_settings_good = true
-    description = ""
-    EXPECTED_MYSQL_SETTINGS.each do |setting, expected_value|
-      actual_value = actual_mysql_settings[setting]
-      if actual_value != expected_value
-        mysql_settings_good = false
-        description += "#{setting}: expected #{expected_value} != actual #{actual_value}\n"
+  protected
+
+    def _status_description
+      actual_mysql_settings = ActiveRecord::Base.connection.select_one("SELECT #{EXPECTED_MYSQL_SETTINGS.keys.join(', ')};")
+      mysql_settings_good = true
+      description = ""
+      EXPECTED_MYSQL_SETTINGS.each do |setting, expected_value|
+        actual_value = actual_mysql_settings[setting]
+        if actual_value != expected_value
+          mysql_settings_good = false
+          description += "#{setting}: expected #{expected_value} != actual #{actual_value}\n"
+        end
+      end
+
+      if mysql_settings_good
+        [:success, nil]
+      else
+        [:danger, description]
       end
     end
-
-    if mysql_settings_good
-      [:success, nil]
-    else
-      [:danger, description]
-    end
-  end
 end

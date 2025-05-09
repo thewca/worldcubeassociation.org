@@ -146,15 +146,6 @@ class SolveTime
     time_seconds / 60.0
   end
 
-  protected def to_orderable
-    [
-      skipped? ? 1 : 0,
-      dns? ? 1 : 0,
-      dnf? ? 1 : 0,
-      wca_value,
-    ]
-  end
-
   def <=>(other)
     to_orderable <=> other.to_orderable
   end
@@ -219,20 +210,6 @@ class SolveTime
     end
   end
 
-  private def units
-    if incomplete?
-      ""
-    elsif @event.timed_event?
-      time_minutes >= 1 ? "" : " #{I18n.t('common.solve_time.unit_seconds')}"
-    elsif @event.fewest_moves?
-      " #{I18n.t('common.solve_time.unit_moves')}"
-    elsif @event.multiple_blindfolded? # rubocop:disable Lint/DuplicateBranch
-      ""
-    else
-      raise "Unrecognized event type #{@event.id}"
-    end
-  end
-
   def clock_format_with_units
     "#{clock_format}#{units}"
   end
@@ -273,4 +250,31 @@ class SolveTime
   DNF_VALUE = -1
   DNS_VALUE = -2
   SKIPPED_VALUE = 0
+
+  private
+
+    def units
+      if incomplete?
+        ""
+      elsif @event.timed_event?
+        time_minutes >= 1 ? "" : " #{I18n.t('common.solve_time.unit_seconds')}"
+      elsif @event.fewest_moves?
+        " #{I18n.t('common.solve_time.unit_moves')}"
+      elsif @event.multiple_blindfolded? # rubocop:disable Lint/DuplicateBranch
+        ""
+      else
+        raise "Unrecognized event type #{@event.id}"
+      end
+    end
+
+  protected
+
+    def to_orderable
+      [
+        skipped? ? 1 : 0,
+        dns? ? 1 : 0,
+        dnf? ? 1 : 0,
+        wca_value,
+      ]
+    end
 end

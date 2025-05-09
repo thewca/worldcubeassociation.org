@@ -3,14 +3,6 @@
 class DelegateReportsController < ApplicationController
   before_action :authenticate_user!
 
-  private def competition_from_params
-    if params[:competition_id]
-      Competition.find(params[:competition_id])
-    else
-      DelegateReport.find(params[:id]).competition
-    end
-  end
-
   def show
     @competition = competition_from_params
     return if redirect_to_root_unless_user(:can_view_delegate_report?, @competition.delegate_report)
@@ -72,24 +64,34 @@ class DelegateReportsController < ApplicationController
     redirect_to delegate_report_edit_path(competition_from_params)
   end
 
-  private def delegate_report_params
-    params.require(:delegate_report).permit(
-      :discussion_url,
-      :schedule_url,
-      :remarks,
-      :posted,
-      :wrc_feedback_requested,
-      :wrc_incidents,
-      :wic_feedback_requested,
-      :wic_incidents,
-      *DelegateReport::AVAILABLE_SECTIONS,
-      setup_images: [],
-    )
-  end
+  private
 
-  private def assign_wrc_users(delegate_report)
-    wrc_primary_user, wrc_secondary_user = UserGroup.teams_committees_group_wrc.active_users.sample 2
-    delegate_report.wrc_primary_user = wrc_primary_user
-    delegate_report.wrc_secondary_user = wrc_secondary_user
-  end
+    def competition_from_params
+      if params[:competition_id]
+        Competition.find(params[:competition_id])
+      else
+        DelegateReport.find(params[:id]).competition
+      end
+    end
+
+    def delegate_report_params
+      params.require(:delegate_report).permit(
+        :discussion_url,
+        :schedule_url,
+        :remarks,
+        :posted,
+        :wrc_feedback_requested,
+        :wrc_incidents,
+        :wic_feedback_requested,
+        :wic_incidents,
+        *DelegateReport::AVAILABLE_SECTIONS,
+        setup_images: [],
+      )
+    end
+
+    def assign_wrc_users(delegate_report)
+      wrc_primary_user, wrc_secondary_user = UserGroup.teams_committees_group_wrc.active_users.sample 2
+      delegate_report.wrc_primary_user = wrc_primary_user
+      delegate_report.wrc_secondary_user = wrc_secondary_user
+    end
 end

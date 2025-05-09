@@ -41,14 +41,6 @@ class Api::V0::ApiController < ApplicationController
     render json: Registrations::Helper.user_qualification_data(user, date)
   end
 
-  private def cutoff_date
-    if params[:date].present?
-      Date.safe_parse(params[:date])
-    else
-      Date.current
-    end
-  end
-
   def scramble_program
     begin
       rsa_key = OpenSSL::PKey::RSA.new(AppSecrets.TNOODLE_PUBLIC_KEY)
@@ -221,27 +213,7 @@ class Api::V0::ApiController < ApplicationController
     }
   end
 
-  private def records_by_event(records)
-    records.group_by { |record| record["event_id"] }.transform_values! do |event_records|
-      event_records.group_by { |record| record["type"] }.transform_values! do |type_records|
-        type_records.map { |record| record["value"] }.min
-      end
-    end
-  end
-
   def authenticated_user
-    current_api_user || current_user
-  end
-
-  # Find the user that owns the access token.
-  # From: https://github.com/doorkeeper-gem/doorkeeper#authenticated-resource-owner
-  private def current_api_user
-    @current_api_user ||= User.find_by(id: doorkeeper_token&.resource_owner_id) if doorkeeper_token&.accessible?
-  end
-
-  private def require_user!
-    raise WcaExceptions::MustLogIn.new if current_api_user.nil? && current_user.nil?
-
     current_api_user || current_user
   end
 
@@ -255,4 +227,34 @@ class Api::V0::ApiController < ApplicationController
 
     render json: competition_series.to_wcif
   end
+
+  private
+
+    def cutoff_date
+      if params[:date].present?
+        Date.safe_parse(params[:date])
+      else
+        Date.current
+      end
+    end
+
+    def records_by_event(records)
+      records.group_by { |record| record["event_id"] }.transform_values! do |event_records|
+        event_records.group_by { |record| record["type"] }.transform_values! do |type_records|
+          type_records.map { |record| record["value"] }.min
+        end
+      end
+    end
+
+    # Find the user that owns the access token.
+    # From: https://github.com/doorkeeper-gem/doorkeeper#authenticated-resource-owner
+    def current_api_user
+      @current_api_user ||= User.find_by(id: doorkeeper_token&.resource_owner_id) if doorkeeper_token&.accessible?
+    end
+
+    def require_user!
+      raise WcaExceptions::MustLogIn.new if current_api_user.nil? && current_user.nil?
+
+      current_api_user || current_user
+    end
 end

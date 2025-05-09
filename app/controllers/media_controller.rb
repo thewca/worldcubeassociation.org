@@ -36,17 +36,6 @@ class MediaController < ApplicationController
     end
   end
 
-  private def all_media
-    params[:year] ||= "all years"
-    params[:region] ||= "all"
-
-    media = CompetitionMedium.includes(:competition).where(status: params[:status]).order(submitted_at: :desc)
-    media = media.joins(:competition).where("YEAR(competitions.start_date) = :media_start", media_start: params[:year]) unless params[:year] == "all years"
-    media = media.belongs_to_region(params[:region]) unless params[:region] == "all"
-
-    media
-  end
-
   def validate
     params[:status] ||= "pending"
     @media = all_media
@@ -73,20 +62,33 @@ class MediaController < ApplicationController
     end
   end
 
-  private def medium_params
-    params.require(:competition_medium).permit(
-      :competition_id,
-      :media_type,
-      :text,
-      :uri,
-      :submitter_name,
-      :submitter_email,
-      :submitter_comment,
-      :status,
-    )
-  end
+  private
 
-  private def find_medium
-    CompetitionMedium.find(params[:id])
-  end
+    def all_media
+      params[:year] ||= "all years"
+      params[:region] ||= "all"
+
+      media = CompetitionMedium.includes(:competition).where(status: params[:status]).order(submitted_at: :desc)
+      media = media.joins(:competition).where("YEAR(competitions.start_date) = :media_start", media_start: params[:year]) unless params[:year] == "all years"
+      media = media.belongs_to_region(params[:region]) unless params[:region] == "all"
+
+      media
+    end
+
+    def medium_params
+      params.require(:competition_medium).permit(
+        :competition_id,
+        :media_type,
+        :text,
+        :uri,
+        :submitter_name,
+        :submitter_email,
+        :submitter_comment,
+        :status,
+      )
+    end
+
+    def find_medium
+      CompetitionMedium.find(params[:id])
+    end
 end

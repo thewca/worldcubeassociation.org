@@ -105,37 +105,6 @@ class TicketsController < ApplicationController
     }
   end
 
-  private def user_and_person_from_params
-    user_id = params[:userId]
-    wca_id = params[:wcaId]
-
-    if user_id && !wca_id
-      user = User.find(user_id)
-      person = user.person
-    elsif !user_id && wca_id
-      person = Person.find_by(wca_id: wca_id)
-      user = person.user
-    elsif user_id && wca_id
-      person = Person.find_by(wca_id: wca_id)
-      user = User.find(user_id)
-    end
-    [user, person]
-  end
-
-  private def check_errors(user, person)
-    if user.present? && person.present? && person&.user != user
-      render status: :unprocessable_entity, json: {
-        error: "Person and user not linked.",
-      }
-      true
-    elsif user.nil? && person.nil?
-      render status: :unprocessable_entity, json: {
-        error: "User ID and WCA ID is not provided.",
-      }
-      true
-    end
-  end
-
   def details_before_anonymization
     user, person = user_and_person_from_params
     return if check_errors(user, person)
@@ -190,4 +159,37 @@ class TicketsController < ApplicationController
       new_wca_id: person&.reload&.wca_id, # Reload to get the new wca_id
     }
   end
+
+  private
+
+    def user_and_person_from_params
+      user_id = params[:userId]
+      wca_id = params[:wcaId]
+
+      if user_id && !wca_id
+        user = User.find(user_id)
+        person = user.person
+      elsif !user_id && wca_id
+        person = Person.find_by(wca_id: wca_id)
+        user = person.user
+      elsif user_id && wca_id
+        person = Person.find_by(wca_id: wca_id)
+        user = User.find(user_id)
+      end
+      [user, person]
+    end
+
+    def check_errors(user, person)
+      if user.present? && person.present? && person&.user != user
+        render status: :unprocessable_entity, json: {
+          error: "Person and user not linked.",
+        }
+        true
+      elsif user.nil? && person.nil?
+        render status: :unprocessable_entity, json: {
+          error: "User ID and WCA ID is not provided.",
+        }
+        true
+      end
+    end
 end
