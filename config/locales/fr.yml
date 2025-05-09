@@ -2267,6 +2267,8 @@ fr:
       translators: Traducteur·rice·s
   registrations:
     errors:
+      #original_hash: 8c2f29b
+      exceeding_competitor_limit: Limite de compétiteurs atteinte.
       #original_hash: 51c7156
       edit_deadline_passed: >-
         La date limite de modification des inscriptions est passée ! Les
@@ -4180,6 +4182,20 @@ fr:
         '-6003': >-
           Aucun paiement en suspens n'a été trouvé - ceci est probablement dû au
           fait que vous avez déjà payé votre inscription.
+        #original_hash: 631576f
+        '-7001': Le compétiteur n'a pas encore réglé les frais d'inscription
+        #original_hash: 2aa350b
+        '-7002': L'acceptation automatique n'est pas activée pour cette compétition.
+        #original_hash: d191d2d
+        '-7003': >-
+          Ne peut accepter automatiquement que les inscriptions en attente ou la
+          première position sur la liste d'attente
+        #original_hash: 30fd93d
+        '-7004': La compétition a atteint le seuil auto_accept_disable_threshold
+        #original_hash: f2bb661
+        '-7005': >-
+          Impossible de procéder à une acceptation automatique lorsque les
+          inscriptions ne sont pas ouvertes
     errors:
       #original_hash: b14d060
       must_use_wca_registration: >-
