@@ -160,7 +160,7 @@ export function sortRegistrations(registrations, sortColumn, sortDirection) {
       }
 
       case 'amount':
-        return a.payment.payment_amount_iso - b.payment.payment_amount_iso;
+        return a.payment.paid_amount_iso - b.payment.paid_amount_iso;
 
       case 'waiting_list_position':
         return a.competing.waiting_list_position - b.competing.waiting_list_position;
