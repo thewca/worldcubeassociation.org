@@ -17,9 +17,13 @@ import { AddChampionshipButton, ChampionshipSelect } from './InputChampionship';
 import UtcDatePicker from '../../UtcDatePicker';
 import { IdWcaSearch } from '../../../SearchWidget/WcaSearch';
 import SEARCH_MODELS from '../../../SearchWidget/SearchModel';
-import { readValueRecursive, useSectionDisabled, useSections } from '../provider/FormSectionProvider';
-import { useFormObjectSection, useFormSectionUpdateAction } from '../EditForm';
-import { useFormContext } from '../provider/FormObjectProvider';
+import {
+  readValueRecursive,
+  useSectionAllowIgnoreDisabled,
+  useSectionDisabled,
+  useSections,
+} from '../provider/FormSectionProvider';
+import { useFormContext, useFormObjectSection, useFormUpdateAction } from '../provider/FormObjectProvider';
 
 function snakifyId(id, section = []) {
   const idParts = [...section, id];
@@ -106,9 +110,10 @@ const wrapInput = (
 
   const section = useSections();
   const sectionDisabled = useSectionDisabled();
+  const sectionAllowIgnoreDisabled = useSectionAllowIgnoreDisabled();
 
   const formValues = useFormObjectSection();
-  const updateFormValue = useFormSectionUpdateAction();
+  const updateFormValue = useFormUpdateAction();
 
   const inputProps = additionalPropNames.reduce((acc, propName) => ({
     ...acc,
@@ -116,8 +121,8 @@ const wrapInput = (
   }), {});
 
   const onChange = useCallback((e, { [inputValueKey]: newValue }) => {
-    updateFormValue(props.id, newValue);
-  }, [updateFormValue, props.id]);
+    updateFormValue(props.id, newValue, section);
+  }, [updateFormValue, props.id, section]);
 
   let value = formValues[props.id];
 
@@ -139,7 +144,10 @@ const wrapInput = (
 
   const noLabel = passDownLabel ? 'ignore' : props.noLabel;
 
-  const disabled = sectionDisabled || props.disabled;
+  const elementDisabled = sectionDisabled || props.disabled;
+  const elementIgnoreDisabled = sectionAllowIgnoreDisabled && props.ignoreDisabled;
+
+  const disabled = elementDisabled && !elementIgnoreDisabled;
 
   const passDownDisabled = additionalPropNames.includes('disabled');
   if (passDownDisabled) inputProps.disabled = disabled;

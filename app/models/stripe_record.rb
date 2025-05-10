@@ -49,7 +49,7 @@ class StripeRecord < ApplicationRecord
   serialize :parameters, coder: JSON
 
   def determine_wca_status
-    result = WCA_TO_STRIPE_STATUS_MAP.find { |key, values| values.include?(self.stripe_status) }
+    result = WCA_TO_STRIPE_STATUS_MAP.find { |_key, values| values.include?(self.stripe_status) }
     result&.first || raise("No associated wca_status for stripe_status: #{self.stripe_status} - our tests should prevent this from happening!")
   end
 
@@ -80,40 +80,46 @@ class StripeRecord < ApplicationRecord
   def retrieve_stripe
     case self.stripe_record_type
     when StripeRecord.stripe_record_types[:payment_intent]
-      Stripe::PaymentIntent.retrieve(self.stripe_id, stripe_account: self.account_id)
+      stripe_client.v1.payment_intents.retrieve(self.stripe_id)
     when StripeRecord.stripe_record_types[:charge]
-      Stripe::Charge.retrieve(self.stripe_id, stripe_account: self.account_id)
+      stripe_client.v1.charges.retrieve(self.stripe_id)
     when StripeRecord.stripe_record_types[:refund]
-      Stripe::Refund.retrieve(self.stripe_id, stripe_account: self.account_id)
+      stripe_client.v1.refunds.retrieve(self.stripe_id)
     end
   end
 
   alias_method :retrieve_remote, :retrieve_stripe
 
   def update_amount_remote(amount_iso, currency_iso)
-    if self.payment_intent?
-      stripe_amount = StripeRecord.amount_to_stripe(amount_iso, currency_iso)
+    return unless self.payment_intent?
 
-      update_intent_args = {
-        amount: stripe_amount,
-        currency: currency_iso,
-      }
+    stripe_amount = StripeRecord.amount_to_stripe(amount_iso, currency_iso)
 
-      Stripe::PaymentIntent.update(
-        self.stripe_id,
-        update_intent_args,
-        stripe_account: self.account_id,
-      )
+    update_intent_args = {
+      amount: stripe_amount,
+      currency: currency_iso,
+    }
 
-      updated_parameters = self.parameters.deep_merge(update_intent_args)
+    stripe_client.v1.payment_intents.update(
+      self.stripe_id,
+      update_intent_args,
+    )
 
-      # Update our own journals so that we know we changed something
-      self.update!(
-        parameters: updated_parameters,
-        amount_stripe_denomination: stripe_amount,
-        currency_code: currency_iso,
-      )
-    end
+    updated_parameters = self.parameters.deep_merge(update_intent_args)
+
+    # Update our own journals so that we know we changed something
+    self.update!(
+      parameters: updated_parameters,
+      amount_stripe_denomination: stripe_amount,
+      currency_code: currency_iso,
+    )
+  end
+
+  def confirm_remote_for_test(payment_method)
+    raise "This method is only supposed to be called during testing!" unless Rails.env.test?
+    raise "Not a PaymentIntent, seems that you messed up your test case :P" unless self.payment_intent?
+
+    stripe_client.v1.payment_intents.confirm(self.stripe_id, { payment_method: payment_method })
   end
 
   def money_amount
@@ -150,9 +156,7 @@ class StripeRecord < ApplicationRecord
       # In practice this should never happen because the inflation on those currencies
       # makes it absolutely impractical for Delegates to charge 0.45 HUF for example.
       # If this error is actually ever thrown, talk to the Delegates of the competition in question.
-      if amount_times_hundred % 100 != 0
-        raise "Trying to charge an amount of #{amount_lowest_denomination} #{iso_currency}, which is smaller than what the Stripe API accepts for sub-hundred currencies"
-      end
+      raise "Trying to charge an amount of #{amount_lowest_denomination} #{iso_currency}, which is smaller than what the Stripe API accepts for sub-hundred currencies" if amount_times_hundred % 100 != 0
 
       return amount_times_hundred
     end
@@ -169,9 +173,7 @@ class StripeRecord < ApplicationRecord
       # We're losing precision after dividing it down to the "smaller" denomination.
       # Normally, this should not happen as the Stripe API docs specify that sub-hundreds
       # on the special currencies are not accepted and thus should never be returned by the API.
-      if amount_div_hundred.truncate != amount_div_hundred
-        raise "Trying to receive an amount of #{amount_stripe_denomination} #{iso_currency}, which is more precise than what the Stripe API returns for sub-hundred currencies"
-      end
+      raise "Trying to receive an amount of #{amount_stripe_denomination} #{iso_currency}, which is more precise than what the Stripe API returns for sub-hundred currencies" if amount_div_hundred.truncate != amount_div_hundred
 
       return amount_div_hundred
     end
@@ -191,5 +193,9 @@ class StripeRecord < ApplicationRecord
       account_id: account_id,
       parent_record: parent_record,
     )
+  end
+
+  private def stripe_client
+    Stripe::StripeClient.new(AppSecrets.STRIPE_API_KEY, stripe_account: self.account_id)
   end
 end

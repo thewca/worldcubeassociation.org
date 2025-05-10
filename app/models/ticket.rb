@@ -19,15 +19,15 @@ class Ticket < ApplicationRecord
   # the user can be any of the two stakeholders.
   def user_stakeholders(user)
     return [] if user.nil?
+
     ticket_stakeholders.belongs_to_user(user).or(ticket_stakeholders.belongs_to_groups(user.active_groups))
   end
 
   def can_user_access?(user)
     return false if user.nil?
-    (
-      ticket_stakeholders.belongs_to_user(user).any? ||
+
+    ticket_stakeholders.belongs_to_user(user).any? ||
       ticket_stakeholders.belongs_to_groups(user.active_groups).any?
-    )
   end
 
   def action_allowed?(action, user)

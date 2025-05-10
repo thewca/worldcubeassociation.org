@@ -19,7 +19,7 @@ class StripeWebhookEvent < ApplicationRecord
   has_one :canceled_intent, class_name: "PaymentIntent", as: :cancellation_source
 
   def retrieve_event
-    Stripe::Event.retrieve(self.stripe_id, stripe_account: self.account_id)
+    stripe_client.v1.events.retrieve(self.stripe_id)
   end
 
   def self.create_from_api(api_event, handled: false)
@@ -32,5 +32,9 @@ class StripeWebhookEvent < ApplicationRecord
       created_at_remote: created_at_remote,
       handled: handled,
     )
+  end
+
+  private def stripe_client
+    Stripe::StripeClient.new(AppSecrets.STRIPE_API_KEY, stripe_account: self.account_id)
   end
 end

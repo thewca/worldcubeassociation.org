@@ -10,13 +10,14 @@ RSpec.feature "Competition events management" do
   end
 
   context "unconfirmed competition without schedule" do
-    let!(:competition) { FactoryBot.create(:competition, :with_delegate, :registration_open, event_ids: ["333", "444"], with_rounds: true) }
+    let!(:competition) { create(:competition, :with_delegate, :registration_open, event_ids: %w[333 444], with_rounds: true) }
+
     background do
       sign_in competition.delegates.first
       visit "/competitions/#{competition.id}/schedule/edit"
     end
 
-    scenario "can add a venue and a room", js: true do
+    scenario "can add a venue and a room", :js do
       find("div", class: 'title', text: 'Edit venues information').click
 
       within(:css, "#venues-edit-panel-body") do
@@ -35,19 +36,20 @@ RSpec.feature "Competition events management" do
 
       save_schedule_react
 
-      expect(competition.competition_venues.map(&:name)).to match_array %w(Venue)
-      expect(competition.competition_venues.flat_map(&:venue_rooms).map(&:name)).to match_array %w(Youpitralala)
+      expect(competition.competition_venues.map(&:name)).to match_array %w[Venue]
+      expect(competition.competition_venues.flat_map(&:venue_rooms).map(&:name)).to match_array %w[Youpitralala]
     end
   end
 
   context "unconfirmed competition with schedule" do
-    let!(:competition) { FactoryBot.create(:competition, :with_delegate, :registration_open, :with_valid_schedule, event_ids: ["333", "444"]) }
+    let!(:competition) { create(:competition, :with_delegate, :registration_open, :with_valid_schedule, event_ids: %w[333 444]) }
+
     background do
       sign_in competition.delegates.first
       visit "/competitions/#{competition.id}/schedule/edit"
     end
 
-    scenario "room calendar is rendered", js: true do
+    scenario "room calendar is rendered", :js do
       find("div", class: 'title', text: 'Edit schedules').click
 
       within(:css, "#schedules-edit-panel-body") do

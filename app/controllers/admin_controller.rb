@@ -4,8 +4,8 @@ require 'csv'
 
 class AdminController < ApplicationController
   before_action :authenticate_user!
-  before_action -> { redirect_to_root_unless_user(:can_admin_results?) }, except: [:all_voters, :leader_senior_voters]
-  before_action -> { redirect_to_root_unless_user(:can_see_eligible_voters?) }, only: [:all_voters, :leader_senior_voters]
+  before_action -> { redirect_to_root_unless_user(:can_admin_results?) }, except: %i[all_voters leader_senior_voters]
+  before_action -> { redirect_to_root_unless_user(:can_see_eligible_voters?) }, only: %i[all_voters leader_senior_voters]
 
   def index
   end
@@ -33,72 +33,16 @@ class AdminController < ApplicationController
     @results_validator.validate(@competition.id)
   end
 
-  def check_results
-    with_results_validator
-  end
-
   def check_competition_results
     with_results_validator do
       @competition = competition_from_params
-      @result_validation.competition_ids = @competition.id
     end
-  end
-
-  def compute_validation_competitions
-    validation_form = ResultValidationForm.new(
-      competition_start_date: params[:start_date],
-      competition_end_date: params[:end_date],
-      competition_selection: ResultValidationForm::COMP_VALIDATION_ALL,
-    )
-
-    render json: {
-      competitions: validation_form.competitions,
-    }
   end
 
   def with_results_validator
-    @result_validation = ResultValidationForm.new(
-      competition_ids: params[:competition_ids] || "",
-      competition_start_date: params[:competition_start_date] || "",
-      competition_end_date: params[:competition_end_date] || "",
-      validator_classes: params[:validator_classes] || ResultValidationForm::ALL_VALIDATOR_NAMES.join(","),
-      competition_selection: params[:competition_selection] || ResultValidationForm::COMP_VALIDATION_MANUAL,
-      apply_fixes: params[:apply_fixes] || false,
-    )
-
     # For this view, we just build an empty validator: the WRT will decide what
     # to actually run (by default all validators will be selected).
     @results_validator = ResultsValidators::CompetitionsResultsValidator.new(check_real_results: true)
-    yield if block_given?
-  end
-
-  def do_check_results
-    running_validators do
-      render :check_results
-    end
-  end
-
-  def do_check_competition_results
-    running_validators do
-      uniq_id = @result_validation.competitions.first
-      @competition = Competition.find(uniq_id)
-
-      render :check_competition_results
-    end
-  end
-
-  def running_validators
-    action_params = params.require(:result_validation_form)
-                          .permit(:competition_ids, :validator_classes, :apply_fixes, :competition_selection, :competition_start_date, :competition_end_date)
-
-    @result_validation = ResultValidationForm.new(action_params)
-
-    if @result_validation.valid?
-      @results_validator = @result_validation.build_and_run
-    else
-      @results_validator = ResultsValidators::CompetitionsResultsValidator.new(check_real_results: true)
-    end
-
     yield if block_given?
   end
 
@@ -120,19 +64,19 @@ class AdminController < ApplicationController
   RESULTS_POSTING_STEPS = %i[inbox_result inbox_person].freeze
 
   private def load_result_posting_steps
-    @competition = competition_from_params(associations: [:events, :rounds])
+    @competition = competition_from_params(associations: %i[events rounds])
 
     data_tables = {
       result: Result,
       scramble: Scramble,
       inbox_result: InboxResult,
       inbox_person: InboxPerson,
-      newcomer_person: InboxPerson.where(wcaId: ''),
-      newcomer_result: Result.select(:personId).distinct.where("personId REGEXP '^[0-9]+$'"),
+      newcomer_person: InboxPerson.where(wca_id: ''),
+      newcomer_result: Result.select(:person_id).distinct.where("person_id REGEXP '^[0-9]+$'"),
     }
 
-    @existing_data = data_tables.transform_values { |table| table.where(competitionId: @competition.id).count }
-    @inbox_step = RESULTS_POSTING_STEPS.find { |inbox| @existing_data[inbox] > 0 }
+    @existing_data = data_tables.transform_values { |table| table.where(competition_id: @competition.id).count }
+    @inbox_step = RESULTS_POSTING_STEPS.find { |inbox| @existing_data[inbox].positive? }
 
     yield if block_given?
   end
@@ -157,18 +101,18 @@ class AdminController < ApplicationController
                                 .map do |inbox_res|
         inbox_person = inbox_res.inbox_person
 
-        person_id = inbox_person&.wcaId.presence || inbox_res.personId
-        person_country = Country.find_by_iso2(inbox_person&.countryId)
+        person_id = inbox_person&.wca_id.presence || inbox_res.person_id
+        person_country = inbox_person&.country
 
         {
           pos: inbox_res.pos,
-          personId: person_id,
-          personName: inbox_res.personName,
-          countryId: person_country.id,
-          competitionId: inbox_res.competitionId,
-          eventId: inbox_res.eventId,
-          roundTypeId: inbox_res.roundTypeId,
-          formatId: inbox_res.formatId,
+          person_id: person_id,
+          person_name: inbox_res.person_name,
+          country_id: person_country.id,
+          competition_id: inbox_res.competition_id,
+          event_id: inbox_res.event_id,
+          round_type_id: inbox_res.round_type_id,
+          format_id: inbox_res.format_id,
           value1: inbox_res.value1,
           value2: inbox_res.value2,
           value3: inbox_res.value3,
@@ -222,9 +166,9 @@ class AdminController < ApplicationController
 
       case model
       when Result.name
-        Result.where(competitionId: @competition.id, eventId: event_id, roundTypeId: round_type_id).destroy_all
+        Result.where(competition_id: @competition.id, event_id: event_id, round_type_id: round_type_id).destroy_all
       when Scramble.name
-        Scramble.where(competitionId: @competition.id, eventId: event_id, roundTypeId: round_type_id).destroy_all
+        Scramble.where(competition_id: @competition.id, event_id: event_id, round_type_id: round_type_id).destroy_all
       else
         raise "Invalid table: #{params[:table]}"
       end
@@ -246,9 +190,7 @@ class AdminController < ApplicationController
 
     # This makes sure the json structure is valid!
     if @upload_json.import_to_inbox
-      if @competition.results_submitted_at.nil?
-        @competition.update!(results_submitted_at: Time.now)
-      end
+      @competition.update!(results_submitted_at: Time.now) if @competition.results_submitted_at.nil?
       flash[:success] = "JSON file has been imported."
       redirect_to competition_admin_upload_results_edit_path
     else
@@ -276,59 +218,21 @@ class AdminController < ApplicationController
     render partial: "fix_results_selector"
   end
 
-  def edit_person
-    @person = Person.current.find_by(wca_id: params[:person].try(:[], :wca_id))
-    # If there isn't a person in the params, make an empty one that simple form have an object to work with.
-    # Note: most of the time persons are dynamically selected using user_id picker.
-    @person ||= Person.new
-  end
-
   def person_data
     @person = Person.current.find_by!(wca_id: params[:person_wca_id])
 
     render json: {
       name: @person.name,
-      countryId: @person.countryId,
+      country_id: @person.country_id,
       gender: @person.gender,
       dob: @person.dob,
       incorrect_wca_id_claim_count: @person.incorrect_wca_id_claim_count,
     }
   end
 
-  def compute_auxiliary_data
-  end
-
   def do_compute_auxiliary_data
     ComputeAuxiliaryData.perform_later
-    redirect_to admin_compute_auxiliary_data_path
-  end
-
-  def reset_compute_auxiliary_data
-    ComputeAuxiliaryData.reset_error_state!
-    redirect_to admin_compute_auxiliary_data_path
-  end
-
-  def generate_exports
-  end
-
-  def do_generate_dev_export
-    DumpDeveloperDatabase.perform_later
-    redirect_to admin_generate_exports_path
-  end
-
-  def do_generate_public_export
-    DumpPublicResultsDatabase.perform_later
-    redirect_to admin_generate_exports_path
-  end
-
-  def check_regional_records
-    @check_records_request = CheckRegionalRecordsForm.new(
-      competition_id: params[:competition_id] || nil,
-      event_id: params[:event_id] || nil,
-      refresh_index: params[:refresh_index] || nil,
-    )
-
-    @cad_timestamp = ComputeAuxiliaryData.successful_start_date&.to_fs || 'never'
+    redirect_to panel_page_path(id: User.panel_pages[:computeAuxiliaryData])
   end
 
   def override_regional_records
@@ -342,12 +246,12 @@ class AdminController < ApplicationController
   def do_override_regional_records
     ActiveRecord::Base.transaction do
       params[:regional_record_overrides].each do |id_and_type, marker|
-        next if [:competition_id, :event_id].include? id_and_type.to_sym
+        next if %i[competition_id event_id].include? id_and_type.to_sym
 
-        next unless marker.present?
+        next if marker.blank?
 
         result_id, result_type = id_and_type.split('-')
-        record_marker = :"regional#{result_type}Record"
+        record_marker = :"regional_#{result_type}_record"
 
         Result.where(id: result_id).update_all(record_marker => marker)
       end
@@ -356,7 +260,7 @@ class AdminController < ApplicationController
     competition_id = params.dig(:regional_record_overrides, :competition_id)
     event_id = params.dig(:regional_record_overrides, :event_id)
 
-    redirect_to action: :check_regional_records, competition_id: competition_id, event_id: event_id
+    redirect_to panel_page_path(id: User.panel_pages[:checkRecords], competition_id: competition_id, event_id: event_id)
   end
 
   def all_voters
@@ -379,7 +283,7 @@ class AdminController < ApplicationController
   end
 
   private def competition_from_params(associations: {})
-    Competition.includes(associations).find_by_id!(params[:competition_id])
+    Competition.includes(associations).find(params[:competition_id])
   end
 
   private def competition_list_from_string(competition_ids_string)
@@ -391,10 +295,10 @@ class AdminController < ApplicationController
     @competition_ids = competition_list_from_string(@competition_ids_string)
     @persons_to_finish = FinishUnfinishedPersons.search_persons(@competition_ids)
 
-    if @persons_to_finish.empty?
-      flash[:warning] = "There are no persons to complete for the selected competition"
-      redirect_to panel_page_path(id: User.panel_pages[:createNewComers], competition_ids: @competition_ids)
-    end
+    return unless @persons_to_finish.empty?
+
+    flash[:warning] = "There are no persons to complete for the selected competition"
+    redirect_to panel_page_path(id: User.panel_pages[:createNewComers], competition_ids: @competition_ids)
   end
 
   def do_complete_persons
@@ -404,7 +308,7 @@ class AdminController < ApplicationController
 
     ActiveRecord::Base.transaction do
       params[:person_completions].each do |person_key, procedure|
-        next if [:competition_ids, :continue_batch].include? person_key.to_sym
+        next if %i[competition_ids continue_batch].include? person_key.to_sym
 
         old_name, old_country, pending_person_id, pending_competition_id = person_key.split '|'
 
@@ -425,7 +329,7 @@ class AdminController < ApplicationController
             inbox_person = InboxPerson.find_by(id: pending_person_id, competition_id: pending_competition_id)
 
             old_name = inbox_person.name
-            old_country = inbox_person.countryId
+            old_country = inbox_person.country_id
           end
 
           FinishUnfinishedPersons.insert_person(inbox_person, new_name, new_country, new_id)
@@ -437,7 +341,7 @@ class AdminController < ApplicationController
           # Has to exist because otherwise there would be nothing to merge
           new_person = Person.find(merge_id)
 
-          FinishUnfinishedPersons.adapt_results(pending_person_id.presence, old_name, old_country, new_person.wca_id, new_person.name, new_person.countryId, pending_competition_id)
+          FinishUnfinishedPersons.adapt_results(pending_person_id.presence, old_name, old_country, new_person.wca_id, new_person.name, new_person.country_id, pending_competition_id)
         end
       end
     end
@@ -450,9 +354,7 @@ class AdminController < ApplicationController
     if continue_batch
       can_continue = FinishUnfinishedPersons.unfinished_results_scope(competition_list_from_string(competition_ids)).any?
 
-      if can_continue
-        return redirect_to action: :complete_persons, competition_ids: competition_ids
-      end
+      return redirect_to action: :complete_persons, competition_ids: competition_ids if can_continue
     end
 
     redirect_to panel_page_path(id: User.panel_pages[:createNewComers], competition_ids: competition_ids)
@@ -463,14 +365,14 @@ class AdminController < ApplicationController
     @country_id = params.require(:country_id)
     @person_id = params.require(:person_id)
 
-    all_results = Result.select("Results.*, FALSE AS `muted`")
+    all_results = Result.select("results.*, FALSE AS `muted`")
                         .joins(:event, :round_type)
                         .where(
-                          personName: @person_name,
-                          countryId: @country_id,
-                          personId: @person_id,
+                          person_name: @person_name,
+                          country_id: @country_id,
+                          person_id: @person_id,
                         )
-                        .order("Events.rank, RoundTypes.rank DESC")
+                        .order("events.rank, round_types.rank DESC")
 
     @results_by_competition = all_results.group_by(&:competition_id)
                                          .transform_keys { |id| Competition.find(id) }

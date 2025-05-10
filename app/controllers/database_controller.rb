@@ -12,18 +12,18 @@ class DatabaseController < ApplicationController
 
   def sql_permalink
     url, = current_results_export("sql")
-    redirect_to url, status: 301, allow_other_host: true
+    redirect_to url, status: :moved_permanently, allow_other_host: true
   end
 
   def tsv_permalink
     url, = current_results_export("tsv")
-    redirect_to url, status: 301, allow_other_host: true
+    redirect_to url, status: :moved_permanently, allow_other_host: true
   end
 
   def current_results_export(file_type)
     export_timestamp = DumpPublicResultsDatabase.successful_start_date
 
-    Rails.cache.fetch("database-export-#{export_timestamp}-#{file_type}", expires_in: 1.days) do
+    Rails.cache.fetch("database-export-#{export_timestamp}-#{file_type}", expires_in: 1.day) do
       base_name = DbDumpHelper.result_export_file_name(file_type, export_timestamp)
       file_name = "#{DbDumpHelper::RESULTS_EXPORT_FOLDER}/#{base_name}"
 

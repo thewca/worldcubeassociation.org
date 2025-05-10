@@ -4,6 +4,7 @@ class Cutoff
   include ActiveModel::Validations
 
   attr_accessor :number_of_attempts, :attempt_result, :event
+
   validates :number_of_attempts, numericality: { only_integer: true }
   validates :attempt_result, numericality: { only_integer: true }
 
@@ -43,7 +44,7 @@ class Cutoff
 
   def self.wcif_json_schema
     {
-      "type" => ["object", "null"],
+      "type" => %w[object null],
       "properties" => {
         "numberOfAttempts" => { "type" => "integer" },
         "attemptResult" => { "type" => "integer" },

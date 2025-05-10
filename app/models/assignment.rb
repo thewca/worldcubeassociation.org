@@ -8,9 +8,7 @@ class Assignment < ApplicationRecord
   validate :validate_assignment_code
 
   private def validate_assignment_code
-    unless assignment_code.match?(/^(competitor|staff-\w+)$/)
-      errors.add(:activity_code, "should be a valid assignment code")
-    end
+    errors.add(:activity_code, "should be a valid assignment code") unless assignment_code.match?(/^(competitor|staff-\w+)$/)
   end
 
   def wcif_equal?(other_wcif)
@@ -30,7 +28,7 @@ class Assignment < ApplicationRecord
       "type" => ["object"],
       "properties" => {
         "activityId" => { "type" => "integer" },
-        "stationNumber" => { "type" => ["integer", "null"] },
+        "stationNumber" => { "type" => %w[integer null] },
         "assignmentCode" => { "type" => "string" },
       },
     }

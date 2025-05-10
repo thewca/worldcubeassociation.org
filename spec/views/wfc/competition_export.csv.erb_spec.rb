@@ -26,7 +26,7 @@ RSpec.describe "wfc/competition_export.csv.erb" do
   end
 
   it "filters out trainee delegates" do
-    competition = FactoryBot.create :competition, :with_valid_submitted_results, :with_delegates_and_trainee_delegate
+    competition = create(:competition, :with_valid_submitted_results, :with_delegates_and_trainee_delegate)
     competition.define_singleton_method(:num_competitors) do # mock count(distinct ...) from controller
       10
     end
@@ -35,7 +35,7 @@ RSpec.describe "wfc/competition_export.csv.erb" do
     render
 
     delegates_without_trainees = competition.delegates.reject(&:trainee_delegate?)
-    expect(delegates_without_trainees.length).to_not eq competition.delegates.length
+    expect(delegates_without_trainees.length).not_to eq competition.delegates.length
 
     table = rendered.csv_header
     expect(table[0]["Delegates"]).to eq delegates_without_trainees.map(&:name).sort.join(",")

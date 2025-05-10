@@ -23,7 +23,7 @@ module DuesCalculator
 
     # The maximum of the two is the total dues per competitor
     [registration_fee_dues, country_band_dues].max
-  rescue Money::Currency::UnknownCurrency, CurrencyUnavailable
+  rescue Money::Currency::UnknownCurrency, CurrencyUnavailable, Money::Bank::UnknownRate
     nil
   end
 end

@@ -1,3 +1,4 @@
 #!/bin/bash
 # Make the EC2 Instance join the cluster on startup
 echo "ECS_CLUSTER=${ecs_cluster_name}" >> /etc/ecs/ecs.config
+echo "ECS_CONTAINER_STOP_TIMEOUT=305" >> /etc/ecs/ecs.config

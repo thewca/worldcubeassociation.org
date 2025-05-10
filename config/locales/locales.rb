@@ -43,6 +43,10 @@ module Locales
       flag_id: "fr",
       name: "Français",
     },
+    'fr-CA': {
+      flag_id: "ca",
+      name: "Français Canadien",
+    },
     hr: {
       flag_id: "hr",
       name: "Hrvatski",

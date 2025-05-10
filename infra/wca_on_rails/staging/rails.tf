@@ -13,6 +13,10 @@ locals {
       value = var.ROOT_URL
     },
     {
+      name  = "OIDC_ISSUER"
+      value = var.ROOT_URL
+    },
+    {
       name = "DATABASE_HOST"
       value = "staging-worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com"
     },

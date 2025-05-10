@@ -4,8 +4,6 @@ class Event < ApplicationRecord
   include Cachable
   include StaticData
 
-  self.table_name = "Events"
-
   OFFICIAL = self.all_raw.select { |e| e[:is_official] }.freeze
   OFFICIAL_IDS = OFFICIAL.pluck(:id).freeze
 
@@ -42,7 +40,7 @@ class Event < ApplicationRecord
   end
 
   def deprecated?
-    990 <= rank && rank < 1000
+    rank >= 990 && rank < 1000
   end
 
   # See https://www.worldcubeassociation.org/regulations/#9f12
@@ -55,7 +53,7 @@ class Event < ApplicationRecord
   end
 
   def multiple_blindfolded?
-    ["333mbf", "333mbo"].include?(self.id)
+    %w[333mbf 333mbo].include?(self.id)
   end
 
   def can_change_time_limit?
@@ -68,7 +66,7 @@ class Event < ApplicationRecord
 
   # Events that are generally fast enough to never need to go over the default 10 minute time limit
   def fast_event?
-    ['333', '222', '444', '333oh', 'clock', 'mega', 'pyram', 'skewb', 'sq1'].include?(self.id)
+    %w[333 222 444 333oh clock mega pyram skewb sq1].include?(self.id)
   end
 
   def self.dump_static
@@ -86,8 +84,8 @@ class Event < ApplicationRecord
 
   DEFAULT_SERIALIZE_OPTIONS = {
     only: ["id"],
-    methods: ["name", "can_change_time_limit", "can_have_cutoff", "is_timed_event",
-              "is_fewest_moves", "is_multiple_blindfolded", "is_official", "format_ids"],
+    methods: %w[name can_change_time_limit can_have_cutoff is_timed_event
+                is_fewest_moves is_multiple_blindfolded is_official format_ids],
   }.freeze
 
   def serializable_hash(options = nil)

@@ -1,3 +1,4 @@
+# rubocop:disable all
 # frozen_string_literal: true
 
 class AddNewV2Columns < ActiveRecord::Migration[7.2]

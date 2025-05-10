@@ -3,16 +3,16 @@
 require "rails_helper"
 
 RSpec.describe RegistrationsMailer, type: :mailer do
-  let(:delegate1) { FactoryBot.create :delegate }
-  let(:delegate2) { FactoryBot.create :trainee_delegate }
-  let(:organizer1) { FactoryBot.create :user }
-  let(:organizer2) { FactoryBot.create :user }
-  let(:competition_without_organizers) { FactoryBot.create(:competition, :registration_open, delegates: [delegate1, delegate2]) }
-  let(:competition_with_organizers) { FactoryBot.create(:competition, :registration_open, delegates: [delegate1, delegate2], organizers: [organizer1, organizer2]) }
+  let(:delegate1) { create(:delegate) }
+  let(:delegate2) { create(:trainee_delegate) }
+  let(:organizer1) { create(:user) }
+  let(:organizer2) { create(:user) }
+  let(:competition_without_organizers) { create(:competition, :registration_open, delegates: [delegate1, delegate2]) }
+  let(:competition_with_organizers) { create(:competition, :registration_open, delegates: [delegate1, delegate2], organizers: [organizer1, organizer2]) }
 
   describe "notify registrants in their language" do
-    let(:french_user) { FactoryBot.create :user, :wca_id, :french_locale }
-    let(:registration) { FactoryBot.create(:registration, user: french_user, competition: competition_with_organizers) }
+    let(:french_user) { create(:user, :wca_id, :french_locale) }
+    let(:registration) { create(:registration, user: french_user, competition: competition_with_organizers) }
     let(:mail_new) { RegistrationsMailer.notify_registrant_of_new_registration(registration) }
     let(:mail_accepted) { RegistrationsMailer.notify_registrant_of_accepted_registration(registration) }
     let(:mail_waitlisted) { RegistrationsMailer.notify_registrant_of_waitlisted_registration(registration) }
@@ -47,12 +47,12 @@ RSpec.describe RegistrationsMailer, type: :mailer do
   end
 
   describe "notify_organizers_of_new_registration" do
-    let(:registration) { FactoryBot.create(:registration, competition: competition_without_organizers) }
+    let(:registration) { create(:registration, competition: competition_without_organizers) }
     let(:mail) { RegistrationsMailer.notify_organizers_of_new_registration(registration) }
 
     it "renders the headers" do
       # Set receive_registration_emails to true and test that the email headers are present
-      competition_delegate2 = competition_without_organizers.competition_delegates.find_by_delegate_id(delegate2.id)
+      competition_delegate2 = competition_without_organizers.competition_delegates.find_by(delegate_id: delegate2.id)
       competition_delegate2.receive_registration_emails = true
       competition_delegate2.save!
 
@@ -64,11 +64,11 @@ RSpec.describe RegistrationsMailer, type: :mailer do
 
     it "renders the body" do
       # Set receive_registration_emails to true and test that the email body is present
-      competition_delegate2 = competition_without_organizers.competition_delegates.find_by_delegate_id(delegate2.id)
+      competition_delegate2 = competition_without_organizers.competition_delegates.find_by(delegate_id: delegate2.id)
       competition_delegate2.receive_registration_emails = true
       competition_delegate2.save!
 
-      expect(mail.body.encoded).to match(edit_registration_v2_url(competition_id: registration.competition_id, user_id: registration.user_id))
+      expect(mail.body.encoded).to match(edit_registration_url(registration))
     end
 
     it "handles no organizers receiving email" do
@@ -78,15 +78,15 @@ RSpec.describe RegistrationsMailer, type: :mailer do
   end
 
   describe "notify_organizers_of_deleted_registration" do
-    let(:registration) { FactoryBot.create(:registration, competition: competition_without_organizers) }
+    let(:registration) { create(:registration, competition: competition_without_organizers) }
     let(:mail) { RegistrationsMailer.notify_organizers_of_deleted_registration(registration) }
 
     it "renders the headers" do
-      competition_delegate1 = competition_without_organizers.competition_delegates.find_by_delegate_id(delegate1.id)
+      competition_delegate1 = competition_without_organizers.competition_delegates.find_by(delegate_id: delegate1.id)
       competition_delegate1.receive_registration_emails = true
       competition_delegate1.save!
 
-      competition_delegate2 = competition_without_organizers.competition_delegates.find_by_delegate_id(delegate2.id)
+      competition_delegate2 = competition_without_organizers.competition_delegates.find_by(delegate_id: delegate2.id)
       competition_delegate2.receive_registration_emails = true
       competition_delegate2.save!
 
@@ -97,11 +97,11 @@ RSpec.describe RegistrationsMailer, type: :mailer do
     end
 
     it "renders the body" do
-      competition_delegate1 = competition_without_organizers.competition_delegates.find_by_delegate_id(delegate1.id)
+      competition_delegate1 = competition_without_organizers.competition_delegates.find_by(delegate_id: delegate1.id)
       competition_delegate1.receive_registration_emails = true
       competition_delegate1.save!
 
-      competition_delegate2 = competition_without_organizers.competition_delegates.find_by_delegate_id(delegate2.id)
+      competition_delegate2 = competition_without_organizers.competition_delegates.find_by(delegate_id: delegate2.id)
       competition_delegate2.receive_registration_emails = true
       competition_delegate2.save!
 
@@ -110,8 +110,8 @@ RSpec.describe RegistrationsMailer, type: :mailer do
   end
 
   describe "notify_registrant_of_new_registration for competition without organizers" do
-    let(:registration) { FactoryBot.create(:registration, competition: competition_without_organizers) }
-    let!(:earlier_registration) { FactoryBot.create(:registration, competition: competition_without_organizers) }
+    let(:registration) { create(:registration, competition: competition_without_organizers) }
+    let!(:earlier_registration) { create(:registration, competition: competition_without_organizers) }
     let(:mail) { RegistrationsMailer.notify_registrant_of_new_registration(registration) }
 
     it "renders the headers" do
@@ -128,7 +128,7 @@ RSpec.describe RegistrationsMailer, type: :mailer do
   end
 
   describe "notify_registrant_of_new_registration for competition with organizers" do
-    let(:registration) { FactoryBot.create(:registration, competition: competition_with_organizers) }
+    let(:registration) { create(:registration, competition: competition_with_organizers) }
     let(:mail) { RegistrationsMailer.notify_registrant_of_new_registration(registration) }
 
     it "sets organizers in the reply_to" do
@@ -142,7 +142,7 @@ RSpec.describe RegistrationsMailer, type: :mailer do
 
   describe "notify_registrant_of_accepted_registration for competition without organizers" do
     let(:mail) { RegistrationsMailer.notify_registrant_of_accepted_registration(registration) }
-    let(:registration) { FactoryBot.create(:registration, competition: competition_without_organizers) }
+    let(:registration) { create(:registration, competition: competition_without_organizers) }
 
     it "renders the headers" do
       expect(mail.subject).to eq("Registration Accepted: #{competition_without_organizers.name}")
@@ -158,7 +158,7 @@ RSpec.describe RegistrationsMailer, type: :mailer do
 
   describe "notify_registrant_of_accepted_registration for competition with organizers" do
     let(:mail) { RegistrationsMailer.notify_registrant_of_accepted_registration(registration) }
-    let(:registration) { FactoryBot.create(:registration, competition: competition_with_organizers) }
+    let(:registration) { create(:registration, competition: competition_with_organizers) }
 
     it "sets organizers in the reply_to" do
       expect(mail.reply_to).to eq(competition_with_organizers.organizers.map(&:email))
@@ -171,7 +171,7 @@ RSpec.describe RegistrationsMailer, type: :mailer do
 
   describe "notify_registrant_of_waitlisted_registration for competition without organizers" do
     let(:mail) { RegistrationsMailer.notify_registrant_of_waitlisted_registration(registration) }
-    let(:registration) { FactoryBot.create(:registration, competition: competition_without_organizers) }
+    let(:registration) { create(:registration, competition: competition_without_organizers) }
 
     it "renders the headers" do
       expect(mail.subject).to eq("You're on the Waiting List: #{competition_without_organizers.name}")
@@ -187,7 +187,7 @@ RSpec.describe RegistrationsMailer, type: :mailer do
 
   describe "notify_registrant_of_waitlisted_registration for competition with organizers" do
     let(:mail) { RegistrationsMailer.notify_registrant_of_waitlisted_registration(registration) }
-    let(:registration) { FactoryBot.create(:registration, competition: competition_with_organizers) }
+    let(:registration) { create(:registration, competition: competition_with_organizers) }
 
     it "sets organizers in the reply_to" do
       expect(mail.reply_to).to eq(competition_with_organizers.organizers.map(&:email))
@@ -200,7 +200,7 @@ RSpec.describe RegistrationsMailer, type: :mailer do
 
   describe "notify_registrant_of_deleted_registration for a competition without organizers" do
     let(:mail) { RegistrationsMailer.notify_registrant_of_deleted_registration(registration) }
-    let(:registration) { FactoryBot.create(:registration, competition: competition_without_organizers) }
+    let(:registration) { create(:registration, competition: competition_without_organizers) }
 
     it "renders the headers" do
       expect(mail.subject).to eq("Registration Deleted: #{competition_without_organizers.name}")
@@ -217,7 +217,7 @@ RSpec.describe RegistrationsMailer, type: :mailer do
 
   describe "notify_registrant_of_deleted_registration for a competition with organizers" do
     let(:mail) { RegistrationsMailer.notify_registrant_of_deleted_registration(registration) }
-    let(:registration) { FactoryBot.create(:registration, competition: competition_with_organizers) }
+    let(:registration) { create(:registration, competition: competition_with_organizers) }
 
     it "renders the headers" do
       expect(mail.reply_to).to eq(competition_with_organizers.organizers.map(&:email))
@@ -229,7 +229,7 @@ RSpec.describe RegistrationsMailer, type: :mailer do
   end
 
   describe "notify_registrant_of_locked_account_creation" do
-    let(:registration) { FactoryBot.create(:registration, competition: competition_with_organizers) }
+    let(:registration) { create(:registration, competition: competition_with_organizers) }
     let(:mail) { RegistrationsMailer.notify_registrant_of_locked_account_creation(registration.user, registration.competition) }
 
     it "renders the headers" do

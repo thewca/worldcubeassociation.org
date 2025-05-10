@@ -3,15 +3,16 @@ import {
   Button, Form, Header, Icon, Message,
 } from 'semantic-ui-react';
 import _ from 'lodash';
-import { adminCheckRecordsUrl, apiV0Urls, personUrl } from '../../../../lib/requests/routes.js.erb';
+import { panelPageUrl, apiV0Urls, personUrl } from '../../../../lib/requests/routes.js.erb';
+import { PANEL_PAGES } from '../../../../lib/wca-data.js.erb';
 import useSaveAction from '../../../../lib/hooks/useSaveAction';
 import Loading from '../../../Requests/Loading';
 import I18n from '../../../../lib/i18n';
 import useLoadedData from '../../../../lib/hooks/useLoadedData';
 import Errored from '../../../Requests/Errored';
 import UtcDatePicker from '../../../wca/UtcDatePicker';
-import CountrySelector from '../../../CountrySelector/CountrySelector';
-import GenderSelector from '../../../GenderSelector/GenderSelector';
+import RegionSelector from '../../../wca/RegionSelector';
+import GenderSelector from '../../../wca/GenderSelector';
 
 export default function EditPersonForm({ wcaId, onSuccess, showDestroyButton = false }) {
   const {
@@ -49,6 +50,11 @@ export default function EditPersonForm({ wcaId, onSuccess, showDestroyButton = f
   const handleFormChange = (e, { name: formName, value }) => {
     setEditedUserDetails((prev) => ({ ...prev, [formName]: value }));
   };
+
+  const handleDobChange = (date) => handleFormChange(null, {
+    name: 'dob',
+    value: date,
+  });
 
   const editPerson = (method) => {
     save(apiV0Urls.wrt.edit(wcaId), {
@@ -108,7 +114,7 @@ export default function EditPersonForm({ wcaId, onSuccess, showDestroyButton = f
                 The change you made may have affected national and continental records, be sure to
                 run
                 {' '}
-                <a href={adminCheckRecordsUrl}>check_regional_record_markers</a>
+                <a href={panelPageUrl(PANEL_PAGES.checkRecords)}>check_regional_record_markers</a>
                 .
               </>
             )}
@@ -131,11 +137,13 @@ export default function EditPersonForm({ wcaId, onSuccess, showDestroyButton = f
           value={editedUserDetails?.name || ''}
           onChange={handleFormChange}
         />
-        <CountrySelector
+        <RegionSelector
+          label={I18n.t('activerecord.attributes.user.country_iso2')}
           name="representing"
+          onlyCountries
           disabled={!editedUserDetails}
-          countryIso2={editedUserDetails?.representing || ''}
-          onChange={handleFormChange}
+          region={editedUserDetails?.representing || ''}
+          onRegionChange={handleFormChange}
         />
         <GenderSelector
           name="gender"
@@ -152,10 +160,7 @@ export default function EditPersonForm({ wcaId, onSuccess, showDestroyButton = f
           dropdownMode="select"
           disabled={!editedUserDetails}
           isoDate={editedUserDetails?.dob}
-          onChange={(date) => handleFormChange(null, {
-            name: 'dob',
-            value: date,
-          })}
+          onChange={handleDobChange}
         />
         <Button
           disabled={_.isEqual(editedUserDetails, originalUserDetails) || !editedUserDetails}

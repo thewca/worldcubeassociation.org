@@ -10,10 +10,10 @@ class Regulation < SimpleDelegator
     self.regulations.index_by { |r| r["id"] }
   end
 
-  def self.reload_regulations(s3)
+  def self.reload_regulations(s3_client)
     reset_regulations
 
-    self.regulations = JSON.parse(s3.bucket(RegulationTranslationsHelper::BUCKET_NAME).object(REGULATIONS_JSON_PATH).get.body.read).freeze
+    self.regulations = JSON.parse(s3_client.bucket(RegulationTranslationsHelper::BUCKET_NAME).object(REGULATIONS_JSON_PATH).get.body.read).freeze
   rescue StandardError => e
     self.regulations_load_error = e
   end
@@ -41,7 +41,7 @@ class Regulation < SimpleDelegator
     matched_regulations = self.regulations.dup
     query.downcase.split.each do |part|
       matched_regulations.select! do |reg|
-        %w(content_html id).any? { |field| reg[field].downcase.include?(part) }
+        %w[content_html id].any? { |field| reg[field].downcase.include?(part) }
       end
     end
     Regulation.new(matched_regulations)

@@ -3,12 +3,12 @@ import { Message, List } from 'semantic-ui-react';
 
 import {
   adminCheckExistingResultsUrl,
-  adminCheckRegionalRecordsUrl,
-  adminCADUrl,
+  panelPageUrl,
   competitionAllResultsUrl,
   personUrl,
   adminFixResultsUrl,
 } from '../../../lib/requests/routes.js.erb';
+import { PANEL_PAGES } from '../../../lib/wca-data.js.erb';
 
 function AfterActionMessage({
   wcaId,
@@ -44,7 +44,7 @@ function AfterActionMessage({
             </List.Item>
             <List.Item>
               <a
-                href={adminCheckRegionalRecordsUrl(competitionId, eventId)}
+                href={panelPageUrl(PANEL_PAGES.checkRecords, { competitionId, eventId })}
                 target="_blank"
                 rel="noreferrer"
               >
@@ -53,7 +53,7 @@ function AfterActionMessage({
             </List.Item>
             <List.Item>
               <a
-                href={adminCADUrl}
+                href={panelPageUrl(PANEL_PAGES.computeAuxiliaryData)}
                 target="_blank"
                 rel="noreferrer"
               >

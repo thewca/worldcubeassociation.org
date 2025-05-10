@@ -64,6 +64,7 @@ EnvConfig = SuperConfig.new(raise_exception: !is_compiling_assets) do
     optional :DISABLE_BULLET, :bool, false
     optional :MAILCATCHER_SMTP_HOST, :string, ''
     optional :ASSET_HOST, :string, ''
+    optional :RUNNING_IN_DOCKER, :bool, false
     mandatory :WCA_REGISTRATIONS_BACKEND_URL, :string
   end
 
@@ -96,6 +97,7 @@ EnvConfig = SuperConfig.new(raise_exception: !is_compiling_assets) do
   end
 
   optional :ROOT_URL, :string, default_root_url
+  optional :OIDC_ISSUER, :string, default_root_url
 
   # For server status
   optional :BUILD_TAG, :string, "local"
@@ -105,6 +107,15 @@ EnvConfig = SuperConfig.new(raise_exception: !is_compiling_assets) do
 
   # For Asset Compilation
   optional :ASSETS_COMPILATION, :bool, false
+
+  # For local Playwright instances
+  optional :PLAYWRIGHT_SERVER_SOCKET_URL, :string, ''
+  optional :PLAYWRIGHT_BROWSERS_PATH, :string, ''
+  optional :PLAYWRIGHT_RUN_LOCALLY, :bool, false
+
+  # For developer setups who have a local Ruby runtime
+  optional :CAPYBARA_RUN_ON_HOST, :bool, false
+  optional :CAPYBARA_APP_HOST, :string, ''
 
   # For API Only Server
   optional :API_ONLY, :bool, false

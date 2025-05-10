@@ -14,9 +14,7 @@ class LiveController < ApplicationController
     round_id = params.require(:round_id)
     registration_id = params.require(:registration_id)
 
-    if LiveResult.exists?(round_id: round_id, registration_id: registration_id)
-      return render json: { status: "result already exist" }, status: :unprocessable_entity
-    end
+    return render json: { status: "result already exist" }, status: :unprocessable_entity if LiveResult.exists?(round_id: round_id, registration_id: registration_id)
 
     AddLiveResultJob.perform_later(results, round_id, registration_id, current_user)
 
@@ -30,7 +28,7 @@ class LiveController < ApplicationController
 
     result = LiveResult.includes(:live_attempts).find_by(round: round, registration_id: registration_id)
 
-    return render json: { status: "result does not exist" }, status: :unprocessable_entity unless result.present?
+    return render json: { status: "result does not exist" }, status: :unprocessable_entity if result.blank?
 
     previous_attempts = result.live_attempts.index_by(&:attempt_number)
 
@@ -69,7 +67,7 @@ class LiveController < ApplicationController
 
     # TODO: Figure out why this fires a query for every live_attempt
     # LiveAttempt Load (0.6ms)  SELECT `live_attempts`.* FROM `live_attempts` WHERE `live_attempts`.`live_result_id` = 39 AND `live_attempts`.`replaced_by_id` IS NULL ORDER BY `live_attempts`.`attempt_number` ASC
-    render json: Round.includes(live_results: [:live_attempts, :round, :event]).find(round_id).live_results
+    render json: Round.includes(live_results: %i[live_attempts round event]).find(round_id).live_results
   end
 
   def double_check

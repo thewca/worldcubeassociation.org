@@ -25,9 +25,7 @@ SuperConfig::Base.class_eval do
     File.delete(file_path) if refresh && File.exist?(file_path)
 
     self.vault(secret_name, cache: true) do |vault_secret|
-      unless File.exist? file_path
-        File.write file_path, vault_secret.to_json
-      end
+      File.write file_path, vault_secret.to_json unless File.exist? file_path
 
       File.expand_path file_path
     end
@@ -38,7 +36,7 @@ SuperConfig::Base.class_eval do
       puts "Received exception #{e} from Vault - attempt #{attempt}" if e.present?
 
       secret = Vault.logical.read("kv/data/#{EnvConfig.VAULT_APPLICATION}/#{secret_name}")
-      raise "Tried to read #{secret_name}, but doesn't exist" unless secret.present?
+      raise "Tried to read #{secret_name}, but doesn't exist" if secret.blank?
 
       secret.data[:data]
     end

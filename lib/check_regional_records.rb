@@ -5,19 +5,19 @@ module CheckRegionalRecords
   LOOKUP_TABLE_NAME = 'regional_records_lookup'
 
   def self.add_to_lookup_table(competition_id = nil, table_name: LOOKUP_TABLE_NAME)
-    ActiveRecord::Base.connection.execute <<-SQL
+    ActiveRecord::Base.connection.execute <<-SQL.squish
       INSERT INTO #{table_name}
-      (resultId, countryId, eventId, competitionEndDate, best, average)
-      SELECT Results.id, Results.countryId, Results.eventId, Competitions.end_date, Results.best, Results.average
-      FROM Results
-      INNER JOIN Competitions ON Results.competitionId = Competitions.id
-      #{competition_id.present? ? "WHERE Results.competitionId = '#{competition_id}'" : ''}
+      (result_id, country_id, event_id, competition_end_date, best, average)
+      SELECT results.id, results.country_id, results.event_id, competitions.end_date, results.best, results.average
+      FROM results
+      INNER JOIN competitions ON results.competition_id = competitions.id
+      #{competition_id.present? ? "WHERE results.competition_id = '#{competition_id}'" : ''}
       ON DUPLICATE KEY UPDATE
-        countryId = Results.countryId,
-        eventId = Results.eventId,
-        competitionEndDate = Competitions.end_date,
-        best = Results.best,
-        average = Results.average
+        country_id = results.country_id,
+        event_id = results.event_id,
+        competition_end_date = competitions.end_date,
+        best = results.best,
+        average = results.average
     SQL
   end
 
@@ -59,9 +59,7 @@ module CheckRegionalRecords
       # there might be an overlap where the next competition started in the morning but the old competition set a record in the evening.
       if next_start_date > competition.end_date
         tentative_records.each do |region, record|
-          if !confirmed_records.key?(region) || record < confirmed_records[region]
-            confirmed_records[region] = record
-          end
+          confirmed_records[region] = record if !confirmed_records.key?(region) || record < confirmed_records[region]
         end
       else
         still_pending.push(cache)
@@ -94,19 +92,19 @@ module CheckRegionalRecords
     marked_records = results_scope.includes(:competition)
                                   .where.not(regional_record_marker => '')
 
-    minimum_result_candidates = results_scope.select("eventId, competitionId, roundTypeId, countryId, MIN(#{value_column}) AS `value`")
+    minimum_result_candidates = results_scope.select("event_id, competition_id, round_type_id, country_id, MIN(#{value_column}) AS `value`")
                                              .where.not(value_column => ..0)
-                                             .group("eventId, competitionId, roundTypeId, countryId")
+                                             .group("event_id, competition_id, round_type_id, country_id")
 
     # Deliberately NOT using `results_scope` here, because the necessary event/competition filtering is
     # implicitly included via the `minimum_result_candidate` view (and doubling up would make the query much slower!)
     minimum_results = Result.includes(:competition)
-                            .from("Results, (#{minimum_result_candidates.to_sql}) AS `helper`")
-                            .where("Results.eventId = helper.eventId")
-                            .where("Results.competitionId = helper.competitionId")
-                            .where("Results.roundTypeId = helper.roundTypeId")
-                            .where("Results.countryId = helper.countryId")
-                            .where("Results.#{value_column} = helper.`value`")
+                            .from("results, (#{minimum_result_candidates.to_sql}) AS `helper`")
+                            .where("results.event_id = helper.event_id")
+                            .where("results.competition_id = helper.competition_id")
+                            .where("results.round_type_id = helper.round_type_id")
+                            .where("results.country_id = helper.country_id")
+                            .where("results.#{value_column} = helper.`value`")
 
     (marked_records + minimum_results).uniq(&:id)
                                       .sort_by do |r|
@@ -126,12 +124,12 @@ module CheckRegionalRecords
     end
   end
 
-  SOLUTION_TYPES = [[:best, 'Single'], [:average, 'Average']].freeze
+  SOLUTION_TYPES = [[:best, 'single'], [:average, 'average']].freeze
 
   def self.check_records(event_id = nil, competition_id = nil)
     SOLUTION_TYPES.to_h do |value_column, value_name|
       # some helper symbols for further down
-      regional_record_symbol = :"regional#{value_name}Record"
+      regional_record_symbol = :"regional_#{value_name}_record"
       value_solve_symbol = :"#{value_column}_solve"
 
       base_records = {}
@@ -140,12 +138,12 @@ module CheckRegionalRecords
         model_comp = Competition.find(competition_id)
         event_filter = event_id || model_comp.event_ids
 
-        previous_min_results = Result.select("eventId, countryId, MIN(#{value_column}) AS `value`")
-                                     .from("#{LOOKUP_TABLE_NAME} AS Results")
+        previous_min_results = Result.select("event_id, country_id, MIN(#{value_column}) AS `value`")
+                                     .from("#{LOOKUP_TABLE_NAME} AS results")
                                      .where.not(value_column => ..0)
-                                     .where(competitionEndDate: ...model_comp.start_date)
-                                     .where(eventId: event_filter)
-                                     .group(:eventId, :countryId)
+                                     .where(competition_end_date: ...model_comp.start_date)
+                                     .where(event_id: event_filter)
+                                     .group(:event_id, :country_id)
 
         previous_min_results.each do |r|
           event_records = base_records[r.event_id] || {}
@@ -166,7 +164,7 @@ module CheckRegionalRecords
       pending_competitions = []
 
       check_results = self.load_ordered_results(event_id, competition_id, value_column, regional_record_symbol)
-                          .map do |r|
+                          .filter_map do |r|
         value_solve = r.send(value_solve_symbol)
 
         # Skip DNF, DNS, invalid Multi attempts
@@ -216,7 +214,7 @@ module CheckRegionalRecords
           competition: r.competition,
           result: r,
         }
-      end.compact
+      end
 
       [value_column, check_results]
     end

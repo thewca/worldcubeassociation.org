@@ -2,13 +2,11 @@
 
 class ServerStatusController < ApplicationController
   def index
-    @locale_stats = ApplicationController.locale_counts.sort_by { |locale, count| count }.reverse
+    @locale_stats = ApplicationController.locale_counts.sort_by { |_locale, count| count }.reverse
 
     @checks = checks
-    @everything_good = @checks.all?(&:is_passing?)
-    if !@everything_good
-      render status: 503
-    end
+    @everything_good = @checks.all?(&:passing?)
+    render status: :service_unavailable unless @everything_good
   end
 
   def checks
@@ -21,7 +19,7 @@ class ServerStatusController < ApplicationController
 end
 
 class StatusCheck
-  def is_passing?
+  def passing?
     status == :success
   end
 
@@ -50,7 +48,7 @@ class JobsCheck < StatusCheck
 
   protected def _status_description
     jobs_that_should_have_run_by_now = CronjobStatistic.where(recently_rejected: 0, run_start: nil)
-                                                       .where('enqueued_at < ?', MINUTES_IN_WHICH_A_JOB_SHOULD_HAVE_STARTED_RUNNING.minutes.ago)
+                                                       .where(enqueued_at: ...MINUTES_IN_WHICH_A_JOB_SHOULD_HAVE_STARTED_RUNNING.minutes.ago)
 
     oldest_job_that_should_have_run_by_now = jobs_that_should_have_run_by_now.order(:enqueued_at).first
 
@@ -59,16 +57,16 @@ class JobsCheck < StatusCheck
     else
       [
         :danger,
-        %{
+        %(
           Uh oh!
           Job #{oldest_job_that_should_have_run_by_now.id} was enqueued
           #{time_ago_in_words oldest_job_that_should_have_run_by_now.enqueued_at}
           ago and still has not run.
           #{jobs_that_should_have_run_by_now.count}
-          #{"job".pluralize(jobs_that_should_have_run_by_now.count)}
-          #{"is".pluralize(jobs_that_should_have_run_by_now.count)}
+          #{'job'.pluralize(jobs_that_should_have_run_by_now.count)}
+          #{'is'.pluralize(jobs_that_should_have_run_by_now.count)}
           waiting to run.
-        }.squish,
+        ).squish,
       ]
     end
   end
@@ -100,7 +98,7 @@ class MysqlSettingsCheck < StatusCheck
   end
 
   protected def _status_description
-    actual_mysql_settings = ActiveRecord::Base.connection.select_one("SELECT #{EXPECTED_MYSQL_SETTINGS.keys.join(", ")};")
+    actual_mysql_settings = ActiveRecord::Base.connection.select_one("SELECT #{EXPECTED_MYSQL_SETTINGS.keys.join(', ')};")
     mysql_settings_good = true
     description = ""
     EXPECTED_MYSQL_SETTINGS.each do |setting, expected_value|

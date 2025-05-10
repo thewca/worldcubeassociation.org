@@ -21,6 +21,14 @@ class TicketStakeholder < ApplicationRecord
     methods: %w[stakeholder],
   }.freeze
 
+  def user_group_stakeholder?
+    stakeholder_type == "UserGroup"
+  end
+
+  def user_stakeholder?
+    stakeholder_type == "User"
+  end
+
   def serializable_hash(options = nil)
     json = super(DEFAULT_SERIALIZE_OPTIONS.merge(options || {}))
     json[:class] = self.class.to_s.downcase

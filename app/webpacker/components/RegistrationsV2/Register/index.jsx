@@ -1,10 +1,9 @@
 import React from 'react';
-import { useQuery } from '@tanstack/react-query';
 import StepPanel from './StepPanel';
-import { getSingleRegistration } from '../api/registration/get/get_registrations';
 import Loading from '../../Requests/Loading';
-import RegistrationMessage, { showMessage } from './RegistrationMessage';
-import StoreProvider, { useDispatch } from '../../../lib/providers/StoreProvider';
+import RegistrationProvider, { useRegistration } from '../lib/RegistrationProvider';
+import RegistrationMessage from './RegistrationMessage';
+import StoreProvider from '../../../lib/providers/StoreProvider';
 import messageReducer from '../reducers/messageReducer';
 import WCAQueryClientProvider from '../../../lib/providers/WCAQueryClientProvider';
 import ConfirmProvider from '../../../lib/providers/ConfirmProvider';
@@ -13,10 +12,49 @@ import { hasNotPassed, hasPassed } from '../../../lib/utils/dates';
 import RegistrationNotAllowedMessage from './RegistrationNotAllowedMessage';
 import RegistrationClosingMessage from './RegistrationClosingMessage';
 import usePerpetualState from '../hooks/usePerpetualState';
+import FormObjectProvider from '../../wca/FormBuilder/provider/FormObjectProvider';
+import { isQualifiedForEvent } from '../../../lib/helpers/qualifications';
 
 // The following states should show the Panel even when registration is already closed.
 //   (You can think of this as "is there a non-cancelled, non-rejected registration?)
 const editableRegistrationStates = ['accepted', 'pending', 'waiting_list'];
+
+const defaultRegistration = (defaultEvents = []) => ({
+  competing: {
+    event_ids: defaultEvents,
+    comment: '',
+  },
+  guests: 0,
+});
+
+const buildFormRegistration = ({
+  registration: serverRegistration,
+  competitionInfo,
+  preferredEvents,
+  qualifications,
+}) => {
+  const initialSelectedEvents = competitionInfo.events_per_registration_limit ? [] : preferredEvents
+    .filter((event) => competitionInfo.event_ids.includes(event))
+    .filter((event) => !competitionInfo['uses_qualification?'] || isQualifiedForEvent(event, qualifications.wcif, qualifications.personalRecords));
+
+  if (serverRegistration) {
+    if (serverRegistration.competing.registration_status === 'cancelled') {
+      const dummyRegistration = defaultRegistration(initialSelectedEvents);
+
+      return {
+        ...dummyRegistration,
+        competing: {
+          ...dummyRegistration.competing,
+          registration_status: 'cancelled',
+        },
+      };
+    }
+
+    return serverRegistration;
+  }
+
+  return defaultRegistration(initialSelectedEvents);
+};
 
 export default function Index({
   competitionInfo,
@@ -27,21 +65,28 @@ export default function Index({
   stripePublishableKey = '',
   connectedAccountId = '',
   cannotRegisterReasons,
+  isProcessing = false,
 }) {
   return (
     <WCAQueryClientProvider>
       <StoreProvider reducer={messageReducer} initialState={{ messages: [] }}>
         <ConfirmProvider>
-          <Register
+          <RegistrationProvider
             competitionInfo={competitionInfo}
             userInfo={userInfo}
-            userCanPreRegister={userCanPreRegister}
-            preferredEvents={preferredEvents}
-            stripePublishableKey={stripePublishableKey}
-            connectedAccountId={connectedAccountId}
-            qualifications={qualifications}
-            cannotRegisterReasons={cannotRegisterReasons}
-          />
+            isProcessing={isProcessing}
+          >
+            <Register
+              competitionInfo={competitionInfo}
+              userInfo={userInfo}
+              userCanPreRegister={userCanPreRegister}
+              preferredEvents={preferredEvents}
+              stripePublishableKey={stripePublishableKey}
+              connectedAccountId={connectedAccountId}
+              qualifications={qualifications}
+              cannotRegisterReasons={cannotRegisterReasons}
+            />
+          </RegistrationProvider>
         </ConfirmProvider>
       </StoreProvider>
     </WCAQueryClientProvider>
@@ -58,24 +103,6 @@ function Register({
   stripePublishableKey,
   cannotRegisterReasons,
 }) {
-  const dispatch = useDispatch();
-
-  const {
-    data: registration,
-    isFetching,
-    refetch,
-  } = useQuery({
-    queryKey: ['registration', competitionInfo.id, userInfo.id],
-    queryFn: () => getSingleRegistration(userInfo.id, competitionInfo),
-    onError: (data) => {
-      const { error } = data.json;
-      dispatch(showMessage(
-        `competitions.registration_v2.errors.${error}`,
-        'negative',
-      ));
-    },
-  });
-
   const registrationAlreadyOpen = usePerpetualState(
     () => hasPassed(competitionInfo.registration_open),
   );
@@ -83,6 +110,8 @@ function Register({
   const registrationNotYetClosed = usePerpetualState(
     () => hasNotPassed(competitionInfo.registration_close),
   );
+
+  const { isFetching, registration } = useRegistration();
 
   if (isFetching) {
     return <Loading />;
@@ -110,24 +139,31 @@ function Register({
     || (userCanPreRegister && registrationNotYetClosed)
     || hasEditableRegistration;
 
+  const formRegistration = buildFormRegistration({
+    registration,
+    competitionInfo,
+    preferredEvents,
+    qualifications,
+  });
+
   return (
     <>
       <RegistrationOpeningMessage registrationStart={competitionInfo.registration_open} />
       <RegistrationClosingMessage registrationEnd={competitionInfo.registration_close} />
       {showRegistrationPanel && (
-        <>
+        <FormObjectProvider initialObject={formRegistration}>
           <RegistrationMessage />
           <StepPanel
             user={userInfo}
             preferredEvents={preferredEvents}
             competitionInfo={competitionInfo}
             registration={registration}
-            refetchRegistration={refetch}
             connectedAccountId={connectedAccountId}
             stripePublishableKey={stripePublishableKey}
             qualifications={qualifications}
+            registrationCurrentlyOpen={registrationCurrentlyOpen}
           />
-        </>
+        </FormObjectProvider>
       )}
     </>
   );

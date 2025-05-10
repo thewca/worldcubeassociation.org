@@ -3,10 +3,10 @@
 <%= render layout: 'nav' do %>
   <ul class="nav nav-tabs">
     <li><a href="#general-info" data-toggle="tab"><%=t 'competitions.show.general_info' %></a></li>
-    <% if @competition.has_rounds? %>
+    <% if @competition.any_rounds? %>
       <li><a href="#competition-events" data-toggle="tab"><%=t 'competitions.show.events' %></a></li>
     <% end %>
-    <% if @competition.has_schedule? %>
+    <% if @competition.any_venues? %>
       <li><a href="#competition-schedule" data-toggle="tab"><%=t 'competitions.show.schedule' %></a></li>
     <% end %>
     <% @competition.tabs.each do |tab| %>
@@ -20,12 +20,12 @@
         <%= render "results_table", results: @competition.winning_results, hide_pos: true, hide_round: true %>
       <% end %>
     </div>
-    <% if @competition.has_rounds? %>
+    <% if @competition.any_rounds? %>
       <div class="tab-pane" id="competition-events">
         <%= render "events_tab" %>
       </div>
     <% end %>
-    <% if @competition.has_schedule? %>
+    <% if @competition.any_venues? %>
       <div class="tab-pane" id="competition-schedule">
         <%= render "competition_schedule_tab", competition: @competition %>
       </div>

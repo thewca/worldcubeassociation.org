@@ -2,8 +2,8 @@
 
 FactoryBot.define do
   factory :registration do
-    association :competition, factory: [:competition, :registration_open]
-    association :user, factory: [:user, :wca_id]
+    competition factory: %i[competition registration_open]
+    user factory: %i[user wca_id]
     guests { 10 }
     comments { "" }
     created_at { Time.now }
@@ -12,7 +12,7 @@ FactoryBot.define do
 
     transient do
       # TODO: Consider refactoring registration event definitions to be less reliant on hardcoded event IDs?
-      event_ids { ['333', '333oh'] }
+      event_ids { %w[333 333oh] }
       events { competition.events.where(id: event_ids) }
     end
 
@@ -22,6 +22,11 @@ FactoryBot.define do
 
     trait :skip_validations do
       to_create { |instance| instance.save(validate: false) }
+    end
+
+    trait :non_competing do
+      accepted # Must be accepted so that it shows up in WCIF
+      is_competing { false }
     end
 
     trait :accepted do
@@ -41,11 +46,11 @@ FactoryBot.define do
     end
 
     trait :newcomer do
-      association :user, factory: [:user]
+      user
     end
 
     trait :newcomer_month_eligible do
-      association :user, factory: [:user, :current_year_wca_id]
+      user factory: %i[user current_year_wca_id]
     end
 
     trait :paid do
@@ -101,15 +106,15 @@ FactoryBot.define do
 
     trait :paid_no_hooks do
       after(:create) do |registration|
-        payment = FactoryBot.build :registration_payment, registration: registration, user: registration.user,
-                                                          amount_lowest_denomination: registration.competition.base_entry_fee_lowest_denomination
+        payment = FactoryBot.build(:registration_payment, registration: registration, user: registration.user,
+                                                          amount_lowest_denomination: registration.competition.base_entry_fee_lowest_denomination)
         payment.save(validate: false)
       end
     end
 
     trait :unpaid do
       after(:create) do |registration|
-        FactoryBot.create :registration_payment, registration: registration, user: registration.user
+        FactoryBot.create(:registration_payment, registration: registration, user: registration.user)
       end
     end
 
@@ -119,7 +124,7 @@ FactoryBot.define do
     end
 
     after(:create) do |registration|
-      registration.competition.waiting_list.add(registration) if registration.competing_status == Registrations::Helper::STATUS_WAITING_LIST
+      registration.waiting_list.add(registration) if registration.competing_status == Registrations::Helper::STATUS_WAITING_LIST
     end
   end
 end

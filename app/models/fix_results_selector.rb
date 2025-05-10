@@ -53,8 +53,7 @@ class FixResultsSelector
     person.results
           .filter { |r| r.competition_id == competition_id }
           .filter { |r| r.event_id == event_id }
-          .filter { |r| r.round_type_id == round_type_id }
-          .first
+          .find { |r| r.round_type_id == round_type_id }
   end
 
   def result_or_repeat_link(resolver)

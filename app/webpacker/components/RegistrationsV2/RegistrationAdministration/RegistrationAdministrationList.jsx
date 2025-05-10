@@ -3,9 +3,10 @@ import React, {
   useMemo, useReducer, useRef,
 } from 'react';
 import {
-  Accordion, Checkbox, Form, Header, Icon, Segment, Sticky,
+  Accordion, Checkbox, Divider, Form, Header, Icon, Segment, Sticky,
 } from 'semantic-ui-react';
 import { getAllRegistrations } from '../api/registration/get/get_registrations';
+import RegistrationAdministrationSearch from './RegistrationAdministrationSearch';
 import RegistrationActions from './RegistrationActions';
 import { showMessage, showMessages } from '../Register/RegistrationMessage';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
@@ -18,6 +19,8 @@ import useOrderedSet from '../../../lib/hooks/useOrderedSet';
 import {
   APPROVED_COLOR, APPROVED_ICON,
   CANCELLED_COLOR, CANCELLED_ICON,
+  NON_COMPETING_COLOR,
+  NON_COMPETING_ICON,
   partitionRegistrations,
   PENDING_COLOR, PENDING_ICON,
   REJECTED_COLOR, REJECTED_ICON,
@@ -108,12 +111,13 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
     },
   });
 
-  const {
-    waiting, accepted, cancelled, pending, rejected,
-  } = useMemo(
+  const partitionedRegistrations = useMemo(
     () => partitionRegistrations(registrations ?? []),
     [registrations],
   );
+  const {
+    waiting, accepted, cancelled, pending, rejected, nonCompeting,
+  } = partitionedRegistrations;
 
   const selectedIds = useOrderedSet();
   const partitionedSelectedIds = useMemo(
@@ -123,8 +127,11 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
       accepted: selectedIds.asArray.filter((id) => accepted.some((reg) => id === reg.user.id)),
       cancelled: selectedIds.asArray.filter((id) => cancelled.some((reg) => id === reg.user.id)),
       rejected: selectedIds.asArray.filter((id) => rejected.some((reg) => id === reg.user.id)),
+      nonCompeting: selectedIds.asArray.filter(
+        (id) => nonCompeting.some((reg) => id === reg.user.id),
+      ),
     }),
-    [selectedIds.asArray, pending, waiting, accepted, cancelled, rejected],
+    [selectedIds.asArray, pending, waiting, accepted, cancelled, rejected, nonCompeting],
   );
 
   // some sticky/floating bar somewhere with totals/info would be better
@@ -188,7 +195,6 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
               onSelect={selectedIds.add}
               onUnselect={selectedIds.remove}
               onToggle={selectedIds.toggle}
-              competition_id={competitionInfo.id}
               competitionInfo={competitionInfo}
               color={PENDING_COLOR}
               distinguishPaidUnpaid
@@ -212,9 +218,12 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
       content: {
         content: (
           <>
+            <Header.Subheader>
+              {I18n.t('competitions.registration_v2.list.waitlist.information')}
+            </Header.Subheader>
             <Checkbox
               toggle
-              value={waitlistEditModeEnabled}
+              checked={waitlistEditModeEnabled}
               onChange={setWaitlistEditModeEnabled}
               label={I18n.t('competitions.registration_v2.list.edit_waiting_list')}
             />
@@ -224,7 +233,6 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
               onSelect={selectedIds.add}
               onUnselect={selectedIds.remove}
               onToggle={selectedIds.toggle}
-              competition_id={competitionInfo.id}
               initialSortColumn="waiting_list_position"
               competitionInfo={competitionInfo}
               registrations={waiting.toSorted(
@@ -269,7 +277,6 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
             onSelect={selectedIds.add}
             onUnselect={selectedIds.remove}
             onToggle={selectedIds.toggle}
-            competition_id={competitionInfo.id}
             competitionInfo={competitionInfo}
             color={APPROVED_COLOR}
           />
@@ -301,7 +308,6 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
               onSelect={selectedIds.add}
               onUnselect={selectedIds.remove}
               onToggle={selectedIds.toggle}
-              competition_id={competitionInfo.id}
               competitionInfo={competitionInfo}
               color={CANCELLED_COLOR}
             />
@@ -334,7 +340,6 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
               onSelect={selectedIds.add}
               onUnselect={selectedIds.remove}
               onToggle={selectedIds.toggle}
-              competition_id={competitionInfo.id}
               competitionInfo={competitionInfo}
               color={REJECTED_COLOR}
             />
@@ -342,8 +347,39 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
         ),
       },
     },
-    // TODO: Either add non competing registrations here on in a separate staff tab
-  ];
+    nonCompeting.length > 0 && {
+      key: 'nonCompeting',
+      title: {
+        content: (
+          <SectionToggle
+            icon={NON_COMPETING_ICON}
+            title={I18n.t('competitions.registration_v2.list.non_competing.title')}
+            inParens={nonCompeting.length}
+            color={NON_COMPETING_COLOR}
+          />
+        ),
+      },
+      content: {
+        content: (
+          <>
+            <Header.Subheader>
+              {I18n.t('competitions.registration_v2.list.non_competing.information')}
+            </Header.Subheader>
+            <RegistrationAdministrationTable
+              columnsExpanded={expandedColumns}
+              registrations={nonCompeting}
+              selected={partitionedSelectedIds.nonCompeting}
+              onSelect={selectedIds.add}
+              onUnselect={selectedIds.remove}
+              onToggle={selectedIds.toggle}
+              competitionInfo={competitionInfo}
+              color={NON_COMPETING_COLOR}
+            />
+          </>
+        ),
+      },
+    },
+  ].filter(Boolean);
 
   const nonEmptyTableIndices = [
     ['pending', pending],
@@ -351,6 +387,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
     ['accepted', accepted],
     ['cancelled', cancelled],
     ['rejected', rejected],
+    ['nonCompeting', nonCompeting],
   ].filter(
     ([, list]) => list.length > 0,
   ).map(
@@ -374,6 +411,16 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
         </Form.Group>
       </Form>
 
+      <Divider />
+
+      <RegistrationAdministrationSearch
+        partitionedRegistrations={partitionedRegistrations}
+        usingPayments={competitionInfo['using_payment_integrations?']}
+        currencyCode={competitionInfo.currency_code}
+      />
+
+      <Divider />
+
       <div ref={actionsRef}>
         <Sticky context={actionsRef} offset={20}>
           <RegistrationActions
@@ -385,6 +432,8 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
             updateRegistrationMutation={updateRegistrationMutation}
           />
         </Sticky>
+
+        <Divider />
 
         <Accordion
           defaultActiveIndex={nonEmptyTableIndices}

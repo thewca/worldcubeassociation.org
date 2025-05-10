@@ -13,14 +13,13 @@ import {
   getSkippedWaitlistCount,
   PENDING_COLOR, PENDING_ICON,
   REJECTED_COLOR, REJECTED_ICON,
+  sortRegistrations,
   WAITLIST_COLOR, WAITLIST_ICON,
 } from '../../../lib/utils/registrationAdmin';
 import { useConfirm } from '../../../lib/providers/ConfirmProvider';
 
 function V3csvExport(selected, registrations, competition) {
-  let csvContent = 'data:text/csv;charset=utf-8,';
-  csvContent
-    += `Status,Name,Country,WCA ID,Birth Date,Gender,${competition.event_ids.join(',')},Email,Guests,IP,Registration Date Time (UTC)\n`;
+  let csvContent = `Status,Name,Country,WCA ID,Birth Date,Gender,${competition.event_ids.join(',')},Email,Guests,IP,Registration Date Time (UTC),Payment Date Time(UTC),User Id,Registration Status\n`;
   registrations
     .filter((r) => selected.length === 0 || selected.includes(r.user_id))
     .forEach((registration) => {
@@ -36,6 +35,12 @@ function V3csvExport(selected, registrations, competition) {
         registration.guests // IP feel always blank
       },"",${
         DateTime.fromISO(registration.competing.registered_on).setZone('UTC').toFormat('yyyy-MM-dd HH:mm:ss ZZZZ')
+      },${
+        registration.payment?.has_paid ? DateTime.fromISO(registration.payment.updated_at).setZone('UTC').toFormat('yyyy-MM-dd HH:mm:ss ZZZZ') : ''
+      },${
+        registration.user_id
+      },${
+        registration.competing.registration_status
       }\n`;
     });
 
@@ -76,7 +81,7 @@ export default function RegistrationActions({
   const anySelected = selectedCount > 0;
 
   const {
-    pending, accepted, cancelled, waiting, rejected,
+    pending, accepted, cancelled, waiting, rejected, nonCompeting,
   } = partitionedSelectedIds;
   const anyPending = pending.length < selectedCount;
   const anyApprovable = accepted.length < selectedCount;
@@ -94,7 +99,9 @@ export default function RegistrationActions({
     [registrations],
   );
 
-  const selectedEmails = [...pending, ...waiting, ...accepted, ...cancelled, ...rejected]
+  const selectedEmails = [
+    ...pending, ...waiting, ...accepted, ...cancelled, ...rejected, ...nonCompeting,
+  ]
     .map((userId) => userEmailMap[userId])
     .join(',');
 
@@ -121,22 +128,25 @@ export default function RegistrationActions({
   const moveSelectedToWaitlist = () => {
     const idsToWaitlist = [...pending, ...cancelled, ...accepted, ...rejected];
 
-    const registrationsByUserId = _.groupBy(registrations, 'user_id');
-
-    const [paid, unpaid] = _.partition(
-      idsToWaitlist,
-      (userId) => registrationsByUserId[userId]?.[0]?.payment?.updated_at,
+    const registrationsToMove = registrations.filter(
+      (reg) => idsToWaitlist.includes(reg.user_id),
     );
-
-    paid.sort((a, b) => {
-      const dateA = new Date(registrationsByUserId[a][0].payment.updated_at);
-      const dateB = new Date(registrationsByUserId[b][0].payment.updated_at);
-      return dateA - dateB;
-    });
-
-    const combined = paid.concat(unpaid);
-    changeStatus(combined, 'waiting_list');
+    const sortedRegistrationsToMove = sortRegistrations(
+      registrationsToMove,
+      'paid_on_with_registered_on_fallback',
+      'ascending',
+    );
+    const sortedIdsToMove = sortedRegistrationsToMove.map((reg) => reg.user_id);
+    changeStatus(sortedIdsToMove, 'waiting_list');
   };
+
+  const showOverLimitMessage = (count) => dispatch(
+    showMessage(
+      'competitions.registration_v2.update.too_many',
+      'negative',
+      { count },
+    ),
+  );
 
   const onMoveSelectedToWaitlist = () => {
     const skippedPendingCount = getSkippedPendingCount(
@@ -164,12 +174,18 @@ export default function RegistrationActions({
       registrations,
       partitionedSelectedIds,
     );
+    const amountOverLimit = Math.max(idsToAccept.length - spotsRemaining, 0);
+    const goesOverLimit = amountOverLimit > 0;
     const skippedPendingCount = getSkippedPendingCount(
       registrations,
       partitionedSelectedIds,
     );
 
-    if (skippedWaitlistCount > 0) {
+    if (goesOverLimit) {
+      showOverLimitMessage(amountOverLimit);
+    } else if (skippedWaitlistCount > 0) {
+      // note: if the user confirms (ignores the warning) then no further checks are done
+      //  in this `else-if` chain; we can't check that directly in the `if` condition
       confirm({
         content: I18n.t(
           'competitions.registration_v2.list.waitlist.skipped_warning',
@@ -187,14 +203,6 @@ export default function RegistrationActions({
       }).then(
         () => changeStatus(idsToAccept, 'accepted'),
       ).catch(noop);
-    } else if (idsToAccept.length > spotsRemaining) {
-      dispatch(showMessage(
-        'competitions.registration_v2.update.too_many',
-        'negative',
-        {
-          count: idsToAccept.length - spotsRemaining,
-        },
-      ));
     } else {
       changeStatus(idsToAccept, 'accepted');
     }

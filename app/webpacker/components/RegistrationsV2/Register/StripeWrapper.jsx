@@ -8,10 +8,11 @@ import I18n from '../../../lib/i18n';
 import PaymentStep from './PaymentStep';
 import { fetchJsonOrError } from '../../../lib/requests/fetchWithAuthenticityToken';
 import { paymentDenominationUrl } from '../../../lib/requests/routes.js.erb';
+import { useRegistration } from '../lib/RegistrationProvider';
 
-const convertISOAmount = async (amount, currency) => {
+const convertISOAmount = async (competitionId, userId, isoDonationAmount) => {
   const { data } = await fetchJsonOrError(
-    paymentDenominationUrl(amount, currency),
+    paymentDenominationUrl(competitionId, userId, isoDonationAmount),
   );
   return data;
 };
@@ -21,18 +22,19 @@ export default function StripeWrapper({
   stripePublishableKey,
   connectedAccountId,
   user,
-  registration,
   nextStep,
 }) {
   const [stripePromise, setStripePromise] = useState(null);
   const initialAmount = competitionInfo.base_entry_fee_lowest_denomination;
-  const [donationAmount, setDonationAmount] = useState(0);
+  const [isoDonationAmount, setIsoDonationAmount] = useState(0);
+
+  const { registration } = useRegistration();
 
   const {
     data, isFetching,
   } = useQuery({
-    queryFn: () => convertISOAmount(initialAmount + donationAmount, competitionInfo.currency_code),
-    queryKey: ['displayAmount', initialAmount + donationAmount, competitionInfo.currency_code],
+    queryFn: () => convertISOAmount(competitionInfo.id, registration.user_id, isoDonationAmount),
+    queryKey: ['displayAmount', isoDonationAmount, competitionInfo.id, registration.user_id],
   });
 
   useEffect(() => {
@@ -49,7 +51,7 @@ export default function StripeWrapper({
       <Message positive>
         {I18n.t('registrations.payment_form.hints.payment_button')}
       </Message>
-      { donationAmount > initialAmount && (
+      { isoDonationAmount > initialAmount && (
       <Message warning>
         {I18n.t('registrations.payment_form.alerts.amount_rather_high')}
       </Message>
@@ -60,10 +62,10 @@ export default function StripeWrapper({
           options={{ amount: data?.api_amounts.stripe ?? initialAmount, currency: competitionInfo.currency_code.toLowerCase(), mode: 'payment' }}
         >
           <PaymentStep
-            setDonationAmount={setDonationAmount}
+            setIsoDonationAmount={setIsoDonationAmount}
             competitionInfo={competitionInfo}
             user={user}
-            donationAmount={donationAmount}
+            isoDonationAmount={isoDonationAmount}
             displayAmount={data?.human_amount}
             registration={registration}
             nextStep={nextStep}

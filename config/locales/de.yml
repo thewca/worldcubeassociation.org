@@ -152,57 +152,57 @@ de:
       #original_hash: 4d618bb
       name: Qualifikationsrunde
       #original_hash: 4d618bb
-      cellName: Qualifikationsrunde
+      cell_name: Qualifikationsrunde
     '1':
       #original_hash: 1e725b6
       name: Erste Runde
       #original_hash: 1e725b6
-      cellName: Erste Runde
+      cell_name: Erste Runde
     '2':
       #original_hash: 985c8d0
       name: Zweite Runde
       #original_hash: 985c8d0
-      cellName: Zweite Runde
+      cell_name: Zweite Runde
     '3':
       #original_hash: e2f74d2
       name: Halbfinale
       #original_hash: e2f74d2
-      cellName: Halbfinale
+      cell_name: Halbfinale
     b:
       #original_hash: 327c999
       name: B-Finale
       #original_hash: 327c999
-      cellName: B-Finale
+      cell_name: B-Finale
     c:
       #original_hash: 672b22c
       name: Kombiniertes Finale
       #original_hash: 672b22c
-      cellName: Kombiniertes Finale
+      cell_name: Kombiniertes Finale
     d:
       #original_hash: 1e725b6
       name: Kombinierte Erste Runde
       #original_hash: 1e725b6
-      cellName: Erste Runde
+      cell_name: Erste Runde
     e:
       #original_hash: 985c8d0
       name: Zweite Runde
       #original_hash: 985c8d0
-      cellName: Zweite Runde
+      cell_name: Zweite Runde
     f:
       #original_hash: 672b22c
       name: Finale
       #original_hash: 672b22c
-      cellName: Finale
+      cell_name: Finale
     g:
       #original_hash: e2f74d2
       name: Halbfinale
       #original_hash: e2f74d2
-      cellName: Halbfinale
+      cell_name: Halbfinale
     h:
       #original_hash: 4d618bb
       name: Qualifikationsrunde
       #original_hash: 4d618bb
-      cellName: Qualifikationsrunde
+      cell_name: Qualifikationsrunde
   attempts:
     #original_hash: 17dae1e
     attempt_name: 'Versuch %{number}'
@@ -450,23 +450,23 @@ de:
         #original_hash: 7f3d889
         confirmed: Lasse dieser Turnier nicht von Organisatoren editieren
         #original_hash: d493e6a
-        showAtAll: Wettbewerb öffentlich sichtbar machen
+        show_at_all: Wettbewerb öffentlich sichtbar machen
         #original_hash: 709a232
         name: Name
         #original_hash: f91b080
         name_reason: Der Grund für diesen Namen
         #original_hash: fdba578
-        cellName: Competition-Kurzname
+        cell_name: Competition-Kurzname
         #original_hash: 0f21717
-        countryId: Region
+        country_id: Region
         #original_hash: 25b7b06
-        cityName: Name der Stadt
+        city_name: Name der Stadt
         #original_hash: 67cd406
         venue: Veranstaltungsort
         #original_hash: 486f8fb
-        venueAddress: Adresse des Veranstaltungsortes
+        venue_address: Adresse des Veranstaltungsortes
         #original_hash: 08767af
-        venueDetails: Details zum Veranstaltungsort
+        venue_details: Details zum Veranstaltungsort
         #original_hash: ff99f5b
         start_date: Startdatum
         #original_hash: 89d10cd
@@ -629,7 +629,7 @@ de:
         #original_hash: 8c41ae8
         wca_id: Person
         #original_hash: fa4c045
-        countryId: Repräsentiert
+        country_id: Repräsentiert
         #original_hash: ab58155
         dob: Geburtsdatum
         #original_hash: 8a754c6
@@ -681,19 +681,19 @@ de:
         competition_id: Passierte bei
       competition_medium:
         #original_hash: 1917f4f
-        competitionId: Competition
+        competition_id: Competition
         #original_hash: 3deb745
-        type: Typ
+        media_type: Typ
         #original_hash: c3328c3
         text: Text
         #original_hash: d051707
         uri: Link
         #original_hash: 1be755a
-        submitterName: Name des Einreichers
+        submitter_name: Name des Einreichers
         #original_hash: 78cdfee
-        submitterEmail: E-Mail-Adresse des Einreichers
+        submitter_email: E-Mail-Adresse des Einreichers
         #original_hash: 0d31f23
-        submitterComment: Kommentar des Einreichers
+        submitter_comment: Kommentar des Einreichers
         #original_hash: bae7d5b
         status: Status
       regional_organization:
@@ -777,7 +777,7 @@ de:
         accepted: Akzeptiert
         #original_hash: 96f608c
         pending: Ausstehend
-      type:
+      media_type:
         #original_hash: ee45c30
         report: Report
         #original_hash: 4360c2d
@@ -892,12 +892,12 @@ de:
           alphanumerische Zeichen, Bindestriche(-), Und-Zeichen(&), Punkte(.),
           Doppelpunkte(:), Apostrophe(') und Leerzeichen( ) enthalten.
         #original_hash: fbcda66
-        cellName: >-
+        cell_name: >-
           Ein Kurzname zum Anzeigen. Falls der Name des Wettbewerbs weniger als
           %{short_name_limit} Zeichen hat, sollte dies nicht editiert werden und
           sollte mit dem normalen Namen übereinstimmen.
         #original_hash: bce4589
-        cityName: >-
+        city_name: >-
           Name der Stadt und des Verwaltungsbezirks (wenn möglich) in dem der
           Wettbewerb stattfindet. Lasse hierbei das Land aus (z.B. Paris ODER
           San Francisco, Kalifornien).
@@ -925,7 +925,7 @@ de:
         #original_hash: da39a3e
         clone_tabs: ''
         #original_hash: da39a3e
-        countryId: ''
+        country_id: ''
         #original_hash: da39a3e
         end_date: ''
         #original_hash: da39a3e
@@ -958,7 +958,7 @@ de:
         #original_hash: da39a3e
         registration_close: ''
         #original_hash: da39a3e
-        showAtAll: ''
+        show_at_all: ''
         #original_hash: da39a3e
         start_date: ''
         #original_hash: da39a3e
@@ -992,7 +992,7 @@ de:
           Anmeldungen mit zu vielen Events werden blockiert. Lasse dies frei,
           wenn es kein Limit gibt.
         #original_hash: da39a3e
-        venueAddress: ''
+        venue_address: ''
         #original_hash: 3de153b
         extra_registration_requirements: >-
           Bitte führe hier zusätzliche Registrierungsbedingungen auf, die oben
@@ -1208,19 +1208,19 @@ de:
         comment: ''
       competition_medium:
         #original_hash: da39a3e
-        competitionId: ''
+        competition_id: ''
         #original_hash: da39a3e
-        type: ''
+        media_type: ''
         #original_hash: da39a3e
         text: ''
         #original_hash: da39a3e
         uri: ''
         #original_hash: da39a3e
-        submitterName: ''
+        submitter_name: ''
         #original_hash: da39a3e
-        submitterEmail: ''
+        submitter_email: ''
         #original_hash: da39a3e
-        submitterComment: ''
+        submitter_comment: ''
         #original_hash: da39a3e
         status: ''
       results_submission:
