@@ -23,7 +23,7 @@ function V3csvExport(selected, registrations, competition) {
     .forEach((registration) => {
       csvContent += `${registration.competing.registration_status === 'accepted' ? 'a' : 'p'},"${
         registration.user.name
-      }","${countries.byIso2[registration.user.country.iso2].name}",${
+      }","${countries.byIso2[registration.user.country?.iso2]?.name}",${
         registration.user.wca_id
       },${registration.user.dob},${
         registration.user.gender

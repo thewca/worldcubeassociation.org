@@ -154,9 +154,13 @@ export default function TableRow({
             {dobIsShown && <Table.Cell>{dateOfBirth}</Table.Cell>}
 
             <Table.Cell>
-              <RegionFlag iso2={country.iso2} withoutTooltip={regionIsExpanded} />
-              {' '}
-              {regionIsExpanded && countries.byIso2[country.iso2].name}
+              {country?.iso2 && (
+                <>
+                  <RegionFlag iso2={country.iso2} withoutTooltip={regionIsExpanded} />
+                  {' '}
+                  {regionIsExpanded && countries.byIso2?.[country.iso2]?.name}
+                </>
+              )}
             </Table.Cell>
 
             <Table.Cell>
