@@ -520,6 +520,14 @@ function EditActivities({
                     select={addActivityFromCalendarDrag}
                     // allow clicking on existing events to edit them
                     eventClick={editCustomEvent}
+                    // allow right-clicking on existing events to delete them;
+                    //  no direct `eventContextMenu` prop or anything like that unfortunately
+                    eventDidMount={(arg) => {
+                      arg.el.addEventListener('contextmenu', (e) => {
+                        e.preventDefault();
+                        removeEvent(arg.event);
+                      });
+                    }}
                   />
                 </Grid.Column>
               </Grid.Row>
