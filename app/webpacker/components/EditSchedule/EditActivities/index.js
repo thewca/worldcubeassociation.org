@@ -518,9 +518,9 @@ function EditActivities({
                     selectable
                     dateClick={addActivityFromCalendarClick}
                     select={addActivityFromCalendarDrag}
-                    // allow clicking on existing events to edit them
+                    // allow clicking on existing (custom) events to edit them
                     eventClick={editCustomEvent}
-                    // allow right-clicking on existing events to delete them;
+                    // allow right-clicking on (any) existing events to delete them;
                     //  no direct `eventContextMenu` prop or anything like that unfortunately
                     eventDidMount={(arg) => {
                       arg.el.addEventListener('contextmenu', (e) => {
