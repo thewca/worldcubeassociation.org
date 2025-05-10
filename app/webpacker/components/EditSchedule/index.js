@@ -131,10 +131,12 @@ function EditSchedule({
           <Accordion.Content
             active={openAccordion === 0}
           >
-            <EditVenues
-              countryZones={countryZones}
-              referenceTime={referenceTime}
-            />
+            {openAccordion === 0 && (
+              <EditVenues
+                countryZones={countryZones}
+                referenceTime={referenceTime}
+              />
+            )}
           </Accordion.Content>
           <Accordion.Title
             index={1}
@@ -146,11 +148,13 @@ function EditSchedule({
           <Accordion.Content
             active={openAccordion === 1}
           >
-            <EditActivities
-              wcifEvents={wcifEvents}
-              referenceTime={referenceTime}
-              calendarLocale={calendarLocale}
-            />
+            {openAccordion === 1 && (
+              <EditActivities
+                wcifEvents={wcifEvents}
+                referenceTime={referenceTime}
+                calendarLocale={calendarLocale}
+              />
+            )}
           </Accordion.Content>
         </Accordion>
         {unsavedChanges && renderUnsavedChangesAlert()}
