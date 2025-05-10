@@ -4,20 +4,13 @@ class TranslationsController < ApplicationController
   before_action :authenticate_user!, except: [:index]
 
   def self.compute_bad_i18n_keys
-    base_locales = load_base_locales
+  base_locales = Locales::AVAILABLE.transform_keys(&:to_s).transform_values { |attrs| attrs[:base_locale] || 'en' }
 
-    (I18n.available_locales - [:en]).index_with do |locale|
-      base_locale = base_locales[locale.to_s] || 'en' # Default to 'en' if not specified
-      base_translation = locale_to_translation(base_locale)
-      locale_to_translation(locale).compare_to(base_translation)
+  (I18n.available_locales - [:en]).index_with do |locale|
+    base_locale = base_locales[locale.to_s]
+    base_translation = locale_to_translation(base_locale)
+    locale_to_translation(locale).compare_to(base_translation)
     end
-  end
-
-  def self.load_base_locales
-    filename = Rails.root.join('config/i18n_config/locale_base.yml')
-    return {} unless File.exist?(filename)
-
-    YAML.load_file(filename) || {}
   end
 
   def self.locale_to_translation(locale)
