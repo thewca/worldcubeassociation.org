@@ -26,8 +26,8 @@ export default function RegistrationAdministrationTableFooter({
 
   const countryCount = new Set(
     registrations
-    .map((reg) => reg.user.country?.iso2)
-    .filter((iso2) => iso2)
+      .map((reg) => reg.user.country?.iso2)
+      .filter((iso2) => iso2),
   ).size;
 
   const guestCount = _.sum(registrations.map((r) => r.guests));
