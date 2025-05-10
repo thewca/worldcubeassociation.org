@@ -49,7 +49,7 @@ class RoleChangeMailer < ApplicationMailer
           email: role.user.senior_delegates.map(&:email),
           message: 'Informing as one of the Delegates under you has been put in probation.',
         ),
-        UserRole.UserRoleEmailRecipient.new(
+        UserRole::UserRoleEmailRecipient.new(
           name: UserGroup.teams_committees_group_wic.name,
           email: UserGroup.teams_committees_group_wic.metadata.email,
           message: 'Informing as a Delegate has been put in probation.',
