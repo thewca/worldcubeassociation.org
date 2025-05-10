@@ -5503,7 +5503,6 @@ fr-CA:
     title: Outils logiciels pour les compétitions WCA
     #original_hash: dec9e69
     wca_icon_text: Développés et maintenus par la WST
-    #original_hash: aeed200
     intro:
       #original_hash: 0925c9c
       desc: >-
@@ -5623,6 +5622,7 @@ fr-CA:
   logo:
     #original_hash: 26bb57a
     title: Logo de la WCA
+    #original_hash: aeed200
     intro: "Le logo de la WCA a été conçu par Justin Eastman, dans un concours de conception en janvier\_2005. Nous avons aimé le logo en raison de sa conception, des couleurs et du fait qu’il ne montre pas spécifiquement un cube 3x3x3."
     headings:
       usage_guidelines:
