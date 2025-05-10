@@ -53,20 +53,6 @@ module ResultsValidators
       true
     end
 
-    protected def validate_competitions(competition_ids, check_real_results)
-      if @memory_batch.present?
-        competition_ids.each_slice(@memory_batch) do |batch_ids|
-          validator_data = ValidatorData.from_competitions(self, batch_ids, check_real_results)
-
-          run_validation(validator_data)
-        end
-      else
-        validator_data = ValidatorData.from_competitions(self, competition_ids, check_real_results, batch_size: @sql_batch)
-
-        run_validation(validator_data)
-      end
-    end
-
     # The concept: this aggregate of validators should be applicable on any association
     # of competitions/validators (eg: run all validations on a given competition,
     # validate the competitor limit for a given set of competitions).
@@ -105,6 +91,22 @@ module ResultsValidators
           @errors.concat(v.errors)
           @warnings.concat(v.warnings)
           @infos.concat(v.infos)
+        end
+      end
+
+    protected
+
+      def validate_competitions(competition_ids, check_real_results)
+        if @memory_batch.present?
+          competition_ids.each_slice(@memory_batch) do |batch_ids|
+            validator_data = ValidatorData.from_competitions(self, batch_ids, check_real_results)
+
+            run_validation(validator_data)
+          end
+        else
+          validator_data = ValidatorData.from_competitions(self, competition_ids, check_real_results, batch_size: @sql_batch)
+
+          run_validation(validator_data)
         end
       end
   end

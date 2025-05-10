@@ -44,10 +44,6 @@ class UsersController < ApplicationController
     end
   end
 
-  private def user_to_edit
-    User.find_by(id: params[:id] || current_user.id)
-  end
-
   def enable_2fa
     # NOTE: current_user is not nil as authenticate_user! is called first
     params[:section] = "2fa"
@@ -251,10 +247,6 @@ class UsersController < ApplicationController
     end
   end
 
-  private def sso_moderator?(user)
-    user.communication_team? || user.results_team?
-  end
-
   def sso_discourse
     # This implements https://meta.discourse.org/t/official-single-sign-on-for-discourse-sso/13045
     # (section "implementing SSO on your site")
@@ -320,49 +312,59 @@ class UsersController < ApplicationController
     render json: { ok: true }
   end
 
-  private def redirect_if_cannot_edit_user(user)
-    unless current_user&.can_edit_user?(user)
-      flash[:danger] = "You cannot edit this user"
-      redirect_to root_url
-      return true
+  private
+
+    def user_to_edit
+      User.find_by(id: params[:id] || current_user.id)
     end
-    false
-  end
 
-  private def user_params
-    params.require(:user).permit(current_user.editable_fields_of_user(user_to_edit).to_a).tap do |user_params|
-      user_params[:wca_id] = user_params[:wca_id].upcase if user_params.key?(:wca_id)
-      if user_params.key?(:delegate_reports_region)
-        raw_region = user_params.delete(:delegate_reports_region)
+    def sso_moderator?(user)
+      user.communication_team? || user.results_team?
+    end
 
-        user_params[:delegate_reports_region_type] = if raw_region.blank?
-                                                       # Explicitly reset the region type column when "worldwide" (represented by a blank value) was selected
-                                                       nil
-                                                     elsif raw_region.starts_with?('_')
-                                                       'Continent'
-                                                     else
-                                                       'Country'
-                                                     end
+    def redirect_if_cannot_edit_user(user)
+      unless current_user&.can_edit_user?(user)
+        flash[:danger] = "You cannot edit this user"
+        redirect_to root_url
+        return true
+      end
+      false
+    end
 
-        user_params[:delegate_reports_region_id] = raw_region.presence
+    def user_params
+      params.require(:user).permit(current_user.editable_fields_of_user(user_to_edit).to_a).tap do |user_params|
+        user_params[:wca_id] = user_params[:wca_id].upcase if user_params.key?(:wca_id)
+        if user_params.key?(:delegate_reports_region)
+          raw_region = user_params.delete(:delegate_reports_region)
+
+          user_params[:delegate_reports_region_type] = if raw_region.blank?
+                                                         # Explicitly reset the region type column when "worldwide" (represented by a blank value) was selected
+                                                         nil
+                                                       elsif raw_region.starts_with?('_')
+                                                         'Continent'
+                                                       else
+                                                         'Country'
+                                                       end
+
+          user_params[:delegate_reports_region_id] = raw_region.presence
+        end
       end
     end
-  end
 
-  private def recently_authenticated?
-    session[:last_authenticated_at] && session[:last_authenticated_at] > RECENT_AUTHENTICATION_DURATION.ago
-  end
-
-  private def set_recent_authentication!
-    @recently_authenticated = recently_authenticated?
-  end
-
-  private def check_recent_authentication!
-    unless recently_authenticated?
-      flash[:danger] = I18n.t("users.edit.sensitive.identity_error")
-      redirect_to profile_edit_path(section: "2fa-check")
-      return false
+    def recently_authenticated?
+      session[:last_authenticated_at] && session[:last_authenticated_at] > RECENT_AUTHENTICATION_DURATION.ago
     end
-    true
-  end
+
+    def set_recent_authentication!
+      @recently_authenticated = recently_authenticated?
+    end
+
+    def check_recent_authentication!
+      unless recently_authenticated?
+        flash[:danger] = I18n.t("users.edit.sensitive.identity_error")
+        redirect_to profile_edit_path(section: "2fa-check")
+        return false
+      end
+      true
+    end
 end

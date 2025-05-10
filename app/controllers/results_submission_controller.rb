@@ -55,7 +55,9 @@ class ResultsSubmissionController < ApplicationController
     end
   end
 
-  private def competition_from_params
-    Competition.find(params[:competition_id])
-  end
+  private
+
+    def competition_from_params
+      Competition.find(params[:competition_id])
+    end
 end

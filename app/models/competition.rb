@@ -203,9 +203,6 @@ class Competition < ApplicationRecord
   validates :events_per_registration_limit, numericality: { only_integer: true, greater_than_or_equal_to: 1, less_than_or_equal_to: :number_of_events, allow_blank: true, if: :event_restrictions? }
   validates :id, presence: true, uniqueness: { case_sensitive: false }, length: { maximum: MAX_ID_LENGTH },
                  format: { with: VALID_ID_RE }, if: :name_valid_or_updating?
-  private def name_valid_or_updating?
-    self.persisted? || (name.length <= MAX_NAME_LENGTH && name =~ VALID_NAME_RE)
-  end
   validates :name, length: { maximum: MAX_NAME_LENGTH },
                    format: { with: VALID_NAME_RE, message: proc { I18n.t('competitions.errors.invalid_name_message') } }
   validates :cell_name, length: { maximum: MAX_CELL_NAME_LENGTH },
@@ -249,13 +246,6 @@ class Competition < ApplicationRecord
   validates :contact, length: { maximum: MAX_MARKDOWN_LENGTH }
 
   validate :validate_newcomer_month_reserved_spots, if: -> { competitor_limit.present? && newcomer_month_reserved_spots.present? }
-  private def validate_newcomer_month_reserved_spots
-    max_newcomer_spots = (competitor_limit * NEWCOMER_MONTH_RESERVATIONS_FRACTION).floor
-    errors.add(:newcomer_month_reserved_spots, I18n.t('competitions.errors.newcomer_month_reservations_percentage')) if
-      newcomer_month_reserved_spots > max_newcomer_spots
-    errors.add(:newcomer_month_reserved_spots, I18n.t('competitions.errors.newcomer_month_reservations_available')) if
-      newcomer_month_reserved_spots > newcomer_month_spots_reservable
-  end
 
   def enforce_newcomer_month_reservations?
     newcomer_month_reserved_spots.present? && newcomer_month_reserved_spots.positive? && NEWCOMER_MONTH_ENABLED
@@ -334,22 +324,9 @@ class Competition < ApplicationRecord
   # couldn't be possible because the schedule doesn't contain the round
   # just added.
   validate :must_have_at_least_one_event, if: :confirmed_or_visible?
-  private def must_have_at_least_one_event
-    errors.add(:competition_events, I18n.t('competitions.errors.must_contain_event')) if no_events?
-  end
 
   # We check for `present?` specifically so that a value of 0 will return true, and trigger the validation
   validate :auto_close_threshold_validations, if: -> { auto_close_threshold.present? }
-  private def auto_close_threshold_validations
-    errors.add(:auto_close_threshold, I18n.t('competitions.errors.auto_close_positive_nonzero')) unless auto_close_threshold.positive?
-    return unless auto_close_threshold != 0
-
-    errors.add(:auto_close_threshold, I18n.t('competitions.errors.use_wca_registration')) unless use_wca_registration
-    errors.add(:auto_close_threshold, I18n.t('competitions.errors.must_exceed_competitor_limit')) if
-      competitor_limit.present? && auto_close_threshold <= competitor_limit
-    errors.add(:auto_close_threshold, I18n.t('competitions.errors.auto_close_exceed_paid')) if
-      will_save_change_to_auto_close_threshold? && auto_close_threshold <= registrations.with_payments.count
-  end
 
   # Only validate on update: nobody can confirm competition on creation.
   # The only exception to this is within tests, in which case we actually don't want to run this validation.
@@ -364,41 +341,11 @@ class Competition < ApplicationRecord
   def advancement_condition_must_be_present_for_all_non_final_rounds
     errors.add(:competition_events, I18n.t('competitions.errors.advancement_condition_must_be_present_for_all_non_final_rounds')) unless rounds.all?(&:advancement_condition_is_valid?)
   end
-  private def should_validate_registration_closing?
-    confirmed_or_visible? && (will_save_change_to_registration_close? || will_save_change_to_confirmed_at?) && !closing_full_registration
-  end
 
   # Same comment as for start_date_must_be_28_days_in_advance
   validate :registation_must_not_be_past, if: :should_validate_registration_closing?
-  private def registation_must_not_be_past
-    return unless editing_user_id
-
-    editing_user = User.find(editing_user_id)
-    errors.add(:registration_close, I18n.t('competitions.errors.registration_already_closed')) if !editing_user.can_admin_competitions? && registration_range_specified? && registration_past?
-  end
 
   validate :auto_accept_validations
-  private def auto_accept_validations
-    errors.add(:auto_accept_registrations, I18n.t('competitions.errors.must_use_wca_registration')) if
-      auto_accept_registrations? && !use_wca_registration
-
-    errors.add(:auto_accept_registrations, I18n.t('competitions.errors.auto_accept_limit')) if
-      auto_accept_disable_threshold.present? &&
-      auto_accept_disable_threshold.positive? &&
-      competitor_limit.present? &&
-      auto_accept_disable_threshold >= competitor_limit
-
-    errors.add(:auto_accept_registrations, I18n.t('competitions.errors.auto_accept_not_negative')) if
-      auto_accept_disable_threshold.present? && auto_accept_disable_threshold.negative?
-
-    # TODO: This logic belongs in a controller more appropriately than in the validation.
-    # IF we build a controller endpoint specifically for auto_accept, this logic should be move there.
-    return unless auto_accept_registrations_changed? && auto_accept_registrations?
-
-    errors.add(:auto_accept_registrations, I18n.t('competitions.errors.auto_accept_accept_paid_pending')) if registrations.pending.with_payments.count.positive?
-    errors.add(:auto_accept_registrations, I18n.t('competitions.errors.auto_accept_accept_waitlisted')) if
-      registrations.waitlisted.count.positive? && !registration_full_and_accepted?
-  end
 
   def no_event_without_rounds?
     competition_events.map(&:rounds).none?(&:empty?)
@@ -718,14 +665,6 @@ class Competition < ApplicationRecord
   before_validation :unpack_delegate_organizer_ids
   # After the cloned competition is created, clone other associations which cannot just be copied.
   after_create :clone_associations
-  private def clone_associations
-    # Clone competition tabs.
-    return unless clone_tabs
-
-    being_cloned_from&.tabs&.each do |tab|
-      tabs.create!(tab.attributes.slice(*CompetitionTab::CLONEABLE_ATTRIBUTES))
-    end
-  end
 
   after_create :create_delegate_report!
 
@@ -912,11 +851,6 @@ class Competition < ApplicationRecord
   end
 
   validate :organizers_can_organize_competition
-  private def organizers_can_organize_competition
-    organizers.each do |organizer|
-      errors.add(:organizer_ids, "#{organizer.name}: #{organizer.cannot_organize_competition_reasons.to_sentence}") if organizer&.cannot_organize_competition_reasons.present?
-    end
-  end
 
   validate :registration_must_close_after_it_opens
   def registration_must_close_after_it_opens
@@ -930,9 +864,6 @@ class Competition < ApplicationRecord
   end
 
   after_save :clear_external_website, if: :generate_website?
-  private def clear_external_website
-    update_column :external_website, nil
-  end
 
   def website
     generate_website ? internal_website : external_website
@@ -1049,11 +980,6 @@ class Competition < ApplicationRecord
     ["Europe/London"]
   end
 
-  private def compute_coordinates
-    self.latitude_microdegrees = @latitude_degrees * 1e6 unless @latitude_degrees.nil?
-    self.longitude_microdegrees = @longitude_degrees * 1e6 unless @longitude_degrees.nil?
-  end
-
   delegate :nonzero?, to: :base_entry_fee, prefix: true
 
   def paid_entry?
@@ -1152,59 +1078,17 @@ class Competition < ApplicationRecord
       (!event_change_deadline_date_required? || event_change_deadline_date.blank? || event_change_deadline_date > DateTime.now)
   end
 
-  private def dates_must_be_valid
-    if start_date.nil? && end_date.nil?
-      if confirmed_or_visible?
-        errors.add(:start_date, I18n.t('common.errors.invalid'))
-        errors.add(:end_date, I18n.t('common.errors.invalid'))
-      end
-      return
-    end
-
-    return errors.add(:start_date, I18n.t('common.errors.invalid')) if start_date.blank?
-    return errors.add(:end_date, I18n.t('common.errors.invalid')) if end_date.blank?
-
-    errors.add(:end_date, I18n.t('competitions.errors.end_date_before_start')) if end_date < start_date
-
-    errors.add(:end_date, I18n.t('competitions.errors.span_too_many_days', max_days: MAX_SPAN_DAYS)) if number_of_days > MAX_SPAN_DAYS
-  end
-
   validate :registration_dates_must_be_valid
-  private def registration_dates_must_be_valid
-    errors.add(:refund_policy_limit_date, I18n.t('competitions.errors.refund_date_after_start')) if refund_policy_limit_date? && refund_policy_limit_date > start_date
-
-    if registration_period_required? && registration_open.present? && registration_close.present? &&
-       (registration_open >= start_date || registration_close >= start_date)
-      errors.add(:registration_close, I18n.t('competitions.errors.registration_period_after_start'))
-    end
-  end
 
   validate :waiting_list_dates_must_be_valid
-  private def waiting_list_dates_must_be_valid
-    return unless waiting_list_deadline_date?
-
-    errors.add(:waiting_list_deadline_date, I18n.t('competitions.errors.waiting_list_deadline_before_registration_close')) if registration_range_specified? && waiting_list_deadline_date < registration_close
-    errors.add(:waiting_list_deadline_date, I18n.t('competitions.errors.waiting_list_deadline_before_refund_date')) if refund_policy_limit_date? && waiting_list_deadline_date < refund_policy_limit_date
-    errors.add(:waiting_list_deadline_date, I18n.t('competitions.errors.waiting_list_deadline_after_end')) if waiting_list_deadline_date > end_date
-  end
 
   validate :event_change_dates_must_be_valid
-  private def event_change_dates_must_be_valid
-    return unless event_change_deadline_date?
-
-    errors.add(:event_change_deadline_date, I18n.t('competitions.errors.event_change_deadline_before_registration_close')) if registration_range_specified? && event_change_deadline_date < registration_close
-    errors.add(:event_change_deadline_date, I18n.t('competitions.errors.event_change_deadline_with_ots')) if on_the_spot_registration? && event_change_deadline_date < start_date
-    errors.add(:event_change_deadline_date, I18n.t('competitions.errors.event_change_deadline_after_end_date')) if event_change_deadline_date > end_date.to_datetime.end_of_day
-  end
 
   def enabling_on_the_spot_registration?
     self.on_the_spot_registration_changed? && self.on_the_spot_registration?
   end
 
   validate :enforce_edit_deadline_ots_consistency
-  private def enforce_edit_deadline_ots_consistency
-    errors.add(:on_the_spot_registration, I18n.t('competitions.errors.on_the_spot_with_past_event_change_deadline')) if enabling_on_the_spot_registration? && event_change_deadline_date&.past?
-  end
 
   # Since Competition.events only includes saved events
   # this method is required to ensure that in any forms which
@@ -1239,10 +1123,6 @@ class Competition < ApplicationRecord
   def colliding_registration_start_competitions
     Competition.where("ABS(TIMESTAMPDIFF(MINUTE, ?, registration_open)) <= ? AND id <> ?", registration_open, REGISTRATION_COLLISION_MINUTES_WARNING, id)
                .order(:registration_open)
-  end
-
-  private def to_radians(degrees)
-    degrees * Math::PI / 180
   end
 
   # Source http://www.movable-type.co.uk/scripts/latlong.html
@@ -2163,22 +2043,6 @@ class Competition < ApplicationRecord
   end
 
   validate :series_siblings_must_be_valid
-  private def series_siblings_must_be_valid
-    return unless part_of_competition_series?
-
-    series_sibling_competitions.each do |comp|
-      errors.add(:competition_series, I18n.t('competitions.errors.series_distance_km', competition: comp.name)) unless self.distance_adjacent_to?(comp, CompetitionSeries::MAX_SERIES_DISTANCE_KM)
-      errors.add(:competition_series, I18n.t('competitions.errors.series_distance_days', competition: comp.name)) unless self.start_date_adjacent_to?(comp, CompetitionSeries::MAX_SERIES_DISTANCE_DAYS)
-    end
-  end
-
-  private def clean_series_when_leaving
-    if competition_series_id.nil? && # if we just processed an update to remove the competition series
-       (old_series_id = competition_series_id_previously_was) && # and we previously had an ID
-       (old_series = CompetitionSeries.find_by(id: old_series_id)) # and that series still exists
-      old_series.reload.destroy_if_orphaned # prompt it to check for orphaned state.
-    end
-  end
 
   def part_of_competition_series?
     !competition_series_id.nil?
@@ -2208,16 +2072,6 @@ class Competition < ApplicationRecord
   def dues_per_competitor_in_usd
     dues = DuesCalculator.dues_per_competitor_in_usd(self.country_iso2, self.base_entry_fee_lowest_denomination.to_i, self.currency_code)
     dues.presence || 0
-  end
-
-  private def xero_dues_payer
-    self.country&.wfc_dues_redirect&.redirect_to ||
-    self.organizers.find { |organizer| organizer.wfc_dues_redirect.present? }&.wfc_dues_redirect&.redirect_to
-  end
-
-  # WFC usually sends dues to the first staff delegate in alphabetical order if there are no redirects setup for the country or organizer.
-  private def delegate_dues_payer
-    staff_delegates.min_by(&:name)
   end
 
   def dues_payer_name
@@ -2947,4 +2801,167 @@ class Competition < ApplicationRecord
     threshold_reached = fully_paid_registrations_count >= auto_close_threshold && auto_close_threshold.positive?
     threshold_reached && update(closing_full_registration: true, registration_close: Time.now)
   end
+
+  private
+
+    def name_valid_or_updating?
+      self.persisted? || (name.length <= MAX_NAME_LENGTH && name =~ VALID_NAME_RE)
+    end
+
+    def validate_newcomer_month_reserved_spots
+      max_newcomer_spots = (competitor_limit * NEWCOMER_MONTH_RESERVATIONS_FRACTION).floor
+      errors.add(:newcomer_month_reserved_spots, I18n.t('competitions.errors.newcomer_month_reservations_percentage')) if
+        newcomer_month_reserved_spots > max_newcomer_spots
+      errors.add(:newcomer_month_reserved_spots, I18n.t('competitions.errors.newcomer_month_reservations_available')) if
+        newcomer_month_reserved_spots > newcomer_month_spots_reservable
+    end
+
+    def must_have_at_least_one_event
+      errors.add(:competition_events, I18n.t('competitions.errors.must_contain_event')) if no_events?
+    end
+
+    def auto_close_threshold_validations
+      errors.add(:auto_close_threshold, I18n.t('competitions.errors.auto_close_positive_nonzero')) unless auto_close_threshold.positive?
+      return unless auto_close_threshold != 0
+
+      errors.add(:auto_close_threshold, I18n.t('competitions.errors.use_wca_registration')) unless use_wca_registration
+      errors.add(:auto_close_threshold, I18n.t('competitions.errors.must_exceed_competitor_limit')) if
+        competitor_limit.present? && auto_close_threshold <= competitor_limit
+      errors.add(:auto_close_threshold, I18n.t('competitions.errors.auto_close_exceed_paid')) if
+        will_save_change_to_auto_close_threshold? && auto_close_threshold <= registrations.with_payments.count
+    end
+
+    def should_validate_registration_closing?
+      confirmed_or_visible? && (will_save_change_to_registration_close? || will_save_change_to_confirmed_at?) && !closing_full_registration
+    end
+
+    def registation_must_not_be_past
+      return unless editing_user_id
+
+      editing_user = User.find(editing_user_id)
+      errors.add(:registration_close, I18n.t('competitions.errors.registration_already_closed')) if !editing_user.can_admin_competitions? && registration_range_specified? && registration_past?
+    end
+
+    def auto_accept_validations
+      errors.add(:auto_accept_registrations, I18n.t('competitions.errors.must_use_wca_registration')) if
+          auto_accept_registrations? && !use_wca_registration
+
+      errors.add(:auto_accept_registrations, I18n.t('competitions.errors.auto_accept_limit')) if
+        auto_accept_disable_threshold.present? &&
+        auto_accept_disable_threshold.positive? &&
+        competitor_limit.present? &&
+        auto_accept_disable_threshold >= competitor_limit
+
+      errors.add(:auto_accept_registrations, I18n.t('competitions.errors.auto_accept_not_negative')) if
+        auto_accept_disable_threshold.present? && auto_accept_disable_threshold.negative?
+
+      # TODO: This logic belongs in a controller more appropriately than in the validation.
+      # IF we build a controller endpoint specifically for auto_accept, this logic should be move there.
+      return unless auto_accept_registrations_changed? && auto_accept_registrations?
+
+      errors.add(:auto_accept_registrations, I18n.t('competitions.errors.auto_accept_accept_paid_pending')) if registrations.pending.with_payments.count.positive?
+      errors.add(:auto_accept_registrations, I18n.t('competitions.errors.auto_accept_accept_waitlisted')) if
+        registrations.waitlisted.count.positive? && !registration_full_and_accepted?
+    end
+
+    def clone_associations
+      # Clone competition tabs.
+      return unless clone_tabs
+
+      being_cloned_from&.tabs&.each do |tab|
+        tabs.create!(tab.attributes.slice(*CompetitionTab::CLONEABLE_ATTRIBUTES))
+      end
+    end
+
+    def organizers_can_organize_competition
+      organizers.each do |organizer|
+        errors.add(:organizer_ids, "#{organizer.name}: #{organizer.cannot_organize_competition_reasons.to_sentence}") if organizer&.cannot_organize_competition_reasons.present?
+      end
+    end
+
+    def clear_external_website
+      update_column :external_website, nil
+    end
+
+    def compute_coordinates
+      self.latitude_microdegrees = @latitude_degrees * 1e6 unless @latitude_degrees.nil?
+      self.longitude_microdegrees = @longitude_degrees * 1e6 unless @longitude_degrees.nil?
+    end
+
+    def dates_must_be_valid
+      if start_date.nil? && end_date.nil?
+        if confirmed_or_visible?
+          errors.add(:start_date, I18n.t('common.errors.invalid'))
+          errors.add(:end_date, I18n.t('common.errors.invalid'))
+        end
+        return
+      end
+
+      return errors.add(:start_date, I18n.t('common.errors.invalid')) if start_date.blank?
+      return errors.add(:end_date, I18n.t('common.errors.invalid')) if end_date.blank?
+
+      errors.add(:end_date, I18n.t('competitions.errors.end_date_before_start')) if end_date < start_date
+
+      errors.add(:end_date, I18n.t('competitions.errors.span_too_many_days', max_days: MAX_SPAN_DAYS)) if number_of_days > MAX_SPAN_DAYS
+    end
+
+    def registration_dates_must_be_valid
+      errors.add(:refund_policy_limit_date, I18n.t('competitions.errors.refund_date_after_start')) if refund_policy_limit_date? && refund_policy_limit_date > start_date
+
+      if registration_period_required? && registration_open.present? && registration_close.present? &&
+         (registration_open >= start_date || registration_close >= start_date)
+        errors.add(:registration_close, I18n.t('competitions.errors.registration_period_after_start'))
+      end
+    end
+
+    def waiting_list_dates_must_be_valid
+      return unless waiting_list_deadline_date?
+
+      errors.add(:waiting_list_deadline_date, I18n.t('competitions.errors.waiting_list_deadline_before_registration_close')) if registration_range_specified? && waiting_list_deadline_date < registration_close
+      errors.add(:waiting_list_deadline_date, I18n.t('competitions.errors.waiting_list_deadline_before_refund_date')) if refund_policy_limit_date? && waiting_list_deadline_date < refund_policy_limit_date
+      errors.add(:waiting_list_deadline_date, I18n.t('competitions.errors.waiting_list_deadline_after_end')) if waiting_list_deadline_date > end_date
+    end
+
+    def event_change_dates_must_be_valid
+      return unless event_change_deadline_date?
+
+      errors.add(:event_change_deadline_date, I18n.t('competitions.errors.event_change_deadline_before_registration_close')) if registration_range_specified? && event_change_deadline_date < registration_close
+      errors.add(:event_change_deadline_date, I18n.t('competitions.errors.event_change_deadline_with_ots')) if on_the_spot_registration? && event_change_deadline_date < start_date
+      errors.add(:event_change_deadline_date, I18n.t('competitions.errors.event_change_deadline_after_end_date')) if event_change_deadline_date > end_date.to_datetime.end_of_day
+    end
+
+    def enforce_edit_deadline_ots_consistency
+      errors.add(:on_the_spot_registration, I18n.t('competitions.errors.on_the_spot_with_past_event_change_deadline')) if enabling_on_the_spot_registration? && event_change_deadline_date&.past?
+    end
+
+    def to_radians(degrees)
+      degrees * Math::PI / 180
+    end
+
+    def series_siblings_must_be_valid
+      return unless part_of_competition_series?
+
+      series_sibling_competitions.each do |comp|
+        errors.add(:competition_series, I18n.t('competitions.errors.series_distance_km', competition: comp.name)) unless self.distance_adjacent_to?(comp, CompetitionSeries::MAX_SERIES_DISTANCE_KM)
+        errors.add(:competition_series, I18n.t('competitions.errors.series_distance_days', competition: comp.name)) unless self.start_date_adjacent_to?(comp, CompetitionSeries::MAX_SERIES_DISTANCE_DAYS)
+      end
+    end
+
+    def clean_series_when_leaving
+      if competition_series_id.nil? && # if we just processed an update to remove the competition series
+         (old_series_id = competition_series_id_previously_was) && # and we previously had an ID
+         (old_series = CompetitionSeries.find_by(id: old_series_id)) # and that series still exists
+        old_series.reload.destroy_if_orphaned # prompt it to check for orphaned state.
+      end
+    end
+
+    def xero_dues_payer
+      self.country&.wfc_dues_redirect&.redirect_to ||
+        self.organizers.find { |organizer| organizer.wfc_dues_redirect.present? }&.wfc_dues_redirect&.redirect_to
+    end
+
+    # WFC usually sends dues to the first staff delegate in alphabetical order if there are no redirects setup for the country or organizer.
+    def delegate_dues_payer
+      staff_delegates.min_by(&:name)
+    end
 end

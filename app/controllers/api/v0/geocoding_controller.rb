@@ -22,7 +22,9 @@ class Api::V0::GeocodingController < Api::V0::ApiController
     render json: guessed_zones
   end
 
-  private def raise_if_invalid
-    raise ActionController::InvalidAuthenticityToken unless any_authenticity_token_valid?
-  end
+  private
+
+    def raise_if_invalid
+      raise ActionController::InvalidAuthenticityToken unless any_authenticity_token_valid?
+    end
 end

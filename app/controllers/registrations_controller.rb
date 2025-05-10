@@ -7,32 +7,12 @@ class RegistrationsController < ApplicationController
   # Stripe has its own authenticity mechanism with Webhook Secrets.
   protect_from_forgery except: [:stripe_webhook]
 
-  private def competition_from_params
-    competition = if params[:competition_id]
-                    Competition.find(params[:competition_id])
-                  else
-                    Registration.find(params[:id]).competition
-                  end
-    raise ActionController::RoutingError.new('Not Found') unless competition.user_can_view?(current_user)
-
-    competition
-  end
-
   before_action -> { redirect_to_root_unless_user(:can_manage_competition?, competition_from_params) },
                 except: %i[index psych_sheet psych_sheet_event register payment_completion load_payment_intent stripe_webhook payment_denomination capture_paypal_payment]
 
   before_action :competition_must_be_using_wca_registration!, except: %i[import do_import add do_add index psych_sheet psych_sheet_event stripe_webhook payment_denomination]
-  private def competition_must_be_using_wca_registration!
-    return if competition_from_params.use_wca_registration?
-
-    flash[:danger] = I18n.t('registrations.flash.not_using_wca')
-    redirect_to competition_path(competition_from_params)
-  end
 
   before_action :competition_must_not_be_using_wca_registration!, only: %i[import do_import]
-  private def competition_must_not_be_using_wca_registration!
-    redirect_to competition_path(competition_from_params) if competition_from_params.use_wca_registration?
-  end
 
   def edit_registrations
     @competition = competition_from_params
@@ -191,83 +171,6 @@ class RegistrationsController < ApplicationController
   rescue StandardError => e
     flash.now[:danger] = e.to_s
     render :add
-  end
-
-  private def user_for_registration!(registration_row)
-    registration_row[:wca_id]&.upcase!
-    registration_row[:email]&.downcase!
-    person_details = {
-      name: registration_row[:name],
-      country_iso2: Country.c_find(registration_row[:country]).iso2,
-      gender: registration_row[:gender],
-      dob: registration_row[:birth_date],
-    }
-    if registration_row[:wca_id].present?
-      raise I18n.t("registrations.import.errors.non_existent_wca_id", wca_id: registration_row[:wca_id]) unless Person.exists?(wca_id: registration_row[:wca_id])
-
-      user = User.find_by(wca_id: registration_row[:wca_id])
-      if user
-        if user.dummy_account?
-          email_user = User.find_by(email: registration_row[:email])
-          if email_user
-            if email_user.wca_id.present?
-              raise I18n.t("registrations.import.errors.email_user_with_different_wca_id",
-                           email: registration_row[:email], user_wca_id: email_user.wca_id,
-                           registration_wca_id: registration_row[:wca_id])
-            else
-              # User hooks will also remove the dummy user account.
-              email_user.update!(wca_id: registration_row[:wca_id], **person_details)
-              [email_user, false]
-            end
-          else
-            user.skip_reconfirmation!
-            user.update!(dummy_account: false, **person_details, email: registration_row[:email])
-            [user, true]
-          end
-        else
-          [user, false] # Use this account.
-        end
-      else
-        email_user = User.find_by(email: registration_row[:email])
-        if email_user
-          if email_user.unconfirmed_wca_id.present? && email_user.unconfirmed_wca_id != registration_row[:wca_id]
-            raise I18n.t("registrations.import.errors.email_user_with_different_unconfirmed_wca_id",
-                         email: registration_row[:email], unconfirmed_wca_id: email_user.unconfirmed_wca_id,
-                         registration_wca_id: registration_row[:wca_id])
-          else
-            email_user.update!(wca_id: registration_row[:wca_id], **person_details)
-            [email_user, false]
-          end
-        else
-          # Create a locked account with confirmed WCA ID.
-          [create_locked_account!(registration_row), true]
-        end
-      end
-    else
-      email_user = User.find_by(email: registration_row[:email])
-      # Use the user if exists, otherwise create a locked account without WCA ID.
-      if email_user
-        if email_user.wca_id.blank?
-          # If this is just a user account with no WCA ID, update its data.
-          # Given it's verified by organizers, it's more trustworthy/official data (if different at all).
-          email_user.update!(person_details)
-        end
-        [email_user, false]
-      else
-        [create_locked_account!(registration_row), true]
-      end
-    end
-  end
-
-  private def create_locked_account!(registration_row)
-    User.new_locked_account(
-      name: registration_row[:name],
-      email: registration_row[:email],
-      wca_id: registration_row[:wca_id],
-      country_iso2: Country.c_find(registration_row[:country]).iso2,
-      gender: registration_row[:gender],
-      dob: registration_row[:birth_date],
-    ).tap(&:save!)
   end
 
   def register
@@ -531,11 +434,6 @@ class RegistrationsController < ApplicationController
     render json: { status: :ok, message: :charge_refunded, refunded_charge: refund_json }
   end
 
-  private def registration_from_params
-    id = params.require(:id)
-    Registration.find(id)
-  end
-
   def capture_paypal_payment
     return head :forbidden if PaypalInterface.paypal_disabled?
 
@@ -581,4 +479,110 @@ class RegistrationsController < ApplicationController
 
     render json: response
   end
+
+  private
+
+    def competition_from_params
+      competition = if params[:competition_id]
+                      Competition.find(params[:competition_id])
+                    else
+                      Registration.find(params[:id]).competition
+                    end
+      raise ActionController::RoutingError.new('Not Found') unless competition.user_can_view?(current_user)
+
+      competition
+    end
+
+    def competition_must_be_using_wca_registration!
+      return if competition_from_params.use_wca_registration?
+
+      flash[:danger] = I18n.t('registrations.flash.not_using_wca')
+      redirect_to competition_path(competition_from_params)
+    end
+
+    def competition_must_not_be_using_wca_registration!
+      redirect_to competition_path(competition_from_params) if competition_from_params.use_wca_registration?
+    end
+
+    def user_for_registration!(registration_row)
+      registration_row[:wca_id]&.upcase!
+      registration_row[:email]&.downcase!
+      person_details = {
+        name: registration_row[:name],
+        country_iso2: Country.c_find(registration_row[:country]).iso2,
+        gender: registration_row[:gender],
+        dob: registration_row[:birth_date],
+      }
+      if registration_row[:wca_id].present?
+        raise I18n.t("registrations.import.errors.non_existent_wca_id", wca_id: registration_row[:wca_id]) unless Person.exists?(wca_id: registration_row[:wca_id])
+
+        user = User.find_by(wca_id: registration_row[:wca_id])
+        if user
+          if user.dummy_account?
+            email_user = User.find_by(email: registration_row[:email])
+            if email_user
+              if email_user.wca_id.present?
+                raise I18n.t("registrations.import.errors.email_user_with_different_wca_id",
+                             email: registration_row[:email], user_wca_id: email_user.wca_id,
+                             registration_wca_id: registration_row[:wca_id])
+              else
+                # User hooks will also remove the dummy user account.
+                email_user.update!(wca_id: registration_row[:wca_id], **person_details)
+                [email_user, false]
+              end
+            else
+              user.skip_reconfirmation!
+              user.update!(dummy_account: false, **person_details, email: registration_row[:email])
+              [user, true]
+            end
+          else
+            [user, false] # Use this account.
+          end
+        else
+          email_user = User.find_by(email: registration_row[:email])
+          if email_user
+            if email_user.unconfirmed_wca_id.present? && email_user.unconfirmed_wca_id != registration_row[:wca_id]
+              raise I18n.t("registrations.import.errors.email_user_with_different_unconfirmed_wca_id",
+                           email: registration_row[:email], unconfirmed_wca_id: email_user.unconfirmed_wca_id,
+                           registration_wca_id: registration_row[:wca_id])
+            else
+              email_user.update!(wca_id: registration_row[:wca_id], **person_details)
+              [email_user, false]
+            end
+          else
+            # Create a locked account with confirmed WCA ID.
+            [create_locked_account!(registration_row), true]
+          end
+        end
+      else
+        email_user = User.find_by(email: registration_row[:email])
+        # Use the user if exists, otherwise create a locked account without WCA ID.
+        if email_user
+          if email_user.wca_id.blank?
+            # If this is just a user account with no WCA ID, update its data.
+            # Given it's verified by organizers, it's more trustworthy/official data (if different at all).
+            email_user.update!(person_details)
+          end
+          [email_user, false]
+        else
+          [create_locked_account!(registration_row), true]
+        end
+      end
+    end
+
+    def create_locked_account!(registration_row)
+      User.new_locked_account(
+        name: registration_row[:name],
+        email: registration_row[:email],
+        wca_id: registration_row[:wca_id],
+        country_iso2: Country.c_find(registration_row[:country]).iso2,
+        gender: registration_row[:gender],
+        dob: registration_row[:birth_date],
+      ).tap(&:save!)
+    end
+
+    def registration_from_params
+      id = params.require(:id)
+      Registration.find(id)
+    end
 end

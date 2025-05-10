@@ -1,33 +1,6 @@
 # frozen_string_literal: true
 
 class RoleChangeMailer < ApplicationMailer
-  private def wrt_email_recipient
-    UserRole::UserRoleEmailRecipient.new(
-      name: UserGroup.teams_committees_group_wrt.name,
-      email: UserGroup.teams_committees_group_wrt.metadata.email,
-      message: 'Please take action if this role change is inconsistent or accidental.',
-    )
-  end
-
-  private def role_metadata(role)
-    metadata = {}
-    group = role.group
-
-    # Populate the metadata list.
-    case group.group_type
-    when UserGroup.group_types[:delegate_regions]
-      metadata[:region_name] = group.name
-      metadata[:status] = I18n.t("enums.user_roles.status.delegate_regions.#{role.metadata.status}", locale: 'en')
-      metadata[:delegated_competitions_count] = role.metadata.total_delegated
-    when UserGroup.group_types[:translators]
-      metadata[:locale] = group.metadata.locale
-    when UserGroup.group_types[:teams_committees], UserGroup.group_types[:councils], UserGroup.group_types[:officers]
-      metadata[:status] = I18n.t("enums.user_roles.status.#{group.group_type}.#{role.metadata.status}", locale: 'en')
-      metadata[:group_name] = group.name
-    end
-    metadata.compact
-  end
-
   def notify_role_start(role, user_who_made_the_change)
     @role = role
     @user_who_made_the_change = user_who_made_the_change
@@ -274,4 +247,33 @@ class RoleChangeMailer < ApplicationMailer
       subject: "Role removed for #{role.user.name} in #{@group_type_name}",
     )
   end
+
+  private
+
+    def wrt_email_recipient
+      UserRole::UserRoleEmailRecipient.new(
+        name: UserGroup.teams_committees_group_wrt.name,
+        email: UserGroup.teams_committees_group_wrt.metadata.email,
+        message: 'Please take action if this role change is inconsistent or accidental.',
+      )
+    end
+
+    def role_metadata(role)
+      metadata = {}
+      group = role.group
+
+      # Populate the metadata list.
+      case group.group_type
+      when UserGroup.group_types[:delegate_regions]
+        metadata[:region_name] = group.name
+        metadata[:status] = I18n.t("enums.user_roles.status.delegate_regions.#{role.metadata.status}", locale: 'en')
+        metadata[:delegated_competitions_count] = role.metadata.total_delegated
+      when UserGroup.group_types[:translators]
+        metadata[:locale] = group.metadata.locale
+      when UserGroup.group_types[:teams_committees], UserGroup.group_types[:councils], UserGroup.group_types[:officers]
+        metadata[:status] = I18n.t("enums.user_roles.status.#{group.group_type}.#{role.metadata.status}", locale: 'en')
+        metadata[:group_name] = group.name
+      end
+      metadata.compact
+    end
 end

@@ -186,14 +186,6 @@ module Resultable
     sorted_solves_with_index.length < format.expected_solve_count
   end
 
-  private def sorted_solves
-    @sorted_solves ||= solve_times.reject(&:skipped?).sort.freeze
-  end
-
-  private def sorted_solves_with_index
-    @sorted_solves_with_index ||= solve_times.each_with_index.reject { |s, _| s.skipped? }.sort.freeze
-  end
-
   def solve_times
     @solve_times ||= [SolveTime.new(event_id, :single, value1),
                       SolveTime.new(event_id, :single, value2),
@@ -232,4 +224,14 @@ module Resultable
     @counting_solve_times = nil
     super
   end
+
+  private
+
+    def sorted_solves
+      @sorted_solves ||= solve_times.reject(&:skipped?).sort.freeze
+    end
+
+    def sorted_solves_with_index
+      @sorted_solves_with_index ||= solve_times.each_with_index.reject { |s, _| s.skipped? }.sort.freeze
+    end
 end

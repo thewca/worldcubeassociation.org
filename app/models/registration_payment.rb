@@ -22,14 +22,6 @@ class RegistrationPayment < ApplicationRecord
     amount_lowest_denomination + refunding_registration_payments.sum(:amount_lowest_denomination)
   end
 
-  private def auto_accept_hook
-    registration.attempt_auto_accept
-  end
-
-  private def auto_close_hook
-    registration.consider_auto_close
-  end
-
   def to_v2_json(refunds: false)
     payment_provider = CompetitionPaymentIntegration::INTEGRATION_RECORD_TYPES.key(self.receipt_type)
 
@@ -55,4 +47,14 @@ class RegistrationPayment < ApplicationRecord
 
     v2_json
   end
+
+  private
+
+    def auto_accept_hook
+      registration.attempt_auto_accept
+    end
+
+    def auto_close_hook
+      registration.consider_auto_close
+    end
 end

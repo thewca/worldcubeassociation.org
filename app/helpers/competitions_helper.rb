@@ -139,11 +139,6 @@ module CompetitionsHelper
     end
   end
 
-  private def report_and_results_days_to_class(days)
-    level = [Competition::REPORT_AND_RESULTS_DAYS_OK, Competition::REPORT_AND_RESULTS_DAYS_WARNING, Competition::REPORT_AND_RESULTS_DAYS_DANGER].count { |d| days > d }
-    %w[alert-green alert-success alert-orange alert-danger][level]
-  end
-
   def report_content(competition)
     days_report = days_after_competition(competition.delegate_report.posted_at, competition)
     if days_report
@@ -327,6 +322,11 @@ module CompetitionsHelper
   end
 
   private
+
+    def report_and_results_days_to_class(days)
+      level = [Competition::REPORT_AND_RESULTS_DAYS_OK, Competition::REPORT_AND_RESULTS_DAYS_WARNING, Competition::REPORT_AND_RESULTS_DAYS_DANGER].count { |d| days > d }
+      %w[alert-green alert-success alert-orange alert-danger][level]
+    end
 
     def get_registration_status_message_if_registered(competition, user, registration = nil)
       # Helper function for `competition_message_for_user`

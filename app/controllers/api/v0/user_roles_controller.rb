@@ -1,36 +1,6 @@
 # frozen_string_literal: true
 
 class Api::V0::UserRolesController < Api::V0::ApiController
-  # Removes all pending WCA ID claims for the demoted Delegate and notifies the users.
-  private def remove_pending_wca_id_claims(role)
-    region_senior_delegate = role.group.senior_delegate
-    role.user.confirmed_users_claiming_wca_id.each do |confirmed_user|
-      WcaIdClaimMailer.notify_user_of_delegate_demotion(confirmed_user, role.user, region_senior_delegate).deliver_later
-    end
-    # Clear all pending WCA IDs claims for the demoted Delegate
-    User.where(delegate_to_handle_wca_id_claim: role.user.id).update_all(delegate_id_to_handle_wca_id_claim: nil, unconfirmed_wca_id: nil)
-  end
-
-  private def pre_filtered_user_roles
-    active_record = UserRole.includes(:user, :group) # Including user & group for post filtering.
-    is_active = params.key?(:isActive) ? ActiveRecord::Type::Boolean.new.cast(params.require(:isActive)) : nil
-    is_group_hidden = params.key?(:isGroupHidden) ? ActiveRecord::Type::Boolean.new.cast(params.require(:isGroupHidden)) : nil
-    group_type = params[:groupType]
-    group_id = params[:groupId]
-    user_id = params[:userId]
-
-    # In next few lines, instead of foo.present? we are using !foo.nil? because foo.present? returns
-    # false if foo is a boolean false but we need to actually check if the boolean is present or not.
-    unless is_active.nil?
-      active_record = is_active ? active_record.active : active_record.inactive
-    end
-    active_record = active_record.where(group: { is_hidden: is_group_hidden }) unless is_group_hidden.nil?
-    active_record = active_record.where(group: { group_type: group_type }) if group_type.present?
-    active_record = active_record.where(group_id: group_id) if group_id.present?
-    active_record = active_record.where(user_id: user_id) if user_id.present?
-    active_record
-  end
-
   # Returns a list of roles based on the parameters.
   def index
     roles = pre_filtered_user_roles
@@ -123,31 +93,6 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     render json: {
       success: true,
     }
-  end
-
-  private def changed_key_to_human_readable(changed_key)
-    {
-      'end_date' => 'End Date',
-      'ban_reason' => 'Ban reason',
-      'scope' => 'Ban scope',
-    }[changed_key]
-  end
-
-  private def changed_value_to_human_readable(changed_value)
-    changed_value.nil? ? 'None' : changed_value
-  end
-
-  private def changes_in_model(previous_changes)
-    previous_changes&.map do |changed_key, values|
-      changed_parameter = changed_key_to_human_readable(changed_key)
-      if changed_parameter.present?
-        UserRole::UserRoleChange.new(
-          changed_parameter: changed_parameter,
-          previous_value: changed_value_to_human_readable(values[0]),
-          new_value: changed_value_to_human_readable(values[1]),
-        )
-      end
-    end
   end
 
   # update method is written in a way that at a time, only one parameter can be changed. If multiple
@@ -303,4 +248,61 @@ class Api::V0::UserRolesController < Api::V0::ApiController
 
     render json: { result: active_roles }
   end
+
+  private
+
+    # Removes all pending WCA ID claims for the demoted Delegate and notifies the users.
+    def remove_pending_wca_id_claims(role)
+      region_senior_delegate = role.group.senior_delegate
+      role.user.confirmed_users_claiming_wca_id.each do |confirmed_user|
+        WcaIdClaimMailer.notify_user_of_delegate_demotion(confirmed_user, role.user, region_senior_delegate).deliver_later
+      end
+      # Clear all pending WCA IDs claims for the demoted Delegate
+      User.where(delegate_to_handle_wca_id_claim: role.user.id).update_all(delegate_id_to_handle_wca_id_claim: nil, unconfirmed_wca_id: nil)
+    end
+
+    def pre_filtered_user_roles
+      active_record = UserRole.includes(:user, :group) # Including user & group for post filtering.
+      is_active = params.key?(:isActive) ? ActiveRecord::Type::Boolean.new.cast(params.require(:isActive)) : nil
+      is_group_hidden = params.key?(:isGroupHidden) ? ActiveRecord::Type::Boolean.new.cast(params.require(:isGroupHidden)) : nil
+      group_type = params[:groupType]
+      group_id = params[:groupId]
+      user_id = params[:userId]
+
+      # In next few lines, instead of foo.present? we are using !foo.nil? because foo.present? returns
+      # false if foo is a boolean false but we need to actually check if the boolean is present or not.
+      unless is_active.nil?
+        active_record = is_active ? active_record.active : active_record.inactive
+      end
+      active_record = active_record.where(group: { is_hidden: is_group_hidden }) unless is_group_hidden.nil?
+      active_record = active_record.where(group: { group_type: group_type }) if group_type.present?
+      active_record = active_record.where(group_id: group_id) if group_id.present?
+      active_record = active_record.where(user_id: user_id) if user_id.present?
+      active_record
+    end
+
+    def changed_key_to_human_readable(changed_key)
+      {
+        'end_date' => 'End Date',
+        'ban_reason' => 'Ban reason',
+        'scope' => 'Ban scope',
+      }[changed_key]
+    end
+
+    def changed_value_to_human_readable(changed_value)
+      changed_value.nil? ? 'None' : changed_value
+    end
+
+    def changes_in_model(previous_changes)
+      previous_changes&.map do |changed_key, values|
+        changed_parameter = changed_key_to_human_readable(changed_key)
+        if changed_parameter.present?
+          UserRole::UserRoleChange.new(
+            changed_parameter: changed_parameter,
+            previous_value: changed_value_to_human_readable(values[0]),
+            new_value: changed_value_to_human_readable(values[1]),
+          )
+        end
+      end
+    end
 end
