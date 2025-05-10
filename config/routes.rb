@@ -428,6 +428,7 @@ Rails.application.routes.draw do
         resources :dues_redirects, only: %i[index create destroy]
       end
     end
+    match '*unmatched', to: 'api#route_not_found', via: :all
   end
 
   # Deprecated Links
