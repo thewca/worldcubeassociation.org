@@ -105,6 +105,9 @@ export default function RegistrationActions({
     .map((userId) => userEmailMap[userId])
     .join(',');
 
+  const isUsingPaymentIntegration = competitionInfo['using_payment_integrations?'];
+  const checkForSkippedPending = isUsingPaymentIntegration;
+
   const changeStatus = (attendees, status) => {
     updateRegistrationMutation(
       {
@@ -154,7 +157,7 @@ export default function RegistrationActions({
       partitionedSelectedIds,
     );
 
-    if (skippedPendingCount > 0) {
+    if (checkForSkippedPending && skippedPendingCount > 0) {
       confirm({
         content: I18n.t(
           'competitions.registration_v2.list.pending.waitlist_skipped_warning',
@@ -183,9 +186,19 @@ export default function RegistrationActions({
 
     if (goesOverLimit) {
       showOverLimitMessage(amountOverLimit);
+    } else if (skippedWaitlistCount > 0 && (checkForSkippedPending && skippedPendingCount > 0)) {
+      confirm({
+        content: I18n.t(
+          'competitions.registration_v2.list.approved.pending_waitlist_combined_skipped_warning',
+          { count: skippedWaitlistCount + skippedPendingCount },
+        ),
+      }).then(
+        () => changeStatus(idsToAccept, 'accepted'),
+      ).catch(noop);
     } else if (skippedWaitlistCount > 0) {
       // note: if the user confirms (ignores the warning) then no further checks are done
       //  in this `else-if` chain; we can't check that directly in the `if` condition
+      //  to make up for never seeing the last else below case, the first else case above exists
       confirm({
         content: I18n.t(
           'competitions.registration_v2.list.waitlist.skipped_warning',
@@ -194,7 +207,7 @@ export default function RegistrationActions({
       }).then(
         () => changeStatus(idsToAccept, 'accepted'),
       ).catch(noop);
-    } else if (skippedPendingCount > 0) {
+    } else if (checkForSkippedPending && skippedPendingCount > 0) {
       confirm({
         content: I18n.t(
           'competitions.registration_v2.list.pending.approve_skipped_warning',

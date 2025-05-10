@@ -1844,6 +1844,7 @@ en:
           skipped_warning: "You've skipped %{count} registration(s) on the Waiting List. Are you sure you want to approve the selected registration(s)?"
         approved:
           title: "Approved Registrations"
+          pending_waitlist_combined_skipped_warning: "You've skipped %{count} earlier Pending/Waiting List registration(s). Are you sure you want to accept the selected registration(s)?"
         cancelled:
           title: "Cancelled Registrations"
           information: "Cancelled competitors are allowed to register again."
