@@ -7,4 +7,3 @@ class Api::ApiController < ApplicationController
     }, status: :not_implemented
   end
 end
-
