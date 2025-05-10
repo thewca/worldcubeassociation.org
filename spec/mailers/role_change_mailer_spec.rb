@@ -48,7 +48,7 @@ RSpec.describe RoleChangeMailer, type: :mailer do
     let(:mail) { described_class.notify_role_change(role, user_who_made_the_change, [UserRole::UserRoleChange.new(changed_parameter: 'End Date', previous_value: 'Empty', new_value: '01-01-2024')].to_json) }
 
     it 'renders the headers' do
-      expect(mail.to).to match_array [user_who_made_the_change.email, GroupsMetadataBoard.email, senior_delegate.user.email, UserGroup.teams_committees_group_wrt.metadata.email].flatten
+      expect(mail.to).to match_array [user_who_made_the_change.email, GroupsMetadataBoard.email, senior_delegate.user.email, UserGroup.teams_committees_group_wrt.metadata.email, User.teams_committees_group_wic.metadata.email].flatten
       expect(mail.reply_to).to match_array [user_who_made_the_change.email]
       expect(mail.subject).to eq "Role changed for #{role.user.name} in Delegate Probation"
     end
