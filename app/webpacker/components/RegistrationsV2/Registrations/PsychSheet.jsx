@@ -220,9 +220,13 @@ function PsychSheetBody({
                 </div>
               </Table.Cell>
               <Table.Cell>
-                <RegionFlag iso2={registration.user.country.iso2} withoutTooltip />
-                {' '}
-                {countries.byIso2[registration.user.country.iso2].name}
+                {registration.user.country?.iso2 && (
+                  <>
+                    <RegionFlag iso2={registration.user.country.iso2} withoutTooltip />
+                    {' '}
+                    {countries.byIso2[registration.user.country.iso2].name}
+                  </>
+                )}
               </Table.Cell>
               <Table.Cell textAlign="right">
                 {registration.single_rank}
