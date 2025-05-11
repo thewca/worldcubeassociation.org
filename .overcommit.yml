@@ -40,6 +40,7 @@ PreCommit:
     enabled: true
     include:
       - 'app/webpacker/**/*.js'
+      - 'app/webpacker/**/*.jsx'
     exclude:
       # Semantic UI stuff, we need to re-exclude that here.
       - 'app/webpacker/stylesheets/semantic/**/*'

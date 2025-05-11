@@ -3,7 +3,7 @@ import { Icon, Table } from 'semantic-ui-react';
 import cn from 'classnames';
 
 import { personUrl, editResultUrl } from '../../../lib/requests/routes.js.erb';
-import CountryFlag from '../../wca/CountryFlag';
+import RegionFlag from '../../wca/RegionFlag';
 import {
   formatAttemptResult,
   formatAttemptsForResult,
@@ -36,7 +36,7 @@ function ResultRow({
         {formatAttemptResult(result.average, result.event_id)}
       </Table.Cell>
       <Table.Cell>{result.regional_average_record}</Table.Cell>
-      <Table.Cell><CountryFlag iso2={result.country_iso2} /></Table.Cell>
+      <Table.Cell><RegionFlag iso2={result.country_iso2} /></Table.Cell>
       <Table.Cell className={(result.event_id === '333mbf' || result.event_id === '333mbo') ? 'table-cell-solves-mbf' : 'table-cell-solves'}>
         {formatAttemptsForResult(result, result.event_id)}
       </Table.Cell>

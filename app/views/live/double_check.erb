@@ -1,0 +1,5 @@
+<% provide(:title, "#{@round.name} Double Check") %>
+
+<%= render layout: 'competitions/nav' do %>
+  <%= react_component('Live/Admin/DoubleCheck', { competitors: @competitors.as_json({ methods: [:name, :user]}), round: @round.as_json( { include: [:event], only: [:id], methods: [:name]}), competitionId: @competition.id, }) %>
+<% end %>

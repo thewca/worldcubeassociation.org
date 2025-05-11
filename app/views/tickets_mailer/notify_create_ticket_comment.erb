@@ -1,0 +1,22 @@
+<p>Hi,</p>
+
+<p>A new comment has been added to ticket <%= @ticket_comment.ticket_id %>.</p>
+
+<b>Ticket Details:</b>
+<ul>
+  <li>Ticket ID: <%= @ticket_comment.ticket_id %></li>
+  <li>Link to Ticket: <%= ticket_url(@ticket_comment.ticket_id) %></li>
+</ul>
+
+<b>Comment Details:</b>
+<ul>
+  <li>Author: <%= @ticket_comment.author_text %></li>
+  <li>Timestamp: <%= @ticket_comment.created_at %></li>
+</ul>
+
+<b>Comment:</b>
+<blockquote><%= md @ticket_comment.comment %></blockquote>
+
+<p>You can view the full ticket and respond to the comment by clicking the link above.</p>
+
+<p>Please do not reply directly to this email. Replies to this address are not monitored. To respond to the comment, please use the provided link to access the ticket within our system.</p>

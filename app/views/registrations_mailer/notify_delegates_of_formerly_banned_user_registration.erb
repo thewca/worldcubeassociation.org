@@ -1,0 +1,26 @@
+<p>
+  <%= @registration.name %>
+  <% if @registration.user.wca_id %>
+    (<%= wca_id_link @registration.user.wca_id -%>)
+  <% end %>
+  just registered for <%= @registration.competition.name %>.
+</p>
+
+<% user = @registration.user %>
+<% bans = user.past_bans_metadata %>
+
+<p>
+  <%= t 'registrations.mailer.formerly_banned.ban_count', ban_count: bans.count %>
+</p>
+
+<ul>
+  <% bans.each do |ban| %>
+    <li>
+      <%= t 'registrations.mailer.formerly_banned.scope_and_reason', ban_scope: ban.scope, ban_reason: ban.ban_reason %>
+    </li>
+  <% end %>
+</ul>
+
+<p>
+  <%= t 'registrations.mailer.formerly_banned.wic_message' %>
+</p>

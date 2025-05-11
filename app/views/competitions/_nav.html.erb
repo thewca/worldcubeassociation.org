@@ -222,10 +222,10 @@
     <div id="competition-data">
       <h3>
         <% if current_user && @competition.upcoming? %>
-          <span class="bookmark-icon" id="not-bookmarked" data-toggle="tooltip" data-placement="bottom" title="<%= I18n.t('competitions.competition_info.bookmark') %>" <% if current_user.is_bookmarked?(@competition) %>style="display: none;"<% end %>>
+          <span class="bookmark-icon" id="not-bookmarked" data-toggle="tooltip" data-placement="bottom" title="<%= I18n.t('competitions.competition_info.bookmark') %>" <% if current_user.competition_bookmarked?(@competition) %>style="display: none;"<% end %>>
             <%= ui_icon('bookmark') %>
           </span>
-          <span class="bookmark-icon" id="bookmarked" data-toggle="tooltip" data-placement="bottom" title="<%= I18n.t('competitions.competition_info.is_bookmarked') %>" <% if !current_user.is_bookmarked?(@competition) %>style="display: none;"<% end %>>
+          <span class="bookmark-icon" id="bookmarked" data-toggle="tooltip" data-placement="bottom" title="<%= I18n.t('competitions.competition_info.is_bookmarked') %>" <% if !current_user.competition_bookmarked?(@competition) %>style="display: none;"<% end %>>
             <%= ui_icon('bookmark') %>
           </span>
         <% end %>
@@ -270,7 +270,6 @@
       <% @competition.warnings_for(current_user).each do |field, message| %>
         <%= alert :warning, message, note: true %>
       <% end %>
-
 
       <% @competition.info_for(current_user).each do |field, message| %>
         <%= alert :info, message, note: true %>

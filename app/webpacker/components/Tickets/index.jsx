@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import {
   Button, Container, Dropdown, Message, Modal,
 } from 'semantic-ui-react';
@@ -10,6 +10,8 @@ import TicketHeader from './TicketHeader';
 import TicketWorkbench from './TicketWorkbench';
 import TicketLogs from './TicketLogs';
 import useInputState from '../../lib/hooks/useInputState';
+import TicketComments from './TicketComments';
+import WCAQueryClientProvider from '../../lib/providers/WCAQueryClientProvider';
 
 function SkateholderSelector({ stakeholderList, setUserSelectedStakeholder }) {
   const [selectedOption, setSelectedOption] = useInputState(stakeholderList[0]);
@@ -41,18 +43,36 @@ function SkateholderSelector({ stakeholderList, setUserSelectedStakeholder }) {
 function TicketContent({ ticketDetails, currentStakeholder, sync }) {
   return (
     <>
-      <TicketHeader ticketDetails={ticketDetails} />
+      <TicketHeader
+        ticketDetails={ticketDetails}
+        currentStakeholder={currentStakeholder}
+        sync={sync}
+      />
       <TicketWorkbench
         ticketDetails={ticketDetails}
         sync={sync}
         currentStakeholder={currentStakeholder}
       />
-      <TicketLogs logs={ticketDetails.ticket.ticket_logs} />
+      <TicketComments
+        ticketId={ticketDetails.ticket.id}
+        currentStakeholder={currentStakeholder}
+      />
+      <TicketLogs
+        ticketId={ticketDetails.ticket.id}
+      />
     </>
   );
 }
 
-export default function Tickets({ id }) {
+export default function Wrapper({ id }) {
+  return (
+    <WCAQueryClientProvider>
+      <Tickets id={id} />
+    </WCAQueryClientProvider>
+  );
+}
+
+function Tickets({ id }) {
   const {
     data: ticketDetails, sync, loading, error,
   } = useLoadedData(actionUrls.tickets.show(id));

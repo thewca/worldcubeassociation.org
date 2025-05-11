@@ -2,13 +2,13 @@ import React, {
   createContext,
   useCallback,
   useContext,
-  useEffect,
   useMemo,
   useReducer,
 } from 'react';
 import _ from 'lodash';
-import { changesSaved, setErrors } from '../store/actions';
+import { changesSaved, setErrors, updateFormValue } from '../store/actions';
 import formReducer from '../store/reducer';
+import SectionProvider, { readValueRecursive, useSections } from './FormSectionProvider';
 
 const FormContext = createContext(null);
 
@@ -21,6 +21,8 @@ const createState = (initialObject) => ({
 export default function FormObjectProvider({
   children,
   initialObject,
+  globalDisabled = false,
+  globalAllowIgnoreDisabled = true,
 }) {
   const [formState, dispatch] = useReducer(formReducer, initialObject, createState);
 
@@ -28,36 +30,10 @@ export default function FormObjectProvider({
     !_.isEqual(formState.object, formState.initialObject)
   ), [formState.object, formState.initialObject]);
 
-  const onUnload = useCallback((e) => {
-    // Prompt the user before letting them navigate away from this page with unsaved changes.
-    if (unsavedChanges) {
-      const confirmationMessage = 'You have unsaved changes, are you sure you want to leave?';
-      e.returnValue = confirmationMessage;
-      return confirmationMessage;
-    }
-
-    return null;
-  }, [unsavedChanges]);
-
-  useEffect(() => {
-    window.addEventListener('beforeunload', onUnload);
-
-    return () => {
-      window.removeEventListener('beforeunload', onUnload);
-    };
-  }, [onUnload]);
-
-  const onSuccess = useCallback((data) => {
-    const { redirect } = data;
-
-    if (redirect) {
-      window.removeEventListener('beforeunload', onUnload);
-      window.location.replace(redirect);
-    } else {
-      dispatch(changesSaved());
-      dispatch(setErrors(null));
-    }
-  }, [dispatch, onUnload]);
+  const onSuccess = useCallback((override = undefined) => {
+    dispatch(changesSaved(override));
+    dispatch(setErrors(null));
+  }, [dispatch]);
 
   const onError = useCallback((err) => {
     // check whether the 'json' and 'response' properties are set,
@@ -75,6 +51,14 @@ export default function FormObjectProvider({
           };
 
           dispatch(setErrors(jsonSchemaError));
+        } else {
+          const errorProperty = err.json.json_property || 'error';
+
+          const wrappedError = {
+            [errorProperty]: [err.json.error],
+          };
+
+          dispatch(setErrors(wrappedError));
         }
       } else {
         dispatch(setErrors(err.json));
@@ -94,7 +78,12 @@ export default function FormObjectProvider({
 
   return (
     <FormContext.Provider value={formContext}>
-      {children}
+      <SectionProvider
+        disabled={globalDisabled}
+        allowIgnoreDisabled={globalAllowIgnoreDisabled}
+      >
+        {children}
+      </SectionProvider>
     </FormContext.Provider>
   );
 }
@@ -108,3 +97,55 @@ export const useFormInitialObject = () => useFormContext().initialObject;
 
 export const useFormSuccessHandler = () => useFormContext().onSuccess;
 export const useFormErrorHandler = () => useFormContext().onError;
+
+export const useFormObjectSection = () => {
+  const formObject = useFormObject();
+  const sections = useSections();
+
+  return readValueRecursive(formObject, sections);
+};
+
+export const useFormValue = (key, sections = []) => {
+  const formObject = useFormObject();
+
+  const formSection = readValueRecursive(formObject, sections);
+  return useMemo(() => formSection[key], [formSection, key]);
+};
+
+export const useFormInitialValue = (key, sections = []) => {
+  const initialFormObject = useFormInitialObject();
+
+  const initialFormSection = readValueRecursive(initialFormObject, sections);
+  return useMemo(() => initialFormSection[key], [initialFormSection, key]);
+};
+
+export const useFormUpdateAction = () => {
+  const dispatch = useFormDispatch();
+
+  return useCallback((key, value, sections = []) => (
+    dispatch(updateFormValue(key, value, sections))
+  ), [dispatch]);
+};
+
+export const useFormObjectState = (key, sections = []) => {
+  const formObject = useFormObject();
+
+  const formSection = readValueRecursive(formObject, sections);
+  const formValue = formSection[key];
+
+  const formUpdater = useFormUpdateAction();
+
+  const setFormValue = useCallback(
+    (value) => formUpdater(key, value, sections),
+    [formUpdater, key, sections],
+  );
+
+  return [formValue, setFormValue];
+};
+
+export const useHasFormValueChanged = (key, sections = []) => {
+  const formValue = useFormValue(key, sections);
+  const formInitialValue = useFormInitialValue(key, sections);
+
+  return !_.isEqual(formValue, formInitialValue);
+};

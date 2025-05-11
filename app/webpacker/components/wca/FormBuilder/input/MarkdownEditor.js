@@ -3,6 +3,8 @@ import SimpleMDE from 'react-simplemde-editor';
 import { fetchWithAuthenticityToken } from '../../../../lib/requests/fetchWithAuthenticityToken';
 import 'easymde/dist/easymde.min.css';
 
+const UPLOAD_IMAGE_KEY = 'upload-image';
+
 function insertText(editor, markup, promptText) {
   const cm = editor.codemirror;
 
@@ -28,7 +30,7 @@ function insertText(editor, markup, promptText) {
   cm.focus();
 }
 
-function getOptions(disabled) {
+function getOptions(imageUploadEnabled) {
   const table = {
     name: 'table-custom',
     action: '\n\n| Column 1 | Column 2 | Column 3 |\n| -------- | -------- | -------- |\n| Text     | Text      | Text     |\n\n',
@@ -69,13 +71,14 @@ function getOptions(disabled) {
 
   const textFormattings = ['bold', 'italic', 'heading'];
   const textStructures = ['quote', 'unordered-list', 'ordered-list', table];
-  const uploadsAndInserts = ['link', 'upload-image', map, youtube];
+  const uploadImageTool = [imageUploadEnabled && UPLOAD_IMAGE_KEY].filter(Boolean);
+  const inserts = ['link', map, youtube, ...uploadImageTool];
   const previews = ['preview', 'side-by-side', 'fullscreen'];
   const helps = ['guide'];
   const toolbar = [
     ...textFormattings,
     '|', ...textStructures,
-    '|', ...uploadsAndInserts,
+    '|', ...inserts,
     '|', ...previews,
     '|', ...helps,
   ];
@@ -100,8 +103,8 @@ function getOptions(disabled) {
     spellChecker: false,
     promptURLs: true,
     previewRender,
-    status: ['upload-image'],
-    uploadImage: true,
+    status: [imageUploadEnabled && UPLOAD_IMAGE_KEY].filter(Boolean),
+    uploadImage: imageUploadEnabled,
     async imageUploadFunction(file, onSuccess, onError) {
       const formData = new FormData();
       formData.append('image', file);
@@ -113,7 +116,6 @@ function getOptions(disabled) {
         onError(e);
       }
     },
-    disabled,
   };
 }
 
@@ -121,8 +123,9 @@ export default function MarkdownEditor({
   id,
   value,
   onChange,
+  imageUploadEnabled = true,
 }) {
-  const options = useMemo(() => getOptions(false), []);
+  const options = useMemo(() => getOptions(imageUploadEnabled), [imageUploadEnabled]);
   const mdChange = useCallback((text) => onChange(null, { value: text }), [onChange]);
 
   return (

@@ -13,12 +13,11 @@ class Api::V0::UserGroupsController < Api::V0::ApiController
     groups.reject do |group|
       # Here, instead of foo.present? we are using !foo.nil? because foo.present? returns false if
       # foo is a boolean false but we need to actually check if the boolean is present or not.
-      (
-        (!is_active.nil? && is_active != group.is_active) ||
+
+      (!is_active.nil? && is_active != group.is_active) ||
         (!is_hidden.nil? && is_hidden != group.is_hidden) ||
         (!parent_group_id.nil? && parent_group_id != group.parent_group_id) ||
-        (!is_root_group.nil? && is_root_group != group.is_root_group?)
-      )
+        (!is_root_group.nil? && is_root_group != group.root_group?)
     end
   end
 
@@ -55,11 +54,7 @@ class Api::V0::UserGroupsController < Api::V0::ApiController
     return head :unauthorized unless current_user&.has_permission?(:can_create_groups, group_type)
 
     ActiveRecord::Base.transaction do
-      if group_type == UserGroup.group_types[:delegate_regions]
-        metadata = GroupsMetadataDelegateRegions.create!(friendly_id: friendly_id)
-      else
-        metadata = nil
-      end
+      metadata = (GroupsMetadataDelegateRegions.create!(friendly_id: friendly_id) if group_type == UserGroup.group_types[:delegate_regions])
       UserGroup.create!(group_type: group_type, name: name, parent_group_id: parent_group_id, is_active: is_active, is_hidden: is_hidden, metadata: metadata)
     end
     render json: {

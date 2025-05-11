@@ -72,6 +72,8 @@ function UtcDatePicker({
     <DatePicker
       id={id}
       name={name}
+      // Makes adjacent `label` tags align correctly within SemUI's CSS world
+      className="ui input"
       selected={date}
       onChange={onChangeInternal}
       shouldCloseOnSelect={shouldCloseOnSelect}

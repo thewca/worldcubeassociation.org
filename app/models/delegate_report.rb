@@ -4,12 +4,12 @@ class DelegateReport < ApplicationRecord
   REPORTS_ENABLED_DATE = Date.new(2016, 6, 1)
   # Any potentially available section, regardless of versioning.
   #   Use with care, some sections may not be available for some versions!
-  AVAILABLE_SECTIONS = [
-    :summary,
-    :equipment,
-    :venue,
-    :organization,
-    :incidents,
+  AVAILABLE_SECTIONS = %i[
+    summary
+    equipment
+    venue
+    organization
+    incidents
   ].freeze
 
   belongs_to :competition
@@ -17,13 +17,17 @@ class DelegateReport < ApplicationRecord
   belongs_to :wrc_primary_user, class_name: "User", optional: true
   belongs_to :wrc_secondary_user, class_name: "User", optional: true
 
-  enum :version, [:legacy, :working_group_2024], suffix: true, default: :working_group_2024
+  enum :version, %i[legacy working_group_2024], suffix: true, default: :working_group_2024
+
+  has_many_attached :setup_images do |attachable|
+    attachable.variant :preview, resize_to_limit: [100, 100]
+  end
 
   attr_accessor :current_user
 
   before_create :set_discussion_url
   def set_discussion_url
-    self.discussion_url = "https://groups.google.com/a/worldcubeassociation.org/forum/#!topicsearchin/reports/" + URI.encode_www_form_component(competition.name)
+    self.discussion_url = "https://groups.google.com/a/worldcubeassociation.org/forum/#!topicsearchin/reports/#{URI.encode_www_form_component(competition.name)}"
   end
 
   private def render_section_template(section)
@@ -50,6 +54,13 @@ class DelegateReport < ApplicationRecord
   validates :wrc_incidents, presence: true, if: :wrc_feedback_requested
   validates :wic_incidents, presence: true, if: :wic_feedback_requested
 
+  validate :setup_image_count, if: %i[posted? requires_setup_images?]
+  private def setup_image_count
+    errors.add(:setup_images, "Needs at least #{self.required_setup_images_count} images") if self.setup_images.count < self.required_setup_images_count
+  end
+
+  validates :setup_images, blob: { content_type: :web_image }
+
   def schedule_and_discussion_urls_required?
     posted? && created_at > Date.new(2019, 7, 21)
   end
@@ -62,7 +73,7 @@ class DelegateReport < ApplicationRecord
     case section
     when :summary
       self.working_group_2024_version?
-    when :venue
+    when :equipment
       self.legacy_version?
     else
       true
@@ -71,6 +82,14 @@ class DelegateReport < ApplicationRecord
 
   def md_sections
     AVAILABLE_SECTIONS.filter { |section| self.uses_section?(section) }
+  end
+
+  def requires_setup_images?
+    self.uses_section?(:venue) && self.required_setup_images_count.positive?
+  end
+
+  def required_setup_images_count
+    self.working_group_2024_version? ? 2 : 0
   end
 
   def can_see_submit_button?(current_user)
@@ -116,7 +135,7 @@ class DelegateReport < ApplicationRecord
     {
       competitionName: competition.name,
       competitionId: competition.id,
-      competitionRegion: competition.continent.name,
+      competitionRegion: competition.continent.name_in(:en),
       feedbackRequests: {
         WRC: self.wrc_incidents,
         WIC: self.wic_incidents,

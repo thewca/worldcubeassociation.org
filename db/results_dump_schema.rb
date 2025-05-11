@@ -123,10 +123,6 @@ ActiveRecord::Schema[7.1].define(version: 0) do
     t.boolean "final", null: false
   end
 
-  create_table "Rounds", id: false, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
-    t.string "sorry_message", limit: 172, default: "", null: false, collation: "utf8mb3_general_ci"
-  end
-
   create_table "Scrambles", id: false, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.integer "scrambleId", default: 0, null: false, unsigned: true
     t.string "competitionId", limit: 32, null: false
@@ -144,8 +140,7 @@ ActiveRecord::Schema[7.1].define(version: 0) do
     t.string "championship_type", null: false
   end
 
-  create_table "eligible_country_iso2s_for_championship", id: false, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
-    t.bigint "id", default: 0, null: false
+  create_table "eligible_country_iso2s_for_championship", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "championship_type", null: false
     t.string "eligible_country_iso2", null: false
   end

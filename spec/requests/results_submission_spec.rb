@@ -3,8 +3,8 @@
 require 'rails_helper'
 
 RSpec.describe ResultsSubmissionController, type: :request do
-  let(:delegate) { FactoryBot.create :delegate }
-  let(:comp) { FactoryBot.create(:competition, :with_valid_submitted_results, delegates: [delegate]) }
+  let(:delegate) { create(:delegate) }
+  let(:comp) { create(:competition, :with_valid_submitted_results, delegates: [delegate]) }
 
   context "not logged in" do
     it "redirects to sign in" do
@@ -14,7 +14,7 @@ RSpec.describe ResultsSubmissionController, type: :request do
   end
 
   context "logged in as a regular user" do
-    sign_in { FactoryBot.create(:user) }
+    before { sign_in create(:user) }
 
     it "redirects to home page" do
       get competition_submit_results_edit_path(comp.id)
@@ -23,7 +23,7 @@ RSpec.describe ResultsSubmissionController, type: :request do
   end
 
   context "logged in as a regular delegate" do
-    sign_in { FactoryBot.create(:delegate) }
+    before { sign_in create(:delegate) }
 
     it "redirects to home page" do
       get competition_submit_results_edit_path(comp.id)
@@ -43,7 +43,7 @@ RSpec.describe ResultsSubmissionController, type: :request do
       it "returns http success" do
         get competition_submit_results_edit_path(comp.id)
         # Checking the response status: we want a successful get without redirect.
-        expect(response.status).to eq(200)
+        expect(response).to have_http_status(:ok)
       end
 
       it "redirects to homepage if competition is not announced" do

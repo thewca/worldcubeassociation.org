@@ -8,10 +8,10 @@ FactoryBot.define do
     end
 
     best { rank * 100 }
-    worldRank { rank }
-    continentRank { rank }
-    countryRank { rank }
-    eventId { event }
+    world_rank { rank }
+    continent_rank { rank }
+    country_rank { rank }
+    event_id { event }
   end
 
   factory :ranks_single do
@@ -21,9 +21,9 @@ FactoryBot.define do
     end
 
     best { rank * 100 }
-    worldRank { rank }
-    continentRank { rank }
-    countryRank { rank }
-    eventId { event }
+    world_rank { rank }
+    continent_rank { rank }
+    country_rank { rank }
+    event_id { event }
   end
 end

@@ -1,3 +1,4 @@
+# rubocop:disable all
 # frozen_string_literal: true
 
 class AddRailsPersonsView < ActiveRecord::Migration
@@ -6,7 +7,7 @@ class AddRailsPersonsView < ActiveRecord::Migration
     add_index :Persons, [:id, :subId], unique: true
     add_column :Persons, :rails_id, :primary_key
 
-    execute <<-SQL
+    execute <<-SQL.squish
       CREATE VIEW rails_persons
       AS SELECT
         rails_id AS id,

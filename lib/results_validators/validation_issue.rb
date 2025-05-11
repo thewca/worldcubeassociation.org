@@ -3,15 +3,16 @@
 module ResultsValidators
   class ValidationIssue
     attr_reader :kind, :competition_id
-    def initialize(kind, competition_id, message, **message_args)
-      @message = message
+
+    def initialize(id, kind, competition_id, **message_args)
+      @id = id
       @kind = kind
       @args = message_args
       @competition_id = competition_id
     end
 
     def to_s
-      format(@message, @args)
+      I18n.t("validators.#{@kind}.#{@id}", **@args, locale: 'en')
     end
 
     def ==(other)

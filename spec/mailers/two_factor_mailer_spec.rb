@@ -4,7 +4,7 @@ require "rails_helper"
 
 RSpec.describe TwoFactorMailer, type: :mailer do
   describe "send_otp_to_user" do
-    let(:user) { FactoryBot.create(:user, :with_2fa) }
+    let(:user) { create(:user, :with_2fa) }
     let(:mail) { TwoFactorMailer.send_otp_to_user(user) }
 
     it "renders" do

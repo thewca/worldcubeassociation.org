@@ -4,9 +4,9 @@ require 'rails_helper'
 
 RSpec.describe UsersController do
   describe "GET #edit" do
-    let(:user) { FactoryBot.create(:user_with_wca_id) }
+    let(:user) { create(:user_with_wca_id) }
 
-    sign_in { FactoryBot.create :admin }
+    before { sign_in create :admin }
 
     it "populates user" do
       get :edit, params: { id: user.id }
@@ -15,9 +15,9 @@ RSpec.describe UsersController do
   end
 
   describe "claim wca id" do
-    let!(:person) { FactoryBot.create(:person) }
-    let!(:delegate) { FactoryBot.create(:delegate) }
-    let!(:user) { FactoryBot.create(:user) }
+    let!(:person) { create(:person) }
+    let!(:delegate) { create(:delegate) }
+    let!(:user) { create(:user) }
 
     before :each do
       sign_in user
@@ -27,7 +27,7 @@ RSpec.describe UsersController do
       expect(WcaIdClaimMailer).to receive(:notify_delegate_of_wca_id_claim).with(user).and_call_original
       expect do
         patch :update, params: { id: user, user: { claiming_wca_id: true, unconfirmed_wca_id: person.wca_id, delegate_id_to_handle_wca_id_claim: delegate.id, dob_verification: person.dob.strftime("%F") } }
-      end.to change { enqueued_jobs.size }.by(1)
+      end.to change(enqueued_jobs, :size).by(1)
       new_user = assigns(:user)
       expect(new_user).to be_valid
       expect(user.reload.unconfirmed_wca_id).to eq person.wca_id
@@ -36,7 +36,7 @@ RSpec.describe UsersController do
     end
 
     it "cannot claim wca id for another user" do
-      other_user = FactoryBot.create :user
+      other_user = create(:user)
 
       old_unconfirmed_wca_id = other_user.unconfirmed_wca_id
       patch :update, params: { id: other_user.id, user: { claiming_wca_id: true, unconfirmed_wca_id: person.wca_id, delegate_id_to_handle_wca_id_claim: delegate.id } }
@@ -44,7 +44,7 @@ RSpec.describe UsersController do
     end
 
     it "cannot claim wca id if already has a wca id" do
-      other_person = FactoryBot.create(:person)
+      other_person = create(:person)
       user.update!(wca_id: other_person.wca_id, name: other_person.name, country_iso2: other_person.country_iso2,
                    dob: other_person.dob, gender: other_person.gender)
 
@@ -56,9 +56,9 @@ RSpec.describe UsersController do
   end
 
   describe "approve wca id claim" do
-    let!(:delegate) { FactoryBot.create(:delegate) }
-    let(:person) { FactoryBot.create(:person) }
-    let(:user) { FactoryBot.create :user, unconfirmed_wca_id: person.wca_id, delegate_to_handle_wca_id_claim: delegate, dob_verification: person.dob }
+    let!(:delegate) { create(:delegate) }
+    let(:person) { create(:person) }
+    let(:user) { create(:user, unconfirmed_wca_id: person.wca_id, delegate_to_handle_wca_id_claim: delegate, dob_verification: person.dob) }
 
     before :each do
       sign_in delegate
@@ -81,8 +81,8 @@ RSpec.describe UsersController do
     end
 
     it "can set id to something not claimed if the details match" do
-      person2 = FactoryBot.create :person, name: user.name, countryId: user.country.id,
-                                           dob: user.dob, gender: user.gender
+      person2 = create(:person, name: user.name, country_id: user.country.id,
+                                dob: user.dob, gender: user.gender)
       patch :update, params: { id: user, user: { wca_id: person2.wca_id } }
       user.reload
       expect(user.wca_id).to eq person2.wca_id
@@ -91,7 +91,7 @@ RSpec.describe UsersController do
     end
 
     it "can change claimed id" do
-      person2 = FactoryBot.create :person
+      person2 = create(:person)
       patch :update, params: { id: user, user: { unconfirmed_wca_id: person2.wca_id } }
       user.reload
       expect(user.unconfirmed_wca_id).to eq person2.wca_id
@@ -99,7 +99,7 @@ RSpec.describe UsersController do
     end
 
     it "can clear claimed id" do
-      FactoryBot.create :person
+      create(:person)
       patch :update, params: { id: user, user: { unconfirmed_wca_id: "" } }
       user.reload
       expect(user.unconfirmed_wca_id).to be_nil
@@ -108,18 +108,18 @@ RSpec.describe UsersController do
   end
 
   describe "editing user data" do
-    let!(:user) { FactoryBot.create(:user) }
-    let!(:delegate) { FactoryBot.create(:delegate) }
+    let!(:user) { create(:user) }
+    let!(:delegate) { create(:delegate) }
 
     context "recently authenticated" do
       it "user can change email" do
         sign_in user
-        expect(user.confirmation_sent_at).to eq nil
+        expect(user.confirmation_sent_at).to be nil
         post :authenticate_user_for_sensitive_edit, params: { user: { password: "wca" } }
         patch :update, params: { id: user.id, user: { email: "newEmail@newEmail.com" } }
         user.reload
         expect(user.unconfirmed_email).to eq "newemail@newemail.com"
-        expect(user.confirmation_sent_at).not_to eq nil
+        expect(user.confirmation_sent_at).not_to be nil
       end
     end
 
@@ -128,8 +128,8 @@ RSpec.describe UsersController do
         sign_in user
         patch :update, params: { id: user.id, user: { email: "newEmail@newEmail.com" } }
         user.reload
-        expect(user.unconfirmed_email).to eq nil
-        expect(user.confirmation_sent_at).to eq nil
+        expect(user.unconfirmed_email).to be nil
+        expect(user.confirmation_sent_at).to be nil
         expect(flash[:danger]).to eq I18n.t("users.edit.sensitive.identity_error")
       end
     end
@@ -143,11 +143,12 @@ RSpec.describe UsersController do
     it "user can change his preferred events" do
       sign_in user
       patch :update, params: { id: user.id, user: { user_preferred_events_attributes: [{ event_id: "333" }, { event_id: "444" }, { event_id: "clock" }] } }
-      expect(user.reload.preferred_events.map(&:id)).to eq %w(333 444 clock)
+      expect(user.reload.preferred_events.map(&:id)).to eq %w[333 444 clock]
     end
 
     context "after creating a pending registration" do
-      let!(:registration) { FactoryBot.create(:registration, :pending, user: user) }
+      let!(:registration) { create(:registration, :pending, user: user) }
+
       it "user can change name" do
         sign_in user
         patch :update, params: { id: user.id, user: { name: "Johnny 5" } }
@@ -156,7 +157,8 @@ RSpec.describe UsersController do
     end
 
     context "after having a registration deleted" do
-      let!(:registration) { FactoryBot.create(:registration, :cancelled, user: user) }
+      let!(:registration) { create(:registration, :cancelled, user: user) }
+
       it "user can change name" do
         sign_in user
         patch :update, params: { id: user.id, user: { name: "Johnny 5" } }
@@ -165,7 +167,7 @@ RSpec.describe UsersController do
     end
 
     context "after registration is accepted for a competition" do
-      let!(:registration) { FactoryBot.create(:registration, :accepted, user: user) }
+      let!(:registration) { create(:registration, :accepted, user: user) }
 
       it "user cannot change name" do
         sign_in user
@@ -183,13 +185,13 @@ RSpec.describe UsersController do
   end
 
   describe "GET #index" do
-    sign_in { FactoryBot.create :admin }
+    before { sign_in create :admin }
 
     it "is injection safe" do
       get :index, params: { format: :json, sort: "country", order: "ASC -- HMM" }
       users = assigns(:users)
       sql = users.to_sql
-      expect(sql).to_not match "HMM"
+      expect(sql).not_to match "HMM"
       expect(sql).to match(/order by .+ desc/i)
     end
   end
@@ -198,14 +200,14 @@ RSpec.describe UsersController do
     context 'not signed in' do
       it 'requires authentication' do
         post :acknowledge_cookies
-        expect(response.status).to eq 401
-        response_json = JSON.parse(response.body)
-        expect(response_json['ok']).to eq false
+        expect(response).to have_http_status :unauthorized
+        response_json = response.parsed_body
+        expect(response_json['ok']).to be false
       end
     end
 
     context 'signed in' do
-      let!(:admin) { FactoryBot.create :admin, cookies_acknowledged: false }
+      let!(:admin) { create(:admin, cookies_acknowledged: false) }
 
       before :each do
         sign_in admin
@@ -214,15 +216,15 @@ RSpec.describe UsersController do
       it "records acknowledgement and is idempotent" do
         expect(admin.reload.cookies_acknowledged).to be false
         post :acknowledge_cookies
-        response_json = JSON.parse(response.body)
-        expect(response_json['ok']).to eq true
+        response_json = response.parsed_body
+        expect(response_json['ok']).to be true
         expect(admin.reload.cookies_acknowledged).to be true
 
         # Do the same thing again. This shouldn't clear their cookies acknowledged
         # state.
         post :acknowledge_cookies
-        response_json = JSON.parse(response.body)
-        expect(response_json['ok']).to eq true
+        response_json = response.parsed_body
+        expect(response_json['ok']).to be true
         expect(admin.reload.cookies_acknowledged).to be true
       end
     end

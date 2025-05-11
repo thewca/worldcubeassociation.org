@@ -1,8 +1,9 @@
+# rubocop:disable all
 # frozen_string_literal: true
 
 class ChangePreregsCreatedAtToNotNull < ActiveRecord::Migration
   def change
-    Registration.where(created_at: nil).each do |registration|
+    Registration.where(created_at: nil).find_each do |registration|
       # Not all competitions that used WCA registration actually have registration_open set,
       # so just pick a day before the competition as the day that these old registrations
       # were created.

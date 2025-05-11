@@ -13,8 +13,7 @@ import SEARCH_MODELS from '../../../SearchWidget/SearchModel';
 import { useConfirm } from '../../../../lib/providers/ConfirmProvider';
 import { nextStatusOfGroupType, previousStatusOfGroupType, statusObjectOfGroupType } from '../../../../lib/helpers/status-objects';
 import { delegateRegionsStatus } from '../../../../lib/wca-data.js.erb';
-import RegionSelector from './RegionSelector';
-import useInputState from '../../../../lib/hooks/useInputState';
+import LocationEditorModal from './LocationEditorModal';
 
 const delegateStatusOptions = [
   delegateRegionsStatus.trainee_delegate,
@@ -61,20 +60,13 @@ export default function Subregion({ title, groupId }) {
   const [delegateToChange, setDelegateToChange] = useState(null);
   const [formValues, setFormValues] = useState(initialValue);
   const [newDelegateUser, setNewDelegateUser] = useState(null);
-  const [newLocation, setNewLocation] = useInputState(null);
   const [formError, setFormError] = useState(null);
   const { save, saving } = useSaveAction();
   const confirm = useConfirm();
   const error = delegatesFetchError || formError;
 
-  const setDelegateToChangeAndShowModal = (delegate) => {
-    setDelegateToChange(delegate);
-    setOpenModalType('changeRegion');
-  };
-
   const setDelegateToEditLocation = (delegate) => {
     setDelegateToChange(delegate);
-    setNewLocation(delegate.metadata.location);
     setOpenModalType('editLocation');
   };
 
@@ -130,19 +122,9 @@ export default function Subregion({ title, groupId }) {
     });
   };
 
-  const changeRegionAction = (delegate, newGroupId) => {
+  const editLocationAction = (changes) => {
     confirm().then(() => {
-      save(apiV0Urls.userRoles.update(delegate.id), {
-        groupId: newGroupId,
-      }, sync, { method: 'PATCH' });
-    });
-  };
-
-  const editLocationAction = () => {
-    confirm().then(() => {
-      save(apiV0Urls.userRoles.update(delegateToChange.id), {
-        location: newLocation,
-      }, () => {
+      save(apiV0Urls.userRoles.update(delegateToChange.id), changes, () => {
         sync();
         setOpenModalType(null);
       }, { method: 'PATCH' });
@@ -187,9 +169,6 @@ export default function Subregion({ title, groupId }) {
                   && <Button onClick={() => demoteDelegateAction(delegate)}>Demote</Button>}
                 {!isLead(delegate)
                   && <Button onClick={() => endDelegateRoleAction(delegate)}>End Role</Button>}
-                <Button onClick={() => setDelegateToChangeAndShowModal(delegate)}>
-                  Change Region
-                </Button>
                 <Button onClick={() => setDelegateToEditLocation(delegate)}>
                   Edit Location
                 </Button>
@@ -235,44 +214,13 @@ export default function Subregion({ title, groupId }) {
           </Form>
         </Modal.Content>
       </Modal>
-      <Modal
-        size="fullscreen"
-        onClose={() => setOpenModalType(null)}
-        open={openModalType === 'changeRegion'}
-      >
-        <Modal.Content>
-          <Header>Change Region</Header>
-          <RegionSelector
-            delegate={delegateToChange}
-            onRegionSelect={
-              (selectedRegionId) => {
-                changeRegionAction(delegateToChange, selectedRegionId);
-                setOpenModalType(null);
-              }
-            }
-            onCancel={() => setOpenModalType(null)}
-          />
-        </Modal.Content>
-      </Modal>
-      <Modal
-        size="fullscreen"
-        onClose={() => setOpenModalType(null)}
-        open={openModalType === 'editLocation'}
-      >
-        <Modal.Content>
-          <Header>Edit Location</Header>
-          <Form onSubmit={editLocationAction}>
-            <Form.Input
-              label="Location"
-              name="location"
-              value={newLocation}
-              onChange={setNewLocation}
-            />
-            <Form.Button onClick={() => setOpenModalType(null)}>Cancel</Form.Button>
-            <Form.Button type="submit">Save</Form.Button>
-          </Form>
-        </Modal.Content>
-      </Modal>
+      {openModalType === 'editLocation' && (
+        <LocationEditorModal
+          onClose={() => setOpenModalType(null)}
+          delegate={delegateToChange}
+          onSubmit={editLocationAction}
+        />
+      )}
     </>
   );
 }

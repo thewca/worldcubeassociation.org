@@ -1,4 +1,4 @@
-import React, { useReducer, useState } from 'react';
+import React, { useState } from 'react';
 import { Message, Segment } from 'semantic-ui-react';
 import CalendarView from './CalendarView';
 import TableView from './TableView';
@@ -6,30 +6,11 @@ import TimeZoneSelector from './TimeZone';
 import VenuesAndRooms from './VenuesAndRooms';
 import ViewSelector from './ViewSelector';
 import useStoredState from '../../lib/hooks/useStoredState';
+import useSet from '../../lib/hooks/useSet';
 import { earliestWithLongestTieBreaker } from '../../lib/utils/activities';
 import { getDatesBetweenInclusive } from '../../lib/utils/dates';
-import { EventSelector } from '../CompetitionsOverview/CompetitionsFilters';
+import EventSelector from '../wca/EventSelector';
 import I18n from '../../lib/i18n';
-
-const activeIdReducer = (state, { type, id, ids }) => {
-  let newState = [...state];
-
-  switch (type) {
-    case 'toggle':
-      if (newState.includes(id)) {
-        newState = newState.filter((x) => x !== id);
-      } else {
-        newState.push(id);
-      }
-      return newState;
-
-    case 'reset':
-      return ids ?? [];
-
-    default:
-      throw new Error('Unknown action.');
-  }
-};
 
 export default function Schedule({
   wcifSchedule,
@@ -72,30 +53,14 @@ export default function Schedule({
   // rooms
 
   const roomsOfActiveVenues = activeVenues.flatMap((venue) => venue.rooms);
-  const [activeRoomIds, dispatchRooms] = useReducer(
-    activeIdReducer,
-    roomsOfActiveVenues.map((room) => room.id),
-  );
-  const activeRooms = roomsOfActiveVenues.filter((room) => activeRoomIds.includes(room.id));
+  const activeRoomIds = useSet(roomsOfActiveVenues.map((room) => room.id));
+  const activeRooms = roomsOfActiveVenues.filter((room) => activeRoomIds.asSet.has(room.id));
 
   // events
 
-  const [activeEventIds, dispatchEvents] = useReducer(
-    activeIdReducer,
-    wcifEvents.map((event) => event.id),
-  );
   const availableEventIds = wcifEvents.map(({ id }) => id);
-  const activeEvents = wcifEvents.filter(({ id }) => activeEventIds.includes(id));
-
-  const handleEventSelection = ({ type, eventId }) => {
-    if (type === 'select_all_events') {
-      dispatchEvents({ type: 'reset', ids: availableEventIds });
-    } else if (type === 'clear_events') {
-      dispatchEvents({ type: 'reset' });
-    } else if (type === 'toggle_event') {
-      dispatchEvents({ type: 'toggle', id: eventId });
-    }
-  };
+  const activeEventIds = useSet(availableEventIds);
+  const activeEvents = wcifEvents.filter(({ id }) => activeEventIds.has(id));
 
   // view
 
@@ -137,16 +102,19 @@ export default function Schedule({
         setActiveVenueIndex={setActiveVenueIndexAndUpdateTimeZone}
         timeZoneCount={timeZoneCount}
         rooms={roomsOfActiveVenues}
-        activeRoomIds={activeRoomIds}
-        dispatchRooms={dispatchRooms}
+        activeRoomIds={activeRoomIds.asArray}
+        updateRooms={activeRoomIds.update}
+        toggleRoom={activeRoomIds.toggle}
         setActiveTimeZone={setActiveTimeZone}
       />
 
       <Segment>
         <EventSelector
           eventList={availableEventIds}
-          selectedEvents={activeEventIds}
-          onEventSelection={handleEventSelection}
+          selectedEvents={activeEventIds.asArray}
+          onEventClick={activeEventIds.toggle}
+          onAllClick={() => activeEventIds.update(availableEventIds)}
+          onClearClick={activeEventIds.clear}
         />
       </Segment>
 
@@ -167,7 +135,7 @@ export default function Schedule({
           timeZone={activeTimeZone}
           activeVenues={activeVenues}
           activeRooms={activeRooms}
-          activeEventIds={activeEventIds}
+          activeEventIds={activeEventIds.asArray}
           calendarLocale={calendarLocale}
           wcifEvents={wcifEvents}
         />

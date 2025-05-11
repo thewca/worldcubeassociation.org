@@ -4,7 +4,7 @@ require "rails_helper"
 
 RSpec.feature "Sign in with 2FA" do
   context 'Signing in without 2FA' do
-    let(:fool) { FactoryBot.create(:user) }
+    let(:fool) { create(:user) }
 
     it 'works for a fool' do
       visit "/users/sign_in"
@@ -16,7 +16,7 @@ RSpec.feature "Sign in with 2FA" do
   end
 
   context 'Signing in with 2FA' do
-    let!(:user) { FactoryBot.create(:user, :with_2fa) }
+    let!(:user) { create(:user, :with_2fa) }
 
     it 'works with an otp' do
       visit "/users/sign_in"
@@ -42,7 +42,7 @@ RSpec.feature "Sign in with 2FA" do
       expect(page).to have_content "Signed in successfully"
     end
 
-    it 'can send a OTP by email', js: true do
+    it 'can send a OTP by email', :js do
       visit "/users/sign_in"
       fill_in "Email", with: user.email
       fill_in "user[password]", with: "wca"
