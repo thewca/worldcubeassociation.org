@@ -1,9 +1,22 @@
-import { DateTime } from 'luxon';
+import { DateTime, Interval } from 'luxon';
 
 // parameter name conventions:
 // - `luxonDate` for luxon DateTime objects
 // - `date` for date-only ISO strings (no time)
 // - `dateTime` for date-and-time ISO strings
+
+export const toRelativeOptions = {
+  default: {
+    locale: window.I18n.locale,
+  },
+  roundUpAndAtBestDayPrecision: {
+    locale: window.I18n.locale,
+    // don't be more precise than "days" (i.e. no hours/minutes/seconds)
+    unit: ['years', 'months', 'weeks', 'days'],
+    // round up, e.g. in 8 hours -> pads to 1 day 8 hours -> rounds to "in 1 day"
+    padding: 24 * 60 * 60 * 1000,
+  },
+};
 
 /// / luxon parameters
 
@@ -40,12 +53,16 @@ export const fullTimeDiff = (luxonDate) => {
 
 /// / string parameters
 
-export function hasPassed(dateTime) {
-  return DateTime.fromISO(dateTime) < DateTime.now();
+export function hasPassed(dateTime, timeZone = null) {
+  return DateTime.fromISO(dateTime, { zone: timeZone }) < DateTime.now();
 }
 
-export function hasNotPassed(dateTime) {
-  return DateTime.now() < DateTime.fromISO(dateTime);
+export function hasNotPassed(dateTime, timeZone = null) {
+  return DateTime.now() < DateTime.fromISO(dateTime, { zone: timeZone });
+}
+
+export function hasNotPassedOrNull(dateTime, timeZone = null) {
+  return dateTime === null || hasNotPassed(dateTime, timeZone);
 }
 
 export const doesRangeCrossMidnight = (
@@ -88,6 +105,14 @@ export const getFullDateTimeString = (dateTime, timeZone = 'local') => DateTime.
   .setZone(timeZone)
   .toLocaleString(DateTime.DATETIME_FULL_WITH_SECONDS);
 
+export const getIsoDateString = (dateTime, timeZone = 'local') => DateTime.fromISO(dateTime)
+  .setZone(timeZone)
+  .toISODate();
+
+export const getTimeWithSecondsString = (dateTime, timeZone = 'local') => DateTime.fromISO(dateTime)
+  .setZone(timeZone)
+  .toLocaleString(DateTime.TIME_WITH_SECONDS);
+
 // start/end dates may have different time-of-days
 export const getDatesBetweenInclusive = (
   startDateTime,
@@ -120,3 +145,7 @@ export const todayWithTime = (dateTime, timeZone) => {
     millisecond: luxonDate.millisecond,
   });
 };
+
+export function dateRange(fromDate, toDate, options = {}) {
+  return Interval.fromDateTimes(DateTime.fromISO(fromDate), DateTime.fromISO(toDate)).toLocaleString({ month: 'short', day: '2-digit', year: 'numeric' }, options);
+}

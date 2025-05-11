@@ -27,6 +27,7 @@ import 'semantic-css/placeholder';
 import 'semantic-css/popup';
 import 'semantic-css/rail';
 import 'semantic-css/reset';
+import 'semantic-css/search';
 import 'semantic-css/segment';
 import 'semantic-css/sidebar';
 import 'semantic-css/site';

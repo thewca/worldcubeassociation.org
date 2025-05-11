@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class Continent < ApplicationRecord
-  self.table_name = "Continents"
   NAME_LOOKUP_ATTRIBUTE = :name
   FICTIVE_IDS = ["_Multiple Continents"].freeze
 
@@ -9,12 +8,10 @@ class Continent < ApplicationRecord
   include LocalizedSortable
   include StaticData
 
-  REAL_CONTINENTS = self.all_raw.select { |c| !FICTIVE_IDS.include?(c[:id]) }.freeze
+  REAL_CONTINENTS = self.all_raw.select { |c| FICTIVE_IDS.exclude?(c[:id]) }.freeze
   REAL_CONTINENT_IDS = REAL_CONTINENTS.pluck(:id).freeze
 
-  has_many :countries, foreign_key: :continentId
-
-  alias_attribute :record_name, :recordName
+  has_many :countries
 
   def url_id
     self.name_in(:en).parameterize.underscore.downcase

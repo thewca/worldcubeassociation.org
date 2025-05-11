@@ -16,8 +16,8 @@ class VenueRoom < ApplicationRecord
     self.color ||= DEFAULT_ROOM_COLOR
   end
 
-  validates_presence_of :name
-  validates_numericality_of :wcif_id, only_integer: true
+  validates :name, presence: true
+  validates :wcif_id, numericality: { only_integer: true }
 
   def all_activities
     schedule_activities.flat_map(&:all_activities)
@@ -49,7 +49,7 @@ class VenueRoom < ApplicationRecord
         "activities" => { "type" => "array", "items" => ScheduleActivity.wcif_json_schema },
         "extensions" => { "type" => "array", "items" => WcifExtension.wcif_json_schema },
       },
-      "required" => ["id", "name", "activities"],
+      "required" => %w[id name activities],
     }
   end
 

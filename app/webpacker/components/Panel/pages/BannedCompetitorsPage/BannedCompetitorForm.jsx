@@ -80,7 +80,7 @@ export default function BanendCompetitorForm({
         name="endDate"
         control={UtcDatePicker}
         showYearDropdown
-        dateFormatOverride="YYYY-MM-dd"
+        dateFormatOverride="yyyy-MM-dd"
         dropdownMode="select"
         isoDate={formValues?.endDate}
         onChange={(date) => handleFormChange(null, {

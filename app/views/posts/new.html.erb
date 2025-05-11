@@ -1,7 +1,7 @@
 <% provide(:title, 'New post') %>
 
 <div class="container">
-  <h1><%= yield(:title) %></h1>
-
-  <%= render "posts/post_form" %>
+  <%= react_component("Posts/CreatePost", {
+    allTags: PostTag.select(:tag).distinct.pluck(:tag),
+  }) %>
 </div>

@@ -44,17 +44,17 @@ const dataToResult = ({
 }, person, attemptsData) => {
   const country = countries.byIso2[person.countryIso2];
   const result = {
-    personId: person.wcaId,
-    personName: person.name,
-    countryId: country ? country.id : undefined,
+    person_id: person.wcaId,
+    person_name: person.name,
+    country_id: country ? country.id : undefined,
     best: best(attemptsData.attempts),
     average: average(attemptsData.attempts, eventId, attemptsData.attempts.length),
-    regionalAverageRecord: attemptsData.markerAvg,
-    regionalSingleRecord: attemptsData.markerBest,
-    eventId,
-    formatId,
-    competitionId,
-    roundTypeId,
+    regional_average_record: attemptsData.markerAvg,
+    regional_single_record: attemptsData.markerBest,
+    event_id: eventId,
+    format_id: formatId,
+    competition_id: competitionId,
+    round_type_id: roundTypeId,
   };
   // Map individual attempts to valueN...
   attemptsData.attempts.forEach((a, index) => { result[`value${index + 1}`] = a; });
@@ -223,7 +223,7 @@ function ResultFormWrapper({ result, sync }) {
   if (created) {
     return (
       <AfterActionMessage
-        wcaId={created.result.personId}
+        wcaId={created.result.person_id}
         eventId={result.event_id}
         competitionId={result.competition_id}
         response={created.response}
@@ -234,7 +234,7 @@ function ResultFormWrapper({ result, sync }) {
     return (
       <div>
         <AfterActionMessage
-          wcaId={edited.result.personId}
+          wcaId={edited.result.person_id}
           eventId={result.event_id}
           competitionId={result.competition_id}
           response={edited.response}

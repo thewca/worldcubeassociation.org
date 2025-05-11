@@ -1,16 +1,16 @@
 # frozen_string_literal: true
 
 module CountryCityValidators
-  AU_STATES = %w(
-    Australian\ Capital\ Territory
-    New\ South\ Wales
-    Northern\ Territory
-    Queensland
-    South\ Australia
-    Tasmania
-    Victoria
-    Western\ Australia
-  ).to_set
+  AU_STATES = [
+    'Australian Capital Territory',
+    'New South Wales',
+    'Northern Territory',
+    'Queensland',
+    'South Australia',
+    'Tasmania',
+    'Victoria',
+    'Western Australia',
+  ].to_set
 
   class AuCityValidator < CityCommaRegionValidator
     def initialize

@@ -136,7 +136,7 @@ function Logo({ title, logoFileUrl }) {
         />
       </p>
       <div>
-        <label>
+        <label htmlFor="checkbox_id">
           <input
             type="checkbox"
             name="checkbox"

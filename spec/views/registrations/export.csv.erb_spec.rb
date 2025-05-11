@@ -3,9 +3,9 @@
 require "rails_helper"
 
 RSpec.describe "registrations/export.csv.erb" do
-  let(:competition) { FactoryBot.create :competition, :registration_open, event_ids: %w(333 333oh) }
+  let(:competition) { create(:competition, :registration_open, event_ids: %w[333 333oh]) }
   let!(:user) {
-    FactoryBot.create(
+    create(
       :user,
       name: "Bob",
       country_iso2: "US",
@@ -13,7 +13,7 @@ RSpec.describe "registrations/export.csv.erb" do
       gender: "m",
       email: "bob@bob.com",
     ).tap do |user|
-      FactoryBot.create(
+      create(
         :registration,
         competition: competition,
         competing_status: Registrations::Helper::STATUS_ACCEPTED,

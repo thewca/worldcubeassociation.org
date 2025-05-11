@@ -4,7 +4,7 @@ require "rails_helper"
 
 RSpec.describe AvatarsMailer, type: :mailer do
   describe "notify_user_of_avatar_rejection" do
-    let(:user) { FactoryBot.create :user, name: "Sherlock Holmes" }
+    let(:user) { create(:user, name: "Sherlock Holmes") }
     let(:rejection_reason) { "The avatar must not include texts other than regular background texts." }
     let(:mail) { AvatarsMailer.notify_user_of_avatar_rejection(user, rejection_reason) }
 
@@ -22,8 +22,8 @@ RSpec.describe AvatarsMailer, type: :mailer do
   end
 
   describe 'notify_user_of_avatar_removal' do
-    let(:remover_user) { FactoryBot.create(:user, name: 'Enola Holmes') }
-    let(:user) { FactoryBot.create(:user, name: 'Sherlock Holmes') }
+    let(:remover_user) { create(:user, name: 'Enola Holmes') }
+    let(:user) { create(:user, name: 'Sherlock Holmes') }
     let(:rejection_reason) { 'The avatar must not include texts other than regular background texts.' }
     let(:mail) { described_class.notify_user_of_avatar_removal(remover_user, user, rejection_reason) }
 

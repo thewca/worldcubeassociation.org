@@ -64,15 +64,17 @@ function ListView({
 
       return (
         <>
-          <ListViewSection
-            competitions={inProgressComps}
-            title={I18n.t('competitions.index.titles.in_progress')}
-            shouldShowRegStatus={shouldShowRegStatus}
-            selectedDelegate={filterState.delegate}
-            regStatusLoading={regStatusLoading}
-            isLoading={isLoading && !upcomingComps?.length}
-            hasMoreCompsToLoad={hasMoreCompsToLoad && !upcomingComps?.length}
-          />
+          {inProgressComps?.length > 0 && (
+            <ListViewSection
+              competitions={inProgressComps}
+              title={I18n.t('competitions.index.titles.in_progress')}
+              shouldShowRegStatus={shouldShowRegStatus}
+              selectedDelegate={filterState.delegate}
+              regStatusLoading={regStatusLoading}
+              isLoading={isLoading && !upcomingComps?.length}
+              hasMoreCompsToLoad={hasMoreCompsToLoad && !upcomingComps?.length}
+            />
+          )}
           <ListViewSection
             competitions={upcomingComps}
             title={I18n.t('competitions.index.titles.upcoming')}

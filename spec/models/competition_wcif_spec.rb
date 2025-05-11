@@ -4,17 +4,17 @@ require 'rails_helper'
 
 RSpec.describe "Competition WCIF" do
   let!(:competition) {
-    FactoryBot.create(
+    create(
       :competition,
       :visible,
       :with_competitor_limit,
       id: "TestComp2014",
       name: "Test Comp 2014",
-      cellName: "Test 2014",
+      cell_name: "Test 2014",
       start_date: "2014-02-03",
       end_date: "2014-02-05",
       external_website: "http://example.com",
-      event_ids: %w(333 444 333fm 333mbf),
+      event_ids: %w[333 444 333fm 333mbf],
       with_schedule: true,
       competitor_limit: 50,
       registration_open: "2013-12-01",
@@ -22,7 +22,7 @@ RSpec.describe "Competition WCIF" do
     )
   }
   let(:partner_competition) {
-    FactoryBot.create(
+    create(
       :competition,
       :visible,
       id: "PartnerComp2014",
@@ -31,7 +31,7 @@ RSpec.describe "Competition WCIF" do
     )
   }
   let!(:competition_series) {
-    FactoryBot.create(
+    create(
       :competition_series,
       wcif_id: "SpectacularSeries2014",
       name: "The Spectacular Series 2014",
@@ -43,12 +43,13 @@ RSpec.describe "Competition WCIF" do
   let(:organizer) { competition.organizers.first }
   let(:sixty_second_2_attempt_cutoff) { Cutoff.new(number_of_attempts: 2, attempt_result: 1.minute.in_centiseconds) }
   let(:top_16_advance) { AdvancementConditions::RankingCondition.new(16) }
-  let!(:round333_1) { FactoryBot.create(:round, competition: competition, event_id: "333", number: 1, cutoff: sixty_second_2_attempt_cutoff, advancement_condition: top_16_advance, scramble_set_count: 16, total_number_of_rounds: 2) }
-  let!(:round333_2) { FactoryBot.create(:round, competition: competition, event_id: "333", number: 2, total_number_of_rounds: 2) }
-  let!(:round444_1) { FactoryBot.create(:round, competition: competition, event_id: "444", number: 1) }
-  let!(:round333fm_1) { FactoryBot.create(:round, competition: competition, event_id: "333fm", number: 1, format_id: "m") }
-  let!(:round333mbf_1) { FactoryBot.create(:round, competition: competition, event_id: "333mbf", number: 1, format_id: "3") }
+  let!(:round333_1) { create(:round, competition: competition, event_id: "333", number: 1, cutoff: sixty_second_2_attempt_cutoff, advancement_condition: top_16_advance, scramble_set_count: 16, total_number_of_rounds: 2) }
+  let!(:round333_2) { create(:round, competition: competition, event_id: "333", number: 2, total_number_of_rounds: 2) }
+  let!(:round444_1) { create(:round, competition: competition, event_id: "444", number: 1) }
+  let!(:round333fm_1) { create(:round, competition: competition, event_id: "333fm", number: 1, format_id: "m") }
+  let!(:round333mbf_1) { create(:round, competition: competition, event_id: "333mbf", number: 1, format_id: "3") }
   let!(:round333mbf_1_extension) { round333mbf_1.wcif_extensions.create!(extension_id: "com.third.party", spec_url: "https://example.com", data: { "tables" => 5 }) }
+
   before :each do
     # Load all the rounds we just created.
     competition.reload
@@ -284,7 +285,7 @@ RSpec.describe "Competition WCIF" do
     it "rendered WCIF matches JSON Schema definition" do
       expect {
         JSON::Validator.validate!(Competition.wcif_json_schema, competition.to_wcif)
-      }.to_not raise_error
+      }.not_to raise_error
     end
   end
 
@@ -296,7 +297,7 @@ RSpec.describe "Competition WCIF" do
 
       competition.set_wcif_competitor_limit!(competitor_limit_wcif, delegate)
 
-      expect(competition.competitor_limit_enabled?).to eq(true)
+      expect(competition.competitor_limit_enabled?).to be(true)
       expect(competition.to_wcif["competitorLimit"]).to eq(competitor_limit_wcif)
     end
 
@@ -352,7 +353,7 @@ RSpec.describe "Competition WCIF" do
       competition.set_wcif_events!(wcif["events"], delegate)
 
       expect(competition.to_wcif["events"]).to eq(wcif["events"])
-      expect(competition.events.map(&:id)).to match_array %w(333 333fm 333mbf 444)
+      expect(competition.events.map(&:id)).to match_array %w[333 333fm 333mbf 444]
     end
 
     it "does remove competition event when wcif rounds are nil" do
@@ -363,7 +364,7 @@ RSpec.describe "Competition WCIF" do
 
       wcif["events"].reject! { |e| e["id"] == "444" }
       expect(competition.to_wcif["events"]).to eq(wcif["events"])
-      expect(competition.events.map(&:id)).to match_array %w(333 333fm 333mbf)
+      expect(competition.events.map(&:id)).to match_array %w[333 333fm 333mbf]
     end
 
     it "removes competition event when wcif event is missing" do
@@ -372,7 +373,7 @@ RSpec.describe "Competition WCIF" do
       competition.set_wcif_events!(wcif["events"], delegate)
 
       expect(competition.to_wcif["events"]).to eq(wcif["events"])
-      expect(competition.events.map(&:id)).to match_array %w(333 333fm 333mbf)
+      expect(competition.events.map(&:id)).to match_array %w[333 333fm 333mbf]
     end
 
     it "creates competition event when adding round to previously nonexistent event" do
@@ -384,7 +385,7 @@ RSpec.describe "Competition WCIF" do
             "id" => "555-r1",
             "format" => "a",
             "timeLimit" => {
-              "centiseconds" => 3*60*100,
+              "centiseconds" => 3 * 60 * 100,
               "cumulativeRoundIds" => [],
             },
             "cutoff" => nil,
@@ -802,7 +803,7 @@ RSpec.describe "Competition WCIF" do
 
     context "validates the given data with JSON Schema definition" do
       it "Doesn't update invalid venue" do
-        %w(id name latitudeMicrodegrees longitudeMicrodegrees timezone rooms).each do |attr|
+        %w[id name latitudeMicrodegrees longitudeMicrodegrees timezone rooms].each do |attr|
           save_attr = wcif["schedule"]["venues"][0][attr]
           wcif["schedule"]["venues"][0][attr] = nil
           expect { competition.set_wcif!(wcif, delegate) }.to raise_error(JSON::Schema::ValidationError)
@@ -811,7 +812,7 @@ RSpec.describe "Competition WCIF" do
       end
 
       it "Doesn't update invalid activity" do
-        %w(id name childActivities activityCode startTime endTime).each do |attr|
+        %w[id name childActivities activityCode startTime endTime].each do |attr|
           save_attr = wcif["schedule"]["venues"][0]["rooms"][0]["activities"][0][attr]
           wcif["schedule"]["venues"][0]["rooms"][0]["activities"][0][attr] = nil
           expect { competition.set_wcif!(wcif, delegate) }.to raise_error(JSON::Schema::ValidationError)
@@ -820,7 +821,7 @@ RSpec.describe "Competition WCIF" do
       end
 
       it "Doesn't update invalid room" do
-        %w(id name activities).each do |attr|
+        %w[id name activities].each do |attr|
           save_attr = wcif["schedule"]["venues"][0]["rooms"][0][attr]
           wcif["schedule"]["venues"][0]["rooms"][0][attr] = nil
           expect { competition.set_wcif!(wcif, delegate) }.to raise_error(JSON::Schema::ValidationError)
@@ -830,7 +831,7 @@ RSpec.describe "Competition WCIF" do
     end
 
     it "allows adding assignments for newly added activities" do
-      registration = FactoryBot.create(:registration, :accepted, competition: competition)
+      registration = create(:registration, :accepted, competition: competition)
       activities = wcif["schedule"]["venues"][0]["rooms"][0]["activities"]
       activities << {
         "id" => 1000,

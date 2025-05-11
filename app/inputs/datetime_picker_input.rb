@@ -2,11 +2,11 @@
 
 class DatetimePickerInput < DatePickerInput
   def self.display_pattern
-    I18n.t('datepicker.dformat') + ' ' + I18n.t('timepicker.dformat')
+    "#{I18n.t('datepicker.dformat')} #{I18n.t('timepicker.dformat')}"
   end
 
   def self.picker_pattern
-    I18n.t('datepicker.pformat') + ' ' + I18n.t('timepicker.pformat')
+    "#{I18n.t('datepicker.pformat')} #{I18n.t('timepicker.pformat')}"
   end
 
   private

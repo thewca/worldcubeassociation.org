@@ -18,6 +18,8 @@ const otherActivityCodes = [
   'other-lunch',
   'other-dinner',
   'other-awards',
+  'other-setup',
+  'other-teardown',
   'other-misc',
 ];
 
@@ -103,6 +105,7 @@ function EditActivityModal({
           icon="save"
           content="Save"
           positive
+          disabled={!activityCode || !activityName?.trim()}
           onClick={() => {
             onModalSave({ activityCode, activityName });
             closeModalAndCleanUp();
