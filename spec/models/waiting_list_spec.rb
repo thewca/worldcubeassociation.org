@@ -3,43 +3,43 @@
 require 'rails_helper'
 
 RSpec.describe WaitingList do
-  let(:competition) { FactoryBot.create(:competition, :registration_open, :editable_registrations, :with_organizer) }
+  let(:competition) { create(:competition, :registration_open, :editable_registrations, :with_organizer) }
   let(:waiting_list) { competition.waiting_list }
 
   it 'position is nil when registration not on waiting list' do
-    registration = FactoryBot.create(:registration)
+    registration = create(:registration)
     expect(registration.waiting_list_position).to be(nil)
   end
 
   describe 'add to waiting list' do
     it 'first competitor in the waiting list gets set to position 1' do
-      registration = FactoryBot.create(:registration, :pending, competition: competition)
+      registration = create(:registration, :pending, competition: competition)
       registration.update!(competing_status: 'waiting_list')
       waiting_list.add(registration)
       expect(competition.waiting_list.entries[0]).to eq(registration.id)
     end
 
     it 'second competitor gets set to position 2' do
-      FactoryBot.create(:registration, :waiting_list, competition: competition).id
-      registration = FactoryBot.create(:registration, :waiting_list, competition: competition)
+      create(:registration, :waiting_list, competition: competition).id
+      registration = create(:registration, :waiting_list, competition: competition)
       expect(competition.waiting_list.entries[1]).to eq(registration.id)
     end
 
     it 're-adding a registration has no effect' do
-      registrations = FactoryBot.create_list(:registration, 3, :waiting_list, competition: competition)
+      registrations = create_list(:registration, 3, :waiting_list, competition: competition)
       initial_waiting_list = waiting_list.entries
       waiting_list.add(registrations.first)
       expect(competition.waiting_list.reload.entries).to eq(initial_waiting_list)
     end
 
     it 'doesnt get added if the registration is already on the list' do
-      registration = FactoryBot.create(:registration, :waiting_list, competition: competition)
+      registration = create(:registration, :waiting_list, competition: competition)
       waiting_list.add(registration)
       expect(waiting_list.entries.count).to eq(1)
     end
 
     it 'must have waiting_list status to be added' do
-      registration = FactoryBot.create(:registration, :pending, competition: competition)
+      registration = create(:registration, :pending, competition: competition)
       expect {
         waiting_list.add(registration)
       }.to raise_error(ArgumentError, "Registration must have a competing_status of 'waiting_list' to be added to the waiting list")
@@ -47,14 +47,14 @@ RSpec.describe WaitingList do
   end
 
   describe 'with populated waiting list' do
-    let!(:reg1) { FactoryBot.create(:registration, :waiting_list, competition: competition) }
-    let!(:reg2) { FactoryBot.create(:registration, :waiting_list, competition: competition) }
-    let!(:reg3) { FactoryBot.create(:registration, :waiting_list, competition: competition) }
-    let!(:reg4) { FactoryBot.create(:registration, :waiting_list, competition: competition) }
-    let!(:reg5) { FactoryBot.create(:registration, :waiting_list, competition: competition) }
+    let!(:reg1) { create(:registration, :waiting_list, competition: competition) }
+    let!(:reg2) { create(:registration, :waiting_list, competition: competition) }
+    let!(:reg3) { create(:registration, :waiting_list, competition: competition) }
+    let!(:reg4) { create(:registration, :waiting_list, competition: competition) }
+    let!(:reg5) { create(:registration, :waiting_list, competition: competition) }
 
     it 'waiting list position gives position, not index' do
-      registration = FactoryBot.create(:registration, :waiting_list, competition: competition)
+      registration = create(:registration, :waiting_list, competition: competition)
       expect(registration.waiting_list_position).to eq(6)
     end
 
@@ -151,7 +151,7 @@ RSpec.describe WaitingList do
     end
 
     it 'does nothing if removing an item which isnt present' do
-      reg = FactoryBot.create(:registration, id: 999_999, competition: competition)
+      reg = create(:registration, id: 999_999, competition: competition)
       expect { waiting_list.remove(reg) }.not_to raise_error
 
       expect(reg1.waiting_list_position).to eq(1)

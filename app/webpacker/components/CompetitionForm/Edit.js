@@ -18,9 +18,11 @@ import I18n from '../../lib/i18n';
 
 function EditCompetition({
   competition,
+  editingUserId,
   storedEvents,
   isAdminView,
   isSeriesPersisted,
+  areResultsSubmitted,
 }) {
   const originalCompId = competition.competitionId;
   const backendUrl = `${competitionUrl(originalCompId)}?adminView=${isAdminView}`;
@@ -85,6 +87,18 @@ function EditCompetition({
     return isConfirmed && !isAdminView;
   }, [confirmationData, isAdminView, isLoading]);
 
+  const allowIgnoreDisabled = useMemo(() => {
+    const { staff: { staffDelegateIds, traineeDelegateIds } } = competition;
+    const allDelegates = [...staffDelegateIds, ...traineeDelegateIds];
+
+    const isDelegateEdit = allDelegates.includes(editingUserId);
+
+    // Admins can edit whenever the heck they want.
+    // Delegates should only be allowed to edit as long as results are not submitted,
+    //   see https://github.com/thewca/worldcubeassociation.org/issues/11415 for details.
+    return isAdminView || (isDelegateEdit && !areResultsSubmitted);
+  }, [competition, editingUserId, isAdminView, areResultsSubmitted]);
+
   return (
     <StoreProvider
       reducer={_.identity}
@@ -101,6 +115,7 @@ function EditCompetition({
         footerActions={footerActions}
         saveButtonText={I18n.t('competitions.competition_form.submit_update_value')}
         globalDisabled={isDisabled}
+        globalAllowIgnoreDisabled={allowIgnoreDisabled}
       >
         <MainForm storedEvents={storedEvents} />
       </EditForm>
@@ -110,17 +125,21 @@ function EditCompetition({
 
 export default function Wrapper({
   competition,
+  editingUserId,
   storedEvents = [],
   isAdminView = false,
   isSeriesPersisted = false,
+  areResultsSubmitted = false,
 }) {
   return (
     <WCAQueryClientProvider>
       <EditCompetition
         competition={competition}
+        editingUserId={editingUserId}
         storedEvents={storedEvents}
         isAdminView={isAdminView}
         isSeriesPersisted={isSeriesPersisted}
+        areResultsSubmitted={areResultsSubmitted}
       />
     </WCAQueryClientProvider>
   );

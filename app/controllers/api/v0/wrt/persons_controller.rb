@@ -11,11 +11,11 @@ class Api::V0::Wrt::PersonsController < Api::V0::ApiController
     representing = person_params.require(:representing)
     gender = person_params.require(:gender)
     dob = person_params.require(:dob)
-    country_id = Country.find_by(iso2: representing).id
+    country_id = Country.c_find_by_iso2(representing).id
 
     {
       name: name,
-      countryId: country_id,
+      country_id: country_id,
       gender: gender,
       dob: dob,
       incorrect_wca_id_claim_count: 0,

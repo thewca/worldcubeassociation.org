@@ -80,11 +80,11 @@ class StripeRecord < ApplicationRecord
   def retrieve_stripe
     case self.stripe_record_type
     when StripeRecord.stripe_record_types[:payment_intent]
-      Stripe::PaymentIntent.retrieve(self.stripe_id, stripe_account: self.account_id)
+      stripe_client.v1.payment_intents.retrieve(self.stripe_id)
     when StripeRecord.stripe_record_types[:charge]
-      Stripe::Charge.retrieve(self.stripe_id, stripe_account: self.account_id)
+      stripe_client.v1.charges.retrieve(self.stripe_id)
     when StripeRecord.stripe_record_types[:refund]
-      Stripe::Refund.retrieve(self.stripe_id, stripe_account: self.account_id)
+      stripe_client.v1.refunds.retrieve(self.stripe_id)
     end
   end
 
@@ -100,10 +100,9 @@ class StripeRecord < ApplicationRecord
       currency: currency_iso,
     }
 
-    Stripe::PaymentIntent.update(
+    stripe_client.v1.payment_intents.update(
       self.stripe_id,
       update_intent_args,
-      stripe_account: self.account_id,
     )
 
     updated_parameters = self.parameters.deep_merge(update_intent_args)
@@ -114,6 +113,13 @@ class StripeRecord < ApplicationRecord
       amount_stripe_denomination: stripe_amount,
       currency_code: currency_iso,
     )
+  end
+
+  def confirm_remote_for_test(payment_method)
+    raise "This method is only supposed to be called during testing!" unless Rails.env.test?
+    raise "Not a PaymentIntent, seems that you messed up your test case :P" unless self.payment_intent?
+
+    stripe_client.v1.payment_intents.confirm(self.stripe_id, { payment_method: payment_method })
   end
 
   def money_amount
@@ -187,5 +193,9 @@ class StripeRecord < ApplicationRecord
       account_id: account_id,
       parent_record: parent_record,
     )
+  end
+
+  private def stripe_client
+    Stripe::StripeClient.new(AppSecrets.STRIPE_API_KEY, stripe_account: self.account_id)
   end
 end

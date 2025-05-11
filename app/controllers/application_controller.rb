@@ -6,7 +6,7 @@ class ApplicationController < ActionController::Base
   include TimeWillTell::Helpers::DateRangeHelper
   include Devise::Controllers::StoreLocation
 
-  protect_from_forgery with: :exception, unless: :is_oauth_request?
+  protect_from_forgery with: :exception, unless: :oauth_request?
 
   prepend_before_action :set_locale, unless: :ignore_client_language?
   # The API should only ever respond in English
@@ -64,15 +64,15 @@ class ApplicationController < ActionController::Base
 
   before_action :configure_permitted_parameters, if: :devise_controller?
   protected def configure_permitted_parameters
-    devise_parameter_sanitizer.permit(:sign_up, keys: [
-      :name,
-      :email,
-      :dob,
-      :gender,
-      :country_iso2,
+    devise_parameter_sanitizer.permit(:sign_up, keys: %i[
+      name
+      email
+      dob
+      gender
+      country_iso2
     ] + User::CLAIM_WCA_ID_PARAMS)
-    devise_parameter_sanitizer.permit(:sign_in, keys: [:login, :otp_attempt])
-    devise_parameter_sanitizer.permit(:account_update, keys: [:name, :email])
+    devise_parameter_sanitizer.permit(:sign_in, keys: %i[login otp_attempt])
+    devise_parameter_sanitizer.permit(:account_update, keys: %i[name email])
   end
 
   # This method is called by devise after a successful login to know the redirect path
@@ -113,21 +113,21 @@ class ApplicationController < ActionController::Base
 
     # For redirecting user to source after login - https://github.com/heartcombo/devise/wiki/How-To:-Redirect-back-to-current-page-after-sign-in,-sign-out,-sign-up,-update
     def storable_location?
-      request.get? && is_navigational_format? && !devise_controller? && !request.xhr? && !is_api_request?
+      request.get? && is_navigational_format? && !devise_controller? && !request.xhr? && !api_request?
     end
 
     def ignore_client_language?
-      is_api_request? || is_oauth_request?
+      api_request? || oauth_request?
     end
 
-    def is_oauth_request?
+    def oauth_request?
       # Checking the fullpath alone is not enough: The user-facing UI to manage OAuth applications
       #   and the "Approve" / "Deny" buttons for incoming OAuth requests also live under `/oauth/` routes.
       #   So we also check the controller inheritance chain because Doorkeeper conveniently distinguishes the "metal" controller.
       request.fullpath.include?('/oauth/') && self.class.ancestors.include?(Doorkeeper::ApplicationMetalController)
     end
 
-    def is_api_request?
+    def api_request?
       request.fullpath.include?('/api/')
     end
 

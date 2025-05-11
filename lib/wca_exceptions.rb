@@ -2,17 +2,18 @@
 
 module WcaExceptions
   class ApiException < StandardError
-    attr_reader :status
+    attr_reader :status, :error_details
 
-    def initialize(status, error_str)
+    def initialize(status, error_str, **error_details)
       super(error_str)
       @status = status
+      @error_details = error_details
     end
   end
 
   class BadApiParameter < ApiException
-    def initialize(error_str)
-      super(:unprocessable_entity, error_str)
+    def initialize(error_str, json_property: nil)
+      super(:unprocessable_entity, error_str, json_property: json_property)
     end
   end
 

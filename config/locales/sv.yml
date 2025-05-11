@@ -152,57 +152,57 @@ sv:
       #original_hash: 4d618bb
       name: Kvalificeringsomgång
       #original_hash: 4d618bb
-      cellName: Kvalificeringsomgång
+      cell_name: Kvalificeringsomgång
     '1':
       #original_hash: 1e725b6
       name: Första omgången
       #original_hash: 1e725b6
-      cellName: Första omgången
+      cell_name: Första omgången
     '2':
       #original_hash: 985c8d0
       name: Andra omgången
       #original_hash: 985c8d0
-      cellName: Andra omgången
+      cell_name: Andra omgången
     '3':
       #original_hash: e2f74d2
       name: Semifinal
       #original_hash: e2f74d2
-      cellName: Semifinal
+      cell_name: Semifinal
     b:
       #original_hash: 327c999
       name: B-Final
       #original_hash: 327c999
-      cellName: B-Final
+      cell_name: B-Final
     c:
       #original_hash: 672b22c
       name: Final
       #original_hash: 672b22c
-      cellName: Final
+      cell_name: Final
     d:
       #original_hash: 1e725b6
       name: Första omgången
       #original_hash: 1e725b6
-      cellName: Första omgången
+      cell_name: Första omgången
     e:
       #original_hash: 985c8d0
       name: Andra omgången
       #original_hash: 985c8d0
-      cellName: Andra omgången
+      cell_name: Andra omgången
     f:
       #original_hash: 672b22c
       name: Final
       #original_hash: 672b22c
-      cellName: Final
+      cell_name: Final
     g:
       #original_hash: e2f74d2
       name: Semifinal
       #original_hash: e2f74d2
-      cellName: Semifinal
+      cell_name: Semifinal
     h:
       #original_hash: 4d618bb
       name: Kvalificeringsomgång
       #original_hash: 4d618bb
-      cellName: Kvalificeringsomgång
+      cell_name: Kvalificeringsomgång
   attempts:
     #original_hash: 17dae1e
     attempt_name: 'Försök %{number}'
@@ -520,7 +520,7 @@ sv:
         #original_hash: 8c41ae8
         wca_id: Person
         #original_hash: fa4c045
-        countryId: Representerar
+        country_id: Representerar
         #original_hash: ab58155
         dob: Födelsedatum
         #original_hash: 8a754c6
@@ -572,19 +572,19 @@ sv:
         competition_id: Inträffade under
       competition_medium:
         #original_hash: 1917f4f
-        competitionId: Tävling
+        competition_id: Tävling
         #original_hash: 3deb745
-        type: Typ
+        media_type: Typ
         #original_hash: c3328c3
         text: Text
         #original_hash: d051707
         uri: Länk
         #original_hash: 1be755a
-        submitterName: Inskickarens namn
+        submitter_name: Inskickarens namn
         #original_hash: 78cdfee
-        submitterEmail: Inskickarens e-post
+        submitter_email: Inskickarens e-post
         #original_hash: 0d31f23
-        submitterComment: Inskickarens kommentar
+        submitter_comment: Inskickarens kommentar
         #original_hash: bae7d5b
         status: Status
       regional_organization:
@@ -678,7 +678,7 @@ sv:
         accepted: Accepterad
         #original_hash: 96f608c
         pending: Väntar
-      type:
+      media_type:
         #original_hash: ee45c30
         report: Rapport
         #original_hash: 4360c2d
@@ -888,7 +888,7 @@ sv:
         comment: ''
       competition_medium:
         #original_hash: da39a3e
-        competitionId: ''
+        competition_id: ''
         #original_hash: da39a3e
         type: ''
         #original_hash: da39a3e
@@ -896,11 +896,11 @@ sv:
         #original_hash: da39a3e
         uri: ''
         #original_hash: da39a3e
-        submitterName: ''
+        submitter_name: ''
         #original_hash: da39a3e
-        submitterEmail: ''
+        submitter_email: ''
         #original_hash: da39a3e
-        submitterComment: ''
+        submitter_comment: ''
         #original_hash: da39a3e
         status: ''
       results_submission:

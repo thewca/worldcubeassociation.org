@@ -14,7 +14,7 @@ module ResultsValidators
       "This validator checks that all events and rounds match between what has been announced and what is present in the results. It also check for a main event and emit a warning if there is none (and if 3x3 is not in the results)."
     end
 
-    def self.has_automated_fix?
+    def self.automatically_fixable?
       false
     end
 
@@ -36,7 +36,7 @@ module ResultsValidators
 
         check_events_match(competition, results_for_comp)
 
-        check_rounds_match(competition, results_for_comp) if competition.has_rounds?
+        check_rounds_match(competition, results_for_comp) if competition.any_rounds?
       end
     end
 
@@ -59,7 +59,7 @@ module ResultsValidators
         # Check for missing/unexpected events.
         # As events must be validated by WCAT, any missing or unexpected event should lead to an error.
         expected = competition.events.map(&:id)
-        real = results.map(&:eventId).uniq
+        real = results.map(&:event_id).uniq
 
         (real - expected).each do |event_id|
           @errors << ValidationError.new(UNEXPECTED_RESULTS_ERROR,
@@ -81,7 +81,7 @@ module ResultsValidators
         expected_rounds_by_ids = competition.competition_events.map(&:rounds).flatten.index_by { |r| "#{r.event.id}-#{r.round_type_id}" }
 
         expected = expected_rounds_by_ids.keys
-        real = results.map { |r| "#{r.eventId}-#{r.roundTypeId}" }.uniq
+        real = results.map { |r| "#{r.event_id}-#{r.round_type_id}" }.uniq
         unexpected = real - expected
         missing = expected - real
 

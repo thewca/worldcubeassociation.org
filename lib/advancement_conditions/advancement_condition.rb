@@ -27,7 +27,7 @@ module AdvancementConditions
     end
 
     def self.wcif_type_to_class
-      @@wcif_type_to_class ||= @@advancement_conditions.index_by { |cls| cls.wcif_type }
+      @@wcif_type_to_class ||= @@advancement_conditions.index_by(&:wcif_type)
     end
 
     def self.load(json)
@@ -46,7 +46,7 @@ module AdvancementConditions
 
     def self.wcif_json_schema
       {
-        "type" => ["object", "null"],
+        "type" => %w[object null],
         "properties" => {
           "type" => { "type" => "string", "enum" => @@advancement_conditions.map(&:wcif_type) },
           "level" => { "type" => "integer" },

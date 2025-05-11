@@ -62,7 +62,7 @@ class CompetitionSeries < ApplicationRecord
   end
 
   DEFAULT_SERIALIZE_OPTIONS = {
-    only: ["name", "short_name"],
+    only: %w[name short_name],
     include: ["competitions"],
   }.freeze
 
@@ -98,12 +98,15 @@ class CompetitionSeries < ApplicationRecord
     }
   end
 
+  # Rubocop only flags this method (and not the same method in competition.rb), but they should be named the same
+  # rubocop:disable Naming/AccessorMethodName
   def set_form_data(form_data_series)
     raise WcaExceptions::BadApiParameter.new("A Series must include at least two competitions.") if form_data_series["competitionIds"].count <= 1
 
     self.competition_ids = form_data_series["competitionIds"].join(",")
     assign_attributes(CompetitionSeries.form_data_to_attributes(form_data_series))
   end
+  # rubocop:enable Naming/AccessorMethodName
 
   def self.form_data_to_attributes(form_data)
     {
@@ -115,9 +118,9 @@ class CompetitionSeries < ApplicationRecord
 
   def self.form_data_json_schema
     {
-      "type" => ["object", "null"],
+      "type" => %w[object null],
       "properties" => {
-        "id" => { "type" => ["integer", "null"] },
+        "id" => { "type" => %w[integer null] },
         "seriesId" => { "type" => "string" },
         "name" => { "type" => "string" },
         "shortName" => { "type" => "string" },
@@ -141,7 +144,7 @@ class CompetitionSeries < ApplicationRecord
 
   def self.wcif_json_schema
     {
-      "type" => ["object", "null"],
+      "type" => %w[object null],
       "properties" => {
         "id" => { "type" => "string" },
         "name" => { "type" => "string" },
@@ -185,6 +188,6 @@ class CompetitionSeries < ApplicationRecord
   end
 
   def public_competitions
-    self.competitions.where(showAtAll: true)
+    self.competitions.where(show_at_all: true)
   end
 end

@@ -13,7 +13,6 @@ function EditEntry({
   dataType,
   DisplayTable,
   EditForm,
-  competitionIdKey = 'competition_id',
 }) {
   const {
     data, sync, loading, error,
@@ -35,9 +34,9 @@ function EditEntry({
                 -
                 {' '}
                 <a
-                  href={competitionUrl(data[competitionIdKey])}
+                  href={competitionUrl(data.competition_id)}
                 >
-                  {data[competitionIdKey]}
+                  {data.competition_id}
                 </a>
               </h3>
               <DisplayTable dataItem={data} />

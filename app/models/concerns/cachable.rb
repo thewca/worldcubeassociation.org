@@ -48,7 +48,7 @@ module Cachable
 
     # Everything that modifies our knowledge about which cached entities even _exist_,
     #   needs to flush the whole cache (so that created / deleted entities can be loaded / dropped)
-    after_commit :clear_cache, on: [:create, :destroy]
+    after_commit :clear_cache, on: %i[create destroy]
 
     def clear_cache
       self.models_by_id = nil

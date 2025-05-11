@@ -37,7 +37,7 @@ function CompetitionsFilters({
         <Form.Field width={8}>
           <RegionSelector
             region={filterState.region}
-            onRegionChange={(region) => dispatchFilter({ region })}
+            onRegionChange={(_, { value: region }) => dispatchFilter({ region })}
           />
         </Form.Field>
         <Form.Field width={8}>

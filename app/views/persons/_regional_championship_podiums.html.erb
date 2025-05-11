@@ -21,8 +21,8 @@
           <% results.each do |result| %>
             <tr class="result">
               <td class="event">
-                <%= cubing_icon result.eventId %>
-                <%= t "events.#{result.eventId}" %>
+                <%= cubing_icon result.event_id %>
+                <%= t "events.#{result.event_id}" %>
               </td>
               <td class="place"><%= result.pos %></td>
               <td class="single"><%= result.best_solve.clock_format %></td>

@@ -38,8 +38,8 @@ class Api::V0::UsersController < Api::V0::ApiController
     require_user!
     return render json: { single: [], average: [] } if current_user.wca_id.blank?
 
-    person = Person.includes(:ranksSingle, :ranksAverage).find_by!(wca_id: current_user.wca_id)
-    render json: { single: person.ranksSingle.map(&:to_wcif), average: person.ranksAverage.map(&:to_wcif) }
+    person = Person.includes(:ranks_single, :ranks_average).find_by!(wca_id: current_user.wca_id)
+    render json: { single: person.ranks_single.map(&:to_wcif), average: person.ranks_average.map(&:to_wcif) }
   end
 
   def preferred_events
@@ -71,8 +71,8 @@ class Api::V0::UsersController < Api::V0::ApiController
         json[:upcoming_competitions] = user.accepted_competitions.select(&:upcoming?) if params[:upcoming_competitions]
         json[:ongoing_competitions] = user.accepted_competitions.select(&:in_progress?) if params[:ongoing_competitions]
         if show_rankings && user.wca_id.present?
-          person = Person.includes(:ranksSingle, :ranksAverage).find_by!(wca_id: user.wca_id)
-          json[:rankings] = { single: person.ranksSingle, average: person.ranksAverage }
+          person = Person.includes(:ranks_single, :ranks_average).find_by!(wca_id: user.wca_id)
+          json[:rankings] = { single: person.ranks_single, average: person.ranks_average }
         end
         render status: :ok, json: json
       else

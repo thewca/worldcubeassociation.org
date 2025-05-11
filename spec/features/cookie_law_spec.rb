@@ -12,18 +12,18 @@ RSpec.feature "cookie law" do
       # Visit the homepage a second time. We should not see the cookie banner
       # (because we just acknowledged it!)
       visit_homepage_and_wait_for_load
-      expect(page).not_to have_selector(CookieBannerHelper::ACKNOWLEDGE_SELECTOR)
+      expect(page).to have_no_selector(CookieBannerHelper::ACKNOWLEDGE_SELECTOR)
 
       # Clear cookies and visit the homepage again. The cookie banner should
       # show back up.
-      page.driver.clear_cookies
+      page.driver.with_playwright_page { it.context.clear_cookies }
       visit_homepage_and_wait_for_load
       expect(page).to have_selector(CookieBannerHelper::ACKNOWLEDGE_SELECTOR)
     end
   end
 
   context "signed in" do
-    let!(:admin) { FactoryBot.create(:admin, cookies_acknowledged: false) }
+    let!(:admin) { create(:admin, cookies_acknowledged: false) }
 
     background do
       sign_in admin
@@ -35,7 +35,7 @@ RSpec.feature "cookie law" do
 
       # Clear cookies. This logs us out and clears the acknowledgement cookie.
       # The banner should come back.
-      page.driver.clear_cookies
+      page.driver.with_playwright_page { it.context.clear_cookies }
       visit_homepage_and_wait_for_load
       expect(page).to have_selector(CookieBannerHelper::ACKNOWLEDGE_SELECTOR)
 
@@ -43,7 +43,7 @@ RSpec.feature "cookie law" do
       # cookies, and shouldn't ask us to acknowledge them again.
       sign_in admin
       visit_homepage_and_wait_for_load
-      expect(page).not_to have_selector(CookieBannerHelper::ACKNOWLEDGE_SELECTOR)
+      expect(page).to have_no_selector(CookieBannerHelper::ACKNOWLEDGE_SELECTOR)
     end
   end
 end
@@ -51,5 +51,5 @@ end
 def visit_homepage_and_wait_for_load
   # Go to the homepage and wait for something to show up.
   visit "/"
-  expect(page).to have_selector("footer")
+  expect(page).to have_css("footer")
 end

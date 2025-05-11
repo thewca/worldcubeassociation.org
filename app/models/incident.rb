@@ -3,7 +3,7 @@
 class Incident < ApplicationRecord
   has_many :incident_tags, autosave: true, dependent: :destroy
   has_many :incident_competitions, dependent: :destroy
-  has_many :competitions, -> { order("Competitions.start_date asc") }, through: :incident_competitions
+  has_many :competitions, -> { order("competitions.start_date asc") }, through: :incident_competitions
 
   accepts_nested_attributes_for :incident_competitions, allow_destroy: true
 
@@ -42,7 +42,7 @@ class Incident < ApplicationRecord
   def self.search(query, params: {})
     incidents = Incident
     query&.split&.each do |part|
-      like_query = %w(public_summary title).map { |col| "#{col} LIKE :part" }.join(" OR ")
+      like_query = %w[public_summary title].map { |col| "#{col} LIKE :part" }.join(" OR ")
       incidents = incidents.where(like_query, part: "%#{part}%")
     end
     incidents = incidents.where(incident_tags: IncidentTag.where(tag: params[:tags].split(","))) if params[:tags]
@@ -51,13 +51,13 @@ class Incident < ApplicationRecord
   end
 
   DEFAULT_PUBLIC_SERIALIZE_OPTIONS = {
-    only: [:id, :title, :public_summary, :created_at, :updated_at, :resolved_at],
+    only: %i[id title public_summary created_at updated_at resolved_at],
     methods: [:url],
   }.freeze
 
   DEFAULT_DELEGATE_MATTERS_SERIALIZE_OPTIONS = {
     only: DEFAULT_PUBLIC_SERIALIZE_OPTIONS[:only] +
-          [:private_description, :digest_worthy, :digest_sent_at],
+          %i[private_description digest_worthy digest_sent_at],
     methods: DEFAULT_PUBLIC_SERIALIZE_OPTIONS[:methods],
   }.freeze
 
