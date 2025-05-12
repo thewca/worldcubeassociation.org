@@ -84,9 +84,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@auth/core@npm:0.39.0":
-  version: 0.39.0
-  resolution: "@auth/core@npm:0.39.0"
+"@auth/core@npm:0.39.1":
+  version: 0.39.1
+  resolution: "@auth/core@npm:0.39.1"
   dependencies:
     "@panva/hkdf": "npm:^1.2.1"
     jose: "npm:^6.0.6"
@@ -104,7 +104,7 @@ __metadata:
       optional: true
     nodemailer:
       optional: true
-  checksum: 10c0/551891eddfcf29bdd4bf614bb0b700a76dbf148af7ead740ecd518d27618a7558a44703edd70ff16298cb54ec2912d7921586a71cb7e233b5d456899345d730b
+  checksum: 10c0/ba2703656c266ce42f10a1e5ac90c2bcbc829bff651cc930ad95a4734aafaa249551d0af589a0c970fbd7f7aa6324c329439183bfb46ba1bee3f8cfa90128275
   languageName: node
   linkType: hard
 
@@ -7863,11 +7863,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"next-auth@npm:5.0.0-beta.27":
-  version: 5.0.0-beta.27
-  resolution: "next-auth@npm:5.0.0-beta.27"
+"next-auth@npm:5.0.0-beta.28":
+  version: 5.0.0-beta.28
+  resolution: "next-auth@npm:5.0.0-beta.28"
   dependencies:
-    "@auth/core": "npm:0.39.0"
+    "@auth/core": "npm:0.39.1"
   peerDependencies:
     "@simplewebauthn/browser": ^9.0.1
     "@simplewebauthn/server": ^9.0.2
@@ -7881,7 +7881,7 @@ __metadata:
       optional: true
     nodemailer:
       optional: true
-  checksum: 10c0/6f13e4d7d44bf0327cea017d7adb8cf9e9bca32bf030dd147ed5dd8301bcd1cf521b577615454b969643a08389b260347cc83c3e3c421dfa593f3ab7b126295a
+  checksum: 10c0/56ab8c5e9bdbffe65191a1afa1d18b95df9f61686f9d2faca3f53098eb59491df5929540d8bdb3258a0ab8d26ff2707e6256e34212c329c624f3014652cb8701
   languageName: node
   linkType: hard
 
@@ -7909,7 +7909,7 @@ __metadata:
     eslint-plugin-prettier: "npm:^5.3.1"
     graphql: "npm:^16.11.0"
     next: "npm:15.3.1"
-    next-auth: "npm:5.0.0-beta.27"
+    next-auth: "npm:5.0.0-beta.28"
     next-themes: "npm:^0.4.6"
     openapi-fetch: "npm:^0.13.7"
     openapi-typescript: "npm:^7.7.1"
