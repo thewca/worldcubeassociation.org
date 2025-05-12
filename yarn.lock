@@ -10249,7 +10249,7 @@ __metadata:
     stylelint-scss: "npm:^6.11.1"
     terser-webpack-plugin: "npm:^5.3.14"
     webpack: "npm:^5.99.7"
-    webpack-assets-manifest: "npm:^6.0.2"
+    webpack-assets-manifest: "npm:^6.1.0"
     webpack-bundle-analyzer: "npm:^4.10.2"
     webpack-cli: "npm:^6.0.1"
     webpack-dev-server: "npm:^5.2.1"
@@ -11647,17 +11647,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webpack-assets-manifest@npm:^6.0.2":
-  version: 6.0.2
-  resolution: "webpack-assets-manifest@npm:6.0.2"
+"webpack-assets-manifest@npm:^6.1.0":
+  version: 6.1.0
+  resolution: "webpack-assets-manifest@npm:6.1.0"
   dependencies:
     deepmerge: "npm:^4.3.1"
     lockfile: "npm:^1.0.4"
-    schema-utils: "npm:^4.3.0"
+    schema-utils: "npm:^4.3.2"
     tapable: "npm:^2.2.1"
   peerDependencies:
     webpack: ^5.61.0
-  checksum: 10c0/43084376c7601c776eb1a53c0cf3058d18254b6746319e90cc7ad7ec1996c92472a3eef54746d4c97b69465282dd4a5014b9127f16f6bc5334f02b2914272cbb
+  checksum: 10c0/7132eda85305c00d8249f7c335ffdc3e25d811b9926acefb3d04ba68f9479f353c5be27c5cffb6e1fd48cc98c021f7da05bc8a40511fe64bd67ec279a2039e50
   languageName: node
   linkType: hard
 
