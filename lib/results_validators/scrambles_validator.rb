@@ -97,9 +97,8 @@ module ResultsValidators
                                              :scrambles, competition.id,
                                              round_id: round_id)
             end
-          else
-            @errors.concat(errors_for_round)
           end
+          @errors.concat(errors_for_round)
         end
       end
     end
