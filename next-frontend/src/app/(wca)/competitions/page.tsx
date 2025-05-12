@@ -49,9 +49,9 @@ const getAllCompData = async () => {
   return compDataArray;
 };
 
-const competitions = await getAllCompData();
+export default async function Competitions() {
+  const competitions = await getAllCompData();
 
-export default function Competitions() {
   return (
     <Container>
       <Card.Root
