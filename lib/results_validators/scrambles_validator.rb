@@ -91,12 +91,10 @@ module ResultsValidators
                                                :scrambles, competition.id,
                                                round_id: round_id)
           end
-          if round_id.start_with?("333mbf")
-            unless errors_for_round.size < scrambles_by_group_id.keys.size
-              @errors << ValidationError.new(MISSING_SCRAMBLES_FOR_MULTI_ERROR,
-                                             :scrambles, competition.id,
-                                             round_id: round_id)
-            end
+          if round_id.start_with?("333mbf") && (errors_for_round.size >= scrambles_by_group_id.size)
+            @errors << ValidationError.new(MISSING_SCRAMBLES_FOR_MULTI_ERROR,
+                                           :scrambles, competition.id,
+                                           round_id: round_id)
           end
           @errors.concat(errors_for_round)
         end
