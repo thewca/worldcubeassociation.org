@@ -2066,6 +2066,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@payloadcms/translations@npm:3.37.0":
+  version: 3.37.0
+  resolution: "@payloadcms/translations@npm:3.37.0"
+  dependencies:
+    date-fns: "npm:4.1.0"
+  checksum: 10c0/93a7c81256d8a418859f6b5a3c4250835f4cc04a68688b7de2ce9430d65a54fffa9924531b21aeb19d33888b507a19e8797d60e02e548781a9057b8df3d15de3
+  languageName: node
+  linkType: hard
+
 "@payloadcms/ui@npm:3.36.1, @payloadcms/ui@npm:^3.16.0":
   version: 3.36.1
   resolution: "@payloadcms/ui@npm:3.36.1"
@@ -7920,7 +7929,7 @@ __metadata:
     next-themes: "npm:^0.4.6"
     openapi-fetch: "npm:^0.13.7"
     openapi-typescript: "npm:^7.7.1"
-    payload: "npm:^3.36.1"
+    payload: "npm:^3.37.0"
     payload-authjs: "npm:^0.8.2"
     prettier: "npm:^3.5.3"
     react: "npm:^19.1.0"
@@ -8472,12 +8481,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"payload@npm:^3.36.1":
-  version: 3.36.1
-  resolution: "payload@npm:3.36.1"
+"payload@npm:^3.37.0":
+  version: 3.37.0
+  resolution: "payload@npm:3.37.0"
   dependencies:
     "@next/env": "npm:^15.1.5"
-    "@payloadcms/translations": "npm:3.36.1"
+    "@payloadcms/translations": "npm:3.37.0"
     "@types/busboy": "npm:1.5.4"
     ajv: "npm:8.17.1"
     bson-objectid: "npm:2.0.4"
@@ -8509,7 +8518,7 @@ __metadata:
     graphql: ^16.8.1
   bin:
     payload: bin.js
-  checksum: 10c0/4f548ad5b77d3cfca602252c05d5b656f3e72ce2ff7300bd77f251c1f0027d188014849d5ad7253aa59b3ba350d55abb83eb56b89d9f551537acc07f1d9a2041
+  checksum: 10c0/cfa65464a64c0b231ece7ec1e902d1c8caed6a5657d9a5ef25a2c7a6cf6c2425941903dde300630e5655233827a8e3fa8afe85d48b8f0555c6ea284f9d8d0bbf
   languageName: node
   linkType: hard
 
