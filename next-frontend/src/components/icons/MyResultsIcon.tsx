@@ -15,8 +15,8 @@ const MyResultsIcon = createIcon({
   ),
 });
 
-const MyResultsIconPreview = () => {
+export const MyResultsIconPreview = () => {
   return <MyResultsIcon size="lg" />;
 };
 
-export default MyResultsIconPreview;
+export default MyResultsIcon;
