@@ -7927,7 +7927,7 @@ __metadata:
     next: "npm:15.3.2"
     next-auth: "npm:5.0.0-beta.28"
     next-themes: "npm:^0.4.6"
-    openapi-fetch: "npm:^0.13.7"
+    openapi-fetch: "npm:^0.14.0"
     openapi-typescript: "npm:^7.7.1"
     payload: "npm:^3.37.0"
     payload-authjs: "npm:^0.8.2"
@@ -8233,12 +8233,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"openapi-fetch@npm:^0.13.7":
-  version: 0.13.7
-  resolution: "openapi-fetch@npm:0.13.7"
+"openapi-fetch@npm:^0.14.0":
+  version: 0.14.0
+  resolution: "openapi-fetch@npm:0.14.0"
   dependencies:
     openapi-typescript-helpers: "npm:^0.0.15"
-  checksum: 10c0/3d6c9c818d6ccc6510a419a0db6c349ab18a730ee3691c016978b6763d351e66e6348f88b2c3f3f40577d644bc11d10ecdc663922e257a5efdfa9089b3f7e130
+  checksum: 10c0/d23155edde61837a25896a2b201c890649ec8d16b37c3920dee940290ef6a66bd1b6f1df5ac68ec203f32d485ce16f7cf3557c13c183299e2e321d0a2eb62691
   languageName: node
   linkType: hard
 
