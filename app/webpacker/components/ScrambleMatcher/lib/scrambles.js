@@ -149,13 +149,16 @@ export const transformUploadedScrambles = (
 
 // export const updateMultiAndFm = (scrambles) => flatMap(scrambles, (s) => (s.event === '333fm' || s.event === '333mbf' ? splitMultiFm(s) : s));
 
-export const usedScramblesIdsForEvent = (wcifEvents, eventId) => flatMap(
-  flatMap(
-    wcifEvents.filter((e) => e.id === eventId),
-    (e) => flatMap(e.rounds, (r) => r.scrambleSets),
-  ),
-  (s) => s.id,
-);
+export const usedScramblesIdsForEvent = (eventWcif, eventId) => {
+  const b = flatMap(
+    eventWcif.filter((e) => e.id === eventId),
+    (e) => flatMap(e.rounds, (r) => r.scrambleSets ?? []),
+  );
+  return flatMap(
+    b,
+    (s) => s.id,
+  );
+};
 
 const scrambleSetsForRound = (usedScramblesId, round, uploadedScrambles) => {
   // We don't want to overwrite existing scrambles,
@@ -199,15 +202,15 @@ const scrambleSetsForRound = (usedScramblesId, round, uploadedScrambles) => {
 export const autoAssignScrambles = (eventWcif, uploadedScrambles) => {
   const usedScrambleIdsByEvent = {};
   eventWcif.forEach((e) => {
-    usedScrambleIdsByEvent[e.id] = usedScramblesIdsForEvent(eventWcif.events, e.id);
+    usedScrambleIdsByEvent[e.id] = usedScramblesIdsForEvent(eventWcif, e.id);
   });
   return {
-    events: eventWcif.events.map((e) => ({
+    events: eventWcif.map((e) => ({
       ...e,
       rounds: e.rounds.map((r) => ({
         ...r,
         scrambleSets:
-          r.scrambleSets.length === 0
+          r.scrambleSets
             ? scrambleSetsForRound(
               usedScrambleIdsByEvent[e.id],
               r,

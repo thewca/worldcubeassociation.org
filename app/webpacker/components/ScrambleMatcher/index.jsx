@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import {
-  Button, ButtonGroup, Grid, Icon, Message,
+  Button, ButtonGroup, Icon, Message,
 } from 'semantic-ui-react';
 import WCAQueryClientProvider from '../../lib/providers/WCAQueryClientProvider';
 import { autoAssignScrambles, transformUploadedScrambles } from './lib/scrambles';
@@ -8,18 +8,18 @@ import JSONList from './JSONList';
 import Events from './Events';
 import UploadScramblesButton from './UploadScramblesButton';
 
-export default function Wrapper({ eventWCIF }) {
+export default function Wrapper({ wcifEvents }) {
   return (
     <WCAQueryClientProvider>
       <ScrambleMatcher
-        competitionId={eventWCIF}
+        wcifEvents={wcifEvents}
       />
     </WCAQueryClientProvider>
   );
 }
 
-function ScrambleMatcher({ eventWCIF }) {
-  const [uploadedJSON, setUploadedJSON] = useState([]);
+function ScrambleMatcher({ wcifEvents }) {
+  const [uploadedJSON, setUploadedJSON] = useState({ wcif: wcifEvents, uploadedScrambles: [] });
   const [uniqueScrambleSetId, setUniqueScrambleSetId] = useState(0);
   const [uniqueScrambleUploadedId, setUniqueScrambleUploadedId] = useState(1);
   const [assignedScrambleWcif, setAssignedScrambleWcif] = useState(null);
@@ -86,7 +86,7 @@ function ScrambleMatcher({ eventWCIF }) {
           fluid
           icon
           positive
-          onClick={() => setAssignedScrambleWcif(autoAssignScrambles(eventWCIF, uploadedJSON))}
+          onClick={() => setAssignedScrambleWcif(autoAssignScrambles(wcifEvents, uploadedJSON))}
         >
           <Icon name="coffee" />
           {' '}
@@ -98,10 +98,8 @@ function ScrambleMatcher({ eventWCIF }) {
           Clear scrambles assignments
         </Button>
       </ButtonGroup>
-      <JSONList uploadedScrambles={uploadedJSON} />
-      {assignedScrambleWcif
-      && JSON.stringify(assignedScrambleWcif, null, 2)}
-      {assignedScrambleWcif && <Events />}
+      <JSONList uploadedScrambles={uploadedJSON.uploadedScrambles} />
+      {assignedScrambleWcif && <Events assignedScrambleWcif={assignedScrambleWcif.events} />}
     </>
   );
 }

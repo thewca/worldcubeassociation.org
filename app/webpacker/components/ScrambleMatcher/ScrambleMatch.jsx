@@ -1,9 +1,9 @@
 import React from 'react';
 
-export default function ScrambleMatch({ roundWcif }) {
+export default function ScrambleMatch({ activeRound }) {
   return (
     <div>
-      {JSON.stringify(roundWcif)}
+      {JSON.stringify(activeRound)}
     </div>
   );
 }

@@ -4,16 +4,18 @@ import Rounds from './Rounds';
 
 export default function Events({ assignedScrambleWcif }) {
   const [activeEvent, setActiveEvent] = useState(null);
-
+  console.log(assignedScrambleWcif);
   return (
     <>
       <EventSelector
-        selectedEvents={[activeEvent]}
+        selectedEvents={activeEvent ? [activeEvent] : []}
         onEventClick={setActiveEvent}
         hideAllButton
         hideClearButton
       />
-      <Rounds eventWcif={assignedScrambleWcif.find((e) => e.id === activeEvent.id)} />
+      {activeEvent && (
+        <Rounds eventWcif={assignedScrambleWcif.find((e) => e.id === activeEvent)} />
+      )}
     </>
   );
 }
