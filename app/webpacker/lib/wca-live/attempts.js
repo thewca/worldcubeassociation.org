@@ -127,9 +127,7 @@ export function decodeMbldAttemptResult(value) {
   const solved = points + missed;
   const attempted = solved + missed;
   const centiseconds = seconds === 99999 ? null : seconds * 100;
-  return {
-    solved, attempted, centiseconds, points,
-  };
+  return { solved, attempted, centiseconds };
 }
 
 /**
@@ -167,9 +165,7 @@ export function centisecondsToClockFormat(centiseconds) {
 }
 
 function formatMbldAttemptResult(attemptResult) {
-  const {
-    solved, attempted, centiseconds, points,
-  } = decodeMbldAttemptResult(
+  const { solved, attempted, centiseconds } = decodeMbldAttemptResult(
     attemptResult,
   );
   const clockFormat = centisecondsToClockFormat(centiseconds);
@@ -178,7 +174,7 @@ function formatMbldAttemptResult(attemptResult) {
   // using it here allows us to expand space between mbf results without
   //  expanding the spaces within the individual results
   // see https://github.com/thewca/worldcubeassociation.org/issues/6375
-  return `${points}\u2002(${solved}/${attempted})\u2002${shortClockFormat}`;
+  return `${solved-(attempted-solved)}\u2002(${solved}/${attempted})\u2002${shortClockFormat}`;
 }
 
 function formatFmAttemptResult(attemptResult) {
