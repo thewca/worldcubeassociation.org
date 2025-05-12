@@ -2,10 +2,10 @@ import fetchWithJWTToken from '../../../../../lib/requests/fetchWithJWTToken';
 import { paymentTicketUrl } from '../../../../../lib/requests/routes.js.erb';
 
 export default async function getPaymentTicket(
-  competition,
+  registrationId,
   donationAmount,
 ) {
-  const route = paymentTicketUrl(competition.id, donationAmount);
+  const route = paymentTicketUrl(registrationId, donationAmount);
   const { data } = await fetchWithJWTToken(route, {
     method: 'GET',
   });

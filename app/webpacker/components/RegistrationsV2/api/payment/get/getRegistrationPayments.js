@@ -1,9 +1,10 @@
-import { fetchJsonOrError } from '../../../../../lib/requests/fetchWithAuthenticityToken';
+import fetchWithJWTToken from '../../../../../lib/requests/fetchWithJWTToken';
 import { registrationPaymentsUrl } from '../../../../../lib/requests/routes.js.erb';
 
 export default async function getRegistrationPayments(
   registrationId,
 ) {
-  const { data } = await fetchJsonOrError(registrationPaymentsUrl(registrationId));
+  const route = registrationPaymentsUrl(registrationId);
+  const { data } = await fetchWithJWTToken(route);
   return data;
 }

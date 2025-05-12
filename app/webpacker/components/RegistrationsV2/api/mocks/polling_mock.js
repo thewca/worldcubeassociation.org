@@ -1,11 +1,11 @@
-import { getSingleRegistration } from '../registration/get/get_registrations';
+import { getRegistrationByUser } from '../registration/get/get_registrations';
 
 export default async function pollingMock(
   userId,
-  competition,
+  competitionId,
 ) {
   // Now that we are doing more things on Registration create we have to poll ourselves
-  const registration = await getSingleRegistration(userId, competition);
+  const registration = await getRegistrationByUser(userId, competitionId);
 
   return {
     processing: !registration,
