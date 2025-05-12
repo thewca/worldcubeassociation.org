@@ -84,6 +84,11 @@
             path: competition_submit_results_edit_path(@competition),
             icon: "cloud upload alt",
           }
+          nav_items << {
+            text: t('.menu.match_scrambles'),
+            path: competition_match_scrambles_path(@competition),
+            icon: "cloud upload alt",
+          }
         end
         if current_user&.can_admin_results?
           nav_items << {

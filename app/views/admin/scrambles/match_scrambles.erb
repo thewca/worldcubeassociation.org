@@ -1,0 +1,6 @@
+<%= render layout: 'competitions/nav' do %>
+  <%= react_component("ScrambleMatcher", {
+    wcifEvents: @competition.events_wcif,
+    competitionName: @competition.name,
+  }) %>
+<% end %>
