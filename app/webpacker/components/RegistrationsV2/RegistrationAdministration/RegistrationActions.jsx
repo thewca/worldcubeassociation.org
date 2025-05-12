@@ -106,13 +106,16 @@ export default function RegistrationActions({
   const changeStatus = (attendees, status) => {
     updateRegistrationMutation(
       {
-        requests: attendees.map((attendee) => (
-          {
-            user_id: attendee,
-            competing: { status },
-            competition_id: competitionInfo.id,
-          })),
-        competition_id: competitionInfo.id,
+        competitionId: competitionInfo.id,
+        payload: {
+          requests: attendees.map((attendee) => (
+            {
+              user_id: attendee,
+              competing: { status },
+              competition_id: competitionInfo.id,
+            })),
+          competition_id: competitionInfo.id,
+        },
       },
       {
         onSuccess: () => {
