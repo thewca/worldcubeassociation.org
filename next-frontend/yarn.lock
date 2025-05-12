@@ -1954,12 +1954,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@payloadcms/db-sqlite@npm:^3.36.1":
-  version: 3.36.1
-  resolution: "@payloadcms/db-sqlite@npm:3.36.1"
+"@payloadcms/db-sqlite@npm:^3.37.0":
+  version: 3.37.0
+  resolution: "@payloadcms/db-sqlite@npm:3.37.0"
   dependencies:
     "@libsql/client": "npm:0.14.0"
-    "@payloadcms/drizzle": "npm:3.36.1"
+    "@payloadcms/drizzle": "npm:3.37.0"
     console-table-printer: "npm:2.12.1"
     drizzle-kit: "npm:0.28.0"
     drizzle-orm: "npm:0.36.1"
@@ -1967,14 +1967,14 @@ __metadata:
     to-snake-case: "npm:1.0.0"
     uuid: "npm:9.0.0"
   peerDependencies:
-    payload: 3.36.1
-  checksum: 10c0/b67009e6acd90222bf469cdf8f6931488c35d75a16f1fc74490dab66566f7d39a22c39c6c4df970995b7dcef319e37af93006ed13bd961d487b9b14dfcc2339a
+    payload: 3.37.0
+  checksum: 10c0/57c0b155c8b0c0bff7ab036d4ba938892eb72b43348d23cca1a6be5b2d796a9418cc2c01b866d11d4331b6060c8cdee16292b2f3fd47a125321f6917b274b280
   languageName: node
   linkType: hard
 
-"@payloadcms/drizzle@npm:3.36.1":
-  version: 3.36.1
-  resolution: "@payloadcms/drizzle@npm:3.36.1"
+"@payloadcms/drizzle@npm:3.37.0":
+  version: 3.37.0
+  resolution: "@payloadcms/drizzle@npm:3.37.0"
   dependencies:
     console-table-printer: "npm:2.12.1"
     drizzle-orm: "npm:0.36.1"
@@ -1982,8 +1982,8 @@ __metadata:
     to-snake-case: "npm:1.0.0"
     uuid: "npm:9.0.0"
   peerDependencies:
-    payload: 3.36.1
-  checksum: 10c0/d237d37c67b5acfb92e673ab149942463c98833ff59482bd1eb78926c107394c38a9b98987bb7afa0c4298a61474599366714974ab50f5ab6aacbf030df069ea
+    payload: 3.37.0
+  checksum: 10c0/0477ad6c9ec185923f3a4ef4f865673c7ef43cecee4ba0f444d05eb49a978556bea0816820f46de00cfa94ec92780a590d30a7d6939ecaf01d1a5fe4f665177f
   languageName: node
   linkType: hard
 
@@ -7893,7 +7893,7 @@ __metadata:
     "@chakra-ui/react": "npm:^3.17.0"
     "@emotion/react": "npm:^11.14.0"
     "@eslint/eslintrc": "npm:^3"
-    "@payloadcms/db-sqlite": "npm:^3.36.1"
+    "@payloadcms/db-sqlite": "npm:^3.37.0"
     "@payloadcms/live-preview-react": "npm:^3.36.1"
     "@payloadcms/next": "npm:^3.36.1"
     "@stylistic/eslint-plugin": "npm:^4.2.0"
