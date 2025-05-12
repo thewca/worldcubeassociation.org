@@ -125,19 +125,10 @@ Style/ClassVars:
 Style/Documentation:
   Enabled: false
 
-Style/Lambda:
-  Enabled: false
-
 Style/MultilineBlockChain:
   Enabled: false
 
 Style/Next:
-  Enabled: false
-
-Style/NumericPredicate:
-  Enabled: false
-
-Style/PercentLiteralDelimiters:
   Enabled: false
 
 Style/RaiseArgs:
@@ -146,17 +137,8 @@ Style/RaiseArgs:
 Style/SignalException:
   EnforcedStyle: only_raise
 
-Layout/SpaceAroundOperators:
-  Enabled: false
-
 Layout/IndentationConsistency:
   EnforcedStyle: indented_internal_methods
-
-Style/StringLiteralsInInterpolation:
-  Enabled: false
-
-Style/SymbolArray:
-  Enabled: false
 
 # This causes a bunch of false positives as of 2025-03-17
 Rails/ActionControllerFlashBeforeRender:
@@ -166,11 +148,16 @@ Rails/ActionControllerFlashBeforeRender:
 Rails/EnumHash:
   Enabled: false
 
-Style/WordArray:
-  Enabled: false
-
 Style/SymbolProc:
-  Enabled: false
+  AllowedMethods:
+    # Capybara DSL plugins
+    - with_playwright_element_handle
+    - with_playwright_page
+  Exclude:
+    # 3rd-party libraries often use configuration DSLs
+    #   that look like we might pass a proc, but actually we want to
+    #   stick as close to their README as possible
+    - 'config/initializers/**/*.rb'
 
 Naming/MethodParameterName:
   AllowedNames:
@@ -234,9 +221,6 @@ Rails/Date:
   Enabled: false
 
 Rails/SkipsModelValidations:
-  Enabled: false
-
-Rails/RedundantForeignKey:
   Enabled: false
 
 Rails/InverseOf:
@@ -392,59 +376,4 @@ RSpecRails/NegationBeValid:
   Enabled: false
 
 RSpecRails/InferredSpecType:
-  Enabled: false
-
-# Factory Bot
-
-FactoryBot/ConsistentParenthesesStyle:
-  Enabled: false
-
-FactoryBot/SyntaxMethods:
-  Enabled: false
-
-FactoryBot/ExcessiveCreateList:
-  Enabled: false
-
-# Capybara
-
-Capybara/AmbiguousClick:
-  Enabled: false
-
-Capybara/ClickLinkOrButtonStyle:
-  Enabled: false
-
-Capybara/CurrentPathExpectation:
-  Enabled: false
-
-Capybara/FindAllFirst:
-  Enabled: false
-
-Capybara/MatchStyle:
-  Enabled: false
-
-Capybara/NegationMatcher:
-  Enabled: false
-
-Capybara/NegationMatcherAfterVisit:
-  Enabled: false
-
-Capybara/RedundantWithinFind:
-  Enabled: false
-
-Capybara/SpecificActions:
-  Enabled: false
-
-Capybara/SpecificFinders:
-  Enabled: false
-
-Capybara/SpecificMatcher:
-  Enabled: false
-
-Capybara/VisibilityMatcher:
-  Enabled: false
-
-Capybara/RSpec/HaveSelector:
-  Enabled: false
-
-Capybara/RSpec/PredicateMatcher:
   Enabled: false

@@ -34,7 +34,7 @@ class RegionalOrganization < ApplicationRecord
   end
 
   DEFAULT_SERIALIZE_OPTIONS = {
-    only: ["name", "website", "country"],
+    only: %w[name website country],
     methods: ["logo_url"],
   }.freeze
 

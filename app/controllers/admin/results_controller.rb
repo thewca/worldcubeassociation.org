@@ -12,15 +12,15 @@ module Admin
         format.json do
           @pending_competitions = Competition.pending_posting.order(results_submitted_at: :asc)
           user_attributes = {
-            only: ["id", "name"],
+            only: %w[id name],
             methods: [],
             include: [],
           }
           render json: {
             current_user: current_user.as_json(user_attributes),
             competitions: @pending_competitions.as_json(
-              only: ["id", "name", "results_submitted_at"],
-              methods: ["city", "country_iso2"],
+              only: %w[id name results_submitted_at],
+              methods: %w[city country_iso2],
               include: { posting_user: user_attributes },
             ),
           }
@@ -100,7 +100,7 @@ module Admin
         # We just inserted a new result, make sure we at least give it the
         # correct position.
         validator = ResultsValidators::PositionsValidator.new(apply_fixes: true)
-        validator.validate(competition_ids: [result.competitionId])
+        validator.validate(competition_ids: [result.competition_id])
         json[:messages] = ["Result inserted!"].concat(validator.infos.map(&:to_s))
       else
         json[:errors] = result.errors.map(&:full_message)
@@ -112,9 +112,9 @@ module Admin
       result = Result.find(params.require(:id))
       # Since we may move the result to another competition, we want to validate
       # both competitions if needed.
-      competitions_to_validate = [result.competitionId]
+      competitions_to_validate = [result.competition_id]
       if result.update(result_params)
-        competitions_to_validate << result.competitionId
+        competitions_to_validate << result.competition_id
         competitions_to_validate.uniq!
         validator = ResultsValidators::PositionsValidator.new(apply_fixes: true)
         validator.validate(competition_ids: competitions_to_validate)
@@ -138,7 +138,7 @@ module Admin
 
     def destroy
       result = Result.find(params.require(:id))
-      competition_id = result.competitionId
+      competition_id = result.competition_id
       result.destroy!
 
       # Create a results validator to fix positions if needed
@@ -152,10 +152,10 @@ module Admin
 
     private def result_params
       params.require(:result).permit(:value1, :value2, :value3, :value4, :value5,
-                                     :competitionId, :roundTypeId, :eventId, :formatId,
-                                     :personName, :personId, :countryId,
+                                     :competition_id, :round_type_id, :event_id, :format_id,
+                                     :person_name, :person_id, :country_id,
                                      :best, :average,
-                                     :regionalSingleRecord, :regionalAverageRecord)
+                                     :regional_single_record, :regional_average_record)
     end
   end
 end

@@ -33,7 +33,7 @@
               </td>
             </tr>
             <% pb_markers = historical_pb_markers(results.reverse) # Compute pb markers for results in the chronological order. %>
-            <% results.group_by(&:competitionId).each do |_, results| %>
+            <% results.group_by(&:competition_id).each do |_, results| %>
               <% results.each_with_index do |result, index| %>
                 <tr class="result <%= return_podium_class result %>">
                   <td class="competition">
@@ -41,16 +41,16 @@
                       <%= link_to result.competition.name, result.competition %>
                     <% end %>
                   </td>
-                  <td class="round"><%= t "rounds.#{result.roundTypeId}.cell_name" %></td>
+                  <td class="round"><%= t "rounds.#{result.round_type_id}.cell_name" %></td>
                   <td class="place"><%= result.pos %></td>
-                  <td class="single <%= pb_type_class_for_result(result.regionalSingleRecord, pb_markers[result.id][:single]) %>">
+                  <td class="single <%= pb_type_class_for_result(result.regional_single_record, pb_markers[result.id][:single]) %>">
                     <%= result.best_solve.clock_format %>
                   </td>
-                  <td class="regional-single-record"><%= result.regionalSingleRecord %></td>
-                  <td class="average <%= pb_type_class_for_result(result.regionalAverageRecord, pb_markers[result.id][:average]) %>">
+                  <td class="regional-single-record"><%= result.regional_single_record %></td>
+                  <td class="average <%= pb_type_class_for_result(result.regional_average_record, pb_markers[result.id][:average]) %>">
                     <%= result.average_solve.clock_format %>
                   </td>
-                  <td class="regional-average-record"><%= result.regionalAverageRecord %></td>
+                  <td class="regional-average-record"><%= result.regional_average_record %></td>
                   <%= solve_tds_for_result(result) %>
                 </tr>
               <% end %>

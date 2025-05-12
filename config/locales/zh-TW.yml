@@ -514,7 +514,7 @@ zh-TW:
         #original_hash: 8c41ae8
         wca_id: 人
         #original_hash: fa4c045
-        countryId: 區域
+        country_id: 區域
         #original_hash: ab58155
         dob: 生日
         #original_hash: 8a754c6

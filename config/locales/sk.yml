@@ -396,7 +396,7 @@ sk:
         #original_hash: 8c41ae8
         wca_id: Osoba
         #original_hash: d523ebb
-        countryId: Krajina
+        country_id: Krajina
         #original_hash: ab58155
         dob: Dátum narodenia
         #original_hash: 8a754c6
@@ -743,7 +743,7 @@ sk:
         #original_hash: 498f4c5
         dob: Dátum narodenia by mal mať formát YYYY-MM-DD.
         #original_hash: da39a3e
-        countryId: ''
+        country_id: ''
         #original_hash: da39a3e
         gender: ''
         #original_hash: da39a3e

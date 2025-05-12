@@ -607,7 +607,7 @@ ca:
         #original_hash: 8c41ae8
         wca_id: Persona
         #original_hash: d523ebb
-        countryId: País
+        country_id: País
         #original_hash: ab58155
         dob: Data de naixement
         #original_hash: 8a754c6
@@ -1116,7 +1116,7 @@ ca:
         #original_hash: 498f4c5
         dob: La data de naixement ha de tenir el format YYY-MM-DD.
         #original_hash: da39a3e
-        countryId: ''
+        country_id: ''
         #original_hash: da39a3e
         gender: ''
         #original_hash: da39a3e

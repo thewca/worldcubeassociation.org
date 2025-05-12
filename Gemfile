@@ -2,12 +2,6 @@
 
 source 'https://rubygems.org'
 
-# From https://github.com/bundler/bundler/issues/4978#issuecomment-272248627
-git_source(:github) do |repo_name|
-  repo_name = "#{repo_name}/#{repo_name}" unless repo_name.include?("/")
-  "https://github.com/#{repo_name}.git"
-end
-
 gem 'rails'
 gem 'rails-i18n'
 gem 'i18n-js'
@@ -87,7 +81,7 @@ gem 'i18n-country-translations', github: 'thewca/i18n-country-translations'
 gem 'http_accept_language'
 gem 'twitter_cldr'
 # version explicitly specified because Shakapacker wants to keep Gemfile and package.json in sync
-gem 'shakapacker', '8.2.0'
+gem 'shakapacker', '8.3.0'
 gem 'json-schema'
 gem 'translighterate'
 gem 'enum_help'

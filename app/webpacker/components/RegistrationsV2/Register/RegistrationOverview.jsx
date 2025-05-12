@@ -20,7 +20,13 @@ export default function RegistrationOverview({
 }) {
   const dispatch = useDispatch();
   const confirm = useConfirm();
-  const { registration, isRejected, isAccepted } = useRegistration();
+
+  const {
+    registration,
+    isRejected,
+    isAccepted,
+    hasPaid,
+  } = useRegistration();
 
   const hasRegistrationEditDeadlinePassed = hasPassed(
     competitionInfo.event_change_deadline_date ?? competitionInfo.start_date,
@@ -28,7 +34,7 @@ export default function RegistrationOverview({
 
   const deleteAllowed = (competitionInfo.competitor_can_cancel === 'always')
     || (competitionInfo.competitor_can_cancel === 'not_accepted' && !isAccepted)
-    || (competitionInfo.competitor_can_cancel === 'unpaid' && !registration.payment?.has_paid);
+    || (competitionInfo.competitor_can_cancel === 'unpaid' && !hasPaid);
 
   const queryClient = useQueryClient();
 

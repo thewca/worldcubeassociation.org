@@ -1,107 +1,63 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import _ from 'lodash';
-import React, {
-  useCallback,
-  useEffect,
-  useState,
-} from 'react';
+import React, { useCallback } from 'react';
 import {
   Button,
   Form,
   Header,
   Icon,
-  List,
   Message,
   Segment,
 } from 'semantic-ui-react';
-import updateRegistration from '../api/registration/patch/update_registration';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
 import { showMessage } from '../Register/RegistrationMessage';
-import Loading from '../../Requests/Loading';
 import EventSelector from '../../wca/EventSelector';
-import Refunds from './Refunds';
+import RegistrationPayments from './RegistrationPayments';
 import { personUrl, editPersonUrl } from '../../../lib/requests/routes.js.erb';
 import { useConfirm } from '../../../lib/providers/ConfirmProvider';
 import I18n from '../../../lib/i18n';
 import RegistrationHistory from './RegistrationHistory';
 import { hasPassed } from '../../../lib/utils/dates';
-import getUsersInfo from '../api/user/post/getUserInfo';
-import { useRegistration } from '../lib/RegistrationProvider';
-import useSet from '../../../lib/hooks/useSet';
+import {
+  useFormObjectState,
+  useFormSuccessHandler,
+  useHasFormValueChanged,
+} from '../../wca/FormBuilder/provider/FormObjectProvider';
+import { useInputUpdater } from '../../../lib/hooks/useInputState';
+import { useOrderedSetWrapper } from '../../../lib/hooks/useOrderedSet';
+import { WCA_EVENT_IDS } from '../../../lib/wca-data.js.erb';
+import { useUpdateRegistrationMutation } from '../lib/mutations';
 
-export default function RegistrationEditor({ competitor, competitionInfo }) {
+export default function RegistrationEditor({ registrationId, competitor, competitionInfo }) {
   const dispatch = useDispatch();
-  const [comment, setComment] = useState('');
-  const [adminComment, setAdminComment] = useState('');
-  const [status, setStatus] = useState('');
-  const [guests, setGuests] = useState(0);
-  const selectedEventIds = useSet();
-  const [registration, setRegistration] = useState({});
+
+  const [comment, setCommentRaw] = useFormObjectState('comment', ['competing']);
+  const setComment = useInputUpdater(setCommentRaw);
+
+  const [adminComment, setAdminCommentRaw] = useFormObjectState('admin_comment', ['competing']);
+  const setAdminComment = useInputUpdater(setAdminCommentRaw);
+
+  const [guests, setGuestsRaw] = useFormObjectState('guests');
+  const setGuests = useInputUpdater(setGuestsRaw, true);
+
+  const [nativeEventIds, setNativeEventIds] = useFormObjectState('event_ids', ['competing']);
+  const selectedEventIds = useOrderedSetWrapper(nativeEventIds, setNativeEventIds, WCA_EVENT_IDS);
+
+  const [status, setStatusRaw] = useFormObjectState('registration_status', ['competing']);
+  const setStatus = useInputUpdater(setStatusRaw);
+
   const confirm = useConfirm();
 
-  const queryClient = useQueryClient();
+  const formSuccess = useFormSuccessHandler();
 
   const {
-    isFetching: isRegistrationLoading,
-    registration: serverRegistration, refetchRegistration: refetch,
-  } = useRegistration();
+    mutate: updateRegistrationMutation,
+    isPending: isUpdating,
+  } = useUpdateRegistrationMutation(competitionInfo, competitor);
 
-  const { isLoading, data: competitorsInfo } = useQuery({
-    queryKey: ['history-user', serverRegistration?.history],
-    queryFn: () => getUsersInfo(_.uniq(serverRegistration.history.flatMap((e) => (
-      (e.actor_type === 'user' || e.actor_type === 'worker') ? Number(e.actor_id) : [])))),
-    enabled: Boolean(serverRegistration),
-  });
-
-  const { mutate: updateRegistrationMutation, isPending: isUpdating } = useMutation({
-    mutationFn: updateRegistration,
-    onError: (data) => {
-      const { error } = data.json;
-      dispatch(showMessage(
-        `competitions.registration_v2.errors.${error}`,
-        'negative',
-      ));
-    },
-    onSuccess: (data) => {
-      queryClient.setQueryData(
-        ['registration', competitionInfo.id, competitor.id],
-        {
-          ...data.registration,
-          payment: serverRegistration.payment,
-        },
-      );
-      // Going from cancelled -> pending
-      if (registration.competing.registration_status === 'cancelled') {
-        dispatch(showMessage('registrations.flash.registered', 'positive'));
-        // Not changing status
-      } else {
-        dispatch(showMessage('registrations.flash.updated', 'positive'));
-      }
-    },
-  });
-
-  // using selectedEventIds.update in dependency array causes warnings
-  const { update: setSelectedEventIds } = selectedEventIds;
-  useEffect(() => {
-    if (serverRegistration) {
-      setRegistration(serverRegistration);
-      setComment(serverRegistration.competing.comment ?? '');
-      setStatus(serverRegistration.competing.registration_status);
-      setSelectedEventIds(serverRegistration.competing.event_ids);
-      setAdminComment(serverRegistration.competing.admin_comment ?? '');
-      setGuests(serverRegistration.guests ?? 0);
-    }
-  }, [serverRegistration, setSelectedEventIds]);
-
-  const hasEventsChanged = serverRegistration
-    && _.xor(serverRegistration.competing.event_ids, selectedEventIds.asArray).length > 0;
-  const hasCommentChanged = serverRegistration
-    && comment !== (serverRegistration.competing.comment ?? '');
-  const hasAdminCommentChanged = serverRegistration
-    && adminComment !== (serverRegistration.competing.admin_comment ?? '');
-  const hasStatusChanged = serverRegistration
-    && status !== serverRegistration.competing.registration_status;
-  const hasGuestsChanged = serverRegistration && guests !== serverRegistration.guests;
+  const hasEventsChanged = useHasFormValueChanged('event_ids', ['competing']);
+  const hasCommentChanged = useHasFormValueChanged('comment', ['competing']);
+  const hasAdminCommentChanged = useHasFormValueChanged('admin_comment', ['competing']);
+  const hasStatusChanged = useHasFormValueChanged('registration_status', ['competing']);
+  const hasGuestsChanged = useHasFormValueChanged('guests');
 
   const hasChanges = hasEventsChanged
     || hasCommentChanged
@@ -128,32 +84,28 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
         'negative',
       ));
     } else {
-      dispatch(showMessage('competitions.registration_v2.update.being_updated', 'positive'));
       // Only send changed values
       const body = {
         user_id: competitor.id,
         competition_id: competitionInfo.id,
-        competing: {},
+        competing: {
+          comment: hasCommentChanged ? comment : undefined,
+          event_ids: hasEventsChanged ? selectedEventIds.asArray : undefined,
+          admin_comment: hasAdminCommentChanged ? adminComment : undefined,
+          status: hasStatusChanged ? status : undefined,
+        },
+        guests: hasGuestsChanged ? guests : undefined,
       };
-      if (hasEventsChanged) {
-        body.competing.event_ids = selectedEventIds.asArray;
-      }
-      if (hasCommentChanged) {
-        body.competing.comment = comment;
-      }
-      if (hasAdminCommentChanged) {
-        body.competing.admin_comment = adminComment;
-      }
-      if (hasStatusChanged) {
-        body.competing.status = status;
-      }
-      if (hasGuestsChanged) {
-        body.guests = guests;
-      }
+
       confirm({
-        content: I18n.t('competitions.registration_v2.update.update_confirm'),
+        content: I18n.t('competitions.registration_v2.update.organizer_update_confirm'),
       }).then(() => {
-        updateRegistrationMutation(body);
+        updateRegistrationMutation(body, {
+          onSuccess: (data) => {
+            dispatch(showMessage('registrations.flash.updated', 'positive'));
+            formSuccess(data.registration);
+          },
+        });
       }).catch(() => {});
     }
   }, [
@@ -176,14 +128,11 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
     adminComment,
     status,
     guests,
+    formSuccess,
   ]);
 
   const registrationEditDeadlinePassed = Boolean(competitionInfo.event_change_deadline_date)
     && hasPassed(competitionInfo.event_change_deadline_date);
-
-  if (isLoading || isRegistrationLoading) {
-    return <Loading />;
-  }
 
   return (
     <Segment padded attached loading={isUpdating}>
@@ -222,7 +171,7 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
           id="competitor-comment"
           maxLength={240}
           value={comment}
-          onChange={(event, data) => setComment(data.value)}
+          onChange={setComment}
         />
 
         <Form.TextArea
@@ -230,7 +179,7 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
           id="admin-comment"
           maxLength={240}
           value={adminComment}
-          onChange={(event, data) => setAdminComment(data.value)}
+          onChange={setAdminComment}
         />
 
         <Header as="h6">{I18n.t('activerecord.attributes.registration.status')}</Header>
@@ -241,7 +190,7 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
             name="regStatusRadioGroup"
             value="pending"
             checked={status === 'pending'}
-            onChange={(event, data) => setStatus(data.value)}
+            onChange={setStatus}
           />
           <Form.Radio
             id="radio-status-accepted"
@@ -249,7 +198,7 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
             name="regStatusRadioGroup"
             value="accepted"
             checked={status === 'accepted'}
-            onChange={(event, data) => setStatus(data.value)}
+            onChange={setStatus}
           />
           <Form.Radio
             id="radio-status-waiting-list"
@@ -257,7 +206,7 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
             name="regStatusRadioGroup"
             value="waiting_list"
             checked={status === 'waiting_list'}
-            onChange={(event, data) => setStatus(data.value)}
+            onChange={setStatus}
           />
           <Form.Radio
             id="radio-status-cancelled"
@@ -265,7 +214,7 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
             name="regStatusRadioGroup"
             value="cancelled"
             checked={status === 'cancelled'}
-            onChange={(event, data) => setStatus(data.value)}
+            onChange={setStatus}
           />
           <Form.Radio
             id="radio-status-rejected"
@@ -274,7 +223,7 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
             value="rejected"
             disabled={registrationEditDeadlinePassed}
             checked={status === 'rejected'}
-            onChange={(event, data) => setStatus(data.value)}
+            onChange={setStatus}
           />
         </Form.Group>
         <Form.Input
@@ -284,7 +233,7 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
           min={0}
           max={99}
           value={guests}
-          onChange={(event, data) => setGuests(data.value)}
+          onChange={setGuests}
         />
         <Button
           color="blue"
@@ -298,30 +247,12 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
       {/* i18n-tasks-use t('registrations.list.series_registrations') */}
 
       {competitionInfo['using_payment_integrations?'] && (
-        <>
-          <Message>{I18n.t('payments.labels.payment_statuses')}</Message>
-          <List>
-            {registration.payment.payment_statuses.map((paymentStatus) => (
-              <List.Item key={paymentStatus}>
-                {/* i18n-tasks-use t('payments.statuses.succeeded') */}
-                {/* i18n-tasks-use t('payments.statuses.refund') */}
-                {I18n.t(`payments.statuses.${paymentStatus}`)}
-              </List.Item>
-            ))}
-          </List>
-          {(registration.payment.payment_statuses.includes('succeeded') || registration.payment.payment_statuses.includes('refund')) && (
-            <Refunds
-              competitionId={competitionInfo.id}
-              userId={competitor.id}
-              onSuccess={refetch}
-            />
-          )}
-        </>
+        <RegistrationPayments
+          competitionId={competitionInfo.id}
+          registrationId={registrationId}
+        />
       )}
-      <RegistrationHistory
-        history={registration.history.toReversed()}
-        competitorsInfo={competitorsInfo}
-      />
+      <RegistrationHistory registrationId={registrationId} />
     </Segment>
   );
 }

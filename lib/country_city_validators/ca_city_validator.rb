@@ -1,24 +1,24 @@
 # frozen_string_literal: true
 
 module CountryCityValidators
-  CA_PROVINCES = %w(
-    Alberta
-    British\ Columbia
-    Manitoba
-    New\ Brunswick
-    Newfoundland\ and\ Labrador
-    Nova\ Scotia
-    Ontario
-    Prince\ Edward\ Island
-    Quebec
-    Saskatchewan
-  ).to_set
+  CA_PROVINCES = [
+    'Alberta',
+    'British Columbia',
+    'Manitoba',
+    'New Brunswick',
+    'Newfoundland and Labrador',
+    'Nova Scotia',
+    'Ontario',
+    'Prince Edward Island',
+    'Quebec',
+    'Saskatchewan',
+  ].to_set
 
-  CA_TERRITORIES = %w(
-    Northwest\ Territories
-    Nunavut
-    Yukon
-  ).to_set
+  CA_TERRITORIES = [
+    'Northwest Territories',
+    'Nunavut',
+    'Yukon',
+  ].to_set
 
   class CaCityValidator < CityCommaRegionValidator
     def initialize

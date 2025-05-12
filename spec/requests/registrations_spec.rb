@@ -4,12 +4,12 @@ require "rails_helper"
 require "csv"
 
 RSpec.describe "registrations" do
-  let!(:competition) { FactoryBot.create(:competition, :with_delegate, :future, :visible, event_ids: %w(333 444)) }
+  let!(:competition) { create(:competition, :with_delegate, :future, :visible, event_ids: %w[333 444]) }
 
   describe "POST #do_import" do
     context "when signed in as a normal user" do
       it "doesn't allow access" do
-        sign_in FactoryBot.create(:user)
+        sign_in create(:user)
         post competition_registrations_do_import_path(competition)
         expect(response).to redirect_to root_url
       end
@@ -50,16 +50,16 @@ RSpec.describe "registrations" do
       end
 
       it "renders an error when there are active registrations for other Series competitions" do
-        two_timer_dave = FactoryBot.create(:user, :wca_id, name: "Two Timer Dave")
+        two_timer_dave = create(:user, :wca_id, name: "Two Timer Dave")
 
-        series = FactoryBot.create(:competition_series)
+        series = create(:competition_series)
         competition.update!(competition_series: series)
 
-        partner_competition = FactoryBot.create(:competition, :with_delegate, :visible, event_ids: %w(333 555),
-                                                                                        competition_series: series, series_base: competition)
+        partner_competition = create(:competition, :with_delegate, :visible, event_ids: %w[333 555],
+                                                                             competition_series: series, series_base: competition)
 
         # make sure there is a dummy registration for the partner competition.
-        FactoryBot.create(:registration, :accepted, competition: partner_competition, user: two_timer_dave)
+        create(:registration, :accepted, competition: partner_competition, user: two_timer_dave)
 
         file = csv_file [
           ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
@@ -129,12 +129,12 @@ RSpec.describe "registrations" do
 
           context "user exists with the given WCA ID" do
             context "the user is a dummy account" do
-              let!(:dummy_user) { FactoryBot.create(:dummy_user) }
+              let!(:dummy_user) { create(:dummy_user) }
 
               context "user exists with registrant's email" do
                 context "the user already has WCA ID" do
                   it "renders an error" do
-                    user = FactoryBot.create(:user, :wca_id)
+                    user = create(:user, :wca_id)
                     file = csv_file [
                       ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
                       ["a", dummy_user.name, dummy_user.country.id, dummy_user.wca_id, dummy_user.dob, dummy_user.gender, user.email, "1", "0"],
@@ -149,7 +149,7 @@ RSpec.describe "registrations" do
 
                 context "the user doesn't have WCA ID" do
                   it "merges the user with the dummy one and registers him" do
-                    user = FactoryBot.create(:user)
+                    user = create(:user)
                     file = csv_file [
                       ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
                       ["a", dummy_user.name, dummy_user.country.id, dummy_user.wca_id, dummy_user.dob, dummy_user.gender, user.email, "1", "0"],
@@ -160,7 +160,7 @@ RSpec.describe "registrations" do
                     expect(User.exists?(dummy_user.id)).to be false
                     user.reload
                     expect(user.wca_id).to eq dummy_user.wca_id
-                    expect(user.registrations.first.events.map(&:id)).to eq %w(333)
+                    expect(user.registrations.first.events.map(&:id)).to eq %w[333]
                     expect(competition.registrations.count).to eq 1
                   end
                 end
@@ -180,7 +180,7 @@ RSpec.describe "registrations" do
                   expect(user).not_to be_dummy_account
                   expect(user).to be_locked_account
                   expect(user.email).to eq "sherlock@example.com"
-                  expect(user.registrations.first.events.map(&:id)).to eq %w(333)
+                  expect(user.registrations.first.events.map(&:id)).to eq %w[333]
                   expect(competition.registrations.count).to eq 1
                 end
               end
@@ -188,7 +188,7 @@ RSpec.describe "registrations" do
 
             context "the user is not a dummy account" do
               it "registers this user" do
-                user = FactoryBot.create(:user, :wca_id)
+                user = create(:user, :wca_id)
                 file = csv_file [
                   ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
                   ["a", user.name, user.country.id, user.wca_id, user.dob, user.gender, "sherlock@example.com", "1", "0"],
@@ -196,7 +196,7 @@ RSpec.describe "registrations" do
                 expect {
                   post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
                 }.not_to change(User, :count)
-                expect(user.registrations.first.events.map(&:id)).to eq %w(333)
+                expect(user.registrations.first.events.map(&:id)).to eq %w[333]
                 expect(competition.registrations.count).to eq 1
               end
             end
@@ -206,10 +206,10 @@ RSpec.describe "registrations" do
             context "user exists with registrant's email" do
               context "the user has unconfirmed WCA ID different from the given WCA ID" do
                 it "renders an error" do
-                  person = FactoryBot.create(:person)
-                  unconfirmed_person = FactoryBot.create(:person)
-                  delegate = FactoryBot.create(:delegate_role)
-                  user = FactoryBot.create(
+                  person = create(:person)
+                  unconfirmed_person = create(:person)
+                  delegate = create(:delegate_role)
+                  user = create(
                     :user,
                     unconfirmed_wca_id: unconfirmed_person.wca_id,
                     dob_verification: unconfirmed_person.dob,
@@ -229,9 +229,9 @@ RSpec.describe "registrations" do
 
               context "the user has unconfirmed WCA ID same as the given WCA ID" do
                 it "claims the WCA ID and registers the user" do
-                  person = FactoryBot.create(:person)
-                  delegate = FactoryBot.create(:delegate_role)
-                  user = FactoryBot.create(
+                  person = create(:person)
+                  delegate = create(:delegate_role)
+                  user = create(
                     :user,
                     unconfirmed_wca_id: person.wca_id,
                     dob_verification: person.dob,
@@ -247,15 +247,15 @@ RSpec.describe "registrations" do
                   expect(user.reload.wca_id).to eq person.wca_id
                   expect(user.reload.unconfirmed_wca_id).to be_nil
                   expect(user.reload.delegate_to_handle_wca_id_claim).to be_nil
-                  expect(user.registrations.first.events.map(&:id)).to eq %w(333)
+                  expect(user.registrations.first.events.map(&:id)).to eq %w[333]
                   expect(competition.registrations.count).to eq 1
                 end
               end
 
               context "the user has no unconfirmed WCA ID" do
                 it "updates this user with the WCA ID and registers him" do
-                  person = FactoryBot.create(:person)
-                  user = FactoryBot.create(:user)
+                  person = create(:person)
+                  user = create(:user)
                   file = csv_file [
                     ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
                     ["a", person.name, person.country.id, person.wca_id, person.dob, person.gender, user.email, "1", "0"],
@@ -264,7 +264,7 @@ RSpec.describe "registrations" do
                     post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
                   }.not_to change(User, :count)
                   expect(user.reload.wca_id).to eq person.wca_id
-                  expect(user.registrations.first.events.map(&:id)).to eq %w(333)
+                  expect(user.registrations.first.events.map(&:id)).to eq %w[333]
                   expect(competition.registrations.count).to eq 1
                 end
               end
@@ -273,7 +273,7 @@ RSpec.describe "registrations" do
             context "no user exists with registrant's email" do
               it "creates a locked user with this WCA ID, registers and notifies him" do
                 expect(RegistrationsMailer).to receive(:notify_registrant_of_locked_account_creation)
-                person = FactoryBot.create(:person)
+                person = create(:person)
                 file = csv_file [
                   ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
                   ["a", person.name, person.country.id, person.wca_id, person.dob, person.gender, "sherlock@example.com", "1", "0"],
@@ -292,7 +292,7 @@ RSpec.describe "registrations" do
         context "registrant doesn't have WCA ID" do
           context "user exists with registrant's email" do
             it "registers this user" do
-              user = FactoryBot.create(:user)
+              user = create(:user)
               file = csv_file [
                 ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
                 ["a", "Sherlock Holmes", "United Kingdom", "", "2000-01-01", "m", user.email, "1", "0"],
@@ -300,12 +300,12 @@ RSpec.describe "registrations" do
               expect {
                 post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
               }.not_to change(User, :count)
-              expect(user.registrations.first.events.map(&:id)).to eq %w(333)
+              expect(user.registrations.first.events.map(&:id)).to eq %w[333]
               expect(competition.registrations.count).to eq 1
             end
 
             it "updates user data unless it has WCA ID" do
-              user = FactoryBot.create(:user)
+              user = create(:user)
               file = csv_file [
                 ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
                 ["a", "Sherlock Holmes", "United Kingdom", "", "2000-01-01", "m", user.email, "1", "0"],
@@ -340,7 +340,7 @@ RSpec.describe "registrations" do
       describe "registrations re-import" do
         context "CSV registrant already accepted in the database" do
           it "leaves existing registration unchanged" do
-            registration = FactoryBot.create(:registration, :accepted, competition: competition, events: %w(333))
+            registration = create(:registration, :accepted, competition: competition, events: %w[333])
             user = registration.user
             file = csv_file [
               ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
@@ -355,7 +355,7 @@ RSpec.describe "registrations" do
 
         context "CSV registrant already accepted in the database, but with different events" do
           it "only updates registration events" do
-            registration = FactoryBot.create(:registration, :accepted, competition: competition, events: %(333))
+            registration = create(:registration, :accepted, competition: competition, events: %(333))
             user = registration.user
             file = csv_file [
               ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
@@ -365,13 +365,13 @@ RSpec.describe "registrations" do
               post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
             }.to not_change { competition.registrations.count }
               .and not_change { registration.reload.competing_status }
-              .and change { registration.reload.events.map(&:id) }.from(%w(333)).to(%w(333 444))
+              .and change { registration.reload.events.map(&:id) }.from(%w[333]).to(%w[333 444])
           end
         end
 
         context "CSV registrant already in the database, but deleted" do
           it "acceptes the registration again" do
-            registration = FactoryBot.create(:registration, :cancelled, competition: competition)
+            registration = create(:registration, :cancelled, competition: competition)
             user = registration.user
             file = csv_file [
               ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
@@ -387,7 +387,7 @@ RSpec.describe "registrations" do
 
         context "registrant deleted in the database, but not in the CSV file" do
           it "leaves the registration unchanged" do
-            registration = FactoryBot.create(:registration, :cancelled, competition: competition)
+            registration = create(:registration, :cancelled, competition: competition)
             file = csv_file [
               ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
             ]
@@ -401,7 +401,7 @@ RSpec.describe "registrations" do
 
         context "registrant accepted in the database, but not in the CSV file" do
           it "deletes the registration" do
-            registration = FactoryBot.create(:registration, :accepted, competition: competition)
+            registration = create(:registration, :accepted, competition: competition)
             file = csv_file [
               ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
             ]
@@ -434,54 +434,56 @@ RSpec.describe "registrations" do
   describe "POST #do_add" do
     context "when signed in as a normal user" do
       it "doesn't allow access" do
-        sign_in FactoryBot.create(:user)
+        sign_in create(:user)
         post competition_registrations_do_import_path(competition)
         expect(response).to redirect_to root_url
       end
     end
 
     context "when signed in as competition manager" do
+      let(:ots_competition) { create(:competition, :registration_open, :with_delegate, :visible) }
+
       before do
-        sign_in competition.delegates.first
+        sign_in ots_competition.delegates.first
       end
 
       context "when there is existing registration for the given person" do
         it "renders an error" do
-          registration = FactoryBot.create(:registration, :accepted, competition: competition, events: %w(333))
+          registration = create(:registration, :accepted, competition: ots_competition, events: %w[333])
           user = registration.user
           expect {
-            post competition_registrations_do_add_path(competition), params: {
+            post competition_registrations_do_add_path(ots_competition), params: {
               registration_data: {
                 name: user.name, country: user.country.id, birth_date: user.dob,
                 gender: user.gender, email: user.email, event_ids: ["444"]
               },
             }
-          }.to(not_change { competition.registrations.count })
+          }.to(not_change { ots_competition.registrations.count })
           expect(response.body).to include "This person already has a registration."
         end
       end
 
       context "when there is another registration in the same series" do
         it "renders an error" do
-          two_timer_dave = FactoryBot.create(:user, name: "Two Timer Dave")
+          two_timer_dave = create(:user, name: "Two Timer Dave")
 
-          series = FactoryBot.create(:competition_series)
-          competition.update!(competition_series: series)
+          series = create(:competition_series)
+          ots_competition.update!(competition_series: series)
 
-          partner_competition = FactoryBot.create(:competition, :with_delegate, :visible, event_ids: %w(333 555),
-                                                                                          competition_series: series, series_base: competition)
+          partner_competition = create(:competition, :with_delegate, :visible, event_ids: %w[333 555],
+                                                                               competition_series: series, series_base: ots_competition)
 
           # make sure there is a dummy registration for the partner competition.
-          FactoryBot.create(:registration, :accepted, competition: partner_competition, user: two_timer_dave)
+          create(:registration, :accepted, competition: partner_competition, user: two_timer_dave)
 
           expect {
-            post competition_registrations_do_add_path(competition), params: {
+            post competition_registrations_do_add_path(ots_competition), params: {
               registration_data: {
                 name: two_timer_dave.name, country: two_timer_dave.country.id, birth_date: two_timer_dave.dob,
                 gender: two_timer_dave.gender, email: two_timer_dave.email, event_ids: ["444"]
               },
             }
-          }.not_to(change { competition.registrations.count })
+          }.not_to(change { ots_competition.registrations.count })
           expect(response.body).to include "You can only be accepted for one Series competition at a time"
         end
       end
@@ -489,14 +491,14 @@ RSpec.describe "registrations" do
       context "when there is no existing registration for the given person" do
         it "creates an accepted registration" do
           expect {
-            post competition_registrations_do_add_path(competition), params: {
+            post competition_registrations_do_add_path(ots_competition), params: {
               registration_data: {
                 name: "Sherlock Holmes", country: "United Kingdom", birth_date: "2000-01-01",
                 gender: "m", email: "sherlock@example.com", event_ids: ["444"]
               },
             }
-          }.to change { competition.registrations.count }.by(1)
-          registration = competition.registrations.last
+          }.to change { ots_competition.registrations.count }.by(1)
+          registration = ots_competition.registrations.last
           expect(registration.user.name).to eq "Sherlock Holmes"
           expect(registration.events.map(&:id)).to eq ["444"]
           expect(registration).to be_accepted
@@ -507,20 +509,102 @@ RSpec.describe "registrations" do
 
       context "when competitor limit has been reached" do
         it "redirects to competition page" do
-          FactoryBot.create(:registration, :accepted, competition: competition, events: %w(333))
-          competition.update!(
+          create(:registration, :accepted, competition: ots_competition, events: %w[333])
+          ots_competition.update!(
             competitor_limit_enabled: true, competitor_limit: 1, competitor_limit_reason: "So I take all the podiums",
           )
           expect {
-            post competition_registrations_do_add_path(competition), params: {
+            post competition_registrations_do_add_path(ots_competition), params: {
               registration_data: {
                 name: "Sherlock Holmes", country: "United Kingdom", birth_date: "2000-01-01",
                 gender: "m", email: "sherlock@example.com", event_ids: ["444"]
               },
             }
-          }.not_to(change { competition.registrations.count })
+          }.not_to(change { ots_competition.registrations.count })
           follow_redirect!
           expect(response.body).to include "The competitor limit has been reached"
+        end
+      end
+
+      describe "on the spot behaviour" do
+        let(:open_comp) { create(:competition, :registration_open, delegates: [ots_competition.delegates.first]) }
+        let(:closed_comp) { create(:competition, :registration_closed, delegates: [ots_competition.delegates.first]) }
+        let(:past_comp) { create(:competition, :past, delegates: [ots_competition.delegates.first]) }
+
+        context 'on-the-spot is enabled' do
+          it 'works when registration is open' do
+            open_comp.update!(on_the_spot_registration: true, on_the_spot_entry_fee_lowest_denomination: 500)
+
+            expect {
+              post competition_registrations_do_add_path(open_comp), params: {
+                registration_data: {
+                  name: "Sherlock Holmes", country: "United Kingdom", birth_date: "2000-01-01",
+                  gender: "m", email: "sherlock@example.com", event_ids: ["444"]
+                },
+              }
+            }.to(change { open_comp.registrations.count })
+          end
+
+          it 'works when registration is closed' do
+            closed_comp.update!(on_the_spot_registration: true, on_the_spot_entry_fee_lowest_denomination: 500)
+
+            expect {
+              post competition_registrations_do_add_path(closed_comp), params: {
+                registration_data: {
+                  name: "Sherlock Holmes", country: "United Kingdom", birth_date: "2000-01-01",
+                  gender: "m", email: "sherlock@example.com", event_ids: ["444"]
+                },
+              }
+            }.to(change { closed_comp.registrations.count })
+          end
+
+          it 'doesnt work after the end of the competition' do
+            past_comp.update!(on_the_spot_registration: true, on_the_spot_entry_fee_lowest_denomination: 500)
+
+            expect {
+              post competition_registrations_do_add_path(past_comp), params: {
+                registration_data: {
+                  name: "Sherlock Holmes", country: "United Kingdom", birth_date: "2000-01-01",
+                  gender: "m", email: "sherlock@example.com", event_ids: ["444"]
+                },
+              }
+            }.not_to(change { past_comp.registrations.count })
+          end
+        end
+
+        context 'on-the-spot is disabled' do
+          it 'works when registration is open' do
+            expect {
+              post competition_registrations_do_add_path(open_comp), params: {
+                registration_data: {
+                  name: "Sherlock Holmes", country: "United Kingdom", birth_date: "2000-01-01",
+                  gender: "m", email: "sherlock@example.com", event_ids: ["444"]
+                },
+              }
+            }.to(change { open_comp.registrations.count })
+          end
+
+          it 'doesnt work when registration is closed' do
+            expect {
+              post competition_registrations_do_add_path(closed_comp), params: {
+                registration_data: {
+                  name: "Sherlock Holmes", country: "United Kingdom", birth_date: "2000-01-01",
+                  gender: "m", email: "sherlock@example.com", event_ids: ["444"]
+                },
+              }
+            }.not_to(change { closed_comp.registrations.count })
+          end
+
+          it 'doesnt work after the end of the competition' do
+            expect {
+              post competition_registrations_do_add_path(past_comp), params: {
+                registration_data: {
+                  name: "Sherlock Holmes", country: "United Kingdom", birth_date: "2000-01-01",
+                  gender: "m", email: "sherlock@example.com", event_ids: ["444"]
+                },
+              }
+            }.not_to(change { past_comp.registrations.count })
+          end
         end
       end
     end
@@ -528,9 +612,9 @@ RSpec.describe "registrations" do
 
   describe "POST #process_payment_intent" do
     context "when not signed in" do
-      let(:competition) { FactoryBot.create(:competition, :stripe_connected, :visible, :registration_open, events: Event.where(id: %w(222 333))) }
-      let!(:user) { FactoryBot.create(:user, :wca_id) }
-      let!(:registration) { FactoryBot.create(:registration, competition: competition, user: user) }
+      let(:competition) { create(:competition, :stripe_connected, :visible, :registration_open, events: Event.where(id: %w[222 333])) }
+      let!(:user) { create(:user, :wca_id) }
+      let!(:registration) { create(:registration, competition: competition, user: user) }
 
       sign_out
 
@@ -541,17 +625,17 @@ RSpec.describe "registrations" do
     end
 
     context "when signed in" do
-      let(:competition) { FactoryBot.create(:competition, :stripe_connected, :visible, :registration_open, events: Event.where(id: %w(222 333)), base_entry_fee_lowest_denomination: 1000) }
-      let!(:user) { FactoryBot.create(:user, :wca_id) }
-      let!(:registration) { FactoryBot.create(:registration, competition: competition, user: user) }
+      let(:competition) { create(:competition, :stripe_connected, :visible, :registration_open, events: Event.where(id: %w[222 333]), base_entry_fee_lowest_denomination: 1000) }
+      let!(:user) { create(:user, :wca_id) }
+      let!(:registration) { create(:registration, competition: competition, user: user) }
 
       before :each do
         sign_in user
       end
 
       it "restricts access to the registration's owner" do
-        user2 = FactoryBot.create(:user, :wca_id)
-        registration2 = FactoryBot.create(:registration, competition: competition, user: user2)
+        user2 = create(:user, :wca_id)
+        registration2 = create(:registration, competition: competition, user: user2)
         post registration_payment_intent_path(registration2.id, :stripe)
         expect(response).to have_http_status :forbidden
       end
@@ -1060,9 +1144,9 @@ RSpec.describe "registrations" do
   end
 
   describe "POST #create_paypal_order" do
-    let(:competition) { FactoryBot.create(:competition, :paypal_connected, :visible, :registration_open, events: Event.where(id: %w(222 333)), base_entry_fee_lowest_denomination: 1000) }
-    let!(:user) { FactoryBot.create(:user, :wca_id) }
-    let!(:registration) { FactoryBot.create(:registration, competition: competition, user: user) }
+    let(:competition) { create(:competition, :paypal_connected, :visible, :registration_open, events: Event.where(id: %w[222 333]), base_entry_fee_lowest_denomination: 1000) }
+    let!(:user) { create(:user, :wca_id) }
+    let!(:registration) { create(:registration, competition: competition, user: user) }
 
     before :each do
       sign_in user # TODO: Why do we need to sign in here?
@@ -1090,9 +1174,9 @@ RSpec.describe "registrations" do
   end
 
   describe "POST #capture_paypal_payment" do
-    let(:competition) { FactoryBot.create(:competition, :paypal_connected, :visible, :registration_open, events: Event.where(id: %w(222 333)), base_entry_fee_lowest_denomination: 1000) }
-    let!(:user) { FactoryBot.create(:user, :wca_id) }
-    let!(:registration) { FactoryBot.create(:registration, competition: competition, user: user) }
+    let(:competition) { create(:competition, :paypal_connected, :visible, :registration_open, events: Event.where(id: %w[222 333]), base_entry_fee_lowest_denomination: 1000) }
+    let!(:user) { create(:user, :wca_id) }
+    let!(:registration) { create(:registration, competition: competition, user: user) }
 
     before :each do
       sign_in user
@@ -1148,10 +1232,10 @@ RSpec.describe "registrations" do
 
   # TODO: Add cases for partial refunds
   describe "POST #issue_paypal_refund" do
-    let(:competition) { FactoryBot.create(:competition, :paypal_connected, :visible, :registration_open, events: Event.where(id: %w(222 333)), base_entry_fee_lowest_denomination: 1000) }
-    let!(:user) { FactoryBot.create(:user, :wca_id) }
-    let!(:admin_user) { FactoryBot.create(:admin) }
-    let!(:registration) { FactoryBot.create(:registration, competition: competition, user: user) }
+    let(:competition) { create(:competition, :paypal_connected, :visible, :registration_open, events: Event.where(id: %w[222 333]), base_entry_fee_lowest_denomination: 1000) }
+    let!(:user) { create(:user, :wca_id) }
+    let!(:admin_user) { create(:admin) }
+    let!(:registration) { create(:registration, competition: competition, user: user) }
 
     before :each do
       sign_in user
@@ -1277,9 +1361,9 @@ def capture_order_response(record_id, amount, currency)
               "disbursement_mode" => "INSTANT",
               "seller_protection" => {
                 "status" => "ELIGIBLE",
-                "dispute_categories" => [
-                  "ITEM_NOT_RECEIVED",
-                  "UNAUTHORIZED_TRANSACTION",
+                "dispute_categories" => %w[
+                  ITEM_NOT_RECEIVED
+                  UNAUTHORIZED_TRANSACTION
                 ],
               },
               "links" => [

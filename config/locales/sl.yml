@@ -440,7 +440,7 @@ sl:
         #original_hash: 8c41ae8
         wca_id: Oseba
         #original_hash: d523ebb
-        countryId: Država
+        country_id: Država
         #original_hash: ab58155
         dob: Datum rojstva
         #original_hash: 8a754c6
@@ -814,7 +814,7 @@ sl:
         #original_hash: 498f4c5
         dob: 'Datum rojstva mora slediti sledečemu formatu: LLLL-MM-DD'
         #original_hash: da39a3e
-        countryId: ''
+        country_id: ''
         #original_hash: da39a3e
         gender: ''
         #original_hash: da39a3e

@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe Api::V0::UsersController do
   describe 'GET show_user_*' do
-    let!(:user) { FactoryBot.create(:user_with_wca_id, name: "Jeremy") }
+    let!(:user) { create(:user_with_wca_id, name: "Jeremy") }
 
     it 'can query by id' do
       get :show_user_by_id, params: { id: user.id }
@@ -30,8 +30,8 @@ RSpec.describe Api::V0::UsersController do
     end
 
     describe 'upcoming_competitions' do
-      let!(:upcoming_comp) { FactoryBot.create(:competition, :confirmed, :visible, starts: 2.weeks.from_now) }
-      let!(:registration) { FactoryBot.create(:registration, :accepted, user: user, competition: upcoming_comp) }
+      let!(:upcoming_comp) { create(:competition, :confirmed, :visible, starts: 2.weeks.from_now) }
+      let!(:registration) { create(:registration, :accepted, user: user, competition: upcoming_comp) }
 
       it 'does not render upcoming competitions by default' do
         get :show_user_by_id, params: { id: user.id }
@@ -50,7 +50,7 @@ RSpec.describe Api::V0::UsersController do
   end
 
   describe 'GET #me' do
-    let!(:normal_user) { FactoryBot.create(:user_with_wca_id, name: "Jeremy") }
+    let!(:normal_user) { create(:user_with_wca_id, name: "Jeremy") }
 
     it 'correctly returns user' do
       sign_in normal_user
@@ -59,7 +59,7 @@ RSpec.describe Api::V0::UsersController do
       json = response.parsed_body
       expect(json["user"]).to eq normal_user.serializable_hash(private_attributes: ['email']).as_json
     end
-    let!(:id_less_user) { FactoryBot.create(:user, email: "example@email.com") }
+    let!(:id_less_user) { create(:user, email: "example@email.com") }
 
     it 'correctly returns user without wca_id' do
       sign_in id_less_user
@@ -69,8 +69,8 @@ RSpec.describe Api::V0::UsersController do
       expect(json["user"]).to eq id_less_user.serializable_hash(private_attributes: ['email']).as_json
     end
 
-    let(:competed_person) { FactoryBot.create(:person_who_has_competed_once, name: "Jeremy", wca_id: "2005FLEI01") }
-    let!(:competed_user) { FactoryBot.create(:user, person: competed_person, email: "example1@email.com") }
+    let(:competed_person) { create(:person_who_has_competed_once, name: "Jeremy", wca_id: "2005FLEI01") }
+    let!(:competed_user) { create(:user, person: competed_person, email: "example1@email.com") }
 
     it 'correctly returns user with their prs' do
       sign_in competed_user
@@ -83,8 +83,8 @@ RSpec.describe Api::V0::UsersController do
   end
 
   describe 'GET #permissions' do
-    let!(:normal_user) { FactoryBot.create(:user_with_wca_id, name: "Jeremy") }
-    let!(:senior_delegate_role) { FactoryBot.create :senior_delegate_role }
+    let!(:normal_user) { create(:user_with_wca_id, name: "Jeremy") }
+    let!(:senior_delegate_role) { create(:senior_delegate_role) }
 
     it 'correctly returns user a normal users permission' do
       sign_in normal_user
@@ -92,7 +92,7 @@ RSpec.describe Api::V0::UsersController do
       expect(response).to have_http_status :ok
       expect(response.body).to eq normal_user.permissions.to_json
     end
-    let!(:banned_user) { FactoryBot.create(:user, :banned) }
+    let!(:banned_user) { create(:user, :banned) }
 
     it 'correctly returns that a banned user cant compete' do
       sign_in banned_user
@@ -113,7 +113,7 @@ RSpec.describe Api::V0::UsersController do
     end
 
     it 'correctly returns wrt to be able to create competitions' do
-      sign_in FactoryBot.create :user, :wrt_member
+      sign_in create :user, :wrt_member
       get :permissions
       expect(response).to have_http_status :ok
       json = response.parsed_body
@@ -121,7 +121,7 @@ RSpec.describe Api::V0::UsersController do
     end
 
     it 'correctly returns delegate to be able to create competitions' do
-      delegate = FactoryBot.create :delegate_role
+      delegate = create(:delegate_role)
       sign_in delegate.user
       get :permissions
       expect(response).to have_http_status :ok
@@ -130,7 +130,7 @@ RSpec.describe Api::V0::UsersController do
     end
 
     it 'correctly returns wst to be able to create competitions' do
-      sign_in FactoryBot.create :user, :wst_member
+      sign_in create :user, :wst_member
       get :permissions
       expect(response).to have_http_status :ok
       json = response.parsed_body
@@ -138,7 +138,7 @@ RSpec.describe Api::V0::UsersController do
     end
 
     it 'correctly returns board to be able to create competitions' do
-      sign_in FactoryBot.create :user, :board_member
+      sign_in create :user, :board_member
       get :permissions
       expect(response).to have_http_status :ok
       json = response.parsed_body
@@ -146,7 +146,7 @@ RSpec.describe Api::V0::UsersController do
     end
 
     it 'correctly returns board to be able to admin competitions' do
-      sign_in FactoryBot.create :user, :board_member
+      sign_in create :user, :board_member
       get :permissions
       expect(response).to have_http_status :ok
       json = response.parsed_body
@@ -154,7 +154,7 @@ RSpec.describe Api::V0::UsersController do
     end
 
     it 'correctly returns wrt to be able to admin competitions' do
-      sign_in FactoryBot.create :user, :wrt_member
+      sign_in create :user, :wrt_member
       get :permissions
       expect(response).to have_http_status :ok
       json = response.parsed_body
@@ -162,17 +162,17 @@ RSpec.describe Api::V0::UsersController do
     end
 
     it 'correctly returns wst to be able to admin competitions' do
-      sign_in FactoryBot.create :user, :wst_member
+      sign_in create :user, :wst_member
       get :permissions
       expect(response).to have_http_status :ok
       json = response.parsed_body
       expect(json["can_administer_competitions"]["scope"]).to eq "*"
     end
 
-    let!(:delegate_user) { (FactoryBot.create :delegate_role, group_id: senior_delegate_role.group.id).user }
-    let!(:organizer_user) { FactoryBot.create :user }
+    let!(:delegate_user) { create(:delegate_role, group_id: senior_delegate_role.group.id).user }
+    let!(:organizer_user) { create(:user) }
     let!(:competition) {
-      FactoryBot.create(:competition, :confirmed, delegates: [delegate_user], organizers: [organizer_user])
+      create(:competition, :confirmed, delegates: [delegate_user], organizers: [organizer_user])
     }
 
     it 'correctly returns delegates to be able to admin competitions they delegated' do

@@ -14,7 +14,7 @@ RSpec.describe Api::V0::CompetitionsController do
 
   describe 'GET #show' do
     let(:competition) {
-      FactoryBot.create(
+      create(
         :competition,
         :visible,
         id: "TestComp2014",
@@ -52,7 +52,7 @@ RSpec.describe Api::V0::CompetitionsController do
 
   describe 'GET #schedule' do
     let(:competition) {
-      FactoryBot.create(
+      create(
         :competition,
         :with_delegate,
         :with_valid_schedule,
@@ -89,10 +89,10 @@ RSpec.describe Api::V0::CompetitionsController do
 
   describe 'GET #index' do
     it 'sorts newest to oldest' do
-      yesteryear_comp = FactoryBot.create(:competition, :confirmed, :visible, starts: 1.year.ago)
-      yesterday_comp = FactoryBot.create(:competition, :confirmed, :visible, starts: 1.day.ago)
-      today_comp = FactoryBot.create(:competition, :confirmed, :visible, starts: 0.days.ago)
-      tomorrow_comp = FactoryBot.create(:competition, :confirmed, :visible, starts: 1.day.from_now)
+      yesteryear_comp = create(:competition, :confirmed, :visible, starts: 1.year.ago)
+      yesterday_comp = create(:competition, :confirmed, :visible, starts: 1.day.ago)
+      today_comp = create(:competition, :confirmed, :visible, starts: 0.days.ago)
+      tomorrow_comp = create(:competition, :confirmed, :visible, starts: 1.day.from_now)
 
       get :index
       expect(response).to have_http_status :ok
@@ -101,8 +101,8 @@ RSpec.describe Api::V0::CompetitionsController do
     end
 
     it 'can query by country_iso2' do
-      vietnam_comp = FactoryBot.create(:competition, :confirmed, :visible, country_id: "Vietnam")
-      usa_comp = FactoryBot.create(:competition, :confirmed, :visible, country_id: "USA")
+      vietnam_comp = create(:competition, :confirmed, :visible, country_id: "Vietnam")
+      usa_comp = create(:competition, :confirmed, :visible, country_id: "USA")
 
       get :index, params: { country_iso2: "US" }
       json = response.parsed_body
@@ -116,15 +116,15 @@ RSpec.describe Api::V0::CompetitionsController do
     end
 
     context 'managed_by' do
-      let(:delegate1) { FactoryBot.create(:delegate) }
-      let(:delegate2) { FactoryBot.create(:delegate) }
-      let(:trainee_delegate1) { FactoryBot.create(:trainee_delegate) }
-      let(:organizer1) { FactoryBot.create(:user) }
-      let(:organizer2) { FactoryBot.create(:user) }
+      let(:delegate1) { create(:delegate) }
+      let(:delegate2) { create(:delegate) }
+      let(:trainee_delegate1) { create(:trainee_delegate) }
+      let(:organizer1) { create(:user) }
+      let(:organizer2) { create(:user) }
       let!(:competition) {
-        FactoryBot.create(:competition, :confirmed, delegates: [delegate1, delegate2, trainee_delegate1], organizers: [organizer1, organizer2])
+        create(:competition, :confirmed, delegates: [delegate1, delegate2, trainee_delegate1], organizers: [organizer1, organizer2])
       }
-      let!(:other_comp) { FactoryBot.create(:competition) }
+      let!(:other_comp) { create(:competition) }
 
       it 'managed_by includes delegate' do
         scopes = Doorkeeper::OAuth::Scopes.new
@@ -164,8 +164,8 @@ RSpec.describe Api::V0::CompetitionsController do
     end
 
     it 'can do a plaintext query' do
-      terrible_comp = FactoryBot.create(:competition, :confirmed, :visible, name: "A terrible competition 2016", country_id: "USA")
-      awesome_comp = FactoryBot.create(:competition, :confirmed, :visible, name: "An awesome competition 2016", country_id: "France")
+      terrible_comp = create(:competition, :confirmed, :visible, name: "A terrible competition 2016", country_id: "USA")
+      awesome_comp = create(:competition, :confirmed, :visible, name: "An awesome competition 2016", country_id: "France")
 
       get :index, params: { q: "AWES" }
       json = response.parsed_body
@@ -201,9 +201,9 @@ RSpec.describe Api::V0::CompetitionsController do
     end
 
     it 'can query by date' do
-      last_feb_comp = FactoryBot.create(:competition, :confirmed, :visible, starts: Date.new(2015, 2, 1))
-      feb_comp = FactoryBot.create(:competition, :confirmed, :visible, starts: Date.new(2016, 2, 1))
-      march_comp = FactoryBot.create(:competition, :confirmed, :visible, starts: Date.new(2016, 3, 1))
+      last_feb_comp = create(:competition, :confirmed, :visible, starts: Date.new(2015, 2, 1))
+      feb_comp = create(:competition, :confirmed, :visible, starts: Date.new(2016, 2, 1))
+      march_comp = create(:competition, :confirmed, :visible, starts: Date.new(2016, 3, 1))
 
       get :index, params: { start: "2015-02-01" }
       json = response.parsed_body
@@ -223,8 +223,8 @@ RSpec.describe Api::V0::CompetitionsController do
     end
 
     it 'can query by announced_after' do
-      FactoryBot.create(:competition, :confirmed, :visible, name: "Old comp 2018", announced_at: 3.days.ago)
-      FactoryBot.create(:competition, :confirmed, :visible, name: "New comp 2018", announced_at: Time.now)
+      create(:competition, :confirmed, :visible, name: "Old comp 2018", announced_at: 3.days.ago)
+      create(:competition, :confirmed, :visible, name: "New comp 2018", announced_at: Time.now)
       get :index, params: { announced_after: 2.days.ago }
       expect(response).to have_http_status :ok
       json = response.parsed_body
@@ -232,7 +232,7 @@ RSpec.describe Api::V0::CompetitionsController do
     end
 
     it 'paginates' do
-      FactoryBot.create_list :competition, 7, :confirmed, :visible
+      create_list(:competition, 7, :confirmed, :visible)
 
       get :index, params: { per_page: 5 }
       expect(response).to have_http_status :ok
@@ -255,10 +255,10 @@ RSpec.describe Api::V0::CompetitionsController do
   end
 
   describe 'wcif' do
-    let!(:series) { FactoryBot.create :competition_series }
+    let!(:series) { create(:competition_series) }
 
     let!(:competition) {
-      FactoryBot.create(
+      create(
         :competition,
         :with_delegate,
         :visible,
@@ -267,7 +267,7 @@ RSpec.describe Api::V0::CompetitionsController do
         start_date: "2014-02-03",
         end_date: "2014-02-05",
         external_website: "http://example.com",
-        event_ids: %w(333 444),
+        event_ids: %w[333 444],
         latitude: 43_641_740,
         longitude: -79_376_902,
         competition_series: series,
@@ -275,7 +275,7 @@ RSpec.describe Api::V0::CompetitionsController do
     }
 
     let!(:hidden_competition) {
-      FactoryBot.create(
+      create(
         :competition,
         :not_visible,
         id: "HiddenComp2014",
@@ -349,18 +349,18 @@ RSpec.describe Api::V0::CompetitionsController do
         user_competitor_ids = []
         comp_id = 1
         3.times do
-          user = FactoryBot.create(:user)
+          user = create(:user)
           user_competitor_ids << [user.id, comp_id]
           comp_id += 1
-          last_registration = FactoryBot.create(:registration, :accepted, competition: competition, user: user)
+          last_registration = create(:registration, :accepted, competition: competition, user: user)
         end
         get_wcif_and_compare_persons_to(competition.id, user_competitor_ids + [[competition.organizers.first.id, nil], [competition.delegates.first.id, nil]])
 
         # Move last registration to deleted
         last_registration.competing_status = Registrations::Helper::STATUS_CANCELLED
         # Create and register one new user
-        user = FactoryBot.create(:user)
-        last_registration = FactoryBot.create(:registration, :accepted, competition: competition, user: user)
+        user = create(:user)
+        last_registration = create(:registration, :accepted, competition: competition, user: user)
         user_competitor_ids << [user.id, comp_id]
         get_wcif_and_compare_persons_to(competition.id, user_competitor_ids + [[competition.organizers.first.id, nil], [competition.delegates.first.id, nil]])
       end
@@ -369,7 +369,7 @@ RSpec.describe Api::V0::CompetitionsController do
         get :show_wcif, params: { competition_id: 'TestComp2014' }
         expect(response).to have_http_status :ok
         parsed_body = response.parsed_body
-        expect(parsed_body['series']['competitionIds']).to eq ['HiddenComp2014', 'TestComp2014']
+        expect(parsed_body['series']['competitionIds']).to eq %w[HiddenComp2014 TestComp2014]
       end
     end
 

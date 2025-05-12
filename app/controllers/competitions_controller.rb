@@ -13,18 +13,18 @@ class CompetitionsController < ApplicationController
     },
   }.freeze
 
-  before_action :authenticate_user!, except: [
-    :index,
-    :show,
-    :embedable_map,
-    :show_podiums,
-    :show_all_results,
-    :show_results_by_person,
-    :show_scrambles,
+  before_action :authenticate_user!, except: %i[
+    index
+    show
+    embedable_map
+    show_podiums
+    show_all_results
+    show_results_by_person
+    show_scrambles
   ]
-  before_action -> { redirect_to_root_unless_user(:can_admin_competitions?) }, only: [
-    :admin_edit,
-    :disconnect_payment_integration,
+  before_action -> { redirect_to_root_unless_user(:can_admin_competitions?) }, only: %i[
+    admin_edit
+    disconnect_payment_integration
   ]
   before_action -> { redirect_to_root_unless_user(:can_admin_results?) }, only: [
     :post_results,
@@ -35,11 +35,11 @@ class CompetitionsController < ApplicationController
   before_action -> { redirect_to_root_unless_user(:can_access_senior_delegate_panel?) }, only: [
     :for_senior,
   ]
-  before_action -> { redirect_to_root_unless_user(:can_manage_competition?, competition_from_params) }, only: [
-    :edit,
-    :edit_events,
-    :edit_schedule,
-    :payment_integration_setup,
+  before_action -> { redirect_to_root_unless_user(:can_manage_competition?, competition_from_params) }, only: %i[
+    edit
+    edit_events
+    edit_schedule
+    payment_integration_setup
   ]
 
   rescue_from WcaExceptions::ApiException do |e|
@@ -102,7 +102,7 @@ class CompetitionsController < ApplicationController
       return redirect_to competition_admin_import_results_path(comp)
     end
 
-    if comp.main_event && comp.results.where(eventId: comp.main_event_id).empty?
+    if comp.main_event && comp.results.where(event_id: comp.main_event_id).empty?
       flash[:danger] = t('competitions.messages.no_main_event_results', event_name: comp.main_event.name)
       return redirect_to competition_admin_import_results_path(comp)
     end
@@ -376,10 +376,8 @@ class CompetitionsController < ApplicationController
         },
       },
       limit: other_comp.competitor_limit_enabled ? other_comp.competitor_limit : "",
-      competitors: other_comp.probably_over? ? other_comp.results.select('DISTINCT personId').count : "",
-      events: other_comp.events.map { |event|
-        event.id
-      },
+      competitors: other_comp.probably_over? ? other_comp.results.select('DISTINCT person_id').count : "",
+      events: other_comp.events.map(&:id),
       coordinates: {
         lat: other_comp.latitude_degrees,
         long: other_comp.longitude_degrees,
@@ -424,9 +422,7 @@ class CompetitionsController < ApplicationController
       minutesUntil: competition.minutes_until_other_registration_starts(other_comp),
       cityName: other_comp.city_name,
       countryId: other_comp.country_id,
-      events: other_comp.events.map { |event|
-        event.id
-      },
+      events: other_comp.events.map(&:id),
     }
   end
 
@@ -772,7 +768,7 @@ class CompetitionsController < ApplicationController
         [r.competition_id, r.competing_status]
       end
       competition_ids.concat(@registered_for_by_competition_id.keys)
-      competition_ids.concat(current_user.person.competitions.pluck(:competitionId)) if current_user.person
+      competition_ids.concat(current_user.person.competitions.pluck(:competition_id)) if current_user.person
       # An organiser might still have duties to perform for a cancelled competition until the date of the competition has passed.
       # For example, mailing all competitors about the cancellation.
       # In general ensuring ease of access until it is certain that they won't need to frequently visit the page anymore.

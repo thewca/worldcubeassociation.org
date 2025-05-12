@@ -10,34 +10,34 @@ module AuxiliaryDataComputation
   ## Build 'concise results' tables.
   def self.compute_concise_results
     [
-      %w(best concise_single_results),
-      %w(average concise_average_results),
+      %w[best concise_single_results],
+      %w[average concise_average_results],
     ].each do |field, table_name|
       DbHelper.with_temp_table(table_name) do |temp_table_name|
         ActiveRecord::Base.connection.execute <<-SQL.squish
           INSERT INTO #{temp_table_name} (id, #{field}, value_and_id, person_id, event_id, country_id, continent_id, year, month, day)
           SELECT
-            result.id,
+            results.id,
             #{field},
             valueAndId,
-            personId,
-            eventId,
+            person_id,
+            event_id,
             countries.id country_id,
             continent_id,
             YEAR(start_date) year,
             MONTH(start_date) month,
             DAY(start_date) day
           FROM (
-              SELECT MIN(#{field} * 1000000000 + result.id) valueAndId
-              FROM Results result
-              JOIN competitions ON competitions.id = competitionId
+              SELECT MIN(#{field} * 1000000000 + results.id) valueAndId
+              FROM results
+              JOIN competitions ON competitions.id = competition_id
               WHERE #{field} > 0
-              GROUP BY personId, result.countryId, eventId, YEAR(start_date)
+              GROUP BY person_id, results.country_id, event_id, YEAR(start_date)
             ) MinValuesWithId
-            JOIN Results result ON result.id = valueAndId % 1000000000
-            JOIN competitions ON competitions.id = competitionId
-            JOIN countries ON countries.id = result.countryId
-            JOIN events ON events.id = eventId
+            JOIN results ON results.id = valueAndId % 1000000000
+            JOIN competitions ON competitions.id = results.competition_id
+            JOIN countries ON countries.id = results.country_id
+            JOIN events ON events.id = results.event_id
         SQL
       end
     end
@@ -46,11 +46,11 @@ module AuxiliaryDataComputation
   ## Build rank tables.
   def self.compute_rank_tables
     [
-      %w(best ranks_single concise_single_results),
-      %w(average ranks_average concise_average_results),
+      %w[best ranks_single concise_single_results],
+      %w[average ranks_average concise_average_results],
     ].each do |field, table_name, concise_table_name|
       DbHelper.with_temp_table(table_name) do |temp_table_name|
-        current_country_by_wca_id = Person.current.pluck(:wca_id, :countryId).to_h
+        current_country_by_wca_id = Person.current.pluck(:wca_id, :country_id).to_h
         # Get all personal records (note: people that changed their country appear once for each country).
         personal_records_with_event = ActiveRecord::Base.connection.execute <<-SQL.squish
           SELECT event_id, person_id, country_id, continent_id, MIN(#{field}) value

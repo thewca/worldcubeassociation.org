@@ -25,14 +25,14 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
 
     competitions = competitions_scope.search(params[:q], params: params)
 
-    serial_methods = ["short_display_name", "city", "country_iso2", "event_ids", "latitude_degrees", "longitude_degrees", "announced_at"]
+    serial_methods = %w[short_display_name city country_iso2 event_ids latitude_degrees longitude_degrees announced_at]
     serial_includes = {}
 
-    serial_includes["delegates"] = { only: ["id", "name"], methods: [], include: ["avatar"] } if admin_mode
-    serial_methods |= ["results_submitted_at", "results_posted_at", "report_posted_at", "report_posted_by_user"] if admin_mode
+    serial_includes["delegates"] = { only: %w[id name], methods: [], include: ["avatar"] } if admin_mode
+    serial_methods |= %w[results_submitted_at results_posted_at report_posted_at report_posted_by_user] if admin_mode
 
     paginate json: competitions,
-             only: ["id", "name", "start_date", "end_date", "registration_open", "registration_close", "venue"],
+             only: %w[id name start_date end_date registration_open registration_close venue],
              methods: serial_methods,
              include: serial_includes
   end
@@ -63,7 +63,7 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
     competition = competition_from_params(associations: [:rounds])
     event = Event.c_find!(params[:event_id])
     results_by_round = competition.results
-                                  .where(eventId: event.id)
+                                  .where(event_id: event.id)
                                   .group_by(&:round_type)
                                   .sort_by { |round_type, _| -round_type.rank }
     rounds = results_by_round.map do |round_type, results|
@@ -74,7 +74,7 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
       {
         id: round&.id,
         roundTypeId: round_type.id,
-        results: results.sort_by { |r| [r.pos, r.personName] },
+        results: results.sort_by { |r| [r.pos, r.person_name] },
       }
     end
     render json: {

@@ -6,8 +6,8 @@ RSpec.describe "registrations/edit_registrations" do
   it "shows administrative notes when a registration has them" do
     pending("Until we find a better way to statically test React pages. Signed GB 11/13/2024")
 
-    competition = FactoryBot.create(:competition, :registration_open)
-    FactoryBot.create(:registration, competition: competition, administrative_notes: "😎")
+    competition = create(:competition, :registration_open)
+    create(:registration, competition: competition, administrative_notes: "😎")
 
     assign(:competition, competition)
     assign(:registrations, competition.registrations)
@@ -22,8 +22,8 @@ RSpec.describe "registrations/edit_registrations" do
   it "hides administrative notes when no registrations have them" do
     pending("Until we find a better way to statically test React pages. Signed GB 11/13/2024")
 
-    competition = FactoryBot.create(:competition, :registration_open)
-    FactoryBot.create(:registration, competition: competition)
+    competition = create(:competition, :registration_open)
+    create(:registration, competition: competition)
 
     assign(:competition, competition)
     assign(:registrations, competition.registrations)

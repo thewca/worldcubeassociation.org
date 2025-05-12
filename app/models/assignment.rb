@@ -28,7 +28,7 @@ class Assignment < ApplicationRecord
       "type" => ["object"],
       "properties" => {
         "activityId" => { "type" => "integer" },
-        "stationNumber" => { "type" => ["integer", "null"] },
+        "stationNumber" => { "type" => %w[integer null] },
         "assignmentCode" => { "type" => "string" },
       },
     }

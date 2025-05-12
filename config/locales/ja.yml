@@ -426,7 +426,7 @@ ja:
         #original_hash: 8c41ae8
         wca_id: 個人
         #original_hash: fa4c045
-        countryId: 国・地域
+        country_id: 国・地域
         #original_hash: ab58155
         dob: 生年月日
         #original_hash: 8a754c6

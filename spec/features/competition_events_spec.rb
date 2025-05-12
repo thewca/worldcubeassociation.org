@@ -10,10 +10,10 @@ RSpec.feature "Competition events management" do
   end
 
   context "unconfirmed competition" do
-    let(:competition) { FactoryBot.create(:competition, event_ids: [], qualification_results: true, qualification_results_reason: "Because I need them for testing!") }
+    let(:competition) { create(:competition, event_ids: [], qualification_results: true, qualification_results_reason: "Because I need them for testing!") }
 
     background do
-      sign_in FactoryBot.create(:admin)
+      sign_in create(:admin)
       visit "/competitions/#{competition.id}/events/edit"
 
       within_event_panel("333") do
@@ -26,7 +26,7 @@ RSpec.feature "Competition events management" do
     end
 
     scenario "adds 1 round of 333", :js do
-      expect(competition.events.map(&:id)).to match_array %w(333)
+      expect(competition.events.map(&:id)).to match_array %w[333]
     end
 
     scenario "remove event", :js do
@@ -144,7 +144,7 @@ RSpec.feature "Competition events management" do
   end
 
   context "confirmed competition" do
-    let!(:competition) { FactoryBot.create(:competition, :future, :confirmed, event_ids: ["222", "444"]) }
+    let!(:competition) { create(:competition, :future, :confirmed, event_ids: %w[222 444]) }
 
     scenario "delegate cannot add events", :js do
       sign_in competition.delegates.first
@@ -163,18 +163,18 @@ RSpec.feature "Competition events management" do
     end
 
     scenario "board member can add events", :js do
-      sign_in FactoryBot.create(:user, :board_member)
+      sign_in create(:user, :board_member)
       visit "/competitions/#{competition.id}/events/edit"
       within_event_panel("333") do
         click_button "Add event"
       end
       save_events_react
 
-      expect(competition.reload.events.map(&:id)).to match_array %w(222 333 444)
+      expect(competition.reload.events.map(&:id)).to match_array %w[222 333 444]
     end
 
     scenario "board member can remove events", :js do
-      sign_in FactoryBot.create(:user, :board_member)
+      sign_in create(:user, :board_member)
       visit "/competitions/#{competition.id}/events/edit"
 
       within_event_panel("444") do
@@ -187,14 +187,14 @@ RSpec.feature "Competition events management" do
 
       save_events_react
 
-      expect(competition.reload.events.map(&:id)).to match_array %w(222)
+      expect(competition.reload.events.map(&:id)).to match_array %w[222]
     end
 
     context "even admin cannot create inconsistent competition state" do
       let(:comp_event_222) { competition.competition_events.find_by(event_id: "222") }
 
       scenario "by deleting main event", :js do
-        sign_in FactoryBot.create(:admin)
+        sign_in create(:admin)
         visit "/competitions/#{competition.id}/events/edit"
 
         within_event_panel("222") do
@@ -211,11 +211,11 @@ RSpec.feature "Competition events management" do
           save_events_react(wait_for_completion: false)
         end
 
-        expect(competition.reload.events.map(&:id)).to match_array %w(222 444)
+        expect(competition.reload.events.map(&:id)).to match_array %w[222 444]
       end
 
       scenario "by inserting a qualification when they were not originally applied for", :js do
-        sign_in FactoryBot.create(:admin)
+        sign_in create(:admin)
         visit "/competitions/#{competition.id}/events/edit"
 
         expect(find_event_panel("222").find(:css, '[name="qualification"].disabled')).to be
@@ -224,11 +224,11 @@ RSpec.feature "Competition events management" do
   end
 
   context "competition with results posted" do
-    let!(:competition) { FactoryBot.create :competition, :confirmed, :visible, :past, :results_posted, event_ids: Event.where(id: '333') }
+    let!(:competition) { create(:competition, :confirmed, :visible, :past, :results_posted, event_ids: Event.where(id: '333')) }
     let(:competition_event) { competition.competition_events.find_by(event_id: "333") }
 
     scenario "delegate cannot update events", :js do
-      FactoryBot.create :round, number: 2, format_id: 'a', competition_event: competition_event, total_number_of_rounds: 2
+      create(:round, number: 2, format_id: 'a', competition_event: competition_event, total_number_of_rounds: 2)
       sign_in competition.delegates.first
       visit "/competitions/#{competition.id}/events/edit"
 
@@ -244,7 +244,7 @@ RSpec.feature "Competition events management" do
     end
 
     scenario "board member can update events", :js do
-      sign_in FactoryBot.create(:user, :board_member)
+      sign_in create(:user, :board_member)
       visit "/competitions/#{competition.id}/events/edit"
 
       event_panel = find_event_panel("333")

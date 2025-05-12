@@ -41,7 +41,7 @@ class Regulation < SimpleDelegator
     matched_regulations = self.regulations.dup
     query.downcase.split.each do |part|
       matched_regulations.select! do |reg|
-        %w(content_html id).any? { |field| reg[field].downcase.include?(part) }
+        %w[content_html id].any? { |field| reg[field].downcase.include?(part) }
       end
     end
     Regulation.new(matched_regulations)

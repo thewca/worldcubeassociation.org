@@ -70,7 +70,6 @@ function formatDateRange(start: Date, end: Date): string {
 
 const CompetitionTableEntry: React.FC<CompsProps> = ({ comp }) => {
   const [open, setOpen] = useState(false);
-  console.log({ comp });
   return (
     <Table.Row bg="bg.inverted" onClick={() => setOpen(true)} key={comp.id}>
       <Table.Cell>{regoStatusIcons[comp.regoStatus] || null}</Table.Cell>

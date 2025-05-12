@@ -1,42 +1,21 @@
 # frozen_string_literal: true
 
 class PaymentController < ApplicationController
-  def available_refunds
+  def registration_payments
     if current_user
-      attendee_id = params.require(:attendee_id)
-      competition_id, user_id = attendee_id.split("-")
-      competition = Competition.find(competition_id)
-
-      registration = Registration.includes(:registration_payments).find_by(competition: competition, user_id: user_id)
+      registration_id = params.require(:registration_id)
+      registration = Registration.includes(:competition, registration_payments: [:refunding_registration_payments]).find(registration_id)
 
       return render status: :bad_request, json: { error: "Registration not found" } if registration.blank?
 
-      return render status: :unauthorized, json: { error: 'unauthorized' } unless current_user.can_manage_competition?(competition)
+      return render status: :unauthorized, json: { error: 'unauthorized' } unless current_user.can_manage_competition?(registration.competition)
 
       # Use `filter` here on purpose because the whole `registration_payments` list has been included above.
       #   Using `where` would create an SQL query, but it would also break (i.e. make redundant) the `includes` call above.
       root_payments = registration.registration_payments.filter { |rp| rp.refunded_registration_payment_id.nil? }
+      serialized_payments = root_payments.map { it.to_v2_json(refunds: true) }
 
-      charges = root_payments.map { |reg_payment|
-        payment_provider = CompetitionPaymentIntegration::INTEGRATION_RECORD_TYPES.invert[reg_payment.receipt_type]
-
-        available_amount = reg_payment.amount_available_for_refund
-        full_amount_ruby = reg_payment.amount_lowest_denomination
-
-        human_amount_refundable = helpers.ruby_money_to_human_readable(available_amount, reg_payment.currency_code)
-        human_amount_payment = helpers.ruby_money_to_human_readable(full_amount_ruby, reg_payment.currency_code)
-
-        {
-          payment_id: reg_payment.receipt_id,
-          payment_provider: payment_provider,
-          ruby_amount_refundable: available_amount,
-          human_amount_refundable: human_amount_refundable,
-          human_amount_payment: human_amount_payment,
-          currency_code: reg_payment.currency_code,
-        }
-      }
-
-      render json: { charges: charges }, status: :ok
+      render json: { charges: serialized_payments }, status: :ok
     else
       render status: :unauthorized, json: { error: I18n.t('api.login_message') }
     end

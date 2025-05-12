@@ -2,8 +2,8 @@
 
 class PostsController < ApplicationController
   include TagsHelper
-  before_action :authenticate_user!, except: [:homepage, :index, :rss, :show]
-  before_action -> { redirect_to_root_unless_user(:can_create_posts?) }, except: [:homepage, :index, :rss, :show]
+  before_action :authenticate_user!, except: %i[homepage index rss show]
+  before_action -> { redirect_to_root_unless_user(:can_create_posts?) }, except: %i[homepage index rss show]
   POSTS_PER_PAGE = 10
 
   def index
@@ -94,7 +94,7 @@ class PostsController < ApplicationController
   end
 
   private def editable_post_fields
-    [:title, :body, :sticky, :unstick_at, :tags, :show_on_homepage]
+    %i[title body sticky unstick_at tags show_on_homepage]
   end
   helper_method :editable_post_fields
 
