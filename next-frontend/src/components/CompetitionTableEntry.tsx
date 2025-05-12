@@ -18,13 +18,13 @@ interface Comps {
   dateEnd: Date;
   city: string;
   country: string;
-  regoStatus: string;
+  registrationStatus: string;
   competitorLimit: BigInteger;
   events: string[];
   mainEvent: string;
 }
 
-const regoStatusIcons: Record<string, TSX.Element> = {
+const registrationStatusIcons: Record<string, TSX.Element> = {
   open: <CompRegoNotFullOpenGreenIcon />,
   notOpen: <CompRegoNotOpenYetGreyIcon />,
   closed: <CompRegoClosedRedIcon />,
@@ -72,7 +72,7 @@ const CompetitionTableEntry: React.FC<CompsProps> = ({ comp }) => {
   const [open, setOpen] = useState(false);
   return (
     <Table.Row bg="bg.inverted" onClick={() => setOpen(true)} key={comp.id}>
-      <Table.Cell>{regoStatusIcons[comp.regoStatus] || null}</Table.Cell>
+      <Table.Cell>{registrationStatusIcons[comp.registrationStatus] || null}</Table.Cell>
       <Table.Cell>
         <Text>{formatDateRange(comp.dateStart, comp.dateEnd)}</Text>
       </Table.Cell>
