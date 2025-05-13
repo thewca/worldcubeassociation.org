@@ -1,7 +1,7 @@
-import React from 'react';
-import {Badge, Card, Center, HStack, Flex, Text} from "@chakra-ui/react";
-import {Image} from "@chakra-ui/react";
-import {DataListItem, DataListRoot} from "@/components/ui/data-list";
+import React from "react";
+import { Card, Center, Flex, Text } from "@chakra-ui/react";
+import { Image } from "@chakra-ui/react";
+import { DataListItem, DataListRoot } from "@/components/ui/data-list";
 import RoleBadge from "@/components/RoleBadge";
 
 interface ProfileData {
@@ -15,7 +15,6 @@ interface ProfileData {
   completedSolves: number;
 }
 
-
 const ProfileCard: React.FC<ProfileData> = ({
   name,
   profilePicture,
@@ -24,14 +23,28 @@ const ProfileCard: React.FC<ProfileData> = ({
   gender,
   region,
   competitions,
-  completedSolves
+  completedSolves,
 }) => {
   return (
-    <Card.Root bg="wcawhite.muted" color="wcawhite.contrast"  h="85lvh" rounded="md" size="sm"  shadow="wca" position="sticky" top="20px">
+    <Card.Root
+      bg="wcawhite.muted"
+      color="wcawhite.contrast"
+      h="85lvh"
+      rounded="md"
+      size="sm"
+      shadow="wca"
+      position="sticky"
+      top="20px"
+    >
       <Card.Header>
         <Center>
           {/* Profile Picture */}
-          <Image src={profilePicture} size="2xl" rounded="md" />
+          <Image
+            src={profilePicture}
+            size="2xl"
+            rounded="md"
+            alt="Profile Image"
+          />
         </Center>
       </Card.Header>
 
@@ -39,7 +52,7 @@ const ProfileCard: React.FC<ProfileData> = ({
         <Card.Title marginBottom={2}>
           <Text textStyle="3xl">{name}</Text>
           <Flex direction="row" wrap="wrap" align="start" gap="4px 8px">
-          {roles.map((role, index) => (
+            {roles.map((role, index) => (
               <RoleBadge
                 key={index}
                 teamRole={role.teamRole}
