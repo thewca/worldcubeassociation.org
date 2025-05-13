@@ -11,13 +11,13 @@
     <%= alert :info do %>
       <% if @competition.registration_past? %>
         <% # i18n-tasks-use t('registrations.please_sign_in_past_html') %>
-        <%= please_sign_in('registrations.please_sign_in_past_html', @competition) %>
+        <%= please_sign_in('registrations.please_sign_in_past_html') %>
       <% elsif @competition.registration_not_yet_opened? %>
         <% # i18n-tasks-use t('registrations.please_sign_in_not_yet_open_html') %>
-        <%= please_sign_in('registrations.please_sign_in_not_yet_open_html', @competition) %>
+        <%= please_sign_in('registrations.please_sign_in_not_yet_open_html') %>
       <% else %>
         <% # i18n-tasks-use t('registrations.please_sign_in_html') %>
-        <%= please_sign_in('registrations.please_sign_in_html', @competition, comp: @competition.name) %>
+        <%= please_sign_in('registrations.please_sign_in_html', comp: @competition.name) %>
       <% end %>
     <% end %>
   <% else %>
