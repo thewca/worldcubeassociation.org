@@ -10,7 +10,7 @@ class Api::V1::RegistrationsController < Api::V1::ApiController
   before_action :ensure_registration_exists, only: [:show_by_user]
   before_action :validate_show_registration_by_user, only: [:show_by_user]
   before_action :validate_show_registration, only: [:show]
-  before_action :validate_admin_action, only: [:index_admin, :bulk_auto_accept]
+  before_action :validate_admin_action, only: %i[index_admin bulk_auto_accept]
   before_action :load_registration_from_request, only: [:update]
   before_action :user_can_modify_registration, only: [:update]
   before_action :validate_update_request, only: [:update]
