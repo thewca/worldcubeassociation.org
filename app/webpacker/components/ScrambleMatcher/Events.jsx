@@ -15,6 +15,7 @@ export default function Events({ wcifEvents, assignedScrambleWcif }) {
       />
       {activeEvent && (
         <Rounds
+          key={activeEvent}
           eventWcif={wcifEvents.find((e) => e.id === activeEvent)}
           assignedScrambleEventsWcif={assignedScrambleWcif.events.find((e) => e.id === activeEvent)}
         />
