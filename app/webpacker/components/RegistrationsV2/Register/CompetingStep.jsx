@@ -154,9 +154,12 @@ export default function CompetingStep({
 
   const actionCreateRegistration = useCallback(() => {
     createRegistrationMutation({
-      ...formState,
-      user_id: user.id,
-      competition_id: competitionInfo.id,
+      competitionId: competitionInfo.id,
+      payload: {
+        ...formState,
+        user_id: user.id,
+        competition_id: competitionInfo.id,
+      },
     });
   }, [
     createRegistrationMutation,
@@ -175,18 +178,21 @@ export default function CompetingStep({
     }).then(() => {
       if (canEditRegistration) {
         updateRegistrationMutation({
-          user_id: user.id,
-          competition_id: competitionInfo.id,
-          competing: {
-            comment: hasCommentChanged ? comment : undefined,
-            event_ids: hasEventsChanged ? selectedEventIds.asArray : undefined,
+          registrationId: registration.id,
+          payload: {
+            user_id: user.id,
+            competition_id: competitionInfo.id,
+            competing: {
+              comment: hasCommentChanged ? comment : undefined,
+              event_ids: hasEventsChanged ? selectedEventIds.asArray : undefined,
+            },
+            guests: hasGuestsChanged ? guests : undefined,
           },
-          guests: hasGuestsChanged ? guests : undefined,
         }, {
           onSuccess: (data, variables) => {
             onUpdateSuccess(data);
 
-            const newCompetingStatus = variables.competing.registration_status
+            const newCompetingStatus = variables.payload.competing?.registration_status
               || data.registration.competing.registration_status;
 
             if (initialRegistrationStatus === 'cancelled' && newCompetingStatus === 'pending') {
@@ -213,6 +219,7 @@ export default function CompetingStep({
     nextStep,
     updateRegistrationMutation,
     competitionInfo,
+    registration?.id,
     user,
     hasCommentChanged,
     comment,
@@ -227,17 +234,21 @@ export default function CompetingStep({
 
   const actionReRegister = useCallback(() => {
     updateRegistrationMutation({
-      ...formState,
-      competing: {
-        ...formState.competing,
-        status: 'pending',
+      registrationId: registration.id,
+      payload: {
+        ...formState,
+        competing: {
+          ...formState.competing,
+          status: 'pending',
+        },
+        user_id: user.id,
+        competition_id: competitionInfo.id,
       },
-      user_id: user.id,
-      competition_id: competitionInfo.id,
     }, { onSuccess: onUpdateSuccess });
   }, [
     updateRegistrationMutation,
     formState,
+    registration?.id,
     user.id,
     competitionInfo.id,
     onUpdateSuccess,

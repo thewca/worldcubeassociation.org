@@ -48,10 +48,12 @@ module Registrations
           #   from when we called `event_ids` in the `apply_payload` method above.
           registration.events.reset
 
+          history_action_type = Registrations::Helper.action_type(update_params, registration.user_id, acting_entity_id)
+
           if acting_entity_id == Registration::AUTO_ACCEPT_ENTITY_ID
-            registration.add_history_entry(changes, Registration::SYSTEM_ENTITY_ID, acting_entity_id, Registrations::Helper.action_type(update_params, acting_entity_id))
+            registration.add_history_entry(changes, Registration::SYSTEM_ENTITY_ID, acting_entity_id, history_action_type)
           else
-            registration.add_history_entry(changes, Registration::USER_ENTITY_ID, acting_entity_id, Registrations::Helper.action_type(update_params, acting_entity_id))
+            registration.add_history_entry(changes, Registration::USER_ENTITY_ID, acting_entity_id, history_action_type)
           end
         end
 
