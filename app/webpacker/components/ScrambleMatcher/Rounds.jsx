@@ -4,7 +4,7 @@ import { activityCodeToName } from '@wca/helpers';
 import ScrambleMatch from './ScrambleMatch';
 
 export default function Rounds({ eventWcif, assignedScrambleEventsWcif }) {
-  const [activeRound, setActiveRound] = useState({ id: eventWcif.rounds[0].id });
+  const [activeRound, setActiveRound] = useState(eventWcif.rounds[0]);
 
   return (
     <>
