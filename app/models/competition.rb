@@ -2858,6 +2858,7 @@ class Competition < ApplicationRecord
           "type" => "object",
           "properties" => {
             "isConfirmed" => { "type" => "boolean" },
+            "isVisible" => { "type" => "boolean" },
           },
         },
         "cloning" => {
