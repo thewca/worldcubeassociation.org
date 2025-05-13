@@ -11,7 +11,7 @@ export default function JSONList({ uploadedScrambles }) {
         {uploadedScrambles.length}
       </Header>
       {uploadedScrambles.map((s) => (
-        <ScrambleFileInfo scramble={s} key={s.competitionName} />
+        <ScrambleFileInfo uploadedJSON={s} key={s.competitionName} />
       ))}
     </>
   );

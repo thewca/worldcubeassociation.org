@@ -2,13 +2,13 @@ import React, { useState } from 'react';
 import EventSelector from '../wca/EventSelector';
 import Rounds from './Rounds';
 
-export default function Events({ assignedScrambleWcif }) {
+export default function Events({ wcifEvents, assignedScrambleWcif }) {
   const [activeEvent, setActiveEvent] = useState(null);
-  console.log(assignedScrambleWcif);
   return (
     <>
       <EventSelector
         selectedEvents={activeEvent ? [activeEvent] : []}
+        eventList={wcifEvents.map((e) => e.id)}
         onEventClick={setActiveEvent}
         hideAllButton
         hideClearButton

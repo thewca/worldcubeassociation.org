@@ -2,9 +2,11 @@ import React, { useState } from 'react';
 import {
   Accordion, Card, CardContent, CardDescription, CardHeader, Header, Icon, List, ListItem,
 } from 'semantic-ui-react';
+import { activityCodeToName } from '@wca/helpers';
 
-export default function ScrambleFileInfo({ scramble }) {
+export default function ScrambleFileInfo({ uploadedJSON }) {
   const [expanded, setExpanded] = useState(false);
+  const { wcif } = uploadedJSON;
 
   return (
     <Card fluid>
@@ -13,26 +15,32 @@ export default function ScrambleFileInfo({ scramble }) {
           <CardHeader>
             <Header>
               <Icon name="dropdown" />
-              {scramble.competitionName}
+              {uploadedJSON.competitionName}
             </Header>
           </CardHeader>
           <CardDescription>
             Generated with
             {' '}
-            {scramble.version}
+            {uploadedJSON.version}
             <br />
             On
             {' '}
-            {scramble.generationDate}
+            {uploadedJSON.generationDate}
           </CardDescription>
         </Accordion.Title>
         <Accordion.Content active={expanded}>
-          <CardContent>
+          <CardContent style={{ maxHeight: '400px', overflowY: 'auto' }}>
             <List>
-              {scramble.sheets.map((sheet) => (
-                <ListItem key={sheet.id}>
-                  {sheet.title}
-                </ListItem>
+              {wcif.events.map((event) => (
+                event.rounds.map((round) => (
+                  round.scrambleSets.map((scrambleSet, i) => (
+                    <ListItem key={`${round.id}-${scrambleSet.id}`}>
+                      {activityCodeToName(round.id)}
+                      {' - '}
+                      {String.fromCharCode(65 + i)}
+                    </ListItem>
+                  ))
+                ))
               ))}
             </List>
           </CardContent>

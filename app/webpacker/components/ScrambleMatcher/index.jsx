@@ -1,9 +1,8 @@
 import React, { useCallback, useState } from 'react';
 import {
-  Button, ButtonGroup, Icon, Message,
+  Message,
 } from 'semantic-ui-react';
 import WCAQueryClientProvider from '../../lib/providers/WCAQueryClientProvider';
-import { autoAssignScrambles, transformUploadedScrambles } from './lib/scrambles';
 import JSONList from './JSONList';
 import Events from './Events';
 import UploadScramblesButton from './UploadScramblesButton';
@@ -19,49 +18,38 @@ export default function Wrapper({ wcifEvents }) {
 }
 
 function ScrambleMatcher({ wcifEvents }) {
-  const [uploadedJSON, setUploadedJSON] = useState({ wcif: wcifEvents, uploadedScrambles: [] });
-  const [uniqueScrambleSetId, setUniqueScrambleSetId] = useState(0);
+  const [uploadedJSON, setUploadedJSON] = useState({ wcif: null, uploadedScrambles: [] });
   const [uniqueScrambleUploadedId, setUniqueScrambleUploadedId] = useState(1);
-  const [assignedScrambleWcif, setAssignedScrambleWcif] = useState(null);
-
-  const incrementScrambleSetId = useCallback(() => {
-    setUniqueScrambleSetId((old) => (old + 1));
-    return uniqueScrambleSetId;
-  }, [uniqueScrambleSetId, setUniqueScrambleSetId]);
+  const [error, setError] = useState(null);
 
   const uploadNewScramble = useCallback((ev) => {
     const reader = new FileReader();
 
     reader.onload = (e) => {
       setUploadedJSON((state) => {
-        let newScramble = JSON.parse(e.target.result);
+        const newScramble = JSON.parse(e.target.result);
         // Manually assign some id, in case someone uses same name for zip
         // but with different scrambles.
         newScramble.competitionName = `${uniqueScrambleUploadedId}: ${
           newScramble.competitionName
         }`;
         setUniqueScrambleUploadedId((old) => (old + 1));
-        newScramble = transformUploadedScrambles(
-          newScramble,
-          uniqueScrambleUploadedId,
-          incrementScrambleSetId,
-        );
         return {
-          wcif: {
-            ...state.wcif,
-            scrambleProgram: newScramble.version,
-          },
+          wcif: _.merge(state.wcif, newScramble.wcif),
+          scrambleProgram: newScramble.version,
+          generationDate: newScramble.generationDate,
+          competitionName: newScramble.competitionName,
           uploadedScrambles: [...state.uploadedScrambles, newScramble],
         };
       });
     };
 
     reader.onerror = (e) => {
-      alert("Couldn't load the JSON scrambles file");
+      setError(`Couldn't load the JSON scrambles file ${e.target.error.name}`);
     };
 
     if (ev.target.files.length > 0) reader.readAsText(ev.target.files[0]);
-  }, [incrementScrambleSetId, uniqueScrambleUploadedId]);
+  }, [uniqueScrambleUploadedId]);
 
   return (
     <>
@@ -77,29 +65,18 @@ function ScrambleMatcher({ wcifEvents }) {
           For each round (or each attempt for Multiple Blindfolded and Fewest Moves) you can assign
           scrambles manually from the unused scrambles in the uploaded scrambles.
           When everything looks good, get the Results JSON to import the results on the WCA website.
-          Don't forget to set the competition ID if it's not detected!
+          Don&#39;t forget to set the competition ID if it&#39;s not detected!
         </Message.Content>
       </Message>
+      { error && <Message negative>{error}</Message> }
       <UploadScramblesButton onUpload={uploadNewScramble} />
-      <ButtonGroup fluid widths={2}>
-        <Button
-          fluid
-          icon
-          positive
-          onClick={() => setAssignedScrambleWcif(autoAssignScrambles(wcifEvents, uploadedJSON))}
-        >
-          <Icon name="coffee" />
-          {' '}
-          Automatically assign scrambles
-        </Button>
-        <Button fluid icon negative onClick={() => setAssignedScrambleWcif(null)}>
-          <Icon name="trash" />
-          {' '}
-          Clear scrambles assignments
-        </Button>
-      </ButtonGroup>
       <JSONList uploadedScrambles={uploadedJSON.uploadedScrambles} />
-      {assignedScrambleWcif && <Events assignedScrambleWcif={assignedScrambleWcif.events} />}
+      {uploadedJSON.wcif && (
+      <Events
+        wcifEvents={wcifEvents}
+        assignedScrambleWcif={uploadedJSON.wcif}
+      />
+      )}
     </>
   );
 }
