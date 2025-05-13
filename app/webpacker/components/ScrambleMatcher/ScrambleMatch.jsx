@@ -3,7 +3,10 @@ import { Icon, Ref, Table } from 'semantic-ui-react';
 import { activityCodeToName } from '@wca/helpers';
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 
-export default function ScrambleMatch({ activeRound, assignedScrambleRoundWcif, setAssignedScrambleRoundWcif }) {
+export default function ScrambleMatch({
+  activeRound,
+  assignedScrambleRoundWcif,
+}) {
   const { scrambleSetCount } = activeRound;
   const scrambleSets = assignedScrambleRoundWcif.scrambleSets || [];
 
@@ -14,13 +17,9 @@ export default function ScrambleMatch({ activeRound, assignedScrambleRoundWcif, 
     const updated = Array.from(scrambleSets);
     const [moved] = updated.splice(source.index, 1);
     updated.splice(destination.index, 0, moved);
-
-    setAssignedScrambleRoundWcif((prev) => ({
-      ...prev,
-      scrambleSets: updated,
-    }));
   };
 
+  /* eslint-disable react/jsx-props-no-spreading */
   return (
     <Table>
       <Table.Header>
@@ -43,7 +42,7 @@ export default function ScrambleMatch({ activeRound, assignedScrambleRoundWcif, 
                   return (
                     <Draggable
                       key={scramble.id}
-                      draggableId={scramble.id}
+                      draggableId={scramble.id.toString()}
                       index={index}
                     >
                       {(providedDraggable) => (
