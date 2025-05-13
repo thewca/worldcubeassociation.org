@@ -152,57 +152,57 @@ eu:
       #original_hash: 4d618bb
       name: Sailkatze txanda
       #original_hash: 4d618bb
-      cell_name: Sailkatze txanda
+      cellName: Sailkatze txanda
     '1':
       #original_hash: 1e725b6
       name: Lehenengo txanda
       #original_hash: 1e725b6
-      cell_name: Lehenengo txanda
+      cellName: Lehenengo txanda
     '2':
       #original_hash: 985c8d0
       name: Bigarren txanda
       #original_hash: 985c8d0
-      cell_name: Bigarren txanda
+      cellName: Bigarren txanda
     '3':
       #original_hash: e2f74d2
       name: Finalaurrekoa
       #original_hash: e2f74d2
-      cell_name: Finalaurrekoa
+      cellName: Finalaurrekoa
     b:
       #original_hash: 327c999
       name: B Finala
       #original_hash: 327c999
-      cell_name: B Finala
+      cellName: B Finala
     c:
       #original_hash: 672b22c
       name: Finala
       #original_hash: 672b22c
-      cell_name: Finala
+      cellName: Finala
     d:
       #original_hash: 1e725b6
       name: Lehenengo txanda
       #original_hash: 1e725b6
-      cell_name: Lehenengo txanda
+      cellName: Lehenengo txanda
     e:
       #original_hash: 985c8d0
       name: Bigarren txanda
       #original_hash: 985c8d0
-      cell_name: Bigarren txanda
+      cellName: Bigarren txanda
     f:
       #original_hash: 672b22c
       name: Finala
       #original_hash: 672b22c
-      cell_name: Finala
+      cellName: Finala
     g:
       #original_hash: e2f74d2
       name: Semifinala
       #original_hash: e2f74d2
-      cell_name: Semifinala
+      cellName: Semifinala
     h:
       #original_hash: 4d618bb
       name: Sailkatze txanda
       #original_hash: 4d618bb
-      cell_name: Sailkatze txanda
+      cellName: Sailkatze txanda
   attempts:
     #original_hash: 17dae1e
     attempt_name: '%{number}. saiakera'
@@ -522,7 +522,7 @@ eu:
         #original_hash: 8c41ae8
         wca_id: Pertsona
         #original_hash: fa4c045
-        country_id: Ordezkatzen
+        countryId: Ordezkatzen
         #original_hash: ab58155
         dob: Jaiotza-data
         #original_hash: 8a754c6
@@ -574,19 +574,19 @@ eu:
         competition_id: Honen bitartean gertatu zen
       competition_medium:
         #original_hash: 1917f4f
-        competition_id: Lehiaketa
+        competitionId: Lehiaketa
         #original_hash: 3deb745
-        media_type: Mota
+        type: Mota
         #original_hash: c3328c3
         text: Testua
         #original_hash: d051707
         uri: Esteka
         #original_hash: 1be755a
-        submitter_name: Egilearen izena
+        submitterName: Egilearen izena
         #original_hash: 78cdfee
-        submitter_email: Egilearen e-maila
+        submitterEmail: Egilearen e-maila
         #original_hash: 0d31f23
-        submitter_comment: Egilearen iruzkina
+        submitterComment: Egilearen iruzkina
         #original_hash: bae7d5b
         status: Egoera
       regional_organization:
@@ -680,7 +680,7 @@ eu:
         accepted: Onartuta
         #original_hash: 96f608c
         pending: Zain
-      media_type:
+      type:
         #original_hash: ee45c30
         report: Txostena
         #original_hash: 4360c2d
@@ -891,19 +891,19 @@ eu:
         comment: ''
       competition_medium:
         #original_hash: da39a3e
-        competition_id: ''
+        competitionId: ''
         #original_hash: da39a3e
-        media_type: ''
+        type: ''
         #original_hash: da39a3e
         text: ''
         #original_hash: da39a3e
         uri: ''
         #original_hash: da39a3e
-        submitter_name: ''
+        submitterName: ''
         #original_hash: da39a3e
-        submitter_email: ''
+        submitterEmail: ''
         #original_hash: da39a3e
-        submitter_comment: ''
+        submitterComment: ''
         #original_hash: da39a3e
         status: ''
       results_submission:
@@ -1250,8 +1250,8 @@ eu:
       faq: Ohiko Galderak
       #original_hash: cf1d2c9
       forum: Forua
-      #original_hash: 3ad28c0
-      teams: 'Taldeak, Batzordeak eta Kontseiluak'
+      #original_hash: 0e7a036
+      teams: Talde eta Komiteak
       #original_hash: 7981fb3
       education: Hezkuntza-baliabideak
       #original_hash: c66444f
@@ -1366,26 +1366,22 @@ eu:
         Zuzendari Exekutiboa WCAko Ofizial Exekutibo nagusia da, Lehendakaria
         Batzarrak bilera guztien buru da, Idazkariak erakundearen dokumentuak
         mantentzen ditu eta Diruzainak WCAko finantza-gaiak kudeatzen ditu.
-      #original_hash: e0d37a2
+      #original_hash: 19d4bbb
       board_description: >-
-        WCAko Batzarraren ardura da erakundea bere osotasunean zuzentzea eta
-        beste Taldeek, Komiteek eta Kontseiluek betetzen ez dituzten
-        betebeharrak betetzea.
+        WCAko Batzarra organizazioa osotara gidatzeaz, eta beste Talde eta
+        Komiteek betetzen ez dituzten betebeharrak betetzeaz arduratzen da
     teams_committees_councils:
-      #original_hash: 0d62207
-      title: 'WCA Taldea, Komiteak eta Kontseiluak'
-      #original_hash: 4701b90
+      #original_hash: 1d14e2f
+      title: WCAko Talde eta Komiteak
+      #original_hash: 9fdee8f
       description: >-
-        WCAko Taldeak eta Komiteak antolakundearen funtsezko parte dira, eta
-        eguneroko lanak egiten dituzte martxan egoteko. Komite horiek WCA
-        komunitateko kideek osatzen dituzte, WCAko ordezkariak eta lehiakideak
-        barne. Talde bakoitzak lider bat du, zeinen lana taldearen
-        funtzionamendu egokia bermatza eta taldeko beste kide batzuk gidatzea
-        den. Kontseiluak talde mota berezi bat dira, zeregina WCAko Batzarrean
-        aholku-emailea izatea dutena, eta komunitateko kideek osatzen dituzte,
-        ez WCAko bolondresek. Komiteetan, Taldeetan edo Kontseiluetan sartzeko
-        postuak irekitzen direnean, nola aplikatzeko informazioa orri nagusian
-        argitaratzen da.
+        WCAko Talde eta Komiteak organizazioaren funtsezko atalak dira, eta WCAk
+        funtzionatzen jarrai dezan egin beharreko eguneroko betebeharrak
+        betetzen dituzte. Komite hauek WCAko komunitateko kideak dira, WCAko
+        Ordezkariak eta lehiakideak barne. Talde bakoitzak buruzagi bat du,
+        zeinaren rola taldearen funtzionamendu aproposaz eta taldeko beste
+        kideak gidatzeaz arduratzen den. Talde edota Komiteren baterako postuak
+        irekitzen direnean gure lehen orrialdean iragartzen dugu.
       #original_hash: b37456c
       contact_button: Kontaktatu
       #original_hash: ae7928f
@@ -2183,6 +2179,10 @@ eu:
       translators: Itzultzaileak
   registrations:
     errors:
+      #original_hash: 51c7156
+      edit_deadline_passed: >-
+        Erregistroa editatzeko epea pasatu da! Aldaketak soilik ohiz kanpoko
+        egoeraran egin behar lirateke.
       #original_hash: 44ab952
       need_name: Izen bat behar du
       #original_hash: 6f64c57
@@ -2209,6 +2209,10 @@ eu:
       series_more_than_one_accepted: Serieko lehiaketa bakarrean onartua izan zaitezke aldi berean.
       #original_hash: 13bfcd6
       can_only_register_for_qualified_events: Ezin duzu izena eman gaituta ez zauden probetan.
+      #original_hash: 93ed20e
+      cannot_change_events_when_cancelling: >-
+        Ezin dituzu zure probak aldatu zure erregistroa ezeztatzen duzun
+        bitartean.
       #original_hash: 4025877
       cannot_register_without_comment: >-
         Iruzkin bat egin behar duzu. Mesedez, irakurri aurreko
@@ -2533,6 +2537,15 @@ eu:
       ditzakezunak.
     #original_hash: ee89a3e
     registration_requirements: 'Lehiaketan izena emateko baldintzak:'
+    registration_history:
+      #original_hash: 342fa25
+      acting_user: Bitarteko erabiltzailea
+      #original_hash: 97c89a4
+      action: Erabilpena
+      #original_hash: 8aa57de
+      changes: Aldaketak
+      #original_hash: cec61a5
+      title: Erregistro historia
     import:
       #original_hash: 5a394f3
       title: 'Inportatu %{comp}(a)eko erregistroak'
@@ -4459,18 +4472,10 @@ eu:
       Ohar zaitez filtro batzuk (aurreko urteak, adibidez) denboraldi baterako
       deuseztatuta daudela. Software taldeak filtro hauek berritzean dihardu -
       sentitzen dugu eragozpenagatik.
-    #original_hash: e3710ed
-    tooltip_no_years: Gure datutegia datu historikoak neurtzeko handiegia da
-    #original_hash: 357094b
-    tooltip_no_quantities: Gure datutegia mailaketa luzeak neurtzeko handiegia da
     selector_elements:
       events_selector:
         #original_hash: ad8919a
         event: Proba
-        #original_hash: 3e83afa
-        all_events: Proba guztiak
-      #original_hash: 0f21717
-      region: Eskualdea
       type_selector:
         #original_hash: 3deb745
         type: Mota
@@ -4478,30 +4483,13 @@ eu:
         single: Banakakoa
         #original_hash: 15f86c0
         average: Batezbestekoa
-      years_selector:
-        #original_hash: 96f997b
-        years: Urteak
-        #original_hash: 0977c76
-        all_years: Urte guztiak
-        #original_hash: 8737f09
-        only: Bakarrik
-        #original_hash: b3c0fe7
-        only_html: '%{year}. urtea bakarrik'
-        #original_hash: 96bdb66
-        until: Noiz arte
-        #original_hash: fa23930
-        until_html: '%{year} arte'
       show_selector:
         #original_hash: d97d1ee
         show: Erakutsi
         #original_hash: f3cf96e
         persons: Pertsonak
-        #original_hash: 16d3376
-        persons_html: '%{quantity} pertsona'
         #original_hash: 612e12d
         results: Emaitzak
-        #original_hash: f3baa4a
-        results_html: '%{quantity} emaitza'
         #original_hash: d46d2ee
         by_region: Eskualdeka
         #original_hash: c0dcb86
@@ -4528,8 +4516,6 @@ eu:
       name: Izena
       #original_hash: 5faa59d
       result: Emaitza
-      #original_hash: fa4c045
-      representing: Ordezkatzen
       #original_hash: 1917f4f
       competition: Lehiaketa
       #original_hash: e7f6fc5
@@ -4538,23 +4524,21 @@ eu:
       region: Eskualdea
       #original_hash: 70c07ec
       world: Mundua
-      type_options:
-        #original_hash: 3deb745
-        type: Mota
-        #original_hash: dd11868
-        single: Banakakoa
-        #original_hash: 15f86c0
-        average: Batezbestekoa
       #original_hash: ad8919a
       event: Proba
       #original_hash: dcf8b56
       date_circa: Data inguruan
-      #original_hash: 1c54132
-      record: Errekorra
   notifications:
     #original_hash: 10bcdbd
     connect_wca_id: Zure WCA IDa kontura lotu!
   payments:
+    labels:
+      #original_hash: cccf678
+      payment_statuses: Ordainketen egoera
+      #original_hash: 312b6b6
+      available_refunds: Ordainketa erabilgarriak
+      #original_hash: ef3cd45
+      original_payment: Ordainketa originala
     payment_providers:
       #original_hash: 559ef55
       paypal: PayPal
@@ -4648,6 +4632,11 @@ eu:
           primary_email: E-maila
         #original_hash: 08d2e98
         fallback_not_applicable: Ezin da
+    statuses:
+      #original_hash: c8fbda9
+      succeeded: Arrakastatsua
+      #original_hash: d6fbc7a
+      refund: Dirua itzulita
   persons:
     index:
       #original_hash: 5934b4c
@@ -5050,11 +5039,10 @@ eu:
       #original_hash: 9482c5d
       title: Egitura
       board:
-        #original_hash: e0d37a2
+        #original_hash: 19d4bbb
         description: >-
-          WCAko Batzarraren ardura da erakundea bere osotasunean zuzentzea eta
-          beste Taldeek, Komiteek eta Kontseiluek betetzen ez dituzten
-          betebeharrak betetzea.
+          WCAko Batzarra organizazioa osotara gidatzeaz, eta beste Talde eta
+          Komiteek betetzen ez dituzten betebeharrak betetzeaz arduratzen da
       users:
         #original_hash: 57bbaad
         profile: '%{user_name}(r)en profila'
@@ -5226,7 +5214,6 @@ eu:
     title: WCAko lehiaketetarako software erremintak
     #original_hash: 6d2fe37
     wca_icon_text: WSTk garatua eta eguneratua
-    #original_hash: 6520873
     intro:
       #original_hash: 0c5fab5
       desc: >-
@@ -5336,6 +5323,7 @@ eu:
   logo:
     #original_hash: c72c969
     title: WCAren Logotipoa
+    #original_hash: 6520873
     intro: >-
       WCA logotipoa Justin Eastman-ek diseinatu zuen, diseinu lehiaketa batean
       2005eko urtarrilean. Logotipoa gustatu zitzaigun bere diseinuagatik,
