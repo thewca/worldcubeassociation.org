@@ -10,7 +10,7 @@ class Api::V1::RegistrationsController < Api::V1::ApiController
   before_action :ensure_registration_exists, only: [:show_by_user]
   before_action :validate_show_registration_by_user, only: [:show_by_user]
   before_action :validate_show_registration, only: [:show]
-  before_action :validate_index_admin, only: [:index_admin]
+  before_action :validate_admin_action, only: %i[index_admin bulk_auto_accept]
   before_action :load_registration_from_request, only: [:update]
   before_action :user_can_modify_registration, only: [:update]
   before_action :validate_update_request, only: [:update]
@@ -222,7 +222,7 @@ class Api::V1::RegistrationsController < Api::V1::ApiController
   end
 
   # To list Registrations in the admin view you need to be able to administer the competition
-  def validate_index_admin
+  def validate_admin_action
     competition_id = params_competition_id
     @competition = Competition.find(competition_id)
 
@@ -239,6 +239,11 @@ class Api::V1::RegistrationsController < Api::V1::ApiController
       registration_payments: :receipt,
       registration_history_entries: :registration_history_changes,
     ).map { |r| r.to_v2_json(admin: true, pii: true) }
+  end
+
+  def bulk_auto_accept
+    Registration.bulk_auto_accept(@competition)
+    render json: { result: "success" }
   end
 
   def validate_payment_ticket_request
