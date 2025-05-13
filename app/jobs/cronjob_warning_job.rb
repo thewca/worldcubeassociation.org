@@ -10,16 +10,17 @@ class CronjobWarningJob < WcaCronjob
       statistics = CronjobStatistic.find_by(name: job.klass)
       next if statistics.nil? || statistics.average_runtime.nil?
 
+      last_scheduled_run = job.last_time
+
       # Normally, we would warn if the last run (w.r.t the execution time of the cronjob you're looking at right now)
       #   has not been scheduled yet. However, since we execute jobs in a linear queue, some long-running jobs
       #   (like the DumpDeveloperDatabase job) might "delay" super fast-running jobs (like the CleanupPdfs job).
-      # When that happens, there is nothing to immediately worry about. To avoid unnecessary warning messages
-      #   that turn out to be false positives, we use the previous-last run as a marker time instead.
-      last_scheduled_run = job.last_time
-      should_have_run_scheduled = job.last_time last_scheduled_run
+      # For jobs that run "more than once per day", we avoid unnecessary warning messages
+      #   that turn out to be false positives, by using the previous-last run as a marker time instead.
+      last_scheduled_run = job.last_time(last_scheduled_run) if last_scheduled_run > 1.day.ago
 
       average_runtime = (statistics.average_runtime / 1000.0).seconds
-      should_start_before = should_have_run_scheduled + (3 * average_runtime)
+      should_start_before = last_scheduled_run + (3 * average_runtime)
 
       started_as_planned = statistics.run_start <= should_start_before
       completed_later_successfully = statistics.successful_run_start >= should_start_before
