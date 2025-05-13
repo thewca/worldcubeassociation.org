@@ -20,13 +20,13 @@ class CronjobWarningJob < WcaCronjob
       unless started_as_planned
         message = if statistics.last_run_successful?
                     <<~SLACK.squish
-                      Uh oh! Cronjob '#{job.klass}' was scheduled at #{last_scheduled_run}
-                      (with leeway until #{should_start_before} at an average runtime of #{average_runtime})
+                      Uh oh! Cronjob '#{job.klass}' should have run at #{last_scheduled_run}
+                      (with leeway until #{should_start_before} at an average runtime of #{average_runtime} seconds)
                       but still hasn't started. Please check that everything is in order!"
                     SLACK
                   else
                     <<~SLACK.squish
-                      BEEP BOOP :alarm: Cronjob '#{job.klass}' was scheduled at #{last_scheduled_run}
+                      BEEP BOOP :alarm: Cronjob '#{job.klass}' should have run at #{last_scheduled_run}
                       but it previously crashed with the following error message:
 
                       ```
