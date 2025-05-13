@@ -336,7 +336,7 @@ export const submitRegistrationUrl = (competitionId) => `<%= CGI.unescape(Rails.
 
 export const updateRegistrationUrl = (registrationId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v1_registration_path("${registrationId}")) %>`;
 
-export const bulkAutoAcceptUrl = (competitionId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v1_registrations_bulk_auto_accept_path(competition_id: "${competitionId}")) %>`;
+export const bulkAutoAcceptUrl = (competitionId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.bulk_auto_accept_api_v1_competition_registrations_path(competition_id: "${competitionId}")) %>`;
 
 export const bulkUpdateRegistrationUrl = (competitionId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.bulk_update_api_v1_competition_registrations_path(competition_id: "${competitionId}")) %>`;
 

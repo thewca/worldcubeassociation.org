@@ -1392,7 +1392,7 @@ RSpec.describe 'API Registrations' do
       expected_accepted = auto_accept_comp.waiting_list.entries[..4]
       expected_remaining = auto_accept_comp.waiting_list.entries[5..] + initial_pending_ids
 
-      patch api_v1_registrations_bulk_auto_accept_path(competition_id: auto_accept_comp.id), headers: headers
+      patch bulk_auto_accept_api_v1_competition_registrations_path(competition_id: auto_accept_comp.id), headers: headers
       expect(response).to have_http_status(:ok)
 
       expect(auto_accept_comp.registrations.competing_status_accepted.count).to eq(10)
