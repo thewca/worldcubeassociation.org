@@ -25,7 +25,9 @@ export function getTotals(registrations, eventIds = []) {
   const registrationCount = registrations.length;
 
   const countryCount = new Set(
-    registrations.map((reg) => reg.user.country.iso2),
+    registrations
+      .map((reg) => reg.user.country?.iso2)
+      .filter(Boolean),
   ).size;
 
   const eventCounts = Object.fromEntries(

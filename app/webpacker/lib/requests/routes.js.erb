@@ -97,9 +97,9 @@ export const adminFixResultsUrl = (personId, competition_id = undefined, event_i
 
 export const paymentFinishUrl = (competitionId, paymentIntegration) => `<%= CGI.unescape(Rails.application.routes.url_helpers.registration_payment_completion_url("${competitionId}", "${paymentIntegration}", host: EnvConfig.ROOT_URL)) %>`
 
-export const registrationPaymentsUrl = (registrationId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.registration_payments_path("${registrationId}")) %>`
+export const registrationPaymentsUrl = (registrationId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v1_registration_payments_path("${registrationId}")) %>`
 
-export const registrationHistoryUrl = (registrationId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.registration_history_path("${registrationId}")) %>`;
+export const registrationHistoryUrl = (registrationId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v1_registration_history_path("${registrationId}")) %>`;
 
 export const refundPaymentUrl = (competitionId, paymentIntegration, paymentId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.registration_payment_refund_path("${competitionId}", "${paymentIntegration}", "${paymentId}")) %>`
 
@@ -324,21 +324,23 @@ export const eligibleVotersUrl = `<%= CGI.unescape(Rails.application.routes.url_
 
 export const leaderSeniorVotersUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.leader_senior_voters_path) %>`;
 
-export const confirmedRegistrationsUrl = (competitionId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v1_registrations_path(competition_id: "${competitionId}")) %>`;
+export const confirmedRegistrationsUrl = (competitionId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v1_competition_registrations_path(competition_id: "${competitionId}")) %>`;
 
-export const allRegistrationsUrl = (competitionId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v1_registrations_list_admin_path(competition_id: "${competitionId}")) %>`;
+export const allRegistrationsUrl = (competitionId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.admin_api_v1_competition_registrations_path(competition_id: "${competitionId}")) %>`;
 
-export const singleRegistrationUrl = (competitionId, userId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v1_registrations_register_path(competition_id: "${competitionId}", user_id: "${userId}")) %>`;
+export const singleRegistrationUrl = (registrationId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v1_registration_path("${registrationId}")) %>`;
 
-export const submitRegistrationUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v1_registrations_register_path) %>`;
+export const registrationByUserUrl = (competitionId, userId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.show_by_user_api_v1_competition_registrations_path(competition_id: "${competitionId}", user_id: "${userId}")) %>`;
 
-export const updateRegistrationUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v1_registrations_register_path) %>`;
+export const submitRegistrationUrl = (competitionId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v1_competition_registrations_path(competition_id: "${competitionId}")) %>`;
 
-export const bulkUpdateRegistrationUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v1_registrations_bulk_update_path) %>`;
+export const updateRegistrationUrl = (registrationId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v1_registration_path("${registrationId}")) %>`;
 
 export const bulkAutoAcceptUrl = (competitionId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v1_registrations_bulk_auto_accept_path(competition_id: "${competitionId}")) %>`;
 
-export const paymentTicketUrl = (competitionId, isoDonationAmount) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v1_registrations_payment_ticket_path(competition_id: "${competitionId}", iso_donation_amount: "${isoDonationAmount}")) %>`;
+export const bulkUpdateRegistrationUrl = (competitionId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.bulk_update_api_v1_competition_registrations_path(competition_id: "${competitionId}")) %>`;
+
+export const paymentTicketUrl = (registrationId, isoDonationAmount) => `<%= CGI.unescape(Rails.application.routes.url_helpers.payment_ticket_api_v1_registration_path("${registrationId}", iso_donation_amount: "${isoDonationAmount}")) %>`;
 
 export const rankingsUrl = (eventId, rankingType, region, gender, show) => {
   const url = `<%= CGI.unescape(Rails.application.routes.url_helpers.rankings_path(event_id: "${eventId}", type: "${rankingType}")) %>`

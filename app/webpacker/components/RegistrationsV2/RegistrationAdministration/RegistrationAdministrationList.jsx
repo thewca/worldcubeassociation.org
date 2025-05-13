@@ -163,15 +163,18 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
     const waitingSorted = waiting
       .toSorted((a, b) => a.competing.waiting_list_position - b.competing.waiting_list_position);
     updateRegistrationMutation({
-      competition_id: competitionInfo.id,
-      requests: [{
+      competitionId: competitionInfo.id,
+      payload: {
         competition_id: competitionInfo.id,
-        user_id: waitingSorted[result.source.index].user_id,
-        competing: {
-          waiting_list_position: waitingSorted[result.destination.index]
-            .competing.waiting_list_position,
-        },
-      }],
+        requests: [{
+          competition_id: competitionInfo.id,
+          user_id: waitingSorted[result.source.index].user_id,
+          competing: {
+            waiting_list_position: waitingSorted[result.destination.index]
+              .competing.waiting_list_position,
+          },
+        }],
+      },
     }, {
       onSuccess: () => {
         // We need to get the info for all Competitors if you change the waiting list position
