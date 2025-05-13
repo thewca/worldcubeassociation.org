@@ -56,16 +56,9 @@ function ScrambleMatcher({ wcifEvents }) {
       <Message info>
         <Message.Header>Matching scrambles to rounds</Message.Header>
         <Message.Content>
-          Clicking "Automatically assign scrambles" will attempt to automatically detect which
-          scrambles sets belongs to which round, assigning up to the number of scramble sets
-          listed on the "Manage events" page on the WCA website. Unlike the workbook assistant,
-          this will attempt to assign unused scrambles only to rounds without scrambles! Which
-          means that clicking several times the button with the same uploaded scrambles will have
-          no effect. You can check scrambles assignments by browsing through the rounds in the menu.
-          For each round (or each attempt for Multiple Blindfolded and Fewest Moves) you can assign
-          scrambles manually from the unused scrambles in the uploaded scrambles.
-          When everything looks good, get the Results JSON to import the results on the WCA website.
-          Don&#39;t forget to set the competition ID if it&#39;s not detected!
+          Scrambles are assigned automatically when you upload a TNoodle JSON file.
+          If there is a discrepancy between the number of scramble sets in the JSON file
+          and the number of groups in the round you can manually assign them below.
         </Message.Content>
       </Message>
       { error && <Message negative>{error}</Message> }
