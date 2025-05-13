@@ -2,10 +2,34 @@ import React, { useCallback, useState } from 'react';
 import {
   Message,
 } from 'semantic-ui-react';
+import { activityCodeToName } from '@wca/helpers';
+import _ from 'lodash';
 import WCAQueryClientProvider from '../../lib/providers/WCAQueryClientProvider';
 import JSONList from './JSONList';
 import Events from './Events';
 import UploadScramblesButton from './UploadScramblesButton';
+
+function addHumanReadableNames(wcif) {
+  return {
+    ...wcif,
+    events: wcif.events.map((event) => (
+      {
+        ...event,
+        rounds: event.rounds.map((round) => (
+          {
+            ...round,
+            scrambleSets: round.scrambleSets.map((scrambleSet, i) => (
+              {
+                ...scrambleSet,
+                name: `${activityCodeToName(round.id)} - ${String.fromCharCode(65 + i)}`,
+              }
+            )),
+          }
+        )),
+      }
+    )),
+  };
+}
 
 export default function Wrapper({ wcifEvents }) {
   return (
@@ -34,6 +58,7 @@ function ScrambleMatcher({ wcifEvents }) {
           newScramble.competitionName
         }`;
         setUniqueScrambleUploadedId((old) => (old + 1));
+        newScramble.wcif = addHumanReadableNames(newScramble.wcif);
         return {
           wcif: _.merge(state.wcif, newScramble.wcif),
           scrambleProgram: newScramble.version,

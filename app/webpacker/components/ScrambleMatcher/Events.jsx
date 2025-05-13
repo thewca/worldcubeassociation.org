@@ -14,7 +14,10 @@ export default function Events({ wcifEvents, assignedScrambleWcif }) {
         hideClearButton
       />
       {activeEvent && (
-        <Rounds eventWcif={assignedScrambleWcif.find((e) => e.id === activeEvent)} />
+        <Rounds
+          eventWcif={wcifEvents.find((e) => e.id === activeEvent)}
+          assignedScrambleEventsWcif={assignedScrambleWcif.events.find((e) => e.id === activeEvent)}
+        />
       )}
     </>
   );
