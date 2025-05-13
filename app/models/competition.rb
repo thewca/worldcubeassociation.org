@@ -2858,8 +2858,6 @@ class Competition < ApplicationRecord
           "type" => "object",
           "properties" => {
             "isConfirmed" => { "type" => "boolean" },
-            "autoAcceptEnabled" => { "type" => %w[boolean null] },
-            "autoAcceptDisableThreshold" => { "type" => %w[integer null] }, "isVisible" => { "type" => "boolean" }
           },
         },
         "cloning" => {

@@ -415,9 +415,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
         <Button
           disabled={isAutoAccepting}
           color="green"
-          onClick={() => {
-            bulkAutoAcceptMutation(competitionInfo.id);
-          }}
+          onClick={() => bulkAutoAcceptMutation(competitionInfo.id)}
         >
           <Icon name="check" />
           {' '}
