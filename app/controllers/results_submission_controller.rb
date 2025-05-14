@@ -40,31 +40,33 @@ class ResultsSubmissionController < ApplicationController
       raw_wcif: tnoodle_json[:wcif],
     )
 
-    tnoodle_wcif[:events].each do |wcif_event|
-      competition_event = competition.competition_events.find_by(event_id: wcif_event[:id])
+    scr_file_upload.transaction do
+      tnoodle_wcif[:events].each do |wcif_event|
+        competition_event = competition.competition_events.find_by(event_id: wcif_event[:id])
 
-      wcif_event[:rounds].each do |wcif_round|
-        competition_round = competition_event.rounds.find { it.wcif_id == wcif_round[:id] }
+        wcif_event[:rounds].each do |wcif_round|
+          competition_round = competition_event.rounds.find { it.wcif_id == wcif_round[:id] }
 
-        wcif_round[:scrambleSets].each_with_index do |wcif_scramble_set, idx|
-          scramble_set = scr_file_upload.inbox_scramble_sets.create!(
-            ordered_index: idx,
-            matched_round: competition_round,
-          )
-
-          wcif_scramble_set[:scrambles].each_with_index do |wcif_scramble, n|
-            scramble_set.inbox_scrambles.create!(
-              scramble_string: wcif_scramble,
-              scramble_number: n + 1,
+          wcif_round[:scrambleSets].each_with_index do |wcif_scramble_set, idx|
+            scramble_set = scr_file_upload.inbox_scramble_sets.create!(
+              ordered_index: idx,
+              matched_round: competition_round,
             )
-          end
 
-          wcif_scramble_set[:extraScrambles].each_with_index do |wcif_extra_scramble, n|
-            scramble_set.inbox_scrambles.create!(
-              scramble_string: wcif_extra_scramble,
-              scramble_number: n + 1,
-              is_extra: true,
-            )
+            wcif_scramble_set[:scrambles].each_with_index do |wcif_scramble, n|
+              scramble_set.inbox_scrambles.create!(
+                scramble_string: wcif_scramble,
+                scramble_number: n + 1,
+              )
+            end
+
+            wcif_scramble_set[:extraScrambles].each_with_index do |wcif_extra_scramble, n|
+              scramble_set.inbox_scrambles.create!(
+                scramble_string: wcif_extra_scramble,
+                scramble_number: n + 1,
+                is_extra: true,
+              )
+            end
           end
         end
       end
