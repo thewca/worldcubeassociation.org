@@ -66,7 +66,7 @@ export default function CompetingStep({
 }) {
   const {
     isRegistered, isPolling, isProcessing, startPolling, refetchRegistration,
-    isPending, isWaitingList,
+    isPending, isWaitingList, registration,
   } = useRegistration();
 
   const dispatch = useDispatch();

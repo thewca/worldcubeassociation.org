@@ -96,6 +96,7 @@ function PaymentStep({
   const stripe = useStripe();
   const elements = useElements();
   const dispatch = useDispatch();
+  const { registration } = useRegistration();
 
   const [isLoading, setIsLoading] = useState(false);
   const [isDonationChecked, setDonationChecked] = useCheckboxState(false);
