@@ -862,12 +862,11 @@ RSpec.describe Registration do
     end
   end
 
-  describe '#bulk_auto_accept' do
+  describe '#bulk_auto_accept', :tag do
     context 'when competitor limit' do
       let(:auto_accept_comp) { create(:competition, :auto_accept, :registration_open, :with_competitor_limit, competitor_limit: 10, auto_accept_disable_threshold: nil) }
 
       before do
-        auto_accept_comp.auto_accept_disable_threshold = 6
         create_list(:registration, 5, :accepted, competition: auto_accept_comp)
       end
 

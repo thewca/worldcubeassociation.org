@@ -552,22 +552,23 @@ class Registration < ApplicationRecord
   end
 
   def self.bulk_auto_accept(competition)
-    registrations_to_check = competition.registrations.find(competition.waiting_list.entries) if
+    waitlisted_registrations = competition.registrations.find(competition.waiting_list.entries) if
       competition.waiting_list.present?
 
-    registrations_to_check.concat(
-      competition
-       .registrations
-       .competing_status_pending
-       .with_payments
-       .sort_by { |registration| registration.last_positive_payment.updated_at },
-    )
+    pending_registrations = competition
+                             .registrations
+                             .competing_status_pending
+                             .with_payments
+                             .sort_by { |registration| registration.last_positive_payment.updated_at }
 
-    registrations_to_check.each_with_object({}) do |reg, hash|
+    results = waitlisted_registrations.each_with_object({}) do |reg, hash|
       result = reg.attempt_auto_accept
       hash[reg.id] = result
       break hash unless result[:succeeded]
     end
+
+    # We dont need to break out of pending registrations because auto accept can still put them on the waiting list
+    pending_registrations.each_with_object(results) {|reg, hash| hash[reg.id] = reg.attempt_auto_accept }
   end
 
   def last_positive_payment
@@ -604,7 +605,7 @@ class Registration < ApplicationRecord
       { succeeded: true, message: nil }
     else
       log_auto_accept_failure(auto_accepted_registration.errors.messages.values.flatten)
-      { succeeded: false, message: failure_reason }
+      { succeeded: false, message: auto_accepted_registration.errors.messages.values.flatten }
     end
   end
 
