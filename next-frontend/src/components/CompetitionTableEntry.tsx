@@ -8,12 +8,19 @@ import {
   CloseButton,
   Drawer,
   Portal,
+  Badge,
+  VStack,
 } from "@chakra-ui/react";
 
 import CompRegoFullButOpenOrangeIcon from "@/components/icons/CompRegoFullButOpen_orangeIcon";
 import CompRegoNotFullOpenGreenIcon from "@/components/icons/CompRegoNotFullOpen_greenIcon";
 import CompRegoNotOpenYetGreyIcon from "@/components/icons/CompRegoNotOpenYet_greyIcon";
 import CompRegoClosedRedIcon from "@/components/icons/CompRegoClosed_redIcon";
+
+import CompRegoCloseDateIcon from "@/components/icons/CompRegoCloseDateIcon";
+import CompetitorsIcon from "@/components/icons/CompetitorsIcon";
+import RegisterIcon from "@/components/icons/RegisterIcon";
+import LocationIcon from "@/components/icons/LocationIcon";
 
 import EventIcon from "@/components/EventIcon";
 import CountryMap from "@/components/CountryMap";
@@ -42,7 +49,7 @@ interface Props {
 const getRegistrationStatus = (comp: WCACompetition): string => {
   if (comp.registration_currently_open) {
     if (comp.competitor_limit === 0) return "open";
-    return "open"; // You can enhance with full/open state if API supports it
+    return "open";
   }
   if (new Date(comp.registration_open ?? "") > new Date()) return "notOpen";
   return "closed";
@@ -126,6 +133,7 @@ const CompetitionTableEntry: React.FC<Props> = ({ comp }) => {
         open={open}
         onOpenChange={(e) => setOpen(e.open)}
         variant="competitionInfo"
+        size="xl"
       >
         <Portal>
           <Drawer.Backdrop />
@@ -135,7 +143,28 @@ const CompetitionTableEntry: React.FC<Props> = ({ comp }) => {
                 <Drawer.Title>{comp.name}</Drawer.Title>
               </Drawer.Header>
               <Drawer.Body>
-                <Text>Competitor Limit: {comp.competitor_limit}</Text>
+                <VStack alignItems="start">
+                  <Badge variant="information">
+                    {comp.country_iso2} {/* replace with flag */}
+                    <CountryMap code={comp.country_iso2} bold /> {comp.city}
+                  </Badge>
+                  <Badge variant="information">
+                    <CompRegoCloseDateIcon />
+                    {formatDateRange(comp.start_date, comp.end_date)}
+                  </Badge>
+                  <Badge variant="information">
+                    <CompetitorsIcon />
+                    {comp.competitor_limit} Competitor Limit
+                  </Badge>
+                  <Badge variant="information">
+                    <RegisterIcon />
+                    {comp.competitor_limit} Spots Left
+                  </Badge>
+                  <Badge variant="information">
+                    <LocationIcon />
+                    {comp.city}
+                  </Badge>
+                </VStack>
                 <Text>Events:</Text>
                 {comp.event_ids.map((eventId) => (
                   <EventIcon
@@ -146,8 +175,8 @@ const CompetitionTableEntry: React.FC<Props> = ({ comp }) => {
                 ))}
               </Drawer.Body>
               <Drawer.Footer>
-                <Button variant="outline">Cancel</Button>
-                <Button>Save</Button>
+                <Button variant="outline">Register Now</Button>
+                <Button variant="solid">View Competition</Button>
               </Drawer.Footer>
               <Drawer.CloseTrigger asChild>
                 <CloseButton size="sm" />

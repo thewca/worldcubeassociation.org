@@ -1,11 +1,20 @@
-import { Card, Container, Table, VStack, Heading } from "@chakra-ui/react";
+import {
+  Card,
+  Container,
+  Table,
+  VStack,
+  Heading,
+  Flex,
+  Button,
+} from "@chakra-ui/react";
 import CompetitionTableEntry from "@/components/CompetitionTableEntry";
 import RemovableCard from "@/components/RemovableCard";
 
 import { getCompetitionInfo } from "@/lib/wca/competitions/getCompetitionInfo";
+import AllCompsIcon from "@/components/icons/AllCompsIcon";
 
 // Array of competition IDs you want to retrieve data for
-const compIds = ["OC2022", "OC2024", "WC2025"];
+const compIds = ["OC2022", "OC2024", "WC2025", "PerthAutumn2025"];
 
 // Async function to populate comp data
 const getAllCompData = async () => {
@@ -40,7 +49,7 @@ export default async function Competitions() {
 
   return (
     <Container>
-      <VStack gap="8" width="full" pt="8">
+      <VStack gap="8" width="full" pt="8" alignItems="left">
         <RemovableCard
           imageUrl="https://ando527.github.io/wcaWireframes/images/newcomer.png"
           heading="Why Compete?"
@@ -48,7 +57,19 @@ export default async function Competitions() {
           buttonText="Learn More"
           buttonUrl="/"
         />
-        <Heading size="5xl">All Competitions</Heading>
+        <Heading size="5xl">
+          <AllCompsIcon boxSize="1em" />
+          All Competitions
+        </Heading>
+        <Flex gap="2" width="full">
+          <Button>Filter 1</Button>
+          <Button variant="outline">Filter 2</Button>
+          <Button variant="solid">Filter 3</Button>
+          <Button variant="outline">Filter 4</Button>
+          <Flex gap="2" ml="auto">
+            <Button variant="outline">Filter Right</Button>
+          </Flex>
+        </Flex>
         <Card.Root
           bg="bg.inverted"
           color="fg.inverted"

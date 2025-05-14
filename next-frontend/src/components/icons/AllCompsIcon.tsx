@@ -19,8 +19,4 @@ const AllCompsIcon = createIcon({
   ),
 });
 
-const AllCompsIconPreview = () => {
-  return <AllCompsIcon size="lg" />;
-};
-
-export default AllCompsIconPreview;
+export default AllCompsIcon;
