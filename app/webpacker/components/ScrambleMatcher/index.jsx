@@ -2,12 +2,15 @@ import React, { useCallback, useReducer, useState } from 'react';
 import {
   Message,
 } from 'semantic-ui-react';
-import { activityCodeToName } from '@wca/helpers';
 import _ from 'lodash';
+import { useMutation } from '@tanstack/react-query';
 import WCAQueryClientProvider from '../../lib/providers/WCAQueryClientProvider';
 import JSONList from './JSONList';
 import Events from './Events';
 import UploadScramblesButton from './UploadScramblesButton';
+import { fetchJsonOrError } from '../../lib/requests/fetchWithAuthenticityToken';
+import { submitScrambleUrl } from '../../lib/requests/routes.js.erb';
+import Loading from '../Requests/Loading';
 
 function scrambleMatchReducer(state, action) {
   switch (action.type) {
@@ -44,83 +47,65 @@ function scrambleMatchReducer(state, action) {
   }
 }
 
-function addHumanReadableNames(wcif) {
-  return {
-    ...wcif,
-    events: wcif.events.map((event) => (
-      {
-        ...event,
-        rounds: event.rounds.map((round) => (
-          {
-            ...round,
-            scrambleSets: round.scrambleSets.map((scrambleSet, i) => (
-              {
-                ...scrambleSet,
-                name: `${activityCodeToName(round.id)} - ${String.fromCharCode(65 + i)}`,
-              }
-            )),
-          }
-        )),
-      }
-    )),
-  };
-}
-
-function extractScamblesSets(wcif) {
+function matchScrambles(scrambleFile) {
   const scrambleSets = {};
-  wcif.events.forEach((event) => {
-    event.rounds.forEach((round) => {
-      scrambleSets[round.id] = round.scrambleSets;
-    });
+  scrambleFile.inbox_scramble_sets.forEach((set) => {
+    const match = scrambleSets[set.wcif_id];
+    if (match) {
+      scrambleSets[set.wcif_id] = [...match, set];
+    } else {
+      scrambleSets[set.wcif_id] = [set];
+    }
   });
   return scrambleSets;
 }
 
-export default function Wrapper({ wcifEvents }) {
+export async function uploadScrambles(competitionId, file) {
+  const formData = new FormData();
+  formData.append('tnoodle[json]', file);
+
+  const response = await fetchJsonOrError(submitScrambleUrl(competitionId), {
+    method: 'POST',
+    body: formData,
+  });
+
+  return response.data;
+}
+
+export default function Wrapper({ wcifEvents, competitionId }) {
   return (
     <WCAQueryClientProvider>
       <ScrambleMatcher
         wcifEvents={wcifEvents}
+        competitionId={competitionId}
       />
     </WCAQueryClientProvider>
   );
 }
 
-function ScrambleMatcher({ wcifEvents }) {
-  const [uploadedJSON, setUploadedJSON] = useState({ wcif: null, uploadedScrambles: [] });
-  const [uniqueScrambleUploadedId, setUniqueScrambleUploadedId] = useState(1);
+function ScrambleMatcher({ wcifEvents, competitionId }) {
+  const [uploadedJSON, setUploadedJSON] = useState([]);
   const [error, setError] = useState(null);
   const [matchState, dispatchMatchState] = useReducer(scrambleMatchReducer, {});
 
+  const { isLoading, mutate } = useMutation({
+    mutationFn: (file) => uploadScrambles(competitionId, file),
+    onSuccess: (data) => {
+      setUploadedJSON((prev) => [...prev, data.scramble_file]);
+      dispatchMatchState({ type: 'setScrambles', scrambleSets: matchScrambles(data.scramble_file) });
+    },
+    onError: (responseError) => {
+      setError(responseError.message);
+    },
+  });
+
   const uploadNewScramble = useCallback((ev) => {
-    const reader = new FileReader();
+    mutate(ev.target.files[0]);
+  }, [mutate]);
 
-    reader.onload = (e) => {
-      setUploadedJSON((state) => {
-        const newScramble = JSON.parse(e.target.result);
-        // Manually assign some id, in case someone uses same name for zip
-        // but with different scrambles.
-        newScramble.competitionName = `${uniqueScrambleUploadedId}: ${
-          newScramble.competitionName
-        }`;
-        setUniqueScrambleUploadedId((old) => (old + 1));
-        newScramble.wcif = addHumanReadableNames(newScramble.wcif);
-        dispatchMatchState({ type: 'setScrambles', scrambleSets: extractScamblesSets(newScramble.wcif) });
-        return {
-          scrambleProgram: newScramble.version,
-          generationDate: newScramble.generationDate,
-          competitionName: newScramble.competitionName,
-          uploadedScrambles: [...state.uploadedScrambles, newScramble],
-        };
-      });
-    };
-
-    reader.onerror = (e) => {
-      setError(`Couldn't load the JSON scrambles file ${e.target.error.name}`);
-    };
-
-    if (ev.target.files.length > 0) reader.readAsText(ev.target.files[0]);
-  }, [uniqueScrambleUploadedId]);
+  if (isLoading) {
+    return <Loading />;
+  }
 
   return (
     <>
@@ -134,7 +119,7 @@ function ScrambleMatcher({ wcifEvents }) {
       </Message>
       { error && <Message negative>{error}</Message> }
       <UploadScramblesButton onUpload={uploadNewScramble} />
-      <JSONList uploadedScrambles={uploadedJSON.uploadedScrambles} />
+      <JSONList uploadedJSON={uploadedJSON} />
       {matchState.scrambleSets && (
       <Events
         wcifEvents={wcifEvents}

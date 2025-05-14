@@ -10,8 +10,6 @@ export default function UploadScramblesButton({ onUpload }) {
 
   const handleChange = (event) => {
     onUpload(event);
-    // optionally reset input value to allow reuploading same file
-    event.target.value = null;
   };
 
   return (

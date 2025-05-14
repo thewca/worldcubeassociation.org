@@ -2,6 +2,7 @@ import React from 'react';
 import { Icon, Ref, Table } from 'semantic-ui-react';
 import { activityCodeToName } from '@wca/helpers';
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
+import { events, roundTypes } from '../../lib/wca-data.js.erb';
 
 export default function ScrambleMatch({
   activeRound,
@@ -10,6 +11,7 @@ export default function ScrambleMatch({
 }) {
   const { scrambleSetCount } = activeRound;
   const scrambleSets = matchState.scrambleSets[activeRound.id];
+  console.log(scrambleSets);
 
   const handleOnDragEnd = (result) => {
     const { destination, source } = result;
@@ -68,8 +70,11 @@ export default function ScrambleMatch({
                               {...providedDraggable.dragHandleProps}
                             >
                               <Icon name="bars" />
+                              {events.byId[scramble.event_id].name}
                               {' '}
-                              {scramble?.name ?? '—'}
+                              {roundTypes.byId[scramble.round_type_id].name}
+                              {' - '}
+                              {String.fromCharCode(65 + scramble.ordered_index)}
                             </Table.Cell>
                           </Ref>
                         )}

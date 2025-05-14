@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import {
   Accordion, Card, CardContent, CardDescription, CardHeader, Header, Icon, List, ListItem,
 } from 'semantic-ui-react';
+import { events, roundTypes } from '../../lib/wca-data.js.erb';
 
 export default function ScrambleFileInfo({ uploadedJSON }) {
   const [expanded, setExpanded] = useState(false);
-  const { wcif } = uploadedJSON;
 
   return (
     <Card fluid>
@@ -14,30 +14,30 @@ export default function ScrambleFileInfo({ uploadedJSON }) {
           <CardHeader>
             <Header>
               <Icon name="dropdown" />
-              {uploadedJSON.competitionName}
+              {uploadedJSON.competition_id}
             </Header>
           </CardHeader>
           <CardDescription>
             Generated with
             {' '}
-            {uploadedJSON.version}
+            {uploadedJSON.scramble_program}
             <br />
             On
             {' '}
-            {uploadedJSON.generationDate}
+            {uploadedJSON.generated_at}
           </CardDescription>
         </Accordion.Title>
         <Accordion.Content active={expanded}>
           <CardContent style={{ maxHeight: '400px', overflowY: 'auto' }}>
             <List>
-              {wcif.events.map((event) => (
-                event.rounds.map((round) => (
-                  round.scrambleSets.map((scrambleSet) => (
-                    <ListItem key={`${round.id}-${scrambleSet.id}`}>
-                      {scrambleSet.name}
-                    </ListItem>
-                  ))
-                ))
+              {uploadedJSON.inbox_scramble_sets.map((scrambleSet) => (
+                <ListItem key={scrambleSet.id}>
+                  {events.byId[scrambleSet.event_id].name}
+                  {' '}
+                  {roundTypes.byId[scrambleSet.round_type_id].name}
+                  {' - '}
+                  {String.fromCharCode(65 + scrambleSet.ordered_index)}
+                </ListItem>
               ))}
             </List>
           </CardContent>
