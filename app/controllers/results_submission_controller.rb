@@ -15,31 +15,35 @@ class ResultsSubmissionController < ApplicationController
   def upload_scramble_json
     competition = competition_from_params
 
-    raw_file_contents = params.require(:tnoodle).require(:json).read
+    uploaded_file = params.require(:tnoodle).require(:json)
+
+    raw_file_contents = uploaded_file.read
     tnoodle_json = JSON.parse(raw_file_contents, symbolize_names: true)
 
     # The original Java `LocalDateTime` format is defined as `"MMM dd, yyyy h:m:s a"`.
     generation_date = DateTime.strptime(tnoodle_json[:generationDate], "%b %d, %Y %l:%M:%S %p")
-
-    tnoodle_wcif = tnoodle_json[:wcif]
+    tnoodle_version = tnoodle_json[:version]
 
     existing_upload = ScrambleFileUpload
                       .includes(inbox_scramble_sets: { inbox_scrambles: [], matched_round: [:competition_event] })
                       .find_by(
                         competition: competition,
-                        scramble_program: tnoodle_json[:version],
+                        scramble_program: tnoodle_version,
                         generated_at: generation_date,
                       )
 
     return render json: { success: :ok, scramble_file: existing_upload } if existing_upload.present?
 
+    tnoodle_wcif = tnoodle_json[:wcif]
+
     scr_file_upload = ScrambleFileUpload.create!(
       uploaded_by_user: current_user,
       uploaded_at: DateTime.now,
       competition: competition,
-      scramble_program: tnoodle_json[:version],
+      original_filename: uploaded_file.original_filename,
+      scramble_program: tnoodle_version,
       generated_at: generation_date,
-      raw_wcif: tnoodle_json[:wcif],
+      raw_wcif: tnoodle_wcif,
     )
 
     scr_file_upload.transaction do
