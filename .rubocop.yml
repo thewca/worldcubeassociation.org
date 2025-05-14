@@ -116,6 +116,9 @@ Style/AccessModifierDeclarations:
 Style/BlockDelimiters:
   Enabled: false
 
+Style/ClassAndModuleChildren:
+  EnforcedStyle: compact
+
 Style/ClassVars:
   Enabled: false
 

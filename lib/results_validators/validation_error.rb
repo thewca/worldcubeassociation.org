@@ -1,6 +1,4 @@
 # frozen_string_literal: true
 
-module ResultsValidators
-  class ValidationError < ValidationIssue
-  end
+class ResultsValidators::ValidationError < ValidationIssue
 end
