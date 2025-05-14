@@ -1,4 +1,4 @@
-import { Card, Container, Table, VStack } from "@chakra-ui/react";
+import { Card, Container, Table, VStack, Heading } from "@chakra-ui/react";
 import CompetitionTableEntry from "@/components/CompetitionTableEntry";
 import RemovableCard from "@/components/RemovableCard";
 
@@ -9,9 +9,7 @@ const compIds = ["OC2022", "OC2024", "WC2025"];
 
 // Async function to populate comp data
 const getAllCompData = async () => {
-  const compDataArray = [];
-
-  for (const competitionId of compIds) {
+  const competitionPromises = compIds.map(async (competitionId) => {
     const { data: competitionInfo, error } =
       await getCompetitionInfo(competitionId);
 
@@ -20,34 +18,21 @@ const getAllCompData = async () => {
         `Error fetching competition with ID ${competitionId}:`,
         error,
       );
-      continue;
+      return null;
     }
 
     if (!competitionInfo) {
       console.warn(`Competition with ID ${competitionId} does not exist`);
-      continue;
+      return null;
     }
 
-    // Transform data into the desired format
-    const formattedComp = {
-      name: competitionInfo.name,
-      id: competitionInfo.id,
-      dateStart: new Date(competitionInfo.start_date),
-      dateEnd: new Date(competitionInfo.end_date),
-      city: competitionInfo.city,
-      country: competitionInfo.country_iso2,
-      regoStatus: competitionInfo.registration_currently_open
-        ? "open"
-        : "closed",
-      competitorLimit: competitionInfo.competitor_limit,
-      events: competitionInfo.event_ids,
-      mainEvent: competitionInfo.main_event_id,
-    };
+    return competitionInfo;
+  });
 
-    compDataArray.push(formattedComp);
-  }
+  const results = await Promise.all(competitionPromises);
 
-  return compDataArray;
+  // Filter out null results (errors or missing comps)
+  return results.filter((comp) => comp !== null);
 };
 
 export default async function Competitions() {
@@ -63,6 +48,7 @@ export default async function Competitions() {
           buttonText="Learn More"
           buttonUrl="/"
         />
+        <Heading size="5xl">All Competitions</Heading>
         <Card.Root
           bg="bg.inverted"
           color="fg.inverted"

@@ -1,44 +1,66 @@
 "use client";
-import React from "react";
-import { Table, Text, Link } from "@chakra-ui/react";
+import React, { useState } from "react";
+import {
+  Table,
+  Text,
+  Link,
+  Button,
+  CloseButton,
+  Drawer,
+  Portal,
+} from "@chakra-ui/react";
+
 import CompRegoFullButOpenOrangeIcon from "@/components/icons/CompRegoFullButOpen_orangeIcon";
 import CompRegoNotFullOpenGreenIcon from "@/components/icons/CompRegoNotFullOpen_greenIcon";
 import CompRegoNotOpenYetGreyIcon from "@/components/icons/CompRegoNotOpenYet_greyIcon";
 import CompRegoClosedRedIcon from "@/components/icons/CompRegoClosed_redIcon";
 
-import { Button, CloseButton, Drawer, Portal } from "@chakra-ui/react";
-import { useState } from "react";
 import EventIcon from "@/components/EventIcon";
 import CountryMap from "@/components/CountryMap";
 
-interface Comps {
-  name: string;
+// Raw competition type from WCA API
+interface WCACompetition {
   id: string;
-  dateStart: Date;
-  dateEnd: Date;
+  name: string;
+  start_date: string;
+  end_date: string;
   city: string;
-  country: string;
-  registrationStatus: string;
-  competitorLimit: BigInteger;
-  events: string[];
-  mainEvent: string;
+  country_iso2: string;
+  registration_open: string | null;
+  registration_close: string | null;
+  registration_currently_open: boolean;
+  competitor_limit: number;
+  event_ids: string[];
+  main_event_id: string;
 }
 
-const registrationStatusIcons: Record<string, TSX.Element> = {
+interface Props {
+  comp: WCACompetition;
+}
+
+// Map registration status
+const getRegistrationStatus = (comp: WCACompetition): string => {
+  if (comp.registration_currently_open) {
+    if (comp.competitor_limit === 0) return "open";
+    return "open"; // You can enhance with full/open state if API supports it
+  }
+  if (new Date(comp.registration_open ?? "") > new Date()) return "notOpen";
+  return "closed";
+};
+
+const registrationStatusIcons: Record<string, JSX.Element> = {
   open: <CompRegoNotFullOpenGreenIcon />,
   notOpen: <CompRegoNotOpenYetGreyIcon />,
   closed: <CompRegoClosedRedIcon />,
   full: <CompRegoFullButOpenOrangeIcon />,
 };
 
-interface CompsProps {
-  comp: Comps;
-}
+// Format date range
+function formatDateRange(start: string, end: string): string {
+  const startDate = new Date(start);
+  const endDate = new Date(end);
+  const sameDay = startDate.toDateString() === endDate.toDateString();
 
-function formatDateRange(start: Date, end: Date): string {
-  const sameDay = start.toDateString() === end.toDateString();
-
-  // Formatters
   const dayFormatter = new Intl.DateTimeFormat("en-US", { day: "numeric" });
   const monthDayFormatter = new Intl.DateTimeFormat("en-US", {
     month: "short",
@@ -50,54 +72,56 @@ function formatDateRange(start: Date, end: Date): string {
     year: "numeric",
   });
 
-  if (sameDay) {
-    return fullFormatter.format(start);
-  }
+  if (sameDay) return fullFormatter.format(startDate);
 
-  const sameMonth = start.getMonth() === end.getMonth();
-  const sameYear = start.getFullYear() === end.getFullYear();
+  const sameMonth = startDate.getMonth() === endDate.getMonth();
+  const sameYear = startDate.getFullYear() === endDate.getFullYear();
 
   if (sameMonth && sameYear) {
-    return `${monthDayFormatter.format(start)} - ${dayFormatter.format(end)}, ${start.getFullYear()}`;
+    return `${monthDayFormatter.format(startDate)} - ${dayFormatter.format(endDate)}, ${startDate.getFullYear()}`;
   }
 
   if (sameYear) {
-    return `${monthDayFormatter.format(start)} - ${monthDayFormatter.format(end)}, ${start.getFullYear()}`;
+    return `${monthDayFormatter.format(startDate)} - ${monthDayFormatter.format(endDate)}, ${startDate.getFullYear()}`;
   }
 
-  return `${fullFormatter.format(start)} - ${fullFormatter.format(end)}`;
+  return `${fullFormatter.format(startDate)} - ${fullFormatter.format(endDate)}`;
 }
 
-const CompetitionTableEntry: React.FC<CompsProps> = ({ comp }) => {
+const CompetitionTableEntry: React.FC<Props> = ({ comp }) => {
   const [open, setOpen] = useState(false);
+  const regoStatus = getRegistrationStatus(comp);
+
   return (
     <Table.Row bg="bg.inverted" onClick={() => setOpen(true)} key={comp.id}>
+      <Table.Cell>{registrationStatusIcons[regoStatus] || null}</Table.Cell>
+
       <Table.Cell>
-        {registrationStatusIcons[comp.registrationStatus] || null}
+        <Text>{formatDateRange(comp.start_date, comp.end_date)}</Text>
       </Table.Cell>
-      <Table.Cell>
-        <Text>{formatDateRange(comp.dateStart, comp.dateEnd)}</Text>
-      </Table.Cell>
+
       <Table.Cell>
         <Link
           hoverArrow
-          href={"/competitions/" + comp.id}
-          onClick={(e) => {
-            e.stopPropagation();
-          }}
+          href={`/competitions/${comp.id}`}
+          onClick={(e) => e.stopPropagation()}
         >
           {comp.name}
         </Link>
       </Table.Cell>
+
       <Table.Cell>
         <Text>{comp.city}</Text>
       </Table.Cell>
+
       <Table.Cell>
-        <CountryMap code={comp.country} bold />
+        <CountryMap code={comp.country_iso2} bold />
       </Table.Cell>
+
       <Table.Cell>
-        <Text>{comp.country}</Text>
+        <Text>{comp.country_iso2}</Text>
       </Table.Cell>
+
       <Drawer.Root
         open={open}
         onOpenChange={(e) => setOpen(e.open)}
@@ -111,13 +135,13 @@ const CompetitionTableEntry: React.FC<CompsProps> = ({ comp }) => {
                 <Drawer.Title>{comp.name}</Drawer.Title>
               </Drawer.Header>
               <Drawer.Body>
-                <Text>Competitor Limit: {comp.competitorLimit}</Text>
+                <Text>Competitor Limit: {comp.competitor_limit}</Text>
                 <Text>Events:</Text>
-                {comp.events.map((eventIndividual) => (
+                {comp.event_ids.map((eventId) => (
                   <EventIcon
-                    eventId={eventIndividual}
-                    key={eventIndividual}
-                    main={eventIndividual === comp.mainEvent}
+                    eventId={eventId}
+                    key={eventId}
+                    main={eventId === comp.main_event_id}
                   />
                 ))}
               </Drawer.Body>
