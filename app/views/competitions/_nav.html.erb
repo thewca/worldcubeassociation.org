@@ -88,7 +88,7 @@
             text: t('.menu.match_scrambles'),
             path: competition_match_scrambles_path(@competition),
             icon: "cloud upload alt",
-          }
+          } unless Rails.env.production? && EnvConfig.WCA_LIVE_SITE?
         end
         if current_user&.can_admin_results?
           nav_items << {
