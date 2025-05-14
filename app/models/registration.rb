@@ -560,7 +560,7 @@ class Registration < ApplicationRecord
        .registrations
        .competing_status_pending
        .with_payments
-       .sort_by { |registration| registration.last_positive_payment.updated_at }
+       .sort_by { |registration| registration.last_positive_payment.updated_at },
     )
 
     registrations_to_check.to_h { [it.id, it.attempt_auto_accept] }

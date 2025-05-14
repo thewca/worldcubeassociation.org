@@ -610,14 +610,14 @@ RSpec.describe Registration do
         create(:registration_payment, :skip_create_hook, registration: reg, competition: auto_accept_comp)
         response = reg.attempt_auto_accept
 
-        expect(response[:succeeded]).to eq(true)
-        expect(response[:message]).to eq(nil)
+        expect(response[:succeeded]).to be(true)
+        expect(response[:message]).to be(nil)
       end
 
       it 'on fail, returns succeeded:false and message:{error code}' do
         response = reg.attempt_auto_accept
 
-        expect(response[:succeeded]).to eq(false)
+        expect(response[:succeeded]).to be(false)
         expect(response[:message]).to eq(-7001)
       end
     end
@@ -887,13 +887,13 @@ RSpec.describe Registration do
 
         it 'accepted registration has reg_id, succeeded:true, message:nil' do
           succeeded_response = @result[waitlisted.id]
-          expect(succeeded_response[:succeeded]).to eq(true)
-          expect(succeeded_response[:message]).to eq(nil)
+          expect(succeeded_response[:succeeded]).to be(true)
+          expect(succeeded_response[:message]).to be(nil)
         end
 
         it 'non-accepted registration hash reg_id, succeeded:false and message:{error_code}' do
           unsucceeded_response = @result[pending.id]
-          expect(unsucceeded_response[:succeeded]).to eq(false)
+          expect(unsucceeded_response[:succeeded]).to be(false)
           expect(unsucceeded_response[:message]).to eq(-7004)
         end
       end
