@@ -605,6 +605,23 @@ RSpec.describe Registration do
     let(:auto_accept_comp) { create(:competition, :auto_accept, :registration_open) }
     let!(:reg) { create(:registration, competition: auto_accept_comp) }
 
+    describe 'return values' do
+      it 'on success, returns succeeded:true and message:nil' do
+        create(:registration_payment, :skip_create_hook, registration: reg, competition: auto_accept_comp)
+        response = reg.attempt_auto_accept
+
+        expect(response[:succeeded]).to eq(true)
+        expect(response[:message]).to eq(nil)
+      end
+
+      it 'on fail, returns succeeded:false and message:{error code}' do
+        response = reg.attempt_auto_accept
+
+        expect(response[:succeeded]).to eq(false)
+        expect(response[:message]).to eq(-7001)
+      end
+    end
+
     it 'auto accepts a competitor who pays for their pending registration' do
       expect(reg.competing_status).to eq('pending')
 
@@ -846,11 +863,39 @@ RSpec.describe Registration do
   end
 
   describe '#bulk_auto_accept' do
-    describe 'when competitor limit' do
+    context 'when competitor limit' do
       let(:auto_accept_comp) { create(:competition, :auto_accept, :registration_open, :with_competitor_limit, competitor_limit: 10, auto_accept_disable_threshold: nil) }
 
       before do
+        auto_accept_comp.auto_accept_disable_threshold = 6
         create_list(:registration, 5, :accepted, competition: auto_accept_comp)
+      end
+
+      context 'return values' do
+        let(:waitlisted) { create(:registration, :waiting_list, competition: auto_accept_comp) }
+        let(:pending) { create(:registration, :pending, competition: auto_accept_comp) }
+
+        before do
+          create(:registration_payment, :skip_create_hook, registration: waitlisted, competition: auto_accept_comp)
+          create(:registration_payment, :skip_create_hook, registration: pending, competition: auto_accept_comp)
+          @result = Registration.bulk_auto_accept(auto_accept_comp)
+        end
+
+        it 'hash length matches number of waitlisted + pending registrations' do
+          expect(@result.length).to eq(2)
+        end
+
+        it 'accepted registration has reg_id, succeeded:true, message:nil' do
+          succeeded_response = @result[waitlisted.id]
+          expect(succeeded_response[:succeeded]).to eq(true)
+          expect(succeeded_response[:message]).to eq(nil)
+        end
+
+        it 'non-accepted registration hash reg_id, succeeded:false and message:{error_code}' do
+          unsucceeded_response = @result[pending.id]
+          expect(unsucceeded_response[:succeeded]).to eq(false)
+          expect(unsucceeded_response[:message]).to eq(-7004)
+        end
       end
 
       it 'accepts paid-pending registrations' do
@@ -930,7 +975,7 @@ RSpec.describe Registration do
       end
     end
 
-    describe 'when disable_threshold' do
+    context 'when disable_threshold' do
       let(:threshold_auto_accept_comp) {
         create(:competition, :auto_accept, :registration_open, :with_competitor_limit, auto_accept_disable_threshold: 9)
       }
@@ -1016,7 +1061,7 @@ RSpec.describe Registration do
       end
     end
 
-    describe 'no limit' do
+    context 'no limit' do
       let(:auto_accept_comp) { create(:competition, :auto_accept, :registration_open, auto_accept_disable_threshold: nil) }
 
       before do

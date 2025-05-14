@@ -552,19 +552,18 @@ class Registration < ApplicationRecord
   end
 
   def self.bulk_auto_accept(competition)
-    if competition.waiting_list.present?
-      competition.registrations
-                 .find(competition.waiting_list.entries)
-                 .each(&:attempt_auto_accept)
-    end
+    registrations_to_check = competition.registrations.find(competition.waiting_list.entries) if
+      competition.waiting_list.present?
 
-    sorted_pending_registrations = competition
-                                   .registrations
-                                   .competing_status_pending
-                                   .with_payments
-                                   .sort_by { |registration| registration.last_positive_payment.updated_at }
+    registrations_to_check.concat(
+      competition
+       .registrations
+       .competing_status_pending
+       .with_payments
+       .sort_by { |registration| registration.last_positive_payment.updated_at }
+    )
 
-    sorted_pending_registrations.each(&:attempt_auto_accept)
+    registrations_to_check.to_h { [it.id, it.attempt_auto_accept] }
   end
 
   def last_positive_payment
