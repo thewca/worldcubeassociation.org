@@ -581,12 +581,13 @@ class Registration < ApplicationRecord
   end
 
   def attempt_auto_accept
-    return false unless auto_accept_in_current_env?
+    # Deliberately not i18n-ing as this is a temporary error message - not necessary for it to be translated
+    return { succeeded: false, message: 'auto accept not enabled in current env' } unless auto_accept_in_current_env?
 
     failure_reason = auto_accept_failure_reason
     if failure_reason.present?
       log_auto_accept_failure(failure_reason)
-      return false
+      return { succeeded: false, message: failure_reason}
     end
 
     update_payload = build_auto_accept_payload
@@ -597,10 +598,10 @@ class Registration < ApplicationRecord
         update_payload,
         AUTO_ACCEPT_ENTITY_ID,
       )
-      true
+      return { succeeded: true, message: nil}
     else
       log_auto_accept_failure(auto_accepted_registration.errors.messages.values.flatten)
-      false
+      return { succeeded: false, message: failure_reason}
     end
   end
 
