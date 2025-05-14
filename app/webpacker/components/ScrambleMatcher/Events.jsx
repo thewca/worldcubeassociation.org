@@ -1,23 +1,22 @@
-import React, { useState } from 'react';
+import React from 'react';
 import EventSelector from '../wca/EventSelector';
 import Rounds from './Rounds';
 
-export default function Events({ wcifEvents, assignedScrambleWcif }) {
-  const [activeEvent, setActiveEvent] = useState(null);
+export default function Events({ wcifEvents, matchState, dispatchMatchState }) {
   return (
     <>
       <EventSelector
-        selectedEvents={activeEvent ? [activeEvent] : []}
+        selectedEvents={matchState.event ? [matchState.event] : []}
         eventList={wcifEvents.map((e) => e.id)}
-        onEventClick={setActiveEvent}
+        onEventClick={(event) => dispatchMatchState({ type: 'changeEvent', event })}
         hideAllButton
         hideClearButton
       />
-      {activeEvent && (
+      {matchState.event && (
         <Rounds
-          key={activeEvent}
-          eventWcif={wcifEvents.find((e) => e.id === activeEvent)}
-          assignedScrambleEventsWcif={assignedScrambleWcif.events.find((e) => e.id === activeEvent)}
+          eventWcif={wcifEvents.find((e) => e.id === matchState.event)}
+          matchState={matchState}
+          dispatchMatchState={dispatchMatchState}
         />
       )}
     </>

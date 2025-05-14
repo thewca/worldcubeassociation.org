@@ -5,10 +5,11 @@ import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 
 export default function ScrambleMatch({
   activeRound,
-  assignedScrambleRoundWcif,
+  matchState,
+  dispatchMatchState,
 }) {
   const { scrambleSetCount } = activeRound;
-  const scrambleSets = assignedScrambleRoundWcif.scrambleSets || [];
+  const scrambleSets = matchState.scrambleSets[activeRound.id];
 
   const handleOnDragEnd = (result) => {
     const { destination, source } = result;
@@ -17,14 +18,15 @@ export default function ScrambleMatch({
     const updated = Array.from(scrambleSets);
     const [moved] = updated.splice(source.index, 1);
     updated.splice(destination.index, 0, moved);
+    dispatchMatchState({ type: 'updateScrambles', scrambleSets: updated, roundId: activeRound.id });
   };
 
   /* eslint-disable react/jsx-props-no-spreading */
   return (
-    <Table>
+    <Table definition>
       <Table.Header>
         <Table.Row>
-          <Table.HeaderCell>Group Id</Table.HeaderCell>
+          <Table.HeaderCell />
           <Table.HeaderCell>Assigned Scrambles</Table.HeaderCell>
           <Table.HeaderCell />
         </Table.Row>
@@ -52,15 +54,15 @@ export default function ScrambleMatch({
                             {...providedDraggable.dragHandleProps}
                             negative={hasError || isExtra}
                           >
-                            <Table.Cell>
+                            <Table.Cell collapsing>
                               {isExpected
                                 ? `${activityCodeToName(activeRound.id)}, Group ${index + 1}`
-                                : 'Extra scramble (unassigned)'}
+                                : 'Extra Scramble set (unassigned)'}
                               {(hasError || isExtra) && (
                                 <>
                                   {' '}
                                   <Icon name="exclamation triangle" />
-                                  {hasError ? 'Missing scramble' : 'Unexpected scramble'}
+                                  {hasError ? 'Missing scramble' : 'Unexpected Scramble Set'}
                                 </>
                               )}
                             </Table.Cell>

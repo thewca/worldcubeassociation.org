@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useReducer, useState } from 'react';
 import {
   Message,
 } from 'semantic-ui-react';
@@ -8,6 +8,41 @@ import WCAQueryClientProvider from '../../lib/providers/WCAQueryClientProvider';
 import JSONList from './JSONList';
 import Events from './Events';
 import UploadScramblesButton from './UploadScramblesButton';
+
+function scrambleMatchReducer(state, action) {
+  switch (action.type) {
+    case 'setScrambles': {
+      return {
+        ...state,
+        scrambleSets: action.scrambleSets,
+      };
+    }
+    case 'changeEvent': {
+      return {
+        ...state,
+        event: action.event,
+        round: null,
+      };
+    }
+    case 'changeRound': {
+      return {
+        ...state,
+        round: action.round,
+      };
+    }
+    case 'updateScrambles': {
+      const updated = _.cloneDeep(state.scrambleSets);
+      updated[action.roundId] = action.scrambleSets;
+      return {
+        ...state,
+        scrambleSets: updated,
+      };
+    }
+    default: {
+      throw new Error(`Unhandled action type: ${action.type}`);
+    }
+  }
+}
 
 function addHumanReadableNames(wcif) {
   return {
@@ -31,6 +66,16 @@ function addHumanReadableNames(wcif) {
   };
 }
 
+function extractScamblesSets(wcif) {
+  const scrambleSets = {};
+  wcif.events.forEach((event) => {
+    event.rounds.forEach((round) => {
+      scrambleSets[round.id] = round.scrambleSets;
+    });
+  });
+  return scrambleSets;
+}
+
 export default function Wrapper({ wcifEvents }) {
   return (
     <WCAQueryClientProvider>
@@ -45,6 +90,7 @@ function ScrambleMatcher({ wcifEvents }) {
   const [uploadedJSON, setUploadedJSON] = useState({ wcif: null, uploadedScrambles: [] });
   const [uniqueScrambleUploadedId, setUniqueScrambleUploadedId] = useState(1);
   const [error, setError] = useState(null);
+  const [matchState, dispatchMatchState] = useReducer(scrambleMatchReducer, {});
 
   const uploadNewScramble = useCallback((ev) => {
     const reader = new FileReader();
@@ -59,8 +105,8 @@ function ScrambleMatcher({ wcifEvents }) {
         }`;
         setUniqueScrambleUploadedId((old) => (old + 1));
         newScramble.wcif = addHumanReadableNames(newScramble.wcif);
+        dispatchMatchState({ type: 'setScrambles', scrambleSets: extractScamblesSets(newScramble.wcif) });
         return {
-          wcif: _.merge(state.wcif, newScramble.wcif),
           scrambleProgram: newScramble.version,
           generationDate: newScramble.generationDate,
           competitionName: newScramble.competitionName,
@@ -89,10 +135,11 @@ function ScrambleMatcher({ wcifEvents }) {
       { error && <Message negative>{error}</Message> }
       <UploadScramblesButton onUpload={uploadNewScramble} />
       <JSONList uploadedScrambles={uploadedJSON.uploadedScrambles} />
-      {uploadedJSON.wcif && (
+      {matchState.scrambleSets && (
       <Events
         wcifEvents={wcifEvents}
-        assignedScrambleWcif={uploadedJSON.wcif}
+        matchState={matchState}
+        dispatchMatchState={dispatchMatchState}
       />
       )}
     </>
