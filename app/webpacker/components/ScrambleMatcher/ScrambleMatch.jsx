@@ -10,7 +10,6 @@ export default function ScrambleMatch({
 }) {
   const { scrambleSetCount } = activeRound;
   const scrambleSets = matchState.scrambleSets[activeRound.id];
-  console.log(matchState.scrambleSets);
 
   const handleOnDragEnd = (result) => {
     const { destination, source } = result;
@@ -27,9 +26,8 @@ export default function ScrambleMatch({
     <Table definition fixed>
       <Table.Header>
         <Table.Row>
-          <Table.HeaderCell />
+          <Table.HeaderCell width={5} />
           <Table.HeaderCell>Assigned Scrambles</Table.HeaderCell>
-          <Table.HeaderCell />
         </Table.Row>
       </Table.Header>
       <DragDropContext onDragEnd={handleOnDragEnd}>
@@ -46,7 +44,7 @@ export default function ScrambleMatch({
                     <Table.Row
                       negative={hasError || isExtra}
                     >
-                      <Table.Cell collapsing>
+                      <Table.Cell>
                         {isExpected
                           ? `${activityCodeToName(activeRound.id)}, Group ${index + 1}`
                           : 'Extra Scramble set (unassigned)'}
@@ -69,12 +67,13 @@ export default function ScrambleMatch({
                               {...providedDraggable.draggableProps}
                               {...providedDraggable.dragHandleProps}
                             >
+                              <Icon name="bars" />
+                              {' '}
                               {scramble?.name ?? '—'}
                             </Table.Cell>
                           </Ref>
                         )}
                       </Draggable>
-                      <Table.Cell><Icon name="bars" /></Table.Cell>
                     </Table.Row>
                   );
                 })}
