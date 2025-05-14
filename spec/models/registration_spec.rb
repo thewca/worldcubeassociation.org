@@ -873,16 +873,23 @@ RSpec.describe Registration do
 
       context 'return values' do
         let(:waitlisted) { create(:registration, :waiting_list, competition: auto_accept_comp) }
-        let(:pending) { create(:registration, :pending, competition: auto_accept_comp) }
+        let(:pending1) { create(:registration, :pending, competition: auto_accept_comp) }
+        let(:pending2) { create(:registration, :pending, competition: auto_accept_comp) }
 
         before do
           create(:registration_payment, :skip_create_hook, registration: waitlisted, competition: auto_accept_comp)
-          create(:registration_payment, :skip_create_hook, registration: pending, competition: auto_accept_comp)
+          create(:registration_payment, :skip_create_hook, registration: pending1, competition: auto_accept_comp)
+          create(:registration_payment, :skip_create_hook, registration: pending2, competition: auto_accept_comp)
+          create_list(:registration, 5, :pending, :paid, competition: auto_accept_comp)
+          auto_accept_comp.auto_accept_disable_threshold = 7
           @result = Registration.bulk_auto_accept(auto_accept_comp)
         end
 
-        it 'hash length matches number of waitlisted + pending registrations' do
-          expect(@result.length).to eq(2)
+        it 'only returns up to and including the first failure' do
+          expect(@result.length).to be(3)
+          expect(@result[waitlisted.id][:succeeded]).to be(true)
+          expect(@result[pending1.id][:succeeded]).to be(true)
+          expect(@result[pending2.id][:succeeded]).to be(false)
         end
 
         it 'accepted registration has reg_id, succeeded:true, message:nil' do
@@ -892,7 +899,7 @@ RSpec.describe Registration do
         end
 
         it 'non-accepted registration hash reg_id, succeeded:false and message:{error_code}' do
-          unsucceeded_response = @result[pending.id]
+          unsucceeded_response = @result[pending2.id]
           expect(unsucceeded_response[:succeeded]).to be(false)
           expect(unsucceeded_response[:message]).to eq(-7004)
         end

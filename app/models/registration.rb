@@ -563,7 +563,11 @@ class Registration < ApplicationRecord
        .sort_by { |registration| registration.last_positive_payment.updated_at },
     )
 
-    registrations_to_check.to_h { [it.id, it.attempt_auto_accept] }
+    registrations_to_check.each_with_object({}) do |reg, hash|
+      result = reg.attempt_auto_accept
+      hash[reg.id] = result
+      break hash unless result[:succeeded]
+    end
   end
 
   def last_positive_payment
