@@ -106,6 +106,7 @@ Rails.application.routes.draw do
     get 'submit-results' => 'results_submission#new', as: :submit_results_edit
     get 'submit-scrambles' => 'admin/scrambles#match_scrambles', as: :match_scrambles
     post 'submit-results' => 'results_submission#create', as: :submit_results
+    post 'upload-scramble-json' => 'results_submission#upload_scramble_json', as: :upload_scramble_json
     post 'upload-json' => 'results_submission#upload_json', as: :upload_results_json
     # WRT views and action
     get '/admin/upload-results' => "admin#new_results", as: :admin_upload_results_edit
@@ -354,6 +355,7 @@ Rails.application.routes.draw do
           end
 
           collection do
+            patch 'bulk_auto_accept', to: 'registrations#bulk_auto_accept'
             patch 'bulk_update', to: 'registrations#bulk_update'
             get 'admin', to: 'registrations#index_admin'
             get ':user_id', to: 'registrations#show_by_user', as: :show_by_user
@@ -438,5 +440,5 @@ Rails.application.routes.draw do
   # Deprecated Links
   get 'teams-committees' => redirect('teams-committees-councils')
   get 'panel/delegate-crash-course' => redirect('panel/delegate#delegate-handbook')
-  get 'panel' => redirect('panel/staff')
+  get 'panel' => redirect('panel/volunteer')
 end

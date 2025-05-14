@@ -46,6 +46,7 @@ module Locales
     'fr-CA': {
       flag_id: "ca",
       name: "Français Canadien",
+      base_locale: "fr",
     },
     hr: {
       flag_id: "hr",
