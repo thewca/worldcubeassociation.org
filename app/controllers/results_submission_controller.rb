@@ -23,11 +23,13 @@ class ResultsSubmissionController < ApplicationController
 
     tnoodle_wcif = tnoodle_json[:wcif]
 
-    existing_upload = ScrambleFileUpload.find_by(
-      competition: competition,
-      scramble_program: tnoodle_json[:version],
-      generated_at: generation_date,
-    )
+    existing_upload = ScrambleFileUpload
+                      .includes(inbox_scramble_sets: { inbox_scrambles: [], matched_round: [:competition_event] })
+                      .find_by(
+                        competition: competition,
+                        scramble_program: tnoodle_json[:version],
+                        generated_at: generation_date,
+                      )
 
     return render json: { success: :ok, scramble_file: existing_upload } if existing_upload.present?
 
