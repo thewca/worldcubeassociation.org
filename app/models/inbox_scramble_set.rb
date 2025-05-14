@@ -21,4 +21,12 @@ class InboxScrambleSet < ApplicationRecord
     self.event_id = matched_round.event_id
     self.round_type_id = matched_round.round_type_id
   end
+
+  DEFAULT_SERIALIZE_OPTIONS = {
+    include: %w[inbox_scrambles],
+  }.freeze
+
+  def serializable_hash(options = nil)
+    super(DEFAULT_SERIALIZE_OPTIONS.merge(options || {}))
+  end
 end
