@@ -14,7 +14,7 @@ export default function ScrambleFileInfo({ uploadedJSON }) {
           <CardHeader>
             <Header>
               <Icon name="dropdown" />
-              {uploadedJSON.competition_id}
+              {uploadedJSON.original_filename}
             </Header>
           </CardHeader>
           <CardDescription>
