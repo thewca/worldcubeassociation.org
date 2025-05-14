@@ -12,7 +12,7 @@ class InboxScrambleSet < ApplicationRecord
 
   validates :ordered_index, uniqueness: { scope: %i[competition_id event_id round_type_id] }
 
-  before_save :backfill_round_information!, if: :matched_round_id?
+  before_validation :backfill_round_information!, if: :matched_round_id?
 
   def backfill_round_information!
     return if matched_round.blank?
