@@ -587,7 +587,7 @@ class Registration < ApplicationRecord
     failure_reason = auto_accept_failure_reason
     if failure_reason.present?
       log_auto_accept_failure(failure_reason)
-      return { succeeded: false, message: failure_reason}
+      return { succeeded: false, message: failure_reason }
     end
 
     update_payload = build_auto_accept_payload
@@ -598,10 +598,10 @@ class Registration < ApplicationRecord
         update_payload,
         AUTO_ACCEPT_ENTITY_ID,
       )
-      return { succeeded: true, message: nil}
+      { succeeded: true, message: nil }
     else
       log_auto_accept_failure(auto_accepted_registration.errors.messages.values.flatten)
-      return { succeeded: false, message: failure_reason}
+      { succeeded: false, message: failure_reason }
     end
   end
 
