@@ -10,6 +10,7 @@ export default function ScrambleMatch({
 }) {
   const { scrambleSetCount } = activeRound;
   const scrambleSets = matchState.scrambleSets[activeRound.id];
+  console.log(matchState.scrambleSets);
 
   const handleOnDragEnd = (result) => {
     const { destination, source } = result;
@@ -23,7 +24,7 @@ export default function ScrambleMatch({
 
   /* eslint-disable react/jsx-props-no-spreading */
   return (
-    <Table definition>
+    <Table definition fixed>
       <Table.Header>
         <Table.Row>
           <Table.HeaderCell />
@@ -42,36 +43,39 @@ export default function ScrambleMatch({
                   const isExtra = index >= scrambleSetCount;
 
                   return (
-                    <Draggable
-                      key={scramble.id}
-                      draggableId={scramble.id.toString()}
-                      index={index}
+                    <Table.Row
+                      negative={hasError || isExtra}
                     >
-                      {(providedDraggable) => (
-                        <Ref innerRef={providedDraggable.innerRef}>
-                          <Table.Row
-                            {...providedDraggable.draggableProps}
-                            {...providedDraggable.dragHandleProps}
-                            negative={hasError || isExtra}
-                          >
-                            <Table.Cell collapsing>
-                              {isExpected
-                                ? `${activityCodeToName(activeRound.id)}, Group ${index + 1}`
-                                : 'Extra Scramble set (unassigned)'}
-                              {(hasError || isExtra) && (
-                                <>
-                                  {' '}
-                                  <Icon name="exclamation triangle" />
-                                  {hasError ? 'Missing scramble' : 'Unexpected Scramble Set'}
-                                </>
-                              )}
+                      <Table.Cell collapsing>
+                        {isExpected
+                          ? `${activityCodeToName(activeRound.id)}, Group ${index + 1}`
+                          : 'Extra Scramble set (unassigned)'}
+                        {(hasError || isExtra) && (
+                          <>
+                            {' '}
+                            <Icon name="exclamation triangle" />
+                            {hasError ? 'Missing scramble' : 'Unexpected Scramble Set'}
+                          </>
+                        )}
+                      </Table.Cell>
+                      <Draggable
+                        key={scramble.id}
+                        draggableId={scramble.id.toString()}
+                        index={index}
+                      >
+                        {(providedDraggable) => (
+                          <Ref innerRef={providedDraggable.innerRef}>
+                            <Table.Cell
+                              {...providedDraggable.draggableProps}
+                              {...providedDraggable.dragHandleProps}
+                            >
+                              {scramble?.name ?? '—'}
                             </Table.Cell>
-                            <Table.Cell>{scramble?.name ?? '—'}</Table.Cell>
-                            <Table.Cell><Icon name="bars" /></Table.Cell>
-                          </Table.Row>
-                        </Ref>
-                      )}
-                    </Draggable>
+                          </Ref>
+                        )}
+                      </Draggable>
+                      <Table.Cell><Icon name="bars" /></Table.Cell>
+                    </Table.Row>
                   );
                 })}
                 {providedDroppable.placeholder}
