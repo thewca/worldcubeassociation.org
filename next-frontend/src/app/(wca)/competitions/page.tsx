@@ -1,5 +1,6 @@
-import { Card, Container, Table } from "@chakra-ui/react";
+import { Card, Container, Table, VStack } from "@chakra-ui/react";
 import CompetitionTableEntry from "@/components/CompetitionTableEntry";
+import RemovableCard from "@/components/RemovableCard";
 
 import { getCompetitionInfo } from "@/lib/wca/competitions/getCompetitionInfo";
 
@@ -54,23 +55,32 @@ export default async function Competitions() {
 
   return (
     <Container>
-      <Card.Root
-        bg="bg.inverted"
-        color="fg.inverted"
-        shadow="wca"
-        overflow="hidden"
-        width="full"
-      >
-        <Card.Body p={0}>
-          <Table.Root size="xs" rounded="md" variant="competitions">
-            <Table.Body>
-              {competitions.map((comp) => (
-                <CompetitionTableEntry comp={comp} key={comp.id} />
-              ))}
-            </Table.Body>
-          </Table.Root>
-        </Card.Body>
-      </Card.Root>
+      <VStack gap="8" width="full" pt="8">
+        <RemovableCard
+          imageUrl="https://ando527.github.io/wcaWireframes/images/newcomer.png"
+          heading="Why Compete?"
+          description="This section will only be visible to new visitors to the site, and not show up if the user is logged in, or has previously exited this popup. The 'Find out more' button will direct visitors to the homepage."
+          buttonText="Learn More"
+          buttonUrl="/"
+        />
+        <Card.Root
+          bg="bg.inverted"
+          color="fg.inverted"
+          shadow="wca"
+          overflow="hidden"
+          width="full"
+        >
+          <Card.Body p={0}>
+            <Table.Root size="xs" rounded="md" variant="competitions">
+              <Table.Body>
+                {competitions.map((comp) => (
+                  <CompetitionTableEntry comp={comp} key={comp.id} />
+                ))}
+              </Table.Body>
+            </Table.Root>
+          </Card.Body>
+        </Card.Root>
+      </VStack>
     </Container>
   );
 }
