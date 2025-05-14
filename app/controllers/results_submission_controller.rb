@@ -23,6 +23,14 @@ class ResultsSubmissionController < ApplicationController
 
     tnoodle_wcif = tnoodle_json[:wcif]
 
+    existing_upload = ScrambleFileUpload.find_by(
+      competition: competition,
+      scramble_program: tnoodle_json[:version],
+      generated_at: generation_date,
+    )
+
+    return render json: { success: :ok, scramble_file: existing_upload } if existing_upload.present?
+
     scr_file_upload = ScrambleFileUpload.create!(
       uploaded_by_user: current_user,
       uploaded_at: DateTime.now,
@@ -58,8 +66,6 @@ class ResultsSubmissionController < ApplicationController
               is_extra: true,
             )
           end
-
-          scramble_set.backfill_round_information!
         end
       end
     end
