@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe DelegatesMetadataSyncJob, type: :job do
+RSpec.describe DelegatesMetadataSyncJob do
   describe "delegates metadata sync job" do
     let(:delegate) { create(:delegate_role) }
     let(:competition1) { create(:competition, :visible, delegates: [delegate.user], start_date: 4.weeks.ago, end_date: 4.weeks.ago + 2.days) }
