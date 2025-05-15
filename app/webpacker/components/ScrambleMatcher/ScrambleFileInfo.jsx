@@ -20,7 +20,7 @@ export default function ScrambleFileInfo({ uploadedJSON }) {
 
   const [expanded, setExpanded] = useState(false);
 
-  const { mutate: deleteMutation } = useMutation({
+  const { mutate: deleteMutation, isPending: isDeleting } = useMutation({
     mutationFn: () => deleteScrambleFile(uploadedJSON.id),
     onSuccess: (data) => {
       queryClient.setQueryData(
@@ -63,7 +63,15 @@ export default function ScrambleFileInfo({ uploadedJSON }) {
                 </List.Item>
               ))}
             </List>
-            <Button fluid negative icon="trash" content="Delete" onClick={deleteMutation} />
+            <Button
+              fluid
+              negative
+              icon="trash"
+              content="Delete"
+              onClick={deleteMutation}
+              disabled={isDeleting}
+              loading={isDeleting}
+            />
           </Card.Content>
         </Accordion.Content>
       </Accordion>

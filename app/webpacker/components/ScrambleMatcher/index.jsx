@@ -120,7 +120,7 @@ function ScrambleMatcher({ wcifEvents, competitionId }) {
     mutate(ev.target.files[0]);
   }, [mutate]);
 
-  if (isFetching || isPending) {
+  if (isFetching) {
     return <Loading />;
   }
 
@@ -135,7 +135,7 @@ function ScrambleMatcher({ wcifEvents, competitionId }) {
         </Message.Content>
       </Message>
       { error && <Message negative>{error}</Message> }
-      <UploadScramblesButton onUpload={uploadNewScramble} />
+      <UploadScramblesButton onUpload={uploadNewScramble} isUploading={isPending} />
       <JSONList uploadedJsonFiles={uploadedJsonFiles} />
       {matchState.scrambleSets && (
       <Events

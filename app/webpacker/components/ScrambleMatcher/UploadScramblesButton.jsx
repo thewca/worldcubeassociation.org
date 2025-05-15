@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import { Button } from 'semantic-ui-react';
 
-export default function UploadScramblesButton({ onUpload }) {
+export default function UploadScramblesButton({ onUpload, isUploading }) {
   const inputRef = useRef(null);
 
   const handleClick = () => {
@@ -26,7 +26,8 @@ export default function UploadScramblesButton({ onUpload }) {
         fluid
         primary
         onClick={handleClick}
-        style={{ marginTop: '1rem' }}
+        disabled={isUploading}
+        loading={isUploading}
       >
         Upload scrambles json from TNoodle
       </Button>
