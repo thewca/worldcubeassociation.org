@@ -586,12 +586,12 @@ class Registration < ApplicationRecord
 
   def attempt_auto_accept
     # Deliberately not i18n-ing as this is a temporary error message - not necessary for it to be translated
-    return { succeeded: false, message: 'auto accept not enabled in current env' } unless auto_accept_in_current_env?
+    return { succeeded: false, info: 'auto accept not enabled in current env' } unless auto_accept_in_current_env?
 
     failure_reason = auto_accept_failure_reason
     if failure_reason.present?
       log_auto_accept_failure(failure_reason)
-      return { succeeded: false, message: failure_reason }
+      return { succeeded: false, info: failure_reason }
     end
 
     update_payload = build_auto_accept_payload
@@ -602,16 +602,16 @@ class Registration < ApplicationRecord
         update_payload,
         AUTO_ACCEPT_ENTITY_ID,
       )
-      { succeeded: true, message: nil }
+      { succeeded: true, info: auto_accepted_registration.competing_status }
     else
       log_auto_accept_failure(auto_accepted_registration.errors.messages.values.flatten)
-      { succeeded: false, message: auto_accepted_registration.errors.messages.values.flatten }
+      { succeeded: false, info: auto_accepted_registration.errors.messages.values.flatten }
     end
   end
 
   private def auto_accept_failure_reason
-    return Registrations::ErrorCodes::OUTSTANDING_FEES if outstanding_entry_fees.positive?
     return Registrations::ErrorCodes::AUTO_ACCEPT_NOT_ENABLED unless competition.auto_accept_registrations?
+    return Registrations::ErrorCodes::OUTSTANDING_FEES if outstanding_entry_fees.positive?
     return Registrations::ErrorCodes::INELIGIBLE_FOR_AUTO_ACCEPT unless competing_status_pending? || waiting_list_leader?
     return Registrations::ErrorCodes::AUTO_ACCEPT_DISABLE_THRESHOLD if competition.auto_accept_threshold_reached?
 
