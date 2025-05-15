@@ -125,9 +125,6 @@ Style/Documentation:
 Style/MultilineBlockChain:
   Enabled: false
 
-Style/Next:
-  Enabled: false
-
 Style/RaiseArgs:
   EnforcedStyle: compact
 
