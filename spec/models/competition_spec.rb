@@ -562,22 +562,22 @@ RSpec.describe Competition do
       expect(competition).to be_valid
       expect(competition.probably_over?).to be true
       expect(competition.results_posted?).to be false
-      expect(competition.info(nil)[:upload_results]).to eq "This competition is over. We are working to upload the results as soon as possible!"
+      expect(competition.info[:upload_results]).to eq "This competition is over. We are working to upload the results as soon as possible!"
     end
 
     it "displays info if competition is in progress" do
       competition = build(:competition, :ongoing)
       expect(competition).to be_valid
       expect(competition.in_progress?).to be true
-      expect(competition.info(nil)[:in_progress]).to eq "This competition is ongoing. Come back after #{I18n.l(competition.end_date, format: :long)} to see the results!"
+      expect(competition.info[:in_progress]).to eq "This competition is ongoing. Come back after #{I18n.l(competition.end_date, format: :long)} to see the results!"
 
       competition.use_wca_live_for_scoretaking = true
-      expect(competition.info(nil)[:in_progress]).to eq "This competition is ongoing. You can check the live results <a href='https://live.worldcubeassociation.org/link/competitions/#{competition.id}'>here</a>!"
+      expect(competition.info[:in_progress]).to eq "This competition is ongoing. You can check the live results <a href='https://live.worldcubeassociation.org/link/competitions/#{competition.id}'>here</a>!"
 
       competition.results_posted_at = Time.now
       competition.results_posted_by = create(:user, :wrt_member).id
       expect(competition.in_progress?).to be false
-      expect(competition.info(nil)[:in_progress]).to be nil
+      expect(competition.info[:in_progress]).to be nil
     end
   end
 
