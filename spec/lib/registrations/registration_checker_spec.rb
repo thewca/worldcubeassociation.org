@@ -218,6 +218,7 @@ RSpec.describe Registrations::RegistrationChecker do
           :competition,
           :registration_open,
           :with_event_limit,
+          :with_organizer,
           event_ids: %w[333 333oh 222 444 555 666 777],
         )
       end
@@ -298,7 +299,7 @@ RSpec.describe Registrations::RegistrationChecker do
 
       it 'organizer cant register more events than the events_per_registration_limit' do
         registration_request = build(
-          :registration_request, events: %w[333 222 444 555 666 777], competition_id: event_limit_comp.id, user_id: event_limit_comp.delegates.first.id
+          :registration_request, events: %w[333 222 444 555 666 777], competition_id: event_limit_comp.id, user_id: event_limit_comp.organizers.first.id
         )
 
         expect do
