@@ -684,7 +684,7 @@ RSpec.describe Competition do
       expect(RegistrationCompetitionEvent.count).to eq 1
 
       r.reload
-      expect(r.events).to match_array [three_by_three]
+      expect(r.events).to contain_exactly(three_by_three)
     end
   end
 
@@ -1091,11 +1091,11 @@ RSpec.describe Competition do
     let!(:other_comp) { create(:competition) }
 
     it "finds comps by delegate" do
-      expect(Competition.managed_by(delegate1.id)).to match_array [competition, competition_with_different_organizers]
+      expect(Competition.managed_by(delegate1.id)).to contain_exactly(competition, competition_with_different_organizers)
     end
 
     it "finds comps by organizer" do
-      expect(Competition.managed_by(organizer1.id)).to match_array [competition]
+      expect(Competition.managed_by(organizer1.id)).to contain_exactly(competition)
     end
   end
 

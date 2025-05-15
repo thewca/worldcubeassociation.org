@@ -300,9 +300,6 @@ RSpec/ItBehavesLike:
 RSpec/EmptyLineAfterExample:
   Enabled: false
 
-RSpec/MatchArray:
-  Enabled: false
-
 RSpec/DescribedClass:
   Enabled: false
 
