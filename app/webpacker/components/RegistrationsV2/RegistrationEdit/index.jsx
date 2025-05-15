@@ -17,7 +17,11 @@ export default function RegistrationEdit({ registrationId, competitionInfo, user
       <WCAQueryClientProvider>
         <StoreProvider reducer={messageReducer} initialState={{ messages: [] }}>
           <ConfirmProvider>
-            <RegistrationProvider competitionInfo={competitionInfo} userInfo={user}>
+            <RegistrationProvider
+              competitionInfo={competitionInfo}
+              userInfo={user}
+              registrationId={registrationId}
+            >
               <Sticky context={ref}>
                 <RegistrationMessage />
               </Sticky>

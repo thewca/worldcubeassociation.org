@@ -3,7 +3,7 @@ import React, {
 } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
-import { getSingleRegistration } from '../api/registration/get/get_registrations';
+import { getRegistrationByUser, getSingleRegistration } from '../api/registration/get/get_registrations';
 import { showMessage } from '../Register/RegistrationMessage';
 import pollRegistrations from '../api/registration/get/poll_registrations';
 
@@ -11,13 +11,27 @@ const REFETCH_INTERVAL = 3000;
 
 const RegistrationContext = createContext();
 
+const getRegistrationFromParams = ({
+  competitionId,
+  userId,
+  registrationId = null,
+}) => {
+  if (registrationId) {
+    return getSingleRegistration(registrationId);
+  }
+
+  return getRegistrationByUser(userId, competitionId);
+};
+
 export default function RegistrationProvider({
   competitionInfo,
   userInfo,
+  registrationId,
   isProcessing,
   children,
 }) {
   const dispatch = useDispatch();
+
   const [isPolling, setIsPolling] = useState(isProcessing);
   const [pollCounter, setPollCounter] = useState(0);
 
@@ -31,7 +45,7 @@ export default function RegistrationProvider({
 
   const { data: pollingData, status: pollingStatus } = useQuery({
     queryKey: ['registration-status-polling', userInfo.id, competitionInfo.id],
-    queryFn: async () => pollRegistrations(userInfo.id, competitionInfo),
+    queryFn: async () => pollRegistrations(userInfo.id, competitionInfo.id),
     refetchInterval: REFETCH_INTERVAL,
     onSuccess: () => {
       setPollCounter((prevCounter) => prevCounter + 1);
@@ -50,8 +64,12 @@ export default function RegistrationProvider({
     isFetching,
     refetch: refetchRegistration,
   } = useQuery({
-    queryKey: ['registration', competitionInfo.id, userInfo.id],
-    queryFn: () => getSingleRegistration(userInfo.id, competitionInfo),
+    queryKey: ['registration', competitionInfo.id, userInfo.id, registrationId],
+    queryFn: () => getRegistrationFromParams({
+      competitionId: competitionInfo.id,
+      userId: userInfo.id,
+      registrationId,
+    }),
     onError: (error) => {
       dispatch(
         showMessage(
