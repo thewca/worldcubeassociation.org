@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Person, type: :model do
+RSpec.describe Person do
   let!(:person) { create(:person_who_has_competed_once) }
 
   it "defines a valid person" do

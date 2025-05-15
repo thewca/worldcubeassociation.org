@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe User, type: :model do
+RSpec.describe User do
   let(:dob_form_path) { Rails.application.routes.url_helpers.contact_dob_path }
   let(:wrt_contact_path) { Rails.application.routes.url_helpers.contact_path(contactRecipient: 'wrt') }
 
@@ -425,7 +425,7 @@ RSpec.describe User, type: :model do
     it "when empty, is set to nil" do
       user = create(:user, unconfirmed_wca_id: nil)
       user.update! unconfirmed_wca_id: ""
-      expect(user.reload.unconfirmed_wca_id).to be nil
+      expect(user.reload.unconfirmed_wca_id).to be_nil
     end
   end
 

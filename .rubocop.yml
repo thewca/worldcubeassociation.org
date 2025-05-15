@@ -113,9 +113,6 @@ Metrics/ModuleLength:
 Style/AccessModifierDeclarations:
   Enabled: false
 
-Style/BlockDelimiters:
-  Enabled: false
-
 Style/ClassAndModuleChildren:
   Enabled: false
 
@@ -126,9 +123,6 @@ Style/Documentation:
   Enabled: false
 
 Style/MultilineBlockChain:
-  Enabled: false
-
-Style/Next:
   Enabled: false
 
 Style/RaiseArgs:
@@ -306,9 +300,6 @@ RSpec/DescribedClass:
 RSpec/RepeatedDescription:
   Enabled: false
 
-RSpec/BeNil:
-  Enabled: false
-
 RSpec/LetBeforeExamples:
   Enabled: false
 
@@ -358,10 +349,4 @@ RSpec/ClassCheck:
   Enabled: false
 
 RSpec/BeEmpty:
-  Enabled: false
-
-RSpecRails/NegationBeValid:
-  Enabled: false
-
-RSpecRails/InferredSpecType:
   Enabled: false

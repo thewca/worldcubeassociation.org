@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe RegistrationsMailer, type: :mailer do
+RSpec.describe RegistrationsMailer do
   let(:delegate1) { create(:delegate) }
   let(:delegate2) { create(:trainee_delegate) }
   let(:organizer1) { create(:user) }
