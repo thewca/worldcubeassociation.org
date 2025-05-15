@@ -315,9 +315,6 @@ RSpec/RepeatedDescription:
 RSpec/ReceiveCounts:
   Enabled: false
 
-RSpec/ContextMethod:
-  Enabled: false
-
 RSpec/BeNil:
   Enabled: false
 

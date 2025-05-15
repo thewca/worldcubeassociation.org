@@ -410,7 +410,7 @@ RSpec.describe Competition do
     )
   end
 
-  context "#user_should_post_delegate_report?" do
+  describe "#user_should_post_delegate_report?" do
     it "warns for unposted reports" do
       competition = create(:competition, :visible, :with_delegate, starts: 2.days.ago)
       delegate = competition.delegates.first
