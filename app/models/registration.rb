@@ -610,8 +610,8 @@ class Registration < ApplicationRecord
   end
 
   private def auto_accept_failure_reason
-    return Registrations::ErrorCodes::AUTO_ACCEPT_NOT_ENABLED unless competition.auto_accept_registrations?
     return Registrations::ErrorCodes::OUTSTANDING_FEES if outstanding_entry_fees.positive?
+    return Registrations::ErrorCodes::AUTO_ACCEPT_NOT_ENABLED unless competition.auto_accept_registrations?
     return Registrations::ErrorCodes::INELIGIBLE_FOR_AUTO_ACCEPT unless competing_status_pending? || waiting_list_leader?
     return Registrations::ErrorCodes::AUTO_ACCEPT_DISABLE_THRESHOLD if competition.auto_accept_threshold_reached?
 
