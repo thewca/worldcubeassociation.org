@@ -556,10 +556,10 @@ class Registration < ApplicationRecord
       competition.waiting_list.present?
 
     pending_registrations = competition
-                             .registrations
-                             .competing_status_pending
-                             .with_payments
-                             .sort_by { |registration| registration.last_positive_payment.updated_at }
+                            .registrations
+                            .competing_status_pending
+                            .with_payments
+                            .sort_by { |registration| registration.last_positive_payment.updated_at }
 
     results = waitlisted_registrations.each_with_object({}) do |reg, hash|
       result = reg.attempt_auto_accept
@@ -568,7 +568,7 @@ class Registration < ApplicationRecord
     end
 
     # We dont need to break out of pending registrations because auto accept can still put them on the waiting list
-    pending_registrations.each_with_object(results) {|reg, hash| hash[reg.id] = reg.attempt_auto_accept }
+    pending_registrations.each_with_object(results) { |reg, hash| hash[reg.id] = reg.attempt_auto_accept }
   end
 
   def last_positive_payment
