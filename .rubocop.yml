@@ -312,9 +312,6 @@ RSpec/VariableName:
 RSpec/RepeatedDescription:
   Enabled: false
 
-RSpec/ReceiveCounts:
-  Enabled: false
-
 RSpec/BeNil:
   Enabled: false
 

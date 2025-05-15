@@ -1070,7 +1070,7 @@ RSpec.describe CompetitionsController do
           create(:result, person: user.person, competition_id: competition.id, event_id: "333")
         end
 
-        expect(CompetitionsMailer).to receive(:notify_users_of_id_claim_possibility).and_call_original.exactly(2).times
+        expect(CompetitionsMailer).to receive(:notify_users_of_id_claim_possibility).and_call_original.twice
         expect do
           post :post_results, params: { id: competition }
         end.to change(enqueued_jobs, :size).by(2)
