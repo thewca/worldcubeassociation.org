@@ -3,13 +3,13 @@ import {
   Message,
 } from 'semantic-ui-react';
 import _ from 'lodash';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import WCAQueryClientProvider from '../../lib/providers/WCAQueryClientProvider';
 import JSONList from './JSONList';
 import Events from './Events';
 import UploadScramblesButton from './UploadScramblesButton';
 import { fetchJsonOrError } from '../../lib/requests/fetchWithAuthenticityToken';
-import { submitScrambleUrl } from '../../lib/requests/routes.js.erb';
+import { competitionScrambleFilesUrl } from '../../lib/requests/routes.js.erb';
 import Loading from '../Requests/Loading';
 
 function scrambleMatchReducer(state, action) {
@@ -60,11 +60,17 @@ function matchScrambles(scrambleFile) {
   return scrambleSets;
 }
 
-export async function uploadScrambles(competitionId, file) {
+async function listScrambleFiles(competitionId) {
+  const { data } = await fetchJsonOrError(competitionScrambleFilesUrl(competitionId));
+
+  return data;
+}
+
+async function uploadScrambleFile(competitionId, file) {
   const formData = new FormData();
   formData.append('tnoodle[json]', file);
 
-  const response = await fetchJsonOrError(submitScrambleUrl(competitionId), {
+  const response = await fetchJsonOrError(competitionScrambleFilesUrl(competitionId), {
     method: 'POST',
     body: formData,
   });
@@ -84,26 +90,40 @@ export default function Wrapper({ wcifEvents, competitionId }) {
 }
 
 function ScrambleMatcher({ wcifEvents, competitionId }) {
-  const [uploadedJSON, setUploadedJSON] = useState([]);
+  const queryClient = useQueryClient();
+
   const [error, setError] = useState(null);
   const [matchState, dispatchMatchState] = useReducer(scrambleMatchReducer, {});
 
-  const { isLoading, mutate } = useMutation({
-    mutationFn: (file) => uploadScrambles(competitionId, file),
+  const { data: uploadedJsonFiles, isFetching } = useQuery({
+    queryKey: ['scramble-files', competitionId],
+    queryFn: () => listScrambleFiles(competitionId),
+    select: (data) => data.scramble_files,
+  });
+
+  const { mutate, isPending } = useMutation({
+    mutationFn: (file) => uploadScrambleFile(competitionId, file),
     onSuccess: (data) => {
-      setUploadedJSON((prev) => [...prev, data.scramble_file]);
+      const { scramble_file: newScrambleFile } = data;
+
+      queryClient.setQueryData(
+        ['scramble-files', competitionId],
+        (prev) => [
+          ...prev.filter((scrFile) => scrFile.id !== newScrambleFile.id),
+          newScrambleFile,
+        ],
+      );
+
       dispatchMatchState({ type: 'setScrambles', scrambleSets: matchScrambles(data.scramble_file) });
     },
-    onError: (responseError) => {
-      setError(responseError.message);
-    },
+    onError: (responseError) => setError(responseError.message),
   });
 
   const uploadNewScramble = useCallback((ev) => {
     mutate(ev.target.files[0]);
   }, [mutate]);
 
-  if (isLoading) {
+  if (isFetching || isPending) {
     return <Loading />;
   }
 
@@ -119,7 +139,7 @@ function ScrambleMatcher({ wcifEvents, competitionId }) {
       </Message>
       { error && <Message negative>{error}</Message> }
       <UploadScramblesButton onUpload={uploadNewScramble} />
-      <JSONList uploadedJSON={uploadedJSON} />
+      <JSONList uploadedJsonFiles={uploadedJsonFiles} />
       {matchState.scrambleSets && (
       <Events
         wcifEvents={wcifEvents}

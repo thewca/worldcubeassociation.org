@@ -13,7 +13,7 @@ class ScrambleFilesController < ApplicationController
                      .includes(inbox_scramble_sets: { inbox_scrambles: [], matched_round: [:competition_event] })
                      .where(competition: competition)
 
-    render json: { success: :ok, scramble_file: existing_files }
+    render json: { success: :ok, scramble_files: existing_files }
   end
 
   def create

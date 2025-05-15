@@ -2,15 +2,15 @@ import React from 'react';
 import { Header } from 'semantic-ui-react';
 import ScrambleFileInfo from './ScrambleFileInfo';
 
-export default function JSONList({ uploadedJSON }) {
+export default function JSONList({ uploadedJsonFiles }) {
   return (
     <>
       <Header>
         Uploaded JSON files:
         {' '}
-        {uploadedJSON.length}
+        {uploadedJsonFiles.length}
       </Header>
-      {uploadedJSON.map((s) => (
+      {uploadedJsonFiles.map((s) => (
         <ScrambleFileInfo uploadedJSON={s} key={s.competitionName} />
       ))}
     </>
