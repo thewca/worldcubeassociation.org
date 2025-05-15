@@ -27,7 +27,7 @@ export default function ScrambleMatch({
     <Table definition fixed>
       <Table.Header>
         <Table.Row>
-          <Table.HeaderCell width={5} />
+          <Table.HeaderCell width={4} />
           <Table.HeaderCell>Assigned Scrambles</Table.HeaderCell>
         </Table.Row>
       </Table.Header>
@@ -45,7 +45,7 @@ export default function ScrambleMatch({
                     <Table.Row
                       negative={hasError || isExtra}
                     >
-                      <Table.Cell>
+                      <Table.Cell textAlign="right">
                         {isExpected
                           ? `${activityCodeToName(activeRound.id)}, Group ${index + 1}`
                           : 'Extra Scramble set (unassigned)'}
