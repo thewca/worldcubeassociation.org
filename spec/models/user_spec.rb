@@ -430,7 +430,7 @@ RSpec.describe User, type: :model do
     it "when empty, is set to nil" do
       user = create(:user, unconfirmed_wca_id: nil)
       user.update! unconfirmed_wca_id: ""
-      expect(user.reload.unconfirmed_wca_id).to be nil
+      expect(user.reload.unconfirmed_wca_id).to be_nil
     end
   end
 

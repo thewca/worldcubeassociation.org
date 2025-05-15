@@ -20,7 +20,7 @@ FactoryBot.define do
 
       qualifications { nil }
 
-      hard_qualifications {
+      hard_qualifications do
         {
           '333' => { 'type' => 'attemptResult', 'resultType' => 'single', 'whenDate' => today, 'level' => 1 },
           '555' => { 'type' => 'attemptResult', 'resultType' => 'average', 'whenDate' => today, 'level' => 6 },
@@ -29,9 +29,9 @@ FactoryBot.define do
           '222' => { 'type' => 'anyResult', 'resultType' => 'single', 'whenDate' => today, 'level' => 0 },
           '444' => { 'type' => 'anyResult', 'resultType' => 'average', 'whenDate' => today, 'level' => 0 },
         }
-      }
+      end
 
-      easy_qualifications {
+      easy_qualifications do
         {
           '333' => { 'type' => 'attemptResult', 'resultType' => 'single', 'whenDate' => today, 'level' => 1000 },
           '555' => { 'type' => 'attemptResult', 'resultType' => 'average', 'whenDate' => today, 'level' => 6000 },
@@ -40,9 +40,9 @@ FactoryBot.define do
           '222' => { 'type' => 'anyResult', 'resultType' => 'single', 'whenDate' => today, 'level' => 0 },
           '444' => { 'type' => 'anyResult', 'resultType' => 'average', 'whenDate' => today, 'level' => 0 },
         }
-      }
+      end
 
-      easy_future_qualifications {
+      easy_future_qualifications do
         {
           '333' => { 'type' => 'attemptResult', 'resultType' => 'single', 'whenDate' => next_month, 'level' => 1000 },
           '555' => { 'type' => 'attemptResult', 'resultType' => 'average', 'whenDate' => next_month, 'level' => 6000 },
@@ -51,9 +51,9 @@ FactoryBot.define do
           '222' => { 'type' => 'anyResult', 'resultType' => 'single', 'whenDate' => next_month, 'level' => 0 },
           '444' => { 'type' => 'anyResult', 'resultType' => 'average', 'whenDate' => next_month, 'level' => 0 },
         }
-      }
+      end
 
-      past_qualifications {
+      past_qualifications do
         {
           '333' => { 'type' => 'attemptResult', 'resultType' => 'single', 'whenDate' => last_year, 'level' => 1000 },
           '555' => { 'type' => 'attemptResult', 'resultType' => 'average', 'whenDate' => last_year, 'level' => 6000 },
@@ -62,7 +62,7 @@ FactoryBot.define do
           '222' => { 'type' => 'anyResult', 'resultType' => 'single', 'whenDate' => last_year, 'level' => 0 },
           '444' => { 'type' => 'anyResult', 'resultType' => 'average', 'whenDate' => last_year, 'level' => 0 },
         }
-      }
+      end
     end
 
     sequence(:name) { |n| "Foo Comp #{n} 2015" }

@@ -46,7 +46,7 @@ RSpec.describe Competition do
     it "correctly identifies there is a fee when there is only event fees" do
       competition = create(:competition, name: "Foo: Test - 2015", base_entry_fee_lowest_denomination: 0)
       competition.competition_events.first.update_attribute(:fee_lowest_denomination, 100)
-      expect(competition.base_entry_fee_nonzero?).to be nil
+      expect(competition.base_entry_fee_nonzero?).to be_nil
       expect(competition.paid_entry?).to be true
     end
   end
@@ -260,12 +260,12 @@ RSpec.describe Competition do
 
     it "start_date" do
       competition.start_date = "i am not a date"
-      expect(competition.start_date).to be nil
+      expect(competition.start_date).to be_nil
     end
 
     it "end_date" do
       competition.end_date = "i am also not a date"
-      expect(competition.end_date).to be nil
+      expect(competition.end_date).to be_nil
     end
   end
 
@@ -450,7 +450,7 @@ RSpec.describe Competition do
     it "does not warn about name greater than 32 when competition is publicly visible" do
       competition = build(:competition, :confirmed, :visible, name: "A really long competition name 2016")
       expect(competition).to be_valid
-      expect(competition.warnings_for(nil)[:name]).to be nil
+      expect(competition.warnings_for(nil)[:name]).to be_nil
     end
 
     it "warns if competition is not visible" do
@@ -489,7 +489,7 @@ RSpec.describe Competition do
 
       competition = create(:competition, starts: Date.new(2019, 10, 1), championship_types: ["world"])
       expect(competition).to be_valid
-      expect(competition.warnings_for(nil)["world"]).to be nil
+      expect(competition.warnings_for(nil)["world"]).to be_nil
     end
 
     it "warns if championship already exists" do
@@ -509,7 +509,7 @@ RSpec.describe Competition do
     it "do not warn if competition id starts with a number" do
       competition = build(:competition, id: "1stNumberedComp2021")
       expect(competition).to be_valid
-      expect(competition.warnings_for(nil)[:id]).to be nil
+      expect(competition.warnings_for(nil)[:id]).to be_nil
     end
 
     it "warns if advancement condition isn't present for a non final round" do
@@ -577,7 +577,7 @@ RSpec.describe Competition do
       competition.results_posted_at = Time.now
       competition.results_posted_by = create(:user, :wrt_member).id
       expect(competition.in_progress?).to be false
-      expect(competition.info_for(nil)[:in_progress]).to be nil
+      expect(competition.info_for(nil)[:in_progress]).to be_nil
     end
   end
 
@@ -593,14 +593,14 @@ RSpec.describe Competition do
     end
 
     it "not_over scope does not include the competition" do
-      expect(Competition.not_over.find_by(id: competition.id)).to be nil
+      expect(Competition.not_over.find_by(id: competition.id)).to be_nil
     end
   end
 
   it "knows the calendar" do
     competition = create(:competition)
     competition.start_date = "1987-0-04"
-    expect(competition.start_date).to be nil
+    expect(competition.start_date).to be_nil
   end
 
   it "gracefully handles multiyear competitions" do
@@ -738,9 +738,9 @@ RSpec.describe Competition do
       expect(CompetitionOrganizer.where(organizer_id: organizer.id).count).to eq 1
 
       cd = CompetitionDelegate.find_by(delegate_id: delegate.id)
-      expect(cd).not_to be nil
+      expect(cd).not_to be_nil
       co = CompetitionOrganizer.find_by(organizer_id: organizer.id)
-      expect(co).not_to be nil
+      expect(co).not_to be_nil
 
       c = Competition.find(competition.id)
       c.id = "NewID2015"
@@ -910,14 +910,14 @@ RSpec.describe Competition do
   describe "results" do
     let(:three_by_three) { Event.find "333" }
     let(:two_by_two) { Event.find "222" }
-    let!(:competition) {
+    let!(:competition) do
       c = create(:competition, events: [three_by_three, two_by_two])
       # Create the results rounds right now so that we can use them later.
       create(:round, competition: c, total_number_of_rounds: 2, number: 1, event_id: "333")
       create(:round, competition: c, total_number_of_rounds: 2, number: 2, event_id: "333")
       create(:round, competition: c, total_number_of_rounds: 1, number: 1, event_id: "222", cutoff: Cutoff.new(number_of_attempts: 2, attempt_result: 60 * 100))
       c
-    }
+    end
 
     let(:person_one) { create(:person, name: "One") }
     let(:person_two) { create(:person, name: "Two") }
@@ -997,11 +997,11 @@ RSpec.describe Competition do
 
     expect do
       competition.update_attribute(:id, "NewName2016")
-    end.not_to(change {
+    end.not_to(change do
       %i[results organizers delegates tabs registrations delegate_report].map do |associated|
         competition.send(associated)
       end
-    })
+    end)
 
     expect(competition).to respond_to(:update_foreign_keys),
                            "This whole test should be removed alongside update_foreign_keys callback in the Competition model."
@@ -1070,9 +1070,9 @@ RSpec.describe Competition do
     it "searching with two words" do
       expect(Competition.contains('eso').contains('aci').first).to eq search_comp
       expect(Competition.contains('awesome').contains('comp').first).to eq search_comp
-      expect(Competition.contains('abc').contains('def').first).to be nil
-      expect(Competition.contains('ped').contains('aci').first).to be nil
-      expect(Competition.contains('wes').contains('blah').first).to be nil
+      expect(Competition.contains('abc').contains('def').first).to be_nil
+      expect(Competition.contains('ped').contains('aci').first).to be_nil
+      expect(Competition.contains('wes').contains('blah').first).to be_nil
     end
   end
 
@@ -1082,12 +1082,12 @@ RSpec.describe Competition do
     let(:organizer1) { create(:user) }
     let(:organizer2) { create(:user) }
     let(:organizer3) { create(:user) }
-    let!(:competition) {
+    let!(:competition) do
       create(:competition, :confirmed, delegates: [delegate1, delegate2], organizers: [organizer1, organizer2])
-    }
-    let!(:competition_with_different_organizers) {
+    end
+    let!(:competition_with_different_organizers) do
       create(:competition, :confirmed, delegates: [delegate1, delegate2], organizers: [organizer3])
-    }
+    end
     let!(:other_comp) { create(:competition) }
 
     it "finds comps by delegate" do
@@ -1113,13 +1113,13 @@ RSpec.describe Competition do
   end
 
   describe "#registration_full?" do
-    let(:competition) {
+    let(:competition) do
       create(:competition,
              :registration_open,
              competitor_limit_enabled: true,
              competitor_limit: 10,
              competitor_limit_reason: "Dude, this is my closet")
-    }
+    end
 
     it "detects full competition" do
       expect(competition.registration_full?).to be false
@@ -1147,13 +1147,13 @@ RSpec.describe Competition do
   end
 
   describe '#registration_full_message' do
-    let(:competition) {
+    let(:competition) do
       create(:competition,
              :registration_open,
              competitor_limit_enabled: true,
              competitor_limit: 10,
              competitor_limit_reason: "Dude, this is my closet")
-    }
+    end
 
     it "detects full competition warning message" do
       # Add 9 accepted registrations
@@ -1177,15 +1177,15 @@ RSpec.describe Competition do
   end
 
   context "when changing the competition's date" do
-    let(:competition) {
+    let(:competition) do
       create(:competition,
              with_schedule: true,
              start_date: Date.parse("2018-10-24"),
              end_date: Date.parse("2018-10-26"))
-    }
-    let(:all_activities) {
+    end
+    let(:all_activities) do
       competition.all_activities
-    }
+    end
 
     def change_and_check_activities(new_start_date, new_end_date)
       on_first_day, on_last_day = all_activities.partition { |a| a.start_time.to_date == competition.start_date }
@@ -1449,7 +1449,7 @@ RSpec.describe Competition do
 
       it 'returns nil if no matching account is found' do
         competition = create(:competition)
-        expect(competition.payment_account_for(:paypal)).to be(nil)
+        expect(competition.payment_account_for(:paypal)).to be_nil
       end
     end
 
@@ -1762,7 +1762,7 @@ RSpec.describe Competition do
       comp = create(:competition, competitor_limit: 10)
       create_list(:registration, 6, :accepted, competition: comp)
       comp.newcomer_month_reserved_spots = 5
-      expect(comp).to be_invalid
+      expect(comp).not_to be_valid
       expect(comp.errors.messages[:newcomer_month_reserved_spots]).to include('Desired newcomer month reserved spots exceeds number of spots reservable')
     end
   end

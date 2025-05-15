@@ -3,6 +3,7 @@
 class Round < ApplicationRecord
   belongs_to :competition_event
   has_one :competition, through: :competition_event
+  delegate :competition_id, to: :competition_event
 
   has_one :event, through: :competition_event
   # CompetitionEvent uses the cached value

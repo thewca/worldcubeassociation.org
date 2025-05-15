@@ -224,6 +224,8 @@ module DatabaseDumper
     }.freeze,
     "inbox_persons" => :skip_all_rows,
     "inbox_results" => :skip_all_rows,
+    "inbox_scramble_sets" => :skip_all_rows,
+    "inbox_scrambles" => :skip_all_rows,
     "persons" => {
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w[
@@ -854,6 +856,7 @@ module DatabaseDumper
     "payment_intents" => :skip_all_rows,
     "stripe_webhook_events" => :skip_all_rows,
     "uploaded_jsons" => :skip_all_rows,
+    "scramble_file_uploads" => :skip_all_rows,
     "bookmarked_competitions" => {
       where_clause: JOIN_WHERE_VISIBLE_COMP,
       column_sanitizers: actions_to_column_sanitizers(

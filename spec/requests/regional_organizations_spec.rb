@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe "Regional Organizations management", type: :request do
   let(:regional_organization) { create(:regional_organization, created_at: Time.now) }
-  let(:valid_attributes) {
+  let(:valid_attributes) do
     {
       name: "World Cube Association",
       country: "United States",
@@ -20,9 +20,9 @@ RSpec.describe "Regional Organizations management", type: :request do
       start_date: nil,
       end_date: nil,
     }
-  }
+  end
 
-  let(:invalid_attributes) {
+  let(:invalid_attributes) do
     {
       name: "",
       country: "",
@@ -38,7 +38,7 @@ RSpec.describe "Regional Organizations management", type: :request do
       start_date: Date.today,
       end_date: 3.days.ago,
     }
-  }
+  end
 
   let!(:board_member) { create(:user, :board_member) }
   let!(:user) { create(:user) }
@@ -119,9 +119,9 @@ RSpec.describe "Regional Organizations management", type: :request do
     context "when signed in as a board member and with valid params" do
       it "creates a new regional organization" do
         sign_in board_member
-        expect {
+        expect do
           post regional_organizations_path, params: { regional_organization: valid_attributes }
-        }.to change(RegionalOrganization, :count).by(1)
+        end.to change(RegionalOrganization, :count).by(1)
       end
 
       it "redirects to the created regional organization" do
@@ -134,9 +134,9 @@ RSpec.describe "Regional Organizations management", type: :request do
     context "when signed in as a board member and with invalid params" do
       it "renders the new regional organization form" do
         sign_in board_member
-        expect {
+        expect do
           post regional_organizations_path, params: { regional_organization: invalid_attributes }
-        }.to change(RegionalOrganization, :count).by(0)
+        end.to change(RegionalOrganization, :count).by(0)
         expect(response).to be_successful
       end
     end
@@ -144,9 +144,9 @@ RSpec.describe "Regional Organizations management", type: :request do
     context "when signed in as a user and with valid params" do
       it "creates a new regional organization" do
         sign_in user
-        expect {
+        expect do
           post regional_organizations_path, params: { regional_organization: valid_attributes }
-        }.to change(RegionalOrganization, :count).by(1)
+        end.to change(RegionalOrganization, :count).by(1)
       end
 
       it "redirects to the homepage" do
@@ -159,9 +159,9 @@ RSpec.describe "Regional Organizations management", type: :request do
     context "when signed in as a user and with invalid params" do
       it "renders the new regional organization form" do
         sign_in user
-        expect {
+        expect do
           post regional_organizations_path, params: { regional_organization: invalid_attributes }
-        }.to change(RegionalOrganization, :count).by(0)
+        end.to change(RegionalOrganization, :count).by(0)
         expect(response).to be_successful
       end
     end
@@ -169,7 +169,7 @@ RSpec.describe "Regional Organizations management", type: :request do
 
   describe "PATCH #update" do
     context "with valid params" do
-      let(:new_attributes) {
+      let(:new_attributes) do
         {
           name: "World Speedcubing Association",
           country: "China",
@@ -177,7 +177,7 @@ RSpec.describe "Regional Organizations management", type: :request do
           start_date: Date.today,
           end_date: nil,
         }
-      }
+      end
 
       it "updates the requested requested regional organization and redirects to the regional organization" do
         sign_in board_member

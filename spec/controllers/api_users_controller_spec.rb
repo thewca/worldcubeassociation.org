@@ -26,7 +26,7 @@ RSpec.describe Api::V0::UsersController do
       get :show_user_by_wca_id, params: { wca_id: "foo" }
       expect(response).to have_http_status :not_found
       json = response.parsed_body
-      expect(json["user"]).to be nil
+      expect(json["user"]).to be_nil
     end
 
     describe 'upcoming_competitions' do
@@ -171,9 +171,9 @@ RSpec.describe Api::V0::UsersController do
 
     let!(:delegate_user) { create(:delegate_role, group_id: senior_delegate_role.group.id).user }
     let!(:organizer_user) { create(:user) }
-    let!(:competition) {
+    let!(:competition) do
       create(:competition, :confirmed, delegates: [delegate_user], organizers: [organizer_user])
-    }
+    end
 
     it 'correctly returns delegates to be able to admin competitions they delegated' do
       sign_in delegate_user
