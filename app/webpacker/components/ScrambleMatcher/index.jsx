@@ -98,23 +98,20 @@ function ScrambleMatcher({ wcifEvents, competitionId }) {
   const { data: uploadedJsonFiles, isFetching } = useQuery({
     queryKey: ['scramble-files', competitionId],
     queryFn: () => listScrambleFiles(competitionId),
-    select: (data) => data.scramble_files,
   });
 
   const { mutate, isPending } = useMutation({
     mutationFn: (file) => uploadScrambleFile(competitionId, file),
     onSuccess: (data) => {
-      const { scramble_file: newScrambleFile } = data;
-
       queryClient.setQueryData(
         ['scramble-files', competitionId],
         (prev) => [
-          ...prev.filter((scrFile) => scrFile.id !== newScrambleFile.id),
-          newScrambleFile,
+          ...prev.filter((scrFile) => scrFile.id !== data.id),
+          data,
         ],
       );
 
-      dispatchMatchState({ type: 'setScrambles', scrambleSets: matchScrambles(data.scramble_file) });
+      dispatchMatchState({ type: 'setScrambles', scrambleSets: matchScrambles(data) });
     },
     onError: (responseError) => setError(responseError.message),
   });

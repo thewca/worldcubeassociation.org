@@ -4,7 +4,7 @@ require 'fileutils'
 
 class ScrambleFilesController < ApplicationController
   before_action :authenticate_user!
-  before_action -> { redirect_to_root_unless_user(:can_upload_competition_results?, competition_from_params) }
+  before_action -> { redirect_to_root_unless_user(:can_upload_competition_results?, competition_from_params) }, except: :destroy
 
   def index
     competition = competition_from_params
@@ -13,7 +13,7 @@ class ScrambleFilesController < ApplicationController
                      .includes(inbox_scramble_sets: { inbox_scrambles: [], matched_round: [:competition_event] })
                      .where(competition: competition)
 
-    render json: { success: :ok, scramble_files: existing_files }
+    render json: existing_files
   end
 
   def create
@@ -36,7 +36,7 @@ class ScrambleFilesController < ApplicationController
                         generated_at: generation_date,
                       )
 
-    return render json: { success: :ok, scramble_file: existing_upload } if existing_upload.present?
+    return render json: existing_upload if existing_upload.present?
 
     tnoodle_wcif = tnoodle_json[:wcif]
 
@@ -82,18 +82,18 @@ class ScrambleFilesController < ApplicationController
       end
     end
 
-    render json: { success: :ok, scramble_file: scr_file_upload }
+    render json: scr_file_upload, status: :created
   end
 
   def destroy
     scramble_file_id = params.require(:id)
     scramble_upload = ScrambleFileUpload.find(scramble_file_id)
 
-    render json: { success: :not_found }, status: :not_found if scramble_upload.blank?
+    return head :not_found if scramble_upload.blank?
 
     destroyed_file = scramble_upload.destroy
 
-    render json: { success: :ok, scramble_file: destroyed_file }
+    render json: destroyed_file
   end
 
   private def competition_from_params

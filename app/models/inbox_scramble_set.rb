@@ -8,7 +8,7 @@ class InboxScrambleSet < ApplicationRecord
   belongs_to :scramble_file_upload, optional: true, foreign_key: "external_upload_id", inverse_of: :inbox_scramble_sets
   belongs_to :matched_round, class_name: "Round", optional: true
 
-  has_many :inbox_scrambles
+  has_many :inbox_scrambles, dependent: :destroy
 
   validates :ordered_index, uniqueness: { scope: %i[competition_id event_id round_type_id] }
 
