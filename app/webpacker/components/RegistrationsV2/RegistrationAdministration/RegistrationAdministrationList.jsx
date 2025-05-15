@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import React, {
-  useMemo, useReducer, useRef, useState
+  useMemo, useReducer, useRef, useState,
 } from 'react';
 import {
   Accordion, Button, Checkbox, Divider, Form, Header, Icon, Modal, Segment, Sticky,
@@ -95,15 +95,15 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
 
   const { mutate: bulkAutoAcceptMutation, isPending: isAutoAccepting } = useMutation({
     mutationFn: bulkAutoAccept,
-    onError: (err) => {
+    onError: () => {
       dispatchStore(showMessage(
         'competitions.registration_v2.auto_accept.cant_bulk_auto_accept',
         'negative',
       ));
     },
     onSuccess: (data) => {
-      setModalData(data);     // store payload
-      setModalOpen(true);     // open modal
+      setModalData(data);
+      setModalOpen(true);
       dispatchStore(showMessage('competitions.registration_v2.auto_accept.bulk_auto_accepted', 'positive'));
       return refetch();
     },
@@ -442,7 +442,17 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
                 <ul>
                   {Object.entries(modalData).map(([key, value]) => (
                     <li key={key}>
-                      {key} - <b>Succeeded</b>: {value.succeeded.toString()}, <b>Info</b>: {value.info}
+                      <>
+                        {key}
+                        {' - '}
+                        <b>Succeeded</b>
+                        {': '}
+                        {value.succeeded.toString()}
+                        {', '}
+                        <b>Info</b>
+                        {': '}
+                        {value.info}
+                      </>
                     </li>
                   ))}
                 </ul>
