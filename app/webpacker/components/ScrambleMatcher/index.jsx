@@ -20,19 +20,6 @@ function scrambleMatchReducer(state, action) {
         scrambleSets: action.scrambleSets,
       };
     }
-    case 'changeEvent': {
-      return {
-        ...state,
-        event: action.event,
-        round: null,
-      };
-    }
-    case 'changeRound': {
-      return {
-        ...state,
-        round: action.round,
-      };
-    }
     case 'updateScrambles': {
       const updated = _.cloneDeep(state.scrambleSets);
       updated[action.roundId] = action.scrambleSets;
@@ -137,13 +124,11 @@ function ScrambleMatcher({ wcifEvents, competitionId }) {
       { error && <Message negative>{error}</Message> }
       <UploadScramblesButton onUpload={uploadNewScramble} isUploading={isPending} />
       <JSONList uploadedJsonFiles={uploadedJsonFiles} />
-      {matchState.scrambleSets && (
       <Events
         wcifEvents={wcifEvents}
         matchState={matchState}
         dispatchMatchState={dispatchMatchState}
       />
-      )}
     </>
   );
 }

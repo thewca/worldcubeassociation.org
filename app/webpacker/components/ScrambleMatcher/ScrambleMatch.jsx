@@ -10,7 +10,7 @@ export default function ScrambleMatch({
   dispatchMatchState,
 }) {
   const { scrambleSetCount } = activeRound;
-  const scrambleSets = matchState.scrambleSets[activeRound.id];
+  const scrambleSets = matchState.scrambleSets?.[activeRound.id] ?? [];
 
   const handleOnDragEnd = (result) => {
     const { destination, source } = result;

@@ -1,20 +1,29 @@
-import React from 'react';
+import React, { useMemo, useState } from 'react';
 import EventSelector from '../wca/EventSelector';
 import Rounds from './Rounds';
 
 export default function Events({ wcifEvents, matchState, dispatchMatchState }) {
+  const [selectedEventId, setSelectedEventId] = useState();
+
+  const eventList = useMemo(() => wcifEvents.map((e) => e.id), [wcifEvents]);
+  const selectedEvent = useMemo(
+    () => wcifEvents.find((e) => e.id === selectedEventId),
+    [wcifEvents, selectedEventId],
+  );
+
   return (
     <>
       <EventSelector
-        selectedEvents={matchState.event ? [matchState.event] : []}
-        eventList={wcifEvents.map((e) => e.id)}
-        onEventClick={(event) => dispatchMatchState({ type: 'changeEvent', event })}
+        selectedEvents={[selectedEventId]}
+        eventList={eventList}
+        onEventClick={setSelectedEventId}
         hideAllButton
-        hideClearButton
+        onClearClick={() => setSelectedEventId(null)}
+        showBreakBeforeButtons={false}
       />
-      {matchState.event && (
+      {selectedEvent && (
         <Rounds
-          eventWcif={wcifEvents.find((e) => e.id === matchState.event)}
+          wcifRounds={selectedEvent.rounds}
           matchState={matchState}
           dispatchMatchState={dispatchMatchState}
         />
