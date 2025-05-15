@@ -80,7 +80,7 @@ RSpec.describe CompetitionTab do
 
     it "doesn't allow relative URLs" do
       competition_tab.update(content: "[Link](/relative)")
-      expect(competition_tab).to be_invalid
+      expect(competition_tab).not_to be_valid
     end
 
     it "allows full URLs" do
