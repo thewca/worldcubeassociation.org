@@ -7,7 +7,7 @@ class AdvancementConditions::AdvancementCondition
 
   validates :level, numericality: { only_integer: true }
 
-  @@advancement_conditions = [AttemptResultCondition, PercentCondition, RankingCondition].freeze
+  @@advancement_conditions = [AdvancementConditions::AttemptResultCondition, AdvancementConditions::PercentCondition, AdvancementConditions::RankingCondition].freeze
 
   def initialize(level)
     self.level = level
