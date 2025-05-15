@@ -327,9 +327,6 @@ RSpec/LetBeforeExamples:
 RSpec/ExampleWording:
   Enabled: false
 
-RSpec/Focus:
-  Enabled: false
-
 RSpec/MultipleDescribes:
   Enabled: false
 

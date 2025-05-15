@@ -491,7 +491,7 @@ RSpec.describe Api::V0::ApiController, :clean_db_with_truncation do
     end
   end
 
-  describe 'GET #user_qualification_data', :focus do
+  describe 'GET #user_qualification_data' do
     it 'returns empty JSON if user has never competed' do
       user = create(:user)
       get :user_qualification_data, params: { user_id: user.id }
