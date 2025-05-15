@@ -339,12 +339,6 @@ RSpec/PendingWithoutReason:
 RSpec/MultipleDescribes:
   Enabled: false
 
-RSpec/StubbedMock:
-  Enabled: false
-
-RSpec/SortMetadata:
-  Enabled: false
-
 RSpec/NamedSubject:
   Enabled: false
 
