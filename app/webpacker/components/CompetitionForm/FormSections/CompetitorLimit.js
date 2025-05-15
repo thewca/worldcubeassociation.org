@@ -3,13 +3,17 @@ import { InputBooleanSelect, InputNumber, InputTextArea } from '../../wca/FormBu
 import ConditionalSection from './ConditionalSection';
 import SubSection from '../../wca/FormBuilder/SubSection';
 import { useFormObject } from '../../wca/FormBuilder/provider/FormObjectProvider';
+import { useStore } from '../../../lib/providers/StoreProvider';
 
 export default function CompetitorLimit() {
   const {
     competitorLimit: {
       enabled: hasLimit,
+      autoAcceptEnabled,
     },
   } = useFormObject();
+
+  const { isAdminView } = useStore();
 
   return (
     <SubSection section="competitorLimit">
@@ -19,6 +23,12 @@ export default function CompetitorLimit() {
         <InputTextArea id="reason" />
         <InputNumber id="autoCloseThreshold" min={1} nullable />
         <InputNumber id="newcomerMonthReservedSpots" min={1} nullable />
+      </ConditionalSection>
+      <ConditionalSection showIf={isAdminView}>
+        <InputBooleanSelect id="autoAcceptEnabled" required />
+        <ConditionalSection showIf={autoAcceptEnabled}>
+          <InputNumber id="autoAcceptDisableThreshold" nullable />
+        </ConditionalSection>
       </ConditionalSection>
     </SubSection>
   );

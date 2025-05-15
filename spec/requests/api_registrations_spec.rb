@@ -16,20 +16,20 @@ RSpec.describe 'API Registrations' do
       let(:registration_request) { build(:registration_request, competition_id: competition.id, user_id: user.id) }
 
       it 'returns 202' do
-        # post api_v1_registrations_register_path, params: registration_request, headers: headers
-        post api_v1_registrations_register_path, params: registration_request, headers: headers
+        post api_v1_competition_registrations_path(competition), params: registration_request, headers: headers
         expect(response.body).to eq({ status: "accepted", message: "Started Registration Process" }.to_json)
         expect(response).to have_http_status(:accepted)
       end
 
       it 'enqueues an AddRegistrationJob' do
         expect do
-          post api_v1_registrations_register_path, params: registration_request, headers: headers
-        end.to have_enqueued_job(AddRegistrationJob)
+          post api_v1_competition_registrations_path(competition), params: registration_request, headers: headers
+        }.to have_enqueued_job(AddRegistrationJob)
+        end
       end
 
       it 'creates a registration when job is worked off' do
-        post api_v1_registrations_register_path, params: registration_request, headers: headers
+        post api_v1_competition_registrations_path(competition), params: registration_request, headers: headers
         perform_enqueued_jobs
 
         registration = Registration.find_by(user_id: user.id)
@@ -38,7 +38,7 @@ RSpec.describe 'API Registrations' do
       end
 
       it 'creates a registration history' do
-        post api_v1_registrations_register_path, params: registration_request, headers: headers
+        post api_v1_competition_registrations_path(competition), params: registration_request, headers: headers
         perform_enqueued_jobs
 
         registration = Registration.find_by(user_id: user.id)
@@ -52,7 +52,7 @@ RSpec.describe 'API Registrations' do
         competition = create(:competition, :registration_closed)
         registration_request = build(:registration_request, competition_id: competition.id, user_id: user.id)
 
-        post api_v1_registrations_register_path, params: registration_request, headers: headers
+        post api_v1_competition_registrations_path(competition), params: registration_request, headers: headers
 
         error_json = {
           error: Registrations::ErrorCodes::REGISTRATION_CLOSED,
@@ -69,7 +69,7 @@ RSpec.describe 'API Registrations' do
           :registration_request, guests: 10, competition_id: competition.id, user_id: existing_reg.user_id
         )
 
-        post api_v1_registrations_register_path, params: registration_request, headers: headers
+        post api_v1_competition_registrations_path(competition), params: registration_request, headers: headers
 
         error_json = {
           error: Registrations::ErrorCodes::REGISTRATION_ALREADY_EXISTS,
@@ -87,7 +87,7 @@ RSpec.describe 'API Registrations' do
         )
         headers = { 'Authorization' => registration_request['jwt_token'] }
 
-        post api_v1_registrations_register_path, params: registration_request, headers: headers
+        post api_v1_competition_registrations_path(competition), params: registration_request, headers: headers
 
         error_json = {
           error: Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS,
@@ -104,7 +104,7 @@ RSpec.describe 'API Registrations' do
         )
         headers = { 'Authorization' => registration_request['jwt_token'] }
 
-        post api_v1_registrations_register_path, params: registration_request, headers: headers
+        post api_v1_competition_registrations_path(competition), params: registration_request, headers: headers
 
         error_json = {
           error: Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS,
@@ -119,7 +119,7 @@ RSpec.describe 'API Registrations' do
         registration_request = build(:registration_request, :incomplete, competition_id: competition.id, user_id: user.id)
         headers = { 'Authorization' => registration_request['jwt_token'] }
 
-        post api_v1_registrations_register_path, params: registration_request, headers: headers
+        post api_v1_competition_registrations_path(competition), params: registration_request, headers: headers
 
         error_json = {
           error: Registrations::ErrorCodes::USER_CANNOT_COMPETE,
@@ -134,7 +134,7 @@ RSpec.describe 'API Registrations' do
         registration_request = build(:registration_request, competition_id: competition.id, user_id: banned_user.id)
         headers = { 'Authorization' => registration_request['jwt_token'] }
 
-        post api_v1_registrations_register_path, params: registration_request, headers: headers
+        post api_v1_competition_registrations_path(competition), params: registration_request, headers: headers
 
         error_json = {
           error: Registrations::ErrorCodes::USER_CANNOT_COMPETE,
@@ -149,7 +149,7 @@ RSpec.describe 'API Registrations' do
         registration_request = build(:registration_request, competition_id: competition.id, user_id: briefly_banned_user.id)
         headers = { 'Authorization' => registration_request['jwt_token'] }
 
-        post api_v1_registrations_register_path, params: registration_request, headers: headers
+        post api_v1_competition_registrations_path(competition), params: registration_request, headers: headers
 
         expect(response).to have_http_status(:accepted)
       end
@@ -164,7 +164,7 @@ RSpec.describe 'API Registrations' do
         )
         headers = { 'Authorization' => registration_request['jwt_token'] }
 
-        post api_v1_registrations_register_path, params: registration_request, headers: headers
+        post api_v1_competition_registrations_path(competition), params: registration_request, headers: headers
 
         error_json = {
           error: Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS,
@@ -179,7 +179,7 @@ RSpec.describe 'API Registrations' do
         registration_request = build(:registration_request, competition_id: competition.id, user_id: competition.organizers.first.id)
         headers = { 'Authorization' => registration_request['jwt_token'] }
 
-        post api_v1_registrations_register_path, params: registration_request, headers: headers
+        post api_v1_competition_registrations_path(competition), params: registration_request, headers: headers
         expect(response.body).to eq({ status: "accepted", message: "Started Registration Process" }.to_json)
         expect(response).to have_http_status(:accepted)
       end
@@ -188,7 +188,7 @@ RSpec.describe 'API Registrations' do
         registration_request = build(:registration_request, :impersonation, competition_id: competition.id, user_id: user.id)
         headers = { 'Authorization' => registration_request['jwt_token'] }
 
-        post api_v1_registrations_register_path, params: registration_request, headers: headers
+        post api_v1_competition_registrations_path(competition), params: registration_request, headers: headers
 
         error_json = {
           error: Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS,
@@ -206,7 +206,7 @@ RSpec.describe 'API Registrations' do
         registration_request = build(:registration_request, competition_id: competition_a.id, user_id: user.id)
         headers = { 'Authorization' => registration_request['jwt_token'] }
 
-        post api_v1_registrations_register_path, params: registration_request, headers: headers
+        post api_v1_competition_registrations_path(competition_a), params: registration_request, headers: headers
 
         expect(response).to have_http_status(:accepted)
       end
@@ -224,7 +224,7 @@ RSpec.describe 'API Registrations' do
         registration_request = build(:registration_request, competition_id: competition_b.id, user_id: user.id)
         headers = { 'Authorization' => registration_request['jwt_token'] }
 
-        post api_v1_registrations_register_path, params: registration_request, headers: headers
+        post api_v1_competition_registrations_path(competition_b), params: registration_request, headers: headers
 
         expect(response).to have_http_status(:accepted)
       end
@@ -242,7 +242,7 @@ RSpec.describe 'API Registrations' do
         registration_request = build(:registration_request, competition_id: competition_b.id, user_id: user.id)
         headers = { 'Authorization' => registration_request['jwt_token'] }
 
-        post api_v1_registrations_register_path, params: registration_request, headers: headers
+        post api_v1_competition_registrations_path(competition_b), params: registration_request, headers: headers
 
         expect(response).to have_http_status(:accepted)
       end
@@ -260,7 +260,7 @@ RSpec.describe 'API Registrations' do
         registration_request = build(:registration_request, competition_id: competition_b.id, user_id: user.id)
         headers = { 'Authorization' => registration_request['jwt_token'] }
 
-        post api_v1_registrations_register_path, params: registration_request, headers: headers
+        post api_v1_competition_registrations_path(competition_b), params: registration_request, headers: headers
 
         expect(response).to have_http_status(:accepted)
       end
@@ -290,7 +290,7 @@ RSpec.describe 'API Registrations' do
         )
         headers = { 'Authorization' => registration_request['jwt_token'] }
 
-        post api_v1_registrations_register_path, params: registration_request, headers: headers
+        post api_v1_competition_registrations_path(comp_with_qualifications), params: registration_request, headers: headers
         perform_enqueued_jobs
 
         expect(response).to have_http_status(:accepted)
@@ -307,7 +307,7 @@ RSpec.describe 'API Registrations' do
 
         headers = { 'Authorization' => registration_request['jwt_token'] }
 
-        post api_v1_registrations_register_path, params: registration_request, headers: headers
+        post api_v1_competition_registrations_path(comp_with_qualifications), params: registration_request, headers: headers
         perform_enqueued_jobs
 
         expect(response).to have_http_status(:unprocessable_content)
@@ -350,7 +350,7 @@ RSpec.describe 'API Registrations' do
       )
       headers = { 'Authorization' => update_request['jwt_token'] }
 
-      patch api_v1_registrations_register_path, params: update_request, headers: headers
+      patch api_v1_registration_path(registration), params: update_request, headers: headers
 
       expect(response).to have_http_status(:ok)
 
@@ -383,7 +383,7 @@ RSpec.describe 'API Registrations' do
       )
       headers = { 'Authorization' => update_request['jwt_token'] }
 
-      patch api_v1_registrations_register_path, params: update_request, headers: headers
+      patch api_v1_registration_path(favourites_reg), params: update_request, headers: headers
 
       expect(response).to have_http_status(:ok)
 
@@ -405,7 +405,7 @@ RSpec.describe 'API Registrations' do
       )
       headers = { 'Authorization' => update_request['jwt_token'] }
 
-      patch api_v1_registrations_register_path, params: update_request, headers: headers
+      patch api_v1_registration_path(cancelled_reg), params: update_request, headers: headers
       perform_enqueued_jobs
 
       expect(response).to have_http_status(:ok)
@@ -426,7 +426,7 @@ RSpec.describe 'API Registrations' do
       )
       headers = { 'Authorization' => update_request['jwt_token'] }
 
-      patch api_v1_registrations_register_path, params: update_request, headers: headers
+      patch api_v1_registration_path(rejected_reg), params: update_request, headers: headers
       perform_enqueued_jobs
 
       expect(response).to have_http_status(:ok)
@@ -439,7 +439,8 @@ RSpec.describe 'API Registrations' do
       update_request = build(:update_request, competition_id: competition.id, user_id: user.id)
       headers = { 'Authorization' => update_request['jwt_token'] }
 
-      patch api_v1_registrations_register_path, params: update_request, headers: headers
+      # Assuming that we're never generating one-thousand three-hundred persisted registrations during tests…
+      patch api_v1_registration_path(1337), params: update_request, headers: headers
 
       error_json = {
         error: Registrations::ErrorCodes::REGISTRATION_NOT_FOUND,
@@ -458,7 +459,7 @@ RSpec.describe 'API Registrations' do
       )
       headers = { 'Authorization' => update_request['jwt_token'] }
 
-      patch api_v1_registrations_register_path, params: update_request, headers: headers
+      patch api_v1_registration_path(registration), params: update_request, headers: headers
 
       error_json = {
         error: Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS,
@@ -474,12 +475,12 @@ RSpec.describe 'API Registrations' do
 
       update_request = build(
         :update_request,
-        competition_id: registration.competition.id,
+        competition_id: registration.competition_id,
         user_id: registration.user_id,
       )
       headers = { 'Authorization' => update_request['jwt_token'] }
 
-      patch api_v1_registrations_register_path, params: update_request, headers: headers
+      patch api_v1_registration_path(registration), params: update_request, headers: headers
 
       error_json = {
         error: Registrations::ErrorCodes::USER_EDITS_NOT_ALLOWED,
@@ -495,12 +496,12 @@ RSpec.describe 'API Registrations' do
 
       update_request = build(
         :update_request,
-        competition_id: registration.competition.id,
+        competition_id: registration.competition_id,
         user_id: registration.user_id,
       )
       headers = { 'Authorization' => update_request['jwt_token'] }
 
-      patch api_v1_registrations_register_path, params: update_request, headers: headers
+      patch api_v1_registration_path(registration), params: update_request, headers: headers
 
       error_json = {
         error: Registrations::ErrorCodes::USER_EDITS_NOT_ALLOWED,
@@ -516,12 +517,12 @@ RSpec.describe 'API Registrations' do
 
       update_request = build(
         :update_request,
-        competition_id: registration.competition.id,
+        competition_id: registration.competition_id,
         user_id: registration.user_id,
       )
       headers = { 'Authorization' => update_request['jwt_token'] }
 
-      patch api_v1_registrations_register_path, params: update_request, headers: headers
+      patch api_v1_registration_path(registration), params: update_request, headers: headers
 
       error_json = {
         error: Registrations::ErrorCodes::USER_EDITS_NOT_ALLOWED,
@@ -540,13 +541,13 @@ RSpec.describe 'API Registrations' do
       update_request = build(
         :update_request,
         user_id: registration.user_id,
-        competition_id: registration.competition.id,
+        competition_id: registration.competition_id,
         competing: { 'status' => 'cancelled' },
       )
 
       headers = { 'Authorization' => update_request['jwt_token'] }
 
-      patch api_v1_registrations_register_path, params: update_request, headers: headers
+      patch api_v1_registration_path(registration), params: update_request, headers: headers
 
       error_json = {
         error: Registrations::ErrorCodes::USER_EDITS_NOT_ALLOWED,
@@ -563,13 +564,13 @@ RSpec.describe 'API Registrations' do
       update_request = build(
         :update_request,
         user_id: registration.user_id,
-        competition_id: registration.competition.id,
+        competition_id: registration.competition_id,
         guests: 5,
       )
 
       headers = { 'Authorization' => update_request['jwt_token'] }
 
-      patch api_v1_registrations_register_path, params: update_request, headers: headers
+      patch api_v1_registration_path(registration), params: update_request, headers: headers
 
       error_json = {
         error: Registrations::ErrorCodes::USER_EDITS_NOT_ALLOWED,
@@ -585,14 +586,14 @@ RSpec.describe 'API Registrations' do
 
       update_request = build(
         :update_request,
-        competition_id: registration.competition.id,
+        competition_id: registration.competition_id,
         user_id: registration.user_id,
         competing: { 'comment' => 'updated_comment' },
       )
 
       headers = { 'Authorization' => update_request['jwt_token'] }
 
-      patch api_v1_registrations_register_path, params: update_request, headers: headers
+      patch api_v1_registration_path(registration), params: update_request, headers: headers
 
       error_json = {
         error: Registrations::ErrorCodes::USER_EDITS_NOT_ALLOWED,
@@ -612,7 +613,7 @@ RSpec.describe 'API Registrations' do
 
       headers = { 'Authorization' => update_request['jwt_token'] }
 
-      patch api_v1_registrations_register_path, params: update_request, headers: headers
+      patch api_v1_registration_path(registration), params: update_request, headers: headers
 
       error_json = {
         error: Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS,
@@ -632,7 +633,7 @@ RSpec.describe 'API Registrations' do
 
       headers = { 'Authorization' => update_request['jwt_token'] }
 
-      patch api_v1_registrations_register_path, params: update_request, headers: headers
+      patch api_v1_registration_path(registration), params: update_request, headers: headers
 
       error_json = {
         error: Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS,
@@ -646,13 +647,13 @@ RSpec.describe 'API Registrations' do
       update_request = build(
         :update_request,
         user_id: registration.user_id,
-        competition_id: registration.competition.id,
+        competition_id: registration.competition_id,
         submitted_by: competition.organizers.first.id,
         competing: { 'comment' => 'updated_comment' },
       )
       headers = { 'Authorization' => update_request['jwt_token'] }
 
-      patch api_v1_registrations_register_path, params: update_request, headers: headers
+      patch api_v1_registration_path(registration), params: update_request, headers: headers
       expect(response).to have_http_status(:ok)
     end
 
@@ -664,13 +665,13 @@ RSpec.describe 'API Registrations' do
         :update_request,
         :organizer_for_user,
         user_id: registration.user_id,
-        competition_id: registration.competition.id,
+        competition_id: registration.competition_id,
         competing: { 'comment' => 'this is a new comment' },
         submitted_by: edit_deadline_passed.organizers.first.id,
       )
       headers = { 'Authorization' => update_request['jwt_token'] }
 
-      patch api_v1_registrations_register_path, params: update_request, headers: headers
+      patch api_v1_registration_path(registration), params: update_request, headers: headers
       expect(response).to have_http_status(:ok)
     end
 
@@ -692,7 +693,7 @@ RSpec.describe 'API Registrations' do
       )
       headers = { 'Authorization' => update_request['jwt_token'] }
 
-      patch api_v1_registrations_register_path, params: update_request, headers: headers
+      patch api_v1_registration_path(registration_b), params: update_request, headers: headers
       error_json = {
         error: Registrations::ErrorCodes::ALREADY_REGISTERED_IN_SERIES,
       }.to_json
@@ -714,7 +715,7 @@ RSpec.describe 'API Registrations' do
 
       headers = { 'Authorization' => update_request['jwt_token'] }
 
-      patch api_v1_registrations_register_path, params: update_request, headers: headers
+      patch api_v1_registration_path(cancelled_reg), params: update_request, headers: headers
       error_json = {
         error: Registrations::ErrorCodes::REGISTRATION_CLOSED,
       }.to_json
@@ -735,7 +736,7 @@ RSpec.describe 'API Registrations' do
 
       headers = { 'Authorization' => update_request['jwt_token'] }
 
-      patch api_v1_registrations_register_path, params: update_request, headers: headers
+      patch api_v1_registration_path(paid_reg), params: update_request, headers: headers
       error_json = {
         error: Registrations::ErrorCodes::ORGANIZER_MUST_CANCEL_REGISTRATION,
       }.to_json
@@ -755,7 +756,7 @@ RSpec.describe 'API Registrations' do
       )
       headers = { 'Authorization' => update_request['jwt_token'] }
 
-      patch api_v1_registrations_register_path, params: update_request, headers: headers
+      patch api_v1_registration_path(paid_reg), params: update_request, headers: headers
       error_json = {
         error: Registrations::ErrorCodes::ORGANIZER_MUST_CANCEL_REGISTRATION,
       }.to_json
@@ -775,7 +776,7 @@ RSpec.describe 'API Registrations' do
       )
       headers = { 'Authorization' => update_request['jwt_token'] }
 
-      patch api_v1_registrations_register_path, params: update_request, headers: headers
+      patch api_v1_registration_path(accepted_reg), params: update_request, headers: headers
       error_json = {
         error: Registrations::ErrorCodes::ORGANIZER_MUST_CANCEL_REGISTRATION,
       }.to_json
@@ -796,7 +797,7 @@ RSpec.describe 'API Registrations' do
         )
         headers = { 'Authorization' => update_request['jwt_token'] }
 
-        patch api_v1_registrations_register_path, params: update_request, headers: headers
+        patch api_v1_registration_path(registration), params: update_request, headers: headers
         error_json = {
           error: Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS,
         }.to_json
@@ -838,7 +839,7 @@ RSpec.describe 'API Registrations' do
         )
         headers = { 'Authorization' => update_request['jwt_token'] }
 
-        patch api_v1_registrations_register_path, params: update_request, headers: headers
+        patch api_v1_registration_path(registration), params: update_request, headers: headers
         error_json = {
           error: Registrations::ErrorCodes::REGISTRATION_IS_REJECTED,
         }.to_json
@@ -879,7 +880,7 @@ RSpec.describe 'API Registrations' do
       )
 
       headers = { 'Authorization' => bulk_update_request['jwt_token'] }
-      patch api_v1_registrations_bulk_update_path, params: bulk_update_request, headers: headers
+      patch bulk_update_api_v1_competition_registrations_path(competition), params: bulk_update_request, headers: headers
 
       expect(response).to have_http_status(:ok)
 
@@ -924,7 +925,7 @@ RSpec.describe 'API Registrations' do
       )
 
       headers = { 'Authorization' => bulk_update_request['jwt_token'] }
-      patch api_v1_registrations_bulk_update_path, params: bulk_update_request, headers: headers
+      patch bulk_update_api_v1_competition_registrations_path(competition), params: bulk_update_request, headers: headers
 
       expect(response).to have_http_status(:ok)
 
@@ -967,7 +968,7 @@ RSpec.describe 'API Registrations' do
       )
 
       headers = { 'Authorization' => bulk_update_request['jwt_token'] }
-      patch api_v1_registrations_bulk_update_path, params: bulk_update_request, headers: headers
+      patch bulk_update_api_v1_competition_registrations_path(competition), params: bulk_update_request, headers: headers
 
       expect(response).to have_http_status(:unprocessable_content)
 
@@ -986,7 +987,7 @@ RSpec.describe 'API Registrations' do
       )
 
       headers = { 'Authorization' => bulk_update_request['jwt_token'] }
-      patch api_v1_registrations_bulk_update_path, params: bulk_update_request, headers: headers
+      patch bulk_update_api_v1_competition_registrations_path(competition), params: bulk_update_request, headers: headers
 
       expect(response).to have_http_status(:bad_request)
     end
@@ -1000,7 +1001,7 @@ RSpec.describe 'API Registrations' do
       )
 
       headers = { 'Authorization' => bulk_update_request['jwt_token'] }
-      patch api_v1_registrations_bulk_update_path, params: bulk_update_request, headers: headers
+      patch bulk_update_api_v1_competition_registrations_path(competition), params: bulk_update_request, headers: headers
       error_json = {
         error: [Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS],
       }.to_json
@@ -1017,7 +1018,7 @@ RSpec.describe 'API Registrations' do
         competition_id: competition.id,
       )
       headers = { 'Authorization' => bulk_update_request['jwt_token'] }
-      patch api_v1_registrations_bulk_update_path, params: bulk_update_request, headers: headers
+      patch bulk_update_api_v1_competition_registrations_path(competition), params: bulk_update_request, headers: headers
 
       expect(response).to have_http_status(:ok)
     end
@@ -1030,7 +1031,7 @@ RSpec.describe 'API Registrations' do
         competition_id: competition.id,
       )
       headers = { 'Authorization' => bulk_update_request['jwt_token'] }
-      patch api_v1_registrations_bulk_update_path, params: bulk_update_request, headers: headers
+      patch bulk_update_api_v1_competition_registrations_path(competition), params: bulk_update_request, headers: headers
 
       expect(response).to have_http_status(:ok)
     end
@@ -1049,7 +1050,7 @@ RSpec.describe 'API Registrations' do
       )
 
       headers = { 'Authorization' => bulk_update_request['jwt_token'] }
-      patch api_v1_registrations_bulk_update_path, params: bulk_update_request, headers: headers
+      patch bulk_update_api_v1_competition_registrations_path(competition), params: bulk_update_request, headers: headers
       error_json = {
         error: { registration1.user_id => Registrations::ErrorCodes::INVALID_EVENT_SELECTION },
       }.to_json
@@ -1077,7 +1078,7 @@ RSpec.describe 'API Registrations' do
         requests: [failed_update, failed_update_2, normal_update],
       )
       headers = { 'Authorization' => bulk_update_request['jwt_token'] }
-      patch api_v1_registrations_bulk_update_path, params: bulk_update_request, headers: headers
+      patch bulk_update_api_v1_competition_registrations_path(competition), params: bulk_update_request, headers: headers
 
       error_json = {
         error: {
@@ -1102,7 +1103,7 @@ RSpec.describe 'API Registrations' do
       )
 
       headers = { 'Authorization' => bulk_update_request['jwt_token'] }
-      patch api_v1_registrations_bulk_update_path, params: bulk_update_request, headers: headers
+      patch bulk_update_api_v1_competition_registrations_path(competition), params: bulk_update_request, headers: headers
 
       error_json = {
         error: {
@@ -1137,7 +1138,7 @@ RSpec.describe 'API Registrations' do
       )
 
       headers = { 'Authorization' => bulk_update_request['jwt_token'] }
-      patch api_v1_registrations_bulk_update_path, params: bulk_update_request, headers: headers
+      patch bulk_update_api_v1_competition_registrations_path(competition), params: bulk_update_request, headers: headers
 
       error_json = {
         error: {
@@ -1195,7 +1196,7 @@ RSpec.describe 'API Registrations' do
       let(:headers) { { 'Authorization' => bulk_update_request['jwt_token'] } }
 
       it 'accepts competitors from the waiting list if there is space in accepted' do
-        patch api_v1_registrations_bulk_update_path, params: bulk_update_request, headers: headers
+        patch bulk_update_api_v1_competition_registrations_path(competition), params: bulk_update_request, headers: headers
 
         expect(response).to have_http_status(:ok)
 
@@ -1207,7 +1208,7 @@ RSpec.describe 'API Registrations' do
       it 'can accept competitors up to the competitor limit' do
         competition.update(competitor_limit: 3)
 
-        patch api_v1_registrations_bulk_update_path, params: bulk_update_request, headers: headers
+        patch bulk_update_api_v1_competition_registrations_path(competition), params: bulk_update_request, headers: headers
 
         expect(response).to have_http_status(:ok)
 
@@ -1220,7 +1221,7 @@ RSpec.describe 'API Registrations' do
         create(:registration, :non_competing, competition: competition)
         competition.update(competitor_limit: 3)
 
-        patch api_v1_registrations_bulk_update_path, params: bulk_update_request, headers: headers
+        patch bulk_update_api_v1_competition_registrations_path(competition), params: bulk_update_request, headers: headers
 
         expect(response).to have_http_status(:ok)
 
@@ -1232,7 +1233,7 @@ RSpec.describe 'API Registrations' do
       it 'wont accept competitors over the competitor limit' do
         competition.update(competitor_limit: 2)
 
-        patch api_v1_registrations_bulk_update_path, params: bulk_update_request, headers: headers
+        patch bulk_update_api_v1_competition_registrations_path(competition), params: bulk_update_request, headers: headers
         expect(response).to have_http_status(:forbidden)
       end
     end
@@ -1257,7 +1258,7 @@ RSpec.describe 'API Registrations' do
 
     it 'returns multiple registrations' do
       headers = { 'Authorization' => fetch_jwt_token(competition.organizers.first.id) }
-      get api_v1_registrations_list_admin_path(competition_id: competition.id), headers: headers
+      get admin_api_v1_competition_registrations_path(competition), headers: headers
 
       expect(response).to have_http_status(:ok)
 
@@ -1287,13 +1288,13 @@ RSpec.describe 'API Registrations' do
     let(:headers) { { 'Authorization' => fetch_jwt_token(reg.user_id) } }
 
     it 'successfully builds a payment_intent via Stripe API' do
-      get api_v1_registrations_payment_ticket_path(competition_id: competition.id), headers: headers
+      get payment_ticket_api_v1_registration_path(reg), headers: headers
       expect(response).to be_successful
     end
 
     context 'successful payment ticket' do
       before do
-        get api_v1_registrations_payment_ticket_path(competition_id: competition.id), headers: headers
+        get payment_ticket_api_v1_registration_path(reg), headers: headers
       end
 
       it 'returns a client secret' do
@@ -1312,7 +1313,7 @@ RSpec.describe 'API Registrations' do
     end
 
     it 'has the correct payment_intent properties when a donation is present' do
-      get api_v1_registrations_payment_ticket_path(competition_id: competition.id), headers: headers, params: { iso_donation_amount: 1300 }
+      get payment_ticket_api_v1_registration_path(reg), headers: headers, params: { iso_donation_amount: 1300 }
 
       payment_record = PaymentIntent.find_by(holder_type: "Registration", holder_id: reg.id).payment_record
       expect(payment_record.amount_stripe_denomination).to be(2300)
@@ -1322,7 +1323,7 @@ RSpec.describe 'API Registrations' do
     describe 'refuse ticket create request' do
       it 'if registration already paid' do
         create(:registration_payment, registration: reg)
-        get api_v1_registrations_payment_ticket_path(competition_id: competition.id), headers: headers
+        get payment_ticket_api_v1_registration_path(reg), headers: headers
 
         body = response.parsed_body
         expect(response).to have_http_status(:forbidden)
@@ -1334,7 +1335,7 @@ RSpec.describe 'API Registrations' do
         closed_reg = create(:registration, :pending, competition: closed_comp)
 
         headers = { 'Authorization' => fetch_jwt_token(closed_reg.user_id) }
-        get api_v1_registrations_payment_ticket_path(competition_id: closed_comp.id), headers: headers
+        get payment_ticket_api_v1_registration_path(closed_reg), headers: headers
 
         body = response.parsed_body
         expect(response).to have_http_status(:forbidden)
@@ -1369,6 +1370,38 @@ RSpec.describe 'API Registrations' do
 
       expect(response).to be_successful
       expect(response.parsed_body).to eq(expected_response)
+    end
+  end
+
+  describe 'PATCH #bulk_accept' do
+    let(:auto_accept_comp) {
+      create(
+        :competition, :auto_accept, :registration_open, :with_organizer, :with_competitor_limit, competitor_limit: 10, auto_accept_disable_threshold: nil
+      )
+    }
+
+    before do
+      create_list(:registration, 5, :accepted, competition: auto_accept_comp)
+    end
+
+    it 'triggers bulk auto accept via API route' do
+      headers['Authorization'] = fetch_jwt_token(auto_accept_comp.organizers.first.id)
+
+      create_list(:registration, 9, :paid, :waiting_list, competition: auto_accept_comp)
+      create_list(:registration, 3, :paid, :pending, competition: auto_accept_comp)
+      initial_pending_ids = auto_accept_comp.registrations.competing_status_pending.ids
+      expected_accepted = auto_accept_comp.waiting_list.entries[..4]
+      expected_remaining = auto_accept_comp.waiting_list.entries[5..] + initial_pending_ids
+
+      patch bulk_auto_accept_api_v1_competition_registrations_path(competition_id: auto_accept_comp.id), headers: headers
+      expect(response).to have_http_status(:ok)
+
+      expect(auto_accept_comp.registrations.competing_status_accepted.count).to eq(10)
+      expect(auto_accept_comp.registrations.competing_status_waiting_list.count).to eq(7)
+
+      expect((expected_accepted - auto_accept_comp.registrations.competing_status_accepted.ids).empty?).to be(true)
+
+      expect(auto_accept_comp.waiting_list.reload.entries).to eq(expected_remaining)
     end
   end
 end
