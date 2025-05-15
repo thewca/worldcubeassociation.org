@@ -113,9 +113,6 @@ Metrics/ModuleLength:
 Style/AccessModifierDeclarations:
   Enabled: false
 
-Style/BlockDelimiters:
-  Enabled: false
-
 Style/ClassAndModuleChildren:
   Enabled: false
 
@@ -316,9 +313,6 @@ RSpec/ReceiveCounts:
   Enabled: false
 
 RSpec/ContextMethod:
-  Enabled: false
-
-RSpec/BeNil:
   Enabled: false
 
 RSpec/LetBeforeExamples:
