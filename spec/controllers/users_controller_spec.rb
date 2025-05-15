@@ -114,12 +114,12 @@ RSpec.describe UsersController do
     context "recently authenticated" do
       it "user can change email" do
         sign_in user
-        expect(user.confirmation_sent_at).to be nil
+        expect(user.confirmation_sent_at).to be_nil
         post :authenticate_user_for_sensitive_edit, params: { user: { password: "wca" } }
         patch :update, params: { id: user.id, user: { email: "newEmail@newEmail.com" } }
         user.reload
         expect(user.unconfirmed_email).to eq "newemail@newemail.com"
-        expect(user.confirmation_sent_at).not_to be nil
+        expect(user.confirmation_sent_at).not_to be_nil
       end
     end
 
@@ -128,8 +128,8 @@ RSpec.describe UsersController do
         sign_in user
         patch :update, params: { id: user.id, user: { email: "newEmail@newEmail.com" } }
         user.reload
-        expect(user.unconfirmed_email).to be nil
-        expect(user.confirmation_sent_at).to be nil
+        expect(user.unconfirmed_email).to be_nil
+        expect(user.confirmation_sent_at).to be_nil
         expect(flash[:danger]).to eq I18n.t("users.edit.sensitive.identity_error")
       end
     end

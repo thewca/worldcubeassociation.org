@@ -148,7 +148,7 @@ RSpec.describe Result do
 
           it "missing solves" do
             result = build_result(value1: 42, value2: 43, value3: 44, value4: 0, value5: 0, best: 42, average: 44)
-            expect(result.average_is_not_computable_reason).to be nil
+            expect(result.average_is_not_computable_reason).to be_nil
             expect(result.compute_correct_average).to eq 0
             expect(result).not_to be_valid(average: ["should be 0"])
           end

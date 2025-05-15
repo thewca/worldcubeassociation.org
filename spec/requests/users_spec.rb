@@ -153,9 +153,9 @@ RSpec.describe "users" do
       end
 
       it 'can (re)generate backup codes for user with 2FA' do
-        expect(user.otp_backup_codes).to be nil
+        expect(user.otp_backup_codes).to be_nil
         post profile_generate_2fa_backup_path
-        expect(user.reload.otp_backup_codes).not_to be nil
+        expect(user.reload.otp_backup_codes).not_to be_nil
         json = response.parsed_body
         expect(json["codes"]&.size).to eq User::NUMBER_OF_BACKUP_CODES
       end

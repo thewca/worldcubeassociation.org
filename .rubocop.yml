@@ -315,9 +315,6 @@ RSpec/ReceiveCounts:
 RSpec/ContextMethod:
   Enabled: false
 
-RSpec/BeNil:
-  Enabled: false
-
 RSpec/LetBeforeExamples:
   Enabled: false
 

@@ -225,7 +225,7 @@ RSpec.describe CompetitionsController do
         # confirmed, and results_posted_at attributes.
         expect(new_comp.show_at_all).to be false
         expect(new_comp.confirmed?).to be false
-        expect(new_comp.results_posted_at).to be nil
+        expect(new_comp.results_posted_at).to be_nil
         # We don't want to clone its dates.
         expect(new_comp.start_date).to be_nil
         expect(new_comp.end_date).to be_nil
@@ -921,8 +921,8 @@ RSpec.describe CompetitionsController do
       it 'announces and expects organizers to receive a notification email' do
         sign_in wcat_member
         competition.update(start_date: "2011-12-04", end_date: "2011-12-05")
-        expect(competition.announced_at).to be nil
-        expect(competition.announced_by).to be nil
+        expect(competition.announced_at).to be_nil
+        expect(competition.announced_by).to be_nil
         expect(CompetitionsMailer).to receive(:notify_organizer_of_announced_competition).with(competition, competition.organizers.last).and_call_original
         expect do
           put :announce, params: { competition_id: competition }
@@ -1050,8 +1050,8 @@ RSpec.describe CompetitionsController do
           create(:result, person: user.person, competition_id: competition.id, event_id: "333")
         end
 
-        expect(competition.results_posted_at).to be nil
-        expect(competition.results_posted_by).to be nil
+        expect(competition.results_posted_at).to be_nil
+        expect(competition.results_posted_by).to be_nil
         expect(CompetitionsMailer).to receive(:notify_users_of_results_presence).and_call_original.exactly(4).times
         expect do
           post :post_results, params: { id: competition }
