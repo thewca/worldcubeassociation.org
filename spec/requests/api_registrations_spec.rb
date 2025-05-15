@@ -24,8 +24,7 @@ RSpec.describe 'API Registrations' do
       it 'enqueues an AddRegistrationJob' do
         expect do
           post api_v1_competition_registrations_path(competition), params: registration_request, headers: headers
-        }.to have_enqueued_job(AddRegistrationJob)
-        end
+        end.to have_enqueued_job(AddRegistrationJob)
       end
 
       it 'creates a registration when job is worked off' do
@@ -1374,11 +1373,11 @@ RSpec.describe 'API Registrations' do
   end
 
   describe 'PATCH #bulk_accept' do
-    let(:auto_accept_comp) {
+    let(:auto_accept_comp) do
       create(
         :competition, :auto_accept, :registration_open, :with_organizer, :with_competitor_limit, competitor_limit: 10, auto_accept_disable_threshold: nil
       )
-    }
+    end
 
     before do
       create_list(:registration, 5, :accepted, competition: auto_accept_comp)
