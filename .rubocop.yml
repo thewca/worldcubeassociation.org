@@ -372,8 +372,5 @@ RSpec/ClassCheck:
 RSpec/BeEmpty:
   Enabled: false
 
-RSpecRails/NegationBeValid:
-  Enabled: false
-
 RSpecRails/InferredSpecType:
   Enabled: false
