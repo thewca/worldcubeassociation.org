@@ -96,14 +96,12 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
   const { mutate: bulkAutoAcceptMutation, isPending: isAutoAccepting } = useMutation({
     mutationFn: bulkAutoAccept,
     onError: (err) => {
-      console.log("error: ", err)
       dispatchStore(showMessage(
         'competitions.registration_v2.auto_accept.cant_bulk_auto_accept',
         'negative',
       ));
     },
     onSuccess: (data) => {
-      console.log("success")
       setModalData(data);     // store payload
       setModalOpen(true);     // open modal
       dispatchStore(showMessage('competitions.registration_v2.auto_accept.bulk_auto_accepted', 'positive'));
