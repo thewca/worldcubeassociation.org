@@ -58,14 +58,14 @@ RSpec.describe RegistrationsController, :clean_db_with_truncation do
 
     context 'when signed in as organizer' do
       let(:organizer) { create(:user) }
-      let(:competition) {
+      let(:competition) do
         create(:competition, :stripe_connected, :visible,
                organizers: [organizer],
                events: Event.where(id: %w[222 333]),
                use_wca_registration: true,
                starts: (ClearConnectedPaymentIntegrations::DELAY_IN_DAYS + 1).days.ago,
                registration_close: (ClearConnectedPaymentIntegrations::DELAY_IN_DAYS + 3).days.ago)
-      }
+      end
       let!(:registration) { create(:registration, competition: competition, user: organizer) }
 
       context "processes a payment" do

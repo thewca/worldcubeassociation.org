@@ -910,14 +910,14 @@ RSpec.describe Competition do
   describe "results" do
     let(:three_by_three) { Event.find "333" }
     let(:two_by_two) { Event.find "222" }
-    let!(:competition) {
+    let!(:competition) do
       c = create(:competition, events: [three_by_three, two_by_two])
       # Create the results rounds right now so that we can use them later.
       create(:round, competition: c, total_number_of_rounds: 2, number: 1, event_id: "333")
       create(:round, competition: c, total_number_of_rounds: 2, number: 2, event_id: "333")
       create(:round, competition: c, total_number_of_rounds: 1, number: 1, event_id: "222", cutoff: Cutoff.new(number_of_attempts: 2, attempt_result: 60 * 100))
       c
-    }
+    end
 
     let(:person_one) { create(:person, name: "One") }
     let(:person_two) { create(:person, name: "Two") }
@@ -997,11 +997,11 @@ RSpec.describe Competition do
 
     expect do
       competition.update_attribute(:id, "NewName2016")
-    end.not_to(change {
+    end.not_to(change do
       %i[results organizers delegates tabs registrations delegate_report].map do |associated|
         competition.send(associated)
       end
-    })
+    end)
 
     expect(competition).to respond_to(:update_foreign_keys),
                            "This whole test should be removed alongside update_foreign_keys callback in the Competition model."
@@ -1082,12 +1082,12 @@ RSpec.describe Competition do
     let(:organizer1) { create(:user) }
     let(:organizer2) { create(:user) }
     let(:organizer3) { create(:user) }
-    let!(:competition) {
+    let!(:competition) do
       create(:competition, :confirmed, delegates: [delegate1, delegate2], organizers: [organizer1, organizer2])
-    }
-    let!(:competition_with_different_organizers) {
+    end
+    let!(:competition_with_different_organizers) do
       create(:competition, :confirmed, delegates: [delegate1, delegate2], organizers: [organizer3])
-    }
+    end
     let!(:other_comp) { create(:competition) }
 
     it "finds comps by delegate" do
@@ -1113,13 +1113,13 @@ RSpec.describe Competition do
   end
 
   describe "#registration_full?" do
-    let(:competition) {
+    let(:competition) do
       create(:competition,
              :registration_open,
              competitor_limit_enabled: true,
              competitor_limit: 10,
              competitor_limit_reason: "Dude, this is my closet")
-    }
+    end
 
     it "detects full competition" do
       expect(competition.registration_full?).to be false
@@ -1147,13 +1147,13 @@ RSpec.describe Competition do
   end
 
   describe '#registration_full_message' do
-    let(:competition) {
+    let(:competition) do
       create(:competition,
              :registration_open,
              competitor_limit_enabled: true,
              competitor_limit: 10,
              competitor_limit_reason: "Dude, this is my closet")
-    }
+    end
 
     it "detects full competition warning message" do
       # Add 9 accepted registrations
@@ -1177,15 +1177,15 @@ RSpec.describe Competition do
   end
 
   context "when changing the competition's date" do
-    let(:competition) {
+    let(:competition) do
       create(:competition,
              with_schedule: true,
              start_date: Date.parse("2018-10-24"),
              end_date: Date.parse("2018-10-26"))
-    }
-    let(:all_activities) {
+    end
+    let(:all_activities) do
       competition.all_activities
-    }
+    end
 
     def change_and_check_activities(new_start_date, new_end_date)
       on_first_day, on_last_day = all_activities.partition { |a| a.start_time.to_date == competition.start_date }

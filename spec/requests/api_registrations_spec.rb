@@ -22,9 +22,9 @@ RSpec.describe 'API Registrations' do
       end
 
       it 'enqueues an AddRegistrationJob' do
-        expect {
+        expect do
           post api_v1_competition_registrations_path(competition), params: registration_request, headers: headers
-        }.to have_enqueued_job(AddRegistrationJob)
+        end.to have_enqueued_job(AddRegistrationJob)
       end
 
       it 'creates a registration when job is worked off' do
@@ -328,16 +328,16 @@ RSpec.describe 'API Registrations' do
     let(:user) { create(:user) }
     let(:competition) { create(:competition, :registration_open, :editable_registrations, :with_organizer) }
     let(:registration) { create(:registration, competition: competition, user: user) }
-    let(:paid_cant_cancel) {
+    let(:paid_cant_cancel) do
       create(
         :competition, :registration_closed, :editable_registrations, :with_organizer, competitor_can_cancel: :unpaid
       )
-    }
-    let(:accepted_cant_cancel) {
+    end
+    let(:accepted_cant_cancel) do
       create(
         :competition, :registration_closed, :editable_registrations, :with_organizer, competitor_can_cancel: :not_accepted
       )
-    }
+    end
 
     it 'updates a registration' do
       update_request = build(
@@ -1155,34 +1155,34 @@ RSpec.describe 'API Registrations' do
       let(:waitlisted2) { create(:registration, :waiting_list, competition: competition) }
       let(:waitlisted3) { create(:registration, :waiting_list, competition: competition) }
 
-      let(:update_request1) {
+      let(:update_request1) do
         build(
           :update_request,
           user_id: waitlisted1.user_id,
           competition_id: waitlisted1.competition.id,
           competing: { 'status' => 'accepted' },
         )
-      }
+      end
 
-      let(:update_request2) {
+      let(:update_request2) do
         build(
           :update_request,
           user_id: waitlisted2.user_id,
           competition_id: waitlisted2.competition.id,
           competing: { 'status' => 'accepted' },
         )
-      }
+      end
 
-      let(:update_request3) {
+      let(:update_request3) do
         build(
           :update_request,
           user_id: waitlisted3.user_id,
           competition_id: waitlisted3.competition.id,
           competing: { 'status' => 'accepted' },
         )
-      }
+      end
 
-      let(:bulk_update_request) {
+      let(:bulk_update_request) do
         build(
           :bulk_update_request,
           user_ids: [waitlisted1.user_id],
@@ -1190,7 +1190,7 @@ RSpec.describe 'API Registrations' do
           competition_id: competition.id,
           requests: [update_request1, update_request2, update_request3],
         )
-      }
+      end
 
       let(:headers) { { 'Authorization' => bulk_update_request['jwt_token'] } }
 
@@ -1344,14 +1344,14 @@ RSpec.describe 'API Registrations' do
   end
 
   describe 'GET #payment_denomination' do
-    let(:competition) {
+    let(:competition) do
       create(:competition,
              :registration_open,
              :with_organizer,
              :stripe_connected,
              currency_code: "SEK",
              base_entry_fee_lowest_denomination: 1500)
-    }
+    end
     let(:reg) { create(:registration, :pending, competition: competition) }
     let(:headers) { { 'Authorization' => fetch_jwt_token(reg.user_id) } }
 
@@ -1373,11 +1373,11 @@ RSpec.describe 'API Registrations' do
   end
 
   describe 'PATCH #bulk_accept' do
-    let(:auto_accept_comp) {
+    let(:auto_accept_comp) do
       create(
         :competition, :auto_accept, :registration_open, :with_organizer, :with_competitor_limit, competitor_limit: 10, auto_accept_disable_threshold: nil
       )
-    }
+    end
 
     before do
       create_list(:registration, 5, :accepted, competition: auto_accept_comp)
