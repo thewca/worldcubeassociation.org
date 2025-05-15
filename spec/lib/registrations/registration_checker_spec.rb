@@ -262,6 +262,19 @@ RSpec.describe Registrations::RegistrationChecker do
         }.not_to raise_error
       end
 
+      it 'competitor cant register more events than the events_per_registration_limit' do
+        registration_request = build(
+          :registration_request, events: %w[333 222 444 555 666 777], competition_id: event_limit_comp.id, user_id: default_user.id
+        )
+
+        expect {
+          Registrations::RegistrationChecker.create_registration_allowed!(registration_request, User.find(registration_request['user_id']), event_limit_comp)
+        }.to raise_error(WcaExceptions::RegistrationError) do |error|
+          expect(error.status).to eq(:unprocessable_entity)
+          expect(error.error).to eq(Registrations::ErrorCodes::INVALID_EVENT_SELECTION)
+        end
+      end
+      
       it 'competitor can exceed event limit if event_restrictions not enforced' do
         unenforced_event_limit_comp = create(
           :competition,
@@ -285,7 +298,7 @@ RSpec.describe Registrations::RegistrationChecker do
 
       it 'organizer cant register more events than the events_per_registration_limit' do
         registration_request = build(
-          :registration_request, events: %w[333 222 444 555 666 777], competition_id: event_limit_comp.id, user_id: default_user.id
+          :registration_request, events: %w[333 222 444 555 666 777], competition_id: event_limit_comp.id, user_id: event_limit_comp.delegates.first.id
         )
 
         expect {
