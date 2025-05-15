@@ -345,9 +345,6 @@ RSpec/StubbedMock:
 RSpec/SortMetadata:
   Enabled: false
 
-RSpec/ScatteredSetup:
-  Enabled: false
-
 RSpec/NamedSubject:
   Enabled: false
 
