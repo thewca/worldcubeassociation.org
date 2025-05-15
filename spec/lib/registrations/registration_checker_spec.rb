@@ -274,7 +274,7 @@ RSpec.describe Registrations::RegistrationChecker do
           expect(error.error).to eq(Registrations::ErrorCodes::INVALID_EVENT_SELECTION)
         end
       end
-      
+
       it 'competitor can exceed event limit if event_restrictions not enforced' do
         unenforced_event_limit_comp = create(
           :competition,
