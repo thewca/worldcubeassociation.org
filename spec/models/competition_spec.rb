@@ -1762,7 +1762,7 @@ RSpec.describe Competition do
       comp = create(:competition, competitor_limit: 10)
       create_list(:registration, 6, :accepted, competition: comp)
       comp.newcomer_month_reserved_spots = 5
-      expect(comp).to be_invalid
+      expect(comp).not_to be_valid
       expect(comp.errors.messages[:newcomer_month_reserved_spots]).to include('Desired newcomer month reserved spots exceeds number of spots reservable')
     end
   end

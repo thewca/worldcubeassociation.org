@@ -86,7 +86,7 @@ RSpec.describe Qualification do
         'whenDate' => '2021-06-01',
       }
       qualification = Qualification.load(input)
-      expect(qualification).to be_invalid
+      expect(qualification).not_to be_valid
     end
 
     it "requires date" do
@@ -96,7 +96,7 @@ RSpec.describe Qualification do
         'level' => 1000,
       }
       qualification = Qualification.load(input)
-      expect(qualification).to be_invalid
+      expect(qualification).not_to be_valid
     end
 
     it "requires type" do
@@ -106,7 +106,7 @@ RSpec.describe Qualification do
         'whenDate' => '2021-06-01',
       }
       qualification = Qualification.load(input)
-      expect(qualification).to be_invalid
+      expect(qualification).not_to be_valid
     end
 
     it "parses correctly" do
@@ -245,7 +245,7 @@ RSpec.describe Qualification do
         'whenDate' => '2021-06-01',
       }
       qualification = Qualification.load(input)
-      expect(qualification).to be_invalid
+      expect(qualification).not_to be_valid
     end
 
     it "requires date" do
@@ -255,7 +255,7 @@ RSpec.describe Qualification do
         'level' => 1000,
       }
       qualification = Qualification.load(input)
-      expect(qualification).to be_invalid
+      expect(qualification).not_to be_valid
     end
 
     it "requires type" do
@@ -265,7 +265,7 @@ RSpec.describe Qualification do
         'whenDate' => '2021-06-01',
       }
       qualification = Qualification.load(input)
-      expect(qualification).to be_invalid
+      expect(qualification).not_to be_valid
     end
 
     it "parses correctly" do

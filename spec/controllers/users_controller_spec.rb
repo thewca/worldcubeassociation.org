@@ -50,7 +50,7 @@ RSpec.describe UsersController do
 
       patch :update, params: { id: user, user: { claiming_wca_id: true, unconfirmed_wca_id: person.wca_id, delegate_id_to_handle_wca_id_claim: delegate.id } }
       new_user = assigns(:user)
-      expect(new_user).to be_invalid
+      expect(new_user).not_to be_valid
       expect(user.reload.unconfirmed_wca_id).to be_nil
     end
   end
