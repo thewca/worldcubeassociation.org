@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe RoleChangeMailer, type: :mailer do
+RSpec.describe RoleChangeMailer do
   describe 'notify_role_start for delegate probation' do
     let(:user_who_made_the_change) { create(:user) }
     let(:senior_delegate) { create(:senior_delegate_role) }

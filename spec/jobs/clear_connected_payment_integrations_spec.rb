@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe ClearConnectedPaymentIntegrations, type: :job do
+RSpec.describe ClearConnectedPaymentIntegrations do
   describe '#perform' do
     it 'does not get disconnected if younger than disconnect_delay' do
       competition = create(:competition, :payment_disconnect_delay_not_elapsed, :stripe_connected)

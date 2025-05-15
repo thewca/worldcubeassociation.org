@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe "Incidents management", type: :request do
+RSpec.describe "Incidents management" do
   let(:incident) { create(:sent_incident, created_at: Time.now) }
   let(:valid_attributes) {
     {

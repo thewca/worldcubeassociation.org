@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe "Regional Organizations management", type: :request do
+RSpec.describe "Regional Organizations management" do
   let(:regional_organization) { create(:regional_organization, created_at: Time.now) }
   let(:valid_attributes) {
     {

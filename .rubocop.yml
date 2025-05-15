@@ -375,5 +375,3 @@ RSpec/BeEmpty:
 RSpecRails/NegationBeValid:
   Enabled: false
 
-RSpecRails/InferredSpecType:
-  Enabled: false

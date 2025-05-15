@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe AdminController, type: :controller do
+RSpec.describe AdminController do
   describe 'merge_people' do
     before { sign_in create :admin }
 
