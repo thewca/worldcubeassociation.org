@@ -306,9 +306,6 @@ RSpec/MatchArray:
 RSpec/DescribedClass:
   Enabled: false
 
-RSpec/VariableName:
-  Enabled: false
-
 RSpec/RepeatedDescription:
   Enabled: false
 
