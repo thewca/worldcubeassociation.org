@@ -1558,7 +1558,7 @@ class Competition < ApplicationRecord
       rank_symbol = :"ranks_#{sort_by}"
       second_rank_symbol = :"ranks_#{sort_by_second}"
 
-      sorted_users = users_with_rankings.sort_by { |user|
+      sorted_users = users_with_rankings.sort_by do |user|
         # using '.find_by(event: ...)' fires another SQL query *despite* the ranks being pre-loaded :facepalm:
         rank = user.send(rank_symbol).find { |r| r.event == event }
         second_rank = user.send(second_rank_symbol).find { |r| r.event == event }
@@ -1572,11 +1572,11 @@ class Competition < ApplicationRecord
           second_rank&.world_rank || 0,
           user.name,
         ]
-      }
+      end
 
       prev_sorted_ranking = nil
 
-      sorted_rankings = sorted_users.map.with_index { |user, i|
+      sorted_rankings = sorted_users.map.with_index do |user, i|
         # see comment about .find vs .find_by above.
         single_ranking = user.ranks_single.find { |r| r.event == event }
         average_ranking = user.ranks_average.find { |r| r.event == event }
@@ -1612,7 +1612,7 @@ class Competition < ApplicationRecord
         )
 
         prev_sorted_ranking = sorted_ranking
-      }
+      end
 
       PsychSheet.new(
         sorted_rankings: sorted_rankings,

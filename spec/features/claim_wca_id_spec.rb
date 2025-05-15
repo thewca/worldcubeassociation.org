@@ -91,8 +91,8 @@ RSpec.feature "Claim WCA ID" do
       # the expected message for this is users.errors.wca_id_no_birthdate_html
       expect(page.find(".alert.alert-danger")).to have_content("We do not have a birthdate recorded for this WCA ID. Please contact the WCA Results Team")
       user.reload
-      expect(user.unconfirmed_wca_id).to be nil
-      expect(user.delegate_to_handle_wca_id_claim).to be nil
+      expect(user.unconfirmed_wca_id).to be_nil
+      expect(user.delegate_to_handle_wca_id_claim).to be_nil
     end
   end
 end
