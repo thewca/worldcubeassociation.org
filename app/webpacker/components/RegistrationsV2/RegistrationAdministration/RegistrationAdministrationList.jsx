@@ -442,17 +442,15 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
                 <ul>
                   {Object.entries(modalData).map(([key, value]) => (
                     <li key={key}>
-                      <>
-                        {key}
-                        {' - '}
-                        <b>Succeeded</b>
-                        {': '}
-                        {value.succeeded.toString()}
-                        {', '}
-                        <b>Info</b>
-                        {': '}
-                        {value.info}
-                      </>
+                      {key}
+                      {' - '}
+                      <b>Succeeded</b>
+                      {': '}
+                      {value.succeeded.toString()}
+                      {', '}
+                      <b>Info</b>
+                      {': '}
+                      {value.info}
                     </li>
                   ))}
                 </ul>
