@@ -348,9 +348,6 @@ RSpec/SortMetadata:
 RSpec/ScatteredSetup:
   Enabled: false
 
-RSpec/ExcessiveDocstringSpacing:
-  Enabled: false
-
 RSpec/NamedSubject:
   Enabled: false
 

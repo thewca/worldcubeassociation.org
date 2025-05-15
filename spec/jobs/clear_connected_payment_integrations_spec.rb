@@ -11,7 +11,7 @@ RSpec.describe ClearConnectedPaymentIntegrations, type: :job do
       expect(competition.competition_payment_integrations.count).to eq(1)
     end
 
-    it 'disconnects all integrations  older than disonnect_delay' do
+    it 'disconnects all integrations older than disonnect_delay' do
       competition1 = create(:competition, :payment_disconnect_delay_elapsed, :stripe_connected, :paypal_connected)
       competition2 = create(:competition, :payment_disconnect_delay_elapsed, :stripe_connected, :paypal_connected, id: "TestComp1")
       competition3 = create(:competition, :payment_disconnect_delay_elapsed, :paypal_connected, id: "TestComp2")
