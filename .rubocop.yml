@@ -330,9 +330,6 @@ RSpec/ExampleWording:
 RSpec/Focus:
   Enabled: false
 
-RSpec/ExpectInHook:
-  Enabled: false
-
 RSpec/MultipleDescribes:
   Enabled: false
 
