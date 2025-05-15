@@ -14,8 +14,8 @@ module Registrations
     REGISTRATION_STATES = [STATUS_ACCEPTED, STATUS_CANCELLED, STATUS_PENDING, STATUS_REJECTED, STATUS_WAITING_LIST].freeze # TODO: Change deleted to canceled when v1 is retired
     ADMIN_ONLY_STATES = [STATUS_PENDING, STATUS_WAITING_LIST, STATUS_ACCEPTED, STATUS_REJECTED].freeze # Only admins are allowed to change registration state to one of these states
 
-    def self.action_type(request, current_user_id)
-      self_updating = request[:user_id].to_i == current_user_id
+    def self.action_type(request, registration_user_id, current_user_id)
+      self_updating = registration_user_id == current_user_id
       status = request.dig('competing', 'status')
       if status == STATUS_CANCELLED
         return self_updating ? 'Competitor delete' : 'Admin delete'
@@ -44,7 +44,7 @@ module Registrations
     end
 
     def self.qualification_data(event, type, time, date)
-      raise ArgumentError.new("'type' may only contain the symbols `:single` or `:average`") unless [:single, :average].include?(type)
+      raise ArgumentError.new("'type' may only contain the symbols `:single` or `:average`") unless %i[single average].include?(type)
 
       {
         eventId: event,

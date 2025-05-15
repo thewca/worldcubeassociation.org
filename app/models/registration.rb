@@ -5,6 +5,12 @@ class Registration < ApplicationRecord
 
   COMMENT_CHARACTER_LIMIT = 240
   DEFAULT_GUEST_LIMIT = 99
+  AUTO_ACCEPT_ENTITY_ID = 'auto-accept'
+  SYSTEM_ENTITY_ID = 'system'
+  USER_ENTITY_ID = 'user'
+  # Live auto accept means that auto accept is triggered at the point where payment occurs
+  # As opposed to being manually triggered by an organizer hitting the "Bulk Auto Accept" button
+  LIVE_AUTO_ACCEPT_ENABLED = false
 
   scope :pending, -> { where(competing_status: 'pending') }
   scope :accepted, -> { where(competing_status: 'accepted') }
@@ -16,7 +22,7 @@ class Registration < ApplicationRecord
   scope :not_cancelled, -> { where.not(competing_status: 'cancelled') }
   scope :with_payments, -> { joins(:registration_payments).distinct }
   scope :wcif_ordered, -> { order(:id) }
-  scope :might_attend, -> { where(competing_status: ['accepted', 'waiting_list']) }
+  scope :might_attend, -> { where(competing_status: %w[accepted waiting_list]) }
 
   belongs_to :competition
   belongs_to :user, optional: true # A user may be deleted later. We only enforce validation directly on creation further down below.
@@ -66,8 +72,8 @@ class Registration < ApplicationRecord
     Rails.cache.delete(CacheAccess.registration_processing_cache_key(competition_id, user_id))
   end
 
-  def update_lanes!(params, acting_user)
-    Registrations::Lanes::Competing.update!(params, self, acting_user.id)
+  def update_lanes!(params, acting_entity_id)
+    Registrations::Lanes::Competing.update!(params, self, acting_entity_id)
   end
 
   def guest_limit
@@ -96,6 +102,10 @@ class Registration < ApplicationRecord
 
   def waitlisted?
     competing_status_waiting_list?
+  end
+
+  def waiting_list_leader?
+    competing_status_waiting_list? && waiting_list_position == 1
   end
 
   # Can NOT use a `has_one :waiting_list, through: :competition` association here, because
@@ -164,8 +174,30 @@ class Registration < ApplicationRecord
     )
   end
 
+  private def last_payment
+    if registration_payments.loaded?
+      registration_payments.max_by(&:created_at)
+    else
+      registration_payments.order(:created_at).last
+    end
+  end
+
   def last_payment_date
-    registration_payments.map(&:created_at).max
+    if registration_payments.loaded?
+      last_payment&.created_at
+    else
+      registration_payments.maximum(:created_at)
+    end
+  end
+
+  def last_payment_status
+    # Store this in a variable so we don't have to recompute over and over
+    most_recent_payment = self.last_payment
+
+    return nil if most_recent_payment.blank?
+    return "refund" if most_recent_payment.refunded_registration_payment_id?
+
+    most_recent_payment.receipt.determine_wca_status
   end
 
   def outstanding_entry_fees
@@ -237,7 +269,7 @@ class Registration < ApplicationRecord
 
   def registration_history
     registration_history_entries.map do |r|
-      changed_attributes = r.registration_history_changes.index_by(&:key).transform_values(&:parsed_value)
+      changed_attributes = r.registration_history_changes.index_by(&:key).transform_values(&:parsed_value).symbolize_keys
 
       {
         changed_attributes: changed_attributes,
@@ -249,10 +281,11 @@ class Registration < ApplicationRecord
     end
   end
 
-  def to_v2_json(admin: false, history: false, pii: false)
+  def to_v2_json(admin: false, pii: false)
     private_attributes = pii ? %w[dob email] : nil
 
     base_json = {
+      id: id,
       user: user.as_json(only: %w[id wca_id name gender country_iso2], methods: %w[country], include: [], private_attributes: private_attributes),
       user_id: user_id,
       competing: {
@@ -264,9 +297,9 @@ class Registration < ApplicationRecord
         base_json.deep_merge!({
                                 payment: {
                                   has_paid: outstanding_entry_fees <= 0,
-                                  payment_statuses: registration_payments.sort_by(&:created_at).reverse.map(&:payment_status),
-                                  payment_amount_iso: paid_entry_fees.cents,
-                                  payment_amount_human_readable: "#{paid_entry_fees.format} (#{paid_entry_fees.currency.name})",
+                                  payment_status: last_payment_status,
+                                  paid_amount_iso: paid_entry_fees.cents,
+                                  currency_code: paid_entry_fees.currency.iso_code,
                                   updated_at: last_payment_date,
                                 },
                               })
@@ -281,11 +314,6 @@ class Registration < ApplicationRecord
                               },
                             })
       base_json[:competing][:waiting_list_position] = waiting_list_position if competing_status_waiting_list?
-    end
-    if history
-      base_json.deep_merge!({
-                              history: registration_history,
-                            })
     end
     base_json
   end
@@ -306,11 +334,11 @@ class Registration < ApplicationRecord
 
   def self.wcif_json_schema
     {
-      "type" => ["object", "null"], # NOTE: for now there may be WCIF persons without registration.
+      "type" => %w[object null], # NOTE: for now there may be WCIF persons without registration.
       "properties" => {
         "wcaRegistrationId" => { "type" => "integer" },
         "eventIds" => { "type" => "array", "items" => { "type" => "string", "enum" => Event.pluck(:id) } },
-        "status" => { "type" => "string", "enum" => %w(accepted deleted pending) },
+        "status" => { "type" => "string", "enum" => %w[accepted deleted pending] },
         "guests" => { "type" => "integer" },
         "comments" => { "type" => "string" },
         "administrativeNotes" => { "type" => "string" },
@@ -375,7 +403,7 @@ class Registration < ApplicationRecord
 
   delegate :allow_registration_without_qualification?, to: :competition, allow_nil: true
 
-  strip_attributes only: [:comments, :administrative_notes]
+  strip_attributes only: %i[comments administrative_notes]
 
   validates :comments, length: { maximum: COMMENT_CHARACTER_LIMIT, frontend_code: Registrations::ErrorCodes::USER_COMMENT_TOO_LONG },
                        presence: { message: I18n.t('registrations.errors.cannot_register_without_comment'), if: :force_comment?, frontend_code: Registrations::ErrorCodes::REQUIRED_COMMENT_MISSING }
@@ -415,10 +443,10 @@ class Registration < ApplicationRecord
 
   delegate :newcomer_month_eligible?, to: :user
 
-  validate :cannot_exceed_newcomer_limit, if: [
-    :trying_to_accept?,
-    :competitor_limit_enabled?,
-    :enforce_newcomer_month_reservations?,
+  validate :cannot_exceed_newcomer_limit, if: %i[
+    trying_to_accept?
+    competitor_limit_enabled?
+    enforce_newcomer_month_reservations?
   ], unless: :newcomer_month_eligible?
 
   private def cannot_exceed_newcomer_limit
@@ -435,18 +463,19 @@ class Registration < ApplicationRecord
 
   delegate :competitor_limit_enabled?, :enforce_newcomer_month_reservations?, to: :competition
 
-  validate :cannot_exceed_competitor_limit, if: [:trying_to_accept?, :competitor_limit_enabled?]
+  validate :cannot_exceed_competitor_limit, if: %i[trying_to_accept? competitor_limit_enabled?]
   private def cannot_exceed_competitor_limit
     return unless competition.registrations.accepted_and_competing_count >= competition.competitor_limit
 
     errors.add(
       :competing_status,
       :exceeding_competitor_limit,
+      message: I18n.t('registrations.errors.exceeding_competitor_limit'),
       frontend_code: Registrations::ErrorCodes::COMPETITOR_LIMIT_REACHED,
     )
   end
 
-  validate :only_one_accepted_per_series, if: [:part_of_competition_series?, :trying_to_accept?]
+  validate :only_one_accepted_per_series, if: %i[part_of_competition_series? trying_to_accept?]
   private def only_one_accepted_per_series
     return unless series_sibling_registrations.accepted.any?
 
@@ -476,7 +505,7 @@ class Registration < ApplicationRecord
     competing_status_changed? && (competing_status_cancelled? || competing_status_rejected?)
   end
 
-  validate :not_changing_events_when_cancelling, if: [:trying_to_cancel?, :tracked_event_ids?, :competition_events_changed?]
+  validate :not_changing_events_when_cancelling, if: %i[trying_to_cancel? tracked_event_ids? competition_events_changed?]
   private def not_changing_events_when_cancelling
     errors.add(:competition_events, :cannot_change_events_when_cancelling, message: I18n.t('registrations.errors.cannot_change_events_when_cancelling'), frontend_code: Registrations::ErrorCodes::INVALID_REQUEST_DATA)
   end
@@ -514,11 +543,93 @@ class Registration < ApplicationRecord
   end
 
   DEFAULT_SERIALIZE_OPTIONS = {
-    only: ["id", "competition_id", "user_id"],
+    only: %w[id competition_id user_id],
     methods: ["event_ids"],
   }.freeze
 
   def serializable_hash(options = nil)
     super(DEFAULT_SERIALIZE_OPTIONS.merge(options || {}))
+  end
+
+  def self.bulk_auto_accept(competition)
+    if competition.waiting_list.present?
+      competition.registrations
+                 .find(competition.waiting_list.entries)
+                 .each(&:attempt_auto_accept)
+    end
+
+    sorted_pending_registrations = competition
+                                   .registrations
+                                   .competing_status_pending
+                                   .with_payments
+                                   .sort_by { |registration| registration.last_positive_payment.updated_at }
+
+    sorted_pending_registrations.each(&:attempt_auto_accept)
+  end
+
+  def last_positive_payment
+    registration_payments
+      .where.not(amount_lowest_denomination: ..0)
+      .order(updated_at: :desc)
+      .first
+  end
+
+  delegate :auto_accept_registrations, to: :competition
+
+  def auto_accept_in_current_env?
+    !(Rails.env.production? && EnvConfig.WCA_LIVE_SITE?)
+  end
+
+  def attempt_auto_accept
+    return false unless auto_accept_in_current_env?
+
+    failure_reason = auto_accept_failure_reason
+    if failure_reason.present?
+      log_auto_accept_failure(failure_reason)
+      return false
+    end
+
+    update_payload = build_auto_accept_payload
+    auto_accepted_registration = Registrations::RegistrationChecker.apply_payload(self, update_payload, clone: false)
+
+    if auto_accepted_registration.valid?
+      update_lanes!(
+        update_payload,
+        AUTO_ACCEPT_ENTITY_ID,
+      )
+      true
+    else
+      log_auto_accept_failure(auto_accepted_registration.errors.messages.values.flatten)
+      false
+    end
+  end
+
+  private def auto_accept_failure_reason
+    return Registrations::ErrorCodes::OUTSTANDING_FEES if outstanding_entry_fees.positive?
+    return Registrations::ErrorCodes::AUTO_ACCEPT_NOT_ENABLED unless competition.auto_accept_registrations?
+    return Registrations::ErrorCodes::INELIGIBLE_FOR_AUTO_ACCEPT unless competing_status_pending? || waiting_list_leader?
+    return Registrations::ErrorCodes::AUTO_ACCEPT_DISABLE_THRESHOLD if competition.auto_accept_threshold_reached?
+
+    Registrations::ErrorCodes::REGISTRATION_NOT_OPEN unless competition.registration_currently_open?
+  end
+
+  private def log_auto_accept_failure(reason)
+    add_history_entry(
+      { auto_accept_failure_reasons: reason },
+      SYSTEM_ENTITY_ID,
+      AUTO_ACCEPT_ENTITY_ID,
+      'System reject',
+    )
+  end
+
+  private def build_auto_accept_payload
+    status = if competition.registration_full_and_accepted? && competing_status_pending?
+               Registrations::Helper::STATUS_WAITING_LIST
+             else
+               Registrations::Helper::STATUS_ACCEPTED
+             end
+
+    # String keys because this is mimicing a params payload
+    { 'user_id' => user_id, 'competing' => { 'status' => status } }
   end
 end

@@ -1,9 +1,11 @@
 # frozen_string_literal: true
 
 class SessionsController < Devise::SessionsController
+  rate_limit to: 10, within: 1.minute, only: %i[new create] if Rails.env.production?
+
   prepend_before_action :authenticate_with_two_factor,
                         if: -> { action_name == 'create' && two_factor_enabled? }
-  skip_before_action :require_no_authentication, only: [:new, :create]
+  skip_before_action :require_no_authentication, only: %i[new create]
 
   # Make sure this happens always before any before_action
   protect_from_forgery with: :exception, prepend: true

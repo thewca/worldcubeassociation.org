@@ -486,6 +486,12 @@ fr:
         registration_competition_events: Épreuves
         #original_hash: 84add5b
         email: Adresse e-mail
+        #original_hash: 6d7a30a
+        search: Recherche...
+        #original_hash: dfd309d
+        too_few_chars: Trop peu de caractères
+        #original_hash: b993b0c
+        no_results: Aucun résultat
       competition_tab:
         #original_hash: 4f9be05
         content: Contenu
@@ -862,10 +868,22 @@ fr:
           WRC.
         #original_hash: da39a3e
         wic_feedback_requested: ''
-        #original_hash: 0aca3b0
-        wic_incidents: >-
-          Listes numérotée des incidents pour lesquels vous souhaitez l'avis du
-          WIC.
+        #original_hash: 74a092e
+        wic_incidents_html: >-
+          Liste des numéros faisant référence à tout incident pour lequel vous
+          souhaiteriez obtenir un retour de la part du WIC. <br>
+          <strong>%{wic_incident_alert}</strong>
+        #original_hash: c4fd7a6
+        wic_incident_alert: >-
+          Si l'incident WIC est délicat (y compris, mais sans s'y limiter, les
+          crimes, le harcèlement, les agressions, etc.), veuillez l'exclure de
+          votre rapport et envoyer un email séparé au WIC. Pour les autres
+          incidents WIC, choisissez par défaut une version brève et anonyme de
+          l'incident et contactez le WIC en privé pour obtenir plus de détails.
+          Le WIC continuera à fournir un retour sur les versions anonymes à des
+          fins de sensibilisation générale. Pour tous les incidents WIC
+          impliquant un membre de la WCA, veuillez exclure tous les détails du
+          rapport et contacter le WIC en privé.
         #original_hash: f30abdc
         remarks: >-
           Parlez de tous les autres détails que vous souhaiteriez partager (ex :
@@ -1383,11 +1401,11 @@ fr:
       #original_hash: 312e799
       officers_description: >-
         Les dirigeants de la WCA gèrent les tâches liés au statut d'association
-        à but non lucratif de la WCA. Ces dirigeants sont élus par le Bureau de
-        la WCA. Le Directeur exécutif est le Directeur général de la WCA, le
-        Président préside toutes les réunions du Bureau, le Secrétaire assure le
-        maintien des documents de l'association et le Trésorier gère les
-        affaires financières de la WCA.
+        à but non lucratif de la WCA. Ces dirigeants sont élus par le Conseil
+        d'administration de la WCA. Le Directeur exécutif est le Directeur
+        général de la WCA, le Président préside toutes les réunions du Bureau,
+        le Secrétaire assure le maintien des documents de l'association et le
+        Trésorier gère les affaires financières de la WCA.
       #original_hash: 19d4bbb
       board_description: >-
         Le Conseil d'administration de la WCA est chargé de diriger
@@ -2242,13 +2260,15 @@ fr:
   user_groups:
     group_types:
       #original_hash: abd2828
-      board: Bureau des Directeurs de la WCA
+      board: Conseil d'administration de la WCA
       #original_hash: d79bd00
       officers: Dirigeants de la WCA
       #original_hash: 959d354
       translators: Traducteur·rice·s
   registrations:
     errors:
+      #original_hash: 8c2f29b
+      exceeding_competitor_limit: Limite de compétiteurs atteinte.
       #original_hash: 51c7156
       edit_deadline_passed: >-
         La date limite de modification des inscriptions est passée ! Les
@@ -2506,11 +2526,6 @@ fr:
       Veuillez consulter les informations relatives à la compétition pour
       connaître les modalités de paiement.
     refund_form:
-      hints:
-        #original_hash: 38c904c
-        refund_amount: >-
-          Le montant à rembourser au compétiteur. Il peut s'agir de n'importe
-          quelle valeur dans la limite du montant déjà payé.
       labels:
         #original_hash: 1cc5991
         refund_amount: Montant à rembourser
@@ -2622,7 +2637,7 @@ fr:
     registration_requirements: 'Conditions d''inscription pour la compétition :'
     registration_history:
       #original_hash: 342fa25
-      acting_user: Utilisateur faisant l'action
+      acting_user: Action faite par
       #original_hash: 97c89a4
       action: Action
       #original_hash: 8aa57de
@@ -2687,6 +2702,14 @@ fr:
         ajouter les inscriptions ayant lieu sur place.
       #original_hash: a11edb8
       add: Ajouter l'inscription
+      #original_hash: fd52980
+      ots_not_enabled: >-
+        Les inscriptions sont terminées et l'inscription sur place n'est pas
+        activée - vous devez d'abord modifier la compétition pour l'activer.
+      #original_hash: 61125b5
+      competition_over: >-
+        Il n'est pas possible d'ajouter des inscriptions sur place après la fin
+        de la compétition.
       errors:
         #original_hash: d6dcf5c
         already_registered: Cette personne a déjà une inscription.
@@ -3940,6 +3963,10 @@ fr:
         being_deleted: L'inscription est en cours de suppression...
         #original_hash: cbf13af
         update_confirm: Êtes-vous sûr·e de vouloir mettre à jour votre inscription?
+        #original_hash: 604da8b
+        organizer_update_confirm: >-
+          Êtes-vous sûr de vouloir mettre à jour l'inscription de l'utilisateur
+          ?
         #original_hash: 9b92912
         update_confirm_contact: >-
           Vous devez contacter les organisateurs pour mettre à jour votre
@@ -4151,6 +4178,24 @@ fr:
         '-6001': Le paiement WCA n’est pas activé pour cette compétition
         #original_hash: 092da51
         '-6002': Vous devez terminer votre inscription avant de pouvoir payer
+        #original_hash: ee2c9c4
+        '-6003': >-
+          Aucun paiement en suspens n'a été trouvé - ceci est probablement dû au
+          fait que vous avez déjà payé votre inscription.
+        #original_hash: 631576f
+        '-7001': Le compétiteur n'a pas encore réglé les frais d'inscription
+        #original_hash: 2aa350b
+        '-7002': L'acceptation automatique n'est pas activée pour cette compétition.
+        #original_hash: d191d2d
+        '-7003': >-
+          Ne peut accepter automatiquement que les inscriptions en attente ou la
+          première position sur la liste d'attente
+        #original_hash: 30fd93d
+        '-7004': La compétition a atteint le seuil auto_accept_disable_threshold
+        #original_hash: f2bb661
+        '-7005': >-
+          Impossible de procéder à une acceptation automatique lorsque les
+          inscriptions ne sont pas ouvertes
     errors:
       #original_hash: b14d060
       must_use_wca_registration: >-
@@ -4262,6 +4307,10 @@ fr:
       event_change_deadline_with_ots: >-
         La date limite pour mettre à jour les épreuves doit être placée durant
         la compétition si les inscriptions sur place sont acceptées.
+      #original_hash: e6400f7
+      on_the_spot_with_past_event_change_deadline: >-
+        Impossible d'autoriser les inscriptions sur place si la date limite de
+        mise à jour des événements est dépassée.
       #original_hash: 5ae2437
       series_distance_km: 'La compétition est située trop loin de %{competition}.'
       #original_hash: 4a5d7c5
@@ -4724,11 +4773,27 @@ fr:
     #original_hash: 10bcdbd
     connect_wca_id: Associez votre ID WCA à votre compte !
   payments:
+    messages:
+      #original_hash: 2eac1cb
+      charge_refunded: Le paiement a été remboursé
+      #original_hash: 1e1d219
+      charges_refunded: Tous les frais ont été remboursés
+    errors:
+      refund:
+        #original_hash: 66475ae
+        provider_disconnected: >-
+          Vous ne pouvez plus effectuer de remboursement pour cette compétition.
+          Veuillez utiliser le tableau de bord de votre fournisseur de paiement
+          pour le faire.
+        #original_hash: 73e93ee
+        refund_amount_too_high: >-
+          Vous n'êtes pas autorisé à rembourser plus que ce que le compétiteur a
+          payé.
+        #original_hash: 6368ffc
+        refund_amount_too_low: Le montant du remboursement doit être supérieur à zéro.
     labels:
-      #original_hash: cccf678
-      payment_statuses: Statuts de paiement
-      #original_hash: 312b6b6
-      available_refunds: Remboursements disponibles
+      #original_hash: b6370d7
+      net_payment: Paiement net
       #original_hash: ef3cd45
       original_payment: Paiement initial
     payment_providers:
@@ -4829,11 +4894,6 @@ fr:
           primary_email: Adresse e-mail
         #original_hash: 08d2e98
         fallback_not_applicable: N/A
-    statuses:
-      #original_hash: c8fbda9
-      succeeded: Réussi
-      #original_hash: d6fbc7a
-      refund: Remboursé
   persons:
     index:
       #original_hash: 5934b4c
@@ -5259,7 +5319,7 @@ fr:
       board:
         #original_hash: 19d4bbb
         description: >-
-          Le conseil d'administration de la WCA est chargé de diriger
+          Le Conseil d'administration de la WCA est chargé de diriger
           l'organisation dans son ensemble et de remplir toutes les fonctions
           qui ne sont pas remplies par d'autres équipes et comités.
       users:
@@ -5422,8 +5482,8 @@ fr:
       private_information: Informations privées
       #original_hash: 87a1c7e
       private_information_disclaimer: >-
-        Les informations ci-dessous ne seront visibles que par le Bureau de la
-        WCA
+        Les informations ci-dessous ne seront visibles que par le Conseil
+        d'administration de la WCA
     errors:
       #original_hash: 08122c4
       end_date_after_start_date: ne peut pas être après "Reconnue jusqu'à"
@@ -5431,7 +5491,7 @@ fr:
       #original_hash: 60cdccc
       create_success: >-
         Demande soumise avec avec succès ! Merci de vérifier vos e-mails et
-        d'attendre que le Bureau des Directeurs de la WCA l'évalue.
+        d'attendre que le Conseil d'administration de la WCA l'évalue.
     delete:
       #original_hash: 6588652
       confirm_delete: >-
@@ -5442,7 +5502,6 @@ fr:
     title: Outils logiciels pour les compétitions WCA
     #original_hash: 6d2fe37
     wca_icon_text: Développés et maintenus par la WST
-    #original_hash: 6520873
     intro:
       #original_hash: 0c5fab5
       desc: >-
@@ -5562,6 +5621,7 @@ fr:
   logo:
     #original_hash: c72c969
     title: Logo de la WCA
+    #original_hash: 6520873
     intro: "Le logo de la WCA a été conçu par Justin Eastman, dans un concours de design en janvier\_2005. Nous avons aimé le logo en raison de son design, des couleurs et du fait qu’il ne montre pas spécifiquement un cube 3x3x3."
     headings:
       usage_guidelines:

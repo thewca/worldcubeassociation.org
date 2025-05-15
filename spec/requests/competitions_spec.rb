@@ -20,7 +20,7 @@ RSpec.describe "competitions" do
         it 'can set championship types' do
           expect(competition.confirmed?).to be false
 
-          update_params = build_competition_update(competition, championships: ["world", "_Europe"])
+          update_params = build_competition_update(competition, championships: %w[world _Europe])
           patch competition_path(competition), params: update_params, as: :json
 
           expect(response).to be_successful
@@ -124,7 +124,7 @@ RSpec.describe "competitions" do
         it 'can set championship types' do
           expect(competition.confirmed?).to be true
 
-          update_params = build_competition_update(competition, championships: ["world", "_Europe"])
+          update_params = build_competition_update(competition, championships: %w[world _Europe])
           patch competition_path(competition), params: update_params, as: :json
 
           expect(response).to be_successful
@@ -231,7 +231,7 @@ RSpec.describe "competitions" do
         it 'can set championship types' do
           expect(competition.confirmed?).to be false
 
-          update_params = build_competition_update(competition, championships: ["world", "_Europe"])
+          update_params = build_competition_update(competition, championships: %w[world _Europe])
           patch competition_path(competition), params: update_params, as: :json
 
           expect(response).to be_successful
@@ -335,7 +335,7 @@ RSpec.describe "competitions" do
         it 'cannot set championship types' do
           expect(competition.confirmed?).to be true
 
-          update_params = build_competition_update(competition, championships: ["world", "_Europe"])
+          update_params = build_competition_update(competition, championships: %w[world _Europe])
           patch competition_path(competition), params: update_params, as: :json
 
           expect(response).to have_http_status(:unprocessable_entity)

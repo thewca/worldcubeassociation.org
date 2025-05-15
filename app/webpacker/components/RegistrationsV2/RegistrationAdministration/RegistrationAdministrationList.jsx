@@ -3,7 +3,7 @@ import React, {
   useMemo, useReducer, useRef,
 } from 'react';
 import {
-  Accordion, Checkbox, Divider, Form, Header, Icon, Segment, Sticky,
+  Accordion, Button, Checkbox, Divider, Form, Header, Icon, Segment, Sticky,
 } from 'semantic-ui-react';
 import { getAllRegistrations } from '../api/registration/get/get_registrations';
 import RegistrationAdministrationSearch from './RegistrationAdministrationSearch';
@@ -13,6 +13,7 @@ import { useDispatch } from '../../../lib/providers/StoreProvider';
 import I18n from '../../../lib/i18n';
 import Loading from '../../Requests/Loading';
 import { bulkUpdateRegistrations } from '../api/registration/patch/update_registration';
+import bulkAutoAccept from '../api/registration/patch/bulk_auto_accept';
 import RegistrationAdministrationTable from './RegistrationsAdministrationTable';
 import useCheckboxState from '../../../lib/hooks/useCheckboxState';
 import useOrderedSet from '../../../lib/hooks/useOrderedSet';
@@ -89,6 +90,20 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
     },
   });
 
+  const { mutate: bulkAutoAcceptMutation, isPending: isAutoAccepting } = useMutation({
+    mutationFn: bulkAutoAccept,
+    onError: () => {
+      dispatchStore(showMessage(
+        'competitions.registration_v2.auto_accept.cant_bulk_auto_accept',
+        'negative',
+      ));
+    },
+    onSuccess: () => {
+      dispatchStore(showMessage('competitions.registration_v2.auto_accept.bulk_auto_accepted', 'positive'));
+      return refetch();
+    },
+  });
+
   const { mutate: updateRegistrationMutation, isPending: isMutating } = useMutation({
     mutationFn: bulkUpdateRegistrations,
     onError: (data) => {
@@ -148,15 +163,18 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
     const waitingSorted = waiting
       .toSorted((a, b) => a.competing.waiting_list_position - b.competing.waiting_list_position);
     updateRegistrationMutation({
-      competition_id: competitionInfo.id,
-      requests: [{
+      competitionId: competitionInfo.id,
+      payload: {
         competition_id: competitionInfo.id,
-        user_id: waitingSorted[result.source.index].user_id,
-        competing: {
-          waiting_list_position: waitingSorted[result.destination.index]
-            .competing.waiting_list_position,
-        },
-      }],
+        requests: [{
+          competition_id: competitionInfo.id,
+          user_id: waitingSorted[result.source.index].user_id,
+          competing: {
+            waiting_list_position: waitingSorted[result.destination.index]
+              .competing.waiting_list_position,
+          },
+        }],
+      },
     }, {
       onSuccess: () => {
         // We need to get the info for all Competitors if you change the waiting list position
@@ -395,7 +413,19 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
   );
 
   return (
-    <Segment loading={isMutating}>
+    <Segment loading={isMutating || isAutoAccepting}>
+      {competitionInfo.auto_accept_registrations && (
+        <Button
+          disabled={isAutoAccepting}
+          color="green"
+          onClick={() => bulkAutoAcceptMutation(competitionInfo.id)}
+        >
+          <Icon name="check" />
+          {' '}
+          {I18n.t('competitions.registration_v2.auto_accept.bulk_auto_accept')}
+        </Button>
+      )}
+
       <Form>
         <Form.Group unstackable widths="2">
           {Object.entries(expandableColumns).map(([id, name]) => (
@@ -415,7 +445,6 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
 
       <RegistrationAdministrationSearch
         partitionedRegistrations={partitionedRegistrations}
-        competitionId={competitionInfo.id}
         usingPayments={competitionInfo['using_payment_integrations?']}
         currencyCode={competitionInfo.currency_code}
       />

@@ -141,7 +141,7 @@ RSpec.describe Person, type: :model do
 
     context "when a foreigner does compete" do
       it "cannot gain a champion title" do
-        expect(fr_competitor.championship_podiums[:national].map(&:country_id)).to eq %w(France)
+        expect(fr_competitor.championship_podiums[:national].map(&:country_id)).to eq %w[France]
       end
 
       it "is ignored when computing others' position" do
@@ -160,7 +160,7 @@ RSpec.describe Person, type: :model do
       before { fr_competitor.update_using_sub_id! country_id: "USA" }
 
       it "includes championship titles related to the previous nationality" do
-        expect(fr_competitor.championship_podiums[:national].map(&:country_id)).to eq %w(France)
+        expect(fr_competitor.championship_podiums[:national].map(&:country_id)).to eq %w[France]
       end
 
       it "does no longer treat the person as eligible for championship title related to previous nationality" do

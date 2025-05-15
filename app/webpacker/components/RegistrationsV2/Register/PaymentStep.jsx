@@ -62,7 +62,7 @@ export default function PaymentStep({
     await elements.submit();
 
     // Create the PaymentIntent and obtain clientSecret
-    const data = await getPaymentTicket(competitionInfo, isoDonationAmount);
+    const data = await getPaymentTicket(registration.id, isoDonationAmount);
 
     const { client_secret: clientSecret } = data;
 
@@ -90,6 +90,7 @@ export default function PaymentStep({
 
     setIsLoading(false);
   };
+
   if (hasPassed(competitionInfo.registration_close)) {
     return (
       <Message color="red">{I18n.t('registrations.payment_form.errors.registration_closed')}</Message>

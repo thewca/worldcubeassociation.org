@@ -46,7 +46,7 @@ module AdvancementConditions
 
     def self.wcif_json_schema
       {
-        "type" => ["object", "null"],
+        "type" => %w[object null],
         "properties" => {
           "type" => { "type" => "string", "enum" => @@advancement_conditions.map(&:wcif_type) },
           "level" => { "type" => "integer" },

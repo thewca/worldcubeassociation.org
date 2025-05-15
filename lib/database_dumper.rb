@@ -40,7 +40,7 @@ module DatabaseDumper
     "competitions" => {
       where_clause: WHERE_VISIBLE_COMP,
       column_sanitizers: actions_to_column_sanitizers(
-        copy: %w(
+        copy: %w[
           id
           name
           name_reason
@@ -113,10 +113,10 @@ module DatabaseDumper
           auto_accept_disable_threshold
           newcomer_month_reserved_spots
           competitor_can_cancel
-        ),
-        db_default: %w(
+        ],
+        db_default: %w[
           connected_stripe_account_id
-        ),
+        ],
         fake_values: {
           "remarks" => "'remarks to the board here'",
         },
@@ -126,7 +126,7 @@ module DatabaseDumper
     "competition_media" => {
       where_clause: "WHERE status = 'accepted'",
       column_sanitizers: actions_to_column_sanitizers(
-        copy: %w(
+        copy: %w[
           id
           competition_id
           media_type
@@ -135,7 +135,7 @@ module DatabaseDumper
           submitted_at
           decided_at
           status
-        ),
+        ],
         fake_values: {
           "submitter_name" => "'mr. media submitter'",
           "submitter_comment" => "'a comment about this media'",
@@ -145,7 +145,7 @@ module DatabaseDumper
     }.freeze,
     "concise_average_results" => {
       column_sanitizers: actions_to_column_sanitizers(
-        copy: %w(
+        copy: %w[
           average
           continent_id
           country_id
@@ -156,12 +156,12 @@ module DatabaseDumper
           person_id
           value_and_id
           year
-        ),
+        ],
       ),
     }.freeze,
     "concise_single_results" => {
       column_sanitizers: actions_to_column_sanitizers(
-        copy: %w(
+        copy: %w[
           best
           continent_id
           country_id
@@ -172,46 +172,46 @@ module DatabaseDumper
           person_id
           value_and_id
           year
-        ),
+        ],
       ),
     }.freeze,
     "connected_paypal_accounts" => :skip_all_rows,
     "connected_stripe_accounts" => :skip_all_rows,
     "continents" => {
       column_sanitizers: actions_to_column_sanitizers(
-        copy: %w(
+        copy: %w[
           id
           latitude
           longitude
           name
           record_name
           zoom
-        ),
+        ],
       ),
     }.freeze,
     "countries" => {
       column_sanitizers: actions_to_column_sanitizers(
-        copy: %w(
+        copy: %w[
           id
           continent_id
           iso2
           name
-        ),
+        ],
       ),
     }.freeze,
     "events" => {
       column_sanitizers: actions_to_column_sanitizers(
-        copy: %w(
+        copy: %w[
           id
           format
           name
           rank
-        ),
+        ],
       ),
     }.freeze,
     "formats" => {
       column_sanitizers: actions_to_column_sanitizers(
-        copy: %w(
+        copy: %w[
           id
           expected_solve_count
           name
@@ -219,14 +219,16 @@ module DatabaseDumper
           sort_by_second
           trim_fastest_n
           trim_slowest_n
-        ),
+        ],
       ),
     }.freeze,
     "inbox_persons" => :skip_all_rows,
     "inbox_results" => :skip_all_rows,
+    "inbox_scramble_sets" => :skip_all_rows,
+    "inbox_scrambles" => :skip_all_rows,
     "persons" => {
       column_sanitizers: actions_to_column_sanitizers(
-        copy: %w(
+        copy: %w[
           id
           wca_id
           comments
@@ -234,11 +236,11 @@ module DatabaseDumper
           gender
           name
           sub_id
-        ),
-        db_default: %w(
+        ],
+        db_default: %w[
           comments
           incorrect_wca_id_claim_count
-        ),
+        ],
         fake_values: {
           "dob" => "'1954-12-04'",
         },
@@ -246,7 +248,7 @@ module DatabaseDumper
     }.freeze,
     "ranks_average" => {
       column_sanitizers: actions_to_column_sanitizers(
-        copy: %w(
+        copy: %w[
           id
           best
           continent_rank
@@ -254,12 +256,12 @@ module DatabaseDumper
           event_id
           person_id
           world_rank
-        ),
+        ],
       ),
     }.freeze,
     "ranks_single" => {
       column_sanitizers: actions_to_column_sanitizers(
-        copy: %w(
+        copy: %w[
           id
           best
           continent_rank
@@ -267,12 +269,12 @@ module DatabaseDumper
           event_id
           person_id
           world_rank
-        ),
+        ],
       ),
     }.freeze,
     "results" => {
       column_sanitizers: actions_to_column_sanitizers(
-        copy: %w(
+        copy: %w[
           id
           average
           best
@@ -292,13 +294,13 @@ module DatabaseDumper
           value3
           value4
           value5
-        ),
+        ],
       ),
     }.freeze,
     "rounds" => {
       where_clause: "JOIN competition_events ON competition_events.id = competition_event_id #{JOIN_WHERE_VISIBLE_COMP}",
       column_sanitizers: actions_to_column_sanitizers(
-        copy: %w(
+        copy: %w[
           id
           competition_event_id
           format_id
@@ -312,23 +314,23 @@ module DatabaseDumper
           created_at
           updated_at
           old_type
-        ),
+        ],
       ),
     }.freeze,
     "round_types" => {
       column_sanitizers: actions_to_column_sanitizers(
-        copy: %w(
+        copy: %w[
           id
           cell_name
           final
           name
           rank
-        ),
+        ],
       ),
     }.freeze,
     "scrambles" => {
       column_sanitizers: actions_to_column_sanitizers(
-        copy: %w(
+        copy: %w[
           competition_id
           event_id
           group_id
@@ -337,81 +339,93 @@ module DatabaseDumper
           scramble
           id
           scramble_num
-        ),
+        ],
       ),
     }.freeze,
     "active_storage_attachments" => :skip_all_rows,
     "active_storage_blobs" => :skip_all_rows,
     "active_storage_variant_records" => :skip_all_rows,
     "ar_internal_metadata" => :skip_all_rows,
+    "result_attempts" => {
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w[
+          id
+          value
+          attempt_number
+          result_id
+          created_at
+          updated_at
+        ],
+      ),
+    }.freeze,
     "competition_delegates" => {
       where_clause: JOIN_WHERE_VISIBLE_COMP,
       column_sanitizers: actions_to_column_sanitizers(
-        copy: %w(
+        copy: %w[
           id
           competition_id
           created_at
           delegate_id
           receive_registration_emails
           updated_at
-        ),
+        ],
       ),
     }.freeze,
     "competition_events" => {
       where_clause: JOIN_WHERE_VISIBLE_COMP,
       column_sanitizers: actions_to_column_sanitizers(
-        copy: %w(
+        copy: %w[
           id
           competition_id
           event_id
           fee_lowest_denomination
           qualification
-        ),
+        ],
       ),
     }.freeze,
     "competition_organizers" => {
       where_clause: JOIN_WHERE_VISIBLE_COMP,
       column_sanitizers: actions_to_column_sanitizers(
-        copy: %w(
+        copy: %w[
           id
           competition_id
           created_at
           organizer_id
           receive_registration_emails
           updated_at
-        ),
+        ],
       ),
     }.freeze,
     "competition_series" => {
       # One Series can be associated with many competitions, so any JOIN will inherently produce duplicates. Get rid of them by using GROUP BY.
       where_clause: "LEFT JOIN competitions ON competitions.competition_series_id=competition_series.id #{WHERE_VISIBLE_COMP} GROUP BY competition_series.id",
       column_sanitizers: actions_to_column_sanitizers(
-        copy: %w(
+        copy: %w[
           id
           wcif_id
           name
           short_name
           created_at
           updated_at
-        ),
+        ],
       ),
     }.freeze,
     "competition_tabs" => {
       where_clause: JOIN_WHERE_VISIBLE_COMP,
       column_sanitizers: actions_to_column_sanitizers(
-        copy: %w(
+        copy: %w[
           id
           competition_id
           content
           display_order
           name
-        ),
+        ],
       ),
     }.freeze,
     "competition_venues" => {
       where_clause: JOIN_WHERE_VISIBLE_COMP,
       column_sanitizers: actions_to_column_sanitizers(
-        copy: %w(
+        copy: %w[
           id
           competition_id
           wcif_id
@@ -422,13 +436,13 @@ module DatabaseDumper
           timezone_id
           created_at
           updated_at
-        ),
+        ],
       ),
     }.freeze,
     "venue_rooms" => {
       where_clause: "JOIN competition_venues ON competition_venues.id = competition_venue_id #{JOIN_WHERE_VISIBLE_COMP}",
       column_sanitizers: actions_to_column_sanitizers(
-        copy: %w(
+        copy: %w[
           id
           competition_venue_id
           wcif_id
@@ -436,7 +450,7 @@ module DatabaseDumper
           color
           created_at
           updated_at
-        ),
+        ],
       ),
     }.freeze,
     "live_results" => :skip_all_rows,
@@ -445,7 +459,7 @@ module DatabaseDumper
     "schedule_activities" => {
       where_clause: "WHERE (holder_type=\"ScheduleActivity\" AND holder_id IN (#{VISIBLE_ACTIVITY_IDS}) or id in (#{VISIBLE_ACTIVITY_IDS}))",
       column_sanitizers: actions_to_column_sanitizers(
-        copy: %w(
+        copy: %w[
           id
           holder_type
           holder_id
@@ -457,20 +471,20 @@ module DatabaseDumper
           scramble_set_id
           created_at
           updated_at
-        ),
+        ],
       ),
     }.freeze,
     "delegate_reports" => {
       where_clause: JOIN_WHERE_VISIBLE_COMP,
       column_sanitizers: actions_to_column_sanitizers(
-        copy: %w(
+        copy: %w[
           id
           version
           competition_id
           created_at
           updated_at
-        ),
-        db_default: %w(
+        ],
+        db_default: %w[
           summary
           equipment
           venue
@@ -489,7 +503,7 @@ module DatabaseDumper
           wrc_primary_user_id
           wrc_secondary_user_id
           reminder_sent_at
-        ),
+        ],
       ),
     }.freeze,
     "oauth_access_grants" => :skip_all_rows,
@@ -505,7 +519,7 @@ module DatabaseDumper
     "polls" => :skip_all_rows,
     "posts" => {
       column_sanitizers: actions_to_column_sanitizers(
-        copy: %w(
+        copy: %w[
           id
           author_id
           body
@@ -516,31 +530,31 @@ module DatabaseDumper
           title
           updated_at
           show_on_homepage
-        ),
+        ],
       ),
     }.freeze,
     "post_tags" => {
       where_clause: "JOIN posts ON posts.id=post_tags.post_id",
       column_sanitizers: actions_to_column_sanitizers(
-        copy: %w(
+        copy: %w[
           id
           post_id
           tag
-        ),
+        ],
       ),
     }.freeze,
     "preferred_formats" => {
       column_sanitizers: actions_to_column_sanitizers(
-        copy: %w(
+        copy: %w[
           event_id
           format_id
           ranking
-        ),
+        ],
       ),
     }.freeze,
     "regional_organizations" => {
       column_sanitizers: actions_to_column_sanitizers(
-        copy: %w(
+        copy: %w[
           id
           name
           country
@@ -549,7 +563,7 @@ module DatabaseDumper
           end_date
           created_at
           updated_at
-        ),
+        ],
         fake_values: {
           "email" => "'contact@regional-organization.org'",
           "address" => "'Street and Number, City, State, Postal code, Country'",
@@ -564,18 +578,18 @@ module DatabaseDumper
     "regional_records_lookup" => :skip_all_rows,
     "registration_competition_events" => {
       column_sanitizers: actions_to_column_sanitizers(
-        copy: %w(
+        copy: %w[
           id
           competition_event_id
           registration_id
-        ),
+        ],
       ),
     }.freeze,
     "registration_payments" => :skip_all_rows,
     "registrations" => {
       where_clause: JOIN_WHERE_VISIBLE_COMP,
       column_sanitizers: actions_to_column_sanitizers(
-        copy: %w(
+        copy: %w[
           id
           accepted_at
           accepted_by
@@ -590,8 +604,8 @@ module DatabaseDumper
           is_competing
           competing_status
           registered_at
-        ),
-        db_default: %w(ip),
+        ],
+        db_default: %w[ip],
         fake_values: {
           "comments" => "''", # Can't use :db_default here because comments does not have a default value.
           "administrative_notes" => "''", # Can't use :db_default here because administrative_notes does not have a default value.
@@ -602,14 +616,14 @@ module DatabaseDumper
     "registration_history_entries" => :skip_all_rows,
     "waiting_lists" => {
       column_sanitizers: actions_to_column_sanitizers(
-        copy: %w(
+        copy: %w[
           id
           holder_type
           holder_id
           entries
           created_at
           updated_at
-        ),
+        ],
       ),
     }.freeze,
     "sanity_checks" => :skip_all_rows,
@@ -621,18 +635,18 @@ module DatabaseDumper
     "starburst_announcements" => :skip_all_rows,
     "user_preferred_events" => {
       column_sanitizers: actions_to_column_sanitizers(
-        copy: %w(
+        copy: %w[
           id
           event_id
           user_id
-        ),
+        ],
       ),
     }.freeze,
     "user_groups" => {
       # groups have a self-referencing foreign key to their parent group, so we need to make sure that root groups are inserted first
       order_by_clause: "ORDER BY parent_group_id ASC",
       column_sanitizers: actions_to_column_sanitizers(
-        copy: %w(
+        copy: %w[
           id
           name
           group_type
@@ -643,66 +657,66 @@ module DatabaseDumper
           metadata_type
           created_at
           updated_at
-        ),
+        ],
       ),
     }.freeze,
     "groups_metadata_board" => {
       column_sanitizers: actions_to_column_sanitizers(
-        copy: %w(
+        copy: %w[
           id
           email
           created_at
           updated_at
-        ),
+        ],
       ),
     }.freeze,
     "groups_metadata_delegate_regions" => {
       column_sanitizers: actions_to_column_sanitizers(
-        copy: %w(
+        copy: %w[
           id
           email
           friendly_id
           created_at
           updated_at
-        ),
+        ],
       ),
     }.freeze,
     "groups_metadata_councils" => {
       column_sanitizers: actions_to_column_sanitizers(
-        copy: %w(
+        copy: %w[
           id
           email
           friendly_id
           created_at
           updated_at
-        ),
+        ],
       ),
     }.freeze,
     "groups_metadata_teams_committees" => {
       column_sanitizers: actions_to_column_sanitizers(
-        copy: %w(
+        copy: %w[
           id
           email
           friendly_id
           preferred_contact_mode
           created_at
           updated_at
-        ),
+        ],
       ),
     }.freeze,
     "groups_metadata_translators" => {
       column_sanitizers: actions_to_column_sanitizers(
-        copy: %w(
+        copy: %w[
           id
           locale
           created_at
           updated_at
-        ),
+        ],
       ),
     }.freeze,
     "users" => {
       column_sanitizers: actions_to_column_sanitizers(
-        copy: %w(
+        copy: %w[
           id
           current_avatar_id
           competition_notifications_enabled
@@ -723,8 +737,8 @@ module DatabaseDumper
           delegate_reports_region_id
           delegate_reports_region_type
           dummy_account
-        ),
-        db_default: %w(
+        ],
+        db_default: %w[
           confirmation_sent_at
           confirmation_token
           consumed_timestep
@@ -743,7 +757,7 @@ module DatabaseDumper
           unconfirmed_email
           session_validity_token
           otp_secret
-        ),
+        ],
         fake_values: {
           "dob" => "'1954-12-04'",
           "email" => "CONCAT(id, '@worldcubeassociation.org')",
@@ -753,7 +767,7 @@ module DatabaseDumper
     "user_avatars" => {
       where_clause: "WHERE status = 'approved'",
       column_sanitizers: actions_to_column_sanitizers(
-        copy: %w(
+        copy: %w[
           id
           user_id
           filename
@@ -767,74 +781,74 @@ module DatabaseDumper
           revoked_at
           created_at
           updated_at
-        ),
-        db_default: %w(
+        ],
+        db_default: %w[
           approved_by
           revoked_by
           revocation_reason
-        ),
+        ],
       ),
     },
     "locations" => :skip_all_rows,
     "incidents" => {
       column_sanitizers: actions_to_column_sanitizers(
-        copy: %w(id title public_summary digest_worthy resolved_at digest_sent_at created_at updated_at),
-        db_default: %w(private_description private_wrc_decision),
+        copy: %w[id title public_summary digest_worthy resolved_at digest_sent_at created_at updated_at],
+        db_default: %w[private_description private_wrc_decision],
       ),
     }.freeze,
     "incident_competitions" => {
       column_sanitizers: actions_to_column_sanitizers(
-        copy: %w(id incident_id competition_id),
-        db_default: %w(comments),
+        copy: %w[id incident_id competition_id],
+        db_default: %w[comments],
       ),
     }.freeze,
     "incident_tags" => {
       column_sanitizers: actions_to_column_sanitizers(
-        copy: %w(id incident_id tag),
+        copy: %w[id incident_id tag],
       ),
     }.freeze,
     "vote_options" => :skip_all_rows,
     "votes" => :skip_all_rows,
     "server_settings" => {
       column_sanitizers: actions_to_column_sanitizers(
-        copy: %w(
+        copy: %w[
           name
           value
           created_at
           updated_at
-        ),
+        ],
       ),
     }.freeze,
     "cronjob_statistics" => :skip_all_rows,
     "championships" => {
       where_clause: JOIN_WHERE_VISIBLE_COMP,
       column_sanitizers: actions_to_column_sanitizers(
-        copy: %w(
+        copy: %w[
           id
           competition_id
           championship_type
-        ),
+        ],
       ),
     }.freeze,
     "eligible_country_iso2s_for_championship" => {
       column_sanitizers: actions_to_column_sanitizers(
-        copy: %w(
+        copy: %w[
           championship_type
           eligible_country_iso2
-        ),
+        ],
       ),
     }.freeze,
     "wcif_extensions" => :skip_all_rows,
     "assignments" => {
       column_sanitizers: actions_to_column_sanitizers(
-        copy: %w(
+        copy: %w[
           id
           registration_id
           registration_type
           schedule_activity_id
           station_number
           assignment_code
-        ),
+        ],
       ),
     }.freeze,
     "paypal_records" => :skip_all_rows,
@@ -842,28 +856,29 @@ module DatabaseDumper
     "payment_intents" => :skip_all_rows,
     "stripe_webhook_events" => :skip_all_rows,
     "uploaded_jsons" => :skip_all_rows,
+    "scramble_file_uploads" => :skip_all_rows,
     "bookmarked_competitions" => {
       where_clause: JOIN_WHERE_VISIBLE_COMP,
       column_sanitizers: actions_to_column_sanitizers(
-        copy: %w(
+        copy: %w[
           id
           user_id
           competition_id
-        ),
+        ],
       ),
     }.freeze,
     "country_bands" => {
       column_sanitizers: actions_to_column_sanitizers(
-        copy: %w(
+        copy: %w[
           id
           number
           iso2
-        ),
+        ],
       ),
     }.freeze,
     "country_band_details" => {
       column_sanitizers: actions_to_column_sanitizers(
-        copy: %w(
+        copy: %w[
           id
           number
           start_date
@@ -872,13 +887,13 @@ module DatabaseDumper
           due_percent_registration_fee
           created_at
           updated_at
-        ),
+        ],
       ),
     }.freeze,
     "user_roles" => {
       where_clause: "JOIN user_groups ON user_groups.id=group_id WHERE NOT user_groups.is_hidden",
       column_sanitizers: actions_to_column_sanitizers(
-        copy: %w(
+        copy: %w[
           id
           user_id
           group_id
@@ -888,12 +903,12 @@ module DatabaseDumper
           metadata_type
           created_at
           updated_at
-        ),
+        ],
       ),
     }.freeze,
     "roles_metadata_delegate_regions" => {
       column_sanitizers: actions_to_column_sanitizers(
-        copy: %w(
+        copy: %w[
           id
           status
           location
@@ -902,37 +917,37 @@ module DatabaseDumper
           total_delegated
           created_at
           updated_at
-        ),
+        ],
       ),
     }.freeze,
     "roles_metadata_officers" => {
       column_sanitizers: actions_to_column_sanitizers(
-        copy: %w(
+        copy: %w[
           id
           status
           created_at
           updated_at
-        ),
+        ],
       ),
     }.freeze,
     "roles_metadata_councils" => {
       column_sanitizers: actions_to_column_sanitizers(
-        copy: %w(
+        copy: %w[
           id
           status
           created_at
           updated_at
-        ),
+        ],
       ),
     }.freeze,
     "roles_metadata_teams_committees" => {
       column_sanitizers: actions_to_column_sanitizers(
-        copy: %w(
+        copy: %w[
           id
           status
           created_at
           updated_at
-        ),
+        ],
       ),
     }.freeze,
     "roles_metadata_banned_competitors" => :skip_all_rows,
@@ -951,7 +966,7 @@ module DatabaseDumper
     "Results" => {
       source_table: "results",
       column_sanitizers: actions_to_column_sanitizers(
-        copy: %w(
+        copy: %w[
           pos
           best
           average
@@ -960,7 +975,7 @@ module DatabaseDumper
           value3
           value4
           value5
-        ),
+        ],
         fake_values: {
           "competitionId" => "competition_id",
           "eventId" => "event_id",
@@ -977,9 +992,9 @@ module DatabaseDumper
     "RanksSingle" => {
       source_table: "ranks_single",
       column_sanitizers: actions_to_column_sanitizers(
-        copy: %w(
+        copy: %w[
           best
-        ),
+        ],
         fake_values: {
           # Copy over column to keep backwards compatibility
           "personId" => "person_id",
@@ -993,9 +1008,9 @@ module DatabaseDumper
     "RanksAverage" => {
       source_table: "ranks_average",
       column_sanitizers: actions_to_column_sanitizers(
-        copy: %w(
+        copy: %w[
           best
-        ),
+        ],
         fake_values: {
           # Copy over column to keep backwards compatibility
           "personId" => "person_id",
@@ -1009,12 +1024,12 @@ module DatabaseDumper
     "RoundTypes" => {
       source_table: "round_types",
       column_sanitizers: actions_to_column_sanitizers(
-        copy: %w(
+        copy: %w[
           id
           final
           name
           rank
-        ),
+        ],
         fake_values: {
           # Copy over column to keep backwards compatibility
           "cellName" => "cell_name",
@@ -1024,12 +1039,12 @@ module DatabaseDumper
     "Events" => {
       source_table: "events",
       column_sanitizers: actions_to_column_sanitizers(
-        copy: %w(
+        copy: %w[
           id
           format
           name
           rank
-        ),
+        ],
         fake_values: {
           # Copy over column to keep backwards compatibility
           "cellName" => "name",
@@ -1039,7 +1054,7 @@ module DatabaseDumper
     "Formats" => {
       source_table: "formats",
       column_sanitizers: actions_to_column_sanitizers(
-        copy: %w(
+        copy: %w[
           id
           expected_solve_count
           name
@@ -1047,17 +1062,17 @@ module DatabaseDumper
           sort_by_second
           trim_fastest_n
           trim_slowest_n
-        ),
+        ],
       ),
     }.freeze,
     "Countries" => {
       source_table: "countries",
       column_sanitizers: actions_to_column_sanitizers(
-        copy: %w(
+        copy: %w[
           id
           iso2
           name
-        ),
+        ],
         fake_values: {
           "continentId" => "continent_id",
         }.freeze,
@@ -1066,13 +1081,13 @@ module DatabaseDumper
     "Continents" => {
       source_table: "continents",
       column_sanitizers: actions_to_column_sanitizers(
-        copy: %w(
+        copy: %w[
           id
           latitude
           longitude
           name
           zoom
-        ),
+        ],
         fake_values: {
           "recordName" => "record_name",
         }.freeze,
@@ -1081,10 +1096,10 @@ module DatabaseDumper
     "Persons" => {
       source_table: "persons",
       column_sanitizers: actions_to_column_sanitizers(
-        copy: %w(
+        copy: %w[
           name
           gender
-        ),
+        ],
         fake_values: {
           "id" => "wca_id",
           "subid" => "sub_id",
@@ -1096,7 +1111,7 @@ module DatabaseDumper
       source_table: "competitions",
       where_clause: PUBLIC_COMPETITION_JOIN,
       column_sanitizers: actions_to_column_sanitizers(
-        copy: %w(
+        copy: %w[
           id
           name
           information
@@ -1104,7 +1119,7 @@ module DatabaseDumper
           venue
           latitude
           longitude
-        ),
+        ],
         fake_values: {
           "cityName" => "city_name",
           "countryId" => "country_id",
@@ -1131,9 +1146,9 @@ module DatabaseDumper
     "Scrambles" => {
       source_table: "scrambles",
       column_sanitizers: actions_to_column_sanitizers(
-        copy: %w(
+        copy: %w[
           scramble
-        ),
+        ],
         fake_values: {
           "competitionId" => "competition_id",
           "eventId" => "event_id",
@@ -1153,28 +1168,28 @@ module DatabaseDumper
     "championships" => {
       where_clause: JOIN_WHERE_VISIBLE_COMP,
       column_sanitizers: actions_to_column_sanitizers(
-        copy: %w(
+        copy: %w[
           id
           competition_id
           championship_type
-        ),
+        ],
       ),
     }.freeze,
     "eligible_country_iso2s_for_championship" => {
       column_sanitizers: actions_to_column_sanitizers(
-        copy: %w(
+        copy: %w[
           championship_type
           eligible_country_iso2
-        ),
-        db_default: %w(
+        ],
+        db_default: %w[
           id
-        ),
+        ],
       ),
     }.freeze,
   }.freeze
 
   # NOTE: The parameter dump_config_name has to correspond exactly to the desired key in config/database.yml
-  def self.with_dumped_db(dump_config_name, dump_sanitizers, dump_ts_name = nil)
+  def self.with_dumped_db(dump_config_name, dump_sanitizers, dump_ts_name = nil, drop_db_after_dump: true)
     primary_db_config = ActiveRecord::Base.connection_db_config
 
     config = ActiveRecord::Base.configurations.configs_for(name: dump_config_name.to_s, include_hidden: true)
@@ -1223,14 +1238,14 @@ module DatabaseDumper
 
     yield dump_db_name
   ensure
-    ActiveRecord::Tasks::DatabaseTasks.drop config
+    ActiveRecord::Tasks::DatabaseTasks.drop config if drop_db_after_dump
 
     # Need to connect to primary database again because the operations above redirect the entire ActiveRecord connection
     ActiveRecord::Base.establish_connection(primary_db_config) if primary_db_config
   end
 
   def self.development_dump(dump_filename)
-    self.with_dumped_db(:developer_dump, DEV_SANITIZERS, DEV_TIMESTAMP_NAME) do |dump_db|
+    self.with_dumped_db(:developer_dump, DEV_SANITIZERS, DEV_TIMESTAMP_NAME, drop_db_after_dump: false) do |dump_db|
       LogTask.log_task "Running SQL dump to '#{dump_filename}'" do
         self.mysqldump(dump_db, dump_filename)
       end

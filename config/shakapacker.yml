@@ -67,6 +67,9 @@ test:
   # Make sure that asset paths are stable across browser runs
   cache_manifest: true
 
+  # Make sure that test assets don't interfere with the webpack-dev-server running in Docker
+  cache_path: tmp/cache/webpacker-test
+
 production:
   <<: *default
 

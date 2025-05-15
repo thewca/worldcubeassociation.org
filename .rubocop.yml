@@ -128,9 +128,6 @@ Style/Documentation:
 Style/MultilineBlockChain:
   Enabled: false
 
-Style/PercentLiteralDelimiters:
-  Enabled: false
-
 Style/RaiseArgs:
   EnforcedStyle: compact
 

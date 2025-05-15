@@ -7,8 +7,8 @@ SV = RV::ScramblesValidator
 
 RSpec.describe SV do
   context "on InboxResult and Result" do
-    let!(:competition1) { create(:competition, :past, event_ids: ["333oh", "333mbf"]) }
-    let!(:competition2) { create(:competition, :past, event_ids: ["222", "333bf", "333mbf"]) }
+    let!(:competition1) { create(:competition, :past, event_ids: %w[333oh 333mbf]) }
+    let!(:competition2) { create(:competition, :past, event_ids: %w[222 333bf 333mbf]) }
     let!(:competition3) { create(:competition, :past, event_ids: ["333fm"]) }
 
     # The idea behind this variable is the following: the validator can be applied

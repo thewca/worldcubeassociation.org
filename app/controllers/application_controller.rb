@@ -64,15 +64,15 @@ class ApplicationController < ActionController::Base
 
   before_action :configure_permitted_parameters, if: :devise_controller?
   protected def configure_permitted_parameters
-    devise_parameter_sanitizer.permit(:sign_up, keys: [
-      :name,
-      :email,
-      :dob,
-      :gender,
-      :country_iso2,
+    devise_parameter_sanitizer.permit(:sign_up, keys: %i[
+      name
+      email
+      dob
+      gender
+      country_iso2
     ] + User::CLAIM_WCA_ID_PARAMS)
-    devise_parameter_sanitizer.permit(:sign_in, keys: [:login, :otp_attempt])
-    devise_parameter_sanitizer.permit(:account_update, keys: [:name, :email])
+    devise_parameter_sanitizer.permit(:sign_in, keys: %i[login otp_attempt])
+    devise_parameter_sanitizer.permit(:account_update, keys: %i[name email])
   end
 
   # This method is called by devise after a successful login to know the redirect path

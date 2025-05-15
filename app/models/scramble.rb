@@ -15,8 +15,8 @@ class Scramble < ApplicationRecord
   end
 
   DEFAULT_SERIALIZE_OPTIONS = {
-    only: ["id", "competition_id", "event_id", "round_type_id", "group_id",
-           "is_extra", "scramble_num", "scramble"],
+    only: %w[id competition_id event_id round_type_id group_id
+             is_extra scramble_num scramble],
   }.freeze
 
   def serializable_hash(options = nil)

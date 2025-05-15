@@ -1,5 +1,4 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import _ from 'lodash';
+import { useMutation } from '@tanstack/react-query';
 import React, {
   useCallback, useEffect, useMemo, useState,
 } from 'react';
@@ -13,7 +12,6 @@ import {
   Popup,
   Segment,
 } from 'semantic-ui-react';
-import updateRegistration from '../api/registration/patch/update_registration';
 import submitEventRegistration from '../api/registration/post/submit_registration';
 import Processing from './Processing';
 import { contactCompetitionUrl, userPreferencesRoute } from '../../../lib/requests/routes.js.erb';
@@ -23,12 +21,22 @@ import { showMessage } from './RegistrationMessage';
 import I18n from '../../../lib/i18n';
 import I18nHTMLTranslate from '../../I18nHTMLTranslate';
 import { useConfirm } from '../../../lib/providers/ConfirmProvider';
-import { events, defaultGuestLimit } from '../../../lib/wca-data.js.erb';
+import { events, defaultGuestLimit, WCA_EVENT_IDS } from '../../../lib/wca-data.js.erb';
 import { eventsNotQualifiedFor, isQualifiedForEvent } from '../../../lib/helpers/qualifications';
 import { eventQualificationToString } from '../../../lib/utils/wcif';
 import { hasNotPassed } from '../../../lib/utils/dates';
 import { useRegistration } from '../lib/RegistrationProvider';
-import useSet from '../../../lib/hooks/useSet';
+import { useOrderedSetWrapper } from '../../../lib/hooks/useOrderedSet';
+import {
+  useFormInitialValue,
+  useFormObject,
+  useFormObjectState,
+  useFormSuccessHandler,
+  useHasFormValueChanged,
+} from '../../wca/FormBuilder/provider/FormObjectProvider';
+import { useInputUpdater } from '../../../lib/hooks/useInputState';
+import { useRegistrationMutationErrorHandler, useUpdateRegistrationMutation } from '../lib/mutations';
+import { isoMoneyToHumanReadable } from '../../../lib/helpers/money';
 
 const maxCommentLength = 240;
 
@@ -55,43 +63,31 @@ export default function CompetingStep({
   nextStep,
   competitionInfo,
   user,
-  preferredEvents,
   qualifications,
 }) {
-  const maxEvents = competitionInfo.events_per_registration_limit ?? Infinity;
   const {
     registration, isRegistered, hasPaid, isPolling, isProcessing, startPolling, refetchRegistration,
+    isPending, isWaitingList,
   } = useRegistration();
-  const dispatch = useDispatch();
 
+  const dispatch = useDispatch();
   const confirm = useConfirm();
 
-  const [comment, setComment] = useState('');
-  const initialSelectedEvents = competitionInfo.events_per_registration_limit ? [] : preferredEvents
-    .filter((event) => {
-      const preferredEventHeld = competitionInfo.event_ids.includes(event);
-      if (competitionInfo['uses_qualification?']) {
-        return preferredEventHeld
-          && isQualifiedForEvent(event, qualifications.wcif, qualifications.personalRecords);
-      }
-      return preferredEventHeld;
-    });
-  const selectedEventIds = useSet(initialSelectedEvents);
+  const [comment, setCommentRaw] = useFormObjectState('comment', ['competing']);
+  const setComment = useInputUpdater(setCommentRaw);
+
+  const [nativeEventIds, setNativeEventIds] = useFormObjectState('event_ids', ['competing']);
+  const selectedEventIds = useOrderedSetWrapper(nativeEventIds, setNativeEventIds, WCA_EVENT_IDS);
+
+  const [guests, setGuestsRaw] = useFormObjectState('guests');
+  const setGuests = useInputUpdater(setGuestsRaw, true);
+
+  const initialRegistrationStatus = useFormInitialValue('status', ['competing']);
+
+  const formState = useFormObject();
+
   // Don't set an error state before the user has interacted with the eventPicker
   const [hasInteracted, setHasInteracted] = useState(false);
-
-  const [guests, setGuests] = useState(0);
-
-  // using selectedEventIds.update in dependency array causes warnings
-  const { update: setSelectedEventIds } = selectedEventIds;
-
-  useEffect(() => {
-    if (isRegistered && registration.competing.registration_status !== 'cancelled') {
-      setComment(registration.competing.comment ?? '');
-      setSelectedEventIds(registration.competing.event_ids);
-      setGuests(registration.guests);
-    }
-  }, [isRegistered, registration, setSelectedEventIds]);
 
   useEffect(() => {
     if (isPolling && !isProcessing) {
@@ -100,62 +96,39 @@ export default function CompetingStep({
     }
   }, [isPolling, isProcessing, nextStep, refetchRegistration]);
 
-  const queryClient = useQueryClient();
-  const { mutate: updateRegistrationMutation, isPending: isUpdating } = useMutation({
-    mutationFn: updateRegistration,
-    onError: (data) => {
-      const { error } = data.json;
-      dispatch(showMessage(
-        `competitions.registration_v2.errors.${error}`,
-        'negative',
-      ));
-    },
-    onSuccess: (data) => {
-      queryClient.setQueryData(
-        ['registration', competitionInfo.id, user.id],
-        {
-          ...data.registration,
-          payment: registration.payment,
-        },
-      );
-      // Going from cancelled -> pending
-      if (registration.competing.registration_status === 'cancelled') {
-        // i18n-tasks-use t('registrations.flash.registered')
-        dispatch(showMessage('registrations.flash.registered', 'positive'));
-        // Not changing status
-      } else {
-        // i18n-tasks-use t('registrations.flash.updated')
-        dispatch(showMessage('registrations.flash.updated', 'positive'));
-      }
-      nextStep();
-    },
-  });
+  const formSuccess = useFormSuccessHandler();
+
+  const {
+    mutate: updateRegistrationMutation,
+    isPending: isUpdating,
+  } = useUpdateRegistrationMutation(competitionInfo, user, 'basic');
+
+  const onUpdateSuccess = useCallback((data) => {
+    formSuccess(data.registration);
+    nextStep();
+  }, [formSuccess, nextStep]);
+
+  const onRegistrationError = useRegistrationMutationErrorHandler();
 
   const { mutate: createRegistrationMutation, isLoading: isCreating } = useMutation({
     mutationFn: submitEventRegistration,
-    onError: (data) => {
-      const { error } = data.json;
-      dispatch(showMessage(
-        `competitions.registration_v2.errors.${error}`,
-        'negative',
-      ));
-    },
+    onError: onRegistrationError,
     onSuccess: () => {
       // We can't update the registration yet, because there might be more steps needed
       // And the Registration might still be processing
       dispatch(showMessage('registrations.flash.registered', 'positive'));
+      formSuccess();
       startPolling();
     },
   });
 
-  const hasEventsChanged = registration?.competing
-    && _.xor(registration.competing.event_ids, selectedEventIds.asArray).length > 0;
-  const hasCommentChanged = registration?.competing
-    && comment !== (registration.competing.comment ?? '');
-  const hasGuestsChanged = registration && guests !== registration.guests;
+  const hasEventsChanged = useHasFormValueChanged('event_ids', ['competing']);
+  const hasCommentChanged = useHasFormValueChanged('comment', ['competing']);
+  const hasGuestsChanged = useHasFormValueChanged('guests');
 
   const hasChanges = hasEventsChanged || hasCommentChanged || hasGuestsChanged;
 
+  const maxEvents = competitionInfo.events_per_registration_limit ?? Infinity;
   const eventsAreValid = selectedEventIds.size > 0 && selectedEventIds.size <= maxEvents;
 
   const attemptAction = useCallback(
@@ -182,37 +155,57 @@ export default function CompetingStep({
 
   const actionCreateRegistration = useCallback(() => {
     createRegistrationMutation({
-      user_id: user.id,
-      competition_id: competitionInfo.id,
-      competing: {
-        event_ids: selectedEventIds.asArray,
-        comment,
+      competitionId: competitionInfo.id,
+      payload: {
+        ...formState,
+        user_id: user.id,
+        competition_id: competitionInfo.id,
       },
-      guests,
     });
   }, [
     createRegistrationMutation,
+    formState,
     user.id,
     competitionInfo.id,
-    selectedEventIds.asArray,
-    comment,
-    guests,
   ]);
+
+  const canEditRegistration = useMemo(() => (
+    competitionInfo.allow_registration_edits || isPending || isWaitingList
+  ), [competitionInfo.allow_registration_edits, isPending, isWaitingList]);
 
   const actionUpdateRegistration = useCallback(() => {
     confirm({
-      content: I18n.t(competitionInfo.allow_registration_edits ? 'competitions.registration_v2.update.update_confirm' : 'competitions.registration_v2.update.update_confirm_contact'),
+      content: I18n.t(canEditRegistration ? 'competitions.registration_v2.update.update_confirm' : 'competitions.registration_v2.update.update_confirm_contact'),
     }).then(() => {
-      if (competitionInfo.allow_registration_edits) {
-        dispatch(showMessage('competitions.registration_v2.update.being_updated', 'basic'));
+      if (canEditRegistration) {
         updateRegistrationMutation({
-          user_id: registration.user_id,
-          competition_id: competitionInfo.id,
-          competing: {
-            comment: hasCommentChanged ? comment : undefined,
-            event_ids: hasEventsChanged ? selectedEventIds.asArray : undefined,
+          registrationId: registration.id,
+          payload: {
+            user_id: user.id,
+            competition_id: competitionInfo.id,
+            competing: {
+              comment: hasCommentChanged ? comment : undefined,
+              event_ids: hasEventsChanged ? selectedEventIds.asArray : undefined,
+            },
+            guests: hasGuestsChanged ? guests : undefined,
           },
-          guests,
+        }, {
+          onSuccess: (data, variables) => {
+            onUpdateSuccess(data);
+
+            const newCompetingStatus = variables.payload.competing?.registration_status
+              || data.registration.competing.registration_status;
+
+            if (initialRegistrationStatus === 'cancelled' && newCompetingStatus === 'pending') {
+              // Going from cancelled -> pending
+              // i18n-tasks-use t('registrations.flash.registered')
+              dispatch(showMessage('registrations.flash.registered', 'positive'));
+            } else {
+              // Not changing status
+              // i18n-tasks-use t('registrations.flash.updated')
+              dispatch(showMessage('registrations.flash.updated', 'positive'));
+            }
+          },
         });
       } else {
         const updateMessage = `\n${hasCommentChanged ? `Comment: ${comment}\n` : ''}${hasEventsChanged ? `Events: ${selectedEventIds.asArray.map((eventId) => events.byId[eventId].name).join(', ')}\n` : ''}${hasGuestsChanged ? `Guests: ${guests}\n` : ''}`;
@@ -227,33 +220,39 @@ export default function CompetingStep({
     nextStep,
     updateRegistrationMutation,
     competitionInfo,
-    registration?.user_id,
+    registration?.id,
+    user,
     hasCommentChanged,
     comment,
     hasEventsChanged,
     selectedEventIds.asArray,
     hasGuestsChanged,
     guests,
+    initialRegistrationStatus,
+    onUpdateSuccess,
+    canEditRegistration,
   ]);
 
   const actionReRegister = useCallback(() => {
     updateRegistrationMutation({
-      user_id: registration.user_id,
-      competition_id: competitionInfo.id,
-      competing: {
-        comment,
-        event_ids: selectedEventIds.asArray,
-        status: 'pending',
+      registrationId: registration.id,
+      payload: {
+        ...formState,
+        competing: {
+          ...formState.competing,
+          status: 'pending',
+        },
+        user_id: user.id,
+        competition_id: competitionInfo.id,
       },
-      guests,
-    });
+    }, { onSuccess: onUpdateSuccess });
   }, [
     updateRegistrationMutation,
-    registration?.user_id,
+    formState,
+    registration?.id,
+    user.id,
     competitionInfo.id,
-    comment,
-    selectedEventIds.asArray,
-    guests,
+    onUpdateSuccess,
   ]);
 
   const onEventClick = (eventId) => {
@@ -281,10 +280,10 @@ export default function CompetingStep({
     setHasInteracted(true);
   };
 
-  const shouldShowUpdateButton = isRegistered
-    && registration.competing.registration_status !== 'cancelled';
+  const [competingStatus] = useFormObjectState('registration_status', ['competing']);
 
-  const shouldShowReRegisterButton = registration?.competing?.registration_status === 'cancelled';
+  const shouldShowReRegisterButton = competingStatus === 'cancelled';
+  const shouldShowUpdateButton = isRegistered && !shouldShowReRegisterButton;
 
   const handleSubmit = useCallback((event) => {
     event.preventDefault();
@@ -322,7 +321,7 @@ export default function CompetingStep({
       <>
         {hasPaid && (
           <Message success>
-            {I18n.t('registrations.entry_fees_fully_paid', { paid: registration?.payment.payment_amount_human_readable })}
+            {I18n.t('registrations.entry_fees_fully_paid', { paid: isoMoneyToHumanReadable(registration.payment.paid_amount_iso, registration.payment.currency_code) })}
           </Message>
         )}
 
@@ -384,7 +383,7 @@ export default function CompetingStep({
             <Form.TextArea
               required={Boolean(competitionInfo.force_comment_in_registration)}
               maxLength={maxCommentLength}
-              onChange={(event, data) => setComment(data.value)}
+              onChange={setComment}
               value={comment}
               id="comment"
               error={competitionInfo.force_comment_in_registration && comment.trim().length === 0 && I18n.t('registrations.errors.cannot_register_without_comment')}
@@ -397,9 +396,7 @@ export default function CompetingStep({
                 id="guest-dropdown"
                 type="number"
                 value={guests}
-                onChange={(event, data) => {
-                  setGuests(Number.parseInt(data.value, 10));
-                }}
+                onChange={setGuests}
                 min="0"
                 max={guestLimit}
                 error={guestsRestricted && guests > guestLimit && I18n.t('competitions.competition_info.guest_limit', { count: guestLimit })}
@@ -412,9 +409,7 @@ export default function CompetingStep({
               <>
                 <Button
                   primary
-                  disabled={
-                        isUpdating || !hasChanges
-                      }
+                  disabled={isUpdating || !hasChanges}
                   type="submit"
                 >
                   {I18n.t('registrations.update')}
