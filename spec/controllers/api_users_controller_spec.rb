@@ -86,9 +86,9 @@ RSpec.describe Api::V0::UsersController do
     let!(:banned_user) { create(:user, :banned) }
     let!(:delegate_user) { create(:delegate_role, group_id: senior_delegate_role.group.id).user }
     let!(:organizer_user) { create(:user) }
-    let!(:competition) {
+    let!(:competition) do
       create(:competition, :confirmed, delegates: [delegate_user], organizers: [organizer_user])
-    }
+    end
     let!(:senior_delegate_role) { create(:senior_delegate_role) }
 
     it 'correctly returns user a normal users permission' do
@@ -172,7 +172,7 @@ RSpec.describe Api::V0::UsersController do
       json = response.parsed_body
       expect(json["can_administer_competitions"]["scope"]).to eq "*"
     end
-    
+
     it 'correctly returns delegates to be able to admin competitions they delegated' do
       sign_in delegate_user
       get :permissions
