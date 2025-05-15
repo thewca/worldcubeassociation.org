@@ -26,7 +26,7 @@ RSpec.describe Api::V0::UsersController do
       get :show_user_by_wca_id, params: { wca_id: "foo" }
       expect(response).to have_http_status :not_found
       json = response.parsed_body
-      expect(json["user"]).to be nil
+      expect(json["user"]).to be_nil
     end
 
     describe 'upcoming_competitions' do

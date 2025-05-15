@@ -546,7 +546,7 @@ RSpec.describe Registration do
       it 'removes from waiting list' do
         reg4.update_lanes!({ user_id: reg4.user.id, competing: { status: 'pending' } }.with_indifferent_access, reg4.user.id)
 
-        expect(reg4.waiting_list_position).to be(nil)
+        expect(reg4.waiting_list_position).to be_nil
         expect(waiting_list.entries.count).to eq(4)
       end
 
@@ -590,7 +590,7 @@ RSpec.describe Registration do
         reg = create(:registration, competition: competition)
         reg.update_lanes!({ user_id: reg.user.id, competing: { waiting_list_position: 3 } }.with_indifferent_access, reg.user.id)
 
-        expect(reg.waiting_list_position).to be(nil)
+        expect(reg.waiting_list_position).to be_nil
 
         expect(reg1.waiting_list_position).to eq(1)
         expect(reg2.waiting_list_position).to eq(2)
@@ -840,7 +840,7 @@ RSpec.describe Registration do
 
         reg.attempt_auto_accept
         expect(reg.reload.competing_status).to eq('pending')
-        expect(reg.waiting_list_position).to be(nil)
+        expect(reg.waiting_list_position).to be_nil
       end
     end
   end
