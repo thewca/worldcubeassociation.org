@@ -56,8 +56,9 @@ export default function ScrambleFiles({
     onError: (responseError) => setError(responseError.message),
   });
 
-  const uploadNewScramble = useCallback(async (ev) => {
-    const uploadPromises = ev.target.files.map(mutateAsync);
+  const uploadNewScramble = useCallback((ev) => {
+    const filesArr = Array.from(ev.target.files);
+    const uploadPromises = filesArr.map((f) => mutateAsync(f));
 
     return Promise.all(uploadPromises);
   }, [mutateAsync]);
