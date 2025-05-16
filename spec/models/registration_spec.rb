@@ -1005,7 +1005,7 @@ RSpec.describe Registration do
     end
 
     context 'when disable_threshold' do
-      let(:threshold_auto_accept_comp) {
+      let(:threshold_auto_accept_comp) do
         create(:competition, :auto_accept, :registration_open, :with_competitor_limit, auto_accept_disable_threshold: 9)
       end
 
