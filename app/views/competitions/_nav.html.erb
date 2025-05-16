@@ -271,7 +271,7 @@
         <%= alert :warning, message, note: true %>
       <% end %>
 
-      <% @competition.info.each do |field, message| %>
+      <% @competition.info_messages.each do |field, message| %>
         <%= alert :info, message, note: true %>
       <% end %>
 

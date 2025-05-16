@@ -637,7 +637,7 @@ class Competition < ApplicationRecord
     warnings
   end
 
-  def info
+  def info_messages
     info = {}
     info[:upload_results] = I18n.t('competitions.messages.upload_results') if !self.results_posted? && self.probably_over? && !self.cancelled?
     if self.in_progress? && !self.cancelled?
