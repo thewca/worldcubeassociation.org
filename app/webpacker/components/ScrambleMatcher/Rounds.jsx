@@ -4,7 +4,7 @@ import { activityCodeToName } from '@wca/helpers';
 import ScrambleMatch from './ScrambleMatch';
 import I18n from '../../lib/i18n';
 
-export default function Rounds({ wcifRounds, matchState, dispatchMatchState }) {
+export default function Rounds({ wcifRounds, matchState, moveRoundScrambleSet }) {
   const [selectedRoundId, setSelectedRoundId] = useState();
 
   const selectedRound = useMemo(
@@ -42,7 +42,7 @@ export default function Rounds({ wcifRounds, matchState, dispatchMatchState }) {
         <ScrambleMatch
           activeRound={selectedRound}
           matchState={matchState}
-          dispatchMatchState={dispatchMatchState}
+          moveRoundScrambleSet={moveRoundScrambleSet}
         />
       )}
     </>

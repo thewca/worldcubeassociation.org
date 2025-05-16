@@ -2,7 +2,7 @@ import React, { useMemo, useState } from 'react';
 import EventSelector from '../wca/EventSelector';
 import Rounds from './Rounds';
 
-export default function Events({ wcifEvents, matchState, dispatchMatchState }) {
+export default function Events({ wcifEvents, matchState, moveRoundScrambleSet }) {
   const [selectedEventId, setSelectedEventId] = useState();
 
   const eventList = useMemo(() => wcifEvents.map((e) => e.id), [wcifEvents]);
@@ -25,7 +25,7 @@ export default function Events({ wcifEvents, matchState, dispatchMatchState }) {
         <Rounds
           wcifRounds={selectedEvent.rounds}
           matchState={matchState}
-          dispatchMatchState={dispatchMatchState}
+          moveRoundScrambleSet={moveRoundScrambleSet}
         />
       )}
     </>

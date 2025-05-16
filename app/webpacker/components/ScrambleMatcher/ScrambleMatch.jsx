@@ -7,19 +7,17 @@ import { events, roundTypes } from '../../lib/wca-data.js.erb';
 export default function ScrambleMatch({
   activeRound,
   matchState,
-  dispatchMatchState,
+  moveRoundScrambleSet,
 }) {
   const { scrambleSetCount } = activeRound;
-  const scrambleSets = matchState.scrambleSets?.[activeRound.id] ?? [];
+  const scrambleSets = matchState[activeRound.id] ?? [];
 
   const handleOnDragEnd = (result) => {
     const { destination, source } = result;
-    if (!destination) return;
 
-    const updated = Array.from(scrambleSets);
-    const [moved] = updated.splice(source.index, 1);
-    updated.splice(destination.index, 0, moved);
-    dispatchMatchState({ type: 'updateScrambles', scrambleSets: updated, roundId: activeRound.id });
+    if (destination) {
+      moveRoundScrambleSet(activeRound.id, source.index, destination.index);
+    }
   };
 
   /* eslint-disable react/jsx-props-no-spreading */
@@ -43,6 +41,7 @@ export default function ScrambleMatch({
 
                   return (
                     <Table.Row
+                      key={scramble.id}
                       negative={hasError || isExtra}
                     >
                       <Table.Cell textAlign="right">

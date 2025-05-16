@@ -37,6 +37,7 @@ export default function ScrambleFiles({
     queryKey: ['scramble-files', competitionId],
     queryFn: () => listScrambleFiles(competitionId),
     initialData: initialScrambleFiles,
+    refetchOnMount: true,
   });
 
   const { mutateAsync, isPending } = useMutation({
