@@ -1985,7 +1985,7 @@ RSpec.describe Registrations::RegistrationChecker do
       let(:registration_a) { create(:registration, :accepted) }
 
       let(:series) { create(:competition_series) }
-      let(:competition_a) { registrationA.competition }
+      let(:competition_a) { registration_a.competition }
       let(:competition_b) do
         create(
           :competition, :registration_open, :editable_registrations, :with_organizer, competition_series: series, series_base: competition_a
