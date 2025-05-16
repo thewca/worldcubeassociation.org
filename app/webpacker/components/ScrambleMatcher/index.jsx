@@ -5,22 +5,20 @@ import {
 import _ from 'lodash';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import WCAQueryClientProvider from '../../lib/providers/WCAQueryClientProvider';
-import JSONList from './JSONList';
+import ScrambleFilesList from './ScrambleFilesList';
 import Events from './Events';
-import UploadScramblesButton from './UploadScramblesButton';
 import { fetchJsonOrError } from '../../lib/requests/fetchWithAuthenticityToken';
 import { competitionScrambleFilesUrl } from '../../lib/requests/routes.js.erb';
-import Loading from '../Requests/Loading';
 
 function scrambleMatchReducer(state, action) {
   switch (action.type) {
-    case 'setScrambles': {
+    case 'addScrambleFile': {
       return {
         ...state,
         scrambleSets: action.scrambleSets,
       };
     }
-    case 'updateScrambles': {
+    case 'updateScrambleSet': {
       const updated = _.cloneDeep(state.scrambleSets);
       updated[action.roundId] = action.scrambleSets;
       return {
@@ -32,19 +30,6 @@ function scrambleMatchReducer(state, action) {
       throw new Error(`Unhandled action type: ${action.type}`);
     }
   }
-}
-
-function matchScrambles(scrambleFile) {
-  const scrambleSets = {};
-  scrambleFile.inbox_scramble_sets.forEach((set) => {
-    const match = scrambleSets[set.wcif_id];
-    if (match) {
-      scrambleSets[set.wcif_id] = [...match, set];
-    } else {
-      scrambleSets[set.wcif_id] = [set];
-    }
-  });
-  return scrambleSets;
 }
 
 async function listScrambleFiles(competitionId) {
@@ -68,11 +53,27 @@ async function uploadScrambleFile(competitionId, file) {
 export default function Wrapper({ wcifEvents, competitionId }) {
   return (
     <WCAQueryClientProvider>
-      <ScrambleMatcher
+      <ScrambleMatcherPanel
         wcifEvents={wcifEvents}
         competitionId={competitionId}
       />
     </WCAQueryClientProvider>
+  );
+}
+
+function ScrambleMatcherPanel({ wcifEvents, competitionId }) {
+  return (
+    <>
+      <Message info>
+        <Message.Header>Matching scrambles to rounds</Message.Header>
+        <Message.Content>
+          Scrambles are assigned automatically when you upload a TNoodle JSON file.
+          If there is a discrepancy between the number of scramble sets in the JSON file
+          and the number of groups in the round you can manually assign them below.
+        </Message.Content>
+      </Message>
+      <ScrambleMatcher wcifEvents={wcifEvents} competitionId={competitionId} />
+    </>
   );
 }
 
@@ -98,7 +99,7 @@ function ScrambleMatcher({ wcifEvents, competitionId }) {
         ],
       );
 
-      dispatchMatchState({ type: 'setScrambles', scrambleSets: matchScrambles(data) });
+      dispatchMatchState({ type: 'addScrambleFile', scrambleSets: data.inbox_scramble_sets });
     },
     onError: (responseError) => setError(responseError.message),
   });
@@ -107,23 +108,15 @@ function ScrambleMatcher({ wcifEvents, competitionId }) {
     mutate(ev.target.files[0]);
   }, [mutate]);
 
-  if (isFetching) {
-    return <Loading />;
-  }
-
   return (
     <>
-      <Message info>
-        <Message.Header>Matching scrambles to rounds</Message.Header>
-        <Message.Content>
-          Scrambles are assigned automatically when you upload a TNoodle JSON file.
-          If there is a discrepancy between the number of scramble sets in the JSON file
-          and the number of groups in the round you can manually assign them below.
-        </Message.Content>
-      </Message>
-      { error && <Message negative>{error}</Message> }
-      <UploadScramblesButton onUpload={uploadNewScramble} isUploading={isPending} />
-      <JSONList uploadedJsonFiles={uploadedJsonFiles} />
+      {error && <Message negative onDismiss={() => setError(null)}>{error}</Message>}
+      <ScrambleFilesList
+        uploadedJsonFiles={uploadedJsonFiles}
+        isLoading={isFetching}
+        onUpload={uploadNewScramble}
+        isUploading={isPending}
+      />
       <Events
         wcifEvents={wcifEvents}
         matchState={matchState}

@@ -14,7 +14,7 @@ class InboxScrambleSet < ApplicationRecord
 
   before_validation :backfill_round_information!, if: :matched_round_id?
 
-  delegate :wcif_id, to: :matched_round, allow_nil: true
+  delegate :wcif_id, to: :matched_round, prefix: true, allow_nil: true
 
   def backfill_round_information!
     return if matched_round.blank?
@@ -25,8 +25,9 @@ class InboxScrambleSet < ApplicationRecord
   end
 
   DEFAULT_SERIALIZE_OPTIONS = {
+    except: %w[matched_round_id],
+    methods: %w[matched_round_wcif_id],
     include: %w[inbox_scrambles],
-    methods: %w[wcif_id],
   }.freeze
 
   def serializable_hash(options = nil)
