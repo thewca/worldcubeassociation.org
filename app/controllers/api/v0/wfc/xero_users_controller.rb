@@ -2,9 +2,6 @@
 
 class Api::V0::Wfc::XeroUsersController < Api::V0::ApiController
   before_action :current_user_can_admin_finances!, only: %i[index create]
-  private def current_user_can_admin_finances!
-    render json: {}, status: :unauthorized unless current_user.can_admin_finances?
-  end
 
   def index
     render json: WfcXeroUser.all
@@ -32,4 +29,10 @@ class Api::V0::Wfc::XeroUsersController < Api::V0::ApiController
     )
     render json: { success: true }
   end
+
+  private
+
+    def current_user_can_admin_finances!
+      render json: {}, status: :unauthorized unless current_user.can_admin_finances?
+    end
 end

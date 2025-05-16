@@ -23,7 +23,10 @@ class CompetitionMedium < ApplicationRecord
   }
 
   before_save :set_decided_at
-  private def set_decided_at
-    self.decided_at = Time.now if status_change && status == "accepted"
-  end
+
+  private
+
+    def set_decided_at
+      self.decided_at = Time.now if status_change && status == "accepted"
+    end
 end

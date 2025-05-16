@@ -171,15 +171,17 @@ class CompetitionsMailer < ApplicationMailer
                    reply_to: competition.organizers.pluck(:email)
   end
 
-  private def delegates_to_senior_delegates_email(delegates)
-    delegates.flat_map { |delegate| delegate.senior_delegates.map(&:email) }.uniq.compact
-  end
+  private
 
-  private def delegates_to_regional_delegates_email(delegates)
-    delegates.flat_map { |delegate| delegate.regional_delegates.map(&:email) }.uniq.compact
-  end
+    def delegates_to_senior_delegates_email(delegates)
+      delegates.flat_map { |delegate| delegate.senior_delegates.map(&:email) }.uniq.compact
+    end
 
-  private def delegate_report_email_subject(competition)
-    "[wca-report] [#{competition.continent.name}] #{competition.name}"
-  end
+    def delegates_to_regional_delegates_email(delegates)
+      delegates.flat_map { |delegate| delegate.regional_delegates.map(&:email) }.uniq.compact
+    end
+
+    def delegate_report_email_subject(competition)
+      "[wca-report] [#{competition.continent.name}] #{competition.name}"
+    end
 end

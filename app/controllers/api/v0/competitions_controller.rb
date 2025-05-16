@@ -182,31 +182,33 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
     }
   end
 
-  private def competition_from_params(associations: {})
-    id = params[:competition_id] || params[:id]
-    competition = Competition.includes(associations).find_by(id: id)
-
-    # If this competition exists, but is not publicly visible, then only show it
-    # to the user if they are able to manage the competition.
-    competition = nil if competition && !competition.show_at_all && !can_manage?(competition)
-
-    raise WcaExceptions::NotFound.new("Competition with id #{id} not found") unless competition
-
-    competition
-  end
-
-  private def can_manage?(competition)
-    api_user_can_manage = current_api_user&.can_manage_competition?(competition) && doorkeeper_token.scopes.exists?("manage_competitions")
-    api_user_can_manage || current_user&.can_manage_competition?(competition)
-  end
-
-  private def require_scope!(scope)
-    require_user!
-    raise WcaExceptions::BadApiParameter.new("Missing required scope '#{scope}'") if current_api_user && doorkeeper_token.scopes.exclude?(scope) # If we deal with an OAuth user then check the scopes.
-  end
-
   def require_can_manage!(competition)
     require_user!
     raise WcaExceptions::NotPermitted.new("Not authorized to manage competition") unless can_manage?(competition)
   end
+
+  private
+
+    def competition_from_params(associations: {})
+      id = params[:competition_id] || params[:id]
+      competition = Competition.includes(associations).find_by(id: id)
+
+      # If this competition exists, but is not publicly visible, then only show it
+      # to the user if they are able to manage the competition.
+      competition = nil if competition && !competition.show_at_all && !can_manage?(competition)
+
+      raise WcaExceptions::NotFound.new("Competition with id #{id} not found") unless competition
+
+      competition
+    end
+
+    def can_manage?(competition)
+      api_user_can_manage = current_api_user&.can_manage_competition?(competition) && doorkeeper_token.scopes.exists?("manage_competitions")
+      api_user_can_manage || current_user&.can_manage_competition?(competition)
+    end
+
+    def require_scope!(scope)
+      require_user!
+      raise WcaExceptions::BadApiParameter.new("Missing required scope '#{scope}'") if current_api_user && doorkeeper_token.scopes.exclude?(scope) # If we deal with an OAuth user then check the scopes.
+    end
 end

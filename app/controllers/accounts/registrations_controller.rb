@@ -5,9 +5,6 @@ class Accounts::RegistrationsController < Devise::RegistrationsController
   # rubocop:disable Rails/LexicallyScopedActionFilter
   before_action :check_captcha, only: [:create]
   # rubocop:enable Rails/LexicallyScopedActionFilter
-  protected def after_update_path_for(resource)
-    edit_user_registration_path
-  end
 
   private
 
@@ -24,5 +21,11 @@ class Accounts::RegistrationsController < Devise::RegistrationsController
         flash.now[:recaptcha_error] = flash[:recaptcha_error]
         render :new
       end
+    end
+
+  protected
+
+    def after_update_path_for(resource)
+      edit_user_registration_path
     end
 end

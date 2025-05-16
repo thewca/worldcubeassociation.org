@@ -54,11 +54,13 @@ class CompetitionTabsController < ApplicationController
     render nothing: true
   end
 
-  private def competition_from_params
-    Competition.find(params[:competition_id])
-  end
+  private
 
-  private def competition_tab_params
-    params.require(:competition_tab).permit(:name, :content)
-  end
+    def competition_from_params
+      Competition.find(params[:competition_id])
+    end
+
+    def competition_tab_params
+      params.require(:competition_tab).permit(:name, :content)
+    end
 end

@@ -57,20 +57,12 @@ class Registration < ApplicationRecord
   #   but only if there is no value already specified from the outside
   after_initialize :mark_registered_at, if: :new_record?, unless: :registered_at?
 
-  private def mark_registered_at
-    self.registered_at = current_time_from_proper_timezone
-  end
-
   validates :guests, numericality: { greater_than_or_equal_to: 0 }
   validates :guests, numericality: { less_than_or_equal_to: :guest_limit, if: :check_guest_limit?, frontend_code: Registrations::ErrorCodes::GUEST_LIMIT_EXCEEDED }
   validates :guests, numericality: { equal_to: 0, unless: :guests_allowed?, frontend_code: Registrations::ErrorCodes::GUEST_LIMIT_EXCEEDED }
   validates :guests, numericality: { less_than_or_equal_to: DEFAULT_GUEST_LIMIT, if: :guests_unrestricted?, frontend_code: Registrations::ErrorCodes::UNREASONABLE_GUEST_COUNT }
 
   after_save :mark_registration_processing_as_done
-
-  private def mark_registration_processing_as_done
-    Rails.cache.delete(CacheAccess.registration_processing_cache_key(competition_id, user_id))
-  end
 
   def update_lanes!(params, acting_entity_id)
     Registrations::Lanes::Competing.update!(params, self, acting_entity_id)
@@ -172,14 +164,6 @@ class Registration < ApplicationRecord
       registration_payments.sum(&:amount_lowest_denomination),
       competition.currency_code,
     )
-  end
-
-  private def last_payment
-    if registration_payments.loaded?
-      registration_payments.max_by(&:created_at)
-    else
-      registration_payments.order(:created_at).last
-    end
   end
 
   def last_payment_date
@@ -368,16 +352,9 @@ class Registration < ApplicationRecord
   # Instead the validations should be placed such that they ensure that a user
   # change doesn't lead to an invalid state.
   validate :user_can_register_for_competition, on: :create, unless: :rejected?
-  private def user_can_register_for_competition
-    cannot_register_reasons = user&.cannot_register_for_competition_reasons(competition, is_competing: self.is_competing?)
-    errors.add(:user_id, cannot_register_reasons.to_sentence) if cannot_register_reasons.present?
-  end
 
   # TODO: V3-REG cleanup. All these Validations can be used instead of the registration_checker checks
   validate :cannot_be_undeleted_when_banned, if: :competing_status_changed?
-  private def cannot_be_undeleted_when_banned
-    errors.add(:user_id, I18n.t('registrations.errors.undelete_banned')) if user.banned_at_date?(competition.start_date) && might_attend?
-  end
 
   validates :registration_competition_events, presence: {
                                                 if: :is_competing?,
@@ -449,43 +426,11 @@ class Registration < ApplicationRecord
     enforce_newcomer_month_reservations?
   ], unless: :newcomer_month_eligible?
 
-  private def cannot_exceed_newcomer_limit
-    available_spots = competition.competitor_limit - competition.registrations.accepted_and_competing_count
-
-    # There are a limited number of "reserved" spots for newcomer_month_eligible competitions
-    # We know that there are _some_ available_spots in the comp available, because we passed the competitor_limit check above
-    # However, we still don't know how many of the reserved spots have been taken up by newcomers, versus how many "general" spots are left
-    # For a non-newcomer to be accepted, there need to be more spots available than spots still reserved for newcomers
-    return if available_spots > competition.newcomer_month_reserved_spots_remaining
-
-    errors.add(:competing_status, :exceeding_newcomer_limit, frontend_code: Registrations::ErrorCodes::NO_UNRESERVED_SPOTS_REMAINING)
-  end
-
   delegate :competitor_limit_enabled?, :enforce_newcomer_month_reservations?, to: :competition
 
   validate :cannot_exceed_competitor_limit, if: %i[trying_to_accept? competitor_limit_enabled?]
-  private def cannot_exceed_competitor_limit
-    return unless competition.registrations.accepted_and_competing_count >= competition.competitor_limit
-
-    errors.add(
-      :competing_status,
-      :exceeding_competitor_limit,
-      message: I18n.t('registrations.errors.exceeding_competitor_limit'),
-      frontend_code: Registrations::ErrorCodes::COMPETITOR_LIMIT_REACHED,
-    )
-  end
 
   validate :only_one_accepted_per_series, if: %i[part_of_competition_series? trying_to_accept?]
-  private def only_one_accepted_per_series
-    return unless series_sibling_registrations.accepted.any?
-
-    errors.add(
-      :competition_id,
-      :already_registered_in_series,
-      message: I18n.t('registrations.errors.series_more_than_one_accepted'),
-      frontend_code: Registrations::ErrorCodes::ALREADY_REGISTERED_IN_SERIES,
-    )
-  end
 
   delegate :part_of_competition_series?, to: :competition, allow_nil: true
 
@@ -506,9 +451,6 @@ class Registration < ApplicationRecord
   end
 
   validate :not_changing_events_when_cancelling, if: %i[trying_to_cancel? tracked_event_ids? competition_events_changed?]
-  private def not_changing_events_when_cancelling
-    errors.add(:competition_events, :cannot_change_events_when_cancelling, message: I18n.t('registrations.errors.cannot_change_events_when_cancelling'), frontend_code: Registrations::ErrorCodes::INVALID_REQUEST_DATA)
-  end
 
   attr_writer :tracked_event_ids
 
@@ -517,10 +459,6 @@ class Registration < ApplicationRecord
   end
 
   after_commit :reset_tracked_event_ids
-
-  private def reset_tracked_event_ids
-    @tracked_event_ids = nil
-  end
 
   def tracked_event_ids
     @tracked_event_ids ||= self.event_ids
@@ -604,32 +542,101 @@ class Registration < ApplicationRecord
     end
   end
 
-  private def auto_accept_failure_reason
-    return Registrations::ErrorCodes::OUTSTANDING_FEES if outstanding_entry_fees.positive?
-    return Registrations::ErrorCodes::AUTO_ACCEPT_NOT_ENABLED unless competition.auto_accept_registrations?
-    return Registrations::ErrorCodes::INELIGIBLE_FOR_AUTO_ACCEPT unless competing_status_pending? || waiting_list_leader?
-    return Registrations::ErrorCodes::AUTO_ACCEPT_DISABLE_THRESHOLD if competition.auto_accept_threshold_reached?
+  private
 
-    Registrations::ErrorCodes::REGISTRATION_NOT_OPEN unless competition.registration_currently_open?
-  end
+    def mark_registered_at
+      self.registered_at = current_time_from_proper_timezone
+    end
 
-  private def log_auto_accept_failure(reason)
-    add_history_entry(
-      { auto_accept_failure_reasons: reason },
-      SYSTEM_ENTITY_ID,
-      AUTO_ACCEPT_ENTITY_ID,
-      'System reject',
-    )
-  end
+    def mark_registration_processing_as_done
+      Rails.cache.delete(CacheAccess.registration_processing_cache_key(competition_id, user_id))
+    end
 
-  private def build_auto_accept_payload
-    status = if competition.registration_full_and_accepted? && competing_status_pending?
-               Registrations::Helper::STATUS_WAITING_LIST
-             else
-               Registrations::Helper::STATUS_ACCEPTED
-             end
+    def last_payment
+      if registration_payments.loaded?
+        registration_payments.max_by(&:created_at)
+      else
+        registration_payments.order(:created_at).last
+      end
+    end
 
-    # String keys because this is mimicing a params payload
-    { 'user_id' => user_id, 'competing' => { 'status' => status } }
-  end
+    def user_can_register_for_competition
+      cannot_register_reasons = user&.cannot_register_for_competition_reasons(competition, is_competing: self.is_competing?)
+      errors.add(:user_id, cannot_register_reasons.to_sentence) if cannot_register_reasons.present?
+    end
+
+    def cannot_be_undeleted_when_banned
+      errors.add(:user_id, I18n.t('registrations.errors.undelete_banned')) if user.banned_at_date?(competition.start_date) && might_attend?
+    end
+
+    def cannot_exceed_newcomer_limit
+      available_spots = competition.competitor_limit - competition.registrations.accepted_and_competing_count
+
+      # There are a limited number of "reserved" spots for newcomer_month_eligible competitions
+      # We know that there are _some_ available_spots in the comp available, because we passed the competitor_limit check above
+      # However, we still don't know how many of the reserved spots have been taken up by newcomers, versus how many "general" spots are left
+      # For a non-newcomer to be accepted, there need to be more spots available than spots still reserved for newcomers
+      return if available_spots > competition.newcomer_month_reserved_spots_remaining
+
+      errors.add(:competing_status, :exceeding_newcomer_limit, frontend_code: Registrations::ErrorCodes::NO_UNRESERVED_SPOTS_REMAINING)
+    end
+
+    def cannot_exceed_competitor_limit
+      return unless competition.registrations.accepted_and_competing_count >= competition.competitor_limit
+
+      errors.add(
+        :competing_status,
+        :exceeding_competitor_limit,
+        message: I18n.t('registrations.errors.exceeding_competitor_limit'),
+        frontend_code: Registrations::ErrorCodes::COMPETITOR_LIMIT_REACHED,
+      )
+    end
+
+    def only_one_accepted_per_series
+      return unless series_sibling_registrations.accepted.any?
+
+      errors.add(
+        :competition_id,
+        :already_registered_in_series,
+        message: I18n.t('registrations.errors.series_more_than_one_accepted'),
+        frontend_code: Registrations::ErrorCodes::ALREADY_REGISTERED_IN_SERIES,
+      )
+    end
+
+    def not_changing_events_when_cancelling
+      errors.add(:competition_events, :cannot_change_events_when_cancelling, message: I18n.t('registrations.errors.cannot_change_events_when_cancelling'), frontend_code: Registrations::ErrorCodes::INVALID_REQUEST_DATA)
+    end
+
+    def reset_tracked_event_ids
+      @tracked_event_ids = nil
+    end
+
+    def auto_accept_failure_reason
+      return Registrations::ErrorCodes::OUTSTANDING_FEES if outstanding_entry_fees.positive?
+      return Registrations::ErrorCodes::AUTO_ACCEPT_NOT_ENABLED unless competition.auto_accept_registrations?
+      return Registrations::ErrorCodes::INELIGIBLE_FOR_AUTO_ACCEPT unless competing_status_pending? || waiting_list_leader?
+      return Registrations::ErrorCodes::AUTO_ACCEPT_DISABLE_THRESHOLD if competition.auto_accept_threshold_reached?
+
+      Registrations::ErrorCodes::REGISTRATION_NOT_OPEN unless competition.registration_currently_open?
+    end
+
+    def log_auto_accept_failure(reason)
+      add_history_entry(
+        { auto_accept_failure_reasons: reason },
+        SYSTEM_ENTITY_ID,
+        AUTO_ACCEPT_ENTITY_ID,
+        'System reject',
+      )
+    end
+
+    def build_auto_accept_payload
+      status = if competition.registration_full_and_accepted? && competing_status_pending?
+                 Registrations::Helper::STATUS_WAITING_LIST
+               else
+                 Registrations::Helper::STATUS_ACCEPTED
+               end
+
+      # String keys because this is mimicing a params payload
+      { 'user_id' => user_id, 'competing' => { 'status' => status } }
+    end
 end

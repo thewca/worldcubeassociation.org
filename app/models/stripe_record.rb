@@ -195,7 +195,9 @@ class StripeRecord < ApplicationRecord
     )
   end
 
-  private def stripe_client
-    Stripe::StripeClient.new(AppSecrets.STRIPE_API_KEY, stripe_account: self.account_id)
-  end
+  private
+
+    def stripe_client
+      Stripe::StripeClient.new(AppSecrets.STRIPE_API_KEY, stripe_account: self.account_id)
+    end
 end

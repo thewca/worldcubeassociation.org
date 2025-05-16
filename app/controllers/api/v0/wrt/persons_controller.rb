@@ -2,25 +2,6 @@
 
 class Api::V0::Wrt::PersonsController < Api::V0::ApiController
   before_action :current_user_can_admin_results!
-  private def current_user_can_admin_results!
-    render json: {}, status: :unauthorized unless current_user.can_admin_results?
-  end
-
-  private def edit_params_from_person_params(person_params)
-    name = person_params.require(:name)
-    representing = person_params.require(:representing)
-    gender = person_params.require(:gender)
-    dob = person_params.require(:dob)
-    country_id = Country.c_find_by_iso2(representing).id
-
-    {
-      name: name,
-      country_id: country_id,
-      gender: gender,
-      dob: dob,
-      incorrect_wca_id_claim_count: 0,
-    }
-  end
 
   def update
     wca_id = params.require(:id)
@@ -83,4 +64,26 @@ class Api::V0::Wrt::PersonsController < Api::V0::ApiController
     person.update(incorrect_wca_id_claim_count: 0)
     render status: :ok, json: { success: "Successfully reset claim count for #{person.name}." }
   end
+
+  private
+
+    def current_user_can_admin_results!
+      render json: {}, status: :unauthorized unless current_user.can_admin_results?
+    end
+
+    def edit_params_from_person_params(person_params)
+      name = person_params.require(:name)
+      representing = person_params.require(:representing)
+      gender = person_params.require(:gender)
+      dob = person_params.require(:dob)
+      country_id = Country.c_find_by_iso2(representing).id
+
+      {
+        name: name,
+        country_id: country_id,
+        gender: gender,
+        dob: dob,
+        incorrect_wca_id_claim_count: 0,
+      }
+    end
 end

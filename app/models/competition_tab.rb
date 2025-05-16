@@ -25,24 +25,10 @@ class CompetitionTab < ApplicationRecord
   end
 
   after_create :set_display_order
-  private def set_display_order
-    update_column :display_order, competition.tabs.count
-  end
 
   after_destroy :fix_display_order
-  private def fix_display_order
-    competition.tabs.where("display_order > ?", display_order).update_all("display_order = display_order - 1")
-  end
 
   validate :verify_if_full_urls
-  private def verify_if_full_urls
-    content.scan(/\[(.*?)\]\((.*?)\)/).any? do |match|
-      url = match[1]
-      next if url.blank?
-
-      errors.add(:content, I18n.t('competitions.errors.not_full_url', url: url)) unless url.starts_with?('http://', 'https://', 'mailto:')
-    end
-  end
 
   def reorder(direction)
     current_display_order = display_order
@@ -56,4 +42,23 @@ class CompetitionTab < ApplicationRecord
       update_column :display_order, other_display_order
     end
   end
+
+  private
+
+    def set_display_order
+      update_column :display_order, competition.tabs.count
+    end
+
+    def fix_display_order
+      competition.tabs.where("display_order > ?", display_order).update_all("display_order = display_order - 1")
+    end
+
+    def verify_if_full_urls
+      content.scan(/\[(.*?)\]\((.*?)\)/).any? do |match|
+        url = match[1]
+        next if url.blank?
+
+        errors.add(:content, I18n.t('competitions.errors.not_full_url', url: url)) unless url.starts_with?('http://', 'https://', 'mailto:')
+      end
+    end
 end

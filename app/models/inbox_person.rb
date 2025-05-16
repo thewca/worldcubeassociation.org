@@ -19,9 +19,6 @@ class InboxPerson < ApplicationRecord
   validates :country_iso2, presence: true
 
   validate :dob_must_be_in_the_past
-  private def dob_must_be_in_the_past
-    errors.add(:dob, "must be in the past") if dob && dob >= Date.today
-  end
 
   def country
     Country.c_find_by_iso2(self.country_iso2)
@@ -37,4 +34,10 @@ class InboxPerson < ApplicationRecord
   def update(args)
     InboxPerson.where(id: id, competition_id: competition_id).update_all(args)
   end
+
+  private
+
+    def dob_must_be_in_the_past
+      errors.add(:dob, "must be in the past") if dob && dob >= Date.today
+    end
 end
