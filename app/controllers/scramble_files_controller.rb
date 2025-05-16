@@ -91,14 +91,14 @@ class ScrambleFilesController < ApplicationController
     render json: destroyed_file
   end
 
-  def update_round
+  def update_round_matching
     competition = competition_from_params
 
     competition.rounds.each do |round|
       updated_set_ids = params[round.wcif_id]
 
       if updated_set_ids.present?
-        round.inbox_scramble_sets.update_all(matched_round: nil)
+        round.inbox_scramble_sets.update_all(matched_round_id: nil)
 
         InboxScrambleSet.find(updated_set_ids)
                         .each_with_index do |scramble_set, idx|

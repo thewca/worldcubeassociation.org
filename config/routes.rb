@@ -107,7 +107,7 @@ Rails.application.routes.draw do
     get 'submit-scrambles' => 'admin/scrambles#match_scrambles', as: :match_scrambles
     post 'submit-results' => 'results_submission#create', as: :submit_results
     resources :scramble_files, only: %i[index create destroy], shallow: true do
-      patch 'update-round' => 'scramble_files#update_round', on: :collection
+      patch 'update-round-matching' => 'scramble_files#update_round_matching', on: :collection
     end
     post 'upload-json' => 'results_submission#upload_json', as: :upload_results_json
     # WRT views and action
