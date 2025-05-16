@@ -4,7 +4,7 @@ module CacheAccess
   EXPIRATION_DEFAULT = 60.minutes
 
   # The Hydration block needs to return an array of hashes that have an 'id' field
-  def self.hydrate_entities(key_prefix, ids, expires_in: EXPIRATION_DEFAULT, &hydration_block)
+  def self.hydrate_entities(key_prefix, ids, expires_in: EXPIRATION_DEFAULT, &)
     stringified_ids = ids.map(&:to_s)
 
     keys = stringified_ids.map { |id| self.hydration_key(key_prefix, id) }

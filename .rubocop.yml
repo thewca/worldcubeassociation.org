@@ -43,7 +43,7 @@ Bundler/OrderedGems:
   Enabled: false
 
 Lint/UnusedMethodArgument:
-  Enabled: false
+  AllowUnusedKeywordArguments: true
 
 Style/Alias:
   EnforcedStyle: prefer_alias_method

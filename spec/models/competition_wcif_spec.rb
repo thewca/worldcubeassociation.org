@@ -561,7 +561,7 @@ RSpec.describe "Competition WCIF" do
         activity_with_child = schedule_wcif["venues"][0]["rooms"][0]["activities"].find { |a| a["id"] == 2 }
         activity_with_child["childActivities"] = []
 
-        competition.set_wcif_schedule!(schedule_wcif, delegate)
+        competition.set_wcif_schedule!(schedule_wcif)
 
         expect(competition.to_wcif["schedule"]).to eq(schedule_wcif)
         expect(ScheduleActivity.all.size).to eq 2
@@ -579,7 +579,7 @@ RSpec.describe "Competition WCIF" do
         first_activity["activityCode"] = "222-r1"
         first_activity["startTime"] = (activity_object.start_time + 20.minutes).iso8601
         first_activity["endTime"] = (activity_object.end_time + 20.minutes).iso8601
-        competition.set_wcif_schedule!(schedule_wcif, delegate)
+        competition.set_wcif_schedule!(schedule_wcif)
         expect(competition.to_wcif["schedule"]).to eq(schedule_wcif)
         activity_object.reload
         expect(activity_object.name).to eq "activity name"
@@ -609,7 +609,7 @@ RSpec.describe "Competition WCIF" do
           "extensions" => [],
         }
         schedule_wcif["venues"][0]["rooms"][0]["activities"] << new_activity
-        competition.set_wcif_schedule!(schedule_wcif, delegate)
+        competition.set_wcif_schedule!(schedule_wcif)
         expect(competition.to_wcif["schedule"]).to eq(schedule_wcif)
         competition.reload
         activity = competition.competition_venues.first.venue_rooms.first.schedule_activities.find_by(wcif_id: 44)
@@ -630,11 +630,11 @@ RSpec.describe "Competition WCIF" do
         # Try updating an activity with an invalid activity code
         activity = schedule_wcif["venues"][0]["rooms"][0]["activities"][0]
         activity["activityCode"] = "sneakycode"
-        expect { competition.set_wcif_schedule!(schedule_wcif, delegate) }.to raise_error(ActiveRecord::RecordInvalid)
+        expect { competition.set_wcif_schedule!(schedule_wcif) }.to raise_error(ActiveRecord::RecordInvalid)
         competition.reload
         # 'other' is a valid base, but "blabla" is not a valid 'other' activity
         activity["activityCode"] = "other-blabla"
-        expect { competition.set_wcif_schedule!(schedule_wcif, delegate) }.to raise_error(ActiveRecord::RecordInvalid)
+        expect { competition.set_wcif_schedule!(schedule_wcif) }.to raise_error(ActiveRecord::RecordInvalid)
         # restore to valid value
         activity["activityCode"] = "other-lunch"
         competition.reload
@@ -650,7 +650,7 @@ RSpec.describe "Competition WCIF" do
           "endTime" => activity["endTime"],
           "childActivities" => [],
         }
-        expect { competition.set_wcif_schedule!(schedule_wcif, delegate) }.to raise_error(ActiveRecord::RecordInvalid)
+        expect { competition.set_wcif_schedule!(schedule_wcif) }.to raise_error(ActiveRecord::RecordInvalid)
       end
 
       it "accepts a valid start time from the day before the competition" do
@@ -659,7 +659,7 @@ RSpec.describe "Competition WCIF" do
         # time to UTC, the day will actually be the day before the competition).
         # It's fine because at least one timezone had entered the day of the competition.
         activity["startTime"] = competition.start_date.to_time.change(hour: 1, offset: "+08:00").iso8601
-        competition.set_wcif_schedule!(schedule_wcif, delegate)
+        competition.set_wcif_schedule!(schedule_wcif)
       end
 
       it "accepts a valid end time from the day after the competition" do
@@ -668,19 +668,19 @@ RSpec.describe "Competition WCIF" do
         # time to UTC, the day will actually be the day after the competition).
         # It's fine because at least one timezone is still in the last day of the competition.
         activity["endTime"] = competition.end_date.to_time.change(hour: 20, offset: "-08:00").iso8601
-        competition.set_wcif_schedule!(schedule_wcif, delegate)
+        competition.set_wcif_schedule!(schedule_wcif)
       end
 
       it "Doesn't update with an past start time" do
         activity = schedule_wcif["venues"][0]["rooms"][0]["activities"][1]
         activity["startTime"] = (competition.start_date - 1.day).to_time.iso8601
-        expect { competition.set_wcif_schedule!(schedule_wcif, delegate) }.to raise_error(ActiveRecord::RecordInvalid)
+        expect { competition.set_wcif_schedule!(schedule_wcif) }.to raise_error(ActiveRecord::RecordInvalid)
       end
 
       it "Doesn't update with an future end time" do
         activity = schedule_wcif["venues"][0]["rooms"][0]["activities"][1]
         activity["endTime"] = (competition.end_time + 1.minute).iso8601
-        expect { competition.set_wcif_schedule!(schedule_wcif, delegate) }.to raise_error(ActiveRecord::RecordInvalid)
+        expect { competition.set_wcif_schedule!(schedule_wcif) }.to raise_error(ActiveRecord::RecordInvalid)
       end
 
       it "Doesn't update a nested activity which is not included in parent" do
@@ -692,16 +692,16 @@ RSpec.describe "Competition WCIF" do
         activity_start = Time.parse(activity["startTime"])
         activity_end = Time.parse(activity["endTime"])
         nested_activity["startTime"] = (activity_start - 1.minute).iso8601
-        expect { competition.set_wcif_schedule!(schedule_wcif, delegate) }.to raise_error(ActiveRecord::RecordInvalid)
+        expect { competition.set_wcif_schedule!(schedule_wcif) }.to raise_error(ActiveRecord::RecordInvalid)
         competition.reload
         nested_activity["startTime"] = activity_start.iso8601
         nested_activity["endTime"] = (activity_end + 1.minute).iso8601
-        expect { competition.set_wcif_schedule!(schedule_wcif, delegate) }.to raise_error(ActiveRecord::RecordInvalid)
+        expect { competition.set_wcif_schedule!(schedule_wcif) }.to raise_error(ActiveRecord::RecordInvalid)
         competition.reload
         # Try putting valid start/end time but with end time before start time
         nested_activity["endTime"] = activity_start.iso8601
         nested_activity["startTime"] = activity_end.iso8601
-        expect { competition.set_wcif_schedule!(schedule_wcif, delegate) }.to raise_error(ActiveRecord::RecordInvalid)
+        expect { competition.set_wcif_schedule!(schedule_wcif) }.to raise_error(ActiveRecord::RecordInvalid)
       end
     end
 
@@ -709,7 +709,7 @@ RSpec.describe "Competition WCIF" do
       it "Removing venues works and destroys nested rooms and activities" do
         schedule_wcif["venues"] = []
 
-        competition.set_wcif_schedule!(schedule_wcif, delegate)
+        competition.set_wcif_schedule!(schedule_wcif)
 
         expect(competition.to_wcif["schedule"]).to eq(schedule_wcif)
         expect(VenueRoom.all.size).to eq 0
@@ -725,7 +725,7 @@ RSpec.describe "Competition WCIF" do
         first_venue["longitudeMicrodegrees"] = 0
         first_venue["timezone"] = "Europe/Madrid"
 
-        competition.set_wcif_schedule!(schedule_wcif, delegate)
+        competition.set_wcif_schedule!(schedule_wcif)
         expect(competition.to_wcif["schedule"]).to eq(schedule_wcif)
         venue_object.reload
         expect(venue_object.name).to eq "new name"
@@ -745,7 +745,7 @@ RSpec.describe "Competition WCIF" do
           "rooms" => [],
           "extensions" => [],
         }
-        competition.set_wcif_schedule!(schedule_wcif, delegate)
+        competition.set_wcif_schedule!(schedule_wcif)
         expect(competition.to_wcif["schedule"]).to eq(schedule_wcif)
         competition.reload
         venue = competition.competition_venues.find_by(wcif_id: 44)
@@ -761,7 +761,7 @@ RSpec.describe "Competition WCIF" do
       it "Removing rooms works and destroy nested activities" do
         schedule_wcif["venues"][0]["rooms"].delete_at(0)
 
-        competition.set_wcif_schedule!(schedule_wcif, delegate)
+        competition.set_wcif_schedule!(schedule_wcif)
 
         expect(competition.to_wcif["schedule"]).to eq(schedule_wcif)
         expect(ScheduleActivity.all.size).to eq 0
@@ -774,7 +774,7 @@ RSpec.describe "Competition WCIF" do
 
         first_room["name"] = "new room name"
         first_room["activities"] = []
-        competition.set_wcif_schedule!(schedule_wcif, delegate)
+        competition.set_wcif_schedule!(schedule_wcif)
         expect(competition.to_wcif["schedule"]).to eq(schedule_wcif)
         room_object.reload
         expect(room_object.name).to eq "new room name"
@@ -789,7 +789,7 @@ RSpec.describe "Competition WCIF" do
           "activities" => [],
           "extensions" => [],
         }
-        competition.set_wcif_schedule!(schedule_wcif, delegate)
+        competition.set_wcif_schedule!(schedule_wcif)
         expect(competition.to_wcif["schedule"]).to eq(schedule_wcif)
         competition.reload
         room = competition.competition_venues.first.venue_rooms.find_by(wcif_id: 44)
