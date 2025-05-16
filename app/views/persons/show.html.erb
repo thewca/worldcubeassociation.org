@@ -19,6 +19,9 @@
         <li><a href="#championship-podiums" data-toggle="tab"><%= t '.championship_podiums' %></a></li>
       <% end %>
       <li><a href="#map" data-toggle="tab"><%= t '.competitions_map' %></a></li>
+      <% if @organized_competitions.any? %>
+        <li><a href="#organized-competitions" data-toggle="tab"><%= t '.organized_competitions' %></a></li>
+      <% end %>
     </ul>
 
     <div class="tab-content">
@@ -38,6 +41,11 @@
       <div class="tab-pane" id="map">
         <%= render "competitions_map" %>
       </div>
+      <% if @organized_competitions.any? %>
+        <div class="tab-pane" id="organized-competitions">
+        <%= render "organized_competitions" %>
+        </div>
+      <% end %>
     </div>
   </div>
 </div>
