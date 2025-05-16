@@ -4,7 +4,11 @@ require "rails_helper"
 require "csv"
 
 RSpec.feature "Eligible voters csv" do
-  before { Timecop.freeze(Time.utc(2016, 5, 5, 10, 5, 3)) }
+  before do
+    Timecop.freeze(Time.utc(2016, 5, 5, 10, 5, 3))
+    sign_in board_member
+  end
+
   after { Timecop.return }
 
   let!(:user) { create(:user) }
@@ -18,10 +22,6 @@ RSpec.feature "Eligible voters csv" do
   let!(:delegate_who_is_also_team_leader) { create(:delegate, :wrc_leader) }
   let!(:board_member) { create(:user, :board_member) }
   let!(:officer) { create(:secretary_role) }
-
-  before :each do
-    sign_in board_member
-  end
 
   # See https://github.com/rails/rails/pull/33829 to find about the crazy UTF-8 mangled filenames in Content-Disposition
   # (Spoiler: This is actually proper RFC that has been implemented only in Rails 6. Looks ugly but for browsers it's a good feature!)
