@@ -91,6 +91,25 @@ class ScrambleFilesController < ApplicationController
     render json: destroyed_file
   end
 
+  def update_round
+    competition = competition_from_params
+
+    competition.rounds.each do |round|
+      updated_set_ids = params[round.wcif_id]
+
+      if updated_set_ids.present?
+        round.inbox_scramble_sets.update_all(matched_round: nil)
+
+        InboxScrambleSet.find(updated_set_ids)
+                        .each_with_index do |scramble_set, idx|
+          scramble_set.update!(matched_round: round, ordered_index: idx)
+        end
+      end
+    end
+
+    render json: { success: :ok }
+  end
+
   private def competition_from_params
     Competition.find(params[:competition_id])
   end
