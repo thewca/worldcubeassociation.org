@@ -6,6 +6,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { events, roundTypes } from '../../lib/wca-data.js.erb';
 import { fetchJsonOrError } from '../../lib/requests/fetchWithAuthenticityToken';
 import { scrambleFileUrl } from '../../lib/requests/routes.js.erb';
+import Loading from '../Requests/Loading';
 
 async function deleteScrambleFile(fileId) {
   const { data } = await fetchJsonOrError(scrambleFileUrl(fileId), {
@@ -15,13 +16,13 @@ async function deleteScrambleFile(fileId) {
   return data;
 }
 
-export default function ScrambleFileInfo({ uploadedJSON }) {
+function ScrambleFileInfo({ scrambleFile }) {
   const queryClient = useQueryClient();
 
   const [expanded, setExpanded] = useState(false);
 
   const { mutate: deleteMutation, isPending: isDeleting } = useMutation({
-    mutationFn: () => deleteScrambleFile(uploadedJSON.id),
+    mutationFn: () => deleteScrambleFile(scrambleFile.id),
     onSuccess: (data) => {
       queryClient.setQueryData(
         ['scramble-files', data.competition_id],
@@ -37,23 +38,23 @@ export default function ScrambleFileInfo({ uploadedJSON }) {
           <Card.Header>
             <Header>
               <Icon name="dropdown" />
-              {uploadedJSON.original_filename}
+              {scrambleFile.original_filename}
             </Header>
           </Card.Header>
           <Card.Description>
             Generated with
             {' '}
-            {uploadedJSON.scramble_program}
+            {scrambleFile.scramble_program}
             <br />
             On
             {' '}
-            {uploadedJSON.generated_at}
+            {scrambleFile.generated_at}
           </Card.Description>
         </Accordion.Title>
         <Accordion.Content active={expanded}>
           <Card.Content>
             <List style={{ maxHeight: '400px', overflowY: 'auto' }}>
-              {uploadedJSON.inbox_scramble_sets.map((scrambleSet) => (
+              {scrambleFile.inbox_scramble_sets.map((scrambleSet) => (
                 <List.Item key={scrambleSet.id}>
                   {events.byId[scrambleSet.event_id].name}
                   {' '}
@@ -77,4 +78,14 @@ export default function ScrambleFileInfo({ uploadedJSON }) {
       </Accordion>
     </Card>
   );
+}
+
+export default function ScrambleFileList({ scrambleFiles, isFetching }) {
+  if (isFetching) {
+    return <Loading />;
+  }
+
+  return scrambleFiles.map((scrFile) => (
+    <ScrambleFileInfo key={scrFile.id} scrambleFile={scrFile} />
+  ));
 }
