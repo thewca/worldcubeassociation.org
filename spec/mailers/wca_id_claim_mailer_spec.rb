@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe WcaIdClaimMailer, type: :mailer do
+RSpec.describe WcaIdClaimMailer do
   describe "notify_wcat_of_confirmed_competition" do
     let(:delegate) { create(:delegate) }
     let(:person) { create(:person) }

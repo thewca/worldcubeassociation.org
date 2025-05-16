@@ -39,7 +39,7 @@ RSpec.describe "API Persons" do
         expect(response).to be_successful
         json = response.parsed_body
         expect(json.length).to eq 1
-        expect(json.map { |element| element["person"]["wca_id"] }).to match_array [person.wca_id]
+        expect(json.map { |element| element["person"]["wca_id"] }).to contain_exactly(person.wca_id)
       end
     end
   end

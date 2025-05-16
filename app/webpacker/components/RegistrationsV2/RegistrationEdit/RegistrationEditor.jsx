@@ -7,6 +7,7 @@ import {
   Message,
   Segment,
 } from 'semantic-ui-react';
+import { useQueryClient } from '@tanstack/react-query';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
 import { showMessage } from '../Register/RegistrationMessage';
 import EventSelector from '../../wca/EventSelector';
@@ -28,6 +29,7 @@ import { useUpdateRegistrationMutation } from '../lib/mutations';
 
 export default function RegistrationEditor({ registrationId, competitor, competitionInfo }) {
   const dispatch = useDispatch();
+  const queryClient = useQueryClient();
 
   const [comment, setCommentRaw] = useFormObjectState('comment', ['competing']);
   const setComment = useInputUpdater(setCommentRaw);
@@ -100,10 +102,13 @@ export default function RegistrationEditor({ registrationId, competitor, competi
       confirm({
         content: I18n.t('competitions.registration_v2.update.organizer_update_confirm'),
       }).then(() => {
-        updateRegistrationMutation(body, {
+        updateRegistrationMutation({ registrationId, payload: body }, {
           onSuccess: (data) => {
             dispatch(showMessage('registrations.flash.updated', 'positive'));
             formSuccess(data.registration);
+
+            queryClient.refetchQueries({ queryKey: ['registration-history', registrationId], exact: true });
+            queryClient.refetchQueries({ queryKey: ['registration-payments', registrationId], exact: true });
           },
         });
       }).catch(() => {});
@@ -115,6 +120,7 @@ export default function RegistrationEditor({ registrationId, competitor, competi
     eventsAreValid,
     dispatch,
     maxEvents,
+    registrationId,
     competitor.id,
     competitionInfo.id,
     hasEventsChanged,
@@ -129,6 +135,7 @@ export default function RegistrationEditor({ registrationId, competitor, competi
     status,
     guests,
     formSuccess,
+    queryClient,
   ]);
 
   const registrationEditDeadlinePassed = Boolean(competitionInfo.event_change_deadline_date)
