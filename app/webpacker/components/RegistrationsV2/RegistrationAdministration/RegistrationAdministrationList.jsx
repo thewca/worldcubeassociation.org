@@ -3,7 +3,7 @@ import React, {
   useMemo, useReducer, useRef, useState,
 } from 'react';
 import {
-  Accordion, Button, Checkbox, Divider, Form, Header, Icon, Modal, Segment, Sticky,
+  Accordion, Button, Checkbox, Divider, Form, Header, Icon, List, Modal, Segment, Sticky,
 } from 'semantic-ui-react';
 import { getAllRegistrations } from '../api/registration/get/get_registrations';
 import RegistrationAdministrationSearch from './RegistrationAdministrationSearch';
@@ -439,9 +439,9 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
             <Modal.Header>Bulk Auto-Accept Result</Modal.Header>
             <Modal.Content>
               {modalData && typeof modalData === 'object' ? (
-                <ul>
+                <List bulleted>
                   {Object.entries(modalData).map(([key, value]) => (
-                    <li key={key}>
+                    <List.Item key={key}>
                       {key}
                       {' - '}
                       <b>Succeeded</b>
@@ -451,9 +451,9 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
                       <b>Info</b>
                       {': '}
                       {value.info}
-                    </li>
+                    </List.Item>
                   ))}
-                </ul>
+                </List>
               ) : (
                 <p>No data available.</p>
               )}
