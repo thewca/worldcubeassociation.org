@@ -335,18 +335,3 @@ RSpec/NamedSubject:
 
 RSpec/Be:
   Enabled: false
-
-RSpec/ScatteredLet:
-  Enabled: false
-
-RSpec/RepeatedExample:
-  Enabled: false
-
-RSpec/RepeatedExampleGroupDescription:
-  Enabled: false
-
-RSpec/ClassCheck:
-  Enabled: false
-
-RSpec/BeEmpty:
-  Enabled: false

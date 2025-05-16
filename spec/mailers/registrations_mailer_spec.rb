@@ -73,7 +73,7 @@ RSpec.describe RegistrationsMailer do
 
     it "handles no organizers receiving email" do
       # Expect no email to be sent by default (when the organizer hasn't chosen to receive registration emails)
-      expect(mail.message).to be_kind_of ActionMailer::Base::NullMail
+      expect(mail.message).to be_a ActionMailer::Base::NullMail
     end
   end
 
