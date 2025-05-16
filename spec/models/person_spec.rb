@@ -51,8 +51,8 @@ RSpec.describe Person do
       it "doesn't update person_name and countryId columns in the results table if they differ from the current ones" do
         create(:person_who_has_competed_once, wca_id: person.wca_id, sub_id: 2, name: "Old Name", country_id: "France")
         person.update!(name: "New Name", country_id: "New Zealand")
-        expect(person.results.pluck(:person_name).uniq).to match_array ["Old Name", "New Name"]
-        expect(person.results.pluck(:country_id).uniq).to match_array ["France", "New Zealand"]
+        expect(person.results.pluck(:person_name).uniq).to contain_exactly("Old Name", "New Name")
+        expect(person.results.pluck(:country_id).uniq).to contain_exactly("France", "New Zealand")
       end
 
       it "updates the associated user" do

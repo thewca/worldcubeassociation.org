@@ -294,22 +294,10 @@ RSpec/ItBehavesLike:
 RSpec/EmptyLineAfterExample:
   Enabled: false
 
-RSpec/MatchArray:
-  Enabled: false
-
 RSpec/DescribedClass:
   Enabled: false
 
-RSpec/VariableName:
-  Enabled: false
-
 RSpec/RepeatedDescription:
-  Enabled: false
-
-RSpec/ReceiveCounts:
-  Enabled: false
-
-RSpec/ContextMethod:
   Enabled: false
 
 RSpec/LetBeforeExamples:

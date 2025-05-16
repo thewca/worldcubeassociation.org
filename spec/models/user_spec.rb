@@ -275,12 +275,7 @@ RSpec.describe User do
     let!(:other_delegate_unconfirmed_competition) { create(:competition, delegates: [other_delegate]) }
 
     it "sees delegated competitions" do
-      expect(delegate.delegated_competitions).to match_array [
-        confirmed_competition1,
-        confirmed_competition2,
-        unconfirmed_competition1,
-        unconfirmed_competition2,
-      ]
+      expect(delegate.delegated_competitions).to contain_exactly(confirmed_competition1, confirmed_competition2, unconfirmed_competition1, unconfirmed_competition2)
     end
   end
 
@@ -610,8 +605,8 @@ RSpec.describe User do
     end
 
     it "adds to reports@ only current staff members who want to receive reports" do
-      expect(User.delegate_reports_receivers_emails).to match_array ["seniors@worldcubeassociation.org", "quality@worldcubeassociation.org", "regulations@worldcubeassociation.org", staff_member1.email]
-      expect(User.delegate_reports_receivers_emails(Country.c_find('USA'))).to match_array [staff_member3.email]
+      expect(User.delegate_reports_receivers_emails).to contain_exactly("seniors@worldcubeassociation.org", "quality@worldcubeassociation.org", "regulations@worldcubeassociation.org", staff_member1.email)
+      expect(User.delegate_reports_receivers_emails(Country.c_find('USA'))).to contain_exactly(staff_member3.email)
     end
   end
 
