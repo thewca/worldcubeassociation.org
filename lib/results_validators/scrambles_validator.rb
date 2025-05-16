@@ -72,13 +72,13 @@ module ResultsValidators
           scrambles_by_group_id.each do |group_id, scrambles_for_group|
             # filter out extra scrambles
             actual_number_of_scrambles = scrambles_for_group.count { |element| !element.is_extra }
-            if actual_number_of_scrambles < expected_number_of_scrambles
-              errors_for_round << ValidationError.new(MISSING_SCRAMBLES_FOR_GROUP_ERROR,
-                                                      :scrambles, competition.id,
-                                                      round_id: round_id, group_id: group_id,
-                                                      actual: actual_number_of_scrambles,
-                                                      expected: expected_number_of_scrambles)
-            end
+            next unless actual_number_of_scrambles < expected_number_of_scrambles
+
+            errors_for_round << ValidationError.new(MISSING_SCRAMBLES_FOR_GROUP_ERROR,
+                                                    :scrambles, competition.id,
+                                                    round_id: round_id, group_id: group_id,
+                                                    actual: actual_number_of_scrambles,
+                                                    expected: expected_number_of_scrambles)
           end
           # Check if the number of groups match the number of scramble sets specified.
           if scrambles_by_group_id.size != rounds_info_by_ids[round_id].scramble_set_count

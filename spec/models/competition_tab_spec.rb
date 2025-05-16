@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe CompetitionTab, type: :model do
+RSpec.describe CompetitionTab do
   it "has a valid factory" do
     expect(build(:competition_tab)).to be_valid
   end

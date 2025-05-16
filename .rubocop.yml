@@ -125,9 +125,6 @@ Style/Documentation:
 Style/MultilineBlockChain:
   Enabled: false
 
-Style/Next:
-  Enabled: false
-
 Style/RaiseArgs:
   EnforcedStyle: compact
 
@@ -349,7 +346,4 @@ RSpec/NamedSubject:
   Enabled: false
 
 RSpec/Be:
-  Enabled: false
-
-RSpecRails/InferredSpecType:
   Enabled: false
