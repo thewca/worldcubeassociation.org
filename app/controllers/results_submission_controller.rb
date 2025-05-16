@@ -104,15 +104,15 @@ class ResultsSubmissionController < ApplicationController
     errors = []
     person_with_results = []
     results_to_import = []
-    results_to_import = @competition.rounds.map do |round|
-      round.round_results.map do |result|
+    @competition.rounds.each do |round|
+      round.round_results.each do |result|
         person_with_results >> result["personId"]
         results_to_import >> InboxResult.new({
                                                person_id: result["personId"],
                                                pos: result["position"],
-                                               event_id: event["eventId"],
-                                               round_type_id: round_type_id,
-                                               format_id: round["formatId"],
+                                               event_id: round.event_id,
+                                               round_type_id: round.round_type_id,
+                                               format_id: round.format_id,
                                                best: result["best"],
                                                average: result["average"],
                                                value1: result["attempts"][0].result,
@@ -128,7 +128,7 @@ class ResultsSubmissionController < ApplicationController
                                     .includes([:user])
                                     .to_enum
                                     .with_index(1)
-                                    .select { |r, _registrant_id| r.wcif_status == "accepted" && person_with_results.include?(r.registrant_id) }
+                                    .select { |r, registrant_id| r.wcif_status == "accepted" && person_with_results.include?(registrant_id) }
                                     .map do |r, registrant_id|
       InboxPerson.new({
                         id: registrant_id,
@@ -142,8 +142,8 @@ class ResultsSubmissionController < ApplicationController
     end
 
     ActiveRecord::Base.transaction do
-      InboxPerson.where(competition_id: competition_id).delete_all
-      InboxResult.where(competition_id: competition_id).delete_all
+      InboxPerson.where(competition_id: @competition.id).delete_all
+      InboxResult.where(competition_id: @competition.id).delete_all
       InboxPerson.import!(persons_to_import)
       InboxResult.import!(results_to_import)
     rescue ActiveRecord::RecordInvalid => e

@@ -10,11 +10,14 @@
     <p>
       The result submission process has two steps:
       <ul>
-        <li>Uploading a valid JSON to the website</li>
+        <li>Uploading a valid JSON to the website or use the results submitted via WCA Live</li>
         <li>Then the website will run a number of checks. If everything is correct you'll be able to submit these results to the WRT.</li>
       </ul>
     </p>
     <%= render "submit_json_panel", upload_json: @upload_json, already_has_submitted_result: @results_validator.any_results? %>
+    <%= simple_form_for :submit_from_live, url: competition_import_from_live_path do |f| %>
+      <%= f.submit "Submit WCA Live Results", class: "btn btn-primary" %>
+    <% end %>
 
     <%= render "check_results_panel",
       results_validator: @results_validator,
