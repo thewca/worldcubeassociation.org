@@ -552,19 +552,23 @@ class Registration < ApplicationRecord
   end
 
   def self.bulk_auto_accept(competition)
-    if competition.waiting_list.present?
-      competition.registrations
-                 .find(competition.waiting_list.entries)
-                 .each(&:attempt_auto_accept)
+    waitlisted_registrations = competition.registrations.find(competition.waiting_list.entries) if
+      competition.waiting_list.present?
+
+    pending_registrations = competition
+                            .registrations
+                            .competing_status_pending
+                            .with_payments
+                            .sort_by { |registration| registration.last_positive_payment.updated_at }
+
+    results = waitlisted_registrations.each_with_object({}) do |reg, hash|
+      result = reg.attempt_auto_accept
+      hash[reg.id] = result
+      break hash unless result[:succeeded]
     end
 
-    sorted_pending_registrations = competition
-                                   .registrations
-                                   .competing_status_pending
-                                   .with_payments
-                                   .sort_by { |registration| registration.last_positive_payment.updated_at }
-
-    sorted_pending_registrations.each(&:attempt_auto_accept)
+    # We dont need to break out of pending registrations because auto accept can still put them on the waiting list
+    pending_registrations.each_with_object(results) { |reg, hash| hash[reg.id] = reg.attempt_auto_accept }
   end
 
   def last_positive_payment
@@ -581,12 +585,13 @@ class Registration < ApplicationRecord
   end
 
   def attempt_auto_accept
-    return false unless auto_accept_in_current_env?
+    # Deliberately not i18n-ing as this is a temporary error message - not necessary for it to be translated
+    return { succeeded: false, info: 'auto accept not enabled in current env' } unless auto_accept_in_current_env?
 
     failure_reason = auto_accept_failure_reason
     if failure_reason.present?
       log_auto_accept_failure(failure_reason)
-      return false
+      return { succeeded: false, info: failure_reason }
     end
 
     update_payload = build_auto_accept_payload
@@ -597,10 +602,10 @@ class Registration < ApplicationRecord
         update_payload,
         AUTO_ACCEPT_ENTITY_ID,
       )
-      true
+      { succeeded: true, info: auto_accepted_registration.competing_status }
     else
       log_auto_accept_failure(auto_accepted_registration.errors.messages.values.flatten)
-      false
+      { succeeded: false, info: auto_accepted_registration.errors.messages.values.flatten }
     end
   end
 

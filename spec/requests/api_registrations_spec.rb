@@ -1386,7 +1386,7 @@ RSpec.describe 'API Registrations' do
     it 'triggers bulk auto accept via API route' do
       headers['Authorization'] = fetch_jwt_token(auto_accept_comp.organizers.first.id)
 
-      create_list(:registration, 9, :paid, :waiting_list, competition: auto_accept_comp)
+      waitlisted = create_list(:registration, 9, :paid, :waiting_list, competition: auto_accept_comp)
       create_list(:registration, 3, :paid, :pending, competition: auto_accept_comp)
       initial_pending_ids = auto_accept_comp.registrations.competing_status_pending.ids
       expected_accepted = auto_accept_comp.waiting_list.entries[..4]
@@ -1394,6 +1394,7 @@ RSpec.describe 'API Registrations' do
 
       patch bulk_auto_accept_api_v1_competition_registrations_path(competition_id: auto_accept_comp.id), headers: headers
       expect(response).to have_http_status(:ok)
+      expect(response.parsed_body[waitlisted.first.id.to_s]).to eq({ succeeded: true, info: 'accepted' }.stringify_keys)
 
       expect(auto_accept_comp.registrations.competing_status_accepted.count).to eq(10)
       expect(auto_accept_comp.registrations.competing_status_waiting_list.count).to eq(7)

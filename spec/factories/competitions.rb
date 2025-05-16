@@ -106,6 +106,8 @@ FactoryBot.define do
     trait :auto_accept do
       use_wca_registration { true }
       auto_accept_registrations { true }
+      competitor_limit_enabled { true }
+      competitor_limit_reason { 'test' }
       competitor_limit { 5 }
       auto_accept_disable_threshold { 4 }
     end
