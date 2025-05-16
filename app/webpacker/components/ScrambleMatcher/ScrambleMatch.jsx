@@ -72,7 +72,7 @@ export default function ScrambleMatch({
                               {' '}
                               {roundTypes.byId[scramble.round_type_id].name}
                               {' - '}
-                              {String.fromCharCode(65 + scramble.ordered_index)}
+                              {String.fromCharCode(64 + scramble.scramble_set_number)}
                             </Table.Cell>
                           </Ref>
                         )}

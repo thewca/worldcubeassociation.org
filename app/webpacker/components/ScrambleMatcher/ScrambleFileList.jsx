@@ -60,7 +60,7 @@ function ScrambleFileInfo({ scrambleFile }) {
                   {' '}
                   {roundTypes.byId[scrambleSet.round_type_id].name}
                   {' - '}
-                  {String.fromCharCode(65 + scrambleSet.ordered_index)}
+                  {String.fromCharCode(64 + scrambleSet.scramble_set_number)}
                 </List.Item>
               ))}
             </List>

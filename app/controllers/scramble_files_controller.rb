@@ -59,7 +59,7 @@ class ScrambleFilesController < ApplicationController
 
           wcif_round[:scrambleSets].each_with_index do |wcif_scramble_set, idx|
             scramble_set = scr_file_upload.inbox_scramble_sets.create!(
-              ordered_index: idx,
+              scramble_set_number: idx + 1,
               matched_round: competition_round,
             )
 
@@ -99,22 +99,12 @@ class ScrambleFilesController < ApplicationController
 
       next if updated_set_ids.blank?
 
-      scramble_size_offset = round.inbox_scramble_sets.count
       round.inbox_scramble_sets.update_all(matched_round_id: nil)
 
-      changed_scramble_sets = InboxScrambleSet.find(updated_set_ids)
-
-      # First pass: Set the ordered_index so ridiculously high that we won't have any collision
-      changed_scramble_sets.each_with_index do |scramble_set, idx|
-        scramble_set.update!(ordered_index: scramble_size_offset + idx)
+      InboxScrambleSet.find(updated_set_ids)
+                      .each_with_index do |scramble_set, idx|
+        scramble_set.update!(matched_round: round, matched_round_ordered_index: idx)
       end
-
-      # rubocop:disable Style/CombinableLoops
-      # Second pass: Set the ordered_index to the actual value specified by the user
-      changed_scramble_sets.each_with_index do |scramble_set, idx|
-        scramble_set.update!(matched_round: round, ordered_index: idx)
-      end
-      # rubocop:enable Style/CombinableLoops
     end
 
     render json: { success: :ok }

@@ -10,7 +10,7 @@ class InboxScrambleSet < ApplicationRecord
 
   has_many :inbox_scrambles, dependent: :destroy
 
-  validates :ordered_index, uniqueness: { scope: %i[competition_id event_id round_type_id] }
+  validates :scramble_set_number, uniqueness: { scope: %i[competition_id event_id round_type_id] }
 
   before_validation :backfill_round_information!, if: :matched_round_id?
 
