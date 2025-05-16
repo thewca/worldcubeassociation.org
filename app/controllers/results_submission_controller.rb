@@ -97,6 +97,76 @@ class ResultsSubmissionController < ApplicationController
     end
   end
 
+  def import_from_live
+    @competition = competition_from_params
+    return redirect_to competition_submit_results_edit_path if @competition.results_submitted?
+
+    errors = []
+    person_with_results = []
+    results_to_import = []
+    results_to_import = @competition.rounds.map do |round|
+      round.round_results.map do |result|
+        person_with_results >> result["personId"]
+        results_to_import >> InboxResult.new({
+                                               person_id: result["personId"],
+                                               pos: result["position"],
+                                               event_id: event["eventId"],
+                                               round_type_id: round_type_id,
+                                               format_id: round["formatId"],
+                                               best: result["best"],
+                                               average: result["average"],
+                                               value1: result["attempts"][0].result,
+                                               value2: result["attempts"] & [1].result,
+                                               value3: result["attempts"] & [2].result,
+                                               value4: result["attempts"] & [3].result,
+                                               value5: result["attempts"] & [4].result,
+                                             })
+      end
+    end
+
+    persons_to_import = @competition.registrations.wcif_ordered
+                                    .includes([:user])
+                                    .to_enum
+                                    .with_index(1)
+                                    .select { |r, _registrant_id| r.wcif_status == "accepted" && person_with_results.include?(r.registrant_id) }
+                                    .map do |r, registrant_id|
+      InboxPerson.new({
+                        id: registrant_id,
+                        wca_id: r.wca_id,
+                        competition_id: @competition.id,
+                        name: r.name,
+                        country_iso2: r.country_id,
+                        gender: r.gender,
+                        dob: r.dob,
+                      })
+    end
+
+    ActiveRecord::Base.transaction do
+      InboxPerson.where(competition_id: competition_id).delete_all
+      InboxResult.where(competition_id: competition_id).delete_all
+      InboxPerson.import!(persons_to_import)
+      InboxResult.import!(results_to_import)
+    rescue ActiveRecord::RecordInvalid => e
+      object = e.record
+      errors << if object.instance_of?(InboxPerson)
+                  "Person #{object.name} is invalid (#{e.message}), please fix it!"
+                elsif object.instance_of?(InboxResult)
+                  "Result for person #{object.person_id} in '#{Round.name_from_attributes_id(object.event_id, object.round_type_id)}' is invalid (#{e.message}), please fix it!"
+                else
+                  "An invalid record prevented the results from being created: #{e.message}"
+                end
+    end
+
+    if errors.any?
+      @results_validator = ResultsValidators::CompetitionsResultsValidator.create_full_validation
+      @results_validator.validate(@competition.id)
+      render :new
+    end
+
+    flash[:success] = "Data has been imported from WCA Live."
+    redirect_to competition_submit_results_edit_path
+  end
+
   def create
     # Check inbox, create submission, send email
     @competition = competition_from_params
