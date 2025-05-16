@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_04_28_123246) do
+ActiveRecord::Schema[7.2].define(version: 2025_05_13_130014) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -669,6 +669,35 @@ ActiveRecord::Schema[7.2].define(version: 2025_04_28_123246) do
     t.index ["round_type_id"], name: "InboxResults_fk_round"
   end
 
+  create_table "inbox_scramble_sets", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "competition_id", null: false
+    t.string "event_id", null: false
+    t.string "round_type_id", null: false
+    t.integer "ordered_index", null: false
+    t.integer "matched_round_id"
+    t.bigint "external_upload_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["competition_id", "event_id", "round_type_id", "ordered_index"], name: "idx_on_competition_id_event_id_round_type_id_ordere_68a2d4495c", unique: true
+    t.index ["competition_id", "event_id", "round_type_id"], name: "idx_on_competition_id_event_id_round_type_id_8b43d7b7e6"
+    t.index ["competition_id"], name: "index_inbox_scramble_sets_on_competition_id"
+    t.index ["event_id"], name: "fk_rails_7a55abc2f3"
+    t.index ["external_upload_id"], name: "index_inbox_scramble_sets_on_external_upload_id"
+    t.index ["matched_round_id"], name: "index_inbox_scramble_sets_on_matched_round_id"
+    t.index ["round_type_id"], name: "fk_rails_30f08dbdd8"
+  end
+
+  create_table "inbox_scrambles", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.bigint "inbox_scramble_set_id", null: false
+    t.boolean "is_extra", default: false, null: false
+    t.integer "scramble_number", null: false
+    t.text "scramble_string", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["inbox_scramble_set_id", "scramble_number", "is_extra"], name: "idx_on_inbox_scramble_set_id_scramble_number_is_ext_bd518aa059", unique: true
+    t.index ["inbox_scramble_set_id"], name: "index_inbox_scrambles_on_inbox_scramble_set_id"
+  end
+
   create_table "incident_competitions", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "incident_id", null: false
     t.string "competition_id", null: false
@@ -1166,6 +1195,19 @@ ActiveRecord::Schema[7.2].define(version: 2025_04_28_123246) do
     t.index ["holder_type", "holder_id"], name: "index_schedule_activities_on_holder_type_and_holder_id"
   end
 
+  create_table "scramble_file_uploads", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.integer "uploaded_by", null: false
+    t.timestamp "uploaded_at", null: false
+    t.string "competition_id", null: false
+    t.string "scramble_program"
+    t.timestamp "generated_at"
+    t.text "raw_wcif", size: :long, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["competition_id"], name: "index_scramble_file_uploads_on_competition_id"
+    t.index ["uploaded_by"], name: "index_scramble_file_uploads_on_uploaded_by"
+  end
+
   create_table "scrambles", id: { type: :integer, unsigned: true }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "competition_id", limit: 32, null: false
     t.string "event_id", limit: 6, null: false
@@ -1459,6 +1501,11 @@ ActiveRecord::Schema[7.2].define(version: 2025_04_28_123246) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "inbox_scramble_sets", "events"
+  add_foreign_key "inbox_scramble_sets", "round_types"
+  add_foreign_key "inbox_scramble_sets", "rounds", column: "matched_round_id"
+  add_foreign_key "inbox_scramble_sets", "scramble_file_uploads", column: "external_upload_id"
+  add_foreign_key "inbox_scrambles", "inbox_scramble_sets"
   add_foreign_key "live_attempt_history_entries", "live_attempts"
   add_foreign_key "oauth_openid_requests", "oauth_access_grants", column: "access_grant_id", on_delete: :cascade
   add_foreign_key "payment_intents", "users", column: "initiated_by_id"
@@ -1467,6 +1514,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_04_28_123246) do
   add_foreign_key "registration_history_changes", "registration_history_entries"
   add_foreign_key "sanity_check_exclusions", "sanity_checks"
   add_foreign_key "sanity_checks", "sanity_check_categories"
+  add_foreign_key "scramble_file_uploads", "users", column: "uploaded_by"
   add_foreign_key "stripe_records", "stripe_records", column: "parent_record_id"
   add_foreign_key "stripe_webhook_events", "stripe_records"
   add_foreign_key "ticket_comments", "ticket_stakeholders", column: "acting_stakeholder_id"

@@ -10,17 +10,17 @@ RSpec.describe ResultsValidators::PositionsValidator do
     # The idea behind this variable is the following: the validator can be applied
     # on either a particular model for given competition ids, or on a set of results.
     # We simply want to check it has the expected behavior on all the possible cases.
-    let(:validator_args) {
-      [InboxResult, Result].flat_map { |model|
+    let(:validator_args) do
+      [InboxResult, Result].flat_map do |model|
         [
           { competition_ids: [competition1.id, competition2.id], model: model },
           { results: model.where(competition_id: [competition1.id, competition2.id]), model: model },
         ]
-      }
-    }
+      end
+    end
 
     context "basic results" do
-      let!(:results) {
+      let!(:results) do
         {
           "Result" => [
             create_results(competition1, 5, "333oh"),
@@ -31,7 +31,7 @@ RSpec.describe ResultsValidators::PositionsValidator do
             create_results(competition2, 5, "222", kind: :inbox_result),
           ],
         }
-      }
+      end
 
       it "validates results correctly ordered on given competitions" do
         validator_args.each do |arg|

@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe RegionalOrganizationsMailer, type: :mailer do
+RSpec.describe RegionalOrganizationsMailer do
   describe "notify_board_and_assistants_of_new_regional_organization_application" do
     let(:user) { create(:user, name: "John Doe") }
     let(:regional_organization) { create(:regional_organization) }

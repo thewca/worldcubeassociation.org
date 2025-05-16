@@ -2166,6 +2166,8 @@ eo:
       translators: Tradukantoj
   registrations:
     errors:
+      #original_hash: 8c2f29b
+      exceeding_competitor_limit: Limo de konkursantoj atingita.
       #original_hash: 51c7156
       edit_deadline_passed: >-
         La limdato por redakti registriĝojn jam okazis! Ŝanĝoj devus esti
@@ -3952,6 +3954,18 @@ eo:
         '-6003': >-
           Neniu nepagita pago trovita - ĉi tio verŝajne estas ĉar vi jam pagis
           vian registriĝon.
+        #original_hash: 631576f
+        '-7001': La konkursanto ankoraŭ havas nepagatajn registriĝkostojn
+        #original_hash: 2aa350b
+        '-7002': Aŭtomata akceptado ne estas ŝaltita por ĉi tiu konkurso.
+        #original_hash: d191d2d
+        '-7003': >-
+          Eblas aŭtomate akcepti nur pritraktotajn registriĝojn aŭ tiu kiu estas
+          unua en la atendolisto
+        #original_hash: 30fd93d
+        '-7004': La konkurso atingis auto_accept_disable_threshold
+        #original_hash: f2bb661
+        '-7005': Ne eblas aŭtomate akcepti ekster registriĝperiodo
     errors:
       #original_hash: b14d060
       must_use_wca_registration: >-

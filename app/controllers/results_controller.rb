@@ -26,6 +26,10 @@ class ResultsController < ApplicationController
     [mode, event_id, region, years, show, gender, type].compact
   end
 
+  private def params_for_cache
+    params.permit(:event_id, :region, :years, :show, :gender, :type).to_h.symbolize_keys
+  end
+
   def rankings
     support_old_links!
 
@@ -253,14 +257,8 @@ class ResultsController < ApplicationController
     end
   end
 
-  private
-
-    def params_for_cache
-      params.permit(:event_id, :region, :years, :show, :gender, :type).to_h.symbolize_keys
-    end
-
-    def current_records_query(value, type)
-      <<-SQL.squish
+  private def current_records_query(value, type)
+    <<-SQL.squish
       SELECT
         '#{type}'              type,
                                results.*,
@@ -299,153 +297,153 @@ class ResultsController < ApplicationController
         AND countries.id     = results.country_id
         AND competitions.id  = results.competition_id
         AND events.`rank` < 990
-      SQL
+    SQL
+  end
+
+  private def compute_slim_or_separate_records(rows)
+    single_rows = []
+    average_rows = []
+    rows
+      .group_by { |row| row["event_id"] }
+      .each_value do |event_rows|
+      singles, averages = event_rows.partition { |row| row["type"] == "single" }
+      balance = singles.size - averages.size
+      if balance.negative?
+        singles += Array.new(-balance, nil)
+      elsif balance.positive?
+        averages += Array.new(balance, nil)
+      end
+      single_rows += singles
+      average_rows += averages
     end
 
-    def compute_slim_or_separate_records(rows)
-      single_rows = []
-      average_rows = []
-      rows
-        .group_by { |row| row["event_id"] }
-        .each_value do |event_rows|
-        singles, averages = event_rows.partition { |row| row["type"] == "single" }
-        balance = singles.size - averages.size
-        if balance.negative?
-          singles += Array.new(-balance, nil)
-        elsif balance.positive?
-          averages += Array.new(balance, nil)
+    slim_rows = single_rows.zip(average_rows)
+    [slim_rows, single_rows.compact, average_rows.compact]
+  end
+
+  private def shared_constants_and_conditions
+    @years = Competition.non_future_years
+    @types = %w[single average]
+
+    if params[:event_id] == EVENTS_ALL
+      @event_condition = ""
+    else
+      event = Event.c_find!(params[:event_id])
+      @event_condition = "AND event_id = '#{event.id}'"
+    end
+
+    @continent = Continent.c_find(params[:region])
+    @country = Country.c_find(params[:region])
+    if @continent.present?
+      @region_condition = "AND results.country_id IN (#{@continent.country_ids.map { |id| "'#{id}'" }.join(',')})"
+      @region_condition += " AND record_name IN ('WR', '#{@continent.record_name}')" if @is_histories
+    elsif @country.present?
+      @region_condition = "AND results.country_id = '#{@country.id}'"
+      @region_condition += " AND record_name <> ''" if @is_histories
+    else
+      @region_condition = ""
+      @region_condition += "AND record_name = 'WR'" if @is_histories
+    end
+
+    @gender = params[:gender]
+    @gender_condition = case params[:gender]
+                        when "Male"
+                          "AND gender = 'm'"
+                        when "Female"
+                          "AND gender = 'f'"
+                        else
+                          ""
+                        end
+
+    @is_all_years = params[:years] == YEARS_ALL
+    splitted_years_param = params[:years].split
+    @is_only = splitted_years_param[0] == "only"
+    @is_until = splitted_years_param[0] == "until"
+    @year = splitted_years_param[1].to_i
+
+    if @is_only
+      @years_condition_competition = "AND YEAR(competitions.start_date) = #{@year}"
+      @years_condition_result = "AND results.year = #{@year}"
+    elsif @is_until
+      @years_condition_competition = "AND YEAR(competitions.start_date) <= #{@year}"
+      @years_condition_result = "AND results.year <= #{@year}"
+    else
+      @years_condition_competition = ""
+      @years_condition_result = ""
+    end
+  end
+
+  # Normalizes the params so that old links to rankings still work.
+  private def support_old_links!
+    params[:event_id]&.tr!("+", " ")
+
+    params[:region]&.tr!("+", " ")
+
+    params[:years]&.tr!("+", " ")
+    params[:years] = nil if params[:years] == "all"
+
+    params[:show]&.tr!("+", " ")
+    params[:show]&.downcase!
+    # We are not supporting the all option anymore!
+    params[:show] = nil if params[:show]&.include?("all")
+  end
+
+  private def compute_rankings_by_region(rows, continent, country)
+    return [[], 0, 0] if rows.empty?
+
+    best_value_of_world = rows.first["value"]
+    best_values_of_continents = {}
+    best_values_of_countries = {}
+    world_rows = []
+    continents_rows = []
+    countries_rows = []
+    rows.each do |result|
+      result_country = Country.c_find!(result["country_id"])
+      value = result["value"]
+
+      world_rows << result if value == best_value_of_world
+
+      if best_values_of_continents[result_country.continent.id].nil? || value == best_values_of_continents[result_country.continent.id]
+        best_values_of_continents[result_country.continent.id] = value
+
+        continents_rows << result if (country.present? && country.continent.id == result_country.continent.id) || (continent.present? && continent.id == result_country.continent.id) || params[:region] == "world"
+      end
+
+      next unless best_values_of_countries[result_country.id].nil? || value == best_values_of_countries[result_country.id]
+
+      best_values_of_countries[result_country.id] = value
+
+      countries_rows << result if (country.present? && country.id == result_country.id) || params[:region] == "world"
+    end
+
+    first_continent_index = world_rows.length
+    first_country_index = first_continent_index + continents_rows.length
+    rows_to_display = world_rows + continents_rows + countries_rows
+    [rows_to_display, first_continent_index, first_country_index]
+  end
+
+  private def respond_from_cache(key_prefix, &)
+    respond_to do |format|
+      format.html
+      format.json do
+        cached_data = Rails.cache.fetch [key_prefix, *@cache_params, @record_timestamp] do
+          rows = DbHelper.execute_cached_query(@cache_params, @record_timestamp, @query)
+
+          # First, extract unique competitions
+          comp_ids = rows.map { |r| r["competition_id"] }.uniq
+          competitions_by_id = Competition.where(id: comp_ids)
+                                          .index_by(&:id)
+                                          .transform_values { |comp| comp.as_json(methods: %w[country], include: [], only: %w[cell_name id]) }
+
+          # Now that we've remembered all competitions, we can safely transform the rows
+          rows = yield rows if block_given?
+
+          {
+            rows: rows.as_json, competitionsById: competitions_by_id
+          }
         end
-        single_rows += singles
-        average_rows += averages
-      end
-
-      slim_rows = single_rows.zip(average_rows)
-      [slim_rows, single_rows.compact, average_rows.compact]
-    end
-
-    def shared_constants_and_conditions
-      @years = Competition.non_future_years
-      @types = %w[single average]
-
-      if params[:event_id] == EVENTS_ALL
-        @event_condition = ""
-      else
-        event = Event.c_find!(params[:event_id])
-        @event_condition = "AND event_id = '#{event.id}'"
-      end
-
-      @continent = Continent.c_find(params[:region])
-      @country = Country.c_find(params[:region])
-      if @continent.present?
-        @region_condition = "AND results.country_id IN (#{@continent.country_ids.map { |id| "'#{id}'" }.join(',')})"
-        @region_condition += " AND record_name IN ('WR', '#{@continent.record_name}')" if @is_histories
-      elsif @country.present?
-        @region_condition = "AND results.country_id = '#{@country.id}'"
-        @region_condition += " AND record_name <> ''" if @is_histories
-      else
-        @region_condition = ""
-        @region_condition += "AND record_name = 'WR'" if @is_histories
-      end
-
-      @gender = params[:gender]
-      @gender_condition = case params[:gender]
-                          when "Male"
-                            "AND gender = 'm'"
-                          when "Female"
-                            "AND gender = 'f'"
-                          else
-                            ""
-                          end
-
-      @is_all_years = params[:years] == YEARS_ALL
-      splitted_years_param = params[:years].split
-      @is_only = splitted_years_param[0] == "only"
-      @is_until = splitted_years_param[0] == "until"
-      @year = splitted_years_param[1].to_i
-
-      if @is_only
-        @years_condition_competition = "AND YEAR(competitions.start_date) = #{@year}"
-        @years_condition_result = "AND results.year = #{@year}"
-      elsif @is_until
-        @years_condition_competition = "AND YEAR(competitions.start_date) <= #{@year}"
-        @years_condition_result = "AND results.year <= #{@year}"
-      else
-        @years_condition_competition = ""
-        @years_condition_result = ""
+        render json: cached_data
       end
     end
-
-    # Normalizes the params so that old links to rankings still work.
-    def support_old_links!
-      params[:event_id]&.tr!("+", " ")
-
-      params[:region]&.tr!("+", " ")
-
-      params[:years]&.tr!("+", " ")
-      params[:years] = nil if params[:years] == "all"
-
-      params[:show]&.tr!("+", " ")
-      params[:show]&.downcase!
-      # We are not supporting the all option anymore!
-      params[:show] = nil if params[:show]&.include?("all")
-    end
-
-    def compute_rankings_by_region(rows, continent, country)
-      return [[], 0, 0] if rows.empty?
-
-      best_value_of_world = rows.first["value"]
-      best_values_of_continents = {}
-      best_values_of_countries = {}
-      world_rows = []
-      continents_rows = []
-      countries_rows = []
-      rows.each do |result|
-        result_country = Country.c_find!(result["country_id"])
-        value = result["value"]
-
-        world_rows << result if value == best_value_of_world
-
-        if best_values_of_continents[result_country.continent.id].nil? || value == best_values_of_continents[result_country.continent.id]
-          best_values_of_continents[result_country.continent.id] = value
-
-          continents_rows << result if (country.present? && country.continent.id == result_country.continent.id) || (continent.present? && continent.id == result_country.continent.id) || params[:region] == "world"
-        end
-
-        if best_values_of_countries[result_country.id].nil? || value == best_values_of_countries[result_country.id]
-          best_values_of_countries[result_country.id] = value
-
-          countries_rows << result if (country.present? && country.id == result_country.id) || params[:region] == "world"
-        end
-      end
-
-      first_continent_index = world_rows.length
-      first_country_index = first_continent_index + continents_rows.length
-      rows_to_display = world_rows + continents_rows + countries_rows
-      [rows_to_display, first_continent_index, first_country_index]
-    end
-
-    def respond_from_cache(key_prefix, &)
-      respond_to do |format|
-        format.html
-        format.json do
-          cached_data = Rails.cache.fetch [key_prefix, *@cache_params, @record_timestamp] do
-            rows = DbHelper.execute_cached_query(@cache_params, @record_timestamp, @query)
-
-            # First, extract unique competitions
-            comp_ids = rows.map { |r| r["competition_id"] }.uniq
-            competitions_by_id = Competition.where(id: comp_ids)
-                                            .index_by(&:id)
-                                            .transform_values { |comp| comp.as_json(methods: %w[country], include: [], only: %w[cell_name id]) }
-
-            # Now that we've remembered all competitions, we can safely transform the rows
-            rows = yield rows if block_given?
-
-            {
-              rows: rows.as_json, competitionsById: competitions_by_id
-            }
-          end
-          render json: cached_data
-        end
-      end
-    end
+  end
 end

@@ -110,7 +110,7 @@ Metrics/MethodLength:
 Metrics/ModuleLength:
   Enabled: false
 
-Style/BlockDelimiters:
+Style/AccessModifierDeclarations:
   Enabled: false
 
 Style/ClassAndModuleChildren:
@@ -123,9 +123,6 @@ Style/Documentation:
   Enabled: false
 
 Style/MultilineBlockChain:
-  Enabled: false
-
-Style/Next:
   Enabled: false
 
 Style/RaiseArgs:
@@ -297,25 +294,10 @@ RSpec/ItBehavesLike:
 RSpec/EmptyLineAfterExample:
   Enabled: false
 
-RSpec/MatchArray:
-  Enabled: false
-
 RSpec/DescribedClass:
   Enabled: false
 
-RSpec/VariableName:
-  Enabled: false
-
 RSpec/RepeatedDescription:
-  Enabled: false
-
-RSpec/ReceiveCounts:
-  Enabled: false
-
-RSpec/ContextMethod:
-  Enabled: false
-
-RSpec/BeNil:
   Enabled: false
 
 RSpec/LetBeforeExamples:
@@ -352,25 +334,4 @@ RSpec/NamedSubject:
   Enabled: false
 
 RSpec/Be:
-  Enabled: false
-
-RSpec/ScatteredLet:
-  Enabled: false
-
-RSpec/RepeatedExample:
-  Enabled: false
-
-RSpec/RepeatedExampleGroupDescription:
-  Enabled: false
-
-RSpec/ClassCheck:
-  Enabled: false
-
-RSpec/BeEmpty:
-  Enabled: false
-
-RSpecRails/NegationBeValid:
-  Enabled: false
-
-RSpecRails/InferredSpecType:
   Enabled: false
