@@ -63,19 +63,14 @@ class ScrambleFilesController < ApplicationController
               matched_round: competition_round,
             )
 
-            wcif_scramble_set[:scrambles].each_with_index do |wcif_scramble, n|
-              scramble_set.inbox_scrambles.create!(
-                scramble_string: wcif_scramble,
-                scramble_number: n + 1,
-              )
-            end
-
-            wcif_scramble_set[:extraScrambles].each_with_index do |wcif_extra_scramble, n|
-              scramble_set.inbox_scrambles.create!(
-                scramble_string: wcif_extra_scramble,
-                scramble_number: n + 1,
-                is_extra: true,
-              )
+            %i[scrambles extraScrambles].each do |scramble_kind|
+              wcif_scramble_set[scramble_kind].each_with_index do |wcif_scramble, n|
+                scramble_set.inbox_scrambles.create!(
+                  scramble_string: wcif_scramble,
+                  scramble_number: n + 1,
+                  is_extra: scramble_kind == :extraScramble,
+                )
+              end
             end
           end
         end
