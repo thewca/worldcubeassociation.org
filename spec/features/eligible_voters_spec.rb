@@ -4,10 +4,10 @@ require "rails_helper"
 require "csv"
 
 RSpec.feature "Eligible voters csv" do
-  before {
+  before do
     Timecop.freeze(Time.utc(2016, 5, 5, 10, 5, 3))
     sign_in board_member
-  }
+  end
 
   after { Timecop.return }
 
