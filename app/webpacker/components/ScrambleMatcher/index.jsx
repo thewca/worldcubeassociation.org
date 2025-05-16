@@ -14,8 +14,13 @@ function mergeScrambleSets(state, newScrambleFile) {
     'matched_round_wcif_id',
   );
 
-  return _.mergeWith(
+  const orderedScrambleSets = _.mapValues(
     groupedScrambleSets,
+    (sets) => _.sortBy(sets, 'ordered_index'),
+  );
+
+  return _.mergeWith(
+    orderedScrambleSets,
     state,
     (a, b) => _.uniqBy([...b, ...a], 'id'),
   );
