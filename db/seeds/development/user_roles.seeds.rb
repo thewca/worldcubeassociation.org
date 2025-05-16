@@ -81,7 +81,7 @@ after :user_groups do
   FactoryBot.create(:treasurer_role)
 
   # Banned competitors
-  5.times {
+  5.times do
     FactoryBot.create(
       :banned_competitor_role,
       metadata: FactoryBot.create(
@@ -90,5 +90,5 @@ after :user_groups do
         scope: RolesMetadataBannedCompetitors.scopes[:competing_and_attending],
       ),
     )
-  }
+  end
 end

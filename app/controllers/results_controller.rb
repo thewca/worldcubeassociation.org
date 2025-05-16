@@ -409,11 +409,11 @@ class ResultsController < ApplicationController
         continents_rows << result if (country.present? && country.continent.id == result_country.continent.id) || (continent.present? && continent.id == result_country.continent.id) || params[:region] == "world"
       end
 
-      if best_values_of_countries[result_country.id].nil? || value == best_values_of_countries[result_country.id]
-        best_values_of_countries[result_country.id] = value
+      next unless best_values_of_countries[result_country.id].nil? || value == best_values_of_countries[result_country.id]
 
-        countries_rows << result if (country.present? && country.id == result_country.id) || params[:region] == "world"
-      end
+      best_values_of_countries[result_country.id] = value
+
+      countries_rows << result if (country.present? && country.id == result_country.id) || params[:region] == "world"
     end
 
     first_continent_index = world_rows.length

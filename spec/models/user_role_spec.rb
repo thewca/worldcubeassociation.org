@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe UserRole, type: :model do
+RSpec.describe UserRole do
   describe 'can_user_read?' do
     context 'when the role is active banned competitor' do
       let(:active_banned_competitor_role) { create(:banned_competitor_role, :active) }

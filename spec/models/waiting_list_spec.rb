@@ -8,7 +8,7 @@ RSpec.describe WaitingList do
 
   it 'position is nil when registration not on waiting list' do
     registration = create(:registration)
-    expect(registration.waiting_list_position).to be(nil)
+    expect(registration.waiting_list_position).to be_nil
   end
 
   describe 'add to waiting list' do
@@ -40,9 +40,9 @@ RSpec.describe WaitingList do
 
     it 'must have waiting_list status to be added' do
       registration = create(:registration, :pending, competition: competition)
-      expect {
+      expect do
         waiting_list.add(registration)
-      }.to raise_error(ArgumentError, "Registration must have a competing_status of 'waiting_list' to be added to the waiting list")
+      end.to raise_error(ArgumentError, "Registration must have a competing_status of 'waiting_list' to be added to the waiting list")
     end
   end
 
