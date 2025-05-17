@@ -11,6 +11,8 @@ class Round < ApplicationRecord
 
   has_many :registrations, through: :competition_event
 
+  has_many :inbox_scramble_sets, foreign_key: "matched_round_id", inverse_of: :matched_round, dependent: :nullify
+
   # For the following association, we want to keep it to be able to do some joins,
   # but we definitely want to use cached values when directly using the method.
   belongs_to :format
