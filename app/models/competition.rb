@@ -37,6 +37,7 @@ class Competition < ApplicationRecord
   belongs_to :announced_by_user, optional: true, foreign_key: "announced_by", class_name: "User"
   belongs_to :cancelled_by_user, optional: true, foreign_key: "cancelled_by", class_name: "User"
   has_many :competition_payment_integrations
+  has_many :scramble_file_uploads
 
   accepts_nested_attributes_for :competition_events, allow_destroy: true
   accepts_nested_attributes_for :championships, allow_destroy: true
@@ -698,7 +699,8 @@ class Competition < ApplicationRecord
              'competition_payment_integrations',
              'venue_countries',
              'venue_continents',
-             'waiting_list'
+             'waiting_list',
+             'scramble_file_uploads'
           # Do nothing as they shouldn't be cloned.
         when 'organizers'
           clone.organizers = organizers
