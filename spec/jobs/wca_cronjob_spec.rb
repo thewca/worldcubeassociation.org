@@ -26,7 +26,7 @@ class FailingJob < WcaCronjob
   end
 end
 
-RSpec.describe WcaCronjob, type: :job do
+RSpec.describe WcaCronjob do
   it "doesn't enqueue the same job multiple times" do
     expect { ExampleJob.perform_later }.to change(enqueued_jobs, :size).by(1)
     expect { ExampleJob.perform_later }.to change(enqueued_jobs, :size).by(0)

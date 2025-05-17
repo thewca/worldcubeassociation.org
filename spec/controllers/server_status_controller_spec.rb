@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe ServerStatusController, type: :controller do
+RSpec.describe ServerStatusController do
   it "is happy" do
     allow_any_instance_of(ServerStatusController).to receive(:checks).and_return([HappyCheck.new])
 

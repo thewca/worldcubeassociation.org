@@ -216,17 +216,17 @@ FactoryBot.define do
 
     trait :wca_id do
       transient do
-        person { FactoryBot.create(:person, name: name, country_id: Country.find_by(iso2: country_iso2).id, gender: gender, dob: dob.strftime("%F")) }
+        person { FactoryBot.create(:person, name: name, country_id: Country.c_find_by_iso2(country_iso2).id, gender: gender, dob: dob.strftime("%F")) }
       end
     end
 
     trait :current_year_wca_id do
       transient do
-        person {
+        person do
           FactoryBot.create(
-            :person, name: name, country_id: Country.find_by(iso2: country_iso2).id, gender: gender, dob: dob.strftime("%F"), wca_id_year: Time.current.year.to_s
+            :person, name: name, country_id: Country.c_find_by_iso2(country_iso2).id, gender: gender, dob: dob.strftime("%F"), wca_id_year: Time.current.year.to_s
           )
-        }
+        end
       end
     end
 

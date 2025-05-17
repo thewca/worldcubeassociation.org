@@ -22,23 +22,21 @@ import RegionFlag from '../../wca/RegionFlag';
 const truncateComment = (comment) => (comment?.length > 12 ? `${comment.slice(0, 12)}...` : comment);
 
 function RegistrationTime({
-  timestamp, registeredOn, paymentStatuses, hasPaid, paidOn, usesPaymentIntegration,
+  timestamp, registeredOn, paymentStatus, hasPaid, paidOn, usesPaymentIntegration,
 }) {
   if (timestamp) {
     return getRegistrationTimestamp(paidOn ?? registeredOn);
   }
 
-  const mostRecentPaymentStatus = paymentStatuses ? paymentStatuses[0] : 'unpaid';
-
   if (usesPaymentIntegration && !hasPaid) {
     let content = I18n.t('registrations.list.payment_requested_on', { date: getRegistrationTimestamp(registeredOn) });
     let trigger = <span>{I18n.t('registrations.list.not_paid')}</span>;
 
-    if (mostRecentPaymentStatus === 'initialized') {
+    if (paymentStatus === 'initialized') {
       content = I18n.t('competitions.registration_v2.list.payment.initialized', { date: getRegistrationTimestamp(paidOn) });
     }
 
-    if (mostRecentPaymentStatus === 'refund') {
+    if (paymentStatus === 'refund') {
       content = I18n.t('competitions.registration_v2.list.payment.refunded', { date: getRegistrationTimestamp(paidOn) });
       trigger = <span>{I18n.t('competitions.registration_v2.list.payment.refunded_status')}</span>;
     }
@@ -90,9 +88,9 @@ export default function TableRow({
     waiting_list_position: position,
   } = registration.competing;
   const {
-    payment_amount_iso: paymentAmount,
+    paid_amount_iso: paymentAmount,
     updated_at: updatedAt,
-    payment_statuses: paymentStatuses,
+    payment_status: paymentStatus,
     has_paid: hasPaid,
   } = registration.payment ?? {};
   const usingPayment = competitionInfo['using_payment_integrations?'];
@@ -156,9 +154,13 @@ export default function TableRow({
             {dobIsShown && <Table.Cell>{dateOfBirth}</Table.Cell>}
 
             <Table.Cell>
-              <RegionFlag iso2={country.iso2} withoutTooltip={regionIsExpanded} />
-              {' '}
-              {regionIsExpanded && countries.byIso2[country.iso2].name}
+              {country?.iso2 && (
+                <>
+                  <RegionFlag iso2={country.iso2} withoutTooltip={regionIsExpanded} />
+                  {' '}
+                  {regionIsExpanded && countries.byIso2?.[country.iso2]?.name}
+                </>
+              )}
             </Table.Cell>
 
             <Table.Cell>
@@ -167,7 +169,7 @@ export default function TableRow({
                 paidOn={updatedAt}
                 hasPaid={hasPaid}
                 registeredOn={registeredOn}
-                paymentStatuses={paymentStatuses}
+                paymentStatus={paymentStatus}
                 usesPaymentIntegration={competitionInfo['using_payment_integrations?']}
               />
             </Table.Cell>

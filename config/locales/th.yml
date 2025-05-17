@@ -482,6 +482,12 @@ th:
         registration_competition_events: ประเภท
         #original_hash: 84add5b
         email: Email
+        #original_hash: 6d7a30a
+        search: ค้นหา...
+        #original_hash: dfd309d
+        too_few_chars: ตัวอักษรน้อยเกินไป
+        #original_hash: b993b0c
+        no_results: ไม่พบผลลัพธ์
       competition_tab:
         #original_hash: 4f9be05
         content: เนื้อหา
@@ -2316,10 +2322,6 @@ th:
     #original_hash: 86877d4
     wont_pay_here: กรุณาตรวจสอบรายละเอียดการแข่งขันสำหรับวิธัการขำระ
     refund_form:
-      hints:
-        #original_hash: 38c904c
-        refund_amount: >-
-          จำนวนเงินที่จะคืนให้ผู้เข้าแข่งขันสามารถเป็นจำนวนได้จนถึงจำนวนที่ผู้เข้าแข่งขันชำระมา
       labels:
         #original_hash: 1cc5991
         refund_amount: จำนวนที่คืน
@@ -2472,6 +2474,13 @@ th:
         กรุณาใช้ฟอร์มนี้เพื่อเพิ่มการสมัครที่การแข่งขัน
       #original_hash: a11edb8
       add: เพิ่มการสมัคร
+      #original_hash: fd52980
+      ots_not_enabled: >-
+        การสมัครการแข่งขันปิดแล้วและไม่สามารถเปิดใช้งานการสมัครการแข่งขันที่การแข่งขันได้
+        - คุณต้องแก้ไขการแข่งขันเพื่อเปิดใช้งานก่อน
+      #original_hash: 61125b5
+      competition_over: >-
+        คุณไม่สามารถเพิ่มการสมัครการแข่งขันที่การแข่งขันได้หลังการแข่งขันสิ้นสุดลงได้
       errors:
         #original_hash: d6dcf5c
         already_registered: ผู้สมัครรายนี้มีได้ทำการสมัครไปแล้ว
@@ -3610,6 +3619,8 @@ th:
         being_deleted: การสมัครกำลังถูกลบ...
         #original_hash: cbf13af
         update_confirm: คุณแน่ใจหรือไม่ว่าต้องการอัปเดตการสมัครการแข่งขันของคุณ?
+        #original_hash: 604da8b
+        organizer_update_confirm: คุณแน่ใจว่าต้องการอัพเดตการสมัครการแข่งขันของผู้ใช้หรือไม่?
         #original_hash: 9b92912
         update_confirm_contact: >-
           คุณต้องติดต่อผู้จัดการแข่งัขนเพื่ออัปเดตการสมัครของคุณ คลิก Yes
@@ -3796,6 +3807,8 @@ th:
         '-6001': WCA Payment ไม่ได้เปิดใช้งานสำหรับการแข่งขันครั้งนี้
         #original_hash: 092da51
         '-6002': คุณต้องสมัครการแข่งขันให้เสร็จสิ้นก่อนจึงจะสามารถชำระเงินได้
+        #original_hash: ee2c9c4
+        '-6003': ไม่พบการชำระเงินค้างชำระ - อาจเป็นเพราะคุณได้ชำระเงินค่าสมัครไปแล้ว
     errors:
       #original_hash: b14d060
       must_use_wca_registration: >-
@@ -3885,6 +3898,9 @@ th:
       event_change_deadline_with_ots: >-
         วันสุดท้ายของการแก้ไขประเภทการแข่งขันต้องอยู่ในช่วงเวลาการแข่งขัน
         หากคุณรับสมัครการแข่งขันที่การแข่งขัน
+      #original_hash: e6400f7
+      on_the_spot_with_past_event_change_deadline: >-
+        ไม่สามารถเปิดใช้งานการลงสมัครการแข่งขันที่การแข่งขันได้ได้หากหมดเขตการอัพเดตประเภทการแข่งขันไปแล้ว
       #original_hash: 5ae2437
       series_distance_km: 'การแข่งขันอยู่ห่างจาก %{competition} มากเกินไป'
       #original_hash: 4a5d7c5
@@ -4324,11 +4340,24 @@ th:
     #original_hash: 10bcdbd
     connect_wca_id: เชื่อมต่อ WCA ID กับ account ของคุณ
   payments:
+    messages:
+      #original_hash: 2eac1cb
+      charge_refunded: การชำระค่าสมัครได้รับการคืนเงินแล้ว
+      #original_hash: 1e1d219
+      charges_refunded: ค่าใช้จ่ายทั้งหมดได้รับการคืนแล้ว
+    errors:
+      refund:
+        #original_hash: 66475ae
+        provider_disconnected: >-
+          คุณไม่สามารถทำการคืนเงินสำหรับการแข่งขันนี้ได้อีกต่อไป โปรดใช้
+          dashboard ของผู้ให้บริการชำระเงินของคุณเพื่อดำเนินการดังกล่าว
+        #original_hash: 73e93ee
+        refund_amount_too_high: คุณไม่มีสิทธิคืนเงินมากกว่าที่ผู้สมัครการแข่งขันได้ชำระไว้
+        #original_hash: 6368ffc
+        refund_amount_too_low: จำนวนเงินที่คืนจะต้องมากกว่าศูนย์
     labels:
-      #original_hash: cccf678
-      payment_statuses: สถานะการชำระค่าสมัคร
-      #original_hash: 312b6b6
-      available_refunds: Available Refunds
+      #original_hash: b6370d7
+      net_payment: การชำระเงินสุทธิ
       #original_hash: ef3cd45
       original_payment: Original Payment
     payment_providers:
@@ -4421,11 +4450,6 @@ th:
           primary_email: Email
         #original_hash: 08d2e98
         fallback_not_applicable: N/A
-    statuses:
-      #original_hash: c8fbda9
-      succeeded: สำเร็จ
-      #original_hash: d6fbc7a
-      refund: คืนค่าสมัครแล้ว
   persons:
     index:
       #original_hash: 5934b4c

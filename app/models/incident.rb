@@ -71,17 +71,17 @@ class Incident < ApplicationRecord
     json = super
     json[:class] = self.class.to_s.downcase
 
-    json[:tags] = tags_array.map { |tag|
+    json[:tags] = tags_array.map do |tag|
       { name: tag }.merge(Regulation.find_or_nil(tag) || {})
-    }
+    end
 
-    json[:competitions] = incident_competitions.map { |incident_competition|
+    json[:competitions] = incident_competitions.map do |incident_competition|
       {
         id: incident_competition.competition.id,
         name: incident_competition.competition.name,
         comments: incident_competition.comments,
       }
-    }
+    end
 
     json
   end

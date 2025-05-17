@@ -367,7 +367,7 @@ class User < ApplicationRecord
   end
 
   def country
-    Country.find_by(iso2: country_iso2)
+    Country.c_find_by_iso2(country_iso2)
   end
 
   def newcomer_month_eligible?
@@ -1200,13 +1200,13 @@ class User < ApplicationRecord
   private def deprecated_team_roles
     active_roles
       .includes(:metadata, group: [:metadata])
-      .select { |role|
+      .select do |role|
         [
           UserGroup.group_types[:teams_committees],
           UserGroup.group_types[:councils],
           UserGroup.group_types[:board],
         ].include?(role.group_type)
-      }
+      end
       .reject { |role| role.group.is_hidden }
       .map(&:deprecated_team_role)
   end

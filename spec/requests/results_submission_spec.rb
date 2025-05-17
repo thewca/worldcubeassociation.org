@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe ResultsSubmissionController, type: :request do
+RSpec.describe ResultsSubmissionController do
   let(:delegate) { create(:delegate) }
   let(:comp) { create(:competition, :with_valid_submitted_results, delegates: [delegate]) }
 

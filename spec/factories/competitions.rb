@@ -20,7 +20,7 @@ FactoryBot.define do
 
       qualifications { nil }
 
-      hard_qualifications {
+      hard_qualifications do
         {
           '333' => { 'type' => 'attemptResult', 'resultType' => 'single', 'whenDate' => today, 'level' => 1 },
           '555' => { 'type' => 'attemptResult', 'resultType' => 'average', 'whenDate' => today, 'level' => 6 },
@@ -29,9 +29,9 @@ FactoryBot.define do
           '222' => { 'type' => 'anyResult', 'resultType' => 'single', 'whenDate' => today, 'level' => 0 },
           '444' => { 'type' => 'anyResult', 'resultType' => 'average', 'whenDate' => today, 'level' => 0 },
         }
-      }
+      end
 
-      easy_qualifications {
+      easy_qualifications do
         {
           '333' => { 'type' => 'attemptResult', 'resultType' => 'single', 'whenDate' => today, 'level' => 1000 },
           '555' => { 'type' => 'attemptResult', 'resultType' => 'average', 'whenDate' => today, 'level' => 6000 },
@@ -40,9 +40,9 @@ FactoryBot.define do
           '222' => { 'type' => 'anyResult', 'resultType' => 'single', 'whenDate' => today, 'level' => 0 },
           '444' => { 'type' => 'anyResult', 'resultType' => 'average', 'whenDate' => today, 'level' => 0 },
         }
-      }
+      end
 
-      easy_future_qualifications {
+      easy_future_qualifications do
         {
           '333' => { 'type' => 'attemptResult', 'resultType' => 'single', 'whenDate' => next_month, 'level' => 1000 },
           '555' => { 'type' => 'attemptResult', 'resultType' => 'average', 'whenDate' => next_month, 'level' => 6000 },
@@ -51,9 +51,9 @@ FactoryBot.define do
           '222' => { 'type' => 'anyResult', 'resultType' => 'single', 'whenDate' => next_month, 'level' => 0 },
           '444' => { 'type' => 'anyResult', 'resultType' => 'average', 'whenDate' => next_month, 'level' => 0 },
         }
-      }
+      end
 
-      past_qualifications {
+      past_qualifications do
         {
           '333' => { 'type' => 'attemptResult', 'resultType' => 'single', 'whenDate' => last_year, 'level' => 1000 },
           '555' => { 'type' => 'attemptResult', 'resultType' => 'average', 'whenDate' => last_year, 'level' => 6000 },
@@ -62,7 +62,7 @@ FactoryBot.define do
           '222' => { 'type' => 'anyResult', 'resultType' => 'single', 'whenDate' => last_year, 'level' => 0 },
           '444' => { 'type' => 'anyResult', 'resultType' => 'average', 'whenDate' => last_year, 'level' => 0 },
         }
-      }
+      end
     end
 
     sequence(:name) { |n| "Foo Comp #{n} 2015" }
@@ -106,6 +106,12 @@ FactoryBot.define do
     trait :auto_accept do
       use_wca_registration { true }
       auto_accept_registrations { true }
+      competitor_limit { 5 }
+      auto_accept_disable_threshold { 4 }
+    end
+
+    trait :allow_self_delete do
+      competitor_can_cancel { :always }
     end
 
     trait :newcomer_month do
@@ -421,51 +427,51 @@ FactoryBot.define do
             current_room_id += 1
             venue.venue_rooms.create!(room_attributes)
           end
-          if i == 0
-            start_time = Time.zone.local_to_utc(competition.start_time)
-            end_time = start_time
-            venue.reload
-            first_room = venue.venue_rooms.first
-            first_room.schedule_activities.create!(
-              wcif_id: 1,
-              name: "Some name",
-              activity_code: "other-lunch",
-              start_time: start_time.change(hour: 12, min: 0, sec: 0).iso8601,
-              end_time: end_time.change(hour: 13, min: 0, sec: 0).iso8601,
-            )
-            # In case we're generating multi days competition, add some activities
-            # on the other day.
-            start_time = Time.zone.local_to_utc(competition.end_date.to_time)
-            end_time = start_time
-            activity = first_room.schedule_activities.create!(
-              wcif_id: 2,
-              name: "another activity",
-              activity_code: "333fm-r1",
-              start_time: start_time.change(hour: 10, min: 0, sec: 0).iso8601,
-              end_time: end_time.change(hour: 11, min: 0, sec: 0).iso8601,
-            )
-            activity.child_activities.create!(
-              wcif_id: 3,
-              name: "first group",
-              activity_code: "333fm-r1-g1",
-              start_time: start_time.change(hour: 10, min: 0, sec: 0).iso8601,
-              end_time: end_time.change(hour: 10, min: 30, sec: 0).iso8601,
-            )
-            nested_activity = activity.child_activities.create!(
-              wcif_id: 4,
-              name: "second group",
-              activity_code: "333fm-r1-g2",
-              start_time: start_time.change(hour: 10, min: 30, sec: 0).iso8601,
-              end_time: end_time.change(hour: 11, min: 0, sec: 0).iso8601,
-            )
-            nested_activity.child_activities.create!(
-              wcif_id: 5,
-              name: "some nested thing",
-              activity_code: "333fm-r1-g2-a1",
-              start_time: start_time.change(hour: 10, min: 30, sec: 0).iso8601,
-              end_time: end_time.change(hour: 11, min: 0, sec: 0).iso8601,
-            )
-          end
+          next unless i == 0
+
+          start_time = Time.zone.local_to_utc(competition.start_time)
+          end_time = start_time
+          venue.reload
+          first_room = venue.venue_rooms.first
+          first_room.schedule_activities.create!(
+            wcif_id: 1,
+            name: "Some name",
+            activity_code: "other-lunch",
+            start_time: start_time.change(hour: 12, min: 0, sec: 0).iso8601,
+            end_time: end_time.change(hour: 13, min: 0, sec: 0).iso8601,
+          )
+          # In case we're generating multi days competition, add some activities
+          # on the other day.
+          start_time = Time.zone.local_to_utc(competition.end_date.to_time)
+          end_time = start_time
+          activity = first_room.schedule_activities.create!(
+            wcif_id: 2,
+            name: "another activity",
+            activity_code: "333fm-r1",
+            start_time: start_time.change(hour: 10, min: 0, sec: 0).iso8601,
+            end_time: end_time.change(hour: 11, min: 0, sec: 0).iso8601,
+          )
+          activity.child_activities.create!(
+            wcif_id: 3,
+            name: "first group",
+            activity_code: "333fm-r1-g1",
+            start_time: start_time.change(hour: 10, min: 0, sec: 0).iso8601,
+            end_time: end_time.change(hour: 10, min: 30, sec: 0).iso8601,
+          )
+          nested_activity = activity.child_activities.create!(
+            wcif_id: 4,
+            name: "second group",
+            activity_code: "333fm-r1-g2",
+            start_time: start_time.change(hour: 10, min: 30, sec: 0).iso8601,
+            end_time: end_time.change(hour: 11, min: 0, sec: 0).iso8601,
+          )
+          nested_activity.child_activities.create!(
+            wcif_id: 5,
+            name: "some nested thing",
+            activity_code: "333fm-r1-g2-a1",
+            start_time: start_time.change(hour: 10, min: 30, sec: 0).iso8601,
+            end_time: end_time.change(hour: 11, min: 0, sec: 0).iso8601,
+          )
         end
         # Add valid schedule for existing rounds
         room = competition.competition_venues.last.venue_rooms.first

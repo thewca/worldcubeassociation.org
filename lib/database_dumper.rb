@@ -224,6 +224,8 @@ module DatabaseDumper
     }.freeze,
     "inbox_persons" => :skip_all_rows,
     "inbox_results" => :skip_all_rows,
+    "inbox_scramble_sets" => :skip_all_rows,
+    "inbox_scrambles" => :skip_all_rows,
     "persons" => {
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w[
@@ -344,6 +346,18 @@ module DatabaseDumper
     "active_storage_blobs" => :skip_all_rows,
     "active_storage_variant_records" => :skip_all_rows,
     "ar_internal_metadata" => :skip_all_rows,
+    "result_attempts" => {
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w[
+          id
+          value
+          attempt_number
+          result_id
+          created_at
+          updated_at
+        ],
+      ),
+    }.freeze,
     "competition_delegates" => {
       where_clause: JOIN_WHERE_VISIBLE_COMP,
       column_sanitizers: actions_to_column_sanitizers(
@@ -842,6 +856,7 @@ module DatabaseDumper
     "payment_intents" => :skip_all_rows,
     "stripe_webhook_events" => :skip_all_rows,
     "uploaded_jsons" => :skip_all_rows,
+    "scramble_file_uploads" => :skip_all_rows,
     "bookmarked_competitions" => {
       where_clause: JOIN_WHERE_VISIBLE_COMP,
       column_sanitizers: actions_to_column_sanitizers(
@@ -1174,7 +1189,7 @@ module DatabaseDumper
   }.freeze
 
   # NOTE: The parameter dump_config_name has to correspond exactly to the desired key in config/database.yml
-  def self.with_dumped_db(dump_config_name, dump_sanitizers, dump_ts_name = nil)
+  def self.with_dumped_db(dump_config_name, dump_sanitizers, dump_ts_name = nil, drop_db_after_dump: true)
     primary_db_config = ActiveRecord::Base.connection_db_config
 
     config = ActiveRecord::Base.configurations.configs_for(name: dump_config_name.to_s, include_hidden: true)
@@ -1223,14 +1238,14 @@ module DatabaseDumper
 
     yield dump_db_name
   ensure
-    ActiveRecord::Tasks::DatabaseTasks.drop config
+    ActiveRecord::Tasks::DatabaseTasks.drop config if drop_db_after_dump
 
     # Need to connect to primary database again because the operations above redirect the entire ActiveRecord connection
     ActiveRecord::Base.establish_connection(primary_db_config) if primary_db_config
   end
 
   def self.development_dump(dump_filename)
-    self.with_dumped_db(:developer_dump, DEV_SANITIZERS, DEV_TIMESTAMP_NAME) do |dump_db|
+    self.with_dumped_db(:developer_dump, DEV_SANITIZERS, DEV_TIMESTAMP_NAME, drop_db_after_dump: false) do |dump_db|
       LogTask.log_task "Running SQL dump to '#{dump_filename}'" do
         self.mysqldump(dump_db, dump_filename)
       end

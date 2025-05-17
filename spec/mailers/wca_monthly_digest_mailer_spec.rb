@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe WcaMonthlyDigestMailer, type: :mailer do
+RSpec.describe WcaMonthlyDigestMailer do
   describe "send_weat_digest_content" do
     let(:mail) { WcaMonthlyDigestMailer.send_weat_digest_content }
 
