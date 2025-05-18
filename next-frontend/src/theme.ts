@@ -565,6 +565,11 @@ const customConfig = defineConfig({
                 height: "1.1em",
                 width: "1.1em",
               },
+              img: {
+                height: "1.1em",
+                width: "auto",
+                borderRadius: "3px",
+              },
             },
           },
         ],
@@ -724,6 +729,11 @@ const customConfig = defineConfig({
                 width: "1%",
                 whiteSpace: "noWrap",
                 padding: "0",
+                "& img": {
+                  height: "1.1em",
+                  width: "auto",
+                  borderRadius: "3px",
+                },
               },
               row: {
                 "& td": {

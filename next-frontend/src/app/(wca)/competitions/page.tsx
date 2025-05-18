@@ -14,7 +14,18 @@ import { getCompetitionInfo } from "@/lib/wca/competitions/getCompetitionInfo";
 import AllCompsIcon from "@/components/icons/AllCompsIcon";
 
 // Array of competition IDs you want to retrieve data for
-const compIds = ["OC2022", "OC2024", "WC2025", "PerthAutumn2025"];
+const compIds = [
+  "OC2022",
+  "OC2024",
+  "WC2025",
+  "PerthAutumn2025",
+  "WC2011",
+  "WC2013",
+  "WC2015",
+  "WC2017",
+  "WC2023",
+  "WC2019",
+];
 
 // Async function to populate comp data
 const getAllCompData = async () => {
