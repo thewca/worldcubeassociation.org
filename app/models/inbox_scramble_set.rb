@@ -8,11 +8,13 @@ class InboxScrambleSet < ApplicationRecord
   belongs_to :scramble_file_upload, optional: true, foreign_key: "external_upload_id", inverse_of: :inbox_scramble_sets
   belongs_to :matched_round, class_name: "Round", optional: true
 
-  has_many :inbox_scrambles
+  has_many :inbox_scrambles, dependent: :destroy
 
-  validates :ordered_index, uniqueness: { scope: %i[competition_id event_id round_type_id] }
+  validates :scramble_set_number, uniqueness: { scope: %i[competition_id event_id round_type_id] }
 
   before_validation :backfill_round_information!, if: :matched_round_id?
+
+  delegate :wcif_id, to: :matched_round, prefix: true, allow_nil: true
 
   def backfill_round_information!
     return if matched_round.blank?
@@ -23,6 +25,8 @@ class InboxScrambleSet < ApplicationRecord
   end
 
   DEFAULT_SERIALIZE_OPTIONS = {
+    except: %w[matched_round_id],
+    methods: %w[matched_round_wcif_id],
     include: %w[inbox_scrambles],
   }.freeze
 

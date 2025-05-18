@@ -105,7 +105,9 @@ Rails.application.routes.draw do
     # Delegate views and action
     get 'submit-results' => 'results_submission#new', as: :submit_results_edit
     post 'submit-results' => 'results_submission#create', as: :submit_results
-    post 'upload-scramble-json' => 'results_submission#upload_scramble_json', as: :upload_scramble_json
+    resources :scramble_files, only: %i[index create destroy], shallow: true do
+      patch 'update-round-matching' => 'scramble_files#update_round_matching', on: :collection
+    end
     post 'upload-json' => 'results_submission#upload_json', as: :upload_results_json
     # WRT views and action
     get '/admin/upload-results' => "admin#new_results", as: :admin_upload_results_edit
