@@ -34,12 +34,14 @@ module Admin
       end
     end
 
-    private def new_id_params
-      params.permit(:name, :competition_id, :semi_id)
-    end
+    private
 
-    private def person_params
-      params.require(:person).permit(:name, :wca_id, :dob, :gender, :country_id)
-    end
+      def new_id_params
+        params.permit(:name, :competition_id, :semi_id)
+      end
+
+      def person_params
+        params.require(:person).permit(:name, :wca_id, :dob, :gender, :country_id)
+      end
   end
 end

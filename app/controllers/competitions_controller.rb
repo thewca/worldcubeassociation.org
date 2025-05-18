@@ -54,37 +54,6 @@ class CompetitionsController < ApplicationController
     }
   end
 
-  private def require_user_permission(action, *, is_message: false)
-    permission_result = current_user&.send(action, *)
-
-    if is_message && permission_result
-      return render status: :forbidden, json: { error: permission_result }
-    elsif !is_message && !permission_result
-      return render status: :forbidden, json: { error: "Missing permission #{action}" }
-    end
-
-    # return: when is_message is true, the permission_result message should be empty, i.e. false-y,
-    #   and the negation of an empty message is also true.
-    #   When is_message is false, the permission_result should be true, i.e. the negation should be false.
-    is_message == !permission_result
-  end
-
-  private def competition_from_params(includes: nil)
-    Competition.includes(includes).find(params[:competition_id] || params[:id]).tap do |competition|
-      raise ActionController::RoutingError.new('Not Found') unless competition.user_can_view?(current_user)
-
-      assign_editing_user(competition)
-    end
-  end
-
-  private def assign_delegate(competition)
-    competition.delegates |= [current_user] if current_user.any_kind_of_delegate?
-  end
-
-  private def assign_editing_user(competition)
-    competition.editing_user_id = current_user&.id
-  end
-
   # Rubocop is unhappy about all the things we do in this controller action,
   # which is understandable.
   def index
@@ -587,13 +556,6 @@ class CompetitionsController < ApplicationController
     end
   end
 
-  private def params_for_competition_form
-    # we're quite lax about reading params, because set_form_data! on the competition object does a comprehensive JSON-Schema check.
-    #   Also, listing _all_ the possible params to `permit` here is annoying because the Competition model has _way_ too many columns.
-    #   So we "only" remove the ActionController values, as well as all route params manually.
-    params.permit!.to_h.except(:controller, :action, :id, :competition, :format)
-  end
-
   before_action -> { require_user_permission(:can_manage_competition?, competition_from_params) }, only: [:announcement_data]
 
   def announcement_data
@@ -789,4 +751,44 @@ class CompetitionsController < ApplicationController
     @user = User.find(user_id)
     @competitions = @user.subordinate_delegates.map(&:delegated_competitions).flatten.uniq.reject(&:probably_over?).sort_by { |c| c.start_date || (Date.today + 20.years) }.reverse
   end
+
+  private
+
+    def require_user_permission(action, *, is_message: false)
+      permission_result = current_user&.send(action, *)
+
+      if is_message && permission_result
+        return render status: :forbidden, json: { error: permission_result }
+      elsif !is_message && !permission_result
+        return render status: :forbidden, json: { error: "Missing permission #{action}" }
+      end
+
+      # return: when is_message is true, the permission_result message should be empty, i.e. false-y,
+      #   and the negation of an empty message is also true.
+      #   When is_message is false, the permission_result should be true, i.e. the negation should be false.
+      is_message == !permission_result
+    end
+
+    def competition_from_params(includes: nil)
+      Competition.includes(includes).find(params[:competition_id] || params[:id]).tap do |competition|
+        raise ActionController::RoutingError.new('Not Found') unless competition.user_can_view?(current_user)
+
+        assign_editing_user(competition)
+      end
+    end
+
+    def assign_delegate(competition)
+      competition.delegates |= [current_user] if current_user.any_kind_of_delegate?
+    end
+
+    def assign_editing_user(competition)
+      competition.editing_user_id = current_user&.id
+    end
+
+    def params_for_competition_form
+      # we're quite lax about reading params, because set_form_data! on the competition object does a comprehensive JSON-Schema check.
+      #   Also, listing _all_ the possible params to `permit` here is annoying because the Competition model has _way_ too many columns.
+      #   So we "only" remove the ActionController values, as well as all route params manually.
+      params.permit!.to_h.except(:controller, :action, :id, :competition, :format)
+    end
 end

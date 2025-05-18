@@ -25,7 +25,9 @@ module SortHelper
     end
   end
 
-  private def stable_sort_by(array, direction, &)
-    direction == 'asc' ? array.stable_sort_by_asc(&) : array.stable_sort_by_desc(&)
-  end
+  private
+
+    def stable_sort_by(array, direction, &)
+      direction == 'asc' ? array.stable_sort_by_asc(&) : array.stable_sort_by_desc(&)
+    end
 end

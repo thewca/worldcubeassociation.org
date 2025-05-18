@@ -20,61 +20,6 @@ class ConnectedStripeAccount < ApplicationRecord
     self.create_intent(registration, amount_iso, currency_iso, paying_user)
   end
 
-  # This method implements the PaymentElements workflow described at:
-  # - https://stripe.com/docs/payments/quickstart
-  # - https://stripe.com/docs/payments/accept-a-payment
-  # - https://stripe.com/docs/payments/accept-a-payment?ui=elements
-  # It essentially creates a PaymentIntent for the current user-specified amount.
-  # Everything after the creation of the intent is handled by Stripe through their JS integration.
-  # At the very end, when the process is finished, it redirects the user to a return URL that we specified.
-  private def create_intent(registration, amount_iso, currency_iso, paying_user)
-    stripe_amount = StripeRecord.amount_to_stripe(amount_iso, currency_iso)
-
-    registration_metadata = {
-      competition: registration.competition_id,
-      user: registration.user_id,
-      registration_type: registration.model_name,
-      registration_id: registration.id,
-    }
-
-    # The Stripe API forces the user to provide a return_url when using automated payment methods.
-    # In our test suite however, we want to be able to confirm specific payment methods without a return URL
-    # because our CI containers are not exposed to the public. So we need this little hack :/
-    # See also https://docs.stripe.com/upgrades/manage-payment-methods
-    allow_redirects = Rails.env.test? ? 'never' : 'always'
-
-    payment_intent_args = {
-      amount: stripe_amount,
-      currency: currency_iso,
-      receipt_email: registration.user.email,
-      description: "Registration payment for #{registration.competition.name}",
-      metadata: registration_metadata,
-      # we cannot recycle an existing intent, so we create a new one which needs all possible PaymentMethods enabled.
-      # Required as per https://stripe.com/docs/payments/accept-a-payment-deferred?type=payment&client=html#create-intent
-      automatic_payment_methods: {
-        enabled: true,
-        allow_redirects: allow_redirects,
-      },
-    }
-
-    # Create the PaymentIntent, overriding the stripe_account for the request
-    # by the connected stripe account for the competition.
-    intent = stripe_client.v1.payment_intents.create(payment_intent_args)
-
-    # Log the payment attempt. We register the payment intent ID to find it later after checkout completed.
-    stripe_record = StripeRecord.create_from_api(intent, payment_intent_args, self.account_id)
-
-    # memoize the payment intent in our DB because payments are handled asynchronously
-    # so we need to be able to retrieve this later at any time, even when our server crashes in the meantime…
-    PaymentIntent.create!(
-      holder: registration,
-      payment_record: stripe_record,
-      client_secret: intent.client_secret,
-      initiated_by: paying_user,
-      wca_status: stripe_record.determine_wca_status,
-    )
-  end
-
   def retrieve_payments(payment_intent)
     intent_record = payment_intent.payment_record
 
@@ -170,7 +115,64 @@ class ConnectedStripeAccount < ApplicationRecord
     OAuth2::Client.new(AppSecrets.STRIPE_CLIENT_ID, AppSecrets.STRIPE_API_KEY, options)
   end
 
-  private def stripe_client
-    Stripe::StripeClient.new(AppSecrets.STRIPE_API_KEY, stripe_account: self.account_id)
-  end
+  private
+
+    # This method implements the PaymentElements workflow described at:
+    # - https://stripe.com/docs/payments/quickstart
+    # - https://stripe.com/docs/payments/accept-a-payment
+    # - https://stripe.com/docs/payments/accept-a-payment?ui=elements
+    # It essentially creates a PaymentIntent for the current user-specified amount.
+    # Everything after the creation of the intent is handled by Stripe through their JS integration.
+    # At the very end, when the process is finished, it redirects the user to a return URL that we specified.
+    def create_intent(registration, amount_iso, currency_iso, paying_user)
+      stripe_amount = StripeRecord.amount_to_stripe(amount_iso, currency_iso)
+
+      registration_metadata = {
+        competition: registration.competition_id,
+        user: registration.user_id,
+        registration_type: registration.model_name,
+        registration_id: registration.id,
+      }
+
+      # The Stripe API forces the user to provide a return_url when using automated payment methods.
+      # In our test suite however, we want to be able to confirm specific payment methods without a return URL
+      # because our CI containers are not exposed to the public. So we need this little hack :/
+      # See also https://docs.stripe.com/upgrades/manage-payment-methods
+      allow_redirects = Rails.env.test? ? 'never' : 'always'
+
+      payment_intent_args = {
+        amount: stripe_amount,
+        currency: currency_iso,
+        receipt_email: registration.user.email,
+        description: "Registration payment for #{registration.competition.name}",
+        metadata: registration_metadata,
+        # we cannot recycle an existing intent, so we create a new one which needs all possible PaymentMethods enabled.
+        # Required as per https://stripe.com/docs/payments/accept-a-payment-deferred?type=payment&client=html#create-intent
+        automatic_payment_methods: {
+          enabled: true,
+          allow_redirects: allow_redirects,
+        },
+      }
+
+      # Create the PaymentIntent, overriding the stripe_account for the request
+      # by the connected stripe account for the competition.
+      intent = stripe_client.v1.payment_intents.create(payment_intent_args)
+
+      # Log the payment attempt. We register the payment intent ID to find it later after checkout completed.
+      stripe_record = StripeRecord.create_from_api(intent, payment_intent_args, self.account_id)
+
+      # memoize the payment intent in our DB because payments are handled asynchronously
+      # so we need to be able to retrieve this later at any time, even when our server crashes in the meantime…
+      PaymentIntent.create!(
+        holder: registration,
+        payment_record: stripe_record,
+        client_secret: intent.client_secret,
+        initiated_by: paying_user,
+        wca_status: stripe_record.determine_wca_status,
+      )
+    end
+
+    def stripe_client
+      Stripe::StripeClient.new(AppSecrets.STRIPE_API_KEY, stripe_account: self.account_id)
+    end
 end
