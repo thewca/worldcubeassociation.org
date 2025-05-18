@@ -1472,7 +1472,7 @@ class User < ApplicationRecord
       last_sign_in_ip: nil,
       # If the account associated with the WCA ID is a special account (delegate, organizer,
       # team member) then we want to keep the link between the Person and the account.
-      wca_id: special_account? ? new_wca_id : nil,
+      wca_id: special_account? ? wca_id : nil,
       current_avatar_id: special_account? ? nil : current_avatar_id,
       country_iso2: special_account? ? country_iso2 : nil,
     )
