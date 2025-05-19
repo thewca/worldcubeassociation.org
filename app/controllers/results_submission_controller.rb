@@ -127,14 +127,14 @@ class ResultsSubmissionController < ApplicationController
                                     .includes([:user])
                                     .to_enum
                                     .with_index(1)
-                                    .select { |r, registrant_id| r.wcif_status == "accepted" && person_with_results.include?(registrant_id) }
+                                    .select { |r, registrant_id| r.wcif_status == "accepted" && person_with_results.include?(registrant_id.to_s) }
                                     .map do |r, registrant_id|
       InboxPerson.new({
                         id: registrant_id,
-                        wca_id: r.wca_id,
+                        wca_id: r.wca_id || '',
                         competition_id: @competition.id,
                         name: r.name,
-                        country_iso2: r.country.id,
+                        country_iso2: r.country.iso2,
                         gender: r.gender,
                         dob: r.dob,
                       })
