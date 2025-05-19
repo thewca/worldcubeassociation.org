@@ -133,7 +133,7 @@ class ResultsSubmissionController < ApplicationController
                         wca_id: r.wca_id,
                         competition_id: @competition.id,
                         name: r.name,
-                        country_iso2: r.country_id,
+                        country_iso2: r.country.id,
                         gender: r.gender,
                         dob: r.dob,
                       })

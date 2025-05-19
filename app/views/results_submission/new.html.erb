@@ -15,8 +15,12 @@
       </ul>
     </p>
     <%= render "submit_json_panel", upload_json: @upload_json, already_has_submitted_result: @results_validator.any_results? %>
-    <%= simple_form_for :submit_from_live, url: competition_import_from_live_path do |f| %>
-      <%= f.submit "Submit WCA Live Results", class: "btn btn-primary" %>
+    <%= button_to competition_import_from_live_path,
+                  title: "Submit WCA Live Results",
+                  class: "btn btn-primary",
+                  method: :post do
+    %>
+      Submit WCA Live Results
     <% end %>
 
     <%= render "check_results_panel",
