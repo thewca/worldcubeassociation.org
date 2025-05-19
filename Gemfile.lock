@@ -185,7 +185,7 @@ GEM
       sassc (>= 2.0.0)
     bootstrap-table-rails (1.11.1.1)
     builder (3.3.0)
-    bullet (8.0.6)
+    bullet (8.0.7)
       activesupport (>= 3.0.0)
       uniform_notifier (~> 1.11)
     byebug (12.0.0)
@@ -1147,7 +1147,7 @@ CHECKSUMS
   bootstrap-sass (3.4.1) sha256=ba4673535eb0a8334a39a258ea8d81904832f47607069d0a1735b0937645c7df
   bootstrap-table-rails (1.11.1.1) sha256=444daf5ba9d8b642e377372beba2924ee2cbfa09559abb0ddf2e8bffb1bafc35
   builder (3.3.0) sha256=497918d2f9dca528fdca4b88d84e4ef4387256d984b8154e9d5d3fe5a9c8835f
-  bullet (8.0.6) sha256=30cc4801df41bb4b80e866dd60dbcee37a6bc74d6912e43a520168c8d2ea060a
+  bullet (8.0.7) sha256=7d20550e81b38940e82c6166f483ab330df3cd5ef4eafc9e787934805ee379f1
   byebug (12.0.0) sha256=d4a150d291cca40b66ec9ca31f754e93fed8aa266a17335f71bb0afa7fca1a1e
   camertron-eprun (1.1.1) sha256=9a8e337916445e62648f6a4f35d229302fc44c50549cc881bff1e296ccf9ce4b
   capybara (3.40.0) sha256=42dba720578ea1ca65fd7a41d163dd368502c191804558f6e0f71b391054aeef
