@@ -16,7 +16,7 @@
     "@payloadcms/db-sqlite": "^3.37.0",
     "@payloadcms/live-preview-react": "^3.37.0",
     "@payloadcms/next": "^3.37.0",
-    "@tanstack/react-query": "^5.76.0",
+    "@tanstack/react-query": "^5.76.1",
     "graphql": "^16.11.0",
     "next": "15.3.2",
     "next-auth": "5.0.0-beta.28",
