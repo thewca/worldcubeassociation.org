@@ -101,23 +101,22 @@ class ResultsSubmissionController < ApplicationController
     @competition = competition_from_params
     return redirect_to competition_submit_results_edit_path if @competition.results_submitted?
 
-    errors = []
     results_to_import = @competition.rounds.flat_map do |round|
       round.round_results.map do |result|
-        results_to_import >> InboxResult.new({
-                                               person_id: result["personId"],
-                                               pos: result["position"],
-                                               event_id: round.event_id,
-                                               round_type_id: round.round_type_id,
-                                               format_id: round.format_id,
-                                               best: result["best"],
-                                               average: result["average"],
-                                               value1: result["attempts"][0].result,
-                                               value2: result["attempts"] & [1].result,
-                                               value3: result["attempts"] & [2].result,
-                                               value4: result["attempts"] & [3].result,
-                                               value5: result["attempts"] & [4].result,
-                                             })
+        InboxResult.new({
+                          person_id: result["personId"],
+                          pos: result["position"],
+                          event_id: round.event_id,
+                          round_type_id: round.round_type_id,
+                          format_id: round.format_id,
+                          best: result["best"],
+                          average: result["average"],
+                          value1: result["attempts"][0].result,
+                          value2: result["attempts"] & [1].result,
+                          value3: result["attempts"] & [2].result,
+                          value4: result["attempts"] & [3].result,
+                          value5: result["attempts"] & [4].result,
+                        })
       end
     end
 
@@ -140,6 +139,7 @@ class ResultsSubmissionController < ApplicationController
                       })
     end
 
+    errors = []
     ActiveRecord::Base.transaction do
       InboxPerson.where(competition_id: @competition.id).delete_all
       InboxResult.where(competition_id: @competition.id).delete_all
