@@ -104,18 +104,18 @@ class ResultsSubmissionController < ApplicationController
     results_to_import = @competition.rounds.flat_map do |round|
       round.round_results.map do |result|
         InboxResult.new({
-                          person_id: result["personId"],
-                          pos: result["position"],
+                          person_id: result.person_id,
+                          pos: result.ranking,
                           event_id: round.event_id,
                           round_type_id: round.round_type_id,
                           format_id: round.format_id,
-                          best: result["best"],
-                          average: result["average"],
-                          value1: result["attempts"][0].result,
-                          value2: result["attempts"] & [1].result,
-                          value3: result["attempts"] & [2].result,
-                          value4: result["attempts"] & [3].result,
-                          value5: result["attempts"] & [4].result,
+                          best: result.best,
+                          average: result.average,
+                          value1: result.attempts[0].result,
+                          value2: result.attempts[1]&.result,
+                          value3: result.attempts[2]&.result,
+                          value4: result.attempts[3]&.result,
+                          value5: result.attempts[4]&.result,
                         })
       end
     end
@@ -157,9 +157,10 @@ class ResultsSubmissionController < ApplicationController
     end
 
     if errors.any?
+      flash[:danger] = errors.join("<br/>")
       @results_validator = ResultsValidators::CompetitionsResultsValidator.create_full_validation
       @results_validator.validate(@competition.id)
-      render :new
+      return render :new
     end
 
     flash[:success] = "Data has been imported from WCA Live."
