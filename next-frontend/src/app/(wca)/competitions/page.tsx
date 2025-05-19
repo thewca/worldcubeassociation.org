@@ -6,12 +6,23 @@ import {
   Heading,
   Flex,
   Button,
+  Text,
+  Switch,
+  Icon
 } from "@chakra-ui/react";
 import CompetitionTableEntry from "@/components/CompetitionTableEntry";
 import RemovableCard from "@/components/RemovableCard";
 
 import { getCompetitionInfo } from "@/lib/wca/competitions/getCompetitionInfo";
 import AllCompsIcon from "@/components/icons/AllCompsIcon";
+import MapIcon from "@/components/icons/MapIcon";
+import ListIcon from "@/components/icons/ListIcon";
+
+import CompRegoFullButOpenOrangeIcon from "@/components/icons/CompRegoFullButOpen_orangeIcon";
+import CompRegoNotFullOpenGreenIcon from "@/components/icons/CompRegoNotFullOpen_greenIcon";
+import CompRegoNotOpenYetGreyIcon from "@/components/icons/CompRegoNotOpenYet_greyIcon";
+import CompRegoClosedRedIcon from "@/components/icons/CompRegoClosed_redIcon";
+
 
 // Array of competition IDs you want to retrieve data for
 const compIds = [
@@ -76,10 +87,27 @@ export default async function Competitions() {
           <Button>Filter 1</Button>
           <Button variant="outline">Filter 2</Button>
           <Button variant="solid">Filter 3</Button>
-          <Button variant="outline">Filter 4</Button>
+          <Switch.Root colorPalette="blue" size="lg">
+            <Switch.HiddenInput />
+            <Switch.Control>
+              <Switch.Thumb />
+              <Switch.Indicator fallback={<Icon as={ListIcon} color="gray.400" />}>
+                <Icon as={MapIcon} colorPalette="yellow.400" />
+              </Switch.Indicator>
+            </Switch.Control>
+            <Switch.Label>Map View</Switch.Label>
+          </Switch.Root>
           <Flex gap="2" ml="auto">
             <Button variant="outline">Filter Right</Button>
           </Flex>
+        </Flex>
+        <Flex gap="2" width="full">
+          <Text>Registration Key:</Text>
+          <CompRegoFullButOpenOrangeIcon /><Text>Full</Text>
+          <CompRegoNotFullOpenGreenIcon /><Text>Open</Text>
+          <CompRegoNotOpenYetGreyIcon /><Text>Not Open</Text>
+          <CompRegoClosedRedIcon /><Text>Closed</Text>
+          <Text ml="auto">Currently Displaying: 10 competitions</Text>
         </Flex>
         <Card.Root
           bg="bg.inverted"

@@ -731,7 +731,7 @@ const customConfig = defineConfig({
                 padding: "0",
                 "& img": {
                   height: "1.1em",
-                  width: "auto",
+                  width: "2.8em",
                   borderRadius: "3px",
                 },
               },

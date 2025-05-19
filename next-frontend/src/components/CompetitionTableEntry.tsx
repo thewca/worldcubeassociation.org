@@ -119,15 +119,15 @@ const CompetitionTableEntry: React.FC<Props> = ({ comp }) => {
         </Link>
       </Table.Cell>
 
-      <Table.Cell>
+      <Table.Cell width="100%">
         <Text>{comp.city}</Text>
       </Table.Cell>
 
-      <Table.Cell>
+      <Table.Cell textAlign="right">
         <CountryMap code={comp.country_iso2} bold />
       </Table.Cell>
 
-      <Table.Cell>
+      <Table.Cell minWidth="4em">
         <Flag code={comp.country_iso2} fallback={comp.country_iso2} />
       </Table.Cell>
 
