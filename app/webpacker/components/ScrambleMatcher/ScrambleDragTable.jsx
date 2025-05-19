@@ -12,6 +12,7 @@ export default function ScrambleDragTable({
   renderLabel,
   renderDetails,
 }) {
+  /* eslint-disable react/jsx-props-no-spreading */
   return (
     <Table definition>
       <Table.Header>
