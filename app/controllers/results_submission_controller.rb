@@ -104,6 +104,7 @@ class ResultsSubmissionController < ApplicationController
     results_to_import = @competition.rounds.flat_map do |round|
       round.round_results.map do |result|
         InboxResult.new({
+                          competition: @competition,
                           person_id: result.person_id,
                           pos: result.ranking,
                           event_id: round.event_id,
