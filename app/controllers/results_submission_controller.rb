@@ -102,11 +102,8 @@ class ResultsSubmissionController < ApplicationController
     return redirect_to competition_submit_results_edit_path if @competition.results_submitted?
 
     errors = []
-    person_with_results = []
-    results_to_import = []
-    @competition.rounds.each do |round|
-      round.round_results.each do |result|
-        person_with_results >> result["personId"]
+    results_to_import = @competition.rounds.flat_map do |round|
+      round.round_results.map do |result|
         results_to_import >> InboxResult.new({
                                                person_id: result["personId"],
                                                pos: result["position"],
@@ -123,6 +120,8 @@ class ResultsSubmissionController < ApplicationController
                                              })
       end
     end
+
+    person_with_results = results_to_import.map(&:person_id).uniq
 
     persons_to_import = @competition.registrations.wcif_ordered
                                     .includes([:user])
