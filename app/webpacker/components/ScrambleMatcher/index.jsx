@@ -121,8 +121,8 @@ function ScrambleMatcher({ wcifEvents, competitionId, initialScrambleFiles }) {
   );
 
   const moveRoundScrambleSet = useCallback(
-    (roundId, fromIndex, toIndex) => dispatchMatchState({
-      type: 'moveRoundScrambleSet',
+    (roundId, fromIndex, toIndex, type = 'moveRoundScrambleSet') => dispatchMatchState({
+      type,
       roundId,
       fromIndex,
       toIndex,

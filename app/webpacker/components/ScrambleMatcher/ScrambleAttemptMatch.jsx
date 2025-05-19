@@ -15,7 +15,7 @@ export default function ScrambleAttemptMatch({ activeRound, matchState, moveRoun
     onDragUpdate,
     onDragEnd,
     computeOnDragIndex,
-  } = useScrambleDrag((from, to) => moveRoundScrambleSet(activeRound.id, from, to));
+  } = useScrambleDrag((from, to) => moveRoundScrambleSet(activeRound.id, from, to, 'moveAttemptScrambles'));
 
   return (
     <ScrambleDragTable
