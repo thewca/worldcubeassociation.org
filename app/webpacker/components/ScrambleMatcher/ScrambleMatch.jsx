@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Icon, Ref, Table } from 'semantic-ui-react';
 import { activityCodeToName } from '@wca/helpers';
-import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
+import { DragDropContext, Draggable, Droppable } from '@hello-pangea/dnd';
 import { events, roundTypes } from '../../lib/wca-data.js.erb';
 
 export default function ScrambleMatch({
