@@ -1,8 +1,11 @@
 import React, { useMemo, useState } from 'react';
 import { Button, Header } from 'semantic-ui-react';
-import { activityCodeToName } from '@wca/helpers';
+import { activityCodeToName, parseActivityCode } from '@wca/helpers';
 import ScrambleMatch from './ScrambleMatch';
 import I18n from '../../lib/i18n';
+import ScrambleAttemptMatch from './ScrambleAttemptMatch';
+
+const ATTEMPT_BASED_EVENTS = ['333mbf', '333fm'];
 
 export default function Rounds({ wcifRounds, matchState, moveRoundScrambleSet }) {
   const [selectedRoundId, setSelectedRoundId] = useState();
@@ -11,6 +14,9 @@ export default function Rounds({ wcifRounds, matchState, moveRoundScrambleSet })
     () => wcifRounds.find((r) => r.id === selectedRoundId),
     [wcifRounds, selectedRoundId],
   );
+
+  const isAttemptBased = selectedRound
+    && ATTEMPT_BASED_EVENTS.includes(parseActivityCode(selectedRound.id).eventId);
 
   return (
     <>
@@ -38,13 +44,22 @@ export default function Rounds({ wcifRounds, matchState, moveRoundScrambleSet })
           </Button>
         ))}
       </Button.Group>
-      {selectedRound && (
+      {selectedRound && !isAttemptBased && (
         <ScrambleMatch
           activeRound={selectedRound}
           matchState={matchState}
           moveRoundScrambleSet={moveRoundScrambleSet}
         />
       )}
+      {
+        selectedRound && isAttemptBased && (
+          <ScrambleAttemptMatch
+            activeRound={selectedRound}
+            matchState={matchState}
+            moveRoundScrambleSet={moveRoundScrambleSet}
+          />
+        )
+      }
     </>
   );
 }

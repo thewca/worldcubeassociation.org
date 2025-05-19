@@ -56,6 +56,20 @@ function scrambleMatchReducer(state, action) {
           action.toIndex,
         ),
       };
+    case 'moveAttemptScrambles': {
+      const scrambleSet = state[action.roundId][0];
+      return {
+        ...state,
+        [action.roundId]: [{
+          ...scrambleSet,
+          inbox_scrambles: moveArrayItem(
+            scrambleSet.inbox_scrambles,
+            action.fromIndex,
+            action.toIndex,
+          ),
+        }],
+      };
+    }
     default:
       throw new Error(`Unhandled action type: ${action.type}`);
   }
