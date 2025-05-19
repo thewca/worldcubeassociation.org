@@ -2033,15 +2033,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@payloadcms/translations@npm:3.37.0":
-  version: 3.37.0
-  resolution: "@payloadcms/translations@npm:3.37.0"
-  dependencies:
-    date-fns: "npm:4.1.0"
-  checksum: 10c0/93a7c81256d8a418859f6b5a3c4250835f4cc04a68688b7de2ce9430d65a54fffa9924531b21aeb19d33888b507a19e8797d60e02e548781a9057b8df3d15de3
-  languageName: node
-  linkType: hard
-
 "@payloadcms/translations@npm:3.38.0":
   version: 3.38.0
   resolution: "@payloadcms/translations@npm:3.38.0"
@@ -2051,7 +2042,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@payloadcms/ui@npm:3.38.0":
+"@payloadcms/ui@npm:3.38.0, @payloadcms/ui@npm:^3.16.0":
   version: 3.38.0
   resolution: "@payloadcms/ui@npm:3.38.0"
   dependencies:
@@ -2083,41 +2074,6 @@ __metadata:
     react: ^19.0.0 || ^19.0.0-rc-65a56d0e-20241020
     react-dom: ^19.0.0 || ^19.0.0-rc-65a56d0e-20241020
   checksum: 10c0/1dc0d2b46e5e0367d0fbee934041bd09e9617db5155a5379830e864292f4aa1e23b47cc3ec68a9e88ebfd4397a65afc324ddeade1d4e3ccf862142702716c19c
-  languageName: node
-  linkType: hard
-
-"@payloadcms/ui@npm:^3.16.0":
-  version: 3.37.0
-  resolution: "@payloadcms/ui@npm:3.37.0"
-  dependencies:
-    "@date-fns/tz": "npm:1.2.0"
-    "@dnd-kit/core": "npm:6.0.8"
-    "@dnd-kit/sortable": "npm:7.0.2"
-    "@faceless-ui/modal": "npm:3.0.0-beta.2"
-    "@faceless-ui/scroll-info": "npm:2.0.0"
-    "@faceless-ui/window-info": "npm:3.0.1"
-    "@monaco-editor/react": "npm:4.7.0"
-    "@payloadcms/translations": "npm:3.37.0"
-    bson-objectid: "npm:2.0.4"
-    date-fns: "npm:4.1.0"
-    dequal: "npm:2.0.3"
-    md5: "npm:2.3.0"
-    object-to-formdata: "npm:4.5.1"
-    qs-esm: "npm:7.0.2"
-    react-datepicker: "npm:7.6.0"
-    react-image-crop: "npm:10.1.8"
-    react-select: "npm:5.9.0"
-    scheduler: "npm:0.25.0"
-    sonner: "npm:^1.7.2"
-    ts-essentials: "npm:10.0.3"
-    use-context-selector: "npm:2.0.0"
-    uuid: "npm:10.0.0"
-  peerDependencies:
-    next: ^15.2.3
-    payload: 3.37.0
-    react: ^19.0.0 || ^19.0.0-rc-65a56d0e-20241020
-    react-dom: ^19.0.0 || ^19.0.0-rc-65a56d0e-20241020
-  checksum: 10c0/7214000269aa387acf7bf32fe1b82ca62772d54c691e2b6d1d1d83d4f3abe31b94a2c8c042ca8bfc7b7937aa0a167aac18fc9f06352ee6c6ecf28fa3645d6185
   languageName: node
   linkType: hard
 
