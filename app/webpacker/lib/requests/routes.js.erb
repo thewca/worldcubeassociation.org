@@ -20,6 +20,10 @@ export const newScrambleUrl = (competitionId, roundId) => `<%= CGI.unescape(Rail
 export const scrambleUrl = (id) => `<%= CGI.unescape(Rails.application.routes.url_helpers.scramble_path("${id}"))%>`;
 export const editScrambleUrl = (id) => `<%= CGI.unescape(Rails.application.routes.url_helpers.edit_scramble_path("${id}"))%>`;
 
+export const competitionScrambleFilesUrl = (competitionId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.competition_scramble_files_path("${competitionId}"))%>`;
+export const scrambleFileUrl = (id) => `<%= CGI.unescape(Rails.application.routes.url_helpers.scramble_file_path("${id}"))%>`;
+export const scramblesUpdateRoundMatchingUrl = (competitionId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.update_round_matching_competition_scramble_files_path("${competitionId}"))%>`;
+
 export const postsUrl = (page, format = 'json') => {
   // In this case id holds the page number ;)
   return `<%= CGI.unescape(Rails.application.routes.url_helpers.posts_path(format: "${format}")) %>?page=${page}`;
