@@ -113,10 +113,10 @@ class ResultsSubmissionController < ApplicationController
                           best: result.best,
                           average: result.average,
                           value1: result.attempts[0].result,
-                          value2: result.attempts[1]&.result,
-                          value3: result.attempts[2]&.result,
-                          value4: result.attempts[3]&.result,
-                          value5: result.attempts[4]&.result,
+                          value2: result.attempts[1]&.result || 0,
+                          value3: result.attempts[2]&.result || 0,
+                          value4: result.attempts[3]&.result || 0,
+                          value5: result.attempts[4]&.result || 0,
                         })
       end
     end
