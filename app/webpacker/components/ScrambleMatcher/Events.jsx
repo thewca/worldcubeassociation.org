@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import EventSelector from '../wca/EventSelector';
 import Rounds from './Rounds';
-import {useDispatchWrapper} from "./index";
+import { useDispatchWrapper } from './reducer';
 
 const ATTEMPT_BASED_EVENTS = ['333fm', '333mbf'];
 

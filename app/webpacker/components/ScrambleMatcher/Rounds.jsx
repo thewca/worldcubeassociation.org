@@ -5,7 +5,7 @@ import ScrambleMatch from './ScrambleMatch';
 import I18n from '../../lib/i18n';
 import Groups from './Groups';
 import { events, roundTypes } from '../../lib/wca-data.js.erb';
-import { useDispatchWrapper } from './index';
+import { useDispatchWrapper } from './reducer';
 
 const scrambleToName = (scramble) => `${events.byId[scramble.event_id].name} ${roundTypes.byId[scramble.round_type_id].name} - ${String.fromCharCode(64 + scramble.scramble_set_number)}`;
 
