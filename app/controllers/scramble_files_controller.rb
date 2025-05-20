@@ -60,6 +60,7 @@ class ScrambleFilesController < ApplicationController
           wcif_round[:scrambleSets].each_with_index do |wcif_scramble_set, idx|
             scramble_set = scr_file_upload.inbox_scramble_sets.create!(
               scramble_set_number: idx + 1,
+              ordered_index: idx,
               matched_round: competition_round,
             )
 
@@ -68,6 +69,7 @@ class ScrambleFilesController < ApplicationController
                 scramble_set.inbox_scrambles.create!(
                   scramble_string: wcif_scramble,
                   scramble_number: n + 1,
+                  ordered_index: n,
                   is_extra: scramble_kind == :extraScrambles,
                 )
               end
