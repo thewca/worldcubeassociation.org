@@ -102,10 +102,14 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
       ));
     },
     onSuccess: (data) => {
-      setModalData(data);
-      setModalOpen(true);
-      dispatchStore(showMessage('competitions.registration_v2.auto_accept.bulk_auto_accepted', 'positive'));
-      return refetch();
+      if (Object.keys(data).length === 0) {
+        dispatchStore(showMessage('competitions.registration_v2.auto_accept.nothing_to_accept', 'info'));
+      } else {
+        setModalData(data);
+        setModalOpen(true);
+        dispatchStore(showMessage('competitions.registration_v2.auto_accept.bulk_auto_accepted', 'positive'));
+        return refetch();
+      }
     },
   });
 
