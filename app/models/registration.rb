@@ -561,11 +561,11 @@ class Registration < ApplicationRecord
                             .with_payments
                             .sort_by { |registration| registration.last_positive_payment.updated_at }
 
-    results = waitlisted_registrations.each_with_object({}) do |reg, hash|
-      result = reg.attempt_auto_accept
-      hash[reg.id] = result
-      break hash unless result[:succeeded]
-    end
+  results = waitlisted_registrations
+    .lazy
+    .map { |reg| [reg.id, reg.attempt_auto_accept] }
+    .take_while { |_, result| result[:succeeded] }
+    .to_h
 
     # We dont need to break out of pending registrations because auto accept can still put them on the waiting list
     pending_results = pending_registrations.index_by(&:id).transform_values(&:attempt_auto_accept)
