@@ -95,15 +95,25 @@ class ScrambleFilesController < ApplicationController
     competition = competition_from_params
 
     competition.rounds.each do |round|
-      updated_set_ids = params[round.wcif_id]
+      updated_sets = params[round.wcif_id]
 
-      next if updated_set_ids.blank?
+      next if updated_sets.blank?
 
       round.inbox_scramble_sets.update_all(matched_round_id: nil)
+      updated_set_ids = updated_sets.pluck(:id)
 
       InboxScrambleSet.find(updated_set_ids)
                       .each_with_index do |scramble_set, idx|
-        scramble_set.update!(matched_round: round, matched_round_ordered_index: idx)
+        scramble_set.update!(matched_round: round, ordered_index: idx)
+      end
+
+      updated_sets.each do |updated_set|
+        updated_scramble_ids = updated_set[:inbox_scrambles]
+
+        InboxScramble.find(updated_scramble_ids)
+                     .each_with_index do |scramble, idx|
+          scramble.update!(ordered_index: idx)
+        end
       end
     end
 

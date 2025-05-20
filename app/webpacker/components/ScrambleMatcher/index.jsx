@@ -28,7 +28,10 @@ export default function Wrapper({
 async function submitMatchedScrambles(competitionId, matchState) {
   const matchStateIdsOnly = _.mapValues(
     matchState,
-    (sets) => _.map(sets, 'id'),
+    (sets) => sets.map((set) => ({
+      id: set.id,
+      inbox_scrambles: set.inbox_scrambles.map((scr) => scr.id),
+    })),
   );
 
   const { data } = await fetchJsonOrError(scramblesUpdateRoundMatchingUrl(competitionId), {

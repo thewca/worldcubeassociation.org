@@ -9,7 +9,11 @@ export function mergeScrambleSets(state, newScrambleFile) {
 
   const orderedScrambleSets = _.mapValues(
     groupedScrambleSets,
-    (sets) => _.sortBy(sets, 'matched_round_ordered_index'),
+    (sets) => _.sortBy(sets, 'ordered_index')
+      .map((set) => ({
+        ...set,
+        inbox_scrambles: _.sortBy(set.inbox_scrambles, 'ordered_index'),
+      })),
   );
 
   return _.mergeWith(
