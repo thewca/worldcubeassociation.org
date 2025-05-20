@@ -438,7 +438,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
           >
             <Modal.Header>Bulk Auto-Accept Result</Modal.Header>
             <Modal.Content>
-              {modalData && typeof modalData !== null ? (
+              {modalData !== null ? (
                 <List bulleted>
                   {Object.entries(modalData).map(([key, value]) => (
                     <List.Item key={key}>
