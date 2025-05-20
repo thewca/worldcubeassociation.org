@@ -7,7 +7,7 @@ import Groups from './Groups';
 import { events, roundTypes } from '../../lib/wca-data.js.erb';
 import { useDispatchWrapper } from './reducer';
 
-const scrambleToName = (scramble) => `${events.byId[scramble.event_id].name} ${roundTypes.byId[scramble.round_type_id].name} - ${String.fromCharCode(64 + scramble.scramble_set_number)}`;
+const scrambleSetToName = (scrambleSet) => `${events.byId[scrambleSet.event_id].name} ${roundTypes.byId[scrambleSet.round_type_id].name} - ${String.fromCharCode(64 + scrambleSet.scramble_set_number)}`;
 
 export default function Rounds({
   wcifRounds,
@@ -75,7 +75,7 @@ export default function Rounds({
             expectedNumOfRows={selectedRound.scrambleSetCount}
             onRowDragCompleted={onRoundDragCompleted}
             computeDefinitionName={roundToGroupName}
-            computeRowName={scrambleToName}
+            computeRowName={scrambleSetToName}
           />
           {showGroupsPicker && (
             <Groups

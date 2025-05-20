@@ -3,7 +3,7 @@ import { Button, Header } from 'semantic-ui-react';
 import I18n from '../../lib/i18n';
 import ScrambleMatch from './ScrambleMatch';
 
-const scrambleToName = (scr) => scr.scramble_string;
+const scrambleToName = (scramble) => `Scramble ${scramble.scramble_number} (${scramble.scramble_string})`;
 
 export default function Groups({
   scrambleSetCount,
