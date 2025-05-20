@@ -1,17 +1,14 @@
 import React, { useState } from 'react';
 import { Icon, Ref, Table } from 'semantic-ui-react';
-import { activityCodeToName } from '@wca/helpers';
 import { DragDropContext, Draggable, Droppable } from '@hello-pangea/dnd';
-import { events, roundTypes } from '../../lib/wca-data.js.erb';
 
 export default function ScrambleMatch({
-  activeRound,
-  matchState,
-  moveRoundScrambleSet,
+  matchableRows = [],
+  expectedNumOfRows = matchableRows.length,
+  onRowDragCompleted,
+  computeDefinitionName,
+  computeRowName,
 }) {
-  const { scrambleSetCount } = activeRound;
-  const scrambleSets = matchState[activeRound.id] ?? [];
-
   const [currentDragStart, setCurrentDragStart] = useState(null);
   const [currentDragIndex, setCurrentDragIndex] = useState(null);
 
@@ -24,10 +21,10 @@ export default function ScrambleMatch({
     setCurrentDragStart(null);
     setCurrentDragIndex(null);
 
-    const { destination, source } = result;
+    const { source, destination } = result;
 
     if (destination) {
-      moveRoundScrambleSet(activeRound.id, source.index, destination.index);
+      onRowDragCompleted(source.index, destination.index);
     }
   };
 
@@ -49,6 +46,7 @@ export default function ScrambleMatch({
     if (elIndex >= dragRangeStart && elIndex <= dragRangeEnd) {
       return elIndex - dragDirection;
     }
+
     return elIndex;
   };
 
@@ -70,15 +68,16 @@ export default function ScrambleMatch({
           {(providedDroppable) => (
             <Ref innerRef={providedDroppable.innerRef}>
               <Table.Body {...providedDroppable.droppableProps}>
-                {scrambleSets.map((scramble, index) => {
-                  const isExpected = index < scrambleSetCount;
-                  const hasError = isExpected && !scramble;
-                  const isExtra = index >= scrambleSetCount;
+                {matchableRows.map((rowData, index) => {
+                  const isExpected = index < expectedNumOfRows;
+                  const isExtra = !isExpected;
+
+                  const hasError = isExpected && !rowData;
 
                   return (
                     <Draggable
-                      key={scramble.id}
-                      draggableId={scramble.id.toString()}
+                      key={rowData.id}
+                      draggableId={rowData.id.toString()}
                       index={index}
                     >
                       {(providedDraggable, snapshot) => {
@@ -87,13 +86,13 @@ export default function ScrambleMatch({
                         return (
                           <Ref innerRef={providedDraggable.innerRef}>
                             <Table.Row
-                              key={scramble.id}
+                              key={rowData.id}
                               {...providedDraggable.draggableProps}
                               negative={hasError || isExtra}
                             >
                               <Table.Cell textAlign="right" collapsing>
                                 {isExpected
-                                  ? `${activityCodeToName(activeRound.id)}, Group ${definitionIndex + 1}`
+                                  ? computeDefinitionName(definitionIndex)
                                   : 'Extra Scramble set (unassigned)'}
                                 {(hasError || isExtra) && (
                                   <>
@@ -105,11 +104,7 @@ export default function ScrambleMatch({
                               </Table.Cell>
                               <Table.Cell {...providedDraggable.dragHandleProps}>
                                 <Icon name="bars" />
-                                {events.byId[scramble.event_id].name}
-                                {' '}
-                                {roundTypes.byId[scramble.round_type_id].name}
-                                {' - '}
-                                {String.fromCharCode(64 + scramble.scramble_set_number)}
+                                {computeRowName(rowData)}
                               </Table.Cell>
                             </Table.Row>
                           </Ref>

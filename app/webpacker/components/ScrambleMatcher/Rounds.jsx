@@ -1,9 +1,12 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useCallback } from 'react';
 import { Button, Header } from 'semantic-ui-react';
 import { activityCodeToName } from '@wca/helpers';
 import ScrambleMatch from './ScrambleMatch';
 import I18n from '../../lib/i18n';
-import Groups from "./Groups";
+import Groups from './Groups';
+import { events, roundTypes } from '../../lib/wca-data.js.erb';
+
+const scrambleToName = (scramble) => `${events.byId[scramble.event_id].name} ${roundTypes.byId[scramble.round_type_id].name} - ${String.fromCharCode(64 + scramble.scramble_set_number)}`;
 
 export default function Rounds({
   wcifRounds,
@@ -16,6 +19,16 @@ export default function Rounds({
   const selectedRound = useMemo(
     () => wcifRounds.find((r) => r.id === selectedRoundId),
     [wcifRounds, selectedRoundId],
+  );
+
+  const onRoundDragCompleted = useCallback(
+    (from, to) => moveRoundScrambleSet(selectedRoundId, from, to),
+    [moveRoundScrambleSet, selectedRoundId],
+  );
+
+  const roundToGroupName = useCallback(
+    (idx) => `${activityCodeToName(selectedRoundId)}, Group ${idx + 1}`,
+    [selectedRoundId],
   );
 
   return (
@@ -47,9 +60,11 @@ export default function Rounds({
       {selectedRound && (
         <>
           <ScrambleMatch
-            activeRound={selectedRound}
-            matchState={matchState}
-            moveRoundScrambleSet={moveRoundScrambleSet}
+            matchableRows={matchState[selectedRoundId]}
+            expectedNumOfRows={selectedRound.scrambleSetCount}
+            onRowDragCompleted={onRoundDragCompleted}
+            computeDefinitionName={roundToGroupName}
+            computeRowName={scrambleToName}
           />
           {showGroupsPicker && (
             <Groups
