@@ -9,6 +9,10 @@ import {
   Text,
   Switch,
   Icon,
+  Combobox,
+  Portal,
+  useFilter,
+  useListCollection,
 } from "@chakra-ui/react";
 import CompetitionTableEntry from "@/components/CompetitionTableEntry";
 import RemovableCard from "@/components/RemovableCard";
@@ -22,6 +26,8 @@ import CompRegoFullButOpenOrangeIcon from "@/components/icons/CompRegoFullButOpe
 import CompRegoNotFullOpenGreenIcon from "@/components/icons/CompRegoNotFullOpen_greenIcon";
 import CompRegoNotOpenYetGreyIcon from "@/components/icons/CompRegoNotOpenYet_greyIcon";
 import CompRegoClosedRedIcon from "@/components/icons/CompRegoClosed_redIcon";
+
+import countryCodeMapping from "@/components/CountryMap";
 
 // Array of competition IDs you want to retrieve data for
 const compIds = [
@@ -39,6 +45,7 @@ const compIds = [
 
 // Async function to populate comp data
 const getAllCompData = async () => {
+  
   const competitionPromises = compIds.map(async (competitionId) => {
     const { data: competitionInfo, error } =
       await getCompetitionInfo(competitionId);
@@ -68,6 +75,18 @@ const getAllCompData = async () => {
 export default async function Competitions() {
   const competitions = await getAllCompData();
 
+  /*const { contains } = useFilter({ sensitivity: "base" })
+
+  const { collection, filter } = useListCollection({
+    initialItems: countries,
+    filter: contains,
+  })*/
+
+  const countries = Object.entries(countryCodeMapping).map(([code, name]) => ({
+    label: name,
+    value: code,
+  }));
+
   return (
     <Container>
       <VStack gap="8" width="full" pt="8" alignItems="left">
@@ -83,7 +102,34 @@ export default async function Competitions() {
           All Competitions
         </Heading>
         <Flex gap="2" width="full">
-          <Button>Filter 1</Button>
+        <Combobox.Root
+          collection={collection}
+          /*onInputValueChange={(e) => filter(e.inputValue)}*/
+          width="320px"
+          openOnClick
+        >
+          <Combobox.Label>Select framework</Combobox.Label>
+          <Combobox.Control>
+            <Combobox.Input placeholder="Type to search" />
+            <Combobox.IndicatorGroup>
+              <Combobox.ClearTrigger />
+              <Combobox.Trigger />
+            </Combobox.IndicatorGroup>
+          </Combobox.Control>
+          <Portal>
+            <Combobox.Positioner>
+              <Combobox.Content>
+                <Combobox.Empty>No items found</Combobox.Empty>
+                {collection.items.map((item) => (
+                  <Combobox.Item item={item} key={item.value}>
+                    {item.label}
+                    <Combobox.ItemIndicator />
+                  </Combobox.Item>
+                ))}
+              </Combobox.Content>
+            </Combobox.Positioner>
+          </Portal>
+        </Combobox.Root>
           <Button variant="outline">Filter 2</Button>
           <Button variant="solid">Filter 3</Button>
           <Switch.Root colorPalette="blue" size="lg">
