@@ -2,7 +2,7 @@ import {
   Checkbox, Icon, Popup, Ref, Table,
 } from 'semantic-ui-react';
 import React from 'react';
-import { Draggable } from 'react-beautiful-dnd';
+import { Draggable } from '@hello-pangea/dnd';
 import { showMessage } from '../Register/RegistrationMessage';
 import I18n from '../../../lib/i18n';
 import {
@@ -154,9 +154,13 @@ export default function TableRow({
             {dobIsShown && <Table.Cell>{dateOfBirth}</Table.Cell>}
 
             <Table.Cell>
-              <RegionFlag iso2={country.iso2} withoutTooltip={regionIsExpanded} />
-              {' '}
-              {regionIsExpanded && countries.byIso2[country.iso2].name}
+              {country?.iso2 && (
+                <>
+                  <RegionFlag iso2={country.iso2} withoutTooltip={regionIsExpanded} />
+                  {' '}
+                  {regionIsExpanded && countries.byIso2?.[country.iso2]?.name}
+                </>
+              )}
             </Table.Cell>
 
             <Table.Cell>

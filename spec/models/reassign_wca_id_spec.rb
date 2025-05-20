@@ -61,9 +61,9 @@ RSpec.describe ReassignWcaId do
     delegate_status = account1.delegate_status
 
     expect(reassign_wca_id.do_reassign_wca_id).to be true
-    expect(account1.reload.wca_id).to be nil
+    expect(account1.reload.wca_id).to be_nil
     expect(account2.reload.wca_id).to eq wca_id
-    expect(account1.reload.delegate_status).to be nil
+    expect(account1.reload.delegate_status).to be_nil
     expect(account2.reload.delegate_status).to eq delegate_status
     expect(team_member.reload.user_id).to eq account2.id
     expect(organized_competition.reload.organizers[0].id).to eq account2.id

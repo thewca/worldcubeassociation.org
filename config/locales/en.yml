@@ -1235,7 +1235,6 @@ en:
         with_stripe: "Paid on"
       #context: date is the registration creation date, eg: "2016-12-01 16:18:56 UTC"
       payment_requested_on: "Payment requested on: %{date}"
-      payment_completed_on: "Payment completed on: %{date}"
       #context: Counts how many parallel registrations in the same Series there are. Will display a number behind this label.
       series_registrations: "Series registrations"
       total: "Total"
@@ -1646,6 +1645,8 @@ en:
           reason: "The reason for the competitor limit"
           auto_close_threshold: "Auto-close threshold"
           newcomer_month_reserved_spots: "Number of spots to reserve for newcomers"
+          auto_accept_enabled: "Bulk automatic registration acceptance"
+          auto_accept_disable_threshold: "Limit for automatically accepting registrations"
         staff:
           staff_delegate_ids: "WCA Delegate(s)"
           trainee_delegate_ids: "WCA Trainee Delegate(s)"
@@ -1732,6 +1733,8 @@ en:
           reason: "What is the reason for the limit on competitors? Please fill this out in English!"
           auto_close_threshold: "Registration will automatically close when this number of paid registrations is received. Leave blank to disable, ignore if you aren't using integrated payments."
           newcomer_month_reserved_spots: "Only allowed during Newcomer Month - reserved spots can't be more than half of the Competitor Limit."
+          auto_accept_enabled: "This will enable a 'Bulk Auto Accept' button in the Registrations menu. This will accept all paid Waitlisted and Pending up to the competitor limit, or the limit defined below. Use at your own risk."
+          auto_accept_disable_threshold: "When this number of accepted registrations is reached, auto-accept will disable itself - allowing organizers to manually approve the final registrations. Must be less than the competitor limit. Leave blank if not desired."
         staff:
           staff_delegate_ids: "WCA Delegates for the competition."
           trainee_delegate_ids: "WCA Trainee Delegates for the competition."
@@ -1794,6 +1797,9 @@ en:
           enabled:
             "true": "I want to specify a competitor limit"
             "false": "I DO NOT want to specify a competitor limit"
+          auto_accept_enabled:
+            "true": "Enable 'Bulk Auto Accept' button in Registrations menu"
+            "false": "Disable 'Bulk Auto Accept' button"
         registration:
           allow_on_the_spot:
             "true": "On the spot registrations will be accepted"
@@ -1816,6 +1822,10 @@ en:
               "false": "Competitors MUST be qualified to register for an event"
     #context: new registration system
     registration_v2:
+      auto_accept:
+        bulk_auto_accept: "Auto-Approve Competitors"
+        cant_bulk_auto_accept: "An error occurred while trying to bulk auto accept - contact WST for assistant if needed"
+        bulk_auto_accepted: "Bulk auto accept succeeded"
       pdf:
         #context: <0> indicates an html tag for internationalizing in React, see https://docs.worldcubeassociation.org/guides/translating_the_website.html#using-react
         link: "As a <0>%{pdfLink}</0>"
@@ -1968,6 +1978,7 @@ en:
     #context: and when an error occurred
     errors:
       must_use_wca_registration: "Auto-accept can only be used if you are using the WCA website for registrations"
+      must_use_payment_integration: "You must enable a payment integration (eg, Stripe) in order to use auto-accept"
       auto_accept_limit: "Limit for auto-accepted registrations must be less than the competitor limit"
       auto_accept_not_negative: "Limit for auto-accepted registrations cannot be less than 0."
       auto_accept_accept_paid_pending: "Can't enable auto-accept if there are paid-pending registrations - either accept them or move them to the waiting list"
@@ -2151,6 +2162,7 @@ en:
         admin_view: "Admin view"
         tabs: "Manage tabs"
         submit_results: "Submit results"
+        match_scrambles: "Submit scrambles"
         delegate_report: "Delegate report"
         registration: "Registration"
         import_registrations: "Import registrations"

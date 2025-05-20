@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe RegistrationsMailer, type: :mailer do
+RSpec.describe RegistrationsMailer do
   let(:delegate1) { create(:delegate) }
   let(:delegate2) { create(:trainee_delegate) }
   let(:organizer1) { create(:user) }
@@ -73,7 +73,7 @@ RSpec.describe RegistrationsMailer, type: :mailer do
 
     it "handles no organizers receiving email" do
       # Expect no email to be sent by default (when the organizer hasn't chosen to receive registration emails)
-      expect(mail.message).to be_kind_of ActionMailer::Base::NullMail
+      expect(mail.message).to be_a ActionMailer::Base::NullMail
     end
   end
 

@@ -2,25 +2,25 @@
 
 require 'rails_helper'
 
-RSpec.describe "Incidents management", type: :request do
+RSpec.describe "Incidents management" do
   let(:incident) { create(:sent_incident, created_at: Time.now) }
-  let(:valid_attributes) {
+  let(:valid_attributes) do
     {
       title: "My new incident",
       public_summary: "Public statement",
       private_description: "Private statement",
       private_wrc_decision: "Private resolution",
     }
-  }
+  end
 
-  let(:invalid_attributes) {
+  let(:invalid_attributes) do
     {
       title: "",
       public_summary: "invalid",
       private_description: "description for invalid",
       private_wrc_decision: "resolution for invalid",
     }
-  }
+  end
 
   let!(:wrc_member) { create(:user, :wrc_member) }
 
@@ -136,9 +136,9 @@ RSpec.describe "Incidents management", type: :request do
 
     context "with valid params" do
       it "creates a new Incident" do
-        expect {
+        expect do
           post incidents_path, params: { incident: valid_attributes }
-        }.to change(Incident, :count).by(1)
+        end.to change(Incident, :count).by(1)
       end
 
       it "redirects to the created incident" do
@@ -149,9 +149,9 @@ RSpec.describe "Incidents management", type: :request do
 
     context "with invalid params" do
       it "renders the new incident form" do
-        expect {
+        expect do
           post incidents_path, params: { incident: invalid_attributes }
-        }.to change(Incident, :count).by(0)
+        end.to change(Incident, :count).by(0)
         expect(response).to be_successful
       end
     end
@@ -174,13 +174,13 @@ RSpec.describe "Incidents management", type: :request do
     end
 
     context "with valid params" do
-      let(:new_attributes) {
+      let(:new_attributes) do
         {
           tags: "a,b",
           private_wrc_decision: "Private resolution",
           incident_competitions_attributes: { '0': { competition_id: competition.id, comments: "some text" } },
         }
-      }
+      end
 
       it "updates the requested incident and redirect to the incident" do
         incident = Incident.create! valid_attributes
@@ -218,9 +218,9 @@ RSpec.describe "Incidents management", type: :request do
       it "destroys the requested incident and redirects to the incidents log" do
         sign_in wrc_member
         new_incident = create(:incident)
-        expect {
+        expect do
           delete incident_path(new_incident)
-        }.to change(Incident, :count).by(-1)
+        end.to change(Incident, :count).by(-1)
         expect(response).to redirect_to(incidents_url)
       end
     end

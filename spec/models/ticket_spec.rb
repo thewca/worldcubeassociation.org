@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Ticket, type: :model do
+RSpec.describe Ticket do
   describe 'user_stakeholders' do
     let(:edit_name_ticket) { create(:edit_name_ticket) }
 

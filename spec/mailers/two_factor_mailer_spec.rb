@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe TwoFactorMailer, type: :mailer do
+RSpec.describe TwoFactorMailer do
   describe "send_otp_to_user" do
     let(:user) { create(:user, :with_2fa) }
     let(:mail) { TwoFactorMailer.send_otp_to_user(user) }
