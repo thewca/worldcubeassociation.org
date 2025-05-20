@@ -12,6 +12,8 @@ export default function ScrambleMatch({
   const [currentDragStart, setCurrentDragStart] = useState(null);
   const [currentDragIndex, setCurrentDragIndex] = useState(null);
 
+  const rowCount = Math.max(matchableRows.length, expectedNumOfRows);
+
   const handleOnBeforeDragStart = (init) => {
     setCurrentDragStart(init.source?.index);
     setCurrentDragIndex(init.source?.index);
@@ -68,7 +70,7 @@ export default function ScrambleMatch({
           {(providedDroppable) => (
             <Ref innerRef={providedDroppable.innerRef}>
               <Table.Body {...providedDroppable.droppableProps}>
-                {_.times(Math.max(matchableRows.length, expectedNumOfRows)).map((index) => {
+                {_.times(rowCount).map((index) => {
                   const rowData = matchableRows[index];
                   const isExpected = index < expectedNumOfRows;
                   const isExtra = !isExpected;
@@ -80,6 +82,7 @@ export default function ScrambleMatch({
                       key={rowData.id}
                       draggableId={rowData.id.toString()}
                       index={index}
+                      isDragDisabled={rowCount === 1}
                     >
                       {(providedDraggable, snapshot) => {
                         const definitionIndex = computeOnDragIndex(index, snapshot.isDragging);
