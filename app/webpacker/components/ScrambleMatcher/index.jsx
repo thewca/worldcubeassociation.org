@@ -109,7 +109,7 @@ function ScrambleMatcher({ wcifEvents, competitionId, initialScrambleFiles }) {
         positive
         onClick={submitMatchState}
         loading={isSubmitting}
-        disabled={isSubmitting}
+        disabled={isSubmitting || error}
       >
         Submit
       </Button>
