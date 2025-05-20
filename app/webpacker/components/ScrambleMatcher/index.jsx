@@ -1,4 +1,4 @@
-import React, { useCallback, useReducer } from 'react';
+import React, { useCallback, useMemo, useReducer } from 'react';
 import { Button, Divider, Message } from 'semantic-ui-react';
 import _ from 'lodash';
 import { useMutation } from '@tanstack/react-query';
@@ -61,6 +61,25 @@ function ScrambleMatcher({ wcifEvents, competitionId, initialScrambleFiles }) {
     mutationFn: () => submitMatchedScrambles(competitionId, matchState),
   });
 
+  const error = useMemo(() => {
+    if (!matchState) return '';
+    const roundIds = _.flatMap(wcifEvents, (comp) => _.map(comp.rounds, 'id'));
+    const missingIds = _.difference(roundIds, _.keys(matchState));
+    if (missingIds.length > 0) {
+      return `Missing scramble sets for rounds ${missingIds.join(', ')}`;
+    }
+    const missingScrambles = _.filter(roundIds, (roundId) => {
+      const matchedRound = matchState[roundId];
+      const wcifRound = _.flatMap(wcifEvents, 'rounds').find((r) => r.id === roundId);
+      return matchedRound.length < wcifRound.scrambleSetCount;
+    });
+
+    if (missingScrambles.length > 0) {
+      return `Missing scrambles for rounds ${missingScrambles.join(', ')}`;
+    }
+    return '';
+  }, [matchState, wcifEvents]);
+
   return (
     <>
       <Message info>
@@ -70,6 +89,10 @@ function ScrambleMatcher({ wcifEvents, competitionId, initialScrambleFiles }) {
           If there is a discrepancy between the number of scramble sets in the JSON file
           and the number of groups in the round you can manually assign them below.
         </Message.Content>
+      </Message>
+      <Message error hidden={!error}>
+        <Message.Header>Error</Message.Header>
+        <Message.Content>{error}</Message.Content>
       </Message>
       <ScrambleFiles
         competitionId={competitionId}
