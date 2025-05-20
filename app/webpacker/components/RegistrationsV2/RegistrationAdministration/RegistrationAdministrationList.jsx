@@ -95,7 +95,8 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
 
   const { mutate: bulkAutoAcceptMutation, isPending: isAutoAccepting } = useMutation({
     mutationFn: bulkAutoAccept,
-    onError: () => {
+    onError: (err) => {
+      console.log(err)
       dispatchStore(showMessage(
         'competitions.registration_v2.auto_accept.cant_bulk_auto_accept',
         'negative',
