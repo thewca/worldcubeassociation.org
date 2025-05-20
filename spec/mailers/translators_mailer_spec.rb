@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe TranslatorsMailer, type: :mailer do
+RSpec.describe TranslatorsMailer do
   describe "notify_translators_of_changes" do
     let(:mail) { TranslatorsMailer.notify_translators_of_changes }
 

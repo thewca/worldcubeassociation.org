@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe RegistrationReminderJob, type: :job do
+RSpec.describe RegistrationReminderJob do
   describe "registration reminder job" do
     let(:user) { create(:user) }
     let(:delegate) { create(:delegate) }

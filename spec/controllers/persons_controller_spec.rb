@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe PersonsController, type: :controller do
+RSpec.describe PersonsController do
   describe "GET #index" do
     it "responds to HTML request successfully" do
       get :index

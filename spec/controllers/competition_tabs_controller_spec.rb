@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe CompetitionTabsController, type: :controller do
+RSpec.describe CompetitionTabsController do
   let!(:organizer) { create(:user) }
   let(:competition) { create(:competition, organizers: [organizer]) }
 

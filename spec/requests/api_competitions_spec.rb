@@ -344,9 +344,9 @@ RSpec.describe "API Competitions" do
             avatar: nil,
             personalBests: [],
           }]
-          expect {
+          expect do
             patch api_v0_competition_update_wcif_path(competition), params: { persons: persons }.to_json, headers: headers
-          }.not_to(change { competition.reload.to_wcif["persons"] })
+          end.not_to(change { competition.reload.to_wcif["persons"] })
         end
       end
     end
@@ -359,12 +359,12 @@ RSpec.describe "API Competitions" do
         before { sign_in competition.organizers.first }
 
         it "can set venues, rooms and activities" do
-          expect {
+          expect do
             # Destroy everything
             competition.competition_venues.destroy_all
             # Reconstruct everything from the saved WCIF
             patch api_v0_competition_update_wcif_path(competition), params: wcif.to_json, headers: headers
-          }.not_to(change { competition.reload.to_wcif["schedule"] })
+          end.not_to(change { competition.reload.to_wcif["schedule"] })
         end
 
         it "can update venues and rooms" do
@@ -451,9 +451,9 @@ RSpec.describe "API Competitions" do
         it "doesn't change anything when submitting an invalid WCIF" do
           wcif["schedule"]["venues"] = []
           wcif["schedule"]["startDate"] = nil
-          expect {
+          expect do
             patch api_v0_competition_update_wcif_path(competition), params: wcif.to_json, headers: headers
-          }.not_to(change { competition.reload.competition_venues.size })
+          end.not_to(change { competition.reload.competition_venues.size })
         end
       end
     end
@@ -548,9 +548,9 @@ RSpec.describe "API Competitions" do
         it "prevents from CSRF attacks" do
           headers["ACCESS_TOKEN"] = "INVALID"
           wcif = create_wcif_with_events(%w[333])
-          expect {
+          expect do
             patch api_v0_competition_update_wcif_path(competition), params: wcif.to_json, headers: headers
-          }.to raise_exception ActionController::InvalidAuthenticityToken
+          end.to raise_exception ActionController::InvalidAuthenticityToken
         end
       end
 
