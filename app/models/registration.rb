@@ -606,8 +606,9 @@ class Registration < ApplicationRecord
       )
       { succeeded: true, info: auto_accepted_registration.competing_status }
     else
-      log_auto_accept_failure(auto_accepted_registration.errors.messages.values.flatten)
-      { succeeded: false, info: auto_accepted_registration.errors.messages.values.flatten }
+      error = auto_accepted_registration.errors.messages.values.flatten
+      log_auto_accept_failure(error)
+      { succeeded: false, info: error }
     end
   end
 
