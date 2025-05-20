@@ -95,17 +95,22 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
 
   const { mutate: bulkAutoAcceptMutation, isPending: isAutoAccepting } = useMutation({
     mutationFn: bulkAutoAccept,
-    onError: () => {
+    onError: (err) => {
+      console.log(err)
       dispatchStore(showMessage(
         'competitions.registration_v2.auto_accept.cant_bulk_auto_accept',
         'negative',
       ));
     },
     onSuccess: (data) => {
-      setModalData(data);
-      setModalOpen(true);
-      dispatchStore(showMessage('competitions.registration_v2.auto_accept.bulk_auto_accepted', 'positive'));
-      return refetch();
+      if (Object.keys(data).length === 0) {
+        dispatchStore(showMessage('competitions.registration_v2.auto_accept.nothing_to_accept', 'info'));
+      } else {
+        setModalData(data);
+        setModalOpen(true);
+        dispatchStore(showMessage('competitions.registration_v2.auto_accept.bulk_auto_accepted', 'positive'));
+        return refetch();
+      }
     },
   });
 
