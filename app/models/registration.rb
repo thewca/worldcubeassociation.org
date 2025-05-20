@@ -568,7 +568,9 @@ class Registration < ApplicationRecord
     end
 
     # We dont need to break out of pending registrations because auto accept can still put them on the waiting list
-    pending_registrations.each_with_object(results) { |reg, hash| hash[reg.id] = reg.attempt_auto_accept }
+    pending_results = pending_registrations.index_by(&:id).transform_values(&:attempt_auto_accept)
+
+    results.merge(pending_results)
   end
 
   def last_positive_payment
