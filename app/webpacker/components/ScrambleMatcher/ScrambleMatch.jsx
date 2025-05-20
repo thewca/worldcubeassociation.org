@@ -68,7 +68,8 @@ export default function ScrambleMatch({
           {(providedDroppable) => (
             <Ref innerRef={providedDroppable.innerRef}>
               <Table.Body {...providedDroppable.droppableProps}>
-                {matchableRows.map((rowData, index) => {
+                {_.times(Math.max(matchableRows.length, expectedNumOfRows)).map((index) => {
+                  const rowData = matchableRows[index];
                   const isExpected = index < expectedNumOfRows;
                   const isExtra = !isExpected;
 
