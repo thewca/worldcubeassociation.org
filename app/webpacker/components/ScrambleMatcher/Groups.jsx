@@ -1,5 +1,6 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { Button, Header } from 'semantic-ui-react';
+import _ from 'lodash';
 import I18n from '../../lib/i18n';
 import ScrambleMatch from './ScrambleMatch';
 
@@ -13,7 +14,7 @@ export default function Groups({
   const [selectedGroupNumber, setSelectedGroupNumber] = useState(null);
 
   const availableEventIds = useMemo(
-    () => Array.from({ length: scrambleSetCount }, (e, i) => i),
+    () => _.times(scrambleSetCount),
     [scrambleSetCount],
   );
 
