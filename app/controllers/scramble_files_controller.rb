@@ -60,6 +60,7 @@ class ScrambleFilesController < ApplicationController
           wcif_round[:scrambleSets].each_with_index do |wcif_scramble_set, idx|
             scramble_set = scr_file_upload.inbox_scramble_sets.create!(
               scramble_set_number: idx + 1,
+              ordered_index: idx,
               matched_round: competition_round,
             )
 
@@ -68,6 +69,7 @@ class ScrambleFilesController < ApplicationController
                 scramble_set.inbox_scrambles.create!(
                   scramble_string: wcif_scramble,
                   scramble_number: n + 1,
+                  ordered_index: n,
                   is_extra: scramble_kind == :extraScrambles,
                 )
               end
@@ -95,15 +97,25 @@ class ScrambleFilesController < ApplicationController
     competition = competition_from_params
 
     competition.rounds.each do |round|
-      updated_set_ids = params[round.wcif_id]
+      updated_sets = params[round.wcif_id]
 
-      next if updated_set_ids.blank?
+      next if updated_sets.blank?
 
       round.inbox_scramble_sets.update_all(matched_round_id: nil)
+      updated_set_ids = updated_sets.pluck(:id)
 
       InboxScrambleSet.find(updated_set_ids)
                       .each_with_index do |scramble_set, idx|
-        scramble_set.update!(matched_round: round, matched_round_ordered_index: idx)
+        scramble_set.update!(matched_round: round, ordered_index: idx)
+      end
+
+      updated_sets.each do |updated_set|
+        updated_scramble_ids = updated_set[:inbox_scrambles]
+
+        InboxScramble.find(updated_scramble_ids)
+                     .each_with_index do |scramble, idx|
+          scramble.update!(ordered_index: idx)
+        end
       end
     end
 

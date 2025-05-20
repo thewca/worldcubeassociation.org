@@ -7,59 +7,7 @@ import ScrambleFiles from './ScrambleFiles';
 import Events from './Events';
 import { fetchJsonOrError } from '../../lib/requests/fetchWithAuthenticityToken';
 import { scramblesUpdateRoundMatchingUrl } from '../../lib/requests/routes.js.erb';
-
-function mergeScrambleSets(state, newScrambleFile) {
-  const groupedScrambleSets = _.groupBy(
-    newScrambleFile.inbox_scramble_sets,
-    'matched_round_wcif_id',
-  );
-
-  const orderedScrambleSets = _.mapValues(
-    groupedScrambleSets,
-    (sets) => _.sortBy(sets, 'matched_round_ordered_index'),
-  );
-
-  return _.mergeWith(
-    orderedScrambleSets,
-    state,
-    (a, b) => _.uniqBy([...b, ...a], 'id'),
-  );
-}
-
-function moveArrayItem(arr, fromIndex, toIndex) {
-  const movedItem = arr[fromIndex];
-
-  const withoutMovedItem = [
-    ...arr.slice(0, fromIndex),
-    // here we want to ignore the moved item itself, so we need the +1
-    ...arr.slice(fromIndex + 1),
-  ];
-
-  return [
-    ...withoutMovedItem.slice(0, toIndex),
-    movedItem,
-    // here we do NOT want to ignore the items that were originally there, so no +1
-    ...withoutMovedItem.slice(toIndex),
-  ];
-}
-
-function scrambleMatchReducer(state, action) {
-  switch (action.type) {
-    case 'addScrambleFile':
-      return mergeScrambleSets(state, action.scrambleFile);
-    case 'moveRoundScrambleSet':
-      return {
-        ...state,
-        [action.roundId]: moveArrayItem(
-          state[action.roundId],
-          action.fromIndex,
-          action.toIndex,
-        ),
-      };
-    default:
-      throw new Error(`Unhandled action type: ${action.type}`);
-  }
-}
+import scrambleMatchReducer, { mergeScrambleSets } from './reducer';
 
 export default function Wrapper({
   wcifEvents,
@@ -80,7 +28,10 @@ export default function Wrapper({
 async function submitMatchedScrambles(competitionId, matchState) {
   const matchStateIdsOnly = _.mapValues(
     matchState,
-    (sets) => _.map(sets, 'id'),
+    (sets) => sets.map((set) => ({
+      id: set.id,
+      inbox_scrambles: set.inbox_scrambles.map((scr) => scr.id),
+    })),
   );
 
   const { data } = await fetchJsonOrError(scramblesUpdateRoundMatchingUrl(competitionId), {
@@ -98,21 +49,11 @@ function ScrambleMatcher({ wcifEvents, competitionId, initialScrambleFiles }) {
   const [matchState, dispatchMatchState] = useReducer(
     scrambleMatchReducer,
     initialScrambleFiles,
-    (files) => files.reduce((accu, file) => mergeScrambleSets(accu, file), {}),
+    (files) => files.reduce(mergeScrambleSets, {}),
   );
 
   const addScrambleFile = useCallback(
     (scrambleFile) => dispatchMatchState({ type: 'addScrambleFile', scrambleFile }),
-    [dispatchMatchState],
-  );
-
-  const moveRoundScrambleSet = useCallback(
-    (roundId, fromIndex, toIndex) => dispatchMatchState({
-      type: 'moveRoundScrambleSet',
-      roundId,
-      fromIndex,
-      toIndex,
-    }),
     [dispatchMatchState],
   );
 
@@ -138,7 +79,7 @@ function ScrambleMatcher({ wcifEvents, competitionId, initialScrambleFiles }) {
       <Events
         wcifEvents={wcifEvents}
         matchState={matchState}
-        moveRoundScrambleSet={moveRoundScrambleSet}
+        dispatchMatchState={dispatchMatchState}
       />
       <Divider />
       <Button

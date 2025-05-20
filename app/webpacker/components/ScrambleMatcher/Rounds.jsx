@@ -1,15 +1,45 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useCallback } from 'react';
 import { Button, Header } from 'semantic-ui-react';
 import { activityCodeToName } from '@wca/helpers';
 import ScrambleMatch from './ScrambleMatch';
 import I18n from '../../lib/i18n';
+import Groups from './Groups';
+import { events, roundTypes } from '../../lib/wca-data.js.erb';
+import { useDispatchWrapper } from './reducer';
 
-export default function Rounds({ wcifRounds, matchState, moveRoundScrambleSet }) {
+const scrambleSetToName = (scrambleSet) => `${events.byId[scrambleSet.event_id].name} ${roundTypes.byId[scrambleSet.round_type_id].name} - ${String.fromCharCode(64 + scrambleSet.scramble_set_number)}`;
+
+export default function Rounds({
+  wcifRounds,
+  matchState,
+  dispatchMatchState,
+  showGroupsPicker = false,
+}) {
   const [selectedRoundId, setSelectedRoundId] = useState();
 
   const selectedRound = useMemo(
     () => wcifRounds.find((r) => r.id === selectedRoundId),
     [wcifRounds, selectedRoundId],
+  );
+
+  const onRoundDragCompleted = useCallback(
+    (fromIndex, toIndex) => dispatchMatchState({
+      type: 'moveRoundScrambleSet',
+      roundId: selectedRoundId,
+      fromIndex,
+      toIndex,
+    }),
+    [dispatchMatchState, selectedRoundId],
+  );
+
+  const wrappedDispatch = useDispatchWrapper(
+    dispatchMatchState,
+    { roundId: selectedRoundId },
+  );
+
+  const roundToGroupName = useCallback(
+    (idx) => `${activityCodeToName(selectedRoundId)}, Group ${idx + 1}`,
+    [selectedRoundId],
   );
 
   return (
@@ -39,11 +69,22 @@ export default function Rounds({ wcifRounds, matchState, moveRoundScrambleSet })
         ))}
       </Button.Group>
       {selectedRound && (
-        <ScrambleMatch
-          activeRound={selectedRound}
-          matchState={matchState}
-          moveRoundScrambleSet={moveRoundScrambleSet}
-        />
+        <>
+          <ScrambleMatch
+            matchableRows={matchState[selectedRoundId]}
+            expectedNumOfRows={selectedRound.scrambleSetCount}
+            onRowDragCompleted={onRoundDragCompleted}
+            computeDefinitionName={roundToGroupName}
+            computeRowName={scrambleSetToName}
+          />
+          {showGroupsPicker && (
+            <Groups
+              scrambleSetCount={selectedRound.scrambleSetCount}
+              scrambleSets={matchState[selectedRoundId]}
+              dispatchMatchState={wrappedDispatch}
+            />
+          )}
+        </>
       )}
     </>
   );
