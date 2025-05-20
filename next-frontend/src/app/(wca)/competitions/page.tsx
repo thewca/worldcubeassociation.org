@@ -8,7 +8,7 @@ import {
   Button,
   Text,
   Switch,
-  Icon
+  Icon,
 } from "@chakra-ui/react";
 import CompetitionTableEntry from "@/components/CompetitionTableEntry";
 import RemovableCard from "@/components/RemovableCard";
@@ -22,7 +22,6 @@ import CompRegoFullButOpenOrangeIcon from "@/components/icons/CompRegoFullButOpe
 import CompRegoNotFullOpenGreenIcon from "@/components/icons/CompRegoNotFullOpen_greenIcon";
 import CompRegoNotOpenYetGreyIcon from "@/components/icons/CompRegoNotOpenYet_greyIcon";
 import CompRegoClosedRedIcon from "@/components/icons/CompRegoClosed_redIcon";
-
 
 // Array of competition IDs you want to retrieve data for
 const compIds = [
@@ -91,7 +90,9 @@ export default async function Competitions() {
             <Switch.HiddenInput />
             <Switch.Control>
               <Switch.Thumb />
-              <Switch.Indicator fallback={<Icon as={ListIcon} color="gray.400" />}>
+              <Switch.Indicator
+                fallback={<Icon as={ListIcon} color="gray.400" />}
+              >
                 <Icon as={MapIcon} colorPalette="yellow.400" />
               </Switch.Indicator>
             </Switch.Control>
@@ -103,10 +104,14 @@ export default async function Competitions() {
         </Flex>
         <Flex gap="2" width="full">
           <Text>Registration Key:</Text>
-          <CompRegoFullButOpenOrangeIcon /><Text>Full</Text>
-          <CompRegoNotFullOpenGreenIcon /><Text>Open</Text>
-          <CompRegoNotOpenYetGreyIcon /><Text>Not Open</Text>
-          <CompRegoClosedRedIcon /><Text>Closed</Text>
+          <CompRegoFullButOpenOrangeIcon />
+          <Text>Full</Text>
+          <CompRegoNotFullOpenGreenIcon />
+          <Text>Open</Text>
+          <CompRegoNotOpenYetGreyIcon />
+          <Text>Not Open</Text>
+          <CompRegoClosedRedIcon />
+          <Text>Closed</Text>
           <Text ml="auto">Currently Displaying: 10 competitions</Text>
         </Flex>
         <Card.Root
