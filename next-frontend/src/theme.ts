@@ -537,6 +537,13 @@ const customConfig = defineConfig({
               gap: "2",
               mr: "2.5",
             },
+            information: {
+              bg: "transparent",
+              color: "fg",
+              fontWeight: "light",
+              gap: "2",
+              mr: "2.5",
+            },
           },
         },
         compoundVariants: [
@@ -547,6 +554,21 @@ const customConfig = defineConfig({
               svg: {
                 height: "1.25em",
                 width: "1.25em",
+              },
+            },
+          },
+          {
+            variant: "information",
+            css: {
+              textStyle: "md", //needed to supercede the default textStyle
+              svg: {
+                height: "1.1em",
+                width: "1.1em",
+              },
+              img: {
+                height: "1.1em",
+                width: "auto",
+                borderRadius: "3px",
               },
             },
           },
@@ -707,6 +729,11 @@ const customConfig = defineConfig({
                 width: "1%",
                 whiteSpace: "noWrap",
                 padding: "0",
+                "& img": {
+                  height: "1.1em",
+                  width: "2.8em",
+                  borderRadius: "3px",
+                },
               },
               row: {
                 "& td": {
@@ -750,6 +777,7 @@ const customConfig = defineConfig({
                 borderRadius: "md",
                 shadow: "{shadows.wca}",
                 height: "max-content",
+                borderRadius: "xl",
               },
             },
           },
