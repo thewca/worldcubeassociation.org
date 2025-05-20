@@ -79,10 +79,10 @@ export default function ScrambleMatch({
 
                   return (
                     <Draggable
-                      key={rowData.id}
-                      draggableId={rowData.id.toString()}
+                      key={rowData?.id ?? `extra-scramble-set-${index + 1}`}
+                      draggableId={rowData?.id?.toString() ?? `extra-scramble-set-${index + 1}`}
                       index={index}
-                      isDragDisabled={rowCount === 1}
+                      isDragDisabled={rowCount === 1 || hasError}
                     >
                       {(providedDraggable, snapshot) => {
                         const definitionIndex = computeOnDragIndex(index, snapshot.isDragging);
@@ -90,7 +90,7 @@ export default function ScrambleMatch({
                         return (
                           <Ref innerRef={providedDraggable.innerRef}>
                             <Table.Row
-                              key={rowData.id}
+                              key={rowData?.id ?? `extra-scramble-set-${index + 1}`}
                               {...providedDraggable.draggableProps}
                               negative={hasError || isExtra}
                             >
@@ -98,17 +98,16 @@ export default function ScrambleMatch({
                                 {isExpected
                                   ? computeDefinitionName(definitionIndex)
                                   : 'Extra Scramble set (unassigned)'}
-                                {(hasError || isExtra) && (
+                                {isExtra && (
                                   <>
-                                    {' '}
                                     <Icon name="exclamation triangle" />
-                                    {hasError ? 'Missing scramble' : 'Unexpected Scramble Set'}
+                                    Unexpected Scramble Set
                                   </>
                                 )}
                               </Table.Cell>
                               <Table.Cell {...providedDraggable.dragHandleProps}>
-                                <Icon name="bars" />
-                                {computeRowName(rowData)}
+                                <Icon name={hasError ? 'exclamation triangle' : 'bars'} />
+                                {hasError ? 'Missing scramble set' : computeRowName(rowData)}
                               </Table.Cell>
                             </Table.Row>
                           </Ref>
