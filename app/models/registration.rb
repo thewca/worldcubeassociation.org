@@ -576,13 +576,7 @@ class Registration < ApplicationRecord
 
   delegate :auto_accept_registrations, to: :competition
 
-  def auto_accept_in_current_env?
-    !(Rails.env.production? && EnvConfig.WCA_LIVE_SITE?)
-  end
-
   def attempt_auto_accept
-    return false unless auto_accept_in_current_env?
-
     failure_reason = auto_accept_failure_reason
     if failure_reason.present?
       log_auto_accept_failure(failure_reason)
