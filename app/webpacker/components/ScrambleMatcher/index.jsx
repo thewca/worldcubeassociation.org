@@ -61,24 +61,21 @@ function ScrambleMatcher({ wcifEvents, competitionId, initialScrambleFiles }) {
     mutationFn: () => submitMatchedScrambles(competitionId, matchState),
   });
 
-  const error = useMemo(() => {
-    if (!matchState) return '';
-    const roundIds = _.flatMap(wcifEvents, (comp) => _.map(comp.rounds, 'id'));
-    const missingIds = _.difference(roundIds, _.keys(matchState));
-    if (missingIds.length > 0) {
-      return `Missing scramble sets for rounds ${missingIds.join(', ')}`;
-    }
-    const missingScrambles = _.filter(roundIds, (roundId) => {
+  const roundIds = useMemo(() => _.flatMap(wcifEvents, 'rounds').map((r) => r.id), [wcifEvents]);
+
+  const missingIds = useMemo(() => {
+    if (!matchState) return [];
+    return _.difference(roundIds, _.keys(matchState));
+  }, [matchState, roundIds]);
+
+  const missingScrambleIds = useMemo(() => {
+    if (!matchState) return [];
+    return _.filter(roundIds, (roundId) => {
       const matchedRound = matchState[roundId];
       const wcifRound = _.flatMap(wcifEvents, 'rounds').find((r) => r.id === roundId);
       return matchedRound.length < wcifRound.scrambleSetCount;
     });
-
-    if (missingScrambles.length > 0) {
-      return `Missing scrambles for rounds ${missingScrambles.join(', ')}`;
-    }
-    return '';
-  }, [matchState, wcifEvents]);
+  }, [matchState, roundIds, wcifEvents]);
 
   return (
     <>
@@ -90,10 +87,34 @@ function ScrambleMatcher({ wcifEvents, competitionId, initialScrambleFiles }) {
           and the number of groups in the round you can manually assign them below.
         </Message.Content>
       </Message>
-      <Message error hidden={!error}>
-        <Message.Header>Error</Message.Header>
-        <Message.Content>{error}</Message.Content>
-      </Message>
+      { missingIds.length > 0 && (
+        <Message error>
+          <Message.Header>Missing Scramble Sets</Message.Header>
+          <Message.List>
+            { missingIds.map((id) => (
+              <Message.Item key={id}>
+                Missing scramble sets for round
+                {' '}
+                {id}
+              </Message.Item>
+            ))}
+          </Message.List>
+        </Message>
+      )}
+      { missingScrambleIds.length > 0 && (
+        <Message error>
+          <Message.Header>Missing Scrambles</Message.Header>
+          <Message.List>
+            { missingScrambleIds.map((id) => (
+              <Message.Item key={id}>
+                Missing scrambles round
+                {' '}
+                {id}
+              </Message.Item>
+            ))}
+          </Message.List>
+        </Message>
+      )}
       <ScrambleFiles
         competitionId={competitionId}
         initialScrambleFiles={initialScrambleFiles}
