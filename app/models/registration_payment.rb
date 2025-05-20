@@ -23,7 +23,7 @@ class RegistrationPayment < ApplicationRecord
   end
 
   private def should_auto_accept?
-    auto_accept_in_current_env? && auto_accept_registrations? && Registration::LIVE_AUTO_ACCEPT_ENABLED
+    auto_accept_registrations? && Registration::LIVE_AUTO_ACCEPT_ENABLED
   end
 
   private def auto_accept_hook
