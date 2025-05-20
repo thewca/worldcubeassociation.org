@@ -104,13 +104,12 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
     onSuccess: (data) => {
       if (Object.keys(data).length === 0) {
         dispatchStore(showMessage('competitions.registration_v2.auto_accept.nothing_to_accept', 'info'));
-        return; // No need to refetch in this case
       } else {
         setModalData(data);
         setModalOpen(true);
         dispatchStore(showMessage('competitions.registration_v2.auto_accept.bulk_auto_accepted', 'positive'));
-        return refetch();
       }
+      return refetch();
     },
   });
 
