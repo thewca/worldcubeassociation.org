@@ -552,8 +552,15 @@ class Registration < ApplicationRecord
   end
 
   def self.bulk_auto_accept(competition)
-    waitlisted_registrations = competition.registrations.find(competition.waiting_list.entries) if
-      competition.waiting_list.present?
+    if competition.waiting_list.present?
+      waitlisted_registrations = competition.registrations.find(competition.waiting_list.entries)
+
+      waitlisted_outcomes = waitlisted_registrations
+                            .lazy
+                            .map { |reg| [reg.id, reg.attempt_auto_accept] }
+                            .take_while { |_, result| result[:succeeded] }
+                            .to_h
+    end
 
     pending_registrations = competition
                             .registrations
@@ -561,16 +568,10 @@ class Registration < ApplicationRecord
                             .with_payments
                             .sort_by { |registration| registration.last_positive_payment.updated_at }
 
-    results = waitlisted_registrations
-              .lazy
-              .map { |reg| [reg.id, reg.attempt_auto_accept] }
-              .take_while { |_, result| result[:succeeded] }
-              .to_h
-
     # We dont need to break out of pending registrations because auto accept can still put them on the waiting list
-    pending_results = pending_registrations.index_by(&:id).transform_values(&:attempt_auto_accept)
+    pending_outcomes = pending_registrations.index_by(&:id).transform_values(&:attempt_auto_accept)
 
-    results.merge(pending_results)
+    waitlisted_outcomes.present? ? results.merge(pending_outcomes) : pending_outcomes
   end
 
   def last_positive_payment

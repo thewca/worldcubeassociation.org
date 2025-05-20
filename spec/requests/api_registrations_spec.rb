@@ -1381,11 +1381,10 @@ RSpec.describe 'API Registrations' do
 
     before do
       create_list(:registration, 5, :accepted, competition: auto_accept_comp)
+      headers['Authorization'] = fetch_jwt_token(auto_accept_comp.organizers.first.id)
     end
 
     it 'triggers bulk auto accept via API route' do
-      headers['Authorization'] = fetch_jwt_token(auto_accept_comp.organizers.first.id)
-
       waitlisted = create_list(:registration, 9, :paid, :waiting_list, competition: auto_accept_comp)
       create_list(:registration, 3, :paid, :pending, competition: auto_accept_comp)
       initial_pending_ids = auto_accept_comp.registrations.competing_status_pending.ids
@@ -1402,6 +1401,12 @@ RSpec.describe 'API Registrations' do
       expect((expected_accepted - auto_accept_comp.registrations.competing_status_accepted.ids).empty?).to be(true)
 
       expect(auto_accept_comp.waiting_list.reload.entries).to eq(expected_remaining)
+    end
+
+    it 'returns empty json if no registrations to be auto-accepted' do
+      patch bulk_auto_accept_api_v1_competition_registrations_path(competition_id: auto_accept_comp.id), headers: headers
+      expect(response).to have_http_status(:ok)
+      expect(response.parsed_body).to eq({})
     end
   end
 end

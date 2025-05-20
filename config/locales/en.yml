@@ -1825,7 +1825,7 @@ en:
     registration_v2:
       auto_accept:
         bulk_auto_accept: "Auto-Approve Competitors"
-        cant_bulk_auto_accept: "An error occurred while trying to bulk auto accept - contact WST for assistant if needed"
+        cant_bulk_auto_accept: "An error occurred while trying to bulk auto accept - contact WST for assistance if needed"
         bulk_auto_accepted: "Bulk auto accept succeeded"
       pdf:
         #context: <0> indicates an html tag for internationalizing in React, see https://docs.worldcubeassociation.org/guides/translating_the_website.html#using-react
