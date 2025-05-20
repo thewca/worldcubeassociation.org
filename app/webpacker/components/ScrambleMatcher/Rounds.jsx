@@ -69,7 +69,7 @@ export default function Rounds({
           {showGroupsPicker && (
             <Groups
               scrambleSetCount={selectedRound.scrambleSetCount}
-              matchState={matchState}
+              scrambleSets={matchState[selectedRoundId]}
               moveRoundScrambleSet={moveRoundScrambleSet}
             />
           )}

@@ -1,13 +1,25 @@
-import React, { useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { Button, Header } from 'semantic-ui-react';
 import I18n from '../../lib/i18n';
+import ScrambleMatch from './ScrambleMatch';
 
-export default function Groups({ scrambleSetCount, matchState, moveRoundScrambleSet }) {
+const scrambleToName = (scr) => scr.scramble_string;
+
+export default function Groups({
+  scrambleSetCount,
+  scrambleSets,
+  moveRoundScrambleSet,
+}) {
   const [selectedGroupNumber, setSelectedGroupNumber] = useState(null);
 
   const availableEventIds = useMemo(
     () => Array.from({ length: scrambleSetCount }, (e, i) => i),
     [scrambleSetCount],
+  );
+
+  const groupScrambleToName = useCallback(
+    (idx) => `Attempt ${idx + 1}`,
+    [],
   );
 
   return (
@@ -39,7 +51,11 @@ export default function Groups({ scrambleSetCount, matchState, moveRoundScramble
         ))}
       </Button.Group>
       {selectedGroupNumber !== null && (
-        <Header>Matcher for this group!</Header>
+        <ScrambleMatch
+          matchableRows={scrambleSets[selectedGroupNumber].inbox_scrambles}
+          computeDefinitionName={groupScrambleToName}
+          computeRowName={scrambleToName}
+        />
       )}
     </>
   );
