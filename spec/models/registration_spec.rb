@@ -605,7 +605,15 @@ RSpec.describe Registration do
     let(:auto_accept_comp) { create(:competition, :auto_accept, :registration_open) }
     let!(:reg) { create(:registration, competition: auto_accept_comp) }
 
-    it 'auto accepts a competitor who pays for their pending registration' do
+    it 'live auto accept is not triggered upon payment' do
+      expect(reg.competing_status).to eq('pending')
+
+      create(:registration_payment, registration: reg, competition: auto_accept_comp)
+
+      expect(reg.reload.competing_status).to eq('pending')
+    end
+
+    it 'works for a paid pending registration' do
       expect(reg.competing_status).to eq('pending')
 
       create(:registration_payment, :skip_create_hook, registration: reg, competition: auto_accept_comp)
@@ -616,7 +624,7 @@ RSpec.describe Registration do
       expect(reg.registration_history_entries.last.actor_id).to eq('auto-accept')
     end
 
-    it 'auto accepts a competitor who included a donation in their payment' do
+    it 'works for a competitor who included a donation in their payment' do
       expect(reg.competing_status).to eq('pending')
 
       create(:registration_payment, :skip_create_hook, :with_donation, registration: reg, competition: auto_accept_comp)
