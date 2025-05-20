@@ -3,8 +3,14 @@ import { Button, Header } from 'semantic-ui-react';
 import { activityCodeToName } from '@wca/helpers';
 import ScrambleMatch from './ScrambleMatch';
 import I18n from '../../lib/i18n';
+import Groups from "./Groups";
 
-export default function Rounds({ wcifRounds, matchState, moveRoundScrambleSet }) {
+export default function Rounds({
+  wcifRounds,
+  matchState,
+  moveRoundScrambleSet,
+  showGroupsPicker = false,
+}) {
   const [selectedRoundId, setSelectedRoundId] = useState();
 
   const selectedRound = useMemo(
@@ -39,11 +45,20 @@ export default function Rounds({ wcifRounds, matchState, moveRoundScrambleSet })
         ))}
       </Button.Group>
       {selectedRound && (
-        <ScrambleMatch
-          activeRound={selectedRound}
-          matchState={matchState}
-          moveRoundScrambleSet={moveRoundScrambleSet}
-        />
+        <>
+          <ScrambleMatch
+            activeRound={selectedRound}
+            matchState={matchState}
+            moveRoundScrambleSet={moveRoundScrambleSet}
+          />
+          {showGroupsPicker && (
+            <Groups
+              scrambleSetCount={selectedRound.scrambleSetCount}
+              matchState={matchState}
+              moveRoundScrambleSet={moveRoundScrambleSet}
+            />
+          )}
+        </>
       )}
     </>
   );
