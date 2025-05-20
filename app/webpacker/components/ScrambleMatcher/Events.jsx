@@ -1,10 +1,11 @@
 import React, { useMemo, useState } from 'react';
 import EventSelector from '../wca/EventSelector';
 import Rounds from './Rounds';
+import {useDispatchWrapper} from "./index";
 
 const ATTEMPT_BASED_EVENTS = ['333fm', '333mbf'];
 
-export default function Events({ wcifEvents, matchState, moveRoundScrambleSet }) {
+export default function Events({ wcifEvents, matchState, dispatchMatchState }) {
   const [selectedEventId, setSelectedEventId] = useState();
 
   const availableEventIds = useMemo(() => wcifEvents.map((e) => e.id), [wcifEvents]);
@@ -17,6 +18,11 @@ export default function Events({ wcifEvents, matchState, moveRoundScrambleSet })
   const isAttemptBasedEvent = useMemo(
     () => ATTEMPT_BASED_EVENTS.includes(selectedEventId),
     [selectedEventId],
+  );
+
+  const wrappedDispatch = useDispatchWrapper(
+    dispatchMatchState,
+    { eventId: selectedEventId },
   );
 
   return (
@@ -33,7 +39,7 @@ export default function Events({ wcifEvents, matchState, moveRoundScrambleSet })
         <Rounds
           wcifRounds={selectedWcifEvent.rounds}
           matchState={matchState}
-          moveRoundScrambleSet={moveRoundScrambleSet}
+          dispatchMatchState={wrappedDispatch}
           showGroupsPicker={isAttemptBasedEvent}
         />
       )}

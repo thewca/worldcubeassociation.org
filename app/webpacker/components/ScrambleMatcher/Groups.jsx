@@ -8,13 +8,23 @@ const scrambleToName = (scr) => scr.scramble_string;
 export default function Groups({
   scrambleSetCount,
   scrambleSets,
-  moveRoundScrambleSet,
+  dispatchMatchState,
 }) {
   const [selectedGroupNumber, setSelectedGroupNumber] = useState(null);
 
   const availableEventIds = useMemo(
     () => Array.from({ length: scrambleSetCount }, (e, i) => i),
     [scrambleSetCount],
+  );
+
+  const onGroupDragCompleted = useCallback(
+    (fromIndex, toIndex) => dispatchMatchState({
+      type: 'moveScrambleInSet',
+      setNumber: selectedGroupNumber,
+      fromIndex,
+      toIndex,
+    }),
+    [dispatchMatchState, selectedGroupNumber],
   );
 
   const groupScrambleToName = useCallback(
@@ -53,6 +63,7 @@ export default function Groups({
       {selectedGroupNumber !== null && (
         <ScrambleMatch
           matchableRows={scrambleSets[selectedGroupNumber].inbox_scrambles}
+          onRowDragCompleted={onGroupDragCompleted}
           computeDefinitionName={groupScrambleToName}
           computeRowName={scrambleToName}
         />

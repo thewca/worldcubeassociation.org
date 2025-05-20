@@ -5,13 +5,14 @@ import ScrambleMatch from './ScrambleMatch';
 import I18n from '../../lib/i18n';
 import Groups from './Groups';
 import { events, roundTypes } from '../../lib/wca-data.js.erb';
+import { useDispatchWrapper } from './index';
 
 const scrambleToName = (scramble) => `${events.byId[scramble.event_id].name} ${roundTypes.byId[scramble.round_type_id].name} - ${String.fromCharCode(64 + scramble.scramble_set_number)}`;
 
 export default function Rounds({
   wcifRounds,
   matchState,
-  moveRoundScrambleSet,
+  dispatchMatchState,
   showGroupsPicker = false,
 }) {
   const [selectedRoundId, setSelectedRoundId] = useState();
@@ -22,8 +23,18 @@ export default function Rounds({
   );
 
   const onRoundDragCompleted = useCallback(
-    (from, to) => moveRoundScrambleSet(selectedRoundId, from, to),
-    [moveRoundScrambleSet, selectedRoundId],
+    (fromIndex, toIndex) => dispatchMatchState({
+      type: 'moveRoundScrambleSet',
+      roundId: selectedRoundId,
+      fromIndex,
+      toIndex,
+    }),
+    [dispatchMatchState, selectedRoundId],
+  );
+
+  const wrappedDispatch = useDispatchWrapper(
+    dispatchMatchState,
+    { roundId: selectedRoundId },
   );
 
   const roundToGroupName = useCallback(
@@ -70,7 +81,7 @@ export default function Rounds({
             <Groups
               scrambleSetCount={selectedRound.scrambleSetCount}
               scrambleSets={matchState[selectedRoundId]}
-              moveRoundScrambleSet={moveRoundScrambleSet}
+              dispatchMatchState={wrappedDispatch}
             />
           )}
         </>

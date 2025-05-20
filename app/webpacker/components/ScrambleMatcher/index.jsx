@@ -43,6 +43,15 @@ function moveArrayItem(arr, fromIndex, toIndex) {
   ];
 }
 
+export function useDispatchWrapper(originalDispatch, actionVars) {
+  return useCallback((action) => {
+    originalDispatch({
+      ...actionVars,
+      ...action,
+    });
+  }, [actionVars, originalDispatch]);
+}
+
 function scrambleMatchReducer(state, action) {
   switch (action.type) {
     case 'addScrambleFile':
@@ -55,6 +64,19 @@ function scrambleMatchReducer(state, action) {
           action.fromIndex,
           action.toIndex,
         ),
+      };
+    case 'moveScrambleInSet':
+      return {
+        ...state,
+        [action.roundId]: state[action.roundId]
+          .map((scrSet, i) => (i === action.setNumber ? ({
+            ...scrSet,
+            inbox_scrambles: moveArrayItem(
+              scrSet.inbox_scrambles,
+              action.fromIndex,
+              action.toIndex,
+            ),
+          }) : scrSet)),
       };
     default:
       throw new Error(`Unhandled action type: ${action.type}`);
@@ -106,16 +128,6 @@ function ScrambleMatcher({ wcifEvents, competitionId, initialScrambleFiles }) {
     [dispatchMatchState],
   );
 
-  const moveRoundScrambleSet = useCallback(
-    (roundId, fromIndex, toIndex) => dispatchMatchState({
-      type: 'moveRoundScrambleSet',
-      roundId,
-      fromIndex,
-      toIndex,
-    }),
-    [dispatchMatchState],
-  );
-
   const { mutate: submitMatchState, isPending: isSubmitting } = useMutation({
     mutationFn: () => submitMatchedScrambles(competitionId, matchState),
   });
@@ -138,7 +150,7 @@ function ScrambleMatcher({ wcifEvents, competitionId, initialScrambleFiles }) {
       <Events
         wcifEvents={wcifEvents}
         matchState={matchState}
-        moveRoundScrambleSet={moveRoundScrambleSet}
+        dispatchMatchState={dispatchMatchState}
       />
       <Divider />
       <Button
