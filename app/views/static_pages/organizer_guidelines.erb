@@ -17,7 +17,7 @@
 
   <p><%= t('full_organizer_guidelines.recommended.title') %></p>
   <div class="list-group">
-    <% %w(staff emails running-systems new-competitors enhancing-experience reflection).each do |doc| %>
+    <% %w(competition-volunteers emails running-systems new-competitors enhancing-experience reflection).each do |doc| %>
       <%= link_to "https://documents.worldcubeassociation.org/edudoc/organizer-guidelines/#{doc}.pdf", class: "list-group-item" do %>
         <%= ui_icon("file alt") %>
         <%= t("full_organizer_guidelines.recommended.#{doc}") %>
