@@ -24,6 +24,10 @@ module Admin
       @scramble = Scramble.includes(:competition).find(params[:id])
     end
 
+    def match_scrambles
+      @competition = Competition.find(params[:competition_id])
+    end
+
     def create
       json = {}
       # Build a brand new scramble, validations will make sure the specified round

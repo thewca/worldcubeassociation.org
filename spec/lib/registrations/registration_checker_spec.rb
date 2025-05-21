@@ -218,6 +218,7 @@ RSpec.describe Registrations::RegistrationChecker do
           :competition,
           :registration_open,
           :with_event_limit,
+          :with_organizer,
           event_ids: %w[333 333oh 222 444 555 666 777],
         )
       end
@@ -298,7 +299,7 @@ RSpec.describe Registrations::RegistrationChecker do
 
       it 'organizer cant register more events than the events_per_registration_limit' do
         registration_request = build(
-          :registration_request, events: %w[333 222 444 555 666 777], competition_id: event_limit_comp.id, user_id: default_user.id
+          :registration_request, events: %w[333 222 444 555 666 777], competition_id: event_limit_comp.id, user_id: event_limit_comp.organizers.first.id
         )
 
         expect do
@@ -1982,33 +1983,33 @@ RSpec.describe Registrations::RegistrationChecker do
     end
 
     describe '#update_registration_allowed!.updating series registrations' do
-      let(:registrationA) { create(:registration, :accepted) }
+      let(:registration_a) { create(:registration, :accepted) }
 
       let(:series) { create(:competition_series) }
-      let(:competitionA) { registrationA.competition }
-      let(:competitionB) do
+      let(:competition_a) { registration_a.competition }
+      let(:competition_b) do
         create(
-          :competition, :registration_open, :editable_registrations, :with_organizer, competition_series: series, series_base: competitionA
+          :competition, :registration_open, :editable_registrations, :with_organizer, competition_series: series, series_base: competition_a
         )
       end
 
-      let(:registrationB) { create(:registration, :cancelled, competition: competitionB, user_id: registrationA.user.id) }
+      let(:registration_b) { create(:registration, :cancelled, competition: competition_b, user_id: registration_a.user.id) }
 
       before do
-        competitionA.update!(competition_series: series)
+        competition_a.update!(competition_series: series)
       end
 
       it 'organizer cant set status to accepted if attendee is accepted for another series comp' do
         update_request = build(
           :update_request,
-          user_id: registrationB.user.id,
-          competition_id: competitionB.id,
-          submitted_by: competitionB.organizers.first.id,
+          user_id: registration_b.user.id,
+          competition_id: competition_b.id,
+          submitted_by: competition_b.organizers.first.id,
           competing: { 'status' => 'accepted' },
         )
 
         expect do
-          Registrations::RegistrationChecker.update_registration_allowed!(update_request, registrationB)
+          Registrations::RegistrationChecker.update_registration_allowed!(update_request, registration_b)
         end.to raise_error(WcaExceptions::RegistrationError) do |error|
           expect(error.error).to eq(Registrations::ErrorCodes::ALREADY_REGISTERED_IN_SERIES)
           expect(error.status).to eq(:unprocessable_entity)
@@ -2018,14 +2019,14 @@ RSpec.describe Registrations::RegistrationChecker do
       it 'organizer can update admin comment in attendees non-accepted series comp registration' do
         update_request = build(
           :update_request,
-          user_id: registrationB.user_id,
-          competition_id: registrationB.competition_id,
-          submitted_by: competitionB.organizers.first.id,
+          user_id: registration_b.user_id,
+          competition_id: registration_b.competition_id,
+          submitted_by: competition_b.organizers.first.id,
           competing: { 'admin_comment' => 'why they were cancelled' },
         )
 
         expect do
-          Registrations::RegistrationChecker.update_registration_allowed!(update_request, registrationB)
+          Registrations::RegistrationChecker.update_registration_allowed!(update_request, registration_b)
         end.not_to raise_error
       end
     end

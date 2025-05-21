@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe CompetitionTab, type: :model do
+RSpec.describe CompetitionTab do
   it "has a valid factory" do
     expect(build(:competition_tab)).to be_valid
   end
@@ -11,7 +11,7 @@ RSpec.describe CompetitionTab, type: :model do
     expect(CompetitionTab.column_names).to match_array(CompetitionTab::CLONEABLE_ATTRIBUTES + CompetitionTab::UNCLONEABLE_ATTRIBUTES)
   end
 
-  context "#slug" do
+  describe "#slug" do
     it "generates the same slug under different locales" do
       competition_tab = build(:competition_tab, id: 42, name: "Schedule / Расписание")
       expect(I18n.with_locale(:en) { competition_tab.slug }).to eq "42-schedule"
@@ -19,7 +19,7 @@ RSpec.describe CompetitionTab, type: :model do
     end
   end
 
-  context "#display_order" do
+  describe "#display_order" do
     let(:competition) { create(:competition) }
     let(:other_competition) { create(:competition) }
 
@@ -48,7 +48,7 @@ RSpec.describe CompetitionTab, type: :model do
     end
   end
 
-  context "#reorder" do
+  describe "#reorder" do
     let!(:competition) { create(:competition) }
     let!(:tab1) { create(:competition_tab, competition: competition) }
     let!(:tab2) { create(:competition_tab, competition: competition) }
@@ -75,7 +75,7 @@ RSpec.describe CompetitionTab, type: :model do
     end
   end
 
-  context "#verify_if_full_urls" do
+  describe "#verify_if_full_urls" do
     let(:competition_tab) { build(:competition_tab) }
 
     it "doesn't allow relative URLs" do

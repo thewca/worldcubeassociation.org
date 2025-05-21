@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe SyncMailingListsJob, type: :job do
+RSpec.describe SyncMailingListsJob do
   it "syncs mailing lists" do
     # Regions
     africa_region = GroupsMetadataDelegateRegions.find_by!(friendly_id: 'africa').user_group

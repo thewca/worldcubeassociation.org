@@ -636,7 +636,15 @@ RSpec.describe Registration do
       end
     end
 
-    it 'auto accepts a competitor who pays for their pending registration' do
+    it 'live auto accept is not triggered upon payment' do
+      expect(reg.competing_status).to eq('pending')
+
+      create(:registration_payment, registration: reg, competition: auto_accept_comp)
+
+      expect(reg.reload.competing_status).to eq('pending')
+    end
+
+    it 'works for a paid pending registration' do
       expect(reg.competing_status).to eq('pending')
 
       create(:registration_payment, :skip_create_hook, registration: reg, competition: auto_accept_comp)
@@ -647,7 +655,7 @@ RSpec.describe Registration do
       expect(reg.registration_history_entries.last.actor_id).to eq('auto-accept')
     end
 
-    it 'auto accepts a competitor who included a donation in their payment' do
+    it 'works for a competitor who included a donation in their payment' do
       expect(reg.competing_status).to eq('pending')
 
       create(:registration_payment, :skip_create_hook, :with_donation, registration: reg, competition: auto_accept_comp)
@@ -1205,7 +1213,7 @@ RSpec.describe Registration do
     it 'positive registration_payment calls registration.consider_auto_close' do
       competition = create(:competition)
       reg = create(:registration, competition: competition)
-      expect(reg).to receive(:consider_auto_close).exactly(1).times
+      expect(reg).to receive(:consider_auto_close).once
 
       create(
         :registration_payment,
@@ -1239,7 +1247,7 @@ RSpec.describe Registration do
 
     it 'calls competition.attempt_auto_close! if reg is fully paid' do
       competition = create(:competition)
-      expect_any_instance_of(Competition).to receive(:attempt_auto_close!).exactly(1).times
+      expect_any_instance_of(Competition).to receive(:attempt_auto_close!).once
 
       create(:registration, :paid, competition: competition)
     end

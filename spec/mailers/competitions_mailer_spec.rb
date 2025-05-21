@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe CompetitionsMailer, type: :mailer do
+RSpec.describe CompetitionsMailer do
   describe "notify_wcat_of_confirmed_competition" do
     let(:senior_delegate_role) { create(:senior_delegate_role) }
     let(:delegate_role) { create(:delegate_role, group: senior_delegate_role.group) }

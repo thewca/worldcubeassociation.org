@@ -1070,7 +1070,7 @@ fr-CA:
           otp_email:
             #original_hash: a238ac2
             subject: Votre code à usage unique pour le site internet de la WCA
-            #original_hash: 7aa8fc0
+            #original_hash: f126936
             2fa_attempt: >-
               Vous être en train de vous connecter sur le site de la WCA.
               L'authentification à deux facteur est activée pour votre compte,
@@ -2456,8 +2456,6 @@ fr-CA:
         with_stripe: Payé le
       #original_hash: 026f5b9
       payment_requested_on: 'Paiement demandé le : %{date}'
-      #original_hash: 23471fd
-      payment_completed_on: 'Paiement terminé le : %{date}'
       #original_hash: e5b42e6
       series_registrations: Inscriptions à une série
       #original_hash: b25928c
@@ -3401,6 +3399,10 @@ fr-CA:
           auto_close_threshold: Seuil de fermeture automatique
           #original_hash: 5b521f2
           newcomer_month_reserved_spots: Nombre de places à réserver aux nouveaux compétiteurs
+          #original_hash: 10fe7a9
+          auto_accept_enabled: Acceptation d'inscriptions automatiques en lot
+          #original_hash: 0405b42
+          auto_accept_disable_threshold: Limite pour l'acceptation automatique des inscriptions
         staff:
           #original_hash: 928eac8
           staff_delegate_ids: Délégué·s WCA
@@ -3551,7 +3553,7 @@ fr-CA:
             Nom de la ville où la compétition a lieu ainsi que la province /
             état (dans les pays où c'est l'usage). Ne pas mettre le pays.
             Exemple d'entrée valide : Montréal, Quebec
-          #original_hash: 84d365b
+          #original_hash: 37f2d96
           name_html: >-
             La salle où la compétition à lieu. %{md}. Par exemple : [École de
             Technologie Supérieure](https://www.etsmtl.ca)
@@ -3621,6 +3623,20 @@ fr-CA:
             Uniquement autorisé pendant le mois des nouveaux venus - les places
             réservées ne peuvent pas être supérieures à la moitié de la limite
             de compétiteurs.
+          #original_hash: 1bcac21
+          auto_accept_enabled: >-
+            Cela activera un bouton « Acceptation automatique en lot » dans le
+            menu « Inscriptions ». Cela acceptera toutes les inscriptions payées
+            sur la liste d'attente et en suspens jusqu'à la limite de
+            compétiteurs, ou la limite définie ci-dessous. A utiliser à vos
+            risques et périls.
+          #original_hash: adb50c3
+          auto_accept_disable_threshold: >-
+            Lorsque ce nombre d'inscriptions acceptées est atteint,
+            l'acceptation automatique se désactive, ce qui permet aux
+            organisateurs d'approuver manuellement les dernières inscriptions.
+            Doit être inférieur à la limite de compétiteurs. Ne rien indiquer si
+            vous ne souhaitez pas utiliser cette option.
         staff:
           #original_hash: 32f6084
           staff_delegate_ids: Délégué·s WCA pour la compétition.
@@ -3794,6 +3810,13 @@ fr-CA:
             'true': Je veux spécifier une limite au nombre de compétiteurs
             #original_hash: 9aca8d5
             'false': Je ne veux PAS spécifier de limite pour les compétiteurs.
+          auto_accept_enabled:
+            #original_hash: 0342c05
+            'true': >-
+              Activer le bouton « Acceptation automatique en lot » dans le menu
+              « Inscriptions ».
+            #original_hash: 766603b
+            'false': Désactiver le bouton 'Acceptation automatique en lot'
         registration:
           allow_on_the_spot:
             #original_hash: eb483f3
@@ -3839,6 +3862,16 @@ fr-CA:
                 Les compétiteurs DOIVENT se qualifier pour s'inscrire à une
                 épreuve
     registration_v2:
+      auto_accept:
+        #original_hash: 82f5cbf
+        bulk_auto_accept: Approuver automatiquement les compétiteurs
+        #original_hash: cafaf48
+        cant_bulk_auto_accept: >-
+          Une erreur s'est produite lors de la tentative d'acceptation
+          automatique en lot - contactez le WST pour obtenir de l'aide si
+          nécessaire.
+        #original_hash: c3d5d8a
+        bulk_auto_accepted: Acceptation automatique en lot réussie
       pdf:
         #original_hash: cbab88c
         link: 'Comme un <0>%{pdfLink}</0>'
@@ -3883,11 +3916,11 @@ fr-CA:
           one: '%{count} place disponible'
           other: '%{count} places disponibles'
         pending:
-          #original_hash: 854b463
-          title: Inscriptions en cours
-          #original_hash: e9df03a
+          #original_hash: 6cd48ad
+          title: Inscriptions en suspens
+          #original_hash: 0a03e70
           information: >-
-            La liste des inscriptions en cours ne doit être utilisée que pour
+            La liste des inscriptions en suspens ne doit être utilisée que pour
             les inscriptions incomplètes (par exemple, non payées). Veuillez
             utiliser la liste d'attente si votre compétition est trop pleine
             pour que de nouveaux compétiteurs puissent s'y inscrire.
@@ -3995,8 +4028,8 @@ fr-CA:
           zero: Déplacer vers
           one: 'Déplacer %{count} vers'
           other: 'Déplacer %{count} vers'
-        #original_hash: bc9b533
-        pending: En cours
+        #original_hash: a9eed29
+        pending: En suspens
         #original_hash: a5fba54
         waitlist: Liste d'attente
         #original_hash: 658c072
@@ -4187,9 +4220,9 @@ fr-CA:
         '-7001': Le compétiteur n'a pas encore réglé les frais d'inscription
         #original_hash: 26af2fa
         '-7002': L'acceptation automatique n'est pas activée pour cette compétition.
-        #original_hash: e78339a
+        #original_hash: 94eb2ec
         '-7003': >-
-          Ne peut accepter automatiquement que les inscriptions en attente ou la
+          Ne peut accepter automatiquement que les inscriptions en suspens ou la
           première position sur la liste d'attente
         #original_hash: 02b03af
         '-7004': La compétition a atteint le seuil auto_accept_disable_threshold
@@ -4202,6 +4235,10 @@ fr-CA:
       must_use_wca_registration: >-
         L'acceptation automatique ne peut être utilisée que si vous utilisez le
         site web de la WCA pour les inscriptions.
+      #original_hash: f20d411
+      must_use_payment_integration: >-
+        Vous devez activer une intégration de paiement (par exemple, Stripe)
+        afin d'utiliser l'acceptation automatique.
       #original_hash: 6ad02a7
       auto_accept_limit: >-
         La limite d'inscriptions acceptées automatiquement doit être inférieure
@@ -4210,10 +4247,10 @@ fr-CA:
       auto_accept_not_negative: >-
         La limite d'inscriptions acceptées automatiquement ne peut être
         inférieure à 0.
-      #original_hash: 847d990
+      #original_hash: 6281d7a
       auto_accept_accept_paid_pending: >-
         Impossible d'activer l'acceptation automatique s'il y a des inscriptions
-        payées en cours - il faut soit les accepter, soit les placer sur la
+        payées en suspens - il faut soit les accepter, soit les placer sur la
         liste d'attente.
       #original_hash: d681c09
       auto_accept_accept_waitlisted: >-
@@ -4620,6 +4657,8 @@ fr-CA:
         tabs: Gérer les onglets
         #original_hash: 678d15b
         submit_results: Envoyer les résultats
+        #original_hash: d8bb428
+        match_scrambles: Soumettre les mélanges
         #original_hash: 21f47fb
         delegate_report: Rapport des Délégués
         #original_hash: 3e69f54

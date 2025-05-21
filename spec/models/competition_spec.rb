@@ -410,7 +410,7 @@ RSpec.describe Competition do
     )
   end
 
-  context "#user_should_post_delegate_report?" do
+  describe "#user_should_post_delegate_report?" do
     it "warns for unposted reports" do
       competition = create(:competition, :visible, :with_delegate, starts: 2.days.ago)
       delegate = competition.delegates.first
@@ -556,28 +556,28 @@ RSpec.describe Competition do
     end
   end
 
-  context "info_for" do
+  context "info_messages" do
     it "displays info if competition is finished but results aren't posted" do
       competition = build(:competition, starts: 1.month.ago)
       expect(competition).to be_valid
       expect(competition.probably_over?).to be true
       expect(competition.results_posted?).to be false
-      expect(competition.info_for(nil)[:upload_results]).to eq "This competition is over. We are working to upload the results as soon as possible!"
+      expect(competition.info_messages[:upload_results]).to eq "This competition is over. We are working to upload the results as soon as possible!"
     end
 
     it "displays info if competition is in progress" do
       competition = build(:competition, :ongoing)
       expect(competition).to be_valid
       expect(competition.in_progress?).to be true
-      expect(competition.info_for(nil)[:in_progress]).to eq "This competition is ongoing. Come back after #{I18n.l(competition.end_date, format: :long)} to see the results!"
+      expect(competition.info_messages[:in_progress]).to eq "This competition is ongoing. Come back after #{I18n.l(competition.end_date, format: :long)} to see the results!"
 
       competition.use_wca_live_for_scoretaking = true
-      expect(competition.info_for(nil)[:in_progress]).to eq "This competition is ongoing. You can check the live results <a href='https://live.worldcubeassociation.org/link/competitions/#{competition.id}'>here</a>!"
+      expect(competition.info_messages[:in_progress]).to eq "This competition is ongoing. You can check the live results <a href='https://live.worldcubeassociation.org/link/competitions/#{competition.id}'>here</a>!"
 
       competition.results_posted_at = Time.now
       competition.results_posted_by = create(:user, :wrt_member).id
       expect(competition.in_progress?).to be false
-      expect(competition.info_for(nil)[:in_progress]).to be_nil
+      expect(competition.info_messages[:in_progress]).to be_nil
     end
   end
 
@@ -684,7 +684,7 @@ RSpec.describe Competition do
       expect(RegistrationCompetitionEvent.count).to eq 1
 
       r.reload
-      expect(r.events).to match_array [three_by_three]
+      expect(r.events).to contain_exactly(three_by_three)
     end
   end
 
@@ -1091,11 +1091,11 @@ RSpec.describe Competition do
     let!(:other_comp) { create(:competition) }
 
     it "finds comps by delegate" do
-      expect(Competition.managed_by(delegate1.id)).to match_array [competition, competition_with_different_organizers]
+      expect(Competition.managed_by(delegate1.id)).to contain_exactly(competition, competition_with_different_organizers)
     end
 
     it "finds comps by organizer" do
-      expect(Competition.managed_by(organizer1.id)).to match_array [competition]
+      expect(Competition.managed_by(organizer1.id)).to contain_exactly(competition)
     end
   end
 

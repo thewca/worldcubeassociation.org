@@ -583,14 +583,7 @@ class Registration < ApplicationRecord
 
   delegate :auto_accept_registrations?, to: :competition
 
-  def auto_accept_in_current_env?
-    !(Rails.env.production? && EnvConfig.WCA_LIVE_SITE?)
-  end
-
   def attempt_auto_accept
-    # Deliberately not i18n-ing as this is a temporary error message - not necessary for it to be translated
-    return { succeeded: false, info: 'auto accept not enabled in current env' } unless auto_accept_in_current_env?
-
     failure_reason = auto_accept_failure_reason
     if failure_reason.present?
       log_auto_accept_failure(failure_reason)
