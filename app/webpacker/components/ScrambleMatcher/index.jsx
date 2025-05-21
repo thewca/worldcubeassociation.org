@@ -65,7 +65,10 @@ function ScrambleMatcher({ wcifEvents, competitionId, initialScrambleFiles }) {
   const roundIds = useMemo(() => wcifEvents.flatMap((event) => event.rounds)
     .map((r) => r.id), [wcifEvents]);
 
-  const roundIdsWithoutScrambles = useMemo(() => _.difference(roundIds, Object.keys(matchState)), [matchState, roundIds]);
+  const roundIdsWithoutScrambles = useMemo(() => _.difference(
+    roundIds,
+    Object.keys(matchState),
+  ), [matchState, roundIds]);
 
   const missingScrambleIds = useMemo(() => {
     if (_.isEmpty(matchState)) return [];
