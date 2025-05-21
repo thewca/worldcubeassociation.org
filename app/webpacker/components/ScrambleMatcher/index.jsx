@@ -65,13 +65,10 @@ function ScrambleMatcher({ wcifEvents, competitionId, initialScrambleFiles }) {
   const roundIds = useMemo(() => wcifEvents.flatMap((event) => event.rounds)
     .map((r) => r.id), [wcifEvents]);
 
-  const missingIds = useMemo(() => {
-    if (!matchState) return [];
-    return _.difference(roundIds, Object.keys(matchState));
-  }, [matchState, roundIds]);
+  const roundIdsWithoutScrambles = useMemo(() => _.difference(roundIds, Object.keys(matchState)), [matchState, roundIds]);
 
   const missingScrambleIds = useMemo(() => {
-    if (!matchState) return [];
+    if (_.isEmpty(matchState)) return [];
     return roundIds.filter((roundId) => {
       const matchedRound = matchState[roundId];
       const wcifRound = wcifEvents.flatMap((event) => event.rounds).find((r) => r.id === roundId);
@@ -81,19 +78,11 @@ function ScrambleMatcher({ wcifEvents, competitionId, initialScrambleFiles }) {
 
   return (
     <>
-      <Message info>
-        <Message.Header>Matching scrambles to rounds</Message.Header>
-        <Message.Content>
-          Scrambles are assigned automatically when you upload a TNoodle JSON file.
-          If there is a discrepancy between the number of scramble sets in the JSON file
-          and the number of groups in the round you can manually assign them below.
-        </Message.Content>
-      </Message>
-      { missingIds.length > 0 && (
+      { roundIdsWithoutScrambles.length > 0 && (
         <Message error>
           <Message.Header>Missing Scramble Sets</Message.Header>
           <Message.List>
-            { missingIds.map((id) => (
+            { roundIdsWithoutScrambles.map((id) => (
               <Message.Item key={id}>
                 Missing scramble sets for round
                 {' '}
@@ -109,7 +98,7 @@ function ScrambleMatcher({ wcifEvents, competitionId, initialScrambleFiles }) {
           <Message.List>
             { missingScrambleIds.map((id) => (
               <Message.Item key={id}>
-                Missing scrambles round
+                Missing scrambles in round
                 {' '}
                 {activityCodeToName(id)}
               </Message.Item>
@@ -132,7 +121,7 @@ function ScrambleMatcher({ wcifEvents, competitionId, initialScrambleFiles }) {
         primary
         onClick={submitMatchState}
         loading={isSubmitting}
-        disabled={isSubmitting || missingScrambleIds.length > 0 || missingIds.length > 0}
+        disabled={isSubmitting || missingScrambleIds.length > 0 || roundIdsWithoutScrambles.length > 0}
       >
         Save Changes
       </Button>

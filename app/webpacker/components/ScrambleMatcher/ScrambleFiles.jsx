@@ -74,6 +74,11 @@ export default function ScrambleFiles({
         {' '}
         {uploadedJsonFiles?.length}
         {' '}
+        <Header.Subheader>
+          Scrambles are assigned automatically when you upload a TNoodle JSON file.
+          If there is a discrepancy between the number of scramble sets in the JSON file
+          and the number of groups in the round you can manually assign them below.
+        </Header.Subheader>
         <Button.Group>
           <Button
             positive
