@@ -28,12 +28,12 @@ class InboxScrambleSet < ApplicationRecord
     prefix_for_index(ordered_index)
   end
 
-def prefix_for_index(index)
-  char = (65 + (index % 26)).chr
-  return char if index < 26
+  def prefix_for_index(index)
+    char = (65 + (index % 26)).chr
+    return char if index < 26
 
-  prefix_for_index((index / 26) - 1) + char
-end
+    prefix_for_index((index / 26) - 1) + char
+  end
 
   DEFAULT_SERIALIZE_OPTIONS = {
     except: %w[matched_round_id],
