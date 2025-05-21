@@ -555,11 +555,11 @@ class Registration < ApplicationRecord
     if competition.waiting_list.present?
       waitlisted_registrations = competition.registrations.find(competition.waiting_list.entries)
 
-      waitlisted_outcomes = waitlisted_registrations
-                            .lazy
-                            .map { |reg| [reg.id, reg.attempt_auto_accept] }
-                            .take_while { |_, result| result[:succeeded] }
-                            .to_h
+      waitlisted_outcomes = waitlisted_registrations.each_with_object({}) do |reg, hash|
+        result = reg.attempt_auto_accept
+        hash[reg.id] = result
+        break hash unless result[:succeeded]
+      end
     end
 
     pending_registrations = competition
@@ -571,7 +571,7 @@ class Registration < ApplicationRecord
     # We dont need to break out of pending registrations because auto accept can still put them on the waiting list
     pending_outcomes = pending_registrations.index_by(&:id).transform_values(&:attempt_auto_accept)
 
-    waitlisted_outcomes.present? ? results.merge(pending_outcomes) : pending_outcomes
+    waitlisted_outcomes.present? ? waitlisted_outcomes.merge(pending_outcomes) : pending_outcomes
   end
 
   def last_positive_payment
