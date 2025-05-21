@@ -9,7 +9,17 @@ import {
   SimpleGrid,
   GridItem,
   Image,
+  VStack,
+  Badge,
 } from "@chakra-ui/react";
+
+import Flag from "react-world-flags";
+import CountryMap from "@/components/CountryMap";
+
+import CompRegoCloseDateIcon from "@/components/icons/CompRegoCloseDateIcon";
+import CompetitorsIcon from "@/components/icons/CompetitorsIcon";
+import RegisterIcon from "@/components/icons/RegisterIcon";
+import LocationIcon from "@/components/icons/LocationIcon";
 
 export default async function home() {
   return (
@@ -19,6 +29,7 @@ export default async function home() {
         flexDirection="row"
         overflow="hidden"
         colorPalette="blue"
+        size="lg"
       >
         <Box
           position="relative"
@@ -57,6 +68,10 @@ export default async function home() {
           bg="blue.100"
           justifyContent="center"
           pr="15%"
+          backgroundImage="url('placeholderIcons.png')" // or bgImage
+          backgroundSize="35%"
+          backgroundPosition="110% 200%"
+          backgroundRepeat="no-repeat"
         >
           <Heading size="4xl" color="yellow.50" mb="4">
             WELCOME TO THE WORLD OF SPEEDCUBING
@@ -120,9 +135,44 @@ export default async function home() {
           </Card.Root>
         </GridItem>
       </SimpleGrid>
-      <Card.Root>
-        <Card.Body>
-          <Text>Test</Text>
+
+      <Card.Root
+        variant="info"
+        flexDirection="row"
+        overflow="hidden"
+        colorPalette="yellow"
+        size="lg"
+      >
+        <Image
+          src="newMerch.png"
+          alt="new Merchandise"
+          objectFit="cover"
+          maxW="50%"
+          height="25rem"
+          bg="yellow.50"
+        />
+        <Card.Body
+          flex="1"
+          zIndex="2"
+          color="yellow.100"
+          p="8"
+          bg="yellow.50"
+          justifyContent="center"
+          alignItems="flex-end"
+          textAlign="right"
+          backgroundImage="url('yellowBrandImage.svg')"
+          backgroundSize="100%"
+          backgroundPosition="right"
+          backgroundRepeat="no-repeat"
+        >
+          <Heading size="4xl" color="yellow.100" mb="4">
+            WEVE GOT NEW MERCH!
+          </Heading>
+          <Text fontSize="md">
+            Check out our newly launched official merchandise which includes a
+            selection of apparels ranging from tshirts to hoodies.
+          </Text>
+          <Button ml="auto">Shop WCA</Button>
         </Card.Body>
       </Card.Root>
 
@@ -215,7 +265,7 @@ export default async function home() {
                 cupidatat non proident, sunt in culpa qui officia deserunt
                 mollit anim id est laborum.
               </Card.Description>
-              <Button>Test Button</Button>
+              <Button mr="auto">Test Button</Button>
             </Card.Body>
           </Card.Root>
         </GridItem>
@@ -243,16 +293,68 @@ export default async function home() {
           </Card.Root>
         </GridItem>
         <GridItem colSpan={2} display="flex">
-          <Card.Root variant="info" colorPalette="red">
-            <Card.Body>
-              <Card.Title>Upcoming Competitions</Card.Title>
-              <Separator size="md" />
-              <Card.Description>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                nisi ut aliquip ex ea commodo consequat.
-              </Card.Description>
+          <Card.Root variant="info" colorPalette="grey" width="full">
+            <Card.Body justifyContent="space-around">
+              <Card.Title display="flex" justifyContent="space-between">
+                Featured Upcoming Competitions
+                <Button variant="outline">View all Competitions</Button>
+              </Card.Title>
+              <SimpleGrid columns={2} rows={1} gap={4}>
+                <Card.Root variant="info" colorPalette="red">
+                  <Card.Body>
+                    <Heading size="3xl">World Championships 2025</Heading>
+                    <VStack alignItems="start">
+                      <Badge variant="information" colorPalette="red">
+                        <Flag code={"US"} fallback={"US"} />
+                        <CountryMap code="US" bold /> Seattle
+                      </Badge>
+                      <Badge variant="information" colorPalette="red">
+                        <CompRegoCloseDateIcon />
+                        <Text>Jul 3 - 6, 2025</Text>
+                      </Badge>
+                      <Badge variant="information" colorPalette="red">
+                        <CompetitorsIcon />
+                        2000 Competitor Limit
+                      </Badge>
+                      <Badge variant="information" colorPalette="red">
+                        <RegisterIcon />0 Spots Left
+                      </Badge>
+                      <Badge variant="information" colorPalette="red">
+                        <LocationIcon />
+                        Seattle Convention Center
+                      </Badge>
+                    </VStack>
+                  </Card.Body>
+                </Card.Root>
+
+                <Card.Root variant="info" colorPalette="yellow">
+                  <Card.Body>
+                    <Heading size="3xl">New Zealand Nationals 2025</Heading>
+                    <VStack alignItems="start">
+                      <Badge variant="information" colorPalette="yellow">
+                        <Flag code={"NZ"} fallback={"NZ"} />
+                        <CountryMap code="NZ" bold /> Auckland
+                      </Badge>
+                      <Badge variant="information" colorPalette="yellow">
+                        <CompRegoCloseDateIcon />
+                        <Text>Dec 12 - 14, 2025</Text>
+                      </Badge>
+                      <Badge variant="information" colorPalette="yellow">
+                        <CompetitorsIcon />
+                        300 Competitor Limit
+                      </Badge>
+                      <Badge variant="information" colorPalette="yellow">
+                        <RegisterIcon />
+                        300 Spots Left
+                      </Badge>
+                      <Badge variant="information" colorPalette="yellow">
+                        <LocationIcon />
+                        Auckland Netball Centre
+                      </Badge>
+                    </VStack>
+                  </Card.Body>
+                </Card.Root>
+              </SimpleGrid>
             </Card.Body>
           </Card.Root>
         </GridItem>

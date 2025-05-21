@@ -146,26 +146,26 @@ const CompetitionTableEntry: React.FC<Props> = ({ comp }) => {
               </Drawer.Header>
               <Drawer.Body>
                 <VStack alignItems="start">
-                  <Badge variant="information">
+                  <Badge variant="information" colorPalette="grey">
                     <Flag
                       code={comp.country_iso2}
                       fallback={comp.country_iso2}
                     />
                     <CountryMap code={comp.country_iso2} bold /> {comp.city}
                   </Badge>
-                  <Badge variant="information">
+                  <Badge variant="information" colorPalette="grey">
                     <CompRegoCloseDateIcon />
                     {formatDateRange(comp.start_date, comp.end_date)}
                   </Badge>
-                  <Badge variant="information">
+                  <Badge variant="information" colorPalette="grey">
                     <CompetitorsIcon />
                     {comp.competitor_limit} Competitor Limit
                   </Badge>
-                  <Badge variant="information">
+                  <Badge variant="information" colorPalette="grey">
                     <RegisterIcon />
                     {comp.competitor_limit} Spots Left
                   </Badge>
-                  <Badge variant="information">
+                  <Badge variant="information" colorPalette="grey">
                     <LocationIcon />
                     {comp.city}
                   </Badge>
