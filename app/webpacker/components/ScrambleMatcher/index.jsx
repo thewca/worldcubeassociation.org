@@ -124,7 +124,9 @@ function ScrambleMatcher({ wcifEvents, competitionId, initialScrambleFiles }) {
         primary
         onClick={submitMatchState}
         loading={isSubmitting}
-        disabled={isSubmitting || missingScrambleIds.length > 0 || roundIdsWithoutScrambles.length > 0}
+        disabled={isSubmitting
+          || missingScrambleIds.length > 0
+          || roundIdsWithoutScrambles.length > 0}
       >
         Save Changes
       </Button>
