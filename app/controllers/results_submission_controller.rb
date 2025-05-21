@@ -77,12 +77,28 @@ class ResultsSubmissionController < ApplicationController
                       })
     end
 
+    scrambles_to_import = InboxScrambleSet.where(competition_id: @competition.id).flat_map do |scramble_set|
+      scramble_set.inbox_scrambles.map do |scramble|
+        Scramble.new({
+                       competition_id: @competition.id,
+                       event_id: scramble_set.event_id,
+                       round_type_id: scramble_set.round_type_id,
+                       group_id: scramble_set.group_id,
+                       is_extra: scramble.is_extra,
+                       scramble_num: scramble.ordered_index + 1,
+                       scramble: scramble.scramble_string,
+                     })
+      end
+    end
+
     errors = []
     ActiveRecord::Base.transaction do
       InboxPerson.where(competition_id: @competition.id).delete_all
       InboxResult.where(competition_id: @competition.id).delete_all
+      Scramble.where(competition_id: @competition.id).delete_all
       InboxPerson.import!(persons_to_import)
       InboxResult.import!(results_to_import)
+      Scramble.import!(scrambles_to_import)
     rescue ActiveRecord::RecordInvalid => e
       object = e.record
       errors << if object.instance_of?(InboxPerson)

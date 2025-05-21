@@ -24,6 +24,18 @@ class InboxScrambleSet < ApplicationRecord
     self.round_type_id = matched_round.round_type_id
   end
 
+  def group_id
+    prefix_for_index(ordered_index)
+  end
+
+  def prefix_for_index(index)
+    if index < 26
+      (65 + index).chr
+    else
+      prefix_for_index((index / 26) - 1) + (65 + (index % 26)).chr
+    end
+  end
+
   DEFAULT_SERIALIZE_OPTIONS = {
     except: %w[matched_round_id],
     methods: %w[matched_round_wcif_id],
