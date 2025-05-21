@@ -9,12 +9,12 @@ import {
   Flex,
   Button,
   Text,
-  Switch,
-  Icon,
   Combobox,
   Portal,
   Table,
   Card,
+  HStack,
+  SegmentGroup,
 } from "@chakra-ui/react";
 import AllCompsIcon from "@/components/icons/AllCompsIcon";
 import MapIcon from "@/components/icons/MapIcon";
@@ -30,12 +30,10 @@ import { countryCodeMapping } from "@/components/CountryMap";
 import Flag from "react-world-flags";
 
 export default function CompetitionsClient({ competitions }) {
-
   const countries = Object.entries(countryCodeMapping).map(([code, name]) => ({
     label: name,
     value: code,
   }));
-  console.log(countries);
 
   const { contains } = useFilter({ sensitivity: "base", keys: ["label"] });
   const { collection, filter } = useListCollection({
@@ -77,7 +75,12 @@ export default function CompetitionsClient({ competitions }) {
                   <Combobox.Empty>No items found</Combobox.Empty>
                   {collection.items.map((item) => (
                     <Combobox.Item item={item} key={item.value}>
-                    <Flag code={item.value} fallback={item.value} height="25" width="32"/>
+                      <Flag
+                        code={item.value}
+                        fallback={item.value}
+                        height="25"
+                        width="32"
+                      />
                       {item.label}
                       <Combobox.ItemIndicator />
                     </Combobox.Item>
@@ -88,20 +91,38 @@ export default function CompetitionsClient({ competitions }) {
           </Combobox.Root>
           <Button variant="outline">Filter 2</Button>
           <Button variant="solid">Filter 3</Button>
-          <Switch.Root colorPalette="blue" size="lg">
-            <Switch.HiddenInput />
-            <Switch.Control>
-              <Switch.Thumb />
-              <Switch.Indicator
-                fallback={<Icon as={ListIcon} color="gray.400" />}
-              >
-                <Icon as={MapIcon} colorPalette="yellow.400" />
-              </Switch.Indicator>
-            </Switch.Control>
-            <Switch.Label>Map View</Switch.Label>
-          </Switch.Root>
+
           <Flex gap="2" ml="auto">
-            <Button variant="outline">Filter Right</Button>
+            <SegmentGroup.Root
+              defaultValue="list"
+              size="lg"
+              colorPalette="blue"
+              variant="inset"
+            >
+              <SegmentGroup.Indicator />
+              <SegmentGroup.Items
+                items={[
+                  {
+                    value: "list",
+                    label: (
+                      <HStack>
+                        <ListIcon />
+                        List
+                      </HStack>
+                    ),
+                  },
+                  {
+                    value: "map",
+                    label: (
+                      <HStack>
+                        <MapIcon />
+                        Map
+                      </HStack>
+                    ),
+                  },
+                ]}
+              />
+            </SegmentGroup.Root>
           </Flex>
         </Flex>
         <Flex gap="2" width="full">
