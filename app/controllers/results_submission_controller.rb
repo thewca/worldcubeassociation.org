@@ -83,7 +83,7 @@ class ResultsSubmissionController < ApplicationController
                        competition_id: @competition.id,
                        event_id: scramble_set.event_id,
                        round_type_id: scramble_set.round_type_id,
-                       group_id: scramble_set.group_id,
+                       group_id: scramble_set.alphabetic_group_index,
                        is_extra: scramble.is_extra,
                        scramble_num: scramble.ordered_index + 1,
                        scramble: scramble.scramble_string,

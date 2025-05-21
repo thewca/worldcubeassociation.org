@@ -24,7 +24,7 @@ class InboxScrambleSet < ApplicationRecord
     self.round_type_id = matched_round.round_type_id
   end
 
-  def group_id
+  def alphabetic_group_index
     prefix_for_index(ordered_index)
   end
 
