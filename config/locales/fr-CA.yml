@@ -1070,7 +1070,7 @@ fr-CA:
           otp_email:
             #original_hash: a238ac2
             subject: Votre code à usage unique pour le site internet de la WCA
-            #original_hash: 7aa8fc0
+            #original_hash: f126936
             2fa_attempt: >-
               Vous être en train de vous connecter sur le site de la WCA.
               L'authentification à deux facteur est activée pour votre compte,
@@ -3553,7 +3553,7 @@ fr-CA:
             Nom de la ville où la compétition a lieu ainsi que la province /
             état (dans les pays où c'est l'usage). Ne pas mettre le pays.
             Exemple d'entrée valide : Montréal, Quebec
-          #original_hash: 84d365b
+          #original_hash: 37f2d96
           name_html: >-
             La salle où la compétition à lieu. %{md}. Par exemple : [École de
             Technologie Supérieure](https://www.etsmtl.ca)
