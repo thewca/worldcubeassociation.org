@@ -11,26 +11,30 @@ export default function Groups({
   scrambleSets,
   dispatchMatchState,
 }) {
+  if (scrambleSetCount === 1) {
+    return (
+      <SelectedGroupPanel
+        selectedGroupNumber={0}
+        scrambleSets={scrambleSets}
+        dispatchMatchState={dispatchMatchState}
+      />
+    );
+  }
+  return (
+    <GroupsPicker
+      scrambleSetCount={scrambleSetCount}
+      scrambleSets={scrambleSets}
+      dispatchMatchState={dispatchMatchState}
+    />
+  );
+}
+
+function GroupsPicker({ dispatchMatchState, scrambleSetCount, scrambleSets }) {
   const [selectedGroupNumber, setSelectedGroupNumber] = useState(null);
 
-  const availableEventIds = useMemo(
+  const availableGroups = useMemo(
     () => _.times(scrambleSetCount),
     [scrambleSetCount],
-  );
-
-  const onGroupDragCompleted = useCallback(
-    (fromIndex, toIndex) => dispatchMatchState({
-      type: 'moveScrambleInSet',
-      setNumber: selectedGroupNumber,
-      fromIndex,
-      toIndex,
-    }),
-    [dispatchMatchState, selectedGroupNumber],
-  );
-
-  const groupScrambleToName = useCallback(
-    (idx) => `Attempt ${idx + 1}`,
-    [],
   );
 
   return (
@@ -47,7 +51,7 @@ export default function Groups({
         </Button>
       </Header>
       <Button.Group>
-        {availableEventIds.map((num) => (
+        {availableGroups.map((num) => (
           <Button
             key={num}
             toggle
@@ -62,13 +66,38 @@ export default function Groups({
         ))}
       </Button.Group>
       {selectedGroupNumber !== null && (
-        <ScrambleMatch
-          matchableRows={scrambleSets[selectedGroupNumber].inbox_scrambles}
-          onRowDragCompleted={onGroupDragCompleted}
-          computeDefinitionName={groupScrambleToName}
-          computeRowName={scrambleToName}
+        <SelectedGroupPanel
+          dispatchMatchState={dispatchMatchState}
+          selectedGroupNumber={selectedGroupNumber}
+          scrambleSets={scrambleSets}
         />
       )}
     </>
+  );
+}
+
+function SelectedGroupPanel({ dispatchMatchState, selectedGroupNumber, scrambleSets }) {
+  const onGroupDragCompleted = useCallback(
+    (fromIndex, toIndex) => dispatchMatchState({
+      type: 'moveScrambleInSet',
+      setNumber: selectedGroupNumber,
+      fromIndex,
+      toIndex,
+    }),
+    [dispatchMatchState, selectedGroupNumber],
+  );
+
+  const groupScrambleToName = useCallback(
+    (idx) => `Attempt ${idx + 1}`,
+    [],
+  );
+
+  return (
+    <ScrambleMatch
+      matchableRows={scrambleSets[selectedGroupNumber].inbox_scrambles}
+      onRowDragCompleted={onGroupDragCompleted}
+      computeDefinitionName={groupScrambleToName}
+      computeRowName={scrambleToName}
+    />
   );
 }
