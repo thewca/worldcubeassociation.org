@@ -76,11 +76,12 @@ export default function ScrambleMatch({
                   const isExtra = !isExpected;
 
                   const hasError = isExpected && !rowData;
+                  const fallbackIndex = `extra-scramble-set-${index + 1}`;
 
                   return (
                     <Draggable
-                      key={rowData?.id ?? `extra-scramble-set-${index + 1}`}
-                      draggableId={rowData?.id?.toString() ?? `extra-scramble-set-${index + 1}`}
+                      key={rowData?.id ?? fallbackIndex}
+                      draggableId={rowData?.id?.toString() ?? fallbackIndex}
                       index={index}
                       isDragDisabled={rowCount === 1 || hasError}
                     >
@@ -90,7 +91,7 @@ export default function ScrambleMatch({
                         return (
                           <Ref innerRef={providedDraggable.innerRef}>
                             <Table.Row
-                              key={rowData?.id ?? `extra-scramble-set-${index + 1}`}
+                              key={rowData?.id ?? fallbackIndex}
                               {...providedDraggable.draggableProps}
                               negative={hasError || isExtra}
                             >

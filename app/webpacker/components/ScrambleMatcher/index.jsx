@@ -2,6 +2,7 @@ import React, { useCallback, useMemo, useReducer } from 'react';
 import { Button, Divider, Message } from 'semantic-ui-react';
 import _ from 'lodash';
 import { useMutation } from '@tanstack/react-query';
+import { activityCodeToName } from '@wca/helpers';
 import WCAQueryClientProvider from '../../lib/providers/WCAQueryClientProvider';
 import ScrambleFiles from './ScrambleFiles';
 import Events from './Events';
@@ -61,7 +62,8 @@ function ScrambleMatcher({ wcifEvents, competitionId, initialScrambleFiles }) {
     mutationFn: () => submitMatchedScrambles(competitionId, matchState),
   });
 
-  const roundIds = useMemo(() => wcifEvents.flatMap((event) => event.rounds).map((r) => r.id), [wcifEvents]);
+  const roundIds = useMemo(() => wcifEvents.flatMap((event) => event.rounds)
+    .map((r) => r.id), [wcifEvents]);
 
   const missingIds = useMemo(() => {
     if (!matchState) return [];
@@ -95,7 +97,7 @@ function ScrambleMatcher({ wcifEvents, competitionId, initialScrambleFiles }) {
               <Message.Item key={id}>
                 Missing scramble sets for round
                 {' '}
-                {id}
+                {activityCodeToName(id)}
               </Message.Item>
             ))}
           </Message.List>
@@ -109,7 +111,7 @@ function ScrambleMatcher({ wcifEvents, competitionId, initialScrambleFiles }) {
               <Message.Item key={id}>
                 Missing scrambles round
                 {' '}
-                {id}
+                {activityCodeToName(id)}
               </Message.Item>
             ))}
           </Message.List>
@@ -127,12 +129,12 @@ function ScrambleMatcher({ wcifEvents, competitionId, initialScrambleFiles }) {
       />
       <Divider />
       <Button
-        positive
+        primary
         onClick={submitMatchState}
         loading={isSubmitting}
         disabled={isSubmitting || missingScrambleIds.length > 0 || missingIds.length > 0}
       >
-        Submit
+        Save Changes
       </Button>
     </>
   );

@@ -8,6 +8,7 @@ import { events, roundTypes } from '../../lib/wca-data.js.erb';
 import { useDispatchWrapper } from './reducer';
 
 const scrambleSetToName = (scrambleSet) => `${events.byId[scrambleSet.event_id].name} ${roundTypes.byId[scrambleSet.round_type_id].name} - ${String.fromCharCode(64 + scrambleSet.scramble_set_number)}`;
+
 export default function Rounds({
   wcifRounds,
   matchState,
@@ -24,6 +25,7 @@ export default function Rounds({
       />
     );
   }
+
   return (
     <RoundsPicker
       wcifRounds={wcifRounds}
@@ -33,6 +35,7 @@ export default function Rounds({
     />
   );
 }
+
 function SelectedRoundPanel({
   selectedRound,
   matchState,
@@ -56,6 +59,7 @@ function SelectedRoundPanel({
     (idx) => `${activityCodeToName(selectedRound.id)}, Group ${idx + 1}`,
     [selectedRound.id],
   );
+
   return (
     <>
       <ScrambleMatch
@@ -75,6 +79,7 @@ function SelectedRoundPanel({
     </>
   );
 }
+
 function RoundsPicker({
   wcifRounds,
   matchState,
@@ -86,6 +91,7 @@ function RoundsPicker({
     () => wcifRounds.find((r) => r.id === selectedRoundId),
     [wcifRounds, selectedRoundId],
   );
+
   return (
     <>
       <Header as="h4">
