@@ -7,7 +7,17 @@ import Groups from './Groups';
 import { events, roundTypes } from '../../lib/wca-data.js.erb';
 import { useDispatchWrapper } from './reducer';
 
-const scrambleSetToName = (scrambleSet) => `${events.byId[scrambleSet.event_id].name} ${roundTypes.byId[scrambleSet.round_type_id].name} - ${String.fromCharCode(64 + scrambleSet.scramble_set_number)}`;
+const prefixForIndex = (index) => {
+  if (index < 26) {
+    return String.fromCharCode(65 + index);
+  }
+  return (
+    prefixForIndex(Math.floor(index / 26) - 1)
+    + String.fromCharCode(65 + (index % 26))
+  );
+};
+
+const scrambleSetToName = (scrambleSet) => `${events.byId[scrambleSet.event_id].name} ${roundTypes.byId[scrambleSet.round_type_id].name} - ${prefixForIndex(scrambleSet.scramble_set_number - 1)}`;
 
 export default function Rounds({
   wcifRounds,
