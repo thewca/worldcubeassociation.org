@@ -61,18 +61,18 @@ function ScrambleMatcher({ wcifEvents, competitionId, initialScrambleFiles }) {
     mutationFn: () => submitMatchedScrambles(competitionId, matchState),
   });
 
-  const roundIds = useMemo(() => _.flatMap(wcifEvents, 'rounds').map((r) => r.id), [wcifEvents]);
+  const roundIds = useMemo(() => wcifEvents.flatMap((event) => event.rounds).map((r) => r.id), [wcifEvents]);
 
   const missingIds = useMemo(() => {
     if (!matchState) return [];
-    return _.difference(roundIds, _.keys(matchState));
+    return _.difference(roundIds, Object.keys(matchState));
   }, [matchState, roundIds]);
 
   const missingScrambleIds = useMemo(() => {
     if (!matchState) return [];
-    return _.filter(roundIds, (roundId) => {
+    return roundIds.filter((roundId) => {
       const matchedRound = matchState[roundId];
-      const wcifRound = _.flatMap(wcifEvents, 'rounds').find((r) => r.id === roundId);
+      const wcifRound = wcifEvents.flatMap((event) => event.rounds).find((r) => r.id === roundId);
       return matchedRound.length < wcifRound.scrambleSetCount;
     });
   }, [matchState, roundIds, wcifEvents]);
