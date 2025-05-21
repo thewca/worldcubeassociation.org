@@ -687,7 +687,7 @@ fr:
         #original_hash: 61a0572
         accepted: Accepté
         #original_hash: 96f608c
-        pending: En attente
+        pending: En suspens
       media_type:
         #original_hash: ee45c30
         report: Rapport
@@ -2456,8 +2456,6 @@ fr:
         with_stripe: Payé le
       #original_hash: ce53c71
       payment_requested_on: 'Paiement demandé le : %{date}'
-      #original_hash: f5b1b34
-      payment_completed_on: 'Paiement terminé le : %{date}'
       #original_hash: 3141a14
       series_registrations: Inscriptions à une série
       #original_hash: b25928c
@@ -3401,6 +3399,10 @@ fr:
           auto_close_threshold: Seuil de fermeture automatique
           #original_hash: b1d5af4
           newcomer_month_reserved_spots: Nombre de places à réserver aux nouveaux compétiteurs
+          #original_hash: b13de61
+          auto_accept_enabled: Acceptation d'inscriptions automatiques en lot
+          #original_hash: 1b8698d
+          auto_accept_disable_threshold: Limite pour l'acceptation automatique des inscriptions
         staff:
           #original_hash: 2e3ed8b
           staff_delegate_ids: Délégué·s WCA
@@ -3620,6 +3622,20 @@ fr:
             Uniquement autorisé pendant le mois des nouveaux venus - les places
             réservées ne peuvent pas être supérieures à la moitié de la limite
             de compétiteurs.
+          #original_hash: 79dcafd
+          auto_accept_enabled: >-
+            Cela activera un bouton « Acceptation automatique en lot » dans le
+            menu « Inscriptions ». Cela acceptera toutes les inscriptions payées
+            sur la liste d'attente et en suspens jusqu'à la limite de
+            compétiteurs, ou la limite définie ci-dessous. A utiliser à vos
+            risques et périls.
+          #original_hash: b261026
+          auto_accept_disable_threshold: >-
+            Lorsque ce nombre d'inscriptions acceptées est atteint,
+            l'acceptation automatique se désactive, ce qui permet aux
+            organisateurs d'approuver manuellement les dernières inscriptions.
+            Doit être inférieur à la limite de compétiteurs. Ne rien indiquer si
+            vous ne souhaitez pas utiliser cette option.
         staff:
           #original_hash: b4d020f
           staff_delegate_ids: Délégué·s WCA pour la compétition.
@@ -3793,6 +3809,13 @@ fr:
             'true': Je veux spécifier une limite au nombre de compétiteurs
             #original_hash: 53397ec
             'false': Je ne veux PAS spécifier de limite pour les compétiteurs.
+          auto_accept_enabled:
+            #original_hash: 1c0c289
+            'true': >-
+              Activer le bouton « Acceptation automatique en lot » dans le menu
+              « Inscriptions ».
+            #original_hash: 5996b1f
+            'false': Désactiver le bouton 'Acceptation automatique en lot'
         registration:
           allow_on_the_spot:
             #original_hash: 0c521ca
@@ -3838,6 +3861,16 @@ fr:
                 Les compétiteurs DOIVENT se qualifier pour s'inscrire à une
                 épreuve
     registration_v2:
+      auto_accept:
+        #original_hash: eaf9960
+        bulk_auto_accept: Approuver automatiquement les compétiteurs
+        #original_hash: a555496
+        cant_bulk_auto_accept: >-
+          Une erreur s'est produite lors de la tentative d'acceptation
+          automatique en lot - contactez le WST pour obtenir de l'aide si
+          nécessaire.
+        #original_hash: 1897ffb
+        bulk_auto_accepted: Acceptation automatique en lot réussie
       pdf:
         #original_hash: 5c7d60f
         link: 'Comme un <0>%{pdfLink}</0>'
@@ -3883,10 +3916,10 @@ fr:
           other: '%{count} places disponibles'
         pending:
           #original_hash: 4210670
-          title: Inscriptions en cours
+          title: Inscriptions en suspens
           #original_hash: 5e16c6d
           information: >-
-            La liste des inscriptions en cours ne doit être utilisée que pour
+            La liste des inscriptions en suspens ne doit être utilisée que pour
             les inscriptions incomplètes (par exemple, non payées). Veuillez
             utiliser la liste d'attente si votre compétition est trop pleine
             pour que de nouveaux compétiteurs puissent s'y inscrire.
@@ -3995,7 +4028,7 @@ fr:
           one: 'Déplacer %{count} vers'
           other: 'Déplacer %{count} vers'
         #original_hash: 96f608c
-        pending: En cours
+        pending: En suspens
         #original_hash: 92d40dc
         waitlist: Liste d'attente
         #original_hash: 41b81eb
@@ -4188,7 +4221,7 @@ fr:
         '-7002': L'acceptation automatique n'est pas activée pour cette compétition.
         #original_hash: d191d2d
         '-7003': >-
-          Ne peut accepter automatiquement que les inscriptions en attente ou la
+          Ne peut accepter automatiquement que les inscriptions en suspens ou la
           première position sur la liste d'attente
         #original_hash: 30fd93d
         '-7004': La compétition a atteint le seuil auto_accept_disable_threshold
@@ -4201,6 +4234,10 @@ fr:
       must_use_wca_registration: >-
         L'acceptation automatique ne peut être utilisée que si vous utilisez le
         site web de la WCA pour les inscriptions.
+      #original_hash: 693d47d
+      must_use_payment_integration: >-
+        Vous devez activer une intégration de paiement (par exemple, Stripe)
+        afin d'utiliser l'acceptation automatique.
       #original_hash: 130c901
       auto_accept_limit: >-
         La limite d'inscriptions acceptées automatiquement doit être inférieure
@@ -4212,7 +4249,7 @@ fr:
       #original_hash: 181d8d9
       auto_accept_accept_paid_pending: >-
         Impossible d'activer l'acceptation automatique s'il y a des inscriptions
-        payées en cours - il faut soit les accepter, soit les placer sur la
+        payées en suspens - il faut soit les accepter, soit les placer sur la
         liste d'attente.
       #original_hash: 96db418
       auto_accept_accept_waitlisted: >-
@@ -4619,6 +4656,8 @@ fr:
         tabs: Gérer les onglets
         #original_hash: f3d6278
         submit_results: Envoyer les résultats
+        #original_hash: e2d046b
+        match_scrambles: Soumettre les mélanges
         #original_hash: 4c9f914
         delegate_report: Rapport des Délégués
         #original_hash: b233e77
