@@ -73,11 +73,11 @@ export default function CompetitionsClient({ competitions }) {
             </Combobox.Control>
             <Portal>
               <Combobox.Positioner>
-                <Combobox.Content>
+                <Combobox.Content justifyContent="flex-start">
                   <Combobox.Empty>No items found</Combobox.Empty>
                   {collection.items.map((item) => (
                     <Combobox.Item item={item} key={item.value}>
-                    <Flag code={item.value} fallback={item.value} height="32" width="40"/>
+                    <Flag code={item.value} fallback={item.value} height="25" width="32"/>
                       {item.label}
                       <Combobox.ItemIndicator />
                     </Combobox.Item>
