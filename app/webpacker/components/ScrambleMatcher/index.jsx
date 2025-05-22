@@ -4,7 +4,7 @@ import _ from 'lodash';
 import { useMutation } from '@tanstack/react-query';
 import { activityCodeToName } from '@wca/helpers';
 import WCAQueryClientProvider from '../../lib/providers/WCAQueryClientProvider';
-import ScrambleFiles from './ScrambleFiles';
+import FileUpload from './FileUpload';
 import Events from './Events';
 import { fetchJsonOrError } from '../../lib/requests/fetchWithAuthenticityToken';
 import { scramblesUpdateRoundMatchingUrl } from '../../lib/requests/routes.js.erb';
@@ -117,7 +117,7 @@ function ScrambleMatcher({ wcifEvents, competitionId, initialScrambleFiles }) {
           </Message.List>
         </Message>
       )}
-      <ScrambleFiles
+      <FileUpload
         competitionId={competitionId}
         initialScrambleFiles={initialScrambleFiles}
         addScrambleFile={addScrambleFile}
