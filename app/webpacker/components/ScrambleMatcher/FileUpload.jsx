@@ -56,12 +56,19 @@ export default function FileUpload({
     onError: (responseError) => setError(responseError.message),
   });
 
+  const resetFileUpload = useCallback(() => {
+    if (inputRef.current) {
+      inputRef.current.value = null;
+    }
+  }, [inputRef]);
+
   const uploadNewScramble = useCallback((ev) => {
     const filesArr = Array.from(ev.target.files);
     const uploadPromises = filesArr.map((f) => mutateAsync(f));
 
-    return Promise.all(uploadPromises);
-  }, [mutateAsync]);
+    return Promise.all(uploadPromises)
+      .finally(resetFileUpload);
+  }, [mutateAsync, resetFileUpload]);
 
   const clickOnInput = () => {
     inputRef.current?.click();
