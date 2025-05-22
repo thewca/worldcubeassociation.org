@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe FinishUnfinishedPersons do
@@ -7,9 +8,11 @@ RSpec.describe FinishUnfinishedPersons do
     let(:available_per_semi) { {} }
 
     before do
-      allow(Person).to receive(:where).and_return(Person)
-      allow(Person).to receive(:order).and_return(Person)
-      allow(Person).to receive(:pick).and_return(nil)
+      allow(Person).to receive_messages(
+                         where: Person,
+                         order: Person,
+                         pick: nil
+                       )
     end
 
     context 'when a unique semi-ID can be generated' do
@@ -45,9 +48,9 @@ RSpec.describe FinishUnfinishedPersons do
       it 'raises an error' do
         allow(Person).to receive(:pick).and_return('2023DOEJ99')
 
-        expect {
+        expect do
           described_class.compute_semi_id(competition_year, person_name, available_per_semi)
-        }.to raise_error(RuntimeError, /Could not compute a semi-id for John Doe/)
+        end.to raise_error(RuntimeError, /Could not compute a semi-id for John Doe/)
       end
     end
 

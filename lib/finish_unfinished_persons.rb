@@ -109,7 +109,7 @@ module FinishUnfinishedPersons
     sanitized_roman_name = self.remove_accents roman_name
     name_parts = sanitized_roman_name.gsub(/[^a-zA-Z ]/, '').upcase.split
 
-    last_name_index = (name_parts.length > 1 && GENERATIONAL_SUFFIXES.include?(name_parts[-1])) ? -2 : -1
+    last_name_index = name_parts.length > 1 && GENERATIONAL_SUFFIXES.include?(name_parts[-1]) ? -2 : -1
 
     last_name = name_parts[last_name_index]
     rest_of_name = name_parts[0...last_name_index].join
