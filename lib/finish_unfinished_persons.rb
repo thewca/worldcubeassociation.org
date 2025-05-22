@@ -112,7 +112,7 @@ module FinishUnfinishedPersons
     last_name_index = name_parts.length > 1 && GENERATIONAL_SUFFIXES.include?(name_parts[-1]) ? -2 : -1
 
     last_name = name_parts[last_name_index]
-    rest_of_name = name_parts[0...name_parts.length + last_name_index].join
+    rest_of_name = name_parts[...last_name_index].join
 
     padded_rest_of_name = rest_of_name.ljust WCA_QUARTER_ID_LENGTH, WCA_ID_PADDING
     letters_to_shift = [0, WCA_QUARTER_ID_LENGTH - last_name.length].max
