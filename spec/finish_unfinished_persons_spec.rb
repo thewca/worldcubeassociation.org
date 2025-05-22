@@ -9,10 +9,10 @@ RSpec.describe FinishUnfinishedPersons do
 
     before do
       allow(Person).to receive_messages(
-                         where: Person,
-                         order: Person,
-                         pick: nil
-                       )
+        where: Person,
+        order: Person,
+        pick: nil,
+      )
     end
 
     context 'when a unique semi-ID can be generated' do
