@@ -81,25 +81,33 @@ function ScrambleMatcher({ wcifEvents, competitionId, initialScrambleFiles }) {
 
   return (
     <>
-      { roundIdsWithoutScrambles.length > 0 && (
-        <Message error>
-          <Message.Header>Missing Scramble Sets</Message.Header>
-          <Message.List>
-            { roundIdsWithoutScrambles.map((id) => (
-              <Message.Item key={id}>
-                Missing scramble sets for round
-                {' '}
-                {activityCodeToName(id)}
-              </Message.Item>
-            ))}
-          </Message.List>
-        </Message>
+      {roundIdsWithoutScrambles.length > 0 && (
+        Object.keys(matchState).length === 0 ? (
+          <Message
+            warning
+            header="No scramble sets available"
+            content="Upload some JSON files to get started!"
+          />
+        ) : (
+          <Message error>
+            <Message.Header>Missing Scramble Sets</Message.Header>
+            <Message.List>
+              {roundIdsWithoutScrambles.map((id) => (
+                <Message.Item key={id}>
+                  Missing scramble sets for round
+                  {' '}
+                  {activityCodeToName(id)}
+                </Message.Item>
+              ))}
+            </Message.List>
+          </Message>
+        )
       )}
-      { missingScrambleIds.length > 0 && (
+      {missingScrambleIds.length > 0 && (
         <Message error>
           <Message.Header>Missing Scrambles</Message.Header>
           <Message.List>
-            { missingScrambleIds.map((id) => (
+            {missingScrambleIds.map((id) => (
               <Message.Item key={id}>
                 Missing scrambles in round
                 {' '}
