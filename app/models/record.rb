@@ -4,6 +4,12 @@ class Record < ApplicationRecord
   RECORD_SCOPES = %w[WR CR NR].freeze
   RECORD_TYPES = %w[single average].freeze
 
+  SCOPES_FOR = {
+    NR: %w[WR CR NR].freeze,
+    CR: %w[WR CR].freeze,
+    WR: %w[WR].freeze,
+  }.freeze
+
   validates :record_type, presence: true, inclusion: { in: RECORD_TYPES }
   validates :record_scope, presence: true, inclusion: { in: RECORD_SCOPES }
   validates :event_id, presence: true
@@ -35,10 +41,11 @@ class Record < ApplicationRecord
 
   belongs_to :result
 
-  def self.record_for(event_id, record_type, scope, country_id: nil, continent_id: nil)
-    query = where(event_id: event_id, record_type: record_type, record_scope: scope)
+  def self.record_for(event_id, record_type, scope, country_id: nil, continent_id: nil, date: nil)
+    query = where(event_id: event_id, record_type: record_type, record_scope: SCOPES_FOR[scope])
     query = query.where(country_id: country_id) if country_id
     query = query.where(continent_id: continent_id) if continent_id
+    query = query.where(record_timestamp: ...date) if date
     query.minimum(:value)
   end
 
