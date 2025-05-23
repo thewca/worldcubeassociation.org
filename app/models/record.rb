@@ -13,17 +13,25 @@ class Record < ApplicationRecord
   validates :continent_id, presence: true, if: -> { record_scope == 'CR' }
 
   scope :world_records, -> { where(record_scope: 'WR') }
-  scope :national_records, ->(country_id = nil) {
+  scope :national_records, lambda { |country_id = nil|
     scope = where(record_scope: 'NR')
     country_id.present? ? scope.where(country_id: country_id) : scope
   }
 
-  scope :continental_records, ->(continent_id = nil) {
+  scope :continental_records, lambda { |continent_id = nil|
     scope = where(record_scope: 'CR')
     continent_id.present? ? scope.where(continent_id: continent_id) : scope
   }
 
-  scope :current, -> { group(:event_id, :record_type).maximum(:record_timestamp) }
+  scope :current, lambda {
+    latest = select("event_id, record_type, MAX(record_timestamp) as latest_time")
+             .group(:event_id, :record_type)
+
+    joins("INNER JOIN (#{latest.to_sql}) latest_records
+         ON records.event_id = latest_records.event_id
+         AND records.record_type = latest_records.record_type
+         AND records.record_timestamp = latest_records.latest_time")
+  }
 
   belongs_to :result
 
@@ -41,11 +49,12 @@ class Record < ApplicationRecord
     '_South America' => 'SAR',
     '_Asia' => 'AsR',
     '_Oceania' => 'OcR',
-  }
+  }.freeze
 
   def marker
-    return 'NR' if record_scope === 'NR'
-    return CONTINENT_TO_RECORD_MARKER[continent_id] if record_scope === 'CR'
+    return 'NR' if record_scope == 'NR'
+    return CONTINENT_TO_RECORD_MARKER[continent_id] if record_scope == 'CR'
+
     'WR'
   end
 end

@@ -5,12 +5,11 @@ namespace :records do
   task fill_records_table: [:environment] do
     [
       { record_type: 'single', field: :regional_single_record },
-      { record_type: 'average', field: :regional_average_record }
+      { record_type: 'average', field: :regional_average_record },
     ].each do |records|
-      Result.includes([:competition, :round_type])
+      Result.includes(%i[competition round_type])
             .where.not(records[:field] => nil)
             .find_each do |result|
-
         record_value = result.send(records[:field])
         round = result.round
         has_round_schedule = result.competition.start_date > Date.new(2018, 12, 31)
@@ -26,7 +25,7 @@ namespace :records do
           country_id: result.country_id,
           continent_id: result.continent_id,
           record_timestamp: record_timestamp,
-          record_scope: record_scope
+          record_scope: record_scope,
         )
       end
     end
