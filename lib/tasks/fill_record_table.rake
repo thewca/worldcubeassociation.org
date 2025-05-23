@@ -20,7 +20,7 @@ namespace :records do
         Record.create(
           record_type: records[:record_type],
           result: result,
-          value: result.best,
+          value: records[:record_type] == 'single' ? result.best : result.average,
           event_id: result.event_id,
           country_id: result.country_id,
           continent_id: result.continent_id,
