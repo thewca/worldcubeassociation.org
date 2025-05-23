@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_05_20_093305) do
+ActiveRecord::Schema[7.2].define(version: 2025_05_23_115703) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -952,6 +952,23 @@ ActiveRecord::Schema[7.2].define(version: 2025_05_20_093305) do
     t.integer "country_rank", default: 0, null: false
     t.index ["event_id"], name: "fk_events"
     t.index ["person_id"], name: "fk_persons"
+  end
+
+  create_table "records", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "record_type", null: false
+    t.bigint "result_id", null: false
+    t.integer "value", null: false
+    t.string "event_id", null: false
+    t.string "country_id"
+    t.string "continent_id"
+    t.string "record_scope", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["country_id", "record_scope"], name: "index_records_on_country_id_and_record_scope"
+    t.index ["event_id", "record_scope"], name: "index_records_on_event_id_and_record_scope"
+    t.index ["event_id", "record_type", "record_scope"], name: "index_records_on_event_id_and_record_type_and_record_scope", unique: true
+    t.index ["record_scope"], name: "index_records_on_record_scope"
+    t.index ["result_id"], name: "index_records_on_result_id"
   end
 
   create_table "regional_organizations", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
