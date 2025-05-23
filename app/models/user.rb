@@ -813,7 +813,14 @@ class User < ApplicationRecord
     # We use the ability to `remove_avatar` as a general check for whether edits are allowed.
     #   Otherwise, checking for competitions of `current_avatar` and `pending_avatar` might be
     #   too cumbersome depending on the context (ie depending on where this method is being called from)
-    self.editable_fields_of_user(user).include?(:remove_avatar)
+    # Note that the check for the user's WCA ID is technically not required. That is,
+    #   we can perfectly link an avatar to a user who has not claimed any WCA ID. The true reason
+    #   for this check is purely pragmatic: We've had issues with "unclaimed" user accounts
+    #   (i.e. accounts that do not have a WCA ID) thinking that they are anonymous and uploading
+    #   derogatory, racist or otherwise harmful material as pictures because they thought they
+    #   would be "anonymous". With this requirement for a WCA ID, we can at least ban or otherwise
+    #   punish users who exhibit such a highly concerning behavior.
+    user.wca_id.present? && self.editable_fields_of_user(user).include?(:remove_avatar)
   end
 
   def organizer_for?(user)
