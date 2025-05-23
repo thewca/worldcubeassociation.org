@@ -20,18 +20,10 @@ RSpec.describe "AuxiliaryDataComputation" do
       AuxiliaryDataComputation.compute_concise_results
       # Concise single results
       concise_single_results = ActiveRecord::Base.connection.execute "SELECT event_id, person_id, year, best FROM concise_single_results"
-      expect(concise_single_results).to match_array [
-        ["333", person.wca_id, 2016, 700],
-        ["333", person.wca_id, 2017, 800],
-        ["222", person.wca_id, 2017, 100],
-      ]
+      expect(concise_single_results).to contain_exactly(["333", person.wca_id, 2016, 700], ["333", person.wca_id, 2017, 800], ["222", person.wca_id, 2017, 100])
       # Concise average results
       concise_average_results = ActiveRecord::Base.connection.execute "SELECT event_id, person_id, year, average FROM concise_average_results"
-      expect(concise_average_results).to match_array [
-        ["333", person.wca_id, 2016, 800],
-        ["333", person.wca_id, 2017, 900],
-        ["222", person.wca_id, 2017, 150],
-      ]
+      expect(concise_average_results).to contain_exactly(["333", person.wca_id, 2016, 800], ["333", person.wca_id, 2017, 900], ["222", person.wca_id, 2017, 150])
     end
 
     it "creates multiple entries for people that have switched country in the middle of a year" do
@@ -41,16 +33,10 @@ RSpec.describe "AuxiliaryDataComputation" do
       AuxiliaryDataComputation.compute_concise_results
       # Concise single results
       concise_single_results = ActiveRecord::Base.connection.execute "SELECT event_id, person_id, country_id, year, best FROM concise_single_results"
-      expect(concise_single_results).to match_array [
-        ["333", person.wca_id, "China", 2016, 700],
-        ["333", person.wca_id, "Chile", 2016, 750],
-      ]
+      expect(concise_single_results).to contain_exactly(["333", person.wca_id, "China", 2016, 700], ["333", person.wca_id, "Chile", 2016, 750])
       # Concise average results
       concise_average_results = ActiveRecord::Base.connection.execute "SELECT event_id, person_id, country_id, year, average FROM concise_average_results"
-      expect(concise_average_results).to match_array [
-        ["333", person.wca_id, "China", 2016, 800],
-        ["333", person.wca_id, "Chile", 2016, 850],
-      ]
+      expect(concise_average_results).to contain_exactly(["333", person.wca_id, "China", 2016, 800], ["333", person.wca_id, "Chile", 2016, 850])
     end
   end
 
