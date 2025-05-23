@@ -1346,6 +1346,10 @@ class User < ApplicationRecord
         .map(&:competition)
   end
 
+  def competitions_with_active_registrations
+    self.competitions_registered_for.not_over.merge(Registration.where.not(competing_status: %w[cancelled rejected]))
+  end
+
   def delegate_in_probation?
     UserGroup.delegate_probation.flat_map(&:active_users).include?(self)
   end
@@ -1425,7 +1429,7 @@ class User < ApplicationRecord
   end
 
   def anonymization_checks_with_message_args
-    upcoming_registered_competitions = competitions_registered_for.not_over.merge(Registration.where.not(competing_status: %w[cancelled rejected])).pluck(:id, :name).map { |id, name| { id: id, name: name } }
+    upcoming_registered_competitions = competitions_with_active_registrations.pluck(:id, :name).map { |id, name| { id: id, name: name } }
     access_grants = oauth_access_grants
                     .where.not(revoked_at: nil)
                     .map do |access_grant|
