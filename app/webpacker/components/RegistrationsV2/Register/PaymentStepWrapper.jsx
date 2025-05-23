@@ -46,7 +46,7 @@ export default function PaymentStepWrapper({
 
   if (hasPassed(competitionInfo.registration_close)) {
     return (
-      <Message color="red">{I18n.t('registrations.payment_form.errors.registration_closed')}</Message>
+      <Message error>{I18n.t('registrations.payment_form.errors.registration_closed')}</Message>
     );
   }
 
