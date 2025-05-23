@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe SubmitReportNagJob, type: :job do
+RSpec.describe SubmitReportNagJob do
   it "schedules report nag email" do
     _unscheduled_competition = create(:competition, starts: nil)
     _recent_competition_missing_report = create(:competition, :visible, starts: 3.days.ago)

@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import { Button, Dropdown } from 'semantic-ui-react';
 import { DateTime } from 'luxon';
+import { noop } from 'lodash';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
 import { showMessage } from '../Register/RegistrationMessage';
 import I18n from '../../../lib/i18n';
@@ -8,6 +9,7 @@ import { countries } from '../../../lib/wca-data.js.erb';
 import {
   APPROVED_COLOR, APPROVED_ICON,
   CANCELLED_COLOR, CANCELLED_ICON,
+  getSkippedPendingCount,
   getSkippedWaitlistCount,
   PENDING_COLOR, PENDING_ICON,
   REJECTED_COLOR, REJECTED_ICON,
@@ -23,7 +25,7 @@ function V3csvExport(selected, registrations, competition) {
     .forEach((registration) => {
       csvContent += `${registration.competing.registration_status === 'accepted' ? 'a' : 'p'},"${
         registration.user.name
-      }","${countries.byIso2[registration.user.country.iso2].name}",${
+      }","${countries.byIso2[registration.user.country?.iso2]?.name}",${
         registration.user.wca_id
       },${registration.user.dob},${
         registration.user.gender
@@ -103,16 +105,22 @@ export default function RegistrationActions({
     .map((userId) => userEmailMap[userId])
     .join(',');
 
+  const isUsingPaymentIntegration = competitionInfo['using_payment_integrations?'];
+  const checkForSkippedPending = isUsingPaymentIntegration;
+
   const changeStatus = (attendees, status) => {
     updateRegistrationMutation(
       {
-        requests: attendees.map((attendee) => (
-          {
-            user_id: attendee,
-            competing: { status },
-            competition_id: competitionInfo.id,
-          })),
-        competition_id: competitionInfo.id,
+        competitionId: competitionInfo.id,
+        payload: {
+          requests: attendees.map((attendee) => (
+            {
+              user_id: attendee,
+              competing: { status },
+              competition_id: competitionInfo.id,
+            })),
+          competition_id: competitionInfo.id,
+        },
       },
       {
         onSuccess: () => {
@@ -123,9 +131,11 @@ export default function RegistrationActions({
     );
   };
 
-  const moveToWaitlist = (ids) => {
+  const moveSelectedToWaitlist = () => {
+    const idsToWaitlist = [...pending, ...cancelled, ...accepted, ...rejected];
+
     const registrationsToMove = registrations.filter(
-      (reg) => ids.includes(reg.user_id),
+      (reg) => idsToWaitlist.includes(reg.user_id),
     );
     const sortedRegistrationsToMove = sortRegistrations(
       registrationsToMove,
@@ -144,7 +154,27 @@ export default function RegistrationActions({
     ),
   );
 
-  const attemptToApprove = () => {
+  const onMoveSelectedToWaitlist = () => {
+    const skippedPendingCount = getSkippedPendingCount(
+      registrations,
+      partitionedSelectedIds,
+    );
+
+    if (checkForSkippedPending && skippedPendingCount > 0) {
+      confirm({
+        content: I18n.t(
+          'competitions.registration_v2.list.pending.waitlist_skipped_warning',
+          { count: skippedPendingCount },
+        ),
+      }).then(
+        moveSelectedToWaitlist,
+      ).catch(noop);
+    } else {
+      moveSelectedToWaitlist();
+    }
+  };
+
+  const onMoveSelectedToApproved = () => {
     const idsToAccept = [...pending, ...cancelled, ...waiting, ...rejected];
     const skippedWaitlistCount = getSkippedWaitlistCount(
       registrations,
@@ -152,12 +182,26 @@ export default function RegistrationActions({
     );
     const amountOverLimit = Math.max(idsToAccept.length - spotsRemaining, 0);
     const goesOverLimit = amountOverLimit > 0;
+    const skippedPendingCount = getSkippedPendingCount(
+      registrations,
+      partitionedSelectedIds,
+    );
 
     if (goesOverLimit) {
       showOverLimitMessage(amountOverLimit);
+    } else if (skippedWaitlistCount > 0 && (checkForSkippedPending && skippedPendingCount > 0)) {
+      confirm({
+        content: I18n.t(
+          'competitions.registration_v2.list.approved.pending_waitlist_combined_skipped_warning',
+          { count: skippedWaitlistCount + skippedPendingCount },
+        ),
+      }).then(
+        () => changeStatus(idsToAccept, 'accepted'),
+      ).catch(noop);
     } else if (skippedWaitlistCount > 0) {
       // note: if the user confirms (ignores the warning) then no further checks are done
       //  in this `else-if` chain; we can't check that directly in the `if` condition
+      //  to make up for never seeing the last else below case, the first else case above exists
       confirm({
         content: I18n.t(
           'competitions.registration_v2.list.waitlist.skipped_warning',
@@ -165,7 +209,16 @@ export default function RegistrationActions({
         ),
       }).then(
         () => changeStatus(idsToAccept, 'accepted'),
-      ).catch(() => null);
+      ).catch(noop);
+    } else if (checkForSkippedPending && skippedPendingCount > 0) {
+      confirm({
+        content: I18n.t(
+          'competitions.registration_v2.list.pending.approve_skipped_warning',
+          { count: skippedPendingCount },
+        ),
+      }).then(
+        () => changeStatus(idsToAccept, 'accepted'),
+      ).catch(noop);
     } else {
       changeStatus(idsToAccept, 'accepted');
     }
@@ -238,9 +291,7 @@ export default function RegistrationActions({
             icon={WAITLIST_ICON}
             color={WAITLIST_COLOR}
             isDisabled={!anyWaitlistable}
-            onClick={() => moveToWaitlist(
-              [...pending, ...cancelled, ...accepted, ...rejected],
-            )}
+            onClick={onMoveSelectedToWaitlist}
           />
 
           <MoveAction
@@ -248,7 +299,7 @@ export default function RegistrationActions({
             icon={APPROVED_ICON}
             color={APPROVED_COLOR}
             isDisabled={!anyApprovable}
-            onClick={attemptToApprove}
+            onClick={onMoveSelectedToApproved}
           />
 
           <MoveAction

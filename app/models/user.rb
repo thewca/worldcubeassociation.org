@@ -1200,13 +1200,13 @@ class User < ApplicationRecord
   private def deprecated_team_roles
     active_roles
       .includes(:metadata, group: [:metadata])
-      .select { |role|
+      .select do |role|
         [
           UserGroup.group_types[:teams_committees],
           UserGroup.group_types[:councils],
           UserGroup.group_types[:board],
         ].include?(role.group_type)
-      }
+      end
       .reject { |role| role.group.is_hidden }
       .map(&:deprecated_team_role)
   end
@@ -1346,6 +1346,10 @@ class User < ApplicationRecord
         .map(&:competition)
   end
 
+  def competitions_with_active_registrations
+    self.competitions_registered_for.not_over.merge(Registration.where.not(competing_status: %w[cancelled rejected]))
+  end
+
   def delegate_in_probation?
     UserGroup.delegate_probation.flat_map(&:active_users).include?(self)
   end
@@ -1425,7 +1429,7 @@ class User < ApplicationRecord
   end
 
   def anonymization_checks_with_message_args
-    upcoming_registered_competitions = competitions_registered_for.not_over.merge(Registration.where.not(competing_status: %w[cancelled rejected])).pluck(:id, :name).map { |id, name| { id: id, name: name } }
+    upcoming_registered_competitions = competitions_with_active_registrations.pluck(:id, :name).map { |id, name| { id: id, name: name } }
     access_grants = oauth_access_grants
                     .where.not(revoked_at: nil)
                     .map do |access_grant|

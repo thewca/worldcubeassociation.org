@@ -5,7 +5,7 @@ DUMMY_SESSION_KEY = 'foobar'
 RSpec.describe LogTagging do
   describe "user_log_tag" do
     before(:each) do
-      expect(Rails.application.config).to receive(:session_options).and_return({ key: DUMMY_SESSION_KEY })
+      allow(Rails.application.config).to receive(:session_options).and_return({ key: DUMMY_SESSION_KEY })
     end
 
     let(:cookie_jar) { double(:cookie_jar, encrypted: { DUMMY_SESSION_KEY => env }) }
