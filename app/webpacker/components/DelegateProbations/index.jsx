@@ -5,7 +5,7 @@ import useSaveAction from '../../lib/hooks/useSaveAction';
 import { apiV0Urls } from '../../lib/requests/routes.js.erb';
 import { groupTypes } from '../../lib/wca-data.js.erb';
 import Errored from '../Requests/Errored';
-import Loading from "../Requests/Loading";
+import Loading from '../Requests/Loading';
 
 import ProbationForm from './ProbationForm';
 import ProbationListTable from './ProbationListTable';
