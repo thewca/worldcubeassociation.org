@@ -1850,12 +1850,15 @@ en:
         pending:
           title: "Pending Registrations"
           information: "Pending should only be used for incomplete (eg, unpaid) registrations - please use the Waiting List if your competition is too full to accept new competitors."
+          waitlist_skipped_warning: "You've skipped %{count} earlier Pending registration(s). Are you sure you want to move the selected registration(s) to the Waiting List?"
+          approve_skipped_warning: "You've skipped %{count} earlier Pending registration(s). Are you sure you want to accept the selected registration(s)?"
         waitlist:
           title: "Waiting List Registrations"
           information: "Competitors are added to the end of the Waiting List. If you add several at once, the paid competitors will be added to the end in the order that they paid, followed by the rest in the order that they registered. You can manually adjust the order in Edit Mode if necessary."
-          skipped_warning: "You've skipped %{count} registration(s) on the Waiting List. Are you sure you want to approve the other registration(s) instead?"
+          skipped_warning: "You've skipped %{count} registration(s) on the Waiting List. Are you sure you want to approve the selected registration(s)?"
         approved:
           title: "Approved Registrations"
+          pending_waitlist_combined_skipped_warning: "You've skipped %{count} earlier Pending/Waiting List registration(s). Are you sure you want to accept the selected registration(s)?"
         cancelled:
           title: "Cancelled Registrations"
           information: "Cancelled competitors are allowed to register again."
@@ -1903,7 +1906,7 @@ en:
         cancelled: "Cancelled"
         rejected: "Rejected"
         amount: "Amount"
-        too_many: "Accepting all these registrations would go over the competitor limit by %{count}"
+        too_many: "Accepting all these registrations would go over the competitor limit by %{count}."
         no_self_update: "Contact the Organization Team to update your registration."
       register:
         will_open_countdown: "Registration will open in %{minutes} minutes %{seconds} seconds. This page will refresh automatically when registration opens."
