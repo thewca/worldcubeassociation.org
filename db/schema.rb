@@ -780,21 +780,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_05_23_115703) do
     t.datetime "updated_at", precision: nil, null: false
   end
 
-  create_table "manual_payment_integrations", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
-    t.string "payment_reference", null: false
-    t.text "payment_information", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "manual_payment_records", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
-    t.string "payment_reference"
-    t.integer "amount_iso_denomination", null: false
-    t.string "currency_code", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "oauth_access_grants", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.integer "resource_owner_id", null: false
     t.integer "application_id", null: false
