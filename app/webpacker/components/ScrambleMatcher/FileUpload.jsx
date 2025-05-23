@@ -23,7 +23,7 @@ async function uploadScrambleFile(competitionId, file) {
   return data;
 }
 
-export default function ScrambleFiles({
+export default function FileUpload({
   competitionId,
   initialScrambleFiles,
   addScrambleFile,
@@ -56,12 +56,19 @@ export default function ScrambleFiles({
     onError: (responseError) => setError(responseError.message),
   });
 
+  const resetFileUpload = useCallback(() => {
+    if (inputRef.current) {
+      inputRef.current.value = null;
+    }
+  }, [inputRef]);
+
   const uploadNewScramble = useCallback((ev) => {
     const filesArr = Array.from(ev.target.files);
     const uploadPromises = filesArr.map((f) => mutateAsync(f));
 
-    return Promise.all(uploadPromises);
-  }, [mutateAsync]);
+    return Promise.all(uploadPromises)
+      .finally(resetFileUpload);
+  }, [mutateAsync, resetFileUpload]);
 
   const clickOnInput = () => {
     inputRef.current?.click();
@@ -74,7 +81,7 @@ export default function ScrambleFiles({
         {' '}
         {uploadedJsonFiles?.length}
         {' '}
-        <Button.Group>
+        <Button.Group floated="right">
           <Button
             positive
             icon="plus"
@@ -92,6 +99,11 @@ export default function ScrambleFiles({
             disabled={isFetching}
           />
         </Button.Group>
+        <Header.Subheader>
+          Scrambles are assigned automatically when you upload a TNoodle JSON file.
+          If there is a discrepancy between the number of scramble sets in the JSON file
+          and the number of groups in the round you can manually assign them below.
+        </Header.Subheader>
       </Header>
       {error && <Message negative onDismiss={() => setError(null)}>{error}</Message>}
       <input

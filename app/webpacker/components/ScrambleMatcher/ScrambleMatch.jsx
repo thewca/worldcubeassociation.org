@@ -12,6 +12,8 @@ export default function ScrambleMatch({
   const [currentDragStart, setCurrentDragStart] = useState(null);
   const [currentDragIndex, setCurrentDragIndex] = useState(null);
 
+  const rowCount = Math.max(matchableRows.length, expectedNumOfRows);
+
   const handleOnBeforeDragStart = (init) => {
     setCurrentDragStart(init.source?.index);
     setCurrentDragIndex(init.source?.index);
@@ -68,17 +70,21 @@ export default function ScrambleMatch({
           {(providedDroppable) => (
             <Ref innerRef={providedDroppable.innerRef}>
               <Table.Body {...providedDroppable.droppableProps}>
-                {matchableRows.map((rowData, index) => {
+                {_.times(rowCount).map((index) => {
+                  const rowData = matchableRows[index];
                   const isExpected = index < expectedNumOfRows;
                   const isExtra = !isExpected;
 
                   const hasError = isExpected && !rowData;
+                  const fallbackIndex = `extra-scramble-set-${index + 1}`;
+                  const key = rowData?.id?.toString() ?? fallbackIndex;
 
                   return (
                     <Draggable
-                      key={rowData.id}
-                      draggableId={rowData.id.toString()}
+                      key={key}
+                      draggableId={key}
                       index={index}
+                      isDragDisabled={rowCount === 1 || hasError}
                     >
                       {(providedDraggable, snapshot) => {
                         const definitionIndex = computeOnDragIndex(index, snapshot.isDragging);
@@ -86,7 +92,7 @@ export default function ScrambleMatch({
                         return (
                           <Ref innerRef={providedDraggable.innerRef}>
                             <Table.Row
-                              key={rowData.id}
+                              key={key}
                               {...providedDraggable.draggableProps}
                               negative={hasError || isExtra}
                             >
@@ -94,17 +100,16 @@ export default function ScrambleMatch({
                                 {isExpected
                                   ? computeDefinitionName(definitionIndex)
                                   : 'Extra Scramble set (unassigned)'}
-                                {(hasError || isExtra) && (
+                                {isExtra && (
                                   <>
-                                    {' '}
                                     <Icon name="exclamation triangle" />
-                                    {hasError ? 'Missing scramble' : 'Unexpected Scramble Set'}
+                                    Unexpected Scramble Set
                                   </>
                                 )}
                               </Table.Cell>
                               <Table.Cell {...providedDraggable.dragHandleProps}>
-                                <Icon name="bars" />
-                                {computeRowName(rowData)}
+                                <Icon name={hasError ? 'exclamation triangle' : 'bars'} />
+                                {hasError ? 'Missing scramble set' : computeRowName(rowData)}
                               </Table.Cell>
                             </Table.Row>
                           </Ref>

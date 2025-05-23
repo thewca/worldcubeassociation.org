@@ -7,7 +7,13 @@ import Groups from './Groups';
 import { events, roundTypes } from '../../lib/wca-data.js.erb';
 import { useDispatchWrapper } from './reducer';
 
-const scrambleSetToName = (scrambleSet) => `${events.byId[scrambleSet.event_id].name} ${roundTypes.byId[scrambleSet.round_type_id].name} - ${String.fromCharCode(64 + scrambleSet.scramble_set_number)}`;
+const prefixForIndex = (index) => {
+  const char = String.fromCharCode(65 + (index % 26));
+  if (index < 26) return char;
+  return prefixForIndex(Math.floor(index / 26) - 1) + char;
+};
+
+const scrambleSetToName = (scrambleSet) => `${events.byId[scrambleSet.event_id].name} ${roundTypes.byId[scrambleSet.round_type_id].name} - ${prefixForIndex(scrambleSet.scramble_set_number - 1)}`;
 
 export default function Rounds({
   wcifRounds,
@@ -15,31 +21,81 @@ export default function Rounds({
   dispatchMatchState,
   showGroupsPicker = false,
 }) {
-  const [selectedRoundId, setSelectedRoundId] = useState();
+  if (wcifRounds.length === 1) {
+    return (
+      <SelectedRoundPanel
+        selectedRound={wcifRounds[0]}
+        matchState={matchState}
+        dispatchMatchState={dispatchMatchState}
+        showGroupsPicker={showGroupsPicker}
+      />
+    );
+  }
 
-  const selectedRound = useMemo(
-    () => wcifRounds.find((r) => r.id === selectedRoundId),
-    [wcifRounds, selectedRoundId],
+  return (
+    <RoundsPicker
+      wcifRounds={wcifRounds}
+      matchState={matchState}
+      dispatchMatchState={dispatchMatchState}
+      showGroupsPicker={showGroupsPicker}
+    />
   );
+}
 
+function SelectedRoundPanel({
+  selectedRound,
+  matchState,
+  dispatchMatchState,
+  showGroupsPicker = false,
+}) {
   const onRoundDragCompleted = useCallback(
     (fromIndex, toIndex) => dispatchMatchState({
       type: 'moveRoundScrambleSet',
-      roundId: selectedRoundId,
+      roundId: selectedRound.id,
       fromIndex,
       toIndex,
     }),
-    [dispatchMatchState, selectedRoundId],
+    [dispatchMatchState, selectedRound.id],
   );
-
   const wrappedDispatch = useDispatchWrapper(
     dispatchMatchState,
-    { roundId: selectedRoundId },
+    { roundId: selectedRound.id },
+  );
+  const roundToGroupName = useCallback(
+    (idx) => `${activityCodeToName(selectedRound.id)}, Group ${idx + 1}`,
+    [selectedRound.id],
   );
 
-  const roundToGroupName = useCallback(
-    (idx) => `${activityCodeToName(selectedRoundId)}, Group ${idx + 1}`,
-    [selectedRoundId],
+  return (
+    <>
+      <ScrambleMatch
+        matchableRows={matchState[selectedRound.id]}
+        expectedNumOfRows={selectedRound.scrambleSetCount}
+        onRowDragCompleted={onRoundDragCompleted}
+        computeDefinitionName={roundToGroupName}
+        computeRowName={scrambleSetToName}
+      />
+      {showGroupsPicker && (
+        <Groups
+          scrambleSetCount={selectedRound.scrambleSetCount}
+          scrambleSets={matchState[selectedRound.id]}
+          dispatchMatchState={wrappedDispatch}
+        />
+      )}
+    </>
+  );
+}
+
+function RoundsPicker({
+  wcifRounds,
+  matchState,
+  dispatchMatchState,
+  showGroupsPicker = false,
+}) {
+  const [selectedRoundId, setSelectedRoundId] = useState();
+  const selectedRound = useMemo(
+    () => wcifRounds.find((r) => r.id === selectedRoundId),
+    [wcifRounds, selectedRoundId],
   );
 
   return (
@@ -69,22 +125,12 @@ export default function Rounds({
         ))}
       </Button.Group>
       {selectedRound && (
-        <>
-          <ScrambleMatch
-            matchableRows={matchState[selectedRoundId]}
-            expectedNumOfRows={selectedRound.scrambleSetCount}
-            onRowDragCompleted={onRoundDragCompleted}
-            computeDefinitionName={roundToGroupName}
-            computeRowName={scrambleSetToName}
-          />
-          {showGroupsPicker && (
-            <Groups
-              scrambleSetCount={selectedRound.scrambleSetCount}
-              scrambleSets={matchState[selectedRoundId]}
-              dispatchMatchState={wrappedDispatch}
-            />
-          )}
-        </>
+        <SelectedRoundPanel
+          selectedRound={selectedRound}
+          matchState={matchState}
+          dispatchMatchState={dispatchMatchState}
+          showGroupsPicker={showGroupsPicker}
+        />
       )}
     </>
   );
