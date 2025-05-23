@@ -64,7 +64,7 @@ module AuxiliaryDataComputation
                      continent_id,
                      country_id
             WITH ROLLUP
-            HAVING event_id IS NOT NULL
+            HAVING event_id IS NOT NULL AND person_id IS NOT NULL
           ), current_persons AS (
             SELECT
               wca_id,
@@ -82,40 +82,39 @@ module AuxiliaryDataComputation
           ),
           continent_ranks AS (
             SELECT
-              pb.person_id, pb.event_id, pb.value,
+              pb.person_id, pb.event_id, pb.continent_id, pb.value,
               RANK() OVER (PARTITION BY pb.event_id, pb.continent_id ORDER BY pb.value) AS continent_rank
             FROM personal_bests pb
-              INNER JOIN current_persons cp ON cp.wca_id = pb.person_id
-            WHERE pb.country_id IS NULL AND pb.continent_id = cp.continent_id
+            WHERE pb.country_id IS NULL AND pb.continent_id IS NOT NULL
           ),
           country_ranks AS (
             SELECT
-              pb.person_id, pb.event_id, pb.value,
+              pb.person_id, pb.event_id, pb.country_id, pb.value,
               RANK() OVER (PARTITION BY pb.event_id, pb.country_id ORDER BY pb.value) AS country_rank
             FROM personal_bests pb
-              JOIN current_persons cp ON cp.wca_id = pb.person_id
-            WHERE pb.country_id = cp.country_id
+            WHERE pb.country_id IS NOT NULL
           )
           SELECT
-            pb.person_id,
-            pb.event_id,
-            MIN(pb.value) AS best,
-            MIN(wr.world_rank) AS world_rank,
-            COALESCE(MIN(cr.continent_rank), 0) AS continent_rank,
-            COALESCE(MIN(nr.country_rank), 0) AS country_rank
-          FROM personal_bests pb
-            INNER JOIN current_persons cp ON cp.wca_id = pb.person_id
-            LEFT JOIN world_ranks wr
-              ON pb.person_id = wr.person_id AND pb.event_id = wr.event_id
-              AND pb.continent_id IS NULL AND pb.country_id IS NULL
-            LEFT JOIN continent_ranks cr
-              ON pb.person_id = cr.person_id AND pb.event_id = cr.event_id
-              AND pb.country_id IS NULL AND pb.continent_id = cp.continent_id
-            LEFT JOIN country_ranks nr
-              ON pb.person_id = nr.person_id AND pb.event_id = nr.event_id
-              AND pb.country_id = cp.country_id
-          GROUP BY pb.person_id, pb.event_id
-          ORDER BY pb.event_id, world_rank
+            cp.wca_id AS person_id,
+            wr.event_id,
+            wr.value AS best,
+            wr.world_rank AS world_rank,
+            COALESCE(cr.continent_rank, 0) AS continent_rank,
+            COALESCE(nr.country_rank, 0) AS country_rank
+          FROM current_persons cp
+          INNER JOIN world_ranks wr
+            ON cp.wca_id = wr.person_id
+          LEFT JOIN continent_ranks cr
+            ON cp.wca_id = cr.person_id
+            AND wr.event_id = cr.event_id
+            AND cp.continent_id = cr.continent_id
+          LEFT JOIN country_ranks nr
+            ON cp.wca_id = nr.person_id
+            AND wr.event_id = nr.event_id
+            AND cp.country_id = nr.country_id
+          ORDER BY
+            wr.event_id,
+            world_rank
         SQL
       end
     end
