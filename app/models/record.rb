@@ -13,8 +13,15 @@ class Record < ApplicationRecord
   validates :continent_id, presence: true, if: -> { record_scope == 'CR' }
 
   scope :world_records, -> { where(record_scope: 'WR') }
-  scope :continental_records, -> { where(record_scope: 'CR') }
-  scope :national_records, -> { where(record_scope: 'NR') }
+  scope :national_records, ->(country_id = nil) {
+    scope = where(record_scope: 'NR')
+    country_id.present? ? scope.where(country_id: country_id) : scope
+  }
+
+  scope :continental_records, ->(continent_id = nil) {
+    scope = where(record_scope: 'CR')
+    continent_id.present? ? scope.where(continent_id: continent_id) : scope
+  }
 
   scope :current, -> { group(:event_id, :record_type).maximum(:record_timestamp) }
 
