@@ -9,6 +9,7 @@ class AddRecordTable < ActiveRecord::Migration[7.2]
       t.string :event_id, null: false
       t.string :country_id
       t.string :continent_id
+      t.string :record_timestamp, null: false
       t.string :record_scope, null: false, index: true # 'WR', 'CR', or 'NR'
       t.index [:event_id, :record_type, :record_scope], unique: true
       t.index [:event_id, :record_scope]

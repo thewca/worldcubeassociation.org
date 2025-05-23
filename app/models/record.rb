@@ -7,6 +7,7 @@ class Record < ApplicationRecord
   validates :record_type, presence: true, inclusion: { in: RECORD_TYPES }
   validates :record_scope, presence: true, inclusion: { in: RECORD_SCOPES }
   validates :event_id, presence: true
+  validates :record_timestamp, presence: true
   validates :value, presence: true, numericality: { only_integer: true, greater_than: 0 }
   validates :country_id, presence: true, if: -> { record_scope == 'NR' }
   validates :continent_id, presence: true, if: -> { record_scope == 'CR' }
