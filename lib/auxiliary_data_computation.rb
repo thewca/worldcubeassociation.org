@@ -104,9 +104,16 @@ module AuxiliaryDataComputation
             COALESCE(MIN(cr.continent_rank), 0) AS continent_rank,
             COALESCE(MIN(nr.country_rank), 0) AS country_rank
           FROM personal_bests pb
-            LEFT JOIN world_ranks wr ON pb.person_id = wr.person_id AND pb.event_id = wr.event_id
-            LEFT JOIN continent_ranks cr ON pb.person_id = cr.person_id AND pb.event_id = cr.event_id
-            LEFT JOIN country_ranks nr ON pb.person_id = nr.person_id AND pb.event_id = nr.event_id
+            INNER JOIN current_persons cp ON cp.wca_id = pb.person_id
+            LEFT JOIN world_ranks wr
+              ON pb.person_id = wr.person_id AND pb.event_id = wr.event_id
+              AND pb.continent_id IS NULL AND pb.country_id IS NULL
+            LEFT JOIN continent_ranks cr
+              ON pb.person_id = cr.person_id AND pb.event_id = cr.event_id
+              AND pb.country_id IS NULL AND pb.continent_id = cp.continent_id
+            LEFT JOIN country_ranks nr
+              ON pb.person_id = nr.person_id AND pb.event_id = nr.event_id
+              AND pb.country_id = cp.country_id
           GROUP BY pb.person_id, pb.event_id
           ORDER BY pb.event_id, world_rank
         SQL
