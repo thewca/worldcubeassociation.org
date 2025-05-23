@@ -3,7 +3,7 @@ import React, {
   useMemo, useReducer, useRef,
 } from 'react';
 import {
-  Accordion, Checkbox, Divider, Form, Header, Icon, Segment, Sticky,
+  Accordion, Button, Checkbox, Divider, Form, Header, Icon, Segment, Sticky,
 } from 'semantic-ui-react';
 import { getAllRegistrations } from '../api/registration/get/get_registrations';
 import RegistrationAdministrationSearch from './RegistrationAdministrationSearch';
@@ -13,6 +13,7 @@ import { useDispatch } from '../../../lib/providers/StoreProvider';
 import I18n from '../../../lib/i18n';
 import Loading from '../../Requests/Loading';
 import { bulkUpdateRegistrations } from '../api/registration/patch/update_registration';
+import bulkAutoAccept from '../api/registration/patch/bulk_auto_accept';
 import RegistrationAdministrationTable from './RegistrationsAdministrationTable';
 import useCheckboxState from '../../../lib/hooks/useCheckboxState';
 import useOrderedSet from '../../../lib/hooks/useOrderedSet';
@@ -86,6 +87,20 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
           : 'registrations.flash.failed',
         'negative',
       ));
+    },
+  });
+
+  const { mutate: bulkAutoAcceptMutation, isPending: isAutoAccepting } = useMutation({
+    mutationFn: bulkAutoAccept,
+    onError: () => {
+      dispatchStore(showMessage(
+        'competitions.registration_v2.auto_accept.cant_bulk_auto_accept',
+        'negative',
+      ));
+    },
+    onSuccess: () => {
+      dispatchStore(showMessage('competitions.registration_v2.auto_accept.bulk_auto_accepted', 'positive'));
+      return refetch();
     },
   });
 
@@ -398,7 +413,19 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
   );
 
   return (
-    <Segment loading={isMutating}>
+    <Segment loading={isMutating || isAutoAccepting}>
+      {competitionInfo.auto_accept_registrations && (
+        <Button
+          disabled={isAutoAccepting}
+          color="green"
+          onClick={() => bulkAutoAcceptMutation(competitionInfo.id)}
+        >
+          <Icon name="check" />
+          {' '}
+          {I18n.t('competitions.registration_v2.auto_accept.bulk_auto_accept')}
+        </Button>
+      )}
+
       <Form>
         <Form.Group unstackable widths="2">
           {Object.entries(expandableColumns).map(([id, name]) => (

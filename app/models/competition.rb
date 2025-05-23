@@ -37,6 +37,7 @@ class Competition < ApplicationRecord
   belongs_to :announced_by_user, optional: true, foreign_key: "announced_by", class_name: "User"
   belongs_to :cancelled_by_user, optional: true, foreign_key: "cancelled_by", class_name: "User"
   has_many :competition_payment_integrations
+  has_many :scramble_file_uploads
 
   accepts_nested_attributes_for :competition_events, allow_destroy: true
   accepts_nested_attributes_for :championships, allow_destroy: true
@@ -382,6 +383,9 @@ class Competition < ApplicationRecord
     errors.add(:auto_accept_registrations, I18n.t('competitions.errors.must_use_wca_registration')) if
       auto_accept_registrations? && !use_wca_registration
 
+    errors.add(:auto_accept_registrations, I18n.t('competitions.errors.must_use_payment_integration')) if
+      auto_accept_registrations? && confirmed_or_visible? && competition_payment_integrations.where(connected_account_type: "ConnectedStripeAccount").none?
+
     errors.add(:auto_accept_registrations, I18n.t('competitions.errors.auto_accept_limit')) if
       auto_accept_disable_threshold.present? &&
       auto_accept_disable_threshold.positive? &&
@@ -637,7 +641,7 @@ class Competition < ApplicationRecord
     warnings
   end
 
-  def info_for(user)
+  def info_messages
     info = {}
     info[:upload_results] = I18n.t('competitions.messages.upload_results') if !self.results_posted? && self.probably_over? && !self.cancelled?
     if self.in_progress? && !self.cancelled?
@@ -695,7 +699,8 @@ class Competition < ApplicationRecord
              'competition_payment_integrations',
              'venue_countries',
              'venue_continents',
-             'waiting_list'
+             'waiting_list',
+             'scramble_file_uploads'
           # Do nothing as they shouldn't be cloned.
         when 'organizers'
           clone.organizers = organizers
@@ -1555,7 +1560,7 @@ class Competition < ApplicationRecord
       rank_symbol = :"ranks_#{sort_by}"
       second_rank_symbol = :"ranks_#{sort_by_second}"
 
-      sorted_users = users_with_rankings.sort_by { |user|
+      sorted_users = users_with_rankings.sort_by do |user|
         # using '.find_by(event: ...)' fires another SQL query *despite* the ranks being pre-loaded :facepalm:
         rank = user.send(rank_symbol).find { |r| r.event == event }
         second_rank = user.send(second_rank_symbol).find { |r| r.event == event }
@@ -1569,11 +1574,11 @@ class Competition < ApplicationRecord
           second_rank&.world_rank || 0,
           user.name,
         ]
-      }
+      end
 
       prev_sorted_ranking = nil
 
-      sorted_rankings = sorted_users.map.with_index { |user, i|
+      sorted_rankings = sorted_users.map.with_index do |user, i|
         # see comment about .find vs .find_by above.
         single_ranking = user.ranks_single.find { |r| r.event == event }
         average_ranking = user.ranks_average.find { |r| r.event == event }
@@ -1609,7 +1614,7 @@ class Competition < ApplicationRecord
         )
 
         prev_sorted_ranking = sorted_ranking
-      }
+      end
 
       PsychSheet.new(
         sorted_rankings: sorted_rankings,
@@ -1884,8 +1889,8 @@ class Competition < ApplicationRecord
     ActiveRecord::Base.transaction do
       set_wcif_series!(wcif["series"], current_user) if wcif["series"]
       set_wcif_events!(wcif["events"], current_user) if wcif["events"]
-      set_wcif_schedule!(wcif["schedule"], current_user) if wcif["schedule"]
-      update_persons_wcif!(wcif["persons"], current_user) if wcif["persons"]
+      set_wcif_schedule!(wcif["schedule"]) if wcif["schedule"]
+      update_persons_wcif!(wcif["persons"]) if wcif["persons"]
       WcifExtension.update_wcif_extensions!(self, wcif["extensions"]) if wcif["extensions"]
       set_wcif_competitor_limit!(wcif["competitorLimit"], current_user) if wcif["competitorLimit"]
 
@@ -1948,28 +1953,26 @@ class Competition < ApplicationRecord
     wcif_events.each do |wcif_event|
       event_found = competition_events.find { |ce| ce.event_id == wcif_event["id"] }
       event_to_be_added = wcif_event["rounds"]
-      if !event_found && event_to_be_added
-        raise WcaExceptions::BadApiParameter.new("Cannot add events") unless current_user.can_add_and_remove_events?(self)
+      next unless !event_found && event_to_be_added
+      raise WcaExceptions::BadApiParameter.new("Cannot add events") unless current_user.can_add_and_remove_events?(self)
 
-        competition_events.create!(event_id: wcif_event["id"])
-      end
+      competition_events.create!(event_id: wcif_event["id"])
     end
 
     # Update all events.
     wcif_events.each do |wcif_event| # rubocop:disable Style/CombinableLoops
       event_to_be_updated = wcif_event["rounds"]
-      if event_to_be_updated
-        raise WcaExceptions::BadApiParameter.new("Cannot update events") unless current_user.can_update_events?(self)
+      next unless event_to_be_updated
+      raise WcaExceptions::BadApiParameter.new("Cannot update events") unless current_user.can_update_events?(self)
 
-        competition_events.find { |ce| ce.event_id == wcif_event["id"] }.load_wcif!(wcif_event)
-      end
+      competition_events.find { |ce| ce.event_id == wcif_event["id"] }.load_wcif!(wcif_event)
     end
 
     reload
   end
 
   # Takes an array of partial Person WCIF and updates the fields that are not immutable.
-  def update_persons_wcif!(wcif_persons, current_user)
+  def update_persons_wcif!(wcif_persons)
     registration_includes = [
       { assignments: [:schedule_activity] },
       :user,
@@ -2032,7 +2035,7 @@ class Competition < ApplicationRecord
     Assignment.upsert_all(new_assignments) if new_assignments.any?
   end
 
-  def set_wcif_schedule!(wcif_schedule, current_user)
+  def set_wcif_schedule!(wcif_schedule)
     if wcif_schedule["startDate"] != start_date.strftime("%F")
       raise WcaExceptions::BadApiParameter.new("Wrong start date for competition")
     elsif wcif_schedule["numberOfDays"] != number_of_days
@@ -2293,6 +2296,8 @@ class Competition < ApplicationRecord
         "reason" => competitor_limit_reason,
         "autoCloseThreshold" => auto_close_threshold,
         "newcomerMonthReservedSpots" => newcomer_month_reserved_spots,
+        "autoAcceptEnabled" => auto_accept_registrations,
+        "autoAcceptDisableThreshold" => auto_accept_disable_threshold,
       },
       "staff" => {
         "staffDelegateIds" => staff_delegates.to_a.pluck(:id),
@@ -2398,6 +2403,8 @@ class Competition < ApplicationRecord
         "reason" => errors[:competitor_limit_reason],
         "autoCloseThreshold" => errors[:auto_close_threshold],
         "newcomer_month_reserved_spots" => errors[:newcomer_month_reserved_spots],
+        "autoAcceptEnabled" => errors[:auto_accept_registrations],
+        "autoAcceptDisableThreshold" => errors[:auto_accept_disable_threshold],
       },
       "staff" => {
         "staffDelegateIds" => errors[:staff_delegate_ids],
@@ -2498,41 +2505,41 @@ class Competition < ApplicationRecord
         # These keys all represent timestamps. They may only be edited by non-admins if...
         #   - the original value (pre-edit) has not yet passed
         #   - the new value is in the future (extending deadlines is allowed, shortening them is not)
-        if %w[registration.closingDateTime registration.waitingListDeadlineDate registration.eventChangeDeadlineDate].include?(joined_key)
-          existing_value = current_state_form.dig(*prefixes, key)
+        next unless %w[registration.closingDateTime registration.waitingListDeadlineDate registration.eventChangeDeadlineDate].include?(joined_key)
 
-          previously_had_value = existing_value.present?
-          will_have_value = value.present?
+        existing_value = current_state_form.dig(*prefixes, key)
 
-          # Complain if the existing timestamp lies in the past
-          #   Note: Some timestamps are less strict than others (see https://github.com/thewca/worldcubeassociation.org/issues/11416)
-          #   so we only enforce this validation on a subset of timestamps.
-          edits_forbidden_if_past = %w[registration.closingDateTime registration.waitingListDeadlineDate].include?(joined_key)
+        previously_had_value = existing_value.present?
+        will_have_value = value.present?
 
-          if previously_had_value && edits_forbidden_if_past
-            existing_datetime = DateTime.parse(existing_value)
+        # Complain if the existing timestamp lies in the past
+        #   Note: Some timestamps are less strict than others (see https://github.com/thewca/worldcubeassociation.org/issues/11416)
+        #   so we only enforce this validation on a subset of timestamps.
+        edits_forbidden_if_past = %w[registration.closingDateTime registration.waitingListDeadlineDate].include?(joined_key)
 
-            raise WcaExceptions::BadApiParameter.new(I18n.t('competitions.errors.editing_deadline_already_passed', timestamp: existing_datetime), json_property: joined_key) if existing_datetime.past?
-          end
+        if previously_had_value && edits_forbidden_if_past
+          existing_datetime = DateTime.parse(existing_value)
 
-          if will_have_value
-            new_datetime = DateTime.parse(value)
-
-            # Complain if the new timestamp lies in the past
-            raise WcaExceptions::BadApiParameter.new(I18n.t('competitions.errors.edited_deadline_not_in_future', new_timestamp: new_datetime), json_property: joined_key) if new_datetime.past?
-          end
-
-          if previously_had_value && will_have_value
-            new_datetime = DateTime.parse(value)
-            existing_datetime = DateTime.parse(existing_value)
-
-            new_before_existing = new_datetime < existing_datetime
-
-            # Complain if the new value lies before the old value
-            #   (i.e. the user is trying to move some deadline to end earlier)
-            raise WcaExceptions::BadApiParameter.new(I18n.t('competitions.errors.edited_deadline_not_after_original', new_timestamp: new_datetime, timestamp: existing_datetime), json_property: joined_key) if new_before_existing
-          end
+          raise WcaExceptions::BadApiParameter.new(I18n.t('competitions.errors.editing_deadline_already_passed', timestamp: existing_datetime), json_property: joined_key) if existing_datetime.past?
         end
+
+        if will_have_value
+          new_datetime = DateTime.parse(value)
+
+          # Complain if the new timestamp lies in the past
+          raise WcaExceptions::BadApiParameter.new(I18n.t('competitions.errors.edited_deadline_not_in_future', new_timestamp: new_datetime), json_property: joined_key) if new_datetime.past?
+        end
+
+        next unless previously_had_value && will_have_value
+
+        new_datetime = DateTime.parse(value)
+        existing_datetime = DateTime.parse(existing_value)
+
+        new_before_existing = new_datetime < existing_datetime
+
+        # Complain if the new value lies before the old value
+        #   (i.e. the user is trying to move some deadline to end earlier)
+        raise WcaExceptions::BadApiParameter.new(I18n.t('competitions.errors.edited_deadline_not_after_original', new_timestamp: new_datetime, timestamp: existing_datetime), json_property: joined_key) if new_before_existing
       end
     end
 
@@ -2594,6 +2601,8 @@ class Competition < ApplicationRecord
       competitor_limit_reason: form_data.dig('competitorLimit', 'reason'),
       auto_close_threshold: form_data.dig('competitorLimit', 'autoCloseThreshold'),
       newcomer_month_reserved_spots: form_data.dig('competitorLimit', 'newcomerMonthReservedSpots'),
+      auto_accept_registrations: form_data.dig('competitorLimit', 'autoAcceptEnabled'),
+      auto_accept_disable_threshold: form_data.dig('competitorLimit', 'autoAcceptDisableThreshold'),
       extra_registration_requirements: form_data.dig('registration', 'extraRequirements'),
       on_the_spot_registration: form_data.dig('registration', 'allowOnTheSpot'),
       on_the_spot_entry_fee_lowest_denomination: form_data.dig('entryFees', 'onTheSpotEntryFee'),
@@ -2733,6 +2742,8 @@ class Competition < ApplicationRecord
             "reason" => { "type" => %w[string null] },
             "autoCloseThreshold" => { "type" => %w[integer null] },
             "newcomerMonthReservedSpots" => { "type" => %w[integer null] },
+            "autoAcceptEnabled" => { "type" => %w[boolean null] },
+            "autoAcceptDisableThreshold" => { "type" => %w[integer null] },
           },
         },
         "staff" => {

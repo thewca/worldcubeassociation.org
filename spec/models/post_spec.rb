@@ -29,7 +29,7 @@ RSpec.describe Post do
     let(:post) { create(:post) }
 
     it "can tag posts with a comma separated list" do
-      expect(post.tags_array).to match_array %w[]
+      expect(post.tags_array).to be_empty
 
       post.update!(tags: "wic, test-with-hyphens")
       expect(Post.find(post.id).tags_array).to match_array %w[wic test-with-hyphens]

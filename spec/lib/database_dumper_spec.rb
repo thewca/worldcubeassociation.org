@@ -63,7 +63,7 @@ RSpec.describe "DatabaseDumper" do
 
       expect(Competition.count).to eq 1
       expect(visible_competition.reload.remarks).to eq "remarks to the board here"
-      expect(CompetitionDelegate.find_by(competition_id: not_visible_competition.id)).to be nil
+      expect(CompetitionDelegate.find_by(competition_id: not_visible_competition.id)).to be_nil
       expect(user.reload.dob).to eq Date.new(1954, 12, 4)
       expect(ServerSetting.find_by(name: DatabaseDumper::DEV_TIMESTAMP_NAME).as_datetime).to be >= before_dump
 
