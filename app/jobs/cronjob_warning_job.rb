@@ -25,29 +25,29 @@ class CronjobWarningJob < WcaCronjob
       started_as_planned = statistics.run_start <= should_start_before
       completed_later_successfully = statistics.successful_run_start >= should_start_before
 
-      unless started_as_planned || completed_later_successfully
-        message = if statistics.last_run_successful?
-                    <<~SLACK.squish
-                      Uh oh! Cronjob '#{job.klass}' should have run at #{should_start_before}
-                      (with leeway at an average runtime of #{average_runtime} seconds)
-                      but still hasn't started. Please check that everything is in order!"
-                    SLACK
-                  else
-                    <<~SLACK.squish
-                      BEEP BOOP :alarm: Cronjob '#{job.klass}' should have run at #{should_start_before}
-                      but it previously crashed with the following error message:
+      next if started_as_planned || completed_later_successfully
 
-                      ```
-                      #{statistics.last_error_message}
-                      ```
-                    SLACK
-                  end
+      message = if statistics.last_run_successful?
+                  <<~SLACK.squish
+                    Uh oh! Cronjob '#{job.klass}' should have run at #{should_start_before}
+                    (with leeway at an average runtime of #{average_runtime} seconds)
+                    but still hasn't started. Please check that everything is in order!"
+                  SLACK
+                else
+                  <<~SLACK.squish
+                    BEEP BOOP :alarm: Cronjob '#{job.klass}' should have run at #{should_start_before}
+                    but it previously crashed with the following error message:
 
-        if Rails.env.production? && EnvConfig.WCA_LIVE_SITE?
-          SlackBot.send_alarm_message(message)
-        else
-          Rails.logger.warn message
-        end
+                    ```
+                    #{statistics.last_error_message}
+                    ```
+                  SLACK
+                end
+
+      if Rails.env.production? && EnvConfig.WCA_LIVE_SITE?
+        SlackBot.send_alarm_message(message)
+      else
+        Rails.logger.warn message
       end
     end
   end
