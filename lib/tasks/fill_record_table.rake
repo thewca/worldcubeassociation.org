@@ -13,7 +13,7 @@ namespace :records do
 
         record_value = result.send(records[:field])
         round = result.round
-        has_round_schedule = result.competition.schedule_must_match_rounds
+        has_round_schedule = result.competition.start_date > Date.new(2018, 12, 31)
         record_timestamp = has_round_schedule ? round.end_time : result.competition.end_date
         is_cr = Record::CONTINENT_TO_RECORD_MARKER.value?(record_value)
         record_scope = is_cr ? Record::CONTINENT_TO_RECORD_MARKER[result.continent_id] : record_value

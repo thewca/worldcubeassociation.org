@@ -16,11 +16,11 @@ class Record < ApplicationRecord
   scope :continental_records, -> { where(record_scope: 'CR') }
   scope :national_records, -> { where(record_scope: 'NR') }
 
-  scope :current, -> { maximum(:record_timestamp) }
+  scope :current, -> { group(:event_id, :record_type).maximum(:record_timestamp) }
 
   belongs_to :result
 
-  def self.best_for(event_id, record_type, scope, country_id: nil, continent_id: nil)
+  def self.record_for(event_id, record_type, scope, country_id: nil, continent_id: nil)
     query = where(event_id: event_id, record_type: record_type, record_scope: scope)
     query = query.where(country_id: country_id) if country_id
     query = query.where(continent_id: continent_id) if continent_id
