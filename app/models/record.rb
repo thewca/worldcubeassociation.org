@@ -16,6 +16,8 @@ class Record < ApplicationRecord
   scope :continental_records, -> { where(record_scope: 'CR') }
   scope :national_records, -> { where(record_scope: 'NR') }
 
+  scope :current, -> { maximum(:record_timestamp) }
+
   belongs_to :result
 
   def self.best_for(event_id, record_type, scope, country_id: nil, continent_id: nil)
@@ -23,5 +25,20 @@ class Record < ApplicationRecord
     query = query.where(country_id: country_id) if country_id
     query = query.where(continent_id: continent_id) if continent_id
     query.minimum(:value)
+  end
+
+  CONTINENT_TO_RECORD_MARKER = {
+    '_Africa' => 'AfR',
+    '_Europe' => 'ER',
+    '_North_America' => 'NAR',
+    '_South America' => 'SAR',
+    '_Asia' => 'AsR',
+    '_Oceania' => 'OcR',
+  }
+
+  def marker
+    return 'NR' if record_scope === 'NR'
+    return CONTINENT_TO_RECORD_MARKER[continent_id] if record_scope === 'CR'
+    'WR'
   end
 end

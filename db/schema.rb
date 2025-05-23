@@ -982,7 +982,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_05_23_115703) do
     t.datetime "updated_at", null: false
     t.index ["country_id", "record_scope"], name: "index_records_on_country_id_and_record_scope"
     t.index ["event_id", "record_scope"], name: "index_records_on_event_id_and_record_scope"
-    t.index ["event_id", "record_type", "record_scope"], name: "index_records_on_event_id_and_record_type_and_record_scope", unique: true
+    t.index ["event_id", "record_type", "record_scope"], name: "index_records_on_event_id_and_record_type_and_record_scope"
     t.index ["record_scope"], name: "index_records_on_record_scope"
     t.index ["result_id"], name: "index_records_on_result_id"
   end
