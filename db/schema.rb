@@ -954,24 +954,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_05_26_015242) do
     t.index ["person_id"], name: "fk_persons"
   end
 
-  create_table "records", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
-    t.string "record_type", null: false
-    t.bigint "result_id", null: false
-    t.integer "value", null: false
-    t.string "event_id", null: false
-    t.string "country_id"
-    t.string "continent_id"
-    t.string "record_timestamp", null: false
-    t.string "record_scope", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["country_id", "record_scope"], name: "index_records_on_country_id_and_record_scope"
-    t.index ["event_id", "record_scope"], name: "index_records_on_event_id_and_record_scope"
-    t.index ["event_id", "record_type", "record_scope"], name: "index_records_on_event_id_and_record_type_and_record_scope"
-    t.index ["record_scope"], name: "index_records_on_record_scope"
-    t.index ["result_id"], name: "index_records_on_result_id"
-  end
-
   create_table "regional_organizations", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
     t.string "country", null: false
@@ -989,6 +971,24 @@ ActiveRecord::Schema[7.2].define(version: 2025_05_26_015242) do
     t.text "extra_information"
     t.index ["country"], name: "index_regional_organizations_on_country"
     t.index ["name"], name: "index_regional_organizations_on_name"
+  end
+
+  create_table "regional_records", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "record_type", null: false
+    t.bigint "result_id", null: false
+    t.integer "value", null: false
+    t.string "event_id", null: false
+    t.string "country_id"
+    t.string "continent_id"
+    t.date "record_timestamp", null: false
+    t.integer "record_scope", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["country_id", "record_scope"], name: "index_regional_records_on_country_id_and_record_scope"
+    t.index ["event_id", "record_scope"], name: "index_regional_records_on_event_id_and_record_scope"
+    t.index ["event_id", "record_type", "record_scope"], name: "idx_on_event_id_record_type_record_scope_bdec6938e0"
+    t.index ["record_scope"], name: "index_regional_records_on_record_scope"
+    t.index ["result_id"], name: "index_regional_records_on_result_id"
   end
 
   create_table "regional_records_lookup", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
@@ -1079,6 +1079,15 @@ ActiveRecord::Schema[7.2].define(version: 2025_05_26_015242) do
     t.datetime "updated_at", null: false
     t.index ["result_id", "attempt_number"], name: "index_result_attempts_on_result_id_and_attempt_number", unique: true
     t.index ["result_id"], name: "index_result_attempts_on_result_id"
+  end
+
+  create_table "result_timestamps", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.bigint "result_id", null: false
+    t.date "round_timestamp", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["result_id", "round_timestamp"], name: "index_result_timestamps_on_result_id_and_round_timestamp"
+    t.index ["result_id"], name: "index_result_timestamps_on_result_id"
   end
 
   create_table "results", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB PACK_KEYS=1", force: :cascade do |t|
