@@ -1,8 +1,9 @@
 # frozen_string_literal: true
 
 class ScheduleActivity < ApplicationRecord
+  ACTIVITY_CODE_OTHER = 'other'
   # See https://docs.google.com/document/d/1hnzAZizTH0XyGkSYe-PxFL5xpKVWl_cvSdTzlT_kAs8/edit#heading=h.14uuu58hnua
-  VALID_ACTIVITY_CODE_BASE = (Event::OFFICIAL_IDS + %w[other]).freeze
+  VALID_ACTIVITY_CODE_BASE = (Event::OFFICIAL_IDS + [ACTIVITY_CODE_OTHER]).freeze
   VALID_OTHER_ACTIVITY_CODE = %w[registration checkin multi breakfast lunch dinner awards unofficial misc tutorial setup teardown].freeze
   belongs_to :venue_room
   belongs_to :round, optional: true
@@ -18,8 +19,13 @@ class ScheduleActivity < ApplicationRecord
   validates :start_time, presence: { allow_blank: false }
   validates :end_time, presence: { allow_blank: false }
   validates :activity_code, presence: { allow_blank: false }
+  validates :round, presence: { if: :event_activity? }
   # TODO: we don't yet care for scramble_set_id
   delegate :color, to: :venue_room
+
+  private def event_activity?
+    self.parsed_activity_code[:event_id] != ACTIVITY_CODE_OTHER
+  end
 
   validate :included_in_competition_dates
   def included_in_competition_dates
