@@ -105,6 +105,6 @@ RSpec.describe "RegulationsCheck" do
     status, description = check.status_description
 
     expect(status).to eq :danger
-    expect(description).to match(/Error while loading regulations: unexpected character: 'i am definitely not json' at line 1 column 1 from JSON::ParserError/)
+    expect(description).to match(/Error while loading regulations: unexpected character: 'i' at line 1 column 1 from JSON::ParserError/)
   end
 end
