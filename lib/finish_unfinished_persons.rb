@@ -3,7 +3,7 @@
 module FinishUnfinishedPersons
   WCA_ID_PADDING = 'U'
   WCA_QUARTER_ID_LENGTH = 4
-  GENERATIONAL_SUFFIXES = %w[JR SR II III IV].freeze
+  GENERATIONAL_SUFFIXES = %w[JR JNR SR SNR II III IV].freeze
 
   WITH_ACCENT = 'ÀÁÂÃÄÅÆĂÇĆČÈÉÊËÌÍÎÏİÐĐÑÒÓÔÕÖØÙÚÛÜÝÞřßŞȘŠŚşșśšŢȚţțŻŽźżžəàáâãäåæăąắặảầấạậāằçćčèéêëęěễệếềēểğìíîïịĩіıðđķКкŁłļñńņňòóôõöøỗọơốờőợồộớùúûüưứữũụűūůựýýþÿỳỹ'
   WITHOUT_ACCENT = 'aaaaaaaaccceeeeiiiiiddnoooooouuuuybrsssssssssttttzzzzzaaaaaaaaaaaaaaaaaaaccceeeeeeeeeeeegiiiiiiiiddkKklllnnnnoooooooooooooooouuuuuuuuuuuuuyybyyy'
