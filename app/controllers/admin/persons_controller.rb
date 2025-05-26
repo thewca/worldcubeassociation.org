@@ -44,8 +44,8 @@ module Admin
       results_scope = results_scope.where(event_id: params[:eventId]) if params.key?(:eventId)
 
       render json: results_scope.as_json(
-        only: [:id, :competition_id, :competition_name],
-        methods: [:event_id, :person_name, :round_type_id]
+        only: %i[id competition_id competition_name],
+        methods: %i[event_id person_name round_type_id]
       )
     end
 
