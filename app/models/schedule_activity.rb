@@ -115,7 +115,6 @@ class ScheduleActivity < ApplicationRecord
     }
   end
 
-  # TODO: not a fan of how it works (= passing round information)
   def to_event
     raise "#to_event called for nested activity" unless parent_activity.nil?
 
