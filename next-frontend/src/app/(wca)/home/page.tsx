@@ -16,6 +16,7 @@ import {
 
 import Flag from "react-world-flags";
 import CountryMap from "@/components/CountryMap";
+import AnnouncementsCard from "@/components/AnnouncementsCard"
 
 import CompRegoCloseDateIcon from "@/components/icons/CompRegoCloseDateIcon";
 import CompetitorsIcon from "@/components/icons/CompetitorsIcon";
@@ -249,15 +250,30 @@ export default async function home() {
             </Card.Body>
           </Card.Root>
         </SimpleGrid>
-        <Card.Root variant="info" colorPalette="blue">
-          <Card.Body>
-            <Text>Announcements</Text>
-          </Card.Body>
-        </Card.Root>
+        <AnnouncementsCard
+          hero={{
+            title: "Big Update: WCA World Championship 2025!",
+            postedBy: "Mitchell Anderson",
+            postedAt: "May 25, 2025",
+            markdown: `**Get ready!**\n\nThe next WCA World Championship is coming to Sydney 🇦🇺. More details soon.`,
+            fullLink: "/articles/world-champs-2025"
+          }}
+          others={[
+            {
+              title: "New Regulations Update",
+              href: "/articles/regulations-update",
+            },
+            {
+              title: "Highlights from Asian Championship",
+              href: "/articles/asia-highlights",
+            },
+          ]}
+        />
       </SimpleGrid>
 
       <SimpleGrid columns={3} rows={1} gap={8}>
         <GridItem colSpan={2} display="flex">
+          {/* TODO - make this changel slide every so often automatically */}
           <Tabs.Root defaultValue="tab1" variant="slider" orientation="vertical">
             <Card.Root
               variant="info"
