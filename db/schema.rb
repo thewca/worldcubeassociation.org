@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_05_26_015242) do
+ActiveRecord::Schema[7.2].define(version: 2025_05_26_112653) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -1183,8 +1183,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_05_26_015242) do
   end
 
   create_table "schedule_activities", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
-    t.string "holder_type", null: false
-    t.bigint "holder_id", null: false
+    t.string "holder_type"
+    t.bigint "holder_id"
     t.bigint "venue_room_id"
     t.bigint "parent_activity_id"
     t.integer "wcif_id", null: false
@@ -1196,8 +1196,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_05_26_015242) do
     t.integer "scramble_set_id"
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
-    t.index ["holder_type", "holder_id", "wcif_id"], name: "index_activities_on_their_id_within_holder", unique: true
-    t.index ["holder_type", "holder_id"], name: "index_schedule_activities_on_holder_type_and_holder_id"
     t.index ["parent_activity_id"], name: "index_schedule_activities_on_parent_activity_id"
     t.index ["round_id"], name: "index_schedule_activities_on_round_id"
     t.index ["venue_room_id"], name: "index_schedule_activities_on_venue_room_id"
