@@ -11,6 +11,7 @@ import {
   Badge,
   VStack,
   Heading,
+  Float
 } from "@chakra-ui/react";
 
 import Flag from "react-world-flags";
@@ -24,6 +25,7 @@ import CompRegoCloseDateIcon from "@/components/icons/CompRegoCloseDateIcon";
 import CompetitorsIcon from "@/components/icons/CompetitorsIcon";
 import RegisterIcon from "@/components/icons/RegisterIcon";
 import LocationIcon from "@/components/icons/LocationIcon";
+import NationalChampionshipIcon from "@/components/icons/NationalChampionshipIcon";
 
 import EventIcon from "@/components/EventIcon";
 import CountryMap from "@/components/CountryMap";
@@ -141,7 +143,11 @@ const CompetitionTableEntry: React.FC<Props> = ({ comp }) => {
         <Portal>
           <Drawer.Backdrop />
           <Drawer.Positioner padding="4">
-            <Drawer.Content>
+            <Drawer.Content overflow="hidden">
+              {/* TODO: Make this float only visible for Championship competitions */}
+              <Float placement="middle-end" offsetX="20" fontSize="21vw" opacity="0.1" >
+                <NationalChampionshipIcon />
+              </Float>
               <Drawer.Header>
                 <Heading size="3xl">{comp.name}</Heading>
               </Drawer.Header>
@@ -181,6 +187,7 @@ const CompetitionTableEntry: React.FC<Props> = ({ comp }) => {
                 ))}
               </Drawer.Body>
               <Drawer.Footer justifyContent="space-between" width="full">
+                {/* TODO: Only Show register button/link if registration is not full */}
                 <Button variant="outline">Register Now</Button>
                 <Button variant="solid">View Competition</Button>
               </Drawer.Footer>
