@@ -244,7 +244,7 @@ class Round < ApplicationRecord
   end
 
   def end_time
-    schedule.minimum(:end_time)
+    schedule.maximum(:end_time)
   end
 
   def schedule
