@@ -109,10 +109,10 @@ function FixResultsPage() {
           placeholder="Select Competition"
           fluid
           scrolling
-          options={competitionsList?.reverse().map((competition) => ({
-            key: competition.id,
-            text: competition.name,
-            value: competition.id,
+          options={competitionsList?.map((competition) => ({
+            key: competition.competitionId,
+            text: competition.competitionName,
+            value: competition.competitionId,
           }))}
           disabled={anyLoading}
           value={formValues?.competitionId}

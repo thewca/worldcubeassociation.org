@@ -3,9 +3,10 @@ import { viewUrls } from '../../../../../lib/requests/routes.js.erb';
 
 async function getEvents({ wcaId, competitionId }) {
   const { data } = await fetchJsonOrError(
-    viewUrls.persons.competitionEvents(wcaId, competitionId),
+    viewUrls.persons.results(wcaId, competitionId),
   );
-  return data || {};
+  const resultsList = data || {};
+  return _.uniq(_.map(resultsList, 'event_id'));
 }
 
 export default getEvents;

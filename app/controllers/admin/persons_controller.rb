@@ -34,19 +34,19 @@ module Admin
       end
     end
 
-    def competition_events
-      person = Person.current.find_by!(wca_id: params[:wca_id])
-      competition_id = params.require(:competition_id)
+    def results
+      person_wca_id = params.require(:wcaId)
 
-      render json: person.results.where(competition_id: competition_id).pluck(:eventId).uniq
-    end
+      person = Person.current.find_by!(wca_id: person_wca_id)
+      results_scope = person.results.joins(:competition).select('results.*, competitions.name AS competition_name')
 
-    def competition_event_results
-      person = Person.current.find_by!(wca_id: params[:wca_id])
-      competition_id = params.require(:competition_id)
-      event_id = params.require(:event_id)
+      results_scope = results_scope.where(competition_id: params[:competitionId]) if params.key?(:competitionId)
+      results_scope = results_scope.where(event_id: params[:eventId]) if params.key?(:eventId)
 
-      render json: person.results.where(competition_id: competition_id, eventId: event_id)
+      render json: results_scope.as_json(
+        only: [:id, :competition_id, :competition_name],
+        methods: [:event_id, :person_name, :round_type_id]
+      )
     end
 
     private def new_id_params

@@ -187,8 +187,7 @@ Rails.application.routes.draw do
   get 'wst/wca-developer-database-dump.zip', to: redirect(DbDumpHelper.public_s3_path(DbDumpHelper::DEVELOPER_EXPORT_SQL_PERMALINK))
 
   get 'persons/new_id' => 'admin/persons#generate_ids'
-  get '/persons/:wca_id/:competition_id/events' => 'admin/persons#competition_events', as: :person_competition_events
-  get '/persons/:wca_id/:competition_id/:event_id/results' => 'admin/persons#competition_event_results', as: :person_competition_event_results
+  get '/persons/results' => 'admin/persons#results', as: :person_results
   resources :persons, only: [:index, :show]
   post 'persons' => 'admin/persons#create'
 

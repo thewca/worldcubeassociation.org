@@ -1,11 +1,17 @@
 import { fetchJsonOrError } from '../../../../../lib/requests/fetchWithAuthenticityToken';
-import { apiV0Urls } from '../../../../../lib/requests/routes.js.erb';
+import { viewUrls } from '../../../../../lib/requests/routes.js.erb';
 
 async function getCompetitions({ wcaId }) {
   const { data } = await fetchJsonOrError(
-    apiV0Urls.persons.competitions(wcaId),
+    viewUrls.persons.results(wcaId),
   );
-  return data || {};
+  const resultsList = data || {};
+  const competitionsList = _.uniqBy(resultsList, 'competition_id')
+    .map((item) => ({
+      competitionId: item.competition_id,
+      competitionName: item.competition_name,
+    })).reverse();
+  return competitionsList;
 }
 
 export default getCompetitions;

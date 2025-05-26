@@ -3,7 +3,7 @@ import { viewUrls } from '../../../../../lib/requests/routes.js.erb';
 
 async function getResults({ wcaId, competitionId, eventId }) {
   const { data } = await fetchJsonOrError(
-    viewUrls.persons.competitionEventResults(wcaId, competitionId, eventId),
+    viewUrls.persons.results(wcaId, competitionId, eventId),
   );
   return data || {};
 }
