@@ -47,7 +47,8 @@ namespace :schedule_activities do
 
   desc "Overwrite duplicated wcif_id within the same schedule"
   task fix_duplicate_wcif_ids: :environment do
-    ScheduleActivity.find_each do |activity|
+    ScheduleActivity.includes(venue_room: [:competition], round: [])
+                    .find_each do |activity|
       next if activity.valid?
 
       wcif_id_errors = activity.errors.details[:wcif_id]
