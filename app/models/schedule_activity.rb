@@ -4,11 +4,10 @@ class ScheduleActivity < ApplicationRecord
   # See https://docs.google.com/document/d/1hnzAZizTH0XyGkSYe-PxFL5xpKVWl_cvSdTzlT_kAs8/edit#heading=h.14uuu58hnua
   VALID_ACTIVITY_CODE_BASE = (Event::OFFICIAL_IDS + %w[other]).freeze
   VALID_OTHER_ACTIVITY_CODE = %w[registration checkin multi breakfast lunch dinner awards unofficial misc tutorial setup teardown].freeze
-  belongs_to :holder, polymorphic: true
-  belongs_to :venue_room, optional: true # TODO: remove the `optional` part after the old holder column is gone
+  belongs_to :venue_room
   belongs_to :round, optional: true
-  belongs_to :parent_activity, class_name: "ScheduleActivity", optional: true
-  has_many :child_activities, class_name: "ScheduleActivity", as: :holder, dependent: :destroy
+  belongs_to :parent_activity, class_name: "ScheduleActivity", optional: true, inverse_of: :child_activities
+  has_many :child_activities, class_name: "ScheduleActivity", foreign_key: :parent_activity_id, inverse_of: :parent_activity, dependent: :destroy
   has_many :wcif_extensions, as: :extendable, dependent: :delete_all
   has_many :assignments, dependent: :delete_all
 
@@ -18,18 +17,26 @@ class ScheduleActivity < ApplicationRecord
   validates :end_time, presence: { allow_blank: false }
   validates :activity_code, presence: { allow_blank: false }
   # TODO: we don't yet care for scramble_set_id
-  validate :included_in_parent_schedule
-  validate :valid_activity_code
-  delegate :color, to: :holder
+  delegate :color, to: :venue_room
 
+  validate :included_in_competition_dates
+  def included_in_competition_dates
+    errors.add(:start_time, "should be after competition's start_time") unless start_time >= venue_room.start_time
+    errors.add(:end_time, "should be before competition's end_time") unless end_time <= venue_room.end_time
+  end
+
+  validate :included_in_parent_schedule, if: :parent_activity_id?
   def included_in_parent_schedule
-    return if errors.present?
+    errors.add(:start_time, "should be after parent's start_time") unless start_time >= parent_activity.start_time
+    errors.add(:end_time, "should be before parent's end_time") unless end_time <= parent_activity.end_time
+  end
 
-    errors.add(:start_time, "should be after parent's start_time") unless start_time >= holder.start_time
-    errors.add(:end_time, "should be before parent's end_time") unless end_time <= holder.end_time
+  validate :start_before_end
+  def start_before_end
     errors.add(:end_time, "should be after start_time") unless start_time <= end_time
   end
 
+  validate :valid_activity_code
   def valid_activity_code
     return if errors.present?
 
@@ -40,10 +47,10 @@ class ScheduleActivity < ApplicationRecord
       errors.add(:activity_code, "is an invalid 'other' activity code") unless VALID_OTHER_ACTIVITY_CODE.include?(other_id)
     end
 
-    return unless holder.has_attribute?(:activity_code)
+    return if parent_activity.blank?
 
-    holder_activity_id = holder.activity_code.split('-').first
-    errors.add(:activity_code, "should share its base activity id with parent") unless activity_id == holder_activity_id
+    parent_activity_id = parent_activity.activity_code.split('-').first
+    errors.add(:activity_code, "should share its base activity id with parent") unless activity_id == parent_activity_id
   end
 
   # Name can be specified externally, but we may want to infer the activity name
@@ -96,17 +103,17 @@ class ScheduleActivity < ApplicationRecord
 
   # TODO: not a fan of how it works (= passing round information)
   def to_event(rounds_by_wcif_id = {})
-    raise "#to_event called for nested activity" unless holder.is_a?(VenueRoom)
+    raise "#to_event called for nested activity" unless parent_activity.nil?
 
     {
       title: localized_name(rounds_by_wcif_id),
-      roomId: holder.id,
-      roomName: holder.name,
-      venueName: holder.competition_venue.name,
+      roomId: venue_room_id,
+      roomName: venue_room.name,
+      venueName: venue_room.competition_venue.name,
       color: color,
       activityDetails: parsed_activity_code,
-      start: start_time.in_time_zone(holder.competition_venue.timezone_id),
-      end: end_time.in_time_zone(holder.competition_venue.timezone_id),
+      start: start_time.in_time_zone(venue_room.competition_venue.timezone_id),
+      end: end_time.in_time_zone(venue_room.competition_venue.timezone_id),
     }
   end
 
