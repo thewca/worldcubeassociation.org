@@ -141,6 +141,31 @@ module CheckRegionalRecords
           [current_event_id, current_competition_id, round_id, country_id, round.end_time, min] if record_at_time_of_round < min
         end
         [value_name, candidates]
+      else
+        # Currently takes (72175.1 ms) for all results, (16080.0 ms) when filtering for event_id
+        best_at_date = ActiveRecord::Base.connection.execute(<<~SQL)
+                                                  SELECT *
+                                                  FROM (
+                                                    SELECT
+                                                      results.*,
+                                                      result_timestamps.round_timestamp,
+                                                      ROW_NUMBER() OVER (
+                                                        PARTITION BY results.event_id, result_timestamps.round_timestamp
+                                                        ORDER BY results.#{value_column}
+                                                      ) AS best_rank
+                                                    FROM results
+                                                    INNER JOIN result_timestamps ON result_timestamps.result_id = results.id
+                                                    WHERE results.#{value_column} > 0
+                                                    #{event_id.present? ? "AND results.event_id = '#{event_id}'" : ''}
+                                                  ) ranked_results
+                                                  WHERE ranked_results.best_rank = 1
+        SQL
+        .to_a
+        candidates = best_at_date.filter_map do |current_event_id, current_competition_id, round_id, country_id, min, round_timestamp|
+          record_at_time_of_round = RegionalRecord.record_for(current_event_id, value_name, :NR, country_id: country_id, date: round_timestamp)
+          [current_event_id, current_competition_id, round_id, country_id, round_timestamp, min] if record_at_time_of_round < min
+        end
+        [value_name, candidates]
       end
     end
   end
