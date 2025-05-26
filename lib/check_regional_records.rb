@@ -126,6 +126,25 @@ module CheckRegionalRecords
 
   SOLUTION_TYPES = [[:best, 'single'], [:average, 'average']].freeze
 
+  def self.check_records_new_table(event_id = nil, competition_id = nil)
+    SOLUTION_TYPES.to_h do |value_column, value_name|
+      if competition_id.present?
+        competition = Competition.find(competition_id)
+        results = competition.results
+        results = competition.results.where(event_id: event_id) if event_id.present?
+        minimum_results_by_event = results.select("event_id, competition_id, round_id, country_id, MIN(#{value_column}) AS `value`")
+                                          .where.not(value_column => ..0)
+                                          .group("event_id, competition_id, round_id, country_id")
+        candidates = minimum_results_by_event.filter_map do |current_event_id, current_competition_id, round_id, country_id, min|
+          round = Round.find(round_id)
+          record_at_time_of_round = Record.record_for(current_event_id, value_name, :NR, country_id: country_id, date: round.end_time)
+          [current_event_id, current_competition_id, round_id, country_id, round.end_time, min] if record_at_time_of_round < min
+        end
+        [value_name, candidates]
+      end
+    end
+  end
+
   def self.check_records(event_id = nil, competition_id = nil)
     SOLUTION_TYPES.to_h do |value_column, value_name|
       # some helper symbols for further down
