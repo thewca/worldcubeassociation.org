@@ -61,6 +61,14 @@ class ScheduleActivity < ApplicationRecord
     errors.add(:activity_code, "should share its base activity id with parent") unless activity_id == parent_activity_id
   end
 
+  validate :consistent_round_information, if: :round_id?
+  def consistent_round_information
+    parts = self.parsed_activity_code
+
+    errors.add(:activity_code, "group should not be larger than the number of scramble sets") if parts[:group_number].present? && (parts[:group_number] > round.scramble_set_count)
+    errors.add(:activity_code, "attempt number should not be larger than the number of expected attempts") if parts[:group_number].present? && (parts[:group_number] > round.format.expected_solve_count)
+  end
+
   # Name can be specified externally, but we may want to infer the activity name
   # from its activity code (eg: if it's for an event or round).
   def localized_name(rounds_by_wcif_id = {})
