@@ -879,6 +879,30 @@ const customConfig = defineConfig({
                 flexGrow: "1",
               },
             },
+            slider: {
+              root: {
+                width: "100%",
+              },
+              content: {
+                _vertical: {
+                  ps: "0px",
+                },
+                width: "100%",
+              },
+              trigger: {
+                p: "0px",
+                width: "1rem",
+                height: "1rem",
+                bg: "white/50",
+                cursor: "pointer",
+                minWidth: "1rem",
+                borderRadius: "0.5rem",
+                _selected: {
+                  bg: "white",
+
+                }
+              }
+            }
           },
         },
       },

@@ -11,6 +11,7 @@ import {
   Image,
   VStack,
   Badge,
+  Tabs,
 } from "@chakra-ui/react";
 
 import Flag from "react-world-flags";
@@ -22,6 +23,39 @@ import RegisterIcon from "@/components/icons/RegisterIcon";
 import LocationIcon from "@/components/icons/LocationIcon";
 
 export default async function home() {
+  const slides = [
+    {
+      id: "tab1",
+      image:
+        "newcomer.png",
+      title: "“I Can’t Wait for the next one!”",
+      description:
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+      subtitle: "John Doe",
+      colorPalette: "green",
+    },
+    {
+      id: "tab2",
+      image:
+        "newcomer.png",
+      title: "“Best Event Ever!”",
+      description:
+        "Aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
+      subtitle: "John Doe",
+        colorPalette: "blue",
+    },
+    {
+      id: "tab3",
+      image:
+        "newcomer.png",
+      title: "“Loved every second”",
+      description:
+        "Officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit voluptatem.",
+      subtitle: "John Doe",
+        colorPalette: "orange",
+    },
+  ];
+
   return (
     <SimpleGrid columns={1} rows={6} gap={8} p={8}>
       <Card.Root
@@ -224,30 +258,60 @@ export default async function home() {
 
       <SimpleGrid columns={3} rows={1} gap={8}>
         <GridItem colSpan={2} display="flex">
-          <Card.Root
-            variant="info"
-            flexDirection="row"
-            overflow="hidden"
-            colorPalette="green"
-          >
-            <Image
-              src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80"
-              alt="Green double couch with wooden legs"
-              maxW="1/3"
-            />
-            <Card.Body>
-              <Card.Title>
-                &ldquo;I Can&apos;t Wait for the next one!&ldquo;
-              </Card.Title>
-              <Separator size="md" />
-              <Card.Description>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                nisi ut aliquip ex ea commodo consequat.
-              </Card.Description>
-            </Card.Body>
-          </Card.Root>
+          <Tabs.Root defaultValue="tab1" variant="slider" orientation="vertical">
+            <Card.Root
+              variant="info"
+              flexDirection="row"
+              overflow="hidden"
+              colorPalette={slides.find((s) => s.id === "tab1")?.colorPalette} // Default
+              position="relative"
+              width="full"
+            >
+              {/* Tab Triggers (Dots) */}
+              <Tabs.List asChild>
+                <Box
+                  position="absolute"
+                  right="6"
+                  top="50%"
+                  transform="translateY(-50%)"
+                  display="flex"
+                  flexDirection="column"
+                  gap="2"
+                  zIndex="10"
+                >
+                  {slides.map((slide) => (
+                    <Tabs.Trigger value={slide.id} key={slide.id}>
+                    </Tabs.Trigger>
+                  ))}
+                </Box>
+              </Tabs.List>
+
+              {/* Tab Content */}
+              {slides.map((slide) => (
+                <Tabs.Content value={slide.id} key={slide.id} asChild>
+                  <Card.Root
+                    variant="info"
+                    flexDirection="row"
+                    overflow="hidden"
+                    colorPalette={slide.colorPalette}
+                  >
+                    <Image
+                      src={slide.image}
+                      alt={slide.title}
+                      maxW="1/3"
+                      objectFit="cover"
+                    />
+                    <Card.Body pr="3em">
+                      <Card.Title>{slide.title}</Card.Title>
+                      <Separator size="md" />
+                      <Card.Description>{slide.description}</Card.Description>
+                      <Text>{slide.subtitle}</Text>
+                    </Card.Body>
+                  </Card.Root>
+                </Tabs.Content>
+              ))}
+            </Card.Root>
+        </Tabs.Root>
         </GridItem>
         <GridItem colSpan={1} display="flex">
           <Card.Root variant="info">
