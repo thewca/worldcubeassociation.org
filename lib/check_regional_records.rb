@@ -137,7 +137,7 @@ module CheckRegionalRecords
                                           .group("event_id, competition_id, round_id, country_id")
         candidates = minimum_results_by_event.filter_map do |current_event_id, current_competition_id, round_id, country_id, min|
           round = Round.find(round_id)
-          record_at_time_of_round = Record.record_for(current_event_id, value_name, :NR, country_id: country_id, date: round.end_time)
+          record_at_time_of_round = RegionalRecord.record_for(current_event_id, value_name, :NR, country_id: country_id, date: round.end_time)
           [current_event_id, current_competition_id, round_id, country_id, round.end_time, min] if record_at_time_of_round < min
         end
         [value_name, candidates]

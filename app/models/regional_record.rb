@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Record < ApplicationRecord
+class RegionalRecord < ApplicationRecord
   RECORD_SCOPES = %w[WR CR NR].freeze
   RECORD_TYPES = %w[single average].freeze
 
