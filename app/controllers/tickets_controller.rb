@@ -181,7 +181,7 @@ class TicketsController < ApplicationController
 
     ActiveRecord::Base.transaction do
       new_wca_id = person&.anonymize
-      users_to_anonymize.each { |user| user.anonymize(new_wca_id) }
+      users_to_anonymize.each { |user_to_anonymize| user_to_anonymize.anonymize(new_wca_id) }
     end
 
     render json: {
