@@ -45,7 +45,7 @@ module Admin
 
       render json: results_scope.as_json(
         only: %i[id competition_id competition_name],
-        methods: %i[event_id person_name round_type_id]
+        methods: %i[event_id person_name round_type_id],
       )
     end
 

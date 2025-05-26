@@ -188,7 +188,7 @@ Rails.application.routes.draw do
 
   get 'persons/new_id' => 'admin/persons#generate_ids'
   get '/persons/results' => 'admin/persons#results', as: :person_results
-  resources :persons, only: [:index, :show]
+  resources :persons, only: %i[index show]
   post 'persons' => 'admin/persons#create'
 
   resources :polls, only: %i[edit new vote create update index destroy]
