@@ -18,7 +18,7 @@ class AddRecordComputationTables < ActiveRecord::Migration[7.2]
     end
 
     create_table :result_timestamps do |t|
-      t.references :result, null: false, index: true
+      t.references :result, null: false, index: { unique: true }
       t.date :round_timestamp, null: false
       t.index %i[result_id round_timestamp]
       t.timestamps

@@ -248,12 +248,7 @@ class Round < ApplicationRecord
   end
 
   def schedule
-    ScheduleActivity
-      .where(holder_type: 'VenueRoom')
-      .joins("INNER JOIN venue_rooms ON venue_rooms.id = schedule_activities.holder_id")
-      .joins("INNER JOIN competition_venues ON competition_venues.id = venue_rooms.competition_venue_id")
-      .where(competition_venues: { competition_id: competition_id })
-      .where("activity_code LIKE ?", "#{wcif_id}%")
+    ScheduleActivity.where(round_id: self.id)
   end
 
   def to_string_map(short: false)

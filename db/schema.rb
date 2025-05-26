@@ -1087,7 +1087,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_05_26_015242) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["result_id", "round_timestamp"], name: "index_result_timestamps_on_result_id_and_round_timestamp"
-    t.index ["result_id"], name: "index_result_timestamps_on_result_id"
+    t.index ["result_id"], name: "index_result_timestamps_on_result_id", unique: true
   end
 
   create_table "results", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB PACK_KEYS=1", force: :cascade do |t|
