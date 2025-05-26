@@ -15,7 +15,7 @@ class ScheduleActivity < ApplicationRecord
   scope :root_activities, -> { where(parent_activity_id: nil) }
 
   validates :name, presence: true
-  validates :wcif_id, numericality: { only_integer: true }
+  validates :wcif_id, numericality: { only_integer: true }, uniqueness: { scope: :venue_room_id }
   validates :start_time, presence: { allow_blank: false }
   validates :end_time, presence: { allow_blank: false }
   validates :activity_code, presence: { allow_blank: false }

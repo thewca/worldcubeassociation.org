@@ -44,4 +44,25 @@ namespace :schedule_activities do
       )
     end
   end
+
+  desc "Overwrite duplicated wcif_id within the same schedule"
+  task fix_duplicate_wcif_ids: :environment do
+    ScheduleActivity.find_each do |activity|
+      next if activity.valid?
+
+      wcif_id_errors = activity.errors.details[:wcif_id]
+      next if wcif_id_errors.blank?
+
+      wcif_id_duplicated = wcif_id_errors.any? { it[:error] == :taken }
+      next unless wcif_id_duplicated
+
+      increment_id = ScheduleActivity.where(venue_room_id: activity.venue_room_id).maximum(:wcif_id) + 1
+      puts "Updating activity #{activity.id} to wcif_id #{increment_id}"
+
+      activity.update_column(
+        :wcif_id,
+        increment_id,
+      )
+    end
+  end
 end
