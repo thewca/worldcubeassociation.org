@@ -10,6 +10,7 @@ import {
   Portal,
   Badge,
   VStack,
+  Heading,
 } from "@chakra-ui/react";
 
 import Flag from "react-world-flags";
@@ -142,7 +143,7 @@ const CompetitionTableEntry: React.FC<Props> = ({ comp }) => {
           <Drawer.Positioner padding="4">
             <Drawer.Content>
               <Drawer.Header>
-                <Drawer.Title>{comp.name}</Drawer.Title>
+                <Heading size="3xl">{comp.name}</Heading>
               </Drawer.Header>
               <Drawer.Body>
                 <VStack alignItems="start">
@@ -179,7 +180,7 @@ const CompetitionTableEntry: React.FC<Props> = ({ comp }) => {
                   />
                 ))}
               </Drawer.Body>
-              <Drawer.Footer>
+              <Drawer.Footer justifyContent="space-between" width="full">
                 <Button variant="outline">Register Now</Button>
                 <Button variant="solid">View Competition</Button>
               </Drawer.Footer>

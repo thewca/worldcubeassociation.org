@@ -671,6 +671,29 @@ const customConfig = defineConfig({
           },
         ],
       },
+      checkboxCard: {
+        variants: {
+          size: {
+            xs: {
+              root: {
+                textStyle: "xs",
+              },
+              control: {
+                padding: "1",
+                gap: "0.5",
+              },
+              addon: {
+                px: "1.5",
+                py: "0.5",
+                borderTopWidth: "1px",
+              },
+              indicator: {
+                boxSize: "2",
+              },
+            },
+          },
+        },
+      },
       segmentGroup: {
         variants: {
           variant: {
@@ -684,7 +707,7 @@ const customConfig = defineConfig({
                 fontWeight: "600",
                 border: "2px solid",
                 borderColor: "colorPalette.solid",
-                color: "colorPalette.solid",
+                color: "colorPalette.highContrast",
                 bg: "transparent",
                 borderRadius: "0",
                 transition: "all 250ms",

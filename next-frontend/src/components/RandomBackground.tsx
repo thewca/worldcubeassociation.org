@@ -43,7 +43,12 @@ const RandomBackground = ({
               const randomColor = getColor(randomNumber / colorPickThreshold);
 
               return (
-                <Box width="2.5vw" height="2.5vw" bg={randomColor} key={keyVal} />
+                <Box
+                  width="2.5vw"
+                  height="2.5vw"
+                  bg={randomColor}
+                  key={keyVal}
+                />
               );
             }
 
