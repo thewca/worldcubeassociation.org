@@ -2046,7 +2046,10 @@ class Competition < ApplicationRecord
       {
         venue_rooms: [
           :wcif_extensions,
-          { schedule_activities: [{ child_activities: %i[child_activities wcif_extensions] }, :wcif_extensions] },
+          {
+            schedule_activities: [{ child_activities: %i[child_activities wcif_extensions] }, :wcif_extensions],
+            competition: { competition_events: :rounds },
+          },
         ],
       },
       :wcif_extensions,
