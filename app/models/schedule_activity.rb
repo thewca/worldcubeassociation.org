@@ -105,11 +105,15 @@ class ScheduleActivity < ApplicationRecord
     }
   end
 
-  def load_wcif!(wcif)
-    update!(ScheduleActivity.wcif_to_attributes(wcif))
+  def load_wcif!(wcif, venue_room, parent_activity: nil)
+    update!(
+      venue_room: venue_room,
+      parent_activity: parent_activity,
+      **ScheduleActivity.wcif_to_attributes(wcif),
+    )
     new_child_activities = wcif["childActivities"].map do |activity_wcif|
       activity = child_activities.find { |a| a.wcif_id == activity_wcif["id"] } || child_activities.build
-      activity.load_wcif!(activity_wcif)
+      activity.load_wcif!(activity_wcif, venue_room, parent_activity: self)
     end
     self.child_activities = new_child_activities
     WcifExtension.update_wcif_extensions!(self, wcif["extensions"]) if wcif["extensions"]
