@@ -1184,10 +1184,11 @@ class User < ApplicationRecord
   def self.search(query, params: {})
     search_by_email = ActiveRecord::Type::Boolean.new.cast(params[:email])
     admin_search = ActiveRecord::Type::Boolean.new.cast(params[:adminSearch])
+    searching_persons_table = ActiveRecord::Type::Boolean.new.cast(params[:persons_table])
 
     return User.where(email: query) if admin_search && search_by_email
 
-    if ActiveRecord::Type::Boolean.new.cast(params[:persons_table])
+    if searching_persons_table
       users = Person.includes(:user).current
       search_by_email = false # We can't search by email on the 'Person' table
     else
