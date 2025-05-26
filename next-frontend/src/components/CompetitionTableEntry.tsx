@@ -11,7 +11,7 @@ import {
   Badge,
   VStack,
   Heading,
-  Float
+  Float,
 } from "@chakra-ui/react";
 
 import Flag from "react-world-flags";
@@ -145,7 +145,12 @@ const CompetitionTableEntry: React.FC<Props> = ({ comp }) => {
           <Drawer.Positioner padding="4">
             <Drawer.Content overflow="hidden">
               {/* TODO: Make this float only visible for Championship competitions */}
-              <Float placement="middle-end" offsetX="20" fontSize="21vw" opacity="0.1" >
+              <Float
+                placement="middle-end"
+                offsetX="20"
+                fontSize="21vw"
+                opacity="0.1"
+              >
                 <NationalChampionshipIcon />
               </Float>
               <Drawer.Header>

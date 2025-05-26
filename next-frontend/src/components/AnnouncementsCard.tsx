@@ -1,4 +1,4 @@
-import { Box, Button, Flex, Heading, Link, Text, VStack, Card, Separator } from "@chakra-ui/react";
+import { Button, Flex, Link, Text, VStack, Card } from "@chakra-ui/react";
 import { MarkdownProse } from "@/components/Markdown";
 
 export default function AnnouncementsCard({
@@ -25,13 +25,11 @@ export default function AnnouncementsCard({
         flex="2"
       >
         <Card.Body bg="blue.100" color="blue.fg">
-          <Card.Title >{hero.title}</Card.Title>
+          <Card.Title>{hero.title}</Card.Title>
           <Text fontSize="sm" mt={1}>
             Posted by {hero.postedBy} · {hero.postedAt}
           </Text>
-          <Card.Description>
-            <MarkdownProse content={hero.markdown}/>
-          </Card.Description>
+          <MarkdownProse content={hero.markdown} />
           <Button mt="auto" mr="auto" as={Link} href={hero.fullLink}>
             Read full article
           </Button>
@@ -39,27 +37,27 @@ export default function AnnouncementsCard({
       </Card.Root>
 
       {/* OTHER ANNOUNCEMENTS */}
-        <VStack align="start" spacing={3}>
+      <VStack align="start" spacing={3}>
         {others.map((a, i) => (
-            <Button
-                key={i}
-                href={a.href}
-                variant="solid"
-                width="full"
-                justifyContent="flex-start"
-            >
+          <Button
+            key={i}
+            href={a.href}
+            variant="solid"
+            width="full"
+            justifyContent="flex-start"
+          >
             {a.title}
-            </Button>
+          </Button>
         ))}
-            <Button
-                href="#"
-                variant="solid"
-                width="full"
-                justifyContent="flex-start"
-            >
-            See All Announcements
-            </Button>
-        </VStack>
+        <Button
+          href="#"
+          variant="solid"
+          width="full"
+          justifyContent="flex-start"
+        >
+          See All Announcements
+        </Button>
+      </VStack>
     </Flex>
   );
 }

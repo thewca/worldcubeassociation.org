@@ -16,7 +16,7 @@ import {
 
 import Flag from "react-world-flags";
 import CountryMap from "@/components/CountryMap";
-import AnnouncementsCard from "@/components/AnnouncementsCard"
+import AnnouncementsCard from "@/components/AnnouncementsCard";
 
 import CompRegoCloseDateIcon from "@/components/icons/CompRegoCloseDateIcon";
 import CompetitorsIcon from "@/components/icons/CompetitorsIcon";
@@ -27,8 +27,7 @@ export default async function home() {
   const slides = [
     {
       id: "tab1",
-      image:
-        "newcomer.png",
+      image: "newcomer.png",
       title: "“I Can’t Wait for the next one!”",
       description:
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
@@ -37,23 +36,21 @@ export default async function home() {
     },
     {
       id: "tab2",
-      image:
-        "newcomer.png",
+      image: "newcomer.png",
       title: "“Best Event Ever!”",
       description:
         "Aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
       subtitle: "John Doe",
-        colorPalette: "blue",
+      colorPalette: "blue",
     },
     {
       id: "tab3",
-      image:
-        "newcomer.png",
+      image: "newcomer.png",
       title: "“Loved every second”",
       description:
         "Officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit voluptatem.",
       subtitle: "John Doe",
-        colorPalette: "orange",
+      colorPalette: "orange",
     },
   ];
 
@@ -256,7 +253,7 @@ export default async function home() {
             postedBy: "Mitchell Anderson",
             postedAt: "May 25, 2025",
             markdown: `**Get ready!**\n\nThe next WCA World Championship is coming to Sydney 🇦🇺. More details soon.`,
-            fullLink: "/articles/world-champs-2025"
+            fullLink: "/articles/world-champs-2025",
           }}
           others={[
             {
@@ -274,7 +271,11 @@ export default async function home() {
       <SimpleGrid columns={3} rows={1} gap={8}>
         <GridItem colSpan={2} display="flex">
           {/* TODO - make this changel slide every so often automatically */}
-          <Tabs.Root defaultValue="tab1" variant="slider" orientation="vertical">
+          <Tabs.Root
+            defaultValue="tab1"
+            variant="slider"
+            orientation="vertical"
+          >
             <Card.Root
               variant="info"
               flexDirection="row"
@@ -296,8 +297,10 @@ export default async function home() {
                   zIndex="10"
                 >
                   {slides.map((slide) => (
-                    <Tabs.Trigger value={slide.id} key={slide.id}>
-                    </Tabs.Trigger>
+                    <Tabs.Trigger
+                      value={slide.id}
+                      key={slide.id}
+                    ></Tabs.Trigger>
                   ))}
                 </Box>
               </Tabs.List>
@@ -327,7 +330,7 @@ export default async function home() {
                 </Tabs.Content>
               ))}
             </Card.Root>
-        </Tabs.Root>
+          </Tabs.Root>
         </GridItem>
         <GridItem colSpan={1} display="flex">
           <Card.Root variant="info">

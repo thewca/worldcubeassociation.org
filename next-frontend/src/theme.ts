@@ -899,10 +899,9 @@ const customConfig = defineConfig({
                 borderRadius: "0.5rem",
                 _selected: {
                   bg: "white",
-
-                }
-              }
-            }
+                },
+              },
+            },
           },
         },
       },
