@@ -6,7 +6,7 @@ class VenueRoom < ApplicationRecord
   belongs_to :competition_venue
   has_one :competition, through: :competition_venue
   delegate :start_time, :end_time, to: :competition
-  has_many :schedule_activities, dependent: :destroy
+  has_many :schedule_activities, -> { root_activities }, dependent: :destroy
   has_many :wcif_extensions, as: :extendable, dependent: :delete_all
 
   validates :color, format: { with: /\A#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})\z/, message: "Please input a valid hexadecimal color code" }

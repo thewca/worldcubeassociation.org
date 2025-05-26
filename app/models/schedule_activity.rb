@@ -11,6 +11,8 @@ class ScheduleActivity < ApplicationRecord
   has_many :wcif_extensions, as: :extendable, dependent: :delete_all
   has_many :assignments, dependent: :delete_all
 
+  scope :root_activities, -> { where(parent_activity_id: nil) }
+
   validates :name, presence: true
   validates :wcif_id, numericality: { only_integer: true }
   validates :start_time, presence: { allow_blank: false }
