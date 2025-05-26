@@ -29,6 +29,8 @@ import CompRegoFullButOpenOrangeIcon from "@/components/icons/CompRegoFullButOpe
 import CompRegoNotFullOpenGreenIcon from "@/components/icons/CompRegoNotFullOpen_greenIcon";
 import CompRegoNotOpenYetGreyIcon from "@/components/icons/CompRegoNotOpenYet_greyIcon";
 import CompRegoClosedRedIcon from "@/components/icons/CompRegoClosed_redIcon";
+import CompRegoOpenDateIcon from "@/components/icons/CompRegoOpenDateIcon";
+import CompRegoCloseDateIcon from "@/components/icons/CompRegoCloseDateIcon";
 import { countryCodeMapping } from "@/components/CountryMap";
 import EventIcon from "@/components/EventIcon";
 
@@ -146,7 +148,7 @@ export default function CompetitionsClient({ competitions }) {
     <Container>
       <VStack gap="8" width="full" pt="8" alignItems="left">
         <RemovableCard
-          imageUrl="https://ando527.github.io/wcaWireframes/images/newcomer.png"
+          imageUrl="newcomer.png"
           heading="Why Compete?"
           description="This section will only be visible to new visitors..."
           buttonText="Learn More"
@@ -195,12 +197,23 @@ export default function CompetitionsClient({ competitions }) {
                         </Combobox.Positioner>
                       </Portal>
                     </Combobox.Root>
+                    {/* TODO: replace these buttons with DatePicker (Chakra does not have one by default) */}
+                    <Button variant="outline">
+                      <CompRegoOpenDateIcon />
+                      Date From
+                    </Button>
+                    <Button variant="outline">
+                      <CompRegoCloseDateIcon />
+                      Date To
+                    </Button>
+                    {/* TODO: add "accordion" functionality to this button */}
                     <Button variant="outline" size="sm">
                       Advanced Filters
                     </Button>
                   </Flex>
 
                   <Flex gap="2" width="full" alignItems="flex-start">
+                    {/* TODO: Remove Disabled parameter when user has location info shared */}
                     <Slider.Root
                       width="250px"
                       colorPalette="blue"
