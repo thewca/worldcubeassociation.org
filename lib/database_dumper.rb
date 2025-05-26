@@ -463,9 +463,12 @@ module DatabaseDumper
           id
           holder_type
           holder_id
+          venue_room_id
+          parent_activity_id
           wcif_id
           name
           activity_code
+          round_id
           start_time
           end_time
           scramble_set_id
