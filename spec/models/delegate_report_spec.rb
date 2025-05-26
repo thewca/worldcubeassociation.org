@@ -85,7 +85,7 @@ RSpec.describe DelegateReport do
       end
 
       it "can view delegate report with posted report" do
-        posted_dummy_dr = create(:delegate_report, :posted, competition: competition, discussion_url: "http://example.com")
+        posted_dummy_dr = create(:delegate_report, :posted, competition: competition)
         competition.delegate_report.update!(schedule_url: "http://example.com", posted: true, setup_images: posted_dummy_dr.setup_images_blobs)
 
         expect(other_delegate.can_view_delegate_report?(competition.delegate_report)).to be true
