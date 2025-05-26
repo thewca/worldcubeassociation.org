@@ -446,31 +446,32 @@ FactoryBot.define do
           # on the other day.
           start_time = Time.zone.local_to_utc(competition.end_date.to_time)
           end_time = start_time
+          arbitrary_round = competition.competition_events.sample.rounds.sample
           activity = first_room.schedule_activities.create!(
             wcif_id: 2,
             name: "another activity",
-            activity_code: "333fm-r1",
+            activity_code: "#{arbitrary_round.event.id}-r1",
             start_time: start_time.change(hour: 10, min: 0, sec: 0).iso8601,
             end_time: end_time.change(hour: 11, min: 0, sec: 0).iso8601,
           )
           activity.child_activities.create!(
             wcif_id: 3,
             name: "first group",
-            activity_code: "333fm-r1-g1",
+            activity_code: "#{arbitrary_round.event.id}-r1-g1",
             start_time: start_time.change(hour: 10, min: 0, sec: 0).iso8601,
             end_time: end_time.change(hour: 10, min: 30, sec: 0).iso8601,
           )
           nested_activity = activity.child_activities.create!(
             wcif_id: 4,
             name: "second group",
-            activity_code: "333fm-r1-g2",
+            activity_code: "#{arbitrary_round.event.id}-r1-g2",
             start_time: start_time.change(hour: 10, min: 30, sec: 0).iso8601,
             end_time: end_time.change(hour: 11, min: 0, sec: 0).iso8601,
           )
           nested_activity.child_activities.create!(
             wcif_id: 5,
             name: "some nested thing",
-            activity_code: "333fm-r1-g2-a1",
+            activity_code: "#{arbitrary_round.event.id}-r1-g2-a1",
             start_time: start_time.change(hour: 10, min: 30, sec: 0).iso8601,
             end_time: end_time.change(hour: 11, min: 0, sec: 0).iso8601,
           )
@@ -486,6 +487,7 @@ FactoryBot.define do
               wcif_id: current_activity_id,
               name: "Great round",
               activity_code: r.wcif_id,
+              round: r,
               start_time: start_time.change(hour: 10, min: 30, sec: 0).iso8601,
               end_time: end_time.change(hour: 11, min: 0, sec: 0).iso8601,
             )
