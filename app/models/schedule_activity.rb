@@ -5,6 +5,7 @@ class ScheduleActivity < ApplicationRecord
   VALID_ACTIVITY_CODE_BASE = (Event::OFFICIAL_IDS + %w[other]).freeze
   VALID_OTHER_ACTIVITY_CODE = %w[registration checkin multi breakfast lunch dinner awards unofficial misc tutorial setup teardown].freeze
   belongs_to :holder, polymorphic: true
+  belongs_to :venue_room, optional: true # TODO: remove the `optional` part after the old holder column is gone
   belongs_to :parent_activity, class_name: "ScheduleActivity", optional: true
   has_many :child_activities, class_name: "ScheduleActivity", as: :holder, dependent: :destroy
   has_many :wcif_extensions, as: :extendable, dependent: :delete_all
