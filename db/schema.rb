@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_05_20_093305) do
+ActiveRecord::Schema[7.2].define(version: 2025_05_26_015242) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -1185,9 +1185,12 @@ ActiveRecord::Schema[7.2].define(version: 2025_05_20_093305) do
   create_table "schedule_activities", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "holder_type", null: false
     t.bigint "holder_id", null: false
+    t.bigint "venue_room_id"
+    t.bigint "parent_activity_id"
     t.integer "wcif_id", null: false
     t.string "name", null: false
     t.string "activity_code", null: false
+    t.integer "round_id"
     t.datetime "start_time", precision: nil, null: false
     t.datetime "end_time", precision: nil, null: false
     t.integer "scramble_set_id"
@@ -1195,6 +1198,9 @@ ActiveRecord::Schema[7.2].define(version: 2025_05_20_093305) do
     t.datetime "updated_at", precision: nil, null: false
     t.index ["holder_type", "holder_id", "wcif_id"], name: "index_activities_on_their_id_within_holder", unique: true
     t.index ["holder_type", "holder_id"], name: "index_schedule_activities_on_holder_type_and_holder_id"
+    t.index ["parent_activity_id"], name: "index_schedule_activities_on_parent_activity_id"
+    t.index ["round_id"], name: "index_schedule_activities_on_round_id"
+    t.index ["venue_room_id"], name: "index_schedule_activities_on_venue_room_id"
   end
 
   create_table "scramble_file_uploads", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
@@ -1517,6 +1523,9 @@ ActiveRecord::Schema[7.2].define(version: 2025_05_20_093305) do
   add_foreign_key "registration_history_changes", "registration_history_entries"
   add_foreign_key "sanity_check_exclusions", "sanity_checks"
   add_foreign_key "sanity_checks", "sanity_check_categories"
+  add_foreign_key "schedule_activities", "rounds"
+  add_foreign_key "schedule_activities", "schedule_activities", column: "parent_activity_id"
+  add_foreign_key "schedule_activities", "venue_rooms"
   add_foreign_key "scramble_file_uploads", "users", column: "uploaded_by"
   add_foreign_key "stripe_records", "stripe_records", column: "parent_record_id"
   add_foreign_key "stripe_webhook_events", "stripe_records"

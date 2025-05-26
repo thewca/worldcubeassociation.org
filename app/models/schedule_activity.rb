@@ -5,6 +5,9 @@ class ScheduleActivity < ApplicationRecord
   VALID_ACTIVITY_CODE_BASE = (Event::OFFICIAL_IDS + %w[other]).freeze
   VALID_OTHER_ACTIVITY_CODE = %w[registration checkin multi breakfast lunch dinner awards unofficial misc tutorial setup teardown].freeze
   belongs_to :holder, polymorphic: true
+  belongs_to :venue_room, optional: true # TODO: remove the `optional` part after the old holder column is gone
+  belongs_to :round, optional: true
+  belongs_to :parent_activity, class_name: "ScheduleActivity", optional: true
   has_many :child_activities, class_name: "ScheduleActivity", as: :holder, dependent: :destroy
   has_many :wcif_extensions, as: :extendable, dependent: :delete_all
   has_many :assignments, dependent: :delete_all
@@ -46,7 +49,7 @@ class ScheduleActivity < ApplicationRecord
   # Name can be specified externally, but we may want to infer the activity name
   # from its activity code (eg: if it's for an event or round).
   def localized_name(rounds_by_wcif_id = {})
-    parts = ScheduleActivity.parse_activity_code(activity_code)
+    parts = self.parsed_activity_code
     if parts[:event_id] == "other"
       # TODO/NOTE: should we fix the name for event with predefined activity codes? (ie: those below but 'misc' and 'unofficial')
       # VALID_OTHER_ACTIVITY_CODE = %w(registration checkin multi breakfast lunch dinner awards unofficial misc).freeze
@@ -71,6 +74,14 @@ class ScheduleActivity < ApplicationRecord
     [self, child_activities.map(&:all_activities)].flatten
   end
 
+  def root_activity
+    parent_activity&.root_activity || self
+  end
+
+  def parsed_activity_code
+    ScheduleActivity.parse_activity_code(self.activity_code)
+  end
+
   def to_wcif
     {
       "id" => wcif_id,
@@ -93,21 +104,37 @@ class ScheduleActivity < ApplicationRecord
       roomName: holder.name,
       venueName: holder.competition_venue.name,
       color: color,
-      activityDetails: ScheduleActivity.parse_activity_code(activity_code),
+      activityDetails: parsed_activity_code,
       start: start_time.in_time_zone(holder.competition_venue.timezone_id),
       end: end_time.in_time_zone(holder.competition_venue.timezone_id),
     }
   end
 
-  def load_wcif!(wcif)
-    update!(ScheduleActivity.wcif_to_attributes(wcif))
+  def load_wcif!(wcif, venue_room, parent_activity: nil)
+    update!(
+      venue_room: venue_room,
+      parent_activity: parent_activity,
+      **ScheduleActivity.wcif_to_attributes(wcif),
+    )
+    if self.activity_code_previously_changed?
+      round = parent_activity&.round || self.find_matched_round
+      self.update_attribute!(:round, round) if round.present?
+    end
     new_child_activities = wcif["childActivities"].map do |activity_wcif|
       activity = child_activities.find { |a| a.wcif_id == activity_wcif["id"] } || child_activities.build
-      activity.load_wcif!(activity_wcif)
+      activity.load_wcif!(activity_wcif, venue_room, parent_activity: self)
     end
     self.child_activities = new_child_activities
     WcifExtension.update_wcif_extensions!(self, wcif["extensions"]) if wcif["extensions"]
     self
+  end
+
+  private def find_matched_round
+    # Using `find` instead of `find_by` throughout to leverage preloaded associations
+    competition_event = venue_room.competition.competition_events.find { it.event_id == self.parsed_activity_code[:event_id] }
+    return nil if competition_event.blank?
+
+    competition_event.rounds.find { it.number == self.parsed_activity_code[:round_number] }
   end
 
   def move_by(diff)
