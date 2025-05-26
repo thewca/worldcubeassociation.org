@@ -3,6 +3,7 @@ import React, { useCallback } from 'react';
 import { QueryClient, useQueries } from '@tanstack/react-query';
 import {
   userSearchApiUrl,
+  userAdminSearchApiUrl,
   personSearchApiUrl,
   competitionSearchApiUrl,
   apiV0Urls,
@@ -116,7 +117,9 @@ export default function WcaSearch({
   const urlFn = useCallback((query) => {
     switch (model) {
       case SEARCH_MODELS.user:
-        return `${userSearchApiUrl(query)}&${new URLSearchParams(params).toString()}`;
+        return (params.adminSearch
+          ? `${userAdminSearchApiUrl(query)}&${new URLSearchParams(params).toString()}`
+          : `${userSearchApiUrl(query)}&${new URLSearchParams(params).toString()}`);
       case SEARCH_MODELS.person:
         return `${personSearchApiUrl(query)}&${new URLSearchParams(params).toString()}`;
       case SEARCH_MODELS.competition:
