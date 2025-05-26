@@ -71,16 +71,14 @@ class ScheduleActivity < ApplicationRecord
 
   # Name can be specified externally, but we may want to infer the activity name
   # from its activity code (eg: if it's for an event or round).
-  def localized_name(rounds_by_wcif_id = {})
+  def localized_name
     parts = self.parsed_activity_code
     if parts[:event_id] == "other"
       # TODO/NOTE: should we fix the name for event with predefined activity codes? (ie: those below but 'misc' and 'unofficial')
       # VALID_OTHER_ACTIVITY_CODE = %w(registration checkin multi breakfast lunch dinner awards unofficial misc).freeze
-      name
+      self.name
     else
-      inferred_name = Event.c_find(parts[:event_id]).name
-      round = rounds_by_wcif_id["#{parts[:event_id]}-r#{parts[:round_number]}"]
-      inferred_name = round[:name] if round
+      inferred_name = round&.name || Event.c_find(parts[:event_id]).name
       inferred_name += " (#{I18n.t('attempts.attempt_name', number: parts[:attempt_number])})" if parts[:attempt_number]
       inferred_name
     end
@@ -118,11 +116,11 @@ class ScheduleActivity < ApplicationRecord
   end
 
   # TODO: not a fan of how it works (= passing round information)
-  def to_event(rounds_by_wcif_id = {})
+  def to_event
     raise "#to_event called for nested activity" unless parent_activity.nil?
 
     {
-      title: localized_name(rounds_by_wcif_id),
+      title: localized_name,
       roomId: venue_room_id,
       roomName: venue_room.name,
       venueName: venue_room.competition_venue.name,
