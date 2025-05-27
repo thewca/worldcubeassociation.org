@@ -19,7 +19,14 @@ export function mergeScrambleSets(state, newScrambleFile) {
   return _.mergeWith(
     orderedScrambleSets,
     state,
-    (a, b) => _.uniqBy([...b, ...a], 'id'),
+    (a, b) => {
+      const aOrEmpty = a ?? [];
+      const bOrEmpty = b ?? [];
+
+      const merged = [...bOrEmpty, ...aOrEmpty];
+
+      return _.uniqBy(merged, 'id');
+    },
   );
 }
 
