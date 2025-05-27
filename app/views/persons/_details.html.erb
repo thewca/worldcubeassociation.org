@@ -30,6 +30,7 @@
           <%= content_tag :th, t('activerecord.attributes.person.gender') if @person.gender_visible? %>
           <th><%= t 'layouts.navigation.competitions' %></th>
           <th><%= t 'persons.show.completed_solves' %></th>
+          <%= content_tag :th, t('persons.show.organized_competitions') if @organized_competitions.any? %>
         </tr>
       </thead>
       <tbody>
@@ -38,6 +39,7 @@
         <%= content_tag :td, User::GENDER_LABEL_METHOD.call(@person.gender.to_sym) if @person.gender_visible? %>
         <td><%= @person.competitions.count %></td>
         <td><%= @person.completed_solves_count %></td>
+        <%= content_tag :td, @organized_competitions.count if @organized_competitions.any? %>
       </tbody>
     </table>
   </div>
