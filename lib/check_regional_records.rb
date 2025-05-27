@@ -132,13 +132,14 @@ module CheckRegionalRecords
         competition = Competition.find(competition_id)
         results = competition.results
         results = competition.results.where(event_id: event_id) if event_id.present?
-        minimum_results_by_event = results.select("event_id, competition_id, round_id, country_id, MIN(#{value_column}) AS `value`")
+        minimum_results_by_event = results.select("id, event_id, competition_id, round_type_id, country_id, MIN(#{value_column}) AS `value`")
                                           .where.not(value_column => ..0)
-                                          .group("event_id, competition_id, round_id, country_id")
-        candidates = minimum_results_by_event.filter_map do |current_event_id, current_competition_id, round_id, country_id, min|
-          round = Round.find(round_id)
-          record_at_time_of_round = RegionalRecord.record_for(current_event_id, value_name, :NR, country_id: country_id, date: round.end_time)
-          [current_event_id, current_competition_id, round_id, country_id, round.end_time, min] if record_at_time_of_round < min
+                                          .group("id, event_id, competition_id, round_type_id, country_id")
+        timestamps = ResultTimestamp.where(result_id: minimum_results_by_event.ids)
+        candidates = minimum_results_by_event.filter_map do |result|
+          timestamp = timestamps.find { |t| t.result_id == result.id }.round_timestamp
+          record_at_time_of_round = RegionalRecord.record_for(result.event_id, value_name, :NR, country_id: result.country_id, date: timestamp)
+          [result.event_id, result.competition_id, result.round_type_id, result.country_id, timestamp, result.value] if record_at_time_of_round > result.value
         end
         [value_name, candidates]
       else
