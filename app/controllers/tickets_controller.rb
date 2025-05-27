@@ -180,9 +180,8 @@ class TicketsController < ApplicationController
     end
 
     ActiveRecord::Base.transaction do
-      person&.anonymize
-
-      users_to_anonymize.each(&:anonymize)
+      new_wca_id = person&.anonymize
+      users_to_anonymize.each { it.anonymize(new_wca_id) }
     end
 
     render json: {
