@@ -87,7 +87,7 @@ RSpec.describe FinishUnfinishedPersons, type: :module do
         allow(FinishUnfinishedPersons).to receive(:remove_accents).with('John Smith').and_return('John Smith')
         allow(Person).to receive(:where).with('wca_id LIKE ?', anything).and_return(
           double(pick: '2023SMIT99'),
-          )
+        )
       end
 
       it 'raises an error' do
