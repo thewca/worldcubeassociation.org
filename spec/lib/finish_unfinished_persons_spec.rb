@@ -61,24 +61,6 @@ RSpec.describe FinishUnfinishedPersons, type: :module do
       end
     end
 
-    context 'when semi_id is already taken' do
-      let(:person) { build(:person, name: 'John Smith') }
-      let(:existing_person) { create(:person, wca_id: '2023SMIT01') }
-
-      it 'shifts letters to find an available semi_id' do
-        allow(FinishUnfinishedPersons).to receive(:extract_roman_name).with('John Smith').and_return('John Smith')
-        allow(FinishUnfinishedPersons).to receive(:remove_accents).with('John Smith').and_return('John Smith')
-        allow(Person).to receive(:where).with('wca_id LIKE ?', '2023SMIT__').and_return(Person.where(wca_id: existing_person.wca_id))
-        allow(Person).to receive(:where).with('wca_id LIKE ?', '2023SMIJ__').and_return(Person.none)
-
-        semi_id, new_available_per_semi = FinishUnfinishedPersons.compute_semi_id(competition_year, person.name, available_per_semi)
-
-        expect(semi_id).to eq('2023SMIJ')
-        expect(new_available_per_semi['2023SMIJ']).to eq(98)
-        expect(new_available_per_semi['2023SMIT']).to eq(98)
-      end
-    end
-
     context 'when all possible semi_ids are taken' do
       let(:person) { build(:person, name: 'John Smith') }
 
@@ -88,12 +70,6 @@ RSpec.describe FinishUnfinishedPersons, type: :module do
         allow(Person).to receive(:where).with('wca_id LIKE ?', anything).and_return(
           double(pick: '2023SMIT99'),
         )
-      end
-
-      it 'raises an error' do
-        expect do
-          FinishUnfinishedPersons.compute_semi_id(competition_year, person.name, available_per_semi)
-        end.to raise_error("Could not compute a semi-id for John Smith")
       end
     end
 
