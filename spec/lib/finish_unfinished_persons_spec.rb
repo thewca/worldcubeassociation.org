@@ -61,18 +61,6 @@ RSpec.describe FinishUnfinishedPersons, type: :module do
       end
     end
 
-    context 'when all possible semi_ids are taken' do
-      let(:person) { build(:person, name: 'John Smith') }
-
-      before do
-        allow(FinishUnfinishedPersons).to receive(:extract_roman_name).with('John Smith').and_return('John Smith')
-        allow(FinishUnfinishedPersons).to receive(:remove_accents).with('John Smith').and_return('John Smith')
-        allow(Person).to receive(:where).with('wca_id LIKE ?', anything).and_return(
-          double(pick: '2023SMIT99'),
-        )
-      end
-    end
-
     context 'with a single name part' do
       let(:person) { build(:person, name: 'Madonna') }
 
