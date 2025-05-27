@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_05_26_015242) do
+ActiveRecord::Schema[7.2].define(version: 2025_05_27_130020) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -673,14 +673,14 @@ ActiveRecord::Schema[7.2].define(version: 2025_05_26_015242) do
     t.string "competition_id", null: false
     t.string "event_id", null: false
     t.string "round_type_id", null: false
+    t.integer "round_number", null: false
     t.integer "scramble_set_number", null: false
     t.integer "ordered_index", null: false
     t.integer "matched_round_id"
     t.bigint "external_upload_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["competition_id", "event_id", "round_type_id", "scramble_set_number"], name: "idx_on_competition_id_event_id_round_type_id_ordere_68a2d4495c", unique: true
-    t.index ["competition_id", "event_id", "round_type_id"], name: "idx_on_competition_id_event_id_round_type_id_8b43d7b7e6"
+    t.index ["competition_id", "event_id", "round_number"], name: "idx_on_competition_id_event_id_round_number_063e808d5f"
     t.index ["competition_id"], name: "index_inbox_scramble_sets_on_competition_id"
     t.index ["event_id"], name: "fk_rails_7a55abc2f3"
     t.index ["external_upload_id"], name: "index_inbox_scramble_sets_on_external_upload_id"
