@@ -30,10 +30,6 @@ FactoryBot.define do
       gender { "" }
     end
 
-    trait :no_wca_id do
-      wca_id { nil }
-    end
-
     factory :person_with_multiple_sub_ids do
       after(:create) do |person|
         name = person.name
