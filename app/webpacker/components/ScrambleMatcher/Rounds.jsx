@@ -4,7 +4,7 @@ import { activityCodeToName } from '@wca/helpers';
 import ScrambleMatch from './ScrambleMatch';
 import I18n from '../../lib/i18n';
 import Groups from './Groups';
-import { events, roundTypes } from '../../lib/wca-data.js.erb';
+import { events } from '../../lib/wca-data.js.erb';
 import { useDispatchWrapper } from './reducer';
 
 const prefixForIndex = (index) => {
@@ -13,7 +13,7 @@ const prefixForIndex = (index) => {
   return prefixForIndex(Math.floor(index / 26) - 1) + char;
 };
 
-const scrambleSetToName = (scrambleSet) => `${events.byId[scrambleSet.event_id].name} ${roundTypes.byId[scrambleSet.round_type_id].name} - ${prefixForIndex(scrambleSet.scramble_set_number - 1)}`;
+const scrambleSetToName = (scrambleSet) => `${events.byId[scrambleSet.event_id].name} Round ${scrambleSet.round_number} Scramble Set ${prefixForIndex(scrambleSet.scramble_set_number - 1)}`;
 
 export default function Rounds({
   wcifRounds,

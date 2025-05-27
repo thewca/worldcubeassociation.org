@@ -14,14 +14,17 @@ class InboxScrambleSet < ApplicationRecord
 
   before_validation :backfill_round_information!, if: :matched_round_id?
 
-  delegate :wcif_id, to: :matched_round, prefix: true, allow_nil: true
-
   def backfill_round_information!
     return if matched_round.blank?
 
     self.competition_id = matched_round.competition_id
     self.event_id = matched_round.event_id
     self.round_type_id = matched_round.round_type_id
+    self.round_number = matched_round.number
+  end
+
+  def matched_round_wcif_id
+    matched_round&.wcif_id || "#{self.event_id}-r#{self.round_number}"
   end
 
   def alphabetic_group_index
