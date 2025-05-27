@@ -5,24 +5,18 @@ namespace :registrant_id do
   task :populate do
     Competition.all.each do |comp|
       puts "Populating registrant ID for #{comp.id}"
-      changes = comp.persons_wcif.map do |person|
-        { id: person['registration']['wcaRegistrationId'], registrant_id: person['registrantId'] } if
-          person['registration'].present?
-      end
 
-      ids = changes.map { it[:id] }
-      existing_ids = Registration.where(id: ids).pluck(:id)
-      missing_ids = ids - existing_ids
+      changes = comp.persons_wcif.filter_map do |person|
+        next if person['registration'].nil?
+        [person['registration']['wcaRegistrationId'], person['registrantId']]
+      end.to_h
 
-      puts "> Missing ids: "
-      puts missing_ids
-
-      puts "> Changes"
       puts changes
 
-      pp changes.reject { |c| c[:id].is_a?(Integer) && c[:registrant_id].present? }
-
-      Registration.upsert_all(changes)
+      ActiveRecord::Base.connection.transaction do
+        Registration.find(changes.keys).each { it.update(registrant_id: changes[it.id]) }
+      end
+      break
     end
   end
 end
