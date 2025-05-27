@@ -142,7 +142,7 @@ module CheckRegionalRecords
         end
         [value_name, candidates]
       else
-        # Currently takes (42717.7 ms) for all results, (16080.0 ms) when filtering for event_id
+        # Currently takes (42717.7 ms) for all results (16080.0 ms) when filtering for event_id
         best_at_date = ActiveRecord::Base.connection.execute(<<~SQL)
                                                   WITH ranked_results AS (
                                                   SELECT
