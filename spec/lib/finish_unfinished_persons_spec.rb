@@ -11,7 +11,7 @@ RSpec.describe FinishUnfinishedPersons do
       let(:person_name) { 'John Doe' }
 
       it 'returns the correct semi-ID and updates available_per_semi' do
-        create(:person, wca_id: nil) # Ensure clean state
+        create(:person, :no_wca_id)
         semi_id, updated_available = described_class.compute_semi_id(competition_year, person_name, available_per_semi)
 
         expect(semi_id).to start_with('2023')
@@ -54,7 +54,7 @@ RSpec.describe FinishUnfinishedPersons do
       let(:person_name) { 'John Doe Jr.' }
 
       it 'ignores the generational suffix and generates the correct semi-ID' do
-        create(:person, wca_id: nil) # Ensure clean state
+        create(:person, :no_wca_id)
         semi_id, updated_available = described_class.compute_semi_id(competition_year, person_name, available_per_semi)
 
         expect(semi_id).to start_with('2023')
