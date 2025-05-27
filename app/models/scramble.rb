@@ -11,6 +11,14 @@ class Scramble < ApplicationRecord
   validates :scramble_num, numericality: { presence: true, greater_than: 0 }
   validates :is_extra, inclusion: { presence: true, in: [true, false] }
 
+  # See the explanation in `resultable.rb` which has a validation with the same name.
+  validate :linked_round_consistent, if: :round_id?
+  def linked_round_consistent
+    errors.add(:competition, "Should match '#{round.competition_id}' of the linked round, but is '#{competition_id}'") unless competition_id == round.competition_id
+    errors.add(:round_type, "Should match '#{round.round_type_id}' of the linked round, but is '#{round_type_id}'") unless round_type_id == round.round_type_id
+    errors.add(:event, "Should match '#{round.event_id}' of the linked round, but is '#{event_id}'") unless event_id == round.event_id
+  end
+
   def round_type
     RoundType.c_find(round_type_id)
   end
