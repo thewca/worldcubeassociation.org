@@ -15,10 +15,12 @@ const itemFromId = (id, items) => ({
   text: items.byId[id].name,
 });
 
-const formatRoundData = ({ eventId, formatId, roundTypeId }) => ({
+const formatRoundData = ({
+  eventId, formatId, roundTypeId, roundId,
+}) => ({
   [eventId]: {
     eventId,
-    rounds: [{ formatId, roundTypeId }],
+    rounds: [{ formatId, roundTypeId, roundId }],
   },
 });
 
