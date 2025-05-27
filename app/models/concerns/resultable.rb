@@ -11,6 +11,7 @@ module Resultable
     belongs_to :round_type
     belongs_to :event
     belongs_to :format
+    belongs_to :round, optional: true
 
     # Forgetting to synchronize the results in WCA Live is a very common mistake,
     # so this error message is hinting the user to check that, even if it's
@@ -38,7 +39,7 @@ module Resultable
       # Using a 'find' here is intentional to pass the `includes(:rounds)` to
       # avoid the n+1 query on competition_events if we were directly using
       # competition.find_round_for.
-      Competition
+      super || Competition
         .includes(:rounds)
         .find_by(id: competition_id)
         &.find_round_for(event_id, round_type_id, format_id)
