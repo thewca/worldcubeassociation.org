@@ -288,6 +288,7 @@ module DatabaseDumper
           regional_average_record
           regional_single_record
           round_type_id
+          round_id
           updated_at
           value1
           value2
@@ -336,6 +337,7 @@ module DatabaseDumper
           group_id
           is_extra
           round_type_id
+          round_id
           scramble
           id
           scramble_num
