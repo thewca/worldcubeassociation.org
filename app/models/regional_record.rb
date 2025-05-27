@@ -33,9 +33,9 @@ class RegionalRecord < ApplicationRecord
              .group(:event_id, :record_type)
 
     joins("INNER JOIN (#{latest.to_sql}) latest_records
-         ON records.event_id = latest_records.event_id
-         AND records.record_type = latest_records.record_type
-         AND records.record_timestamp = latest_records.latest_time")
+         ON regional_records.event_id = latest_records.event_id
+         AND regional_records.record_type = latest_records.record_type
+         AND regional_records.record_timestamp = latest_records.latest_time")
   }
 
   belongs_to :result

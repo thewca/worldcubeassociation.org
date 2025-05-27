@@ -4,29 +4,20 @@ namespace :records do
   desc "Fills records table from results"
   task fill_records_table: [:environment] do
     [
-      { record_type: 'single', field: :regional_single_record },
-      { record_type: 'average', field: :regional_average_record },
+      { record_type: 'single', field: :regional_single_record, record_value: 'best' },
+      { record_type: 'average', field: :regional_average_record, record_value: 'average' },
     ].each do |records|
-      Result.includes(%i[competition round_type])
-            .where.not(records[:field] => nil)
-            .find_each do |result|
-        record_value = result.send(records[:field])
-        round = result.round
-        has_round_schedule = result.competition.start_date > Date.new(2018, 12, 31)
-        record_timestamp = has_round_schedule ? round.end_time : result.competition.end_date
-        is_cr = RegionalRecord::CONTINENT_TO_RECORD_MARKER.value?(record_value)
-        record_scope = is_cr ? RegionalRecord::CONTINENT_TO_RECORD_MARKER[result.continent_id] : record_value
-
-        RegionalRecord.create(
-          record_type: records[:record_type],
-          result: result,
-          value: records[:record_type] == 'single' ? result.best : result.average,
-          event_id: result.event_id,
-          country_id: result.country_id,
-          continent_id: result.continent_id,
-          record_timestamp: record_timestamp,
-          record_scope: record_scope,
-        )
+      Result::MARKERS.compact.each do |marker|
+        is_cr = RegionalRecord::CONTINENT_TO_RECORD_MARKER.value?(marker)
+        record_scope = is_cr ? :CR : marker.to_sym
+        ActiveRecord::Base.connection.execute(<<~SQL)
+        INSERT INTO regional_records (record_type, result_id, value, event_id, country_id, continent_id, record_timestamp, record_scope, created_at, updated_at)
+        SELECT '#{records[:record_type]}', results.id, results.#{records[:record_value]}, results.event_id, results.country_id, countries.continent_id, result_timestamps.round_timestamp, #{RegionalRecord.record_scopes[record_scope]}, NOW(), NOW()
+        FROM results
+        INNER JOIN result_timestamps ON result_timestamps.result_id = results.id
+        INNER JOIN countries ON countries.id = results.country_id
+        WHERE #{records[:field]} = '#{marker}';
+      SQL
       end
     end
   end
