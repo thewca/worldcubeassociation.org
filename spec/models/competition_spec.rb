@@ -513,8 +513,8 @@ RSpec.describe Competition do
     end
 
     it "warns if advancement condition isn't present for a non final round" do
-      create(:round, competition: competition, event_id: "333", number: 1)
-      create(:round, competition: competition, event_id: "333", number: 2)
+      create(:round, competition: competition, event_id: "333", number: 1, total_number_of_rounds: 2)
+      create(:round, competition: competition, event_id: "333", number: 2, total_number_of_rounds: 2)
 
       expect(competition).to be_valid
       expect(competition.warnings_for(nil)[:advancement_conditions]).to eq I18n.t('competitions.messages.advancement_condition_must_be_present_for_all_non_final_rounds')
