@@ -743,34 +743,34 @@ RSpec.describe "Competition WCIF" do
 
     context "activities" do
       it "Removing activities works and destroy nested activities" do
-        activity_with_child = schedule_wcif["venues"][0]["rooms"][0]["activities"].find { |a| a["id"] == 2 }
+        activity_with_child = schedule_wcif["venues"][0]["rooms"][0]["activities"].find { |a| a["id"] == 1 }
         activity_with_child["childActivities"] = []
 
         competition.set_wcif_schedule!(schedule_wcif)
 
         expect(competition.to_wcif["schedule"]).to eq(schedule_wcif)
-        expect(ScheduleActivity.all.size).to eq 2
+        expect(ScheduleActivity.all.size).to eq 7
       end
 
       it "Updating activity's attributes correctly updates the existing object" do
         first_venue = schedule_wcif["venues"][0]
         first_room = first_venue["rooms"][0]
-        first_activity = first_room["activities"][0]
+        second_activity = first_room["activities"][1]
         activity_object = competition.competition_venues.find_by(wcif_id: first_venue["id"])
                                      .venue_rooms.find_by(wcif_id: first_room["id"])
-                                     .schedule_activities.find_by(wcif_id: first_activity["id"])
+                                     .schedule_activities.find_by(wcif_id: second_activity["id"])
 
-        first_activity["name"] = "activity name"
-        first_activity["activityCode"] = "222-r1"
-        first_activity["startTime"] = (activity_object.start_time + 20.minutes).iso8601
-        first_activity["endTime"] = (activity_object.end_time + 20.minutes).iso8601
+        second_activity["name"] = "activity name"
+        second_activity["activityCode"] = "222-r1"
+        second_activity["startTime"] = (activity_object.start_time + 20.minutes).iso8601
+        second_activity["endTime"] = (activity_object.end_time + 20.minutes).iso8601
         competition.set_wcif_schedule!(schedule_wcif)
         expect(competition.to_wcif["schedule"]).to eq(schedule_wcif)
         activity_object.reload
         expect(activity_object.name).to eq "activity name"
         expect(activity_object.activity_code).to eq "222-r1"
-        expect(activity_object.start_time).to eq first_activity["startTime"]
-        expect(activity_object.end_time).to eq first_activity["endTime"]
+        expect(activity_object.start_time).to eq second_activity["startTime"]
+        expect(activity_object.end_time).to eq second_activity["endTime"]
       end
 
       it "Creating nested activities works" do
@@ -870,7 +870,7 @@ RSpec.describe "Competition WCIF" do
 
       it "Doesn't update a nested activity which is not included in parent" do
         # Let's try first a past date
-        activity = schedule_wcif["venues"][0]["rooms"][0]["activities"][1]
+        activity = schedule_wcif["venues"][0]["rooms"][0]["activities"][0]
         nested_activity = activity["childActivities"][0]
         # Get rid of nested-nested, to make sure we don't run into their validations
         nested_activity["childActivities"] = []
