@@ -1179,7 +1179,7 @@ RSpec.describe Competition do
   context "when changing the competition's date" do
     let(:competition) do
       create(:competition,
-             with_schedule: true,
+             :with_valid_schedule,
              start_date: Date.parse("2018-10-24"),
              end_date: Date.parse("2018-10-26"))
     end
@@ -1188,7 +1188,8 @@ RSpec.describe Competition do
     end
 
     def change_and_check_activities(new_start_date, new_end_date)
-      on_first_day, on_last_day = all_activities.partition { |a| a.start_time.to_date == competition.start_date }
+      on_first_day = all_activities.filter { |a| a.start_time.to_date == competition.start_date }
+      on_last_day = all_activities.filter { |a| a.start_time.to_date == competition.end_date }
       # the factory define one activity per day, the two lines below are
       # basically safe guards against a future change to the competition's factory.
       expect(on_first_day).not_to be_empty
