@@ -131,15 +131,17 @@ class ScheduleActivity < ApplicationRecord
   end
 
   def load_wcif!(wcif, venue_room, parent_activity: nil)
+    wcif_attributes = ScheduleActivity.wcif_to_attributes(wcif)
+
+    self.assign_attributes(wcif_attributes.slice(:activity_code))
+    round = parent_activity&.round || self.find_matched_round
+
     update!(
       venue_room: venue_room,
       parent_activity: parent_activity,
-      **ScheduleActivity.wcif_to_attributes(wcif),
+      round: round,
+      **wcif_attributes,
     )
-    if self.activity_code_previously_changed?
-      round = parent_activity&.round || self.find_matched_round
-      self.update_attribute!(:round, round) if round.present?
-    end
     new_child_activities = wcif["childActivities"].map do |activity_wcif|
       activity = child_activities.find { |a| a.wcif_id == activity_wcif["id"] } || child_activities.build
       activity.load_wcif!(activity_wcif, venue_room, parent_activity: self)
