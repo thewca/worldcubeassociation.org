@@ -126,7 +126,7 @@ module CheckRegionalRecords
 
   SOLUTION_TYPES = [[:best, 'single'], [:average, 'average']].freeze
 
-  def self.check_records_new_table(event_id = nil, competition_id = nil, from_timestamp, to_timestamp)
+  def self.check_records_new_table(event_id = nil, competition_id = nil, from_timestamp = nil, to_timestamp = nil)
     SOLUTION_TYPES.to_h do |value_column, value_name|
       if competition_id.present?
         competition = Competition.find(competition_id)
@@ -141,7 +141,7 @@ module CheckRegionalRecords
           record_at_time_of_round = RegionalRecord.record_for(result.event_id, value_name, :NR, country_id: result.country_id, date: timestamp)
           [result.event_id, result.competition_id, result.round_type_id, result.country_id, timestamp, result.value] if record_at_time_of_round > result.value
         end
-        [value_name, candidates]
+        [value_column, candidates]
       else
         # Currently takes (42717.7 ms) for all results (16080.0 ms) when filtering for event_id
         best_at_date = ActiveRecord::Base.connection.execute(<<~SQL)
@@ -172,7 +172,7 @@ module CheckRegionalRecords
           record_at_time_of_round = RegionalRecord.record_for(current_event_id, value_name, :NR, country_id: country_id, date: round_timestamp)
           [current_event_id, current_competition_id, round_id, country_id, round_timestamp, min] if record_at_time_of_round < min
         end
-        [value_name, candidates]
+        [value_column, candidates]
       end
     end
   end
