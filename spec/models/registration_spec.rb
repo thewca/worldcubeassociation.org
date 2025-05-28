@@ -1314,7 +1314,11 @@ RSpec.describe Registration do
     end
 
     it 'allows registrations belonging to different competitions to have the same registrant id' do
-      expect(create(:registration)).to be_valid
+      second_reg = create(:registration)
+      expect(second_reg.competition.id).not_to eq(registration.competition.id)
+      expect(second_reg.registrant_id).to eq(registration.registrant_id)
+
+      expect(second_reg).to be_valid
       expect(registration).to be_valid
     end
 

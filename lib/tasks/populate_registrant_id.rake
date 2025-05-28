@@ -2,7 +2,7 @@
 
 namespace :registrant_id do
   desc 'Backfills all registration.registrant_id values with their WCIF-generated registrant_id'
-  task :populate do
+  task populate: :environment do
     Competition.in_batches(of: 30) do |batch|
       ActiveRecord::Base.connection.transaction do
         batch.each do |comp|
