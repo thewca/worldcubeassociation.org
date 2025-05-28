@@ -7,6 +7,9 @@ FactoryBot.define do
       with_rounds { false }
       with_schedule { false }
       exclude_from_schedule { [] }
+      rounds_per_event { 1 }
+      groups_per_round { 1 }
+      number_of_venues { 2 }
       series_base { nil }
       series_distance_days { 0 }
       series_distance_km { 0 }
@@ -401,18 +404,21 @@ FactoryBot.define do
       end
       if evaluator.with_rounds
         competition.competition_events.each do |ce|
-          ce.rounds.create!(
-            format: ce.event.preferred_formats.first.format,
-            number: 1,
-            total_number_of_rounds: 1,
-          )
+          evaluator.rounds_per_event.times do |i|
+            ce.rounds.create!(
+              format: ce.event.preferred_formats.first.format,
+              number: i + 1,
+              total_number_of_rounds: evaluator.rounds_per_event,
+              scramble_set_count: evaluator.groups_per_round,
+            )
+          end
         end
       end
 
       if evaluator.with_schedule
         # room id in wcif for a competition are unique, so we need to have a global counter
         current_room_id = 1
-        2.times do |i|
+        evaluator.number_of_venues.times do |i|
           venue_attributes = {
             name: "Venue #{i + 1}",
             wcif_id: i + 1,
@@ -486,6 +492,8 @@ FactoryBot.define do
                       end_time: end_time.iso8601,
                     )
 
+                    current_activity_id += 1
+
                     if r.scramble_set_count > 1
                       round_activity_duration = round_activity.end_time - round_activity.start_time
                       slot_per_group = round_activity_duration / r.scramble_set_count
@@ -497,6 +505,7 @@ FactoryBot.define do
 
                         round_activity.child_activities.create!(
                           wcif_id: current_activity_id,
+                          venue_room: venue_room,
                           name: "Great round, group #{group_num + 1}",
                           activity_code: "#{r.wcif_id}-g#{group_num + 1}",
                           round: r,
@@ -508,8 +517,6 @@ FactoryBot.define do
                         current_activity_id += 1
                       end
                     end
-
-                    current_activity_id += 1
                   end
 
                   current_day_activities += 1

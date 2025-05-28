@@ -298,7 +298,7 @@ RSpec.describe "API Competitions" do
     end
 
     describe "persons" do
-      let!(:competition) { create(:competition, :with_delegate, :with_organizer, :visible, :registration_open, with_schedule: true) }
+      let!(:competition) { create(:competition, :with_delegate, :with_organizer, :visible, :registration_open, :with_valid_schedule) }
       let!(:registration) { create(:registration, :accepted, competition: competition) }
       let!(:organizer_registration) { create(:registration, :accepted, competition: competition, user: competition.organizers.first) }
 
@@ -352,7 +352,7 @@ RSpec.describe "API Competitions" do
     end
 
     describe "schedule" do
-      let!(:competition) { create(:competition, :with_delegate, :with_organizer, :visible, :registration_open, with_schedule: true) }
+      let!(:competition) { create(:competition, :with_delegate, :with_organizer, :visible, :registration_open, :with_valid_schedule, number_of_venues: 1, event_ids: ["333"], rounds_per_event: 2, groups_per_round: 2) }
       let!(:wcif) { competition.to_wcif.slice("schedule") }
 
       context "when signed in as a competition manager" do
@@ -418,34 +418,36 @@ RSpec.describe "API Competitions" do
 
         it "can update activities and nested activities" do
           room = competition.competition_venues.first.venue_rooms.first
-          activity_with_child = room.schedule_activities.find_by(wcif_id: 2)
+          activity_with_child = room.schedule_activities.find_by(wcif_id: 1)
           wcif_room = wcif["schedule"]["venues"][0]["rooms"][0]
-          wcif_room["activities"][1]["name"] = "new name"
-          wcif_room["activities"][1]["childActivities"][0]["name"] = "foo"
-          wcif_room["activities"][1]["childActivities"][1]["name"] = "bar"
+          wcif_room["activities"][0]["name"] = "new name"
+          wcif_room["activities"][0]["childActivities"][0]["name"] = "foo"
+          wcif_room["activities"][0]["childActivities"][1]["name"] = "bar"
 
           patch api_v0_competition_update_wcif_path(competition), params: wcif.to_json, headers: headers
 
           expect(activity_with_child.reload.name).to eq "new name"
-          expect(activity_with_child.child_activities.find_by(wcif_id: 3).name).to eq "foo"
-          expect(activity_with_child.child_activities.find_by(wcif_id: 4).name).to eq "bar"
+          expect(activity_with_child.child_activities.find_by(wcif_id: 2).name).to eq "foo"
+          expect(activity_with_child.child_activities.find_by(wcif_id: 3).name).to eq "bar"
         end
 
         it "can delete activities and nested activities" do
           room = competition.competition_venues.first.venue_rooms.first
-          activity_with_child = room.schedule_activities.find_by(wcif_id: 2)
+          activity_with_child = room.schedule_activities.find_by(wcif_id: 1)
           # Remove the nested activity with a child activity
           wcif_room = wcif["schedule"]["venues"][0]["rooms"][0]
-          wcif_room["activities"][1]["childActivities"].delete_at(1)
+          wcif_room["activities"][0]["childActivities"].delete_at(1)
           # Remove an activity
-          wcif_room["activities"].delete_at(0)
+          wcif_room["activities"].delete_at(1)
 
           patch api_v0_competition_update_wcif_path(competition), params: wcif.to_json, headers: headers
 
-          expect(room.reload.schedule_activities.size).to eq 1
+          expect(room.reload.schedule_activities.size).to eq 2
           expect(activity_with_child.reload.child_activities.size).to eq 1
-          # We expect the nested-nested activity to be destroyed with its parent
-          expect(ScheduleActivity.all.size).to eq 2
+          # We deleted one activity (lunch) and one child activity. Still leaves:
+          #   - the original round + 2 groups as children
+          #   - the second round + 1 child that was not deleted
+          expect(ScheduleActivity.all.size).to eq 5
         end
 
         it "doesn't change anything when submitting an invalid WCIF" do
