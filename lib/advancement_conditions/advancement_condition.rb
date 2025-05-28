@@ -8,8 +8,6 @@ module AdvancementConditions
 
     validates :level, numericality: { only_integer: true }
 
-    @@advancement_conditions = [AttemptResultCondition, PercentCondition, RankingCondition].freeze
-
     def initialize(level)
       self.level = level
     end
@@ -26,17 +24,13 @@ module AdvancementConditions
       self.to_wcif.hash
     end
 
-    def self.wcif_type_to_class
-      @@wcif_type_to_class ||= @@advancement_conditions.index_by(&:wcif_type)
-    end
-
     def self.load(json)
       if json.nil? || json.is_a?(self)
         json
       else
         json_obj = json.is_a?(Hash) ? json : JSON.parse(json)
         wcif_type = json_obj['type']
-        self.wcif_type_to_class[wcif_type].new(json_obj['level'])
+        Utils.advancement_condition_class_from_wcif_type(wcif_type).new(json_obj['level'])
       end
     end
 
@@ -48,7 +42,7 @@ module AdvancementConditions
       {
         "type" => %w[object null],
         "properties" => {
-          "type" => { "type" => "string", "enum" => @@advancement_conditions.map(&:wcif_type) },
+          "type" => { "type" => "string", "enum" => Utils::ALL_ADVANCEMENT_CONDITIONS.map(&:wcif_type) },
           "level" => { "type" => "integer" },
         },
       }
