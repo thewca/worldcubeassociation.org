@@ -8,7 +8,7 @@ RSpec.describe FinishUnfinishedPersons, type: :module do
     let(:available_per_semi) { {} }
 
     context 'with a simple name' do
-      let(:person) { build(:person, name: 'John Smith') }
+      let(:person) { create(:person, name: 'John Smith') }
 
       it 'generates a semi_id with the correct format' do
         allow(FinishUnfinishedPersons).to receive(:extract_roman_name).with('John Smith').and_return('John Smith')
@@ -23,7 +23,7 @@ RSpec.describe FinishUnfinishedPersons, type: :module do
     end
 
     context 'with a generational suffix' do
-      let(:person) { build(:person, name: 'John Smith Jr') }
+      let(:person) { create(:person, name: 'John Smith Jr') }
 
       it 'correctly identifies the last name and generates a semi_id' do
         allow(FinishUnfinishedPersons).to receive(:extract_roman_name).with('John Smith Jr').and_return('John Smith Jr')
@@ -36,7 +36,7 @@ RSpec.describe FinishUnfinishedPersons, type: :module do
     end
 
     context 'with an extended generational suffix' do
-      let(:person) { build(:person, name: 'John Smith Jnr') }
+      let(:person) { create(:person, name: 'John Smith Jnr') }
 
       it 'correctly identifies the last name for JNR' do
         allow(FinishUnfinishedPersons).to receive(:extract_roman_name).with('John Smith Jnr').and_return('John Smith Jnr')
@@ -49,7 +49,7 @@ RSpec.describe FinishUnfinishedPersons, type: :module do
     end
 
     context 'with accented characters' do
-      let(:person) { build(:person, name: 'José García') }
+      let(:person) { create(:person, name: 'José García') }
 
       it 'handles accented characters correctly' do
         allow(FinishUnfinishedPersons).to receive(:extract_roman_name).with('José García').and_return('Jose Garcia')
@@ -62,7 +62,7 @@ RSpec.describe FinishUnfinishedPersons, type: :module do
     end
 
     context 'with a single name part' do
-      let(:person) { build(:person, name: 'Madonna') }
+      let(:person) { create(:person, name: 'Madonna') }
 
       it 'uses the single name as the last name' do
         allow(FinishUnfinishedPersons).to receive(:extract_roman_name).with('Madonna').and_return('Madonna')
@@ -75,7 +75,7 @@ RSpec.describe FinishUnfinishedPersons, type: :module do
     end
 
     context 'with a name containing special characters' do
-      let(:person) { build(:person, name: 'John O\'Connor') }
+      let(:person) { create(:person, name: 'John O\'Connor') }
 
       it 'sanitizes special characters' do
         allow(FinishUnfinishedPersons).to receive(:extract_roman_name).with('John O\'Connor').and_return('John OConnor')
