@@ -457,7 +457,7 @@ FactoryBot.define do
               start_time = competition_start_utc.clone
               lunch_time_marker = start_time.change(hour: 12, min: 0, sec: 0)
 
-              schedule_events.each do |ce|
+              competition.competition_events.each do |ce|
                 ce.rounds.each do |r|
                   if start_time >= lunch_time_marker && !had_lunch_today
                     end_time = lunch_time_marker + lunch_time_duration
@@ -477,39 +477,42 @@ FactoryBot.define do
 
                   end_time = start_time + available_time_per_activity
 
-                  round_activity = venue_room.schedule_activities.create!(
-                    wcif_id: current_activity_id,
-                    name: "Great round",
-                    activity_code: r.wcif_id,
-                    round: r,
-                    start_time: start_time.iso8601,
-                    end_time: end_time.iso8601,
-                  )
-
-                  if r.scramble_set_count > 1
-                    round_activity_duration = round_activity.end_time - round_activity.start_time
-                    slot_per_group = round_activity_duration / r.scramble_set_count
-
-                    group_start_time = round_activity.start_time.clone
-
-                    r.scramble_set_count.times do |group_num|
-                      group_end_time = group_start_time + slot_per_group
-
-                      round_activity.child_activities.create!(
-                        wcif_id: current_activity_id,
-                        name: "Great round, group #{group_num + 1}",
-                        activity_code: "#{r.wcif_id}-g#{group_num + 1}",
-                        round: r,
-                        start_time: group_start_time,
-                        end_time: group_end_time,
+                  if schedule_events.include?(ce)
+                    round_activity = venue_room.schedule_activities.create!(
+                      wcif_id: current_activity_id,
+                      name: "Great round",
+                      activity_code: r.wcif_id,
+                      round: r,
+                      start_time: start_time.iso8601,
+                      end_time: end_time.iso8601,
                       )
 
-                      group_start_time = group_end_time.clone
-                      current_activity_id += 1
+                    if r.scramble_set_count > 1
+                      round_activity_duration = round_activity.end_time - round_activity.start_time
+                      slot_per_group = round_activity_duration / r.scramble_set_count
+
+                      group_start_time = round_activity.start_time.clone
+
+                      r.scramble_set_count.times do |group_num|
+                        group_end_time = group_start_time + slot_per_group
+
+                        round_activity.child_activities.create!(
+                          wcif_id: current_activity_id,
+                          name: "Great round, group #{group_num + 1}",
+                          activity_code: "#{r.wcif_id}-g#{group_num + 1}",
+                          round: r,
+                          start_time: group_start_time,
+                          end_time: group_end_time,
+                          )
+
+                        group_start_time = group_end_time.clone
+                        current_activity_id += 1
+                      end
                     end
+
+                    current_activity_id += 1
                   end
 
-                  current_activity_id += 1
                   current_day_activities += 1
 
                   if current_day_activities >= activities_per_day
