@@ -1477,7 +1477,7 @@ class User < ApplicationRecord
     ]
   end
 
-  def anonymize
+  def anonymize(new_wca_id = nil)
     skip_reconfirmation!
     update(
       email: id.to_s + User::ANONYMOUS_ACCOUNT_EMAIL_ID_SUFFIX,
