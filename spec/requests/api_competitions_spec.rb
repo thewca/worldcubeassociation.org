@@ -352,7 +352,7 @@ RSpec.describe "API Competitions" do
     end
 
     describe "schedule" do
-      let!(:competition) { create(:competition, :with_delegate, :with_organizer, :visible, :registration_open, :with_valid_schedule, number_of_venues: 1, event_ids: ["333"], rounds_per_event: 2, groups_per_round: 2) }
+      let!(:competition) { create(:competition, :with_delegate, :with_organizer, :visible, :registration_open, :with_valid_schedule, schedule_only_one_venue: true, event_ids: ["333"], rounds_per_event: 2, groups_per_round: 2) }
       let!(:wcif) { competition.to_wcif.slice("schedule") }
 
       context "when signed in as a competition manager" do
