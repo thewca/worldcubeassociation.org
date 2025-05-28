@@ -10,6 +10,7 @@ namespace :registrant_id do
 
           changes = comp.persons_wcif(authorized: true).filter_map do |person|
             next if person['registration'].nil?
+
             [person['registration']['wcaRegistrationId'], person['registrantId']]
           end.to_h
 
