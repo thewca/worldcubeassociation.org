@@ -54,9 +54,9 @@ RSpec.describe "Competition WCIF" do
   let(:event_222) { build(:competition_event, event_id: "222", rounds: [round222_1]) }
   let(:round333fm_1) { build(:round, number: 1, format_id: "m") }
   let(:event_333fm) { build(:competition_event, event_id: "333fm", rounds: [round333fm_1]) }
-  let(:round333mbf_1) { build(:round, number: 1, format_id: "3") }
+  let(:round333mbf_1_extension) { WcifExtension.new(extension_id: "com.third.party", spec_url: "https://example.com", data: { "tables" => 5 }) }
+  let(:round333mbf_1) { build(:round, number: 1, format_id: "3", wcif_extensions: [round333mbf_1_extension]) }
   let(:event_333mbf) { build(:competition_event, event_id: "333mbf", rounds: [round333mbf_1]) }
-  let(:round333mbf_1_extension) { round333mbf_1.wcif_extensions.create!(extension_id: "com.third.party", spec_url: "https://example.com", data: { "tables" => 5 }) }
 
   describe "#to_wcif" do
     it "renders a valid WCIF" do
