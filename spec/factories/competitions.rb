@@ -6,6 +6,7 @@ FactoryBot.define do
       championship_types { [] }
       with_rounds { false }
       with_schedule { false }
+      exclude_from_schedule { [] }
       series_base { nil }
       series_distance_days { 0 }
       series_distance_km { 0 }
@@ -431,7 +432,8 @@ FactoryBot.define do
           end
         end
         # Add valid schedule for existing rounds
-        number_of_activities = competition.competition_events.sum { it.rounds.count }
+        schedule_events = competition.competition_events.reject { evaluator.exclude_from_schedule.include?(it.event_id) }
+        number_of_activities = schedule_events.sum { it.rounds.count }
 
         if number_of_activities > 0
           competition_start_utc = Time.zone.local_to_utc(competition.start_time)
@@ -455,7 +457,7 @@ FactoryBot.define do
               start_time = competition_start_utc.clone
               lunch_time_marker = start_time.change(hour: 12, min: 0, sec: 0)
 
-              competition.competition_events.each do |ce|
+              schedule_events.each do |ce|
                 ce.rounds.each do |r|
                   if start_time >= lunch_time_marker && !had_lunch_today
                     end_time = lunch_time_marker + lunch_time_duration
