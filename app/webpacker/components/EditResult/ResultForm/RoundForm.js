@@ -32,16 +32,16 @@ const extractFromRoundData = (roundData, eventId, key, items) => {
 
 function RoundForm({ roundData, setRoundData }) {
   const {
-    competitionId, roundTypeId, eventId, formatId, roundId,
+    competitionId, roundTypeId, eventId, formatId,
   } = roundData;
 
   const setCompetition = useNestedInputUpdater(setRoundData, 'competitionId');
 
   const [localRoundData, setLocalRoundData] = useState(formatRoundData(roundData));
 
-  const setEvent = useRoundDataSetter(setRoundData, 'eventId', roundId, localRoundData);
-  const setFormat = useRoundDataSetter(setRoundData, 'formatId', roundId, localRoundData);
-  const setRoundType = useRoundDataSetter(setRoundData, 'roundTypeId', roundId, localRoundData);
+  const setEvent = useRoundDataSetter(setRoundData, 'eventId', roundData, localRoundData);
+  const setFormat = useRoundDataSetter(setRoundData, 'formatId', roundData, localRoundData);
+  const setRoundType = useRoundDataSetter(setRoundData, 'roundTypeId', roundData, localRoundData);
 
   const [competitionIdError, setCompetitionIdError] = useState(null);
 
