@@ -33,7 +33,7 @@ SuperConfig::Base.class_eval do
 
   private def vault_read(secret_name)
     Vault.with_retries(Vault::HTTPConnectionError, Vault::HTTPError) do |attempt, e|
-      puts { "Received exception #{e} from Vault - attempt #{attempt}" } if e.present?
+      puts "Received exception #{e} from Vault - attempt #{attempt}" if e.present?
 
       secret = Vault.logical.read("kv/data/#{EnvConfig.VAULT_APPLICATION}/#{secret_name}")
       raise "Tried to read #{secret_name}, but doesn't exist" if secret.blank?

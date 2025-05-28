@@ -47,7 +47,6 @@ class Registration < ApplicationRecord
   serialize :roles, coder: YAML
 
   before_create -> { self.registrant_id ||= competition.registrations.count + 1 }
-  validates :registrant_id, uniqueness: { scope: :competition_id }
 
   # TODO: V3-REG cleanup. The "accepts_nested_attributes_for" directly below can be removed.
   accepts_nested_attributes_for :registration_competition_events, allow_destroy: true

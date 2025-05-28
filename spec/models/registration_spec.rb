@@ -1321,11 +1321,5 @@ RSpec.describe Registration do
       expect(second_reg).to be_valid
       expect(registration).to be_valid
     end
-
-    it 'invalid if non-unique within the scope of a competition (and non-null)' do
-      second_reg = create(:registration, competition: registration.competition)
-      second_reg.registrant_id = registration.registrant_id
-      expect(second_reg).not_to be_valid
-    end
   end
 end
