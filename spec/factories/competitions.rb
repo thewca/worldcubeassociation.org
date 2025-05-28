@@ -10,6 +10,7 @@ FactoryBot.define do
       rounds_per_event { 1 }
       groups_per_round { 1 }
       number_of_venues { 2 }
+      schedule_only_one_venue { false }
       series_base { nil }
       series_distance_days { 0 }
       series_distance_km { 0 }
@@ -450,13 +451,15 @@ FactoryBot.define do
           number_of_days = (competition_end_utc - competition_start_utc).seconds.in_days
           activities_per_day = (number_of_activities / number_of_days.to_f).ceil
 
-          # somewhat arbitrary: let's make the competition run from 10AM to 8PM
+          # somewhat arbitrary: let's make the competition run from 10AM to 7PM
           #   which is 10 hours, including one hour for lunch in every room
-          available_hours_per_day = 9.hours
+          available_hours_per_day = 8.hours
           lunch_time_duration = 1.hour
           available_time_per_activity = available_hours_per_day / activities_per_day
 
-          competition.competition_venues.each do |competition_venue|
+          competition.competition_venues.each_with_index do |competition_venue, venue_idx|
+            next if venue_idx > 0 && evaluator.schedule_only_one_venue
+
             competition_venue.venue_rooms.each do |venue_room|
               current_activity_id = 1
               current_day_activities = 0
@@ -482,42 +485,42 @@ FactoryBot.define do
                     had_lunch_today = true
                   end
 
-                  end_time = start_time + available_time_per_activity
+                  end_time = start_time + available_time_per_activity.to_i
 
-                  if schedule_events.include?(ce)
-                    round_activity = venue_room.schedule_activities.create!(
-                      wcif_id: current_activity_id,
-                      name: "Great round",
-                      activity_code: r.wcif_id,
-                      round: r,
-                      start_time: start_time.iso8601,
-                      end_time: end_time.iso8601,
-                    )
+                  next unless schedule_events.include?(ce)
 
-                    current_activity_id += 1
+                  round_activity = venue_room.schedule_activities.create!(
+                    wcif_id: current_activity_id,
+                    name: "Great round",
+                    activity_code: r.wcif_id,
+                    round: r,
+                    start_time: start_time.iso8601,
+                    end_time: end_time.iso8601,
+                  )
 
-                    if r.scramble_set_count > 1
-                      round_activity_duration = round_activity.end_time - round_activity.start_time
-                      slot_per_group = round_activity_duration / r.scramble_set_count
+                  current_activity_id += 1
 
-                      group_start_time = round_activity.start_time.clone
+                  if r.scramble_set_count > 1
+                    round_activity_duration = round_activity.end_time - round_activity.start_time
+                    slot_per_group = round_activity_duration / r.scramble_set_count
 
-                      r.scramble_set_count.times do |group_num|
-                        group_end_time = group_start_time + slot_per_group
+                    group_start_time = round_activity.start_time.clone
 
-                        round_activity.child_activities.create!(
-                          wcif_id: current_activity_id,
-                          venue_room: venue_room,
-                          name: "Great round, group #{group_num + 1}",
-                          activity_code: "#{r.wcif_id}-g#{group_num + 1}",
-                          round: r,
-                          start_time: group_start_time,
-                          end_time: group_end_time,
-                        )
+                    r.scramble_set_count.times do |group_num|
+                      group_end_time = group_start_time + slot_per_group
 
-                        group_start_time = group_end_time.clone
-                        current_activity_id += 1
-                      end
+                      round_activity.child_activities.create!(
+                        wcif_id: current_activity_id,
+                        venue_room: venue_room,
+                        name: "Great round, group #{group_num + 1}",
+                        activity_code: "#{r.wcif_id}-g#{group_num + 1}",
+                        round: r,
+                        start_time: group_start_time,
+                        end_time: group_end_time,
+                      )
+
+                      group_start_time = group_end_time.clone
+                      current_activity_id += 1
                     end
                   end
 
