@@ -2,7 +2,7 @@
 
 FactoryBot.define do
   factory :competition_event do
-    competition { association :competition, event_ids: [event_id] }
+    competition { association :competition, event_ids: [] }
     event_id { "333" }
     fee_lowest_denomination { 0 }
   end
