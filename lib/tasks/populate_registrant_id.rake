@@ -34,6 +34,12 @@ namespace :registrant_id do
 
       inconsistencies.concat(differences)
     end
-    puts "Inconsistencies: #{inconsistencies}"
+
+    if inconsistencies.empty?
+      puts "Validation successful - no inconsistencies found"
+    else
+      puts "The following registration_ids had inconsistencies between their WCIF-generated registrant_id and task-generated registrant_id:"
+      puts inconsistencies
+    end
   end
 end
