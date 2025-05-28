@@ -44,7 +44,7 @@ class RegionalRecord < ApplicationRecord
     query = where(event_id: event_id, record_type: record_type, record_scope: scope...)
     query = query.where(country_id: country_id) if country_id
     query = query.where(continent_id: continent_id) if continent_id
-    query = query.where(record_timestamp: ...date) if date
+    query = query.where("record_timestamp >= #{date}") if date
     query.minimum(:value)
   end
 
