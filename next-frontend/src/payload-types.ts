@@ -86,9 +86,11 @@ export interface Config {
   };
   globals: {
     nav: Nav;
+    home: Home;
   };
   globalsSelect: {
     nav: NavSelect<false> | NavSelect<true>;
+    home: HomeSelect<false> | HomeSelect<true>;
   };
   locale: null;
   user: User & {
@@ -763,6 +765,371 @@ export interface Nav {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "home".
+ */
+export interface Home {
+  id: number;
+  item: (
+    | {
+        type: '1/3 & 2/3' | '2/3 & 1/3' | '1/2 & 1/2' | '1/4 & 3/4' | '3/4 & 1/4';
+        alignment: 'horizontal' | 'vertical';
+        blocks: (
+          | {
+              heading: string;
+              body: string;
+              buttonText?: string | null;
+              buttonLink?: string | null;
+              colorPalette?: ('blue' | 'red' | 'green' | 'orange' | 'yellow' | 'grey') | null;
+              id?: string | null;
+              blockName?: string | null;
+              blockType: 'BasicCard';
+            }
+          | {
+              heading: string;
+              body: string;
+              buttonText?: string | null;
+              buttonLink?: string | null;
+              colorPalette?: ('blue' | 'red' | 'green' | 'orange' | 'yellow' | 'grey') | null;
+              id?: string | null;
+              blockName?: string | null;
+              blockType: 'HeroCard';
+            }
+          | {
+              id?: string | null;
+              blockName?: string | null;
+              blockType: 'AnnouncementsSection';
+            }
+          | {
+              heading: string;
+              body: string;
+              mainImage?: (number | null) | Media;
+              colorPalette?: ('blue' | 'red' | 'green' | 'orange' | 'yellow' | 'grey') | null;
+              headingColor?: ('blue' | 'red' | 'green' | 'orange' | 'yellow' | 'grey') | null;
+              bgImage?: (number | null) | Media;
+              bgSize?: number | null;
+              bgPos?: string | null;
+              id?: string | null;
+              blockName?: string | null;
+              blockType: 'ImageBanner';
+            }
+          | {
+              heading: string;
+              mainImage?: (number | null) | Media;
+              colorPalette?: ('blue' | 'red' | 'green' | 'orange' | 'yellow' | 'grey') | null;
+              id?: string | null;
+              blockName?: string | null;
+              blockType: 'ImageCard';
+            }
+          | {
+              blocks: {
+                id: string | null;
+                image: number | Media;
+                title: string;
+                description: string;
+                subtitle?: string | null;
+                colorPalette: 'blue' | 'red' | 'green' | 'orange' | 'yellow' | 'grey';
+                blockName?: string | null;
+                blockType: 'testimonial';
+              }[];
+              id?: string | null;
+              blockName?: string | null;
+              blockType: 'testimonials';
+            }
+          | {
+              heading: string;
+              body: string;
+              buttonText?: string | null;
+              buttonLink?: string | null;
+              image?: (number | null) | Media;
+              id?: string | null;
+              blockName?: string | null;
+              blockType: 'CardWithImage';
+            }
+          | {
+              Competition1ID: string;
+              colorPalette1?: ('blue' | 'red' | 'green' | 'orange' | 'yellow' | 'grey') | null;
+              Competition2ID: string;
+              colorPalette2?: ('blue' | 'red' | 'green' | 'orange' | 'yellow' | 'grey') | null;
+              id?: string | null;
+              blockName?: string | null;
+              blockType: 'FeaturedCompetitions';
+            }
+          | {
+              type: '1/3 & 2/3' | '2/3 & 1/3' | '1/2 & 1/2' | '1/4 & 3/4' | '3/4 & 1/4';
+              alignment: 'horizontal' | 'vertical';
+              blocks: (
+                | {
+                    heading: string;
+                    body: string;
+                    buttonText?: string | null;
+                    buttonLink?: string | null;
+                    colorPalette?: ('blue' | 'red' | 'green' | 'orange' | 'yellow' | 'grey') | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'BasicCard';
+                  }
+                | {
+                    heading: string;
+                    body: string;
+                    buttonText?: string | null;
+                    buttonLink?: string | null;
+                    colorPalette?: ('blue' | 'red' | 'green' | 'orange' | 'yellow' | 'grey') | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'HeroCard';
+                  }
+                | {
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'AnnouncementsSection';
+                  }
+                | {
+                    heading: string;
+                    body: string;
+                    mainImage?: (number | null) | Media;
+                    colorPalette?: ('blue' | 'red' | 'green' | 'orange' | 'yellow' | 'grey') | null;
+                    headingColor?: ('blue' | 'red' | 'green' | 'orange' | 'yellow' | 'grey') | null;
+                    bgImage?: (number | null) | Media;
+                    bgSize?: number | null;
+                    bgPos?: string | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'ImageBanner';
+                  }
+                | {
+                    heading: string;
+                    mainImage?: (number | null) | Media;
+                    colorPalette?: ('blue' | 'red' | 'green' | 'orange' | 'yellow' | 'grey') | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'ImageCard';
+                  }
+                | {
+                    blocks: {
+                      id: string | null;
+                      image: number | Media;
+                      title: string;
+                      description: string;
+                      subtitle?: string | null;
+                      colorPalette: 'blue' | 'red' | 'green' | 'orange' | 'yellow' | 'grey';
+                      blockName?: string | null;
+                      blockType: 'testimonial';
+                    }[];
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'testimonials';
+                  }
+                | {
+                    heading: string;
+                    body: string;
+                    buttonText?: string | null;
+                    buttonLink?: string | null;
+                    image?: (number | null) | Media;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'CardWithImage';
+                  }
+                | {
+                    Competition1ID: string;
+                    colorPalette1?: ('blue' | 'red' | 'green' | 'orange' | 'yellow' | 'grey') | null;
+                    Competition2ID: string;
+                    colorPalette2?: ('blue' | 'red' | 'green' | 'orange' | 'yellow' | 'grey') | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'FeaturedCompetitions';
+                  }
+                | {
+                    type: '1/3 & 2/3' | '2/3 & 1/3' | '1/2 & 1/2' | '1/4 & 3/4' | '3/4 & 1/4';
+                    alignment: 'horizontal' | 'vertical';
+                    blocks: (
+                      | {
+                          heading: string;
+                          body: string;
+                          buttonText?: string | null;
+                          buttonLink?: string | null;
+                          colorPalette?: ('blue' | 'red' | 'green' | 'orange' | 'yellow' | 'grey') | null;
+                          id?: string | null;
+                          blockName?: string | null;
+                          blockType: 'BasicCard';
+                        }
+                      | {
+                          heading: string;
+                          body: string;
+                          buttonText?: string | null;
+                          buttonLink?: string | null;
+                          colorPalette?: ('blue' | 'red' | 'green' | 'orange' | 'yellow' | 'grey') | null;
+                          id?: string | null;
+                          blockName?: string | null;
+                          blockType: 'HeroCard';
+                        }
+                      | {
+                          id?: string | null;
+                          blockName?: string | null;
+                          blockType: 'AnnouncementsSection';
+                        }
+                      | {
+                          heading: string;
+                          body: string;
+                          mainImage?: (number | null) | Media;
+                          colorPalette?: ('blue' | 'red' | 'green' | 'orange' | 'yellow' | 'grey') | null;
+                          headingColor?: ('blue' | 'red' | 'green' | 'orange' | 'yellow' | 'grey') | null;
+                          bgImage?: (number | null) | Media;
+                          bgSize?: number | null;
+                          bgPos?: string | null;
+                          id?: string | null;
+                          blockName?: string | null;
+                          blockType: 'ImageBanner';
+                        }
+                      | {
+                          heading: string;
+                          mainImage?: (number | null) | Media;
+                          colorPalette?: ('blue' | 'red' | 'green' | 'orange' | 'yellow' | 'grey') | null;
+                          id?: string | null;
+                          blockName?: string | null;
+                          blockType: 'ImageCard';
+                        }
+                      | {
+                          blocks: {
+                            id: string | null;
+                            image: number | Media;
+                            title: string;
+                            description: string;
+                            subtitle?: string | null;
+                            colorPalette: 'blue' | 'red' | 'green' | 'orange' | 'yellow' | 'grey';
+                            blockName?: string | null;
+                            blockType: 'testimonial';
+                          }[];
+                          id?: string | null;
+                          blockName?: string | null;
+                          blockType: 'testimonials';
+                        }
+                      | {
+                          heading: string;
+                          body: string;
+                          buttonText?: string | null;
+                          buttonLink?: string | null;
+                          image?: (number | null) | Media;
+                          id?: string | null;
+                          blockName?: string | null;
+                          blockType: 'CardWithImage';
+                        }
+                      | {
+                          Competition1ID: string;
+                          colorPalette1?: ('blue' | 'red' | 'green' | 'orange' | 'yellow' | 'grey') | null;
+                          Competition2ID: string;
+                          colorPalette2?: ('blue' | 'red' | 'green' | 'orange' | 'yellow' | 'grey') | null;
+                          id?: string | null;
+                          blockName?: string | null;
+                          blockType: 'FeaturedCompetitions';
+                        }
+                    )[];
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'twoBlocksLeaf';
+                  }
+              )[];
+              id?: string | null;
+              blockName?: string | null;
+              blockType: 'twoBlocksBranch';
+            }
+        )[];
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'twoBlocks';
+      }
+    | {
+        blocks: (
+          | {
+              heading: string;
+              body: string;
+              buttonText?: string | null;
+              buttonLink?: string | null;
+              colorPalette?: ('blue' | 'red' | 'green' | 'orange' | 'yellow' | 'grey') | null;
+              id?: string | null;
+              blockName?: string | null;
+              blockType: 'BasicCard';
+            }
+          | {
+              heading: string;
+              body: string;
+              buttonText?: string | null;
+              buttonLink?: string | null;
+              colorPalette?: ('blue' | 'red' | 'green' | 'orange' | 'yellow' | 'grey') | null;
+              id?: string | null;
+              blockName?: string | null;
+              blockType: 'HeroCard';
+            }
+          | {
+              id?: string | null;
+              blockName?: string | null;
+              blockType: 'AnnouncementsSection';
+            }
+          | {
+              heading: string;
+              body: string;
+              mainImage?: (number | null) | Media;
+              colorPalette?: ('blue' | 'red' | 'green' | 'orange' | 'yellow' | 'grey') | null;
+              headingColor?: ('blue' | 'red' | 'green' | 'orange' | 'yellow' | 'grey') | null;
+              bgImage?: (number | null) | Media;
+              bgSize?: number | null;
+              bgPos?: string | null;
+              id?: string | null;
+              blockName?: string | null;
+              blockType: 'ImageBanner';
+            }
+          | {
+              heading: string;
+              mainImage?: (number | null) | Media;
+              colorPalette?: ('blue' | 'red' | 'green' | 'orange' | 'yellow' | 'grey') | null;
+              id?: string | null;
+              blockName?: string | null;
+              blockType: 'ImageCard';
+            }
+          | {
+              blocks: {
+                id: string | null;
+                image: number | Media;
+                title: string;
+                description: string;
+                subtitle?: string | null;
+                colorPalette: 'blue' | 'red' | 'green' | 'orange' | 'yellow' | 'grey';
+                blockName?: string | null;
+                blockType: 'testimonial';
+              }[];
+              id?: string | null;
+              blockName?: string | null;
+              blockType: 'testimonials';
+            }
+          | {
+              heading: string;
+              body: string;
+              buttonText?: string | null;
+              buttonLink?: string | null;
+              image?: (number | null) | Media;
+              id?: string | null;
+              blockName?: string | null;
+              blockType: 'CardWithImage';
+            }
+          | {
+              Competition1ID: string;
+              colorPalette1?: ('blue' | 'red' | 'green' | 'orange' | 'yellow' | 'grey') | null;
+              Competition2ID: string;
+              colorPalette2?: ('blue' | 'red' | 'green' | 'orange' | 'yellow' | 'grey') | null;
+              id?: string | null;
+              blockName?: string | null;
+              blockType: 'FeaturedCompetitions';
+            }
+        )[];
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'fullWidth';
+      }
+  )[];
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "nav_select".
  */
 export interface NavSelect<T extends boolean = true> {
@@ -823,6 +1190,437 @@ export interface NavSelect<T extends boolean = true> {
               displayText?: T;
               targetLink?: T;
               displayIcon?: T;
+              id?: T;
+              blockName?: T;
+            };
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "home_select".
+ */
+export interface HomeSelect<T extends boolean = true> {
+  item?:
+    | T
+    | {
+        twoBlocks?:
+          | T
+          | {
+              type?: T;
+              alignment?: T;
+              blocks?:
+                | T
+                | {
+                    BasicCard?:
+                      | T
+                      | {
+                          heading?: T;
+                          body?: T;
+                          buttonText?: T;
+                          buttonLink?: T;
+                          colorPalette?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    HeroCard?:
+                      | T
+                      | {
+                          heading?: T;
+                          body?: T;
+                          buttonText?: T;
+                          buttonLink?: T;
+                          colorPalette?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    AnnouncementsSection?:
+                      | T
+                      | {
+                          id?: T;
+                          blockName?: T;
+                        };
+                    ImageBanner?:
+                      | T
+                      | {
+                          heading?: T;
+                          body?: T;
+                          mainImage?: T;
+                          colorPalette?: T;
+                          headingColor?: T;
+                          bgImage?: T;
+                          bgSize?: T;
+                          bgPos?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    ImageCard?:
+                      | T
+                      | {
+                          heading?: T;
+                          mainImage?: T;
+                          colorPalette?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    testimonials?:
+                      | T
+                      | {
+                          blocks?:
+                            | T
+                            | {
+                                testimonial?:
+                                  | T
+                                  | {
+                                      id?: T;
+                                      image?: T;
+                                      title?: T;
+                                      description?: T;
+                                      subtitle?: T;
+                                      colorPalette?: T;
+                                      blockName?: T;
+                                    };
+                              };
+                          id?: T;
+                          blockName?: T;
+                        };
+                    CardWithImage?:
+                      | T
+                      | {
+                          heading?: T;
+                          body?: T;
+                          buttonText?: T;
+                          buttonLink?: T;
+                          image?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    FeaturedCompetitions?:
+                      | T
+                      | {
+                          Competition1ID?: T;
+                          colorPalette1?: T;
+                          Competition2ID?: T;
+                          colorPalette2?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    twoBlocksBranch?:
+                      | T
+                      | {
+                          type?: T;
+                          alignment?: T;
+                          blocks?:
+                            | T
+                            | {
+                                BasicCard?:
+                                  | T
+                                  | {
+                                      heading?: T;
+                                      body?: T;
+                                      buttonText?: T;
+                                      buttonLink?: T;
+                                      colorPalette?: T;
+                                      id?: T;
+                                      blockName?: T;
+                                    };
+                                HeroCard?:
+                                  | T
+                                  | {
+                                      heading?: T;
+                                      body?: T;
+                                      buttonText?: T;
+                                      buttonLink?: T;
+                                      colorPalette?: T;
+                                      id?: T;
+                                      blockName?: T;
+                                    };
+                                AnnouncementsSection?:
+                                  | T
+                                  | {
+                                      id?: T;
+                                      blockName?: T;
+                                    };
+                                ImageBanner?:
+                                  | T
+                                  | {
+                                      heading?: T;
+                                      body?: T;
+                                      mainImage?: T;
+                                      colorPalette?: T;
+                                      headingColor?: T;
+                                      bgImage?: T;
+                                      bgSize?: T;
+                                      bgPos?: T;
+                                      id?: T;
+                                      blockName?: T;
+                                    };
+                                ImageCard?:
+                                  | T
+                                  | {
+                                      heading?: T;
+                                      mainImage?: T;
+                                      colorPalette?: T;
+                                      id?: T;
+                                      blockName?: T;
+                                    };
+                                testimonials?:
+                                  | T
+                                  | {
+                                      blocks?:
+                                        | T
+                                        | {
+                                            testimonial?:
+                                              | T
+                                              | {
+                                                  id?: T;
+                                                  image?: T;
+                                                  title?: T;
+                                                  description?: T;
+                                                  subtitle?: T;
+                                                  colorPalette?: T;
+                                                  blockName?: T;
+                                                };
+                                          };
+                                      id?: T;
+                                      blockName?: T;
+                                    };
+                                CardWithImage?:
+                                  | T
+                                  | {
+                                      heading?: T;
+                                      body?: T;
+                                      buttonText?: T;
+                                      buttonLink?: T;
+                                      image?: T;
+                                      id?: T;
+                                      blockName?: T;
+                                    };
+                                FeaturedCompetitions?:
+                                  | T
+                                  | {
+                                      Competition1ID?: T;
+                                      colorPalette1?: T;
+                                      Competition2ID?: T;
+                                      colorPalette2?: T;
+                                      id?: T;
+                                      blockName?: T;
+                                    };
+                                twoBlocksLeaf?:
+                                  | T
+                                  | {
+                                      type?: T;
+                                      alignment?: T;
+                                      blocks?:
+                                        | T
+                                        | {
+                                            BasicCard?:
+                                              | T
+                                              | {
+                                                  heading?: T;
+                                                  body?: T;
+                                                  buttonText?: T;
+                                                  buttonLink?: T;
+                                                  colorPalette?: T;
+                                                  id?: T;
+                                                  blockName?: T;
+                                                };
+                                            HeroCard?:
+                                              | T
+                                              | {
+                                                  heading?: T;
+                                                  body?: T;
+                                                  buttonText?: T;
+                                                  buttonLink?: T;
+                                                  colorPalette?: T;
+                                                  id?: T;
+                                                  blockName?: T;
+                                                };
+                                            AnnouncementsSection?:
+                                              | T
+                                              | {
+                                                  id?: T;
+                                                  blockName?: T;
+                                                };
+                                            ImageBanner?:
+                                              | T
+                                              | {
+                                                  heading?: T;
+                                                  body?: T;
+                                                  mainImage?: T;
+                                                  colorPalette?: T;
+                                                  headingColor?: T;
+                                                  bgImage?: T;
+                                                  bgSize?: T;
+                                                  bgPos?: T;
+                                                  id?: T;
+                                                  blockName?: T;
+                                                };
+                                            ImageCard?:
+                                              | T
+                                              | {
+                                                  heading?: T;
+                                                  mainImage?: T;
+                                                  colorPalette?: T;
+                                                  id?: T;
+                                                  blockName?: T;
+                                                };
+                                            testimonials?:
+                                              | T
+                                              | {
+                                                  blocks?:
+                                                    | T
+                                                    | {
+                                                        testimonial?:
+                                                          | T
+                                                          | {
+                                                              id?: T;
+                                                              image?: T;
+                                                              title?: T;
+                                                              description?: T;
+                                                              subtitle?: T;
+                                                              colorPalette?: T;
+                                                              blockName?: T;
+                                                            };
+                                                      };
+                                                  id?: T;
+                                                  blockName?: T;
+                                                };
+                                            CardWithImage?:
+                                              | T
+                                              | {
+                                                  heading?: T;
+                                                  body?: T;
+                                                  buttonText?: T;
+                                                  buttonLink?: T;
+                                                  image?: T;
+                                                  id?: T;
+                                                  blockName?: T;
+                                                };
+                                            FeaturedCompetitions?:
+                                              | T
+                                              | {
+                                                  Competition1ID?: T;
+                                                  colorPalette1?: T;
+                                                  Competition2ID?: T;
+                                                  colorPalette2?: T;
+                                                  id?: T;
+                                                  blockName?: T;
+                                                };
+                                          };
+                                      id?: T;
+                                      blockName?: T;
+                                    };
+                              };
+                          id?: T;
+                          blockName?: T;
+                        };
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        fullWidth?:
+          | T
+          | {
+              blocks?:
+                | T
+                | {
+                    BasicCard?:
+                      | T
+                      | {
+                          heading?: T;
+                          body?: T;
+                          buttonText?: T;
+                          buttonLink?: T;
+                          colorPalette?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    HeroCard?:
+                      | T
+                      | {
+                          heading?: T;
+                          body?: T;
+                          buttonText?: T;
+                          buttonLink?: T;
+                          colorPalette?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    AnnouncementsSection?:
+                      | T
+                      | {
+                          id?: T;
+                          blockName?: T;
+                        };
+                    ImageBanner?:
+                      | T
+                      | {
+                          heading?: T;
+                          body?: T;
+                          mainImage?: T;
+                          colorPalette?: T;
+                          headingColor?: T;
+                          bgImage?: T;
+                          bgSize?: T;
+                          bgPos?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    ImageCard?:
+                      | T
+                      | {
+                          heading?: T;
+                          mainImage?: T;
+                          colorPalette?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    testimonials?:
+                      | T
+                      | {
+                          blocks?:
+                            | T
+                            | {
+                                testimonial?:
+                                  | T
+                                  | {
+                                      id?: T;
+                                      image?: T;
+                                      title?: T;
+                                      description?: T;
+                                      subtitle?: T;
+                                      colorPalette?: T;
+                                      blockName?: T;
+                                    };
+                              };
+                          id?: T;
+                          blockName?: T;
+                        };
+                    CardWithImage?:
+                      | T
+                      | {
+                          heading?: T;
+                          body?: T;
+                          buttonText?: T;
+                          buttonLink?: T;
+                          image?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    FeaturedCompetitions?:
+                      | T
+                      | {
+                          Competition1ID?: T;
+                          colorPalette1?: T;
+                          Competition2ID?: T;
+                          colorPalette2?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                  };
               id?: T;
               blockName?: T;
             };

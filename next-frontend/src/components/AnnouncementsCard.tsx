@@ -15,7 +15,7 @@ export default function AnnouncementsCard({
   others: { title: string; href: string }[];
 }) {
   return (
-    <Flex direction="column" gap={3}>
+    <Flex direction="column" gap={3} width="full">
       {/* HERO ANNOUNCEMENT */}
       <Card.Root
         variant="info"
