@@ -66,6 +66,7 @@ class ScheduleActivity < ApplicationRecord
     parts = self.parsed_activity_code
 
     errors.add(:activity_code, "event should match the selected round") if parts[:event_id] != round.event_id
+    errors.add(:activity_code, "round number should match the selected round") if parts[:round_number].present? && (parts[:round_number] != round.number)
 
     errors.add(:activity_code, "group should not be larger than the number of scramble sets") if parts[:group_number].present? && (parts[:group_number] > round.scramble_set_count)
     errors.add(:activity_code, "attempt number should not be larger than the number of expected attempts") if parts[:attempt_number].present? && (parts[:attempt_number] > round.format.expected_solve_count)
