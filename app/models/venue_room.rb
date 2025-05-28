@@ -5,7 +5,7 @@ class VenueRoom < ApplicationRecord
   DEFAULT_ROOM_COLOR = "#304a96"
   belongs_to :competition_venue
   has_one :competition, through: :competition_venue
-  delegate :start_time, :end_time, to: :competition
+  delegate :start_time, :end_time, to: :competition, prefix: true
   has_many :schedule_activities, -> { root_activities }, dependent: :destroy
   has_many :wcif_extensions, as: :extendable, dependent: :delete_all
 

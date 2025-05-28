@@ -29,8 +29,8 @@ class ScheduleActivity < ApplicationRecord
 
   validate :included_in_competition_dates
   def included_in_competition_dates
-    errors.add(:start_time, "should be after competition's start_time") unless start_time >= venue_room.start_time
-    errors.add(:end_time, "should be before competition's end_time") unless end_time <= venue_room.end_time
+    errors.add(:start_time, "should be after competition's start_time") unless start_time >= venue_room.competition_start_time
+    errors.add(:end_time, "should be before competition's end_time") unless end_time <= venue_room.competition_end_time
   end
 
   validate :included_in_parent_schedule, if: :parent_activity_id?
@@ -65,6 +65,8 @@ class ScheduleActivity < ApplicationRecord
   def consistent_round_information
     parts = self.parsed_activity_code
 
+    errors.add(:activity_code, "event should match the selected round") if parts[:event_id] != round.event_id
+
     errors.add(:activity_code, "group should not be larger than the number of scramble sets") if parts[:group_number].present? && (parts[:group_number] > round.scramble_set_count)
     errors.add(:activity_code, "attempt number should not be larger than the number of expected attempts") if parts[:attempt_number].present? && (parts[:attempt_number] > round.format.expected_solve_count)
   end
@@ -73,7 +75,7 @@ class ScheduleActivity < ApplicationRecord
   # from its activity code (eg: if it's for an event or round).
   def localized_name
     parts = self.parsed_activity_code
-    if parts[:event_id] == "other"
+    if parts[:event_id] == ACTIVITY_CODE_OTHER
       # TODO/NOTE: should we fix the name for event with predefined activity codes? (ie: those below but 'misc' and 'unofficial')
       # VALID_OTHER_ACTIVITY_CODE = %w(registration checkin multi breakfast lunch dinner awards unofficial misc).freeze
       self.name
