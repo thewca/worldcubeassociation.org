@@ -149,8 +149,6 @@ module CheckRegionalRecords
                                                   SELECT
                                                     results.id AS result_id,
                                                     results.event_id,
-                                                    results.competition_id,
-                                                    results.round_type_id,
                                                     results.country_id,
                                                     results.#{value_column},
                                                     result_timestamps.round_timestamp,
@@ -168,9 +166,14 @@ module CheckRegionalRecords
                                                 SELECT * FROM ranked_results WHERE best_rank = 1;
         SQL
         .to_a
-        candidates = best_at_date.filter_map do |_result_id, current_event_id, current_competition_id, round_id, country_id, min, round_timestamp|
-          record_at_time_of_round = RegionalRecord.record_for(current_event_id, value_name, :NR, country_id: country_id, date: round_timestamp)
-          [current_event_id, current_competition_id, round_id, country_id, round_timestamp, min] if record_at_time_of_round < min
+        candidates = best_at_date.filter_map do |result_id, current_event_id, country_id, min, round_timestamp|
+          is_record, computed_marker = RegionalRecord.is_record_at_date?(min, current_event_id, value_name, country_id, round_timestamp)
+          result = Result.includes(:competition).find(result_id)
+          {
+            computed_marker: computed_marker,
+            competition: result.competition,
+            result:result,
+          } if is_record
         end
         [value_column, candidates]
       end
