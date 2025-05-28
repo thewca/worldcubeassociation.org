@@ -25,11 +25,12 @@ const useRoundDataSetter = (updater, path, currentRoundId, availableRoundData) =
     _.set(filterCriteria, path, innerValue);
 
     // find the next round that matches the desired, user-selected criteria
-    const nextAvailableRounds = availableRoundData[filterCriteria.eventId].rounds;
+    const nextAvailableRounds = availableRoundData[filterCriteria.eventId].rounds
+      .map((r) => ({ ...r, eventId: currentEventId }));
 
     const nextRound = nextAvailableRounds.find(
       (r) => Object.entries(r).every(
-        ([rKey, rValue]) => filterCriteria[rKey] === rValue,
+        ([rKey, rValue]) => rKey === 'roundId' || filterCriteria[rKey] === rValue,
       ),
     );
 
