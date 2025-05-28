@@ -3,7 +3,7 @@ import {
   Accordion, Button, Card, Header, Icon, List,
 } from 'semantic-ui-react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { events, roundTypes } from '../../lib/wca-data.js.erb';
+import { events } from '../../lib/wca-data.js.erb';
 import { fetchJsonOrError } from '../../lib/requests/fetchWithAuthenticityToken';
 import { scrambleFileUrl } from '../../lib/requests/routes.js.erb';
 import Loading from '../Requests/Loading';
@@ -57,9 +57,9 @@ function ScrambleFileInfo({ scrambleFile }) {
               {scrambleFile.inbox_scramble_sets.map((scrambleSet) => (
                 <List.Item key={scrambleSet.id}>
                   {events.byId[scrambleSet.event_id].name}
-                  {' '}
-                  {roundTypes.byId[scrambleSet.round_type_id].name}
-                  {' - '}
+                  {' Round '}
+                  {scrambleSet.round_number}
+                  {' Scramble Set '}
                   {String.fromCharCode(64 + scrambleSet.scramble_set_number)}
                 </List.Item>
               ))}
