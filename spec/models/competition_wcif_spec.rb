@@ -8,21 +8,22 @@ RSpec.describe "Competition WCIF" do
       :competition,
       :visible,
       :with_competitor_limit,
+      :with_valid_schedule,
       id: "TestComp2014",
       name: "Test Comp 2014",
       cell_name: "Test 2014",
       start_date: "2014-02-03",
       end_date: "2014-02-05",
       external_website: "http://example.com",
-      event_ids: %w[222 333 444 333fm 333mbf],
-      with_schedule: true,
+      event_ids: [],
+      competition_events: [event_333, event_222, event_444, event_333fm, event_333mbf],
       exclude_from_schedule: %w[222],
       competitor_limit: 50,
       registration_open: "2013-12-01",
       registration_close: "2013-12-31",
     )
   end
-  let(:partner_competition) do
+  let!(:partner_competition) do
     create(
       :competition,
       :visible,
@@ -44,18 +45,18 @@ RSpec.describe "Competition WCIF" do
   let(:organizer) { competition.organizers.first }
   let(:sixty_second_2_attempt_cutoff) { Cutoff.new(number_of_attempts: 2, attempt_result: 1.minute.in_centiseconds) }
   let(:top_16_advance) { AdvancementConditions::RankingCondition.new(16) }
-  let!(:round333_1) { create(:round, competition: competition, event_id: "333", number: 1, cutoff: sixty_second_2_attempt_cutoff, advancement_condition: top_16_advance, scramble_set_count: 16, total_number_of_rounds: 2) }
-  let!(:round333_2) { create(:round, competition: competition, event_id: "333", number: 2, total_number_of_rounds: 2) }
-  let!(:round444_1) { create(:round, competition: competition, event_id: "444", number: 1) }
-  let!(:round222_1) { create(:round, competition: competition, event_id: "222", number: 1) }
-  let!(:round333fm_1) { create(:round, competition: competition, event_id: "333fm", number: 1, format_id: "m") }
-  let!(:round333mbf_1) { create(:round, competition: competition, event_id: "333mbf", number: 1, format_id: "3") }
-  let!(:round333mbf_1_extension) { round333mbf_1.wcif_extensions.create!(extension_id: "com.third.party", spec_url: "https://example.com", data: { "tables" => 5 }) }
-
-  before :each do
-    # Load all the rounds we just created.
-    competition.reload
-  end
+  let(:event_333) { build(:competition_event, event_id: "333") }
+  let!(:round333_1) { build(:round, competition_event: event_333, number: 1, cutoff: sixty_second_2_attempt_cutoff, advancement_condition: top_16_advance, scramble_set_count: 16, total_number_of_rounds: 2) }
+  let!(:round333_2) { build(:round, competition_event: event_333, number: 2, total_number_of_rounds: 2) }
+  let(:event_444) { build(:competition_event, event_id: "444") }
+  let!(:round444_1) { build(:round, competition_event: event_444, number: 1) }
+  let(:event_222) { build(:competition_event, event_id: "222") }
+  let!(:round222_1) { build(:round, competition_event: event_222, number: 1) }
+  let(:event_333fm) { build(:competition_event, event_id: "333fm") }
+  let!(:round333fm_1) { build(:round, competition_event: event_333fm, number: 1, format_id: "m") }
+  let(:event_333mbf) { build(:competition_event, event_id: "333mbf") }
+  let!(:round333mbf_1) { build(:round, competition_event: event_333mbf, number: 1, format_id: "3") }
+  let(:round333mbf_1_extension) { round333mbf_1.wcif_extensions.create!(extension_id: "com.third.party", spec_url: "https://example.com", data: { "tables" => 5 }) }
 
   describe "#to_wcif" do
     it "renders a valid WCIF" do

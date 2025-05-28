@@ -404,6 +404,8 @@ FactoryBot.define do
       end
       if evaluator.with_rounds
         competition.competition_events.each do |ce|
+          next if ce.rounds.any?
+
           evaluator.rounds_per_event.times do |i|
             ce.rounds.create!(
               format: ce.event.preferred_formats.first.format,
