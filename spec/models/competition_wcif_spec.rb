@@ -355,7 +355,7 @@ RSpec.describe "Competition WCIF" do
       competition.set_wcif_events!(wcif["events"], delegate)
 
       expect(competition.to_wcif["events"]).to eq(wcif["events"])
-      expect(competition.events.map(&:id)).to match_array %w[333 333fm 333mbf 444]
+      expect(competition.event_ids).to match_array %w[222 333 333fm 333mbf 444]
     end
 
     it "does remove competition event when wcif rounds are nil" do
@@ -366,7 +366,7 @@ RSpec.describe "Competition WCIF" do
 
       wcif["events"].reject! { |e| e["id"] == "444" }
       expect(competition.to_wcif["events"]).to eq(wcif["events"])
-      expect(competition.events.map(&:id)).to match_array %w[333 333fm 333mbf]
+      expect(competition.event_ids).to match_array %w[222 333 333fm 333mbf]
     end
 
     it "removes competition event when wcif event is missing" do
@@ -375,7 +375,7 @@ RSpec.describe "Competition WCIF" do
       competition.set_wcif_events!(wcif["events"], delegate)
 
       expect(competition.to_wcif["events"]).to eq(wcif["events"])
-      expect(competition.events.map(&:id)).to match_array %w[333 333fm 333mbf]
+      expect(competition.event_ids).to match_array %w[222 333 333fm 333mbf]
     end
 
     it "creates competition event when adding round to previously nonexistent event" do
@@ -400,7 +400,7 @@ RSpec.describe "Competition WCIF" do
         "qualification" => nil,
       }
       # Add 5x5x5 after 4x4x4 to match the expected order.
-      wcif["events"].insert(2, wcif555)
+      wcif["events"].insert(3, wcif555)
 
       competition.set_wcif_events!(wcif["events"], delegate)
 
