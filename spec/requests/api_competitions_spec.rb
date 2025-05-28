@@ -232,7 +232,7 @@ RSpec.describe "API Competitions" do
           let(:competition) { create(:competition, :past, :with_delegate, :with_organizer, :visible, :confirmed, :results_posted, event_ids: %w[222 333]) }
 
           it "allows adding rounds to an event" do
-            competition.competition_events.find_by(event_id: "333").rounds.delete_all
+            competition.competition_events.find_by(event_id: "333").rounds.destroy_all
             expect(competition.competition_events.find_by(event_id: "333").rounds.length).to eq 0
             patch api_v0_competition_update_wcif_path(competition), params: create_wcif_with_events(%w[222 333]).to_json, headers: headers
             expect(response).to be_successful
@@ -248,7 +248,7 @@ RSpec.describe "API Competitions" do
           let!(:competition) { create(:competition, :future, :with_delegate, :with_organizer, :visible, :confirmed, event_ids: %w[222 333]) }
 
           it "allows adding rounds to an event" do
-            competition.competition_events.find_by(event_id: "333").rounds.delete_all
+            competition.competition_events.find_by(event_id: "333").rounds.destroy_all
             expect(competition.competition_events.find_by(event_id: "333").rounds.length).to eq 0
             patch api_v0_competition_update_wcif_path(competition), params: create_wcif_with_events(%w[222 333]).to_json, headers: headers
             expect(response).to be_successful
