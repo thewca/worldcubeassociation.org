@@ -18,6 +18,7 @@ namespace :registrant_id do
     end
   end
 
+  desc 'Checks that the backfill completed in `populate` is consistent with the WCIF-generated registrant_ids'
   task verify: :environment do
     inconsistencies = []
     comps = Competition.where("end_date > '2025-05-01'")
