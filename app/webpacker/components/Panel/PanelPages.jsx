@@ -5,7 +5,6 @@ import {
   subordinateUpcomingCompetitionsUrl,
   generateDbTokenUrl,
   serverStatusPageUrl,
-  fixResultsUrl,
   mergeProfilesUrl,
   reassignConnectedWcaIdUrl,
 } from '../../lib/requests/routes.js.erb';
@@ -38,6 +37,7 @@ import RunValidatorsForm from './pages/RunValidatorsPage/RunValidatorsForm';
 import ComputeAuxiliaryDataPage from './pages/ComputeAuxiliaryDataPage';
 import GenerateDataExportsPage from './pages/GenerateDataExportsPage';
 import CheckRecordsPage from './pages/CheckRecordsPage';
+import FixResultsPage from './pages/FixResultsPage';
 
 export default {
   [PANEL_PAGES.postingDashboard]: {
@@ -178,7 +178,7 @@ export default {
   },
   [PANEL_PAGES.fixResults]: {
     name: 'Fix Results',
-    link: fixResultsUrl,
+    component: FixResultsPage,
   },
   [PANEL_PAGES.mergeProfiles]: {
     name: 'Merge Profiles',
