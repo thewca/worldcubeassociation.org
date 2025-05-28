@@ -4,19 +4,19 @@ require 'rails_helper'
 
 class ExampleJob < WcaCronjob
   def perform
-    Rails.logger.debug "Doing stuff..."
+    puts "Doing stuff..."
   end
 end
 
 class ExampleJob2 < WcaCronjob
   def perform
-    Rails.logger.debug "Doing other stuff..."
+    puts "Doing other stuff..."
   end
 end
 
 class SuccessfulJob < WcaCronjob
   def perform
-    Rails.logger.debug "Succeeding!"
+    puts "Succeeding!"
   end
 end
 
