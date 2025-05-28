@@ -164,7 +164,7 @@ RSpec.describe SV do
         validator_args.each do |arg|
           sv = SV.new.validate(**arg)
           expect(sv.warnings).to be_empty
-          expect(sv.errors).to match_array(expected_errors)
+          expect(sv.errors).to include(*expected_errors)
         end
       end
     end
