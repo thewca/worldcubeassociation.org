@@ -439,7 +439,7 @@ FactoryBot.define do
           competition_start_utc = Time.zone.local_to_utc(competition.start_time)
           competition_end_utc = Time.zone.local_to_utc(competition.end_time)
 
-          number_of_days = (competition_end_utc - competition_start_utc).to_i
+          number_of_days = (competition_end_utc - competition_start_utc).seconds.in_days
           activities_per_day = (number_of_activities / number_of_days.to_f).ceil
 
           # somewhat arbitrary: let's make the competition run from 10AM to 8PM
@@ -454,7 +454,7 @@ FactoryBot.define do
               current_day_activities = 0
               had_lunch_today = false
 
-              start_time = competition_start_utc.clone
+              start_time = competition_start_utc.change(hour: 10, min: 0, sec: 0)
               lunch_time_marker = start_time.change(hour: 12, min: 0, sec: 0)
 
               competition.competition_events.each do |ce|
@@ -472,7 +472,6 @@ FactoryBot.define do
 
                     current_activity_id += 1
                     had_lunch_today = true
-                    start_time = end_time
                   end
 
                   end_time = start_time + available_time_per_activity
@@ -485,7 +484,7 @@ FactoryBot.define do
                       round: r,
                       start_time: start_time.iso8601,
                       end_time: end_time.iso8601,
-                      )
+                    )
 
                     if r.scramble_set_count > 1
                       round_activity_duration = round_activity.end_time - round_activity.start_time
@@ -503,7 +502,7 @@ FactoryBot.define do
                           round: r,
                           start_time: group_start_time,
                           end_time: group_end_time,
-                          )
+                        )
 
                         group_start_time = group_end_time.clone
                         current_activity_id += 1
@@ -516,7 +515,8 @@ FactoryBot.define do
                   current_day_activities += 1
 
                   if current_day_activities >= activities_per_day
-                    start_time = competition_start_utc + 1.day
+                    start_time = (start_time + 1.day).change(hour: 10, min: 0, sec: 0)
+                    lunch_time_marker = start_time.change(hour: 12, min: 0, sec: 0)
                     current_day_activities = 0
                     had_lunch_today = false
                   else
