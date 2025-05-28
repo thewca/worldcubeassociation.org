@@ -45,9 +45,9 @@ RSpec.describe "Competition WCIF" do
   let(:organizer) { competition.organizers.first }
   let(:sixty_second_2_attempt_cutoff) { Cutoff.new(number_of_attempts: 2, attempt_result: 1.minute.in_centiseconds) }
   let(:top_16_advance) { AdvancementConditions::RankingCondition.new(16) }
-  let(:event_333) { build(:competition_event, event_id: "333") }
-  let!(:round333_1) { build(:round, competition_event: event_333, number: 1, cutoff: sixty_second_2_attempt_cutoff, advancement_condition: top_16_advance, scramble_set_count: 16, total_number_of_rounds: 2) }
-  let!(:round333_2) { build(:round, competition_event: event_333, number: 2, total_number_of_rounds: 2) }
+  let(:round333_1) { build(:round, competition: nil, number: 1, cutoff: sixty_second_2_attempt_cutoff, advancement_condition: top_16_advance, scramble_set_count: 16, total_number_of_rounds: 2) }
+  let(:round333_2) { build(:round, competition: nil, number: 2, total_number_of_rounds: 2) }
+  let(:event_333) { build(:competition_event, event_id: "333", rounds: [round333_1, round333_2]) }
   let(:event_444) { build(:competition_event, event_id: "444") }
   let!(:round444_1) { build(:round, competition_event: event_444, number: 1) }
   let(:event_222) { build(:competition_event, event_id: "222") }

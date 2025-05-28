@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Round < ApplicationRecord
-  belongs_to :competition_event
+  belongs_to :competition_event, inverse_of: :rounds
   has_one :competition, through: :competition_event
   delegate :competition_id, to: :competition_event
 
