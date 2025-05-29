@@ -64,13 +64,12 @@ class Registration < ApplicationRecord
 
   validates :registrant_id, presence: true, uniqueness: { scope: :competition_id }
 
-  # Set a `registrant_id` counter for newly created records,
-  #   but also give bulk imports the chance to set it for themselves if they want to
-  #   (i.e. don't trigger this hook if there is already a value present)
-  after_initialize :generate_registrant_id, if: :new_record?, unless: :registrant_id?
+  # Run the hook twice so that even if you try to skip validations, it still persists a non-null value to the DB
+  before_validation :ensure_registrant_id, on: :create
+  before_create :ensure_registrant_id
 
-  private def generate_registrant_id
-    self.registrant_id = competition.registrations.count + 1
+  private def ensure_registrant_id
+    self.registrant_id ||= competition.registrations.count + 1
   end
 
   validates :guests, numericality: { greater_than_or_equal_to: 0 }
