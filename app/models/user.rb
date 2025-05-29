@@ -1261,7 +1261,7 @@ class User < ApplicationRecord
     json
   end
 
-  def to_wcif(competition, registration = nil, registrant_id = nil, authorized: false)
+  def to_wcif(competition, registration = nil, authorized: false)
     roles = registration&.roles || []
     roles << "delegate" if competition.staff_delegates.include?(self)
     roles << "trainee-delegate" if competition.trainee_delegates.include?(self)
@@ -1274,7 +1274,7 @@ class User < ApplicationRecord
       "name" => name,
       "wcaUserId" => id,
       "wcaId" => wca_id,
-      "registrantId" => registrant_id,
+      "registrantId" => registration&.registrant_id,
       "countryIso2" => country_iso2,
       "gender" => gender,
       "registration" => registration&.to_wcif(authorized: authorized),
