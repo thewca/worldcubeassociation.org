@@ -1184,9 +1184,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_05_29_061324) do
   end
 
   create_table "schedule_activities", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
-    t.string "holder_type"
-    t.bigint "holder_id"
-    t.bigint "venue_room_id"
+    t.bigint "venue_room_id", null: false
     t.bigint "parent_activity_id"
     t.integer "wcif_id", null: false
     t.string "name", null: false
@@ -1199,6 +1197,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_05_29_061324) do
     t.datetime "updated_at", precision: nil, null: false
     t.index ["parent_activity_id"], name: "index_schedule_activities_on_parent_activity_id"
     t.index ["round_id"], name: "index_schedule_activities_on_round_id"
+    t.index ["venue_room_id", "wcif_id"], name: "index_schedule_activities_on_venue_room_id_and_wcif_id", unique: true
     t.index ["venue_room_id"], name: "index_schedule_activities_on_venue_room_id"
   end
 
