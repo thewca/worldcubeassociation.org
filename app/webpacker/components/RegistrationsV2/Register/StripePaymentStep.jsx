@@ -46,12 +46,18 @@ export default function Wrapper({
     queryKey: ['displayAmount', isoDonationAmount, competitionInfo.id, registration.user_id],
   });
 
+  console.log('trace1')
   useEffect(() => {
-    setStripePromise(
-      loadStripe(stripePublishableKey, {
-        stripeAccount: connectedAccountId,
-      }),
-    );
+    try {
+      setStripePromise(
+        loadStripe(stripePublishableKey, {
+          stripeAccount: connectedAccountId,
+        }),
+      );
+    } catch (error ){
+      console.log('error:')
+      console.log(error)
+    }
   }, [connectedAccountId, stripePublishableKey]);
 
   return (
@@ -68,7 +74,14 @@ export default function Wrapper({
       { stripePromise && (
         <Elements
           stripe={stripePromise}
-          options={{ amount: data?.api_amounts.stripe ?? initialAmount, currency: competitionInfo.currency_code.toLowerCase(), mode: 'payment' }}
+          options={{
+            amount: data?.api_amounts.stripe ?? initialAmount,
+            currency: competitionInfo.currency_code.toLowerCase(),
+            mode: 'payment',
+            onLoadError: (error) => {
+              console.log('Stripe load error: ', error)
+            }
+          }}
         >
           <PaymentStep
             setIsoDonationAmount={setIsoDonationAmount}
@@ -93,15 +106,27 @@ function PaymentStep({
   displayAmount,
   conversionFetching,
 }) {
-  const stripe = useStripe();
-  const elements = useElements();
+
+  console.log('trace2')
+  let stripe = null
+  let elements = null
+  try {
+    stripe = useStripe();
+    elements = useElements();
+  } catch(error) {
+    console.log('error')
+    console.log(error)
+  }
+
   const dispatch = useDispatch();
   const { registration } = useRegistration();
 
   const [isLoading, setIsLoading] = useState(false);
   const [isDonationChecked, setDonationChecked] = useCheckboxState(false);
 
+  console.log('trace3')
   const handleSubmit = async (e) => {
+    console.log('trace4')
     e.preventDefault();
 
     if (!stripe || !elements) {
@@ -113,11 +138,17 @@ function PaymentStep({
     setIsLoading(true);
 
     // Call submit before doing any async work as per Stripe Documentation
-    await elements.submit();
+    try {
+      await elements.submit();
+    } catch (error) {
+      console.log('error2')
+      console.log(error)
+    }
 
     // Create the PaymentIntent and obtain clientSecret
     const data = await getPaymentTicket(registration.id, isoDonationAmount);
 
+    console.log('trace5')
     const { client_secret: clientSecret } = data;
 
     const { error } = await stripe.confirmPayment({
@@ -176,6 +207,7 @@ function PaymentStep({
             )}
           </FormField>
         )}
+        {console.log('trace6')}
         { isLoading
           ? <Loading />
           : (
