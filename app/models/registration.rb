@@ -46,12 +46,6 @@ class Registration < ApplicationRecord
 
   serialize :roles, coder: YAML
 
-  # Set a `registered_at` timestamp for newly created records,
-  #   but only if there is no value already specified from the outside
-  after_initialize :mark_registered_at, if: :new_record?, unless: :registered_at?
-
-  before_create -> { self.registrant_id ||= competition.registrations.count + 1 }
-
   # TODO: V3-REG cleanup. The "accepts_nested_attributes_for" directly below can be removed.
   accepts_nested_attributes_for :registration_competition_events, allow_destroy: true
   validates_associated :registration_competition_events
@@ -59,10 +53,15 @@ class Registration < ApplicationRecord
   validates :user, presence: true, on: [:create]
 
   validates :registered_at, presence: true
+  # Set a `registered_at` timestamp for newly created records,
+  #   but only if there is no value already specified from the outside
+  after_initialize :mark_registered_at, if: :new_record?, unless: :registered_at?
 
   private def mark_registered_at
     self.registered_at = current_time_from_proper_timezone
   end
+
+  before_create -> { self.registrant_id ||= competition.registrations.count + 1 }
 
   validates :guests, numericality: { greater_than_or_equal_to: 0 }
   validates :guests, numericality: { less_than_or_equal_to: :guest_limit, if: :check_guest_limit?, frontend_code: Registrations::ErrorCodes::GUEST_LIMIT_EXCEEDED }

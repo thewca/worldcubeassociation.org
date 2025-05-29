@@ -597,6 +597,7 @@ module DatabaseDumper
           accepted_at
           accepted_by
           competition_id
+          registrant_id
           created_at
           deleted_at
           deleted_by

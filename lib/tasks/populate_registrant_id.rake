@@ -3,19 +3,15 @@
 namespace :registrant_id do
   desc 'Backfills all registration.registrant_id values with their WCIF-generated registrant_id'
   task populate: :environment do
-    Competition.find_each do |competition|
-      puts "Setting registrant_ids for #{competition.id}"
-      ActiveRecord::Base.connection.execute(<<~SQL.squish)
-         WITH wcif_ordered AS (
-           SELECT id, ROW_NUMBER() OVER (ORDER BY id) AS registrant_id
-           FROM registrations
-           WHERE competition_id = '#{competition.id}'
-         )
-        UPDATE registrations
-        JOIN wcif_ordered ON registrations.id = wcif_ordered.id
-        SET registrations.registrant_id = wcif_ordered.registrant_id
-      SQL
-    end
+    ActiveRecord::Base.connection.execute(<<~SQL.squish)
+       WITH wcif_ordered AS (
+         SELECT id, ROW_NUMBER() OVER (PARTITION BY competition_id ORDER BY id) AS registrant_id
+         FROM registrations
+       )
+      UPDATE registrations
+      JOIN wcif_ordered ON registrations.id = wcif_ordered.id
+      SET registrations.registrant_id = wcif_ordered.registrant_id
+    SQL
   end
 
   desc 'Checks that the backfill completed in `populate` is consistent with the WCIF-generated registrant_ids'
