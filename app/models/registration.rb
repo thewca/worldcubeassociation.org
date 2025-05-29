@@ -53,6 +53,7 @@ class Registration < ApplicationRecord
   validates :user, presence: true, on: [:create]
 
   validates :registered_at, presence: true
+
   # Set a `registered_at` timestamp for newly created records,
   #   but only if there is no value already specified from the outside
   after_initialize :mark_registered_at, if: :new_record?, unless: :registered_at?
@@ -61,8 +62,16 @@ class Registration < ApplicationRecord
     self.registered_at = current_time_from_proper_timezone
   end
 
-  before_validation -> { self.registrant_id ||= competition.registrations.count + 1 }, on: :create
   validates :registrant_id, presence: true, uniqueness: { scope: :competition_id }
+
+  # Set a `registrant_id` counter for newly created records,
+  #   but also give bulk imports the chance to set it for themselves if they want to
+  #   (i.e. don't trigger this hook if there is already a value present)
+  after_initialize :generate_registrant_id, if: :new_record?, unless: :registrant_id?
+
+  private def generate_registrant_id
+    self.registrant_id = competitions.registrations.count + 1
+  end
 
   validates :guests, numericality: { greater_than_or_equal_to: 0 }
   validates :guests, numericality: { less_than_or_equal_to: :guest_limit, if: :check_guest_limit?, frontend_code: Registrations::ErrorCodes::GUEST_LIMIT_EXCEEDED }
