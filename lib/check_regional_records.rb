@@ -147,33 +147,39 @@ module CheckRegionalRecords
         best_at_date = ActiveRecord::Base.connection.execute(<<~SQL)
                                                   WITH ranked_results AS (
                                                   SELECT
-                                                    results.id AS result_id,
-                                                    results.event_id,
-                                                    results.country_id,
-                                                    results.#{value_column},
-                                                    result_timestamps.round_timestamp,
+                                                    result_id,
+                                                    event_id,
+                                                    country_id,
+                                                    continent_id,
+                                                    #{value_column},
+                                                    round_timestamp,
                                                     ROW_NUMBER() OVER (
-                                                      PARTITION BY results.event_id, result_timestamps.round_timestamp
-                                                      ORDER BY results.#{value_column}
+                                                      PARTITION BY event_id, round_timestamp
+                                                      ORDER BY #{value_column}
                                                     ) AS best_rank
-                                                  FROM results
-                                                  INNER JOIN result_timestamps ON result_timestamps.result_id = results.id
-                                                  WHERE results.#{value_column} > 0
-                                                  #{event_id.present? ? "AND results.event_id = '#{event_id}'" : ''}
-                                                  #{from_timestamp.present? ? "AND result_timestamps.round_timestamp >= '#{from_timestamp}'" : ''}
-                                                  #{to_timestamp.present? ? "AND result_timestamps.round_timestamp <= '#{to_timestamp}'" : ''}
+                                                  FROM result_timestamps
+                                                  WHERE #{value_column} > 0
+                                                  #{event_id.present? ? "AND event_id = '#{event_id}'" : ''}
+                                                  #{from_timestamp.present? ? "AND round_timestamp >= '#{from_timestamp}'" : ''}
+                                                  #{to_timestamp.present? ? "AND round_timestamp <= '#{to_timestamp}'" : ''}
                                                 )
                                                 SELECT * FROM ranked_results WHERE best_rank = 1;
         SQL
         .to_a
         candidates = best_at_date.filter_map do |result_id, current_event_id, country_id, min, round_timestamp|
           is_record, computed_marker = RegionalRecord.is_record_at_date?(min, current_event_id, value_name, country_id, round_timestamp)
-          result = Result.includes(:competition).find(result_id)
-          {
-            computed_marker: computed_marker,
-            competition: result.competition,
-            result:result,
-          } if is_record
+          if is_record
+            result = Result.includes(:competition).find(result_id)
+            {
+              computed_marker: computed_marker,
+              competition: result.competition,
+              result:result,
+            }
+          end
+        rescue Exception => e
+          puts "Error checking record for #{result_id} in #{current_event_id} at #{round_timestamp}: #{e}"
+          puts e.backtrace
+          nil
         end
         [value_column, candidates]
       end
