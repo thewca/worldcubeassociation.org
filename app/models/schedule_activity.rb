@@ -68,7 +68,12 @@ class ScheduleActivity < ApplicationRecord
     errors.add(:activity_code, "event should match the selected round") if parts[:event_id] != round.event_id
     errors.add(:activity_code, "round number should match the selected round") if parts[:round_number].present? && (parts[:round_number] != round.number)
 
-    errors.add(:activity_code, "group should not be larger than the number of scramble sets") if parts[:group_number].present? && (parts[:group_number] > round.scramble_set_count)
+    # TODO: We normally want this validation, but it messes with established "workflows" of Delegates
+    #   who want to sync in-progress schedules or experiment with external group assignment tools
+    #   while at the same time not wanting to constantly switch to the "Edit Events" page to update the scramble set number
+    # See also https://github.com/thewca/worldcubeassociation.org/issues/11654 fpr details
+    # errors.add(:activity_code, "group should not be larger than the number of scramble sets") if parts[:group_number].present? && (parts[:group_number] > round.scramble_set_count)
+
     errors.add(:activity_code, "attempt number should not be larger than the number of expected attempts") if parts[:attempt_number].present? && (parts[:attempt_number] > round.format.expected_solve_count)
   end
 
