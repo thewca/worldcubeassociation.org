@@ -59,6 +59,7 @@ export default function ScrambleMatch({
         <Table.Row>
           <Table.HeaderCell />
           <Table.HeaderCell>Assigned Scrambles</Table.HeaderCell>
+          <Table.HeaderCell>Move</Table.HeaderCell>
         </Table.Row>
       </Table.Header>
       <DragDropContext
@@ -110,6 +111,9 @@ export default function ScrambleMatch({
                               <Table.Cell {...providedDraggable.dragHandleProps}>
                                 <Icon name={hasError ? 'exclamation triangle' : 'bars'} />
                                 {hasError ? 'Missing scramble set' : computeRowName(rowData)}
+                              </Table.Cell>
+                              <Table.Cell textAlign="center" collapsing icon>
+                                <Icon name="arrows alternate horizontal" />
                               </Table.Cell>
                             </Table.Row>
                           </Ref>
