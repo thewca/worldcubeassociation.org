@@ -61,7 +61,7 @@ class Registration < ApplicationRecord
     self.registered_at = current_time_from_proper_timezone
   end
 
-  before_create -> { self.registrant_id ||= competition.registrations.count + 1 }
+  before_validation -> { self.registrant_id ||= competition.registrations.count + 1 }, on: :create
   validates :registrant_id, presence: true, uniqueness: { scope: :competition_id }
 
   validates :guests, numericality: { greater_than_or_equal_to: 0 }
