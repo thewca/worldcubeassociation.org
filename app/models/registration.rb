@@ -290,6 +290,7 @@ class Registration < ApplicationRecord
       id: id,
       user: user.as_json(only: %w[id wca_id name gender country_iso2], methods: %w[country], include: [], private_attributes: private_attributes),
       user_id: user_id,
+      registrant_id: registrant_id,
       competing: {
         event_ids: event_ids,
       },
