@@ -24,10 +24,17 @@ class CronjobWarningJob < WcaCronjob
 
       started_as_planned = statistics.run_start <= should_start_before
       completed_later_successfully = statistics.successful_run_start >= should_start_before
+      running_extremely_long = !statistics.run_end? && statistics.run_start <= (5 * average_runtime).ago
 
-      next if started_as_planned || completed_later_successfully
+      next if (started_as_planned && !running_extremely_long) || completed_later_successfully
 
-      message = if statistics.last_run_successful?
+      message = if running_extremely_long
+                  <<~SLACK.squish
+                    Kaboom! :boom: Cronjob '#{job.klass}' has started at #{statistics.run_start}
+                    but still hasn't finished, despite running longer than five times the average
+                    (#{average_runtime} seconds). Please check that everything is in order!"
+                  SLACK
+                elsif statistics.last_run_successful?
                   <<~SLACK.squish
                     Uh oh! Cronjob '#{job.klass}' should have run at #{should_start_before}
                     (with leeway at an average runtime of #{average_runtime} seconds)
