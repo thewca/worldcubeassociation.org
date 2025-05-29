@@ -82,7 +82,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
         ActiveRecord::Base.transaction do
           upcoming_comps_for_user.each do |registration|
             begin
-              registration.update!(competing_status: Registrations::Helper::STATUS_CANCELLED)
+              registration.update!(competing_status: Registrations::Helper::STATUS_REJECTED)
               RegistrationsMailer.notify_delegates_of_registration_deletion_of_banned_competitor(registration, end_date).deliver_later
             rescue ActiveRecord::RecordInvalid => e
               raise ActiveRecord::Rollback, "Registration update failed: #{e.message}"
