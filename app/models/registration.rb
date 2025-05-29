@@ -62,6 +62,7 @@ class Registration < ApplicationRecord
   end
 
   before_create -> { self.registrant_id ||= competition.registrations.count + 1 }
+  validates :registrant_id, presence: true, uniqueness: { scope: :competition_id }
 
   validates :guests, numericality: { greater_than_or_equal_to: 0 }
   validates :guests, numericality: { less_than_or_equal_to: :guest_limit, if: :check_guest_limit?, frontend_code: Registrations::ErrorCodes::GUEST_LIMIT_EXCEEDED }
