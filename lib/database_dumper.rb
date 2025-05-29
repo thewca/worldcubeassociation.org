@@ -458,8 +458,6 @@ module DatabaseDumper
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w[
           id
-          holder_type
-          holder_id
           venue_room_id
           parent_activity_id
           wcif_id
