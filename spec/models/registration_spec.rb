@@ -605,7 +605,46 @@ RSpec.describe Registration do
     let(:auto_accept_comp) { create(:competition, :auto_accept, :registration_open) }
     let!(:reg) { create(:registration, competition: auto_accept_comp) }
 
-    it 'auto accepts a competitor who pays for their pending registration' do
+    describe 'return values' do
+      context 'on success' do
+        it 'returns succeeded:true and info:accepted' do
+          create(:registration_payment, :skip_create_hook, registration: reg, competition: auto_accept_comp)
+          response = reg.attempt_auto_accept
+
+          expect(response[:succeeded]).to be(true)
+          expect(response[:info]).to eq('accepted')
+        end
+
+        it 'returns info:waiting_list if reg was waitlisted' do
+          auto_accept_comp.competitor_limit = 1
+          create(:registration, :accepted, competition: auto_accept_comp)
+          create(:registration_payment, :skip_create_hook, registration: reg, competition: auto_accept_comp)
+          response = reg.attempt_auto_accept
+
+          expect(response[:succeeded]).to be(true)
+          expect(response[:info]).to eq('waiting_list')
+        end
+      end
+
+      context 'on fail' do
+        it 'on fail, returns succeeded:false and info:{error code}' do
+          response = reg.attempt_auto_accept
+
+          expect(response[:succeeded]).to be(false)
+          expect(response[:info]).to eq(-7001)
+        end
+      end
+    end
+
+    it 'live auto accept is not triggered upon payment' do
+      expect(reg.competing_status).to eq('pending')
+
+      create(:registration_payment, registration: reg, competition: auto_accept_comp)
+
+      expect(reg.reload.competing_status).to eq('pending')
+    end
+
+    it 'works for a paid pending registration' do
       expect(reg.competing_status).to eq('pending')
 
       create(:registration_payment, :skip_create_hook, registration: reg, competition: auto_accept_comp)
@@ -616,7 +655,7 @@ RSpec.describe Registration do
       expect(reg.registration_history_entries.last.actor_id).to eq('auto-accept')
     end
 
-    it 'auto accepts a competitor who included a donation in their payment' do
+    it 'works for a competitor who included a donation in their payment' do
       expect(reg.competing_status).to eq('pending')
 
       create(:registration_payment, :skip_create_hook, :with_donation, registration: reg, competition: auto_accept_comp)
@@ -846,11 +885,54 @@ RSpec.describe Registration do
   end
 
   describe '#bulk_auto_accept' do
-    describe 'when competitor limit' do
+    context 'when competitor limit' do
       let(:auto_accept_comp) { create(:competition, :auto_accept, :registration_open, :with_competitor_limit, competitor_limit: 10, auto_accept_disable_threshold: nil) }
 
       before do
         create_list(:registration, 5, :accepted, competition: auto_accept_comp)
+      end
+
+      context 'return values' do
+        let(:waitlisted1) { create(:registration, :waiting_list, competition: auto_accept_comp) }
+        let(:waitlisted2) { create(:registration, :waiting_list, competition: auto_accept_comp) }
+        let(:waitlisted3) { create(:registration, :waiting_list, competition: auto_accept_comp) }
+        let(:pending1) { create(:registration, :pending, competition: auto_accept_comp) }
+        let(:pending2) { create(:registration, :pending, competition: auto_accept_comp) }
+
+        before do
+          create(:registration_payment, :skip_create_hook, registration: waitlisted1, competition: auto_accept_comp)
+          create(:registration_payment, :skip_create_hook, registration: waitlisted2, competition: auto_accept_comp)
+          create(:registration_payment, :skip_create_hook, registration: pending1, competition: auto_accept_comp)
+          create(:registration_payment, :skip_create_hook, registration: pending2, competition: auto_accept_comp)
+          auto_accept_comp.competitor_limit = 6
+          @result = Registration.bulk_auto_accept(auto_accept_comp)
+        end
+
+        it 'only returns waiting list values up to and including the first failure' do
+          expect(@result.length).to be(4)
+          expect(@result[waitlisted1.id][:succeeded]).to be(true)
+          expect(@result[waitlisted2.id][:succeeded]).to be(false)
+          expect(@result[pending1.id][:succeeded]).to be(true)
+          expect(@result[pending2.id][:succeeded]).to be(true)
+        end
+
+        it 'accepted registration has reg_id, succeeded:true, info:accepted' do
+          succeeded_response = @result[waitlisted1.id]
+          expect(succeeded_response[:succeeded]).to be(true)
+          expect(succeeded_response[:info]).to eq('accepted')
+        end
+
+        it 'non-accepted registration has reg_id, succeeded:false and info:{error_code}' do
+          unsucceeded_response = @result[waitlisted2.id]
+          expect(unsucceeded_response[:succeeded]).to be(false)
+          expect(unsucceeded_response[:info]).to eq(['Competitor limit reached.'])
+        end
+
+        it 'waitlisted registration has info:waiting_list' do
+          succeeded_response = @result[pending1.id]
+          expect(succeeded_response[:succeeded]).to be(true)
+          expect(succeeded_response[:info]).to eq('waiting_list')
+        end
       end
 
       it 'accepts paid-pending registrations' do
@@ -930,7 +1012,7 @@ RSpec.describe Registration do
       end
     end
 
-    describe 'when disable_threshold' do
+    context 'when disable_threshold' do
       let(:threshold_auto_accept_comp) do
         create(:competition, :auto_accept, :registration_open, :with_competitor_limit, auto_accept_disable_threshold: 9)
       end
@@ -1016,8 +1098,8 @@ RSpec.describe Registration do
       end
     end
 
-    describe 'no limit' do
-      let(:auto_accept_comp) { create(:competition, :auto_accept, :registration_open, auto_accept_disable_threshold: nil) }
+    context 'no limit' do
+      let(:auto_accept_comp) { create(:competition, :auto_accept, :registration_open, auto_accept_disable_threshold: nil, competitor_limit: 20) }
 
       before do
         create_list(:registration, 5, :accepted, competition: auto_accept_comp)
@@ -1223,6 +1305,21 @@ RSpec.describe Registration do
 
     it 'given a donation, sums the donation and entry fee' do
       expect(registration.entry_fee_with_donation(1500)).to eq(Money.new(2500, "USD"))
+    end
+  end
+
+  describe 'registrant_id' do
+    it 'populates upon create' do
+      expect(registration.registrant_id).to eq(1)
+    end
+
+    it 'allows registrations belonging to different competitions to have the same registrant id' do
+      second_reg = create(:registration)
+      expect(second_reg.competition.id).not_to eq(registration.competition.id)
+      expect(second_reg.registrant_id).to eq(registration.registrant_id)
+
+      expect(second_reg).to be_valid
+      expect(registration).to be_valid
     end
   end
 end

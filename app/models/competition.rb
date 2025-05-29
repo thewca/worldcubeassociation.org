@@ -37,6 +37,7 @@ class Competition < ApplicationRecord
   belongs_to :announced_by_user, optional: true, foreign_key: "announced_by", class_name: "User"
   belongs_to :cancelled_by_user, optional: true, foreign_key: "cancelled_by", class_name: "User"
   has_many :competition_payment_integrations
+  has_many :scramble_file_uploads
 
   accepts_nested_attributes_for :competition_events, allow_destroy: true
   accepts_nested_attributes_for :championships, allow_destroy: true
@@ -640,7 +641,7 @@ class Competition < ApplicationRecord
     warnings
   end
 
-  def info_for(user)
+  def info_messages
     info = {}
     info[:upload_results] = I18n.t('competitions.messages.upload_results') if !self.results_posted? && self.probably_over? && !self.cancelled?
     if self.in_progress? && !self.cancelled?
@@ -698,7 +699,8 @@ class Competition < ApplicationRecord
              'competition_payment_integrations',
              'venue_countries',
              'venue_continents',
-             'waiting_list'
+             'waiting_list',
+             'scramble_file_uploads'
           # Do nothing as they shouldn't be cloned.
         when 'organizers'
           clone.organizers = organizers
@@ -1887,8 +1889,8 @@ class Competition < ApplicationRecord
     ActiveRecord::Base.transaction do
       set_wcif_series!(wcif["series"], current_user) if wcif["series"]
       set_wcif_events!(wcif["events"], current_user) if wcif["events"]
-      set_wcif_schedule!(wcif["schedule"], current_user) if wcif["schedule"]
-      update_persons_wcif!(wcif["persons"], current_user) if wcif["persons"]
+      set_wcif_schedule!(wcif["schedule"]) if wcif["schedule"]
+      update_persons_wcif!(wcif["persons"]) if wcif["persons"]
       WcifExtension.update_wcif_extensions!(self, wcif["extensions"]) if wcif["extensions"]
       set_wcif_competitor_limit!(wcif["competitorLimit"], current_user) if wcif["competitorLimit"]
 
@@ -1970,7 +1972,7 @@ class Competition < ApplicationRecord
   end
 
   # Takes an array of partial Person WCIF and updates the fields that are not immutable.
-  def update_persons_wcif!(wcif_persons, current_user)
+  def update_persons_wcif!(wcif_persons)
     registration_includes = [
       { assignments: [:schedule_activity] },
       :user,
@@ -2033,7 +2035,7 @@ class Competition < ApplicationRecord
     Assignment.upsert_all(new_assignments) if new_assignments.any?
   end
 
-  def set_wcif_schedule!(wcif_schedule, current_user)
+  def set_wcif_schedule!(wcif_schedule)
     if wcif_schedule["startDate"] != start_date.strftime("%F")
       raise WcaExceptions::BadApiParameter.new("Wrong start date for competition")
     elsif wcif_schedule["numberOfDays"] != number_of_days
@@ -2044,7 +2046,10 @@ class Competition < ApplicationRecord
       {
         venue_rooms: [
           :wcif_extensions,
-          { schedule_activities: [{ child_activities: %i[child_activities wcif_extensions] }, :wcif_extensions] },
+          {
+            schedule_activities: [{ child_activities: %i[child_activities wcif_extensions] }, :wcif_extensions],
+            competition: { competition_events: :rounds },
+          },
         ],
       },
       :wcif_extensions,
@@ -2139,12 +2144,11 @@ class Competition < ApplicationRecord
 
   def to_ics
     cal = Icalendar::Calendar.new
-    wcif_ids = rounds.to_h { |r| [r.wcif_id, r.to_string_map] }
     all_activities.each do |activity|
       event = Icalendar::Event.new
       event.dtstart = Icalendar::Values::DateTime.new(activity.start_time, "TZID" => "Etc/UTC")
       event.dtend = Icalendar::Values::DateTime.new(activity.end_time, "TZID" => "Etc/UTC")
-      event.summary = activity.localized_name(wcif_ids)
+      event.summary = activity.localized_name
       cal.add_event(event)
     end
     cal.publish

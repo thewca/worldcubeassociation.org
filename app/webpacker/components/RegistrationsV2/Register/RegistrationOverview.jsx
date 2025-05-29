@@ -14,6 +14,7 @@ import { useConfirm } from '../../../lib/providers/ConfirmProvider';
 import { contactCompetitionUrl } from '../../../lib/requests/routes.js.erb';
 import RegistrationStatus from './RegistrationStatus';
 import { useRegistration } from '../lib/RegistrationProvider';
+import { isoMoneyToHumanReadable } from '../../../lib/helpers/money';
 
 export default function RegistrationOverview({
   nextStep, competitionInfo,
@@ -125,6 +126,18 @@ export default function RegistrationOverview({
                   :
                 </List.Header>
                 {registration.guests}
+              </List.Item>
+            )}
+            { registration.payment && (
+              <List.Item>
+                <List.Header>
+                  {I18n.t('payments.labels.net_payment')}
+                  :
+                </List.Header>
+                {isoMoneyToHumanReadable(
+                  registration.payment.paid_amount_iso,
+                  registration.payment.currency_code,
+                )}
               </List.Item>
             )}
             <ButtonGroup widths={2}>

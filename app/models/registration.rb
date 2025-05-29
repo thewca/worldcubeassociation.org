@@ -61,6 +61,8 @@ class Registration < ApplicationRecord
     self.registered_at = current_time_from_proper_timezone
   end
 
+  before_create -> { self.registrant_id ||= competition.registrations.count + 1 }
+
   validates :guests, numericality: { greater_than_or_equal_to: 0 }
   validates :guests, numericality: { less_than_or_equal_to: :guest_limit, if: :check_guest_limit?, frontend_code: Registrations::ErrorCodes::GUEST_LIMIT_EXCEEDED }
   validates :guests, numericality: { equal_to: 0, unless: :guests_allowed?, frontend_code: Registrations::ErrorCodes::GUEST_LIMIT_EXCEEDED }
@@ -553,18 +555,25 @@ class Registration < ApplicationRecord
 
   def self.bulk_auto_accept(competition)
     if competition.waiting_list.present?
-      competition.registrations
-                 .find(competition.waiting_list.entries)
-                 .each(&:attempt_auto_accept)
+      waitlisted_registrations = competition.registrations.find(competition.waiting_list.entries)
+
+      waitlisted_outcomes = waitlisted_registrations.each_with_object({}) do |reg, hash|
+        result = reg.attempt_auto_accept
+        hash[reg.id] = result
+        break hash unless result[:succeeded]
+      end
     end
 
-    sorted_pending_registrations = competition
-                                   .registrations
-                                   .competing_status_pending
-                                   .with_payments
-                                   .sort_by { |registration| registration.last_positive_payment.updated_at }
+    pending_registrations = competition
+                            .registrations
+                            .competing_status_pending
+                            .with_payments
+                            .sort_by { |registration| registration.last_positive_payment.updated_at }
 
-    sorted_pending_registrations.each(&:attempt_auto_accept)
+    # We dont need to break out of pending registrations because auto accept can still put them on the waiting list
+    pending_outcomes = pending_registrations.index_by(&:id).transform_values(&:attempt_auto_accept)
+
+    waitlisted_outcomes.present? ? waitlisted_outcomes.merge(pending_outcomes) : pending_outcomes
   end
 
   def last_positive_payment
@@ -574,19 +583,13 @@ class Registration < ApplicationRecord
       .first
   end
 
-  delegate :auto_accept_registrations, to: :competition
-
-  def auto_accept_in_current_env?
-    !(Rails.env.production? && EnvConfig.WCA_LIVE_SITE?)
-  end
+  delegate :auto_accept_registrations?, to: :competition
 
   def attempt_auto_accept
-    return false unless auto_accept_in_current_env?
-
     failure_reason = auto_accept_failure_reason
     if failure_reason.present?
       log_auto_accept_failure(failure_reason)
-      return false
+      return { succeeded: false, info: failure_reason }
     end
 
     update_payload = build_auto_accept_payload
@@ -597,16 +600,17 @@ class Registration < ApplicationRecord
         update_payload,
         AUTO_ACCEPT_ENTITY_ID,
       )
-      true
+      { succeeded: true, info: auto_accepted_registration.competing_status }
     else
-      log_auto_accept_failure(auto_accepted_registration.errors.messages.values.flatten)
-      false
+      error = auto_accepted_registration.errors.messages.values.flatten
+      log_auto_accept_failure(error)
+      { succeeded: false, info: error }
     end
   end
 
   private def auto_accept_failure_reason
     return Registrations::ErrorCodes::OUTSTANDING_FEES if outstanding_entry_fees.positive?
-    return Registrations::ErrorCodes::AUTO_ACCEPT_NOT_ENABLED unless competition.auto_accept_registrations?
+    return Registrations::ErrorCodes::AUTO_ACCEPT_NOT_ENABLED unless auto_accept_registrations?
     return Registrations::ErrorCodes::INELIGIBLE_FOR_AUTO_ACCEPT unless competing_status_pending? || waiting_list_leader?
     return Registrations::ErrorCodes::AUTO_ACCEPT_DISABLE_THRESHOLD if competition.auto_accept_threshold_reached?
 

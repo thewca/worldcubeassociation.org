@@ -1,9 +1,9 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import React, {
-  useMemo, useReducer, useRef,
+  useMemo, useReducer, useRef, useState,
 } from 'react';
 import {
-  Accordion, Button, Checkbox, Divider, Form, Header, Icon, Segment, Sticky,
+  Accordion, Button, Checkbox, Divider, Form, Header, Icon, List, Modal, Segment, Sticky,
 } from 'semantic-ui-react';
 import { getAllRegistrations } from '../api/registration/get/get_registrations';
 import RegistrationAdministrationSearch from './RegistrationAdministrationSearch';
@@ -90,6 +90,9 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
     },
   });
 
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalData, setModalData] = useState(null);
+
   const { mutate: bulkAutoAcceptMutation, isPending: isAutoAccepting } = useMutation({
     mutationFn: bulkAutoAccept,
     onError: () => {
@@ -98,8 +101,14 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
         'negative',
       ));
     },
-    onSuccess: () => {
-      dispatchStore(showMessage('competitions.registration_v2.auto_accept.bulk_auto_accepted', 'positive'));
+    onSuccess: (data) => {
+      if (Object.keys(data).length === 0) {
+        dispatchStore(showMessage('competitions.registration_v2.auto_accept.nothing_to_accept', 'info'));
+      } else {
+        setModalData(data);
+        setModalOpen(true);
+        dispatchStore(showMessage('competitions.registration_v2.auto_accept.bulk_auto_accepted', 'positive'));
+      }
       return refetch();
     },
   });
@@ -415,15 +424,49 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
   return (
     <Segment loading={isMutating || isAutoAccepting}>
       {competitionInfo.auto_accept_registrations && (
-        <Button
-          disabled={isAutoAccepting}
-          color="green"
-          onClick={() => bulkAutoAcceptMutation(competitionInfo.id)}
-        >
-          <Icon name="check" />
-          {' '}
-          {I18n.t('competitions.registration_v2.auto_accept.bulk_auto_accept')}
-        </Button>
+        <>
+          <Button
+            disabled={isAutoAccepting}
+            color="green"
+            onClick={() => bulkAutoAcceptMutation(competitionInfo.id)}
+          >
+            <Icon name="check" />
+            {' '}
+            {I18n.t('competitions.registration_v2.auto_accept.bulk_auto_accept')}
+          </Button>
+
+          <Modal
+            open={modalOpen}
+            onClose={() => setModalOpen(false)}
+            size="small"
+          >
+            <Modal.Header>Bulk Auto-Accept Result</Modal.Header>
+            <Modal.Content>
+              {modalData !== null ? (
+                <List bulleted>
+                  {Object.entries(modalData).map(([key, value]) => (
+                    <List.Item key={key}>
+                      {key}
+                      {' - '}
+                      <b>Succeeded</b>
+                      {': '}
+                      {value.succeeded.toString()}
+                      {', '}
+                      <b>Info</b>
+                      {': '}
+                      {value.info}
+                    </List.Item>
+                  ))}
+                </List>
+              ) : (
+                <p>No data available.</p>
+              )}
+            </Modal.Content>
+            <Modal.Actions>
+              <Button onClick={() => setModalOpen(false)}>Close</Button>
+            </Modal.Actions>
+          </Modal>
+        </>
       )}
 
       <Form>
