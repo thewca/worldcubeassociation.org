@@ -79,10 +79,17 @@ class Api::V0::UserRolesController < Api::V0::ApiController
       upcoming_comps_for_user = user.competitions_with_active_registrations.distinct
       upcoming_comps_for_user = upcoming_comps_for_user.between_dates(Date.today, end_date) if end_date.present?
       unless upcoming_comps_for_user.empty?
-        upcoming_comps_for_user.each do |registration|
-          registration.update!(competing_status: Registrations::Helper::STATUS_CANCELLED)
-          RegistrationsMailer.notify_delegates_of_registration_deletion_of_banned_competitor(registration, end_date).deliver_later
+        ActiveRecord::Base.transaction do
+          upcoming_comps_for_user.each do |registration|
+            begin
+              registration.update!(competing_status: Registrations::Helper::STATUS_CANCELLED)
+              RegistrationsMailer.notify_delegates_of_registration_deletion_of_banned_competitor(registration, end_date).deliver_later
+            rescue ActiveRecord::RecordInvalid => e
+              raise ActiveRecord::Rollback, "Registration update failed: #{e.message}"
+            end
+          end
         end
+      end
     end
 
     return render status: :unprocessable_entity, json: { error: "Invalid group type" } unless create_supported_groups.include?(group.group_type)
@@ -115,7 +122,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
         start_date: Date.today,
         end_date: end_date,
         metadata: metadata,
-      )
+        )
     end
 
     RoleChangeMailer.notify_role_end(role_to_end, current_user).deliver_later if role_to_end.present?
