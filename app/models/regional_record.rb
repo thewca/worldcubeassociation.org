@@ -47,29 +47,88 @@ class RegionalRecord < ApplicationRecord
     query.minimum(:value)
   end
 
-  # To make this into a single query, we will need to store duplicates of every NR, WR, CR
-  # then we can do something like
-  # records = RegionalRecord.where(event_id: event_id, record_type: record_type)
-  #                           .where(record_scope: [:WR, :CR, :NR])
-  #                           .where(record_timestamp: ..timestamp)
-  #                           .where(
-  #                             scope_filter.eq(:WR)
-  #                             .or(scope_filter.eq(:CR).and(arel_table[:continent_id].eq(continent_id)))
-  #                             .or(scope_filter.eq(:NR).and(arel_table[:country_id].eq(country_id)))
-  #                           )
-  #                           .group(:record_scope)
-  #                           .minimum(:value)
-  # Not sure if worth it right now
-  def self.is_record_at_date?(value, event_id, record_type, country_id, timestamp)
-    return [true, "WR"] if record_for(event_id, record_type, :WR, date: timestamp) >= value
+  def self.is_record_at_date?(value, event_id, record_type, country_id, continent_id, timestamp)
+    scope_filter = arel_table[:record_scope]
 
-    country = Country.c_find(country_id)
-    return [true, CONTINENT_TO_RECORD_MARKER[country.continent_id]] if record_for(event_id, record_type, :CR, continent_id: country.continent_id, date: timestamp) >= value
+    records = RegionalRecord.where(event_id: event_id, record_type: record_type)
+                            .where(record_scope: [:world, :continental, :national])
+                            .where(record_timestamp: ..timestamp)
+                            .where(
+                              scope_filter.eq(:world)
+                                          .or(scope_filter.eq(:continental).and(arel_table[:continent_id].eq(continent_id)))
+                                          .or(scope_filter.eq(:national).and(arel_table[:country_id].eq(country_id)))
+                            )
+                            .group(:record_scope)
+                            .minimum(:value)
 
-    return [true, "NR"] if record_for(event_id, record_type, :NR, country_id: country_id, date: timestamp) >= value
-
+    return [true, "WR"] if records["world"] && value <= records["world"]
+    return [true, CONTINENT_TO_RECORD_MARKER[continent_id]] if records["continental"] && value <= records["continental"]
+    return [true, "NR"] if records["national"] && value <= records["national"]
     [false, nil]
   end
+
+  def self.collect_record_thresholds(best_at_date, value_name)
+    # 1) Extract the distinct keys we’ll need
+    combos = best_at_date.map { |_, event_id, country_id, continent_id, _, timestamp|
+      [ event_id, country_id, continent_id, timestamp ]
+    }.uniq
+
+    # 2) Unzip into nicer lookup sets
+    event_ids, country_ids, continent_ids, timestamps = combos.transpose.map(&:uniq)
+
+    # 3) One big grouped minimum query
+    #   We group by all four dimensions plus the record_scope
+    minima = RegionalRecord
+               .where(record_type: value_name,
+                      event_id:        event_ids,
+                      record_scope:    %w[world continental national])
+               .where(record_timestamp: timestamps.min..timestamps.max)
+               .group(:event_id, :record_timestamp, :record_scope, :continent_id, :country_id)
+               .minimum(:value)
+
+    # 4) Build a nested lookup hash
+    thresholds = Hash.new { |h, k| h[k] = {} }
+    minima.each do |(event_id, ts, scope, continent, country), min_value|
+      thresholds[[ event_id, country, continent, ts ]] ||= {}
+      thresholds[[ event_id, country, continent, ts ]][scope] = min_value
+    end
+
+    thresholds
+  end
+
+  def self.annotate_candidates(best_at_date, value_name)
+    # Precompute the thresholds table
+    thresholds = collect_record_thresholds(best_at_date, value_name)
+
+    # Pull all the Result objects in one go
+    result_ids = best_at_date.map(&:first)
+    results_by_id = Result.includes(:competition)
+                          .where(id: result_ids)
+                          .index_by(&:id)
+
+    # Now do a single pass
+    best_at_date.filter_map do |result_id, event_id, country_id, continent_id, min_value, ts|
+      t = thresholds[[ event_id, country_id, continent_id, ts ]] || {}
+      marker =
+        if t["world"]      && min_value <= t["world"]
+          "WR"
+        elsif t["continental"] && min_value <= t["continental"]
+          CONTINENT_TO_RECORD_MARKER[continent_id]
+        elsif t["national"]  && min_value <= t["national"]
+          "NR"
+        end
+
+      next unless marker
+
+      result = results_by_id[result_id]
+      {
+        computed_marker: marker,
+        competition:     result.competition,
+        result:          result
+      }
+    end
+  end
+
 
   CONTINENT_TO_RECORD_MARKER = {
     '_Africa' => 'AfR',

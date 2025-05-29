@@ -143,44 +143,51 @@ module CheckRegionalRecords
         end
         [value_column, candidates]
       else
-        # Currently takes (42717.7 ms) for all results (16080.0 ms) when filtering for event_id
-        best_at_date = ActiveRecord::Base.connection.execute(<<~SQL)
-                                                  WITH ranked_results AS (
-                                                  SELECT
-                                                    result_id,
-                                                    event_id,
-                                                    country_id,
-                                                    continent_id,
-                                                    #{value_column},
-                                                    round_timestamp,
-                                                    ROW_NUMBER() OVER (
-                                                      PARTITION BY event_id, round_timestamp
-                                                      ORDER BY #{value_column}
-                                                    ) AS best_rank
-                                                  FROM result_timestamps
-                                                  WHERE #{value_column} > 0
-                                                  #{event_id.present? ? "AND event_id = '#{event_id}'" : ''}
-                                                  #{from_timestamp.present? ? "AND round_timestamp >= '#{from_timestamp}'" : ''}
-                                                  #{to_timestamp.present? ? "AND round_timestamp <= '#{to_timestamp}'" : ''}
-                                                )
-                                                SELECT * FROM ranked_results WHERE best_rank = 1;
-        SQL
-        .to_a
-        candidates = best_at_date.filter_map do |result_id, current_event_id, country_id, min, round_timestamp|
-          is_record, computed_marker = RegionalRecord.is_record_at_date?(min, current_event_id, value_name, country_id, round_timestamp)
-          if is_record
-            result = Result.includes(:competition).find(result_id)
-            {
-              computed_marker: computed_marker,
-              competition: result.competition,
-              result:result,
-            }
-          end
-        rescue Exception => e
-          puts "Error checking record for #{result_id} in #{current_event_id} at #{round_timestamp}: #{e}"
-          puts e.backtrace
-          nil
-        end
+        conn = ActiveRecord::Base.connection
+        # Build CTE filters (unqualified, since only one source in CTE)
+        cte_filters = []
+        cte_filters << "#{value_column} > 0"
+        cte_filters << "event_id = #{conn.quote(event_id)}"            if event_id.present?
+        cte_filters << "round_timestamp >= #{conn.quote(from_timestamp)}" if from_timestamp.present?
+        cte_filters << "round_timestamp <= #{conn.quote(to_timestamp)}"   if to_timestamp.present?
+        cte_where = cte_filters.join(" AND ")
+
+        # Build final WHERE filters, qualifying with rt alias
+        final_filters = []
+        final_filters << "rt.#{value_column} > 0"
+        final_filters << "rt.event_id = #{conn.quote(event_id)}"            if event_id.present?
+        final_filters << "rt.round_timestamp >= #{conn.quote(from_timestamp)}" if from_timestamp.present?
+        final_filters << "rt.round_timestamp <= #{conn.quote(to_timestamp)}"   if to_timestamp.present?
+        final_where = final_filters.join(" AND ")
+
+        sql = <<~SQL
+            -- CTE to find the minimum non-zero value per partition
+            WITH min_best AS (
+              SELECT
+                event_id,
+                round_timestamp,
+                MIN(#{value_column}) AS #{value_column}
+              FROM result_timestamps
+              WHERE #{cte_where}
+              GROUP BY event_id, round_timestamp
+            )
+            -- Join back to get the full rows
+            SELECT
+              rt.result_id,
+              rt.event_id,
+              rt.country_id,
+              rt.continent_id,
+              rt.#{value_column}   AS #{value_column},
+              rt.round_timestamp
+            FROM result_timestamps rt
+            JOIN min_best mb
+              ON rt.event_id        = mb.event_id
+             AND rt.round_timestamp = mb.round_timestamp
+             AND rt.#{value_column} = mb.#{value_column}
+            WHERE #{final_where};
+          SQL
+        best_at_date = conn.execute(sql).to_a
+        candidates = RegionalRecord.annotate_candidates(best_at_date, value_column)
         [value_column, candidates]
       end
     end
