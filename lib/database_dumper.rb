@@ -5,9 +5,6 @@ module DatabaseDumper
   JOIN_WHERE_VISIBLE_COMP = "JOIN competitions ON competitions.id = competition_id #{WHERE_VISIBLE_COMP}".freeze
   DEV_TIMESTAMP_NAME = "developer_dump_exported_at"
   RESULTS_TIMESTAMP_NAME = "public_results_exported_at"
-  VISIBLE_ACTIVITY_IDS = "SELECT A.id FROM schedule_activities AS A " \
-                         "JOIN venue_rooms ON (venue_rooms.id = holder_id AND holder_type = 'VenueRoom') " \
-                         "JOIN competition_venues ON competition_venues.id = competition_venue_id #{JOIN_WHERE_VISIBLE_COMP}".freeze
   PUBLIC_COMPETITION_JOIN = "LEFT JOIN competition_events ON competitions.id = competition_events.competition_id " \
                             "LEFT JOIN competition_delegates ON competitions.id = competition_delegates.competition_id " \
                             "LEFT JOIN users AS users_delegates ON users_delegates.id = competition_delegates.delegate_id " \
@@ -457,12 +454,10 @@ module DatabaseDumper
     "live_attempts" => :skip_all_rows,
     "live_attempt_history_entries" => :skip_all_rows,
     "schedule_activities" => {
-      where_clause: "WHERE (holder_type=\"ScheduleActivity\" AND holder_id IN (#{VISIBLE_ACTIVITY_IDS}) or id in (#{VISIBLE_ACTIVITY_IDS}))",
+      where_clause: "JOIN venue_rooms ON venue_rooms.id = venue_room_id JOIN competition_venues ON competition_venues.id = venue_rooms.competition_venue_id #{JOIN_WHERE_VISIBLE_COMP}",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w[
           id
-          holder_type
-          holder_id
           venue_room_id
           parent_activity_id
           wcif_id
@@ -597,6 +592,7 @@ module DatabaseDumper
           accepted_at
           accepted_by
           competition_id
+          registrant_id
           created_at
           deleted_at
           deleted_by

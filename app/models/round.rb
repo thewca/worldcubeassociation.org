@@ -34,6 +34,8 @@ class Round < ApplicationRecord
   serialize :round_results, coder: RoundResults
   validates_associated :round_results
 
+  has_many :schedule_activities, -> { root_activities }, dependent: :destroy
+
   has_many :wcif_extensions, as: :extendable, dependent: :delete_all
 
   has_many :live_results

@@ -1307,4 +1307,19 @@ RSpec.describe Registration do
       expect(registration.entry_fee_with_donation(1500)).to eq(Money.new(2500, "USD"))
     end
   end
+
+  describe 'registrant_id' do
+    it 'populates upon create' do
+      expect(registration.registrant_id).to eq(1)
+    end
+
+    it 'allows registrations belonging to different competitions to have the same registrant id' do
+      second_reg = create(:registration)
+      expect(second_reg.competition.id).not_to eq(registration.competition.id)
+      expect(second_reg.registrant_id).to eq(registration.registrant_id)
+
+      expect(second_reg).to be_valid
+      expect(registration).to be_valid
+    end
+  end
 end

@@ -53,12 +53,23 @@ class Registration < ApplicationRecord
   validates :user, presence: true, on: [:create]
 
   validates :registered_at, presence: true
+
   # Set a `registered_at` timestamp for newly created records,
   #   but only if there is no value already specified from the outside
   after_initialize :mark_registered_at, if: :new_record?, unless: :registered_at?
 
   private def mark_registered_at
     self.registered_at = current_time_from_proper_timezone
+  end
+
+  validates :registrant_id, presence: true, uniqueness: { scope: :competition_id }
+
+  # Run the hook twice so that even if you try to skip validations, it still persists a non-null value to the DB
+  before_validation :ensure_registrant_id, on: :create
+  before_create :ensure_registrant_id
+
+  private def ensure_registrant_id
+    self.registrant_id ||= competition.registrations.count + 1
   end
 
   validates :guests, numericality: { greater_than_or_equal_to: 0 }
