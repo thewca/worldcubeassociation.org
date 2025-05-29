@@ -143,10 +143,10 @@ class RegionalRecord < ApplicationRecord
 
   def marker
     case record_scope
-    when :continental
-      CONTINENT_TO_RECORD_MARKER[continent_id]
     when :world
       "WR"
+    when :continental
+      CONTINENT_TO_RECORD_MARKER[continent_id]
     when :national
       "NR"
     end
