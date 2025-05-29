@@ -1031,6 +1031,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_05_27_134848) do
 
   create_table "registrations", id: { type: :integer, unsigned: true }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "competition_id", limit: 32, default: "", null: false
+    t.integer "registrant_id"
     t.text "comments"
     t.string "ip", limit: 16, default: "", null: false
     t.integer "user_id"

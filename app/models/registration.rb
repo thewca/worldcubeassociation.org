@@ -61,6 +61,8 @@ class Registration < ApplicationRecord
     self.registered_at = current_time_from_proper_timezone
   end
 
+  before_create -> { self.registrant_id ||= competition.registrations.count + 1 }
+
   validates :guests, numericality: { greater_than_or_equal_to: 0 }
   validates :guests, numericality: { less_than_or_equal_to: :guest_limit, if: :check_guest_limit?, frontend_code: Registrations::ErrorCodes::GUEST_LIMIT_EXCEEDED }
   validates :guests, numericality: { equal_to: 0, unless: :guests_allowed?, frontend_code: Registrations::ErrorCodes::GUEST_LIMIT_EXCEEDED }
