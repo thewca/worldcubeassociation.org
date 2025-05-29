@@ -2960,10 +2960,4 @@ class Competition < ApplicationRecord
     threshold_reached = fully_paid_registrations_count >= auto_close_threshold && auto_close_threshold.positive?
     threshold_reached && update(closing_full_registration: true, registration_close: Time.now)
   end
-
-  def registrant_ids_map
-    @registrant_ids_map ||= registrations.wcif_ordered.each.with_index(1).to_h do |registration, idx|
-      [registration.id, idx]
-    end
-  end
 end
