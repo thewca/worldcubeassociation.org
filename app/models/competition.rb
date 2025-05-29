@@ -2144,12 +2144,11 @@ class Competition < ApplicationRecord
 
   def to_ics
     cal = Icalendar::Calendar.new
-    wcif_ids = rounds.to_h { |r| [r.wcif_id, r.to_string_map] }
     all_activities.each do |activity|
       event = Icalendar::Event.new
       event.dtstart = Icalendar::Values::DateTime.new(activity.start_time, "TZID" => "Etc/UTC")
       event.dtend = Icalendar::Values::DateTime.new(activity.end_time, "TZID" => "Etc/UTC")
-      event.summary = activity.localized_name(wcif_ids)
+      event.summary = activity.localized_name
       cal.add_event(event)
     end
     cal.publish
