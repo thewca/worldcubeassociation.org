@@ -73,7 +73,7 @@ class Country < ApplicationRecord
     Continent.c_find(self.continent_id)
   end
 
-  def self.find_by_iso2(iso2)
+  def self.c_find_by_iso2(iso2)
     c_values.find { |c| c.iso2 == iso2 }
   end
 

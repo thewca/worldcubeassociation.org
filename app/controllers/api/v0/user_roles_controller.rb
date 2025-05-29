@@ -76,7 +76,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
       user = User.find(user_id)
       ban_reason = params[:banReason]
       scope = params[:scope]
-      upcoming_comps_for_user = user.competitions_registered_for.not_over.merge(Registration.not_cancelled)
+      upcoming_comps_for_user = user.competitions_with_active_registrations.distinct
       upcoming_comps_for_user = upcoming_comps_for_user.between_dates(Date.today, end_date) if end_date.present?
       unless upcoming_comps_for_user.empty?
         return render status: :unprocessable_entity, json: {
@@ -140,13 +140,13 @@ class Api::V0::UserRolesController < Api::V0::ApiController
   private def changes_in_model(previous_changes)
     previous_changes&.map do |changed_key, values|
       changed_parameter = changed_key_to_human_readable(changed_key)
-      if changed_parameter.present?
-        UserRole::UserRoleChange.new(
-          changed_parameter: changed_parameter,
-          previous_value: changed_value_to_human_readable(values[0]),
-          new_value: changed_value_to_human_readable(values[1]),
-        )
-      end
+      next if changed_parameter.blank?
+
+      UserRole::UserRoleChange.new(
+        changed_parameter: changed_parameter,
+        previous_value: changed_value_to_human_readable(values[0]),
+        new_value: changed_value_to_human_readable(values[1]),
+      )
     end
   end
 

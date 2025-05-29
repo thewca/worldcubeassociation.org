@@ -2,7 +2,7 @@ import React, { useMemo, useReducer } from 'react';
 import {
   Ref, Segment, Table, TableFooter,
 } from 'semantic-ui-react';
-import { DragDropContext, Droppable } from 'react-beautiful-dnd';
+import { DragDropContext, Droppable } from '@hello-pangea/dnd';
 import { noop } from 'lodash';
 import I18n from '../../../lib/i18n';
 import TableHeader from './AdministrationTableHeader';
@@ -24,6 +24,7 @@ export const sortReducer = createSortReducer([
   'paid_on',
   'comment',
   'dob',
+  'administrative_notes',
   ...WCA_EVENT_IDS,
 ]);
 

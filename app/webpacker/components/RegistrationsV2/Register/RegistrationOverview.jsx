@@ -14,13 +14,20 @@ import { useConfirm } from '../../../lib/providers/ConfirmProvider';
 import { contactCompetitionUrl } from '../../../lib/requests/routes.js.erb';
 import RegistrationStatus from './RegistrationStatus';
 import { useRegistration } from '../lib/RegistrationProvider';
+import { isoMoneyToHumanReadable } from '../../../lib/helpers/money';
 
 export default function RegistrationOverview({
   nextStep, competitionInfo,
 }) {
   const dispatch = useDispatch();
   const confirm = useConfirm();
-  const { registration, isRejected, isAccepted } = useRegistration();
+
+  const {
+    registration,
+    isRejected,
+    isAccepted,
+    hasPaid,
+  } = useRegistration();
 
   const hasRegistrationEditDeadlinePassed = hasPassed(
     competitionInfo.event_change_deadline_date ?? competitionInfo.start_date,
@@ -28,16 +35,19 @@ export default function RegistrationOverview({
 
   const deleteAllowed = (competitionInfo.competitor_can_cancel === 'always')
     || (competitionInfo.competitor_can_cancel === 'not_accepted' && !isAccepted)
-    || (competitionInfo.competitor_can_cancel === 'unpaid' && !registration.payment?.has_paid);
+    || (competitionInfo.competitor_can_cancel === 'unpaid' && !hasPaid);
 
   const queryClient = useQueryClient();
 
   const { mutate: deleteRegistrationMutation, isPending: isDeleting } = useMutation({
     mutationFn: () => updateRegistration({
-      user_id: registration.user_id,
-      competition_id: competitionInfo.id,
-      competing: {
-        status: 'cancelled',
+      registrationId: registration.id,
+      payload: {
+        user_id: registration.user_id,
+        competition_id: competitionInfo.id,
+        competing: {
+          status: 'cancelled',
+        },
       },
     }),
     onError: (data) => {
@@ -116,6 +126,18 @@ export default function RegistrationOverview({
                   :
                 </List.Header>
                 {registration.guests}
+              </List.Item>
+            )}
+            { registration.payment && (
+              <List.Item>
+                <List.Header>
+                  {I18n.t('payments.labels.net_payment')}
+                  :
+                </List.Header>
+                {isoMoneyToHumanReadable(
+                  registration.payment.paid_amount_iso,
+                  registration.payment.currency_code,
+                )}
               </List.Item>
             )}
             <ButtonGroup widths={2}>

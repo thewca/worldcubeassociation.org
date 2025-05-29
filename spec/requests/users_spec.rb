@@ -104,9 +104,9 @@ RSpec.describe "users" do
       end
 
       it 'does not generate backup codes for user without 2FA' do
-        expect {
+        expect do
           post profile_generate_2fa_backup_path
-        }.not_to change(user, :otp_backup_codes)
+        end.not_to change(user, :otp_backup_codes)
         json = response.parsed_body
         expect(json["error"]["message"]).to include "not enabled"
       end
@@ -121,10 +121,10 @@ RSpec.describe "users" do
       end
 
       it 'does not generate backup codes for user without 2FA' do
-        expect {
+        expect do
           post profile_generate_2fa_backup_path
           follow_redirect!
-        }.not_to change(user, :otp_backup_codes)
+        end.not_to change(user, :otp_backup_codes)
         expect(response.body).to include I18n.t('users.edit.sensitive.identity_error')
       end
     end
@@ -153,9 +153,9 @@ RSpec.describe "users" do
       end
 
       it 'can (re)generate backup codes for user with 2FA' do
-        expect(user.otp_backup_codes).to be nil
+        expect(user.otp_backup_codes).to be_nil
         post profile_generate_2fa_backup_path
-        expect(user.reload.otp_backup_codes).not_to be nil
+        expect(user.reload.otp_backup_codes).not_to be_nil
         json = response.parsed_body
         expect(json["codes"]&.size).to eq User::NUMBER_OF_BACKUP_CODES
       end
@@ -174,7 +174,7 @@ RSpec.describe "users" do
       answer_sso = SingleSignOn.parse(query_string_from_location(response.location))
       expect(answer_sso.moderator).to be true
       expect(answer_sso.external_id).to eq user.id.to_s
-      [:name, :email, :avatar_url].each do |a|
+      %i[name email avatar_url].each do |a|
         expect(answer_sso.send(a)).to eq user.send(a)
       end
       expect(answer_sso.add_groups).to eq "wct"
@@ -206,7 +206,7 @@ RSpec.describe "users" do
       # Discourse
       expect(answer_sso.moderator).to be false
       expect(answer_sso.add_groups).to eq "delegate,wst"
-      expect(answer_sso.remove_groups).to eq((User.all_discourse_groups - ["wst", "delegate"]).join(","))
+      expect(answer_sso.remove_groups).to eq((User.all_discourse_groups - %w[wst delegate]).join(","))
     end
 
     it "doesn't authenticate unconfirmed user" do

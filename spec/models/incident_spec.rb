@@ -17,7 +17,7 @@ RSpec.describe Incident do
   end
 
   it "creates custom tags" do
-    tags = ["one", "two"]
+    tags = %w[one two]
     incident = create(:incident, tags: tags)
     expect(incident.incident_tags.map(&:tag)).to eq tags
   end
@@ -32,6 +32,6 @@ RSpec.describe Incident do
     comp2 = [create(:competition), "not in the report"]
     incident = create(:incident, comps: [comp, comp2])
     expect(incident.competitions.size).to eq 2
-    expect(incident.incident_competitions.map(&:comments)).to match_array [comp[1], comp2[1]]
+    expect(incident.incident_competitions.map(&:comments)).to contain_exactly(comp[1], comp2[1])
   end
 end

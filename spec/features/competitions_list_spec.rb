@@ -14,10 +14,14 @@ RSpec.feature "Competitions list", :js do
 
       before do
         visit "/competitions?show_admin_details=yes"
-        # Wait for the Delegate index to start loading
-        expect(page).to have_css("#delegate-pulse")
-        # …and then wait for it to finish loading
-        expect(page).to have_no_css("#delegate-pulse")
+
+        # The delegate dropdown should have three items: The generic 'None'
+        #   as well as two Delegates created by the `let(:competition)` above.
+        # We use this to make sure that the query has finished
+        # rubocop:disable RSpec/ExpectInHook
+        expect(page).to have_css("#delegate div.item", visible: :hidden, count: 3)
+        # rubocop:enable RSpec/ExpectInHook
+
         within(:css, "#delegate") do
           find(".search").set(delegate.name)
           find(".search").send_keys(:enter)

@@ -111,12 +111,12 @@ RSpec.describe Result do
 
     it "values must all be >= -2" do
       result = build(:result, value1: 0, value2: -3, value3: 0, value4: 0, value5: 0)
-      expect(result).to be_invalid(value2: ["invalid"])
+      expect(result).not_to be_valid(value2: ["invalid"])
     end
 
     it "position must be a number" do
       result = build(:result, pos: nil)
-      expect(result).to be_invalid(pos: ["The position is not a valid number. Did you clear all the empty rows and synchronized WCA Live?"])
+      expect(result).not_to be_valid(pos: ["The position is not a valid number. Did you clear all the empty rows and synchronized WCA Live?"])
     end
 
     it "correctly computes best" do
@@ -124,7 +124,7 @@ RSpec.describe Result do
       expect(result).to be_valid
 
       result.best = 41
-      expect(result).to be_invalid(best: ["should be 42"])
+      expect(result).not_to be_valid(best: ["should be 42"])
     end
 
     context "correctly computes average" do
@@ -143,14 +143,14 @@ RSpec.describe Result do
 
             result.average = 33
             expect(result.compute_correct_average).to eq 44
-            expect(result).to be_invalid(average: ["should be 44"])
+            expect(result).not_to be_valid(average: ["should be 44"])
           end
 
           it "missing solves" do
             result = build_result(value1: 42, value2: 43, value3: 44, value4: 0, value5: 0, best: 42, average: 44)
-            expect(result.average_is_not_computable_reason).to be nil
+            expect(result.average_is_not_computable_reason).to be_nil
             expect(result.compute_correct_average).to eq 0
-            expect(result).to be_invalid(average: ["should be 0"])
+            expect(result).not_to be_valid(average: ["should be 0"])
           end
         end
 
@@ -305,7 +305,7 @@ RSpec.describe Result do
 
       context "best of 3" do
         let(:round_type_id) { "f" }
-        let(:competition) { create(:competition, event_ids: ["333bf", "444bf", "555bf", "333mbf", "333ft", "333fm"]) }
+        let(:competition) { create(:competition, event_ids: %w[333bf 444bf 555bf 333mbf 333ft 333fm]) }
 
         context "333bf" do
           let(:format_id) { "3" }

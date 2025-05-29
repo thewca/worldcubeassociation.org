@@ -30,10 +30,51 @@ RSpec.describe "results" do
   end
 
   describe "GET #records" do
-    context "with default params" do
-      it "shows records" do
+    context 'html request format' do
+      it "show records given default params" do
         get records_path
         expect(response).to be_successful
+      end
+    end
+
+    context 'json' do
+      let(:headers) { { 'CONTENT_TYPE' => 'application/json', 'ACCEPT' => 'application/json' } }
+      let(:genders) { %w[Male Female] }
+
+      RSpec.shared_examples 'single parameter' do |param_name, param_value|
+        it "returns success for param #{param_name} with value: #{param_value}" do
+          get records_path, headers: headers, params: { **{ param_name => param_value } }
+          expect(response).to be_successful
+        end
+      end
+
+      ResultsController::SHOWS.each do |show|
+        it_behaves_like 'single parameter', 'show', show
+      end
+
+      ResultsController::GENDERS.each do |gender|
+        it_behaves_like 'single parameter', 'gender', gender
+      end
+
+      TestConstants::RESULT_TEST_EVENTS.each do |event|
+        it_behaves_like 'single parameter', 'event_id', event
+      end
+
+      TestConstants::RESULT_TEST_REGIONS.each do |region|
+        it_behaves_like 'single parameter', 'region', region
+      end
+
+      RSpec.shared_examples 'two parameters' do |param_1, param_2, value_1, value_2|
+        it "returns success for params #{param_1}/#{param_2} with values: #{value_1}/#{value_2}" do
+          get records_path, headers: headers, params: { ** { param_1 => value_1, param_2 => value_2 } }
+          expect(response).to be_successful
+        end
+      end
+
+      ResultsController::SHOWS.each do |show|
+        TestConstants::RESULT_TEST_REGIONS.each do |region|
+          it_behaves_like 'two parameters', 'show', 'region', show, region
+        end
       end
     end
   end

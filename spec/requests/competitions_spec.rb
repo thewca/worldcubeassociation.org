@@ -20,7 +20,7 @@ RSpec.describe "competitions" do
         it 'can set championship types' do
           expect(competition.confirmed?).to be false
 
-          update_params = build_competition_update(competition, championships: ["world", "_Europe"])
+          update_params = build_competition_update(competition, championships: %w[world _Europe])
           patch competition_path(competition), params: update_params, as: :json
 
           expect(response).to be_successful
@@ -29,10 +29,10 @@ RSpec.describe "competitions" do
 
         context "when handling Series competitions" do
           let!(:series) { create(:competition_series) }
-          let!(:partner_competition) {
+          let!(:partner_competition) do
             create(:competition, :with_delegate, :visible, :with_valid_schedule,
                    competition_series: series, series_base: competition)
-          }
+          end
 
           it "can add competition to an existing Series" do
             expect(competition.confirmed?).to be false
@@ -124,7 +124,7 @@ RSpec.describe "competitions" do
         it 'can set championship types' do
           expect(competition.confirmed?).to be true
 
-          update_params = build_competition_update(competition, championships: ["world", "_Europe"])
+          update_params = build_competition_update(competition, championships: %w[world _Europe])
           patch competition_path(competition), params: update_params, as: :json
 
           expect(response).to be_successful
@@ -134,10 +134,10 @@ RSpec.describe "competitions" do
 
         context "when handling Series competitions" do
           let!(:series) { create(:competition_series) }
-          let!(:partner_competition) {
+          let!(:partner_competition) do
             create(:competition, :with_delegate, :visible, :with_valid_schedule,
                    competition_series: series, series_base: competition)
-          }
+          end
 
           it "can add competition to an existing Series" do
             expect(competition.confirmed?).to be true
@@ -231,7 +231,7 @@ RSpec.describe "competitions" do
         it 'can set championship types' do
           expect(competition.confirmed?).to be false
 
-          update_params = build_competition_update(competition, championships: ["world", "_Europe"])
+          update_params = build_competition_update(competition, championships: %w[world _Europe])
           patch competition_path(competition), params: update_params, as: :json
 
           expect(response).to be_successful
@@ -240,10 +240,10 @@ RSpec.describe "competitions" do
 
         context "when handling Series competitions" do
           let!(:series) { create(:competition_series) }
-          let!(:partner_competition) {
+          let!(:partner_competition) do
             create(:competition, :with_delegate, :visible, :with_valid_schedule,
                    competition_series: series, series_base: competition)
-          }
+          end
 
           it "can add competition to an existing Series" do
             expect(competition.confirmed?).to be false
@@ -335,7 +335,7 @@ RSpec.describe "competitions" do
         it 'cannot set championship types' do
           expect(competition.confirmed?).to be true
 
-          update_params = build_competition_update(competition, championships: ["world", "_Europe"])
+          update_params = build_competition_update(competition, championships: %w[world _Europe])
           patch competition_path(competition), params: update_params, as: :json
 
           expect(response).to have_http_status(:unprocessable_entity)
@@ -404,10 +404,10 @@ RSpec.describe "competitions" do
 
         context "when handling Series competitions" do
           let!(:series) { create(:competition_series) }
-          let!(:partner_competition) {
+          let!(:partner_competition) do
             create(:competition, :with_delegate, :visible, :with_valid_schedule,
                    competition_series: series, series_base: competition)
-          }
+          end
 
           it 'cannot add competition to an existing Series' do
             expect(competition.confirmed?).to be true

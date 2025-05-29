@@ -133,6 +133,8 @@ function NonActionItemContent({ nonActionItem }) {
       return 'There are no competitions with external websites.';
     case 'recent_competitions_data_to_be_removed_wca_live':
       return 'There are no recent competitions data to be removed from WCA Live.';
+    case 'user_has_upcoming_registered_competitions':
+      return 'This user has no upcoming registered competitions.';
     default:
       return `Unknown data (${nonActionItem}), please contact WST.`;
   }
@@ -220,6 +222,19 @@ function ActionItemContent({ actionItem, messageArgs }) {
           from WCA Live).
           <List ordered>
             {messageArgs?.recent_competitions_3_months?.map((competition) => (
+              <List.Item key={competition.id}>
+                <a href={competitionUrl(competition.id)}>{competition.name}</a>
+              </List.Item>
+            ))}
+          </List>
+        </>
+      );
+    case 'user_has_upcoming_registered_competitions':
+      return (
+        <>
+          This user has upcoming registered competitions. Please take care of it.
+          <List ordered>
+            {messageArgs?.upcoming_registered_competitions?.map((competition) => (
               <List.Item key={competition.id}>
                 <a href={competitionUrl(competition.id)}>{competition.name}</a>
               </List.Item>

@@ -10,7 +10,7 @@ RSpec.feature "Competition events management" do
   end
 
   context "unconfirmed competition without schedule" do
-    let!(:competition) { create(:competition, :with_delegate, :registration_open, event_ids: ["333", "444"], with_rounds: true) }
+    let!(:competition) { create(:competition, :with_delegate, :registration_open, event_ids: %w[333 444], with_rounds: true) }
 
     background do
       sign_in competition.delegates.first
@@ -36,13 +36,13 @@ RSpec.feature "Competition events management" do
 
       save_schedule_react
 
-      expect(competition.competition_venues.map(&:name)).to match_array %w(Venue)
-      expect(competition.competition_venues.flat_map(&:venue_rooms).map(&:name)).to match_array %w(Youpitralala)
+      expect(competition.competition_venues.map(&:name)).to match_array %w[Venue]
+      expect(competition.competition_venues.flat_map(&:venue_rooms).map(&:name)).to match_array %w[Youpitralala]
     end
   end
 
   context "unconfirmed competition with schedule" do
-    let!(:competition) { create(:competition, :with_delegate, :registration_open, :with_valid_schedule, event_ids: ["333", "444"]) }
+    let!(:competition) { create(:competition, :with_delegate, :registration_open, :with_valid_schedule, event_ids: %w[333 444]) }
 
     background do
       sign_in competition.delegates.first
@@ -55,9 +55,9 @@ RSpec.feature "Competition events management" do
       within(:css, "#schedules-edit-panel-body") do
         # click_link doesn't work because Capybara expects links to always have an href
         find("a", class: 'item', text: "Room 1 for venue 1").click
-        # 2 is the number of non-nested activities created by the factory
+        # 3 is the number of non-nested activities created (2 events that we specified + lunch)
         # Nested activity are not supported (yet) in the schedule manager
-        expect(all('.fc-event').size).to eq(2)
+        expect(all('.fc-event').size).to eq(3)
       end
     end
   end

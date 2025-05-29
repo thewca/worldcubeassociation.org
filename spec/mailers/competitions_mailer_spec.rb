@@ -2,14 +2,14 @@
 
 require "rails_helper"
 
-RSpec.describe CompetitionsMailer, type: :mailer do
+RSpec.describe CompetitionsMailer do
   describe "notify_wcat_of_confirmed_competition" do
     let(:senior_delegate_role) { create(:senior_delegate_role) }
     let(:delegate_role) { create(:delegate_role, group: senior_delegate_role.group) }
     let(:second_senior_delegate_role) { create(:senior_delegate_role, group: GroupsMetadataDelegateRegions.find_by!(friendly_id: 'asia').user_group) }
     let(:second_delegate_role) { create(:delegate_role, group: senior_delegate_role.group) }
     let(:third_delegate_role) { create(:trainee_delegate_role, group: second_senior_delegate_role.group) }
-    let(:competition) { create(:competition, :with_competitor_limit, championship_types: %w(world PL), delegates: [delegate_role.user, second_delegate_role.user, third_delegate_role.user]) }
+    let(:competition) { create(:competition, :with_competitor_limit, championship_types: %w[world PL], delegates: [delegate_role.user, second_delegate_role.user, third_delegate_role.user]) }
     let(:mail) do
       I18n.with_locale(:pl) do
         CompetitionsMailer.notify_wcat_of_confirmed_competition(delegate_role.user, competition)
@@ -277,7 +277,7 @@ RSpec.describe CompetitionsMailer, type: :mailer do
     end
 
     context "multi-national competition" do
-      let(:competition) {
+      let(:competition) do
         create(:competition,
                :with_delegate_report,
                :with_valid_schedule,
@@ -287,7 +287,7 @@ RSpec.describe CompetitionsMailer, type: :mailer do
                delegates: [delegate.user, trainee_delegate.user],
                starts: Date.new(2016, 2, 1),
                ends: Date.new(2016, 2, 2))
-      }
+      end
 
       it "renders the headers" do
         countries = competition.continent.countries.sample(competition.competition_venues.count)
@@ -305,7 +305,7 @@ RSpec.describe CompetitionsMailer, type: :mailer do
     end
 
     context "multi-continent competition" do
-      let(:competition) {
+      let(:competition) do
         create(:competition,
                :with_delegate_report,
                :with_valid_schedule,
@@ -315,7 +315,7 @@ RSpec.describe CompetitionsMailer, type: :mailer do
                delegates: [delegate.user, trainee_delegate.user],
                starts: Date.new(2016, 2, 1),
                ends: Date.new(2016, 2, 2))
-      }
+      end
 
       it "renders the headers" do
         continents = Continent.real.sample(competition.competition_venues.count)
@@ -370,13 +370,13 @@ RSpec.describe CompetitionsMailer, type: :mailer do
     let(:delegates) { create_list(:delegate, 3) }
     let(:trainee_delegates) { create_list(:trainee_delegate, 3) }
     let(:competition) { create(:competition, name: "Comp of the future 2017", id: "CompFut2017", delegates: delegates + trainee_delegates) }
-    let(:results_submission) {
+    let(:results_submission) do
       build(
         :results_submission,
         schedule_url: link_to_competition_schedule_tab(competition),
         message: "Hello, here are the results",
       )
-    }
+    end
     let(:mail) { CompetitionsMailer.results_submitted(competition, results_submission, delegates.first) }
     let(:utc_now) { Time.utc(2018, 2, 23, 22, 3, 32) }
 

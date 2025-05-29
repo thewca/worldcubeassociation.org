@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Person, type: :model do
+RSpec.describe Person do
   let!(:person) { create(:person_who_has_competed_once) }
 
   it "defines a valid person" do
@@ -51,8 +51,8 @@ RSpec.describe Person, type: :model do
       it "doesn't update person_name and countryId columns in the results table if they differ from the current ones" do
         create(:person_who_has_competed_once, wca_id: person.wca_id, sub_id: 2, name: "Old Name", country_id: "France")
         person.update!(name: "New Name", country_id: "New Zealand")
-        expect(person.results.pluck(:person_name).uniq).to match_array ["Old Name", "New Name"]
-        expect(person.results.pluck(:country_id).uniq).to match_array ["France", "New Zealand"]
+        expect(person.results.pluck(:person_name).uniq).to contain_exactly("Old Name", "New Name")
+        expect(person.results.pluck(:country_id).uniq).to contain_exactly("France", "New Zealand")
       end
 
       it "updates the associated user" do
@@ -141,7 +141,7 @@ RSpec.describe Person, type: :model do
 
     context "when a foreigner does compete" do
       it "cannot gain a champion title" do
-        expect(fr_competitor.championship_podiums[:national].map(&:country_id)).to eq %w(France)
+        expect(fr_competitor.championship_podiums[:national].map(&:country_id)).to eq %w[France]
       end
 
       it "is ignored when computing others' position" do
@@ -160,7 +160,7 @@ RSpec.describe Person, type: :model do
       before { fr_competitor.update_using_sub_id! country_id: "USA" }
 
       it "includes championship titles related to the previous nationality" do
-        expect(fr_competitor.championship_podiums[:national].map(&:country_id)).to eq %w(France)
+        expect(fr_competitor.championship_podiums[:national].map(&:country_id)).to eq %w[France]
       end
 
       it "does no longer treat the person as eligible for championship title related to previous nationality" do

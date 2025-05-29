@@ -3,10 +3,11 @@ import {
   Icon, Form, Grid, Popup,
 } from 'semantic-ui-react';
 
-import CountrySelector from '../../CountrySelector/CountrySelector';
+import RegionSelector from '../../wca/RegionSelector';
 import { personApiUrl } from '../../../lib/requests/routes.js.erb';
 import { fetchJsonOrError } from '../../../lib/requests/fetchWithAuthenticityToken';
 import useNestedInputUpdater from '../../../lib/hooks/useNestedInputUpdater';
+import I18n from '../../../lib/i18n';
 
 function PersonForm({ personData, setPersonData }) {
   const { wcaId, name, countryIso2 } = personData;
@@ -65,9 +66,11 @@ function PersonForm({ personData, setPersonData }) {
           />
         </Grid.Column>
         <Grid.Column>
-          <CountrySelector
-            countryIso2={countryIso2}
-            onChange={setCountryIso2}
+          <RegionSelector
+            label={I18n.t('activerecord.attributes.user.country_iso2')}
+            onlyCountries
+            region={countryIso2}
+            onRegionChange={setCountryIso2}
           />
         </Grid.Column>
       </Grid>

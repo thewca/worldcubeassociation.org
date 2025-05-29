@@ -49,7 +49,7 @@ RSpec.describe TicketsController do
       year = wca_id.first(4)
 
       (1..99).each do |i|
-        create(:person_who_has_competed_once, wca_id: "#{year}ANON#{i.to_s.rjust(2, "0")}")
+        create(:person_who_has_competed_once, wca_id: "#{year}ANON#{i.to_s.rjust(2, '0')}")
       end
 
       post :anonymize, params: { wcaId: wca_id }
@@ -82,7 +82,7 @@ RSpec.describe TicketsController do
 
       expect(response).to be_successful
       user.reload
-      expect(user.wca_id).to be nil
+      expect(user.wca_id).to be_nil
       expect(user.email).to eq user.id.to_s + User::ANONYMOUS_ACCOUNT_EMAIL_ID_SUFFIX
       expect(user.name).to eq User::ANONYMOUS_NAME
       expect(user.dob).to eq User::ANONYMOUS_DOB.to_date

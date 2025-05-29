@@ -486,6 +486,12 @@ fr:
         registration_competition_events: Épreuves
         #original_hash: 84add5b
         email: Adresse e-mail
+        #original_hash: 6d7a30a
+        search: Recherche...
+        #original_hash: dfd309d
+        too_few_chars: Trop peu de caractères
+        #original_hash: b993b0c
+        no_results: Aucun résultat
       competition_tab:
         #original_hash: 4f9be05
         content: Contenu
@@ -862,10 +868,22 @@ fr:
           WRC.
         #original_hash: da39a3e
         wic_feedback_requested: ''
-        #original_hash: 0aca3b0
-        wic_incidents: >-
-          Listes numérotée des incidents pour lesquels vous souhaitez l'avis du
-          WIC.
+        #original_hash: 74a092e
+        wic_incidents_html: >-
+          Liste des numéros faisant référence à tout incident pour lequel vous
+          souhaiteriez obtenir un retour de la part du WIC. <br>
+          <strong>%{wic_incident_alert}</strong>
+        #original_hash: c4fd7a6
+        wic_incident_alert: >-
+          Si l'incident WIC est délicat (y compris, mais sans s'y limiter, les
+          crimes, le harcèlement, les agressions, etc.), veuillez l'exclure de
+          votre rapport et envoyer un email séparé au WIC. Pour les autres
+          incidents WIC, choisissez par défaut une version brève et anonyme de
+          l'incident et contactez le WIC en privé pour obtenir plus de détails.
+          Le WIC continuera à fournir un retour sur les versions anonymes à des
+          fins de sensibilisation générale. Pour tous les incidents WIC
+          impliquant un membre de la WCA, veuillez exclure tous les détails du
+          rapport et contacter le WIC en privé.
         #original_hash: f30abdc
         remarks: >-
           Parlez de tous les autres détails que vous souhaiteriez partager (ex :
@@ -1383,11 +1401,11 @@ fr:
       #original_hash: 312e799
       officers_description: >-
         Les dirigeants de la WCA gèrent les tâches liés au statut d'association
-        à but non lucratif de la WCA. Ces dirigeants sont élus par le Bureau de
-        la WCA. Le Directeur exécutif est le Directeur général de la WCA, le
-        Président préside toutes les réunions du Bureau, le Secrétaire assure le
-        maintien des documents de l'association et le Trésorier gère les
-        affaires financières de la WCA.
+        à but non lucratif de la WCA. Ces dirigeants sont élus par le Conseil
+        d'administration de la WCA. Le Directeur exécutif est le Directeur
+        général de la WCA, le Président préside toutes les réunions du Bureau,
+        le Secrétaire assure le maintien des documents de l'association et le
+        Trésorier gère les affaires financières de la WCA.
       #original_hash: 19d4bbb
       board_description: >-
         Le Conseil d'administration de la WCA est chargé de diriger
@@ -2242,13 +2260,15 @@ fr:
   user_groups:
     group_types:
       #original_hash: abd2828
-      board: Bureau des Directeurs de la WCA
+      board: Conseil d'administration de la WCA
       #original_hash: d79bd00
       officers: Dirigeants de la WCA
       #original_hash: 959d354
       translators: Traducteur·rice·s
   registrations:
     errors:
+      #original_hash: 8c2f29b
+      exceeding_competitor_limit: Limite de compétiteurs atteinte.
       #original_hash: 51c7156
       edit_deadline_passed: >-
         La date limite de modification des inscriptions est passée ! Les
@@ -2436,8 +2456,6 @@ fr:
         with_stripe: Payé le
       #original_hash: ce53c71
       payment_requested_on: 'Paiement demandé le : %{date}'
-      #original_hash: f5b1b34
-      payment_completed_on: 'Paiement terminé le : %{date}'
       #original_hash: 3141a14
       series_registrations: Inscriptions à une série
       #original_hash: b25928c
@@ -2499,6 +2517,16 @@ fr:
       sera pas approuvée avant qu'une place ne se libère.
     #original_hash: bcd7d70
     entry_fees_fully_paid: 'Vous avez payé %{paid}, ce qui couvre entièrement les frais d''inscription.'
+    #original_hash: e50b275
+    entry_fees_partially_paid: >-
+      Vous avez payé %{paid} de %{total}. Vérifiez auprès des organisateurs si
+      vous devez payer le reste.
+    #original_hash: b9d0818
+    entry_fees_fully_refunded: >-
+      Vos frais d'inscription ont été intégralement remboursés. Si vous devez
+      payer à nouveau, vous pouvez le faire ci-dessous
+    #original_hash: 0c9c8e7
+    entry_fees_pay_again: Je veux payer à nouveau
     #original_hash: 2e5d1b9
     will_pay_here: Vous les paierez ici après avoir soumis votre inscription
     #original_hash: 86877d4
@@ -2506,11 +2534,6 @@ fr:
       Veuillez consulter les informations relatives à la compétition pour
       connaître les modalités de paiement.
     refund_form:
-      hints:
-        #original_hash: 38c904c
-        refund_amount: >-
-          Le montant à rembourser au compétiteur. Il peut s'agir de n'importe
-          quelle valeur dans la limite du montant déjà payé.
       labels:
         #original_hash: 1cc5991
         refund_amount: Montant à rembourser
@@ -2622,7 +2645,7 @@ fr:
     registration_requirements: 'Conditions d''inscription pour la compétition :'
     registration_history:
       #original_hash: 342fa25
-      acting_user: Utilisateur faisant l'action
+      acting_user: Action faite par
       #original_hash: 97c89a4
       action: Action
       #original_hash: 8aa57de
@@ -2687,6 +2710,14 @@ fr:
         ajouter les inscriptions ayant lieu sur place.
       #original_hash: a11edb8
       add: Ajouter l'inscription
+      #original_hash: fd52980
+      ots_not_enabled: >-
+        Les inscriptions sont terminées et l'inscription sur place n'est pas
+        activée - vous devez d'abord modifier la compétition pour l'activer.
+      #original_hash: 61125b5
+      competition_over: >-
+        Il n'est pas possible d'ajouter des inscriptions sur place après la fin
+        de la compétition.
       errors:
         #original_hash: d6dcf5c
         already_registered: Cette personne a déjà une inscription.
@@ -2711,11 +2742,11 @@ fr:
         que vous avez déclarés avant de confirmer la compétition.
       #original_hash: 4fe4dee
       advancement_condition_must_be_present_for_all_non_final_rounds: >-
-        Veillez à ce que toutes les rondes non finales soient assorties d'une
-        condition d'avancement.
+        Veillez à ce que tous les tours qui ne sont pas des finales soient
+        assortis d'une condition d'avancement.
       #original_hash: a00f441
       cutoff_is_greater_than_time_limit: >-
-        La ronde %{round_number} de %{event} a une cutoff supérieure à la limite
+        Le tour %{round_number} de %{event} a une cutoff supérieure à la limite
         de temps. Veuillez vous assurer que la cutoff n'est pas supérieure à la
         limite de temps.
       #original_hash: c1580b1
@@ -3378,6 +3409,10 @@ fr:
           auto_close_threshold: Seuil de fermeture automatique
           #original_hash: b1d5af4
           newcomer_month_reserved_spots: Nombre de places à réserver aux nouveaux compétiteurs
+          #original_hash: b13de61
+          auto_accept_enabled: Acceptation d'inscriptions automatique
+          #original_hash: 1b8698d
+          auto_accept_disable_threshold: Limite pour l'acceptation automatique des inscriptions
         staff:
           #original_hash: 2e3ed8b
           staff_delegate_ids: Délégué·s WCA
@@ -3597,6 +3632,19 @@ fr:
             Uniquement autorisé pendant le mois des nouveaux venus - les places
             réservées ne peuvent pas être supérieures à la moitié de la limite
             de compétiteurs.
+          #original_hash: 79dcafd
+          auto_accept_enabled: >-
+            Cela activera un bouton « Acceptation automatique » dans le menu «
+            Inscriptions ». Cela acceptera toutes les inscriptions payées sur la
+            liste d'attente et en suspens jusqu'à la limite de compétiteurs, ou
+            la limite définie ci-dessous. A utiliser à vos risques et périls.
+          #original_hash: b261026
+          auto_accept_disable_threshold: >-
+            Lorsque ce nombre d'inscriptions acceptées est atteint,
+            l'acceptation automatique se désactive, ce qui permet aux
+            organisateurs d'approuver manuellement les dernières inscriptions.
+            Doit être inférieur à la limite de compétiteurs. Ne rien indiquer si
+            vous ne souhaitez pas utiliser cette option.
         staff:
           #original_hash: b4d020f
           staff_delegate_ids: Délégué·s WCA pour la compétition.
@@ -3770,6 +3818,13 @@ fr:
             'true': Je veux spécifier une limite au nombre de compétiteurs
             #original_hash: 53397ec
             'false': Je ne veux PAS spécifier de limite pour les compétiteurs.
+          auto_accept_enabled:
+            #original_hash: 1c0c289
+            'true': >-
+              Activer le bouton « Acceptation automatique » dans le menu «
+              Inscriptions ».
+            #original_hash: 5996b1f
+            'false': Désactiver le bouton 'Acceptation automatique'
         registration:
           allow_on_the_spot:
             #original_hash: 0c521ca
@@ -3815,6 +3870,17 @@ fr:
                 Les compétiteurs DOIVENT se qualifier pour s'inscrire à une
                 épreuve
     registration_v2:
+      auto_accept:
+        #original_hash: eaf9960
+        bulk_auto_accept: Approuver automatiquement les compétiteurs
+        #original_hash: 1a84d92
+        cant_bulk_auto_accept: >-
+          Une erreur s'est produite lors de la tentative d'acceptation
+          automatique - contactez le WST pour obtenir de l'aide si nécessaire.
+        #original_hash: 1897ffb
+        bulk_auto_accepted: Acceptation automatique réussie
+        #original_hash: 786d81b
+        nothing_to_accept: Aucune inscription n'est éligible à l'acceptation automatique
       pdf:
         #original_hash: 5c7d60f
         link: 'Comme un <0>%{pdfLink}</0>'
@@ -3860,13 +3926,23 @@ fr:
           other: '%{count} places disponibles'
         pending:
           #original_hash: 4210670
-          title: Inscriptions en cours
+          title: Inscriptions en suspens
           #original_hash: 5e16c6d
           information: >-
-            La liste des inscriptions en cours ne doit être utilisée que pour
+            La liste des inscriptions en suspens ne doit être utilisée que pour
             les inscriptions incomplètes (par exemple, non payées). Veuillez
             utiliser la liste d'attente si votre compétition est trop pleine
             pour que de nouveaux compétiteurs puissent s'y inscrire.
+          #original_hash: 134e94f
+          waitlist_skipped_warning: >-
+            Vous avez ignoré %{count} d'inscription(s) précédente(s) en suspens.
+            Êtes-vous sûr de vouloir déplacer l'(les) inscription(s)
+            sélectionnée(s) vers la Liste d'attente ?
+          #original_hash: c2875e1
+          approve_skipped_warning: >-
+            Vous avez ignoré %{count} d'inscription(s) précédente(s) en suspens.
+            Êtes-vous sûr de vouloir accepter la ou les inscriptions
+            sélectionnées ?
         waitlist:
           #original_hash: 3907ca4
           title: Inscriptions sur liste d'attente
@@ -3877,14 +3953,19 @@ fr:
             seront ajoutés à la fin dans l'ordre où ils ont payé, suivis par les
             autres dans l'ordre où ils se sont inscrits. Vous pouvez ajuster
             manuellement l'ordre en mode édition si nécessaire.
-          #original_hash: a6c86ec
+          #original_hash: dc16b6c
           skipped_warning: >-
             Vous avez ignoré %{count} inscription(s) sur la liste d'attente.
-            Êtes-vous sûr de vouloir approuver l'autre (les autres)
-            inscription(s) à la place ?
+            Êtes-vous sûr de vouloir approuver la ou les inscriptions
+            sélectionnées?
         approved:
           #original_hash: a59612c
           title: Inscriptions approuvées
+          #original_hash: bbdee7d
+          pending_waitlist_combined_skipped_warning: >-
+            Vous avez ignoré %{count} d'inscription(s) antérieure(s) en
+            suspens/en attente. Êtes-vous sûr de vouloir accepter la ou les
+            inscriptions sélectionnées ?
         cancelled:
           #original_hash: bd69c74
           title: Inscriptions annulées
@@ -3940,6 +4021,10 @@ fr:
         being_deleted: L'inscription est en cours de suppression...
         #original_hash: cbf13af
         update_confirm: Êtes-vous sûr·e de vouloir mettre à jour votre inscription?
+        #original_hash: 604da8b
+        organizer_update_confirm: >-
+          Êtes-vous sûr de vouloir mettre à jour l'inscription de l'utilisateur
+          ?
         #original_hash: 9b92912
         update_confirm_contact: >-
           Vous devez contacter les organisateurs pour mettre à jour votre
@@ -3968,7 +4053,7 @@ fr:
           one: 'Déplacer %{count} vers'
           other: 'Déplacer %{count} vers'
         #original_hash: 96f608c
-        pending: En cours
+        pending: En suspens
         #original_hash: 92d40dc
         waitlist: Liste d'attente
         #original_hash: 41b81eb
@@ -3979,10 +4064,10 @@ fr:
         rejected: Rejetée(s)
         #original_hash: 43dc853
         amount: Montant
-        #original_hash: 67b3c7d
+        #original_hash: d7e4497
         too_many: >-
           Accepter toutes ces inscriptions dépasserait de %{count} la limite des
-          compétiteurs
+          compétiteurs.
         #original_hash: 462376a
         no_self_update: Contactez l’équipe organisatrice pour mettre à jour votre inscription.
       register:
@@ -4151,11 +4236,33 @@ fr:
         '-6001': Le paiement WCA n’est pas activé pour cette compétition
         #original_hash: 092da51
         '-6002': Vous devez terminer votre inscription avant de pouvoir payer
+        #original_hash: ee2c9c4
+        '-6003': >-
+          Aucun paiement en suspens n'a été trouvé - ceci est probablement dû au
+          fait que vous avez déjà payé votre inscription.
+        #original_hash: 631576f
+        '-7001': Le compétiteur n'a pas encore réglé les frais d'inscription
+        #original_hash: 2aa350b
+        '-7002': L'acceptation automatique n'est pas activée pour cette compétition.
+        #original_hash: d191d2d
+        '-7003': >-
+          Ne peut accepter automatiquement que les inscriptions en suspens ou la
+          première position sur la liste d'attente
+        #original_hash: 30fd93d
+        '-7004': La compétition a atteint le seuil auto_accept_disable_threshold
+        #original_hash: f2bb661
+        '-7005': >-
+          Impossible de procéder à une acceptation automatique lorsque les
+          inscriptions ne sont pas ouvertes
     errors:
       #original_hash: b14d060
       must_use_wca_registration: >-
         L'acceptation automatique ne peut être utilisée que si vous utilisez le
         site web de la WCA pour les inscriptions.
+      #original_hash: 693d47d
+      must_use_payment_integration: >-
+        Vous devez activer une intégration de paiement (par exemple, Stripe)
+        afin d'utiliser l'acceptation automatique.
       #original_hash: 130c901
       auto_accept_limit: >-
         La limite d'inscriptions acceptées automatiquement doit être inférieure
@@ -4167,7 +4274,7 @@ fr:
       #original_hash: 181d8d9
       auto_accept_accept_paid_pending: >-
         Impossible d'activer l'acceptation automatique s'il y a des inscriptions
-        payées en cours - il faut soit les accepter, soit les placer sur la
+        payées en suspens - il faut soit les accepter, soit les placer sur la
         liste d'attente.
       #original_hash: 96db418
       auto_accept_accept_waitlisted: >-
@@ -4262,6 +4369,10 @@ fr:
       event_change_deadline_with_ots: >-
         La date limite pour mettre à jour les épreuves doit être placée durant
         la compétition si les inscriptions sur place sont acceptées.
+      #original_hash: e6400f7
+      on_the_spot_with_past_event_change_deadline: >-
+        Impossible d'autoriser les inscriptions sur place si la date limite de
+        mise à jour des événements est dépassée.
       #original_hash: 5ae2437
       series_distance_km: 'La compétition est située trop loin de %{competition}.'
       #original_hash: 4a5d7c5
@@ -4570,6 +4681,8 @@ fr:
         tabs: Gérer les onglets
         #original_hash: f3d6278
         submit_results: Envoyer les résultats
+        #original_hash: e2d046b
+        match_scrambles: Soumettre les mélanges
         #original_hash: 4c9f914
         delegate_report: Rapport des Délégués
         #original_hash: b233e77
@@ -4724,11 +4837,27 @@ fr:
     #original_hash: 10bcdbd
     connect_wca_id: Associez votre ID WCA à votre compte !
   payments:
+    messages:
+      #original_hash: 2eac1cb
+      charge_refunded: Le paiement a été remboursé
+      #original_hash: 1e1d219
+      charges_refunded: Tous les frais ont été remboursés
+    errors:
+      refund:
+        #original_hash: 66475ae
+        provider_disconnected: >-
+          Vous ne pouvez plus effectuer de remboursement pour cette compétition.
+          Veuillez utiliser le tableau de bord de votre fournisseur de paiement
+          pour le faire.
+        #original_hash: 73e93ee
+        refund_amount_too_high: >-
+          Vous n'êtes pas autorisé à rembourser plus que ce que le compétiteur a
+          payé.
+        #original_hash: 6368ffc
+        refund_amount_too_low: Le montant du remboursement doit être supérieur à zéro.
     labels:
-      #original_hash: cccf678
-      payment_statuses: Statuts de paiement
-      #original_hash: 312b6b6
-      available_refunds: Remboursements disponibles
+      #original_hash: b6370d7
+      net_payment: Paiement net
       #original_hash: ef3cd45
       original_payment: Paiement initial
     payment_providers:
@@ -4829,11 +4958,6 @@ fr:
           primary_email: Adresse e-mail
         #original_hash: 08d2e98
         fallback_not_applicable: N/A
-    statuses:
-      #original_hash: c8fbda9
-      succeeded: Réussi
-      #original_hash: d6fbc7a
-      refund: Remboursé
   persons:
     index:
       #original_hash: 5934b4c
@@ -5259,7 +5383,7 @@ fr:
       board:
         #original_hash: 19d4bbb
         description: >-
-          Le conseil d'administration de la WCA est chargé de diriger
+          Le Conseil d'administration de la WCA est chargé de diriger
           l'organisation dans son ensemble et de remplir toutes les fonctions
           qui ne sont pas remplies par d'autres équipes et comités.
       users:
@@ -5422,8 +5546,8 @@ fr:
       private_information: Informations privées
       #original_hash: 87a1c7e
       private_information_disclaimer: >-
-        Les informations ci-dessous ne seront visibles que par le Bureau de la
-        WCA
+        Les informations ci-dessous ne seront visibles que par le Conseil
+        d'administration de la WCA
     errors:
       #original_hash: 08122c4
       end_date_after_start_date: ne peut pas être après "Reconnue jusqu'à"
@@ -5431,7 +5555,7 @@ fr:
       #original_hash: 60cdccc
       create_success: >-
         Demande soumise avec avec succès ! Merci de vérifier vos e-mails et
-        d'attendre que le Bureau des Directeurs de la WCA l'évalue.
+        d'attendre que le Conseil d'administration de la WCA l'évalue.
     delete:
       #original_hash: 6588652
       confirm_delete: >-
@@ -5442,7 +5566,6 @@ fr:
     title: Outils logiciels pour les compétitions WCA
     #original_hash: 6d2fe37
     wca_icon_text: Développés et maintenus par la WST
-    #original_hash: 6520873
     intro:
       #original_hash: 0c5fab5
       desc: >-
@@ -5562,6 +5685,7 @@ fr:
   logo:
     #original_hash: c72c969
     title: Logo de la WCA
+    #original_hash: 6520873
     intro: "Le logo de la WCA a été conçu par Justin Eastman, dans un concours de design en janvier\_2005. Nous avons aimé le logo en raison de son design, des couleurs et du fait qu’il ne montre pas spécifiquement un cube 3x3x3."
     headings:
       usage_guidelines:
@@ -6365,18 +6489,17 @@ fr:
       #original_hash: ebbab6f
       met_cutoff_but_missing_results_error: >-
         [%{round_id}] %{person_name} a atteint la cutoff mais il manque des
-        résultats pour la deuxième phase de la ronde. La cutoff était %{cutoff}.
+        résultats pour la deuxième partie du tour. La cutoff était %{cutoff}.
       #original_hash: cc0b47b
       didnt_meet_cutoff_but_has_results_error: >-
         [%{round_id}] %{person_name} a au moins un résultat pour la deuxième
-        phase de la ronde mais n'a pas atteint la cutoff. Le seuil était
-        %{cutoff}.
+        partie du tour mais n'a pas atteint la cutoff. Le seuil était %{cutoff}.
       #original_hash: 4fc3fd7
       wrong_attempts_for_cutoff_error: >-
         Il manque à [%{round_id}] %{person_name} au moins une tentative avant la
         cutoff. Veuillez modifier le résultat pour inclure la ou les tentatives
-        manquantes ou mettre à jour les informations relatives à la ronde dans
-        la page Gérer les événements de la compétition.
+        manquantes ou mettre à jour les informations relatives au tour dans la
+        page Gérer les événements de la compétition.
       #original_hash: 24c10d3
       mismatched_result_format_error: >-
         [%{round_id}] Les résultats pour %{person_name} sont dans le mauvais
@@ -6384,7 +6507,7 @@ fr:
       #original_hash: 32ea6be
       result_over_time_limit_error: >-
         [%{round_id}] Au moins un résultat pour %{person_name} dépasse le temps
-        limite de la ronde, qui est de %{time_limit} par tentative. Toutes les
+        limite du tour, qui est de %{time_limit} par tentative. Toutes les
         solutions dépassant la limite de temps doivent être transformées en DNF.
       #original_hash: 1678105
       results_over_cumulative_time_limit_error: >-
@@ -6392,18 +6515,18 @@ fr:
         à la limite de temps cumulée, qui était de %{time_limit}.
       #original_hash: 3fbb505
       no_round_information_warning: >-
-        [%{round_id}] Il n'y a pas d'information sur la limite de temps pour
-        cette ronde. Ces validations ont été ignorées. Veuillez mettre à jour
-        les informations relatives à la ronde dans la page Gérer les événements
-        de la compétition.
+        [%{round_id}] Il n'y a pas d'information sur la limite de temps pour ce
+        tour. Ces validations ont été ignorées. Veuillez mettre à jour les
+        informations relatives au tour dans la page Gérer les événements de la
+        compétition.
       #original_hash: 76dc4e7
       undefined_time_limit_warning: >-
-        [%{round_id}] La limite de temps pour cette ronde est indéfinie, les
+        [%{round_id}] La limite de temps pour ce tour est indéfinie, les
         validations de limite de temps ont été ignorées. Ceci n'est attendu que
         pour les compétitions antérieures à 2013.
       #original_hash: 10ad25f
       suspicious_dnf_warning: >-
-        [%{round_ids}] La ronde a une limite de temps cumulée, et en extrapolant
+        [%{round_ids}] Le tour a une limite de temps cumulée, et en extrapolant
         sur la base des résolutions réussies de %{person_name}, il ne leur
         restait que très peu de temps pour au moins l'un de leurs DNF. Veuillez
         vous assurer que chaque DNF et DNS est effectivement correct. Si le
@@ -6412,7 +6535,7 @@ fr:
         comme DNS.
       #original_hash: 8057a12
       missing_cumulative_round_id_error: >-
-        [%{original_round_id}] Impossible de trouver la ronde %{wcif_id} pour la
+        [%{original_round_id}] Impossible de trouver le tour %{wcif_id} pour la
         limite de temps cumulée spécifiée dans le WCIF. Veuillez vous rendre sur
         la page Gérer les événements de la compétition et supprimer %{wcif_id}
         de la limite de temps cumulée pour %{original_round_id}. WST est au
@@ -6424,73 +6547,70 @@ fr:
     rounds:
       #original_hash: 517fd54
       too_many_qualified_warning: >-
-        Ronde %{round_id} : plus de compétiteurs se sont qualifiés que ce que la
+        Tour %{round_id} : plus de compétiteurs se sont qualifiés que ce que la
         condition d'avancement prévoyait (%{actual} au lieu de %{expected}, la
         condition était : %{condition}). Veuillez mettre à jour les informations
-        relatives à la ronde dans la page de gestion des événements.
+        relatives au tour dans la page de gestion des événements.
       #original_hash: 09d3568
       unexpected_round_results_error: >-
-        La ronde %{round_id} est présente dans les résultats mais n'a pas été
-        créée dans l'onglet des événements. Veuillez inclure les informations
-        relatives à la ronde dans la page de gestion des événements de la
+        Le tour %{round_id} est présent dans les résultats mais n'a pas été créé
+        dans l'onglet des événements. Veuillez inclure les informations
+        relatives au tour dans la page de gestion des événements de la
         compétition.
       #original_hash: 5b5f9ee
       regulation_9m1_error: >-
-        La ronde %{round_id} compte 99 compétiteurs ou moins mais a plus de deux
-        rondes suivantes, ce qui n'est pas autorisé par le règlement 9m1.
+        Le tour %{round_id} compte 99 compétiteurs ou moins mais a plus de deux
+        tours suivants, ce qui n'est pas autorisé par la règle 9m1.
       #original_hash: 892e0d5
       regulation_9m2_error: >-
-        La ronde %{round_id} compte 15 compétiteurs ou moins mais comporte plus
-        d'une ronde suivante, ce qui n'est pas autorisé par le règlement 9m2.
+        Le tour %{round_id} compte 15 compétiteurs ou moins mais comporte plus
+        d'un tour suivant, ce qui n'est pas autorisé par la règle 9m2.
       #original_hash: cb8522e
       regulation_9m3_error: >-
-        La ronde %{round_id} compte 7 compétiteurs ou moins mais comporte au
-        moins une ronde suivante, ce qui n'est pas autorisé par le règlement
-        9m3.
+        Le tour %{round_id} compte 7 compétiteurs ou moins mais comporte au
+        moins un tour suivant, ce qui n'est pas autorisé par la règle 9m3.
       #original_hash: e12138a
       regulation_9p1_error: >-
-        Ronde %{round_id} : Moins de 25% des compétiteurs ont été éliminés, ce
-        qui n'est pas autorisé selon le règlement 9p1.
+        Tour %{round_id} : Moins de 25% des compétiteurs ont été éliminés, ce
+        qui n'est pas autorisé selon la règle 9p1.
       #original_hash: f5d8ae9
       no_competitor_eliminated_error: >-
-        Ronde %{round_id} : Il doit y avoir au moins un compétiteur éliminé, ce
-        qui est exigé par le règlement 9p (compétitions antérieures à avril
-        2010).
+        Tour %{round_id} : Il doit y avoir au moins un compétiteur éliminé, ce
+        qui est exigé par la règle 9p (compétitions antérieures à avril 2010).
       #original_hash: b868019
       less_than_twenty_five_percent_eliminated_error: >-
-        Ronde %{round_id} : selon la condition d'avancement (%{condition}),
-        moins de 25% des compétiteurs seraient éliminés, ce qui n'est pas
-        autorisé selon le règlement 9p1. Veuillez mettre à jour les informations
-        relatives à la ronde dans la page de gestion des événements.
+        Tour %{round_id} : selon la condition d'avancement (%{condition}), moins
+        de 25% des compétiteurs seraient éliminés, ce qui n'est pas autorisé
+        selon la règle 9p1. Veuillez mettre à jour les informations relatives au
+        tour dans la page de gestion des événements.
       #original_hash: d6fc805
       not_enough_qualified_warning: >-
-        Manche %{round_id} : selon les données de l'événement, au plus
-        %{expected} aurait pu procéder, mais seulement %{actual} a participé à
-        la ronde. Veuillez laisser un commentaire à ce sujet (ou corriger les
-        données relatives aux événements si vous avez appliqué une condition
+        Tour %{round_id} : selon les données de l'événement, au plus %{expected}
+        aurait pu procéder, mais seulement %{actual} a participé au tour.
+        Veuillez laisser un commentaire à ce sujet (ou corriger les données
+        relatives aux événements si vous avez appliqué une condition
         d'avancement différente).
       #original_hash: 7915e13
       competed_not_qualified_error: >-
-        La ronde %{round_id} : %{ids} a concouru mais n'a pas rempli la
-        condition d'avancement du résultat de la tentative (%{condition}).
-        Veuillez vous assurer que la condition d'avancement correspond à ce qui
-        a été utilisé pendant la compétition, et supprimez les résultats si
-        nécessaire.
+        Le tour %{round_id} : %{ids} a concouru mais n'a pas rempli la condition
+        d'avancement du résultat de la tentative (%{condition}). Veuillez vous
+        assurer que la condition d'avancement correspond à ce qui a été utilisé
+        pendant la compétition, et supprimez les résultats si nécessaire.
       #original_hash: c4a7f11
       round_not_found_error: >-
-        La ronde %{round_id} n'a pas été trouvée. Veuillez vous assurer que le
+        Le tour %{round_id} n'a pas été trouvé. Veuillez vous assurer que le
         panneau d'édition des événements du site web de la WCA et WCA Live sont
         synchronisés.
       #original_hash: 3c739f3
       missing_round_results_error: >-
-        Il n'y a pas de résultats pour la ronde %{round_id} mais elle est listée
-        dans l'onglet événements. Si cette ronde n'a pas eu lieu, veuillez la
+        Il n'y a pas de résultats pour le tour %{round_id} mais il est listé
+        dans l'onglet événements. Si ce tour n'a pas eu lieu, veuillez le
         supprimer dans la page de gestion des événements de la compétition.
       #original_hash: dcf92d3
       unexpected_combined_round_error: >-
-        Aucun seuil n'a été annoncé pour '%{round_name}', mais elle a été
-        détectée comme une ronde à seuil dans les résultats. Veuillez mettre à
-        jour les informations relatives à la ronde dans la page de gestion des
+        Aucune cutoff n'a été annoncé pour '%{round_name}', mais il a été
+        détecté comme un tour avec cutoff dans les résultats. Veuillez mettre à
+        jour les informations relatives au tour dans la page de gestion des
         événements de la compétition.
     events:
       #original_hash: e87f8a0
@@ -6498,7 +6618,7 @@ fr:
         L'événement principal sélectionné pour cette compétition est
         %{main_event_id}. Comment cet événement a-t-il été traité comme
         l'événement principal de la compétition ? Veuillez donner une brève
-        explication au WRT (par exemple, nombre de rondes, prix, vainqueur
+        explication au WRT (par exemple, nombre de tours, prix, vainqueur
         déclaré de la compétition, ...).
       #original_hash: 1d4e297
       no_main_event_warning: >-
@@ -6520,7 +6640,7 @@ fr:
       #original_hash: ff7e063
       missing_scrambles_for_round_error: >-
         [%{round_id}] Mélanges manquants. Utilisez Scrambles Matcher pour
-        ajouter les bon mélanges à la ronde.
+        ajouter les bon mélanges au tour.
       #original_hash: 340d2f3
       missing_scrambles_for_competition_error: >-
         Il manque des mélanges pour la compétition. Utilisez Scrambles Matcher
@@ -6546,7 +6666,7 @@ fr:
         au WRT expliquant pourquoi plusieurs groupes de FMC ont été utilisés.
       #original_hash: d6830c0
       wrong_number_of_scramble_sets_error: >-
-        [%{round_id}] Cette ronde a un nombre de mélanges différent de celui
-        indiqué dans l'onglet Gérer les événements. Veuillez ajuster le nombre
-        de sets de mélanges dans l'onglet Gérer les événements en fonction du
-        nombre de sets utilisés.
+        [%{round_id}] Ce tour a un nombre de mélanges différent de celui indiqué
+        dans l'onglet Gérer les événements. Veuillez ajuster le nombre de sets
+        de mélanges dans l'onglet Gérer les événements en fonction du nombre de
+        sets utilisés.

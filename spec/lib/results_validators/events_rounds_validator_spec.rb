@@ -7,20 +7,20 @@ ERV = RV::EventsRoundsValidator
 
 RSpec.describe ERV do
   context "on InboxResult and Result" do
-    let!(:competition1) { create(:competition, :past, event_ids: ["333", "333oh"], main_event_id: nil) }
-    let!(:competition2) { create(:competition, :past, event_ids: ["222", "555"], main_event_id: "222") }
+    let!(:competition1) { create(:competition, :past, event_ids: %w[333 333oh], main_event_id: nil) }
+    let!(:competition2) { create(:competition, :past, event_ids: %w[222 555], main_event_id: "222") }
 
     # The idea behind this variable is the following: the validator can be applied
     # on either a particular model for given competition ids, or on a set of results.
     # We simply want to check it has the expected behavior on all the possible cases.
-    let(:validator_args) {
-      [InboxResult, Result].flat_map { |model|
+    let(:validator_args) do
+      [InboxResult, Result].flat_map do |model|
         [
           { competition_ids: [competition1.id, competition2.id], model: model },
           { results: model.where(competition_id: [competition1.id, competition2.id]), model: model },
         ]
-      }
-    }
+      end
+    end
 
     it "triggers events-related errors and warnings" do
       # Triggers:

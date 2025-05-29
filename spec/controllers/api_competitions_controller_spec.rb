@@ -13,7 +13,7 @@ RSpec.describe Api::V0::CompetitionsController do
   end
 
   describe 'GET #show' do
-    let(:competition) {
+    let(:competition) do
       create(
         :competition,
         :visible,
@@ -22,7 +22,7 @@ RSpec.describe Api::V0::CompetitionsController do
         end_date: "2014-02-05",
         external_website: "http://example.com",
       )
-    }
+    end
 
     it '404s on invalid competition' do
       get :show, params: { id: "FakeId2014" }
@@ -51,7 +51,7 @@ RSpec.describe Api::V0::CompetitionsController do
   end
 
   describe 'GET #schedule' do
-    let(:competition) {
+    let(:competition) do
       create(
         :competition,
         :with_delegate,
@@ -62,7 +62,7 @@ RSpec.describe Api::V0::CompetitionsController do
         end_date: "2014-02-05",
         external_website: "http://example.com",
       )
-    }
+    end
 
     it '404s on invalid competition' do
       get :show, params: { id: "FakeId2014" }
@@ -121,9 +121,9 @@ RSpec.describe Api::V0::CompetitionsController do
       let(:trainee_delegate1) { create(:trainee_delegate) }
       let(:organizer1) { create(:user) }
       let(:organizer2) { create(:user) }
-      let!(:competition) {
+      let!(:competition) do
         create(:competition, :confirmed, delegates: [delegate1, delegate2, trainee_delegate1], organizers: [organizer1, organizer2])
-      }
+      end
       let!(:other_comp) { create(:competition) }
 
       it 'managed_by includes delegate' do
@@ -257,7 +257,7 @@ RSpec.describe Api::V0::CompetitionsController do
   describe 'wcif' do
     let!(:series) { create(:competition_series) }
 
-    let!(:competition) {
+    let!(:competition) do
       create(
         :competition,
         :with_delegate,
@@ -267,14 +267,14 @@ RSpec.describe Api::V0::CompetitionsController do
         start_date: "2014-02-03",
         end_date: "2014-02-05",
         external_website: "http://example.com",
-        event_ids: %w(333 444),
+        event_ids: %w[333 444],
         latitude: 43_641_740,
         longitude: -79_376_902,
         competition_series: series,
       )
-    }
+    end
 
-    let!(:hidden_competition) {
+    let!(:hidden_competition) do
       create(
         :competition,
         :not_visible,
@@ -286,7 +286,7 @@ RSpec.describe Api::V0::CompetitionsController do
         longitude: -79_376_902,
         competition_series: series,
       )
-    }
+    end
 
     it '404s on invalid competition' do
       get :show_wcif, params: { competition_id: "FakeId2014" }
@@ -369,7 +369,7 @@ RSpec.describe Api::V0::CompetitionsController do
         get :show_wcif, params: { competition_id: 'TestComp2014' }
         expect(response).to have_http_status :ok
         parsed_body = response.parsed_body
-        expect(parsed_body['series']['competitionIds']).to eq ['HiddenComp2014', 'TestComp2014']
+        expect(parsed_body['series']['competitionIds']).to eq %w[HiddenComp2014 TestComp2014]
       end
     end
 

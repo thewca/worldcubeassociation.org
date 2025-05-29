@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 class UsersController < ApplicationController
-  before_action :authenticate_user!, except: [:select_nearby_delegate, :acknowledge_cookies]
-  before_action :check_recent_authentication!, only: [:enable_2fa, :disable_2fa, :regenerate_2fa_backup_codes]
-  before_action :set_recent_authentication!, only: [:edit, :update, :enable_2fa, :disable_2fa]
+  before_action :authenticate_user!, except: %i[select_nearby_delegate acknowledge_cookies]
+  before_action :check_recent_authentication!, only: %i[enable_2fa disable_2fa regenerate_2fa_backup_codes]
+  before_action :set_recent_authentication!, only: %i[edit update enable_2fa disable_2fa]
 
   RECENT_AUTHENTICATION_DURATION = 10.minutes.freeze
 
@@ -20,7 +20,7 @@ class UsersController < ApplicationController
       format.json do
         @users = User.in_region(params[:region])
         params[:search]&.split&.each do |part|
-          like_query = %w(users.name wca_id email).map do |column|
+          like_query = %w[users.name wca_id email].map do |column|
             "#{column} LIKE :part"
           end.join(" OR ")
           @users = @users.where(like_query, part: "%#{part}%")
@@ -217,7 +217,7 @@ class UsersController < ApplicationController
     @user.current_user = current_user
     return if redirect_if_cannot_edit_user(@user)
 
-    dangerous_change = current_user == @user && [:password, :password_confirmation, :email].any? { |attribute| user_params.key? attribute }
+    dangerous_change = current_user == @user && %i[password password_confirmation email].any? { |attribute| user_params.key? attribute }
     return if dangerous_change && !check_recent_authentication!
 
     old_confirmation_sent_at = @user.confirmation_sent_at

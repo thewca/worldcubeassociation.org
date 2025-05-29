@@ -43,7 +43,7 @@ Bundler/OrderedGems:
   Enabled: false
 
 Lint/UnusedMethodArgument:
-  Enabled: false
+  AllowUnusedKeywordArguments: true
 
 Style/Alias:
   EnforcedStyle: prefer_alias_method
@@ -113,9 +113,6 @@ Metrics/ModuleLength:
 Style/AccessModifierDeclarations:
   Enabled: false
 
-Style/BlockDelimiters:
-  Enabled: false
-
 Style/ClassAndModuleChildren:
   Enabled: false
 
@@ -128,12 +125,6 @@ Style/Documentation:
 Style/MultilineBlockChain:
   Enabled: false
 
-Style/Next:
-  Enabled: false
-
-Style/PercentLiteralDelimiters:
-  Enabled: false
-
 Style/RaiseArgs:
   EnforcedStyle: compact
 
@@ -143,21 +134,12 @@ Style/SignalException:
 Layout/IndentationConsistency:
   EnforcedStyle: indented_internal_methods
 
-Style/StringLiteralsInInterpolation:
-  Enabled: false
-
-Style/SymbolArray:
-  Enabled: false
-
 # This causes a bunch of false positives as of 2025-03-17
 Rails/ActionControllerFlashBeforeRender:
   Enabled: false
 
 # We currently have a couple enums that are defined with Arrays, disabling for now
 Rails/EnumHash:
-  Enabled: false
-
-Style/WordArray:
   Enabled: false
 
 Style/SymbolProc:
@@ -312,25 +294,10 @@ RSpec/ItBehavesLike:
 RSpec/EmptyLineAfterExample:
   Enabled: false
 
-RSpec/MatchArray:
-  Enabled: false
-
 RSpec/DescribedClass:
   Enabled: false
 
-RSpec/VariableName:
-  Enabled: false
-
 RSpec/RepeatedDescription:
-  Enabled: false
-
-RSpec/ReceiveCounts:
-  Enabled: false
-
-RSpec/ContextMethod:
-  Enabled: false
-
-RSpec/BeNil:
   Enabled: false
 
 RSpec/LetBeforeExamples:
@@ -339,53 +306,11 @@ RSpec/LetBeforeExamples:
 RSpec/ExampleWording:
   Enabled: false
 
-RSpec/Focus:
-  Enabled: false
-
-RSpec/ExpectInHook:
-  Enabled: false
-
-RSpec/PendingWithoutReason:
-  Enabled: false
-
 RSpec/MultipleDescribes:
-  Enabled: false
-
-RSpec/StubbedMock:
-  Enabled: false
-
-RSpec/SortMetadata:
-  Enabled: false
-
-RSpec/ScatteredSetup:
-  Enabled: false
-
-RSpec/ExcessiveDocstringSpacing:
   Enabled: false
 
 RSpec/NamedSubject:
   Enabled: false
 
 RSpec/Be:
-  Enabled: false
-
-RSpec/ScatteredLet:
-  Enabled: false
-
-RSpec/RepeatedExample:
-  Enabled: false
-
-RSpec/RepeatedExampleGroupDescription:
-  Enabled: false
-
-RSpec/ClassCheck:
-  Enabled: false
-
-RSpec/BeEmpty:
-  Enabled: false
-
-RSpecRails/NegationBeValid:
-  Enabled: false
-
-RSpecRails/InferredSpecType:
   Enabled: false

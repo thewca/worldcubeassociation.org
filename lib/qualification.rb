@@ -6,12 +6,12 @@ class Qualification
   attr_accessor :when_date, :level, :wcif_type, :result_type
 
   validates :when_date, presence: true
-  validates :result_type, presence: true, inclusion: { in: ["single", "average"] }
-  validates :wcif_type, presence: true, inclusion: { in: ["attemptResult", "ranking", "anyResult"] }
+  validates :result_type, presence: true, inclusion: { in: %w[single average] }
+  validates :wcif_type, presence: true, inclusion: { in: %w[attemptResult ranking anyResult] }
   validates :level, numericality: { only_integer: true, greater_than: 0 }, if: :result_or_ranking?
 
   def result_or_ranking?
-    ['attemptResult', 'ranking'].include?(self.wcif_type)
+    %w[attemptResult ranking].include?(self.wcif_type)
   end
 
   def ==(other)
@@ -71,12 +71,12 @@ class Qualification
 
   def self.wcif_json_schema
     {
-      "type" => ["object", "null"],
+      "type" => %w[object null],
       "properties" => {
         "whenDate" => { "type" => "string" },
-        "resultType" => { "type" => "string", "enum" => ["single", "average"] },
-        "type" => { "type" => "string", "enum" => ["attemptResult", "ranking", "anyResult"] },
-        "level" => { "type" => ["integer", "null"] },
+        "resultType" => { "type" => "string", "enum" => %w[single average] },
+        "type" => { "type" => "string", "enum" => %w[attemptResult ranking anyResult] },
+        "level" => { "type" => %w[integer null] },
       },
     }
   end

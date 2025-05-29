@@ -25,7 +25,7 @@ import { toDegrees, toMicrodegrees } from '../../../lib/utils/edit-schedule';
 import { fetchWithAuthenticityToken } from '../../../lib/requests/fetchWithAuthenticityToken';
 import { geocodingTimeZoneUrl } from '../../../lib/requests/routes.js.erb';
 import { getTimeZoneDropdownLabel, sortByOffset } from '../../../lib/utils/timezone';
-import CountrySelector from '../../CountrySelector/CountrySelector';
+import RegionSelector from '../../wca/RegionSelector';
 
 // We need to keep track of which timezones the frontend can actually understand.
 //   Sometimes, package updates or Ruby runtime updates can introduce newly-fangled IANA timezones
@@ -183,10 +183,11 @@ function VenuePanel({
               value={venue.name}
               onChange={handleVenueChange}
             />
-            <CountrySelector
+            <RegionSelector
               name="countryIso2"
-              countryIso2={venue.countryIso2}
-              onChange={handleVenueChange}
+              onlyCountries
+              region={venue.countryIso2}
+              onRegionChange={handleVenueChange}
             />
             {bestMatch && (
               <Button

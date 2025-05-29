@@ -3,12 +3,15 @@
 class Round < ApplicationRecord
   belongs_to :competition_event
   has_one :competition, through: :competition_event
+  delegate :competition_id, to: :competition_event
 
   has_one :event, through: :competition_event
   # CompetitionEvent uses the cached value
   delegate :event, to: :competition_event
 
   has_many :registrations, through: :competition_event
+
+  has_many :inbox_scramble_sets, foreign_key: "matched_round_id", inverse_of: :matched_round, dependent: :nullify
 
   # For the following association, we want to keep it to be able to do some joins,
   # but we definitely want to use cached values when directly using the method.
@@ -31,6 +34,8 @@ class Round < ApplicationRecord
   serialize :round_results, coder: RoundResults
   validates_associated :round_results
 
+  has_many :schedule_activities, -> { root_activities }, dependent: :destroy
+
   has_many :wcif_extensions, as: :extendable, dependent: :delete_all
 
   has_many :live_results
@@ -44,7 +49,7 @@ class Round < ApplicationRecord
 
   # Qualification rounds/b-final are handled weirdly, they have round number 0
   # and do not count towards the total amount of rounds.
-  OLD_TYPES = ["0", "b"].freeze
+  OLD_TYPES = %w[0 b].freeze
   validates :old_type, inclusion: { in: OLD_TYPES, allow_nil: true }
   after_validation(if: :old_type) do
     self.number = 0

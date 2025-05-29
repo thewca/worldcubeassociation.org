@@ -50,7 +50,7 @@ RSpec.describe UsersController do
 
       patch :update, params: { id: user, user: { claiming_wca_id: true, unconfirmed_wca_id: person.wca_id, delegate_id_to_handle_wca_id_claim: delegate.id } }
       new_user = assigns(:user)
-      expect(new_user).to be_invalid
+      expect(new_user).not_to be_valid
       expect(user.reload.unconfirmed_wca_id).to be_nil
     end
   end
@@ -114,12 +114,12 @@ RSpec.describe UsersController do
     context "recently authenticated" do
       it "user can change email" do
         sign_in user
-        expect(user.confirmation_sent_at).to be nil
+        expect(user.confirmation_sent_at).to be_nil
         post :authenticate_user_for_sensitive_edit, params: { user: { password: "wca" } }
         patch :update, params: { id: user.id, user: { email: "newEmail@newEmail.com" } }
         user.reload
         expect(user.unconfirmed_email).to eq "newemail@newemail.com"
-        expect(user.confirmation_sent_at).not_to be nil
+        expect(user.confirmation_sent_at).not_to be_nil
       end
     end
 
@@ -128,8 +128,8 @@ RSpec.describe UsersController do
         sign_in user
         patch :update, params: { id: user.id, user: { email: "newEmail@newEmail.com" } }
         user.reload
-        expect(user.unconfirmed_email).to be nil
-        expect(user.confirmation_sent_at).to be nil
+        expect(user.unconfirmed_email).to be_nil
+        expect(user.confirmation_sent_at).to be_nil
         expect(flash[:danger]).to eq I18n.t("users.edit.sensitive.identity_error")
       end
     end
@@ -143,7 +143,7 @@ RSpec.describe UsersController do
     it "user can change his preferred events" do
       sign_in user
       patch :update, params: { id: user.id, user: { user_preferred_events_attributes: [{ event_id: "333" }, { event_id: "444" }, { event_id: "clock" }] } }
-      expect(user.reload.preferred_events.map(&:id)).to eq %w(333 444 clock)
+      expect(user.reload.preferred_events.map(&:id)).to eq %w[333 444 clock]
     end
 
     context "after creating a pending registration" do

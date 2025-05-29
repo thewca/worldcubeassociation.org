@@ -287,7 +287,7 @@ RSpec.feature "Sign up" do
       click_on "I have competed in a WCA competition."
 
       click_button "Sign up"
-      page.find_by_id('have-competed', class: ["collapse", "in"]) # ensure page loads completely
+      page.find_by_id('have-competed', class: %w[collapse in]) # ensure page loads completely
 
       expect(page).to have_css('#have-competed', visible: :visible)
       expect(page).to have_css('#never-competed', visible: :hidden)

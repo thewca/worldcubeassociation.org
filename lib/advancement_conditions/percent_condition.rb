@@ -8,8 +8,8 @@ module AdvancementConditions
       "percent"
     end
 
-    def to_s(round, short: false)
-      I18n.t("advancement_condition#{".short" if short}.percent", percent: percent)
+    def to_s(_round, short: false)
+      I18n.t("advancement_condition#{'.short' if short}.percent", percent: percent)
     end
 
     def max_advancing(results)

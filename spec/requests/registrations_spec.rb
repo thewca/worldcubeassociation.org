@@ -4,7 +4,7 @@ require "rails_helper"
 require "csv"
 
 RSpec.describe "registrations" do
-  let!(:competition) { create(:competition, :with_delegate, :future, :visible, event_ids: %w(333 444)) }
+  let!(:competition) { create(:competition, :with_delegate, :future, :visible, event_ids: %w[333 444]) }
 
   describe "POST #do_import" do
     context "when signed in as a normal user" do
@@ -42,9 +42,9 @@ RSpec.describe "registrations" do
           ["a", "Sherlock Holmes", "United Kingdom", "", "2000-01-01", "m", "sherlock@example.com", "1", "0"],
           ["a", "John Watson", "United Kingdom", "", "2000-01-01", "m", "watson@example.com", "1", "1"],
         ]
-        expect {
+        expect do
           post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
-        }.not_to(change { competition.registrations.count })
+        end.not_to(change { competition.registrations.count })
         follow_redirect!
         expect(response.body).to include "The given file includes 2 accepted registrations, which is more than the competitor limit of 1."
       end
@@ -55,7 +55,7 @@ RSpec.describe "registrations" do
         series = create(:competition_series)
         competition.update!(competition_series: series)
 
-        partner_competition = create(:competition, :with_delegate, :visible, event_ids: %w(333 555),
+        partner_competition = create(:competition, :with_delegate, :visible, event_ids: %w[333 555],
                                                                              competition_series: series, series_base: competition)
 
         # make sure there is a dummy registration for the partner competition.
@@ -65,9 +65,9 @@ RSpec.describe "registrations" do
           ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
           ["a", two_timer_dave.name, two_timer_dave.country.id, two_timer_dave.wca_id, two_timer_dave.dob, two_timer_dave.gender, two_timer_dave.email, "1", "1"],
         ]
-        expect {
+        expect do
           post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
-        }.not_to(change { competition.registrations.count })
+        end.not_to(change { competition.registrations.count })
         follow_redirect!
         expect(response.body).to include "Error importing #{two_timer_dave.name}: Validation failed: Competition You can only be accepted for one Series competition at a time."
       end
@@ -78,9 +78,9 @@ RSpec.describe "registrations" do
           ["a", "Sherlock Holmes", "United Kingdom", "", "2000-01-01", "m", "sherlock@example.com", "1", "0"],
           ["a", "John Watson", "United Kingdom", "", "2000-01-01", "m", "sherlock@example.com", "1", "1"],
         ]
-        expect {
+        expect do
           post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
-        }.not_to(change { competition.registrations.count })
+        end.not_to(change { competition.registrations.count })
         follow_redirect!
         expect(response.body).to include "Email must be unique, found the following duplicates: sherlock@example.com."
       end
@@ -91,9 +91,9 @@ RSpec.describe "registrations" do
           ["a", "Sherlock Holmes", "United Kingdom", "2019HOLM01", "2000-01-01", "m", "sherlock@example.com", "1", "0"],
           ["a", "John Watson", "United Kingdom", "2019HOLM01", "2000-01-01", "m", "watson@example.com", "1", "1"],
         ]
-        expect {
+        expect do
           post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
-        }.not_to(change { competition.registrations.count })
+        end.not_to(change { competition.registrations.count })
         follow_redirect!
         expect(response.body).to include "WCA ID must be unique, found the following duplicates: 2019HOLM01."
       end
@@ -105,9 +105,9 @@ RSpec.describe "registrations" do
           ["a", "John Watson", "United Kingdom", "2019WATS01", "2000-01-01", "m", "watson@example.com", "1", "1"],
           ["a", "James Moriarty", "United Kingdom", "2019MORI01", "Jan 01 2000", "m", "moriarty@example.com", "0", "1"],
         ]
-        expect {
+        expect do
           post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
-        }.not_to(change { competition.registrations.count })
+        end.not_to(change { competition.registrations.count })
         follow_redirect!
         expect(response.body).to include "Birthdate must follow the YYYY-mm-dd format (year-month-day, for example 1944-07-13), found the following dates which cannot be parsed: 01.01.2000, Jan 01 2000."
       end
@@ -120,9 +120,9 @@ RSpec.describe "registrations" do
               ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
               ["a", "Sherlock Holmes", "United Kingdom", "1000DARN99", "2000-01-01", "m", "sherlock@example.com", "1", "0"],
             ]
-            expect {
+            expect do
               post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
-            }.not_to(change { competition.registrations.count })
+            end.not_to(change { competition.registrations.count })
             follow_redirect!
             expect(response.body).to match(/The WCA ID 1000DARN99 doesn.*t exist/)
           end
@@ -139,9 +139,9 @@ RSpec.describe "registrations" do
                       ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
                       ["a", dummy_user.name, dummy_user.country.id, dummy_user.wca_id, dummy_user.dob, dummy_user.gender, user.email, "1", "0"],
                     ]
-                    expect {
+                    expect do
                       post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
-                    }.not_to(change { competition.registrations.count })
+                    end.not_to(change { competition.registrations.count })
                     follow_redirect!
                     expect(response.body).to include "There is already a user with email #{user.email}, but it has WCA ID of #{user.wca_id} instead of #{dummy_user.wca_id}."
                   end
@@ -154,13 +154,13 @@ RSpec.describe "registrations" do
                       ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
                       ["a", dummy_user.name, dummy_user.country.id, dummy_user.wca_id, dummy_user.dob, dummy_user.gender, user.email, "1", "0"],
                     ]
-                    expect {
+                    expect do
                       post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
-                    }.to change(User, :count).by(-1)
+                    end.to change(User, :count).by(-1)
                     expect(User.exists?(dummy_user.id)).to be false
                     user.reload
                     expect(user.wca_id).to eq dummy_user.wca_id
-                    expect(user.registrations.first.events.map(&:id)).to eq %w(333)
+                    expect(user.registrations.first.events.map(&:id)).to eq %w[333]
                     expect(competition.registrations.count).to eq 1
                   end
                 end
@@ -173,14 +173,14 @@ RSpec.describe "registrations" do
                     ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
                     ["a", dummy_user.name, dummy_user.country.id, dummy_user.wca_id, dummy_user.dob, dummy_user.gender, "sherlock@example.com", "1", "0"],
                   ]
-                  expect {
+                  expect do
                     post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
-                  }.not_to change(User, :count)
+                  end.not_to change(User, :count)
                   user = dummy_user.reload
                   expect(user).not_to be_dummy_account
                   expect(user).to be_locked_account
                   expect(user.email).to eq "sherlock@example.com"
-                  expect(user.registrations.first.events.map(&:id)).to eq %w(333)
+                  expect(user.registrations.first.events.map(&:id)).to eq %w[333]
                   expect(competition.registrations.count).to eq 1
                 end
               end
@@ -193,10 +193,10 @@ RSpec.describe "registrations" do
                   ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
                   ["a", user.name, user.country.id, user.wca_id, user.dob, user.gender, "sherlock@example.com", "1", "0"],
                 ]
-                expect {
+                expect do
                   post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
-                }.not_to change(User, :count)
-                expect(user.registrations.first.events.map(&:id)).to eq %w(333)
+                end.not_to change(User, :count)
+                expect(user.registrations.first.events.map(&:id)).to eq %w[333]
                 expect(competition.registrations.count).to eq 1
               end
             end
@@ -219,9 +219,9 @@ RSpec.describe "registrations" do
                     ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
                     ["a", person.name, person.country.id, person.wca_id, person.dob, person.gender, user.email, "1", "0"],
                   ]
-                  expect {
+                  expect do
                     post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
-                  }.not_to(change { competition.registrations.count })
+                  end.not_to(change { competition.registrations.count })
                   follow_redirect!
                   expect(response.body).to include "There is already a user with email #{user.email}, but it has unconfirmed WCA ID of #{unconfirmed_person.wca_id} instead of #{person.wca_id}."
                 end
@@ -241,13 +241,13 @@ RSpec.describe "registrations" do
                     ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
                     ["a", person.name, person.country.id, person.wca_id, person.dob, person.gender, user.email, "1", "0"],
                   ]
-                  expect {
+                  expect do
                     post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
-                  }.not_to change(User, :count)
+                  end.not_to change(User, :count)
                   expect(user.reload.wca_id).to eq person.wca_id
                   expect(user.reload.unconfirmed_wca_id).to be_nil
                   expect(user.reload.delegate_to_handle_wca_id_claim).to be_nil
-                  expect(user.registrations.first.events.map(&:id)).to eq %w(333)
+                  expect(user.registrations.first.events.map(&:id)).to eq %w[333]
                   expect(competition.registrations.count).to eq 1
                 end
               end
@@ -260,11 +260,11 @@ RSpec.describe "registrations" do
                     ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
                     ["a", person.name, person.country.id, person.wca_id, person.dob, person.gender, user.email, "1", "0"],
                   ]
-                  expect {
+                  expect do
                     post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
-                  }.not_to change(User, :count)
+                  end.not_to change(User, :count)
                   expect(user.reload.wca_id).to eq person.wca_id
-                  expect(user.registrations.first.events.map(&:id)).to eq %w(333)
+                  expect(user.registrations.first.events.map(&:id)).to eq %w[333]
                   expect(competition.registrations.count).to eq 1
                 end
               end
@@ -278,9 +278,9 @@ RSpec.describe "registrations" do
                   ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
                   ["a", person.name, person.country.id, person.wca_id, person.dob, person.gender, "sherlock@example.com", "1", "0"],
                 ]
-                expect {
+                expect do
                   post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
-                }.to change(User, :count).by(1)
+                end.to change(User, :count).by(1)
                 user = competition.registrations.first.user
                 expect(user.wca_id).to eq person.wca_id
                 expect(user).to be_locked_account
@@ -297,10 +297,10 @@ RSpec.describe "registrations" do
                 ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
                 ["a", "Sherlock Holmes", "United Kingdom", "", "2000-01-01", "m", user.email, "1", "0"],
               ]
-              expect {
+              expect do
                 post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
-              }.not_to change(User, :count)
-              expect(user.registrations.first.events.map(&:id)).to eq %w(333)
+              end.not_to change(User, :count)
+              expect(user.registrations.first.events.map(&:id)).to eq %w[333]
               expect(competition.registrations.count).to eq 1
             end
 
@@ -310,9 +310,9 @@ RSpec.describe "registrations" do
                 ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
                 ["a", "Sherlock Holmes", "United Kingdom", "", "2000-01-01", "m", user.email, "1", "0"],
               ]
-              expect {
+              expect do
                 post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
-              }.not_to change(User, :count)
+              end.not_to change(User, :count)
               expect(user.reload.name).to eq "Sherlock Holmes"
               expect(user.dob).to eq Date.new(2000, 1, 1)
               expect(user.country_iso2).to eq "GB"
@@ -326,9 +326,9 @@ RSpec.describe "registrations" do
                 ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
                 ["a", "Sherlock Holmes", "United Kingdom", "", "2000-01-01", "m", "sherlock@example.com", "1", "0"],
               ]
-              expect {
+              expect do
                 post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
-              }.to change(User, :count).by(1)
+              end.to change(User, :count).by(1)
               user = competition.registrations.first.user
               expect(user.wca_id).to be_blank
               expect(user).to be_locked_account
@@ -340,15 +340,15 @@ RSpec.describe "registrations" do
       describe "registrations re-import" do
         context "CSV registrant already accepted in the database" do
           it "leaves existing registration unchanged" do
-            registration = create(:registration, :accepted, competition: competition, events: %w(333))
+            registration = create(:registration, :accepted, competition: competition, events: %w[333])
             user = registration.user
             file = csv_file [
               ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
               ["a", user.name, user.country.id, "", user.dob, user.gender, user.email, "1", "0"],
             ]
-            expect {
+            expect do
               post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
-            }.to not_change { competition.registrations.count }
+            end.to not_change { competition.registrations.count }
               .and(not_change { registration.reload.competing_status })
           end
         end
@@ -361,11 +361,11 @@ RSpec.describe "registrations" do
               ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
               ["a", user.name, user.country.id, "", user.dob, user.gender, user.email, "1", "1"],
             ]
-            expect {
+            expect do
               post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
-            }.to not_change { competition.registrations.count }
+            end.to not_change { competition.registrations.count }
               .and not_change { registration.reload.competing_status }
-              .and change { registration.reload.events.map(&:id) }.from(%w(333)).to(%w(333 444))
+              .and change { registration.reload.events.map(&:id) }.from(%w[333]).to(%w[333 444])
           end
         end
 
@@ -377,9 +377,9 @@ RSpec.describe "registrations" do
               ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
               ["a", user.name, user.country.id, "", user.dob, user.gender, user.email, "1", "0"],
             ]
-            expect {
+            expect do
               post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
-            }.to not_change { competition.registrations.count }
+            end.to not_change { competition.registrations.count }
               .and(change { registration.reload.competing_status })
             expect(registration.reload).to be_accepted
           end
@@ -391,9 +391,9 @@ RSpec.describe "registrations" do
             file = csv_file [
               ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
             ]
-            expect {
+            expect do
               post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
-            }.to not_change { competition.registrations.count }
+            end.to not_change { competition.registrations.count }
               .and(not_change { registration.reload.competing_status })
             expect(registration.reload).to be_cancelled
           end
@@ -405,9 +405,9 @@ RSpec.describe "registrations" do
             file = csv_file [
               ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
             ]
-            expect {
+            expect do
               post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
-            }.to not_change { User.count }
+            end.to not_change { User.count }
               .and not_change { competition.registrations.count }
               .and change { competition.registrations.accepted.count }.by(-1)
             expect(registration.reload).to be_cancelled
@@ -420,9 +420,9 @@ RSpec.describe "registrations" do
               ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
               ["a", "Sherlock Holmes", "United Kingdom", "", "2000-01-01", "m", "sherlock@example.com", "1", "0"],
             ]
-            expect {
+            expect do
               post competition_registrations_do_import_path(competition), params: { registrations_import: { registrations_file: file } }
-            }.to change { competition.registrations.count }.by(1)
+            end.to change { competition.registrations.count }.by(1)
           end
         end
       end
@@ -441,22 +441,24 @@ RSpec.describe "registrations" do
     end
 
     context "when signed in as competition manager" do
+      let(:ots_competition) { create(:competition, :registration_open, :with_delegate, :visible) }
+
       before do
-        sign_in competition.delegates.first
+        sign_in ots_competition.delegates.first
       end
 
       context "when there is existing registration for the given person" do
         it "renders an error" do
-          registration = create(:registration, :accepted, competition: competition, events: %w(333))
+          registration = create(:registration, :accepted, competition: ots_competition, events: %w[333])
           user = registration.user
-          expect {
-            post competition_registrations_do_add_path(competition), params: {
+          expect do
+            post competition_registrations_do_add_path(ots_competition), params: {
               registration_data: {
                 name: user.name, country: user.country.id, birth_date: user.dob,
                 gender: user.gender, email: user.email, event_ids: ["444"]
               },
             }
-          }.to(not_change { competition.registrations.count })
+          end.to(not_change { ots_competition.registrations.count })
           expect(response.body).to include "This person already has a registration."
         end
       end
@@ -466,37 +468,37 @@ RSpec.describe "registrations" do
           two_timer_dave = create(:user, name: "Two Timer Dave")
 
           series = create(:competition_series)
-          competition.update!(competition_series: series)
+          ots_competition.update!(competition_series: series)
 
-          partner_competition = create(:competition, :with_delegate, :visible, event_ids: %w(333 555),
-                                                                               competition_series: series, series_base: competition)
+          partner_competition = create(:competition, :with_delegate, :visible, event_ids: %w[333 555],
+                                                                               competition_series: series, series_base: ots_competition)
 
           # make sure there is a dummy registration for the partner competition.
           create(:registration, :accepted, competition: partner_competition, user: two_timer_dave)
 
-          expect {
-            post competition_registrations_do_add_path(competition), params: {
+          expect do
+            post competition_registrations_do_add_path(ots_competition), params: {
               registration_data: {
                 name: two_timer_dave.name, country: two_timer_dave.country.id, birth_date: two_timer_dave.dob,
                 gender: two_timer_dave.gender, email: two_timer_dave.email, event_ids: ["444"]
               },
             }
-          }.not_to(change { competition.registrations.count })
+          end.not_to(change { ots_competition.registrations.count })
           expect(response.body).to include "You can only be accepted for one Series competition at a time"
         end
       end
 
       context "when there is no existing registration for the given person" do
         it "creates an accepted registration" do
-          expect {
-            post competition_registrations_do_add_path(competition), params: {
+          expect do
+            post competition_registrations_do_add_path(ots_competition), params: {
               registration_data: {
                 name: "Sherlock Holmes", country: "United Kingdom", birth_date: "2000-01-01",
                 gender: "m", email: "sherlock@example.com", event_ids: ["444"]
               },
             }
-          }.to change { competition.registrations.count }.by(1)
-          registration = competition.registrations.last
+          end.to change { ots_competition.registrations.count }.by(1)
+          registration = ots_competition.registrations.last
           expect(registration.user.name).to eq "Sherlock Holmes"
           expect(registration.events.map(&:id)).to eq ["444"]
           expect(registration).to be_accepted
@@ -507,20 +509,102 @@ RSpec.describe "registrations" do
 
       context "when competitor limit has been reached" do
         it "redirects to competition page" do
-          create(:registration, :accepted, competition: competition, events: %w(333))
-          competition.update!(
+          create(:registration, :accepted, competition: ots_competition, events: %w[333])
+          ots_competition.update!(
             competitor_limit_enabled: true, competitor_limit: 1, competitor_limit_reason: "So I take all the podiums",
           )
-          expect {
-            post competition_registrations_do_add_path(competition), params: {
+          expect do
+            post competition_registrations_do_add_path(ots_competition), params: {
               registration_data: {
                 name: "Sherlock Holmes", country: "United Kingdom", birth_date: "2000-01-01",
                 gender: "m", email: "sherlock@example.com", event_ids: ["444"]
               },
             }
-          }.not_to(change { competition.registrations.count })
+          end.not_to(change { ots_competition.registrations.count })
           follow_redirect!
           expect(response.body).to include "The competitor limit has been reached"
+        end
+      end
+
+      describe "on the spot behaviour" do
+        let(:open_comp) { create(:competition, :registration_open, delegates: [ots_competition.delegates.first]) }
+        let(:closed_comp) { create(:competition, :registration_closed, delegates: [ots_competition.delegates.first]) }
+        let(:past_comp) { create(:competition, :past, delegates: [ots_competition.delegates.first]) }
+
+        context 'on-the-spot is enabled' do
+          it 'works when registration is open' do
+            open_comp.update!(on_the_spot_registration: true, on_the_spot_entry_fee_lowest_denomination: 500)
+
+            expect do
+              post competition_registrations_do_add_path(open_comp), params: {
+                registration_data: {
+                  name: "Sherlock Holmes", country: "United Kingdom", birth_date: "2000-01-01",
+                  gender: "m", email: "sherlock@example.com", event_ids: ["444"]
+                },
+              }
+            end.to(change { open_comp.registrations.count })
+          end
+
+          it 'works when registration is closed' do
+            closed_comp.update!(on_the_spot_registration: true, on_the_spot_entry_fee_lowest_denomination: 500)
+
+            expect do
+              post competition_registrations_do_add_path(closed_comp), params: {
+                registration_data: {
+                  name: "Sherlock Holmes", country: "United Kingdom", birth_date: "2000-01-01",
+                  gender: "m", email: "sherlock@example.com", event_ids: ["444"]
+                },
+              }
+            end.to(change { closed_comp.registrations.count })
+          end
+
+          it 'doesnt work after the end of the competition' do
+            past_comp.update!(on_the_spot_registration: true, on_the_spot_entry_fee_lowest_denomination: 500)
+
+            expect do
+              post competition_registrations_do_add_path(past_comp), params: {
+                registration_data: {
+                  name: "Sherlock Holmes", country: "United Kingdom", birth_date: "2000-01-01",
+                  gender: "m", email: "sherlock@example.com", event_ids: ["444"]
+                },
+              }
+            end.not_to(change { past_comp.registrations.count })
+          end
+        end
+
+        context 'on-the-spot is disabled' do
+          it 'works when registration is open' do
+            expect do
+              post competition_registrations_do_add_path(open_comp), params: {
+                registration_data: {
+                  name: "Sherlock Holmes", country: "United Kingdom", birth_date: "2000-01-01",
+                  gender: "m", email: "sherlock@example.com", event_ids: ["444"]
+                },
+              }
+            end.to(change { open_comp.registrations.count })
+          end
+
+          it 'doesnt work when registration is closed' do
+            expect do
+              post competition_registrations_do_add_path(closed_comp), params: {
+                registration_data: {
+                  name: "Sherlock Holmes", country: "United Kingdom", birth_date: "2000-01-01",
+                  gender: "m", email: "sherlock@example.com", event_ids: ["444"]
+                },
+              }
+            end.not_to(change { closed_comp.registrations.count })
+          end
+
+          it 'doesnt work after the end of the competition' do
+            expect do
+              post competition_registrations_do_add_path(past_comp), params: {
+                registration_data: {
+                  name: "Sherlock Holmes", country: "United Kingdom", birth_date: "2000-01-01",
+                  gender: "m", email: "sherlock@example.com", event_ids: ["444"]
+                },
+              }
+            end.not_to(change { past_comp.registrations.count })
+          end
         end
       end
     end
@@ -528,7 +612,7 @@ RSpec.describe "registrations" do
 
   describe "POST #process_payment_intent" do
     context "when not signed in" do
-      let(:competition) { create(:competition, :stripe_connected, :visible, :registration_open, events: Event.where(id: %w(222 333))) }
+      let(:competition) { create(:competition, :stripe_connected, :visible, :registration_open, events: Event.where(id: %w[222 333])) }
       let!(:user) { create(:user, :wca_id) }
       let!(:registration) { create(:registration, competition: competition, user: user) }
 
@@ -541,7 +625,7 @@ RSpec.describe "registrations" do
     end
 
     context "when signed in" do
-      let(:competition) { create(:competition, :stripe_connected, :visible, :registration_open, events: Event.where(id: %w(222 333)), base_entry_fee_lowest_denomination: 1000) }
+      let(:competition) { create(:competition, :stripe_connected, :visible, :registration_open, events: Event.where(id: %w[222 333]), base_entry_fee_lowest_denomination: 1000) }
       let!(:user) { create(:user, :wca_id) }
       let!(:registration) { create(:registration, competition: competition, user: user) }
 
@@ -703,7 +787,7 @@ RSpec.describe "registrations" do
 
           # NOTE: The PI confirmation sends a redirect code where the user would _normally_ proceed with authentication,
           # but we cannot do that programmatically. So we just take the status quo as "stuck in SCA". (See also comment below)
-          expect {
+          expect do
             # mimic the user clicking through the interface
             payment_intent.payment_record.confirm_remote_for_test("pm_card_authenticationRequired")
 
@@ -712,7 +796,7 @@ RSpec.describe "registrations" do
               payment_intent: payment_intent.payment_record.stripe_id,
               payment_intent_client_secret: payment_intent.client_secret,
             }
-          }.not_to(change { registration.reload.outstanding_entry_fees })
+          end.not_to(change { registration.reload.outstanding_entry_fees })
 
           expect(registration.paid_entry_fees).to eq 0
           expect(payment_intent.payment_record.reload.stripe_status).to eq('requires_action')
@@ -764,18 +848,18 @@ RSpec.describe "registrations" do
 
           payment_intent = registration.reload.payment_intents.first
 
-          expect {
+          expect do
             # mimic the user clicking through the interface
             payment_intent.payment_record.confirm_remote_for_test("pm_card_visa_chargeDeclined")
-          }.to raise_error(Stripe::StripeError, "Your card was declined.")
+          end.to raise_error(Stripe::StripeError, "Your card was declined.")
 
-          expect {
+          expect do
             # mimick the response that Stripe sends to our return_url after completing the checkout UI
             get registration_payment_completion_path(competition.id, :stripe), params: {
               payment_intent: payment_intent.payment_record.stripe_id,
               payment_intent_client_secret: payment_intent.client_secret,
             }
-          }.not_to(change { registration.reload.outstanding_entry_fees })
+          end.not_to(change { registration.reload.outstanding_entry_fees })
 
           expect(registration.paid_entry_fees).to eq 0
           expect(payment_intent.confirmed_at).to be_nil
@@ -790,18 +874,18 @@ RSpec.describe "registrations" do
 
           payment_intent = registration.reload.payment_intents.first
 
-          expect {
+          expect do
             # mimic the user clicking through the interface
             payment_intent.payment_record.confirm_remote_for_test("pm_card_visa_chargeDeclinedExpiredCard")
-          }.to raise_error(Stripe::StripeError, "Your card has expired.")
+          end.to raise_error(Stripe::StripeError, "Your card has expired.")
 
-          expect {
+          expect do
             # mimick the response that Stripe sends to our return_url after completing the checkout UI
             get registration_payment_completion_path(competition.id, :stripe), params: {
               payment_intent: payment_intent.payment_record.stripe_id,
               payment_intent_client_secret: payment_intent.client_secret,
             }
-          }.not_to(change { registration.reload.outstanding_entry_fees })
+          end.not_to(change { registration.reload.outstanding_entry_fees })
 
           expect(registration.paid_entry_fees).to eq 0
           expect(payment_intent.confirmed_at).to be_nil
@@ -816,18 +900,18 @@ RSpec.describe "registrations" do
 
           payment_intent = registration.reload.payment_intents.first
 
-          expect {
+          expect do
             # mimic the user clicking through the interface
             payment_intent.payment_record.confirm_remote_for_test("pm_card_visa_chargeDeclinedIncorrectCvc")
-          }.to raise_error(Stripe::StripeError, "Your card's security code is incorrect.")
+          end.to raise_error(Stripe::StripeError, "Your card's security code is incorrect.")
 
-          expect {
+          expect do
             # mimick the response that Stripe sends to our return_url after completing the checkout UI
             get registration_payment_completion_path(competition.id, :stripe), params: {
               payment_intent: payment_intent.payment_record.stripe_id,
               payment_intent_client_secret: payment_intent.client_secret,
             }
-          }.not_to(change { registration.reload.outstanding_entry_fees })
+          end.not_to(change { registration.reload.outstanding_entry_fees })
 
           expect(registration.paid_entry_fees).to eq 0
           expect(payment_intent.confirmed_at).to be_nil
@@ -842,18 +926,18 @@ RSpec.describe "registrations" do
 
           payment_intent = registration.reload.payment_intents.first
 
-          expect {
+          expect do
             # mimic the user clicking through the interface
             payment_intent.payment_record.confirm_remote_for_test("pm_card_radarBlock")
-          }.to raise_error(Stripe::StripeError, "Your card was declined.")
+          end.to raise_error(Stripe::StripeError, "Your card was declined.")
 
-          expect {
+          expect do
             # mimick the response that Stripe sends to our return_url after completing the checkout UI
             get registration_payment_completion_path(competition.id, :stripe), params: {
               payment_intent: payment_intent.payment_record.stripe_id,
               payment_intent_client_secret: payment_intent.client_secret,
             }
-          }.not_to(change { registration.reload.outstanding_entry_fees })
+          end.not_to(change { registration.reload.outstanding_entry_fees })
 
           expect(registration.paid_entry_fees).to eq 0
           expect(payment_intent.confirmed_at).to be_nil
@@ -868,7 +952,7 @@ RSpec.describe "registrations" do
 
           payment_intent = registration.reload.payment_intents.first
 
-          expect {
+          expect do
             # mimic the user clicking through the interface
             payment_intent.payment_record.confirm_remote_for_test("pm_card_authenticationRequiredChargeDeclinedInsufficientFunds")
 
@@ -877,7 +961,7 @@ RSpec.describe "registrations" do
               payment_intent: payment_intent.payment_record.stripe_id,
               payment_intent_client_secret: payment_intent.client_secret,
             }
-          }.not_to(change { registration.reload.outstanding_entry_fees })
+          end.not_to(change { registration.reload.outstanding_entry_fees })
 
           expect(registration.paid_entry_fees).to eq 0
           expect(payment_intent.confirmed_at).to be_nil
@@ -899,10 +983,10 @@ RSpec.describe "registrations" do
           # Intent should not be confirmed at this stage, because we have never received a receipt charge from Stripe yet
           expect(payment_intent.confirmed_at).to be_nil
 
-          expect {
+          expect do
             # mimic the user clicking through the interface
             payment_intent.payment_record.confirm_remote_for_test("pm_card_visa_chargeDeclined")
-          }.to raise_error(Stripe::StripeError, "Your card was declined.")
+          end.to raise_error(Stripe::StripeError, "Your card was declined.")
 
           # mimick the response that Stripe sends to our return_url after completing the checkout UI
           get registration_payment_completion_path(competition.id, :stripe), params: {
@@ -937,10 +1021,10 @@ RSpec.describe "registrations" do
           first_pi_stripe_id = payment_intent.payment_record.stripe_id
           first_pi_parameters = payment_intent.payment_record.parameters
 
-          expect {
+          expect do
             # mimic the user clicking through the interface
             payment_intent.payment_record.confirm_remote_for_test("pm_card_visa_chargeDeclined")
-          }.to raise_error(Stripe::StripeError, "Your card was declined.")
+          end.to raise_error(Stripe::StripeError, "Your card was declined.")
 
           # mimick the response that Stripe sends to our return_url after completing the checkout UI
           get registration_payment_completion_path(competition.id, :stripe), params: {
@@ -980,10 +1064,10 @@ RSpec.describe "registrations" do
           first_pi_stripe_id = payment_intent.payment_record.stripe_id
           first_pi_parameters = payment_intent.payment_record.parameters
 
-          expect {
+          expect do
             # mimic the user clicking through the interface
             payment_intent.payment_record.confirm_remote_for_test("pm_card_visa_chargeDeclined")
-          }.to raise_error(Stripe::StripeError, "Your card was declined.")
+          end.to raise_error(Stripe::StripeError, "Your card was declined.")
 
           # mimick the response that Stripe sends to our return_url after completing the checkout UI
           get registration_payment_completion_path(competition.id, :stripe), params: {
@@ -1060,7 +1144,7 @@ RSpec.describe "registrations" do
   end
 
   describe "POST #create_paypal_order" do
-    let(:competition) { create(:competition, :paypal_connected, :visible, :registration_open, events: Event.where(id: %w(222 333)), base_entry_fee_lowest_denomination: 1000) }
+    let(:competition) { create(:competition, :paypal_connected, :visible, :registration_open, events: Event.where(id: %w[222 333]), base_entry_fee_lowest_denomination: 1000) }
     let!(:user) { create(:user, :wca_id) }
     let!(:registration) { create(:registration, competition: competition, user: user) }
 
@@ -1090,7 +1174,7 @@ RSpec.describe "registrations" do
   end
 
   describe "POST #capture_paypal_payment" do
-    let(:competition) { create(:competition, :paypal_connected, :visible, :registration_open, events: Event.where(id: %w(222 333)), base_entry_fee_lowest_denomination: 1000) }
+    let(:competition) { create(:competition, :paypal_connected, :visible, :registration_open, events: Event.where(id: %w[222 333]), base_entry_fee_lowest_denomination: 1000) }
     let!(:user) { create(:user, :wca_id) }
     let!(:registration) { create(:registration, competition: competition, user: user) }
 
@@ -1148,7 +1232,7 @@ RSpec.describe "registrations" do
 
   # TODO: Add cases for partial refunds
   describe "POST #issue_paypal_refund" do
-    let(:competition) { create(:competition, :paypal_connected, :visible, :registration_open, events: Event.where(id: %w(222 333)), base_entry_fee_lowest_denomination: 1000) }
+    let(:competition) { create(:competition, :paypal_connected, :visible, :registration_open, events: Event.where(id: %w[222 333]), base_entry_fee_lowest_denomination: 1000) }
     let!(:user) { create(:user, :wca_id) }
     let!(:admin_user) { create(:admin) }
     let!(:registration) { create(:registration, competition: competition, user: user) }
@@ -1277,9 +1361,9 @@ def capture_order_response(record_id, amount, currency)
               "disbursement_mode" => "INSTANT",
               "seller_protection" => {
                 "status" => "ELIGIBLE",
-                "dispute_categories" => [
-                  "ITEM_NOT_RECEIVED",
-                  "UNAUTHORIZED_TRANSACTION",
+                "dispute_categories" => %w[
+                  ITEM_NOT_RECEIVED
+                  UNAUTHORIZED_TRANSACTION
                 ],
               },
               "links" => [

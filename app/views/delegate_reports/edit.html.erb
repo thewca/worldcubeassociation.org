@@ -23,7 +23,7 @@
           <%= f.hidden_field :setup_images, multiple: true, value: image.signed_id %>
         <% end %>
 
-        <%= f.input :setup_images, multiple: true, hint: t('simple_form.hints.delegate_report.setup_images', image_count: @delegate_report.required_setup_images_count), input_html: { multiple: true, accept: 'image/*' } %>
+        <%= f.input :setup_images, multiple: true, hint: t('simple_form.hints.delegate_report.setup_images', image_count: @delegate_report.required_setup_images_count), input_html: { multiple: true, accept: ActiveStorage.web_image_content_types.join(", ") } %>
 
         <% if @delegate_report.setup_images.attached? %>
           <div class="row">
@@ -43,8 +43,8 @@
 
     <%= f.input :wrc_feedback_requested, as: :boolean %>
     <%= f.input :wrc_incidents %>
-    <%= f.input :wic_feedback_requested, as: :boolean %>
-    <%= f.input :wic_incidents %>
+    <%= f.input :wic_feedback_requested, as: :boolean, input_html: {id:"wic_feedback_checkbox", data: {confirm_message: I18n.t("simple_form.hints.delegate_report.wic_incident_alert")}} %>
+    <%= f.input :wic_incidents, hint: t("simple_form.hints.delegate_report.wic_incidents_html", wic_incident_alert: t("simple_form.hints.delegate_report.wic_incident_alert")) %>
     <%# 'remarks' is the only Report section without a fixed template, so we include it irrespective of the version %>
     <%= f.input :remarks, input_html: { class: "markdown-editor markdown-editor-image-upload" } %>
 
@@ -64,3 +64,22 @@
     <% end %>
   <% end %>
 <% end %>
+
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const checkbox = document.getElementById("wic_feedback_checkbox");
+
+    if (checkbox) {
+      checkbox.addEventListener("change", function (e) {
+        if (checkbox.checked) {
+          const message = checkbox.dataset.confirmMessage;
+          if (!confirm(message)) {
+            e.preventDefault();
+            checkbox.checked = false;
+          }
+        }
+      });
+    }
+  });
+</script>
