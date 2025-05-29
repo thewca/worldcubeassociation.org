@@ -2,29 +2,28 @@
 
 class RegionalRecord < ApplicationRecord
   enum :record_scope, {
-    NR: 0,
-    CR: 1,
-    WR: 2,
-  }
+    national: 0,
+    continental: 1,
+    world: 2,
+  }, prefix: true
 
-  RECORD_SCOPES = %w[WR CR NR].freeze
   RECORD_TYPES = %w[single average].freeze
 
   validates :record_type, presence: true, inclusion: { in: RECORD_TYPES }
   validates :event_id, presence: true
   validates :record_timestamp, presence: true
   validates :value, presence: true, numericality: { only_integer: true, greater_than: 0 }
-  validates :country_id, presence: true, if: -> { record_scope == 'NR' }
-  validates :continent_id, presence: true, if: -> { record_scope == 'CR' }
+  validates :country_id, presence: true, if: -> { record_scope == :national }
+  validates :continent_id, presence: true, if: -> { record_scope == :continental }
 
-  scope :world_records, -> { where(record_scope: :WR) }
+  scope :world_records, -> { where(record_scope: :world) }
   scope :national_records, lambda { |country_id = nil|
-    scope = where(record_scope >= :NR)
+    scope = where(record_scope: :national)
     country_id.present? ? scope.where(country_id: country_id) : scope
   }
 
   scope :continental_records, lambda { |continent_id = nil|
-    scope = where(record_scope >= :CR)
+    scope = where(record_scope: :continental)
     continent_id.present? ? scope.where(continent_id: continent_id) : scope
   }
 
@@ -41,7 +40,7 @@ class RegionalRecord < ApplicationRecord
   belongs_to :result
 
   def self.record_for(event_id, record_type, scope, country_id: nil, continent_id: nil, date: nil)
-    query = where(event_id: event_id, record_type: record_type, record_scope: scope...)
+    query = where(event_id: event_id, record_type: record_type, record_scope: scope)
     query = query.where(country_id: country_id) if country_id
     query = query.where(continent_id: continent_id) if continent_id
     query = query.where(record_timestamp: ..date) if date
@@ -82,9 +81,13 @@ class RegionalRecord < ApplicationRecord
   }.freeze
 
   def marker
-    return 'NR' if record_scope == 'NR'
-    return CONTINENT_TO_RECORD_MARKER[continent_id] if record_scope == 'CR'
-
-    'WR'
+    case record_scope
+    when :continental
+      CONTINENT_TO_RECORD_MARKER[continent_id]
+    when :world
+      "WR"
+    when :national
+      "NR"
+    end
   end
 end
