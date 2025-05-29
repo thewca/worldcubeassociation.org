@@ -70,7 +70,7 @@ class Registration < ApplicationRecord
   after_initialize :generate_registrant_id, if: :new_record?, unless: :registrant_id?
 
   private def generate_registrant_id
-    self.registrant_id = competitions.registrations.count + 1
+    self.registrant_id = competition.registrations.count + 1
   end
 
   validates :guests, numericality: { greater_than_or_equal_to: 0 }
