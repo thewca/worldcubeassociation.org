@@ -81,7 +81,9 @@ class RegionalRecord < ApplicationRecord
     minima = RegionalRecord
                .where(record_type: value_name,
                       event_id:        event_ids,
-                      record_scope:    %w[world continental national])
+                      record_scope:    %w[world continental national],
+                      country_id: country_ids,
+                      continent_id: continent_ids)
                .where(record_timestamp: timestamps.min..timestamps.max)
                .group(:event_id, :record_timestamp, :record_scope, :continent_id, :country_id)
                .minimum(:value)
@@ -110,7 +112,7 @@ class RegionalRecord < ApplicationRecord
     best_at_date.filter_map do |result_id, event_id, country_id, continent_id, min_value, ts|
       t = thresholds[[ event_id, country_id, continent_id, ts ]] || {}
       marker =
-        if t["world"]      && min_value <= t["world"]
+        if t["world"] && min_value <= t["world"]
           "WR"
         elsif t["continental"] && min_value <= t["continental"]
           CONTINENT_TO_RECORD_MARKER[continent_id]
