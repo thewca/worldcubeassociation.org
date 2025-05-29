@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_05_27_134848) do
+ActiveRecord::Schema[7.2].define(version: 2025_05_29_061324) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -1031,7 +1031,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_05_27_134848) do
 
   create_table "registrations", id: { type: :integer, unsigned: true }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "competition_id", limit: 32, default: "", null: false
-    t.integer "registrant_id"
+    t.integer "registrant_id", null: false
     t.text "comments"
     t.string "ip", limit: 16, default: "", null: false
     t.integer "user_id"
@@ -1048,6 +1048,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_05_27_134848) do
     t.string "competing_status", default: "pending", null: false
     t.datetime "registered_at", null: false
     t.index ["competition_id", "competing_status"], name: "index_registrations_on_competition_id_and_competing_status"
+    t.index ["competition_id", "registrant_id"], name: "index_registrations_on_competition_id_and_registrant_id", unique: true
     t.index ["competition_id", "user_id"], name: "index_registrations_on_competition_id_and_user_id", unique: true
     t.index ["competition_id"], name: "index_registrations_on_competition_id"
     t.index ["user_id"], name: "index_registrations_on_user_id"
