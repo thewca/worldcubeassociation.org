@@ -60,20 +60,18 @@ class ResultsSubmissionController < ApplicationController
 
     person_with_results = results_to_import.map(&:person_id).uniq
 
-    persons_to_import = @competition.registrations.wcif_ordered
-                                    .includes([:user])
-                                    .to_enum
-                                    .with_index(1)
-                                    .select { |r, registrant_id| r.wcif_status == "accepted" && person_with_results.include?(registrant_id.to_s) }
-                                    .map do |r, registrant_id|
+    persons_to_import = @competition.registrations
+                                    .includes(:user)
+                                    .select { it.wcif_status == "accepted" && person_with_results.include?(it.registrant_id.to_s) }
+                                    .map do
       InboxPerson.new({
-                        id: registrant_id,
-                        wca_id: r.wca_id || '',
+                        id: it.registrant_id,
+                        wca_id: it.wca_id || '',
                         competition_id: @competition.id,
-                        name: r.name,
-                        country_iso2: r.country.iso2,
-                        gender: r.gender,
-                        dob: r.dob,
+                        name: it.name,
+                        country_iso2: it.country.iso2,
+                        gender: it.gender,
+                        dob: it.dob,
                       })
     end
 
