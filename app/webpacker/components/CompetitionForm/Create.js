@@ -12,7 +12,6 @@ import I18n from '../../lib/i18n';
 
 function CreateCompetition({
   competition = null,
-  newcomerMonthEnabled,
   isCloning = false,
 }) {
   const redirectHandler = useQueryRedirect();
@@ -34,7 +33,6 @@ function CreateCompetition({
       initialState={{
         isAdminView: false,
         isPersisted: false,
-        newcomerMonthEnabled,
         isSeriesPersisted: false,
       }}
     >

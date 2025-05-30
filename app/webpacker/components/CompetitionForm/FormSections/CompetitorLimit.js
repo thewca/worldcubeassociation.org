@@ -2,6 +2,7 @@ import React from 'react';
 import { InputBooleanSelect, InputNumber, InputTextArea } from '../../wca/FormBuilder/input/FormInputs';
 import ConditionalSection from './ConditionalSection';
 import SubSection from '../../wca/FormBuilder/SubSection';
+import { newcomerMonthEnabled } from '../../../lib/wca-data.js.erb';
 import { useFormObject } from '../../wca/FormBuilder/provider/FormObjectProvider';
 import { useStore } from '../../../lib/providers/StoreProvider';
 
@@ -13,7 +14,7 @@ export default function CompetitorLimit() {
     },
   } = useFormObject();
 
-  const { isAdminView, newcomerMonthEnabled } = useStore();
+  const { isAdminView } = useStore();
 
   return (
     <SubSection section="competitorLimit">
