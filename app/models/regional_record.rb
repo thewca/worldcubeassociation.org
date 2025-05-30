@@ -7,9 +7,8 @@ class RegionalRecord < ApplicationRecord
     world: 2,
   }, prefix: true
 
-  RECORD_TYPES = %w[single average].freeze
+  enum :record_type, { single: 'single', average: 'average' }, prefix: true
 
-  validates :record_type, presence: true, inclusion: { in: RECORD_TYPES }
   validates :event_id, presence: true
   validates :record_timestamp, presence: true
   validates :value, presence: true, numericality: { only_integer: true, greater_than: 0 }
@@ -63,7 +62,7 @@ class RegionalRecord < ApplicationRecord
                             .minimum(:value)
 
     return [true, "WR"] if records["world"] && value <= records["world"]
-    return [true, CONTINENT_TO_RECORD_MARKER[continent_id]] if records["continental"] && value <= records["continental"]
+    return [true, Continent.c_find(continent_id).record_name] if records["continental"] && value <= records["continental"]
     return [true, "NR"] if records["national"] && value <= records["national"]
     [false, nil]
   end
@@ -116,7 +115,7 @@ class RegionalRecord < ApplicationRecord
         if t["world"] && min_value <= t["world"]
           "WR"
         elsif t["continental"] && min_value <= t["continental"]
-          CONTINENT_TO_RECORD_MARKER[continent_id]
+          Continent.c_find(continent_id).record_name
         elsif t["national"]  && min_value <= t["national"]
           "NR"
         end
@@ -133,21 +132,12 @@ class RegionalRecord < ApplicationRecord
   end
 
 
-  CONTINENT_TO_RECORD_MARKER = {
-    '_Africa' => 'AfR',
-    '_Europe' => 'ER',
-    '_North America' => 'NAR',
-    '_South America' => 'SAR',
-    '_Asia' => 'AsR',
-    '_Oceania' => 'OcR',
-  }.freeze
-
   def marker
     case record_scope
     when :world
       "WR"
     when :continental
-      CONTINENT_TO_RECORD_MARKER[continent_id]
+      Continent.c_find(continent_id).record_name
     when :national
       "NR"
     end
