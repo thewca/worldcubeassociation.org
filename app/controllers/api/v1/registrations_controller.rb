@@ -139,7 +139,10 @@ class Api::V1::RegistrationsController < Api::V1::ApiController
       can_administer_or_current_user?(@competition, @current_user, target_user)
 
     raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::USER_EDITS_NOT_ALLOWED) unless
-      @competition.registration_edits_currently_permitted? || @current_user.can_manage_competition?(@competition) || user_uncancelling_registration?(@registration, new_status)
+      !(@registration.competing_status_accepted? && @competition.cannot_edit_accepted_registrations?) &&
+      @competition.registration_edits_currently_permitted? ||
+      @current_user.can_manage_competition?(@competition) ||
+      user_uncancelling_registration?(@registration, new_status)
 
     raise WcaExceptions::RegistrationError.new(:unauthorized, Registrations::ErrorCodes::REGISTRATION_IS_REJECTED) if
       user_is_rejected?(@current_user, target_user, @registration) && !organizer_modifying_own_registration?(@competition, @current_user, target_user)
