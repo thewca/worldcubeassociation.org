@@ -13,7 +13,9 @@ export default function CompetitorLimit() {
     },
   } = useFormObject();
 
-  const { isAdminView } = useStore();
+  const store = useStore();
+  console.log("store: ", store)
+  const { isAdminView, newcomerMonthEnabled } = useStore();
 
   return (
     <SubSection section="competitorLimit">
@@ -22,7 +24,9 @@ export default function CompetitorLimit() {
         <InputNumber id="count" min={0} />
         <InputTextArea id="reason" />
         <InputNumber id="autoCloseThreshold" min={1} nullable />
-        <InputNumber id="newcomerMonthReservedSpots" min={1} nullable />
+        <ConditionalSection showIf={newcomerMonthEnabled}>
+          <InputNumber id="newcomerMonthReservedSpots" min={1} nullable />
+        </ConditionalSection>
       </ConditionalSection>
       <ConditionalSection showIf={isAdminView}>
         <InputBooleanSelect id="autoAcceptEnabled" required />

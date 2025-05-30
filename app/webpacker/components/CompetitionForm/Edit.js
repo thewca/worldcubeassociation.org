@@ -22,6 +22,7 @@ function EditCompetition({
   storedEvents,
   isAdminView,
   isSeriesPersisted,
+  newcomerMonthEnabled,
   areResultsSubmitted,
 }) {
   const originalCompId = competition.competitionId;
@@ -105,6 +106,7 @@ function EditCompetition({
       initialState={{
         isAdminView,
         isPersisted: true,
+        newcomerMonthEnabled,
         isSeriesPersisted,
       }}
     >
