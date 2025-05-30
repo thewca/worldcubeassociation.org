@@ -30,6 +30,18 @@ export function mergeScrambleSets(state, newScrambleFile) {
   );
 }
 
+function removeScrambleSet(state, oldScrambleFile) {
+  const withoutScrambleFile = _.mapValues(
+    state,
+    (sets) => sets.filter(
+      (set) => set.external_upload_id !== oldScrambleFile.id,
+    ),
+  );
+
+  // Throw away state entries for rounds that don't have any sets at all anymore
+  return _.pickBy(withoutScrambleFile, (sets) => sets.length > 0);
+}
+
 function moveArrayItem(arr, fromIndex, toIndex) {
   const movedItem = arr[fromIndex];
 
@@ -60,6 +72,8 @@ export default function scrambleMatchReducer(state, action) {
   switch (action.type) {
     case 'addScrambleFile':
       return mergeScrambleSets(state, action.scrambleFile);
+    case 'removeScrambleFile':
+      return removeScrambleSet(state, action.scrambleFile);
     case 'moveRoundScrambleSet':
       return {
         ...state,

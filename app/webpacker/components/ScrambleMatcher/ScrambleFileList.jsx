@@ -16,7 +16,7 @@ async function deleteScrambleFile(fileId) {
   return data;
 }
 
-function ScrambleFileInfo({ scrambleFile }) {
+function ScrambleFileInfo({ scrambleFile, removeScrambleFile }) {
   const queryClient = useQueryClient();
 
   const [expanded, setExpanded] = useState(false);
@@ -28,6 +28,8 @@ function ScrambleFileInfo({ scrambleFile }) {
         ['scramble-files', data.competition_id],
         (prev) => prev.filter((scrFile) => scrFile.id !== data.id),
       );
+
+      removeScrambleFile(data);
     },
   });
 
@@ -80,12 +82,16 @@ function ScrambleFileInfo({ scrambleFile }) {
   );
 }
 
-export default function ScrambleFileList({ scrambleFiles, isFetching }) {
+export default function ScrambleFileList({ scrambleFiles, isFetching, removeScrambleFile }) {
   if (isFetching) {
     return <Loading />;
   }
 
   return scrambleFiles.map((scrFile) => (
-    <ScrambleFileInfo key={scrFile.id} scrambleFile={scrFile} />
+    <ScrambleFileInfo
+      key={scrFile.id}
+      scrambleFile={scrFile}
+      removeScrambleFile={removeScrambleFile}
+    />
   ));
 }
