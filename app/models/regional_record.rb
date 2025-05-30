@@ -73,7 +73,7 @@ class RegionalRecord < ApplicationRecord
              .where(record_type: value_name,
                     event_id:     event_ids,
                     record_scope: %w[world continental national])
-             .order(:event_id, :record_scope, :continent_id, :country_id, :record_timestamp)
+             .order(:event_id, :record_timestamp, :record_scope, :continent_id, :country_id)
              .pluck(
                :event_id,
                :record_timestamp,
@@ -129,6 +129,14 @@ class RegionalRecord < ApplicationRecord
       w_cutoff = lookup_threshold(w_series[event_id],                  ts)
       c_cutoff = lookup_threshold(c_series[[event_id, continent_id]],  ts)
       n_cutoff = lookup_threshold(n_series[[event_id, country_id]],    ts)
+
+      if result_id == 49089
+        puts "min_val: #{min_val}"
+        puts "w_cutoff: #{lookup_threshold(w_series[event_id], ts)}"
+        pp w_series[event_id]
+        puts "c_cutoff: #{lookup_threshold(c_series[[event_id, continent_id]], ts)}"
+        puts "n_cutoff: #{lookup_threshold(n_series[[event_id, country_id]], ts)}"
+      end
 
       marker =
         if !w_cutoff || min_val <= w_cutoff
