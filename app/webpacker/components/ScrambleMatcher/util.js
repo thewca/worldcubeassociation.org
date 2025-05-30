@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import { events } from '../../lib/wca-data.js.erb';
 
 const prefixForIndex = (index) => {
@@ -8,6 +9,20 @@ const prefixForIndex = (index) => {
 };
 
 export const scrambleSetToName = (scrambleSet) => `${events.byId[scrambleSet.event_id].name} Round ${scrambleSet.round_number} Scramble Set ${prefixForIndex(scrambleSet.scramble_set_number - 1)}`;
+
+export const scrambleSetToDetails = (scrambleSet) => {
+  const [extraScr, standardScr] = _.partition(scrambleSet.inbox_scrambles, 'is_extra');
+
+  const stdScrambleList = standardScr.map((scr) => scr.scramble_string).join('\n');
+
+  if (extraScr.length > 0) {
+    const extraScrambleList = extraScr.map((scr) => scr.scramble_string).join('\n');
+
+    return [stdScrambleList, extraScrambleList].join('\n\n');
+  }
+
+  return stdScrambleList;
+};
 
 export function moveArrayItem(arr, fromIndex, toIndex) {
   const movedItem = arr[fromIndex];

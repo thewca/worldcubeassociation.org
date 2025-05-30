@@ -5,7 +5,7 @@ import ScrambleMatch from './ScrambleMatch';
 import I18n from '../../lib/i18n';
 import Groups from './Groups';
 import { useDispatchWrapper } from './reducer';
-import { scrambleSetToName } from './util';
+import {scrambleSetToDetails, scrambleSetToName} from './util';
 
 export default function Rounds({
   wcifRounds,
@@ -66,6 +66,7 @@ function SelectedRoundPanel({
         onRowDragCompleted={onRoundDragCompleted}
         computeDefinitionName={roundToGroupName}
         computeRowName={scrambleSetToName}
+        computeRowDetails={scrambleSetToDetails}
       />
       {showGroupsPicker && (
         <Groups
