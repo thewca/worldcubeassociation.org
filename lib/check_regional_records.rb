@@ -191,7 +191,7 @@ module CheckRegionalRecords
             WHERE #{final_where};
           SQL
         best_at_date = conn.execute(sql).to_a
-        candidates = RegionalRecord.annotate_candidates(best_at_date, value_column)
+        candidates = RegionalRecord.annotate_candidates(best_at_date, value_name)
         [value_column, candidates]
       end
     end

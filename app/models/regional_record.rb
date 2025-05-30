@@ -67,66 +67,85 @@ class RegionalRecord < ApplicationRecord
     [false, nil]
   end
 
-  def self.collect_record_thresholds(best_at_date, value_name)
-    # 1) Extract the distinct keys we’ll need
-    combos = best_at_date.map { |_, event_id, country_id, continent_id, _, timestamp|
-      [ event_id, country_id, continent_id, timestamp ]
-    }.uniq
+  def self.build_threshold_series(event_ids, value_name)
+    # Fetch all relevant records once
+    recs = RegionalRecord
+             .where(record_type: value_name,
+                    event_id:     event_ids,
+                    record_scope: %w[world continental national])
+             .order(:event_id, :record_scope, :continent_id, :country_id, :record_timestamp)
+             .pluck(
+               :event_id,
+               :record_timestamp,
+               :record_scope,
+               :continent_id,
+               :country_id,
+               :value
+             )
 
-    # 2) Unzip into nicer lookup sets
-    event_ids, country_ids, continent_ids, timestamps = combos.transpose.map(&:uniq)
+    world_series        = Hash.new { |h, event| h[event] = [] }
+    continental_series  = Hash.new { |h, k|  h[k]     = [] }  # key = [event, continent]
+    national_series     = Hash.new { |h, k|  h[k]     = [] }  # key = [event, country]
 
-    # 3) One big grouped minimum query
-    #   We group by all four dimensions plus the record_scope
-    minima = RegionalRecord
-               .where(record_type: value_name,
-                      event_id:        event_ids,
-                      record_scope:    %w[world continental national],
-                      country_id: country_ids,
-                      continent_id: continent_ids)
-               .where(record_timestamp: timestamps.min..timestamps.max)
-               .group(:event_id, :record_timestamp, :record_scope, :continent_id, :country_id)
-               .minimum(:value)
+    recs.each do |event_id, ts, scope, continent, country, val|
+      case scope
+      when "world"
+        arr = world_series[event_id]
+        arr << [ts, arr.empty? ? val : [arr.last.last, val].min]
 
-    # 4) Build a nested lookup hash
-    thresholds = Hash.new { |h, k| h[k] = {} }
-    minima.each do |(event_id, ts, scope, continent, country), min_value|
-      thresholds[[ event_id, country, continent, ts ]] ||= {}
-      thresholds[[ event_id, country, continent, ts ]][scope] = min_value
+      when "continental"
+        key = [event_id, continent]
+        arr = continental_series[key]
+        arr << [ts, arr.empty? ? val : [arr.last.last, val].min]
+
+      when "national"
+        key = [event_id, country]
+        arr = national_series[key]
+        arr << [ts, arr.empty? ? val : [arr.last.last, val].min]
+      end
     end
 
-    thresholds
+    [world_series, continental_series, national_series]
+  end
+
+  def self.lookup_threshold(arr, target_ts)
+    return nil if arr.empty?
+    i = arr.bsearch_index { |ts, _| ts > target_ts }
+    return arr.last.last if i.nil?   # everything ≤ target_ts
+    return nil if i.zero?            # no entries ≤ target_ts
+    arr[i-1].last
   end
 
   def self.annotate_candidates(best_at_date, value_name)
-    # Precompute the thresholds table
-    thresholds = collect_record_thresholds(best_at_date, value_name)
+    event_ids = best_at_date.map { |r| r[1] }.uniq
+    w_series, c_series, n_series = build_threshold_series(event_ids, value_name)
 
-    # Pull all the Result objects in one go
-    result_ids = best_at_date.map(&:first)
     results_by_id = Result.includes(:competition)
-                          .where(id: result_ids)
+                          .where(id: best_at_date.map(&:first))
                           .index_by(&:id)
 
-    # Now do a single pass
-    best_at_date.filter_map do |result_id, event_id, country_id, continent_id, min_value, ts|
-      t = thresholds[[ event_id, country_id, continent_id, ts ]] || {}
+    best_at_date.filter_map do |result_id, event_id, country_id, continent_id, min_val, ts|
+      # fetch from each series
+      w_cutoff = lookup_threshold(w_series[event_id],                  ts)
+      c_cutoff = lookup_threshold(c_series[[event_id, continent_id]],  ts)
+      n_cutoff = lookup_threshold(n_series[[event_id, country_id]],    ts)
+
       marker =
-        if t["world"] && min_value <= t["world"]
+        if !w_cutoff || min_val <= w_cutoff
           "WR"
-        elsif t["continental"] && min_value <= t["continental"]
+        elsif !c_cutoff || min_val <= c_cutoff
           Continent.c_find(continent_id).record_name
-        elsif t["national"]  && min_value <= t["national"]
+        elsif !n_cutoff || min_val <= n_cutoff
           "NR"
         end
 
       next unless marker
 
-      result = results_by_id[result_id]
+      r = results_by_id[result_id]
       {
         computed_marker: marker,
-        competition:     result.competition,
-        result:          result
+        competition:     r.competition,
+        result:          r
       }
     end
   end
