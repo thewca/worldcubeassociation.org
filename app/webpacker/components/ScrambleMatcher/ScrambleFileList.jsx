@@ -3,10 +3,10 @@ import {
   Accordion, Button, Card, Header, Icon, List,
 } from 'semantic-ui-react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { events } from '../../lib/wca-data.js.erb';
 import { fetchJsonOrError } from '../../lib/requests/fetchWithAuthenticityToken';
 import { scrambleFileUrl } from '../../lib/requests/routes.js.erb';
 import Loading from '../Requests/Loading';
+import { scrambleSetToName } from './util';
 
 async function deleteScrambleFile(fileId) {
   const { data } = await fetchJsonOrError(scrambleFileUrl(fileId), {
@@ -58,11 +58,7 @@ function ScrambleFileInfo({ scrambleFile, removeScrambleFile }) {
             <List style={{ maxHeight: '400px', overflowY: 'auto' }}>
               {scrambleFile.inbox_scramble_sets.map((scrambleSet) => (
                 <List.Item key={scrambleSet.id}>
-                  {events.byId[scrambleSet.event_id].name}
-                  {' Round '}
-                  {scrambleSet.round_number}
-                  {' Scramble Set '}
-                  {String.fromCharCode(64 + scrambleSet.scramble_set_number)}
+                  {scrambleSetToName(scrambleSet)}
                 </List.Item>
               ))}
             </List>

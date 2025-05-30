@@ -1,5 +1,6 @@
 import { useCallback } from 'react';
 import _ from 'lodash';
+import { moveArrayItem } from './util';
 
 export function mergeScrambleSets(state, newScrambleFile) {
   const groupedScrambleSets = _.groupBy(
@@ -40,23 +41,6 @@ function removeScrambleSet(state, oldScrambleFile) {
 
   // Throw away state entries for rounds that don't have any sets at all anymore
   return _.pickBy(withoutScrambleFile, (sets) => sets.length > 0);
-}
-
-function moveArrayItem(arr, fromIndex, toIndex) {
-  const movedItem = arr[fromIndex];
-
-  const withoutMovedItem = [
-    ...arr.slice(0, fromIndex),
-    // here we want to ignore the moved item itself, so we need the +1
-    ...arr.slice(fromIndex + 1),
-  ];
-
-  return [
-    ...withoutMovedItem.slice(0, toIndex),
-    movedItem,
-    // here we do NOT want to ignore the items that were originally there, so no +1
-    ...withoutMovedItem.slice(toIndex),
-  ];
 }
 
 export function useDispatchWrapper(originalDispatch, actionVars) {

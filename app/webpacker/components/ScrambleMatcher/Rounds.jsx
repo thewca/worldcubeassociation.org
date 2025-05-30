@@ -4,16 +4,8 @@ import { activityCodeToName } from '@wca/helpers';
 import ScrambleMatch from './ScrambleMatch';
 import I18n from '../../lib/i18n';
 import Groups from './Groups';
-import { events } from '../../lib/wca-data.js.erb';
 import { useDispatchWrapper } from './reducer';
-
-const prefixForIndex = (index) => {
-  const char = String.fromCharCode(65 + (index % 26));
-  if (index < 26) return char;
-  return prefixForIndex(Math.floor(index / 26) - 1) + char;
-};
-
-const scrambleSetToName = (scrambleSet) => `${events.byId[scrambleSet.event_id].name} Round ${scrambleSet.round_number} Scramble Set ${prefixForIndex(scrambleSet.scramble_set_number - 1)}`;
+import { scrambleSetToName } from './util';
 
 export default function Rounds({
   wcifRounds,
