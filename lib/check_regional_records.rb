@@ -135,11 +135,15 @@ module CheckRegionalRecords
         minimum_results_by_event = results.select("id, event_id, competition_id, round_type_id, country_id, MIN(#{value_column}) AS `value`")
                                           .where.not(value_column => ..0)
                                           .group("id, event_id, competition_id, round_type_id, country_id")
-        timestamps = ResultTimestamp.where(result_id: minimum_results_by_event.ids)
+        timestamps = ResultTimestamp.where(result_id: minimum_results_by_event.ids).index_by(&:result_id)
         candidates = minimum_results_by_event.filter_map do |result|
-          timestamp = timestamps.find { |t| t.result_id == result.id }.round_timestamp
-          record_at_time_of_round = RegionalRecord.record_for(result.event_id, value_name, :NR, country_id: result.country_id, date: timestamp)
-          [result.event_id, result.competition_id, result.round_type_id, result.country_id, timestamp, result.value] if record_at_time_of_round > result.value
+          timestamp = timestamps[result.id].round_timestamp
+          is_record, marker = RegionalRecord.is_record_at_date?(result.value, result.event_id, value_name, result.country_id, timestamp)
+          {
+            computed_marker: marker,
+            competition:     result.competition,
+            result:          result
+          } if is_record
         end
         [value_column, candidates]
       else

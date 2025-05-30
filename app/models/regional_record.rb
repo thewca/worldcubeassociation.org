@@ -47,8 +47,9 @@ class RegionalRecord < ApplicationRecord
     query.minimum(:value)
   end
 
-  def self.is_record_at_date?(value, event_id, record_type, country_id, continent_id, timestamp)
+  def self.is_record_at_date?(value, event_id, record_type, country_id, timestamp)
     scope_filter = arel_table[:record_scope]
+    continent_id = Country.c_find(country_id).continent_id
 
     records = RegionalRecord.where(event_id: event_id, record_type: record_type)
                             .where(record_scope: [:world, :continental, :national])
