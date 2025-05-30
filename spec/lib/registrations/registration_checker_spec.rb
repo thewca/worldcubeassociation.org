@@ -2037,6 +2037,10 @@ RSpec.describe Registrations::RegistrationChecker do
       let(:newcomer_month_eligible_reg) { create(:registration, :newcomer_month_eligible, competition: newcomer_month_comp) }
       let(:newcomer_reg) { create(:registration, :newcomer, competition: newcomer_month_comp) }
 
+      before do
+        stub_const("Competition::NEWCOMER_MONTH_ENABLED", true)
+      end
+
       describe 'only newcomer spots remain' do
         before do
           create_list(:registration, 2, :accepted, competition: newcomer_month_comp)
