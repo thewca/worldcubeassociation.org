@@ -58,6 +58,18 @@ function SelectedRoundPanel({
     setModalPayload(null);
   }, [setModalOpen, setModalPayload]);
 
+  const onModalConfirm = useCallback((scrambleSet, newRoundId) => {
+    dispatchMatchState({
+      type: 'moveScrambleSetToRound',
+      scrambleSet,
+      fromRoundId: selectedRound.id,
+      toRoundId: newRoundId,
+    });
+
+    setModalOpen(false);
+    setModalPayload(null);
+  }, [setModalOpen, setModalPayload, dispatchMatchState, selectedRound.id]);
+
   const onRoundDragCompleted = useCallback(
     (fromIndex, toIndex) => dispatchMatchState({
       type: 'moveRoundScrambleSet',
@@ -92,6 +104,7 @@ function SelectedRoundPanel({
       <MoveScrambleSetModal
         isOpen={isModalOpen}
         onClose={onModalClose}
+        onConfirm={onModalConfirm}
         selectedScrambleSet={modalPayload}
         currentRound={selectedRound}
         availableRounds={wcifRounds}
@@ -153,7 +166,13 @@ function MoveScrambleSetModal({
       </Modal.Content>
       <Modal.Actions>
         <Button onClick={onClose}>Cancel</Button>
-        <Button positive onClick={() => onConfirm(selectedRound)} disabled={!canMove}>Move</Button>
+        <Button
+          positive
+          onClick={() => onConfirm(selectedScrambleSet, selectedRound)}
+          disabled={!canMove}
+        >
+          Move
+        </Button>
       </Modal.Actions>
     </Modal>
   );

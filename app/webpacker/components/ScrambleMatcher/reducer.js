@@ -67,6 +67,17 @@ export default function scrambleMatchReducer(state, action) {
           action.toIndex,
         ),
       };
+    case 'moveScrambleSetToRound':
+      return {
+        ...state,
+        [action.fromRoundId]: state[action.fromRoundId].filter(
+          (scrSet) => scrSet.id !== action.scrambleSet.id,
+        ),
+        [action.toRoundId]: [
+          ...state[action.toRoundId],
+          { ...action.scrambleSet },
+        ],
+      };
     case 'moveScrambleInSet':
       return {
         ...state,
