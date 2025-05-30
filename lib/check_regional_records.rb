@@ -124,10 +124,10 @@ module CheckRegionalRecords
     end
   end
 
-  SOLUTION_TYPES = [[:best, 'single'], [:average, 'average']].freeze
+  SOLUTION_TYPES = [[:best, 'single', :regional_single_record], [:average, 'average', :regional_average_record]].freeze
 
   def self.check_records_new_table(event_id = nil, competition_id = nil, from_timestamp = nil, to_timestamp = nil)
-    SOLUTION_TYPES.to_h do |value_column, value_name|
+    SOLUTION_TYPES.to_h do |value_column, value_name, record_column|
       if competition_id.present?
         competition = Competition.find(competition_id)
         results = competition.results
@@ -173,7 +173,7 @@ module CheckRegionalRecords
                 MIN(#{value_column}) AS #{value_column}
               FROM result_timestamps
               WHERE #{cte_where}
-              GROUP BY event_id, round_timestamp
+              GROUP BY event_id, country_id, round_timestamp
             )
             -- Join back to get the full rows
             SELECT
@@ -192,7 +192,18 @@ module CheckRegionalRecords
           SQL
         best_at_date = conn.execute(sql).to_a
         candidates = RegionalRecord.annotate_candidates(best_at_date, value_name)
-        [value_column, candidates]
+        current_record_holders = Result.includes(:competition).where.not(record_column => nil)
+        current_record_holders = current_record_holders.where(event_id: event_id) if event_id.present?
+        current_record_holders = current_record_holders.where("round_timestamp >= #{conn.quote(from_timestamp)}") if from_timestamp.present?
+        current_record_holders = current_record_holders.where("round_timestamp <= #{conn.quote(to_timestamp)}") if to_timestamp.present?
+        current_record_holders = current_record_holders.where.not(id: candidates.map { |c| c[:result].id }).map do |r|
+          {
+            result: r,
+            computed_marker: "",
+            competition: r.competition,
+          }
+        end
+        [value_column, candidates + current_record_holders]
       end
     end
   end
