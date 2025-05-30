@@ -240,7 +240,11 @@ class AdminController < ApplicationController
                           .permit(:competition_id, :event_id, :refresh_index)
 
     @check_records_request = CheckRegionalRecordsForm.new(action_params)
-    @check_results = @check_records_request.run_check_new
+    @check_results = if Rails.env.local?
+                       @check_records_request.run_check_new
+                     else
+                       @check_records_request.run_check
+                     end
   end
 
   def do_override_regional_records

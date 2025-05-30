@@ -245,10 +245,6 @@ class Round < ApplicationRecord
     "#{event.id}-r#{self.number}"
   end
 
-  def end_time
-    schedule.maximum(:end_time)
-  end
-
   def schedule
     ScheduleActivity.where(round_id: self.id)
   end
