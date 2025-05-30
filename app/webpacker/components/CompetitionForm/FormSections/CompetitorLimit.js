@@ -13,8 +13,6 @@ export default function CompetitorLimit() {
     },
   } = useFormObject();
 
-  const store = useStore();
-  console.log("store: ", store)
   const { isAdminView, newcomerMonthEnabled } = useStore();
 
   return (
