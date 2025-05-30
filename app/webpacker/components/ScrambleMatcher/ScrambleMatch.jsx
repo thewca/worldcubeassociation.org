@@ -11,6 +11,7 @@ export default function ScrambleMatch({
   computeDefinitionName,
   computeRowName,
   computeRowDetails = undefined,
+  moveAwayAction = undefined,
 }) {
   const [currentDragStart, setCurrentDragStart] = useState(null);
   const [currentDragIndex, setCurrentDragIndex] = useState(null);
@@ -62,7 +63,7 @@ export default function ScrambleMatch({
         <Table.Row>
           <Table.HeaderCell />
           <Table.HeaderCell>Assigned Scrambles</Table.HeaderCell>
-          <Table.HeaderCell>Move</Table.HeaderCell>
+          {moveAwayAction && (<Table.HeaderCell>Move</Table.HeaderCell>)}
         </Table.Row>
       </Table.Header>
       <DragDropContext
@@ -131,9 +132,15 @@ export default function ScrambleMatch({
                                     </>
                                   )}
                               </Table.Cell>
-                              <Table.Cell textAlign="center" collapsing icon>
-                                <Icon name="arrows alternate horizontal" />
-                              </Table.Cell>
+                              {moveAwayAction && (
+                                <Table.Cell textAlign="center" collapsing icon>
+                                  <Icon
+                                    name="arrows alternate horizontal"
+                                    link
+                                    onClick={() => moveAwayAction(rowData)}
+                                  />
+                                </Table.Cell>
+                              )}
                             </Table.Row>
                           </Ref>
                         );

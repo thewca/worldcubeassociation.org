@@ -1,11 +1,14 @@
 import React, { useMemo, useState, useCallback } from 'react';
-import { Button, Header } from 'semantic-ui-react';
+import {
+  Button, Form, Header, Modal,
+} from 'semantic-ui-react';
 import { activityCodeToName } from '@wca/helpers';
 import ScrambleMatch from './ScrambleMatch';
 import I18n from '../../lib/i18n';
 import Groups from './Groups';
 import { useDispatchWrapper } from './reducer';
-import {scrambleSetToDetails, scrambleSetToName} from './util';
+import { scrambleSetToDetails, scrambleSetToName } from './util';
+import useInputState from '../../lib/hooks/useInputState';
 
 export default function Rounds({
   wcifRounds,
@@ -19,6 +22,7 @@ export default function Rounds({
         selectedRound={wcifRounds[0]}
         matchState={matchState}
         dispatchMatchState={dispatchMatchState}
+        wcifRounds={wcifRounds}
         showGroupsPicker={showGroupsPicker}
       />
     );
@@ -38,8 +42,22 @@ function SelectedRoundPanel({
   selectedRound,
   matchState,
   dispatchMatchState,
+  wcifRounds,
   showGroupsPicker = false,
 }) {
+  const [isModalOpen, setModalOpen] = useState(false);
+  const [modalPayload, setModalPayload] = useState(null);
+
+  const onMoveAway = useCallback((scrambleRow) => {
+    setModalOpen(true);
+    setModalPayload(scrambleRow);
+  }, [setModalOpen, setModalPayload]);
+
+  const onModalClose = useCallback(() => {
+    setModalOpen(false);
+    setModalPayload(null);
+  }, [setModalOpen, setModalPayload]);
+
   const onRoundDragCompleted = useCallback(
     (fromIndex, toIndex) => dispatchMatchState({
       type: 'moveRoundScrambleSet',
@@ -49,10 +67,12 @@ function SelectedRoundPanel({
     }),
     [dispatchMatchState, selectedRound.id],
   );
+
   const wrappedDispatch = useDispatchWrapper(
     dispatchMatchState,
     { roundId: selectedRound.id },
   );
+
   const roundToGroupName = useCallback(
     (idx) => `${activityCodeToName(selectedRound.id)}, Group ${idx + 1}`,
     [selectedRound.id],
@@ -67,6 +87,14 @@ function SelectedRoundPanel({
         computeDefinitionName={roundToGroupName}
         computeRowName={scrambleSetToName}
         computeRowDetails={scrambleSetToDetails}
+        moveAwayAction={onMoveAway}
+      />
+      <MoveScrambleSetModal
+        isOpen={isModalOpen}
+        onClose={onModalClose}
+        selectedScrambleSet={modalPayload}
+        currentRound={selectedRound}
+        availableRounds={wcifRounds}
       />
       {showGroupsPicker && (
         <Groups
@@ -76,6 +104,58 @@ function SelectedRoundPanel({
         />
       )}
     </>
+  );
+}
+
+function MoveScrambleSetModal({
+  isOpen,
+  onClose,
+  onConfirm = onClose,
+  selectedScrambleSet,
+  currentRound,
+  availableRounds,
+}) {
+  const [selectedRound, setSelectedRound] = useInputState(currentRound.id);
+
+  const roundsSelectOptions = useMemo(() => availableRounds.map((r) => ({
+    key: r.id,
+    text: activityCodeToName(r.id),
+    value: r.id,
+  })), [availableRounds]);
+
+  const canMove = selectedRound !== currentRound.id;
+
+  if (!selectedScrambleSet) {
+    return null;
+  }
+
+  return (
+    <Modal
+      open={isOpen}
+      onClose={onClose}
+      closeIcon
+    >
+      <Modal.Header>
+        Move scramble set
+        {' '}
+        {scrambleSetToName(selectedScrambleSet)}
+      </Modal.Header>
+      <Modal.Content>
+        <Form>
+          <Form.Select
+            inline
+            label="New round"
+            options={roundsSelectOptions}
+            value={selectedRound}
+            onChange={setSelectedRound}
+          />
+        </Form>
+      </Modal.Content>
+      <Modal.Actions>
+        <Button onClick={onClose}>Cancel</Button>
+        <Button positive onClick={() => onConfirm(selectedRound)} disabled={!canMove}>Move</Button>
+      </Modal.Actions>
+    </Modal>
   );
 }
 
@@ -122,6 +202,7 @@ function RoundsPicker({
           selectedRound={selectedRound}
           matchState={matchState}
           dispatchMatchState={dispatchMatchState}
+          wcifRounds={wcifRounds}
           showGroupsPicker={showGroupsPicker}
         />
       )}
