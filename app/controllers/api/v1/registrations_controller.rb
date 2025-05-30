@@ -139,7 +139,7 @@ class Api::V1::RegistrationsController < Api::V1::ApiController
       can_administer_or_current_user?(@competition, @current_user, target_user)
 
     raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::USER_EDITS_NOT_ALLOWED) unless
-      @competition.registration_edits_currently_permitted? || @current_user.can_manage_competition?(@competition) || user_uncancelling_registration?(@registration, new_status)
+      @competition.registration_edits_currently_permitted? || @current_user.can_manage_competition?(@competition) || user_uncancelling_registration?(@registration, new_status) || user_registration_not_accepted?(@registration)
 
     raise WcaExceptions::RegistrationError.new(:unauthorized, Registrations::ErrorCodes::REGISTRATION_IS_REJECTED) if
       user_is_rejected?(@current_user, target_user, @registration) && !organizer_modifying_own_registration?(@competition, @current_user, target_user)
@@ -304,6 +304,10 @@ class Api::V1::RegistrationsController < Api::V1::ApiController
 
     def user_uncancelling_registration?(registration, new_status)
       registration.competing_status_cancelled? && new_status == Registrations::Helper::STATUS_PENDING
+    end
+
+    def user_registration_not_accepted?(registration)
+      registration.competing_status_pending? || registration.competing_status_waiting_list?
     end
 
     def can_administer_or_current_user?(competition, current_user, target_user)
