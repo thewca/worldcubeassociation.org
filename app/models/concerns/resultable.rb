@@ -11,6 +11,7 @@ module Resultable
     belongs_to :round_type
     belongs_to :event
     belongs_to :format
+    belongs_to :round, optional: true
 
     # Forgetting to synchronize the results in WCA Live is a very common mistake,
     # so this error message is hinting the user to check that, even if it's
@@ -38,7 +39,7 @@ module Resultable
       # Using a 'find' here is intentional to pass the `includes(:rounds)` to
       # avoid the n+1 query on competition_events if we were directly using
       # competition.find_round_for.
-      Competition
+      super || Competition
         .includes(:rounds)
         .find_by(id: competition_id)
         &.find_round_for(event_id, round_type_id, format_id)
@@ -50,6 +51,16 @@ module Resultable
 
       errors.add(:round_type,
                  "Result must belong to a valid round. Please check that the tuple (competition_id, event_id, round_type_id, format_id) matches an existing round.")
+    end
+
+    # Deliberately using `round_id` here instead of "simply" checking for `round`
+    #   because the latter would try to fall back to `round_type_id`.
+    validate :linked_round_consistent, if: :round_id?
+    def linked_round_consistent
+      errors.add(:competition, "Should match '#{round.competition_id}' of the linked round, but is '#{competition_id}'") unless competition_id == round.competition_id
+      errors.add(:round_type, "Should match '#{round.round_type_id}' of the linked round, but is '#{round_type_id}'") unless round_type_id == round.round_type_id
+      errors.add(:event, "Should match '#{round.event_id}' of the linked round, but is '#{event_id}'") unless event_id == round.event_id
+      errors.add(:format, "Should match '#{round.format_id}' of the linked round, but is '#{format_id}'") unless format_id == round.format_id
     end
 
     validate :validate_each_solve, if: :event
