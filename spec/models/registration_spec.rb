@@ -1357,5 +1357,4 @@ RSpec.describe Registration do
       expect(registration.user_can_modify?(competitor)).to be false
     end
   end
-
 end
