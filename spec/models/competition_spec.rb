@@ -513,8 +513,8 @@ RSpec.describe Competition do
     end
 
     it "warns if advancement condition isn't present for a non final round" do
-      create(:round, competition: competition, event_id: "333", number: 1)
-      create(:round, competition: competition, event_id: "333", number: 2)
+      create(:round, competition: competition, event_id: "333", number: 1, total_number_of_rounds: 2)
+      create(:round, competition: competition, event_id: "333", number: 2, total_number_of_rounds: 2)
 
       expect(competition).to be_valid
       expect(competition.warnings_for(nil)[:advancement_conditions]).to eq I18n.t('competitions.messages.advancement_condition_must_be_present_for_all_non_final_rounds')
@@ -1179,7 +1179,7 @@ RSpec.describe Competition do
   context "when changing the competition's date" do
     let(:competition) do
       create(:competition,
-             with_schedule: true,
+             :with_valid_schedule,
              start_date: Date.parse("2018-10-24"),
              end_date: Date.parse("2018-10-26"))
     end
@@ -1188,7 +1188,8 @@ RSpec.describe Competition do
     end
 
     def change_and_check_activities(new_start_date, new_end_date)
-      on_first_day, on_last_day = all_activities.partition { |a| a.start_time.to_date == competition.start_date }
+      on_first_day = all_activities.filter { |a| a.start_time.to_date == competition.start_date }
+      on_last_day = all_activities.filter { |a| a.start_time.to_date == competition.end_date }
       # the factory define one activity per day, the two lines below are
       # basically safe guards against a future change to the competition's factory.
       expect(on_first_day).not_to be_empty

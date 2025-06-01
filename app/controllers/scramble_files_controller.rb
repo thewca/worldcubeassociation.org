@@ -54,14 +54,24 @@ class ScrambleFilesController < ApplicationController
       tnoodle_wcif[:events].each do |wcif_event|
         competition_event = competition.competition_events.find_by(event_id: wcif_event[:id])
 
-        wcif_event[:rounds].each do |wcif_round|
-          competition_round = competition_event.rounds.find { it.wcif_id == wcif_round[:id] }
+        wcif_event[:rounds].each_with_index do |wcif_round, rd_idx|
+          competition_round = competition_event&.rounds&.find { it.wcif_id == wcif_round[:id] }
+
+          round_scope = {
+            competition_id: competition_round&.competition_id || competition.id,
+            event_id: competition_round&.event_id || wcif_event[:id],
+            round_number: rd_idx + 1,
+          }
+
+          existing_sets_count = InboxScrambleSet.where(**round_scope).count
+          highest_ordered_index = InboxScrambleSet.where(**round_scope).maximum(:ordered_index) || 0
 
           wcif_round[:scrambleSets].each_with_index do |wcif_scramble_set, idx|
             scramble_set = scr_file_upload.inbox_scramble_sets.create!(
-              scramble_set_number: idx + 1,
-              ordered_index: idx,
+              scramble_set_number: idx + existing_sets_count + 1,
+              ordered_index: idx + highest_ordered_index,
               matched_round: competition_round,
+              **round_scope,
             )
 
             %i[scrambles extraScrambles].each do |scramble_kind|

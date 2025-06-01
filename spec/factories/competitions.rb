@@ -6,6 +6,11 @@ FactoryBot.define do
       championship_types { [] }
       with_rounds { false }
       with_schedule { false }
+      exclude_from_schedule { [] }
+      rounds_per_event { 1 }
+      groups_per_round { 1 }
+      number_of_venues { 2 }
+      schedule_only_one_venue { false }
       series_base { nil }
       series_distance_days { 0 }
       series_distance_km { 0 }
@@ -106,6 +111,8 @@ FactoryBot.define do
     trait :auto_accept do
       use_wca_registration { true }
       auto_accept_registrations { true }
+      competitor_limit_enabled { true }
+      competitor_limit_reason { 'test' }
       competitor_limit { 5 }
       auto_accept_disable_threshold { 4 }
     end
@@ -398,18 +405,23 @@ FactoryBot.define do
       end
       if evaluator.with_rounds
         competition.competition_events.each do |ce|
-          ce.rounds.create!(
-            format: ce.event.preferred_formats.first.format,
-            number: 1,
-            total_number_of_rounds: 1,
-          )
+          next if ce.rounds.any?
+
+          evaluator.rounds_per_event.times do |i|
+            ce.rounds.create!(
+              format: ce.event.preferred_formats.first.format,
+              number: i + 1,
+              total_number_of_rounds: evaluator.rounds_per_event,
+              scramble_set_count: evaluator.groups_per_round,
+            )
+          end
         end
       end
 
       if evaluator.with_schedule
         # room id in wcif for a competition are unique, so we need to have a global counter
         current_room_id = 1
-        2.times do |i|
+        evaluator.number_of_venues.times do |i|
           venue_attributes = {
             name: "Venue #{i + 1}",
             wcif_id: i + 1,
@@ -427,67 +439,104 @@ FactoryBot.define do
             current_room_id += 1
             venue.venue_rooms.create!(room_attributes)
           end
-          next unless i == 0
-
-          start_time = Time.zone.local_to_utc(competition.start_time)
-          end_time = start_time
-          venue.reload
-          first_room = venue.venue_rooms.first
-          first_room.schedule_activities.create!(
-            wcif_id: 1,
-            name: "Some name",
-            activity_code: "other-lunch",
-            start_time: start_time.change(hour: 12, min: 0, sec: 0).iso8601,
-            end_time: end_time.change(hour: 13, min: 0, sec: 0).iso8601,
-          )
-          # In case we're generating multi days competition, add some activities
-          # on the other day.
-          start_time = Time.zone.local_to_utc(competition.end_date.to_time)
-          end_time = start_time
-          activity = first_room.schedule_activities.create!(
-            wcif_id: 2,
-            name: "another activity",
-            activity_code: "333fm-r1",
-            start_time: start_time.change(hour: 10, min: 0, sec: 0).iso8601,
-            end_time: end_time.change(hour: 11, min: 0, sec: 0).iso8601,
-          )
-          activity.child_activities.create!(
-            wcif_id: 3,
-            name: "first group",
-            activity_code: "333fm-r1-g1",
-            start_time: start_time.change(hour: 10, min: 0, sec: 0).iso8601,
-            end_time: end_time.change(hour: 10, min: 30, sec: 0).iso8601,
-          )
-          nested_activity = activity.child_activities.create!(
-            wcif_id: 4,
-            name: "second group",
-            activity_code: "333fm-r1-g2",
-            start_time: start_time.change(hour: 10, min: 30, sec: 0).iso8601,
-            end_time: end_time.change(hour: 11, min: 0, sec: 0).iso8601,
-          )
-          nested_activity.child_activities.create!(
-            wcif_id: 5,
-            name: "some nested thing",
-            activity_code: "333fm-r1-g2-a1",
-            start_time: start_time.change(hour: 10, min: 30, sec: 0).iso8601,
-            end_time: end_time.change(hour: 11, min: 0, sec: 0).iso8601,
-          )
         end
         # Add valid schedule for existing rounds
-        room = competition.competition_venues.last.venue_rooms.first
-        current_activity_id = 1
-        start_time = Time.zone.local_to_utc(competition.start_time)
-        end_time = start_time
-        competition.competition_events.each do |ce|
-          ce.rounds.each do |r|
-            room.schedule_activities.create!(
-              wcif_id: current_activity_id,
-              name: "Great round",
-              activity_code: r.wcif_id,
-              start_time: start_time.change(hour: 10, min: 30, sec: 0).iso8601,
-              end_time: end_time.change(hour: 11, min: 0, sec: 0).iso8601,
-            )
-            current_activity_id += 1
+        schedule_events = competition.competition_events.reject { evaluator.exclude_from_schedule.include?(it.event_id) }
+        number_of_activities = schedule_events.sum { it.rounds.count }
+
+        if number_of_activities > 0
+          competition_start_utc = Time.zone.local_to_utc(competition.start_time)
+          competition_end_utc = Time.zone.local_to_utc(competition.end_time)
+
+          number_of_days = (competition_end_utc - competition_start_utc).seconds.in_days
+          activities_per_day = (number_of_activities / number_of_days.to_f).ceil
+
+          # somewhat arbitrary: let's make the competition run from 10AM to 7PM
+          #   which is 10 hours, including one hour for lunch in every room
+          available_hours_per_day = 8.hours
+          lunch_time_duration = 1.hour
+          available_time_per_activity = available_hours_per_day / activities_per_day
+
+          competition.competition_venues.each_with_index do |competition_venue, venue_idx|
+            next if venue_idx > 0 && evaluator.schedule_only_one_venue
+
+            competition_venue.venue_rooms.each do |venue_room|
+              current_activity_id = 1
+              current_day_activities = 0
+              had_lunch_today = false
+
+              start_time = competition_start_utc.change(hour: 10, min: 0, sec: 0)
+              lunch_time_marker = start_time.change(hour: 12, min: 0, sec: 0)
+
+              competition.competition_events.each do |ce|
+                ce.rounds.each do |r|
+                  if start_time >= lunch_time_marker && !had_lunch_today
+                    end_time = lunch_time_marker + lunch_time_duration
+
+                    venue_room.schedule_activities.create!(
+                      wcif_id: current_activity_id,
+                      name: "Enjoy your meal!",
+                      activity_code: "other-lunch",
+                      start_time: lunch_time_marker.iso8601,
+                      end_time: end_time.iso8601,
+                    )
+
+                    current_activity_id += 1
+                    had_lunch_today = true
+                  end
+
+                  end_time = start_time + available_time_per_activity.to_i
+
+                  next unless schedule_events.include?(ce)
+
+                  round_activity = venue_room.schedule_activities.create!(
+                    wcif_id: current_activity_id,
+                    name: "Great round",
+                    activity_code: r.wcif_id,
+                    round: r,
+                    start_time: start_time.iso8601,
+                    end_time: end_time.iso8601,
+                  )
+
+                  current_activity_id += 1
+
+                  if r.scramble_set_count > 1
+                    round_activity_duration = round_activity.end_time - round_activity.start_time
+                    slot_per_group = round_activity_duration / r.scramble_set_count
+
+                    group_start_time = round_activity.start_time.clone
+
+                    r.scramble_set_count.times do |group_num|
+                      group_end_time = group_start_time + slot_per_group
+
+                      round_activity.child_activities.create!(
+                        wcif_id: current_activity_id,
+                        venue_room: venue_room,
+                        name: "Great round, group #{group_num + 1}",
+                        activity_code: "#{r.wcif_id}-g#{group_num + 1}",
+                        round: r,
+                        start_time: group_start_time,
+                        end_time: group_end_time,
+                      )
+
+                      group_start_time = group_end_time.clone
+                      current_activity_id += 1
+                    end
+                  end
+
+                  current_day_activities += 1
+
+                  if current_day_activities >= activities_per_day
+                    start_time = (start_time + 1.day).change(hour: 10, min: 0, sec: 0)
+                    lunch_time_marker = start_time.change(hour: 12, min: 0, sec: 0)
+                    current_day_activities = 0
+                    had_lunch_today = false
+                  else
+                    start_time = end_time.clone
+                  end
+                end
+              end
+            end
           end
         end
       end

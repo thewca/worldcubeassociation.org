@@ -1258,6 +1258,9 @@ en:
     registration_full: "The competitor limit for this competition is %{competitor_limit} and it has already been reached. If you register, your registration will be placed on a waiting list. It may not be approved unless a spot frees up."
     registration_full_include_waiting_list: "The competitor limit for this competition is %{competitor_limit} and it may be filled. If you register, your registration will be placed on a waiting list. It may not be approved unless a spot frees up."
     entry_fees_fully_paid: "You have paid %{paid}, which fully covers the registration fees."
+    entry_fees_partially_paid: "You have paid %{paid} of %{total}. Check with the organizers if you need to pay the rest."
+    entry_fees_fully_refunded: "Your registration fees were fully refunded. If you need to pay again, you can do so below"
+    entry_fees_pay_again: "I want to pay again"
     will_pay_here: "You will pay them here after submitting your registration"
     wont_pay_here: "Please check the competition's information for instructions about how to pay"
     refund_form:
@@ -1824,8 +1827,9 @@ en:
     registration_v2:
       auto_accept:
         bulk_auto_accept: "Auto-Approve Competitors"
-        cant_bulk_auto_accept: "An error occurred while trying to bulk auto accept - contact WST for assistant if needed"
+        cant_bulk_auto_accept: "An error occurred while trying to bulk auto accept - contact WST for assistance if needed"
         bulk_auto_accepted: "Bulk auto accept succeeded"
+        nothing_to_accept: "No registrations eligible for auto-accept"
       pdf:
         #context: <0> indicates an html tag for internationalizing in React, see https://docs.worldcubeassociation.org/guides/translating_the_website.html#using-react
         link: "As a <0>%{pdfLink}</0>"
@@ -1846,12 +1850,15 @@ en:
         pending:
           title: "Pending Registrations"
           information: "Pending should only be used for incomplete (eg, unpaid) registrations - please use the Waiting List if your competition is too full to accept new competitors."
+          waitlist_skipped_warning: "You've skipped %{count} earlier Pending registration(s). Are you sure you want to move the selected registration(s) to the Waiting List?"
+          approve_skipped_warning: "You've skipped %{count} earlier Pending registration(s). Are you sure you want to accept the selected registration(s)?"
         waitlist:
           title: "Waiting List Registrations"
           information: "Competitors are added to the end of the Waiting List. If you add several at once, the paid competitors will be added to the end in the order that they paid, followed by the rest in the order that they registered. You can manually adjust the order in Edit Mode if necessary."
-          skipped_warning: "You've skipped %{count} registration(s) on the Waiting List. Are you sure you want to approve the other registration(s) instead?"
+          skipped_warning: "You've skipped %{count} registration(s) on the Waiting List. Are you sure you want to approve the selected registration(s)?"
         approved:
           title: "Approved Registrations"
+          pending_waitlist_combined_skipped_warning: "You've skipped %{count} earlier Pending/Waiting List registration(s). Are you sure you want to accept the selected registration(s)?"
         cancelled:
           title: "Cancelled Registrations"
           information: "Cancelled competitors are allowed to register again."
@@ -1899,7 +1906,7 @@ en:
         cancelled: "Cancelled"
         rejected: "Rejected"
         amount: "Amount"
-        too_many: "Accepting all these registrations would go over the competitor limit by %{count}"
+        too_many: "Accepting all these registrations would go over the competitor limit by %{count}."
         no_self_update: "Contact the Organization Team to update your registration."
       register:
         will_open_countdown: "Registration will open in %{minutes} minutes %{seconds} seconds. This page will refresh automatically when registration opens."

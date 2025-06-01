@@ -3,10 +3,10 @@ import {
   Accordion, Button, Card, Header, Icon, List,
 } from 'semantic-ui-react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { events, roundTypes } from '../../lib/wca-data.js.erb';
 import { fetchJsonOrError } from '../../lib/requests/fetchWithAuthenticityToken';
 import { scrambleFileUrl } from '../../lib/requests/routes.js.erb';
 import Loading from '../Requests/Loading';
+import { scrambleSetToName } from './util';
 
 async function deleteScrambleFile(fileId) {
   const { data } = await fetchJsonOrError(scrambleFileUrl(fileId), {
@@ -16,7 +16,7 @@ async function deleteScrambleFile(fileId) {
   return data;
 }
 
-function ScrambleFileInfo({ scrambleFile }) {
+function ScrambleFileInfo({ scrambleFile, removeScrambleFile }) {
   const queryClient = useQueryClient();
 
   const [expanded, setExpanded] = useState(false);
@@ -28,6 +28,8 @@ function ScrambleFileInfo({ scrambleFile }) {
         ['scramble-files', data.competition_id],
         (prev) => prev.filter((scrFile) => scrFile.id !== data.id),
       );
+
+      removeScrambleFile(data);
     },
   });
 
@@ -56,11 +58,7 @@ function ScrambleFileInfo({ scrambleFile }) {
             <List style={{ maxHeight: '400px', overflowY: 'auto' }}>
               {scrambleFile.inbox_scramble_sets.map((scrambleSet) => (
                 <List.Item key={scrambleSet.id}>
-                  {events.byId[scrambleSet.event_id].name}
-                  {' '}
-                  {roundTypes.byId[scrambleSet.round_type_id].name}
-                  {' - '}
-                  {String.fromCharCode(64 + scrambleSet.scramble_set_number)}
+                  {scrambleSetToName(scrambleSet)}
                 </List.Item>
               ))}
             </List>
@@ -80,12 +78,16 @@ function ScrambleFileInfo({ scrambleFile }) {
   );
 }
 
-export default function ScrambleFileList({ scrambleFiles, isFetching }) {
+export default function ScrambleFileList({ scrambleFiles, isFetching, removeScrambleFile }) {
   if (isFetching) {
     return <Loading />;
   }
 
   return scrambleFiles.map((scrFile) => (
-    <ScrambleFileInfo key={scrFile.id} scrambleFile={scrFile} />
+    <ScrambleFileInfo
+      key={scrFile.id}
+      scrambleFile={scrFile}
+      removeScrambleFile={removeScrambleFile}
+    />
   ));
 }

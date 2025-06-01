@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import { Icon, Ref, Table } from 'semantic-ui-react';
+import {
+  Icon, Popup, Ref, Table,
+} from 'semantic-ui-react';
 import { DragDropContext, Draggable, Droppable } from '@hello-pangea/dnd';
 
 export default function ScrambleMatch({
@@ -8,9 +10,13 @@ export default function ScrambleMatch({
   onRowDragCompleted,
   computeDefinitionName,
   computeRowName,
+  computeRowDetails = undefined,
+  moveAwayAction = undefined,
 }) {
   const [currentDragStart, setCurrentDragStart] = useState(null);
   const [currentDragIndex, setCurrentDragIndex] = useState(null);
+
+  const rowCount = Math.max(matchableRows.length, expectedNumOfRows);
 
   const handleOnBeforeDragStart = (init) => {
     setCurrentDragStart(init.source?.index);
@@ -57,6 +63,7 @@ export default function ScrambleMatch({
         <Table.Row>
           <Table.HeaderCell />
           <Table.HeaderCell>Assigned Scrambles</Table.HeaderCell>
+          {moveAwayAction && (<Table.HeaderCell>Move</Table.HeaderCell>)}
         </Table.Row>
       </Table.Header>
       <DragDropContext
@@ -68,17 +75,21 @@ export default function ScrambleMatch({
           {(providedDroppable) => (
             <Ref innerRef={providedDroppable.innerRef}>
               <Table.Body {...providedDroppable.droppableProps}>
-                {matchableRows.map((rowData, index) => {
+                {_.times(rowCount).map((index) => {
+                  const rowData = matchableRows[index];
                   const isExpected = index < expectedNumOfRows;
                   const isExtra = !isExpected;
 
                   const hasError = isExpected && !rowData;
+                  const fallbackIndex = `extra-scramble-set-${index + 1}`;
+                  const key = rowData?.id?.toString() ?? fallbackIndex;
 
                   return (
                     <Draggable
-                      key={rowData.id}
-                      draggableId={rowData.id.toString()}
+                      key={key}
+                      draggableId={key}
                       index={index}
+                      isDragDisabled={rowCount === 1 || hasError}
                     >
                       {(providedDraggable, snapshot) => {
                         const definitionIndex = computeOnDragIndex(index, snapshot.isDragging);
@@ -86,7 +97,7 @@ export default function ScrambleMatch({
                         return (
                           <Ref innerRef={providedDraggable.innerRef}>
                             <Table.Row
-                              key={rowData.id}
+                              key={key}
                               {...providedDraggable.draggableProps}
                               negative={hasError || isExtra}
                             >
@@ -94,18 +105,42 @@ export default function ScrambleMatch({
                                 {isExpected
                                   ? computeDefinitionName(definitionIndex)
                                   : 'Extra Scramble set (unassigned)'}
-                                {(hasError || isExtra) && (
+                                {isExtra && (
                                   <>
-                                    {' '}
                                     <Icon name="exclamation triangle" />
-                                    {hasError ? 'Missing scramble' : 'Unexpected Scramble Set'}
+                                    Unexpected Scramble Set
                                   </>
                                 )}
                               </Table.Cell>
                               <Table.Cell {...providedDraggable.dragHandleProps}>
-                                <Icon name="bars" />
-                                {computeRowName(rowData)}
+                                <Icon name={hasError ? 'exclamation triangle' : 'bars'} />
+                                {hasError
+                                  ? 'Missing scramble set'
+                                  : (
+                                    <>
+                                      {computeRowName(rowData)}
+                                      {' '}
+                                      {computeRowDetails && (
+                                        <Popup
+                                          trigger={<Icon name="info circle" />}
+                                          position="right center"
+                                          style={{ whiteSpace: 'pre-line' }}
+                                        >
+                                          {computeRowDetails(rowData)}
+                                        </Popup>
+                                      )}
+                                    </>
+                                  )}
                               </Table.Cell>
+                              {moveAwayAction && (
+                                <Table.Cell textAlign="center" collapsing icon>
+                                  <Icon
+                                    name="arrows alternate horizontal"
+                                    link
+                                    onClick={() => moveAwayAction(rowData)}
+                                  />
+                                </Table.Cell>
+                              )}
                             </Table.Row>
                           </Ref>
                         );

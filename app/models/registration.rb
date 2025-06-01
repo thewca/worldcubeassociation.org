@@ -53,12 +53,23 @@ class Registration < ApplicationRecord
   validates :user, presence: true, on: [:create]
 
   validates :registered_at, presence: true
+
   # Set a `registered_at` timestamp for newly created records,
   #   but only if there is no value already specified from the outside
   after_initialize :mark_registered_at, if: :new_record?, unless: :registered_at?
 
   private def mark_registered_at
     self.registered_at = current_time_from_proper_timezone
+  end
+
+  validates :registrant_id, presence: true, uniqueness: { scope: :competition_id }
+
+  # Run the hook twice so that even if you try to skip validations, it still persists a non-null value to the DB
+  before_validation :ensure_registrant_id, on: :create
+  before_create :ensure_registrant_id
+
+  private def ensure_registrant_id
+    self.registrant_id ||= competition.registrations.count + 1
   end
 
   validates :guests, numericality: { greater_than_or_equal_to: 0 }
@@ -288,6 +299,7 @@ class Registration < ApplicationRecord
       id: id,
       user: user.as_json(only: %w[id wca_id name gender country_iso2], methods: %w[country], include: [], private_attributes: private_attributes),
       user_id: user_id,
+      registrant_id: registrant_id,
       competing: {
         event_ids: event_ids,
       },
@@ -553,18 +565,25 @@ class Registration < ApplicationRecord
 
   def self.bulk_auto_accept(competition)
     if competition.waiting_list.present?
-      competition.registrations
-                 .find(competition.waiting_list.entries)
-                 .each(&:attempt_auto_accept)
+      waitlisted_registrations = competition.registrations.find(competition.waiting_list.entries)
+
+      waitlisted_outcomes = waitlisted_registrations.each_with_object({}) do |reg, hash|
+        result = reg.attempt_auto_accept
+        hash[reg.id] = result
+        break hash unless result[:succeeded]
+      end
     end
 
-    sorted_pending_registrations = competition
-                                   .registrations
-                                   .competing_status_pending
-                                   .with_payments
-                                   .sort_by { |registration| registration.last_positive_payment.updated_at }
+    pending_registrations = competition
+                            .registrations
+                            .competing_status_pending
+                            .with_payments
+                            .sort_by { |registration| registration.last_positive_payment.updated_at }
 
-    sorted_pending_registrations.each(&:attempt_auto_accept)
+    # We dont need to break out of pending registrations because auto accept can still put them on the waiting list
+    pending_outcomes = pending_registrations.index_by(&:id).transform_values(&:attempt_auto_accept)
+
+    waitlisted_outcomes.present? ? waitlisted_outcomes.merge(pending_outcomes) : pending_outcomes
   end
 
   def last_positive_payment
@@ -580,7 +599,7 @@ class Registration < ApplicationRecord
     failure_reason = auto_accept_failure_reason
     if failure_reason.present?
       log_auto_accept_failure(failure_reason)
-      return false
+      return { succeeded: false, info: failure_reason }
     end
 
     update_payload = build_auto_accept_payload
@@ -591,10 +610,11 @@ class Registration < ApplicationRecord
         update_payload,
         AUTO_ACCEPT_ENTITY_ID,
       )
-      true
+      { succeeded: true, info: auto_accepted_registration.competing_status }
     else
-      log_auto_accept_failure(auto_accepted_registration.errors.messages.values.flatten)
-      false
+      error = auto_accepted_registration.errors.messages.values.flatten
+      log_auto_accept_failure(error)
+      { succeeded: false, info: error }
     end
   end
 
