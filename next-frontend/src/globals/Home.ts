@@ -2,6 +2,21 @@ import { Block, GlobalConfig } from "payload";
 
 const colorPalettes = ["blue", "red", "green", "orange", "yellow", "grey"];
 
+const colors = [
+  "darkBlue",
+  "darkRed",
+  "darkGreen",
+  "darkOrange",
+  "darkYellow",
+  "blue",
+  "red",
+  "green",
+  "orange",
+  "yellow",
+  "white",
+  "black",
+];
+
 const BasicCard: Block = {
   slug: "BasicCard",
   fields: [
@@ -57,9 +72,19 @@ const ImageBanner: Block = {
       options: colorPalettes,
     },
     {
+      name: "bgColor",
+      type: "select",
+      options: colors,
+    },
+    {
       name: "headingColor",
       type: "select",
-      options: colorPalettes,
+      options: colors,
+    },
+    {
+      name: "textColor",
+      type: "select",
+      options: colors,
     },
     {
       name: "bgImage",
@@ -132,8 +157,8 @@ const HeroCard: Block = {
 };
 
 const CardWithImage: Block = {
-    slug: "CardWithImage",
-    fields: [
+  slug: "CardWithImage",
+  fields: [
     {
       name: "heading",
       type: "text",
@@ -160,11 +185,11 @@ const CardWithImage: Block = {
       relationTo: "media",
     },
   ],
-}
+};
 
 const FeaturedCompetitions: Block = {
-    slug: "FeaturedCompetitions",
-    fields: [
+  slug: "FeaturedCompetitions",
+  fields: [
     {
       name: "Competition1ID",
       type: "text",
@@ -186,7 +211,7 @@ const FeaturedCompetitions: Block = {
       options: colorPalettes,
     },
   ],
-}
+};
 
 const AnnouncementsSection: Block = {
   slug: "AnnouncementsSection",

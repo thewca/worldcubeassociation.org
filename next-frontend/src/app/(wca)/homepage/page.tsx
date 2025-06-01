@@ -27,6 +27,34 @@ import LocationIcon from "@/components/icons/LocationIcon";
 import Flag from "react-world-flags";
 import CountryMap from "@/components/CountryMap";
 
+const colorMap: Record<string, string> = {
+  blue: "blue.50",
+  red: "red.50",
+  green: "green.50",
+  orange: "orange.50",
+  yellow: "yellow.50",
+  darkBlue: "blue.100",
+  darkRed: "red.100",
+  darkGreen: "green.100",
+  darkOrange: "orange.100",
+  darkYellow: "yellow.100",
+  white: "supplementary.texts.light",
+  black: "supplementary.texts.dark",
+};
+
+const colorGradientMap: Record<string, string> = {
+  blue: "blue-50",
+  red: "red-50",
+  green: "green-50",
+  orange: "orange-50",
+  yellow: "yellow-50",
+  darkBlue: "blue-100",
+  darkRed: "red-100",
+  darkGreen: "green-100",
+  darkOrange: "orange-100",
+  darkYellow: "yellow-100",
+};
+
 const BasicCard = ({ heading, body, buttonText, buttonLink }) => {
   return (
     <Card.Root variant="info" size="lg" width="full">
@@ -68,23 +96,21 @@ const HeroCard = ({ heading, body, buttonText, buttonLink, colorPalette }) => {
 const CardWithImage = ({ heading, body, buttonText, buttonLink, image }) => {
   return (
     <Card.Root variant="info" width="full">
-    <Image
+      <Image
         src={image.url}
         alt="Green double couch with wooden legs"
         aspectRatio="3/1"
-    />
-    <Card.Body>
+      />
+      <Card.Body>
         <Card.Title>{heading}</Card.Title>
         <Separator size="md" />
-        <Card.Description>
-       {body}
-        </Card.Description>
+        <Card.Description>{body}</Card.Description>
         {buttonText?.trim() && (
           <Button mr="auto" href={buttonLink}>
             {buttonText}
           </Button>
         )}
-    </Card.Body>
+      </Card.Body>
     </Card.Root>
   );
 };
@@ -119,6 +145,8 @@ const ImageBanner = ({
   image,
   colorPalette,
   headingColor,
+  textColor,
+  bgColor,
   bgImage,
   bgSize,
   bgPos,
@@ -138,7 +166,7 @@ const ImageBanner = ({
           objectFit="cover"
           width="100%"
           height="40vh"
-          bg={`${colorPalette}.100`}
+          bg={colorMap[bgColor]}
         />
         {/* Blue Gradient Overlay */}
         <Box
@@ -148,7 +176,7 @@ const ImageBanner = ({
           bottom="0"
           left="50%"
           style={{
-            backgroundImage: `linear-gradient(to right, transparent, var(--chakra-colors-${colorPalette}-100))`,
+            backgroundImage: `linear-gradient(to right, transparent, var(--chakra-colors-${colorGradientMap[bgColor]}))`,
           }}
           zIndex="1"
         />
@@ -159,7 +187,7 @@ const ImageBanner = ({
         zIndex="2"
         color="white"
         p="8"
-        bg={`${colorPalette}.100`}
+        bg={colorMap[bgColor]}
         justifyContent="center"
         pr="15%"
         backgroundImage={`url('${bgImage.url}')`}
@@ -167,10 +195,12 @@ const ImageBanner = ({
         backgroundPosition={bgPos}
         backgroundRepeat="no-repeat"
       >
-        <Heading size="4xl" color={`${headingColor}.50`} mb="4">
+        <Heading size="4xl" color={colorMap[headingColor]} mb="4">
           {heading}
         </Heading>
-        <Text fontSize="md">{body}</Text>
+        <Text fontSize="md" color={colorMap[textColor]}>
+          {body}
+        </Text>
       </Card.Body>
     </Card.Root>
   );
@@ -194,72 +224,77 @@ const ImageCard = ({ heading, image, colorPalette }) => {
   );
 };
 
-const FeaturedCompetitions = ({ Competition1ID, colorPalette1, Competition2ID, colorPalette2 }) => {
+const FeaturedCompetitions = ({
+  Competition1ID,
+  colorPalette1,
+  Competition2ID,
+  colorPalette2,
+}) => {
   return (
     <Card.Root variant="info" colorPalette="grey" width="full">
-            <Card.Body justifyContent="space-around">
-              <Card.Title display="flex" justifyContent="space-between">
-                Featured Upcoming Competitions
-                <Button variant="outline">View all Competitions</Button>
-              </Card.Title>
-              <SimpleGrid columns={2} rows={1} gap={4}>
-                <Card.Root variant="info" colorPalette={colorPalette1}>
-                  <Card.Body>
-                    <Heading size="3xl">{Competition1ID}</Heading>
-                    <VStack alignItems="start">
-                      <Badge variant="information" colorPalette={colorPalette1}>
-                        <Flag code={"US"} fallback={"US"} />
-                        <CountryMap code="US" bold /> Seattle
-                      </Badge>
-                      <Badge variant="information" colorPalette={colorPalette1}>
-                        <CompRegoCloseDateIcon />
-                        <Text>Jul 3 - 6, 2025</Text>
-                      </Badge>
-                      <Badge variant="information" colorPalette={colorPalette1}>
-                        <CompetitorsIcon />
-                        2000 Competitor Limit
-                      </Badge>
-                      <Badge variant="information" colorPalette={colorPalette1}>
-                        <RegisterIcon />0 Spots Left
-                      </Badge>
-                      <Badge variant="information" colorPalette={colorPalette1}>
-                        <LocationIcon />
-                        Seattle Convention Center
-                      </Badge>
-                    </VStack>
-                  </Card.Body>
-                </Card.Root>
-
-                <Card.Root variant="info" colorPalette="yellow">
-                  <Card.Body>
-                    <Heading size="3xl">{Competition2ID}</Heading>
-                    <VStack alignItems="start">
-                      <Badge variant="information" colorPalette={colorPalette2}>
-                        <Flag code={"NZ"} fallback={"NZ"} />
-                        <CountryMap code="NZ" bold /> Auckland
-                      </Badge>
-                      <Badge variant="information" colorPalette={colorPalette2}>
-                        <CompRegoCloseDateIcon />
-                        <Text>Dec 12 - 14, 2025</Text>
-                      </Badge>
-                      <Badge variant="information" colorPalette={colorPalette2}>
-                        <CompetitorsIcon />
-                        300 Competitor Limit
-                      </Badge>
-                      <Badge variant="information" colorPalette={colorPalette2}>
-                        <RegisterIcon />
-                        300 Spots Left
-                      </Badge>
-                      <Badge variant="information" colorPalette={colorPalette2}>
-                        <LocationIcon />
-                        Auckland Netball Centre
-                      </Badge>
-                    </VStack>
-                  </Card.Body>
-                </Card.Root>
-              </SimpleGrid>
+      <Card.Body justifyContent="space-around">
+        <Card.Title display="flex" justifyContent="space-between">
+          Featured Upcoming Competitions
+          <Button variant="outline">View all Competitions</Button>
+        </Card.Title>
+        <SimpleGrid columns={2} rows={1} gap={4}>
+          <Card.Root variant="info" colorPalette={colorPalette1}>
+            <Card.Body>
+              <Heading size="3xl">{Competition1ID}</Heading>
+              <VStack alignItems="start">
+                <Badge variant="information" colorPalette={colorPalette1}>
+                  <Flag code={"US"} fallback={"US"} />
+                  <CountryMap code="US" bold /> Seattle
+                </Badge>
+                <Badge variant="information" colorPalette={colorPalette1}>
+                  <CompRegoCloseDateIcon />
+                  <Text>Jul 3 - 6, 2025</Text>
+                </Badge>
+                <Badge variant="information" colorPalette={colorPalette1}>
+                  <CompetitorsIcon />
+                  2000 Competitor Limit
+                </Badge>
+                <Badge variant="information" colorPalette={colorPalette1}>
+                  <RegisterIcon />0 Spots Left
+                </Badge>
+                <Badge variant="information" colorPalette={colorPalette1}>
+                  <LocationIcon />
+                  Seattle Convention Center
+                </Badge>
+              </VStack>
             </Card.Body>
           </Card.Root>
+
+          <Card.Root variant="info" colorPalette="yellow">
+            <Card.Body>
+              <Heading size="3xl">{Competition2ID}</Heading>
+              <VStack alignItems="start">
+                <Badge variant="information" colorPalette={colorPalette2}>
+                  <Flag code={"NZ"} fallback={"NZ"} />
+                  <CountryMap code="NZ" bold /> Auckland
+                </Badge>
+                <Badge variant="information" colorPalette={colorPalette2}>
+                  <CompRegoCloseDateIcon />
+                  <Text>Dec 12 - 14, 2025</Text>
+                </Badge>
+                <Badge variant="information" colorPalette={colorPalette2}>
+                  <CompetitorsIcon />
+                  300 Competitor Limit
+                </Badge>
+                <Badge variant="information" colorPalette={colorPalette2}>
+                  <RegisterIcon />
+                  300 Spots Left
+                </Badge>
+                <Badge variant="information" colorPalette={colorPalette2}>
+                  <LocationIcon />
+                  Auckland Netball Centre
+                </Badge>
+              </VStack>
+            </Card.Body>
+          </Card.Root>
+        </SimpleGrid>
+      </Card.Body>
+    </Card.Root>
   );
 };
 
@@ -395,7 +430,7 @@ const renderBlockGroup = (entry, keyPrefix = "") => {
                 />
               </GridItem>
             );
-        case "CardWithImage":
+          case "CardWithImage":
             return (
               <GridItem key={key} colSpan={columns[i]} display="flex">
                 <CardWithImage
@@ -437,6 +472,8 @@ const renderBlockGroup = (entry, keyPrefix = "") => {
                   image={subEntry.mainImage}
                   colorPalette={subEntry.colorPalette}
                   headingColor={subEntry.headingColor}
+                  textColor={subEntry.textColor}
+                  bgColor={subEntry.bgColor}
                   bgSize={subEntry.bgSize}
                   bgPos={subEntry.bgPos}
                   bgImage={subEntry.bgImage}
@@ -454,7 +491,7 @@ const renderBlockGroup = (entry, keyPrefix = "") => {
                 ></ImageCard>
               </GridItem>
             );
-        case "FeaturedCompetitions":
+          case "FeaturedCompetitions":
             return (
               <GridItem key={key} colSpan={columns[i] || 1} display="flex">
                 <FeaturedCompetitions
@@ -519,6 +556,8 @@ const renderFullBlock = (entry, keyPrefix = "") => {
                 image={subEntry.mainImage}
                 colorPalette={subEntry.colorPalette}
                 headingColor={subEntry.headingColor}
+                textColor={subEntry.textColor}
+                bgColor={subEntry.bgColor}
                 bgSize={subEntry.bgSize}
                 bgPos={subEntry.bgPos}
                 bgImage={subEntry.bgImage}
@@ -533,15 +572,15 @@ const renderFullBlock = (entry, keyPrefix = "") => {
                 colorPalette={subEntry.colorPalette}
               ></ImageCard>
             );
-            case "FeaturedCompetitions":
+          case "FeaturedCompetitions":
             return (
-                <FeaturedCompetitions
-                  key={key}
-                  Competition1ID={subEntry.Competition1ID}
-                  colorPalette1={subEntry.colorPalette1}
-                  Competition2ID={subEntry.Competition2ID}
-                  colorPalette2={subEntry.colorPalette2}
-                ></FeaturedCompetitions>
+              <FeaturedCompetitions
+                key={key}
+                Competition1ID={subEntry.Competition1ID}
+                colorPalette1={subEntry.colorPalette1}
+                Competition2ID={subEntry.Competition2ID}
+                colorPalette2={subEntry.colorPalette2}
+              ></FeaturedCompetitions>
             );
           case "Testimonials":
             return <Testimonials key={key} entry={subEntry}></Testimonials>;

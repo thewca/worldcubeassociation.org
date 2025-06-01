@@ -804,7 +804,54 @@ export interface Home {
               body: string;
               mainImage?: (number | null) | Media;
               colorPalette?: ('blue' | 'red' | 'green' | 'orange' | 'yellow' | 'grey') | null;
-              headingColor?: ('blue' | 'red' | 'green' | 'orange' | 'yellow' | 'grey') | null;
+              bgColor?:
+                | (
+                    | 'darkBlue'
+                    | 'darkRed'
+                    | 'darkGreen'
+                    | 'darkOrange'
+                    | 'darkYellow'
+                    | 'blue'
+                    | 'red'
+                    | 'green'
+                    | 'orange'
+                    | 'yellow'
+                    | 'white'
+                    | 'black'
+                  )
+                | null;
+              headingColor?:
+                | (
+                    | 'darkBlue'
+                    | 'darkRed'
+                    | 'darkGreen'
+                    | 'darkOrange'
+                    | 'darkYellow'
+                    | 'blue'
+                    | 'red'
+                    | 'green'
+                    | 'orange'
+                    | 'yellow'
+                    | 'white'
+                    | 'black'
+                  )
+                | null;
+              textColor?:
+                | (
+                    | 'darkBlue'
+                    | 'darkRed'
+                    | 'darkGreen'
+                    | 'darkOrange'
+                    | 'darkYellow'
+                    | 'blue'
+                    | 'red'
+                    | 'green'
+                    | 'orange'
+                    | 'yellow'
+                    | 'white'
+                    | 'black'
+                  )
+                | null;
               bgImage?: (number | null) | Media;
               bgSize?: number | null;
               bgPos?: string | null;
@@ -888,7 +935,54 @@ export interface Home {
                     body: string;
                     mainImage?: (number | null) | Media;
                     colorPalette?: ('blue' | 'red' | 'green' | 'orange' | 'yellow' | 'grey') | null;
-                    headingColor?: ('blue' | 'red' | 'green' | 'orange' | 'yellow' | 'grey') | null;
+                    bgColor?:
+                      | (
+                          | 'darkBlue'
+                          | 'darkRed'
+                          | 'darkGreen'
+                          | 'darkOrange'
+                          | 'darkYellow'
+                          | 'blue'
+                          | 'red'
+                          | 'green'
+                          | 'orange'
+                          | 'yellow'
+                          | 'white'
+                          | 'black'
+                        )
+                      | null;
+                    headingColor?:
+                      | (
+                          | 'darkBlue'
+                          | 'darkRed'
+                          | 'darkGreen'
+                          | 'darkOrange'
+                          | 'darkYellow'
+                          | 'blue'
+                          | 'red'
+                          | 'green'
+                          | 'orange'
+                          | 'yellow'
+                          | 'white'
+                          | 'black'
+                        )
+                      | null;
+                    textColor?:
+                      | (
+                          | 'darkBlue'
+                          | 'darkRed'
+                          | 'darkGreen'
+                          | 'darkOrange'
+                          | 'darkYellow'
+                          | 'blue'
+                          | 'red'
+                          | 'green'
+                          | 'orange'
+                          | 'yellow'
+                          | 'white'
+                          | 'black'
+                        )
+                      | null;
                     bgImage?: (number | null) | Media;
                     bgSize?: number | null;
                     bgPos?: string | null;
@@ -972,7 +1066,54 @@ export interface Home {
                           body: string;
                           mainImage?: (number | null) | Media;
                           colorPalette?: ('blue' | 'red' | 'green' | 'orange' | 'yellow' | 'grey') | null;
-                          headingColor?: ('blue' | 'red' | 'green' | 'orange' | 'yellow' | 'grey') | null;
+                          bgColor?:
+                            | (
+                                | 'darkBlue'
+                                | 'darkRed'
+                                | 'darkGreen'
+                                | 'darkOrange'
+                                | 'darkYellow'
+                                | 'blue'
+                                | 'red'
+                                | 'green'
+                                | 'orange'
+                                | 'yellow'
+                                | 'white'
+                                | 'black'
+                              )
+                            | null;
+                          headingColor?:
+                            | (
+                                | 'darkBlue'
+                                | 'darkRed'
+                                | 'darkGreen'
+                                | 'darkOrange'
+                                | 'darkYellow'
+                                | 'blue'
+                                | 'red'
+                                | 'green'
+                                | 'orange'
+                                | 'yellow'
+                                | 'white'
+                                | 'black'
+                              )
+                            | null;
+                          textColor?:
+                            | (
+                                | 'darkBlue'
+                                | 'darkRed'
+                                | 'darkGreen'
+                                | 'darkOrange'
+                                | 'darkYellow'
+                                | 'blue'
+                                | 'red'
+                                | 'green'
+                                | 'orange'
+                                | 'yellow'
+                                | 'white'
+                                | 'black'
+                              )
+                            | null;
                           bgImage?: (number | null) | Media;
                           bgSize?: number | null;
                           bgPos?: string | null;
@@ -1069,7 +1210,54 @@ export interface Home {
               body: string;
               mainImage?: (number | null) | Media;
               colorPalette?: ('blue' | 'red' | 'green' | 'orange' | 'yellow' | 'grey') | null;
-              headingColor?: ('blue' | 'red' | 'green' | 'orange' | 'yellow' | 'grey') | null;
+              bgColor?:
+                | (
+                    | 'darkBlue'
+                    | 'darkRed'
+                    | 'darkGreen'
+                    | 'darkOrange'
+                    | 'darkYellow'
+                    | 'blue'
+                    | 'red'
+                    | 'green'
+                    | 'orange'
+                    | 'yellow'
+                    | 'white'
+                    | 'black'
+                  )
+                | null;
+              headingColor?:
+                | (
+                    | 'darkBlue'
+                    | 'darkRed'
+                    | 'darkGreen'
+                    | 'darkOrange'
+                    | 'darkYellow'
+                    | 'blue'
+                    | 'red'
+                    | 'green'
+                    | 'orange'
+                    | 'yellow'
+                    | 'white'
+                    | 'black'
+                  )
+                | null;
+              textColor?:
+                | (
+                    | 'darkBlue'
+                    | 'darkRed'
+                    | 'darkGreen'
+                    | 'darkOrange'
+                    | 'darkYellow'
+                    | 'blue'
+                    | 'red'
+                    | 'green'
+                    | 'orange'
+                    | 'yellow'
+                    | 'white'
+                    | 'black'
+                  )
+                | null;
               bgImage?: (number | null) | Media;
               bgSize?: number | null;
               bgPos?: string | null;
@@ -1249,7 +1437,9 @@ export interface HomeSelect<T extends boolean = true> {
                           body?: T;
                           mainImage?: T;
                           colorPalette?: T;
+                          bgColor?: T;
                           headingColor?: T;
+                          textColor?: T;
                           bgImage?: T;
                           bgSize?: T;
                           bgPos?: T;
@@ -1350,7 +1540,9 @@ export interface HomeSelect<T extends boolean = true> {
                                       body?: T;
                                       mainImage?: T;
                                       colorPalette?: T;
+                                      bgColor?: T;
                                       headingColor?: T;
+                                      textColor?: T;
                                       bgImage?: T;
                                       bgSize?: T;
                                       bgPos?: T;
@@ -1451,7 +1643,9 @@ export interface HomeSelect<T extends boolean = true> {
                                                   body?: T;
                                                   mainImage?: T;
                                                   colorPalette?: T;
+                                                  bgColor?: T;
                                                   headingColor?: T;
+                                                  textColor?: T;
                                                   bgImage?: T;
                                                   bgSize?: T;
                                                   bgPos?: T;
@@ -1562,7 +1756,9 @@ export interface HomeSelect<T extends boolean = true> {
                           body?: T;
                           mainImage?: T;
                           colorPalette?: T;
+                          bgColor?: T;
                           headingColor?: T;
+                          textColor?: T;
                           bgImage?: T;
                           bgSize?: T;
                           bgPos?: T;
