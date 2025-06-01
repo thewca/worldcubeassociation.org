@@ -532,8 +532,15 @@ const customConfig = defineConfig({
           variant: {
             achievement: {
               bg: "transparent",
-              color: "fg",
+              color: "colorPalette.fg",
               fontWeight: "bold",
+              gap: "2",
+              mr: "2.5",
+            },
+            information: {
+              bg: "transparent",
+              color: "colorPalette.contrast",
+              fontWeight: "light",
               gap: "2",
               mr: "2.5",
             },
@@ -547,6 +554,21 @@ const customConfig = defineConfig({
               svg: {
                 height: "1.25em",
                 width: "1.25em",
+              },
+            },
+          },
+          {
+            variant: "information",
+            css: {
+              textStyle: "md", //needed to supercede the default textStyle
+              svg: {
+                height: "1.1em",
+                width: "1.1em",
+              },
+              img: {
+                height: "1.1em",
+                width: "auto",
+                borderRadius: "3px",
               },
             },
           },
@@ -649,6 +671,73 @@ const customConfig = defineConfig({
           },
         ],
       },
+      checkboxCard: {
+        variants: {
+          size: {
+            xs: {
+              root: {
+                textStyle: "xs",
+              },
+              control: {
+                padding: "1",
+                gap: "0.5",
+              },
+              addon: {
+                px: "1.5",
+                py: "0.5",
+                borderTopWidth: "1px",
+              },
+              indicator: {
+                boxSize: "2",
+              },
+            },
+          },
+        },
+      },
+      segmentGroup: {
+        variants: {
+          variant: {
+            inset: {
+              root: {
+                bg: "transparent",
+              },
+              item: {
+                px: "5",
+                py: "2.5",
+                fontWeight: "600",
+                border: "2px solid",
+                borderColor: "colorPalette.solid",
+                color: "colorPalette.highContrast",
+                bg: "transparent",
+                borderRadius: "0",
+                transition: "all 250ms",
+                cursor: "pointer",
+                _first: {
+                  borderTopLeftRadius: "5px",
+                  borderBottomLeftRadius: "5px",
+                  borderRight: "0px",
+                },
+                _last: {
+                  borderTopRightRadius: "5px",
+                  borderBottomRightRadius: "5px",
+                  borderLeft: "0px",
+                },
+                _checked: {
+                  bg: "colorPalette.solid",
+                  color: "colorPalette.contrast",
+                  boxShadow: "inset rgba(0, 0, 0, 0.25) 0 0 5px 0",
+                },
+                "&:not([data-state=checked]):hover": {
+                  bg: "colorPalette.fg/30",
+                },
+              },
+              indicator: {
+                display: "none",
+              },
+            },
+          },
+        },
+      },
       accordion: {
         variants: {
           variant: {
@@ -707,6 +796,11 @@ const customConfig = defineConfig({
                 width: "1%",
                 whiteSpace: "noWrap",
                 padding: "0",
+                "& img": {
+                  height: "1.1em",
+                  width: "2.8em",
+                  borderRadius: "3px",
+                },
               },
               row: {
                 "& td": {
@@ -750,6 +844,7 @@ const customConfig = defineConfig({
                 borderRadius: "md",
                 shadow: "{shadows.wca}",
                 height: "max-content",
+                borderRadius: "xl",
               },
             },
           },
@@ -782,6 +877,29 @@ const customConfig = defineConfig({
               },
               content: {
                 flexGrow: "1",
+              },
+            },
+            slider: {
+              root: {
+                width: "100%",
+              },
+              content: {
+                _vertical: {
+                  ps: "0px",
+                },
+                width: "100%",
+              },
+              trigger: {
+                p: "0px",
+                width: "1rem",
+                height: "1rem",
+                bg: "white/50",
+                cursor: "pointer",
+                minWidth: "1rem",
+                borderRadius: "0.5rem",
+                _selected: {
+                  bg: "white",
+                },
               },
             },
           },

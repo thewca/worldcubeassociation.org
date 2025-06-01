@@ -9,6 +9,7 @@ import { authConfig } from "@/auth.config";
 
 import { Media } from "./collections/Media";
 import { Nav } from "@/globals/Nav";
+import { Home } from "@/globals/Home";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -21,7 +22,7 @@ export default buildConfig({
     },
   },
   collections: [Media],
-  globals: [Nav],
+  globals: [Nav, Home],
   secret: process.env.PAYLOAD_SECRET || "",
   typescript: {
     outputFile: path.resolve(dirname, "payload-types.ts"),

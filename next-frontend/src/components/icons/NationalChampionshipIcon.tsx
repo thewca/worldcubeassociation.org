@@ -20,7 +20,7 @@ const NationalChampionshipIcon = createIcon({
 });
 
 const NationalChampionshipIconPreview = () => {
-  return <NationalChampionshipIcon size="lg" />;
+  return <NationalChampionshipIcon size="lg" boxSize="1em" />;
 };
 
 export default NationalChampionshipIconPreview;
