@@ -640,7 +640,7 @@ RSpec.describe User do
       expect(competitor.can_edit_registration?(registration)).to be true
     end
 
-    it "unless their registration is accepted" do
+    it "unless their registration is accepted and allow_registration_edits is false", :tag do
       registration.competing_status = Registrations::Helper::STATUS_ACCEPTED
       expect(competitor.can_edit_registration?(registration)).to be false
     end
