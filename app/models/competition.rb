@@ -1150,8 +1150,8 @@ class Competition < ApplicationRecord
     start_date.present? && start_date > Date.new(2021, 6, 24)
   end
 
-  def can_edit_accepted_registrations?
-    self.allow_registration_edits?
+  def cannot_edit_accepted_registrations?
+    !self.allow_registration_edits?
   end
 
   # can registration edits be done right now
