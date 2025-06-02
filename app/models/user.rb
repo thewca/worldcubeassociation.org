@@ -1182,12 +1182,17 @@ class User < ApplicationRecord
   end
 
   def self.search(query, params: {})
-    users = Person.includes(:user).current
-    # We can't search by email on the 'Person' table
-    search_by_email = false
-    unless ActiveRecord::Type::Boolean.new.cast(params[:persons_table])
+    search_by_email = ActiveRecord::Type::Boolean.new.cast(params[:email])
+    admin_search = ActiveRecord::Type::Boolean.new.cast(params[:adminSearch])
+    searching_persons_table = ActiveRecord::Type::Boolean.new.cast(params[:persons_table])
+
+    return User.where(email: query) if admin_search && search_by_email
+
+    if searching_persons_table
+      users = Person.includes(:user).current
+      search_by_email = false # We can't search by email on the 'Person' table
+    else
       users = User.confirmed_email.not_dummy_account
-      search_by_email = ActiveRecord::Type::Boolean.new.cast(params[:email])
 
       users = users.where(id: self.staff_delegate_ids) if ActiveRecord::Type::Boolean.new.cast(params[:only_staff_delegates])
 
