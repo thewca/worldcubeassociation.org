@@ -1377,10 +1377,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime@npm:^7.10.4, @babel/runtime@npm:^7.10.5, @babel/runtime@npm:^7.12.5, @babel/runtime@npm:^7.20.13, @babel/runtime@npm:^7.26.7, @babel/runtime@npm:^7.27.1":
+"@babel/runtime@npm:^7.10.4, @babel/runtime@npm:^7.10.5, @babel/runtime@npm:^7.12.5, @babel/runtime@npm:^7.20.13, @babel/runtime@npm:^7.26.7":
   version: 7.27.1
   resolution: "@babel/runtime@npm:7.27.1"
   checksum: 10c0/530a7332f86ac5a7442250456823a930906911d895c0b743bf1852efc88a20a016ed4cd26d442d0ca40ae6d5448111e02a08dd638a4f1064b47d080e2875dc05
+  languageName: node
+  linkType: hard
+
+"@babel/runtime@npm:^7.27.4":
+  version: 7.27.4
+  resolution: "@babel/runtime@npm:7.27.4"
+  checksum: 10c0/ca99e964179c31615e1352e058cc9024df7111c829631c90eec84caba6703cc32acc81503771847c306b3c70b815609fe82dde8682936debe295b0b283b2dc6e
   languageName: node
   linkType: hard
 
@@ -10162,7 +10169,7 @@ __metadata:
     "@babel/plugin-transform-runtime": "npm:^7.27.4"
     "@babel/preset-env": "npm:^7.27.2"
     "@babel/preset-react": "npm:^7.27.1"
-    "@babel/runtime": "npm:^7.27.1"
+    "@babel/runtime": "npm:^7.27.4"
     "@cubing/icons": "npm:^3.0.4"
     "@fullcalendar/core": "npm:^6.1.17"
     "@fullcalendar/interaction": "npm:^6.1.17"
