@@ -1,5 +1,3 @@
-import React from "react";
-
 import AboutTheRegulationsIcon from "@/components/icons/AboutTheRegulationsIcon";
 import AboutTheWcaIcon from "@/components/icons/AboutTheWcaIcon";
 import AdminResultsIcon from "@/components/icons/AdminResultsIcon";
