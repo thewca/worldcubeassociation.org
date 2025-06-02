@@ -63,3 +63,9 @@ runs:
         tag: ${{ env.MONOLITH_TAG }}
         build_tag: ${{ inputs.build_tag }}
         environment: ${{ inputs.environment }}
+    - name: Build and push main next Image
+      uses: ./.github/actions/build-js-image
+      with:
+        target: runner
+        registry: ${{ inputs.registry }}
+        tag: ${{inputs.environment}}-nextjs

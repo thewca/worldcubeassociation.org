@@ -1,4 +1,4 @@
-name: 'Build and Push Docker Image'
+name: 'Build and Push Ruby Docker Image'
 description: 'A custom action to build and push our Docker images with environment-specific configurations.'
 inputs:
   target:
