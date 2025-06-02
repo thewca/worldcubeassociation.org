@@ -5749,10 +5749,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"flag-icons@npm:^7.3.2":
-  version: 7.3.2
-  resolution: "flag-icons@npm:7.3.2"
-  checksum: 10c0/4ca9698bd13f004311225a3d87d23f59e2020496a055fbea8a2f72642775c0b0ed0f6f87cb00dd7e7a7cfce0328e4cd2e0dc89dc0ee26cd334d334956d068fd5
+"flag-icons@npm:^7.5.0":
+  version: 7.5.0
+  resolution: "flag-icons@npm:7.5.0"
+  checksum: 10c0/c81e20c1751833882c95633349ba7e76e74d7d86c317e4ac2bac86589325430a3181913453fa3824edabaa1a84469f7ae4fd50c388027079048a5c3be438874a
   languageName: node
   linkType: hard
 
@@ -10137,7 +10137,7 @@ __metadata:
     eslint-plugin-react-hooks: "npm:^5.2.0"
     expose-loader: "npm:^5.0.1"
     file-loader: "npm:^6.2.0"
-    flag-icons: "npm:^7.3.2"
+    flag-icons: "npm:^7.5.0"
     glob: "npm:^11.0.2"
     i18n-js: "npm:^4.5.1"
     jquery: "npm:3.7.1"
