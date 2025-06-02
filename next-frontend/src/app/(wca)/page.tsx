@@ -15,7 +15,7 @@ import {
 } from "@chakra-ui/react";
 import Link from "next/link";
 
-import { iconMap, IconName } from "@/components/icons/iconMap";
+import { iconMap } from "@/components/icons/iconMap";
 
 export default function Home() {
   const { data: session } = useSession();
@@ -65,17 +65,15 @@ export default function Home() {
               WCA Icon Gallery
             </Text>
           </Box>
-          <SimpleGrid columns={{ base: 2, sm: 3, md: 4, lg: 6 }} spacing={6}>
-            {(Object.entries(iconMap) as [IconName, React.ComponentType][]).map(
-              ([iconName, IconComponent], index) => (
-                <Box textAlign="center" key={index}>
-                  <IconComponent w="6" h="6" />
-                  <Text mt="2" fontSize="sm">
-                    {iconName}
-                  </Text>
-                </Box>
-              ),
-            )}
+          <SimpleGrid columns={{ base: 2, sm: 3, md: 4, lg: 6 }}>
+            {Object.entries(iconMap).map(([iconName, IconComponent], index) => (
+              <Box textAlign="center" key={index}>
+                <IconComponent w="6" h="6" />
+                <Text mt="2" fontSize="sm">
+                  {iconName}
+                </Text>
+              </Box>
+            ))}
           </SimpleGrid>
         </Card.Body>
       </Card.Root>

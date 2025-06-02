@@ -207,7 +207,7 @@ export type IconName =
   | "SkewbIcon"
   | "Sq1Icon";
 
-export const iconMap: Record<IconName, React.ComponentType> = {
+export const iconMap = {
   "About the Regulations": AboutTheRegulationsIcon,
   "About the WCA": AboutTheWcaIcon,
   "Admin Results": AdminResultsIcon,
