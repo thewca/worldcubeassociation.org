@@ -55,6 +55,7 @@ class Api::V1::ApiController < ActionController::API
   def test_snake_case
     return head :not_found if Rails.env.production? && EnvConfig.WCA_LIVE_SITE?
 
+    puts params.inspect
     params.delete(:action)
     params.delete(:api) # TODO: ChatGPT claims I shouldn't be getting this key - but for now I'm just trying to get the tests passing
     params.delete(:controller)
@@ -62,7 +63,8 @@ class Api::V1::ApiController < ActionController::API
   end
 
   private def snake_case_params!
-    # TODO: Apparently if the endpoint gets given a JSON array, it puts it in a _json param - I want to research this more, for now, this gets tests passing
+    # If Rails receives a JSON array (ie, started with [] instead of {}), it puts it in a `_json` parameter
+    # I wasn't able to find this behaviour documented/discussed anywhere, but asserts it is normal behaviour
     if params[:_json].is_a?(Array)
       params[:_json].map! { it.deep_transform_keys(&:underscore) }
     else
