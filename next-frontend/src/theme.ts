@@ -650,6 +650,7 @@ const customConfig = defineConfig({
         ],
       },
       accordion: {
+        slots: [],
         variants: {
           variant: {
             subtle: {
@@ -692,6 +693,7 @@ const customConfig = defineConfig({
         },
       },
       table: {
+        slots: [],
         variants: {
           variant: {
             results: {
@@ -743,6 +745,7 @@ const customConfig = defineConfig({
         },
       },
       drawer: {
+        slots: [],
         variants: {
           variant: {
             competitionInfo: {
@@ -756,6 +759,7 @@ const customConfig = defineConfig({
         },
       },
       tabs: {
+        slots: [],
         variants: {
           variant: {
             enclosed: {
