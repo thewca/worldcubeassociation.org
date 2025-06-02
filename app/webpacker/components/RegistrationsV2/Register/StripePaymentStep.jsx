@@ -68,13 +68,7 @@ export default function Wrapper({
       { stripePromise && (
         <Elements
           stripe={stripePromise}
-          options={{
-            amount: data?.api_amounts.stripe ?? initialAmount,
-            currency: competitionInfo.currency_code.toLowerCase(),
-            mode: 'payment',
-            onLoadError: (error) => {
-            }
-          }}
+          options={{ amount: data?.api_amounts.stripe ?? initialAmount, currency: competitionInfo.currency_code.toLowerCase(), mode: 'payment' }}
         >
           <PaymentStep
             setIsoDonationAmount={setIsoDonationAmount}
@@ -99,7 +93,6 @@ function PaymentStep({
   displayAmount,
   conversionFetching,
 }) {
-
   const stripe = useStripe();
   const elements = useElements();
   const dispatch = useDispatch();
