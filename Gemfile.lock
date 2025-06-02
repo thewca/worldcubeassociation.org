@@ -104,7 +104,7 @@ GEM
       activemodel (= 7.2.2.1)
       activesupport (= 7.2.2.1)
       timeout (>= 0.4.0)
-    activerecord-import (2.1.0)
+    activerecord-import (2.2.0)
       activerecord (>= 4.2)
     activestorage (7.2.2.1)
       actionpack (= 7.2.2.1)
@@ -1118,7 +1118,7 @@ CHECKSUMS
   activejob (7.2.2.1) sha256=f2f95a8573b394aa4f7c24843f0c4a6065c073a5c64d6f15ecd98d98c2c23e5b
   activemodel (7.2.2.1) sha256=8398861f9ee2c4671a8357ab39e9b38a045fd656f6685a3dd5890c2419dbfdaf
   activerecord (7.2.2.1) sha256=79a31f71c32d5138717c2104e0ff105f5d82922247c85bdca144f2720e67fab9
-  activerecord-import (2.1.0) sha256=7b1bc586c4b636e125c18f533c9ac4421dd2dbac8f4865dbf576382a338c2c94
+  activerecord-import (2.2.0) sha256=f8ca99b196e50775723d1f1d192c379f656378dc9f5628240992a0d78807fa4b
   activestorage (7.2.2.1) sha256=b4ec35ff94d4d6656ee6952ce439c3f80e249552d49fd2d3996ee53880c5525f
   activestorage-validator (0.4.0) sha256=11313b7e3be8e6feeda39db3abec3c0a9bc7ccc5d0e9610fa6e37073de764a60
   activesupport (7.2.2.1) sha256=842bcbf8a92977f80fb4750661a237cf5dd4fdd442066b3c35e88afb488647f5
