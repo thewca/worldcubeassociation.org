@@ -36,7 +36,7 @@ class Api::V1::ApiController < ActionController::API
       payload.map { camelize_keys(it) }
     when Hash
       payload.transform_keys { it.to_s.camelize(:lower) }
-         .transform_values { camelize_keys(it) }
+             .transform_values { camelize_keys(it) }
     else
       payload
     end
