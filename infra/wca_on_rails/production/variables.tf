@@ -98,6 +98,9 @@ variable "shared" {
     https_listener: object({
       arn: string
     })
+    nextjs-production: object({
+      arn: string
+    })
     pma_production: object({
       arn: string
     })

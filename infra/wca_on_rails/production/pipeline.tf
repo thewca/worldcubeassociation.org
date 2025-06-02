@@ -121,6 +121,51 @@ resource "aws_codebuild_project" "build" {
   }
 }
 
+resource "aws_iam_role" "codebuild_role" {
+  name = "${var.name_prefix}-codebuild-redeploy-nextjs-role"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Principal = {
+          Service = "codebuild.amazonaws.com"
+        }
+        Action = "sts:AssumeRole"
+      }
+    ]
+  })
+}
+
+resource "aws_iam_policy" "codebuild_redeploy_nextjs" {
+  name = "${var.name_prefix}-codebuild-redeploy-nextjs-policy"
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "ecs:UpdateService",
+          "ecs:DescribeServices",
+          "ecs:DescribeClusters"
+        ]
+        Resource = "*"
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "logs:CreateLogGroup",
+          "logs:CreateLogStream",
+          "logs:PutLogEvents"
+        ]
+        Resource = "*"
+      }
+    ]
+  })
+}
+
 data "aws_iam_policy_document" "codedeploy_assume_role_policy" {
   statement {
     principals {
@@ -217,6 +262,29 @@ resource "aws_s3_bucket_lifecycle_configuration" "this" {
   }
 }
 
+resource "aws_codebuild_project" "redeploy_nextjs" {
+  name          = "${var.name_prefix}-redeploy-nextjs"
+  service_role  = aws_iam_role.codebuild_role.arn
+
+  environment {
+    compute_type    = "BUILD_GENERAL1_SMALL"
+    image           = "aws/codebuild/standard:6.0"
+    type            = "LINUX_CONTAINER"
+  }
+
+  source {
+    type      = "NO_SOURCE"
+    buildspec = <<EOF
+version: 0.2
+
+phases:
+  build:
+    commands:
+      - aws ecs update-service --cluster ${var.shared.ecs_cluster.name} --service ${var.nextjs_ecs_service_name} --force-new-deployment
+EOF
+  }
+}
+
 resource "aws_codepipeline" "this" {
   name     = var.name_prefix
   role_arn = aws_iam_role.codepipeline_role.arn
@@ -260,6 +328,26 @@ resource "aws_codepipeline" "this" {
       configuration = {
         ProjectName = aws_codebuild_project.build.name
       }
+    }
+  }
+
+  stage {
+    name = "redeploy-nextjs"
+
+    action {
+      name             = "redeploy-nextjs"
+      category         = "Build"
+      owner            = "AWS"
+      provider         = "CodeBuild"
+      version          = "1"
+      input_artifacts  = ["build_output"]
+      output_artifacts = [] # No output, just triggering update
+
+      configuration = {
+        ProjectName = aws_codebuild_project.redeploy_nextjs.name
+      }
+
+      run_order = 1
     }
   }
 
