@@ -279,7 +279,7 @@ RSpec.describe Api::V0::ApiController, :clean_db_with_truncation do
         expect(response).to have_http_status :ok
         json = response.parsed_body
 
-        expect(json['me']['delegate_status']).to be nil
+        expect(json['me']['delegate_status']).to be_nil
         expect(json['me']['teams'].length).to eq 2
         team = json['me']['teams'].find { |t| t['friendly_id'] == 'wrc' }
         expect(team['leader']).to be false
@@ -326,10 +326,10 @@ RSpec.describe Api::V0::ApiController, :clean_db_with_truncation do
         expect(json['me']['country_iso2']).to eq("US")
         expect(json['me']['gender']).to eq("m")
 
-        expect(json['me']['dob']).to be(nil)
-        expect(json['me']['email']).to be(nil)
+        expect(json['me']['dob']).to be_nil
+        expect(json['me']['email']).to be_nil
 
-        expect(json['me']['delegate_status']).to be(nil)
+        expect(json['me']['delegate_status']).to be_nil
         expect(json['me']['teams']).to eq([])
       end
 
@@ -340,7 +340,7 @@ RSpec.describe Api::V0::ApiController, :clean_db_with_truncation do
         expect(response).to have_http_status :ok
         json = response.parsed_body
         expect(json['me']['dob']).to eq("1987-12-04")
-        expect(json['me']['email']).to be(nil)
+        expect(json['me']['email']).to be_nil
       end
 
       it 'can request email scope' do
@@ -491,7 +491,7 @@ RSpec.describe Api::V0::ApiController, :clean_db_with_truncation do
     end
   end
 
-  describe 'GET #user_qualification_data', :focus do
+  describe 'GET #user_qualification_data' do
     it 'returns empty JSON if user has never competed' do
       user = create(:user)
       get :user_qualification_data, params: { user_id: user.id }

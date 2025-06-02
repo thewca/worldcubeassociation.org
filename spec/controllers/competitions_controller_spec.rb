@@ -20,9 +20,9 @@ RSpec.describe CompetitionsController do
       it '404s when competition is not visible' do
         competition.update_column(:show_at_all, false)
 
-        expect {
+        expect do
           get :show, params: { id: competition.id }
-        }.to raise_error(ActionController::RoutingError)
+        end.to raise_error(ActionController::RoutingError)
       end
     end
   end
@@ -98,11 +98,11 @@ RSpec.describe CompetitionsController do
     let(:organizer) { create(:user) }
     let(:admin) { create(:admin) }
     let!(:my_competition) { create(:competition, :confirmed, latitude: 10.0, longitude: 10.0, organizers: [organizer], starts: 1.week.ago) }
-    let!(:other_competition) {
+    let!(:other_competition) do
       create(
         :competition, :with_delegate, :with_valid_schedule, latitude: 10.005, longitude: 10.005, starts: 4.days.ago, registration_close: 5.days.ago
       )
-    }
+    end
 
     context 'when signed in as an organizer' do
       before :each do
@@ -225,7 +225,7 @@ RSpec.describe CompetitionsController do
         # confirmed, and results_posted_at attributes.
         expect(new_comp.show_at_all).to be false
         expect(new_comp.confirmed?).to be false
-        expect(new_comp.results_posted_at).to be nil
+        expect(new_comp.results_posted_at).to be_nil
         # We don't want to clone its dates.
         expect(new_comp.start_date).to be_nil
         expect(new_comp.end_date).to be_nil
@@ -512,7 +512,7 @@ RSpec.describe CompetitionsController do
       it "can confirm a competition that is having advancement conditions" do
         competition.update(start_date: 29.days.from_now, end_date: 29.days.from_now)
         competition.competition_events[0].rounds.destroy_all!
-        competition.competition_events[0].rounds.create!(
+        round_one = competition.competition_events[0].rounds.create!(
           format: competition.competition_events[0].event.preferred_formats.first.format,
           number: 1,
           advancement_condition: AdvancementConditions::RankingCondition.new(4),
@@ -526,10 +526,19 @@ RSpec.describe CompetitionsController do
         )
         start_time = Time.zone.local_to_utc(competition.start_time)
         end_time = start_time
-        room = competition.competition_venues.last.venue_rooms.first
+        room = competition.competition_venues.last.venue_rooms.first.reload
         room.schedule_activities.create!(
           wcif_id: 5,
           name: "Great round",
+          round: round_one,
+          activity_code: round_one.wcif_id,
+          start_time: start_time.change(hour: 10, min: 0, sec: 0).iso8601,
+          end_time: end_time.change(hour: 10, min: 30, sec: 0).iso8601,
+        )
+        room.schedule_activities.create!(
+          wcif_id: 6,
+          name: "Great round",
+          round: round_two,
           activity_code: round_two.wcif_id,
           start_time: start_time.change(hour: 10, min: 30, sec: 0).iso8601,
           end_time: end_time.change(hour: 11, min: 0, sec: 0).iso8601,
@@ -921,8 +930,8 @@ RSpec.describe CompetitionsController do
       it 'announces and expects organizers to receive a notification email' do
         sign_in wcat_member
         competition.update(start_date: "2011-12-04", end_date: "2011-12-05")
-        expect(competition.announced_at).to be nil
-        expect(competition.announced_by).to be nil
+        expect(competition.announced_at).to be_nil
+        expect(competition.announced_by).to be_nil
         expect(CompetitionsMailer).to receive(:notify_organizer_of_announced_competition).with(competition, competition.organizers.last).and_call_original
         expect do
           put :announce, params: { competition_id: competition }
@@ -1029,9 +1038,9 @@ RSpec.describe CompetitionsController do
       it 'does not allow regular user to use organiser reg close button' do
         comp_with_full_reg = create(:competition, :registration_open, competitor_limit_enabled: true, competitor_limit: 1, competitor_limit_reason: "we have a tiny venue")
         create(:registration, :accepted, :newcomer, competition: comp_with_full_reg)
-        expect {
+        expect do
           put :close_full_registration, params: { competition_id: comp_with_full_reg }
-        }.to raise_error(ActionController::RoutingError)
+        end.to raise_error(ActionController::RoutingError)
         expect(comp_with_full_reg.reload.registration_close).to be > Time.now
       end
     end
@@ -1050,8 +1059,8 @@ RSpec.describe CompetitionsController do
           create(:result, person: user.person, competition_id: competition.id, event_id: "333")
         end
 
-        expect(competition.results_posted_at).to be nil
-        expect(competition.results_posted_by).to be nil
+        expect(competition.results_posted_at).to be_nil
+        expect(competition.results_posted_by).to be_nil
         expect(CompetitionsMailer).to receive(:notify_users_of_results_presence).and_call_original.exactly(4).times
         expect do
           post :post_results, params: { id: competition }
@@ -1070,7 +1079,7 @@ RSpec.describe CompetitionsController do
           create(:result, person: user.person, competition_id: competition.id, event_id: "333")
         end
 
-        expect(CompetitionsMailer).to receive(:notify_users_of_id_claim_possibility).and_call_original.exactly(2).times
+        expect(CompetitionsMailer).to receive(:notify_users_of_id_claim_possibility).and_call_original.twice
         expect do
           post :post_results, params: { id: competition }
         end.to change(enqueued_jobs, :size).by(2)
@@ -1298,9 +1307,9 @@ RSpec.describe CompetitionsController do
       before { sign_in create :user }
 
       it 'does not allow access' do
-        expect {
+        expect do
           get :edit_events, params: { id: competition.id }
-        }.to raise_error(ActionController::RoutingError)
+        end.to raise_error(ActionController::RoutingError)
       end
     end
   end
@@ -1329,9 +1338,9 @@ RSpec.describe CompetitionsController do
       before { sign_in create :user }
 
       it 'does not allow access' do
-        expect {
+        expect do
           get :payment_integration_setup, params: { competition_id: competition }
-        }.to raise_error(ActionController::RoutingError)
+        end.to raise_error(ActionController::RoutingError)
       end
     end
   end
@@ -1350,9 +1359,9 @@ RSpec.describe CompetitionsController do
       before { sign_in create :user }
 
       it 'does not allow access' do
-        expect {
+        expect do
           get :stripe_connect, params: { state: competition }
-        }.to raise_error(ActionController::RoutingError)
+        end.to raise_error(ActionController::RoutingError)
       end
     end
   end
@@ -1371,9 +1380,9 @@ RSpec.describe CompetitionsController do
       before { sign_in create :user }
 
       it 'does not allow access' do
-        expect {
+        expect do
           get :edit_schedule, params: { id: competition }
-        }.to raise_error(ActionController::RoutingError)
+        end.to raise_error(ActionController::RoutingError)
       end
     end
 

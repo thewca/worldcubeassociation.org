@@ -3,12 +3,15 @@
 class Round < ApplicationRecord
   belongs_to :competition_event
   has_one :competition, through: :competition_event
+  delegate :competition_id, to: :competition_event
 
   has_one :event, through: :competition_event
   # CompetitionEvent uses the cached value
   delegate :event, to: :competition_event
 
   has_many :registrations, through: :competition_event
+
+  has_many :inbox_scramble_sets, foreign_key: "matched_round_id", inverse_of: :matched_round, dependent: :nullify
 
   # For the following association, we want to keep it to be able to do some joins,
   # but we definitely want to use cached values when directly using the method.
@@ -30,6 +33,8 @@ class Round < ApplicationRecord
 
   serialize :round_results, coder: RoundResults
   validates_associated :round_results
+
+  has_many :schedule_activities, -> { root_activities }, dependent: :destroy
 
   has_many :wcif_extensions, as: :extendable, dependent: :delete_all
 
@@ -158,18 +163,13 @@ class Round < ApplicationRecord
     if number == 1
       registrations.includes(:user)
                    .accepted
-                   .wcif_ordered
-                   .to_enum
-                   .with_index(1)
-                   .map { |r, registrant_id| r.as_json({ include: [user: { only: [:name], methods: [], include: [] }] }).merge("registration_id" => registrant_id) }
+                   .map { it.as_json({ include: [user: { only: [:name], methods: [], include: [] }] }).merge("registration_id" => r.registrant_id) }
     else
       advancing = previous_round.live_results.where(advancing: true).pluck(:registration_id)
+
       Registration.includes(:user)
-                  .where(id: advancing)
-                  .wcif_ordered
-                  .to_enum
-                  .with_index(1)
-                  .map { |r, registrant_id| r.as_json({ include: [user: { only: [:name], methods: [], include: [] }] }).merge("registration_id" => registrant_id) }
+                  .find(advancing)
+                  .map { it.as_json({ include: [user: { only: [:name], methods: [], include: [] }] }).merge("registration_id" => r.registrant_id) }
     end
   end
 

@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe JobFailureMailer, type: :mailer do
+RSpec.describe JobFailureMailer do
   describe "notify_admin_of_job_failure" do
     let(:job) { JobUtils::WCA_CRONJOBS.sample.new }
     let(:exception) do

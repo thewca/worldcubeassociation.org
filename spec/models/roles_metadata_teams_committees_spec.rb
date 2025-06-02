@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe RolesMetadataTeamsCommittees, type: :model do
+RSpec.describe RolesMetadataTeamsCommittees do
   describe 'at_least_senior_member?' do
     it 'returns false when the role is a WRC member' do
       role = create(:user_role, :active, :wrc_member)
