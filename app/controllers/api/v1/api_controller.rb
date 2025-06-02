@@ -7,13 +7,8 @@ class Api::V1::ApiController < ActionController::API
   # Manually include new Relic because we don't derive from ActionController::Base
   include NewRelic::Agent::Instrumentation::ControllerInstrumentation if Rails.env.production?
 
-  # def render_with_camel_case(json:, **options)
-  #   camelized_json = camelize_keys(json)
-  #   render json: camelized_json, **options
-  # end
-
   skip_before_action :validate_jwt_token
-  def test_action
+  def test_snake_case
     return head :not_found if Rails.env.production? && EnvConfig.WCA_LIVE_SITE?
 
     params.delete(:action)
@@ -31,17 +26,21 @@ class Api::V1::ApiController < ActionController::API
     end
   end
 
-  # private def camelize_keys(obj)
-  #   case obj
-  #   when Array
-  #     obj.map { |v| camelize_keys(v) }
-  #   when Hash
-  #     obj.transform_keys { |k| k.to_s.camelize(:lower) }
-  #        .transform_values { |v| camelize_keys(v) }
-  #   else
-  #     obj
-  #   end
-  # end
+  def render_with_camel_case(payload)
+    render json: camelize_keys(payload)
+  end
+
+  private def camelize_keys(payload)
+    case payload
+    when Array
+      payload.map { camelize_keys(it) }
+    when Hash
+      payload.transform_keys { it.to_s.camelize(:lower) }
+         .transform_values { camelize_keys(it) }
+    else
+      payload
+    end
+  end
 
   def validate_jwt_token
     auth_header = request.headers['Authorization']

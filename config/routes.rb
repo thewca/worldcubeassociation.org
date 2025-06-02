@@ -349,7 +349,8 @@ Rails.application.routes.draw do
     # While this is the start of a v1 API, this is currently not usable by outside developers as
     # getting a JWT token requires you to be logged in through the Website
     namespace :v1 do
-      post "/test_action", to: "api#test_action" if Rails.env.test?
+      post "/test_snake_case", to: "api#test_snake_case" if Rails.env.test?
+      post "/test_camel_case", to: "api#test_camel_case" if Rails.env.test?
       resources :competitions, only: [] do
         resources :registrations, only: %i[index show create update], shallow: true do
           resource :history, only: %i[show], controller: :registration_history

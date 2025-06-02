@@ -10,7 +10,7 @@ RSpec.describe 'v1_api_controller' do
         secondExample: "secondExample",
       }
 
-      post api_v1_test_action_path, params: test_payload, as: :json
+      post api_v1_test_snake_case_path, params: test_payload, as: :json
       expect(response.parsed_body).to eq({
         first_example: "firstExample",
         second_example: "secondExample",
@@ -23,7 +23,7 @@ RSpec.describe 'v1_api_controller' do
         second_example: "secondExample",
       }
 
-      post api_v1_test_action_path, params: test_payload, as: :json
+      post api_v1_test_snake_case_path, params: test_payload, as: :json
       expect(response.parsed_body).to eq({
         first_example: "firstExample",
         second_example: "secondExample",
@@ -36,7 +36,7 @@ RSpec.describe 'v1_api_controller' do
         second_example: "secondExample",
       }
 
-      post api_v1_test_action_path, params: test_payload, as: :json
+      post api_v1_test_snake_case_path, params: test_payload, as: :json
       expect(response.parsed_body).to eq({
         first_example: "firstExample",
         second_example: "secondExample",
@@ -49,7 +49,7 @@ RSpec.describe 'v1_api_controller' do
         { secondExample: "secondExample" },
       ]
 
-      post api_v1_test_action_path, params: test_payload, as: :json
+      post api_v1_test_snake_case_path, params: test_payload, as: :json
       expect(response.parsed_body).to eq({ _json: [
         { first_example: "firstExample" },
         { second_example: "secondExample" },
@@ -62,7 +62,7 @@ RSpec.describe 'v1_api_controller' do
         secondExample: { thirdNest: { fourthNest: 'value2' } },
       }
 
-      post api_v1_test_action_path, params: test_payload, as: :json
+      post api_v1_test_snake_case_path, params: test_payload, as: :json
       expect(response.parsed_body).to eq({
         first_example: { first_nest: { second_nest: 'value1' } },
         second_example: { third_nest: { fourth_nest: 'value2' } },
@@ -75,7 +75,7 @@ RSpec.describe 'v1_api_controller' do
         secondExample: [thirdNest: { fourthNest: 'value2' }, fifthNest: { fifthNestKey: 'fifth nest val' }],
       ]
 
-      post api_v1_test_action_path, params: test_payload, as: :json
+      post api_v1_test_snake_case_path, params: test_payload, as: :json
       expect(response.parsed_body).to eq({ _json: [
         first_example: [first_nest: { second_nest: 'value1' }, another_nest: { another_nest_key: 'another nest val' }],
         second_example: [third_nest: { fourth_nest: 'value2' }, fifth_nest: { fifth_nest_key: 'fifth nest val' }],
@@ -88,7 +88,7 @@ RSpec.describe 'v1_api_controller' do
         secondExample: [thirdNest: { fourthNest: 'value2' }, fifthNest: { fifthNestKey: 'fifth nest val' }],
       }
 
-      post api_v1_test_action_path, params: test_payload, as: :json
+      post api_v1_test_snake_case_path, params: test_payload, as: :json
       expect(response.parsed_body).to eq({
         first_example: [first_nest: { second_nest: 'value1' }, another_nest: { another_nest_key: 'another nest val' }],
         second_example: [third_nest: { fourth_nest: 'value2' }, fifth_nest: { fifth_nest_key: 'fifth nest val' }],
