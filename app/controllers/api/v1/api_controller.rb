@@ -57,7 +57,7 @@ class Api::V1::ApiController < ActionController::API
 
     puts params.inspect
     params.delete(:action)
-    params.delete(:api) # TODO: ChatGPT claims I shouldn't be getting this key - but for now I'm just trying to get the tests passing
+    params.delete(:api)
     params.delete(:controller)
     render json: params.to_unsafe_h
   end
