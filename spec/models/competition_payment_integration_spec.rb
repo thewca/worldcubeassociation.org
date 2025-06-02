@@ -8,8 +8,8 @@ RSpec.describe CompetitionPaymentIntegration do
     let(:integration) { competition.competition_payment_integrations.first }
 
     it 'sets to inactive in the database' do
-      integration.mark_inactive
-      expect(integration.active?).to be(false)
+      integration.mark_inactive!
+      expect(integration.is_inactive?).to be(true)
     end
   end
 end

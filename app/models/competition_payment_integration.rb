@@ -39,7 +39,7 @@ class CompetitionPaymentIntegration < ApplicationRecord
   # 1. Inform the organizer via UI that the account is inactive, and ask them to remove the connected payment integration
   # 2. Organizer removes CPI and connects a new account
   # Thus "inactive" is a placeholder state before a CPI is removed - which is why we have no mark_active functionality
-  def mark_inactive
-    self.update(active: false)
+  def mark_inactive!
+    self.update(is_inactive: true)
   end
 end
