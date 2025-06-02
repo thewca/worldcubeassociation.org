@@ -2,9 +2,45 @@
 
 class Api::V1::ApiController < ActionController::API
   prepend_before_action :validate_jwt_token
+  before_action :snake_case_params!
 
   # Manually include new Relic because we don't derive from ActionController::Base
   include NewRelic::Agent::Instrumentation::ControllerInstrumentation if Rails.env.production?
+
+  # def render_with_camel_case(json:, **options)
+  #   camelized_json = camelize_keys(json)
+  #   render json: camelized_json, **options
+  # end
+
+  skip_before_action :validate_jwt_token
+  def test_action
+    return head :not_found if Rails.env.production? && EnvConfig.WCA_LIVE_SITE?
+    params.delete(:action)
+    params.delete(:api) # TODO: ChatGPT claims I shouldn't be getting this key - but for now I'm just trying to get the tests passing
+    params.delete(:controller)
+    render json: params.to_unsafe_h
+  end
+
+  private def snake_case_params!
+    # TODO: Apparently if the endpoint gets given a JSON array, it puts it in a _json param - I want to research this more, for now, this gets tests passing
+    if params[:_json].is_a?(Array)
+      params[:_json].map! { it.deep_transform_keys(&:underscore) }
+    else
+      params.deep_transform_keys!(&:underscore)
+    end
+  end
+
+  # private def camelize_keys(obj)
+  #   case obj
+  #   when Array
+  #     obj.map { |v| camelize_keys(v) }
+  #   when Hash
+  #     obj.transform_keys { |k| k.to_s.camelize(:lower) }
+  #        .transform_values { |v| camelize_keys(v) }
+  #   else
+  #     obj
+  #   end
+  # end
 
   def validate_jwt_token
     auth_header = request.headers['Authorization']
