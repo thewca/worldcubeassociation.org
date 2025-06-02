@@ -190,7 +190,7 @@ class Competition < ApplicationRecord
   MAX_MARKDOWN_LENGTH = 255
   MAX_COMPETITOR_LIMIT = 5000
   MAX_GUEST_LIMIT = 100
-  NEWCOMER_MONTH_ENABLED = true
+  NEWCOMER_MONTH_ENABLED = false
   NEWCOMER_MONTH_RESERVATIONS_FRACTION = 0.5
 
   validates :competitor_limit_enabled, inclusion: { in: [true, false], if: :competitor_limit_required? }
@@ -1841,18 +1841,16 @@ class Competition < ApplicationRecord
     # NOTE: we're including non-competing registrations so that they can have job
     # assignments as well. These registrations don't have accepted?, but they
     # should appear in the WCIF.
-    persons_wcif = self.registrations.wcif_ordered
+    persons_wcif = self.registrations
                        .includes(includes_associations)
-                       .to_enum
-                       .with_index(1)
-                       .select { |r, _registrant_id| authorized || r.wcif_status == "accepted" }
-                       .map do |r, registrant_id|
-      managers.delete(r.user)
-      r.user.to_wcif(self, r, registrant_id, authorized: authorized)
+                       .select { authorized || it.wcif_status == "accepted" }
+                       .map do
+      managers.delete(it.user)
+      it.user.to_wcif(self, it, authorized: authorized)
     end
     # NOTE: unregistered managers may generate N+1 queries on their personal bests,
     # but that's fine because there are very few of them!
-    persons_wcif + managers.map { |m| m.to_wcif(self, authorized: authorized) }
+    persons_wcif + managers.map { it.to_wcif(self, authorized: authorized) }
   end
 
   def events_wcif

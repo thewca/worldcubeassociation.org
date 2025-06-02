@@ -1,5 +1,6 @@
 import { useCallback } from 'react';
 import _ from 'lodash';
+import { moveArrayItem } from './util';
 
 export function mergeScrambleSets(state, newScrambleFile) {
   const groupedScrambleSets = _.groupBy(
@@ -30,21 +31,16 @@ export function mergeScrambleSets(state, newScrambleFile) {
   );
 }
 
-function moveArrayItem(arr, fromIndex, toIndex) {
-  const movedItem = arr[fromIndex];
+function removeScrambleSet(state, oldScrambleFile) {
+  const withoutScrambleFile = _.mapValues(
+    state,
+    (sets) => sets.filter(
+      (set) => set.external_upload_id !== oldScrambleFile.id,
+    ),
+  );
 
-  const withoutMovedItem = [
-    ...arr.slice(0, fromIndex),
-    // here we want to ignore the moved item itself, so we need the +1
-    ...arr.slice(fromIndex + 1),
-  ];
-
-  return [
-    ...withoutMovedItem.slice(0, toIndex),
-    movedItem,
-    // here we do NOT want to ignore the items that were originally there, so no +1
-    ...withoutMovedItem.slice(toIndex),
-  ];
+  // Throw away state entries for rounds that don't have any sets at all anymore
+  return _.pickBy(withoutScrambleFile, (sets) => sets.length > 0);
 }
 
 export function useDispatchWrapper(originalDispatch, actionVars) {
@@ -60,6 +56,8 @@ export default function scrambleMatchReducer(state, action) {
   switch (action.type) {
     case 'addScrambleFile':
       return mergeScrambleSets(state, action.scrambleFile);
+    case 'removeScrambleFile':
+      return removeScrambleSet(state, action.scrambleFile);
     case 'moveRoundScrambleSet':
       return {
         ...state,
@@ -68,6 +66,17 @@ export default function scrambleMatchReducer(state, action) {
           action.fromIndex,
           action.toIndex,
         ),
+      };
+    case 'moveScrambleSetToRound':
+      return {
+        ...state,
+        [action.fromRoundId]: state[action.fromRoundId].filter(
+          (scrSet) => scrSet.id !== action.scrambleSet.id,
+        ),
+        [action.toRoundId]: [
+          ...state[action.toRoundId],
+          { ...action.scrambleSet },
+        ],
       };
     case 'moveScrambleInSet':
       return {

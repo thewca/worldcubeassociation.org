@@ -27,6 +27,7 @@ export default function FileUpload({
   competitionId,
   initialScrambleFiles,
   addScrambleFile,
+  removeScrambleFile,
 }) {
   const inputRef = useRef();
   const queryClient = useQueryClient();
@@ -114,7 +115,11 @@ export default function FileUpload({
         style={{ display: 'none' }}
         onChange={uploadNewScramble}
       />
-      <ScrambleFileList scrambleFiles={uploadedJsonFiles} isFetching={isFetching} />
+      <ScrambleFileList
+        scrambleFiles={uploadedJsonFiles}
+        isFetching={isFetching}
+        removeScrambleFile={removeScrambleFile}
+      />
     </>
   );
 }
