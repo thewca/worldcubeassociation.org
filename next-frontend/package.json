@@ -33,7 +33,7 @@
     "@chakra-ui/cli": "^3.19.1",
     "@eslint/eslintrc": "^3",
     "@stylistic/eslint-plugin": "^4.4.0",
-    "@tanstack/eslint-plugin-query": "^5.74.7",
+    "@tanstack/eslint-plugin-query": "^5.78.0",
     "@types/node": "^22",
     "@types/react": "^19",
     "@types/react-dom": "^19",
