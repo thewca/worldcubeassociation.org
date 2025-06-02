@@ -7,23 +7,27 @@
     <% cpi = @competition.competition_payment_integrations.first %>
     <% type = CompetitionPaymentIntegration::AVAILABLE_INTEGRATIONS.invert[cpi.connected_account_type] %>
 
-    <p>
-      <%= t("payments.payment_setup.currently_connected_info", provider: t("payments.payment_providers.#{type}")) %>
-    </p>
-    <ul>
-      <% cpi.connected_account.account_details.each do |key, value| %>
-        <li><b><%= t("payments.payment_setup.account_details.#{type}.#{key}") %></b>: <%= value || t('payments.payment_setup.account_details.fallback_not_applicable') %></li>
-      <% end %>
-    </ul>
-    <p>
-      <b><%= t("payments.payment_setup.before_disconnect_warning", provider: t("payments.payment_providers.#{type}")) %></b>
-    </p>
-    <ul>
-      <li><%= link_to(t("payments.payment_setup.external_dashboard", provider: t("payments.payment_providers.#{type}")), CompetitionPaymentIntegration::INTEGRATION_DASHBOARD_URLS[type]) %></li>
-    </ul>
-    <p>
-      <%= t("payments.payment_setup.before_disconnect_info", provider: t("payments.payment_providers.#{type}")) %>
-    </p>
+    <% if cpi.active? %>
+      <p>
+        <%= t("payments.payment_setup.currently_connected_info", provider: t("payments.payment_providers.#{type}")) %>
+      </p>
+      <ul>
+        <% cpi.connected_account.account_details.each do |key, value| %>
+          <li><b><%= t("payments.payment_setup.account_details.#{type}.#{key}") %></b>: <%= value || t('payments.payment_setup.account_details.fallback_not_applicable') %></li>
+        <% end %>
+      </ul>
+      <p>
+        <b><%= t("payments.payment_setup.before_disconnect_warning", provider: t("payments.payment_providers.#{type}")) %></b>
+      </p>
+      <ul>
+        <li><%= link_to(t("payments.payment_setup.external_dashboard", provider: t("payments.payment_providers.#{type}")), CompetitionPaymentIntegration::INTEGRATION_DASHBOARD_URLS[type]) %></li>
+      </ul>
+      <p>
+        <%= t("payments.payment_setup.before_disconnect_info", provider: t("payments.payment_providers.#{type}")) %>
+      </p>
+    <% else %>
+      <p><b><%= t("payments.payment_setup.inactive_account") %></b></p>
+    <% end %>
 
     <% if current_user&.can_admin_competitions? %>
       <%= button_to(
