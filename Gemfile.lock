@@ -887,7 +887,7 @@ GEM
     stringio (3.1.7)
     strip_attributes (2.0.0)
       activemodel (>= 3.0, < 9.0)
-    stripe (15.1.0)
+    stripe (15.2.0)
     superconfig (3.0.0)
     terminal-table (4.0.0)
       unicode-display_width (>= 1.1.1, < 4)
@@ -1445,7 +1445,7 @@ CHECKSUMS
   starburst (2.0.0.rc0)
   stringio (3.1.7) sha256=5b78b7cb242a315fb4fca61a8255d62ec438f58da2b90be66048546ade4507fa
   strip_attributes (2.0.0) sha256=7f3c914c9562043fd13b13981d7780d93dcaa2d8c34a542860f32f99e1671a41
-  stripe (15.1.0) sha256=72ec4bacf753f93978e98cb72723f54d643a993eaa6b72a247ec759f1db0480b
+  stripe (15.2.0) sha256=6e929f66b9a57d5c3e3db77c59d843cfe95c3256d5882e9205b1cfc9400d850a
   superconfig (3.0.0) sha256=2f89acd3635ecf8783fcc881b3768ec4b088987f1d4113351f1c9810bba22133
   terminal-table (4.0.0) sha256=f504793203f8251b2ea7c7068333053f0beeea26093ec9962e62ea79f94301d2
   terser (1.2.5) sha256=f1e49770b61af6897770217f87c6574d5e6f81881712fb0fc6a609bab0ccbfa7
