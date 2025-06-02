@@ -4,9 +4,11 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "check:types": "tsc --noEmit",
     "build": "next build",
     "start": "next start",
     "build:types": "openapi-typescript public/wcaAPI.yaml -o src/lib/wca/wcaSchema.ts",
+    "chakra:types": "chakra typegen ./src/theme.ts",
     "lint": "next lint",
     "lint:fix": "next lint --fix"
   },
