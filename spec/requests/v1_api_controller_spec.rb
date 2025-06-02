@@ -50,10 +50,10 @@ RSpec.describe 'v1_api_controller' do
       ]
 
       post api_v1_test_action_path, params: test_payload, as: :json
-      expect(response.parsed_body).to eq({_json: [
+      expect(response.parsed_body).to eq({ _json: [
         { first_example: "firstExample" },
         { second_example: "secondExample" },
-      ]}.deep_stringify_keys)
+      ] }.deep_stringify_keys)
     end
 
     it 'keys in a nested hash get converted' do
@@ -71,27 +71,27 @@ RSpec.describe 'v1_api_controller' do
 
     it 'deeply nested array of hashes/arrays keys all get converted' do
       test_payload = [
-        firstExample: [ firstNest: { secondNest: 'value1' }, anotherNest: { anotherNestKey: 'another nest val' } ],
-        secondExample: [ thirdNest: { fourthNest: 'value2' }, fifthNest: { fifthNestKey: 'fifth nest val' } ],
+        firstExample: [firstNest: { secondNest: 'value1' }, anotherNest: { anotherNestKey: 'another nest val' }],
+        secondExample: [thirdNest: { fourthNest: 'value2' }, fifthNest: { fifthNestKey: 'fifth nest val' }],
       ]
 
       post api_v1_test_action_path, params: test_payload, as: :json
-      expect(response.parsed_body).to eq({_json: [
-        first_example: [ first_nest: { second_nest: 'value1' }, another_nest: { another_nest_key: 'another nest val' } ],
-        second_example: [ third_nest: { fourth_nest: 'value2' }, fifth_nest: { fifth_nest_key: 'fifth nest val' } ],
-      ]}.deep_stringify_keys)
+      expect(response.parsed_body).to eq({ _json: [
+        first_example: [first_nest: { second_nest: 'value1' }, another_nest: { another_nest_key: 'another nest val' }],
+        second_example: [third_nest: { fourth_nest: 'value2' }, fifth_nest: { fifth_nest_key: 'fifth nest val' }],
+      ] }.deep_stringify_keys)
     end
 
     it 'deeply nested hash of hashes/arrays keys all get converted' do
       test_payload = {
-        firstExample: [ firstNest: { secondNest: 'value1' }, anotherNest: { anotherNestKey: 'another nest val' } ],
-        secondExample: [ thirdNest: { fourthNest: 'value2' }, fifthNest: { fifthNestKey: 'fifth nest val' } ],
+        firstExample: [firstNest: { secondNest: 'value1' }, anotherNest: { anotherNestKey: 'another nest val' }],
+        secondExample: [thirdNest: { fourthNest: 'value2' }, fifthNest: { fifthNestKey: 'fifth nest val' }],
       }
 
       post api_v1_test_action_path, params: test_payload, as: :json
       expect(response.parsed_body).to eq({
-        first_example: [ first_nest: { second_nest: 'value1' }, another_nest: { another_nest_key: 'another nest val' } ],
-        second_example: [ third_nest: { fourth_nest: 'value2' }, fifth_nest: { fifth_nest_key: 'fifth nest val' } ],
+        first_example: [first_nest: { second_nest: 'value1' }, another_nest: { another_nest_key: 'another nest val' }],
+        second_example: [third_nest: { fourth_nest: 'value2' }, fifth_nest: { fifth_nest_key: 'fifth nest val' }],
       }.deep_stringify_keys)
     end
   end

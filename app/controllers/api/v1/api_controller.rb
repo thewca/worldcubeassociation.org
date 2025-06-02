@@ -15,6 +15,7 @@ class Api::V1::ApiController < ActionController::API
   skip_before_action :validate_jwt_token
   def test_action
     return head :not_found if Rails.env.production? && EnvConfig.WCA_LIVE_SITE?
+
     params.delete(:action)
     params.delete(:api) # TODO: ChatGPT claims I shouldn't be getting this key - but for now I'm just trying to get the tests passing
     params.delete(:controller)
