@@ -39,6 +39,12 @@ runs:
         id=$(docker create ${{ steps.build.outputs.imageid }})
         docker cp $id:/rails/public/ ./assets
         aws s3 sync ./assets s3://${{ env.ASSET_BUCKET }}/assets/${{ inputs.build_tag }}
+    - name: Build and push main next Image
+      uses: ./.github/actions/build-js-image
+      with:
+        target: runner
+        registry: ${{ inputs.registry }}
+        tag: nextjs-${{inputs.environment}}
     - name: Build and push API Image
       uses: ./.github/actions/build-ruby-image
       with:
@@ -63,9 +69,3 @@ runs:
         tag: ${{ env.MONOLITH_TAG }}
         build_tag: ${{ inputs.build_tag }}
         environment: ${{ inputs.environment }}
-    - name: Build and push main next Image
-      uses: ./.github/actions/build-js-image
-      with:
-        target: runner
-        registry: ${{ inputs.registry }}
-        tag: ${{inputs.environment}}-nextjs
