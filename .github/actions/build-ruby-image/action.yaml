@@ -39,7 +39,7 @@ runs:
         fi
     - name: Build and push Docker image
       uses: docker/build-push-action@v6
-      id: build-image
+      id: build-ruby-image
       with:
         push: true
         load: ${{ inputs.load }}
