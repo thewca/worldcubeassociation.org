@@ -27,6 +27,24 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CompetitionInfo'
+  /competitions/{competitionId}/registrations:
+    get:
+      summary: Get competition registrations
+      parameters:
+        - name: competitionId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RegistrationData'
   /persons/{wca_id}/:
     get:
       summary: Get information for a person
@@ -669,3 +687,22 @@ components:
           type: string
         name:
           type: string
+
+    RegistrationData:
+      type: object
+      properties:
+        id:
+          type: integer
+        competition_id:
+          type: string
+        user_id:
+          type: integer
+        event_ids:
+          type: array
+          items:
+            type: string
+      required:
+        - id
+        - competition_id
+        - user_id
+        - event_ids

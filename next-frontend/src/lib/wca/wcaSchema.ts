@@ -42,6 +42,44 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/competitions/{competitionId}/registrations": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get competition registrations */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    competitionId: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Successful response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["RegistrationData"][];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/persons/{wca_id}/": {
         parameters: {
             query?: never;
@@ -411,6 +449,12 @@ export interface components {
         Event: {
             id?: string;
             name?: string;
+        };
+        RegistrationData: {
+            id: number;
+            competition_id: string;
+            user_id: number;
+            event_ids: string[];
         };
     };
     responses: never;

@@ -1,70 +1,45 @@
 "use client";
-import React from "react";
+import React, { useMemo } from "react";
 import { Card, Text, Table, Center, Spinner } from "@chakra-ui/react";
 import EventIcon from "@/components/EventIcon";
 import CountryMap from "@/components/CountryMap";
-import { useEffect, useState } from "react";
-
-const ALL_EVENTS = [
-  "333",
-  "222",
-  "444",
-  "555",
-  "666",
-  "777",
-  "333bf",
-  "333fm",
-  "333oh",
-  "clock",
-  "minx",
-  "pyram",
-  "skewb",
-  "sq1",
-  "444bf",
-  "555bf",
-  "333mbf",
-];
+import { useQuery } from "@tanstack/react-query";
+import useAPI from "@/lib/wca/useAPI";
 
 interface CompetitorData {
   id: string;
 }
 
 const TabCompetitors: React.FC<CompetitorData> = ({ id }) => {
-  const [competitors, setCompetitors] = useState<Person[]>([]);
-  const [eventIds, setEventIds] = useState<string[]>([]);
-  const [loading, setLoading] = useState(true);
+  const api = useAPI();
 
-  useEffect(() => {
-    fetch(
-      `https://www.worldcubeassociation.org/api/v0/competitions/${id}/wcif/public`,
-    )
-      .then((res) => res.json())
-      .then((data) => {
-        const people: Person[] = data.persons.filter(
-          (p: Person) => p.registration?.isCompeting,
-        );
-        setCompetitors(people);
+  const { data: registrationsQuery, isFetching } = useQuery({
+    queryKey: ["registrations", id],
+    queryFn: () =>
+      api.GET("/competitions/{competitionId}/registrations", {
+        params: { path: { competitionId: id } },
+      }),
+  });
 
-        const allEventIds = new Set<string>();
-        people.forEach((p) => {
-          p.registration?.eventIds.forEach((id) => allEventIds.add(id));
-        });
-        setEventIds(
-          Array.from(allEventIds).sort(
-            (a, b) => ALL_EVENTS.indexOf(a) - ALL_EVENTS.indexOf(b),
-          ),
-        );
-      })
-      .catch(console.error)
-      .finally(() => setLoading(false));
-  }, [id]);
+  const eventIds = useMemo(() => {
+    const flatEventList = registrationsQuery?.data?.flatMap(
+      (reg) => reg.event_ids,
+    );
 
-  if (loading) {
+    const eventSet = new Set(flatEventList);
+    return Array.from(eventSet);
+  }, [registrationsQuery?.data]);
+
+  if (isFetching) {
     return (
       <Center py={10}>
         <Spinner size="xl" />
       </Center>
     );
+  }
+
+  if (!registrationsQuery?.data) {
+    return <Text>Welp, that didn&apos;t work!</Text>;
   }
 
   return (
@@ -84,18 +59,18 @@ const TabCompetitors: React.FC<CompetitorData> = ({ id }) => {
           </Table.Header>
 
           <Table.Body>
-            {competitors.map((person) => (
-              <Table.Row key={person.wcaId || person.name}>
+            {registrationsQuery.data.map((registration) => (
+              <Table.Row key={registration.id}>
                 <Table.Cell>
-                  <Text fontWeight="medium">{person.name}</Text>
+                  <Text fontWeight="medium">{registration.user_id}</Text>
                 </Table.Cell>
                 <Table.Cell>
-                  <CountryMap code={person.countryIso2} bold />
+                  <CountryMap code="AU" bold />
                 </Table.Cell>
 
                 {eventIds.map((eventId) => (
                   <Table.Cell key={eventId}>
-                    {person.registration?.eventIds.includes(eventId) ? (
+                    {registration.event_ids.includes(eventId) ? (
                       <EventIcon eventId={eventId} />
                     ) : null}
                   </Table.Cell>
