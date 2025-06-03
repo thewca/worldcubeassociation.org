@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { JSX } from "react";
 import { Table, Text, Link } from "@chakra-ui/react";
 import CompRegoFullButOpenOrangeIcon from "@/components/icons/CompRegoFullButOpen_orangeIcon";
 import CompRegoNotFullOpenGreenIcon from "@/components/icons/CompRegoNotFullOpen_greenIcon";
@@ -19,12 +19,12 @@ interface Comps {
   city: string;
   country: string;
   registrationStatus: string;
-  competitorLimit: BigInteger;
+  competitorLimit: number;
   events: string[];
   mainEvent: string;
 }
 
-const registrationStatusIcons: Record<string, TSX.Element> = {
+const registrationStatusIcons: Record<string, JSX.Element> = {
   open: <CompRegoNotFullOpenGreenIcon />,
   notOpen: <CompRegoNotOpenYetGreyIcon />,
   closed: <CompRegoClosedRedIcon />,
