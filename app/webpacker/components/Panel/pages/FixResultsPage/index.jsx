@@ -7,10 +7,8 @@ import { IdWcaSearch } from '../../../SearchWidget/WcaSearch';
 import { events, roundTypes } from '../../../../lib/wca-data.js.erb';
 import { editResultUrl } from '../../../../lib/requests/routes.js.erb';
 import SEARCH_MODELS from '../../../SearchWidget/SearchModel';
-import getCompetitions from './api/getCompetitions';
 import Errored from '../../../Requests/Errored';
-import getEvents from './api/getEvents';
-import getResults from './api/getResults';
+import { getCompetitions, getEvents, getResults } from './api/getFixResultsData';
 
 function FixResultsPage() {
   const [formValues, setFormValues] = useState({});
@@ -109,7 +107,7 @@ function FixResultsPage() {
           placeholder="Select Competition"
           fluid
           scrolling
-          options={competitionsList?.map((competition) => ({
+          options={competitionsList?.reverse().map((competition) => ({
             key: competition.competitionId,
             text: competition.competitionName,
             value: competition.competitionId,
