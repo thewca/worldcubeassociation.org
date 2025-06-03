@@ -75,6 +75,7 @@ class UploadJson
               pos: result["position"],
               event_id: event["eventId"],
               round_type_id: round_type_id,
+              round_id: competition_round&.id,
               format_id: round["formatId"],
               best: result["best"],
               average: result["average"],
@@ -99,7 +100,8 @@ class UploadJson
                 new_scramble_attributes = {
                   competition_id: competition_id,
                   event_id: event["eventId"],
-                  round_type_id: round["roundId"],
+                  round_type_id: round_type_id,
+                  round_id: competition_round&.id,
                   group_id: group["group"],
                   is_extra: scramble_type == "extraScrambles",
                   scramble_num: index + 1,

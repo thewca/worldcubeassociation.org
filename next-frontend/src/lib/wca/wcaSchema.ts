@@ -143,18 +143,18 @@ export interface components {
     schemas: {
         Person: {
             /** @example 267 */
-            id?: number;
+            id: number;
             /** @example Tim Reynolds */
-            name?: string;
+            name: string;
             /** @example 2005REYN01 */
-            wca_id?: string;
+            wca_id: string;
             /** @example US */
-            country_iso2?: string;
+            country_iso2: string;
             /**
              * Format: uri
              * @example https://www.worldcubeassociation.org/persons/2005REYN01
              */
-            url?: string;
+            url: string;
         };
         Organizer: components["schemas"]["Person"] & {
             /** @example regional_delegate */
@@ -305,6 +305,10 @@ export interface components {
             website: string;
             /** @example Seattle, Washington */
             city: string;
+            /** @example 770 Don Mills Rd, North York, ON M3C IT3, Canada */
+            venue_address: string;
+            /** @example The big convention center */
+            venue_details: string;
             /**
              * Format: float
              * @example 47.611387
@@ -321,6 +325,10 @@ export interface components {
              *       "333"
              *     ] */
             event_ids: string[];
+            /** @example 333 */
+            main_event_id: string;
+            /** @example 123 */
+            number_of_bookmarks: number;
             /** @example true */
             "registration_full?": boolean;
             delegates: components["schemas"]["Person"][];

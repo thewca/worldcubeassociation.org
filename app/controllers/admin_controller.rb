@@ -112,6 +112,7 @@ class AdminController < ApplicationController
           competition_id: inbox_res.competition_id,
           event_id: inbox_res.event_id,
           round_type_id: inbox_res.round_type_id,
+          round_id: inbox_res.round_id,
           format_id: inbox_res.format_id,
           value1: inbox_res.value1,
           value2: inbox_res.value2,

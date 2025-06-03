@@ -4,9 +4,11 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "check:types": "tsc --noEmit",
     "build": "next build",
     "start": "next start",
     "build:types": "openapi-typescript public/wcaAPI.yaml -o src/lib/wca/wcaSchema.ts",
+    "chakra:types": "chakra typegen ./src/theme.ts",
     "lint": "next lint",
     "lint:fix": "next lint --fix"
   },
@@ -27,6 +29,7 @@
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-icons": "^5.5.0",
+    "react-markdown": "^10.1.0",
     "swagger-ui-react": "^5.22.0"
   },
   "devDependencies": {
