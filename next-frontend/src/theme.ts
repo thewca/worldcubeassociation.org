@@ -424,6 +424,7 @@ const customConfig = defineConfig({
           },
         },
         defaultVariants: {
+          // @ts-expect-error TODO: Fix this
           variant: "solid",
           size: "lg",
         },
@@ -523,6 +524,7 @@ const customConfig = defineConfig({
           },
         },
         defaultVariants: {
+          // @ts-expect-error TODO: Fix this
           variant: "wcaLink",
           hoverArrow: "false",
         },
@@ -544,6 +546,7 @@ const customConfig = defineConfig({
             variant: "achievement",
             css: {
               textStyle: "lg", //needed to supercede the default textStyle
+              // @ts-expect-error TODO: Fix this
               svg: {
                 height: "1.25em",
                 width: "1.25em",
@@ -574,6 +577,7 @@ const customConfig = defineConfig({
           },
         },
         defaultVariants: {
+          // @ts-expect-error TODO: Fix this
           size: "sm",
         },
         variants: {
@@ -640,6 +644,7 @@ const customConfig = defineConfig({
             variant: "infoSnippet",
             css: {
               header: {
+                // @ts-expect-error TODO: Fix this
                 svg: {
                   height: "1.15em",
                   width: "1.15em",
@@ -650,6 +655,7 @@ const customConfig = defineConfig({
         ],
       },
       accordion: {
+        slots: [],
         variants: {
           variant: {
             subtle: {
@@ -692,6 +698,7 @@ const customConfig = defineConfig({
         },
       },
       table: {
+        slots: [],
         variants: {
           variant: {
             results: {
@@ -743,6 +750,7 @@ const customConfig = defineConfig({
         },
       },
       drawer: {
+        slots: [],
         variants: {
           variant: {
             competitionInfo: {
@@ -756,6 +764,7 @@ const customConfig = defineConfig({
         },
       },
       tabs: {
+        slots: [],
         variants: {
           variant: {
             enclosed: {
