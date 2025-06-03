@@ -5,21 +5,22 @@ import SpeedcubingHistoryIcon from "@/components/icons/SpeedcubingHistoryIcon";
 import { eventIconMap } from "@/components/icons/EventIconMap";
 import { LuShare2 } from "react-icons/lu";
 
-interface Record {
+interface RecordItem {
   event: string;
   snr: number;
   scr: number;
   swr: number;
-  single: number;
-  average: number;
+  single: string;
+  average: string;
   anr: number;
   acr: number;
   awr: number;
 }
 
 interface RecordsProps {
-  records: Record[];
+  records: RecordItem[];
 }
+
 const PersonalRecordsTable: React.FC<RecordsProps> = ({ records }) => {
   const eventMap = {
     "222": "2x2x2 Cube",
@@ -39,9 +40,10 @@ const PersonalRecordsTable: React.FC<RecordsProps> = ({ records }) => {
     pyram: "Pyraminx",
     skewb: "Skewb",
     sq1: "Square-1",
-  };
+  } as Record<string, string>;
 
   const getColor = (pr: number) => {
+    if (pr === 0) return undefined;
     if (pr === 1) return "recordColors.personal";
     if (pr < 11) return "recordColors.national";
     return "fg.inverted";
@@ -163,10 +165,10 @@ const PersonalRecordsTable: React.FC<RecordsProps> = ({ records }) => {
                     {record.single}
                   </Table.Cell>
                   <Table.Cell color="fg.inverted" fontWeight="medium">
-                    {record.average !== 0 ? record.average : ""}
+                    {record.average}
                   </Table.Cell>
                   <Table.Cell
-                    color={record.awr !== 0 && getColor(record.awr)}
+                    color={getColor(record.awr)}
                     fontWeight={
                       record.awr !== 0 && record.awr < 11 ? "bold" : "light"
                     }
@@ -174,7 +176,7 @@ const PersonalRecordsTable: React.FC<RecordsProps> = ({ records }) => {
                     {record.awr !== 0 ? record.awr : ""}
                   </Table.Cell>
                   <Table.Cell
-                    color={record.acr !== 0 && getColor(record.acr)}
+                    color={getColor(record.acr)}
                     fontWeight={
                       record.acr !== 0 && record.acr < 11 ? "bold" : "light"
                     }
@@ -182,7 +184,7 @@ const PersonalRecordsTable: React.FC<RecordsProps> = ({ records }) => {
                     {record.acr !== 0 ? record.acr : ""}
                   </Table.Cell>
                   <Table.Cell
-                    color={record.anr !== 0 && getColor(record.anr)}
+                    color={getColor(record.anr)}
                     fontWeight={
                       record.anr !== 0 && record.anr < 11 ? "bold" : "light"
                     }

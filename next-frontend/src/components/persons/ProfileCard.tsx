@@ -19,6 +19,7 @@ import RegulationsHistoryIcon from "@/components/icons/RegulationsHistoryIcon";
 import NationalChampionshipIcon from "@/components/icons/NationalChampionshipIcon";
 import { LuStar } from "react-icons/lu";
 import { LuCircleHelp } from "react-icons/lu";
+import { countryCodeMapping } from "@/components/CountryMap";
 
 interface ProfileData {
   name: string;
@@ -26,7 +27,7 @@ interface ProfileData {
   roles: { teamRole: string; teamText: string; staffColor: string }[];
   wcaId: string;
   gender: string;
-  region: string;
+  regionIso2: string;
   competitions: number;
   completedSolves: number;
 }
@@ -37,7 +38,7 @@ const ProfileCard: React.FC<ProfileData> = ({
   roles,
   wcaId,
   gender,
-  region,
+  regionIso2,
   competitions,
   completedSolves,
 }) => {
@@ -84,7 +85,7 @@ const ProfileCard: React.FC<ProfileData> = ({
         <DataListRoot variant="profileStat">
           <DataListItem label="WCA ID" value={wcaId} />
           {gender !== "o" && <DataListItem label="Gender" value={gender} />}
-          <DataListItem label="Region" value={region} />
+          <DataListItem label="Region" value={countryCodeMapping[regionIso2]} />
           <DataListItem label="Competitions" value={competitions} />
           <DataListItem label="Completed Solves" value={completedSolves} />
         </DataListRoot>

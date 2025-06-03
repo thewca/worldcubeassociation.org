@@ -184,15 +184,43 @@ export interface components {
             id: number;
             /** @example Tim Reynolds */
             name: string;
+            /** @example m */
+            gender?: string;
             /** @example 2005REYN01 */
             wca_id: string;
             /** @example US */
             country_iso2: string;
+            /** @example delegate */
+            delegate_status: string;
+            teams: components["schemas"]["TeamMembership"][];
             /**
              * Format: uri
              * @example https://www.worldcubeassociation.org/persons/2005REYN01
              */
             url: string;
+            avatar: components["schemas"]["UserAvatar"];
+        };
+        TeamMembership: {
+            id: number;
+            /** @example wst */
+            friendly_id: string;
+            leader: boolean;
+            senior_member: boolean;
+            name?: string;
+            wca_id?: string;
+            avatar?: components["schemas"]["UserAvatar"];
+        };
+        UserAvatar: {
+            /**
+             * Format: uri
+             * @example https://avatars.worldcubeassociation.org/uploads/user/avatar/2099EXAM/1535183030.jpg
+             */
+            url: string;
+            /**
+             * Format: uri
+             * @example https://avatars.worldcubeassociation.org/uploads/user/avatar/2099EXAM/1535183030_thumb.jpg
+             */
+            thumb_url?: string;
         };
         Organizer: components["schemas"]["Person"] & {
             /** @example regional_delegate */
@@ -202,27 +230,16 @@ export interface components {
              * @example 255@worldcubeassociation.org
              */
             email?: string;
-            avatar?: {
-                /**
-                 * Format: uri
-                 * @example https://avatars.worldcubeassociation.org/uploads/user/avatar/2099EXAM/1535183030.jpg
-                 */
-                url?: string;
-                /**
-                 * Format: uri
-                 * @example https://avatars.worldcubeassociation.org/uploads/user/avatar/2099EXAM/1535183030_thumb.jpg
-                 */
-                thumb_url?: string;
-            };
+            avatar?: components["schemas"]["UserAvatar"];
         };
         Rank: {
             id: number;
-            personId: string;
-            eventId: string;
+            person_id: string;
+            event_id: string;
             best: number;
-            worldRank: number;
-            continentRank: number;
-            countryRank: number;
+            world_rank: number;
+            continent_rank: number;
+            country_rank: number;
         };
         Medals: {
             gold: number;
@@ -238,17 +255,25 @@ export interface components {
         };
         PersonInfo: {
             person: components["schemas"]["Person"];
-            previous_persons: Record<string, never>[];
-            ranks_single: components["schemas"]["Rank"][];
-            ranks_average: components["schemas"]["Rank"][];
+            previous_persons?: Record<string, never>[];
+            ranks_single?: components["schemas"]["Rank"][];
+            ranks_average?: components["schemas"]["Rank"][];
             medals: components["schemas"]["Medals"];
             records: components["schemas"]["Records"];
+            personal_records: {
+                [key: string]: components["schemas"]["SingleAndAverageRank"];
+            };
             championship_podiums: {
                 world?: Record<string, never>[];
                 continental?: Record<string, never>[];
                 greater_china?: Record<string, never>[];
                 national?: Record<string, never>[];
             };
+            competition_count: number;
+        };
+        SingleAndAverageRank: {
+            average: components["schemas"]["Rank"];
+            single: components["schemas"]["Rank"];
         };
         CompetitionInfo: {
             /** @example WC2003 */

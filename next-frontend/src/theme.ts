@@ -867,6 +867,7 @@ const customConfig = defineConfig({
         },
       },
       dataList: {
+        slots: [],
         variants: {
           variant: {
             profileStat: {

@@ -10,6 +10,7 @@ import CompetitionsTab from "@/components/persons/CompetitionsTab";
 import RecordsTab from "@/components/persons/RecordsTab";
 import MapTab from "@/components/persons/MapTab";
 import ChampionshipPodiumsTab from "@/components/persons/ChampionshipPodiums";
+import type { components } from "@/lib/wca/wcaSchema";
 
 export default async function PersonOverview({
   params,
@@ -87,15 +88,18 @@ export default async function PersonOverview({
     snr: number;
     scr: number;
     swr: number;
-    single: number;
-    average: number;
+    single: string;
+    average: string;
     anr: number;
     acr: number;
     awr: number;
   }
 
   const transformPersonalRecords = (
-    personalRecords: Record<string, unknown>,
+    personalRecords: Record<
+      string,
+      components["schemas"]["SingleAndAverageRank"]
+    >,
   ): RecordItem[] => {
     const eventOrder = [
       "333",
@@ -178,7 +182,7 @@ export default async function PersonOverview({
 
     // Transform the personalRecords object into an array
     const recordsArray = Object.entries(personalRecords).map(
-      ([event, record]: [string, unknown]) => ({
+      ([event, record]) => ({
         event,
         single:
           event === "333mbf"
@@ -200,7 +204,7 @@ export default async function PersonOverview({
     // Reorder the array based on eventOrder
     return eventOrder
       .map((event) => recordsArray.find((record) => record.event === event))
-      .filter((record): record is RecordItem => !!record); // Remove undefined items
+      .filter((record) => !!record); // Remove undefined items
   };
 
   let hasRecords = false;
@@ -233,7 +237,7 @@ export default async function PersonOverview({
             roles={roles}
             wcaId={wcaId}
             gender={genderText}
-            region={personDetails.person.country.name}
+            regionIso2={personDetails.person.country_iso2}
             competitions={personDetails.competition_count}
             completedSolves={1659}
           />
