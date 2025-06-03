@@ -13,18 +13,17 @@ import {
 } from "@chakra-ui/react";
 import { Image } from "@chakra-ui/react";
 import { DataListItem, DataListRoot } from "@/components/ui/data-list";
-import RoleBadge from "@/components/RoleBadge";
+import RoleBadge, { StaffColor } from "@/components/RoleBadge";
 import MyResultsIcon from "@/components/icons/MyResultsIcon";
 import RegulationsHistoryIcon from "@/components/icons/RegulationsHistoryIcon";
 import NationalChampionshipIcon from "@/components/icons/NationalChampionshipIcon";
-import { LuStar } from "react-icons/lu";
-import { LuCircleHelp } from "react-icons/lu";
+import { LuStar, LuCircleHelp } from "react-icons/lu";
 import { countryCodeMapping } from "@/components/CountryMap";
 
 interface ProfileData {
   name: string;
   profilePicture: string;
-  roles: { teamRole: string; teamText: string; staffColor: string }[];
+  roles: { teamRole: string; teamText: string; staffColor: StaffColor }[];
   wcaId: string;
   gender: string;
   regionIso2: string;
@@ -56,12 +55,7 @@ const ProfileCard: React.FC<ProfileData> = ({
       <Card.Header>
         <Center>
           {/* Profile Picture */}
-          <Image
-            src={profilePicture}
-            size="2xl"
-            rounded="md"
-            alt="Profile Photo"
-          />
+          <Image src={profilePicture} rounded="md" alt="Profile Photo" />
         </Center>
       </Card.Header>
 

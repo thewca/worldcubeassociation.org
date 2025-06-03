@@ -11,6 +11,7 @@ import RecordsTab from "@/components/persons/RecordsTab";
 import MapTab from "@/components/persons/MapTab";
 import ChampionshipPodiumsTab from "@/components/persons/ChampionshipPodiums";
 import type { components } from "@/lib/wca/wcaSchema";
+import { StaffColor } from "@/components/RoleBadge";
 
 export default async function PersonOverview({
   params,
@@ -35,8 +36,11 @@ export default async function PersonOverview({
     genderText = "o";
   }
 
-  const roles: { teamRole: string; teamText: string; staffColor: string }[] =
-    [];
+  const roles: {
+    teamRole: string;
+    teamText: string;
+    staffColor: StaffColor;
+  }[] = [];
 
   personDetails.person.teams.forEach(
     (team: {
@@ -46,7 +50,7 @@ export default async function PersonOverview({
     }) => {
       const teamText = team.friendly_id.toUpperCase();
       let teamRole = "";
-      let staffColour = "black";
+      let staffColour: StaffColor = "black";
 
       if (teamText == "BOARD") {
         staffColour = "black";
