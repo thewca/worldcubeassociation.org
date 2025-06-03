@@ -9,14 +9,19 @@ import { RefreshRouteOnSave } from "@/components/RefreshRouteOnSave";
 import { ColorModeButton } from "@/components/ui/color-mode";
 import { LuChevronDown, LuHouse } from "react-icons/lu";
 
-import { iconMap } from "@/components/icons/iconMap";
+import { iconMap, IconName } from "@/components/icons/iconMap";
+
+interface IconDisplayProps {
+  name: IconName | undefined | null;
+  fallback?: boolean;
+}
 
 const IconDisplay = ({ name, fallback = true }: IconDisplayProps) => {
-  const IconComponent = iconMap[name];
-
-  if (!IconComponent) {
+  if (!name) {
     return fallback ? <div>No_Icon</div> : null;
   }
+
+  const IconComponent = iconMap[name];
 
   return <IconComponent />;
 };
