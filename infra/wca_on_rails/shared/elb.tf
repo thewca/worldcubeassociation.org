@@ -346,6 +346,22 @@ resource "aws_lb_listener_rule" "pma_forward_prod" {
   }
 }
 
+resource "aws_lb_listener_rule" "next_forward_prod" {
+  listener_arn = aws_lb_listener.https.arn
+  priority     = 9
+
+  action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.nextjs-production.arn
+  }
+
+  condition {
+    host_header {
+      values = ["next70912409871254.worldcubeassociation.org"]
+    }
+  }
+}
+
 resource "aws_lb_listener_rule" "rails_forward_staging" {
   listener_arn = aws_lb_listener.https.arn
   priority     = 4

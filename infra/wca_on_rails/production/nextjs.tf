@@ -10,12 +10,36 @@ locals {
       value = var.WCA_LIVE_SITE
     },
     {
-      name  = "ROOT_URL"
-      value = var.ROOT_URL
+      name  = "AUTH_SECRET"
+      value = "123456789abc"
     },
     {
-      name  = "AUTH_SECRET"
-      value = var.ROOT_URL
+      name  = "OIDC_ISSUER"
+      value = "https://staging.worldcubeassociation.org/"
+    },
+    {
+      name  = "OIDC_CLIENT_ID"
+      value = "example-application-id"
+    },
+    {
+      name  = "OIDC_CLIENT_SECRET"
+      value = "example-secret"
+    },
+    {
+      name  = "PAYLOAD_SECRET"
+      value = "123456789abc"
+    },
+    {
+      name  = "DATABASE_URI"
+      value = "file:./payload.db"
+    },
+    {
+      name  = "WCA_BACKEND_API_URL"
+      value = "https://www.worldcubeassociation.org/api/v0/"
+    },
+    {
+      name  = "WCA_FRONTEND_API_URL"
+      value = "https://www.worldcubeassociation.org/api/v0/"
     },
   ]
 }
@@ -44,7 +68,7 @@ resource "aws_iam_role_policy" "nextjs_task_policy" {
 }
 
 resource "aws_ecs_task_definition" "nextjs" {
-  family = var.name_prefix
+  family = "nextjs-production"
 
   network_mode             = "awsvpc"
   requires_compatibilities = ["EC2"]
@@ -59,7 +83,7 @@ resource "aws_ecs_task_definition" "nextjs" {
   container_definitions = jsonencode([
     {
       name              = "nextjs-production"
-      image             = "${var.shared.ecr_repository.repository_url}:nextjs-production"
+      image             = "${var.shared.next_repository_url}:nextjs-production"
       cpu    = 1024
       memory = 3910
       portMappings = [
@@ -78,7 +102,7 @@ resource "aws_ecs_task_definition" "nextjs" {
           awslogs-stream-prefix = var.name_prefix
         }
       }
-      environment = local.rails_environment
+      environment = local.nextjs_environment
       healthCheck       = {
         command            = ["CMD-SHELL", "curl -f http://localhost:3000/ || exit 1"]
         interval           = 30
@@ -96,8 +120,8 @@ resource "aws_ecs_task_definition" "nextjs" {
 
 
 
-data "aws_ecs_task_definition" "this" {
-  task_definition = aws_ecs_task_definition.this.family
+data "aws_ecs_task_definition" "nextjs" {
+  task_definition = aws_ecs_task_definition.nextjs.family
 }
 
 resource "aws_ecs_service" "nextjs" {
@@ -106,12 +130,12 @@ resource "aws_ecs_service" "nextjs" {
   # During deployment a new task revision is created with modified
   # container image, so we want use data.aws_ecs_task_definition to
   # always point to the active task definition
-  task_definition                    = data.aws_ecs_task_definition.this.arn
-  desired_count                      = 1
+  task_definition                    = data.aws_ecs_task_definition.nextjs.arn
+  desired_count                      = 0
   scheduling_strategy                = "REPLICA"
   deployment_maximum_percent         = 200
   deployment_minimum_healthy_percent = 50
-  health_check_grace_period_seconds  = var.rails_startup_time
+  health_check_grace_period_seconds  = 30
 
   capacity_provider_strategy {
     capacity_provider = var.shared.t3_capacity_provider.name

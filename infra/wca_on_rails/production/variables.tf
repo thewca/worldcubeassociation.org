@@ -79,6 +79,7 @@ variable "shared" {
       name: string
       arn: string
     }),
+    next_repository_url: string,
     ecs_cluster: object({
       id: string
       name: string

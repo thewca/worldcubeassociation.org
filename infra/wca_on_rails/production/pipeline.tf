@@ -272,6 +272,10 @@ resource "aws_codebuild_project" "redeploy_nextjs" {
     type            = "LINUX_CONTAINER"
   }
 
+  artifacts {
+    type = "NO_ARTIFACTS"
+  }
+
   source {
     type      = "NO_SOURCE"
     buildspec = <<EOF
@@ -280,7 +284,7 @@ version: 0.2
 phases:
   build:
     commands:
-      - aws ecs update-service --cluster ${var.shared.ecs_cluster.name} --service ${var.nextjs_ecs_service_name} --force-new-deployment
+      - aws ecs update-service --cluster ${var.shared.ecs_cluster.name} --service ${aws_ecs_service.nextjs.name} --force-new-deployment
 EOF
   }
 }
@@ -331,25 +335,25 @@ resource "aws_codepipeline" "this" {
     }
   }
 
-  stage {
-    name = "redeploy-nextjs"
-
-    action {
-      name             = "redeploy-nextjs"
-      category         = "Build"
-      owner            = "AWS"
-      provider         = "CodeBuild"
-      version          = "1"
-      input_artifacts  = ["build_output"]
-      output_artifacts = [] # No output, just triggering update
-
-      configuration = {
-        ProjectName = aws_codebuild_project.redeploy_nextjs.name
-      }
-
-      run_order = 1
-    }
-  }
+  # stage {
+  #   name = "redeploy-nextjs"
+  #
+  #   action {
+  #     name             = "redeploy-nextjs"
+  #     category         = "Build"
+  #     owner            = "AWS"
+  #     provider         = "CodeBuild"
+  #     version          = "1"
+  #     input_artifacts  = ["build_output"]
+  #     output_artifacts = [] # No output, just triggering update
+  #
+  #     configuration = {
+  #       ProjectName = aws_codebuild_project.redeploy_nextjs.name
+  #     }
+  #
+  #     run_order = 1
+  #   }
+  # }
 
   stage {
     name = "deploy"
