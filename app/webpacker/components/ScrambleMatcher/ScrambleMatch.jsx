@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import { Icon, Ref, Table } from 'semantic-ui-react';
+import {
+  Icon, Popup, Ref, Table,
+} from 'semantic-ui-react';
 import { DragDropContext, Draggable, Droppable } from '@hello-pangea/dnd';
 
 export default function ScrambleMatch({
@@ -8,6 +10,8 @@ export default function ScrambleMatch({
   onRowDragCompleted,
   computeDefinitionName,
   computeRowName,
+  computeRowDetails = undefined,
+  moveAwayAction = undefined,
 }) {
   const [currentDragStart, setCurrentDragStart] = useState(null);
   const [currentDragIndex, setCurrentDragIndex] = useState(null);
@@ -59,6 +63,7 @@ export default function ScrambleMatch({
         <Table.Row>
           <Table.HeaderCell />
           <Table.HeaderCell>Assigned Scrambles</Table.HeaderCell>
+          {moveAwayAction && (<Table.HeaderCell>Move</Table.HeaderCell>)}
         </Table.Row>
       </Table.Header>
       <DragDropContext
@@ -109,8 +114,33 @@ export default function ScrambleMatch({
                               </Table.Cell>
                               <Table.Cell {...providedDraggable.dragHandleProps}>
                                 <Icon name={hasError ? 'exclamation triangle' : 'bars'} />
-                                {hasError ? 'Missing scramble set' : computeRowName(rowData)}
+                                {hasError
+                                  ? 'Missing scramble set'
+                                  : (
+                                    <>
+                                      {computeRowName(rowData)}
+                                      {' '}
+                                      {computeRowDetails && (
+                                        <Popup
+                                          trigger={<Icon name="info circle" />}
+                                          position="right center"
+                                          style={{ whiteSpace: 'pre-line' }}
+                                        >
+                                          {computeRowDetails(rowData)}
+                                        </Popup>
+                                      )}
+                                    </>
+                                  )}
                               </Table.Cell>
+                              {moveAwayAction && (
+                                <Table.Cell textAlign="center" collapsing icon>
+                                  <Icon
+                                    name="arrows alternate horizontal"
+                                    link
+                                    onClick={() => moveAwayAction(rowData)}
+                                  />
+                                </Table.Cell>
+                              )}
                             </Table.Row>
                           </Ref>
                         );

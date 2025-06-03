@@ -32,8 +32,9 @@ export const authConfig: NextAuthConfig = {
       }
     },
     async session({ session, token }) {
+      // @ts-expect-error TODO: Fix this
       session.accessToken = token.access_token;
-      session.user.id = token.userId;
+      session.user.id = token.userId as string;
       return session;
     },
   },

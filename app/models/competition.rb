@@ -190,7 +190,7 @@ class Competition < ApplicationRecord
   MAX_MARKDOWN_LENGTH = 255
   MAX_COMPETITOR_LIMIT = 5000
   MAX_GUEST_LIMIT = 100
-  NEWCOMER_MONTH_ENABLED = true
+  NEWCOMER_MONTH_ENABLED = false
   NEWCOMER_MONTH_RESERVATIONS_FRACTION = 0.5
 
   validates :competitor_limit_enabled, inclusion: { in: [true, false], if: :competitor_limit_required? }
