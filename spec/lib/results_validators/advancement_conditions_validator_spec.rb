@@ -14,14 +14,14 @@ RSpec.describe ResultsValidators::AdvancementConditionsValidator do
     # The idea behind this variable is the following: the validator can be applied
     # on either a particular model for given competition ids, or on a set of results.
     # We simply want to check it has the expected behavior on all the possible cases.
-    let(:validator_args) {
-      [InboxResult, Result].flat_map { |model|
+    let(:validator_args) do
+      [InboxResult, Result].flat_map do |model|
         [
           { competition_ids: [competition1.id, competition2.id], model: model },
           { results: model.where(competition_id: [competition1.id, competition2.id]), model: model },
         ]
-      }
-    }
+      end
+    end
 
     it "doesn't complain when it's fine" do
       (1..4).each { |i| create(:round, competition: competition1, event_id: "333oh", total_number_of_rounds: 4, number: i) }
@@ -99,15 +99,15 @@ RSpec.describe ResultsValidators::AdvancementConditionsValidator do
           create(:result, competition: competition2, event_id: "222", round_type_id: "f", person: fake_person, best: value, average: value)
           create(:result, competition: competition3, event_id: "333", round_type_id: "f", person: fake_person, best: value, average: value)
         end
-        if i == 20
-          # Create a single attempt result over the attempt result condition.
-          create(:result, competition: competition2, event_id: "222", round_type_id: "f", person: fake_person, best: 1800, average: 1800)
-          expected_errors << RV::ValidationError.new(ACV::COMPETED_NOT_QUALIFIED_ERROR,
-                                                     :rounds, competition2.id,
-                                                     round_id: "222-f",
-                                                     ids: fake_person.wca_id,
-                                                     condition: first_round.advancement_condition.to_s(first_round))
-        end
+        next unless i == 20
+
+        # Create a single attempt result over the attempt result condition.
+        create(:result, competition: competition2, event_id: "222", round_type_id: "f", person: fake_person, best: 1800, average: 1800)
+        expected_errors << RV::ValidationError.new(ACV::COMPETED_NOT_QUALIFIED_ERROR,
+                                                   :rounds, competition2.id,
+                                                   round_id: "222-f",
+                                                   ids: fake_person.wca_id,
+                                                   condition: first_round.advancement_condition.to_s(first_round))
       end
       expected_errors << RV::ValidationError.new(ACV::ROUND_9P1_ERROR,
                                                  :rounds, competition2.id,

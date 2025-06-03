@@ -92,6 +92,12 @@ components:
   schemas:
     Person:
       type: object
+      required:
+        - id
+        - name
+        - wca_id
+        - country_iso2
+        - url
       properties:
         id:
           type: integer
@@ -400,6 +406,12 @@ components:
         city:
           type: string
           example: "Seattle, Washington"
+        venue_address:
+          type: string
+          example: "770 Don Mills Rd, North York, ON M3C IT3, Canada"
+        venue_details:
+          type: string
+          example: "The big convention center"
         latitude_degrees:
           type: number
           format: float
@@ -416,6 +428,12 @@ components:
           items:
             type: string
           example: [ "333" ]
+        main_event_id:
+          type: string
+          example: "333"
+        number_of_bookmarks:
+          type: integer
+          example: 123
         registration_full?:
           type: boolean
           example: true

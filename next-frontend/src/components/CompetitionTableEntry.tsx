@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { JSX } from "react";
 import { Table, Text, Link } from "@chakra-ui/react";
 import CompRegoFullButOpenOrangeIcon from "@/components/icons/CompRegoFullButOpen_orangeIcon";
 import CompRegoNotFullOpenGreenIcon from "@/components/icons/CompRegoNotFullOpen_greenIcon";
@@ -18,13 +18,13 @@ interface Comps {
   dateEnd: Date;
   city: string;
   country: string;
-  regoStatus: string;
-  competitorLimit: BigInteger;
+  registrationStatus: string;
+  competitorLimit: number;
   events: string[];
   mainEvent: string;
 }
 
-const regoStatusIcons: Record<string, TSX.Element> = {
+const registrationStatusIcons: Record<string, JSX.Element> = {
   open: <CompRegoNotFullOpenGreenIcon />,
   notOpen: <CompRegoNotOpenYetGreyIcon />,
   closed: <CompRegoClosedRedIcon />,
@@ -72,7 +72,9 @@ const CompetitionTableEntry: React.FC<CompsProps> = ({ comp }) => {
   const [open, setOpen] = useState(false);
   return (
     <Table.Row bg="bg.inverted" onClick={() => setOpen(true)} key={comp.id}>
-      <Table.Cell>{regoStatusIcons[comp.regoStatus] || null}</Table.Cell>
+      <Table.Cell>
+        {registrationStatusIcons[comp.registrationStatus] || null}
+      </Table.Cell>
       <Table.Cell>
         <Text>{formatDateRange(comp.dateStart, comp.dateEnd)}</Text>
       </Table.Cell>

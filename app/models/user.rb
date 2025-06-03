@@ -539,6 +539,10 @@ class User < ApplicationRecord
     can_view_past_banned_competitors? || staff_delegate? || appeals_committee?
   end
 
+  private def can_view_delegate_probations?
+    wic_team?
+  end
+
   private def can_view_past_banned_competitors?
     wic_team? || board_member? || weat_team? || results_team? || admin?
   end
@@ -559,6 +563,8 @@ class User < ApplicationRecord
     groups = groups_with_edit_access
 
     groups += UserGroup.banned_competitors.ids if can_view_past_banned_competitors?
+
+    groups += UserGroup.delegate_probation.ids if can_view_delegate_probations?
 
     groups
   end
@@ -731,6 +737,7 @@ class User < ApplicationRecord
         pages: [
           panel_pages[:bannedCompetitors],
           panel_pages[:downloadVoters],
+          panel_pages[:delegateProbations],
         ],
       },
       weat: {
@@ -813,7 +820,14 @@ class User < ApplicationRecord
     # We use the ability to `remove_avatar` as a general check for whether edits are allowed.
     #   Otherwise, checking for competitions of `current_avatar` and `pending_avatar` might be
     #   too cumbersome depending on the context (ie depending on where this method is being called from)
-    self.editable_fields_of_user(user).include?(:remove_avatar)
+    # Note that the check for the user's WCA ID is technically not required. That is,
+    #   we can perfectly link an avatar to a user who has not claimed any WCA ID. The true reason
+    #   for this check is purely pragmatic: We've had issues with "unclaimed" user accounts
+    #   (i.e. accounts that do not have a WCA ID) thinking that they are anonymous and uploading
+    #   derogatory, racist or otherwise harmful material as pictures because they thought they
+    #   would be "anonymous". With this requirement for a WCA ID, we can at least ban or otherwise
+    #   punish users who exhibit such a highly concerning behavior.
+    user.wca_id.present? && self.editable_fields_of_user(user).include?(:remove_avatar)
   end
 
   def organizer_for?(user)
@@ -1168,12 +1182,17 @@ class User < ApplicationRecord
   end
 
   def self.search(query, params: {})
-    users = Person.includes(:user).current
-    # We can't search by email on the 'Person' table
-    search_by_email = false
-    unless ActiveRecord::Type::Boolean.new.cast(params[:persons_table])
+    search_by_email = ActiveRecord::Type::Boolean.new.cast(params[:email])
+    admin_search = ActiveRecord::Type::Boolean.new.cast(params[:adminSearch])
+    searching_persons_table = ActiveRecord::Type::Boolean.new.cast(params[:persons_table])
+
+    return User.where(email: query) if admin_search && search_by_email
+
+    if searching_persons_table
+      users = Person.includes(:user).current
+      search_by_email = false # We can't search by email on the 'Person' table
+    else
       users = User.confirmed_email.not_dummy_account
-      search_by_email = ActiveRecord::Type::Boolean.new.cast(params[:email])
 
       users = users.where(id: self.staff_delegate_ids) if ActiveRecord::Type::Boolean.new.cast(params[:only_staff_delegates])
 
@@ -1200,13 +1219,13 @@ class User < ApplicationRecord
   private def deprecated_team_roles
     active_roles
       .includes(:metadata, group: [:metadata])
-      .select { |role|
+      .select do |role|
         [
           UserGroup.group_types[:teams_committees],
           UserGroup.group_types[:councils],
           UserGroup.group_types[:board],
         ].include?(role.group_type)
-      }
+      end
       .reject { |role| role.group.is_hidden }
       .map(&:deprecated_team_role)
   end
@@ -1247,7 +1266,7 @@ class User < ApplicationRecord
     json
   end
 
-  def to_wcif(competition, registration = nil, registrant_id = nil, authorized: false)
+  def to_wcif(competition, registration = nil, authorized: false)
     roles = registration&.roles || []
     roles << "delegate" if competition.staff_delegates.include?(self)
     roles << "trainee-delegate" if competition.trainee_delegates.include?(self)
@@ -1260,7 +1279,7 @@ class User < ApplicationRecord
       "name" => name,
       "wcaUserId" => id,
       "wcaId" => wca_id,
-      "registrantId" => registrant_id,
+      "registrantId" => registration&.registrant_id,
       "countryIso2" => country_iso2,
       "gender" => gender,
       "registration" => registration&.to_wcif(authorized: authorized),
@@ -1346,12 +1365,16 @@ class User < ApplicationRecord
         .map(&:competition)
   end
 
+  def competitions_with_active_registrations
+    self.competitions_registered_for.not_over.merge(Registration.where.not(competing_status: %w[cancelled rejected]))
+  end
+
   def delegate_in_probation?
     UserGroup.delegate_probation.flat_map(&:active_users).include?(self)
   end
 
   private def can_manage_delegate_probation?
-    admin? || board_member? || senior_delegate? || can_access_wfc_senior_matters?
+    admin? || board_member? || senior_delegate? || can_access_wfc_senior_matters? || group_leader?(UserGroup.teams_committees_group_wic)
   end
 
   def senior_delegates
@@ -1425,7 +1448,7 @@ class User < ApplicationRecord
   end
 
   def anonymization_checks_with_message_args
-    upcoming_registered_competitions = competitions_registered_for.not_over.merge(Registration.where.not(competing_status: %w[cancelled rejected])).pluck(:id, :name).map { |id, name| { id: id, name: name } }
+    upcoming_registered_competitions = competitions_with_active_registrations.pluck(:id, :name).map { |id, name| { id: id, name: name } }
     access_grants = oauth_access_grants
                     .where.not(revoked_at: nil)
                     .map do |access_grant|
@@ -1459,7 +1482,7 @@ class User < ApplicationRecord
     ]
   end
 
-  def anonymize
+  def anonymize(new_wca_id = nil)
     skip_reconfirmation!
     update(
       email: id.to_s + User::ANONYMOUS_ACCOUNT_EMAIL_ID_SUFFIX,

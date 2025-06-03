@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe ResultsSubmissionController, type: :request do
+RSpec.describe ResultsSubmissionController do
   let(:image) { Rack::Test::UploadedFile.new('spec/support/logo.png', 'image/png') }
 
   context "not signed in" do

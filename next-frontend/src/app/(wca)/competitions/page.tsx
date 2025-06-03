@@ -35,9 +35,7 @@ const getAllCompData = async () => {
       dateEnd: new Date(competitionInfo.end_date),
       city: competitionInfo.city,
       country: competitionInfo.country_iso2,
-      regoStatus: competitionInfo.registration_currently_open
-        ? "open"
-        : "closed",
+      registrationStatus: "open", // TODO GB
       competitorLimit: competitionInfo.competitor_limit,
       events: competitionInfo.event_ids,
       mainEvent: competitionInfo.main_event_id,
@@ -49,9 +47,9 @@ const getAllCompData = async () => {
   return compDataArray;
 };
 
-const competitions = await getAllCompData();
+export default async function Competitions() {
+  const competitions = await getAllCompData();
 
-export default function Competitions() {
   return (
     <Container>
       <Card.Root

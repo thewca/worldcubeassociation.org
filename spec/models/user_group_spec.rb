@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe UserGroup, type: :model do
+RSpec.describe UserGroup do
   let(:africa_region) { GroupsMetadataDelegateRegions.find_by!(friendly_id: 'africa').user_group }
   let(:asia_region) { GroupsMetadataDelegateRegions.find_by!(friendly_id: 'asia').user_group }
   let(:europe_region) { GroupsMetadataDelegateRegions.find_by!(friendly_id: 'europe').user_group }

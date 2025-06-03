@@ -28,6 +28,7 @@ const ALL_EVENTS = [
 interface CompetitorData {
   id: string;
 }
+
 const TabCompetitors: React.FC<CompetitorData> = ({ id }) => {
   const [competitors, setCompetitors] = useState<Person[]>([]);
   const [eventIds, setEventIds] = useState<string[]>([]);
@@ -65,6 +66,7 @@ const TabCompetitors: React.FC<CompetitorData> = ({ id }) => {
       </Center>
     );
   }
+
   return (
     <Card.Root>
       <Card.Body>
