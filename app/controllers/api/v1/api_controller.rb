@@ -55,7 +55,6 @@ class Api::V1::ApiController < ActionController::API
   def test_snake_case
     return head :not_found if Rails.env.production? && EnvConfig.WCA_LIVE_SITE?
 
-    puts params.inspect
     params.delete(:action)
     params.delete(:api)
     params.delete(:controller)
@@ -71,5 +70,4 @@ class Api::V1::ApiController < ActionController::API
       params.deep_transform_keys!(&:underscore)
     end
   end
-
 end
