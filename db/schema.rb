@@ -655,6 +655,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_05_29_061324) do
     t.string "competition_id", limit: 32, default: "", null: false
     t.string "event_id", limit: 6, default: "", null: false
     t.string "round_type_id", limit: 1, default: "", null: false
+    t.integer "round_id"
     t.string "format_id", limit: 1, default: "", null: false
     t.integer "value1", default: 0, null: false
     t.integer "value2", default: 0, null: false
@@ -666,6 +667,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_05_29_061324) do
     t.index ["competition_id"], name: "InboxResults_fk_tournament"
     t.index ["event_id"], name: "InboxResults_fk_event"
     t.index ["format_id"], name: "InboxResults_fk_format"
+    t.index ["round_id"], name: "index_inbox_results_on_round_id"
     t.index ["round_type_id"], name: "InboxResults_fk_round"
   end
 
@@ -1072,6 +1074,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_05_29_061324) do
     t.string "competition_id", limit: 32, default: "", null: false
     t.string "event_id", limit: 6, default: "", null: false
     t.string "round_type_id", limit: 1, default: "", null: false
+    t.integer "round_id"
     t.string "format_id", limit: 1, default: "", null: false
     t.integer "value1", default: 0, null: false
     t.integer "value2", default: 0, null: false
@@ -1100,6 +1103,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_05_29_061324) do
     t.index ["person_id"], name: "Results_fk_competitor"
     t.index ["regional_average_record", "event_id"], name: "index_Results_on_regionalAverageRecord_and_eventId"
     t.index ["regional_single_record", "event_id"], name: "index_Results_on_regionalSingleRecord_and_eventId"
+    t.index ["round_id"], name: "index_results_on_round_id"
     t.index ["round_type_id"], name: "Results_fk_round"
   end
 
@@ -1219,11 +1223,13 @@ ActiveRecord::Schema[7.2].define(version: 2025_05_29_061324) do
     t.string "competition_id", limit: 32, null: false
     t.string "event_id", limit: 6, null: false
     t.string "round_type_id", limit: 1, null: false
+    t.integer "round_id"
     t.string "group_id", limit: 3, null: false
     t.boolean "is_extra", null: false
     t.integer "scramble_num", null: false
     t.text "scramble", null: false
     t.index ["competition_id", "event_id"], name: "competitionId"
+    t.index ["round_id"], name: "index_scrambles_on_round_id"
   end
 
   create_table "server_settings", primary_key: "name", id: :string, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
@@ -1508,6 +1514,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_05_29_061324) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "inbox_results", "rounds"
   add_foreign_key "inbox_scramble_sets", "events"
   add_foreign_key "inbox_scramble_sets", "rounds", column: "matched_round_id"
   add_foreign_key "inbox_scramble_sets", "scramble_file_uploads", column: "external_upload_id"
