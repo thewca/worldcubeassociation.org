@@ -3,6 +3,9 @@
 require 'rails_helper'
 
 RSpec.describe 'v1_api_controller' do
+  let(:jwt) { fetch_jwt_token(create(:user).id) }
+  let(:headers) { { 'Authorization' => jwt } }
+
   describe '#snake_case_params!' do
     it 'sets camelCase keys only to snake_case' do
       test_payload = {
@@ -10,7 +13,7 @@ RSpec.describe 'v1_api_controller' do
         secondExample: "secondExample",
       }
 
-      post api_v1_test_snake_case_path, params: test_payload, as: :json
+      post api_v1_test_snake_case_path, params: test_payload, headers: headers, as: :json
       expect(response.parsed_body).to eq({
         first_example: "firstExample",
         second_example: "secondExample",
@@ -23,7 +26,7 @@ RSpec.describe 'v1_api_controller' do
         second_example: "secondExample",
       }
 
-      post api_v1_test_snake_case_path, params: test_payload, as: :json
+      post api_v1_test_snake_case_path, params: test_payload, headers: headers, as: :json
       expect(response.parsed_body).to eq({
         first_example: "firstExample",
         second_example: "secondExample",
@@ -36,7 +39,7 @@ RSpec.describe 'v1_api_controller' do
         second_example: "secondExample",
       }
 
-      post api_v1_test_snake_case_path, params: test_payload, as: :json
+      post api_v1_test_snake_case_path, params: test_payload, headers: headers, as: :json
       expect(response.parsed_body).to eq({
         first_example: "firstExample",
         second_example: "secondExample",
@@ -49,7 +52,7 @@ RSpec.describe 'v1_api_controller' do
         { secondExample: "secondExample" },
       ]
 
-      post api_v1_test_snake_case_path, params: test_payload, as: :json
+      post api_v1_test_snake_case_path, params: test_payload, headers: headers, as: :json
       expect(response.parsed_body).to eq({ _json: [
         { first_example: "firstExample" },
         { second_example: "secondExample" },
@@ -62,7 +65,7 @@ RSpec.describe 'v1_api_controller' do
         secondExample: { thirdNest: { fourthNest: 'value2' } },
       }
 
-      post api_v1_test_snake_case_path, params: test_payload, as: :json
+      post api_v1_test_snake_case_path, params: test_payload, headers: headers, as: :json
       expect(response.parsed_body).to eq({
         first_example: { first_nest: { second_nest: 'value1' } },
         second_example: { third_nest: { fourth_nest: 'value2' } },
@@ -75,7 +78,7 @@ RSpec.describe 'v1_api_controller' do
         secondExample: [thirdNest: { fourthNest: 'value2' }, fifthNest: { fifthNestKey: 'fifth nest val' }],
       ]
 
-      post api_v1_test_snake_case_path, params: test_payload, as: :json
+      post api_v1_test_snake_case_path, params: test_payload, headers: headers, as: :json
       expect(response.parsed_body).to eq({ _json: [
         first_example: [first_nest: { second_nest: 'value1' }, another_nest: { another_nest_key: 'another nest val' }],
         second_example: [third_nest: { fourth_nest: 'value2' }, fifth_nest: { fifth_nest_key: 'fifth nest val' }],
@@ -88,10 +91,103 @@ RSpec.describe 'v1_api_controller' do
         secondExample: [thirdNest: { fourthNest: 'value2' }, fifthNest: { fifthNestKey: 'fifth nest val' }],
       }
 
-      post api_v1_test_snake_case_path, params: test_payload, as: :json
+      post api_v1_test_snake_case_path, params: test_payload, headers: headers, as: :json
       expect(response.parsed_body).to eq({
         first_example: [first_nest: { second_nest: 'value1' }, another_nest: { another_nest_key: 'another nest val' }],
         second_example: [third_nest: { fourth_nest: 'value2' }, fifth_nest: { fifth_nest_key: 'fifth nest val' }],
+      }.deep_stringify_keys)
+    end
+  end
+
+  describe '#camelize_response' do
+    it 'sets snake_case keys to camelCase' do
+      test_payload = {
+        first_example: "firstExample",
+        second_example: "secondExample",
+      }
+
+      post api_v1_test_camel_case_path, params: test_payload, headers: headers, as: :json
+      expect(response.parsed_body).to eq({
+        firstExample: "firstExample",
+        secondExample: "secondExample",
+      }.stringify_keys)
+    end
+
+    it 'camelCase params are unchanged' do
+      test_payload = {
+        firstExample: "firstExample",
+        secondExample: "secondExample",
+      }
+
+      post api_v1_test_camel_case_path, params: test_payload, headers: headers, as: :json
+      expect(response.parsed_body).to eq({
+        firstExample: "firstExample",
+        secondExample: "secondExample",
+      }.stringify_keys)
+    end
+
+    it 'mix of snake_case and camelCase gets converted to all camelCase' do
+      test_payload = {
+        firstExample: "firstExample",
+        second_example: "secondExample",
+      }
+
+      post api_v1_test_camel_case_path, params: test_payload, headers: headers, as: :json
+      expect(response.parsed_body).to eq({
+        firstExample: "firstExample",
+        secondExample: "secondExample",
+      }.stringify_keys)
+    end
+
+    it 'keys in an array of hashes get converted to camelCase' do
+      test_payload = [
+        { first_example: "firstExample" },
+        { second_example: "secondExample" },
+      ]
+
+      post api_v1_test_camel_case_path, params: test_payload, headers: headers, as: :json
+      expect(response.parsed_body).to eq({ Json: [
+        { firstExample: "firstExample" },
+        { secondExample: "secondExample" },
+      ] }.deep_stringify_keys)
+    end
+
+    it 'keys in a nested hash get converted to camelCase' do
+      test_payload = {
+        first_example: { first_nest: { second_nest: 'value1' } },
+        second_example: { third_nest: { fourth_nest: 'value2' } },
+      }
+
+      post api_v1_test_camel_case_path, params: test_payload, headers: headers, as: :json
+      expect(response.parsed_body).to eq({
+        firstExample: { firstNest: { secondNest: 'value1' } },
+        secondExample: { thirdNest: { fourthNest: 'value2' } },
+      }.deep_stringify_keys)
+    end
+
+    it 'deeply nested array of hashes/arrays keys all get converted to camelCase' do
+      test_payload = [
+        first_example: [first_nest: { second_nest: 'value1' }, another_nest: { another_nest_key: 'another nest val' }],
+        second_example: [third_nest: { fourth_nest: 'value2' }, fifth_nest: { fifth_nest_key: 'fifth nest val' }],
+      ]
+
+      post api_v1_test_camel_case_path, params: test_payload, headers: headers, as: :json
+      expect(response.parsed_body).to eq({ Json: [
+        firstExample: [firstNest: { secondNest: 'value1' }, anotherNest: { anotherNestKey: 'another nest val' }],
+        secondExample: [thirdNest: { fourthNest: 'value2' }, fifthNest: { fifthNestKey: 'fifth nest val' }],
+      ] }.deep_stringify_keys)
+    end
+
+    it 'deeply nested hash of hashes/arrays keys all get converted to camelCase' do
+      test_payload = {
+        first_example: [first_nest: { second_nest: 'value1' }, another_nest: { another_nest_key: 'another nest val' }],
+        second_example: [third_nest: { fourth_nest: 'value2' }, fifth_nest: { fifth_nest_key: 'fifth nest val' }],
+      }
+
+      post api_v1_test_camel_case_path, params: test_payload, headers: headers, as: :json
+      expect(response.parsed_body).to eq({
+        firstExample: [firstNest: { secondNest: 'value1' }, anotherNest: { anotherNestKey: 'another nest val' }],
+        secondExample: [thirdNest: { fourthNest: 'value2' }, fifthNest: { fifthNestKey: 'fifth nest val' }],
       }.deep_stringify_keys)
     end
   end

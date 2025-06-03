@@ -3,7 +3,7 @@
 class Api::V1::ApiController < ActionController::API
   prepend_before_action :validate_jwt_token
   before_action :snake_case_params!
-  skip_before_action :validate_jwt_token, only: [:test_snake_case]
+  after_action :camelize_response, except: [:test_snake_case]
 
   # Manually include new Relic because we don't derive from ActionController::Base
   include NewRelic::Agent::Instrumentation::ControllerInstrumentation if Rails.env.production?
@@ -24,8 +24,9 @@ class Api::V1::ApiController < ActionController::API
     end
   end
 
-  def render_with_camel_case(payload)
-    render json: camelize_keys(payload)
+  private def camelize_response
+    body = JSON.parse(response.body)
+    response.body = JSON.generate(camelize_keys(body))
   end
 
   private def camelize_keys(payload)
@@ -50,6 +51,15 @@ class Api::V1::ApiController < ActionController::API
 
   rescue_from ActionController::ParameterMissing do |_e|
     render json: { error: Registrations::ErrorCodes::INVALID_REQUEST_DATA }, status: :bad_request
+  end
+
+  def test_camel_case
+    return head :not_found if Rails.env.production? && EnvConfig.WCA_LIVE_SITE?
+
+    params.delete(:action)
+    params.delete(:api)
+    params.delete(:controller)
+    render json: params.to_unsafe_h
   end
 
   def test_snake_case
