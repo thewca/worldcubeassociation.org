@@ -27,10 +27,10 @@ const COMPETITION_SELECTION_OPTIONS_TEXT = {
 
 const COMPETITION_SELECTION_OPTIONS = Object.keys(COMPETITION_SELECTION_OPTIONS_TEXT);
 
-export default function Wrapper() {
+export default function Wrapper({ competitionIds }) {
   return (
     <WCAQueryClientProvider>
-      <RunValidatorsForm />
+      <RunValidatorsForm competitionIds={competitionIds} />
     </WCAQueryClientProvider>
   );
 }
