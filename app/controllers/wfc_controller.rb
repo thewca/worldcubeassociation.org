@@ -18,6 +18,7 @@ class WfcController < ApplicationController
     response.headers["Content-Disposition"] = "attachment; filename=\"wfc-competitions-export-#{from}-#{to}.tsv\""
     @competitions = Competition
                     .select(select_attributes)
+                    .select('COUNT(DISTINCT persons.id) AS num_competitors')
                     .includes(:delegates, :championships, :organizers, :events, organizers: [:wfc_dues_redirect])
                     .left_joins(:competitors)
                     .group(:id)
