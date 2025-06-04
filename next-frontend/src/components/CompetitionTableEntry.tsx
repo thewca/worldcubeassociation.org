@@ -30,33 +30,30 @@ import NationalChampionshipIcon from "@/components/icons/NationalChampionshipIco
 import EventIcon from "@/components/EventIcon";
 import CountryMap from "@/components/CountryMap";
 
+import type { components } from "@/lib/wca/wcaSchema";
+
 // Raw competition type from WCA API
-interface WCACompetition {
-  id: string;
-  name: string;
-  start_date: string;
-  end_date: string;
-  city: string;
-  country_iso2: string;
-  registration_open: string | null;
-  registration_close: string | null;
-  registration_currently_open: boolean;
-  competitor_limit: number;
-  event_ids: string[];
-  main_event_id: string;
-}
+type CompetitionIndex = components["schemas"]["CompetitionIndex"];
 
 interface Props {
-  comp: WCACompetition;
+  comp: CompetitionIndex;
 }
 
 // Map registration status
-const getRegistrationStatus = (comp: WCACompetition): string => {
-  if (comp.registration_currently_open) {
-    if (comp.competitor_limit === 0) return "open";
+const getRegistrationStatus = (comp: CompetitionIndex): string => {
+  const alreadyOpened = new Date(comp.registration_open) <= new Date();
+  const notYetClosed = new Date(comp.registration_close) > new Date();
+
+  const currentlyOpen = alreadyOpened && notYetClosed;
+
+  if (currentlyOpen) {
     return "open";
   }
-  if (new Date(comp.registration_open ?? "") > new Date()) return "notOpen";
+
+  if (!alreadyOpened) {
+    return "notOpen";
+  }
+
   return "closed";
 };
 

@@ -20,7 +20,7 @@ import {
   CheckboxGroup,
   Icon,
 } from "@chakra-ui/react";
-import AllCompsIcon from "@/components/icons/AllCompsIcon";
+import { AllCompsIcon } from "@/components/icons/AllCompsIcon";
 import MapIcon from "@/components/icons/MapIcon";
 import ListIcon from "@/components/icons/ListIcon";
 import CompetitionTableEntry from "@/components/CompetitionTableEntry";
@@ -33,16 +33,26 @@ import CompRegoOpenDateIcon from "@/components/icons/CompRegoOpenDateIcon";
 import CompRegoCloseDateIcon from "@/components/icons/CompRegoCloseDateIcon";
 import { countryCodeMapping } from "@/components/CountryMap";
 import EventIcon from "@/components/EventIcon";
-
 import Flag from "react-world-flags";
 
-export default function CompetitionsClient({ competitions }) {
+import type { components } from "@/lib/wca/wcaSchema";
+
+type CompetitionIndex = components["schemas"]["CompetitionIndex"];
+
+interface CompetitionsListProps {
+  competitions: CompetitionIndex[];
+}
+
+export default function CompetitionsClient({
+  competitions,
+}: CompetitionsListProps) {
   const countries = Object.entries(countryCodeMapping).map(([code, name]) => ({
     label: name,
     value: code,
   }));
 
-  const { contains } = useFilter({ sensitivity: "base", keys: ["label"] });
+  const { contains } = useFilter({ sensitivity: "base" });
+
   const { collection, filter } = useListCollection({
     initialItems: countries,
     filter: contains,
