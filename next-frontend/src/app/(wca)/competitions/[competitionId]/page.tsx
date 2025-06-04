@@ -104,7 +104,7 @@ export default async function CompetitionOverView({
     second: "2-digit",
     hour12: true,
     timeZoneName: "short",
-  };
+  } as Intl.DateTimeFormatOptions;
 
   const formattedRegoOpenDate = regoOpenDate.toLocaleString(
     "en-US",

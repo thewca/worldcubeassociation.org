@@ -111,6 +111,12 @@ const customConfig = defineConfig({
         danger: { value: "{colors.red.50}" },
         warning: { value: "{colors.yellow.50}" },
         success: { value: "{colors.green.100}" },
+        recordColors: {
+          personal: { value: "{colors.orange.50}" },
+          national: { value: "{colors.green.50}" },
+          continental: { value: "{colors.red.50}" },
+          world: { value: "{colors.blue.50}" },
+        },
         grey: {
           solid: {
             value: {
@@ -173,6 +179,11 @@ const customConfig = defineConfig({
               },
             },
           },
+          spanBg: { value: "#664d00" },
+          cls1: { value: "#664d00" },
+          cls2: { value: "#ffd313" },
+          cls3: { value: "#ffde55" },
+          cls4: { value: "#cea705" },
         },
         green: {
           solid: {
@@ -207,6 +218,11 @@ const customConfig = defineConfig({
               },
             },
           },
+          spanBg: { value: "#1B4D3E" },
+          cls1: { value: "#1B4D3E" },
+          cls2: { value: "#049347" },
+          cls3: { value: "#04632D" },
+          cls4: { value: "#1AB55C" },
         },
         blue: {
           solid: {
@@ -241,6 +257,11 @@ const customConfig = defineConfig({
               },
             },
           },
+          spanBg: { value: "#003366" },
+          cls1: { value: "#003366" },
+          cls2: { value: "#0051BA" },
+          cls3: { value: "#03458C" },
+          cls4: { value: "#066AC4" },
         },
         red: {
           solid: {
@@ -275,6 +296,11 @@ const customConfig = defineConfig({
               },
             },
           },
+          spanBg: { value: "#7A1220" },
+          cls1: { value: "#7A1220" },
+          cls2: { value: "#CF1A1B" },
+          cls3: { value: "#A3131A" },
+          cls4: { value: "#E53841" },
         },
         orange: {
           solid: {
@@ -314,6 +340,11 @@ const customConfig = defineConfig({
               },
             },
           },
+          spanBg: { value: "#7A2B00" },
+          cls1: { value: "#7A2B00" },
+          cls2: { value: "#FF5800" },
+          cls3: { value: "#D34405" },
+          cls4: { value: "#F96E32" },
         },
         bg: {
           DEFAULT: {
@@ -424,6 +455,7 @@ const customConfig = defineConfig({
           },
         },
         defaultVariants: {
+          // @ts-expect-error TODO: Fix this
           variant: "solid",
           size: "lg",
         },
@@ -523,6 +555,7 @@ const customConfig = defineConfig({
           },
         },
         defaultVariants: {
+          // @ts-expect-error TODO: Fix this
           variant: "wcaLink",
           hoverArrow: "false",
         },
@@ -533,7 +566,7 @@ const customConfig = defineConfig({
             achievement: {
               bg: "transparent",
               color: "colorPalette.fg",
-              fontWeight: "bold",
+              fontWeight: "medium",
               gap: "2",
               mr: "2.5",
             },
@@ -551,6 +584,7 @@ const customConfig = defineConfig({
             variant: "achievement",
             css: {
               textStyle: "lg", //needed to supercede the default textStyle
+              // @ts-expect-error TODO: Fix this
               svg: {
                 height: "1.25em",
                 width: "1.25em",
@@ -561,6 +595,7 @@ const customConfig = defineConfig({
             variant: "information",
             css: {
               textStyle: "md", //needed to supercede the default textStyle
+              // @ts-expect-error TODO: Fix this
               svg: {
                 height: "1.1em",
                 width: "1.1em",
@@ -596,6 +631,7 @@ const customConfig = defineConfig({
           },
         },
         defaultVariants: {
+          // @ts-expect-error TODO: Fix this
           size: "sm",
         },
         variants: {
@@ -604,6 +640,14 @@ const customConfig = defineConfig({
               body: {
                 bg: "colorPalette.solid",
                 color: "colorPalette.contrast",
+              },
+            },
+            summary: {
+              body: {
+                bg: "colorPalette.solid",
+                color: "colorPalette.contrast",
+                p: "7",
+                gap: "3",
               },
             },
             info: {
@@ -662,6 +706,7 @@ const customConfig = defineConfig({
             variant: "infoSnippet",
             css: {
               header: {
+                // @ts-expect-error TODO: Fix this
                 svg: {
                   height: "1.15em",
                   width: "1.15em",
@@ -672,6 +717,7 @@ const customConfig = defineConfig({
         ],
       },
       checkboxCard: {
+        slots: [],
         variants: {
           size: {
             xs: {
@@ -695,6 +741,7 @@ const customConfig = defineConfig({
         },
       },
       segmentGroup: {
+        slots: [],
         variants: {
           variant: {
             inset: {
@@ -739,6 +786,7 @@ const customConfig = defineConfig({
         },
       },
       accordion: {
+        slots: [],
         variants: {
           variant: {
             subtle: {
@@ -781,11 +829,12 @@ const customConfig = defineConfig({
         },
       },
       table: {
+        slots: [],
         variants: {
           variant: {
             results: {
               cell: {
-                padding: "0",
+                p: "0",
               },
             },
             competitions: {
@@ -837,20 +886,21 @@ const customConfig = defineConfig({
         },
       },
       drawer: {
+        slots: [],
         variants: {
           variant: {
             competitionInfo: {
               content: {
-                borderRadius: "md",
+                borderRadius: "xl",
                 shadow: "{shadows.wca}",
                 height: "max-content",
-                borderRadius: "xl",
               },
             },
           },
         },
       },
       tabs: {
+        slots: [],
         variants: {
           variant: {
             enclosed: {
@@ -900,6 +950,65 @@ const customConfig = defineConfig({
                 _selected: {
                   bg: "white",
                 },
+              },
+            },
+            results: {
+              content: {
+                p: "8",
+              },
+              trigger: {
+                borderRadius: "0",
+                color: "fg",
+                _notFirst: {
+                  _before: {
+                    content: '""',
+                    position: "absolute",
+                    left: 0,
+                    top: "50%",
+                    transform: "translateY(-50%)",
+                    height: "1.5em",
+                    width: "1.5px",
+                    backgroundColor: "#D9D9D9",
+                  },
+                },
+                _selected: {
+                  bg: "colorPalette.solid",
+                  color: "colorPalette.contrast",
+                  _before: {
+                    display: "none", // Remove the line when selected
+                  },
+                },
+                "&[data-selected] + &::before": {
+                  display: "none",
+                },
+              },
+            },
+          },
+        },
+      },
+      dataList: {
+        slots: [],
+        variants: {
+          variant: {
+            profileStat: {
+              root: {
+                display: "grid",
+                gridTemplateColumns: "1fr 1fr",
+                columnGap: "2rem",
+                rowGap: "0.5rem",
+              },
+              item: {
+                flexDirection: "column-reverse",
+                alignItems: "flex-start", // default for left column
+                _even: {
+                  alignItems: "flex-end", // right column overrides
+                },
+              },
+              itemLabel: {
+                fontWeight: "regular",
+              },
+              itemValue: {
+                fontWeight: "semibold",
               },
             },
           },

@@ -53,7 +53,9 @@ class PanelController < ApplicationController
     validators = params.require(:selectedValidators).split(',').map do |validator_name|
       ResultsValidators::Utils.validator_class_from_name(validator_name)
     end
-    apply_fix_when_possible = params.require(:applyFixWhenPossible)
+
+    apply_fix_when_possible_raw = params.require(:applyFixWhenPossible)
+    apply_fix_when_possible = ActiveRecord::Type::Boolean.new.cast(apply_fix_when_possible_raw)
 
     results_validator = ResultsValidators::CompetitionsResultsValidator.new(
       validators,

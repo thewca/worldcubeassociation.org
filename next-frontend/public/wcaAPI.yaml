@@ -27,6 +27,24 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CompetitionInfo'
+  /competitions/{competitionId}/registrations:
+    get:
+      summary: Get competition registrations
+      parameters:
+        - name: competitionId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RegistrationData'
   /persons/{wca_id}/:
     get:
       summary: Get information for a person
@@ -92,6 +110,15 @@ components:
   schemas:
     Person:
       type: object
+      required:
+        - id
+        - name
+        - wca_id
+        - country_iso2
+        - delegate_status
+        - teams
+        - url
+        - avatar
       properties:
         id:
           type: integer
@@ -99,16 +126,66 @@ components:
         name:
           type: string
           example: "Tim Reynolds"
+        gender:
+          type: string
+          example: "m"
         wca_id:
           type: string
           example: "2005REYN01"
         country_iso2:
           type: string
           example: "US"
+        delegate_status:
+          type: string
+          example: "delegate"
+        teams:
+          type: array
+          items:
+            $ref: '#/components/schemas/TeamMembership'
         url:
           type: string
           format: uri
           example: "https://www.worldcubeassociation.org/persons/2005REYN01"
+        avatar:
+          $ref: '#/components/schemas/UserAvatar'
+
+    TeamMembership:
+      type: object
+      required:
+        - id
+        - friendly_id
+        - leader
+        - senior_member
+      properties:
+        id:
+          type: integer
+        friendly_id:
+          type: string
+          example: "wst"
+        leader:
+          type: boolean
+        senior_member:
+          type: boolean
+        name:
+          type: string
+        wca_id:
+          type: string
+        avatar:
+          $ref: '#/components/schemas/UserAvatar'
+
+    UserAvatar:
+      type: object
+      required:
+        - url
+      properties:
+        url:
+          type: string
+          format: uri
+          example: "https://avatars.worldcubeassociation.org/uploads/user/avatar/2099EXAM/1535183030.jpg"
+        thumb_url:
+          type: string
+          format: uri
+          example: "https://avatars.worldcubeassociation.org/uploads/user/avatar/2099EXAM/1535183030_thumb.jpg"
 
     Organizer:
       allOf:
@@ -123,41 +200,32 @@ components:
               format: email
               example: "255@worldcubeassociation.org"
             avatar:
-              type: object
-              properties:
-                url:
-                  type: string
-                  format: uri
-                  example: "https://avatars.worldcubeassociation.org/uploads/user/avatar/2099EXAM/1535183030.jpg"
-                thumb_url:
-                  type: string
-                  format: uri
-                  example: "https://avatars.worldcubeassociation.org/uploads/user/avatar/2099EXAM/1535183030_thumb.jpg"
+              $ref: '#/components/schemas/UserAvatar'
 
     Rank:
       type: object
       required:
         - id
-        - personId
-        - eventId
+        - person_id
+        - event_id
         - best
-        - worldRank
-        - continentRank
-        - countryRank
+        - world_rank
+        - continent_rank
+        - country_rank
       properties:
         id:
           type: integer
-        personId:
+        person_id:
           type: string
-        eventId:
+        event_id:
           type: string
         best:
           type: integer
-        worldRank:
+        world_rank:
           type: integer
-        continentRank:
+        continent_rank:
           type: integer
-        countryRank:
+        country_rank:
           type: integer
 
     Medals:
@@ -198,12 +266,11 @@ components:
       type: object
       required:
         - person
-        - previous_persons
-        - ranks_average
-        - ranks_single
         - medals
         - records
+        - personal_records
         - championship_podiums
+        - competition_count
       properties:
         person:
           $ref: '#/components/schemas/Person'
@@ -223,6 +290,10 @@ components:
           $ref: '#/components/schemas/Medals'
         records:
           $ref: '#/components/schemas/Records'
+        personal_records:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/SingleAndAverageRank'
         championship_podiums:
           type: object
           properties:
@@ -242,6 +313,19 @@ components:
               type: array
               items:
                 type: object
+        competition_count:
+          type: integer
+
+    SingleAndAverageRank:
+      type: object
+      required:
+        - average
+        - single
+      properties:
+        average:
+          $ref: "#/components/schemas/Rank"
+        single:
+          $ref: "#/components/schemas/Rank"
 
     CompetitionInfo:
       type: object
@@ -400,6 +484,12 @@ components:
         city:
           type: string
           example: "Seattle, Washington"
+        venue_address:
+          type: string
+          example: "770 Don Mills Rd, North York, ON M3C IT3, Canada"
+        venue_details:
+          type: string
+          example: "The big convention center"
         latitude_degrees:
           type: number
           format: float
@@ -416,6 +506,12 @@ components:
           items:
             type: string
           example: [ "333" ]
+        main_event_id:
+          type: string
+          example: "333"
+        number_of_bookmarks:
+          type: integer
+          example: 123
         registration_full?:
           type: boolean
           example: true
@@ -651,3 +747,22 @@ components:
           type: string
         name:
           type: string
+
+    RegistrationData:
+      type: object
+      properties:
+        id:
+          type: integer
+        competition_id:
+          type: string
+        user_id:
+          type: integer
+        event_ids:
+          type: array
+          items:
+            type: string
+      required:
+        - id
+        - competition_id
+        - user_id
+        - event_ids

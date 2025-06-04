@@ -9,17 +9,7 @@ interface MarkdownProseProps {
 
 export const MarkdownProse = ({ content }: MarkdownProseProps) => {
   return (
-    <Prose
-      sx={{
-        a: {
-          color: "blue.500 !important",
-          textDecorationColor: "blue.300 !important",
-          _hover: {
-            textDecoration: "none !important",
-          },
-        },
-      }}
-    >
+    <Prose>
       <Markdown
         components={{
           a: ({ href, children }) => (
