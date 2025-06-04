@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_05_29_061324) do
+ActiveRecord::Schema[7.2].define(version: 2025_06_03_030429) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -1525,12 +1525,14 @@ ActiveRecord::Schema[7.2].define(version: 2025_05_29_061324) do
   add_foreign_key "paypal_records", "paypal_records", column: "parent_record_id"
   add_foreign_key "regional_records_lookup", "results", on_update: :cascade, on_delete: :cascade
   add_foreign_key "registration_history_changes", "registration_history_entries"
+  add_foreign_key "results", "rounds"
   add_foreign_key "sanity_check_exclusions", "sanity_checks"
   add_foreign_key "sanity_checks", "sanity_check_categories"
   add_foreign_key "schedule_activities", "rounds"
   add_foreign_key "schedule_activities", "schedule_activities", column: "parent_activity_id"
   add_foreign_key "schedule_activities", "venue_rooms"
   add_foreign_key "scramble_file_uploads", "users", column: "uploaded_by"
+  add_foreign_key "scrambles", "rounds"
   add_foreign_key "stripe_records", "stripe_records", column: "parent_record_id"
   add_foreign_key "stripe_webhook_events", "stripe_records"
   add_foreign_key "ticket_comments", "ticket_stakeholders", column: "acting_stakeholder_id"
