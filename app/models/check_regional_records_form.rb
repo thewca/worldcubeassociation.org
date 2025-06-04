@@ -18,4 +18,8 @@ class CheckRegionalRecordsForm
 
     CheckRegionalRecords.check_records(self.check_event_id, self.competition_id)
   end
+
+  def run_check_new
+    CheckRegionalRecords.check_records_new_table(self.check_event_id, self.competition_id)
+  end
 end
