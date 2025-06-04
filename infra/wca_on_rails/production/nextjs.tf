@@ -31,7 +31,7 @@ locals {
     },
     {
       name  = "DATABASE_URI"
-      value = "file:./payload.db"
+      value = "payload-database-prod.cluster-comp2du1hpno.us-west-2.docdb.amazonaws.com:27017"
     },
     {
       name  = "WCA_BACKEND_API_URL"
@@ -75,7 +75,7 @@ resource "aws_ecs_task_definition" "nextjs" {
 
   # We configure the roles to allow `aws ecs execute-command` into a task
   execution_role_arn = aws_iam_role.task_execution_role.arn
-  task_role_arn      = aws_iam_role.task_role.arn
+  task_role_arn      = aws_iam_role.nextjs_role.arn
 
   cpu = "1024"
   memory = "3910"
@@ -131,7 +131,7 @@ resource "aws_ecs_service" "nextjs" {
   # container image, so we want use data.aws_ecs_task_definition to
   # always point to the active task definition
   task_definition                    = data.aws_ecs_task_definition.nextjs.arn
-  desired_count                      = 0
+  desired_count                      = 1
   scheduling_strategy                = "REPLICA"
   deployment_maximum_percent         = 200
   deployment_minimum_healthy_percent = 50

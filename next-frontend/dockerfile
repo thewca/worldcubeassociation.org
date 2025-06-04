@@ -46,6 +46,9 @@ COPY --from=builder /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
+# Documentdb cert
+RUN curl https://truststore.pki.rds.amazonaws.com/global/global-bundle.pem --output global-bundle.pem
+
 USER nextjs
 
 EXPOSE 3000

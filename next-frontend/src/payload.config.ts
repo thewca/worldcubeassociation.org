@@ -14,7 +14,9 @@ import { mongooseAdapter } from "@payloadcms/db-mongodb";
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
 
-export default function config() {
+export default createConfig();
+
+function createConfig() {
   let dbAdapter;
   if (process.env.NODE_ENV !== "production") {
     dbAdapter = sqliteAdapter({
@@ -25,6 +27,11 @@ export default function config() {
   } else {
     dbAdapter = mongooseAdapter({
       url: process.env.DATABASE_URI || "",
+      connectOptions: {
+        authMechanism: "MONGODB-AWS",
+        tls: true,
+        tlsCAFile: "global-bundle.pem",
+      },
     });
   }
 
