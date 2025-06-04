@@ -1,24 +1,37 @@
-import { Block, GlobalConfig } from "payload";
+import { Block, GlobalConfig, SelectField } from "payload";
 
-const colorPalettes = ["blue", "red", "green", "orange", "yellow", "grey"];
+const colorSelect: SelectField = {
+  name: "color",
+  type: "select",
+  required: true,
+  interfaceName: "ColorSelect",
+  options: [
+    "darkBlue",
+    "darkRed",
+    "darkGreen",
+    "darkOrange",
+    "darkYellow",
+    "blue",
+    "red",
+    "green",
+    "orange",
+    "yellow",
+    "white",
+    "black",
+  ],
+};
 
-const colors = [
-  "darkBlue",
-  "darkRed",
-  "darkGreen",
-  "darkOrange",
-  "darkYellow",
-  "blue",
-  "red",
-  "green",
-  "orange",
-  "yellow",
-  "white",
-  "black",
-];
+const colorPaletteSelect: SelectField = {
+  name: "colorPalette",
+  type: "select",
+  required: true,
+  interfaceName: "ColorPaletteSelect",
+  options: ["blue", "red", "green", "orange", "yellow", "grey"],
+};
 
 const BasicCard: Block = {
   slug: "BasicCard",
+  interfaceName: "BasicCardBlock",
   fields: [
     {
       name: "heading",
@@ -40,16 +53,13 @@ const BasicCard: Block = {
       type: "text",
       required: false,
     },
-    {
-      name: "colorPalette",
-      type: "select",
-      options: colorPalettes,
-    },
+    colorPaletteSelect,
   ],
 };
 
 const ImageBanner: Block = {
   slug: "ImageBanner",
+  interfaceName: "ImageBannerBlock",
   fields: [
     {
       name: "heading",
@@ -65,26 +75,20 @@ const ImageBanner: Block = {
       name: "mainImage",
       type: "upload",
       relationTo: "media",
+      required: true,
     },
+    colorPaletteSelect,
     {
-      name: "colorPalette",
-      type: "select",
-      options: colorPalettes,
-    },
-    {
+      ...colorSelect,
       name: "bgColor",
-      type: "select",
-      options: colors,
     },
     {
+      ...colorSelect,
       name: "headingColor",
-      type: "select",
-      options: colors,
     },
     {
+      ...colorSelect,
       name: "textColor",
-      type: "select",
-      options: colors,
     },
     {
       name: "bgImage",
@@ -106,6 +110,7 @@ const ImageBanner: Block = {
 
 const ImageCard: Block = {
   slug: "ImageCard",
+  interfaceName: "ImageCardBlock",
   fields: [
     {
       name: "heading",
@@ -116,17 +121,15 @@ const ImageCard: Block = {
       name: "mainImage",
       type: "upload",
       relationTo: "media",
+      required: true,
     },
-    {
-      name: "colorPalette",
-      type: "select",
-      options: colorPalettes,
-    },
+    colorPaletteSelect,
   ],
 };
 
 const HeroCard: Block = {
   slug: "HeroCard",
+  interfaceName: "HeroCardBlock",
   fields: [
     {
       name: "heading",
@@ -148,16 +151,13 @@ const HeroCard: Block = {
       type: "text",
       required: false,
     },
-    {
-      name: "colorPalette",
-      type: "select",
-      options: colorPalettes,
-    },
+    colorPaletteSelect,
   ],
 };
 
 const CardWithImage: Block = {
   slug: "CardWithImage",
+  interfaceName: "CardWithImageBlock",
   fields: [
     {
       name: "heading",
@@ -183,12 +183,14 @@ const CardWithImage: Block = {
       name: "image",
       type: "upload",
       relationTo: "media",
+      required: true,
     },
   ],
 };
 
 const FeaturedCompetitions: Block = {
   slug: "FeaturedCompetitions",
+  interfaceName: "FeaturedCompetitionsBlock",
   fields: [
     {
       name: "Competition1ID",
@@ -196,9 +198,8 @@ const FeaturedCompetitions: Block = {
       required: true,
     },
     {
+      ...colorPaletteSelect,
       name: "colorPalette1",
-      type: "select",
-      options: colorPalettes,
     },
     {
       name: "Competition2ID",
@@ -206,30 +207,26 @@ const FeaturedCompetitions: Block = {
       required: true,
     },
     {
+      ...colorPaletteSelect,
       name: "colorPalette2",
-      type: "select",
-      options: colorPalettes,
     },
   ],
 };
 
 const AnnouncementsSection: Block = {
   slug: "AnnouncementsSection",
+  interfaceName: "AnnouncementsSectionBlock",
   fields: [],
 };
 
 const TestimonialSlide: Block = {
   slug: "testimonial", // singular
+  interfaceName: "TestimonialSlideBlock",
   labels: {
     singular: "Testimonial",
     plural: "Testimonials",
   },
   fields: [
-    {
-      name: "id",
-      type: "text",
-      required: true,
-    },
     {
       name: "image",
       type: "upload",
@@ -250,17 +247,13 @@ const TestimonialSlide: Block = {
       name: "subtitle",
       type: "text",
     },
-    {
-      name: "colorPalette",
-      type: "select",
-      options: colorPalettes,
-      required: true,
-    },
+    colorPaletteSelect,
   ],
 };
 
 const Testimonials: Block = {
   slug: "testimonials",
+  interfaceName: "TestimonialsBlock",
   labels: {
     singular: "Testimonials Section",
     plural: "Testimonials Sections",
@@ -289,6 +282,7 @@ const coreBlocks = [
 
 const twoBlocksLeaf: Block = {
   slug: "twoBlocksLeaf",
+  interfaceName: "TwoBlocksLeafBlock",
   fields: [
     {
       name: "type",
@@ -321,6 +315,7 @@ const twoBlocksLeaf: Block = {
 
 const twoBlocksBranch: Block = {
   slug: "twoBlocksBranch",
+  interfaceName: "TwoBlocksBranchBlock",
   fields: [
     {
       name: "type",
@@ -353,6 +348,7 @@ const twoBlocksBranch: Block = {
 
 const twoBlocks: Block = {
   slug: "twoBlocks",
+  interfaceName: "TwoBlocksBlock",
   fields: [
     {
       name: "type",
@@ -385,6 +381,7 @@ const twoBlocks: Block = {
 
 const fullWidth: Block = {
   slug: "fullWidth",
+  interfaceName: "FullWidthBlock",
   fields: [
     {
       name: "blocks",

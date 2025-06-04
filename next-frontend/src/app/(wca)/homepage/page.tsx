@@ -14,6 +14,7 @@ import {
   Tabs,
   Badge,
   VStack,
+  Link,
 } from "@chakra-ui/react";
 import AnnouncementsCard from "@/components/AnnouncementsCard";
 import { getPayload } from "payload";
@@ -26,6 +27,21 @@ import LocationIcon from "@/components/icons/LocationIcon";
 
 import Flag from "react-world-flags";
 import CountryMap from "@/components/CountryMap";
+
+import type {
+  BasicCardBlock,
+  CardWithImageBlock,
+  FeaturedCompetitionsBlock,
+  FullWidthBlock,
+  HeroCardBlock,
+  ImageBannerBlock,
+  ImageCardBlock,
+  Media,
+  TestimonialsBlock,
+  TwoBlocksBlock,
+  TwoBlocksBranchBlock,
+  TwoBlocksLeafBlock,
+} from "@/payload-types";
 
 const colorMap: Record<string, string> = {
   blue: "blue.50",
@@ -55,16 +71,16 @@ const colorGradientMap: Record<string, string> = {
   darkYellow: "yellow-100",
 };
 
-const BasicCard = ({ heading, body, buttonText, buttonLink }) => {
+const BasicCard = ({ block }: { block: BasicCardBlock }) => {
   return (
     <Card.Root variant="info" size="lg" width="full">
       <Card.Body>
-        <Card.Title>{heading}</Card.Title>
+        <Card.Title>{block.heading}</Card.Title>
         <Separator size="md" />
-        <Card.Description>{body}</Card.Description>
-        {buttonText?.trim() && (
-          <Button mr="auto" href={buttonLink}>
-            {buttonText}
+        <Card.Description>{block.body}</Card.Description>
+        {block.buttonText?.trim() && (
+          <Button mr="auto" asChild>
+            <Link href={block.buttonLink!}>{block.buttonText}</Link>
           </Button>
         )}
       </Card.Body>
@@ -72,20 +88,20 @@ const BasicCard = ({ heading, body, buttonText, buttonLink }) => {
   );
 };
 
-const HeroCard = ({ heading, body, buttonText, buttonLink, colorPalette }) => {
+const HeroCard = ({ block }: { block: HeroCardBlock }) => {
   return (
     <Card.Root
       variant="info"
       size="lg"
-      colorPalette={colorPalette}
+      colorPalette={block.colorPalette}
       width="full"
     >
       <Card.Body>
-        <Card.Title>{heading}</Card.Title>
-        <Card.Description>{body}</Card.Description>
-        {buttonText?.trim() && (
-          <Button mr="auto" href={buttonLink}>
-            {buttonText}
+        <Card.Title>{block.heading}</Card.Title>
+        <Card.Description>{block.body}</Card.Description>
+        {block.buttonText?.trim() && (
+          <Button mr="auto" asChild>
+            <Link href={block.buttonLink!}>{block.buttonText}</Link>
           </Button>
         )}
       </Card.Body>
@@ -93,21 +109,21 @@ const HeroCard = ({ heading, body, buttonText, buttonLink, colorPalette }) => {
   );
 };
 
-const CardWithImage = ({ heading, body, buttonText, buttonLink, image }) => {
+const CardWithImage = ({ block }: { block: CardWithImageBlock }) => {
   return (
     <Card.Root variant="info" width="full">
       <Image
-        src={image.url}
+        src={(block.image as Media).url ?? undefined}
         alt="Green double couch with wooden legs"
         aspectRatio="3/1"
       />
       <Card.Body>
-        <Card.Title>{heading}</Card.Title>
+        <Card.Title>{block.heading}</Card.Title>
         <Separator size="md" />
-        <Card.Description>{body}</Card.Description>
-        {buttonText?.trim() && (
-          <Button mr="auto" href={buttonLink}>
-            {buttonText}
+        <Card.Description>{block.body}</Card.Description>
+        {block.buttonText?.trim() && (
+          <Button mr="auto" asChild>
+            <Link href={block.buttonLink!}>{block.buttonText}</Link>
           </Button>
         )}
       </Card.Body>
@@ -139,34 +155,23 @@ const AnnouncementsSection = () => {
   );
 };
 
-const ImageBanner = ({
-  heading,
-  body,
-  image,
-  colorPalette,
-  headingColor,
-  textColor,
-  bgColor,
-  bgImage,
-  bgSize,
-  bgPos,
-}) => {
+const ImageBanner = ({ block }: { block: ImageBannerBlock }) => {
   return (
     <Card.Root
       variant="info"
       flexDirection="row"
       overflow="hidden"
-      colorPalette={colorPalette}
+      colorPalette={block.colorPalette}
       size="lg"
     >
       <Box position="relative" flex="1" minW="50%" maxW="50%" overflow="hidden">
         <Image
-          src={image.url}
+          src={(block.mainImage as Media).url ?? undefined}
           alt="Cubing event"
           objectFit="cover"
           width="100%"
           height="40vh"
-          bg={colorMap[bgColor]}
+          bg={colorMap[block.bgColor]}
         />
         {/* Blue Gradient Overlay */}
         <Box
@@ -176,7 +181,7 @@ const ImageBanner = ({
           bottom="0"
           left="50%"
           style={{
-            backgroundImage: `linear-gradient(to right, transparent, var(--chakra-colors-${colorGradientMap[bgColor]}))`,
+            backgroundImage: `linear-gradient(to right, transparent, var(--chakra-colors-${colorGradientMap[block.bgColor]}))`,
           }}
           zIndex="1"
         />
@@ -187,37 +192,45 @@ const ImageBanner = ({
         zIndex="2"
         color="white"
         p="8"
-        bg={colorMap[bgColor]}
+        bg={colorMap[block.bgColor]}
         justifyContent="center"
         pr="15%"
-        backgroundImage={`url('${bgImage.url}')`}
-        backgroundSize={`${bgSize}%`}
-        backgroundPosition={bgPos}
+        backgroundImage={
+          block.bgImage != null
+            ? `url('${(block.bgImage as Media).url}')`
+            : undefined
+        }
+        backgroundSize={block.bgSize != null ? `${block.bgSize}%` : undefined}
+        backgroundPosition={block.bgPos ?? undefined}
         backgroundRepeat="no-repeat"
       >
-        <Heading size="4xl" color={colorMap[headingColor]} mb="4">
-          {heading}
+        <Heading size="4xl" color={colorMap[block.headingColor]} mb="4">
+          {block.heading}
         </Heading>
-        <Text fontSize="md" color={colorMap[textColor]}>
-          {body}
+        <Text fontSize="md" color={colorMap[block.textColor]}>
+          {block.body}
         </Text>
       </Card.Body>
     </Card.Root>
   );
 };
 
-const ImageCard = ({ heading, image, colorPalette }) => {
+const ImageCard = ({ block }: { block: ImageCardBlock }) => {
   return (
     <Card.Root
       overflow="hidden"
       variant="hero"
-      colorPalette={colorPalette}
+      colorPalette={block.colorPalette}
       width="full"
     >
-      <Image src={image.url} alt={heading} aspectRatio={2 / 1} />
+      <Image
+        src={(block.mainImage as Media).url ?? undefined}
+        alt={block.heading}
+        aspectRatio={2 / 1}
+      />
       <Card.Body p={6}>
         <Heading size="3xl" textTransform="uppercase">
-          {heading}
+          {block.heading}
         </Heading>
       </Card.Body>
     </Card.Root>
@@ -225,10 +238,9 @@ const ImageCard = ({ heading, image, colorPalette }) => {
 };
 
 const FeaturedCompetitions = ({
-  Competition1ID,
-  colorPalette1,
-  Competition2ID,
-  colorPalette2,
+  block,
+}: {
+  block: FeaturedCompetitionsBlock;
 }) => {
   return (
     <Card.Root variant="info" colorPalette="grey" width="full">
@@ -237,27 +249,27 @@ const FeaturedCompetitions = ({
           Featured Upcoming Competitions
           <Button variant="outline">View all Competitions</Button>
         </Card.Title>
-        <SimpleGrid columns={2} rows={1} gap={4}>
-          <Card.Root variant="info" colorPalette={colorPalette1}>
+        <SimpleGrid columns={2} gap={4}>
+          <Card.Root variant="info" colorPalette={block.colorPalette1}>
             <Card.Body>
-              <Heading size="3xl">{Competition1ID}</Heading>
+              <Heading size="3xl">{block.Competition1ID}</Heading>
               <VStack alignItems="start">
-                <Badge variant="information" colorPalette={colorPalette1}>
+                <Badge variant="information" colorPalette={block.colorPalette1}>
                   <Flag code={"US"} fallback={"US"} />
                   <CountryMap code="US" bold /> Seattle
                 </Badge>
-                <Badge variant="information" colorPalette={colorPalette1}>
+                <Badge variant="information" colorPalette={block.colorPalette1}>
                   <CompRegoCloseDateIcon />
                   <Text>Jul 3 - 6, 2025</Text>
                 </Badge>
-                <Badge variant="information" colorPalette={colorPalette1}>
+                <Badge variant="information" colorPalette={block.colorPalette1}>
                   <CompetitorsIcon />
                   2000 Competitor Limit
                 </Badge>
-                <Badge variant="information" colorPalette={colorPalette1}>
+                <Badge variant="information" colorPalette={block.colorPalette1}>
                   <RegisterIcon />0 Spots Left
                 </Badge>
-                <Badge variant="information" colorPalette={colorPalette1}>
+                <Badge variant="information" colorPalette={block.colorPalette1}>
                   <LocationIcon />
                   Seattle Convention Center
                 </Badge>
@@ -267,25 +279,25 @@ const FeaturedCompetitions = ({
 
           <Card.Root variant="info" colorPalette="yellow">
             <Card.Body>
-              <Heading size="3xl">{Competition2ID}</Heading>
+              <Heading size="3xl">{block.Competition2ID}</Heading>
               <VStack alignItems="start">
-                <Badge variant="information" colorPalette={colorPalette2}>
+                <Badge variant="information" colorPalette={block.colorPalette2}>
                   <Flag code={"NZ"} fallback={"NZ"} />
                   <CountryMap code="NZ" bold /> Auckland
                 </Badge>
-                <Badge variant="information" colorPalette={colorPalette2}>
+                <Badge variant="information" colorPalette={block.colorPalette2}>
                   <CompRegoCloseDateIcon />
                   <Text>Dec 12 - 14, 2025</Text>
                 </Badge>
-                <Badge variant="information" colorPalette={colorPalette2}>
+                <Badge variant="information" colorPalette={block.colorPalette2}>
                   <CompetitorsIcon />
                   300 Competitor Limit
                 </Badge>
-                <Badge variant="information" colorPalette={colorPalette2}>
+                <Badge variant="information" colorPalette={block.colorPalette2}>
                   <RegisterIcon />
                   300 Spots Left
                 </Badge>
-                <Badge variant="information" colorPalette={colorPalette2}>
+                <Badge variant="information" colorPalette={block.colorPalette2}>
                   <LocationIcon />
                   Auckland Netball Centre
                 </Badge>
@@ -298,11 +310,11 @@ const FeaturedCompetitions = ({
   );
 };
 
-const Testimonials = (entry = "") => {
-  const slides = entry.entry.blocks;
+const Testimonials = ({ block }: { block: TestimonialsBlock }) => {
+  const slides = block.blocks;
   return (
     <Tabs.Root
-      defaultValue={slides?.[0]?.id}
+      defaultValue={slides[0].id}
       variant="slider"
       orientation="vertical"
       width="full"
@@ -311,9 +323,7 @@ const Testimonials = (entry = "") => {
         variant="info"
         flexDirection="row"
         overflow="hidden"
-        colorPalette={
-          slides.find((s) => s.id === slides?.[0]?.id)?.colorPalette
-        }
+        colorPalette={slides[0].colorPalette}
         position="relative"
         width="full"
       >
@@ -330,14 +340,14 @@ const Testimonials = (entry = "") => {
             zIndex="10"
           >
             {slides.map((slide) => (
-              <Tabs.Trigger key={slide.id} value={slide.id} />
+              <Tabs.Trigger key={slide.id} value={slide.id!} />
             ))}
           </Box>
         </Tabs.List>
 
         {/* Slides */}
         {slides.map((slide) => (
-          <Tabs.Content key={slide.id} value={slide.id} asChild>
+          <Tabs.Content key={slide.id} value={slide.id!} asChild>
             <Card.Root
               variant="info"
               flexDirection="row"
@@ -345,8 +355,14 @@ const Testimonials = (entry = "") => {
               colorPalette={slide.colorPalette}
             >
               <Image
-                src={slide.image?.url || "/placeholder.png"}
-                alt={slide.image?.alt || slide.title}
+                src={
+                  slide.image != null
+                    ? ((slide.image as Media).url ?? undefined)
+                    : "/placeholder.png"
+                }
+                alt={
+                  slide.image != null ? (slide.image as Media).alt : slide.title
+                }
                 maxW="1/3"
                 objectFit="cover"
               />
@@ -364,7 +380,12 @@ const Testimonials = (entry = "") => {
   );
 };
 
-const renderBlockGroup = (entry, keyPrefix = "") => {
+type TwoBlocksUnion =
+  | TwoBlocksBlock
+  | TwoBlocksBranchBlock
+  | TwoBlocksLeafBlock;
+
+const renderBlockGroup = (entry: TwoBlocksUnion, keyPrefix = "") => {
   const isHorizontal = entry.alignment === "horizontal";
   let columnCount = 2;
   let col1 = 1;
@@ -400,7 +421,6 @@ const renderBlockGroup = (entry, keyPrefix = "") => {
     <SimpleGrid
       key={keyPrefix}
       columns={isHorizontal ? columnCount : 1}
-      rows={isHorizontal ? 1 : 2}
       gap={8}
       width="full"
     >
@@ -410,36 +430,19 @@ const renderBlockGroup = (entry, keyPrefix = "") => {
           case "BasicCard":
             return (
               <GridItem key={key} colSpan={columns[i]} display="flex">
-                <BasicCard
-                  heading={subEntry.heading}
-                  body={subEntry.body}
-                  buttonText={subEntry.buttonText}
-                  buttonLink={subEntry.buttonLink}
-                />
+                <BasicCard block={subEntry} />
               </GridItem>
             );
           case "HeroCard":
             return (
               <GridItem key={key} colSpan={columns[i]} display="flex">
-                <HeroCard
-                  heading={subEntry.heading}
-                  body={subEntry.body}
-                  buttonText={subEntry.buttonText}
-                  buttonLink={subEntry.buttonLink}
-                  colorPalette={subEntry.colorPalette}
-                />
+                <HeroCard block={subEntry} />
               </GridItem>
             );
           case "CardWithImage":
             return (
               <GridItem key={key} colSpan={columns[i]} display="flex">
-                <CardWithImage
-                  heading={subEntry.heading}
-                  body={subEntry.body}
-                  buttonText={subEntry.buttonText}
-                  buttonLink={subEntry.buttonLink}
-                  image={subEntry.image}
-                />
+                <CardWithImage block={subEntry} />
               </GridItem>
             );
 
@@ -465,48 +468,25 @@ const renderBlockGroup = (entry, keyPrefix = "") => {
           case "ImageBanner":
             return (
               <GridItem key={key} colSpan={columns[i] || 1} display="flex">
-                <ImageBanner
-                  key={key}
-                  heading={subEntry.heading}
-                  body={subEntry.body}
-                  image={subEntry.mainImage}
-                  colorPalette={subEntry.colorPalette}
-                  headingColor={subEntry.headingColor}
-                  textColor={subEntry.textColor}
-                  bgColor={subEntry.bgColor}
-                  bgSize={subEntry.bgSize}
-                  bgPos={subEntry.bgPos}
-                  bgImage={subEntry.bgImage}
-                ></ImageBanner>
+                <ImageBanner block={subEntry} />
               </GridItem>
             );
           case "ImageCard":
             return (
               <GridItem key={key} colSpan={columns[i] || 1} display="flex">
-                <ImageCard
-                  key={key}
-                  heading={subEntry.heading}
-                  image={subEntry.mainImage}
-                  colorPalette={subEntry.colorPalette}
-                ></ImageCard>
+                <ImageCard block={subEntry} />
               </GridItem>
             );
           case "FeaturedCompetitions":
             return (
               <GridItem key={key} colSpan={columns[i] || 1} display="flex">
-                <FeaturedCompetitions
-                  key={key}
-                  Competition1ID={subEntry.Competition1ID}
-                  colorPalette1={subEntry.colorPalette1}
-                  Competition2ID={subEntry.Competition2ID}
-                  colorPalette2={subEntry.colorPalette2}
-                ></FeaturedCompetitions>
+                <FeaturedCompetitions block={subEntry} />
               </GridItem>
             );
           case "testimonials":
             return (
               <GridItem key={key} colSpan={columns[i] || 1} display="flex">
-                <Testimonials key={key} entry={subEntry}></Testimonials>
+                <Testimonials block={subEntry} />
               </GridItem>
             );
 
@@ -518,72 +498,26 @@ const renderBlockGroup = (entry, keyPrefix = "") => {
   );
 };
 
-const renderFullBlock = (entry, keyPrefix = "") => {
+const renderFullBlock = (entry: FullWidthBlock, keyPrefix = "") => {
   return (
     <Box key={keyPrefix} width="full">
       {entry.blocks.map((subEntry, i) => {
         const key = `${keyPrefix}-${i}`;
         switch (subEntry.blockType) {
           case "BasicCard":
-            return (
-              <BasicCard
-                heading={subEntry.heading}
-                body={subEntry.body}
-                buttonText={subEntry.buttonText}
-                buttonLink={subEntry.buttonLink}
-              />
-            );
+            return <BasicCard key={key} block={subEntry} />;
           case "HeroCard":
-            return (
-              <HeroCard
-                heading={subEntry.heading}
-                body={subEntry.body}
-                buttonText={subEntry.buttonText}
-                buttonLink={subEntry.buttonLink}
-                colorPalette={subEntry.colorPalette}
-              />
-            );
-
+            return <HeroCard key={key} block={subEntry} />;
           case "AnnouncementsSection":
             return <AnnouncementsSection />;
-
           case "ImageBanner":
-            return (
-              <ImageBanner
-                key={key}
-                heading={subEntry.heading}
-                body={subEntry.body}
-                image={subEntry.mainImage}
-                colorPalette={subEntry.colorPalette}
-                headingColor={subEntry.headingColor}
-                textColor={subEntry.textColor}
-                bgColor={subEntry.bgColor}
-                bgSize={subEntry.bgSize}
-                bgPos={subEntry.bgPos}
-                bgImage={subEntry.bgImage}
-              ></ImageBanner>
-            );
+            return <ImageBanner key={key} block={subEntry} />;
           case "ImageCard":
-            return (
-              <ImageCard
-                key={key}
-                heading={subEntry.heading}
-                image={subEntry.mainImage}
-                colorPalette={subEntry.colorPalette}
-              ></ImageCard>
-            );
+            return <ImageCard key={key} block={subEntry} />;
           case "FeaturedCompetitions":
-            return (
-              <FeaturedCompetitions
-                key={key}
-                Competition1ID={subEntry.Competition1ID}
-                colorPalette1={subEntry.colorPalette1}
-                Competition2ID={subEntry.Competition2ID}
-                colorPalette2={subEntry.colorPalette2}
-              ></FeaturedCompetitions>
-            );
-          case "Testimonials":
-            return <Testimonials key={key} entry={subEntry}></Testimonials>;
+            return <FeaturedCompetitions key={key} block={subEntry} />;
+          case "testimonials":
+            return <Testimonials key={key} block={subEntry} />;
 
           default:
             return null;

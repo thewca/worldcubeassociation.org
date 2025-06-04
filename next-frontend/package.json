@@ -9,6 +9,7 @@
     "start": "next start",
     "build:types": "openapi-typescript public/wcaAPI.yaml -o src/lib/wca/wcaSchema.ts",
     "chakra:types": "chakra typegen ./src/theme.ts",
+    "payload:types": "payload generate:types",
     "lint": "next lint",
     "lint:fix": "next lint --fix"
   },
