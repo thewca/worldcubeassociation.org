@@ -30,32 +30,32 @@ export default function AnnouncementsCard({
             Posted by {hero.postedBy} · {hero.postedAt}
           </Text>
           <MarkdownProse content={hero.markdown} />
-          <Button mt="auto" mr="auto" as={Link} href={hero.fullLink}>
-            Read full article
+          <Button mt="auto" mr="auto" asChild>
+            <Link href={hero.fullLink}>Read full article</Link>
           </Button>
         </Card.Body>
       </Card.Root>
 
       {/* OTHER ANNOUNCEMENTS */}
-      <VStack align="start" spacing={3}>
+      <VStack align="start" gap={3}>
         {others.map((a, i) => (
           <Button
             key={i}
-            href={a.href}
+            asChild
             variant="solid"
             width="full"
             justifyContent="flex-start"
           >
-            {a.title}
+            <Link href={a.href}>{a.title}</Link>
           </Button>
         ))}
         <Button
-          href="#"
+          asChild
           variant="solid"
           width="full"
           justifyContent="flex-start"
         >
-          See All Announcements
+          <Link href="#">See All Announcements</Link>
         </Button>
       </VStack>
     </Flex>

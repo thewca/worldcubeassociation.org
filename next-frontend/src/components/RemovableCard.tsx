@@ -43,8 +43,8 @@ export default function RemovableCard({
         </HStack>
         <Separator size="md" />
         <CardDescription>{description}</CardDescription>
-        <Button as={Link} href={buttonUrl} alignSelf="start">
-          {buttonText}
+        <Button asChild alignSelf="start">
+          <Link href={buttonUrl}>{buttonText}</Link>
         </Button>
       </CardBody>
     </Card.Root>

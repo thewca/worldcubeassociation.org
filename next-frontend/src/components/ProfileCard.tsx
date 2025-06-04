@@ -2,12 +2,12 @@ import React from "react";
 import { Card, Center, Flex, Text } from "@chakra-ui/react";
 import { Image } from "@chakra-ui/react";
 import { DataListItem, DataListRoot } from "@/components/ui/data-list";
-import RoleBadge from "@/components/RoleBadge";
+import RoleBadge, { StaffColor } from "@/components/RoleBadge";
 
 interface ProfileData {
   name: string;
   profilePicture: string;
-  roles: { teamRole: string; teamText: string; staffColor: string }[];
+  roles: { teamRole: string; teamText: string; staffColor: StaffColor }[];
   wcaId: string;
   gender: string;
   region: string;
@@ -39,12 +39,7 @@ const ProfileCard: React.FC<ProfileData> = ({
       <Card.Header>
         <Center>
           {/* Profile Picture */}
-          <Image
-            src={profilePicture}
-            size="2xl"
-            rounded="md"
-            alt="Profile Image"
-          />
+          <Image src={profilePicture} rounded="md" alt="Profile Image" />
         </Center>
       </Card.Header>
 

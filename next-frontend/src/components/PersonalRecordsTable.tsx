@@ -5,7 +5,7 @@ import { LuBox } from "react-icons/lu";
 
 import "@cubing/icons/css";
 
-interface Record {
+interface RecordItem {
   event: string;
   snr: number;
   scr: number;
@@ -18,7 +18,7 @@ interface Record {
 }
 
 interface RecordsProps {
-  records: Record[];
+  records: RecordItem[];
 }
 const PersonalRecordsTable: React.FC<RecordsProps> = ({ records }) => {
   const eventMap = {
@@ -39,7 +39,7 @@ const PersonalRecordsTable: React.FC<RecordsProps> = ({ records }) => {
     pyram: "Pyraminx",
     skewb: "Skewb",
     sq1: "Square-1",
-  };
+  } as Record<string, string>;
 
   return (
     <Card.Root
