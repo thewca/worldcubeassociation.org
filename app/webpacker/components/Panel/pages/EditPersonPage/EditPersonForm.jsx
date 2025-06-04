@@ -14,7 +14,12 @@ import UtcDatePicker from '../../../wca/UtcDatePicker';
 import RegionSelector from '../../../wca/RegionSelector';
 import GenderSelector from '../../../wca/GenderSelector';
 
-export default function EditPersonForm({ wcaId, onSuccess, showDestroyButton = false }) {
+export default function EditPersonForm({
+  wcaId,
+  onSuccess,
+  showDestroyButton = false,
+  defaultValues,
+}) {
   const {
     data: personFetchData, loading, error: personError,
   } = useLoadedData(
@@ -90,6 +95,12 @@ export default function EditPersonForm({ wcaId, onSuccess, showDestroyButton = f
       setResponse({ success: true, message: 'Success' });
     }, { method: 'PUT' }, (error) => setResponse({ success: false, message: `${error}` }));
   };
+
+  useEffect(() => {
+    if (defaultValues) {
+      setEditedUserDetails((prev) => ({ ...prev, ...defaultValues }));
+    }
+  }, [defaultValues]);
 
   if (loading || saving) return <Loading />;
   if (personError) return <Errored />;
