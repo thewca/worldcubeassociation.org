@@ -210,15 +210,6 @@ class AdminController < ApplicationController
     )
   end
 
-  def fix_results_selector
-    action_params = params.require(:fix_results_selector)
-                          .permit(:person_id, :competition_id, :event_id, :round_type_id)
-
-    @result_selector = FixResultsSelector.new(action_params)
-
-    render partial: "fix_results_selector"
-  end
-
   def person_data
     @person = Person.current.find_by!(wca_id: params[:person_wca_id])
 
