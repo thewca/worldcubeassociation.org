@@ -15,6 +15,7 @@
   "dependencies": {
     "@chakra-ui/react": "^3.19.1",
     "@emotion/react": "^11.14.0",
+    "@payloadcms/db-mongodb": "^3.40.0",
     "@payloadcms/db-sqlite": "^3.40.0",
     "@payloadcms/live-preview-react": "^3.40.0",
     "@payloadcms/next": "^3.40.0",
