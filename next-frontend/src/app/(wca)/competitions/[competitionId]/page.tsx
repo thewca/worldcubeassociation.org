@@ -528,7 +528,7 @@ export default async function CompetitionOverView({
           <TabRegister />
         </Tabs.Content>
         <Tabs.Content value="competitors">
-          <TabCompetitors />
+          <TabCompetitors id={competitionInfo.id} />
         </Tabs.Content>
         <Tabs.Content value="events">
           <TabEvents />

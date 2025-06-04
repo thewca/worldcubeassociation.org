@@ -2,7 +2,7 @@
 
 import { Text } from "@chakra-ui/react";
 
-const countryCodeMapping: Record<string, string> = {
+export const countryCodeMapping: Record<string, string> = {
   // Africa
   DZ: "Algeria",
   EG: "Egypt",
