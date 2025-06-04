@@ -333,6 +333,8 @@ export interface components {
             /** Format: float */
             longitude_degrees: number;
             event_ids: string[];
+            main_event_id?: string;
+            competitor_limit?: number;
             /** Format: date-time */
             results_submitted_at?: string;
             /** Format: date-time */

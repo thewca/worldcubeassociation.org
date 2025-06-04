@@ -394,6 +394,10 @@ components:
           type: array
           items:
             type: string
+        main_event_id:
+          type: string
+        competitor_limit:
+          type: integer
         results_submitted_at:
           type: string
           format: date-time

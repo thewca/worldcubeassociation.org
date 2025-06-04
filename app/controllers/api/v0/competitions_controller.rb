@@ -32,7 +32,7 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
     serial_methods |= %w[results_submitted_at results_posted_at report_posted_at report_posted_by_user] if admin_mode
 
     paginate json: competitions,
-             only: %w[id name start_date end_date registration_open registration_close venue],
+             only: %w[id name start_date end_date registration_open registration_close venue competitor_limit main_event_id],
              methods: serial_methods,
              include: serial_includes
   end

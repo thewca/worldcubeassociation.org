@@ -55,7 +55,7 @@ export default async function home() {
   ];
 
   return (
-    <SimpleGrid columns={1} rows={6} gap={8} p={8}>
+    <SimpleGrid columns={1} gap={8} p={8}>
       <Card.Root
         variant="info"
         flexDirection="row"
@@ -115,7 +115,7 @@ export default async function home() {
         </Card.Body>
       </Card.Root>
 
-      <SimpleGrid columns={4} rows={1} gap={8}>
+      <SimpleGrid columns={4} gap={8}>
         <GridItem colSpan={2} display="flex">
           <Card.Root variant="info" colorPalette="green" size="lg">
             <Card.Body>
@@ -160,7 +160,7 @@ export default async function home() {
                 <br />
                 If you have any questions about the different processes of the
                 WCA, make sure to go through our{" "}
-                <Link hoverArrow="true">Frequently Asked Questions!</Link>
+                <Link hoverArrow>Frequently Asked Questions!</Link>
               </Card.Description>
               <Button mr="auto">Take me to the WCA contact form</Button>
             </Card.Body>
@@ -208,8 +208,8 @@ export default async function home() {
         </Card.Body>
       </Card.Root>
 
-      <SimpleGrid columns={2} rows={1} gap={8}>
-        <SimpleGrid columns={2} rows={2} gap={8}>
+      <SimpleGrid columns={2} gap={8}>
+        <SimpleGrid columns={2} gap={8}>
           <Card.Root overflow="hidden" variant="hero" colorPalette="green">
             <Image src="about.png" alt="About the WCA" aspectRatio={2 / 1} />
             <Card.Body p={6}>
@@ -268,7 +268,7 @@ export default async function home() {
         />
       </SimpleGrid>
 
-      <SimpleGrid columns={3} rows={1} gap={8}>
+      <SimpleGrid columns={3} gap={8}>
         <GridItem colSpan={2} display="flex">
           {/* TODO - make this changel slide every so often automatically */}
           <Tabs.Root
@@ -354,7 +354,7 @@ export default async function home() {
         </GridItem>
       </SimpleGrid>
 
-      <SimpleGrid columns={3} rows={1} gap={8}>
+      <SimpleGrid columns={3} gap={8}>
         <GridItem colSpan={1} display="flex">
           <Card.Root variant="info">
             <Image
@@ -382,7 +382,7 @@ export default async function home() {
                 Featured Upcoming Competitions
                 <Button variant="outline">View all Competitions</Button>
               </Card.Title>
-              <SimpleGrid columns={2} rows={1} gap={4}>
+              <SimpleGrid columns={2} gap={4}>
                 <Card.Root variant="info" colorPalette="red">
                   <Card.Body>
                     <Heading size="3xl">World Championships 2025</Heading>
