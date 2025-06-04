@@ -110,7 +110,7 @@ export default function WcaSearch({
   multiple = true,
   disabled = false,
   model,
-  params,
+  params = {},
   label,
   removeNoResultsMessage,
 }) {
