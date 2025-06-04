@@ -31,7 +31,7 @@ locals {
     },
     {
       name  = "DATABASE_URI"
-      value = "payload-database-prod.cluster-comp2du1hpno.us-west-2.docdb.amazonaws.com:27017"
+      value = "mongodb://payload-database-prod.cluster-comp2du1hpno.us-west-2.docdb.amazonaws.com:27017"
     },
     {
       name  = "WCA_BACKEND_API_URL"
@@ -56,6 +56,8 @@ data "aws_iam_policy_document" "nextjs_task_policy" {
       "ssmmessages:CreateDataChannel",
       "ssmmessages:OpenControlChannel",
       "ssmmessages:OpenDataChannel",
+      "rds-db:connect",
+      "sts:GetCallerIdentity"
     ]
 
     resources = ["*"]
@@ -140,6 +142,11 @@ resource "aws_ecs_service" "nextjs" {
   capacity_provider_strategy {
     capacity_provider = var.shared.t3_capacity_provider.name
     weight            = 1
+  }
+
+  deployment_circuit_breaker {
+    enable   = true
+    rollback = true
   }
 
   enable_execute_command = true

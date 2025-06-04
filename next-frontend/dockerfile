@@ -12,6 +12,9 @@ COPY package.json yarn.lock* .yarnrc.yml ./
 RUN corepack enable
 RUN yarn install --immutable
 
+# Documentdb cert
+RUN curl https://truststore.pki.rds.amazonaws.com/global/global-bundle.pem --output ./global-bundle.pem
+
 
 FROM base AS builder
 WORKDIR /app
@@ -45,9 +48,7 @@ COPY --from=builder /app/public ./public
 # https://nextjs.org/docs/advanced-features/output-file-tracing
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
-
-# Documentdb cert
-RUN curl https://truststore.pki.rds.amazonaws.com/global/global-bundle.pem --output global-bundle.pem
+COPY --from=deps /app/global-bundle.pem /app/global-bundle.pem
 
 USER nextjs
 

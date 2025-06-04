@@ -1,5 +1,4 @@
 // storage-adapter-import-placeholder
-import { sqliteAdapter } from "@payloadcms/db-sqlite";
 import path from "path";
 import { buildConfig } from "payload";
 import { fileURLToPath } from "url";
@@ -17,23 +16,15 @@ const dirname = path.dirname(filename);
 export default createConfig();
 
 function createConfig() {
-  let dbAdapter;
-  if (process.env.NODE_ENV !== "production") {
-    dbAdapter = sqliteAdapter({
-      client: {
-        url: process.env.DATABASE_URI || "",
-      },
-    });
-  } else {
-    dbAdapter = mongooseAdapter({
-      url: process.env.DATABASE_URI || "",
-      connectOptions: {
-        authMechanism: "MONGODB-AWS",
-        tls: true,
-        tlsCAFile: "global-bundle.pem",
-      },
-    });
-  }
+  const dbAdapter = mongooseAdapter({
+    url: process.env.DATABASE_URI || "",
+    connectOptions: {
+      authMechanism: "MONGODB-AWS",
+      authSource: "$external",
+      tls: true,
+      tlsCAFile: "/app/global-bundle.pem",
+    },
+  });
 
   return buildConfig({
     admin: {
