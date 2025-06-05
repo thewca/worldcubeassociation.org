@@ -125,7 +125,7 @@ class ResultsSubmissionController < ApplicationController
     # Check inbox, create submission, send email
     @competition = competition_from_params
 
-    submit_results_params = params.require(:results_submission).permit(:message, :schedule_url, :confirm_information)
+    submit_results_params = params.require(:results_submission).permit(:message, :confirm_information)
     submit_results_params[:competition_id] = @competition.id
     @results_submission = ResultsSubmission.new(submit_results_params)
     # This validates also that results in Inboxes are all good

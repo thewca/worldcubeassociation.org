@@ -532,7 +532,6 @@ en:
         submitter_comment: ""
         status: ""
       results_submission:
-        schedule_url: ""
         results_file: ""
         message: ""
         confirm_information: ""
