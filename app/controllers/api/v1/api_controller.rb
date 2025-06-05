@@ -2,6 +2,8 @@
 
 class Api::V1::ApiController < ActionController::API
   prepend_before_action :validate_jwt_token
+  before_action :snake_case_params!
+  after_action :camelize_response, except: [:test_snake_case]
 
   # Manually include new Relic because we don't derive from ActionController::Base
   include NewRelic::Agent::Instrumentation::ControllerInstrumentation if Rails.env.production?
@@ -22,6 +24,23 @@ class Api::V1::ApiController < ActionController::API
     end
   end
 
+  private def camelize_response
+    body = JSON.parse(response.body)
+    response.body = JSON.generate(camelize_keys(body))
+  end
+
+  private def camelize_keys(payload)
+    case payload
+    when Array
+      payload.map { camelize_keys(it) }
+    when Hash
+      payload.transform_keys { it.to_s.camelize(:lower) }
+             .transform_values { camelize_keys(it) }
+    else
+      payload
+    end
+  end
+
   def render_error(http_status, error, data = nil)
     if data.present?
       render json: { error: error, data: data }, status: http_status
@@ -32,5 +51,33 @@ class Api::V1::ApiController < ActionController::API
 
   rescue_from ActionController::ParameterMissing do |_e|
     render json: { error: Registrations::ErrorCodes::INVALID_REQUEST_DATA }, status: :bad_request
+  end
+
+  def test_camel_case
+    return head :not_found if Rails.env.production? && EnvConfig.WCA_LIVE_SITE?
+
+    params.delete(:action)
+    params.delete(:api)
+    params.delete(:controller)
+    render json: params.to_unsafe_h
+  end
+
+  def test_snake_case
+    return head :not_found if Rails.env.production? && EnvConfig.WCA_LIVE_SITE?
+
+    params.delete(:action)
+    params.delete(:api)
+    params.delete(:controller)
+    render json: params.to_unsafe_h
+  end
+
+  private def snake_case_params!
+    # If Rails receives a JSON array (ie, started with [] instead of {}), it puts it in a `_json` parameter
+    # I wasn't able to find this behaviour documented/discussed anywhere, but asserts it is normal behaviour
+    if params[:_json].is_a?(Array)
+      params[:_json].map! { it.deep_transform_keys(&:underscore) }
+    else
+      params.deep_transform_keys!(&:underscore)
+    end
   end
 end
