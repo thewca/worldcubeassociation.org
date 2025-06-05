@@ -31,7 +31,7 @@ locals {
     },
     {
       name  = "DATABASE_URI"
-      value = "mongodb://payload-database-prod.cluster-comp2du1hpno.us-west-2.docdb.amazonaws.com:27017/payload"
+      value = "mongodb://payload-database-prod.cluster-comp2du1hpno.us-west-2.docdb.amazonaws.com:27017/payload?retryWrites=false"
     },
     {
       name  = "WCA_BACKEND_API_URL"
@@ -41,6 +41,10 @@ locals {
       name  = "WCA_FRONTEND_API_URL"
       value = "https://www.worldcubeassociation.org/api/v0/"
     },
+    {
+      name = "NEXTAUTH_URL"
+      value = "https://next70912409871254.worldcubeassociation.org"
+    }
   ]
 }
 
