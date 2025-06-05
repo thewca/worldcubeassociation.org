@@ -398,6 +398,8 @@ components:
           type: string
         competitor_limit:
           type: integer
+        has_any_championship:
+          type: boolean
         results_submitted_at:
           type: string
           format: date-time

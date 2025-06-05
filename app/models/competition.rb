@@ -2157,6 +2157,12 @@ class Competition < ApplicationRecord
     championships.map(&:championship_type).any? { |ct| Championship::MAJOR_CHAMPIONSHIP_TYPES.include?(ct) }
   end
 
+  def has_any_championship?
+    championships.map(&:championship_type).any?
+  end
+
+  alias_method :has_any_championship, :has_any_championship?
+
   def multi_country_fmc_competition?
     events.length == 1 && events[0].fewest_moves? && Country::FICTIVE_IDS.include?(country_id)
   end

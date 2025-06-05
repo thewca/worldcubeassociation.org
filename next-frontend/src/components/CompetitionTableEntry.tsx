@@ -100,7 +100,6 @@ function formatDateRange(start: string, end: string): string {
 const CompetitionTableEntry: React.FC<Props> = ({ comp }) => {
   const [open, setOpen] = useState(false);
   const regoStatus = getRegistrationStatus(comp);
-
   return (
     <Table.Row bg="bg.inverted" onClick={() => setOpen(true)} key={comp.id}>
       <Table.Cell>{registrationStatusIcons[regoStatus] || null}</Table.Cell>
@@ -141,15 +140,16 @@ const CompetitionTableEntry: React.FC<Props> = ({ comp }) => {
           <Drawer.Backdrop />
           <Drawer.Positioner padding="4">
             <Drawer.Content overflow="hidden">
-              {/* TODO: Make this float only visible for Championship competitions */}
-              <Float
-                placement="middle-end"
-                offsetX="20"
-                fontSize="21vw"
-                opacity="0.1"
-              >
-                <NationalChampionshipIcon />
-              </Float>
+              {comp.has_any_championship && (
+                <Float
+                  placement="middle-end"
+                  offsetX="20"
+                  fontSize="21vw"
+                  opacity="0.1"
+                >
+                  <NationalChampionshipIcon />
+                </Float>
+              )}
               <Drawer.Header>
                 <Heading size="3xl">{comp.name}</Heading>
               </Drawer.Header>
