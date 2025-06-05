@@ -140,7 +140,7 @@ const CompetitionTableEntry: React.FC<Props> = ({ comp }) => {
           <Drawer.Backdrop />
           <Drawer.Positioner padding="4">
             <Drawer.Content overflow="hidden">
-              {comp.has_any_championship && (
+              {comp.competition_is_championship && (
                 <Float
                   placement="middle-end"
                   offsetX="20"

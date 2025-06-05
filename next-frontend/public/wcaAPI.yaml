@@ -398,7 +398,7 @@ components:
           type: string
         competitor_limit:
           type: integer
-        has_any_championship:
+        competition_is_championship:
           type: boolean
         results_submitted_at:
           type: string
