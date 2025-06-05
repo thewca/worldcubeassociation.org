@@ -335,7 +335,7 @@ export interface components {
             event_ids: string[];
             main_event_id?: string;
             competitor_limit?: number;
-            has_any_championship?: boolean;
+            competition_is_championship?: boolean;
             /** Format: date-time */
             results_submitted_at?: string;
             /** Format: date-time */
