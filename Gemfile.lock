@@ -602,7 +602,7 @@ GEM
       nio4r (~> 2.0)
     raabro (1.4.0)
     racc (1.8.1)
-    rack (3.1.15)
+    rack (3.1.16)
     rack-cors (3.0.0)
       logger
       rack (>= 3.0.14)
@@ -1342,7 +1342,7 @@ CHECKSUMS
   puma (6.6.0) sha256=f25c06873eb3d5de5f0a4ebc783acc81a4ccfe580c760cfe323497798018ad87
   raabro (1.4.0) sha256=d4fa9ff5172391edb92b242eed8be802d1934b1464061ae5e70d80962c5da882
   racc (1.8.1) sha256=4a7f6929691dbec8b5209a0b373bc2614882b55fc5d2e447a21aaa691303d62f
-  rack (3.1.15) sha256=d12b3e9960d18a26ded961250f2c0e3b375b49ff40dbe6786e9c3b160cbffca4
+  rack (3.1.16) sha256=efb5606c351efc56b85b10c3493055d0d35209d23f44792ec4e1183eb0234635
   rack-cors (3.0.0) sha256=7b95be61db39606906b61b83bd7203fa802b0ceaaad8fcb2fef39e097bf53f68
   rack-proxy (0.7.7) sha256=446a4b57001022145d5c3ba73b775f66a2260eaf7420c6907483141900395c8a
   rack-session (2.1.1) sha256=0b6dc07dea7e4b583f58a48e8b806d4c9f1c6c9214ebc202ec94562cbea2e4e9
