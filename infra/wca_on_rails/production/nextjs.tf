@@ -31,7 +31,7 @@ locals {
     },
     {
       name  = "DATABASE_URI"
-      value = "mongodb://payload-database-prod.cluster-comp2du1hpno.us-west-2.docdb.amazonaws.com:27017"
+      value = "mongodb://payload-database-prod.cluster-comp2du1hpno.us-west-2.docdb.amazonaws.com:27017/payload"
     },
     {
       name  = "WCA_BACKEND_API_URL"
@@ -106,10 +106,10 @@ resource "aws_ecs_task_definition" "nextjs" {
       }
       environment = local.nextjs_environment
       healthCheck       = {
-        command            = ["CMD-SHELL", "curl -f http://localhost:3000/ || exit 1"]
+        command            = ["CMD-SHELL", "wget --spider -q http://localhost:3000/ || exit 1"]
         interval           = 30
         retries            = 3
-        startPeriod        = var.rails_startup_time
+        startPeriod        = 5
         timeout            = 5
       }
     }

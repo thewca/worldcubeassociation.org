@@ -9,23 +9,45 @@ import { authConfig } from "@/auth.config";
 import { Media } from "./collections/Media";
 import { Nav } from "@/globals/Nav";
 import { mongooseAdapter } from "@payloadcms/db-mongodb";
+import { sqliteAdapter } from "@payloadcms/db-sqlite";
+import { fromContainerMetadata } from "@aws-sdk/credential-providers";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
 
+async function dbAdapter() {
+  if (process.env.NODE_ENV === "production") {
+    const credentialProvider = fromContainerMetadata();
+    const credentials = await credentialProvider();
+
+    return mongooseAdapter({
+      url: process.env.DATABASE_URI || "",
+      connectOptions: {
+        auth: {
+          username: credentials.accessKeyId,
+          password: credentials.secretAccessKey,
+        },
+        authMechanismProperties: {
+          AWS_SESSION_TOKEN: credentials.sessionToken,
+        },
+        authMechanism: "MONGODB-AWS",
+        authSource: "$external",
+        tls: true,
+        tlsCAFile: "/app/global-bundle.pem",
+      },
+    });
+  } else {
+    return sqliteAdapter({
+      client: {
+        url: process.env.DATABASE_URI || "",
+      },
+    });
+  }
+}
+
 export default createConfig();
 
-function createConfig() {
-  const dbAdapter = mongooseAdapter({
-    url: process.env.DATABASE_URI || "",
-    connectOptions: {
-      authMechanism: "MONGODB-AWS",
-      authSource: "$external",
-      tls: true,
-      tlsCAFile: "/app/global-bundle.pem",
-    },
-  });
-
+async function createConfig() {
   return buildConfig({
     admin: {
       user: "users",
@@ -39,7 +61,7 @@ function createConfig() {
     typescript: {
       outputFile: path.resolve(dirname, "payload-types.ts"),
     },
-    db: dbAdapter,
+    db: await dbAdapter(),
     sharp,
     plugins: [
       authjsPlugin({
