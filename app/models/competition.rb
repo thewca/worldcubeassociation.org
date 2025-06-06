@@ -2164,11 +2164,7 @@ class Competition < ApplicationRecord
   alias_method :competition_is_championship, :any_championship?
 
   def championship_types
-    if championships.loaded?
-      championships.map(&:championship_type)
-    else
-      championships.pluck(:championship_type)
-    end
+    championships.pluck(:championship_type)
   end
 
   def multi_country_fmc_competition?
