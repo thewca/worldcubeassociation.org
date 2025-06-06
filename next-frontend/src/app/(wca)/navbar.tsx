@@ -16,9 +16,9 @@ interface IconDisplayProps {
   fallback?: boolean;
 }
 
-const IconDisplay = ({ name, fallback = true }: IconDisplayProps) => {
+const IconDisplay = ({ name, fallback = false }: IconDisplayProps) => {
   if (!name) {
-    return fallback ? <div>No_Icon</div> : null;
+    return fallback ? <Text>No_Icon</Text> : null;
   }
 
   const IconComponent = iconMap[name];
