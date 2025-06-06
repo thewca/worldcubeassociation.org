@@ -2,6 +2,7 @@
   "name": "next-frontend",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev",
     "check:types": "tsc --noEmit",
@@ -10,7 +11,9 @@
     "build:types": "openapi-typescript public/wcaAPI.yaml -o src/lib/wca/wcaSchema.ts",
     "chakra:types": "chakra typegen ./src/theme.ts",
     "lint": "next lint",
-    "lint:fix": "next lint --fix"
+    "lint:fix": "next lint --fix",
+    "test": "vitest --config vite.config.ts",
+    "test:ui": "vitest --ui"
   },
   "dependencies": {
     "@chakra-ui/react": "^3.19.1",
@@ -37,17 +40,23 @@
     "@eslint/eslintrc": "^3",
     "@stylistic/eslint-plugin": "^4.4.0",
     "@tanstack/eslint-plugin-query": "^5.78.0",
+    "@testing-library/dom": "10.4.0",
+    "@testing-library/jest-dom": "6.6.3",
+    "@testing-library/react": "^16.3.0",
     "@types/node": "^22",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@types/swagger-ui-react": "^5.18.0",
+    "@vitejs/plugin-react": "4.5.1",
     "eslint": "^9",
     "eslint-config-next": "15.3.3",
     "eslint-config-prettier": "^10.1.5",
     "eslint-plugin-prettier": "^5.4.1",
+    "jsdom": "^26.1.0",
     "openapi-typescript": "^7.8.0",
     "prettier": "^3.5.3",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vitest": "^3.2.1"
   },
   "scarfSettings": {
     "enabled": false
