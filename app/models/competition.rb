@@ -2154,14 +2154,22 @@ class Competition < ApplicationRecord
   end
 
   def world_or_continental_championship?
-    championships.map(&:championship_type).any? { |ct| Championship::MAJOR_CHAMPIONSHIP_TYPES.include?(ct) }
+    championship_types.any? { |ct| Championship::MAJOR_CHAMPIONSHIP_TYPES.include?(ct) }
   end
 
-  def competition_is_championship?
-    championships.map(&:championship_type).any?
+  def any_championship?
+    championship_types.any?
   end
 
-  alias_method :competition_is_championship, :competition_is_championship?
+  alias_method :competition_is_championship, :any_championship?
+
+  def championship_types
+    if championships.loaded?
+      championships.map(&:championship_type)
+    else
+      championships.pluck(:championship_type)
+    end
+  end
 
   def multi_country_fmc_competition?
     events.length == 1 && events[0].fewest_moves? && Country::FICTIVE_IDS.include?(country_id)
@@ -2311,7 +2319,7 @@ class Competition < ApplicationRecord
         "organizerIds" => organizers.to_a.pluck(:id),
         "contact" => contact,
       },
-      "championships" => championships.map(&:championship_type),
+      "championships" => championship_types,
       "website" => {
         "generateWebsite" => generate_website,
         "externalWebsite" => external_website,
