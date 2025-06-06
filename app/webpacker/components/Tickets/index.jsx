@@ -7,7 +7,7 @@ import { actionUrls } from '../../lib/requests/routes.js.erb';
 import Loading from '../Requests/Loading';
 import Errored from '../Requests/Errored';
 import TicketHeader from './TicketHeader';
-import TicketWorkbench from './TicketWorkbench';
+import TicketWorkbenches from './TicketWorkbenches';
 import TicketLogs from './TicketLogs';
 import useInputState from '../../lib/hooks/useInputState';
 import TicketComments from './TicketComments';
@@ -24,7 +24,7 @@ function SkateholderSelector({ stakeholderList, setUserSelectedStakeholder }) {
       <Dropdown
         options={stakeholderList.map((requesterStakeholder) => ({
           key: requesterStakeholder.id,
-          text: requesterStakeholder.stakeholder.name,
+          text: `${requesterStakeholder.stakeholder.name} (${requesterStakeholder.stakeholder_role})`,
           value: requesterStakeholder,
         }))}
         value={selectedOption}
@@ -41,6 +41,10 @@ function SkateholderSelector({ stakeholderList, setUserSelectedStakeholder }) {
 }
 
 function TicketContent({ ticketDetails, currentStakeholder, sync }) {
+  const ticketType = ticketDetails.ticket.metadata_type;
+  const stakeholderRole = currentStakeholder.stakeholder_role;
+  const TicketWorkbench = TicketWorkbenches[ticketType]?.[stakeholderRole];
+
   return (
     <>
       <TicketHeader
@@ -48,11 +52,13 @@ function TicketContent({ ticketDetails, currentStakeholder, sync }) {
         currentStakeholder={currentStakeholder}
         sync={sync}
       />
-      <TicketWorkbench
-        ticketDetails={ticketDetails}
-        sync={sync}
-        currentStakeholder={currentStakeholder}
-      />
+      {TicketWorkbench && (
+        <TicketWorkbench
+          ticketDetails={ticketDetails}
+          sync={sync}
+          currentStakeholder={currentStakeholder}
+        />
+      )}
       <TicketComments
         ticketId={ticketDetails.ticket.id}
         currentStakeholder={currentStakeholder}

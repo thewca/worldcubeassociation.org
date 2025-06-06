@@ -6,6 +6,11 @@ class TicketStakeholder < ApplicationRecord
     cc: "cc",
   }
 
+  enum :stakeholder_role, {
+    actioner: "actioner",
+    requester: "requester",
+  }
+
   belongs_to :ticket
   belongs_to :stakeholder, polymorphic: true
 

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_06_03_030429) do
+ActiveRecord::Schema[7.2].define(version: 2025_06_04_143939) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -1320,6 +1320,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_06_03_030429) do
     t.boolean "is_active", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "stakeholder_role", null: false
     t.index ["stakeholder_type", "stakeholder_id"], name: "index_ticket_stakeholders_on_stakeholder"
     t.index ["ticket_id"], name: "index_ticket_stakeholders_on_ticket_id"
   end

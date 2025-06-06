@@ -17,6 +17,7 @@ FactoryBot.define do
           ticket: edit_name_ticket.ticket,
           stakeholder: UserGroup.teams_committees_group_wrt,
           connection: :assigned,
+          stakeholder_role: TicketStakeholder.stakeholder_roles[:actioner],
           is_active: true,
         )
         FactoryBot.create(
@@ -24,6 +25,7 @@ FactoryBot.define do
           ticket: edit_name_ticket.ticket,
           stakeholder: FactoryBot.create(:user),
           connection: :cc,
+          stakeholder_role: TicketStakeholder.stakeholder_roles[:requester],
           is_active: true,
         )
       end
