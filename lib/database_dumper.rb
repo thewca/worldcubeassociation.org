@@ -1209,6 +1209,13 @@ module DatabaseDumper
       ActiveRecord::Base.connection.execute("SET SESSION group_concat_max_len = 1048576")
     end
 
+    # We need to make sure that the dump runs in the correct order, because of foreign key dependencies.
+    #   Normally, this would not be a problem for a "standard SQL dump", because tools like `mysqldump` or `mariadb-dump`
+    #   simply disable Foreign Keys altogether, then dump the data in one go, and then enable the foreign key checking again.
+    # However, since we're running manual dumps while foreign key checking is enabled, we need to make sure that our data
+    #   is being dumped in the "correct order". For example, we cannot run the `results` dumper before `rounds`,
+    #   because there is a Foreign Key pointing from the former to the latter, so inserting values into `results`
+    #   without the corresponding `rounds` row already existing, will make the DB throw errors.
     ordered_table_names = dump_sanitizers.keys
                                          .index_with { ActiveRecord::Base.connection.foreign_keys(it).pluck(:to_table) }
                                          .tsort
