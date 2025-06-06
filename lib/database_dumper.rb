@@ -1209,8 +1209,14 @@ module DatabaseDumper
       ActiveRecord::Base.connection.execute("SET SESSION group_concat_max_len = 1048576")
     end
 
+    ordered_table_names = dump_sanitizers.keys
+                                         .index_with { ActiveRecord::Base.connection.foreign_keys(it).pluck(:to_table) }
+                                         .tsort
+
     LogTask.log_task "Populating sanitized tables in '#{dump_db_name}'" do
-      dump_sanitizers.each do |table_name, table_sanitizer|
+      ordered_table_names.each do |table_name|
+        table_sanitizer = dump_sanitizers[table_name]
+
         next if table_sanitizer == :skip_all_rows
 
         # Give an option to override source table name if schemas diverge
