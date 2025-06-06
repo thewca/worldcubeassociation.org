@@ -13,7 +13,7 @@
     "lint": "next lint",
     "lint:fix": "next lint --fix",
     "test": "vitest --config vite.config.ts",
-    "test:ui": "vitest --ui"
+    "test:ui": "vitest --ui --config vite.config.ts"
   },
   "dependencies": {
     "@chakra-ui/react": "^3.19.1",
