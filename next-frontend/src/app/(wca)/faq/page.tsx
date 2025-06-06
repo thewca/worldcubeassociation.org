@@ -1,76 +1,131 @@
-import * as React from "react";
-import { Center, Heading, Stack } from "@chakra-ui/react";
-import { Accordion } from "@chakra-ui/react";
+"use client";
 
-export default function Home() {
+import { VStack, Container, Card, Heading, Tabs } from "@chakra-ui/react";
+import {
+  AccordionItem,
+  AccordionItemContent,
+  AccordionItemTrigger,
+  AccordionRoot,
+} from "@chakra-ui/react";
+
+export default function FAQ() {
   return (
-    <Center>
-      <Stack maxW="2xl">
-        {/* Page Title */}
-        <Heading>FREQUENTLY ASKED QUESTIONS</Heading>
-
-        {/* FAQ Items */}
-        <Accordion.Root multiple collapsible variant="subtle" width="full">
-          <Accordion.Item value="wca-id">
-            <Accordion.ItemTrigger colorPalette="blue">
-              How do I obtain a WCA ID and a WCA profile?
-            </Accordion.ItemTrigger>
-            <Accordion.ItemContent>
-              You can obtain a WCA ID and profile by participating in an
-              official WCA competition. Once your results are uploaded, your
-              profile will be automatically created.
-            </Accordion.ItemContent>
-          </Accordion.Item>
-          <Accordion.Item value="find-competition">
-            <Accordion.ItemTrigger colorPalette="blue">
-              How can I find a WCA competition?
-            </Accordion.ItemTrigger>
-            <Accordion.ItemContent>
-              You can find WCA competitions on the official WCA website under
-              the &quot;Competitions&quot; tab. There, you can filter
-              competitions by country, date, or type.
-            </Accordion.ItemContent>
-          </Accordion.Item>
-          <Accordion.Item value="register">
-            <Accordion.ItemTrigger colorPalette="blue">
-              How can I register for a competition? Who can I refer to if I have
-              problems registering for a competition?
-            </Accordion.ItemTrigger>
-            <Accordion.ItemContent>
-              Many competitions do registration right here on the WCA website,
-              but some use their own systems. You should contact the organizers
-              of the competition you want to compete in for more details.
-              {/* Search for Competition */}
-            </Accordion.ItemContent>
-          </Accordion.Item>
-          <Accordion.Item value="requirements">
-            <Accordion.ItemTrigger colorPalette="blue">
-              What are the requirements for attending a WCA competition? What do
-              I need to know before attending a WCA competition?
-            </Accordion.ItemTrigger>
-            <Accordion.ItemContent>
-              Familiarize yourself with the WCA regulations and ensure you
-              understand the competition flow. Competitors must bring their own
-              cubes and follow the rules.
-            </Accordion.ItemContent>
-          </Accordion.Item>
-          <Accordion.Item value="comp-hometown">
-            <Accordion.ItemTrigger colorPalette="red">
-              How can I have a WCA competition in my hometown?
-            </Accordion.ItemTrigger>
-            <Accordion.ItemContent>
-              If you are interested in organizing a competition, it&apos;s
-              highly recommended to attend at least one or two competitions as a
-              competitor to learn from the experience. WCA Competitions must
-              follow the <a href="#">WCA Regulations</a>. After that, the
-              organization team must contact a nearby{" "}
-              <a href="#">WCA Delegate</a>. Visit the{" "}
-              <a href="#">WCA Competition Organizer Guidelines</a> for further
-              information.
-            </Accordion.ItemContent>
-          </Accordion.Item>
-        </Accordion.Root>
-      </Stack>
-    </Center>
+    <Container>
+      <VStack gap="8" width="full" pt="8" alignItems="left">
+        <Heading size="5xl"> Frequently Asked Questions</Heading>
+        <Card.Root maxW="40em">
+          <Card.Body>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
+            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+            aliquip ex ea commodo consequat.
+          </Card.Body>
+        </Card.Root>
+        <Card.Root variant="hero" overflow="hidden">
+          <Card.Body bg="bg">
+            <Tabs.Root
+              variant="subtle"
+              fitted
+              defaultValue={"tab-1"}
+              width="full"
+            >
+              <Tabs.List>
+                <Tabs.Trigger value="tab-1">Tab 1</Tabs.Trigger>
+                <Tabs.Trigger value="tab-2">Tab 2</Tabs.Trigger>
+                <Tabs.Trigger value="tab-3">Tab 3</Tabs.Trigger>
+              </Tabs.List>
+              <Tabs.Content value="tab-1">
+                <AccordionRoot
+                  multiple
+                  collapsible
+                  variant="subtle"
+                  width="full"
+                >
+                  <AccordionItem value="wca-id">
+                    <AccordionItemTrigger colorPalette="blue">
+                      How do I obtain a WCA ID and a WCA profile?
+                    </AccordionItemTrigger>
+                    <AccordionItemContent>
+                      You can obtain a WCA ID and profile by participating in an
+                      official WCA competition. Once your results are uploaded,
+                      your profile will be automatically created.
+                    </AccordionItemContent>
+                  </AccordionItem>
+                  <AccordionItem value="find-competition">
+                    <AccordionItemTrigger colorPalette="blue">
+                      How can I find a WCA competition?
+                    </AccordionItemTrigger>
+                    <AccordionItemContent>
+                      You can find WCA competitions on the official WCA website
+                      under the &quot;Competitions&quot; tab. There, you can
+                      filter competitions by country, date, or type.
+                    </AccordionItemContent>
+                  </AccordionItem>
+                </AccordionRoot>
+              </Tabs.Content>
+              <Tabs.Content value="tab-2">
+                <AccordionRoot
+                  multiple
+                  collapsible
+                  variant="subtle"
+                  width="full"
+                >
+                  <AccordionItem value="wca-id">
+                    <AccordionItemTrigger colorPalette="green">
+                      How can I have a WCA Competition in my hometown?
+                    </AccordionItemTrigger>
+                    <AccordionItemContent>
+                      You can obtain a WCA ID and profile by participating in an
+                      official WCA competition. Once your results are uploaded,
+                      your profile will be automatically created.
+                    </AccordionItemContent>
+                  </AccordionItem>
+                  <AccordionItem value="find-competition">
+                    <AccordionItemTrigger colorPalette="green">
+                      What are the WCA accounts for? What is the difference
+                      between WCA accounts and WCA profiles?
+                    </AccordionItemTrigger>
+                    <AccordionItemContent>
+                      You can find WCA competitions on the official WCA website
+                      under the &quot;Competitions&quot; tab. There, you can
+                      filter competitions by country, date, or type.
+                    </AccordionItemContent>
+                  </AccordionItem>
+                </AccordionRoot>
+              </Tabs.Content>
+              <Tabs.Content value="tab-3">
+                <AccordionRoot
+                  multiple
+                  collapsible
+                  variant="subtle"
+                  width="full"
+                >
+                  <AccordionItem value="wca-id">
+                    <AccordionItemTrigger colorPalette="red">
+                      How do I change my profile picture?
+                    </AccordionItemTrigger>
+                    <AccordionItemContent>
+                      You can obtain a WCA ID and profile by participating in an
+                      official WCA competition. Once your results are uploaded,
+                      your profile will be automatically created.
+                    </AccordionItemContent>
+                  </AccordionItem>
+                  <AccordionItem value="find-competition">
+                    <AccordionItemTrigger colorPalette="red">
+                      How do I connect my WCA account with my WCA ID?
+                    </AccordionItemTrigger>
+                    <AccordionItemContent>
+                      You can find WCA competitions on the official WCA website
+                      under the &quot;Competitions&quot; tab. There, you can
+                      filter competitions by country, date, or type.
+                    </AccordionItemContent>
+                  </AccordionItem>
+                </AccordionRoot>
+              </Tabs.Content>
+            </Tabs.Root>
+          </Card.Body>
+        </Card.Root>
+      </VStack>
+    </Container>
   );
 }
