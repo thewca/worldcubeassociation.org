@@ -356,6 +356,9 @@ components:
         - latitude_degrees
         - longitude_degrees
         - event_ids
+        - main_event_id
+        - competitor_limit
+        - championship_types
       properties:
         id:
           type: string
@@ -398,8 +401,11 @@ components:
           type: string
         competitor_limit:
           type: integer
-        competition_is_championship:
-          type: boolean
+        championship_types:
+          type: array
+          items:
+            type: string
+            example: 'world'
         results_submitted_at:
           type: string
           format: date-time
