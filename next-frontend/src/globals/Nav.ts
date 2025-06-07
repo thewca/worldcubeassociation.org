@@ -1,7 +1,7 @@
 import { Block, GlobalConfig } from "payload";
 
 import type { IconName } from "@/components/icons/iconMap";
-import type { Route, StaticRoute } from "nextjs-routes";
+import type { Route } from "nextjs-routes";
 
 const iconOptions = [
   "About the Regulations",
@@ -87,15 +87,14 @@ const iconOptions = [
   "YouTube",
 ] satisfies IconName[];
 
-type ExtractStaticPaths<T> = T extends StaticRoute<infer P> ? P : never;
-type StaticPaths = ExtractStaticPaths<Route>;
+type StaticRoute = Exclude<Route, { query: unknown }>["pathname"];
 
 const staticLinkOptions = [
   "/",
   "/faq",
   "/api/swagger",
   "/competitions",
-] satisfies StaticPaths[];
+] satisfies StaticRoute[];
 
 const LinkItem: Block = {
   slug: "LinkItem", // required
