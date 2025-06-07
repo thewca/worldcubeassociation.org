@@ -265,6 +265,12 @@ class UsersController < ApplicationController
     if current_user.forum_banned?
       flash[:alert] = I18n.t('registrations.errors.banned_html').html_safe
       return redirect_to new_user_session_path
+    elsif current_user.dob.nil?
+      flash[:alert] = I18n.t('misc.forum_enter_dob').html_safe
+      return redirect_to edit_user_path(current_user)
+    elsif current_user.below_forum_age_requirement?
+      flash[:alert] = I18n.t('misc.forum_age_requirement').html_safe
+      return redirect_to new_user_session_path
     end
 
     # Use the 'SingleSignOn' lib provided by Discourse. Our secret and URL is
