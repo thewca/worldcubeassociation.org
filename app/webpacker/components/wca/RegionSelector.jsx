@@ -17,13 +17,16 @@ const continentOptions = Object.values(continents.real).map((continent) => (
 const countryOptions = Object.values(countries.real).map((country) => (
   {
     key: country.id,
-    text: country.name,
     value: country.iso2,
-    flag: (
-      <>
-        <RegionFlag iso2={country.iso2} withoutTooltip />
-        {' '}
-      </>
+    text: (
+      <div style={{ display: 'flex', alignItems: 'center' }}>
+        <div>
+          <RegionFlag iso2={country.iso2} withoutTooltip />
+        </div>
+        <span style={{ marginLeft: '3px', }}>
+          {country.name}
+        </span>
+      </div>
     ),
   }
 ));
