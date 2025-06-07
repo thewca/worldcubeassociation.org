@@ -2,6 +2,9 @@
   "name": "next-frontend",
   "version": "0.1.0",
   "private": true,
+  "resolutions": {
+    "@payloadcms/db-mongodb/mongoose": "^8.15.1"
+  },
   "scripts": {
     "dev": "next dev",
     "check:types": "tsc --noEmit",

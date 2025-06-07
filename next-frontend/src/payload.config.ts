@@ -10,7 +10,6 @@ import { authConfig } from "@/auth.config";
 import { Media } from "./collections/Media";
 import { Nav } from "@/globals/Nav";
 import { mongooseAdapter } from "@payloadcms/db-mongodb";
-import { fromContainerMetadata } from "@aws-sdk/credential-providers";
 import { Home } from "@/globals/Home";
 
 const filename = fileURLToPath(import.meta.url);
@@ -18,19 +17,9 @@ const dirname = path.dirname(filename);
 
 async function dbAdapter() {
   if (process.env.NODE_ENV === "production") {
-    const credentialProvider = fromContainerMetadata();
-    const credentials = await credentialProvider();
-
     return mongooseAdapter({
       url: process.env.DATABASE_URI || "",
       connectOptions: {
-        auth: {
-          username: credentials.accessKeyId,
-          password: credentials.secretAccessKey,
-        },
-        authMechanismProperties: {
-          AWS_SESSION_TOKEN: credentials.sessionToken,
-        },
         authMechanism: "MONGODB-AWS",
         authSource: "$external",
         tls: true,
