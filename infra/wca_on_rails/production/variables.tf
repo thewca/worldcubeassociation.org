@@ -79,6 +79,7 @@ variable "shared" {
       name: string
       arn: string
     }),
+    next_repository_url: string,
     ecs_cluster: object({
       id: string
       name: string
@@ -96,6 +97,9 @@ variable "shared" {
       id: string
     })
     https_listener: object({
+      arn: string
+    })
+    nextjs-production: object({
       arn: string
     })
     pma_production: object({

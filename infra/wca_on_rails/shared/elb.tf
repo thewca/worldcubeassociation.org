@@ -104,6 +104,30 @@ resource "aws_lb_target_group" "rails-production" {
   }
 }
 
+resource "aws_lb_target_group" "nextjs-production" {
+  name        = "nextjs-production"
+  port        = 3000
+  protocol    = "HTTP"
+  vpc_id      = aws_default_vpc.default.id
+  target_type = "ip"
+
+  deregistration_delay = 10
+  health_check {
+    interval            = 10
+    path                = "/"
+    port                = "traffic-port"
+    protocol            = "HTTP"
+    timeout             = 5
+    healthy_threshold   = 2
+    unhealthy_threshold = 5
+    matcher             = 200
+  }
+  tags = {
+    Name = "${var.name_prefix}-nextjs"
+    Env = "production"
+  }
+}
+
 resource "aws_lb_target_group" "auxiliary" {
   name        = "wca-auxiliary"
   port        = 80
@@ -322,6 +346,22 @@ resource "aws_lb_listener_rule" "pma_forward_prod" {
   }
 }
 
+resource "aws_lb_listener_rule" "next_forward_prod" {
+  listener_arn = aws_lb_listener.https.arn
+  priority     = 9
+
+  action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.nextjs-production.arn
+  }
+
+  condition {
+    host_header {
+      values = ["next70912409871254.worldcubeassociation.org"]
+    }
+  }
+}
+
 resource "aws_lb_listener_rule" "rails_forward_staging" {
   listener_arn = aws_lb_listener.https.arn
   priority     = 4
@@ -414,6 +454,10 @@ output "lb" {
 }
 output "rails-production" {
   value = aws_lb_target_group.rails-production
+}
+
+output "nextjs-production" {
+  value = aws_lb_target_group.nextjs-production
 }
 
 output "rails_staging"{

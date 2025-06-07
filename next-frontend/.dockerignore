@@ -1,0 +1,6 @@
+# See https://docs.docker.com/engine/reference/builder/#dockerignore-file for more about ignoring files.
+node_modules
+.next
+.yarn
+.env
+*.db
