@@ -968,6 +968,7 @@ PLATFORMS
   riscv64-linux-android
   riscv64-linux-gnu
   riscv64-linux-musl
+  ruby
   x86-linux
   x86-linux-gnu
   x86-linux-musl
