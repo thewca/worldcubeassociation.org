@@ -23,7 +23,7 @@ const countryOptions = Object.values(countries.real).map((country) => (
         <div>
           <RegionFlag iso2={country.iso2} withoutTooltip />
         </div>
-        <span style={{ marginLeft: '3px', }}>
+        <span style={{ marginLeft: '3px' }}>
           {country.name}
         </span>
       </div>
