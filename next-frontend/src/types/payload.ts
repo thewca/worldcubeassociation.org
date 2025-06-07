@@ -724,7 +724,7 @@ export interface Nav {
         entries: (
           | {
               displayText: string;
-              targetLink: string;
+              targetLink: '/' | '/faq' | '/api/swagger' | '/competitions';
               displayIcon?: IconName;
               id?: string | null;
               blockName?: string | null;
@@ -735,7 +735,7 @@ export interface Nav {
               displayIcon?: IconName;
               entries: {
                 displayText: string;
-                targetLink: string;
+                targetLink: '/' | '/faq' | '/api/swagger' | '/competitions';
                 displayIcon?: IconName;
                 id?: string | null;
                 blockName?: string | null;
@@ -757,7 +757,7 @@ export interface Nav {
       }
     | {
         displayText: string;
-        targetLink: string;
+        targetLink: '/' | '/faq' | '/api/swagger' | '/competitions';
         displayIcon?: IconName;
         id?: string | null;
         blockName?: string | null;
