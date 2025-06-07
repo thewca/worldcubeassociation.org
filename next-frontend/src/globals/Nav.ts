@@ -1,5 +1,8 @@
 import { Block, GlobalConfig } from "payload";
 
+import type { IconName } from "@/components/icons/iconMap";
+import type { Route, StaticRoute } from "nextjs-routes";
+
 const iconOptions = [
   "About the Regulations",
   "About the WCA",
@@ -82,7 +85,17 @@ const iconOptions = [
   "Weibo",
   "X (formerly Twitter)",
   "YouTube",
-];
+] satisfies IconName[];
+
+type ExtractStaticPaths<T> = T extends StaticRoute<infer P> ? P : never;
+type StaticPaths = ExtractStaticPaths<Route>;
+
+const staticLinkOptions = [
+  "/",
+  "/faq",
+  "/api/swagger",
+  "/competitions",
+] satisfies StaticPaths[];
 
 const LinkItem: Block = {
   slug: "LinkItem", // required
@@ -95,7 +108,8 @@ const LinkItem: Block = {
     },
     {
       name: "targetLink",
-      type: "text",
+      type: "select",
+      options: staticLinkOptions,
       required: true,
     },
     {

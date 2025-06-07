@@ -17,8 +17,14 @@ declare module "nextjs-routes" {
     | DynamicRoute<"/api/auth/[...nextauth]", { "nextauth": string[] }>
     | StaticRoute<"/api/graphql">
     | StaticRoute<"/api/graphql-playground">
+    | StaticRoute<"/api/swagger">
+    | StaticRoute<"/competitions">
     | DynamicRoute<"/competitions/[competitionId]", { "competitionId": string }>
-    | DynamicRoute<"/competitions/[competitionId]/admin", { "competitionId": string }>;
+    | DynamicRoute<"/competitions/[competitionId]/admin", { "competitionId": string }>
+    | StaticRoute<"/faq">
+    | StaticRoute<"/home">
+    | StaticRoute<"/homepage">
+    | DynamicRoute<"/persons/[wcaId]", { "wcaId": string }>;
 
   interface StaticRoute<Pathname> {
     pathname: Pathname;

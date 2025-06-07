@@ -576,7 +576,7 @@ export interface Nav {
         entries: (
           | {
               displayText: string;
-              targetLink: string;
+              targetLink: '/' | '/faq' | '/api/swagger' | '/competitions';
               displayIcon?:
                 | (
                     | 'About the Regulations'
@@ -755,7 +755,7 @@ export interface Nav {
                 | null;
               entries: {
                 displayText: string;
-                targetLink: string;
+                targetLink: '/' | '/faq' | '/api/swagger' | '/competitions';
                 displayIcon?:
                   | (
                       | 'About the Regulations'
@@ -861,7 +861,7 @@ export interface Nav {
       }
     | {
         displayText: string;
-        targetLink: string;
+        targetLink: '/' | '/faq' | '/api/swagger' | '/competitions';
         displayIcon?:
           | (
               | 'About the Regulations'
