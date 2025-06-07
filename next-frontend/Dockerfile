@@ -24,10 +24,8 @@ COPY . .
 # Uncomment the following line in case you want to disable telemetry during the build.
 ENV NEXT_TELEMETRY_DISABLED=1
 RUN corepack enable
-# Already set NODE_ENV to production during build so we can have different code for dev and prod
-ENV NODE_ENV=production
 # Create the types and build
-RUN yarn run chakra:types && yarn run build
+RUN yarn run chakra:types && NODE_ENV=production yarn run build
 
 # Production image, copy all the files and run next
 FROM base AS runner

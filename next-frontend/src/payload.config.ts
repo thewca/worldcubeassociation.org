@@ -1,5 +1,4 @@
 // storage-adapter-import-placeholder
-import { sqliteAdapter } from "@payloadcms/db-sqlite";
 import path from "path";
 import { buildConfig } from "payload";
 import { fileURLToPath } from "url";
@@ -9,7 +8,6 @@ import { authConfig } from "@/auth.config";
 
 import { Media } from "./collections/Media";
 import { Nav } from "@/globals/Nav";
-import { mongooseAdapter } from "@payloadcms/db-mongodb";
 import { Home } from "@/globals/Home";
 
 const filename = fileURLToPath(import.meta.url);
@@ -17,6 +15,7 @@ const dirname = path.dirname(filename);
 
 async function dbAdapter() {
   if (process.env.NODE_ENV === "production") {
+    const { mongooseAdapter } = await import("@payloadcms/db-mongodb");
     return mongooseAdapter({
       url: process.env.DATABASE_URI || "",
       connectOptions: {
@@ -27,6 +26,7 @@ async function dbAdapter() {
       },
     });
   } else {
+    const { sqliteAdapter } = await import("@payloadcms/db-sqlite");
     return sqliteAdapter({
       client: {
         url: process.env.DATABASE_URI || "",
