@@ -1,4 +1,6 @@
-import React, { useCallback, useMemo, useState, useEffect } from 'react';
+import React, {
+  useCallback, useMemo, useState, useEffect,
+} from 'react';
 import {
   Button, Checkbox, Form, FormField, FormGroup, Header, Message,
 } from 'semantic-ui-react';
@@ -84,7 +86,22 @@ export default function PostForm({
   ]);
 
   useEffect(() => {
-    unsavedFormAlert(document.getElementById('post-form'));
+    const form = document.getElementById('post-form');
+
+    if (form) {
+      let unsavedChanges = false;
+      const markUnsaved = () => { unsavedChanges = true; };
+
+      form.addEventListener('change', markUnsaved);
+      form.addEventListener('input', markUnsaved);
+      form.addEventListener('submit', () => { unsavedChanges = false; });
+
+      window.addEventListener('beforeunload', (e) => {
+        if (unsavedChanges) {
+          e.preventDefault();
+        }
+      });
+    }
   }, []);
 
   return (

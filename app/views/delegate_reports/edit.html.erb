@@ -68,8 +68,23 @@
 
 <script>
   document.addEventListener("DOMContentLoaded", function () {
-    unsavedFormAlert(document.getElementById("delegate-report-form"));
     const checkbox = document.getElementById("wic_feedback_checkbox");
+    const form = document.getElementById("delegate-report-form");
+
+    if (form) {
+      let unsavedChanges = false;
+      const markUnsaved = () => { unsavedChanges = true; }
+
+      form.addEventListener("change", markUnsaved);
+      form.addEventListener("input", markUnsaved);
+      form.addEventListener("submit", () => { unsavedChanges = false });
+
+      window.addEventListener("beforeunload", (e) => {
+        if (unsavedChanges) {
+          e.preventDefault();
+        }
+      });
+    }
 
     if (checkbox) {
       checkbox.addEventListener("change", function (e) {

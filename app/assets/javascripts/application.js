@@ -293,21 +293,3 @@ $(function() {
     form.submit();
   });
 });
-
-// Tracks changes on form and warns user before navigating away with unsaved changes
-function unsavedFormAlert(form) {
-  if (form) {
-      let unsavedChanges = false;
-      const markUnsaved = () => { unsavedChanges = true; }
-
-      form.addEventListener("change", markUnsaved);
-      form.addEventListener("input", markUnsaved);
-      form.addEventListener("submit", () => { unsavedChanges = false });
-
-      window.addEventListener("beforeunload", (e) => {
-        if (unsavedChanges) {
-          e.preventDefault();
-        }
-      });
-    }
-}
