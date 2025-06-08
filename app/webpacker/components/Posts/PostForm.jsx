@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState, useEffect } from 'react';
 import {
   Button, Checkbox, Form, FormField, FormGroup, Header, Message,
 } from 'semantic-ui-react';
@@ -83,12 +83,16 @@ export default function PostForm({
     postId,
   ]);
 
+  useEffect(() => {
+    unsavedFormAlert(document.getElementById('post-form'));
+  }, []);
+
   return (
     <>
       <Header>
         {header}
       </Header>
-      <Form onSubmit={onSubmit}>
+      <Form id="post-form" onSubmit={onSubmit}>
         <Form.Input label={I18n.t('activerecord.attributes.post.title')} onChange={setFormTitle} value={formTitle} />
         <FormField>
           <label htmlFor="post-body">{I18n.t('activerecord.attributes.post.body')}</label>
