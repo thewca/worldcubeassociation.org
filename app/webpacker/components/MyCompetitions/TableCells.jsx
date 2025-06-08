@@ -67,14 +67,15 @@ export function ReportTableCell({
             />
           )}
 
-        { isPastCompetition && !isReportPosted && canSeeMissingReport && (
+        { isPastCompetition && !isReportPosted && canSeeMissingReport
+          && (
             <Popup
               content={I18n.t('competitions.my_competitions_table.missing_report')}
               trigger={(
                 <Icon name="warning" />
               )}
             />
-        )}
+          )}
       </>
     </Table.Cell>
   );
