@@ -2409,7 +2409,7 @@ ko:
         #original_hash: a1984e1
         cutoff: '컷오프: %{short_cutoff}'
         #original_hash: a8b6fe6
-        download_html: '모든 대회 세부 정보를 PDF로 다운로드하려면 %{here}를 클릭하십시오.'
+        download_html: '대회의 모든 세부 정보를 PDF로 다운로드하려면 %{here}를 클릭하십시오.'
       #original_hash: eb9a4bc
       date: 날짜
       #original_hash: 4f05cd6
@@ -3301,7 +3301,7 @@ ko:
           refunded: '결제는 %{date}에 환불되었습니다.'
         psychsheets:
           #original_hash: ded0a5d
-          show_me: 보여주기
+          show_me: 나를 찾아보기
           #original_hash: a23dc2b
           rank: '등수: %{userPosition}'
         #original_hash: 19eabc9
