@@ -373,7 +373,6 @@ RSpec.describe CompetitionsMailer do
     let(:results_submission) do
       build(
         :results_submission,
-        schedule_url: link_to_competition_schedule_tab(competition),
         message: "Hello, here are the results",
       )
     end
