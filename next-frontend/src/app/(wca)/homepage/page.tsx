@@ -145,7 +145,7 @@ const ImageBanner = ({ block }: { block: ImageBannerBlock }) => {
       <Box position="relative" flex="1" minW="50%" maxW="50%" overflow="hidden">
         <Image
           src={(block.mainImage as Media).url ?? undefined}
-          alt="Cubing event"
+          alt={(block.mainImage as Media).alt ?? undefined}
           objectFit="cover"
           width="100%"
           height="40vh"
