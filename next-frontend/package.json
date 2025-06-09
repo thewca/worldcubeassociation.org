@@ -2,6 +2,9 @@
   "name": "next-frontend",
   "version": "0.1.0",
   "private": true,
+  "resolutions": {
+    "@payloadcms/db-mongodb/mongoose": "^8.15.1"
+  },
   "scripts": {
     "dev": "next dev",
     "check:types": "tsc --noEmit",
@@ -14,12 +17,15 @@
     "lint:fix": "next lint --fix"
   },
   "dependencies": {
+    "@aws-sdk/credential-providers": "^3.823.0",
     "@chakra-ui/react": "^3.20.0",
     "@emotion/react": "^11.14.0",
+    "@payloadcms/db-mongodb": "^3.41.0",
     "@payloadcms/db-sqlite": "^3.41.0",
     "@payloadcms/live-preview-react": "^3.41.0",
     "@payloadcms/next": "^3.41.0",
     "@tanstack/react-query": "^5.80.6",
+    "aws4": "^1.13.2",
     "graphql": "^16.11.0",
     "next": "15.3.3",
     "next-auth": "5.0.0-beta.28",
@@ -39,6 +45,7 @@
     "@eslint/eslintrc": "^3",
     "@stylistic/eslint-plugin": "^4.4.1",
     "@tanstack/eslint-plugin-query": "^5.78.0",
+    "@types/aws4": "^1",
     "@types/node": "^22",
     "@types/react": "^19",
     "@types/react-dom": "^19",
