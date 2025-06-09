@@ -2478,7 +2478,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@payloadcms/db-mongodb@npm:^3.40.0":
+"@payloadcms/db-mongodb@npm:^3.41.0":
   version: 3.41.0
   resolution: "@payloadcms/db-mongodb@npm:3.41.0"
   dependencies:
@@ -9581,7 +9581,7 @@ __metadata:
     "@chakra-ui/react": "npm:^3.20.0"
     "@emotion/react": "npm:^11.14.0"
     "@eslint/eslintrc": "npm:^3"
-    "@payloadcms/db-mongodb": "npm:^3.40.0"
+    "@payloadcms/db-mongodb": "npm:^3.41.0"
     "@payloadcms/db-sqlite": "npm:^3.41.0"
     "@payloadcms/live-preview-react": "npm:^3.41.0"
     "@payloadcms/next": "npm:^3.41.0"
