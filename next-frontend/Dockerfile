@@ -54,6 +54,7 @@ EXPOSE 3000
 ENV PORT=3000
 ENV NEW_RELIC_APP_NAME = 'next-js-production'
 ENV NEW_RELIC_LICENSE_KEY = ''
+ENV NEW_RELIC_LOG = 'stdout'
 
 # server.js is created by next build from the standalone output
 # https://nextjs.org/docs/pages/api-reference/config/next-config-js/output
