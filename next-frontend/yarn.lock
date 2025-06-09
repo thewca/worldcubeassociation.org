@@ -1303,15 +1303,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@floating-ui/core@npm:^1.6.0":
-  version: 1.6.9
-  resolution: "@floating-ui/core@npm:1.6.9"
-  dependencies:
-    "@floating-ui/utils": "npm:^0.2.9"
-  checksum: 10c0/77debdfc26bc36c6f5ae1f26ab3c15468215738b3f5682af4e1915602fa21ba33ad210273f31c9d2da1c531409929e1afb1138b1608c6b54a0f5853ee84c340d
-  languageName: node
-  linkType: hard
-
 "@floating-ui/core@npm:^1.7.1":
   version: 1.7.1
   resolution: "@floating-ui/core@npm:1.7.1"
@@ -1321,23 +1312,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@floating-ui/dom@npm:1.7.1":
+"@floating-ui/dom@npm:1.7.1, @floating-ui/dom@npm:^1.0.0, @floating-ui/dom@npm:^1.0.1":
   version: 1.7.1
   resolution: "@floating-ui/dom@npm:1.7.1"
   dependencies:
     "@floating-ui/core": "npm:^1.7.1"
     "@floating-ui/utils": "npm:^0.2.9"
   checksum: 10c0/33b0e892f4c50ce568169cd58793ff5e3bc1e72ee007237d73b9458d4475e1e5f5a4b3f9e6752422d5f5ac902bc0c135ca7dc0a23c6df187fd9d28dc34cdceed
-  languageName: node
-  linkType: hard
-
-"@floating-ui/dom@npm:^1.0.0, @floating-ui/dom@npm:^1.0.1":
-  version: 1.6.13
-  resolution: "@floating-ui/dom@npm:1.6.13"
-  dependencies:
-    "@floating-ui/core": "npm:^1.6.0"
-    "@floating-ui/utils": "npm:^0.2.9"
-  checksum: 10c0/272242d2eb6238ffcee0cb1f3c66e0eafae804d5d7b449db5ecf904bc37d31ad96cf575a9e650b93c1190f64f49a684b1559d10e05ed3ec210628b19116991a9
   languageName: node
   linkType: hard
 
@@ -2052,15 +2033,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@payloadcms/translations@npm:3.40.0":
-  version: 3.40.0
-  resolution: "@payloadcms/translations@npm:3.40.0"
-  dependencies:
-    date-fns: "npm:4.1.0"
-  checksum: 10c0/0f87b26a7cd12d7f8b8fe0eb32e2cb5d665f4660f6260c8543feb81ca230612ad54753b68a023e47685adca444c4b726043340f8dca5a4197ecaa2a0ee570ae2
-  languageName: node
-  linkType: hard
-
 "@payloadcms/translations@npm:3.41.0":
   version: 3.41.0
   resolution: "@payloadcms/translations@npm:3.41.0"
@@ -2070,7 +2042,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@payloadcms/ui@npm:3.41.0":
+"@payloadcms/ui@npm:3.41.0, @payloadcms/ui@npm:^3.16.0":
   version: 3.41.0
   resolution: "@payloadcms/ui@npm:3.41.0"
   dependencies:
@@ -2103,42 +2075,6 @@ __metadata:
     react: ^19.0.0 || ^19.0.0-rc-65a56d0e-20241020
     react-dom: ^19.0.0 || ^19.0.0-rc-65a56d0e-20241020
   checksum: 10c0/9cac69a278c5b46006a47f97065003ed69faf265fe273dd729ccac7495a3d517a9680ae30c5cc1882ccc14f96d0355e1b6912c75b936bc850b3654ab5d1ba290
-  languageName: node
-  linkType: hard
-
-"@payloadcms/ui@npm:^3.16.0":
-  version: 3.40.0
-  resolution: "@payloadcms/ui@npm:3.40.0"
-  dependencies:
-    "@date-fns/tz": "npm:1.2.0"
-    "@dnd-kit/core": "npm:6.0.8"
-    "@dnd-kit/sortable": "npm:7.0.2"
-    "@dnd-kit/utilities": "npm:3.2.2"
-    "@faceless-ui/modal": "npm:3.0.0-beta.2"
-    "@faceless-ui/scroll-info": "npm:2.0.0"
-    "@faceless-ui/window-info": "npm:3.0.1"
-    "@monaco-editor/react": "npm:4.7.0"
-    "@payloadcms/translations": "npm:3.40.0"
-    bson-objectid: "npm:2.0.4"
-    date-fns: "npm:4.1.0"
-    dequal: "npm:2.0.3"
-    md5: "npm:2.3.0"
-    object-to-formdata: "npm:4.5.1"
-    qs-esm: "npm:7.0.2"
-    react-datepicker: "npm:7.6.0"
-    react-image-crop: "npm:10.1.8"
-    react-select: "npm:5.9.0"
-    scheduler: "npm:0.25.0"
-    sonner: "npm:^1.7.2"
-    ts-essentials: "npm:10.0.3"
-    use-context-selector: "npm:2.0.0"
-    uuid: "npm:10.0.0"
-  peerDependencies:
-    next: ^15.2.3
-    payload: 3.40.0
-    react: ^19.0.0 || ^19.0.0-rc-65a56d0e-20241020
-    react-dom: ^19.0.0 || ^19.0.0-rc-65a56d0e-20241020
-  checksum: 10c0/d73843da5ef997c43f65d24ac15e3617286cff43d03b0143748e730c39a52a6b1b41c8a8fc0bc3b273136d319b70af88f7f98ecd6434018e811c13cd8a90ba89
   languageName: node
   linkType: hard
 
