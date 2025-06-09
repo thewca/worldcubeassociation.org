@@ -40,12 +40,14 @@ class TicketsEditPerson < ApplicationRecord
         ticket_id: ticket.id,
         stakeholder: UserGroup.teams_committees_group_wrt,
         connection: TicketStakeholder.connections[:assigned],
+        stakeholder_role: TicketStakeholder.stakeholder_roles[:actioner],
         is_active: true,
       )
       requester_stakeholder = TicketStakeholder.create!(
         ticket_id: ticket.id,
         stakeholder: requester,
         connection: TicketStakeholder.connections[:cc],
+        stakeholder_role: TicketStakeholder.stakeholder_roles[:requester],
         is_active: true,
       )
 
