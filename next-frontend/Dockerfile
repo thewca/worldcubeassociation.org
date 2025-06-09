@@ -25,7 +25,7 @@ COPY . .
 ENV NEXT_TELEMETRY_DISABLED=1
 RUN corepack enable
 # Create the types and build
-RUN yarn run chakra:types && NODE_ENV=production yarn run build
+RUN yarn run chakra:types && NODE_ENV=production NEXT_PUBLIC_WCA_FRONTEND_API_URL='https://www.worldcubeassociation.org/api/v0/' yarn run build
 
 # Production image, copy all the files and run next
 FROM base AS runner
