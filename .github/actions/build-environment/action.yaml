@@ -24,7 +24,7 @@ runs:
           echo "MONOLITH_TAG=latest" >> $GITHUB_ENV
         fi
     - name: Build and Push Sidekiq image
-      uses: ./.github/actions/build-ruby-image
+      uses: ./.github/actions/build-image
       id: build
       with:
         target: sidekiq
@@ -39,14 +39,8 @@ runs:
         id=$(docker create ${{ steps.build.outputs.imageid }})
         docker cp $id:/rails/public/ ./assets
         aws s3 sync ./assets s3://${{ env.ASSET_BUCKET }}/assets/${{ inputs.build_tag }}
-    - name: Build and push main next Image
-      uses: ./.github/actions/build-js-image
-      with:
-        target: runner
-        registry: ${{ inputs.registry }}
-        tag: nextjs-${{inputs.environment}}
     - name: Build and push API Image
-      uses: ./.github/actions/build-ruby-image
+      uses: ./.github/actions/build-image
       with:
         target: monolith-api
         registry: ${{ inputs.registry }}
@@ -54,15 +48,15 @@ runs:
         build_tag: ${{ inputs.build_tag }}
         environment: ${{ inputs.environment }}
     - name: Build and push SQS Worker
-      uses: ./.github/actions/build-ruby-image
+      uses: ./.github/actions/build-image
       with:
         target: shoryuken
         registry: ${{ inputs.registry }}
         tag: ${{inputs.environment}}-sqs-worker
         build_tag: ${{ inputs.build_tag }}
         environment: ${{ inputs.environment }}
-    - name: Build and push main ruby Image
-      uses: ./.github/actions/build-ruby-image
+    - name: Build and push Image
+      uses: ./.github/actions/build-image
       with:
         target: monolith
         registry: ${{ inputs.registry }}

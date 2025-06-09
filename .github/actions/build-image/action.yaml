@@ -1,4 +1,4 @@
-name: 'Build and Push Ruby Docker Image'
+name: 'Build and Push Docker Image'
 description: 'A custom action to build and push our Docker images with environment-specific configurations.'
 inputs:
   target:
@@ -39,7 +39,7 @@ runs:
         fi
     - name: Build and push Docker image
       uses: docker/build-push-action@v6
-      id: build-ruby-image
+      id: build-image
       with:
         push: true
         load: ${{ inputs.load }}
