@@ -803,13 +803,11 @@ export interface TwoBlocksBlock {
   type: '1/3 & 2/3' | '2/3 & 1/3' | '1/2 & 1/2' | '1/4 & 3/4' | '3/4 & 1/4';
   alignment: 'horizontal' | 'vertical';
   blocks: (
-    | BasicCardBlock
-    | HeroCardBlock
+    | TextCardBlock
     | AnnouncementsSectionBlock
     | ImageBannerBlock
-    | ImageCardBlock
+    | ImageOnlyCardBlock
     | TestimonialsBlock
-    | CardWithImageBlock
     | FeaturedCompetitionsBlock
     | TwoBlocksBranchBlock
   )[];
@@ -819,31 +817,20 @@ export interface TwoBlocksBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "BasicCardBlock".
+ * via the `definition` "TextCardBlock".
  */
-export interface BasicCardBlock {
+export interface TextCardBlock {
   heading: string;
   body: string;
+  variant: 'info' | 'hero';
+  separatorAfterHeading: boolean;
   buttonText?: string | null;
   buttonLink?: string | null;
+  headerImage?: (number | null) | Media;
   colorPalette: ColorPaletteSelect;
   id?: string | null;
   blockName?: string | null;
-  blockType: 'BasicCard';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "HeroCardBlock".
- */
-export interface HeroCardBlock {
-  heading: string;
-  body: string;
-  buttonText?: string | null;
-  buttonLink?: string | null;
-  colorPalette: ColorPaletteSelect;
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'HeroCard';
+  blockType: 'TextCard';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -875,15 +862,15 @@ export interface ImageBannerBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "ImageCardBlock".
+ * via the `definition` "ImageOnlyCardBlock".
  */
-export interface ImageCardBlock {
-  heading: string;
+export interface ImageOnlyCardBlock {
   mainImage: number | Media;
+  heading?: string | null;
   colorPalette: ColorPaletteSelect;
   id?: string | null;
   blockName?: string | null;
-  blockType: 'ImageCard';
+  blockType: 'ImageOnlyCard';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -911,20 +898,6 @@ export interface TestimonialSlideBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "CardWithImageBlock".
- */
-export interface CardWithImageBlock {
-  heading: string;
-  body: string;
-  buttonText?: string | null;
-  buttonLink?: string | null;
-  image: number | Media;
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'CardWithImage';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "FeaturedCompetitionsBlock".
  */
 export interface FeaturedCompetitionsBlock {
@@ -944,13 +917,11 @@ export interface TwoBlocksBranchBlock {
   type: '1/3 & 2/3' | '2/3 & 1/3' | '1/2 & 1/2' | '1/4 & 3/4' | '3/4 & 1/4';
   alignment: 'horizontal' | 'vertical';
   blocks: (
-    | BasicCardBlock
-    | HeroCardBlock
+    | TextCardBlock
     | AnnouncementsSectionBlock
     | ImageBannerBlock
-    | ImageCardBlock
+    | ImageOnlyCardBlock
     | TestimonialsBlock
-    | CardWithImageBlock
     | FeaturedCompetitionsBlock
     | TwoBlocksLeafBlock
   )[];
@@ -966,13 +937,11 @@ export interface TwoBlocksLeafBlock {
   type: '1/3 & 2/3' | '2/3 & 1/3' | '1/2 & 1/2' | '1/4 & 3/4' | '3/4 & 1/4';
   alignment: 'horizontal' | 'vertical';
   blocks: (
-    | BasicCardBlock
-    | HeroCardBlock
+    | TextCardBlock
     | AnnouncementsSectionBlock
     | ImageBannerBlock
-    | ImageCardBlock
+    | ImageOnlyCardBlock
     | TestimonialsBlock
-    | CardWithImageBlock
     | FeaturedCompetitionsBlock
   )[];
   id?: string | null;
@@ -985,13 +954,11 @@ export interface TwoBlocksLeafBlock {
  */
 export interface FullWidthBlock {
   blocks: (
-    | BasicCardBlock
-    | HeroCardBlock
+    | TextCardBlock
     | AnnouncementsSectionBlock
     | ImageBannerBlock
-    | ImageCardBlock
+    | ImageOnlyCardBlock
     | TestimonialsBlock
-    | CardWithImageBlock
     | FeaturedCompetitionsBlock
   )[];
   id?: string | null;
@@ -1093,13 +1060,11 @@ export interface TwoBlocksBlockSelect<T extends boolean = true> {
   blocks?:
     | T
     | {
-        BasicCard?: T | BasicCardBlockSelect<T>;
-        HeroCard?: T | HeroCardBlockSelect<T>;
+        TextCard?: T | TextCardBlockSelect<T>;
         AnnouncementsSection?: T | AnnouncementsSectionBlockSelect<T>;
         ImageBanner?: T | ImageBannerBlockSelect<T>;
-        ImageCard?: T | ImageCardBlockSelect<T>;
+        ImageOnlyCard?: T | ImageOnlyCardBlockSelect<T>;
         testimonials?: T | TestimonialsBlockSelect<T>;
-        CardWithImage?: T | CardWithImageBlockSelect<T>;
         FeaturedCompetitions?: T | FeaturedCompetitionsBlockSelect<T>;
         twoBlocksBranch?: T | TwoBlocksBranchBlockSelect<T>;
       };
@@ -1108,26 +1073,16 @@ export interface TwoBlocksBlockSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "BasicCardBlock_select".
+ * via the `definition` "TextCardBlock_select".
  */
-export interface BasicCardBlockSelect<T extends boolean = true> {
+export interface TextCardBlockSelect<T extends boolean = true> {
   heading?: T;
   body?: T;
+  variant?: T;
+  separatorAfterHeading?: T;
   buttonText?: T;
   buttonLink?: T;
-  colorPalette?: T;
-  id?: T;
-  blockName?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "HeroCardBlock_select".
- */
-export interface HeroCardBlockSelect<T extends boolean = true> {
-  heading?: T;
-  body?: T;
-  buttonText?: T;
-  buttonLink?: T;
+  headerImage?: T;
   colorPalette?: T;
   id?: T;
   blockName?: T;
@@ -1160,11 +1115,11 @@ export interface ImageBannerBlockSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "ImageCardBlock_select".
+ * via the `definition` "ImageOnlyCardBlock_select".
  */
-export interface ImageCardBlockSelect<T extends boolean = true> {
-  heading?: T;
+export interface ImageOnlyCardBlockSelect<T extends boolean = true> {
   mainImage?: T;
+  heading?: T;
   colorPalette?: T;
   id?: T;
   blockName?: T;
@@ -1197,19 +1152,6 @@ export interface TestimonialSlideBlockSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "CardWithImageBlock_select".
- */
-export interface CardWithImageBlockSelect<T extends boolean = true> {
-  heading?: T;
-  body?: T;
-  buttonText?: T;
-  buttonLink?: T;
-  image?: T;
-  id?: T;
-  blockName?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "FeaturedCompetitionsBlock_select".
  */
 export interface FeaturedCompetitionsBlockSelect<T extends boolean = true> {
@@ -1230,13 +1172,11 @@ export interface TwoBlocksBranchBlockSelect<T extends boolean = true> {
   blocks?:
     | T
     | {
-        BasicCard?: T | BasicCardBlockSelect<T>;
-        HeroCard?: T | HeroCardBlockSelect<T>;
+        TextCard?: T | TextCardBlockSelect<T>;
         AnnouncementsSection?: T | AnnouncementsSectionBlockSelect<T>;
         ImageBanner?: T | ImageBannerBlockSelect<T>;
-        ImageCard?: T | ImageCardBlockSelect<T>;
+        ImageOnlyCard?: T | ImageOnlyCardBlockSelect<T>;
         testimonials?: T | TestimonialsBlockSelect<T>;
-        CardWithImage?: T | CardWithImageBlockSelect<T>;
         FeaturedCompetitions?: T | FeaturedCompetitionsBlockSelect<T>;
         twoBlocksLeaf?: T | TwoBlocksLeafBlockSelect<T>;
       };
@@ -1253,13 +1193,11 @@ export interface TwoBlocksLeafBlockSelect<T extends boolean = true> {
   blocks?:
     | T
     | {
-        BasicCard?: T | BasicCardBlockSelect<T>;
-        HeroCard?: T | HeroCardBlockSelect<T>;
+        TextCard?: T | TextCardBlockSelect<T>;
         AnnouncementsSection?: T | AnnouncementsSectionBlockSelect<T>;
         ImageBanner?: T | ImageBannerBlockSelect<T>;
-        ImageCard?: T | ImageCardBlockSelect<T>;
+        ImageOnlyCard?: T | ImageOnlyCardBlockSelect<T>;
         testimonials?: T | TestimonialsBlockSelect<T>;
-        CardWithImage?: T | CardWithImageBlockSelect<T>;
         FeaturedCompetitions?: T | FeaturedCompetitionsBlockSelect<T>;
       };
   id?: T;
@@ -1273,13 +1211,11 @@ export interface FullWidthBlockSelect<T extends boolean = true> {
   blocks?:
     | T
     | {
-        BasicCard?: T | BasicCardBlockSelect<T>;
-        HeroCard?: T | HeroCardBlockSelect<T>;
+        TextCard?: T | TextCardBlockSelect<T>;
         AnnouncementsSection?: T | AnnouncementsSectionBlockSelect<T>;
         ImageBanner?: T | ImageBannerBlockSelect<T>;
-        ImageCard?: T | ImageCardBlockSelect<T>;
+        ImageOnlyCard?: T | ImageOnlyCardBlockSelect<T>;
         testimonials?: T | TestimonialsBlockSelect<T>;
-        CardWithImage?: T | CardWithImageBlockSelect<T>;
         FeaturedCompetitions?: T | FeaturedCompetitionsBlockSelect<T>;
       };
   id?: T;
