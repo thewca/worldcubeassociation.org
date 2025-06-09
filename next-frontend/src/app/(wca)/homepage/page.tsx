@@ -41,6 +41,9 @@ import type {
   TwoBlocksLeafBlock,
   ColorSelect,
   Testimonial,
+  AnnouncementsSectionBlock,
+  Announcement,
+  User,
 } from "@/payload-types";
 
 const colorMap: Record<ColorSelect, string> = {
@@ -102,26 +105,30 @@ const TextCard = ({ block }: { block: TextCardBlock }) => {
   );
 };
 
-const AnnouncementsSection = () => {
+const AnnouncementsSection = ({
+  block,
+}: {
+  block: AnnouncementsSectionBlock;
+}) => {
+  const mainAnnouncement = block.mainAnnouncement as Announcement;
+
   return (
     <AnnouncementsCard
       hero={{
-        title: "Big Update: WCA World Championship 2025!",
-        postedBy: "Mitchell Anderson",
-        postedAt: "May 25, 2025",
-        markdown: `**Get ready!**\n\nThe next WCA World Championship is coming to Sydney 🇦🇺. More details soon.`,
-        fullLink: "/articles/world-champs-2025",
+        title: mainAnnouncement.title,
+        postedBy: (mainAnnouncement.publishedBy as User).name!,
+        postedAt: mainAnnouncement.publishedAt,
+        markdown: mainAnnouncement.content,
+        fullLink: `/articles/${mainAnnouncement.id}`,
       }}
-      others={[
-        {
-          title: "New Regulations Update",
-          href: "/articles/regulations-update",
-        },
-        {
-          title: "Highlights from Asian Championship",
-          href: "/articles/asia-highlights",
-        },
-      ]}
+      others={block
+        .furtherAnnouncements!.map(
+          (announcement) => announcement as Announcement,
+        )
+        .map((announcement) => ({
+          title: announcement.title,
+          href: `/articles/${announcement.id}`,
+        }))}
     />
   );
 };
@@ -422,7 +429,7 @@ const renderBlockGroup = (entry: TwoBlocksUnion, keyPrefix = "") => {
           case "AnnouncementsSection":
             return (
               <GridItem key={key} colSpan={columns[i] || 1} display="flex">
-                <AnnouncementsSection />
+                <AnnouncementsSection block={subEntry} />
               </GridItem>
             );
           case "twoBlocksBranch":
@@ -478,7 +485,7 @@ const renderFullBlock = (entry: FullWidthBlock, keyPrefix = "") => {
           case "TextCard":
             return <TextCard key={key} block={subEntry} />;
           case "AnnouncementsSection":
-            return <AnnouncementsSection />;
+            return <AnnouncementsSection key={key} block={subEntry} />;
           case "ImageBanner":
             return <ImageBanner key={key} block={subEntry} />;
           case "ImageOnlyCard":

@@ -177,7 +177,21 @@ const AnnouncementsSection: Block = {
   slug: "AnnouncementsSection",
   interfaceName: "AnnouncementsSectionBlock",
   imageURL: "/payload/announcement_section.png",
-  fields: [],
+  fields: [
+    {
+      name: "mainAnnouncement",
+      type: "relationship",
+      relationTo: "announcements",
+      required: true,
+    },
+    {
+      name: "furtherAnnouncements",
+      type: "relationship",
+      relationTo: "announcements",
+      hasMany: true,
+    },
+    colorPaletteSelect,
+  ],
 };
 
 const TestimonialSlide: Block = {

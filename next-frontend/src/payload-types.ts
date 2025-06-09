@@ -91,6 +91,7 @@ export interface Config {
   collections: {
     media: Media;
     testimonials: Testimonial;
+    announcements: Announcement;
     users: User;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -100,6 +101,7 @@ export interface Config {
   collectionsSelect: {
     media: MediaSelect<false> | MediaSelect<true>;
     testimonials: TestimonialsSelect<false> | TestimonialsSelect<true>;
+    announcements: AnnouncementsSelect<false> | AnnouncementsSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -177,6 +179,20 @@ export interface Testimonial {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "announcements".
+ */
+export interface Announcement {
+  id: number;
+  image?: (number | null) | Media;
+  title: string;
+  content: string;
+  publishedAt: string;
+  publishedBy: string | User;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "users".
  */
 export interface User {
@@ -210,6 +226,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'testimonials';
         value: number | Testimonial;
+      } | null)
+    | ({
+        relationTo: 'announcements';
+        value: number | Announcement;
       } | null)
     | ({
         relationTo: 'users';
@@ -284,6 +304,19 @@ export interface TestimonialsSelect<T extends boolean = true> {
   punchline?: T;
   fullTestimonial?: T;
   whoDunnit?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "announcements_select".
+ */
+export interface AnnouncementsSelect<T extends boolean = true> {
+  image?: T;
+  title?: T;
+  content?: T;
+  publishedAt?: T;
+  publishedBy?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -868,6 +901,9 @@ export interface TextCardBlock {
  * via the `definition` "AnnouncementsSectionBlock".
  */
 export interface AnnouncementsSectionBlock {
+  mainAnnouncement: number | Announcement;
+  furtherAnnouncements?: (number | Announcement)[] | null;
+  colorPalette: ColorPaletteSelect;
   id?: string | null;
   blockName?: string | null;
   blockType: 'AnnouncementsSection';
@@ -1120,6 +1156,9 @@ export interface TextCardBlockSelect<T extends boolean = true> {
  * via the `definition` "AnnouncementsSectionBlock_select".
  */
 export interface AnnouncementsSectionBlockSelect<T extends boolean = true> {
+  mainAnnouncement?: T;
+  furtherAnnouncements?: T;
+  colorPalette?: T;
   id?: T;
   blockName?: T;
 }
