@@ -90,6 +90,7 @@ export interface Config {
   blocks: {};
   collections: {
     media: Media;
+    testimonials: Testimonial;
     users: User;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -98,6 +99,7 @@ export interface Config {
   collectionsJoins: {};
   collectionsSelect: {
     media: MediaSelect<false> | MediaSelect<true>;
+    testimonials: TestimonialsSelect<false> | TestimonialsSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -162,6 +164,19 @@ export interface Media {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "testimonials".
+ */
+export interface Testimonial {
+  id: number;
+  image?: (number | null) | Media;
+  punchline: string;
+  fullTestimonial: string;
+  whoDunnit: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "users".
  */
 export interface User {
@@ -191,6 +206,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'media';
         value: number | Media;
+      } | null)
+    | ({
+        relationTo: 'testimonials';
+        value: number | Testimonial;
       } | null)
     | ({
         relationTo: 'users';
@@ -255,6 +274,18 @@ export interface MediaSelect<T extends boolean = true> {
   height?: T;
   focalX?: T;
   focalY?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "testimonials_select".
+ */
+export interface TestimonialsSelect<T extends boolean = true> {
+  image?: T;
+  punchline?: T;
+  fullTestimonial?: T;
+  whoDunnit?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -880,21 +911,18 @@ export interface TestimonialsBlock {
   blocks: TestimonialSlideBlock[];
   id?: string | null;
   blockName?: string | null;
-  blockType: 'testimonials';
+  blockType: 'TestimonialsSpinner';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "TestimonialSlideBlock".
  */
 export interface TestimonialSlideBlock {
-  image: number | Media;
-  title: string;
-  description: string;
-  subtitle?: string | null;
+  testimonial: number | Testimonial;
   colorPalette: ColorPaletteSelect;
   id?: string | null;
   blockName?: string | null;
-  blockType: 'testimonial';
+  blockType: 'TestimonialSlide';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1064,7 +1092,7 @@ export interface TwoBlocksBlockSelect<T extends boolean = true> {
         AnnouncementsSection?: T | AnnouncementsSectionBlockSelect<T>;
         ImageBanner?: T | ImageBannerBlockSelect<T>;
         ImageOnlyCard?: T | ImageOnlyCardBlockSelect<T>;
-        testimonials?: T | TestimonialsBlockSelect<T>;
+        TestimonialsSpinner?: T | TestimonialsBlockSelect<T>;
         FeaturedCompetitions?: T | FeaturedCompetitionsBlockSelect<T>;
         twoBlocksBranch?: T | TwoBlocksBranchBlockSelect<T>;
       };
@@ -1132,7 +1160,7 @@ export interface TestimonialsBlockSelect<T extends boolean = true> {
   blocks?:
     | T
     | {
-        testimonial?: T | TestimonialSlideBlockSelect<T>;
+        TestimonialSlide?: T | TestimonialSlideBlockSelect<T>;
       };
   id?: T;
   blockName?: T;
@@ -1142,10 +1170,7 @@ export interface TestimonialsBlockSelect<T extends boolean = true> {
  * via the `definition` "TestimonialSlideBlock_select".
  */
 export interface TestimonialSlideBlockSelect<T extends boolean = true> {
-  image?: T;
-  title?: T;
-  description?: T;
-  subtitle?: T;
+  testimonial?: T;
   colorPalette?: T;
   id?: T;
   blockName?: T;
@@ -1176,7 +1201,7 @@ export interface TwoBlocksBranchBlockSelect<T extends boolean = true> {
         AnnouncementsSection?: T | AnnouncementsSectionBlockSelect<T>;
         ImageBanner?: T | ImageBannerBlockSelect<T>;
         ImageOnlyCard?: T | ImageOnlyCardBlockSelect<T>;
-        testimonials?: T | TestimonialsBlockSelect<T>;
+        TestimonialsSpinner?: T | TestimonialsBlockSelect<T>;
         FeaturedCompetitions?: T | FeaturedCompetitionsBlockSelect<T>;
         twoBlocksLeaf?: T | TwoBlocksLeafBlockSelect<T>;
       };
@@ -1197,7 +1222,7 @@ export interface TwoBlocksLeafBlockSelect<T extends boolean = true> {
         AnnouncementsSection?: T | AnnouncementsSectionBlockSelect<T>;
         ImageBanner?: T | ImageBannerBlockSelect<T>;
         ImageOnlyCard?: T | ImageOnlyCardBlockSelect<T>;
-        testimonials?: T | TestimonialsBlockSelect<T>;
+        TestimonialsSpinner?: T | TestimonialsBlockSelect<T>;
         FeaturedCompetitions?: T | FeaturedCompetitionsBlockSelect<T>;
       };
   id?: T;
@@ -1215,7 +1240,7 @@ export interface FullWidthBlockSelect<T extends boolean = true> {
         AnnouncementsSection?: T | AnnouncementsSectionBlockSelect<T>;
         ImageBanner?: T | ImageBannerBlockSelect<T>;
         ImageOnlyCard?: T | ImageOnlyCardBlockSelect<T>;
-        testimonials?: T | TestimonialsBlockSelect<T>;
+        TestimonialsSpinner?: T | TestimonialsBlockSelect<T>;
         FeaturedCompetitions?: T | FeaturedCompetitionsBlockSelect<T>;
       };
   id?: T;

@@ -181,7 +181,7 @@ const AnnouncementsSection: Block = {
 };
 
 const TestimonialSlide: Block = {
-  slug: "testimonial", // singular
+  slug: "TestimonialSlide",
   interfaceName: "TestimonialSlideBlock",
   labels: {
     singular: "Testimonial",
@@ -189,33 +189,19 @@ const TestimonialSlide: Block = {
   },
   fields: [
     {
-      name: "image",
-      type: "upload",
-      relationTo: "media",
+      name: "testimonial",
+      type: "relationship",
+      relationTo: "testimonials",
       required: true,
-    },
-    {
-      name: "title",
-      type: "text",
-      required: true,
-    },
-    {
-      name: "description",
-      type: "textarea",
-      required: true,
-    },
-    {
-      name: "subtitle",
-      type: "text",
     },
     colorPaletteSelect,
   ],
 };
 
-const Testimonials: Block = {
-  slug: "testimonials",
+const TestimonialsSpinner: Block = {
+  slug: "TestimonialsSpinner",
   interfaceName: "TestimonialsBlock",
-  imageURL: "/payload/testimonials.png",
+  imageURL: "/payload/testimonials_spinner.png",
   labels: {
     singular: "Testimonials Section",
     plural: "Testimonials Sections",
@@ -236,7 +222,7 @@ const coreBlocks = [
   AnnouncementsSection,
   ImageBanner,
   ImageOnlyCard,
-  Testimonials,
+  TestimonialsSpinner,
   FeaturedCompetitions,
 ];
 

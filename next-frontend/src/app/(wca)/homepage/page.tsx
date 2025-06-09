@@ -40,6 +40,7 @@ import type {
   TwoBlocksBranchBlock,
   TwoBlocksLeafBlock,
   ColorSelect,
+  Testimonial,
 } from "@/payload-types";
 
 const colorMap: Record<ColorSelect, string> = {
@@ -287,7 +288,7 @@ const FeaturedCompetitions = ({
   );
 };
 
-const Testimonials = ({ block }: { block: TestimonialsBlock }) => {
+const TestimonialsSpinner = ({ block }: { block: TestimonialsBlock }) => {
   const slides = block.blocks;
   return (
     <Tabs.Root
@@ -323,35 +324,43 @@ const Testimonials = ({ block }: { block: TestimonialsBlock }) => {
         </Tabs.List>
 
         {/* Slides */}
-        {slides.map((slide) => (
-          <Tabs.Content key={slide.id} value={slide.id!} asChild>
-            <Card.Root
-              variant="info"
-              flexDirection="row"
-              overflow="hidden"
-              colorPalette={slide.colorPalette}
-            >
-              <Image
-                src={
-                  slide.image != null
-                    ? ((slide.image as Media).url ?? undefined)
-                    : "/placeholder.png"
-                }
-                alt={
-                  slide.image != null ? (slide.image as Media).alt : slide.title
-                }
-                maxW="1/3"
-                objectFit="cover"
-              />
-              <Card.Body pr="3em">
-                <Card.Title>{slide.title}</Card.Title>
-                <Separator size="md" />
-                <Card.Description>{slide.description}</Card.Description>
-                <Text>{slide.subtitle}</Text>
-              </Card.Body>
-            </Card.Root>
-          </Tabs.Content>
-        ))}
+        {slides.map((slide) => {
+          const testimonial = slide.testimonial as Testimonial;
+
+          return (
+            <Tabs.Content key={slide.id} value={slide.id!} asChild>
+              <Card.Root
+                variant="info"
+                flexDirection="row"
+                overflow="hidden"
+                colorPalette={slide.colorPalette}
+              >
+                <Image
+                  src={
+                    testimonial.image != null
+                      ? ((testimonial.image as Media).url ?? undefined)
+                      : "/placeholder.png"
+                  }
+                  alt={
+                    testimonial.image != null
+                      ? (testimonial.image as Media).alt
+                      : testimonial.punchline
+                  }
+                  maxW="1/3"
+                  objectFit="cover"
+                />
+                <Card.Body pr="3em">
+                  <Card.Title>{testimonial.punchline}</Card.Title>
+                  <Separator size="md" />
+                  <Card.Description>
+                    {testimonial.fullTestimonial}
+                  </Card.Description>
+                  <Text>{testimonial.whoDunnit}</Text>
+                </Card.Body>
+              </Card.Root>
+            </Tabs.Content>
+          );
+        })}
       </Card.Root>
     </Tabs.Root>
   );
@@ -446,10 +455,10 @@ const renderBlockGroup = (entry: TwoBlocksUnion, keyPrefix = "") => {
                 <FeaturedCompetitions block={subEntry} />
               </GridItem>
             );
-          case "testimonials":
+          case "TestimonialsSpinner":
             return (
               <GridItem key={key} colSpan={columns[i] || 1} display="flex">
-                <Testimonials block={subEntry} />
+                <TestimonialsSpinner block={subEntry} />
               </GridItem>
             );
           default:
@@ -476,8 +485,8 @@ const renderFullBlock = (entry: FullWidthBlock, keyPrefix = "") => {
             return <ImageOnlyCard key={key} block={subEntry} />;
           case "FeaturedCompetitions":
             return <FeaturedCompetitions key={key} block={subEntry} />;
-          case "testimonials":
-            return <Testimonials key={key} block={subEntry} />;
+          case "TestimonialsSpinner":
+            return <TestimonialsSpinner key={key} block={subEntry} />;
 
           default:
             return null;

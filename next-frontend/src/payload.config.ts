@@ -7,7 +7,8 @@ import sharp from "sharp";
 import { authjsPlugin } from "payload-authjs";
 import { authConfig } from "@/auth.config";
 
-import { Media } from "./collections/Media";
+import { Media } from "@/collections/Media";
+import { Testimonials } from "@/collections/Testimonials";
 import { Nav } from "@/globals/Nav";
 import { Home } from "@/globals/Home";
 
@@ -21,7 +22,7 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Media],
+  collections: [Media, Testimonials],
   globals: [Nav, Home],
   secret: process.env.PAYLOAD_SECRET || "",
   typescript: {
