@@ -346,6 +346,10 @@ resource "aws_lb_listener_rule" "pma_forward_prod" {
   }
 }
 
+locals {
+  next_url = "next70912409871254.worldcubeassociation.org"
+}
+
 resource "aws_lb_listener_rule" "next_forward_prod" {
   listener_arn = aws_lb_listener.https.arn
   priority     = 9
@@ -357,7 +361,7 @@ resource "aws_lb_listener_rule" "next_forward_prod" {
 
   condition {
     host_header {
-      values = ["next70912409871254.worldcubeassociation.org"]
+      values = [local.next_url]
     }
   }
 }
@@ -478,4 +482,8 @@ output "pma_staging"{
 
 output "mailcatcher"{
   value = aws_lb_target_group.mailcatcher-staging
+}
+
+output "next_url" {
+  value = local.next_url
 }

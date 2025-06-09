@@ -43,7 +43,7 @@ locals {
     },
     {
       name = "NEXTAUTH_URL"
-      value = "https://next70912409871254.worldcubeassociation.org"
+      value = var.shared.next_url
     }
   ]
 }

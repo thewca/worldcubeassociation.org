@@ -109,6 +109,7 @@ variable "shared" {
       id: string,
       root_resource_id: string
     })
+    next_url: string
     account_id: string
     # These are booth arrays
     private_subnets: any
