@@ -6,7 +6,7 @@
 <%= render layout: 'nav' do %>
   <h2>Editing Delegate Report for <%= @competition.name%></h2>
   <%= simple_form_for @delegate_report, url: delegate_report_path(@competition.id),
-                                        html: { class: "delegate-report", id: "delegate-report-form" } do |f| %>
+                                        html: { class: "delegate-report are-you-sure" } do |f| %>
     <%= f.hidden_field :updated_at %>
 
     <% if @delegate_report.posted? %>
@@ -69,22 +69,6 @@
 <script>
   document.addEventListener("DOMContentLoaded", function () {
     const checkbox = document.getElementById("wic_feedback_checkbox");
-    const form = document.getElementById("delegate-report-form");
-
-    if (form) {
-      let unsavedChanges = false;
-      const markUnsaved = () => { unsavedChanges = true; }
-
-      form.addEventListener("change", markUnsaved);
-      form.addEventListener("input", markUnsaved);
-      form.addEventListener("submit", () => { unsavedChanges = false });
-
-      window.addEventListener("beforeunload", (e) => {
-        if (unsavedChanges) {
-          e.preventDefault();
-        }
-      });
-    }
 
     if (checkbox) {
       checkbox.addEventListener("change", function (e) {
