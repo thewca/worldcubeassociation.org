@@ -29,9 +29,10 @@ const colorPaletteSelect: SelectField = {
   options: ["blue", "red", "green", "orange", "yellow", "grey"],
 };
 
-const BasicCard: Block = {
-  slug: "BasicCard",
-  interfaceName: "BasicCardBlock",
+const TextCard: Block = {
+  slug: "TextCard",
+  interfaceName: "TextCardBlock",
+  imageURL: "/payload/text_card.png",
   fields: [
     {
       name: "heading",
@@ -40,8 +41,21 @@ const BasicCard: Block = {
     },
     {
       name: "body",
-      type: "text",
+      type: "textarea",
       required: true,
+    },
+    {
+      name: "variant",
+      type: "select",
+      options: ["info", "hero"],
+      defaultValue: "info",
+      required: true,
+    },
+    {
+      name: "separatorAfterHeading",
+      type: "checkbox",
+      required: true,
+      defaultValue: false,
     },
     {
       name: "buttonText",
@@ -53,6 +67,11 @@ const BasicCard: Block = {
       type: "text",
       required: false,
     },
+    {
+      name: "headerImage",
+      type: "upload",
+      relationTo: "media",
+    },
     colorPaletteSelect,
   ],
 };
@@ -60,6 +79,7 @@ const BasicCard: Block = {
 const ImageBanner: Block = {
   slug: "ImageBanner",
   interfaceName: "ImageBannerBlock",
+  imageURL: "/payload/image_banner.png",
   fields: [
     {
       name: "heading",
@@ -68,7 +88,7 @@ const ImageBanner: Block = {
     },
     {
       name: "body",
-      type: "text",
+      type: "textarea",
       required: true,
     },
     {
@@ -108,89 +128,29 @@ const ImageBanner: Block = {
   ],
 };
 
-const ImageCard: Block = {
-  slug: "ImageCard",
-  interfaceName: "ImageCardBlock",
+const ImageOnlyCard: Block = {
+  slug: "ImageOnlyCard",
+  interfaceName: "ImageOnlyCardBlock",
+  imageURL: "/payload/image_only_card.png",
   fields: [
-    {
-      name: "heading",
-      type: "text",
-      required: true,
-    },
     {
       name: "mainImage",
       type: "upload",
       relationTo: "media",
       required: true,
     },
-    colorPaletteSelect,
-  ],
-};
-
-const HeroCard: Block = {
-  slug: "HeroCard",
-  interfaceName: "HeroCardBlock",
-  fields: [
     {
       name: "heading",
       type: "text",
-      required: true,
-    },
-    {
-      name: "body",
-      type: "text",
-      required: true,
-    },
-    {
-      name: "buttonText",
-      type: "text",
-      required: false,
-    },
-    {
-      name: "buttonLink",
-      type: "text",
-      required: false,
     },
     colorPaletteSelect,
-  ],
-};
-
-const CardWithImage: Block = {
-  slug: "CardWithImage",
-  interfaceName: "CardWithImageBlock",
-  fields: [
-    {
-      name: "heading",
-      type: "text",
-      required: true,
-    },
-    {
-      name: "body",
-      type: "text",
-      required: true,
-    },
-    {
-      name: "buttonText",
-      type: "text",
-      required: false,
-    },
-    {
-      name: "buttonLink",
-      type: "text",
-      required: false,
-    },
-    {
-      name: "image",
-      type: "upload",
-      relationTo: "media",
-      required: true,
-    },
   ],
 };
 
 const FeaturedCompetitions: Block = {
   slug: "FeaturedCompetitions",
   interfaceName: "FeaturedCompetitionsBlock",
+  imageURL: "/payload/featured_upcoming_competitions.png",
   fields: [
     {
       name: "Competition1ID",
@@ -216,11 +176,26 @@ const FeaturedCompetitions: Block = {
 const AnnouncementsSection: Block = {
   slug: "AnnouncementsSection",
   interfaceName: "AnnouncementsSectionBlock",
-  fields: [],
+  imageURL: "/payload/announcement_section.png",
+  fields: [
+    {
+      name: "mainAnnouncement",
+      type: "relationship",
+      relationTo: "announcements",
+      required: true,
+    },
+    {
+      name: "furtherAnnouncements",
+      type: "relationship",
+      relationTo: "announcements",
+      hasMany: true,
+    },
+    colorPaletteSelect,
+  ],
 };
 
 const TestimonialSlide: Block = {
-  slug: "testimonial", // singular
+  slug: "TestimonialSlide",
   interfaceName: "TestimonialSlideBlock",
   labels: {
     singular: "Testimonial",
@@ -228,32 +203,19 @@ const TestimonialSlide: Block = {
   },
   fields: [
     {
-      name: "image",
-      type: "upload",
-      relationTo: "media",
+      name: "testimonial",
+      type: "relationship",
+      relationTo: "testimonials",
       required: true,
-    },
-    {
-      name: "title",
-      type: "text",
-      required: true,
-    },
-    {
-      name: "description",
-      type: "textarea",
-      required: true,
-    },
-    {
-      name: "subtitle",
-      type: "text",
     },
     colorPaletteSelect,
   ],
 };
 
-const Testimonials: Block = {
-  slug: "testimonials",
+const TestimonialsSpinner: Block = {
+  slug: "TestimonialsSpinner",
   interfaceName: "TestimonialsBlock",
+  imageURL: "/payload/testimonials_spinner.png",
   labels: {
     singular: "Testimonials Section",
     plural: "Testimonials Sections",
@@ -270,13 +232,11 @@ const Testimonials: Block = {
 };
 
 const coreBlocks = [
-  BasicCard,
-  HeroCard,
+  TextCard,
   AnnouncementsSection,
   ImageBanner,
-  ImageCard,
-  Testimonials,
-  CardWithImage,
+  ImageOnlyCard,
+  TestimonialsSpinner,
   FeaturedCompetitions,
 ];
 
@@ -404,4 +364,9 @@ export const Home: GlobalConfig = {
       minRows: 1,
     },
   ],
+  admin: {
+    livePreview: {
+      url: "/homepage",
+    },
+  },
 };

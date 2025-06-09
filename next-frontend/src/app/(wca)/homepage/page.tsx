@@ -29,21 +29,24 @@ import Flag from "react-world-flags";
 import CountryMap from "@/components/CountryMap";
 
 import type {
-  BasicCardBlock,
-  CardWithImageBlock,
+  TextCardBlock,
   FeaturedCompetitionsBlock,
   FullWidthBlock,
-  HeroCardBlock,
   ImageBannerBlock,
-  ImageCardBlock,
+  ImageOnlyCardBlock,
   Media,
   TestimonialsBlock,
   TwoBlocksBlock,
   TwoBlocksBranchBlock,
   TwoBlocksLeafBlock,
+  ColorSelect,
+  Testimonial,
+  AnnouncementsSectionBlock,
+  Announcement,
+  User,
 } from "@/payload-types";
 
-const colorMap: Record<string, string> = {
+const colorMap: Record<ColorSelect, string> = {
   blue: "blue.50",
   red: "red.50",
   green: "green.50",
@@ -58,7 +61,7 @@ const colorMap: Record<string, string> = {
   black: "supplementary.texts.dark",
 };
 
-const colorGradientMap: Record<string, string> = {
+const colorGradientMap: Record<ColorSelect, string> = {
   blue: "blue-50",
   red: "red-50",
   green: "green-50",
@@ -69,35 +72,28 @@ const colorGradientMap: Record<string, string> = {
   darkGreen: "green-100",
   darkOrange: "orange-100",
   darkYellow: "yellow-100",
+  white: "white-100",
+  black: "black-100",
 };
 
-const BasicCard = ({ block }: { block: BasicCardBlock }) => {
-  return (
-    <Card.Root variant="info" size="lg" width="full">
-      <Card.Body>
-        <Card.Title>{block.heading}</Card.Title>
-        <Separator size="md" />
-        <Card.Description>{block.body}</Card.Description>
-        {block.buttonText?.trim() && (
-          <Button mr="auto" asChild>
-            <Link href={block.buttonLink!}>{block.buttonText}</Link>
-          </Button>
-        )}
-      </Card.Body>
-    </Card.Root>
-  );
-};
-
-const HeroCard = ({ block }: { block: HeroCardBlock }) => {
+const TextCard = ({ block }: { block: TextCardBlock }) => {
   return (
     <Card.Root
-      variant="info"
+      variant={block.variant}
       size="lg"
       colorPalette={block.colorPalette}
       width="full"
     >
+      {block.headerImage && (
+        <Image
+          src={(block.headerImage as Media).url ?? undefined}
+          alt={(block.headerImage as Media).alt ?? undefined}
+          aspectRatio="3/1"
+        />
+      )}
       <Card.Body>
         <Card.Title>{block.heading}</Card.Title>
+        {block.separatorAfterHeading && <Separator size="md" />}
         <Card.Description>{block.body}</Card.Description>
         {block.buttonText?.trim() && (
           <Button mr="auto" asChild>
@@ -109,48 +105,30 @@ const HeroCard = ({ block }: { block: HeroCardBlock }) => {
   );
 };
 
-const CardWithImage = ({ block }: { block: CardWithImageBlock }) => {
-  return (
-    <Card.Root variant="info" width="full">
-      <Image
-        src={(block.image as Media).url ?? undefined}
-        alt="Green double couch with wooden legs"
-        aspectRatio="3/1"
-      />
-      <Card.Body>
-        <Card.Title>{block.heading}</Card.Title>
-        <Separator size="md" />
-        <Card.Description>{block.body}</Card.Description>
-        {block.buttonText?.trim() && (
-          <Button mr="auto" asChild>
-            <Link href={block.buttonLink!}>{block.buttonText}</Link>
-          </Button>
-        )}
-      </Card.Body>
-    </Card.Root>
-  );
-};
+const AnnouncementsSection = ({
+  block,
+}: {
+  block: AnnouncementsSectionBlock;
+}) => {
+  const mainAnnouncement = block.mainAnnouncement as Announcement;
 
-const AnnouncementsSection = () => {
   return (
     <AnnouncementsCard
       hero={{
-        title: "Big Update: WCA World Championship 2025!",
-        postedBy: "Mitchell Anderson",
-        postedAt: "May 25, 2025",
-        markdown: `**Get ready!**\n\nThe next WCA World Championship is coming to Sydney 🇦🇺. More details soon.`,
-        fullLink: "/articles/world-champs-2025",
+        title: mainAnnouncement.title,
+        postedBy: (mainAnnouncement.publishedBy as User).name!,
+        postedAt: mainAnnouncement.publishedAt,
+        markdown: mainAnnouncement.content,
+        fullLink: `/articles/${mainAnnouncement.id}`,
       }}
-      others={[
-        {
-          title: "New Regulations Update",
-          href: "/articles/regulations-update",
-        },
-        {
-          title: "Highlights from Asian Championship",
-          href: "/articles/asia-highlights",
-        },
-      ]}
+      others={block
+        .furtherAnnouncements!.map(
+          (announcement) => announcement as Announcement,
+        )
+        .map((announcement) => ({
+          title: announcement.title,
+          href: `/articles/${announcement.id}`,
+        }))}
     />
   );
 };
@@ -167,7 +145,7 @@ const ImageBanner = ({ block }: { block: ImageBannerBlock }) => {
       <Box position="relative" flex="1" minW="50%" maxW="50%" overflow="hidden">
         <Image
           src={(block.mainImage as Media).url ?? undefined}
-          alt="Cubing event"
+          alt={(block.mainImage as Media).alt ?? undefined}
           objectFit="cover"
           width="100%"
           height="40vh"
@@ -204,7 +182,12 @@ const ImageBanner = ({ block }: { block: ImageBannerBlock }) => {
         backgroundPosition={block.bgPos ?? undefined}
         backgroundRepeat="no-repeat"
       >
-        <Heading size="4xl" color={colorMap[block.headingColor]} mb="4">
+        <Heading
+          size="4xl"
+          color={colorMap[block.headingColor]}
+          mb="4"
+          textTransform="uppercase"
+        >
           {block.heading}
         </Heading>
         <Text fontSize="md" color={colorMap[block.textColor]}>
@@ -215,7 +198,7 @@ const ImageBanner = ({ block }: { block: ImageBannerBlock }) => {
   );
 };
 
-const ImageCard = ({ block }: { block: ImageCardBlock }) => {
+const ImageOnlyCard = ({ block }: { block: ImageOnlyCardBlock }) => {
   return (
     <Card.Root
       overflow="hidden"
@@ -225,14 +208,16 @@ const ImageCard = ({ block }: { block: ImageCardBlock }) => {
     >
       <Image
         src={(block.mainImage as Media).url ?? undefined}
-        alt={block.heading}
-        aspectRatio={2 / 1}
+        alt={(block.mainImage as Media).alt ?? block.heading ?? undefined}
+        aspectRatio="2/1"
       />
-      <Card.Body p={6}>
-        <Heading size="3xl" textTransform="uppercase">
-          {block.heading}
-        </Heading>
-      </Card.Body>
+      {block.heading && (
+        <Card.Body p={6}>
+          <Heading size="3xl" textTransform="uppercase">
+            {block.heading}
+          </Heading>
+        </Card.Body>
+      )}
     </Card.Root>
   );
 };
@@ -310,7 +295,7 @@ const FeaturedCompetitions = ({
   );
 };
 
-const Testimonials = ({ block }: { block: TestimonialsBlock }) => {
+const TestimonialsSpinner = ({ block }: { block: TestimonialsBlock }) => {
   const slides = block.blocks;
   return (
     <Tabs.Root
@@ -346,35 +331,43 @@ const Testimonials = ({ block }: { block: TestimonialsBlock }) => {
         </Tabs.List>
 
         {/* Slides */}
-        {slides.map((slide) => (
-          <Tabs.Content key={slide.id} value={slide.id!} asChild>
-            <Card.Root
-              variant="info"
-              flexDirection="row"
-              overflow="hidden"
-              colorPalette={slide.colorPalette}
-            >
-              <Image
-                src={
-                  slide.image != null
-                    ? ((slide.image as Media).url ?? undefined)
-                    : "/placeholder.png"
-                }
-                alt={
-                  slide.image != null ? (slide.image as Media).alt : slide.title
-                }
-                maxW="1/3"
-                objectFit="cover"
-              />
-              <Card.Body pr="3em">
-                <Card.Title>{slide.title}</Card.Title>
-                <Separator size="md" />
-                <Card.Description>{slide.description}</Card.Description>
-                <Text>{slide.subtitle}</Text>
-              </Card.Body>
-            </Card.Root>
-          </Tabs.Content>
-        ))}
+        {slides.map((slide) => {
+          const testimonial = slide.testimonial as Testimonial;
+
+          return (
+            <Tabs.Content key={slide.id} value={slide.id!} asChild>
+              <Card.Root
+                variant="info"
+                flexDirection="row"
+                overflow="hidden"
+                colorPalette={slide.colorPalette}
+              >
+                <Image
+                  src={
+                    testimonial.image != null
+                      ? ((testimonial.image as Media).url ?? undefined)
+                      : "/placeholder.png"
+                  }
+                  alt={
+                    testimonial.image != null
+                      ? (testimonial.image as Media).alt
+                      : testimonial.punchline
+                  }
+                  maxW="1/3"
+                  objectFit="cover"
+                />
+                <Card.Body pr="3em">
+                  <Card.Title>{testimonial.punchline}</Card.Title>
+                  <Separator size="md" />
+                  <Card.Description>
+                    {testimonial.fullTestimonial}
+                  </Card.Description>
+                  <Text>{testimonial.whoDunnit}</Text>
+                </Card.Body>
+              </Card.Root>
+            </Tabs.Content>
+          );
+        })}
       </Card.Root>
     </Tabs.Root>
   );
@@ -427,32 +420,18 @@ const renderBlockGroup = (entry: TwoBlocksUnion, keyPrefix = "") => {
       {entry.blocks.map((subEntry, i) => {
         const key = `${keyPrefix}-${i}`;
         switch (subEntry.blockType) {
-          case "BasicCard":
+          case "TextCard":
             return (
               <GridItem key={key} colSpan={columns[i]} display="flex">
-                <BasicCard block={subEntry} />
+                <TextCard block={subEntry} />
               </GridItem>
             );
-          case "HeroCard":
-            return (
-              <GridItem key={key} colSpan={columns[i]} display="flex">
-                <HeroCard block={subEntry} />
-              </GridItem>
-            );
-          case "CardWithImage":
-            return (
-              <GridItem key={key} colSpan={columns[i]} display="flex">
-                <CardWithImage block={subEntry} />
-              </GridItem>
-            );
-
           case "AnnouncementsSection":
             return (
               <GridItem key={key} colSpan={columns[i] || 1} display="flex">
-                <AnnouncementsSection />
+                <AnnouncementsSection block={subEntry} />
               </GridItem>
             );
-
           case "twoBlocksBranch":
             return (
               <GridItem key={key} colSpan={columns[i] || 1} display="flex">
@@ -471,10 +450,10 @@ const renderBlockGroup = (entry: TwoBlocksUnion, keyPrefix = "") => {
                 <ImageBanner block={subEntry} />
               </GridItem>
             );
-          case "ImageCard":
+          case "ImageOnlyCard":
             return (
               <GridItem key={key} colSpan={columns[i] || 1} display="flex">
-                <ImageCard block={subEntry} />
+                <ImageOnlyCard block={subEntry} />
               </GridItem>
             );
           case "FeaturedCompetitions":
@@ -483,13 +462,12 @@ const renderBlockGroup = (entry: TwoBlocksUnion, keyPrefix = "") => {
                 <FeaturedCompetitions block={subEntry} />
               </GridItem>
             );
-          case "testimonials":
+          case "TestimonialsSpinner":
             return (
               <GridItem key={key} colSpan={columns[i] || 1} display="flex">
-                <Testimonials block={subEntry} />
+                <TestimonialsSpinner block={subEntry} />
               </GridItem>
             );
-
           default:
             return null;
         }
@@ -504,20 +482,18 @@ const renderFullBlock = (entry: FullWidthBlock, keyPrefix = "") => {
       {entry.blocks.map((subEntry, i) => {
         const key = `${keyPrefix}-${i}`;
         switch (subEntry.blockType) {
-          case "BasicCard":
-            return <BasicCard key={key} block={subEntry} />;
-          case "HeroCard":
-            return <HeroCard key={key} block={subEntry} />;
+          case "TextCard":
+            return <TextCard key={key} block={subEntry} />;
           case "AnnouncementsSection":
-            return <AnnouncementsSection />;
+            return <AnnouncementsSection key={key} block={subEntry} />;
           case "ImageBanner":
             return <ImageBanner key={key} block={subEntry} />;
-          case "ImageCard":
-            return <ImageCard key={key} block={subEntry} />;
+          case "ImageOnlyCard":
+            return <ImageOnlyCard key={key} block={subEntry} />;
           case "FeaturedCompetitions":
             return <FeaturedCompetitions key={key} block={subEntry} />;
-          case "testimonials":
-            return <Testimonials key={key} block={subEntry} />;
+          case "TestimonialsSpinner":
+            return <TestimonialsSpinner key={key} block={subEntry} />;
 
           default:
             return null;
