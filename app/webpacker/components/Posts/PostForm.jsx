@@ -16,8 +16,13 @@ import I18nHTMLTranslate from '../I18nHTMLTranslate';
 export default function PostForm({
   header, allTags, post,
 }) {
+  const [hasChanged, setHasChanged] = useState(false);
   const [formTitle, setFormTitle] = useInputState(post?.title ?? '');
-  const [formBody, setFormBody] = useInputState(post?.body ?? '');
+  const [formBody, setFormBodyRaw] = useInputState(post?.body ?? '');
+  const setFormBody = (value) => {
+    setHasChanged(true);
+    setFormBodyRaw(value);
+  };
   const [formTags, setFormTags] = useState(post?.tags_array ?? []);
   const [formIsStickied, setFormIsStickied] = useCheckboxState(post?.sticky ?? false);
   const [
@@ -85,31 +90,23 @@ export default function PostForm({
     postId,
   ]);
 
+  const onChange = useCallback(() => {
+    setHasChanged(true);
+  }, [setHasChanged]);
+
   useEffect(() => {
-    const form = document.getElementById('post-form');
-
-    if (form) {
-      let unsavedChanges = false;
-      const markUnsaved = () => { unsavedChanges = true; };
-
-      form.addEventListener('change', markUnsaved);
-      form.addEventListener('input', markUnsaved);
-      form.addEventListener('submit', () => { unsavedChanges = false; });
-
-      window.addEventListener('beforeunload', (e) => {
-        if (unsavedChanges) {
-          e.preventDefault();
-        }
-      });
-    }
-  }, []);
+    if (!hasChanged) return;
+    window.addEventListener('beforeunload', (event) => {
+      event.preventDefault();
+    });
+  }, [hasChanged]);
 
   return (
     <>
       <Header>
         {header}
       </Header>
-      <Form id="post-form" onSubmit={onSubmit}>
+      <Form onSubmit={onSubmit} onChange={onChange}>
         <Form.Input label={I18n.t('activerecord.attributes.post.title')} onChange={setFormTitle} value={formTitle} />
         <FormField>
           <label htmlFor="post-body">{I18n.t('activerecord.attributes.post.body')}</label>
