@@ -14,7 +14,7 @@
     "lint:fix": "next lint --fix"
   },
   "dependencies": {
-    "@chakra-ui/react": "^3.19.1",
+    "@chakra-ui/react": "^3.20.0",
     "@emotion/react": "^11.14.0",
     "@payloadcms/db-sqlite": "^3.40.0",
     "@payloadcms/live-preview-react": "^3.40.0",
