@@ -34,5 +34,11 @@ module DuesCalculator
     elsif Money.default_bank.get_rate(currency_code, 'USD').nil?
       "Currency #{currency_code} cannot be converted to USD."
     end
+    # Money.default_bank.get_rate will return CurrencyUnavailable if the currency cannot be
+    # converted. There is currently no way to check if the currency exists because of poor
+    # code design of EuCentralBank. Till we have a method, we will use rescue to catch the
+    # error.
+  rescue CurrencyUnavailable
+    "Currency #{currency_code} cannot be converted to USD."
   end
 end
