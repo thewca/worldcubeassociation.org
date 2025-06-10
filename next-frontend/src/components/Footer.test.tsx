@@ -9,7 +9,7 @@ describe("Footer", () => {
       render(
         <UiProvider>
           <Footer />
-        </UiProvider>
+        </UiProvider>,
       );
     });
 
