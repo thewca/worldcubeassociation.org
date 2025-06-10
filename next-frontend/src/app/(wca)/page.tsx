@@ -14,7 +14,8 @@ import {
   Tabs,
   Badge,
   VStack,
-  Link as ChakraLink, Center,
+  Link as ChakraLink,
+  Center,
 } from "@chakra-ui/react";
 import AnnouncementsCard from "@/components/AnnouncementsCard";
 import { getPayload } from "payload";
