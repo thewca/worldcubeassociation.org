@@ -366,7 +366,7 @@ export const Home: GlobalConfig = {
   ],
   admin: {
     livePreview: {
-      url: "/homepage",
+      url: "/",
     },
   },
 };
