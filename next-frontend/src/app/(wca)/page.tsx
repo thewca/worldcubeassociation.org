@@ -14,7 +14,7 @@ import {
   Tabs,
   Badge,
   VStack,
-  Link,
+  Link as ChakraLink, Center,
 } from "@chakra-ui/react";
 import AnnouncementsCard from "@/components/AnnouncementsCard";
 import { getPayload } from "payload";
@@ -45,6 +45,7 @@ import type {
   Announcement,
   User,
 } from "@/payload-types";
+import Link from "next/link";
 
 const colorMap: Record<ColorSelect, string> = {
   blue: "blue.50",
@@ -97,7 +98,9 @@ const TextCard = ({ block }: { block: TextCardBlock }) => {
         <Card.Description>{block.body}</Card.Description>
         {block.buttonText?.trim() && (
           <Button mr="auto" asChild>
-            <Link href={block.buttonLink!}>{block.buttonText}</Link>
+            <ChakraLink asChild>
+              <Link href={block.buttonLink!}>{block.buttonText}</Link>
+            </ChakraLink>
           </Button>
         )}
       </Card.Body>
@@ -508,6 +511,19 @@ export default async function Homepage() {
   const homepage = await payload.findGlobal({ slug: "home" });
 
   const homepageEntries = homepage?.item || [];
+
+  if (homepageEntries.length === 0) {
+    return (
+      <Center padding={10}>
+        <Text>
+          No homepage content yet, go ahead and{" "}
+          <ChakraLink asChild>
+            <Link href="/payload">add some!</Link>
+          </ChakraLink>
+        </Text>
+      </Center>
+    );
+  }
 
   return (
     <SimpleGrid columns={1} gap={8} p={8}>
