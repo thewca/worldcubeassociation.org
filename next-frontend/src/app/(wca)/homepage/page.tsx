@@ -118,7 +118,7 @@ const AnnouncementsSection = ({
         title: mainAnnouncement.title,
         postedBy: (mainAnnouncement.publishedBy as User).name!,
         postedAt: mainAnnouncement.publishedAt,
-        markdown: mainAnnouncement.content,
+        markdown: mainAnnouncement.contentMarkdown!,
         fullLink: `/articles/${mainAnnouncement.id}`,
       }}
       others={block
@@ -360,7 +360,7 @@ const TestimonialsSpinner = ({ block }: { block: TestimonialsBlock }) => {
                   <Card.Title>{testimonial.punchline}</Card.Title>
                   <Separator size="md" />
                   <Card.Description>
-                    {testimonial.fullTestimonial}
+                    {testimonial.fullTestimonialMarkdown}
                   </Card.Description>
                   <Text>{testimonial.whoDunnit}</Text>
                 </Card.Body>

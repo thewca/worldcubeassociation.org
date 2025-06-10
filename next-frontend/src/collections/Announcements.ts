@@ -1,4 +1,5 @@
 import type { CollectionConfig } from "payload";
+import { markdownConvertedField } from "@/collections/helpers";
 
 export const Announcements: CollectionConfig = {
   slug: "announcements",
@@ -15,9 +16,10 @@ export const Announcements: CollectionConfig = {
     },
     {
       name: "content",
-      type: "textarea",
+      type: "richText",
       required: true,
     },
+    markdownConvertedField("content"),
     {
       name: "publishedAt",
       type: "date",

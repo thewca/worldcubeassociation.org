@@ -172,7 +172,22 @@ export interface Testimonial {
   id: number;
   image?: (number | null) | Media;
   punchline: string;
-  fullTestimonial: string;
+  fullTestimonial: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  fullTestimonialMarkdown?: string | null;
   whoDunnit: string;
   updatedAt: string;
   createdAt: string;
@@ -185,7 +200,22 @@ export interface Announcement {
   id: number;
   image?: (number | null) | Media;
   title: string;
-  content: string;
+  content: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  contentMarkdown?: string | null;
   publishedAt: string;
   publishedBy: string | User;
   updatedAt: string;
@@ -303,6 +333,7 @@ export interface TestimonialsSelect<T extends boolean = true> {
   image?: T;
   punchline?: T;
   fullTestimonial?: T;
+  fullTestimonialMarkdown?: T;
   whoDunnit?: T;
   updatedAt?: T;
   createdAt?: T;
@@ -315,6 +346,7 @@ export interface AnnouncementsSelect<T extends boolean = true> {
   image?: T;
   title?: T;
   content?: T;
+  contentMarkdown?: T;
   publishedAt?: T;
   publishedBy?: T;
   updatedAt?: T;

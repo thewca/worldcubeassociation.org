@@ -4,6 +4,7 @@ import { buildConfig } from "payload";
 import { fileURLToPath } from "url";
 import sharp from "sharp";
 import { authjsPlugin } from "payload-authjs";
+import { lexicalEditor } from "@payloadcms/richtext-lexical";
 import { authConfig } from "@/auth.config";
 
 import { Media } from "@/collections/Media";
@@ -50,6 +51,7 @@ export default buildConfig({
   },
   collections: [Media, Testimonials, Announcements],
   globals: [Nav, Home],
+  editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || "",
   typescript: {
     outputFile: path.resolve(dirname, "payload-types.ts"),
