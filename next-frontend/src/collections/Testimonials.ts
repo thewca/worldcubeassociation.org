@@ -15,7 +15,7 @@ export const Testimonials: CollectionConfig = {
     },
     {
       name: "fullTestimonial",
-      type: "textarea",
+      type: "richText",
       required: true,
     },
     {

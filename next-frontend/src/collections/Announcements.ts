@@ -15,7 +15,7 @@ export const Announcements: CollectionConfig = {
     },
     {
       name: "content",
-      type: "textarea",
+      type: "richText",
       required: true,
     },
     {

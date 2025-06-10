@@ -172,7 +172,21 @@ export interface Testimonial {
   id: number;
   image?: (number | null) | Media;
   punchline: string;
-  fullTestimonial: string;
+  fullTestimonial: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
   whoDunnit: string;
   updatedAt: string;
   createdAt: string;
@@ -185,7 +199,21 @@ export interface Announcement {
   id: number;
   image?: (number | null) | Media;
   title: string;
-  content: string;
+  content: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
   publishedAt: string;
   publishedBy: string | User;
   updatedAt: string;
