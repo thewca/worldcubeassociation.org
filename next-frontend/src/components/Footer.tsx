@@ -25,53 +25,48 @@ export default function Footer() {
         {/* Social Media Icons */}
         <HStack>
           <IconButton variant="ghost" asChild>
-            <ChakraLink asChild variant="plainLink">
-              <Link
-                href="https://www.instagram.com/thewcaofficial/"
-                target="_blank"
-              >
-                <InstagramIcon />
-              </Link>
+            <ChakraLink
+              variant="plainLink"
+              href="https://www.instagram.com/thewcaofficial/"
+              target="_blank"
+            >
+              <InstagramIcon />
             </ChakraLink>
           </IconButton>
           <IconButton variant="ghost" asChild>
-            <ChakraLink asChild variant="plainLink">
-              <Link
-                href="https://www.facebook.com/WorldCubeAssociation/"
-                target="_blank"
-              >
-                <FacebookIcon />
-              </Link>
+            <ChakraLink
+              variant="plainLink"
+              href="https://www.facebook.com/WorldCubeAssociation/"
+              target="_blank"
+            >
+              <FacebookIcon />
             </ChakraLink>
           </IconButton>
           <IconButton variant="ghost" asChild>
-            <ChakraLink asChild variant="plainLink">
-              <Link
-                href="https://www.twitter.com/theWCAofficial/"
-                target="_blank"
-              >
-                <XIcon />
-              </Link>
+            <ChakraLink
+              variant="plainLink"
+              href="https://www.twitter.com/theWCAofficial/"
+              target="_blank"
+            >
+              <XIcon />
             </ChakraLink>
           </IconButton>
           <IconButton variant="ghost" asChild>
-            <ChakraLink asChild variant="plainLink">
-              <Link
-                href="https://github.com/thewca/worldcubeassociation.org"
-                target="_blank"
-              >
-                <GitHubIcon />
-              </Link>
+            <ChakraLink
+              variant="plainLink"
+              href="https://github.com/thewca/worldcubeassociation.org"
+              target="_blank"
+            >
+              <GitHubIcon />
             </ChakraLink>
           </IconButton>
           <IconButton variant="ghost" asChild>
-            <ChakraLink asChild variant="plainLink">
-              <Link
-                href="https://www.youtube.com/channel/UC5OUMUnS8PvY1RvtB1pQZ0g"
-                target="_blank"
-              >
-                <YouTubeIcon />
-              </Link>
+            <ChakraLink
+              variant="plainLink"
+              href="https://www.youtube.com/channel/UC5OUMUnS8PvY1RvtB1pQZ0g"
+              target="_blank"
+            >
+              <YouTubeIcon />
             </ChakraLink>
           </IconButton>
         </HStack>
@@ -85,15 +80,17 @@ export default function Footer() {
             <Link href="/about">About Us</Link>
           </ChakraLink>
           <ChakraLink asChild variant="plainLink">
-            <Link href="/faqs">FAQs</Link>
+            <Link href="/faq">FAQs</Link>
           </ChakraLink>
           <ChakraLink asChild variant="plainLink">
             <Link href="/contact">Contact</Link>
           </ChakraLink>
-          <ChakraLink asChild variant="plainLink">
-            <Link href="https://github.com" target="_blank">
-              GitHub
-            </Link>
+          <ChakraLink
+            variant="plainLink"
+            href="https://github.com/thewca"
+            target="_blank"
+          >
+            GitHub
           </ChakraLink>
           <ChakraLink asChild variant="plainLink">
             <Link href="/privacy">Privacy</Link>

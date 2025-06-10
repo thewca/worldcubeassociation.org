@@ -47,6 +47,7 @@ import type {
   User,
 } from "@/types/payload";
 import Link from "next/link";
+import { route } from "nextjs-routes";
 
 const TextCard = ({ block }: { block: TextCardBlock }) => {
   return (
@@ -71,8 +72,8 @@ const TextCard = ({ block }: { block: TextCardBlock }) => {
         </Card.Description>
         {block.buttonText?.trim() && (
           <Button mr="auto" asChild>
-            <ChakraLink asChild>
-              <Link href={block.buttonLink!}>{block.buttonText}</Link>
+            <ChakraLink href={block.buttonLink!}>
+              {block.buttonText}
             </ChakraLink>
           </Button>
         )}
@@ -491,7 +492,11 @@ export default async function Homepage() {
         <Text>
           No homepage content yet, go ahead and{" "}
           <ChakraLink asChild>
-            <Link href="/payload">add some!</Link>
+            <Link
+              href={route({ pathname: "/payload/[[...segments]]", query: {} })}
+            >
+              add some!
+            </Link>
           </ChakraLink>
         </Text>
       </Center>

@@ -12,7 +12,6 @@ import {
   Tabs,
   Separator,
 } from "@chakra-ui/react";
-import Link from "next/link";
 import PermissionProvider from "@/providers/PermissionProvider";
 import PermissionsTestMessage from "@/components/competitions/permissionsTestMessage";
 import { getCompetitionInfo } from "@/lib/wca/competitions/getCompetitionInfo";
@@ -372,10 +371,8 @@ export default async function CompetitionOverView({
                             (organizer, index) => (
                               <Text as="span" key={index}>
                                 {organizer.url != "" ? (
-                                  <ChakraLink asChild>
-                                    <Link href={organizer.url}>
-                                      {organizer.name}
-                                    </Link>
+                                  <ChakraLink href={organizer.url}>
+                                    {organizer.name}
                                   </ChakraLink>
                                 ) : (
                                   organizer.name
@@ -394,12 +391,10 @@ export default async function CompetitionOverView({
                       <Card.Header>Delegates</Card.Header>
                       <Card.Body>
                         <Text>
-                          {competitionInfo.delegates.map((delegates, index) => (
+                          {competitionInfo.delegates.map((delegate, index) => (
                             <Text as="span" key={index}>
-                              <ChakraLink asChild>
-                                <Link href={delegates.url}>
-                                  {delegates.name}
-                                </Link>
+                              <ChakraLink href={delegate.url}>
+                                {delegate.name}
                               </ChakraLink>
                               {competitionInfo.delegates.length == index + 1
                                 ? ""
@@ -416,20 +411,19 @@ export default async function CompetitionOverView({
                         <MarkdownProse content={competitionInfo.contact} />
                       </Card.Body>
                     </Card.Root>
-                    <ChakraLink asChild variant="plainLink">
-                      <Link
+                    <Button variant="outline" asChild>
+                      <ChakraLink
+                        variant="plainLink"
                         href={
                           "https://www.worldcubeassociation.org/competitions/" +
                           competitionInfo.id +
                           ".pdf"
                         }
                       >
-                        <Button variant="outline">
-                          Download Competition PDF
-                          <WcaDocsIcon />
-                        </Button>
-                      </Link>
-                    </ChakraLink>
+                        Download Competition PDF
+                        <WcaDocsIcon />
+                      </ChakraLink>
+                    </Button>
                   </Card.Body>
                 </Card.Root>
 
