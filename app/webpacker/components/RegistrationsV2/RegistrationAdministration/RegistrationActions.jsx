@@ -44,7 +44,7 @@ function V3csvExport(selected, registrations, competition) {
       },${
         registration.registrant_id
       },${
-        registration.competing.waiting_list_position || null
+        registration.competing.waiting_list_position || ""
       }\n`;
     });
 
