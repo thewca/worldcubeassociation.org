@@ -44,6 +44,10 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
+  routes: {
+    admin: "/payload",
+    api: "/api/payload",
+  },
   collections: [Media, Testimonials, Announcements],
   globals: [Nav, Home],
   secret: process.env.PAYLOAD_SECRET || "",
