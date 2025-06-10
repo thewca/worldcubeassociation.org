@@ -10,6 +10,10 @@ import { authConfig } from "@/auth.config";
 import { Media } from "@/collections/Media";
 import { Testimonials } from "@/collections/Testimonials";
 import { Announcements } from "@/collections/Announcements";
+import {
+  FaqCategories,
+  FaqQuestions,
+} from "@/collections/FrequentlyAskedQuestions";
 import { Nav } from "@/globals/Nav";
 import { Home } from "@/globals/Home";
 
@@ -49,7 +53,13 @@ export default buildConfig({
     admin: "/payload",
     api: "/api/payload",
   },
-  collections: [Media, Testimonials, Announcements],
+  collections: [
+    Media,
+    Testimonials,
+    Announcements,
+    FaqCategories,
+    FaqQuestions,
+  ],
   globals: [Nav, Home],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || "",
