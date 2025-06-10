@@ -1,4 +1,5 @@
 import type { CollectionConfig } from "payload";
+import { markdownConvertedField } from "@/collections/helpers";
 
 export const Testimonials: CollectionConfig = {
   slug: "testimonials",
@@ -15,9 +16,10 @@ export const Testimonials: CollectionConfig = {
     },
     {
       name: "fullTestimonial",
-      type: "textarea",
+      type: "richText",
       required: true,
     },
+    markdownConvertedField("fullTestimonial"),
     {
       name: "whoDunnit",
       type: "text",

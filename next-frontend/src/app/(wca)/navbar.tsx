@@ -125,7 +125,7 @@ export default async function Navbar() {
       <HStack>
         <ColorModeButton />
         <Button asChild variant="ghost" size="sm">
-          <Link href="/admin">Payload CMS</Link>
+          <Link href="/payload">Payload CMS</Link>
         </Button>
       </HStack>
     </HStack>
