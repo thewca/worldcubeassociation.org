@@ -11,6 +11,7 @@ import { Testimonials } from "@/collections/Testimonials";
 import { Announcements } from "@/collections/Announcements";
 import { Nav } from "@/globals/Nav";
 import { Home } from "@/globals/Home";
+import { getSecret } from "@/vault";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -46,7 +47,7 @@ export default buildConfig({
   },
   collections: [Media, Testimonials, Announcements],
   globals: [Nav, Home],
-  secret: process.env.PAYLOAD_SECRET || "",
+  secret: await getSecret("PAYLOAD_SECRET"),
   typescript: {
     outputFile: path.resolve(dirname, "payload-types.ts"),
   },

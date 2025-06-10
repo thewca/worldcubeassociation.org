@@ -1,15 +1,16 @@
 import { NextAuthConfig } from "next-auth";
+import { getSecret } from "@/vault";
 
 export const authConfig: NextAuthConfig = {
-  debug: true,
+  secret: await getSecret("AUTH_SECRET"),
   providers: [
     {
       id: "WCA",
       name: "WCA-OIDC-Provider",
       type: "oidc",
       issuer: process.env.OIDC_ISSUER,
-      clientId: process.env.OIDC_CLIENT_ID,
-      clientSecret: process.env.OIDC_CLIENT_SECRET,
+      clientId: await getSecret("OIDC_CLIENT_ID"),
+      clientSecret: await getSecret("OIDC_CLIENT_SECRET"),
     },
   ],
   callbacks: {

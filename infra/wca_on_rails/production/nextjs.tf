@@ -10,24 +10,20 @@ locals {
       value = var.WCA_LIVE_SITE
     },
     {
-      name  = "AUTH_SECRET"
-      value = "123456789abc"
+      name = "VAULT_ADDR",
+      value = var.VAULT_ADDR
+    },
+    {
+      name = "VAULT_APPLICATION"
+      value = "wca-nextjs-production"
+    },
+    {
+      name = "AWS_REGION"
+      value = var.region
     },
     {
       name  = "OIDC_ISSUER"
-      value = "https://staging.worldcubeassociation.org/"
-    },
-    {
-      name  = "OIDC_CLIENT_ID"
-      value = "example-application-id"
-    },
-    {
-      name  = "OIDC_CLIENT_SECRET"
-      value = "example-secret"
-    },
-    {
-      name  = "PAYLOAD_SECRET"
-      value = "123456789abc"
+      value = "https://worldcubeassociation.org/"
     },
     {
       name  = "DATABASE_URI"
@@ -43,7 +39,11 @@ locals {
     },
     {
       name = "NEXTAUTH_URL"
-      value = var.shared.next_url
+      value = "https://${var.shared.next_url}"
+    },
+    {
+      name = "TASK_ROLE",
+      value = aws_iam_role.nextjs_role.name
     }
   ]
 }
