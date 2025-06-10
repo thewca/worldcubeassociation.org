@@ -7,7 +7,7 @@ module DuesCalculator
   end
 
   def self.dues_per_competitor_in_usd(country_iso2, base_entry_fee_lowest_denomination, currency_code)
-    return nil if DuesCalculator.error_in_dues_calculation(country_iso2, currency_code)
+    return nil if DuesCalculator.error_in_dues_calculation(country_iso2, currency_code).present?
 
     country_band = CountryBand.find_by(iso2: country_iso2)
     country_band_detail = country_band&.active_country_band_detail
