@@ -243,4 +243,25 @@ RSpec.describe RegistrationsMailer do
       expect(mail.body.encoded).to match("Regards, #{users_to_sentence(competition_with_organizers.organizers_or_delegates)}.")
     end
   end
+
+  describe "notify_delegates_of_formerly_banned_user_registration" do
+    let(:registration) { create(:registration, competition: competition_with_organizers) }
+    let(:mail) { RegistrationsMailer.notify_delegates_of_formerly_banned_user_registration(registration) }
+
+    it "renders the headers" do
+      expect(mail.subject).to eq("A formerly-banned competitor just registered for #{registration.competition.name}")
+      expect(mail.to).to eq([delegate1.email, delegate2.email])
+      expect(mail.reply_to).to eq([UserGroup.teams_committees_group_wic.metadata.email])
+      expect(mail.from).to eq(["notifications@worldcubeassociation.org"])
+    end
+
+    it "renders the body" do
+      expect(mail.body.encoded).to match("A formerly-banned competitor just registered for #{registration.competition.name}")
+    end
+
+    it "does not send email if no delegates exist" do
+      competition_without_organizers.delegates.clear
+      expect(mail).to be_nil
+    end
+  end
 end
