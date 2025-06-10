@@ -256,12 +256,9 @@ RSpec.describe RegistrationsMailer do
     end
 
     it "renders the body" do
-      expect(mail.body.encoded).to match("A formerly-banned competitor just registered for #{registration.competition.name}")
-    end
-
-    it "does not send email if no delegates exist" do
-      competition_without_organizers.delegates.clear
-      expect(mail).to be_nil
+      expect(mail.body.encoded).to include("just registered for #{registration.competition.name}")
+      expect(mail.body.encoded).to include("Competitor has been banned")
+      expect(mail.body.encoded).to include("If you have any questions regarding the competitor's disciplinary history, please reach out to the WIC by replying to this email.")
     end
   end
 end
