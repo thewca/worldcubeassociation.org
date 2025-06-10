@@ -80,6 +80,42 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/competition_index": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get a list of (upcoming) competitions for table display */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Successful response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["CompetitionIndex"][];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/persons/{wca_id}/": {
         parameters: {
             query?: never;
@@ -274,6 +310,44 @@ export interface components {
         SingleAndAverageRank: {
             average: components["schemas"]["Rank"];
             single: components["schemas"]["Rank"];
+        };
+        CompetitionIndex: {
+            id: string;
+            name: string;
+            short_display_name: string;
+            /** Format: date */
+            start_date: string;
+            /** Format: date */
+            end_date: string;
+            /** Format: date-time */
+            registration_open: string;
+            /** Format: date-time */
+            registration_close: string;
+            /** Format: date-time */
+            announced_at: string;
+            country_iso2: string;
+            city: string;
+            venue: string;
+            /** Format: float */
+            latitude_degrees: number;
+            /** Format: float */
+            longitude_degrees: number;
+            event_ids: string[];
+            main_event_id: string;
+            competitor_limit: number;
+            championship_types: string[];
+            /** Format: date-time */
+            results_submitted_at?: string;
+            /** Format: date-time */
+            results_posted_at?: string;
+            /** Format: date-time */
+            report_posted_at?: string;
+            report_posted_by_user?: number;
+            delegates?: {
+                id: number;
+                name: string;
+                avatar: components["schemas"]["UserAvatar"];
+            }[];
         };
         CompetitionInfo: {
             /** @example WC2003 */

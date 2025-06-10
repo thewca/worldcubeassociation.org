@@ -16,9 +16,9 @@ interface IconDisplayProps {
   fallback?: boolean;
 }
 
-const IconDisplay = ({ name, fallback = true }: IconDisplayProps) => {
+const IconDisplay = ({ name, fallback = false }: IconDisplayProps) => {
   if (!name) {
-    return fallback ? <div>No_Icon</div> : null;
+    return fallback ? <Text>No_Icon</Text> : null;
   }
 
   const IconComponent = iconMap[name];
@@ -70,7 +70,7 @@ export default async function Navbar() {
                         {subEntry.blockType === "LinkItem" && (
                           <Menu.Item value={subEntry.id!} asChild>
                             <Link href={subEntry.targetLink}>
-                              <IconDisplay name={navbarEntry.displayIcon} />
+                              <IconDisplay name={subEntry.displayIcon} />
                               {subEntry.displayText}
                             </Link>
                           </Menu.Item>
@@ -96,7 +96,7 @@ export default async function Navbar() {
                                       <Menu.Item value={nestedEntry.id!}>
                                         <Link href={nestedEntry.targetLink}>
                                           <IconDisplay
-                                            name={navbarEntry.displayIcon}
+                                            name={nestedEntry.displayIcon}
                                           />
                                           {nestedEntry.displayText}
                                         </Link>

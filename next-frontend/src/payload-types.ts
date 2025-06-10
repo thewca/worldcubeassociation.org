@@ -7,6 +7,28 @@
  */
 
 /**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ColorPaletteSelect".
+ */
+export type ColorPaletteSelect = 'blue' | 'red' | 'green' | 'orange' | 'yellow' | 'grey';
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ColorSelect".
+ */
+export type ColorSelect =
+  | 'darkBlue'
+  | 'darkRed'
+  | 'darkGreen'
+  | 'darkOrange'
+  | 'darkYellow'
+  | 'blue'
+  | 'red'
+  | 'green'
+  | 'orange'
+  | 'yellow'
+  | 'white'
+  | 'black';
+/**
  * Supported timezones in IANA format.
  *
  * This interface was referenced by `Config`'s JSON-Schema
@@ -68,6 +90,8 @@ export interface Config {
   blocks: {};
   collections: {
     media: Media;
+    testimonials: Testimonial;
+    announcements: Announcement;
     users: User;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -76,6 +100,8 @@ export interface Config {
   collectionsJoins: {};
   collectionsSelect: {
     media: MediaSelect<false> | MediaSelect<true>;
+    testimonials: TestimonialsSelect<false> | TestimonialsSelect<true>;
+    announcements: AnnouncementsSelect<false> | AnnouncementsSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -86,9 +112,11 @@ export interface Config {
   };
   globals: {
     nav: Nav;
+    home: Home;
   };
   globalsSelect: {
     nav: NavSelect<false> | NavSelect<true>;
+    home: HomeSelect<false> | HomeSelect<true>;
   };
   locale: null;
   user: User & {
@@ -138,6 +166,33 @@ export interface Media {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "testimonials".
+ */
+export interface Testimonial {
+  id: number;
+  image?: (number | null) | Media;
+  punchline: string;
+  fullTestimonial: string;
+  whoDunnit: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "announcements".
+ */
+export interface Announcement {
+  id: number;
+  image?: (number | null) | Media;
+  title: string;
+  content: string;
+  publishedAt: string;
+  publishedBy: string | User;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "users".
  */
 export interface User {
@@ -167,6 +222,14 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'media';
         value: number | Media;
+      } | null)
+    | ({
+        relationTo: 'testimonials';
+        value: number | Testimonial;
+      } | null)
+    | ({
+        relationTo: 'announcements';
+        value: number | Announcement;
       } | null)
     | ({
         relationTo: 'users';
@@ -231,6 +294,31 @@ export interface MediaSelect<T extends boolean = true> {
   height?: T;
   focalX?: T;
   focalY?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "testimonials_select".
+ */
+export interface TestimonialsSelect<T extends boolean = true> {
+  image?: T;
+  punchline?: T;
+  fullTestimonial?: T;
+  whoDunnit?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "announcements_select".
+ */
+export interface AnnouncementsSelect<T extends boolean = true> {
+  image?: T;
+  title?: T;
+  content?: T;
+  publishedAt?: T;
+  publishedBy?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -763,6 +851,186 @@ export interface Nav {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "home".
+ */
+export interface Home {
+  id: number;
+  item: (TwoBlocksBlock | FullWidthBlock)[];
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TwoBlocksBlock".
+ */
+export interface TwoBlocksBlock {
+  type: '1/3 & 2/3' | '2/3 & 1/3' | '1/2 & 1/2' | '1/4 & 3/4' | '3/4 & 1/4';
+  alignment: 'horizontal' | 'vertical';
+  blocks: (
+    | TextCardBlock
+    | AnnouncementsSectionBlock
+    | ImageBannerBlock
+    | ImageOnlyCardBlock
+    | TestimonialsBlock
+    | FeaturedCompetitionsBlock
+    | TwoBlocksBranchBlock
+  )[];
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'twoBlocks';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TextCardBlock".
+ */
+export interface TextCardBlock {
+  heading: string;
+  body: string;
+  variant: 'info' | 'hero';
+  separatorAfterHeading: boolean;
+  buttonText?: string | null;
+  buttonLink?: string | null;
+  headerImage?: (number | null) | Media;
+  colorPalette: ColorPaletteSelect;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'TextCard';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "AnnouncementsSectionBlock".
+ */
+export interface AnnouncementsSectionBlock {
+  mainAnnouncement: number | Announcement;
+  furtherAnnouncements?: (number | Announcement)[] | null;
+  colorPalette: ColorPaletteSelect;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'AnnouncementsSection';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ImageBannerBlock".
+ */
+export interface ImageBannerBlock {
+  heading: string;
+  body: string;
+  mainImage: number | Media;
+  colorPalette: ColorPaletteSelect;
+  bgColor: ColorSelect;
+  headingColor: ColorSelect;
+  textColor: ColorSelect;
+  bgImage?: (number | null) | Media;
+  bgSize?: number | null;
+  bgPos?: string | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'ImageBanner';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ImageOnlyCardBlock".
+ */
+export interface ImageOnlyCardBlock {
+  mainImage: number | Media;
+  heading?: string | null;
+  colorPalette: ColorPaletteSelect;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'ImageOnlyCard';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TestimonialsBlock".
+ */
+export interface TestimonialsBlock {
+  blocks: TestimonialSlideBlock[];
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'TestimonialsSpinner';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TestimonialSlideBlock".
+ */
+export interface TestimonialSlideBlock {
+  testimonial: number | Testimonial;
+  colorPalette: ColorPaletteSelect;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'TestimonialSlide';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FeaturedCompetitionsBlock".
+ */
+export interface FeaturedCompetitionsBlock {
+  Competition1ID: string;
+  colorPalette1: ColorPaletteSelect;
+  Competition2ID: string;
+  colorPalette2: ColorPaletteSelect;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'FeaturedCompetitions';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TwoBlocksBranchBlock".
+ */
+export interface TwoBlocksBranchBlock {
+  type: '1/3 & 2/3' | '2/3 & 1/3' | '1/2 & 1/2' | '1/4 & 3/4' | '3/4 & 1/4';
+  alignment: 'horizontal' | 'vertical';
+  blocks: (
+    | TextCardBlock
+    | AnnouncementsSectionBlock
+    | ImageBannerBlock
+    | ImageOnlyCardBlock
+    | TestimonialsBlock
+    | FeaturedCompetitionsBlock
+    | TwoBlocksLeafBlock
+  )[];
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'twoBlocksBranch';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TwoBlocksLeafBlock".
+ */
+export interface TwoBlocksLeafBlock {
+  type: '1/3 & 2/3' | '2/3 & 1/3' | '1/2 & 1/2' | '1/4 & 3/4' | '3/4 & 1/4';
+  alignment: 'horizontal' | 'vertical';
+  blocks: (
+    | TextCardBlock
+    | AnnouncementsSectionBlock
+    | ImageBannerBlock
+    | ImageOnlyCardBlock
+    | TestimonialsBlock
+    | FeaturedCompetitionsBlock
+  )[];
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'twoBlocksLeaf';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FullWidthBlock".
+ */
+export interface FullWidthBlock {
+  blocks: (
+    | TextCardBlock
+    | AnnouncementsSectionBlock
+    | ImageBannerBlock
+    | ImageOnlyCardBlock
+    | TestimonialsBlock
+    | FeaturedCompetitionsBlock
+  )[];
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'fullWidth';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "nav_select".
  */
 export interface NavSelect<T extends boolean = true> {
@@ -830,6 +1098,192 @@ export interface NavSelect<T extends boolean = true> {
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "home_select".
+ */
+export interface HomeSelect<T extends boolean = true> {
+  item?:
+    | T
+    | {
+        twoBlocks?: T | TwoBlocksBlockSelect<T>;
+        fullWidth?: T | FullWidthBlockSelect<T>;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TwoBlocksBlock_select".
+ */
+export interface TwoBlocksBlockSelect<T extends boolean = true> {
+  type?: T;
+  alignment?: T;
+  blocks?:
+    | T
+    | {
+        TextCard?: T | TextCardBlockSelect<T>;
+        AnnouncementsSection?: T | AnnouncementsSectionBlockSelect<T>;
+        ImageBanner?: T | ImageBannerBlockSelect<T>;
+        ImageOnlyCard?: T | ImageOnlyCardBlockSelect<T>;
+        TestimonialsSpinner?: T | TestimonialsBlockSelect<T>;
+        FeaturedCompetitions?: T | FeaturedCompetitionsBlockSelect<T>;
+        twoBlocksBranch?: T | TwoBlocksBranchBlockSelect<T>;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TextCardBlock_select".
+ */
+export interface TextCardBlockSelect<T extends boolean = true> {
+  heading?: T;
+  body?: T;
+  variant?: T;
+  separatorAfterHeading?: T;
+  buttonText?: T;
+  buttonLink?: T;
+  headerImage?: T;
+  colorPalette?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "AnnouncementsSectionBlock_select".
+ */
+export interface AnnouncementsSectionBlockSelect<T extends boolean = true> {
+  mainAnnouncement?: T;
+  furtherAnnouncements?: T;
+  colorPalette?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ImageBannerBlock_select".
+ */
+export interface ImageBannerBlockSelect<T extends boolean = true> {
+  heading?: T;
+  body?: T;
+  mainImage?: T;
+  colorPalette?: T;
+  bgColor?: T;
+  headingColor?: T;
+  textColor?: T;
+  bgImage?: T;
+  bgSize?: T;
+  bgPos?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ImageOnlyCardBlock_select".
+ */
+export interface ImageOnlyCardBlockSelect<T extends boolean = true> {
+  mainImage?: T;
+  heading?: T;
+  colorPalette?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TestimonialsBlock_select".
+ */
+export interface TestimonialsBlockSelect<T extends boolean = true> {
+  blocks?:
+    | T
+    | {
+        TestimonialSlide?: T | TestimonialSlideBlockSelect<T>;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TestimonialSlideBlock_select".
+ */
+export interface TestimonialSlideBlockSelect<T extends boolean = true> {
+  testimonial?: T;
+  colorPalette?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FeaturedCompetitionsBlock_select".
+ */
+export interface FeaturedCompetitionsBlockSelect<T extends boolean = true> {
+  Competition1ID?: T;
+  colorPalette1?: T;
+  Competition2ID?: T;
+  colorPalette2?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TwoBlocksBranchBlock_select".
+ */
+export interface TwoBlocksBranchBlockSelect<T extends boolean = true> {
+  type?: T;
+  alignment?: T;
+  blocks?:
+    | T
+    | {
+        TextCard?: T | TextCardBlockSelect<T>;
+        AnnouncementsSection?: T | AnnouncementsSectionBlockSelect<T>;
+        ImageBanner?: T | ImageBannerBlockSelect<T>;
+        ImageOnlyCard?: T | ImageOnlyCardBlockSelect<T>;
+        TestimonialsSpinner?: T | TestimonialsBlockSelect<T>;
+        FeaturedCompetitions?: T | FeaturedCompetitionsBlockSelect<T>;
+        twoBlocksLeaf?: T | TwoBlocksLeafBlockSelect<T>;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TwoBlocksLeafBlock_select".
+ */
+export interface TwoBlocksLeafBlockSelect<T extends boolean = true> {
+  type?: T;
+  alignment?: T;
+  blocks?:
+    | T
+    | {
+        TextCard?: T | TextCardBlockSelect<T>;
+        AnnouncementsSection?: T | AnnouncementsSectionBlockSelect<T>;
+        ImageBanner?: T | ImageBannerBlockSelect<T>;
+        ImageOnlyCard?: T | ImageOnlyCardBlockSelect<T>;
+        TestimonialsSpinner?: T | TestimonialsBlockSelect<T>;
+        FeaturedCompetitions?: T | FeaturedCompetitionsBlockSelect<T>;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FullWidthBlock_select".
+ */
+export interface FullWidthBlockSelect<T extends boolean = true> {
+  blocks?:
+    | T
+    | {
+        TextCard?: T | TextCardBlockSelect<T>;
+        AnnouncementsSection?: T | AnnouncementsSectionBlockSelect<T>;
+        ImageBanner?: T | ImageBannerBlockSelect<T>;
+        ImageOnlyCard?: T | ImageOnlyCardBlockSelect<T>;
+        TestimonialsSpinner?: T | TestimonialsBlockSelect<T>;
+        FeaturedCompetitions?: T | FeaturedCompetitionsBlockSelect<T>;
+      };
+  id?: T;
+  blockName?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
