@@ -92,16 +92,24 @@ export interface Config {
     media: Media;
     testimonials: Testimonial;
     announcements: Announcement;
+    faqCategories: FaqCategory;
+    faqQuestions: FaqQuestion;
     users: User;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
   };
-  collectionsJoins: {};
+  collectionsJoins: {
+    faqCategories: {
+      relatedQuestions: 'faqQuestions';
+    };
+  };
   collectionsSelect: {
     media: MediaSelect<false> | MediaSelect<true>;
     testimonials: TestimonialsSelect<false> | TestimonialsSelect<true>;
     announcements: AnnouncementsSelect<false> | AnnouncementsSelect<true>;
+    faqCategories: FaqCategoriesSelect<false> | FaqCategoriesSelect<true>;
+    faqQuestions: FaqQuestionsSelect<false> | FaqQuestionsSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -244,6 +252,34 @@ export interface User {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "faqCategories".
+ */
+export interface FaqCategory {
+  id: number;
+  title: string;
+  colorPalette: ColorPaletteSelect;
+  relatedQuestions?: {
+    docs?: (number | FaqQuestion)[];
+    hasNextPage?: boolean;
+    totalDocs?: number;
+  };
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "faqQuestions".
+ */
+export interface FaqQuestion {
+  id: number;
+  category: number | FaqCategory;
+  question: string;
+  answer: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-locked-documents".
  */
 export interface PayloadLockedDocument {
@@ -260,6 +296,14 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'announcements';
         value: number | Announcement;
+      } | null)
+    | ({
+        relationTo: 'faqCategories';
+        value: number | FaqCategory;
+      } | null)
+    | ({
+        relationTo: 'faqQuestions';
+        value: number | FaqQuestion;
       } | null)
     | ({
         relationTo: 'users';
@@ -349,6 +393,28 @@ export interface AnnouncementsSelect<T extends boolean = true> {
   contentMarkdown?: T;
   publishedAt?: T;
   publishedBy?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "faqCategories_select".
+ */
+export interface FaqCategoriesSelect<T extends boolean = true> {
+  title?: T;
+  colorPalette?: T;
+  relatedQuestions?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "faqQuestions_select".
+ */
+export interface FaqQuestionsSelect<T extends boolean = true> {
+  category?: T;
+  question?: T;
+  answer?: T;
   updatedAt?: T;
   createdAt?: T;
 }
