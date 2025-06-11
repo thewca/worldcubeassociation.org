@@ -16,13 +16,8 @@ import I18nHTMLTranslate from '../I18nHTMLTranslate';
 export default function PostForm({
   header, allTags, post,
 }) {
-  const [hasChanged, setHasChanged] = useState(false);
   const [formTitle, setFormTitle] = useInputState(post?.title ?? '');
-  const [formBody, setFormBodyRaw] = useInputState(post?.body ?? '');
-  const setFormBody = (value) => {
-    setHasChanged(true);
-    setFormBodyRaw(value);
-  };
+  const [formBody, setFormBody] = useInputState(post?.body ?? '');
   const [formTags, setFormTags] = useState(post?.tags_array ?? []);
   const [formIsStickied, setFormIsStickied] = useCheckboxState(post?.sticky ?? false);
   const [
@@ -32,6 +27,10 @@ export default function PostForm({
   const [postURL, setPostURL] = useInputState(post?.url ?? null);
   const [postId, setPostId] = useInputState(post?.id ?? null);
   const [unstickAt, setUnstickAt] = useState(post?.unstick_at ?? null);
+
+  const unsavedChanges = useMemo(() => (
+    !_.isEqual(formTitle, formBody, formTags, formIsStickied, postURL, postId, unstickAt)
+  ), [formTitle, formBody, formTags, formIsStickied, postURL, postId, unstickAt]);
 
   const tagOptions = useMemo(
     () => allTags.map((tag) => ({ value: tag, text: tag, key: tag })),
@@ -90,23 +89,26 @@ export default function PostForm({
     postId,
   ]);
 
-  const onChange = useCallback(() => {
-    setHasChanged(true);
-  }, [setHasChanged]);
+  const onUnload = useCallback((e) => {
+    if (unsavedChanges) {
+      return e.preventDefault();
+    }
+    return null;
+  }, [unsavedChanges]);
 
   useEffect(() => {
-    if (!hasChanged) return;
-    window.addEventListener('beforeunload', (event) => {
-      event.preventDefault();
-    });
-  }, [hasChanged]);
+    window.addEventListener('beforeunload', onUnload);
+    return () => {
+      window.removeEventListener('beforeunload', onUnload);
+    };
+  }, [onUnload]);
 
   return (
     <>
       <Header>
         {header}
       </Header>
-      <Form onSubmit={onSubmit} onChange={onChange}>
+      <Form onSubmit={onSubmit}>
         <Form.Input label={I18n.t('activerecord.attributes.post.title')} onChange={setFormTitle} value={formTitle} />
         <FormField>
           <label htmlFor="post-body">{I18n.t('activerecord.attributes.post.body')}</label>
