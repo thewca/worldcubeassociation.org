@@ -15,8 +15,8 @@
     "payload:types": "payload generate:types",
     "lint": "next lint",
     "lint:fix": "next lint --fix",
-    "test": "vitest --config vitest.config.mts",
-    "test:ui": "vitest --ui --config vitest.config.mts"
+    "test": "vitest",
+    "test:ui": "vitest --ui"
   },
   "dependencies": {
     "@aws-sdk/credential-providers": "^3.823.0",
