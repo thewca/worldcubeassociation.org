@@ -14,6 +14,7 @@ import {
   FaqCategories,
   FaqQuestions,
 } from "@/collections/FrequentlyAskedQuestions";
+import { Users } from "@/collections/Users";
 import { Nav } from "@/globals/Nav";
 import { Home } from "@/globals/Home";
 
@@ -60,6 +61,7 @@ export default buildConfig({
     Announcements,
     FaqCategories,
     FaqQuestions,
+    Users,
   ],
   globals: [Nav, Home],
   editor: lexicalEditor(),
