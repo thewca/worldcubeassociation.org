@@ -158,7 +158,7 @@ Naming/MethodParameterName:
     - n
     - id
 
-Naming/PredicateName:
+Naming/PredicatePrefix:
   AllowedMethods:
     # These are database columns
     - is_active?
