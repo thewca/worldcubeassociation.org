@@ -118,7 +118,7 @@ body, html {
 
   // This is to vertically align region flag and name in RegionSelector dropdown
   .ui.dropdown {
-    .menu.visible.transition[role='listbox'] {
+    .menu[role='listbox'] {
       .item[role='option'] {
         display: flex;
         align-items: center;
