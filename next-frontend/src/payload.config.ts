@@ -11,10 +11,18 @@ import { Testimonials } from "@/collections/Testimonials";
 import { Announcements } from "@/collections/Announcements";
 import { Nav } from "@/globals/Nav";
 import { Home } from "@/globals/Home";
-import { getSecret } from "@/vault";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
+
+// async function getPayloadSecret() {
+//   if (process.env.IS_COMPILING_ASSETS) {
+//     return "";
+//   }
+//
+//   const { getSecret } = await import("@/vault");
+//   return getSecret("PAYLOAD_SECRET");
+// }
 
 async function dbAdapter() {
   if (process.env.NODE_ENV === "production") {
@@ -47,7 +55,7 @@ export default buildConfig({
   },
   collections: [Media, Testimonials, Announcements],
   globals: [Nav, Home],
-  secret: await getSecret("PAYLOAD_SECRET"),
+  secret: process.env.PAYLOAD_SECRET || "",
   typescript: {
     outputFile: path.resolve(dirname, "payload-types.ts"),
   },
