@@ -4,11 +4,16 @@ import { buildConfig } from "payload";
 import { fileURLToPath } from "url";
 import sharp from "sharp";
 import { authjsPlugin } from "payload-authjs";
+import { lexicalEditor } from "@payloadcms/richtext-lexical";
 import { authConfig } from "@/auth.config";
 
 import { Media } from "@/collections/Media";
 import { Testimonials } from "@/collections/Testimonials";
 import { Announcements } from "@/collections/Announcements";
+import {
+  FaqCategories,
+  FaqQuestions,
+} from "@/collections/FrequentlyAskedQuestions";
 import { Nav } from "@/globals/Nav";
 import { Home } from "@/globals/Home";
 
@@ -53,8 +58,19 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Media, Testimonials, Announcements],
+  routes: {
+    admin: "/payload",
+    api: "/api/payload",
+  },
+  collections: [
+    Media,
+    Testimonials,
+    Announcements,
+    FaqCategories,
+    FaqQuestions,
+  ],
   globals: [Nav, Home],
+  editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || "",
   typescript: {
     outputFile: path.resolve(dirname, "payload-types.ts"),
