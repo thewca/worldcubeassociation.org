@@ -25,6 +25,7 @@ async function dbAdapter() {
     const { mongooseAdapter } = await import("@payloadcms/db-mongodb");
     return mongooseAdapter({
       url: process.env.DATABASE_URI || "",
+      disableIndexHints: true,
       connectOptions: {
         authMechanism: "MONGODB-AWS",
         authSource: "$external",
