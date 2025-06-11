@@ -20,15 +20,6 @@ import { Home } from "@/globals/Home";
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
 
-// async function getPayloadSecret() {
-//   if (process.env.IS_COMPILING_ASSETS) {
-//     return "";
-//   }
-//
-//   const { getSecret } = await import("@/vault");
-//   return getSecret("PAYLOAD_SECRET");
-// }
-
 async function dbAdapter() {
   if (process.env.NODE_ENV === "production") {
     const { mongooseAdapter } = await import("@payloadcms/db-mongodb");
