@@ -1,17 +1,20 @@
-import { NextAuthConfig } from "next-auth";
+import type { NextAuthConfig } from "next-auth";
+import { Provider } from "@auth/core/providers";
+
+export const WCA_PROVIDER_ID = "WCA";
+
+const baseWcaProvider: Provider = {
+  id: WCA_PROVIDER_ID,
+  name: "WCA-OIDC-Provider",
+  type: "oidc",
+  issuer: process.env.OIDC_ISSUER,
+  clientId: process.env.OIDC_CLIENT_ID,
+  clientSecret: process.env.OIDC_CLIENT_SECRET,
+};
 
 export const authConfig: NextAuthConfig = {
   secret: process.env.AUTH_SECRET,
-  providers: [
-    {
-      id: "WCA",
-      name: "WCA-OIDC-Provider",
-      type: "oidc",
-      issuer: process.env.OIDC_ISSUER,
-      clientId: process.env.OIDC_CLIENT_ID,
-      clientSecret: process.env.OIDC_CLIENT_SECRET,
-    },
-  ],
+  providers: [baseWcaProvider],
   callbacks: {
     async jwt({ token, account }) {
       if (account) {
@@ -38,4 +41,25 @@ export const authConfig: NextAuthConfig = {
       return session;
     },
   },
+};
+
+export const payloadAuthConfig: NextAuthConfig = {
+  basePath: "/api/auth/payload",
+  ...authConfig,
+  providers: [
+    {
+      ...baseWcaProvider,
+      authorization: {
+        params: { scope: "openid profile email cms" },
+      },
+      profile: (profile) => {
+        return {
+          id: profile.sub,
+          name: profile.name,
+          email: profile.email,
+          roles: profile.roles,
+        };
+      },
+    },
+  ],
 };
