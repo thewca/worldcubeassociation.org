@@ -2,10 +2,9 @@
 
 module ResultsValidators
   class GenericValidator
-    attr_reader :errors, :warnings, :infos, :apply_fixes
+    attr_reader :errors, :warnings, :infos
 
-    def initialize(apply_fixes: false)
-      @apply_fixes = apply_fixes
+    def initialize
       reset_state
     end
 

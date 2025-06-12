@@ -13,6 +13,11 @@ module ResultsValidators
       true
     end
 
+    def initialize(apply_fixes: false)
+      super()
+      @apply_fixes = apply_fixes
+    end
+
     def run_validation(validator_data)
       validator_data.each do |competition_data|
         competition = competition_data.competition

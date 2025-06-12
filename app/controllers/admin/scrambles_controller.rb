@@ -35,7 +35,7 @@ module Admin
       scramble = Scramble.new(scramble_params)
       if scramble.save
         # We just inserted a new scramble, make sure we at least give it correct information.
-        validator = ResultsValidators::ScramblesValidator.new(apply_fixes: true)
+        validator = ResultsValidators::ScramblesValidator.new
         validator.validate(competition_ids: [scramble.competition_id])
         json[:messages] = ["Scramble inserted!"].concat(validator.infos.map(&:to_s))
       else
@@ -52,7 +52,7 @@ module Admin
       if scramble.update(scramble_params)
         competitions_to_validate << scramble.competition_id
         competitions_to_validate.uniq!
-        validator = ResultsValidators::ScramblesValidator.new(apply_fixes: true)
+        validator = ResultsValidators::ScramblesValidator.new
         validator.validate(competition_ids: competitions_to_validate)
         info = if scramble.saved_changes.empty?
                  ["It looks like you submitted the exact same scramble, so no changes were made."]
@@ -78,7 +78,7 @@ module Admin
       scramble.destroy!
 
       # Create a results validator to fix information if needed
-      validator = ResultsValidators::ScramblesValidator.new(apply_fixes: true)
+      validator = ResultsValidators::ScramblesValidator.new
       validator.validate(competition_ids: [competition_id])
 
       render json: {

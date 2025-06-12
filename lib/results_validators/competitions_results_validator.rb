@@ -14,12 +14,12 @@ module ResultsValidators
 
     # Takes a list of validator classes, and if it should process real results or not.
     def initialize(validators = [], check_real_results: false, apply_fixes: false, sql_batch: nil, memory_batch: nil)
-      super(apply_fixes: apply_fixes)
+      super()
 
       @validators = validators
 
       @check_real_results = check_real_results
-
+      @apply_fixes = apply_fixes
       @sql_batch = sql_batch
       @memory_batch = memory_batch
 
@@ -96,7 +96,11 @@ module ResultsValidators
     private
 
       def load_validator(validator_class)
-        validator_class.new(apply_fixes: @apply_fixes)
+        if validator_class.class_name == PositionsValidator.class_name
+          validator_class.new(apply_fixes: @apply_fixes)
+        else
+          validator_class.new
+        end
       end
 
       def merge(other_validators)
