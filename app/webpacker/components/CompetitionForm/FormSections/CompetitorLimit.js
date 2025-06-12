@@ -4,7 +4,6 @@ import ConditionalSection from './ConditionalSection';
 import SubSection from '../../wca/FormBuilder/SubSection';
 import { newcomerMonthEnabled } from '../../../lib/wca-data.js.erb';
 import { useFormObject } from '../../wca/FormBuilder/provider/FormObjectProvider';
-import { useStore } from '../../../lib/providers/StoreProvider';
 
 export default function CompetitorLimit() {
   const {
@@ -13,8 +12,6 @@ export default function CompetitorLimit() {
       autoAcceptEnabled,
     },
   } = useFormObject();
-
-  const { isAdminView } = useStore();
 
   return (
     <SubSection section="competitorLimit">
@@ -27,11 +24,9 @@ export default function CompetitorLimit() {
           <InputNumber id="newcomerMonthReservedSpots" min={1} nullable />
         </ConditionalSection>
       </ConditionalSection>
-      <ConditionalSection showIf={isAdminView}>
-        <InputBooleanSelect id="autoAcceptEnabled" required />
-        <ConditionalSection showIf={autoAcceptEnabled}>
-          <InputNumber id="autoAcceptDisableThreshold" nullable />
-        </ConditionalSection>
+      <InputBooleanSelect id="autoAcceptEnabled" required />
+      <ConditionalSection showIf={autoAcceptEnabled}>
+        <InputNumber id="autoAcceptDisableThreshold" nullable />
       </ConditionalSection>
     </SubSection>
   );
