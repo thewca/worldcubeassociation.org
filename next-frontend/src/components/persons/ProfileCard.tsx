@@ -1,3 +1,5 @@
+'use client'
+
 import React from "react";
 import {
   Card,
@@ -41,6 +43,7 @@ const ProfileCard: React.FC<ProfileData> = ({
   competitions,
   completedSolves,
 }) => {
+  console.log(JSON.stringify(regionIso2));
   return (
     <Card.Root
       bg="grey.solid"
