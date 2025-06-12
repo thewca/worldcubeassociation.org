@@ -447,7 +447,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
                   {Object.entries(modalData).map(([key, value]) => (
                     <List.Item key={key}>
                       {registrations.find(
-                        registration => (registration.id === Number(key))
+                        (registration) => registration.id === Number(key),
                       )?.user.name}
                       {' - '}
                       <b>Succeeded</b>
