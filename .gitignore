@@ -63,3 +63,10 @@ yarn-debug.log*
 
 # Ignore Font files in accordance to Licensing Agreement
 next-frontend/src/app/(wca)/fonts/TTNormsPro/*
+
+# Playwright
+node_modules/
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
