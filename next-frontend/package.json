@@ -14,7 +14,9 @@
     "chakra:types": "chakra typegen ./src/theme.ts",
     "payload:types": "payload generate:types",
     "lint": "next lint",
-    "lint:fix": "next lint --fix"
+    "lint:fix": "next lint --fix",
+    "test": "vitest",
+    "test:ui": "vitest --ui"
   },
   "dependencies": {
     "@aws-sdk/credential-providers": "^3.823.0",
@@ -48,20 +50,27 @@
     "@eslint/eslintrc": "^3",
     "@stylistic/eslint-plugin": "^4.4.1",
     "@tanstack/eslint-plugin-query": "^5.78.0",
+    "@testing-library/dom": "^10.4.0",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.3.0",
     "@types/aws4": "^1",
+    "@types/jest": "^29.5.14",
     "@types/newrelic": "^9.14.8",
     "@types/node": "^22",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@types/react-world-flags": "^1",
     "@types/swagger-ui-react": "^5.18.0",
+    "@vitejs/plugin-react": "^4.5.2",
     "eslint": "^9",
     "eslint-config-next": "15.3.3",
     "eslint-config-prettier": "^10.1.5",
     "eslint-plugin-prettier": "^5.4.1",
+    "jsdom": "^26.1.0",
     "openapi-typescript": "^7.8.0",
     "prettier": "^3.5.3",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vitest": "^3.2.3"
   },
   "scarfSettings": {
     "enabled": false
