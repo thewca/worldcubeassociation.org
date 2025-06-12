@@ -43,3 +43,4 @@ next-env.d.ts
 
 # Payload backend when running locally / in dev mode
 next-frontend.db
+/media/**/*
