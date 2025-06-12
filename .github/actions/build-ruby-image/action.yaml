@@ -37,9 +37,9 @@ runs:
           echo "SHAKAPACKER_ASSET_HOST=https://assets.worldcubeassociation.org" >> $GITHUB_ENV
           echo "WCA_LIVE_SITE=true" >> $GITHUB_ENV
         fi
-    - name: Build and push Docker image
+    - name: Build and push Ruby Docker image
       uses: docker/build-push-action@v6
-      id: build-image
+      id: build-ruby-image
       with:
         push: true
         load: ${{ inputs.load }}
