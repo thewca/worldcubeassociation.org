@@ -577,7 +577,7 @@ const customConfig = defineConfig({
           variant: {
             achievement: {
               bg: "transparent",
-              color: "colorPalette.fg",
+              color: "fg",
               fontWeight: "medium",
               gap: "2",
               mr: "2.5",
