@@ -5,6 +5,14 @@ FROM node:22-alpine AS base
 FROM base AS deps
 # Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
 RUN apk add --no-cache libc6-compat
+
+RUN apk add --update --virtual .deps --no-cache unzip && \
+     wget https://releases.hashicorp.com/vault/1.19.5/vault_1.19.5_linux_amd64.zip && \
+    unzip vault_1.19.5_linux_amd64.zip -d /tmp && \
+    mv /tmp/vault /usr/local/bin/vault && \
+    rm -f vault_1.19.5_linux_amd64.zip && \
+    apk del .deps
+
 WORKDIR /app
 
 COPY package.json yarn.lock* .yarnrc.yml ./
@@ -25,7 +33,7 @@ COPY . .
 ENV NEXT_TELEMETRY_DISABLED=1
 RUN corepack enable
 # Create the types and build
-RUN yarn run chakra:types && NODE_ENV=production NEXT_PUBLIC_WCA_FRONTEND_API_URL='https://www.worldcubeassociation.org/api/v0/' yarn run build
+RUN yarn run chakra:types && NODE_ENV=production IS_COMPILING_ASSETS=1 NEXT_PUBLIC_WCA_FRONTEND_API_URL='https://www.worldcubeassociation.org/api/v0/' yarn run build
 
 # Production image, copy all the files and run next
 FROM base AS runner
@@ -46,6 +54,10 @@ COPY --from=builder /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 COPY --from=deps /app/global-bundle.pem /app/global-bundle.pem
+COPY --from=deps /usr/local/bin/vault /usr/local/bin/vault
+COPY --from=builder /app/docker-entrypoint.sh /app/docker-entrypoint.sh
+
+RUN apk add --no-cache jq
 
 USER nextjs
 
@@ -56,4 +68,4 @@ ENV PORT=3000
 # server.js is created by next build from the standalone output
 # https://nextjs.org/docs/pages/api-reference/config/next-config-js/output
 ENV HOSTNAME="0.0.0.0"
-CMD ["node", "server.js"]
+ENTRYPOINT ["/app/docker-entrypoint.sh"]
