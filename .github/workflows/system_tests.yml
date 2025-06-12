@@ -48,13 +48,13 @@ jobs:
         run: |
           bin/bundle exec i18n export
           bin/rake assets:precompile
+      - name: Install Playwright Browsers # as per https://playwright.dev/docs/ci#github-actions
+        run: bin/yarn playwright install --with-deps
       - name: Cache Playwright runnables
         uses: actions/cache@v4
         with:
           path: ${{ env.PLAYWRIGHT_BROWSERS_PATH }}
           key: ${{ runner.os }}-playwright-${{ hashFiles('**/node_modules/playwright*') }}
-      - name: Install Playwright Browsers # as per https://playwright.dev/docs/ci#github-actions
-        run: bin/yarn playwright install --with-deps
       - name: Run Playwright tests
         run: yarn playwright test
       - uses: actions/upload-artifact@v4
