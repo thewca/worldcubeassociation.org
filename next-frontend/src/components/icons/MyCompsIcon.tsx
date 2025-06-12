@@ -20,7 +20,7 @@ const MyCompsIcon = createIcon({
 });
 
 const MyCompsIconPreview = () => {
-  return <MyCompsIcon size="lg" />;
+  return <MyCompsIcon size="lg" boxSize="1em" />;
 };
 
 export default MyCompsIconPreview;

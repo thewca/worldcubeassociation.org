@@ -16,7 +16,7 @@ const DownloadIcon = createIcon({
 });
 
 const DownloadIconPreview = () => {
-  return <DownloadIcon size="lg" />;
+  return <DownloadIcon size="lg" boxSize="1em" />;
 };
 
 export default DownloadIconPreview;

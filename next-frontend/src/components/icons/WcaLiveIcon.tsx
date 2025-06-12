@@ -13,7 +13,7 @@ const WcaLiveIcon = createIcon({
 });
 
 const WcaLiveIconPreview = () => {
-  return <WcaLiveIcon size="lg" />;
+  return <WcaLiveIcon size="lg" boxSize="1em" />;
 };
 
 export default WcaLiveIconPreview;

@@ -16,7 +16,7 @@ const RankingsIcon = createIcon({
 });
 
 const RankingsIconPreview = () => {
-  return <RankingsIcon size="lg" />;
+  return <RankingsIcon size="lg" boxSize="1em" />;
 };
 
 export default RankingsIconPreview;

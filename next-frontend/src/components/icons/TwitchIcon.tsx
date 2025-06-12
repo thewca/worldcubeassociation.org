@@ -18,7 +18,7 @@ const TwitchIcon = createIcon({
 });
 
 const TwitchIconPreview = () => {
-  return <TwitchIcon size="lg" />;
+  return <TwitchIcon size="lg" boxSize="1em" />;
 };
 
 export default TwitchIconPreview;

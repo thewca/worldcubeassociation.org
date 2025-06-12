@@ -16,7 +16,7 @@ const MyResultsIcon = createIcon({
 });
 
 export const MyResultsIconPreview = () => {
-  return <MyResultsIcon size="lg" />;
+  return <MyResultsIcon size="lg" boxSize="1em" />;
 };
 
 export default MyResultsIcon;

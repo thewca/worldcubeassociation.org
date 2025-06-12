@@ -16,7 +16,7 @@ const ExternalLinkIcon = createIcon({
 });
 
 const ExternalLinkIconPreview = () => {
-  return <ExternalLinkIcon size="lg" />;
+  return <ExternalLinkIcon size="lg" boxSize="1em" />;
 };
 
 export default ExternalLinkIconPreview;

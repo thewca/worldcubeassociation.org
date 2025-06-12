@@ -16,7 +16,7 @@ const SearchIcon = createIcon({
 });
 
 const SearchIconPreview = () => {
-  return <SearchIcon size="lg" />;
+  return <SearchIcon size="lg" boxSize="1em" />;
 };
 
 export default SearchIconPreview;

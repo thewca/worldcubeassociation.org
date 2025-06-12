@@ -81,7 +81,7 @@ const MenuIcon = createIcon({
 });
 
 const MenuIconPreview = () => {
-  return <MenuIcon size="lg" />;
+  return <MenuIcon size="lg" boxSize="1em" />;
 };
 
 export default MenuIconPreview;

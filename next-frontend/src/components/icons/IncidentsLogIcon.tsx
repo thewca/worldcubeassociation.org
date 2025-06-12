@@ -16,7 +16,7 @@ const IncidentsLogIcon = createIcon({
 });
 
 const IncidentsLogIconPreview = () => {
-  return <IncidentsLogIcon size="lg" />;
+  return <IncidentsLogIcon size="lg" boxSize="1em" />;
 };
 
 export default IncidentsLogIconPreview;

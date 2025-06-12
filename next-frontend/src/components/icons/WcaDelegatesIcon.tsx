@@ -16,7 +16,7 @@ const WcaDelegatesIcon = createIcon({
 });
 
 const WcaDelegatesIconPreview = () => {
-  return <WcaDelegatesIcon size="lg" />;
+  return <WcaDelegatesIcon size="lg" boxSize="1em" />;
 };
 
 export default WcaDelegatesIconPreview;

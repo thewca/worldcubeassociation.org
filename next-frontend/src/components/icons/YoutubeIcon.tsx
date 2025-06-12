@@ -16,7 +16,7 @@ const YoutubeIcon = createIcon({
 });
 
 const YoutubeIconPreview = () => {
-  return <YoutubeIcon size="lg" />;
+  return <YoutubeIcon size="lg" boxSize="1em" />;
 };
 
 export default YoutubeIconPreview;

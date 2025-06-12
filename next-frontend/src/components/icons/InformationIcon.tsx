@@ -16,7 +16,7 @@ const InformationIcon = createIcon({
 });
 
 const InformationIconPreview = () => {
-  return <InformationIcon size="lg" />;
+  return <InformationIcon size="lg" boxSize="1em" />;
 };
 
 export default InformationIconPreview;

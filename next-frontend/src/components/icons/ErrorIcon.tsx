@@ -16,7 +16,7 @@ const ErrorIcon = createIcon({
 });
 
 const ErrorIconPreview = () => {
-  return <ErrorIcon size="lg" />;
+  return <ErrorIcon size="lg" boxSize="1em" />;
 };
 
 export default ErrorIconPreview;

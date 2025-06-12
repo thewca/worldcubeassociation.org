@@ -16,7 +16,7 @@ const CloneIcon = createIcon({
 });
 
 const CloneIconPreview = () => {
-  return <CloneIcon size="lg" />;
+  return <CloneIcon size="lg" boxSize="1em" />;
 };
 
 export default CloneIconPreview;

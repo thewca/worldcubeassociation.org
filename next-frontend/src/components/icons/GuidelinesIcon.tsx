@@ -16,7 +16,7 @@ const GuidelinesIcon = createIcon({
 });
 
 const GuidelinesIconPreview = () => {
-  return <GuidelinesIcon size="lg" />;
+  return <GuidelinesIcon size="lg" boxSize="1em" />;
 };
 
 export default GuidelinesIconPreview;

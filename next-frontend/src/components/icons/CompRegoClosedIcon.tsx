@@ -16,7 +16,7 @@ const CompRegoClosedIcon = createIcon({
 });
 
 const CompRegoClosedIconPreview = () => {
-  return <CompRegoClosedIcon size="lg" />;
+  return <CompRegoClosedIcon size="lg" boxSize="1em" />;
 };
 
 export default CompRegoClosedIconPreview;

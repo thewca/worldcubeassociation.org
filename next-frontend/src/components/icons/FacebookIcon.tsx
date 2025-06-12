@@ -16,7 +16,7 @@ const FacebookIcon = createIcon({
 });
 
 const FacebookIconPreview = () => {
-  return <FacebookIcon size="lg" />;
+  return <FacebookIcon size="lg" boxSize="1em" />;
 };
 
 export default FacebookIconPreview;

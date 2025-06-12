@@ -20,7 +20,7 @@ const CompRegoFullButOpenIcon = createIcon({
 });
 
 const CompRegoFullButOpenIconPreview = () => {
-  return <CompRegoFullButOpenIcon size="lg" />;
+  return <CompRegoFullButOpenIcon size="lg" boxSize="1em" />;
 };
 
 export default CompRegoFullButOpenIconPreview;

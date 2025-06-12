@@ -16,7 +16,7 @@ const MapIcon = createIcon({
 });
 
 const MapIconPreview = () => {
-  return <MapIcon size="lg" />;
+  return <MapIcon size="lg" boxSize="1em" />;
 };
 
 export default MapIconPreview;

@@ -16,7 +16,7 @@ const OnTheSpotRegistrationIcon = createIcon({
 });
 
 const OnTheSpotRegistrationIconPreview = () => {
-  return <OnTheSpotRegistrationIcon size="lg" />;
+  return <OnTheSpotRegistrationIcon size="lg" boxSize="1em" />;
 };
 
 export default OnTheSpotRegistrationIconPreview;

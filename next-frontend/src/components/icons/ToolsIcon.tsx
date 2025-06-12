@@ -16,7 +16,7 @@ const ToolsIcon = createIcon({
 });
 
 const ToolsIconPreview = () => {
-  return <ToolsIcon size="lg" />;
+  return <ToolsIcon size="lg" boxSize="1em" />;
 };
 
 export default ToolsIconPreview;

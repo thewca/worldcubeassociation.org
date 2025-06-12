@@ -20,7 +20,7 @@ const CompRegoNotOpenYetIcon = createIcon({
 });
 
 const CompRegoNotOpenYetIconPreview = () => {
-  return <CompRegoNotOpenYetIcon size="lg" />;
+  return <CompRegoNotOpenYetIcon size="lg" boxSize="1em" />;
 };
 
 export default CompRegoNotOpenYetIconPreview;

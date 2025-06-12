@@ -16,7 +16,7 @@ const LocationIcon = createIcon({
 });
 
 const LocationIconPreview = () => {
-  return <LocationIcon size="lg" />;
+  return <LocationIcon size="lg" boxSize="1em" />;
 };
 
 export default LocationIconPreview;

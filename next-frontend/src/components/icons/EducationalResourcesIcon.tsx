@@ -16,7 +16,7 @@ const EducationalResourcesIcon = createIcon({
 });
 
 const EducationalResourcesIconPreview = () => {
-  return <EducationalResourcesIcon size="lg" />;
+  return <EducationalResourcesIcon size="lg" boxSize="1em" />;
 };
 
 export default EducationalResourcesIconPreview;

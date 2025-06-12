@@ -16,7 +16,7 @@ const CompRegoOpenDateIcon = createIcon({
 });
 
 const CompRegoOpenDateIconPreview = () => {
-  return <CompRegoOpenDateIcon size="lg" />;
+  return <CompRegoOpenDateIcon size="lg" boxSize="1em" />;
 };
 
 export default CompRegoOpenDateIconPreview;

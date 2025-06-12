@@ -16,7 +16,7 @@ const RegisterIcon = createIcon({
 });
 
 const RegisterIconPreview = () => {
-  return <RegisterIcon size="lg" />;
+  return <RegisterIcon size="lg" boxSize="1em" />;
 };
 
 export default RegisterIconPreview;

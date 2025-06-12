@@ -28,7 +28,7 @@ const WeiboIcon = createIcon({
 });
 
 const WeiboIconPreview = () => {
-  return <WeiboIcon size="lg" />;
+  return <WeiboIcon size="lg" boxSize="1em" />;
 };
 
 export default WeiboIconPreview;

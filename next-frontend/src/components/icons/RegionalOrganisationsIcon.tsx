@@ -16,7 +16,7 @@ const RegionalOrganisationsIcon = createIcon({
 });
 
 const RegionalOrganisationsIconPreview = () => {
-  return <RegionalOrganisationsIcon size="lg" />;
+  return <RegionalOrganisationsIcon size="lg" boxSize="1em" />;
 };
 
 export default RegionalOrganisationsIconPreview;

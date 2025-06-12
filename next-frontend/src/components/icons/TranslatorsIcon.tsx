@@ -16,7 +16,7 @@ const TranslatorsIcon = createIcon({
 });
 
 const TranslatorsIconPreview = () => {
-  return <TranslatorsIcon size="lg" />;
+  return <TranslatorsIcon size="lg" boxSize="1em" />;
 };
 
 export default TranslatorsIconPreview;

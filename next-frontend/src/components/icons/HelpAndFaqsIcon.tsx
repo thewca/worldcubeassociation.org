@@ -16,7 +16,7 @@ const HelpAndFaqsIcon = createIcon({
 });
 
 const HelpAndFaqsIconPreview = () => {
-  return <HelpAndFaqsIcon size="lg" />;
+  return <HelpAndFaqsIcon size="lg" boxSize="1em" />;
 };
 
 export default HelpAndFaqsIconPreview;

@@ -16,7 +16,7 @@ const DisciplinaryLogIcon = createIcon({
 });
 
 const DisciplinaryLogIconPreview = () => {
-  return <DisciplinaryLogIcon size="lg" />;
+  return <DisciplinaryLogIcon size="lg" boxSize="1em" />;
 };
 
 export default DisciplinaryLogIconPreview;

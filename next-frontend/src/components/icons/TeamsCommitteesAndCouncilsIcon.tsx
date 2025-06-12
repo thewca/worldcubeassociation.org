@@ -16,7 +16,7 @@ const TeamsCommitteesAndCouncilsIcon = createIcon({
 });
 
 const TeamsCommitteesAndCouncilsIconPreview = () => {
-  return <TeamsCommitteesAndCouncilsIcon size="lg" />;
+  return <TeamsCommitteesAndCouncilsIcon size="lg" boxSize="1em" />;
 };
 
 export default TeamsCommitteesAndCouncilsIconPreview;

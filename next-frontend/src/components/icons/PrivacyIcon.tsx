@@ -16,7 +16,7 @@ const PrivacyIcon = createIcon({
 });
 
 const PrivacyIconPreview = () => {
-  return <PrivacyIcon size="lg" />;
+  return <PrivacyIcon size="lg" boxSize="1em" />;
 };
 
 export default PrivacyIconPreview;

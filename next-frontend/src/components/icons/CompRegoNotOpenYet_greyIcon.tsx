@@ -20,7 +20,9 @@ const CompRegoNotOpenYet_greyIcon = createIcon({
 });
 
 const CompRegoNotOpenYet_greyIconPreview = () => {
-  return <CompRegoNotOpenYet_greyIcon size="lg" color="gray.500" />;
+  return (
+    <CompRegoNotOpenYet_greyIcon size="lg" boxSize="1em" color="gray.500" />
+  );
 };
 
 export default CompRegoNotOpenYet_greyIconPreview;

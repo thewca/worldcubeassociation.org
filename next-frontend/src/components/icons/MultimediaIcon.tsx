@@ -16,7 +16,7 @@ const MultimediaIcon = createIcon({
 });
 
 const MultimediaIconPreview = () => {
-  return <MultimediaIcon size="lg" />;
+  return <MultimediaIcon size="lg" boxSize="1em" />;
 };
 
 export default MultimediaIconPreview;

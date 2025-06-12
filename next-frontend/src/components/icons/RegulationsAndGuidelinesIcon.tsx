@@ -16,7 +16,7 @@ const RegulationsAndGuidelinesIcon = createIcon({
 });
 
 const RegulationsAndGuidelinesIconPreview = () => {
-  return <RegulationsAndGuidelinesIcon size="lg" />;
+  return <RegulationsAndGuidelinesIcon size="lg" boxSize="1em" />;
 };
 
 export default RegulationsAndGuidelinesIconPreview;

@@ -24,7 +24,7 @@ const InstagramIcon = createIcon({
 });
 
 const InstagramIconPreview = () => {
-  return <InstagramIcon size="lg" />;
+  return <InstagramIcon size="lg" boxSize="1em" />;
 };
 
 export default InstagramIconPreview;

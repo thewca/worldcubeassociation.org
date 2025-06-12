@@ -20,7 +20,7 @@ const ResultsExportIcon = createIcon({
 });
 
 const ResultsExportIconPreview = () => {
-  return <ResultsExportIcon size="lg" />;
+  return <ResultsExportIcon size="lg" boxSize="1em" />;
 };
 
 export default ResultsExportIconPreview;

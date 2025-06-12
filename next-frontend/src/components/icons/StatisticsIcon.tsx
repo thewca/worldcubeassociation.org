@@ -16,7 +16,7 @@ const StatisticsIcon = createIcon({
 });
 
 const StatisticsIconPreview = () => {
-  return <StatisticsIcon size="lg" />;
+  return <StatisticsIcon size="lg" boxSize="1em" />;
 };
 
 export default StatisticsIconPreview;

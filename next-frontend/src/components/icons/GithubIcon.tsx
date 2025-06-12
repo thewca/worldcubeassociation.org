@@ -16,7 +16,7 @@ const GithubIcon = createIcon({
 });
 
 const GithubIconPreview = () => {
-  return <GithubIcon size="lg" />;
+  return <GithubIcon size="lg" boxSize="1em" />;
 };
 
 export default GithubIconPreview;

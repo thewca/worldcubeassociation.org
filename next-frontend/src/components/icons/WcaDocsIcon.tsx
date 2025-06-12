@@ -16,7 +16,7 @@ const WcaDocsIcon = createIcon({
 });
 
 const WcaDocsIconPreview = () => {
-  return <WcaDocsIcon size="lg" />;
+  return <WcaDocsIcon size="lg" boxSize="1em" />;
 };
 
 export default WcaDocsIconPreview;

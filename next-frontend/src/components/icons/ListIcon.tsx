@@ -16,7 +16,7 @@ const ListIcon = createIcon({
 });
 
 const ListIconPreview = () => {
-  return <ListIcon size="lg" />;
+  return <ListIcon size="lg" boxSize="1em" />;
 };
 
 export default ListIconPreview;

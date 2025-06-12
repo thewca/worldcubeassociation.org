@@ -16,7 +16,7 @@ const UsersPersonsIcon = createIcon({
 });
 
 const UsersPersonsIconPreview = () => {
-  return <UsersPersonsIcon size="lg" />;
+  return <UsersPersonsIcon size="lg" boxSize="1em" />;
 };
 
 export default UsersPersonsIconPreview;

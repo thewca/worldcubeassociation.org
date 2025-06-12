@@ -16,7 +16,7 @@ const DeveloperExportIcon = createIcon({
 });
 
 const DeveloperExportIconPreview = () => {
-  return <DeveloperExportIcon size="lg" />;
+  return <DeveloperExportIcon size="lg" boxSize="1em" />;
 };
 
 export default DeveloperExportIconPreview;

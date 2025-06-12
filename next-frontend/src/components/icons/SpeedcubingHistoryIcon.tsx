@@ -16,7 +16,7 @@ const SpeedcubingHistoryIcon = createIcon({
 });
 
 const SpeedcubingHistoryIconPreview = () => {
-  return <SpeedcubingHistoryIcon size="lg" />;
+  return <SpeedcubingHistoryIcon size="lg" boxSize="1em" />;
 };
 
 export default SpeedcubingHistoryIconPreview;

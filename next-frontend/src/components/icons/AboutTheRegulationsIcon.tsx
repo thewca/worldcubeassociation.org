@@ -16,7 +16,7 @@ const AboutTheRegulationsIcon = createIcon({
 });
 
 const AboutTheRegulationsIconPreview = () => {
-  return <AboutTheRegulationsIcon size="lg" />;
+  return <AboutTheRegulationsIcon size="lg" boxSize="1em" />;
 };
 
 export default AboutTheRegulationsIconPreview;

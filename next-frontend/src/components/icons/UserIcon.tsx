@@ -16,7 +16,7 @@ const UserIcon = createIcon({
 });
 
 const UserIconPreview = () => {
-  return <UserIcon size="lg" />;
+  return <UserIcon size="lg" boxSize="1em" />;
 };
 
 export default UserIconPreview;

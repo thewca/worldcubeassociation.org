@@ -16,7 +16,7 @@ const FiltersIcon = createIcon({
 });
 
 const FiltersIconPreview = () => {
-  return <FiltersIcon size="lg" />;
+  return <FiltersIcon size="lg" boxSize="1em" />;
 };
 
 export default FiltersIconPreview;

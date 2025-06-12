@@ -52,7 +52,7 @@ const SpotsLeftIcon = createIcon({
 });
 
 const SpotsLeftIconPreview = () => {
-  return <SpotsLeftIcon size="lg" />;
+  return <SpotsLeftIcon size="lg" boxSize="1em" />;
 };
 
 export default SpotsLeftIconPreview;

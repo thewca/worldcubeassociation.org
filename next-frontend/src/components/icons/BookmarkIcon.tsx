@@ -16,7 +16,7 @@ const BookmarkIcon = createIcon({
 });
 
 const BookmarkIconPreview = () => {
-  return <BookmarkIcon size="lg" />;
+  return <BookmarkIcon size="lg" boxSize="1em" />;
 };
 
 export default BookmarkIconPreview;

@@ -16,7 +16,7 @@ const RegulationsHistoryIcon = createIcon({
 });
 
 const RegulationsHistoryIconPreview = () => {
-  return <RegulationsHistoryIcon size="lg" />;
+  return <RegulationsHistoryIcon size="lg" boxSize="1em" />;
 };
 
 export default RegulationsHistoryIconPreview;

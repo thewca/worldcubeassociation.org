@@ -16,7 +16,7 @@ const DisclaimerIcon = createIcon({
 });
 
 const DisclaimerIconPreview = () => {
-  return <DisclaimerIcon size="lg" />;
+  return <DisclaimerIcon size="lg" boxSize="1em" />;
 };
 
 export default DisclaimerIconPreview;

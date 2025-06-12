@@ -16,7 +16,7 @@ const EventLocationIcon = createIcon({
 });
 
 const EventLocationIconPreview = () => {
-  return <EventLocationIcon size="lg" />;
+  return <EventLocationIcon size="lg" boxSize="1em" />;
 };
 
 export default EventLocationIconPreview;

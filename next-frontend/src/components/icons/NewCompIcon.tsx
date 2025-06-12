@@ -16,7 +16,7 @@ const NewCompIcon = createIcon({
 });
 
 const NewCompIconPreview = () => {
-  return <NewCompIcon size="lg" />;
+  return <NewCompIcon size="lg" boxSize="1em" />;
 };
 
 export default NewCompIconPreview;
