@@ -20,7 +20,7 @@ jobs:
       - name: Build and push nextjs Image
         uses: ./.github/actions/build-js-image
         with:
-          registry: ${{ steps.login-ecr.outputs.registry }}/wca-next-js
+          registry: ${{ steps.login-ecr.outputs.registry }}/wca-nextjs
           tag: nextjs-production
       - name: Deploy new nextjs Image
         run: |
