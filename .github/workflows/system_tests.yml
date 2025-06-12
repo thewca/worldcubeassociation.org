@@ -1,4 +1,4 @@
-name: Playwright Tests
+name: System Tests
 on:
   push:
     branches: [ main ]
@@ -12,7 +12,6 @@ jobs:
       RAILS_ENV: test
       NODE_ENV: test
       DISABLE_SPRING: 1
-      PLAYWRIGHT_BROWSERS_PATH: ./pw-browsers
       CAPYBARA_APP_HOST: "" # Explicitly set a blank value to override our default Docker container setup
     steps:
       - uses: actions/checkout@v4
@@ -55,7 +54,7 @@ jobs:
           path: ${{ env.PLAYWRIGHT_BROWSERS_PATH }}
           key: ${{ runner.os }}-playwright-${{ hashFiles('**/node_modules/playwright*') }}
       - name: Install Playwright Browsers # as per https://playwright.dev/docs/ci#github-actions
-        run: bin/yarn playwright install --with-deps --no-shell chromium
+        run: bin/yarn playwright install --with-deps
       - name: Run Playwright tests
         run: yarn playwright test
       - uses: actions/upload-artifact@v4
