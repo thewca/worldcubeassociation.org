@@ -51,6 +51,7 @@ jobs:
 
       - name: Start Next.js server
         run: |
+          cd next-frontend
           yarn build
           nohup yarn start --port 3001 &
       - name: Wait for server
