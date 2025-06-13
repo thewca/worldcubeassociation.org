@@ -20,6 +20,7 @@ const cmsWcaProvider: Provider = {
   authorization: {
     params: { scope: "openid profile email cms" },
   },
+  idToken: false,
   profile: (profile) => {
     return {
       id: profile.sub,
