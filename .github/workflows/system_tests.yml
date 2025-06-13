@@ -11,6 +11,7 @@ jobs:
       RACK_ENV: test
       RAILS_ENV: test
       NODE_ENV: test
+      PAYLOAD_SECRET: amazing-payload-secret
       DISABLE_SPRING: 1
       CAPYBARA_APP_HOST: "" # Explicitly set a blank value to override our default Docker container setup
     steps:
