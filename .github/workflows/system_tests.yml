@@ -52,14 +52,6 @@ jobs:
         run: |
           bin/bundle exec i18n export
           bin/rake assets:precompile
-
-      - name: Start Next.js server
-        run: |
-          cd next-frontend
-          yarn install
-          yarn run chakra:types && yarn run check:types
-          yarn run lint
-          yarn dev --port 3001
       - name: Wait for server
         run: |
           for i in {1..30}; do
