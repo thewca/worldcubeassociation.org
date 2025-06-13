@@ -52,13 +52,6 @@ jobs:
         run: |
           bin/bundle exec i18n export
           bin/rake assets:precompile
-      - name: Wait for server
-        run: |
-          for i in {1..30}; do
-            curl -sSf http://localhost:3001 && break
-            echo "Waiting for Next.js..."
-            sleep 2
-          done
       - name: Install Playwright Browsers # as per https://playwright.dev/docs/ci#github-actions
         run: bin/yarn playwright install --with-deps
       - name: Run Playwright tests
