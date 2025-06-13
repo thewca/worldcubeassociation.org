@@ -1,7 +1,7 @@
 import { NextAuthConfig } from "next-auth";
 
 export const authConfig: NextAuthConfig = {
-  debug: true,
+  secret: process.env.AUTH_SECRET,
   providers: [
     {
       id: "WCA",
