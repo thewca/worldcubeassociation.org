@@ -53,6 +53,8 @@ jobs:
         run: |
           cd next-frontend
           yarn install
+          yarn run chakra:types && yarn run check:types
+          yarn run lint
           yarn build
           nohup yarn start --port 3001 &
       - name: Wait for server
