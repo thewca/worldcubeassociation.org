@@ -56,7 +56,12 @@ jobs:
           yarn run chakra:types && yarn run check:types
           yarn run lint
           yarn build
-          nohup yarn start --port 3001 &
+          nohup yarn start --port 3001 > next.log 2>&1 &
+      - name: Dump Next.js server log
+        if: failure()
+        run: |
+          echo "======= NEXT.JS SERVER LOG ======="
+          cat next-frontend/next.log || echo "No log output"
       - name: Wait for server
         run: |
           for i in {1..30}; do
