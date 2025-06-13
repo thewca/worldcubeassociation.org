@@ -18,7 +18,7 @@ import MyResultsIcon from "@/components/icons/MyResultsIcon";
 import RegulationsHistoryIcon from "@/components/icons/RegulationsHistoryIcon";
 import NationalChampionshipIcon from "@/components/icons/NationalChampionshipIcon";
 import { LuStar, LuCircleHelp } from "react-icons/lu";
-import { countryCodeMapping } from "@/components/CountryMap";
+import { countries } from "@/lib/staticData/wca-data";
 
 interface ProfileData {
   name: string;
@@ -79,7 +79,10 @@ const ProfileCard: React.FC<ProfileData> = ({
         <DataListRoot variant="profileStat">
           <DataListItem label="WCA ID" value={wcaId} />
           {gender !== "o" && <DataListItem label="Gender" value={gender} />}
-          <DataListItem label="Region" value={countryCodeMapping[regionIso2]} />
+          <DataListItem
+            label="Region"
+            value={countries.byIso2[regionIso2].id}
+          />
           <DataListItem label="Competitions" value={competitions} />
           <DataListItem label="Completed Solves" value={completedSolves} />
         </DataListRoot>
