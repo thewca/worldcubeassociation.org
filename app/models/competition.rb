@@ -2218,9 +2218,19 @@ class Competition < ApplicationRecord
     end
   end
 
-  def dues_per_competitor_in_usd
-    dues = DuesCalculator.dues_per_competitor_in_usd(self.country_iso2, self.base_entry_fee_lowest_denomination.to_i, self.currency_code)
-    dues.presence || 0
+  def export_for_dues_generation
+    error = DuesCalculator.error_in_dues_calculation(self.country_iso2, self.currency_code)
+    dues_per_competitor_in_usd = error.nil? ? DuesCalculator.dues_per_competitor_in_usd(self.country_iso2, self.base_entry_fee_lowest_denomination.to_i, self.currency_code) : 0
+
+    [
+      id, name, country.iso2, continent.id,
+      start_date, end_date, announced_at, results_posted_at,
+      Rails.application.routes.url_helpers.competition_url(id), num_competitors, delegates.reject(&:trainee_delegate?).map(&:name).sort.join(","),
+      currency_code, base_entry_fee_lowest_denomination, Money::Currency.new(currency_code).subunit_to_unit,
+      championships.map(&:championship_type).sort.join(","), exempt_from_wca_dues?, organizers.map(&:name).sort.join(","),
+      dues_per_competitor_in_usd * num_competitors, dues_payer_name, dues_payer_email, dues_payer_is_combined_invoice?, country.band&.number || 0,
+      error
+    ]
   end
 
   private def xero_dues_payer
