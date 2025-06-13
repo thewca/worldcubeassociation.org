@@ -45,7 +45,7 @@ import type {
   AnnouncementsSectionBlock,
   Announcement,
   User,
-} from "@/payload-types";
+} from "@/types/payload";
 import Link from "next/link";
 
 const colorMap: Record<ColorSelect, string> = {

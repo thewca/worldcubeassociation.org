@@ -25,6 +25,6 @@ jobs:
       - name: Install fresh Yarn packages
         run: yarn install
       - name: Check types
-        run: yarn run chakra:types && yarn run check:types
+        run: yarn run check:types
       - name: Run Lint
         run: yarn run lint

@@ -10,7 +10,7 @@ import {
 } from "@chakra-ui/react";
 import { getPayload } from "payload";
 import config from "@payload-config";
-import { FaqQuestion } from "@/payload-types";
+import { FaqQuestion } from "@/types/payload";
 
 export default async function FAQ() {
   const payload = await getPayload({ config });
