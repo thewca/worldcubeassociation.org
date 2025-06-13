@@ -58,7 +58,6 @@ jobs:
           yarn run lint
           nohup yarn start --port 3001 > next.log 2>&1 &
       - name: Dump Next.js server log
-        if: failure()
         run: |
           echo "======= NEXT.JS SERVER LOG ======="
           cat next-frontend/next.log || echo "No log output"
