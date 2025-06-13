@@ -10,7 +10,7 @@ import CompetitionsTab from "@/components/persons/CompetitionsTab";
 import RecordsTab from "@/components/persons/RecordsTab";
 import MapTab from "@/components/persons/MapTab";
 import ChampionshipPodiumsTab from "@/components/persons/ChampionshipPodiums";
-import type { components } from "@/lib/wca/wcaSchema";
+import type { components } from "@/types/openapi";
 import { StaffColor } from "@/components/RoleBadge";
 
 export default async function PersonOverview({
