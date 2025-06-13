@@ -5,7 +5,7 @@ import { fileURLToPath } from "url";
 import sharp from "sharp";
 import { authjsPlugin } from "payload-authjs";
 import { lexicalEditor } from "@payloadcms/richtext-lexical";
-import { authConfig } from "@/auth.config";
+import { payloadAuthConfig } from "@/auth.config";
 
 import { Media } from "@/collections/Media";
 import { Testimonials } from "@/collections/Testimonials";
@@ -14,6 +14,7 @@ import {
   FaqCategories,
   FaqQuestions,
 } from "@/collections/FrequentlyAskedQuestions";
+import { Users } from "@/collections/Users";
 import { Nav } from "@/globals/Nav";
 import { Home } from "@/globals/Home";
 
@@ -60,6 +61,7 @@ export default buildConfig({
     Announcements,
     FaqCategories,
     FaqQuestions,
+    Users,
   ],
   globals: [Nav, Home],
   editor: lexicalEditor(),
@@ -71,7 +73,7 @@ export default buildConfig({
   sharp,
   plugins: [
     authjsPlugin({
-      authjsConfig: authConfig,
+      authjsConfig: payloadAuthConfig,
     }),
   ],
 });

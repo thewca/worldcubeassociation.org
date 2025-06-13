@@ -33,6 +33,10 @@ Doorkeeper::OpenidConnect.configure do
     claim :name, response: %i[id_token user_info] do |resource_owner|
       resource_owner.name
     end
+
+    claim :roles, response: :user_info, scope: :cms do |resource_owner|
+      resource_owner.teams_committees.pluck(:friendly_id)
+    end
   end
 
   discovery_url_options do
