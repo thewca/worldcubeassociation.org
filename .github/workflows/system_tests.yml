@@ -15,8 +15,6 @@ jobs:
       PAYLOAD_SECRET: amazing-payload-secret
       DISABLE_SPRING: 1
       CAPYBARA_APP_HOST: "" # Explicitly set a blank value to override our default Docker container setup
-      NEW_RELIC_APP_NAME: wca_system_tests
-      NEW_RELIC_ENABLED: false
     steps:
       - uses: actions/checkout@v4
       - uses: fregante/setup-git-user@v2 # set up dummy user.name and user.email in git so that Overcommit doesn't explode

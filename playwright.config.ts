@@ -77,7 +77,7 @@ export default defineConfig({
   //   reuseExistingServer: !process.env.CI,
   // },
   webServer: {
-    command: 'cd next-frontend && yarn dev --port 3001',
+    command: 'cd next-frontend && yarn install && yarn dev --port 3001',
     url: 'http://localhost:3001',
     reuseExistingServer: !process.env.CI,
     stdout: 'pipe',
