@@ -55,7 +55,8 @@ jobs:
       - name: Install Playwright Browsers # as per https://playwright.dev/docs/ci#github-actions
         run: bin/yarn playwright install --with-deps
       - name: Run Playwright tests
-        run: yarn playwright test
+        # run: yarn playwright test
+        run: DEBUG=pw:webServer yarn playwright test
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
         with:
