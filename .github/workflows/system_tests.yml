@@ -11,6 +11,7 @@ jobs:
       RACK_ENV: test
       RAILS_ENV: test
       NODE_ENV: test
+      PORT: 3000
       PAYLOAD_SECRET: amazing-payload-secret
       DISABLE_SPRING: 1
       CAPYBARA_APP_HOST: "" # Explicitly set a blank value to override our default Docker container setup
@@ -56,11 +57,7 @@ jobs:
           yarn install
           yarn run chakra:types && yarn run check:types
           yarn run lint
-          yarn start --port 3001 > next.log 2>&1 &
-      - name: Dump Next.js server log
-        run: |
-          echo "======= NEXT.JS SERVER LOG ======="
-          cat next-frontend/next.log || echo "No log output"
+          yarn dev --port 3001
       - name: Wait for server
         run: |
           for i in {1..30}; do
