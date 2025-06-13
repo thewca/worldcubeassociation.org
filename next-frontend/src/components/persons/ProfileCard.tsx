@@ -27,6 +27,7 @@ interface ProfileData {
   wcaId: string;
   gender: string;
   regionIso2: string;
+  countryName: string;
   competitions: number;
   completedSolves: number;
 }
