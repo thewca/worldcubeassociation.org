@@ -78,10 +78,9 @@ const MenuIcon = createIcon({
       />
     </>
   ),
-defaultProps: {
+  defaultProps: {
     boxSize: "1em",
   },
 });
-
 
 export default MenuIcon;

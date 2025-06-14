@@ -58,7 +58,7 @@ const _MmagicIcon = createIcon({
       />
     </>
   ),
-defaultProps: {
+  defaultProps: {
     boxSize: "1em",
   },
 });

@@ -25,10 +25,9 @@ const WeiboIcon = createIcon({
       />
     </>
   ),
-defaultProps: {
+  defaultProps: {
     boxSize: "1em",
   },
 });
-
 
 export default WeiboIcon;

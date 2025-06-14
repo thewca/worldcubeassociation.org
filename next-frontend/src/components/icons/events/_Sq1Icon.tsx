@@ -13,7 +13,7 @@ const _Sq1Icon = createIcon({
       />
     </>
   ),
-defaultProps: {
+  defaultProps: {
     boxSize: "1em",
   },
 });

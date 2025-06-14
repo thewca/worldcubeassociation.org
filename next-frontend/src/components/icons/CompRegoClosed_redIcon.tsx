@@ -13,9 +13,9 @@ const CompRegoClosed_redIcon = createIcon({
       />
     </>
   ),
-defaultProps: {
+  defaultProps: {
     boxSize: "1em",
-    color: "red.500"
+    color: "red.500",
   },
 });
 

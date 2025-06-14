@@ -17,11 +17,10 @@ const CompRegoNotOpenYet_greyIcon = createIcon({
       />
     </>
   ),
-defaultProps: {
+  defaultProps: {
     boxSize: "1em",
-    color: "gray.500"
+    color: "gray.500",
   },
 });
-
 
 export default CompRegoNotOpenYet_greyIcon;

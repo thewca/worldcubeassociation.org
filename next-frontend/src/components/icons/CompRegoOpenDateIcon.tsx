@@ -13,10 +13,9 @@ const CompRegoOpenDateIcon = createIcon({
       />
     </>
   ),
-defaultProps: {
+  defaultProps: {
     boxSize: "1em",
   },
 });
-
 
 export default CompRegoOpenDateIcon;

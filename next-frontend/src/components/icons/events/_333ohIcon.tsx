@@ -24,7 +24,7 @@ const _333ohIcon = createIcon({
       <path d="m288.258 199.901h55.92v55.921h-55.92z" fill="currentColor" />
     </>
   ),
-defaultProps: {
+  defaultProps: {
     boxSize: "1em",
   },
 });

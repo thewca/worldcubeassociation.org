@@ -15,10 +15,9 @@ const TwitchIcon = createIcon({
       <path d="M28.34,11.71h3.91v11.7h-3.91v-11.7Z" fill="currentColor" />
     </>
   ),
-defaultProps: {
+  defaultProps: {
     boxSize: "1em",
   },
 });
-
 
 export default TwitchIcon;

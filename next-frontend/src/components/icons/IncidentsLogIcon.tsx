@@ -13,7 +13,7 @@ const IncidentsLogIcon = createIcon({
       />
     </>
   ),
-defaultProps: {
+  defaultProps: {
     boxSize: "1em",
   },
 });

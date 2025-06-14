@@ -85,11 +85,10 @@ const ProfileCard: React.FC<ProfileData> = ({
             label="Region"
             value={
               <>
-              <Flex gap="1">
-                <Flag code={regionIso2} fallback="" height="20" width="28" />
-                {countryName}
-              </Flex>
-                
+                <Flex gap="1">
+                  <Flag code={regionIso2} fallback="" height="20" width="28" />
+                  {countryName}
+                </Flex>
               </>
             }
           />

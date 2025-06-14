@@ -13,7 +13,7 @@ const AboutTheWcaIcon = createIcon({
       />
     </>
   ),
-defaultProps: {
+  defaultProps: {
     boxSize: "1em",
   },
 });

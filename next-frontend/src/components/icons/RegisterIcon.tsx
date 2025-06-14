@@ -13,10 +13,9 @@ const RegisterIcon = createIcon({
       />
     </>
   ),
-defaultProps: {
+  defaultProps: {
     boxSize: "1em",
   },
 });
-
 
 export default RegisterIcon;

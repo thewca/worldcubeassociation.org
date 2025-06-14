@@ -10,10 +10,9 @@ const WcaLiveIcon = createIcon({
       <circle cx="22.5" cy="22.5" r="22.5" fill="currentColor" />
     </>
   ),
-defaultProps: {
+  defaultProps: {
     boxSize: "1em",
   },
 });
-
 
 export default WcaLiveIcon;

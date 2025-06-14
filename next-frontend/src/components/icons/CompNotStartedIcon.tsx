@@ -13,7 +13,7 @@ const CompNotStartedIcon = createIcon({
       />
     </>
   ),
-defaultProps: {
+  defaultProps: {
     boxSize: "1em",
   },
 });

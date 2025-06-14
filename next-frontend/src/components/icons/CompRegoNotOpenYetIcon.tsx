@@ -17,10 +17,9 @@ const CompRegoNotOpenYetIcon = createIcon({
       />
     </>
   ),
-defaultProps: {
+  defaultProps: {
     boxSize: "1em",
   },
 });
-
 
 export default CompRegoNotOpenYetIcon;
