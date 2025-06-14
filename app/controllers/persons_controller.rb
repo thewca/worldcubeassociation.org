@@ -35,6 +35,7 @@ class PersonsController < ApplicationController
     @records = @person.records
     @results = @person.results.includes(:competition, :event, :format, :round_type).order("events.rank, competitions.start_date DESC, competitions.id, round_types.rank DESC")
     @championship_podiums = @person.championship_podiums
+    @organized_competitions = @person.user.organized_competitions.not_cancelled.visible.order("start_date")
     params[:event] ||= @results.first.event.id
   end
 end
