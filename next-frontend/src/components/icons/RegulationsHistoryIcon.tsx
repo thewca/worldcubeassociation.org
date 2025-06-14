@@ -13,10 +13,10 @@ const RegulationsHistoryIcon = createIcon({
       />
     </>
   ),
+defaultProps: {
+    boxSize: "1em",
+  },
 });
 
-const RegulationsHistoryIconPreview = () => {
-  return <RegulationsHistoryIcon size="lg" boxSize="1em" />;
-};
 
-export default RegulationsHistoryIconPreview;
+export default RegulationsHistoryIcon;

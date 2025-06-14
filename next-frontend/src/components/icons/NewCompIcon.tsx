@@ -13,10 +13,10 @@ const NewCompIcon = createIcon({
       />
     </>
   ),
+defaultProps: {
+    boxSize: "1em",
+  },
 });
 
-const NewCompIconPreview = () => {
-  return <NewCompIcon size="lg" boxSize="1em" />;
-};
 
-export default NewCompIconPreview;
+export default NewCompIcon;

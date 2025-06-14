@@ -13,10 +13,10 @@ const ToolsIcon = createIcon({
       />
     </>
   ),
+defaultProps: {
+    boxSize: "1em",
+  },
 });
 
-const ToolsIconPreview = () => {
-  return <ToolsIcon size="lg" boxSize="1em" />;
-};
 
-export default ToolsIconPreview;
+export default ToolsIcon;

@@ -13,10 +13,10 @@ const DisclaimerIcon = createIcon({
       />
     </>
   ),
+defaultProps: {
+    boxSize: "1em",
+  },
 });
 
-const DisclaimerIconPreview = () => {
-  return <DisclaimerIcon size="lg" boxSize="1em" />;
-};
 
-export default DisclaimerIconPreview;
+export default DisclaimerIcon;

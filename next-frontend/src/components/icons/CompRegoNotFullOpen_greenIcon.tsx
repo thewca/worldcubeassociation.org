@@ -13,12 +13,11 @@ const CompRegoNotFullOpen_greenIcon = createIcon({
       />
     </>
   ),
+defaultProps: {
+    boxSize: "1em",
+    color: "green.500"
+  },
 });
 
-const CompRegoNotFullOpen_greenIconPreview = () => {
-  return (
-    <CompRegoNotFullOpen_greenIcon size="lg" boxSize="1em" color="green.500" />
-  );
-};
 
-export default CompRegoNotFullOpen_greenIconPreview;
+export default CompRegoNotFullOpen_greenIcon;

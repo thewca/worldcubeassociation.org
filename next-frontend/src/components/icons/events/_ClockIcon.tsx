@@ -13,6 +13,9 @@ const _ClockIcon = createIcon({
       />
     </>
   ),
+defaultProps: {
+    boxSize: "1em",
+  },
 });
 
 export default _ClockIcon;

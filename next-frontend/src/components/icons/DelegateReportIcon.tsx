@@ -13,10 +13,9 @@ const DelegateReportIcon = createIcon({
       />
     </>
   ),
+defaultProps: {
+    boxSize: "1em",
+  },
 });
 
-const DelegateReportIconPreview = () => {
-  return <DelegateReportIcon size="lg" boxSize="1em" />;
-};
-
-export default DelegateReportIconPreview;
+export default DelegateReportIcon;

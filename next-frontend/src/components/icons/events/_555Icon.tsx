@@ -109,6 +109,9 @@ const _555Icon = createIcon({
       />
     </>
   ),
+defaultProps: {
+    boxSize: "1em",
+  },
 });
 
 export default _555Icon;

@@ -13,10 +13,10 @@ const ListIcon = createIcon({
       />
     </>
   ),
+defaultProps: {
+    boxSize: "1em",
+  },
 });
 
-const ListIconPreview = () => {
-  return <ListIcon size="lg" boxSize="1em" />;
-};
 
-export default ListIconPreview;
+export default ListIcon;

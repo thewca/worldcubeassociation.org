@@ -13,10 +13,9 @@ const CloneIcon = createIcon({
       />
     </>
   ),
+defaultProps: {
+    boxSize: "1em",
+  },
 });
 
-const CloneIconPreview = () => {
-  return <CloneIcon size="lg" boxSize="1em" />;
-};
-
-export default CloneIconPreview;
+export default CloneIcon;

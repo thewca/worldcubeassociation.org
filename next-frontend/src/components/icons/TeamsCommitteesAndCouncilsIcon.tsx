@@ -13,10 +13,10 @@ const TeamsCommitteesAndCouncilsIcon = createIcon({
       />
     </>
   ),
+defaultProps: {
+    boxSize: "1em",
+  },
 });
 
-const TeamsCommitteesAndCouncilsIconPreview = () => {
-  return <TeamsCommitteesAndCouncilsIcon size="lg" boxSize="1em" />;
-};
 
-export default TeamsCommitteesAndCouncilsIconPreview;
+export default TeamsCommitteesAndCouncilsIcon;

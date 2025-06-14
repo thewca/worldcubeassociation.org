@@ -13,10 +13,10 @@ const ContactIcon = createIcon({
       />
     </>
   ),
+defaultProps: {
+    boxSize: "1em",
+  },
 });
 
-const ContactIconPreview = () => {
-  return <ContactIcon size="lg" boxSize="1em" />;
-};
 
-export default ContactIconPreview;
+export default ContactIcon;

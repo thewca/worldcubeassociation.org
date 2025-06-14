@@ -13,10 +13,10 @@ const MapIcon = createIcon({
       />
     </>
   ),
+defaultProps: {
+    boxSize: "1em",
+  },
 });
 
-const MapIconPreview = () => {
-  return <MapIcon size="lg" boxSize="1em" />;
-};
 
-export default MapIconPreview;
+export default MapIcon;

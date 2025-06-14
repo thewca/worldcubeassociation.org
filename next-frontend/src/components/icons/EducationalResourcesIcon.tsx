@@ -13,10 +13,10 @@ const EducationalResourcesIcon = createIcon({
       />
     </>
   ),
+defaultProps: {
+    boxSize: "1em",
+  },
 });
 
-const EducationalResourcesIconPreview = () => {
-  return <EducationalResourcesIcon size="lg" boxSize="1em" />;
-};
 
-export default EducationalResourcesIconPreview;
+export default EducationalResourcesIcon;

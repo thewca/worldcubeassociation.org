@@ -18,6 +18,9 @@ const _555bfIcon = createIcon({
       />
     </>
   ),
+defaultProps: {
+    boxSize: "1em",
+  },
 });
 
 export default _555bfIcon;

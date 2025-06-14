@@ -17,16 +17,11 @@ const CompRegoFullButOpen_orangeIcon = createIcon({
       />
     </>
   ),
+defaultProps: {
+    boxSize: "1em",
+    color: "orange.500"
+  },
 });
 
-const CompRegoFullButOpen_orangeIconPreview = () => {
-  return (
-    <CompRegoFullButOpen_orangeIcon
-      size="lg"
-      boxSize="1em"
-      color="orange.500"
-    />
-  );
-};
 
-export default CompRegoFullButOpen_orangeIconPreview;
+export default CompRegoFullButOpen_orangeIcon;

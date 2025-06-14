@@ -13,10 +13,10 @@ const LanguageIcon = createIcon({
       />
     </>
   ),
+defaultProps: {
+    boxSize: "1em",
+  },
 });
 
-const LanguageIconPreview = () => {
-  return <LanguageIcon size="lg" boxSize="1em" />;
-};
 
-export default LanguageIconPreview;
+export default LanguageIcon;

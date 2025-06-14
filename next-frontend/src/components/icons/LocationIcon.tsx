@@ -13,10 +13,10 @@ const LocationIcon = createIcon({
       />
     </>
   ),
+defaultProps: {
+    boxSize: "1em",
+  },
 });
 
-const LocationIconPreview = () => {
-  return <LocationIcon size="lg" boxSize="1em" />;
-};
 
-export default LocationIconPreview;
+export default LocationIcon;

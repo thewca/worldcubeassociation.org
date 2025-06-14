@@ -13,10 +13,12 @@ const MyResultsIcon = createIcon({
       />
     </>
   ),
+defaultProps: {
+    boxSize: "1em",
+  },
+  defaultProps: {
+    boxSize: "1em",
+  },
 });
-
-export const MyResultsIconPreview = () => {
-  return <MyResultsIcon size="lg" boxSize="1em" />;
-};
 
 export default MyResultsIcon;

@@ -13,10 +13,10 @@ const MediaSubmissionIcon = createIcon({
       />
     </>
   ),
+defaultProps: {
+    boxSize: "1em",
+  },
 });
 
-const MediaSubmissionIconPreview = () => {
-  return <MediaSubmissionIcon size="lg" boxSize="1em" />;
-};
 
-export default MediaSubmissionIconPreview;
+export default MediaSubmissionIcon;

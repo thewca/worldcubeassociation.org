@@ -13,10 +13,10 @@ const WcaDelegatesIcon = createIcon({
       />
     </>
   ),
+defaultProps: {
+    boxSize: "1em",
+  },
 });
 
-const WcaDelegatesIconPreview = () => {
-  return <WcaDelegatesIcon size="lg" boxSize="1em" />;
-};
 
-export default WcaDelegatesIconPreview;
+export default WcaDelegatesIcon;

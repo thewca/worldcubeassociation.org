@@ -153,6 +153,9 @@ const _666Icon = createIcon({
       />
     </>
   ),
+defaultProps: {
+    boxSize: "1em",
+  },
 });
 
 export default _666Icon;

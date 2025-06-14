@@ -24,6 +24,9 @@ const _333fmIcon = createIcon({
       <path d="m72.347 342.5h100v100h-100z" fill="currentColor" />
     </>
   ),
+defaultProps: {
+    boxSize: "1em",
+  },
 });
 
 export default _333fmIcon;

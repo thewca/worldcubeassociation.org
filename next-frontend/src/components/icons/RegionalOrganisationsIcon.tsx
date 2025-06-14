@@ -13,10 +13,10 @@ const RegionalOrganisationsIcon = createIcon({
       />
     </>
   ),
+defaultProps: {
+    boxSize: "1em",
+  },
 });
 
-const RegionalOrganisationsIconPreview = () => {
-  return <RegionalOrganisationsIcon size="lg" boxSize="1em" />;
-};
 
-export default RegionalOrganisationsIconPreview;
+export default RegionalOrganisationsIcon;

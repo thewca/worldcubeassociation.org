@@ -13,10 +13,10 @@ const FiltersIcon = createIcon({
       />
     </>
   ),
+defaultProps: {
+    boxSize: "1em",
+  },
 });
 
-const FiltersIconPreview = () => {
-  return <FiltersIcon size="lg" boxSize="1em" />;
-};
 
-export default FiltersIconPreview;
+export default FiltersIcon;

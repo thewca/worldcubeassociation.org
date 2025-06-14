@@ -13,10 +13,10 @@ const ScramblesIcon = createIcon({
       />
     </>
   ),
+defaultProps: {
+    boxSize: "1em",
+  },
 });
 
-const ScramblesIconPreview = () => {
-  return <ScramblesIcon size="lg" boxSize="1em" />;
-};
 
-export default ScramblesIconPreview;
+export default ScramblesIcon;

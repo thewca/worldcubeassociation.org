@@ -13,10 +13,10 @@ const RegulationsIcon = createIcon({
       />
     </>
   ),
+defaultProps: {
+    boxSize: "1em",
+  },
 });
 
-const RegulationsIconPreview = () => {
-  return <RegulationsIcon size="lg" boxSize="1em" />;
-};
 
-export default RegulationsIconPreview;
+export default RegulationsIcon;

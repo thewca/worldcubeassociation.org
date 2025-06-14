@@ -13,10 +13,10 @@ const WcaOfficersAndBoardIcon = createIcon({
       />
     </>
   ),
+defaultProps: {
+    boxSize: "1em",
+  },
 });
 
-const WcaOfficersAndBoardIconPreview = () => {
-  return <WcaOfficersAndBoardIcon size="lg" boxSize="1em" />;
-};
 
-export default WcaOfficersAndBoardIconPreview;
+export default WcaOfficersAndBoardIcon;

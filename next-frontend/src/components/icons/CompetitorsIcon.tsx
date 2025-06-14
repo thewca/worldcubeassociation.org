@@ -13,10 +13,9 @@ const CompetitorsIcon = createIcon({
       />
     </>
   ),
+defaultProps: {
+    boxSize: "1em",
+  },
 });
 
-const CompetitorsIconPreview = () => {
-  return <CompetitorsIcon size="lg" boxSize="1em" />;
-};
-
-export default CompetitorsIconPreview;
+export default CompetitorsIcon;

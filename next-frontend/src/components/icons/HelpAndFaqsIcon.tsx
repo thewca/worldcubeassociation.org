@@ -13,10 +13,10 @@ const HelpAndFaqsIcon = createIcon({
       />
     </>
   ),
+defaultProps: {
+    boxSize: "1em",
+  },
 });
 
-const HelpAndFaqsIconPreview = () => {
-  return <HelpAndFaqsIcon size="lg" boxSize="1em" />;
-};
 
-export default HelpAndFaqsIconPreview;
+export default HelpAndFaqsIcon;

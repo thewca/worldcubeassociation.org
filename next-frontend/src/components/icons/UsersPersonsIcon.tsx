@@ -13,10 +13,10 @@ const UsersPersonsIcon = createIcon({
       />
     </>
   ),
+defaultProps: {
+    boxSize: "1em",
+  },
 });
 
-const UsersPersonsIconPreview = () => {
-  return <UsersPersonsIcon size="lg" boxSize="1em" />;
-};
 
-export default UsersPersonsIconPreview;
+export default UsersPersonsIcon;

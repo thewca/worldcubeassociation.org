@@ -17,6 +17,9 @@ const _444bfIcon = createIcon({
       />
     </>
   ),
+defaultProps: {
+    boxSize: "1em",
+  },
 });
 
 export default _444bfIcon;

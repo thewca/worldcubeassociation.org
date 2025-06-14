@@ -25,6 +25,9 @@ const _222Icon = createIcon({
       />
     </>
   ),
+defaultProps: {
+    boxSize: "1em",
+  },
 });
 
 export default _222Icon;

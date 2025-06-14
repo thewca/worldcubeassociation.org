@@ -13,10 +13,10 @@ const YoutubeIcon = createIcon({
       />
     </>
   ),
+defaultProps: {
+    boxSize: "1em",
+  },
 });
 
-const YoutubeIconPreview = () => {
-  return <YoutubeIcon size="lg" boxSize="1em" />;
-};
 
-export default YoutubeIconPreview;
+export default YoutubeIcon;

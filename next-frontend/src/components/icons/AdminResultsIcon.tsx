@@ -13,10 +13,9 @@ const AdminResultsIcon = createIcon({
       />
     </>
   ),
+defaultProps: {
+    boxSize: "1em",
+  },
 });
 
-const AdminResultsIconPreview = () => {
-  return <AdminResultsIcon size="lg" boxSize="1em" />;
-};
-
-export default AdminResultsIconPreview;
+export default AdminResultsIcon;

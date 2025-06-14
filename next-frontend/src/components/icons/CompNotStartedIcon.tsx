@@ -13,10 +13,9 @@ const CompNotStartedIcon = createIcon({
       />
     </>
   ),
+defaultProps: {
+    boxSize: "1em",
+  },
 });
 
-const CompNotStartedIconPreview = () => {
-  return <CompNotStartedIcon size="lg" boxSize="1em" />;
-};
-
-export default CompNotStartedIconPreview;
+export default CompNotStartedIcon;

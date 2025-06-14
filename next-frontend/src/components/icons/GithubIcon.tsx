@@ -13,10 +13,10 @@ const GithubIcon = createIcon({
       />
     </>
   ),
+defaultProps: {
+    boxSize: "1em",
+  },
 });
 
-const GithubIconPreview = () => {
-  return <GithubIcon size="lg" boxSize="1em" />;
-};
 
-export default GithubIconPreview;
+export default GithubIcon;
