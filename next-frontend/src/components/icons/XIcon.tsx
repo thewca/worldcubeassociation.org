@@ -13,10 +13,9 @@ const XIcon = createIcon({
       />
     </>
   ),
+  defaultProps: {
+    boxSize: "1em",
+  },
 });
 
-const XIconPreview = () => {
-  return <XIcon size="lg" />;
-};
-
-export default XIconPreview;
+export default XIcon;

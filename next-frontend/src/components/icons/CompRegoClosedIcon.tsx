@@ -13,10 +13,9 @@ const CompRegoClosedIcon = createIcon({
       />
     </>
   ),
+  defaultProps: {
+    boxSize: "1em",
+  },
 });
 
-const CompRegoClosedIconPreview = () => {
-  return <CompRegoClosedIcon size="lg" />;
-};
-
-export default CompRegoClosedIconPreview;
+export default CompRegoClosedIcon;

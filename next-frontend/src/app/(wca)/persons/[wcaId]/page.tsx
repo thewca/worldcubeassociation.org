@@ -242,6 +242,7 @@ export default async function PersonOverview({
             wcaId={wcaId}
             gender={genderText}
             regionIso2={personDetails.person.country_iso2}
+            countryName={personDetails.person.country.name}
             competitions={personDetails.competition_count}
             completedSolves={1659}
           />

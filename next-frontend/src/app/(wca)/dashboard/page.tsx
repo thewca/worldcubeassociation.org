@@ -68,7 +68,7 @@ export default function Dashboard() {
           <SimpleGrid columns={{ base: 2, sm: 3, md: 4, lg: 6 }}>
             {Object.entries(iconMap).map(([iconName, IconComponent], index) => (
               <Box textAlign="center" key={index}>
-                <IconComponent w="6" h="6" />
+                <IconComponent fontSize="1.5em" />
                 <Text mt="2" fontSize="sm">
                   {iconName}
                 </Text>

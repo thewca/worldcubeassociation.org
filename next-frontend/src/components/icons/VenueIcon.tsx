@@ -13,10 +13,9 @@ const VenueIcon = createIcon({
       />
     </>
   ),
+  defaultProps: {
+    boxSize: "1em",
+  },
 });
 
-const VenueIconPreview = () => {
-  return <VenueIcon size="lg" />;
-};
-
-export default VenueIconPreview;
+export default VenueIcon;

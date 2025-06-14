@@ -13,10 +13,9 @@ const StatisticsIcon = createIcon({
       />
     </>
   ),
+  defaultProps: {
+    boxSize: "1em",
+  },
 });
 
-const StatisticsIconPreview = () => {
-  return <StatisticsIcon size="lg" />;
-};
-
-export default StatisticsIconPreview;
+export default StatisticsIcon;

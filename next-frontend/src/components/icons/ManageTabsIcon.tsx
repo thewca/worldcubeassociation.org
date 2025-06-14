@@ -13,10 +13,9 @@ const ManageTabsIcon = createIcon({
       />
     </>
   ),
+  defaultProps: {
+    boxSize: "1em",
+  },
 });
 
-const ManageTabsIconPreview = () => {
-  return <ManageTabsIcon size="lg" />;
-};
-
-export default ManageTabsIconPreview;
+export default ManageTabsIcon;

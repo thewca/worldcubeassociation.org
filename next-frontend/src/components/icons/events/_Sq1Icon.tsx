@@ -13,6 +13,9 @@ const _Sq1Icon = createIcon({
       />
     </>
   ),
+  defaultProps: {
+    boxSize: "1em",
+  },
 });
 
 export default _Sq1Icon;

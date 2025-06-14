@@ -13,10 +13,9 @@ const EditIcon = createIcon({
       />
     </>
   ),
+  defaultProps: {
+    boxSize: "1em",
+  },
 });
 
-const EditIconPreview = () => {
-  return <EditIcon size="lg" />;
-};
-
-export default EditIconPreview;
+export default EditIcon;

@@ -17,10 +17,9 @@ const ResultsExportIcon = createIcon({
       />
     </>
   ),
+  defaultProps: {
+    boxSize: "1em",
+  },
 });
 
-const ResultsExportIconPreview = () => {
-  return <ResultsExportIcon size="lg" />;
-};
-
-export default ResultsExportIconPreview;
+export default ResultsExportIcon;

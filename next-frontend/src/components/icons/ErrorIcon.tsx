@@ -13,10 +13,9 @@ const ErrorIcon = createIcon({
       />
     </>
   ),
+  defaultProps: {
+    boxSize: "1em",
+  },
 });
 
-const ErrorIconPreview = () => {
-  return <ErrorIcon size="lg" />;
-};
-
-export default ErrorIconPreview;
+export default ErrorIcon;

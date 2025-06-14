@@ -24,6 +24,9 @@ const _333ftIcon = createIcon({
       <path d="m199.255 252.178h54.981v54.982h-54.981z" fill="currentColor" />
     </>
   ),
+  defaultProps: {
+    boxSize: "1em",
+  },
 });
 
 export default _333ftIcon;

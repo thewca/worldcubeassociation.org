@@ -13,10 +13,9 @@ const MultimediaIcon = createIcon({
       />
     </>
   ),
+  defaultProps: {
+    boxSize: "1em",
+  },
 });
 
-const MultimediaIconPreview = () => {
-  return <MultimediaIcon size="lg" />;
-};
-
-export default MultimediaIconPreview;
+export default MultimediaIcon;

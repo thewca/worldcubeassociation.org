@@ -45,6 +45,9 @@ const _PyramIcon = createIcon({
       />
     </>
   ),
+  defaultProps: {
+    boxSize: "1em",
+  },
 });
 
 export default _PyramIcon;

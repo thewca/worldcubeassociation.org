@@ -17,10 +17,9 @@ const MyCompsIcon = createIcon({
       />
     </>
   ),
+  defaultProps: {
+    boxSize: "1em",
+  },
 });
 
-const MyCompsIconPreview = () => {
-  return <MyCompsIcon size="lg" />;
-};
-
-export default MyCompsIconPreview;
+export default MyCompsIcon;

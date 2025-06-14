@@ -13,10 +13,10 @@ const CompRegoClosed_redIcon = createIcon({
       />
     </>
   ),
+  defaultProps: {
+    boxSize: "1em",
+    color: "red.500",
+  },
 });
 
-const CompRegoClosed_redIconPreview = () => {
-  return <CompRegoClosed_redIcon size="lg" color="red.500" />;
-};
-
-export default CompRegoClosed_redIconPreview;
+export default CompRegoClosed_redIcon;

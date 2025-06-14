@@ -13,10 +13,9 @@ const RecordsIcon = createIcon({
       />
     </>
   ),
+  defaultProps: {
+    boxSize: "1em",
+  },
 });
-
-export const RecordsIconPreview = () => {
-  return <RecordsIcon size="lg" />;
-};
 
 export default RecordsIcon;

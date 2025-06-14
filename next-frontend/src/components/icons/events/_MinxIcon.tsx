@@ -53,6 +53,9 @@ const _MinxIcon = createIcon({
       />
     </>
   ),
+  defaultProps: {
+    boxSize: "1em",
+  },
 });
 
 export default _MinxIcon;

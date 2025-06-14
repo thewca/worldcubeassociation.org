@@ -205,6 +205,9 @@ const _777Icon = createIcon({
       />
     </>
   ),
+  defaultProps: {
+    boxSize: "1em",
+  },
 });
 
 export default _777Icon;
