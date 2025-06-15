@@ -131,6 +131,14 @@ $(() => {
       },
     });
 
+    // Manually trigger change to original textarea so are-you-sure can be utilized
+    editor.codemirror.on('change', () => {
+      this.value = editor.value();
+      $(this).trigger('change');
+    });
+    // So edited value does not persist on refresh
+    editor.value(this.defaultValue);
+
     // Trick to fix tab and shift+tab focus from:
     //  https://github.com/sparksuite/simplemde-markdown-editor/issues/122#issuecomment-176329907
     editor.codemirror.options.extraKeys.Tab = false;

@@ -1,4 +1,6 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, {
+  useCallback, useMemo, useState, useEffect,
+} from 'react';
 import {
   Button, Checkbox, Form, FormField, FormGroup, Header, Message,
 } from 'semantic-ui-react';
@@ -25,6 +27,10 @@ export default function PostForm({
   const [postURL, setPostURL] = useInputState(post?.url ?? null);
   const [postId, setPostId] = useInputState(post?.id ?? null);
   const [unstickAt, setUnstickAt] = useState(post?.unstick_at ?? null);
+
+  const unsavedChanges = useMemo(() => (
+    !_.isEqual(formTitle, formBody, formTags, formIsStickied, postURL, postId, unstickAt)
+  ), [formTitle, formBody, formTags, formIsStickied, postURL, postId, unstickAt]);
 
   const tagOptions = useMemo(
     () => allTags.map((tag) => ({ value: tag, text: tag, key: tag })),
@@ -82,6 +88,20 @@ export default function PostForm({
     unstickAt,
     postId,
   ]);
+
+  const onUnload = useCallback((e) => {
+    if (unsavedChanges) {
+      return e.preventDefault();
+    }
+    return null;
+  }, [unsavedChanges]);
+
+  useEffect(() => {
+    window.addEventListener('beforeunload', onUnload);
+    return () => {
+      window.removeEventListener('beforeunload', onUnload);
+    };
+  }, [onUnload]);
 
   return (
     <>
