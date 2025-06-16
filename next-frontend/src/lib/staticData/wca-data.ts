@@ -50,6 +50,14 @@ type Event = {
   formatIds: string[];
 };
 
+type RoundType = {
+  id: string;
+  rank: number;
+  name: string;
+  cellName: string;
+  final: boolean;
+};
+
 type CamelizedKeys<T> = {
   [K in keyof T as K extends string ? CamelCase<K> : K]: T[K];
 };
@@ -153,4 +161,17 @@ function extendEvents(rawEvent: Event) {
       return this.formats()[0];
     },
   };
+}
+
+// ----- ROUND TYPES -----
+
+const roundTypeData = loadStaticData(roundTypesDataRaw);
+
+export const roundTypes = {
+  byId: _.mapValues(_.keyBy(roundTypeData, "id"), extendRoundTypes),
+};
+
+function extendRoundTypes(rawFormat: RoundType) {
+  // Simple identity right now but we may want to add cool stuff in the future
+  return rawFormat;
 }
