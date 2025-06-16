@@ -20,9 +20,9 @@ const eslintConfig = [
       "@stylistic": stylistic,
     },
   },
-  globalIgnores(["./build-translations.js"]),
   eslintPluginPrettierRecommended,
   ...pluginQuery.configs["flat/recommended"],
+  globalIgnores(["src/types","./build-translations.js"]),
 ];
 
 export default eslintConfig;
