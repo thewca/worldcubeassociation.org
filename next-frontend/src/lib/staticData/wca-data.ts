@@ -11,13 +11,13 @@ type Event = {
   rank: number;
   format: string;
   name: string;
-  canChangeTimeLimit: boolean;
-  canHaveCutoff: boolean;
-  isTimedEvent: boolean;
-  isFewestMoves: boolean;
-  isMultipleBlindfolded: boolean;
-  isOfficial: boolean;
-  formatIds: string[];
+  can_change_time_limit: boolean;
+  can_have_cutoff: boolean;
+  is_timed_event: boolean;
+  is_fewest_moves: boolean;
+  is_multiple_blindfolded: boolean;
+  is_official: boolean;
+  format_ids: string[];
 };
 
 // ----- COUNTRIES -----
@@ -57,7 +57,7 @@ export const formats = {
 // ----- EVENTS -----
 
 export const events = {
-  official: _.map(_.filter(eventsDataRaw, "isOfficial"), extendEvents),
+  official: eventsDataRaw.map(extendEvents).filter((e) => e.is_official),
   byId: _.mapValues(_.keyBy(eventsDataRaw, "id"), extendEvents),
 };
 
@@ -68,7 +68,7 @@ function extendEvents(rawEvent: Event) {
     ...rawEvent,
     name: (t: (path: string) => string) => t(`events.${rawEvent.id}`),
     formats() {
-      return this.formatIds.map((formatId) => formats.byId[formatId]);
+      return this.format_ids.map((formatId: string) => formats.byId[formatId]);
     },
     recommendedFormat() {
       return this.formats()[0];
