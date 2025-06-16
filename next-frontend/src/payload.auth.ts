@@ -3,7 +3,7 @@ import { PayloadAuthjsUser, withPayload } from "payload-authjs";
 import payloadConfig from "@payload-config";
 import { payloadAuthConfig } from "@/auth.config";
 
-import type { User as PayloadUser } from "@/payload-types";
+import type { User as PayloadUser } from "@/types/payload";
 
 declare module "@auth/core/types" {
   // eslint-disable-next-line @typescript-eslint/no-empty-object-type
