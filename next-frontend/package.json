@@ -19,7 +19,7 @@
     "test:ui": "vitest --ui"
   },
   "dependencies": {
-    "@aws-sdk/credential-providers": "^3.823.0",
+    "@aws-sdk/credential-providers": "^3.828.0",
     "@chakra-ui/react": "^3.21.0",
     "@emotion/react": "^11.14.0",
     "@payloadcms/db-mongodb": "^3.41.0",
