@@ -8,7 +8,8 @@ export type StaffColor =
   | "green"
   | "black"
   | "red"
-  | "orange";
+  | "orange"
+  | "grey";
 
 interface RoleBadgeProps {
   teamRole: string;

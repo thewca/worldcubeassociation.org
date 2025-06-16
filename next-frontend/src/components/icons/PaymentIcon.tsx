@@ -13,10 +13,9 @@ const PaymentIcon = createIcon({
       />
     </>
   ),
+  defaultProps: {
+    boxSize: "1em",
+  },
 });
 
-const PaymentIconPreview = () => {
-  return <PaymentIcon size="lg" />;
-};
-
-export default PaymentIconPreview;
+export default PaymentIcon;

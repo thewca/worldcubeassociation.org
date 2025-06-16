@@ -18,7 +18,7 @@ import MyResultsIcon from "@/components/icons/MyResultsIcon";
 import RegulationsHistoryIcon from "@/components/icons/RegulationsHistoryIcon";
 import NationalChampionshipIcon from "@/components/icons/NationalChampionshipIcon";
 import { LuStar, LuCircleHelp } from "react-icons/lu";
-import { countryCodeMapping } from "@/components/CountryMap";
+import Flag from "react-world-flags";
 
 interface ProfileData {
   name: string;
@@ -79,7 +79,17 @@ const ProfileCard: React.FC<ProfileData> = ({
         <DataListRoot variant="profileStat">
           <DataListItem label="WCA ID" value={wcaId} />
           {gender !== "o" && <DataListItem label="Gender" value={gender} />}
-          <DataListItem label="Region" value={countryCodeMapping[regionIso2]} />
+          <DataListItem
+            label="Region"
+            value={
+              <>
+                <Flex gap="1">
+                  <Flag code={regionIso2} fallback="" height="20" width="28" />
+                  Representing {regionIso2}
+                </Flex>
+              </>
+            }
+          />
           <DataListItem label="Competitions" value={competitions} />
           <DataListItem label="Completed Solves" value={completedSolves} />
         </DataListRoot>
