@@ -27,7 +27,6 @@ interface ProfileData {
   wcaId: string;
   gender: string;
   regionIso2: string;
-  countryName: string;
   competitions: number;
   completedSolves: number;
 }
@@ -39,7 +38,6 @@ const ProfileCard: React.FC<ProfileData> = ({
   wcaId,
   gender,
   regionIso2,
-  countryName,
   competitions,
   completedSolves,
 }) => {
@@ -87,7 +85,7 @@ const ProfileCard: React.FC<ProfileData> = ({
               <>
                 <Flex gap="1">
                   <Flag code={regionIso2} fallback="" height="20" width="28" />
-                  {countryName}
+                  Representing {regionIso2}
                 </Flex>
               </>
             }
