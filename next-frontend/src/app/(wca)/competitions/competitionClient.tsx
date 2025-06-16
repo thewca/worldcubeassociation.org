@@ -34,8 +34,8 @@ import CompRegoCloseDateIcon from "@/components/icons/CompRegoCloseDateIcon";
 import EventIcon from "@/components/EventIcon";
 import Flag from "react-world-flags";
 
-import type { components } from "@/lib/wca/wcaSchema";
 import { countries } from "@/lib/staticData/wca-data";
+import type { components } from "@/types/openapi";
 
 type CompetitionIndex = components["schemas"]["CompetitionIndex"];
 
