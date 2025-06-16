@@ -10,13 +10,14 @@
     "check:types": "tsc --noEmit",
     "build": "next build",
     "start": "next start",
-    "build:types": "openapi-typescript public/wcaAPI.yaml -o src/lib/wca/wcaSchema.ts",
-    "chakra:types": "chakra typegen ./src/theme.ts",
-    "payload:types": "payload generate:types",
+    "types:openapi": "openapi-typescript public/wcaAPI.yaml -o src/types/openapi.ts",
+    "types:chakra": "chakra typegen ./src/theme.ts --outdir src/types/chakra --strict",
+    "types:payload": "payload generate:types",
     "lint": "next lint",
     "lint:fix": "next lint --fix",
     "test": "vitest",
-    "test:ui": "vitest --ui"
+    "test:ui": "vitest --ui",
+    "postinstall": "chakra typegen ./src/theme.ts"
   },
   "dependencies": {
     "@aws-sdk/credential-providers": "^3.828.0",

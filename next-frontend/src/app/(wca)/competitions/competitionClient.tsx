@@ -35,7 +35,7 @@ import { countryCodeMapping } from "@/components/CountryMap";
 import EventIcon from "@/components/EventIcon";
 import Flag from "react-world-flags";
 
-import type { components } from "@/lib/wca/wcaSchema";
+import type { components } from "@/types/openapi";
 
 type CompetitionIndex = components["schemas"]["CompetitionIndex"];
 

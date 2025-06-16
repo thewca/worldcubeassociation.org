@@ -1,7 +1,7 @@
 "use client";
 
 import React, { createContext, useContext, useMemo } from "react";
-import { components } from "@/lib/wca/wcaSchema";
+import { components } from "@/types/openapi";
 import { useQuery } from "@tanstack/react-query";
 import useAPI from "@/lib/wca/useAPI";
 import { useSession } from "next-auth/react";
