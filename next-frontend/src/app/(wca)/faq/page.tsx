@@ -18,10 +18,13 @@ export default async function FAQ() {
   const faqCategoriesResult = await payload.find({
     collection: "faqCategories",
     limit: 0,
-    depth: 1,
   });
 
   const faqCategories = faqCategoriesResult.docs;
+
+  if (faqCategories.length === 0) {
+    return <Heading> No FAQ categories found, add some!</Heading>;
+  }
 
   return (
     <Container>
