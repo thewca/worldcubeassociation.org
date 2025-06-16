@@ -18,7 +18,6 @@ export const markdownConvertedField = (
     admin: {
       hidden: true,
     },
-    virtual: true,
     hooks: {
       afterRead: [
         ({ siblingData, siblingFields }) => {
@@ -36,6 +35,13 @@ export const markdownConvertedField = (
               ) as RichTextField,
             }),
           });
+        },
+      ],
+      beforeChange: [
+        ({ siblingData }) => {
+          // Ensure that the markdown field is not saved in the database
+          delete siblingData[convertedName];
+          return null;
         },
       ],
     },
