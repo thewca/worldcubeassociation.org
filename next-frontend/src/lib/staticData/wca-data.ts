@@ -66,13 +66,10 @@ export const WCA_EVENT_IDS = Object.values(events.official).map((e) => e.id);
 function extendEvents(rawEvent: Event) {
   return {
     ...rawEvent,
-    name: (t: (path: string) => string) => t(`events.${rawEvent.id}`),
-    formats() {
-      return this.format_ids.map((formatId: string) => formats.byId[formatId]);
-    },
-    recommendedFormat() {
-      return this.formats()[0];
-    },
+    formats: rawEvent.format_ids.map(
+      (formatId: string) => formats.byId[formatId],
+    ),
+    recommendedFormat: formats.byId[rawEvent.format_ids[0]],
   };
 }
 
