@@ -30,7 +30,7 @@ import NationalChampionshipIcon from "@/components/icons/NationalChampionshipIco
 import EventIcon from "@/components/EventIcon";
 import CountryMap from "@/components/CountryMap";
 
-import type { components } from "@/lib/wca/wcaSchema";
+import type { components } from "@/types/openapi";
 
 // Raw competition type from WCA API
 type CompetitionIndex = components["schemas"]["CompetitionIndex"];

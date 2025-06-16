@@ -5,6 +5,14 @@ const nextConfig: NextConfig = {
   experimental: {
     optimizePackageImports: ["@chakra-ui/react"],
   },
+  logging: {
+    fetches: {
+      fullUrl: true,
+    },
+    incomingRequests: {
+      ignore: [],
+    },
+  },
   output: "standalone",
 };
 

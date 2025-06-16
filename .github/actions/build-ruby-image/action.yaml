@@ -23,7 +23,7 @@ inputs:
 outputs:
   imageid:
     description: 'The Docker image id build'
-    value: ${{ steps.build-image.outputs.imageid }}
+    value: ${{ steps.build-ruby-image.outputs.imageid }}
 runs:
   using: 'composite'
   steps:
@@ -37,9 +37,9 @@ runs:
           echo "SHAKAPACKER_ASSET_HOST=https://assets.worldcubeassociation.org" >> $GITHUB_ENV
           echo "WCA_LIVE_SITE=true" >> $GITHUB_ENV
         fi
-    - name: Build and push Docker image
+    - name: Build and push Ruby Docker image
       uses: docker/build-push-action@v6
-      id: build-image
+      id: build-ruby-image
       with:
         push: true
         load: ${{ inputs.load }}

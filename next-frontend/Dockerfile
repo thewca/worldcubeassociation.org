@@ -33,7 +33,7 @@ COPY . .
 ENV NEXT_TELEMETRY_DISABLED=1
 RUN corepack enable
 # Create the types and build
-RUN yarn run chakra:types && NODE_ENV=production IS_COMPILING_ASSETS=1 NEXT_PUBLIC_WCA_FRONTEND_API_URL='https://www.worldcubeassociation.org/api/v0/' yarn run build
+RUN NODE_ENV=production IS_COMPILING_ASSETS=1 NEXT_PUBLIC_WCA_FRONTEND_API_URL='https://www.worldcubeassociation.org/api/v0/' yarn run build
 
 # Production image, copy all the files and run next
 FROM base AS runner
@@ -64,8 +64,11 @@ USER nextjs
 EXPOSE 3000
 
 ENV PORT=3000
+ENV NEW_RELIC_APP_NAME='next-js-production'
+ENV NEW_RELIC_LOG='stdout'
 
 # server.js is created by next build from the standalone output
 # https://nextjs.org/docs/pages/api-reference/config/next-config-js/output
 ENV HOSTNAME="0.0.0.0"
+ENV NODE_OPTIONS='-r newrelic'
 ENTRYPOINT ["/app/docker-entrypoint.sh"]

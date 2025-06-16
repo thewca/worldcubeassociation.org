@@ -39,5 +39,6 @@
   ],
   "exclude": [
     "node_modules"
-  ]
+  ],
+  "types": ["vitest/globals"]
 }
