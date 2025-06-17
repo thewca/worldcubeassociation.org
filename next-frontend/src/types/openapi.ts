@@ -42,6 +42,44 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/competitions/{competitionId}/events": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get competition events in WCIF v0 format */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    competitionId: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Successful response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["WcifEvent"][];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/competitions/{competitionId}/registrations": {
         parameters: {
             query?: never;
@@ -556,6 +594,74 @@ export interface components {
             user_id: number;
             event_ids: string[];
         };
+        WcifEvent: {
+            /** @example 333 */
+            id: string;
+            rounds: components["schemas"]["WcifRound"][];
+            competitorLimit?: number;
+            qualification?: components["schemas"]["WcifQualification"];
+            extensions: unknown[];
+        };
+        WcifRound: {
+            /** @example 333-r1 */
+            id: string;
+            /** @enum {string} */
+            format: "1" | "2" | "3" | "a" | "m";
+            timeLimit?: components["schemas"]["WcifTimeLimit"];
+            cutoff?: components["schemas"]["WcifCutoff"];
+            advancementCondition?: components["schemas"]["WcifAdvancementCondition"];
+            results: components["schemas"]["WcifResult"][];
+            scrambleSetCount: number;
+            scrambleSets: components["schemas"]["WcifScrambleSet"][];
+            extensions: unknown[];
+        };
+        WcifQualification: {
+            /** Format: date */
+            whenDate: string;
+            /** @enum {string} */
+            type: "attemptResult" | "ranking" | "anyResult";
+            /** @enum {string} */
+            resultType: "single" | "average";
+            level?: components["schemas"]["WcifAttemptResult"] | components["schemas"]["WcifRanking"];
+        };
+        WcifTimeLimit: {
+            /** @example 18000 */
+            centiseconds: number;
+            cumulativeRoundIds: string[];
+        };
+        WcifCutoff: {
+            /** @example 2 */
+            numberOfAttempts: number;
+            attemptResult: components["schemas"]["WcifAttemptResult"];
+        };
+        WcifAdvancementCondition: {
+            /** @enum {string} */
+            type: "ranking" | "percent" | "attemptResult";
+            level: components["schemas"]["WcifRanking"] | components["schemas"]["WcifPercent"] | components["schemas"]["WcifAttemptResult"];
+        };
+        WcifResult: {
+            /** @example 1 */
+            personId: number;
+            /** @example 10 */
+            ranking?: number;
+            attempts: components["schemas"]["WcifAttempt"][];
+            best: components["schemas"]["WcifAttemptResult"];
+            average: components["schemas"]["WcifAttemptResult"];
+        };
+        WcifScrambleSet: {
+            /** @example 1 */
+            id: number;
+            scrambles: components["schemas"]["WcifScramble"][];
+            extraScrambles: components["schemas"]["WcifScramble"][];
+        };
+        WcifAttemptResult: number;
+        WcifAttempt: {
+            result: components["schemas"]["WcifAttemptResult"];
+            reconstruction?: string;
+        };
+        WcifRanking: number;
+        WcifPercent: number;
+        WcifScramble: string;
     };
     responses: never;
     parameters: never;
