@@ -17,13 +17,7 @@ export function CallToActionBlock({
   buttons,
 }: CallToActionBlockProps) {
   return (
-    <Box
-      bgGradient="linear(to-r, blue.50, blue.100)"
-      borderRadius="2xl"
-      p={{ base: 6, md: 10 }}
-      shadow="md"
-      width="full"
-    >
+    <Box borderRadius="2xl" p={{ base: 6, md: 10 }} shadow="md" width="full">
       <VStack align="start">
         <Box color="gray.700" fontSize="lg">
           <MarkdownProse content={content} />

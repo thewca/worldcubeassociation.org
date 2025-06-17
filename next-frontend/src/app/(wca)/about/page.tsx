@@ -4,6 +4,9 @@ import { getPayload } from "payload";
 import config from "@payload-config";
 import { Container, Heading, VStack } from "@chakra-ui/react";
 import { CallToActionBlock } from "@/components/about/CallToAction";
+import Quote from "@/components/about/Quote";
+import AboutUsItem from "@/components/about/AboutUsItem";
+import { Media } from "@/types/payload";
 
 export default async function About() {
   const payload = await getPayload({ config });
@@ -30,6 +33,25 @@ export default async function About() {
                   buttons={item.buttons}
                 />
               );
+            case "quote": {
+              return (
+                <Quote
+                  key={item.id}
+                  content={item.contentMarkdown!}
+                  author={item.quotedPerson}
+                />
+              );
+            }
+            case "simpleItem": {
+              return (
+                <AboutUsItem
+                  key={item.id}
+                  title={item.title}
+                  contentMarkdown={item.contentMarkdown!}
+                  image={item.image! as Media}
+                />
+              );
+            }
           }
         })}
       </VStack>
