@@ -1,13 +1,29 @@
 import React from "react";
-import { Card, Table } from "@chakra-ui/react";
+import { Card, Table, Text } from "@chakra-ui/react";
+import { getEvents } from "@/lib/wca/competitions/wcif/getEvents";
 
-export default function TabEvents({
+interface TabEventsProps {
+  competitionId: string;
+  forceQualifications?: boolean;
+}
+
+export default async function TabEvents({
   competitionId,
   forceQualifications = false,
-}) {
-  const events = [];
+}: TabEventsProps) {
+  const { data: events, error } = await getEvents(competitionId);
 
-  const showCutoff = events.some((event) => Boolean(event.cutoff));
+  if (error) {
+    return <Text>Error fetching competition events</Text>;
+  }
+
+  if (!events) {
+    return <Text>Competition does not exist</Text>;
+  }
+
+  const showCutoff = events.some((event) =>
+    event.rounds.some((round) => Boolean(round.cutoff)),
+  );
 
   const showQualifications =
     forceQualifications || events.some((event) => Boolean(event.qualification));
