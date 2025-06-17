@@ -1,6 +1,11 @@
 import React from "react";
 import { Card, Table, Text } from "@chakra-ui/react";
 import { getEvents } from "@/lib/wca/competitions/wcif/getEvents";
+import {
+  cutoffToString,
+  getRoundTypeId,
+  timeLimitToString,
+} from "@/lib/wca/wcif/rounds";
 
 interface TabEventsProps {
   competitionId: string;
@@ -54,13 +59,25 @@ export default async function TabEvents({
                       {event.id}
                     </Table.Cell>
                   )}
-                  <Table.Cell>Round Type</Table.Cell>
+                  <Table.Cell>
+                    {getRoundTypeId(
+                      idx + 1,
+                      event.rounds.length,
+                      Boolean(round.cutoff),
+                    )}
+                  </Table.Cell>
                   <Table.Cell>
                     {round.cutoff && `${round.cutoff.numberOfAttempts} / `}
                     {round.format}
                   </Table.Cell>
-                  <Table.Cell>Time Limit</Table.Cell>
-                  {showCutoff && <Table.Cell>Cutoff</Table.Cell>}
+                  <Table.Cell>
+                    {timeLimitToString(round.timeLimit, event.id, events)}
+                  </Table.Cell>
+                  {showCutoff && (
+                    <Table.Cell>
+                      {round.cutoff && cutoffToString(round.cutoff, event.id)}
+                    </Table.Cell>
+                  )}
                   <Table.Cell>
                     {round.advancementCondition && "Advancement condition yay!"}
                   </Table.Cell>
