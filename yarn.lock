@@ -2466,6 +2466,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@playwright/test@npm:1.52.0":
+  version: 1.52.0
+  resolution: "@playwright/test@npm:1.52.0"
+  dependencies:
+    playwright: "npm:1.52.0"
+  bin:
+    playwright: cli.js
+  checksum: 10c0/1c428b421593eb4f79b7c99783a389c3ab3526c9051ec772749f4fca61414dfa9f2344eba846faac5f238084aa96c836364a91d81d3034ac54924f239a93e247
+  languageName: node
+  linkType: hard
+
 "@pmmmwh/react-refresh-webpack-plugin@npm:^0.6.0":
   version: 0.6.0
   resolution: "@pmmmwh/react-refresh-webpack-plugin@npm:0.6.0"
@@ -2819,6 +2830,15 @@ __metadata:
   version: 18.0.0
   resolution: "@types/node@npm:18.0.0"
   checksum: 10c0/1481061b322bc72544944cd038cc1b037b013336fb63775638d48231a3e9ddf5f99af6f8719b970ccfff60701d86afd0cecfc27cd7ccf78c845f53079dc78ed4
+  languageName: node
+  linkType: hard
+
+"@types/node@npm:^24.0.3":
+  version: 24.0.3
+  resolution: "@types/node@npm:24.0.3"
+  dependencies:
+    undici-types: "npm:~7.8.0"
+  checksum: 10c0/9c3c4e87600d1cf11e291c2fd4bfd806a615455463c30a0ef6dc9c801b3423344d9b82b8084e3ccabce485a7421ebb61a66e9676181bd7d9aea4759998a120d5
   languageName: node
   linkType: hard
 
@@ -8270,7 +8290,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"playwright@npm:^1.52.0":
+"playwright@npm:1.52.0":
   version: 1.52.0
   resolution: "playwright@npm:1.52.0"
   dependencies:
@@ -10130,6 +10150,7 @@ __metadata:
     "@fullcalendar/react": "npm:^6.1.17"
     "@fullcalendar/timegrid": "npm:^6.1.17"
     "@hello-pangea/dnd": "npm:^18.0.1"
+    "@playwright/test": "npm:1.52.0"
     "@pmmmwh/react-refresh-webpack-plugin": "npm:^0.6.0"
     "@rails/actioncable": "npm:^8.0.200"
     "@rails/ujs": "npm:^7.1.501"
@@ -10137,6 +10158,7 @@ __metadata:
     "@stripe/stripe-js": "npm:^7.3.1"
     "@tanstack/react-query": "npm:^5.80.7"
     "@tanstack/react-table": "npm:^8.21.3"
+    "@types/node": "npm:^24.0.3"
     "@wca/helpers": "npm:^1.1.5"
     autonumeric: "npm:^4.10.8"
     autoprefixer: "npm:^10.4.21"
@@ -10178,7 +10200,6 @@ __metadata:
     make-plural: "npm:^7.4.0"
     mini-css-extract-plugin: "npm:^2.9.2"
     path-complete-extname: "npm:^1.0.0"
-    playwright: "npm:^1.52.0"
     pnp-webpack-plugin: "npm:^1.7.0"
     postcss: "npm:^8.5.5"
     postcss-flexbugs-fixes: "npm:^5.0.2"
@@ -11426,6 +11447,13 @@ __metadata:
     has-symbols: "npm:^1.1.0"
     which-boxed-primitive: "npm:^1.1.1"
   checksum: 10c0/7dbd35ab02b0e05fe07136c72cb9355091242455473ec15057c11430129bab38b7b3624019b8778d02a881c13de44d63cd02d122ee782fb519e1de7775b5b982
+  languageName: node
+  linkType: hard
+
+"undici-types@npm:~7.8.0":
+  version: 7.8.0
+  resolution: "undici-types@npm:7.8.0"
+  checksum: 10c0/9d9d246d1dc32f318d46116efe3cfca5a72d4f16828febc1918d94e58f6ffcf39c158aa28bf5b4fc52f410446bc7858f35151367bd7a49f21746cab6497b709b
   languageName: node
   linkType: hard
 
