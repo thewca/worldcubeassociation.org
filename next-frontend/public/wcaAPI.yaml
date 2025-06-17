@@ -619,6 +619,8 @@ components:
         number_of_bookmarks:
           type: integer
           example: 123
+        uses_qualification?:
+          type: boolean
         registration_full?:
           type: boolean
           example: true

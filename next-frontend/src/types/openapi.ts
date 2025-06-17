@@ -466,6 +466,7 @@ export interface components {
             main_event_id: string;
             /** @example 123 */
             number_of_bookmarks: number;
+            "uses_qualification?": boolean;
             /** @example true */
             "registration_full?": boolean;
             delegates: components["schemas"]["Person"][];
