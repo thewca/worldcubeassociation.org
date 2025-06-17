@@ -415,6 +415,7 @@ Rails.application.routes.draw do
         get '/competitors' => 'competitions#competitors'
         get '/qualifications' => 'competitions#qualifications'
         get '/registrations' => 'competitions#registrations'
+        get '/events' => 'competitions#events'
         get '/schedule' => 'competitions#schedule'
         get '/scrambles' => 'competitions#scrambles', as: :scrambles
         get '/scrambles/:event_id' => 'competitions#event_scrambles', as: :event_scrambles

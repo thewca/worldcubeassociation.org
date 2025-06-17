@@ -49,6 +49,11 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
     render json: competition.qualification_wcif
   end
 
+  def events
+    competition = competition_from_params
+    render json: competition.events_wcif
+  end
+
   def schedule
     competition = competition_from_params
     render json: competition.schedule_wcif

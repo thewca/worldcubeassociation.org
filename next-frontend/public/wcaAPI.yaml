@@ -27,6 +27,24 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CompetitionInfo'
+  /competitions/{competitionId}/events:
+    get:
+      summary: Get competition events in WCIF v0 format
+      parameters:
+        - name: competitionId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/WcifEvent'
   /competitions/{competitionId}/registrations:
     get:
       summary: Get competition registrations
@@ -875,3 +893,185 @@ components:
         - competition_id
         - user_id
         - event_ids
+
+    WcifEvent:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '333'
+        rounds:
+          type: array
+          items:
+            $ref: '#/components/schemas/WcifRound'
+        competitorLimit:
+          type: integer
+        qualification:
+          $ref: '#/components/schemas/WcifQualification'
+        extensions:
+          type: array
+      required:
+        - id
+        - rounds
+        - extensions
+
+    WcifRound:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "333-r1"
+        format:
+          type: string
+          enum: [ '1', '2', '3', 'a', 'm' ]
+        timeLimit:
+          $ref: '#/components/schemas/WcifTimeLimit'
+        cutoff:
+          $ref: '#/components/schemas/WcifCutoff'
+        advancementCondition:
+          $ref: '#/components/schemas/WcifAdvancementCondition'
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/WcifResult'
+        scrambleSetCount:
+          type: integer
+        scrambleSets:
+          type: array
+          items:
+            $ref: '#/components/schemas/WcifScrambleSet'
+        extensions:
+          type: array
+      required:
+        - id
+        - format
+        - results
+        - scrambleSetCount
+        - scrambleSets
+        - extensions
+
+    WcifQualification:
+      type: object
+      properties:
+        whenDate:
+          type: string
+          format: date
+        type:
+          type: string
+          enum: [ 'attemptResult', 'ranking', 'anyResult' ]
+        resultType:
+          type: string
+          enum: [ 'single', 'average' ]
+        level:
+          oneOf:
+            - $ref: '#/components/schemas/WcifAttemptResult'
+            - $ref: '#/components/schemas/WcifRanking'
+      required:
+        - whenDate
+        - type
+        - resultType
+
+    WcifTimeLimit:
+      type: object
+      properties:
+        centiseconds:
+          type: integer
+          example: 18000
+        cumulativeRoundIds:
+          type: array
+          items:
+            type: string
+      required:
+        - centiseconds
+        - cumulativeRoundIds
+
+    WcifCutoff:
+      type: object
+      properties:
+        numberOfAttempts:
+          type: integer
+          example: 2
+        attemptResult:
+          $ref: '#/components/schemas/WcifAttemptResult'
+      required:
+        - numberOfAttempts
+        - attemptResult
+
+    WcifAdvancementCondition:
+      type: object
+      properties:
+        type:
+          type: string
+          enum: [ 'ranking', 'percent', 'attemptResult' ]
+        level:
+          oneOf:
+            - $ref: '#/components/schemas/WcifRanking'
+            - $ref: '#/components/schemas/WcifPercent'
+            - $ref: '#/components/schemas/WcifAttemptResult'
+      required:
+        - type
+        - level
+
+    WcifResult:
+      type: object
+      properties:
+        personId:
+          type: integer
+          example: 1
+        ranking:
+          type: integer
+          example: 10
+        attempts:
+          type: array
+          items:
+            $ref: '#/components/schemas/WcifAttempt'
+        best:
+          $ref: '#/components/schemas/WcifAttemptResult'
+        average:
+          $ref: '#/components/schemas/WcifAttemptResult'
+      required:
+        - personId
+        - attempts
+        - best
+        - average
+
+    WcifScrambleSet:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        scrambles:
+          type: array
+          items:
+            $ref: '#/components/schemas/WcifScramble'
+        extraScrambles:
+          type: array
+          items:
+            $ref: '#/components/schemas/WcifScramble'
+      required:
+        - id
+        - scrambles
+        - extraScrambles
+
+    WcifAttemptResult:
+      type: integer
+
+    WcifAttempt:
+      type: object
+      properties:
+        result:
+          $ref: '#/components/schemas/WcifAttemptResult'
+        reconstruction:
+          type: string
+      required:
+        - result
+
+    WcifRanking:
+      type: integer
+
+    WcifPercent:
+      type: integer
+
+    WcifScramble:
+      type: string
