@@ -769,13 +769,13 @@ RSpec.describe User do
       expect(user.below_forum_age_requirement?).to be(true)
     end
 
-    it 'false when user is 13' do
+    it 'false when user is exactly 13' do
       user.dob = Date.today.advance(years: -13)
       expect(user.below_forum_age_requirement?).to be(false)
     end
 
     it 'false when user older than 13' do
-      user.dob = Date.today.advance(years: -27)
+      user.dob = Date.today.advance(days: 1, years: -13)
       expect(user.below_forum_age_requirement?).to be(false)
     end
   end

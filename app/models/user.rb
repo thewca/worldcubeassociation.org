@@ -493,7 +493,7 @@ class User < ApplicationRecord
   end
 
   def below_forum_age_requirement?
-    (Date.today - 13.years) < dob
+    (Date.today - FORUM_AGE_REQUIREMENT) < dob
   end
 
   def forum_banned?
