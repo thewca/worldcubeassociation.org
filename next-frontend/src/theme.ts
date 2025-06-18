@@ -140,6 +140,18 @@ const customConfig = defineConfig({
               _dark: "colors.wcawhite.200",
             },
           },
+          spanBg: { value: "#3e3e3e" },
+          cls1: { value: "#3e3e3e" },
+          cls2: { value: "#7a7a7a" },
+          cls3: { value: "#dcdcdc" },
+          cls4: { value: "#525252" },
+        },
+        black: {
+          spanBg: { value: "#1e1e1e" },
+          cls1: { value: "#1e1e1e" },
+          cls2: { value: "#3b3b3b" },
+          cls3: { value: "#6b6b6b" },
+          cls4: { value: "#282828" },
         },
         yellow: {
           solid: {
@@ -565,7 +577,7 @@ const customConfig = defineConfig({
           variant: {
             achievement: {
               bg: "transparent",
-              color: "colorPalette.fg",
+              color: "fg",
               fontWeight: "medium",
               gap: "2",
               mr: "2.5",

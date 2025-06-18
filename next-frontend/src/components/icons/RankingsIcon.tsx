@@ -13,10 +13,9 @@ const RankingsIcon = createIcon({
       />
     </>
   ),
+  defaultProps: {
+    boxSize: "1em",
+  },
 });
 
-const RankingsIconPreview = () => {
-  return <RankingsIcon size="lg" />;
-};
-
-export default RankingsIconPreview;
+export default RankingsIcon;
