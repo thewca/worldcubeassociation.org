@@ -43,8 +43,7 @@ SuperConfig::Base.class_eval do
   end
 end
 
-AppSecrets = SuperConfig.new(raise_exception: !EnvConfig.ASSETS_COMPILATION?) do
-  if Rails.env.production? && !EnvConfig.ASSETS_COMPILATION?
+AppSecrets = SuperConfig.new(raise_exception: !EnvConfig.ASSETS_COMPILATION?) do if Rails.env.production? && !EnvConfig.ASSETS_COMPILATION?
     require_relative "vault_config"
 
     vault :DATABASE_PASSWORD
@@ -125,5 +124,7 @@ AppSecrets = SuperConfig.new(raise_exception: !EnvConfig.ASSETS_COMPILATION?) do
     optional :WRC_WEBHOOK_USERNAME, :string, ''
     optional :WRC_WEBHOOK_PASSWORD, :string, ''
     optional :CURRENCY_LAYER_API_KEY, :string, ''
+    optional :TWITCH_CLIENT_ID, :string, ''
+    optional :TWITCH_CLIENT_SECRET, :string, ''
   end
 end
