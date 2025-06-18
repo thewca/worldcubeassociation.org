@@ -22,6 +22,10 @@ locals {
       value = var.region
     },
     {
+      name = "MEDIA_BUCKET"
+      value = aws_s3_bucket.next-media.id
+    },
+    {
       name  = "OIDC_ISSUER"
       value = "https://www.worldcubeassociation.org/"
     },
@@ -65,6 +69,15 @@ data "aws_iam_policy_document" "nextjs_task_policy" {
     ]
 
     resources = ["*"]
+  }
+
+  statement {
+    actions = [
+      "s3:*",
+    ]
+
+    resources = [aws_s3_bucket.next-media.arn,
+      "${aws_s3_bucket.next-media.arn}/*"]
   }
 }
 

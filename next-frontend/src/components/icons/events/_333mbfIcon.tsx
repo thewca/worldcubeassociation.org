@@ -103,6 +103,9 @@ const _333mbfIcon = createIcon({
       />
     </>
   ),
+  defaultProps: {
+    boxSize: "1em",
+  },
 });
 
 export default _333mbfIcon;

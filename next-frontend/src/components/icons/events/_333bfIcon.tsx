@@ -16,6 +16,9 @@ const _333bfIcon = createIcon({
       />
     </>
   ),
+  defaultProps: {
+    boxSize: "1em",
+  },
 });
 
 export default _333bfIcon;

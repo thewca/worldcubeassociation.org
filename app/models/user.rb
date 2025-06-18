@@ -492,14 +492,8 @@ class User < ApplicationRecord
     user.senior_delegates.include?(self)
   end
 
-  def age_in_years
-    years_since_birth = Date.today.year - dob.year
-    birthday_happened = Date.today.day >= dob.day && Date.today.month >= dob.month
-    birthday_happened ? years_since_birth : years_since_birth - 1
-  end
-
   def below_forum_age_requirement?
-    age_in_years < FORUM_AGE_REQUIREMENT
+    (Date.today - FORUM_AGE_REQUIREMENT.years) < dob
   end
 
   def forum_banned?
