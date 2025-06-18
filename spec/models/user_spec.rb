@@ -761,7 +761,7 @@ RSpec.describe User do
     end
   end
 
-  describe '#below_forum_age_requirement?' do
+  describe '#below_forum_age_requirement?', :tag do
     let(:user) { create(:user) }
 
     it 'true when user under 13' do
@@ -775,7 +775,7 @@ RSpec.describe User do
     end
 
     it 'false when user older than 13' do
-      user.dob = Date.today.advance(days: 1, years: -13)
+      user.dob = Date.today.advance(days: -1, years: -13)
       expect(user.below_forum_age_requirement?).to be(false)
     end
   end
