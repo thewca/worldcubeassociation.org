@@ -16,7 +16,7 @@ export default async function About() {
   const aboutItems = aboutPage.blocks;
 
   if (aboutItems.length === 0) {
-    return <Heading> No About Items, add some!</Heading>;
+    return <Heading>No About Items, add some!</Heading>;
   }
 
   return (

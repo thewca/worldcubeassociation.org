@@ -24,7 +24,7 @@ export default async function FAQ() {
   const faqCategories = faqCategoriesResult.docs;
 
   if (faqCategories.length === 0) {
-    return <Heading> No FAQ categories found, add some!</Heading>;
+    return <Heading>No FAQ categories found, add some!</Heading>;
   }
 
   return (
