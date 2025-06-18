@@ -2,8 +2,10 @@ import React from "react";
 import { Card, Table, Text } from "@chakra-ui/react";
 import { getEvents } from "@/lib/wca/competitions/wcif/getEvents";
 import {
+  advancementConditionToString,
   cutoffToString,
   getRoundTypeId,
+  qualificationToString,
   timeLimitToString,
 } from "@/lib/wca/wcif/rounds";
 
@@ -79,10 +81,26 @@ export default async function TabEvents({
                     </Table.Cell>
                   )}
                   <Table.Cell>
-                    {round.advancementCondition && "Advancement condition yay!"}
+                    {round.advancementCondition &&
+                      advancementConditionToString(
+                        round.advancementCondition,
+                        event.id,
+                        round.format,
+                      )}
                   </Table.Cell>
                   {showQualifications && (
-                    <Table.Cell>{idx === 0 && "Qualification Yay!"}</Table.Cell>
+                    <Table.Cell>
+                      {idx === 0 && (
+                        <>
+                          {event.qualification
+                            ? qualificationToString(
+                                event.qualification,
+                                event.id,
+                              )
+                            : "-"}
+                        </>
+                      )}
+                    </Table.Cell>
                   )}
                 </Table.Row>
               )),
