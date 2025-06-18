@@ -3,6 +3,7 @@
 import { Box, Button, Stack, VStack } from "@chakra-ui/react";
 import React from "react";
 import { MarkdownProse } from "@/components/Markdown";
+import Link from "next/link";
 
 type CallToActionBlockProps = {
   content: string;
@@ -33,9 +34,9 @@ export function CallToActionBlock({
               size="lg"
               asChild
             >
-              <a href={button.label} rel={"noopener"}>
+              <Link href={button.url} target={"_blank"} rel={"noopener"}>
                 {button.label}
-              </a>
+              </Link>
             </Button>
           ))}
         </Stack>
