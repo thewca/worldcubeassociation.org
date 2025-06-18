@@ -21,7 +21,7 @@ if Rails.env.production? && EnvConfig.WCA_LIVE_SITE? && !EnvConfig.ASSETS_COMPIL
   Money.default_bank = mclb
 else
   eu_bank = EuCentralBank.new
-  eu_bank.update_rates unless Rails.env.development? && EnvConfig.OFFLINE_MODE?
+  eu_bank.update_rates unless Rails.env.development? && EnvConfig.DEVELOPMENT_OFFLINE_MODE?
   Money.default_bank = eu_bank
 end
 
