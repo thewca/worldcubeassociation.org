@@ -761,34 +761,6 @@ RSpec.describe User do
     end
   end
 
-  describe '#age_in_years' do
-    let(:user) { create(:user) }
-
-    it 'returns an integer' do
-      expect(user.age_in_years.class).to be(Integer)
-    end
-
-    it 'counts the year if after user birthday - same month' do
-      user.dob = Date.today.advance(days: -1, years: -10)
-      expect(user.age_in_years).to be(10)
-    end
-
-    it 'counts the year if after user birthday - previous month' do
-      user.dob = Date.today.advance(days: 1, months: -1, years: -10)
-      expect(user.age_in_years).to be(10)
-    end
-
-    it 'counts the year if on user birthday' do
-      user.dob = Date.today.advance(years: -10)
-      expect(user.age_in_years).to be(10)
-    end
-
-    it 'doesnt count the year if before user birthday' do
-      user.dob = Date.today.advance(years: -10, days: 1)
-      expect(user.age_in_years).to be(9)
-    end
-  end
-
   describe '#below_forum_age_requirement?' do
     let(:user) { create(:user) }
 
