@@ -494,7 +494,7 @@ class User < ApplicationRecord
 
   def age_in_years
     years_since_birth = Date.today.year - dob.year
-    birthday_happened = Date.today.day >= dob.day && Date.today.month >= dob.month
+    birthday_happened = Date.today.month > dob.month || (Date.today.month == dob.month && Date.today.day >= dob.day)
     birthday_happened ? years_since_birth : years_since_birth - 1
   end
 

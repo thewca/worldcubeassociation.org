@@ -768,8 +768,13 @@ RSpec.describe User do
       expect(user.age_in_years.class).to be(Integer)
     end
 
-    it 'counts the year if after user birthday' do
+    it 'counts the year if after user birthday - same month' do
       user.dob = Date.today.advance(days: -1, years: -10)
+      expect(user.age_in_years).to be(10)
+    end
+
+    it 'counts the year if after user birthday - previous month' do
+      user.dob = Date.today.advance(days: 1, months: -1, years: -10)
       expect(user.age_in_years).to be(10)
     end
 
