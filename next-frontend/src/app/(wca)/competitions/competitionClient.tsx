@@ -31,10 +31,10 @@ import CompRegoNotOpenYetGreyIcon from "@/components/icons/CompRegoNotOpenYet_gr
 import CompRegoClosedRedIcon from "@/components/icons/CompRegoClosed_redIcon";
 import CompRegoOpenDateIcon from "@/components/icons/CompRegoOpenDateIcon";
 import CompRegoCloseDateIcon from "@/components/icons/CompRegoCloseDateIcon";
-import { countryCodeMapping } from "@/components/CountryMap";
 import EventIcon from "@/components/EventIcon";
 import Flag from "react-world-flags";
 
+import { countries } from "@/lib/staticData/wca-data";
 import type { components } from "@/types/openapi";
 
 type CompetitionIndex = components["schemas"]["CompetitionIndex"];
@@ -46,15 +46,13 @@ interface CompetitionsListProps {
 export default function CompetitionsClient({
   competitions,
 }: CompetitionsListProps) {
-  const countries = Object.entries(countryCodeMapping).map(([code, name]) => ({
-    label: name,
-    value: code,
-  }));
-
   const { contains } = useFilter({ sensitivity: "base" });
 
   const { collection, filter } = useListCollection({
-    initialItems: countries,
+    initialItems: Object.entries(countries.byIso2).map(([code, country]) => ({
+      label: country.id,
+      value: code,
+    })),
     filter: contains,
   });
 
