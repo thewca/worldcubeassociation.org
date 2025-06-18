@@ -1,5 +1,4 @@
-import { Box, Flex, Heading, VStack } from "@chakra-ui/react";
-import Image from "next/image";
+import { Box, Flex, Heading, VStack, Image } from "@chakra-ui/react";
 import { MarkdownProse } from "@/components/Markdown";
 import { Media } from "@/types/payload";
 
@@ -31,14 +30,8 @@ export default function AboutUsItem({
           <Image
             src={image.url}
             alt={image.alt || title}
-            width={800}
-            height={400}
-            style={{
-              width: "100%",
-              height: "auto",
-              borderRadius: "1rem",
-              objectFit: "cover",
-            }}
+            borderRadius={"1rem"}
+            objectFit="cover"
           />
         </Box>
       )}
