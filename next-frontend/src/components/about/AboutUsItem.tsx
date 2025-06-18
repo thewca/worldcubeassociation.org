@@ -19,14 +19,15 @@ export default function AboutUsItem({
       gap={8}
       align="start"
       width="full"
+      justify="space-between"
     >
-      <VStack align="start" flex="1">
+      <VStack align="start">
         <Heading size="lg">{title}</Heading>
         <MarkdownProse content={contentMarkdown} />
       </VStack>
 
       {image?.url && (
-        <Box flexShrink={0} flex="1" maxW="500px" w="full">
+        <Box flexShrink={0} maxW="500px" w="full">
           <Image
             src={image.url}
             alt={image.alt || title}
