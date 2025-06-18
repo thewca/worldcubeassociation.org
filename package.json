@@ -107,7 +107,7 @@
     "not dead"
   ],
   "devDependencies": {
-    "@playwright/test": "^1.53.0",
+    "@playwright/test": "1.52.0",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.6.0",
     "@types/node": "^24.0.1",
     "babel-plugin-transform-react-remove-prop-types": "^0.4.24",
@@ -119,7 +119,6 @@
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^5.2.0",
     "jshint": "^2.13.6",
-    "playwright": "^1.52.0",
     "react-refresh": "^0.17.0",
     "stylelint": "^16.20.0",
     "stylelint-config-recommended-scss": "^15.0.1",
