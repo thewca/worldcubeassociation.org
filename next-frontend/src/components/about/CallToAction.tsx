@@ -31,6 +31,7 @@ export function CallToActionBlock({
               colorScheme="blue"
               variant={i === 0 ? "solid" : "outline"}
               size="lg"
+              asChild
             >
               <a href={button.label} rel={"noopener"}>
                 {button.label}

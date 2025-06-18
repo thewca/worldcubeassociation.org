@@ -1,4 +1,4 @@
-import { Box, Flex, Heading, VStack, Image, HStack } from "@chakra-ui/react";
+import { Box, Heading, VStack, Image, HStack } from "@chakra-ui/react";
 import { MarkdownProse } from "@/components/Markdown";
 import { Media } from "@/types/payload";
 
