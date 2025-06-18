@@ -1,4 +1,4 @@
-import { Box, Flex, Heading, VStack, Image } from "@chakra-ui/react";
+import { Box, Flex, Heading, VStack, Image, HStack } from "@chakra-ui/react";
 import { MarkdownProse } from "@/components/Markdown";
 import { Media } from "@/types/payload";
 
@@ -14,7 +14,7 @@ export default function AboutUsItem({
   image,
 }: SimpleItemBlockProps) {
   return (
-    <Flex
+    <HStack
       direction={{ base: "column", md: "row" }}
       gap={8}
       align="start"
@@ -35,6 +35,6 @@ export default function AboutUsItem({
           />
         </Box>
       )}
-    </Flex>
+    </HStack>
   );
 }
