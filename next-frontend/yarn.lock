@@ -5062,6 +5062,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/js-cookie@npm:^3":
+  version: 3.0.6
+  resolution: "@types/js-cookie@npm:3.0.6"
+  checksum: 10c0/173afaf5ea9d86c22395b9d2a00b6adb0006dcfef165d6dcb0395cdc32f5a5dcf9c3c60f97194119963a15849b8f85121e1ae730b03e40bc0c29b84396ba22f9
+  languageName: node
+  linkType: hard
+
 "@types/json-schema@npm:^7.0.15":
   version: 7.0.15
   resolution: "@types/json-schema@npm:7.0.15"
@@ -10635,6 +10642,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"js-cookie@npm:^3.0.5":
+  version: 3.0.5
+  resolution: "js-cookie@npm:3.0.5"
+  checksum: 10c0/04a0e560407b4489daac3a63e231d35f4e86f78bff9d792011391b49c59f721b513411cd75714c418049c8dc9750b20fcddad1ca5a2ca616c3aca4874cce5b3a
+  languageName: node
+  linkType: hard
+
 "js-file-download@npm:^0.4.12":
   version: 0.4.12
   resolution: "js-file-download@npm:0.4.12"
@@ -12053,6 +12067,7 @@ __metadata:
     "@testing-library/react": "npm:^16.3.0"
     "@types/aws4": "npm:^1"
     "@types/jest": "npm:^30.0.0"
+    "@types/js-cookie": "npm:^3"
     "@types/newrelic": "npm:^9.14.8"
     "@types/node": "npm:^24"
     "@types/react": "npm:^19"
@@ -12069,6 +12084,7 @@ __metadata:
     i18next: "npm:^25.2.1"
     i18next-browser-languagedetector: "npm:^8.2.0"
     i18next-resources-to-backend: "npm:^1.2.1"
+    js-cookie: "npm:^3.0.5"
     jsdom: "npm:^26.1.0"
     newrelic: "npm:^12.21.0"
     next: "npm:15.3.3"

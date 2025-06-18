@@ -18,6 +18,7 @@ import { ColorModeButton } from "@/components/ui/color-mode";
 import { LuChevronDown, LuMonitorCheck } from "react-icons/lu";
 
 import { iconMap, IconName } from "@/components/icons/iconMap";
+import LanguageSelector from "@/components/ui/languageSelector";
 
 interface IconDisplayProps {
   name: IconName | undefined | null;
@@ -136,6 +137,9 @@ export default async function Navbar() {
         {navbar.entry.length === 0 && (
           <Text>Oh no, there are no navbar items!</Text>
         )}
+      </HStack>
+      <HStack>
+        <LanguageSelector />
       </HStack>
       <HStack>
         <ColorModeButton />
