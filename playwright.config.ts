@@ -75,5 +75,6 @@ export default defineConfig({
     command: 'cd next-frontend && corepack install && yarn install && yarn dev --port 3001',
     url: 'http://localhost:3001',
     reuseExistingServer: !process.env.CI,
+    timeout: 120 * 1000,
   },
 });
