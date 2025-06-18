@@ -615,14 +615,41 @@ export interface components {
             scrambleSets: components["schemas"]["WcifScrambleSet"][];
             extensions: unknown[];
         };
-        WcifQualification: {
+        WcifQualification: components["schemas"]["WcifQualificationAttemptResult"] | components["schemas"]["WcifQualificationRanking"] | components["schemas"]["WcifQualificationAnyResult"];
+        WcifQualificationAttemptResult: {
             /** Format: date */
             whenDate: string;
-            /** @enum {string} */
-            type: "attemptResult" | "ranking" | "anyResult";
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            type: "attemptResult";
             /** @enum {string} */
             resultType: "single" | "average";
-            level?: components["schemas"]["WcifAttemptResult"] | components["schemas"]["WcifRanking"];
+            level: components["schemas"]["WcifAttemptResult"];
+        };
+        WcifQualificationRanking: {
+            /** Format: date */
+            whenDate: string;
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            type: "ranking";
+            /** @enum {string} */
+            resultType: "single" | "average";
+            level: components["schemas"]["WcifRanking"];
+        };
+        WcifQualificationAnyResult: {
+            /** Format: date */
+            whenDate: string;
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            type: "anyResult";
+            /** @enum {string} */
+            resultType: "single" | "average";
         };
         WcifTimeLimit: {
             /** @example 18000 */
@@ -634,10 +661,30 @@ export interface components {
             numberOfAttempts: number;
             attemptResult: components["schemas"]["WcifAttemptResult"];
         };
-        WcifAdvancementCondition: {
-            /** @enum {string} */
-            type: "ranking" | "percent" | "attemptResult";
-            level: components["schemas"]["WcifRanking"] | components["schemas"]["WcifPercent"] | components["schemas"]["WcifAttemptResult"];
+        WcifAdvancementCondition: components["schemas"]["WcifAdvancementConditionRanking"] | components["schemas"]["WcifAdvancementConditionPercent"] | components["schemas"]["WcifAdvancementConditionAttemptResult"];
+        WcifAdvancementConditionRanking: {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            type: "ranking";
+            level: components["schemas"]["WcifRanking"];
+        };
+        WcifAdvancementConditionPercent: {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            type: "percent";
+            level: components["schemas"]["WcifPercent"];
+        };
+        WcifAdvancementConditionAttemptResult: {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            type: "attemptResult";
+            level: components["schemas"]["WcifAttemptResult"];
         };
         WcifResult: {
             /** @example 1 */

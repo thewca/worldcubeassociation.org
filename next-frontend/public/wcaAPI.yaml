@@ -951,6 +951,18 @@ components:
         - extensions
 
     WcifQualification:
+      oneOf:
+        - $ref: '#/components/schemas/WcifQualificationAttemptResult'
+        - $ref: '#/components/schemas/WcifQualificationRanking'
+        - $ref: '#/components/schemas/WcifQualificationAnyResult'
+      discriminator:
+        propertyName: type
+        mapping:
+          attemptResult: '#/components/schemas/WcifQualificationAttemptResult'
+          ranking: '#/components/schemas/WcifQualificationRanking'
+          anyResult: '#/components/schemas/WcifQualificationAnyResult'
+
+    WcifQualificationAttemptResult:
       type: object
       properties:
         whenDate:
@@ -958,14 +970,50 @@ components:
           format: date
         type:
           type: string
-          enum: [ 'attemptResult', 'ranking', 'anyResult' ]
+          example: "attemptResult"
         resultType:
           type: string
           enum: [ 'single', 'average' ]
         level:
-          oneOf:
-            - $ref: '#/components/schemas/WcifAttemptResult'
-            - $ref: '#/components/schemas/WcifRanking'
+          $ref: '#/components/schemas/WcifAttemptResult'
+      required:
+        - whenDate
+        - type
+        - resultType
+        - level
+
+    WcifQualificationRanking:
+      type: object
+      properties:
+        whenDate:
+          type: string
+          format: date
+        type:
+          type: string
+          example: "ranking"
+        resultType:
+          type: string
+          enum: [ 'single', 'average' ]
+        level:
+          $ref: '#/components/schemas/WcifRanking'
+      required:
+        - whenDate
+        - type
+        - resultType
+        - level
+
+    WcifQualificationAnyResult:
+      type: object
+      properties:
+        whenDate:
+          type: string
+          format: date
+        type:
+          type: string
+          example: "anyResult"
+        resultType:
+          type: string
+          enum: [ 'single', 'average' ]
       required:
         - whenDate
         - type
@@ -998,16 +1046,49 @@ components:
         - attemptResult
 
     WcifAdvancementCondition:
+      oneOf:
+        - $ref: '#/components/schemas/WcifAdvancementConditionRanking'
+        - $ref: '#/components/schemas/WcifAdvancementConditionPercent'
+        - $ref: '#/components/schemas/WcifAdvancementConditionAttemptResult'
+      discriminator:
+        propertyName: type
+        mapping:
+          ranking: '#/components/schemas/WcifAdvancementConditionRanking'
+          percent: '#/components/schemas/WcifAdvancementConditionPercent'
+          attemptResult: '#/components/schemas/WcifAdvancementConditionAttemptResult'
+
+    WcifAdvancementConditionRanking:
       type: object
       properties:
         type:
           type: string
-          enum: [ 'ranking', 'percent', 'attemptResult' ]
+          example: "ranking"
         level:
-          oneOf:
-            - $ref: '#/components/schemas/WcifRanking'
-            - $ref: '#/components/schemas/WcifPercent'
-            - $ref: '#/components/schemas/WcifAttemptResult'
+          $ref: '#/components/schemas/WcifRanking'
+      required:
+        - type
+        - level
+
+    WcifAdvancementConditionPercent:
+      type: object
+      properties:
+        type:
+          type: string
+          example: "percent"
+        level:
+          $ref: '#/components/schemas/WcifPercent'
+      required:
+        - type
+        - level
+
+    WcifAdvancementConditionAttemptResult:
+      type: object
+      properties:
+        type:
+          type: string
+          example: "attemptResult"
+        level:
+          $ref: '#/components/schemas/WcifAttemptResult'
       required:
         - type
         - level
