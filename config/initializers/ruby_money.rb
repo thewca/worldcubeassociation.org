@@ -21,11 +21,7 @@ if Rails.env.production? && EnvConfig.WCA_LIVE_SITE? && !EnvConfig.ASSETS_COMPIL
   Money.default_bank = mclb
 else
   eu_bank = EuCentralBank.new
-  begin
-    eu_bank.update_rates
-  rescue SocketError, OpenURI::HTTPError => e
-    Rails.logger.warn "Failed to update EU Central Bank rates: #{e.message}. Using default rates."
-  end
+  eu_bank.update_rates unless EnvConfig.DEVELOPMENT_OFFLINE_MODE?
   Money.default_bank = eu_bank
 end
 

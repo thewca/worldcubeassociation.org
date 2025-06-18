@@ -31,6 +31,7 @@ EnvConfig = SuperConfig.new(raise_exception: !is_compiling_assets) do
     mandatory :CDN_ASSETS_DISTRIBUTION_ID, :string
     mandatory :REGISTRATION_QUEUE, :string
     mandatory :LIVE_QUEUE, :string
+    optional :DEVELOPMENT_OFFLINE_MODE, :bool, false
 
     if is_compiling_assets
       mandatory :V2_REGISTRATIONS_POLL_URL, :string
@@ -56,6 +57,7 @@ EnvConfig = SuperConfig.new(raise_exception: !is_compiling_assets) do
     optional :WRC_WEBHOOK_URL, :string, ''
     optional :REGISTRATION_QUEUE, :string, ''
     optional :LIVE_QUEUE, :string, ''
+    optional :DEVELOPMENT_OFFLINE_MODE, :bool, false
 
     optional :V2_REGISTRATIONS_POLL_URL, :string, ''
     optional :V3_REGISTRATIONS_POLL_URL, :string, ''
