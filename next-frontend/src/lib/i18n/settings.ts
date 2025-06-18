@@ -31,3 +31,5 @@ export const languages = [
   "zh-CN",
   "zh-TW",
 ];
+
+export const storageKey = "i18next-lng";
