@@ -12,6 +12,9 @@ export default function UploadResultsJson({ competitionId, isWrtViewing }) {
   const { mutate: uploadResultsJsonMutate, error, isError } = useMutation({
     mutationFn: () => uploadResultsJson({ competitionId, resultFile, markResultSubmitted }),
     onSuccess: () => {
+      // Ideally page should not be reloaded, but this is currently required to re-render
+      // the rails HTML portion. Once that rails HTML portion is also migrated to React,
+      // then this reload will be removed.
       window.location.reload();
     },
   });
@@ -19,7 +22,7 @@ export default function UploadResultsJson({ competitionId, isWrtViewing }) {
   if (isError) return <Errored error={error} />;
 
   return (
-    <Form>
+    <Form onSubmit={uploadResultsJsonMutate}>
       <Form.Input
         type="file"
         onChange={(event) => setResultFile(event.target.files[0])}
@@ -33,7 +36,7 @@ export default function UploadResultsJson({ competitionId, isWrtViewing }) {
       )}
       <Form.Button
         disabled={!resultFile}
-        onClick={uploadResultsJsonMutate}
+        type="submit"
       >
         Upload JSON
       </Form.Button>
