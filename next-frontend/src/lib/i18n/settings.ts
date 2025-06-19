@@ -33,3 +33,4 @@ export const languages = [
 ];
 
 export const storageKey = "i18next-lng";
+export const defaultNamespace = "translation";

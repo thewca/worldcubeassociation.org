@@ -2,7 +2,12 @@ import i18next from "i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
 import resourcesToBackend from "i18next-resources-to-backend";
 import { initReactI18next } from "react-i18next/initReactI18next";
-import { fallbackLng, languages, storageKey } from "./settings";
+import {
+  fallbackLng,
+  languages,
+  storageKey,
+  defaultNamespace,
+} from "./settings";
 
 const runsOnServerSide = typeof window === "undefined";
 
@@ -19,7 +24,7 @@ i18next
     fallbackLng,
     lng: undefined,
     fallbackNS: "",
-    defaultNS: "",
+    defaultNS: defaultNamespace,
     preload: runsOnServerSide ? languages : [],
     detection: {
       order: ["cookie", "navigator"],
