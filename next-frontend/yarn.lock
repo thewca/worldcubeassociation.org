@@ -3796,7 +3796,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@payloadcms/storage-s3@npm:3.42.0":
+"@payloadcms/storage-s3@npm:^3.42.0":
   version: 3.42.0
   resolution: "@payloadcms/storage-s3@npm:3.42.0"
   dependencies:
