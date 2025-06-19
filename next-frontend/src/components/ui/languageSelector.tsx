@@ -1,24 +1,25 @@
 "use client";
 
-import { Menu, Button } from "@chakra-ui/react";
-import React, { useEffect, useState } from "react";
+import { Menu, Button, ClientOnly, Skeleton } from "@chakra-ui/react";
+import React from "react";
 import { LuChevronDown } from "react-icons/lu";
 import { fallbackLng, languages, storageKey } from "@/lib/i18n/settings";
 import Cookies from "js-cookie";
 
-const LanguageSelector = () => {
-  const [currentLocale, setCurrentLocale] = useState(fallbackLng);
+export default function Wrapper() {
+  return (
+    <ClientOnly fallback={<Skeleton boxSize="8" />}>
+      <LanguageSelector />
+    </ClientOnly>
+  );
+}
 
-  useEffect(() => {
-    const storedLocale = Cookies.get(storageKey);
-    if (storedLocale) {
-      setCurrentLocale(storedLocale);
-    }
-  }, []);
+const LanguageSelector = () => {
+  const currentLocale = Cookies.get(storageKey) ?? fallbackLng;
 
   const handleChangeLocale = (code: string) => {
     Cookies.set(storageKey, code, { expires: 365, path: "/" });
-    setCurrentLocale(code);
+    // We need to reload because we render a lot of sites on the server
     window.location.reload();
   };
 
@@ -50,5 +51,3 @@ const LanguageSelector = () => {
     </Menu.Root>
   );
 };
-
-export default LanguageSelector;
