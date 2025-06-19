@@ -1,6 +1,4 @@
 import _ from "lodash";
-import countriesReal from "./countries.real.json";
-import countriesFictive from "./countries.fictive.json";
 import continentDataRaw from "./continents.json";
 import eventsDataRaw from "./events.json";
 import formatsDataRaw from "./formats.json";
@@ -18,35 +16,6 @@ type Event = {
   is_multiple_blindfolded: boolean;
   is_official: boolean;
   format_ids: string[];
-};
-
-// ----- COUNTRIES -----
-const fictionalCountryIds = _.map(countriesFictive, "id");
-
-const countryData = [
-  ...countriesReal.states_lists[0].states,
-  ...countriesFictive,
-];
-const realCountryData = countryData.filter(
-  (c) => !fictionalCountryIds.includes(c.id),
-);
-
-export const countries = {
-  byIso2: _.keyBy(countryData, "iso2"),
-  byId: _.keyBy(countryData, "id"),
-  real: realCountryData,
-};
-
-// ----- CONTINENTS -----
-
-const fictionalContinentIds = ["_Multiple Continents"];
-const realContinents = continentDataRaw.filter(
-  (c) => !fictionalContinentIds.includes(c.id),
-);
-
-export const continents = {
-  byId: _.keyBy(continentDataRaw, "id"),
-  real: realContinents,
 };
 // ----- FORMATS -----
 

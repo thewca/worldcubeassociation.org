@@ -2,7 +2,6 @@ import _ from "lodash";
 import countriesReal from "../../staticData/countries.real.json";
 import countriesFictive from "../../staticData/countries.fictive.json";
 
-// ----- COUNTRIES -----
 const fictionalCountryIds = _.map(countriesFictive, "id");
 
 const countryData = [
