@@ -32,19 +32,21 @@ const LanguageSelector = () => {
           <LuChevronDown />
         </Button>
       </Menu.Trigger>
-      <Menu.Content>
-        <Menu.ItemGroup>
-          {languages.map((lang) => (
-            <Menu.Item
-              value={lang}
-              key={lang}
-              onClick={() => handleChangeLocale(lang)}
-            >
-              {lang}
-            </Menu.Item>
-          ))}
-        </Menu.ItemGroup>
-      </Menu.Content>
+      <Menu.Positioner>
+        <Menu.Content>
+          <Menu.ItemGroup>
+            {languages.map((lang) => (
+              <Menu.Item
+                value={lang}
+                key={lang}
+                onClick={() => handleChangeLocale(lang)}
+              >
+                {lang}
+              </Menu.Item>
+            ))}
+          </Menu.ItemGroup>
+        </Menu.Content>
+      </Menu.Positioner>
     </Menu.Root>
   );
 };
