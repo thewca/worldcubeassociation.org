@@ -12692,7 +12692,7 @@ __metadata:
     "@payloadcms/live-preview-react": "npm:^3.42.0"
     "@payloadcms/next": "npm:^3.42.0"
     "@payloadcms/richtext-lexical": "npm:^3.42.0"
-    "@payloadcms/storage-s3": "npm:3.42.0"
+    "@payloadcms/storage-s3": "npm:^3.42.0"
     "@stylistic/eslint-plugin": "npm:^4.4.1"
     "@tanstack/eslint-plugin-query": "npm:^5.78.0"
     "@tanstack/react-query": "npm:^5.80.7"
