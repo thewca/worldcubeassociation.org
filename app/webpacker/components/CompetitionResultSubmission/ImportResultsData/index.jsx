@@ -36,18 +36,14 @@ function ImportResultsData({
           Import Results Data
         </Accordion.Title>
         <Accordion.Content active={activeAccordion}>
-          {alreadyHasSubmittedResult
-            ? (
-              <Message warning>
-                Some results are already there, importing results data again will override all
-                of them!
-              </Message>
-            )
-            : (
-              <Message info>
-                Please start by selecting a JSON file to import.
-              </Message>
-            )}
+          <Message
+            warning={alreadyHasSubmittedResult}
+            info={!alreadyHasSubmittedResult}
+          >
+            {alreadyHasSubmittedResult
+              ? 'Some results have already been uploaded before, importing results data again will override all of them!'
+              : 'Please start by selecting a JSON file to import.'}
+          </Message>
           <UploadResultsJson
             competitionId={competitionId}
             isWrtViewing={isWrtViewing}

@@ -192,11 +192,11 @@ class AdminController < ApplicationController
 
     # This makes sure the json structure is valid!
     if upload_json.import_to_inbox
-      competition.update!(results_submitted_at: Time.now) if competition.results_submitted_at.nil? && mark_result_submitted
+      competition.touch(:results_submitted_at) if competition.results_submitted_at.nil? && mark_result_submitted
       render status: :ok, json: { success: true }
     else
       render status: :unprocessable_entity, json: {
-        error: "Error importing JSON file.",
+        error: upload_json.errors.full_messages,
       }
     end
   end
