@@ -239,6 +239,7 @@ export interface User {
   emailVerified?: string | null;
   name?: string | null;
   image?: string | null;
+  roles?: string[];
   accounts?:
     | {
         id?: string | null;
@@ -428,6 +429,7 @@ export interface UsersSelect<T extends boolean = true> {
   emailVerified?: T;
   name?: T;
   image?: T;
+  roles?: T;
   accounts?:
     | T
     | {

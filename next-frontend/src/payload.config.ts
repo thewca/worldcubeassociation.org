@@ -5,8 +5,8 @@ import { fileURLToPath } from "url";
 import sharp from "sharp";
 import { authjsPlugin } from "payload-authjs";
 import { lexicalEditor } from "@payloadcms/richtext-lexical";
-import { authConfig } from "@/auth.config";
-
+import { payloadAuthConfig } from "@/auth.config";
+import { s3Storage } from "@payloadcms/storage-s3";
 import { Media } from "@/collections/Media";
 import { Testimonials } from "@/collections/Testimonials";
 import { Announcements } from "@/collections/Announcements";
@@ -14,11 +14,40 @@ import {
   FaqCategories,
   FaqQuestions,
 } from "@/collections/FrequentlyAskedQuestions";
+import { Users } from "@/collections/Users";
 import { Nav } from "@/globals/Nav";
 import { Home } from "@/globals/Home";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
+
+async function plugins() {
+  const defaultPlugins = [
+    authjsPlugin({
+      authjsConfig: payloadAuthConfig,
+    }),
+  ];
+  if (process.env.NODE_ENV === "production") {
+    const { fromContainerMetadata } = await import(
+      "@aws-sdk/credential-providers"
+    );
+    const credentials = fromContainerMetadata();
+    return [
+      ...defaultPlugins,
+      s3Storage({
+        collections: {
+          media: true,
+        },
+        bucket: process.env.MEDIA_BUCKET!,
+        config: {
+          region: process.env.AWS_REGION,
+          credentials,
+        },
+      }),
+    ];
+  }
+  return defaultPlugins;
+}
 
 async function dbAdapter() {
   if (process.env.NODE_ENV === "production") {
@@ -60,6 +89,7 @@ export default buildConfig({
     Announcements,
     FaqCategories,
     FaqQuestions,
+    Users,
   ],
   globals: [Nav, Home],
   editor: lexicalEditor(),
@@ -69,9 +99,5 @@ export default buildConfig({
   },
   db: await dbAdapter(),
   sharp,
-  plugins: [
-    authjsPlugin({
-      authjsConfig: authConfig,
-    }),
-  ],
+  plugins: await plugins(),
 });

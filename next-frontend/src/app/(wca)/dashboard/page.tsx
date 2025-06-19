@@ -16,6 +16,7 @@ import {
 import Link from "next/link";
 
 import { iconMap } from "@/components/icons/iconMap";
+import { WCA_PROVIDER_ID } from "@/auth.config";
 
 export default function Dashboard() {
   const { data: session } = useSession();
@@ -32,7 +33,7 @@ export default function Dashboard() {
           )}
         </>
       ) : (
-        <Button onClick={() => signIn("WCA")} colorPalette="blue">
+        <Button onClick={() => signIn(WCA_PROVIDER_ID)} colorPalette="blue">
           Sign in
         </Button>
       )}
@@ -68,7 +69,7 @@ export default function Dashboard() {
           <SimpleGrid columns={{ base: 2, sm: 3, md: 4, lg: 6 }}>
             {Object.entries(iconMap).map(([iconName, IconComponent], index) => (
               <Box textAlign="center" key={index}>
-                <IconComponent w="6" h="6" />
+                <IconComponent fontSize="1.5em" />
                 <Text mt="2" fontSize="sm">
                   {iconName}
                 </Text>
