@@ -121,7 +121,7 @@ class ResultsSubmissionController < ApplicationController
     redirect_to competition_submit_results_edit_path
   end
 
-  def submit_to_wrt
+  def create
     # Check inbox, create submission, send email
     @competition = competition_from_params
 
@@ -138,7 +138,7 @@ class ResultsSubmissionController < ApplicationController
       render status: :ok, json: { success: true }
     else
       @results_validator = @results_submission.results_validator
-      render status: :internal_server_error, json: { error: "Submitted results contain errors." }
+      render status: :unprocessable_entity, json: { error: "Submitted results contain errors." }
     end
   end
 
