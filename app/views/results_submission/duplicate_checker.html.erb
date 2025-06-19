@@ -1,0 +1,10 @@
+<% provide(:title, "Duplicate Checker") %>
+
+<%= render layout: 'nav' do %>
+  <h1><%= yield(:title) %></h1>
+
+  <%= react_component("DuplicateChecker", {
+    competitionId: @competition.id,
+  }) %>
+
+<% end %>

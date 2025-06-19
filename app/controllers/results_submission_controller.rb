@@ -12,6 +12,31 @@ class ResultsSubmissionController < ApplicationController
     @results_validator.validate(@competition.id)
   end
 
+  def duplicate_checker
+    @competition = competition_from_params
+  end
+
+  def potential_duplicates_data
+    competition = competition_from_params
+
+    render status: :ok, json: {
+      duplicate_checker_last_fetch_status: competition.duplicate_checker_last_fetch_status,
+      duplicate_checker_last_fetch_time: competition.duplicate_checker_last_fetch_time,
+      similar_persons: competition.potential_duplicate_people.order(:score).reverse_order,
+    }
+  end
+
+  def compute_potential_duplicates
+    competition = competition_from_params
+
+    competition.update!(duplicate_checker_last_fetch_status: :fetch_in_progress)
+    ComputePotentialDuplicates.perform_later(competition)
+
+    render status: :ok, json: {
+      duplicate_checker_last_fetch_status: competition.duplicate_checker_last_fetch_status,
+    }
+  end
+
   def upload_json
     @competition = competition_from_params
     return redirect_to competition_submit_results_edit_path if @competition.results_submitted?

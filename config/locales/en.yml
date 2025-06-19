@@ -2165,6 +2165,7 @@ en:
         payment_view: "Setup payments"
         admin_view: "Admin view"
         tabs: "Manage tabs"
+        duplicate_checker: "Duplicate Checker"
         submit_results: "Submit results"
         match_scrambles: "Submit scrambles"
         delegate_report: "Delegate report"
