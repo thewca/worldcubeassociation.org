@@ -12,8 +12,10 @@ const realCountryData = countryData.filter(
   (c) => !fictionalCountryIds.includes(c.id),
 );
 
-export default {
+const countries = {
   byIso2: _.keyBy(countryData, "iso2"),
   byId: _.keyBy(countryData, "id"),
   real: realCountryData,
 };
+
+export default countries;

@@ -8,7 +8,9 @@ const realContinents = continentDataRaw.filter(
   (c) => !fictionalContinentIds.includes(c.id),
 );
 
-export const continents = {
+const continents = {
   byId: _.keyBy(continentDataRaw, "id"),
   real: realContinents,
 };
+
+export default continents;
