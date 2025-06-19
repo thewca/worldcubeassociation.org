@@ -8,9 +8,11 @@ import Cookies from "js-cookie";
 
 export function useT(options?: object) {
   const lng = Cookies.get(storageKey);
+
   useEffect(() => {
     if (!lng || i18next.resolvedLanguage === lng) return;
     i18next.changeLanguage(lng);
   }, [lng]);
+
   return useTranslation("translation", options);
 }
