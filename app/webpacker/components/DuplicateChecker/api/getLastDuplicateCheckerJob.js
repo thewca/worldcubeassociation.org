@@ -1,9 +1,9 @@
 import { fetchJsonOrError } from '../../../lib/requests/fetchWithAuthenticityToken';
 import { viewUrls } from '../../../lib/requests/routes.js.erb';
 
-export default async function getPotentialDuplicatesData({ competitionId }) {
+export default async function getLastDuplicateCheckerJob({ competitionId }) {
   const { data } = await fetchJsonOrError(
-    viewUrls.competitions.potentialDuplicatesData(competitionId),
+    viewUrls.competitions.lastDuplicateCheckerJob(competitionId),
   );
   return data || {};
 }

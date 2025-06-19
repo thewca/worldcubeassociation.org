@@ -38,7 +38,7 @@ class Competition < ApplicationRecord
   belongs_to :cancelled_by_user, optional: true, foreign_key: "cancelled_by", class_name: "User"
   has_many :competition_payment_integrations
   has_many :scramble_file_uploads
-  has_many :potential_duplicate_people, dependent: :delete_all
+  has_many :duplicate_checker_jobs, dependent: :delete_all
 
   accepts_nested_attributes_for :competition_events, allow_destroy: true
   accepts_nested_attributes_for :championships, allow_destroy: true
@@ -97,13 +97,6 @@ class Competition < ApplicationRecord
   }, prefix: true
 
   enum :competitor_can_cancel, %i[not_accepted always unpaid], prefix: true
-
-  enum :duplicate_checker_last_fetch_status, {
-    not_fetched: 0,
-    fetch_in_progress: 1,
-    fetch_successful: 2,
-    fetch_failed: 3,
-  }, prefix: true
 
   CLONEABLE_ATTRIBUTES = %w[
     city_name
