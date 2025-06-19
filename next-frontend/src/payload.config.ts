@@ -17,6 +17,7 @@ import {
 import { Users } from "@/collections/Users";
 import { Nav } from "@/globals/Nav";
 import { Home } from "@/globals/Home";
+import { Documents } from "@/collections/Documents";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -90,6 +91,7 @@ export default buildConfig({
     FaqCategories,
     FaqQuestions,
     Users,
+    Documents,
   ],
   globals: [Nav, Home],
   editor: lexicalEditor(),
