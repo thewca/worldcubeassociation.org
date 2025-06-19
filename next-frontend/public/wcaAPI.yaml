@@ -182,6 +182,13 @@ components:
   schemas:
     UserRole:
       type: object
+      required:
+        - id
+        - start_date
+        - end_date
+        - group
+        - user
+        - metadata
       properties:
         id:
           type: integer
@@ -209,11 +216,22 @@ components:
             updated_at:
               type: string
               format: date-time
+            email:
+              type: string
+              format: email
         class:
           type: string
 
     Group:
       type: object
+      required:
+        - id
+        - name
+        - group_type
+        - is_active
+        - is_hidden
+        - created_at
+        - updated_at
       properties:
         id:
           type: integer
@@ -242,6 +260,22 @@ components:
           format: date-time
         lead_user:
           $ref: '#/components/schemas/Person'
+        metadata:
+          type: object
+          properties:
+            id:
+              type: integer
+            status:
+              type: string
+            created_at:
+              type: string
+              format: date-time
+            updated_at:
+              type: string
+              format: date-time
+            email:
+              type: string
+              format: email
 
     Person:
       type: object

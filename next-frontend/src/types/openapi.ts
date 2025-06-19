@@ -271,20 +271,22 @@ export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
         UserRole: {
-            id?: number;
+            id: number;
             /** Format: date */
-            start_date?: string;
+            start_date: string;
             /** Format: date */
-            end_date?: string | null;
-            group?: components["schemas"]["Group"];
-            user?: components["schemas"]["Person"];
-            metadata?: {
+            end_date: string | null;
+            group: components["schemas"]["Group"];
+            user: components["schemas"]["Person"];
+            metadata: {
                 id?: number;
                 status?: string;
                 /** Format: date-time */
                 created_at?: string;
                 /** Format: date-time */
                 updated_at?: string;
+                /** Format: email */
+                email?: string;
             };
             class?: string;
         };
@@ -302,6 +304,16 @@ export interface components {
             /** Format: date-time */
             updated_at?: string;
             lead_user?: components["schemas"]["Person"];
+            metadata?: {
+                id?: number;
+                status?: string;
+                /** Format: date-time */
+                created_at?: string;
+                /** Format: date-time */
+                updated_at?: string;
+                /** Format: email */
+                email?: string;
+            };
         };
         Person: {
             /** @example 267 */
