@@ -22,7 +22,7 @@ class ResultsSubmissionController < ApplicationController
     render status: :ok, json: {
       duplicate_checker_last_fetch_status: competition.duplicate_checker_last_fetch_status,
       duplicate_checker_last_fetch_time: competition.duplicate_checker_last_fetch_time,
-      similar_persons: competition.potential_duplicate_people.order(:score).reverse_order,
+      similar_persons: competition.potential_duplicate_people.order(score: :desc),
     }
   end
 
