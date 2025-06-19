@@ -1,7 +1,7 @@
 "use client";
 
 import { Text } from "@chakra-ui/react";
-import { countries } from "@/lib/staticData/wca-data";
+import countries from "@/lib/wca/data/countries";
 
 type CountryMapProps = {
   code: string;
