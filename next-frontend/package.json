@@ -13,7 +13,7 @@
     "types:openapi": "openapi-typescript public/wcaAPI.yaml -o src/types/openapi.ts",
     "types:chakra": "chakra typegen ./src/theme.ts --outdir src/types/chakra --strict",
     "types:payload": "payload generate:types",
-    "build:translations": "node build-translations.js",
+    "build:translations": "./build-translations.js",
     "lint": "next lint",
     "lint:fix": "next lint --fix",
     "test": "vitest",

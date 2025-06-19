@@ -22,7 +22,7 @@ const eslintConfig = [
   },
   eslintPluginPrettierRecommended,
   ...pluginQuery.configs["flat/recommended"],
-  globalIgnores(["src/types","./build-translations.js"]),
+  globalIgnores(["src/types"]),
 ];
 
 export default eslintConfig;
