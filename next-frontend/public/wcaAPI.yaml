@@ -94,6 +94,66 @@ paths:
               schema:
                 $ref: '#/components/schemas/Results'
 
+  /user_roles:
+    get:
+      summary: Get user roles
+      parameters:
+        - name: isActive
+          in: query
+          schema:
+            type: boolean
+          description: Filter by whether the group is active
+        - name: isGroupHidden
+          in: query
+          schema:
+            type: boolean
+          description: Filter by whether the group is hidden
+        - name: userId
+          in: query
+          schema:
+            type: integer
+          description: Filter by user ID
+        - name: groupId
+          in: query
+          schema:
+            type: integer
+          description: Filter by group ID
+        - name: status
+          in: query
+          schema:
+            type: string
+          description: Filter by metadata status (e.g., "chair")
+        - name: groupType
+          in: query
+          schema:
+            type: string
+          description: Filter by group type (e.g., "officers")
+        - name: isLead
+          in: query
+          schema:
+            type: boolean
+          description: Filter by whether the user is the lead of the group
+        - name: sort
+          in: query
+          schema:
+            type: string
+          description: Sort by a specific field (e.g., "start_date", "-created_at")
+        - name: perPage
+          in: query
+          schema:
+            type: integer
+            default: 100
+          description: Number of results per page
+      responses:
+        '200':
+          description: A list of user roles
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserRole'
+
   /users/me/permissions:
     get:
       summary: Get user's permissions
@@ -120,6 +180,69 @@ components:
       bearerFormat: JWT
 
   schemas:
+    UserRole:
+      type: object
+      properties:
+        id:
+          type: integer
+        start_date:
+          type: string
+          format: date
+        end_date:
+          type: string
+          format: date
+          nullable: true
+        group:
+          $ref: '#/components/schemas/Group'
+        user:
+          $ref: '#/components/schemas/Person'
+        metadata:
+          type: object
+          properties:
+            id:
+              type: integer
+            status:
+              type: string
+            created_at:
+              type: string
+              format: date-time
+            updated_at:
+              type: string
+              format: date-time
+        class:
+          type: string
+
+    Group:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        group_type:
+          type: string
+        parent_group_id:
+          type: integer
+          nullable: true
+        is_active:
+          type: boolean
+        is_hidden:
+          type: boolean
+        metadata_id:
+          type: integer
+          nullable: true
+        metadata_type:
+          type: string
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        lead_user:
+          $ref: '#/components/schemas/Person'
+
     Person:
       type: object
       required:
