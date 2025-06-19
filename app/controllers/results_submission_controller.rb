@@ -16,25 +16,22 @@ class ResultsSubmissionController < ApplicationController
     @competition = competition_from_params
   end
 
-  def potential_duplicates_data
+  def last_duplicate_checker_job
     competition = competition_from_params
 
-    render status: :ok, json: {
-      duplicate_checker_last_fetch_status: competition.duplicate_checker_last_fetch_status,
-      duplicate_checker_last_fetch_time: competition.duplicate_checker_last_fetch_time,
-      similar_persons: competition.potential_duplicate_people.order(score: :desc),
-    }
+    render status: :ok, json: competition.duplicate_checker_jobs.order(created_at: :desc).first
   end
 
   def compute_potential_duplicates
     competition = competition_from_params
 
-    competition.update!(duplicate_checker_last_fetch_status: :fetch_in_progress)
-    ComputePotentialDuplicates.perform_later(competition)
+    job = DuplicateCheckerJob.create!(
+      competition_id: competition.id,
+      status: DuplicateCheckerJob.statuses[:not_started],
+    )
+    ComputePotentialDuplicates.perform_later(job)
 
-    render status: :ok, json: {
-      duplicate_checker_last_fetch_status: competition.duplicate_checker_last_fetch_status,
-    }
+    render status: :ok, json: job
   end
 
   def upload_json

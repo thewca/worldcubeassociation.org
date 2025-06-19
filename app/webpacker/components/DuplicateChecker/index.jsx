@@ -4,7 +4,7 @@ import WCAQueryClientProvider from '../../lib/providers/WCAQueryClientProvider';
 import Loading from '../Requests/Loading';
 import Errored from '../Requests/Errored';
 import computePotentialDuplicates from './api/computePotentialDuplicates';
-import getPotentialDuplicatesData from './api/getPotentialDuplicatesData';
+import getLastDuplicateCheckerJob from './api/getLastDuplicateCheckerJob';
 import SimilarPersons from './SimilarPersons';
 import DuplicateCheckerHeader from './DuplicateCheckerHeader';
 
@@ -17,31 +17,22 @@ export default function Wrapper({ competitionId }) {
 }
 
 function DuplicateChecker({ competitionId }) {
-  const { data, isLoading, isError } = useQuery({
-    queryKey: ['potential-duplicates-data', competitionId],
-    queryFn: () => getPotentialDuplicatesData({ competitionId }),
+  const { data: lastDuplicateCheckerJob, isLoading, isError } = useQuery({
+    queryKey: ['last-duplicate-checker-job', competitionId],
+    queryFn: () => getLastDuplicateCheckerJob({ competitionId }),
   });
 
   const queryClient = useQueryClient();
 
   const { mutate: computePotentialDuplicatesMutate } = useMutation({
     mutationFn: computePotentialDuplicates,
-    onSuccess: ({ duplicate_checker_last_fetch_status: duplicateCheckerLastFetchStatus }) => {
+    onSuccess: (newJob) => {
       queryClient.setQueryData(
-        ['potential-duplicates-data', competitionId],
-        (oldData) => ({
-          ...oldData,
-          duplicate_checker_last_fetch_status: duplicateCheckerLastFetchStatus,
-        }),
+        ['last-duplicate-checker-job', competitionId],
+        () => newJob,
       );
     },
   });
-
-  const {
-    duplicate_checker_last_fetch_status: lastFetchedStatus,
-    duplicate_checker_last_fetch_time: lastFetchedTime,
-    similar_persons: similarPersons,
-  } = data || {};
 
   if (isLoading) return <Loading />;
   if (isError) return <Errored />;
@@ -49,11 +40,10 @@ function DuplicateChecker({ competitionId }) {
   return (
     <>
       <DuplicateCheckerHeader
-        lastFetchedStatus={lastFetchedStatus}
-        lastFetchedTime={lastFetchedTime}
+        lastDuplicateCheckerJob={lastDuplicateCheckerJob}
         run={() => computePotentialDuplicatesMutate({ competitionId })}
       />
-      <SimilarPersons similarPersons={similarPersons} />
+      <SimilarPersons similarPersons={lastDuplicateCheckerJob.similar_persons} />
     </>
   );
 }
