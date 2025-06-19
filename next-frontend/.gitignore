@@ -47,3 +47,4 @@ next-env.d.ts
 
 # Translations
 src/lib/i18n/locales/*.json
+!src/lib/i18n/locales/available.json

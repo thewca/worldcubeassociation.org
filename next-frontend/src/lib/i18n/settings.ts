@@ -1,36 +1,7 @@
+import availableLocales from "./locales/available.json";
+
 export const fallbackLng = "en";
-export const languages = [
-  "cs",
-  "da",
-  "de",
-  "en",
-  "eo",
-  "es",
-  "eu",
-  "fi",
-  "fr",
-  "hr",
-  "hu",
-  "id",
-  "it",
-  "ja",
-  "kk",
-  "ko",
-  "nl",
-  "pl",
-  "pt",
-  "pt-BR",
-  "ro",
-  "ru",
-  "sk",
-  "sl",
-  "sv",
-  "th",
-  "uk",
-  "vi",
-  "zh-CN",
-  "zh-TW",
-];
+export const languages = Object.keys(availableLocales);
 
 export const storageKey = "i18next-lng";
 export const defaultNamespace = "translation";
