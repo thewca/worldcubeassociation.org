@@ -1,8 +1,6 @@
 import _ from "lodash";
 import continentDataRaw from "../../staticData/continents.json";
 
-// ----- CONTINENTS -----
-
 const fictionalContinentIds = ["_Multiple Continents"];
 const realContinents = continentDataRaw.filter(
   (c) => !fictionalContinentIds.includes(c.id),

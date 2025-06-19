@@ -4,8 +4,6 @@ import formats from "@/lib/wca/data/formats";
 
 type Event = (typeof eventsDataRaw)[number];
 
-// ----- EVENTS -----
-
 const events = {
   official: eventsDataRaw.map(extendEvents).filter((e) => e.is_official),
   byId: _.mapValues(_.keyBy(eventsDataRaw, "id"), extendEvents),
