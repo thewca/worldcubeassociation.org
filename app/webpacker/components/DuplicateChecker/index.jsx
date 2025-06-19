@@ -18,7 +18,7 @@ export default function Wrapper({ competitionId }) {
 
 function DuplicateChecker({ competitionId }) {
   const { data, isLoading, isError } = useQuery({
-    queryKey: ['potential-duplicates-data'],
+    queryKey: ['potential-duplicates-data', competitionId],
     queryFn: () => getPotentialDuplicatesData({ competitionId }),
   });
 
@@ -28,7 +28,7 @@ function DuplicateChecker({ competitionId }) {
     mutationFn: computePotentialDuplicates,
     onSuccess: ({ duplicate_checker_last_fetch_status: duplicateCheckerLastFetchStatus }) => {
       queryClient.setQueryData(
-        ['potential-duplicates-data'],
+        ['potential-duplicates-data', competitionId],
         (oldData) => ({
           ...oldData,
           duplicate_checker_last_fetch_status: duplicateCheckerLastFetchStatus,
