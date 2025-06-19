@@ -20,6 +20,7 @@ EnvConfig = SuperConfig.new(raise_exception: !is_compiling_assets) do
     mandatory :AWS_REGION, :string
     mandatory :DATABASE_WRT_USER, :string
     optional :PAYPAL_BASE_URL, :string ## TODO: Change to mandatory when launching paypal
+    optional :TWITCH_PARENT_URL, :string, 'www.worldcubeassociation.org'
     mandatory :WRC_WEBHOOK_URL, :string
 
     # Production-specific stuff
@@ -53,6 +54,7 @@ EnvConfig = SuperConfig.new(raise_exception: !is_compiling_assets) do
     optional :WCA_REGISTRATIONS_URL, :string, ''
     optional :WCA_REGISTRATIONS_POLL_URL, :string, ''
     optional :PAYPAL_BASE_URL, :string, ''
+    optional :TWITCH_PARENT_URL, :string, 'www.worldcubeassociation.org'
     optional :WRC_WEBHOOK_URL, :string, ''
     optional :REGISTRATION_QUEUE, :string, ''
     optional :LIVE_QUEUE, :string, ''
