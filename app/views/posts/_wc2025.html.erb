@@ -30,13 +30,24 @@
 
     <div id="twitch-embed"></div>
 
-    <script type="text/javascript">
-      new Twitch.Embed("twitch-embed", {
-        width: 854,
-        height: 480,
-        channel: "sigalig",
-        layout: "video",
-      });
-    </script>
+    <% if TwitchInterface.wca_is_live? %>
+      <script type="text/javascript">
+        new Twitch.Embed("twitch-embed", {
+          width: 854,
+          height: 480,
+          channel: "<%= TwitchInterface::TWITCH_CHANNEL_LOGIN_NAME %>",
+          layout: "video",
+        });
+      </script>
+    <% else %>
+      <script type="text/javascript">
+        new Twitch.Embed("twitch-embed", {
+          width: 854,
+          height: 480,
+          video: <%= TwitchInterface.get_latest_vod %>,
+          layout: "video",
+        });
+      </script>
+    <% end %>
   </div>
 </div>
