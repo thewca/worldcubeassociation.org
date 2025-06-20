@@ -676,8 +676,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_06_04_143939) do
     t.string "event_id", null: false
     t.integer "round_number", null: false
     t.integer "scramble_set_number", null: false
-    t.integer "ordered_index", null: false
     t.integer "matched_round_id"
+    t.integer "matched_round_ordered_index"
     t.bigint "external_upload_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -693,7 +693,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_06_04_143939) do
     t.bigint "inbox_scramble_set_id", null: false
     t.boolean "is_extra", default: false, null: false
     t.integer "scramble_number", null: false
-    t.integer "ordered_index", null: false
     t.text "scramble_string", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -955,6 +954,24 @@ ActiveRecord::Schema[7.2].define(version: 2025_06_04_143939) do
     t.index ["person_id"], name: "fk_persons"
   end
 
+  create_table "records", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "record_type", null: false
+    t.bigint "result_id", null: false
+    t.integer "value", null: false
+    t.string "event_id", null: false
+    t.string "country_id"
+    t.string "continent_id"
+    t.string "record_timestamp", null: false
+    t.string "record_scope", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["country_id", "record_scope"], name: "index_records_on_country_id_and_record_scope"
+    t.index ["event_id", "record_scope"], name: "index_records_on_event_id_and_record_scope"
+    t.index ["event_id", "record_type", "record_scope"], name: "index_records_on_event_id_and_record_type_and_record_scope"
+    t.index ["record_scope"], name: "index_records_on_record_scope"
+    t.index ["result_id"], name: "index_records_on_result_id"
+  end
+
   create_table "regional_organizations", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
     t.string "country", null: false
@@ -1033,7 +1050,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_06_04_143939) do
 
   create_table "registrations", id: { type: :integer, unsigned: true }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "competition_id", limit: 32, default: "", null: false
-    t.integer "registrant_id", null: false
+    t.integer "registrant_id"
     t.text "comments"
     t.string "ip", limit: 16, default: "", null: false
     t.integer "user_id"
@@ -1050,7 +1067,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_06_04_143939) do
     t.string "competing_status", default: "pending", null: false
     t.datetime "registered_at", null: false
     t.index ["competition_id", "competing_status"], name: "index_registrations_on_competition_id_and_competing_status"
-    t.index ["competition_id", "registrant_id"], name: "index_registrations_on_competition_id_and_registrant_id", unique: true
     t.index ["competition_id", "user_id"], name: "index_registrations_on_competition_id_and_user_id", unique: true
     t.index ["competition_id"], name: "index_registrations_on_competition_id"
     t.index ["user_id"], name: "index_registrations_on_user_id"
@@ -1089,7 +1105,9 @@ ActiveRecord::Schema[7.2].define(version: 2025_06_04_143939) do
     t.index ["competition_id", "updated_at"], name: "index_Results_on_competitionId_and_updated_at"
     t.index ["competition_id"], name: "Results_fk_tournament"
     t.index ["country_id"], name: "_tmp_index_Results_on_countryId"
+    t.index ["event_id", "average", "id"], name: "index_results_on_event_id_and_average_and_id"
     t.index ["event_id", "average"], name: "Results_eventAndAverage"
+    t.index ["event_id", "best", "id"], name: "index_results_on_event_id_and_best_and_id"
     t.index ["event_id", "best"], name: "Results_eventAndBest"
     t.index ["event_id", "competition_id", "round_type_id", "country_id", "average"], name: "Results_regionalAverageRecordCheckSpeedup"
     t.index ["event_id", "competition_id", "round_type_id", "country_id", "best"], name: "Results_regionalSingleRecordCheckSpeedup"
