@@ -10,7 +10,11 @@ import {
 import { cookies, headers } from "next/headers";
 import parser from "accept-language-parser";
 
-export async function getT(options?: { keyPrefix?: string }) {
+import type { UseTranslationOptions } from "react-i18next";
+
+export async function getT(
+  options?: UseTranslationOptions<typeof defaultNamespace>,
+) {
   const cookieList = await cookies();
   const headerList = await headers();
 

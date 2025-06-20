@@ -26,6 +26,10 @@ i18next
     fallbackNS: "",
     defaultNS: defaultNamespace,
     preload: runsOnServerSide ? languages : [],
+    interpolation: {
+      prefix: "%{",
+      suffix: "}",
+    },
     detection: {
       order: ["cookie", "navigator"],
       lookupCookie: storageKey,
