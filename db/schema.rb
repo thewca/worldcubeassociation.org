@@ -349,6 +349,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_06_04_143939) do
   create_table "competition_payment_integrations", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "connected_account_type", null: false
     t.bigint "connected_account_id", null: false
+    t.boolean "is_inactive", default: false, null: false
     t.string "competition_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -1188,7 +1189,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_06_04_143939) do
   end
 
   create_table "schedule_activities", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
-    t.bigint "venue_room_id", null: false
+    t.bigint "venue_room_id"
     t.bigint "parent_activity_id"
     t.integer "wcif_id", null: false
     t.string "name", null: false
