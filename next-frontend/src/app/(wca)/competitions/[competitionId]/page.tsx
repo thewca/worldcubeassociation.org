@@ -532,7 +532,10 @@ export default async function CompetitionOverView({
           <TabCompetitors id={competitionInfo.id} />
         </Tabs.Content>
         <Tabs.Content value="events">
-          <TabEvents />
+          <TabEvents
+            competitionId={competitionInfo.id}
+            forceQualifications={competitionInfo["uses_qualification?"]}
+          />
         </Tabs.Content>
         <Tabs.Content value="schedule">
           <TabSchedule />
