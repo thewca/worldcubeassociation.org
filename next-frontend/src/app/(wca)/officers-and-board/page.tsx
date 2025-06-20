@@ -16,35 +16,10 @@ import { useMemo } from "react";
 import UserBadge from "@/components/UserBadge";
 import { MdMarkEmailUnread } from "react-icons/md";
 import Errored from "@/components/ui/errored";
+import { useT } from "@/lib/i18n/useI18n";
 
 export default function OfficersAndBoard() {
-  const I18n = {
-    t: (path: string) => {
-      switch (path) {
-        case "page.officers_and_board.title":
-          return "WCA Officers & Board";
-        case "page.officers_and_board.officers_description":
-          return "The officers of the WCA handle tasks relating to the non-profit status of the WCA. These officers are elected by the WCA Board. The Executive Director is the Chief Executive Officer of the WCA, the Chair presides over all Board meetings, the Secretary maintains the organization's documents, and the Treasurer manages financial matters of the WCA.";
-        case "user_groups.group_types.officers":
-          return "WCA Officers";
-        case "user_groups.group_types.board":
-          return "WCA Board of Directors";
-        case "page.officers_and_board.board_description":
-          return "The WCA Board is responsible for leading the organization as a whole, and fulfilling any duties not fulfilled by other Teams and Committees";
-        default:
-          return (
-            {
-              "enums.user_roles.status.officers.chair": "WCA Chair",
-              "enums.user_roles.status.officers.executive_director":
-                "WCA Executive Director",
-              "enums.user_roles.status.officers.secretary": "WCA Secretary",
-              "enums.user_roles.status.officers.vice_chair": "WCA Vice-Chair",
-              "enums.user_roles.status.officers.treasurer": "WCA Treasurer",
-            }[path] ?? ""
-          );
-      }
-    },
-  };
+  const I18n = useT();
   const api = useAPI();
   const { data: officerRequest, isLoading: officersLoading } = useQuery({
     queryKey: ["officers"],
