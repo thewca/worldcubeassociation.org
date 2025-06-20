@@ -33,8 +33,10 @@ jobs:
         with:
           node-version: '20'
           cache: 'yarn'
-      - name: Install fresh Yarn packages
+      - name: Install fresh Yarn packages in root directory
         run: bin/yarn install
+      - name: Install Yarn packages for NextJS
+        run: cd next-frontend && bin/yarn install
       - name: Activate MySQL # as per https://github.com/actions/runner-images/blob/main/images/ubuntu/Ubuntu2404-Readme.md
         run: sudo systemctl start mysql.service
       - name: Populate database with seeds
