@@ -200,7 +200,7 @@ components:
           format: date
           nullable: true
         group:
-          $ref: '#/components/schemas/Group'
+          $ref: '#/components/schemas/UserGroup'
         user:
           $ref: '#/components/schemas/Person'
         metadata:
@@ -222,7 +222,7 @@ components:
         class:
           type: string
 
-    Group:
+    UserGroup:
       type: object
       required:
         - id

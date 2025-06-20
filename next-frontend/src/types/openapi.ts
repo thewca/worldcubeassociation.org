@@ -276,7 +276,7 @@ export interface components {
             start_date: string;
             /** Format: date */
             end_date: string | null;
-            group: components["schemas"]["Group"];
+            group: components["schemas"]["UserGroup"];
             user: components["schemas"]["Person"];
             metadata: {
                 id?: number;
@@ -290,19 +290,19 @@ export interface components {
             };
             class?: string;
         };
-        Group: {
-            id?: number;
-            name?: string;
-            group_type?: string;
+        UserGroup: {
+            id: number;
+            name: string;
+            group_type: string;
             parent_group_id?: number | null;
-            is_active?: boolean;
-            is_hidden?: boolean;
+            is_active: boolean;
+            is_hidden: boolean;
             metadata_id?: number | null;
             metadata_type?: string | null;
             /** Format: date-time */
-            created_at?: string;
+            created_at: string;
             /** Format: date-time */
-            updated_at?: string;
+            updated_at: string;
             lead_user?: components["schemas"]["Person"];
             metadata?: {
                 id?: number;
