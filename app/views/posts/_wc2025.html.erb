@@ -28,26 +28,14 @@
       >Competition Groups</a>
     </div>
 
-    <div id="twitch-embed"></div>
-
-    <% if TwitchInterface.wca_is_live? %>
-      <script type="text/javascript">
-        new Twitch.Embed("twitch-embed", {
-          width: 854,
-          height: 480,
-          channel: "<%= TwitchInterface::TWITCH_CHANNEL_LOGIN_NAME %>",
-          layout: "video",
-        });
-      </script>
-    <% else %>
-      <script type="text/javascript">
-        new Twitch.Embed("twitch-embed", {
-          width: 854,
-          height: 480,
-          video: <%= TwitchInterface.get_latest_vod %>,
-          layout: "video",
-        });
-      </script>
-    <% end %>
-  </div>
+    <iframe
+      width="854"
+      height="480"
+      src="https://www.youtube.com/embed/fqOBdW03wOo?autoplay=1&mute=1"
+      title="YouTube video player"
+      frameborder="0"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+      referrerpolicy="strict-origin-when-cross-origin"
+      allowfullscreen
+    ></iframe>
 </div>
