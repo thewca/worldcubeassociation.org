@@ -1,5 +1,6 @@
 import React from "react";
 import { Card, Table, Text } from "@chakra-ui/react";
+import { TimeLimitCutoffFooter } from "@/components/competitions/TimeLimitCutoffFooter";
 import { getEvents } from "@/lib/wca/competitions/wcif/getEvents";
 import {
   advancementConditionToString,
@@ -113,7 +114,12 @@ export default async function TabEvents({
           </Table.Body>
         </Table.Root>
       </Card.Body>
-      <Card.Footer>Explanations about what &#34;Cutoff&#34; means</Card.Footer>
+      <Card.Footer>
+        <TimeLimitCutoffFooter
+          events={events}
+          forceQualifications={forceQualifications}
+        />
+      </Card.Footer>
     </Card.Root>
   );
 }
