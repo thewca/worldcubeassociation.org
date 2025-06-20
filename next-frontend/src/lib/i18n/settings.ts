@@ -1,36 +1,19 @@
-export const fallbackLng = "en";
-export const languages = [
-  "cs",
-  "da",
-  "de",
-  "en",
-  "eo",
-  "es",
-  "eu",
-  "fi",
-  "fr",
-  "hr",
-  "hu",
-  "id",
-  "it",
-  "ja",
-  "kk",
-  "ko",
-  "nl",
-  "pl",
-  "pt",
-  "pt-BR",
-  "ro",
-  "ru",
-  "sk",
-  "sl",
-  "sv",
-  "th",
-  "uk",
-  "vi",
-  "zh-CN",
-  "zh-TW",
-];
+import availableLocales from "./locales/available.json";
+
+type LanguageCode = keyof typeof availableLocales;
+
+export const fallbackLng: LanguageCode = "en";
+export const languages: LanguageCode[] = Object.keys(
+  availableLocales,
+) as LanguageCode[];
 
 export const storageKey = "i18next-lng";
 export const defaultNamespace = "translation";
+
+const isValidLanguageCode = (code: string): code is LanguageCode =>
+  code in availableLocales;
+
+export const coerceLanguageCode = (
+  isoCode: string,
+  fallback: LanguageCode = fallbackLng,
+): LanguageCode => (isValidLanguageCode(isoCode) ? isoCode : fallback);

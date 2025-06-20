@@ -19,6 +19,8 @@ runs:
       run: |
         rm -rf ./next-frontend/src/lib/staticData
         cp -rT ./lib/static_data ./next-frontend/src/lib/staticData
+        rm ./next-frontend/src/lib/i18n/locales/available.json
+        cp ./config/locales/available.json ./next-frontend/src/lib/i18n/locales/available.json
     - name: Build and push JS Docker image
       uses: docker/build-push-action@v6
       id: build-js-image
