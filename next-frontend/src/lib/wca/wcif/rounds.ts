@@ -1,4 +1,11 @@
+import events from "@/lib/wca/data/events";
+import {
+  attemptResultToMbldPoints,
+  centisecondsToClockFormat,
+} from "@/lib/wca/wcif/attempts";
+
 import type { components } from "@/types/openapi";
+import type { TFunction } from "i18next";
 
 type WcifEvent = components["schemas"]["WcifEvent"];
 type WcifRound = components["schemas"]["WcifRound"];
@@ -70,10 +77,8 @@ export const parseActivityCode = (activityCode: string): ActivityDetails => {
       case "r":
         return { ...acc, roundNumber: numericValue };
       case "g":
-        // Now parsing 'group' into a number.
         return { ...acc, group: numericValue };
       case "a":
-        // Now parsing 'attempt' into a number.
         return { ...acc, attempt: numericValue };
       default:
         throw new Error(
@@ -84,21 +89,29 @@ export const parseActivityCode = (activityCode: string): ActivityDetails => {
 };
 
 export const localizeRoundInformation = (
+  t: TFunction,
   eventId: string,
   roundTypeId: RoundTypeId,
   attempt?: number,
 ) => {
-  const eventName = `Event ${eventId}`;
-  const roundTypeName = `RoundType ${roundTypeId}`;
+  const eventName = t(`events.${eventId}`);
+  const roundTypeName = t(`rounds.${roundTypeId}.name`);
 
-  if (attempt) {
-    return `${eventName} ${roundTypeName} (Attempt ${attempt})`;
+  const roundName = t("round.name", {
+    event_name: eventName,
+    round_name: roundTypeName,
+  });
+
+  if (attempt !== undefined) {
+    const attemptName = t("attempts.attempt_name", { number: attempt });
+    return `${roundName} (${attemptName})`;
   }
 
-  return `${eventName} ${roundTypeName}`;
+  return roundName;
 };
 
 export const localizeActivityCode = (
+  t: TFunction,
   activityCode: string,
   wcifRound: WcifRound,
   wcifEvent: WcifEvent,
@@ -116,10 +129,11 @@ export const localizeActivityCode = (
     Boolean(wcifRound.cutoff),
   );
 
-  return localizeRoundInformation(eventId, roundTypeId, attemptNumber);
+  return localizeRoundInformation(t, eventId, roundTypeId, attemptNumber);
 };
 
 export const timeLimitToString = (
+  t: TFunction,
   wcifTimeLimit: WcifTimeLimit | undefined,
   eventId: string,
   siblingEvents: WcifEvent[],
@@ -127,7 +141,7 @@ export const timeLimitToString = (
   // From WCIF specification:
   // For events with unchangeable time limit (3x3x3 MBLD, 3x3x3 FM) the value is null.
   if (!wcifTimeLimit) {
-    return `Fixed time limit: ${eventId}`; // TODO I18N
+    return t(`time_limit.${eventId}`);
   }
 
   const timeStr = centisecondsToClockFormat(wcifTimeLimit.centiseconds);
@@ -137,7 +151,7 @@ export const timeLimitToString = (
   }
 
   if (wcifTimeLimit.cumulativeRoundIds.length === 1) {
-    return `Cumulative: ${timeStr}`;
+    return t("time_limit.cumulative.one_round", { time: timeStr });
   }
 
   const allWcifRounds = siblingEvents.flatMap((event) => event.rounds);
@@ -162,6 +176,7 @@ export const timeLimitToString = (
     }
 
     return localizeActivityCode(
+      t,
       cumulativeRound.id,
       cumulativeRound,
       cumulativeEvent,
@@ -173,43 +188,121 @@ export const timeLimitToString = (
   //   so resort to using comma instead.
   const roundStr = roundStrs.join(", ");
 
-  return `Across rounds: ${timeStr} for ${roundStr}`;
+  return t("time_limit.cumulative.across_rounds", {
+    time: timeStr,
+    rounds: roundStr,
+  });
 };
 
-export const cutoffToString = (wcifCutoff: WcifCutoff, eventId: string) => {
-  return `Cutoff in ${wcifCutoff.numberOfAttempts} attempts for event ${eventId}`;
+export const cutoffToString = (
+  t: TFunction,
+  wcifCutoff: WcifCutoff,
+  eventId: string,
+) => {
+  const wcaEvent = events.byId[eventId];
+
+  if (wcaEvent.is_timed_event) {
+    return t("cutoff.time", {
+      count: wcifCutoff.numberOfAttempts,
+      time: centisecondsToClockFormat(wcifCutoff.attemptResult),
+    });
+  }
+  if (wcaEvent.is_fewest_moves) {
+    return t("cutoff.moves", {
+      count: wcifCutoff.numberOfAttempts,
+      moves: wcifCutoff.attemptResult,
+    });
+  }
+  if (wcaEvent.is_multiple_blindfolded) {
+    return t("cutoff.points", {
+      count: wcifCutoff.numberOfAttempts,
+      points: attemptResultToMbldPoints(wcifCutoff.attemptResult),
+    });
+  }
+
+  return "?";
 };
 
 export const advancementConditionToString = (
+  t: TFunction,
   wcifAdvancementCondition: WcifAdvancementCondition,
   eventId: string,
   roundFormat: string,
 ) => {
   switch (wcifAdvancementCondition.type) {
     case "ranking":
-      return `Only the best ${wcifAdvancementCondition.level} shall pass`;
+      return t(`advancement_condition.ranking`, {
+        ranking: wcifAdvancementCondition.level,
+      });
     case "percent":
-      return `Only the best ${wcifAdvancementCondition.level}% shall pass`;
+      return t(`advancement_condition.percent`, {
+        percent: wcifAdvancementCondition.level,
+      });
     case "attemptResult":
-      return `Your ${roundFormat} must be under a score of ${wcifAdvancementCondition.level}, whatever that means for ${eventId} specifics`;
+      const roundName = t(`formats.${roundFormat}`);
+      const wcaEvent = events.byId[eventId];
+
+      if (wcaEvent.is_timed_event) {
+        return t(`advancement_condition.attempt_result.time`, {
+          round_format: roundName,
+          time: centisecondsToClockFormat(wcifAdvancementCondition.level),
+        });
+      }
+      if (wcaEvent.is_fewest_moves) {
+        return t(`advancement_condition.attempt_result.moves`, {
+          round_format: roundName,
+          moves: wcifAdvancementCondition.level,
+        });
+      }
+      if (wcaEvent.is_multiple_blindfolded) {
+        return t(`advancement_condition.attempt_result.points`, {
+          round_format: roundName,
+          points: attemptResultToMbldPoints(wcifAdvancementCondition.level),
+        });
+      }
+
+      return "?";
   }
 };
 
 export const qualificationToString = (
+  t: TFunction,
   wcifQualification: WcifQualification,
   eventId: string,
 ) => {
   const dateString = `${wcifQualification.whenDate} in your local TZ`;
 
+  const deadlineString = t("qualification.deadline.by_date", {
+    date: dateString,
+  });
+
+  const wcaEvent = events.byId[eventId];
+
   switch (wcifQualification.type) {
     case "ranking":
-      return `${wcifQualification.resultType} must be ranked better than ${wcifQualification.level} before ${dateString}`;
+      const rankingMessage = `qualification.${wcifQualification.resultType}.ranking`;
+      return `${t(rankingMessage, { ranking: wcifQualification.level })} ${deadlineString}`;
     case "anyResult":
-      return `Must have a ${wcifQualification.resultType} result before ${dateString}`;
+      const anyResultMessage = `qualification.${wcifQualification.resultType}.any_result`;
+      return `${t(anyResultMessage)} ${deadlineString}`;
     case "attemptResult":
-      return `Must have a ${wcifQualification.resultType} result better than ${wcifQualification.level} as per ${eventId} before ${dateString}`;
+      if (wcaEvent.is_timed_event) {
+        const attemptResultTimeMessage = `qualification.${wcifQualification.resultType}.time`;
+        return `${t(attemptResultTimeMessage, { time: centisecondsToClockFormat(wcifQualification.level) })} ${deadlineString}`;
+      }
+      if (wcaEvent.is_fewest_moves) {
+        const messageName = `qualification.${wcifQualification.resultType}.moves`;
+        const moves =
+          wcifQualification.resultType === "average"
+            ? wcifQualification.level / 100
+            : wcifQualification.level;
+
+        return `${t(messageName, { moves })} ${deadlineString}`;
+      }
+      if (wcaEvent.is_multiple_blindfolded) {
+        const messageName = `qualification.${wcifQualification.resultType}.points`;
+        return `${t(messageName, { points: attemptResultToMbldPoints(wcifQualification.level) })} ${deadlineString}`;
+      }
+      return `?`;
   }
 };
-
-const centisecondsToClockFormat = (centiseconds: number): string =>
-  centiseconds.toString(); // TODO GB

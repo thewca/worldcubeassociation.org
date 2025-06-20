@@ -8,6 +8,7 @@ import {
   qualificationToString,
   timeLimitToString,
 } from "@/lib/wca/wcif/rounds";
+import { getT } from "@/lib/i18n/get18n";
 
 interface TabEventsProps {
   competitionId: string;
@@ -35,6 +36,8 @@ export default async function TabEvents({
   const showQualifications =
     forceQualifications || events.some((event) => Boolean(event.qualification));
 
+  const { t } = await getT();
+
   return (
     <Card.Root>
       <Card.Body>
@@ -58,31 +61,32 @@ export default async function TabEvents({
                 <Table.Row key={round.id}>
                   {idx === 0 && (
                     <Table.Cell rowSpan={event.rounds.length}>
-                      {event.id}
+                      {t(`events.${event.id}`)}
                     </Table.Cell>
                   )}
                   <Table.Cell>
-                    {getRoundTypeId(
-                      idx + 1,
-                      event.rounds.length,
-                      Boolean(round.cutoff),
+                    {t(
+                      `rounds.${getRoundTypeId(idx + 1, event.rounds.length, Boolean(round.cutoff))}.cell_name`,
                     )}
                   </Table.Cell>
                   <Table.Cell>
-                    {round.cutoff && `${round.cutoff.numberOfAttempts} / `}
-                    {round.format}
+                    {round.cutoff &&
+                      `${t(`formats.short.${round.cutoff.numberOfAttempts}`)} / `}
+                    {t(`formats.short.${round.format}`)}
                   </Table.Cell>
                   <Table.Cell>
-                    {timeLimitToString(round.timeLimit, event.id, events)}
+                    {timeLimitToString(t, round.timeLimit, event.id, events)}
                   </Table.Cell>
                   {showCutoff && (
                     <Table.Cell>
-                      {round.cutoff && cutoffToString(round.cutoff, event.id)}
+                      {round.cutoff &&
+                        cutoffToString(t, round.cutoff, event.id)}
                     </Table.Cell>
                   )}
                   <Table.Cell>
                     {round.advancementCondition &&
                       advancementConditionToString(
+                        t,
                         round.advancementCondition,
                         event.id,
                         round.format,
@@ -94,6 +98,7 @@ export default async function TabEvents({
                         <>
                           {event.qualification
                             ? qualificationToString(
+                                t,
                                 event.qualification,
                                 event.id,
                               )
