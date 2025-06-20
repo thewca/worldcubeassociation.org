@@ -931,8 +931,6 @@ fr-CA:
         status: ''
       results_submission:
         #original_hash: da39a3e
-        schedule_url: ''
-        #original_hash: da39a3e
         results_file: ''
         #original_hash: da39a3e
         message: ''
@@ -1070,7 +1068,7 @@ fr-CA:
           otp_email:
             #original_hash: a238ac2
             subject: Votre code à usage unique pour le site internet de la WCA
-            #original_hash: 7aa8fc0
+            #original_hash: f126936
             2fa_attempt: >-
               Vous être en train de vous connecter sur le site de la WCA.
               L'authentification à deux facteur est activée pour votre compte,
@@ -3563,7 +3561,7 @@ fr-CA:
             Nom de la ville où la compétition a lieu ainsi que la province /
             état (dans les pays où c'est l'usage). Ne pas mettre le pays.
             Exemple d'entrée valide : Montréal, Quebec
-          #original_hash: 84d365b
+          #original_hash: 37f2d96
           name_html: >-
             La salle où la compétition à lieu. %{md}. Par exemple : [École de
             Technologie Supérieure](https://www.etsmtl.ca)
@@ -5053,6 +5051,13 @@ fr-CA:
       success: Merci pour votre message. Nous vous contacterons bientôt !
       #original_hash: d4918d2
       delivery_error: Erreur lors de l'envoi du message.
+  misc:
+    #original_hash: 0d220a6
+    forum_age_requirement: Vous devez avoir au moins 13 ans pour accéder au Forum de la WCA.
+    #original_hash: 51320c6
+    forum_enter_dob: >-
+      Une date de naissance est requise pour accéder au forum. Veuillez saisir
+      votre date de naissance, puis essayez à nouveau d'accéder au forum.
   faq:
     #original_hash: 541998a
     title: Foire Aux Questions

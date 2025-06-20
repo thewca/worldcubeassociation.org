@@ -931,8 +931,6 @@ fr:
         status: ''
       results_submission:
         #original_hash: da39a3e
-        schedule_url: ''
-        #original_hash: da39a3e
         results_file: ''
         #original_hash: da39a3e
         message: ''
@@ -5052,6 +5050,13 @@ fr:
       success: Merci pour votre message. Nous vous contacterons bientôt !
       #original_hash: 8e3a9da
       delivery_error: Erreur lors de l'envoi du message.
+  misc:
+    #original_hash: 9a0f1cc
+    forum_age_requirement: Vous devez avoir au moins 13 ans pour accéder au Forum de la WCA.
+    #original_hash: d1f3342
+    forum_enter_dob: >-
+      Une date de naissance est requise pour accéder au forum. Veuillez saisir
+      votre date de naissance, puis essayez à nouveau d'accéder au forum.
   faq:
     #original_hash: d790b40
     title: Foire Aux Questions
