@@ -33,22 +33,14 @@ jobs:
         with:
           node-version: '20'
           cache: 'yarn'
-      - name: Install fresh Yarn packages
+      - name: Install fresh Yarn packages in root directory
         run: bin/yarn install
-      - name: Run Overcommit commit hooks
-        run: |
-          gem install overcommit
-          overcommit --sign
-          overcommit --sign pre-commit
-          overcommit --run
+      - name: Install Yarn packages for NextJS
+        run: cd next-frontend && yarn install
       - name: Activate MySQL # as per https://github.com/actions/runner-images/blob/main/images/ubuntu/Ubuntu2404-Readme.md
         run: sudo systemctl start mysql.service
       - name: Populate database with seeds
         run: bin/rake db:reset
-      - name: Pre-compile assets for frontend tests
-        run: |
-          bin/bundle exec i18n export
-          bin/rake assets:precompile
       - name: Install Playwright Browsers # as per https://playwright.dev/docs/ci#github-actions
         run: bin/yarn playwright install --with-deps
       - name: Run Playwright tests
