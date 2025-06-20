@@ -18,6 +18,7 @@ import MyResultsIcon from "@/components/icons/MyResultsIcon";
 import RegulationsHistoryIcon from "@/components/icons/RegulationsHistoryIcon";
 import NationalChampionshipIcon from "@/components/icons/NationalChampionshipIcon";
 import { LuStar, LuCircleHelp } from "react-icons/lu";
+import countries from "@/lib/wca/data/countries";
 import Flag from "react-world-flags";
 
 interface ProfileData {
@@ -85,7 +86,7 @@ const ProfileCard: React.FC<ProfileData> = ({
               <>
                 <Flex gap="1">
                   <Flag code={regionIso2} fallback="" height="20" width="28" />
-                  Representing {regionIso2}
+                  Representing {countries.byIso2[regionIso2].id}
                 </Flex>
               </>
             }

@@ -29,6 +29,13 @@ const cmsWcaProvider: Provider = {
       roles: profile.roles,
     };
   },
+  // allow re-linking of accounts that have the same email.
+  //   This happens when a user who is allowed to use Payload
+  //   First logs in via the "normal" provider, and later wants to "switch"
+  //   to using Payload via the CMS provider.
+  // See https://authjs.dev/concepts#security for details. Quote:
+  //   > Examples of scenarios where this is secure include an OAuth provider you control [...]
+  allowDangerousEmailAccountLinking: true,
 };
 
 export const authConfig: NextAuthConfig = {

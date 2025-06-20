@@ -18,6 +18,7 @@ import { ColorModeButton } from "@/components/ui/color-mode";
 import { LuChevronDown, LuMonitorCheck } from "react-icons/lu";
 
 import { iconMap, IconName } from "@/components/icons/iconMap";
+import LanguageSelector from "@/components/ui/languageSelector";
 
 interface IconDisplayProps {
   name: IconName | undefined | null;
@@ -138,6 +139,7 @@ export default async function Navbar() {
         )}
       </HStack>
       <HStack>
+        <LanguageSelector />
         <ColorModeButton />
         <Button asChild variant="ghost" size="sm">
           <Link href="/payload">Payload CMS</Link>

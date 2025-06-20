@@ -5,6 +5,7 @@ import EventIcon from "@/components/EventIcon";
 import CountryMap from "@/components/CountryMap";
 import { useQuery } from "@tanstack/react-query";
 import useAPI from "@/lib/wca/useAPI";
+import { useT } from "@/lib/i18n/useI18n";
 
 interface CompetitorData {
   id: string;
@@ -12,6 +13,7 @@ interface CompetitorData {
 
 const TabCompetitors: React.FC<CompetitorData> = ({ id }) => {
   const api = useAPI();
+  const { t } = useT();
 
   const { data: registrationsQuery, isFetching } = useQuery({
     queryKey: ["registrations", id],
@@ -39,7 +41,7 @@ const TabCompetitors: React.FC<CompetitorData> = ({ id }) => {
   }
 
   if (!registrationsQuery?.data) {
-    return <Text>Welp, that didn&apos;t work!</Text>;
+    return <Text>{t("competitions.registration_v2.errors.-1001")}</Text>;
   }
 
   return (
