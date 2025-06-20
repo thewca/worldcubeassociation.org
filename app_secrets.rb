@@ -80,8 +80,8 @@ AppSecrets = SuperConfig.new(raise_exception: !EnvConfig.ASSETS_COMPILATION?) do
     vault :WRC_WEBHOOK_USERNAME
     vault :WRC_WEBHOOK_PASSWORD
     vault :CURRENCY_LAYER_API_KEY
-    vault :TWITCH_CLIENT_ID, :string, ''
-    vault :TWITCH_CLIENT_SECRET, :string, ''
+    vault :TWITCH_CLIENT_ID
+    vault :TWITCH_CLIENT_SECRET
 
     # To allow logging in to staging with your prod account
     unless EnvConfig.WCA_LIVE_SITE?
