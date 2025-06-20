@@ -801,16 +801,16 @@ export interface components {
             extensions: unknown[];
         };
         WcifActivity: {
-            id?: number;
-            name?: string;
-            activityCode?: components["schemas"]["WcifActivityCode"];
+            id: number;
+            name: string;
+            activityCode: components["schemas"]["WcifActivityCode"];
             /** Format: date-time */
-            startTime?: string;
+            startTime: string;
             /** Format: date-time */
-            endTime?: string;
-            childActivities?: components["schemas"]["WcifActivity"][];
+            endTime: string;
+            childActivities: components["schemas"]["WcifActivity"][];
             scrambleSetId?: number;
-            extensions?: unknown[];
+            extensions: unknown[];
         };
         /** @example US */
         WcifCountryCode: string;
