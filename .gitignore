@@ -65,7 +65,6 @@ yarn-debug.log*
 next-frontend/src/app/(wca)/fonts/TTNormsPro/*
 
 # Playwright
-node_modules/
 /test-results/
 /playwright-report/
 /blob-report/
