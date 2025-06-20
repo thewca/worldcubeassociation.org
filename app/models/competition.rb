@@ -701,7 +701,8 @@ class Competition < ApplicationRecord
              'venue_countries',
              'venue_continents',
              'waiting_list',
-             'scramble_file_uploads'
+             'scramble_file_uploads',
+             'duplicate_checker_jobs'
           # Do nothing as they shouldn't be cloned.
         when 'organizers'
           clone.organizers = organizers
