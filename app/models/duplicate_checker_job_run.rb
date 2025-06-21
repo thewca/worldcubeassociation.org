@@ -1,8 +1,10 @@
 # frozen_string_literal: true
 
-class DuplicateCheckerJob < ApplicationRecord
+class DuplicateCheckerJobRun < ApplicationRecord
   has_many :potential_duplicate_people, dependent: :destroy
   belongs_to :competition
+
+  default_scope -> { order(start_time: :desc) }
 
   enum :status, {
     not_started: 'not_started',

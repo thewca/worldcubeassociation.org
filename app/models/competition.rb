@@ -38,7 +38,9 @@ class Competition < ApplicationRecord
   belongs_to :cancelled_by_user, optional: true, foreign_key: "cancelled_by", class_name: "User"
   has_many :competition_payment_integrations
   has_many :scramble_file_uploads
-  has_many :duplicate_checker_jobs, dependent: :delete_all
+  has_many :accepted_registrations, -> { accepted }, class_name: "Registration", foreign_key: "competition_id"
+  has_many :accepted_newcomers, -> { where(wca_id: nil) }, through: :accepted_registrations, source: :user
+  has_many :duplicate_checker_job_runs, dependent: :delete_all
 
   accepts_nested_attributes_for :competition_events, allow_destroy: true
   accepts_nested_attributes_for :championships, allow_destroy: true
@@ -702,7 +704,9 @@ class Competition < ApplicationRecord
              'venue_continents',
              'waiting_list',
              'scramble_file_uploads',
-             'duplicate_checker_jobs'
+             'accepted_registrations',
+             'accepted_newcomers',
+             'duplicate_checker_job_runs'
           # Do nothing as they shouldn't be cloned.
         when 'organizers'
           clone.organizers = organizers

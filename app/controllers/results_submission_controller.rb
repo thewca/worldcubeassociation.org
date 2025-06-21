@@ -16,18 +16,18 @@ class ResultsSubmissionController < ApplicationController
     @competition = competition_from_params
   end
 
-  def last_duplicate_checker_job
+  def last_duplicate_checker_job_run
     competition = competition_from_params
 
-    render status: :ok, json: competition.duplicate_checker_jobs.order(created_at: :desc).first
+    render status: :ok, json: competition.duplicate_checker_job_runs.first
   end
 
   def compute_potential_duplicates
     competition = competition_from_params
 
-    job = DuplicateCheckerJob.create!(
+    job = DuplicateCheckerJobRun.create!(
       competition_id: competition.id,
-      status: DuplicateCheckerJob.statuses[:not_started],
+      status: DuplicateCheckerJobRun.statuses[:not_started],
     )
     ComputePotentialDuplicates.perform_later(job)
 

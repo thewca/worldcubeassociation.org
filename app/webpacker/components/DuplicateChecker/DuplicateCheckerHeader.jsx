@@ -1,27 +1,27 @@
 import React from 'react';
 import { DateTime } from 'luxon';
 import { Button, Message } from 'semantic-ui-react';
-import { duplicateCheckerJobStatuses } from '../../lib/wca-data.js.erb';
+import { duplicateCheckerJobRunStatuses } from '../../lib/wca-data.js.erb';
 
-export default function DuplicateCheckerHeader({ lastDuplicateCheckerJob, run }) {
+export default function DuplicateCheckerHeader({ lastDuplicateCheckerJobRun, run }) {
   if (
-    lastDuplicateCheckerJob.status === duplicateCheckerJobStatuses.in_progress
-    || lastDuplicateCheckerJob.status === duplicateCheckerJobStatuses.not_started
+    lastDuplicateCheckerJobRun.status === duplicateCheckerJobRunStatuses.in_progress
+    || lastDuplicateCheckerJobRun.status === duplicateCheckerJobRunStatuses.not_started
   ) {
     return (
       <Message info>
         Duplicate Checker is currently running. Please check after sometime.
       </Message>
     );
-  } if (lastDuplicateCheckerJob.status === duplicateCheckerJobStatuses.success) {
+  } if (lastDuplicateCheckerJobRun.status === duplicateCheckerJobRunStatuses.success) {
     return (
       <Message positive>
         {`Duplicate Checker ran successfully at ${
-          DateTime.fromISO(lastDuplicateCheckerJob.end_time).toLocal().toRelative()}.`}
+          DateTime.fromISO(lastDuplicateCheckerJobRun.end_time).toLocal().toRelative()}.`}
         <Button onClick={run}>Re-run now</Button>
       </Message>
     );
-  } if (lastDuplicateCheckerJob.status === duplicateCheckerJobStatuses.failed) {
+  } if (lastDuplicateCheckerJobRun.status === duplicateCheckerJobRunStatuses.failed) {
     return (
       <Message negative>
         Something went wrong. Please try running again.
