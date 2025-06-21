@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-class CreateDuplicateCheckerJobs < ActiveRecord::Migration[7.2]
+class CreateDuplicateCheckerJobRuns < ActiveRecord::Migration[7.2]
   def change
-    create_table :duplicate_checker_jobs do |t|
+    create_table :duplicate_checker_job_runs do |t|
       t.references :competition, null: false, type: :string
       t.datetime :start_time
       t.datetime :end_time

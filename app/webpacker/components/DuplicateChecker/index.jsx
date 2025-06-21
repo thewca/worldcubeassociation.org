@@ -4,7 +4,7 @@ import WCAQueryClientProvider from '../../lib/providers/WCAQueryClientProvider';
 import Loading from '../Requests/Loading';
 import Errored from '../Requests/Errored';
 import computePotentialDuplicates from './api/computePotentialDuplicates';
-import getLastDuplicateCheckerJob from './api/getLastDuplicateCheckerJob';
+import getLastDuplicateCheckerJobRun from './api/getLastDuplicateCheckerJobRun';
 import SimilarPersons from './SimilarPersons';
 import DuplicateCheckerHeader from './DuplicateCheckerHeader';
 
@@ -17,9 +17,9 @@ export default function Wrapper({ competitionId }) {
 }
 
 function DuplicateChecker({ competitionId }) {
-  const { data: lastDuplicateCheckerJob, isLoading, isError } = useQuery({
+  const { data: lastDuplicateCheckerJobRun, isLoading, isError } = useQuery({
     queryKey: ['last-duplicate-checker-job', competitionId],
-    queryFn: () => getLastDuplicateCheckerJob({ competitionId }),
+    queryFn: () => getLastDuplicateCheckerJobRun({ competitionId }),
   });
 
   const queryClient = useQueryClient();
@@ -40,10 +40,10 @@ function DuplicateChecker({ competitionId }) {
   return (
     <>
       <DuplicateCheckerHeader
-        lastDuplicateCheckerJob={lastDuplicateCheckerJob}
+        lastDuplicateCheckerJobRun={lastDuplicateCheckerJobRun}
         run={() => computePotentialDuplicatesMutate({ competitionId })}
       />
-      <SimilarPersons similarPersons={lastDuplicateCheckerJob.similar_persons} />
+      <SimilarPersons similarPersons={lastDuplicateCheckerJobRun.similar_persons} />
     </>
   );
 }
