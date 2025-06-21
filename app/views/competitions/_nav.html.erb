@@ -79,6 +79,13 @@
           }
         end
         if current_user&.can_upload_competition_results?(@competition)
+          unless @competition.probably_over?
+            nav_items << {
+              text: t('.menu.duplicate_checker'),
+              path: competition_duplicate_checker_path(@competition),
+              icon: "users",
+            }
+          end
           nav_items << {
             text: t('.menu.submit_results'),
             path: competition_submit_results_edit_path(@competition),
