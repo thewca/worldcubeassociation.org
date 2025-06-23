@@ -12,7 +12,7 @@ class ResultsSubmissionController < ApplicationController
     @results_validator.validate(@competition.id)
   end
 
-  def duplicate_checker
+  def newcomer_checks
     @competition = competition_from_params
   end
 

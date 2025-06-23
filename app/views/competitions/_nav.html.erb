@@ -81,8 +81,8 @@
         if current_user&.can_upload_competition_results?(@competition)
           unless @competition.probably_over?
             nav_items << {
-              text: t('.menu.duplicate_checker'),
-              path: competition_duplicate_checker_path(@competition),
+              text: t('.menu.newcomer_checks'),
+              path: competition_newcomer_checks_path(@competition),
               icon: "users",
             }
           end

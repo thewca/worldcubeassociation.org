@@ -1,9 +1,9 @@
-<% provide(:title, "Duplicate Checker") %>
+<% provide(:title, "Newcomer Checks") %>
 
 <%= render layout: 'nav' do %>
   <h1><%= yield(:title) %></h1>
 
-  <%= react_component("DuplicateChecker", {
+  <%= react_component("NewcomerChecks", {
     competitionId: @competition.id,
   }) %>
 
