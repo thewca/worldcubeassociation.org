@@ -93,9 +93,9 @@ export default function OfficersAndBoard() {
           {board.map((board) => (
             <UserBadge
               key={board.id}
-              profilePicture={board.user!.avatar.url}
-              name={board.user!.name}
-              wcaId={board.user!.wca_id}
+              profilePicture={board.user.avatar.url}
+              name={board.user.name}
+              wcaId={board.user.wca_id}
             />
           ))}
         </SimpleGrid>
