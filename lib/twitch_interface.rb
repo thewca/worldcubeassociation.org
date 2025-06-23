@@ -1,4 +1,5 @@
 module TwitchInterface
+  TARGET_VIDEO_ID =
   FINGER_FLOCK_NAME = "FlockFingerLakes"
   WCA_NAME = "WorldCubeAssociationOfficial"
   TWITCH_CHANNEL_LOGIN_NAME = 'lofigirl'
