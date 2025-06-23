@@ -3739,18 +3739,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@payloadcms/plugin-cloud-storage@npm:3.42.0":
-  version: 3.42.0
-  resolution: "@payloadcms/plugin-cloud-storage@npm:3.42.0"
+"@payloadcms/plugin-cloud-storage@npm:3.43.0":
+  version: 3.43.0
+  resolution: "@payloadcms/plugin-cloud-storage@npm:3.43.0"
   dependencies:
-    "@payloadcms/ui": "npm:3.42.0"
+    "@payloadcms/ui": "npm:3.43.0"
     find-node-modules: "npm:^2.1.3"
     range-parser: "npm:^1.2.1"
   peerDependencies:
-    payload: 3.42.0
+    payload: 3.43.0
     react: ^19.0.0 || ^19.0.0-rc-65a56d0e-20241020
     react-dom: ^19.0.0 || ^19.0.0-rc-65a56d0e-20241020
-  checksum: 10c0/690dcf1ffb7ecfc92b27a3dc6f0bce45e3a6d002dd27163faa6d30b1ba0bf0e5b05c1e178cfbd28a8fb0e9f47cc2ddd9b677b5ec002e143db5ce09910d8982bc
+  checksum: 10c0/abbb9d8ce7a8848f0325691cf91dbd3160bb47e8de1fd1559d342e905228fe487cb651f5db5cd2c194b5ea305cf9a56cb80144bbe100b02a5a34c2b90fa19832
   languageName: node
   linkType: hard
 
@@ -3796,17 +3796,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@payloadcms/storage-s3@npm:^3.42.0":
-  version: 3.42.0
-  resolution: "@payloadcms/storage-s3@npm:3.42.0"
+"@payloadcms/storage-s3@npm:^3.43.0":
+  version: 3.43.0
+  resolution: "@payloadcms/storage-s3@npm:3.43.0"
   dependencies:
     "@aws-sdk/client-s3": "npm:^3.614.0"
     "@aws-sdk/lib-storage": "npm:^3.614.0"
     "@aws-sdk/s3-request-presigner": "npm:^3.614.0"
-    "@payloadcms/plugin-cloud-storage": "npm:3.42.0"
+    "@payloadcms/plugin-cloud-storage": "npm:3.43.0"
   peerDependencies:
-    payload: 3.42.0
-  checksum: 10c0/5b847b984ab2c26ad504171c81b6bd3e8a11b730a5185521be009679408c186ae86793bdaa0a1bbe717262fc419e78db8e80c94655c487e41aaab6a61a79b0f0
+    payload: 3.43.0
+  checksum: 10c0/1375f39e6add849738102a5f109781e2174847462d8e149a5dc4d1aa85f0b8559cadad34ac8163fadc89b07a949a1ed78fd2101150791d08f6405c651389148b
   languageName: node
   linkType: hard
 
@@ -12814,7 +12814,7 @@ __metadata:
     "@payloadcms/live-preview-react": "npm:^3.42.0"
     "@payloadcms/next": "npm:^3.43.0"
     "@payloadcms/richtext-lexical": "npm:^3.42.0"
-    "@payloadcms/storage-s3": "npm:^3.42.0"
+    "@payloadcms/storage-s3": "npm:^3.43.0"
     "@stylistic/eslint-plugin": "npm:^5.0.0"
     "@tanstack/eslint-plugin-query": "npm:^5.81.2"
     "@tanstack/react-query": "npm:^5.81.2"
