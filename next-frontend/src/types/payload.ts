@@ -121,10 +121,12 @@ export interface Config {
   globals: {
     nav: Nav;
     home: Home;
+    'about-regulations-page': AboutRegulationsPage;
   };
   globalsSelect: {
     nav: NavSelect<false> | NavSelect<true>;
     home: HomeSelect<false> | HomeSelect<true>;
+    'about-regulations-page': AboutRegulationsPageSelect<false> | AboutRegulationsPageSelect<true>;
   };
   locale: null;
   user: User & {
@@ -1131,6 +1133,37 @@ export interface FullWidthBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "about-regulations-page".
+ */
+export interface AboutRegulationsPage {
+  id: number;
+  blocks: {
+    title: string;
+    content: {
+      root: {
+        type: string;
+        children: {
+          type: string;
+          version: number;
+          [k: string]: unknown;
+        }[];
+        direction: ('ltr' | 'rtl') | null;
+        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+        indent: number;
+        version: number;
+      };
+      [k: string]: unknown;
+    };
+    contentMarkdown?: string | null;
+    id?: string | null;
+    blockName?: string | null;
+    blockType: 'paragraph';
+  }[];
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "nav_select".
  */
 export interface NavSelect<T extends boolean = true> {
@@ -1384,6 +1417,28 @@ export interface FullWidthBlockSelect<T extends boolean = true> {
       };
   id?: T;
   blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "about-regulations-page_select".
+ */
+export interface AboutRegulationsPageSelect<T extends boolean = true> {
+  blocks?:
+    | T
+    | {
+        paragraph?:
+          | T
+          | {
+              title?: T;
+              content?: T;
+              contentMarkdown?: T;
+              id?: T;
+              blockName?: T;
+            };
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
