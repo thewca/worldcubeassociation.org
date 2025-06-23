@@ -219,7 +219,7 @@ class Api::V0::ApiController < ApplicationController
       sql_url: "#{sql_permalink_url}.zip",
       tsv_url: "#{tsv_permalink_url}.zip",
       developer_url: DbDumpHelper.public_s3_path(DbDumpHelper::DEVELOPER_EXPORT_SQL_PERMALINK),
-      readme: DatabaseController.render_readme(self, DateTime.now)
+      readme: DatabaseController.render_readme(self, DateTime.now),
     }
   end
 
