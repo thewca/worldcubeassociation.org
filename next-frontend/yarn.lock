@@ -1540,7 +1540,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@emotion/cache@npm:^11.13.5, @emotion/cache@npm:^11.14.0, @emotion/cache@npm:^11.4.0":
+"@emotion/cache@npm:^11.14.0, @emotion/cache@npm:^11.4.0":
   version: 11.14.0
   resolution: "@emotion/cache@npm:11.14.0"
   dependencies:
@@ -1550,19 +1550,6 @@ __metadata:
     "@emotion/weak-memoize": "npm:^0.4.0"
     stylis: "npm:4.2.0"
   checksum: 10c0/3fa3e7a431ab6f8a47c67132a00ac8358f428c1b6c8421d4b20de9df7c18e95eec04a5a6ff5a68908f98d3280044f247b4965ac63df8302d2c94dba718769724
-  languageName: node
-  linkType: hard
-
-"@emotion/css@npm:^11.13.5":
-  version: 11.13.5
-  resolution: "@emotion/css@npm:11.13.5"
-  dependencies:
-    "@emotion/babel-plugin": "npm:^11.13.5"
-    "@emotion/cache": "npm:^11.13.5"
-    "@emotion/serialize": "npm:^1.3.3"
-    "@emotion/sheet": "npm:^1.4.0"
-    "@emotion/utils": "npm:^1.4.2"
-  checksum: 10c0/45d444b08c1a9776046786f1ad8b93297d9e0fb79e6a40b73e9f9c5c20a071f83bae2408e7b98fe526fc123774a18b12ae3c8dc5b5883b8169685ee7b8df9463
   languageName: node
   linkType: hard
 
@@ -3683,9 +3670,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@payloadcms/graphql@npm:3.42.0":
-  version: 3.42.0
-  resolution: "@payloadcms/graphql@npm:3.42.0"
+"@payloadcms/graphql@npm:3.43.0":
+  version: 3.43.0
+  resolution: "@payloadcms/graphql@npm:3.43.0"
   dependencies:
     graphql-scalars: "npm:1.22.2"
     pluralize: "npm:8.0.0"
@@ -3693,10 +3680,10 @@ __metadata:
     tsx: "npm:4.19.2"
   peerDependencies:
     graphql: ^16.8.1
-    payload: 3.42.0
+    payload: 3.43.0
   bin:
     payload-graphql: bin.js
-  checksum: 10c0/6b5630fa595c5853b1eebc3894cd7f9aa502ab97fadb5da4b8e553f848bf5bb2faa153fba882ce72681de678c6a3593151d207cd272b6dc7e4d810588c3a4f23
+  checksum: 10c0/d7914dcde645df9510b39a3c79fda4f03ad7378dabee514ecf8023e678df86a0bc29747a057b607a42af42d435329b0be92276f2f8f64e234e58c850565b9979
   languageName: node
   linkType: hard
 
@@ -3719,14 +3706,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@payloadcms/next@npm:^3.42.0":
-  version: 3.42.0
-  resolution: "@payloadcms/next@npm:3.42.0"
+"@payloadcms/next@npm:^3.43.0":
+  version: 3.43.0
+  resolution: "@payloadcms/next@npm:3.43.0"
   dependencies:
     "@dnd-kit/core": "npm:6.0.8"
-    "@payloadcms/graphql": "npm:3.42.0"
-    "@payloadcms/translations": "npm:3.42.0"
-    "@payloadcms/ui": "npm:3.42.0"
+    "@payloadcms/graphql": "npm:3.43.0"
+    "@payloadcms/translations": "npm:3.43.0"
+    "@payloadcms/ui": "npm:3.43.0"
     busboy: "npm:^1.6.0"
     dequal: "npm:2.0.3"
     file-type: "npm:19.3.0"
@@ -3735,14 +3722,13 @@ __metadata:
     http-status: "npm:2.1.0"
     path-to-regexp: "npm:6.3.0"
     qs-esm: "npm:7.0.2"
-    react-diff-viewer-continued: "npm:4.0.5"
     sass: "npm:1.77.4"
     uuid: "npm:10.0.0"
   peerDependencies:
     graphql: ^16.8.1
     next: ^15.2.3
-    payload: 3.42.0
-  checksum: 10c0/f774c5c5b6b9dd9e2e425d29428096f6b06678e99d6685c56e79c4599cc8a9bc3c5537c07379fb42a7e686831ec2a851aa05add763a600ccbd3e921d9a2bbd1b
+    payload: 3.43.0
+  checksum: 10c0/e5ea0e2baededd0feee431dbbdb956074aeda6cd5ec8c5957e2f8ed1a8df32df6c6af2bc7be3074a1c2bcd0a18e7367b4e16ae0e9f8f6c232fea3772a7e9de5a
   languageName: node
   linkType: hard
 
@@ -3826,6 +3812,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@payloadcms/translations@npm:3.43.0":
+  version: 3.43.0
+  resolution: "@payloadcms/translations@npm:3.43.0"
+  dependencies:
+    date-fns: "npm:4.1.0"
+  checksum: 10c0/b8bffd7fa5202da0600fba2f150246bd8dd969e5ba2f033ed4a40cf81458ccd1fba3c63e824bd0aba8d3eed4be0cdddf1883ff6b3fa9872013b76e94b938517b
+  languageName: node
+  linkType: hard
+
 "@payloadcms/ui@npm:3.42.0, @payloadcms/ui@npm:^3.16.0":
   version: 3.42.0
   resolution: "@payloadcms/ui@npm:3.42.0"
@@ -3859,6 +3854,42 @@ __metadata:
     react: ^19.0.0 || ^19.0.0-rc-65a56d0e-20241020
     react-dom: ^19.0.0 || ^19.0.0-rc-65a56d0e-20241020
   checksum: 10c0/6585d169291eea13d271239a89703a8c1e0abffd5971d82f144b068dcf5a3b595dd504a91dc2a7440eaa4a176438b9b3247046d4af59d15736c6fa5b33fe0062
+  languageName: node
+  linkType: hard
+
+"@payloadcms/ui@npm:3.43.0":
+  version: 3.43.0
+  resolution: "@payloadcms/ui@npm:3.43.0"
+  dependencies:
+    "@date-fns/tz": "npm:1.2.0"
+    "@dnd-kit/core": "npm:6.0.8"
+    "@dnd-kit/sortable": "npm:7.0.2"
+    "@dnd-kit/utilities": "npm:3.2.2"
+    "@faceless-ui/modal": "npm:3.0.0-beta.2"
+    "@faceless-ui/scroll-info": "npm:2.0.0"
+    "@faceless-ui/window-info": "npm:3.0.1"
+    "@monaco-editor/react": "npm:4.7.0"
+    "@payloadcms/translations": "npm:3.43.0"
+    bson-objectid: "npm:2.0.4"
+    date-fns: "npm:4.1.0"
+    dequal: "npm:2.0.3"
+    md5: "npm:2.3.0"
+    object-to-formdata: "npm:4.5.1"
+    qs-esm: "npm:7.0.2"
+    react-datepicker: "npm:7.6.0"
+    react-image-crop: "npm:10.1.8"
+    react-select: "npm:5.9.0"
+    scheduler: "npm:0.25.0"
+    sonner: "npm:^1.7.2"
+    ts-essentials: "npm:10.0.3"
+    use-context-selector: "npm:2.0.0"
+    uuid: "npm:10.0.0"
+  peerDependencies:
+    next: ^15.2.3
+    payload: 3.43.0
+    react: ^19.0.0 || ^19.0.0-rc-65a56d0e-20241020
+    react-dom: ^19.0.0 || ^19.0.0-rc-65a56d0e-20241020
+  checksum: 10c0/33ce23d8f16b10be64c158f106fa7c3e2cc91c2b26fa1b38b2d5a4dcf6508cdfd0009e8a850532f396d41dfc74ead75ab8e3755036dd30592e0ceb85f7ad453e
   languageName: node
   linkType: hard
 
@@ -8464,13 +8495,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"diff@npm:^5.2.0":
-  version: 5.2.0
-  resolution: "diff@npm:5.2.0"
-  checksum: 10c0/aed0941f206fe261ecb258dc8d0ceea8abbde3ace5827518ff8d302f0fc9cc81ce116c4d8f379151171336caf0516b79e01abdc1ed1201b6440d895a66689eb4
-  languageName: node
-  linkType: hard
-
 "doctrine@npm:^2.1.0":
   version: 2.1.0
   resolution: "doctrine@npm:2.1.0"
@@ -12766,7 +12790,7 @@ __metadata:
     "@payloadcms/db-mongodb": "npm:^3.42.0"
     "@payloadcms/db-sqlite": "npm:^3.42.0"
     "@payloadcms/live-preview-react": "npm:^3.42.0"
-    "@payloadcms/next": "npm:^3.42.0"
+    "@payloadcms/next": "npm:^3.43.0"
     "@payloadcms/richtext-lexical": "npm:^3.42.0"
     "@payloadcms/storage-s3": "npm:^3.42.0"
     "@stylistic/eslint-plugin": "npm:^4.4.1"
@@ -14054,22 +14078,6 @@ __metadata:
   peerDependencies:
     react: ^15.3.0 || 16 || 17 || 18
   checksum: 10c0/a015dc31ebb2777bdcc14b2b466994ff670f823c978bd5d3ee0bfd7955ccf4de48fadeac39a0a97bd8d628502c0808f384e48bf650d6a141b2f04c43275f0e29
-  languageName: node
-  linkType: hard
-
-"react-diff-viewer-continued@npm:4.0.5":
-  version: 4.0.5
-  resolution: "react-diff-viewer-continued@npm:4.0.5"
-  dependencies:
-    "@emotion/css": "npm:^11.13.5"
-    "@emotion/react": "npm:^11.14.0"
-    classnames: "npm:^2.5.1"
-    diff: "npm:^5.2.0"
-    memoize-one: "npm:^6.0.0"
-  peerDependencies:
-    react: ^15.3.0 || ^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
-    react-dom: ^15.3.0 || ^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
-  checksum: 10c0/57b3280fb21a730f10c07373353b7854657e37952fac4b70c5cc5c59391465d044a6a2531ded06ecb9237c235b86620957580e2dd7511515965073846ee7c084
   languageName: node
   linkType: hard
 
