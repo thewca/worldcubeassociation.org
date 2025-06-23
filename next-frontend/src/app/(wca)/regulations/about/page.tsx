@@ -24,7 +24,7 @@ export default async function SpeedcubingHistory() {
   return (
     <Container>
       <VStack gap="8" width="full" pt="8" alignItems="left">
-        <Heading size="5xl">{t("speedcubing_history.title")}</Heading>
+        <Heading size="5xl">{t("about_regulations.title")}</Heading>
         {aboutRegulationsItems.map((item) => (
           <Card.Root key={item.id}>
             <Card.Body>
