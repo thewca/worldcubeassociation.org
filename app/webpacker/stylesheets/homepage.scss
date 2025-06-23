@@ -104,17 +104,6 @@ footer {
   padding: 2rem;
 }
 
-.wc2025-elements {
-  background-color: rgba(255, 255, 255, 0.95); /* slightly translucent white */
-  border: 1px solid #ccc;
-  border-radius: 12px;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
-  padding: 2rem;
-  margin: 2rem auto; /* center horizontally */
-  text-align: center;
-
-}
-
 .wc2025-box > div {
   flex: 1; /* optional: make them evenly sized */
 }
@@ -132,3 +121,46 @@ footer {
   max-width: 400px;
   height: auto;
 }
+
+.wc2025-header {
+  font-size: 3em;
+  text-align: center;
+  text-shadow: 0 0 5px white;
+  text-transform: uppercase;
+  margin-bottom: 40px;
+}
+
+@media (max-width: 768px) {
+  .wc2025 {
+    width: 90%;
+    max-width: 90%;
+  }
+
+  .wc2025-header {
+    display: none
+  }
+
+  .wc2025-box {
+    width: 100%;
+    max-width: 100%;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .wc2025-box > div {
+    width: 90%;
+    max-width: 90%;
+    box-sizing: border-box; /* ensures padding doesn't overflow */
+  }
+
+  .wc2025-logo, .sponsor-logo {
+    max-width: 80%
+  }
+
+  iframe {
+    max-width: 120%;
+    height: 200px;
+  }
+}
+
+

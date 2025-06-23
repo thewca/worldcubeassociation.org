@@ -1,13 +1,13 @@
 <div class="wc2025">
-  <h1 class="ui huge header" id="welcome">
-    <%= "RUBIK'S WCA WORLD CHAMPIONSHIP 2025" %>
-  </h1>
+  <h2 class="wc2025-header">
+    <%= "JULY 3-6: RUBIK'S WCA WORLD CHAMPIONSHIP 2025" %>
+  </h2>
 
   <div class="wc2025-box">
     <div id="comp-logo">
-      <%= image_tag "https://www.cubingusa.org/static/img/wc2025-logo.png", alt: "WC2025 Logo", class: "wc2025-logo" %>
+      <%= image_tag "https://www.cubingusa.org/static/img/wc2025-logo.png", alt: "WC2025 Logo", class: "wc2025-logo", style: "margin-bottom: 20px;" %>
 
-      <div style="display: flex; flex-direction: column; gap: 10px;">
+      <div class="wc2025-buttons" style="display: flex; flex-direction: column; gap: 10px;">
         <a
           href="https://live.worldcubeassociation.org/competitions/7025"
           class="ui button primary hide-new-window-icon"
@@ -33,6 +33,7 @@
       <iframe
         width="854"
         height="480"
+        style="border-radius: 12px; overflow: hidden;"
         src=<%= TwitchInterface.get_video_embed_url("FlockFingerLakes") %>
         title="YouTube video player"
         frameborder="0"
