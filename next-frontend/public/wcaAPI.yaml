@@ -93,7 +93,17 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Results'
-
+  /export/public:
+    get:
+      summary: Get Export Information
+      operationId: getExports
+      responses:
+        "200":
+          description: Successfully retrieved exports
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ExportInfo"
   /users/me/permissions:
     get:
       summary: Get user's permissions
@@ -213,6 +223,29 @@ components:
               example: "255@worldcubeassociation.org"
             avatar:
               $ref: '#/components/schemas/UserAvatar'
+
+    ExportInfo:
+      type: object
+      required:
+        - export_date
+        - sql_url
+        - tsv_url
+        - readme
+      properties:
+        export_date:
+          type: string
+          format: date
+        sql_url:
+          type: string
+          format: uri
+        tsv_url:
+          type: string
+          format: uri
+        readme:
+          type: string
+        developer_url:
+          type: string
+          format: uri
 
     Rank:
       type: object
