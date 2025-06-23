@@ -1,41 +1,50 @@
-<script src="https://embed.twitch.tv/embed/v1.js"></script>
-
-
-<div class="ui fluid container" id="cover-homepage">
-  <h1 class="ui huge header inverted" id="welcome">
+<div class="wc2025-box">
+  <h1 class="ui huge header" id="welcome">
     <%= "RUBIK'S WCA WORLD CHAMPIONSHIP 2025" %>
   </h1>
 
-  <div id="twitch-embed-container" style="display: flex; flex-direction: column; align-items: center; gap: 20px;">
-    <div style="display: flex; gap: 10px;">
-      <a
-        href="https://live.worldcubeassociation.org/competitions/7025"
-        class="ui button primary hide-new-window-icon"
-        target="_blank"
-        rel="noopener noreferrer"
-      >Live Results</a>
-      <a
-        href="https://www.worldcubeassociation.org/competitions/WC2025#competition-schedule"
-        class="ui button primary hide-new-window-icon"
-        target="_blank"
-        rel="noopener noreferrer"
-      >Schedule</a>
-      <a
-        href="https://www.competitiongroups.com/competitions/WC2025"
-        class="ui button primary hide-new-window-icon"
-        target="_blank"
-        rel="noopener noreferrer"
-      >Competition Groups</a>
+  <div class="wc2025-elements"
+    <div id="comp-logo">
+      <%= image_tag "https://www.cubingusa.org/static/img/wc2025-logo.png", alt: "WC2025 Logo", class: "wc2025-logo" %>
+
+      <div style="display: flex; flex-direction: column; gap: 10px;">
+        <a
+          href="https://live.worldcubeassociation.org/competitions/7025"
+          class="ui button primary hide-new-window-icon"
+          target="_blank"
+          rel="noopener noreferrer"
+        >Live Results</a>
+        <a
+          href="https://www.worldcubeassociation.org/competitions/WC2025#competition-schedule"
+          class="ui button primary hide-new-window-icon"
+          target="_blank"
+          rel="noopener noreferrer"
+        >Schedule</a>
+        <a
+          href="https://www.competitiongroups.com/competitions/WC2025"
+          class="ui button primary hide-new-window-icon"
+          target="_blank"
+          rel="noopener noreferrer"
+        >Competition Groups</a>
+      </div>
     </div>
 
-    <iframe
-      width="854"
-      height="480"
-      src="https://www.youtube.com/embed/fqOBdW03wOo?autoplay=1&mute=1"
-      title="YouTube video player"
-      frameborder="0"
-      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-      referrerpolicy="strict-origin-when-cross-origin"
-      allowfullscreen
-    ></iframe>
+    <div id="embed-and-buttons" style="display: flex; flex-direction: column; align-items: center; gap: 20px;">
+      <iframe
+        width="854"
+        height="480"
+        src=<%= TwitchInterface.get_video_embed_url("FlockFingerLakes") %>
+        title="YouTube video player"
+        frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        referrerpolicy="strict-origin-when-cross-origin"
+        allowfullscreen
+      ></iframe>
+    </div>
+    <div id="sponsor-logos">
+      <%= image_tag "https://www.cubingusa.org/static/img/rubiks_new.png", alt: "WC2025 Logo", class: "sponsor-logo" %>
+      <%= image_tag "https://www.cubingusa.org/static/img/cubicle.png", alt: "WC2025 Logo", class: "sponsor-logo" %>
+    </div>
+  </div>
+
 </div>
