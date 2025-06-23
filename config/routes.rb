@@ -104,7 +104,7 @@ Rails.application.routes.draw do
     resources :competition_tabs, except: [:show], as: :tabs, path: :tabs
     get 'tabs/:id/reorder' => "competition_tabs#reorder", as: :tab_reorder
     # Delegate views and action
-    get 'duplicate-checker' => 'results_submission#duplicate_checker', as: :duplicate_checker
+    get 'newcomer-checks' => 'results_submission#newcomer_checks', as: :newcomer_checks
     get 'last-duplicate-checker-job' => 'results_submission#last_duplicate_checker_job_run', as: :last_duplicate_checker_job_run
     post 'compute_potential_duplicates' => 'results_submission#compute_potential_duplicates', as: :compute_potential_duplicates
     get 'submit-results' => 'results_submission#new', as: :submit_results_edit
