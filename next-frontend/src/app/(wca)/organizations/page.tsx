@@ -68,7 +68,7 @@ export default function RegionalOrganizations() {
                     width="100%"
                     height="auto"
                     transition="opacity 0.3s"
-                    _groupHover={{ opacity: 0.2 }}
+                    _hover={{ opacity: 0.2 }}
                   />
                 )}
                 <VStack
@@ -81,7 +81,7 @@ export default function RegionalOrganizations() {
                   align="center"
                   bg={org.logo_url ? "rgba(255,255,255,0.9)" : "transparent"}
                   opacity={org.logo_url ? 0 : 1}
-                  _groupHover={{ opacity: 1 }}
+                  _hover={{ opacity: 1 }}
                   transition="opacity 0.3s"
                   p={4}
                 >
