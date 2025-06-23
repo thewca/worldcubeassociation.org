@@ -2,6 +2,7 @@
 
 class Api::V0::RegionalOrganizationsController < ApplicationController
   def index
-    render json: RegionalOrganization.currently_acknowledged.order(country: :asc)
+    render json: RegionalOrganization.includes([:logo_attachment])
+                                     .currently_acknowledged.order(country: :asc)
   end
 end
