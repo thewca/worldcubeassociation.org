@@ -95,6 +95,7 @@ export interface Config {
     faqCategories: FaqCategory;
     faqQuestions: FaqQuestion;
     users: User;
+    tool: Tool;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
@@ -111,6 +112,7 @@ export interface Config {
     faqCategories: FaqCategoriesSelect<false> | FaqCategoriesSelect<true>;
     faqQuestions: FaqQuestionsSelect<false> | FaqQuestionsSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
+    tool: ToolSelect<false> | ToolSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
@@ -281,6 +283,22 @@ export interface FaqQuestion {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "tool".
+ */
+export interface Tool {
+  id: number;
+  name: string;
+  description: string;
+  toolLink: string;
+  guideLink?: string | null;
+  sourceLink?: string | null;
+  author: string;
+  category: 'before' | 'during' | 'after';
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-locked-documents".
  */
 export interface PayloadLockedDocument {
@@ -309,6 +327,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'users';
         value: string | User;
+      } | null)
+    | ({
+        relationTo: 'tool';
+        value: number | Tool;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -438,6 +460,21 @@ export interface UsersSelect<T extends boolean = true> {
         providerAccountId?: T;
         type?: T;
       };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "tool_select".
+ */
+export interface ToolSelect<T extends boolean = true> {
+  name?: T;
+  description?: T;
+  toolLink?: T;
+  guideLink?: T;
+  sourceLink?: T;
+  author?: T;
+  category?: T;
   updatedAt?: T;
   createdAt?: T;
 }

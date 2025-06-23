@@ -34,6 +34,11 @@ export const Tool: CollectionConfig = {
       type: "text",
     },
     {
+      name: "author",
+      type: "text",
+      required: true,
+    },
+    {
       name: "category",
       type: "select",
       options: [
@@ -50,6 +55,7 @@ export const Tool: CollectionConfig = {
           value: "after",
         },
       ],
+      required: true,
     },
   ],
 };
