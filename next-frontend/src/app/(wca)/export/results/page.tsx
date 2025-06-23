@@ -32,7 +32,7 @@ export default function ResultExportPage() {
 
   return (
     <Container>
-      <VStack align={"left"}>
+      <VStack align={"left"} gap={"16px"}>
         <Heading size={"5xl"}>{t("database.results_export.heading")}</Heading>
         <Text>{t("database.results_export.description")}</Text>
         <Card.Root>
