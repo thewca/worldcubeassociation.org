@@ -1,33 +1,30 @@
 <% video_id = test ? ServerSetting.find('TEST_wc2025_video_url').value : ServerSetting.find('wc2025_video_url').value %>
-<% puts "===============================" %>
-<% puts test %>
-<% puts video_id %>
 
 <div class="wc2025">
   <h2 class="wc2025-header">
     <%= "JULY 3-6: RUBIK'S WCA WORLD CHAMPIONSHIP 2025" %>
   </h2>
 
-  <div class="wc2025-box">
-    <div id="comp-logo">
-      <%= image_tag "https://www.cubingusa.org/static/img/wc2025-logo.png", alt: "WC2025 Logo", class: "wc2025-logo", style: "margin-bottom: 20px;" %>
+  <div class="wc2025-box row">
+    <div id="comp-logo" class="col-md-4 text-center">
+      <%= image_tag "wc2025-logo", alt: "WC2025 Logo", class: "wc2025-logo", style: "margin-bottom: 20px;" %>
 
       <div class="wc2025-buttons" style="display: flex; flex-direction: column; gap: 10px;">
         <a
           href="https://live.worldcubeassociation.org/competitions/7025"
-          class="ui button primary hide-new-window-icon"
+          class="ui button primary hide-new-window-icon btn-block"
           target="_blank"
           rel="noopener noreferrer"
         >Live Results</a>
         <a
           href="https://www.worldcubeassociation.org/competitions/WC2025#competition-schedule"
-          class="ui button primary hide-new-window-icon"
+          class="ui button primary hide-new-window-icon btn-block"
           target="_blank"
           rel="noopener noreferrer"
         >Schedule</a>
         <a
           href="https://www.competitiongroups.com/competitions/WC2025"
-          class="ui button primary hide-new-window-icon"
+          class="ui button primary hide-new-window-icon btn-block"
           target="_blank"
           rel="noopener noreferrer"
         >Competition Groups</a>
@@ -49,8 +46,11 @@
     </div>
 
     <div id="sponsor-logos">
-      <%= image_tag "https://www.cubingusa.org/static/img/rubiks_new.png", alt: "WC2025 Logo", class: "sponsor-logo" %>
-      <%= image_tag "https://www.cubingusa.org/static/img/cubicle.png", alt: "WC2025 Logo", class: "sponsor-logo" %>
+      <h3>Thank you to our title sponsor:</h3>
+      <%= image_tag "rubiks_new.png",
+        alt: "WC2025 Logo",
+        class: "sponsor-logo"
+      %>
     </div>
   </div>
 </div>
