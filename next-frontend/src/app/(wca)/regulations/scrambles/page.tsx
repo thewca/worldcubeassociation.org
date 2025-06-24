@@ -167,6 +167,188 @@ export default async function ScramblesPage() {
           These are provided in case you want to check the behaviour of an older
           version.
         </Text>
+        <List.Root>
+          <List.Item>
+            <Link href="https://github.com/thewca/tnoodle/releases/download/v0.7.4/TNoodle-0.7.4.jar">
+              TNoodle-0.7.4
+            </Link>{" "}
+            (2013-01-01)
+          </List.Item>
+          <List.Item>
+            <Link href="https://github.com/thewca/tnoodle/releases/download/v0.7.5/TNoodle-0.7.5.jar">
+              TNoodle-0.7.5
+            </Link>{" "}
+            (2013-02-26)
+          </List.Item>
+          <List.Item>
+            <Link href="https://github.com/thewca/tnoodle/releases/download/v0.7.8/TNoodle-0.7.8.jar">
+              TNoodle-0.7.8
+            </Link>{" "}
+            (2013-04-26)
+          </List.Item>
+          <List.Item>
+            <Link href="https://github.com/thewca/tnoodle/releases/download/v0.7.12/TNoodle-0.7.12.jar">
+              TNoodle-0.7.12
+            </Link>{" "}
+            (2013-10-01)
+          </List.Item>
+          <List.Item>
+            <Link href="https://github.com/thewca/tnoodle/releases/download/v0.8.0/TNoodle-WCA-0.8.0.jar">
+              TNoodle-WCA-0.8.0
+            </Link>{" "}
+            (2014-01-13)
+          </List.Item>
+          <List.Item>
+            <Link href="https://github.com/thewca/tnoodle/releases/download/v0.8.1/TNoodle-WCA-0.8.1.jar">
+              TNoodle-WCA-0.8.1
+            </Link>{" "}
+            (2014-01-14)
+          </List.Item>
+          <List.Item>
+            <Link href="https://github.com/thewca/tnoodle/releases/download/v0.8.2/TNoodle-WCA-0.8.2.jar">
+              TNoodle-WCA-0.8.2
+            </Link>{" "}
+            (2014-01-28)
+          </List.Item>
+          <List.Item>
+            <Link href="https://github.com/thewca/tnoodle/releases/download/v0.8.4/TNoodle-WCA-0.8.4.jar">
+              TNoodle-WCA-0.8.4
+            </Link>{" "}
+            (2014-02-10)
+          </List.Item>
+          <List.Item>
+            <Link href="https://github.com/thewca/tnoodle/releases/download/v0.9.0/TNoodle-WCA-0.9.0.jar">
+              TNoodle-WCA-0.9.0
+            </Link>{" "}
+            (2015-03-30)
+          </List.Item>
+          <List.Item>
+            <Link href="https://github.com/thewca/tnoodle/releases/download/v0.10.0/TNoodle-WCA-0.10.0.jar">
+              TNoodle-WCA-0.10.0
+            </Link>{" "}
+            (2015-06-30)
+          </List.Item>
+          <List.Item>
+            <Link href="https://github.com/thewca/tnoodle/releases/download/v0.11.1/TNoodle-WCA-0.11.1.jar">
+              TNoodle-WCA-0.11.1
+            </Link>{" "}
+            (2016-04-04)
+          </List.Item>
+          <List.Item>
+            <Link href="https://github.com/thewca/tnoodle/releases/download/v0.11.3/TNoodle-WCA-0.11.3.jar">
+              TNoodle-WCA-0.11.3
+            </Link>{" "}
+            (2016-10-17)
+          </List.Item>
+          <List.Item>
+            <Link href="https://github.com/thewca/tnoodle/releases/download/v0.11.5/TNoodle-WCA-0.11.5.jar">
+              TNoodle-WCA-0.11.5
+            </Link>{" "}
+            (2016-12-12)
+          </List.Item>
+          <List.Item>
+            <Link href="https://github.com/thewca/tnoodle/releases/download/v0.12.0/TNoodle-WCA-0.12.0.jar">
+              TNoodle-WCA-0.12.0
+            </Link>{" "}
+            (2017-09-25)
+          </List.Item>
+          <List.Item>
+            <Link href="https://github.com/thewca/tnoodle/releases/download/v0.13.1/TNoodle-WCA-0.13.1.jar">
+              TNoodle-WCA-0.13.1
+            </Link>{" "}
+            (2018-01-29)
+          </List.Item>
+          <List.Item>
+            <Link href="https://github.com/thewca/tnoodle/releases/download/v0.13.2/TNoodle-WCA-0.13.2.jar">
+              TNoodle-WCA-0.13.2
+            </Link>{" "}
+            (2018-02-03)
+          </List.Item>
+          <List.Item>
+            <Link href="https://github.com/thewca/tnoodle/releases/download/v0.13.3/TNoodle-WCA-0.13.3.jar">
+              TNoodle-WCA-0.13.3
+            </Link>{" "}
+            (2018-02-05)
+          </List.Item>
+          <List.Item>
+            <Link href="https://github.com/thewca/tnoodle/releases/download/v0.13.4/TNoodle-WCA-0.13.4.jar">
+              TNoodle-WCA-0.13.4
+            </Link>{" "}
+            (2018-07-02)
+          </List.Item>
+          <List.Item>
+            <Link href="https://github.com/thewca/tnoodle/releases/download/v0.13.5/TNoodle-WCA-0.13.5.jar">
+              TNoodle-WCA-0.13.5
+            </Link>{" "}
+            (2018-10-08)
+          </List.Item>
+          <List.Item>
+            <Link href="https://github.com/thewca/tnoodle/releases/download/v0.14.0/TNoodle-WCA-0.14.0.jar">
+              TNoodle-WCA-0.14.0
+            </Link>{" "}
+            (2018-12-03)
+          </List.Item>
+          <List.Item>
+            <Link href="https://github.com/thewca/tnoodle/releases/download/v0.15.0/TNoodle-WCA-0.15.0.jar">
+              TNoodle-WCA-0.15.0
+            </Link>{" "}
+            (2019-07-14)
+          </List.Item>
+          <List.Item>
+            <Link href="https://github.com/thewca/tnoodle/releases/download/v0.15.1/TNoodle-WCA-0.15.1.jar">
+              TNoodle-WCA-0.15.1
+            </Link>{" "}
+            (2020-01-01)
+          </List.Item>
+          <List.Item>
+            <Link href="https://github.com/thewca/tnoodle/releases/download/v1.0.1/TNoodle-WCA-1.0.1.jar">
+              TNoodle-WCA-1.0.1
+            </Link>{" "}
+            (2020-08-17)
+          </List.Item>
+          <List.Item>
+            <Link href="https://github.com/thewca/tnoodle/releases/download/v1.1.0/TNoodle-WCA-1.1.0.jar">
+              TNoodle-WCA-1.1.0
+            </Link>{" "}
+            (2021-04-19)
+          </List.Item>
+          <List.Item>
+            <Link href="https://github.com/thewca/tnoodle/releases/download/v1.1.1/TNoodle-WCA-1.1.1.jar">
+              TNoodle-WCA-1.1.1
+            </Link>{" "}
+            (2021-07-07)
+          </List.Item>
+          <List.Item>
+            <Link href="https://github.com/thewca/tnoodle/releases/download/v1.1.2/TNoodle-WCA-1.1.2.jar">
+              TNoodle-WCA-1.1.2
+            </Link>{" "}
+            (2021-07-07)
+          </List.Item>
+          <List.Item>
+            <Link href="https://github.com/thewca/tnoodle/releases/download/v1.1.3.1/TNoodle-WCA-1.1.3.1.jar">
+              TNoodle-WCA-1.1.3.1
+            </Link>{" "}
+            (2024-01-22)
+          </List.Item>
+          <List.Item>
+            <Link href="https://github.com/thewca/tnoodle/releases/download/v1.2.0/TNoodle-WCA-1.2.0.jar">
+              TNoodle-WCA-1.2.0
+            </Link>{" "}
+            (2023-12-31)
+          </List.Item>
+          <List.Item>
+            <Link href="https://github.com/thewca/tnoodle/releases/download/v1.2.1/TNoodle-WCA-1.2.1.jar">
+              TNoodle-WCA-1.2.1
+            </Link>{" "}
+            (2024-01-02)
+          </List.Item>
+          <List.Item>
+            <Link href="https://github.com/thewca/tnoodle/releases/download/v1.2.2/TNoodle-WCA-1.2.2.jar">
+              TNoodle-WCA-1.2.2
+            </Link>{" "}
+            (2024-01-22)
+          </List.Item>
+        </List.Root>
       </VStack>
     </Container>
   );
