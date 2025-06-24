@@ -80,39 +80,68 @@ footer {
 }
 
 .wc2025 {
-  background-color: rgba(255, 255, 255, 0.95); /* slightly translucent white */
+  background-color: rgba(255, 255, 255, 0.95);
   border: 1px solid #ccc;
   border-radius: 12px;
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
   padding: 2rem;
-  margin: 2rem auto; /* center horizontally */
+  margin: 2rem auto;
   text-align: center;
 }
 
 .wc2025-box {
-  background-color: rgba(255, 255, 255, 0.95); /* slightly translucent white */
+  background-color: rgba(255, 255, 255, 0.95);
   border: 1px solid #ccc;
   border-radius: 12px;
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
   padding: 2rem;
-  margin: 2rem auto; /* center horizontally */
+  margin: 2rem auto;
   text-align: center;
   display: flex;
-  justify-content: space-between; /* or center / flex-start */
-  align-items: center; /* or center */
-  gap: 2rem; /* space between divs */
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2rem;
   padding: 2rem;
 }
 
-.wc2025-box > div {
-  flex: 1; /* optional: make them evenly sized */
+#embed-wrapper {
+  flex: 1 1 50%;
+  min-width: 300px; /* or whatever your lower bound is */
+  max-width: 854px;
 }
 
-.wc2025-logo {
+#embed {
+  position: relative;
+  width: 100%;
+  padding-top: 56.25%; /* 16:9 aspect ratio */
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+#embed iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  border-radius: 12px;
+}
+
+#sponsor-logos, #comp-logo {
+  flex: 1 1 25%;
   display: block;
   margin: 0 auto;
   max-width: 300px;
+  min-width: 200px;
   height: auto;
+}
+
+.logo {
+  width: 100%;
+  height: auto;
+  display: block;
 }
 
 .sponsor-logo {
@@ -130,7 +159,31 @@ footer {
   margin-bottom: 40px;
 }
 
-@media (max-width: 768px) {
+@media (min-width: 19000px) {
+  #comp-logo,
+  #embed-and-buttons,
+  #sponsor-logos {
+    flex: 1 1 15%;
+  }
+}
+
+@media (min-width: 18000px) {
+  #comp-logo {
+    flex: 1 1 30%;
+    max-width: 300px;
+  }
+
+  #embed-and-buttons {
+    flex: 1 1 30%;
+  }
+
+  #sponsor-logos {
+    flex: 1 1 100%;
+  }
+}
+
+/* this used to be the max-width mobile column */
+@media (min-width: 18000px) {
   .wc2025 {
     width: 90%;
     max-width: 90%;
@@ -162,5 +215,6 @@ footer {
     height: 200px;
   }
 }
+
 
 
