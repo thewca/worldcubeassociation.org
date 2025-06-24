@@ -3,6 +3,7 @@
 class StaticPagesController < ApplicationController
   include DocumentsHelper
 
+
   def home
   end
 

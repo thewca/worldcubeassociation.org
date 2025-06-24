@@ -1,3 +1,8 @@
+<% video_id = test ? ServerSetting.find('TEST_wc2025_video_url').value : ServerSetting.find('wc2025_video_url').value %>
+<% puts "===============================" %>
+<% puts test %>
+<% puts video_id %>
+
 <div class="wc2025">
   <h2 class="wc2025-header">
     <%= "JULY 3-6: RUBIK'S WCA WORLD CHAMPIONSHIP 2025" %>
@@ -34,7 +39,7 @@
         width="854"
         height="480"
         style="border-radius: 12px; overflow: hidden;"
-        src="https://www.youtube.com/embed/fqOBdW03wOo?autoplay=1&mute=1"
+        src=<%= "https://www.youtube.com/embed/#{video_id}?autoplay=1&mute=1" %>
         title="YouTube video player"
         frameborder="0"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"

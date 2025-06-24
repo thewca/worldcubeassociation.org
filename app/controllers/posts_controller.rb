@@ -4,6 +4,7 @@ class PostsController < ApplicationController
   include TagsHelper
   before_action :authenticate_user!, except: %i[homepage index rss show]
   before_action -> { redirect_to_root_unless_user(:can_create_posts?) }, except: %i[homepage index rss show]
+  before_action -> { redirect_to_root_unless_user(:can_administrate_livestream?) }, only: :livestream_management
   POSTS_PER_PAGE = 10
 
   def index
@@ -37,6 +38,43 @@ class PostsController < ApplicationController
 
   def homepage
     @latest_post = Post.order(sticky: :desc, created_at: :desc).first
+  end
+
+  def livestream_management
+  end
+
+  def livestream_links
+    test = ServerSetting.find("TEST_wc2025_video_url").value
+    live = ServerSetting.find("wc2025_video_url").value
+    render json: { test: test, live: live }
+  end
+
+  def update_test_link
+    puts "=============================================="
+    puts params
+    new_value = params[:new_test_value]
+    test = ServerSetting.find("TEST_wc2025_video_url")
+
+    if test.update!(value: new_value)
+      render json: { data: test.reload.value }
+    else
+      render json: { error: test.errors }
+    end
+
+  end
+
+  # Sets the live link to the value of the current test link
+  def promote_test_link
+    test = ServerSetting.find("TEST_wc2025_video_url")
+    live = ServerSetting.find("wc2025_video_url")
+    if live.update!(value: test.value)
+      render json: { data: live.reload.value }
+    else
+      render json: { error: live.errors }
+    end
+  end
+
+  def wc2025_preview
   end
 
   def rss
