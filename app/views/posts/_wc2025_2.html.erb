@@ -1,51 +1,52 @@
 <% video_id = test ? ServerSetting.find('TEST_wc2025_video_url').value : ServerSetting.find('wc2025_video_url').value %>
 
 <div class="wc2025">
-  <h2 class="wc2025-header">
+  <h2 class="wc2025-header text-center">
     <%= "JULY 3-6: RUBIK'S WCA WORLD CHAMPIONSHIP 2025" %>
   </h2>
 
-  <div class="wc2025-box">
-    <div id="comp-logo">
+  <div class="panel row">
+    <!-- Column 1: Logo + Buttons -->
+    <div id="comp-logo" class="col-md-2 text-center">
       <%= image_tag "wc2025-logo", alt: "WC2025 Logo", class: "wc2025-logo", style: "margin-bottom: 20px;" %>
 
-      <div class="wc2025-buttons" style="display: flex; flex-direction: column; gap: 10px;">
+      <div class="wc2025-buttons">
         <a
           href="https://live.worldcubeassociation.org/competitions/7025"
-          class="ui button primary hide-new-window-icon"
+          class="btn btn-primary btn-block"
           target="_blank"
           rel="noopener noreferrer"
         >Live Results</a>
         <a
           href="https://www.worldcubeassociation.org/competitions/WC2025#competition-schedule"
-          class="ui button primary hide-new-window-icon"
+          class="btn btn-primary btn-block"
           target="_blank"
           rel="noopener noreferrer"
         >Schedule</a>
         <a
           href="https://www.competitiongroups.com/competitions/WC2025"
-          class="ui button primary hide-new-window-icon"
+          class="btn btn-primary btn-block"
           target="_blank"
           rel="noopener noreferrer"
         >Competition Groups</a>
       </div>
     </div>
 
-    <div id="embed-and-buttons" style="display: flex; flex-direction: column; align-items: center; gap: 20px;">
-      <iframe
-        width="854"
-        height="480"
-        style="border-radius: 12px; overflow: hidden;"
-        src=<%= "https://www.youtube.com/embed/#{video_id}?autoplay=1&mute=1" %>
-        title="YouTube video player"
-        frameborder="0"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-        referrerpolicy="strict-origin-when-cross-origin"
-        allowfullscreen
-      ></iframe>
+    <!-- Column 2: Livestream -->
+    <div id="embed-and-buttons" class="col-md-8 text-center">
+      <div class="embed-responsive embed-responsive-16by9" style="border-radius: 12px; overflow: hidden;">
+        <iframe
+          class="embed-responsive-item"
+          src="<%= "https://www.youtube.com/embed/#{video_id}?autoplay=1&mute=1" %>"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowfullscreen
+        ></iframe>
+      </div>
     </div>
 
-    <div id="sponsor-logos">
+    <!-- Column 3: Sponsor -->
+    <div id="sponsor-logos" class="col-md-2 text-center">
       <h3>Thank you to our title sponsor:</h3>
       <%= image_tag "rubiks_new.png",
         alt: "WC2025 Logo",
