@@ -12891,6 +12891,7 @@ __metadata:
     i18next-resources-to-backend: "npm:^1.2.1"
     js-cookie: "npm:^3.0.5"
     jsdom: "npm:^26.1.0"
+    lodash: "npm:^4.17.21"
     luxon: "npm:^3.6.1"
     newrelic: "npm:^12.24.0"
     next: "npm:15.3.5"

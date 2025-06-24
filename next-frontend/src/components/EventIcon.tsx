@@ -42,21 +42,28 @@ const eventIconMap: Record<string, React.ElementType> = {
   "333oh": _333ohIcon,
   "444bf": _444bfIcon,
   "555bf": _555bfIcon,
-};
+} as const;
 
 type EventIconProps = {
-  eventId: string;
+  eventId: keyof typeof eventIconMap;
   size?: string;
   main?: boolean;
+  color?: string;
 };
 
-const EventIcon = ({ eventId, size = "2xl", main = false }: EventIconProps) => {
+const EventIcon = ({
+  eventId,
+  size = "2xl",
+  main = false,
+  color = undefined,
+}: EventIconProps) => {
   const IconComponent = eventIconMap[eventId];
   if (!IconComponent) return null;
+
   return (
     <IconComponent
       size={size}
-      color={main ? "currentColor" : "supplementary.texts.gray1"}
+      color={color || main ? "currentColor" : "supplementary.texts.gray1"}
       key={eventId}
     />
   );
