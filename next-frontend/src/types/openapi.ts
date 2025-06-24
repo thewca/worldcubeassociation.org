@@ -194,6 +194,42 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/regulations/translations": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Gets all translations of regulations */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Successful response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["RegulationsTranslations"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/users/me/permissions": {
         parameters: {
             query?: never;
@@ -245,6 +281,16 @@ export interface components {
             name?: string;
             wca_id?: string;
             avatar?: components["schemas"]["UserAvatar"];
+        };
+        RegulationsTranslations: {
+            current: components["schemas"]["Translation"][];
+            outdated: components["schemas"]["Translation"][];
+        };
+        Translation: {
+            version: string;
+            language: string;
+            language_english: string;
+            url: string;
         };
         UserAvatar: {
             /**
