@@ -128,6 +128,13 @@ footer {
   }
 }
 
+@media (max-width: 1600) {
+  .wc2025-embed iframe {
+    width: 550px;
+    height: 309px;
+  }
+}
+
 @media (max-width: 1400px) {
   .wc2025-logos {
     flex: 0 1 10%;
@@ -137,6 +144,20 @@ footer {
     width: 600px;
     height: 338px;
   }
+}
+
+@media (max-width: 1200px) {
+  .wc2025-embed iframe {
+    width: 450px;
+    height: 253px;
+  }
+
+.wc2025, .wc2025-box {
+    padding: 1rem;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+  }
+
 }
 
 @media (max-width: 1000px) {
@@ -180,4 +201,20 @@ footer {
     height: 196px;
   }
 }
+
+@media (max-width: 400px) {
+  .wc2025-box {
+    padding: 0.75rem;
+  }
+
+  .wc2025-embed iframe {
+    width: 270px;
+    height: 151px;
+  }
+
+  #logo-and-buttons {
+    min-width: 150px;
+  }
+}
+
 
