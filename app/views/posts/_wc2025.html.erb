@@ -1,5 +1,7 @@
 <% video_id = test ? ServerSetting.find('TEST_wc2025_video_url').value : ServerSetting.find('wc2025_video_url').value %>
 
+<% return if video_id.blank? %>
+
 <div class="wc2025">
   <h2 class="wc2025-header">
     <%= "JULY 3-6: RUBIK'S WCA WORLD CHAMPIONSHIP 2025" %>
