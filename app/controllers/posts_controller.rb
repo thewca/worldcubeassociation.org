@@ -50,8 +50,6 @@ class PostsController < ApplicationController
   end
 
   def update_test_link
-    puts "=============================================="
-    puts params
     new_value = params[:new_test_value]
     test = ServerSetting.find("TEST_wc2025_video_url")
 

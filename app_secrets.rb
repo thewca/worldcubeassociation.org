@@ -43,7 +43,8 @@ SuperConfig::Base.class_eval do
   end
 end
 
-AppSecrets = SuperConfig.new(raise_exception: !EnvConfig.ASSETS_COMPILATION?) do if Rails.env.production? && !EnvConfig.ASSETS_COMPILATION?
+AppSecrets = SuperConfig.new(raise_exception: !EnvConfig.ASSETS_COMPILATION?) do
+  if Rails.env.production? && !EnvConfig.ASSETS_COMPILATION?
     require_relative "vault_config"
 
     vault :DATABASE_PASSWORD
@@ -80,9 +81,6 @@ AppSecrets = SuperConfig.new(raise_exception: !EnvConfig.ASSETS_COMPILATION?) do
     vault :WRC_WEBHOOK_USERNAME
     vault :WRC_WEBHOOK_PASSWORD
     vault :CURRENCY_LAYER_API_KEY
-    vault :YOUTUBE_API_KEY
-    vault :TWITCH_CLIENT_ID
-    vault :TWITCH_CLIENT_SECRET
 
     # To allow logging in to staging with your prod account
     unless EnvConfig.WCA_LIVE_SITE?
@@ -127,8 +125,5 @@ AppSecrets = SuperConfig.new(raise_exception: !EnvConfig.ASSETS_COMPILATION?) do
     optional :WRC_WEBHOOK_USERNAME, :string, ''
     optional :WRC_WEBHOOK_PASSWORD, :string, ''
     optional :CURRENCY_LAYER_API_KEY, :string, ''
-    optional :TWITCH_CLIENT_ID, :string, ''
-    optional :TWITCH_CLIENT_SECRET, :string, ''
-    optional :YOUTUBE_API_KEY, :string, ''
   end
 end
