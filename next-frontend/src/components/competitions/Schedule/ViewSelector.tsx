@@ -3,7 +3,7 @@
 import { useT } from "@/lib/i18n/useI18n";
 import { Tabs } from "@chakra-ui/react";
 
-const views = ["calendar", "table"];
+const views = ["calendar", "somethingelse"];
 
 interface ViewSelectorProps {
   activeView: string;
@@ -17,7 +17,11 @@ export default function ViewSelector({
   const { t } = useT();
 
   return (
-    <Tabs.Root value={activeView} onValueChange={(e) => setActiveView(e.value)}>
+    <Tabs.Root
+      fitted
+      value={activeView}
+      onValueChange={(e) => setActiveView(e.value)}
+    >
       <Tabs.List>
         {views.map((view) => (
           <Tabs.Trigger key={view} value={view}>

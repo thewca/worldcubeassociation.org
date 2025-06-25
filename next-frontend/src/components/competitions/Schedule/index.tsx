@@ -103,7 +103,7 @@ export default function Schedule({
   const { t } = useT();
 
   return (
-    <VStack gap="3">
+    <VStack gap="3" alignItems="stretch">
       {timeZoneCount > 1 && (
         <Alert.Root status="warning">
           <Alert.Content>
@@ -135,7 +135,7 @@ export default function Schedule({
         setActiveTimeZone={setActiveTimeZone}
       />
 
-      <Box width="100%" border="sm" borderRadius="l3" padding="4">
+      <Box border="sm" borderRadius="l3" padding="4">
         <EventSelector
           title={t("competitions.competition_form.events")}
           eventList={availableEventIds}
@@ -147,14 +147,16 @@ export default function Schedule({
         />
       </Box>
 
-      <TimeZoneSelector
-        activeVenue={activeVenueOrNull}
-        hasMultipleVenues={venueCount > 1}
-        activeTimeZone={activeTimeZone}
-        setActiveTimeZone={setActiveTimeZone}
-        followVenueSelection={followVenueSelection}
-        setFollowVenueSelection={setFollowVenueSelection}
-      />
+      <Box border="sm" borderRadius="l3" padding="4">
+        <TimeZoneSelector
+          activeVenue={activeVenueOrNull}
+          hasMultipleVenues={venueCount > 1}
+          activeTimeZone={activeTimeZone}
+          setActiveTimeZone={setActiveTimeZone}
+          followVenueSelection={followVenueSelection}
+          setFollowVenueSelection={setFollowVenueSelection}
+        />
+      </Box>
 
       <ViewSelector activeView={activeView} setActiveView={setActiveView} />
 

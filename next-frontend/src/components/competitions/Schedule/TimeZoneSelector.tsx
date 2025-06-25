@@ -1,13 +1,15 @@
 "use client";
 
+import { useState } from "react";
 import {
   Button,
+  ButtonGroup,
   Checkbox,
-  Box,
   Combobox,
-  Heading,
+  HStack,
   useFilter,
-  useListCollection,
+  createListCollection,
+  VStack, Text,
 } from "@chakra-ui/react";
 import _ from "lodash";
 import { sortByOffset } from "@/lib/wca/timezone";
@@ -39,6 +41,7 @@ export default function TimeZoneSelector({
 }: TimeZoneSelectorProps) {
   const { t } = useTranslation();
 
+  const [inputFilter, setInputFilter] = useState("");
   const { contains } = useFilter({ sensitivity: "base" });
 
   const api = useAPI();
@@ -58,27 +61,38 @@ export default function TimeZoneSelector({
   const uniqueTimeZones = _.uniq(backendTimeZones.concat(availableTimeZones));
   const sortedTimeZones = sortByOffset(uniqueTimeZones, randomReferenceDate);
 
-  const { collection, filter } = useListCollection({
-    initialItems: sortedTimeZones,
-    filter: contains,
-  });
+  const filteredTimeZones = sortedTimeZones.filter((tz) =>
+    activeTimeZone === inputFilter || contains(tz, inputFilter),
+  );
+
+  const collection = createListCollection({ items: filteredTimeZones });
+
+  const clearInputFilter = () => setInputFilter("");
+
+  const handleValueChange = (e: Combobox.ValueChangeDetails) => {
+    setActiveTimeZone(e.value[0]);
+    clearInputFilter();
+  };
 
   return (
-    <Box>
-      <Heading size="sm">{t("competitions.schedule.time_zone")}</Heading>
+    <VStack alignItems="start">
       <Combobox.Root
+        closeOnSelect
         collection={collection}
-        onInputValueChange={(e) => filter(e.inputValue)}
+        inputValue={activeTimeZone}
+        onInputValueChange={(e) => setInputFilter(e.inputValue)}
         value={[activeTimeZone]}
-        onValueChange={(e) => setActiveTimeZone(e.value[0])}
+        defaultValue={[activeTimeZone]}
+        onValueChange={handleValueChange}
+        onSelect={clearInputFilter}
+        selectionBehavior="preserve"
       >
         <Combobox.Label>
           {t("competitions.schedule.timezone_setting")}
         </Combobox.Label>
         <Combobox.Control>
-          <Combobox.Input placeholder="Yay?" />
+          <Combobox.Input placeholder="Nothing selected" />
           <Combobox.IndicatorGroup>
-            <Combobox.ClearTrigger />
             <Combobox.Trigger />
           </Combobox.IndicatorGroup>
         </Combobox.Control>
@@ -94,27 +108,31 @@ export default function TimeZoneSelector({
           </Combobox.Content>
         </Combobox.Positioner>
       </Combobox.Root>
-      <Button onClick={() => setActiveTimeZone(currentTimeZone)}>
-        <LuHouse />
-        {t("competitions.schedule.timezone_set_local")}
-      </Button>
-      {activeVenue && (
-        <Button onClick={() => setActiveTimeZone(activeVenue.timezone)}>
-          <LocationIcon />
-          {t("competitions.schedule.timezone_set_venue")}
-        </Button>
-      )}
-      {hasMultipleVenues && (
-        <Checkbox.Root
-          checked={followVenueSelection}
-          onCheckedChange={(e) => setFollowVenueSelection(Boolean(e.checked))}
-        >
-          <Checkbox.Control />
-          <Checkbox.Label>
-            {t("competitions.schedule.timezone_follow_venue")}
-          </Checkbox.Label>
-        </Checkbox.Root>
-      )}
-    </Box>
+      <HStack>
+        <ButtonGroup size="sm">
+          <Button onClick={() => setActiveTimeZone(currentTimeZone)}>
+            <LuHouse />
+            {t("competitions.schedule.timezone_set_local")}
+          </Button>
+          {activeVenue && (
+            <Button onClick={() => setActiveTimeZone(activeVenue.timezone)}>
+              <LocationIcon />
+              {t("competitions.schedule.timezone_set_venue")}
+            </Button>
+          )}
+        </ButtonGroup>
+        {hasMultipleVenues && (
+          <Checkbox.Root
+            checked={followVenueSelection}
+            onCheckedChange={(e) => setFollowVenueSelection(Boolean(e.checked))}
+          >
+            <Checkbox.Control />
+            <Checkbox.Label>
+              {t("competitions.schedule.timezone_follow_venue")}
+            </Checkbox.Label>
+          </Checkbox.Root>
+        )}
+      </HStack>
+    </VStack>
   );
 }
