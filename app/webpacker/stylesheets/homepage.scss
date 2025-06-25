@@ -160,12 +160,7 @@ footer {
   }
 }
 
-@media (max-width: 500px) {
-  .wc2025-embed iframe {
-    width: 350px;
-    height: 196px;
-  }
-
+@media (max-width: 740px) {
   #logo-and-buttons {
     display: flex;
     flex-direction: row;
@@ -178,3 +173,11 @@ footer {
     flex: 1 1 10%;
   }
 }
+
+@media (max-width: 500px) {
+  .wc2025-embed iframe {
+    width: 350px;
+    height: 196px;
+  }
+}
+
