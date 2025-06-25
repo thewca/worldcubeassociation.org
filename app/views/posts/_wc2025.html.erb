@@ -9,7 +9,9 @@
 
   <div class="wc2025-box">
     <div id="logo-and-buttons" class="wc2025-logos">
-      <%= image_tag "wc2025-logo", alt: "WC2025 Logo", class: "img-responsive wc2025-main-logo", style: "margin-bottom: 20px;" %>
+      <%= link_to "https://www.cubingusa.org/worlds/", target: "_blank", class: "hide-new-window-icon" do %>
+        <%= image_tag "wc2025-logo", alt: "WC2025 Logo", class: "img-responsive wc2025-main-logo", style: "margin-bottom: 20px;" %>
+      <% end %>
 
       <div class="wc2025-buttons" style="display: flex; flex-direction: column; gap: 10px;">
         <a
@@ -49,8 +51,9 @@
 
     <div id="rubiks-logo" class="wc2025-logos">
       <h3>Thank you to our title sponsor:</h3>
-      <%= image_tag "rubiks_new.png", alt: "WC2025 Logo", class: "img-responsive"
-      %>
+      <%= link_to "https://www.rubiks.com/", target: "_blank", class: "hide-new-window-icon" do %>
+        <%= image_tag "rubiks_new.png", alt: "WC2025 Logo", class: "img-responsive" %>
+      <% end %>
     </div>
   </div>
 </div>
