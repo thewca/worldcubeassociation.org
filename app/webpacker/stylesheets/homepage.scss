@@ -190,8 +190,8 @@ footer {
     gap: 10px;
   }
 
-  .wc2025-main-logo, .wc2025-buttons {
-    flex: 1 1 10%;
+  .wc2025-main-logo {
+    min-width: 200px;
   }
 }
 
@@ -210,6 +210,10 @@ footer {
   .wc2025-embed iframe {
     width: 270px;
     height: 151px;
+  }
+
+  .wc2025-main-logo {
+    min-width: 150px;
   }
 
   #logo-and-buttons {
