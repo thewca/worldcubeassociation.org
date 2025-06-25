@@ -25,8 +25,10 @@ const reducer = <T>(
   state: ReducerState<T>,
   { type, array = [] }: ReducerAction<T>,
 ): ReducerState<T> => {
-  const toAdd = _.uniq(array?.filter((e) => !state.array.includes(e)) ?? []);
-  const toRemove = _.uniq(array?.filter((e) => state.array.includes(e)) ?? []);
+  const uniqueChanges = _.uniq(array);
+  const [toRemove, toAdd] = _.partition(uniqueChanges, (e) =>
+    state.array.includes(e),
+  );
 
   switch (type) {
     case "clear":
@@ -116,11 +118,7 @@ function useOrderedSetInternal<T>(
 export default function useOrderedSet<T>(
   initialArray: T[] = [],
 ): OrderedSet<T> {
-  const [{ array }, dispatch] = useReducer<
-    ReducerState<T>,
-    T[],
-    [ReducerAction<T>]
-  >(reducer, initialArray, (arr) => ({
+  const [{ array }, dispatch] = useReducer(reducer<T>, initialArray, (arr) => ({
     array: _.uniq(arr),
   }));
 

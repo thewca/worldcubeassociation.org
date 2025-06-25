@@ -3,7 +3,7 @@
 import { useT } from "@/lib/i18n/useI18n";
 import { Tabs } from "@chakra-ui/react";
 
-const views = ["calendar", "somethingelse"];
+const views = ["calendar", "table"];
 
 interface ViewSelectorProps {
   activeView: string;

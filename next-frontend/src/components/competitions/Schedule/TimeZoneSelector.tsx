@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import {
   Button,
   ButtonGroup,
@@ -9,7 +9,7 @@ import {
   HStack,
   useFilter,
   createListCollection,
-  VStack, Text,
+  VStack,
 } from "@chakra-ui/react";
 import _ from "lodash";
 import { sortByOffset } from "@/lib/wca/timezone";
@@ -61,11 +61,18 @@ export default function TimeZoneSelector({
   const uniqueTimeZones = _.uniq(backendTimeZones.concat(availableTimeZones));
   const sortedTimeZones = sortByOffset(uniqueTimeZones, randomReferenceDate);
 
-  const filteredTimeZones = sortedTimeZones.filter((tz) =>
-    activeTimeZone === inputFilter || contains(tz, inputFilter),
+  const filteredTimeZones = useMemo(
+    () =>
+      sortedTimeZones.filter(
+        (tz) => activeTimeZone === inputFilter || contains(tz, inputFilter),
+      ),
+    [activeTimeZone, contains, inputFilter, sortedTimeZones],
   );
 
-  const collection = createListCollection({ items: filteredTimeZones });
+  const collection = useMemo(
+    () => createListCollection({ items: filteredTimeZones }),
+    [filteredTimeZones],
+  );
 
   const clearInputFilter = () => setInputFilter("");
 
@@ -101,7 +108,7 @@ export default function TimeZoneSelector({
             <Combobox.Empty>No items found</Combobox.Empty>
             {collection.items.map((item) => (
               <Combobox.Item item={item} key={item}>
-                {item}
+                <Combobox.ItemText>{item}</Combobox.ItemText>
                 <Combobox.ItemIndicator />
               </Combobox.Item>
             ))}
