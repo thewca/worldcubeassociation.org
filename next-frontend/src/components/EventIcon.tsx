@@ -20,7 +20,9 @@ import _333ohIcon from "@/components/icons/events/_333ohIcon";
 import _444bfIcon from "@/components/icons/events/_444bfIcon";
 import _555bfIcon from "@/components/icons/events/_555bfIcon";
 
-const eventIconMap: Record<string, React.ElementType> = {
+import type { ComponentProps } from "react";
+
+const eventIconMap = {
   "333": _333Icon,
   "333bf": _333bfIcon,
   "333ft": _333ftIcon,
@@ -44,29 +46,20 @@ const eventIconMap: Record<string, React.ElementType> = {
   "555bf": _555bfIcon,
 } as const;
 
-type EventIconProps = {
-  eventId: keyof typeof eventIconMap;
-  size?: string;
-  main?: boolean;
-  color?: string;
-};
+type EventIconId = keyof typeof eventIconMap;
 
-const EventIcon = ({
-  eventId,
-  size = "2xl",
-  main = false,
-  color = undefined,
-}: EventIconProps) => {
-  const IconComponent = eventIconMap[eventId];
+type EventIconIntrinsic = (typeof eventIconMap)[EventIconId];
+type EventIconIntrinsicProps = ComponentProps<EventIconIntrinsic>;
+
+type EventIconProps = {
+  eventId: string;
+} & EventIconIntrinsicProps;
+
+const EventIcon = ({ eventId, ...iconIntrinsicProps }: EventIconProps) => {
+  const IconComponent = eventIconMap[eventId as EventIconId];
   if (!IconComponent) return null;
 
-  return (
-    <IconComponent
-      size={size}
-      color={color || main ? "currentColor" : "supplementary.texts.gray1"}
-      key={eventId}
-    />
-  );
+  return <IconComponent {...iconIntrinsicProps} />;
 };
 
 export default EventIcon;

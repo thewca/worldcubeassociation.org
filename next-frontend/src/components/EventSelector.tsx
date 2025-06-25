@@ -1,7 +1,15 @@
 "use client";
 
 import { WCA_EVENT_IDS } from "@/lib/wca/data/events";
-import { Button } from "@chakra-ui/react";
+import {
+  Button,
+  ButtonGroup,
+  CheckboxCard,
+  CheckboxGroup,
+  HStack,
+  Text,
+  VisuallyHidden,
+} from "@chakra-ui/react";
 import { useT } from "@/lib/i18n/useI18n";
 import { Tooltip } from "@/components/ui/tooltip";
 import EventIcon from "@/components/EventIcon";
@@ -44,86 +52,98 @@ export default function EventSelector({
   const { t } = useT();
 
   return (
-    <>
-      <label htmlFor="events">
-        {title}
-        {showBreakBeforeButtons ? <br /> : " "}
-        {hideAllButton || (
-          <Tooltip
-            disabled={!Number.isFinite(maxEvents)}
-            content={t("competitions.registration_v2.register.event_limit", {
-              max_events: maxEvents,
-            })}
-          >
-            <Button
-              disabled={disabled || eventList.length >= maxEvents}
-              id="select-all-events"
-              onClick={onAllClick}
-            >
-              {t("competitions.index.all_events")}
-            </Button>
-          </Tooltip>
-        )}
-        {hideClearButton || (
-          <Button
-            disabled={disabled}
-            id="clear-all-events"
-            onClick={onClearClick}
-          >
-            {t("competitions.index.clear")}
-          </Button>
-        )}
-      </label>
-      <Tooltip
-        open={selectedEvents.length === 0}
-        disabled={!shouldErrorOnEmpty}
-        positioning={{ placement: "bottom-end" }}
-        contentProps={{ css: { "--tooltip-bg": "#9f3a38" } }}
-        content={t("registrations.errors.must_register")}
-      >
-        <div id="events">
+    <Tooltip
+      open={selectedEvents.length === 0}
+      disabled={!shouldErrorOnEmpty}
+      positioning={{ placement: "bottom-end" }}
+      contentProps={{ css: { "--tooltip-bg": "#9f3a38" } }}
+      content={t("registrations.errors.must_register")}
+    >
+      <CheckboxGroup disabled={disabled} alignItems="start">
+        <HStack>
+          <Text textStyle="label">{title}</Text>
+          {showBreakBeforeButtons ? <br /> : " "}
+          <ButtonGroup size="sm">
+            {hideAllButton || (
+              <Tooltip
+                disabled={!Number.isFinite(maxEvents)}
+                content={t(
+                  "competitions.registration_v2.register.event_limit",
+                  {
+                    max_events: maxEvents,
+                  },
+                )}
+              >
+                <Button
+                  disabled={disabled || eventList.length >= maxEvents}
+                  onClick={onAllClick}
+                  colorPalette="blue"
+                >
+                  {t("competitions.index.all_events")}
+                </Button>
+              </Tooltip>
+            )}
+            {hideClearButton || (
+              <Button
+                disabled={disabled}
+                onClick={onClearClick}
+                colorPalette="grey"
+              >
+                {t("competitions.index.clear")}
+              </Button>
+            )}
+          </ButtonGroup>
+        </HStack>
+        <HStack>
           {eventList.map((eventId) => {
+            const currentEventSelected = selectedEvents.includes(eventId);
+            const currentEventDisabled = eventsDisabled.includes(eventId);
+
             const isDisabled =
               disabled ||
-              (!selectedEvents.includes(eventId) &&
-                selectedEvents.length >= maxEvents) ||
-              eventsDisabled.includes(eventId);
+              (!currentEventSelected && selectedEvents.length >= maxEvents) ||
+              currentEventDisabled;
 
             return (
-              <Tooltip
+              <CheckboxCard.Root
                 key={eventId}
-                content={
-                  eventsDisabled.includes(eventId)
-                    ? disabledText(eventId)
-                    : t(`events.${eventId}`)
-                }
+                variant="surface"
+                colorPalette="green"
+                align="center"
+                disabled={isDisabled}
+                size={eventButtonsCompact ? "sm" : undefined}
+                checked={currentEventSelected}
+                onCheckedChange={() => onEventClick(eventId)}
               >
-                {
-                  // hover events don't work on disabled buttons, so wrap in a div
-                  <div style={{ display: "inline-block" }}>
-                    <Button
-                      key={eventId}
-                      disabled={isDisabled}
-                      size={eventButtonsCompact ? "sm" : undefined}
-                      id={`checkbox-${eventId}`}
-                      onClick={() => onEventClick(eventId)}
+                <CheckboxCard.HiddenInput />
+                <CheckboxCard.Control>
+                  <CheckboxCard.Content>
+                    <Tooltip
+                      content={
+                        currentEventDisabled
+                          ? disabledText(eventId)
+                          : t(`events.${eventId}`)
+                      }
+                      openDelay={200}
                     >
                       <EventIcon
                         eventId={eventId}
-                        color={
-                          eventsDisabled.includes(eventId)
-                            ? "#FFBBBB"
-                            : undefined
-                        }
+                        fontSize="2xl"
+                        color={currentEventDisabled ? "#FFBBBB" : undefined}
                       />
-                    </Button>
-                  </div>
-                }
-              </Tooltip>
+                    </Tooltip>
+                    <VisuallyHidden>
+                      <CheckboxCard.Label>
+                        {t(`events.${eventId}`)}
+                      </CheckboxCard.Label>
+                    </VisuallyHidden>
+                  </CheckboxCard.Content>
+                </CheckboxCard.Control>
+              </CheckboxCard.Root>
             );
           })}
-        </div>
-      </Tooltip>
-    </>
+        </HStack>
+      </CheckboxGroup>
+    </Tooltip>
   );
 }

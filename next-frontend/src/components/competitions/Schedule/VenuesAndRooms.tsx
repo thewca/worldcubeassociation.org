@@ -218,12 +218,16 @@ function VenueInfo({ activeVenue, venueCount }: VenueInfoProps) {
                   ${name}
                 </a>`,
                 count: venueCount,
+                interpolation: { escapeValue: false },
               }),
             }}
           />
         </Alert.Title>
         <Alert.Description>
-          {t("competitions.schedule.timezone_message", { timezone })}
+          {t("competitions.schedule.timezone_message", {
+            timezone,
+            interpolation: { escapeValue: false },
+          })}
         </Alert.Description>
       </Alert.Content>
     </Alert.Root>

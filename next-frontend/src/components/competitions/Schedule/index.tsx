@@ -14,7 +14,7 @@ import type { WcifEvent } from "@/lib/wca/wcif/rounds";
 import useSet from "@/lib/hooks/useSet";
 import useStoredState from "@/lib/hooks/useStoredState";
 import { getDatesBetweenInclusive } from "@/lib/wca/dates";
-import { Alert, Box } from "@chakra-ui/react";
+import { Alert, Box, VStack } from "@chakra-ui/react";
 import { useT } from "@/lib/i18n/useI18n";
 import EventSelector from "@/components/EventSelector";
 
@@ -103,7 +103,7 @@ export default function Schedule({
   const { t } = useT();
 
   return (
-    <>
+    <VStack gap="3">
       {timeZoneCount > 1 && (
         <Alert.Root status="warning">
           <Alert.Content>
@@ -114,7 +114,7 @@ export default function Schedule({
         </Alert.Root>
       )}
 
-      <Alert.Root>
+      <Alert.Root status="info" colorPalette="grey">
         <Alert.Content>
           <Alert.Title>
             {t("competitions.schedule.schedule_change_warning")}
@@ -135,7 +135,7 @@ export default function Schedule({
         setActiveTimeZone={setActiveTimeZone}
       />
 
-      <Box>
+      <Box width="100%" border="sm" borderRadius="l3" padding="4">
         <EventSelector
           title={t("competitions.competition_form.events")}
           eventList={availableEventIds}
@@ -143,6 +143,7 @@ export default function Schedule({
           onEventClick={activeEventIds.toggle}
           onAllClick={() => activeEventIds.update(availableEventIds)}
           onClearClick={activeEventIds.clear}
+          showBreakBeforeButtons={false}
         />
       </Box>
 
@@ -177,6 +178,6 @@ export default function Schedule({
           wcifEvents={wcifEvents}
         />
       )}
-    </>
+    </VStack>
   );
 }
