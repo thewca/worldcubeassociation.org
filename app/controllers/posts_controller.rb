@@ -4,7 +4,7 @@ class PostsController < ApplicationController
   include TagsHelper
   before_action :authenticate_user!, except: %i[homepage index rss show]
   before_action -> { redirect_to_root_unless_user(:can_create_posts?) }, except: %i[homepage index rss show]
-  before_action -> { redirect_to_root_unless_user(:can_administrate_livestream?) }, only: :livestream_management
+  before_action -> { redirect_to_root_unless_user(:can_administrate_livestream?) }, only: %i[livestream_management livestream_links update_test_link promote_test_link]
   POSTS_PER_PAGE = 10
 
   def index
