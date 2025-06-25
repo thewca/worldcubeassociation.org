@@ -6,8 +6,8 @@
   </h2>
 
   <div class="wc2025-box">
-    <div id="comp-logo">
-      <%= image_tag "wc2025-logo", alt: "WC2025 Logo", class: "wc2025-logo", style: "margin-bottom: 20px;" %>
+    <div id="logo-and-buttons" class="wc2025-logos">
+      <%= image_tag "wc2025-logo", alt: "WC2025 Logo", class: "img-responsive wc2025-main-logo", style: "margin-bottom: 20px;" %>
 
       <div class="wc2025-buttons" style="display: flex; flex-direction: column; gap: 10px;">
         <a
@@ -31,9 +31,10 @@
       </div>
     </div>
 
-    <div id="embed" class="embed-responsive embed-responsive-16by9">
+    <div id="embed" class="wc2025-embed" style="align-items: center; gap: 20px;">
       <iframe
-        class="embed-responsive-item"
+        width="854"
+        height="480"
         style="border-radius: 12px; overflow: hidden;"
         src=<%= "https://www.youtube.com/embed/#{video_id}?autoplay=1&mute=1" %>
         title="YouTube video player"
@@ -44,11 +45,9 @@
       ></iframe>
     </div>
 
-    <div id="sponsor-logos">
+    <div id="rubiks-logo" class="wc2025-logos">
       <h3>Thank you to our title sponsor:</h3>
-      <%= image_tag "rubiks_new.png",
-        alt: "WC2025 Logo",
-        class: "wc2025-logo"
+      <%= image_tag "rubiks_new.png", alt: "WC2025 Logo", class: "img-responsive"
       %>
     </div>
   </div>
