@@ -3,7 +3,7 @@ import WCAQueryClientProvider from '../../lib/providers/WCAQueryClientProvider';
 import LivestreamManager from './LivestreamManager';
 
 export default function LivestreamManagementContainer({
- inputTestLink, inputLiveLink
+  inputTestLink, inputLiveLink,
 }) {
   return (
     <WCAQueryClientProvider>

@@ -1,13 +1,15 @@
 import React from 'react';
-import { Confirm, Input, Button, Form, Icon, List, ListItem, Message, Segment } from 'semantic-ui-react';
-import useInputState from '../../lib/hooks/useInputState';
+import {
+  Confirm, Input, Button, Form, Icon, List, ListItem, Message, Segment,
+} from 'semantic-ui-react';
 import { useMutation } from '@tanstack/react-query';
+import useInputState from '../../lib/hooks/useInputState';
 import { updateTestLink, promoteTestLink } from './api/livestream';
 
 function LivestreamManager({ inputTestLink, inputLiveLink }) {
   const [testLink, setTestLink] = useInputState(inputTestLink);
   const [liveLink, setLiveLink] = useInputState(inputLiveLink);
-  const [testLinkInput, setTestLinkInput] = useInputState("");
+  const [testLinkInput, setTestLinkInput] = useInputState('');
   const [pendingSubmissionValue, setPendingSubmissionValue] = useInputState(null);
   const [confirmUpdateOpen, setConfirmUpdateOpen] = useInputState(false);
   const [confirmPromoteOpen, setConfirmPromoteOpen] = useInputState(false);
@@ -29,17 +31,16 @@ function LivestreamManager({ inputTestLink, inputLiveLink }) {
     setConfirmPromoteOpen(false);
   };
 
-
   const { mutate: updateTestLinkMutation, isSuccess: testLinkUpdated, error: testLinkUpdateError } = useMutation({
     mutationFn: updateTestLink,
-    onSuccess: ({data}) => {
+    onSuccess: ({ data }) => {
       setTestLink(data);
     },
   });
 
   const { mutate: promoteTestLinkMutation, isSuccess: liveLinkUpdate, error: liveLinkUpdateError } = useMutation({
     mutationFn: promoteTestLink,
-    onSuccess: ({data}) => {
+    onSuccess: ({ data }) => {
       setLiveLink(data);
     },
   });
@@ -56,13 +57,26 @@ function LivestreamManager({ inputTestLink, inputLiveLink }) {
 
       <b><p>Current VideoID's:</p></b>
       <List bulleted>
-        <ListItem><b>Test videoId</b>: {testLink}</ListItem>
-        <ListItem><b>Live videoId</b>: {liveLink}</ListItem>
+        <ListItem>
+          <b>Test videoId</b>
+          :
+          {' '}
+          {testLink}
+        </ListItem>
+        <ListItem>
+          <b>Live videoId</b>
+          :
+          {' '}
+          {liveLink}
+        </ListItem>
       </List>
 
       <Segment>
         <h2>Step 1: Update the Test VideoID</h2>
-        <p>You can either input a VideoID manually[1]: <i>(Note - we don't check that the VideoID is valid! That's your job in Step 2.)</i></p>
+        <p>
+          You can either input a VideoID manually[1]:
+          <i>(Note - we don't check that the VideoID is valid! That's your job in Step 2.)</i>
+        </p>
         <Form onSubmit={() => handleSubmit(testLinkInput)} success={testLinkUpdated} error={!!testLinkUpdateError}>
           <Form.Field>
             <label>New videoId</label>
@@ -86,7 +100,7 @@ function LivestreamManager({ inputTestLink, inputLiveLink }) {
           >
             <Icon name="play" />
             {' '}
-            {'Use WC2025 Promo Video'}
+            Use WC2025 Promo Video
           </Button>
 
           <Button
@@ -96,18 +110,20 @@ function LivestreamManager({ inputTestLink, inputLiveLink }) {
           >
             <Icon name="low vision" />
             {' '}
-            {'Clear Video Link'}
+            Clear Video Link
           </Button>
         </Form>
       </Segment>
-
-
 
       <Segment>
         <h2>Step 2: Check the Homepage Preview</h2>
         <p>Before we update the video on the homepage, let's make sure that you've entered the link correctly for the new video you want.</p>
 
-        <p><a href="/wc2025-preview" target="_blank" rel="noopener noreferrer">Click here</a> to see a preview of the homepage.</p>
+        <p>
+          <a href="/wc2025-preview" target="_blank" rel="noopener noreferrer">Click here</a>
+          {' '}
+          to see a preview of the homepage.
+        </p>
         <p>Please confirm the following:</p>
         <List bulleted>
           <ListItem>The correct video is loaded</ListItem>
@@ -116,7 +132,7 @@ function LivestreamManager({ inputTestLink, inputLiveLink }) {
       </Segment>
 
       <Segment>
-        <Form onSubmit={() => setConfirmPromoteOpen(true) }>
+        <Form onSubmit={() => setConfirmPromoteOpen(true)}>
           <h2>Step 3: Update the Homepage Livestream Link</h2>
           <p>This will update the link used on the public-facing homepage. Make sure you've checked the Homepage Preview first!</p>
 
@@ -126,7 +142,7 @@ function LivestreamManager({ inputTestLink, inputLiveLink }) {
           >
             <Icon name="exclamation triangle" />
             {' '}
-            {'Update Public Livestream Link'}
+            Update Public Livestream Link
           </Button>
         </Form>
       </Segment>
@@ -136,8 +152,17 @@ function LivestreamManager({ inputTestLink, inputLiveLink }) {
         <List ordered>
           <ListItem>Go to the video you want to use, and click "Share".</ListItem>
           <ListItem>The link will look like this: https://youtu.be/fiqMMsCuSq8?si=PYUK2ftPOPQy36Su</ListItem>
-          <ListItem>We only want the part after ".be/" and before the first question mark - highlighted in bold: https://youtu.be/<b>fiqMMsCuSq8</b>?si=PYUK2ftPOPQy36Su</ListItem>
-          <ListItem>Paste only that part - <b>fiqMMsCuSq8</b> - into the box in Step 1</ListItem>
+          <ListItem>
+            We only want the part after ".be/" and before the first question mark - highlighted in bold: https://youtu.be/
+            <b>fiqMMsCuSq8</b>
+            ?si=PYUK2ftPOPQy36Su
+          </ListItem>
+          <ListItem>
+            Paste only that part -
+            <b>fiqMMsCuSq8</b>
+            {' '}
+            - into the box in Step 1
+          </ListItem>
         </List>
       </Segment>
 
@@ -153,9 +178,9 @@ function LivestreamManager({ inputTestLink, inputLiveLink }) {
         onCancel={() => setConfirmPromoteOpen(false)}
         onConfirm={submitPromote}
         content={
-          testLink === ""
-            ? "WARNING! You are submitting a blank videoId - this will hide the WC2025 banner and return the homepage to nornmal. Are you sure?"
-            : `Are you sure you want to submit this VideoID: "${testLink}"?`
+          testLink === ''
+            ? 'WARNING! You are submitting a blank videoId - this will hide the WC2025 banner and return the homepage to nornmal. Are you sure?'
+            : `Are you sure you want to submit this VideoID: ${testLink}?`
         }
       />
 
