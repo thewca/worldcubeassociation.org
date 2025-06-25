@@ -38,7 +38,7 @@ function LivestreamManager({ inputTestLink, inputLiveLink }) {
     },
   });
 
-  const { mutate: promoteTestLinkMutation, isSuccess: liveLinkUpdate, error: liveLinkUpdateError } = useMutation({
+  const { mutate: promoteTestLinkMutation, isSuccess: liveLinkUpdated, error: liveLinkUpdateError } = useMutation({
     mutationFn: promoteTestLink,
     onSuccess: ({ data }) => {
       setLiveLink(data);
@@ -132,7 +132,7 @@ function LivestreamManager({ inputTestLink, inputLiveLink }) {
       </Segment>
 
       <Segment>
-        <Form onSubmit={() => setConfirmPromoteOpen(true)}>
+        <Form onSubmit={() => setConfirmPromoteOpen(true)} success={liveLinkUpdated} error={!!liveLinkUpdateError}>
           <h2>Step 3: Update the Homepage Livestream Link</h2>
           <p>This will update the link used on the public-facing homepage. Make sure you've checked the Homepage Preview first!</p>
 
@@ -144,6 +144,9 @@ function LivestreamManager({ inputTestLink, inputLiveLink }) {
             {' '}
             Update Public Livestream Link
           </Button>
+
+          <Message success content={`Live videoId updated! New value: ${testLink}`} />
+          <Message error content={liveLinkUpdateError?.message || 'Something went wrong'} />
         </Form>
       </Segment>
 
@@ -153,7 +156,7 @@ function LivestreamManager({ inputTestLink, inputLiveLink }) {
           <ListItem>Go to the video you want to use, and click "Share".</ListItem>
           <ListItem>The link will look like this: https://youtu.be/fiqMMsCuSq8?si=PYUK2ftPOPQy36Su</ListItem>
           <ListItem>
-            We only want the part after ".be/" and before the first question mark - highlighted in bold: https://youtu.be/
+            We only want the part after '.be/' and before the first question mark - highlighted in bold: https://youtu.be/
             <b>fiqMMsCuSq8</b>
             ?si=PYUK2ftPOPQy36Su
           </ListItem>
