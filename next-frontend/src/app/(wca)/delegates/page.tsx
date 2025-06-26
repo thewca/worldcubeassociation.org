@@ -36,30 +36,14 @@ export default function TeamsCommitteesPage() {
           },
         },
       }),
+    select(request) {
+      return request.data!.filter((group) => group.parent_group_id === null);
+    },
   });
 
-  const groups = useMemo(() => delegateRequest?.data ?? [], [delegateRequest]);
+  const groups = useMemo(() => delegateRequest ?? [], [delegateRequest]);
 
-  const [hash, setHash] = useState<string | null>("");
-
-  const activeGroup = useMemo(
-    () => groups.find((group) => group.metadata!.friendly_id === hash),
-    [groups, hash],
-  );
-
-  const hashIsValid = Boolean(activeGroup);
-
-  useEffect(() => {
-    if (!isLoading && !hashIsValid) {
-      if (groups.length > 0) {
-        setHash(groups[0].metadata!.friendly_id!);
-      } else {
-        setHash(null);
-      }
-    }
-  }, [isLoading, hashIsValid, groups, setHash]);
-
-  if (isLoading || !activeGroup) return <Loading />;
+  if (isLoading) return <Loading />;
 
   return (
     <Container>
