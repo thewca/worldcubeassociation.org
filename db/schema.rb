@@ -1488,6 +1488,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_26_030259) do
     t.boolean "cookies_acknowledged", default: false, null: false
     t.boolean "registration_notifications_enabled", default: false
     t.string "otp_secret"
+    t.boolean "should_claim_wca_id", default: false, null: false
     t.index ["delegate_id_to_handle_wca_id_claim"], name: "index_users_on_delegate_id_to_handle_wca_id_claim"
     t.index ["delegate_reports_region_type", "delegate_reports_region_id"], name: "index_users_on_delegate_reports_region"
     t.index ["email"], name: "index_users_on_email", unique: true
