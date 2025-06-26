@@ -18,31 +18,27 @@ import { components } from "@/types/openapi";
 import Link from "next/link";
 import { usePermissions } from "@/providers/PermissionProvider";
 import UserBadge from "@/components/UserBadge";
+import I18nHTMLTranslate from "@/components/I18nHTMLTranslate";
 
 export default function TeamsCommitteesPage() {
   const I18n = useT();
 
   const api = useAPI();
 
-  const { data: teamsCommittees, isLoading: teamsCommitteesLoading } = useQuery(
-    {
-      queryKey: ["teams_committees"],
-      queryFn: () =>
-        api.GET("/user_groups", {
-          params: {
-            query: {
-              isActive: true,
-              groupType: "teams_committees",
-              isHidden: false,
-            },
+  const { data: delegateRequest, isLoading } = useQuery({
+    queryKey: ["delegate_regions"],
+    queryFn: () =>
+      api.GET("/user_groups", {
+        params: {
+          query: {
+            isActive: true,
+            groupType: "delegate_regions",
           },
-        }),
-    },
-  );
+        },
+      }),
+  });
 
-  const isLoading = teamsCommitteesLoading;
-
-  const groups = useMemo(() => teamsCommittees?.data ?? [], [teamsCommittees]);
+  const groups = useMemo(() => delegateRequest?.data ?? [], [delegateRequest]);
 
   const [hash, setHash] = useState<string | null>("");
 
@@ -68,10 +64,16 @@ export default function TeamsCommitteesPage() {
   return (
     <Container>
       <VStack align={"left"} gap="8" width="full" pt="8" alignItems="left">
-        <Heading size="5xl">
-          {I18n.t("page.teams_committees_councils.title")}
-        </Heading>
-        <Prose>{I18n.t("page.teams_committees_councils.description")}</Prose>
+        <Heading size="5xl">{I18n.t("delegates_page.title")}</Heading>
+        <Prose>
+          <I18nHTMLTranslate
+            i18nKey="about.structure.delegates_html"
+            options={{ see_link: "" }}
+          />
+        </Prose>
+        <Prose>
+          <I18nHTMLTranslate i18nKey="delegates_page.acknowledges" />
+        </Prose>
         <Tabs.Root
           variant="enclosed"
           orientation="vertical"
