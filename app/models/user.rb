@@ -1068,6 +1068,7 @@ class User < ApplicationRecord
     unconfirmed_wca_id
     delegate_id_to_handle_wca_id_claim
     dob_verification
+    should_claim_wca_id
   ].freeze
 
   def editable_fields_of_user(user)

@@ -102,6 +102,12 @@
   <main>
     <%= render 'layouts/flash' %>
 
+    <% if current_page?(root_path) %>
+      <%= react_component("ClaimWcaIdAlert", {
+        shouldClaimWcaId: current_user&.should_claim_wca_id?
+      }) %>
+    <% end %>
+
     <%= yield %>
   </main>
 

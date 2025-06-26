@@ -1482,6 +1482,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_05_131200) do
     t.string "reset_password_token"
     t.boolean "results_notifications_enabled", default: false
     t.string "session_validity_token"
+    t.boolean "should_claim_wca_id", default: false, null: false
     t.integer "sign_in_count", default: 0, null: false
     t.string "unconfirmed_email", limit: 255
     t.string "unconfirmed_wca_id", limit: 255
