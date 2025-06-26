@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import {
+  Center,
   Container,
   Heading,
   Table,
@@ -19,6 +20,7 @@ import Link from "next/link";
 import { usePermissions } from "@/providers/PermissionProvider";
 import UserBadge from "@/components/UserBadge";
 import I18nHTMLTranslate from "@/components/I18nHTMLTranslate";
+import _ from "lodash";
 
 export default function TeamsCommitteesPage() {
   const I18n = useT();
@@ -74,7 +76,7 @@ export default function TeamsCommitteesPage() {
           </Tabs.List>
           {groups.map((group) => (
             <Tabs.Content value={group.name} key={group.id} w={"full"}>
-              <TeamTab group={group} />
+              <DelegateTab group={group} />
             </Tabs.Content>
           ))}
         </Tabs.Root>
@@ -83,91 +85,84 @@ export default function TeamsCommitteesPage() {
   );
 }
 
-function TeamTab({ group }: { group: components["schemas"]["UserGroup"] }) {
-  const I18n = useT();
-
-  const { metadata, name, id } = group;
-  const { friendly_id, email } = metadata!;
-  const canReadGroupPast = usePermissions()?.canReadGroupPast(group.name);
+function DelegateTab({ group }: { group: components["schemas"]["UserGroup"] }) {
+  const { metadata, name, id, lead_user } = group;
+  const { email } = metadata!;
 
   return (
     <VStack align={"left"}>
       <Heading size="2xl">{name}</Heading>
-      <Text>
-        {I18n.t(
-          `page.teams_committees_councils.groups_description.${friendly_id}`,
-        )}
-      </Text>
       <Link href={`mailto:${email}`}>{email}</Link>
+      <Center>
+        <UserBadge
+          key={lead_user!.id}
+          profilePicture={lead_user!.avatar.url}
+          name={lead_user!.name}
+          wcaId={lead_user!.wca_id}
+        />
+      </Center>
       <MemberTable id={id} />
-      {canReadGroupPast && (
-        <>
-          <Heading size={"xl"}>Past Roles</Heading>
-          <MemberTable id={id} isActive={false} />
-        </>
-      )}
     </VStack>
   );
 }
 
-function MemberTable({
-  id,
-  isActive = true,
-}: {
-  id: number;
-  isActive?: boolean;
-}) {
+function MemberTable({ id }: { id: number }) {
   const I18n = useT();
   const api = useAPI();
 
-  const { data: roleRequest, isLoading } = useQuery({
-    queryKey: ["roles", id, isActive],
+  const { data: roles, isLoading } = useQuery({
+    queryKey: ["roles", id],
     queryFn: () =>
       api.GET("/user_roles", {
         params: {
           query: {
-            isActive: isActive,
-            groupId: id,
+            parentGroupId: id,
+            isActive: true,
+            sort: "location,name",
           },
         },
       }),
+    select(request) {
+      return _.groupBy(request.data!, "group.name");
+    },
   });
-
-  const roles = useMemo(() => roleRequest?.data ?? [], [roleRequest]);
 
   if (isLoading) return <Loading />;
 
-  return (
-    <Table.Root>
-      <Table.Header>
-        <Table.Row>
-          <Table.ColumnHeader>
-            {I18n.t("delegates_page.table.name")}
-          </Table.ColumnHeader>
-          <Table.ColumnHeader>
-            {I18n.t("delegates_page.table.role")}
-          </Table.ColumnHeader>
-        </Table.Row>
-      </Table.Header>
-      <Table.Body>
-        {roles.map((role) => (
-          <Table.Row key={role.id}>
-            <Table.Cell>
-              <UserBadge
-                key={role.id}
-                profilePicture={role.user.avatar.url}
-                name={role.user.name}
-                wcaId={role.user.wca_id}
-              />
-            </Table.Cell>
-            <Table.Cell>
-              {I18n.t(
-                `enums.user_roles.status.${role.group.group_type}.${role.metadata.status}`,
-              )}
-            </Table.Cell>
+  return _.map(roles, (delegates, region) => (
+    <VStack>
+      <Heading size={"xl"}>{region}</Heading>
+      <Table.Root>
+        <Table.Header>
+          <Table.Row>
+            <Table.ColumnHeader>
+              {I18n.t("delegates_page.table.name")}
+            </Table.ColumnHeader>
+            <Table.ColumnHeader>
+              {I18n.t("delegates_page.table.role")}
+            </Table.ColumnHeader>
           </Table.Row>
-        ))}
-      </Table.Body>
-    </Table.Root>
-  );
+        </Table.Header>
+        <Table.Body>
+          {delegates.map((role) => (
+            <Table.Row key={role.id}>
+              <Table.Cell>
+                <UserBadge
+                  key={role.id}
+                  profilePicture={role.user.avatar.url}
+                  name={role.user.name}
+                  wcaId={role.user.wca_id}
+                />
+              </Table.Cell>
+              <Table.Cell>
+                {I18n.t(
+                  `enums.user_roles.status.${role.group.group_type}.${role.metadata.status}`,
+                )}
+              </Table.Cell>
+            </Table.Row>
+          ))}
+        </Table.Body>
+      </Table.Root>
+    </VStack>
+  ));
 }
