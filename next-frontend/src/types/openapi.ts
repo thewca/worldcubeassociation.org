@@ -194,6 +194,106 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/user_groups": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get user groups */
+        get: {
+            parameters: {
+                query?: {
+                    /** @description Filter by whether the group is active */
+                    isActive?: boolean;
+                    /** @description Filter by whether the group is hidden */
+                    isHidden?: boolean;
+                    /** @description Filter by group type (e.g., "officers") */
+                    groupType?: string;
+                    /** @description Sort by a specific field (e.g., "start_date", "-created_at") */
+                    sort?: string;
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description A list of user groups */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["UserGroup"][];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/user_roles": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get user roles */
+        get: {
+            parameters: {
+                query?: {
+                    /** @description Filter by whether the group is active */
+                    isActive?: boolean;
+                    /** @description Filter by whether the group is hidden */
+                    isGroupHidden?: boolean;
+                    /** @description Filter by user ID */
+                    userId?: number;
+                    /** @description Filter by group ID */
+                    groupId?: number;
+                    /** @description Filter by metadata status (e.g., "chair") */
+                    status?: string;
+                    /** @description Filter by group type (e.g., "officers") */
+                    groupType?: string;
+                    /** @description Filter by whether the user is the lead of the group */
+                    isLead?: boolean;
+                    /** @description Sort by a specific field (e.g., "start_date", "-created_at") */
+                    sort?: string;
+                    /** @description Number of results per page */
+                    perPage?: number;
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description A list of user roles */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["UserRole"][];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/users/me/permissions": {
         parameters: {
             query?: never;
@@ -215,6 +315,53 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        UserRole: {
+            id: number;
+            /** Format: date */
+            start_date: string;
+            /** Format: date */
+            end_date: string | null;
+            group: components["schemas"]["UserGroup"];
+            user: components["schemas"]["Person"];
+            metadata: {
+                id?: number;
+                status?: string;
+                /** Format: date-time */
+                created_at?: string;
+                /** Format: date-time */
+                updated_at?: string;
+                /** Format: email */
+                email?: string;
+            };
+            class?: string;
+        };
+        UserGroup: {
+            id: number;
+            name: string;
+            group_type: string;
+            parent_group_id?: number | null;
+            is_active: boolean;
+            is_hidden: boolean;
+            metadata_id?: number | null;
+            metadata_type?: string | null;
+            /** Format: date-time */
+            created_at: string;
+            /** Format: date-time */
+            updated_at: string;
+            lead_user?: components["schemas"]["Person"];
+            metadata?: {
+                id?: number;
+                status?: string;
+                /** Format: date-time */
+                created_at?: string;
+                /** Format: date-time */
+                updated_at?: string;
+                /** Format: email */
+                email?: string;
+                preferred_contact_mode?: string;
+                friendly_id?: string;
+            };
+        };
         Person: {
             /** @example 267 */
             id: number;
