@@ -1,6 +1,6 @@
 <% provide(:title, 'WC2025 Livestream Management') %>
 
 <%= react_component('Posts/LivestreamManagementContainer', {
-  inputTestLink: ServerSetting.find_or_create_by("TEST_wc2025_video_url").value,
-  inputLiveLink: ServerSetting.find_or_create_by("wc2025_video_url").value,
+  inputTestLink: ServerSetting.find_by(name: "TEST_wc2025_video_url")&.value,
+  inputLiveLink: ServerSetting.find_by(name: "wc2025_video_url")&.value,
 }) %>
