@@ -14,7 +14,7 @@ class CompetitionsMailer < ApplicationMailer
       mail(
         from: UserGroup.teams_committees_group_wcat.metadata.email,
         to: UserGroup.teams_committees_group_wcat.metadata.email,
-        cc: (competition.delegates.map(&:email) + senior_and_regional_delegates,
+        cc: (competition.delegates.map(&:email) + senior_and_regional_delegates).uniq.compact,
         reply_to: confirmer.email,
         subject: "#{competition.name} is confirmed",
       )
