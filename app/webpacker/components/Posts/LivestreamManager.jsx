@@ -15,7 +15,7 @@ function LivestreamManager({ testVideoIdProp, liveVideoIdProp }) {
   const [confirmUpdateOpen, setConfirmUpdateOpen] = useInputState(false);
   const [confirmPromoteOpen, setConfirmPromoteOpen] = useInputState(false);
 
-  const defaultVideoId = 'blat80pyeBg'
+  const defaultVideoId = 'blat80pyeBg';
 
   const {
     mutate: updateTestVideoIdMutation,
@@ -93,7 +93,7 @@ function LivestreamManager({ testVideoIdProp, liveVideoIdProp }) {
         <p>
           You can either input a VideoID manually[1]:
           <i>
-             (Note - we don&apos;t check that the VideoID is valid! That&apos;s your job in Step 2.)
+            (Note - we don&apos;t check that the VideoID is valid! That&apos;s your job in Step 2.)
           </i>
         </p>
         <Form
@@ -229,11 +229,11 @@ function LivestreamManager({ testVideoIdProp, liveVideoIdProp }) {
 }
 
 function LivestreamManagerWrapper(
-  { testVideoId, liveVideoId }
+  { testVideoId, liveVideoId },
 ) {
   return (
     <WCAQueryClientProvider>
-        <LivestreamManager testVideoIdProp={testVideoId} liveVideoIdProp={liveVideoId} />
+      <LivestreamManager testVideoIdProp={testVideoId} liveVideoIdProp={liveVideoId} />
     </WCAQueryClientProvider>
   );
 }
