@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_06_04_143939) do
+ActiveRecord::Schema[7.2].define(version: 2025_06_05_071530) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -1448,6 +1448,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_06_04_143939) do
     t.boolean "cookies_acknowledged", default: false, null: false
     t.boolean "registration_notifications_enabled", default: false
     t.string "otp_secret"
+    t.boolean "should_claim_wca_id", default: false, null: false
     t.index ["delegate_id_to_handle_wca_id_claim"], name: "index_users_on_delegate_id_to_handle_wca_id_claim"
     t.index ["delegate_reports_region_type", "delegate_reports_region_id"], name: "index_users_on_delegate_reports_region"
     t.index ["email"], name: "index_users_on_email", unique: true

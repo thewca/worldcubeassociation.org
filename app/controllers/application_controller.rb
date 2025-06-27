@@ -83,6 +83,11 @@ class ApplicationController < ActionController::Base
     session[:locale] = nil
     set_locale
 
+    if current_user.should_claim_wca_id?
+      flash[:info] = t('devise.after_sign_in.wca_claim_alert', claim_wca_id_path: profile_claim_wca_id_url).html_safe
+      current_user.update(should_claim_wca_id: false)
+    end
+
     super
   end
 
