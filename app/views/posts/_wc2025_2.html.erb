@@ -1,0 +1,62 @@
+<% video_id = test ? ServerSetting.find_by(name: 'TEST_wc2025_video_url')&.value : ServerSetting.find_by(name: 'wc2025_video_url')&.value %>
+
+<% return if video_id.blank? %>
+
+<div class="wc2025">
+  <h2 class="wc2025-header">
+    <%= "JULY 3-6: RUBIK'S WCA WORLD CHAMPIONSHIP 2025" %>
+  </h2>
+
+  <div class="container jumbotron">
+    <div class="row">
+      <div class="col-md-3 col-lg-3">
+        <%= link_to "https://www.cubingusa.org/worlds/", target: "_blank", class: "hide-new-window-icon" do %>
+          <%= image_tag "wc2025-logo.png", alt: "WC2025 Logo", class: "img-responsive wc2025-main-logo", style: "margin-bottom: 20px;" %>
+        <% end %>
+
+        <div class="wc2025-buttons" style="display: flex; flex-direction: column; gap: 10px;">
+          <a
+            href="https://live.worldcubeassociation.org/competitions/7025"
+            class="ui button primary hide-new-window-icon"
+            target="_blank"
+            rel="noopener noreferrer"
+          >Live Results</a>
+          <a
+            href="https://www.worldcubeassociation.org/competitions/WC2025#competition-schedule"
+            class="ui button primary hide-new-window-icon"
+            target="_blank"
+            rel="noopener noreferrer"
+          >Schedule</a>
+          <a
+            href="https://www.competitiongroups.com/competitions/WC2025"
+            class="ui button primary hide-new-window-icon"
+            target="_blank"
+            rel="noopener noreferrer"
+          >Competition Groups</a>
+        </div>
+      </div>
+
+      <div class="col-md-6 col-lg-6">
+        <div class="embed-responsive embed-responsive-16by9"
+          <iframe
+            class="embed-responsive-item"
+            style="border-radius: 12px; overflow: hidden;"
+            src=<%= "https://www.youtube.com/embed/#{video_id}?autoplay=1&mute=1" %>
+            title="YouTube video player"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerpolicy="strict-origin-when-cross-origin"
+            allowfullscreen
+          ></iframe>
+        </div>
+      </div>
+
+      <div class="col-md-3 col-lg-3">
+        <h3>Thank you to our title sponsor:</h3>
+        <%= link_to "https://www.rubiks.com/", target: "_blank", class: "hide-new-window-icon" do %>
+          <%= image_tag "rubiks_new.png", alt: "WC2025 Logo", class: "img-responsive" %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
