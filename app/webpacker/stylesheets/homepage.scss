@@ -230,11 +230,20 @@ footer {
   }
 }
 
-@media (min-width: 1200px) {
+@media (min-width: 992px) {
   #outer-row {
     display: flex;
     align-items: center;
     flex-wrap: wrap;
   }
 }
+
+@media (max-width: 992px) {
+  #inner-row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+}
+
 
