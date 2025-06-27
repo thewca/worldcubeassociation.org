@@ -115,7 +115,7 @@ footer {
   }
 }
 
-@media (min-width: 992px) { // This vertically centers the items in lg view
+@media (min-width: 992px) { // This vertically centers the items in md and lg views
   #outer-row {
     display: flex;
     align-items: center;

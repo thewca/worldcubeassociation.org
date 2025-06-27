@@ -66,9 +66,6 @@ class PostsController < ApplicationController
     end
   end
 
-  def wc2025_preview
-  end
-
   def rss
     tag = params[:tag]
     @posts = if tag
