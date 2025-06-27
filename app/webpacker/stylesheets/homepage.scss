@@ -228,6 +228,18 @@ footer {
   #wc2025-jumbotron {
     width: 1500px;
   }
+
+  #wc2025-logo {
+    max-width: 100% //
+  }
+}
+
+@media (max-width: 1600px) {
+  #wc2025-logo {
+    min-width: 140px; // Without this, it's too small in the ~320px range (smallest reasonable phone screen size)
+    max-width: 260px; // Without this, it's too big in xs and sm views, taking space away from player and lower elements
+    width: 100% // Without this, it will not go below the max-width even when the parent container is smaller
+  }
 }
 
 @media (min-width: 992px) {
@@ -244,10 +256,6 @@ footer {
     align-items: center;
     flex-wrap: wrap;
   }
-}
-
-#wc2025-logo {
-  min-width: 140px; // Without this, it's too small in the ~320px range (smallest reasonable phone screen size)
 }
 
 .column-gap {
