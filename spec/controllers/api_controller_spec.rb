@@ -438,6 +438,8 @@ RSpec.describe Api::V0::ApiController, :clean_db_with_truncation do
         'export_date' => export_timestamp.iso8601,
         'sql_url' => "#{root_url}export/results/WCA_export.sql.zip",
         'tsv_url' => "#{root_url}export/results/WCA_export.tsv.zip",
+        'developer_url' => "#{ENV.fetch('DUMP_HOST', nil)}/export/developer/wca-developer-database-dump.zip",
+        'readme' => "",
       )
     end
   end
