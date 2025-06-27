@@ -229,3 +229,12 @@ footer {
     width: 1500px;
   }
 }
+
+@media (min-width: 1200px) {
+  #outer-row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+}
+

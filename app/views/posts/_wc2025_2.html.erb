@@ -9,16 +9,16 @@
   </h2>
 
   <div class="container jumbotron" id="wc2025-jumbotron">
-    <div class="row">
-      <div class="col-sm-4 col-md-3">
-        <div class="row">
-          <div class="col-xs-6 col-sm-12">
+    <div class="row" id="outer-row">
+      <div class="col-md-4 col-lg-3">
+        <div class="row" id="inner-row">
+          <div class="col-xs-6 col-md-12">
             <%= link_to "https://www.cubingusa.org/worlds/", target: "_blank", class: "hide-new-window-icon" do %>
               <%= image_tag "wc2025-logo.png", alt: "WC2025 Logo", class: "img-responsive", style: "margin-bottom: 20px;" %>
             <% end %>
           </div>
 
-          <div class="col-xs-6 col-sm-12">
+          <div class="col-xs-6 col-md-12">
             <div class="wc2025-buttons" style="display: flex; flex-direction: column; gap: 10px;">
               <a
                 href="https://live.worldcubeassociation.org/competitions/7025"
@@ -43,7 +43,7 @@
         </div>
       </div>
 
-      <div class="col-sm-8 col-md-6">
+      <div class="col-md-8 col-lg-6">
         <div class="embed-responsive embed-responsive-16by9">
           <iframe
             class="embed-responsive-item"
@@ -58,7 +58,9 @@
         </div>
       </div>
 
-      <div class="col-xs-6 col-xs-offset-3 col-sm-4 col-sm-offset-0 col-md-3">
+      <div class="clearfix visible-sm-block"></div>
+
+      <div class="col-xs-6 col-xs-offset-3 col-md-4 col-md-offset-0 col-lg-3">
         <h3>Thank you to our title sponsor:</h3>
         <%= link_to "https://www.rubiks.com/", target: "_blank", class: "hide-new-window-icon" do %>
           <%= image_tag "rubiks_new.png", alt: "WC2025 Logo", class: "img-responsive" %>
