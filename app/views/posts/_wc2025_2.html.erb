@@ -10,11 +10,11 @@
 
   <div class="container jumbotron" id="wc2025-jumbotron">
     <div class="row" id="outer-row">
-      <div class="col-md-4 col-lg-3">
+      <div class="col-md-4 col-lg-3 column-gap">
         <div class="row" id="inner-row">
           <div class="col-xs-6 col-md-12">
             <%= link_to "https://www.cubingusa.org/worlds/", target: "_blank", class: "hide-new-window-icon" do %>
-              <%= image_tag "wc2025-logo.png", alt: "WC2025 Logo", class: "img-responsive", style: "margin-bottom: 20px;" %>
+              <%= image_tag "wc2025-logo.png", id: "wc2025-logo", alt: "WC2025 Logo", class: "img-responsive", style: "margin-bottom: 20px;" %>
             <% end %>
           </div>
 
@@ -43,7 +43,7 @@
         </div>
       </div>
 
-      <div class="col-md-8 col-lg-6">
+      <div class="col-md-8 col-lg-6 column-gap">
         <div class="embed-responsive embed-responsive-16by9">
           <iframe
             class="embed-responsive-item"

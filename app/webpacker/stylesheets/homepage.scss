@@ -246,4 +246,11 @@ footer {
   }
 }
 
+#wc2025-logo {
+  min-width: 140px; // Without this, it's too small in the ~320px range (smallest reasonable phone screen size)
+}
+
+.column-gap {
+  margin-bottom: 15px; // Otherwise col items are touching each other when vertically stacked
+}
 
