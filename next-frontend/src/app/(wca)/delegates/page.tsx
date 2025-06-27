@@ -1,13 +1,12 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 import {
   Center,
   Container,
   Heading,
   Table,
   Tabs,
-  Text,
   VStack,
 } from "@chakra-ui/react";
 import { useT } from "@/lib/i18n/useI18n";
@@ -17,7 +16,6 @@ import Loading from "@/components/ui/loading";
 import { Prose } from "@/components/ui/prose";
 import { components } from "@/types/openapi";
 import Link from "next/link";
-import { usePermissions } from "@/providers/PermissionProvider";
 import UserBadge from "@/components/UserBadge";
 import I18nHTMLTranslate from "@/components/I18nHTMLTranslate";
 import _ from "lodash";
