@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  Confirm, Container, Input, Button, Form, Icon, List, ListItem, Message, Segment,
+  Confirm, Container, Input, Button, Form, Icon, List, Message, Segment,
 } from 'semantic-ui-react';
 import { useMutation } from '@tanstack/react-query';
 import WCAQueryClientProvider from '../../lib/providers/WCAQueryClientProvider';
@@ -62,30 +62,30 @@ function LivestreamManager({ testVideoIdProp, liveVideoIdProp }) {
       <h1>Livestream Management</h1>
       <p>Use this page to manage the livestream displayed on the WCA homepage</p>
       <List bulleted>
-        <ListItem>Update the chosen VideoID by following the steps below</ListItem>
-        <ListItem>
+        <List.Item>Update the chosen VideoID by following the steps below</List.Item>
+        <List.Item>
           The WC2025 banner will disappear if the &quot;Live videoId&quot; ever becomes blank
-        </ListItem>
-        <ListItem>
+        </List.Item>
+        <List.Item>
           {'The live videoId can\'t be updated directly - you have to set the test videoId first (Step 1),'
           + 'and then overwrite the live videoId with its value (Step 3)'}
-        </ListItem>
+        </List.Item>
       </List>
 
       <b><p>Current VideoID&apos;s:</p></b>
       <List bulleted>
-        <ListItem>
+        <List.Item>
           <b>Test videoId</b>
           :
           {' '}
           {testVideoId}
-        </ListItem>
-        <ListItem>
+        </List.Item>
+        <List.Item>
           <b>Live videoId</b>
           :
           {' '}
           {liveVideoId}
-        </ListItem>
+        </List.Item>
       </List>
 
       <Segment>
@@ -154,11 +154,11 @@ function LivestreamManager({ testVideoIdProp, liveVideoIdProp }) {
         </p>
         <p>Please confirm the following:</p>
         <List bulleted>
-          <ListItem>The correct video is loaded</ListItem>
-          <ListItem>
+          <List.Item>The correct video is loaded</List.Item>
+          <List.Item>
             {'The video autoplays (hint: If not, make sure that your videoId stopped at the '
             + 'question mark in the youtube link)'}
-          </ListItem>
+          </List.Item>
         </List>
       </Segment>
 
@@ -191,19 +191,19 @@ function LivestreamManager({ testVideoIdProp, liveVideoIdProp }) {
       <Segment>
         <h3>[1] How do I find the videoId?</h3>
         <List ordered>
-          <ListItem>Go to the video you want to use, and click &quot;Share&quot;.</ListItem>
-          <ListItem>The link will look like this: https://youtu.be/fiqMMsCuSq8?si=PYUK2ftPOPQy36Su</ListItem>
-          <ListItem>
+          <List.Item>Go to the video you want to use, and click &quot;Share&quot;.</List.Item>
+          <List.Item>The link will look like this: https://youtu.be/fiqMMsCuSq8?si=PYUK2ftPOPQy36Su</List.Item>
+          <List.Item>
             We only want the part after &quot;be/&quot; and before the first question mark - highlighted in bold: https://youtu.be/
             <b>fiqMMsCuSq8</b>
             ?si=PYUK2ftPOPQy36Su
-          </ListItem>
-          <ListItem>
+          </List.Item>
+          <List.Item>
             Paste only that part -
             <b>fiqMMsCuSq8</b>
             {' '}
             - into the box in Step 1
-          </ListItem>
+          </List.Item>
         </List>
       </Segment>
 
