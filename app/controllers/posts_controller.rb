@@ -58,7 +58,6 @@ class PostsController < ApplicationController
     else
       render json: { error: test.errors }
     end
-
   end
 
   # Sets the live link to the value of the current test link
