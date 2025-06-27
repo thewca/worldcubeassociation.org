@@ -14,6 +14,28 @@ function LivestreamManager({ inputTestLink, inputLiveLink }) {
   const [confirmUpdateOpen, setConfirmUpdateOpen] = useInputState(false);
   const [confirmPromoteOpen, setConfirmPromoteOpen] = useInputState(false);
 
+  const {
+    mutate: updateTestLinkMutation,
+    isSuccess: testLinkUpdated,
+    error: testLinkUpdateError,
+  } = useMutation({
+    mutationFn: updateTestLink,
+    onSuccess: ({ data }) => {
+      setTestLink(data);
+    },
+  });
+
+  const {
+    mutate: promoteTestLinkMutation,
+    isSuccess: liveLinkUpdated,
+    error: liveLinkUpdateError,
+  } = useMutation({
+    mutationFn: promoteTestLink,
+    onSuccess: ({ data }) => {
+      setLiveLink(data);
+    },
+  });
+
   const handleSubmit = (value) => {
     setPendingSubmissionValue(value);
     setConfirmUpdateOpen(true);
@@ -21,7 +43,8 @@ function LivestreamManager({ inputTestLink, inputLiveLink }) {
 
   const confirmUpdateSubmission = () => {
     updateTestLinkMutation(pendingSubmissionValue);
-    setTestLinkInput(pendingSubmissionValue); // In case the submission comes from one of the non-"Submit" buttons
+    // In case the submission comes from one of the non-"Submit" buttons
+    setTestLinkInput(pendingSubmissionValue);
     setConfirmUpdateOpen(false);
     setPendingSubmissionValue(null);
   };
@@ -31,31 +54,22 @@ function LivestreamManager({ inputTestLink, inputLiveLink }) {
     setConfirmPromoteOpen(false);
   };
 
-  const { mutate: updateTestLinkMutation, isSuccess: testLinkUpdated, error: testLinkUpdateError } = useMutation({
-    mutationFn: updateTestLink,
-    onSuccess: ({ data }) => {
-      setTestLink(data);
-    },
-  });
-
-  const { mutate: promoteTestLinkMutation, isSuccess: liveLinkUpdated, error: liveLinkUpdateError } = useMutation({
-    mutationFn: promoteTestLink,
-    onSuccess: ({ data }) => {
-      setLiveLink(data);
-    },
-  });
-
   return (
     <>
       <h1>Livestream Management</h1>
       <p>Use this page to manage the livestream displayed on the WCA homepage</p>
       <List bulleted>
         <ListItem>Update the chosen VideoID by following the steps below</ListItem>
-        <ListItem>Note that the WC2025 banner will disappear if the "Live videoId" ever becomes blank</ListItem>
-        <ListItem>The live videoId can't be updated directly - you have to set the test videoId first (Step 1), and then overwrite the live videoId with its value (Step 3)</ListItem>
+        <ListItem>
+          The WC2025 banner will disappear if the &quot;Live videoId&quot; ever becomes blank
+        </ListItem>
+        <ListItem>
+          {'The live videoId can\'t be updated directly - you have to set the test videoId first (Step 1),'
+          + 'and then overwrite the live videoId with its value (Step 3)'}
+        </ListItem>
       </List>
 
-      <b><p>Current VideoID's:</p></b>
+      <b><p>Current VideoID&apos;s:</p></b>
       <List bulleted>
         <ListItem>
           <b>Test videoId</b>
@@ -75,12 +89,18 @@ function LivestreamManager({ inputTestLink, inputLiveLink }) {
         <h2>Step 1: Update the Test VideoID</h2>
         <p>
           You can either input a VideoID manually[1]:
-          <i>(Note - we don't check that the VideoID is valid! That's your job in Step 2.)</i>
+          <i>
+            (Note - we don&apos;t check that the VideoID is valid! That&apos;s your job in Step 2.)
+          </i>
         </p>
-        <Form onSubmit={() => handleSubmit(testLinkInput)} success={testLinkUpdated} error={!!testLinkUpdateError}>
+        <Form
+          onSubmit={() => handleSubmit(testLinkInput)}
+          success={testLinkUpdated}
+          error={!!testLinkUpdateError}
+        >
           <Form.Field>
-            <label>New videoId</label>
             <Input
+              label="New videoId"
               placeholder="Enter VideoID to test"
               value={testLinkInput}
               onChange={(e) => setTestLinkInput(e.target.value)}
@@ -117,7 +137,10 @@ function LivestreamManager({ inputTestLink, inputLiveLink }) {
 
       <Segment>
         <h2>Step 2: Check the Homepage Preview</h2>
-        <p>Before we update the video on the homepage, let's make sure that you've entered the link correctly for the new video you want.</p>
+        <p>
+          {'Before we update the video on the homepage, let\'s make sure that'
+          + 'you\'ve entered the link correctly for the new video you want.'}
+        </p>
 
         <p>
           <a href="/wc2025-preview" target="_blank" rel="noopener noreferrer">Click here</a>
@@ -127,14 +150,24 @@ function LivestreamManager({ inputTestLink, inputLiveLink }) {
         <p>Please confirm the following:</p>
         <List bulleted>
           <ListItem>The correct video is loaded</ListItem>
-          <ListItem>The video autoplays (hint: If not, make sure that your videoId stopped at the question mark in the youtube link)</ListItem>
+          <ListItem>
+            {'The video autoplays (hint: If not, make sure that your videoId stopped at the'
+            + 'question mark in the youtube link)'}
+          </ListItem>
         </List>
       </Segment>
 
       <Segment>
-        <Form onSubmit={() => setConfirmPromoteOpen(true)} success={liveLinkUpdated} error={!!liveLinkUpdateError}>
+        <Form
+          onSubmit={() => setConfirmPromoteOpen(true)}
+          success={liveLinkUpdated}
+          error={!!liveLinkUpdateError}
+        >
           <h2>Step 3: Update the Homepage Livestream Link</h2>
-          <p>This will update the link used on the public-facing homepage. Make sure you've checked the Homepage Preview first!</p>
+          <p>
+            {'This will update the link used on the public-facing homepage.'
+             + 'Make sure you\'ve checked the Homepage Preview first!'}
+          </p>
 
           <Button
             color="red"
@@ -153,10 +186,10 @@ function LivestreamManager({ inputTestLink, inputLiveLink }) {
       <Segment>
         <h3>[1] How do I find the videoId?</h3>
         <List ordered>
-          <ListItem>Go to the video you want to use, and click "Share".</ListItem>
+          <ListItem>Go to the video you want to use, and click &quot;Share&quot;.</ListItem>
           <ListItem>The link will look like this: https://youtu.be/fiqMMsCuSq8?si=PYUK2ftPOPQy36Su</ListItem>
           <ListItem>
-            We only want the part after '.be/' and before the first question mark - highlighted in bold: https://youtu.be/
+            We only want the part after &quot;be/&quot; and before the first question mark - highlighted in bold: https://youtu.be/
             <b>fiqMMsCuSq8</b>
             ?si=PYUK2ftPOPQy36Su
           </ListItem>
