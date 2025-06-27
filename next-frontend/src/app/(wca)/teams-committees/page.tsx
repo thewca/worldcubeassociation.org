@@ -158,9 +158,6 @@ function MemberTable({
           <Table.ColumnHeader>
             {I18n.t("delegates_page.table.name")}
           </Table.ColumnHeader>
-          <Table.ColumnHeader>
-            {I18n.t("delegates_page.table.role")}
-          </Table.ColumnHeader>
         </Table.Row>
       </Table.Header>
       <Table.Body>
@@ -172,12 +169,15 @@ function MemberTable({
                 profilePicture={role.user.avatar.url}
                 name={role.user.name}
                 wcaId={role.user.wca_id}
+                roles={[
+                  {
+                    teamRole: I18n.t(
+                      `enums.user_roles.status.${role.group.group_type}.${role.metadata.status}`,
+                    ),
+                    staffColor: "red",
+                  },
+                ]}
               />
-            </Table.Cell>
-            <Table.Cell>
-              {I18n.t(
-                `enums.user_roles.status.${role.group.group_type}.${role.metadata.status}`,
-              )}
             </Table.Cell>
           </Table.Row>
         ))}
