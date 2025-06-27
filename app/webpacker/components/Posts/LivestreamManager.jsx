@@ -152,7 +152,7 @@ function LivestreamManager({ inputTestLink, inputLiveLink }) {
         <List bulleted>
           <ListItem>The correct video is loaded</ListItem>
           <ListItem>
-            {'The video autoplays (hint: If not, make sure that your videoId stopped at the'
+            {'The video autoplays (hint: If not, make sure that your videoId stopped at the '
             + 'question mark in the youtube link)'}
           </ListItem>
         </List>
