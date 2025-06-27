@@ -9,39 +9,45 @@
 
   <div class="container jumbotron">
     <div class="row">
-      <div class="col-md-3 col-lg-3">
-        <%= link_to "https://www.cubingusa.org/worlds/", target: "_blank", class: "hide-new-window-icon" do %>
-          <%= image_tag "wc2025-logo.png", alt: "WC2025 Logo", class: "img-responsive wc2025-main-logo", style: "margin-bottom: 20px;" %>
-        <% end %>
+      <div class="col-sm-4 col-md-3">
+        <div class="row">
+          <div class="col-xs-6 col-sm-12">
+            <%= link_to "https://www.cubingusa.org/worlds/", target: "_blank", class: "hide-new-window-icon" do %>
+              <%= image_tag "wc2025-logo.png", alt: "WC2025 Logo", class: "img-responsive", style: "margin-bottom: 20px;" %>
+            <% end %>
+          </div>
 
-        <div class="wc2025-buttons" style="display: flex; flex-direction: column; gap: 10px;">
-          <a
-            href="https://live.worldcubeassociation.org/competitions/7025"
-            class="ui button primary hide-new-window-icon"
-            target="_blank"
-            rel="noopener noreferrer"
-          >Live Results</a>
-          <a
-            href="https://www.worldcubeassociation.org/competitions/WC2025#competition-schedule"
-            class="ui button primary hide-new-window-icon"
-            target="_blank"
-            rel="noopener noreferrer"
-          >Schedule</a>
-          <a
-            href="https://www.competitiongroups.com/competitions/WC2025"
-            class="ui button primary hide-new-window-icon"
-            target="_blank"
-            rel="noopener noreferrer"
-          >Competition Groups</a>
+          <div class="col-xs-6 col-sm-12">
+            <div class="wc2025-buttons" style="display: flex; flex-direction: column; gap: 10px;">
+              <a
+                href="https://live.worldcubeassociation.org/competitions/7025"
+                class="ui button primary hide-new-window-icon"
+                target="_blank"
+                rel="noopener noreferrer"
+              >Live Results</a>
+              <a
+                href="https://www.worldcubeassociation.org/competitions/WC2025#competition-schedule"
+                class="ui button primary hide-new-window-icon"
+                target="_blank"
+                rel="noopener noreferrer"
+              >Schedule</a>
+              <a
+                href="https://www.competitiongroups.com/competitions/WC2025"
+                class="ui button primary hide-new-window-icon"
+                target="_blank"
+                rel="noopener noreferrer"
+              >Competition Groups</a>
+            </div>
+          </div>
         </div>
       </div>
 
-      <div class="col-md-6 col-lg-6">
-        <div class="embed-responsive embed-responsive-16by9"
+      <div class="col-sm-8 col-md-6">
+        <div class="embed-responsive embed-responsive-16by9">
           <iframe
             class="embed-responsive-item"
             style="border-radius: 12px; overflow: hidden;"
-            src=<%= "https://www.youtube.com/embed/#{video_id}?autoplay=1&mute=1" %>
+            src=<%= "https://www.youtube.com/embed/#{video_id}?autoplay=1&mute=1&loop=1&playlist=#{video_id}" %>
             title="YouTube video player"
             frameborder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
@@ -51,7 +57,7 @@
         </div>
       </div>
 
-      <div class="col-md-3 col-lg-3">
+      <div class="col-sm-4 col-md-3 col-md-offset-6 col-xs-6 col-xs-offset-3">
         <h3>Thank you to our title sponsor:</h3>
         <%= link_to "https://www.rubiks.com/", target: "_blank", class: "hide-new-window-icon" do %>
           <%= image_tag "rubiks_new.png", alt: "WC2025 Logo", class: "img-responsive" %>
