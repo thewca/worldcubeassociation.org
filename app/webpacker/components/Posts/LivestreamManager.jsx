@@ -5,12 +5,12 @@ import {
 import { useMutation } from '@tanstack/react-query';
 import WCAQueryClientProvider from '../../lib/providers/WCAQueryClientProvider';
 import useInputState from '../../lib/hooks/useInputState';
-import { updateTestLink, promoteTestLink } from './api/livestream';
+import { updateTestVideoId, promoteTestVideoId } from './api/livestream';
 
-function LivestreamManager({ inputTestLink, inputLiveLink }) {
-  const [testLink, setTestLink] = useInputState(inputTestLink);
-  const [liveLink, setLiveLink] = useInputState(inputLiveLink);
-  const [testLinkInput, setTestLinkInput] = useInputState('');
+function LivestreamManager({ testVideoIdProp, liveVideoIdProp }) {
+  const [testVideoId, setTestVideoId] = useInputState(testVideoIdProp);
+  const [liveVideoId, setLiveVideoId] = useInputState(liveVideoIdProp);
+  const [testVideoIdInput, setTestVideoIdInput] = useInputState('');
   const [pendingSubmissionValue, setPendingSubmissionValue] = useInputState(null);
   const [confirmUpdateOpen, setConfirmUpdateOpen] = useInputState(false);
   const [confirmPromoteOpen, setConfirmPromoteOpen] = useInputState(false);
@@ -18,24 +18,24 @@ function LivestreamManager({ inputTestLink, inputLiveLink }) {
   const defaultVideoId = 'blat80pyeBg'
 
   const {
-    mutate: updateTestLinkMutation,
-    isSuccess: testLinkUpdated,
-    error: testLinkUpdateError,
+    mutate: updateTestVideoIdMutation,
+    isSuccess: testVideoIdUpdated,
+    error: testVideoIdUpdateError,
   } = useMutation({
-    mutationFn: updateTestLink,
+    mutationFn: updateTestVideoId,
     onSuccess: ({ data }) => {
-      setTestLink(data);
+      setTestVideoId(data);
     },
   });
 
   const {
-    mutate: promoteTestLinkMutation,
-    isSuccess: liveLinkUpdated,
-    error: liveLinkUpdateError,
+    mutate: promoteTestVideoIdMutation,
+    isSuccess: liveVideoIdUpdated,
+    error: liveVideoIdUpdateError,
   } = useMutation({
-    mutationFn: promoteTestLink,
+    mutationFn: promoteTestVideoId,
     onSuccess: ({ data }) => {
-      setLiveLink(data);
+      setLiveVideoId(data);
     },
   });
 
@@ -45,15 +45,15 @@ function LivestreamManager({ inputTestLink, inputLiveLink }) {
   };
 
   const confirmUpdateSubmission = () => {
-    updateTestLinkMutation(pendingSubmissionValue);
+    updateTestVideoIdMutation(pendingSubmissionValue);
     // In case the submission comes from one of the non-"Submit" buttons
-    setTestLinkInput(pendingSubmissionValue);
+    setTestVideoIdInput(pendingSubmissionValue);
     setConfirmUpdateOpen(false);
     setPendingSubmissionValue(null);
   };
 
   const submitPromote = () => {
-    promoteTestLinkMutation();
+    promoteTestVideoIdMutation();
     setConfirmPromoteOpen(false);
   };
 
@@ -78,13 +78,13 @@ function LivestreamManager({ inputTestLink, inputLiveLink }) {
           <b>Test videoId</b>
           :
           {' '}
-          {testLink}
+          {testVideoId}
         </ListItem>
         <ListItem>
           <b>Live videoId</b>
           :
           {' '}
-          {liveLink}
+          {liveVideoId}
         </ListItem>
       </List>
 
@@ -93,34 +93,34 @@ function LivestreamManager({ inputTestLink, inputLiveLink }) {
         <p>
           You can either input a VideoID manually[1]:
           <i>
-            (Note - we don&apos;t check that the VideoID is valid! That&apos;s your job in Step 2.)
+             (Note - we don&apos;t check that the VideoID is valid! That&apos;s your job in Step 2.)
           </i>
         </p>
         <Form
-          onSubmit={() => handleSubmit(testLinkInput)}
-          success={testLinkUpdated}
-          error={!!testLinkUpdateError}
+          onSubmit={() => handleSubmit(testVideoIdInput)}
+          success={testVideoIdUpdated}
+          error={!!testVideoIdUpdateError}
         >
           <Form.Field>
             <Input
               label="New videoId"
               placeholder="Enter VideoID to test"
-              value={testLinkInput}
-              onChange={(e) => setTestLinkInput(e.target.value)}
+              value={testVideoIdInput}
+              onChange={(e) => setTestVideoIdInput(e.target.value)}
             />
           </Form.Field>
 
-          <Button primary type="submit" disabled={testLink === testLinkInput}>Submit</Button>
+          <Button primary type="submit" disabled={testVideoId === testVideoIdInput}>Submit</Button>
 
-          <Message success content={`Test videoId updated! New value: ${testLink}`} />
-          <Message error content={testLinkUpdateError?.message || 'Something went wrong'} />
+          <Message success content={`Test videoId updated! New value: ${testVideoId}`} />
+          <Message error content={testVideoIdUpdateError?.message || 'Something went wrong'} />
 
           <p>Or use one of these default options:</p>
           <Button
             type="button"
             color="green"
             onClick={() => handleSubmit(defaultVideoId)}
-            disabled={testLink === defaultVideoId}
+            disabled={testVideoId === defaultVideoId}
           >
             <Icon name="play" />
             {' '}
@@ -131,11 +131,11 @@ function LivestreamManager({ inputTestLink, inputLiveLink }) {
             type="button"
             color="red"
             onClick={() => handleSubmit('')}
-            disabled={testLink === ''}
+            disabled={testVideoId === ''}
           >
             <Icon name="low vision" />
             {' '}
-            Clear Video Link
+            Clear VideoId
           </Button>
         </Form>
       </Segment>
@@ -144,7 +144,7 @@ function LivestreamManager({ inputTestLink, inputLiveLink }) {
         <h2>Step 2: Check the Homepage Preview</h2>
         <p>
           {'Before we update the video on the homepage, let\'s make sure that'
-          + 'you\'ve entered the link correctly for the new video you want.'}
+          + 'you\'ve entered the videoId correctly for the new video you want.'}
         </p>
 
         <p>
@@ -165,8 +165,8 @@ function LivestreamManager({ inputTestLink, inputLiveLink }) {
       <Segment>
         <Form
           onSubmit={() => setConfirmPromoteOpen(true)}
-          success={liveLinkUpdated}
-          error={!!liveLinkUpdateError}
+          success={liveVideoIdUpdated}
+          error={!!liveVideoIdUpdateError}
         >
           <h2>Step 3: Update the Homepage Livestream Link</h2>
           <p>
@@ -183,8 +183,8 @@ function LivestreamManager({ inputTestLink, inputLiveLink }) {
             Update Public Livestream Link
           </Button>
 
-          <Message success content={`Live videoId updated! New value: ${testLink}`} />
-          <Message error content={liveLinkUpdateError?.message || 'Something went wrong'} />
+          <Message success content={`Live videoId updated! New value: ${testVideoId}`} />
+          <Message error content={liveVideoIdUpdateError?.message || 'Something went wrong'} />
         </Form>
       </Segment>
 
@@ -219,9 +219,9 @@ function LivestreamManager({ inputTestLink, inputLiveLink }) {
         onCancel={() => setConfirmPromoteOpen(false)}
         onConfirm={submitPromote}
         content={
-          testLink === ''
+          testVideoId === ''
             ? 'WARNING! You are submitting a blank videoId - this will hide the WC2025 banner and return the homepage to nornmal. Are you sure?'
-            : `Are you sure you want to submit this VideoID: ${testLink}?`
+            : `Are you sure you want to submit this VideoID: ${testVideoId}?`
         }
       />
     </Container>
@@ -229,11 +229,11 @@ function LivestreamManager({ inputTestLink, inputLiveLink }) {
 }
 
 function LivestreamManagerWrapper(
-  { inputTestLink, inputLiveLink }
+  { testVideoId, liveVideoId }
 ) {
   return (
     <WCAQueryClientProvider>
-        <LivestreamManager inputTestLink={inputTestLink} inputLiveLink={inputLiveLink} />
+        <LivestreamManager testVideoIdProp={testVideoId} liveVideoIdProp={liveVideoId} />
     </WCAQueryClientProvider>
   );
 }

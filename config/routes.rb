@@ -233,7 +233,6 @@ Rails.application.routes.draw do
   root 'posts#homepage'
   resources :posts
   get 'livestream-management' => 'posts#livestream_management'
-  get 'livestream-links' => 'posts#livestream_links'
   post 'update-test-link' => 'posts#update_test_link'
   get 'promote-test-link' => 'posts#promote_test_link'
   get 'wc2025-preview' => 'posts#wc2025_preview'

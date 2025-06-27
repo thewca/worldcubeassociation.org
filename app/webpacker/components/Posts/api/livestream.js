@@ -1,14 +1,8 @@
 import { fetchJsonOrError } from '../../../lib/requests/fetchWithAuthenticityToken';
-import { livestreamLinksUrl, updateTestLinkUrl, promoteTestLinkUrl } from '../../../lib/requests/routes.js.erb';
+import { updateTestVideoIdUrl, promoteTestVideoIdUrl } from '../../../lib/requests/routes.js.erb';
 
-export async function getLivestreamLinks() {
-  fetchJsonOrError(livestreamLinksUrl, {
-    method: 'GET',
-  });
-}
-
-export async function updateTestLink(value) {
-  const { data } = await fetchJsonOrError(updateTestLinkUrl, {
+export async function updateTestVideoId(value) {
+  const { data } = await fetchJsonOrError(updateTestVideoIdUrl, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -18,8 +12,8 @@ export async function updateTestLink(value) {
   return data;
 }
 
-export async function promoteTestLink() {
-  const { data } = await fetchJsonOrError(promoteTestLinkUrl, {
+export async function promoteTestVideoId() {
+  const { data } = await fetchJsonOrError(promoteTestVideoIdUrl, {
     method: 'GET',
   });
   return data;
