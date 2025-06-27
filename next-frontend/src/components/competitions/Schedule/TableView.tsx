@@ -2,7 +2,7 @@
 
 import { DateTime } from "luxon";
 import React from "react";
-import { Checkbox, Grid, Icon } from "@chakra-ui/react";
+import { Box, Checkbox, Grid, Heading, Icon } from "@chakra-ui/react";
 import cn from "classnames";
 import {
   activitiesOnDate,
@@ -72,13 +72,16 @@ export default function TableView({
 
   return (
     <>
-      <Checkbox
-        name="details"
-        label={t("competitions.schedule.more_details")}
-        toggle
+      <Checkbox.Root
         checked={isExpanded}
-        onChange={(_, data) => setIsExpanded(data.checked)}
-      />
+        onCheckedChange={(e) => setIsExpanded(!!e.checked)}
+      >
+        <Checkbox.HiddenInput />
+        <Checkbox.Control />
+        <Checkbox.Label>
+          {t("competitions.schedule.more_details")}
+        </Checkbox.Label>
+      </Checkbox.Root>
 
       {dates.map((date) => {
         const activitiesForDay = activitiesOnDate(
@@ -150,19 +153,20 @@ function SingleDayTable({
     <Box>
       <Heading>
         {hasActivities && (
-          <AddToCalendar
-            startDate={startTime}
-            endDate={endTime}
-            timeZone={timeZone}
-            name={competitionName}
-            address={activeVenueAddress}
-          />
+          <>
+            <AddToCalendar
+              startDate={startTime}
+              endDate={endTime}
+              timeZone={timeZone}
+              name={competitionName}
+              address={activeVenueAddress}
+            />{" "}
+          </>
         )}
-        {hasActivities && " "}
         {title}
       </Heading>
 
-      <Grid centered divided="vertically" className="schedule-events">
+      <Grid centered divided="vertically">
         <HeaderRow isExpanded={isExpanded} />
 
         {hasActivities ? (
