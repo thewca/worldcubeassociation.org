@@ -225,7 +225,7 @@ function LivestreamManager({ inputTestLink, inputLiveLink }) {
 }
 
 function LivestreamManagerWrapper(
-  inputTestLink, inputLiveLink,
+  { inputTestLink, inputLiveLink }
 ) {
   return (
     <WCAQueryClientProvider>
