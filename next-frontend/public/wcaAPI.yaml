@@ -93,7 +93,16 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Results'
-
+  /regulations/translations:
+    get:
+      summary: Gets all translations of regulations
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegulationsTranslations'
   /users/me/permissions:
     get:
       summary: Get user's permissions
@@ -184,6 +193,38 @@ components:
           type: string
         avatar:
           $ref: '#/components/schemas/UserAvatar'
+
+    RegulationsTranslations:
+      type: object
+      required:
+        - current
+        - outdated
+      properties:
+        current:
+          type: array
+          items:
+            $ref: '#/components/schemas/Translation'
+        outdated:
+          type: array
+          items:
+            $ref: '#/components/schemas/Translation'
+
+    Translation:
+      type: object
+      required:
+        - version
+        - language
+        - language_english
+        - url
+      properties:
+        version:
+          type: string
+        language:
+          type: string
+        language_english:
+          type: string
+        url:
+          type: string
 
     UserAvatar:
       type: object
