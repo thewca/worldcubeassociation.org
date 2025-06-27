@@ -2,6 +2,7 @@
 
 <% return if video_id.blank? %>
 
+<!-- I tried jumbotron-in-jumbotron, but it doesn't lead to the a visual distinction between the outer and inner boxes -->
 <div class="wc2025" id="wc2025-container">
   <h2 class="wc2025-header">
     <%= "JULY 3-6: RUBIK'S WCA WORLD CHAMPIONSHIP 2025" %>
@@ -57,7 +58,7 @@
         </div>
       </div>
 
-      <div class="col-sm-4 col-md-3 col-md-offset-6 col-xs-6 col-xs-offset-3">
+      <div class="col-xs-6 col-xs-offset-3 col-sm-4 col-sm-offset-0 col-md-3">
         <h3>Thank you to our title sponsor:</h3>
         <%= link_to "https://www.rubiks.com/", target: "_blank", class: "hide-new-window-icon" do %>
           <%= image_tag "rubiks_new.png", alt: "WC2025 Logo", class: "img-responsive" %>
