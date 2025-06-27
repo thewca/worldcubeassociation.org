@@ -55,7 +55,7 @@ function LivestreamManager({ inputTestLink, inputLiveLink }) {
   };
 
   return (
-    <>
+    <Container>
       <h1>Livestream Management</h1>
       <p>Use this page to manage the livestream displayed on the WCA homepage</p>
       <List bulleted>
@@ -220,8 +220,10 @@ function LivestreamManager({ inputTestLink, inputLiveLink }) {
         }
       />
 
-    </>
+    <Container/>
   );
 }
+
+
 
 export default LivestreamManager;

@@ -7,7 +7,7 @@ export default function LivestreamManagementContainer({
 }) {
   return (
     <WCAQueryClientProvider>
-      <LivestreamManager inputTestLink={inputTestLink} inputLiveLink={inputLiveLink} />
+        <LivestreamManager inputTestLink={inputTestLink} inputLiveLink={inputLiveLink} />
     </WCAQueryClientProvider>
   );
 }
