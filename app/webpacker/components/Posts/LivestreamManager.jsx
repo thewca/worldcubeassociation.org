@@ -144,7 +144,7 @@ function LivestreamManager({ inputTestLink, inputLiveLink }) {
         </p>
 
         <p>
-          <a href="/wc2025-preview" target="_blank" rel="noopener noreferrer">Click here</a>
+          <a href="/?preview=1" target="_blank" rel="noopener noreferrer">Click here</a>
           {' '}
           to see a preview of the homepage.
         </p>
