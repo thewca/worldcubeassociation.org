@@ -38,6 +38,7 @@ class PostsController < ApplicationController
 
   def homepage
     @latest_post = Post.order(sticky: :desc, created_at: :desc).first
+    @preview = params[:preview] == "1" && current_user.can_administrate_livestream?
   end
 
   def livestream_management
