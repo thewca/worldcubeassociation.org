@@ -8,6 +8,7 @@ import {
   Table,
   VStack,
   Heading,
+  Input,
 } from "@chakra-ui/react";
 import { LuChevronLeft, LuChevronRight } from "react-icons/lu";
 import useAPI from "@/lib/wca/useAPI";
@@ -26,7 +27,7 @@ const ITEMS_PER_PAGE = 10;
 export default function IncidentsPage() {
   const api = useAPI();
   const [page, setPage] = useState(1);
-  const [query, setQuery] = useState(undefined);
+  const [query, setQuery] = useState<string | undefined>(undefined);
   const [searchTags, setSearchTags] = useState<string[]>([]);
 
   const { data: incidentQuery, isLoading } = useQuery({
@@ -85,6 +86,11 @@ export default function IncidentsPage() {
     <Container>
       <VStack align={"left"}>
         <Heading size="5xl">Incidents Log</Heading>
+        <Input
+          placeholder={"Search"}
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+        />
         <Table.Root size="sm" variant="outline" striped>
           <Table.Header>
             <Table.Row>
