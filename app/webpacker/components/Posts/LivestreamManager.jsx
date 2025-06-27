@@ -15,6 +15,8 @@ function LivestreamManager({ inputTestLink, inputLiveLink }) {
   const [confirmUpdateOpen, setConfirmUpdateOpen] = useInputState(false);
   const [confirmPromoteOpen, setConfirmPromoteOpen] = useInputState(false);
 
+  const defaultVideoId = 'blat80pyeBg'
+
   const {
     mutate: updateTestLinkMutation,
     isSuccess: testLinkUpdated,
@@ -108,7 +110,7 @@ function LivestreamManager({ inputTestLink, inputLiveLink }) {
             />
           </Form.Field>
 
-          <Button primary type="submit">Submit</Button>
+          <Button primary type="submit" disabled={testLink === testLinkInput}>Submit</Button>
 
           <Message success content={`Test videoId updated! New value: ${testLink}`} />
           <Message error content={testLinkUpdateError?.message || 'Something went wrong'} />
@@ -117,7 +119,8 @@ function LivestreamManager({ inputTestLink, inputLiveLink }) {
           <Button
             type="button"
             color="green"
-            onClick={() => handleSubmit('blat80pyeBg')}
+            onClick={() => handleSubmit(defaultVideoId)}
+            disabled={testLink === defaultVideoId}
           >
             <Icon name="play" />
             {' '}
@@ -128,6 +131,7 @@ function LivestreamManager({ inputTestLink, inputLiveLink }) {
             type="button"
             color="red"
             onClick={() => handleSubmit('')}
+            disabled={testLink === ''}
           >
             <Icon name="low vision" />
             {' '}
