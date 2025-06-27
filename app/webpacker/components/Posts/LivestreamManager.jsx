@@ -1,8 +1,9 @@
 import React from 'react';
 import {
-  Confirm, Input, Button, Form, Icon, List, ListItem, Message, Segment,
+  Confirm, Container, Input, Button, Form, Icon, List, ListItem, Message, Segment,
 } from 'semantic-ui-react';
 import { useMutation } from '@tanstack/react-query';
+import WCAQueryClientProvider from '../../lib/providers/WCAQueryClientProvider';
 import useInputState from '../../lib/hooks/useInputState';
 import { updateTestLink, promoteTestLink } from './api/livestream';
 
@@ -219,11 +220,18 @@ function LivestreamManager({ inputTestLink, inputLiveLink }) {
             : `Are you sure you want to submit this VideoID: ${testLink}?`
         }
       />
-
-    <Container/>
+    </Container>
   );
 }
 
+function LivestreamManagerWrapper(
+  inputTestLink, inputLiveLink,
+) {
+  return (
+    <WCAQueryClientProvider>
+        <LivestreamManager inputTestLink={inputTestLink} inputLiveLink={inputLiveLink} />
+    </WCAQueryClientProvider>
+  );
+}
 
-
-export default LivestreamManager;
+export default LivestreamManagerWrapper;
