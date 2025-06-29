@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe ResultsSubmissionController, type: :request do
+RSpec.describe ResultsSubmissionController do
   let(:delegate) { create(:delegate) }
   let(:comp) { create(:competition, :with_valid_submitted_results, delegates: [delegate]) }
 
@@ -55,7 +55,7 @@ RSpec.describe ResultsSubmissionController, type: :request do
 
     describe "Posting results" do
       let(:results_submission_params) do
-        { message: submission_message, schedule_url: "https://example.com/schedule", confirm_information: 1, competition_id: comp.id }
+        { message: submission_message, confirm_information: 1, competition_id: comp.id }
       end
 
       it "sends the 'results submitted' email immediately" do

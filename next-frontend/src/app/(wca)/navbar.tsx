@@ -1,22 +1,36 @@
 "use server";
 
 import React from "react";
-import { Button, HStack, IconButton, Menu, Text } from "@chakra-ui/react";
+import {
+  Button,
+  HStack,
+  IconButton,
+  Menu,
+  Text,
+  Image as ChakraImage,
+} from "@chakra-ui/react";
 import { getPayload } from "payload";
 import config from "@payload-config";
 import Link from "next/link";
+import Image from "next/image";
 import { RefreshRouteOnSave } from "@/components/RefreshRouteOnSave";
 import { ColorModeButton } from "@/components/ui/color-mode";
-import { LuChevronDown, LuHouse } from "react-icons/lu";
+import { LuChevronDown, LuMonitorCheck } from "react-icons/lu";
 
-import { iconMap } from "@/components/icons/iconMap";
+import { iconMap, IconName } from "@/components/icons/iconMap";
+import LanguageSelector from "@/components/ui/languageSelector";
 
-const IconDisplay = ({ name, fallback = true }: IconDisplayProps) => {
-  const IconComponent = iconMap[name];
+interface IconDisplayProps {
+  name: IconName | undefined | null;
+  fallback?: boolean;
+}
 
-  if (!IconComponent) {
-    return fallback ? <div>No_Icon</div> : null;
+const IconDisplay = ({ name, fallback = false }: IconDisplayProps) => {
+  if (!name) {
+    return fallback ? <Text>No_Icon</Text> : null;
   }
+
+  const IconComponent = iconMap[name];
 
   return <IconComponent />;
 };
@@ -36,7 +50,14 @@ export default async function Navbar() {
       <HStack>
         <IconButton asChild variant="ghost">
           <Link href={"/"}>
-            <LuHouse />
+            <ChakraImage asChild maxW={10}>
+              <Image src="/logo.png" alt="WCA Logo" height={50} width={50} />
+            </ChakraImage>
+          </Link>
+        </IconButton>
+        <IconButton asChild variant="ghost">
+          <Link href={"/dashboard"}>
+            <LuMonitorCheck />
           </Link>
         </IconButton>
         {navbar.entry.map((navbarEntry) => (
@@ -65,7 +86,7 @@ export default async function Navbar() {
                         {subEntry.blockType === "LinkItem" && (
                           <Menu.Item value={subEntry.id!} asChild>
                             <Link href={subEntry.targetLink}>
-                              <IconDisplay name={navbarEntry.displayIcon} />
+                              <IconDisplay name={subEntry.displayIcon} />
                               {subEntry.displayText}
                             </Link>
                           </Menu.Item>
@@ -91,7 +112,7 @@ export default async function Navbar() {
                                       <Menu.Item value={nestedEntry.id!}>
                                         <Link href={nestedEntry.targetLink}>
                                           <IconDisplay
-                                            name={navbarEntry.displayIcon}
+                                            name={nestedEntry.displayIcon}
                                           />
                                           {nestedEntry.displayText}
                                         </Link>
@@ -118,9 +139,10 @@ export default async function Navbar() {
         )}
       </HStack>
       <HStack>
+        <LanguageSelector />
         <ColorModeButton />
         <Button asChild variant="ghost" size="sm">
-          <Link href="/admin">Payload CMS</Link>
+          <Link href="/payload">Payload CMS</Link>
         </Button>
       </HStack>
     </HStack>

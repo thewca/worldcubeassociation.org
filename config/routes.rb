@@ -58,6 +58,7 @@ Rails.application.routes.draw do
   post 'users/:id/avatar' => 'users#upload_avatar'
   patch 'users/:id/avatar' => 'users#update_avatar'
   delete 'users/:id/avatar' => 'users#delete_avatar'
+  get '/users/admin_search' => 'users#admin_search'
   get 'admin/avatars/pending' => 'admin/avatars#pending_avatar_users', as: :pending_avatars
   post 'admin/avatars' => 'admin/avatars#update_avatar', as: :admin_update_avatar
 
@@ -97,18 +98,20 @@ Rails.application.routes.draw do
     post 'registrations/add' => 'registrations#do_add', as: :registrations_do_add
     get 'registrations/psych-sheet' => 'registrations#psych_sheet', as: :psych_sheet
     get 'registrations/psych-sheet/:event_id' => 'registrations#psych_sheet_event', as: :psych_sheet_event
-    resources :registrations, only: %i[index update create edit destroy], shallow: true do
-      get 'payments' => 'payment#registration_payments', as: :payments
-      resource :history, only: [:show], controller: :registration_history
-    end
+    resources :registrations, only: %i[index update create edit destroy], shallow: true
     get 'edit/registrations' => 'registrations#edit_registrations'
     get 'register' => 'registrations#register'
     resources :competition_tabs, except: [:show], as: :tabs, path: :tabs
     get 'tabs/:id/reorder' => "competition_tabs#reorder", as: :tab_reorder
     # Delegate views and action
     get 'submit-results' => 'results_submission#new', as: :submit_results_edit
+    get 'submit-scrambles' => 'admin/scrambles#match_scrambles', as: :match_scrambles
     post 'submit-results' => 'results_submission#create', as: :submit_results
+    resources :scramble_files, only: %i[index create destroy], shallow: true do
+      patch 'update-round-matching' => 'scramble_files#update_round_matching', on: :collection
+    end
     post 'upload-json' => 'results_submission#upload_json', as: :upload_results_json
+    post 'import-from-live' => 'results_submission#import_from_live', as: :import_from_live
     # WRT views and action
     get '/admin/upload-results' => "admin#new_results", as: :admin_upload_results_edit
     get '/admin/check-existing-results' => "admin#check_competition_results", as: :admin_check_existing_results
@@ -185,6 +188,7 @@ Rails.application.routes.draw do
   get 'wst/wca-developer-database-dump.zip', to: redirect(DbDumpHelper.public_s3_path(DbDumpHelper::DEVELOPER_EXPORT_SQL_PERMALINK))
 
   get 'persons/new_id' => 'admin/persons#generate_ids'
+  get '/persons/results' => 'admin/persons#results', as: :person_results
   resources :persons, only: %i[index show]
   post 'persons' => 'admin/persons#create'
 
@@ -297,7 +301,6 @@ Rails.application.routes.draw do
   get '/admin/all-voters' => 'admin#all_voters', as: :eligible_voters
   get '/admin/leader-senior-voters' => 'admin#leader_senior_voters', as: :leader_senior_voters
   post '/admin/merge_people' => 'admin#do_merge_people', as: :admin_do_merge_people
-  get '/admin/fix_results_selector' => 'admin#fix_results_selector', as: :admin_fix_results_ajax
   get '/admin/person_data' => 'admin#person_data'
   get '/admin/do_compute_auxiliary_data' => 'admin#do_compute_auxiliary_data'
   get '/admin/generate_db_token' => 'admin#generate_db_token'
@@ -347,14 +350,22 @@ Rails.application.routes.draw do
     # While this is the start of a v1 API, this is currently not usable by outside developers as
     # getting a JWT token requires you to be logged in through the Website
     namespace :v1 do
-      namespace :registrations do
-        get '/register', to: 'registrations#show'
-        post '/register', to: 'registrations#create'
-        patch '/register', to: 'registrations#update'
-        patch '/bulk_update', to: 'registrations#bulk_update'
-        get '/:competition_id', to: 'registrations#list'
-        get '/:competition_id/admin', to: 'registrations#list_admin', as: :list_admin
-        get '/:competition_id/payment', to: 'registrations#payment_ticket', as: :payment_ticket
+      resources :competitions, only: [] do
+        resources :registrations, only: %i[index show create update], shallow: true do
+          resource :history, only: %i[show], controller: :registration_history
+          resource :payments, only: %i[show], controller: :registration_payments
+
+          member do
+            get 'payment_ticket', to: 'registrations#payment_ticket'
+          end
+
+          collection do
+            patch 'bulk_auto_accept', to: 'registrations#bulk_auto_accept'
+            patch 'bulk_update', to: 'registrations#bulk_update'
+            get 'admin', to: 'registrations#index_admin'
+            get ':user_id', to: 'registrations#show_by_user', as: :show_by_user
+          end
+        end
       end
     end
 
@@ -434,5 +445,5 @@ Rails.application.routes.draw do
   # Deprecated Links
   get 'teams-committees' => redirect('teams-committees-councils')
   get 'panel/delegate-crash-course' => redirect('panel/delegate#delegate-handbook')
-  get 'panel' => redirect('panel/staff')
+  get 'panel' => redirect('panel/volunteer')
 end

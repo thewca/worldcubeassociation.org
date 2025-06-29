@@ -75,6 +75,7 @@ module Admin
           eventId: ce.event_id,
           rounds: ce.rounds.map do |r|
             {
+              roundId: r.id,
               roundTypeId: r.round_type_id,
               formatId: r.format_id,
             }
@@ -152,8 +153,8 @@ module Admin
 
     private def result_params
       params.require(:result).permit(:value1, :value2, :value3, :value4, :value5,
-                                     :competition_id, :round_type_id, :event_id, :format_id,
-                                     :person_name, :person_id, :country_id,
+                                     :competition_id, :round_type_id, :round_id, :event_id,
+                                     :format_id, :person_name, :person_id, :country_id,
                                      :best, :average,
                                      :regional_single_record, :regional_average_record)
     end

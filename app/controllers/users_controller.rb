@@ -4,6 +4,7 @@ class UsersController < ApplicationController
   before_action :authenticate_user!, except: %i[select_nearby_delegate acknowledge_cookies]
   before_action :check_recent_authentication!, only: %i[enable_2fa disable_2fa regenerate_2fa_backup_codes]
   before_action :set_recent_authentication!, only: %i[edit update enable_2fa disable_2fa]
+  before_action -> { redirect_to_root_unless_user(:can_admin_results?) }, only: %i[admin_search]
 
   RECENT_AUTHENTICATION_DURATION = 10.minutes.freeze
 
@@ -264,6 +265,12 @@ class UsersController < ApplicationController
     if current_user.forum_banned?
       flash[:alert] = I18n.t('registrations.errors.banned_html').html_safe
       return redirect_to new_user_session_path
+    elsif current_user.dob.nil?
+      flash[:alert] = I18n.t('misc.forum_enter_dob').html_safe
+      return redirect_to edit_user_path(current_user)
+    elsif current_user.below_forum_age_requirement?
+      flash[:alert] = I18n.t('misc.forum_age_requirement').html_safe
+      return redirect_to new_user_session_path
     end
 
     # Use the 'SingleSignOn' lib provided by Discourse. Our secret and URL is
@@ -364,5 +371,15 @@ class UsersController < ApplicationController
       return false
     end
     true
+  end
+
+  def admin_search
+    query = params[:q]&.slice(0...SearchResultsController::SEARCH_QUERY_LIMIT)
+
+    return render status: :bad_request, json: { error: "No query specified" } unless query
+
+    render status: :ok, json: {
+      result: User.search(query, params: params).limit(SearchResultsController::SEARCH_RESULT_LIMIT),
+    }
   end
 end

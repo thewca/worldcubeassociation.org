@@ -17,10 +17,9 @@ const NationalChampionshipIcon = createIcon({
       />
     </>
   ),
+  defaultProps: {
+    boxSize: "1em",
+  },
 });
 
-const NationalChampionshipIconPreview = () => {
-  return <NationalChampionshipIcon size="lg" />;
-};
-
-export default NationalChampionshipIconPreview;
+export default NationalChampionshipIcon;

@@ -532,7 +532,6 @@ en:
         submitter_comment: ""
         status: ""
       results_submission:
-        schedule_url: ""
         results_file: ""
         message: ""
         confirm_information: ""
@@ -1235,7 +1234,6 @@ en:
         with_stripe: "Paid on"
       #context: date is the registration creation date, eg: "2016-12-01 16:18:56 UTC"
       payment_requested_on: "Payment requested on: %{date}"
-      payment_completed_on: "Payment completed on: %{date}"
       #context: Counts how many parallel registrations in the same Series there are. Will display a number behind this label.
       series_registrations: "Series registrations"
       total: "Total"
@@ -1259,6 +1257,9 @@ en:
     registration_full: "The competitor limit for this competition is %{competitor_limit} and it has already been reached. If you register, your registration will be placed on a waiting list. It may not be approved unless a spot frees up."
     registration_full_include_waiting_list: "The competitor limit for this competition is %{competitor_limit} and it may be filled. If you register, your registration will be placed on a waiting list. It may not be approved unless a spot frees up."
     entry_fees_fully_paid: "You have paid %{paid}, which fully covers the registration fees."
+    entry_fees_partially_paid: "You have paid %{paid} of %{total}. Check with the organizers if you need to pay the rest."
+    entry_fees_fully_refunded: "Your registration fees were fully refunded. If you need to pay again, you can do so below"
+    entry_fees_pay_again: "I want to pay again"
     will_pay_here: "You will pay them here after submitting your registration"
     wont_pay_here: "Please check the competition's information for instructions about how to pay"
     refund_form:
@@ -1646,6 +1647,8 @@ en:
           reason: "The reason for the competitor limit"
           auto_close_threshold: "Auto-close threshold"
           newcomer_month_reserved_spots: "Number of spots to reserve for newcomers"
+          auto_accept_enabled: "Bulk automatic registration acceptance"
+          auto_accept_disable_threshold: "Limit for automatically accepting registrations"
         staff:
           staff_delegate_ids: "WCA Delegate(s)"
           trainee_delegate_ids: "WCA Trainee Delegate(s)"
@@ -1732,6 +1735,8 @@ en:
           reason: "What is the reason for the limit on competitors? Please fill this out in English!"
           auto_close_threshold: "Registration will automatically close when this number of paid registrations is received. Leave blank to disable, ignore if you aren't using integrated payments."
           newcomer_month_reserved_spots: "Only allowed during Newcomer Month - reserved spots can't be more than half of the Competitor Limit."
+          auto_accept_enabled: "This will enable a 'Bulk Auto Accept' button in the Registrations menu. This will accept all paid Waitlisted and Pending up to the competitor limit, or the limit defined below. Use at your own risk."
+          auto_accept_disable_threshold: "When this number of accepted registrations is reached, auto-accept will disable itself - allowing organizers to manually approve the final registrations. Must be less than the competitor limit. Leave blank if not desired."
         staff:
           staff_delegate_ids: "WCA Delegates for the competition."
           trainee_delegate_ids: "WCA Trainee Delegates for the competition."
@@ -1794,6 +1799,9 @@ en:
           enabled:
             "true": "I want to specify a competitor limit"
             "false": "I DO NOT want to specify a competitor limit"
+          auto_accept_enabled:
+            "true": "Enable 'Bulk Auto Accept' button in Registrations menu"
+            "false": "Disable 'Bulk Auto Accept' button"
         registration:
           allow_on_the_spot:
             "true": "On the spot registrations will be accepted"
@@ -1816,6 +1824,11 @@ en:
               "false": "Competitors MUST be qualified to register for an event"
     #context: new registration system
     registration_v2:
+      auto_accept:
+        bulk_auto_accept: "Auto-Approve Competitors"
+        cant_bulk_auto_accept: "An error occurred while trying to bulk auto accept - contact WST for assistance if needed"
+        bulk_auto_accepted: "Bulk auto accept succeeded"
+        nothing_to_accept: "No registrations eligible for auto-accept"
       pdf:
         #context: <0> indicates an html tag for internationalizing in React, see https://docs.worldcubeassociation.org/guides/translating_the_website.html#using-react
         link: "As a <0>%{pdfLink}</0>"
@@ -1836,12 +1849,15 @@ en:
         pending:
           title: "Pending Registrations"
           information: "Pending should only be used for incomplete (eg, unpaid) registrations - please use the Waiting List if your competition is too full to accept new competitors."
+          waitlist_skipped_warning: "You've skipped %{count} earlier Pending registration(s). Are you sure you want to move the selected registration(s) to the Waiting List?"
+          approve_skipped_warning: "You've skipped %{count} earlier Pending registration(s). Are you sure you want to accept the selected registration(s)?"
         waitlist:
           title: "Waiting List Registrations"
           information: "Competitors are added to the end of the Waiting List. If you add several at once, the paid competitors will be added to the end in the order that they paid, followed by the rest in the order that they registered. You can manually adjust the order in Edit Mode if necessary."
-          skipped_warning: "You've skipped %{count} registration(s) on the Waiting List. Are you sure you want to approve the other registration(s) instead?"
+          skipped_warning: "You've skipped %{count} registration(s) on the Waiting List. Are you sure you want to approve the selected registration(s)?"
         approved:
           title: "Approved Registrations"
+          pending_waitlist_combined_skipped_warning: "You've skipped %{count} earlier Pending/Waiting List registration(s). Are you sure you want to accept the selected registration(s)?"
         cancelled:
           title: "Cancelled Registrations"
           information: "Cancelled competitors are allowed to register again."
@@ -1889,7 +1905,7 @@ en:
         cancelled: "Cancelled"
         rejected: "Rejected"
         amount: "Amount"
-        too_many: "Accepting all these registrations would go over the competitor limit by %{count}"
+        too_many: "Accepting all these registrations would go over the competitor limit by %{count}."
         no_self_update: "Contact the Organization Team to update your registration."
       register:
         will_open_countdown: "Registration will open in %{minutes} minutes %{seconds} seconds. This page will refresh automatically when registration opens."
@@ -1968,6 +1984,7 @@ en:
     #context: and when an error occurred
     errors:
       must_use_wca_registration: "Auto-accept can only be used if you are using the WCA website for registrations"
+      must_use_payment_integration: "You must enable a payment integration (eg, Stripe) in order to use auto-accept"
       auto_accept_limit: "Limit for auto-accepted registrations must be less than the competitor limit"
       auto_accept_not_negative: "Limit for auto-accepted registrations cannot be less than 0."
       auto_accept_accept_paid_pending: "Can't enable auto-accept if there are paid-pending registrations - either accept them or move them to the waiting list"
@@ -2151,6 +2168,7 @@ en:
         admin_view: "Admin view"
         tabs: "Manage tabs"
         submit_results: "Submit results"
+        match_scrambles: "Submit scrambles"
         delegate_report: "Delegate report"
         registration: "Registration"
         import_registrations: "Import registrations"
@@ -2340,7 +2358,10 @@ en:
     messages:
       success: "Thank you for your message. We will contact you soon!"
       delivery_error: "Error sending message."
-
+  #context: for keys which don't fit into another category, and don't justify a category of their own
+  misc:
+    forum_age_requirement: "You must be 13 years old to access the WCA Forum."
+    forum_enter_dob: "A date of birth is required before accessing the forum. Please enter your date of birth, and then try and access the forum again."
   #context: FAQ page
   faq:
     title: "Frequently Asked Questions"

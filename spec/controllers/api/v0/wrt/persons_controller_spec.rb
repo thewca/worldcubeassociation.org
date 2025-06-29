@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Api::V0::Wrt::PersonsController, type: :controller do
+RSpec.describe Api::V0::Wrt::PersonsController do
   describe 'PATCH #update person' do
     before { sign_in create :admin }
 

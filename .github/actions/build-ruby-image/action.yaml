@@ -1,0 +1,55 @@
+name: 'Build and Push Docker Image'
+description: 'A custom action to build and push our Docker images with environment-specific configurations.'
+inputs:
+  target:
+    description: 'Docker build target'
+    required: true
+  registry:
+    description: 'Docker registry to push the image to'
+    required: true
+  tag:
+    description: 'The image tag in the registry'
+    required: true
+  build_tag:
+    description: 'The build tag of the current code state'
+    required: true
+  environment:
+    description: 'Deployment environment (e.g., staging, production)'
+    required: true
+  load:
+    description: 'If the docker image should be added to the local docker image context (default false)'
+    required: false
+    default: false
+outputs:
+  imageid:
+    description: 'The Docker image id build'
+    value: ${{ steps.build-ruby-image.outputs.imageid }}
+runs:
+  using: 'composite'
+  steps:
+    - name: Set environment variables
+      shell: bash
+      run: |
+        if [ "${{ inputs.environment }}" == "staging" ]; then
+          echo "SHAKAPACKER_ASSET_HOST=https://assets-staging.worldcubeassociation.org" >> $GITHUB_ENV
+          echo "WCA_LIVE_SITE=false" >> $GITHUB_ENV
+        elif [ "${{ inputs.environment }}" == "production" ]; then
+          echo "SHAKAPACKER_ASSET_HOST=https://assets.worldcubeassociation.org" >> $GITHUB_ENV
+          echo "WCA_LIVE_SITE=true" >> $GITHUB_ENV
+        fi
+    - name: Build and push Ruby Docker image
+      uses: docker/build-push-action@v6
+      id: build-ruby-image
+      with:
+        push: true
+        load: ${{ inputs.load }}
+        context: .
+        target: ${{ inputs.target }}
+        tags: |
+          ${{ inputs.registry }}:${{ inputs.tag }}
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
+        build-args: |
+          BUILD_TAG=${{ inputs.build_tag }}
+          WCA_LIVE_SITE=${{ env.WCA_LIVE_SITE }}
+          SHAKAPACKER_ASSET_HOST=${{ env.SHAKAPACKER_ASSET_HOST }}

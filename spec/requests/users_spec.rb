@@ -104,9 +104,9 @@ RSpec.describe "users" do
       end
 
       it 'does not generate backup codes for user without 2FA' do
-        expect {
+        expect do
           post profile_generate_2fa_backup_path
-        }.not_to change(user, :otp_backup_codes)
+        end.not_to change(user, :otp_backup_codes)
         json = response.parsed_body
         expect(json["error"]["message"]).to include "not enabled"
       end
@@ -121,10 +121,10 @@ RSpec.describe "users" do
       end
 
       it 'does not generate backup codes for user without 2FA' do
-        expect {
+        expect do
           post profile_generate_2fa_backup_path
           follow_redirect!
-        }.not_to change(user, :otp_backup_codes)
+        end.not_to change(user, :otp_backup_codes)
         expect(response.body).to include I18n.t('users.edit.sensitive.identity_error')
       end
     end
@@ -153,9 +153,9 @@ RSpec.describe "users" do
       end
 
       it 'can (re)generate backup codes for user with 2FA' do
-        expect(user.otp_backup_codes).to be nil
+        expect(user.otp_backup_codes).to be_nil
         post profile_generate_2fa_backup_path
-        expect(user.reload.otp_backup_codes).not_to be nil
+        expect(user.reload.otp_backup_codes).not_to be_nil
         json = response.parsed_body
         expect(json["codes"]&.size).to eq User::NUMBER_OF_BACKUP_CODES
       end
@@ -219,6 +219,22 @@ RSpec.describe "users" do
 
     it 'doesnt authenticate user banned from discourse' do
       user = create(:user, :banned)
+      sign_in user
+      sso.nonce = 1234
+      get "#{sso_discourse_path}?#{sso.payload}"
+      expect(response).to redirect_to new_user_session_path
+    end
+
+    it 'redirects user with no dob to profile page' do
+      user = create(:user, dob: nil)
+      sign_in user
+      sso.nonce = 1234
+      get "#{sso_discourse_path}?#{sso.payload}"
+      expect(response).to redirect_to edit_user_path(user)
+    end
+
+    it 'doesnt authenticate user under 13' do
+      user = create(:user, dob: Date.today.advance(years: -13, days: 1))
       sign_in user
       sso.nonce = 1234
       get "#{sso_discourse_path}?#{sso.payload}"

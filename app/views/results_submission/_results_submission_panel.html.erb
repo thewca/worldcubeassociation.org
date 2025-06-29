@@ -1,12 +1,6 @@
 <%
   has_errors ||= false
   results_submission ||= ResultsSubmission.new
-  schedule_url_kwargs = {
-    readonly: true,
-    input_html: {
-      value: link_to_competition_schedule_tab(competition),
-    },
-  }
 %>
 <div class="panel panel-default">
   <div class="panel-heading heading-as-link <%= "collapsed" if has_errors %>" data-toggle="collapse" data-target="#collapse-submit-results">
@@ -26,7 +20,6 @@
       </p>
 
       <%= simple_form_for results_submission, url: competition_submit_results_path do |f| %>
-        <%= f.input :schedule_url, **schedule_url_kwargs %>
         <%= f.input :message, as: :text, input_html: { class: "markdown-editor" } %>
         <%= f.input :confirm_information, as: :boolean, label: "I confirm the information displayed on the WCA website's events page and on the competition's schedule page reflect what happened during the competition." %>
         <%= f.submit "Submit", class: "btn btn-primary" %>

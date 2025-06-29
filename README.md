@@ -12,7 +12,7 @@
 <br />
 <div align="center">
 
-[![Build Status](https://github.com/thewca/worldcubeassociation.org/actions/workflows/ruby.yml/badge.svg?event=push)](https://github.com/thewca/worldcubeassociation.org/actions/workflows/ruby.yml)
+[![Build Status](https://github.com/thewca/worldcubeassociation.org/actions/workflows/ruby-test.yml/badge.svg?event=push)](https://github.com/thewca/worldcubeassociation.org/actions/workflows/ruby-test.yml)
 [![Coverage Status](https://coveralls.io/repos/github/thewca/worldcubeassociation.org/badge.svg?branch=main)](https://coveralls.io/github/thewca/worldcubeassociation.org?branch=main)
 
 </div>

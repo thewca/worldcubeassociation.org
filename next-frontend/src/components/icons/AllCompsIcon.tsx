@@ -2,7 +2,7 @@
 
 import { createIcon } from "@chakra-ui/react";
 
-const AllCompsIcon = createIcon({
+export const AllCompsIcon = createIcon({
   displayName: "AllCompsIcon",
   viewBox: "0 0 44.98 41.86",
   path: (
@@ -17,10 +17,9 @@ const AllCompsIcon = createIcon({
       />
     </>
   ),
+  defaultProps: {
+    boxSize: "1em",
+  },
 });
 
-const AllCompsIconPreview = () => {
-  return <AllCompsIcon size="lg" />;
-};
-
-export default AllCompsIconPreview;
+export default AllCompsIcon;

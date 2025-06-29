@@ -17,6 +17,7 @@ import './ScrambleForm.scss';
 const roundDataFromScramble = (scramble) => ({
   competitionId: scramble.competition_id || '',
   roundTypeId: scramble.round_type_id || '',
+  roundId: scramble.round_id || '',
   eventId: scramble.event_id || '',
 });
 
@@ -28,7 +29,7 @@ const scrambleInfoFromScramble = (scramble) => ({
 });
 
 const dataToScramble = ({
-  eventId, competitionId, roundTypeId,
+  eventId, competitionId, roundTypeId, roundId,
 }, {
   groupId, isExtra, scrambleNum, scrambleStr,
 }) => {
@@ -36,6 +37,7 @@ const dataToScramble = ({
     competition_id: competitionId,
     event_id: eventId,
     round_type_id: roundTypeId,
+    round_id: roundId,
     group_id: groupId,
     is_extra: isExtra,
     scramble_num: scrambleNum,

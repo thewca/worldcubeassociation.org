@@ -25,10 +25,9 @@ const SpectatorsIcon = createIcon({
       />
     </>
   ),
+  defaultProps: {
+    boxSize: "1em",
+  },
 });
 
-const SpectatorsIconPreview = () => {
-  return <SpectatorsIcon size="lg" />;
-};
-
-export default SpectatorsIconPreview;
+export default SpectatorsIcon;
