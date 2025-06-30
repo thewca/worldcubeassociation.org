@@ -3338,9 +3338,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@payloadcms/graphql@npm:3.43.0":
-  version: 3.43.0
-  resolution: "@payloadcms/graphql@npm:3.43.0"
+"@payloadcms/graphql@npm:3.44.0":
+  version: 3.44.0
+  resolution: "@payloadcms/graphql@npm:3.44.0"
   dependencies:
     graphql-scalars: "npm:1.22.2"
     pluralize: "npm:8.0.0"
@@ -3348,10 +3348,10 @@ __metadata:
     tsx: "npm:4.19.2"
   peerDependencies:
     graphql: ^16.8.1
-    payload: 3.43.0
+    payload: 3.44.0
   bin:
     payload-graphql: bin.js
-  checksum: 10c0/d7914dcde645df9510b39a3c79fda4f03ad7378dabee514ecf8023e678df86a0bc29747a057b607a42af42d435329b0be92276f2f8f64e234e58c850565b9979
+  checksum: 10c0/11645d69f547016c905995e2690eef7c0033d64a11074b2698d243727df72e8384f436c90dffb44b47da1f00a22e50962a9de3f50bcecbcc511d3eb489b5928d
   languageName: node
   linkType: hard
 
@@ -3374,14 +3374,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@payloadcms/next@npm:^3.43.0":
-  version: 3.43.0
-  resolution: "@payloadcms/next@npm:3.43.0"
+"@payloadcms/next@npm:^3.44.0":
+  version: 3.44.0
+  resolution: "@payloadcms/next@npm:3.44.0"
   dependencies:
     "@dnd-kit/core": "npm:6.0.8"
-    "@payloadcms/graphql": "npm:3.43.0"
-    "@payloadcms/translations": "npm:3.43.0"
-    "@payloadcms/ui": "npm:3.43.0"
+    "@payloadcms/graphql": "npm:3.44.0"
+    "@payloadcms/translations": "npm:3.44.0"
+    "@payloadcms/ui": "npm:3.44.0"
     busboy: "npm:^1.6.0"
     dequal: "npm:2.0.3"
     file-type: "npm:19.3.0"
@@ -3395,8 +3395,8 @@ __metadata:
   peerDependencies:
     graphql: ^16.8.1
     next: ^15.2.3
-    payload: 3.43.0
-  checksum: 10c0/e5ea0e2baededd0feee431dbbdb956074aeda6cd5ec8c5957e2f8ed1a8df32df6c6af2bc7be3074a1c2bcd0a18e7367b4e16ae0e9f8f6c232fea3772a7e9de5a
+    payload: 3.44.0
+  checksum: 10c0/f8a8aa45cdd44c06cfefd219de9c715f1437f47f68d832de6bda447456e46d1f731dce4a15cf7ba05cf37bb790a07e6ebe48ec229a167a1acf2eb4c485d7f3cd
   languageName: node
   linkType: hard
 
@@ -3489,6 +3489,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@payloadcms/translations@npm:3.44.0":
+  version: 3.44.0
+  resolution: "@payloadcms/translations@npm:3.44.0"
+  dependencies:
+    date-fns: "npm:4.1.0"
+  checksum: 10c0/8efeb339b476b54e3d72a52bed8d034db4140c7988b47ece3eae4bf5a814c4adb2e475fb0f72afee65b17680cffc06b4269505ff1d170b6710a6d81076c8ec91
+  languageName: node
+  linkType: hard
+
 "@payloadcms/ui@npm:3.43.0":
   version: 3.43.0
   resolution: "@payloadcms/ui@npm:3.43.0"
@@ -3522,6 +3531,42 @@ __metadata:
     react: ^19.0.0 || ^19.0.0-rc-65a56d0e-20241020
     react-dom: ^19.0.0 || ^19.0.0-rc-65a56d0e-20241020
   checksum: 10c0/33ce23d8f16b10be64c158f106fa7c3e2cc91c2b26fa1b38b2d5a4dcf6508cdfd0009e8a850532f396d41dfc74ead75ab8e3755036dd30592e0ceb85f7ad453e
+  languageName: node
+  linkType: hard
+
+"@payloadcms/ui@npm:3.44.0":
+  version: 3.44.0
+  resolution: "@payloadcms/ui@npm:3.44.0"
+  dependencies:
+    "@date-fns/tz": "npm:1.2.0"
+    "@dnd-kit/core": "npm:6.0.8"
+    "@dnd-kit/sortable": "npm:7.0.2"
+    "@dnd-kit/utilities": "npm:3.2.2"
+    "@faceless-ui/modal": "npm:3.0.0-beta.2"
+    "@faceless-ui/scroll-info": "npm:2.0.0"
+    "@faceless-ui/window-info": "npm:3.0.1"
+    "@monaco-editor/react": "npm:4.7.0"
+    "@payloadcms/translations": "npm:3.44.0"
+    bson-objectid: "npm:2.0.4"
+    date-fns: "npm:4.1.0"
+    dequal: "npm:2.0.3"
+    md5: "npm:2.3.0"
+    object-to-formdata: "npm:4.5.1"
+    qs-esm: "npm:7.0.2"
+    react-datepicker: "npm:7.6.0"
+    react-image-crop: "npm:10.1.8"
+    react-select: "npm:5.9.0"
+    scheduler: "npm:0.25.0"
+    sonner: "npm:^1.7.2"
+    ts-essentials: "npm:10.0.3"
+    use-context-selector: "npm:2.0.0"
+    uuid: "npm:10.0.0"
+  peerDependencies:
+    next: ^15.2.3
+    payload: 3.44.0
+    react: ^19.0.0 || ^19.0.0-rc-65a56d0e-20241020
+    react-dom: ^19.0.0 || ^19.0.0-rc-65a56d0e-20241020
+  checksum: 10c0/45e02d2fb53423aed7932d2e10c35257edb6ecc8ebf68efac28dad770c34348b8b59d633119acaaa059ba10c79cf4b64d0e52c554a9611106df63292f575ca63
   languageName: node
   linkType: hard
 
@@ -12400,7 +12445,7 @@ __metadata:
     "@payloadcms/db-mongodb": "npm:^3.43.0"
     "@payloadcms/db-sqlite": "npm:^3.43.0"
     "@payloadcms/live-preview-react": "npm:^3.43.0"
-    "@payloadcms/next": "npm:^3.43.0"
+    "@payloadcms/next": "npm:^3.44.0"
     "@payloadcms/richtext-lexical": "npm:^3.43.0"
     "@payloadcms/storage-s3": "npm:^3.43.0"
     "@stylistic/eslint-plugin": "npm:^5.0.0"
