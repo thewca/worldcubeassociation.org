@@ -7,7 +7,6 @@ class ServerSetting < ApplicationRecord
   TEST_VIDEO_ID_NAME = 'TEST_wc2025_video_url'
   LIVE_VIDEO_ID_NAME = 'wc2025_video_url'
 
-
   def self.test_video_id
     find_or_create_by(name: ServerSetting::TEST_VIDEO_ID_NAME)&.value
   end
