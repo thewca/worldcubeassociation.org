@@ -6,7 +6,7 @@
 
   <div class="ui fluid container" id="cover-homepage">
 
-    <%= render 'wc2025' %>
+    <%= render 'wc2025' if @video_id.present? %>
     <div class="ui fluid container">
       <h1 class="ui huge header inverted" id="welcome">
         <%= t('homepage.title') %>

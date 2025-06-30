@@ -1,5 +1,3 @@
-<% return if @video_id.blank? %>
-
 <!-- I tried jumbotron-in-jumbotron, but it doesn't lead to the a visual distinction between the outer and inner boxes -->
 <div class="wc2025" id="wc2025-container">
   <h2 class="wc2025-header">
@@ -46,7 +44,7 @@
           <iframe
             class="embed-responsive-item"
             style="border-radius: 12px; overflow: hidden;"
-            src=<%= "https://www.youtube.com/embed/#{@video_id}?autoplay=1&mute=1&loop=1&playlist=#{@video_id}" %>
+            src="<%= "https://www.youtube.com/embed/#{@video_id}?autoplay=1&mute=1&loop=1&playlist=#{@video_id}" %>"
             title="YouTube video player"
             frameborder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
