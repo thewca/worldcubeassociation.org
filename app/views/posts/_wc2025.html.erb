@@ -1,4 +1,4 @@
-<% video_id = @preview ? ServerSetting.find_by(name: 'TEST_wc2025_video_url')&.value : ServerSetting.find_by(name: 'wc2025_video_url')&.value %>
+<% video_id = @preview ? ServerSetting.test_video_id : ServerSetting.live_video_id %>
 
 <% return if video_id.blank? %>
 

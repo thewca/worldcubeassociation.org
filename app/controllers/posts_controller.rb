@@ -38,7 +38,7 @@ class PostsController < ApplicationController
 
   def homepage
     @latest_post = Post.order(sticky: :desc, created_at: :desc).first
-    @preview = params[:preview] == "1" && current_user.can_administrate_livestream?
+    @preview = params[:preview] == "1" && current_user&.can_administrate_livestream?
   end
 
   def livestream_management
@@ -46,9 +46,9 @@ class PostsController < ApplicationController
 
   def update_test_link
     new_value = params[:new_test_value]
-    test = ServerSetting.find_or_create_by(name: "TEST_wc2025_video_url")
+    test = ServerSetting.test_video_id
 
-    if test.update!(value: new_value)
+    if test.update(value: new_value)
       render json: { data: test.reload.value }
     else
       render json: { error: test.errors }
@@ -57,8 +57,8 @@ class PostsController < ApplicationController
 
   # Sets the live link to the value of the current test link
   def promote_test_link
-    test = ServerSetting.find("TEST_wc2025_video_url")
-    live = ServerSetting.find_or_create_by(name: "wc2025_video_url")
+    test = ServerSetting.test_video_id
+    live = ServerSetting.live_video_id
     if live.update!(value: test.value)
       render json: { data: live.reload.value }
     else

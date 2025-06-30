@@ -59,7 +59,7 @@ function LivestreamManager({ testVideoIdProp, liveVideoIdProp }) {
 
   return (
     <Container>
-      <h1>Livestream Management</h1>
+      <Header>Livestream Management</Header>
       <p>Use this page to manage the livestream displayed on the WCA homepage</p>
       <List bulleted>
         <List.Item>Update the chosen VideoID by following the steps below</List.Item>
