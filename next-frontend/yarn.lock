@@ -3583,12 +3583,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@payloadcms/db-sqlite@npm:^3.43.0":
-  version: 3.43.0
-  resolution: "@payloadcms/db-sqlite@npm:3.43.0"
+"@payloadcms/db-sqlite@npm:^3.44.0":
+  version: 3.44.0
+  resolution: "@payloadcms/db-sqlite@npm:3.44.0"
   dependencies:
     "@libsql/client": "npm:0.14.0"
-    "@payloadcms/drizzle": "npm:3.43.0"
+    "@payloadcms/drizzle": "npm:3.44.0"
     console-table-printer: "npm:2.12.1"
     drizzle-kit: "npm:0.31.1"
     drizzle-orm: "npm:0.44.2"
@@ -3596,14 +3596,14 @@ __metadata:
     to-snake-case: "npm:1.0.0"
     uuid: "npm:9.0.0"
   peerDependencies:
-    payload: 3.43.0
-  checksum: 10c0/229c90f553e25c251abcf939427c9e580d7099ba45c8310128a18431dd93681939b7dae2d1a6dcc78826fcfe15c62c116fad2bd5d7a3fc3da993c778b70e15ce
+    payload: 3.44.0
+  checksum: 10c0/9025ad4781cea111d00180db7c3f92807850cf8890c979be8d72d48c654bc74026654623ce6c0f96213c3378f2c27cabdb388e6dc2507aae9bb71633290ec47c
   languageName: node
   linkType: hard
 
-"@payloadcms/drizzle@npm:3.43.0":
-  version: 3.43.0
-  resolution: "@payloadcms/drizzle@npm:3.43.0"
+"@payloadcms/drizzle@npm:3.44.0":
+  version: 3.44.0
+  resolution: "@payloadcms/drizzle@npm:3.44.0"
   dependencies:
     console-table-printer: "npm:2.12.1"
     dequal: "npm:2.0.3"
@@ -3612,8 +3612,8 @@ __metadata:
     to-snake-case: "npm:1.0.0"
     uuid: "npm:9.0.0"
   peerDependencies:
-    payload: 3.43.0
-  checksum: 10c0/05e4f8e26a2a603549969b2b19e837a2fb09113b930770137967e250c3b0376b60e346a1296f270559059d0db863d528a77b5286990617b3f4d58706603f03a8
+    payload: 3.44.0
+  checksum: 10c0/c1dab0d4371a54ea60b95e565dd4ab7fce9457b76aafbe807da2fd990c177a123b156a673447457942f3be8aa4d17a016b09fa39d5a3b1a11dae4c7deec85101
   languageName: node
   linkType: hard
 
@@ -12790,7 +12790,7 @@ __metadata:
     "@emotion/react": "npm:^11.14.0"
     "@eslint/eslintrc": "npm:^3"
     "@payloadcms/db-mongodb": "npm:^3.44.0"
-    "@payloadcms/db-sqlite": "npm:^3.43.0"
+    "@payloadcms/db-sqlite": "npm:^3.44.0"
     "@payloadcms/live-preview-react": "npm:^3.44.0"
     "@payloadcms/next": "npm:^3.44.0"
     "@payloadcms/richtext-lexical": "npm:^3.44.0"
