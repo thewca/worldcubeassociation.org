@@ -148,13 +148,13 @@ GEM
       base64
       jmespath (~> 1, >= 1.6.1)
       logger
-    aws-sdk-kms (1.105.0)
+    aws-sdk-kms (1.106.0)
       aws-sdk-core (~> 3, >= 3.225.0)
       aws-sigv4 (~> 1.5)
     aws-sdk-rds (1.282.0)
       aws-sdk-core (~> 3, >= 3.225.0)
       aws-sigv4 (~> 1.5)
-    aws-sdk-s3 (1.190.0)
+    aws-sdk-s3 (1.191.0)
       aws-sdk-core (~> 3, >= 3.225.0)
       aws-sdk-kms (~> 1)
       aws-sigv4 (~> 1.5)
@@ -1138,9 +1138,9 @@ CHECKSUMS
   aws-partitions (1.1122.0) sha256=e2b7c109fb56bf423796f40f37f3d28a68f900a93cbcecfe984ce2a89a8fdce9
   aws-sdk-cloudfront (1.119.0) sha256=11f7105e9e1f950825de12885c605cd014cf470fcf1cbe01587e2b0a6ff4e35a
   aws-sdk-core (3.226.1) sha256=6e0fcee9d5fb8792c785ce5ae6a7af266e16e09e24bc623f13db7e91047ff5eb
-  aws-sdk-kms (1.105.0) sha256=d7756c1c2e3a79afaceb7c590f3846d2814cf217e28971c243608c41d65bae4f
+  aws-sdk-kms (1.106.0) sha256=1737e3f154746dedcaf6aecf2e5490ab5e6447ac373bb5a57a19bb1184506007
   aws-sdk-rds (1.282.0) sha256=159c4d5ea71295dc466ca78e99013b593cee33bc28fd0f98bde9ed7028a18603
-  aws-sdk-s3 (1.190.0) sha256=75c9e609796713b28c6428bd1d1be1c3f65b1dc5a541590c9b515183c1d85a2b
+  aws-sdk-s3 (1.191.0) sha256=62b541dbaee2925cbc9d21d2003cd4270f778ddbdb7a7dd58a5343514004dfd3
   aws-sdk-sqs (1.96.0) sha256=842bc82a07a46b81e6543c8f49dc8b5b7e93427a13d08199624aa962dc2c0bac
   aws-sigv4 (1.12.1) sha256=6973ff95cb0fd0dc58ba26e90e9510a2219525d07620c8babeb70ef831826c00
   babel-source (5.8.35) sha256=79ef222a9dcb867ac2efa3b0da35b4bcb15a4bfa67b6b2dcbf1e9a29104498d9
