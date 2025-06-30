@@ -12876,7 +12876,7 @@ __metadata:
     node-vault: "npm:^0.10.5"
     openapi-fetch: "npm:^0.14.0"
     openapi-typescript: "npm:^7.8.0"
-    payload: "npm:^3.43.0"
+    payload: "npm:^3.44.0"
     payload-authjs: "npm:^0.8.2"
     prettier: "npm:^3.6.2"
     react: "npm:^19.1.0"
@@ -13521,12 +13521,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"payload@npm:^3.43.0":
-  version: 3.43.0
-  resolution: "payload@npm:3.43.0"
+"payload@npm:^3.44.0":
+  version: 3.44.0
+  resolution: "payload@npm:3.44.0"
   dependencies:
     "@next/env": "npm:^15.1.5"
-    "@payloadcms/translations": "npm:3.43.0"
+    "@payloadcms/translations": "npm:3.44.0"
     "@types/busboy": "npm:1.5.4"
     ajv: "npm:8.17.1"
     bson-objectid: "npm:2.0.4"
@@ -13560,7 +13560,7 @@ __metadata:
     graphql: ^16.8.1
   bin:
     payload: bin.js
-  checksum: 10c0/e094f1a595f7d2b87d62af84813756fd8584cf93b38bd8e2a0e15039818b05d04a706284c7922d6ee3a7d82a3904ac3b5d56b042469a1c1aaad92c82796e691f
+  checksum: 10c0/e630db20ca4ac43efa93cb413b92bc624b8f5cc761c9da9866daca9b379269c8c837ec9f3554dfabcb415beb7bc673e0198b2a711e8fa9fb38681d1b23b91edd
   languageName: node
   linkType: hard
 
