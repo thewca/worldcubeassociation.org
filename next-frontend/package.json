@@ -22,7 +22,7 @@
   },
   "dependencies": {
     "@aws-sdk/credential-providers": "^3.839.0",
-    "@chakra-ui/react": "^3.21.0",
+    "@chakra-ui/react": "^3.21.1",
     "@emotion/react": "^11.14.0",
     "@payloadcms/db-mongodb": "^3.43.0",
     "@payloadcms/db-sqlite": "^3.43.0",
