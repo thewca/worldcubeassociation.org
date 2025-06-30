@@ -39,9 +39,14 @@ class PostsController < ApplicationController
   def homepage
     @latest_post = Post.order(sticky: :desc, created_at: :desc).first
     @preview = params[:preview] == "1" && current_user&.can_administrate_livestream?
+    @video_id = @preview ?
+      ServerSetting.find_by(name: ServerSetting::TEST_VIDEO_ID_NAME)&.value :
+      ServerSetting.find_by(name: ServerSetting::LIVE_VIDEO_ID_NAME)&.value
   end
 
   def livestream_management
+    @test_video_id = ServerSetting.find_or_create_by(name: ServerSetting::TEST_VIDEO_ID_NAME)&.value
+    @live_video_id = ServerSetting.find_or_create_by(name: ServerSetting::LIVE_VIDEO_ID_NAME)&.value
   end
 
   def update_test_link
@@ -49,7 +54,7 @@ class PostsController < ApplicationController
     test = ServerSetting.find(ServerSetting::TEST_VIDEO_ID_NAME)
 
     if test.update(value: new_value)
-      render json: { data: test.reload.value }
+      render json: { data: test.value }
     else
       render json: { error: test.errors }
     end
@@ -60,7 +65,7 @@ class PostsController < ApplicationController
     test = ServerSetting.test_video_id
     live = ServerSetting.find(ServerSetting::LIVE_VIDEO_ID_NAME)
     if live.update(value: test)
-      render json: { data: live.reload.value }
+      render json: { data: live.value }
     else
       render json: { error: live.errors }
     end

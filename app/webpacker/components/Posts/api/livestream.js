@@ -14,7 +14,7 @@ export async function updateTestVideoId(value) {
 
 export async function promoteTestVideoId() {
   const { data } = await fetchJsonOrError(promoteTestVideoIdUrl, {
-    method: 'GET',
+    method: 'PATCH',
   });
   return data;
 }
