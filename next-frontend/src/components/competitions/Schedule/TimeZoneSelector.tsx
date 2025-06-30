@@ -18,8 +18,9 @@ import { useTranslation } from "react-i18next";
 import LocationIcon from "@/components/icons/LocationIcon";
 import { LuHouse } from "react-icons/lu";
 import { useQuery } from "@tanstack/react-query";
-import useAPI from "@/lib/wca/useAPI";
+import { DateTime } from "luxon";
 
+import useAPI from "@/lib/wca/useAPI";
 import type { WcifVenue } from "@/lib/wca/wcif/activities";
 
 interface TimeZoneSelectorProps {
@@ -56,7 +57,7 @@ export default function TimeZoneSelector({
   // It literally doesn't matter what the exact value of this date is,
   //   so we don't need to care about memoizing.
   // All that matters is that it stays consistent within one render cycle (which it does by definition)
-  const randomReferenceDate = new Date().toISOString();
+  const randomReferenceDate = DateTime.now().toISO();
 
   const uniqueTimeZones = _.uniq(backendTimeZones.concat(availableTimeZones));
   const sortedTimeZones = sortByOffset(uniqueTimeZones, randomReferenceDate);

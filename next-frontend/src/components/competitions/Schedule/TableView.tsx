@@ -2,8 +2,16 @@
 
 import { DateTime } from "luxon";
 import React from "react";
-import { Box, Checkbox, Grid, Heading, Icon } from "@chakra-ui/react";
-import cn from "classnames";
+import {
+  Center,
+  Checkbox,
+  Em,
+  GridItem,
+  Heading,
+  SimpleGrid, Stack,
+  StackSeparator,
+  VStack,
+} from "@chakra-ui/react";
 import {
   activitiesOnDate,
   earliestWithLongestTieBreaker,
@@ -29,6 +37,7 @@ import {
   type WcifRound,
 } from "@/lib/wca/wcif/rounds";
 import { useT } from "@/lib/i18n/useI18n";
+import EventIcon from "@/components/EventIcon";
 
 interface TableViewProps {
   dates: DateTime[];
@@ -140,9 +149,12 @@ function SingleDayTable({
   });
 
   const hasActivities = groupedActivities.length > 0;
-  const startTime = hasActivities && groupedActivities[0][0].startTime;
-  const endTime =
-    hasActivities && groupedActivities[groupedActivities.length - 1][0].endTime;
+  const startTime = hasActivities
+    ? groupedActivities[0][0].startTime
+    : date.toISO()!;
+  const endTime = hasActivities
+    ? groupedActivities[groupedActivities.length - 1][0].endTime
+    : date.toISO()!;
   const activeVenueAddress =
     activeVenue &&
     `${toDegrees(activeVenue.latitudeMicrodegrees)},${toDegrees(
@@ -150,8 +162,8 @@ function SingleDayTable({
     )}`;
 
   return (
-    <Box>
-      <Heading>
+    <>
+      <Heading size="2xl" paddingTop={4}>
         {hasActivities && (
           <>
             <AddToCalendar
@@ -166,7 +178,7 @@ function SingleDayTable({
         {title}
       </Heading>
 
-      <Grid centered divided="vertically">
+      <Stack separator={<StackSeparator />} gap={6}>
         <HeaderRow isExpanded={isExpanded} />
 
         {hasActivities ? (
@@ -176,7 +188,7 @@ function SingleDayTable({
             const activityRound = rounds.find(
               (round) =>
                 round.id === getActivityRoundId(representativeActivity),
-            );
+            )!;
 
             return (
               <ActivityRow
@@ -191,14 +203,12 @@ function SingleDayTable({
             );
           })
         ) : (
-          <Grid.Row columns={1}>
-            <Grid.Column textAlign="center">
-              <em>{t("competitions.schedule.no_activities")}</em>
-            </Grid.Column>
-          </Grid.Row>
+          <Center>
+            <Em>{t("competitions.schedule.no_activities")}</Em>
+          </Center>
         )}
-      </Grid>
-    </Box>
+      </Stack>
+    </>
   );
 }
 
@@ -210,34 +220,32 @@ function HeaderRow({ isExpanded }: HeaderRowProps) {
   const { t } = useT();
 
   return (
-    <Grid.Row only="computer">
-      <Grid.Column width={isExpanded ? 1 : 2}>
+    <SimpleGrid columns={16} hideBelow="lg" columnGap={3}>
+      <GridItem colSpan={isExpanded ? 1 : 2}>
         {t("competitions.schedule.start")}
-      </Grid.Column>
-      <Grid.Column width={isExpanded ? 1 : 2}>
+      </GridItem>
+      <GridItem colSpan={isExpanded ? 1 : 2}>
         {t("competitions.schedule.end")}
-      </Grid.Column>
-      <Grid.Column width={isExpanded ? 4 : 7}>
+      </GridItem>
+      <GridItem colSpan={isExpanded ? 4 : 7}>
         {t("competitions.schedule.activity")}
-      </Grid.Column>
-      <Grid.Column width={isExpanded ? 3 : 5}>
+      </GridItem>
+      <GridItem colSpan={isExpanded ? 3 : 5}>
         {t("competitions.schedule.room_or_stage")}
-      </Grid.Column>
+      </GridItem>
       {isExpanded && (
         <>
-          <Grid.Column width={1}>{t("competitions.events.format")}</Grid.Column>
-          <Grid.Column width={2}>
+          <GridItem>{t("competitions.events.format")}</GridItem>
+          <GridItem colSpan={2}>
             <a href="#time-limit">{t("competitions.events.time_limit")}</a>
-          </Grid.Column>
-          <Grid.Column width={2}>
+          </GridItem>
+          <GridItem colSpan={2}>
             <a href="#cutoff">{t("competitions.events.cutoff")}</a>
-          </Grid.Column>
-          <Grid.Column width={2}>
-            {t("competitions.events.proceed")}
-          </Grid.Column>
+          </GridItem>
+          <GridItem colSpan={2}>{t("competitions.events.proceed")}</GridItem>
         </>
       )}
-    </Grid.Row>
+    </SimpleGrid>
   );
 }
 
@@ -281,20 +289,20 @@ function ActivityRow({
 
   return (
     <>
-      <Grid.Row only="computer">
-        <Grid.Column width={isExpanded ? 1 : 2}>
+      <SimpleGrid columns={16} hideBelow="lg" columnGap={3}>
+        <GridItem colSpan={isExpanded ? 1 : 2}>
           {getSimpleTimeString(startTime, timeZone)}
-        </Grid.Column>
-        <Grid.Column width={isExpanded ? 1 : 2}>
+        </GridItem>
+        <GridItem colSpan={isExpanded ? 1 : 2}>
           {getSimpleTimeString(endTime, timeZone)}
-        </Grid.Column>
-        <Grid.Column width={isExpanded ? 4 : 7}>{name}</Grid.Column>
-        <Grid.Column width={isExpanded ? 3 : 5}>
+        </GridItem>
+        <GridItem colSpan={isExpanded ? 4 : 7}>{name}</GridItem>
+        <GridItem colSpan={isExpanded ? 3 : 5}>
           {roomsUsed.map((room) => room.name).join(", ")}
-        </Grid.Column>
+        </GridItem>
         {isExpanded && (
           <>
-            <Grid.Column width={1}>
+            <GridItem>
               {format && (
                 <>
                   {cutoff &&
@@ -302,8 +310,8 @@ function ActivityRow({
                   {formats.byId[format].short_name}
                 </>
               )}
-            </Grid.Column>
-            <Grid.Column width={2}>
+            </GridItem>
+            <GridItem colSpan={2}>
               {round && timeLimitToString(t, timeLimit, eventId, wcifEvents)}
               {timeLimit && (
                 <>
@@ -315,11 +323,11 @@ function ActivityRow({
                   )}
                 </>
               )}
-            </Grid.Column>
-            <Grid.Column width={2}>
+            </GridItem>
+            <GridItem colSpan={2}>
               {cutoff && cutoffToString(t, cutoff, eventId)}
-            </Grid.Column>
-            <Grid.Column width={2}>
+            </GridItem>
+            <GridItem colSpan={2}>
               {advancementCondition &&
                 advancementConditionToString(
                   t,
@@ -327,52 +335,52 @@ function ActivityRow({
                   eventId,
                   format,
                 )}
-            </Grid.Column>
+            </GridItem>
           </>
         )}
-      </Grid.Row>
-      <Grid.Row only="tablet mobile">
-        <Grid.Column textAlign="left" mobile={6} tablet={4}>
-          {I18n.t("competitions.schedule.range.from")}
+      </SimpleGrid>
+      <SimpleGrid columns={16} hideFrom="lg" gap={3}>
+        <GridItem textAlign="left" colSpan={[6, 4]}>
+          {t("competitions.schedule.range.from")}
           <br />
           <b>{getSimpleTimeString(startTime, timeZone)}</b>
-        </Grid.Column>
-        <Grid.Column textAlign="center" mobile={4} tablet={8}>
-          <Icon size="big" className={cn("cubing-icon", `event-${eventId}`)} />
-        </Grid.Column>
-        <Grid.Column textAlign="right" mobile={6} tablet={4}>
-          {I18n.t("competitions.schedule.range.to")}
+        </GridItem>
+        <GridItem textAlign="center" colSpan={[4, 8]}>
+          <EventIcon eventId={eventId} size="2xl" />
+        </GridItem>
+        <GridItem textAlign="right" colSpan={[6, 4]}>
+          {t("competitions.schedule.range.to")}
           <br />
           <b>{getSimpleTimeString(endTime, timeZone)}</b>
-        </Grid.Column>
-        <Grid.Column textAlign="center" mobile={16} tablet={10}>
+        </GridItem>
+        <GridItem textAlign="center" colSpan={[16, 10]}>
           <b>{name}</b>
-        </Grid.Column>
-        <Grid.Column textAlign="center" mobile={16} tablet={6}>
+        </GridItem>
+        <GridItem textAlign="center" colSpan={[16, 6]}>
           {roomsUsed.map((room) => room.name).join(", ")}
-        </Grid.Column>
+        </GridItem>
         {isExpanded && eventId !== "other" && (
           <>
             {format && (
               <>
-                <Grid.Column textAlign="left" mobile={6} tablet={4}>
+                <GridItem textAlign="left" colSpan={[6, 4]}>
                   {t("competitions.events.format")}
-                </Grid.Column>
-                <Grid.Column textAlign="right" mobile={10} tablet={4}>
+                </GridItem>
+                <GridItem textAlign="right" colSpan={[10, 4]}>
                   <b>
                     {cutoff &&
                       `${formats.byId[cutoff.numberOfAttempts].short_name} / `}
                     {formats.byId[format].short_name}
                   </b>
-                </Grid.Column>
+                </GridItem>
               </>
             )}
             {timeLimit && (
               <>
-                <Grid.Column textAlign="left" mobile={6} tablet={4}>
+                <GridItem textAlign="left" colSpan={[6, 4]}>
                   {t("competitions.events.time_limit")}
-                </Grid.Column>
-                <Grid.Column textAlign="right" mobile={10} tablet={4}>
+                </GridItem>
+                <GridItem textAlign="right" colSpan={[10, 4]}>
                   <b>
                     {round &&
                       timeLimitToString(t, timeLimit, eventId, wcifEvents)}
@@ -383,25 +391,25 @@ function ActivityRow({
                       <a href="#cumulative-across-rounds-time-limit">**</a>
                     )}
                   </b>
-                </Grid.Column>
+                </GridItem>
               </>
             )}
             {cutoff && (
               <>
-                <Grid.Column textAlign="left" mobile={6} tablet={4}>
+                <GridItem textAlign="left" colSpan={[6, 4]}>
                   {t("competitions.events.cutoff")}
-                </Grid.Column>
-                <Grid.Column textAlign="right" mobile={10} tablet={4}>
+                </GridItem>
+                <GridItem textAlign="right" colSpan={[10, 4]}>
                   <b>{cutoffToString(t, cutoff, eventId)}</b>
-                </Grid.Column>
+                </GridItem>
               </>
             )}
             {advancementCondition && (
               <>
-                <Grid.Column textAlign="left" mobile={6} tablet={4}>
-                  {I18n.t("competitions.events.proceed")}
-                </Grid.Column>
-                <Grid.Column textAlign="right" mobile={10} tablet={4}>
+                <GridItem textAlign="left" colSpan={[6, 4]}>
+                  {t("competitions.events.proceed")}
+                </GridItem>
+                <GridItem textAlign="right" colSpan={[10, 4]}>
                   <b>
                     {advancementConditionToString(
                       t,
@@ -410,12 +418,12 @@ function ActivityRow({
                       format,
                     )}
                   </b>
-                </Grid.Column>
+                </GridItem>
               </>
             )}
           </>
         )}
-      </Grid.Row>
+      </SimpleGrid>
     </>
   );
 }

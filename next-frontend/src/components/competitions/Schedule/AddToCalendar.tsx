@@ -8,7 +8,7 @@ interface AddToCalendarProps {
   endDate: string;
   timeZone: string;
   name: string;
-  address: string;
+  address?: string;
   allDay?: boolean;
 }
 
