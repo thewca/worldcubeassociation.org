@@ -46,7 +46,7 @@ class PostsController < ApplicationController
 
   def update_test_link
     new_value = params[:new_test_value]
-    test = ServerSetting.test_video_id
+    test = ServerSetting.find(ServerSetting::TEST_VIDEO_ID_NAME)
 
     if test.update(value: new_value)
       render json: { data: test.reload.value }
@@ -58,8 +58,8 @@ class PostsController < ApplicationController
   # Sets the live link to the value of the current test link
   def promote_test_link
     test = ServerSetting.test_video_id
-    live = ServerSetting.live_video_id
-    if live.update!(value: test.value)
+    live = ServerSetting.find(ServerSetting::LIVE_VIDEO_ID_NAME)
+    if live.update(value: test)
       render json: { data: live.reload.value }
     else
       render json: { error: live.errors }

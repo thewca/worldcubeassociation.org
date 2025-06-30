@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  Confirm, Container, Input, Button, Form, Icon, List, Message, Segment,
+  Confirm, Container, Input, Button, Header, Form, Icon, List, Message, Segment,
 } from 'semantic-ui-react';
 import { useMutation } from '@tanstack/react-query';
 import WCAQueryClientProvider from '../../lib/providers/WCAQueryClientProvider';
@@ -177,6 +177,7 @@ function LivestreamManager({ testVideoIdProp, liveVideoIdProp }) {
           <Button
             color="red"
             type="submit"
+            disabled={testVideoId === liveVideoId}
           >
             <Icon name="exclamation triangle" />
             {' '}
