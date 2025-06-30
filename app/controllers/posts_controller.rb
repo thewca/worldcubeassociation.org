@@ -62,7 +62,7 @@ class PostsController < ApplicationController
 
   # Sets the live link to the value of the current test link
   def promote_test_link
-    test = ServerSetting.test_video_id
+    test = ServerSetting.find(ServerSetting::TEST_VIDEO_ID_NAME).value
     live = ServerSetting.find(ServerSetting::LIVE_VIDEO_ID_NAME)
     if live.update(value: test)
       render json: { data: live.value }
