@@ -20,9 +20,8 @@ declare module "nextjs-routes" {
     | StaticRoute<"/competitions">
     | DynamicRoute<"/competitions/[competitionId]", { "competitionId": string }>
     | DynamicRoute<"/competitions/[competitionId]/admin", { "competitionId": string }>
+    | StaticRoute<"/dashboard">
     | StaticRoute<"/faq">
-    | StaticRoute<"/home">
-    | StaticRoute<"/homepage">
     | DynamicRoute<"/payload/[[...segments]]", { "segments"?: string[] | undefined }>
     | DynamicRoute<"/persons/[wcaId]", { "wcaId": string }>;
 
