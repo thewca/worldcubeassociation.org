@@ -1,0 +1,26 @@
+# frozen_string_literal: true
+
+class ComputePotentialDuplicates < ApplicationJob
+  def perform(job)
+    persons_cache = Person.select(:id, :wca_id, :name, :dob, :country_id)
+
+    job.touch(:start_time)
+    job.update!(status: DuplicateCheckerJobRun.statuses[:in_progress])
+    job.competition.accepted_newcomers.each do |user|
+      name = user.name
+      country_id = user.country.id
+      similar_persons = FinishUnfinishedPersons.compute_similar_persons(name, country_id, persons_cache)
+      similar_persons.each do |person, score_decimal|
+        PotentialDuplicatePerson.create!(
+          duplicate_checker_job_run_id: job.id,
+          original_user_id: user.id,
+          duplicate_person_id: person.id,
+          algorithm: PotentialDuplicatePerson.algorithms[:jarowinkler],
+          score: score_decimal * 100,
+        )
+      end
+    end
+    job.touch(:end_time)
+    job.update!(status: DuplicateCheckerJobRun.statuses[:success])
+  end
+end
