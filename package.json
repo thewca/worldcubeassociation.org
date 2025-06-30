@@ -23,7 +23,7 @@
     "@fullcalendar/core": "^6.1.17",
     "@fullcalendar/interaction": "^6.1.17",
     "@fullcalendar/luxon3": "^6.1.17",
-    "@fullcalendar/react": "^6.1.17",
+    "@fullcalendar/react": "^6.1.18",
     "@fullcalendar/timegrid": "^6.1.17",
     "@hello-pangea/dnd": "^18.0.1",
     "@rails/actioncable": "^8.0.200",
