@@ -121,6 +121,121 @@ export type IconName =
   | 'SkewbIcon'
   | 'Sq1Icon';
 /**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "WcaIconName".
+ */
+export type WcaIconName =
+  | (
+      | 'About the Regulations'
+      | 'About the WCA'
+      | 'Admin Results'
+      | 'All Competitions'
+      | 'Bookmark'
+      | 'Clone'
+      | 'Competition Not Started'
+      | 'Registration Closed'
+      | 'Registration Closed (Red)'
+      | 'Registration Full but Open'
+      | 'Registration Full but Open (Orange)'
+      | 'Registration Not Full, Open'
+      | 'Registration Not Full, Open (Green)'
+      | 'Registration Not Open Yet'
+      | 'Registration Not Open Yet (Grey)'
+      | 'Registration Open Date'
+      | 'Registration Close Date'
+      | 'Competitors'
+      | 'Contact'
+      | 'Delegate Report'
+      | 'Details'
+      | 'Developer Export'
+      | 'Disciplinary Log'
+      | 'Disclaimer'
+      | 'Download'
+      | 'Edit'
+      | 'Educational Resources'
+      | 'Error'
+      | 'External Link'
+      | 'Facebook'
+      | 'Filters'
+      | 'GitHub'
+      | 'Guidelines'
+      | 'Help and FAQs'
+      | 'Incidents Log'
+      | 'Information'
+      | 'Instagram'
+      | 'Language'
+      | 'List'
+      | 'Location'
+      | 'Manage Tabs'
+      | 'Map'
+      | 'Media Submission'
+      | 'Menu'
+      | 'Multimedia'
+      | 'My Competitions'
+      | 'My Results'
+      | 'National Championship'
+      | 'New Competition'
+      | 'On-the-Spot Registration'
+      | 'Payment'
+      | 'Privacy'
+      | 'Rankings'
+      | 'Records'
+      | 'Regional Organisations'
+      | 'Register'
+      | 'Registration'
+      | 'Regulations and Guidelines'
+      | 'Regulations History'
+      | 'Regulations'
+      | 'Results Export'
+      | 'Scrambles'
+      | 'Search'
+      | 'Spectators'
+      | 'Speedcubing History'
+      | 'Spots Left'
+      | 'Statistics'
+      | 'Teams, Committees and Councils'
+      | 'Tools'
+      | 'Translators'
+      | 'Twitch'
+      | 'User'
+      | 'Users / Persons'
+      | 'Venue'
+      | 'WCA Delegates'
+      | 'WCA Documents'
+      | 'WCA Live'
+      | 'WCA Officers and Board'
+      | 'Weibo'
+      | 'X (formerly Twitter)'
+      | 'YouTube'
+      | '222Icon'
+      | '333bfIcon'
+      | '333fmIcon'
+      | '333ftIcon'
+      | '333Icon'
+      | '333mbfIcon'
+      | '333ohIcon'
+      | '333mboIcon'
+      | '444bfIcon'
+      | '444Icon'
+      | '555bfIcon'
+      | '555Icon'
+      | '666Icon'
+      | '777Icon'
+      | 'ClockIcon'
+      | 'MagicIcon'
+      | 'MinxIcon'
+      | 'MmagicIcon'
+      | 'PyramIcon'
+      | 'SkewbIcon'
+      | 'Sq1Icon'
+    )
+  | null;
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "StaticTargetLink".
+ */
+export type StaticTargetLink = '/' | '/faq' | '/api/swagger' | '/competitions';
+/**
  * Supported timezones in IANA format.
  *
  * This interface was referenced by `Config`'s JSON-Schema
@@ -335,7 +450,7 @@ export interface Testimonial {
     };
     [k: string]: unknown;
   };
-  fullTestimonialMarkdown: string;
+  fullTestimonialMarkdown?: string | null;
   whoDunnit: string;
   updatedAt: string;
   createdAt: string;
@@ -363,7 +478,7 @@ export interface Announcement {
     };
     [k: string]: unknown;
   };
-  contentMarkdown: string;
+  contentMarkdown?: string | null;
   publishedAt: string;
   publishedBy: string | User;
   updatedAt: string;
@@ -720,23 +835,23 @@ export interface Nav {
   entry: (
     | {
         title: string;
-        displayIcon?: IconName;
+        displayIcon?: WcaIconName;
         entries: (
           | {
               displayText: string;
-              targetLink: '/' | '/faq' | '/api/swagger' | '/competitions';
-              displayIcon?: IconName;
+              targetLink: StaticTargetLink;
+              displayIcon?: WcaIconName;
               id?: string | null;
               blockName?: string | null;
               blockType: 'LinkItem';
             }
           | {
               title: string;
-              displayIcon?: IconName;
+              displayIcon?: WcaIconName;
               entries: {
                 displayText: string;
-                targetLink: '/' | '/faq' | '/api/swagger' | '/competitions';
-                displayIcon?: IconName;
+                targetLink: StaticTargetLink;
+                displayIcon?: WcaIconName;
                 id?: string | null;
                 blockName?: string | null;
                 blockType: 'LinkItem';
@@ -757,8 +872,8 @@ export interface Nav {
       }
     | {
         displayText: string;
-        targetLink: '/' | '/faq' | '/api/swagger' | '/competitions';
-        displayIcon?: IconName;
+        targetLink: StaticTargetLink;
+        displayIcon?: WcaIconName;
         id?: string | null;
         blockName?: string | null;
         blockType: 'LinkItem';
@@ -818,7 +933,7 @@ export interface TextCardBlock {
     };
     [k: string]: unknown;
   };
-  bodyMarkdown: string;
+  bodyMarkdown?: string | null;
   variant: 'info' | 'hero';
   separatorAfterHeading: boolean;
   buttonText?: string | null;
@@ -862,7 +977,7 @@ export interface ImageBannerBlock {
     };
     [k: string]: unknown;
   };
-  bodyMarkdown: string;
+  bodyMarkdown?: string | null;
   mainImage: number | Media;
   colorPalette: ColorPaletteSelect;
   /**
@@ -920,7 +1035,7 @@ export interface FeaturedCompetitionsBlock {
     | null;
   id?: string | null;
   blockName?: string | null;
-  blockType: 'FeaturedCompetitions';
+  blockType: 'FeaturedComps';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1001,7 +1116,7 @@ export interface AboutUsPage {
           };
           [k: string]: unknown;
         };
-        contentMarkdown: string;
+        contentMarkdown?: string | null;
         buttons: {
           label: string;
           url: string;
@@ -1029,7 +1144,7 @@ export interface AboutUsPage {
           };
           [k: string]: unknown;
         };
-        contentMarkdown: string;
+        contentMarkdown?: string | null;
         id?: string | null;
         blockName?: string | null;
         blockType: 'simpleItem';
@@ -1050,7 +1165,7 @@ export interface AboutUsPage {
           };
           [k: string]: unknown;
         };
-        contentMarkdown: string;
+        contentMarkdown?: string | null;
         quotedPerson: string;
         id?: string | null;
         blockName?: string | null;
@@ -1081,7 +1196,7 @@ export interface PrivacyPage {
     };
     [k: string]: unknown;
   };
-  preambleMarkdown: string;
+  preambleMarkdown?: string | null;
   blocks: {
     title: string;
     content: {
@@ -1099,7 +1214,7 @@ export interface PrivacyPage {
       };
       [k: string]: unknown;
     };
-    contentMarkdown: string;
+    contentMarkdown?: string | null;
     id?: string | null;
     blockName?: string | null;
     blockType: 'privacyItem';
@@ -1130,7 +1245,7 @@ export interface DisclaimerPage {
       };
       [k: string]: unknown;
     };
-    contentMarkdown: string;
+    contentMarkdown?: string | null;
     id?: string | null;
     blockName?: string | null;
     blockType: 'disclaimerItem';
@@ -1161,7 +1276,7 @@ export interface SpeedcubingHistoryPage {
           };
           [k: string]: unknown;
         };
-        contentMarkdown: string;
+        contentMarkdown?: string | null;
         id?: string | null;
         blockName?: string | null;
         blockType: 'paragraph';
@@ -1189,7 +1304,7 @@ export interface SpeedcubingHistoryPage {
           };
           [k: string]: unknown;
         };
-        contentMarkdown: string;
+        contentMarkdown?: string | null;
         quotedPerson: string;
         id?: string | null;
         blockName?: string | null;
@@ -1222,7 +1337,7 @@ export interface AboutRegulationsPage {
       };
       [k: string]: unknown;
     };
-    contentMarkdown: string;
+    contentMarkdown?: string | null;
     id?: string | null;
     blockName?: string | null;
     blockType: 'paragraph';
@@ -1330,7 +1445,7 @@ export interface TwoBlocksBlockSelect<T extends boolean = true> {
         ImageBanner?: T | ImageBannerBlockSelect<T>;
         ImageOnlyCard?: T | ImageOnlyCardBlockSelect<T>;
         TestimonialsSpinner?: T | TestimonialsBlockSelect<T>;
-        FeaturedCompetitions?: T | FeaturedCompetitionsBlockSelect<T>;
+        FeaturedComps?: T | FeaturedCompetitionsBlockSelect<T>;
         twoBlocksBranch?: T | TwoBlocksBranchBlockSelect<T>;
       };
   id?: T;
@@ -1438,7 +1553,7 @@ export interface TwoBlocksBranchBlockSelect<T extends boolean = true> {
         ImageBanner?: T | ImageBannerBlockSelect<T>;
         ImageOnlyCard?: T | ImageOnlyCardBlockSelect<T>;
         TestimonialsSpinner?: T | TestimonialsBlockSelect<T>;
-        FeaturedCompetitions?: T | FeaturedCompetitionsBlockSelect<T>;
+        FeaturedComps?: T | FeaturedCompetitionsBlockSelect<T>;
         twoBlocksLeaf?: T | TwoBlocksLeafBlockSelect<T>;
       };
   id?: T;
@@ -1459,7 +1574,7 @@ export interface TwoBlocksLeafBlockSelect<T extends boolean = true> {
         ImageBanner?: T | ImageBannerBlockSelect<T>;
         ImageOnlyCard?: T | ImageOnlyCardBlockSelect<T>;
         TestimonialsSpinner?: T | TestimonialsBlockSelect<T>;
-        FeaturedCompetitions?: T | FeaturedCompetitionsBlockSelect<T>;
+        FeaturedComps?: T | FeaturedCompetitionsBlockSelect<T>;
       };
   id?: T;
   blockName?: T;
@@ -1477,7 +1592,7 @@ export interface FullWidthBlockSelect<T extends boolean = true> {
         ImageBanner?: T | ImageBannerBlockSelect<T>;
         ImageOnlyCard?: T | ImageOnlyCardBlockSelect<T>;
         TestimonialsSpinner?: T | TestimonialsBlockSelect<T>;
-        FeaturedCompetitions?: T | FeaturedCompetitionsBlockSelect<T>;
+        FeaturedComps?: T | FeaturedCompetitionsBlockSelect<T>;
       };
   id?: T;
   blockName?: T;

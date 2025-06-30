@@ -27,13 +27,14 @@ const LinkItem: Block = {
       name: "targetLink",
       type: "select",
       options: staticLinkOptions,
+      interfaceName: "StaticTargetLink",
       required: true,
     },
     {
       name: "displayIcon",
       type: "select",
       options: iconOptions,
-      interfaceName: "IconName",
+      interfaceName: "WcaIconName",
     },
   ],
 };
@@ -55,7 +56,7 @@ const NestedDropdown: Block = {
       name: "displayIcon",
       type: "select",
       options: iconOptions,
-      interfaceName: "IconName",
+      interfaceName: "WcaIconName",
     },
     {
       name: "entries",
@@ -79,7 +80,7 @@ const Dropdown: Block = {
       name: "displayIcon",
       type: "select",
       options: iconOptions,
-      interfaceName: "IconName",
+      interfaceName: "WcaIconName",
     },
     {
       name: "entries",
