@@ -2150,13 +2150,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fullcalendar/luxon3@npm:^6.1.17":
-  version: 6.1.17
-  resolution: "@fullcalendar/luxon3@npm:6.1.17"
+"@fullcalendar/luxon3@npm:^6.1.18":
+  version: 6.1.18
+  resolution: "@fullcalendar/luxon3@npm:6.1.18"
   peerDependencies:
-    "@fullcalendar/core": ~6.1.17
+    "@fullcalendar/core": ~6.1.18
     luxon: ^3.0.0
-  checksum: 10c0/7137f22c78a64cbf8c3e4a564585d8d19f1d2c3be77ae3376ba94273a0817cbdd5277cfd762a1364770d8f50cb73be2192e374cbf7f53e9a7c4b9cce7c4ed338
+  checksum: 10c0/77677a594d71ded87cd8f36057d0673fe7a0264bca082f291242684c178112264d2e77df9a073cd66050e7dac75944ea3cb71a032a50f653fe56e0648db76455
   languageName: node
   linkType: hard
 
@@ -10405,7 +10405,7 @@ __metadata:
     "@cubing/icons": "npm:^3.0.4"
     "@fullcalendar/core": "npm:^6.1.18"
     "@fullcalendar/interaction": "npm:^6.1.17"
-    "@fullcalendar/luxon3": "npm:^6.1.17"
+    "@fullcalendar/luxon3": "npm:^6.1.18"
     "@fullcalendar/react": "npm:^6.1.18"
     "@fullcalendar/timegrid": "npm:^6.1.17"
     "@hello-pangea/dnd": "npm:^18.0.1"
