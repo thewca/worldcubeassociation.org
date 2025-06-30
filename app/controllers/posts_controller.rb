@@ -4,6 +4,7 @@ class PostsController < ApplicationController
   include TagsHelper
   before_action :authenticate_user!, except: %i[homepage index rss show]
   before_action -> { redirect_to_root_unless_user(:can_create_posts?) }, except: %i[homepage index rss show]
+  before_action -> { redirect_to_root_unless_user(:can_administrate_livestream?) }, only: %i[livestream_management update_test_link promote_test_link]
   POSTS_PER_PAGE = 10
 
   def index
@@ -37,6 +38,32 @@ class PostsController < ApplicationController
 
   def homepage
     @latest_post = Post.order(sticky: :desc, created_at: :desc).first
+    @preview = params[:preview] == "1" && current_user&.can_administrate_livestream?
+  end
+
+  def livestream_management
+  end
+
+  def update_test_link
+    new_value = params[:new_test_value]
+    test = ServerSetting.test_video_id
+
+    if test.update(value: new_value)
+      render json: { data: test.reload.value }
+    else
+      render json: { error: test.errors }
+    end
+  end
+
+  # Sets the live link to the value of the current test link
+  def promote_test_link
+    test = ServerSetting.test_video_id
+    live = ServerSetting.live_video_id
+    if live.update!(value: test.value)
+      render json: { data: live.reload.value }
+    else
+      render json: { error: live.errors }
+    end
   end
 
   def rss
