@@ -40,10 +40,10 @@ class PostsController < ApplicationController
     @latest_post = Post.order(sticky: :desc, created_at: :desc).first
     @preview = params[:preview] == "1" && current_user&.can_administrate_livestream?
     @video_id = if @preview
-      ServerSetting.find_by(name: ServerSetting::TEST_VIDEO_ID_NAME)&.value
-    else
-      ServerSetting.find_by(name: ServerSetting::LIVE_VIDEO_ID_NAME)&.value
-    end
+                  ServerSetting.find_by(name: ServerSetting::TEST_VIDEO_ID_NAME)&.value
+                else
+                  ServerSetting.find_by(name: ServerSetting::LIVE_VIDEO_ID_NAME)&.value
+                end
   end
 
   def livestream_management
