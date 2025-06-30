@@ -10395,7 +10395,7 @@ __metadata:
     "@babel/plugin-proposal-throw-expressions": "npm:^7.27.1"
     "@babel/plugin-syntax-dynamic-import": "npm:^7.8.3"
     "@babel/plugin-syntax-import-meta": "npm:^7.10.4"
-    "@babel/plugin-transform-destructuring": "npm:^7.27.3"
+    "@babel/plugin-transform-destructuring": "npm:^7.27.7"
     "@babel/plugin-transform-object-rest-spread": "npm:^7.27.7"
     "@babel/plugin-transform-regenerator": "npm:^7.27.5"
     "@babel/plugin-transform-runtime": "npm:^7.27.4"
