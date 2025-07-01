@@ -1,3 +1,5 @@
+"use client";
+
 import DOMPurify from "dompurify";
 import { useT } from "@/lib/i18n/useI18n";
 
@@ -13,7 +15,9 @@ function I18nHTMLTranslate({
   return (
     <span
       dangerouslySetInnerHTML={{
-        __html: DOMPurify.sanitize(t(i18nKey, options)),
+        __html: DOMPurify.sanitize(
+          t(i18nKey, { ...options, interpolation: { escapeValue: false } }),
+        ),
       }}
     />
   );

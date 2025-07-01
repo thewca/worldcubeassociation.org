@@ -16,8 +16,8 @@ export default async function ResultExportPage() {
 
   return (
     <Container>
-      <VStack align={"left"} gap={"16px"}>
-        <Heading size={"5xl"}>{t("database.developer_export.heading")}</Heading>
+      <VStack align="left" gap="16px">
+        <Heading size="5xl">{t("database.developer_export.heading")}</Heading>
         <Text>
           <I18nHTMLTranslate
             i18nKey={"database.developer_export.description_html"}

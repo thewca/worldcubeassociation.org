@@ -29,7 +29,6 @@ i18next
     interpolation: {
       prefix: "%{",
       suffix: "}",
-      escapeValue: false,
     },
     detection: {
       order: ["cookie", "navigator"],
