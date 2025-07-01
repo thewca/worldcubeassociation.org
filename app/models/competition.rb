@@ -383,27 +383,27 @@ class Competition < ApplicationRecord
 
   validate :auto_accept_validations
   private def auto_accept_validations
-    errors.add(:auto_accept_registrations, I18n.t('competitions.errors.must_use_wca_registration')) if
+    errors.add(:auto_accept_preference, I18n.t('competitions.errors.must_use_wca_registration')) if
       !auto_accept_preference_disabled? && !use_wca_registration
 
-    errors.add(:auto_accept_registrations, I18n.t('competitions.errors.must_use_payment_integration')) if
+    errors.add(:auto_accept_preference, I18n.t('competitions.errors.must_use_payment_integration')) if
       !auto_accept_preference_disabled? && confirmed_or_visible? && competition_payment_integrations.where(connected_account_type: "ConnectedStripeAccount").none?
 
-    errors.add(:auto_accept_registrations, I18n.t('competitions.errors.auto_accept_limit')) if
+    errors.add(:auto_accept_preference, I18n.t('competitions.errors.auto_accept_limit')) if
       auto_accept_disable_threshold.present? &&
       auto_accept_disable_threshold.positive? &&
       competitor_limit.present? &&
       auto_accept_disable_threshold >= competitor_limit
 
-    errors.add(:auto_accept_registrations, I18n.t('competitions.errors.auto_accept_not_negative')) if
+    errors.add(:auto_accept_preference, I18n.t('competitions.errors.auto_accept_not_negative')) if
       auto_accept_disable_threshold.present? && auto_accept_disable_threshold.negative?
 
     # TODO: This logic belongs in a controller more appropriately than in the validation.
     # IF we build a controller endpoint specifically for auto_accept, this logic should be move there.
     return unless auto_accept_preference_changed? && !auto_accept_preference_disabled?
 
-    errors.add(:auto_accept_registrations, I18n.t('competitions.errors.auto_accept_accept_paid_pending')) if registrations.pending.with_payments.count.positive?
-    errors.add(:auto_accept_registrations, I18n.t('competitions.errors.auto_accept_accept_waitlisted')) if
+    errors.add(:auto_accept_preference, I18n.t('competitions.errors.auto_accept_accept_paid_pending')) if registrations.pending.with_payments.count.positive?
+    errors.add(:auto_accept_preference, I18n.t('competitions.errors.auto_accept_accept_waitlisted')) if
       registrations.waitlisted.count.positive? && !registration_full_and_accepted?
   end
 

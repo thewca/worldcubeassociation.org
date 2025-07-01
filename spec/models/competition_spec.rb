@@ -1599,13 +1599,13 @@ RSpec.describe Competition do
         it 'not using WCA registration' do
           auto_accept_comp.use_wca_registration = false
           expect(auto_accept_comp).not_to be_valid
-          expect(auto_accept_comp.errors[:auto_accept_registrations]).to include("Auto-accept can only be used if you are using the WCA website for registrations")
+          expect(auto_accept_comp.errors[:auto_accept_preference]).to include("Auto-accept can only be used if you are using the WCA website for registrations")
         end
 
         it 'integrated payment not enabled when competition is confirmed' do
           confirmed_comp = build(:competition, :confirmed, :bulk_auto_accept)
           expect(confirmed_comp).not_to be_valid
-          expect(confirmed_comp.errors[:auto_accept_registrations]).to include("You must enable a payment integration (eg, Stripe) in order to use auto-accept")
+          expect(confirmed_comp.errors[:auto_accept_preference]).to include("You must enable a payment integration (eg, Stripe) in order to use auto-accept")
         end
 
         it 'any paid-pending registrations exist' do
@@ -1613,7 +1613,7 @@ RSpec.describe Competition do
           competition.auto_accept_preference = :bulk
 
           expect(competition).not_to be_valid
-          expect(competition.errors[:auto_accept_registrations]).to include("Can't enable auto-accept if there are paid-pending registrations - either accept them or move them to the waiting list")
+          expect(competition.errors[:auto_accept_preference]).to include("Can't enable auto-accept if there are paid-pending registrations - either accept them or move them to the waiting list")
         end
 
         it 'waitlisted registrations exist and accepted competitors < competition limit' do
@@ -1621,7 +1621,7 @@ RSpec.describe Competition do
           competition.auto_accept_preference = :bulk
 
           expect(competition).not_to be_valid
-          expect(competition.errors[:auto_accept_registrations]).to include("Can't enable auto-accept - please accept as many users from the Waiting List as possible.")
+          expect(competition.errors[:auto_accept_preference]).to include("Can't enable auto-accept - please accept as many users from the Waiting List as possible.")
         end
       end
 
@@ -1629,14 +1629,14 @@ RSpec.describe Competition do
         auto_accept_comp.competitor_limit = 100
         auto_accept_comp.auto_accept_disable_threshold = 101
         expect(auto_accept_comp).not_to be_valid
-        expect(auto_accept_comp.errors[:auto_accept_registrations]).to include("Limit for auto-accepted registrations must be less than the competitor limit")
+        expect(auto_accept_comp.errors[:auto_accept_preference]).to include("Limit for auto-accepted registrations must be less than the competitor limit")
       end
 
       it 'disable threshld must be less than competitor limit' do
         auto_accept_comp.competitor_limit = 100
         auto_accept_comp.auto_accept_disable_threshold = 100
         expect(auto_accept_comp).not_to be_valid
-        expect(auto_accept_comp.errors[:auto_accept_registrations]).to include("Limit for auto-accepted registrations must be less than the competitor limit")
+        expect(auto_accept_comp.errors[:auto_accept_preference]).to include("Limit for auto-accepted registrations must be less than the competitor limit")
       end
 
       it 'disable threshold may be 0' do
@@ -1647,7 +1647,7 @@ RSpec.describe Competition do
       it 'disable threshold may not be be less than 0' do
         auto_accept_comp.auto_accept_disable_threshold = -1
         expect(auto_accept_comp).not_to be_valid
-        expect(auto_accept_comp.errors[:auto_accept_registrations]).to include("Limit for auto-accepted registrations cannot be less than 0.")
+        expect(auto_accept_comp.errors[:auto_accept_preference]).to include("Limit for auto-accepted registrations cannot be less than 0.")
       end
     end
 
@@ -1658,13 +1658,13 @@ RSpec.describe Competition do
         it 'not using WCA registration' do
           auto_accept_comp.use_wca_registration = false
           expect(auto_accept_comp).not_to be_valid
-          expect(auto_accept_comp.errors[:auto_accept_registrations]).to include("Auto-accept can only be used if you are using the WCA website for registrations")
+          expect(auto_accept_comp.errors[:auto_accept_preference]).to include("Auto-accept can only be used if you are using the WCA website for registrations")
         end
 
         it 'integrated payment not enabled when competition is confirmed' do
           confirmed_comp = build(:competition, :confirmed, :live_auto_accept)
           expect(confirmed_comp).not_to be_valid
-          expect(confirmed_comp.errors[:auto_accept_registrations]).to include("You must enable a payment integration (eg, Stripe) in order to use auto-accept")
+          expect(confirmed_comp.errors[:auto_accept_preference]).to include("You must enable a payment integration (eg, Stripe) in order to use auto-accept")
         end
 
         it 'any paid-pending registrations exist' do
@@ -1672,7 +1672,7 @@ RSpec.describe Competition do
           competition.auto_accept_preference = :live
 
           expect(competition).not_to be_valid
-          expect(competition.errors[:auto_accept_registrations]).to include("Can't enable auto-accept if there are paid-pending registrations - either accept them or move them to the waiting list")
+          expect(competition.errors[:auto_accept_preference]).to include("Can't enable auto-accept if there are paid-pending registrations - either accept them or move them to the waiting list")
         end
 
         it 'waitlisted registrations exist and accepted competitors < competition limit' do
@@ -1680,7 +1680,7 @@ RSpec.describe Competition do
           competition.auto_accept_preference = :live
 
           expect(competition).not_to be_valid
-          expect(competition.errors[:auto_accept_registrations]).to include("Can't enable auto-accept - please accept as many users from the Waiting List as possible.")
+          expect(competition.errors[:auto_accept_preference]).to include("Can't enable auto-accept - please accept as many users from the Waiting List as possible.")
         end
       end
 
@@ -1688,14 +1688,14 @@ RSpec.describe Competition do
         auto_accept_comp.competitor_limit = 100
         auto_accept_comp.auto_accept_disable_threshold = 101
         expect(auto_accept_comp).not_to be_valid
-        expect(auto_accept_comp.errors[:auto_accept_registrations]).to include("Limit for auto-accepted registrations must be less than the competitor limit")
+        expect(auto_accept_comp.errors[:auto_accept_preference]).to include("Limit for auto-accepted registrations must be less than the competitor limit")
       end
 
       it 'disable threshld must be less than competitor limit' do
         auto_accept_comp.competitor_limit = 100
         auto_accept_comp.auto_accept_disable_threshold = 100
         expect(auto_accept_comp).not_to be_valid
-        expect(auto_accept_comp.errors[:auto_accept_registrations]).to include("Limit for auto-accepted registrations must be less than the competitor limit")
+        expect(auto_accept_comp.errors[:auto_accept_preference]).to include("Limit for auto-accepted registrations must be less than the competitor limit")
       end
 
       it 'disable threshold may be 0' do
@@ -1706,7 +1706,7 @@ RSpec.describe Competition do
       it 'disable threshold may not be be less than 0' do
         auto_accept_comp.auto_accept_disable_threshold = -1
         expect(auto_accept_comp).not_to be_valid
-        expect(auto_accept_comp.errors[:auto_accept_registrations]).to include("Limit for auto-accepted registrations cannot be less than 0.")
+        expect(auto_accept_comp.errors[:auto_accept_preference]).to include("Limit for auto-accepted registrations cannot be less than 0.")
       end
     end
   end
