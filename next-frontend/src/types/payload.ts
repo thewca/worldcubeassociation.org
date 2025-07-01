@@ -201,7 +201,7 @@ export interface Testimonial {
     };
     [k: string]: unknown;
   };
-  fullTestimonialMarkdown?: string | null;
+  fullTestimonialMarkdown: string;
   whoDunnit: string;
   updatedAt: string;
   createdAt: string;
@@ -229,7 +229,7 @@ export interface Announcement {
     };
     [k: string]: unknown;
   };
-  contentMarkdown?: string | null;
+  contentMarkdown: string;
   publishedAt: string;
   publishedBy: string | User;
   updatedAt: string;
@@ -1158,7 +1158,7 @@ export interface AboutUsPage {
           };
           [k: string]: unknown;
         };
-        contentMarkdown?: string | null;
+        contentMarkdown: string;
         buttons: {
           label: string;
           url: string;
@@ -1186,7 +1186,7 @@ export interface AboutUsPage {
           };
           [k: string]: unknown;
         };
-        contentMarkdown?: string | null;
+        contentMarkdown: string;
         id?: string | null;
         blockName?: string | null;
         blockType: 'simpleItem';
@@ -1207,7 +1207,7 @@ export interface AboutUsPage {
           };
           [k: string]: unknown;
         };
-        contentMarkdown?: string | null;
+        contentMarkdown: string;
         quotedPerson: string;
         id?: string | null;
         blockName?: string | null;
@@ -1238,7 +1238,7 @@ export interface PrivacyPage {
     };
     [k: string]: unknown;
   };
-  preambleMarkdown?: string | null;
+  preambleMarkdown: string;
   blocks: {
     title: string;
     content: {
@@ -1256,7 +1256,7 @@ export interface PrivacyPage {
       };
       [k: string]: unknown;
     };
-    contentMarkdown?: string | null;
+    contentMarkdown: string;
     id?: string | null;
     blockName?: string | null;
     blockType: 'privacyItem';
@@ -1287,7 +1287,7 @@ export interface DisclaimerPage {
       };
       [k: string]: unknown;
     };
-    contentMarkdown?: string | null;
+    contentMarkdown: string;
     id?: string | null;
     blockName?: string | null;
     blockType: 'disclaimerItem';
