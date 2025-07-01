@@ -15,9 +15,15 @@ interface RoleBadgeProps {
   teamRole: string;
   teamText: string;
   staffColor: StaffColor;
+  fontSize?: string;
 }
 
-const RoleBadge: FC<RoleBadgeProps> = ({ teamRole, teamText, staffColor }) => {
+const RoleBadge: FC<RoleBadgeProps> = ({
+  teamRole,
+  teamText,
+  staffColor,
+  fontSize = "0.75em",
+}) => {
   const [spanBg, cls1, cls2, cls3, cls4] = useToken("colors", [
     `${staffColor}.spanBg`,
     `${staffColor}.cls1`,
@@ -27,7 +33,7 @@ const RoleBadge: FC<RoleBadgeProps> = ({ teamRole, teamText, staffColor }) => {
   ]);
 
   return (
-    <Box display="flex" alignItems="center" fontSize="0.75em">
+    <Box display="flex" alignItems="center" fontSize={fontSize}>
       <Box asChild width="2.75em" height="2.75em" zIndex="2">
         <svg viewBox="0 0 88.44 89.99">
           <g data-name="Layer 1">
