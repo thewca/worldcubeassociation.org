@@ -1,5 +1,8 @@
 import { Block, GlobalConfig } from "payload";
 
+import type { IconName } from "@/components/icons/iconMap";
+import type { Route } from "nextjs-routes";
+
 const iconOptions = [
   "About the Regulations",
   "About the WCA",
@@ -82,7 +85,16 @@ const iconOptions = [
   "Weibo",
   "X (formerly Twitter)",
   "YouTube",
-];
+] satisfies IconName[];
+
+type StaticRoute = Exclude<Route, { query: unknown }>["pathname"];
+
+const staticLinkOptions = [
+  "/",
+  "/faq",
+  "/api/swagger",
+  "/competitions",
+] satisfies StaticRoute[];
 
 const LinkItem: Block = {
   slug: "LinkItem", // required
@@ -95,13 +107,16 @@ const LinkItem: Block = {
     },
     {
       name: "targetLink",
-      type: "text",
+      type: "select",
+      options: staticLinkOptions,
+      interfaceName: "StaticTargetLink",
       required: true,
     },
     {
       name: "displayIcon",
       type: "select",
       options: iconOptions,
+      interfaceName: "WcaIconName",
     },
   ],
 };
@@ -123,6 +138,7 @@ const NestedDropdown: Block = {
       name: "displayIcon",
       type: "select",
       options: iconOptions,
+      interfaceName: "WcaIconName",
     },
     {
       name: "entries",
@@ -146,6 +162,7 @@ const Dropdown: Block = {
       name: "displayIcon",
       type: "select",
       options: iconOptions,
+      interfaceName: "WcaIconName",
     },
     {
       name: "entries",
