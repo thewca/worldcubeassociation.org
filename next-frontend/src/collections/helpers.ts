@@ -14,6 +14,7 @@ export const markdownConvertedField = (
 ): Field => {
   return {
     name: convertedName,
+    required: true,
     type: "textarea",
     admin: {
       hidden: true,
@@ -37,13 +38,7 @@ export const markdownConvertedField = (
           });
         },
       ],
-      beforeChange: [
-        ({ siblingData }) => {
-          // Ensure that the markdown field is not saved in the database
-          delete siblingData[convertedName];
-          return null;
-        },
-      ],
     },
+    virtual: true,
   };
 };
