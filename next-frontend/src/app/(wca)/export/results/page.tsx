@@ -32,7 +32,7 @@ export default async function ResultExportPage() {
             <Card.Description>
               <VStack align={"left"}>
                 <Text>{t("database.results_export.file_formats.sql")}</Text>
-                <Link>
+                <Link href={exports.sql_url}>
                   {exports.sql_url} ({exports.export_date})
                 </Link>
               </VStack>
@@ -45,7 +45,7 @@ export default async function ResultExportPage() {
             <Card.Description>
               <VStack align={"left"}>
                 {t("database.results_export.file_formats.tsv")}
-                <Link>
+                <Link href={exports.tsv_url}>
                   {exports.tsv_url} ({exports.export_date})
                 </Link>
               </VStack>
@@ -57,8 +57,8 @@ export default async function ResultExportPage() {
             readme_filename: "README.md",
           })}
         </Text>
-        <Code display={"block"} whiteSpace="pre" fontSize={"sm"}>
-          <Link>{exports.readme}</Link>
+        <Code display="block" whiteSpace="pre" fontSize="sm">
+          {exports.readme}
         </Code>
       </VStack>
     </Container>
