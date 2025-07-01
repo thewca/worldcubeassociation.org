@@ -27,6 +27,12 @@ export const Privacy: GlobalConfig = {
   label: "Privacy Page",
   fields: [
     {
+      name: "preamble",
+      type: "richText",
+      required: true,
+    },
+    markdownConvertedField("preamble"),
+    {
       name: "blocks",
       type: "blocks",
       required: true,
