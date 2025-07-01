@@ -7,6 +7,8 @@ import {
   Code,
   Link,
   Button,
+  HStack,
+  Badge,
 } from "@chakra-ui/react";
 import { getT } from "@/lib/i18n/get18n";
 import { getExportDetails } from "@/lib/wca/exports/getExportDetails";
@@ -66,12 +68,16 @@ const ExportCard = async ({
       <Card.Body>
         <Card.Title>{type.toUpperCase()}</Card.Title>
         <Card.Description>
-          <Text>{t("database.results_export.file_formats.sql")}</Text>
+          {t(`database.results_export.file_formats.${type}`)}
         </Card.Description>
+        <HStack mt="2">
+          <Badge>{export_date}</Badge>
+          <Badge>Filesize</Badge>
+        </HStack>
       </Card.Body>
       <Card.Footer>
         <Button asChild>
-          <Link href={url}>{export_date}</Link>
+          <Link href={url}>{t("database.developer_export.download")}</Link>
         </Button>
       </Card.Footer>
     </Card.Root>

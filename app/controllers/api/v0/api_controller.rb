@@ -212,7 +212,7 @@ class Api::V0::ApiController < ApplicationController
   end
 
   def export_public
-    timestamp = DumpPublicResultsDatabase.start_date
+    timestamp = DumpPublicResultsDatabase.successful_start_date
 
     render json: {
       export_date: timestamp&.iso8601,
