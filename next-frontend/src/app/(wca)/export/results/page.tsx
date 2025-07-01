@@ -1,5 +1,3 @@
-"use client";
-
 import {
   VStack,
   Container,
@@ -9,26 +7,19 @@ import {
   Code,
   Link,
 } from "@chakra-ui/react";
-import { useT } from "@/lib/i18n/useI18n";
-import { useMemo } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { getT } from "@/lib/i18n/get18n";
+import { getExportDetails } from "@/lib/wca/exports/getExportDetails";
 import Errored from "@/components/ui/errored";
 import Loading from "@/components/ui/loading";
-import useAPI from "@/lib/wca/useAPI";
 
-export default function ResultExportPage() {
-  const { t } = useT();
-  const api = useAPI();
-  const { data: exportRequest, isLoading } = useQuery({
-    queryKey: ["exports"],
-    queryFn: () => api.GET("/export/public"),
-  });
+export default async function ResultExportPage() {
+  const { t } = await getT();
 
-  const exports = useMemo(() => exportRequest?.data, [exportRequest]);
+  const { data: exportRequest, error } = await getExportDetails();
 
-  if (isLoading) return <Loading />;
+  if (error) return <Errored error={error} />;
 
-  if (!exports) return <Errored error={"Error Loading Exports"} />;
+  if (!exportRequest) return <Loading />;
 
   return (
     <Container>

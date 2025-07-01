@@ -8,12 +8,12 @@ function I18nHTMLTranslate({
   i18nKey: string;
   options?: Record<string, string>;
 }) {
-  const I18n = useT();
+  const { t } = useT();
 
   return (
     <span
       dangerouslySetInnerHTML={{
-        __html: DOMPurify.sanitize(I18n.t(i18nKey, options)),
+        __html: DOMPurify.sanitize(t(i18nKey, options)),
       }}
     />
   );
