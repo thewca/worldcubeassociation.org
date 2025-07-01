@@ -12440,7 +12440,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"mongoose@npm:^8.15.1":
+"mongoose@npm:8.15.1":
   version: 8.15.1
   resolution: "mongoose@npm:8.15.1"
   dependencies:
