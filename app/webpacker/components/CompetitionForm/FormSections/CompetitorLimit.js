@@ -9,7 +9,7 @@ export default function CompetitorLimit() {
   const {
     competitorLimit: {
       enabled: hasLimit,
-      autoAcceptEnabled,
+      autoAcceptPreference,
     },
   } = useFormObject();
 
@@ -24,8 +24,8 @@ export default function CompetitorLimit() {
           <InputNumber id="newcomerMonthReservedSpots" min={1} nullable />
         </ConditionalSection>
       </ConditionalSection>
-      <InputBooleanSelect id="autoAcceptEnabled" required />
-      <ConditionalSection showIf={autoAcceptEnabled}>
+      <InputBooleanSelect id="autoAcceptPreference" required />
+      <ConditionalSection showIf={autoAcceptPreference !== 0}>
         <InputNumber id="autoAcceptDisableThreshold" nullable />
       </ConditionalSection>
     </SubSection>

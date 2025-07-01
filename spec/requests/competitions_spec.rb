@@ -3,11 +3,48 @@
 require "rails_helper"
 
 RSpec.describe "competitions" do
-  let!(:competition) { create(:competition, :with_delegate, :future, :visible, :with_valid_schedule) }
+  describe 'POST #create_competition' do
+    let!(:competition) { build(:competition, :with_delegate, :future, auto_accept_preference: :live, main_event_id: nil) }
+
+    context 'when signed in as admin' do
+      before { sign_in create :admin }
+
+      it 'can set auto_accept_preference to live' do
+        post competitions_path, params: competition.to_form_data, as: :json
+
+        expect(response).to be_successful
+        comp = Competition.find_by(name: competition.name)
+        expect(comp.auto_accept_preference_live?).to be(true)
+      end
+    end
+
+    context 'when signed in as delegate' do
+      before { sign_in competition.delegates.first }
+
+      it 'cannot set auto_accept_preference to live' do
+        post competitions_path, params: competition.to_form_data, as: :json
+
+        expect(response).not_to be_successful
+        expect(response.parsed_body).to eq({ 'error' => 'Live auto accept can only be enabled by admins - contact WCAT if you would like to use it'})
+      end
+    end
+  end
 
   describe "PATCH #update_competition" do
+    let!(:competition) { create(:competition, :with_delegate, :future, :visible, :with_valid_schedule) }
+
     context "when signed in as admin" do
       before { sign_in create :admin }
+
+      it 'can set auto_accept_preference to live' do
+        competitor_limit_params = competition.to_form_data['competitorLimit']
+        competitor_limit_params['autoAcceptPreference'] = 'live'
+        update_params = build_competition_update(competition, competitorLimit: competitor_limit_params)
+        patch competition_path(competition), params: update_params, as: :json
+
+        expect(response).to be_successful
+        expect(competition.reload.auto_accept_preference_live?).to be(true)
+      end
 
       it 'can confirm competition' do
         put competition_confirm_path(competition)
@@ -225,6 +262,16 @@ RSpec.describe "competitions" do
       before :each do
         sign_in competition.delegates.first
         competition.update!(start_date: 5.weeks.from_now, end_date: 5.weeks.from_now)
+      end
+
+      it 'cannot set auto_accept_preference to live' do
+        competitor_limit_params = competition.to_form_data['competitorLimit']
+        competitor_limit_params['autoAcceptPreference'] = 'live'
+        update_params = build_competition_update(competition, competitorLimit: competitor_limit_params)
+        patch competition_path(competition), params: update_params, as: :json
+
+        expect(response).not_to be_successful
+        expect(competition.reload.auto_accept_preference_live?).to be(false)
       end
 
       context 'when handling unconfirmed competitions' do
