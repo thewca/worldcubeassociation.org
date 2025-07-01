@@ -290,8 +290,10 @@ export interface components {
             export_date: string;
             /** Format: uri */
             sql_url: string;
+            sql_filesize_bytes: number;
             /** Format: uri */
             tsv_url: string;
+            tsv_filesize_bytes: number;
             readme: string;
             /** Format: uri */
             developer_url?: string;
