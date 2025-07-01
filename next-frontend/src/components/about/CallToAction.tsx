@@ -1,6 +1,6 @@
 "use client";
 
-import { Box, Button, Stack, VStack } from "@chakra-ui/react";
+import { Box, Button, ButtonGroup, Container, Stack } from "@chakra-ui/react";
 import React from "react";
 import { MarkdownProse } from "@/components/Markdown";
 import Link from "next/link";
@@ -18,29 +18,24 @@ export function CallToActionBlock({
   buttons,
 }: CallToActionBlockProps) {
   return (
-    <Box borderRadius="2xl" p={{ base: 6, md: 10 }} shadow="md" width="full">
-      <VStack align="start">
+    <Container borderRadius="2xl" p={{ base: 6, md: 10 }} shadow="md" fluid>
+      <Stack direction="column">
         <Box color="gray.700" fontSize="lg">
           <MarkdownProse content={content} />
         </Box>
 
         <Stack direction={{ base: "column", sm: "row" }}>
-          {buttons.map((button, i) => (
-            <Button
-              key={i}
-              as="a"
-              colorScheme="blue"
-              variant={i === 0 ? "solid" : "outline"}
-              size="lg"
-              asChild
-            >
-              <Link href={button.url} target={"_blank"} rel={"noopener"}>
-                {button.label}
-              </Link>
-            </Button>
-          ))}
+          <ButtonGroup colorScheme="blue" size="lg">
+            {buttons.map((button, i) => (
+              <Button key={i} variant={i === 0 ? "solid" : "outline"} asChild>
+                <Link href={button.url} target={"_blank"} rel={"noopener"}>
+                  {button.label}
+                </Link>
+              </Button>
+            ))}
+          </ButtonGroup>
         </Stack>
-      </VStack>
-    </Box>
+      </Stack>
+    </Container>
   );
 }

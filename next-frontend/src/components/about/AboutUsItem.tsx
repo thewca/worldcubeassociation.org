@@ -1,6 +1,7 @@
-import { Box, Heading, VStack, Image, HStack } from "@chakra-ui/react";
+import { Box, Heading, Image as ChakraImage, Stack } from "@chakra-ui/react";
 import { MarkdownProse } from "@/components/Markdown";
-import { Media } from "@/types/payload";
+import type { Media } from "@/types/payload";
+import Image from "next/image";
 
 type SimpleItemBlockProps = {
   title: string;
@@ -14,28 +15,23 @@ export default function AboutUsItem({
   image,
 }: SimpleItemBlockProps) {
   return (
-    <HStack
+    <Stack
       direction={{ base: "column", md: "row" }}
       gap={8}
-      align="start"
-      width="full"
       justify="space-between"
     >
-      <VStack align="start">
+      <Stack direction="column">
         <Heading size="lg">{title}</Heading>
         <MarkdownProse content={contentMarkdown} />
-      </VStack>
+      </Stack>
 
       {image?.url && (
-        <Box flexShrink={0} maxW="500px" w="full">
-          <Image
-            src={image.url}
-            alt={image.alt || title}
-            borderRadius={"1rem"}
-            objectFit="cover"
-          />
+        <Box position="relative" maxW="500px" w="full">
+          <ChakraImage asChild borderRadius={"1rem"}>
+            <Image src={image.url} alt={image.alt || title} fill />
+          </ChakraImage>
         </Box>
       )}
-    </HStack>
+    </Stack>
   );
 }
