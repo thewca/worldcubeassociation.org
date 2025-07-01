@@ -18,7 +18,13 @@ export function CallToActionBlock({
   buttons,
 }: CallToActionBlockProps) {
   return (
-    <Container borderRadius="2xl" p={{ base: 6, md: 10 }} shadow="md" fluid>
+    <Container
+      borderRadius="2xl"
+      p={{ base: 6, md: 10 }}
+      shadow="md"
+      bg="bg"
+      fluid
+    >
       <Stack direction="column">
         <Box color="gray.700" fontSize="lg">
           <MarkdownProse content={content} />
