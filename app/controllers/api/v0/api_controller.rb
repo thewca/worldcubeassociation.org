@@ -212,12 +212,19 @@ class Api::V0::ApiController < ApplicationController
   end
 
   def export_public
-    timestamp = DumpPublicResultsDatabase.start_date
+    timestamp = DumpPublicResultsDatabase.successful_start_date
+
+    _, sql_filesize = DbDumpHelper.cached_results_export_info("sql", timestamp)
+    _, tsv_filesize = DbDumpHelper.cached_results_export_info("tsv", timestamp)
 
     render json: {
       export_date: timestamp&.iso8601,
       sql_url: "#{sql_permalink_url}.zip",
+      sql_filesize_bytes: sql_filesize,
       tsv_url: "#{tsv_permalink_url}.zip",
+      tsv_filesize_bytes: tsv_filesize,
+      developer_url: DbDumpHelper.public_s3_path(DbDumpHelper::DEVELOPER_EXPORT_SQL_PERMALINK),
+      readme: DatabaseController.render_readme(self, DateTime.now),
     }
   end
 
