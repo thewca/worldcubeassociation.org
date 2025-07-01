@@ -18,7 +18,7 @@ import MyResultsIcon from "@/components/icons/MyResultsIcon";
 import RegulationsHistoryIcon from "@/components/icons/RegulationsHistoryIcon";
 import NationalChampionshipIcon from "@/components/icons/NationalChampionshipIcon";
 import { LuStar, LuCircleHelp } from "react-icons/lu";
-import { countries } from "@/lib/staticData/wca-data";
+import countries from "@/lib/wca/data/countries";
 import Flag from "react-world-flags";
 
 interface ProfileData {
