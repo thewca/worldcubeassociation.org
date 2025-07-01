@@ -19,6 +19,7 @@ import { Nav } from "@/globals/Nav";
 import { Home } from "@/globals/Home";
 import { Privacy } from "@/collections/Privacy";
 import { Disclaimer } from "@/collections/Disclaimer";
+import { AboutUsPage } from "@/globals/About";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -93,7 +94,7 @@ export default buildConfig({
     FaqQuestions,
     Users,
   ],
-  globals: [Nav, Home, Privacy, Disclaimer],
+  globals: [Nav, Home, AboutUsPage, Privacy, Disclaimer],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || "",
   typescript: {
