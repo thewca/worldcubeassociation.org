@@ -523,8 +523,6 @@ class CompetitionsController < ApplicationController
     competition_admin_view = ActiveRecord::Type::Boolean.new.cast(admin_view_param) && current_user.can_admin_competitions?
     competition_organizer_view = !competition_admin_view
 
-
-
     old_organizers = competition.organizers.to_a
 
     form_data = params_for_competition_form

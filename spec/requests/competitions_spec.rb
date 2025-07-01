@@ -25,7 +25,7 @@ RSpec.describe "competitions" do
         post competitions_path, params: competition.to_form_data, as: :json
 
         expect(response).not_to be_successful
-        expect(response.parsed_body).to eq({ 'error' => 'Live auto accept can only be enabled by admins - contact WCAT if you would like to use it'})
+        expect(response.parsed_body).to eq({ 'error' => 'Live auto accept can only be enabled by admins - contact WCAT if you would like to use it' })
       end
     end
   end

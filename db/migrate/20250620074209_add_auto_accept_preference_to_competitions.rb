@@ -6,7 +6,7 @@ class AddAutoAcceptPreferenceToCompetitions < ActiveRecord::Migration[7.2]
 
     reversible do |direction|
       direction.up do
-        execute <<~SQL
+        execute <<~SQL.squish
           UPDATE competitions
           SET auto_accept_preference = CASE
             WHEN auto_accept_registrations = TRUE THEN 1
