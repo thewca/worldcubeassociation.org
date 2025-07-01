@@ -6,6 +6,7 @@ import {
   Card,
   Code,
   Link,
+  Button,
 } from "@chakra-ui/react";
 import { getT } from "@/lib/i18n/get18n";
 import { getExportDetails } from "@/lib/wca/exports/getExportDetails";
@@ -15,43 +16,27 @@ import Loading from "@/components/ui/loading";
 export default async function ResultExportPage() {
   const { t } = await getT();
 
-  const { data: exportRequest, error } = await getExportDetails();
+  const { data: exports, error } = await getExportDetails();
 
   if (error) return <Errored error={error} />;
 
-  if (!exportRequest) return <Loading />;
+  if (!exports) return <Loading />;
 
   return (
     <Container>
-      <VStack align={"left"} gap={"16px"}>
-        <Heading size={"5xl"}>{t("database.results_export.heading")}</Heading>
+      <VStack align="left" gap="16px">
+        <Heading size="5xl">{t("database.results_export.heading")}</Heading>
         <Text>{t("database.results_export.description")}</Text>
-        <Card.Root>
-          <Card.Body>
-            <Card.Title>SQL</Card.Title>
-            <Card.Description>
-              <VStack align={"left"}>
-                <Text>{t("database.results_export.file_formats.sql")}</Text>
-                <Link href={exports.sql_url}>
-                  {exports.sql_url} ({exports.export_date})
-                </Link>
-              </VStack>
-            </Card.Description>
-          </Card.Body>
-        </Card.Root>
-        <Card.Root>
-          <Card.Body>
-            <Card.Title>TSV</Card.Title>
-            <Card.Description>
-              <VStack align={"left"}>
-                {t("database.results_export.file_formats.tsv")}
-                <Link href={exports.tsv_url}>
-                  {exports.tsv_url} ({exports.export_date})
-                </Link>
-              </VStack>
-            </Card.Description>
-          </Card.Body>
-        </Card.Root>
+        <ExportCard
+          type="sql"
+          url={exports.sql_url}
+          export_date={exports.export_date}
+        />
+        <ExportCard
+          type="tsv"
+          url={exports.tsv_url}
+          export_date={exports.export_date}
+        />
         <Text>
           {t("database.results_export.hint_readme_html", {
             readme_filename: "README.md",
@@ -64,3 +49,31 @@ export default async function ResultExportPage() {
     </Container>
   );
 }
+
+const ExportCard = async ({
+  type,
+  url,
+  export_date,
+}: {
+  type: "sql" | "tsv";
+  url: string;
+  export_date: string;
+}) => {
+  const { t } = await getT();
+
+  return (
+    <Card.Root>
+      <Card.Body>
+        <Card.Title>{type.toUpperCase()}</Card.Title>
+        <Card.Description>
+          <Text>{t("database.results_export.file_formats.sql")}</Text>
+        </Card.Description>
+      </Card.Body>
+      <Card.Footer>
+        <Button asChild>
+          <Link href={url}>{export_date}</Link>
+        </Button>
+      </Card.Footer>
+    </Card.Root>
+  );
+};
