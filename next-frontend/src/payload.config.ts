@@ -17,8 +17,8 @@ import {
 import { Users } from "@/collections/Users";
 import { Nav } from "@/globals/Nav";
 import { Home } from "@/globals/Home";
-import { Privacy } from "@/collections/Privacy";
-import { Disclaimer } from "@/collections/Disclaimer";
+import { Privacy } from "@/globals/Privacy";
+import { Disclaimer } from "@/globals/Disclaimer";
 import { AboutUsPage } from "@/globals/About";
 
 const filename = fileURLToPath(import.meta.url);
