@@ -122,11 +122,15 @@ export interface Config {
     nav: Nav;
     home: Home;
     'about-us-page': AboutUsPage;
+    'privacy-page': PrivacyPage;
+    'disclaimer-page': DisclaimerPage;
   };
   globalsSelect: {
     nav: NavSelect<false> | NavSelect<true>;
     home: HomeSelect<false> | HomeSelect<true>;
     'about-us-page': AboutUsPageSelect<false> | AboutUsPageSelect<true>;
+    'privacy-page': PrivacyPageSelect<false> | PrivacyPageSelect<true>;
+    'disclaimer-page': DisclaimerPageSelect<false> | DisclaimerPageSelect<true>;
   };
   locale: null;
   user: User & {
@@ -1215,6 +1219,84 @@ export interface AboutUsPage {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "privacy-page".
+ */
+export interface PrivacyPage {
+  id: number;
+  preamble: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  preambleMarkdown?: string | null;
+  blocks: {
+    title: string;
+    content: {
+      root: {
+        type: string;
+        children: {
+          type: string;
+          version: number;
+          [k: string]: unknown;
+        }[];
+        direction: ('ltr' | 'rtl') | null;
+        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+        indent: number;
+        version: number;
+      };
+      [k: string]: unknown;
+    };
+    contentMarkdown?: string | null;
+    id?: string | null;
+    blockName?: string | null;
+    blockType: 'privacyItem';
+  }[];
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "disclaimer-page".
+ */
+export interface DisclaimerPage {
+  id: number;
+  blocks: {
+    title?: string | null;
+    content: {
+      root: {
+        type: string;
+        children: {
+          type: string;
+          version: number;
+          [k: string]: unknown;
+        }[];
+        direction: ('ltr' | 'rtl') | null;
+        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+        indent: number;
+        version: number;
+      };
+      [k: string]: unknown;
+    };
+    contentMarkdown?: string | null;
+    id?: string | null;
+    blockName?: string | null;
+    blockType: 'disclaimerItem';
+  }[];
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "nav_select".
  */
 export interface NavSelect<T extends boolean = true> {
@@ -1508,6 +1590,52 @@ export interface AboutUsPageSelect<T extends boolean = true> {
               content?: T;
               contentMarkdown?: T;
               quotedPerson?: T;
+              id?: T;
+              blockName?: T;
+            };
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "privacy-page_select".
+ */
+export interface PrivacyPageSelect<T extends boolean = true> {
+  preamble?: T;
+  preambleMarkdown?: T;
+  blocks?:
+    | T
+    | {
+        privacyItem?:
+          | T
+          | {
+              title?: T;
+              content?: T;
+              contentMarkdown?: T;
+              id?: T;
+              blockName?: T;
+            };
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "disclaimer-page_select".
+ */
+export interface DisclaimerPageSelect<T extends boolean = true> {
+  blocks?:
+    | T
+    | {
+        disclaimerItem?:
+          | T
+          | {
+              title?: T;
+              content?: T;
+              contentMarkdown?: T;
               id?: T;
               blockName?: T;
             };
