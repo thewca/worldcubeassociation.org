@@ -486,16 +486,6 @@ class CompetitionsController < ApplicationController
     head :ok
   end
 
-  before_action :check_live_auto_accept_permissions, only: %i[create update]
-  private def check_live_auto_accept_permissions
-    currently_enabled = params['action'] == 'create' ? false : competition_from_params.auto_accept_preference_live?
-    new_preference = params_for_competition_form.dig('competitorLimit', 'autoAcceptPreference')
-    trying_to_enable_live = !currently_enabled && new_preference == 'live'
-
-    render status: :unauthorized, json: { error: 'Live auto accept can only be enabled by admins - contact WCAT if you would like to use it' } if
-        trying_to_enable_live && !current_user.can_admin_competitions?
-  end
-
   before_action -> { require_user_permission(:can_create_competitions?) }, only: [:create]
   def create
     competition = Competition.new

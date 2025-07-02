@@ -1,9 +1,12 @@
 import React from 'react';
-import { InputBooleanSelect, InputNumber, InputSelect, InputTextArea } from '../../wca/FormBuilder/input/FormInputs';
+import {
+  InputBooleanSelect, InputNumber, InputSelect, InputTextArea,
+} from '../../wca/FormBuilder/input/FormInputs';
 import ConditionalSection from './ConditionalSection';
 import SubSection from '../../wca/FormBuilder/SubSection';
-import { newcomerMonthEnabled } from '../../../lib/wca-data.js.erb';
+import { autoAcceptPreferences, newcomerMonthEnabled } from '../../../lib/wca-data.js.erb';
 import { useFormObject } from '../../wca/FormBuilder/provider/FormObjectProvider';
+import { useStore } from '../../../lib/providers/StoreProvider';
 
 export default function CompetitorLimit() {
   const {
@@ -13,7 +16,19 @@ export default function CompetitorLimit() {
     },
   } = useFormObject();
 
-  const autoAcceptOptions = ['disabled', 'bulk', 'live'].map((status) => ({
+
+  const { isAdminView } = useStore();
+
+  console.log("preferences")
+  console.log(autoAcceptPreferences)
+  console.log(autoAcceptPreferences.bulk)
+
+  const preferenceKeys = Object.keys(autoAcceptPreferences)
+  const availableAutoAcceptPreferences = isAdminView
+    ? preferenceKeys
+    : [preferenceKeys[0], preferenceKeys[1]]
+
+  const autoAcceptOptions = availableAutoAcceptPreferences.map((status) => ({
     key: status,
     value: status,
     text: I18n.t(`competitions.competition_form.choices.competitor_limit.auto_accept_preference.${status}`),

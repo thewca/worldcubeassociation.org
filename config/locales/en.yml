@@ -1802,7 +1802,7 @@ en:
           auto_accept_preference:
             "disabled": "Disable 'Bulk Auto Accept' button"
             "bulk": "Enable 'Bulk Auto Accept' button in Registrations menu"
-            "live": "Admin only"
+            "live": "Automatically accept registrations when payment is made"
         registration:
           allow_on_the_spot:
             "true": "On the spot registrations will be accepted"
