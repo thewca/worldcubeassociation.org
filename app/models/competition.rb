@@ -2968,8 +2968,8 @@ class Competition < ApplicationRecord
           "properties" => {
             "autoAcceptPreference" => { "type" => "string", "enum" => Competition.auto_accept_preferences.keys },
             "autoAcceptDisableThreshold" => { "type" => %w[integer null] },
-          }
-        }
+          },
+        },
       },
     }
   end

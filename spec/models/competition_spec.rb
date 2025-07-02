@@ -1595,6 +1595,7 @@ RSpec.describe Competition do
 
     context 'preference: bulk' do
       let(:auto_accept_comp) { build(:competition, :bulk_auto_accept) }
+
       context 'cant enable auto-accept when' do
         it 'not using WCA registration' do
           auto_accept_comp.use_wca_registration = false
@@ -1713,8 +1714,8 @@ RSpec.describe Competition do
 
   describe 'auto accept preferences' do
     let(:competition) { create(:competition, :registration_open) }
-    let(:pending_reg) { create(:registration, :pending, competition: competition)}
-    let(:waitlisted_reg) { create(:registration, :waiting_list, competition: competition)}
+    let(:pending_reg) { create(:registration, :pending, competition: competition) }
+    let(:waitlisted_reg) { create(:registration, :waiting_list, competition: competition) }
 
     context 'preference: disabled' do
       before { competition.auto_accept_preference = :disabled }
