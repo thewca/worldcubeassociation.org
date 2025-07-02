@@ -31,8 +31,8 @@ export default function CompetitorLimit() {
         </ConditionalSection>
       </ConditionalSection>
       <InputSelect id="autoAcceptPreference" options={autoAcceptOptions} required ignoreDisabled />
-      <ConditionalSection showIf={autoAcceptPreference !== 0}>
-        <InputNumber id="autoAcceptDisableThreshold" nullable />
+      <ConditionalSection showIf={autoAcceptPreference !== 'disabled'}>
+        <InputNumber id="autoAcceptDisableThreshold" nullable ignoreDisabled />
       </ConditionalSection>
     </SubSection>
   );

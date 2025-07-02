@@ -423,7 +423,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
 
   return (
     <Segment loading={isMutating || isAutoAccepting}>
-      {competitionInfo.auto_accept_preference && (
+      {competitionInfo.auto_accept_preference === 'bulk' && (
         <>
           <Button
             disabled={isAutoAccepting}

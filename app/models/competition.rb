@@ -2963,6 +2963,13 @@ class Competition < ApplicationRecord
             "mainEventId" => { "type" => %w[string null] },
           },
         },
+        "competitorLimit" => {
+          "type" => "object",
+          "properties" => {
+            "autoAcceptPreference" => { "type" => "string", "enum" => Competition.auto_accept_preferences.keys },
+            "autoAcceptDisableThreshold" => { "type" => %w[integer null] },
+          }
+        }
       },
     }
   end
