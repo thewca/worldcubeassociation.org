@@ -10,6 +10,7 @@ import RegistrationAdministrationSearch from './RegistrationAdministrationSearch
 import RegistrationActions from './RegistrationActions';
 import { showMessage, showMessages } from '../Register/RegistrationMessage';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
+import { autoAcceptPreferences } from '../../../lib/wca-data.js.erb';
 import I18n from '../../../lib/i18n';
 import Loading from '../../Requests/Loading';
 import { bulkUpdateRegistrations } from '../api/registration/patch/update_registration';
@@ -423,7 +424,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
 
   return (
     <Segment loading={isMutating || isAutoAccepting}>
-      {competitionInfo.auto_accept_preference === 'bulk' && (
+      {competitionInfo.auto_accept_preference === autoAcceptPreferences.bulk && (
         <>
           <Button
             disabled={isAutoAccepting}

@@ -182,7 +182,7 @@ export const competitionMaxShortNameLength = <%= Competition::MAX_CELL_NAME_LENG
 
 export const newcomerMonthEnabled = <%= Competition::NEWCOMER_MONTH_ENABLED.to_json.html_safe %>
 
-export const autoAcceptPreferences = <%= Competition.auto_accept_preferences.to_json.html_safe %>
+export const autoAcceptPreferences = <%= Competition.auto_accept_preferences.keys.index_with(&:itself).to_json.html_safe %>
 
 // ----- CHAMPIONSHIPS -----
 

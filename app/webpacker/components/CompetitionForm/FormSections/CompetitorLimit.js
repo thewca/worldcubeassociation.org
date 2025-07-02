@@ -5,6 +5,7 @@ import {
 import ConditionalSection from './ConditionalSection';
 import SubSection from '../../wca/FormBuilder/SubSection';
 import { autoAcceptPreferences, newcomerMonthEnabled } from '../../../lib/wca-data.js.erb';
+import I18n from '../../../lib/i18n';
 import { useFormObject } from '../../wca/FormBuilder/provider/FormObjectProvider';
 import { useStore } from '../../../lib/providers/StoreProvider';
 
@@ -19,14 +20,9 @@ export default function CompetitorLimit() {
 
   const { isAdminView } = useStore();
 
-  console.log("preferences")
-  console.log(autoAcceptPreferences)
-  console.log(autoAcceptPreferences.bulk)
-
-  const preferenceKeys = Object.keys(autoAcceptPreferences)
   const availableAutoAcceptPreferences = isAdminView
-    ? preferenceKeys
-    : [preferenceKeys[0], preferenceKeys[1]]
+    ? Object.keys(autoAcceptPreferences)
+    : [autoAcceptPreferences.disabled, autoAcceptPreferences.bulk]
 
   const autoAcceptOptions = availableAutoAcceptPreferences.map((status) => ({
     key: status,
