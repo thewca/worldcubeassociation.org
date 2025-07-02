@@ -17,12 +17,11 @@ export default function CompetitorLimit() {
     },
   } = useFormObject();
 
-
   const { isAdminView } = useStore();
 
   const availableAutoAcceptPreferences = isAdminView
     ? Object.keys(autoAcceptPreferences)
-    : [autoAcceptPreferences.disabled, autoAcceptPreferences.bulk]
+    : [autoAcceptPreferences.disabled, autoAcceptPreferences.bulk];
 
   const autoAcceptOptions = availableAutoAcceptPreferences.map((status) => ({
     key: status,
