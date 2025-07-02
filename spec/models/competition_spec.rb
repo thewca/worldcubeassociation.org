@@ -1711,6 +1711,82 @@ RSpec.describe Competition do
     end
   end
 
+  describe 'auto accept preferences' do
+    let(:competition) { create(:competition, :registration_open) }
+    let(:pending_reg) { create(:registration, :pending, competition: competition)}
+    let(:waitlisted_reg) { create(:registration, :waiting_list, competition: competition)}
+
+    context 'preference: disabled' do
+      before { competition.auto_accept_preference = :disabled }
+
+      it 'wont bulk auto accept' do
+        create(:registration_payment, registration: pending_reg, competition: competition)
+        expect(pending_reg.competing_status).to eq('pending')
+        create(:registration_payment, registration: waitlisted_reg, competition: competition)
+        expect(waitlisted_reg.competing_status).to eq('waiting_list')
+
+        Registration.bulk_auto_accept(competition)
+        expect(pending_reg.reload.competing_status).to eq('pending')
+        expect(pending_reg.registration_history.last[:changed_attributes][:auto_accept_failure_reasons]).to eq("-7002")
+        expect(waitlisted_reg.reload.competing_status).to eq('waiting_list')
+        expect(waitlisted_reg.registration_history.last[:changed_attributes][:auto_accept_failure_reasons]).to eq("-7002")
+      end
+
+      it 'wont live auto accept' do
+        create(:registration_payment, registration: pending_reg, competition: competition)
+        expect(pending_reg.reload.competing_status).to eq('pending')
+        create(:registration_payment, registration: waitlisted_reg, competition: competition)
+        expect(waitlisted_reg.reload.competing_status).to eq('waiting_list')
+      end
+    end
+
+    context 'preference: bulk' do
+      before { competition.auto_accept_preference = :bulk }
+
+      it 'will bulk auto accept' do
+        create(:registration_payment, registration: pending_reg, competition: competition)
+        expect(pending_reg.competing_status).to eq('pending')
+        create(:registration_payment, registration: waitlisted_reg, competition: competition)
+        expect(waitlisted_reg.competing_status).to eq('waiting_list')
+
+        Registration.bulk_auto_accept(competition)
+        expect(pending_reg.reload.competing_status).to eq('accepted')
+        expect(waitlisted_reg.reload.competing_status).to eq('accepted')
+      end
+
+      it 'wont live auto accept' do
+        create(:registration_payment, registration: pending_reg, competition: competition)
+        expect(pending_reg.reload.competing_status).to eq('pending')
+        create(:registration_payment, registration: waitlisted_reg, competition: competition)
+        expect(waitlisted_reg.reload.competing_status).to eq('waiting_list')
+      end
+    end
+
+    context 'preference: live' do
+      before { competition.auto_accept_preference = :live }
+
+      it 'wont bulk auto accept' do
+        create(:registration_payment, :skip_create_hook, registration: pending_reg, competition: competition)
+        expect(pending_reg.competing_status).to eq('pending')
+        create(:registration_payment, :skip_create_hook, registration: waitlisted_reg, competition: competition)
+        expect(waitlisted_reg.competing_status).to eq('waiting_list')
+
+        Registration.bulk_auto_accept(competition)
+        expect(pending_reg.reload.competing_status).to eq('pending')
+        expect(pending_reg.registration_history.last[:changed_attributes][:auto_accept_failure_reasons]).to eq("-7002")
+        expect(waitlisted_reg.reload.competing_status).to eq('waiting_list')
+        expect(waitlisted_reg.registration_history.last[:changed_attributes][:auto_accept_failure_reasons]).to eq("-7002")
+      end
+
+      it 'will live auto accept' do
+        create(:registration_payment, registration: pending_reg, competition: competition)
+        expect(pending_reg.reload.competing_status).to eq('accepted')
+        create(:registration_payment, registration: waitlisted_reg, competition: competition)
+        expect(waitlisted_reg.reload.competing_status).to eq('accepted')
+      end
+    end
+  end
+
   context 'auto-close registrations' do
     let!(:auto_close_comp) { create(:competition, :registration_open, auto_close_threshold: 5) }
     let(:comp) { create(:competition, :registration_open, :with_competitor_limit, competitor_limit: 3) }

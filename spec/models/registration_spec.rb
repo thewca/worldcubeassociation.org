@@ -602,7 +602,7 @@ RSpec.describe Registration do
   end
 
   describe '#auto_accept' do
-    let(:auto_accept_comp) { create(:competition, :auto_accept, :registration_open) }
+    let(:auto_accept_comp) { create(:competition, :live_auto_accept, :registration_open) }
     let!(:reg) { create(:registration, competition: auto_accept_comp) }
 
     describe 'return values' do
@@ -634,14 +634,6 @@ RSpec.describe Registration do
           expect(response[:info]).to eq(-7001)
         end
       end
-    end
-
-    it 'live auto accept is not triggered upon payment' do
-      expect(reg.competing_status).to eq('pending')
-
-      create(:registration_payment, registration: reg, competition: auto_accept_comp)
-
-      expect(reg.reload.competing_status).to eq('pending')
     end
 
     it 'works for a paid pending registration' do
@@ -677,11 +669,12 @@ RSpec.describe Registration do
     it 'accepts the last competitor on the auto-accept disable threshold' do
       auto_accept_comp.auto_accept_disable_threshold = 5
       create(:registration_payment, :skip_create_hook, registration: reg, competition: auto_accept_comp)
+      expect(reg.competing_status).to eq('pending')
+
       create_list(:registration, 4, :accepted, competition: auto_accept_comp)
 
       # Add some non-accepted registrations to make sure we're checking accepted registrations only
       create_list(:registration, 5, competition: auto_accept_comp)
-      expect(reg.competing_status).to eq('pending')
 
       create(:registration_payment, :skip_create_hook, registration: reg, competition: auto_accept_comp)
 
@@ -751,7 +744,7 @@ RSpec.describe Registration do
       end
 
       it 'before registration has opened' do
-        unopened_comp = create(:competition, :auto_accept, :registration_not_opened)
+        unopened_comp = create(:competition, :live_auto_accept, :registration_not_opened)
         unopened_reg = create(:registration, competition: unopened_comp)
 
         expect(unopened_reg.competing_status).to eq('pending')
@@ -764,7 +757,7 @@ RSpec.describe Registration do
       end
 
       it 'after registration has closed' do
-        closed_comp = create(:competition, :auto_accept)
+        closed_comp = create(:competition, :live_auto_accept)
         closed_reg = create(:registration, competition: closed_comp)
 
         expect(closed_reg.competing_status).to eq('pending')
@@ -817,7 +810,7 @@ RSpec.describe Registration do
     context 'log when auto accept is prevented by validations' do
       let(:limited_comp) do
         create(
-          :competition, :registration_open, :with_competitor_limit, :auto_accept, competitor_limit: 5, auto_accept_disable_threshold: nil
+          :competition, :registration_open, :with_competitor_limit, :live_auto_accept, competitor_limit: 5, auto_accept_disable_threshold: nil
         )
       end
       let!(:prevented_reg) { create(:registration, competition: limited_comp) }
@@ -841,7 +834,7 @@ RSpec.describe Registration do
         series = create(:competition_series)
         competition_a = registration.competition
         competition_a.update!(competition_series: series)
-        competition_b = create(:competition, :registration_open, :auto_accept, competition_series: series, series_base: competition_a)
+        competition_b = create(:competition, :registration_open, :live_auto_accept, competition_series: series, series_base: competition_a)
         reg_b = create(:registration, user: registration.user, competition: competition_b)
 
         create(:registration_payment, :skip_create_hook, registration: reg_b, competition: competition_b)
@@ -886,7 +879,7 @@ RSpec.describe Registration do
 
   describe '#bulk_auto_accept' do
     context 'when competitor limit' do
-      let(:auto_accept_comp) { create(:competition, :auto_accept, :registration_open, :with_competitor_limit, competitor_limit: 10, auto_accept_disable_threshold: nil) }
+      let(:auto_accept_comp) { create(:competition, :bulk_auto_accept, :registration_open, :with_competitor_limit, competitor_limit: 10, auto_accept_disable_threshold: nil) }
 
       before do
         create_list(:registration, 5, :accepted, competition: auto_accept_comp)
@@ -1014,7 +1007,7 @@ RSpec.describe Registration do
 
     context 'when disable_threshold' do
       let(:threshold_auto_accept_comp) do
-        create(:competition, :auto_accept, :registration_open, :with_competitor_limit, auto_accept_disable_threshold: 9)
+        create(:competition, :bulk_auto_accept, :registration_open, :with_competitor_limit, auto_accept_disable_threshold: 9)
       end
 
       before do
@@ -1099,7 +1092,7 @@ RSpec.describe Registration do
     end
 
     context 'no limit' do
-      let(:auto_accept_comp) { create(:competition, :auto_accept, :registration_open, auto_accept_disable_threshold: nil, competitor_limit: 20) }
+      let(:auto_accept_comp) { create(:competition, :bulk_auto_accept, :registration_open, auto_accept_disable_threshold: nil, competitor_limit: 20) }
 
       before do
         create_list(:registration, 5, :accepted, competition: auto_accept_comp)
@@ -1172,7 +1165,7 @@ RSpec.describe Registration do
     end
 
     context 'refunded registration' do
-      let(:auto_accept_comp) { create(:competition, :auto_accept, :registration_open, :with_competitor_limit, competitor_limit: 2, auto_accept_disable_threshold: nil) }
+      let(:auto_accept_comp) { create(:competition, :bulk_auto_accept, :registration_open, :with_competitor_limit, competitor_limit: 2, auto_accept_disable_threshold: nil) }
       let!(:reg1) { create(:registration, :pending, :paid, competition: auto_accept_comp) }
       let(:reg2) { create(:registration, :pending, competition: auto_accept_comp) }
 

@@ -113,6 +113,7 @@ FactoryBot.define do
     end
 
     trait :unpaid do
+      # TODO: What the fuck is going on here? This very much looks like it creates a payment?
       after(:create) do |registration|
         FactoryBot.create(:registration_payment, registration: registration, user: registration.user)
       end
