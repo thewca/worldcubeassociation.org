@@ -1,5 +1,5 @@
 import React from 'react';
-import { InputBooleanSelect, InputNumber, InputTextArea } from '../../wca/FormBuilder/input/FormInputs';
+import { InputBooleanSelect, InputNumber, InputSelect, InputTextArea } from '../../wca/FormBuilder/input/FormInputs';
 import ConditionalSection from './ConditionalSection';
 import SubSection from '../../wca/FormBuilder/SubSection';
 import { newcomerMonthEnabled } from '../../../lib/wca-data.js.erb';
@@ -13,6 +13,12 @@ export default function CompetitorLimit() {
     },
   } = useFormObject();
 
+  const autoAcceptOptions = ['disabled', 'bulk', 'live'].map((status) => ({
+    key: status,
+    value: status,
+    text: I18n.t(`competitions.competition_form.choices.competitor_limit.auto_accept_preference.${status}`),
+  }));
+
   return (
     <SubSection section="competitorLimit">
       <InputBooleanSelect id="enabled" forceChoice />
@@ -24,7 +30,7 @@ export default function CompetitorLimit() {
           <InputNumber id="newcomerMonthReservedSpots" min={1} nullable />
         </ConditionalSection>
       </ConditionalSection>
-      <InputBooleanSelect id="autoAcceptPreference" required />
+      <InputSelect id="autoAcceptPreference" options={autoAcceptOptions} required ignoreDisabled />
       <ConditionalSection showIf={autoAcceptPreference !== 0}>
         <InputNumber id="autoAcceptDisableThreshold" nullable />
       </ConditionalSection>
