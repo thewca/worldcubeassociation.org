@@ -8,9 +8,7 @@ class AddAutoAcceptPreferenceToCompetitions < ActiveRecord::Migration[7.2]
       direction.up do
         execute <<~SQL.squish
           UPDATE competitions
-          SET
-            auto_accept_preference = auto_accept_registrations
-          END
+          SET auto_accept_preference = auto_accept_registrations
         SQL
       end
     end
