@@ -565,7 +565,7 @@ class Registration < ApplicationRecord
       waitlisted_registrations = competition.registrations.find(competition.waiting_list.entries)
 
       waitlisted_outcomes = waitlisted_registrations.each_with_object({}) do |reg, hash|
-        result = reg.attempt_auto_accept(bulk: true)
+        result = reg.attempt_auto_accept(:bulk)
         hash[reg.id] = result
         break hash unless result[:succeeded]
       end
@@ -578,7 +578,7 @@ class Registration < ApplicationRecord
                             .sort_by { |registration| registration.last_positive_payment.updated_at }
 
     # We dont need to break out of pending registrations because auto accept can still put them on the waiting list
-    pending_outcomes = pending_registrations.index_by(&:id).transform_values { it.attempt_auto_accept(bulk: true) }
+    pending_outcomes = pending_registrations.index_by(&:id).transform_values { it.attempt_auto_accept(:bulk) }
 
     waitlisted_outcomes.present? ? waitlisted_outcomes.merge(pending_outcomes) : pending_outcomes
   end
@@ -592,8 +592,8 @@ class Registration < ApplicationRecord
 
   delegate :auto_accept_preference, :auto_accept_preference_disabled?, :auto_accept_preference_bulk?, :auto_accept_preference_live?, to: :competition
 
-  def attempt_auto_accept(bulk: false)
-    failure_reason = auto_accept_failure_reason(bulk)
+  def attempt_auto_accept(preference)
+    failure_reason = auto_accept_failure_reason(:live)
     if failure_reason.present?
       log_auto_accept_failure(failure_reason)
       return { succeeded: false, info: failure_reason }
@@ -615,9 +615,10 @@ class Registration < ApplicationRecord
     end
   end
 
-  private def auto_accept_failure_reason(bulk)
+  private def auto_accept_failure_reason(preference)
     return Registrations::ErrorCodes::OUTSTANDING_FEES if outstanding_entry_fees.positive?
-    return Registrations::ErrorCodes::AUTO_ACCEPT_NOT_ENABLED if (bulk && auto_accept_preference_live?) || auto_accept_preference_disabled?
+    byebug
+    return Registrations::ErrorCodes::AUTO_ACCEPT_NOT_ENABLED if auto_accept_preference_disabled? || (auto_accept_preference != preference)
     return Registrations::ErrorCodes::INELIGIBLE_FOR_AUTO_ACCEPT unless competing_status_pending? || waiting_list_leader?
     return Registrations::ErrorCodes::AUTO_ACCEPT_DISABLE_THRESHOLD if competition.auto_accept_threshold_reached?
 

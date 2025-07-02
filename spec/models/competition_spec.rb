@@ -1712,7 +1712,7 @@ RSpec.describe Competition do
     end
   end
 
-  describe 'auto accept preferences' do
+  describe 'auto accept preferences', :tag do
     let(:competition) { create(:competition, :registration_open) }
     let(:pending_reg) { create(:registration, :pending, competition: competition) }
     let(:waitlisted_reg) { create(:registration, :waiting_list, competition: competition) }

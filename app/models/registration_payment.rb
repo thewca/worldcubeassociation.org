@@ -23,7 +23,7 @@ class RegistrationPayment < ApplicationRecord
   end
 
   private def auto_accept_hook
-    registration.attempt_auto_accept
+    registration.attempt_auto_accept(:live)
   end
 
   private def auto_close_hook
