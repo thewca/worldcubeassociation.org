@@ -14,6 +14,9 @@ const nextConfig: NextConfig = {
     },
   },
   output: "standalone",
+  images: {
+    remotePatterns: [new URL("https://avatars.worldcubeassociation.org/**")],
+  },
 };
 
 export default withPayload(nextConfig);
