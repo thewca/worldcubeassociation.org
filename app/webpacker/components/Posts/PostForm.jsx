@@ -24,12 +24,7 @@ export default function PostForm({
   ] = useCheckboxState(post?.show_on_homepage ?? true);
   const [postURL, setPostURL] = useInputState(post?.url ?? null);
   const [postId, setPostId] = useInputState(post?.id ?? null);
-  const [unstickAt, setUnstickAt] = useState(() => {
-    if (post?.unstick_at) return post.unstick_at;
-    const now = new Date();
-    now.setDate(now.getDate() + 14);
-    return now.toISOString().split('T')[0];
-  });
+  const [unstickAt, setUnstickAt] = useState(post?.unstick_at ?? null);
 
   const tagOptions = useMemo(
     () => allTags.map((tag) => ({ value: tag, text: tag, key: tag })),
