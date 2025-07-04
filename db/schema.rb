@@ -1,4 +1,4 @@
-# This file is auto-generated from the current state of the database. Instead
+# This file is auto-generated from the current state of the database. Insteadschema
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
 #
@@ -1189,7 +1189,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_06_20_074209) do
   end
 
   create_table "schedule_activities", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
-    t.bigint "venue_room_id"
     t.bigint "parent_activity_id"
     t.integer "wcif_id", null: false
     t.string "name", null: false
