@@ -5,6 +5,7 @@ FactoryBot.define do
     transient do
       skip_auto_accept_hook { false }
       competition { registration.competition }
+      revert_to { nil }
     end
 
     registration { nil }
@@ -20,8 +21,14 @@ FactoryBot.define do
       amount_lowest_denomination { competition.base_entry_fee_lowest_denomination * 2 }
     end
 
-    trait :skip_create_hook do
+    trait :skip_create_hook_bulk do
       skip_auto_accept_hook { true }
+      revert_to { :bulk }
+    end
+
+    trait :skip_create_hook_live do
+      skip_auto_accept_hook { true }
+      revert_to { :live }
     end
 
     after(:build) do |_payment, evaluator|
@@ -29,7 +36,7 @@ FactoryBot.define do
     end
 
     after(:create) do |_payment, evaluator|
-      evaluator.competition.auto_accept_preference = :live if evaluator.skip_auto_accept_hook
+      evaluator.competition.auto_accept_preference = evaluator.revert_to if evaluator.skip_auto_accept_hook
     end
   end
 end
