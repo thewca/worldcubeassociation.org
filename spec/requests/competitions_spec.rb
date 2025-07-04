@@ -3,9 +3,9 @@
 require "rails_helper"
 
 RSpec.describe "competitions" do
-  let!(:competition) { create(:competition, :with_delegate, :future, :visible, :with_valid_schedule) }
-
   describe "PATCH #update_competition" do
+    let!(:competition) { create(:competition, :with_delegate, :future, :visible, :auto_accept, :with_valid_schedule) }
+
     context "when signed in as admin" do
       before { sign_in create :admin }
 
@@ -225,6 +225,16 @@ RSpec.describe "competitions" do
       before :each do
         sign_in competition.delegates.first
         competition.update!(start_date: 5.weeks.from_now, end_date: 5.weeks.from_now)
+      end
+
+      it 'cannot set auto_accept_preference to live' do
+        competitor_limit_params = competition.to_form_data['competitorLimit']
+        competitor_limit_params['autoAcceptPreference'] = 'live'
+        update_params = build_competition_update(competition, competitorLimit: competitor_limit_params)
+        patch competition_path(competition), params: update_params, as: :json
+
+        expect(response).not_to be_successful
+        expect(competition.reload.auto_accept_preference_live?).to be(false)
       end
 
       context 'when handling unconfirmed competitions' do

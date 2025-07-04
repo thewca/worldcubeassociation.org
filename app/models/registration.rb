@@ -8,9 +8,6 @@ class Registration < ApplicationRecord
   AUTO_ACCEPT_ENTITY_ID = 'auto-accept'
   SYSTEM_ENTITY_ID = 'system'
   USER_ENTITY_ID = 'user'
-  # Live auto accept means that auto accept is triggered at the point where payment occurs
-  # As opposed to being manually triggered by an organizer hitting the "Bulk Auto Accept" button
-  LIVE_AUTO_ACCEPT_ENABLED = false
 
   scope :pending, -> { where(competing_status: 'pending') }
   scope :accepted, -> { where(competing_status: 'accepted') }
@@ -568,7 +565,7 @@ class Registration < ApplicationRecord
       waitlisted_registrations = competition.registrations.find(competition.waiting_list.entries)
 
       waitlisted_outcomes = waitlisted_registrations.each_with_object({}) do |reg, hash|
-        result = reg.attempt_auto_accept
+        result = reg.attempt_auto_accept(:bulk)
         hash[reg.id] = result
         break hash unless result[:succeeded]
       end
@@ -581,7 +578,7 @@ class Registration < ApplicationRecord
                             .sort_by { |registration| registration.last_positive_payment.updated_at }
 
     # We dont need to break out of pending registrations because auto accept can still put them on the waiting list
-    pending_outcomes = pending_registrations.index_by(&:id).transform_values(&:attempt_auto_accept)
+    pending_outcomes = pending_registrations.index_by(&:id).transform_values { it.attempt_auto_accept(:bulk) }
 
     waitlisted_outcomes.present? ? waitlisted_outcomes.merge(pending_outcomes) : pending_outcomes
   end
@@ -593,10 +590,10 @@ class Registration < ApplicationRecord
       .first
   end
 
-  delegate :auto_accept_registrations?, to: :competition
+  delegate :auto_accept_preference, :auto_accept_preference_disabled?, :auto_accept_preference_bulk?, :auto_accept_preference_live?, to: :competition
 
-  def attempt_auto_accept
-    failure_reason = auto_accept_failure_reason
+  def attempt_auto_accept(mode)
+    failure_reason = auto_accept_failure_reason(mode)
     if failure_reason.present?
       log_auto_accept_failure(failure_reason)
       return { succeeded: false, info: failure_reason }
@@ -618,9 +615,9 @@ class Registration < ApplicationRecord
     end
   end
 
-  private def auto_accept_failure_reason
+  private def auto_accept_failure_reason(mode)
     return Registrations::ErrorCodes::OUTSTANDING_FEES if outstanding_entry_fees.positive?
-    return Registrations::ErrorCodes::AUTO_ACCEPT_NOT_ENABLED unless auto_accept_registrations?
+    return Registrations::ErrorCodes::AUTO_ACCEPT_NOT_ENABLED if auto_accept_preference_disabled? || (auto_accept_preference.to_sym != mode)
     return Registrations::ErrorCodes::INELIGIBLE_FOR_AUTO_ACCEPT unless competing_status_pending? || waiting_list_leader?
     return Registrations::ErrorCodes::AUTO_ACCEPT_DISABLE_THRESHOLD if competition.auto_accept_threshold_reached?
 
