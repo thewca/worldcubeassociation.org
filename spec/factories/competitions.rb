@@ -109,6 +109,7 @@ FactoryBot.define do
     end
 
     trait :auto_accept do
+      stripe_connected
       use_wca_registration { true }
       competitor_limit_enabled { true }
       competitor_limit_reason { 'test' }
