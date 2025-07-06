@@ -13,10 +13,9 @@ const InformationIcon = createIcon({
       />
     </>
   ),
+  defaultProps: {
+    boxSize: "1em",
+  },
 });
 
-const InformationIconPreview = () => {
-  return <InformationIcon size="lg" />;
-};
-
-export default InformationIconPreview;
+export default InformationIcon;

@@ -33,6 +33,9 @@ export const submitPostUrl = `<%= CGI.unescape(Rails.application.routes.url_help
 
 export const postUrl = (id) => `<%= CGI.unescape(Rails.application.routes.url_helpers.post_path("${id}")) %>`
 
+export const updateTestVideoIdUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.update_test_link_path) %>`;
+export const promoteTestVideoIdUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.promote_test_link_path) %>`;
+
 export const incidentsUrl = (perPage, page, tags = undefined, searchString = undefined, competitions = undefined, format = 'json') => {
   const searchParams = new URLSearchParams(`per_page=${perPage}&page=${page}`);
   if (tags && tags.length > 0) {
@@ -118,6 +121,8 @@ export const userApiUrl = (id) => `<%= CGI.unescape(Rails.application.routes.url
 export const personSearchApiUrl = (query) => `<%= Rails.application.routes.url_helpers.api_v0_search_persons_path %>?q=${query}`;
 
 export const userSearchApiUrl = (query) => `<%= Rails.application.routes.url_helpers.api_v0_search_users_path %>?q=${query}`;
+
+export const userAdminSearchApiUrl = (query) => `<%= CGI.unescape(Rails.application.routes.url_helpers.users_admin_search_path) %>?q=${query}`;
 
 export const geocodingApiUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_geocoding_search_path) %>`;
 export const geocodingTimeZoneUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_geocoding_time_zone_path) %>`;
@@ -278,6 +283,9 @@ export const viewUrls = {
   competitions: {
     countInRange: (startDate, endDate) => `<%= CGI.unescape(Rails.application.routes.url_helpers.panel_competition_count_path) %>?${jsonToQueryString({ startDate, endDate })}`,
   },
+  persons: {
+    results: (wcaId, competitionId, eventId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.person_results_path) %>?${jsonToQueryString({ wcaId, competitionId, eventId })}`,
+  },
   cronjob: {
     details: (cronjobName) => `<%= CGI.unescape(Rails.application.routes.url_helpers.panel_cronjob_details_path(cronjob_name: "${cronjobName}")) %>`,
   },
@@ -366,8 +374,6 @@ export const rankingsUrl = (eventId, rankingType, region, gender, show) => {
 };
 
 export const serverStatusPageUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.server_status_path) %>`;
-
-export const fixResultsUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.admin_fix_results_path) %>`;
 
 export const mergeProfilesUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.admin_merge_people_path) %>`;
 

@@ -19,6 +19,9 @@ const _SkewbIcon = createIcon({
       <path d="m457 43.5v187.5l-187.5-187.5z" fill="currentColor" />
     </>
   ),
+  defaultProps: {
+    boxSize: "1em",
+  },
 });
 
 export default _SkewbIcon;

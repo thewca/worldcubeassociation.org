@@ -112,6 +112,7 @@ class AdminController < ApplicationController
           competition_id: inbox_res.competition_id,
           event_id: inbox_res.event_id,
           round_type_id: inbox_res.round_type_id,
+          round_id: inbox_res.round_id,
           format_id: inbox_res.format_id,
           value1: inbox_res.value1,
           value2: inbox_res.value2,
@@ -207,15 +208,6 @@ class AdminController < ApplicationController
       event_id: params[:event_id],
       round_type_id: params[:round_type_id],
     )
-  end
-
-  def fix_results_selector
-    action_params = params.require(:fix_results_selector)
-                          .permit(:person_id, :competition_id, :event_id, :round_type_id)
-
-    @result_selector = FixResultsSelector.new(action_params)
-
-    render partial: "fix_results_selector"
   end
 
   def person_data

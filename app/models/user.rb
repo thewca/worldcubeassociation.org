@@ -74,6 +74,8 @@ class User < ApplicationRecord
   ANONYMOUS_GENDER = 'o'
   ANONYMOUS_COUNTRY_ISO2 = 'US'
 
+  FORUM_AGE_REQUIREMENT = 13
+
   def self.eligible_voters
     [
       UserGroup.delegate_regions,
@@ -454,6 +456,10 @@ class User < ApplicationRecord
     Rails.env.production? && EnvConfig.WCA_LIVE_SITE? ? software_team_admin? : (software_team? || software_team_admin?)
   end
 
+  def can_administrate_livestream?
+    software_team? || board_member? || communication_team?
+  end
+
   def any_kind_of_delegate?
     delegate_role_metadata.any?
   end
@@ -490,12 +496,16 @@ class User < ApplicationRecord
     user.senior_delegates.include?(self)
   end
 
-  def banned?
-    group_member?(UserGroup.banned_competitors.first)
+  def below_forum_age_requirement?
+    (Date.today - FORUM_AGE_REQUIREMENT.years) < dob
   end
 
   def forum_banned?
     current_ban&.metadata&.scope == 'competing_and_attending_and_forums'
+  end
+
+  def banned?
+    group_member?(UserGroup.banned_competitors.first)
   end
 
   def banned_in_past?
@@ -1182,12 +1192,17 @@ class User < ApplicationRecord
   end
 
   def self.search(query, params: {})
-    users = Person.includes(:user).current
-    # We can't search by email on the 'Person' table
-    search_by_email = false
-    unless ActiveRecord::Type::Boolean.new.cast(params[:persons_table])
+    search_by_email = ActiveRecord::Type::Boolean.new.cast(params[:email])
+    admin_search = ActiveRecord::Type::Boolean.new.cast(params[:adminSearch])
+    searching_persons_table = ActiveRecord::Type::Boolean.new.cast(params[:persons_table])
+
+    return User.where(email: query) if admin_search && search_by_email
+
+    if searching_persons_table
+      users = Person.includes(:user).current
+      search_by_email = false # We can't search by email on the 'Person' table
+    else
       users = User.confirmed_email.not_dummy_account
-      search_by_email = ActiveRecord::Type::Boolean.new.cast(params[:email])
 
       users = users.where(id: self.staff_delegate_ids) if ActiveRecord::Type::Boolean.new.cast(params[:only_staff_delegates])
 

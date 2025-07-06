@@ -760,4 +760,23 @@ RSpec.describe User do
       expect(user.teams_committees_at_least_senior_roles).not_to include(wrt_role)
     end
   end
+
+  describe '#below_forum_age_requirement?', :tag do
+    let(:user) { create(:user) }
+
+    it 'true when user under 13' do
+      user.dob = Date.today.advance(days: 1, years: -13)
+      expect(user.below_forum_age_requirement?).to be(true)
+    end
+
+    it 'false when user is exactly 13' do
+      user.dob = Date.today.advance(years: -13)
+      expect(user.below_forum_age_requirement?).to be(false)
+    end
+
+    it 'false when user older than 13' do
+      user.dob = Date.today.advance(days: -1, years: -13)
+      expect(user.below_forum_age_requirement?).to be(false)
+    end
+  end
 end

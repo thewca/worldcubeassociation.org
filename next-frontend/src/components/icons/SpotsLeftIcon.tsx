@@ -49,10 +49,9 @@ const SpotsLeftIcon = createIcon({
       />
     </>
   ),
+  defaultProps: {
+    boxSize: "1em",
+  },
 });
 
-const SpotsLeftIconPreview = () => {
-  return <SpotsLeftIcon size="lg" />;
-};
-
-export default SpotsLeftIconPreview;
+export default SpotsLeftIcon;

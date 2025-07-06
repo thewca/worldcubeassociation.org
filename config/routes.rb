@@ -58,6 +58,7 @@ Rails.application.routes.draw do
   post 'users/:id/avatar' => 'users#upload_avatar'
   patch 'users/:id/avatar' => 'users#update_avatar'
   delete 'users/:id/avatar' => 'users#delete_avatar'
+  get '/users/admin_search' => 'users#admin_search'
   get 'admin/avatars/pending' => 'admin/avatars#pending_avatar_users', as: :pending_avatars
   post 'admin/avatars' => 'admin/avatars#update_avatar', as: :admin_update_avatar
 
@@ -187,6 +188,7 @@ Rails.application.routes.draw do
   get 'wst/wca-developer-database-dump.zip', to: redirect(DbDumpHelper.public_s3_path(DbDumpHelper::DEVELOPER_EXPORT_SQL_PERMALINK))
 
   get 'persons/new_id' => 'admin/persons#generate_ids'
+  get '/persons/results' => 'admin/persons#results', as: :person_results
   resources :persons, only: %i[index show]
   post 'persons' => 'admin/persons#create'
 
@@ -230,6 +232,10 @@ Rails.application.routes.draw do
 
   root 'posts#homepage'
   resources :posts
+  get 'livestream-management' => 'posts#livestream_management'
+  post 'update-test-link' => 'posts#update_test_link'
+  patch 'promote-test-link' => 'posts#promote_test_link'
+  get 'wc2025-preview' => 'posts#wc2025_preview'
   get 'rss' => 'posts#rss'
 
   post 'upload/image', to: 'upload#image'
@@ -298,7 +304,6 @@ Rails.application.routes.draw do
   get '/admin/all-voters' => 'admin#all_voters', as: :eligible_voters
   get '/admin/leader-senior-voters' => 'admin#leader_senior_voters', as: :leader_senior_voters
   post '/admin/merge_people' => 'admin#do_merge_people', as: :admin_do_merge_people
-  get '/admin/fix_results_selector' => 'admin#fix_results_selector', as: :admin_fix_results_ajax
   get '/admin/person_data' => 'admin#person_data'
   get '/admin/do_compute_auxiliary_data' => 'admin#do_compute_auxiliary_data'
   get '/admin/generate_db_token' => 'admin#generate_db_token'

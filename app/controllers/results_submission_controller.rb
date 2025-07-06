@@ -46,6 +46,7 @@ class ResultsSubmissionController < ApplicationController
                           pos: result.ranking,
                           event_id: round.event_id,
                           round_type_id: round.round_type_id,
+                          round_id: round.id,
                           format_id: round.format_id,
                           best: result.best,
                           average: result.average,
@@ -81,6 +82,7 @@ class ResultsSubmissionController < ApplicationController
                        competition_id: @competition.id,
                        event_id: scramble_set.event_id,
                        round_type_id: scramble_set.round_type_id,
+                       round_id: scramble_set.matched_round_id,
                        group_id: scramble_set.alphabetic_group_index,
                        is_extra: scramble.is_extra,
                        scramble_num: scramble.ordered_index + 1,
@@ -123,7 +125,7 @@ class ResultsSubmissionController < ApplicationController
     # Check inbox, create submission, send email
     @competition = competition_from_params
 
-    submit_results_params = params.require(:results_submission).permit(:message, :schedule_url, :confirm_information)
+    submit_results_params = params.require(:results_submission).permit(:message, :confirm_information)
     submit_results_params[:competition_id] = @competition.id
     @results_submission = ResultsSubmission.new(submit_results_params)
     # This validates also that results in Inboxes are all good

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_05_29_061324) do
+ActiveRecord::Schema[7.2].define(version: 2025_06_04_143939) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -655,6 +655,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_05_29_061324) do
     t.string "competition_id", limit: 32, default: "", null: false
     t.string "event_id", limit: 6, default: "", null: false
     t.string "round_type_id", limit: 1, default: "", null: false
+    t.integer "round_id"
     t.string "format_id", limit: 1, default: "", null: false
     t.integer "value1", default: 0, null: false
     t.integer "value2", default: 0, null: false
@@ -666,6 +667,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_05_29_061324) do
     t.index ["competition_id"], name: "InboxResults_fk_tournament"
     t.index ["event_id"], name: "InboxResults_fk_event"
     t.index ["format_id"], name: "InboxResults_fk_format"
+    t.index ["round_id"], name: "index_inbox_results_on_round_id"
     t.index ["round_type_id"], name: "InboxResults_fk_round"
   end
 
@@ -1072,6 +1074,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_05_29_061324) do
     t.string "competition_id", limit: 32, default: "", null: false
     t.string "event_id", limit: 6, default: "", null: false
     t.string "round_type_id", limit: 1, default: "", null: false
+    t.integer "round_id"
     t.string "format_id", limit: 1, default: "", null: false
     t.integer "value1", default: 0, null: false
     t.integer "value2", default: 0, null: false
@@ -1100,6 +1103,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_05_29_061324) do
     t.index ["person_id"], name: "Results_fk_competitor"
     t.index ["regional_average_record", "event_id"], name: "index_Results_on_regionalAverageRecord_and_eventId"
     t.index ["regional_single_record", "event_id"], name: "index_Results_on_regionalSingleRecord_and_eventId"
+    t.index ["round_id"], name: "index_results_on_round_id"
     t.index ["round_type_id"], name: "Results_fk_round"
   end
 
@@ -1219,11 +1223,13 @@ ActiveRecord::Schema[7.2].define(version: 2025_05_29_061324) do
     t.string "competition_id", limit: 32, null: false
     t.string "event_id", limit: 6, null: false
     t.string "round_type_id", limit: 1, null: false
+    t.integer "round_id"
     t.string "group_id", limit: 3, null: false
     t.boolean "is_extra", null: false
     t.integer "scramble_num", null: false
     t.text "scramble", null: false
     t.index ["competition_id", "event_id"], name: "competitionId"
+    t.index ["round_id"], name: "index_scrambles_on_round_id"
   end
 
   create_table "server_settings", primary_key: "name", id: :string, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
@@ -1314,6 +1320,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_05_29_061324) do
     t.boolean "is_active", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "stakeholder_role", null: false
     t.index ["stakeholder_type", "stakeholder_id"], name: "index_ticket_stakeholders_on_stakeholder"
     t.index ["ticket_id"], name: "index_ticket_stakeholders_on_ticket_id"
   end
@@ -1508,6 +1515,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_05_29_061324) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "inbox_results", "rounds"
   add_foreign_key "inbox_scramble_sets", "events"
   add_foreign_key "inbox_scramble_sets", "rounds", column: "matched_round_id"
   add_foreign_key "inbox_scramble_sets", "scramble_file_uploads", column: "external_upload_id"
@@ -1518,12 +1526,14 @@ ActiveRecord::Schema[7.2].define(version: 2025_05_29_061324) do
   add_foreign_key "paypal_records", "paypal_records", column: "parent_record_id"
   add_foreign_key "regional_records_lookup", "results", on_update: :cascade, on_delete: :cascade
   add_foreign_key "registration_history_changes", "registration_history_entries"
+  add_foreign_key "results", "rounds"
   add_foreign_key "sanity_check_exclusions", "sanity_checks"
   add_foreign_key "sanity_checks", "sanity_check_categories"
   add_foreign_key "schedule_activities", "rounds"
   add_foreign_key "schedule_activities", "schedule_activities", column: "parent_activity_id"
   add_foreign_key "schedule_activities", "venue_rooms"
   add_foreign_key "scramble_file_uploads", "users", column: "uploaded_by"
+  add_foreign_key "scrambles", "rounds"
   add_foreign_key "stripe_records", "stripe_records", column: "parent_record_id"
   add_foreign_key "stripe_webhook_events", "stripe_records"
   add_foreign_key "ticket_comments", "ticket_stakeholders", column: "acting_stakeholder_id"

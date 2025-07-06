@@ -13,10 +13,9 @@ const SpeedcubingHistoryIcon = createIcon({
       />
     </>
   ),
+  defaultProps: {
+    boxSize: "1em",
+  },
 });
 
-const SpeedcubingHistoryIconPreview = () => {
-  return <SpeedcubingHistoryIcon size="lg" />;
-};
-
-export default SpeedcubingHistoryIconPreview;
+export default SpeedcubingHistoryIcon;

@@ -66,7 +66,7 @@ RSpec.describe RoleChangeMailer do
 
     it 'renders the headers' do
       expect(mail.to).to contain_exactly(user_who_made_the_change.email, GroupsMetadataBoard.email, UserGroup.teams_committees_group_weat.metadata.email, UserGroup.teams_committees_group_wfc.metadata.email,
-                                         UserGroup.teams_committees_group_wrt.metadata.email, UserGroup.teams_committees_group_wic.metadata.email)
+                                         UserGroup.teams_committees_group_wrt.metadata.email)
       expect(mail.reply_to).to contain_exactly(user_who_made_the_change.email)
       expect(mail.subject).to eq "Role removed for #{translator.user.name} in Delegate Regions"
     end

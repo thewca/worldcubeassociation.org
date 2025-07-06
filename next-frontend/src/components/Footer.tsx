@@ -20,7 +20,7 @@ import Image from "next/image";
 
 export default function Footer() {
   return (
-    <Center borderTopWidth={3} padding={3} mt={5}>
+    <Center borderTop="md" padding={3} mt={5} bg="bg">
       <VStack>
         {/* Social Media Icons */}
         <HStack>

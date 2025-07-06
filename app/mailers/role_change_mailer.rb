@@ -95,7 +95,7 @@ class RoleChangeMailer < ApplicationMailer
         ),
         UserRole::UserRoleEmailRecipient.new(
           name: 'Team/Committee Leader',
-          email: role.group.lead_user.email,
+          email: role.group.lead_user&.email,
           message: 'Informing as there is a new appointment in your Team/Committee.',
         ),
         UserRole::UserRoleEmailRecipient.new(
@@ -198,7 +198,7 @@ class RoleChangeMailer < ApplicationMailer
         ),
         UserRole::UserRoleEmailRecipient.new(
           name: 'Team/Committee Leader',
-          email: role.group.lead_user.email,
+          email: role.group.lead_user&.email,
           message: 'Informing as there was a change in your Team/Committee.',
         ),
       )
@@ -248,11 +248,6 @@ class RoleChangeMailer < ApplicationMailer
           email: UserGroup.teams_committees_group_wfc.metadata.email,
           message: 'Please take necessary action if there is a pending dues for the Delegate whose role is ended.',
         ),
-        UserRole::UserRoleEmailRecipient.new(
-          name: UserGroup.teams_committees_group_wic.name,
-          email: UserGroup.teams_committees_group_wic.metadata.email,
-          message: 'Informing as there is a role end action for a Delegate.',
-        ),
       )
     when UserGroup.group_types[:translators]
       @to_list.push(
@@ -276,7 +271,7 @@ class RoleChangeMailer < ApplicationMailer
         ),
         UserRole::UserRoleEmailRecipient.new(
           name: 'Team/Committee Leader',
-          email: role.group.lead_user.email,
+          email: role.group.lead_user&.email,
           message: 'Informing as there is a role end in your Team/Committee.',
         ),
       )

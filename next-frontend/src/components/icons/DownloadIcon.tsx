@@ -13,10 +13,9 @@ const DownloadIcon = createIcon({
       />
     </>
   ),
+  defaultProps: {
+    boxSize: "1em",
+  },
 });
 
-const DownloadIconPreview = () => {
-  return <DownloadIcon size="lg" />;
-};
-
-export default DownloadIconPreview;
+export default DownloadIcon;

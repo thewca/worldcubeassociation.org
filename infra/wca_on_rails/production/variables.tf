@@ -79,6 +79,7 @@ variable "shared" {
       name: string
       arn: string
     }),
+    next_repository_url: string,
     ecs_cluster: object({
       id: string
       name: string
@@ -98,6 +99,9 @@ variable "shared" {
     https_listener: object({
       arn: string
     })
+    nextjs-production: object({
+      arn: string
+    })
     pma_production: object({
       arn: string
     })
@@ -105,6 +109,7 @@ variable "shared" {
       id: string,
       root_resource_id: string
     })
+    next_url: string
     account_id: string
     # These are booth arrays
     private_subnets: any
