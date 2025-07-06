@@ -656,7 +656,7 @@ RSpec.describe Registration do
       expect(reg.reload.competing_status).to eq('accepted')
     end
 
-    it 'doesnt auto accept an unpaid pending competitor', :tag do
+    it 'doesnt auto accept an unpaid pending competitor' do
       expect(reg.competing_status).to eq('pending')
 
       reg.attempt_auto_accept(:live)
@@ -664,11 +664,11 @@ RSpec.describe Registration do
       expect(reg.registration_history.last[:changed_attributes][:auto_accept_failure_reasons]).to eq("-7001")
     end
 
-    it 'doesnt auto accept an unpaid waiting list competitor', :tag do
+    it 'doesnt auto accept an unpaid waiting list competitor' do
       reg.update(competing_status: 'waiting_list')
 
       reg.attempt_auto_accept(:live)
-      expect(reg.reload.competing_status).to eq('pending')
+      expect(reg.reload.competing_status).to eq('waiting_list')
       expect(reg.registration_history.last[:changed_attributes][:auto_accept_failure_reasons]).to eq("-7001")
     end
 
