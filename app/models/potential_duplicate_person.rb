@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class PotentialDuplicatePerson < ApplicationRecord
+  self.table_name = 'potential_duplicate_persons'
+
   belongs_to :original_user, class_name: 'User'
   belongs_to :duplicate_person, class_name: 'Person'
 

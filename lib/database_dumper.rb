@@ -962,7 +962,7 @@ module DatabaseDumper
     "tickets_edit_person" => :skip_all_rows,
     "tickets_edit_person_fields" => :skip_all_rows,
     "duplicate_checker_job_runs" => :skip_all_rows,
-    "potential_duplicate_people" => :skip_all_rows,
+    "potential_duplicate_persons" => :skip_all_rows,
   }.freeze
 
   RESULTS_SANITIZERS = {

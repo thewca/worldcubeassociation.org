@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-class CreatePotentialDuplicatePeople < ActiveRecord::Migration[7.2]
+class CreatePotentialDuplicatePersons < ActiveRecord::Migration[7.2]
   def change
-    create_table :potential_duplicate_people do |t|
+    create_table :potential_duplicate_persons do |t|
       t.references :duplicate_checker_job_run, null: false, foreign_key: { to_table: :duplicate_checker_job_runs }
       t.references :original_user, type: :integer, null: false, foreign_key: { to_table: :users }
       t.references :duplicate_person, type: :integer, null: false, foreign_key: { to_table: :persons }

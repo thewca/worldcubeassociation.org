@@ -5,15 +5,15 @@ import { duplicateCheckerJobRunStatuses } from '../../lib/wca-data.js.erb';
 
 export default function DuplicateCheckerHeader({ lastDuplicateCheckerJobRun, run }) {
   if (
-    lastDuplicateCheckerJobRun.status === duplicateCheckerJobRunStatuses.in_progress
-    || lastDuplicateCheckerJobRun.status === duplicateCheckerJobRunStatuses.not_started
+    lastDuplicateCheckerJobRun.run_status === duplicateCheckerJobRunStatuses.in_progress
+    || lastDuplicateCheckerJobRun.run_status === duplicateCheckerJobRunStatuses.not_started
   ) {
     return (
       <Message info>
         Duplicate Checker is currently running. Please check after sometime.
       </Message>
     );
-  } if (lastDuplicateCheckerJobRun.status === duplicateCheckerJobRunStatuses.success) {
+  } if (lastDuplicateCheckerJobRun.run_status === duplicateCheckerJobRunStatuses.success) {
     return (
       <Message positive>
         {`Duplicate Checker ran successfully at ${
@@ -21,7 +21,7 @@ export default function DuplicateCheckerHeader({ lastDuplicateCheckerJobRun, run
         <Button onClick={run}>Re-run now</Button>
       </Message>
     );
-  } if (lastDuplicateCheckerJobRun.status === duplicateCheckerJobRunStatuses.failed) {
+  } if (lastDuplicateCheckerJobRun.run_status === duplicateCheckerJobRunStatuses.failed) {
     return (
       <Message negative>
         Something went wrong. Please try running again.

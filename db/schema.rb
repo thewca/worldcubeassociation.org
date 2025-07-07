@@ -584,7 +584,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_06_19_163228) do
     t.string "competition_id", null: false
     t.datetime "start_time"
     t.datetime "end_time"
-    t.string "status", null: false
+    t.string "run_status", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["competition_id"], name: "index_duplicate_checker_job_runs_on_competition_id"
@@ -935,7 +935,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_06_19_163228) do
     t.index ["sticky", "created_at"], name: "index_posts_on_world_readable_and_sticky_and_created_at"
   end
 
-  create_table "potential_duplicate_people", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+  create_table "potential_duplicate_persons", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "duplicate_checker_job_run_id", null: false
     t.integer "original_user_id", null: false
     t.integer "duplicate_person_id", null: false
@@ -943,9 +943,9 @@ ActiveRecord::Schema[7.2].define(version: 2025_06_19_163228) do
     t.integer "score", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["duplicate_checker_job_run_id"], name: "idx_on_duplicate_checker_job_run_id_7956d5c283"
-    t.index ["duplicate_person_id"], name: "index_potential_duplicate_people_on_duplicate_person_id"
-    t.index ["original_user_id"], name: "index_potential_duplicate_people_on_original_user_id"
+    t.index ["duplicate_checker_job_run_id"], name: "idx_on_duplicate_checker_job_run_id_12b05a3796"
+    t.index ["duplicate_person_id"], name: "index_potential_duplicate_persons_on_duplicate_person_id"
+    t.index ["original_user_id"], name: "index_potential_duplicate_persons_on_original_user_id"
   end
 
   create_table "preferred_formats", id: false, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
@@ -1536,6 +1536,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_06_19_163228) do
     t.datetime "updated_at", null: false
   end
 
+  add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "inbox_results", "rounds"
   add_foreign_key "inbox_scramble_sets", "events"
@@ -1546,9 +1547,9 @@ ActiveRecord::Schema[7.2].define(version: 2025_06_19_163228) do
   add_foreign_key "oauth_openid_requests", "oauth_access_grants", column: "access_grant_id", on_delete: :cascade
   add_foreign_key "payment_intents", "users", column: "initiated_by_id"
   add_foreign_key "paypal_records", "paypal_records", column: "parent_record_id"
-  add_foreign_key "potential_duplicate_people", "duplicate_checker_job_runs"
-  add_foreign_key "potential_duplicate_people", "persons", column: "duplicate_person_id"
-  add_foreign_key "potential_duplicate_people", "users", column: "original_user_id"
+  add_foreign_key "potential_duplicate_persons", "duplicate_checker_job_runs"
+  add_foreign_key "potential_duplicate_persons", "persons", column: "duplicate_person_id"
+  add_foreign_key "potential_duplicate_persons", "users", column: "original_user_id"
   add_foreign_key "regional_records_lookup", "results", on_update: :cascade, on_delete: :cascade
   add_foreign_key "registration_history_changes", "registration_history_entries"
   add_foreign_key "results", "rounds"

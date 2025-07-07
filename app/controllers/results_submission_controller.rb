@@ -17,7 +17,7 @@ class ResultsSubmissionController < ApplicationController
   end
 
   def last_duplicate_checker_job_run
-    last_job_run = DuplicateCheckerJobRuns.where(competition_id: params[:competition_id]).first
+    last_job_run = DuplicateCheckerJobRun.where(competition_id: params[:competition_id]).first
 
     render status: :ok, json: last_job_run
   end
@@ -27,7 +27,7 @@ class ResultsSubmissionController < ApplicationController
 
     job_run = DuplicateCheckerJobRun.create!(
       competition_id: competition.id,
-      status: DuplicateCheckerJobRun.statuses[:not_started],
+      run_status: DuplicateCheckerJobRun.run_statuses[:not_started],
     )
     ComputePotentialDuplicates.perform_later(job_run)
 
