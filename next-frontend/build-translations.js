@@ -4,12 +4,21 @@
 const fs = require("fs");
 const path = require("path");
 const yaml = require("js-yaml");
-const { languages } = require("./src/lib/i18n/settings.ts");
+const languages = Object.keys(require("../config/locales/available.json"));
+
+const PLURALS = ["zero", "one", "other"];
+
+const transformKey = (key) => {
+  if (PLURALS.includes(key)) {
+    return `_${key}`;
+  }
+  return `.${key}`;
+};
 
 // Recursively flatten a nested object using dot notation
 function flattenObject(obj, prefix = "") {
   return Object.entries(obj).reduce((acc, [key, value]) => {
-    const newKey = prefix ? `${prefix}.${key}` : key;
+    const newKey = prefix ? `${prefix}${transformKey(key)}` : key;
     if (value && typeof value === "object" && !Array.isArray(value)) {
       Object.assign(acc, flattenObject(value, newKey));
     } else {
