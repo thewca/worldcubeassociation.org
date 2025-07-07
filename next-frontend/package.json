@@ -41,7 +41,7 @@
     "next-themes": "^0.4.6",
     "node-vault": "^0.10.5",
     "openapi-fetch": "^0.14.0",
-    "payload": "^3.44.0",
+    "payload": "^3.45.0",
     "payload-authjs": "^0.8.2",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
