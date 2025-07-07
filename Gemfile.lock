@@ -391,6 +391,8 @@ GEM
     highline (3.1.2)
       reline
     hiredis (0.6.3)
+    html_safe_flash (0.2.0)
+      rails (>= 6)
     htmlentities (4.3.4)
     http-accept (1.7.0)
     http-cookie (1.0.3)
@@ -1026,6 +1028,7 @@ DEPENDENCIES
   guard-rspec
   hash_diff
   hiredis
+  html_safe_flash
   http_accept_language
   i18n-country-translations!
   i18n-js
@@ -1250,6 +1253,7 @@ CHECKSUMS
   hashie (5.0.0) sha256=9d6c4e51f2a36d4616cbc8a322d619a162d8f42815a792596039fc95595603da
   highline (3.1.2) sha256=67cbd34d19f6ef11a7ee1d82ffab5d36dfd5b3be861f450fc1716c7125f4bb4a
   hiredis (0.6.3) sha256=7f052e320f7d24b5c2a9fdf67c6ff6facdf6e256394a703511bce34ecf445212
+  html_safe_flash (0.2.0) sha256=78c2acc14c1c02e834d740e2261852725f6d61c838fdd1f88bf76644231670f4
   htmlentities (4.3.4) sha256=125a73c6c9f2d1b62100b7c3c401e3624441b663762afa7fe428476435a673da
   http-accept (1.7.0) sha256=c626860682bfbb3b46462f8c39cd470fd7b0584f61b3cc9df5b2e9eb9972a126
   http-cookie (1.0.3) sha256=2f11269d817bc52ab2af2721e89a377660a961078de2a3a55fc696d7897e8c00
