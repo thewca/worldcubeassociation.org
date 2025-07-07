@@ -399,9 +399,9 @@ class Competition < ApplicationRecord
     # IF we build a controller endpoint specifically for auto_accept, this logic should be move there.
     return unless auto_accept_registrations_changed? && auto_accept_registrations?
 
-    errors.add(:auto_accept_registrations, I18n.t('competitions.errors.auto_accept_accept_paid_pending')) if registrations.pending.with_payments.count.positive?
+    errors.add(:auto_accept_registrations, I18n.t('competitions.errors.auto_accept_accept_paid_pending')) if registrations.pending.with_payments.any?
     errors.add(:auto_accept_registrations, I18n.t('competitions.errors.auto_accept_accept_waitlisted')) if
-      registrations.waitlisted.count.positive? && !registration_full_and_accepted?
+      registrations.waitlisted.any? && !registration_full_and_accepted?
   end
 
   def no_event_without_rounds?
