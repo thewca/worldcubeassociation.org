@@ -12675,7 +12675,7 @@ __metadata:
     react-icons: "npm:^5.5.0"
     react-markdown: "npm:^10.1.0"
     react-world-flags: "npm:^1.6.0"
-    swagger-ui-react: "npm:^5.25.3"
+    swagger-ui-react: "npm:^5.26.0"
     typescript: "npm:^5"
     vitest: "npm:^3.2.4"
   languageName: unknown
@@ -15545,9 +15545,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"swagger-ui-react@npm:^5.25.3":
-  version: 5.25.3
-  resolution: "swagger-ui-react@npm:5.25.3"
+"swagger-ui-react@npm:^5.26.0":
+  version: 5.26.0
+  resolution: "swagger-ui-react@npm:5.26.0"
   dependencies:
     "@babel/runtime-corejs3": "npm:^7.27.1"
     "@scarf/scarf": "npm:=1.4.0"
@@ -15585,7 +15585,7 @@ __metadata:
   peerDependencies:
     react: ">=16.8.0 <19"
     react-dom: ">=16.8.0 <19"
-  checksum: 10c0/9d6542d0d1bd2533e87853d4deef5507d30b35941c697d50c763428533a88cbd9c2e3abe1af5946e35aa7fa3568dc14b9da4363f09bdf6d8023e0699efceb5cf
+  checksum: 10c0/4ce665f46171d724050435db86ce046d5a7777b5601d4ae6b418245e1fc9792591d6cb54fc583c074855f9890ff5b0e986b0a5601f47b79cfc8377dee8a3e3cc
   languageName: node
   linkType: hard
 
