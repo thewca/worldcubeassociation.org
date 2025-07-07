@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import {
   Container,
   Heading,
-  Table,
+  SimpleGrid,
   Tabs,
   Text,
   VStack,
@@ -152,36 +152,23 @@ function MemberTable({
   if (isLoading) return <Loading />;
 
   return (
-    <Table.Root>
-      <Table.Header>
-        <Table.Row>
-          <Table.ColumnHeader>
-            {I18n.t("delegates_page.table.name")}
-          </Table.ColumnHeader>
-        </Table.Row>
-      </Table.Header>
-      <Table.Body>
-        {roles.map((role) => (
-          <Table.Row key={role.id}>
-            <Table.Cell>
-              <UserBadge
-                key={role.id}
-                profilePicture={role.user.avatar.url}
-                name={role.user.name}
-                wcaId={role.user.wca_id}
-                roles={[
-                  {
-                    teamRole: I18n.t(
-                      `enums.user_roles.status.${role.group.group_type}.${role.metadata.status}`,
-                    ),
-                    staffColor: "red",
-                  },
-                ]}
-              />
-            </Table.Cell>
-          </Table.Row>
-        ))}
-      </Table.Body>
-    </Table.Root>
+    <SimpleGrid columns={{ md: 1, sm: 1, lg: 2 }} gap={"20px"}>
+      {roles.map((role) => (
+        <UserBadge
+          key={role.id}
+          profilePicture={role.user.avatar.url}
+          name={role.user.name}
+          wcaId={role.user.wca_id}
+          roles={[
+            {
+              teamRole: I18n.t(
+                `enums.user_roles.status.${role.group.group_type}.${role.metadata.status}`,
+              ),
+              staffColor: "red",
+            },
+          ]}
+        />
+      ))}
+    </SimpleGrid>
   );
 }
