@@ -533,8 +533,6 @@ en:
         status: ""
       results_submission:
         results_file: ""
-        message: ""
-        confirm_information: ""
       regional_organization:
         name: ""
         country: ""
