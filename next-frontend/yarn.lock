@@ -1567,17 +1567,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@contrast/fn-inspect@npm:^4.2.0":
-  version: 4.3.0
-  resolution: "@contrast/fn-inspect@npm:4.3.0"
-  dependencies:
-    nan: "npm:^2.19.0"
-    node-gyp: "npm:latest"
-    node-gyp-build: "npm:^4.8.1"
-  checksum: 10c0/699f5c99df005168c5fe3cfaa439f5ce337f429b509a53a6d410f18fd781ca1649360fd84cce33e664a573033ca0f416c9cd2c3a54cf3962ca6a0788b4eb9585
-  languageName: node
-  linkType: hard
-
 "@csstools/color-helpers@npm:^5.0.2":
   version: 5.0.2
   resolution: "@csstools/color-helpers@npm:5.0.2"
@@ -3307,7 +3296,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@newrelic/native-metrics@npm:^11.0.0":
+"@newrelic/fn-inspect@npm:^4.4.0":
+  version: 4.4.0
+  resolution: "@newrelic/fn-inspect@npm:4.4.0"
+  dependencies:
+    nan: "npm:^2.22.2"
+    node-gyp: "npm:latest"
+    node-gyp-build: "npm:^4.8.1"
+    prebuildify: "npm:^6.0.1"
+  checksum: 10c0/3fcebf9011b18075dd414d9e5ce5e3acfb4ea00e39e342f6e818e536ced2d4ca26211ae932808150c1da6c96db59c85fcf9368944f0c0d1b47f93211863a1a34
+  languageName: node
+  linkType: hard
+
+"@newrelic/native-metrics@npm:^11.1.0":
   version: 11.1.0
   resolution: "@newrelic/native-metrics@npm:11.1.0"
   dependencies:
@@ -12633,7 +12634,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nan@npm:^2.19.0, nan@npm:^2.22.2":
+"nan@npm:^2.22.2":
   version: 2.22.2
   resolution: "nan@npm:2.22.2"
   dependencies:
@@ -12672,14 +12673,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"newrelic@npm:^12.22.0":
-  version: 12.22.0
-  resolution: "newrelic@npm:12.22.0"
+"newrelic@npm:^12.23.0":
+  version: 12.23.0
+  resolution: "newrelic@npm:12.23.0"
   dependencies:
-    "@contrast/fn-inspect": "npm:^4.2.0"
     "@grpc/grpc-js": "npm:^1.13.2"
     "@grpc/proto-loader": "npm:^0.7.5"
-    "@newrelic/native-metrics": "npm:^11.0.0"
+    "@newrelic/fn-inspect": "npm:^4.4.0"
+    "@newrelic/native-metrics": "npm:^11.1.0"
     "@newrelic/security-agent": "npm:^2.4.2"
     "@opentelemetry/api": "npm:^1.9.0"
     "@opentelemetry/core": "npm:^2.0.0"
@@ -12700,7 +12701,7 @@ __metadata:
     semver: "npm:^7.5.2"
     winston-transport: "npm:^4.5.0"
   dependenciesMeta:
-    "@contrast/fn-inspect":
+    "@newrelic/fn-inspect":
       optional: true
     "@newrelic/native-metrics":
       optional: true
@@ -12708,7 +12709,7 @@ __metadata:
       optional: true
   bin:
     newrelic-naming-rules: bin/test-naming-rules.js
-  checksum: 10c0/9757a29215a8c5ca3cf52c64c5dc965fba52bc3d4c3479e7484cadfcd710223f385ecf1edc1fded3509ff64727b821143ea7158ccac8a8aaf7bf3672f941c75f
+  checksum: 10c0/f6e703d7cbe48dceaa8e51dda47f0972ed0c074f73003dc32ef6fd8e89bf7857960b908eeb340a5913a75f67bc08a2e1d86e0517aab990d69115c5e64141c9f7
   languageName: node
   linkType: hard
 
@@ -12778,7 +12779,7 @@ __metadata:
     i18next-resources-to-backend: "npm:^1.2.1"
     js-cookie: "npm:^3.0.5"
     jsdom: "npm:^26.1.0"
-    newrelic: "npm:^12.22.0"
+    newrelic: "npm:^12.23.0"
     next: "npm:15.3.5"
     next-auth: "npm:5.0.0-beta.29"
     next-themes: "npm:^0.4.6"
