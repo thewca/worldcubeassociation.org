@@ -32,7 +32,7 @@
     <% if @current_user.can_submit_competition_results?(@competition) %>
       <%= react_component("CompetitionResultSubmission/FormToWrt", {
         competitionId: @competition.id,
-        isErrorInUploadedResults: @results_validator.any_errors?,
+        isErrorInPreviousUpload: @results_validator.any_errors?,
       }) %>
     <% end %>
   <% end %>

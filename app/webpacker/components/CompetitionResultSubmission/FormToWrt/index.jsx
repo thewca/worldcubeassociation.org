@@ -12,43 +12,39 @@ import Loading from '../../Requests/Loading';
 const DELEGATE_HANDBOOK_COMPETITION_RESULTS_URL = 'https://documents.worldcubeassociation.org/edudoc/delegate-handbook/delegate-handbook.pdf#competition-results';
 const ERROR_MESSAGE_UPLOADED_RESULTS = "Please upload a JSON file and make sure the results don't contain any errors.";
 
-export default function Wrapper({ competitionId, isErrorInUploadedResults }) {
+export default function Wrapper({ competitionId, isErrorInPreviousUpload }) {
   return (
     <WCAQueryClientProvider>
       <FormToWrt
         competitionId={competitionId}
-        isErrorInUploadedResults={isErrorInUploadedResults}
+        isErrorInPreviousUpload={isErrorInPreviousUpload}
       />
     </WCAQueryClientProvider>
   );
 }
 
-function FormToWrt({ competitionId, isErrorInUploadedResults }) {
-  const [activeAccordion, setActiveAccordion] = useState(!isErrorInUploadedResults);
+function FormToWrt({ competitionId, isErrorInPreviousUpload }) {
+  const [activeAccordion, setActiveAccordion] = useState(!isErrorInPreviousUpload);
 
   const [confirmDetails, setConfirmDetails] = useCheckboxState(false);
   const [message, setMessage] = useInputState();
 
-  const [success, setSuccess] = useState();
-
   const {
     mutate: submitToWrtMutate,
     isLoading,
-    isError: isErrorInSubmission,
+    isSuccess,
+    isError: isErrorInCurrentUpload,
     error: errorInSubmission,
-  } = useMutation({
-    mutationFn: submitToWrt,
-    onSuccess: () => setSuccess(true),
-  });
+  } = useMutation({ mutationFn: submitToWrt });
 
   const formSubmitHandler = () => {
     submitToWrtMutate({ competitionId, message });
   };
 
   if (isLoading) return <Loading />;
-  if (success) return <Message success>Thank you for submitting the results!</Message>;
-  if (isErrorInUploadedResults) return <Errored error={ERROR_MESSAGE_UPLOADED_RESULTS} />;
-  if (isErrorInSubmission) return <Errored error={errorInSubmission} />;
+  if (isSuccess) return <Message success>Thank you for submitting the results!</Message>;
+  if (isErrorInPreviousUpload) return <Errored error={ERROR_MESSAGE_UPLOADED_RESULTS} />;
+  if (isErrorInCurrentUpload) return <Errored error={errorInSubmission} />;
 
   return (
     <Accordion fluid styled>
