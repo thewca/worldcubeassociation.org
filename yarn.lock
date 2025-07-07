@@ -40,26 +40,26 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/core@npm:^7.27.7":
-  version: 7.27.7
-  resolution: "@babel/core@npm:7.27.7"
+"@babel/core@npm:^7.28.0":
+  version: 7.28.0
+  resolution: "@babel/core@npm:7.28.0"
   dependencies:
     "@ampproject/remapping": "npm:^2.2.0"
     "@babel/code-frame": "npm:^7.27.1"
-    "@babel/generator": "npm:^7.27.5"
+    "@babel/generator": "npm:^7.28.0"
     "@babel/helper-compilation-targets": "npm:^7.27.2"
     "@babel/helper-module-transforms": "npm:^7.27.3"
     "@babel/helpers": "npm:^7.27.6"
-    "@babel/parser": "npm:^7.27.7"
+    "@babel/parser": "npm:^7.28.0"
     "@babel/template": "npm:^7.27.2"
-    "@babel/traverse": "npm:^7.27.7"
-    "@babel/types": "npm:^7.27.7"
+    "@babel/traverse": "npm:^7.28.0"
+    "@babel/types": "npm:^7.28.0"
     convert-source-map: "npm:^2.0.0"
     debug: "npm:^4.1.0"
     gensync: "npm:^1.0.0-beta.2"
     json5: "npm:^2.2.3"
     semver: "npm:^6.3.1"
-  checksum: 10c0/02c0cd475821c5333d5ee5eb9a0565af1a38234b37859ae09c4c95d7171bbc11a23a6f733c31b3cb12dc523311bdc8f7f9d705136f33eeb6704b7fbd6e6468ca
+  checksum: 10c0/423302e7c721e73b1c096217880272e02020dfb697a55ccca60ad01bba90037015f84d0c20c6ce297cf33a19bb704bc5c2b3d3095f5284dfa592bd1de0b9e8c3
   languageName: node
   linkType: hard
 
@@ -10241,7 +10241,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "root-workspace-0b6124@workspace:."
   dependencies:
-    "@babel/core": "npm:^7.27.7"
+    "@babel/core": "npm:^7.28.0"
     "@babel/plugin-proposal-class-properties": "npm:^7.17.12"
     "@babel/plugin-proposal-decorators": "npm:^7.28.0"
     "@babel/plugin-proposal-export-namespace-from": "npm:^7.18.9"
