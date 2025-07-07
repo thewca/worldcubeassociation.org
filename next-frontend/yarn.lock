@@ -3768,9 +3768,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@payloadcms/richtext-lexical@npm:^3.44.0":
-  version: 3.44.0
-  resolution: "@payloadcms/richtext-lexical@npm:3.44.0"
+"@payloadcms/richtext-lexical@npm:^3.45.0":
+  version: 3.45.0
+  resolution: "@payloadcms/richtext-lexical@npm:3.45.0"
   dependencies:
     "@lexical/headless": "npm:0.28.0"
     "@lexical/html": "npm:0.28.0"
@@ -3782,8 +3782,8 @@ __metadata:
     "@lexical/selection": "npm:0.28.0"
     "@lexical/table": "npm:0.28.0"
     "@lexical/utils": "npm:0.28.0"
-    "@payloadcms/translations": "npm:3.44.0"
-    "@payloadcms/ui": "npm:3.44.0"
+    "@payloadcms/translations": "npm:3.45.0"
+    "@payloadcms/ui": "npm:3.45.0"
     "@types/uuid": "npm:10.0.0"
     acorn: "npm:8.12.1"
     bson-objectid: "npm:2.0.4"
@@ -3802,11 +3802,11 @@ __metadata:
   peerDependencies:
     "@faceless-ui/modal": 3.0.0-beta.2
     "@faceless-ui/scroll-info": 2.0.0
-    "@payloadcms/next": 3.44.0
-    payload: 3.44.0
+    "@payloadcms/next": 3.45.0
+    payload: 3.45.0
     react: ^19.0.0 || ^19.0.0-rc-65a56d0e-20241020
     react-dom: ^19.0.0 || ^19.0.0-rc-65a56d0e-20241020
-  checksum: 10c0/39d36d3e735b31b4d791d3fb22c46acd9e5a85883e9c541846cc1fb2a1132cfc8a6ad18b60027d16e432978a5867fb8178fba3139c0d8bf50e4a1120e08fb232
+  checksum: 10c0/4f067e57343f3771d2d47095f57f078570e3d067d03643608ac4fce4415a6da5218c57504f3a7163a2c059d59319752378197ddbe760ce9f86c073d7f5b08772
   languageName: node
   linkType: hard
 
@@ -12747,7 +12747,7 @@ __metadata:
     "@payloadcms/db-sqlite": "npm:^3.44.0"
     "@payloadcms/live-preview-react": "npm:^3.44.0"
     "@payloadcms/next": "npm:^3.45.0"
-    "@payloadcms/richtext-lexical": "npm:^3.44.0"
+    "@payloadcms/richtext-lexical": "npm:^3.45.0"
     "@payloadcms/storage-s3": "npm:^3.44.0"
     "@stylistic/eslint-plugin": "npm:^5.1.0"
     "@tanstack/eslint-plugin-query": "npm:^5.81.2"
