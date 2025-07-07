@@ -1131,7 +1131,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-sdk/types@npm:3.821.0, @aws-sdk/types@npm:^3.222.0":
+"@aws-sdk/types@npm:3.821.0":
   version: 3.821.0
   resolution: "@aws-sdk/types@npm:3.821.0"
   dependencies:
@@ -1141,7 +1141,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-sdk/types@npm:3.840.0":
+"@aws-sdk/types@npm:3.840.0, @aws-sdk/types@npm:^3.222.0":
   version: 3.840.0
   resolution: "@aws-sdk/types@npm:3.840.0"
   dependencies:
@@ -3351,17 +3351,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@next/env@npm:15.3.5":
+"@next/env@npm:15.3.5, @next/env@npm:^15.1.5":
   version: 15.3.5
   resolution: "@next/env@npm:15.3.5"
   checksum: 10c0/7ffad993e85710bbfbf52826bb6a8726d807e714715b5f28fa1b770ea38e3757c1bef9dbe1a1c31ea8eae39a097aa8fc2987ea8d47a3d9f6f30a88e72919fd7b
-  languageName: node
-  linkType: hard
-
-"@next/env@npm:^15.1.5":
-  version: 15.3.4
-  resolution: "@next/env@npm:15.3.4"
-  checksum: 10c0/43d37896e1422c9c353d9ded1d1b01545aa30b2bb125bcc40ffd4474dbc6e0ba603a77fc2a598616964a925379bb5a39eb1a242f0c49fc933e39e099fb2f7d75
   languageName: node
   linkType: hard
 
@@ -3825,15 +3818,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@payloadcms/translations@npm:3.44.0":
-  version: 3.44.0
-  resolution: "@payloadcms/translations@npm:3.44.0"
-  dependencies:
-    date-fns: "npm:4.1.0"
-  checksum: 10c0/8efeb339b476b54e3d72a52bed8d034db4140c7988b47ece3eae4bf5a814c4adb2e475fb0f72afee65b17680cffc06b4269505ff1d170b6710a6d81076c8ec91
-  languageName: node
-  linkType: hard
-
 "@payloadcms/translations@npm:3.45.0":
   version: 3.45.0
   resolution: "@payloadcms/translations@npm:3.45.0"
@@ -3843,7 +3827,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@payloadcms/ui@npm:3.45.0":
+"@payloadcms/ui@npm:3.45.0, @payloadcms/ui@npm:^3.16.0":
   version: 3.45.0
   resolution: "@payloadcms/ui@npm:3.45.0"
   dependencies:
@@ -3876,42 +3860,6 @@ __metadata:
     react: ^19.0.0 || ^19.0.0-rc-65a56d0e-20241020
     react-dom: ^19.0.0 || ^19.0.0-rc-65a56d0e-20241020
   checksum: 10c0/fb4640c237c90d2d283b77a71a68c09a4862e1b23079398aa80d963c78216312a032c7dada2160eda4687ecb4b6a3c017c6f5395c27a8df2672ee872691b3f5a
-  languageName: node
-  linkType: hard
-
-"@payloadcms/ui@npm:^3.16.0":
-  version: 3.44.0
-  resolution: "@payloadcms/ui@npm:3.44.0"
-  dependencies:
-    "@date-fns/tz": "npm:1.2.0"
-    "@dnd-kit/core": "npm:6.0.8"
-    "@dnd-kit/sortable": "npm:7.0.2"
-    "@dnd-kit/utilities": "npm:3.2.2"
-    "@faceless-ui/modal": "npm:3.0.0-beta.2"
-    "@faceless-ui/scroll-info": "npm:2.0.0"
-    "@faceless-ui/window-info": "npm:3.0.1"
-    "@monaco-editor/react": "npm:4.7.0"
-    "@payloadcms/translations": "npm:3.44.0"
-    bson-objectid: "npm:2.0.4"
-    date-fns: "npm:4.1.0"
-    dequal: "npm:2.0.3"
-    md5: "npm:2.3.0"
-    object-to-formdata: "npm:4.5.1"
-    qs-esm: "npm:7.0.2"
-    react-datepicker: "npm:7.6.0"
-    react-image-crop: "npm:10.1.8"
-    react-select: "npm:5.9.0"
-    scheduler: "npm:0.25.0"
-    sonner: "npm:^1.7.2"
-    ts-essentials: "npm:10.0.3"
-    use-context-selector: "npm:2.0.0"
-    uuid: "npm:10.0.0"
-  peerDependencies:
-    next: ^15.2.3
-    payload: 3.44.0
-    react: ^19.0.0 || ^19.0.0-rc-65a56d0e-20241020
-    react-dom: ^19.0.0 || ^19.0.0-rc-65a56d0e-20241020
-  checksum: 10c0/45e02d2fb53423aed7932d2e10c35257edb6ecc8ebf68efac28dad770c34348b8b59d633119acaaa059ba10c79cf4b64d0e52c554a9611106df63292f575ca63
   languageName: node
   linkType: hard
 
