@@ -3643,17 +3643,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@payloadcms/db-mongodb@npm:^3.44.0":
-  version: 3.44.0
-  resolution: "@payloadcms/db-mongodb@npm:3.44.0"
+"@payloadcms/db-mongodb@npm:^3.45.0":
+  version: 3.45.0
+  resolution: "@payloadcms/db-mongodb@npm:3.45.0"
   dependencies:
     mongoose: "npm:8.15.1"
     mongoose-paginate-v2: "npm:1.8.5"
     prompts: "npm:2.4.2"
     uuid: "npm:10.0.0"
   peerDependencies:
-    payload: 3.44.0
-  checksum: 10c0/8c2a883c0d9665490649c9804bf637e158bb138b818b30015c563b24a7ca0f16cca001a9abd483a3f02c0b40c79d97058b2ca9aeccc08c410a38e08287038e8a
+    payload: 3.45.0
+  checksum: 10c0/a94886d5662c1c826480ba2785737d3a3856a8ef9b16da10e4e0dc30c8b776aa992ac754f50e5bcb90c3f821a58110a2604a0ade8e3d59dafb70d62b23d3bebe
   languageName: node
   linkType: hard
 
@@ -12743,7 +12743,7 @@ __metadata:
     "@chakra-ui/react": "npm:^3.21.1"
     "@emotion/react": "npm:^11.14.0"
     "@eslint/eslintrc": "npm:^3"
-    "@payloadcms/db-mongodb": "npm:^3.44.0"
+    "@payloadcms/db-mongodb": "npm:^3.45.0"
     "@payloadcms/db-sqlite": "npm:^3.44.0"
     "@payloadcms/live-preview-react": "npm:^3.44.0"
     "@payloadcms/next": "npm:^3.45.0"
