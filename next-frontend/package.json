@@ -24,7 +24,7 @@
     "@payloadcms/db-mongodb": "^3.44.0",
     "@payloadcms/db-sqlite": "^3.44.0",
     "@payloadcms/live-preview-react": "^3.44.0",
-    "@payloadcms/next": "^3.44.0",
+    "@payloadcms/next": "^3.45.0",
     "@payloadcms/richtext-lexical": "^3.44.0",
     "@payloadcms/storage-s3": "^3.44.0",
     "@tanstack/react-query": "^5.81.5",
