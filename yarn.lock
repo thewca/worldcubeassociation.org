@@ -383,16 +383,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-proposal-decorators@npm:^7.27.1":
-  version: 7.27.1
-  resolution: "@babel/plugin-proposal-decorators@npm:7.27.1"
+"@babel/plugin-proposal-decorators@npm:^7.28.0":
+  version: 7.28.0
+  resolution: "@babel/plugin-proposal-decorators@npm:7.28.0"
   dependencies:
     "@babel/helper-create-class-features-plugin": "npm:^7.27.1"
     "@babel/helper-plugin-utils": "npm:^7.27.1"
     "@babel/plugin-syntax-decorators": "npm:^7.27.1"
   peerDependencies:
     "@babel/core": ^7.0.0-0
-  checksum: 10c0/3af0db6b2468907bcaf62246b2cfd3616ba9239ea1cd26036ec6baff1bc095fe4964853b1d29a79944d36e6e3d331cd130d05b0c41c835266daf7bb9d8e8f87c
+  checksum: 10c0/e399f3adc4278560d15fd80691c7a9b644f46e50fa90746f9f3b9ac02cf955ef2b6677277d97c97a4bd6d6a777821fdedf1318923632a439cba1c05e8e59246c
   languageName: node
   linkType: hard
 
@@ -10243,7 +10243,7 @@ __metadata:
   dependencies:
     "@babel/core": "npm:^7.27.7"
     "@babel/plugin-proposal-class-properties": "npm:^7.17.12"
-    "@babel/plugin-proposal-decorators": "npm:^7.27.1"
+    "@babel/plugin-proposal-decorators": "npm:^7.28.0"
     "@babel/plugin-proposal-export-namespace-from": "npm:^7.18.9"
     "@babel/plugin-proposal-function-sent": "npm:^7.27.1"
     "@babel/plugin-proposal-json-strings": "npm:^7.14.5"
