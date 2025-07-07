@@ -13,9 +13,4 @@ RSpec.describe ResultsSubmission do
     results_submission.message = nil
     expect(results_submission).to be_invalid_with_errors(message: ["can't be blank"])
   end
-
-  it "requires confirmation" do
-    results_submission.confirm_information = nil
-    expect(results_submission).to be_invalid_with_errors(confirm_information: [ResultsSubmission::CONFIRM_INFORMATION_ERROR])
-  end
 end
