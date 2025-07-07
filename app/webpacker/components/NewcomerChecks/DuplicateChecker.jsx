@@ -34,7 +34,7 @@ export default function DuplicateChecker({ competitionId }) {
         lastDuplicateCheckerJobRun={lastDuplicateCheckerJobRun}
         run={() => computePotentialDuplicatesMutate({ competitionId })}
       />
-      <SimilarPersons similarPersons={lastDuplicateCheckerJobRun.similar_persons} />
+      <SimilarPersons similarPersons={lastDuplicateCheckerJobRun.potential_duplicate_people} />
     </>
   );
 }

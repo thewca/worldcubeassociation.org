@@ -6,10 +6,10 @@ class ComputePotentialDuplicates < ApplicationJob
 
     job.touch(:start_time)
     job.update!(status: DuplicateCheckerJobRun.statuses[:in_progress])
+
     job.competition.accepted_newcomers.each do |user|
-      name = user.name
-      country_id = user.country.id
-      similar_persons = FinishUnfinishedPersons.compute_similar_persons(name, country_id, persons_cache)
+      similar_persons = FinishUnfinishedPersons.compute_similar_persons(user.name, user.country.id, persons_cache)
+
       similar_persons.each do |person, score_decimal|
         PotentialDuplicatePerson.create!(
           duplicate_checker_job_run_id: job.id,
@@ -20,6 +20,7 @@ class ComputePotentialDuplicates < ApplicationJob
         )
       end
     end
+
     job.touch(:end_time)
     job.update!(status: DuplicateCheckerJobRun.statuses[:success])
   end
