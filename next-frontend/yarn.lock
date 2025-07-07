@@ -3657,27 +3657,27 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@payloadcms/db-sqlite@npm:^3.44.0":
-  version: 3.44.0
-  resolution: "@payloadcms/db-sqlite@npm:3.44.0"
+"@payloadcms/db-sqlite@npm:^3.45.0":
+  version: 3.45.0
+  resolution: "@payloadcms/db-sqlite@npm:3.45.0"
   dependencies:
     "@libsql/client": "npm:0.14.0"
-    "@payloadcms/drizzle": "npm:3.44.0"
+    "@payloadcms/drizzle": "npm:3.45.0"
     console-table-printer: "npm:2.12.1"
-    drizzle-kit: "npm:0.31.1"
+    drizzle-kit: "npm:0.31.4"
     drizzle-orm: "npm:0.44.2"
     prompts: "npm:2.4.2"
     to-snake-case: "npm:1.0.0"
     uuid: "npm:9.0.0"
   peerDependencies:
-    payload: 3.44.0
-  checksum: 10c0/9025ad4781cea111d00180db7c3f92807850cf8890c979be8d72d48c654bc74026654623ce6c0f96213c3378f2c27cabdb388e6dc2507aae9bb71633290ec47c
+    payload: 3.45.0
+  checksum: 10c0/a2a0e8ffca6567247143d80d75a0a7144719948f0d5ff79b0c6dafa05b67b4f83c81553817985d0e1d4679125318bf408d66f1e6e42a8be3304c349c64023758
   languageName: node
   linkType: hard
 
-"@payloadcms/drizzle@npm:3.44.0":
-  version: 3.44.0
-  resolution: "@payloadcms/drizzle@npm:3.44.0"
+"@payloadcms/drizzle@npm:3.45.0":
+  version: 3.45.0
+  resolution: "@payloadcms/drizzle@npm:3.45.0"
   dependencies:
     console-table-printer: "npm:2.12.1"
     dequal: "npm:2.0.3"
@@ -3686,8 +3686,8 @@ __metadata:
     to-snake-case: "npm:1.0.0"
     uuid: "npm:9.0.0"
   peerDependencies:
-    payload: 3.44.0
-  checksum: 10c0/c1dab0d4371a54ea60b95e565dd4ab7fce9457b76aafbe807da2fd990c177a123b156a673447457942f3be8aa4d17a016b09fa39d5a3b1a11dae4c7deec85101
+    payload: 3.45.0
+  checksum: 10c0/390d2078e0c48c21e82819f1ef8e699c4d5b69dca97290aded3e2825cd0758385365907281751b3dde6b578717402f2681fcf0a08c2219f112d04705cb63754d
   languageName: node
   linkType: hard
 
@@ -8614,17 +8614,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"drizzle-kit@npm:0.31.1":
-  version: 0.31.1
-  resolution: "drizzle-kit@npm:0.31.1"
+"drizzle-kit@npm:0.31.4":
+  version: 0.31.4
+  resolution: "drizzle-kit@npm:0.31.4"
   dependencies:
     "@drizzle-team/brocli": "npm:^0.10.2"
     "@esbuild-kit/esm-loader": "npm:^2.5.5"
-    esbuild: "npm:^0.25.2"
+    esbuild: "npm:^0.25.4"
     esbuild-register: "npm:^3.5.0"
   bin:
     drizzle-kit: bin.cjs
-  checksum: 10c0/da28fd8de2649ff4a9bccd84270d95eddac7578bda7604d9cf1870bffd94c7ae3a939d300a4af1f74e9942ae6a46e816afdc7aa7f2837e65c3051a4aa42cdee9
+  checksum: 10c0/5e345cb28b4b8f329ce5f851e47418ac2ee8189aecec85f566f7a6c309f3392613519a39c559618599bd1e63fb99f114b9d9d82fb9e411f1702425678f34d2c2
   languageName: node
   linkType: hard
 
@@ -8993,7 +8993,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"esbuild@npm:^0.25.0, esbuild@npm:^0.25.1, esbuild@npm:^0.25.2":
+"esbuild@npm:^0.25.0, esbuild@npm:^0.25.1, esbuild@npm:^0.25.4":
   version: 0.25.5
   resolution: "esbuild@npm:0.25.5"
   dependencies:
@@ -12744,7 +12744,7 @@ __metadata:
     "@emotion/react": "npm:^11.14.0"
     "@eslint/eslintrc": "npm:^3"
     "@payloadcms/db-mongodb": "npm:^3.45.0"
-    "@payloadcms/db-sqlite": "npm:^3.44.0"
+    "@payloadcms/db-sqlite": "npm:^3.45.0"
     "@payloadcms/live-preview-react": "npm:^3.45.0"
     "@payloadcms/next": "npm:^3.45.0"
     "@payloadcms/richtext-lexical": "npm:^3.45.0"
