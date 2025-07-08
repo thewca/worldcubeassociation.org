@@ -1369,9 +1369,7 @@ class Competition < ApplicationRecord
     !confirmed_at.nil?
   end
 
-  def confirmed
-    self.confirmed?
-  end
+  alias_method :confirmed, :confirmed?
 
   def confirmed=(new_confirmed_str)
     new_confirmed = ActiveRecord::Type::Boolean.new.cast(new_confirmed_str)
