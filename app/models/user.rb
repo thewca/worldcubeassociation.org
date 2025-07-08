@@ -926,7 +926,7 @@ class User < ApplicationRecord
   end
 
   def can_upload_competition_results?(competition)
-    can_submit_competition_results?(competition, upload_only: true)
+    can_admin_results? || can_submit_competition_results?(competition, upload_only: true)
   end
 
   def can_submit_competition_results?(competition, upload_only: false)

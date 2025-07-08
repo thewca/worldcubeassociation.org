@@ -179,28 +179,6 @@ class AdminController < ApplicationController
     end
   end
 
-  def create_results
-    competition = competition_from_params
-
-    # Do json analysis + insert record in db, then redirect to check inbox
-    # (and delete existing record if any)
-    upload_json = UploadJson.new({
-                                   results_file: params.require(:results_file),
-                                   competition_id: competition.id,
-                                 })
-    mark_result_submitted = ActiveRecord::Type::Boolean.new.cast(params.require(:mark_result_submitted))
-
-    # This makes sure the json structure is valid!
-    if upload_json.import_to_inbox
-      competition.touch(:results_submitted_at) if competition.results_submitted_at.nil? && mark_result_submitted
-      render status: :ok, json: { success: true }
-    else
-      render status: :unprocessable_entity, json: {
-        error: upload_json.errors.full_messages,
-      }
-    end
-  end
-
   def fix_results
     @result_selector = FixResultsSelector.new(
       person_id: params[:person_id],

@@ -10,7 +10,12 @@ export default function UploadResultsJson({ competitionId, isWrtViewing }) {
   const [markResultSubmitted, setMarkResultSubmitted] = useCheckboxState(isWrtViewing);
 
   const { mutate: uploadResultsJsonMutate, error, isError } = useMutation({
-    mutationFn: () => uploadResultsJson({ competitionId, resultFile, markResultSubmitted }),
+    mutationFn: () => uploadResultsJson({
+      competitionId,
+      resultFile,
+      markResultSubmitted,
+      storeUploadedJson: !isWrtViewing, // The JSON will be uploaded to database only for Delegates.
+    }),
     onSuccess: () => {
       // Ideally page should not be reloaded, but this is currently required to re-render
       // the rails HTML portion. Once that rails HTML portion is also migrated to React,
