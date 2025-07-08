@@ -328,8 +328,9 @@ class RegistrationsController < ApplicationController
 
     # Create a default audit that marks the event as "unhandled".
     audit_event = StripeWebhookEvent.create_from_api(event)
-    audit_remote_timestamp = audit_event.created_at_remote
+    puts "audit event: #{audit_event.inspect}"
 
+    audit_remote_timestamp = audit_event.created_at_remote
     connected_account = ConnectedStripeAccount.find_by(account_id: audit_event.account_id)
 
     if connected_account.nil?
@@ -344,6 +345,7 @@ class RegistrationsController < ApplicationController
     incoming_event = StripeWebhookEvent::INCOMING_EVENTS.include?(event.type)
 
     stored_record ||= StripeRecord.create_from_api(stripe_intent, {}, audit_event.account_id) if incoming_event
+    puts "stored record: #{stored_record.inspect}"
 
     if stored_record.nil?
       logger.error "Stripe webhook reported event on entity #{stripe_intent.id} but we have no matching transaction."
@@ -353,6 +355,7 @@ class RegistrationsController < ApplicationController
     audit_event.update!(stripe_record: stored_record, handled: handling_event)
 
     # Handle the event
+    puts "event type: #{event.type}"
     case event.type
     when StripeWebhookEvent::PAYMENT_INTENT_SUCCEEDED
       # stripe_intent contains a Stripe::PaymentIntent as per Stripe documentation
@@ -414,8 +417,11 @@ class RegistrationsController < ApplicationController
 
         stored_holder.with_lock do
           already_refunded = original_payment.refunding_registration_payments.any?(receipt: stored_record)
+          puts "already refunded: #{already_refunded}"
+          byebug
+          refund_succeeded = stored_record.stripe_status_succeeded?
 
-          unless already_refunded
+          if refund_succeeded && !already_refunded
             stored_holder.record_refund(
               ruby_money.cents,
               ruby_money.currency.iso_code,

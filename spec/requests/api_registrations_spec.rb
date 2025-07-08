@@ -1409,4 +1409,261 @@ RSpec.describe 'API Registrations' do
       expect(response.parsed_body).to eq({})
     end
   end
+
+  describe 'POST #stripe_webhook' do
+    context 'handling refund.created' do
+      let(:competition) { create(:competition, :stripe_connected) }
+      let(:account_id) { competition.competition_payment_integrations.first.connected_account.account_id }
+      let(:registration) { create(:registration, competition: competition) }
+      let(:registration_payment) { create(:registration_payment, registration: registration) }
+      let(:stripe_record) { registration_payment.receipt }
+
+      context 'successful refund' do
+        before do
+          post registration_stripe_webhook_path, params: refund_created_webhook, as: :json
+        end
+
+        it 'returns success if target charge exists' do
+          expect(response).to be_successful
+        end
+
+        it 'returns 404 if charge not found' do
+          val = false
+          expect(val).to be(true)
+        end
+
+        it 'creates a stripe_record for the refund' do
+          expect(StripeRecord.exists?(stripe_id: 're_3RiDX8I8ds2wj1dZ0RDaaCQg')).to be(true)
+        end
+
+        it 'creates a refund registration_payment for a successful refund' do
+          expect(registration_payment.refunding_registration_payments.count).to be(1)
+        end
+      end
+
+      context 'does not create a refund if' do
+        before do
+        end
+
+        it 'the stripe refund isnt yet completed' do
+          post registration_stripe_webhook_path, params: refund_created_webhook(status: 'pending'), as: :json
+          expect(registration_payment.refunding_registration_payments.count).to be(0)
+        end
+
+        it 'the refund has already been recorded', :only do
+          create(:registration_payment, :refund, refunded_registration_payment: registration_payment)
+          post registration_stripe_webhook_path, params: refund_created_webhook(status: 'succeeded'), as: :json
+          expect(registration_payment.refunding_registration_payments.count).to be(1)
+          expect(RegistrationPayment.count.count).to be(2)
+        end
+      end
+    end
+
+    context 'handling refund.updated' do
+      it 'returns success if found' do
+        val = false
+        expect(val).to be(true)
+      end
+
+      it 'returns failed if refund not found' do
+        val = false
+        expect(val).to be(true)
+      end
+
+      it 'creates a refund if the status was updated to succeeded' do
+      end
+
+      context 'does not create a refund if' do
+        it 'the stripe refund isnt yet completed' do
+          val = false
+          expect(val).to be(true)
+        end
+
+        it 'the refund has already been recorded' do
+          val = false
+          expect(val).to be(true)
+        end
+      end
+    end
+  end
+
+  def refund_created_webhook(amount: 1000, currency: 'usd', charge_id: 'test_charge_id', status: 'succeeded')
+    {
+      id: "evt_3RiDX8I8ds2wj1dZ0IsN0goY",
+      account: "acct_19ZQVmE2qoiROdto",
+      object: "event",
+      api_version: "2025-04-30.basil",
+      created: 1751888912,
+      data: {
+        object: {
+          id: "re_3RiDX8I8ds2wj1dZ0RDaaCQg",
+          object: "refund",
+          amount: amount,
+          balance_transaction: "txn_3RiDX8I8ds2wj1dZ0WkucIWD",
+          charge: charge_id,
+          created: 1751888912,
+          currency: currency,
+          destination_details: {
+            card: {
+              reference_status: "pending",
+              reference_type: "acquirer_reference_number",
+              type: "refund"
+            },
+            type: "card"
+          },
+          metadata: {},
+          payment_intent: "pi_3RiDX8I8ds2wj1dZ0l44iwK5",
+          reason: nil,
+          receipt_number: nil,
+          source_transfer_reversal: nil,
+          status: status,
+          transfer_reversal: nil
+        },
+        previous_attributes: {}
+      },
+      livemode: false,
+      pending_webhooks: 0,
+      request: {
+        id: "req_f56WK6ef8J0sKx",
+        idempotency_key: "f14568d1-91bd-4a9d-ac14-1a4acf472423"
+      },
+      type: "refund.created"
+    }
+  end
+
+  def refund_notification_webhook(amount = 1000, currency = "usd")
+    {
+      id: "evt_3RhpdyI8ds2wj1dZ1Ho4bBiD",
+      account: "acct_19ZQVmE2qoiROdto",
+      object: "event",
+      api_version: "2025-04-30.basil",
+      created: 1751797081,
+      data: {
+        object: {
+          id: "test_charge_id",
+          object: "charge",
+          amount: 1000,
+          amount_captured: 1000,
+          amount_refunded: 1000,
+          application: nil,
+          application_fee: nil,
+          application_fee_amount: nil,
+          balance_transaction: "txn_3RhpdyI8ds2wj1dZ1FqImWuJ",
+          billing_details: {
+            address: {
+              city: nil,
+              country: nil,
+              line1: nil,
+              line2: nil,
+              postal_code: nil,
+              state: nil
+            },
+            email: nil,
+            name: nil,
+            phone: nil,
+            tax_id: nil
+          },
+          calculated_statement_descriptor: "WORLD CUBE ASSOCIATION",
+          captured: true,
+          created: 1751797078,
+          currency: "usd",
+          customer: nil,
+          description: "(created by Stripe CLI)",
+          destination: nil,
+          dispute: nil,
+          disputed: false,
+          failure_balance_transaction: nil,
+          failure_code: nil,
+          failure_message: nil,
+          fraud_details: {},
+          livemode: false,
+          metadata: {},
+          on_behalf_of: nil,
+          order: nil,
+          outcome: {
+            advice_code: nil,
+            network_advice_code: nil,
+            network_decline_code: nil,
+            network_status: "approved_by_network",
+            reason: nil,
+            risk_level: "normal",
+            risk_score: 44,
+            seller_message: "Payment complete.",
+            type: "authorized"
+          },
+          paid: true,
+          payment_intent: "pi_3RhpdyI8ds2wj1dZ1Eg6GGyz",
+          payment_method: "pm_1RhpdyI8ds2wj1dZs6NEO2Cf",
+          payment_method_details: {
+            card: {
+              amount_authorized: 1000,
+              authorization_code: "110830",
+              brand: "visa",
+              checks: {
+                address_line1_check: nil,
+                address_postal_code_check: nil,
+                cvc_check: "pass"
+              },
+              country: "US",
+              exp_month: 7,
+              exp_year: 2026,
+              extended_authorization: {
+                status: "disabled"
+              },
+              fingerprint: "ps38R05DkefjOFFa",
+              funding: "credit",
+              incremental_authorization: {
+                status: "unavailable"
+              },
+              installments: nil,
+              last4: "4242",
+              mandate: nil,
+              multicapture: {
+                status: "unavailable"
+              },
+              network: "visa",
+              network_token: {
+                used: false
+              },
+              network_transaction_id: "112115515682485",
+              overcapture: {
+                maximum_amount_capturable: 1000,
+                status: "unavailable"
+              },
+              regulated_status: "unregulated",
+              three_d_secure: nil,
+              wallet: nil
+            },
+            type: "card"
+          },
+          radar_options: {},
+          receipt_email: nil,
+          receipt_number: nil,
+          receipt_url: "https://pay.stripe.com/receipts/payment/CAcaFwoVYWNjdF8xOWlSZ1FJOGRzMndqMWRaKNmaqcMGMgYZL9tFe8A6LBZ0GyL6ohn5w3W8djEldAyhpRQdi6HeZ5MVRu52fvEise6hKTM0pJuITJjz",
+          refunded: true,
+          review: nil,
+          shipping: nil,
+          source: nil,
+          source_transfer: nil,
+          statement_descriptor: nil,
+          statement_descriptor_suffix: nil,
+          status: "succeeded",
+          transfer_data: nil,
+          transfer_group: nil
+        },
+        previous_attributes: {
+          amount_refunded: 0,
+          receipt_url: "https://pay.stripe.com/receipts/payment/CAcaFwoVYWNjdF8xOWlSZ1FJOGRzMndqMWRaKNiaqcMGMgbZwhqCtZk6LBZfAv6w3HkYoFLtySDPDNl20vhp0nDi_ZyIyDXIi63b8Rv_bmoJZ4cLhB5H",
+          refunded: false
+        }
+      },
+      livemode: false,
+      pending_webhooks: 0,
+      request: {
+        id: "req_ePVntYhB97A5GO",
+        idempotency_key: "4d23287a-980e-42c7-b814-229b3d24549f"
+      },
+      type: "charge.refunded"
+    }
+  end
 end
