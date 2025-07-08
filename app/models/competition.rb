@@ -1842,9 +1842,9 @@ class Competition < ApplicationRecord
     persons_wcif = self.registrations
                        .includes(includes_associations)
                        .select { authorized || it.wcif_status == "accepted" }
-                       .map do
-      managers.delete(it.user)
-      it.user.to_wcif(self, it, authorized: authorized)
+                       .map do |registration|
+      managers.delete(registration.user)
+      registration.user.to_wcif(self, registration, authorized: authorized)
     end
     # NOTE: unregistered managers may generate N+1 queries on their personal bests,
     # but that's fine because there are very few of them!
