@@ -3,7 +3,7 @@
 class UsersController < ApplicationController
   before_action :authenticate_user!, except: %i[select_nearby_delegate acknowledge_cookies]
   before_action :check_recent_authentication, only: %i[enable_2fa disable_2fa regenerate_2fa_backup_codes]
-  before_action :check_recent_authentication, only: %i[update], if: :dangerous_profile_change?
+  before_action :check_recent_auth_dangerous, only: %i[update], if: :dangerous_profile_change?
   before_action :set_recent_authentication!, only: %i[edit update enable_2fa disable_2fa]
   before_action :redirect_if_cannot_edit_user, only: %i[edit update]
   before_action -> { redirect_to_root_unless_user(:can_admin_results?) }, only: %i[admin_search]
@@ -367,6 +367,13 @@ class UsersController < ApplicationController
 
     flash[:danger] = I18n.t("users.edit.sensitive.identity_error")
     redirect_to profile_edit_path(section: "2fa-check")
+  end
+
+  # We need this separate method because you cannot define `before_filter` chains
+  #   with the same name on different endpoints :(
+  # See https://guides.rubyonrails.org/action_controller_overview.html#before-action
+  private def check_recent_auth_dangerous
+    check_recent_authentication if dangerous_profile_change?
   end
 
   def admin_search
