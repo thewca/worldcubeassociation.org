@@ -166,6 +166,14 @@ Naming/PredicatePrefix:
     # This one actually makes sense
     - has_permission?
 
+Naming/PredicateMethod:
+  AllowedPatterns:
+    # Some chunks of results code run do_* actions (for example do_person_merge)
+    # returning a boolean whether the complex database operations were successful.
+    #   Think of it as a logical combination of many AR `update` and `destroy` operations,
+    #   which by themselves also return booleans without having a question mark at the end.
+    - 'do_*'
+
 Lint/EmptyFile:
   Exclude:
     - 'db/seeds.rb'
