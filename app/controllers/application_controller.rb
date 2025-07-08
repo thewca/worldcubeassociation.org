@@ -15,7 +15,7 @@ class ApplicationController < ActionController::Base
   before_action :store_user_location!, if: :storable_location?
   before_action :add_new_relic_headers
   protected def add_new_relic_headers
-    ::NewRelic::Agent.add_custom_attributes(user_id: current_user ? current_user.id : nil)
+    ::NewRelic::Agent.add_custom_attributes(user_id: current_user&.id)
     ::NewRelic::Agent.add_custom_attributes(HTTP_REFERER: request.headers['HTTP_REFERER'])
     ::NewRelic::Agent.add_custom_attributes(HTTP_ACCEPT: request.headers['HTTP_ACCEPT'])
     ::NewRelic::Agent.add_custom_attributes(HTTP_USER_AGENT: request.user_agent)

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class RegistrationReminderJob < WcaCronjob
-  def should_send_reminder(competition)
+  def should_send_reminder?(competition)
     # We send a reminder if we haven't sent a reminder before, or if we sent one more than 2 days ago (i.e. if there is a second registration period).
     competition.registration_reminder_sent_at.nil? || competition.registration_reminder_sent_at < 2.days.ago
   end
@@ -12,7 +12,7 @@ class RegistrationReminderJob < WcaCronjob
       .not_cancelled
       .where("registration_open <= ? AND registration_open >= NOW()", 1.day.from_now)
       .includes(bookmarked_competitions: [:user])
-      .select { |c| should_send_reminder(c) }.each do |competition|
+      .select { |c| should_send_reminder?(c) }.each do |competition|
         ActiveRecord::Base.transaction do
           competition.update_attribute(:registration_reminder_sent_at, Time.now)
           users_to_email = competition.bookmarked_users
