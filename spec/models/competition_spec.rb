@@ -1767,9 +1767,9 @@ RSpec.describe Competition do
       before { competition.auto_accept_preference = :live }
 
       it 'wont bulk auto accept' do
-        create(:registration_payment, :skip_create_hook_live, registration: pending_reg, competition: competition)
+        create(:registration_payment, :skip_create_hook, registration: pending_reg, competition: competition)
         expect(pending_reg.competing_status).to eq('pending')
-        create(:registration_payment, :skip_create_hook_live, registration: waitlisted_reg, competition: competition)
+        create(:registration_payment, :skip_create_hook, registration: waitlisted_reg, competition: competition)
         expect(waitlisted_reg.competing_status).to eq('waiting_list')
 
         Registration.bulk_auto_accept(competition)
