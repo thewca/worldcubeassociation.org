@@ -416,9 +416,9 @@ class RegistrationsController < ApplicationController
         end
 
         stored_holder.with_lock do
-          already_refunded = original_payment.refunding_registration_payments.any?(receipt: stored_record)
-          puts "already refunded: #{already_refunded}"
-          byebug
+          # already_refunded = original_payment.refunding_registration_payments.any?(receipt: stored_record)
+          already_refunded = stored_record.registration_payment.present?
+
           refund_succeeded = stored_record.stripe_status_succeeded?
 
           if refund_succeeded && !already_refunded

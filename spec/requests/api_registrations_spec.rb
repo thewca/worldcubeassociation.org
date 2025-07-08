@@ -1442,19 +1442,16 @@ RSpec.describe 'API Registrations' do
       end
 
       context 'does not create a refund if' do
-        before do
-        end
-
         it 'the stripe refund isnt yet completed' do
           post registration_stripe_webhook_path, params: refund_created_webhook(status: 'pending'), as: :json
           expect(registration_payment.refunding_registration_payments.count).to be(0)
         end
 
-        it 'the refund has already been recorded', :only do
+        it 'the refund has already been recorded' do
           create(:registration_payment, :refund, refunded_registration_payment: registration_payment)
           post registration_stripe_webhook_path, params: refund_created_webhook(status: 'succeeded'), as: :json
           expect(registration_payment.refunding_registration_payments.count).to be(1)
-          expect(RegistrationPayment.count.count).to be(2)
+          expect(RegistrationPayment.count).to be(2)
         end
       end
     end
