@@ -1412,18 +1412,59 @@ RSpec.describe 'API Registrations' do
 
   describe 'POST #stripe_webhook' do
     context 'handling refund.created' do
-      let(:competition) { create(:competition, :stripe_connected) }
+      let!(:competition) { create(:competition, :stripe_connected) }
       let(:account_id) { competition.competition_payment_integrations.first.connected_account.account_id }
       let(:registration) { create(:registration, competition: competition) }
-      let(:registration_payment) { create(:registration_payment, registration: registration) }
+      let!(:registration_payment) { create(:registration_payment, registration: registration) }
       let(:stripe_record) { registration_payment.receipt }
 
       context 'successful refund' do
-        before do
-          post registration_stripe_webhook_path, params: refund_created_webhook, as: :json
+        it 'returns success if target charge exists', :only_2 do
+          post registration_stripe_webhook_path, params: refund_webhook, as: :json
+          expect(response).to be_successful
         end
 
-        it 'returns success if target charge exists' do
+        it 'returns 404 if charge not found' do
+          post registration_stripe_webhook_path, params: refund_webhook(charge_id: 'not_our_charge_id'), as: :json
+          expect(response).not_to be_successful
+        end
+
+        it 'creates a stripe_record for the refund' do
+          post registration_stripe_webhook_path, params: refund_webhook, as: :json
+          expect(StripeRecord.exists?(stripe_id: 're_3RiDX8I8ds2wj1dZ0RDaaCQg')).to be(true)
+        end
+
+        it 'creates a refund registration_payment for a successful refund' do
+          post registration_stripe_webhook_path, params: refund_webhook, as: :json
+          expect(registration_payment.refunding_registration_payments.count).to be(1)
+        end
+      end
+
+      context 'does not create a refund if' do
+        it 'the stripe refund isnt yet completed' do
+          post registration_stripe_webhook_path, params: refund_webhook(status: 'pending'), as: :json
+          expect(registration_payment.refunding_registration_payments.count).to be(0)
+        end
+
+        it 'the refund has already been recorded' do
+          create(:registration_payment, :refund, refunded_registration_payment: registration_payment)
+          post registration_stripe_webhook_path, params: refund_webhook(status: 'succeeded'), as: :json
+          expect(registration_payment.refunding_registration_payments.count).to be(1)
+          expect(RegistrationPayment.count).to be(2)
+        end
+      end
+    end
+
+    context 'handling refund.updated' do
+      let!(:competition) { create(:competition, :stripe_connected) }
+      let(:account_id) { competition.competition_payment_integrations.first.connected_account.account_id }
+      let(:registration) { create(:registration, competition: competition) }
+      let(:registration_payment) { create(:registration_payment, registration: registration) }
+      let(:receipt_record) { registration_payment.receipt }
+
+      context 'updated from pending to successful'
+        it 'returns success if target charge exists', :only do
+          post registration_stripe_webhook_path, params: refund_webhook(type: 'refund.updated'), as: :json
           expect(response).to be_successful
         end
 
@@ -1432,34 +1473,20 @@ RSpec.describe 'API Registrations' do
           expect(val).to be(true)
         end
 
-        it 'creates a stripe_record for the refund' do
+        it 'updates the stripe_record status from pending to succeeded' do
+          # TODO: We should assert that the record already exists, and that it updates
           expect(StripeRecord.exists?(stripe_id: 're_3RiDX8I8ds2wj1dZ0RDaaCQg')).to be(true)
+
+          post registration_stripe_webhook_path, params: refund_webhook(type: 'refund.updated'), as: :json
         end
 
         it 'creates a refund registration_payment for a successful refund' do
           expect(registration_payment.refunding_registration_payments.count).to be(1)
         end
-      end
 
-      context 'does not create a refund if' do
-        it 'the stripe refund isnt yet completed' do
-          post registration_stripe_webhook_path, params: refund_created_webhook(status: 'pending'), as: :json
-          expect(registration_payment.refunding_registration_payments.count).to be(0)
-        end
 
-        it 'the refund has already been recorded' do
-          create(:registration_payment, :refund, refunded_registration_payment: registration_payment)
-          post registration_stripe_webhook_path, params: refund_created_webhook(status: 'succeeded'), as: :json
-          expect(registration_payment.refunding_registration_payments.count).to be(1)
-          expect(RegistrationPayment.count).to be(2)
-        end
-      end
-    end
 
-    context 'handling refund.updated' do
       it 'returns success if found' do
-        val = false
-        expect(val).to be(true)
       end
 
       it 'returns failed if refund not found' do
@@ -1484,7 +1511,7 @@ RSpec.describe 'API Registrations' do
     end
   end
 
-  def refund_created_webhook(amount: 1000, currency: 'usd', charge_id: 'test_charge_id', status: 'succeeded')
+  def refund_webhook(amount: 1000, currency: 'usd', charge_id: 'test_charge_id', status: 'succeeded', type: 'refund.created')
     {
       id: "evt_3RiDX8I8ds2wj1dZ0IsN0goY",
       account: "acct_19ZQVmE2qoiROdto",
@@ -1524,7 +1551,7 @@ RSpec.describe 'API Registrations' do
         id: "req_f56WK6ef8J0sKx",
         idempotency_key: "f14568d1-91bd-4a9d-ac14-1a4acf472423"
       },
-      type: "refund.created"
+      type: type
     }
   end
 
