@@ -608,7 +608,7 @@ RSpec.describe Registration do
     describe 'return values' do
       context 'on success' do
         it 'returns succeeded:true and info:accepted' do
-          create(:registration_payment, :skip_create_hook_live, registration: reg, competition: auto_accept_comp)
+          create(:registration_payment, :skip_create_hook, registration: reg, competition: auto_accept_comp)
           response = reg.attempt_auto_accept(:live)
 
           expect(response[:succeeded]).to be(true)
@@ -618,7 +618,7 @@ RSpec.describe Registration do
         it 'returns info:waiting_list if reg was waitlisted' do
           auto_accept_comp.competitor_limit = 1
           create(:registration, :accepted, competition: auto_accept_comp)
-          create(:registration_payment, :skip_create_hook_live, registration: reg, competition: auto_accept_comp)
+          create(:registration_payment, :skip_create_hook, registration: reg, competition: auto_accept_comp)
           response = reg.attempt_auto_accept(:live)
 
           expect(response[:succeeded]).to be(true)
@@ -639,7 +639,7 @@ RSpec.describe Registration do
     it 'works for a paid pending registration' do
       expect(reg.competing_status).to eq('pending')
 
-      create(:registration_payment, :skip_create_hook_live, registration: reg, competition: auto_accept_comp)
+      create(:registration_payment, :skip_create_hook, registration: reg, competition: auto_accept_comp)
 
       reg.attempt_auto_accept(:live)
       expect(reg.reload.competing_status).to eq('accepted')
@@ -650,7 +650,7 @@ RSpec.describe Registration do
     it 'works for a competitor who included a donation in their payment' do
       expect(reg.competing_status).to eq('pending')
 
-      create(:registration_payment, :skip_create_hook_live, :with_donation, registration: reg, competition: auto_accept_comp)
+      create(:registration_payment, :skip_create_hook, :with_donation, registration: reg, competition: auto_accept_comp)
 
       reg.attempt_auto_accept(:live)
       expect(reg.reload.competing_status).to eq('accepted')
@@ -675,7 +675,7 @@ RSpec.describe Registration do
     it 'doesnt auto accept a competitor who gets refunded' do
       expect(reg.competing_status).to eq('pending')
 
-      create(:registration_payment, :refund, :skip_create_hook_live, registration: reg, competition: auto_accept_comp)
+      create(:registration_payment, :refund, :skip_create_hook, registration: reg, competition: auto_accept_comp)
 
       reg.attempt_auto_accept(:live)
       expect(reg.reload.competing_status).to eq('pending')
@@ -684,7 +684,7 @@ RSpec.describe Registration do
 
     it 'accepts the last competitor on the auto-accept disable threshold' do
       auto_accept_comp.auto_accept_disable_threshold = 5
-      create(:registration_payment, :skip_create_hook_live, registration: reg, competition: auto_accept_comp)
+      create(:registration_payment, :skip_create_hook, registration: reg, competition: auto_accept_comp)
       expect(reg.competing_status).to eq('pending')
 
       create_list(:registration, 4, :accepted, competition: auto_accept_comp)
@@ -692,7 +692,7 @@ RSpec.describe Registration do
       # Add some non-accepted registrations to make sure we're checking accepted registrations only
       create_list(:registration, 5, competition: auto_accept_comp)
 
-      create(:registration_payment, :skip_create_hook_live, registration: reg, competition: auto_accept_comp)
+      create(:registration_payment, :skip_create_hook, registration: reg, competition: auto_accept_comp)
 
       reg.attempt_auto_accept(:live)
       expect(reg.reload.competing_status).to eq('accepted')
@@ -701,7 +701,7 @@ RSpec.describe Registration do
     it 'can auto-accept the first user on the waiting list' do
       waiting_list_reg = create(:registration, :waiting_list, competition: auto_accept_comp)
 
-      create(:registration_payment, :skip_create_hook_live, registration: waiting_list_reg, competition: auto_accept_comp)
+      create(:registration_payment, :skip_create_hook, registration: waiting_list_reg, competition: auto_accept_comp)
 
       waiting_list_reg.attempt_auto_accept(:live)
       expect(waiting_list_reg.reload.competing_status).to eq('accepted')
@@ -713,7 +713,7 @@ RSpec.describe Registration do
         waiting_list_reg = create(:registration, :waiting_list, competition: auto_accept_comp)
         expect(waiting_list_reg.waiting_list_position).to eq(4)
 
-        create(:registration_payment, :skip_create_hook_live, registration: waiting_list_reg, competition: auto_accept_comp)
+        create(:registration_payment, :skip_create_hook, registration: waiting_list_reg, competition: auto_accept_comp)
 
         waiting_list_reg.attempt_auto_accept(:live)
         expect(waiting_list_reg.reload.competing_status).to eq('waiting_list')
@@ -721,7 +721,7 @@ RSpec.describe Registration do
       end
 
       it 'if status is cancelled' do
-        create(:registration_payment, :skip_create_hook_live, registration: reg, competition: auto_accept_comp)
+        create(:registration_payment, :skip_create_hook, registration: reg, competition: auto_accept_comp)
 
         reg.update(competing_status: 'cancelled')
 
@@ -731,7 +731,7 @@ RSpec.describe Registration do
       end
 
       it 'if status is rejected' do
-        create(:registration_payment, :skip_create_hook_live, registration: reg, competition: auto_accept_comp)
+        create(:registration_payment, :skip_create_hook, registration: reg, competition: auto_accept_comp)
         reg.update(competing_status: 'rejected')
 
         reg.attempt_auto_accept(:live)
@@ -740,7 +740,7 @@ RSpec.describe Registration do
       end
 
       it 'if status is accepted' do
-        create(:registration_payment, :skip_create_hook_live, registration: reg, competition: auto_accept_comp)
+        create(:registration_payment, :skip_create_hook, registration: reg, competition: auto_accept_comp)
         reg.update(competing_status: 'accepted')
 
         reg.attempt_auto_accept(:live)
@@ -749,7 +749,7 @@ RSpec.describe Registration do
 
       it 'if status is waiting_list and position isnt first' do
         create(:registration, :waiting_list, competition: auto_accept_comp)
-        create(:registration_payment, :skip_create_hook_live, registration: reg, competition: auto_accept_comp)
+        create(:registration_payment, :skip_create_hook, registration: reg, competition: auto_accept_comp)
         reg.update(competing_status: 'waiting_list')
         auto_accept_comp.waiting_list.add(reg)
 
@@ -764,7 +764,7 @@ RSpec.describe Registration do
 
         expect(unopened_reg.competing_status).to eq('pending')
 
-        create(:registration_payment, :skip_create_hook_live, registration: unopened_reg, competition: unopened_comp)
+        create(:registration_payment, :skip_create_hook, registration: unopened_reg, competition: unopened_comp)
 
         unopened_reg.attempt_auto_accept(:live)
         expect(unopened_reg.reload.competing_status).to eq('pending')
@@ -777,7 +777,7 @@ RSpec.describe Registration do
 
         expect(closed_reg.competing_status).to eq('pending')
 
-        create(:registration_payment, :skip_create_hook_live, registration: closed_reg, competition: closed_comp)
+        create(:registration_payment, :skip_create_hook, registration: closed_reg, competition: closed_comp)
 
         closed_reg.attempt_auto_accept(:live)
         expect(closed_reg.reload.competing_status).to eq('pending')
@@ -802,7 +802,7 @@ RSpec.describe Registration do
         create_list(:registration, 5, :accepted, competition: auto_accept_comp)
         expect(reg.competing_status).to eq('pending')
 
-        create(:registration_payment, :skip_create_hook_live, registration: reg, competition: auto_accept_comp)
+        create(:registration_payment, :skip_create_hook, registration: reg, competition: auto_accept_comp)
 
         reg.attempt_auto_accept(:live)
         expect(reg.reload.competing_status).to eq('pending')
@@ -814,7 +814,7 @@ RSpec.describe Registration do
         create_list(:registration, 6, :skip_validations, :accepted, competition: auto_accept_comp)
         expect(reg.competing_status).to eq('pending')
 
-        create(:registration_payment, :skip_create_hook_live, registration: reg, competition: auto_accept_comp)
+        create(:registration_payment, :skip_create_hook, registration: reg, competition: auto_accept_comp)
 
         reg.attempt_auto_accept(:live)
         expect(reg.reload.competing_status).to eq('pending')
@@ -835,7 +835,7 @@ RSpec.describe Registration do
         create_list(:registration, 5, :accepted, competition: limited_comp)
 
         waiting_list_reg = create(:registration, :waiting_list, competition: limited_comp)
-        create(:registration_payment, :skip_create_hook_live, registration: waiting_list_reg, competition: limited_comp)
+        create(:registration_payment, :skip_create_hook, registration: waiting_list_reg, competition: limited_comp)
         expect(waiting_list_reg.reload.competing_status).to eq('waiting_list')
 
         waiting_list_reg.attempt_auto_accept(:live)
@@ -852,7 +852,7 @@ RSpec.describe Registration do
         competition_b = create(:competition, :registration_open, :live_auto_accept, competition_series: series, series_base: competition_a)
         reg_b = create(:registration, user: registration.user, competition: competition_b)
 
-        create(:registration_payment, :skip_create_hook_live, registration: reg_b, competition: competition_b)
+        create(:registration_payment, :skip_create_hook, registration: reg_b, competition: competition_b)
 
         reg_b.attempt_auto_accept(:live)
         error_string = ['You can only be accepted for one Series competition at a time.'].to_s
@@ -868,7 +868,7 @@ RSpec.describe Registration do
         auto_accept_comp.auto_accept_disable_threshold = nil
         create_list(:registration, 5, :accepted, competition: auto_accept_comp)
 
-        create(:registration_payment, :skip_create_hook_live, registration: reg, competition: auto_accept_comp)
+        create(:registration_payment, :skip_create_hook, registration: reg, competition: auto_accept_comp)
 
         reg.attempt_auto_accept(:live)
         expect(reg.reload.competing_status).to eq('waiting_list')
@@ -883,7 +883,7 @@ RSpec.describe Registration do
         auto_accept_comp.auto_accept_disable_threshold = 4
         create_list(:registration, 5, :accepted, competition: auto_accept_comp)
 
-        create(:registration_payment, :skip_create_hook_live, registration: reg, competition: auto_accept_comp)
+        create(:registration_payment, :skip_create_hook, registration: reg, competition: auto_accept_comp)
 
         reg.attempt_auto_accept(:live)
         expect(reg.reload.competing_status).to eq('pending')
@@ -908,10 +908,10 @@ RSpec.describe Registration do
         let(:pending2) { create(:registration, :pending, competition: auto_accept_comp) }
 
         before do
-          create(:registration_payment, :skip_create_hook_bulk, registration: waitlisted1, competition: auto_accept_comp)
-          create(:registration_payment, :skip_create_hook_bulk, registration: waitlisted2, competition: auto_accept_comp)
-          create(:registration_payment, :skip_create_hook_bulk, registration: pending1, competition: auto_accept_comp)
-          create(:registration_payment, :skip_create_hook_bulk, registration: pending2, competition: auto_accept_comp)
+          create(:registration_payment, :skip_create_hook, registration: waitlisted1, competition: auto_accept_comp)
+          create(:registration_payment, :skip_create_hook, registration: waitlisted2, competition: auto_accept_comp)
+          create(:registration_payment, :skip_create_hook, registration: pending1, competition: auto_accept_comp)
+          create(:registration_payment, :skip_create_hook, registration: pending2, competition: auto_accept_comp)
           auto_accept_comp.competitor_limit = 6
           @result = Registration.bulk_auto_accept(auto_accept_comp)
         end
@@ -946,7 +946,7 @@ RSpec.describe Registration do
       it 'accepts paid-pending registrations' do
         pending_registrations = create_list(:registration, 9, :pending, competition: auto_accept_comp)
         pending_registrations.reverse_each do |r|
-          create(:registration_payment, :skip_create_hook_bulk, registration: r, competition: auto_accept_comp)
+          create(:registration_payment, :skip_create_hook, registration: r, competition: auto_accept_comp)
         end
         create_list(:registration, 5, :pending, competition: auto_accept_comp)
 
@@ -994,12 +994,12 @@ RSpec.describe Registration do
         expect(auto_accept_comp.waiting_list.reload.entries).to eq(expected_remaining)
       end
 
-      it 'accepts waitlisted registrations before pending registrations - only a few waitlisted', :only do
+      it 'accepts waitlisted registrations before pending registrations - only a few waitlisted' do
         create_list(:registration, 2, :paid, :waiting_list, competition: auto_accept_comp)
         waitlisted_ids = auto_accept_comp.registrations.competing_status_waiting_list.ids
         pending_registrations = create_list(:registration, 9, :pending, competition: auto_accept_comp)
         pending_registrations.reverse_each do |r|
-          create(:registration_payment, :skip_create_hook_bulk, registration: r, competition: auto_accept_comp)
+          create(:registration_payment, :skip_create_hook, registration: r, competition: auto_accept_comp)
         end
         create_list(:registration, 5, :pending, competition: auto_accept_comp)
 
@@ -1032,7 +1032,7 @@ RSpec.describe Registration do
       it 'accepts paid-pending registrations' do
         pending_registrations = create_list(:registration, 9, :pending, competition: threshold_auto_accept_comp)
         pending_registrations.reverse_each do |r|
-          create(:registration_payment, :skip_create_hook_bulk, registration: r, competition: threshold_auto_accept_comp)
+          create(:registration_payment, :skip_create_hook, registration: r, competition: threshold_auto_accept_comp)
         end
         create_list(:registration, 5, :pending, competition: threshold_auto_accept_comp)
 
@@ -1085,7 +1085,7 @@ RSpec.describe Registration do
         waitlisted_ids = threshold_auto_accept_comp.registrations.competing_status_waiting_list.ids
         pending_registrations = create_list(:registration, 9, :pending, competition: threshold_auto_accept_comp)
         pending_registrations.reverse_each do |r|
-          create(:registration_payment, :skip_create_hook_bulk, registration: r, competition: threshold_auto_accept_comp)
+          create(:registration_payment, :skip_create_hook, registration: r, competition: threshold_auto_accept_comp)
         end
         create_list(:registration, 5, :pending, competition: threshold_auto_accept_comp)
 
@@ -1116,7 +1116,7 @@ RSpec.describe Registration do
       it 'accepts paid-pending registrations' do
         pending_registrations = create_list(:registration, 9, :pending, competition: auto_accept_comp)
         pending_registrations.reverse_each do |r|
-          create(:registration_payment, :skip_create_hook_bulk, registration: r, competition: auto_accept_comp)
+          create(:registration_payment, :skip_create_hook, registration: r, competition: auto_accept_comp)
         end
         create_list(:registration, 5, :pending, competition: auto_accept_comp)
 
@@ -1190,8 +1190,8 @@ RSpec.describe Registration do
       end
 
       it 'gets accepted earlier if repaid before another registration' do
-        create(:registration_payment, :skip_create_hook_bulk, registration: reg1, competition: reg1.competition)
-        create(:registration_payment, :skip_create_hook_bulk, registration: reg2, competition: reg2.competition)
+        create(:registration_payment, :skip_create_hook, registration: reg1, competition: reg1.competition)
+        create(:registration_payment, :skip_create_hook, registration: reg2, competition: reg2.competition)
 
         Registration.bulk_auto_accept(auto_accept_comp)
         expect(reg1.reload.competing_status).to eq('accepted')
@@ -1199,9 +1199,9 @@ RSpec.describe Registration do
       end
 
       it 'gets accepted later if repaid after another registration' do
-        create(:registration_payment, :skip_create_hook_bulk, registration: reg2, competition: reg2.competition)
+        create(:registration_payment, :skip_create_hook, registration: reg2, competition: reg2.competition)
         sleep 1 # It appears we can only order payments to second-precision
-        create(:registration_payment, :skip_create_hook_bulk, registration: reg1, competition: reg1.competition)
+        create(:registration_payment, :skip_create_hook, registration: reg1, competition: reg1.competition)
 
         Registration.bulk_auto_accept(auto_accept_comp)
         expect(reg2.reload.competing_status).to eq('accepted')
