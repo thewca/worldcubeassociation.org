@@ -308,6 +308,7 @@ export const actionUrls = {
   competitionResultSubmission: {
     submitToWrt: (competitionId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.competition_submit_results_path("${competitionId}")) %>`,
     uploadResultsJson: (competitionId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.competition_upload_results_json_path("${competitionId}")) %>`,
+    importWcaLiveResults: (competitionId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.competition_import_from_live_path("${competitionId}")) %>`,
   },
   cronjob: {
     run: (cronjobName) => `<%= CGI.unescape(Rails.application.routes.url_helpers.panel_cronjob_run_path(cronjob_name: "${cronjobName}")) %>`,

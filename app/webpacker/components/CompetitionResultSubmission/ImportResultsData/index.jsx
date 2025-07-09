@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
-import { Accordion, Container, Message } from 'semantic-ui-react';
-import UploadResultsJson from '../UploadResultsJson';
+import {
+  Accordion, Container, Message, Tab,
+} from 'semantic-ui-react';
 import WCAQueryClientProvider from '../../../lib/providers/WCAQueryClientProvider';
+import { isProduction } from '../../../lib/wca-data.js.erb';
+import UploadResultsJson from './UploadResultsJson';
+import ImportWcaLiveResults from './ImportWcaLiveResults';
 
 export default function Wrapper({
   competitionId,
@@ -26,6 +30,39 @@ function ImportResultsData({
 }) {
   const [activeAccordion, setActiveAccordion] = useState(!alreadyHasSubmittedResult);
 
+  const onImportSuccess = () => {
+    // Ideally page should not be reloaded, but this is currently required to re-render
+    // the rails HTML portion. Once that rails HTML portion is also migrated to React,
+    // then this reload will be removed.
+    window.location.reload();
+  };
+
+  const panes = [
+    {
+      menuItem: 'Upload Results JSON',
+      render: () => (
+        <Tab.Pane>
+          <UploadResultsJson
+            competitionId={competitionId}
+            isWrtViewing={isWrtViewing}
+            onImportSuccess={onImportSuccess}
+          />
+        </Tab.Pane>
+      ),
+    },
+    ...(isProduction ? [] : [{
+      menuItem: 'Import WCA Live Results',
+      render: () => (
+        <Tab.Pane>
+          <ImportWcaLiveResults
+            competitionId={competitionId}
+            onImportSuccess={onImportSuccess}
+          />
+        </Tab.Pane>
+      ),
+    }]),
+  ];
+
   return (
     <Container fluid>
       <Accordion fluid styled>
@@ -44,10 +81,7 @@ function ImportResultsData({
               ? 'Some results have already been uploaded before, importing results data again will override all of them!'
               : 'Please start by selecting a JSON file to import.'}
           </Message>
-          <UploadResultsJson
-            competitionId={competitionId}
-            isAdminView={isAdminView}
-          />
+          <Tab panes={panes} />
         </Accordion.Content>
       </Accordion>
     </Container>
