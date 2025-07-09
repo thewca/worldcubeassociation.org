@@ -48,7 +48,11 @@ export default async function SpeedcubingHistory() {
             }
             case "paragraph": {
               return (
-                <MarkdownProse key={item.id} content={item.contentMarkdown!} as={Text} />
+                <MarkdownProse
+                  key={item.id}
+                  content={item.contentMarkdown!}
+                  as={Text}
+                />
               );
             }
             case "captionedImage": {
