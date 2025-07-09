@@ -104,6 +104,9 @@ Rails.application.routes.draw do
     resources :competition_tabs, except: [:show], as: :tabs, path: :tabs
     get 'tabs/:id/reorder' => "competition_tabs#reorder", as: :tab_reorder
     # Delegate views and action
+    get 'newcomer-checks' => 'results_submission#newcomer_checks', as: :newcomer_checks
+    get 'last-duplicate-checker-job' => 'results_submission#last_duplicate_checker_job_run', as: :last_duplicate_checker_job_run
+    post 'compute_potential_duplicates' => 'results_submission#compute_potential_duplicates', as: :compute_potential_duplicates
     get 'submit-results' => 'results_submission#new', as: :submit_results_edit
     get 'submit-scrambles' => 'admin/scrambles#match_scrambles', as: :match_scrambles
     post 'submit-results' => 'results_submission#create', as: :submit_results
@@ -232,6 +235,10 @@ Rails.application.routes.draw do
 
   root 'posts#homepage'
   resources :posts
+  get 'livestream-management' => 'posts#livestream_management'
+  post 'update-test-link' => 'posts#update_test_link'
+  patch 'promote-test-link' => 'posts#promote_test_link'
+  get 'wc2025-preview' => 'posts#wc2025_preview'
   get 'rss' => 'posts#rss'
 
   post 'upload/image', to: 'upload#image'
@@ -417,6 +424,7 @@ Rails.application.routes.draw do
         get '/competitors' => 'competitions#competitors'
         get '/qualifications' => 'competitions#qualifications'
         get '/registrations' => 'competitions#registrations'
+        get '/events' => 'competitions#events'
         get '/schedule' => 'competitions#schedule'
         get '/scrambles' => 'competitions#scrambles', as: :scrambles
         get '/scrambles/:event_id' => 'competitions#event_scrambles', as: :event_scrambles

@@ -25,6 +25,18 @@ updates:
   directory: "/next-frontend"
   schedule:
     interval: weekly
+  groups:
+    react:
+      patterns:
+        - "react"
+        - "react-dom"
+    payload:
+      patterns:
+        - "payload"
+        - "@payloadcms/*"
+    chakra-ui:
+      patterns:
+        - "@chakra-ui/*"
   open-pull-requests-limit: 10
 - package-ecosystem: github-actions
   directory: "/"

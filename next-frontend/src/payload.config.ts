@@ -15,8 +15,13 @@ import {
   FaqQuestions,
 } from "@/collections/FrequentlyAskedQuestions";
 import { Users } from "@/collections/Users";
+import { Tools } from "@/collections/Tools";
 import { Nav } from "@/globals/Nav";
 import { Home } from "@/globals/Home";
+import { SpeedCubingHistoryPage } from "@/globals/SpeedcubingHistory";
+import { Privacy } from "@/globals/Privacy";
+import { Disclaimer } from "@/globals/Disclaimer";
+import { AboutUsPage } from "@/globals/About";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -90,8 +95,16 @@ export default buildConfig({
     FaqCategories,
     FaqQuestions,
     Users,
+    Tools,
   ],
-  globals: [Nav, Home],
+  globals: [
+    Nav,
+    Home,
+    AboutUsPage,
+    Privacy,
+    Disclaimer,
+    SpeedCubingHistoryPage,
+  ],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || "",
   typescript: {
