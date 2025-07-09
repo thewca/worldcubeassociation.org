@@ -10,23 +10,23 @@ import {
   IconButton,
   Portal,
   HoverCard,
+  Image as ChakraImage,
+  Badge,
 } from "@chakra-ui/react";
 import { getT } from "@/lib/i18n/get18n";
 import type { Tool } from "@/types/payload";
 import ExternalLinkIcon from "@/components/icons/ExternalLinkIcon";
 import GithubIcon from "@/components/icons/GithubIcon";
 import { AiFillQuestionCircle } from "react-icons/ai";
-import { Image as ChakraImage } from "@chakra-ui/react";
-import Image from "next/image";
-import React from "react";
-import _ from "lodash";
 import { CgWebsite } from "react-icons/cg";
+import Image from "next/image";
+import _ from "lodash";
 
 export default async function ScoreTools() {
   const payload = await getPayload({ config });
 
   const toolResults = await payload.find({
-    collection: "tool",
+    collection: "tools",
     limit: 0,
   });
 
@@ -72,8 +72,8 @@ function ToolCard({ tool }: { tool: Tool }) {
     <Card.Root>
       <Card.Body>
         <Card.Title>
-          {tool.name}{" "}
-          {tool.author === "WCA Software Team" && (
+          {tool.name} <Badge>{tool.author}</Badge>
+          {tool.isOfficial && (
             <HoverCard.Root openDelay={0} closeDelay={500}>
               <HoverCard.Trigger>
                 <IconButton asChild variant="ghost">
@@ -100,7 +100,7 @@ function ToolCard({ tool }: { tool: Tool }) {
         </Card.Title>
         <VStack align="left">
           <Text>{tool.description}</Text>
-          <Link href={tool.toolLink}>
+          <Link href={tool.homepageLink}>
             <CgWebsite /> Website <ExternalLinkIcon />
           </Link>
           {tool.guideLink && (
@@ -108,9 +108,9 @@ function ToolCard({ tool }: { tool: Tool }) {
               <AiFillQuestionCircle /> Guide <ExternalLinkIcon />
             </Link>
           )}
-          {tool.sourceLink && (
-            <Link href={tool.sourceLink}>
-              <GithubIcon /> Sources <ExternalLinkIcon /> ({tool.author})
+          {tool.sourceCodeLink && (
+            <Link href={tool.sourceCodeLink}>
+              <GithubIcon /> Sources <ExternalLinkIcon />
             </Link>
           )}
         </VStack>

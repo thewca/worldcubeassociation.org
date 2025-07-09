@@ -15,7 +15,7 @@ import {
   FaqQuestions,
 } from "@/collections/FrequentlyAskedQuestions";
 import { Users } from "@/collections/Users";
-import { Tool } from "@/collections/Tool";
+import { Tools } from "@/collections/Tools";
 import { Nav } from "@/globals/Nav";
 import { Home } from "@/globals/Home";
 import { Privacy } from "@/globals/Privacy";
@@ -94,7 +94,7 @@ export default buildConfig({
     FaqCategories,
     FaqQuestions,
     Users,
-    Tool,
+    Tools,
   ],
   globals: [Nav, Home, AboutUsPage, Privacy, Disclaimer],
   editor: lexicalEditor(),

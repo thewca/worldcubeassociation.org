@@ -1,11 +1,7 @@
 import { CollectionConfig } from "payload";
 
-export const Tool: CollectionConfig = {
-  slug: "tool",
-  labels: {
-    singular: "Tool",
-    plural: "Tools",
-  },
+export const Tools: CollectionConfig = {
+  slug: "tools",
   admin: {
     useAsTitle: "name",
   },
@@ -14,6 +10,7 @@ export const Tool: CollectionConfig = {
       name: "name",
       type: "text",
       required: true,
+      unique: true,
     },
     {
       name: "description",
@@ -21,7 +18,7 @@ export const Tool: CollectionConfig = {
       required: true,
     },
     {
-      name: "toolLink",
+      name: "homepageLink",
       type: "text",
       required: true,
     },
@@ -30,8 +27,12 @@ export const Tool: CollectionConfig = {
       type: "text",
     },
     {
-      name: "sourceLink",
+      name: "sourceCodeLink",
       type: "text",
+    },
+    {
+      name: "isOfficial",
+      type: "checkbox",
     },
     {
       name: "author",

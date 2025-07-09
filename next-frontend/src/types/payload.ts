@@ -95,7 +95,7 @@ export interface Config {
     faqCategories: FaqCategory;
     faqQuestions: FaqQuestion;
     users: User;
-    tool: Tool;
+    tools: Tool;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
@@ -112,7 +112,7 @@ export interface Config {
     faqCategories: FaqCategoriesSelect<false> | FaqCategoriesSelect<true>;
     faqQuestions: FaqQuestionsSelect<false> | FaqQuestionsSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
-    tool: ToolSelect<false> | ToolSelect<true>;
+    tools: ToolsSelect<false> | ToolsSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
@@ -289,15 +289,16 @@ export interface FaqQuestion {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "tool".
+ * via the `definition` "tools".
  */
 export interface Tool {
   id: number;
   name: string;
   description: string;
-  toolLink: string;
+  homepageLink: string;
   guideLink?: string | null;
-  sourceLink?: string | null;
+  sourceCodeLink?: string | null;
+  isOfficial?: boolean | null;
   author: string;
   category: 'before' | 'during' | 'after';
   updatedAt: string;
@@ -335,7 +336,7 @@ export interface PayloadLockedDocument {
         value: string | User;
       } | null)
     | ({
-        relationTo: 'tool';
+        relationTo: 'tools';
         value: number | Tool;
       } | null);
   globalSlug?: string | null;
@@ -471,14 +472,15 @@ export interface UsersSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "tool_select".
+ * via the `definition` "tools_select".
  */
-export interface ToolSelect<T extends boolean = true> {
+export interface ToolsSelect<T extends boolean = true> {
   name?: T;
   description?: T;
-  toolLink?: T;
+  homepageLink?: T;
   guideLink?: T;
-  sourceLink?: T;
+  sourceCodeLink?: T;
+  isOfficial?: T;
   author?: T;
   category?: T;
   updatedAt?: T;
