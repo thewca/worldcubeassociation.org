@@ -17,7 +17,7 @@ class ResultsSubmissionController < ApplicationController
   end
 
   def last_duplicate_checker_job_run
-    last_job_run = DuplicateCheckerJobRun.where(competition_id: params.require(:competition_id)).first
+    last_job_run = DuplicateCheckerJobRun.find_by(competition_id: params.require(:competition_id))
 
     render status: :ok, json: last_job_run
   end
