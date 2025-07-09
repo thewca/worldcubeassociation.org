@@ -124,6 +124,7 @@ export interface Config {
     'about-us-page': AboutUsPage;
     'privacy-page': PrivacyPage;
     'disclaimer-page': DisclaimerPage;
+    'speedcubing-history-page': SpeedcubingHistoryPage;
   };
   globalsSelect: {
     nav: NavSelect<false> | NavSelect<true>;
@@ -131,6 +132,7 @@ export interface Config {
     'about-us-page': AboutUsPageSelect<false> | AboutUsPageSelect<true>;
     'privacy-page': PrivacyPageSelect<false> | PrivacyPageSelect<true>;
     'disclaimer-page': DisclaimerPageSelect<false> | DisclaimerPageSelect<true>;
+    'speedcubing-history-page': SpeedcubingHistoryPageSelect<false> | SpeedcubingHistoryPageSelect<true>;
   };
   locale: null;
   user: User & {
@@ -1297,6 +1299,67 @@ export interface DisclaimerPage {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "speedcubing-history-page".
+ */
+export interface SpeedcubingHistoryPage {
+  id: number;
+  blocks: (
+    | {
+        content: {
+          root: {
+            type: string;
+            children: {
+              type: string;
+              version: number;
+              [k: string]: unknown;
+            }[];
+            direction: ('ltr' | 'rtl') | null;
+            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+            indent: number;
+            version: number;
+          };
+          [k: string]: unknown;
+        };
+        contentMarkdown: string;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'paragraph';
+      }
+    | {
+        caption: string;
+        image: number | Media;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'captionedImage';
+      }
+    | {
+        content: {
+          root: {
+            type: string;
+            children: {
+              type: string;
+              version: number;
+              [k: string]: unknown;
+            }[];
+            direction: ('ltr' | 'rtl') | null;
+            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+            indent: number;
+            version: number;
+          };
+          [k: string]: unknown;
+        };
+        contentMarkdown: string;
+        quotedPerson: string;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'quote';
+      }
+  )[];
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "nav_select".
  */
 export interface NavSelect<T extends boolean = true> {
@@ -1636,6 +1699,44 @@ export interface DisclaimerPageSelect<T extends boolean = true> {
               title?: T;
               content?: T;
               contentMarkdown?: T;
+              id?: T;
+              blockName?: T;
+            };
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "speedcubing-history-page_select".
+ */
+export interface SpeedcubingHistoryPageSelect<T extends boolean = true> {
+  blocks?:
+    | T
+    | {
+        paragraph?:
+          | T
+          | {
+              content?: T;
+              contentMarkdown?: T;
+              id?: T;
+              blockName?: T;
+            };
+        captionedImage?:
+          | T
+          | {
+              caption?: T;
+              image?: T;
+              id?: T;
+              blockName?: T;
+            };
+        quote?:
+          | T
+          | {
+              content?: T;
+              contentMarkdown?: T;
+              quotedPerson?: T;
               id?: T;
               blockName?: T;
             };

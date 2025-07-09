@@ -3,13 +3,19 @@ import Markdown from "react-markdown";
 import { Link as ChakraLink } from "@chakra-ui/react";
 import Link from "next/link";
 
+import type { ElementType } from "react";
+
 interface MarkdownProseProps {
   content: string;
+  as?: ElementType;
 }
 
-export const MarkdownProse = ({ content }: MarkdownProseProps) => {
+export const MarkdownProse = ({
+  content,
+  as: RenderAs = Prose,
+}: MarkdownProseProps) => {
   return (
-    <Prose>
+    <RenderAs>
       <Markdown
         components={{
           a: ({ href, children }) => (
@@ -27,6 +33,6 @@ export const MarkdownProse = ({ content }: MarkdownProseProps) => {
       >
         {content}
       </Markdown>
-    </Prose>
+    </RenderAs>
   );
 };
