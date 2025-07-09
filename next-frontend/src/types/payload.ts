@@ -95,6 +95,7 @@ export interface Config {
     faqCategories: FaqCategory;
     faqQuestions: FaqQuestion;
     users: User;
+    tools: Tool;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
@@ -111,6 +112,7 @@ export interface Config {
     faqCategories: FaqCategoriesSelect<false> | FaqCategoriesSelect<true>;
     faqQuestions: FaqQuestionsSelect<false> | FaqQuestionsSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
+    tools: ToolsSelect<false> | ToolsSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
@@ -289,6 +291,23 @@ export interface FaqQuestion {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "tools".
+ */
+export interface Tool {
+  id: number;
+  name: string;
+  description: string;
+  homepageLink: string;
+  guideLink?: string | null;
+  sourceCodeLink?: string | null;
+  isOfficial?: boolean | null;
+  author: string;
+  category: 'before' | 'during' | 'after';
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-locked-documents".
  */
 export interface PayloadLockedDocument {
@@ -317,6 +336,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'users';
         value: string | User;
+      } | null)
+    | ({
+        relationTo: 'tools';
+        value: number | Tool;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -446,6 +469,22 @@ export interface UsersSelect<T extends boolean = true> {
         providerAccountId?: T;
         type?: T;
       };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "tools_select".
+ */
+export interface ToolsSelect<T extends boolean = true> {
+  name?: T;
+  description?: T;
+  homepageLink?: T;
+  guideLink?: T;
+  sourceCodeLink?: T;
+  isOfficial?: T;
+  author?: T;
+  category?: T;
   updatedAt?: T;
   createdAt?: T;
 }

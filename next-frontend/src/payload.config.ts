@@ -15,6 +15,7 @@ import {
   FaqQuestions,
 } from "@/collections/FrequentlyAskedQuestions";
 import { Users } from "@/collections/Users";
+import { Tools } from "@/collections/Tools";
 import { Nav } from "@/globals/Nav";
 import { Home } from "@/globals/Home";
 import { SpeedCubingHistoryPage } from "@/globals/SpeedcubingHistory";
@@ -94,6 +95,7 @@ export default buildConfig({
     FaqCategories,
     FaqQuestions,
     Users,
+    Tools,
   ],
   globals: [
     Nav,
