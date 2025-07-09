@@ -13,7 +13,7 @@ import Quote from "@/components/Quote";
 import { getPayload } from "payload";
 import config from "@payload-config";
 import { Media } from "@/types/payload";
-import { MarkdownText } from "@/components/Markdown";
+import { MarkdownProse } from "@/components/Markdown";
 import { getT } from "@/lib/i18n/get18n";
 
 export default async function SpeedcubingHistory() {
@@ -48,7 +48,7 @@ export default async function SpeedcubingHistory() {
             }
             case "paragraph": {
               return (
-                <MarkdownText key={item.id} content={item.contentMarkdown!} />
+                <MarkdownProse key={item.id} content={item.contentMarkdown!} as={Text} />
               );
             }
             case "captionedImage": {
