@@ -12,7 +12,17 @@
         <%= f.input :email, required: true, autofocus: true %>
         <%= f.input :password, required: true %>
         <%= f.input :password_confirmation, required: true %>
-        <%= f.input :should_claim_wca_id %>
+        <div class="field">
+          <%= f.label :should_claim_wca_id %>
+          <div>
+            <%= f.radio_button :should_claim_wca_id, true %>
+            <%= f.label :should_claim_wca_id_true, "Yes" %>
+          </div>
+          <div>
+            <%= f.radio_button :should_claim_wca_id, false %>
+            <%= f.label :should_claim_wca_id_false, "No" %>
+          </div>
+        </div>
         <%= recaptcha_tags %>
         <br>
         <%= f.submit t('.sign_up'), class: "btn btn-primary" %>
