@@ -1,7 +1,6 @@
 "use server";
 
 import {
-  Box,
   Container,
   Heading,
   Link,
@@ -10,6 +9,10 @@ import {
   VStack,
   Image,
   List,
+  Icon,
+  Float,
+  LinkBox,
+  LinkOverlay,
 } from "@chakra-ui/react";
 import Loading from "@/components/ui/loading";
 import { getRegionalOrganizations } from "@/lib/wca/organizations/getRegionalOrganizations";
@@ -32,55 +35,58 @@ export default async function RegionalOrganizations() {
       <VStack align={"left"}>
         <Heading size={"5xl"}>{I18n.t("regional_organizations.title")}</Heading>
         <Text>{I18n.t("regional_organizations.content")}</Text>
-        <SimpleGrid columns={3} gap="16px">
+        <SimpleGrid columns={3} columnGap={4} rowGap={6}>
           {organizations.map((org) => (
-            <Box
+            <LinkBox
               key={org.name}
               position="relative"
               role="group"
-              overflow="hidden"
               borderRadius="md"
               boxShadow="md"
               _hover={{ cursor: org.website ? "pointer" : "default" }}
             >
-              <Link
-                href={org.website}
-                textDecoration="none"
-                _hover={{ textDecoration: "none" }}
-                display="block"
-              >
-                {org.logo_url && (
-                  <Image
-                    src={org.logo_url}
-                    alt=""
-                    objectFit="cover"
-                    width="100%"
-                    height="auto"
-                    transition="opacity 0.3s"
-                    _hover={{ opacity: 0.2 }}
-                  />
-                )}
-                <VStack
-                  position={org.logo_url ? "absolute" : "relative"}
-                  top={0}
-                  left={0}
-                  right={0}
-                  bottom={0}
-                  justify="center"
-                  align="center"
-                  bg={org.logo_url ? "rgba(255,255,255,0.9)" : "transparent"}
-                  opacity={org.logo_url ? 0 : 1}
-                  _hover={{ opacity: 1 }}
-                  transition="opacity 0.3s"
-                  p={4}
-                >
+              <Float offsetX={6}>
+                <Icon asChild size="sm">
                   <Flag code={org.country_iso2} />
-                  <Text fontWeight="bold" fontSize="md" textAlign="center">
+                </Icon>
+              </Float>
+              {org.logo_url && (
+                <Image
+                  src={org.logo_url}
+                  alt={org.name}
+                  objectFit="cover"
+                  width="100%"
+                  height="auto"
+                  transition="opacity 0.3s"
+                  _hover={{ opacity: 0.2 }}
+                />
+              )}
+              <VStack
+                position={org.logo_url ? "absolute" : "relative"}
+                top={0}
+                left={0}
+                right={0}
+                bottom={0}
+                justify="center"
+                align="center"
+                bg={org.logo_url ? "rgba(255,255,255,0.9)" : "transparent"}
+                opacity={org.logo_url ? 0 : 1}
+                _hover={{ opacity: 1 }}
+                transition="opacity 0.3s"
+                p={4}
+              >
+                <LinkOverlay asChild>
+                  <Link
+                    href={org.website}
+                    variant="plainLink"
+                    textStyle="2xl"
+                    textAlign="center"
+                  >
                     {org.name}
-                  </Text>
-                </VStack>
-              </Link>
-            </Box>
+                  </Link>
+                </LinkOverlay>
+              </VStack>
+            </LinkBox>
           ))}
         </SimpleGrid>
         <Heading size={"2xl"}>
