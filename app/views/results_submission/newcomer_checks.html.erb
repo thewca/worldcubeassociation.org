@@ -3,7 +3,7 @@
 <%= render layout: 'nav' do %>
   <h1><%= yield(:title) %></h1>
 
-  <%= react_component("NewcomerChecks", {
+  <%= react_component("NewcomerChecks/DuplicateChecker", {
     competitionId: @competition.id,
   }) %>
 

@@ -15,7 +15,7 @@ class ComputePotentialDuplicates < ApplicationJob
           duplicate_checker_job_run_id: job.id,
           original_user_id: user.id,
           duplicate_person_id: person.id,
-          algorithm: PotentialDuplicatePerson.algorithms[:jarowinkler],
+          name_matching_algorithm: PotentialDuplicatePerson.name_matching_algorithms[:jarowinkler],
           score: score_decimal * 100,
         )
       end

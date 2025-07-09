@@ -6,7 +6,7 @@ class PotentialDuplicatePerson < ApplicationRecord
   belongs_to :original_user, class_name: 'User'
   belongs_to :duplicate_person, class_name: 'Person'
 
-  enum :algorithm, {
+  enum :name_matching_algorithm, {
     jarowinkler: 'jarowinkler',
   }
 

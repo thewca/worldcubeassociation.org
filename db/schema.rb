@@ -939,7 +939,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_06_19_163228) do
     t.bigint "duplicate_checker_job_run_id", null: false
     t.integer "original_user_id", null: false
     t.integer "duplicate_person_id", null: false
-    t.string "algorithm", null: false
+    t.string "name_matching_algorithm", null: false
     t.integer "score", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
