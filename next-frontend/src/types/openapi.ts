@@ -289,7 +289,7 @@ export interface components {
     schemas: {
         RegionalOrganization: {
             name: string;
-            country: string;
+            country_iso2: string;
             website: string;
             /** Format: uri */
             logo_url?: string;

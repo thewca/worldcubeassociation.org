@@ -166,12 +166,12 @@ components:
       type: object
       required:
         - name
-        - country
+        - country_iso2
         - website
       properties:
         name:
           type: string
-        country:
+        country_iso2:
           type: string
         website:
           type: string

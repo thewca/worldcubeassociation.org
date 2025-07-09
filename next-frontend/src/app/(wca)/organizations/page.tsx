@@ -17,6 +17,7 @@ import { getT } from "@/lib/i18n/get18n";
 import Errored from "@/components/ui/errored";
 import I18nHTMLTranslate from "@/components/I18nHTMLTranslate";
 import _ from "lodash";
+import Flag from "react-world-flags";
 
 export default async function RegionalOrganizations() {
   const I18n = await getT();
@@ -73,7 +74,7 @@ export default async function RegionalOrganizations() {
                   transition="opacity 0.3s"
                   p={4}
                 >
-                  <Text fontSize="sm">{org.country}</Text>
+                  <Flag code={org.country_iso2} />
                   <Text fontWeight="bold" fontSize="md" textAlign="center">
                     {org.name}
                   </Text>
