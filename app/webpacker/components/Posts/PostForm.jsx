@@ -28,9 +28,27 @@ export default function PostForm({
   const [postId, setPostId] = useInputState(post?.id ?? null);
   const [unstickAt, setUnstickAt] = useState(post?.unstick_at ?? null);
 
-  const unsavedChanges = useMemo(() => (
-    !_.isEqual(formTitle, formBody, formTags, formIsStickied, postURL, postId, unstickAt)
-  ), [formTitle, formBody, formTags, formIsStickied, postURL, postId, unstickAt]);
+  const unsavedChanges = useMemo(() => {
+    const initial = {
+      title: post?.title ?? '',
+      body: post?.body ?? '',
+      tags: post?.tags_array ?? [],
+      sticky: post?.sticky ?? false,
+      show_on_homepage: post?.show_on_homepage ?? true,
+      unstick_at: post?.unstick_at ?? null,
+    };
+
+    const current = {
+      title: formTitle,
+      body: formBody,
+      tags: formTags,
+      sticky: formIsStickied,
+      show_on_homepage: formShowOnHomePage,
+      unstick_at: unstickAt,
+    };
+
+    return !_.isEqual(initial, current);
+  }, [post, formTitle, formBody, formTags, formIsStickied, unstickAt, formShowOnHomePage]);
 
   const tagOptions = useMemo(
     () => allTags.map((tag) => ({ value: tag, text: tag, key: tag })),
