@@ -242,3 +242,6 @@ export const VALIDATORS_WITH_FIX = <%= ResultsValidators::Utils::VALIDATORS_WITH
 
 // ----- CRONJOBS -----
 export const cronjobs = <%= JobUtils::WCA_CRONJOBS.map(&:to_s).to_h { |item| [item, item] }.to_json.html_safe %>;
+
+// ----- RESULTS -----
+export const duplicateCheckerJobRunStatuses = <%= DuplicateCheckerJobRun.run_statuses.to_json %>

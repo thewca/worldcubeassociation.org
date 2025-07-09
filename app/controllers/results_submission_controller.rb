@@ -12,6 +12,23 @@ class ResultsSubmissionController < ApplicationController
     @results_validator.validate(@competition.id)
   end
 
+  def newcomer_checks
+    @competition = competition_from_params
+  end
+
+  def last_duplicate_checker_job_run
+    last_job_run = DuplicateCheckerJobRun.find_by(competition_id: params.require(:competition_id))
+
+    render status: :ok, json: last_job_run
+  end
+
+  def compute_potential_duplicates
+    job_run = DuplicateCheckerJobRun.create!(competition_id: params.require(:competition_id))
+    ComputePotentialDuplicates.perform_later(job_run)
+
+    render status: :ok, json: job_run
+  end
+
   def upload_json
     @competition = competition_from_params
     return redirect_to competition_submit_results_edit_path if @competition.results_submitted?
