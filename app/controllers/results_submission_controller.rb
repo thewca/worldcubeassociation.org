@@ -125,20 +125,19 @@ class ResultsSubmissionController < ApplicationController
     # Check inbox, create submission, send email
     @competition = competition_from_params
 
-    submit_results_params = params.require(:results_submission).permit(:message, :confirm_information)
-    submit_results_params[:competition_id] = @competition.id
-    @results_submission = ResultsSubmission.new(submit_results_params)
+    message = params.require(:message)
+    @results_submission = ResultsSubmission.new({
+                                                  message: message,
+                                                  competition_id: @competition.id,
+                                                })
     # This validates also that results in Inboxes are all good
     if @results_submission.valid?
       CompetitionsMailer.results_submitted(@competition, @results_submission, current_user).deliver_now
-
-      flash[:success] = "Thank you for submitting the results!"
       @competition.update!(results_submitted_at: Time.now)
-      redirect_to competition_path(@competition)
+      render status: :ok, json: { success: true }
     else
-      flash[:danger] = "Submitted results contain errors."
       @results_validator = @results_submission.results_validator
-      render :new
+      render status: :unprocessable_entity, json: { error: "Submitted results contain errors." }
     end
   end
 

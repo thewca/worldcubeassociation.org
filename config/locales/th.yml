@@ -850,8 +850,21 @@ th:
         wrc_incidents: หมายเลขของ incident ที่ต้องการข้อเสนอแนะจาก WRC
         #original_hash: da39a3e
         wic_feedback_requested: ''
-        #original_hash: 0aca3b0
-        wic_incidents: รายการถึง incidents ที่คุณต้องการให้ WIC ตอบกลับ
+        #original_hash: 74a092e
+        wic_incidents_html: >-
+          รายการตัวเลขที่อ้างอิงถึง Incidents ที่คุณต้องการให้ WIC
+          แสดงความคิดเห็น <br> <strong>%{wic_incident_alert}</strong>
+        #original_hash: c4fd7a6
+        wic_incident_alert: >-
+          หาก Incidents ของ WIC เป็นเรื่องละเอียดอ่อน
+          (ไม่จำกัดเพียงเรื่องอาชญากรรม การคุกคาม การทำร้ายร่างกาย ฯลฯ)
+          โปรดอย่ารายงานเรื่องนี้และส่งอีเมลถึง WIC แยกต่างหาก สำหรับ Incidents
+          อื่นๆ ของ WIC โปรดใช้เวอร์ชันสั้น ๆ ที่ไม่เปิดเผยตัวตนของเหตุการณ์นั้น
+          และติดตามเรื่องดังกล่าวกับ WIC เป็นการส่วนตัวพร้อมรายละเอียดเพิ่มเติม
+          โดย WIC
+          จะยังคงให้ข้อเสนอแนะเกี่ยวกับเวอร์ชันที่ไม่เปิดเผยตัวตนเพื่อให้ทราบโดยทั่วไป
+          สำหรับเหตุการณ์ WIC ทั้งหมดที่เกี่ยวข้องกับอาสาสมัคร WCA
+          โปรดอย่ารายงานรายละเอียดทั้งหมด และติดต่อ WIC เป็นการส่วนตัว
         #original_hash: f30abdc
         remarks: >-
           พูดเกี่ยวกับรายละเอียดอย่างอื่นที่คุณต้องการแบ่งปัน (เช่น
@@ -898,13 +911,9 @@ th:
         status: ''
       results_submission:
         #original_hash: da39a3e
-        schedule_url: ''
-        #original_hash: da39a3e
         results_file: ''
         #original_hash: da39a3e
         message: ''
-        #original_hash: da39a3e
-        confirm_information: ''
       regional_organization:
         #original_hash: da39a3e
         name: ''
@@ -2096,6 +2105,8 @@ th:
       translators: Translators
   registrations:
     errors:
+      #original_hash: 8c2f29b
+      exceeding_competitor_limit: จำนวนผู้เข้าแข่งขันถึงขีดจำกัดแล้ว
       #original_hash: 51c7156
       edit_deadline_passed: >-
         กำหนดเวลาแก้ไขเวลาการสมัครการแข่งขันได้ผ่านไปแล้ว
@@ -2259,8 +2270,6 @@ th:
         with_stripe: จ่ายวันที่
       #original_hash: ce53c71
       payment_requested_on: 'ชำระเงินตามที่ร้องขอ: %{date}'
-      #original_hash: f5b1b34
-      payment_completed_on: 'การชำระเงินสำเร็จเมื่อวันที่: %{date}'
       #original_hash: 3141a14
       series_registrations: การาสมัครการแข่งขันซีรียส์
       #original_hash: b25928c
@@ -2317,6 +2326,16 @@ th:
       ซึ่งจะไม่ได้รับการยืนยันจนกว่าจะมีที่ว่าง
     #original_hash: bcd7d70
     entry_fees_fully_paid: 'คุณได้ชำระ %{paid} ซึ่งครบตามกำหนดของการสมัคร'
+    #original_hash: e50b275
+    entry_fees_partially_paid: >-
+      คุณได้ชำระเงินแล้ว %{paid} บาท จาก %{total} บาท
+      ตรวจสอบกับผู้จัดการแข่งขันว่าคุณต้องชำระเงินส่วนที่เหลือหรือไม่
+    #original_hash: b9d0818
+    entry_fees_fully_refunded: >-
+      ค่าสมัครของคุณได้รับการคืนเต็มจำนวนแล้ว หากคุณต้องการชำระเงินอีกครั้ง
+      คุณสามารถทำได้ที่ด้านล่าง
+    #original_hash: 0c9c8e7
+    entry_fees_pay_again: ฉันต้องการจ่ายเงินอีกครั้ง
     #original_hash: 2e5d1b9
     will_pay_here: คุณจะจ่ายที่นี่ หลังจากส่งการสมัครไปแล้ว
     #original_hash: 86877d4
@@ -3120,6 +3139,10 @@ th:
           auto_close_threshold: เกณฑ์ปิดอัตโนมัติ
           #original_hash: b1d5af4
           newcomer_month_reserved_spots: จำนวนที่นั่งสำรองสำหรับผู้เข้าแข่งขันใหม่
+          #original_hash: b13de61
+          auto_accept_enabled: การยอมรับการสมัครอัตโนมัติเป็นกลุ่ม
+          #original_hash: 1b8698d
+          auto_accept_disable_threshold: จำกัดการรับการสมัครอัตโนมัติ
         staff:
           #original_hash: 2e3ed8b
           staff_delegate_ids: WCA Delegate(s)
@@ -3308,6 +3331,19 @@ th:
           newcomer_month_reserved_spots: >-
             อนุญาตเฉพาะในช่วง Newcomer Month เท่านั้น -
             ตำแหน่งที่จองไว้จะต้องไม่เกินครึ่งหนึ่งของขีดจำกัดผู้แข่งขัน
+          #original_hash: 79dcafd
+          auto_accept_enabled: >-
+            การดำเนินการนี้จะเปิดใช้งาน "ยอมรับการสมัครอัตโนมัติเป็นกลุ่ม"
+            ในเมนูการสมัครการแข่งขัน
+            ซึ่งจะยอมรับการสมัครที่ชำระค่าสมัครแล้วและรายชื่อที่รอดำเนินการจนถึงขีดจำกัดของผู้เข้าแข่งขันหรือขีดจำกัดที่กำหนดไว้ด้านล่าง
+            ใช้ด้วยความเสี่ยงของคุณเอง
+          #original_hash: b261026
+          auto_accept_disable_threshold: >-
+            เมื่อจำนวนการสมัครที่ได้รับการยอมรับถึงจำนวนนี้
+            ระบบจะปิดใช้งานระบบการยอมรับอัตโนมัติ
+            ซึ่งจะทำให้ผู้จัดการแข่งขันสามารถยอมรับการสมัครการแข่งขันในขั้นสุดท้ายได้ด้วยตนเอง
+            เลขที่ใส่จะต้องน้อยกว่าขีดจำกัดของผู้เข้าแข่งขัน
+            สามารถปล่อยว่างไว้ได้หากไม่ต้องการ
         staff:
           #original_hash: b4d020f
           staff_delegate_ids: WCA Delegates สำหรับการแข่งขัน
@@ -3464,6 +3500,13 @@ th:
             'true': ฉันต้องการจำกัดจำนวนผู้เข้าแข่งขัน
             #original_hash: 53397ec
             'false': ฉันไม่ต้องการจำกัดจำนวนผู้เข้าแข่งขัน
+          auto_accept_enabled:
+            #original_hash: 1c0c289
+            'true': >-
+              เปิดใช้งานปุ่ม 'ยอมรับการสมัครอัตโนมัติเป็นกลุ่ม'
+              ในเมนูการสมัครการแข่งขัน
+            #original_hash: 5996b1f
+            'false': ปิดใช้งานปุ่ม 'ยอมรับการสมัครอัตโนมัติเป็นกลุ่ม'
         registration:
           allow_on_the_spot:
             #original_hash: 0c521ca
@@ -3504,6 +3547,17 @@ th:
               #original_hash: 6509041
               'false': ผู้เข้าแข่งขันจะต้องผ่านการคัดเลือกในประเภทที่สมัคร
     registration_v2:
+      auto_accept:
+        #original_hash: eaf9960
+        bulk_auto_accept: ยอมรับการสมัครโดยอัตโนมัติ
+        #original_hash: 1a84d92
+        cant_bulk_auto_accept: >-
+          เกิดข้อผิดพลาดขณะพยายามยอมรับการสมัครอัตโนมัติเป็นกลุ่ม - ติดต่อ WST
+          เพื่อขอความช่วยเหลือหากจำเป็น
+        #original_hash: 1897ffb
+        bulk_auto_accepted: ยอมรับการสมัครอัตโนมัติเป็นกลุ่มสำเร็จ
+        #original_hash: 786d81b
+        nothing_to_accept: ไม่มีการสมัครที่เข้าเงื่อนไขการยอมรับอัตโนมัติ
       pdf:
         #original_hash: 5c7d60f
         link: 'เป็น <0>%{pdfLink}</0>'
@@ -3550,6 +3604,14 @@ th:
             ควรใช้สถานะรอดำเนินการสำหรับการสมัครที่ไม่สมบูรณ์ (เช่น
             ไม่ได้ชำระเงิน) เท่านั้น - โปรดใช้ Waiting List
             หากการแข่งขันของคุณเต็มและไม่สามารถรับผู้เข้าแข่งขันรายใหม่ได้
+          #original_hash: 134e94f
+          waitlist_skipped_warning: >-
+            คุณได้ข้ามการสมัครที่รอดำเนินการไปก่อนหน้านี้ %{count} รายการแล้ว
+            คุณแน่ใจหรือไม่ว่าต้องการย้ายการลงสมัครที่เลือกไปยังรายการรอ?
+          #original_hash: c2875e1
+          approve_skipped_warning: >-
+            คุณได้ข้ามการสมัครที่รอดำเนินการไปก่อนหน้านี้ %{count} รายการ
+            คุณแน่ใจหรือไม่ว่าต้องการยอมรับกาสมัครที่เลือกไว้
         waitlist:
           #original_hash: 3907ca4
           title: Waiting List Registrations
@@ -3560,13 +3622,17 @@ th:
             ผู้เข้าแข่งขันที่ชำระเงินแล้วจะถูกเพิ่มเข้าในลำดับท้ายตามลำดับที่ชำระเงินแล้ว
             ตามด้วยผู้เข้าแข่งขันที่เหลือตามลำดับที่สมัครแข่งขัน
             คุณสามารถปรับเปลี่ยนลำดับด้วยตนเองในโหมดแก้ไขได้หากจำเป็น
-          #original_hash: a6c86ec
+          #original_hash: dc16b6c
           skipped_warning: >-
             คุณได้ข้ามการสมัคร %{count} รายการใน waiting list
-            คุณแน่ใจหรือไม่ว่าต้องการอนุมัติการสมัครรายการอื่นแทน
+            คุณแน่ใจหรือไม่ว่าต้องการอนุมัติการสมัครที่เลือกแทน
         approved:
           #original_hash: a59612c
           title: การสมัครที่ได้รับการยอมรับแล้ว
+          #original_hash: bbdee7d
+          pending_waitlist_combined_skipped_warning: >-
+            คุณได้ข้ามการสมัครที่รอดำเนินการ/อยู่ในรายการรอก่อนหน้านี้ไปแล้ว
+            %{count} รายการ คุณแน่ใจหรือไม่ว่าต้องการยอมรับการสมัครที่เลือกไว้
         cancelled:
           #original_hash: bd69c74
           title: การสมัครที่ถูกยกเลิก
@@ -3657,7 +3723,7 @@ th:
         rejected: ถูกปฏิเสธ
         #original_hash: 43dc853
         amount: Amount
-        #original_hash: 67b3c7d
+        #original_hash: d7e4497
         too_many: >-
           การยอมรับกาสมัครทั้งหมดเหล่านี้จะเกินขีดจำกัดของผู้เข้าแข่งขันที่
           %{count} คน
@@ -3809,11 +3875,27 @@ th:
         '-6002': คุณต้องสมัครการแข่งขันให้เสร็จสิ้นก่อนจึงจะสามารถชำระเงินได้
         #original_hash: ee2c9c4
         '-6003': ไม่พบการชำระเงินค้างชำระ - อาจเป็นเพราะคุณได้ชำระเงินค่าสมัครไปแล้ว
+        #original_hash: 631576f
+        '-7001': ผู้เข้าแข่งขันยังมีค้างชำระค่าสมัครการแข่งขัน
+        #original_hash: 2aa350b
+        '-7002': การยอมรับการสมัครอัตโนมัติไม่ได้เปิดใช้งานสำหรับการแข่งขันนี้
+        #original_hash: d191d2d
+        '-7003': >-
+          สามารถยอมรับการสมัครการแข่งขันที่รอดำเนินการหรือตำแหน่งแรกในรายชื่อรอโดยอัตโนมัติเท่านั้น
+        #original_hash: 30fd93d
+        '-7004': การแข่งขันได้ถึงเกณฑ์ auto_accept_disable_threshold แล้ว
+        #original_hash: f2bb661
+        '-7005': >-
+          ไม่สามารถยอมรับการสมัครการแข่งขันอัตโนมัติได้ในขณะที่ยังไม่เปิดรับสมัครการแข่งขัน
     errors:
       #original_hash: b14d060
       must_use_wca_registration: >-
         ระบบยอมรับการสมัครอัตโนมัติสามารถใช้ได้เฉพาะกรณีที่คุณใช้เว็บไซต์ WCA
         ในการรับสมัครการแข่งขันเท่านั้น
+      #original_hash: 693d47d
+      must_use_payment_integration: >-
+        คุณต้องเปิดใช้งานการชำระค่าสมัคร (เช่น Stripe)
+        เพื่อใช้การยอมรับอัตโนมัติ
       #original_hash: 130c901
       auto_accept_limit: >-
         ขีดจำกัดสำหรับการยอมรับการสมัครอัตโนมัติจะต้องน้อยกว่าขีดจำกัดของผู้แข่งขัน
@@ -4191,6 +4273,8 @@ th:
         tabs: จัดการแท็บ
         #original_hash: f3d6278
         submit_results: ส่งผลการแข่งขัน
+        #original_hash: e2d046b
+        match_scrambles: ส่งโจทย์การแข่งขัน
         #original_hash: 4c9f914
         delegate_report: Delegate report
         #original_hash: b233e77
@@ -4537,6 +4621,13 @@ th:
       success: ขอบคุณสำหรับข้อความของคุณ เราจะติดต่อกลับในเร็วนี้!
       #original_hash: 8e3a9da
       delivery_error: ข้อผิดพลาดในการส่งข้อความ
+  misc:
+    #original_hash: 9a0f1cc
+    forum_age_requirement: คุณต้องมีอายุ 13 ปีจึงจะสามารถเข้าถึงฟอรัม WCA ได้
+    #original_hash: d1f3342
+    forum_enter_dob: >-
+      จำเป็นต้องระบุวันเกิดก่อนจึงจะเข้าใช้ฟอรัมได้ โปรดป้อนวันเกิดของคุณ
+      จากนั้นลองเข้าใช้ฟอรัมอีกครั้ง
   faq:
     #original_hash: d790b40
     title: คำถามที่พบบ่อย
@@ -5004,7 +5095,6 @@ th:
     title: Software tools สำหรับการแข่งขัน WCA
     #original_hash: 6d2fe37
     wca_icon_text: Developed and maintained by the WST
-    #original_hash: 6520873
     intro:
       #original_hash: 0c5fab5
       desc: >-
@@ -5108,6 +5198,7 @@ th:
   logo:
     #original_hash: c72c969
     title: WCA Logo
+    #original_hash: 6520873
     intro: >-
       โลโก้ WCA ได้รับการออกแบบโดย Justin Eastman
       ในการประกวดการออกแบบในเดือนมกราคม พ.ศ. 2548 เราชอบโลโก้นี้เนื่องจากดีไซน์

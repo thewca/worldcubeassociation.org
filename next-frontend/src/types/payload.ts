@@ -121,11 +121,17 @@ export interface Config {
   globals: {
     nav: Nav;
     home: Home;
+    'about-us-page': AboutUsPage;
+    'privacy-page': PrivacyPage;
+    'disclaimer-page': DisclaimerPage;
     'speedcubing-history-page': SpeedcubingHistoryPage;
   };
   globalsSelect: {
     nav: NavSelect<false> | NavSelect<true>;
     home: HomeSelect<false> | HomeSelect<true>;
+    'about-us-page': AboutUsPageSelect<false> | AboutUsPageSelect<true>;
+    'privacy-page': PrivacyPageSelect<false> | PrivacyPageSelect<true>;
+    'disclaimer-page': DisclaimerPageSelect<false> | DisclaimerPageSelect<true>;
     'speedcubing-history-page': SpeedcubingHistoryPageSelect<false> | SpeedcubingHistoryPageSelect<true>;
   };
   locale: null;
@@ -197,7 +203,7 @@ export interface Testimonial {
     };
     [k: string]: unknown;
   };
-  fullTestimonialMarkdown?: string | null;
+  fullTestimonialMarkdown: string;
   whoDunnit: string;
   updatedAt: string;
   createdAt: string;
@@ -225,7 +231,7 @@ export interface Announcement {
     };
     [k: string]: unknown;
   };
-  contentMarkdown?: string | null;
+  contentMarkdown: string;
   publishedAt: string;
   publishedBy: string | User;
   updatedAt: string;
@@ -1133,6 +1139,166 @@ export interface FullWidthBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "about-us-page".
+ */
+export interface AboutUsPage {
+  id: number;
+  blocks: (
+    | {
+        content: {
+          root: {
+            type: string;
+            children: {
+              type: string;
+              version: number;
+              [k: string]: unknown;
+            }[];
+            direction: ('ltr' | 'rtl') | null;
+            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+            indent: number;
+            version: number;
+          };
+          [k: string]: unknown;
+        };
+        contentMarkdown: string;
+        buttons: {
+          label: string;
+          url: string;
+          id?: string | null;
+        }[];
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'callToAction';
+      }
+    | {
+        title: string;
+        image?: (number | null) | Media;
+        content: {
+          root: {
+            type: string;
+            children: {
+              type: string;
+              version: number;
+              [k: string]: unknown;
+            }[];
+            direction: ('ltr' | 'rtl') | null;
+            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+            indent: number;
+            version: number;
+          };
+          [k: string]: unknown;
+        };
+        contentMarkdown: string;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'simpleItem';
+      }
+    | {
+        content: {
+          root: {
+            type: string;
+            children: {
+              type: string;
+              version: number;
+              [k: string]: unknown;
+            }[];
+            direction: ('ltr' | 'rtl') | null;
+            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+            indent: number;
+            version: number;
+          };
+          [k: string]: unknown;
+        };
+        contentMarkdown: string;
+        quotedPerson: string;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'quote';
+      }
+  )[];
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "privacy-page".
+ */
+export interface PrivacyPage {
+  id: number;
+  preamble: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  preambleMarkdown: string;
+  blocks: {
+    title: string;
+    content: {
+      root: {
+        type: string;
+        children: {
+          type: string;
+          version: number;
+          [k: string]: unknown;
+        }[];
+        direction: ('ltr' | 'rtl') | null;
+        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+        indent: number;
+        version: number;
+      };
+      [k: string]: unknown;
+    };
+    contentMarkdown: string;
+    id?: string | null;
+    blockName?: string | null;
+    blockType: 'privacyItem';
+  }[];
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "disclaimer-page".
+ */
+export interface DisclaimerPage {
+  id: number;
+  blocks: {
+    title?: string | null;
+    content: {
+      root: {
+        type: string;
+        children: {
+          type: string;
+          version: number;
+          [k: string]: unknown;
+        }[];
+        direction: ('ltr' | 'rtl') | null;
+        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+        indent: number;
+        version: number;
+      };
+      [k: string]: unknown;
+    };
+    contentMarkdown: string;
+    id?: string | null;
+    blockName?: string | null;
+    blockType: 'disclaimerItem';
+  }[];
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "speedcubing-history-page".
  */
 export interface SpeedcubingHistoryPage {
@@ -1154,7 +1320,7 @@ export interface SpeedcubingHistoryPage {
           };
           [k: string]: unknown;
         };
-        contentMarkdown?: string | null;
+        contentMarkdown: string;
         id?: string | null;
         blockName?: string | null;
         blockType: 'paragraph';
@@ -1182,7 +1348,7 @@ export interface SpeedcubingHistoryPage {
           };
           [k: string]: unknown;
         };
-        contentMarkdown?: string | null;
+        contentMarkdown: string;
         quotedPerson: string;
         id?: string | null;
         blockName?: string | null;
@@ -1447,6 +1613,99 @@ export interface FullWidthBlockSelect<T extends boolean = true> {
       };
   id?: T;
   blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "about-us-page_select".
+ */
+export interface AboutUsPageSelect<T extends boolean = true> {
+  blocks?:
+    | T
+    | {
+        callToAction?:
+          | T
+          | {
+              content?: T;
+              contentMarkdown?: T;
+              buttons?:
+                | T
+                | {
+                    label?: T;
+                    url?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        simpleItem?:
+          | T
+          | {
+              title?: T;
+              image?: T;
+              content?: T;
+              contentMarkdown?: T;
+              id?: T;
+              blockName?: T;
+            };
+        quote?:
+          | T
+          | {
+              content?: T;
+              contentMarkdown?: T;
+              quotedPerson?: T;
+              id?: T;
+              blockName?: T;
+            };
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "privacy-page_select".
+ */
+export interface PrivacyPageSelect<T extends boolean = true> {
+  preamble?: T;
+  preambleMarkdown?: T;
+  blocks?:
+    | T
+    | {
+        privacyItem?:
+          | T
+          | {
+              title?: T;
+              content?: T;
+              contentMarkdown?: T;
+              id?: T;
+              blockName?: T;
+            };
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "disclaimer-page_select".
+ */
+export interface DisclaimerPageSelect<T extends boolean = true> {
+  blocks?:
+    | T
+    | {
+        disclaimerItem?:
+          | T
+          | {
+              title?: T;
+              content?: T;
+              contentMarkdown?: T;
+              id?: T;
+              blockName?: T;
+            };
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

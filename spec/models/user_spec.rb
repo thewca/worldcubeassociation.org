@@ -761,7 +761,7 @@ RSpec.describe User do
     end
   end
 
-  describe '#below_forum_age_requirement?', :tag do
+  describe '#below_forum_age_requirement?' do
     let(:user) { create(:user) }
 
     it 'true when user under 13' do
