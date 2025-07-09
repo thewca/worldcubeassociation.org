@@ -94,6 +94,16 @@ class User < ApplicationRecord
     (team_leaders + senior_delegates).uniq.compact
   end
 
+  def self.regional_voters
+    regional_delegates = RolesMetadataDelegateRegions
+                         .where(status: "regional_delegate")
+                         .joins(:user_role)
+                         .where(user_roles: { end_date: nil })
+                         .includes(:user)
+                         .map(&:user)
+    regional_delegates.uniq.compact
+  end
+
   def self.all_discourse_groups
     UserGroup.teams_committees.map { |x| x.metadata.friendly_id } + UserGroup.councils.map { |x| x.metadata.friendly_id } + RolesMetadataDelegateRegions.statuses.values + [UserGroup.group_types[:board]]
   end
