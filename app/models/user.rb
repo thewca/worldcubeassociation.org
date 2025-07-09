@@ -940,6 +940,10 @@ class User < ApplicationRecord
     competition.announced? && appropriate_role && appropriate_time && !competition.results_posted?
   end
 
+  def can_check_newcomers_data?(competition)
+    competition.upcoming? && can_admin_results?
+  end
+
   def can_create_poll?
     admin? || board_member? || wrc_team? || wic_team? || quality_assurance_committee?
   end
