@@ -1,4 +1,4 @@
-"use client";
+"use server";
 
 import {
   Box,
@@ -12,31 +12,19 @@ import {
   List,
 } from "@chakra-ui/react";
 import Loading from "@/components/ui/loading";
-import useAPI from "@/lib/wca/useAPI";
-import { useQuery } from "@tanstack/react-query";
-import { useMemo } from "react";
-import { useT } from "@/lib/i18n/useI18n";
+import { getRegionalOrganizations } from "@/lib/wca/organizations/getRegionalOrganizations";
+import { getT } from "@/lib/i18n/get18n";
 import Errored from "@/components/ui/errored";
 import I18nHTMLTranslate from "@/components/I18nHTMLTranslate";
 import _ from "lodash";
 
-export default function RegionalOrganizations() {
-  const I18n = useT();
-  const api = useAPI();
-  const { data: organizationRequest, isLoading } = useQuery({
-    queryKey: ["regional-organizations"],
-    queryFn: () => api.GET("/regional-organizations"),
-  });
+export default async function RegionalOrganizations() {
+  const I18n = await getT();
 
-  const organizations = useMemo(
-    () => organizationRequest?.data ?? [],
-    [organizationRequest],
-  );
+  const { data: organizations, error } = await getRegionalOrganizations();
 
-  if (isLoading) return <Loading />;
-
-  if (organizations.length === 0)
-    return <Errored error={"Error Loading Regional Organizations"} />;
+  if (error) return <Errored error={error} />;
+  if (!organizations) return <Loading />;
 
   return (
     <Container>
