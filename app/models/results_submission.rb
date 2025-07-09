@@ -3,12 +3,10 @@
 class ResultsSubmission
   include ActiveModel::Model
 
-  attr_accessor :message, :competition_id, :confirm_information
+  attr_accessor :message, :competition_id
 
   validates :message, presence: true
   validates :competition_id, presence: true
-  CONFIRM_INFORMATION_ERROR = "You must confirm the information is accurate"
-  validates :confirm_information, acceptance: { message: CONFIRM_INFORMATION_ERROR, allow_nil: false }
 
   validate do
     if results_validator.any_errors?

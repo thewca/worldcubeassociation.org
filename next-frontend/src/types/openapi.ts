@@ -194,6 +194,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/export/public": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Export Information */
+        get: operations["getExports"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/users/me/permissions": {
         parameters: {
             query?: never;
@@ -267,6 +284,19 @@ export interface components {
              */
             email?: string;
             avatar?: components["schemas"]["UserAvatar"];
+        };
+        ExportInfo: {
+            /** Format: date */
+            export_date: string;
+            /** Format: uri */
+            sql_url: string;
+            sql_filesize_bytes: number;
+            /** Format: uri */
+            tsv_url: string;
+            tsv_filesize_bytes: number;
+            readme: string;
+            /** Format: uri */
+            developer_url?: string;
         };
         Rank: {
             id: number;
@@ -564,6 +594,26 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
+    getExports: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successfully retrieved exports */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ExportInfo"];
+                };
+            };
+        };
+    };
     getUserPermissions: {
         parameters: {
             query?: never;

@@ -873,13 +873,9 @@ ko:
         status: ''
       results_submission:
         #original_hash: da39a3e
-        schedule_url: ''
-        #original_hash: da39a3e
         results_file: ''
         #original_hash: da39a3e
         message: ''
-        #original_hash: da39a3e
-        confirm_information: ''
       regional_organization:
         #original_hash: da39a3e
         name: ''
@@ -2085,7 +2081,7 @@ ko:
       #original_hash: 3141a14
       series_registrations: 시리즈 참가 신청
       #original_hash: b25928c
-      total: 총
+      total: 총합
     new_registration:
       #original_hash: 8b9f726
       title: '%{comp} 참가 신청'
@@ -2616,7 +2612,7 @@ ko:
       #original_hash: db98a68
       title: 대회
       #original_hash: 6a72085
-      all_events: 모두
+      all_events: 모두 선택
       #original_hash: 6d76b81
       all_years: 모든 연도
       #original_hash: 719ea39
@@ -3252,11 +3248,11 @@ ko:
           other: '%{count}자리 남음'
         pending:
           #original_hash: 4210670
-          title: 승인 대기 중인 참가 신청
+          title: 승인 보류자 명단
           #original_hash: 5e16c6d
           information: >-
-            '보류'는 참가 신청이 완료되지 않은 경우(예: 미납)에만 사용해야 합니다. 신청자가 너무 많아서 새로운 참가자를 받을 수
-            없는 경우 대기 명단을 사용하십시오.
+            '승인 보류자 명단'은 참가 신청이 완료되지 않은 경우에만(예: 미납) 사용해야 합니다. 신청자가 너무 많아서 새로운
+            참가자를 받을 수 없는 경우 대기자 명단을 사용하십시오.
           #original_hash: 134e94f
           waitlist_skipped_warning: >-
             %{count}개의 참가 신청을 이미 건너뛰었습니다. 보류 중인 참가 신청이 있습니다. 선택한 참가 신청을 대기자 명단으로
@@ -3265,7 +3261,7 @@ ko:
           approve_skipped_warning: '%{count}개를 이미 건너뛰었습니다. 보류 중인 참가 신청이 있습니다. 선택한 참가 신청을 수락하시겠습니까?'
         waitlist:
           #original_hash: 3907ca4
-          title: 대기 명단 참가 신청
+          title: 대기자 명단
           #original_hash: de3f9d4
           information: >-
             선수는 대기자 명단 맨 마지막에 추가됩니다. 여러 선수를 한꺼번에 추가하는 경우, 참가비를 결제한 선수는 결제 순서대로 맨
@@ -3274,17 +3270,17 @@ ko:
           skipped_warning: '대기 명단에서 %{count}개의 참가 신청을 건너뛰었습니다. 선택된 참가 신청을 승인하시겠습니까?'
         approved:
           #original_hash: a59612c
-          title: 승인된 참가 신청
+          title: 승인자 명단
           #original_hash: bbdee7d
           pending_waitlist_combined_skipped_warning: '이전에 보류/대기 명단에 있는 참가 신청 중 %{count}개를 건너뛰었습니다. 선택한 참가 신청을 수락하시겠습니까?'
         cancelled:
           #original_hash: bd69c74
-          title: 취소된 참가 신청
+          title: 취소자 명단
           #original_hash: bb5b570
           information: 참가 신청이 취소된 선수는 다시 참가 신청할 수 있습니다.
         rejected:
           #original_hash: 9cef5ae
-          title: 거절된 참가 신청
+          title: 반려자 명단
           #original_hash: 3fd2e0c
           information: 참가 신청이 거절된 선수는 참가 신청을 다시 할 수 없습니다.
         non_competing:
@@ -3309,7 +3305,7 @@ ko:
         #original_hash: 5e0207a
         comment_and_note: 코멘트 및 메모
         #original_hash: b651ae4
-        edit_waiting_list: 대기 명단 편집 모드 활성화
+        edit_waiting_list: 대기자 명단 편집 모드 활성화
       bookmark:
         #original_hash: 7952a5c
         unbookmark: 즐겨 찾기를 삭제했습니다
@@ -3831,7 +3827,7 @@ ko:
         #original_hash: 5301648
         edit: 수정
         #original_hash: d8cdb57
-        clone: 복제하기
+        clone: 대회 복제
         #original_hash: 2b92094
         orga_view: 주최자 보기
         #original_hash: c6171f8
@@ -3851,7 +3847,7 @@ ko:
         #original_hash: 4c9f914
         delegate_report: 파견위원 보고서
         #original_hash: b233e77
-        registration: 참가 신청
+        registration: 참가 신청 관리
         #original_hash: 3f9176e
         import_registrations: 참가 신청 내역 불러오기
         #original_hash: d672995
@@ -3935,7 +3931,7 @@ ko:
     last_updated_html: '마지막 업데이트: %{timestamp}'
     #original_hash: 9ca9d89
     filters_fixes_underway: >-
-      일부 필터(예: 지난 해)는 일시적으로 비활성화되어 있습니다. 소프트웨어 팀은 이러한 필터를 복구하기 위해 노력하고 있습니다. 불편을
+      일부 필터(예: 과년도)는 일시적으로 비활성화되어 있습니다. 소프트웨어 팀은 이러한 필터를 복구하기 위해 노력하고 있습니다. 불편을
       끼쳐드려 죄송합니다.
     selector_elements:
       events_selector:
@@ -4175,6 +4171,11 @@ ko:
       success: 메시지를 보내주셔서 감사합니다. 곧 연락드리겠습니다!
       #original_hash: 8e3a9da
       delivery_error: 메시지를 보내는 중 오류가 발생했습니다.
+  misc:
+    #original_hash: 9a0f1cc
+    forum_age_requirement: WCA 포럼에 접속하려면 13세 이상이어야 합니다.
+    #original_hash: d1f3342
+    forum_enter_dob: 포럼에 접속하려면 생년월일을 입력해야 합니다. 생년월일을 입력하신 후 포럼에 다시 접속해 보세요.
   faq:
     #original_hash: d790b40
     title: 자주 묻는 질문

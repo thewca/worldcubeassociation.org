@@ -95,7 +95,7 @@ class RoleChangeMailer < ApplicationMailer
         ),
         UserRole::UserRoleEmailRecipient.new(
           name: 'Team/Committee Leader',
-          email: role.group.lead_user.email,
+          email: role.group.lead_user&.email,
           message: 'Informing as there is a new appointment in your Team/Committee.',
         ),
         UserRole::UserRoleEmailRecipient.new(
@@ -198,7 +198,7 @@ class RoleChangeMailer < ApplicationMailer
         ),
         UserRole::UserRoleEmailRecipient.new(
           name: 'Team/Committee Leader',
-          email: role.group.lead_user.email,
+          email: role.group.lead_user&.email,
           message: 'Informing as there was a change in your Team/Committee.',
         ),
       )
@@ -271,7 +271,7 @@ class RoleChangeMailer < ApplicationMailer
         ),
         UserRole::UserRoleEmailRecipient.new(
           name: 'Team/Committee Leader',
-          email: role.group.lead_user.email,
+          email: role.group.lead_user&.email,
           message: 'Informing as there is a role end in your Team/Committee.',
         ),
       )
