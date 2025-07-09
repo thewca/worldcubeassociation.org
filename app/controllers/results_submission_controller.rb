@@ -128,10 +128,6 @@ class ResultsSubmissionController < ApplicationController
     message = params.require(:message)
     @results_submission = ResultsSubmission.new({
                                                   message: message,
-                                                  # FIXME: Now confirm_information validation is done in the frontend, so backend validation is not required anymore,
-                                                  # so hardcoding it as `true`. A good cleanup for future is to remove the field `confirm_information` from
-                                                  # ResultsSubmission model as it is not needed anymore.
-                                                  confirm_information: true,
                                                   competition_id: @competition.id,
                                                 })
     # This validates also that results in Inboxes are all good
