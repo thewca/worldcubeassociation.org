@@ -1,12 +1,12 @@
 "use server";
 
-import { Container, Heading, VStack, Card } from "@chakra-ui/react";
+import { Container, Heading, VStack, Card, Text } from "@chakra-ui/react";
 import { getPayload } from "payload";
 import config from "@payload-config";
-import { MarkdownText } from "@/components/Markdown";
+import { MarkdownProse } from "@/components/Markdown";
 import { getT } from "@/lib/i18n/get18n";
 
-export default async function SpeedcubingHistory() {
+export default async function AboutTheRegulations() {
   const payload = await getPayload({ config });
 
   const aboutRegulations = await payload.findGlobal({
@@ -30,7 +30,11 @@ export default async function SpeedcubingHistory() {
             <Card.Body>
               <Card.Title>{item.title}</Card.Title>
               <Card.Description>
-                <MarkdownText key={item.id} content={item.contentMarkdown!} />
+                <MarkdownProse
+                  key={item.id}
+                  content={item.contentMarkdown}
+                  as={Text}
+                />
               </Card.Description>
             </Card.Body>
           </Card.Root>

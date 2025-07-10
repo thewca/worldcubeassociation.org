@@ -1,10 +1,4 @@
-"use client";
-
-import useAPI from "@/lib/wca/useAPI";
-import { useT } from "@/lib/i18n/useI18n";
-import { useQuery } from "@tanstack/react-query";
-import { useMemo } from "react";
-import Loading from "@/components/ui/loading";
+import { getT } from "@/lib/i18n/get18n";
 import {
   Container,
   Heading,
@@ -15,25 +9,18 @@ import {
 } from "@chakra-ui/react";
 import { components } from "@/types/openapi";
 import I18nHTMLTranslate from "@/components/I18nHTMLTranslate";
+import { getRegulationsTranslations } from "@/lib/wca/regulations/getRegulationsTranslations";
+import Errored from "@/components/ui/errored";
 
-export default function RegulationsTranslations() {
-  const api = useAPI();
+export default async function RegulationsTranslations() {
+  const { t } = await getT();
 
-  const { t } = useT();
+  const { data: translationRequest, error } =
+    await getRegulationsTranslations();
 
-  const { data: translationRequest, isLoading } = useQuery({
-    queryKey: ["regulations", "translations"],
-    queryFn: () => api.GET("/regulations/translations"),
-  });
+  if (error) return <Errored error={error} />;
 
-  const { current, outdated } = useMemo(
-    () => translationRequest?.data ?? { current: [], outdated: [] },
-    [translationRequest?.data],
-  );
-
-  if (isLoading) {
-    return <Loading />;
-  }
+  const { current, outdated } = translationRequest;
 
   return (
     <Container>

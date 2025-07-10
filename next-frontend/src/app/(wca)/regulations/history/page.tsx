@@ -3,7 +3,11 @@
 import { Container, Heading, VStack, Text, Link, List } from "@chakra-ui/react";
 import { getPayload } from "payload";
 import config from "@payload-config";
-export default async function SpeedcubingHistory() {
+import { getT } from "@/lib/i18n/get18n";
+
+export default async function RegulationsHistory() {
+  const { i18n } = await getT();
+
   const payload = await getPayload({ config });
 
   const regulationsHistory = await payload.find({
@@ -11,9 +15,10 @@ export default async function SpeedcubingHistory() {
     limit: 0,
     depth: 1,
   });
+
   const regulationsHistoryItems = regulationsHistory.docs
     .sort((a, b) =>
-      a.version.localeCompare(b.version, undefined, {
+      a.version.localeCompare(b.version, i18n.language, {
         numeric: true,
         sensitivity: "base",
       }),
@@ -26,13 +31,13 @@ export default async function SpeedcubingHistory() {
 
   return (
     <Container>
-      <VStack gap="8" width="full" pt="8" alignItems="left">
+      <VStack gap="8" pt="8" alignItems="left">
         <Heading size="5xl">WCA Regulations and Guidelines</Heading>
         <Heading size="2xl">Older Versions of the Regulations</Heading>
         <Text>
           Until 2011, the Regulations were maintained by Ron van Bruchem and the
           WCA Board. Since then, the{" "}
-          <Link href={"mailto:wrc@worldcubeassociation.org"}>
+          <Link href="mailto:wrc@worldcubeassociation.org">
             WCA Regulations Committee
           </Link>{" "}
           is in charge of them.
@@ -61,7 +66,7 @@ export default async function SpeedcubingHistory() {
         </List.Root>
         <Text>
           Current updates to the Regulations and Guidelines are available{" "}
-          <Link href={"https://github.com/thewca/wca-regulations/"}>
+          <Link href="https://github.com/thewca/wca-regulations/">
             on GitHub
           </Link>
         </Text>

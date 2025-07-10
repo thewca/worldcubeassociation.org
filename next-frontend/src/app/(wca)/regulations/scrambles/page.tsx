@@ -18,8 +18,8 @@ const LATEST_JARFILE =
 export default async function ScramblesPage() {
   return (
     <Container>
-      <VStack align={"left"} gap={"16px"}>
-        <Heading size={"5xl"}>WCA Scrambles</Heading>
+      <VStack align="left" gap="16px">
+        <Heading size="5xl">WCA Scrambles</Heading>
         <Text>
           The current official scramble programs is <em>{LATEST_VERSION}</em>.
           It generates high-quality scramble sequences for all the events of a
@@ -32,12 +32,12 @@ export default async function ScramblesPage() {
             <Text>Last official change: January 22nd, 2024</Text>
           </VStack>
         </Center>
-        <Heading size={"2xl"}>Important Notes for Delegates</Heading>
+        <Heading size="2xl">Important Notes for Delegates</Heading>
         <List.Root>
           <List.Item>
             Official competitions must always use a current version of the
             official scramble program (see{" "}
-            <Link href={"/regulations#4b"}>Regulation 4b</Link>).
+            <Link href="/regulations#4b">Regulation 4b</Link>).
           </List.Item>
           <List.Item>
             Delegates should download TNoodle to run it on a computer. They
@@ -47,17 +47,13 @@ export default async function ScramblesPage() {
           <List.Item>
             Delegates must save all scramble sequences generated for an official
             competition, and send them with the results (see the{" "}
-            <Link
-              href={
-                "https://documents.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf"
-              }
-            >
+            <Link href="https://documents.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf">
               WCA Competition Requirements Policy
             </Link>
             ).
           </List.Item>
         </List.Root>
-        <Heading size={"2xl"}>Scramble Secrecy</Heading>
+        <Heading size="2xl">Scramble Secrecy</Heading>
         <List.Root>
           <List.Item>
             <b>Always</b> encrypt your scrambles in TNoodle with an unguessable
@@ -91,27 +87,23 @@ export default async function ScramblesPage() {
           </List.Root>
           <List.Item>
             Additional precautions are outlined in the{" "}
-            <Link
-              href={
-                "https://documents.worldcubeassociation.org/documents/policies/external/Scramble%20Accountability.pdf"
-              }
-            >
+            <Link href="https://documents.worldcubeassociation.org/documents/policies/external/Scramble%20Accountability.pdf">
               Scramble Accountability Policy
             </Link>
             .
           </List.Item>
         </List.Root>
-        <Heading size={"2xl"}>Detailed Instructions for TNoodle</Heading>
+        <Heading size="2xl">Detailed Instructions for TNoodle</Heading>
         <Text>
-          TNoodle requires <Link href={"https://www.java.com/en/"}>Java</Link>{" "}
-          to be installed on your computer.
+          TNoodle requires <Link href="https://www.java.com/en/">Java</Link> to
+          be installed on your computer.
         </Text>
         <List.Root>
           <List.Item>
             Run the <Code>{LATEST_JARFILE}</Code> file on your computer.
             <br />
             It will open the page{" "}
-            <Link href={"http://localhost:2014/scramble"}>
+            <Link href="http://localhost:2014/scramble">
               http://localhost:2014/scramble
             </Link>{" "}
             in your browser.
@@ -128,7 +120,7 @@ export default async function ScramblesPage() {
             <br />A <Code>.zip</Code> file will download in your browser.
           </List.Item>
         </List.Root>
-        <Heading size={"2xl"}>Notes</Heading>
+        <Heading size="2xl">Notes</Heading>
         <List.Root>
           <List.Item>
             4x4x4 scramble sequences <strong>may take a few minutes</strong> to
@@ -151,17 +143,17 @@ export default async function ScramblesPage() {
             .
           </List.Item>
         </List.Root>
-        <Heading size={"2xl"}>About TNoodle</Heading>
+        <Heading size="2xl">About TNoodle</Heading>
         <Text>
           TNoodle uses code developed or adapted by Jeremy Fleischman, Ryan
           Zheng, Cl&#233;ment Gallet, Shuang Chen, Bruce Norskog, and Lucas
           Garron. View the{" "}
-          <Link href={"https://github.com/thewca/tnoodle"}>
+          <Link href="https://github.com/thewca/tnoodle">
             TNoodle project on GitHub
           </Link>{" "}
           to view the source, report an issue, or contribute to its development.
         </Text>
-        <Heading size={"2xl"}>History of Official Releases</Heading>
+        <Heading size="2xl">History of Official Releases</Heading>
         <Text>
           Old versions must not be used without permission from the WCA Board.
           These are provided in case you want to check the behaviour of an older
