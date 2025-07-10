@@ -266,10 +266,34 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/regional-organizations": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** A list of currently acknowledged regional organizations */
+        get: operations["getOrganizations"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        RegionalOrganization: {
+            name: string;
+            country_iso2: string;
+            website: string;
+            /** Format: uri */
+            logo_url?: string;
+        };
         Person: {
             /** @example 267 */
             id: number;
@@ -792,6 +816,26 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+        };
+    };
+    getOrganizations: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Retrieved organizations */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RegionalOrganization"][];
+                };
             };
         };
     };

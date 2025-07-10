@@ -140,6 +140,20 @@ paths:
         "401":
           description: Unauthorized
 
+  /regional-organizations:
+    get:
+      summary: A list of currently acknowledged regional organizations
+      operationId: getOrganizations
+      responses:
+        "200":
+          description: Retrieved organizations
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/RegionalOrganization"
+
 components:
   securitySchemes:
     bearerAuth:
@@ -148,6 +162,23 @@ components:
       bearerFormat: JWT
 
   schemas:
+    RegionalOrganization:
+      type: object
+      required:
+        - name
+        - country_iso2
+        - website
+      properties:
+        name:
+          type: string
+        country_iso2:
+          type: string
+        website:
+          type: string
+        logo_url:
+          type: string
+          format: uri
+
     Person:
       type: object
       required:
