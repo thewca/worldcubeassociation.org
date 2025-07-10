@@ -505,7 +505,6 @@ class CompetitionsController < ApplicationController
   end
 
   before_action -> { require_user_permission(:can_manage_competition?, competition_from_params) }, only: [:update]
-
   def update
     competition = competition_from_params
 

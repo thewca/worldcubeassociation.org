@@ -4,7 +4,7 @@ import { getPayload } from "payload";
 import config from "@payload-config";
 import { Container, Heading, VStack } from "@chakra-ui/react";
 import { CallToActionBlock } from "@/components/about/CallToAction";
-import Quote from "@/components/about/Quote";
+import Quote from "@/components/Quote";
 import AboutUsItem from "@/components/about/AboutUsItem";
 import { Media } from "@/types/payload";
 

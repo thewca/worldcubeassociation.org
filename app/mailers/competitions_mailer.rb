@@ -143,9 +143,10 @@ class CompetitionsMailer < ApplicationMailer
     )
   end
 
-  def results_submitted(competition, results_submission, submitter_user)
+  def results_submitted(competition, results_validator, message, submitter_user)
     @competition = competition
-    @results_submission = results_submission
+    @results_validator = results_validator
+    @message = message
     @submitter_user = submitter_user
     last_uploaded_json = @competition.uploaded_jsons.order(:id).last
     if last_uploaded_json

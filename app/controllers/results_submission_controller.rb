@@ -4,12 +4,30 @@ require 'fileutils'
 
 class ResultsSubmissionController < ApplicationController
   before_action :authenticate_user!
-  before_action -> { redirect_to_root_unless_user(:can_upload_competition_results?, competition_from_params) }
+  before_action -> { redirect_to_root_unless_user(:can_upload_competition_results?, competition_from_params) }, except: %i[newcomer_checks last_duplicate_checker_job_run compute_potential_duplicates]
+  before_action -> { redirect_to_root_unless_user(:can_check_newcomers_data?, competition_from_params) }, only: %i[newcomer_checks last_duplicate_checker_job_run compute_potential_duplicates]
 
   def new
     @competition = competition_from_params
     @results_validator = ResultsValidators::CompetitionsResultsValidator.create_full_validation
     @results_validator.validate(@competition.id)
+  end
+
+  def newcomer_checks
+    @competition = competition_from_params
+  end
+
+  def last_duplicate_checker_job_run
+    last_job_run = DuplicateCheckerJobRun.find_by(competition_id: params.require(:competition_id))
+
+    render status: :ok, json: last_job_run
+  end
+
+  def compute_potential_duplicates
+    job_run = DuplicateCheckerJobRun.create!(competition_id: params.require(:competition_id))
+    ComputePotentialDuplicates.perform_later(job_run)
+
+    render status: :ok, json: job_run
   end
 
   def upload_json
@@ -122,24 +140,16 @@ class ResultsSubmissionController < ApplicationController
   end
 
   def create
-    # Check inbox, create submission, send email
-    @competition = competition_from_params
+    competition = competition_from_params
+    message = params.require(:message)
+    results_validator = ResultsValidators::CompetitionsResultsValidator.create_full_validation.validate(competition.id)
 
-    submit_results_params = params.require(:results_submission).permit(:message, :confirm_information)
-    submit_results_params[:competition_id] = @competition.id
-    @results_submission = ResultsSubmission.new(submit_results_params)
-    # This validates also that results in Inboxes are all good
-    if @results_submission.valid?
-      CompetitionsMailer.results_submitted(@competition, @results_submission, current_user).deliver_now
+    render status: :unprocessable_entity, json: { error: "Submitted results contain errors." } if results_validator.any_errors?
 
-      flash[:success] = "Thank you for submitting the results!"
-      @competition.update!(results_submitted_at: Time.now)
-      redirect_to competition_path(@competition)
-    else
-      flash[:danger] = "Submitted results contain errors."
-      @results_validator = @results_submission.results_validator
-      render :new
-    end
+    CompetitionsMailer.results_submitted(competition, results_validator, message, current_user).deliver_now
+    competition.touch(:results_submitted_at)
+
+    render status: :ok, json: { success: true }
   end
 
   private def competition_from_params

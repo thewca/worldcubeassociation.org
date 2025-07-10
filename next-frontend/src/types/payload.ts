@@ -95,6 +95,8 @@ export interface Config {
     faqCategories: FaqCategory;
     faqQuestions: FaqQuestion;
     users: User;
+    regulationsHistoryItem: RegulationsHistoryItem;
+    tools: Tool;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
@@ -111,6 +113,8 @@ export interface Config {
     faqCategories: FaqCategoriesSelect<false> | FaqCategoriesSelect<true>;
     faqQuestions: FaqQuestionsSelect<false> | FaqQuestionsSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
+    regulationsHistoryItem: RegulationsHistoryItemSelect<false> | RegulationsHistoryItemSelect<true>;
+    tools: ToolsSelect<false> | ToolsSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
@@ -124,6 +128,8 @@ export interface Config {
     'about-us-page': AboutUsPage;
     'privacy-page': PrivacyPage;
     'disclaimer-page': DisclaimerPage;
+    'speedcubing-history-page': SpeedcubingHistoryPage;
+    'about-regulations-page': AboutRegulationsPage;
   };
   globalsSelect: {
     nav: NavSelect<false> | NavSelect<true>;
@@ -131,6 +137,8 @@ export interface Config {
     'about-us-page': AboutUsPageSelect<false> | AboutUsPageSelect<true>;
     'privacy-page': PrivacyPageSelect<false> | PrivacyPageSelect<true>;
     'disclaimer-page': DisclaimerPageSelect<false> | DisclaimerPageSelect<true>;
+    'speedcubing-history-page': SpeedcubingHistoryPageSelect<false> | SpeedcubingHistoryPageSelect<true>;
+    'about-regulations-page': AboutRegulationsPageSelect<false> | AboutRegulationsPageSelect<true>;
   };
   locale: null;
   user: User & {
@@ -201,7 +209,7 @@ export interface Testimonial {
     };
     [k: string]: unknown;
   };
-  fullTestimonialMarkdown?: string | null;
+  fullTestimonialMarkdown: string;
   whoDunnit: string;
   updatedAt: string;
   createdAt: string;
@@ -229,7 +237,7 @@ export interface Announcement {
     };
     [k: string]: unknown;
   };
-  contentMarkdown?: string | null;
+  contentMarkdown: string;
   publishedAt: string;
   publishedBy: string | User;
   updatedAt: string;
@@ -287,6 +295,36 @@ export interface FaqQuestion {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "regulationsHistoryItem".
+ */
+export interface RegulationsHistoryItem {
+  id: number;
+  version: string;
+  url: string;
+  changesUrl?: string | null;
+  summarizedChangesUrl?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "tools".
+ */
+export interface Tool {
+  id: number;
+  name: string;
+  description: string;
+  homepageLink: string;
+  guideLink?: string | null;
+  sourceCodeLink?: string | null;
+  isOfficial?: boolean | null;
+  author: string;
+  category: 'before' | 'during' | 'after';
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-locked-documents".
  */
 export interface PayloadLockedDocument {
@@ -315,6 +353,14 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'users';
         value: string | User;
+      } | null)
+    | ({
+        relationTo: 'regulationsHistoryItem';
+        value: number | RegulationsHistoryItem;
+      } | null)
+    | ({
+        relationTo: 'tools';
+        value: number | Tool;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -444,6 +490,34 @@ export interface UsersSelect<T extends boolean = true> {
         providerAccountId?: T;
         type?: T;
       };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "regulationsHistoryItem_select".
+ */
+export interface RegulationsHistoryItemSelect<T extends boolean = true> {
+  version?: T;
+  url?: T;
+  changesUrl?: T;
+  summarizedChangesUrl?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "tools_select".
+ */
+export interface ToolsSelect<T extends boolean = true> {
+  name?: T;
+  description?: T;
+  homepageLink?: T;
+  guideLink?: T;
+  sourceCodeLink?: T;
+  isOfficial?: T;
+  author?: T;
+  category?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -1158,7 +1232,7 @@ export interface AboutUsPage {
           };
           [k: string]: unknown;
         };
-        contentMarkdown?: string | null;
+        contentMarkdown: string;
         buttons: {
           label: string;
           url: string;
@@ -1186,7 +1260,7 @@ export interface AboutUsPage {
           };
           [k: string]: unknown;
         };
-        contentMarkdown?: string | null;
+        contentMarkdown: string;
         id?: string | null;
         blockName?: string | null;
         blockType: 'simpleItem';
@@ -1207,7 +1281,7 @@ export interface AboutUsPage {
           };
           [k: string]: unknown;
         };
-        contentMarkdown?: string | null;
+        contentMarkdown: string;
         quotedPerson: string;
         id?: string | null;
         blockName?: string | null;
@@ -1238,7 +1312,7 @@ export interface PrivacyPage {
     };
     [k: string]: unknown;
   };
-  preambleMarkdown?: string | null;
+  preambleMarkdown: string;
   blocks: {
     title: string;
     content: {
@@ -1256,7 +1330,7 @@ export interface PrivacyPage {
       };
       [k: string]: unknown;
     };
-    contentMarkdown?: string | null;
+    contentMarkdown: string;
     id?: string | null;
     blockName?: string | null;
     blockType: 'privacyItem';
@@ -1287,10 +1361,102 @@ export interface DisclaimerPage {
       };
       [k: string]: unknown;
     };
-    contentMarkdown?: string | null;
+    contentMarkdown: string;
     id?: string | null;
     blockName?: string | null;
     blockType: 'disclaimerItem';
+  }[];
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "speedcubing-history-page".
+ */
+export interface SpeedcubingHistoryPage {
+  id: number;
+  blocks: (
+    | {
+        content: {
+          root: {
+            type: string;
+            children: {
+              type: string;
+              version: number;
+              [k: string]: unknown;
+            }[];
+            direction: ('ltr' | 'rtl') | null;
+            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+            indent: number;
+            version: number;
+          };
+          [k: string]: unknown;
+        };
+        contentMarkdown: string;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'paragraph';
+      }
+    | {
+        caption: string;
+        image: number | Media;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'captionedImage';
+      }
+    | {
+        content: {
+          root: {
+            type: string;
+            children: {
+              type: string;
+              version: number;
+              [k: string]: unknown;
+            }[];
+            direction: ('ltr' | 'rtl') | null;
+            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+            indent: number;
+            version: number;
+          };
+          [k: string]: unknown;
+        };
+        contentMarkdown: string;
+        quotedPerson: string;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'quote';
+      }
+  )[];
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "about-regulations-page".
+ */
+export interface AboutRegulationsPage {
+  id: number;
+  blocks: {
+    title: string;
+    content: {
+      root: {
+        type: string;
+        children: {
+          type: string;
+          version: number;
+          [k: string]: unknown;
+        }[];
+        direction: ('ltr' | 'rtl') | null;
+        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+        indent: number;
+        version: number;
+      };
+      [k: string]: unknown;
+    };
+    contentMarkdown: string;
+    id?: string | null;
+    blockName?: string | null;
+    blockType: 'paragraph';
   }[];
   updatedAt?: string | null;
   createdAt?: string | null;
@@ -1631,6 +1797,66 @@ export interface DisclaimerPageSelect<T extends boolean = true> {
     | T
     | {
         disclaimerItem?:
+          | T
+          | {
+              title?: T;
+              content?: T;
+              contentMarkdown?: T;
+              id?: T;
+              blockName?: T;
+            };
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "speedcubing-history-page_select".
+ */
+export interface SpeedcubingHistoryPageSelect<T extends boolean = true> {
+  blocks?:
+    | T
+    | {
+        paragraph?:
+          | T
+          | {
+              content?: T;
+              contentMarkdown?: T;
+              id?: T;
+              blockName?: T;
+            };
+        captionedImage?:
+          | T
+          | {
+              caption?: T;
+              image?: T;
+              id?: T;
+              blockName?: T;
+            };
+        quote?:
+          | T
+          | {
+              content?: T;
+              contentMarkdown?: T;
+              quotedPerson?: T;
+              id?: T;
+              blockName?: T;
+            };
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "about-regulations-page_select".
+ */
+export interface AboutRegulationsPageSelect<T extends boolean = true> {
+  blocks?:
+    | T
+    | {
+        paragraph?:
           | T
           | {
               title?: T;
