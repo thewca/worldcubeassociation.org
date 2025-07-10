@@ -104,6 +104,9 @@ Rails.application.routes.draw do
     resources :competition_tabs, except: [:show], as: :tabs, path: :tabs
     get 'tabs/:id/reorder' => "competition_tabs#reorder", as: :tab_reorder
     # Delegate views and action
+    get 'newcomer-checks' => 'results_submission#newcomer_checks', as: :newcomer_checks
+    get 'last-duplicate-checker-job' => 'results_submission#last_duplicate_checker_job_run', as: :last_duplicate_checker_job_run
+    post 'compute_potential_duplicates' => 'results_submission#compute_potential_duplicates', as: :compute_potential_duplicates
     get 'submit-results' => 'results_submission#new', as: :submit_results_edit
     get 'submit-scrambles' => 'admin/scrambles#match_scrambles', as: :match_scrambles
     post 'submit-results' => 'results_submission#create', as: :submit_results
@@ -411,6 +414,8 @@ Rails.application.routes.draw do
       get '/competition_series/:id' => 'api#competition_series'
       get '/competition_index' => 'competitions#competition_index', as: :competition_index
 
+      resources :regional_organizations, only: %i[index], path: '/regional-organizations'
+
       resources :competitions, only: %i[index show] do
         get '/wcif' => 'competitions#show_wcif'
         get '/wcif/public' => 'competitions#show_wcif_public'
@@ -419,6 +424,7 @@ Rails.application.routes.draw do
         get '/competitors' => 'competitions#competitors'
         get '/qualifications' => 'competitions#qualifications'
         get '/registrations' => 'competitions#registrations'
+        get '/events' => 'competitions#events'
         get '/schedule' => 'competitions#schedule'
         get '/scrambles' => 'competitions#scrambles', as: :scrambles
         get '/scrambles/:event_id' => 'competitions#event_scrambles', as: :event_scrambles

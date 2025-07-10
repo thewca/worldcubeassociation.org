@@ -282,6 +282,7 @@ export const viewUrls = {
   },
   competitions: {
     countInRange: (startDate, endDate) => `<%= CGI.unescape(Rails.application.routes.url_helpers.panel_competition_count_path) %>?${jsonToQueryString({ startDate, endDate })}`,
+    lastDuplicateCheckerJobRun: (competitionId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.competition_last_duplicate_checker_job_run_path(competition_id: "${competitionId}")) %>`,
   },
   persons: {
     results: (wcaId, competitionId, eventId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.person_results_path) %>?${jsonToQueryString({ wcaId, competitionId, eventId })}`,
@@ -304,9 +305,16 @@ export const actionUrls = {
     forCompetitionList: (competitionIds, selectedValidators, applyFixWhenPossible) => `<%= CGI.unescape(Rails.application.routes.url_helpers.panel_validators_for_competition_list_path) %>?${jsonToQueryString({ competitionIds, selectedValidators, applyFixWhenPossible })}`,
     forCompetitionsInRange: (startDate, endDate, selectedValidators, applyFixWhenPossible) => `<%= CGI.unescape(Rails.application.routes.url_helpers.panel_validators_for_competitions_in_range_path) %>?${jsonToQueryString({ startDate, endDate, selectedValidators, applyFixWhenPossible })}`,
   },
+  competitionResultSubmission: {
+    submitToWrt: (competitionId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.competition_submit_results_path("${competitionId}")) %>`,
+    uploadResultsJson: (competitionId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.competition_admin_upload_results_path("${competitionId}")) %>`,
+  },
   cronjob: {
     run: (cronjobName) => `<%= CGI.unescape(Rails.application.routes.url_helpers.panel_cronjob_run_path(cronjob_name: "${cronjobName}")) %>`,
     reset: (cronjobName) => `<%= CGI.unescape(Rails.application.routes.url_helpers.panel_cronjob_reset_path(cronjob_name: "${cronjobName}")) %>`,
+  },
+  competition: {
+    computePotentialDuplicates: (competitionId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.competition_compute_potential_duplicates_path(competition_id: "${competitionId}")) %>`,
   },
 }
 
