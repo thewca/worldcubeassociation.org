@@ -22,7 +22,7 @@ export default function Wrapper({
 function ImportResultsData({
   competitionId,
   alreadyHasSubmittedResult,
-  isAdminView,
+  isAdminView = false,
 }) {
   const [activeAccordion, setActiveAccordion] = useState(!alreadyHasSubmittedResult);
 
