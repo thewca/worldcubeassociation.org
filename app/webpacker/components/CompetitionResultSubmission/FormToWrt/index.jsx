@@ -31,7 +31,7 @@ function FormToWrt({ competitionId, isErrorInPreviousUpload }) {
 
   const {
     mutate: submitToWrtMutate,
-    isLoading,
+    isPending,
     isSuccess,
     isError: isErrorInCurrentUpload,
     error: errorInSubmission,
@@ -41,7 +41,7 @@ function FormToWrt({ competitionId, isErrorInPreviousUpload }) {
     submitToWrtMutate({ competitionId, message });
   };
 
-  if (isLoading) return <Loading />;
+  if (isPending) return <Loading />;
   if (isSuccess) return <Message success>Thank you for submitting the results!</Message>;
   if (isErrorInPreviousUpload) return <Errored error={ERROR_MESSAGE_UPLOADED_RESULTS} />;
   if (isErrorInCurrentUpload) return <Errored error={errorInSubmission} />;
