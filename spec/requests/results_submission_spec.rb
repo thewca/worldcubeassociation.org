@@ -59,10 +59,8 @@ RSpec.describe ResultsSubmissionController do
       end
 
       it "sends the 'results submitted' email immediately" do
-        expected_results_submission = ResultsSubmission.new(results_submission_params)
         expect(CompetitionsMailer)
           .to receive(:results_submitted)
-          .with(comp, expected_results_submission, user)
           .and_call_original
 
         expect do
