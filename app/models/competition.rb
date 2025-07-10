@@ -100,6 +100,8 @@ class Competition < ApplicationRecord
 
   enum :competitor_can_cancel, %i[not_accepted always unpaid], prefix: true
 
+  enum :auto_accept_preference, %i[disabled bulk live], prefix: true
+
   CLONEABLE_ATTRIBUTES = %w[
     city_name
     country_id
@@ -175,6 +177,7 @@ class Competition < ApplicationRecord
     event_change_deadline_date
     competition_series_id
     auto_accept_registrations
+    auto_accept_preference
     auto_accept_disable_threshold
     newcomer_month_reserved_spots
   ].freeze
@@ -383,27 +386,27 @@ class Competition < ApplicationRecord
 
   validate :auto_accept_validations
   private def auto_accept_validations
-    errors.add(:auto_accept_registrations, I18n.t('competitions.errors.must_use_wca_registration')) if
-      auto_accept_registrations? && !use_wca_registration
+    errors.add(:auto_accept_preference, I18n.t('competitions.errors.must_use_wca_registration')) if
+      !auto_accept_preference_disabled? && !use_wca_registration
 
-    errors.add(:auto_accept_registrations, I18n.t('competitions.errors.must_use_payment_integration')) if
-      auto_accept_registrations? && confirmed_or_visible? && competition_payment_integrations.where(connected_account_type: "ConnectedStripeAccount").none?
+    errors.add(:auto_accept_preference, I18n.t('competitions.errors.must_use_payment_integration')) if
+      !auto_accept_preference_disabled? && confirmed_or_visible? && competition_payment_integrations.where(connected_account_type: "ConnectedStripeAccount").none?
 
-    errors.add(:auto_accept_registrations, I18n.t('competitions.errors.auto_accept_limit')) if
+    errors.add(:auto_accept_preference, I18n.t('competitions.errors.auto_accept_limit')) if
       auto_accept_disable_threshold.present? &&
       auto_accept_disable_threshold.positive? &&
       competitor_limit.present? &&
       auto_accept_disable_threshold >= competitor_limit
 
-    errors.add(:auto_accept_registrations, I18n.t('competitions.errors.auto_accept_not_negative')) if
+    errors.add(:auto_accept_preference, I18n.t('competitions.errors.auto_accept_not_negative')) if
       auto_accept_disable_threshold.present? && auto_accept_disable_threshold.negative?
 
     # TODO: This logic belongs in a controller more appropriately than in the validation.
     # IF we build a controller endpoint specifically for auto_accept, this logic should be move there.
-    return unless auto_accept_registrations_changed? && auto_accept_registrations?
+    return unless auto_accept_preference_changed? && !auto_accept_preference_disabled?
 
-    errors.add(:auto_accept_registrations, I18n.t('competitions.errors.auto_accept_accept_paid_pending')) if registrations.pending.with_payments.count.positive?
-    errors.add(:auto_accept_registrations, I18n.t('competitions.errors.auto_accept_accept_waitlisted')) if
+    errors.add(:auto_accept_preference, I18n.t('competitions.errors.auto_accept_accept_paid_pending')) if registrations.pending.with_payments.count.positive?
+    errors.add(:auto_accept_preference, I18n.t('competitions.errors.auto_accept_accept_waitlisted')) if
       registrations.waitlisted.count.positive? && !registration_full_and_accepted?
   end
 
@@ -1802,7 +1805,7 @@ class Competition < ApplicationRecord
                base_entry_fee_lowest_denomination currency_code allow_registration_edits competitor_can_cancel
                allow_registration_without_qualification refund_policy_percent use_wca_registration guests_per_registration_limit venue contact
                force_comment_in_registration use_wca_registration external_registration_page guests_entry_fee_lowest_denomination guest_entry_status
-               information events_per_registration_limit guests_enabled auto_accept_registrations auto_accept_disable_threshold],
+               information events_per_registration_limit guests_enabled auto_accept_preference auto_accept_disable_threshold],
       methods: %w[url website short_name city venue_address venue_details latitude_degrees longitude_degrees country_iso2 event_ids
                   main_event_id number_of_bookmarks using_payment_integrations? uses_qualification? uses_cutoff? competition_series_ids registration_full?
                   part_of_competition_series? registration_full_and_accepted?],
@@ -2322,7 +2325,7 @@ class Competition < ApplicationRecord
         "reason" => competitor_limit_reason,
         "autoCloseThreshold" => auto_close_threshold,
         "newcomerMonthReservedSpots" => newcomer_month_reserved_spots,
-        "autoAcceptEnabled" => auto_accept_registrations,
+        "autoAcceptPreference" => auto_accept_preference,
         "autoAcceptDisableThreshold" => auto_accept_disable_threshold,
       },
       "staff" => {
@@ -2429,7 +2432,7 @@ class Competition < ApplicationRecord
         "reason" => errors[:competitor_limit_reason],
         "autoCloseThreshold" => errors[:auto_close_threshold],
         "newcomer_month_reserved_spots" => errors[:newcomer_month_reserved_spots],
-        "autoAcceptEnabled" => errors[:auto_accept_registrations],
+        "autoAcceptPreference" => errors[:auto_accept_preference],
         "autoAcceptDisableThreshold" => errors[:auto_accept_disable_threshold],
       },
       "staff" => {
@@ -2627,7 +2630,7 @@ class Competition < ApplicationRecord
       competitor_limit_reason: form_data.dig('competitorLimit', 'reason'),
       auto_close_threshold: form_data.dig('competitorLimit', 'autoCloseThreshold'),
       newcomer_month_reserved_spots: form_data.dig('competitorLimit', 'newcomerMonthReservedSpots'),
-      auto_accept_registrations: form_data.dig('competitorLimit', 'autoAcceptEnabled'),
+      auto_accept_preference: form_data.dig('competitorLimit', 'autoAcceptPreference'),
       auto_accept_disable_threshold: form_data.dig('competitorLimit', 'autoAcceptDisableThreshold'),
       extra_registration_requirements: form_data.dig('registration', 'extraRequirements'),
       on_the_spot_registration: form_data.dig('registration', 'allowOnTheSpot'),
@@ -2768,7 +2771,7 @@ class Competition < ApplicationRecord
             "reason" => { "type" => %w[string null] },
             "autoCloseThreshold" => { "type" => %w[integer null] },
             "newcomerMonthReservedSpots" => { "type" => %w[integer null] },
-            "autoAcceptEnabled" => { "type" => %w[boolean null] },
+            "autoAcceptPreference" => { "type" => "string", "enum" => Competition.auto_accept_preferences.keys },
             "autoAcceptDisableThreshold" => { "type" => %w[integer null] },
           },
         },
@@ -2964,6 +2967,13 @@ class Competition < ApplicationRecord
           "additionalProperties" => false,
           "properties" => {
             "mainEventId" => { "type" => %w[string null] },
+          },
+        },
+        "competitorLimit" => {
+          "type" => "object",
+          "properties" => {
+            "autoAcceptPreference" => { "type" => "string", "enum" => Competition.auto_accept_preferences.keys },
+            "autoAcceptDisableThreshold" => { "type" => %w[integer null] },
           },
         },
       },

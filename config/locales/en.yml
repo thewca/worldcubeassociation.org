@@ -1645,7 +1645,7 @@ en:
           reason: "The reason for the competitor limit"
           auto_close_threshold: "Auto-close threshold"
           newcomer_month_reserved_spots: "Number of spots to reserve for newcomers"
-          auto_accept_enabled: "Bulk automatic registration acceptance"
+          auto_accept_preference: "Automatically accept registrations"
           auto_accept_disable_threshold: "Limit for automatically accepting registrations"
         staff:
           staff_delegate_ids: "WCA Delegate(s)"
@@ -1733,7 +1733,7 @@ en:
           reason: "What is the reason for the limit on competitors? Please fill this out in English!"
           auto_close_threshold: "Registration will automatically close when this number of paid registrations is received. Leave blank to disable, ignore if you aren't using integrated payments."
           newcomer_month_reserved_spots: "Only allowed during Newcomer Month - reserved spots can't be more than half of the Competitor Limit."
-          auto_accept_enabled: "This will enable a 'Bulk Auto Accept' button in the Registrations menu. This will accept all paid Waitlisted and Pending up to the competitor limit, or the limit defined below. Use at your own risk."
+          auto_accept_preference: "This will enable a 'Bulk Auto Accept' button in the Registrations menu. This will accept all paid Waitlisted and Pending up to the competitor limit, or the limit defined below. Use at your own risk."
           auto_accept_disable_threshold: "When this number of accepted registrations is reached, auto-accept will disable itself - allowing organizers to manually approve the final registrations. Must be less than the competitor limit. Leave blank if not desired."
         staff:
           staff_delegate_ids: "WCA Delegates for the competition."
@@ -1797,9 +1797,10 @@ en:
           enabled:
             "true": "I want to specify a competitor limit"
             "false": "I DO NOT want to specify a competitor limit"
-          auto_accept_enabled:
-            "true": "Enable 'Bulk Auto Accept' button in Registrations menu"
-            "false": "Disable 'Bulk Auto Accept' button"
+          auto_accept_preference:
+            "disabled": "Disable 'Bulk Auto Accept' button"
+            "bulk": "Enable 'Bulk Auto Accept' button in Registrations menu"
+            "live": "Automatically accept registrations when payment is made"
         registration:
           allow_on_the_spot:
             "true": "On the spot registrations will be accepted"
