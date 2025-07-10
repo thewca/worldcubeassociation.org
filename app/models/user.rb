@@ -754,6 +754,7 @@ class User < ApplicationRecord
         name: 'WEAT panel',
         pages: [
           panel_pages[:bannedCompetitors],
+          panel_pages[:delegateProbations],
         ],
       },
     }
@@ -1383,7 +1384,7 @@ class User < ApplicationRecord
   end
 
   private def can_manage_delegate_probation?
-    admin? || board_member? || senior_delegate? || can_access_wfc_senior_matters? || group_leader?(UserGroup.teams_committees_group_wic)
+    admin? || board_member? || senior_delegate? || can_access_wfc_senior_matters? || group_leader?(UserGroup.teams_committees_group_wic) || weat_team?
   end
 
   def senior_delegates
