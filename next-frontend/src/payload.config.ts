@@ -16,8 +16,10 @@ import {
 } from "@/collections/FrequentlyAskedQuestions";
 import { Users } from "@/collections/Users";
 import { Tools } from "@/collections/Tools";
+import { RegulationsHistoryItem } from "@/collections/RegulationsHistory";
 import { Nav } from "@/globals/Nav";
 import { Home } from "@/globals/Home";
+import { AboutRegulations } from "@/globals/AboutRegulations";
 import { SpeedCubingHistoryPage } from "@/globals/SpeedcubingHistory";
 import { Privacy } from "@/globals/Privacy";
 import { Disclaimer } from "@/globals/Disclaimer";
@@ -95,6 +97,7 @@ export default buildConfig({
     FaqCategories,
     FaqQuestions,
     Users,
+    RegulationsHistoryItem,
     Tools,
   ],
   globals: [
@@ -104,6 +107,7 @@ export default buildConfig({
     Privacy,
     Disclaimer,
     SpeedCubingHistoryPage,
+    AboutRegulations,
   ],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || "",

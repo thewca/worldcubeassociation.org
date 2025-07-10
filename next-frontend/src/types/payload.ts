@@ -95,6 +95,7 @@ export interface Config {
     faqCategories: FaqCategory;
     faqQuestions: FaqQuestion;
     users: User;
+    regulationsHistoryItem: RegulationsHistoryItem;
     tools: Tool;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -112,6 +113,7 @@ export interface Config {
     faqCategories: FaqCategoriesSelect<false> | FaqCategoriesSelect<true>;
     faqQuestions: FaqQuestionsSelect<false> | FaqQuestionsSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
+    regulationsHistoryItem: RegulationsHistoryItemSelect<false> | RegulationsHistoryItemSelect<true>;
     tools: ToolsSelect<false> | ToolsSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -127,6 +129,7 @@ export interface Config {
     'privacy-page': PrivacyPage;
     'disclaimer-page': DisclaimerPage;
     'speedcubing-history-page': SpeedcubingHistoryPage;
+    'about-regulations-page': AboutRegulationsPage;
   };
   globalsSelect: {
     nav: NavSelect<false> | NavSelect<true>;
@@ -135,6 +138,7 @@ export interface Config {
     'privacy-page': PrivacyPageSelect<false> | PrivacyPageSelect<true>;
     'disclaimer-page': DisclaimerPageSelect<false> | DisclaimerPageSelect<true>;
     'speedcubing-history-page': SpeedcubingHistoryPageSelect<false> | SpeedcubingHistoryPageSelect<true>;
+    'about-regulations-page': AboutRegulationsPageSelect<false> | AboutRegulationsPageSelect<true>;
   };
   locale: null;
   user: User & {
@@ -291,6 +295,19 @@ export interface FaqQuestion {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "regulationsHistoryItem".
+ */
+export interface RegulationsHistoryItem {
+  id: number;
+  version: string;
+  url: string;
+  changesUrl?: string | null;
+  summarizedChangesUrl?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "tools".
  */
 export interface Tool {
@@ -336,6 +353,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'users';
         value: string | User;
+      } | null)
+    | ({
+        relationTo: 'regulationsHistoryItem';
+        value: number | RegulationsHistoryItem;
       } | null)
     | ({
         relationTo: 'tools';
@@ -469,6 +490,18 @@ export interface UsersSelect<T extends boolean = true> {
         providerAccountId?: T;
         type?: T;
       };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "regulationsHistoryItem_select".
+ */
+export interface RegulationsHistoryItemSelect<T extends boolean = true> {
+  version?: T;
+  url?: T;
+  changesUrl?: T;
+  summarizedChangesUrl?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -1399,6 +1432,37 @@ export interface SpeedcubingHistoryPage {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "about-regulations-page".
+ */
+export interface AboutRegulationsPage {
+  id: number;
+  blocks: {
+    title: string;
+    content: {
+      root: {
+        type: string;
+        children: {
+          type: string;
+          version: number;
+          [k: string]: unknown;
+        }[];
+        direction: ('ltr' | 'rtl') | null;
+        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+        indent: number;
+        version: number;
+      };
+      [k: string]: unknown;
+    };
+    contentMarkdown: string;
+    id?: string | null;
+    blockName?: string | null;
+    blockType: 'paragraph';
+  }[];
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "nav_select".
  */
 export interface NavSelect<T extends boolean = true> {
@@ -1776,6 +1840,28 @@ export interface SpeedcubingHistoryPageSelect<T extends boolean = true> {
               content?: T;
               contentMarkdown?: T;
               quotedPerson?: T;
+              id?: T;
+              blockName?: T;
+            };
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "about-regulations-page_select".
+ */
+export interface AboutRegulationsPageSelect<T extends boolean = true> {
+  blocks?:
+    | T
+    | {
+        paragraph?:
+          | T
+          | {
+              title?: T;
+              content?: T;
+              contentMarkdown?: T;
               id?: T;
               blockName?: T;
             };
