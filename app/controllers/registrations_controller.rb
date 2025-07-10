@@ -328,7 +328,6 @@ class RegistrationsController < ApplicationController
 
     # Create a default audit that marks the event as "unhandled".
     audit_event = StripeWebhookEvent.create_from_api(event)
-
     audit_remote_timestamp = audit_event.created_at_remote
     connected_account = ConnectedStripeAccount.find_by(account_id: audit_event.account_id)
 
@@ -416,7 +415,6 @@ class RegistrationsController < ApplicationController
         end
 
         stored_holder.with_lock do
-          # already_refunded = original_payment.refunding_registration_payments.any?(receipt: stored_record)
           already_refunded = stored_record.registration_payment.present?
 
           refund_succeeded = stored_record.stripe_status_succeeded?
