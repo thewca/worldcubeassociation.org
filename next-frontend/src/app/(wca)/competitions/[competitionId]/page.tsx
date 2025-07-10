@@ -538,7 +538,10 @@ export default async function CompetitionOverView({
           />
         </Tabs.Content>
         <Tabs.Content value="schedule">
-          <TabSchedule />
+          <TabSchedule
+            competitionId={competitionInfo.id}
+            competitionName={competitionInfo.name}
+          />
         </Tabs.Content>
         <Tabs.Content value="custom-1">
           <MarkdownProse content={competitionInfo.information} />
