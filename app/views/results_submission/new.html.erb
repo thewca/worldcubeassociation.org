@@ -18,7 +18,7 @@
       competitionId: @competition.id,
       alreadyHasSubmittedResult: @results_validator.any_results?,
     }) %>
-    <br /> <%# The <br /> tag is used here to add some spacing for better readability. %>
+    <br />
     <% unless Rails.env.production? && EnvConfig.WCA_LIVE_SITE? %>
       <%= button_to competition_import_from_live_path,
                     title: "Submit WCA Live Results",

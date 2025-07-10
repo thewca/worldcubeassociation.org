@@ -53,7 +53,7 @@ class ResultsSubmissionController < ApplicationController
     # This makes sure the json structure is valid!
     return render status: :unprocessable_entity, json: { error: upload_json.errors.full_messages } unless upload_json.import_to_inbox
 
-    competition.touch(:results_submitted_at) if competition.results_submitted_at.nil? && mark_result_submitted
+    competition.touch(:results_submitted_at) if !competition.results_submitted? && mark_result_submitted
     competition.uploaded_jsons.create!(json_str: upload_json.results_json_str) if store_uploaded_json
 
     render status: :ok, json: { success: true }
