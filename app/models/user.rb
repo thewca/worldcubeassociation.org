@@ -926,7 +926,7 @@ class User < ApplicationRecord
   end
 
   def can_upload_competition_results?(competition)
-    can_admin_results? || can_submit_competition_results?(competition, upload_only: true)
+    can_submit_competition_results?(competition, upload_only: true)
   end
 
   def can_submit_competition_results?(competition, upload_only: false)
@@ -935,9 +935,8 @@ class User < ApplicationRecord
                        else
                          competition.staff_delegates.include?(self)
                        end
-    appropriate_role = can_admin_results? || allowed_delegate
     appropriate_time = competition.in_progress? || competition.probably_over?
-    competition.announced? && appropriate_role && appropriate_time && !competition.results_posted?
+    can_admin_results? || (competition.announced? && allowed_delegate && appropriate_time && !competition.results_posted?)
   end
 
   def can_check_newcomers_data?(competition)
