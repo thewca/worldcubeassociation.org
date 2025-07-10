@@ -928,11 +928,11 @@ class User < ApplicationRecord
   def can_upload_competition_results?(competition)
     return false if competition.upcoming? || !competition.announced?
 
-    can_admin_results? || (competition.delegates.include?(self) && competition.results_posted?)
+    can_admin_results? || (competition.delegates.include?(self) && !competition.results_posted?)
   end
 
   def can_submit_competition_results?(competition)
-    can_upload_competition_results?(competition) && (can_admin_results? || competition.staff_delegates.include?(self))
+    can_admin_results? || competition.staff_delegates.include?(self)
   end
 
   def can_check_newcomers_data?(competition)
