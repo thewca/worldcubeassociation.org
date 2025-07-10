@@ -5,7 +5,7 @@ FactoryBot.define do
     transient do
       skip_auto_accept_hook { false }
       competition { registration.competition }
-      payment_intent { create(:payment_intent, :confirmed) }
+      payment_intent { create(:payment_intent, :confirmed, holder: registration) }
     end
 
     registration do
@@ -16,7 +16,11 @@ FactoryBot.define do
     currency_code { competition&.currency_code }
     refunded_registration_payment { nil }
     receipt do
-      refunded_registration_payment.present? ? create(:stripe_record, :refund, parent_record: refunded_registration_payment.receipt) : payment_intent.payment_record.child_records.first
+      if refunded_registration_payment.present?
+        create(:stripe_record, :refund, parent_record: refunded_registration_payment.receipt)
+      else
+        payment_intent.payment_record.child_records.first
+      end
     end
 
     trait :refund do

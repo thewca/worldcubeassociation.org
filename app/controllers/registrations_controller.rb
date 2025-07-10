@@ -346,15 +346,10 @@ class RegistrationsController < ApplicationController
     incoming_event = StripeWebhookEvent::INCOMING_EVENTS.include?(event.type)
 
     stored_record ||= StripeRecord.create_from_api(stripe_intent, {}, audit_event.account_id) if incoming_event
-    original_charge = StripeRecord.charge.find_by(stripe_id: stripe_intent.charge) unless stored_record.stripe_record_type == 'charge'
 
     puts "stored record: #{stored_record.inspect}"
 
-    # In case of UPDATE events, the stored record will be the event being updated, not the underlying charge
-    # Thus, in cases where a stored record is present, we must also ensure that there is a corresponding charge somewhere
-    # NOTE: This is clumsy implementation but we can work on it in review
-    # An alternative might be to create a different _EVENTS array in StripeWebhookEvent
-    if stored_record.nil? || (stored_record.stripe_record_type != 'charge' && original_charge.nil?)
+    if stored_record.nil?
       logger.error "Stripe webhook reported event on entity #{stripe_intent.id} but we have no matching charge."
       return head :not_found #unless StripeRecord.charge.exists?(stripe_id: stripe_intent.charge)
     end
@@ -393,7 +388,8 @@ class RegistrationsController < ApplicationController
 
       stored_intent = stored_record.payment_intent
       stored_intent.update_status_and_charges(connected_account, stripe_intent, audit_event, audit_remote_timestamp)
-    when StripeWebhookEvent::REFUND_CREATED
+    when StripeWebhookEvent::REFUND_CREATED, StripeWebhookEvent::REFUND_UPDATED
+      puts "handling"
       # stripe_intent contains a Stripe::Refund as per Stripe documentation
 
       original_charge = StripeRecord.charge.find_by(stripe_id: stripe_intent.charge)
@@ -405,12 +401,16 @@ class RegistrationsController < ApplicationController
 
         logger.error "Stripe webhook reported a refund on charge #{stripe_intent.charge} but we never issued that one"
         return head :not_found
-      else
+      # TODO: Need to add tests against this behaviour
+      elsif stored_record.parent_record.nil?
         stored_record.update!(parent_record: original_charge)
       end
 
+      # NOTE: Feels weird to be checking the type of the event in this block - is there a better way to handle this logic?
+      stored_record.update_from_api(stripe_intent) if event.type == StripeWebhookEvent::REFUND_UPDATED
       stored_intent = stored_record.root_record.payment_intent
       stored_holder = stored_intent.holder
+      puts stored_holder.inspect
 
       if stored_holder.is_a? Registration
         ruby_money = stored_record.money_amount
