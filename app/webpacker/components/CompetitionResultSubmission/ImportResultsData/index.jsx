@@ -3,7 +3,6 @@ import {
   Accordion, Container, Message, Tab,
 } from 'semantic-ui-react';
 import WCAQueryClientProvider from '../../../lib/providers/WCAQueryClientProvider';
-import { isProduction } from '../../../lib/wca-data.js.erb';
 import UploadResultsJson from './UploadResultsJson';
 import ImportWcaLiveResults from './ImportWcaLiveResults';
 
@@ -50,7 +49,7 @@ function ImportResultsData({
         </Tab.Pane>
       ),
     },
-    ...(isProduction ? [] : [{
+    ...(isWrtViewing ? [{
       menuItem: 'Import WCA Live Results',
       render: () => (
         <Tab.Pane>
@@ -60,7 +59,7 @@ function ImportResultsData({
           />
         </Tab.Pane>
       ),
-    }]),
+    }] : []),
   ];
 
   return (

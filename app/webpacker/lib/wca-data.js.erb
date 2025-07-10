@@ -247,6 +247,3 @@ export const cronjobs = <%= JobUtils::WCA_CRONJOBS.map(&:to_s).to_h { |item| [it
 
 // ----- RESULTS -----
 export const duplicateCheckerJobRunStatuses = <%= DuplicateCheckerJobRun.run_statuses.to_json %>
-
-// ----- PRODUCTION CONFIG -----
-export const isProduction = <%= Rails.env.production? && EnvConfig.WCA_LIVE_SITE? %>

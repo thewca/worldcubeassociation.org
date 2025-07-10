@@ -17,6 +17,6 @@ export default function ImportWcaLiveResults({ competitionId, onImportSuccess })
   if (isError) return <Errored error={error} />;
 
   return (
-    <Button onClick={importWcaLiveResultsMutate}>Import WCA Live Results</Button>
+    <Button primary onClick={importWcaLiveResultsMutate}>Import WCA Live Results</Button>
   );
 }
