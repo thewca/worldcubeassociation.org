@@ -141,7 +141,7 @@ class ResultsSubmissionController < ApplicationController
                 end
     end
 
-    return render status: :unprocessable_entity, json: { error: errors.join("<br/>") } if errors.any?
+    return render status: :unprocessable_entity, json: { error: errors } if errors.any?
 
     render status: :ok, json: { success: true }
   end

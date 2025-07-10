@@ -43,13 +43,13 @@ function ImportResultsData({
         <Tab.Pane>
           <UploadResultsJson
             competitionId={competitionId}
-            isWrtViewing={isWrtViewing}
+            isAdminView={isAdminView}
             onImportSuccess={onImportSuccess}
           />
         </Tab.Pane>
       ),
     },
-    ...(isWrtViewing ? [{
+    ...(isAdminView ? [{
       menuItem: 'Import WCA Live Results',
       render: () => (
         <Tab.Pane>
