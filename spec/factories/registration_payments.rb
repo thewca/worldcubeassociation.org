@@ -24,7 +24,6 @@ FactoryBot.define do
     end
 
     trait :refund do
-
       amount_lowest_denomination { -competition.base_entry_fee_lowest_denomination }
     end
 

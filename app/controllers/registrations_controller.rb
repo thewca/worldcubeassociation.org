@@ -347,7 +347,7 @@ class RegistrationsController < ApplicationController
 
     if stored_record.nil?
       logger.error "Stripe webhook reported event on entity #{stripe_intent.id} but we have no matching charge."
-      return head :not_found #unless StripeRecord.charge.exists?(stripe_id: stripe_intent.charge)
+      return head :not_found # unless StripeRecord.charge.exists?(stripe_id: stripe_intent.charge)
     end
 
     audit_event.update!(stripe_record: stored_record, handled: handling_event)

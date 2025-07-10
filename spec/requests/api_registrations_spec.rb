@@ -1553,7 +1553,7 @@ RSpec.describe 'API Registrations' do
       account: "acct_19ZQVmE2qoiROdto",
       object: "event",
       api_version: "2025-04-30.basil",
-      created: 1751888912,
+      created: 1_751_888_912,
       data: {
         object: {
           id: "re_3RiDX8I8ds2wj1dZ0RDaaCQg",
@@ -1561,15 +1561,15 @@ RSpec.describe 'API Registrations' do
           amount: amount,
           balance_transaction: "txn_3RiDX8I8ds2wj1dZ0WkucIWD",
           charge: charge_id,
-          created: 1751888912,
+          created: 1_751_888_912,
           currency: currency,
           destination_details: {
             card: {
               reference_status: "pending",
               reference_type: "acquirer_reference_number",
-              type: "refund"
+              type: "refund",
             },
-            type: "card"
+            type: "card",
           },
           metadata: {},
           payment_intent: "pi_3RiDX8I8ds2wj1dZ0l44iwK5",
@@ -1577,27 +1577,27 @@ RSpec.describe 'API Registrations' do
           receipt_number: nil,
           source_transfer_reversal: nil,
           status: status,
-          transfer_reversal: nil
+          transfer_reversal: nil,
         },
-        previous_attributes: {}
+        previous_attributes: {},
       },
       livemode: false,
       pending_webhooks: 0,
       request: {
         id: "req_f56WK6ef8J0sKx",
-        idempotency_key: "f14568d1-91bd-4a9d-ac14-1a4acf472423"
+        idempotency_key: "f14568d1-91bd-4a9d-ac14-1a4acf472423",
       },
-      type: type
+      type: type,
     }
   end
 
-  def refund_notification_webhook(amount = 1000, currency = "usd")
+  def refund_notification_webhook(_amount = 1000, _currency = "usd")
     {
       id: "evt_3RhpdyI8ds2wj1dZ1Ho4bBiD",
       account: "acct_19ZQVmE2qoiROdto",
       object: "event",
       api_version: "2025-04-30.basil",
-      created: 1751797081,
+      created: 1_751_797_081,
       data: {
         object: {
           id: "test_charge_id",
@@ -1616,16 +1616,16 @@ RSpec.describe 'API Registrations' do
               line1: nil,
               line2: nil,
               postal_code: nil,
-              state: nil
+              state: nil,
             },
             email: nil,
             name: nil,
             phone: nil,
-            tax_id: nil
+            tax_id: nil,
           },
           calculated_statement_descriptor: "WORLD CUBE ASSOCIATION",
           captured: true,
-          created: 1751797078,
+          created: 1_751_797_078,
           currency: "usd",
           customer: nil,
           description: "(created by Stripe CLI)",
@@ -1649,7 +1649,7 @@ RSpec.describe 'API Registrations' do
             risk_level: "normal",
             risk_score: 44,
             seller_message: "Payment complete.",
-            type: "authorized"
+            type: "authorized",
           },
           paid: true,
           payment_intent: "pi_3RhpdyI8ds2wj1dZ1Eg6GGyz",
@@ -1662,39 +1662,39 @@ RSpec.describe 'API Registrations' do
               checks: {
                 address_line1_check: nil,
                 address_postal_code_check: nil,
-                cvc_check: "pass"
+                cvc_check: "pass",
               },
               country: "US",
               exp_month: 7,
               exp_year: 2026,
               extended_authorization: {
-                status: "disabled"
+                status: "disabled",
               },
               fingerprint: "ps38R05DkefjOFFa",
               funding: "credit",
               incremental_authorization: {
-                status: "unavailable"
+                status: "unavailable",
               },
               installments: nil,
               last4: "4242",
               mandate: nil,
               multicapture: {
-                status: "unavailable"
+                status: "unavailable",
               },
               network: "visa",
               network_token: {
-                used: false
+                used: false,
               },
               network_transaction_id: "112115515682485",
               overcapture: {
                 maximum_amount_capturable: 1000,
-                status: "unavailable"
+                status: "unavailable",
               },
               regulated_status: "unregulated",
               three_d_secure: nil,
-              wallet: nil
+              wallet: nil,
             },
-            type: "card"
+            type: "card",
           },
           radar_options: {},
           receipt_email: nil,
@@ -1709,21 +1709,21 @@ RSpec.describe 'API Registrations' do
           statement_descriptor_suffix: nil,
           status: "succeeded",
           transfer_data: nil,
-          transfer_group: nil
+          transfer_group: nil,
         },
         previous_attributes: {
           amount_refunded: 0,
           receipt_url: "https://pay.stripe.com/receipts/payment/CAcaFwoVYWNjdF8xOWlSZ1FJOGRzMndqMWRaKNiaqcMGMgbZwhqCtZk6LBZfAv6w3HkYoFLtySDPDNl20vhp0nDi_ZyIyDXIi63b8Rv_bmoJZ4cLhB5H",
-          refunded: false
-        }
+          refunded: false,
+        },
       },
       livemode: false,
       pending_webhooks: 0,
       request: {
         id: "req_ePVntYhB97A5GO",
-        idempotency_key: "4d23287a-980e-42c7-b814-229b3d24549f"
+        idempotency_key: "4d23287a-980e-42c7-b814-229b3d24549f",
       },
-      type: "charge.refunded"
+      type: "charge.refunded",
     }
   end
 end
