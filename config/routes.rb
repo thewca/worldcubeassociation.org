@@ -452,7 +452,7 @@ Rails.application.routes.draw do
   end
 
   # Deprecated Links
-  get 'teams-committees' => redirect('teams-committees-councils')
+  get 'teams-committees-councils' => redirect('teams-committees')
   get 'panel/delegate-crash-course' => redirect('panel/delegate#delegate-handbook')
   get 'panel' => redirect('panel/volunteer')
 end
