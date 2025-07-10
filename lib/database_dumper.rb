@@ -107,6 +107,7 @@ module DatabaseDumper
           forbid_newcomers_reason
           auto_close_threshold
           auto_accept_registrations
+          auto_accept_preference
           auto_accept_disable_threshold
           newcomer_month_reserved_spots
           competitor_can_cancel
@@ -961,6 +962,8 @@ module DatabaseDumper
     "tickets" => :skip_all_rows,
     "tickets_edit_person" => :skip_all_rows,
     "tickets_edit_person_fields" => :skip_all_rows,
+    "duplicate_checker_job_runs" => :skip_all_rows,
+    "potential_duplicate_persons" => :skip_all_rows,
   }.freeze
 
   RESULTS_SANITIZERS = {

@@ -1375,7 +1375,7 @@ RSpec.describe 'API Registrations' do
   describe 'PATCH #bulk_accept' do
     let(:auto_accept_comp) do
       create(
-        :competition, :auto_accept, :registration_open, :with_organizer, :with_competitor_limit, competitor_limit: 10, auto_accept_disable_threshold: nil
+        :competition, :bulk_auto_accept, :registration_open, :with_organizer, :with_competitor_limit, competitor_limit: 10, auto_accept_disable_threshold: nil
       )
     end
 

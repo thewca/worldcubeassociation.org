@@ -5,7 +5,7 @@ export default function Errored({ error }: { error: string }) {
     <Alert.Root>
       <Alert.Indicator />
       <Alert.Content>
-        <Alert.Title> Error fetching Data</Alert.Title>
+        <Alert.Title>Error fetching Data</Alert.Title>
         <Alert.Description>{error}</Alert.Description>
       </Alert.Content>
     </Alert.Root>

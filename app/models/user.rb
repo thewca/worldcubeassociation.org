@@ -456,6 +456,10 @@ class User < ApplicationRecord
     Rails.env.production? && EnvConfig.WCA_LIVE_SITE? ? software_team_admin? : (software_team? || software_team_admin?)
   end
 
+  def can_administrate_livestream?
+    software_team? || board_member? || communication_team?
+  end
+
   def any_kind_of_delegate?
     delegate_role_metadata.any?
   end
@@ -934,6 +938,10 @@ class User < ApplicationRecord
     appropriate_role = can_admin_results? || allowed_delegate
     appropriate_time = competition.in_progress? || competition.probably_over?
     competition.announced? && appropriate_role && appropriate_time && !competition.results_posted?
+  end
+
+  def can_check_newcomers_data?(competition)
+    competition.upcoming? && can_admin_results?
   end
 
   def can_create_poll?

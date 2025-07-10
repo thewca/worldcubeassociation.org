@@ -29,7 +29,16 @@ i18next
     interpolation: {
       prefix: "%{",
       suffix: "}",
+      escapeValue: false,
     },
+    // Little hack: Normally, i18next marks plurals with a separate symbol, like so:
+    //   some.nested.key_one: "One nested key"
+    //   some.nested.key_other: "Many nested keys"
+    // This is a good idea in principle, but our hand-written transformation would need to
+    // detect which key suffixes in the YAML nesting are plural keys, and which aren't.
+    // This isn't exactly hard to program but can be hard to maintain (and cover all edge cases)
+    // so for now we pretend that plurals are demarcated just as normal nesting items.
+    pluralSeparator: ".",
     detection: {
       order: ["cookie", "navigator"],
       lookupCookie: storageKey,
