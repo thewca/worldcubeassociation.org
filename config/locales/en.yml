@@ -533,8 +533,6 @@ en:
         status: ""
       results_submission:
         results_file: ""
-        message: ""
-        confirm_information: ""
       regional_organization:
         name: ""
         country: ""
@@ -2167,6 +2165,7 @@ en:
         payment_view: "Setup payments"
         admin_view: "Admin view"
         tabs: "Manage tabs"
+        newcomer_checks: "Newcomer Checks"
         submit_results: "Submit results"
         match_scrambles: "Submit scrambles"
         delegate_report: "Delegate report"
