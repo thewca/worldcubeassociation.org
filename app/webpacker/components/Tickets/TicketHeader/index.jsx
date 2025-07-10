@@ -2,7 +2,7 @@ import React from 'react';
 import { Card, Header } from 'semantic-ui-react';
 import StatusView from './StatusView';
 
-export default function TicketHeader({ ticketDetails, currentStakeholder, sync }) {
+export default function TicketHeader({ ticketDetails, currentStakeholder, updateStatus }) {
   const { ticket: { id } } = ticketDetails;
 
   return (
@@ -12,7 +12,7 @@ export default function TicketHeader({ ticketDetails, currentStakeholder, sync }
         <StatusView
           ticketDetails={ticketDetails}
           currentStakeholder={currentStakeholder}
-          sync={sync}
+          updateStatus={updateStatus}
         />
       </Card.Content>
     </Card>

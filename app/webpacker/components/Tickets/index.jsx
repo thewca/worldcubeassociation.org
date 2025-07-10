@@ -1,74 +1,16 @@
 import React, { useMemo } from 'react';
 import {
-  Button, Container, Dropdown, Message, Modal,
+  Button, Container, Message, Modal,
 } from 'semantic-ui-react';
-import useLoadedData from '../../lib/hooks/useLoadedData';
-import { actionUrls } from '../../lib/requests/routes.js.erb';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import Loading from '../Requests/Loading';
 import Errored from '../Requests/Errored';
-import TicketHeader from './TicketHeader';
-import TicketWorkbenches from './TicketWorkbenches';
-import TicketLogs from './TicketLogs';
 import useInputState from '../../lib/hooks/useInputState';
-import TicketComments from './TicketComments';
 import WCAQueryClientProvider from '../../lib/providers/WCAQueryClientProvider';
-
-function SkateholderSelector({ stakeholderList, setUserSelectedStakeholder }) {
-  const [selectedOption, setSelectedOption] = useInputState(stakeholderList[0]);
-  return (
-    <>
-      <p>
-        You are part of more than one stakeholder, please select the stakeholder as which you want
-        to visit the ticket page.
-      </p>
-      <Dropdown
-        options={stakeholderList.map((requesterStakeholder) => ({
-          key: requesterStakeholder.id,
-          text: `${requesterStakeholder.stakeholder.name} (${requesterStakeholder.stakeholder_role})`,
-          value: requesterStakeholder,
-        }))}
-        value={selectedOption}
-        onChange={setSelectedOption}
-      />
-      <Button
-        disabled={!selectedOption}
-        onClick={() => setUserSelectedStakeholder(selectedOption)}
-      >
-        Select
-      </Button>
-    </>
-  );
-}
-
-function TicketContent({ ticketDetails, currentStakeholder, sync }) {
-  const ticketType = ticketDetails.ticket.metadata_type;
-  const stakeholderRole = currentStakeholder.stakeholder_role;
-  const TicketWorkbench = TicketWorkbenches[ticketType]?.[stakeholderRole];
-
-  return (
-    <>
-      <TicketHeader
-        ticketDetails={ticketDetails}
-        currentStakeholder={currentStakeholder}
-        sync={sync}
-      />
-      {TicketWorkbench && (
-        <TicketWorkbench
-          ticketDetails={ticketDetails}
-          sync={sync}
-          currentStakeholder={currentStakeholder}
-        />
-      )}
-      <TicketComments
-        ticketId={ticketDetails.ticket.id}
-        currentStakeholder={currentStakeholder}
-      />
-      <TicketLogs
-        ticketId={ticketDetails.ticket.id}
-      />
-    </>
-  );
-}
+import TicketContent from './TicketContent';
+import SkateholderSelector from './SkateholderSelector';
+import getTicketDetails from './api/getTicketDetails';
+import updateStatus from './api/updateStatus';
 
 export default function Wrapper({ id }) {
   return (
@@ -79,9 +21,16 @@ export default function Wrapper({ id }) {
 }
 
 function Tickets({ id }) {
+  const queryClient = useQueryClient();
   const {
-    data: ticketDetails, sync, loading, error,
-  } = useLoadedData(actionUrls.tickets.show(id));
+    data: ticketDetails,
+    isLoading: isLoadingTicketDetails,
+    isError: isErrorTicketDetails,
+    error: errorTicketDetails,
+  } = useQuery({
+    queryKey: ['ticket-details', id],
+    queryFn: () => getTicketDetails({ ticketId: id }),
+  });
 
   const [userSelectedStakeholder, setUserSelectedStakeholder] = useInputState();
   const currentStakeholder = useMemo(() => {
@@ -93,8 +42,33 @@ function Tickets({ id }) {
     return null;
   }, [ticketDetails?.requester_stakeholders, userSelectedStakeholder]);
 
-  if (loading) return <Loading />;
-  if (error) return <Errored />;
+  const {
+    mutate: updateStatusMutate,
+    isPending: isPendingUpdateStatus,
+    isError: isErrorUpdateStatus,
+    error: errorUpdateStatus,
+  } = useMutation({
+    mutationFn: (status) => updateStatus({ ticketId: id, status, currentStakeholder }),
+    onSuccess: (status) => {
+      queryClient.setQueryData(
+        ['ticket-details', id],
+        () => ({
+          ...ticketDetails,
+          ticket: {
+            ...ticketDetails.ticket,
+            metadata: {
+              ...ticketDetails.ticket.metadata,
+              status,
+            },
+          },
+        }),
+      );
+    },
+  });
+
+  if (isLoadingTicketDetails || isPendingUpdateStatus) return <Loading />;
+  if (isErrorTicketDetails) return <Errored error={errorTicketDetails} />;
+  if (isErrorUpdateStatus) return <Errored error={errorUpdateStatus} />;
 
   return (
     <>
@@ -113,7 +87,7 @@ function Tickets({ id }) {
           <TicketContent
             ticketDetails={ticketDetails}
             currentStakeholder={currentStakeholder}
-            sync={sync}
+            updateStatus={updateStatusMutate}
           />
         )}
       </Container>
