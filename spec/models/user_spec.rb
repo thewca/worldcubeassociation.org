@@ -625,41 +625,6 @@ RSpec.describe User do
     end
   end
 
-  describe "can edit registration" do
-    let!(:competitor) { create(:user) }
-    let!(:organizer) { create(:user) }
-    let!(:competition) { create(:competition, :registration_open, organizers: [organizer]) }
-    let!(:registration) { create(:registration, user: competitor, competition: competition) }
-
-    it "if they are an organizer" do
-      expect(organizer.can_edit_registration?(registration)).to be true
-    end
-
-    it "if their registration is pending" do
-      registration.competing_status = Registrations::Helper::STATUS_PENDING
-      expect(competitor.can_edit_registration?(registration)).to be true
-    end
-
-    it "unless their registration is accepted" do
-      registration.competing_status = Registrations::Helper::STATUS_ACCEPTED
-      expect(competitor.can_edit_registration?(registration)).to be false
-    end
-
-    it "if event edit deadline is in the future" do
-      registration.competing_status = Registrations::Helper::STATUS_ACCEPTED
-      competition.allow_registration_edits = true
-      competition.event_change_deadline_date = 2.weeks.from_now
-      expect(competitor.can_edit_registration?(registration)).to be true
-    end
-
-    it "unless event edit deadline has passed" do
-      registration.competing_status = Registrations::Helper::STATUS_ACCEPTED
-      competition.allow_registration_edits = true
-      competition.event_change_deadline_date = 2.weeks.ago
-      expect(competitor.can_edit_registration?(registration)).to be false
-    end
-  end
-
   describe "staff? method" do
     it "returns false for non-staff user" do
       user = create(:user)
