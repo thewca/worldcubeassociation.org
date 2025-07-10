@@ -35,6 +35,11 @@ FactoryBot.define do
       stripe_status { 'succeeded' }
     end
 
+    trait :pending_refund do
+      refund
+      stripe_status { 'pending' }
+    end
+
     after(:create) do |record, evaluator|
       FactoryBot.create(:stripe_record, :charge, parent_record: record) if evaluator.create_child
     end

@@ -339,17 +339,24 @@ class RegistrationsController < ApplicationController
     end
 
     stripe_intent = event.data.object # contains a polymorphic type that depends on the event
+    puts "stripe intent: #{stripe_intent.inspect}"
     stored_record = StripeRecord.find_by(stripe_id: stripe_intent.id)
 
     handling_event = StripeWebhookEvent::HANDLED_EVENTS.include?(event.type)
     incoming_event = StripeWebhookEvent::INCOMING_EVENTS.include?(event.type)
 
     stored_record ||= StripeRecord.create_from_api(stripe_intent, {}, audit_event.account_id) if incoming_event
+    original_charge = StripeRecord.charge.find_by(stripe_id: stripe_intent.charge) unless stored_record.stripe_record_type == 'charge'
+
     puts "stored record: #{stored_record.inspect}"
 
-    if stored_record.nil?
-      logger.error "Stripe webhook reported event on entity #{stripe_intent.id} but we have no matching transaction."
-      return head :not_found
+    # In case of UPDATE events, the stored record will be the event being updated, not the underlying charge
+    # Thus, in cases where a stored record is present, we must also ensure that there is a corresponding charge somewhere
+    # NOTE: This is clumsy implementation but we can work on it in review
+    # An alternative might be to create a different _EVENTS array in StripeWebhookEvent
+    if stored_record.nil? || (stored_record.stripe_record_type != 'charge' && original_charge.nil?)
+      logger.error "Stripe webhook reported event on entity #{stripe_intent.id} but we have no matching charge."
+      return head :not_found #unless StripeRecord.charge.exists?(stripe_id: stripe_intent.charge)
     end
 
     audit_event.update!(stripe_record: stored_record, handled: handling_event)
