@@ -11,7 +11,7 @@ export default function HistoricalRegulation() {
       <AspectRatio>
         <iframe
           width={"100%"}
-          src={`http://regulations.worldcubeassociation.org/history/official/${params.version}/index.html`}
+          src={`https://regulations.worldcubeassociation.org/history/official/${params.version}/index.html`}
         ></iframe>
       </AspectRatio>
     </Container>
