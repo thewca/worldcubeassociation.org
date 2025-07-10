@@ -531,8 +531,6 @@ en:
         submitter_email: ""
         submitter_comment: ""
         status: ""
-      results_submission:
-        results_file: ""
       regional_organization:
         name: ""
         country: ""

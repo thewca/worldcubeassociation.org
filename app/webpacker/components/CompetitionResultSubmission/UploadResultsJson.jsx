@@ -5,12 +5,17 @@ import uploadResultsJson from './api/uploadResultsJson';
 import useCheckboxState from '../../lib/hooks/useCheckboxState';
 import Errored from '../Requests/Errored';
 
-export default function UploadResultsJson({ competitionId, isWrtViewing }) {
+export default function UploadResultsJson({ competitionId, isAdminView }) {
   const [resultFile, setResultFile] = useState();
-  const [markResultSubmitted, setMarkResultSubmitted] = useCheckboxState(isWrtViewing);
+  const [markResultSubmitted, setMarkResultSubmitted] = useCheckboxState(isAdminView);
 
   const { mutate: uploadResultsJsonMutate, error, isError } = useMutation({
-    mutationFn: () => uploadResultsJson({ competitionId, resultFile, markResultSubmitted }),
+    mutationFn: () => uploadResultsJson({
+      competitionId,
+      resultFile,
+      markResultSubmitted,
+      storeUploadedJson: !isAdminView, // The JSON will be uploaded to database only for Delegates.
+    }),
     onSuccess: () => {
       // Ideally page should not be reloaded, but this is currently required to re-render
       // the rails HTML portion. Once that rails HTML portion is also migrated to React,
@@ -27,7 +32,7 @@ export default function UploadResultsJson({ competitionId, isWrtViewing }) {
         type="file"
         onChange={(event) => setResultFile(event.target.files[0])}
       />
-      {isWrtViewing && (
+      {isAdminView && (
         <Form.Checkbox
           checked={markResultSubmitted}
           onChange={setMarkResultSubmitted}

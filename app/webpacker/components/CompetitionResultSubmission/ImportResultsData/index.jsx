@@ -6,14 +6,14 @@ import WCAQueryClientProvider from '../../../lib/providers/WCAQueryClientProvide
 export default function Wrapper({
   competitionId,
   alreadyHasSubmittedResult,
-  isWrtViewing,
+  isAdminView,
 }) {
   return (
     <WCAQueryClientProvider>
       <ImportResultsData
         competitionId={competitionId}
         alreadyHasSubmittedResult={alreadyHasSubmittedResult}
-        isWrtViewing={isWrtViewing}
+        isAdminView={isAdminView}
       />
     </WCAQueryClientProvider>
   );
@@ -22,7 +22,7 @@ export default function Wrapper({
 function ImportResultsData({
   competitionId,
   alreadyHasSubmittedResult,
-  isWrtViewing,
+  isAdminView = false,
 }) {
   const [activeAccordion, setActiveAccordion] = useState(!alreadyHasSubmittedResult);
 
@@ -46,7 +46,7 @@ function ImportResultsData({
           </Message>
           <UploadResultsJson
             competitionId={competitionId}
-            isWrtViewing={isWrtViewing}
+            isAdminView={isAdminView}
           />
         </Accordion.Content>
       </Accordion>

@@ -31,25 +31,32 @@ class ResultsSubmissionController < ApplicationController
   end
 
   def upload_json
-    @competition = competition_from_params
-    return redirect_to competition_submit_results_edit_path if @competition.results_submitted?
+    competition = competition_from_params
+
+    # Only admins can upload results for the competitions where results are already submitted.
+    if competition.results_submitted? && !current_user.can_admin_results?
+      return render status: :unprocessable_entity, json: {
+        error: "Results have already been submitted for this competition.",
+      }
+    end
 
     # Do json analysis + insert record in db, then redirect to check inbox
     # (and delete existing record if any)
-    upload_json_params = params.require(:upload_json).permit(:results_file)
-    upload_json_params[:competition_id] = @competition.id
-    @upload_json = UploadJson.new(upload_json_params)
+    upload_json = UploadJson.new({
+                                   results_file: params.require(:results_file),
+                                   competition_id: competition.id,
+                                 })
+
+    mark_result_submitted = ActiveRecord::Type::Boolean.new.cast(params.require(:mark_result_submitted))
+    store_uploaded_json = ActiveRecord::Type::Boolean.new.cast(params.require(:store_uploaded_json))
 
     # This makes sure the json structure is valid!
-    if @upload_json.import_to_inbox
-      flash[:success] = "JSON File has been imported."
-      @competition.uploaded_jsons.create(json_str: @upload_json.results_json_str)
-      redirect_to competition_submit_results_edit_path
-    else
-      @results_validator = ResultsValidators::CompetitionsResultsValidator.create_full_validation
-      @results_validator.validate(@competition.id)
-      render :new
-    end
+    return render status: :unprocessable_entity, json: { error: upload_json.errors.full_messages } unless upload_json.import_to_inbox
+
+    competition.touch(:results_submitted_at) if !competition.results_submitted? && mark_result_submitted
+    competition.uploaded_jsons.create!(json_str: upload_json.results_json_str) if store_uploaded_json
+
+    render status: :ok, json: { success: true }
   end
 
   def import_from_live
