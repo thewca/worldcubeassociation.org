@@ -926,17 +926,13 @@ class User < ApplicationRecord
   end
 
   def can_upload_competition_results?(competition)
-    can_submit_competition_results?(competition, upload_only: true)
+    return false if competition.upcoming? || !competition.announced?
+
+    can_admin_results? || (competition.delegates.include?(self) && competition.results_posted?)
   end
 
-  def can_submit_competition_results?(competition, upload_only: false)
-    allowed_delegate = if upload_only
-                         competition.delegates.include?(self)
-                       else
-                         competition.staff_delegates.include?(self)
-                       end
-    appropriate_time = competition.in_progress? || competition.probably_over?
-    can_admin_results? || (competition.announced? && allowed_delegate && appropriate_time && !competition.results_posted?)
+  def can_submit_competition_results?(competition)
+    can_upload_competition_results?(competition) && (can_admin_results? || competition.staff_delegates.include?(self))
   end
 
   def can_check_newcomers_data?(competition)
