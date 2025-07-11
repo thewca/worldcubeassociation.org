@@ -107,13 +107,15 @@ function PostingCompetitionsIndex({
                   >
                     Import results page
                   </Button>
-                  <Button
-                    target="_blank"
-                    color="red"
-                    href={viewUrls.tickets.show(c.result_ticket.id)}
-                  >
-                    Tickets page
-                  </Button>
+                  {c.result_ticket && (
+                    <Button
+                      target="_blank"
+                      color="red"
+                      href={viewUrls.tickets.show(c.result_ticket.id)}
+                    >
+                      Tickets page
+                    </Button>
+                  )}
                 </>
               )}
             </Button.Group>

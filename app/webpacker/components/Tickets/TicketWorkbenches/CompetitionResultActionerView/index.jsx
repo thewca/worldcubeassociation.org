@@ -8,7 +8,7 @@ export default function CompetitionResultActionerView({ ticketDetails, updateSta
 
   switch (status) {
     case ticketsCompetitionResultStatuses.submitted:
-      return <>Please lock the competition results from the Posting dashboard.</>;
+      return <p>Please lock the competition results from the Posting dashboard.</p>;
 
     case ticketsCompetitionResultStatuses.warnings_verification:
       return (
@@ -20,15 +20,15 @@ export default function CompetitionResultActionerView({ ticketDetails, updateSta
 
     case ticketsCompetitionResultStatuses.results_verification:
       return (
-        <>
+        <p>
           Please finish the remaining steps in
           {' '}
           <a href={adminImportResultsUrl(competitionId)}>import results page</a>
           .
-        </>
+        </p>
       );
 
     default:
-      return <>Unknown status</>;
+      return <p>Unknown status</p>;
   }
 }

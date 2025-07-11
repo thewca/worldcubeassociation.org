@@ -19,7 +19,7 @@ class TicketsCompetitionResult < ApplicationRecord
     end
   end
 
-  def self.create_ticket(competition_id, delegate_message, submitted_delegate)
+  def self.create_ticket!(competition_id, delegate_message, submitted_delegate)
     ticket_metadata = TicketsCompetitionResult.create!(
       status: TicketsCompetitionResult.statuses[:submitted],
       competition_id: competition_id,

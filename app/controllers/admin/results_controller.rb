@@ -47,19 +47,12 @@ module Admin
 
       ActiveRecord::Base.transaction do
         @updated_competitions.update(posting_user: current_user)
-        @updated_competitions.each do |competition|
-          next if competition.tickets_competition_result.nil? # This is to temporarily allow the results which didn't get submitted through tickets.
-
-          competition.tickets_competition_result.update!(
-            status: TicketsCompetitionResult.statuses[:warnings_verification],
-          )
-        end
+        ticket_competition_result_ids = @updated_competitions.joins(:tickets_competition_result).pluck('tickets_competition_result.id')
+        TicketsCompetitionResult.where(id: ticket_competition_result_ids)
+                                .update_all(status: TicketsCompetitionResult.statuses[:warnings_verification])
       end
 
-      json = { error: "Something went wrong." }
-      json = { message: "Competitions successfully locked, go on posting!" } if @updated_competitions.update(posting_user: current_user)
-
-      render json: json
+      render json: { message: "Competitions successfully locked, go on posting!" }
     end
 
     def show
