@@ -16,6 +16,7 @@ import {
   adminImportResultsUrl,
   adminStartPostingUrl,
   competitionUrl,
+  viewUrls,
 } from '../../lib/requests/routes.js.erb';
 
 function stateReducer(accumulated, current) {
@@ -105,6 +106,13 @@ function PostingCompetitionsIndex({
                     href={adminImportResultsUrl(c.id)}
                   >
                     Import results page
+                  </Button>
+                  <Button
+                    target="_blank"
+                    color="red"
+                    href={viewUrls.tickets.show(c.result_ticket.id)}
+                  >
+                    Tickets page
                   </Button>
                 </>
               )}

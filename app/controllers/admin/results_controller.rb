@@ -21,7 +21,10 @@ module Admin
             competitions: @pending_competitions.as_json(
               only: %w[id name results_submitted_at],
               methods: %w[city country_iso2],
-              include: { posting_user: user_attributes },
+              include: {
+                posting_user: user_attributes,
+                result_ticket: {},
+              },
             ),
           }
         end
@@ -41,6 +44,17 @@ module Admin
       #   it was a no-op.
       @updated_competitions = Competition.pending_posting.where(posting_user: nil).where(id: params[:competition_ids])
       return render json: { error: "No competitions to lock." } if @updated_competitions.empty?
+
+      ActiveRecord::Base.transaction do
+        @updated_competitions.update(posting_user: current_user)
+        @updated_competitions.each do |competition|
+          next if competition.tickets_competition_result.nil? # This is to temporarily allow the results which didn't get submitted through tickets.
+
+          competition.tickets_competition_result.update!(
+            status: TicketsCompetitionResult.statuses[:warnings_verification],
+          )
+        end
+      end
 
       json = { error: "Something went wrong." }
       json = { message: "Competitions successfully locked, go on posting!" } if @updated_competitions.update(posting_user: current_user)
