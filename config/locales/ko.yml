@@ -1377,7 +1377,7 @@ ko:
       #original_hash: bddd3ea
       faq_note_html: >-
         문의하기 전에 <a href="/faq">자주 묻는 질문</a>을 살펴보십시오! 여기에 나열되지 않은 특정 위원회나 팀에
-        연락하려면 <a href="/teams-committees-councils">이 페이지</a>에서 자세한 내용을 확인할 수
+        연락하려면 <a href="/teams-committees">이 페이지</a>에서 자세한 내용을 확인할 수
         있습니다.
       #original_hash: ea20be0
       success_message: 이메일이 전송되었습니다. 곧 답변드리겠습니다.
