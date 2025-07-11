@@ -630,7 +630,7 @@ en:
           methods: "Two-factor methods"
           methods_description: "You can use several methods to get a one-time password when signing in, they are described below."
           dedicated_app: "Using a dedicated two-factor application"
-          dedicated_app_desc_html: "The WST recommend using %{authy} on your personal device(s) to obtain your one-time password when signing in.<br/>Other alternatives include %{google} and %{microsoft}."
+          dedicated_app_desc_html: "The WST recommend using %{authy} on your personal device(s) to obtain your one-time password when signing in.<br/>Other alternatives include %{google}, %{apple}, and %{microsoft}."
           scan_qrcode_html: "Scan the QR code below when prompted from your 2FA application (or click %{here} if you're on mobile)."
           backup_codes: "Backup codes"
           backup_codes_desc: "Backup codes can be used instead as one-time password in case you don't have access to your device with your two-factor authentication application. Each code can only be used once. Make sure to store them somewhere safe!"
