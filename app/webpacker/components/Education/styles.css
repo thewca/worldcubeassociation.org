@@ -1,0 +1,44 @@
+:root {
+  --white-color: #eeeeee;
+  --green-color: #029347;
+  --red-color: #c62535;
+  --yellow-color: #ffd313;
+  --blue-color: #0051ba;
+  --orange-color: #ff5800;
+}
+
+h1 {
+  margin: 0;
+  text-align: center;
+  font-size: 2.1rem;
+}
+
+h2 {
+  margin: 0;
+  text-align: center;
+  font-size: 1.8rem;
+}
+
+p, li {
+  margin: 0;
+  font-size: 1.3rem;
+  line-height: 1.7;
+}
+
+div[style*="background-color: var(--red-color)"] a,
+div[style*="background-color: var(--green-color)"] a,
+div[style*="background-color: var(--blue-color)"] a,
+div[style*="background-color: var(--orange-color)"] a {
+  text-decoration: underline;
+  color: var(--white-color);
+
+  &:hover {
+    color: #cccccc;
+  }
+}
+
+.wca-id {
+  padding-inline: 0.3rem;
+  background-color: var(--yellow-color);
+  color: black;
+}
