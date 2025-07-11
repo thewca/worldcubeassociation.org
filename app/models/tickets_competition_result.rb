@@ -7,7 +7,7 @@ class TicketsCompetitionResult < ApplicationRecord
     submitted: "submitted",
     warnings_verification: "warnings_verification",
     results_verification: "results_verification",
-    closed: "closed",
+    posted: "posted",
   }
 
   has_one :ticket, as: :metadata

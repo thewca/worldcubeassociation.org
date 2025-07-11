@@ -120,7 +120,7 @@ class CompetitionsController < ApplicationController
       comp.registrations.accepted.each { |registration| registration.user.maybe_assign_wca_id_by_results(comp) }
       if comp.tickets_competition_result.present?
         comp.tickets_competition_result.update!(
-          status: TicketsCompetitionResult.statuses[:closed],
+          status: TicketsCompetitionResult.statuses[:posted],
         )
       end
     end
