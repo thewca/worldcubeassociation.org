@@ -53,8 +53,7 @@ class TicketsEditPerson < ApplicationRecord
 
       TicketLog.create!(
         ticket_id: ticket.id,
-        action_type: TicketLog.action_types[:status_updated],
-        action_value: TicketsEditPerson.statuses[:open],
+        action_type: TicketLog.action_types[:created],
         acting_user_id: requester.id,
         acting_stakeholder_id: requester_stakeholder.id,
       )
