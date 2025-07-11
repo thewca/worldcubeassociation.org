@@ -842,8 +842,6 @@ zh-TW:
         results_file: ''
         #original_hash: da39a3e
         message: ''
-        #original_hash: da39a3e
-        confirm_information: ''
       regional_organization:
         #original_hash: da39a3e
         name: ''
@@ -1311,7 +1309,7 @@ zh-TW:
       #original_hash: bddd3ea
       faq_note_html: >-
         在詢問前，也許您可以先看看我們的<a href="/faq">常見問題</a>！如果您想要聯絡這邊沒有列出的特定委員會或團隊，你可以試試在<a
-        href="/teams-committees-councils">這個頁面</a>找到詳細資訊。
+        href="/teams-committees">這個頁面</a>找到詳細資訊。
       #original_hash: ea20be0
       success_message: 已送出電子郵件 - 我們會盡快回覆您。
       #original_hash: 8fa6b95

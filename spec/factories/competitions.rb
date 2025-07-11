@@ -109,12 +109,22 @@ FactoryBot.define do
     end
 
     trait :auto_accept do
+      stripe_connected
       use_wca_registration { true }
-      auto_accept_registrations { true }
       competitor_limit_enabled { true }
       competitor_limit_reason { 'test' }
       competitor_limit { 5 }
       auto_accept_disable_threshold { 4 }
+    end
+
+    trait :bulk_auto_accept do
+      auto_accept
+      auto_accept_preference { :bulk }
+    end
+
+    trait :live_auto_accept do
+      auto_accept
+      auto_accept_preference { :live }
     end
 
     trait :allow_self_delete do

@@ -28,7 +28,6 @@ class AdminController < ApplicationController
 
   def new_results
     @competition = competition_from_params
-    @upload_json = UploadJson.new
     @results_validator = ResultsValidators::CompetitionsResultsValidator.create_full_validation
     @results_validator.validate(@competition.id)
   end
@@ -177,27 +176,6 @@ class AdminController < ApplicationController
 
     load_result_posting_steps do
       render partial: 'import_results_steps'
-    end
-  end
-
-  def create_results
-    @competition = competition_from_params
-
-    # Do json analysis + insert record in db, then redirect to check inbox
-    # (and delete existing record if any)
-    upload_json_params = params.require(:upload_json).permit(:results_file)
-    upload_json_params[:competition_id] = @competition.id
-    @upload_json = UploadJson.new(upload_json_params)
-
-    # This makes sure the json structure is valid!
-    if @upload_json.import_to_inbox
-      @competition.update!(results_submitted_at: Time.now) if @competition.results_submitted_at.nil?
-      flash[:success] = "JSON file has been imported."
-      redirect_to competition_admin_upload_results_edit_path
-    else
-      @results_validator = ResultsValidators::CompetitionsResultsValidator.create_full_validation
-      @results_validator.validate(@competition.id)
-      render :new_results
     end
   end
 

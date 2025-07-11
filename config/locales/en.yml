@@ -531,10 +531,6 @@ en:
         submitter_email: ""
         submitter_comment: ""
         status: ""
-      results_submission:
-        results_file: ""
-        message: ""
-        confirm_information: ""
       regional_organization:
         name: ""
         country: ""
@@ -805,7 +801,7 @@ en:
         wapc: "The WCA Appeals Committee (WAC) reviews and resolves appeals regarding decisions made by other WCA Volunteers. The WAC provides an independent and impartial review process to ensure that decisions are fair, reasonable, and in accordance with WCA policies and regulations."
     contacts:
       title: "WCA Contact Form"
-      faq_note_html: 'Before making an inquiry, you may wish to take a look at our <a href="/faq">Frequently Asked Questions</a>! If you wish to contact a specific committee or team not listed here, you may check their details on <a href="/teams-committees-councils">this page</a>.'
+      faq_note_html: 'Before making an inquiry, you may wish to take a look at our <a href="/faq">Frequently Asked Questions</a>! If you wish to contact a specific committee or team not listed here, you may check their details on <a href="/teams-committees">this page</a>.'
       success_message: "Email sent - we'll get back to you soon."
       prefilled: "To update your registration, you need to contact the organizers of the competition. We have prefilled the contact form with your requested changes - please submit the form."
       form:
@@ -1647,7 +1643,7 @@ en:
           reason: "The reason for the competitor limit"
           auto_close_threshold: "Auto-close threshold"
           newcomer_month_reserved_spots: "Number of spots to reserve for newcomers"
-          auto_accept_enabled: "Bulk automatic registration acceptance"
+          auto_accept_preference: "Automatically accept registrations"
           auto_accept_disable_threshold: "Limit for automatically accepting registrations"
         staff:
           staff_delegate_ids: "WCA Delegate(s)"
@@ -1735,7 +1731,7 @@ en:
           reason: "What is the reason for the limit on competitors? Please fill this out in English!"
           auto_close_threshold: "Registration will automatically close when this number of paid registrations is received. Leave blank to disable, ignore if you aren't using integrated payments."
           newcomer_month_reserved_spots: "Only allowed during Newcomer Month - reserved spots can't be more than half of the Competitor Limit."
-          auto_accept_enabled: "This will enable a 'Bulk Auto Accept' button in the Registrations menu. This will accept all paid Waitlisted and Pending up to the competitor limit, or the limit defined below. Use at your own risk."
+          auto_accept_preference: "This will enable a 'Bulk Auto Accept' button in the Registrations menu. This will accept all paid Waitlisted and Pending up to the competitor limit, or the limit defined below. Use at your own risk."
           auto_accept_disable_threshold: "When this number of accepted registrations is reached, auto-accept will disable itself - allowing organizers to manually approve the final registrations. Must be less than the competitor limit. Leave blank if not desired."
         staff:
           staff_delegate_ids: "WCA Delegates for the competition."
@@ -1799,9 +1795,10 @@ en:
           enabled:
             "true": "I want to specify a competitor limit"
             "false": "I DO NOT want to specify a competitor limit"
-          auto_accept_enabled:
-            "true": "Enable 'Bulk Auto Accept' button in Registrations menu"
-            "false": "Disable 'Bulk Auto Accept' button"
+          auto_accept_preference:
+            "disabled": "Disable 'Bulk Auto Accept' button"
+            "bulk": "Enable 'Bulk Auto Accept' button in Registrations menu"
+            "live": "Automatically accept registrations when payment is made"
         registration:
           allow_on_the_spot:
             "true": "On the spot registrations will be accepted"
@@ -2167,6 +2164,7 @@ en:
         payment_view: "Setup payments"
         admin_view: "Admin view"
         tabs: "Manage tabs"
+        newcomer_checks: "Newcomer Checks"
         submit_results: "Submit results"
         match_scrambles: "Submit scrambles"
         delegate_report: "Delegate report"
@@ -2923,7 +2921,7 @@ en:
       missing_round_results_error: "There are no results for round %{round_id} but it is listed in the events tab. If this round was not held, please remove the round in the competition's manage events page."
       unexpected_combined_round_error: "No cutoff was announced for '%{round_name}', but it has been detected as a cutoff round in the results. Please update the round's information in the competition's manage events page."
     events:
-      not_333_main_event_warning: "The selected main event for this competition is %{main_event_id}. How was that event treated as the main event of the competition? Please give WRT a brief explanation (e.g. number of rounds, prizes, declared winner of the competition, ...)."
+      not_333_main_event_warning: "The selected main event is %{main_event_id}. Although this was approved by WCAT BEFORE the competition, WRT is responsible for ensuring AFTER the competition that the suitable main event guidelines from the WCA Competition Requirements Policy were met. Please give one action that was taken to treat %{main_event_id} as the main event DURING the competition (valid examples: declared the winner of the competition, most number of rounds, bigger prize)."
       no_main_event_warning: "There is no selected main event for this competition. Please let WRT know that this is correct."
       unexpected_results_error: "Results are present for %{event_id}, however it is not listed as an official event. Please remove the event from the results or contact the WCAT to request the event to be added to the WCA website."
       missing_results_warning: "There are no results for %{event_id}, but it is listed as an official event. If the event was held, please reupload your JSON with the results included. If the event was not held, leave a comment for the WRT."

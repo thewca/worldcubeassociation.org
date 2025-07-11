@@ -4,7 +4,8 @@ require 'fileutils'
 
 class ResultsSubmissionController < ApplicationController
   before_action :authenticate_user!
-  before_action -> { redirect_to_root_unless_user(:can_upload_competition_results?, competition_from_params) }
+  before_action -> { redirect_to_root_unless_user(:can_upload_competition_results?, competition_from_params) }, except: %i[newcomer_checks last_duplicate_checker_job_run compute_potential_duplicates]
+  before_action -> { redirect_to_root_unless_user(:can_check_newcomers_data?, competition_from_params) }, only: %i[newcomer_checks last_duplicate_checker_job_run compute_potential_duplicates]
 
   def new
     @competition = competition_from_params
@@ -12,36 +13,66 @@ class ResultsSubmissionController < ApplicationController
     @results_validator.validate(@competition.id)
   end
 
-  def upload_json
+  def newcomer_checks
     @competition = competition_from_params
-    return redirect_to competition_submit_results_edit_path if @competition.results_submitted?
+  end
+
+  def last_duplicate_checker_job_run
+    last_job_run = DuplicateCheckerJobRun.find_by(competition_id: params.require(:competition_id))
+
+    render status: :ok, json: last_job_run
+  end
+
+  def compute_potential_duplicates
+    job_run = DuplicateCheckerJobRun.create!(competition_id: params.require(:competition_id))
+    ComputePotentialDuplicates.perform_later(job_run)
+
+    render status: :ok, json: job_run
+  end
+
+  def upload_json
+    competition = competition_from_params
+
+    # Only admins can upload results for the competitions where results are already submitted.
+    if competition.results_submitted? && !current_user.can_admin_results?
+      return render status: :unprocessable_entity, json: {
+        error: "Results have already been submitted for this competition.",
+      }
+    end
 
     # Do json analysis + insert record in db, then redirect to check inbox
     # (and delete existing record if any)
-    upload_json_params = params.require(:upload_json).permit(:results_file)
-    upload_json_params[:competition_id] = @competition.id
-    @upload_json = UploadJson.new(upload_json_params)
+    upload_json = UploadJson.new({
+                                   results_file: params.require(:results_file),
+                                   competition_id: competition.id,
+                                 })
+
+    mark_result_submitted = ActiveRecord::Type::Boolean.new.cast(params.require(:mark_result_submitted))
+    store_uploaded_json = ActiveRecord::Type::Boolean.new.cast(params.require(:store_uploaded_json))
 
     # This makes sure the json structure is valid!
-    if @upload_json.import_to_inbox
-      flash[:success] = "JSON File has been imported."
-      @competition.uploaded_jsons.create(json_str: @upload_json.results_json_str)
-      redirect_to competition_submit_results_edit_path
-    else
-      @results_validator = ResultsValidators::CompetitionsResultsValidator.create_full_validation
-      @results_validator.validate(@competition.id)
-      render :new
-    end
+    return render status: :unprocessable_entity, json: { error: upload_json.errors.full_messages } unless upload_json.import_to_inbox
+
+    competition.touch(:results_submitted_at) if !competition.results_submitted? && mark_result_submitted
+    competition.uploaded_jsons.create!(json_str: upload_json.results_json_str) if store_uploaded_json
+
+    render status: :ok, json: { success: true }
   end
 
   def import_from_live
-    @competition = competition_from_params
-    return redirect_to competition_submit_results_edit_path if @competition.results_submitted?
+    competition = competition_from_params
 
-    results_to_import = @competition.rounds.flat_map do |round|
+    # Only admins can upload results for the competitions where results are already submitted.
+    if competition.results_submitted? && !current_user.can_admin_results?
+      return render status: :unprocessable_entity, json: {
+        error: "Results have already been submitted for this competition.",
+      }
+    end
+
+    results_to_import = competition.rounds.flat_map do |round|
       round.round_results.map do |result|
         InboxResult.new({
-                          competition: @competition,
+                          competition: competition,
                           person_id: result.person_id,
                           pos: result.ranking,
                           event_id: round.event_id,
@@ -61,14 +92,14 @@ class ResultsSubmissionController < ApplicationController
 
     person_with_results = results_to_import.map(&:person_id).uniq
 
-    persons_to_import = @competition.registrations
-                                    .includes(:user)
-                                    .select { it.wcif_status == "accepted" && person_with_results.include?(it.registrant_id.to_s) }
-                                    .map do
+    persons_to_import = competition.registrations
+                                   .includes(:user)
+                                   .select { it.wcif_status == "accepted" && person_with_results.include?(it.registrant_id.to_s) }
+                                   .map do
       InboxPerson.new({
                         id: it.registrant_id,
                         wca_id: it.wca_id || '',
-                        competition_id: @competition.id,
+                        competition_id: competition.id,
                         name: it.name,
                         country_iso2: it.country.iso2,
                         gender: it.gender,
@@ -76,10 +107,10 @@ class ResultsSubmissionController < ApplicationController
                       })
     end
 
-    scrambles_to_import = InboxScrambleSet.where(competition_id: @competition.id).flat_map do |scramble_set|
+    scrambles_to_import = InboxScrambleSet.where(competition_id: competition.id).flat_map do |scramble_set|
       scramble_set.inbox_scrambles.map do |scramble|
         Scramble.new({
-                       competition_id: @competition.id,
+                       competition_id: competition.id,
                        event_id: scramble_set.event_id,
                        round_type_id: scramble_set.round_type_id,
                        round_id: scramble_set.matched_round_id,
@@ -93,9 +124,9 @@ class ResultsSubmissionController < ApplicationController
 
     errors = []
     ActiveRecord::Base.transaction do
-      InboxPerson.where(competition_id: @competition.id).delete_all
-      InboxResult.where(competition_id: @competition.id).delete_all
-      Scramble.where(competition_id: @competition.id).delete_all
+      InboxPerson.where(competition_id: competition.id).delete_all
+      InboxResult.where(competition_id: competition.id).delete_all
+      Scramble.where(competition_id: competition.id).delete_all
       InboxPerson.import!(persons_to_import)
       InboxResult.import!(results_to_import)
       Scramble.import!(scrambles_to_import)
@@ -110,36 +141,22 @@ class ResultsSubmissionController < ApplicationController
                 end
     end
 
-    if errors.any?
-      flash[:danger] = errors.join("<br/>")
-      @results_validator = ResultsValidators::CompetitionsResultsValidator.create_full_validation
-      @results_validator.validate(@competition.id)
-      return render :new
-    end
+    return render status: :unprocessable_entity, json: { error: errors } if errors.any?
 
-    flash[:success] = "Data has been imported from WCA Live."
-    redirect_to competition_submit_results_edit_path
+    render status: :ok, json: { success: true }
   end
 
   def create
-    # Check inbox, create submission, send email
-    @competition = competition_from_params
+    competition = competition_from_params
+    message = params.require(:message)
+    results_validator = ResultsValidators::CompetitionsResultsValidator.create_full_validation.validate(competition.id)
 
-    submit_results_params = params.require(:results_submission).permit(:message, :confirm_information)
-    submit_results_params[:competition_id] = @competition.id
-    @results_submission = ResultsSubmission.new(submit_results_params)
-    # This validates also that results in Inboxes are all good
-    if @results_submission.valid?
-      CompetitionsMailer.results_submitted(@competition, @results_submission, current_user).deliver_now
+    render status: :unprocessable_entity, json: { error: "Submitted results contain errors." } if results_validator.any_errors?
 
-      flash[:success] = "Thank you for submitting the results!"
-      @competition.update!(results_submitted_at: Time.now)
-      redirect_to competition_path(@competition)
-    else
-      flash[:danger] = "Submitted results contain errors."
-      @results_validator = @results_submission.results_validator
-      render :new
-    end
+    CompetitionsMailer.results_submitted(competition, results_validator, message, current_user).deliver_now
+    competition.touch(:results_submitted_at)
+
+    render status: :ok, json: { success: true }
   end
 
   private def competition_from_params
