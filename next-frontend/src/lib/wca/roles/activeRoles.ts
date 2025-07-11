@@ -9,3 +9,4 @@ const getActiveRolesOfType = cache(async (groupType: string) => {
 
 export const getOfficersRoles = () => getActiveRolesOfType("officers");
 export const getBoardRoles = () => getActiveRolesOfType("board");
+export const getTranslatorRoles = () => getActiveRolesOfType("translators");

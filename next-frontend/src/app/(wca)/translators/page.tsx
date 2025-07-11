@@ -1,32 +1,18 @@
-"use client";
-
 import _ from "lodash";
 import { Container, Heading, SimpleGrid, VStack } from "@chakra-ui/react";
-import Loading from "@/components/ui/loading";
-import useAPI from "@/lib/wca/useAPI";
-import { useQuery } from "@tanstack/react-query";
-import { useMemo } from "react";
 import UserBadge from "@/components/UserBadge";
 import Errored from "@/components/ui/errored";
-import { useT } from "@/lib/i18n/useI18n";
+import { getT } from "@/lib/i18n/get18n";
+import { getTranslatorRoles } from "@/lib/wca/roles/activeRoles";
 
-export default function TranslatorsPage() {
-  const I18n = useT();
-  const api = useAPI();
-  const { data: translatorRequest, isLoading: isLoading } = useQuery({
-    queryKey: ["translators"],
-    queryFn: () =>
-      api.GET("/user_roles", {
-        params: { query: { groupType: "translators" } },
-      }),
-  });
+export default async function TranslatorsPage() {
+  const { t } = await getT();
 
-  const translatorsByLanguage = useMemo(
-    () => _.groupBy(translatorRequest?.data, "group.name"),
-    [translatorRequest],
-  );
+  const { data: translatorRoles, error } = await getTranslatorRoles();
 
-  if (isLoading) return <Loading />;
+  if (error) return <Errored error={error} />;
+
+  const translatorsByLanguage = _.groupBy(translatorRoles, "group.name");
 
   if (!translatorsByLanguage)
     return <Errored error={"Error Loading Translators"} />;
@@ -34,10 +20,12 @@ export default function TranslatorsPage() {
   return (
     <Container>
       <VStack align={"left"}>
-        <Heading size={"5xl"}>{I18n.t("page.translators.title")}</Heading>
+        <Heading size={"5xl"}>{t("page.translators.title")}</Heading>
         {_.map(translatorsByLanguage, (translators, language) => (
           <VStack align={"left"} key={language}>
-            <Heading size={"2xl"}>{language}</Heading>
+            <Heading size={"2xl"} marginY={2}>
+              {language}
+            </Heading>
             <SimpleGrid columns={3} gap="16px">
               {translators.map((translator) => (
                 <UserBadge
