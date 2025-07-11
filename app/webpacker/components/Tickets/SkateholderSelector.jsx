@@ -1,9 +1,15 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Button, Dropdown } from 'semantic-ui-react';
 import useInputState from '../../lib/hooks/useInputState';
 
 export default function SkateholderSelector({ stakeholderList, setUserSelectedStakeholder }) {
   const [selectedOption, setSelectedOption] = useInputState(stakeholderList[0]);
+  const stakeholderListOptions = useMemo(() => stakeholderList.map((requesterStakeholder) => ({
+    key: requesterStakeholder.id,
+    text: `${requesterStakeholder.stakeholder.name} (${requesterStakeholder.stakeholder_role})`,
+    value: requesterStakeholder,
+  })), [stakeholderList]);
+
   return (
     <>
       <p>
@@ -11,11 +17,7 @@ export default function SkateholderSelector({ stakeholderList, setUserSelectedSt
         to visit the ticket page.
       </p>
       <Dropdown
-        options={stakeholderList.map((requesterStakeholder) => ({
-          key: requesterStakeholder.id,
-          text: `${requesterStakeholder.stakeholder.name} (${requesterStakeholder.stakeholder_role})`,
-          value: requesterStakeholder,
-        }))}
+        options={stakeholderListOptions}
         value={selectedOption}
         onChange={setSelectedOption}
       />

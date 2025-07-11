@@ -24,7 +24,7 @@ function Tickets({ id }) {
   const queryClient = useQueryClient();
   const {
     data: ticketDetails,
-    isLoading: isLoadingTicketDetails,
+    isPending: isPendingTicketDetails,
     isError: isErrorTicketDetails,
     error: errorTicketDetails,
   } = useQuery({
@@ -52,12 +52,12 @@ function Tickets({ id }) {
     onSuccess: (status) => {
       queryClient.setQueryData(
         ['ticket-details', id],
-        () => ({
-          ...ticketDetails,
+        (oldTicketDetails) => ({
+          ...oldTicketDetails,
           ticket: {
-            ...ticketDetails.ticket,
+            ...oldTicketDetails.ticket,
             metadata: {
-              ...ticketDetails.ticket.metadata,
+              ...oldTicketDetails.ticket.metadata,
               status,
             },
           },
@@ -66,7 +66,7 @@ function Tickets({ id }) {
     },
   });
 
-  if (isLoadingTicketDetails || isPendingUpdateStatus) return <Loading />;
+  if (isPendingTicketDetails || isPendingUpdateStatus) return <Loading />;
   if (isErrorTicketDetails) return <Errored error={errorTicketDetails} />;
   if (isErrorUpdateStatus) return <Errored error={errorUpdateStatus} />;
 
