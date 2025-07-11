@@ -6,6 +6,7 @@ import {
   fallbackLng,
   languages,
   defaultNamespace,
+  coerceLanguageCode,
 } from "./settings";
 import { cookies, headers } from "next/headers";
 import parser from "accept-language-parser";
@@ -23,11 +24,14 @@ export async function getT(
     headerList.get("Accept-Language") ?? [],
   );
 
-  const lng =
+  const lngRaw =
     cookieList.get(storageKey)?.value || acceptLanguage || fallbackLng;
+
+  const lng = coerceLanguageCode(lngRaw);
 
   return {
     t: i18next.getFixedT(lng, defaultNamespace, options?.keyPrefix),
     i18n: i18next,
+    lng,
   };
 }
