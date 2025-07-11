@@ -1469,6 +1469,27 @@ RSpec.describe 'API Registrations' do
       let!(:registration_payment) { create(:registration_payment, registration: registration) }
       let(:receipt_record) { registration_payment.receipt }
 
+      context 'if the target refund hasnt been recorded' do
+        it 'creates a refund StripeRecord' do
+          expect(StripeRecord.exists?(stripe_id: 're_3RiDX8I8ds2wj1dZ0RDaaCQg')).to be(false)
+
+          post registration_stripe_webhook_path, params: refund_webhook(type: 'refund.updated'), as: :json
+
+          expect(response).to be_successful
+          expect(StripeRecord.exists?(stripe_id: 're_3RiDX8I8ds2wj1dZ0RDaaCQg')).to be(true)
+        end
+
+        it 'sets the parent of that StripeRecord to the original charge' do
+          expect(StripeRecord.exists?(stripe_id: 're_3RiDX8I8ds2wj1dZ0RDaaCQg')).to be(false)
+
+          post registration_stripe_webhook_path, params: refund_webhook(type: 'refund.updated'), as: :json
+
+          expect(response).to be_successful
+          expect(StripeRecord.find_by(stripe_id: 're_3RiDX8I8ds2wj1dZ0RDaaCQg').parent_record).to eq(receipt_record)
+        end
+
+      end
+
       it 'does nothing if the refund has already been recorded' do
         create(:registration_payment, :refund, registration: registration, refunded_registration_payment: registration_payment)
 
@@ -1479,15 +1500,6 @@ RSpec.describe 'API Registrations' do
 
         expect(registration_payment.reload.refunding_registration_payments.count).to be(1)
         expect(registration.reload.outstanding_entry_fees.cents).to eq(1000)
-      end
-
-      it 'creates a new record if the target refund doesnt exist' do
-        expect(StripeRecord.exists?(stripe_id: 're_3RiDX8I8ds2wj1dZ0RDaaCQg')).to be(false)
-
-        post registration_stripe_webhook_path, params: refund_webhook(type: 'refund.updated'), as: :json
-
-        expect(response).to be_successful
-        expect(StripeRecord.exists?(stripe_id: 're_3RiDX8I8ds2wj1dZ0RDaaCQg')).to be(true)
       end
 
       it 'returns 404 if charge not found' do
