@@ -1,7 +1,7 @@
 import { fetchJsonOrError } from '../../../lib/requests/fetchWithAuthenticityToken';
 import { actionUrls } from '../../../lib/requests/routes.js.erb';
 
-export default async function updateStatus({ ticketId, status, currentStakeholder }) {
+export default async function updateStatus({ ticketId, status, currentStakeholderId }) {
   await fetchJsonOrError(
     actionUrls.tickets.updateStatus(ticketId),
     {
@@ -11,7 +11,7 @@ export default async function updateStatus({ ticketId, status, currentStakeholde
       },
       body: JSON.stringify({
         ticket_status: status,
-        acting_stakeholder_id: currentStakeholder.id,
+        acting_stakeholder_id: currentStakeholderId,
       }),
     },
   );

@@ -48,7 +48,11 @@ function Tickets({ id }) {
     isError: isErrorUpdateStatus,
     error: errorUpdateStatus,
   } = useMutation({
-    mutationFn: (status) => updateStatus({ ticketId: id, status, currentStakeholder }),
+    mutationFn: (status) => updateStatus({
+      ticketId: id,
+      status,
+      currentStakeholderId: currentStakeholder.id,
+    }),
     onSuccess: (status) => {
       queryClient.setQueryData(
         ['ticket-details', id],
