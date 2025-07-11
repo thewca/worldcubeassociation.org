@@ -1,5 +1,3 @@
-"use client";
-
 import _ from "lodash";
 import {
   Container,
@@ -9,70 +7,46 @@ import {
   Text,
   VStack,
 } from "@chakra-ui/react";
-import Loading from "@/components/ui/loading";
-import useAPI from "@/lib/wca/useAPI";
-import { useQuery } from "@tanstack/react-query";
-import { useMemo } from "react";
 import UserBadge from "@/components/UserBadge";
 import { MdMarkEmailUnread } from "react-icons/md";
 import Errored from "@/components/ui/errored";
-import { useT } from "@/lib/i18n/useI18n";
+import { getT } from "@/lib/i18n/get18n";
+import { getBoardRoles, getOfficersRoles } from "@/lib/wca/roles/activeRoles";
 
-export default function OfficersAndBoard() {
-  const I18n = useT();
-  const api = useAPI();
-  const { data: officerRequest, isLoading: officersLoading } = useQuery({
-    queryKey: ["officers"],
-    queryFn: () =>
-      api.GET("/user_roles", {
-        params: { query: { isActive: true, groupType: "officers" } },
-      }),
-  });
+export default async function OfficersAndBoard() {
+  const { t } = await getT();
 
-  const { data: boardRequest, isLoading: boardLoading } = useQuery({
-    queryKey: ["board"],
-    queryFn: () =>
-      api.GET("/user_roles", {
-        params: { query: { isActive: true, groupType: "board" } },
-      }),
-  });
+  const { data: officerRoles, error: officerRolesError } =
+    await getOfficersRoles();
+
+  const { data: boardRoles, error: boardRolesError } = await getBoardRoles();
+
+  if (officerRolesError) return <Errored error={officerRolesError} />;
+  if (boardRolesError) return <Errored error={boardRolesError} />;
 
   // The same user can hold multiple officer positions, and it won't be good to show same user
   // multiple times.
-  const officerRoles = useMemo(
-    () => _.groupBy(officerRequest?.data, (officer) => officer?.user?.id),
-    [officerRequest],
-  );
-  const officers = useMemo(
-    () => _.uniqBy(officerRequest?.data, "user.wca_id"),
-    [officerRequest],
+  const groupedOfficerRoles = _.groupBy(
+    officerRoles,
+    (officer) => officer.user.id,
   );
 
-  const board = useMemo(() => boardRequest?.data, [boardRequest]);
-
-  if (boardLoading || officersLoading) return <Loading />;
-
-  if (!board || !officers)
-    return <Errored error={"Error Loading Officers & Board"} />;
+  const officers = _.uniqBy(officerRoles, "user.wca_id");
 
   return (
     <Container>
       <VStack align={"left"}>
-        <Heading size={"5xl"}>
-          {I18n.t("page.officers_and_board.title")}
-        </Heading>
-        <Heading size={"2xl"}>
-          {I18n.t("user_groups.group_types.officers")}
-        </Heading>
-        <Text>{I18n.t("page.officers_and_board.officers_description")}</Text>
+        <Heading size={"5xl"}>{t("page.officers_and_board.title")}</Heading>
+        <Heading size={"2xl"}>{t("user_groups.group_types.officers")}</Heading>
+        <Text>{t("page.officers_and_board.officers_description")}</Text>
         <SimpleGrid columns={3} gap="16px">
           {officers.map((officer) => (
             <UserBadge
               key={officer.id}
               profilePicture={officer.user.avatar.url}
               name={officer.user.name}
-              roles={officerRoles[officer.user.id].map((role) => ({
-                teamRole: I18n.t(
+              roles={groupedOfficerRoles[officer.user.id].map((role) => ({
+                teamRole: t(
                   `enums.user_roles.status.officers.${role.metadata.status}`,
                 ),
                 staffColor: "blue",
@@ -82,15 +56,15 @@ export default function OfficersAndBoard() {
           ))}
         </SimpleGrid>
         <Heading size={"2xl"}>
-          {I18n.t("user_groups.group_types.board")}{" "}
-          <Link href={board[0].group.metadata!.email}>
+          {t("user_groups.group_types.board")}{" "}
+          <Link href={boardRoles[0].group.metadata!.email}>
             <MdMarkEmailUnread />
-            {board[0].group.metadata!.email}
+            {boardRoles[0].group.metadata!.email}
           </Link>
         </Heading>
-        <Text>{I18n.t("page.officers_and_board.board_description")}</Text>
+        <Text>{t("page.officers_and_board.board_description")}</Text>
         <SimpleGrid columns={3} gap="16px">
-          {board.map((board) => (
+          {boardRoles.map((board) => (
             <UserBadge
               key={board.id}
               profilePicture={board.user.avatar.url}
