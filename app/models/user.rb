@@ -95,13 +95,7 @@ class User < ApplicationRecord
   end
 
   def self.regional_voters
-    regional_delegates = RolesMetadataDelegateRegions
-                         .where(status: "regional_delegate")
-                         .joins(:user_role)
-                         .where(user_roles: { end_date: nil })
-                         .includes(:user)
-                         .map(&:user)
-    regional_delegates.uniq.compact
+    regional_delegates = RolesMetadataDelegateRegions.regional_delegate.where(user_roles: { end_date: nil }).includes(:user).map(&:user).uniq.compact
   end
 
   def self.all_discourse_groups
