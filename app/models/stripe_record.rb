@@ -27,7 +27,7 @@ class StripeRecord < ApplicationRecord
     legacy_payment_intent_registered: "payment_intent_registered",
     legacy_success: "success",
     legacy_failure: "failure",
-  }
+  }, prefix: true
 
   # Actual values are according to Stripe API documentation as of 2023-03-12.
   enum :stripe_record_type, {
@@ -180,6 +180,17 @@ class StripeRecord < ApplicationRecord
 
     # Stripe and ruby-money agree. All good.
     amount_stripe_denomination.to_i
+  end
+
+  # We dont update parameters, account_id or parent record - none of that should be change by receiving an UPDATE to a given refund
+  def update_from_api(api_record)
+    update!(
+      stripe_record_type: api_record.object,
+      stripe_id: api_record.id,
+      amount_stripe_denomination: api_record.amount,
+      currency_code: api_record.currency,
+      stripe_status: api_record.status,
+    )
   end
 
   def self.create_from_api(api_record, parameters, account_id, parent_record = nil)

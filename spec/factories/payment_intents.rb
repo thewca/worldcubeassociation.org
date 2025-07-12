@@ -16,7 +16,7 @@ FactoryBot.define do
     trait :confirmed do
       confirmed_at { DateTime.now }
       wca_status { 'succeeded' }
-      payment_record { FactoryBot.create(:stripe_record, :payment_intent, stripe_status: 'succeeded') }
+      payment_record { FactoryBot.create(:stripe_record, :successful_pi) }
     end
 
     trait :not_started do
