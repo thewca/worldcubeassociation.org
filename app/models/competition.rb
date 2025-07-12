@@ -41,6 +41,8 @@ class Competition < ApplicationRecord
   has_many :accepted_registrations, -> { accepted }, class_name: "Registration", foreign_key: "competition_id"
   has_many :accepted_newcomers, -> { where(wca_id: nil) }, through: :accepted_registrations, source: :user
   has_many :duplicate_checker_job_runs, dependent: :delete_all
+  has_one :tickets_competition_result
+  has_one :result_ticket, through: :tickets_competition_result, source: :ticket
 
   accepts_nested_attributes_for :competition_events, allow_destroy: true
   accepts_nested_attributes_for :championships, allow_destroy: true
@@ -709,7 +711,9 @@ class Competition < ApplicationRecord
              'scramble_file_uploads',
              'accepted_registrations',
              'accepted_newcomers',
-             'duplicate_checker_job_runs'
+             'duplicate_checker_job_runs',
+             'tickets_competition_result',
+             'result_ticket'
           # Do nothing as they shouldn't be cloned.
         when 'organizers'
           clone.organizers = organizers

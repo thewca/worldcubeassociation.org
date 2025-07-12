@@ -21,7 +21,10 @@ module Admin
             competitions: @pending_competitions.as_json(
               only: %w[id name results_submitted_at],
               methods: %w[city country_iso2],
-              include: { posting_user: user_attributes },
+              include: {
+                posting_user: user_attributes,
+                result_ticket: {},
+              },
             ),
           }
         end
@@ -42,10 +45,14 @@ module Admin
       @updated_competitions = Competition.pending_posting.where(posting_user: nil).where(id: params[:competition_ids])
       return render json: { error: "No competitions to lock." } if @updated_competitions.empty?
 
-      json = { error: "Something went wrong." }
-      json = { message: "Competitions successfully locked, go on posting!" } if @updated_competitions.update(posting_user: current_user)
+      ActiveRecord::Base.transaction do
+        @updated_competitions.update(posting_user: current_user)
+        ticket_competition_result_ids = @updated_competitions.joins(:tickets_competition_result).pluck('tickets_competition_result.id')
+        TicketsCompetitionResult.where(id: ticket_competition_result_ids)
+                                .update_all(status: TicketsCompetitionResult.statuses[:warnings_verification])
+      end
 
-      render json: json
+      render json: { message: "Competitions successfully locked, go on posting!" }
     end
 
     def show
