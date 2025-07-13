@@ -641,7 +641,7 @@ class User < ApplicationRecord
       generateDataExports
       fixResults
       mergeProfiles
-      reassignConnectedWcaId
+      mergeUsers
     ].index_with { |panel_page| panel_page.to_s.underscore.dasherize }
   end
 
@@ -700,7 +700,7 @@ class User < ApplicationRecord
           panel_pages[:generateDataExports],
           panel_pages[:fixResults],
           panel_pages[:mergeProfiles],
-          panel_pages[:reassignConnectedWcaId],
+          panel_pages[:mergeUsers],
         ],
       },
       wst: {
@@ -1354,15 +1354,20 @@ class User < ApplicationRecord
     end
   end
 
+  def special_account_competitions
+    {
+      organized_competitions: organized_competitions.map(&:name),
+      delegated_competitions: delegated_competitions.map(&:name),
+      announced_competitions: competitions_announced.map(&:name),
+      results_posted_competitions: competitions_results_posted.map(&:name),
+    }.reject { |_, value| value.empty? }
+  end
+
   # Special Accounts are accounts where the WCA ID and user account should always be connected
   # These includes any teams, organizers, delegates
   # Note: Someone can Delegate a competition without ever being a Delegate.
   def special_account?
-    self.roles.any? ||
-      !self.organized_competitions.empty? ||
-      !delegated_competitions.empty? ||
-      !competitions_announced.empty? ||
-      !competitions_results_posted.empty?
+    self.roles.any? || self.special_account_competitions.present?
   end
 
   def accepted_registrations
@@ -1509,5 +1514,20 @@ class User < ApplicationRecord
       current_avatar_id: special_account? ? nil : current_avatar_id,
       country_iso2: special_account? ? country_iso2 : nil,
     )
+  end
+
+  def transfer_data_to(user)
+    competition_organizers.update_all(organizer_id: user.id)
+    competition_delegates.update_all(delegate_id: user.id)
+    competitions_results_posted.update_all(results_posted_by: user.id)
+    competitions_announced.update_all(announced_by: user.id)
+    roles.update_all(user_id: user.id)
+    registrations.update_all(user_id: user.id)
+
+    return if wca_id.blank?
+
+    wca_id_to_be_transferred = wca_id
+    self.update!(wca_id: nil) # Must remove WCA ID before adding it as it is unique in the Users table.
+    user.update!(wca_id: wca_id_to_be_transferred)
   end
 end
