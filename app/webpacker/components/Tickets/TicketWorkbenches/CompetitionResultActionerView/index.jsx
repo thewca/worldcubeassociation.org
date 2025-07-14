@@ -29,6 +29,6 @@ export default function CompetitionResultActionerView({ ticketDetails, updateSta
       );
 
     default:
-      return <p>Unknown status</p>;
+      return null;
   }
 }
