@@ -61,7 +61,7 @@
     "leaflet": "^1.9.4",
     "leaflet-geosearch": "^4.2.0",
     "lodash": "^4.17.21",
-    "luxon": "^3.6.1",
+    "luxon": "^3.7.1",
     "make-plural": "^7.4.0",
     "mini-css-extract-plugin": "^2.9.2",
     "path-complete-extname": "^1.0.0",
