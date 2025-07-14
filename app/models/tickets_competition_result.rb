@@ -11,6 +11,7 @@ class TicketsCompetitionResult < ApplicationRecord
   }
 
   has_one :ticket, as: :metadata
+  belongs_to :competition
 
   def action_user_groups(action)
     case action

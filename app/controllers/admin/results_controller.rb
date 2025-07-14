@@ -47,8 +47,7 @@ module Admin
 
       ActiveRecord::Base.transaction do
         @updated_competitions.update(posting_user: current_user)
-        ticket_competition_result_ids = @updated_competitions.joins(:tickets_competition_result).pluck('tickets_competition_result.id')
-        TicketsCompetitionResult.where(id: ticket_competition_result_ids)
+        TicketsCompetitionResult.where(competition: @updated_competitions)
                                 .update_all(status: TicketsCompetitionResult.statuses[:warnings_verification])
       end
 
