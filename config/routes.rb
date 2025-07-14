@@ -4,6 +4,8 @@ require 'sidekiq/web'
 require 'sidekiq/cron/web'
 
 Rails.application.routes.draw do
+  mount GraphiQL::Rails::Engine, at: "/graphiql", graphql_path: "/api/wcif/graphql" if Rails.env.development?
+  post '/api/wcif/graphql', to: 'graphql#execute'
   use_doorkeeper do
     controllers applications: 'oauth/applications'
   end
