@@ -50,11 +50,19 @@ class ResultsSubmissionController < ApplicationController
     mark_result_submitted = ActiveRecord::Type::Boolean.new.cast(params.require(:mark_result_submitted))
     store_uploaded_json = ActiveRecord::Type::Boolean.new.cast(params.require(:store_uploaded_json))
 
-    # This makes sure the json structure is valid!
-    return render status: :unprocessable_entity, json: { error: upload_json.errors.full_messages } unless upload_json.import_to_inbox
+    return render status: :unprocessable_entity, json: { error: upload_json.errors.full_messages } unless upload_json.valid?
 
-    competition.touch(:results_submitted_at) if !competition.results_submitted? && mark_result_submitted
-    competition.uploaded_jsons.create!(json_str: upload_json.results_json_str) if store_uploaded_json
+    temporary_results_data = upload_json.temporary_results_data
+
+    errors = CompetitionResultsImport.import_temporary_results(
+      competition,
+      temporary_results_data,
+      mark_result_submitted: mark_result_submitted,
+      store_uploaded_json: store_uploaded_json,
+      results_json_str: upload_json.results_json_str,
+    )
+
+    return render status: :unprocessable_entity, json: { error: errors } if errors.any?
 
     render status: :ok, json: { success: true }
   end
@@ -122,24 +130,12 @@ class ResultsSubmissionController < ApplicationController
       end
     end
 
-    errors = []
-    ActiveRecord::Base.transaction do
-      InboxPerson.where(competition_id: competition.id).delete_all
-      InboxResult.where(competition_id: competition.id).delete_all
-      Scramble.where(competition_id: competition.id).delete_all
-      InboxPerson.import!(persons_to_import)
-      InboxResult.import!(results_to_import)
-      Scramble.import!(scrambles_to_import)
-    rescue ActiveRecord::RecordInvalid => e
-      object = e.record
-      errors << if object.instance_of?(InboxPerson)
-                  "Person #{object.name} is invalid (#{e.message}), please fix it!"
-                elsif object.instance_of?(InboxResult)
-                  "Result for person #{object.person_id} in '#{Round.name_from_attributes_id(object.event_id, object.round_type_id)}' is invalid (#{e.message}), please fix it!"
-                else
-                  "An invalid record prevented the results from being created: #{e.message}"
-                end
-    end
+    temporary_results_data = {
+      results_to_import: results_to_import,
+      scrambles_to_import: scrambles_to_import,
+      persons_to_import: persons_to_import,
+    }
+    errors = CompetitionResultsImport.import_temporary_results(competition, temporary_results_data)
 
     return render status: :unprocessable_entity, json: { error: errors } if errors.any?
 
