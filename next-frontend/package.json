@@ -32,7 +32,7 @@
     "aws4": "^1.13.2",
     "dompurify": "^3.2.6",
     "graphql": "^16.11.0",
-    "i18next": "^25.3.1",
+    "i18next": "^25.3.2",
     "i18next-browser-languagedetector": "^8.2.0",
     "i18next-resources-to-backend": "^1.2.1",
     "js-cookie": "^3.0.5",
