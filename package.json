@@ -117,7 +117,7 @@
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^5.2.0",
     "jshint": "^2.13.6",
-    "playwright": "^1.52.0",
+    "playwright": "^1.54.1",
     "react-refresh": "^0.17.0",
     "stylelint": "^16.21.1",
     "stylelint-config-recommended-scss": "^15.0.1",
