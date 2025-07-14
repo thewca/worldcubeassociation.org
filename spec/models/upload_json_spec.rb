@@ -58,6 +58,8 @@ RSpec.describe UploadJson do
     }.to_json
 
     upload_json = build(:upload_json, competition_id: competition.id, results_json_str: results_json)
+    expect(upload_json).to be_valid
+
     temporary_results_data = upload_json.temporary_results_data
     CompetitionResultsImport.import_temporary_results(
       competition,
@@ -67,7 +69,6 @@ RSpec.describe UploadJson do
       results_json_str: upload_json.results_json_str,
     )
 
-    expect(upload_json).to be_valid
     expect(InboxResult.count).to eq 1
     inbox_result = InboxResult.first
     # There is no cutoff, so the incoming round_type_id "c" should be converted to "f"
