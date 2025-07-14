@@ -1,5 +1,5 @@
 import React from 'react';
-import { Message } from 'semantic-ui-react';
+import { List, Message } from 'semantic-ui-react';
 import _ from 'lodash';
 import { viewUrls } from '../../../../lib/requests/routes.js.erb';
 
@@ -11,7 +11,7 @@ export default function SpecialAccountDetails({ user }) {
 
   return (
     <Message>
-      <p>{`The user with email ${user.email} is a special account.`}</p>
+      <Message.Header>{`The user with email ${user.email} is a special account.`}</Message.Header>
       {user.roles.length > 0 && (
         <p>
           The user has some roles, you can view them
@@ -20,18 +20,20 @@ export default function SpecialAccountDetails({ user }) {
           .
         </p>
       )}
-      {specialAccountCompetitionKeys.length && (
-        <p>
-          Following are the competitions which made the account of user a special account:
+      <List divided relaxed>
+        {specialAccountCompetitionKeys.length && (
+        <List.Item>
           {specialAccountCompetitionKeys.map((specialAccountCompetitionKey) => (
-            <p>
-              {specialAccountCompetitionKey}
-              :
-              {user.special_account_competitions[specialAccountCompetitionKey].join(', ')}
-            </p>
+            <List.Content>
+              <List.Header>{specialAccountCompetitionKey}</List.Header>
+              <List.Description>
+                {user.special_account_competitions[specialAccountCompetitionKey].join(', ')}
+              </List.Description>
+            </List.Content>
           ))}
-        </p>
-      )}
+        </List.Item>
+        )}
+      </List>
     </Message>
   );
 }

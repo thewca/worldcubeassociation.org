@@ -31,7 +31,7 @@ export default function MergeUsers({ firstUserId, secondUserId }) {
     queryFn: () => getUserDetails(secondUserId),
   });
 
-  const [toBeMaintainedUserId, setToBeMaintainedUserId] = useInputState();
+  const [toUserId, setToUserId] = useInputState();
 
   const {
     mutate: mergeUsersMutation,
@@ -41,10 +41,10 @@ export default function MergeUsers({ firstUserId, secondUserId }) {
     isSuccess,
   } = useMutation({
     mutationFn: () => {
-      const toBeAnonymizedUserId = (
-        firstUserId === toBeMaintainedUserId ? secondUserId : firstUserId
+      const fromUserId = (
+        firstUserId === toUserId ? secondUserId : firstUserId
       );
-      return mergeUsers(toBeMaintainedUserId, toBeAnonymizedUserId);
+      return mergeUsers(toUserId, fromUserId);
     },
   });
 
@@ -71,12 +71,12 @@ export default function MergeUsers({ firstUserId, secondUserId }) {
       </div>
       <Select
         options={selectOptions}
-        value={toBeMaintainedUserId}
-        onChange={setToBeMaintainedUserId}
+        value={toUserId}
+        onChange={setToUserId}
       />
       <Button
         primary
-        disabled={!toBeMaintainedUserId}
+        disabled={!toUserId}
         onClick={mergeUsersMutation}
       >
         Merge

@@ -242,8 +242,8 @@ RSpec.describe UsersController do
 
       it 'requires different people' do
         post :merge, params: {
-          toBeMaintainedUserId: user1.id,
-          toBeAnonymizedUserId: user1.id,
+          toUserId: user1.id,
+          fromUserId: user1.id,
         }
 
         expect(response).to have_http_status :bad_request
@@ -253,8 +253,8 @@ RSpec.describe UsersController do
 
       it 'requires at least one not to have WCA ID' do
         post :merge, params: {
-          toBeMaintainedUserId: user1.id,
-          toBeAnonymizedUserId: user2.id,
+          toUserId: user1.id,
+          fromUserId: user2.id,
         }
 
         expect(response).to have_http_status :bad_request
@@ -266,8 +266,8 @@ RSpec.describe UsersController do
         user2.update!(wca_id: nil, name: "#{user1.name} Different") # Adding a suffix to make it different.
 
         post :merge, params: {
-          toBeMaintainedUserId: user1.id,
-          toBeAnonymizedUserId: user2.id,
+          toUserId: user1.id,
+          fromUserId: user2.id,
         }
 
         expect(response).to have_http_status :bad_request
@@ -279,8 +279,8 @@ RSpec.describe UsersController do
         user2.update!(wca_id: nil, country_iso2: Country.real.where.not(iso2: user1.country_iso2).sample.iso2)
 
         post :merge, params: {
-          toBeMaintainedUserId: user1.id,
-          toBeAnonymizedUserId: user2.id,
+          toUserId: user1.id,
+          fromUserId: user2.id,
         }
 
         expect(response).to have_http_status :bad_request
@@ -293,8 +293,8 @@ RSpec.describe UsersController do
         user2.update!(wca_id: nil, gender: User::ALLOWABLE_GENDERS[1])
 
         post :merge, params: {
-          toBeMaintainedUserId: user1.id,
-          toBeAnonymizedUserId: user2.id,
+          toUserId: user1.id,
+          fromUserId: user2.id,
         }
 
         expect(response).to have_http_status :bad_request
@@ -306,8 +306,8 @@ RSpec.describe UsersController do
         user2.update!(wca_id: nil, dob: user1.dob + 1.day)
 
         post :merge, params: {
-          toBeMaintainedUserId: user1.id,
-          toBeAnonymizedUserId: user2.id,
+          toUserId: user1.id,
+          fromUserId: user2.id,
         }
 
         expect(response).to have_http_status :bad_request
@@ -322,8 +322,8 @@ RSpec.describe UsersController do
         create(:competition, :past, delegates: [user2], organizers: [user2], announced_by: user2.id, results_posted_by: user2.id)
 
         post :merge, params: {
-          toBeMaintainedUserId: user1.id,
-          toBeAnonymizedUserId: user2.id,
+          toUserId: user1.id,
+          fromUserId: user2.id,
         }
 
         expect(response).to have_http_status :ok
