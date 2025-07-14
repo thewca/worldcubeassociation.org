@@ -13,10 +13,13 @@ class TicketsCompetitionResult < ApplicationRecord
   has_one :ticket, as: :metadata
   belongs_to :competition
 
-  def action_user_groups(action)
-    case action
-    when :update_status
-      [UserGroup.teams_committees_group_wrt]
+  def actions_allowed(ticket_stakeholder)
+    if ticket_stakeholder.stakeholder == UserGroup.teams_committees_group_wrt
+      actions = [:add_comment]
+      actions << :update_status unless posted?
+      actions
+    else
+      []
     end
   end
 
