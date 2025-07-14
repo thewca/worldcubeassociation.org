@@ -46,9 +46,9 @@ module Admin
       return render json: { error: "No competitions to lock." } if @updated_competitions.empty?
 
       ActiveRecord::Base.transaction do
-        @updated_competitions.update(posting_user: current_user)
         TicketsCompetitionResult.where(competition: @updated_competitions)
                                 .update_all(status: TicketsCompetitionResult.statuses[:warnings_verification])
+        @updated_competitions.update(posting_user: current_user)
       end
 
       render json: { message: "Competitions successfully locked, go on posting!" }

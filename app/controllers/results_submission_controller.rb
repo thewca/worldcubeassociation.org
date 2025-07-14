@@ -151,9 +151,9 @@ class ResultsSubmissionController < ApplicationController
     message = params.require(:message)
     results_validator = ResultsValidators::CompetitionsResultsValidator.create_full_validation.validate(competition.id)
 
-    render status: :unprocessable_entity, json: { error: "Submitted results contain errors." } if results_validator.any_errors?
+    return render status: :unprocessable_entity, json: { error: "Submitted results contain errors." } if results_validator.any_errors?
 
-    render status: :unprocessable_entity, json: { error: "There is already a ticket associated, please contact WRT to update this." } if competition.result_ticket.present?
+    return render status: :unprocessable_entity, json: { error: "There is already a ticket associated, please contact WRT to update this." } if competition.result_ticket.present?
 
     CompetitionsMailer.results_submitted(competition, results_validator, message, current_user).deliver_now
 
