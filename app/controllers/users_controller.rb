@@ -78,7 +78,6 @@ class UsersController < ApplicationController
 
     ActiveRecord::Base.transaction do
       from_user.transfer_data_to(to_user)
-      from_user.anonymize
     end
     render status: :ok, json: { success: true }
   end

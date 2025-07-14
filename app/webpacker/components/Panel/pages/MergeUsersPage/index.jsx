@@ -6,8 +6,8 @@ import useInputState from '../../../../lib/hooks/useInputState';
 import MergeUsers from './MergeUsers';
 
 export default function MergeUsersPage() {
-  const [firstUserId, setFirstUserId] = useInputState(6387);
-  const [secondUserId, setSecondUserId] = useInputState(6388);
+  const [firstUserId, setFirstUserId] = useInputState();
+  const [secondUserId, setSecondUserId] = useInputState();
   const [modalOpen, setModalOpen] = useState(false);
 
   return (

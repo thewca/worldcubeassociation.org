@@ -339,8 +339,6 @@ RSpec.describe UsersController do
         expect(user2.competition_delegates.count).to eq 0
         expect(user2.competitions_announced.count).to eq 0
         expect(user2.competitions_results_posted.count).to eq 0
-        expect(user2.name).to eq User::ANONYMOUS_NAME
-        expect(user2.country_iso2).to be_nil
       end
     end
   end
