@@ -54,7 +54,7 @@ class ResultsSubmissionController < ApplicationController
 
     temporary_results_data = upload_json.temporary_results_data
 
-    errors = CompetitionResults.import_temporary_results(
+    errors = CompetitionResultsImport.import_temporary_results(
       competition,
       temporary_results_data,
       mark_result_submitted: mark_result_submitted,
@@ -135,7 +135,7 @@ class ResultsSubmissionController < ApplicationController
       scrambles_to_import: scrambles_to_import,
       persons_to_import: persons_to_import,
     }
-    errors = CompetitionResults.import_temporary_results(competition, temporary_results_data)
+    errors = CompetitionResultsImport.import_temporary_results(competition, temporary_results_data)
 
     return render status: :unprocessable_entity, json: { error: errors } if errors.any?
 

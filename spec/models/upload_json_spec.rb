@@ -59,7 +59,7 @@ RSpec.describe UploadJson do
 
     upload_json = build(:upload_json, competition_id: competition.id, results_json_str: results_json)
     temporary_results_data = upload_json.temporary_results_data
-    CompetitionResults.import_temporary_results(
+    CompetitionResultsImport.import_temporary_results(
       competition,
       temporary_results_data,
       mark_result_submitted: false,

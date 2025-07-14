@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module CompetitionResults
+module CompetitionResultsImport
   def self.import_temporary_results(competition, temporary_results_data, mark_result_submitted: false, store_uploaded_json: false, results_json_str: nil)
     errors = []
     results_to_import = temporary_results_data[:results_to_import]
