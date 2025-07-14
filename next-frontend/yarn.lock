@@ -12704,9 +12704,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"newrelic@npm:^12.24.0":
-  version: 12.24.0
-  resolution: "newrelic@npm:12.24.0"
+"newrelic@npm:^12.25.0":
+  version: 12.25.0
+  resolution: "newrelic@npm:12.25.0"
   dependencies:
     "@grpc/grpc-js": "npm:^1.13.2"
     "@grpc/proto-loader": "npm:^0.7.5"
@@ -12740,7 +12740,7 @@ __metadata:
       optional: true
   bin:
     newrelic-naming-rules: bin/test-naming-rules.js
-  checksum: 10c0/dd5fc06c6de478ed01371e0fb5c98761c8cbcdf13191764a72f18d43dbc3572c53d80176cff02127d98d7792a69e65501465595f285b07c261d94c4890f18a6e
+  checksum: 10c0/7000d9e287518a5dd8367b79b2000de2701411f2e4406245c257942f5e45946baa7a5f748415f7a750c7b700bad31c3a7b59afc2c309db98de739317a1032bf7
   languageName: node
   linkType: hard
 
@@ -12811,7 +12811,7 @@ __metadata:
     i18next-resources-to-backend: "npm:^1.2.1"
     js-cookie: "npm:^3.0.5"
     jsdom: "npm:^26.1.0"
-    newrelic: "npm:^12.24.0"
+    newrelic: "npm:^12.25.0"
     next: "npm:15.3.5"
     next-auth: "npm:5.0.0-beta.29"
     next-themes: "npm:^0.4.6"
