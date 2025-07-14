@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_06_20_074209) do
+ActiveRecord::Schema[7.2].define(version: 2025_07_10_084311) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -1357,6 +1357,15 @@ ActiveRecord::Schema[7.2].define(version: 2025_06_20_074209) do
     t.index ["metadata_type", "metadata_id"], name: "index_tickets_on_metadata"
   end
 
+  create_table "tickets_competition_result", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "status", null: false
+    t.string "competition_id", null: false
+    t.text "delegate_message", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["competition_id"], name: "index_tickets_competition_result_on_competition_id"
+  end
+
   create_table "tickets_edit_person", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "status", null: false
     t.string "wca_id", null: false
@@ -1568,6 +1577,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_06_20_074209) do
   add_foreign_key "ticket_comments", "users", column: "acting_user_id"
   add_foreign_key "ticket_logs", "ticket_stakeholders", column: "acting_stakeholder_id"
   add_foreign_key "ticket_logs", "users", column: "acting_user_id"
+  add_foreign_key "tickets_competition_result", "competitions"
   add_foreign_key "user_avatars", "users"
   add_foreign_key "user_groups", "user_groups", column: "parent_group_id"
   add_foreign_key "user_roles", "user_groups", column: "group_id"
