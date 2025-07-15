@@ -2,8 +2,8 @@
 
 module Types
   class AssignmentType < Types::BaseObject
-    field :activity_id, Integer, null: false
-    field :station_number, Integer, null: true
-    field :assignment_code, String, null: false
+    field :activityId, Integer, null: false
+    field :stationNumber, Integer, null: true
+    field :assignmentCode, String, null: false
   end
 end

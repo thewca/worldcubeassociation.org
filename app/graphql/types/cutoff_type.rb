@@ -2,7 +2,7 @@
 
 module Types
   class CutoffType < Types::BaseObject
-    field :number_of_attempts, Integer, null: false
-    field :attempt_result, Integer, null: false
+    field :numberOfAttempts, Integer, null: false
+    field :attemptResult, Integer, null: false
   end
 end
