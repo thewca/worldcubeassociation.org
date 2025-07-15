@@ -3,7 +3,7 @@
 FactoryBot.define do
   factory :stripe_record do
     transient do
-      create_child { false }
+      create_child_charge { false }
     end
 
     stripe_record_type { 'payment_intent' }
@@ -20,7 +20,7 @@ FactoryBot.define do
 
     trait :successful_pi do
       stripe_status { 'succeeded' }
-      create_child { true }
+      create_child_charge { true }
     end
 
     trait :charge do
@@ -41,7 +41,7 @@ FactoryBot.define do
     end
 
     after(:create) do |record, evaluator|
-      FactoryBot.create(:stripe_record, :charge, parent_record: record) if evaluator.create_child
+      FactoryBot.create(:stripe_record, :charge, parent_record: record) if evaluator.create_child_charge
     end
   end
 end

@@ -336,16 +336,16 @@ class RegistrationsController < ApplicationController
       return head :not_found
     end
 
-    stripe_intent = event.data.object # contains a polymorphic type that depends on the event
-    stored_record = StripeRecord.find_by(stripe_id: stripe_intent.id)
+    event_data = event.data.object # contains a polymorphic type that depends on the event
+    stored_record = StripeRecord.find_by(stripe_id: event_data.id)
 
     handling_event = StripeWebhookEvent::HANDLED_EVENTS.include?(event.type)
     incoming_event = StripeWebhookEvent::INCOMING_EVENTS.include?(event.type)
 
-    stored_record ||= StripeRecord.create_from_api(stripe_intent, {}, audit_event.account_id) if incoming_event
+    stored_record ||= StripeRecord.create_or_update_from_api(event_data, {}, audit_event.account_id) if incoming_event
 
     if stored_record.nil?
-      logger.error "Stripe webhook reported event on entity #{stripe_intent.id} but we have no matching charge."
+      logger.error "Stripe webhook reported event on entity #{event_data.id} but we have record with a matching `stripe_id`."
       return head :not_found
     end
 
@@ -354,11 +354,11 @@ class RegistrationsController < ApplicationController
     # Handle the event
     case event.type
     when StripeWebhookEvent::PAYMENT_INTENT_SUCCEEDED
-      # stripe_intent contains a Stripe::PaymentIntent as per Stripe documentation
+      # event_data contains a Stripe::PaymentIntent as per Stripe documentation
 
       stored_intent = stored_record.payment_intent
 
-      stored_intent.update_status_and_charges(connected_account, stripe_intent, audit_event, audit_remote_timestamp) do |charge_transaction|
+      stored_intent.update_status_and_charges(connected_account, event_data, audit_event, audit_remote_timestamp) do |charge_transaction|
         ruby_money = charge_transaction.money_amount
         stored_holder = stored_intent.holder
 
@@ -378,28 +378,27 @@ class RegistrationsController < ApplicationController
         end
       end
     when StripeWebhookEvent::PAYMENT_INTENT_CANCELED
-      # stripe_intent contains a Stripe::PaymentIntent as per Stripe documentation
+      # event_data contains a Stripe::PaymentIntent as per Stripe documentation
 
       stored_intent = stored_record.payment_intent
-      stored_intent.update_status_and_charges(connected_account, stripe_intent, audit_event, audit_remote_timestamp)
+      stored_intent.update_status_and_charges(connected_account, event_data, audit_event, audit_remote_timestamp)
     when StripeWebhookEvent::REFUND_CREATED, StripeWebhookEvent::REFUND_UPDATED
-      # stripe_intent contains a Stripe::Refund as per Stripe documentation
+      # event_data contains a Stripe::Refund as per Stripe documentation
 
-      original_charge = StripeRecord.charge.find_by(stripe_id: stripe_intent.charge)
+      original_charge = StripeRecord.charge.find_by(stripe_id: event_data.charge)
 
       if original_charge.nil?
         # We created a record because refund creation is an incoming event,
         #   but now we figured out that we don't care about it after all.
         stored_record.destroy
 
-        logger.error "Stripe webhook reported a refund on charge #{stripe_intent.charge} but we never issued that one"
+        logger.error "Stripe webhook reported a refund on charge #{event_data.charge} but we never issued that one"
         return head :not_found
-      elsif stored_record.parent_record.nil?
+      else
         stored_record.update!(parent_record: original_charge)
       end
 
-      # NOTE: Feels weird to be checking the type of the event in this block - is there a better way to handle this logic?
-      stored_record.update_from_api(stripe_intent) if event.type == StripeWebhookEvent::REFUND_UPDATED
+      stored_record = StripeRecord.create_or_update_from_api(event_data) if event.type == StripeWebhookEvent::REFUND_UPDATED
       stored_intent = stored_record.root_record.payment_intent
       stored_holder = stored_intent.holder
 
@@ -409,23 +408,23 @@ class RegistrationsController < ApplicationController
         original_payment = RegistrationPayment.find_by(receipt: original_charge)
 
         if original_payment.nil?
-          logger.error "Tried to record refund on charge #{stripe_intent.charge} but we never issued that one"
+          logger.error "Tried to record refund on charge #{event_data.charge} but we never issued that one"
           return head :not_found
         end
 
-        stored_holder.with_lock do
-          already_refunded = stored_record.registration_payment.present?
+        if stored_record.stripe_status_succeeded?
+          stored_holder.with_lock do
+            already_refunded = original_payment.refunding_registration_payments.where(receipt: stored_record).any?
 
-          refund_succeeded = stored_record.stripe_status_succeeded?
-
-          if refund_succeeded && !already_refunded
-            stored_holder.record_refund(
-              ruby_money.cents,
-              ruby_money.currency.iso_code,
-              stored_record,
-              original_payment.id,
-              original_payment.user_id,
-            )
+            unless already_refunded
+              stored_holder.record_refund(
+                ruby_money.cents,
+                ruby_money.currency.iso_code,
+                stored_record,
+                original_payment.id,
+                original_payment.user_id,
+              )
+            end
           end
         end
       end
@@ -570,7 +569,7 @@ class RegistrationsController < ApplicationController
     original_payment = payment_record.registration_payment
 
     registration.with_lock do
-      already_refunded = original_payment.refunding_registration_payments.any?(receipt: payment_record)
+      already_refunded = original_payment.refunding_registration_payments.where(receipt: refund_receipt).any?
 
       unless already_refunded
         registration.record_refund(
