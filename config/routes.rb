@@ -110,6 +110,7 @@ Rails.application.routes.draw do
     get 'submit-results' => 'results_submission#new', as: :submit_results_edit
     get 'submit-scrambles' => 'admin/scrambles#match_scrambles', as: :match_scrambles
     post 'submit-results' => 'results_submission#create', as: :submit_results
+    post 'import-wca-live-results' => 'results_submission#import_from_live'
     resources :scramble_files, only: %i[index create destroy], shallow: true do
       patch 'update-round-matching' => 'scramble_files#update_round_matching', on: :collection
     end
@@ -118,7 +119,6 @@ Rails.application.routes.draw do
     # WRT views and action
     get '/admin/upload-results' => "admin#new_results", as: :admin_upload_results_edit
     get '/admin/check-existing-results' => "admin#check_competition_results", as: :admin_check_existing_results
-    post '/admin/upload-json' => "admin#create_results", as: :admin_upload_results
     post '/admin/clear-submission' => "admin#clear_results_submission", as: :clear_results_submission
     get '/admin/import-results' => 'admin#import_results', as: :admin_import_results
     get '/admin/result-inbox-steps' => 'admin#result_inbox_steps', as: :admin_result_inbox_steps
@@ -453,7 +453,7 @@ Rails.application.routes.draw do
   end
 
   # Deprecated Links
-  get 'teams-committees' => redirect('teams-committees-councils')
+  get 'teams-committees-councils' => redirect('teams-committees')
   get 'panel/delegate-crash-course' => redirect('panel/delegate#delegate-handbook')
   get 'panel' => redirect('panel/volunteer')
 end

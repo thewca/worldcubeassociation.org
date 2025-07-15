@@ -14,7 +14,10 @@ const nextConfig: NextConfig = {
     },
   },
   images: {
-    remotePatterns: [new URL("https://worldcubeassociation.org/**")],
+    remotePatterns: [
+      new URL("https://worldcubeassociation.org/**"),
+      new URL("https://avatars.worldcubeassociation.org/**"),
+    ],
   },
   output: "standalone",
 };

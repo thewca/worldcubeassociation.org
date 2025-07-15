@@ -1037,7 +1037,7 @@ th:
             #original_hash: f82488f
             2fa_attempt: >-
               คุณกำลังเข้าระบบของ WCA, คุณได้เปิดการใช้งานการยืนยันตัวตน 2
-              ขั้นตอน และคุณเพิ่งจะขอให้ส่ง one-time password ด้วย email 
+              ขั้นตอน และคุณเพิ่งจะขอให้ส่ง one-time password ด้วย email
               กรุณาดูด้านล่าง
             #original_hash: 8aeccbf
             disclaimer: >-
@@ -1484,7 +1484,7 @@ th:
         ของเรา!
         หากคุณต้องการติดต่อคณะกรรมการหรือทีมใดโดยเฉพาะที่ไม่ได้ระบุไว้ที่นี่
         คุณสามารถดูข้อมูลติดต่อได้ที่<a
-        href="/teams-committees-councils">หน้านี้</a>
+        href="/teams-committees">หน้านี้</a>
       #original_hash: ea20be0
       success_message: ส่งอีเมลแล้ว - เราจะติดต่อกลับโดยเร็วที่สุด
       #original_hash: 8fa6b95
@@ -1919,7 +1919,7 @@ th:
       have_wca_id_html: 'WCA ID ของคุณคือ %{link_id}'
       #original_hash: bf654e1
       account_is_special: >-
-        WCA ID และบัญชีผู้ใช้ได้เชื่อมต่อกันแล้วด้วยตำแหน่งพิเศษ (เช่น 
+        WCA ID และบัญชีผู้ใช้ได้เชื่อมต่อกันแล้วด้วยตำแหน่งพิเศษ (เช่น
         delegate, ผู้จัดการแข่งขัน, สมาชิกทีม) และไม่สามารถลบได้ กรุณาส่ง email
         มาที่ WCA Result Team เพื่อช่วยเปลี่ยน WCA ID ไปยังบัญชีผู้ใช้อื่น
       cannot_edit:

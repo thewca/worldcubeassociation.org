@@ -14,16 +14,11 @@
         <li>Then the website will run a number of checks. If everything is correct you'll be able to submit these results to the WRT.</li>
       </ul>
     </p>
-    <%= render "submit_json_panel", upload_json: @upload_json, already_has_submitted_result: @results_validator.any_results? %>
-    <% unless Rails.env.production? && EnvConfig.WCA_LIVE_SITE? %>
-      <%= button_to competition_import_from_live_path,
-                    title: "Submit WCA Live Results",
-                    class: "btn btn-primary",
-                    method: :post do
-      %>
-        Submit WCA Live Results
-      <% end %>
-    <% end %>
+    <%= react_component("CompetitionResultSubmission/ImportResultsData", {
+      competitionId: @competition.id,
+      alreadyHasSubmittedResult: @results_validator.any_results?,
+    }) %>
+    <br />
 
     <%= render "check_results_panel",
       results_validator: @results_validator,
