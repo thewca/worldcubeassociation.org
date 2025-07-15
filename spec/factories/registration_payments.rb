@@ -8,8 +8,6 @@ FactoryBot.define do
       payment_intent { association(:payment_intent, :confirmed, holder: registration) }
     end
 
-    refunded_registration_payment { nil }
-    registration { refunded_registration_payment&.registration }
     user_id { registration&.user_id }
     amount_lowest_denomination { competition&.base_entry_fee_lowest_denomination }
     currency_code { competition&.currency_code }
@@ -23,6 +21,7 @@ FactoryBot.define do
 
     trait :refund do
       amount_lowest_denomination { -competition.base_entry_fee_lowest_denomination }
+      registration { refunded_registration_payment&.registration }
     end
 
     trait :with_donation do
