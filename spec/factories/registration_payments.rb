@@ -16,6 +16,7 @@ FactoryBot.define do
     trait :refund do
       amount_lowest_denomination { -competition.base_entry_fee_lowest_denomination }
       registration { refunded_registration_payment&.registration }
+      refunded_registration_payment { registration.registration_payments.order(:id).first }
       receipt { association(:stripe_record, :refund, parent_record: refunded_registration_payment.receipt) }
     end
 

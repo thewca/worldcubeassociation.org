@@ -1558,6 +1558,9 @@ RSpec.describe 'API Registrations' do
     end
   end
 
+  describe 'POST #refund_payment' do
+  end
+
   def refund_webhook(amount: 1000, currency: 'usd', charge_id: 'test_charge_id', status: 'succeeded', type: 'refund.created')
     {
       id: "evt_3RiDX8I8ds2wj1dZ0IsN0goY",
