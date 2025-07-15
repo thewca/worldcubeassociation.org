@@ -1487,7 +1487,6 @@ RSpec.describe 'API Registrations' do
           expect(response).to be_successful
           expect(StripeRecord.find_by(stripe_id: 're_3RiDX8I8ds2wj1dZ0RDaaCQg').parent_record).to eq(receipt_record)
         end
-
       end
 
       it 'does nothing if the refund has already been recorded' do
