@@ -11,17 +11,12 @@ FactoryBot.define do
     user_id { registration&.user_id }
     amount_lowest_denomination { competition&.base_entry_fee_lowest_denomination }
     currency_code { competition&.currency_code }
-    receipt do
-      if refunded_registration_payment.present?
-        association(:stripe_record, :refund, parent_record: refunded_registration_payment.receipt)
-      else
-        payment_intent.payment_record.child_records.first
-      end
-    end
+    receipt { payment_intent.payment_record.child_records.first }
 
     trait :refund do
       amount_lowest_denomination { -competition.base_entry_fee_lowest_denomination }
       registration { refunded_registration_payment&.registration }
+      receipt { association(:stripe_record, :refund, parent_record: refunded_registration_payment.receipt) }
     end
 
     trait :with_donation do
