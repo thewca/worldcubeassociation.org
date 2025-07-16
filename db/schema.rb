@@ -687,8 +687,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_10_084311) do
     t.string "event_id", null: false
     t.integer "round_number", null: false
     t.integer "scramble_set_number", null: false
+    t.integer "ordered_index", null: false
     t.integer "matched_round_id"
-    t.integer "matched_round_ordered_index"
     t.bigint "external_upload_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -704,6 +704,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_10_084311) do
     t.bigint "inbox_scramble_set_id", null: false
     t.boolean "is_extra", default: false, null: false
     t.integer "scramble_number", null: false
+    t.integer "ordered_index", null: false
     t.text "scramble_string", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -978,24 +979,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_10_084311) do
     t.index ["person_id"], name: "fk_persons"
   end
 
-  create_table "records", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
-    t.string "record_type", null: false
-    t.bigint "result_id", null: false
-    t.integer "value", null: false
-    t.string "event_id", null: false
-    t.string "country_id"
-    t.string "continent_id"
-    t.string "record_timestamp", null: false
-    t.string "record_scope", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["country_id", "record_scope"], name: "index_records_on_country_id_and_record_scope"
-    t.index ["event_id", "record_scope"], name: "index_records_on_event_id_and_record_scope"
-    t.index ["event_id", "record_type", "record_scope"], name: "index_records_on_event_id_and_record_type_and_record_scope"
-    t.index ["record_scope"], name: "index_records_on_record_scope"
-    t.index ["result_id"], name: "index_records_on_result_id"
-  end
-
   create_table "regional_organizations", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
     t.string "country", null: false
@@ -1013,6 +996,27 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_10_084311) do
     t.text "extra_information"
     t.index ["country"], name: "index_regional_organizations_on_country"
     t.index ["name"], name: "index_regional_organizations_on_name"
+  end
+
+  create_table "regional_records", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "record_type", null: false
+    t.bigint "result_id", null: false
+    t.integer "value", null: false
+    t.string "event_id"
+    t.string "country_id"
+    t.string "continent_id"
+    t.date "record_timestamp", null: false
+    t.integer "record_scope", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["continent_id"], name: "index_regional_records_on_continent_id"
+    t.index ["country_id", "record_scope"], name: "index_regional_records_on_country_id_and_record_scope"
+    t.index ["country_id"], name: "index_regional_records_on_country_id"
+    t.index ["event_id", "record_scope"], name: "index_regional_records_on_event_id_and_record_scope"
+    t.index ["event_id", "record_type", "record_scope"], name: "idx_on_event_id_record_type_record_scope_bdec6938e0"
+    t.index ["event_id"], name: "index_regional_records_on_event_id"
+    t.index ["record_scope"], name: "index_regional_records_on_record_scope"
+    t.index ["result_id"], name: "index_regional_records_on_result_id"
   end
 
   create_table "regional_records_lookup", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
@@ -1074,7 +1078,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_10_084311) do
 
   create_table "registrations", id: { type: :integer, unsigned: true }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "competition_id", limit: 32, default: "", null: false
-    t.integer "registrant_id"
+    t.integer "registrant_id", null: false
     t.text "comments"
     t.string "ip", limit: 16, default: "", null: false
     t.integer "user_id"
@@ -1091,6 +1095,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_10_084311) do
     t.string "competing_status", default: "pending", null: false
     t.datetime "registered_at", null: false
     t.index ["competition_id", "competing_status"], name: "index_registrations_on_competition_id_and_competing_status"
+    t.index ["competition_id", "registrant_id"], name: "index_registrations_on_competition_id_and_registrant_id", unique: true
     t.index ["competition_id", "user_id"], name: "index_registrations_on_competition_id_and_user_id", unique: true
     t.index ["competition_id"], name: "index_registrations_on_competition_id"
     t.index ["user_id"], name: "index_registrations_on_user_id"
@@ -1104,6 +1109,24 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_10_084311) do
     t.datetime "updated_at", null: false
     t.index ["result_id", "attempt_number"], name: "index_result_attempts_on_result_id_and_attempt_number", unique: true
     t.index ["result_id"], name: "index_result_attempts_on_result_id"
+  end
+
+  create_table "result_timestamps", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.bigint "result_id", null: false
+    t.string "event_id"
+    t.string "country_id"
+    t.string "continent_id"
+    t.integer "best"
+    t.integer "average"
+    t.date "round_timestamp", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["continent_id"], name: "index_result_timestamps_on_continent_id"
+    t.index ["country_id"], name: "index_result_timestamps_on_country_id"
+    t.index ["event_id", "round_timestamp", "average"], name: "idx_on_event_id_round_timestamp_average_f95aa75118"
+    t.index ["event_id", "round_timestamp", "best"], name: "idx_on_event_id_round_timestamp_best_bd9daf2056"
+    t.index ["event_id"], name: "index_result_timestamps_on_event_id"
+    t.index ["result_id"], name: "index_result_timestamps_on_result_id", unique: true
   end
 
   create_table "results", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB PACK_KEYS=1", force: :cascade do |t|
@@ -1129,9 +1152,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_10_084311) do
     t.index ["competition_id", "updated_at"], name: "index_Results_on_competitionId_and_updated_at"
     t.index ["competition_id"], name: "Results_fk_tournament"
     t.index ["country_id"], name: "_tmp_index_Results_on_countryId"
-    t.index ["event_id", "average", "id"], name: "index_results_on_event_id_and_average_and_id"
     t.index ["event_id", "average"], name: "Results_eventAndAverage"
-    t.index ["event_id", "best", "id"], name: "index_results_on_event_id_and_best_and_id"
     t.index ["event_id", "best"], name: "Results_eventAndBest"
     t.index ["event_id", "competition_id", "round_type_id", "country_id", "average"], name: "Results_regionalAverageRecordCheckSpeedup"
     t.index ["event_id", "competition_id", "round_type_id", "country_id", "best"], name: "Results_regionalSingleRecordCheckSpeedup"
@@ -1578,8 +1599,14 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_10_084311) do
   add_foreign_key "potential_duplicate_persons", "duplicate_checker_job_runs"
   add_foreign_key "potential_duplicate_persons", "persons", column: "duplicate_person_id"
   add_foreign_key "potential_duplicate_persons", "users", column: "original_user_id"
+  add_foreign_key "regional_records", "continents"
+  add_foreign_key "regional_records", "countries"
+  add_foreign_key "regional_records", "events"
   add_foreign_key "regional_records_lookup", "results", on_update: :cascade, on_delete: :cascade
   add_foreign_key "registration_history_changes", "registration_history_entries"
+  add_foreign_key "result_timestamps", "continents"
+  add_foreign_key "result_timestamps", "countries"
+  add_foreign_key "result_timestamps", "events"
   add_foreign_key "results", "rounds"
   add_foreign_key "sanity_check_exclusions", "sanity_checks"
   add_foreign_key "sanity_checks", "sanity_check_categories"
