@@ -1421,7 +1421,7 @@ RSpec.describe 'API Registrations' do
 
       it 'rejects a payload which does not match the webhook secret' do
         post registration_stripe_webhook_path, params: refund_webhook, as: :json
-        expect(response.status).to have_http_status(400)
+        expect(response.status).to have_http_status(:bad_request)
       end
     end
 
