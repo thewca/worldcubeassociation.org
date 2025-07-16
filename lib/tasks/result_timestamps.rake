@@ -3,7 +3,7 @@
 namespace :results do
   desc "Fill result timestamps table"
   task fill_timestamps: [:environment] do
-    ActiveRecord::Base.connection.execute(<<~SQL)
+    ActiveRecord::Base.connection.execute(<<~SQL.squish)
       INSERT INTO result_timestamps (result_id, event_id, country_id, continent_id, best, average, round_timestamp, created_at, updated_at)
       WITH max_times_per_round AS (
           SELECT round_id, MAX(end_time) AS max_end_time

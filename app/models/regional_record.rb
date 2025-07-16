@@ -46,17 +46,17 @@ class RegionalRecord < ApplicationRecord
     query.minimum(:value)
   end
 
-  def self.is_record_at_date?(value, event_id, record_type, country_id, timestamp)
+  def self.record_at_date?(value, event_id, record_type, country_id, timestamp)
     scope_filter = arel_table[:record_scope]
     continent_id = Country.c_find(country_id).continent_id
 
     records = RegionalRecord.where(event_id: event_id, record_type: record_type)
-                            .where(record_scope: [:world, :continental, :national])
+                            .where(record_scope: %i[world continental national])
                             .where(record_timestamp: ..timestamp)
                             .where(
                               scope_filter.eq(:world)
                                           .or(scope_filter.eq(:continental).and(arel_table[:continent_id].eq(continent_id)))
-                                          .or(scope_filter.eq(:national).and(arel_table[:country_id].eq(country_id)))
+                                          .or(scope_filter.eq(:national).and(arel_table[:country_id].eq(country_id))),
                             )
                             .group(:record_scope)
                             .minimum(:value)
@@ -64,24 +64,25 @@ class RegionalRecord < ApplicationRecord
     return [true, "WR"] if records["world"] && value <= records["world"]
     return [true, Continent.c_find(continent_id).record_name] if records["continental"] && value <= records["continental"]
     return [true, "NR"] if records["national"] && value <= records["national"]
+
     [false, nil]
   end
 
   def self.build_threshold_series(event_ids, value_name)
     # Fetch all relevant records once
     recs = RegionalRecord
-             .where(record_type: value_name,
-                    event_id:     event_ids,
-                    record_scope: %w[world continental national])
-             .order(:event_id, :record_timestamp, :record_scope, :continent_id, :country_id)
-             .pluck(
-               :event_id,
-               :record_timestamp,
-               :record_scope,
-               :continent_id,
-               :country_id,
-               :value
-             )
+           .where(record_type: value_name,
+                  event_id: event_ids,
+                  record_scope: %w[world continental national])
+           .order(:event_id, :record_timestamp, :record_scope, :continent_id, :country_id)
+           .pluck(
+             :event_id,
+             :record_timestamp,
+             :record_scope,
+             :continent_id,
+             :country_id,
+             :value,
+           )
 
     world_series        = Hash.new { |h, event| h[event] = [] }
     continental_series  = Hash.new { |h, k|  h[k]     = [] }  # key = [event, continent]
@@ -110,14 +111,16 @@ class RegionalRecord < ApplicationRecord
 
   def self.lookup_threshold(arr, target_ts)
     return nil if arr.empty?
+
     i = arr.bsearch_index { |ts, _| ts > target_ts }
     return arr.last.last if i.nil?   # everything ≤ target_ts
     return nil if i.zero?            # no entries ≤ target_ts
-    arr[i-1].last
+
+    arr[i - 1].last
   end
 
   def self.annotate_candidates(best_at_date, value_name)
-    event_ids = best_at_date.map { |r| r[1] }.uniq
+    event_ids = best_at_date.pluck(1).uniq
     w_series, c_series, n_series = build_threshold_series(event_ids, value_name)
 
     results_by_id = Result.includes(:competition)
@@ -144,12 +147,11 @@ class RegionalRecord < ApplicationRecord
       r = results_by_id[result_id]
       {
         computed_marker: marker,
-        competition:     r.competition,
-        result:          r
+        competition: r.competition,
+        result: r,
       }
     end
   end
-
 
   def marker
     case record_scope

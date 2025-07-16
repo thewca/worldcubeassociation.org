@@ -138,12 +138,14 @@ module CheckRegionalRecords
         timestamps = ResultTimestamp.where(result_id: minimum_results_by_event.ids).index_by(&:result_id)
         candidates = minimum_results_by_event.filter_map do |result|
           timestamp = timestamps[result.id].round_timestamp
-          is_record, marker = RegionalRecord.is_record_at_date?(result.value, result.event_id, value_name, result.country_id, timestamp)
-          {
-            computed_marker: marker,
-            competition:     result.competition,
-            result:          result
-          } if is_record
+          is_record, marker = RegionalRecord.record_at_date?(result.value, result.event_id, value_name, result.country_id, timestamp)
+          if is_record
+            {
+              computed_marker: marker,
+              competition: result.competition,
+              result: result,
+            }
+          end
         end
         [value_column, candidates]
       else
@@ -151,7 +153,7 @@ module CheckRegionalRecords
         # Build CTE filters (unqualified, since only one source in CTE)
         cte_filters = []
         cte_filters << "#{value_column} > 0"
-        cte_filters << "event_id = #{conn.quote(event_id)}"            if event_id.present?
+        cte_filters << "event_id = #{conn.quote(event_id)}" if event_id.present?
         cte_filters << "round_timestamp >= #{conn.quote(from_timestamp)}" if from_timestamp.present?
         cte_filters << "round_timestamp <= #{conn.quote(to_timestamp)}"   if to_timestamp.present?
         cte_where = cte_filters.join(" AND ")
@@ -159,37 +161,37 @@ module CheckRegionalRecords
         # Build final WHERE filters, qualifying with rt alias
         final_filters = []
         final_filters << "rt.#{value_column} > 0"
-        final_filters << "rt.event_id = #{conn.quote(event_id)}"            if event_id.present?
+        final_filters << "rt.event_id = #{conn.quote(event_id)}" if event_id.present?
         final_filters << "rt.round_timestamp >= #{conn.quote(from_timestamp)}" if from_timestamp.present?
         final_filters << "rt.round_timestamp <= #{conn.quote(to_timestamp)}"   if to_timestamp.present?
         final_where = final_filters.join(" AND ")
 
         sql = <<~SQL
-            -- CTE to find the minimum non-zero value per partition
-            WITH min_best AS (
-              SELECT
-                event_id,
-                round_timestamp,
-                MIN(#{value_column}) AS #{value_column}
-              FROM result_timestamps
-              WHERE #{cte_where}
-              GROUP BY event_id, country_id, round_timestamp
-            )
-            -- Join back to get the full rows
+          -- CTE to find the minimum non-zero value per partition
+          WITH min_best AS (
             SELECT
-              rt.result_id,
-              rt.event_id,
-              rt.country_id,
-              rt.continent_id,
-              rt.#{value_column}   AS #{value_column},
-              rt.round_timestamp
-            FROM result_timestamps rt
-            JOIN min_best mb
-              ON rt.event_id        = mb.event_id
-             AND rt.round_timestamp = mb.round_timestamp
-             AND rt.#{value_column} = mb.#{value_column}
-            WHERE #{final_where};
-          SQL
+              event_id,
+              round_timestamp,
+              MIN(#{value_column}) AS #{value_column}
+            FROM result_timestamps
+            WHERE #{cte_where}
+            GROUP BY event_id, country_id, round_timestamp
+          )
+          -- Join back to get the full rows
+          SELECT
+            rt.result_id,
+            rt.event_id,
+            rt.country_id,
+            rt.continent_id,
+            rt.#{value_column}   AS #{value_column},
+            rt.round_timestamp
+          FROM result_timestamps rt
+          JOIN min_best mb
+            ON rt.event_id        = mb.event_id
+           AND rt.round_timestamp = mb.round_timestamp
+           AND rt.#{value_column} = mb.#{value_column}
+          WHERE #{final_where};
+        SQL
         best_at_date = conn.execute(sql).to_a
         candidates = RegionalRecord.annotate_candidates(best_at_date, value_name)
         current_record_holders = Result.includes(:competition).where.not(record_column => nil)
