@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# rubocop:disable Metrics/ParameterLists
 class RegionalRecord < ApplicationRecord
   enum :record_scope, {
     national: 0,
@@ -164,3 +165,5 @@ class RegionalRecord < ApplicationRecord
     end
   end
 end
+
+# rubocop:enable Metrics/ParameterLists

@@ -126,6 +126,7 @@ module CheckRegionalRecords
 
   SOLUTION_TYPES = [[:best, 'single', :regional_single_record], [:average, 'average', :regional_average_record]].freeze
 
+  # rubocop:disable Metrics/ParameterLists
   def self.check_records_new_table(event_id = nil, competition_id = nil, from_timestamp = nil, to_timestamp = nil)
     SOLUTION_TYPES.to_h do |value_column, value_name, record_column|
       if competition_id.present?
@@ -209,6 +210,7 @@ module CheckRegionalRecords
       end
     end
   end
+  # rubocop:enable Metrics/ParameterLists
 
   def self.check_records(event_id = nil, competition_id = nil)
     SOLUTION_TYPES.to_h do |value_column, value_name|
