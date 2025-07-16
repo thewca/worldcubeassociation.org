@@ -345,7 +345,7 @@ class RegistrationsController < ApplicationController
     stored_record ||= StripeRecord.create_or_update_from_api(event_data, {}, audit_event.account_id) if incoming_event
 
     if stored_record.nil?
-      logger.error "Stripe webhook reported event on entity #{event_data.id} but we have record with a matching `stripe_id`."
+      logger.error "Stripe webhook reported event on entity #{event_data.id} but we have no record with a matching `stripe_id`."
       return head :not_found
     end
 
