@@ -1411,6 +1411,20 @@ RSpec.describe 'API Registrations' do
   end
 
   describe 'POST #stripe_webhook' do
+    context 'with STRIPE_WEBHOOK_SECRET' do
+      around do |example|
+        original = ENV["STRIPE_WEBHOOK_SECRET"]
+        ENV["STRIPE_WEBHOOK_SECRET"] = "expected_secret"
+        example.run
+        ENV["STRIPE_WEBHOOK_SECRET"] = original
+      end
+
+      it 'rejects a payload which does not match the webhook secret' do
+        post registration_stripe_webhook_path, params: refund_webhook, as: :json
+        expect(response.status).to be(400)
+      end
+    end
+
     context 'handling refund.created' do
       let!(:competition) { create(:competition, :stripe_connected) }
       let(:account_id) { competition.competition_payment_integrations.first.connected_account.account_id }
