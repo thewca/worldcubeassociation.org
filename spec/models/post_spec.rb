@@ -48,4 +48,12 @@ RSpec.describe Post do
       expect(Post.find(post.id).tags_array).to match_array %w[wic]
     end
   end
+
+  context "unstick_at behavior" do
+    it "defaults unstick_at to 2 weeks from now when sticky is true and unstick_at is nil" do
+      post = create(:sticky_post, unstick_at: nil)
+      expect(post).to be_valid
+      expect(post.unstick_at).to eq(2.weeks.from_now.to_date)
+    end
+  end
 end

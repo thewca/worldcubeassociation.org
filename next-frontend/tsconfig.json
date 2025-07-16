@@ -38,6 +38,8 @@
     ".next/types/**/*.ts"
   ],
   "exclude": [
-    "node_modules"
-  ]
+    "node_modules",
+    "./build-translations.js"
+  ],
+  "types": ["vitest/globals"]
 }

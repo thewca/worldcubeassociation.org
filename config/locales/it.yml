@@ -921,8 +921,6 @@ it:
         results_file: ''
         #original_hash: da39a3e
         message: ''
-        #original_hash: da39a3e
-        confirm_information: ''
       regional_organization:
         #original_hash: da39a3e
         name: ''
@@ -1540,7 +1538,7 @@ it:
         Prima di fare una domanda, potresti dare un'occhiata alle nostre <a
         href="/faq">Domande Frequenti</a>! Se desideri contattare uno specifico
         team o commissione che non è elencata qui, puoi trovare i loro contatti
-        in <a href="/teams-committees-councils">questa pagina</a>.
+        in <a href="/teams-committees">questa pagina</a>.
       #original_hash: ea20be0
       success_message: Email inviata. Ti ricontatteremo presto.
       #original_hash: 8fa6b95

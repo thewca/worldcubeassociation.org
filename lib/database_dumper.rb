@@ -107,6 +107,7 @@ module DatabaseDumper
           forbid_newcomers_reason
           auto_close_threshold
           auto_accept_registrations
+          auto_accept_preference
           auto_accept_disable_threshold
           newcomer_month_reserved_spots
           competitor_can_cancel
@@ -285,6 +286,7 @@ module DatabaseDumper
           regional_average_record
           regional_single_record
           round_type_id
+          round_id
           updated_at
           value1
           value2
@@ -333,6 +335,7 @@ module DatabaseDumper
           group_id
           is_extra
           round_type_id
+          round_id
           scramble
           id
           scramble_num
@@ -959,6 +962,9 @@ module DatabaseDumper
     "tickets" => :skip_all_rows,
     "tickets_edit_person" => :skip_all_rows,
     "tickets_edit_person_fields" => :skip_all_rows,
+    "duplicate_checker_job_runs" => :skip_all_rows,
+    "potential_duplicate_persons" => :skip_all_rows,
+    "tickets_competition_result" => :skip_all_rows,
   }.freeze
 
   RESULTS_SANITIZERS = {
@@ -1207,8 +1213,21 @@ module DatabaseDumper
       ActiveRecord::Base.connection.execute("SET SESSION group_concat_max_len = 1048576")
     end
 
+    # We need to make sure that the dump runs in the correct order, because of foreign key dependencies.
+    #   Normally, this would not be a problem for a "standard SQL dump", because tools like `mysqldump` or `mariadb-dump`
+    #   simply disable Foreign Keys altogether, then dump the data in one go, and then enable the foreign key checking again.
+    # However, since we're running manual dumps while foreign key checking is enabled, we need to make sure that our data
+    #   is being dumped in the "correct order". For example, we cannot run the `results` dumper before `rounds`,
+    #   because there is a Foreign Key pointing from the former to the latter, so inserting values into `results`
+    #   without the corresponding `rounds` row already existing, will make the DB throw errors.
+    ordered_table_names = dump_sanitizers.keys
+                                         .index_with { ActiveRecord::Base.connection.foreign_keys(it).pluck(:to_table) }
+                                         .tsort
+
     LogTask.log_task "Populating sanitized tables in '#{dump_db_name}'" do
-      dump_sanitizers.each do |table_name, table_sanitizer|
+      ordered_table_names.each do |table_name|
+        table_sanitizer = dump_sanitizers[table_name]
+
         next if table_sanitizer == :skip_all_rows
 
         # Give an option to override source table name if schemas diverge

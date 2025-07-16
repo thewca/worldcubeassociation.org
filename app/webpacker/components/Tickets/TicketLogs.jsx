@@ -14,6 +14,8 @@ export default function TicketLogs({ ticketId }) {
 
   function logText(actionType, actionValue) {
     switch (actionType) {
+      case ticketLogActionTypes.created:
+        return 'Ticket created.';
       case ticketLogActionTypes.status_updated:
         return `Status updated to ${actionValue}`;
       default:

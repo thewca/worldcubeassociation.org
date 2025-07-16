@@ -21,7 +21,10 @@ module Admin
             competitions: @pending_competitions.as_json(
               only: %w[id name results_submitted_at],
               methods: %w[city country_iso2],
-              include: { posting_user: user_attributes },
+              include: {
+                posting_user: user_attributes,
+                result_ticket: {},
+              },
             ),
           }
         end
@@ -42,10 +45,13 @@ module Admin
       @updated_competitions = Competition.pending_posting.where(posting_user: nil).where(id: params[:competition_ids])
       return render json: { error: "No competitions to lock." } if @updated_competitions.empty?
 
-      json = { error: "Something went wrong." }
-      json = { message: "Competitions successfully locked, go on posting!" } if @updated_competitions.update(posting_user: current_user)
+      ActiveRecord::Base.transaction do
+        TicketsCompetitionResult.where(competition: @updated_competitions)
+                                .update_all(status: TicketsCompetitionResult.statuses[:warnings_verification])
+        @updated_competitions.update(posting_user: current_user)
+      end
 
-      render json: json
+      render json: { message: "Competitions successfully locked, go on posting!" }
     end
 
     def show
@@ -75,6 +81,7 @@ module Admin
           eventId: ce.event_id,
           rounds: ce.rounds.map do |r|
             {
+              roundId: r.id,
               roundTypeId: r.round_type_id,
               formatId: r.format_id,
             }
@@ -152,8 +159,8 @@ module Admin
 
     private def result_params
       params.require(:result).permit(:value1, :value2, :value3, :value4, :value5,
-                                     :competition_id, :round_type_id, :event_id, :format_id,
-                                     :person_name, :person_id, :country_id,
+                                     :competition_id, :round_type_id, :round_id, :event_id,
+                                     :format_id, :person_name, :person_id, :country_id,
                                      :best, :average,
                                      :regional_single_record, :regional_average_record)
     end

@@ -760,4 +760,142 @@ RSpec.describe User do
       expect(user.teams_committees_at_least_senior_roles).not_to include(wrt_role)
     end
   end
+
+  describe '#below_forum_age_requirement?' do
+    let(:user) { create(:user) }
+
+    it 'true when user under 13' do
+      user.dob = Date.today.advance(days: 1, years: -13)
+      expect(user.below_forum_age_requirement?).to be(true)
+    end
+
+    it 'false when user is exactly 13' do
+      user.dob = Date.today.advance(years: -13)
+      expect(user.below_forum_age_requirement?).to be(false)
+    end
+
+    it 'false when user older than 13' do
+      user.dob = Date.today.advance(days: -1, years: -13)
+      expect(user.below_forum_age_requirement?).to be(false)
+    end
+  end
+
+  describe '#can_check_newcomers_data?' do
+    it "returns true for WRT if competition is in future" do
+      wrt_user = create(:user, :wrt_member)
+      competition = create(:competition, starts: 1.month.from_now)
+
+      expect(wrt_user.can_check_newcomers_data?(competition)).to be true
+    end
+
+    it "returns false for WRT if competition is in past" do
+      wrt_user = create(:user, :wrt_member)
+      competition = create(:competition, starts: 1.month.ago)
+
+      expect(wrt_user.can_check_newcomers_data?(competition)).to be false
+    end
+
+    it "returns false for non-WRT user" do
+      user = create(:user)
+      competition = create(:competition, starts: 1.month.from_now)
+
+      expect(user.can_check_newcomers_data?(competition)).to be false
+    end
+
+    it "returns false for WRT if competition is happening now" do
+      wrt_user = create(:user, :wrt_member)
+      competition = create(:competition, starts: Time.current, ends: 1.hour.from_now)
+
+      expect(wrt_user.can_check_newcomers_data?(competition)).to be false
+    end
+  end
+
+  describe '#can_upload_competition_results?' do
+    let(:wrt_member) { create(:user, :wrt_member) }
+    let(:competition_delegate) { create(:delegate) }
+    let(:normal_user) { create(:user) }
+
+    context 'when competition is upcoming' do
+      let(:competition) { create(:competition, :announced, starts: 1.month.from_now, delegates: [competition_delegate]) }
+
+      it "returns false for WRT member" do
+        expect(wrt_member.can_upload_competition_results?(competition)).to be false
+      end
+
+      it "returns false for competition Delegate" do
+        expect(competition_delegate.can_upload_competition_results?(competition)).to be false
+      end
+
+      it "returns false for normal user" do
+        expect(normal_user.can_upload_competition_results?(competition)).to be false
+      end
+    end
+
+    context 'when competition is not announced' do
+      let(:competition) { create(:competition, :not_visible, starts: 1.month.ago, delegates: [competition_delegate]) }
+
+      it "returns false for WRT member" do
+        expect(wrt_member.can_upload_competition_results?(competition)).to be false
+      end
+
+      it "returns false for competition Delegate" do
+        expect(competition_delegate.can_upload_competition_results?(competition)).to be false
+      end
+
+      it "returns false for normal user" do
+        expect(normal_user.can_upload_competition_results?(competition)).to be false
+      end
+    end
+
+    context 'when competition results are posted' do
+      let(:competition) { create(:competition, :announced, :results_posted, starts: 1.month.ago, delegates: [competition_delegate]) }
+
+      it "returns true for WRT member" do
+        expect(wrt_member.can_upload_competition_results?(competition)).to be true
+      end
+
+      it "returns false for competition Delegate" do
+        expect(competition_delegate.can_upload_competition_results?(competition)).to be false
+      end
+
+      it "returns false for normal user" do
+        expect(normal_user.can_upload_competition_results?(competition)).to be false
+      end
+    end
+
+    context 'when competition results are not posted' do
+      let(:competition) { create(:competition, :announced, starts: 1.month.ago, delegates: [competition_delegate]) }
+
+      it "returns true for WRT member" do
+        expect(wrt_member.can_upload_competition_results?(competition)).to be true
+      end
+
+      it "returns true for competition Delegate" do
+        expect(competition_delegate.can_upload_competition_results?(competition)).to be true
+      end
+
+      it "returns false for normal user" do
+        expect(normal_user.can_upload_competition_results?(competition)).to be false
+      end
+    end
+  end
+
+  describe '#can_submit_competition_results?' do
+    let(:wrt_member) { create(:user, :wrt_member) }
+    let(:staff_delegate) { create(:delegate) }
+    let(:trainee_delegate) { create(:trainee_delegate) }
+    let(:competition) { create(:competition, :announced, starts: 1.month.ago, delegates: [staff_delegate, trainee_delegate]) }
+
+    it "returns true for WRT member" do
+      expect(wrt_member.can_submit_competition_results?(competition)).to be true
+    end
+
+    it "returns true for staff Delegate" do
+      expect(staff_delegate.can_submit_competition_results?(competition)).to be true
+    end
+
+    it "returns false for trainee Delegate" do
+      expect(trainee_delegate.can_submit_competition_results?(competition)).to be false
+    end
+  end
 end

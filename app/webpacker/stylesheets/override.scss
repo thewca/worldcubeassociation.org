@@ -115,4 +115,22 @@ body, html {
       background-color: #e0e0e0 !important;
     }
   }
+
+  // This is to vertically align region flag and name in RegionSelector dropdown
+  .ui.dropdown {
+    .menu[role='listbox'] {
+      .item[role='option'] {
+        display: flex;
+        align-items: center;
+
+        .fi {
+          flex-shrink: 0;
+        }
+
+        .text {
+          margin-left: 4px;
+        }
+      }
+    }
+  }
 }

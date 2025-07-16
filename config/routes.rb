@@ -58,6 +58,7 @@ Rails.application.routes.draw do
   post 'users/:id/avatar' => 'users#upload_avatar'
   patch 'users/:id/avatar' => 'users#update_avatar'
   delete 'users/:id/avatar' => 'users#delete_avatar'
+  get '/users/admin_search' => 'users#admin_search'
   get 'admin/avatars/pending' => 'admin/avatars#pending_avatar_users', as: :pending_avatars
   post 'admin/avatars' => 'admin/avatars#update_avatar', as: :admin_update_avatar
 
@@ -103,9 +104,13 @@ Rails.application.routes.draw do
     resources :competition_tabs, except: [:show], as: :tabs, path: :tabs
     get 'tabs/:id/reorder' => "competition_tabs#reorder", as: :tab_reorder
     # Delegate views and action
+    get 'newcomer-checks' => 'results_submission#newcomer_checks', as: :newcomer_checks
+    get 'last-duplicate-checker-job' => 'results_submission#last_duplicate_checker_job_run', as: :last_duplicate_checker_job_run
+    post 'compute_potential_duplicates' => 'results_submission#compute_potential_duplicates', as: :compute_potential_duplicates
     get 'submit-results' => 'results_submission#new', as: :submit_results_edit
     get 'submit-scrambles' => 'admin/scrambles#match_scrambles', as: :match_scrambles
     post 'submit-results' => 'results_submission#create', as: :submit_results
+    post 'import-wca-live-results' => 'results_submission#import_from_live'
     resources :scramble_files, only: %i[index create destroy], shallow: true do
       patch 'update-round-matching' => 'scramble_files#update_round_matching', on: :collection
     end
@@ -114,7 +119,6 @@ Rails.application.routes.draw do
     # WRT views and action
     get '/admin/upload-results' => "admin#new_results", as: :admin_upload_results_edit
     get '/admin/check-existing-results' => "admin#check_competition_results", as: :admin_check_existing_results
-    post '/admin/upload-json' => "admin#create_results", as: :admin_upload_results
     post '/admin/clear-submission' => "admin#clear_results_submission", as: :clear_results_submission
     get '/admin/import-results' => 'admin#import_results', as: :admin_import_results
     get '/admin/result-inbox-steps' => 'admin#result_inbox_steps', as: :admin_result_inbox_steps
@@ -187,6 +191,7 @@ Rails.application.routes.draw do
   get 'wst/wca-developer-database-dump.zip', to: redirect(DbDumpHelper.public_s3_path(DbDumpHelper::DEVELOPER_EXPORT_SQL_PERMALINK))
 
   get 'persons/new_id' => 'admin/persons#generate_ids'
+  get '/persons/results' => 'admin/persons#results', as: :person_results
   resources :persons, only: %i[index show]
   post 'persons' => 'admin/persons#create'
 
@@ -230,6 +235,10 @@ Rails.application.routes.draw do
 
   root 'posts#homepage'
   resources :posts
+  get 'livestream-management' => 'posts#livestream_management'
+  post 'update-test-link' => 'posts#update_test_link'
+  patch 'promote-test-link' => 'posts#promote_test_link'
+  get 'wc2025-preview' => 'posts#wc2025_preview'
   get 'rss' => 'posts#rss'
 
   post 'upload/image', to: 'upload#image'
@@ -298,7 +307,6 @@ Rails.application.routes.draw do
   get '/admin/all-voters' => 'admin#all_voters', as: :eligible_voters
   get '/admin/leader-senior-voters' => 'admin#leader_senior_voters', as: :leader_senior_voters
   post '/admin/merge_people' => 'admin#do_merge_people', as: :admin_do_merge_people
-  get '/admin/fix_results_selector' => 'admin#fix_results_selector', as: :admin_fix_results_ajax
   get '/admin/person_data' => 'admin#person_data'
   get '/admin/do_compute_auxiliary_data' => 'admin#do_compute_auxiliary_data'
   get '/admin/generate_db_token' => 'admin#generate_db_token'
@@ -398,6 +406,7 @@ Rails.application.routes.draw do
       get '/persons/:wca_id/results' => "persons#results", as: :person_results
       get '/persons/:wca_id/competitions' => "persons#competitions", as: :person_competitions
       get '/persons/:wca_id/personal_records' => "persons#personal_records", as: :personal_records
+      get '/regulations/translations' => 'regulations#translations', as: :regulations_translations
       get '/geocoding/search' => 'geocoding#location_from_query', as: :geocoding_search
       get '/geocoding/time_zone' => 'geocoding#time_zone_from_coordinates', as: :geocoding_time_zone
       get '/countries' => 'api#countries'
@@ -405,6 +414,8 @@ Rails.application.routes.draw do
       get '/results/:user_id/qualification_data' => 'api#user_qualification_data', as: :user_qualification_data
       get '/competition_series/:id' => 'api#competition_series'
       get '/competition_index' => 'competitions#competition_index', as: :competition_index
+
+      resources :regional_organizations, only: %i[index], path: '/regional-organizations'
 
       resources :competitions, only: %i[index show] do
         get '/wcif' => 'competitions#show_wcif'
@@ -414,6 +425,7 @@ Rails.application.routes.draw do
         get '/competitors' => 'competitions#competitors'
         get '/qualifications' => 'competitions#qualifications'
         get '/registrations' => 'competitions#registrations'
+        get '/events' => 'competitions#events'
         get '/schedule' => 'competitions#schedule'
         get '/scrambles' => 'competitions#scrambles', as: :scrambles
         get '/scrambles/:event_id' => 'competitions#event_scrambles', as: :event_scrambles
@@ -441,7 +453,7 @@ Rails.application.routes.draw do
   end
 
   # Deprecated Links
-  get 'teams-committees' => redirect('teams-committees-councils')
+  get 'teams-committees-councils' => redirect('teams-committees')
   get 'panel/delegate-crash-course' => redirect('panel/delegate#delegate-handbook')
   get 'panel' => redirect('panel/volunteer')
 end

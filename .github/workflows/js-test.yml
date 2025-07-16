@@ -20,9 +20,11 @@ jobs:
         run: corepack enable # this allows NPM to use its own Yarn. It is crucial that this is run BEFORE the Node setup!
       - uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
           cache: 'yarn'
       - name: Install fresh Yarn packages
         run: yarn install
+      - name: Check types
+        run: yarn run check:types
       - name: Run Lint
         run: yarn run lint

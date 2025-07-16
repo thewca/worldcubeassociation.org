@@ -931,13 +931,9 @@ fr:
         status: ''
       results_submission:
         #original_hash: da39a3e
-        schedule_url: ''
-        #original_hash: da39a3e
         results_file: ''
         #original_hash: da39a3e
         message: ''
-        #original_hash: da39a3e
-        confirm_information: ''
       regional_organization:
         #original_hash: da39a3e
         name: ''
@@ -1567,7 +1563,7 @@ fr:
         href="/faq">Foire Aux Questions</a> ! Si vous souhaitez contacter un
         comité ou une équipe spécifique qui ne figure pas dans la liste, vous
         pouvez consulter ses coordonnées sur <a
-        href="/teams-committees-councils">cette page</a>.
+        href="/teams-committees">cette page</a>.
       #original_hash: ea20be0
       success_message: E-mail envoyé - nous vous répondrons sous peu.
       #original_hash: 8fa6b95
@@ -5052,6 +5048,13 @@ fr:
       success: Merci pour votre message. Nous vous contacterons bientôt !
       #original_hash: 8e3a9da
       delivery_error: Erreur lors de l'envoi du message.
+  misc:
+    #original_hash: 9a0f1cc
+    forum_age_requirement: Vous devez avoir au moins 13 ans pour accéder au Forum de la WCA.
+    #original_hash: d1f3342
+    forum_enter_dob: >-
+      Une date de naissance est requise pour accéder au forum. Veuillez saisir
+      votre date de naissance, puis essayez à nouveau d'accéder au forum.
   faq:
     #original_hash: d790b40
     title: Foire Aux Questions
@@ -5333,7 +5336,7 @@ fr:
       différentes et nous n'avons pas l'intention de ralentir de sitôt! La
       communauté du cube a connu une croissance constante depuis sa création en
       2004 et nous voulons l'encourager à continuer à l'avenir en augmentant
-      l'accessibilité des compétitions dans de nouvelles régions. 
+      l'accessibilité des compétitions dans de nouvelles régions.
 
       Dans le futur, nous espérons soutenir notre communauté encore plus à
       travers des collaborations et des contacts avec ceux qui s'intéressent aux

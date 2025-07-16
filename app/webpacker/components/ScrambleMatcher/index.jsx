@@ -58,6 +58,11 @@ function ScrambleMatcher({ wcifEvents, competitionId, initialScrambleFiles }) {
     [dispatchMatchState],
   );
 
+  const removeScrambleFile = useCallback(
+    (scrambleFile) => dispatchMatchState({ type: 'removeScrambleFile', scrambleFile }),
+    [dispatchMatchState],
+  );
+
   const { mutate: submitMatchState, isPending: isSubmitting } = useMutation({
     mutationFn: () => submitMatchedScrambles(competitionId, matchState),
   });
@@ -72,8 +77,9 @@ function ScrambleMatcher({ wcifEvents, competitionId, initialScrambleFiles }) {
 
   const missingScrambleIds = useMemo(() => {
     if (_.isEmpty(matchState)) return [];
+
     return roundIds.filter((roundId) => {
-      const matchedRound = matchState[roundId];
+      const matchedRound = matchState[roundId] ?? [];
       const wcifRound = wcifEvents.flatMap((event) => event.rounds).find((r) => r.id === roundId);
       return matchedRound.length < wcifRound.scrambleSetCount;
     });
@@ -121,6 +127,7 @@ function ScrambleMatcher({ wcifEvents, competitionId, initialScrambleFiles }) {
         competitionId={competitionId}
         initialScrambleFiles={initialScrambleFiles}
         addScrambleFile={addScrambleFile}
+        removeScrambleFile={removeScrambleFile}
       />
       <Events
         wcifEvents={wcifEvents}

@@ -28,7 +28,6 @@ class AdminController < ApplicationController
 
   def new_results
     @competition = competition_from_params
-    @upload_json = UploadJson.new
     @results_validator = ResultsValidators::CompetitionsResultsValidator.create_full_validation
     @results_validator.validate(@competition.id)
   end
@@ -112,6 +111,7 @@ class AdminController < ApplicationController
           competition_id: inbox_res.competition_id,
           event_id: inbox_res.event_id,
           round_type_id: inbox_res.round_type_id,
+          round_id: inbox_res.round_id,
           format_id: inbox_res.format_id,
           value1: inbox_res.value1,
           value2: inbox_res.value2,
@@ -179,27 +179,6 @@ class AdminController < ApplicationController
     end
   end
 
-  def create_results
-    @competition = competition_from_params
-
-    # Do json analysis + insert record in db, then redirect to check inbox
-    # (and delete existing record if any)
-    upload_json_params = params.require(:upload_json).permit(:results_file)
-    upload_json_params[:competition_id] = @competition.id
-    @upload_json = UploadJson.new(upload_json_params)
-
-    # This makes sure the json structure is valid!
-    if @upload_json.import_to_inbox
-      @competition.update!(results_submitted_at: Time.now) if @competition.results_submitted_at.nil?
-      flash[:success] = "JSON file has been imported."
-      redirect_to competition_admin_upload_results_edit_path
-    else
-      @results_validator = ResultsValidators::CompetitionsResultsValidator.create_full_validation
-      @results_validator.validate(@competition.id)
-      render :new_results
-    end
-  end
-
   def fix_results
     @result_selector = FixResultsSelector.new(
       person_id: params[:person_id],
@@ -207,15 +186,6 @@ class AdminController < ApplicationController
       event_id: params[:event_id],
       round_type_id: params[:round_type_id],
     )
-  end
-
-  def fix_results_selector
-    action_params = params.require(:fix_results_selector)
-                          .permit(:person_id, :competition_id, :event_id, :round_type_id)
-
-    @result_selector = FixResultsSelector.new(action_params)
-
-    render partial: "fix_results_selector"
   end
 
   def person_data

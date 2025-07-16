@@ -74,6 +74,8 @@ class User < ApplicationRecord
   ANONYMOUS_GENDER = 'o'
   ANONYMOUS_COUNTRY_ISO2 = 'US'
 
+  FORUM_AGE_REQUIREMENT = 13
+
   def self.eligible_voters
     [
       UserGroup.delegate_regions,
@@ -454,6 +456,10 @@ class User < ApplicationRecord
     Rails.env.production? && EnvConfig.WCA_LIVE_SITE? ? software_team_admin? : (software_team? || software_team_admin?)
   end
 
+  def can_administrate_livestream?
+    software_team? || board_member? || communication_team?
+  end
+
   def any_kind_of_delegate?
     delegate_role_metadata.any?
   end
@@ -490,12 +496,16 @@ class User < ApplicationRecord
     user.senior_delegates.include?(self)
   end
 
-  def banned?
-    group_member?(UserGroup.banned_competitors.first)
+  def below_forum_age_requirement?
+    (Date.today - FORUM_AGE_REQUIREMENT.years) < dob
   end
 
   def forum_banned?
     current_ban&.metadata&.scope == 'competing_and_attending_and_forums'
+  end
+
+  def banned?
+    group_member?(UserGroup.banned_competitors.first)
   end
 
   def banned_in_past?
@@ -744,6 +754,7 @@ class User < ApplicationRecord
         name: 'WEAT panel',
         pages: [
           panel_pages[:bannedCompetitors],
+          panel_pages[:delegateProbations],
         ],
       },
     }
@@ -916,18 +927,17 @@ class User < ApplicationRecord
   end
 
   def can_upload_competition_results?(competition)
-    can_submit_competition_results?(competition, upload_only: true)
+    return false if competition.upcoming? || !competition.announced?
+
+    can_admin_results? || (competition.delegates.include?(self) && !competition.results_posted?)
   end
 
-  def can_submit_competition_results?(competition, upload_only: false)
-    allowed_delegate = if upload_only
-                         competition.delegates.include?(self)
-                       else
-                         competition.staff_delegates.include?(self)
-                       end
-    appropriate_role = can_admin_results? || allowed_delegate
-    appropriate_time = competition.in_progress? || competition.probably_over?
-    competition.announced? && appropriate_role && appropriate_time && !competition.results_posted?
+  def can_submit_competition_results?(competition)
+    can_upload_competition_results?(competition) && (can_admin_results? || competition.staff_delegates.include?(self))
+  end
+
+  def can_check_newcomers_data?(competition)
+    competition.upcoming? && can_admin_results?
   end
 
   def can_create_poll?
@@ -1182,12 +1192,17 @@ class User < ApplicationRecord
   end
 
   def self.search(query, params: {})
-    users = Person.includes(:user).current
-    # We can't search by email on the 'Person' table
-    search_by_email = false
-    unless ActiveRecord::Type::Boolean.new.cast(params[:persons_table])
+    search_by_email = ActiveRecord::Type::Boolean.new.cast(params[:email])
+    admin_search = ActiveRecord::Type::Boolean.new.cast(params[:adminSearch])
+    searching_persons_table = ActiveRecord::Type::Boolean.new.cast(params[:persons_table])
+
+    return User.where(email: query) if admin_search && search_by_email
+
+    if searching_persons_table
+      users = Person.includes(:user).current
+      search_by_email = false # We can't search by email on the 'Person' table
+    else
       users = User.confirmed_email.not_dummy_account
-      search_by_email = ActiveRecord::Type::Boolean.new.cast(params[:email])
 
       users = users.where(id: self.staff_delegate_ids) if ActiveRecord::Type::Boolean.new.cast(params[:only_staff_delegates])
 
@@ -1261,7 +1276,7 @@ class User < ApplicationRecord
     json
   end
 
-  def to_wcif(competition, registration = nil, registrant_id = nil, authorized: false)
+  def to_wcif(competition, registration = nil, authorized: false)
     roles = registration&.roles || []
     roles << "delegate" if competition.staff_delegates.include?(self)
     roles << "trainee-delegate" if competition.trainee_delegates.include?(self)
@@ -1274,7 +1289,7 @@ class User < ApplicationRecord
       "name" => name,
       "wcaUserId" => id,
       "wcaId" => wca_id,
-      "registrantId" => registrant_id,
+      "registrantId" => registration&.registrant_id,
       "countryIso2" => country_iso2,
       "gender" => gender,
       "registration" => registration&.to_wcif(authorized: authorized),
@@ -1369,7 +1384,7 @@ class User < ApplicationRecord
   end
 
   private def can_manage_delegate_probation?
-    admin? || board_member? || senior_delegate? || can_access_wfc_senior_matters? || group_leader?(UserGroup.teams_committees_group_wic)
+    admin? || board_member? || senior_delegate? || can_access_wfc_senior_matters? || group_leader?(UserGroup.teams_committees_group_wic) || weat_team?
   end
 
   def senior_delegates
