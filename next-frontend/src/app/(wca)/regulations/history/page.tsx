@@ -43,7 +43,10 @@ export default async function RegulationsHistory() {
           is in charge of them.
         </Text>
         <Text>
-          Previously, from the January 1st, 2013 release until the January 1st, 2025 release, the WCA Regulations were split into the WCA Regulations and the WCA Guidelines. The former contents of both documents were combined into the WCA Regulations for the July 17th, 2025 release.
+          Previously, from the January 1st, 2013 release until the January 1st,
+          2025 release, the WCA Regulations were split into the WCA Regulations
+          and the WCA Guidelines. The former contents of both documents were
+          combined into the WCA Regulations for the July 17th, 2025 release.
         </Text>
         <List.Root>
           {regulationsHistoryItems.map((item) => (
