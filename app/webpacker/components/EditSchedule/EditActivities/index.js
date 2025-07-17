@@ -1,5 +1,6 @@
 import React, {
   useCallback,
+  useEffect,
   useMemo,
   useRef,
   useState,
@@ -72,6 +73,9 @@ function EditActivities({
   const [calendarStart, setCalendarStart] = useInputState(8);
   const [calendarEnd, setCalendarEnd] = useInputState(20);
 
+  const [visibleEvents, setVisibleEvents] = useState([]);
+  const [calendarRange, setCalendarRange] = useState({ start: null, end: null });
+
   const setReasonableCalendarBounds = (room) => {
     const roomWcif = roomWcifFromId(wcifSchedule, room.id);
     const activities = roomWcif?.activities;
@@ -138,6 +142,41 @@ function EditActivities({
     ),
     [wcifRoom, wcifVenue],
   );
+
+  const calendarRef = useRef(null);
+
+  const handleDatesSet = (arg) => {
+    setCalendarRange({ start: arg.start, end: arg.end });
+    const calendarApi = arg.view.calendar;
+
+    const events = calendarApi.getEvents().filter(
+      (event) => event.start < arg.end && event.end > arg.start
+    );
+
+    setVisibleEvents(events)
+    console.log('Visible events:', events);
+  };
+
+  useEffect(() => {
+    if (!calendarRef.current || !calendarRange.start || !calendarRange.end) return;
+
+    const api = calendarRef.current.getApi();
+    const events = api.getEvents().filter(
+      (event) => event.start < calendarRange.end && event.end > calendarRange.start
+    );
+
+    setVisibleEvents(events);
+  }, [wcifSchedule]);
+
+
+  const renderedActivityCodes = useMemo(() => {
+    const codes = visibleEvents.map(
+      (event) => event.extendedProps[FC_ACTIVITY_ATTACHMENT]?.activityCode
+    ).filter(Boolean);
+
+    console.log('renderedActivityCodes updated:', codes)
+    return codes
+  }, [visibleEvents, wcifSchedule]);
 
   const fcActivities = useMemo(() => (
     wcifRoom?.activities.map((activity) => {
@@ -397,6 +436,7 @@ function EditActivities({
                       </Ref>
                       <ActivityPicker
                         wcifEvents={wcifEvents}
+                        renderedActivityCodes={renderedActivityCodes}
                         wcifRoom={wcifRoom}
                         listRef={activityPickerRef}
                       />
@@ -459,6 +499,9 @@ function EditActivities({
                     .
                   </Container>
                   <FullCalendar
+                    // For querying properties of the rendered calendar
+                    ref={calendarRef}
+                    datesSet={handleDatesSet}
                     // plugins for the basic FullCalendar implementation.
                     //   - timeGridPlugin: Display days as vertical grid
                     //   - luxonPlugin: Support timezones
