@@ -21,6 +21,8 @@ class ApplicationController < ActionController::Base
     ::NewRelic::Agent.add_custom_attributes(HTTP_USER_AGENT: request.user_agent)
   end
 
+  rescue_from ActionController::InvalidAuthenticityToken, with: :handle_invalid_auth_token
+
   def self.locale_counts
     @@locale_counts
   end
@@ -134,5 +136,10 @@ class ApplicationController < ActionController::Base
     def store_user_location!
       # :user is the scope we are authenticating
       store_location_for(:user, request.fullpath)
+    end
+
+    def handle_invalid_auth_token
+      reset_session
+      redirect_back fallback_location: root_path, alert: I18n.t('devise.sessions.expired')
     end
 end
