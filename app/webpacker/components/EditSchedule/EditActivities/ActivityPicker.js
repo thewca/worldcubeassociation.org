@@ -13,6 +13,7 @@ import { activityToFcTitle, buildPartialActivityFromCode } from '../../../lib/ut
 
 function ActivityPicker({
   wcifEvents,
+  renderedActivityCodes,
   wcifRoom,
   listRef,
 }) {
@@ -31,6 +32,7 @@ function ActivityPicker({
                 {event.rounds.map((round) => (
                   <PickerRow
                     key={round.id}
+                    renderedActivityCodes={renderedActivityCodes}
                     wcifRoom={wcifRoom}
                     wcifEvent={event}
                     wcifRound={round}
@@ -51,6 +53,7 @@ function ActivityPicker({
 
 function PickerRow({
   wcifRoom,
+  renderedActivityCodes,
   wcifEvent,
   wcifRound,
 }) {
@@ -61,6 +64,7 @@ function PickerRow({
       <ActivityLabel
         key={n}
         wcifRoom={wcifRoom}
+        renderedActivityCodes={renderedActivityCodes}
         activityCode={`${wcifRound.id}-a${n + 1}`}
       />
     ));
@@ -69,6 +73,7 @@ function PickerRow({
   return (
     <ActivityLabel
       wcifRoom={wcifRoom}
+      renderedActivityCodes={renderedActivityCodes}
       activityCode={wcifRound.id}
     />
   );
@@ -76,6 +81,7 @@ function PickerRow({
 
 function ActivityLabel({
   wcifRoom,
+  renderedActivityCodes,
   activityCode,
 }) {
   const usedActivityCodes = useMemo(
@@ -83,7 +89,7 @@ function ActivityLabel({
     [wcifRoom.activities],
   );
 
-  const isEnabled = !usedActivityCodes.includes(activityCode);
+  const isEnabled = !renderedActivityCodes.includes(activityCode);
 
   const partialActivity = buildPartialActivityFromCode(activityCode);
 
