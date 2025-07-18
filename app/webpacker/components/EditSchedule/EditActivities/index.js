@@ -501,6 +501,7 @@ function EditActivities({
                   <FullCalendar
                     // For querying properties of the rendered calendar
                     ref={calendarRef}
+                    // For triggering logic that depends on the initial render of the calendar
                     datesSet={handleDatesSet}
                     // plugins for the basic FullCalendar implementation.
                     //   - timeGridPlugin: Display days as vertical grid

@@ -1,6 +1,5 @@
 import React, { useMemo } from 'react';
 import {
-  Header,
   Label,
   List,
   Popup,
@@ -48,7 +47,6 @@ function ActivityPicker({
         Want to add a custom activity such as lunch or registration?
         Click and select a timeframe on the calendar!
       </p>
-      <Header>Orphaned Events</Header>
     </>
   );
 }
