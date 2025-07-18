@@ -4,8 +4,8 @@ require 'csv'
 
 class AdminController < ApplicationController
   before_action :authenticate_user!
-  before_action -> { redirect_to_root_unless_user(:can_admin_results?) }, except: %i[all_voters leader_senior_voters]
-  before_action -> { redirect_to_root_unless_user(:can_see_eligible_voters?) }, only: %i[all_voters leader_senior_voters]
+  before_action -> { redirect_to_root_unless_user(:can_admin_results?) }, except: %i[all_voters leader_senior_voters regional_voters]
+  before_action -> { redirect_to_root_unless_user(:can_see_eligible_voters?) }, only: %i[all_voters leader_senior_voters regional_voters]
 
   def index
   end
@@ -239,6 +239,10 @@ class AdminController < ApplicationController
 
   def leader_senior_voters
     voters User.leader_senior_voters, "leader-senior-wca-voters"
+  end
+
+  def regional_voters
+    voters User.regional_voters, "regional-wca-voters"
   end
 
   private def voters(users, filename)
