@@ -17,7 +17,7 @@ class TicketCommentsController < ApplicationController
     ticket = Ticket.find(params.require(:ticket_id))
     acting_stakeholder = TicketStakeholder.find(params.require(:acting_stakeholder_id))
 
-    return head :bad_request unless ticket.user_stakeholders(current_user).pluck(:id).include?(acting_stakeholder.id)
+    return head :bad_request unless ticket.user_stakeholders(current_user).include?(acting_stakeholder)
     return head :unauthorized unless acting_stakeholder.actions_allowed.include?(:add_comment)
 
     comment = TicketComment.create!(
