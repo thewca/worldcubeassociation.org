@@ -46,7 +46,7 @@ class UsersController < ApplicationController
     end
   end
 
-  def show
+  def show_for_merge
     user = User.find(params.require(:id))
 
     render status: :ok, json: user.as_json(
@@ -57,8 +57,8 @@ class UsersController < ApplicationController
   end
 
   def merge
-    to_user = User.find(params.require(:toUserId))
     from_user = User.find(params.require(:fromUserId))
+    to_user = User.find(params.require(:toUserId))
 
     return render status: :bad_request, json: { error: "Cannot merge user with itself" } if to_user.id == from_user.id
 
@@ -76,9 +76,8 @@ class UsersController < ApplicationController
 
     return render status: :bad_request, json: { error: "Cannot merge users with both having a WCA ID" } if to_user.wca_id.present? && from_user.wca_id.present?
 
-    ActiveRecord::Base.transaction do
-      from_user.transfer_data_to(to_user)
-    end
+    from_user.transfer_data_to(to_user)
+
     render status: :ok, json: { success: true }
   end
 
