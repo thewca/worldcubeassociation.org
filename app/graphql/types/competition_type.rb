@@ -20,7 +20,9 @@ module Types
 
     def persons
       authorized = context[:current_user]&.can_manage_competition?(object)
-      object.persons_wcif(authorized: authorized)
+      Rails.cache.fetch ["persons-wcif", authorized, object] do
+        object.persons_wcif(authorized: authorized)
+      end
     end
 
     def series
