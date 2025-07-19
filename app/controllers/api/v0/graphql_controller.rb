@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class Api::V0::GraphqlController < Api::V0::ApiController
-
   def execute
     variables = prepare_variables(params[:variables])
     query = params[:query]
