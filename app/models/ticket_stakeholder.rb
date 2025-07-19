@@ -22,10 +22,6 @@ class TicketStakeholder < ApplicationRecord
     where(stakeholder_type: "UserGroup", stakeholder_id: group_ids)
   }
 
-  DEFAULT_SERIALIZE_OPTIONS = {
-    methods: %w[stakeholder],
-  }.freeze
-
   def user_group_stakeholder?
     stakeholder_type == "UserGroup"
   end
@@ -33,6 +29,15 @@ class TicketStakeholder < ApplicationRecord
   def user_stakeholder?
     stakeholder_type == "User"
   end
+
+  def actions_allowed
+    ticket.metadata.actions_allowed_for(self)
+  end
+
+  DEFAULT_SERIALIZE_OPTIONS = {
+    include: %w[stakeholder],
+    methods: %w[actions_allowed],
+  }.freeze
 
   def serializable_hash(options = nil)
     json = super(DEFAULT_SERIALIZE_OPTIONS.merge(options || {}))
