@@ -15,8 +15,8 @@ class TicketsCompetitionResult < ApplicationRecord
 
   def actions_allowed_for(ticket_stakeholder)
     if ticket_stakeholder.stakeholder == UserGroup.teams_committees_group_wrt
-      actions = [:add_comment]
-      actions << :update_status unless posted?
+      actions = [TicketLog.action_types[:create_comment]]
+      actions << TicketLog.action_types[:update_status] unless posted?
       actions
     else
       []
@@ -50,7 +50,7 @@ class TicketsCompetitionResult < ApplicationRecord
 
     TicketLog.create!(
       ticket_id: ticket.id,
-      action_type: TicketLog.action_types[:status_updated],
+      action_type: TicketLog.action_types[:update_status],
       action_value: ticket_metadata.status,
       acting_user_id: submitted_delegate.id,
       acting_stakeholder_id: submitted_delegate_stakeholder.id,
