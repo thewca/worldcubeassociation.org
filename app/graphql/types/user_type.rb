@@ -8,8 +8,8 @@ module Types
     field :wcaId, String, null: true
     field :countryIso2, String, null: false
     field :gender, String, null: false
-    field :birthdate, String, null: false
-    field :email, String, null: false
+    field :birthdate, String, null: false, require_authorization: true
+    field :email, String, null: false, require_authorization: true
     field :avatar, Types::UserAvatarType, null: true
     field :roles, [String], null: false
     field :registration, Types::RegistrationType, null: false
