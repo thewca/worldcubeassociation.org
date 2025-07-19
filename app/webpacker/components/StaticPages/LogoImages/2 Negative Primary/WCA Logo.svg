@@ -26,9 +26,9 @@
      inkscape:pageopacity="0.0"
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
-     inkscape:zoom="1.4142136"
-     inkscape:cx="-190.56528"
-     inkscape:cy="282.48916"
+     inkscape:zoom="11.313709"
+     inkscape:cx="198.56442"
+     inkscape:cy="253.71875"
      inkscape:window-width="2560"
      inkscape:window-height="1369"
      inkscape:window-x="-8"
@@ -84,12 +84,13 @@
      fill="white"
      id="path12" />
   <path
-     style="baseline-shift:baseline;display:inline;overflow:visible;vector-effect:none;fill:#000000;stroke-miterlimit:10;enable-background:accumulate;stop-color:#000000;stop-opacity:1;opacity:1"
+     style="baseline-shift:baseline;display:inline;overflow:visible;vector-effect:none;fill:#ffffff;stroke-miterlimit:10;enable-background:accumulate;stop-color:#000000;stop-opacity:1;opacity:1"
      d="m 242.80469,231.2207 c -6.16372,0 -11.18946,5.02486 -11.18946,11.18946 0,6.16459 5.02589,11.1875 11.18946,11.1875 6.16444,0 11.1875,-5.02291 11.1875,-11.1875 0,-6.1646 -5.02291,-11.18946 -11.1875,-11.18946 z m 0,2.5 c 4.8134,0 8.6875,3.87605 8.6875,8.68946 0,4.8134 -3.87394,8.6875 -8.6875,8.6875 -4.81244,0 -8.68946,-3.8741 -8.68946,-8.6875 0,-4.81341 3.87717,-8.68946 8.68946,-8.68946 z"
      id="path13" />
   <path
      d="m 242.172,241.506 c 0.632,0 1.084,-0.09 1.355,-0.361 0.271,-0.181 0.452,-0.633 0.452,-1.175 0,-0.542 -0.181,-0.903 -0.452,-1.174 -0.271,-0.181 -0.723,-0.362 -1.355,-0.362 h -1.265 v 3.072 m 0,6.505 h -2.981 v -11.564 h 4.607 c 1.536,0 2.621,0.271 3.343,0.813 0.723,0.542 1.085,1.355 1.085,2.439 0,1.084 -0.181,1.355 -0.543,1.897 -0.361,0.452 -0.903,0.814 -1.716,1.085 0.452,0.09 0.813,0.271 1.084,0.632 0.271,0.362 0.632,0.813 0.994,1.536 l 1.626,3.253 h -3.162 l -1.446,-2.892 c -0.271,-0.542 -0.542,-0.993 -0.903,-1.174 -0.271,-0.181 -0.723,-0.361 -1.175,-0.361 h -0.813"
      fill="#000000"
      id="path14"
-     sodipodi:nodetypes="ccscscccccscsccccccscsc" />
+     sodipodi:nodetypes="ccscscccccscsccccccscsc"
+     style="fill:#ffffff" />
 </svg>
