@@ -13,7 +13,7 @@ class TicketsCompetitionResult < ApplicationRecord
   has_one :ticket, as: :metadata
   belongs_to :competition
 
-  def actions_allowed(ticket_stakeholder)
+  def actions_allowed_for(ticket_stakeholder)
     if ticket_stakeholder.stakeholder == UserGroup.teams_committees_group_wrt
       actions = [:add_comment]
       actions << :update_status unless posted?

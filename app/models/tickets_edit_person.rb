@@ -11,7 +11,9 @@ class TicketsEditPerson < ApplicationRecord
   has_one :ticket, as: :metadata
   has_many :tickets_edit_person_fields
 
-  def actions_allowed
+  def actions_allowed_for(ticket_stakeholder)
+    return [] if ticket_stakeholder.nil?
+
     %i[add_comment update_status]
   end
 
