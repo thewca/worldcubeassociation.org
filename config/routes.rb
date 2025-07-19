@@ -4,8 +4,7 @@ require 'sidekiq/web'
 require 'sidekiq/cron/web'
 
 Rails.application.routes.draw do
-  mount GraphiQL::Rails::Engine, at: "/graphiql", graphql_path: "/api/wcif/graphql" if Rails.env.development?
-  post '/api/wcif/graphql', to: 'graphql#execute'
+  mount GraphiQL::Rails::Engine, at: "/graphiql", graphql_path: "/api/v0/wcif/graphql" if Rails.env.development?
   use_doorkeeper do
     controllers applications: 'oauth/applications'
   end
@@ -391,6 +390,7 @@ Rails.application.routes.draw do
       get '/search/persons' => 'api#persons_search', as: :search_persons
       get '/search/regulations' => 'api#regulations_search'
       get '/search/incidents' => 'api#incidents_search'
+      post '/wcif/graphql', to: 'graphql#execute'
       get '/users' => 'users#show_users_by_id'
       post '/users' => 'users#show_users_by_id'
       get '/users/me' => 'users#show_me'
