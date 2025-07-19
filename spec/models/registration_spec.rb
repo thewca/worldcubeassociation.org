@@ -675,9 +675,10 @@ RSpec.describe Registration do
     it 'doesnt auto accept a competitor who gets refunded' do
       expect(reg.competing_status).to eq('pending')
 
+      create(:registration_payment, :skip_create_hook, registration: reg, competition: auto_accept_comp)
       create(:registration_payment, :refund, :skip_create_hook, registration: reg, competition: auto_accept_comp)
 
-      reg.attempt_auto_accept(:live)
+      reg.reload.attempt_auto_accept(:live)
       expect(reg.reload.competing_status).to eq('pending')
       expect(reg.registration_history.last[:changed_attributes][:auto_accept_failure_reasons]).to eq("-7001")
     end

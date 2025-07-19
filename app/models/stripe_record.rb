@@ -27,7 +27,7 @@ class StripeRecord < ApplicationRecord
     legacy_payment_intent_registered: "payment_intent_registered",
     legacy_success: "success",
     legacy_failure: "failure",
-  }
+  }, prefix: true
 
   # Actual values are according to Stripe API documentation as of 2023-03-12.
   enum :stripe_record_type, {
@@ -182,17 +182,32 @@ class StripeRecord < ApplicationRecord
     amount_stripe_denomination.to_i
   end
 
-  def self.create_from_api(api_record, parameters, account_id, parent_record = nil)
-    StripeRecord.create!(
-      stripe_record_type: api_record.object,
-      parameters: parameters,
-      stripe_id: api_record.id,
-      amount_stripe_denomination: api_record.amount,
-      currency_code: api_record.currency,
-      stripe_status: api_record.status,
-      account_id: account_id,
-      parent_record: parent_record,
-    )
+  def self.create_or_update_from_api(api_record, parameters = nil, account_id = nil, parent_record = nil)
+    existing_record = StripeRecord.find_by(stripe_id: api_record.id)
+    new_record = nil
+
+    if existing_record.present?
+      existing_record.update!(
+        stripe_record_type: api_record.object,
+        stripe_id: api_record.id,
+        amount_stripe_denomination: api_record.amount,
+        currency_code: api_record.currency,
+        stripe_status: api_record.status,
+      )
+    else
+      new_record = StripeRecord.create!(
+        stripe_record_type: api_record.object,
+        parameters: parameters,
+        stripe_id: api_record.id,
+        amount_stripe_denomination: api_record.amount,
+        currency_code: api_record.currency,
+        stripe_status: api_record.status,
+        account_id: account_id,
+        parent_record: parent_record,
+      )
+    end
+
+    new_record || existing_record
   end
 
   private def stripe_client
