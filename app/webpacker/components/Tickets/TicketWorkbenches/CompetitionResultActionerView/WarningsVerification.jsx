@@ -11,7 +11,12 @@ export default function WarningsVerification({ ticketDetails, updateStatus }) {
     data: validationOutput, isPending, isError, error,
   } = useQuery({
     queryKey: ['ticketCompetitionResultValidationOutput', id],
-    queryFn: () => runValidatorsForCompetitionList(metadata.competition_id, ALL_VALIDATORS, false),
+    queryFn: () => runValidatorsForCompetitionList(
+      metadata.competition_id,
+      ALL_VALIDATORS,
+      false,
+      false,
+    ),
   });
 
   return (

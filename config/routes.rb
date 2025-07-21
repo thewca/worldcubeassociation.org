@@ -288,13 +288,14 @@ Rails.application.routes.draw do
   end
 
   get '/regulations' => 'regulations#show', id: 'index'
-  get '/regulations/wca-regulations-and-guidelines', to: redirect('https://regulations.worldcubeassociation.org/wca-regulations-and-guidelines.pdf', status: 302)
-  get '/regulations/full/wca-regulations-and-guidelines.merged', to: redirect('https://regulations.worldcubeassociation.org/wca-regulations-and-guidelines.merged.pdf', status: 302)
+  get '/regulations/wca-regulations', to: redirect('https://regulations.worldcubeassociation.org/wca-regulations.pdf', status: 302)
+  get '/regulations/wca-regulations-and-guidelines', to: redirect('https://regulations.worldcubeassociation.org/wca-regulations.pdf', status: 302)
+  get '/regulations/full/wca-regulations-and-guidelines.merged', to: redirect('https://regulations.worldcubeassociation.org/wca-regulations.pdf', status: 302)
   get '/regulations/about' => 'regulations#about'
   get '/regulations/countries' => 'regulations#countries'
   get '/regulations/scrambles' => 'regulations#scrambles'
-  get '/regulations/guidelines' => 'regulations#guidelines'
-  get '/regulations/full' => 'regulations#full'
+  get '/regulations/guidelines' => 'regulations#show'
+  get '/regulations/full' => 'regulations#show'
   get '/regulations/translations' => 'regulations#translations'
   get '/regulations/translations/:language' => 'regulations_translations#translated_regulation'
   get '/regulations/translations/:language/guidelines' => 'regulations_translations#translated_guidelines'
