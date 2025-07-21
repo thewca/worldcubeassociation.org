@@ -189,4 +189,10 @@ class TicketsController < ApplicationController
       new_wca_id: person&.reload&.wca_id, # Reload to get the new wca_id
     }
   end
+
+  def imported_temporary_results
+    competition = Competition.find(params.require(:competition_id))
+
+    render json: competition.inbox_results
+  end
 end
