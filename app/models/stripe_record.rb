@@ -27,7 +27,7 @@ class StripeRecord < ApplicationRecord
     legacy_payment_intent_registered: "payment_intent_registered",
     legacy_success: "success",
     legacy_failure: "failure",
-  }, prefix: true
+  }
 
   # Actual values are according to Stripe API documentation as of 2023-03-12.
   enum :stripe_record_type, {

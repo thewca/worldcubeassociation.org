@@ -412,7 +412,7 @@ class RegistrationsController < ApplicationController
           return head :not_found
         end
 
-        if stored_record.stripe_status_succeeded?
+        if stored_record.succeeded?
           stored_holder.with_lock do
             already_refunded = original_payment.refunding_registration_payments.where(receipt: stored_record).any?
 
