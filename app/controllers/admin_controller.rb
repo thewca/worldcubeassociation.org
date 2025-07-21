@@ -33,7 +33,7 @@ class AdminController < ApplicationController
   end
 
   def check_competition_results
-    @competition_id = params.require(:competition_id)
+    @competition = competition_from_params
   end
 
   def clear_results_submission
