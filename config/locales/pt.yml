@@ -1064,10 +1064,10 @@ pt:
             O site da WCA suporta %{two_factor_link} usando uma password de
             utilização única:
           options:
-            #original_hash: 4f9dcb8
+            #original_hash: a4b35b6
             app: >-
-              gerada por uma aplicação 2FA no seu smartphone (como Authy ou
-              Google Authenticator, por exemplo).
+              gerada por uma aplicação 2FA no seu smartphone (como Authy, Google
+              Authenticator ou iOS Passwords).
             #original_hash: 34a7572
             recovery: tirados dos códigos de recuperação gerados ao ativar o 2FA.
             #original_hash: eaee403
@@ -1101,11 +1101,11 @@ pt:
             ao entrar. São descritos abaixo.
           #original_hash: 4442f0e
           dedicated_app: Usando uma aplicação de dois fatores dedicada
-          #original_hash: a61c7d2
+          #original_hash: a87f79f
           dedicated_app_desc_html: >-
             O WST recomenda o uso de%{authy} no(s) seu(s) dispositivo(s) para
             obter a sua password de utilização única ao entrar.<br/>Outras
-            alternativas incluem %{google} e %{microsoft}.
+            alternativas incluem %{google}, %{apple} e %{microsoft}.
           #original_hash: f1b2ec2
           scan_qrcode_html: >-
             Digitalize o código QR abaixo quando solicitado na sua aplicação 2FA
@@ -1512,7 +1512,7 @@ pt:
     contacts:
       #original_hash: 4ef2aad
       title: Formulário de Contacto WCA
-      #original_hash: bddd3ea
+      #original_hash: ab97069
       faq_note_html: >-
         Antes de colocar uma questão, pode dar uma olhada nas nossas <a
         href="/faq">Perguntas Frequentes</a>! Se desejar entrar em contacto com
