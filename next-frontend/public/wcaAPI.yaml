@@ -182,7 +182,7 @@ paths:
         - name: parentGroupId
           in: query
           schema:
-            type: string
+            type: number
           description: Filter by parent Group
         - name: isLead
           in: query
