@@ -726,9 +726,8 @@ en:
       db_results_export: "Results Export"
       db_dev_export: "Developer Export"
       regulations: "Regulations"
-      regulations_full: "Regulations & Guidelines"
+      regulations_full: "Regulations"
       about_regulations: "About the Regulations"
-      guidelines: "Guidelines"
       scrambles: "Scrambles"
       history: "History"
       translations: "Translations"
@@ -2639,7 +2638,7 @@ en:
       advanced_search: "Advanced search"
       incidents: "Incidents"
       posts: "Posts"
-      regulations_and_guidelines: "Regulations and Guidelines"
+      regulations_and_guidelines: "Regulations"
       #context: Used in the homepage's omnisearch
       search_for: "Search for <b>%{search_string}</b>"
       #context: Used when there are no search results. E.g. "No people found for *Sherlock Holmes*".
@@ -2649,7 +2648,7 @@ en:
         people: "No people found for"
         posts: "No posts found for"
         incidents: "No incidents found for"
-        regulations_and_guidelines: "No Regulations or Guidelines found for"
+        regulations_and_guidelines: "No Regulations found for"
   #context: Incident log
   incidents_log:
     #context: disclaimer displayed to inform incidents are only in English
@@ -2661,8 +2660,7 @@ en:
     panel1:
       title: "Regulations"
       content1_html: 'All competitions must follow the <a href="/regulations/">WCA Regulations</a>. It is important for competitors to read these regulations before attending their first competition.'
-      content2_html: 'The WCA Regulations are supplemented by the <a href="/regulations/guidelines.html">WCA Guidelines</a>, which contain additional clarifications and explanations.'
-      content3_html: 'Important decisions about incidents that happened in competitions that were resolved by the WCA Regulations Committee are found in the <a href="/incidents">Incidents Log</a>.'
+      content2_html: 'Important decisions about incidents that happened in competitions that were resolved by the WCA Regulations Committee are found in the <a href="/incidents">Incidents Log</a>.'
     panel2:
       title: "Translations"
       content1_html: 'The WCA Regulations are not only available in English, but WCA members have translated them into several languages: <a href="/regulations/translations/">Translations</a>.'
@@ -2676,7 +2674,7 @@ en:
       content2_html: 'This document contains important information and should be read by every competition organizer.'
   #context: Translations of the regulations
   regulations_translations:
-    title: 'WCA Regulations and Guidelines: Translations'
+    title: 'WCA Regulations: Translations'
     paragraph1: 'If you speak a language other than English, you may find these translations useful.'
     paragraph2: 'Please note that translations do not have any official status, even though they are provided on the WCA website: they do not come with any guarantees. If there is a difference between a translation and the (current official) English version, the English version must be used.'
     translations: 'Translations'
