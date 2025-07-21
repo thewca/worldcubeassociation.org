@@ -183,31 +183,19 @@ class StripeRecord < ApplicationRecord
   end
 
   def self.create_or_update_from_api(api_record, parameters = nil, account_id = nil, parent_record = nil)
-    existing_record = StripeRecord.find_by(stripe_id: api_record.id)
-    new_record = nil
-
-    if existing_record.present?
-      existing_record.update!(
-        stripe_record_type: api_record.object,
+    StripeRecord.find_or_initialize_by(stripe_id: api_record.id) do |new_record|
+      new_record.parameters = parameters
+      new_record.account_id = account_id
+      new_record.parent_record = parent_record
+      new_record.stripe_record_type = api_record.object
+    end.tap do |record|
+      record.update!(
         stripe_id: api_record.id,
         amount_stripe_denomination: api_record.amount,
         currency_code: api_record.currency,
         stripe_status: api_record.status,
-      )
-    else
-      new_record = StripeRecord.create!(
-        stripe_record_type: api_record.object,
-        parameters: parameters,
-        stripe_id: api_record.id,
-        amount_stripe_denomination: api_record.amount,
-        currency_code: api_record.currency,
-        stripe_status: api_record.status,
-        account_id: account_id,
-        parent_record: parent_record,
       )
     end
-
-    new_record || existing_record
   end
 
   private def stripe_client
