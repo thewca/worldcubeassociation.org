@@ -670,7 +670,7 @@ GEM
       execjs
       railties (>= 3.2)
       tilt
-    recaptcha (5.19.0)
+    recaptcha (5.20.0)
     redcarpet (3.6.1)
     redis (5.4.0)
       redis-client (>= 0.22.0)
@@ -1372,7 +1372,7 @@ CHECKSUMS
   rb_sys (0.9.115) sha256=4696a623b89131f4a12bd9e38710add1c64b478dc3d2e9275f61a65f42f743ec
   rdoc (6.14.1) sha256=905efa796cd296ef252af4fb31fe41c073dee894de6aad715821f335c632516b
   react-rails (3.2.1) sha256=2235db0b240517596b1cb3e26177ab5bc64d3a56579b0415ee242b1691f81f64
-  recaptcha (5.19.0) sha256=b69c021a5b788da06901d2c95ab86f10a8634e6496343096cc5167f0318b2a39
+  recaptcha (5.20.0) sha256=d918bb3b18bcb4517fde1908a2d259863c275ccfcf4f47c78e1d4d96709dab47
   redcarpet (3.6.1) sha256=d444910e6aa55480c6bcdc0cdb057626e8a32c054c29e793fa642ba2f155f445
   redis (5.4.0) sha256=798900d869418a9fc3977f916578375b45c38247a556b61d58cba6bb02f7d06b
   redis-client (0.25.0) sha256=927dfd07a37346fd9111d80cac3199d2a02b4c084c79260acf7a5057bd742910
