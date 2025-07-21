@@ -33,16 +33,7 @@ class AdminController < ApplicationController
   end
 
   def check_competition_results
-    with_results_validator do
-      @competition = competition_from_params
-    end
-  end
-
-  def with_results_validator
-    # For this view, we just build an empty validator: the WRT will decide what
-    # to actually run (by default all validators will be selected).
-    @results_validator = ResultsValidators::CompetitionsResultsValidator.new(check_real_results: true)
-    yield if block_given?
+    @competition_id = params.require(:competition_id)
   end
 
   def clear_results_submission
