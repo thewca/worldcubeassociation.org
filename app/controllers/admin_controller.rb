@@ -4,8 +4,8 @@ require 'csv'
 
 class AdminController < ApplicationController
   before_action :authenticate_user!
-  before_action -> { redirect_to_root_unless_user(:can_admin_results?) }, except: %i[all_voters leader_senior_voters]
-  before_action -> { redirect_to_root_unless_user(:can_see_eligible_voters?) }, only: %i[all_voters leader_senior_voters]
+  before_action -> { redirect_to_root_unless_user(:can_admin_results?) }, except: %i[all_voters leader_senior_voters regional_voters]
+  before_action -> { redirect_to_root_unless_user(:can_see_eligible_voters?) }, only: %i[all_voters leader_senior_voters regional_voters]
 
   def index
   end
@@ -28,7 +28,6 @@ class AdminController < ApplicationController
 
   def new_results
     @competition = competition_from_params
-    @upload_json = UploadJson.new
     @results_validator = ResultsValidators::CompetitionsResultsValidator.create_full_validation
     @results_validator.validate(@competition.id)
   end
@@ -180,27 +179,6 @@ class AdminController < ApplicationController
     end
   end
 
-  def create_results
-    @competition = competition_from_params
-
-    # Do json analysis + insert record in db, then redirect to check inbox
-    # (and delete existing record if any)
-    upload_json_params = params.require(:upload_json).permit(:results_file)
-    upload_json_params[:competition_id] = @competition.id
-    @upload_json = UploadJson.new(upload_json_params)
-
-    # This makes sure the json structure is valid!
-    if @upload_json.import_to_inbox
-      @competition.update!(results_submitted_at: Time.now) if @competition.results_submitted_at.nil?
-      flash[:success] = "JSON file has been imported."
-      redirect_to competition_admin_upload_results_edit_path
-    else
-      @results_validator = ResultsValidators::CompetitionsResultsValidator.create_full_validation
-      @results_validator.validate(@competition.id)
-      render :new_results
-    end
-  end
-
   def fix_results
     @result_selector = FixResultsSelector.new(
       person_id: params[:person_id],
@@ -261,6 +239,10 @@ class AdminController < ApplicationController
 
   def leader_senior_voters
     voters User.leader_senior_voters, "leader-senior-wca-voters"
+  end
+
+  def regional_voters
+    voters User.regional_voters, "regional-wca-voters"
   end
 
   private def voters(users, filename)
@@ -368,34 +350,5 @@ class AdminController < ApplicationController
 
     @results_by_competition = all_results.group_by(&:competition_id)
                                          .transform_keys { |id| Competition.find(id) }
-  end
-
-  def reassign_wca_id
-    @reassign_wca_id = ReassignWcaId.new
-    @reassign_wca_id_validated = false
-  end
-
-  def validate_reassign_wca_id
-    reassign_params = params.require(:reassign_wca_id).permit(:account1, :account2)
-    @reassign_wca_id = ReassignWcaId.new(reassign_params)
-    if @reassign_wca_id.valid?
-      @reassign_wca_id_validated = true
-    else
-      flash.now[:danger] = "Error reassigning WCA ID"
-    end
-    render 'reassign_wca_id'
-  end
-
-  def do_reassign_wca_id
-    reassign_params = params.require(:reassign_wca_id).permit(:account1, :account2)
-    @reassign_wca_id = ReassignWcaId.new(reassign_params)
-    if @reassign_wca_id.do_reassign_wca_id
-      flash.now[:success] = "Successfully reassigned #{@reassign_wca_id.account1_user.wca_id} from account #{@reassign_wca_id.account1_user.id} to #{@reassign_wca_id.account2_user.id}!"
-      @reassign_wca_id = ReassignWcaId.new
-    else
-      @reassign_wca_id_validated = false
-      flash.now[:danger] = "Error reassigning WCA ID"
-    end
-    render 'reassign_wca_id'
   end
 end

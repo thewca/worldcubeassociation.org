@@ -112,12 +112,6 @@ FactoryBot.define do
       end
     end
 
-    trait :unpaid do
-      after(:create) do |registration|
-        FactoryBot.create(:registration_payment, registration: registration, user: registration.user)
-      end
-    end
-
     trait :paid_pending do
       competing_status { Registrations::Helper::STATUS_PENDING }
       paid

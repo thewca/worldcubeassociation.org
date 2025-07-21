@@ -11,11 +11,10 @@ class TicketsEditPerson < ApplicationRecord
   has_one :ticket, as: :metadata
   has_many :tickets_edit_person_fields
 
-  def action_user_groups(action)
-    case action
-    when :update_status
-      [UserGroup.teams_committees_group_wrt]
-    end
+  def actions_allowed_for(ticket_stakeholder)
+    return [] if ticket_stakeholder.nil?
+
+    %i[add_comment update_status]
   end
 
   def self.create_ticket(wca_id, changes_requested, requester)
@@ -53,8 +52,7 @@ class TicketsEditPerson < ApplicationRecord
 
       TicketLog.create!(
         ticket_id: ticket.id,
-        action_type: TicketLog.action_types[:status_updated],
-        action_value: TicketsEditPerson.statuses[:open],
+        action_type: TicketLog.action_types[:created],
         acting_user_id: requester.id,
         acting_stakeholder_id: requester_stakeholder.id,
       )

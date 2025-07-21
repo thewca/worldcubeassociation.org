@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_06_04_143939) do
+ActiveRecord::Schema[7.2].define(version: 2025_07_10_084311) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -461,6 +461,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_06_04_143939) do
     t.integer "auto_close_threshold"
     t.boolean "auto_accept_registrations", default: false, null: false
     t.integer "auto_accept_disable_threshold"
+    t.integer "auto_accept_preference", default: 0, null: false
     t.index ["cancelled_at"], name: "index_competitions_on_cancelled_at"
     t.index ["country_id"], name: "index_Competitions_on_countryId"
     t.index ["end_date"], name: "index_competitions_on_end_date"
@@ -578,6 +579,16 @@ ActiveRecord::Schema[7.2].define(version: 2025_06_04_143939) do
     t.integer "wrc_secondary_user_id"
     t.datetime "reminder_sent_at", precision: nil
     t.index ["competition_id"], name: "index_delegate_reports_on_competition_id", unique: true
+  end
+
+  create_table "duplicate_checker_job_runs", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "competition_id", null: false
+    t.datetime "start_time"
+    t.datetime "end_time"
+    t.string "run_status", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["competition_id"], name: "index_duplicate_checker_job_runs_on_competition_id"
   end
 
   create_table "eligible_country_iso2s_for_championship", id: false, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
@@ -923,6 +934,19 @@ ActiveRecord::Schema[7.2].define(version: 2025_06_04_143939) do
     t.index ["show_on_homepage", "sticky", "created_at"], name: "idx_show_wr_sticky_created_at"
     t.index ["slug"], name: "index_posts_on_slug", unique: true
     t.index ["sticky", "created_at"], name: "index_posts_on_world_readable_and_sticky_and_created_at"
+  end
+
+  create_table "potential_duplicate_persons", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.bigint "duplicate_checker_job_run_id", null: false
+    t.integer "original_user_id", null: false
+    t.integer "duplicate_person_id", null: false
+    t.string "name_matching_algorithm", null: false
+    t.integer "score", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["duplicate_checker_job_run_id"], name: "idx_on_duplicate_checker_job_run_id_12b05a3796"
+    t.index ["duplicate_person_id"], name: "index_potential_duplicate_persons_on_duplicate_person_id"
+    t.index ["original_user_id"], name: "index_potential_duplicate_persons_on_original_user_id"
   end
 
   create_table "preferred_formats", id: false, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
@@ -1333,6 +1357,15 @@ ActiveRecord::Schema[7.2].define(version: 2025_06_04_143939) do
     t.index ["metadata_type", "metadata_id"], name: "index_tickets_on_metadata"
   end
 
+  create_table "tickets_competition_result", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "status", null: false
+    t.string "competition_id", null: false
+    t.text "delegate_message", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["competition_id"], name: "index_tickets_competition_result_on_competition_id"
+  end
+
   create_table "tickets_edit_person", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "status", null: false
     t.string "wca_id", null: false
@@ -1524,6 +1557,9 @@ ActiveRecord::Schema[7.2].define(version: 2025_06_04_143939) do
   add_foreign_key "oauth_openid_requests", "oauth_access_grants", column: "access_grant_id", on_delete: :cascade
   add_foreign_key "payment_intents", "users", column: "initiated_by_id"
   add_foreign_key "paypal_records", "paypal_records", column: "parent_record_id"
+  add_foreign_key "potential_duplicate_persons", "duplicate_checker_job_runs"
+  add_foreign_key "potential_duplicate_persons", "persons", column: "duplicate_person_id"
+  add_foreign_key "potential_duplicate_persons", "users", column: "original_user_id"
   add_foreign_key "regional_records_lookup", "results", on_update: :cascade, on_delete: :cascade
   add_foreign_key "registration_history_changes", "registration_history_entries"
   add_foreign_key "results", "rounds"
@@ -1541,6 +1577,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_06_04_143939) do
   add_foreign_key "ticket_comments", "users", column: "acting_user_id"
   add_foreign_key "ticket_logs", "ticket_stakeholders", column: "acting_stakeholder_id"
   add_foreign_key "ticket_logs", "users", column: "acting_user_id"
+  add_foreign_key "tickets_competition_result", "competitions"
   add_foreign_key "user_avatars", "users"
   add_foreign_key "user_groups", "user_groups", column: "parent_group_id"
   add_foreign_key "user_roles", "user_groups", column: "group_id"
