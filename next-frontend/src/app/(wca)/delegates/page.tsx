@@ -1,6 +1,3 @@
-"use client";
-
-import { useMemo } from "react";
 import {
   Center,
   Container,
@@ -9,46 +6,34 @@ import {
   Tabs,
   VStack,
 } from "@chakra-ui/react";
-import { useT } from "@/lib/i18n/useI18n";
-import { useQuery } from "@tanstack/react-query";
-import useAPI from "@/lib/wca/useAPI";
-import Loading from "@/components/ui/loading";
+import { getT } from "@/lib/i18n/get18n";
+import {
+  getDelegateRegions,
+  getDelegatesInGroups,
+} from "@/lib/wca/roles/delegateRegions";
 import { Prose } from "@/components/ui/prose";
 import { components } from "@/types/openapi";
 import Link from "next/link";
 import UserBadge from "@/components/UserBadge";
 import I18nHTMLTranslate from "@/components/I18nHTMLTranslate";
 import _ from "lodash";
+import Errored from "@/components/ui/errored";
 
-export default function TeamsCommitteesPage() {
-  const I18n = useT();
+export default async function TeamsCommitteesPage() {
+  const { t } = await getT();
 
-  const api = useAPI();
+  const { data: delegateGroups, error } = await getDelegateRegions();
 
-  const { data: delegateRequest, isLoading } = useQuery({
-    queryKey: ["delegate_regions"],
-    queryFn: () =>
-      api.GET("/user_groups", {
-        params: {
-          query: {
-            isActive: true,
-            groupType: "delegate_regions",
-          },
-        },
-      }),
-    select(request) {
-      return request.data!.filter((group) => group.parent_group_id === null);
-    },
-  });
+  if (error) return <Errored error={error} />;
 
-  const groups = useMemo(() => delegateRequest ?? [], [delegateRequest]);
-
-  if (isLoading) return <Loading />;
+  const rootGroups = delegateGroups.filter(
+    (group) => group.parent_group_id === null,
+  );
 
   return (
     <Container>
       <VStack align={"left"} gap="8" width="full" pt="8" alignItems="left">
-        <Heading size="5xl">{I18n.t("delegates_page.title")}</Heading>
+        <Heading size="5xl">{t("delegates_page.title")}</Heading>
         <Prose>
           <I18nHTMLTranslate
             i18nKey="about.structure.delegates_html"
@@ -66,13 +51,13 @@ export default function TeamsCommitteesPage() {
           unmountOnExit
         >
           <Tabs.List height="fit-content" position="sticky" top="3">
-            {groups.map((group) => (
+            {rootGroups.map((group) => (
               <Tabs.Trigger value={group.name} key={group.id}>
                 {group.name}
               </Tabs.Trigger>
             ))}
           </Tabs.List>
-          {groups.map((group) => (
+          {rootGroups.map((group) => (
             <Tabs.Content value={group.name} key={group.id} w={"full"}>
               <DelegateTab group={group} />
             </Tabs.Content>
@@ -104,28 +89,14 @@ function DelegateTab({ group }: { group: components["schemas"]["UserGroup"] }) {
   );
 }
 
-function MemberTable({ id }: { id: number }) {
-  const I18n = useT();
-  const api = useAPI();
+async function MemberTable({ id }: { id: number }) {
+  const { t } = await getT();
 
-  const { data: roles, isLoading } = useQuery({
-    queryKey: ["roles", id],
-    queryFn: () =>
-      api.GET("/user_roles", {
-        params: {
-          query: {
-            parentGroupId: id,
-            isActive: true,
-            sort: "location,name",
-          },
-        },
-      }),
-    select(request) {
-      return _.groupBy(request.data!, "group.name");
-    },
-  });
+  const { data: delegateRoles, error } = await getDelegatesInGroups(id);
 
-  if (isLoading) return <Loading />;
+  if (error) return <Errored error={error} />;
+
+  const roles = _.groupBy(delegateRoles, "group.name");
 
   return _.map(roles, (delegates, region) => (
     <VStack>
@@ -134,7 +105,7 @@ function MemberTable({ id }: { id: number }) {
         <Table.Header>
           <Table.Row>
             <Table.ColumnHeader>
-              {I18n.t("delegates_page.table.name")}
+              {t("delegates_page.table.name")}
             </Table.ColumnHeader>
           </Table.Row>
         </Table.Header>
@@ -149,7 +120,7 @@ function MemberTable({ id }: { id: number }) {
                   wcaId={role.user.wca_id}
                   roles={[
                     {
-                      teamRole: I18n.t(
+                      teamRole: t(
                         `enums.user_roles.status.${role.group.group_type}.${role.metadata.status}`,
                       ),
                       staffColor: "yellow",
