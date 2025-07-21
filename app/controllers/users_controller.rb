@@ -4,8 +4,7 @@ class UsersController < ApplicationController
   before_action :authenticate_user!, except: %i[select_nearby_delegate acknowledge_cookies]
   before_action :check_recent_authentication!, only: %i[enable_2fa disable_2fa regenerate_2fa_backup_codes]
   before_action :set_recent_authentication!, only: %i[edit update enable_2fa disable_2fa]
-  before_action -> { redirect_to_root_unless_user(:can_admin_results?) }, only: %i[admin_search]
-  before_action -> { redirect_to_root_unless_user(:can_admin_results?) }, only: %i[merge]
+  before_action -> { redirect_to_root_unless_user(:can_admin_results?) }, only: %i[admin_search merge]
 
   RECENT_AUTHENTICATION_DURATION = 10.minutes.freeze
 
