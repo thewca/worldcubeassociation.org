@@ -4,11 +4,24 @@ class TicketsController < ApplicationController
   include Rails::Pagination
 
   before_action :authenticate_user!
+  before_action -> { check_ticket_errors(TicketLog.action_types[:update_status]) }, only: [:update_status]
 
   SORT_WEIGHT_LAMBDAS = {
     createdAt:
       ->(ticket) { ticket.created_at },
   }.freeze
+
+  private def check_ticket_errors(action_type)
+    @action_type = action_type
+    @ticket = Ticket.find(params.require(:ticket_id))
+    @acting_stakeholder = TicketStakeholder.find(params.require(:acting_stakeholder_id))
+
+    render status: :bad_request, json: { error: "You are not a stakeholder for this ticket." } unless @ticket.user_stakeholders(current_user).include?(@acting_stakeholder)
+
+    render status: :unauthorized, json: { error: "You are not allowed to perform this action." } unless @acting_stakeholder.actions_allowed.include?(@action_type)
+
+    false
+  end
 
   def index
     tickets = Ticket
@@ -63,20 +76,16 @@ class TicketsController < ApplicationController
   end
 
   def update_status
-    action_type = TicketLog.action_types[:update_status]
-    ticket, acting_stakeholder = ticket_and_acting_stakeholder_from_params
-    return if check_ticket_errors(ticket, acting_stakeholder, action_type)
-
     ticket_status = params.require(:ticket_status)
 
     ActiveRecord::Base.transaction do
-      ticket.metadata.update!(status: ticket_status)
+      @ticket.metadata.update!(status: ticket_status)
       TicketLog.create!(
-        ticket_id: ticket.id,
-        action_type: action_type,
+        ticket_id: @ticket.id,
+        action_type: @action_type,
         action_value: ticket_status,
         acting_user_id: current_user.id,
-        acting_stakeholder_id: acting_stakeholder.id,
+        acting_stakeholder_id: @acting_stakeholder.id,
       )
     end
     render json: { success: true }
@@ -187,26 +196,5 @@ class TicketsController < ApplicationController
       success: true,
       new_wca_id: person&.reload&.wca_id, # Reload to get the new wca_id
     }
-  end
-
-  private def ticket_and_acting_stakeholder_from_params
-    ticket = Ticket.find(params.require(:ticket_id))
-    acting_stakeholder = TicketStakeholder.find(params.require(:acting_stakeholder_id))
-
-    [ticket, acting_stakeholder]
-  end
-
-  private def check_ticket_errors(ticket, acting_stakeholder, action)
-    unless ticket.user_stakeholders(current_user).include?(acting_stakeholder)
-      render status: :bad_request, json: { error: "You are not a stakeholder for this ticket." }
-      return true
-    end
-
-    unless acting_stakeholder.actions_allowed.include?(action)
-      render status: :unauthorized, json: { error: "You are not allowed to perform this action." }
-      return true
-    end
-
-    false
   end
 end
