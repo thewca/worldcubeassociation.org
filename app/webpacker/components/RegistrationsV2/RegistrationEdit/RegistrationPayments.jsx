@@ -101,6 +101,7 @@ function PaymentsMainBody({
     },
   });
 
+  console.log(payments)
   if (payments.length === 0) {
     return <Message warning>{I18n.t('payments.messages.charges_refunded')}</Message>;
   }
