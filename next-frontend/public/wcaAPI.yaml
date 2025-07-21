@@ -130,11 +130,6 @@ paths:
           schema:
             type: string
           description: Filter by group type (e.g., "officers")
-        - name: parentGroupId
-          in: query
-          schema:
-            type: string
-          description: Filter by parent Group
         - name: sort
           in: query
           schema:
@@ -184,6 +179,11 @@ paths:
           schema:
             type: string
           description: Filter by group type (e.g., "officers")
+        - name: parentGroupId
+          in: query
+          schema:
+            type: string
+          description: Filter by parent Group
         - name: isLead
           in: query
           schema:

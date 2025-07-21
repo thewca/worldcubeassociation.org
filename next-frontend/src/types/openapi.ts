@@ -249,8 +249,6 @@ export interface paths {
                     isHidden?: boolean;
                     /** @description Filter by group type (e.g., "officers") */
                     groupType?: string;
-                    /** @description Filter by parent Group */
-                    parentGroupId?: string;
                     /** @description Sort by a specific field (e.g., "start_date", "-created_at") */
                     sort?: string;
                 };
@@ -302,6 +300,8 @@ export interface paths {
                     status?: string;
                     /** @description Filter by group type (e.g., "officers") */
                     groupType?: string;
+                    /** @description Filter by parent Group */
+                    parentGroupId?: string;
                     /** @description Filter by whether the user is the lead of the group */
                     isLead?: boolean;
                     /** @description Sort by a specific field (e.g., "start_date", "-created_at") */
