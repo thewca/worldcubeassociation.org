@@ -4,7 +4,7 @@ class UsersController < ApplicationController
   before_action :authenticate_user!, except: %i[select_nearby_delegate acknowledge_cookies]
   before_action :check_recent_authentication!, only: %i[enable_2fa disable_2fa regenerate_2fa_backup_codes]
   before_action :set_recent_authentication!, only: %i[edit update enable_2fa disable_2fa]
-  before_action -> { redirect_to_root_unless_user(:can_admin_results?) }, only: %i[admin_search]
+  before_action -> { redirect_to_root_unless_user(:can_admin_results?) }, only: %i[admin_search merge]
 
   RECENT_AUTHENTICATION_DURATION = 10.minutes.freeze
 
@@ -43,6 +43,41 @@ class UsersController < ApplicationController
         }
       end
     end
+  end
+
+  def show_for_merge
+    user = User.find(params.require(:id))
+
+    render status: :ok, json: user.as_json(
+      include: %w[roles],
+      methods: %w[special_account_competitions],
+      private_attributes: %w[email],
+    )
+  end
+
+  def merge
+    from_user = User.find(params.require(:fromUserId))
+    to_user = User.find(params.require(:toUserId))
+
+    return render status: :bad_request, json: { error: "Cannot merge user with itself" } if to_user.id == from_user.id
+
+    if to_user.name != from_user.name ||
+       to_user.country_iso2 != from_user.country_iso2 ||
+       to_user.gender != from_user.gender ||
+       to_user.dob != from_user.dob
+      return render status: :bad_request, json: { error: "Cannot merge users with different details" }
+    end
+
+    if !current_user.results_team? && (to_user.special_account? || from_user.special_account?)
+      return render status: :bad_request,
+                    json: { error: 'One of the account is a special account, please contact WRT to merge them.' }
+    end
+
+    return render status: :bad_request, json: { error: "Cannot merge users with both having a WCA ID" } if to_user.wca_id.present? && from_user.wca_id.present?
+
+    from_user.transfer_data_to(to_user)
+
+    render status: :ok, json: { success: true }
   end
 
   private def user_to_edit

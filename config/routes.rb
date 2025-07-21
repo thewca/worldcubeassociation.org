@@ -44,7 +44,9 @@ Rails.application.routes.draw do
   get 'competitions/:competition_id/payment-completion/:payment_integration' => 'registrations#payment_completion', as: :registration_payment_completion
   post 'registration/stripe-webhook' => 'registrations#stripe_webhook', as: :registration_stripe_webhook
   get 'registration/:competition_id/:user_id/payment-denomination' => 'registrations#payment_denomination', as: :registration_payment_denomination
+  get '/users/admin_search' => 'users#admin_search'
   resources :users, only: %i[index edit update]
+  get 'users/show_for_merge' => 'users#show_for_merge', as: :user_show_for_merge
   get 'profile/edit' => 'users#edit'
   post 'profile/enable-2fa' => 'users#enable_2fa'
   post 'profile/disable-2fa' => 'users#disable_2fa'
@@ -58,7 +60,7 @@ Rails.application.routes.draw do
   post 'users/:id/avatar' => 'users#upload_avatar'
   patch 'users/:id/avatar' => 'users#update_avatar'
   delete 'users/:id/avatar' => 'users#delete_avatar'
-  get '/users/admin_search' => 'users#admin_search'
+  post 'users/merge' => 'users#merge'
   get 'admin/avatars/pending' => 'admin/avatars#pending_avatar_users', as: :pending_avatars
   post 'admin/avatars' => 'admin/avatars#update_avatar', as: :admin_update_avatar
 
@@ -218,7 +220,6 @@ Rails.application.routes.draw do
   scope 'panel-page' do
     get 'fix-results' => 'admin#fix_results', as: :admin_fix_results
     get 'merge-profiles' => 'admin#merge_people', as: :admin_merge_people
-    get 'reassign-connected-wca-id' => 'admin#reassign_wca_id', as: :admin_reassign_wca_id
   end
   get 'panel-page/:id' => 'panel#panel_page', as: :panel_page
   scope 'tickets' do
@@ -317,8 +318,6 @@ Rails.application.routes.draw do
   get '/admin/complete_persons' => 'admin#complete_persons'
   post '/admin/complete_persons' => 'admin#do_complete_persons'
   get '/admin/peek_unfinished_results' => 'admin#peek_unfinished_results'
-  get '/admin/validate_reassign_wca_id' => 'admin#validate_reassign_wca_id', as: :admin_validate_reassign_wca_id
-  post '/admin/reassign_wca_id' => 'admin#do_reassign_wca_id', as: :admin_do_reassign_wca_id
 
   get '/search' => 'search_results#index'
 
