@@ -94,6 +94,10 @@ class User < ApplicationRecord
     (team_leaders + senior_delegates).uniq.compact
   end
 
+  def self.regional_voters
+    RolesMetadataDelegateRegions.regional_delegate.joins(:user_role).merge(UserRole.active).includes(:user).map(&:user).uniq.compact
+  end
+
   def self.all_discourse_groups
     UserGroup.teams_committees.map { |x| x.metadata.friendly_id } + UserGroup.councils.map { |x| x.metadata.friendly_id } + RolesMetadataDelegateRegions.statuses.values + [UserGroup.group_types[:board]]
   end
@@ -641,7 +645,7 @@ class User < ApplicationRecord
       generateDataExports
       fixResults
       mergeProfiles
-      reassignConnectedWcaId
+      mergeUsers
     ].index_with { |panel_page| panel_page.to_s.underscore.dasherize }
   end
 
@@ -700,7 +704,7 @@ class User < ApplicationRecord
           panel_pages[:generateDataExports],
           panel_pages[:fixResults],
           panel_pages[:mergeProfiles],
-          panel_pages[:reassignConnectedWcaId],
+          panel_pages[:mergeUsers],
         ],
       },
       wst: {
@@ -1047,7 +1051,7 @@ class User < ApplicationRecord
                            # Not using _html suffix as automatic html_safe is available only from
                            # the view helper
                            I18n.t('users.edit.cannot_edit.reason.assigned')
-                         elsif user_to_edit == self && !(admin? || any_kind_of_delegate?) && user_to_edit.registrations.accepted.count.positive?
+                         elsif user_to_edit == self && !(admin? || any_kind_of_delegate?) && user_to_edit.registrations.accepted.any?
                            I18n.t('users.edit.cannot_edit.reason.registered')
                          end
     return unless cannot_edit_reason
@@ -1243,7 +1247,7 @@ class User < ApplicationRecord
   DEFAULT_SERIALIZE_OPTIONS = {
     only: %w[id wca_id name gender
              country_iso2 created_at updated_at],
-    methods: %w[url country delegate_status],
+    methods: %w[url country],
     include: %w[avatar teams],
   }.freeze
 
@@ -1251,10 +1255,18 @@ class User < ApplicationRecord
     # NOTE: doing deep_dup is necessary here to avoid changing the inner values
     # of the freezed variables (which would leak PII)!
     default_options = DEFAULT_SERIALIZE_OPTIONS.deep_dup
-    # Delegates's emails and regions are public information.
-    default_options[:methods].push("email", "location", "region_id") if staff_delegate?
+
+    include_email, exclude_deprecated = options&.values_at(:include_email, :exclude_deprecated)
+
+    unless exclude_deprecated
+      default_options[:methods].push("location", "region_id") if staff_delegate?
+      default_options[:methods].push("delegate_status")
+      default_options[:include].push("teams")
+    end
+    default_options[:methods].push("email") if include_email || staff_delegate?
 
     options = default_options.merge(options || {}).deep_dup
+
     # Preempt the values for avatar and teams, they have a special treatment.
     include_avatar = options[:include]&.delete("avatar")
     include_teams = options[:include]&.delete("teams")
@@ -1354,15 +1366,20 @@ class User < ApplicationRecord
     end
   end
 
+  def special_account_competitions
+    {
+      organized_competitions: organized_competitions.pluck(:name),
+      delegated_competitions: delegated_competitions.pluck(:name),
+      announced_competitions: competitions_announced.pluck(:name),
+      results_posted_competitions: competitions_results_posted.pluck(:name),
+    }.reject { |_, value| value.empty? }
+  end
+
   # Special Accounts are accounts where the WCA ID and user account should always be connected
   # These includes any teams, organizers, delegates
   # Note: Someone can Delegate a competition without ever being a Delegate.
   def special_account?
-    self.roles.any? ||
-      !self.organized_competitions.empty? ||
-      !delegated_competitions.empty? ||
-      !competitions_announced.empty? ||
-      !competitions_results_posted.empty?
+    self.roles.any? || self.special_account_competitions.present?
   end
 
   def accepted_registrations
@@ -1509,5 +1526,22 @@ class User < ApplicationRecord
       current_avatar_id: special_account? ? nil : current_avatar_id,
       country_iso2: special_account? ? country_iso2 : nil,
     )
+  end
+
+  def transfer_data_to(new_user)
+    ActiveRecord::Base.transaction do
+      competition_organizers.update_all(organizer_id: new_user.id)
+      competition_delegates.update_all(delegate_id: new_user.id)
+      competitions_results_posted.update_all(results_posted_by: new_user.id)
+      competitions_announced.update_all(announced_by: new_user.id)
+      roles.update_all(user_id: new_user.id)
+      registrations.update_all(user_id: new_user.id)
+
+      return if wca_id.blank?
+
+      wca_id_to_be_transferred = self.wca_id
+      self.update!(wca_id: nil) # Must remove WCA ID before adding it as it is unique in the Users table.
+      new_user.update!(wca_id: wca_id_to_be_transferred)
+    end
   end
 end

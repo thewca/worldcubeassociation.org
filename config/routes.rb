@@ -44,7 +44,9 @@ Rails.application.routes.draw do
   get 'competitions/:competition_id/payment-completion/:payment_integration' => 'registrations#payment_completion', as: :registration_payment_completion
   post 'registration/stripe-webhook' => 'registrations#stripe_webhook', as: :registration_stripe_webhook
   get 'registration/:competition_id/:user_id/payment-denomination' => 'registrations#payment_denomination', as: :registration_payment_denomination
+  get '/users/admin_search' => 'users#admin_search'
   resources :users, only: %i[index edit update]
+  get 'users/show_for_merge' => 'users#show_for_merge', as: :user_show_for_merge
   get 'profile/edit' => 'users#edit'
   post 'profile/enable-2fa' => 'users#enable_2fa'
   post 'profile/disable-2fa' => 'users#disable_2fa'
@@ -58,7 +60,7 @@ Rails.application.routes.draw do
   post 'users/:id/avatar' => 'users#upload_avatar'
   patch 'users/:id/avatar' => 'users#update_avatar'
   delete 'users/:id/avatar' => 'users#delete_avatar'
-  get '/users/admin_search' => 'users#admin_search'
+  post 'users/merge' => 'users#merge'
   get 'admin/avatars/pending' => 'admin/avatars#pending_avatar_users', as: :pending_avatars
   post 'admin/avatars' => 'admin/avatars#update_avatar', as: :admin_update_avatar
 
@@ -218,12 +220,12 @@ Rails.application.routes.draw do
   scope 'panel-page' do
     get 'fix-results' => 'admin#fix_results', as: :admin_fix_results
     get 'merge-profiles' => 'admin#merge_people', as: :admin_merge_people
-    get 'reassign-connected-wca-id' => 'admin#reassign_wca_id', as: :admin_reassign_wca_id
   end
   get 'panel-page/:id' => 'panel#panel_page', as: :panel_page
   scope 'tickets' do
     get 'details_before_anonymization' => 'tickets#details_before_anonymization', as: :tickets_details_before_anonymization
     post 'anonymize' => 'tickets#anonymize', as: :tickets_anonymize
+    get 'imported_temporary_results' => 'tickets#imported_temporary_results', as: :imported_temporary_results
   end
   resources :tickets, only: %i[index show] do
     post 'update_status' => 'tickets#update_status', as: :update_status
@@ -307,6 +309,7 @@ Rails.application.routes.draw do
 
   get '/admin/all-voters' => 'admin#all_voters', as: :eligible_voters
   get '/admin/leader-senior-voters' => 'admin#leader_senior_voters', as: :leader_senior_voters
+  get '/admin/regional-voters' => 'admin#regional_voters', as: :regional_voters
   post '/admin/merge_people' => 'admin#do_merge_people', as: :admin_do_merge_people
   get '/admin/person_data' => 'admin#person_data'
   get '/admin/do_compute_auxiliary_data' => 'admin#do_compute_auxiliary_data'
@@ -316,8 +319,6 @@ Rails.application.routes.draw do
   get '/admin/complete_persons' => 'admin#complete_persons'
   post '/admin/complete_persons' => 'admin#do_complete_persons'
   get '/admin/peek_unfinished_results' => 'admin#peek_unfinished_results'
-  get '/admin/validate_reassign_wca_id' => 'admin#validate_reassign_wca_id', as: :admin_validate_reassign_wca_id
-  post '/admin/reassign_wca_id' => 'admin#do_reassign_wca_id', as: :admin_do_reassign_wca_id
 
   get '/search' => 'search_results#index'
 

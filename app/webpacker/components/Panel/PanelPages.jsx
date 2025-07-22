@@ -6,7 +6,6 @@ import {
   generateDbTokenUrl,
   serverStatusPageUrl,
   mergeProfilesUrl,
-  reassignConnectedWcaIdUrl,
 } from '../../lib/requests/routes.js.erb';
 import PostingCompetitionsTable from '../PostingCompetitions';
 import EditPersonPage from './pages/EditPersonPage';
@@ -38,6 +37,7 @@ import ComputeAuxiliaryDataPage from './pages/ComputeAuxiliaryDataPage';
 import GenerateDataExportsPage from './pages/GenerateDataExportsPage';
 import CheckRecordsPage from './pages/CheckRecordsPage';
 import FixResultsPage from './pages/FixResultsPage';
+import MergeUsersPage from './pages/MergeUsersPage';
 
 export default {
   [PANEL_PAGES.postingDashboard]: {
@@ -184,8 +184,8 @@ export default {
     name: 'Merge Profiles',
     link: mergeProfilesUrl,
   },
-  [PANEL_PAGES.reassignConnectedWcaId]: {
-    name: 'Reassign Connected WCA ID',
-    link: reassignConnectedWcaIdUrl,
+  [PANEL_PAGES.mergeUsers]: {
+    name: 'Merge Users',
+    component: MergeUsersPage,
   },
 };
