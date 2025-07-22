@@ -58,16 +58,18 @@ async function plugins() {
 
 async function dbAdapter() {
   if (process.env.NODE_ENV === "production") {
-    const { mongooseAdapter } = await import("@payloadcms/db-mongodb");
+    const { mongooseAdapter, compatabilityOptions } = await import(
+      "@payloadcms/db-mongodb"
+    );
     return mongooseAdapter({
       url: process.env.DATABASE_URI || "",
-      disableIndexHints: true,
       connectOptions: {
         authMechanism: "MONGODB-AWS",
         authSource: "$external",
         tls: true,
         tlsCAFile: "/app/global-bundle.pem",
       },
+      ...compatabilityOptions.documentdb,
     });
   } else {
     const { sqliteAdapter } = await import("@payloadcms/db-sqlite");
