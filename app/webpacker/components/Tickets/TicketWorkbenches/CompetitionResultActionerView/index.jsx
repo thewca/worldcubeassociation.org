@@ -10,7 +10,7 @@ export default function CompetitionResultActionerView({ ticketDetails, updateSta
     case ticketsCompetitionResultStatuses.submitted:
       return <p>Please lock the competition results from the Posting dashboard.</p>;
 
-    case ticketsCompetitionResultStatuses.warnings_verification:
+    case ticketsCompetitionResultStatuses.locked_for_posting:
       return (
         <WarningsVerification
           ticketDetails={ticketDetails}
@@ -18,7 +18,7 @@ export default function CompetitionResultActionerView({ ticketDetails, updateSta
         />
       );
 
-    case ticketsCompetitionResultStatuses.results_verification:
+    case ticketsCompetitionResultStatuses.warnings_verified:
       return (
         <p>
           Please finish the remaining steps in

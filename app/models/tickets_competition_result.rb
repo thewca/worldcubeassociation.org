@@ -5,8 +5,8 @@ class TicketsCompetitionResult < ApplicationRecord
 
   enum :status, {
     submitted: "submitted",
-    warnings_verification: "warnings_verification",
-    results_verification: "results_verification",
+    locked_for_posting: "locked_for_posting",
+    warnings_verified: "warnings_verified",
     posted: "posted",
   }
 
@@ -23,10 +23,10 @@ class TicketsCompetitionResult < ApplicationRecord
     end
   end
 
-  def self.create_ticket!(competition_id, delegate_message, submitted_delegate)
+  def self.create_ticket!(competition, delegate_message, submitted_delegate)
     ticket_metadata = TicketsCompetitionResult.create!(
       status: TicketsCompetitionResult.statuses[:submitted],
-      competition_id: competition_id,
+      competition_id: competition.id,
       delegate_message: delegate_message,
     )
 
@@ -40,9 +40,9 @@ class TicketsCompetitionResult < ApplicationRecord
       is_active: true,
     )
 
-    submitted_delegate_stakeholder = TicketStakeholder.create!(
+    competition_stakeholder = TicketStakeholder.create!(
       ticket_id: ticket.id,
-      stakeholder: submitted_delegate,
+      stakeholder: competition,
       connection: TicketStakeholder.connections[:cc],
       stakeholder_role: TicketStakeholder.stakeholder_roles[:requester],
       is_active: true,
@@ -53,7 +53,7 @@ class TicketsCompetitionResult < ApplicationRecord
       action_type: TicketLog.action_types[:update_status],
       action_value: ticket_metadata.status,
       acting_user_id: submitted_delegate.id,
-      acting_stakeholder_id: submitted_delegate_stakeholder.id,
+      acting_stakeholder_id: competition_stakeholder.id,
     )
   end
 end
