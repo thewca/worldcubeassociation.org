@@ -21,7 +21,9 @@ class Ticket < ApplicationRecord
   def user_stakeholders(user)
     return [] if user.nil?
 
-    ticket_stakeholders.belongs_to_user(user).or(ticket_stakeholders.belongs_to_groups(user.active_groups))
+    ticket_stakeholders.belongs_to_user(user)
+                       .or(ticket_stakeholders.belongs_to_groups(user.active_groups))
+                       .or(ticket_stakeholders.belongs_to_competitions(user.delegated_competitions))
   end
 
   def can_user_access?(user)

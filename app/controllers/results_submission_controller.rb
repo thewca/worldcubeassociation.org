@@ -155,7 +155,7 @@ class ResultsSubmissionController < ApplicationController
 
     ActiveRecord::Base.transaction do
       competition.touch(:results_submitted_at)
-      TicketsCompetitionResult.create_ticket!(competition.id, message, current_user)
+      TicketsCompetitionResult.create_ticket!(competition, message, current_user)
     end
 
     render status: :ok, json: { success: true }
