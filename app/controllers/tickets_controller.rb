@@ -193,6 +193,6 @@ class TicketsController < ApplicationController
   def imported_temporary_results
     competition = Competition.find(params.require(:competition_id))
 
-    render json: competition.inbox_results
+    render json: competition.inbox_results.includes(:inbox_person)
   end
 end

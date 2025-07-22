@@ -5,8 +5,8 @@ class InboxResult < ApplicationRecord
 
   # see result.rb for explanation of the scope
   belongs_to :inbox_person, ->(ibr) { where(competition_id: ibr.competition_id) }, primary_key: :id, foreign_key: :person_id, optional: true
-  delegate :country_iso2, to: :person
-  delegate :wca_id, to: :person
+  delegate :country_iso2, to: :inbox_person
+  delegate :wca_id, to: :inbox_person
 
   # NOTE: don't use these too often, as it triggers one person load per call!
   # If you need names for a batch of InboxResult, consider joining the InboxPerson table.
@@ -18,9 +18,7 @@ class InboxResult < ApplicationRecord
     inbox_person&.name || "<person_id=#{person_id}>"
   end
 
-  def name
-    person_name
-  end
+  alias_method :name, :person_name
 
   def attempts
     [value1, value2, value3, value4, value5]

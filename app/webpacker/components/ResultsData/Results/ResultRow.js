@@ -31,8 +31,8 @@ function ResultRow({
       </Table.Cell>
       <Table.Cell>
         {result.wca_id
-          ? <a href={personUrl(result.wca_id)}>{`${result.name}`}</a>
-          : `${result.name}`}
+          ? <a href={personUrl(result.wca_id)}>{result.name}</a>
+          : result.name}
       </Table.Cell>
       <Table.Cell className={getRecordClass(result.regional_single_record)}>
         {formatAttemptResult(result.best, result.event_id)}
