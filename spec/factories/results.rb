@@ -97,18 +97,22 @@ FactoryBot.define do
     instance_eval(&resultable_instance_members)
 
     transient do
-      person { FactoryBot.build(:inbox_person, competition_id: competition.id) }
-      person_id { person&.ref_id }
+      person { FactoryBot.create(:inbox_person, competition_id: competition.id) }
     end
 
-    inbox_person do
-      association(:inbox_person,
-                  competition_id: competition.id,
-                  numeric_id: person_id,
-                  name: person.name, wca_id: person.wca_id,
-                  gender: person.gender, dob: person.dob,
-                  country_iso2: person.country.iso2)
+    trait :for_existing_person do
+      transient do
+        real_person { FactoryBot.create(:person) }
+      end
+
+      person do
+        FactoryBot.create(:inbox_person,
+                          competition_id: competition.id,
+                          **real_person.slice(:name, :wca_id, :gender, :dob, :country_iso2))
+      end
     end
+
+    person_id { person.ref_id }
   end
 
   factory :result do
