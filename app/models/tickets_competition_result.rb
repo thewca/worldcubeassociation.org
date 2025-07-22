@@ -5,8 +5,8 @@ class TicketsCompetitionResult < ApplicationRecord
 
   enum :status, {
     submitted: "submitted",
-    warnings_verification: "warnings_verification",
-    results_verification: "results_verification",
+    locked_for_posting: "locked_for_posting",
+    warnings_verified: "warnings_verified",
     posted: "posted",
   }
 
