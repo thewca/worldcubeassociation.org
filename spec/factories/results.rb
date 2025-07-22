@@ -97,7 +97,7 @@ FactoryBot.define do
     instance_eval(&resultable_instance_members)
 
     transient do
-      person { FactoryBot.build(:inbox_person, competition: competition) }
+      person { FactoryBot.build(:inbox_person, competition_id: competition.id) }
     end
 
     trait :for_existing_person do
@@ -106,7 +106,7 @@ FactoryBot.define do
 
     inbox_person do
       association(:inbox_person,
-                  competition: competition,
+                  competition_id: competition.id,
                   name: person.name, wca_id: person.wca_id,
                   gender: person.gender, dob: person.dob,
                   country_iso2: person.country.iso2)
