@@ -1258,7 +1258,6 @@ class User < ApplicationRecord
       default_options[:methods].push("location", "region_id") if staff_delegate?
       default_options[:methods].push("delegate_status")
       default_options[:include].push("teams")
-
     end
     default_options[:methods].push("email") if include_email || staff_delegate?
 
