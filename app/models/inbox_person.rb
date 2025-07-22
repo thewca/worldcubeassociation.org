@@ -9,10 +9,9 @@ class InboxPerson < ApplicationRecord
   self.primary_key = %i[id competition_id]
 
   belongs_to :person, -> { current }, foreign_key: "wca_id", primary_key: "wca_id", optional: true
-  belongs_to :country, foreign_key: "country_iso2", primary_key: "iso2"
-
-  alias_attribute :ref_id, :id
   alias_method :wca_person, :person
+
+  belongs_to :country, foreign_key: "country_iso2", primary_key: "iso2"
 
   # Compatibility layer for results posting code that doesn't care whether it's a real person or an inbox person
   # TODO: Get rid of this when we get rid of the inbox_* tables during results posting
@@ -30,4 +29,18 @@ class InboxPerson < ApplicationRecord
   def country
     Country.c_find_by_iso2(self.country_iso2)
   end
+
+  def numeric_id
+    # This is the "raw" ID directly from the database column.
+    #   When calling `my_inbox_person.id` on the Rails model, you will receive an array
+    #   as the return value, because of the `self.primary_key` override at the top of the file.
+    # In some contexts, we do want to access the raw ID however
+    #   (most notably, in validators when comparing for equality)
+    # Note also, that doing `self[:id]` is not the same as `self.id`!
+    #   - The latter gives the Rails "smart-cast" composite ID (as an array in this case)
+    #   - The former gives the _attribute_ called `id` directly from the raw database record
+    self[:id]
+  end
+
+  alias_method :ref_id, :numeric_id
 end
