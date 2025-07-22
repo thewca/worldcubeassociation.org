@@ -98,15 +98,13 @@ FactoryBot.define do
 
     transient do
       person { FactoryBot.build(:inbox_person, competition_id: competition.id) }
-    end
-
-    trait :for_existing_person do
-      person { FactoryBot.create(:person) }
+      person_id { person&.ref_id }
     end
 
     inbox_person do
       association(:inbox_person,
                   competition_id: competition.id,
+                  numeric_id: person_id,
                   name: person.name, wca_id: person.wca_id,
                   gender: person.gender, dob: person.dob,
                   country_iso2: person.country.iso2)

@@ -77,8 +77,7 @@ RSpec.describe PV do
                inbox_person: dup_name, competition: competition1,
                event_id: "333oh")
         res1 = create(:inbox_result,
-                      :for_existing_person,
-                      real_person: person,
+                      person: person,
                       competition: competition2, event_id: "222")
         res1.person.update(dob: 90.years.ago, gender: "a", name: "Hey", country_iso2: "FR")
 
