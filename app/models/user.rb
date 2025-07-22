@@ -1243,7 +1243,7 @@ class User < ApplicationRecord
   DEFAULT_SERIALIZE_OPTIONS = {
     only: %w[id wca_id name gender
              country_iso2 created_at updated_at],
-    methods: %w[url country delegate_status],
+    methods: %w[url country],
     include: %w[avatar teams],
   }.freeze
 
@@ -1252,19 +1252,17 @@ class User < ApplicationRecord
     # of the freezed variables (which would leak PII)!
     default_options = DEFAULT_SERIALIZE_OPTIONS.deep_dup
 
-    include_email = options&.[](:include_email)
-    exclude_deprecated = options&.[](:exclude_deprecated)
+    include_email, exclude_deprecated = options&.values_at(:include_email, :exclude_deprecated)
 
-    # Delegates's emails and regions are public information.
+    unless exclude_deprecated
+      default_options[:methods].push("location", "region_id") if staff_delegate?
+      default_options[:methods].push("delegate_status")
+      default_options[:include].push("teams")
+
+    end
     default_options[:methods].push("email") if include_email || staff_delegate?
-    default_options[:methods].push("location", "region_id") if !exclude_deprecated && staff_delegate?
 
     options = default_options.merge(options || {}).deep_dup
-
-    if exclude_deprecated
-      options[:methods].delete("delegate_status")
-      options[:include].delete("teams")
-    end
 
     # Preempt the values for avatar and teams, they have a special treatment.
     include_avatar = options[:include]&.delete("avatar")
