@@ -9,9 +9,9 @@ class InboxPerson < ApplicationRecord
   self.primary_key = %i[id competition_id]
 
   belongs_to :person, -> { current }, foreign_key: "wca_id", primary_key: "wca_id", optional: true
-  alias_method :wca_person, :person
-
   belongs_to :country, foreign_key: "country_iso2", primary_key: "iso2"
+
+  alias_method :wca_person, :person
 
   # Compatibility layer for results posting code that doesn't care whether it's a real person or an inbox person
   # TODO: Get rid of this when we get rid of the inbox_* tables during results posting
