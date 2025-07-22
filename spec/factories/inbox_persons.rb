@@ -10,7 +10,7 @@ FactoryBot.define do
     # Therefore we must do the max logic in RoR's world after casting.
     transient do
       numeric_id { ((InboxPerson.pluck(:id).map(&:to_i).max || 0) + 1) }
-      competition_id { competition&.id }
+      competition_id { nil }
     end
 
     id { [numeric_id, competition_id] }
