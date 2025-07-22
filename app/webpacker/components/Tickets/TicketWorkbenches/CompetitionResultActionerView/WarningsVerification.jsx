@@ -31,7 +31,7 @@ export default function WarningsVerification({ ticketDetails, updateStatus }) {
       <Segment>{ticketDetails.ticket.metadata.delegate_message}</Segment>
       <Button
         primary
-        onClick={() => updateStatus(ticketsCompetitionResultStatuses.results_verification)}
+        onClick={() => updateStatus(ticketsCompetitionResultStatuses.warnings_verified)}
       >
         Warnings verified
       </Button>
