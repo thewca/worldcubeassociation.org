@@ -22,6 +22,10 @@ class TicketStakeholder < ApplicationRecord
     where(stakeholder_type: "UserGroup", stakeholder_id: group_ids)
   }
 
+  scope :belongs_to_competitions, lambda { |competition_ids|
+    where(stakeholder_type: "Competition", stakeholder_id: competition_ids)
+  }
+
   def user_group_stakeholder?
     stakeholder_type == "UserGroup"
   end
