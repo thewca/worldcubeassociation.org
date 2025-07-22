@@ -2,8 +2,10 @@
 
 class UsersController < ApplicationController
   before_action :authenticate_user!, except: %i[select_nearby_delegate acknowledge_cookies]
-  before_action :check_recent_authentication!, only: %i[enable_2fa disable_2fa regenerate_2fa_backup_codes]
+  before_action :check_recent_authentication, only: %i[enable_2fa disable_2fa regenerate_2fa_backup_codes]
+  before_action :check_recent_auth_dangerous, only: %i[update], if: :dangerous_profile_change?
   before_action :set_recent_authentication!, only: %i[edit update enable_2fa disable_2fa]
+  before_action :redirect_if_cannot_edit_user, only: %i[edit update]
   before_action -> { redirect_to_root_unless_user(:can_admin_results?) }, only: %i[admin_search merge]
 
   RECENT_AUTHENTICATION_DURATION = 10.minutes.freeze
@@ -158,9 +160,6 @@ class UsersController < ApplicationController
   def edit
     params[:section] ||= "general"
 
-    @user = user_to_edit
-    return if redirect_if_cannot_edit_user(@user)
-
     @current_user = current_user
   end
 
@@ -249,12 +248,7 @@ class UsersController < ApplicationController
   end
 
   def update
-    @user = user_to_edit
     @user.current_user = current_user
-    return if redirect_if_cannot_edit_user(@user)
-
-    dangerous_change = current_user == @user && %i[password password_confirmation email].any? { |attribute| user_params.key? attribute }
-    return if dangerous_change && !check_recent_authentication!
 
     old_confirmation_sent_at = @user.confirmation_sent_at
     if @user.update(user_params)
@@ -362,13 +356,17 @@ class UsersController < ApplicationController
     render json: { ok: true }
   end
 
-  private def redirect_if_cannot_edit_user(user)
-    unless current_user&.can_edit_user?(user)
-      flash[:danger] = "You cannot edit this user"
-      redirect_to root_url
-      return true
-    end
-    false
+  private def redirect_if_cannot_edit_user
+    @user = user_to_edit
+
+    return if current_user&.can_edit_user?(@user)
+
+    flash[:danger] = "You cannot edit this user"
+    redirect_to root_url
+  end
+
+  private def dangerous_profile_change?
+    current_user == user_to_edit && %i[password password_confirmation email].any? { |attribute| user_params.key? attribute }
   end
 
   private def user_params
@@ -399,13 +397,18 @@ class UsersController < ApplicationController
     @recently_authenticated = recently_authenticated?
   end
 
-  private def check_recent_authentication!
-    unless recently_authenticated?
-      flash[:danger] = I18n.t("users.edit.sensitive.identity_error")
-      redirect_to profile_edit_path(section: "2fa-check")
-      return false
-    end
-    true
+  private def check_recent_authentication
+    return if recently_authenticated?
+
+    flash[:danger] = I18n.t("users.edit.sensitive.identity_error")
+    redirect_to profile_edit_path(section: "2fa-check")
+  end
+
+  # We need this separate method because you cannot define `before_filter` chains
+  #   with the same name on different endpoints :(
+  # See https://guides.rubyonrails.org/action_controller_overview.html#before-action
+  private def check_recent_auth_dangerous
+    check_recent_authentication if dangerous_profile_change?
   end
 
   def admin_search

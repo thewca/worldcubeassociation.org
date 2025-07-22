@@ -407,9 +407,9 @@ class Competition < ApplicationRecord
     # IF we build a controller endpoint specifically for auto_accept, this logic should be move there.
     return unless auto_accept_preference_changed? && !auto_accept_preference_disabled?
 
-    errors.add(:auto_accept_preference, I18n.t('competitions.errors.auto_accept_accept_paid_pending')) if registrations.pending.with_payments.count.positive?
+    errors.add(:auto_accept_preference, I18n.t('competitions.errors.auto_accept_accept_paid_pending')) if registrations.pending.with_payments.any?
     errors.add(:auto_accept_preference, I18n.t('competitions.errors.auto_accept_accept_waitlisted')) if
-      registrations.waitlisted.count.positive? && !registration_full_and_accepted?
+      registrations.waitlisted.any? && !registration_full_and_accepted?
   end
 
   def no_event_without_rounds?
@@ -1382,9 +1382,7 @@ class Competition < ApplicationRecord
     !confirmed_at.nil?
   end
 
-  def confirmed
-    self.confirmed?
-  end
+  alias_method :confirmed, :confirmed?
 
   def confirmed=(new_confirmed_str)
     new_confirmed = ActiveRecord::Type::Boolean.new.cast(new_confirmed_str)
@@ -1857,9 +1855,9 @@ class Competition < ApplicationRecord
     persons_wcif = self.registrations
                        .includes(includes_associations)
                        .select { authorized || it.wcif_status == "accepted" }
-                       .map do
-      managers.delete(it.user)
-      it.user.to_wcif(self, it, authorized: authorized)
+                       .map do |registration|
+      managers.delete(registration.user)
+      registration.user.to_wcif(self, registration, authorized: authorized)
     end
     # NOTE: unregistered managers may generate N+1 queries on their personal bests,
     # but that's fine because there are very few of them!
