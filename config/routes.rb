@@ -225,6 +225,7 @@ Rails.application.routes.draw do
   scope 'tickets' do
     get 'details_before_anonymization' => 'tickets#details_before_anonymization', as: :tickets_details_before_anonymization
     post 'anonymize' => 'tickets#anonymize', as: :tickets_anonymize
+    get 'imported_temporary_results' => 'tickets#imported_temporary_results', as: :imported_temporary_results
   end
   resources :tickets, only: %i[index show] do
     post 'update_status' => 'tickets#update_status', as: :update_status
