@@ -43,7 +43,10 @@ export default function MergeUsers({ firstUserId, secondUserId, onSuccess }) {
     error: mergeError,
     isSuccess,
   } = useMutation({
-    mutationFn: ({ _fromUserId, _toUserId }) => mergeUsers(_toUserId, _fromUserId),
+    mutationFn: ({
+      fromUserId: mutationFromUserId,
+      toUserId: mutationToUserId,
+    }) => mergeUsers(mutationFromUserId, mutationToUserId),
     onSuccess,
   });
 
@@ -76,7 +79,7 @@ export default function MergeUsers({ firstUserId, secondUserId, onSuccess }) {
       <Button
         primary
         disabled={!toUserId}
-        onClick={() => mergeUsersMutation({ _fromUserId: fromUserId, _toUserId: toUserId })}
+        onClick={() => mergeUsersMutation({ fromUserId, toUserId })}
       >
         Merge
       </Button>
