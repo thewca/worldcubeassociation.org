@@ -62,8 +62,6 @@ const potentialWarnings = (competitionInfo) => {
 export default function CompetingStep({
   competitionInfo,
   user,
-  preferredEvents,
-  personalRecords,
 }) {
   const { nextStep, currentStep: { parameters: currentStepParameters } } = useStepNavigation();
   const maxEvents = currentStepParameters.events_per_registration_limit ?? Infinity;
@@ -264,12 +262,12 @@ export default function CompetingStep({
   };
 
   const onAllEventsClick = () => {
-    if (currentStepParameters.qualifications_wcif) {
+    if (currentStepParameters['uses_qualification?']) {
       selectedEventIds.update(
         currentStepParameters.event_ids.filter((e) => isQualifiedForEvent(
           e,
           currentStepParameters.qualifications_wcif,
-          personalRecords,
+          currentStepParameters.personalRecords,
         )),
       );
     } else {
@@ -342,7 +340,7 @@ export default function CompetingStep({
                   : eventsNotQualifiedFor(
                     currentStepParameters.event_ids,
                     currentStepParameters.qualifications_wcif,
-                    personalRecords,
+                    currentStepParameters.personalRecords,
                   )
               }
             disabledText={(event) => eventQualificationToString(

@@ -35,6 +35,10 @@ export default function StepNavigationProvider({
     (stepConfig) => stepConfig.key === key,
   ), [extendedStepsConfig]);
 
+  const findStepByKey = useCallback((key) => extendedStepsConfig.find(
+    (stepConfig) => stepConfig.key === key,
+  ), [extendedStepsConfig]);
+
   const defaultStepIndex = useMemo(() => {
     if (summaryPanelConfig) {
       const summaryComplete = summaryPanelConfig.isCompleted(payload);
@@ -146,11 +150,13 @@ export default function StepNavigationProvider({
       set: true,
       index: findStepIndexByKey(summaryPanelKey),
     }),
+    getStepParametersByKey: (key) => findStepByKey(key).parameters,
   }), [
     steps,
     currentStep,
     activeIndex,
     findStepIndexByKey,
+    findStepByKey,
     extendedStepsConfig,
     payload,
     summaryPanelKey,
@@ -166,7 +172,7 @@ export default function StepNavigationProvider({
 export const useStepNavigation = () => {
   const context = useContext(StepNavigationContext);
   if (!context) {
-    throw new Error('useRegistration must be used within a RegistrationProvider');
+    throw new Error('useStepNavigation must be used within a StepNavigationProvider');
   }
   return context;
 };

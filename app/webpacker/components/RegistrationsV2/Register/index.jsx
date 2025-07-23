@@ -13,7 +13,7 @@ import RegistrationNotAllowedMessage from './RegistrationNotAllowedMessage';
 import RegistrationClosingMessage from './RegistrationClosingMessage';
 import usePerpetualState from '../hooks/usePerpetualState';
 import StepConfigProvider, { useStepConfig } from '../lib/StepConfigProvider';
-import StepNavigationProvider from '../lib/StepNavigationProvider';
+import StepNavigationProvider, { useStepNavigation } from '../lib/StepNavigationProvider';
 import { availableSteps, registrationOverviewConfig } from '../lib/stepConfigs';
 import FormObjectProvider from '../../wca/FormBuilder/provider/FormObjectProvider';
 import { isQualifiedForEvent } from '../../../lib/helpers/qualifications';
@@ -35,10 +35,11 @@ const buildFormRegistration = ({
   competitionInfo,
   preferredEvents,
   qualifications,
+  personalRecords,
 }) => {
   const initialSelectedEvents = competitionInfo.events_per_registration_limit ? [] : preferredEvents
     .filter((event) => competitionInfo.event_ids.includes(event))
-    .filter((event) => !competitionInfo['uses_qualification?'] || isQualifiedForEvent(event, qualifications.wcif, qualifications.personalRecords));
+    .filter((event) => !competitionInfo['uses_qualification?'] || isQualifiedForEvent(event, qualifications, personalRecords));
 
   if (serverRegistration) {
     if (serverRegistration.competing.registration_status === 'cancelled') {
@@ -64,8 +65,6 @@ export default function Index({
   userInfo,
   registrationId,
   userCanPreRegister,
-  preferredEvents,
-  personalRecords,
   cannotRegisterReasons,
   isProcessing = false,
 }) {
@@ -77,14 +76,13 @@ export default function Index({
             <RegistrationProvider
               competitionInfo={competitionInfo}
               userInfo={userInfo}
-              registrationId={registrationId}isProcessing={isProcessing}
+              registrationId={registrationId}
+              isProcessing={isProcessing}
             >
               <RegisterNavigationWrapper
                 competitionInfo={competitionInfo}
                 userInfo={userInfo}
                 userCanPreRegister={userCanPreRegister}
-                preferredEvents={preferredEvents}
-                personalRecords={personalRecords}
                 cannotRegisterReasons={cannotRegisterReasons}
               />
             </RegistrationProvider>
@@ -99,8 +97,6 @@ function RegisterNavigationWrapper({
   competitionInfo,
   userInfo,
   userCanPreRegister,
-  preferredEvents,
-  personalRecords,
   cannotRegisterReasons,
 }) {
   const registrationPayload = useRegistration();
@@ -128,8 +124,6 @@ function RegisterNavigationWrapper({
         competitionInfo={competitionInfo}
         userInfo={userInfo}
         userCanPreRegister={userCanPreRegister}
-        preferredEvents={preferredEvents}
-        personalRecords={personalRecords}
         cannotRegisterReasons={cannotRegisterReasons}
       />
     </StepNavigationProvider>
@@ -139,9 +133,7 @@ function RegisterNavigationWrapper({
 function Register({
   userCanPreRegister,
   competitionInfo,
-  personalRecords,
   userInfo,
-  preferredEvents,
   cannotRegisterReasons,
 }) {
   const registrationAlreadyOpen = usePerpetualState(
@@ -153,6 +145,9 @@ function Register({
   );
 
   const { isFetching, registration } = useRegistration();
+
+  const { getStepParametersByKey } = useStepNavigation();
+  const { preferredEvents, personalRecords, qualifications_wcif: qualifications } = getStepParametersByKey('competing');
 
   if (isFetching) {
     return <Loading />;
@@ -185,6 +180,7 @@ function Register({
     competitionInfo,
     preferredEvents,
     qualifications,
+    personalRecords,
   });
 
   return (
@@ -196,9 +192,7 @@ function Register({
           <RegistrationMessage />
           <StepPanel
             user={userInfo}
-            preferredEvents={preferredEvents}
             competitionInfo={competitionInfo}
-            personalRecords={personalRecords}
           />
         </FormObjectProvider>
       )}

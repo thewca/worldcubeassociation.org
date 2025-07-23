@@ -5,9 +5,7 @@ import { useStepNavigation } from '../lib/StepNavigationProvider';
 
 export default function StepPanel({
   competitionInfo,
-  preferredEvents,
   user,
-  personalRecords,
 }) {
   const {
     steps,
@@ -38,9 +36,7 @@ export default function StepPanel({
       </Step.Group>
       <CurrentStepPanel
         competitionInfo={competitionInfo}
-        preferredEvents={preferredEvents}
         user={user}
-        personalRecords={personalRecords}
       />
     </>
   );
