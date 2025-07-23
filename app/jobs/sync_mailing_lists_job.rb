@@ -6,6 +6,13 @@ class SyncMailingListsJob < WcaCronjob
     throw :abort unless EnvConfig.WCA_LIVE_SITE?
   end
 
+  # This exception is thrown when a 503 response comes back from Google,
+  #   which indicates that we exceeded our quota. Google APIs have extremely strict quotas,
+  #   but their Ruby SDK client offers no batching or request backoff...
+  # And since I don't feel like building our own request queue with timed execution,
+  #   we just take the brute-force approach of retrying when a 503 happens.
+  retry_on Google::Apis::ServerError, wait: :polynomially_longer, attempts: 10
+
   def perform
     GsuiteMailingLists.sync_group("leaders@worldcubeassociation.org", UserGroup.teams_committees.filter_map(&:lead_user).map(&:email))
     GsuiteMailingLists.sync_group(GroupsMetadataBoard.email, UserGroup.board_group.active_users.map(&:email))
