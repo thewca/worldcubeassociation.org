@@ -10,13 +10,13 @@ export default function MergeModal({ potentialDuplicatePerson, competitionId }) 
     duplicate_person: duplicatePerson,
   } = potentialDuplicatePerson;
 
-  const onSuccess = () => {
+  const onSuccess = (_, { _fromUserId, _toUserId }) => {
     queryClient.setQueryData(
       ['last-duplicate-checker-job', competitionId],
       (previousData) => ({
         ...previousData,
         potential_duplicate_persons: previousData.potential_duplicate_persons.filter(
-          (person) => person.original_user_id !== originalUser.id,
+          (person) => ![_fromUserId, _toUserId].includes(person.original_user_id),
         ),
       }),
     );

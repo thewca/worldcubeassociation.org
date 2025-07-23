@@ -77,16 +77,7 @@ class UsersController < ApplicationController
 
     return render status: :bad_request, json: { error: "Cannot merge users with both having a WCA ID" } if to_user.wca_id.present? && from_user.wca_id.present?
 
-    ActiveRecord::Base.transaction do
-      from_user.transfer_data_to(to_user)
-      # After this merge, there won't be any registrations for from_user as all
-      # of them will be transferred to to_user. So any potential duplicates of
-      # from_user is no longer valid. There might be some potential duplicates for
-      # to_user, but they need to be refetched. But refetching here may look
-      # confusing, so removing the potential duplicates of to_user as well.
-      PotentialDuplicatePerson.where(original_user_id: from_user.id).delete_all
-      PotentialDuplicatePerson.where(original_user_id: to_user.id).delete_all
-    end
+    from_user.transfer_data_to(to_user)
 
     render status: :ok, json: { success: true }
   end

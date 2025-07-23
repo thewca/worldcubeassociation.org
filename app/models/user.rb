@@ -59,6 +59,7 @@ class User < ApplicationRecord
   belongs_to :current_avatar, class_name: "UserAvatar", inverse_of: :current_user, optional: true
   belongs_to :pending_avatar, class_name: "UserAvatar", inverse_of: :pending_user, optional: true
   has_many :user_avatars, dependent: :destroy, inverse_of: :user
+  has_many :potential_duplicate_persons, dependent: :destroy, foreign_key: :original_user_id, class_name: "PotentialDuplicatePerson"
 
   scope :confirmed_email, -> { where.not(confirmed_at: nil) }
   scope :newcomers, -> { where(wca_id: nil) }
@@ -1529,17 +1530,27 @@ class User < ApplicationRecord
   end
 
   def transfer_data_to(new_user)
-    competition_organizers.update_all(organizer_id: new_user.id)
-    competition_delegates.update_all(delegate_id: new_user.id)
-    competitions_results_posted.update_all(results_posted_by: new_user.id)
-    competitions_announced.update_all(announced_by: new_user.id)
-    roles.update_all(user_id: new_user.id)
-    registrations.update_all(user_id: new_user.id)
+    ActiveRecord::Base.transaction do
+      competition_organizers.update_all(organizer_id: new_user.id)
+      competition_delegates.update_all(delegate_id: new_user.id)
+      competitions_results_posted.update_all(results_posted_by: new_user.id)
+      competitions_announced.update_all(announced_by: new_user.id)
+      roles.update_all(user_id: new_user.id)
+      registrations.update_all(user_id: new_user.id)
 
-    return if wca_id.blank?
+      return if wca_id.blank?
 
-    wca_id_to_be_transferred = self.wca_id
-    self.update!(wca_id: nil) # Must remove WCA ID before adding it as it is unique in the Users table.
-    new_user.update!(wca_id: wca_id_to_be_transferred)
+      wca_id_to_be_transferred = self.wca_id
+      self.update!(wca_id: nil) # Must remove WCA ID before adding it as it is unique in the Users table.
+      new_user.update!(wca_id: wca_id_to_be_transferred)
+
+      # After this merge, there won't be any registrations for self as all of
+      # them will be transferred to new_user. So any potential duplicates of
+      # self is no longer valid. There might be some potential duplicates for
+      # new_user, but they need to be refetched. But refetching here may look
+      # confusing, so removing the potential duplicates of new_user as well.
+      self.potential_duplicate_persons.delete_all
+      new_user.potential_duplicate_persons.delete_all
+    end
   end
 end

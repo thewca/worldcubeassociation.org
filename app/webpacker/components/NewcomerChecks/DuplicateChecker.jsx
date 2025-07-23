@@ -36,9 +36,7 @@ function DuplicateChecker({ competitionId }) {
     },
   });
 
-  const [mergeModalOptions, setMergeModalOptions] = useState({
-    isOpen: false,
-  });
+  const [potentialDuplicatePerson, setPotentialDuplicatePerson] = useState();
 
   if (isLoading) return <Loading />;
   if (isError) return <Errored />;
@@ -51,20 +49,17 @@ function DuplicateChecker({ competitionId }) {
       />
       <SimilarPersons
         similarPersons={lastDuplicateCheckerJobRun.potential_duplicate_persons}
-        mergePotentialDuplicate={(potentialDuplicatePerson) => setMergeModalOptions({
-          isOpen: true,
-          potentialDuplicatePerson,
-        })}
+        mergePotentialDuplicate={setPotentialDuplicatePerson}
       />
       <Modal
-        open={mergeModalOptions.isOpen}
-        onClose={() => setMergeModalOptions({ isOpen: false })}
+        open={potentialDuplicatePerson}
+        onClose={() => setPotentialDuplicatePerson(null)}
         closeIcon
       >
         <Modal.Header>Merge</Modal.Header>
         <Modal.Content>
           <MergeModal
-            potentialDuplicatePerson={mergeModalOptions.potentialDuplicatePerson}
+            potentialDuplicatePerson={potentialDuplicatePerson}
             competitionId={competitionId}
           />
         </Modal.Content>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import {
   Button, Header, Message, Select,
@@ -32,6 +32,9 @@ export default function MergeUsers({ firstUserId, secondUserId, onSuccess }) {
   });
 
   const [toUserId, setToUserId] = useInputState();
+  const fromUserId = useMemo(() => (
+    firstUserId === toUserId ? secondUserId : firstUserId
+  ), [toUserId, firstUserId, secondUserId]);
 
   const {
     mutate: mergeUsersMutation,
@@ -40,12 +43,7 @@ export default function MergeUsers({ firstUserId, secondUserId, onSuccess }) {
     error: mergeError,
     isSuccess,
   } = useMutation({
-    mutationFn: () => {
-      const fromUserId = (
-        firstUserId === toUserId ? secondUserId : firstUserId
-      );
-      return mergeUsers(toUserId, fromUserId);
-    },
+    mutationFn: ({ _fromUserId, _toUserId }) => mergeUsers(_toUserId, _fromUserId),
     onSuccess,
   });
 
@@ -78,7 +76,7 @@ export default function MergeUsers({ firstUserId, secondUserId, onSuccess }) {
       <Button
         primary
         disabled={!toUserId}
-        onClick={mergeUsersMutation}
+        onClick={() => mergeUsersMutation({ _fromUserId: fromUserId, _toUserId: toUserId })}
       >
         Merge
       </Button>
