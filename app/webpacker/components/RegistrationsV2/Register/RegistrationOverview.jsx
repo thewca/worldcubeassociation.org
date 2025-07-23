@@ -30,7 +30,7 @@ export default function RegistrationOverview({
     hasPaid,
   } = useRegistration();
   const {
-    jumpToStart, jumpToFirstIncompleteStep, refreshStep,
+    jumpToStart, jumpToFirstIncompleteStep,
   } = useStepNavigation();
 
   const hasRegistrationEditDeadlinePassed = hasPassed(
@@ -81,8 +81,7 @@ export default function RegistrationOverview({
       // eslint-disable-next-line no-return-assign
       .then(() => (deleteAllowed
         ? deleteRegistrationMutation()
-        : window.location = contactCompetitionUrl(competitionInfo.id, encodeURIComponent(I18n.t('competitions.registration_v2.update.delete_contact_message')))))
-      .catch(() => refreshStep());
+        : window.location = contactCompetitionUrl(competitionInfo.id, encodeURIComponent(I18n.t('competitions.registration_v2.update.delete_contact_message')))));
   };
 
   if (isRejected) {
