@@ -1768,16 +1768,16 @@ class Competition < ApplicationRecord
   end
 
   def competing_step_parameters(current_user)
-    competition_params = serializable_hash(only: [:events_per_registration_limit,
-                             :allow_registration_edits,
-                             :guest_entry_status,
-                             :guests_per_registration_limit,
-                             :guests_enabled,
-                             :uses_qualification?,
-                             :allow_registration_without_qualification,
-                             :force_comment_in_registration],
-                      methods: [:qualification_wcif, :event_ids],
-                      include: [])
+    competition_params = serializable_hash(only: %i[events_per_registration_limit
+                                                    allow_registration_edits
+                                                    guest_entry_status
+                                                    guests_per_registration_limit
+                                                    guests_enabled
+                                                    uses_qualification?
+                                                    allow_registration_without_qualification
+                                                    force_comment_in_registration],
+                                           methods: %i[qualification_wcif event_ids],
+                                           include: [])
     user_params = {
       preferredEvents: current_user.preferred_events.pluck(:id),
       personalRecords: {

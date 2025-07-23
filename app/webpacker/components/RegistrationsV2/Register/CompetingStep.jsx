@@ -169,14 +169,14 @@ export default function CompetingStep({
   ]);
 
   const canEditRegistration = useMemo(() => (
-    competitionInfo.allow_registration_edits || isPending || isWaitingList
-  ), [competitionInfo.allow_registration_edits, isPending, isWaitingList]);
+    currentStepParameters.allow_registration_edits || isPending || isWaitingList
+  ), [currentStepParameters.allow_registration_edits, isPending, isWaitingList]);
 
   const actionUpdateRegistration = useCallback(() => {
     confirm({
-      content: I18n.t(currentStepParameters.allow_registration_edits ? 'competitions.registration_v2.update.update_confirm' : 'competitions.registration_v2.update.update_confirm_contact'),
+      content: I18n.t(canEditRegistration ? 'competitions.registration_v2.update.update_confirm' : 'competitions.registration_v2.update.update_confirm_contact'),
     }).then(() => {
-      if (currentStepParameters.allow_registration_edits) {
+      if (canEditRegistration) {
         dispatch(showMessage('competitions.registration_v2.update.being_updated', 'basic'));
         updateRegistrationMutation({
           registrationId: registration.id,
@@ -231,7 +231,6 @@ export default function CompetingStep({
     onUpdateSuccess,
     canEditRegistration,
     nextStep,
-    currentStepParameters,
   ]);
 
   const actionReRegister = useCallback(() => {
