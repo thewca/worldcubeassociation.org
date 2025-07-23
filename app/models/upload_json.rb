@@ -37,9 +37,8 @@ class UploadJson
     persons_to_import = []
     parsed_json["persons"].each do |p|
       new_person_attributes = {
-        id: p["id"],
+        id: [p["id"], competition_id],
         wca_id: p["wcaId"],
-        competition_id: competition_id,
         name: p["name"],
         country_iso2: p["countryId"],
         gender: p["gender"],
