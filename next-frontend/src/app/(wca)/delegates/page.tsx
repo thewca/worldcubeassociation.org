@@ -19,7 +19,7 @@ import I18nHTMLTranslate from "@/components/I18nHTMLTranslate";
 import _ from "lodash";
 import Errored from "@/components/ui/errored";
 
-export default async function TeamsCommitteesPage() {
+export default async function DelegatesPage() {
   const { t } = await getT();
 
   const { data: delegateGroups, error } = await getDelegateRegions();
@@ -34,15 +34,12 @@ export default async function TeamsCommitteesPage() {
     <Container>
       <VStack align={"left"} gap="8" width="full" pt="8" alignItems="left">
         <Heading size="5xl">{t("delegates_page.title")}</Heading>
-        <Prose>
-          <I18nHTMLTranslate
-            i18nKey="about.structure.delegates_html"
-            options={{ see_link: "" }}
-          />
-        </Prose>
-        <Prose>
-          <I18nHTMLTranslate i18nKey="delegates_page.acknowledges" />
-        </Prose>
+        <I18nHTMLTranslate
+          i18nKey="about.structure.delegates_html"
+          options={{ see_link: "" }}
+          as={Prose}
+        />
+        <I18nHTMLTranslate i18nKey="delegates_page.acknowledges" as={Prose} />
         <Tabs.Root
           variant="enclosed"
           orientation="vertical"
