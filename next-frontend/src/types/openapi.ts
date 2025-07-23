@@ -154,6 +154,47 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/incidents": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get a list of incidents */
+        get: {
+            parameters: {
+                query?: {
+                    q?: string;
+                    tags?: string;
+                    page?: number;
+                    per_page?: number;
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Successful response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Incident"][];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/persons/{wca_id}/": {
         parameters: {
             query?: never;
@@ -450,6 +491,35 @@ export interface components {
              */
             url: string;
             avatar: components["schemas"]["UserAvatar"];
+        };
+        Incident: {
+            id: string;
+            title: string;
+            private_description?: string;
+            public_summary: string;
+            /** Format: date-time */
+            created_at: string;
+            /** Format: date-time */
+            updated_at: string;
+            /** Format: date-time */
+            resolved_at: string;
+            digest_worthy: boolean;
+            /** Format: date-time */
+            digest_sent_at?: string;
+            /** Format: uri */
+            url: string;
+            tags: {
+                name: string;
+                id?: number;
+                /** Format: uri */
+                url: string;
+                content_html: string;
+            }[];
+            competitions: {
+                id: string;
+                name: string;
+                comments?: string;
+            }[];
         };
         TeamMembership: {
             id: number;
