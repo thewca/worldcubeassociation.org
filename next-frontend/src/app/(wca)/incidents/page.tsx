@@ -9,6 +9,10 @@ import {
   VStack,
   Heading,
   Input,
+  HStack,
+  Text,
+  Select,
+  createListCollection,
 } from "@chakra-ui/react";
 import { LuChevronLeft, LuChevronRight } from "react-icons/lu";
 import useAPI from "@/lib/wca/useAPI";
@@ -22,11 +26,16 @@ import {
   RegulationTag,
 } from "@/components/incidents/Tags";
 
-const ITEMS_PER_PAGE = 10;
+const itemsPerPageChoices = createListCollection({
+  items: [5, 10, 15, 20, 30, 40],
+  itemToValue: (n) => n.toString(),
+  itemToString: (n) => n.toString(),
+});
 
 export default function IncidentsPage() {
   const api = useAPI();
   const [page, setPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
   const [query, setQuery] = useState<string | undefined>(undefined);
   const [searchTags, setSearchTags] = useState<string[]>([]);
 
@@ -35,14 +44,14 @@ export default function IncidentsPage() {
       api.GET("/incidents", {
         params: {
           query: {
-            per_page: ITEMS_PER_PAGE,
+            per_page: itemsPerPage,
             query,
             page,
             tags: searchTags.length === 0 ? undefined : searchTags.join(","),
           },
         },
       }),
-    queryKey: ["incidents", page, query, ...searchTags],
+    queryKey: ["incidents", page, itemsPerPage, query, ...searchTags],
   });
 
   const { totalEntries, totalPages } = useMemo(() => {
@@ -56,7 +65,7 @@ export default function IncidentsPage() {
       const headers = incidentQuery.response.headers;
       const totalEntries = parseInt(headers.get("total") ?? "0", 10);
       const entriesPerPage = parseInt(
-        headers.get("per-page") ?? `${ITEMS_PER_PAGE}`,
+        headers.get("per-page") ?? `${itemsPerPage}`,
         10,
       );
       const totalPages = Math.ceil(totalEntries / entriesPerPage);
@@ -67,7 +76,12 @@ export default function IncidentsPage() {
         totalPages,
       };
     }
-  }, [incidentQuery]);
+  }, [incidentQuery, itemsPerPage]);
+
+  const [topEntryIndex, bottomEntryIndex] = [
+    (page - 1) * itemsPerPage,
+    Math.min(page * itemsPerPage, totalEntries) - 1,
+  ];
 
   const addTagToSearch = useCallback(
     (tag: string) => {
@@ -154,35 +168,78 @@ export default function IncidentsPage() {
           </Table.Body>
         </Table.Root>
 
-        <Pagination.Root count={totalEntries} pageSize={totalPages} page={page}>
-          <ButtonGroup variant="ghost" size="sm" wrap="wrap">
-            <Pagination.PrevTrigger asChild>
-              <IconButton
-                onClick={() => setPage(page - 1)}
-                disabled={page === 1}
-              >
-                <LuChevronLeft />
-              </IconButton>
-            </Pagination.PrevTrigger>
+        <HStack justify="space-between">
+          <Text as="span">
+            Showing entries {topEntryIndex + 1} to {bottomEntryIndex + 1} of{" "}
+            {totalEntries} entries with{" "}
+            <Select.Root
+              collection={itemsPerPageChoices}
+              value={[itemsPerPage.toString()]}
+              onValueChange={(e) => setItemsPerPage(parseInt(e.value[0]))}
+              width="5rem"
+              display="inline-block"
+            >
+              <Select.HiddenSelect />
 
-            <Pagination.Items
-              render={(page) => (
+              <Select.Control>
+                <Select.Trigger>
+                  <Select.ValueText />
+                </Select.Trigger>
+                <Select.IndicatorGroup>
+                  <Select.Indicator />
+                </Select.IndicatorGroup>
+              </Select.Control>
+
+              <Select.Positioner>
+                <Select.Content>
+                  {itemsPerPageChoices.items.map((perPageChoice) => (
+                    <Select.Item
+                      key={perPageChoice.toString()}
+                      item={perPageChoice.toString()}
+                    >
+                      {perPageChoice}
+                    </Select.Item>
+                  ))}
+                </Select.Content>
+              </Select.Positioner>
+            </Select.Root>
+            per page
+          </Text>
+
+          <Pagination.Root
+            count={totalEntries}
+            pageSize={totalPages}
+            page={page}
+          >
+            <ButtonGroup variant="ghost" size="sm" wrap="wrap">
+              <Pagination.PrevTrigger asChild>
                 <IconButton
-                  variant={{ base: "ghost", _selected: "outline" }}
-                  onClick={() => setPage(page.value)}
+                  onClick={() => setPage(page - 1)}
+                  disabled={page === 1}
                 >
-                  {page.value}
+                  <LuChevronLeft />
                 </IconButton>
-              )}
-            />
+              </Pagination.PrevTrigger>
 
-            <Pagination.NextTrigger asChild>
-              <IconButton onClick={() => setPage(page + 1)}>
-                <LuChevronRight />
-              </IconButton>
-            </Pagination.NextTrigger>
-          </ButtonGroup>
-        </Pagination.Root>
+              <Pagination.Items
+                render={(page) => (
+                  <IconButton
+                    variant={{ base: "ghost", _selected: "outline" }}
+                    onClick={() => setPage(page.value)}
+                  >
+                    {page.value}
+                  </IconButton>
+                )}
+              />
+
+              <Pagination.NextTrigger asChild>
+                <IconButton onClick={() => setPage(page + 1)}>
+                  <LuChevronRight />
+                </IconButton>
+              </Pagination.NextTrigger>
+            </ButtonGroup>
+          </Pagination.Root>
+        </HStack>
       </VStack>
     </Container>
   );
