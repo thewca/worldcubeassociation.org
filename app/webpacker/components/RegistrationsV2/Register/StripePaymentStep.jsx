@@ -18,7 +18,6 @@ import getPaymentTicket from '../api/payment/get/getPaymentTicket';
 import { showMessage } from './RegistrationMessage';
 import AutonumericField from '../../wca/FormBuilder/input/AutonumericField';
 import Loading from '../../Requests/Loading';
-import { useStepNavigation } from '../lib/StepNavigationProvider';
 
 const convertISOAmount = async (competitionId, userId, isoDonationAmount) => {
   const { data } = await fetchJsonOrError(
@@ -32,7 +31,6 @@ export default function Wrapper({
   stripePublishableKey,
   connectedAccountId,
   user,
-  nextStep,
 }) {
   const [stripePromise, setStripePromise] = useState(null);
   const initialAmount = competitionInfo.base_entry_fee_lowest_denomination;
@@ -78,7 +76,6 @@ export default function Wrapper({
             isoDonationAmount={isoDonationAmount}
             displayAmount={data?.human_amount}
             registration={registration}
-            nextStep={nextStep}
             conversionFetching={isFetching}
           />
         </Elements>
@@ -97,20 +94,10 @@ function PaymentStep({
   const stripe = useStripe();
   const elements = useElements();
   const dispatch = useDispatch();
-  const { nextStep } = useStepNavigation();
-
-  const { hasPaid, registration } = useRegistration();
+  const { registration } = useRegistration();
 
   const [isLoading, setIsLoading] = useState(false);
   const [isDonationChecked, setDonationChecked] = useCheckboxState(false);
-
-  useEffect(() => {
-    // TODO When we add per Event Payment this logic needs to also check
-    //  if an additional payment is needed
-    if (hasPaid) {
-      nextStep();
-    }
-  }, [nextStep, hasPaid]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -173,17 +160,17 @@ function PaymentStep({
               label={I18n.t('registrations.payment_form.labels.show_donation')}
             />
             { isDonationChecked && (
-            <AutonumericField
-              id="donationInputField"
-              onChange={(_, { value }) => setIsoDonationAmount(value)}
-              currency={competitionInfo.currency_code}
-              value={isoDonationAmount}
-              label={(
-                <Label>
-                  {I18n.t('registrations.payment_form.labels.donation')}
-                </Label>
-              )}
-            />
+              <AutonumericField
+                id="donationInputField"
+                onChange={(_, { value }) => setIsoDonationAmount(value)}
+                currency={competitionInfo.currency_code}
+                value={isoDonationAmount}
+                label={(
+                  <Label>
+                    {I18n.t('registrations.payment_form.labels.donation')}
+                  </Label>
+                )}
+              />
             )}
           </FormField>
         )}

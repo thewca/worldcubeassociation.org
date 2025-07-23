@@ -30,7 +30,7 @@ export default function RegistrationOverview({
     hasPaid,
   } = useRegistration();
   const {
-    jumpToStart, jumpToStepByKey, refreshStep,
+    jumpToStart, jumpToFirstIncompleteStep, refreshStep,
   } = useStepNavigation();
 
   const hasRegistrationEditDeadlinePassed = hasPassed(
@@ -99,7 +99,7 @@ export default function RegistrationOverview({
       )}
       <Segment loading={isDeleting}>
         <Header>{I18n.t('competitions.nav.menu.registration')}</Header>
-        <Form onSubmit={() => jumpToStepByKey('competing')} size="large">
+        <Form onSubmit={() => jumpToFirstIncompleteStep} size="large">
           <List>
             <List.Item>
               <List.Header>
