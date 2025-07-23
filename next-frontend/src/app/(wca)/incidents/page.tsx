@@ -16,7 +16,7 @@ import {
 } from "@chakra-ui/react";
 import { LuChevronLeft, LuChevronRight } from "react-icons/lu";
 import useAPI from "@/lib/wca/useAPI";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, keepPreviousData } from "@tanstack/react-query";
 import { useCallback, useMemo, useState } from "react";
 import Loading from "@/components/ui/loading";
 import _ from "lodash";
@@ -39,7 +39,11 @@ export default function IncidentsPage() {
   const [query, setQuery] = useState<string | undefined>(undefined);
   const [searchTags, setSearchTags] = useState<string[]>([]);
 
-  const { data: incidentQuery, isLoading } = useQuery({
+  const {
+    data: incidentQuery,
+    isLoading,
+    isFetching,
+  } = useQuery({
     queryFn: () =>
       api.GET("/incidents", {
         params: {
@@ -52,6 +56,7 @@ export default function IncidentsPage() {
         },
       }),
     queryKey: ["incidents", page, itemsPerPage, query, ...searchTags],
+    placeholderData: keepPreviousData,
   });
 
   const { totalEntries, totalPages } = useMemo(() => {
@@ -105,6 +110,7 @@ export default function IncidentsPage() {
           value={query}
           onChange={(e) => setQuery(e.target.value)}
         />
+        {isFetching && <Loading />}
         <Table.Root size="sm" variant="outline" striped>
           <Table.Header>
             <Table.Row>
