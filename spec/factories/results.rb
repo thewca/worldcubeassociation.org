@@ -95,6 +95,7 @@ FactoryBot.define do
 
   factory :inbox_result do
     instance_eval(&resultable_instance_members)
+
     transient do
       person { FactoryBot.create(:inbox_person, competition_id: competition.id) }
     end
@@ -103,16 +104,15 @@ FactoryBot.define do
       transient do
         real_person { FactoryBot.create(:person) }
       end
+
       person do
         FactoryBot.create(:inbox_person,
                           competition_id: competition.id,
-                          name: real_person.name, wca_id: real_person.wca_id,
-                          gender: real_person.gender, dob: real_person.dob,
-                          country_iso2: real_person.country.iso2)
+                          **real_person.slice(:name, :wca_id, :gender, :dob, :country_iso2))
       end
     end
 
-    person_id { person.id }
+    person_id { person.ref_id }
   end
 
   factory :result do

@@ -109,12 +109,22 @@ FactoryBot.define do
     end
 
     trait :auto_accept do
+      stripe_connected
       use_wca_registration { true }
-      auto_accept_registrations { true }
       competitor_limit_enabled { true }
       competitor_limit_reason { 'test' }
       competitor_limit { 5 }
       auto_accept_disable_threshold { 4 }
+    end
+
+    trait :bulk_auto_accept do
+      auto_accept
+      auto_accept_preference { :bulk }
+    end
+
+    trait :live_auto_accept do
+      auto_accept
+      auto_accept_preference { :live }
     end
 
     trait :allow_self_delete do
@@ -276,7 +286,7 @@ FactoryBot.define do
         person = FactoryBot.create(:inbox_person, competition_id: competition.id)
         rounds = competition.competition_events.map(&:rounds).flatten
         rounds.each do |round|
-          FactoryBot.create(:inbox_result, competition_id: competition.id, person_id: person.id, event_id: round.event.id, format_id: round.format.id)
+          FactoryBot.create(:inbox_result, competition_id: competition.id, person_id: person.ref_id, event_id: round.event.id, format_id: round.format.id)
           FactoryBot.create_list(:scramble, 5, competition_id: competition.id, event_id: round.event.id)
         end
       end

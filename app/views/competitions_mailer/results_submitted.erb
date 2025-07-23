@@ -14,11 +14,11 @@
 </p>
 
 <p>
-  <% unless @results_submission.results_validator.any_warnings? %>
+  <% unless @results_validator.any_warnings? %>
     The competition results had no warning.
   <% else %>
     Please find below the list of warnings for the competition's results:
-    <% @results_submission.results_validator.warnings.group_by(&:kind).each do |type, warnings| %>
+    <% @results_validator.warnings.group_by(&:kind).each do |type, warnings| %>
       <% if warnings.any? %>
         <br/>Warnings detected in <%= type %>
         <ul>
@@ -33,4 +33,4 @@
 
 <p>Here's a message from <%= @submitter_user.name %>:</p>
 
-<blockquote><%= md @results_submission.message %></blockquote>
+<blockquote><%= md @message %></blockquote>

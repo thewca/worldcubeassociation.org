@@ -910,8 +910,6 @@ hr:
         results_file: ''
         #original_hash: da39a3e
         message: ''
-        #original_hash: da39a3e
-        confirm_information: ''
       regional_organization:
         #original_hash: da39a3e
         name: ''
@@ -1501,7 +1499,7 @@ hr:
         Prije postavljanja upita, možda biste željeli pogledati naša <a
         href="/faq">Često postavljana pitanja</a>! Ako želite kontaktirati
         određeni odbor ili tim koji nije ovdje naveden, možete provjeriti
-        njihove podatke na <a href="/teams-committees-councils">ovoj
+        njihove podatke na <a href="/teams-committees">ovoj
         stranici</a>.
       #original_hash: ea20be0
       success_message: Email poslan - javit ćemo vam se u najbržem roku.

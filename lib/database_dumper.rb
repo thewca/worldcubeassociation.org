@@ -107,6 +107,7 @@ module DatabaseDumper
           forbid_newcomers_reason
           auto_close_threshold
           auto_accept_registrations
+          auto_accept_preference
           auto_accept_disable_threshold
           newcomer_month_reserved_spots
           competitor_can_cancel
@@ -961,6 +962,9 @@ module DatabaseDumper
     "tickets" => :skip_all_rows,
     "tickets_edit_person" => :skip_all_rows,
     "tickets_edit_person_fields" => :skip_all_rows,
+    "duplicate_checker_job_runs" => :skip_all_rows,
+    "potential_duplicate_persons" => :skip_all_rows,
+    "tickets_competition_result" => :skip_all_rows,
   }.freeze
 
   RESULTS_SANITIZERS = {
@@ -1315,7 +1319,7 @@ module DatabaseDumper
   end
 
   def self.filter_out_mysql_warning(dest_filename = nil)
-    "2>&1 | grep -v \"\\[Warning\\] Using a password on the command line interface can be insecure.\"#{dest_filename.present? ? " > #{dest_filename}" : ''} || true"
+    "2>&1 | grep -v \"\\[Warning\\] Using a password on the command line interface can be insecure.\"#{" > #{dest_filename}" if dest_filename.present?} || true"
   end
 end
 

@@ -54,12 +54,12 @@ class PanelController < ApplicationController
       ResultsValidators::Utils.validator_class_from_name(validator_name)
     end
 
-    apply_fix_when_possible_raw = params.require(:applyFixWhenPossible)
-    apply_fix_when_possible = ActiveRecord::Type::Boolean.new.cast(apply_fix_when_possible_raw)
+    apply_fix_when_possible = ActiveRecord::Type::Boolean.new.cast(params.require(:applyFixWhenPossible))
+    check_real_results = ActiveRecord::Type::Boolean.new.cast(params.require(:checkRealResults))
 
     results_validator = ResultsValidators::CompetitionsResultsValidator.new(
       validators,
-      check_real_results: true,
+      check_real_results: check_real_results,
       apply_fixes: apply_fix_when_possible,
     )
     results_validator.validate(competition_ids)

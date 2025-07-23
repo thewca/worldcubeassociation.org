@@ -42,6 +42,44 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/competitions/{competitionId}/events": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get competition events in WCIF v0 format */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    competitionId: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Successful response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["WcifEvent"][];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/competitions/{competitionId}/registrations": {
         parameters: {
             query?: never;
@@ -235,6 +273,114 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/user_roles": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get user roles */
+        get: {
+            parameters: {
+                query?: {
+                    /** @description Filter by whether the group is active */
+                    isActive?: boolean;
+                    /** @description Filter by whether the group is hidden */
+                    isGroupHidden?: boolean;
+                    /** @description Filter by user ID */
+                    userId?: number;
+                    /** @description Filter by group ID */
+                    groupId?: number;
+                    /** @description Filter by metadata status (e.g., "chair") */
+                    status?: string;
+                    /** @description Filter by group type (e.g., "officers") */
+                    groupType?: string;
+                    /** @description Filter by whether the user is the lead of the group */
+                    isLead?: boolean;
+                    /** @description Sort by a specific field (e.g., "start_date", "-created_at") */
+                    sort?: string;
+                    /** @description Number of results per page */
+                    perPage?: number;
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description A list of user roles */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["UserRole"][];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/regulations/translations": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Gets all translations of regulations */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Successful response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["RegulationsTranslations"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/export/public": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Export Information */
+        get: operations["getExports"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/users/me/permissions": {
         parameters: {
             query?: never;
@@ -252,10 +398,79 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/regional-organizations": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** A list of currently acknowledged regional organizations */
+        get: operations["getOrganizations"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        UserRole: {
+            id: number;
+            /** Format: date */
+            start_date: string;
+            /** Format: date */
+            end_date: string | null;
+            group: components["schemas"]["UserGroup"];
+            user: components["schemas"]["Person"];
+            metadata: {
+                id?: number;
+                status?: string;
+                /** Format: date-time */
+                created_at?: string;
+                /** Format: date-time */
+                updated_at?: string;
+                /** Format: email */
+                email?: string;
+            };
+            class?: string;
+        };
+        UserGroup: {
+            id: number;
+            name: string;
+            group_type: string;
+            parent_group_id?: number | null;
+            is_active: boolean;
+            is_hidden: boolean;
+            metadata_id?: number | null;
+            metadata_type?: string | null;
+            /** Format: date-time */
+            created_at: string;
+            /** Format: date-time */
+            updated_at: string;
+            lead_user?: components["schemas"]["Person"];
+            metadata?: {
+                id?: number;
+                status?: string;
+                /** Format: date-time */
+                created_at?: string;
+                /** Format: date-time */
+                updated_at?: string;
+                /** Format: email */
+                email?: string;
+            };
+        };
+        RegionalOrganization: {
+            name: string;
+            country_iso2: string;
+            website: string;
+            /** Format: uri */
+            logo_url?: string;
+        };
         Person: {
             /** @example 267 */
             id: number;
@@ -316,6 +531,16 @@ export interface components {
             wca_id?: string;
             avatar?: components["schemas"]["UserAvatar"];
         };
+        RegulationsTranslations: {
+            current: components["schemas"]["Translation"][];
+            outdated: components["schemas"]["Translation"][];
+        };
+        Translation: {
+            version: string;
+            language: string;
+            language_english: string;
+            url: string;
+        };
         UserAvatar: {
             /**
              * Format: uri
@@ -337,6 +562,19 @@ export interface components {
              */
             email?: string;
             avatar?: components["schemas"]["UserAvatar"];
+        };
+        ExportInfo: {
+            /** Format: date */
+            export_date: string;
+            /** Format: uri */
+            sql_url: string;
+            sql_filesize_bytes: number;
+            /** Format: uri */
+            tsv_url: string;
+            tsv_filesize_bytes: number;
+            readme: string;
+            /** Format: uri */
+            developer_url?: string;
         };
         Rank: {
             id: number;
@@ -536,6 +774,7 @@ export interface components {
             main_event_id: string;
             /** @example 123 */
             number_of_bookmarks: number;
+            "uses_qualification?": boolean;
             /** @example true */
             "registration_full?": boolean;
             delegates: components["schemas"]["Person"][];
@@ -625,6 +864,121 @@ export interface components {
             user_id: number;
             event_ids: string[];
         };
+        WcifEvent: {
+            /** @example 333 */
+            id: string;
+            rounds: components["schemas"]["WcifRound"][];
+            competitorLimit?: number;
+            qualification?: components["schemas"]["WcifQualification"];
+            extensions: unknown[];
+        };
+        WcifRound: {
+            /** @example 333-r1 */
+            id: string;
+            /** @enum {string} */
+            format: "1" | "2" | "3" | "a" | "m";
+            timeLimit?: components["schemas"]["WcifTimeLimit"];
+            cutoff?: components["schemas"]["WcifCutoff"];
+            advancementCondition?: components["schemas"]["WcifAdvancementCondition"];
+            results: components["schemas"]["WcifResult"][];
+            scrambleSetCount: number;
+            scrambleSets: components["schemas"]["WcifScrambleSet"][];
+            extensions: unknown[];
+        };
+        WcifQualification: components["schemas"]["WcifQualificationAttemptResult"] | components["schemas"]["WcifQualificationRanking"] | components["schemas"]["WcifQualificationAnyResult"];
+        WcifQualificationAttemptResult: {
+            /** Format: date */
+            whenDate: string;
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            type: "attemptResult";
+            /** @enum {string} */
+            resultType: "single" | "average";
+            level: components["schemas"]["WcifAttemptResult"];
+        };
+        WcifQualificationRanking: {
+            /** Format: date */
+            whenDate: string;
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            type: "ranking";
+            /** @enum {string} */
+            resultType: "single" | "average";
+            level: components["schemas"]["WcifRanking"];
+        };
+        WcifQualificationAnyResult: {
+            /** Format: date */
+            whenDate: string;
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            type: "anyResult";
+            /** @enum {string} */
+            resultType: "single" | "average";
+        };
+        WcifTimeLimit: {
+            /** @example 18000 */
+            centiseconds: number;
+            cumulativeRoundIds: string[];
+        };
+        WcifCutoff: {
+            /** @example 2 */
+            numberOfAttempts: number;
+            attemptResult: components["schemas"]["WcifAttemptResult"];
+        };
+        WcifAdvancementCondition: components["schemas"]["WcifAdvancementConditionRanking"] | components["schemas"]["WcifAdvancementConditionPercent"] | components["schemas"]["WcifAdvancementConditionAttemptResult"];
+        WcifAdvancementConditionRanking: {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            type: "ranking";
+            level: components["schemas"]["WcifRanking"];
+        };
+        WcifAdvancementConditionPercent: {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            type: "percent";
+            level: components["schemas"]["WcifPercent"];
+        };
+        WcifAdvancementConditionAttemptResult: {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            type: "attemptResult";
+            level: components["schemas"]["WcifAttemptResult"];
+        };
+        WcifResult: {
+            /** @example 1 */
+            personId: number;
+            /** @example 10 */
+            ranking?: number;
+            attempts: components["schemas"]["WcifAttempt"][];
+            best: components["schemas"]["WcifAttemptResult"];
+            average: components["schemas"]["WcifAttemptResult"];
+        };
+        WcifScrambleSet: {
+            /** @example 1 */
+            id: number;
+            scrambles: components["schemas"]["WcifScramble"][];
+            extraScrambles: components["schemas"]["WcifScramble"][];
+        };
+        WcifAttemptResult: number;
+        WcifAttempt: {
+            result: components["schemas"]["WcifAttemptResult"];
+            reconstruction?: string;
+        };
+        WcifRanking: number;
+        WcifPercent: number;
+        WcifScramble: string;
     };
     responses: never;
     parameters: never;
@@ -634,6 +988,26 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
+    getExports: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successfully retrieved exports */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ExportInfo"];
+                };
+            };
+        };
+    };
     getUserPermissions: {
         parameters: {
             query?: never;
@@ -658,6 +1032,26 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+        };
+    };
+    getOrganizations: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Retrieved organizations */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RegionalOrganization"][];
+                };
             };
         };
     };

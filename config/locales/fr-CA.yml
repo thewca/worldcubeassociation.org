@@ -934,8 +934,6 @@ fr-CA:
         results_file: ''
         #original_hash: da39a3e
         message: ''
-        #original_hash: da39a3e
-        confirm_information: ''
       regional_organization:
         #original_hash: da39a3e
         name: ''
@@ -1565,7 +1563,7 @@ fr-CA:
         href="/faq">Foire Aux Questions</a> ! Si vous souhaitez contacter un
         comité ou une équipe spécifique qui ne figure pas dans la liste, vous
         pouvez consulter ses coordonnées sur <a
-        href="/teams-committees-councils">cette page</a>.
+        href="/teams-committees">cette page</a>.
       #original_hash: 597b791
       success_message: Courriel envoyé - nous vous répondrons sous peu.
       #original_hash: a38a97d
@@ -5339,7 +5337,7 @@ fr-CA:
       différentes et nous n'avons pas l'intention de ralentir de sitôt! La
       communauté du cube a connu une croissance constante depuis sa création en
       2004 et nous voulons l'encourager à continuer à l'avenir en augmentant
-      l'accessibilité des compétitions dans de nouvelles régions. 
+      l'accessibilité des compétitions dans de nouvelles régions.
 
       Dans le futur, nous espérons soutenir notre communauté encore plus à
       travers des collaborations et des contacts avec ceux qui s'intéressent aux

@@ -229,4 +229,117 @@ RSpec.describe UsersController do
       end
     end
   end
+
+  describe 'POST #merge' do
+    let(:user1) { create(:user, :wca_id) }
+    let(:shared_attributes) { user1.attributes.symbolize_keys.slice(:name, :country_iso2, :gender, :dob) }
+    let(:user2) { create(:user, :wca_id, shared_attributes) }
+
+    context 'signed in as WRT member' do
+      before :each do
+        sign_in create :user, :wrt_member
+      end
+
+      it 'requires different people' do
+        post :merge, params: {
+          toUserId: user1.id,
+          fromUserId: user1.id,
+        }
+
+        expect(response).to have_http_status :bad_request
+        parsed_body = response.parsed_body
+        expect(parsed_body["error"]).to eq "Cannot merge user with itself"
+      end
+
+      it 'requires at least one not to have WCA ID' do
+        post :merge, params: {
+          toUserId: user1.id,
+          fromUserId: user2.id,
+        }
+
+        expect(response).to have_http_status :bad_request
+        parsed_body = response.parsed_body
+        expect(parsed_body["error"]).to eq "Cannot merge users with both having a WCA ID"
+      end
+
+      it 'requires same name' do
+        user2.update!(wca_id: nil, name: "#{user1.name} Different") # Adding a suffix to make it different.
+
+        post :merge, params: {
+          toUserId: user1.id,
+          fromUserId: user2.id,
+        }
+
+        expect(response).to have_http_status :bad_request
+        parsed_body = response.parsed_body
+        expect(parsed_body["error"]).to eq "Cannot merge users with different details"
+      end
+
+      it 'requires same country' do
+        user2.update!(wca_id: nil, country_iso2: Country.real.where.not(iso2: user1.country_iso2).sample.iso2)
+
+        post :merge, params: {
+          toUserId: user1.id,
+          fromUserId: user2.id,
+        }
+
+        expect(response).to have_http_status :bad_request
+        parsed_body = response.parsed_body
+        expect(parsed_body["error"]).to eq "Cannot merge users with different details"
+      end
+
+      it 'requires same gender' do
+        user1.update!(gender: User::ALLOWABLE_GENDERS[0])
+        user2.update!(wca_id: nil, gender: User::ALLOWABLE_GENDERS[1])
+
+        post :merge, params: {
+          toUserId: user1.id,
+          fromUserId: user2.id,
+        }
+
+        expect(response).to have_http_status :bad_request
+        parsed_body = response.parsed_body
+        expect(parsed_body["error"]).to eq "Cannot merge users with different details"
+      end
+
+      it 'requires same dob' do
+        user2.update!(wca_id: nil, dob: user1.dob + 1.day)
+
+        post :merge, params: {
+          toUserId: user1.id,
+          fromUserId: user2.id,
+        }
+
+        expect(response).to have_http_status :bad_request
+        parsed_body = response.parsed_body
+        expect(parsed_body["error"]).to eq "Cannot merge users with different details"
+      end
+
+      it 'merges users' do
+        user1.update!(wca_id: nil)
+        user2_wca_id = user2.wca_id
+        create(:user_role, :active, :wrc_member, user: user2)
+        create(:competition, :past, delegates: [user2], organizers: [user2], announced_by: user2.id, results_posted_by: user2.id)
+
+        post :merge, params: {
+          toUserId: user1.id,
+          fromUserId: user2.id,
+        }
+
+        expect(response).to have_http_status :ok
+        expect(user1.reload.wca_id).to eq user2_wca_id
+        expect(user2.reload.wca_id).to be_nil
+        expect(user1.roles.count).to eq 1
+        expect(user2.roles.count).to eq 0
+        expect(user1.competition_organizers.count).to eq 1
+        expect(user1.competition_delegates.count).to eq 1
+        expect(user1.competitions_announced.count).to eq 1
+        expect(user1.competitions_results_posted.count).to eq 1
+        expect(user2.competition_organizers.count).to eq 0
+        expect(user2.competition_delegates.count).to eq 0
+        expect(user2.competitions_announced.count).to eq 0
+        expect(user2.competitions_results_posted.count).to eq 0
+      end
+    end
+  end
 end

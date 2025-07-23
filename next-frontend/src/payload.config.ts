@@ -15,8 +15,15 @@ import {
   FaqQuestions,
 } from "@/collections/FrequentlyAskedQuestions";
 import { Users } from "@/collections/Users";
+import { Tools } from "@/collections/Tools";
+import { RegulationsHistoryItem } from "@/collections/RegulationsHistory";
 import { Nav } from "@/globals/Nav";
 import { Home } from "@/globals/Home";
+import { AboutRegulations } from "@/globals/AboutRegulations";
+import { SpeedCubingHistoryPage } from "@/globals/SpeedcubingHistory";
+import { Privacy } from "@/globals/Privacy";
+import { Disclaimer } from "@/globals/Disclaimer";
+import { AboutUsPage } from "@/globals/About";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -51,16 +58,18 @@ async function plugins() {
 
 async function dbAdapter() {
   if (process.env.NODE_ENV === "production") {
-    const { mongooseAdapter } = await import("@payloadcms/db-mongodb");
+    const { mongooseAdapter, compatabilityOptions } = await import(
+      "@payloadcms/db-mongodb"
+    );
     return mongooseAdapter({
       url: process.env.DATABASE_URI || "",
-      disableIndexHints: true,
       connectOptions: {
         authMechanism: "MONGODB-AWS",
         authSource: "$external",
         tls: true,
         tlsCAFile: "/app/global-bundle.pem",
       },
+      ...compatabilityOptions.documentdb,
     });
   } else {
     const { sqliteAdapter } = await import("@payloadcms/db-sqlite");
@@ -90,8 +99,18 @@ export default buildConfig({
     FaqCategories,
     FaqQuestions,
     Users,
+    RegulationsHistoryItem,
+    Tools,
   ],
-  globals: [Nav, Home],
+  globals: [
+    Nav,
+    Home,
+    AboutUsPage,
+    Privacy,
+    Disclaimer,
+    SpeedCubingHistoryPage,
+    AboutRegulations,
+  ],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || "",
   typescript: {
