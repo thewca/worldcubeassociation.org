@@ -369,6 +369,10 @@ class Person < ApplicationRecord
     end
   end
 
+  def user_id
+    user&.id
+  end
+
   def serializable_hash(options = nil)
     json = super(DEFAULT_SERIALIZE_OPTIONS.merge(options || {}))
     json[:class] = self.class.to_s.downcase

@@ -10,7 +10,7 @@ import useInputState from '../../../../lib/hooks/useInputState';
 import mergeUsers from './api/mergeUsers';
 import SpecialAccountDetails from './SpecialAccountDetails';
 
-export default function MergeUsers({ firstUserId, secondUserId }) {
+export default function MergeUsers({ firstUserId, secondUserId, onSuccess }) {
   const {
     data: firstUser,
     isPending: isPendingFirstUser,
@@ -46,6 +46,7 @@ export default function MergeUsers({ firstUserId, secondUserId }) {
       );
       return mergeUsers(toUserId, fromUserId);
     },
+    onSuccess,
   });
 
   if (isPendingFirstUser || isPendingSecondUser || isMergePending) return <Loading />;

@@ -1529,19 +1529,17 @@ class User < ApplicationRecord
   end
 
   def transfer_data_to(new_user)
-    ActiveRecord::Base.transaction do
-      competition_organizers.update_all(organizer_id: new_user.id)
-      competition_delegates.update_all(delegate_id: new_user.id)
-      competitions_results_posted.update_all(results_posted_by: new_user.id)
-      competitions_announced.update_all(announced_by: new_user.id)
-      roles.update_all(user_id: new_user.id)
-      registrations.update_all(user_id: new_user.id)
+    competition_organizers.update_all(organizer_id: new_user.id)
+    competition_delegates.update_all(delegate_id: new_user.id)
+    competitions_results_posted.update_all(results_posted_by: new_user.id)
+    competitions_announced.update_all(announced_by: new_user.id)
+    roles.update_all(user_id: new_user.id)
+    registrations.update_all(user_id: new_user.id)
 
-      return if wca_id.blank?
+    return if wca_id.blank?
 
-      wca_id_to_be_transferred = self.wca_id
-      self.update!(wca_id: nil) # Must remove WCA ID before adding it as it is unique in the Users table.
-      new_user.update!(wca_id: wca_id_to_be_transferred)
-    end
+    wca_id_to_be_transferred = self.wca_id
+    self.update!(wca_id: nil) # Must remove WCA ID before adding it as it is unique in the Users table.
+    new_user.update!(wca_id: wca_id_to_be_transferred)
   end
 end
