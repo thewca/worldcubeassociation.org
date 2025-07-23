@@ -13,18 +13,18 @@ class CompetitionsController < ApplicationController
     },
   }.freeze
 
-  before_action :authenticate_user!, except: [
-    :index,
-    :show,
-    :embedable_map,
-    :show_podiums,
-    :show_all_results,
-    :show_results_by_person,
-    :show_scrambles,
+  before_action :authenticate_user!, except: %i[
+    index
+    show
+    embedable_map
+    show_podiums
+    show_all_results
+    show_results_by_person
+    show_scrambles
   ]
-  before_action -> { redirect_to_root_unless_user(:can_admin_competitions?) }, only: [
-    :admin_edit,
-    :disconnect_payment_integration,
+  before_action -> { redirect_to_root_unless_user(:can_admin_competitions?) }, only: %i[
+    admin_edit
+    disconnect_payment_integration
   ]
   before_action -> { redirect_to_root_unless_user(:can_admin_results?) }, only: [
     :post_results,
@@ -35,11 +35,11 @@ class CompetitionsController < ApplicationController
   before_action -> { redirect_to_root_unless_user(:can_access_senior_delegate_panel?) }, only: [
     :for_senior,
   ]
-  before_action -> { redirect_to_root_unless_user(:can_manage_competition?, competition_from_params) }, only: [
-    :edit,
-    :edit_events,
-    :edit_schedule,
-    :payment_integration_setup,
+  before_action -> { redirect_to_root_unless_user(:can_manage_competition?, competition_from_params) }, only: %i[
+    edit
+    edit_events
+    edit_schedule
+    payment_integration_setup
   ]
 
   rescue_from WcaExceptions::ApiException do |e|
@@ -118,6 +118,11 @@ class CompetitionsController < ApplicationController
       comp.update!(results_posted_at: Time.now, results_posted_by: current_user.id, posting_by: nil)
       comp.competitor_users.each { |user| user.notify_of_results_posted(comp) }
       comp.registrations.accepted.each { |registration| registration.user.maybe_assign_wca_id_by_results(comp) }
+      if comp.tickets_competition_result.present?
+        comp.tickets_competition_result.update!(
+          status: TicketsCompetitionResult.statuses[:posted],
+        )
+      end
     end
 
     flash[:success] = t('competitions.messages.results_posted')
@@ -377,9 +382,7 @@ class CompetitionsController < ApplicationController
       },
       limit: other_comp.competitor_limit_enabled ? other_comp.competitor_limit : "",
       competitors: other_comp.probably_over? ? other_comp.results.select('DISTINCT person_id').count : "",
-      events: other_comp.events.map { |event|
-        event.id
-      },
+      events: other_comp.events.map(&:id),
       coordinates: {
         lat: other_comp.latitude_degrees,
         long: other_comp.longitude_degrees,
@@ -424,9 +427,7 @@ class CompetitionsController < ApplicationController
       minutesUntil: competition.minutes_until_other_registration_starts(other_comp),
       cityName: other_comp.city_name,
       countryId: other_comp.country_id,
-      events: other_comp.events.map { |event|
-        event.id
-      },
+      events: other_comp.events.map(&:id),
     }
   end
 
@@ -509,7 +510,6 @@ class CompetitionsController < ApplicationController
   end
 
   before_action -> { require_user_permission(:can_manage_competition?, competition_from_params) }, only: [:update]
-
   def update
     competition = competition_from_params
 
@@ -614,7 +614,7 @@ class CompetitionsController < ApplicationController
     render json: competition.form_user_preferences(current_user)
   end
 
-  before_action -> { require_user_permission(:can_manage_competition?, competition_from_params) }, only: [:announcement_data]
+  before_action -> { require_user_permission(:can_manage_competition?, competition_from_params) }, only: [:confirmation_data]
 
   def confirmation_data
     competition = competition_from_params

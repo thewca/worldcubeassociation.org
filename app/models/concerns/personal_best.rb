@@ -25,7 +25,7 @@ module PersonalBest
         "worldRanking" => { "type" => "integer" },
         "continentalRanking" => { "type" => "integer" },
         "nationalRanking" => { "type" => "integer" },
-        "type" => { "type" => "string", "enum" => %w(single average) },
+        "type" => { "type" => "string", "enum" => %w[single average] },
       },
     }
   end

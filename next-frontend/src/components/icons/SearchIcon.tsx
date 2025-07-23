@@ -13,10 +13,9 @@ const SearchIcon = createIcon({
       />
     </>
   ),
+  defaultProps: {
+    boxSize: "1em",
+  },
 });
 
-const SearchIconPreview = () => {
-  return <SearchIcon size="lg" />;
-};
-
-export default SearchIconPreview;
+export default SearchIcon;

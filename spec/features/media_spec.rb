@@ -4,8 +4,8 @@ require "rails_helper"
 
 RSpec.feature "Media" do
   context "when signed in as regular user" do
-    let(:competition) { FactoryBot.create(:competition) }
-    let!(:user) { FactoryBot.create(:user) }
+    let(:competition) { create(:competition) }
+    let!(:user) { create(:user) }
 
     before :each do
       sign_in user
@@ -33,11 +33,11 @@ RSpec.feature "Media" do
   end
 
   context "when signed in as WCT member" do
-    let!(:medium1) { FactoryBot.create(:competition_medium, text: "Article 1") }
-    let!(:medium2) { FactoryBot.create(:competition_medium, text: "Article 2") }
+    let!(:medium1) { create(:competition_medium, text: "Article 1") }
+    let!(:medium2) { create(:competition_medium, text: "Article 2") }
 
     before :each do
-      sign_in FactoryBot.create :user, :wct_member
+      sign_in create :user, :wct_member
     end
 
     context "validate media list" do

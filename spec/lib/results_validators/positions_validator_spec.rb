@@ -4,23 +4,23 @@ require 'rails_helper'
 
 RSpec.describe ResultsValidators::PositionsValidator do
   context "on InboxResult and Result" do
-    let!(:competition1) { FactoryBot.create(:competition, :past, event_ids: ["333oh"]) }
-    let!(:competition2) { FactoryBot.create(:competition, :past, event_ids: ["222"]) }
+    let!(:competition1) { create(:competition, :past, event_ids: ["333oh"]) }
+    let!(:competition2) { create(:competition, :past, event_ids: ["222"]) }
 
     # The idea behind this variable is the following: the validator can be applied
     # on either a particular model for given competition ids, or on a set of results.
     # We simply want to check it has the expected behavior on all the possible cases.
-    let(:validator_args) {
-      [InboxResult, Result].flat_map { |model|
+    let(:validator_args) do
+      [InboxResult, Result].flat_map do |model|
         [
           { competition_ids: [competition1.id, competition2.id], model: model },
           { results: model.where(competition_id: [competition1.id, competition2.id]), model: model },
         ]
-      }
-    }
+      end
+    end
 
     context "basic results" do
-      let!(:results) {
+      let!(:results) do
         {
           "Result" => [
             create_results(competition1, 5, "333oh"),
@@ -31,7 +31,7 @@ RSpec.describe ResultsValidators::PositionsValidator do
             create_results(competition2, 5, "222", kind: :inbox_result),
           ],
         }
-      }
+      end
 
       it "validates results correctly ordered on given competitions" do
         validator_args.each do |arg|
@@ -125,17 +125,17 @@ RSpec.describe ResultsValidators::PositionsValidator do
       it "validates correctly tied results" do
         # In a BoX format, results with the same best should have the same position,
         # even if one has a mean.
-        FactoryBot.create(:result, :blind_dnf_mo3, competition: competition1, pos: 1, best: 1000)
-        FactoryBot.create(:result, :blind_mo3, competition: competition1, pos: 1, best: 1000)
-        FactoryBot.create(:result, :blind_mo3, competition: competition1, pos: 3, best: 2000)
+        create(:result, :blind_dnf_mo3, competition: competition1, pos: 1, best: 1000)
+        create(:result, :blind_mo3, competition: competition1, pos: 1, best: 1000)
+        create(:result, :blind_mo3, competition: competition1, pos: 3, best: 2000)
         pv = ResultsValidators::PositionsValidator.new.validate(competition_ids: competition1.id, model: Result)
         expect(pv.any_errors?).to be false
       end
 
       it "invalidates incorrectly ordered results" do
         # In a BoX format, results should be ordered by best, not mean.
-        r1 = FactoryBot.create(:result, :blind_mo3, competition: competition1, pos: 1, best: 2000)
-        r2 = FactoryBot.create(:result, :blind_dnf_mo3, competition: competition1, pos: 2, best: 1000)
+        r1 = create(:result, :blind_mo3, competition: competition1, pos: 1, best: 2000)
+        r2 = create(:result, :blind_dnf_mo3, competition: competition1, pos: 2, best: 1000)
         expected_errors = [
           create_result_error(competition1.id, "333bf-f", r1.person_name, 2, 1),
           create_result_error(competition1.id, "333bf-f", r2.person_name, 1, 2),
@@ -153,7 +153,7 @@ def create_results(competition, number, event_id, kind: :result)
   1.upto(number) do |i|
     # By default the factory creates a predefined best/average, to have increasing
     # time we need to provide some arbitrary times increasing with the position.
-    results << FactoryBot.create(kind, competition: competition, pos: i, best: i*1000, average: i*2000, event_id: event_id)
+    results << FactoryBot.create(kind, competition: competition, pos: i, best: i * 1000, average: i * 2000, event_id: event_id)
   end
   results
 end

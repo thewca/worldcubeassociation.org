@@ -39,7 +39,7 @@ module ResultsValidators
 
     def self.roman_readable_part(name)
       if name.include? " ("
-        name[0, name.index('(')-1]
+        name[0, name.index('(') - 1]
       else
         name
       end
@@ -60,7 +60,7 @@ module ResultsValidators
       validation_issues
     end
 
-    def self.name_validations(name, competition_id = nil, **message_args)
+    def self.name_validations(name, competition_id = nil, **_message_args)
       validation_issues = []
       roman_readable = PersonsValidator.roman_readable_part(name)
       split_name = roman_readable.split
@@ -84,14 +84,14 @@ module ResultsValidators
       validation_issues << ValidationWarning.new(SINGLE_NAME_WARNING, :persons, competition_id, name: name) if split_name.length == 1
 
       # Check for missing period in single letter middle name.
-      validation_issues << ValidationWarning.new(MISSING_PERIOD_WARNING, :persons, competition_id, name: name) if split_name.length > 2 && split_name[1, split_name.length-2].any? { |n| n.length == 1 }
+      validation_issues << ValidationWarning.new(MISSING_PERIOD_WARNING, :persons, competition_id, name: name) if split_name.length > 2 && split_name[1, split_name.length - 2].any? { |n| n.length == 1 }
 
       # Check for letter after period.
       validation_issues << ValidationWarning.new(LETTER_AFTER_PERIOD_WARNING, :persons, competition_id, name: name) if split_name.any? { |n| n.chop.include? '.' }
 
       # Check for single letter first or last name.
       non_word_after_first_letter = [' ', '.'].include?(roman_readable[1])
-      space_before_last_letter = (roman_readable[-2] == " ") && ['I', 'V'].exclude?(roman_readable[-1]) # Roman numerals are allowed as suffixes
+      space_before_last_letter = (roman_readable[-2] == " ") && %w[I V].exclude?(roman_readable[-1]) # Roman numerals are allowed as suffixes
       abbreviated_last_name = (roman_readable[-1] == ".") && (roman_readable[-3] == " ")
       validation_issues << ValidationWarning.new(SINGLE_LETTER_FIRST_OR_LAST_NAME_WARNING, :persons, competition_id, name: name) if non_word_after_first_letter || space_before_last_letter || abbreviated_last_name
 
@@ -148,7 +148,7 @@ module ResultsValidators
             end
           end
           # Look for if 2 new competitors that share the exact same name
-          duplicate_newcomer_names << p.name if without_wca_id.count { |p2| p2.name == p.name } > 1 && duplicate_newcomer_names.exclude?(p.name)
+          duplicate_newcomer_names << p.name if without_wca_id.many? { |p2| p2.name == p.name } && duplicate_newcomer_names.exclude?(p.name)
         end
         duplicate_newcomer_names.each do |name|
           @warnings << ValidationWarning.new(MULTIPLE_NEWCOMERS_WITH_SAME_NAME_WARNING,

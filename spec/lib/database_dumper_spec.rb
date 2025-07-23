@@ -44,10 +44,10 @@ RSpec.describe "DatabaseDumper" do
   # The default database cleaning method of transation does not work well when it comes to creating tables,
   # which is what we do in this test. Use truncation so we don't leave a dirty database behind.
   it "dumps the database according to sanitizers", :clean_db_with_truncation do
-    not_visible_competition = FactoryBot.create :competition, :not_visible, :with_delegate
-    visible_competition = FactoryBot.create :competition, :visible, remarks: "Super secret message to the Board"
-    user = FactoryBot.create :user, dob: Date.new(1989, 1, 1)
-    FactoryBot.create :user, :banned
+    not_visible_competition = create(:competition, :not_visible, :with_delegate)
+    visible_competition = create(:competition, :visible, remarks: "Super secret message to the Board")
+    user = create(:user, dob: Date.new(1989, 1, 1))
+    create(:user, :banned)
 
     dump_file = Tempfile.new
     before_dump = Time.now.change(usec: 0) # Truncate the sub second part of the datetime, since mysql only stores 1 second granularity.
@@ -63,7 +63,7 @@ RSpec.describe "DatabaseDumper" do
 
       expect(Competition.count).to eq 1
       expect(visible_competition.reload.remarks).to eq "remarks to the board here"
-      expect(CompetitionDelegate.find_by(competition_id: not_visible_competition.id)).to be nil
+      expect(CompetitionDelegate.find_by(competition_id: not_visible_competition.id)).to be_nil
       expect(user.reload.dob).to eq Date.new(1954, 12, 4)
       expect(ServerSetting.find_by(name: DatabaseDumper::DEV_TIMESTAMP_NAME).as_datetime).to be >= before_dump
 

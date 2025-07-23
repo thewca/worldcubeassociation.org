@@ -21,12 +21,12 @@ const registrationStatusHint = (competingStatus) => {
 
 const competitionStatusHint = (competition) => {
   let text = '';
-  if (competition['confirmed?']) {
-    text += I18n.t('competitions.messages.confirmed_visible');
-  } else if (competition['visible?']) {
+  if (!competition['confirmed?']) {
+    text += I18n.t('competitions.messages.not_confirmed_not_visible');
+  } else if (!competition['visible?']) {
     text += I18n.t('competitions.messages.confirmed_not_visible');
   } else {
-    text += I18n.t('competitions.messages.not_confirmed_not_visible');
+    text += I18n.t('competitions.messages.confirmed_visible');
   }
 
   return text;
@@ -89,13 +89,10 @@ export function timeDifferenceBefore(competition, refDate) {
 }
 
 export function numberOfDaysAfter(competition, refDate) {
-  const parsedStartDate = parseDateString(competition.end_date).endOf('day');
-  const parsedRefDate = DateTime.fromISO(refDate);
+  const parsedEndDate = parseDateString(competition.end_date).startOf('day');
+  const parsedRefDate = DateTime.fromISO(refDate, { zone: 'utc' }).startOf('day');
 
-  const numberOfDays = parsedStartDate.diff(parsedRefDate, 'days').days;
-
-  // Floor is used here because we want to show 0 days after the competition if it's the same day
-  return Math.floor(Math.abs(numberOfDays));
+  return parsedRefDate.diff(parsedEndDate, 'days').days;
 }
 
 export function timeDifferenceAfter(competition, refDate) {

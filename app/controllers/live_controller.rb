@@ -47,7 +47,17 @@ class LiveController < ApplicationController
     end
 
     # TODO: What is the best way to do this?
-    r = Result.new(value1: results[0], value2: results[1], value3: results[2], value4: results[3] || 0, value5: results[4] || 0, event_id: round.event.id, round_type_id: round.round_type_id, format_id: round.format_id)
+    r = Result.new(
+      value1: results[0],
+      value2: results[1],
+      value3: results[2],
+      value4: results[3] || 0,
+      value5: results[4] || 0,
+      event_id: round.event.id,
+      round_type_id: round.round_type_id,
+      round_id: round.id,
+      format_id: round.format_id,
+    )
 
     result.update(average: r.compute_correct_average, best: r.compute_correct_best, live_attempts: new_attempts, last_attempt_entered_at: Time.now.utc)
 
@@ -67,7 +77,7 @@ class LiveController < ApplicationController
 
     # TODO: Figure out why this fires a query for every live_attempt
     # LiveAttempt Load (0.6ms)  SELECT `live_attempts`.* FROM `live_attempts` WHERE `live_attempts`.`live_result_id` = 39 AND `live_attempts`.`replaced_by_id` IS NULL ORDER BY `live_attempts`.`attempt_number` ASC
-    render json: Round.includes(live_results: [:live_attempts, :round, :event]).find(round_id).live_results
+    render json: Round.includes(live_results: %i[live_attempts round event]).find(round_id).live_results
   end
 
   def double_check

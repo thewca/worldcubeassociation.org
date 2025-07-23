@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-  resultable_instance_members = ->(*_args) {
+  resultable_instance_members = lambda { |*_args|
     transient do
       competition { FactoryBot.create(:competition, event_ids: ["333oh"]) }
       skip_round_creation { false }
@@ -103,13 +103,13 @@ FactoryBot.define do
       transient do
         real_person { FactoryBot.create(:person) }
       end
-      person {
+      person do
         FactoryBot.create(:inbox_person,
                           competition_id: competition.id,
                           name: real_person.name, wca_id: real_person.wca_id,
                           gender: real_person.gender, dob: real_person.dob,
                           country_iso2: real_person.country.iso2)
-      }
+      end
     end
 
     person_id { person.id }

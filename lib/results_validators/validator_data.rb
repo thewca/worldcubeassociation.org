@@ -68,8 +68,8 @@ module ResultsValidators
       # We're sorting in-memory because it is cheaper to re-order an arbitrary Results array that was efficiently loaded by `Competition.includes`,
       # rather than firing a custom SQL ORDER BY that cannot be pre-loaded via `includes`. Bonus: We get to sort via rank and not pure ID.
       ordered_results = results.sort_by do |r|
-        valid_average = %w[a m].include?(r.format_id) && r.average > 0
-        valid_best = r.best > 0
+        valid_average = %w[a m].include?(r.format_id) && r.average.positive?
+        valid_best = r.best.positive?
 
         [
           r.event.rank,

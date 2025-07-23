@@ -6,9 +6,10 @@ import {
   Segment,
 } from 'semantic-ui-react';
 import I18n from '../../../lib/i18n';
-import useCheckboxState from '../../../lib/hooks/useCheckboxState';
+import { useCheckboxUpdater } from '../../../lib/hooks/useCheckboxState';
 import I18nHTMLTranslate from '../../I18nHTMLTranslate';
 import { useStepNavigation } from '../lib/StepNavigationProvider';
+import { useFormObjectState } from '../../wca/FormBuilder/provider/FormObjectProvider';
 
 function RegistrationFullMessage({ competitionInfo }) {
   if (competitionInfo['registration_full_and_accepted?']) {
@@ -31,7 +32,8 @@ function RegistrationFullMessage({ competitionInfo }) {
 }
 
 export default function RegistrationRequirements({ competitionInfo }) {
-  const [infoAcknowledged, setInfoAcknowledged] = useCheckboxState(false);
+  const [infoAcknowledged, setInfoAcknowledgedRaw] = useFormObjectState('infoAcknowledged', ['regRequirements']);
+  const setInfoAcknowledged = useCheckboxUpdater(setInfoAcknowledgedRaw);
   const { nextStep } = useStepNavigation();
 
   return (

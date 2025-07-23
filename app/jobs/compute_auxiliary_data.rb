@@ -102,9 +102,9 @@ class ComputeAuxiliaryData < WcaCronjob
     <<-SQL.squish
       SELECT *
       FROM
-        (#{self.current_records_query("best", "single", event_id: event_id)}
+        (#{self.current_records_query('best', 'single', event_id: event_id)}
         UNION
-        #{self.current_records_query("average", "average", event_id: event_id)}) helper
+        #{self.current_records_query('average', 'average', event_id: event_id)}) helper
       ORDER BY
         `rank`, type DESC, start_date, round_type_id, person_name
     SQL

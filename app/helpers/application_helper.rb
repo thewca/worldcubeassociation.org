@@ -144,7 +144,7 @@ module ApplicationHelper
 
   def region_option_tags(selected_id: nil, real_only: false, use_world: false)
     regions = region_options_hash(real_only: real_only)
-    options_for_select((use_world ? [[t('common.world'), "world"]] : [[t('common.all_regions'), "all"]]), selected_id) + grouped_options_for_select(regions, selected_id)
+    options_for_select(use_world ? [[t('common.world'), "world"]] : [[t('common.all_regions'), "all"]], selected_id) + grouped_options_for_select(regions, selected_id)
   end
 
   def simple_form_for(resource, **options, &)
@@ -171,10 +171,10 @@ module ApplicationHelper
 
   def duration_to_s(total_seconds)
     hours = (total_seconds / 3600).floor
-    minutes = ((total_seconds % 3600)/60).floor
+    minutes = ((total_seconds % 3600) / 60).floor
     seconds = total_seconds % 60
 
-    [hours > 0 ? "#{hours}h " : '', minutes > 0 ? "#{minutes}m " : '', format('%.2f', seconds), 's'].join
+    [hours.positive? ? "#{hours}h " : '', minutes.positive? ? "#{minutes}m " : '', format('%.2f', seconds), 's'].join
   end
 
   def wca_id_link(wca_id, **options)

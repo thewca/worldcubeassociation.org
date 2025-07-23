@@ -216,17 +216,17 @@ FactoryBot.define do
 
     trait :wca_id do
       transient do
-        person { FactoryBot.create(:person, name: name, country_id: Country.find_by(iso2: country_iso2).id, gender: gender, dob: dob.strftime("%F")) }
+        person { FactoryBot.create(:person, name: name, country_id: Country.c_find_by_iso2(country_iso2).id, gender: gender, dob: dob.strftime("%F")) }
       end
     end
 
     trait :current_year_wca_id do
       transient do
-        person {
+        person do
           FactoryBot.create(
-            :person, name: name, country_id: Country.find_by(iso2: country_iso2).id, gender: gender, dob: dob.strftime("%F"), wca_id_year: Time.current.year.to_s
+            :person, name: name, country_id: Country.c_find_by_iso2(country_iso2).id, gender: gender, dob: dob.strftime("%F"), wca_id_year: Time.current.year.to_s
           )
-        }
+        end
       end
     end
 
@@ -250,21 +250,21 @@ FactoryBot.define do
     trait :with_past_competitions do
       after(:create) do |user|
         competition = FactoryBot.create(:competition, :past)
-        FactoryBot.create(:registration, :accepted, user: user, competition: competition, events: %w(333))
+        FactoryBot.create(:registration, :accepted, user: user, competition: competition, events: %w[333])
       end
     end
 
     trait :with_future_competitions do
       after(:create) do |user|
         competition = FactoryBot.create(:competition, :future)
-        FactoryBot.create(:registration, :accepted, user: user, competition: competition, events: %w(333))
+        FactoryBot.create(:registration, :accepted, user: user, competition: competition, events: %w[333])
       end
     end
 
     trait :with_deleted_registration_in_future_comps do
       after(:create) do |user|
         competition = FactoryBot.create(:competition, :future)
-        FactoryBot.create(:registration, :cancelled, user: user, competition: competition, events: %w(333))
+        FactoryBot.create(:registration, :cancelled, user: user, competition: competition, events: %w[333])
       end
     end
 

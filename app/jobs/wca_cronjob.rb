@@ -74,12 +74,12 @@ class WcaCronjob < ApplicationJob
         #   but there are use cases where we want to know when it started AND completed successfully.
         statistics.successful_run_start = statistics.run_start
 
-        runtime = (statistics.run_end - statistics.run_start).in_milliseconds
+        runtime = (statistics.run_end.to_f - statistics.run_start.to_f).in_milliseconds
 
         current_average = statistics.average_runtime || 0
-        new_average = (current_average + runtime.round) / statistics.times_completed
+        new_average = current_average + ((runtime - current_average) / statistics.times_completed)
 
-        statistics.average_runtime = new_average
+        statistics.average_runtime = new_average.round
         statistics.recently_errored = 0
       else
         statistics.increment :recently_errored

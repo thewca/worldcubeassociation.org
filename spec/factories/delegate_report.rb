@@ -2,13 +2,14 @@
 
 FactoryBot.define do
   factory :delegate_report do
-    competition { FactoryBot.create :competition }
+    competition { FactoryBot.create(:competition) }
 
     trait :posted do
       schedule_url { "http://example.com" }
       posted_at { Time.now }
       posted_by_user { FactoryBot.create(:user) }
       upload_files { true }
+      discussion_url { "http://example.com" }
     end
 
     trait :with_images do

@@ -40,7 +40,7 @@ module ResultsValidators
     end
 
     def persons_by_id
-      @persons_by_id ||= @persons.index_by { |person| person.ref_id }
+      @persons_by_id ||= @persons.index_by(&:ref_id)
     end
 
     def competition_associations

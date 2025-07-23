@@ -15,7 +15,7 @@ RSpec.describe "wfc/competition_export.csv.erb" do
       "Currency Code", "Base Registration Fee", "Currency Subunit",
       "Championship Type", "Exempt from WCA Dues", "Organizers",
       "Calculated Dues", "Dues Payer Name", "Dues Payer Email",
-      "Is Combined Invoice", "Dues Band"
+      "Is Combined Invoice", "Dues Band", "Error (if any)"
     ]
 
     assign(:competitions, [])
@@ -26,7 +26,7 @@ RSpec.describe "wfc/competition_export.csv.erb" do
   end
 
   it "filters out trainee delegates" do
-    competition = FactoryBot.create :competition, :with_valid_submitted_results, :with_delegates_and_trainee_delegate
+    competition = create(:competition, :with_valid_submitted_results, :with_delegates_and_trainee_delegate)
     competition.define_singleton_method(:num_competitors) do # mock count(distinct ...) from controller
       10
     end

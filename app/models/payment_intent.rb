@@ -10,7 +10,7 @@ class PaymentIntent < ApplicationRecord
   validate :wca_status_consistency
 
   scope :started, -> { where.not(wca_status: 'created') }
-  scope :incomplete, -> { where.not(wca_status: ['succeeded', 'canceled']) }
+  scope :incomplete, -> { where.not(wca_status: %w[succeeded canceled]) }
 
   delegate :retrieve_remote, :money_amount, :account_id, :determine_wca_status, to: :payment_record
 

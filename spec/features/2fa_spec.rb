@@ -4,7 +4,7 @@ require "rails_helper"
 
 RSpec.feature "Sign in with 2FA" do
   context 'Signing in without 2FA' do
-    let(:fool) { FactoryBot.create(:user) }
+    let(:fool) { create(:user) }
 
     it 'works for a fool' do
       visit "/users/sign_in"
@@ -16,7 +16,7 @@ RSpec.feature "Sign in with 2FA" do
   end
 
   context 'Signing in with 2FA' do
-    let!(:user) { FactoryBot.create(:user, :with_2fa) }
+    let!(:user) { create(:user, :with_2fa) }
 
     it 'works with an otp' do
       visit "/users/sign_in"

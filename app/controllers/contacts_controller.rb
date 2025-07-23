@@ -90,7 +90,7 @@ class ContactsController < ApplicationController
   private def value_humanized(value, field)
     case field
     when :country_iso2
-      Country.find_by(iso2: value).name_in(:en)
+      Country.c_find_by_iso2(value).name_in(:en)
     when :gender
       User::GENDER_LABEL_METHOD.call(value.to_sym)
     else
@@ -142,13 +142,13 @@ class ContactsController < ApplicationController
     }
     changes_requested = Person.fields_edit_requestable
                               .reject { |field| profile_to_edit[field].to_s == edited_profile_details[field].to_s }
-                              .map { |field|
+                              .map do |field|
                                 ContactEditProfile::EditProfileChange.new(
                                   field: field,
                                   from: profile_to_edit[field],
                                   to: edited_profile_details[field],
                                 )
-                              }
+                              end
 
     ticket = TicketsEditPerson.create_ticket(wca_id, changes_requested, current_user)
 
