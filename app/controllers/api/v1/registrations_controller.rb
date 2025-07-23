@@ -78,7 +78,7 @@ class Api::V1::RegistrationsController < Api::V1::ApiController
 
   def registration_config
     competition = Competition.find(params[:competition_id])
-    render json: competition.available_registration_lanes(@current_user), status: :ok
+    render json: competition.available_registration_lanes(@current_user)
   end
 
   def create

@@ -1785,7 +1785,7 @@ class Competition < ApplicationRecord
         average: current_user.ranks_average&.map(&:to_wcif) || [],
       },
     }
-    competition_params.merge!(user_params)
+    competition_params.merge(user_params)
   end
 
   def payment_step_parameters

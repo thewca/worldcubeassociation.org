@@ -1,6 +1,6 @@
 import RegistrationRequirements from '../Register/RegistrationRequirements';
 import CompetingStep from '../Register/CompetingStep';
-import StripeWrapper from '../Register/StripeWrapper';
+import PaymentWrapper from '../Register/PaymentStepWrapper';
 import RegistrationOverview from '../Register/RegistrationOverview';
 
 export const requirementsStepConfig = {
@@ -20,7 +20,7 @@ export const competingStepConfig = {
 export const paymentStepConfig = {
   key: 'payment',
   i18nKey: 'competitions.registration_v2.register.panel.payment',
-  Component: StripeWrapper,
+  Component: PaymentWrapper,
   isCompleted: (stepPayload) => stepPayload.hasPaid,
 };
 
