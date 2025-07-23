@@ -11,7 +11,7 @@ class SyncMailingListsJob < WcaCronjob
   #   but their Ruby SDK client offers no batching or request backoff...
   # And since I don't feel like building our own request queue with timed execution,
   #   we just take the brute-force approach of retrying when a 503 happens.
-  retry_on Google::Apis::ServerError, wait: :polynomially_longer, attempts: 10
+  retry_on Google::Apis::ServerError, wait: 10, attempts: 10
 
   def perform
     GsuiteMailingLists.sync_group("leaders@worldcubeassociation.org", UserGroup.teams_committees.filter_map(&:lead_user).map(&:email))
