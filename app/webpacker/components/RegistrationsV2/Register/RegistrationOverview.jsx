@@ -98,7 +98,7 @@ export default function RegistrationOverview({
       )}
       <Segment loading={isDeleting}>
         <Header>{I18n.t('competitions.nav.menu.registration')}</Header>
-        <Form onSubmit={() => jumpToFirstIncompleteStep} size="large">
+        <Form onSubmit={jumpToFirstIncompleteStep} size="large">
           <List>
             <List.Item>
               <List.Header>
