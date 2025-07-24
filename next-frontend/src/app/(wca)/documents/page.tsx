@@ -27,7 +27,7 @@ export default async function Documents() {
     return <Heading>No documents found. Add some</Heading>;
   }
 
-  const [uncategorized, categorizedRaw] = _.partition(documents, "category");
+  const [categorizedRaw, uncategorized] = _.partition(documents, "category");
   const categorized = _.groupBy(categorizedRaw, "category");
 
   return (
