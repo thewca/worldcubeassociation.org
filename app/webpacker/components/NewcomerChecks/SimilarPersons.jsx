@@ -19,7 +19,7 @@ export default function SimilarPersons({ similarPersons, mergePotentialDuplicate
                 <Table.HeaderCell>Country</Table.HeaderCell>
                 <Table.HeaderCell>DOB</Table.HeaderCell>
                 <Table.HeaderCell>WCA ID</Table.HeaderCell>
-                <Table.HeaderCell>Similarity Score</Table.HeaderCell>
+                <Table.HeaderCell>Name Similarity Score</Table.HeaderCell>
                 <Table.HeaderCell>Action</Table.HeaderCell>
               </Table.Row>
             </Table.Header>
@@ -34,8 +34,13 @@ export default function SimilarPersons({ similarPersons, mergePotentialDuplicate
               </Table.Row>
               {duplicatesByUserId[userId].map((potentialDuplicatePerson) => {
                 const { duplicate_person: duplicatePerson, score } = potentialDuplicatePerson;
+                const exactSameDetails = (
+                  originalUser.name === duplicatePerson.name
+                  && originalUser.dob === duplicatePerson.dob
+                  && originalUser.country_iso2 === duplicatePerson.country_iso2
+                );
                 return (
-                  <Table.Row negative={score > 90}>
+                  <Table.Row negative={exactSameDetails}>
                     <Table.Cell>{duplicatePerson.name}</Table.Cell>
                     <Table.Cell>{duplicatePerson.country.name}</Table.Cell>
                     <Table.Cell>{duplicatePerson.dob}</Table.Cell>
