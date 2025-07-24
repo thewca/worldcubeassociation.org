@@ -120,7 +120,7 @@ const fetchPermissions = cache(async (authToken: string) => {
   return await client.GET("/users/me/permissions");
 });
 
-const getPermissions = async () => {
+export const getPermissions = async () => {
   const session = await auth();
 
   if (!session) {
@@ -137,3 +137,5 @@ const getPermissions = async () => {
     ...hydrateUserPermissions(rawPermissions),
   } as PermissionContext;
 };
+
+export default getPermissions;

@@ -7,18 +7,16 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { getT } from "@/lib/i18n/get18n";
-import { useQuery } from "@tanstack/react-query";
-import Loading from "@/components/ui/loading";
 import { Prose } from "@/components/ui/prose";
 import { components } from "@/types/openapi";
 import Link from "next/link";
-import { usePermissions } from "@/providers/PermissionProvider";
 import UserBadge from "@/components/UserBadge";
 import {
   getTeamCommitteeMembers,
   getTeamsCommittees,
 } from "@/lib/wca/roles/teamsCommittees";
 import Errored from "@/components/ui/errored";
+import getPermissions from "@/lib/wca/permissions";
 
 export default async function TeamsCommitteesPage() {
   const { t } = await getT();
@@ -68,7 +66,9 @@ async function TeamTab({
 
   const { metadata, name, id } = group;
   const { friendly_id, email } = metadata!;
-  const canReadGroupPast = usePermissions()?.canReadGroupPast(group.name);
+
+  const permissions = await getPermissions();
+  const canReadGroupPast = permissions?.canReadGroupPast(group.name);
 
   return (
     <VStack align={"left"}>
@@ -99,10 +99,7 @@ async function MemberTable({
 }) {
   const { t } = await getT();
 
-  const { data: roles, error } = await getTeamCommitteeMembers(
-    id,
-    isActive,
-  );
+  const { data: roles, error } = await getTeamCommitteeMembers(id, isActive);
 
   if (error) return <Errored error={error} />;
 
