@@ -25,6 +25,7 @@ import { SpeedCubingHistoryPage } from "@/globals/SpeedcubingHistory";
 import { Privacy } from "@/globals/Privacy";
 import { Disclaimer } from "@/globals/Disclaimer";
 import { AboutUsPage } from "@/globals/About";
+import { languageConfig, fallbackLng } from "@/lib/i18n/settings";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -92,6 +93,13 @@ export default buildConfig({
   routes: {
     admin: "/payload",
     api: "/api/payload",
+  },
+  localization: {
+    locales: Object.entries(languageConfig).map(([code, { name: label }]) => ({
+      code,
+      label,
+    })),
+    defaultLocale: fallbackLng,
   },
   collections: [
     Media,
