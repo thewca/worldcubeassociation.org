@@ -17,6 +17,7 @@ import {
 import { Users } from "@/collections/Users";
 import { Tools } from "@/collections/Tools";
 import { RegulationsHistoryItem } from "@/collections/RegulationsHistory";
+import { Documents } from "@/collections/Documents";
 import { Nav } from "@/globals/Nav";
 import { Home } from "@/globals/Home";
 import { AboutRegulations } from "@/globals/AboutRegulations";
@@ -99,6 +100,7 @@ export default buildConfig({
     FaqCategories,
     FaqQuestions,
     Users,
+    Documents,
     RegulationsHistoryItem,
     Tools,
   ],
