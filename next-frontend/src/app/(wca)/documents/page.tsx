@@ -12,20 +12,10 @@ import {
 } from "@chakra-ui/react";
 import { getPayload } from "payload";
 import config from "@payload-config";
-import { iconMap, IconName } from "@/components/icons/iconMap";
+import { IconName } from "@/components/icons/iconMap";
 import React from "react";
 import _ from "lodash";
-
-interface IconDisplayProps {
-  name: IconName;
-  fallback?: boolean;
-}
-
-const IconDisplay = ({ name }: IconDisplayProps) => {
-  const IconComponent = iconMap[name];
-
-  return <IconComponent />;
-};
+import IconDisplay from "@/components/IconDisplay";
 
 export default async function Documents() {
   const payload = await getPayload({ config });

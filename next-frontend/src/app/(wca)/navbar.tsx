@@ -17,23 +17,8 @@ import { RefreshRouteOnSave } from "@/components/RefreshRouteOnSave";
 import { ColorModeButton } from "@/components/ui/color-mode";
 import { LuChevronDown, LuMonitorCheck } from "react-icons/lu";
 
-import { iconMap, IconName } from "@/components/icons/iconMap";
 import LanguageSelector from "@/components/ui/languageSelector";
-
-interface IconDisplayProps {
-  name: IconName | undefined | null;
-  fallback?: boolean;
-}
-
-const IconDisplay = ({ name, fallback = false }: IconDisplayProps) => {
-  if (!name) {
-    return fallback ? <Text>No_Icon</Text> : null;
-  }
-
-  const IconComponent = iconMap[name];
-
-  return <IconComponent />;
-};
+import IconDisplay from "@/components/IconDisplay";
 
 export default async function Navbar() {
   const payload = await getPayload({ config });
