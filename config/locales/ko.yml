@@ -871,15 +871,6 @@ ko:
         submitter_comment: ''
         #original_hash: da39a3e
         status: ''
-      results_submission:
-        #original_hash: da39a3e
-        schedule_url: ''
-        #original_hash: da39a3e
-        results_file: ''
-        #original_hash: da39a3e
-        message: ''
-        #original_hash: da39a3e
-        confirm_information: ''
       regional_organization:
         #original_hash: da39a3e
         name: ''
@@ -1011,8 +1002,10 @@ ko:
           #original_hash: d28c3b6
           support_desc_html: 'WCA 웹사이트는 일회용 비밀번호를 사용하여 %{two_factor_link}를 지원합니다:'
           options:
-            #original_hash: 4f9dcb8
-            app: '스마트폰의 전용 2FA 애플리케이션(예: Authy 또는 Google Authenticator)을 통해 생성됩니다.'
+            #original_hash: a4b35b6
+            app: >-
+              스마트폰의 전용 2FA 애플리케이션(예: Authy, Google Authenticator, 또는 iOS 비밀번호)을
+              통해 생성됩니다.
             #original_hash: 34a7572
             recovery: 2FA를 활성화할 때 생성된 복구 코드에서 가져왔습니다.
             #original_hash: eaee403
@@ -1039,10 +1032,10 @@ ko:
           methods_description: '로그인 시 일회용 비밀번호를 얻는 방법은 여러 가지가 있으며, 각 방법은 아래에 설명되어 있습니다.'
           #original_hash: 4442f0e
           dedicated_app: 전용 2단계 인증 애플리케이션 사용
-          #original_hash: a61c7d2
+          #original_hash: a87f79f
           dedicated_app_desc_html: >-
             WST에서는 로그인 시 일회용 비밀번호를 얻기 위해 개인 기기에서 %{authy}를 사용할 것을 권장합니다.<br/>다른
-            대안으로는 %{google}과 %{microsoft}가 있습니다.
+            대안으로는 %{google}, %{apple}과 %{microsoft}가 있습니다.
           #original_hash: f1b2ec2
           scan_qrcode_html: >-
             2FA 애플리케이션에서 메시지가 표시되면 아래 QR 코드를 스캔합니다(모바일을 사용하는 경우 %{here}를
@@ -1378,11 +1371,10 @@ ko:
     contacts:
       #original_hash: 4ef2aad
       title: WCA 문의 양식
-      #original_hash: bddd3ea
+      #original_hash: ab97069
       faq_note_html: >-
         문의하기 전에 <a href="/faq">자주 묻는 질문</a>을 살펴보십시오! 여기에 나열되지 않은 특정 위원회나 팀에
-        연락하려면 <a href="/teams-committees-councils">이 페이지</a>에서 자세한 내용을 확인할 수
-        있습니다.
+        연락하려면 <a href="/teams-committees">이 페이지</a>에서 자세한 내용을 확인할 수 있습니다.
       #original_hash: ea20be0
       success_message: 이메일이 전송되었습니다. 곧 답변드리겠습니다.
       #original_hash: 8fa6b95
@@ -2085,7 +2077,7 @@ ko:
       #original_hash: 3141a14
       series_registrations: 시리즈 참가 신청
       #original_hash: b25928c
-      total: 총
+      total: 총합
     new_registration:
       #original_hash: 8b9f726
       title: '%{comp} 참가 신청'
@@ -2616,7 +2608,7 @@ ko:
       #original_hash: db98a68
       title: 대회
       #original_hash: 6a72085
-      all_events: 모두
+      all_events: 모두 선택
       #original_hash: 6d76b81
       all_years: 모든 연도
       #original_hash: 719ea39
@@ -2859,8 +2851,8 @@ ko:
           auto_close_threshold: 참가 신청 자동 종료 임계값
           #original_hash: b1d5af4
           newcomer_month_reserved_spots: 첫 참가자를 위해 확보할 수 있는 자리의 수
-          #original_hash: b13de61
-          auto_accept_enabled: 대량 참가 신청 자동 승인
+          #original_hash: 26b48e3
+          auto_accept_preference: 참가 신청 자동 승인
           #original_hash: 1b8698d
           auto_accept_disable_threshold: 참가 신청 자동 승인 제한
         staff:
@@ -3038,10 +3030,10 @@ ko:
           #original_hash: e1cf4fc
           newcomer_month_reserved_spots: 첫 참가자의 달에만 허용됩니다. 예약된 자리는 참가자 정원의 절반을 넘을 수 없습니다.
           #original_hash: 79dcafd
-          auto_accept_enabled: >-
-            등록 메뉴에서 '대량 자동 승인' 버튼을 활성화합니다. 이 버튼을 클릭하면 참가자 제한 또는 아래에 정의된 제한까지 결제
-            완료한 대기자 명단 및 보류 중인 모든 참가 신청이 수락됩니다. 사용 시 발생하는 모든 위험 발생 가능성은 사용자 본인이
-            감수해야 합니다.
+          auto_accept_preference: >-
+            참가 신청 메뉴에서 '대량 자동 승인' 버튼을 활성화합니다. 이 버튼을 클릭하면 참가자 정원 또는 아래에 정의된 제한까지
+            결제한 대기자 명단 및 보류 중인 모든 참가 신청이 수락됩니다. 사용 시 발생하는 모든 위험은 사용자 본인이 감수해야
+            합니다.
           #original_hash: b261026
           auto_accept_disable_threshold: >-
             승인된 참가 신청 수가 이 숫자에 도달하면 자동 승인 기능이 비활성화되어 주최측이 최종 참가 신청을 수동으로 승인할 수
@@ -3176,11 +3168,13 @@ ko:
             'true': 참가자 정원을 지정하고 싶습니다
             #original_hash: 53397ec
             'false': 참가자 정원을 지정하고 싶지 않습니다
-          auto_accept_enabled:
-            #original_hash: 1c0c289
-            'true': 참가 신청 메뉴에서 '대량 자동 승인' 버튼 활성화
+          auto_accept_preference:
             #original_hash: 5996b1f
-            'false': '''대량 자동 승인'' 버튼 비활성화'
+            disabled: '''''대량 자동 승인'' 버튼 비활성화'
+            #original_hash: 1c0c289
+            bulk: 참가 신청 메뉴에서 '대량 자동 승인' 버튼 활성화
+            #original_hash: 490ed83
+            live: 결제 시 자동으로 참가 신청을 승인합니다.
         registration:
           allow_on_the_spot:
             #original_hash: 0c521ca
@@ -3252,11 +3246,11 @@ ko:
           other: '%{count}자리 남음'
         pending:
           #original_hash: 4210670
-          title: 승인 대기 중인 참가 신청
+          title: 승인 보류자 명단
           #original_hash: 5e16c6d
           information: >-
-            '보류'는 참가 신청이 완료되지 않은 경우(예: 미납)에만 사용해야 합니다. 신청자가 너무 많아서 새로운 참가자를 받을 수
-            없는 경우 대기 명단을 사용하십시오.
+            '승인 보류자 명단'은 참가 신청이 완료되지 않은 경우에만(예: 미납) 사용해야 합니다. 신청자가 너무 많아서 새로운
+            참가자를 받을 수 없는 경우 대기자 명단을 사용하십시오.
           #original_hash: 134e94f
           waitlist_skipped_warning: >-
             %{count}개의 참가 신청을 이미 건너뛰었습니다. 보류 중인 참가 신청이 있습니다. 선택한 참가 신청을 대기자 명단으로
@@ -3265,7 +3259,7 @@ ko:
           approve_skipped_warning: '%{count}개를 이미 건너뛰었습니다. 보류 중인 참가 신청이 있습니다. 선택한 참가 신청을 수락하시겠습니까?'
         waitlist:
           #original_hash: 3907ca4
-          title: 대기 명단 참가 신청
+          title: 대기자 명단
           #original_hash: de3f9d4
           information: >-
             선수는 대기자 명단 맨 마지막에 추가됩니다. 여러 선수를 한꺼번에 추가하는 경우, 참가비를 결제한 선수는 결제 순서대로 맨
@@ -3274,17 +3268,17 @@ ko:
           skipped_warning: '대기 명단에서 %{count}개의 참가 신청을 건너뛰었습니다. 선택된 참가 신청을 승인하시겠습니까?'
         approved:
           #original_hash: a59612c
-          title: 승인된 참가 신청
+          title: 승인자 명단
           #original_hash: bbdee7d
           pending_waitlist_combined_skipped_warning: '이전에 보류/대기 명단에 있는 참가 신청 중 %{count}개를 건너뛰었습니다. 선택한 참가 신청을 수락하시겠습니까?'
         cancelled:
           #original_hash: bd69c74
-          title: 취소된 참가 신청
+          title: 취소자 명단
           #original_hash: bb5b570
           information: 참가 신청이 취소된 선수는 다시 참가 신청할 수 있습니다.
         rejected:
           #original_hash: 9cef5ae
-          title: 거절된 참가 신청
+          title: 반려자 명단
           #original_hash: 3fd2e0c
           information: 참가 신청이 거절된 선수는 참가 신청을 다시 할 수 없습니다.
         non_competing:
@@ -3309,7 +3303,7 @@ ko:
         #original_hash: 5e0207a
         comment_and_note: 코멘트 및 메모
         #original_hash: b651ae4
-        edit_waiting_list: 대기 명단 편집 모드 활성화
+        edit_waiting_list: 대기자 명단 편집 모드 활성화
       bookmark:
         #original_hash: 7952a5c
         unbookmark: 즐겨 찾기를 삭제했습니다
@@ -3831,7 +3825,7 @@ ko:
         #original_hash: 5301648
         edit: 수정
         #original_hash: d8cdb57
-        clone: 복제하기
+        clone: 대회 복제
         #original_hash: 2b92094
         orga_view: 주최자 보기
         #original_hash: c6171f8
@@ -3844,6 +3838,8 @@ ko:
         admin_view: 관리자 보기
         #original_hash: a857eb4
         tabs: 탭 관리
+        #original_hash: e42bf99
+        newcomer_checks: 첫 참가자 검증
         #original_hash: f3d6278
         submit_results: 결과 제출
         #original_hash: e2d046b
@@ -3851,7 +3847,7 @@ ko:
         #original_hash: 4c9f914
         delegate_report: 파견위원 보고서
         #original_hash: b233e77
-        registration: 참가 신청
+        registration: 참가 신청 관리
         #original_hash: 3f9176e
         import_registrations: 참가 신청 내역 불러오기
         #original_hash: d672995
@@ -3935,7 +3931,7 @@ ko:
     last_updated_html: '마지막 업데이트: %{timestamp}'
     #original_hash: 9ca9d89
     filters_fixes_underway: >-
-      일부 필터(예: 지난 해)는 일시적으로 비활성화되어 있습니다. 소프트웨어 팀은 이러한 필터를 복구하기 위해 노력하고 있습니다. 불편을
+      일부 필터(예: 과년도)는 일시적으로 비활성화되어 있습니다. 소프트웨어 팀은 이러한 필터를 복구하기 위해 노력하고 있습니다. 불편을
       끼쳐드려 죄송합니다.
     selector_elements:
       events_selector:
@@ -4175,6 +4171,11 @@ ko:
       success: 메시지를 보내주셔서 감사합니다. 곧 연락드리겠습니다!
       #original_hash: 8e3a9da
       delivery_error: 메시지를 보내는 중 오류가 발생했습니다.
+  misc:
+    #original_hash: 9a0f1cc
+    forum_age_requirement: WCA 포럼에 접속하려면 13세 이상이어야 합니다.
+    #original_hash: d1f3342
+    forum_enter_dob: 포럼에 접속하려면 생년월일을 입력해야 합니다. 생년월일을 입력하신 후 포럼에 다시 접속해 보세요.
   faq:
     #original_hash: d790b40
     title: 자주 묻는 질문
@@ -5361,10 +5362,12 @@ ko:
         '%{round_name}'에 대한 컷오프는 발표되지 않았지만 결과에서 컷오프 라운드로 감지되었습니다. 대회의 종목 관리
         페이지에서 라운드 정보를 업데이트하십시오.
     events:
-      #original_hash: e87f8a0
+      #original_hash: ef8709f
       not_333_main_event_warning: >-
-        이 대회의 선택된 주 종목은 %{main_event_id}입니다. 이 종목은 어떻게 이 대회의 주 종목으로 취급되었습니까?
-        WRT에 간략한 설명을 해주십시오(예: 라운드 수, 상금, 대회 우승자 선언 등).
+        이 대회의 선택된 주 종목은 %{main_event_id}입니다. 이는 대회 전에 WCAT에서 승인되었지만, WRT는 대회 이후에
+        WCA 대회 요구 사항 정책에 따른 적절한 주 종목 지침이 충족되었는지 확인할 책임이 있습니다. 대회 중에
+        %{main_event_id}을(를) 주 종목으로 간주하기 위해 취한 한 가지 조치를 알려주세요(유효한 예: 대회에서 우승한
+        것으로 선언, 최대 라운드 수, 최대 상금 금액).
       #original_hash: 1d4e297
       no_main_event_warning: 이 대회에는 선택된 주 종목이 없습니다. 이것이 맞다는 것을 WRT에 알려주십시오.
       #original_hash: 6fa46ad

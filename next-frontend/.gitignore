@@ -42,5 +42,9 @@ yarn-error.log*
 next-env.d.ts
 
 # Payload backend when running locally / in dev mode
-next-frontend.db
+*.db
 /media/**/*
+
+# Translations
+src/lib/i18n/locales/*.json
+!src/lib/i18n/locales/available.json

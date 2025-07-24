@@ -12,7 +12,6 @@ import useCheckboxState from '../../../../lib/hooks/useCheckboxState';
 import runValidatorsForCompetitionList from './api/runValidatorsForCompetitionList';
 import runValidatorsForCompetitionsInRange from './api/runValidatorsForCompetitionsInRange';
 import ValidationOutput from './ValidationOutput';
-import WCAQueryClientProvider from '../../../../lib/providers/WCAQueryClientProvider';
 
 const VALIDATOR_OPTIONS = ALL_VALIDATORS.map((validator) => ({
   key: validator,
@@ -27,15 +26,7 @@ const COMPETITION_SELECTION_OPTIONS_TEXT = {
 
 const COMPETITION_SELECTION_OPTIONS = Object.keys(COMPETITION_SELECTION_OPTIONS_TEXT);
 
-export default function Wrapper({ competitionIds }) {
-  return (
-    <WCAQueryClientProvider>
-      <RunValidatorsForm competitionIds={competitionIds} />
-    </WCAQueryClientProvider>
-  );
-}
-
-function RunValidatorsForm({ competitionIds }) {
+export default function RunValidatorsForm({ competitionIds }) {
   const [competitionSelectionMode, setCompetitionSelectionMode] = useInputState('manual');
 
   const [selectedCompetitionIds, setSelectedCompetitionIds] = useInputState(competitionIds || []);

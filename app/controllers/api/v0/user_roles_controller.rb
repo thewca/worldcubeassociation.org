@@ -17,6 +17,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     is_group_hidden = params.key?(:isGroupHidden) ? ActiveRecord::Type::Boolean.new.cast(params.require(:isGroupHidden)) : nil
     group_type = params[:groupType]
     group_id = params[:groupId]
+    parent_group_id = params[:parentGroupId]
     user_id = params[:userId]
 
     # In next few lines, instead of foo.present? we are using !foo.nil? because foo.present? returns
@@ -27,6 +28,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     active_record = active_record.where(group: { is_hidden: is_group_hidden }) unless is_group_hidden.nil?
     active_record = active_record.where(group: { group_type: group_type }) if group_type.present?
     active_record = active_record.where(group_id: group_id) if group_id.present?
+    active_record = active_record.where(group: { parent_group_id: parent_group_id }) if parent_group_id.present?
     active_record = active_record.where(user_id: user_id) if user_id.present?
     active_record
   end
@@ -40,7 +42,11 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     roles = UserRole.sort_roles(roles, params[:sort])
 
     # Paginating the list by sending only first 100 elements unless mentioned in the API.
-    paginate json: roles
+    paginate json: roles, include: {
+      user: { exclude_deprecated: true, include_email: true },
+      group: {},
+      metadata: {},
+    }
   end
 
   def show

@@ -14,7 +14,9 @@ export default function TicketLogs({ ticketId }) {
 
   function logText(actionType, actionValue) {
     switch (actionType) {
-      case ticketLogActionTypes.status_updated:
+      case ticketLogActionTypes.create_ticket:
+        return 'Ticket created.';
+      case ticketLogActionTypes.update_status:
         return `Status updated to ${actionValue}`;
       default:
         return `[Unsupported log]: ${actionType}: ${actionValue}`;

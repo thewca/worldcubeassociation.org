@@ -16,6 +16,7 @@ RUN apk add --update --virtual .deps --no-cache unzip && \
 WORKDIR /app
 
 COPY package.json yarn.lock* .yarnrc.yml ./
+COPY src/theme.ts ./src/theme.ts
 RUN corepack enable
 RUN yarn install --immutable
 

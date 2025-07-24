@@ -8,9 +8,10 @@ class Result < ApplicationRecord
   belongs_to :country
   has_one :continent, through: :country
   delegate :continent_id, :continent, to: :country
+
   # InboxPerson IDs are only unique per competition. So in addition to querying the ID itself (which is guaranteed by :foreign_key)
-  # we also need sure to query the correct competition as well through a custom scope.
-  belongs_to :inbox_person, ->(res) { where(competition_id: res.competition_id) }, primary_key: :id, foreign_key: :person_id, optional: true
+  # we also need sure to query the correct competition as well through a composite key.
+  belongs_to :inbox_person, foreign_key: %i[person_id competition_id], optional: true
 
   has_many :result_attempts
 

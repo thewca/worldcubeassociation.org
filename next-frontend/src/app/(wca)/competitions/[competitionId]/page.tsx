@@ -39,6 +39,7 @@ import TabRegister from "@/components/competitions/TabRegister";
 import TabCompetitors from "@/components/competitions/TabCompetitors";
 import TabEvents from "@/components/competitions/TabEvents";
 import TabSchedule from "@/components/competitions/TabSchedule";
+import { getT } from "@/lib/i18n/get18n";
 
 function formatDateRange(start: Date, end: Date): string {
   const sameDay = start.toDateString() === end.toDateString();
@@ -89,7 +90,6 @@ export default async function CompetitionOverView({
   if (!competitionInfo) {
     return <Text>Competition does not exist</Text>;
   }
-  console.log(competitionInfo);
 
   const refundDate = new Date(competitionInfo.refund_policy_limit_date);
   const regoOpenDate = new Date(competitionInfo.registration_open);
@@ -115,6 +115,7 @@ export default async function CompetitionOverView({
     dateFormat,
   );
   const formattedRefundDate = refundDate.toLocaleString("en-US", dateFormat);
+  const { t } = await getT();
 
   return (
     <Container minW="80vw" p="8">
@@ -171,7 +172,7 @@ export default async function CompetitionOverView({
                     <Card.Root variant="infoSnippet">
                       <Card.Header>
                         <LocationIcon />
-                        Location
+                        {t("competitions.competition_info.location")}
                       </Card.Header>
                       <Card.Body>
                         <Text>{competitionInfo.city}, </Text>
@@ -531,7 +532,10 @@ export default async function CompetitionOverView({
           <TabCompetitors id={competitionInfo.id} />
         </Tabs.Content>
         <Tabs.Content value="events">
-          <TabEvents />
+          <TabEvents
+            competitionId={competitionInfo.id}
+            forceQualifications={competitionInfo["uses_qualification?"]}
+          />
         </Tabs.Content>
         <Tabs.Content value="schedule">
           <TabSchedule />

@@ -197,7 +197,7 @@ RSpec.describe PV do
           RV::ValidationError.new(PV::PERSON_WITHOUT_RESULTS_ERROR,
                                   :persons, competition2.id,
                                   person_name: res1.person.name,
-                                  person_id: res1.person.id),
+                                  person_id: res1.person.ref_id),
           RV::ValidationError.new(PV::WHITESPACE_IN_NAME_ERROR,
                                   :persons, competition1.id,
                                   name: res_whitespace.person.name),

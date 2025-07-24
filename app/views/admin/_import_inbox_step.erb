@@ -28,7 +28,9 @@
     <% results_validator = ResultsValidators::CompetitionsResultsValidator.new %>
     <% results_validator.validate [@competition.id] %>
 
-    <%= render "results_submission/results_preview_panel", results_validator: results_validator, max_height: "500px", expand_all: true, unindent_solves: true %>
+    <%= react_component("Tickets/TicketWorkbenches/CompetitionResultActionerView/ResultsPreview", {
+      competitionId: @competition.id,
+    }) %>
 
     <p>Please <%= link_to "finish importing results", competition_admin_import_inbox_results_path(@competition), class: 'inbox-trigger btn btn-primary', data: { jquery_method: :post } %>
       to proceed to the next step</p>

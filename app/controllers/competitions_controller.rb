@@ -118,6 +118,11 @@ class CompetitionsController < ApplicationController
       comp.update!(results_posted_at: Time.now, results_posted_by: current_user.id, posting_by: nil)
       comp.competitor_users.each { |user| user.notify_of_results_posted(comp) }
       comp.registrations.accepted.each { |registration| registration.user.maybe_assign_wca_id_by_results(comp) }
+      if comp.tickets_competition_result.present?
+        comp.tickets_competition_result.update!(
+          status: TicketsCompetitionResult.statuses[:posted],
+        )
+      end
     end
 
     flash[:success] = t('competitions.messages.results_posted')
@@ -505,7 +510,6 @@ class CompetitionsController < ApplicationController
   end
 
   before_action -> { require_user_permission(:can_manage_competition?, competition_from_params) }, only: [:update]
-
   def update
     competition = competition_from_params
 
