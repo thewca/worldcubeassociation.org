@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import {
   Button, Header, Message, Select,
@@ -10,7 +10,7 @@ import useInputState from '../../../../lib/hooks/useInputState';
 import mergeUsers from './api/mergeUsers';
 import SpecialAccountDetails from './SpecialAccountDetails';
 
-export default function MergeUsers({ firstUserId, secondUserId }) {
+export default function MergeUsers({ firstUserId, secondUserId, onSuccess }) {
   const {
     data: firstUser,
     isPending: isPendingFirstUser,
@@ -32,6 +32,9 @@ export default function MergeUsers({ firstUserId, secondUserId }) {
   });
 
   const [toUserId, setToUserId] = useInputState();
+  const fromUserId = useMemo(() => (
+    firstUserId === toUserId ? secondUserId : firstUserId
+  ), [toUserId, firstUserId, secondUserId]);
 
   const {
     mutate: mergeUsersMutation,
@@ -40,12 +43,11 @@ export default function MergeUsers({ firstUserId, secondUserId }) {
     error: mergeError,
     isSuccess,
   } = useMutation({
-    mutationFn: () => {
-      const fromUserId = (
-        firstUserId === toUserId ? secondUserId : firstUserId
-      );
-      return mergeUsers(toUserId, fromUserId);
-    },
+    mutationFn: ({
+      fromUserId: mutationFromUserId,
+      toUserId: mutationToUserId,
+    }) => mergeUsers(mutationFromUserId, mutationToUserId),
+    onSuccess,
   });
 
   if (isPendingFirstUser || isPendingSecondUser || isMergePending) return <Loading />;
@@ -77,7 +79,7 @@ export default function MergeUsers({ firstUserId, secondUserId }) {
       <Button
         primary
         disabled={!toUserId}
-        onClick={mergeUsersMutation}
+        onClick={() => mergeUsersMutation({ fromUserId, toUserId })}
       >
         Merge
       </Button>

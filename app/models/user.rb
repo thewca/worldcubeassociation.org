@@ -59,6 +59,7 @@ class User < ApplicationRecord
   belongs_to :current_avatar, class_name: "UserAvatar", inverse_of: :current_user, optional: true
   belongs_to :pending_avatar, class_name: "UserAvatar", inverse_of: :pending_user, optional: true
   has_many :user_avatars, dependent: :destroy, inverse_of: :user
+  has_many :potential_duplicate_persons, dependent: :destroy, foreign_key: :original_user_id, class_name: "PotentialDuplicatePerson"
 
   scope :confirmed_email, -> { where.not(confirmed_at: nil) }
   scope :newcomers, -> { where(wca_id: nil) }
@@ -1542,6 +1543,14 @@ class User < ApplicationRecord
       wca_id_to_be_transferred = self.wca_id
       self.update!(wca_id: nil) # Must remove WCA ID before adding it as it is unique in the Users table.
       new_user.update!(wca_id: wca_id_to_be_transferred)
+
+      # After this merge, there won't be any registrations for self as all of
+      # them will be transferred to new_user. So any potential duplicates of
+      # self is no longer valid. There might be some potential duplicates for
+      # new_user, but they need to be refetched. But refetching here may look
+      # confusing, so removing the potential duplicates of new_user as well.
+      self.potential_duplicate_persons.delete_all
+      new_user.potential_duplicate_persons.delete_all
     end
   end
 end
