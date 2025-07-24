@@ -4,9 +4,9 @@ import {
   Heading,
   Accordion,
   Link,
-  Box,
-  Text,
   List,
+  LinkBox,
+  LinkOverlay,
 } from "@chakra-ui/react";
 import { getPayload } from "payload";
 import config from "@payload-config";
@@ -32,51 +32,29 @@ export default async function Documents() {
 
   return (
     <Container>
-      <VStack gap="8" width="full" pt="8" alignItems="left">
+      <VStack gap="8" pt="8" alignItems="left">
         <Heading size="5xl">Documents</Heading>
-        <Accordion.Root>
+        <Accordion.Root variant="enclosed" multiple>
           {uncategorized.map((doc) => (
-            <Accordion.Item
-              p={"1"}
-              key={doc.title}
-              value={doc.title}
-              border="1px solid"
-              borderColor="gray.200"
-              borderRadius="md"
-            >
-              <Accordion.ItemTrigger px={4} py={2}>
-                <Box flex="1" textAlign="left" fontWeight="medium">
-                  <Link
-                    key={doc.id}
-                    href={doc.link}
-                    display="flex"
-                    alignItems="center"
-                    gap={2}
-                    color="blue.600"
-                    variant="underline"
-                  >
-                    <IconDisplay name={doc.icon} /> {doc.title}
-                  </Link>
-                </Box>
-              </Accordion.ItemTrigger>
+            <Accordion.Item key={doc.title} value={doc.title}>
+              <LinkBox asChild>
+                <Accordion.ItemTrigger>
+                  <LinkOverlay asChild>
+                    <Link href={doc.link} color="blue.600" variant="underline">
+                      <IconDisplay name={doc.icon} /> {doc.title}
+                    </Link>
+                  </LinkOverlay>
+                </Accordion.ItemTrigger>
+              </LinkBox>
             </Accordion.Item>
           ))}
           {Object.entries(categorized).map(([category, docs]) => (
-            <Accordion.Item
-              p={"1"}
-              key={category}
-              value={category}
-              border="1px solid"
-              borderColor="gray.200"
-              borderRadius="md"
-            >
-              <Accordion.ItemTrigger px={4} py={2}>
-                <Box flex="1" textAlign="left" fontWeight="medium">
-                  <IconDisplay name="List" /> {category}
-                </Box>
+            <Accordion.Item key={category} value={category}>
+              <Accordion.ItemTrigger>
+                <IconDisplay name="List" /> {category}
               </Accordion.ItemTrigger>
-              <Accordion.ItemContent pb={4}>
-                <VStack align="stretch">
+              <Accordion.ItemContent>
+                <Accordion.ItemBody>
                   <List.Root pl={"10"}>
                     {docs
                       .toSorted((a, b) => a.title.localeCompare(b.title))
@@ -84,18 +62,15 @@ export default async function Documents() {
                         <List.Item key={doc.id}>
                           <Link
                             href={doc.link}
-                            display="flex"
-                            alignItems="center"
-                            gap={2}
                             color="blue.600"
                             variant="underline"
                           >
-                            <Text>{doc.title}</Text>
+                            {doc.title}
                           </Link>
                         </List.Item>
                       ))}
                   </List.Root>
-                </VStack>
+                </Accordion.ItemBody>
               </Accordion.ItemContent>
             </Accordion.Item>
           ))}
