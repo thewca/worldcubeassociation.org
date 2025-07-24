@@ -8,9 +8,9 @@ import {
   Em,
   GridItem,
   Heading,
-  SimpleGrid, Stack,
+  SimpleGrid,
+  Stack,
   StackSeparator,
-  VStack,
 } from "@chakra-ui/react";
 import {
   activitiesOnDate,
