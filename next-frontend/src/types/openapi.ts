@@ -273,6 +273,51 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/user_groups": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get user groups */
+        get: {
+            parameters: {
+                query?: {
+                    /** @description Filter by whether the group is active */
+                    isActive?: boolean;
+                    /** @description Filter by whether the group is hidden */
+                    isHidden?: boolean;
+                    /** @description Filter by group type (e.g., "officers") */
+                    groupType?: string;
+                    /** @description Sort by a specific field (e.g., "start_date", "-created_at") */
+                    sort?: string;
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description A list of user groups */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["UserGroup"][];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/user_roles": {
         parameters: {
             query?: never;
@@ -296,6 +341,8 @@ export interface paths {
                     status?: string;
                     /** @description Filter by group type (e.g., "officers") */
                     groupType?: string;
+                    /** @description Filter by parent Group */
+                    parentGroupId?: number;
                     /** @description Filter by whether the user is the lead of the group */
                     isLead?: boolean;
                     /** @description Sort by a specific field (e.g., "start_date", "-created_at") */
@@ -462,6 +509,8 @@ export interface components {
                 updated_at?: string;
                 /** Format: email */
                 email?: string;
+                preferred_contact_mode?: string;
+                friendly_id?: string;
             };
         };
         RegionalOrganization: {

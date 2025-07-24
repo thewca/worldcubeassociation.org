@@ -1,9 +1,9 @@
 "use client";
 
-import {
-  PermissionFunctions,
-  usePermissions,
-} from "@/providers/PermissionProvider";
+import React from "react";
+
+import { usePermissions } from "@/providers/PermissionProvider";
+import { PermissionFunctions } from "@/lib/wca/permissions";
 
 export default function PermissionCheck({
   children,
