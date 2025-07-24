@@ -847,7 +847,7 @@ GEM
       aws-sdk-core (>= 2)
       concurrent-ruby
       thor
-    sidekiq (8.0.5)
+    sidekiq (8.0.6)
       connection_pool (>= 2.5.0)
       json (>= 2.9.0)
       logger (>= 1.6.2)
@@ -1446,7 +1446,7 @@ CHECKSUMS
   shakapacker (8.3.0) sha256=bdf41f950792f049235bc15e6936811c11cfde920cf3436bc0438eaf0aba01c0
   shellany (0.0.1) sha256=0e127a9132698766d7e752e82cdac8250b6adbd09e6c0a7fbbb6f61964fedee7
   shoryuken (6.2.1) sha256=95ddc0a717624a54e799d25a0a05100cb5a0c3728a96211935c214faaf16b3b6
-  sidekiq (8.0.5) sha256=d063b26fcf7bf082da2cd9d9f3d338bbfddc790e861e4e7c6a34ce2951f9f7d4
+  sidekiq (8.0.6) sha256=4a0a9b12b206b7f86919afcb13041aa60f13f7d7b75a23c707aa5aba3e84fe46
   sidekiq-cron (2.3.0) sha256=89c75745e7a5b6db3b92e593e1cce359cd1864a684a74c407f744a45abd0d615
   signet (0.20.0) sha256=bc660e2a6062311348cd35ec1ffafde1c5e2231213e1ca124f57aa4f59ec47a3
   simple_form (5.3.1) sha256=3891a36a89a7f8c69f1361624c5357591578a9e9c318257cd7b9cc7b6ce47460
