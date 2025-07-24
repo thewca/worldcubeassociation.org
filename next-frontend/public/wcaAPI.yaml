@@ -75,6 +75,35 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/CompetitionIndex'
+  /incidents:
+    get:
+      summary: Get a list of incidents
+      parameters:
+        - name: q
+          in: query
+          schema:
+            type: string
+        - name: tags
+          in: query
+          schema:
+            type: string
+        - name: page
+          in: query
+          schema:
+            type: number
+        - name: per_page
+          in: query
+          schema:
+            type: number
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Incident'
   /persons/{wca_id}/:
     get:
       summary: Get information for a person
@@ -429,6 +458,78 @@ components:
           example: "https://www.worldcubeassociation.org/persons/2005REYN01"
         avatar:
           $ref: '#/components/schemas/UserAvatar'
+
+    Incident:
+      type: object
+      required:
+        - id
+        - title
+        - public_summary
+        - created_at
+        - updated_at
+        - resolved_at
+        - digest_worthy
+        - url
+        - tags
+        - competitions
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        private_description:
+          type: string
+        public_summary:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        resolved_at:
+          type: string
+          format: date-time
+        digest_worthy:
+          type: boolean
+        digest_sent_at:
+          type: string
+          format: date-time
+        url:
+          type: string
+          format: uri
+        tags:
+          type: array
+          items:
+            type: object
+            required:
+              - name
+              - content_html
+              - url
+            properties:
+              name:
+                type: string
+              id:
+                type: number
+              url:
+                type: string
+                format: uri
+              content_html:
+                type: string
+        competitions:
+          type: array
+          items:
+            type: object
+            required:
+              - id
+              - name
+            properties:
+              id:
+                type: string
+              name:
+                type: string
+              comments:
+                type: string
 
     TeamMembership:
       type: object

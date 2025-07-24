@@ -417,6 +417,7 @@ Rails.application.routes.draw do
       get '/competition_series/:id' => 'api#competition_series'
       get '/competition_index' => 'competitions#competition_index', as: :competition_index
 
+      resources :incidents, only: %i[index]
       resources :regional_organizations, only: %i[index], path: '/regional-organizations'
 
       resources :competitions, only: %i[index show] do
