@@ -15,6 +15,8 @@ function ScrambleRowBody({ round, adminMode }) {
             scramble={scramble}
             scrambles={iterScrambles}
             adminMode={adminMode}
+            singleRowOverride={index === 0 && scramble.scramble_num !== 1}
+
           />
         ))
       ))}
