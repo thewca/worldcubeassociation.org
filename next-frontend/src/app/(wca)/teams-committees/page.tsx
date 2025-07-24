@@ -62,7 +62,7 @@ async function TeamTab({
 }: {
   group: components["schemas"]["UserGroup"];
 }) {
-  const I18n = await getT();
+  const { t } = await getT();
 
   const { metadata, name, id } = group;
   const { friendly_id, email } = metadata!;
@@ -74,9 +74,7 @@ async function TeamTab({
     <VStack align={"left"}>
       <Heading size="2xl">{name}</Heading>
       <Text>
-        {I18n.t(
-          `page.teams_committees_councils.groups_description.${friendly_id}`,
-        )}
+        {t(`page.teams_committees_councils.groups_description.${friendly_id}`)}
       </Text>
       <Link href={`mailto:${email}`}>{email}</Link>
       <MemberTable id={id} />

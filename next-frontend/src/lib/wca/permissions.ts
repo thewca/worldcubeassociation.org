@@ -88,21 +88,23 @@ export const hydrateUserPermissions = (
     ),
   canCreateGroup: (group) =>
     Boolean(
-      rawPermissions && rawPermissions.can_create_groups.scope.includes(group),
+      rawPermissions &&
+        allOrSpecificScope(group, rawPermissions.can_create_groups.scope),
     ),
   canEditGroup: (group) =>
     Boolean(
-      rawPermissions && rawPermissions.can_edit_groups.scope.includes(group),
+      rawPermissions &&
+        allOrSpecificScope(group, rawPermissions.can_edit_groups.scope),
     ),
   canReadGroupCurrent: (group) =>
     Boolean(
       rawPermissions &&
-        rawPermissions.can_read_groups_current.scope.includes(group),
+        allOrSpecificScope(group, rawPermissions.can_read_groups_current.scope),
     ),
   canReadGroupPast: (group) =>
     Boolean(
       rawPermissions &&
-        rawPermissions.can_read_groups_past.scope.includes(group),
+        allOrSpecificScope(group, rawPermissions.can_read_groups_past.scope),
     ),
   canRequestToEditProfile: (profile) =>
     Boolean(
