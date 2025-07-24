@@ -113,6 +113,7 @@ Rails.application.routes.draw do
     get 'submit-scrambles' => 'admin/scrambles#match_scrambles', as: :match_scrambles
     post 'submit-results' => 'results_submission#create', as: :submit_results
     post 'import-wca-live-results' => 'results_submission#import_from_live'
+    post 'start-result-submission-process' => 'results_submission#start_result_submission_process', as: :start_result_submission_process
     resources :scramble_files, only: %i[index create destroy], shallow: true do
       patch 'update-round-matching' => 'scramble_files#update_round_matching', on: :collection
     end

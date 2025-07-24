@@ -4,6 +4,7 @@ class TicketsCompetitionResult < ApplicationRecord
   self.table_name = "tickets_competition_result"
 
   enum :status, {
+    pending_import: "pending_import",
     submitted: "submitted",
     locked_for_posting: "locked_for_posting",
     warnings_verified: "warnings_verified",
@@ -23,37 +24,33 @@ class TicketsCompetitionResult < ApplicationRecord
     end
   end
 
-  def self.create_ticket!(competition, delegate_message, submitted_delegate)
-    ticket_metadata = TicketsCompetitionResult.create!(
-      status: TicketsCompetitionResult.statuses[:submitted],
-      competition_id: competition.id,
-      delegate_message: delegate_message,
-    )
+  def self.create_ticket!(competition, user_id)
+    ActiveRecord::Base.transaction do
+      ticket_metadata = TicketsCompetitionResult.create!(
+        status: TicketsCompetitionResult.statuses[:pending_import],
+        competition_id: competition.id,
+      )
 
-    ticket = Ticket.create!(metadata: ticket_metadata)
+      ticket = Ticket.create!(metadata: ticket_metadata)
 
-    TicketStakeholder.create!(
-      ticket_id: ticket.id,
-      stakeholder: UserGroup.teams_committees_group_wrt,
-      connection: TicketStakeholder.connections[:assigned],
-      stakeholder_role: TicketStakeholder.stakeholder_roles[:actioner],
-      is_active: true,
-    )
+      competition_stakeholder = TicketStakeholder.create!(
+        ticket_id: ticket.id,
+        stakeholder: competition,
+        connection: TicketStakeholder.connections[:assigned],
+        stakeholder_role: TicketStakeholder.stakeholder_roles[:requester],
+        is_active: true,
+      )
 
-    competition_stakeholder = TicketStakeholder.create!(
-      ticket_id: ticket.id,
-      stakeholder: competition,
-      connection: TicketStakeholder.connections[:cc],
-      stakeholder_role: TicketStakeholder.stakeholder_roles[:requester],
-      is_active: true,
-    )
+      TicketLog.create!(
+        ticket_id: ticket.id,
+        action_type: TicketLog.action_types[:create_ticket],
+        acting_user_id: user_id,
+        acting_stakeholder_id: competition_stakeholder.id,
+      )
+    end
+  end
 
-    TicketLog.create!(
-      ticket_id: ticket.id,
-      action_type: TicketLog.action_types[:update_status],
-      action_value: ticket_metadata.status,
-      acting_user_id: submitted_delegate.id,
-      acting_stakeholder_id: competition_stakeholder.id,
-    )
+  def competition_stakeholder
+    ticket.ticket_stakeholders.find_by(stakeholder: competition)
   end
 end

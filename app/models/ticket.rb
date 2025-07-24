@@ -30,7 +30,8 @@ class Ticket < ApplicationRecord
     return false if user.nil?
 
     ticket_stakeholders.belongs_to_user(user).any? ||
-      ticket_stakeholders.belongs_to_groups(user.active_groups).any?
+      ticket_stakeholders.belongs_to_groups(user.active_groups).any? ||
+      ticket_stakeholders.belongs_to_competitions(user.delegated_competitions).any?
   end
 
   DEFAULT_SERIALIZE_OPTIONS = {

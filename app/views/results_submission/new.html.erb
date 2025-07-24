@@ -6,6 +6,14 @@
 
   <% if @competition.results_submitted? %>
     <p>The results have already been submitted. If you have any more questions or comments please reply to the email sent with the first results submission.</p>
+  <% elsif @competition.tickets_competition_result.nil? %>
+    <%= button_to competition_start_result_submission_process_path,
+                  title: "Start result submission process",
+                  class: "btn btn-primary",
+                  method: :post do
+    %>
+      Start result submission process
+    <% end %>
   <% else %>
     <p>
       The result submission process has two steps:

@@ -149,16 +149,41 @@ class ResultsSubmissionController < ApplicationController
 
     return render status: :unprocessable_entity, json: { error: "Submitted results contain errors." } if results_validator.any_errors?
 
-    return render status: :unprocessable_entity, json: { error: "There is already a ticket associated, please contact WRT to update this." } if competition.result_ticket.present?
+    return render status: :unprocessable_entity, json: { error: "There is no ticket associated, please contact WST." } if competition.result_ticket.nil?
 
     CompetitionsMailer.results_submitted(competition, results_validator, message, current_user).deliver_now
 
     ActiveRecord::Base.transaction do
       competition.touch(:results_submitted_at)
-      TicketsCompetitionResult.create_ticket!(competition, message, current_user)
+      competition.tickets_competition_result.update!(
+        delegate_message: message,
+        status: TicketsCompetitionResult.statuses[:submitted],
+      )
+      competition.tickets_competition_result.competition_stakeholder.update!(connection: TicketStakeholder.connections[:cc])
+      TicketStakeholder.create!(
+        ticket_id: competition.result_ticket.id,
+        stakeholder: UserGroup.teams_committees_group_wrt,
+        connection: TicketStakeholder.connections[:assigned],
+        stakeholder_role: TicketStakeholder.stakeholder_roles[:actioner],
+        is_active: true,
+      )
     end
 
     render status: :ok, json: { success: true }
+  end
+
+  def start_result_submission_process
+    @competition = competition_from_params
+
+    if @competition.tickets_competition_result.present?
+      return render status: :bad_request, json: {
+        error: "Ticket for result submission already exists.",
+      }
+    end
+
+    TicketsCompetitionResult.create_ticket!(@competition, current_user.id)
+
+    redirect_to competition_submit_results_edit_path
   end
 
   private def competition_from_params
