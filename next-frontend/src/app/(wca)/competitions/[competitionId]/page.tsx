@@ -337,9 +337,13 @@ export default async function CompetitionOverView({
                   <Text>
                     {competitionInfo.event_ids.map((event_id) => (
                       <EventIcon
-                        eventId={event_id}
-                        main={event_id === competitionInfo.main_event_id}
                         key={event_id}
+                        eventId={event_id}
+                        color={
+                          event_id === competitionInfo.main_event_id
+                            ? "currentColor"
+                            : "supplementary.texts.gray1"
+                        }
                       />
                     ))}
                   </Text>
