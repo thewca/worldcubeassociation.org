@@ -5,16 +5,19 @@ FactoryBot.define do
     transient do
       skip_auto_accept_hook { false }
       competition { registration.competition }
-      revert_mode_to { nil }
+      payment_intent { association(:payment_intent, :confirmed, holder: registration) }
     end
 
-    registration { nil }
     user_id { registration&.user_id }
     amount_lowest_denomination { competition&.base_entry_fee_lowest_denomination }
     currency_code { competition&.currency_code }
+    receipt { payment_intent.payment_record.child_records.first }
 
     trait :refund do
       amount_lowest_denomination { -competition.base_entry_fee_lowest_denomination }
+      registration { refunded_registration_payment&.registration }
+      refunded_registration_payment { registration.registration_payments.order(:id).first }
+      receipt { association(:stripe_record, :refund, parent_record: refunded_registration_payment.receipt) }
     end
 
     trait :with_donation do

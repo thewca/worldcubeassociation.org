@@ -275,6 +275,7 @@ export const viewUrls = {
     show: (ticketId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.ticket_path("${ticketId}")) %>`,
     listComments: (ticketId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.ticket_comments_path("${ticketId}")) %>`,
     listLogs: (ticketId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.ticket_logs_path("${ticketId}")) %>`,
+    importedTemporaryResults: (competitionId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.imported_temporary_results_path(competition_id: "${competitionId}")) %>`,
   },
   admin: {
     completePersons: (competitionIds) => `<%= CGI.unescape(Rails.application.routes.url_helpers.admin_complete_persons_path) %>?${jsonToQueryString({ competition_ids: competitionIds })}`,

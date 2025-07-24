@@ -12,6 +12,115 @@
  */
 export type ColorPaletteSelect = 'blue' | 'red' | 'green' | 'orange' | 'yellow' | 'grey';
 /**
+ * Icon name
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "IconName".
+ */
+export type IconName =
+  | 'About the Regulations'
+  | 'About the WCA'
+  | 'Admin Results'
+  | 'All Competitions'
+  | 'Bookmark'
+  | 'Clone'
+  | 'Competition Not Started'
+  | 'Registration Closed'
+  | 'Registration Closed (Red)'
+  | 'Registration Full but Open'
+  | 'Registration Full but Open (Orange)'
+  | 'Registration Not Full, Open'
+  | 'Registration Not Full, Open (Green)'
+  | 'Registration Not Open Yet'
+  | 'Registration Not Open Yet (Grey)'
+  | 'Registration Open Date'
+  | 'Registration Close Date'
+  | 'Competitors'
+  | 'Contact'
+  | 'Delegate Report'
+  | 'Details'
+  | 'Developer Export'
+  | 'Disciplinary Log'
+  | 'Disclaimer'
+  | 'Download'
+  | 'Edit'
+  | 'Educational Resources'
+  | 'Error'
+  | 'External Link'
+  | 'Facebook'
+  | 'Filters'
+  | 'GitHub'
+  | 'Guidelines'
+  | 'Help and FAQs'
+  | 'Incidents Log'
+  | 'Information'
+  | 'Instagram'
+  | 'Language'
+  | 'List'
+  | 'Location'
+  | 'Manage Tabs'
+  | 'Map'
+  | 'Media Submission'
+  | 'Menu'
+  | 'Multimedia'
+  | 'My Competitions'
+  | 'My Results'
+  | 'National Championship'
+  | 'New Competition'
+  | 'On-the-Spot Registration'
+  | 'Payment'
+  | 'Privacy'
+  | 'Rankings'
+  | 'Records'
+  | 'Regional Organisations'
+  | 'Register'
+  | 'Registration'
+  | 'Regulations and Guidelines'
+  | 'Regulations History'
+  | 'Regulations'
+  | 'Results Export'
+  | 'Scrambles'
+  | 'Search'
+  | 'Spectators'
+  | 'Speedcubing History'
+  | 'Spots Left'
+  | 'Statistics'
+  | 'Teams, Committees and Councils'
+  | 'Tools'
+  | 'Translators'
+  | 'Twitch'
+  | 'User'
+  | 'Users / Persons'
+  | 'Venue'
+  | 'WCA Delegates'
+  | 'WCA Documents'
+  | 'WCA Live'
+  | 'WCA Officers and Board'
+  | 'Weibo'
+  | 'X (formerly Twitter)'
+  | 'YouTube'
+  | '222Icon'
+  | '333bfIcon'
+  | '333fmIcon'
+  | '333ftIcon'
+  | '333Icon'
+  | '333mbfIcon'
+  | '333ohIcon'
+  | '333mboIcon'
+  | '444bfIcon'
+  | '444Icon'
+  | '555bfIcon'
+  | '555Icon'
+  | '666Icon'
+  | '777Icon'
+  | 'ClockIcon'
+  | 'MagicIcon'
+  | 'MinxIcon'
+  | 'MmagicIcon'
+  | 'PyramIcon'
+  | 'SkewbIcon'
+  | 'Sq1Icon';
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "ColorSelect".
  */
@@ -95,6 +204,7 @@ export interface Config {
     faqCategories: FaqCategory;
     faqQuestions: FaqQuestion;
     users: User;
+    documents: Document;
     regulationsHistoryItem: RegulationsHistoryItem;
     tools: Tool;
     'payload-locked-documents': PayloadLockedDocument;
@@ -113,6 +223,7 @@ export interface Config {
     faqCategories: FaqCategoriesSelect<false> | FaqCategoriesSelect<true>;
     faqQuestions: FaqQuestionsSelect<false> | FaqQuestionsSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
+    documents: DocumentsSelect<false> | DocumentsSelect<true>;
     regulationsHistoryItem: RegulationsHistoryItemSelect<false> | RegulationsHistoryItemSelect<true>;
     tools: ToolsSelect<false> | ToolsSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
@@ -140,7 +251,39 @@ export interface Config {
     'speedcubing-history-page': SpeedcubingHistoryPageSelect<false> | SpeedcubingHistoryPageSelect<true>;
     'about-regulations-page': AboutRegulationsPageSelect<false> | AboutRegulationsPageSelect<true>;
   };
-  locale: null;
+  locale:
+    | 'en'
+    | 'ca'
+    | 'cs'
+    | 'da'
+    | 'de'
+    | 'eo'
+    | 'es'
+    | 'eu'
+    | 'fi'
+    | 'fr'
+    | 'fr-CA'
+    | 'hr'
+    | 'hu'
+    | 'id'
+    | 'it'
+    | 'ja'
+    | 'kk'
+    | 'ko'
+    | 'nl'
+    | 'pl'
+    | 'pt'
+    | 'pt-BR'
+    | 'ro'
+    | 'ru'
+    | 'sk'
+    | 'sl'
+    | 'sv'
+    | 'th'
+    | 'uk'
+    | 'vi'
+    | 'zh-CN'
+    | 'zh-TW';
   user: User & {
     collection: 'users';
   };
@@ -295,6 +438,22 @@ export interface FaqQuestion {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "documents".
+ */
+export interface Document {
+  id: number;
+  title: string;
+  icon: IconName;
+  link: string;
+  /**
+   * Category name (used for grouping documents)
+   */
+  category?: ('motions' | 'minutes' | 'policies' | 'finances') | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "regulationsHistoryItem".
  */
 export interface RegulationsHistoryItem {
@@ -353,6 +512,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'users';
         value: string | User;
+      } | null)
+    | ({
+        relationTo: 'documents';
+        value: number | Document;
       } | null)
     | ({
         relationTo: 'regulationsHistoryItem';
@@ -495,6 +658,18 @@ export interface UsersSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "documents_select".
+ */
+export interface DocumentsSelect<T extends boolean = true> {
+  title?: T;
+  icon?: T;
+  link?: T;
+  category?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "regulationsHistoryItem_select".
  */
 export interface RegulationsHistoryItemSelect<T extends boolean = true> {
@@ -562,359 +737,23 @@ export interface Nav {
   entry: (
     | {
         title: string;
-        displayIcon?:
-          | (
-              | 'About the Regulations'
-              | 'About the WCA'
-              | 'Admin Results'
-              | 'All Competitions'
-              | 'Bookmark'
-              | 'Clone'
-              | 'Competition Not Started'
-              | 'Registration Closed'
-              | 'Registration Closed (Red)'
-              | 'Registration Full but Open'
-              | 'Registration Full but Open (Orange)'
-              | 'Registration Not Full, Open'
-              | 'Registration Not Full, Open (Green)'
-              | 'Registration Not Open Yet'
-              | 'Registration Not Open Yet (Grey)'
-              | 'Registration Open Date'
-              | 'Registration Close Date'
-              | 'Competitors'
-              | 'Contact'
-              | 'Delegate Report'
-              | 'Details'
-              | 'Developer Export'
-              | 'Disciplinary Log'
-              | 'Disclaimer'
-              | 'Download'
-              | 'Edit'
-              | 'Educational Resources'
-              | 'Error'
-              | 'External Link'
-              | 'Facebook'
-              | 'Filters'
-              | 'GitHub'
-              | 'Guidelines'
-              | 'Help and FAQs'
-              | 'Incidents Log'
-              | 'Information'
-              | 'Instagram'
-              | 'Language'
-              | 'List'
-              | 'Location'
-              | 'Manage Tabs'
-              | 'Map'
-              | 'Media Submission'
-              | 'Menu'
-              | 'Multimedia'
-              | 'My Competitions'
-              | 'My Results'
-              | 'National Championship'
-              | 'New Competition'
-              | 'On-the-Spot Registration'
-              | 'Payment'
-              | 'Privacy'
-              | 'Rankings'
-              | 'Records'
-              | 'Regional Organisations'
-              | 'Register'
-              | 'Registration'
-              | 'Regulations and Guidelines'
-              | 'Regulations History'
-              | 'Regulations'
-              | 'Results Export'
-              | 'Scrambles'
-              | 'Search'
-              | 'Spectators'
-              | 'Speedcubing History'
-              | 'Spots Left'
-              | 'Statistics'
-              | 'Teams, Committees and Councils'
-              | 'Tools'
-              | 'Translators'
-              | 'Twitch'
-              | 'User'
-              | 'Users / Persons'
-              | 'Venue'
-              | 'WCA Delegates'
-              | 'WCA Documents'
-              | 'WCA Live'
-              | 'WCA Officers and Board'
-              | 'Weibo'
-              | 'X (formerly Twitter)'
-              | 'YouTube'
-            )
-          | null;
+        displayIcon?: IconName;
         entries: (
           | {
               displayText: string;
               targetLink: string;
-              displayIcon?:
-                | (
-                    | 'About the Regulations'
-                    | 'About the WCA'
-                    | 'Admin Results'
-                    | 'All Competitions'
-                    | 'Bookmark'
-                    | 'Clone'
-                    | 'Competition Not Started'
-                    | 'Registration Closed'
-                    | 'Registration Closed (Red)'
-                    | 'Registration Full but Open'
-                    | 'Registration Full but Open (Orange)'
-                    | 'Registration Not Full, Open'
-                    | 'Registration Not Full, Open (Green)'
-                    | 'Registration Not Open Yet'
-                    | 'Registration Not Open Yet (Grey)'
-                    | 'Registration Open Date'
-                    | 'Registration Close Date'
-                    | 'Competitors'
-                    | 'Contact'
-                    | 'Delegate Report'
-                    | 'Details'
-                    | 'Developer Export'
-                    | 'Disciplinary Log'
-                    | 'Disclaimer'
-                    | 'Download'
-                    | 'Edit'
-                    | 'Educational Resources'
-                    | 'Error'
-                    | 'External Link'
-                    | 'Facebook'
-                    | 'Filters'
-                    | 'GitHub'
-                    | 'Guidelines'
-                    | 'Help and FAQs'
-                    | 'Incidents Log'
-                    | 'Information'
-                    | 'Instagram'
-                    | 'Language'
-                    | 'List'
-                    | 'Location'
-                    | 'Manage Tabs'
-                    | 'Map'
-                    | 'Media Submission'
-                    | 'Menu'
-                    | 'Multimedia'
-                    | 'My Competitions'
-                    | 'My Results'
-                    | 'National Championship'
-                    | 'New Competition'
-                    | 'On-the-Spot Registration'
-                    | 'Payment'
-                    | 'Privacy'
-                    | 'Rankings'
-                    | 'Records'
-                    | 'Regional Organisations'
-                    | 'Register'
-                    | 'Registration'
-                    | 'Regulations and Guidelines'
-                    | 'Regulations History'
-                    | 'Regulations'
-                    | 'Results Export'
-                    | 'Scrambles'
-                    | 'Search'
-                    | 'Spectators'
-                    | 'Speedcubing History'
-                    | 'Spots Left'
-                    | 'Statistics'
-                    | 'Teams, Committees and Councils'
-                    | 'Tools'
-                    | 'Translators'
-                    | 'Twitch'
-                    | 'User'
-                    | 'Users / Persons'
-                    | 'Venue'
-                    | 'WCA Delegates'
-                    | 'WCA Documents'
-                    | 'WCA Live'
-                    | 'WCA Officers and Board'
-                    | 'Weibo'
-                    | 'X (formerly Twitter)'
-                    | 'YouTube'
-                  )
-                | null;
+              displayIcon?: IconName;
               id?: string | null;
               blockName?: string | null;
               blockType: 'LinkItem';
             }
           | {
               title: string;
-              displayIcon?:
-                | (
-                    | 'About the Regulations'
-                    | 'About the WCA'
-                    | 'Admin Results'
-                    | 'All Competitions'
-                    | 'Bookmark'
-                    | 'Clone'
-                    | 'Competition Not Started'
-                    | 'Registration Closed'
-                    | 'Registration Closed (Red)'
-                    | 'Registration Full but Open'
-                    | 'Registration Full but Open (Orange)'
-                    | 'Registration Not Full, Open'
-                    | 'Registration Not Full, Open (Green)'
-                    | 'Registration Not Open Yet'
-                    | 'Registration Not Open Yet (Grey)'
-                    | 'Registration Open Date'
-                    | 'Registration Close Date'
-                    | 'Competitors'
-                    | 'Contact'
-                    | 'Delegate Report'
-                    | 'Details'
-                    | 'Developer Export'
-                    | 'Disciplinary Log'
-                    | 'Disclaimer'
-                    | 'Download'
-                    | 'Edit'
-                    | 'Educational Resources'
-                    | 'Error'
-                    | 'External Link'
-                    | 'Facebook'
-                    | 'Filters'
-                    | 'GitHub'
-                    | 'Guidelines'
-                    | 'Help and FAQs'
-                    | 'Incidents Log'
-                    | 'Information'
-                    | 'Instagram'
-                    | 'Language'
-                    | 'List'
-                    | 'Location'
-                    | 'Manage Tabs'
-                    | 'Map'
-                    | 'Media Submission'
-                    | 'Menu'
-                    | 'Multimedia'
-                    | 'My Competitions'
-                    | 'My Results'
-                    | 'National Championship'
-                    | 'New Competition'
-                    | 'On-the-Spot Registration'
-                    | 'Payment'
-                    | 'Privacy'
-                    | 'Rankings'
-                    | 'Records'
-                    | 'Regional Organisations'
-                    | 'Register'
-                    | 'Registration'
-                    | 'Regulations and Guidelines'
-                    | 'Regulations History'
-                    | 'Regulations'
-                    | 'Results Export'
-                    | 'Scrambles'
-                    | 'Search'
-                    | 'Spectators'
-                    | 'Speedcubing History'
-                    | 'Spots Left'
-                    | 'Statistics'
-                    | 'Teams, Committees and Councils'
-                    | 'Tools'
-                    | 'Translators'
-                    | 'Twitch'
-                    | 'User'
-                    | 'Users / Persons'
-                    | 'Venue'
-                    | 'WCA Delegates'
-                    | 'WCA Documents'
-                    | 'WCA Live'
-                    | 'WCA Officers and Board'
-                    | 'Weibo'
-                    | 'X (formerly Twitter)'
-                    | 'YouTube'
-                  )
-                | null;
+              displayIcon?: IconName;
               entries: {
                 displayText: string;
                 targetLink: string;
-                displayIcon?:
-                  | (
-                      | 'About the Regulations'
-                      | 'About the WCA'
-                      | 'Admin Results'
-                      | 'All Competitions'
-                      | 'Bookmark'
-                      | 'Clone'
-                      | 'Competition Not Started'
-                      | 'Registration Closed'
-                      | 'Registration Closed (Red)'
-                      | 'Registration Full but Open'
-                      | 'Registration Full but Open (Orange)'
-                      | 'Registration Not Full, Open'
-                      | 'Registration Not Full, Open (Green)'
-                      | 'Registration Not Open Yet'
-                      | 'Registration Not Open Yet (Grey)'
-                      | 'Registration Open Date'
-                      | 'Registration Close Date'
-                      | 'Competitors'
-                      | 'Contact'
-                      | 'Delegate Report'
-                      | 'Details'
-                      | 'Developer Export'
-                      | 'Disciplinary Log'
-                      | 'Disclaimer'
-                      | 'Download'
-                      | 'Edit'
-                      | 'Educational Resources'
-                      | 'Error'
-                      | 'External Link'
-                      | 'Facebook'
-                      | 'Filters'
-                      | 'GitHub'
-                      | 'Guidelines'
-                      | 'Help and FAQs'
-                      | 'Incidents Log'
-                      | 'Information'
-                      | 'Instagram'
-                      | 'Language'
-                      | 'List'
-                      | 'Location'
-                      | 'Manage Tabs'
-                      | 'Map'
-                      | 'Media Submission'
-                      | 'Menu'
-                      | 'Multimedia'
-                      | 'My Competitions'
-                      | 'My Results'
-                      | 'National Championship'
-                      | 'New Competition'
-                      | 'On-the-Spot Registration'
-                      | 'Payment'
-                      | 'Privacy'
-                      | 'Rankings'
-                      | 'Records'
-                      | 'Regional Organisations'
-                      | 'Register'
-                      | 'Registration'
-                      | 'Regulations and Guidelines'
-                      | 'Regulations History'
-                      | 'Regulations'
-                      | 'Results Export'
-                      | 'Scrambles'
-                      | 'Search'
-                      | 'Spectators'
-                      | 'Speedcubing History'
-                      | 'Spots Left'
-                      | 'Statistics'
-                      | 'Teams, Committees and Councils'
-                      | 'Tools'
-                      | 'Translators'
-                      | 'Twitch'
-                      | 'User'
-                      | 'Users / Persons'
-                      | 'Venue'
-                      | 'WCA Delegates'
-                      | 'WCA Documents'
-                      | 'WCA Live'
-                      | 'WCA Officers and Board'
-                      | 'Weibo'
-                      | 'X (formerly Twitter)'
-                      | 'YouTube'
-                    )
-                  | null;
+                displayIcon?: IconName;
                 id?: string | null;
                 blockName?: string | null;
                 blockType: 'LinkItem';
@@ -936,91 +775,7 @@ export interface Nav {
     | {
         displayText: string;
         targetLink: string;
-        displayIcon?:
-          | (
-              | 'About the Regulations'
-              | 'About the WCA'
-              | 'Admin Results'
-              | 'All Competitions'
-              | 'Bookmark'
-              | 'Clone'
-              | 'Competition Not Started'
-              | 'Registration Closed'
-              | 'Registration Closed (Red)'
-              | 'Registration Full but Open'
-              | 'Registration Full but Open (Orange)'
-              | 'Registration Not Full, Open'
-              | 'Registration Not Full, Open (Green)'
-              | 'Registration Not Open Yet'
-              | 'Registration Not Open Yet (Grey)'
-              | 'Registration Open Date'
-              | 'Registration Close Date'
-              | 'Competitors'
-              | 'Contact'
-              | 'Delegate Report'
-              | 'Details'
-              | 'Developer Export'
-              | 'Disciplinary Log'
-              | 'Disclaimer'
-              | 'Download'
-              | 'Edit'
-              | 'Educational Resources'
-              | 'Error'
-              | 'External Link'
-              | 'Facebook'
-              | 'Filters'
-              | 'GitHub'
-              | 'Guidelines'
-              | 'Help and FAQs'
-              | 'Incidents Log'
-              | 'Information'
-              | 'Instagram'
-              | 'Language'
-              | 'List'
-              | 'Location'
-              | 'Manage Tabs'
-              | 'Map'
-              | 'Media Submission'
-              | 'Menu'
-              | 'Multimedia'
-              | 'My Competitions'
-              | 'My Results'
-              | 'National Championship'
-              | 'New Competition'
-              | 'On-the-Spot Registration'
-              | 'Payment'
-              | 'Privacy'
-              | 'Rankings'
-              | 'Records'
-              | 'Regional Organisations'
-              | 'Register'
-              | 'Registration'
-              | 'Regulations and Guidelines'
-              | 'Regulations History'
-              | 'Regulations'
-              | 'Results Export'
-              | 'Scrambles'
-              | 'Search'
-              | 'Spectators'
-              | 'Speedcubing History'
-              | 'Spots Left'
-              | 'Statistics'
-              | 'Teams, Committees and Councils'
-              | 'Tools'
-              | 'Translators'
-              | 'Twitch'
-              | 'User'
-              | 'Users / Persons'
-              | 'Venue'
-              | 'WCA Delegates'
-              | 'WCA Documents'
-              | 'WCA Live'
-              | 'WCA Officers and Board'
-              | 'Weibo'
-              | 'X (formerly Twitter)'
-              | 'YouTube'
-            )
-          | null;
+        displayIcon?: IconName;
         id?: string | null;
         blockName?: string | null;
         blockType: 'LinkItem';

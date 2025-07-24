@@ -103,15 +103,15 @@ class ResultsSubmissionController < ApplicationController
     persons_to_import = competition.registrations
                                    .includes(:user)
                                    .select { it.wcif_status == "accepted" && person_with_results.include?(it.registrant_id.to_s) }
-                                   .map do
+                                   .map do |registration|
       InboxPerson.new({
-                        id: it.registrant_id,
-                        wca_id: it.wca_id || '',
+                        id: registration.registrant_id,
+                        wca_id: registration.wca_id || '',
                         competition_id: competition.id,
-                        name: it.name,
-                        country_iso2: it.country.iso2,
-                        gender: it.gender,
-                        dob: it.dob,
+                        name: registration.name,
+                        country_iso2: registration.country.iso2,
+                        gender: registration.gender,
+                        dob: registration.dob,
                       })
     end
 
@@ -155,7 +155,7 @@ class ResultsSubmissionController < ApplicationController
 
     ActiveRecord::Base.transaction do
       competition.touch(:results_submitted_at)
-      TicketsCompetitionResult.create_ticket!(competition.id, message, current_user)
+      TicketsCompetitionResult.create_ticket!(competition, message, current_user)
     end
 
     render status: :ok, json: { success: true }

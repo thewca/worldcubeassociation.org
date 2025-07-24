@@ -47,7 +47,7 @@ module Admin
 
       ActiveRecord::Base.transaction do
         TicketsCompetitionResult.where(competition: @updated_competitions)
-                                .update_all(status: TicketsCompetitionResult.statuses[:warnings_verification])
+                                .update_all(status: TicketsCompetitionResult.statuses[:locked_for_posting])
         @updated_competitions.update(posting_user: current_user)
       end
 

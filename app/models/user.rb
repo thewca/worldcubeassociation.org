@@ -59,6 +59,7 @@ class User < ApplicationRecord
   belongs_to :current_avatar, class_name: "UserAvatar", inverse_of: :current_user, optional: true
   belongs_to :pending_avatar, class_name: "UserAvatar", inverse_of: :pending_user, optional: true
   has_many :user_avatars, dependent: :destroy, inverse_of: :user
+  has_many :potential_duplicate_persons, dependent: :destroy, foreign_key: :original_user_id, class_name: "PotentialDuplicatePerson"
 
   scope :confirmed_email, -> { where.not(confirmed_at: nil) }
   scope :newcomers, -> { where(wca_id: nil) }
@@ -1051,7 +1052,7 @@ class User < ApplicationRecord
                            # Not using _html suffix as automatic html_safe is available only from
                            # the view helper
                            I18n.t('users.edit.cannot_edit.reason.assigned')
-                         elsif user_to_edit == self && !(admin? || any_kind_of_delegate?) && user_to_edit.registrations.accepted.count.positive?
+                         elsif user_to_edit == self && !(admin? || any_kind_of_delegate?) && user_to_edit.registrations.accepted.any?
                            I18n.t('users.edit.cannot_edit.reason.registered')
                          end
     return unless cannot_edit_reason
@@ -1247,18 +1248,26 @@ class User < ApplicationRecord
   DEFAULT_SERIALIZE_OPTIONS = {
     only: %w[id wca_id name gender
              country_iso2 created_at updated_at],
-    methods: %w[url country delegate_status],
-    include: %w[avatar teams],
+    methods: %w[url country],
+    include: %w[avatar],
   }.freeze
 
   def serializable_hash(options = nil)
     # NOTE: doing deep_dup is necessary here to avoid changing the inner values
     # of the freezed variables (which would leak PII)!
     default_options = DEFAULT_SERIALIZE_OPTIONS.deep_dup
-    # Delegates's emails and regions are public information.
-    default_options[:methods].push("email", "location", "region_id") if staff_delegate?
+
+    include_email, exclude_deprecated = options&.values_at(:include_email, :exclude_deprecated)
+
+    unless exclude_deprecated
+      default_options[:methods].push("location", "region_id") if staff_delegate?
+      default_options[:methods].push("delegate_status")
+      default_options[:include].push("teams")
+    end
+    default_options[:methods].push("email") if include_email || staff_delegate?
 
     options = default_options.merge(options || {}).deep_dup
+
     # Preempt the values for avatar and teams, they have a special treatment.
     include_avatar = options[:include]&.delete("avatar")
     include_teams = options[:include]&.delete("teams")
@@ -1534,6 +1543,14 @@ class User < ApplicationRecord
       wca_id_to_be_transferred = self.wca_id
       self.update!(wca_id: nil) # Must remove WCA ID before adding it as it is unique in the Users table.
       new_user.update!(wca_id: wca_id_to_be_transferred)
+
+      # After this merge, there won't be any registrations for self as all of
+      # them will be transferred to new_user. So any potential duplicates of
+      # self is no longer valid. There might be some potential duplicates for
+      # new_user, but they need to be refetched. But refetching here may look
+      # confusing, so removing the potential duplicates of new_user as well.
+      self.potential_duplicate_persons.delete_all
+      new_user.potential_duplicate_persons.delete_all
     end
   end
 end
