@@ -416,7 +416,7 @@ export interface Document {
   /**
    * Category name (used for grouping documents)
    */
-  category?: string | null;
+  category?: ('motions' | 'minutes' | 'policies' | 'finances') | null;
   updatedAt: string;
   createdAt: string;
 }

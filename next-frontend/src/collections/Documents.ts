@@ -3,6 +3,25 @@ import { iconMap, IconName } from "@/components/icons/iconMap";
 
 const iconOptions = Object.keys(iconMap) as IconName[];
 
+const documentCategories = [
+  {
+    value: "motions",
+    label: "Motions",
+  },
+  {
+    value: "minutes",
+    label: "Minutes",
+  },
+  {
+    value: "policies",
+    label: "WCA Policies",
+  },
+  {
+    value: "finances",
+    label: "Finances",
+  },
+];
+
 export const Documents: CollectionConfig = {
   slug: "documents",
   labels: {
@@ -35,7 +54,8 @@ export const Documents: CollectionConfig = {
     },
     {
       name: "category",
-      type: "text",
+      type: "select",
+      options: documentCategories,
       admin: {
         description: "Category name (used for grouping documents)",
       },
