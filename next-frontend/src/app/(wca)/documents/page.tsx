@@ -1,5 +1,3 @@
-"use server";
-
 import {
   VStack,
   Container,
@@ -12,8 +10,6 @@ import {
 } from "@chakra-ui/react";
 import { getPayload } from "payload";
 import config from "@payload-config";
-import { IconName } from "@/components/icons/iconMap";
-import React from "react";
 import _ from "lodash";
 import IconDisplay from "@/components/IconDisplay";
 
@@ -31,12 +27,8 @@ export default async function Documents() {
     return <Heading>No documents found. Add some</Heading>;
   }
 
-  const documentsByCategory = _.groupBy(
-    documents,
-    (doc) => doc.category || "__uncategorized",
-  );
-  const uncategorized = documentsByCategory["__uncategorized"] || [];
-  const categorized = _.omit(documentsByCategory, "__uncategorized");
+  const [uncategorized, categorizedRaw] = _.partition(documents, "category");
+  const categorized = _.groupBy(categorizedRaw, "category");
 
   return (
     <Container>
@@ -61,9 +53,9 @@ export default async function Documents() {
                     alignItems="center"
                     gap={2}
                     color="blue.600"
-                    _hover={{ textDecoration: "underline" }}
+                    variant="underline"
                   >
-                    <IconDisplay name={doc.icon as IconName} /> {doc.title}
+                    <IconDisplay name={doc.icon} /> {doc.title}
                   </Link>
                 </Box>
               </Accordion.ItemTrigger>
@@ -96,7 +88,7 @@ export default async function Documents() {
                             alignItems="center"
                             gap={2}
                             color="blue.600"
-                            _hover={{ textDecoration: "underline" }}
+                            variant="underline"
                           >
                             <Text>{doc.title}</Text>
                           </Link>

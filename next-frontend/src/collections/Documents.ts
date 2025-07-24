@@ -1,4 +1,7 @@
 import { CollectionConfig } from "payload";
+import { iconMap, IconName } from "@/components/icons/iconMap";
+
+const iconOptions = Object.keys(iconMap) as IconName[];
 
 export const Documents: CollectionConfig = {
   slug: "documents",
@@ -17,7 +20,9 @@ export const Documents: CollectionConfig = {
     },
     {
       name: "icon",
-      type: "text",
+      type: "select",
+      options: iconOptions,
+      interfaceName: "IconName",
       required: true,
       admin: {
         description: "Icon name",

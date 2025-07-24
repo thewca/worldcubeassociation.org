@@ -22,6 +22,7 @@ const LinkItem: Block = {
       name: "displayIcon",
       type: "select",
       options: iconOptions,
+      interfaceName: "IconName",
     },
   ],
 };
@@ -43,6 +44,7 @@ const NestedDropdown: Block = {
       name: "displayIcon",
       type: "select",
       options: iconOptions,
+      interfaceName: "IconName",
     },
     {
       name: "entries",
@@ -66,6 +68,7 @@ const Dropdown: Block = {
       name: "displayIcon",
       type: "select",
       options: iconOptions,
+      interfaceName: "IconName",
     },
     {
       name: "entries",
