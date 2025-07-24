@@ -45,6 +45,24 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/WcifEvent'
+
+  /competitions/{competitionId}/schedule:
+    get:
+      summary: Get competition schedule in WCIF format
+      parameters:
+        - name: competitionId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WcifSchedule'
+
   /competitions/{competitionId}/registrations:
     get:
       summary: Get competition registrations
@@ -277,6 +295,19 @@ paths:
                 $ref: "#/components/schemas/UserPermissions"
         "401":
           description: Unauthorized
+  /known-timezones:
+    get:
+      summary: Get a list of Olson timezones that the backend understands
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+                  example: 'America/New_York'
 
   /regional-organizations:
     get:
@@ -1569,3 +1600,113 @@ components:
 
     WcifScramble:
       type: string
+
+    WcifSchedule:
+      type: object
+      properties:
+        startDate:
+          type: string
+          format: date
+        numberOfDays:
+          type: integer
+        venues:
+          type: array
+          items:
+            $ref: '#/components/schemas/WcifVenue'
+      required:
+        - startDate
+        - numberOfDays
+        - venues
+
+    WcifVenue:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        latitudeMicrodegrees:
+          type: integer
+        longitudeMicrodegrees:
+          type: integer
+        countryIso2:
+          $ref: '#/components/schemas/WcifCountryCode'
+        timezone:
+          type: string
+        rooms:
+          type: array
+          items:
+            $ref: '#/components/schemas/WcifRoom'
+        extensions:
+          type: array
+      required:
+        - id
+        - name
+        - latitudeMicrodegrees
+        - longitudeMicrodegrees
+        - countryIso2
+        - timezone
+        - rooms
+        - extensions
+
+    WcifRoom:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        color:
+          type: string
+        activities:
+          type: array
+          items:
+            $ref: '#/components/schemas/WcifActivity'
+        extensions:
+          type: array
+      required:
+        - id
+        - name
+        - color
+        - activities
+        - extensions
+
+    WcifActivity:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        activityCode:
+          $ref: '#/components/schemas/WcifActivityCode'
+        startTime:
+          type: string
+          format: date-time
+        endTime:
+          type: string
+          format: date-time
+        childActivities:
+          type: array
+          items:
+            $ref: '#/components/schemas/WcifActivity'
+        scrambleSetId:
+          type: integer
+        extensions:
+          type: array
+      required:
+        - id
+        - name
+        - activityCode
+        - startTime
+        - endTime
+        - childActivities
+        - extensions
+
+    WcifCountryCode:
+      type: string
+      example: "US"
+
+    WcifActivityCode:
+      type: string
+      example: "333-r1-g1"

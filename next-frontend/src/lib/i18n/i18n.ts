@@ -26,6 +26,7 @@ i18next
     fallbackNS: "",
     defaultNS: defaultNamespace,
     preload: runsOnServerSide ? languages : [],
+    keySeparator: false,
     interpolation: {
       prefix: "%{",
       suffix: "}",

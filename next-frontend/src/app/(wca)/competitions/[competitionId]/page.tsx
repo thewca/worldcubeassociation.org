@@ -337,9 +337,13 @@ export default async function CompetitionOverView({
                   <Text>
                     {competitionInfo.event_ids.map((event_id) => (
                       <EventIcon
-                        eventId={event_id}
-                        main={event_id === competitionInfo.main_event_id}
                         key={event_id}
+                        eventId={event_id}
+                        color={
+                          event_id === competitionInfo.main_event_id
+                            ? "currentColor"
+                            : "supplementary.texts.gray1"
+                        }
                       />
                     ))}
                   </Text>
@@ -538,7 +542,10 @@ export default async function CompetitionOverView({
           />
         </Tabs.Content>
         <Tabs.Content value="schedule">
-          <TabSchedule />
+          <TabSchedule
+            competitionId={competitionInfo.id}
+            competitionName={competitionInfo.name}
+          />
         </Tabs.Content>
         <Tabs.Content value="custom-1">
           <MarkdownProse content={competitionInfo.information} />

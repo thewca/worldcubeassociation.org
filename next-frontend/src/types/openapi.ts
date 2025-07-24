@@ -80,6 +80,44 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/competitions/{competitionId}/schedule": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get competition schedule in WCIF format */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    competitionId: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Successful response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["WcifSchedule"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/competitions/{competitionId}/registrations": {
         parameters: {
             query?: never;
@@ -437,6 +475,42 @@ export interface paths {
         };
         /** Get user's permissions */
         get: operations["getUserPermissions"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/known-timezones": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get a list of Olson timezones that the backend understands */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Successful response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": string[];
+                    };
+                };
+            };
+        };
         put?: never;
         post?: never;
         delete?: never;
@@ -1028,6 +1102,45 @@ export interface components {
         WcifRanking: number;
         WcifPercent: number;
         WcifScramble: string;
+        WcifSchedule: {
+            /** Format: date */
+            startDate: string;
+            numberOfDays: number;
+            venues: components["schemas"]["WcifVenue"][];
+        };
+        WcifVenue: {
+            id: number;
+            name: string;
+            latitudeMicrodegrees: number;
+            longitudeMicrodegrees: number;
+            countryIso2: components["schemas"]["WcifCountryCode"];
+            timezone: string;
+            rooms: components["schemas"]["WcifRoom"][];
+            extensions: unknown[];
+        };
+        WcifRoom: {
+            id: number;
+            name: string;
+            color: string;
+            activities: components["schemas"]["WcifActivity"][];
+            extensions: unknown[];
+        };
+        WcifActivity: {
+            id: number;
+            name: string;
+            activityCode: components["schemas"]["WcifActivityCode"];
+            /** Format: date-time */
+            startTime: string;
+            /** Format: date-time */
+            endTime: string;
+            childActivities: components["schemas"]["WcifActivity"][];
+            scrambleSetId?: number;
+            extensions: unknown[];
+        };
+        /** @example US */
+        WcifCountryCode: string;
+        /** @example 333-r1-g1 */
+        WcifActivityCode: string;
     };
     responses: never;
     parameters: never;
