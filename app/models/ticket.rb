@@ -29,9 +29,20 @@ class Ticket < ApplicationRecord
   def can_user_access?(user)
     return false if user.nil?
 
-    ticket_stakeholders.belongs_to_user(user).any? ||
-      ticket_stakeholders.belongs_to_groups(user.active_groups).any? ||
-      ticket_stakeholders.belongs_to_competitions(user.delegated_competitions).any?
+    stakeholder_types = ticket_stakeholders.distinct.pluck(:stakeholder_type)
+
+    stakeholder_types.any? do |stakeholder_type|
+      case stakeholder_type
+      when "User"
+        ticket_stakeholders.belongs_to_user(user).any?
+      when "UserGroup"
+        ticket_stakeholders.belongs_to_groups(user.active_groups).any?
+      when "Competition"
+        ticket_stakeholders.belongs_to_competitions(user.delegated_competitions).any?
+      else
+        false
+      end
+    end
   end
 
   DEFAULT_SERIALIZE_OPTIONS = {

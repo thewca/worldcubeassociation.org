@@ -149,7 +149,7 @@ class ResultsSubmissionController < ApplicationController
 
     return render status: :unprocessable_entity, json: { error: "Submitted results contain errors." } if results_validator.any_errors?
 
-    return render status: :unprocessable_entity, json: { error: "There is no ticket associated, please contact WST." } if competition.result_ticket.nil?
+    return render status: :not_found, json: { error: "There is no ticket associated, please contact WST." } if competition.result_ticket.nil?
 
     CompetitionsMailer.results_submitted(competition, results_validator, message, current_user).deliver_now
 
@@ -177,7 +177,7 @@ class ResultsSubmissionController < ApplicationController
 
     if @competition.tickets_competition_result.present?
       return render status: :bad_request, json: {
-        error: "Ticket for result submission already exists.",
+        error: "Ticket for result submission already exists. Please refresh your page.",
       }
     end
 

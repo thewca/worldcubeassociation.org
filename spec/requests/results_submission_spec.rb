@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe ResultsSubmissionController do
   let(:delegate) { create(:delegate) }
-  let(:comp) { create(:competition, :with_valid_submitted_results, delegates: [delegate]) }
+  let(:comp) { create(:competition, :with_valid_submitted_results, :results_ticket_pending_import, delegates: [delegate]) }
 
   context "not logged in" do
     it "redirects to sign in" do

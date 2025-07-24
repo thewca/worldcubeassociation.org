@@ -386,6 +386,12 @@ FactoryBot.define do
       championship_types { ["world"] }
     end
 
+    trait :results_ticket_pending_import do
+      after(:create) do |competition|
+        create(:competition_result_ticket, competition: competition)
+      end
+    end
+
     after(:build) do |competition, evaluator|
       if evaluator.series_base
         series_base = evaluator.series_base
