@@ -922,11 +922,6 @@ pt:
         submitter_comment: ''
         #original_hash: da39a3e
         status: ''
-      results_submission:
-        #original_hash: da39a3e
-        results_file: ''
-        #original_hash: da39a3e
-        message: ''
       regional_organization:
         #original_hash: da39a3e
         name: ''
@@ -1069,10 +1064,10 @@ pt:
             O site da WCA suporta %{two_factor_link} usando uma password de
             utilização única:
           options:
-            #original_hash: 4f9dcb8
+            #original_hash: a4b35b6
             app: >-
-              gerada por uma aplicação 2FA no seu smartphone (como Authy ou
-              Google Authenticator, por exemplo).
+              gerada por uma aplicação 2FA no seu smartphone (como Authy, Google
+              Authenticator ou iOS Passwords).
             #original_hash: 34a7572
             recovery: tirados dos códigos de recuperação gerados ao ativar o 2FA.
             #original_hash: eaee403
@@ -1106,11 +1101,11 @@ pt:
             ao entrar. São descritos abaixo.
           #original_hash: 4442f0e
           dedicated_app: Usando uma aplicação de dois fatores dedicada
-          #original_hash: a61c7d2
+          #original_hash: a87f79f
           dedicated_app_desc_html: >-
             O WST recomenda o uso de%{authy} no(s) seu(s) dispositivo(s) para
             obter a sua password de utilização única ao entrar.<br/>Outras
-            alternativas incluem %{google} e %{microsoft}.
+            alternativas incluem %{google}, %{apple} e %{microsoft}.
           #original_hash: f1b2ec2
           scan_qrcode_html: >-
             Digitalize o código QR abaixo quando solicitado na sua aplicação 2FA
@@ -1300,12 +1295,10 @@ pt:
       db_dev_export: Exportação para Desenvolvimento
       #original_hash: 1fa73f3
       regulations: Regulamento
-      #original_hash: 3bb8751
-      regulations_full: Regulamentos & Orientações
+      #original_hash: 1fa73f3
+      regulations_full: Regulamentos
       #original_hash: 6bce1b5
       about_regulations: Sobre o Regulamento
-      #original_hash: 141d1d7
-      guidelines: Orientações
       #original_hash: c4622c3
       scrambles: Embaralhamentos
       #original_hash: 90ccd64
@@ -1517,12 +1510,12 @@ pt:
     contacts:
       #original_hash: 4ef2aad
       title: Formulário de Contacto WCA
-      #original_hash: bddd3ea
+      #original_hash: ab97069
       faq_note_html: >-
         Antes de colocar uma questão, pode dar uma olhada nas nossas <a
         href="/faq">Perguntas Frequentes</a>! Se desejar entrar em contacto com
         um comité ou equipa específica não listada aqui, poderá encontrar as
-        suas informações de contacto <a href="/teams-committees-councils">nesta
+        suas informações de contacto <a href="/teams-committees">nesta
         página</a>.
       #original_hash: ea20be0
       success_message: Email enviado - entraremos em contacto em breve.
@@ -3279,8 +3272,8 @@ pt:
           auto_close_threshold: Limite de fecho automático
           #original_hash: b1d5af4
           newcomer_month_reserved_spots: Número de vagas reservadas para novos competidores
-          #original_hash: b13de61
-          auto_accept_enabled: Aceitação automática de registos em massa
+          #original_hash: 26b48e3
+          auto_accept_preference: Aceitar inscrições automaticamente
           #original_hash: 1b8698d
           auto_accept_disable_threshold: Limite para aceitação automática de registos
         staff:
@@ -3495,9 +3488,9 @@ pt:
             Permitido apenas durante o Mês do Principiante - as vagas reservadas
             não podem ser superiores a metade do Limite de Competidores.
           #original_hash: 79dcafd
-          auto_accept_enabled: >-
-            Isto irá ativar um botão "Aceitação automática em massa" no menu de
-            Registos. Isto aceitará todos os pagamentos em lista de espera e
+          auto_accept_preference: >-
+            Isto irá ativar um botão "Aceitação automática em massa" no menu
+            Registos. Este aceitará todos os pagamentos em lista de espera e
             pendentes até ao limite de competidores ou ao limite definido
             abaixo. Utilize por sua conta e risco.
           #original_hash: b261026
@@ -3675,11 +3668,13 @@ pt:
             'true': Quero especificar um limite de competidores
             #original_hash: 53397ec
             'false': NÃO QUERO especificar um limite de competidores
-          auto_accept_enabled:
-            #original_hash: 1c0c289
-            'true': Ativar botão 'Aceitação Automática em Massa' no menu de Registos
+          auto_accept_preference:
             #original_hash: 5996b1f
-            'false': Desativar o botão 'Aceitação Automática em massa'
+            disabled: Desativar botão 'Aceitação Automática em Massa'
+            #original_hash: 1c0c289
+            bulk: Ativar o botão 'Aceitação Automática em Massa' no menu Registos
+            #original_hash: 490ed83
+            live: Aceitar inscrições automaticamente quando o pagamento é efetuado
         registration:
           allow_on_the_spot:
             #original_hash: 0c521ca
@@ -4500,6 +4495,8 @@ pt:
         admin_view: Vista de administrador
         #original_hash: a857eb4
         tabs: Gerir abas
+        #original_hash: e42bf99
+        newcomer_checks: Verificações Novos Competidores
         #original_hash: f3d6278
         submit_results: Submeter resultados
         #original_hash: e2d046b
@@ -5542,8 +5539,8 @@ pt:
       incidents: Incidentes
       #original_hash: a0ca0c3
       posts: Artigos
-      #original_hash: 9d7ea9c
-      regulations_and_guidelines: Regulamentos e Orientações
+      #original_hash: 1fa73f3
+      regulations_and_guidelines: Regulamentos
       #original_hash: db683b3
       search_for: 'Procurar por <b>%{search_string}</b>'
       not_found:
@@ -5557,8 +5554,8 @@ pt:
         posts: Nenhum artigo encontrado para
         #original_hash: 3499e7e
         incidents: Nenhum incidente encontrado para
-        #original_hash: 76a6bf1
-        regulations_and_guidelines: Nenhum Regulamento ou Orientação encontrada para
+        #original_hash: 3909204
+        regulations_and_guidelines: Nenhum Regulamento encontrado para
   incidents_log:
     #original_hash: 61ab89f
     i18n_disclaimer: >-
@@ -5577,16 +5574,11 @@ pt:
         Todas as competições devem seguir o <a href="/regulations/">Regulamento
         da WCA</a>. É importante para competidores ler este regulmanento antes
         de competir a primeira vez.
-      #original_hash: 4296902
-      content2_html: >-
-        O Regulamento da WCA é complementado pelas <a
-        href="/regulations/guidelines.html">Orientações da WCA</a>, que contêm
-        clarificações e explicações adicionais.
       #original_hash: c8e1783
-      content3_html: >-
-        Decisões importantes sobre incidentes que aconteceram em competições que
-        foram resolvidas pelo Comité de Regulamentos da WCA podem ser
-        encontrados no <a href="/incidents">Registo de Incidentes</a>.
+      content2_html: >-
+        Decisões importantes sobre incidentes que ocorreram em competições que
+        foram resolvidos pelo Comité de Regulamentos da WCA podem ser
+        encontradas no <a href="/incidents.html">Registo de Incidentes</a>.
     panel2:
       #original_hash: 8ad8302
       title: Traduções
@@ -5620,8 +5612,8 @@ pt:
         Este documento contém informação importante e deve ser lido por todos os
         organizadores de competições.
   regulations_translations:
-    #original_hash: 9493b8d
-    title: 'Regulamentos e Orientações da WCA: Traduções'
+    #original_hash: a19a3f5
+    title: 'Regulamentos da WCA: Traduções'
     #original_hash: 386ecc1
     paragraph1: >-
       Se fala outra língua para além do Inglês, pode achar estas traduções
@@ -6377,12 +6369,16 @@ pt:
         detectado como tempo de corte nos resultados. Por favor atualize as
         informações da ronda na página de gestão de eventos da competição.
     events:
-      #original_hash: e87f8a0
+      #original_hash: ef8709f
       not_333_main_event_warning: >-
-        O evento principal selecionado para esta competição é %{main_event_id}.
-        Como é que este evento foi tratado como o evento principal da
-        competição? Por favor, dê uma breve explicação ao WRT (por exemplo,
-        número de rondas, prémios, vencedor declarado da competição, ...).
+        O evento principal selecionado é %{main_event_id}. Embora isto tenha
+        sido aprovado pela WCAT ANTES da competição, a WRT é responsável por
+        garantir DEPOIS da competição que as diretrizes adequadas do evento
+        principal da Política de Requisitos de Competição da WCA foram
+        cumpridas. Por favor, indique uma ação que foi tomada para tratar
+        %{main_event_id} como o evento principal DURANTE a competição (exemplos
+        válidos: declarado vencedor da competição, maior número de rondas,
+        prémio mais elevado).
       #original_hash: 1d4e297
       no_main_event_warning: >-
         Não há nenhum evento principal selecionado para esta competição. Por

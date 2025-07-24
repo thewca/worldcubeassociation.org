@@ -5,6 +5,15 @@ export const serverClient = createClient<paths>({
   baseUrl: process.env.WCA_BACKEND_API_URL,
   headers: { "Content-Type": "application/json" },
 });
+export const serverClientWithToken = (token: string) =>
+  createClient<paths>({
+    baseUrl: process.env.WCA_BACKEND_API_URL,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
 export const unauthenticatedClient = createClient<paths>({
   baseUrl: process.env.NEXT_PUBLIC_WCA_FRONTEND_API_URL,
   headers: { "Content-Type": "application/json" },

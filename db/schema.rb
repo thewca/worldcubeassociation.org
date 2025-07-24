@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_06_19_163228) do
+ActiveRecord::Schema[7.2].define(version: 2025_07_22_052451) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -461,6 +461,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_06_19_163228) do
     t.integer "auto_close_threshold"
     t.boolean "auto_accept_registrations", default: false, null: false
     t.integer "auto_accept_disable_threshold"
+    t.integer "auto_accept_preference", default: 0, null: false
     t.index ["cancelled_at"], name: "index_competitions_on_cancelled_at"
     t.index ["country_id"], name: "index_Competitions_on_countryId"
     t.index ["end_date"], name: "index_competitions_on_end_date"
@@ -1338,7 +1339,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_06_19_163228) do
   create_table "ticket_stakeholders", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "ticket_id", null: false
     t.string "stakeholder_type", null: false
-    t.bigint "stakeholder_id", null: false
+    t.string "stakeholder_id", limit: 255, null: false
     t.string "connection", null: false
     t.boolean "is_active", null: false
     t.datetime "created_at", null: false
@@ -1354,6 +1355,15 @@ ActiveRecord::Schema[7.2].define(version: 2025_06_19_163228) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["metadata_type", "metadata_id"], name: "index_tickets_on_metadata"
+  end
+
+  create_table "tickets_competition_result", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "status", null: false
+    t.string "competition_id", null: false
+    t.text "delegate_message", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["competition_id"], name: "index_tickets_competition_result_on_competition_id"
   end
 
   create_table "tickets_edit_person", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
@@ -1567,6 +1577,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_06_19_163228) do
   add_foreign_key "ticket_comments", "users", column: "acting_user_id"
   add_foreign_key "ticket_logs", "ticket_stakeholders", column: "acting_stakeholder_id"
   add_foreign_key "ticket_logs", "users", column: "acting_user_id"
+  add_foreign_key "tickets_competition_result", "competitions"
   add_foreign_key "user_avatars", "users"
   add_foreign_key "user_groups", "user_groups", column: "parent_group_id"
   add_foreign_key "user_roles", "user_groups", column: "group_id"

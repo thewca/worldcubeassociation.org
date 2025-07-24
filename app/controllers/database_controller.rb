@@ -4,8 +4,8 @@ class DatabaseController < ApplicationController
   RESULTS_README_TEMPLATE = 'database/public_results_readme'
 
   def results_export
-    @sql_path, @sql_filesize = current_results_export("sql")
-    @tsv_path, @tsv_filesize = current_results_export("tsv")
+    @sql_path, @sql_filesize = DbDumpHelper.cached_results_export_info("sql")
+    @tsv_path, @tsv_filesize = DbDumpHelper.cached_results_export_info("tsv")
 
     @sql_filename = File.basename(@sql_path)
     @tsv_filename = File.basename(@tsv_path)

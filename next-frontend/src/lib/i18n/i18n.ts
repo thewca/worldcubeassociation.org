@@ -30,6 +30,7 @@ i18next
     interpolation: {
       prefix: "%{",
       suffix: "}",
+      escapeValue: false,
     },
     // Little hack: Normally, i18next marks plurals with a separate symbol, like so:
     //   some.nested.key_one: "One nested key"

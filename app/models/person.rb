@@ -74,6 +74,8 @@ class Person < ApplicationRecord
     user.save! if user # User copies data from the person before validation, so this will update him.
   end
 
+  delegate :id, to: :user, prefix: true, allow_nil: true
+
   def update_using_sub_id!(attributes)
     raise unless update_using_sub_id(attributes)
   end
