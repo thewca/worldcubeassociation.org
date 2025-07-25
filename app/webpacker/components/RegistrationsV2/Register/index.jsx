@@ -12,6 +12,9 @@ import { hasNotPassed, hasPassed } from '../../../lib/utils/dates';
 import RegistrationNotAllowedMessage from './RegistrationNotAllowedMessage';
 import RegistrationClosingMessage from './RegistrationClosingMessage';
 import usePerpetualState from '../hooks/usePerpetualState';
+import StepConfigProvider, { useStepConfig } from '../lib/StepConfigProvider';
+import StepNavigationProvider, { useStepNavigation } from '../lib/StepNavigationProvider';
+import { availableSteps, registrationOverviewConfig } from '../lib/stepConfigs';
 import FormObjectProvider from '../../wca/FormBuilder/provider/FormObjectProvider';
 import { isQualifiedForEvent } from '../../../lib/helpers/qualifications';
 
@@ -32,10 +35,11 @@ const buildFormRegistration = ({
   competitionInfo,
   preferredEvents,
   qualifications,
+  personalRecords,
 }) => {
   const initialSelectedEvents = competitionInfo.events_per_registration_limit ? [] : preferredEvents
     .filter((event) => competitionInfo.event_ids.includes(event))
-    .filter((event) => !competitionInfo['uses_qualification?'] || isQualifiedForEvent(event, qualifications.wcif, qualifications.personalRecords));
+    .filter((event) => !competitionInfo['uses_qualification?'] || isQualifiedForEvent(event, qualifications, personalRecords));
 
   if (serverRegistration) {
     if (serverRegistration.competing.registration_status === 'cancelled') {
@@ -61,10 +65,6 @@ export default function Index({
   userInfo,
   registrationId,
   userCanPreRegister,
-  preferredEvents,
-  qualifications,
-  stripePublishableKey = '',
-  connectedAccountId = '',
   cannotRegisterReasons,
   isProcessing = false,
 }) {
@@ -72,37 +72,68 @@ export default function Index({
     <WCAQueryClientProvider>
       <StoreProvider reducer={messageReducer} initialState={{ messages: [] }}>
         <ConfirmProvider>
-          <RegistrationProvider
-            competitionInfo={competitionInfo}
-            userInfo={userInfo}
-            registrationId={registrationId}
-            isProcessing={isProcessing}
-          >
-            <Register
+          <StepConfigProvider competitionId={competitionInfo.id}>
+            <RegistrationProvider
               competitionInfo={competitionInfo}
               userInfo={userInfo}
-              userCanPreRegister={userCanPreRegister}
-              preferredEvents={preferredEvents}
-              stripePublishableKey={stripePublishableKey}
-              connectedAccountId={connectedAccountId}
-              qualifications={qualifications}
-              cannotRegisterReasons={cannotRegisterReasons}
-            />
-          </RegistrationProvider>
+              registrationId={registrationId}
+              isProcessing={isProcessing}
+            >
+              <RegisterNavigationWrapper
+                competitionInfo={competitionInfo}
+                userInfo={userInfo}
+                userCanPreRegister={userCanPreRegister}
+                cannotRegisterReasons={cannotRegisterReasons}
+              />
+            </RegistrationProvider>
+          </StepConfigProvider>
         </ConfirmProvider>
       </StoreProvider>
     </WCAQueryClientProvider>
   );
 }
 
+function RegisterNavigationWrapper({
+  competitionInfo,
+  userInfo,
+  userCanPreRegister,
+  cannotRegisterReasons,
+}) {
+  const registrationPayload = useRegistration();
+
+  const {
+    isFetching: registrationFetching,
+    isRejected: registrationRejected,
+  } = registrationPayload;
+
+  const { steps, isFetching } = useStepConfig();
+
+  if (isFetching || registrationFetching) {
+    return <Loading />;
+  }
+
+  return (
+    <StepNavigationProvider
+      stepsConfiguration={steps}
+      availableSteps={availableSteps}
+      payload={registrationPayload}
+      navigationDisabled={registrationRejected}
+      summaryPanelKey={registrationOverviewConfig.key}
+    >
+      <Register
+        competitionInfo={competitionInfo}
+        userInfo={userInfo}
+        userCanPreRegister={userCanPreRegister}
+        cannotRegisterReasons={cannotRegisterReasons}
+      />
+    </StepNavigationProvider>
+  );
+}
+
 function Register({
   userCanPreRegister,
   competitionInfo,
-  qualifications,
   userInfo,
-  preferredEvents,
-  connectedAccountId,
-  stripePublishableKey,
   cannotRegisterReasons,
 }) {
   const registrationAlreadyOpen = usePerpetualState(
@@ -114,6 +145,9 @@ function Register({
   );
 
   const { isFetching, registration } = useRegistration();
+
+  const { getStepParametersByKey } = useStepNavigation();
+  const { preferredEvents, personalRecords, qualifications_wcif: qualifications } = getStepParametersByKey('competing');
 
   if (isFetching) {
     return <Loading />;
@@ -146,6 +180,7 @@ function Register({
     competitionInfo,
     preferredEvents,
     qualifications,
+    personalRecords,
   });
 
   return (
@@ -157,13 +192,7 @@ function Register({
           <RegistrationMessage />
           <StepPanel
             user={userInfo}
-            preferredEvents={preferredEvents}
             competitionInfo={competitionInfo}
-            registration={registration}
-            connectedAccountId={connectedAccountId}
-            stripePublishableKey={stripePublishableKey}
-            qualifications={qualifications}
-            registrationCurrentlyOpen={registrationCurrentlyOpen}
           />
         </FormObjectProvider>
       )}

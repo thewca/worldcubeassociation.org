@@ -14,10 +14,11 @@ import { useConfirm } from '../../../lib/providers/ConfirmProvider';
 import { contactCompetitionUrl } from '../../../lib/requests/routes.js.erb';
 import RegistrationStatus from './RegistrationStatus';
 import { useRegistration } from '../lib/RegistrationProvider';
+import { useStepNavigation } from '../lib/StepNavigationProvider';
 import { isoMoneyToHumanReadable } from '../../../lib/helpers/money';
 
 export default function RegistrationOverview({
-  nextStep, competitionInfo,
+  competitionInfo,
 }) {
   const dispatch = useDispatch();
   const confirm = useConfirm();
@@ -28,6 +29,9 @@ export default function RegistrationOverview({
     isAccepted,
     hasPaid,
   } = useRegistration();
+  const {
+    jumpToStart, jumpToFirstIncompleteStep,
+  } = useStepNavigation();
 
   const hasRegistrationEditDeadlinePassed = hasPassed(
     competitionInfo.event_change_deadline_date ?? competitionInfo.start_date,
@@ -58,7 +62,7 @@ export default function RegistrationOverview({
       ));
     },
     onSuccess: (data) => {
-      nextStep({ toStart: true });
+      jumpToStart();
       queryClient.setQueryData(
         ['registration', competitionInfo.id, registration.user_id],
         {
@@ -77,8 +81,7 @@ export default function RegistrationOverview({
       // eslint-disable-next-line no-return-assign
       .then(() => (deleteAllowed
         ? deleteRegistrationMutation()
-        : window.location = contactCompetitionUrl(competitionInfo.id, encodeURIComponent(I18n.t('competitions.registration_v2.update.delete_contact_message')))))
-      .catch(() => nextStep({ refresh: true }));
+        : window.location = contactCompetitionUrl(competitionInfo.id, encodeURIComponent(I18n.t('competitions.registration_v2.update.delete_contact_message')))));
   };
 
   if (isRejected) {
@@ -95,7 +98,7 @@ export default function RegistrationOverview({
       )}
       <Segment loading={isDeleting}>
         <Header>{I18n.t('competitions.nav.menu.registration')}</Header>
-        <Form onSubmit={nextStep} size="large">
+        <Form onSubmit={jumpToFirstIncompleteStep} size="large">
           <List>
             <List.Item>
               <List.Header>
