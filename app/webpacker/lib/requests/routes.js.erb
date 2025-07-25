@@ -284,6 +284,8 @@ export const viewUrls = {
   competitions: {
     countInRange: (startDate, endDate) => `<%= CGI.unescape(Rails.application.routes.url_helpers.panel_competition_count_path) %>?${jsonToQueryString({ startDate, endDate })}`,
     lastDuplicateCheckerJobRun: (competitionId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.competition_last_duplicate_checker_job_run_path(competition_id: "${competitionId}")) %>`,
+    newcomerNameFormatCheck: (competitionId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.competition_newcomer_name_format_check_path(competition_id: "${competitionId}")) %>`,
+    newcomerDobFormatCheck: (competitionId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.competition_newcomer_dob_check_path(competition_id: "${competitionId}")) %>`,
   },
   persons: {
     results: (wcaId, competitionId, eventId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.person_results_path) %>?${jsonToQueryString({ wcaId, competitionId, eventId })}`,
