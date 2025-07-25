@@ -26,10 +26,9 @@ class ResultsSubmissionController < ApplicationController
   def newcomer_name_format_check
     competition = competition_from_params
 
-    name_format_issues = []
-    competition.accepted_newcomers.each do |user|
-      name_format_issues += ResultsValidators::PersonsValidator.name_validations(user.name, nil)
-    end
+    name_format_issues = competition.accepted_newcomers.map do |user|
+      ResultsValidators::PersonsValidator.name_validations(user.name, nil)
+    end.flatten
 
     render status: :ok, json: name_format_issues
   end
@@ -37,10 +36,9 @@ class ResultsSubmissionController < ApplicationController
   def newcomer_dob_check
     competition = competition_from_params
 
-    dob_issues = []
-    competition.accepted_newcomers.each do |user|
-      dob_issues += ResultsValidators::PersonsValidator.dob_validations(user.dob, nil, name: user.name)
-    end
+    dob_issues = competition.accepted_newcomers.map do |user|
+      ResultsValidators::PersonsValidator.dob_validations(user.dob, nil, name: user.name)
+    end.flatten
 
     render status: :ok, json: dob_issues
   end
