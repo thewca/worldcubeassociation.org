@@ -30,7 +30,6 @@ export default function RegistrationPayments({
     select: (data) => data.charges,
   });
 
-  console.log("users to request // payments 34")
   const { data: userInfo, isLoading: userInfoLoading } = useQuery({
     queryKey: ['payments-user', payments],
     queryFn: () =>
@@ -109,9 +108,6 @@ function PaymentsMainBody({
       ));
     },
   });
-
-  console.log("line 107")
-  console.log(payments)
 
   if (payments.length === 0) {
     return <Message warning>{I18n.t('payments.messages.no_payments')}</Message>;
@@ -205,10 +201,6 @@ function PaymentRow({
           </>
         )}
       </Table.Row>
-      {console.log("refunding payment 202")}
-      {console.log(payment.refunding_payments)}
-      {console.log("userInfo")}
-      {console.log(userInfo)}
       {payment.refunding_payments.map((p) => (
         <Table.Row key={p.payment_id}>
           <Table.Cell />
