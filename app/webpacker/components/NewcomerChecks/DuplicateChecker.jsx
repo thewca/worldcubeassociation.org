@@ -7,18 +7,9 @@ import computePotentialDuplicates from './api/computePotentialDuplicates';
 import getLastDuplicateCheckerJobRun from './api/getLastDuplicateCheckerJobRun';
 import SimilarPersons from './SimilarPersons';
 import DuplicateCheckerHeader from './DuplicateCheckerHeader';
-import WCAQueryClientProvider from '../../lib/providers/WCAQueryClientProvider';
 import MergeModal from './MergeModal';
 
-export default function Wrapper({ competitionId }) {
-  return (
-    <WCAQueryClientProvider>
-      <DuplicateChecker competitionId={competitionId} />
-    </WCAQueryClientProvider>
-  );
-}
-
-function DuplicateChecker({ competitionId }) {
+export default function DuplicateChecker({ competitionId }) {
   const { data: lastDuplicateCheckerJobRun, isLoading, isError } = useQuery({
     queryKey: ['last-duplicate-checker-job', competitionId],
     queryFn: () => getLastDuplicateCheckerJobRun({ competitionId }),

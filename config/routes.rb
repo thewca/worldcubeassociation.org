@@ -108,6 +108,8 @@ Rails.application.routes.draw do
     # Delegate views and action
     get 'newcomer-checks' => 'results_submission#newcomer_checks', as: :newcomer_checks
     get 'last-duplicate-checker-job' => 'results_submission#last_duplicate_checker_job_run', as: :last_duplicate_checker_job_run
+    get 'newcomer-name-format-check' => 'results_submission#newcomer_name_format_check', as: :newcomer_name_format_check
+    get 'newcomer-dob-check' => 'results_submission#newcomer_dob_check', as: :newcomer_dob_check
     post 'compute_potential_duplicates' => 'results_submission#compute_potential_duplicates', as: :compute_potential_duplicates
     get 'submit-results' => 'results_submission#new', as: :submit_results_edit
     get 'submit-scrambles' => 'admin/scrambles#match_scrambles', as: :match_scrambles
