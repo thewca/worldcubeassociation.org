@@ -72,6 +72,7 @@ async function dbAdapter() {
         tlsCAFile: "/app/global-bundle.pem",
       },
       ...compatabilityOptions.documentdb,
+      useJoinAggregations: false,
     });
   } else {
     const { sqliteAdapter } = await import("@payloadcms/db-sqlite");
