@@ -22,7 +22,7 @@ RSpec.describe 'API Registration Payments' do
     end
 
     it 'returns 500 amount refundable with partial refund' do
-      refund = create(:registration_payment, :refund, registration: reg, amount_lowest_denomination: -500)
+      create(:registration_payment, :refund, registration: reg, amount_lowest_denomination: -500)
       get api_v1_registration_payments_path(reg), headers: headers, as: :json
 
       charge = response.parsed_body['charges'].first
@@ -30,7 +30,7 @@ RSpec.describe 'API Registration Payments' do
     end
 
     it 'returns 0 amount refundable with full refund' do
-      refund = create(:registration_payment, :refund, registration: reg)
+      create(:registration_payment, :refund, registration: reg)
       get api_v1_registration_payments_path(reg), headers: headers, as: :json
 
       charge = response.parsed_body['charges'].first
@@ -38,4 +38,3 @@ RSpec.describe 'API Registration Payments' do
     end
   end
 end
-
