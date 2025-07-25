@@ -87,7 +87,7 @@ function PaymentsMainBody({
       ));
 
       queryClient.setQueryData(
-        ['payments', registrationId],
+        ['registration-payments', registrationId],
         (prevData) => ({
           charges: [
             ...prevData.charges.filter((ch) => ch.payment_id !== refundedCharge.payment_id),
@@ -97,8 +97,6 @@ function PaymentsMainBody({
       );
 
       queryClient.invalidateQueries({ queryKey: ['registration-history', registrationId] });
-
-      // refetchPayments
     },
     onError: (data) => {
       const { error } = data.json;
