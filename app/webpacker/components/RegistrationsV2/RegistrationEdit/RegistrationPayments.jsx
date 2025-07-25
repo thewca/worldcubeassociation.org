@@ -32,15 +32,14 @@ export default function RegistrationPayments({
 
   const { data: userInfo, isLoading: userInfoLoading } = useQuery({
     queryKey: ['payments-user', payments],
-    queryFn: () =>
-      getUsersInfo(
-        _.uniq(
-          payments.flatMap((p) => [
-            p.user_id,
-            ...p.refunding_payments.map((r) => r.user_id),
-          ])
-        )
+    queryFn: () => getUsersInfo(
+      _.uniq(
+        payments.flatMap((p) => [
+          p.user_id,
+          ...p.refunding_payments.map((r) => r.user_id),
+        ]),
       ),
+    ),
     enabled: Boolean(payments),
   });
 
