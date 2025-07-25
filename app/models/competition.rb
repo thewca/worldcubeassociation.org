@@ -1011,10 +1011,6 @@ class Competition < ApplicationRecord
     after_registration_open? && !registration_past?
   end
 
-  def after_registration_open?
-    use_wca_registration? && !cancelled? && !registration_not_yet_opened? && any_registrations?
-  end
-
   def registration_not_yet_opened?
     registration_open && Time.now < registration_open
   end
