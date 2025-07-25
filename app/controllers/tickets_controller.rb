@@ -78,12 +78,14 @@ class TicketsController < ApplicationController
 
     ActiveRecord::Base.transaction do
       @ticket.metadata.update!(status: ticket_status)
-      TicketLog.create!(
-        ticket_id: @ticket.id,
+      ticket_log = @ticket.ticket_logs.create!(
         action_type: @action_type,
-        action_value: ticket_status,
         acting_user_id: current_user.id,
         acting_stakeholder_id: @acting_stakeholder.id,
+      )
+      ticket_log.ticket_log_changes.create!(
+        field_name: TicketLogChange.field_names[:status],
+        field_value: ticket_status,
       )
     end
     render json: { success: true }
