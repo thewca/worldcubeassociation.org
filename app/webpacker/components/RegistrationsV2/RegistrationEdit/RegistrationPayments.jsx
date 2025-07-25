@@ -30,12 +30,18 @@ export default function RegistrationPayments({
     select: (data) => data.charges,
   });
 
-  console.log("users to request")
-  console.log(payments)
-  console.log(_.uniq(payments.map((p) => p.user_id)))
+  console.log("users to request // payments 34")
   const { data: userInfo, isLoading: userInfoLoading } = useQuery({
     queryKey: ['payments-user', payments],
-    queryFn: () => getUsersInfo(_.uniq(payments.map((p) => p.user_id))),
+    queryFn: () =>
+      getUsersInfo(
+        _.uniq(
+          payments.flatMap((p) => [
+            p.user_id,
+            ...p.refunding_payments.map((r) => r.user_id),
+          ])
+        )
+      ),
     enabled: Boolean(payments),
   });
 
@@ -91,6 +97,8 @@ function PaymentsMainBody({
       );
 
       queryClient.invalidateQueries({ queryKey: ['registration-history', registrationId] });
+
+      // refetchPayments
     },
     onError: (data) => {
       const { error } = data.json;
@@ -104,6 +112,7 @@ function PaymentsMainBody({
     },
   });
 
+  console.log("line 107")
   console.log(payments)
 
   if (payments.length === 0) {
@@ -198,7 +207,7 @@ function PaymentRow({
           </>
         )}
       </Table.Row>
-      {console.log("payments")}
+      {console.log("refunding payment 202")}
       {console.log(payment.refunding_payments)}
       {console.log("userInfo")}
       {console.log(userInfo)}
