@@ -30,6 +30,9 @@ export default function RegistrationPayments({
     select: (data) => data.charges,
   });
 
+  console.log("users to request")
+  console.log(payments)
+  console.log(_.uniq(payments.map((p) => p.user_id)))
   const { data: userInfo, isLoading: userInfoLoading } = useQuery({
     queryKey: ['payments-user', payments],
     queryFn: () => getUsersInfo(_.uniq(payments.map((p) => p.user_id))),
@@ -43,8 +46,8 @@ export default function RegistrationPayments({
   return (
     <>
       <Header>
-        Payments
-        <Button floated="right" onClick={refetchPayments}>Refresh</Button>
+        {I18n.t('payments.header')}
+        <Button floated="right" onClick={refetchPayments}>{I18n.t('misc.refresh')}</Button>
       </Header>
       <PaymentsMainBody
         registrationId={registrationId}
@@ -195,6 +198,10 @@ function PaymentRow({
           </>
         )}
       </Table.Row>
+      {console.log("payments")}
+      {console.log(payment.refunding_payments)}
+      {console.log("userInfo")}
+      {console.log(userInfo)}
       {payment.refunding_payments.map((p) => (
         <Table.Row key={p.payment_id}>
           <Table.Cell />
