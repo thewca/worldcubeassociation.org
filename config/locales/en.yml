@@ -2259,6 +2259,7 @@ en:
     messages:
       charge_refunded: "Payment was refunded"
       charges_refunded: "All charges have been refunded"
+      no_payments: "No payments have been made for this registration."
     errors:
       refund:
         provider_disconnected: "You cannot issue a refund for this competition anymore. Please use your payment provider's dashboard to do so."
