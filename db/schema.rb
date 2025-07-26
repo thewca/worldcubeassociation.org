@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_07_26_030259) do
+ActiveRecord::Schema[7.2].define(version: 2025_07_26_044928) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -708,6 +708,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_26_030259) do
     t.text "scramble_string", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["inbox_scramble_set_id", "ordered_index"], name: "idx_on_inbox_scramble_set_id_ordered_index_56858b27bf", unique: true
     t.index ["inbox_scramble_set_id", "scramble_number", "is_extra"], name: "idx_on_inbox_scramble_set_id_scramble_number_is_ext_bd518aa059", unique: true
     t.index ["inbox_scramble_set_id"], name: "index_inbox_scrambles_on_inbox_scramble_set_id"
   end
