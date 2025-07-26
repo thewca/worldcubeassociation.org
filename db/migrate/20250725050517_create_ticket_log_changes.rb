@@ -11,7 +11,6 @@ class CreateTicketLogChanges < ActiveRecord::Migration[7.2]
 
     reversible do |dir|
       dir.up do
-
         TicketLog.find_each do |ticket_log|
           if ticket_log.update_status?
             ticket_log.ticket_log_changes.create!(
