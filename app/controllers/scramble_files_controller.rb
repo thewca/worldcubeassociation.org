@@ -134,7 +134,7 @@ class ScrambleFilesController < ApplicationController
       end
     end
 
-    render json: { success: :ok }
+    render json: competition.inbox_scramble_sets
   end
 
   private def competition_from_params

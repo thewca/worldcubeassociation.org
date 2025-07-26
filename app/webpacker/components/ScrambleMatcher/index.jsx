@@ -89,10 +89,10 @@ function ScrambleMatcher({
 
   const { mutate: submitMatchState, isPending: isSubmitting } = useMutation({
     mutationFn: submitMatchedScrambles,
-    onSuccess: (
-      _response,
-      { matchState: submittedMatchState },
-    ) => setPersistedMatchingState(submittedMatchState),
+    onSuccess: (data) => {
+      const groupedAndSortedScrambles = groupAndSortScrambles(data);
+      setPersistedMatchingState(groupedAndSortedScrambles);
+    },
   });
 
   const roundIds = useMemo(() => wcifEvents.flatMap((event) => event.rounds)
