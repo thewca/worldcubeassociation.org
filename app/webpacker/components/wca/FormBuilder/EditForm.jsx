@@ -87,7 +87,7 @@ function EditForm({
     errors,
   } = useFormContext();
 
-  useUnsavedChangesAlert(unsavedChanges);
+  const onUnload = useUnsavedChangesAlert(unsavedChanges);
 
   const renderSaveButton = (buttonText) => (
     <FormActionButton
