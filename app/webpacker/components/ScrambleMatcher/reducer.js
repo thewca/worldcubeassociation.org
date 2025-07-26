@@ -18,15 +18,19 @@ export function groupAndSortScrambles(scrambleSets) {
   );
 }
 
-export function initializeState(scrambleSets) {
-  const groupedAndSortedScrambles = groupAndSortScrambles(scrambleSets);
+function applyAction(state, keys, action) {
+  return keys.reduce((accState, key) => ({
+    ...accState,
+    [key]: action(state[key]),
+  }), state);
+}
 
-  // Doing shallow cloning here on purpose so that we can modify `current`
-  // without having to worry about referential backlash to `initial`.
-  return ({
-    initial: { ...groupedAndSortedScrambles },
-    current: { ...groupedAndSortedScrambles },
-  });
+export function initializeState(scrambleSets) {
+  return applyAction(
+    {},
+    ['initial', 'current'],
+    () => groupAndSortScrambles(scrambleSets),
+  );
 }
 
 function mergeScrambleSets(sortedScramblesOld, sortedScramblesNew) {
@@ -74,59 +78,52 @@ export function useDispatchWrapper(originalDispatch, actionVars) {
 export default function scrambleMatchReducer(state, action) {
   switch (action.type) {
     case 'addScrambleFile':
-      return {
-        initial: addScrambleFile(state.initial, action.scrambleFile),
-        current: addScrambleFile(state.current, action.scrambleFile),
-      };
+      return applyAction(
+        state,
+        ['initial', 'current'],
+        (subState) => addScrambleFile(subState, action.scrambleFile),
+      );
     case 'removeScrambleFile':
-      return {
-        initial: removeScrambleFile(state.initial, action.scrambleFile),
-        current: removeScrambleFile(state.current, action.scrambleFile),
-      };
+      return applyAction(
+        state,
+        ['initial', 'current'],
+        (subState) => removeScrambleFile(subState, action.scrambleFile),
+      );
     case 'resetAfterSave':
       return initializeState(action.scrambleSets);
     case 'moveRoundScrambleSet':
-      return {
-        ...state,
-        current: {
-          ...state.current,
-          [action.roundId]: moveArrayItem(
-            state.current[action.roundId],
-            action.fromIndex,
-            action.toIndex,
-          ),
-        },
-      };
+      return applyAction(state, ['current'], (subState) => ({
+        ...subState,
+        [action.roundId]: moveArrayItem(
+          subState[action.roundId],
+          action.fromIndex,
+          action.toIndex,
+        ),
+      }));
     case 'moveScrambleSetToRound':
-      return {
-        ...state,
-        current: {
-          ...state.current,
-          [action.fromRoundId]: state.current[action.fromRoundId].filter(
-            (scrSet) => scrSet.id !== action.scrambleSet.id,
-          ),
-          [action.toRoundId]: [
-            ...state.current[action.toRoundId],
-            { ...action.scrambleSet },
-          ],
-        },
-      };
+      return applyAction(state, ['current'], (subState) => ({
+        ...subState,
+        [action.fromRoundId]: subState[action.fromRoundId].filter(
+          (scrSet) => scrSet.id !== action.scrambleSet.id,
+        ),
+        [action.toRoundId]: [
+          ...subState[action.toRoundId],
+          { ...action.scrambleSet },
+        ],
+      }));
     case 'moveScrambleInSet':
-      return {
-        ...state,
-        current: {
-          ...state.current,
-          [action.roundId]: state.current[action.roundId]
-            .map((scrSet, i) => (i === action.setNumber ? ({
-              ...scrSet,
-              inbox_scrambles: moveArrayItem(
-                scrSet.inbox_scrambles,
-                action.fromIndex,
-                action.toIndex,
-              ),
-            }) : scrSet)),
-        }
-      };
+      return applyAction(state, ['current'], (subState) => ({
+        ...subState,
+        [action.roundId]: subState[action.roundId]
+          .map((scrSet, i) => (i === action.setNumber ? ({
+            ...scrSet,
+            inbox_scrambles: moveArrayItem(
+              scrSet.inbox_scrambles,
+              action.fromIndex,
+              action.toIndex,
+            ),
+          }) : scrSet)),
+      }));
     default:
       throw new Error(`Unhandled action type: ${action.type}`);
   }
