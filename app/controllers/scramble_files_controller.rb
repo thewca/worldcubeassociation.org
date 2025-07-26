@@ -64,13 +64,12 @@ class ScrambleFilesController < ApplicationController
             round_number: competition_round&.number || parsed_round_number,
           }
 
-          existing_sets_count = InboxScrambleSet.where(**round_scope).count
           highest_ordered_index = InboxScrambleSet.where(**round_scope).maximum(:ordered_index) || 0
 
           wcif_round[:scrambleSets].each_with_index do |wcif_scramble_set, idx|
             scramble_set = scr_file_upload.inbox_scramble_sets.create!(
-              scramble_set_number: idx + existing_sets_count + 1,
-              ordered_index: idx + highest_ordered_index,
+              scramble_set_number: idx + 1,
+              ordered_index: idx + highest_ordered_index + 1,
               matched_round: competition_round,
               **round_scope,
             )
