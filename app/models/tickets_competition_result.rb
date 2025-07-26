@@ -48,12 +48,14 @@ class TicketsCompetitionResult < ApplicationRecord
       is_active: true,
     )
 
-    TicketLog.create!(
-      ticket_id: ticket.id,
+    ticket_log = ticket.ticket_logs.create!(
       action_type: TicketLog.action_types[:update_status],
-      action_value: ticket_metadata.status,
       acting_user_id: submitted_delegate.id,
       acting_stakeholder_id: competition_stakeholder.id,
+    )
+    ticket_log.ticket_log_changes.create!(
+      field_name: TicketLogChange.field_names[:status],
+      field_value: ticket_metadata.status,
     )
   end
 end
