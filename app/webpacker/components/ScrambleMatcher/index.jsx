@@ -1,5 +1,5 @@
 import React, {
-  useCallback, useEffect,
+  useCallback,
   useMemo,
   useReducer,
   useState,
@@ -14,6 +14,7 @@ import Events from './Events';
 import { fetchJsonOrError } from '../../lib/requests/fetchWithAuthenticityToken';
 import { scramblesUpdateRoundMatchingUrl } from '../../lib/requests/routes.js.erb';
 import scrambleMatchReducer, { groupAndSortScrambles } from './reducer';
+import useUnsavedChangesAlert from '../../lib/hooks/useUnsavedChangesAlert';
 
 export default function Wrapper({
   wcifEvents,
@@ -74,24 +75,7 @@ function ScrambleMatcher({
     [persistedMatchingState, matchState],
   );
 
-  const onUnload = useCallback((e) => {
-    // Prompt the user before letting them navigate away from this page with unsaved changes.
-    if (hasUnsavedChanges) {
-      const confirmationMessage = 'You have unsaved changes, are you sure you want to leave?';
-      e.returnValue = confirmationMessage;
-      return confirmationMessage;
-    }
-
-    return null;
-  }, [hasUnsavedChanges]);
-
-  useEffect(() => {
-    window.addEventListener('beforeunload', onUnload);
-
-    return () => {
-      window.removeEventListener('beforeunload', onUnload);
-    };
-  }, [onUnload]);
+  useUnsavedChangesAlert(hasUnsavedChanges);
 
   const addScrambleFile = useCallback(
     (scrambleFile) => dispatchMatchState({ type: 'addScrambleFile', scrambleFile }),
