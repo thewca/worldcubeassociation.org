@@ -64,22 +64,25 @@ class ScrambleFilesController < ApplicationController
             round_number: competition_round&.number || parsed_round_number,
           }
 
-          highest_ordered_index = InboxScrambleSet.where(**round_scope).maximum(:ordered_index) || 0
+          highest_ordered_index = InboxScrambleSet.where(**round_scope).maximum(:ordered_index)
+          ordered_index_offset = highest_ordered_index&.plus(1) || 0
 
           wcif_round[:scrambleSets].each_with_index do |wcif_scramble_set, idx|
             scramble_set = scr_file_upload.inbox_scramble_sets.create!(
               scramble_set_number: idx + 1,
-              ordered_index: idx + highest_ordered_index + 1,
+              ordered_index: ordered_index_offset + idx,
               matched_round: competition_round,
               **round_scope,
             )
 
             %i[scrambles extraScrambles].each do |scramble_kind|
+              num_persisted_scrambles = scramble_set.inbox_scrambles.count
+
               wcif_scramble_set[scramble_kind].each_with_index do |wcif_scramble, n|
                 scramble_set.inbox_scrambles.create!(
                   scramble_string: wcif_scramble,
                   scramble_number: n + 1,
-                  ordered_index: n,
+                  ordered_index: n + num_persisted_scrambles + 1,
                   is_extra: scramble_kind == :extraScrambles,
                 )
               end
