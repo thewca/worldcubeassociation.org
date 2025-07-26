@@ -2,14 +2,15 @@
 
 class CreateTicketLogChanges < ActiveRecord::Migration[7.2]
   def change
+    create_table :ticket_log_changes do |t|
+      t.references :ticket_log, null: false
+      t.string :field_name, null: false
+      t.string :field_value, null: false
+      t.timestamps
+    end
+
     reversible do |dir|
       dir.up do
-        create_table :ticket_log_changes do |t|
-          t.references :ticket_log, null: false
-          t.string :field_name, null: false
-          t.string :field_value, null: false
-          t.timestamps
-        end
 
         TicketLog.find_each do |ticket_log|
           if ticket_log.update_status?
@@ -19,10 +20,6 @@ class CreateTicketLogChanges < ActiveRecord::Migration[7.2]
             )
           end
         end
-      end
-
-      dir.down do
-        drop_table :ticket_log_changes
       end
     end
   end
