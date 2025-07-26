@@ -59,16 +59,19 @@ function ScrambleMatcher({
   initialScrambleFiles,
   inboxScrambleSets,
 }) {
-  const [storedMatching, setStoredMatching] = useState(groupAndSortScrambles(inboxScrambleSets));
+  const [
+    persistedMatchingState,
+    setPersistedMatchingState,
+  ] = useState(groupAndSortScrambles(inboxScrambleSets));
 
   const [matchState, dispatchMatchState] = useReducer(
     scrambleMatchReducer,
-    storedMatching,
+    persistedMatchingState,
   );
 
   const hasUnsavedChanges = useMemo(
-    () => !_.isEqual(storedMatching, matchState),
-    [storedMatching, matchState],
+    () => !_.isEqual(persistedMatchingState, matchState),
+    [persistedMatchingState, matchState],
   );
 
   const onUnload = useCallback((e) => {
@@ -105,7 +108,7 @@ function ScrambleMatcher({
     onSuccess: (
       _response,
       { matchState: submittedMatchState },
-    ) => setStoredMatching(submittedMatchState),
+    ) => setPersistedMatchingState(submittedMatchState),
   });
 
   const roundIds = useMemo(() => wcifEvents.flatMap((event) => event.rounds)
