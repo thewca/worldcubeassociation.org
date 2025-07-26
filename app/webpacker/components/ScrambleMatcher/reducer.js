@@ -18,21 +18,6 @@ export function groupAndSortScrambles(scrambleSets) {
   );
 }
 
-function applyAction(state, keys, action) {
-  return keys.reduce((accState, key) => ({
-    ...accState,
-    [key]: action(state[key]),
-  }), state);
-}
-
-export function initializeState(scrambleSets) {
-  return applyAction(
-    {},
-    ['initial', 'current'],
-    () => groupAndSortScrambles(scrambleSets),
-  );
-}
-
 function mergeScrambleSets(sortedScramblesOld, sortedScramblesNew) {
   return _.mergeWith(
     sortedScramblesOld,
@@ -45,6 +30,21 @@ function mergeScrambleSets(sortedScramblesOld, sortedScramblesNew) {
 
       return _.uniqBy(merged, 'id');
     },
+  );
+}
+
+function applyAction(state, keys, action) {
+  return keys.reduce((accState, key) => ({
+    ...accState,
+    [key]: action(state[key]),
+  }), state);
+}
+
+export function initializeState(scrambleSets) {
+  return applyAction(
+    {},
+    ['initial', 'current'],
+    () => groupAndSortScrambles(scrambleSets),
   );
 }
 
