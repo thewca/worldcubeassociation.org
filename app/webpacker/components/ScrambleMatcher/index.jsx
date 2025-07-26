@@ -8,12 +8,13 @@ import FileUpload from './FileUpload';
 import Events from './Events';
 import { fetchJsonOrError } from '../../lib/requests/fetchWithAuthenticityToken';
 import { scramblesUpdateRoundMatchingUrl } from '../../lib/requests/routes.js.erb';
-import scrambleMatchReducer, { mergeScrambleSets } from './reducer';
+import scrambleMatchReducer, { groupAndSortScrambles } from './reducer';
 
 export default function Wrapper({
   wcifEvents,
   competitionId,
   initialScrambleFiles,
+  inboxScrambleSets,
 }) {
   return (
     <WCAQueryClientProvider>
@@ -21,6 +22,7 @@ export default function Wrapper({
         wcifEvents={wcifEvents}
         competitionId={competitionId}
         initialScrambleFiles={initialScrambleFiles}
+        inboxScrambleSets={inboxScrambleSets}
       />
     </WCAQueryClientProvider>
   );
@@ -46,11 +48,15 @@ async function submitMatchedScrambles(competitionId, matchState) {
   return data;
 }
 
-function ScrambleMatcher({ wcifEvents, competitionId, initialScrambleFiles }) {
+function ScrambleMatcher({
+  wcifEvents,
+  competitionId,
+  initialScrambleFiles,
+  inboxScrambleSets,
+}) {
   const [matchState, dispatchMatchState] = useReducer(
     scrambleMatchReducer,
-    initialScrambleFiles,
-    (files) => files.reduce(mergeScrambleSets, {}),
+    groupAndSortScrambles(inboxScrambleSets),
   );
 
   const addScrambleFile = useCallback(
