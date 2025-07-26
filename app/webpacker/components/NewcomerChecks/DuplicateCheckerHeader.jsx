@@ -1,16 +1,50 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { DateTime } from 'luxon';
 import { Button, Message } from 'semantic-ui-react';
 import { duplicateCheckerJobRunStatuses } from '../../lib/wca-data.js.erb';
 
-export default function DuplicateCheckerHeader({ lastDuplicateCheckerJobRun, run }) {
-  if (
-    lastDuplicateCheckerJobRun.run_status === duplicateCheckerJobRunStatuses.in_progress
-    || lastDuplicateCheckerJobRun.run_status === duplicateCheckerJobRunStatuses.not_started
-  ) {
+const JOB_RUN_DELAY_MINUTES = 10;
+
+function isJobRunDelayed(lastDuplicateCheckerJobRun) {
+  const jobNotStartedOrInProgress = (
+    lastDuplicateCheckerJobRun.run_status === duplicateCheckerJobRunStatuses.not_started
+    || lastDuplicateCheckerJobRun.run_status === duplicateCheckerJobRunStatuses.in_progress
+  );
+
+  return (jobNotStartedOrInProgress
+    && DateTime.now().diff(
+      DateTime.fromISO((lastDuplicateCheckerJobRun.start_time)),
+    ).as('minutes') > JOB_RUN_DELAY_MINUTES
+  );
+}
+
+export default function DuplicateCheckerHeader({
+  lastDuplicateCheckerJobRun, run, refetch,
+}) {
+  const jobRunDelayed = useMemo(
+    () => isJobRunDelayed(lastDuplicateCheckerJobRun),
+    [lastDuplicateCheckerJobRun],
+  );
+
+  if (jobRunDelayed) {
+    return (
+      <Message warning>
+        Job running longer than expected. Click &apos;Retry&apos; if it appears stuck.
+        <Button onClick={run}>Retry</Button>
+      </Message>
+    );
+  } if (lastDuplicateCheckerJobRun.run_status === duplicateCheckerJobRunStatuses.not_started) {
+    return (
+      <Message info>
+        Duplicate Checker will start soon. Please check after sometime.
+        <Button onClick={refetch}>Refresh</Button>
+      </Message>
+    );
+  } if (lastDuplicateCheckerJobRun.run_status === duplicateCheckerJobRunStatuses.in_progress) {
     return (
       <Message info>
         Duplicate Checker is currently running. Please check after sometime.
+        <Button onClick={refetch}>Refresh</Button>
       </Message>
     );
   } if (lastDuplicateCheckerJobRun.run_status === duplicateCheckerJobRunStatuses.success) {

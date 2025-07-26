@@ -11,7 +11,13 @@ import MergeModal from './MergeModal';
 import EditUser from '../EditUser';
 
 export default function DuplicateChecker({ competitionId }) {
-  const { data: lastDuplicateCheckerJobRun, isLoading, isError } = useQuery({
+  const {
+    data: lastDuplicateCheckerJobRun,
+    isFetching,
+    isError,
+    error,
+    refetch,
+  } = useQuery({
     queryKey: ['last-duplicate-checker-job', competitionId],
     queryFn: () => getLastDuplicateCheckerJobRun({ competitionId }),
   });
@@ -46,14 +52,15 @@ export default function DuplicateChecker({ competitionId }) {
   const [potentialDuplicatePerson, setPotentialDuplicatePerson] = useState();
   const [userIdToEdit, setUserIdToEdit] = useState();
 
-  if (isLoading) return <Loading />;
-  if (isError) return <Errored />;
+  if (isFetching) return <Loading />;
+  if (isError) return <Errored error={error} />;
 
   return (
     <>
       <DuplicateCheckerHeader
         lastDuplicateCheckerJobRun={lastDuplicateCheckerJobRun}
         run={() => computePotentialDuplicatesMutate({ competitionId })}
+        refetch={refetch}
       />
       <SimilarPersons
         similarPersons={lastDuplicateCheckerJobRun.potential_duplicate_persons}
