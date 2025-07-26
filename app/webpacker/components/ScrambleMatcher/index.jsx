@@ -157,6 +157,7 @@ function ScrambleMatcher({
         addScrambleFile={addScrambleFile}
         removeScrambleFile={removeScrambleFile}
       />
+      <Divider />
       {hasUnsavedChanges && (
         <Message info content="You have unsaved changes. Don't forget to Save below!" />
       )}

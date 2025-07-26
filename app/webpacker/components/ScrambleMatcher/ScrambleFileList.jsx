@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
-  Accordion, Button, Card, Header, Icon, List,
+  Accordion, Button, Header, List,
 } from 'semantic-ui-react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { fetchJsonOrError } from '../../lib/requests/fetchWithAuthenticityToken';
@@ -16,10 +16,25 @@ async function deleteScrambleFile(fileId) {
   return data;
 }
 
-function ScrambleFileInfo({ scrambleFile, removeScrambleFile }) {
-  const queryClient = useQueryClient();
+function ScrambleFileHeader({ scrambleFile }) {
+  return (
+    <>
+      {scrambleFile.original_filename}
+      <Header.Subheader>
+        Generated with
+        {' '}
+        {scrambleFile.scramble_program}
+        <br />
+        On
+        {' '}
+        {scrambleFile.generated_at}
+      </Header.Subheader>
+    </>
+  );
+}
 
-  const [expanded, setExpanded] = useState(false);
+function ScrambleFileBody({ scrambleFile, removeScrambleFile }) {
+  const queryClient = useQueryClient();
 
   const { mutate: deleteMutation, isPending: isDeleting } = useMutation({
     mutationFn: () => deleteScrambleFile(scrambleFile.id),
@@ -34,47 +49,24 @@ function ScrambleFileInfo({ scrambleFile, removeScrambleFile }) {
   });
 
   return (
-    <Card fluid>
-      <Accordion open={expanded} styled fluid>
-        <Accordion.Title onClick={() => setExpanded((wasExpanded) => !wasExpanded)}>
-          <Card.Header>
-            <Header>
-              <Icon name="dropdown" />
-              {scrambleFile.original_filename}
-            </Header>
-          </Card.Header>
-          <Card.Description>
-            Generated with
-            {' '}
-            {scrambleFile.scramble_program}
-            <br />
-            On
-            {' '}
-            {scrambleFile.generated_at}
-          </Card.Description>
-        </Accordion.Title>
-        <Accordion.Content active={expanded}>
-          <Card.Content>
-            <List style={{ maxHeight: '400px', overflowY: 'auto' }}>
-              {scrambleFile.inbox_scramble_sets.map((scrambleSet) => (
-                <List.Item key={scrambleSet.id}>
-                  {scrambleSetToName(scrambleSet)}
-                </List.Item>
-              ))}
-            </List>
-            <Button
-              fluid
-              negative
-              icon="trash"
-              content="Delete"
-              onClick={deleteMutation}
-              disabled={isDeleting}
-              loading={isDeleting}
-            />
-          </Card.Content>
-        </Accordion.Content>
-      </Accordion>
-    </Card>
+    <>
+      <List style={{ maxHeight: '400px', overflowY: 'auto' }}>
+        {scrambleFile.inbox_scramble_sets.map((scrambleSet) => (
+          <List.Item key={scrambleSet.id}>
+            {scrambleSetToName(scrambleSet)}
+          </List.Item>
+        ))}
+      </List>
+      <Button
+        fluid
+        negative
+        icon="trash"
+        content="Delete"
+        onClick={deleteMutation}
+        disabled={isDeleting}
+        loading={isDeleting}
+      />
+    </>
   );
 }
 
@@ -83,11 +75,21 @@ export default function ScrambleFileList({ scrambleFiles, isFetching, removeScra
     return <Loading />;
   }
 
-  return scrambleFiles.map((scrFile) => (
-    <ScrambleFileInfo
-      key={scrFile.id}
-      scrambleFile={scrFile}
-      removeScrambleFile={removeScrambleFile}
-    />
-  ));
+  const panels = scrambleFiles.map((scrFile) => ({
+    key: scrFile.id,
+    title: {
+      as: Header,
+      content: <ScrambleFileHeader scrambleFile={scrFile} />,
+    },
+    content: {
+      content: <ScrambleFileBody
+        scrambleFile={scrFile}
+        removeScrambleFile={removeScrambleFile}
+      />,
+    },
+  }));
+
+  return (
+    <Accordion styled fluid panels={panels} />
+  );
 }
