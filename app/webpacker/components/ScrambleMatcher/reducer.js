@@ -18,6 +18,17 @@ export function groupAndSortScrambles(scrambleSets) {
   );
 }
 
+export function initializeState(scrambleSets) {
+  const groupedAndSortedScrambles = groupAndSortScrambles(scrambleSets);
+
+  // Doing shallow cloning here on purpose so that we can modify `current`
+  // without having to worry about referential backlash to `initial`.
+  return ({
+    initial: { ...groupedAndSortedScrambles },
+    current: { ...groupedAndSortedScrambles },
+  });
+}
+
 function mergeScrambleSets(sortedScramblesOld, sortedScramblesNew) {
   return _.mergeWith(
     sortedScramblesOld,
@@ -63,41 +74,58 @@ export function useDispatchWrapper(originalDispatch, actionVars) {
 export default function scrambleMatchReducer(state, action) {
   switch (action.type) {
     case 'addScrambleFile':
-      return addScrambleFile(state, action.scrambleFile);
+      return {
+        initial: addScrambleFile(state.initial, action.scrambleFile),
+        current: addScrambleFile(state.current, action.scrambleFile),
+      };
     case 'removeScrambleFile':
-      return removeScrambleFile(state, action.scrambleFile);
+      return {
+        initial: removeScrambleFile(state.initial, action.scrambleFile),
+        current: removeScrambleFile(state.current, action.scrambleFile),
+      };
+    case 'resetAfterSave':
+      return initializeState(action.scrambleSets);
     case 'moveRoundScrambleSet':
       return {
         ...state,
-        [action.roundId]: moveArrayItem(
-          state[action.roundId],
-          action.fromIndex,
-          action.toIndex,
-        ),
+        current: {
+          ...state.current,
+          [action.roundId]: moveArrayItem(
+            state.current[action.roundId],
+            action.fromIndex,
+            action.toIndex,
+          ),
+        },
       };
     case 'moveScrambleSetToRound':
       return {
         ...state,
-        [action.fromRoundId]: state[action.fromRoundId].filter(
-          (scrSet) => scrSet.id !== action.scrambleSet.id,
-        ),
-        [action.toRoundId]: [
-          ...state[action.toRoundId],
-          { ...action.scrambleSet },
-        ],
+        current: {
+          ...state.current,
+          [action.fromRoundId]: state.current[action.fromRoundId].filter(
+            (scrSet) => scrSet.id !== action.scrambleSet.id,
+          ),
+          [action.toRoundId]: [
+            ...state.current[action.toRoundId],
+            { ...action.scrambleSet },
+          ],
+        },
       };
     case 'moveScrambleInSet':
       return {
         ...state,
-        [action.roundId]: state[action.roundId]
-          .map((scrSet, i) => (i === action.setNumber ? ({
-            ...scrSet,
-            inbox_scrambles: moveArrayItem(
-              scrSet.inbox_scrambles,
-              action.fromIndex,
-              action.toIndex,
-            ),
-          }) : scrSet)),
+        current: {
+          ...state.current,
+          [action.roundId]: state.current[action.roundId]
+            .map((scrSet, i) => (i === action.setNumber ? ({
+              ...scrSet,
+              inbox_scrambles: moveArrayItem(
+                scrSet.inbox_scrambles,
+                action.fromIndex,
+                action.toIndex,
+              ),
+            }) : scrSet)),
+        }
       };
     default:
       throw new Error(`Unhandled action type: ${action.type}`);

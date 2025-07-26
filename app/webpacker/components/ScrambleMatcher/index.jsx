@@ -13,7 +13,7 @@ import FileUpload from './FileUpload';
 import Events from './Events';
 import { fetchJsonOrError } from '../../lib/requests/fetchWithAuthenticityToken';
 import { scramblesUpdateRoundMatchingUrl } from '../../lib/requests/routes.js.erb';
-import scrambleMatchReducer, { groupAndSortScrambles } from './reducer';
+import scrambleMatchReducer, { groupAndSortScrambles, initializeState } from './reducer';
 import useUnsavedChangesAlert from '../../lib/hooks/useUnsavedChangesAlert';
 
 export default function Wrapper({
@@ -61,18 +61,20 @@ function ScrambleMatcher({
   inboxScrambleSets,
 }) {
   const [
-    persistedMatchingState,
-    setPersistedMatchingState,
-  ] = useState(groupAndSortScrambles(inboxScrambleSets));
-
-  const [matchState, dispatchMatchState] = useReducer(
+    {
+      initial: persistedMatchState,
+      current: matchState,
+    },
+    dispatchMatchState,
+  ] = useReducer(
     scrambleMatchReducer,
-    persistedMatchingState,
+    inboxScrambleSets,
+    initializeState,
   );
 
   const hasUnsavedChanges = useMemo(
-    () => !_.isEqual(persistedMatchingState, matchState),
-    [persistedMatchingState, matchState],
+    () => !_.isEqual(persistedMatchState, matchState),
+    [matchState, persistedMatchState],
   );
 
   useUnsavedChangesAlert(hasUnsavedChanges);
@@ -89,10 +91,7 @@ function ScrambleMatcher({
 
   const { mutate: submitMatchState, isPending: isSubmitting } = useMutation({
     mutationFn: submitMatchedScrambles,
-    onSuccess: (data) => {
-      const groupedAndSortedScrambles = groupAndSortScrambles(data);
-      setPersistedMatchingState(groupedAndSortedScrambles);
-    },
+    onSuccess: (data) => dispatchMatchState({ type: 'resetAfterSave', scrambleSets: data }),
   });
 
   const roundIds = useMemo(() => wcifEvents.flatMap((event) => event.rounds)
