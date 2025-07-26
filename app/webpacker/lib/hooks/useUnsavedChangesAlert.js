@@ -12,13 +12,15 @@ const useUnsavedChangesAlert = (hasUnsavedChanges) => {
     return null;
   }, [hasUnsavedChanges]);
 
-  return useEffect(() => {
+  useEffect(() => {
     window.addEventListener('beforeunload', onUnload);
 
     return () => {
       window.removeEventListener('beforeunload', onUnload);
     };
   }, [onUnload]);
+
+  return onUnload;
 };
 
 export default useUnsavedChangesAlert;
