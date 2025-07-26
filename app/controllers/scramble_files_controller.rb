@@ -55,12 +55,13 @@ class ScrambleFilesController < ApplicationController
         competition_event = competition.competition_events.find_by(event_id: wcif_event[:id])
 
         wcif_event[:rounds].each_with_index do |wcif_round, rd_idx|
+          parsed_round_number = ScheduleActivity.parse_activity_code(wcif_round[:id]).fetch(:round_number, rd_idx + 1)
           competition_round = competition_event&.rounds&.find { it.wcif_id == wcif_round[:id] }
 
           round_scope = {
             competition_id: competition_round&.competition_id || competition.id,
             event_id: competition_round&.event_id || wcif_event[:id],
-            round_number: rd_idx + 1,
+            round_number: competition_round&.number || parsed_round_number,
           }
 
           existing_sets_count = InboxScrambleSet.where(**round_scope).count
