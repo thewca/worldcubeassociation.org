@@ -135,6 +135,7 @@ class ScrambleFilesController < ApplicationController
     end
 
     render json: competition.inbox_scramble_sets
+                            .includes(:inbox_scrambles, matched_round: [:competition_event])
   end
 
   private def competition_from_params
