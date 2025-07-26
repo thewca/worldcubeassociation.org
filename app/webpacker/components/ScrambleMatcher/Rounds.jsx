@@ -185,6 +185,7 @@ function RoundsPicker({
   showGroupsPicker = false,
 }) {
   const [selectedRoundId, setSelectedRoundId] = useState();
+
   const selectedRound = useMemo(
     () => wcifRounds.find((r) => r.id === selectedRoundId),
     [wcifRounds, selectedRoundId],

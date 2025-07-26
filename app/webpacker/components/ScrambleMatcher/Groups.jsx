@@ -20,6 +20,7 @@ export default function Groups({
       />
     );
   }
+
   return (
     <GroupsPicker
       scrambleSetCount={scrambleSetCount}
@@ -76,7 +77,7 @@ function GroupsPicker({ dispatchMatchState, scrambleSetCount, scrambleSets }) {
   );
 }
 
-function SelectedGroupPanel({ dispatchMatchState, selectedGroupNumber, scrambleSets }) {
+function SelectedGroupPanel({ dispatchMatchState, selectedGroupNumber, scrambleSets = [] }) {
   const onGroupDragCompleted = useCallback(
     (fromIndex, toIndex) => dispatchMatchState({
       type: 'moveScrambleInSet',
@@ -94,7 +95,7 @@ function SelectedGroupPanel({ dispatchMatchState, selectedGroupNumber, scrambleS
 
   return (
     <ScrambleMatch
-      matchableRows={scrambleSets[selectedGroupNumber].inbox_scrambles}
+      matchableRows={scrambleSets[selectedGroupNumber]?.inbox_scrambles}
       onRowDragCompleted={onGroupDragCompleted}
       computeDefinitionName={groupScrambleToName}
       computeRowName={scrambleToName}
