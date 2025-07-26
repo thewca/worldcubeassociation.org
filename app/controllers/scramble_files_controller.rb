@@ -9,11 +9,7 @@ class ScrambleFilesController < ApplicationController
   def index
     competition = competition_from_params
 
-    existing_files = ScrambleFileUpload
-                     .includes(inbox_scramble_sets: { inbox_scrambles: [], matched_round: [:competition_event] })
-                     .where(competition: competition)
-
-    render json: existing_files
+    render json: ScrambleFileUpload.for_upload.where(competition: competition)
   end
 
   def create
@@ -28,19 +24,17 @@ class ScrambleFilesController < ApplicationController
     generation_date = DateTime.strptime(tnoodle_json[:generationDate], "%b %d, %Y %l:%M:%S %p")
     tnoodle_version = tnoodle_json[:version]
 
-    existing_upload = ScrambleFileUpload
-                      .includes(inbox_scramble_sets: { inbox_scrambles: [], matched_round: [:competition_event] })
-                      .find_by(
-                        competition: competition,
-                        scramble_program: tnoodle_version,
-                        generated_at: generation_date,
-                      )
+    existing_upload = ScrambleFileUpload.for_upload.find_by(
+      competition: competition,
+      scramble_program: tnoodle_version,
+      generated_at: generation_date,
+    )
 
     return render json: existing_upload if existing_upload.present?
 
     tnoodle_wcif = tnoodle_json[:wcif]
 
-    scr_file_upload = ScrambleFileUpload.create!(
+    scr_file_upload = ScrambleFileUpload.for_upload.create!(
       uploaded_by_user: current_user,
       uploaded_at: DateTime.now,
       competition: competition,

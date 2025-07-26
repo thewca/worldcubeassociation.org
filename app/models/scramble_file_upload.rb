@@ -6,6 +6,8 @@ class ScrambleFileUpload < ApplicationRecord
 
   has_many :inbox_scramble_sets, inverse_of: :scramble_file_upload, dependent: :destroy
 
+  scope :for_upload, -> { includes(inbox_scramble_sets: { inbox_scrambles: [], matched_round: [:competition_event] }) }
+
   serialize :raw_wcif, coder: JSON
 
   DEFAULT_SERIALIZE_OPTIONS = {
