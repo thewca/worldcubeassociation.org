@@ -1,8 +1,4 @@
-import React, {
-  useCallback,
-  useEffect,
-  useRef,
-} from 'react';
+import React, { useCallback, useRef } from 'react';
 import {
   Button,
   Dimmer,
@@ -15,6 +11,7 @@ import {
 import FormErrors from './FormErrors';
 import FormObjectProvider, { useFormContext, useFormObject } from './provider/FormObjectProvider';
 import ConfirmProvider, { useConfirm } from '../../../lib/providers/ConfirmProvider';
+import useUnsavedChangesAlert from '../../../lib/hooks/useUnsavedChangesAlert';
 
 function useSafeMutation(mutation, mutationArgs, unloadListener) {
   const { onSuccess: onFormSuccess, onError } = useFormContext();
@@ -90,22 +87,7 @@ function EditForm({
     errors,
   } = useFormContext();
 
-  const onUnload = useCallback((e) => {
-    // Prompt the user before letting them navigate away from this page with unsaved changes.
-    if (unsavedChanges) {
-      const confirmationMessage = 'You have unsaved changes, are you sure you want to leave?';
-      e.returnValue = confirmationMessage;
-      return confirmationMessage;
-    }
-
-    return null;
-  }, [unsavedChanges]);
-
-  useEffect(() => {
-    window.addEventListener('beforeunload', onUnload);
-
-    return () => window.removeEventListener('beforeunload', onUnload);
-  }, [onUnload]);
+  const onUnload = useUnsavedChangesAlert(unsavedChanges);
 
   const renderSaveButton = (buttonText) => (
     <FormActionButton

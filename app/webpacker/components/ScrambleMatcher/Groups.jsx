@@ -9,6 +9,7 @@ const scrambleToName = (scramble) => `Scramble ${scramble.scramble_number} (${sc
 export default function Groups({
   scrambleSetCount,
   scrambleSets,
+  expectedSolveCount,
   dispatchMatchState,
 }) {
   if (scrambleSetCount === 1) {
@@ -16,20 +17,28 @@ export default function Groups({
       <SelectedGroupPanel
         selectedGroupNumber={0}
         scrambleSets={scrambleSets}
+        expectedSolveCount={expectedSolveCount}
         dispatchMatchState={dispatchMatchState}
       />
     );
   }
+
   return (
     <GroupsPicker
       scrambleSetCount={scrambleSetCount}
       scrambleSets={scrambleSets}
+      expectedSolveCount={expectedSolveCount}
       dispatchMatchState={dispatchMatchState}
     />
   );
 }
 
-function GroupsPicker({ dispatchMatchState, scrambleSetCount, scrambleSets }) {
+function GroupsPicker({
+  dispatchMatchState,
+  scrambleSetCount,
+  scrambleSets,
+  expectedSolveCount,
+}) {
   const [selectedGroupNumber, setSelectedGroupNumber] = useState(null);
 
   const availableGroups = useMemo(
@@ -70,13 +79,19 @@ function GroupsPicker({ dispatchMatchState, scrambleSetCount, scrambleSets }) {
           dispatchMatchState={dispatchMatchState}
           selectedGroupNumber={selectedGroupNumber}
           scrambleSets={scrambleSets}
+          expectedSolveCount={expectedSolveCount}
         />
       )}
     </>
   );
 }
 
-function SelectedGroupPanel({ dispatchMatchState, selectedGroupNumber, scrambleSets }) {
+function SelectedGroupPanel({
+  dispatchMatchState,
+  scrambleSets = [],
+  selectedGroupNumber,
+  expectedSolveCount,
+}) {
   const onGroupDragCompleted = useCallback(
     (fromIndex, toIndex) => dispatchMatchState({
       type: 'moveScrambleInSet',
@@ -94,7 +109,8 @@ function SelectedGroupPanel({ dispatchMatchState, selectedGroupNumber, scrambleS
 
   return (
     <ScrambleMatch
-      matchableRows={scrambleSets[selectedGroupNumber].inbox_scrambles}
+      matchableRows={scrambleSets[selectedGroupNumber]?.inbox_scrambles}
+      expectedNumOfRows={expectedSolveCount}
       onRowDragCompleted={onGroupDragCompleted}
       computeDefinitionName={groupScrambleToName}
       computeRowName={scrambleToName}
