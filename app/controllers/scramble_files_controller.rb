@@ -59,7 +59,7 @@ class ScrambleFilesController < ApplicationController
           }
 
           highest_ordered_index = InboxScrambleSet.where(**round_scope).maximum(:ordered_index)
-          ordered_index_offset = highest_ordered_index&.plus(1) || 0
+          ordered_index_offset = highest_ordered_index&.succ || 0
 
           wcif_round[:scrambleSets].each_with_index do |wcif_scramble_set, idx|
             scramble_set = scr_file_upload.inbox_scramble_sets.create!(
