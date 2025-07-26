@@ -76,7 +76,7 @@ class ScrambleFilesController < ApplicationController
                 scramble_set.inbox_scrambles.create!(
                   scramble_string: wcif_scramble,
                   scramble_number: n + 1,
-                  ordered_index: n + num_persisted_scrambles + 1,
+                  ordered_index: n + num_persisted_scrambles,
                   is_extra: scramble_kind == :extraScrambles,
                 )
               end
