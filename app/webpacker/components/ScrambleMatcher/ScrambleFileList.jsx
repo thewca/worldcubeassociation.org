@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import {
   Accordion, Button, Header, List,
 } from 'semantic-ui-react';
@@ -8,7 +8,7 @@ import { scrambleFileUrl } from '../../lib/requests/routes.js.erb';
 import Loading from '../Requests/Loading';
 import { scrambleSetToName } from './util';
 
-async function deleteScrambleFile(fileId) {
+async function deleteScrambleFile({ fileId }) {
   const { data } = await fetchJsonOrError(scrambleFileUrl(fileId), {
     method: 'DELETE',
   });
@@ -37,7 +37,7 @@ function ScrambleFileBody({ scrambleFile, removeScrambleFile }) {
   const queryClient = useQueryClient();
 
   const { mutate: deleteMutation, isPending: isDeleting } = useMutation({
-    mutationFn: () => deleteScrambleFile(scrambleFile.id),
+    mutationFn: deleteScrambleFile,
     onSuccess: (data) => {
       queryClient.setQueryData(
         ['scramble-files', data.competition_id],
@@ -47,6 +47,11 @@ function ScrambleFileBody({ scrambleFile, removeScrambleFile }) {
       removeScrambleFile(data);
     },
   });
+
+  const deleteAction = useCallback(
+    () => deleteMutation({ fileId: scrambleFile.id }),
+    [deleteMutation, scrambleFile.id],
+  );
 
   return (
     <>
@@ -62,7 +67,7 @@ function ScrambleFileBody({ scrambleFile, removeScrambleFile }) {
         negative
         icon="trash"
         content="Delete"
-        onClick={deleteMutation}
+        onClick={deleteAction}
         disabled={isDeleting}
         loading={isDeleting}
       />

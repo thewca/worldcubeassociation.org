@@ -2,7 +2,6 @@ import React, {
   useCallback,
   useMemo,
   useReducer,
-  useState,
 } from 'react';
 import { Button, Divider, Message } from 'semantic-ui-react';
 import _ from 'lodash';
@@ -13,7 +12,7 @@ import FileUpload from './FileUpload';
 import Events from './Events';
 import { fetchJsonOrError } from '../../lib/requests/fetchWithAuthenticityToken';
 import { scramblesUpdateRoundMatchingUrl } from '../../lib/requests/routes.js.erb';
-import scrambleMatchReducer, { groupAndSortScrambles, initializeState } from './reducer';
+import scrambleMatchReducer, { initializeState } from './reducer';
 import useUnsavedChangesAlert from '../../lib/hooks/useUnsavedChangesAlert';
 
 export default function Wrapper({
@@ -94,6 +93,11 @@ function ScrambleMatcher({
     onSuccess: (data) => dispatchMatchState({ type: 'resetAfterSave', scrambleSets: data }),
   });
 
+  const submitAction = useCallback(
+    () => submitMatchState({ competitionId, matchState }),
+    [competitionId, matchState, submitMatchState],
+  );
+
   const roundIds = useMemo(() => wcifEvents.flatMap((event) => event.rounds)
     .map((r) => r.id), [wcifEvents]);
 
@@ -111,6 +115,23 @@ function ScrambleMatcher({
       return matchedRound.length < wcifRound.scrambleSetCount;
     });
   }, [matchState, roundIds, wcifEvents]);
+
+  const submitDisabled = useMemo(() => (
+    isSubmitting
+      || missingScrambleIds.length > 0
+      || roundIdsWithoutScrambles.length > 0
+  ), [isSubmitting, missingScrambleIds.length, roundIdsWithoutScrambles.length]);
+
+  const renderSubmitButton = useCallback((btnText) => (
+    <Button
+      primary
+      onClick={submitAction}
+      loading={isSubmitting}
+      disabled={submitDisabled}
+    >
+      {btnText}
+    </Button>
+  ), [isSubmitting, submitAction, submitDisabled]);
 
   return (
     <>
@@ -158,24 +179,23 @@ function ScrambleMatcher({
       />
       <Divider />
       {hasUnsavedChanges && (
-        <Message info content="You have unsaved changes. Don't forget to Save below!" />
+        <Message info>
+          You have unsaved changes. Don&apos;t forget to
+          {' '}
+          {renderSubmitButton('Save')}
+          your changes!
+        </Message>
       )}
       <Events
         wcifEvents={wcifEvents}
         matchState={matchState}
         dispatchMatchState={dispatchMatchState}
       />
+      {hasUnsavedChanges && (
+        <Message info content="You have unsaved changes. Don't forget to Save below!" />
+      )}
       <Divider />
-      <Button
-        primary
-        onClick={() => submitMatchState({ competitionId, matchState })}
-        loading={isSubmitting}
-        disabled={isSubmitting
-          || missingScrambleIds.length > 0
-          || roundIdsWithoutScrambles.length > 0}
-      >
-        Save Changes
-      </Button>
+      {renderSubmitButton('Save Changes')}
     </>
   );
 }
