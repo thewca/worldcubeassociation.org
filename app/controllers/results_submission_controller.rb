@@ -44,6 +44,11 @@ class ResultsSubmissionController < ApplicationController
   end
 
   def compute_potential_duplicates
+    last_job_run = DuplicateCheckerJobRun.find_by(competition_id: params.require(:competition_id))
+    should_fail_last_job_run = last_job_run&.run_status_not_started? || last_job_run&.run_status_in_progress?
+
+    last_job_run.update!(run_status: DuplicateCheckerJobRun.run_statuses[:failed]) if should_fail_last_job_run
+
     job_run = DuplicateCheckerJobRun.create!(competition_id: params.require(:competition_id))
     ComputePotentialDuplicates.perform_later(job_run)
 
