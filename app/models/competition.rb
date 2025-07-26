@@ -703,6 +703,7 @@ class Competition < ApplicationRecord
              'posting_user',
              'inbox_results',
              'inbox_persons',
+             'inbox_scramble_sets',
              'announced_by_user',
              'cancelled_by_user',
              'competition_payment_integrations',
