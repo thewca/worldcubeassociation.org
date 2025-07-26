@@ -2,13 +2,13 @@ import { useCallback } from 'react';
 import _ from 'lodash';
 import { moveArrayItem } from './util';
 
-export function mergeScrambleSets(state, newScrambleFile) {
+export function groupAndSortScrambles(scrambleSets) {
   const groupedScrambleSets = _.groupBy(
-    newScrambleFile.inbox_scramble_sets,
+    scrambleSets,
     'matched_round_wcif_id',
   );
 
-  const orderedScrambleSets = _.mapValues(
+  return _.mapValues(
     groupedScrambleSets,
     (sets) => _.sortBy(sets, 'ordered_index')
       .map((set) => ({
@@ -16,22 +16,30 @@ export function mergeScrambleSets(state, newScrambleFile) {
         inbox_scrambles: _.sortBy(set.inbox_scrambles, 'ordered_index'),
       })),
   );
+}
 
+function mergeScrambleSets(sortedScramblesOld, sortedScramblesNew) {
   return _.mergeWith(
-    orderedScrambleSets,
-    state,
-    (a, b) => {
-      const aOrEmpty = a ?? [];
-      const bOrEmpty = b ?? [];
+    sortedScramblesOld,
+    sortedScramblesNew,
+    (oldSets, newSets) => {
+      const oldOrEmpty = oldSets ?? [];
+      const newOrEmpty = newSets ?? [];
 
-      const merged = [...bOrEmpty, ...aOrEmpty];
+      const merged = [...oldOrEmpty, ...newOrEmpty];
 
       return _.uniqBy(merged, 'id');
     },
   );
 }
 
-function removeScrambleSet(state, oldScrambleFile) {
+function addScrambleFile(state, newScrambleFile) {
+  const sortedFileScrambles = groupAndSortScrambles(newScrambleFile.inbox_scramble_sets);
+
+  return mergeScrambleSets(state, sortedFileScrambles);
+}
+
+function removeScrambleFile(state, oldScrambleFile) {
   const withoutScrambleFile = _.mapValues(
     state,
     (sets) => sets.filter(
@@ -55,9 +63,9 @@ export function useDispatchWrapper(originalDispatch, actionVars) {
 export default function scrambleMatchReducer(state, action) {
   switch (action.type) {
     case 'addScrambleFile':
-      return mergeScrambleSets(state, action.scrambleFile);
+      return addScrambleFile(state, action.scrambleFile);
     case 'removeScrambleFile':
-      return removeScrambleSet(state, action.scrambleFile);
+      return removeScrambleFile(state, action.scrambleFile);
     case 'moveRoundScrambleSet':
       return {
         ...state,
