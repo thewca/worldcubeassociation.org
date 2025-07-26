@@ -106,25 +106,33 @@ class ScrambleFilesController < ApplicationController
   def update_round_matching
     competition = competition_from_params
 
-    competition.rounds.each do |round|
-      updated_sets = params[round.wcif_id]
+    competition.transaction do
+      competition.rounds.each do |round|
+        updated_sets = params[round.wcif_id]
 
-      next if updated_sets.blank?
+        next if updated_sets.blank?
 
-      round.inbox_scramble_sets.update_all(matched_round_id: nil)
-      updated_set_ids = updated_sets.pluck(:id)
+        round.inbox_scramble_sets.update_all(matched_round_id: nil)
+        updated_set_ids = updated_sets.pluck(:id)
 
-      InboxScrambleSet.find(updated_set_ids)
-                      .each_with_index do |scramble_set, idx|
-        scramble_set.update!(matched_round: round, ordered_index: idx)
-      end
+        # This avoids validation issues when reassigning the indices one by one in the `each` loop below
+        InboxScrambleSet.where(id: updated_set_ids).update_all(ordered_index: -1)
 
-      updated_sets.each do |updated_set|
-        updated_scramble_ids = updated_set[:inbox_scrambles]
+        InboxScrambleSet.find(updated_set_ids)
+                        .each_with_index do |scramble_set, idx|
+          scramble_set.update!(matched_round: round, ordered_index: idx)
+        end
 
-        InboxScramble.find(updated_scramble_ids)
-                     .each_with_index do |scramble, idx|
-          scramble.update!(ordered_index: idx)
+        updated_sets.each do |updated_set|
+          updated_scramble_ids = updated_set[:inbox_scrambles]
+
+          # This avoids validation issues when reassigning the indices one by one in the `each` loop below
+          InboxScramble.where(id: updated_scramble_ids).update_all(ordered_index: -1)
+
+          InboxScramble.find(updated_scramble_ids)
+                       .each_with_index do |scramble, idx|
+            scramble.update!(ordered_index: idx)
+          end
         end
       end
     end
