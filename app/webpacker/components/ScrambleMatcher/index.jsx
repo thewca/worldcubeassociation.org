@@ -1,4 +1,9 @@
-import React, { useCallback, useMemo, useReducer } from 'react';
+import React, {
+  useCallback, useEffect,
+  useMemo,
+  useReducer,
+  useState,
+} from 'react';
 import { Button, Divider, Message } from 'semantic-ui-react';
 import _ from 'lodash';
 import { useMutation } from '@tanstack/react-query';
@@ -28,7 +33,7 @@ export default function Wrapper({
   );
 }
 
-async function submitMatchedScrambles(competitionId, matchState) {
+async function submitMatchedScrambles({ competitionId, matchState }) {
   const matchStateIdsOnly = _.mapValues(
     matchState,
     (sets) => sets.map((set) => ({
@@ -54,10 +59,36 @@ function ScrambleMatcher({
   initialScrambleFiles,
   inboxScrambleSets,
 }) {
+  const [storedMatching, setStoredMatching] = useState(groupAndSortScrambles(inboxScrambleSets));
+
   const [matchState, dispatchMatchState] = useReducer(
     scrambleMatchReducer,
-    groupAndSortScrambles(inboxScrambleSets),
+    storedMatching,
   );
+
+  const hasUnsavedChanges = useMemo(
+    () => !_.isEqual(storedMatching, matchState),
+    [storedMatching, matchState],
+  );
+
+  const onUnload = useCallback((e) => {
+    // Prompt the user before letting them navigate away from this page with unsaved changes.
+    if (hasUnsavedChanges) {
+      const confirmationMessage = 'You have unsaved changes, are you sure you want to leave?';
+      e.returnValue = confirmationMessage;
+      return confirmationMessage;
+    }
+
+    return null;
+  }, [hasUnsavedChanges]);
+
+  useEffect(() => {
+    window.addEventListener('beforeunload', onUnload);
+
+    return () => {
+      window.removeEventListener('beforeunload', onUnload);
+    };
+  }, [onUnload]);
 
   const addScrambleFile = useCallback(
     (scrambleFile) => dispatchMatchState({ type: 'addScrambleFile', scrambleFile }),
@@ -70,7 +101,11 @@ function ScrambleMatcher({
   );
 
   const { mutate: submitMatchState, isPending: isSubmitting } = useMutation({
-    mutationFn: () => submitMatchedScrambles(competitionId, matchState),
+    mutationFn: submitMatchedScrambles,
+    onSuccess: (
+      _response,
+      { matchState: submittedMatchState },
+    ) => setStoredMatching(submittedMatchState),
   });
 
   const roundIds = useMemo(() => wcifEvents.flatMap((event) => event.rounds)
@@ -135,6 +170,9 @@ function ScrambleMatcher({
         addScrambleFile={addScrambleFile}
         removeScrambleFile={removeScrambleFile}
       />
+      {hasUnsavedChanges && (
+        <Message info content="You have unsaved changes. Don't forget to Save below!" />
+      )}
       <Events
         wcifEvents={wcifEvents}
         matchState={matchState}
@@ -143,7 +181,7 @@ function ScrambleMatcher({
       <Divider />
       <Button
         primary
-        onClick={submitMatchState}
+        onClick={() => submitMatchState({ competitionId, matchState })}
         loading={isSubmitting}
         disabled={isSubmitting
           || missingScrambleIds.length > 0
