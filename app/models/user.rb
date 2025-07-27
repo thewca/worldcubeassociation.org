@@ -1045,9 +1045,8 @@ class User < ApplicationRecord
   end
 
   def cannot_edit_data_reason_html(user_to_edit)
-    unless user_to_edit == self || can_edit_any_user?
-      return I18n.t('users.edit.cannot_edit.reason.no_access')
-    end
+    return I18n.t('users.edit.cannot_edit.reason.no_access') unless user_to_edit == self || can_edit_any_user?
+
     # Don't allow editing data if they have a WCA ID assigned, or if they
     # have already registered for a competition. We do allow admins and delegates
     # who have registered for a competition to edit their own data.

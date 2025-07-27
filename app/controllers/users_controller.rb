@@ -63,7 +63,7 @@ class UsersController < ApplicationController
 
   def update_user_data
     user_details = params.permit(:name, :gender, :dob, :country_iso2)
-    
+
     @user.update!(user_details)
 
     render status: :ok, json: @user.as_json(
