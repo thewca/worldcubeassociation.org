@@ -802,6 +802,11 @@ zh-TW:
         wrc_incidents: 列出希望WRC回饋的意外事件編號。
         #original_hash: da39a3e
         wic_feedback_requested: ''
+        #original_hash: 74a092e
+        wic_incidents_html: '請列出您希望WIC提供意見的事件編號清單。<br><strong>%{wic_incident_alert}</strong>'
+        #original_hash: c4fd7a6
+        wic_incident_alert: >-
+          如果WIC事件內容較為敏感（包括但不限於犯罪、騷擾、攻擊等），請勿在報告中提及，並另行以電子郵件單獨聯繫WIC。對於其他WIC事件，請以簡要、匿名的方式進行描述，並私下向WIC補充詳細資訊。即使是匿名版本，WIC仍會提供意見以提升整體認識。若事件涉及WCA志工，請完全不要在報告中提及任何細節，務必私下聯繫WIC。
         #original_hash: f30abdc
         remarks: 分享任何關於比賽的其他細節(例如：進步/社群/這區域的未來展望)。如果您是為了讓前面章節比較簡潔而沒有提到一些事情，盡情在這邊留下評論。
         #original_hash: da39a3e
@@ -1155,12 +1160,10 @@ zh-TW:
       db_dev_export: 開發人員用匯出
       #original_hash: 1fa73f3
       regulations: 規則
-      #original_hash: 3bb8751
-      regulations_full: 規則&指導方針
+      #original_hash: 1fa73f3
+      regulations_full: 規則
       #original_hash: 6bce1b5
       about_regulations: 關於規則
-      #original_hash: 141d1d7
-      guidelines: 指導方針
       #original_hash: c4622c3
       scrambles: 轉亂程式
       #original_hash: 90ccd64
@@ -1848,6 +1851,8 @@ zh-TW:
     errors:
       #original_hash: 8c2f29b
       exceeding_competitor_limit: 已達到參賽者的人數限制。
+      #original_hash: 51c7156
+      edit_deadline_passed: 報名修改截止日期已過！應該僅在特殊情況下才進行變更。
       #original_hash: 44ab952
       need_name: 需要填寫姓名
       #original_hash: 6f64c57
@@ -1954,7 +1959,7 @@ zh-TW:
         #original_hash: 67e08fe
         scope_and_reason: '範圍：%{ban_scope}，理由：%{ban_reason}'
         #original_hash: 2a246da
-        wic_message: 如果您對選手的紀律記錄有任何疑問，請透過回覆此電子郵件與 WIC 聯繫。
+        wic_message: 如果您對選手的紀律記錄有任何疑問，請透過回覆此電子郵件與WIC聯繫。
     list:
       #original_hash: 8b7631c
       title: '%{comp}的報名'
@@ -2110,6 +2115,15 @@ zh-TW:
     preferred_events_populated_html: '我們已自動填入您的偏好項目，您可以在%{link}編輯。'
     #original_hash: ee89a3e
     registration_requirements: 比賽的報名條件：
+    registration_history:
+      #original_hash: 342fa25
+      acting_user: 操作使用者
+      #original_hash: 97c89a4
+      action: 動作
+      #original_hash: 8aa57de
+      changes: 變更內容
+      #original_hash: cec61a5
+      title: 報名紀錄
     import:
       #original_hash: 5a394f3
       title: '載入%{comp}的報名資料'
@@ -2153,6 +2167,10 @@ zh-TW:
       info: 這將會新增一個核准的報名資料。用這個表格來增加現場報名的資料。
       #original_hash: a11edb8
       add: 增加報名資料
+      #original_hash: fd52980
+      ots_not_enabled: 報名已結束，且未啟用現場報名—您必須先編輯比賽設定以啟用此功能。
+      #original_hash: 61125b5
+      competition_over: 比賽結束後，無法新增現場報名。
       errors:
         #original_hash: d6dcf5c
         already_registered: 這個人已經有報名資料了。
@@ -2804,7 +2822,7 @@ zh-TW:
           #original_hash: da39a3e
           is_visible: ''
           #original_hash: 68d3cc6
-          uses_new_registration_system: 如果停用這功能，更改註冊系統會產生技術問題。如果您仍要更改註冊系統請聯絡WCA軟體組來取得協助。
+          uses_new_registration_system: 如果停用這功能，更改報名系統會產生技術問題。如果您仍要更改報名系統請聯絡WCA軟體組來取得協助。
         #original_hash: da39a3e
         competition_id: ''
         #original_hash: 2c812a0
@@ -4364,8 +4382,8 @@ zh-TW:
       incidents: 意外事件
       #original_hash: a0ca0c3
       posts: 文章
-      #original_hash: 9d7ea9c
-      regulations_and_guidelines: 規則與指導方針
+      #original_hash: 1fa73f3
+      regulations_and_guidelines: 規則
       #original_hash: db683b3
       search_for: '搜尋<b>%{search_string}</b>'
       not_found:
@@ -4379,8 +4397,8 @@ zh-TW:
         posts: 未找到相符文章
         #original_hash: 3499e7e
         incidents: 未找到相符意外事件
-        #original_hash: 76a6bf1
-        regulations_and_guidelines: 未找到相符規則或指導方針
+        #original_hash: 3909204
+        regulations_and_guidelines: 未找到相符規則
   incidents_log:
     #original_hash: 61ab89f
     i18n_disclaimer: 請注意，意外事件部分僅提供英文版本，以下的內容並未翻譯。
@@ -4396,12 +4414,8 @@ zh-TW:
       content1_html: >-
         所有比賽必須遵守<a
         href="/regulations/">WCA規則</a>。對於即將要參加第一場比賽參賽者而言，在參加之前閱讀這些規則是很重要的。
-      #original_hash: 4296902
-      content2_html: >-
-        WCA規則有一份<a
-        href="/regulations/guidelines.html">WCA指導方針</a>來做輔助，包含額外的釐清與解釋。
       #original_hash: c8e1783
-      content3_html: 在比賽發生的意外事件以及由WCA規則委員會所做出的解決作法可以在<a href="/incidents">意外事件</a>裡閱覽。
+      content2_html: 由WCA規則委員會處理並裁定的比賽事件的重要決策可在<a href="/incidents">意外事件紀錄</a>查閱。
     panel2:
       #original_hash: 8ad8302
       title: 翻譯版
@@ -4424,8 +4438,8 @@ zh-TW:
       #original_hash: 5016669
       content2_html: 此文件包含重要資訊，所有比賽主辦團隊應詳閱。
   regulations_translations:
-    #original_hash: 9493b8d
-    title: WCA規則與指導方針：翻譯版
+    #original_hash: a19a3f5
+    title: WCA規則：翻譯版
     #original_hash: 386ecc1
     paragraph1: 如果您說的是英語以外的語言，這些翻譯應該對您會有幫助。
     #original_hash: 32b1132
