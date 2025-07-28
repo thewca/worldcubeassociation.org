@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_07_22_052451) do
+ActiveRecord::Schema[7.2].define(version: 2025_07_28_105210) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -1311,6 +1311,26 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_22_052451) do
     t.index ["stripe_record_id"], name: "index_stripe_webhook_events_on_stripe_record_id"
   end
 
+  create_table "terms_and_conditions", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.text "content", null: false
+    t.string "competition_id", null: false
+    t.datetime "deleted_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["competition_id"], name: "index_terms_and_conditions_on_competition_id"
+    t.index ["deleted_at"], name: "index_terms_and_conditions_on_deleted_at"
+  end
+
+  create_table "terms_and_conditions_accepts", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.bigint "terms_and_conditions_id", null: false
+    t.integer "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["terms_and_conditions_id", "user_id"], name: "index_terms_accepts_on_terms_and_user", unique: true
+    t.index ["terms_and_conditions_id"], name: "index_terms_and_conditions_accepts_on_terms_and_conditions_id"
+    t.index ["user_id"], name: "index_terms_and_conditions_accepts_on_user_id"
+  end
+
   create_table "ticket_comments", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "ticket_id", null: false
     t.text "comment"
@@ -1572,6 +1592,9 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_22_052451) do
   add_foreign_key "scrambles", "rounds"
   add_foreign_key "stripe_records", "stripe_records", column: "parent_record_id"
   add_foreign_key "stripe_webhook_events", "stripe_records"
+  add_foreign_key "terms_and_conditions", "competitions"
+  add_foreign_key "terms_and_conditions_accepts", "terms_and_conditions", column: "terms_and_conditions_id"
+  add_foreign_key "terms_and_conditions_accepts", "users"
   add_foreign_key "ticket_comments", "ticket_stakeholders", column: "acting_stakeholder_id"
   add_foreign_key "ticket_comments", "tickets"
   add_foreign_key "ticket_comments", "users", column: "acting_user_id"
