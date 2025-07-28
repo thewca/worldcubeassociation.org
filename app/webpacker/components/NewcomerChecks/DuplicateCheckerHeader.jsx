@@ -35,7 +35,11 @@ export default function DuplicateCheckerHeader({
   if (jobRunDelayed) {
     return (
       <Message warning>
-        Job running longer than expected. Click &apos;Retry&apos; if it appears stuck.
+        {`Job running longer than ${JOB_RUN_DELAY_MINUTES} minutes. Click "Retry" if it appears
+        stuck. (Please note - retry option is available because it's running for more than
+        ${JOB_RUN_DELAY_MINUTES} minutes). If your competitions has a very high number of newcomers
+        (more than 150), it may be possible that your job actually needs more time to run. Please
+        use this button at your own discretion.`}
         <Button onClick={run}>Retry</Button>
       </Message>
     );
