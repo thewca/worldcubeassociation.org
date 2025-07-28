@@ -3,6 +3,8 @@ import { DateTime } from 'luxon';
 import { Button, Message } from 'semantic-ui-react';
 import { duplicateCheckerJobRunStatuses } from '../../lib/wca-data.js.erb';
 
+// Usually this job should run in less than 5 minutes in most of the cases. It
+// can increase sometimes. A safe definition of "delay" looks like 10 minutes.
 const JOB_RUN_DELAY_MINUTES = 10;
 
 function isJobRunDelayed(lastDuplicateCheckerJobRun) {
@@ -33,21 +35,27 @@ export default function DuplicateCheckerHeader({
         <Button onClick={run}>Retry</Button>
       </Message>
     );
-  } if (lastDuplicateCheckerJobRun.run_status === duplicateCheckerJobRunStatuses.not_started) {
+  }
+
+  if (lastDuplicateCheckerJobRun.run_status === duplicateCheckerJobRunStatuses.not_started) {
     return (
       <Message info>
         Duplicate Checker will start soon. Please check after sometime.
         <Button onClick={refetch}>Refresh</Button>
       </Message>
     );
-  } if (lastDuplicateCheckerJobRun.run_status === duplicateCheckerJobRunStatuses.in_progress) {
+  }
+
+  if (lastDuplicateCheckerJobRun.run_status === duplicateCheckerJobRunStatuses.in_progress) {
     return (
       <Message info>
         Duplicate Checker is currently running. Please check after sometime.
         <Button onClick={refetch}>Refresh</Button>
       </Message>
     );
-  } if (lastDuplicateCheckerJobRun.run_status === duplicateCheckerJobRunStatuses.success) {
+  }
+
+  if (lastDuplicateCheckerJobRun.run_status === duplicateCheckerJobRunStatuses.success) {
     return (
       <Message positive>
         {`Duplicate Checker ran successfully at ${
@@ -55,7 +63,9 @@ export default function DuplicateCheckerHeader({
         <Button onClick={run}>Re-run now</Button>
       </Message>
     );
-  } if (lastDuplicateCheckerJobRun.run_status === duplicateCheckerJobRunStatuses.failed) {
+  }
+
+  if (lastDuplicateCheckerJobRun.run_status === duplicateCheckerJobRunStatuses.failed) {
     return (
       <Message negative>
         Something went wrong. Please try running again.
@@ -63,6 +73,7 @@ export default function DuplicateCheckerHeader({
       </Message>
     );
   }
+
   return (
     <Message positive>
       Duplicate Checker has not yet ran.
