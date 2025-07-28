@@ -3,8 +3,12 @@ import { DateTime } from 'luxon';
 import { Button, Message } from 'semantic-ui-react';
 import { duplicateCheckerJobRunStatuses } from '../../lib/wca-data.js.erb';
 
-// Usually this job should run in less than 5 minutes in most of the cases. It
-// can increase sometimes. A safe definition of "delay" looks like 10 minutes.
+// As per the specification of server while writing this comment, for each
+// server, it will take approx 2 seconds. The number of newcomers will be
+// usually 150 in very big competitions. It can go up as well. Considering 150,
+// the time taken will be around 5 minutes. I'm ignoring the uncertainties and
+// expecting that number of newcomers will get doubled over next few years. So
+// defining the delay as 10 minutes.
 const JOB_RUN_DELAY_MINUTES = 10;
 
 function isJobRunDelayed(lastDuplicateCheckerJobRun) {
