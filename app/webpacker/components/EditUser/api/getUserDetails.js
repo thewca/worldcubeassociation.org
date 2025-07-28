@@ -6,13 +6,5 @@ export default async function getUserDetails(userId) {
     viewUrls.users.showForEdit(userId),
   );
 
-  const userDetails = {
-    id: data.id,
-    name: data.name,
-    dob: data.dob,
-    gender: data.gender,
-    country_iso2: data.country_iso2,
-  };
-
-  return userDetails;
+  return data;
 }
