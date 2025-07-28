@@ -98,7 +98,7 @@ RSpec.describe PaymentIntent do
 
     it 'updates pending to requires_capture' do
       expect(intent.wca_status).to eq('pending')
-      intent.update_status_and_charges(nil, mock_update, nil, )
+      intent.update_status_and_charges(nil, mock_update, nil)
 
       expect(intent.reload.wca_status).to eq('requires_capture')
     end
