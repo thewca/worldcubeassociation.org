@@ -5,7 +5,7 @@ class TicketLog < ApplicationRecord
     create_ticket: "create_ticket",
     update_status: "update_status",
     create_comment: "create_comment",
-  }
+  }, prefix: true
   belongs_to :ticket
   has_many :ticket_log_changes, dependent: :destroy
 
