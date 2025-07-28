@@ -11,6 +11,7 @@ class DuplicateCheckerJobRun < ApplicationRecord
     in_progress: 'in_progress',
     success: 'success',
     failed: 'failed',
+    long_running_uncertain: 'long_running_uncertain',
   }, prefix: true, default: :not_started
 
   DEFAULT_SERIALIZE_OPTIONS = {
