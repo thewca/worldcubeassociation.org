@@ -3,6 +3,7 @@ import { ticketsCompetitionResultStatuses } from '../../../../lib/wca-data.js.er
 import WarningsVerification from './WarningsVerification';
 import { adminImportResultsUrl } from '../../../../lib/requests/routes.js.erb';
 import TimelineView from './TimelineView';
+import MergeTemporaryResults from './MergeTemporaryResults';
 
 export default function CompetitionResultActionerView({ ticketDetails, updateStatus }) {
   const { ticket: { metadata: { status, competition_id: competitionId } } } = ticketDetails;
@@ -36,6 +37,13 @@ function ViewForStatus({
       );
 
     case ticketsCompetitionResultStatuses.warnings_verified:
+      return (
+        <MergeTemporaryResults
+          ticketDetails={ticketDetails}
+        />
+      );
+
+    case ticketsCompetitionResultStatuses.merged_temporary_results:
       return (
         <p>
           Please finish the remaining steps in

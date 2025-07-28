@@ -20,6 +20,17 @@ const TIMELINE_STATUSES = [
     Delegate. WRT needs to review them and mark it as done.`,
   },
   {
+    status: ticketsCompetitionResultStatuses.merged_temporary_results,
+    description: `WRT will have a rough look at the results to make sure that
+    there is no major flaw that requires aborting the posting process. For
+    example, check if there are big suspicious chunks of DNFs/DNSs and verify
+    that the shape of the results is sound (e.g. results should generally grow
+    “wider” from top to bottom with very few exceptions like DNFs or cutoffs).
+    Once done with the rough look, proceed to click the “Merge Temporary
+    Results” button which will copy data from InboxResults to Results, then
+    clear the data in InboxResults.`,
+  },
+  {
     status: ticketsCompetitionResultStatuses.posted,
     description: `When the results are posted, the results become public, and
     also email notification will be sent to participants informing that the

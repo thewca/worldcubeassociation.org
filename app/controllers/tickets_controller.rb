@@ -5,6 +5,7 @@ class TicketsController < ApplicationController
 
   before_action :authenticate_user!
   before_action -> { check_ticket_errors(TicketLog.action_types[:update_status]) }, only: [:update_status]
+  before_action -> { redirect_to_root_unless_user(:can_admin_results?) }, only: %i[merge_temporary_results]
 
   SORT_WEIGHT_LAMBDAS = {
     createdAt:
@@ -198,5 +199,12 @@ class TicketsController < ApplicationController
     competition = Competition.find(params.require(:competition_id))
 
     render json: competition.inbox_results.includes(:inbox_person)
+  end
+
+  def merge_temporary_results
+    ticket = Ticket.find(params.require(:ticket_id))
+    ticket.metadata.merge_temporary_results
+
+    render status: :ok, json: { success: true }
   end
 end
