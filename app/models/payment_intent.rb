@@ -22,6 +22,7 @@ class PaymentIntent < ApplicationRecord
   enum :wca_status, {
     created: 'created', # A record has been created on the payment provider's system (no payment action yet initiated by the user)
     pending: 'pending', # The user is now attempting to pay, but has not reached a completion state yet
+    requires_capture: 'requires_capture', # The user has confirmed their payment details and payment approval - the payee must now capture the payment
     partial: 'partial', # Some but not all funds have been paid (eg, if the user has selected an instalment-based payment option)
     processing: 'processing', # The payment is in progress, but the user cannot do anything to advance its state (eg, provider waiting for outcome of bank transfer)
     failed: 'failed', # The payment did not succeed for any reason (insufficient funds, user error) but the user can still try to pay
@@ -85,16 +86,16 @@ class PaymentIntent < ApplicationRecord
       end
 
       # Write any additional details now that the main status cycle is complete
-      self.update_intent_details(api_intent)
+      self.update_intent_details(updated_wca_status, api_intent)
     end
   end
 
   private
 
-    def update_intent_details(api_record)
+    def update_intent_details(updated_wca_status, api_record)
       case self.payment_record_type
       when "StripeRecord"
-        self.update!(error_details: api_record.last_payment_error)
+        self.update!(wca_status: updated_wca_status, error_details: api_record.last_payment_error)
       end
     end
 

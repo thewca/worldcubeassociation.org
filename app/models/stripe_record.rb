@@ -5,8 +5,9 @@ class StripeRecord < ApplicationRecord
   # TODO: Add a link to the Stripe status definitions/documentation
   WCA_TO_STRIPE_STATUS_MAP = {
     created: %w[requires_payment_method legacy_payment_intent_registered legacy_unknown],
-    pending: %w[pending requires_capture requires_confirmation requires_action],
+    pending: %w[pending requires_confirmation requires_action],
     processing: %w[processing],
+    requires_capture: %w[requires_capture],
     partial: %w[],
     failed: %w[legacy_failure failed],
     succeeded: %w[legacy_success succeeded],
