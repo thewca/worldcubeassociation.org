@@ -3,13 +3,14 @@ import { DateTime } from 'luxon';
 import { Button, Message } from 'semantic-ui-react';
 import { duplicateCheckerJobRunStatuses } from '../../lib/wca-data.js.erb';
 
-// As per the specification of server while writing this comment, for each
-// server, it will take approx 2 seconds. The number of newcomers will be
-// usually 150 in very big competitions. It can go up as well. Considering 150,
-// the time taken will be around 5 minutes. I'm ignoring the uncertainties and
-// expecting that number of newcomers will get doubled over next few years. So
-// defining the delay as 10 minutes.
-const JOB_RUN_DELAY_MINUTES = 10;
+// This is the average estimate runtime for a person as of July 2025.
+const ESTIMATE_RUNTIME_SECONDS_PER_PERSON = 2;
+
+// This is the approx number of newcomers in very big competitions as of July 2025.
+const NEWCOMER_COUNT_THRESHOLD = 150;
+
+// This is the number of minutes after which we consider the job to be delayed.
+const JOB_RUN_DELAY_MINUTES = (NEWCOMER_COUNT_THRESHOLD * ESTIMATE_RUNTIME_SECONDS_PER_PERSON) / 60;
 
 function isJobRunDelayed(lastDuplicateCheckerJobRun) {
   const jobNotStartedOrInProgress = (
@@ -35,11 +36,15 @@ export default function DuplicateCheckerHeader({
   if (jobRunDelayed) {
     return (
       <Message warning>
-        {`Job running longer than ${JOB_RUN_DELAY_MINUTES} minutes. Click "Retry" if it appears
-        stuck. (Please note - retry option is available because it's running for more than
-        ${JOB_RUN_DELAY_MINUTES} minutes). If your competitions has a very high number of newcomers
-        (more than 150), it may be possible that your job actually needs more time to run. Please
-        use this button at your own discretion.`}
+        Job appears stuck, because it has been running longer than
+        {JOB_RUN_DELAY_MINUTES}
+        minutes. Click &quot;Retry&quot; below if you would like to cancel this job run and start
+        a new check.
+        Please note: If your competition has an unusually high number of newcomers (more than
+        {' '}
+        {NEWCOMER_COUNT_THRESHOLD}
+        ), it may be possible that your job actually needs more time to run.
+        Please use the button at your own discretion.
         <Button onClick={run}>Retry</Button>
       </Message>
     );
