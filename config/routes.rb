@@ -46,6 +46,7 @@ Rails.application.routes.draw do
   get 'registration/:competition_id/:user_id/payment-denomination' => 'registrations#payment_denomination', as: :registration_payment_denomination
   get '/users/admin_search' => 'users#admin_search'
   resources :users, only: %i[index edit update]
+  get 'users/show_for_edit' => 'users#show_for_edit', as: :user_show_for_edit
   get 'users/show_for_merge' => 'users#show_for_merge', as: :user_show_for_merge
   get 'profile/edit' => 'users#edit'
   post 'profile/enable-2fa' => 'users#enable_2fa'
@@ -60,6 +61,7 @@ Rails.application.routes.draw do
   post 'users/:id/avatar' => 'users#upload_avatar'
   patch 'users/:id/avatar' => 'users#update_avatar'
   delete 'users/:id/avatar' => 'users#delete_avatar'
+  post 'users/update_user_data' => 'users#update_user_data'
   post 'users/merge' => 'users#merge'
   get 'admin/avatars/pending' => 'admin/avatars#pending_avatar_users', as: :pending_avatars
   post 'admin/avatars' => 'admin/avatars#update_avatar', as: :admin_update_avatar

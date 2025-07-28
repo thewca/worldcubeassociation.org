@@ -1045,6 +1045,8 @@ class User < ApplicationRecord
   end
 
   def cannot_edit_data_reason_html(user_to_edit)
+    return I18n.t('users.edit.cannot_edit.reason.no_access') unless user_to_edit == self || can_edit_any_user?
+
     # Don't allow editing data if they have a WCA ID assigned, or if they
     # have already registered for a competition. We do allow admins and delegates
     # who have registered for a competition to edit their own data.
@@ -1099,10 +1101,8 @@ class User < ApplicationRecord
 
   private def editable_competitor_info_fields(user)
     fields = Set.new
-    if user == self || can_edit_any_user?
-      fields += %i[name dob gender country_iso2] unless cannot_edit_data_reason_html(user)
-      fields += CLAIM_WCA_ID_PARAMS
-    end
+    fields += %i[name dob gender country_iso2] unless cannot_edit_data_reason_html(user)
+    fields += CLAIM_WCA_ID_PARAMS if user == self || can_edit_any_user?
     fields << :name if user.wca_id.blank? && organizer_for?(user)
     if can_edit_any_user?
       fields += %i[

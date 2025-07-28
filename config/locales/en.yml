@@ -1045,6 +1045,7 @@ en:
       cannot_edit:
         msg: "You cannot change your name, birthdate, gender, or region. Reason: %{reason}. Contact the <a href='%{wrt_contact_path}' target='_blank'>WCA Results Team</a> or your <a href='%{delegate_url}'>Delegate</a> if you need to change any of these."
         reason:
+          no_access: "you don't have access to edit the user"
           assigned: "you have a WCA ID assigned"
           registered: "you have registered for a competition"
       guidelines_confirmation: "I confirm that my avatar fulfills all avatar guidelines."
