@@ -7,18 +7,10 @@ import computePotentialDuplicates from './api/computePotentialDuplicates';
 import getLastDuplicateCheckerJobRun from './api/getLastDuplicateCheckerJobRun';
 import SimilarPersons from './SimilarPersons';
 import DuplicateCheckerHeader from './DuplicateCheckerHeader';
-import WCAQueryClientProvider from '../../lib/providers/WCAQueryClientProvider';
 import MergeModal from './MergeModal';
+import EditUser from '../EditUser';
 
-export default function Wrapper({ competitionId }) {
-  return (
-    <WCAQueryClientProvider>
-      <DuplicateChecker competitionId={competitionId} />
-    </WCAQueryClientProvider>
-  );
-}
-
-function DuplicateChecker({ competitionId }) {
+export default function DuplicateChecker({ competitionId }) {
   const { data: lastDuplicateCheckerJobRun, isLoading, isError } = useQuery({
     queryKey: ['last-duplicate-checker-job', competitionId],
     queryFn: () => getLastDuplicateCheckerJobRun({ competitionId }),
@@ -36,7 +28,23 @@ function DuplicateChecker({ competitionId }) {
     },
   });
 
+  const onUserEdit = (user) => {
+    queryClient.setQueryData(
+      ['last-duplicate-checker-job', competitionId],
+      (previousData) => ({
+        ...previousData,
+        potential_duplicate_persons: (
+          previousData.potential_duplicate_persons.map((person) => (
+            person.original_user_id === user.id
+              ? { ...person, original_user: user }
+              : person
+          ))),
+      }),
+    );
+  };
+
   const [potentialDuplicatePerson, setPotentialDuplicatePerson] = useState();
+  const [userIdToEdit, setUserIdToEdit] = useState();
 
   if (isLoading) return <Loading />;
   if (isError) return <Errored />;
@@ -50,6 +58,7 @@ function DuplicateChecker({ competitionId }) {
       <SimilarPersons
         similarPersons={lastDuplicateCheckerJobRun.potential_duplicate_persons}
         mergePotentialDuplicate={setPotentialDuplicatePerson}
+        editUser={setUserIdToEdit}
       />
       <Modal
         open={potentialDuplicatePerson}
@@ -61,6 +70,19 @@ function DuplicateChecker({ competitionId }) {
           <MergeModal
             potentialDuplicatePerson={potentialDuplicatePerson}
             competitionId={competitionId}
+          />
+        </Modal.Content>
+      </Modal>
+      <Modal
+        open={userIdToEdit}
+        onClose={() => setUserIdToEdit(null)}
+        closeIcon
+      >
+        <Modal.Header>Edit User</Modal.Header>
+        <Modal.Content>
+          <EditUser
+            id={userIdToEdit}
+            onSuccess={onUserEdit}
           />
         </Modal.Content>
       </Modal>

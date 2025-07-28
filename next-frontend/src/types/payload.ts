@@ -251,7 +251,39 @@ export interface Config {
     'speedcubing-history-page': SpeedcubingHistoryPageSelect<false> | SpeedcubingHistoryPageSelect<true>;
     'about-regulations-page': AboutRegulationsPageSelect<false> | AboutRegulationsPageSelect<true>;
   };
-  locale: null;
+  locale:
+    | 'en'
+    | 'ca'
+    | 'cs'
+    | 'da'
+    | 'de'
+    | 'eo'
+    | 'es'
+    | 'eu'
+    | 'fi'
+    | 'fr'
+    | 'fr-CA'
+    | 'hr'
+    | 'hu'
+    | 'id'
+    | 'it'
+    | 'ja'
+    | 'kk'
+    | 'ko'
+    | 'nl'
+    | 'pl'
+    | 'pt'
+    | 'pt-BR'
+    | 'ro'
+    | 'ru'
+    | 'sk'
+    | 'sl'
+    | 'sv'
+    | 'th'
+    | 'uk'
+    | 'vi'
+    | 'zh-CN'
+    | 'zh-TW';
   user: User & {
     collection: 'users';
   };

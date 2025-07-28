@@ -3,7 +3,7 @@ import React from 'react';
 import { Button, Table } from 'semantic-ui-react';
 import { personUrl } from '../../lib/requests/routes.js.erb';
 
-export default function SimilarPersons({ similarPersons, mergePotentialDuplicate }) {
+export default function SimilarPersons({ similarPersons, mergePotentialDuplicate, editUser }) {
   const duplicatesByUserId = _.groupBy(similarPersons, 'original_user_id');
   const userIds = _.keys(duplicatesByUserId);
 
@@ -30,7 +30,11 @@ export default function SimilarPersons({ similarPersons, mergePotentialDuplicate
                 <Table.Cell>{originalUser.dob}</Table.Cell>
                 <Table.Cell />
                 <Table.Cell />
-                <Table.Cell />
+                <Table.Cell>
+                  <Button onClick={() => editUser(originalUser.id)}>
+                    Edit
+                  </Button>
+                </Table.Cell>
               </Table.Row>
               {duplicatesByUserId[userId].map((potentialDuplicatePerson) => {
                 const { duplicate_person: duplicatePerson, score } = potentialDuplicatePerson;

@@ -1003,8 +1003,12 @@ class Competition < ApplicationRecord
     true
   end
 
+  def after_registration_open?
+    use_wca_registration? && !cancelled? && !registration_not_yet_opened?
+  end
+
   def registration_currently_open?
-    use_wca_registration? && !cancelled? && !registration_not_yet_opened? && !registration_past?
+    after_registration_open? && !registration_past?
   end
 
   def registration_not_yet_opened?
@@ -1013,6 +1017,10 @@ class Competition < ApplicationRecord
 
   def registration_past?
     registration_close && registration_close < Time.now
+  end
+
+  def can_show_competitors_page?
+    after_registration_open? && registrations.competing_status_accepted.competing.any?
   end
 
   def registration_status

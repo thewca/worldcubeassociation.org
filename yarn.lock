@@ -1363,10 +1363,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime@npm:^7.10.4, @babel/runtime@npm:^7.10.5, @babel/runtime@npm:^7.12.5, @babel/runtime@npm:^7.20.13, @babel/runtime@npm:^7.26.7, @babel/runtime@npm:^7.27.6":
+"@babel/runtime@npm:^7.10.4, @babel/runtime@npm:^7.10.5, @babel/runtime@npm:^7.12.5, @babel/runtime@npm:^7.20.13, @babel/runtime@npm:^7.26.7":
   version: 7.27.6
   resolution: "@babel/runtime@npm:7.27.6"
   checksum: 10c0/89726be83f356f511dcdb74d3ea4d873a5f0cf0017d4530cb53aa27380c01ca102d573eff8b8b77815e624b1f8c24e7f0311834ad4fb632c90a770fda00bd4c8
+  languageName: node
+  linkType: hard
+
+"@babel/runtime@npm:^7.28.2":
+  version: 7.28.2
+  resolution: "@babel/runtime@npm:7.28.2"
+  checksum: 10c0/c20afe253629d53a405a610b12a62ac74d341a2c1e0fb202bbef0c118f6b5c84f94bf16039f58fd0483dd256901259930a43976845bdeb180cab1f882c21b6e0
   languageName: node
   linkType: hard
 
@@ -2589,23 +2596,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@stripe/react-stripe-js@npm:^3.7.0":
-  version: 3.7.0
-  resolution: "@stripe/react-stripe-js@npm:3.7.0"
+"@stripe/react-stripe-js@npm:^3.8.0":
+  version: 3.8.0
+  resolution: "@stripe/react-stripe-js@npm:3.8.0"
   dependencies:
     prop-types: "npm:^15.7.2"
   peerDependencies:
     "@stripe/stripe-js": ">=1.44.1 <8.0.0"
     react: ">=16.8.0 <20.0.0"
     react-dom: ">=16.8.0 <20.0.0"
-  checksum: 10c0/663e9176b0a710632abe64bb7efca63a22d8cf690942a4507d57ba1d4fb6328cd08e3cf9040ea95348540c47ed8dbc5250982b150b38eb9564861dc0ecd83d72
+  checksum: 10c0/55355d3ab428f5d74ed1d02ad8682f00b61cacd39413ae5558c888d3dd19c60229887112103056602a3a7fc072a79825a7c418a08fa611e95a59a4ac3b817ad5
   languageName: node
   linkType: hard
 
-"@stripe/stripe-js@npm:^7.5.0":
-  version: 7.5.0
-  resolution: "@stripe/stripe-js@npm:7.5.0"
-  checksum: 10c0/e035372e9813272fa7062fc66ad979b3eb5e96e785bedda7061199d581a5747cbe39fdf0e1965b41825f48ae9e7550f52c2241a77523cdb697e6f20a81304f76
+"@stripe/stripe-js@npm:^7.6.1":
+  version: 7.6.1
+  resolution: "@stripe/stripe-js@npm:7.6.1"
+  checksum: 10c0/9d704f4574c69d7f497b612b7699224b172ef38f30f1b4635de41dfd634ce052702e8e9497f7fbcec424e38c0f1cd09ade1451321cda6915b0ed88af545d47dc
   languageName: node
   linkType: hard
 
@@ -10170,7 +10177,7 @@ __metadata:
     "@babel/plugin-transform-runtime": "npm:^7.28.0"
     "@babel/preset-env": "npm:^7.28.0"
     "@babel/preset-react": "npm:^7.27.1"
-    "@babel/runtime": "npm:^7.27.6"
+    "@babel/runtime": "npm:^7.28.2"
     "@cubing/icons": "npm:^3.0.4"
     "@fullcalendar/core": "npm:^6.1.18"
     "@fullcalendar/interaction": "npm:^6.1.18"
@@ -10181,8 +10188,8 @@ __metadata:
     "@pmmmwh/react-refresh-webpack-plugin": "npm:^0.6.1"
     "@rails/actioncable": "npm:^8.0.200"
     "@rails/ujs": "npm:^7.1.501"
-    "@stripe/react-stripe-js": "npm:^3.7.0"
-    "@stripe/stripe-js": "npm:^7.5.0"
+    "@stripe/react-stripe-js": "npm:^3.8.0"
+    "@stripe/stripe-js": "npm:^7.6.1"
     "@tanstack/react-query": "npm:^5.83.0"
     "@tanstack/react-table": "npm:^8.21.3"
     "@wca/helpers": "npm:^1.1.5"

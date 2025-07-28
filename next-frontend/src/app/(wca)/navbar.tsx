@@ -73,7 +73,10 @@ export default async function Navbar() {
                     {navbarEntry.entries.map((subEntry) => (
                       <React.Fragment key={subEntry.id}>
                         {subEntry.blockType === "LinkItem" && (
-                          <Menu.Item value={subEntry.id!} asChild>
+                          <Menu.Item
+                            value={`${navbarEntry.id}/${subEntry.id}`}
+                            asChild
+                          >
                             <Link href={subEntry.targetLink}>
                               {subEntry.displayIcon && (
                                 <IconDisplay name={subEntry.displayIcon} />
@@ -100,7 +103,10 @@ export default async function Navbar() {
                                 {subEntry.entries.map((nestedEntry) => (
                                   <React.Fragment key={nestedEntry.id}>
                                     {nestedEntry.blockType === "LinkItem" && (
-                                      <Menu.Item value={nestedEntry.id!}>
+                                      <Menu.Item
+                                        value={`${navbarEntry.id}/${subEntry.id}/${nestedEntry.id}`}
+                                        asChild
+                                      >
                                         <Link href={nestedEntry.targetLink}>
                                           {nestedEntry.displayIcon && (
                                             <IconDisplay
