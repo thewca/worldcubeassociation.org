@@ -10,6 +10,8 @@ const prefixForIndex = (index) => {
 
 export const scrambleSetToName = (scrambleSet) => `${events.byId[scrambleSet.event_id].name} Round ${scrambleSet.round_number} Scramble Set ${prefixForIndex(scrambleSet.scramble_set_number - 1)}`;
 
+export const scrambleToName = (scramble) => `Scramble ${scramble.scramble_number} (${scramble.scramble_string})`;
+
 export const scrambleSetToDetails = (scrambleSet) => {
   const [extraScr, standardScr] = _.partition(scrambleSet.inbox_scrambles, 'is_extra');
 

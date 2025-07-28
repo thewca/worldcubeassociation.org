@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import {
   Icon, Popup, Ref, Table,
 } from 'semantic-ui-react';
+import _ from 'lodash';
 import { DragDropContext, Draggable, Droppable } from '@hello-pangea/dnd';
 
 export default function ScrambleMatch({
@@ -9,7 +10,7 @@ export default function ScrambleMatch({
   expectedNumOfRows = matchableRows.length,
   onRowDragCompleted,
   computeDefinitionName,
-  computeRowName,
+  computeCellName,
   computeRowDetails = undefined,
   moveAwayAction = undefined,
 }) {
@@ -118,7 +119,7 @@ export default function ScrambleMatch({
                                   ? 'Missing scramble set'
                                   : (
                                     <>
-                                      {computeRowName(rowData)}
+                                      {computeCellName(rowData)}
                                       {' '}
                                       {computeRowDetails && (
                                         <Popup
