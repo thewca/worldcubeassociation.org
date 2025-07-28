@@ -7,7 +7,7 @@ export const requirementsStepConfig = {
   key: 'requirements',
   i18nKey: 'competitions.registration_v2.register.panel.requirements',
   Component: RegistrationRequirements,
-  isCompleted: () => true, // TODO transmit this information as a dummy
+  isCompleted: (stepPayload) => stepPayload.isRegistered,
 };
 
 export const competingStepConfig = {

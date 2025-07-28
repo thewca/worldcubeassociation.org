@@ -106,11 +106,15 @@ export default function StepNavigationProvider({
       return !stepConfig.isEditable;
     }
 
+    if (stepConfig.key === summaryPanelKey) {
+      return !payload.isRegistered;
+    }
+
     // The step in question is still in the future.
     if (stepIndex > activeIndex) {
       const completeAndEditable = stepConfig.isCompleted(payload) && stepConfig.isEditable;
 
-      return stepConfig.key !== summaryPanelKey && !completeAndEditable;
+      return !completeAndEditable;
     }
 
     // If we reach here, this implicitly means `stepIndex == activeIndex`.
