@@ -13,9 +13,9 @@ import RegistrationNotAllowedMessage from './RegistrationNotAllowedMessage';
 import RegistrationClosingMessage from './RegistrationClosingMessage';
 import usePerpetualState from '../hooks/usePerpetualState';
 import StepConfigProvider, { useStepConfig } from '../lib/StepConfigProvider';
-import StepNavigationProvider, { useStepNavigation } from '../lib/StepNavigationProvider';
+import StepNavigationProvider from '../lib/StepNavigationProvider';
 import { availableSteps, registrationOverviewConfig } from '../lib/stepConfigs';
-import FormObjectProvider from '../../wca/FormBuilder/provider/FormObjectProvider';
+import FormObjectProvider, { useFormObjectState } from '../../wca/FormBuilder/provider/FormObjectProvider';
 import { isQualifiedForEvent } from '../../../lib/helpers/qualifications';
 
 // The following states should show the Panel even when registration is already closed.
@@ -79,7 +79,7 @@ export default function Index({
               registrationId={registrationId}
               isProcessing={isProcessing}
             >
-              <RegisterNavigationWrapper
+              <FormObjectWrapper
                 competitionInfo={competitionInfo}
                 userInfo={userInfo}
                 userCanPreRegister={userCanPreRegister}
@@ -93,7 +93,7 @@ export default function Index({
   );
 }
 
-function RegisterNavigationWrapper({
+function FormObjectWrapper({
   competitionInfo,
   userInfo,
   userCanPreRegister,
@@ -112,11 +112,49 @@ function RegisterNavigationWrapper({
     return <Loading />;
   }
 
+  const { preferredEvents, personalRecords, qualifications_wcif: qualifications } = steps.find(
+    (stepConfig) => stepConfig.key === 'competing',
+  ).parameters;
+
+  const formRegistration = buildFormRegistration({
+    registrationPayload,
+    competitionInfo,
+    preferredEvents,
+    qualifications,
+    personalRecords,
+  });
+
+  return (
+    <FormObjectProvider initialObject={formRegistration}>
+      <RegisterNavigationWrapper
+        steps={steps}
+        registrationPayload={registrationPayload}
+        competitionInfo={competitionInfo}
+        registrationRejected={registrationRejected}
+        userInfo={userInfo}
+        userCanPreRegister={userCanPreRegister}
+        cannotRegisterReasons={cannotRegisterReasons}
+      />
+    </FormObjectProvider>
+  );
+}
+
+function RegisterNavigationWrapper({
+  steps,
+  registrationPayload,
+  registrationRejected,
+  competitionInfo,
+  userInfo,
+  userCanPreRegister,
+  cannotRegisterReasons,
+}) {
+  const [termsAndConditionsAcknowledged] = useFormObjectState('infoAcknowledged', ['regRequirements']);
+
   return (
     <StepNavigationProvider
       stepsConfiguration={steps}
       availableSteps={availableSteps}
-      payload={registrationPayload}
+      payload={{ ...registrationPayload, termsAndConditionsAcknowledged }}
       navigationDisabled={registrationRejected}
       summaryPanelKey={registrationOverviewConfig.key}
     >
@@ -146,9 +184,6 @@ function Register({
 
   const { isFetching, registration } = useRegistration();
 
-  const { getStepParametersByKey } = useStepNavigation();
-  const { preferredEvents, personalRecords, qualifications_wcif: qualifications } = getStepParametersByKey('competing');
-
   if (isFetching) {
     return <Loading />;
   }
@@ -175,26 +210,18 @@ function Register({
     || (userCanPreRegister && registrationNotYetClosed)
     || hasEditableRegistration;
 
-  const formRegistration = buildFormRegistration({
-    registration,
-    competitionInfo,
-    preferredEvents,
-    qualifications,
-    personalRecords,
-  });
-
   return (
     <>
       <RegistrationOpeningMessage registrationStart={competitionInfo.registration_open} />
       <RegistrationClosingMessage registrationEnd={competitionInfo.registration_close} />
       {showRegistrationPanel && (
-        <FormObjectProvider initialObject={formRegistration}>
+        <>
           <RegistrationMessage />
           <StepPanel
             user={userInfo}
             competitionInfo={competitionInfo}
           />
-        </FormObjectProvider>
+        </>
       )}
     </>
   );
