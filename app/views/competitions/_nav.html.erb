@@ -143,7 +143,7 @@
             }
           end
 
-          if @competition.any_registrations?
+          if @competition.can_show_competitors_page?
             nav_items << {
               text: t('.menu.competitors'),
               path: competition_registrations_path(@competition),
