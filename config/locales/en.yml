@@ -2256,9 +2256,11 @@ en:
   notifications:
     connect_wca_id: "Connect your WCA ID to your account!"
   payments:
+    header: "Payment History"
     messages:
       charge_refunded: "Payment was refunded"
       charges_refunded: "All charges have been refunded"
+      no_payments: "No payments have been made for this registration."
     errors:
       refund:
         provider_disconnected: "You cannot issue a refund for this competition anymore. Please use your payment provider's dashboard to do so."
@@ -2359,6 +2361,7 @@ en:
   misc:
     forum_age_requirement: "You must be 13 years old to access the WCA Forum."
     forum_enter_dob: "A date of birth is required before accessing the forum. Please enter your date of birth, and then try and access the forum again."
+    refresh: "Refresh"
   #context: FAQ page
   faq:
     title: "Frequently Asked Questions"
