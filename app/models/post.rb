@@ -2,6 +2,7 @@
 
 class Post < ApplicationRecord
   include MarkdownHelper
+
   belongs_to :author, class_name: "User"
   has_many :post_tags, autosave: true, dependent: :destroy
   include Taggable
