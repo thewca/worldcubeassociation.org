@@ -40,9 +40,9 @@ class PaymentIntent < ApplicationRecord
       # The order of operations here is critical:
       #   We need to update the underlying raw record first, so that `determine_wca_status` works correctly
       self.payment_record.update_status(api_intent)
-      updated_wca_status = self.determine_wca_status.to_s
+      self.assign_common_attributes
 
-      case updated_wca_status
+      case self.wca_status # This has been updated by assign_common_attributes
       when PaymentIntent.wca_statuses[:succeeded]
         # The payment didn't need any additional actions and is completed!
 
@@ -87,18 +87,19 @@ class PaymentIntent < ApplicationRecord
           error_details: payment_error(api_intent),
         )
       else
-        self.update!(wca_status: updated_wca_status, error_details: payment_error(api_intent))
       end
     end
   end
 
   private
 
-    def payment_error(api_intent)
-      case self.payment_record_type
+    def assign_common_attributes(api_intent)
+      error_details = case self.payment_record_type
       when "StripeRecord"
-        api_intent.last_payment_error
+         api_intent.last_payment_error
       end
+
+      self.assign_attributes(wca_status: self.determine_wca_status.to_s, error_details: error_details)
     end
 
     def wca_status_consistency
