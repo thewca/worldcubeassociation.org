@@ -15,7 +15,7 @@ import updateStatus from './api/updateStatus';
 export default function Wrapper({ id }) {
   return (
     <WCAQueryClientProvider>
-      <Tickets id={parseInt(id, 10)} />
+      <Tickets id={id} />
     </WCAQueryClientProvider>
   );
 }

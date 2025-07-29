@@ -57,7 +57,7 @@ class TicketsController < ApplicationController
   def show
     respond_to do |format|
       format.html do
-        @ticket_id = params.require(:id)
+        @ticket_id = params.require(:id).to_i
         render :show
       end
       format.json do
@@ -203,7 +203,7 @@ class TicketsController < ApplicationController
 
   def merge_temporary_results
     ticket = Ticket.find(params.require(:ticket_id))
-    ticket.metadata.merge_temporary_results
+    CompetitionResultsImport.merge_temporary_results(ticket)
 
     render status: :ok, json: { success: true }
   end
