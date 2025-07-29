@@ -82,7 +82,7 @@ class PaymentIntent < ApplicationRecord
         )
       end
 
-      self.update_common_attributes!(api_intent)
+      self.update_common_attributes!(api_intent, updated_wca_status)
     end
   end
 
