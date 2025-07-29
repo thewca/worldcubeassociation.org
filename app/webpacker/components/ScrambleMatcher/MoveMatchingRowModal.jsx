@@ -1,9 +1,9 @@
-import React, {useCallback, useMemo, useState} from 'react';
-import {Button, Form, Modal} from 'semantic-ui-react';
+import React, { useCallback, useMemo, useState } from 'react';
+import { Button, Form, Modal } from 'semantic-ui-react';
 import _ from 'lodash';
 import pickerConfigurations from './config';
-import {useInputUpdater} from '../../lib/hooks/useInputState';
-import {compileLookup} from "./util";
+import { useInputUpdater } from '../../lib/hooks/useInputState';
+import { compileLookup } from './util';
 
 function MatchingSelect({
   pickerKey,
@@ -61,23 +61,13 @@ export default function MoveMatchingRowModal({
 
   const [targetPath, setTargetPath] = useState(basePath);
 
-  const updateTargetPath = useCallback(
-    (dispatchKey, entityId) => setTargetPath(
-      (prevTargetPath) => ({
-        ...prevTargetPath,
-        [dispatchKey]: entityId,
-      }),
-    ),
-    [setTargetPath],
-  );
-
-  const computeChoices = useCallback((historyIdx) => {
+  const computeChoices = useCallback((historyIdx, selectedPath) => {
     const topLevelLookup = pickerHistory[0]?.lookup || {};
 
     const parentSteps = pickerHistory.slice(0, historyIdx);
 
     const finalLookup = parentSteps.reduce((currentLookup, historyStep) => {
-      const currentChoice = targetPath[historyStep.dispatchKey];
+      const currentChoice = selectedPath[historyStep.dispatchKey];
       const lookupResult = currentLookup[currentChoice];
 
       return compileLookup(lookupResult, historyStep.nestedPicker);
@@ -87,7 +77,36 @@ export default function MoveMatchingRowModal({
     const currentLevelChoices = pickerHistory[historyIdx].choices;
 
     return currentLevelChoices.filter((item) => choiceKeys.includes(item.id.toString()));
-  }, [pickerHistory, targetPath]);
+  }, [pickerHistory]);
+
+  const fixSelectionPath = useCallback(
+    (selectedPath) => pickerHistory.reduce((correctedPath, historyStep, idx) => {
+      const availableLookup = computeChoices(idx, correctedPath);
+
+      const originalChoiceId = selectedPath[historyStep.dispatchKey];
+      const firstAvailableFallback = availableLookup[0];
+
+      const finalChoice = availableLookup.find(
+        (item) => item.id === originalChoiceId,
+      ) ?? firstAvailableFallback;
+
+      return {
+        ...correctedPath,
+        [historyStep.dispatchKey]: finalChoice.id,
+      };
+    }, {}),
+    [computeChoices, pickerHistory],
+  );
+
+  const updateTargetPath = useCallback(
+    (dispatchKey, entityId) => setTargetPath(
+      (prevTargetPath) => fixSelectionPath({
+        ...prevTargetPath,
+        [dispatchKey]: entityId,
+      }),
+    ),
+    [setTargetPath, fixSelectionPath],
+  );
 
   const canMove = !_.isEqual(targetPath, basePath);
 
@@ -111,7 +130,7 @@ export default function MoveMatchingRowModal({
           {pickerHistory.map((historyStep, idx) => (
             <MatchingSelect
               pickerKey={historyStep.pickerKey}
-              selectableEntities={computeChoices(idx)}
+              selectableEntities={computeChoices(idx, targetPath)}
               initialSelected={historyStep.entity}
               updateTargetPath={(id) => updateTargetPath(historyStep.dispatchKey, id)}
             />
