@@ -5,8 +5,7 @@ import I18n from '../../lib/i18n';
 import { useDispatchWrapper } from './reducer';
 import pickerConfigurations from './config';
 import MoveMatchingRowModal from './MoveMatchingRowModal';
-import _ from "lodash";
-import {compileLookup} from "./util";
+import { compileLookup } from './util';
 
 export default function PickerWithMatching({
   pickerKey,
