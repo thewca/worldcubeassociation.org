@@ -84,7 +84,7 @@ class PaymentIntent < ApplicationRecord
           canceled_at: nil,
           cancellation_source: nil,
           wca_status: updated_wca_status,
-            error_details: api_intent.last_payment_error,
+          error_details: api_intent.last_payment_error,
         )
       else
         self.update!(wca_status: updated_wca_status, error_details: api_record.last_payment_error)
