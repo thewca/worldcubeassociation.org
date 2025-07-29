@@ -97,7 +97,7 @@ class PaymentIntent < ApplicationRecord
     def payment_error(api_intent)
       case self.payment_record_type
       when "StripeRecord"
-        return api_intent.last_payment_error
+        api_intent.last_payment_error
       end
     end
 
