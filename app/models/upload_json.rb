@@ -21,6 +21,24 @@ class UploadJson
     else
       errors.add(:results_file, "can't be blank")
     end
+
+    if competition.use_wca_registration?
+      persons_to_import.each do |person|
+        registration = Registration.find_by(competition_id: competition_id, registrant_id: person.id)
+
+        errors.add("There is no accepted registration for #{person.name} in this competition.") unless registration&.accepted?
+
+        errors.add("Name in JSON and registration list doesn't match for #{person.name}") if registration.name != person.name
+
+        errors.add("DOB in JSON and registration list doesn't match for #{person.name}") if registration.dob != person.dob
+
+        errors.add("Country in JSON and registration list doesn't match for #{person.name}") if registration.country.iso2 != person.country_iso2
+
+        errors.add("Gender in JSON and registration list doesn't match for #{person.name}") if registration.gender != person.gender
+
+        errors.add("WCA ID in JSON and registration list doesn't match for #{person.name}") if registration.wca_id != person.wca_id
+      end
+    end
   end
 
   def parsed_json
@@ -32,10 +50,8 @@ class UploadJson
     results_file.rewind
   end
 
-  def temporary_results_data
-    competition = Competition.includes(competition_events: [:rounds]).find(competition_id)
-    persons_to_import = []
-    parsed_json["persons"].each do |p|
+  def persons_to_import
+    @persons_to_import ||= parsed_json["persons"].map do |p|
       new_person_attributes = {
         id: [p["id"], competition_id],
         wca_id: p["wcaId"],
@@ -46,8 +62,12 @@ class UploadJson
       }
       # mask uploaded DOB on staging to avoid accidentally importing PII
       new_person_attributes["dob"] = "1954-12-04" if Rails.env.production? && !EnvConfig.WCA_LIVE_SITE?
-      persons_to_import << InboxPerson.new(new_person_attributes)
+      InboxPerson.new(new_person_attributes)
     end
+  end
+
+  def temporary_results_data
+    competition = Competition.includes(competition_events: [:rounds]).find(competition_id)
     results_to_import = []
     scrambles_to_import = []
     parsed_json["events"].each do |event|
