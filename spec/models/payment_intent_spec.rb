@@ -87,7 +87,7 @@ RSpec.describe PaymentIntent do
 
     context 'invalid status combinations update' do
       it_behaves_like '#update PaymentIntent to incompatible status', 'requires_payment_method', 'created', 'pending'
-      it_behaves_like '#update PaymentIntent to incompatible status', 'requires_capture', 'pending', 'partial'
+      it_behaves_like '#update PaymentIntent to incompatible status', 'requires_capture', 'requires_capture', 'partial'
       it_behaves_like '#update PaymentIntent to incompatible status', 'legacy_failure', 'failed', 'succeeded'
     end
   end
