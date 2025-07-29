@@ -1066,7 +1066,7 @@ fr:
               Vous être en train de vous connecter sur le site de la WCA.
               L'authentification à deux facteur est activée pour votre compte,
               et vous venez de demander que l'on vous envoie un mot de passe à
-              usage unique par e-mail. Vous le trouverez ci-dessous :
+              usage unique via e-mail. Vous le trouverez ci-dessous :
             #original_hash: 8aeccbf
             disclaimer: >-
               Si vous n'avez pas demandé ce code d'authentification, veuillez
