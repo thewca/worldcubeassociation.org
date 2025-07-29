@@ -1,12 +1,10 @@
-import React, { useMemo, useState, useCallback } from 'react';
-import {
-  Button, Form, Header, Modal,
-} from 'semantic-ui-react';
+import React, { useCallback, useMemo, useState } from 'react';
+import { Button, Header } from 'semantic-ui-react';
 import ScrambleMatch from './ScrambleMatch';
 import I18n from '../../lib/i18n';
 import { useDispatchWrapper } from './reducer';
-import useInputState from '../../lib/hooks/useInputState';
 import pickerConfigurations from './config';
+import MoveMatchingRowModal from './MoveMatchingRowModal';
 
 export default function PickerWithMatching({
   pickerKey,
@@ -120,7 +118,7 @@ function SelectedEntityPanel({
 }) {
   const {
     key: pickerKey,
-    dispatchId,
+    dispatchKey,
     computeDefinitionName,
     computeMatchingCellName,
     computeMatchingRowDetails = undefined,
@@ -150,7 +148,7 @@ function SelectedEntityPanel({
 
   const wrappedDispatch = useDispatchWrapper(
     dispatchMatchState,
-    { [dispatchId]: selectedEntity.id },
+    { [dispatchKey]: selectedEntity.id },
   );
 
   const onRoundDragCompleted = useCallback(
@@ -169,11 +167,12 @@ function SelectedEntityPanel({
 
   const continuedHistory = useMemo(() => (
     [...pickerHistory, {
-      picker: pickerKey,
-      dispatch: dispatchId,
+      pickerKey,
+      dispatchKey,
       entity: selectedEntity,
+      choices: selectableEntities,
     }]
-  ), [pickerHistory, pickerKey, dispatchId, selectedEntity]);
+  ), [pickerHistory, pickerKey, dispatchKey, selectedEntity, selectableEntities]);
 
   const selectedEntityState = entityLookup[selectedEntity.id];
   const expectedNumOfRows = computeExpectedRowCount?.(selectedEntity, pickerHistory);
@@ -189,13 +188,12 @@ function SelectedEntityPanel({
         computeRowDetails={computeMatchingRowDetails}
         moveAwayAction={onMoveAway}
       />
-      <MoveScrambleSetModal
+      <MoveMatchingRowModal
         isOpen={modalPayload !== null}
         onClose={onModalClose}
         onConfirm={onModalConfirm}
         selectedMatchingRow={modalPayload}
-        selectedEntity={selectedEntity}
-        selectableEntities={selectableEntities}
+        pickerHistory={continuedHistory}
         pickerConfig={pickerConfig}
       />
       {NestedPicker !== undefined && (
@@ -208,69 +206,5 @@ function SelectedEntityPanel({
         />
       )}
     </>
-  );
-}
-
-function MoveScrambleSetModal({
-  isOpen,
-  onClose,
-  onConfirm = onClose,
-  selectedMatchingRow,
-  selectedEntity,
-  selectableEntities,
-  pickerConfig,
-}) {
-  const {
-    computeEntityName,
-    computeMatchingCellName,
-  } = pickerConfig;
-
-  const [targetRound, setTargetRound] = useInputState(selectedEntity.id);
-
-  const roundsSelectOptions = useMemo(() => selectableEntities.map((ent) => ({
-    key: ent.id,
-    text: computeEntityName(ent),
-    value: ent.id,
-  })), [computeEntityName, selectableEntities]);
-
-  const canMove = targetRound !== selectedEntity.id;
-
-  if (!selectedMatchingRow) {
-    return null;
-  }
-
-  return (
-    <Modal
-      open={isOpen}
-      onClose={onClose}
-      closeIcon
-    >
-      <Modal.Header>
-        Move
-        {' '}
-        {computeMatchingCellName(selectedMatchingRow)}
-      </Modal.Header>
-      <Modal.Content>
-        <Form>
-          <Form.Select
-            inline
-            label="New round" // TODO i18n
-            options={roundsSelectOptions}
-            value={targetRound}
-            onChange={setTargetRound}
-          />
-        </Form>
-      </Modal.Content>
-      <Modal.Actions>
-        <Button onClick={onClose}>Cancel</Button>
-        <Button
-          positive
-          onClick={() => onConfirm(selectedMatchingRow, targetRound)}
-          disabled={!canMove}
-        >
-          Move
-        </Button>
-      </Modal.Actions>
-    </Modal>
   );
 }
