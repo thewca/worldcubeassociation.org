@@ -51,8 +51,6 @@ class PaymentIntent < ApplicationRecord
           self.update!(
             confirmed_at: source_datetime,
             confirmation_source: action_source,
-            wca_status: updated_wca_status,
-            error_details: payment_error(api_intent),
           )
         end
 
@@ -71,8 +69,6 @@ class PaymentIntent < ApplicationRecord
           self.update!(
             canceled_at: source_datetime,
             cancellation_source: action_source,
-            wca_status: updated_wca_status,
-            error_details: payment_error(api_intent),
           )
         end
       when PaymentIntent.wca_statuses[:created],
@@ -83,8 +79,6 @@ class PaymentIntent < ApplicationRecord
           confirmation_source: nil,
           canceled_at: nil,
           cancellation_source: nil,
-          wca_status: updated_wca_status,
-          error_details: payment_error(api_intent),
         )
       else
       end
