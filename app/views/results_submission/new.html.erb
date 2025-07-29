@@ -1,35 +1,12 @@
 <% provide(:title, "Results submission") %>
-<% add_to_packs("markdown_editor") %>
 
 <%= render layout: 'nav' do %>
   <h1><%= yield(:title) %></h1>
 
-  <% if @competition.results_submitted? %>
-    <p>The results have already been submitted. If you have any more questions or comments please reply to the email sent with the first results submission.</p>
-  <% else %>
-    <p>
-      The result submission process has two steps:
-      <ul>
-        <li>Uploading a valid JSON to the website or use the results submitted via WCA Live</li>
-        <li>Then the website will run a number of checks. If everything is correct you'll be able to submit these results to the WRT.</li>
-      </ul>
-    </p>
-    <%= react_component("CompetitionResultSubmission/ImportResultsData", {
-      competitionId: @competition.id,
-      alreadyHasSubmittedResult: @results_validator.any_results?,
-    }) %>
-    <br />
-
-    <%= render "check_results_panel",
-      results_validator: @results_validator,
-      force_collapse: @results_submission
-    %>
-    <% if @current_user.can_submit_competition_results?(@competition) %>
-      <%= react_component("CompetitionResultSubmission/FormToWrt", {
-        competitionId: @competition.id,
-        isErrorInPreviousUpload: @results_validator.any_errors?,
-      }) %>
-    <% end %>
-  <% end %>
-
+  <%= react_component("CompetitionResultSubmission", {
+    competitionId: @competition.id,
+    resultsSubmitted: @competition.results_submitted?,
+    alreadyHasSubmittedResult: @competition.inbox_results.present?,
+    canSubmitResults: @current_user.can_submit_competition_results?(@competition),
+  }) %>
 <% end %>

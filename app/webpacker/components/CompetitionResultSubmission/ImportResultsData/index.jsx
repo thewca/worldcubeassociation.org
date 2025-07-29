@@ -22,7 +22,7 @@ export default function Wrapper({
   );
 }
 
-function ImportResultsData({
+export function ImportResultsData({
   competitionId,
   alreadyHasSubmittedResult,
   isAdminView = false,

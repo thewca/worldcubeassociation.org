@@ -9,8 +9,6 @@ class ResultsSubmissionController < ApplicationController
 
   def new
     @competition = competition_from_params
-    @results_validator = ResultsValidators::CompetitionsResultsValidator.create_full_validation
-    @results_validator.validate(@competition.id)
   end
 
   def newcomer_checks
