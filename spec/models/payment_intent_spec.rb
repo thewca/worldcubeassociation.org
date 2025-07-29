@@ -94,6 +94,7 @@ RSpec.describe PaymentIntent do
 
   describe 'update status and charges' do
     let(:intent) { create(:payment_intent, :pending) }
+    # StripeUpdate is an arbitrary value - class type is not under test in this example
     let(:mock_update) { double("StripeUpdate", status: "requires_capture", last_payment_error: nil) }
 
     it 'updates pending to requires_capture' do
