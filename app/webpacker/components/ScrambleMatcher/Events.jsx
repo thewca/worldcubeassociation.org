@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import EventSelector from '../wca/EventSelector';
-import Rounds from './Rounds';
 import { useDispatchWrapper } from './reducer';
+import PickerWithMatching from './PickerWithMatching';
 
 const ATTEMPT_BASED_EVENTS = ['333fm', '333mbf'];
 
@@ -36,11 +36,14 @@ export default function Events({ wcifEvents, matchState, dispatchMatchState }) {
         showBreakBeforeButtons={false}
       />
       {selectedWcifEvent && (
-        <Rounds
-          wcifRounds={selectedWcifEvent.rounds}
-          matchState={matchState}
+        <PickerWithMatching
+          pickerKey="rounds"
+          selectableEntities={selectedWcifEvent.rounds}
+          entityLookup={matchState}
           dispatchMatchState={wrappedDispatch}
-          showGroupsPicker={isAttemptBasedEvent}
+          nestedPickers={[
+            { key: 'groups', mapping: 'inbox_scrambles', active: isAttemptBasedEvent },
+          ]}
         />
       )}
     </>
