@@ -48,7 +48,7 @@ class PaymentIntent < ApplicationRecord
 
         # Record the success timestamp if not already done
         unless self.succeeded?
-          self.update!(
+          self.assign_attributes(
             confirmed_at: source_datetime,
             confirmation_source: action_source,
           )
@@ -66,7 +66,7 @@ class PaymentIntent < ApplicationRecord
 
         # Record the cancellation timestamp if not already done
         unless self.canceled?
-          self.update!(
+          self.assign_attributes(
             canceled_at: source_datetime,
             cancellation_source: action_source,
           )
@@ -74,15 +74,15 @@ class PaymentIntent < ApplicationRecord
       when PaymentIntent.wca_statuses[:created],
         PaymentIntent.wca_statuses[:pending]
         # Reset by the gateway
-        self.update!(
+        self.assign_attributes(
           confirmed_at: nil,
           confirmation_source: nil,
           canceled_at: nil,
           cancellation_source: nil,
         )
-      else
-        self.save! # Persist assign_common_attributes to the database if no other `update` call happens
       end
+
+      self.save! # Persist the attribute assignments to the db
     end
   end
 
