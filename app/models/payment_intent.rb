@@ -91,7 +91,7 @@ class PaymentIntent < ApplicationRecord
     def update_common_attributes!(api_intent, updated_wca_status)
       error_details = case self.payment_record_type
                       when "StripeRecord"
-                         api_intent.last_payment_error
+                        api_intent.last_payment_error
                       end
 
       self.update!(wca_status: updated_wca_status, error_details: error_details)
