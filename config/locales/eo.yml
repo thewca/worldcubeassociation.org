@@ -1965,6 +1965,8 @@ eo:
           href='%{delegate_url}'>Delegiton</a> se vi bezonas ŝanĝi iun ajn el
           tiuj datumoj.
         reason:
+          #original_hash: 2e22133
+          no_access: vi ne havas rajton por redakti la uzanton
           #original_hash: 370ff12
           assigned: vi havas atribuitan WCA-ID-n
           #original_hash: 1c4670f
@@ -4572,11 +4574,15 @@ eo:
     #original_hash: 10bcdbd
     connect_wca_id: Ligu vian WCA-ID-n kun via konto!
   payments:
+    #original_hash: cfeba03
+    header: Pagohistorio
     messages:
       #original_hash: 2eac1cb
       charge_refunded: Pago estis repagita
       #original_hash: 1e1d219
       charges_refunded: Ĉiuj pagoj estis repagitaj
+      #original_hash: c677bd3
+      no_payments: Neniu pago estis farita por ĉi tiu registriĝo.
     errors:
       refund:
         #original_hash: 66475ae
@@ -4780,6 +4786,8 @@ eo:
     forum_enter_dob: >-
       Naskiĝdato estas deviga antaŭ ol aliri la forumon. Bonvolu eniri vian
       naskiĝdaton kaj sekve provi kaj aliri la forumon denove.
+    #original_hash: 56e3bad
+    refresh: Aktualigi
   faq:
     #original_hash: d790b40
     title: Plej Oftaj Demandoj
