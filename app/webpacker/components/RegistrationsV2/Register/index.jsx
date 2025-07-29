@@ -15,7 +15,7 @@ import usePerpetualState from '../hooks/usePerpetualState';
 import StepConfigProvider, { useStepConfig } from '../lib/StepConfigProvider';
 import StepNavigationProvider from '../lib/StepNavigationProvider';
 import { availableSteps, registrationOverviewConfig } from '../lib/stepConfigs';
-import FormObjectProvider, { useFormObject, useFormObjectState } from '../../wca/FormBuilder/provider/FormObjectProvider';
+import FormObjectProvider, { useFormObject } from '../../wca/FormBuilder/provider/FormObjectProvider';
 import { isQualifiedForEvent } from '../../../lib/helpers/qualifications';
 
 // The following states should show the Panel even when registration is already closed.
