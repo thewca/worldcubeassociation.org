@@ -22,21 +22,29 @@ class UploadJson
       errors.add(:results_file, "can't be blank")
     end
 
-    if competition.use_wca_registration?
+    if Competition.find(competition_id).use_wca_registration?
+      accepted_registrations_by_registrant_id = Registration.where(
+        competition_id: competition_id,
+        registrant_id: persons_to_import.pluck(:id),
+        competing_status: Registrations::Helper::STATUS_ACCEPTED,
+      ).index_by(&:registrant_id)
+
       persons_to_import.each do |person|
-        registration = Registration.find_by(competition_id: competition_id, registrant_id: person.id)
+        registration = accepted_registrations_by_registrant_id[person.id]
 
-        errors.add("There is no accepted registration for #{person.name} in this competition.") unless registration&.accepted?
+        if registration.nil?
+          errors.add("There is no accepted registration for #{person.name} in this competition.")
+        else
+          errors.add("Name in JSON and registration list doesn't match for #{person.name}") if registration.name != person.name
 
-        errors.add("Name in JSON and registration list doesn't match for #{person.name}") if registration.name != person.name
+          errors.add("DOB in JSON and registration list doesn't match for #{person.name}") if registration.dob != person.dob
 
-        errors.add("DOB in JSON and registration list doesn't match for #{person.name}") if registration.dob != person.dob
+          errors.add("Country in JSON and registration list doesn't match for #{person.name}") if registration.country.iso2 != person.country_iso2
 
-        errors.add("Country in JSON and registration list doesn't match for #{person.name}") if registration.country.iso2 != person.country_iso2
+          errors.add("Gender in JSON and registration list doesn't match for #{person.name}") if registration.gender != person.gender
 
-        errors.add("Gender in JSON and registration list doesn't match for #{person.name}") if registration.gender != person.gender
-
-        errors.add("WCA ID in JSON and registration list doesn't match for #{person.name}") if registration.wca_id != person.wca_id
+          errors.add("WCA ID in JSON and registration list doesn't match for #{person.name}") if registration.wca_id != person.wca_id
+        end
       end
     end
   end
