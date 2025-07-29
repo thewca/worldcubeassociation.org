@@ -7,11 +7,9 @@ import { useInputUpdater } from '../../lib/hooks/useInputState';
 function MatchingSelect({
   pickerKey,
   selectableEntities,
-  initialSelected,
+  selectedEntityId,
   updateTargetPath,
 }) {
-  const [inputState, setInputStateInternal] = useState(initialSelected.id);
-
   const pickerConfig = useMemo(
     () => pickerConfigurations.find((cfg) => cfg.key === pickerKey),
     [pickerKey],
@@ -23,12 +21,7 @@ function MatchingSelect({
     value: ent.id,
   })), [selectableEntities, pickerConfig]);
 
-  const setInputState = useCallback((id) => {
-    setInputStateInternal(id);
-    updateTargetPath(id);
-  }, [setInputStateInternal, updateTargetPath]);
-
-  const updateInputState = useInputUpdater(setInputState);
+  const updateInputState = useInputUpdater(updateTargetPath);
 
   return (
     <Form.Select
@@ -36,7 +29,7 @@ function MatchingSelect({
       compact
       label={pickerConfig.headerLabel}
       options={roundsSelectOptions}
-      value={inputState}
+      value={selectedEntityId}
       onChange={updateInputState}
     />
   );
@@ -127,7 +120,7 @@ export default function MoveMatchingRowModal({
               key={historyStep.dispatchKey}
               pickerKey={historyStep.pickerKey}
               selectableEntities={computeChoices(idx, targetPath)}
-              initialSelected={historyStep.entity}
+              selectedEntityId={targetPath[historyStep.dispatchKey]}
               updateTargetPath={(id) => updateTargetPath(historyStep.dispatchKey, id)}
             />
           ))}
