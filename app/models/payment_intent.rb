@@ -81,7 +81,7 @@ class PaymentIntent < ApplicationRecord
           cancellation_source: nil,
         )
       else
-        self.update! # Persist assign_common_attributes to the database if no other `update` call happens
+        self.save! # Persist assign_common_attributes to the database if no other `update` call happens
       end
     end
   end
