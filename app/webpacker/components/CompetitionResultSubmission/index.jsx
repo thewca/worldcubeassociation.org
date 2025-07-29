@@ -6,7 +6,7 @@ import FormToWrt from './FormToWrt';
 
 export default function Wrapper(
   {
-    competitionId, resultsSubmitted, alreadyHasSubmittedResult, canSubmitResults,
+    competitionId, resultsSubmitted, hasTemporaryResults, canSubmitResults,
   },
 ) {
   return (
@@ -14,7 +14,7 @@ export default function Wrapper(
       <CompetitionResultSubmission
         competitionId={competitionId}
         resultsSubmitted={resultsSubmitted}
-        alreadyHasSubmittedResult={alreadyHasSubmittedResult}
+        hasTemporaryResults={hasTemporaryResults}
         canSubmitResults={canSubmitResults}
       />
     </WCAQueryClientProvider>
@@ -23,7 +23,7 @@ export default function Wrapper(
 
 function CompetitionResultSubmission(
   {
-    competitionId, resultsSubmitted, alreadyHasSubmittedResult, canSubmitResults,
+    competitionId, resultsSubmitted, hasTemporaryResults, canSubmitResults,
   },
 ) {
   if (resultsSubmitted) {
@@ -38,17 +38,17 @@ function CompetitionResultSubmission(
       The result submission process has two steps:
       <List bulleted>
         <List.Item>
-          Uploading a valid JSON to the website or use the results submitted via WCA Live
+          Uploading a valid JSON to the website.
         </List.Item>
         <List.Item>
-          Submit these results to the WRT after addressing warnings if any.
+          Submit these results to the WRT after addressing warnings (if any).
         </List.Item>
       </List>
       <ImportResultsData
         competitionId={competitionId}
-        alreadyHasSubmittedResult={alreadyHasSubmittedResult}
+        hasTemporaryResults={hasTemporaryResults}
       />
-      {alreadyHasSubmittedResult && (
+      {hasTemporaryResults && (
         <FormToWrt competitionId={competitionId} canSubmitResults={canSubmitResults} />
       )}
     </>

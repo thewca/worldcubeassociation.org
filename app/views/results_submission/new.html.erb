@@ -6,7 +6,7 @@
   <%= react_component("CompetitionResultSubmission", {
     competitionId: @competition.id,
     resultsSubmitted: @competition.results_submitted?,
-    alreadyHasSubmittedResult: @competition.inbox_results.present?,
+    hasTemporaryResults: @competition.inbox_results.present?,
     canSubmitResults: @current_user.can_submit_competition_results?(@competition),
   }) %>
 <% end %>

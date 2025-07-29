@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Accordion, Form, Message } from 'semantic-ui-react';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import Errored from '../../Requests/Errored';
@@ -15,8 +15,6 @@ const DELEGATE_HANDBOOK_COMPETITION_RESULTS_URL = 'https://documents.worldcubeas
 const ERROR_MESSAGE_UPLOADED_RESULTS = "Please upload a JSON file and make sure the results don't contain any errors.";
 
 export default function FormToWrt({ competitionId, canSubmitResults }) {
-  const [activeAccordion, setActiveAccordion] = useState(true);
-
   const [confirmDetails, setConfirmDetails] = useCheckboxState(false);
   const [message, setMessage] = useInputState();
 
@@ -53,13 +51,10 @@ export default function FormToWrt({ competitionId, canSubmitResults }) {
 
   return (
     <Accordion fluid styled>
-      <Accordion.Title
-        active
-        onClick={() => setActiveAccordion((prevValue) => !prevValue)}
-      >
+      <Accordion.Title active>
         Submit to WRT
       </Accordion.Title>
-      <Accordion.Content active={activeAccordion}>
+      <Accordion.Content active>
         <ValidationOutput validationOutput={validationOutput} />
         {canSubmitResults && (
           <>
