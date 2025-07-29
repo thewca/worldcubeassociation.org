@@ -5,6 +5,8 @@ import I18n from '../../lib/i18n';
 import { useDispatchWrapper } from './reducer';
 import pickerConfigurations from './config';
 import MoveMatchingRowModal from './MoveMatchingRowModal';
+import _ from "lodash";
+import {compileLookup} from "./util";
 
 export default function PickerWithMatching({
   pickerKey,
@@ -13,7 +15,7 @@ export default function PickerWithMatching({
   expectedEntitiesLength = selectableEntities.length,
   entityLookup,
   dispatchMatchState,
-  nestedPickerComponent = undefined,
+  nestedPickers = [],
 }) {
   const pickerConfig = useMemo(
     () => pickerConfigurations.find((cfg) => cfg.key === pickerKey),
@@ -33,7 +35,7 @@ export default function PickerWithMatching({
         selectableEntities={selectableEntities}
         entityLookup={entityLookup}
         dispatchMatchState={dispatchMatchState}
-        nestedPickerComponent={nestedPickerComponent}
+        nestedPickers={nestedPickers}
       />
     );
   }
@@ -45,7 +47,7 @@ export default function PickerWithMatching({
       selectableEntities={selectableEntities}
       entityLookup={entityLookup}
       dispatchMatchState={dispatchMatchState}
-      nestedPickerComponent={nestedPickerComponent}
+      nestedPickers={nestedPickers}
     />
   );
 }
@@ -56,7 +58,7 @@ function EntityPicker({
   selectableEntities = [],
   entityLookup,
   dispatchMatchState,
-  nestedPickerComponent = undefined,
+  nestedPickers = [],
 }) {
   const { headerLabel, computeEntityName } = pickerConfig;
 
@@ -100,7 +102,7 @@ function EntityPicker({
           selectableEntities={selectableEntities}
           entityLookup={entityLookup}
           dispatchMatchState={dispatchMatchState}
-          nestedPickerComponent={nestedPickerComponent}
+          nestedPickers={nestedPickers}
         />
       )}
     </>
@@ -114,7 +116,7 @@ function SelectedEntityPanel({
   selectableEntities,
   entityLookup,
   dispatchMatchState,
-  nestedPickerComponent: NestedPicker = undefined,
+  nestedPickers,
 }) {
   const {
     key: pickerKey,
@@ -165,22 +167,34 @@ function SelectedEntityPanel({
     [computeDefinitionName, selectedEntity],
   );
 
+  const [nestedPicker, ...deepNestedPickers] = nestedPickers;
+
   const continuedHistory = useMemo(() => (
     [...pickerHistory, {
       pickerKey,
       dispatchKey,
       entity: selectedEntity,
       choices: selectableEntities,
+      lookup: entityLookup,
+      nestedPicker,
     }]
-  ), [pickerHistory, pickerKey, dispatchKey, selectedEntity, selectableEntities]);
+  ), [
+    pickerHistory,
+    pickerKey,
+    dispatchKey,
+    selectedEntity,
+    selectableEntities,
+    entityLookup,
+    nestedPicker,
+  ]);
 
-  const selectedEntityState = entityLookup[selectedEntity.id];
+  const selectedEntityRows = entityLookup[selectedEntity.id];
   const expectedNumOfRows = computeExpectedRowCount?.(selectedEntity, pickerHistory);
 
   return (
     <>
       <ScrambleMatch
-        matchableRows={selectedEntityState}
+        matchableRows={selectedEntityRows}
         expectedNumOfRows={expectedNumOfRows}
         onRowDragCompleted={onRoundDragCompleted}
         computeDefinitionName={computeIndexDefinitionName}
@@ -196,13 +210,15 @@ function SelectedEntityPanel({
         pickerHistory={continuedHistory}
         pickerConfig={pickerConfig}
       />
-      {NestedPicker !== undefined && (
-        <NestedPicker
+      {nestedPicker !== undefined && nestedPicker.active && (
+        <PickerWithMatching
+          pickerKey={nestedPicker.key}
           pickerHistory={continuedHistory}
-          selectedEntity={selectedEntity}
+          selectableEntities={selectedEntityRows}
           expectedEntitiesLength={expectedNumOfRows}
-          selectedEntityState={selectedEntityState}
+          entityLookup={compileLookup(selectedEntityRows, nestedPicker)}
           dispatchMatchState={wrappedDispatch}
+          nestedPickers={deepNestedPickers}
         />
       )}
     </>

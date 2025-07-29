@@ -1,8 +1,9 @@
-import React, { useCallback, useMemo, useState } from 'react';
-import { Button, Form, Modal } from 'semantic-ui-react';
+import React, {useCallback, useMemo, useState} from 'react';
+import {Button, Form, Modal} from 'semantic-ui-react';
 import _ from 'lodash';
 import pickerConfigurations from './config';
-import { useInputUpdater } from '../../lib/hooks/useInputState';
+import {useInputUpdater} from '../../lib/hooks/useInputState';
+import {compileLookup} from "./util";
 
 function MatchingSelect({
   pickerKey,
@@ -70,6 +71,24 @@ export default function MoveMatchingRowModal({
     [setTargetPath],
   );
 
+  const computeChoices = useCallback((historyIdx) => {
+    const topLevelLookup = pickerHistory[0]?.lookup || {};
+
+    const parentSteps = pickerHistory.slice(0, historyIdx);
+
+    const finalLookup = parentSteps.reduce((currentLookup, historyStep) => {
+      const currentChoice = targetPath[historyStep.dispatchKey];
+      const lookupResult = currentLookup[currentChoice];
+
+      return compileLookup(lookupResult, historyStep.nestedPicker);
+    }, topLevelLookup);
+
+    const choiceKeys = Object.keys(finalLookup);
+    const currentLevelChoices = pickerHistory[historyIdx].choices;
+
+    return currentLevelChoices.filter((item) => choiceKeys.includes(item.id.toString()));
+  }, [pickerHistory, targetPath]);
+
   const canMove = !_.isEqual(targetPath, basePath);
 
   if (!selectedMatchingRow) {
@@ -89,10 +108,10 @@ export default function MoveMatchingRowModal({
       </Modal.Header>
       <Modal.Content>
         <Form>
-          {pickerHistory.map((historyStep) => (
+          {pickerHistory.map((historyStep, idx) => (
             <MatchingSelect
               pickerKey={historyStep.pickerKey}
-              selectableEntities={historyStep.choices}
+              selectableEntities={computeChoices(idx)}
               initialSelected={historyStep.entity}
               updateTargetPath={(id) => updateTargetPath(historyStep.dispatchKey, id)}
             />
