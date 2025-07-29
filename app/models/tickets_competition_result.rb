@@ -59,4 +59,12 @@ class TicketsCompetitionResult < ApplicationRecord
       field_value: ticket_metadata.status,
     )
   end
+
+  def merge_temporary_results
+    ActiveRecord::Base.transaction do
+      CompetitionResultsImport.merge_temporary_results(competition)
+
+      self.update!(status: TicketsCompetitionResult.statuses[:merged_temporary_results])
+    end
+  end
 end

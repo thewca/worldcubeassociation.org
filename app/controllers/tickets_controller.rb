@@ -203,7 +203,8 @@ class TicketsController < ApplicationController
 
   def merge_temporary_results
     ticket = Ticket.find(params.require(:ticket_id))
-    CompetitionResultsImport.merge_temporary_results(ticket)
+
+    ticket.metadata.merge_temporary_results
 
     render status: :ok, json: { success: true }
   end

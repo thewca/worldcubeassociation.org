@@ -85,7 +85,7 @@ class AdminController < ApplicationController
   def import_inbox_results
     @competition = competition_from_params
 
-    CompetitionResultsImport.merge_temporary_results(@competition.result_ticket)
+    @competition.tickets_competition_result.merge_temporary_results
 
     load_result_posting_steps do
       render partial: 'import_results_steps'
