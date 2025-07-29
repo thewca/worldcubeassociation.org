@@ -7,13 +7,13 @@ import { humanizeActivityCode } from '../../lib/utils/wcif';
 const ATTEMPT_BASED_EVENTS = ['333fm', '333mbf'];
 
 const isForAttemptBasedEvent = (pickerHistory) => {
-  const selectedEvent = pickerHistory.find((hist) => hist.picker === 'events')?.entity;
+  const selectedEvent = pickerHistory.find((hist) => hist.pickerKey === 'events')?.entity;
 
   return ATTEMPT_BASED_EVENTS.includes(selectedEvent?.id);
 };
 
 const inferExpectedAttemptNum = (pickerHistory) => {
-  const selectedRound = pickerHistory.find((hist) => hist.picker === 'rounds')?.entity;
+  const selectedRound = pickerHistory.find((hist) => hist.pickerKey === 'rounds')?.entity;
 
   const roundFormat = formats.byId[selectedRound?.format];
   return roundFormat?.expected_solve_count;
