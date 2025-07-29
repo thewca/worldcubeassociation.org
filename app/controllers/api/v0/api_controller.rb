@@ -110,6 +110,10 @@ class Api::V0::ApiController < ApplicationController
     }
   end
 
+  def known_timezones
+    render json: Country::SUPPORTED_TIMEZONES
+  end
+
   def search(*models)
     query = params[:q]&.slice(0...SearchResultsController::SEARCH_QUERY_LIMIT)
 
