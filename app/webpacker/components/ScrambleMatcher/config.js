@@ -45,6 +45,7 @@ const pickerConfigurations = [
   {
     key: 'events',
     dispatchKey: 'eventId',
+    matchingKey: 'rounds',
     headerLabel: 'Events',
     customPickerComponent: EventSelectorCompat,
     computeEntityName: (event) => events.byId[event.id].name,
@@ -53,6 +54,7 @@ const pickerConfigurations = [
   {
     key: 'rounds',
     dispatchKey: 'roundId',
+    matchingKey: 'scrambleSets',
     headerLabel: 'Rounds',
     computeEntityName: (round) => humanizeActivityCode(round.id),
     computeDefinitionName: (round, idx) => `${humanizeActivityCode(round.id)}, Group ${idx + 1}`,
@@ -63,6 +65,7 @@ const pickerConfigurations = [
   {
     key: 'groups',
     dispatchKey: 'groupId',
+    matchingKey: 'inbox_scrambles',
     headerLabel: 'Groups',
     computeEntityName: (scrSet, idx) => `Group ${idx + 1}`,
     computeDefinitionName: (scrSet, idx) => `Attempt ${idx + 1}`,

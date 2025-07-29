@@ -3,7 +3,6 @@ import { Button, Form, Modal } from 'semantic-ui-react';
 import _ from 'lodash';
 import pickerConfigurations from './config';
 import { useInputUpdater } from '../../lib/hooks/useInputState';
-import { compileLookup } from './util';
 
 function MatchingSelect({
   pickerKey,
@@ -34,6 +33,7 @@ function MatchingSelect({
   return (
     <Form.Select
       inline
+      compact
       label={pickerConfig.headerLabel}
       options={roundsSelectOptions}
       value={inputState}
@@ -62,31 +62,26 @@ export default function MoveMatchingRowModal({
   const [targetPath, setTargetPath] = useState(basePath);
 
   const computeChoices = useCallback((historyIdx, selectedPath) => {
-    const topLevelLookup = pickerHistory[0]?.lookup || {};
+    const topLevelChoices = pickerHistory[0]?.choices || [];
 
     const parentSteps = pickerHistory.slice(0, historyIdx);
 
-    const finalLookup = parentSteps.reduce((currentLookup, historyStep) => {
-      const currentChoice = selectedPath[historyStep.dispatchKey];
-      const lookupResult = currentLookup[currentChoice];
+    return parentSteps.reduce((currentChoices, historyStep) => {
+      const choiceInPath = selectedPath[historyStep.dispatchKey];
+      const lookupResult = currentChoices.find((ent) => ent.id === choiceInPath);
 
-      return compileLookup(lookupResult, historyStep.nestedPicker);
-    }, topLevelLookup);
-
-    const choiceKeys = Object.keys(finalLookup);
-    const currentLevelChoices = pickerHistory[historyIdx].choices;
-
-    return currentLevelChoices.filter((item) => choiceKeys.includes(item.id.toString()));
+      return lookupResult[historyStep.matchingKey];
+    }, topLevelChoices);
   }, [pickerHistory]);
 
   const fixSelectionPath = useCallback(
     (selectedPath) => pickerHistory.reduce((correctedPath, historyStep, idx) => {
-      const availableLookup = computeChoices(idx, correctedPath);
+      const availableChoices = computeChoices(idx, correctedPath);
 
       const originalChoiceId = selectedPath[historyStep.dispatchKey];
-      const firstAvailableFallback = availableLookup[0];
+      const firstAvailableFallback = availableChoices[0];
 
-      const finalChoice = availableLookup.find(
+      const finalChoice = availableChoices.find(
         (item) => item.id === originalChoiceId,
       ) ?? firstAvailableFallback;
 
@@ -129,6 +124,7 @@ export default function MoveMatchingRowModal({
         <Form>
           {pickerHistory.map((historyStep, idx) => (
             <MatchingSelect
+              key={historyStep.dispatchKey}
               pickerKey={historyStep.pickerKey}
               selectableEntities={computeChoices(idx, targetPath)}
               initialSelected={historyStep.entity}

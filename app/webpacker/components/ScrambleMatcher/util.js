@@ -42,10 +42,3 @@ export function moveArrayItem(arr, fromIndex, toIndex) {
     ...withoutMovedItem.slice(toIndex),
   ];
 }
-
-export function compileLookup(rows, pickerInfo = undefined) {
-  return _.mapValues(
-    _.keyBy(rows, 'id'),
-    pickerInfo?.mapping,
-  );
-}

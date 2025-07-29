@@ -5,14 +5,12 @@ import I18n from '../../lib/i18n';
 import { useDispatchWrapper } from './reducer';
 import pickerConfigurations from './config';
 import MoveMatchingRowModal from './MoveMatchingRowModal';
-import { compileLookup } from './util';
 
 export default function PickerWithMatching({
   pickerKey,
   pickerHistory = [],
   selectableEntities = [],
   expectedEntitiesLength = selectableEntities.length,
-  entityLookup,
   dispatchMatchState,
   nestedPickers = [],
 }) {
@@ -32,7 +30,6 @@ export default function PickerWithMatching({
         pickerHistory={pickerHistory}
         selectedEntity={selectableEntities[0]}
         selectableEntities={selectableEntities}
-        entityLookup={entityLookup}
         dispatchMatchState={dispatchMatchState}
         nestedPickers={nestedPickers}
       />
@@ -44,7 +41,6 @@ export default function PickerWithMatching({
       pickerConfig={pickerConfig}
       pickerHistory={pickerHistory}
       selectableEntities={selectableEntities}
-      entityLookup={entityLookup}
       dispatchMatchState={dispatchMatchState}
       nestedPickers={nestedPickers}
     />
@@ -55,7 +51,6 @@ function EntityPicker({
   pickerConfig,
   pickerHistory,
   selectableEntities = [],
-  entityLookup,
   dispatchMatchState,
   nestedPickers = [],
 }) {
@@ -113,7 +108,6 @@ function EntityPicker({
           pickerHistory={pickerHistory}
           selectedEntity={selectedEntity}
           selectableEntities={selectableEntities}
-          entityLookup={entityLookup}
           dispatchMatchState={dispatchMatchState}
           nestedPickers={nestedPickers}
         />
@@ -127,13 +121,13 @@ function SelectedEntityPanel({
   pickerHistory,
   selectedEntity,
   selectableEntities,
-  entityLookup,
   dispatchMatchState,
   nestedPickers,
 }) {
   const {
     key: pickerKey,
     dispatchKey,
+    matchingKey,
     computeDefinitionName,
     computeMatchingCellName,
     computeMatchingRowDetails = undefined,
@@ -187,22 +181,22 @@ function SelectedEntityPanel({
     [...pickerHistory, {
       pickerKey,
       dispatchKey,
+      matchingKey,
       entity: selectedEntity,
       choices: selectableEntities,
-      lookup: entityLookup,
       nestedPicker,
     }]
   ), [
     pickerHistory,
     pickerKey,
     dispatchKey,
+    matchingKey,
     selectedEntity,
     selectableEntities,
-    entityLookup,
     nestedPicker,
   ]);
 
-  const selectedEntityRows = entityLookup[selectedEntity.id];
+  const selectedEntityRows = selectedEntity[matchingKey];
   const expectedNumOfRows = computeExpectedRowCount?.(selectedEntity, pickerHistory);
 
   const nestedPickerActive = pickerConfigurations.find((cfg) => cfg.key === nestedPicker?.key)
@@ -237,7 +231,6 @@ function SelectedEntityPanel({
           pickerHistory={continuedHistory}
           selectableEntities={selectedEntityRows}
           expectedEntitiesLength={expectedNumOfRows}
-          entityLookup={compileLookup(selectedEntityRows, nestedPicker)}
           dispatchMatchState={wrappedDispatch}
           nestedPickers={deepNestedPickers}
         />
