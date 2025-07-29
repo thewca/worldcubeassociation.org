@@ -7,7 +7,7 @@ export const requirementsStepConfig = {
   key: 'requirements',
   i18nKey: 'competitions.registration_v2.register.panel.requirements',
   Component: RegistrationRequirements,
-  isCompleted: (stepPayload) => stepPayload.termsAndConditionsAcknowledged
+  isCompleted: (stepPayload) => stepPayload.regRequirements?.infoAcknowledged
       || stepPayload.isRegistered,
 };
 

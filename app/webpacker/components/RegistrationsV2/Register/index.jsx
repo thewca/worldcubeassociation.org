@@ -15,7 +15,7 @@ import usePerpetualState from '../hooks/usePerpetualState';
 import StepConfigProvider, { useStepConfig } from '../lib/StepConfigProvider';
 import StepNavigationProvider from '../lib/StepNavigationProvider';
 import { availableSteps, registrationOverviewConfig } from '../lib/stepConfigs';
-import FormObjectProvider, { useFormObjectState } from '../../wca/FormBuilder/provider/FormObjectProvider';
+import FormObjectProvider, { useFormObject, useFormObjectState } from '../../wca/FormBuilder/provider/FormObjectProvider';
 import { isQualifiedForEvent } from '../../../lib/helpers/qualifications';
 
 // The following states should show the Panel even when registration is already closed.
@@ -128,7 +128,6 @@ function FormObjectWrapper({
     <FormObjectProvider initialObject={formRegistration}>
       <RegisterNavigationWrapper
         steps={steps}
-        registrationPayload={registrationPayload}
         competitionInfo={competitionInfo}
         registrationRejected={registrationRejected}
         userInfo={userInfo}
@@ -141,20 +140,19 @@ function FormObjectWrapper({
 
 function RegisterNavigationWrapper({
   steps,
-  registrationPayload,
   registrationRejected,
   competitionInfo,
   userInfo,
   userCanPreRegister,
   cannotRegisterReasons,
 }) {
-  const [termsAndConditionsAcknowledged] = useFormObjectState('infoAcknowledged', ['regRequirements']);
+  const formObject = useFormObject();
 
   return (
     <StepNavigationProvider
       stepsConfiguration={steps}
       availableSteps={availableSteps}
-      payload={{ ...registrationPayload, termsAndConditionsAcknowledged }}
+      payload={formObject}
       navigationDisabled={registrationRejected}
       summaryPanelKey={registrationOverviewConfig.key}
     >
