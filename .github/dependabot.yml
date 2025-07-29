@@ -40,6 +40,10 @@ updates:
     fullcalendar:
       patterns:
         - "@fullcalendar/*"
+    nextjs:
+      patterns:
+        - "next"
+        - "eslint-config-next"
   open-pull-requests-limit: 10
 - package-ecosystem: github-actions
   directory: "/"
