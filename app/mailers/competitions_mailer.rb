@@ -4,6 +4,7 @@ require 'fileutils'
 
 class CompetitionsMailer < ApplicationMailer
   include MailersHelper
+
   helper :markdown
 
   def notify_wcat_of_confirmed_competition(confirmer, competition)
