@@ -216,6 +216,7 @@ function SelectedEntityPanel({
             moveAwayAction={onMoveAway}
           />
           <MoveMatchingRowModal
+            key={modalPayload?.id}
             isOpen={modalPayload !== null}
             onClose={onModalClose}
             onConfirm={onModalConfirm}
