@@ -52,7 +52,7 @@ class PaymentIntent < ApplicationRecord
             confirmed_at: source_datetime,
             confirmation_source: action_source,
             wca_status: updated_wca_status,
-            error_details: api_intent.last_payment_error,
+            error_details: payment_error(api_intent),
           )
         end
 
@@ -72,7 +72,7 @@ class PaymentIntent < ApplicationRecord
             canceled_at: source_datetime,
             cancellation_source: action_source,
             wca_status: updated_wca_status,
-            error_details: api_intent.last_payment_error,
+            error_details: payment_error(api_intent),
           )
         end
       when PaymentIntent.wca_statuses[:created],
@@ -84,15 +84,22 @@ class PaymentIntent < ApplicationRecord
           canceled_at: nil,
           cancellation_source: nil,
           wca_status: updated_wca_status,
-          error_details: api_intent.last_payment_error,
+          error_details: payment_error(api_intent),
         )
       else
-        self.update!(wca_status: updated_wca_status, error_details: api_record.last_payment_error)
+        self.update!(wca_status: updated_wca_status, error_details: payment_error(api_intent))
       end
     end
   end
 
   private
+
+    def payment_error(api_intent)
+      case self.payment_record_type
+      when "StripeRecord"
+        return api_intent.last_payment_error
+      end
+    end
 
     def wca_status_consistency
       # Check that payment_record's status is in sync with wca_status
