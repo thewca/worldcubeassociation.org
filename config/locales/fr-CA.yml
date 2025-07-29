@@ -1061,12 +1061,12 @@ fr-CA:
           otp_email:
             #original_hash: a238ac2
             subject: Votre code à usage unique pour le site internet de la WCA
-            #original_hash: 7aa8fc0
+            #original_hash: 7ccea57
             2fa_attempt: >-
               Vous être en train de vous connecter sur le site de la WCA.
               L'authentification à deux facteur est activée pour votre compte,
               et vous venez de demander que l'on vous envoie un mot de passe à
-              usage unique par courriel. Vous le trouverez ci-dessous :
+              usage unique via courriel. Vous le trouverez ci-dessous :
             #original_hash: 9b44e16
             disclaimer: >-
               Si vous n'avez pas demandé ce code d'authentification, veuillez
