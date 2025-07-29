@@ -1,7 +1,5 @@
-import React, { useCallback } from 'react';
-import { activityCodeToName } from '@wca/helpers';
+import React from 'react';
 import Groups from './Groups';
-import { scrambleSetToDetails, scrambleSetToName } from './util';
 import PickerWithMatching from './PickerWithMatching';
 
 function NestedGroupsPicker({
@@ -28,19 +26,12 @@ export default function Rounds({
 }) {
   const nestedPickerComponent = showGroupsPicker ? NestedGroupsPicker : undefined;
 
-  const extractMatchingRows = useCallback((rd) => matchState[rd.id], [matchState]);
-
   return (
     <PickerWithMatching
-      pickerHeaderLabel="Rounds"
+      pickerKey="rounds"
       selectableEntities={wcifRounds}
-      extractMatchingRows={extractMatchingRows}
+      matchState={matchState}
       dispatchMatchState={dispatchMatchState}
-      computeEntityName={(rd) => activityCodeToName(rd.id)}
-      computeDefinitionName={(rd, idx) => `${activityCodeToName(rd.id)}, Group ${idx + 1}`}
-      computeMatchingCellName={scrambleSetToName}
-      computeMatchingRowDetails={scrambleSetToDetails}
-      computeExpectedRowCount={(rd) => rd.scrambleSetCount}
       nestedPickerComponent={nestedPickerComponent}
     />
   );

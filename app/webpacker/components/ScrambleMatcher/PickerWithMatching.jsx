@@ -7,32 +7,33 @@ import I18n from '../../lib/i18n';
 import { useDispatchWrapper } from './reducer';
 import useInputState from '../../lib/hooks/useInputState';
 import { formats } from '../../lib/wca-data.js.erb';
+import pickerConfigurations from './config';
 
 export default function PickerWithMatching({
-  pickerHeaderLabel,
+  pickerKey,
   selectableEntities = [],
   expectedEntitiesLength = selectableEntities.length,
-  extractMatchingRows,
+  matchState,
   dispatchMatchState,
-  computeEntityName,
-  computeDefinitionName,
-  computeMatchingCellName,
-  computeMatchingRowDetails = undefined,
-  computeExpectedRowCount = undefined,
   nestedPickerComponent = undefined,
 }) {
+  const pickerConfig = useMemo(
+    () => pickerConfigurations.find((cfg) => cfg.key === pickerKey),
+    [pickerKey],
+  );
+
+  if (!pickerConfig) {
+    return null;
+  }
+
   if (expectedEntitiesLength === 1) {
     return (
       <SelectedEntityPanel
+        pickerConfig={pickerConfig}
         selectedEntity={selectableEntities[0]}
-        extractMatchingRows={extractMatchingRows}
         selectableEntities={selectableEntities}
+        matchState={matchState}
         dispatchMatchState={dispatchMatchState}
-        computeEntityName={computeEntityName}
-        computeDefinitionName={computeDefinitionName}
-        computeMatchingCellName={computeMatchingCellName}
-        computeMatchingRowDetails={computeMatchingRowDetails}
-        computeExpectedRowCount={computeExpectedRowCount}
         nestedPickerComponent={nestedPickerComponent}
       />
     );
@@ -40,32 +41,24 @@ export default function PickerWithMatching({
 
   return (
     <EntityPicker
-      headerLabel={pickerHeaderLabel}
+      pickerConfig={pickerConfig}
       selectableEntities={selectableEntities}
-      extractMatchingRows={extractMatchingRows}
+      matchState={matchState}
       dispatchMatchState={dispatchMatchState}
-      computeEntityName={computeEntityName}
-      computeDefinitionName={computeDefinitionName}
-      computeMatchingCellName={computeMatchingCellName}
-      computeMatchingRowDetails={computeMatchingRowDetails}
-      computeExpectedRowCount={computeExpectedRowCount}
       nestedPickerComponent={nestedPickerComponent}
     />
   );
 }
 
 function EntityPicker({
-  headerLabel,
+  pickerConfig,
   selectableEntities = [],
-  extractMatchingRows,
+  matchState,
   dispatchMatchState,
-  computeEntityName,
-  computeDefinitionName,
-  computeMatchingCellName,
-  computeMatchingRowDetails = undefined,
-  computeExpectedRowCount = undefined,
   nestedPickerComponent = undefined,
 }) {
+  const { headerLabel, computeEntityName } = pickerConfig;
+
   const [selectedEntityId, setSelectedEntityId] = useState();
 
   const selectedEntity = useMemo(
@@ -100,15 +93,11 @@ function EntityPicker({
       </Button.Group>
       {selectedEntity && (
         <SelectedEntityPanel
+          pickerConfig={pickerConfig}
           selectedEntity={selectedEntity}
-          extractMatchingRows={extractMatchingRows}
           selectableEntities={selectableEntities}
+          matchState={matchState}
           dispatchMatchState={dispatchMatchState}
-          computeEntityName={computeEntityName}
-          computeDefinitionName={computeDefinitionName}
-          computeMatchingCellName={computeMatchingCellName}
-          computeMatchingRowDetails={computeMatchingRowDetails}
-          computeExpectedRowCount={computeExpectedRowCount}
           nestedPickerComponent={nestedPickerComponent}
         />
       )}
@@ -117,17 +106,21 @@ function EntityPicker({
 }
 
 function SelectedEntityPanel({
+  pickerConfig,
   selectedEntity,
-  extractMatchingRows,
   selectableEntities,
+  matchState,
   dispatchMatchState,
-  computeEntityName,
-  computeDefinitionName,
-  computeMatchingCellName,
-  computeMatchingRowDetails = undefined,
-  computeExpectedRowCount = undefined,
   nestedPickerComponent: NestedPicker = undefined,
 }) {
+  const {
+    extractMatchingRows,
+    computeDefinitionName,
+    computeMatchingCellName,
+    computeMatchingRowDetails = undefined,
+    computeExpectedRowCount = undefined,
+  } = pickerConfig;
+
   const [modalPayload, setModalPayload] = useState(null);
 
   const onMoveAway = useCallback((entity) => {
@@ -175,7 +168,7 @@ function SelectedEntityPanel({
     [selectedEntity.format],
   );
 
-  const selectedMatchState = extractMatchingRows(selectedEntity);
+  const selectedMatchState = extractMatchingRows(matchState, selectedEntity);
   const expectedNumOfRows = computeExpectedRowCount?.(selectedEntity);
 
   return (
@@ -196,8 +189,7 @@ function SelectedEntityPanel({
         selectedMatchingRow={modalPayload}
         selectedEntity={selectedEntity}
         selectableEntities={selectableEntities}
-        computeEntityName={computeEntityName}
-        computeMatchingCellName={computeMatchingCellName}
+        pickerConfig={pickerConfig}
       />
       {NestedPicker !== undefined && (
         <NestedPicker
@@ -218,9 +210,13 @@ function MoveScrambleSetModal({
   selectedMatchingRow,
   selectedEntity,
   selectableEntities,
-  computeEntityName,
-  computeMatchingCellName,
+  pickerConfig,
 }) {
+  const {
+    computeEntityName,
+    computeMatchingCellName,
+  } = pickerConfig;
+
   const [targetRound, setTargetRound] = useInputState(selectedEntity.id);
 
   const roundsSelectOptions = useMemo(() => selectableEntities.map((ent) => ({

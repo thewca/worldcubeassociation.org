@@ -1,29 +1,18 @@
-import React, { useCallback } from 'react';
-import { scrambleToName } from './util';
+import React from 'react';
 import PickerWithMatching from './PickerWithMatching';
 
 export default function Groups({
   scrambleSets,
   scrambleSetCount,
-  expectedSolveCount,
   dispatchMatchState,
 }) {
-  const extractMatchingRows = useCallback(
-    (selectedSet) => scrambleSets.find((scrSet) => scrSet.id === selectedSet.id)?.inbox_scrambles,
-    [scrambleSets],
-  );
-
   return (
     <PickerWithMatching
-      pickerHeaderLabel="Groups"
+      pickerKey="groups"
       selectableEntities={scrambleSets}
       expectedEntitiesLength={scrambleSetCount}
-      extractMatchingRows={extractMatchingRows}
+      matchState={scrambleSets}
       dispatchMatchState={dispatchMatchState}
-      computeEntityName={(scrSet, idx) => `Group ${idx + 1}`}
-      computeDefinitionName={(scrSet, idx) => `Attempt ${idx + 1}`}
-      computeMatchingCellName={scrambleToName}
-      computeExpectedRowCount={() => expectedSolveCount}
     />
   );
 }
