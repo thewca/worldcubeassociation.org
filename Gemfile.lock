@@ -449,7 +449,7 @@ GEM
     jmespath (1.6.2)
     js_cookie_rails (2.2.0)
       railties (>= 3.1)
-    json (2.13.1)
+    json (2.13.2)
     json-schema (5.2.1)
       addressable (~> 2.8)
       bigdecimal (~> 3.1)
@@ -584,7 +584,7 @@ GEM
       rexml (>= 3.3.9)
     package_json (0.1.0)
     parallel (1.27.0)
-    parser (3.3.8.0)
+    parser (3.3.9.0)
       ast (~> 2.4.1)
       racc
     playwright-ruby-client (1.54.0)
@@ -731,7 +731,7 @@ GEM
     rspec-retry (0.6.2)
       rspec-core (> 3.3)
     rspec-support (3.13.4)
-    rubocop (1.78.0)
+    rubocop (1.79.0)
       json (~> 2.3)
       language_server-protocol (~> 3.17.0.2)
       lint_roller (~> 1.1.0)
@@ -739,8 +739,9 @@ GEM
       parser (>= 3.3.0.2)
       rainbow (>= 2.2.2, < 4.0)
       regexp_parser (>= 2.9.3, < 3.0)
-      rubocop-ast (>= 1.45.1, < 2.0)
+      rubocop-ast (>= 1.46.0, < 2.0)
       ruby-progressbar (~> 1.7)
+      tsort (>= 0.2.0)
       unicode-display_width (>= 2.4.0, < 4.0)
     rubocop-ast (1.46.0)
       parser (>= 3.3.7.2)
@@ -1284,7 +1285,7 @@ CHECKSUMS
   jbuilder (2.13.0) sha256=7200a38a1c0081aa81b7a9757e7a299db75bc58cf1fd45ca7919a91627d227d6
   jmespath (1.6.2) sha256=238d774a58723d6c090494c8879b5e9918c19485f7e840f2c1c7532cf84ebcb1
   js_cookie_rails (2.2.0) sha256=06e6b27ee093945c3acf3982d2dbf9e9117d1130f33bb07e1660ebea68229c62
-  json (2.13.1) sha256=8e7cf4bb44a789ac5fc62869c7187986251c3172d9bdfa60b92c63d6ecab0ffc
+  json (2.13.2) sha256=02e1f118d434c6b230a64ffa5c8dee07e3ec96244335c392eaed39e1199dbb68
   json-schema (5.2.1) sha256=1ef39286c4771e7a71661d955fec9b66d1d1708547a0071c130af7c0a9264898
   jwt (2.10.2) sha256=31e1ee46f7359883d5e622446969fe9c118c3da87a0b1dca765ce269c3a0c4f4
   kaminari (1.2.2) sha256=c4076ff9adccc6109408333f87b5c4abbda5e39dc464bd4c66d06d9f73442a3e
@@ -1349,7 +1350,7 @@ CHECKSUMS
   overcommit (0.68.0) sha256=bfbcd26388e024e10a3d720f03077bc9389fe7c3beac360263b6c77926bcc8d0
   package_json (0.1.0) sha256=20af98c0e45dadcd48b6f45a3324e948f578e7549365671b97faca4637770256
   parallel (1.27.0) sha256=4ac151e1806b755fb4e2dc2332cbf0e54f2e24ba821ff2d3dcf86bf6dc4ae130
-  parser (3.3.8.0) sha256=2476364142b307fa5a1b1ece44f260728be23858a9c71078e956131a75453c45
+  parser (3.3.9.0) sha256=94d6929354b1a6e3e1f89d79d4d302cc8f5aa814431a6c9c7e0623335d7687f2
   playwright-ruby-client (1.54.0) sha256=d4053c946c3e5fa4044d4942feeb6661cf67f1bcfb3445e992bc887e737a4381
   pp (0.6.2) sha256=947ec3120c6f92195f8ee8aa25a7b2c5297bb106d83b41baa02983686577b6ff
   premailer (1.22.0) sha256=538935ebc4a75bfdd1aa624bd348e54986902b6caf08ceaaa6297fc7388227da
@@ -1404,7 +1405,7 @@ CHECKSUMS
   rspec-rails (8.0.1) sha256=0c3700b10ab6d7c648c4cd554023d8c2b5b07e7f01205f7608f0c511cf686505
   rspec-retry (0.6.2) sha256=6101ba23a38809811ae3484acde4ab481c54d846ac66d5037ccb40131a60d858
   rspec-support (3.13.4) sha256=184b1814f6a968102b57df631892c7f1990a91c9a3b9e80ef892a0fc2a71a3f7
-  rubocop (1.78.0) sha256=8b74a6f912eb4fd3e6878851f7f7f45dcad8c7185c34250d4f952b0ee80d6bc0
+  rubocop (1.79.0) sha256=c709e83b16f9fced295d83d190a3a5bbcc46c419d8f9b85f259b99ba6faf5bbe
   rubocop-ast (1.46.0) sha256=0da7f6ad5b98614f89b74f11873c191059c823eae07d6ffd40a42a3338f2232b
   rubocop-capybara (2.22.1) sha256=ced88caef23efea53f46e098ff352f8fc1068c649606ca75cb74650970f51c0c
   rubocop-factory_bot (2.27.1) sha256=9d744b5916778c1848e5fe6777cc69855bd96548853554ec239ba9961b8573fe
