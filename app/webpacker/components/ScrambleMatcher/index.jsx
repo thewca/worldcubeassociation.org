@@ -6,14 +6,14 @@ import React, {
 import { Button, Divider, Message } from 'semantic-ui-react';
 import _ from 'lodash';
 import { useMutation } from '@tanstack/react-query';
-import { activityCodeToName } from '@wca/helpers';
 import WCAQueryClientProvider from '../../lib/providers/WCAQueryClientProvider';
 import FileUpload from './FileUpload';
-import Events from './Events';
+import MatchingPickerChain from './MatchingPickerChain';
 import { fetchJsonOrError } from '../../lib/requests/fetchWithAuthenticityToken';
 import { scramblesUpdateRoundMatchingUrl } from '../../lib/requests/routes.js.erb';
 import scrambleMatchReducer, { initializeState } from './reducer';
 import useUnsavedChangesAlert from '../../lib/hooks/useUnsavedChangesAlert';
+import { humanizeActivityCode } from '../../lib/utils/wcif';
 
 export default function Wrapper({
   wcifEvents,
@@ -150,7 +150,7 @@ function ScrambleMatcher({
                 <Message.Item key={id}>
                   Missing scramble sets for round
                   {' '}
-                  {activityCodeToName(id)}
+                  {humanizeActivityCode(id)}
                 </Message.Item>
               ))}
             </Message.List>
@@ -165,7 +165,7 @@ function ScrambleMatcher({
               <Message.Item key={id}>
                 Missing scrambles in round
                 {' '}
-                {activityCodeToName(id)}
+                {humanizeActivityCode(id)}
               </Message.Item>
             ))}
           </Message.List>
@@ -186,7 +186,7 @@ function ScrambleMatcher({
           your changes!
         </Message>
       )}
-      <Events
+      <MatchingPickerChain
         wcifEvents={wcifEvents}
         matchState={matchState}
         dispatchMatchState={dispatchMatchState}

@@ -59,7 +59,11 @@ function EntityPicker({
   dispatchMatchState,
   nestedPickers = [],
 }) {
-  const { headerLabel, computeEntityName } = pickerConfig;
+  const {
+    headerLabel,
+    computeEntityName,
+    customPickerComponent: CustomPicker,
+  } = pickerConfig;
 
   const [selectedEntityId, setSelectedEntityId] = useState();
 
@@ -70,29 +74,39 @@ function EntityPicker({
 
   return (
     <>
-      <Header as="h4">
-        {headerLabel}
-        {' '}
-        <Button
-          size="mini"
-          onClick={() => setSelectedEntityId(null)}
-        >
-          {I18n.t('competitions.index.clear')}
-        </Button>
-      </Header>
-      <Button.Group>
-        {selectableEntities.map((entity, idx) => (
-          <Button
-            key={entity.id}
-            toggle
-            basic
-            active={entity.id === selectedEntityId}
-            onClick={() => setSelectedEntityId(entity.id)}
-          >
-            {computeEntityName(entity, idx)}
-          </Button>
-        ))}
-      </Button.Group>
+      {CustomPicker !== undefined ? (
+        <CustomPicker
+          selectedEntityId={selectedEntityId}
+          setSelectedEntityId={setSelectedEntityId}
+          selectableEntities={selectableEntities}
+        />
+      ) : (
+        <>
+          <Header as="h4">
+            {headerLabel}
+            {' '}
+            <Button
+              size="mini"
+              onClick={() => setSelectedEntityId(null)}
+            >
+              {I18n.t('competitions.index.clear')}
+            </Button>
+          </Header>
+          <Button.Group>
+            {selectableEntities.map((entity, idx) => (
+              <Button
+                key={entity.id}
+                toggle
+                basic
+                active={entity.id === selectedEntityId}
+                onClick={() => setSelectedEntityId(entity.id)}
+              >
+                {computeEntityName(entity, idx)}
+              </Button>
+            ))}
+          </Button.Group>
+        </>
+      )}
       {selectedEntity && (
         <SelectedEntityPanel
           pickerConfig={pickerConfig}
@@ -124,6 +138,7 @@ function SelectedEntityPanel({
     computeMatchingCellName,
     computeMatchingRowDetails = undefined,
     computeExpectedRowCount = undefined,
+    skipMatchingTable = false,
   } = pickerConfig;
 
   const [modalPayload, setModalPayload] = useState(null);
@@ -190,26 +205,33 @@ function SelectedEntityPanel({
   const selectedEntityRows = entityLookup[selectedEntity.id];
   const expectedNumOfRows = computeExpectedRowCount?.(selectedEntity, pickerHistory);
 
+  const nestedPickerActive = pickerConfigurations.find((cfg) => cfg.key === nestedPicker?.key)
+    ?.isActive?.(continuedHistory) ?? true;
+
   return (
     <>
-      <ScrambleMatch
-        matchableRows={selectedEntityRows}
-        expectedNumOfRows={expectedNumOfRows}
-        onRowDragCompleted={onRoundDragCompleted}
-        computeDefinitionName={computeIndexDefinitionName}
-        computeCellName={computeMatchingCellName}
-        computeRowDetails={computeMatchingRowDetails}
-        moveAwayAction={onMoveAway}
-      />
-      <MoveMatchingRowModal
-        isOpen={modalPayload !== null}
-        onClose={onModalClose}
-        onConfirm={onModalConfirm}
-        selectedMatchingRow={modalPayload}
-        pickerHistory={continuedHistory}
-        pickerConfig={pickerConfig}
-      />
-      {nestedPicker !== undefined && nestedPicker.active && (
+      {!skipMatchingTable && (
+        <>
+          <ScrambleMatch
+            matchableRows={selectedEntityRows}
+            expectedNumOfRows={expectedNumOfRows}
+            onRowDragCompleted={onRoundDragCompleted}
+            computeDefinitionName={computeIndexDefinitionName}
+            computeCellName={computeMatchingCellName}
+            computeRowDetails={computeMatchingRowDetails}
+            moveAwayAction={onMoveAway}
+          />
+          <MoveMatchingRowModal
+            isOpen={modalPayload !== null}
+            onClose={onModalClose}
+            onConfirm={onModalConfirm}
+            selectedMatchingRow={modalPayload}
+            pickerHistory={continuedHistory}
+            pickerConfig={pickerConfig}
+          />
+        </>
+      )}
+      {nestedPicker !== undefined && nestedPickerActive && (
         <PickerWithMatching
           pickerKey={nestedPicker.key}
           pickerHistory={continuedHistory}
