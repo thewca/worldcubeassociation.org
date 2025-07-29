@@ -82,7 +82,7 @@ class PaymentIntent < ApplicationRecord
         )
       end
 
-      update_common_attributes!(api_intent)
+      self.update_common_attributes!(api_intent)
     end
   end
 
