@@ -3556,7 +3556,7 @@ fr:
           #original_hash: 9d9126e
           name_html: >-
             La salle où la compétition à lieu. %{md}. Par exemple : [Cité des
-            Sciences et de l'Industrie](http://www.cite-sciences.fr)
+            Sciences et de l'Industrie](http://www.cite-sciences.fr/)
           #original_hash: 2651d1a
           details_html: >-
             Détails concernant la salle (par exemple, au première étage au fond
