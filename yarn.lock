@@ -2589,23 +2589,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@stripe/react-stripe-js@npm:^3.8.0":
-  version: 3.8.0
-  resolution: "@stripe/react-stripe-js@npm:3.8.0"
+"@stripe/react-stripe-js@npm:^3.8.1":
+  version: 3.8.1
+  resolution: "@stripe/react-stripe-js@npm:3.8.1"
   dependencies:
     prop-types: "npm:^15.7.2"
   peerDependencies:
     "@stripe/stripe-js": ">=1.44.1 <8.0.0"
     react: ">=16.8.0 <20.0.0"
     react-dom: ">=16.8.0 <20.0.0"
-  checksum: 10c0/55355d3ab428f5d74ed1d02ad8682f00b61cacd39413ae5558c888d3dd19c60229887112103056602a3a7fc072a79825a7c418a08fa611e95a59a4ac3b817ad5
+  checksum: 10c0/69c8aa706ddf1c04e85b39b6a22316a26e4e6680fdfce8d78d6d2ea7cacfbb1b9ec605425fdd87c2e098514c741318822fcb42dfd4762a105bf432966ab67c79
   languageName: node
   linkType: hard
 
-"@stripe/stripe-js@npm:^7.6.1":
-  version: 7.6.1
-  resolution: "@stripe/stripe-js@npm:7.6.1"
-  checksum: 10c0/9d704f4574c69d7f497b612b7699224b172ef38f30f1b4635de41dfd634ce052702e8e9497f7fbcec424e38c0f1cd09ade1451321cda6915b0ed88af545d47dc
+"@stripe/stripe-js@npm:^7.7.0":
+  version: 7.7.0
+  resolution: "@stripe/stripe-js@npm:7.7.0"
+  checksum: 10c0/566842c9e635012901d37b3181d0285c1dbb3ab6e520e6c2ad99edf571a7511c04e651f00a2773800bd4059e90663b09f222abc39b435f40319ebe08201124ad
   languageName: node
   linkType: hard
 
@@ -10181,8 +10181,8 @@ __metadata:
     "@pmmmwh/react-refresh-webpack-plugin": "npm:^0.6.1"
     "@rails/actioncable": "npm:^8.0.200"
     "@rails/ujs": "npm:^7.1.501"
-    "@stripe/react-stripe-js": "npm:^3.8.0"
-    "@stripe/stripe-js": "npm:^7.6.1"
+    "@stripe/react-stripe-js": "npm:^3.8.1"
+    "@stripe/stripe-js": "npm:^7.7.0"
     "@tanstack/react-query": "npm:^5.83.0"
     "@tanstack/react-table": "npm:^8.21.3"
     "@wca/helpers": "npm:^1.1.5"
@@ -10259,8 +10259,8 @@ __metadata:
     stylelint-config-recommended-scss: "npm:^15.0.1"
     stylelint-scss: "npm:^6.12.1"
     terser-webpack-plugin: "npm:^5.3.14"
-    webpack: "npm:^5.100.2"
-    webpack-assets-manifest: "npm:^6.2.1"
+    webpack: "npm:^5.101.0"
+    webpack-assets-manifest: "npm:^6.2.2"
     webpack-bundle-analyzer: "npm:^4.10.2"
     webpack-cli: "npm:^6.0.1"
     webpack-dev-server: "npm:^5.2.2"
@@ -11679,9 +11679,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webpack-assets-manifest@npm:^6.2.1":
-  version: 6.2.1
-  resolution: "webpack-assets-manifest@npm:6.2.1"
+"webpack-assets-manifest@npm:^6.2.2":
+  version: 6.2.2
+  resolution: "webpack-assets-manifest@npm:6.2.2"
   dependencies:
     deepmerge: "npm:^4.3.1"
     lockfile: "npm:^1.0.4"
@@ -11689,7 +11689,7 @@ __metadata:
     tapable: "npm:^2.2.2"
   peerDependencies:
     webpack: ^5.61.0
-  checksum: 10c0/610d300431df707164b4d33f14ff0f33799f3dd09843798b765f905306d26b8339df62079f1c6f1656b0daa72d4340ddf749937dc63ffdd19274811493cbb217
+  checksum: 10c0/c183386f7422d6c8ed5da3ecaba7f99f618354c13ef64bc298dd03a4688fa81d73056185e0d805a5eaa3a8b897d803b766f95acdbec8c33a32f1d648b7f50822
   languageName: node
   linkType: hard
 
@@ -11849,9 +11849,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webpack@npm:^5.100.2":
-  version: 5.100.2
-  resolution: "webpack@npm:5.100.2"
+"webpack@npm:^5.101.0":
+  version: 5.101.0
+  resolution: "webpack@npm:5.101.0"
   dependencies:
     "@types/eslint-scope": "npm:^3.7.7"
     "@types/estree": "npm:^1.0.8"
@@ -11883,7 +11883,7 @@ __metadata:
       optional: true
   bin:
     webpack: bin/webpack.js
-  checksum: 10c0/0add75d44c482634c6879a3fc87fa2af6a6c7c8eacda5d5f60ed778a2ce13d33fd6178a2b4750368706a49e769af6d828934c28914b4faa2e21be790f92b4110
+  checksum: 10c0/0fb5f70032ac53cfc2e667c97c6ceb903d280cebd03dd7f7ca794d8ab75d4f692483313efb90c616c2e4e266cf580a54df84cbaee43db36d7d42e450bf1569fd
   languageName: node
   linkType: hard
 
