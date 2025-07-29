@@ -3,17 +3,17 @@ import Groups from './Groups';
 import PickerWithMatching from './PickerWithMatching';
 
 function NestedGroupsPicker({
-  selectableEntities,
+  pickerHistory = [],
+  selectedEntityState,
   expectedEntitiesLength,
   dispatchMatchState,
-  expectedSolveCount,
 }) {
   return (
     <Groups
-      scrambleSets={selectableEntities}
+      scrambleSets={selectedEntityState}
       scrambleSetCount={expectedEntitiesLength}
       dispatchMatchState={dispatchMatchState}
-      expectedSolveCount={expectedSolveCount}
+      pickerHistory={pickerHistory}
     />
   );
 }
@@ -30,7 +30,7 @@ export default function Rounds({
     <PickerWithMatching
       pickerKey="rounds"
       selectableEntities={wcifRounds}
-      matchState={matchState}
+      entityLookup={matchState}
       dispatchMatchState={dispatchMatchState}
       nestedPickerComponent={nestedPickerComponent}
     />

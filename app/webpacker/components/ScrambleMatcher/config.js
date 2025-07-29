@@ -1,11 +1,19 @@
 import { activityCodeToName } from '@wca/helpers';
 import { scrambleSetToDetails, scrambleSetToName, scrambleToName } from './util';
+import { formats } from '../../lib/wca-data.js.erb';
 
-export const pickerConfigurations = [
+const inferExpectedAttemptNum = (pickerHistory) => {
+  const selectedRound = pickerHistory.find((hist) => hist.picker === 'rounds')?.entity;
+
+  const roundFormat = formats.byId[selectedRound?.format];
+  return roundFormat?.expected_solve_count;
+};
+
+const pickerConfigurations = [
   {
     key: 'rounds',
+    dispatchKey: 'roundId',
     headerLabel: 'Rounds',
-    extractMatchingRows: (matchState, round) => matchState[round.id],
     computeEntityName: (round) => activityCodeToName(round.id),
     computeDefinitionName: (round, idx) => `${activityCodeToName(round.id)}, Group ${idx + 1}`,
     computeMatchingCellName: scrambleSetToName,
@@ -14,13 +22,12 @@ export const pickerConfigurations = [
   },
   {
     key: 'groups',
+    dispatchKey: 'groupId',
     headerLabel: 'Groups',
-    extractMatchingRows:
-      (matchState, scrSet) => matchState.find((set) => set.id === scrSet.id)?.inbox_scrambles,
     computeEntityName: (scrSet, idx) => `Group ${idx + 1}`,
     computeDefinitionName: (scrSet, idx) => `Attempt ${idx + 1}`,
     computeMatchingCellName: scrambleToName,
-    computeExpectedRowCount: () => 3, // TODO
+    computeExpectedRowCount: (scrSet, history) => inferExpectedAttemptNum(history),
   },
 ];
 

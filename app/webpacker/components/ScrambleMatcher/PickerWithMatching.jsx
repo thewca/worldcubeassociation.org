@@ -6,14 +6,14 @@ import ScrambleMatch from './ScrambleMatch';
 import I18n from '../../lib/i18n';
 import { useDispatchWrapper } from './reducer';
 import useInputState from '../../lib/hooks/useInputState';
-import { formats } from '../../lib/wca-data.js.erb';
 import pickerConfigurations from './config';
 
 export default function PickerWithMatching({
   pickerKey,
+  pickerHistory = [],
   selectableEntities = [],
   expectedEntitiesLength = selectableEntities.length,
-  matchState,
+  entityLookup,
   dispatchMatchState,
   nestedPickerComponent = undefined,
 }) {
@@ -30,9 +30,10 @@ export default function PickerWithMatching({
     return (
       <SelectedEntityPanel
         pickerConfig={pickerConfig}
+        pickerHistory={pickerHistory}
         selectedEntity={selectableEntities[0]}
         selectableEntities={selectableEntities}
-        matchState={matchState}
+        entityLookup={entityLookup}
         dispatchMatchState={dispatchMatchState}
         nestedPickerComponent={nestedPickerComponent}
       />
@@ -42,8 +43,9 @@ export default function PickerWithMatching({
   return (
     <EntityPicker
       pickerConfig={pickerConfig}
+      pickerHistory={pickerHistory}
       selectableEntities={selectableEntities}
-      matchState={matchState}
+      entityLookup={entityLookup}
       dispatchMatchState={dispatchMatchState}
       nestedPickerComponent={nestedPickerComponent}
     />
@@ -52,8 +54,9 @@ export default function PickerWithMatching({
 
 function EntityPicker({
   pickerConfig,
+  pickerHistory,
   selectableEntities = [],
-  matchState,
+  entityLookup,
   dispatchMatchState,
   nestedPickerComponent = undefined,
 }) {
@@ -94,9 +97,10 @@ function EntityPicker({
       {selectedEntity && (
         <SelectedEntityPanel
           pickerConfig={pickerConfig}
+          pickerHistory={pickerHistory}
           selectedEntity={selectedEntity}
           selectableEntities={selectableEntities}
-          matchState={matchState}
+          entityLookup={entityLookup}
           dispatchMatchState={dispatchMatchState}
           nestedPickerComponent={nestedPickerComponent}
         />
@@ -107,14 +111,16 @@ function EntityPicker({
 
 function SelectedEntityPanel({
   pickerConfig,
+  pickerHistory,
   selectedEntity,
   selectableEntities,
-  matchState,
+  entityLookup,
   dispatchMatchState,
   nestedPickerComponent: NestedPicker = undefined,
 }) {
   const {
-    extractMatchingRows,
+    key: pickerKey,
+    dispatchId,
     computeDefinitionName,
     computeMatchingCellName,
     computeMatchingRowDetails = undefined,
@@ -142,19 +148,18 @@ function SelectedEntityPanel({
     onModalClose();
   }, [dispatchMatchState, selectedEntity.id, onModalClose]);
 
+  const wrappedDispatch = useDispatchWrapper(
+    dispatchMatchState,
+    { [dispatchId]: selectedEntity.id },
+  );
+
   const onRoundDragCompleted = useCallback(
-    (fromIndex, toIndex) => dispatchMatchState({
+    (fromIndex, toIndex) => wrappedDispatch({
       type: 'moveRoundScrambleSet',
-      roundId: selectedEntity.id,
       fromIndex,
       toIndex,
     }),
-    [dispatchMatchState, selectedEntity.id],
-  );
-
-  const wrappedDispatch = useDispatchWrapper(
-    dispatchMatchState,
-    { roundId: selectedEntity.id },
+    [wrappedDispatch],
   );
 
   const computeIndexDefinitionName = useCallback(
@@ -162,19 +167,21 @@ function SelectedEntityPanel({
     [computeDefinitionName, selectedEntity],
   );
 
-  // TODO das muss verallgemeinert werden und fliegt hier raus
-  const selectedRoundFormat = useMemo(
-    () => formats.byId[selectedEntity.format],
-    [selectedEntity.format],
-  );
+  const continuedHistory = useMemo(() => (
+    [...pickerHistory, {
+      picker: pickerKey,
+      dispatch: dispatchId,
+      entity: selectedEntity,
+    }]
+  ), [pickerHistory, pickerKey, dispatchId, selectedEntity]);
 
-  const selectedMatchState = extractMatchingRows(matchState, selectedEntity);
-  const expectedNumOfRows = computeExpectedRowCount?.(selectedEntity);
+  const selectedEntityState = entityLookup[selectedEntity.id];
+  const expectedNumOfRows = computeExpectedRowCount?.(selectedEntity, pickerHistory);
 
   return (
     <>
       <ScrambleMatch
-        matchableRows={selectedMatchState}
+        matchableRows={selectedEntityState}
         expectedNumOfRows={expectedNumOfRows}
         onRowDragCompleted={onRoundDragCompleted}
         computeDefinitionName={computeIndexDefinitionName}
@@ -193,10 +200,11 @@ function SelectedEntityPanel({
       />
       {NestedPicker !== undefined && (
         <NestedPicker
-          selectableEntities={selectedMatchState}
+          pickerHistory={continuedHistory}
+          selectedEntity={selectedEntity}
           expectedEntitiesLength={expectedNumOfRows}
+          selectedEntityState={selectedEntityState}
           dispatchMatchState={wrappedDispatch}
-          expectedSolveCount={selectedRoundFormat?.expectedSolveCount}
         />
       )}
     </>
