@@ -42,7 +42,7 @@ class PaymentIntent < ApplicationRecord
       self.payment_record.update_status(api_intent)
       self.assign_common_attributes(api_intent)
 
-      case self.wca_status # This has been updated by assign_common_attributes
+      case self.wca_status.to_s # This has been updated by assign_common_attributes
       when PaymentIntent.wca_statuses[:succeeded]
         # The payment didn't need any additional actions and is completed!
 
@@ -92,7 +92,7 @@ class PaymentIntent < ApplicationRecord
          api_intent.last_payment_error
       end
 
-      self.update!(wca_status: self.determine_wca_status.to_s, error_details: error_details)
+      self.update!(wca_status: self.determine_wca_status, error_details: error_details)
     end
 
     def wca_status_consistency
