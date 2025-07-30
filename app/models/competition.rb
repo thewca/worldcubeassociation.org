@@ -1853,6 +1853,7 @@ class Competition < ApplicationRecord
     includes_associations = [
       { assignments: [:schedule_activity] },
       { user: {
+        current_avatar: [],
         person: %i[ranks_single ranks_average],
       } },
       :wcif_extensions,
