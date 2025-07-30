@@ -10,6 +10,7 @@ export default function PickerWithMatching({
   pickerHistory = [],
   selectableEntities = [],
   expectedEntitiesLength = selectableEntities.length,
+  rootMatchState = selectableEntities,
   dispatchMatchState,
   nestedPickers = [],
 }) {
@@ -34,7 +35,7 @@ export default function PickerWithMatching({
         pickerConfig={pickerConfig}
         pickerHistory={pickerHistory}
         selectedEntity={selectableEntities[0]}
-        selectableEntities={selectableEntities}
+        rootMatchState={rootMatchState}
         dispatchMatchState={dispatchMatchState}
         nestedPickers={nestedPickers}
       />
@@ -46,6 +47,7 @@ export default function PickerWithMatching({
       pickerConfig={pickerConfig}
       pickerHistory={pickerHistory}
       selectableEntities={selectableEntities}
+      rootMatchState={rootMatchState}
       dispatchMatchState={dispatchMatchState}
       nestedPickers={nestedPickers}
     />
@@ -56,6 +58,7 @@ function EntityPicker({
   pickerConfig,
   pickerHistory,
   selectableEntities = [],
+  rootMatchState,
   dispatchMatchState,
   nestedPickers = [],
 }) {
@@ -112,7 +115,7 @@ function EntityPicker({
           pickerConfig={pickerConfig}
           pickerHistory={pickerHistory}
           selectedEntity={selectedEntity}
-          selectableEntities={selectableEntities}
+          rootMatchState={rootMatchState}
           dispatchMatchState={dispatchMatchState}
           nestedPickers={nestedPickers}
         />
@@ -125,7 +128,7 @@ function SelectedEntityPanel({
   pickerConfig,
   pickerHistory,
   selectedEntity,
-  selectableEntities,
+  rootMatchState,
   dispatchMatchState,
   nestedPickers,
 }) {
@@ -161,14 +164,12 @@ function SelectedEntityPanel({
       pickerKey,
       matchingKey,
       entity: selectedEntity,
-      choices: selectableEntities,
     }]
   ), [
     pickerHistory,
     pickerKey,
     matchingKey,
     selectedEntity,
-    selectableEntities,
   ]);
 
   const onRoundDragCompleted = useCallback(
@@ -203,6 +204,7 @@ function SelectedEntityPanel({
             onClose={onModalClose}
             dispatchMatchState={dispatchMatchState}
             selectedMatchingRow={modalPayload}
+            rootMatchState={rootMatchState}
             pickerHistory={continuedHistory}
             pickerConfig={pickerConfig}
           />
@@ -214,6 +216,7 @@ function SelectedEntityPanel({
           pickerHistory={continuedHistory}
           selectableEntities={selectedEntityRows}
           expectedEntitiesLength={expectedNumOfRows}
+          rootMatchState={rootMatchState}
           dispatchMatchState={dispatchMatchState}
           nestedPickers={deepNestedPickers}
         />

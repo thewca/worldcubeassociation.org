@@ -41,6 +41,7 @@ export default function MoveMatchingRowModal({
   onClose,
   dispatchMatchState,
   selectedMatchingRow,
+  rootMatchState,
   pickerHistory,
   pickerConfig,
 }) {
@@ -64,12 +65,10 @@ export default function MoveMatchingRowModal({
   }, [dispatchMatchState, pickerHistory, onClose]);
 
   const computeChoices = useCallback((historyIdx, selectedPath) => {
-    const topLevelChoices = pickerHistory[0]?.choices || [];
-
     const parentSteps = pickerHistory.slice(0, historyIdx);
 
-    return translatePathToLodash(selectedPath, parentSteps, topLevelChoices).lookup;
-  }, [pickerHistory]);
+    return translatePathToLodash(selectedPath, parentSteps, rootMatchState).lookup;
+  }, [pickerHistory, rootMatchState]);
 
   const fixSelectionPath = useCallback(
     (selectedPath) => pickerHistory.reduce((correctedPath, historyStep, idx) => {

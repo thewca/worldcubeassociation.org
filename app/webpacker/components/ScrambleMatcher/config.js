@@ -61,7 +61,7 @@ const pickerConfigurations = [
     computeExpectedRowCount: (round) => round.scrambleSetCount,
   },
   {
-    key: 'groups',
+    key: 'scrambleSets',
     matchingKey: 'inbox_scrambles',
     headerLabel: 'Groups',
     computeEntityName: (scrSet, idx) => `Group ${idx + 1}`,
