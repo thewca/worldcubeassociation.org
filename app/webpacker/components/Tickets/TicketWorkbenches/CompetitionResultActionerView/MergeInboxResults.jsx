@@ -27,7 +27,7 @@ export default function MergeInboxResults({ ticketDetails }) {
             ...oldTicketDetails.ticket,
             metadata: {
               ...oldTicketDetails.ticket.metadata,
-              status: ticketsCompetitionResultStatuses.merged_temporary_results,
+              status: ticketsCompetitionResultStatuses.merged_inbox_results,
             },
           },
         }),
@@ -43,7 +43,7 @@ export default function MergeInboxResults({ ticketDetails }) {
     <>
       <ResultsPreview competitionId={competitionId} />
       <Button onClick={mergeInboxResultsMutate}>
-        Merge Temporary Results
+        Merge Inbox Results
       </Button>
     </>
   );

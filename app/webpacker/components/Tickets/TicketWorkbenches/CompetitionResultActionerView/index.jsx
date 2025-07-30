@@ -43,7 +43,7 @@ function ViewForStatus({
         />
       );
 
-    case ticketsCompetitionResultStatuses.merged_temporary_results:
+    case ticketsCompetitionResultStatuses.merged_inbox_results:
       return (
         <p>
           Please finish the remaining steps in
