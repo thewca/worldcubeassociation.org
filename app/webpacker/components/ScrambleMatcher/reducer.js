@@ -1,4 +1,3 @@
-import { useCallback } from 'react';
 import _ from 'lodash';
 import { moveArrayItem } from './util';
 
@@ -55,13 +54,28 @@ function removeScrambleFile(state, oldScrambleFile) {
   }));
 }
 
-export function useDispatchWrapper(originalDispatch, actionVars) {
-  return useCallback((action) => {
-    originalDispatch({
-      ...actionVars,
-      ...action,
-    });
-  }, [actionVars, originalDispatch]);
+function translatePathToLodash(path, pickerHistory, initialLookup) {
+  return pickerHistory.reduce((accu, historyStep) => {
+    const idToSearch = path[historyStep.dispatchKey];
+
+    const selectedIndex = accu.lookup.findIndex((ent) => ent.id === idToSearch);
+    const selectedEntity = accu.lookup[selectedIndex];
+
+    return {
+      path: [...accu.path, selectedIndex, historyStep.matchingKey],
+      lookup: selectedEntity[historyStep.matchingKey],
+    };
+  }, {
+    path: [],
+    lookup: initialLookup,
+  });
+}
+
+export function translateHistoryToPath(pickerHistory) {
+  return pickerHistory.reduce((acc, historyStep) => ({
+    ...acc,
+    [historyStep.dispatchKey]: historyStep.entity.id,
+  }), {});
 }
 
 export default function scrambleMatchReducer(state, action) {
@@ -83,39 +97,45 @@ export default function scrambleMatchReducer(state, action) {
         wcifEvents: state,
         scrambleSets: action.scrambleSets,
       });
-    case 'moveRoundScrambleSet':
-      return applyAction(state, ['current'], (subState) => ({
-        ...subState,
-        [action.roundId]: moveArrayItem(
-          subState[action.roundId],
-          action.fromIndex,
-          action.toIndex,
-        ),
-      }));
-    case 'moveScrambleSetToRound':
-      return applyAction(state, ['current'], (subState) => ({
-        ...subState,
-        [action.fromRoundId]: subState[action.fromRoundId].filter(
-          (scrSet) => scrSet.id !== action.scrambleSet.id,
-        ),
-        [action.toRoundId]: [
-          ...subState[action.toRoundId],
-          { ...action.scrambleSet },
-        ],
-      }));
-    case 'moveScrambleInSet':
-      return applyAction(state, ['current'], (subState) => ({
-        ...subState,
-        [action.roundId]: subState[action.roundId]
-          .map((scrSet, i) => (i === action.setNumber ? ({
-            ...scrSet,
-            inbox_scrambles: moveArrayItem(
-              scrSet.inbox_scrambles,
-              action.fromIndex,
-              action.toIndex,
-            ),
-          }) : scrSet)),
-      }));
+    case 'moveMatchingEntity':
+      return applyAction(state, ['current'], (subState) => {
+        const fromPath = translateHistoryToPath(action.pickerHistory);
+
+        const { path: oldPath } = translatePathToLodash(
+          fromPath,
+          action.pickerHistory,
+          subState,
+        );
+
+        const { path: newPath } = translatePathToLodash(
+          action.toPath,
+          action.pickerHistory,
+          subState,
+        );
+
+        return _.chain(subState)
+          .cloneDeep()
+          .update(oldPath, (arr) => arr.filter((ent) => ent.id !== action.entity.id))
+          .update(newPath, (arr = []) => [...arr, action.entity])
+          .value();
+      });
+    case 'reorderMatchingEntities':
+      return applyAction(state, ['current'], (subState) => {
+        const entityPath = translateHistoryToPath(action.pickerHistory);
+
+        const { path: lodashPath, lookup: currentOrder } = translatePathToLodash(
+          entityPath,
+          action.pickerHistory,
+          subState,
+        );
+
+        const movedItemState = moveArrayItem(currentOrder, action.fromIndex, action.toIndex);
+
+        return _.chain(subState)
+          .cloneDeep()
+          .set(lodashPath, movedItemState)
+          .value();
+      });
     default:
       throw new Error(`Unhandled action type: ${action.type}`);
   }

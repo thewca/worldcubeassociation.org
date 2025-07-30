@@ -31,9 +31,14 @@ export default function Wrapper({
 }
 
 async function submitMatchedScrambles({ competitionId, matchState }) {
+  const roundsByWcifId = _.keyBy(
+    matchState.flatMap((wcifEvent) => wcifEvent.rounds),
+    'id',
+  );
+
   const matchStateIdsOnly = _.mapValues(
-    matchState,
-    (sets) => sets.map((set) => ({
+    roundsByWcifId,
+    (round) => round.scrambleSets.map((set) => ({
       id: set.id,
       inbox_scrambles: set.inbox_scrambles.map((scr) => scr.id),
     })),
@@ -139,10 +144,7 @@ function ScrambleMatcher({
         pickerKey="events"
         selectableEntities={matchState}
         dispatchMatchState={dispatchMatchState}
-        nestedPickers={[
-          { key: 'rounds', mapping: 'scrambleSets' },
-          { key: 'groups', mapping: 'inbox_scrambles' },
-        ]}
+        nestedPickers={['rounds', 'groups']}
       />
       {hasUnsavedChanges && (
         <Message info content="You have unsaved changes. Don't forget to Save below!" />

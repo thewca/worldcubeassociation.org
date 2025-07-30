@@ -3,6 +3,7 @@ import { Button, Form, Modal } from 'semantic-ui-react';
 import _ from 'lodash';
 import pickerConfigurations from './config';
 import { useInputUpdater } from '../../lib/hooks/useInputState';
+import { translateHistoryToPath } from './reducer';
 
 function MatchingSelect({
   pickerKey,
@@ -38,7 +39,7 @@ function MatchingSelect({
 export default function MoveMatchingRowModal({
   isOpen,
   onClose,
-  onConfirm = onClose,
+  dispatchMatchState,
   selectedMatchingRow,
   pickerHistory,
   pickerConfig,
@@ -47,12 +48,20 @@ export default function MoveMatchingRowModal({
     computeMatchingCellName,
   } = pickerConfig;
 
-  const basePath = pickerHistory.reduce((acc, historyStep) => ({
-    ...acc,
-    [historyStep.dispatchKey]: historyStep.entity.id,
-  }), {});
+  const basePath = useMemo(() => translateHistoryToPath(pickerHistory), [pickerHistory]);
 
   const [targetPath, setTargetPath] = useState(basePath);
+
+  const onConfirm = useCallback((entityToMove, newTargetPath) => {
+    dispatchMatchState({
+      type: 'moveMatchingEntity',
+      pickerHistory,
+      entity: entityToMove,
+      targetPath: newTargetPath,
+    });
+
+    onClose();
+  }, [dispatchMatchState, pickerHistory, onClose]);
 
   const computeChoices = useCallback((historyIdx, selectedPath) => {
     const topLevelChoices = pickerHistory[0]?.choices || [];

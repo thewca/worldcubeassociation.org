@@ -2,7 +2,6 @@ import React, { useCallback, useMemo, useState } from 'react';
 import { Button, Header } from 'semantic-ui-react';
 import ScrambleMatch from './ScrambleMatch';
 import I18n from '../../lib/i18n';
-import { useDispatchWrapper } from './reducer';
 import pickerConfigurations from './config';
 import MoveMatchingRowModal from './MoveMatchingRowModal';
 
@@ -145,31 +144,6 @@ function SelectedEntityPanel({
     setModalPayload(null);
   }, [setModalPayload]);
 
-  const onModalConfirm = useCallback((entity, newRoundId) => {
-    dispatchMatchState({
-      type: 'moveScrambleSetToRound',
-      scrambleSet: entity,
-      fromRoundId: selectedEntity.id,
-      toRoundId: newRoundId,
-    });
-
-    onModalClose();
-  }, [dispatchMatchState, selectedEntity.id, onModalClose]);
-
-  const wrappedDispatch = useDispatchWrapper(
-    dispatchMatchState,
-    { [dispatchKey]: selectedEntity.id },
-  );
-
-  const onRoundDragCompleted = useCallback(
-    (fromIndex, toIndex) => wrappedDispatch({
-      type: 'moveRoundScrambleSet',
-      fromIndex,
-      toIndex,
-    }),
-    [wrappedDispatch],
-  );
-
   const computeIndexDefinitionName = useCallback(
     (idx) => computeDefinitionName(selectedEntity, idx),
     [computeDefinitionName, selectedEntity],
@@ -184,7 +158,6 @@ function SelectedEntityPanel({
       matchingKey,
       entity: selectedEntity,
       choices: selectableEntities,
-      nestedPicker,
     }]
   ), [
     pickerHistory,
@@ -193,13 +166,22 @@ function SelectedEntityPanel({
     matchingKey,
     selectedEntity,
     selectableEntities,
-    nestedPicker,
   ]);
+
+  const onRoundDragCompleted = useCallback(
+    (fromIndex, toIndex) => dispatchMatchState({
+      type: 'reorderMatchingEntities',
+      pickerHistory: continuedHistory,
+      fromIndex,
+      toIndex,
+    }),
+    [dispatchMatchState, continuedHistory],
+  );
 
   const selectedEntityRows = selectedEntity[matchingKey];
   const expectedNumOfRows = computeExpectedRowCount?.(selectedEntity, pickerHistory);
 
-  const nestedPickerActive = pickerConfigurations.find((cfg) => cfg.key === nestedPicker?.key)
+  const nestedPickerActive = pickerConfigurations.find((cfg) => cfg.key === nestedPicker)
     ?.isActive?.(continuedHistory) ?? true;
 
   return (
@@ -219,7 +201,7 @@ function SelectedEntityPanel({
             key={modalPayload?.id}
             isOpen={modalPayload !== null}
             onClose={onModalClose}
-            onConfirm={onModalConfirm}
+            dispatchMatchState={dispatchMatchState}
             selectedMatchingRow={modalPayload}
             pickerHistory={continuedHistory}
             pickerConfig={pickerConfig}
@@ -228,11 +210,11 @@ function SelectedEntityPanel({
       )}
       {nestedPicker !== undefined && nestedPickerActive && (
         <PickerWithMatching
-          pickerKey={nestedPicker.key}
+          pickerKey={nestedPicker}
           pickerHistory={continuedHistory}
           selectableEntities={selectedEntityRows}
           expectedEntitiesLength={expectedNumOfRows}
-          dispatchMatchState={wrappedDispatch}
+          dispatchMatchState={dispatchMatchState}
           nestedPickers={deepNestedPickers}
         />
       )}
