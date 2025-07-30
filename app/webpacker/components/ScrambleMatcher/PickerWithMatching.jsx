@@ -22,6 +22,12 @@ export default function PickerWithMatching({
     return null;
   }
 
+  const pickerActive = pickerConfig.isActive?.(pickerHistory) ?? true;
+
+  if (!pickerActive) {
+    return null;
+  }
+
   if (expectedEntitiesLength === 1) {
     return (
       <SelectedEntityPanel
@@ -125,7 +131,6 @@ function SelectedEntityPanel({
 }) {
   const {
     key: pickerKey,
-    dispatchKey,
     matchingKey,
     computeDefinitionName,
     computeMatchingCellName,
@@ -154,7 +159,6 @@ function SelectedEntityPanel({
   const continuedHistory = useMemo(() => (
     [...pickerHistory, {
       pickerKey,
-      dispatchKey,
       matchingKey,
       entity: selectedEntity,
       choices: selectableEntities,
@@ -162,7 +166,6 @@ function SelectedEntityPanel({
   ), [
     pickerHistory,
     pickerKey,
-    dispatchKey,
     matchingKey,
     selectedEntity,
     selectableEntities,
@@ -180,9 +183,6 @@ function SelectedEntityPanel({
 
   const selectedEntityRows = selectedEntity[matchingKey];
   const expectedNumOfRows = computeExpectedRowCount?.(selectedEntity, pickerHistory);
-
-  const nestedPickerActive = pickerConfigurations.find((cfg) => cfg.key === nestedPicker)
-    ?.isActive?.(continuedHistory) ?? true;
 
   return (
     <>
@@ -208,7 +208,7 @@ function SelectedEntityPanel({
           />
         </>
       )}
-      {nestedPicker !== undefined && nestedPickerActive && (
+      {nestedPicker !== undefined && (
         <PickerWithMatching
           pickerKey={nestedPicker}
           pickerHistory={continuedHistory}

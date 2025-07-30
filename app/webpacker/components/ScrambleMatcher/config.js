@@ -44,7 +44,6 @@ function EventSelectorCompat({
 const pickerConfigurations = [
   {
     key: 'events',
-    dispatchKey: 'eventId',
     matchingKey: 'rounds',
     headerLabel: 'Events',
     customPickerComponent: EventSelectorCompat,
@@ -53,7 +52,6 @@ const pickerConfigurations = [
   },
   {
     key: 'rounds',
-    dispatchKey: 'roundId',
     matchingKey: 'scrambleSets',
     headerLabel: 'Rounds',
     computeEntityName: (round) => humanizeActivityCode(round.id),
@@ -64,7 +62,6 @@ const pickerConfigurations = [
   },
   {
     key: 'groups',
-    dispatchKey: 'groupId',
     matchingKey: 'inbox_scrambles',
     headerLabel: 'Groups',
     computeEntityName: (scrSet, idx) => `Group ${idx + 1}`,

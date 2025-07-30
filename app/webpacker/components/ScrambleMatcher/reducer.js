@@ -56,7 +56,7 @@ function removeScrambleFile(state, oldScrambleFile) {
 
 export function translatePathToLodash(path, pickerHistory, initialLookup) {
   return pickerHistory.reduce((accu, historyStep) => {
-    const idToSearch = path[historyStep.dispatchKey];
+    const idToSearch = path[historyStep.pickerKey];
 
     const selectedIndex = accu.lookup.findIndex((ent) => ent.id === idToSearch);
     const selectedEntity = accu.lookup[selectedIndex];
@@ -74,7 +74,7 @@ export function translatePathToLodash(path, pickerHistory, initialLookup) {
 export function translateHistoryToPath(pickerHistory) {
   return pickerHistory.reduce((acc, historyStep) => ({
     ...acc,
-    [historyStep.dispatchKey]: historyStep.entity.id,
+    [historyStep.pickerKey]: historyStep.entity.id,
   }), {});
 }
 

@@ -75,7 +75,7 @@ export default function MoveMatchingRowModal({
     (selectedPath) => pickerHistory.reduce((correctedPath, historyStep, idx) => {
       const availableChoices = computeChoices(idx, correctedPath);
 
-      const originalChoiceId = selectedPath[historyStep.dispatchKey];
+      const originalChoiceId = selectedPath[historyStep.pickerKey];
       const firstAvailableFallback = availableChoices[0];
 
       const finalChoice = availableChoices.find(
@@ -84,17 +84,17 @@ export default function MoveMatchingRowModal({
 
       return {
         ...correctedPath,
-        [historyStep.dispatchKey]: finalChoice.id,
+        [historyStep.pickerKey]: finalChoice.id,
       };
     }, {}),
     [computeChoices, pickerHistory],
   );
 
   const updateTargetPath = useCallback(
-    (dispatchKey, entityId) => setTargetPath(
+    (pickerKey, entityId) => setTargetPath(
       (prevTargetPath) => fixSelectionPath({
         ...prevTargetPath,
-        [dispatchKey]: entityId,
+        [pickerKey]: entityId,
       }),
     ),
     [setTargetPath, fixSelectionPath],
@@ -121,11 +121,11 @@ export default function MoveMatchingRowModal({
         <Form>
           {pickerHistory.map((historyStep, idx) => (
             <MatchingSelect
-              key={historyStep.dispatchKey}
+              key={historyStep.pickerKey}
               pickerKey={historyStep.pickerKey}
               selectableEntities={computeChoices(idx, targetPath)}
-              selectedEntityId={targetPath[historyStep.dispatchKey]}
-              updateTargetPath={(id) => updateTargetPath(historyStep.dispatchKey, id)}
+              selectedEntityId={targetPath[historyStep.pickerKey]}
+              updateTargetPath={(id) => updateTargetPath(historyStep.pickerKey, id)}
             />
           ))}
         </Form>
