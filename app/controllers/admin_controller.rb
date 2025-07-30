@@ -85,6 +85,11 @@ class AdminController < ApplicationController
   def import_inbox_results
     @competition = competition_from_params
 
+    if @competition.tickets_competition_result.nil?
+      flash[:danger] = "Cannot import results because the competition does not have a results ticket."
+      return redirect_to competition_admin_import_results_path(@competition)
+    end
+
     @competition.tickets_competition_result.merge_temporary_results
 
     load_result_posting_steps do
