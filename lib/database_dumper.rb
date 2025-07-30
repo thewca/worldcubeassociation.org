@@ -957,6 +957,7 @@ module DatabaseDumper
     "wfc_xero_users" => :skip_all_rows,
     "wfc_dues_redirects" => :skip_all_rows,
     "ticket_logs" => :skip_all_rows,
+    "ticket_log_changes" => :skip_all_rows,
     "ticket_comments" => :skip_all_rows,
     "ticket_stakeholders" => :skip_all_rows,
     "tickets" => :skip_all_rows,
@@ -1319,7 +1320,7 @@ module DatabaseDumper
   end
 
   def self.filter_out_mysql_warning(dest_filename = nil)
-    "2>&1 | grep -v \"\\[Warning\\] Using a password on the command line interface can be insecure.\"#{dest_filename.present? ? " > #{dest_filename}" : ''} || true"
+    "2>&1 | grep -v \"\\[Warning\\] Using a password on the command line interface can be insecure.\"#{" > #{dest_filename}" if dest_filename.present?} || true"
   end
 end
 

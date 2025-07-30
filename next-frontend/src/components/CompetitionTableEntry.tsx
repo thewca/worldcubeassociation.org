@@ -184,7 +184,11 @@ const CompetitionTableEntry: React.FC<Props> = ({ comp }) => {
                   <EventIcon
                     eventId={eventId}
                     key={eventId}
-                    main={eventId === comp.main_event_id}
+                    color={
+                      eventId === comp.main_event_id
+                        ? "currentColor"
+                        : "supplementary.texts.gray1"
+                    }
                   />
                 ))}
               </Drawer.Body>

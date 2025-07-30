@@ -218,7 +218,7 @@ class UserGroup < ApplicationRecord
       .sort_by { |role| [role.user.name, role.updated_at] } # Sorts the members alphabetically.
       .each do |role|
         user = role.user
-        if sorted_users.count.zero? || sorted_users.last.id != user.id
+        if sorted_users.none? || sorted_users.last.id != user.id
           sorted_users.append(user)
           team_member_changes[user.id] = [role]
         else
@@ -301,15 +301,15 @@ class UserGroup < ApplicationRecord
       changes_of_last_month.push("<br><b>Changes in #{self.name}</b>")
       if (leader_appointments.count + no_more_leaders.count).positive?
         changes_of_last_month.push("<br><b>Leaders</b>")
-        changes_of_last_month.push(leader_appointments.join("<br>")) if leader_appointments.count.positive?
-        changes_of_last_month.push(no_more_leaders.join("<br>")) if no_more_leaders.count.positive?
+        changes_of_last_month.push(leader_appointments.join("<br>")) if leader_appointments.any?
+        changes_of_last_month.push(no_more_leaders.join("<br>")) if no_more_leaders.any?
       end
-      changes_of_last_month.push("<br><b>Promoted Senior Members</b><br>#{promoted_senior_members.join('<br>')}") if promoted_senior_members.count.positive?
-      changes_of_last_month.push("<br><b>New Senior Members</b><br>#{new_senior_members.join('<br>')}") if new_senior_members.count.positive?
-      changes_of_last_month.push("<br><b>New Members</b><br>#{new_members.join('<br>')}") if new_members.count.positive?
-      changes_of_last_month.push("<br><b>Demotions from Senior Member to Member</b><br>#{demoted_senior_members.join('<br>')}") if demoted_senior_members.count.positive?
-      changes_of_last_month.push("<br><b>Resigned/Demoted Senior Members</b><br>#{no_more_senior_members.join('<br>')}") if no_more_senior_members.count.positive?
-      changes_of_last_month.push("<br><b>Resigned/Demoted Members</b><br>#{no_more_members.join('<br>')}") if no_more_members.count.positive?
+      changes_of_last_month.push("<br><b>Promoted Senior Members</b><br>#{promoted_senior_members.join('<br>')}") if promoted_senior_members.any?
+      changes_of_last_month.push("<br><b>New Senior Members</b><br>#{new_senior_members.join('<br>')}") if new_senior_members.any?
+      changes_of_last_month.push("<br><b>New Members</b><br>#{new_members.join('<br>')}") if new_members.any?
+      changes_of_last_month.push("<br><b>Demotions from Senior Member to Member</b><br>#{demoted_senior_members.join('<br>')}") if demoted_senior_members.any?
+      changes_of_last_month.push("<br><b>Resigned/Demoted Senior Members</b><br>#{no_more_senior_members.join('<br>')}") if no_more_senior_members.any?
+      changes_of_last_month.push("<br><b>Resigned/Demoted Members</b><br>#{no_more_members.join('<br>')}") if no_more_members.any?
     end
     changes_of_last_month.join("<br>")
   end
@@ -332,7 +332,6 @@ class UserGroup < ApplicationRecord
 
   DEFAULT_SERIALIZE_OPTIONS = {
     include: %w[metadata],
-    methods: %w[lead_user],
   }.freeze
 
   def serializable_hash(options = nil)

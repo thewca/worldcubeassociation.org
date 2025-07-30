@@ -1295,12 +1295,10 @@ pt:
       db_dev_export: Exportação para Desenvolvimento
       #original_hash: 1fa73f3
       regulations: Regulamento
-      #original_hash: 3bb8751
-      regulations_full: Regulamentos & Orientações
+      #original_hash: 1fa73f3
+      regulations_full: Regulamentos
       #original_hash: 6bce1b5
       about_regulations: Sobre o Regulamento
-      #original_hash: 141d1d7
-      guidelines: Orientações
       #original_hash: c4622c3
       scrambles: Embaralhamentos
       #original_hash: 90ccd64
@@ -1990,6 +1988,8 @@ pt:
           WCA</a> ou com o seu <a href='%{delegate_url}'>Delegado</a> para fazer
           algumas dessas mudanças.
         reason:
+          #original_hash: 2e22133
+          no_access: não tem acesso para editar o utilizador
           #original_hash: 370ff12
           assigned: tem um ID da WCA associado
           #original_hash: 1c4670f
@@ -4657,11 +4657,15 @@ pt:
     #original_hash: 10bcdbd
     connect_wca_id: Associe o seu ID da WCA à sua conta!
   payments:
+    #original_hash: cfeba03
+    header: Histórico de Pagamentos
     messages:
       #original_hash: 2eac1cb
       charge_refunded: Pagamento foi reembolsado
       #original_hash: 1e1d219
       charges_refunded: Todas os valores cobrados foram reembolsados
+      #original_hash: c677bd3
+      no_payments: Nenhum pagamento foi efetuado para este registo.
     errors:
       refund:
         #original_hash: 66475ae
@@ -4868,6 +4872,8 @@ pt:
     forum_enter_dob: >-
       É necessário introduzir a data de nascimento para aceder ao fórum.
       Introduza a sua data de nascimento e tente aceder novamente ao fórum.
+    #original_hash: 56e3bad
+    refresh: Atualizar
   faq:
     #original_hash: d790b40
     title: Perguntas Frequentes
@@ -5541,8 +5547,8 @@ pt:
       incidents: Incidentes
       #original_hash: a0ca0c3
       posts: Artigos
-      #original_hash: 9d7ea9c
-      regulations_and_guidelines: Regulamentos e Orientações
+      #original_hash: 1fa73f3
+      regulations_and_guidelines: Regulamentos
       #original_hash: db683b3
       search_for: 'Procurar por <b>%{search_string}</b>'
       not_found:
@@ -5556,8 +5562,8 @@ pt:
         posts: Nenhum artigo encontrado para
         #original_hash: 3499e7e
         incidents: Nenhum incidente encontrado para
-        #original_hash: 76a6bf1
-        regulations_and_guidelines: Nenhum Regulamento ou Orientação encontrada para
+        #original_hash: 3909204
+        regulations_and_guidelines: Nenhum Regulamento encontrado para
   incidents_log:
     #original_hash: 61ab89f
     i18n_disclaimer: >-
@@ -5576,16 +5582,11 @@ pt:
         Todas as competições devem seguir o <a href="/regulations/">Regulamento
         da WCA</a>. É importante para competidores ler este regulmanento antes
         de competir a primeira vez.
-      #original_hash: 4296902
-      content2_html: >-
-        O Regulamento da WCA é complementado pelas <a
-        href="/regulations/guidelines.html">Orientações da WCA</a>, que contêm
-        clarificações e explicações adicionais.
       #original_hash: c8e1783
-      content3_html: >-
-        Decisões importantes sobre incidentes que aconteceram em competições que
-        foram resolvidas pelo Comité de Regulamentos da WCA podem ser
-        encontrados no <a href="/incidents">Registo de Incidentes</a>.
+      content2_html: >-
+        Decisões importantes sobre incidentes que ocorreram em competições que
+        foram resolvidos pelo Comité de Regulamentos da WCA podem ser
+        encontradas no <a href="/incidents.html">Registo de Incidentes</a>.
     panel2:
       #original_hash: 8ad8302
       title: Traduções
@@ -5619,8 +5620,8 @@ pt:
         Este documento contém informação importante e deve ser lido por todos os
         organizadores de competições.
   regulations_translations:
-    #original_hash: 9493b8d
-    title: 'Regulamentos e Orientações da WCA: Traduções'
+    #original_hash: a19a3f5
+    title: 'Regulamentos da WCA: Traduções'
     #original_hash: 386ecc1
     paragraph1: >-
       Se fala outra língua para além do Inglês, pode achar estas traduções

@@ -2,6 +2,7 @@
 
 class Api::V0::ApiController < ApplicationController
   include Rails::Pagination
+
   include NewRelic::Agent::Instrumentation::ControllerInstrumentation if Rails.env.production?
   rate_limit to: 60, within: 1.minute if Rails.env.production?
   protect_from_forgery with: :null_session
@@ -108,6 +109,10 @@ class Api::V0::ApiController < ApplicationController
         "TNoodle-WCA-1.2.2",
       ],
     }
+  end
+
+  def known_timezones
+    render json: Country::SUPPORTED_TIMEZONES
   end
 
   def search(*models)

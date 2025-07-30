@@ -2,15 +2,33 @@ import React from 'react';
 import { ticketsCompetitionResultStatuses } from '../../../../lib/wca-data.js.erb';
 import WarningsVerification from './WarningsVerification';
 import { adminImportResultsUrl } from '../../../../lib/requests/routes.js.erb';
+import TimelineView from './TimelineView';
+import MergeInboxResults from './MergeInboxResults';
 
 export default function CompetitionResultActionerView({ ticketDetails, updateStatus }) {
   const { ticket: { metadata: { status, competition_id: competitionId } } } = ticketDetails;
 
+  return (
+    <>
+      <TimelineView status={status} />
+      <ViewForStatus
+        status={status}
+        ticketDetails={ticketDetails}
+        updateStatus={updateStatus}
+        competitionId={competitionId}
+      />
+    </>
+  );
+}
+
+function ViewForStatus({
+  status, ticketDetails, updateStatus, competitionId,
+}) {
   switch (status) {
     case ticketsCompetitionResultStatuses.submitted:
       return <p>Please lock the competition results from the Posting dashboard.</p>;
 
-    case ticketsCompetitionResultStatuses.warnings_verification:
+    case ticketsCompetitionResultStatuses.locked_for_posting:
       return (
         <WarningsVerification
           ticketDetails={ticketDetails}
@@ -18,7 +36,14 @@ export default function CompetitionResultActionerView({ ticketDetails, updateSta
         />
       );
 
-    case ticketsCompetitionResultStatuses.results_verification:
+    case ticketsCompetitionResultStatuses.warnings_verified:
+      return (
+        <MergeInboxResults
+          ticketDetails={ticketDetails}
+        />
+      );
+
+    case ticketsCompetitionResultStatuses.merged_inbox_results:
       return (
         <p>
           Please finish the remaining steps in
@@ -29,6 +54,6 @@ export default function CompetitionResultActionerView({ ticketDetails, updateSta
       );
 
     default:
-      return <p>Unknown status</p>;
+      return null;
   }
 }

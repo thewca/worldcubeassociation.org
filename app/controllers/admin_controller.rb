@@ -4,8 +4,8 @@ require 'csv'
 
 class AdminController < ApplicationController
   before_action :authenticate_user!
-  before_action -> { redirect_to_root_unless_user(:can_admin_results?) }, except: %i[all_voters leader_senior_voters]
-  before_action -> { redirect_to_root_unless_user(:can_see_eligible_voters?) }, only: %i[all_voters leader_senior_voters]
+  before_action -> { redirect_to_root_unless_user(:can_admin_results?) }, except: %i[all_voters leader_senior_voters regional_voters]
+  before_action -> { redirect_to_root_unless_user(:can_see_eligible_voters?) }, only: %i[all_voters leader_senior_voters regional_voters]
 
   def index
   end
@@ -33,16 +33,7 @@ class AdminController < ApplicationController
   end
 
   def check_competition_results
-    with_results_validator do
-      @competition = competition_from_params
-    end
-  end
-
-  def with_results_validator
-    # For this view, we just build an empty validator: the WRT will decide what
-    # to actually run (by default all validators will be selected).
-    @results_validator = ResultsValidators::CompetitionsResultsValidator.new(check_real_results: true)
-    yield if block_given?
+    @competition = competition_from_params
   end
 
   def clear_results_submission
@@ -94,38 +85,12 @@ class AdminController < ApplicationController
   def import_inbox_results
     @competition = competition_from_params
 
-    ActiveRecord::Base.transaction do
-      result_rows = @competition.inbox_results
-                                .includes(:inbox_person)
-                                .map do |inbox_res|
-        inbox_person = inbox_res.inbox_person
-
-        person_id = inbox_person&.wca_id.presence || inbox_res.person_id
-        person_country = inbox_person&.country
-
-        {
-          pos: inbox_res.pos,
-          person_id: person_id,
-          person_name: inbox_res.person_name,
-          country_id: person_country.id,
-          competition_id: inbox_res.competition_id,
-          event_id: inbox_res.event_id,
-          round_type_id: inbox_res.round_type_id,
-          round_id: inbox_res.round_id,
-          format_id: inbox_res.format_id,
-          value1: inbox_res.value1,
-          value2: inbox_res.value2,
-          value3: inbox_res.value3,
-          value4: inbox_res.value4,
-          value5: inbox_res.value5,
-          best: inbox_res.best,
-          average: inbox_res.average,
-        }
-      end
-
-      Result.insert_all!(result_rows)
-      @competition.inbox_results.destroy_all
+    if @competition.tickets_competition_result.nil?
+      flash[:danger] = "Cannot import results because the competition does not have a results ticket."
+      return redirect_to competition_admin_import_results_path(@competition)
     end
+
+    @competition.tickets_competition_result.merge_inbox_results
 
     load_result_posting_steps do
       render partial: 'import_results_steps'
@@ -241,6 +206,10 @@ class AdminController < ApplicationController
     voters User.leader_senior_voters, "leader-senior-wca-voters"
   end
 
+  def regional_voters
+    voters User.regional_voters, "regional-wca-voters"
+  end
+
   private def voters(users, filename)
     csv = CSV.generate do |line|
       users.each do |user|
@@ -346,34 +315,5 @@ class AdminController < ApplicationController
 
     @results_by_competition = all_results.group_by(&:competition_id)
                                          .transform_keys { |id| Competition.find(id) }
-  end
-
-  def reassign_wca_id
-    @reassign_wca_id = ReassignWcaId.new
-    @reassign_wca_id_validated = false
-  end
-
-  def validate_reassign_wca_id
-    reassign_params = params.require(:reassign_wca_id).permit(:account1, :account2)
-    @reassign_wca_id = ReassignWcaId.new(reassign_params)
-    if @reassign_wca_id.valid?
-      @reassign_wca_id_validated = true
-    else
-      flash.now[:danger] = "Error reassigning WCA ID"
-    end
-    render 'reassign_wca_id'
-  end
-
-  def do_reassign_wca_id
-    reassign_params = params.require(:reassign_wca_id).permit(:account1, :account2)
-    @reassign_wca_id = ReassignWcaId.new(reassign_params)
-    if @reassign_wca_id.do_reassign_wca_id
-      flash.now[:success] = "Successfully reassigned #{@reassign_wca_id.account1_user.wca_id} from account #{@reassign_wca_id.account1_user.id} to #{@reassign_wca_id.account2_user.id}!"
-      @reassign_wca_id = ReassignWcaId.new
-    else
-      @reassign_wca_id_validated = false
-      flash.now[:danger] = "Error reassigning WCA ID"
-    end
-    render 'reassign_wca_id'
   end
 end

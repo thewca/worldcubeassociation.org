@@ -11,7 +11,7 @@ class UserIdsInput < SimpleForm::Inputs::Base
       persons = (@builder.object.send(attribute_name) || "").split(",").map { |wca_id| Person.find_by(wca_id: wca_id) }
       merged_input_options[:data] = { data: persons.to_json }
     else
-      users = (@builder.object.send(attribute_name).to_s || "").split(",").map { |id| User.find_by(id: id) }
+      users = @builder.object.send(attribute_name).to_s.split(",").map { |id| User.find_by(id: id) }
       merged_input_options[:data] = { data: users.to_json }
     end
     merged_input_options[:class] << "wca-autocomplete-only_one" if @options[:only_one]

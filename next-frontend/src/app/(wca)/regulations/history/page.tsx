@@ -32,7 +32,7 @@ export default async function RegulationsHistory() {
   return (
     <Container>
       <VStack gap="8" pt="8" alignItems="left">
-        <Heading size="5xl">WCA Regulations and Guidelines</Heading>
+        <Heading size="5xl">WCA Regulations</Heading>
         <Heading size="2xl">Older Versions of the Regulations</Heading>
         <Text>
           Until 2011, the Regulations were maintained by Ron van Bruchem and the
@@ -43,8 +43,10 @@ export default async function RegulationsHistory() {
           is in charge of them.
         </Text>
         <Text>
-          For the 2013 release, the Regulations were split into two documents:
-          the Regulations and the Guidelines.
+          Previously, from the January 1st, 2013 release until the January 1st,
+          2025 release, the WCA Regulations were split into the WCA Regulations
+          and the WCA Guidelines. The former contents of both documents were
+          combined into the WCA Regulations for the July 17th, 2025 release.
         </Text>
         <List.Root>
           {regulationsHistoryItems.map((item) => (
@@ -65,7 +67,7 @@ export default async function RegulationsHistory() {
           ))}
         </List.Root>
         <Text>
-          Current updates to the Regulations and Guidelines are available{" "}
+          Current updates to the Regulations are available{" "}
           <Link href="https://github.com/thewca/wca-regulations/">
             on GitHub
           </Link>

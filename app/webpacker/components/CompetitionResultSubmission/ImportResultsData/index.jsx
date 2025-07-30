@@ -15,19 +15,19 @@ export default function Wrapper({
     <WCAQueryClientProvider>
       <ImportResultsData
         competitionId={competitionId}
-        alreadyHasSubmittedResult={alreadyHasSubmittedResult}
+        hasTemporaryResults={alreadyHasSubmittedResult}
         isAdminView={isAdminView}
       />
     </WCAQueryClientProvider>
   );
 }
 
-function ImportResultsData({
+export function ImportResultsData({
   competitionId,
-  alreadyHasSubmittedResult,
+  hasTemporaryResults,
   isAdminView = false,
 }) {
-  const [activeAccordion, setActiveAccordion] = useState(!alreadyHasSubmittedResult);
+  const [activeAccordion, setActiveAccordion] = useState(!hasTemporaryResults);
 
   const onImportSuccess = () => {
     // Ideally page should not be reloaded, but this is currently required to re-render
@@ -73,10 +73,10 @@ function ImportResultsData({
         </Accordion.Title>
         <Accordion.Content active={activeAccordion}>
           <Message
-            warning={alreadyHasSubmittedResult}
-            info={!alreadyHasSubmittedResult}
+            warning={hasTemporaryResults}
+            info={!hasTemporaryResults}
           >
-            {alreadyHasSubmittedResult
+            {hasTemporaryResults
               ? 'Some results have already been uploaded before, importing results data again will override all of them!'
               : 'Please start by selecting a JSON file to import.'}
           </Message>

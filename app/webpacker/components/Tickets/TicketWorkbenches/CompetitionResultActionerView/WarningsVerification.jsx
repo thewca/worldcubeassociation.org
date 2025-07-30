@@ -11,7 +11,12 @@ export default function WarningsVerification({ ticketDetails, updateStatus }) {
     data: validationOutput, isPending, isError, error,
   } = useQuery({
     queryKey: ['ticketCompetitionResultValidationOutput', id],
-    queryFn: () => runValidatorsForCompetitionList(metadata.competition_id, ALL_VALIDATORS, false),
+    queryFn: () => runValidatorsForCompetitionList(
+      metadata.competition_id,
+      ALL_VALIDATORS,
+      false,
+      false,
+    ),
   });
 
   return (
@@ -26,7 +31,7 @@ export default function WarningsVerification({ ticketDetails, updateStatus }) {
       <Segment>{ticketDetails.ticket.metadata.delegate_message}</Segment>
       <Button
         primary
-        onClick={() => updateStatus(ticketsCompetitionResultStatuses.results_verification)}
+        onClick={() => updateStatus(ticketsCompetitionResultStatuses.warnings_verified)}
       >
         Warnings verified
       </Button>

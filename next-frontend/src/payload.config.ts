@@ -17,6 +17,7 @@ import {
 import { Users } from "@/collections/Users";
 import { Tools } from "@/collections/Tools";
 import { RegulationsHistoryItem } from "@/collections/RegulationsHistory";
+import { Documents } from "@/collections/Documents";
 import { Nav } from "@/globals/Nav";
 import { Home } from "@/globals/Home";
 import { AboutRegulations } from "@/globals/AboutRegulations";
@@ -24,6 +25,7 @@ import { SpeedCubingHistoryPage } from "@/globals/SpeedcubingHistory";
 import { Privacy } from "@/globals/Privacy";
 import { Disclaimer } from "@/globals/Disclaimer";
 import { AboutUsPage } from "@/globals/About";
+import { languageConfig, fallbackLng } from "@/lib/i18n/settings";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -58,16 +60,19 @@ async function plugins() {
 
 async function dbAdapter() {
   if (process.env.NODE_ENV === "production") {
-    const { mongooseAdapter } = await import("@payloadcms/db-mongodb");
+    const { mongooseAdapter, compatabilityOptions } = await import(
+      "@payloadcms/db-mongodb"
+    );
     return mongooseAdapter({
       url: process.env.DATABASE_URI || "",
-      disableIndexHints: true,
       connectOptions: {
         authMechanism: "MONGODB-AWS",
         authSource: "$external",
         tls: true,
         tlsCAFile: "/app/global-bundle.pem",
       },
+      ...compatabilityOptions.documentdb,
+      useJoinAggregations: false,
     });
   } else {
     const { sqliteAdapter } = await import("@payloadcms/db-sqlite");
@@ -90,6 +95,13 @@ export default buildConfig({
     admin: "/payload",
     api: "/api/payload",
   },
+  localization: {
+    locales: Object.entries(languageConfig).map(([code, { name: label }]) => ({
+      code,
+      label,
+    })),
+    defaultLocale: fallbackLng,
+  },
   collections: [
     Media,
     Testimonials,
@@ -97,6 +109,7 @@ export default buildConfig({
     FaqCategories,
     FaqQuestions,
     Users,
+    Documents,
     RegulationsHistoryItem,
     Tools,
   ],

@@ -80,6 +80,44 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/competitions/{competitionId}/schedule": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get competition schedule in WCIF format */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    competitionId: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Successful response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["WcifSchedule"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/competitions/{competitionId}/registrations": {
         parameters: {
             query?: never;
@@ -142,6 +180,47 @@ export interface paths {
                     };
                     content: {
                         "application/json": components["schemas"]["CompetitionIndex"][];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/incidents": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get a list of incidents */
+        get: {
+            parameters: {
+                query?: {
+                    q?: string;
+                    tags?: string;
+                    page?: number;
+                    per_page?: number;
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Successful response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Incident"][];
                     };
                 };
             };
@@ -232,6 +311,51 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/user_groups": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get user groups */
+        get: {
+            parameters: {
+                query?: {
+                    /** @description Filter by whether the group is active */
+                    isActive?: boolean;
+                    /** @description Filter by whether the group is hidden */
+                    isHidden?: boolean;
+                    /** @description Filter by group type (e.g., "officers") */
+                    groupType?: string;
+                    /** @description Sort by a specific field (e.g., "start_date", "-created_at") */
+                    sort?: string;
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description A list of user groups */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["UserGroup"][];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/user_roles": {
         parameters: {
             query?: never;
@@ -255,6 +379,8 @@ export interface paths {
                     status?: string;
                     /** @description Filter by group type (e.g., "officers") */
                     groupType?: string;
+                    /** @description Filter by parent Group */
+                    parentGroupId?: number;
                     /** @description Filter by whether the user is the lead of the group */
                     isLead?: boolean;
                     /** @description Sort by a specific field (e.g., "start_date", "-created_at") */
@@ -357,6 +483,42 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/known-timezones": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get a list of Olson timezones that the backend understands */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Successful response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": string[];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/regional-organizations": {
         parameters: {
             query?: never;
@@ -421,6 +583,8 @@ export interface components {
                 updated_at?: string;
                 /** Format: email */
                 email?: string;
+                preferred_contact_mode?: string;
+                friendly_id?: string;
             };
         };
         RegionalOrganization: {
@@ -450,6 +614,35 @@ export interface components {
              */
             url: string;
             avatar: components["schemas"]["UserAvatar"];
+        };
+        Incident: {
+            id: string;
+            title: string;
+            private_description?: string;
+            public_summary: string;
+            /** Format: date-time */
+            created_at: string;
+            /** Format: date-time */
+            updated_at: string;
+            /** Format: date-time */
+            resolved_at: string;
+            digest_worthy: boolean;
+            /** Format: date-time */
+            digest_sent_at?: string;
+            /** Format: uri */
+            url: string;
+            tags: {
+                name: string;
+                id?: number;
+                /** Format: uri */
+                url: string;
+                content_html: string;
+            }[];
+            competitions: {
+                id: string;
+                name: string;
+                comments?: string;
+            }[];
         };
         TeamMembership: {
             id: number;
@@ -909,6 +1102,45 @@ export interface components {
         WcifRanking: number;
         WcifPercent: number;
         WcifScramble: string;
+        WcifSchedule: {
+            /** Format: date */
+            startDate: string;
+            numberOfDays: number;
+            venues: components["schemas"]["WcifVenue"][];
+        };
+        WcifVenue: {
+            id: number;
+            name: string;
+            latitudeMicrodegrees: number;
+            longitudeMicrodegrees: number;
+            countryIso2: components["schemas"]["WcifCountryCode"];
+            timezone: string;
+            rooms: components["schemas"]["WcifRoom"][];
+            extensions: unknown[];
+        };
+        WcifRoom: {
+            id: number;
+            name: string;
+            color: string;
+            activities: components["schemas"]["WcifActivity"][];
+            extensions: unknown[];
+        };
+        WcifActivity: {
+            id: number;
+            name: string;
+            activityCode: components["schemas"]["WcifActivityCode"];
+            /** Format: date-time */
+            startTime: string;
+            /** Format: date-time */
+            endTime: string;
+            childActivities: components["schemas"]["WcifActivity"][];
+            scrambleSetId?: number;
+            extensions: unknown[];
+        };
+        /** @example US */
+        WcifCountryCode: string;
+        /** @example 333-r1-g1 */
+        WcifActivityCode: string;
     };
     responses: never;
     parameters: never;

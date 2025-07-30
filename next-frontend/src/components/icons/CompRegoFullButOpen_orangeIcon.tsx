@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { createIcon } from "@chakra-ui/react";
 
 const CompRegoFullButOpen_orangeIcon = createIcon({

@@ -17,7 +17,7 @@ class PotentialDuplicatePerson < ApplicationRecord
       },
       duplicate_person: {
         private_attributes: %w[dob],
-        methods: %w[country],
+        methods: %w[country user_id],
       },
     },
   }.freeze

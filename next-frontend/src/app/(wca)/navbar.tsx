@@ -17,23 +17,8 @@ import { RefreshRouteOnSave } from "@/components/RefreshRouteOnSave";
 import { ColorModeButton } from "@/components/ui/color-mode";
 import { LuChevronDown, LuMonitorCheck } from "react-icons/lu";
 
-import { iconMap, IconName } from "@/components/icons/iconMap";
 import LanguageSelector from "@/components/ui/languageSelector";
-
-interface IconDisplayProps {
-  name: IconName | undefined | null;
-  fallback?: boolean;
-}
-
-const IconDisplay = ({ name, fallback = false }: IconDisplayProps) => {
-  if (!name) {
-    return fallback ? <Text>No_Icon</Text> : null;
-  }
-
-  const IconComponent = iconMap[name];
-
-  return <IconComponent />;
-};
+import IconDisplay from "@/components/IconDisplay";
 
 export default async function Navbar() {
   const payload = await getPayload({ config });
@@ -65,7 +50,9 @@ export default async function Navbar() {
             {navbarEntry.blockType === "LinkItem" && (
               <Button asChild variant="ghost" size="sm">
                 <Link href={navbarEntry.targetLink}>
-                  <IconDisplay name={navbarEntry.displayIcon} />
+                  {navbarEntry.displayIcon && (
+                    <IconDisplay name={navbarEntry.displayIcon} />
+                  )}
                   {navbarEntry.displayText}
                 </Link>
               </Button>
@@ -74,7 +61,9 @@ export default async function Navbar() {
               <Menu.Root>
                 <Menu.Trigger asChild>
                   <Button variant="ghost" size="sm">
-                    <IconDisplay name={navbarEntry.displayIcon} />
+                    {navbarEntry.displayIcon && (
+                      <IconDisplay name={navbarEntry.displayIcon} />
+                    )}
                     {navbarEntry.title}
                     <LuChevronDown />
                   </Button>
@@ -84,9 +73,14 @@ export default async function Navbar() {
                     {navbarEntry.entries.map((subEntry) => (
                       <React.Fragment key={subEntry.id}>
                         {subEntry.blockType === "LinkItem" && (
-                          <Menu.Item value={subEntry.id!} asChild>
+                          <Menu.Item
+                            value={`${navbarEntry.id}/${subEntry.id}`}
+                            asChild
+                          >
                             <Link href={subEntry.targetLink}>
-                              <IconDisplay name={subEntry.displayIcon} />
+                              {subEntry.displayIcon && (
+                                <IconDisplay name={subEntry.displayIcon} />
+                              )}
                               {subEntry.displayText}
                             </Link>
                           </Menu.Item>
@@ -109,11 +103,16 @@ export default async function Navbar() {
                                 {subEntry.entries.map((nestedEntry) => (
                                   <React.Fragment key={nestedEntry.id}>
                                     {nestedEntry.blockType === "LinkItem" && (
-                                      <Menu.Item value={nestedEntry.id!}>
+                                      <Menu.Item
+                                        value={`${navbarEntry.id}/${subEntry.id}/${nestedEntry.id}`}
+                                        asChild
+                                      >
                                         <Link href={nestedEntry.targetLink}>
-                                          <IconDisplay
-                                            name={nestedEntry.displayIcon}
-                                          />
+                                          {nestedEntry.displayIcon && (
+                                            <IconDisplay
+                                              name={nestedEntry.displayIcon}
+                                            />
+                                          )}
                                           {nestedEntry.displayText}
                                         </Link>
                                       </Menu.Item>
