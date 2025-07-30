@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { events } from '../../lib/wca-data.js.erb';
+import { events, formats } from '../../lib/wca-data.js.erb';
 
 const prefixForIndex = (index) => {
   const char = String.fromCharCode(65 + (index % 26));
@@ -41,4 +41,27 @@ export function moveArrayItem(arr, fromIndex, toIndex) {
     // here we do NOT want to ignore the items that were originally there, so no +1
     ...withoutMovedItem.slice(toIndex),
   ];
+}
+
+export function computeMatchingProgress(wcifEvents) {
+  return wcifEvents.flatMap(
+    (wcifEvent) => wcifEvent.rounds.map(
+      (wcifRound) => {
+        const formatExpectedSolveCount = formats.byId[wcifRound.format]?.expected_solve_count;
+
+        return {
+          roundId: wcifRound.id,
+          expected: wcifRound.scrambleSetCount,
+          actual: wcifRound.scrambleSets?.length ?? 0,
+          scrambleSets: wcifRound.scrambleSets?.map(
+            (scrSet) => ({
+              scrambleSetId: scrSet.id,
+              expected: formatExpectedSolveCount,
+              actual: scrSet.inbox_scrambles?.length ?? 0,
+            }),
+          ),
+        };
+      },
+    ),
+  );
 }

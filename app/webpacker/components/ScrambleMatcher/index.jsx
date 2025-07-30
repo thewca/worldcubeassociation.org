@@ -14,6 +14,7 @@ import { scramblesUpdateRoundMatchingUrl } from '../../lib/requests/routes.js.er
 import scrambleMatchReducer, { initializeState } from './reducer';
 import useUnsavedChangesAlert from '../../lib/hooks/useUnsavedChangesAlert';
 import { humanizeActivityCode } from '../../lib/utils/wcif';
+import { computeMatchingProgress } from './util';
 
 export default function Wrapper({
   wcifEvents,
@@ -98,29 +99,17 @@ function ScrambleMatcher({
     [competitionId, matchState, submitMatchState],
   );
 
-  const roundIds = useMemo(() => wcifEvents.flatMap((event) => event.rounds)
-    .map((r) => r.id), [wcifEvents]);
+  const roundMatchingProgress = useMemo(() => computeMatchingProgress(matchState), [matchState]);
+  const hasAnyScrambles = roundMatchingProgress.some((roundProgress) => roundProgress.actual > 0);
 
-  const roundIdsWithoutScrambles = useMemo(() => _.difference(
-    roundIds,
-    Object.keys(matchState),
-  ), [matchState, roundIds]);
-
-  const missingScrambleIds = useMemo(() => {
-    if (_.isEmpty(matchState)) return [];
-
-    return roundIds.filter((roundId) => {
-      const matchedRound = matchState[roundId] ?? [];
-      const wcifRound = wcifEvents.flatMap((event) => event.rounds).find((r) => r.id === roundId);
-      return matchedRound.length < wcifRound.scrambleSetCount;
-    });
-  }, [matchState, roundIds, wcifEvents]);
+  const roundsWithErrors = roundMatchingProgress.filter(
+    (roundProgress) => roundProgress.actual < roundProgress.expected,
+  );
 
   const submitDisabled = useMemo(() => (
     isSubmitting
-      || missingScrambleIds.length > 0
-      || roundIdsWithoutScrambles.length > 0
-  ), [isSubmitting, missingScrambleIds.length, roundIdsWithoutScrambles.length]);
+      || roundsWithErrors.length > 0
+  ), [isSubmitting, roundsWithErrors.length]);
 
   const renderSubmitButton = useCallback((btnText) => (
     <Button
@@ -135,8 +124,8 @@ function ScrambleMatcher({
 
   return (
     <>
-      {roundIdsWithoutScrambles.length > 0 && (
-        Object.keys(matchState).length === 0 ? (
+      {roundsWithErrors.length > 0 && (
+        !hasAnyScrambles ? (
           <Message
             warning
             header="No scramble sets available"
@@ -146,30 +135,21 @@ function ScrambleMatcher({
           <Message error>
             <Message.Header>Missing Scramble Sets</Message.Header>
             <Message.List>
-              {roundIdsWithoutScrambles.map((id) => (
-                <Message.Item key={id}>
-                  Missing scramble sets for round
+              {roundsWithErrors.map((roundProgress) => (
+                <Message.Item key={roundProgress.roundId}>
+                  Missing
                   {' '}
-                  {humanizeActivityCode(id)}
+                  {roundProgress.actual === 0
+                    ? 'all scrambles'
+                    : `${roundProgress.expected - roundProgress.actual} scramble sets`}
+                  for round
+                  {' '}
+                  {humanizeActivityCode(roundProgress.roundId)}
                 </Message.Item>
               ))}
             </Message.List>
           </Message>
         )
-      )}
-      {missingScrambleIds.length > 0 && (
-        <Message error>
-          <Message.Header>Missing Scrambles</Message.Header>
-          <Message.List>
-            {missingScrambleIds.map((id) => (
-              <Message.Item key={id}>
-                Missing scrambles in round
-                {' '}
-                {humanizeActivityCode(id)}
-              </Message.Item>
-            ))}
-          </Message.List>
-        </Message>
       )}
       <FileUpload
         competitionId={competitionId}
