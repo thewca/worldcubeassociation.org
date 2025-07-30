@@ -1,8 +1,4 @@
-import React, {
-  useCallback,
-  useMemo,
-  useReducer,
-} from 'react';
+import React, { useCallback, useMemo, useReducer } from 'react';
 import { Button, Divider, Message } from 'semantic-ui-react';
 import _ from 'lodash';
 import { useMutation } from '@tanstack/react-query';
@@ -13,8 +9,8 @@ import { fetchJsonOrError } from '../../lib/requests/fetchWithAuthenticityToken'
 import { scramblesUpdateRoundMatchingUrl } from '../../lib/requests/routes.js.erb';
 import scrambleMatchReducer, { initializeState } from './reducer';
 import useUnsavedChangesAlert from '../../lib/hooks/useUnsavedChangesAlert';
-import { humanizeActivityCode } from '../../lib/utils/wcif';
 import { computeMatchingProgress } from './util';
+import MatchingProgressMessage from './MatchingProgressMessage';
 
 export default function Wrapper({
   wcifEvents,
@@ -100,57 +96,30 @@ function ScrambleMatcher({
   );
 
   const roundMatchingProgress = useMemo(() => computeMatchingProgress(matchState), [matchState]);
-  const hasAnyScrambles = roundMatchingProgress.some((roundProgress) => roundProgress.actual > 0);
 
-  const roundsWithErrors = roundMatchingProgress.filter(
-    (roundProgress) => roundProgress.actual < roundProgress.expected,
+  const hasAnyMissing = roundMatchingProgress.some(
+    (roundProgress) => roundProgress.actual < roundProgress.expected
+      || roundProgress.scrambleSets.some(
+        (setProgress) => setProgress.actual < setProgress.expected,
+      ),
   );
-
-  const submitDisabled = useMemo(() => (
-    isSubmitting
-      || roundsWithErrors.length > 0
-  ), [isSubmitting, roundsWithErrors.length]);
 
   const renderSubmitButton = useCallback((btnText) => (
     <Button
       primary
       onClick={submitAction}
       loading={isSubmitting}
-      disabled={submitDisabled}
+      disabled={isSubmitting || hasAnyMissing}
     >
       {btnText}
     </Button>
-  ), [isSubmitting, submitAction, submitDisabled]);
+  ), [isSubmitting, submitAction, hasAnyMissing]);
 
   return (
     <>
-      {roundsWithErrors.length > 0 && (
-        !hasAnyScrambles ? (
-          <Message
-            warning
-            header="No scramble sets available"
-            content="Upload some JSON files to get started!"
-          />
-        ) : (
-          <Message error>
-            <Message.Header>Missing Scramble Sets</Message.Header>
-            <Message.List>
-              {roundsWithErrors.map((roundProgress) => (
-                <Message.Item key={roundProgress.roundId}>
-                  Missing
-                  {' '}
-                  {roundProgress.actual === 0
-                    ? 'all scrambles'
-                    : `${roundProgress.expected - roundProgress.actual} scramble sets`}
-                  for round
-                  {' '}
-                  {humanizeActivityCode(roundProgress.roundId)}
-                </Message.Item>
-              ))}
-            </Message.List>
-          </Message>
-        )
-      )}
+      <MatchingProgressMessage
+        roundMatchingProgress={roundMatchingProgress}
+      />
       <FileUpload
         competitionId={competitionId}
         initialScrambleFiles={initialScrambleFiles}

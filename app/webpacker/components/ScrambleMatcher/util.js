@@ -50,12 +50,13 @@ export function computeMatchingProgress(wcifEvents) {
         const formatExpectedSolveCount = formats.byId[wcifRound.format]?.expected_solve_count;
 
         return {
-          roundId: wcifRound.id,
+          id: wcifRound.id,
           expected: wcifRound.scrambleSetCount,
           actual: wcifRound.scrambleSets?.length ?? 0,
           scrambleSets: wcifRound.scrambleSets?.map(
-            (scrSet) => ({
-              scrambleSetId: scrSet.id,
+            (scrSet, idx) => ({
+              id: scrSet.id,
+              index: idx,
               expected: formatExpectedSolveCount,
               actual: scrSet.inbox_scrambles?.length ?? 0,
             }),
