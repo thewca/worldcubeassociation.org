@@ -12,7 +12,7 @@ module Types
     field :email, String, null: false, require_authorization: true
     field :avatar, Types::UserAvatarType, null: true
     field :roles, [String], null: false
-    field :registration, Types::RegistrationType, null: false
+    field :registration, Types::RegistrationType, null: true
     field :assignments, [Types::AssignmentType], null: false
     field :personalBests, [Types::PersonalBestType], null: false
     field :extensions, [Types::WcifExtensionType], null: false
