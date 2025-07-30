@@ -2,35 +2,26 @@ import { useCallback } from 'react';
 import _ from 'lodash';
 import { moveArrayItem } from './util';
 
-export function groupAndSortScrambles(scrambleSets) {
+function addScrambleSetsToEvents(wcifEvents, scrambleSets) {
   const groupedScrambleSets = _.groupBy(
     scrambleSets,
     'matched_round_wcif_id',
   );
 
-  return _.mapValues(
-    groupedScrambleSets,
-    (sets) => _.sortBy(sets, 'ordered_index')
-      .map((set) => ({
-        ...set,
-        inbox_scrambles: _.sortBy(set.inbox_scrambles, 'ordered_index'),
-      })),
-  );
-}
-
-function mergeScrambleSets(sortedScramblesOld, sortedScramblesNew) {
-  return _.mergeWith(
-    sortedScramblesOld,
-    sortedScramblesNew,
-    (oldSets, newSets) => {
-      const oldOrEmpty = oldSets ?? [];
-      const newOrEmpty = newSets ?? [];
-
-      const merged = [...oldOrEmpty, ...newOrEmpty];
-
-      return _.uniqBy(merged, 'id');
-    },
-  );
+  return wcifEvents.map((wcifEvent) => ({
+    ...wcifEvent,
+    rounds: wcifEvent.rounds.map((round) => ({
+      ...round,
+      scrambleSets: _.uniqBy([
+        ...(round.scrambleSets ?? []),
+        ..._.sortBy(groupedScrambleSets[round.id], 'ordered_index')
+          .map((scrSet) => ({
+            ...scrSet,
+            inbox_scrambles: _.sortBy(scrSet.inbox_scrambles, 'ordered_index'),
+          })),
+      ], 'id'),
+    })),
+  }));
 }
 
 function applyAction(state, keys, action) {
@@ -40,30 +31,28 @@ function applyAction(state, keys, action) {
   }), state);
 }
 
-export function initializeState(scrambleSets) {
+export function initializeState({ wcifEvents, scrambleSets }) {
   return applyAction(
     {},
     ['initial', 'current'],
-    () => groupAndSortScrambles(scrambleSets),
+    () => addScrambleSetsToEvents(wcifEvents, scrambleSets),
   );
 }
 
 function addScrambleFile(state, newScrambleFile) {
-  const sortedFileScrambles = groupAndSortScrambles(newScrambleFile.inbox_scramble_sets);
-
-  return mergeScrambleSets(state, sortedFileScrambles);
+  return addScrambleSetsToEvents(state, newScrambleFile.inbox_scramble_sets);
 }
 
 function removeScrambleFile(state, oldScrambleFile) {
-  const withoutScrambleFile = _.mapValues(
-    state,
-    (sets) => sets.filter(
-      (set) => set.external_upload_id !== oldScrambleFile.id,
-    ),
-  );
-
-  // Throw away state entries for rounds that don't have any sets at all anymore
-  return _.pickBy(withoutScrambleFile, (sets) => sets.length > 0);
+  return state.map((wcifEvent) => ({
+    ...wcifEvent,
+    rounds: wcifEvent.rounds.map((round) => ({
+      ...round,
+      scrambleSets: round.scrambleSets.filter(
+        (scrSet) => scrSet.external_upload_id !== oldScrambleFile.id,
+      ),
+    })),
+  }));
 }
 
 export function useDispatchWrapper(originalDispatch, actionVars) {
@@ -90,7 +79,10 @@ export default function scrambleMatchReducer(state, action) {
         (subState) => removeScrambleFile(subState, action.scrambleFile),
       );
     case 'resetAfterSave':
-      return initializeState(action.scrambleSets);
+      return initializeState({
+        wcifEvents: state,
+        scrambleSets: action.scrambleSets,
+      });
     case 'moveRoundScrambleSet':
       return applyAction(state, ['current'], (subState) => ({
         ...subState,

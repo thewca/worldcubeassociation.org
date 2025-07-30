@@ -8,7 +8,7 @@ import _ from 'lodash';
 import { useMutation } from '@tanstack/react-query';
 import WCAQueryClientProvider from '../../lib/providers/WCAQueryClientProvider';
 import FileUpload from './FileUpload';
-import MatchingPickerChain from './MatchingPickerChain';
+import PickerWithMatching from './PickerWithMatching';
 import { fetchJsonOrError } from '../../lib/requests/fetchWithAuthenticityToken';
 import { scramblesUpdateRoundMatchingUrl } from '../../lib/requests/routes.js.erb';
 import scrambleMatchReducer, { initializeState } from './reducer';
@@ -67,7 +67,7 @@ function ScrambleMatcher({
     dispatchMatchState,
   ] = useReducer(
     scrambleMatchReducer,
-    inboxScrambleSets,
+    { wcifEvents, scrambleSets: inboxScrambleSets },
     initializeState,
   );
 
@@ -186,10 +186,14 @@ function ScrambleMatcher({
           your changes!
         </Message>
       )}
-      <MatchingPickerChain
-        wcifEvents={wcifEvents}
-        matchState={matchState}
+      <PickerWithMatching
+        pickerKey="events"
+        selectableEntities={matchState}
         dispatchMatchState={dispatchMatchState}
+        nestedPickers={[
+          { key: 'rounds', mapping: 'scrambleSets' },
+          { key: 'groups', mapping: 'inbox_scrambles' },
+        ]}
       />
       {hasUnsavedChanges && (
         <Message info content="You have unsaved changes. Don't forget to Save below!" />
