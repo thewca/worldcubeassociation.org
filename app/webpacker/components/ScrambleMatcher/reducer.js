@@ -54,7 +54,7 @@ function removeScrambleFile(state, oldScrambleFile) {
   }));
 }
 
-function translatePathToLodash(path, pickerHistory, initialLookup) {
+export function translatePathToLodash(path, pickerHistory, initialLookup) {
   return pickerHistory.reduce((accu, historyStep) => {
     const idToSearch = path[historyStep.dispatchKey];
 
@@ -108,7 +108,7 @@ export default function scrambleMatchReducer(state, action) {
         );
 
         const { path: newPath } = translatePathToLodash(
-          action.toPath,
+          action.targetPath,
           action.pickerHistory,
           subState,
         );

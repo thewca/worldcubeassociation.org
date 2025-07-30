@@ -3,7 +3,7 @@ import { Button, Form, Modal } from 'semantic-ui-react';
 import _ from 'lodash';
 import pickerConfigurations from './config';
 import { useInputUpdater } from '../../lib/hooks/useInputState';
-import { translateHistoryToPath } from './reducer';
+import { translateHistoryToPath, translatePathToLodash } from './reducer';
 
 function MatchingSelect({
   pickerKey,
@@ -68,12 +68,7 @@ export default function MoveMatchingRowModal({
 
     const parentSteps = pickerHistory.slice(0, historyIdx);
 
-    return parentSteps.reduce((currentChoices, historyStep) => {
-      const choiceInPath = selectedPath[historyStep.dispatchKey];
-      const lookupResult = currentChoices.find((ent) => ent.id === choiceInPath);
-
-      return lookupResult[historyStep.matchingKey];
-    }, topLevelChoices);
+    return translatePathToLodash(selectedPath, parentSteps, topLevelChoices).lookup;
   }, [pickerHistory]);
 
   const fixSelectionPath = useCallback(
