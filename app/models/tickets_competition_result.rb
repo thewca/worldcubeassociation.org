@@ -7,6 +7,7 @@ class TicketsCompetitionResult < ApplicationRecord
     submitted: "submitted",
     locked_for_posting: "locked_for_posting",
     warnings_verified: "warnings_verified",
+    merged_inbox_results: "merged_inbox_results",
     posted: "posted",
   }
 
@@ -57,5 +58,13 @@ class TicketsCompetitionResult < ApplicationRecord
       field_name: TicketLogChange.field_names[:status],
       field_value: ticket_metadata.status,
     )
+  end
+
+  def merge_inbox_results
+    ActiveRecord::Base.transaction do
+      CompetitionResultsImport.merge_inbox_results(competition)
+
+      self.update!(status: TicketsCompetitionResult.statuses[:merged_inbox_results])
+    end
   end
 end
