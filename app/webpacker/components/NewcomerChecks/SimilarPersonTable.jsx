@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Table } from 'semantic-ui-react';
+import { Button, Popup, Table } from 'semantic-ui-react';
 import { personUrl } from '../../lib/requests/routes.js.erb';
 
 export default function SimilarPersonTable({
@@ -51,11 +51,22 @@ export default function SimilarPersonTable({
               </Table.Cell>
               <Table.Cell>{score}</Table.Cell>
               <Table.Cell>
-                {exactSameDetails && (
-                <Button onClick={() => mergePotentialDuplicate(potentialDuplicatePerson)}>
-                  Merge
-                </Button>
-                )}
+                <Popup
+                  trigger={(
+                    <div>
+                      {/* Button wrapped in a div because disabled button does
+                          not fire mouse events */}
+                      <Button
+                        disabled={!exactSameDetails}
+                        onClick={() => mergePotentialDuplicate(potentialDuplicatePerson)}
+                      >
+                        Merge
+                      </Button>
+                    </div>
+                  )}
+                  content="Merging is disabled as the user details does not match."
+                  disabled={exactSameDetails}
+                />
               </Table.Cell>
             </Table.Row>
           );
