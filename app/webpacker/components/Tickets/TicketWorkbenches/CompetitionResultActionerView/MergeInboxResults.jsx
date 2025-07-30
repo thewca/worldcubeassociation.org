@@ -2,22 +2,22 @@ import React from 'react';
 import { Button } from 'semantic-ui-react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { ResultsPreview } from './ResultsPreview';
-import mergeTemporaryResults from '../../api/competitionResult/mergeTemporaryResults';
+import mergeInboxResults from '../../api/competitionResult/mergeInboxResults';
 import Loading from '../../../Requests/Loading';
 import Errored from '../../../Requests/Errored';
 import { ticketsCompetitionResultStatuses } from '../../../../lib/wca-data.js.erb';
 
-export default function MergeTemporaryResults({ ticketDetails }) {
+export default function MergeInboxResults({ ticketDetails }) {
   const { ticket: { id, metadata: { competition_id: competitionId } } } = ticketDetails;
 
   const queryClient = useQueryClient();
   const {
-    mutate: mergeTemporaryResultsMutate,
+    mutate: mergeInboxResultsMutate,
     isPending,
     isError,
     error,
   } = useMutation({
-    mutationFn: () => mergeTemporaryResults({ ticketId: id }),
+    mutationFn: () => mergeInboxResults({ ticketId: id }),
     onSuccess: () => {
       queryClient.setQueryData(
         ['ticket-details', id],
@@ -42,7 +42,7 @@ export default function MergeTemporaryResults({ ticketDetails }) {
   return (
     <>
       <ResultsPreview competitionId={competitionId} />
-      <Button onClick={mergeTemporaryResultsMutate}>
+      <Button onClick={mergeInboxResultsMutate}>
         Merge Temporary Results
       </Button>
     </>

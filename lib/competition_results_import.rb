@@ -36,7 +36,7 @@ module CompetitionResultsImport
     errors
   end
 
-  def self.merge_temporary_results(competition)
+  def self.merge_inbox_results(competition)
     ActiveRecord::Base.transaction do
       result_rows = competition.inbox_results
                                .includes(:inbox_person)

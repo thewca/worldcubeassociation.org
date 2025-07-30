@@ -90,7 +90,7 @@ class AdminController < ApplicationController
       return redirect_to competition_admin_import_results_path(@competition)
     end
 
-    @competition.tickets_competition_result.merge_temporary_results
+    @competition.tickets_competition_result.merge_inbox_results
 
     load_result_posting_steps do
       render partial: 'import_results_steps'
