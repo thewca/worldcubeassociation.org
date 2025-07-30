@@ -12,7 +12,6 @@ export default function PickerWithMatching({
   expectedEntitiesLength = selectableEntities.length,
   rootMatchState = selectableEntities,
   dispatchMatchState,
-  nestedPickers = [],
 }) {
   const pickerConfig = useMemo(
     () => pickerConfigurations.find((cfg) => cfg.key === pickerKey),
@@ -37,7 +36,6 @@ export default function PickerWithMatching({
         selectedEntity={selectableEntities[0]}
         rootMatchState={rootMatchState}
         dispatchMatchState={dispatchMatchState}
-        nestedPickers={nestedPickers}
       />
     );
   }
@@ -49,7 +47,6 @@ export default function PickerWithMatching({
       selectableEntities={selectableEntities}
       rootMatchState={rootMatchState}
       dispatchMatchState={dispatchMatchState}
-      nestedPickers={nestedPickers}
     />
   );
 }
@@ -60,7 +57,6 @@ function EntityPicker({
   selectableEntities = [],
   rootMatchState,
   dispatchMatchState,
-  nestedPickers = [],
 }) {
   const {
     headerLabel,
@@ -117,7 +113,6 @@ function EntityPicker({
           selectedEntity={selectedEntity}
           rootMatchState={rootMatchState}
           dispatchMatchState={dispatchMatchState}
-          nestedPickers={nestedPickers}
         />
       )}
     </>
@@ -130,7 +125,6 @@ function SelectedEntityPanel({
   selectedEntity,
   rootMatchState,
   dispatchMatchState,
-  nestedPickers,
 }) {
   const {
     key: pickerKey,
@@ -156,8 +150,6 @@ function SelectedEntityPanel({
     (idx) => computeDefinitionName(selectedEntity, idx),
     [computeDefinitionName, selectedEntity],
   );
-
-  const [nestedPicker, ...deepNestedPickers] = nestedPickers;
 
   const continuedHistory = useMemo(() => (
     [...pickerHistory, {
@@ -210,17 +202,14 @@ function SelectedEntityPanel({
           />
         </>
       )}
-      {nestedPicker !== undefined && (
-        <PickerWithMatching
-          pickerKey={nestedPicker}
-          pickerHistory={continuedHistory}
-          selectableEntities={selectedEntityRows}
-          expectedEntitiesLength={expectedNumOfRows}
-          rootMatchState={rootMatchState}
-          dispatchMatchState={dispatchMatchState}
-          nestedPickers={deepNestedPickers}
-        />
-      )}
+      <PickerWithMatching
+        pickerKey={matchingKey}
+        pickerHistory={continuedHistory}
+        selectableEntities={selectedEntityRows}
+        expectedEntitiesLength={expectedNumOfRows}
+        rootMatchState={rootMatchState}
+        dispatchMatchState={dispatchMatchState}
+      />
     </>
   );
 }

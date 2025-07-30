@@ -144,7 +144,6 @@ function ScrambleMatcher({
         pickerKey="events"
         selectableEntities={matchState}
         dispatchMatchState={dispatchMatchState}
-        nestedPickers={['rounds', 'scrambleSets']}
       />
       {hasUnsavedChanges && (
         <Message info content="You have unsaved changes. Don't forget to Save below!" />
