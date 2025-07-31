@@ -14,7 +14,6 @@ export default function PaymentStepWrapper({
   stripePublishableKey,
   connectedAccountId,
   user,
-  nextStep,
 }) {
   const { registration } = useRegistration();
 
@@ -37,7 +36,6 @@ export default function PaymentStepWrapper({
         payments={payments}
         competitionInfo={competitionInfo}
         connectedAccountId={connectedAccountId}
-        nextStep={nextStep}
         stripePublishableKey={stripePublishableKey}
         user={user}
       />
@@ -55,7 +53,6 @@ export default function PaymentStepWrapper({
     <StripePaymentStep
       competitionInfo={competitionInfo}
       connectedAccountId={connectedAccountId}
-      nextStep={nextStep}
       stripePublishableKey={stripePublishableKey}
       user={user}
     />

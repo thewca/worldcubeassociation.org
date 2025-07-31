@@ -12,7 +12,10 @@ import { hasNotPassed, hasPassed } from '../../../lib/utils/dates';
 import RegistrationNotAllowedMessage from './RegistrationNotAllowedMessage';
 import RegistrationClosingMessage from './RegistrationClosingMessage';
 import usePerpetualState from '../hooks/usePerpetualState';
-import FormObjectProvider from '../../wca/FormBuilder/provider/FormObjectProvider';
+import StepConfigProvider, { useStepConfig } from '../lib/StepConfigProvider';
+import StepNavigationProvider from '../lib/StepNavigationProvider';
+import { availableSteps, registrationOverviewConfig } from '../lib/stepConfigs';
+import FormObjectProvider, { useFormObject } from '../../wca/FormBuilder/provider/FormObjectProvider';
 import { isQualifiedForEvent } from '../../../lib/helpers/qualifications';
 
 // The following states should show the Panel even when registration is already closed.
@@ -32,10 +35,11 @@ const buildFormRegistration = ({
   competitionInfo,
   preferredEvents,
   qualifications,
+  personalRecords,
 }) => {
   const initialSelectedEvents = competitionInfo.events_per_registration_limit ? [] : preferredEvents
     .filter((event) => competitionInfo.event_ids.includes(event))
-    .filter((event) => !competitionInfo['uses_qualification?'] || isQualifiedForEvent(event, qualifications.wcif, qualifications.personalRecords));
+    .filter((event) => !competitionInfo['uses_qualification?'] || isQualifiedForEvent(event, qualifications, personalRecords));
 
   if (serverRegistration) {
     if (serverRegistration.competing.registration_status === 'cancelled') {
@@ -61,10 +65,6 @@ export default function Index({
   userInfo,
   registrationId,
   userCanPreRegister,
-  preferredEvents,
-  qualifications,
-  stripePublishableKey = '',
-  connectedAccountId = '',
   cannotRegisterReasons,
   isProcessing = false,
 }) {
@@ -72,37 +72,104 @@ export default function Index({
     <WCAQueryClientProvider>
       <StoreProvider reducer={messageReducer} initialState={{ messages: [] }}>
         <ConfirmProvider>
-          <RegistrationProvider
-            competitionInfo={competitionInfo}
-            userInfo={userInfo}
-            registrationId={registrationId}
-            isProcessing={isProcessing}
-          >
-            <Register
+          <StepConfigProvider competitionId={competitionInfo.id}>
+            <RegistrationProvider
               competitionInfo={competitionInfo}
               userInfo={userInfo}
-              userCanPreRegister={userCanPreRegister}
-              preferredEvents={preferredEvents}
-              stripePublishableKey={stripePublishableKey}
-              connectedAccountId={connectedAccountId}
-              qualifications={qualifications}
-              cannotRegisterReasons={cannotRegisterReasons}
-            />
-          </RegistrationProvider>
+              registrationId={registrationId}
+              isProcessing={isProcessing}
+            >
+              <FormObjectWrapper
+                competitionInfo={competitionInfo}
+                userInfo={userInfo}
+                userCanPreRegister={userCanPreRegister}
+                cannotRegisterReasons={cannotRegisterReasons}
+              />
+            </RegistrationProvider>
+          </StepConfigProvider>
         </ConfirmProvider>
       </StoreProvider>
     </WCAQueryClientProvider>
   );
 }
 
+function FormObjectWrapper({
+  competitionInfo,
+  userInfo,
+  userCanPreRegister,
+  cannotRegisterReasons,
+}) {
+  const registrationPayload = useRegistration();
+
+  const {
+    isFetching: registrationFetching,
+    isRejected: registrationRejected,
+  } = registrationPayload;
+
+  const { steps, isFetching } = useStepConfig();
+
+  if (isFetching || registrationFetching) {
+    return <Loading />;
+  }
+
+  const { preferredEvents, personalRecords, qualifications_wcif: qualifications } = steps.find(
+    (stepConfig) => stepConfig.key === 'competing',
+  ).parameters;
+
+  const formRegistration = buildFormRegistration({
+    registrationPayload,
+    competitionInfo,
+    preferredEvents,
+    qualifications,
+    personalRecords,
+  });
+
+  return (
+    <FormObjectProvider initialObject={formRegistration}>
+      <RegisterNavigationWrapper
+        steps={steps}
+        competitionInfo={competitionInfo}
+        registrationRejected={registrationRejected}
+        userInfo={userInfo}
+        userCanPreRegister={userCanPreRegister}
+        cannotRegisterReasons={cannotRegisterReasons}
+      />
+    </FormObjectProvider>
+  );
+}
+
+function RegisterNavigationWrapper({
+  steps,
+  registrationRejected,
+  competitionInfo,
+  userInfo,
+  userCanPreRegister,
+  cannotRegisterReasons,
+}) {
+  const formObject = useFormObject();
+
+  return (
+    <StepNavigationProvider
+      stepsConfiguration={steps}
+      availableSteps={availableSteps}
+      payload={formObject}
+      navigationDisabled={registrationRejected}
+      summaryPanelKey={registrationOverviewConfig.key}
+    >
+      <Register
+        competitionInfo={competitionInfo}
+        userInfo={userInfo}
+        userCanPreRegister={userCanPreRegister}
+        cannotRegisterReasons={cannotRegisterReasons}
+      />
+    </StepNavigationProvider>
+  );
+}
+
 function Register({
   userCanPreRegister,
   competitionInfo,
-  qualifications,
   userInfo,
-  preferredEvents,
-  connectedAccountId,
-  stripePublishableKey,
   cannotRegisterReasons,
 }) {
   const registrationAlreadyOpen = usePerpetualState(
@@ -141,31 +208,18 @@ function Register({
     || (userCanPreRegister && registrationNotYetClosed)
     || hasEditableRegistration;
 
-  const formRegistration = buildFormRegistration({
-    registration,
-    competitionInfo,
-    preferredEvents,
-    qualifications,
-  });
-
   return (
     <>
       <RegistrationOpeningMessage registrationStart={competitionInfo.registration_open} />
       <RegistrationClosingMessage registrationEnd={competitionInfo.registration_close} />
       {showRegistrationPanel && (
-        <FormObjectProvider initialObject={formRegistration}>
+        <>
           <RegistrationMessage />
           <StepPanel
             user={userInfo}
-            preferredEvents={preferredEvents}
             competitionInfo={competitionInfo}
-            registration={registration}
-            connectedAccountId={connectedAccountId}
-            stripePublishableKey={stripePublishableKey}
-            qualifications={qualifications}
-            registrationCurrentlyOpen={registrationCurrentlyOpen}
           />
-        </FormObjectProvider>
+        </>
       )}
     </>
   );
