@@ -581,6 +581,9 @@ GEM
     oga (3.4)
       ast
       ruby-ll (~> 2.1)
+    oj (3.16.11)
+      bigdecimal (>= 3.0)
+      ostruct (>= 0.2)
     openssl (3.3.0)
     orm_adapter (0.5.0)
     os (1.1.4)
@@ -1072,6 +1075,7 @@ DEPENDENCIES
   oauth2
   octokit
   oga
+  oj
   openssl
   overcommit
   playwright-ruby-client
@@ -1355,6 +1359,7 @@ CHECKSUMS
   oauth2 (2.0.12) sha256=f7edb8549c7912724d07087d808c3fa6756298fd64d55d4968324df69c64ab3f
   octokit (10.0.0) sha256=82e99a539b7637b7e905e6d277bb0c1a4bed56735935cc33db6da7eae49a24e8
   oga (3.4) sha256=953039cd7be8dc50dfdafe052588e369c707ff1a82e06980b90944e1a1061b6d
+  oj (3.16.11) sha256=2aab609d2bc896529bd3c70d737f591c13932a640ba6164a0f7e414efdb052b1
   openssl (3.3.0) sha256=ff3a573fc97ab30f69483fddc80029f91669bf36532859bd182d1836f45aee79
   orm_adapter (0.5.0) sha256=aa5d0be5d540cbb46d3a93e88061f4ece6a25f6e97d6a47122beb84fe595e9b9
   os (1.1.4) sha256=57816d6a334e7bd6aed048f4b0308226c5fb027433b67d90a9ab435f35108d3f

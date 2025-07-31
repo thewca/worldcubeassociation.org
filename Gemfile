@@ -106,6 +106,7 @@ gem 'hash_diff'
 gem 'tsort'
 gem 'html_safe_flash'
 gem "graphql"
+gem "oj"
 
 group :development, :test do
   gem 'spring'
