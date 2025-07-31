@@ -231,4 +231,16 @@ class TicketsController < ApplicationController
 
     render status: :ok, json: { success: true }
   end
+
+  def post_results
+    ticket = Ticket.find(params.require(:ticket_id))
+    competition = ticket.metadata.competition
+
+    error = CompetitionResultsImport.post_results_error(competition)
+    return render status: :unprocessable_entity, json: { error: error } if error
+
+    CompetitionResultsImport.post_results(competition, current_user)
+
+    render status: :ok, json: { success: true }
+  end
 end
