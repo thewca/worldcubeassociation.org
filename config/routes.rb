@@ -236,6 +236,7 @@ Rails.application.routes.draw do
     post 'merge_inbox_results' => 'tickets#merge_inbox_results', as: :merge_inbox_results
     get 'edit_person_validators' => 'tickets#edit_person_validators', as: :edit_person_validators
     get 'inbox_person_summary' => 'tickets#inbox_person_summary', as: :inbox_person_summary
+    post 'delete_inbox_persons' => 'tickets#delete_inbox_persons', as: :delete_inbox_persons
     resources :ticket_comments, only: %i[index create], as: :comments
     resources :ticket_logs, only: [:index], as: :logs
   end

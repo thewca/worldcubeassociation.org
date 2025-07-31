@@ -5,7 +5,7 @@ class TicketsController < ApplicationController
 
   before_action :authenticate_user!
   before_action -> { check_ticket_errors(TicketLog.action_types[:update_status]) }, only: [:update_status]
-  before_action -> { redirect_to_root_unless_user(:can_admin_results?) }, only: %i[merge_inbox_results]
+  before_action -> { redirect_to_root_unless_user(:can_admin_results?) }, only: %i[merge_inbox_results delete_inbox_persons]
 
   SORT_WEIGHT_LAMBDAS = {
     createdAt:
@@ -218,5 +218,17 @@ class TicketsController < ApplicationController
       inbox_person_no_wca_id_count: competition.inbox_persons.where(wca_id: '').count,
       result_no_wca_id_count: competition.results.select(:person_id).distinct.where("person_id REGEXP '^[0-9]+$'").count,
     }
+  end
+
+  def delete_inbox_persons
+    ticket = Ticket.find(params.require(:ticket_id))
+    competition = ticket.metadata.competition
+
+    ActiveRecord::Base.transaction do
+      competition.inbox_persons.delete_all
+      ticket.metadata.update!(status: TicketsCompetitionResult.statuses[:created_wca_ids])
+    end
+
+    render status: :ok, json: { success: true }
   end
 end
