@@ -45,6 +45,7 @@ export default function FinalSteps({ ticketDetails }) {
       <List bulleted>
         <List.Item>
           <Button
+            as="a"
             primary
             href={viewUrls.admin.overrideRegionalRecords(competitionId, 'all', true)}
             target="_blank"
@@ -54,6 +55,7 @@ export default function FinalSteps({ ticketDetails }) {
         </List.Item>
         <List.Item>
           <Button
+            as="a"
             primary
             href={viewUrls.competitions.adminDoComputeAuxiliaryData}
             target="_blank"
@@ -65,6 +67,7 @@ export default function FinalSteps({ ticketDetails }) {
       <List>
         <List.Item>
           <Button
+            as="a"
             primary
             href={competitionUrl(competitionId)}
             target="_blank"
