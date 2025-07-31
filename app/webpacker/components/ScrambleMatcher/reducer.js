@@ -94,7 +94,7 @@ export default function scrambleMatchReducer(state, action) {
       );
     case 'resetAfterSave':
       return initializeState({
-        wcifEvents: state,
+        wcifEvents: state.initial,
         scrambleSets: action.scrambleSets,
       });
     case 'moveMatchingEntity':
