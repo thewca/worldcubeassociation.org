@@ -37,7 +37,9 @@ export default function DuplicateCheckerHeader({
     return (
       <Message warning>
         Job appears stuck, because it has been running longer than
+        {' '}
         {JOB_RUN_DELAY_MINUTES}
+        {' '}
         minutes. Click &quot;Retry&quot; below if you would like to cancel this job run and start
         a new check.
         Please note: If your competition has an unusually high number of newcomers (more than
@@ -71,7 +73,7 @@ export default function DuplicateCheckerHeader({
   if (lastDuplicateCheckerJobRun.run_status === duplicateCheckerJobRunStatuses.success) {
     return (
       <Message positive>
-        {`Duplicate Checker ran successfully at ${
+        {`Duplicate Checker ran successfully ${
           DateTime.fromISO(lastDuplicateCheckerJobRun.end_time).toLocal().toRelative()}.`}
         <Button onClick={run}>Re-run now</Button>
       </Message>
