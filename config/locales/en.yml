@@ -1045,6 +1045,7 @@ en:
       cannot_edit:
         msg: "You cannot change your name, birthdate, gender, or region. Reason: %{reason}. Contact the <a href='%{wrt_contact_path}' target='_blank'>WCA Results Team</a> or your <a href='%{delegate_url}'>Delegate</a> if you need to change any of these."
         reason:
+          no_access: "you don't have access to edit the user"
           assigned: "you have a WCA ID assigned"
           registered: "you have registered for a competition"
       guidelines_confirmation: "I confirm that my avatar fulfills all avatar guidelines."
@@ -2256,9 +2257,11 @@ en:
   notifications:
     connect_wca_id: "Connect your WCA ID to your account!"
   payments:
+    header: "Payment History"
     messages:
       charge_refunded: "Payment was refunded"
       charges_refunded: "All charges have been refunded"
+      no_payments: "No payments have been made for this registration."
     errors:
       refund:
         provider_disconnected: "You cannot issue a refund for this competition anymore. Please use your payment provider's dashboard to do so."
@@ -2359,6 +2362,7 @@ en:
   misc:
     forum_age_requirement: "You must be 13 years old to access the WCA Forum."
     forum_enter_dob: "A date of birth is required before accessing the forum. Please enter your date of birth, and then try and access the forum again."
+    refresh: "Refresh"
   #context: FAQ page
   faq:
     title: "Frequently Asked Questions"
@@ -2910,7 +2914,7 @@ en:
       regulation_9m1_error: "Round %{round_id} has 99 or fewer competitors but has more than two subsequent rounds, which is not permitted as per Regulation 9m1."
       regulation_9m2_error: "Round %{round_id} has 15 or fewer competitors but has more than one subsequent round, which is not permitted as per Regulation 9m2."
       regulation_9m3_error: "Round %{round_id} has 7 or fewer competitors but has at least one subsequent round, which is not permitted as per Regulation 9m3."
-      regulation_9p1_error: "Round %{round_id}: Fewer than 25%% of competitors were eliminated, which is not permitted as per Regulation 9p1."
+      regulation_9p1_error: "Round %{round_id}: Fewer than 25% of competitors were eliminated, which is not permitted as per Regulation 9p1."
       no_competitor_eliminated_error: "Round %{round_id}: There must be at least one competitor eliminated, which is required as per Regulation 9p (competitions before April 2010)."
       less_than_twenty_five_percent_eliminated_error: "Round %{round_id}: according to the advancement condition (%{condition}), fewer than 25%% of competitors would be eliminated, which is not permitted as per Regulation 9p1. Please update the round information in the manage events page."
       not_enough_qualified_warning: "Round %{round_id}: according to the events data, at most %{expected} could have proceed, but only %{actual} competed in the round. Please leave a comment about that (or fix the events data if you applied a different advancement condition)."

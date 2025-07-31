@@ -2,6 +2,7 @@
 
 class Championship < ApplicationRecord
   include Comparable
+
   CHAMPIONSHIP_TYPE_WORLD = "world"
   MAJOR_CHAMPIONSHIP_TYPES = [
     CHAMPIONSHIP_TYPE_WORLD,

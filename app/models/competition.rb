@@ -34,10 +34,11 @@ class Competition < ApplicationRecord
   belongs_to :posting_user, optional: true, foreign_key: 'posting_by', class_name: "User"
   has_many :inbox_results, dependent: :delete_all
   has_many :inbox_persons, dependent: :delete_all
+  has_many :inbox_scramble_sets, dependent: :delete_all
   belongs_to :announced_by_user, optional: true, foreign_key: "announced_by", class_name: "User"
   belongs_to :cancelled_by_user, optional: true, foreign_key: "cancelled_by", class_name: "User"
   has_many :competition_payment_integrations
-  has_many :scramble_file_uploads
+  has_many :scramble_file_uploads, dependent: :delete_all
   has_many :accepted_registrations, -> { accepted }, class_name: "Registration", foreign_key: "competition_id"
   has_many :accepted_newcomers, -> { where(wca_id: nil) }, through: :accepted_registrations, source: :user
   has_many :duplicate_checker_job_runs, dependent: :delete_all
@@ -702,6 +703,7 @@ class Competition < ApplicationRecord
              'posting_user',
              'inbox_results',
              'inbox_persons',
+             'inbox_scramble_sets',
              'announced_by_user',
              'cancelled_by_user',
              'competition_payment_integrations',
@@ -1003,8 +1005,12 @@ class Competition < ApplicationRecord
     true
   end
 
+  def after_registration_open?
+    !registration_not_yet_opened?
+  end
+
   def registration_currently_open?
-    use_wca_registration? && !cancelled? && !registration_not_yet_opened? && !registration_past?
+    use_wca_registration? && !cancelled? && after_registration_open? && !registration_past?
   end
 
   def registration_not_yet_opened?
@@ -1013,6 +1019,10 @@ class Competition < ApplicationRecord
 
   def registration_past?
     registration_close && registration_close < Time.now
+  end
+
+  def can_show_competitors_page?
+    after_registration_open? && registrations.competing_status_accepted.competing.any?
   end
 
   def registration_status
@@ -1882,6 +1892,7 @@ class Competition < ApplicationRecord
     includes_associations = [
       { assignments: [:schedule_activity] },
       { user: {
+        current_avatar: [],
         person: %i[ranks_single ranks_average],
       } },
       :wcif_extensions,

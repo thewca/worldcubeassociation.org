@@ -7,6 +7,7 @@ class UsersController < ApplicationController
   before_action :set_recent_authentication!, only: %i[edit update enable_2fa disable_2fa]
   before_action :redirect_if_cannot_edit_user, only: %i[edit update]
   before_action -> { redirect_to_root_unless_user(:can_admin_results?) }, only: %i[admin_search merge]
+  before_action -> { check_edit_access }, only: %i[show_for_edit update_user_data]
 
   RECENT_AUTHENTICATION_DURATION = 10.minutes.freeze
 
@@ -45,6 +46,32 @@ class UsersController < ApplicationController
         }
       end
     end
+  end
+
+  private def check_edit_access
+    @user = User.find(params.require(:id))
+    cannot_edit_reason = current_user.cannot_edit_data_reason_html(@user)
+
+    render status: :unauthorized, json: { error: cannot_edit_reason } if cannot_edit_reason.present?
+  end
+
+  def show_for_edit
+    render status: :ok, json: @user.as_json(
+      only: %w[id name gender country_iso2],
+      private_attributes: %w[dob],
+      methods: [],
+      include: [],
+    )
+  end
+
+  def update_user_data
+    user_details = params.permit(:name, :gender, :dob, :country_iso2)
+
+    @user.update!(user_details)
+
+    render status: :ok, json: @user.as_json(
+      private_attributes: %w[dob],
+    )
   end
 
   def show_for_merge

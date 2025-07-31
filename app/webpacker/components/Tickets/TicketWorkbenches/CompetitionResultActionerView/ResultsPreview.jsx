@@ -16,7 +16,7 @@ export default function Wrapper({ competitionId }) {
   );
 }
 
-function ResultsPreview({ competitionId }) {
+export function ResultsPreview({ competitionId }) {
   const {
     data: importedTemporaryResults,
     isPending,

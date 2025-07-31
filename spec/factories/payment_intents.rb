@@ -23,5 +23,9 @@ FactoryBot.define do
       payment_record { association(:stripe_record, :payment_intent, :not_started) }
       wca_status { 'created' }
     end
+
+    trait :pending do
+      payment_record { association(:stripe_record) }
+    end
   end
 end

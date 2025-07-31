@@ -1,4 +1,8 @@
-import React, { useCallback, useMemo, useReducer } from 'react';
+import React, {
+  useCallback,
+  useMemo,
+  useReducer,
+} from 'react';
 import { Button, Divider, Message } from 'semantic-ui-react';
 import _ from 'lodash';
 import { useMutation } from '@tanstack/react-query';
@@ -8,12 +12,14 @@ import FileUpload from './FileUpload';
 import Events from './Events';
 import { fetchJsonOrError } from '../../lib/requests/fetchWithAuthenticityToken';
 import { scramblesUpdateRoundMatchingUrl } from '../../lib/requests/routes.js.erb';
-import scrambleMatchReducer, { mergeScrambleSets } from './reducer';
+import scrambleMatchReducer, { initializeState } from './reducer';
+import useUnsavedChangesAlert from '../../lib/hooks/useUnsavedChangesAlert';
 
 export default function Wrapper({
   wcifEvents,
   competitionId,
   initialScrambleFiles,
+  inboxScrambleSets,
 }) {
   return (
     <WCAQueryClientProvider>
@@ -21,12 +27,13 @@ export default function Wrapper({
         wcifEvents={wcifEvents}
         competitionId={competitionId}
         initialScrambleFiles={initialScrambleFiles}
+        inboxScrambleSets={inboxScrambleSets}
       />
     </WCAQueryClientProvider>
   );
 }
 
-async function submitMatchedScrambles(competitionId, matchState) {
+async function submitMatchedScrambles({ competitionId, matchState }) {
   const matchStateIdsOnly = _.mapValues(
     matchState,
     (sets) => sets.map((set) => ({
@@ -46,12 +53,30 @@ async function submitMatchedScrambles(competitionId, matchState) {
   return data;
 }
 
-function ScrambleMatcher({ wcifEvents, competitionId, initialScrambleFiles }) {
-  const [matchState, dispatchMatchState] = useReducer(
+function ScrambleMatcher({
+  wcifEvents,
+  competitionId,
+  initialScrambleFiles,
+  inboxScrambleSets,
+}) {
+  const [
+    {
+      initial: persistedMatchState,
+      current: matchState,
+    },
+    dispatchMatchState,
+  ] = useReducer(
     scrambleMatchReducer,
-    initialScrambleFiles,
-    (files) => files.reduce(mergeScrambleSets, {}),
+    inboxScrambleSets,
+    initializeState,
   );
+
+  const hasUnsavedChanges = useMemo(
+    () => !_.isEqual(persistedMatchState, matchState),
+    [matchState, persistedMatchState],
+  );
+
+  useUnsavedChangesAlert(hasUnsavedChanges);
 
   const addScrambleFile = useCallback(
     (scrambleFile) => dispatchMatchState({ type: 'addScrambleFile', scrambleFile }),
@@ -64,8 +89,14 @@ function ScrambleMatcher({ wcifEvents, competitionId, initialScrambleFiles }) {
   );
 
   const { mutate: submitMatchState, isPending: isSubmitting } = useMutation({
-    mutationFn: () => submitMatchedScrambles(competitionId, matchState),
+    mutationFn: submitMatchedScrambles,
+    onSuccess: (data) => dispatchMatchState({ type: 'resetAfterSave', scrambleSets: data }),
   });
+
+  const submitAction = useCallback(
+    () => submitMatchState({ competitionId, matchState }),
+    [competitionId, matchState, submitMatchState],
+  );
 
   const roundIds = useMemo(() => wcifEvents.flatMap((event) => event.rounds)
     .map((r) => r.id), [wcifEvents]);
@@ -84,6 +115,23 @@ function ScrambleMatcher({ wcifEvents, competitionId, initialScrambleFiles }) {
       return matchedRound.length < wcifRound.scrambleSetCount;
     });
   }, [matchState, roundIds, wcifEvents]);
+
+  const submitDisabled = useMemo(() => (
+    isSubmitting
+      || missingScrambleIds.length > 0
+      || roundIdsWithoutScrambles.length > 0
+  ), [isSubmitting, missingScrambleIds.length, roundIdsWithoutScrambles.length]);
+
+  const renderSubmitButton = useCallback((btnText) => (
+    <Button
+      primary
+      onClick={submitAction}
+      loading={isSubmitting}
+      disabled={submitDisabled}
+    >
+      {btnText}
+    </Button>
+  ), [isSubmitting, submitAction, submitDisabled]);
 
   return (
     <>
@@ -129,22 +177,25 @@ function ScrambleMatcher({ wcifEvents, competitionId, initialScrambleFiles }) {
         addScrambleFile={addScrambleFile}
         removeScrambleFile={removeScrambleFile}
       />
+      <Divider />
+      {hasUnsavedChanges && (
+        <Message info>
+          You have unsaved changes. Don&apos;t forget to
+          {' '}
+          {renderSubmitButton('Save')}
+          your changes!
+        </Message>
+      )}
       <Events
         wcifEvents={wcifEvents}
         matchState={matchState}
         dispatchMatchState={dispatchMatchState}
       />
+      {hasUnsavedChanges && (
+        <Message info content="You have unsaved changes. Don't forget to Save below!" />
+      )}
       <Divider />
-      <Button
-        primary
-        onClick={submitMatchState}
-        loading={isSubmitting}
-        disabled={isSubmitting
-          || missingScrambleIds.length > 0
-          || roundIdsWithoutScrambles.length > 0}
-      >
-        Save Changes
-      </Button>
+      {renderSubmitButton('Save Changes')}
     </>
   );
 }

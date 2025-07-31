@@ -4,13 +4,11 @@ require 'fileutils'
 
 class ResultsSubmissionController < ApplicationController
   before_action :authenticate_user!
-  before_action -> { redirect_to_root_unless_user(:can_upload_competition_results?, competition_from_params) }, except: %i[newcomer_checks last_duplicate_checker_job_run compute_potential_duplicates]
-  before_action -> { redirect_to_root_unless_user(:can_check_newcomers_data?, competition_from_params) }, only: %i[newcomer_checks last_duplicate_checker_job_run compute_potential_duplicates]
+  before_action -> { redirect_to_root_unless_user(:can_upload_competition_results?, competition_from_params) }, except: %i[newcomer_checks last_duplicate_checker_job_run compute_potential_duplicates newcomer_name_format_check newcomer_dob_check]
+  before_action -> { redirect_to_root_unless_user(:can_check_newcomers_data?, competition_from_params) }, only: %i[newcomer_checks last_duplicate_checker_job_run compute_potential_duplicates newcomer_name_format_check newcomer_dob_check]
 
   def new
     @competition = competition_from_params
-    @results_validator = ResultsValidators::CompetitionsResultsValidator.create_full_validation
-    @results_validator.validate(@competition.id)
   end
 
   def newcomer_checks
@@ -23,7 +21,32 @@ class ResultsSubmissionController < ApplicationController
     render status: :ok, json: last_job_run
   end
 
+  def newcomer_name_format_check
+    competition = competition_from_params
+
+    name_format_issues = competition.accepted_newcomers.flat_map do |user|
+      ResultsValidators::PersonsValidator.name_validations(user.name, nil)
+    end
+
+    render status: :ok, json: name_format_issues
+  end
+
+  def newcomer_dob_check
+    competition = competition_from_params
+
+    dob_issues = competition.accepted_newcomers.flat_map do |user|
+      ResultsValidators::PersonsValidator.dob_validations(user.dob, nil, name: user.name)
+    end
+
+    render status: :ok, json: dob_issues
+  end
+
   def compute_potential_duplicates
+    last_job_run = DuplicateCheckerJobRun.find_by(competition_id: params.require(:competition_id))
+    job_run_running_too_long = last_job_run&.run_status_not_started? || last_job_run&.run_status_in_progress?
+
+    last_job_run.update!(run_status: DuplicateCheckerJobRun.run_statuses[:long_running_uncertain]) if job_run_running_too_long
+
     job_run = DuplicateCheckerJobRun.create!(competition_id: params.require(:competition_id))
     ComputePotentialDuplicates.perform_later(job_run)
 

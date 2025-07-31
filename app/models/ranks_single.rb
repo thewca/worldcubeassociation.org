@@ -2,6 +2,7 @@
 
 class RanksSingle < ApplicationRecord
   include PersonalBest
+
   # ActiveRecord inflects the last word, so by default, this would be 'ranks_singles'
   self.table_name = 'ranks_single'
 

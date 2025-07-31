@@ -108,7 +108,7 @@ RSpec.describe IRV do
                                         cutoff: cutoff_fm.to_s(round_fm))
 
         res_cumul = create(result_kind, :mo3, competition: competition2, event_id: "666", best: 6000)
-        create(result_kind, competition: competition2, event_id: "555", best: 6000, average: 6000, person: person_for_result(res_cumul))
+        create(result_kind, competition: competition2, event_id: "555", best: 6000, average: 6000, person: res_cumul.person)
 
         errs << RV::ValidationError.new(IRV::RESULTS_OVER_CUMULATIVE_TIME_LIMIT_ERROR,
                                         :results, competition2.id,
@@ -255,8 +255,4 @@ RSpec.describe IRV do
       end
     end
   end
-end
-
-def person_for_result(result)
-  result.instance_of?(Result) ? Person.find_by(wca_id: result.person_id) : InboxPerson.find_by(id: result.person_id)
 end

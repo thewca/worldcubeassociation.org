@@ -59,6 +59,7 @@ class User < ApplicationRecord
   belongs_to :current_avatar, class_name: "UserAvatar", inverse_of: :current_user, optional: true
   belongs_to :pending_avatar, class_name: "UserAvatar", inverse_of: :pending_user, optional: true
   has_many :user_avatars, dependent: :destroy, inverse_of: :user
+  has_many :potential_duplicate_persons, dependent: :destroy, foreign_key: :original_user_id, class_name: "PotentialDuplicatePerson"
 
   scope :confirmed_email, -> { where.not(confirmed_at: nil) }
   scope :newcomers, -> { where(wca_id: nil) }
@@ -1044,6 +1045,8 @@ class User < ApplicationRecord
   end
 
   def cannot_edit_data_reason_html(user_to_edit)
+    return I18n.t('users.edit.cannot_edit.reason.no_access') unless user_to_edit == self || can_edit_any_user?
+
     # Don't allow editing data if they have a WCA ID assigned, or if they
     # have already registered for a competition. We do allow admins and delegates
     # who have registered for a competition to edit their own data.
@@ -1098,10 +1101,8 @@ class User < ApplicationRecord
 
   private def editable_competitor_info_fields(user)
     fields = Set.new
-    if user == self || can_edit_any_user?
-      fields += %i[name dob gender country_iso2] unless cannot_edit_data_reason_html(user)
-      fields += CLAIM_WCA_ID_PARAMS
-    end
+    fields += %i[name dob gender country_iso2] unless cannot_edit_data_reason_html(user)
+    fields += CLAIM_WCA_ID_PARAMS if user == self || can_edit_any_user?
     fields << :name if user.wca_id.blank? && organizer_for?(user)
     if can_edit_any_user?
       fields += %i[
@@ -1248,7 +1249,7 @@ class User < ApplicationRecord
     only: %w[id wca_id name gender
              country_iso2 created_at updated_at],
     methods: %w[url country],
-    include: %w[avatar teams],
+    include: %w[avatar],
   }.freeze
 
   def serializable_hash(options = nil)
@@ -1542,6 +1543,14 @@ class User < ApplicationRecord
       wca_id_to_be_transferred = self.wca_id
       self.update!(wca_id: nil) # Must remove WCA ID before adding it as it is unique in the Users table.
       new_user.update!(wca_id: wca_id_to_be_transferred)
+
+      # After this merge, there won't be any registrations for self as all of
+      # them will be transferred to new_user. So any potential duplicates of
+      # self is no longer valid. There might be some potential duplicates for
+      # new_user, but they need to be refetched. But refetching here may look
+      # confusing, so removing the potential duplicates of new_user as well.
+      self.potential_duplicate_persons.delete_all
+      new_user.potential_duplicate_persons.delete_all
     end
   end
 end

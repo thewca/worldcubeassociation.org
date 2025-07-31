@@ -46,6 +46,7 @@ Rails.application.routes.draw do
   get 'registration/:competition_id/:user_id/payment-denomination' => 'registrations#payment_denomination', as: :registration_payment_denomination
   get '/users/admin_search' => 'users#admin_search'
   resources :users, only: %i[index edit update]
+  get 'users/show_for_edit' => 'users#show_for_edit', as: :user_show_for_edit
   get 'users/show_for_merge' => 'users#show_for_merge', as: :user_show_for_merge
   get 'profile/edit' => 'users#edit'
   post 'profile/enable-2fa' => 'users#enable_2fa'
@@ -60,6 +61,7 @@ Rails.application.routes.draw do
   post 'users/:id/avatar' => 'users#upload_avatar'
   patch 'users/:id/avatar' => 'users#update_avatar'
   delete 'users/:id/avatar' => 'users#delete_avatar'
+  post 'users/update_user_data' => 'users#update_user_data'
   post 'users/merge' => 'users#merge'
   get 'admin/avatars/pending' => 'admin/avatars#pending_avatar_users', as: :pending_avatars
   post 'admin/avatars' => 'admin/avatars#update_avatar', as: :admin_update_avatar
@@ -108,6 +110,8 @@ Rails.application.routes.draw do
     # Delegate views and action
     get 'newcomer-checks' => 'results_submission#newcomer_checks', as: :newcomer_checks
     get 'last-duplicate-checker-job' => 'results_submission#last_duplicate_checker_job_run', as: :last_duplicate_checker_job_run
+    get 'newcomer-name-format-check' => 'results_submission#newcomer_name_format_check', as: :newcomer_name_format_check
+    get 'newcomer-dob-check' => 'results_submission#newcomer_dob_check', as: :newcomer_dob_check
     post 'compute_potential_duplicates' => 'results_submission#compute_potential_duplicates', as: :compute_potential_duplicates
     get 'submit-results' => 'results_submission#new', as: :submit_results_edit
     get 'submit-scrambles' => 'admin/scrambles#match_scrambles', as: :match_scrambles
@@ -229,6 +233,7 @@ Rails.application.routes.draw do
   end
   resources :tickets, only: %i[index show] do
     post 'update_status' => 'tickets#update_status', as: :update_status
+    post 'merge_inbox_results' => 'tickets#merge_inbox_results', as: :merge_inbox_results
     get 'edit_person_validators' => 'tickets#edit_person_validators', as: :edit_person_validators
     resources :ticket_comments, only: %i[index create], as: :comments
     resources :ticket_logs, only: [:index], as: :logs
@@ -385,6 +390,7 @@ Rails.application.routes.draw do
       get '/auth/results' => 'api#auth_results'
       get '/export/public' => 'api#export_public'
       get '/scramble-program' => 'api#scramble_program'
+      get '/known-timezones' => 'api#known_timezones'
       get '/search' => 'api#omni_search'
       get '/search/posts' => 'api#posts_search'
       get '/search/competitions' => 'api#competitions_search'
@@ -418,6 +424,7 @@ Rails.application.routes.draw do
       get '/competition_series/:id' => 'api#competition_series'
       get '/competition_index' => 'competitions#competition_index', as: :competition_index
 
+      resources :incidents, only: %i[index]
       resources :regional_organizations, only: %i[index], path: '/regional-organizations'
 
       resources :competitions, only: %i[index show] do

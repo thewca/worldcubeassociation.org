@@ -137,29 +137,29 @@ GEM
     autoprefixer-rails (9.4.7)
       execjs
     aws-eventstream (1.4.0)
-    aws-partitions (1.1131.0)
-    aws-sdk-cloudfront (1.120.0)
-      aws-sdk-core (~> 3, >= 3.225.0)
+    aws-partitions (1.1135.0)
+    aws-sdk-cloudfront (1.121.0)
+      aws-sdk-core (~> 3, >= 3.227.0)
       aws-sigv4 (~> 1.5)
-    aws-sdk-core (3.226.3)
+    aws-sdk-core (3.227.0)
       aws-eventstream (~> 1, >= 1.3.0)
       aws-partitions (~> 1, >= 1.992.0)
       aws-sigv4 (~> 1.9)
       base64
       jmespath (~> 1, >= 1.6.1)
       logger
-    aws-sdk-kms (1.106.0)
-      aws-sdk-core (~> 3, >= 3.225.0)
+    aws-sdk-kms (1.107.0)
+      aws-sdk-core (~> 3, >= 3.227.0)
       aws-sigv4 (~> 1.5)
-    aws-sdk-rds (1.283.0)
-      aws-sdk-core (~> 3, >= 3.225.0)
+    aws-sdk-rds (1.284.0)
+      aws-sdk-core (~> 3, >= 3.227.0)
       aws-sigv4 (~> 1.5)
-    aws-sdk-s3 (1.193.0)
-      aws-sdk-core (~> 3, >= 3.225.0)
+    aws-sdk-s3 (1.194.0)
+      aws-sdk-core (~> 3, >= 3.227.0)
       aws-sdk-kms (~> 1)
       aws-sigv4 (~> 1.5)
-    aws-sdk-sqs (1.96.0)
-      aws-sdk-core (~> 3, >= 3.225.0)
+    aws-sdk-sqs (1.98.0)
+      aws-sdk-core (~> 3, >= 3.227.0)
       aws-sigv4 (~> 1.5)
     aws-sigv4 (1.12.1)
       aws-eventstream (~> 1, >= 1.0.2)
@@ -298,7 +298,7 @@ GEM
       railties (>= 6.1.0)
     faker (3.5.2)
       i18n (>= 1.8.11, < 2)
-    faraday (2.13.2)
+    faraday (2.13.4)
       faraday-net_http (>= 2.0, < 3.5)
       json
       logger
@@ -449,7 +449,7 @@ GEM
     jmespath (1.6.2)
     js_cookie_rails (2.2.0)
       railties (>= 3.1)
-    json (2.13.0)
+    json (2.13.2)
     json-schema (5.2.1)
       addressable (~> 2.8)
       bigdecimal (~> 3.1)
@@ -584,7 +584,7 @@ GEM
       rexml (>= 3.3.9)
     package_json (0.1.0)
     parallel (1.27.0)
-    parser (3.3.8.0)
+    parser (3.3.9.0)
       ast (~> 2.4.1)
       racc
     playwright-ruby-client (1.54.0)
@@ -679,7 +679,7 @@ GEM
       execjs
       railties (>= 3.2)
       tilt
-    recaptcha (5.20.0)
+    recaptcha (5.20.1)
     redcarpet (3.6.1)
     redis (5.4.1)
       redis-client (>= 0.22.0)
@@ -731,7 +731,7 @@ GEM
     rspec-retry (0.6.2)
       rspec-core (> 3.3)
     rspec-support (3.13.4)
-    rubocop (1.77.0)
+    rubocop (1.79.0)
       json (~> 2.3)
       language_server-protocol (~> 3.17.0.2)
       lint_roller (~> 1.1.0)
@@ -739,10 +739,11 @@ GEM
       parser (>= 3.3.0.2)
       rainbow (>= 2.2.2, < 4.0)
       regexp_parser (>= 2.9.3, < 3.0)
-      rubocop-ast (>= 1.45.1, < 2.0)
+      rubocop-ast (>= 1.46.0, < 2.0)
       ruby-progressbar (~> 1.7)
+      tsort (>= 0.2.0)
       unicode-display_width (>= 2.4.0, < 4.0)
-    rubocop-ast (1.45.1)
+    rubocop-ast (1.46.0)
       parser (>= 3.3.7.2)
       prism (~> 1.4)
     rubocop-capybara (2.22.1)
@@ -847,7 +848,7 @@ GEM
       aws-sdk-core (>= 2)
       concurrent-ruby
       thor
-    sidekiq (8.0.5)
+    sidekiq (8.0.6)
       connection_pool (>= 2.5.0)
       json (>= 2.9.0)
       logger (>= 1.6.2)
@@ -904,7 +905,7 @@ GEM
       unicode-display_width (>= 1.1.1, < 4)
     terser (1.2.6)
       execjs (>= 0.3.0, < 3)
-    thor (1.3.2)
+    thor (1.4.0)
     tilt (2.3.0)
     timecop (0.9.10)
     timeout (0.4.3)
@@ -1144,13 +1145,13 @@ CHECKSUMS
   ast (2.4.3) sha256=954615157c1d6a382bc27d690d973195e79db7f55e9765ac7c481c60bdb4d383
   autoprefixer-rails (9.4.7) sha256=7104f54efa89e6390391bd894498a9db92bffaf74474942c4152e6dc0775ab3b
   aws-eventstream (1.4.0) sha256=116bf85c436200d1060811e6f5d2d40c88f65448f2125bc77ffce5121e6e183b
-  aws-partitions (1.1131.0) sha256=a32ed5bbd6ebcf00f087be800a38ebeb642afd8fe2f21dc1d27d829c8c096c18
-  aws-sdk-cloudfront (1.120.0) sha256=16bce7b157d067beef4b2b20f8b3f890c34b55bc44a1a4702aae2deeccd7e94f
-  aws-sdk-core (3.226.3) sha256=7c71d0ddbd5577e3389070cd50d9e7fb90726bd8263beced8889c84b75892010
-  aws-sdk-kms (1.106.0) sha256=1737e3f154746dedcaf6aecf2e5490ab5e6447ac373bb5a57a19bb1184506007
-  aws-sdk-rds (1.283.0) sha256=4cd12e423b04eb07dc4ff97ceb8f05c18d2104ba380ea5a4f0b14a3f4c5810dd
-  aws-sdk-s3 (1.193.0) sha256=ccb954977c43886df7fa2d70a067ed68fc07c54d575de36f5086247a2b113bde
-  aws-sdk-sqs (1.96.0) sha256=842bc82a07a46b81e6543c8f49dc8b5b7e93427a13d08199624aa962dc2c0bac
+  aws-partitions (1.1135.0) sha256=cfb69f16f35dadb444be8b49071aa98b6699ea5b1a832be48709daee673063a4
+  aws-sdk-cloudfront (1.121.0) sha256=decd3281c901dcb56bb5e7c95e829c941a3a47336109e8d2d01f7acf1d107e4e
+  aws-sdk-core (3.227.0) sha256=99071fc5e3ca9347873fd114574319740c3041745df3c74e27875bd912dfc79e
+  aws-sdk-kms (1.107.0) sha256=1ca8e16a29459349c88f17108573fa577287a43d6f113fab0aafae79168ffe1d
+  aws-sdk-rds (1.284.0) sha256=eeae8982c56864f421f27dd2595ee1e5d10b6e32e8c9a2fe0b727aee2a62dd78
+  aws-sdk-s3 (1.194.0) sha256=44cf5e32ec7af4df68da2eab01eeb206514fc1e2991b08e87940fbf9cb9e006b
+  aws-sdk-sqs (1.98.0) sha256=7d9f537498d52d2c43c0c39d928b00456eb1be5488538f3178a7029c77c96a86
   aws-sigv4 (1.12.1) sha256=6973ff95cb0fd0dc58ba26e90e9510a2219525d07620c8babeb70ef831826c00
   babel-source (5.8.35) sha256=79ef222a9dcb867ac2efa3b0da35b4bcb15a4bfa67b6b2dcbf1e9a29104498d9
   babel-transpiler (0.7.0) sha256=4c06f4ad9e8e1cabe94f99e11df2f140bb72aca9ba067dbb49dc14d9b98d1570
@@ -1219,7 +1220,7 @@ CHECKSUMS
   factory_bot (6.5.4) sha256=4707fb7d80a7c14d71feb069460587bfc342e4ff1ef28097e0ad69d5ddfce613
   factory_bot_rails (6.5.0) sha256=4a7b61635424a57cc60412a18b72b9dcfb02fabfce2c930447a01dce8b37c0a2
   faker (3.5.2) sha256=f9a80291b2e3f259801d1dd552f0732fe04dce5d1f74e798365bc0413789c473
-  faraday (2.13.2) sha256=5c19762e3bbe78e61d8007c5119f2968373c5296d6c6d6aa05b6f9cec34f2a1a
+  faraday (2.13.4) sha256=c719ff52cfd0dbaeca79dd83ed3aeea3f621032abf8bc959d1c05666157cac26
   faraday-mashify (1.0.0) sha256=3684606afdcbb49913faf7f1fa9c1cca6259642589fdc857fd574e75cbf0542f
   faraday-multipart (1.1.1) sha256=77a18ff40149030fd1aef55bb4fc7a67ce46419a8a3fcd010e28c2526e8d8903
   faraday-net_http (3.4.1) sha256=095757fae7872b94eac839c08a1a4b8d84fd91d6886cfbe75caa2143de64ab3b
@@ -1284,7 +1285,7 @@ CHECKSUMS
   jbuilder (2.13.0) sha256=7200a38a1c0081aa81b7a9757e7a299db75bc58cf1fd45ca7919a91627d227d6
   jmespath (1.6.2) sha256=238d774a58723d6c090494c8879b5e9918c19485f7e840f2c1c7532cf84ebcb1
   js_cookie_rails (2.2.0) sha256=06e6b27ee093945c3acf3982d2dbf9e9117d1130f33bb07e1660ebea68229c62
-  json (2.13.0) sha256=a4bdf1ce8db5617ec6c59e021db4a398e54b57b335e1fa417ac7badc3fb7c1a0
+  json (2.13.2) sha256=02e1f118d434c6b230a64ffa5c8dee07e3ec96244335c392eaed39e1199dbb68
   json-schema (5.2.1) sha256=1ef39286c4771e7a71661d955fec9b66d1d1708547a0071c130af7c0a9264898
   jwt (2.10.2) sha256=31e1ee46f7359883d5e622446969fe9c118c3da87a0b1dca765ce269c3a0c4f4
   kaminari (1.2.2) sha256=c4076ff9adccc6109408333f87b5c4abbda5e39dc464bd4c66d06d9f73442a3e
@@ -1349,7 +1350,7 @@ CHECKSUMS
   overcommit (0.68.0) sha256=bfbcd26388e024e10a3d720f03077bc9389fe7c3beac360263b6c77926bcc8d0
   package_json (0.1.0) sha256=20af98c0e45dadcd48b6f45a3324e948f578e7549365671b97faca4637770256
   parallel (1.27.0) sha256=4ac151e1806b755fb4e2dc2332cbf0e54f2e24ba821ff2d3dcf86bf6dc4ae130
-  parser (3.3.8.0) sha256=2476364142b307fa5a1b1ece44f260728be23858a9c71078e956131a75453c45
+  parser (3.3.9.0) sha256=94d6929354b1a6e3e1f89d79d4d302cc8f5aa814431a6c9c7e0623335d7687f2
   playwright-ruby-client (1.54.0) sha256=d4053c946c3e5fa4044d4942feeb6661cf67f1bcfb3445e992bc887e737a4381
   pp (0.6.2) sha256=947ec3120c6f92195f8ee8aa25a7b2c5297bb106d83b41baa02983686577b6ff
   premailer (1.22.0) sha256=538935ebc4a75bfdd1aa624bd348e54986902b6caf08ceaaa6297fc7388227da
@@ -1382,7 +1383,7 @@ CHECKSUMS
   rb_sys (0.9.115) sha256=4696a623b89131f4a12bd9e38710add1c64b478dc3d2e9275f61a65f42f743ec
   rdoc (6.14.1) sha256=905efa796cd296ef252af4fb31fe41c073dee894de6aad715821f335c632516b
   react-rails (3.2.1) sha256=2235db0b240517596b1cb3e26177ab5bc64d3a56579b0415ee242b1691f81f64
-  recaptcha (5.20.0) sha256=d918bb3b18bcb4517fde1908a2d259863c275ccfcf4f47c78e1d4d96709dab47
+  recaptcha (5.20.1) sha256=34febe7e79ec9f67aad21e51883b5960d093042a7dfb1b074f53bd67dd8e4c29
   redcarpet (3.6.1) sha256=d444910e6aa55480c6bcdc0cdb057626e8a32c054c29e793fa642ba2f155f445
   redis (5.4.1) sha256=b5e675b57ad22b15c9bcc765d5ac26f60b675408af916d31527af9bd5a81faae
   redis-client (0.25.1) sha256=40130f8f95194c9c73eec322516781b0bfdd8293369a67dc175bd7bc391a68bd
@@ -1404,8 +1405,8 @@ CHECKSUMS
   rspec-rails (8.0.1) sha256=0c3700b10ab6d7c648c4cd554023d8c2b5b07e7f01205f7608f0c511cf686505
   rspec-retry (0.6.2) sha256=6101ba23a38809811ae3484acde4ab481c54d846ac66d5037ccb40131a60d858
   rspec-support (3.13.4) sha256=184b1814f6a968102b57df631892c7f1990a91c9a3b9e80ef892a0fc2a71a3f7
-  rubocop (1.77.0) sha256=1f360b4575ef7a124be27b0dfffa227a2b2d9420d22d4fd8bf179d702bcc88c0
-  rubocop-ast (1.45.1) sha256=94042e49adc17f187ba037b33f941ba7398fede77cdf4bffafba95190a473a3e
+  rubocop (1.79.0) sha256=c709e83b16f9fced295d83d190a3a5bbcc46c419d8f9b85f259b99ba6faf5bbe
+  rubocop-ast (1.46.0) sha256=0da7f6ad5b98614f89b74f11873c191059c823eae07d6ffd40a42a3338f2232b
   rubocop-capybara (2.22.1) sha256=ced88caef23efea53f46e098ff352f8fc1068c649606ca75cb74650970f51c0c
   rubocop-factory_bot (2.27.1) sha256=9d744b5916778c1848e5fe6777cc69855bd96548853554ec239ba9961b8573fe
   rubocop-performance (1.25.0) sha256=6f7d03568a770054117a78d0a8e191cefeffb703b382871ca7743831b1a52ec1
@@ -1446,7 +1447,7 @@ CHECKSUMS
   shakapacker (8.3.0) sha256=bdf41f950792f049235bc15e6936811c11cfde920cf3436bc0438eaf0aba01c0
   shellany (0.0.1) sha256=0e127a9132698766d7e752e82cdac8250b6adbd09e6c0a7fbbb6f61964fedee7
   shoryuken (6.2.1) sha256=95ddc0a717624a54e799d25a0a05100cb5a0c3728a96211935c214faaf16b3b6
-  sidekiq (8.0.5) sha256=d063b26fcf7bf082da2cd9d9f3d338bbfddc790e861e4e7c6a34ce2951f9f7d4
+  sidekiq (8.0.6) sha256=4a0a9b12b206b7f86919afcb13041aa60f13f7d7b75a23c707aa5aba3e84fe46
   sidekiq-cron (2.3.0) sha256=89c75745e7a5b6db3b92e593e1cce359cd1864a684a74c407f744a45abd0d615
   signet (0.20.0) sha256=bc660e2a6062311348cd35ec1ffafde1c5e2231213e1ca124f57aa4f59ec47a3
   simple_form (5.3.1) sha256=3891a36a89a7f8c69f1361624c5357591578a9e9c318257cd7b9cc7b6ce47460
@@ -1468,7 +1469,7 @@ CHECKSUMS
   superconfig (3.0.0) sha256=2f89acd3635ecf8783fcc881b3768ec4b088987f1d4113351f1c9810bba22133
   terminal-table (4.0.0) sha256=f504793203f8251b2ea7c7068333053f0beeea26093ec9962e62ea79f94301d2
   terser (1.2.6) sha256=6ddf00b93df7015b07e2b9b149e74cd70fa7aa4f0f89a15d9922a6ebd13f37ab
-  thor (1.3.2) sha256=eef0293b9e24158ccad7ab383ae83534b7ad4ed99c09f96f1a6b036550abbeda
+  thor (1.4.0) sha256=8763e822ccb0f1d7bee88cde131b19a65606657b847cc7b7b4b82e772bcd8a3d
   tilt (2.3.0) sha256=82dd903d61213c63679d28e404ee8e10d1b0fdf5270f1ad0898ec314cc3e745c
   time_will_tell (0.1.0)
   timecop (0.9.10) sha256=12ba45ce57cdcf6b1043cb6cdffa6381fd89ce10d369c28a7f6f04dc1b0cd8eb

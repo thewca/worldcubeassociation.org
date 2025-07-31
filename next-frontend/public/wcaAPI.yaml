@@ -45,6 +45,24 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/WcifEvent'
+
+  /competitions/{competitionId}/schedule:
+    get:
+      summary: Get competition schedule in WCIF format
+      parameters:
+        - name: competitionId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WcifSchedule'
+
   /competitions/{competitionId}/registrations:
     get:
       summary: Get competition registrations
@@ -75,6 +93,35 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/CompetitionIndex'
+  /incidents:
+    get:
+      summary: Get a list of incidents
+      parameters:
+        - name: q
+          in: query
+          schema:
+            type: string
+        - name: tags
+          in: query
+          schema:
+            type: string
+        - name: page
+          in: query
+          schema:
+            type: number
+        - name: per_page
+          in: query
+          schema:
+            type: number
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Incident'
   /persons/{wca_id}/:
     get:
       summary: Get information for a person
@@ -111,6 +158,39 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Results'
+  /user_groups:
+    get:
+      summary: Get user groups
+      parameters:
+        - name: isActive
+          in: query
+          schema:
+            type: boolean
+          description: Filter by whether the group is active
+        - name: isHidden
+          in: query
+          schema:
+            type: boolean
+          description: Filter by whether the group is hidden
+        - name: groupType
+          in: query
+          schema:
+            type: string
+          description: Filter by group type (e.g., "officers")
+        - name: sort
+          in: query
+          schema:
+            type: string
+          description: Sort by a specific field (e.g., "start_date", "-created_at")
+      responses:
+        '200':
+          description: A list of user groups
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserGroup'
 
   /user_roles:
     get:
@@ -146,6 +226,11 @@ paths:
           schema:
             type: string
           description: Filter by group type (e.g., "officers")
+        - name: parentGroupId
+          in: query
+          schema:
+            type: number
+          description: Filter by parent Group
         - name: isLead
           in: query
           schema:
@@ -210,6 +295,19 @@ paths:
                 $ref: "#/components/schemas/UserPermissions"
         "401":
           description: Unauthorized
+  /known-timezones:
+    get:
+      summary: Get a list of Olson timezones that the backend understands
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+                  example: 'America/New_York'
 
   /regional-organizations:
     get:
@@ -329,6 +427,10 @@ components:
             email:
               type: string
               format: email
+            preferred_contact_mode:
+              type: string
+            friendly_id:
+              type: string
 
     RegionalOrganization:
       type: object
@@ -387,6 +489,78 @@ components:
           example: "https://www.worldcubeassociation.org/persons/2005REYN01"
         avatar:
           $ref: '#/components/schemas/UserAvatar'
+
+    Incident:
+      type: object
+      required:
+        - id
+        - title
+        - public_summary
+        - created_at
+        - updated_at
+        - resolved_at
+        - digest_worthy
+        - url
+        - tags
+        - competitions
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        private_description:
+          type: string
+        public_summary:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        resolved_at:
+          type: string
+          format: date-time
+        digest_worthy:
+          type: boolean
+        digest_sent_at:
+          type: string
+          format: date-time
+        url:
+          type: string
+          format: uri
+        tags:
+          type: array
+          items:
+            type: object
+            required:
+              - name
+              - content_html
+              - url
+            properties:
+              name:
+                type: string
+              id:
+                type: number
+              url:
+                type: string
+                format: uri
+              content_html:
+                type: string
+        competitions:
+          type: array
+          items:
+            type: object
+            required:
+              - id
+              - name
+            properties:
+              id:
+                type: string
+              name:
+                type: string
+              comments:
+                type: string
 
     TeamMembership:
       type: object
@@ -1426,3 +1600,113 @@ components:
 
     WcifScramble:
       type: string
+
+    WcifSchedule:
+      type: object
+      properties:
+        startDate:
+          type: string
+          format: date
+        numberOfDays:
+          type: integer
+        venues:
+          type: array
+          items:
+            $ref: '#/components/schemas/WcifVenue'
+      required:
+        - startDate
+        - numberOfDays
+        - venues
+
+    WcifVenue:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        latitudeMicrodegrees:
+          type: integer
+        longitudeMicrodegrees:
+          type: integer
+        countryIso2:
+          $ref: '#/components/schemas/WcifCountryCode'
+        timezone:
+          type: string
+        rooms:
+          type: array
+          items:
+            $ref: '#/components/schemas/WcifRoom'
+        extensions:
+          type: array
+      required:
+        - id
+        - name
+        - latitudeMicrodegrees
+        - longitudeMicrodegrees
+        - countryIso2
+        - timezone
+        - rooms
+        - extensions
+
+    WcifRoom:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        color:
+          type: string
+        activities:
+          type: array
+          items:
+            $ref: '#/components/schemas/WcifActivity'
+        extensions:
+          type: array
+      required:
+        - id
+        - name
+        - color
+        - activities
+        - extensions
+
+    WcifActivity:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        activityCode:
+          $ref: '#/components/schemas/WcifActivityCode'
+        startTime:
+          type: string
+          format: date-time
+        endTime:
+          type: string
+          format: date-time
+        childActivities:
+          type: array
+          items:
+            $ref: '#/components/schemas/WcifActivity'
+        scrambleSetId:
+          type: integer
+        extensions:
+          type: array
+      required:
+        - id
+        - name
+        - activityCode
+        - startTime
+        - endTime
+        - childActivities
+        - extensions
+
+    WcifCountryCode:
+      type: string
+      example: "US"
+
+    WcifActivityCode:
+      type: string
+      example: "333-r1-g1"

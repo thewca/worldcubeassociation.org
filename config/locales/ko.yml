@@ -1203,12 +1203,10 @@ ko:
       db_dev_export: 개발자 추출
       #original_hash: 1fa73f3
       regulations: 규정
-      #original_hash: 3bb8751
-      regulations_full: 규정 & 지침
+      #original_hash: 1fa73f3
+      regulations_full: 규정
       #original_hash: 6bce1b5
       about_regulations: 규정에 대하여
-      #original_hash: 141d1d7
-      guidelines: 지침
       #original_hash: c4622c3
       scrambles: 스크램블
       #original_hash: 90ccd64
@@ -1772,6 +1770,8 @@ ko:
           href='%{wrt_contact_path}' target='_blank'>WCA 결과 팀</a> 또는 귀하의 지역 <a
           href='%{delegate_url}'>WCA 파견위원</a>에게 연락하십시오.
         reason:
+          #original_hash: 2e22133
+          no_access: 사용자를 수정할 권한이 없습니다
           #original_hash: 370ff12
           assigned: 이미 연결된 WCA ID가 있습니다
           #original_hash: 1c4670f
@@ -3993,11 +3993,15 @@ ko:
     #original_hash: 10bcdbd
     connect_wca_id: WCA 계정과 WCA ID를 연결하십시오!
   payments:
+    #original_hash: cfeba03
+    header: 결제 이력
     messages:
       #original_hash: 2eac1cb
       charge_refunded: 결제가 환불되었습니다
       #original_hash: 1e1d219
       charges_refunded: 모든 비용이 환불되었습니다
+      #original_hash: c677bd3
+      no_payments: 이 참가 신청에 대한 결제가 이루어지지 않았습니다.
     errors:
       refund:
         #original_hash: 66475ae
@@ -4176,6 +4180,8 @@ ko:
     forum_age_requirement: WCA 포럼에 접속하려면 13세 이상이어야 합니다.
     #original_hash: d1f3342
     forum_enter_dob: 포럼에 접속하려면 생년월일을 입력해야 합니다. 생년월일을 입력하신 후 포럼에 다시 접속해 보세요.
+    #original_hash: 56e3bad
+    refresh: 새로고침
   faq:
     #original_hash: d790b40
     title: 자주 묻는 질문
@@ -4716,8 +4722,8 @@ ko:
       incidents: 사건
       #original_hash: a0ca0c3
       posts: 게시물
-      #original_hash: 9d7ea9c
-      regulations_and_guidelines: 규정과 지침
+      #original_hash: 1fa73f3
+      regulations_and_guidelines: 규정
       #original_hash: db683b3
       search_for: '<b>%{search_string}</b>을 검색하십시오'
       not_found:
@@ -4731,8 +4737,8 @@ ko:
         posts: 검색된 게시물이 없습니다
         #original_hash: 3499e7e
         incidents: 검색된 사건이 없습니다
-        #original_hash: 76a6bf1
-        regulations_and_guidelines: 검색된 규정 혹은 지침이 없습니다
+        #original_hash: 3909204
+        regulations_and_guidelines: 검색된 규정이 없습니다
   incidents_log:
     #original_hash: 61ab89f
     i18n_disclaimer: '사건 섹션은 영어로만 제공되며, 아래 내용은 번역되지 않습니다.'
@@ -4748,14 +4754,10 @@ ko:
       content1_html: >-
         모든 WCA 대회는 <a href="/regulations/">WCA 규정</a>을 따라야 합니다. 선수는 첫 대회에 참가하기
         전에 규정을 숙지하는 것이 중요합니다.
-      #original_hash: 4296902
-      content2_html: >-
-        WCA 규정은 추가적인 명료화와 설명이 포함된 <a href="/regulations/guidelines.html">WCA
-        지침</a>으로 보완됩니다.
       #original_hash: c8e1783
-      content3_html: >-
-        WCA 규정 위원회에서 해결한 대회 중 발생한 사건에 대한 중요한 판결은 <a href="/incidents">사건
-        로그</a>에서 확인할 수 있습니다.
+      content2_html: >-
+        WCA 규정 위원회에서 해결한 대회 중 발생한 사건에 대한 중요한 결정은 <a href="/incidents">사건
+        기록</a>에서 확인할 수 있습니다.
     panel2:
       #original_hash: 8ad8302
       title: 번역본
@@ -4784,8 +4786,8 @@ ko:
       #original_hash: 5016669
       content2_html: 본 문서에는 중요한 정보가 포함되어 있으므로 모든 대회 주최자가 꼭 읽어야 합니다.
   regulations_translations:
-    #original_hash: 9493b8d
-    title: 'WCA 규정 및 지침: 번역본'
+    #original_hash: a19a3f5
+    title: 'WCA 규정: 번역본'
     #original_hash: 386ecc1
     paragraph1: 영어가 아닌 다른 언어를 사용하신다면 이러한 번역이 유용할 수 있습니다.
     #original_hash: 32b1132
