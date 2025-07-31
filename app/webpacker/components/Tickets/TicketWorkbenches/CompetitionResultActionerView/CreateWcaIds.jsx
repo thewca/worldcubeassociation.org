@@ -50,7 +50,7 @@ export default function CreateWcaIds({ ticketDetails }) {
       </List>
       <List>
         <List.Item>
-          <Button primary href={viewUrls.admin.completePersons([competitionId])} target="_blank">
+          <Button as="a" primary href={viewUrls.admin.completePersons([competitionId])} target="_blank">
             Assign WCA IDs to newcomers
           </Button>
           Click this button to assign WCA IDs to newcomers.
