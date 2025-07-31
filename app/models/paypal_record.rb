@@ -47,9 +47,10 @@ class PaypalRecord < ApplicationRecord
     created: %w[created],
     pending: %w[payer_action_required],
     processing: %w[saved],
+    requires_capture: %w[approved],
     partial: %w[],
     failed: %w[],
-    succeeded: %w[approved completed], # TODO: In PayPal, WE are the ones who have to make the payment succeed, by "capturing" an already approved payment
+    succeeded: %w[completed],
     canceled: %w[voided],
   }.freeze
 
