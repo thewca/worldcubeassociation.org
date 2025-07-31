@@ -21,7 +21,7 @@ function ImportRegistrations({ competitionId }) {
         <Tab.Pane>
           <UploadRegistrationCsv
             competitionId={competitionId}
-            onImportSuccess={setSuccess}
+            onImportSuccess={() => setSuccess(true)}
           />
         </Tab.Pane>
       ),

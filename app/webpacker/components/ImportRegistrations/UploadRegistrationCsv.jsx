@@ -11,7 +11,7 @@ export default function UploadRegistrationCsv({ competitionId, onImportSuccess }
   const {
     mutate: importRegistrationsMutate, isPending, error, isError,
   } = useMutation({
-    mutationFn: () => importRegistrations({ competitionId, csvFile }),
+    mutationFn: importRegistrations,
     onSuccess: onImportSuccess,
   });
 
@@ -19,7 +19,7 @@ export default function UploadRegistrationCsv({ competitionId, onImportSuccess }
   if (isError) return <Errored error={error} />;
 
   return (
-    <Form onSubmit={importRegistrationsMutate}>
+    <Form onSubmit={() => importRegistrationsMutate({ competitionId, csvFile })}>
       <Form.Input
         type="file"
         accept="text/csv"
