@@ -208,4 +208,15 @@ class TicketsController < ApplicationController
 
     render status: :ok, json: { success: true }
   end
+
+  def inbox_person_summary
+    ticket = Ticket.find(params.require(:ticket_id))
+    competition = ticket.metadata.competition
+
+    render status: :ok, json: {
+      inbox_person_count: competition.inbox_persons.count,
+      inbox_person_no_wca_id_count: competition.inbox_persons.where(wca_id: '').count,
+      result_no_wca_id_count: competition.results.select(:person_id).distinct.where("person_id REGEXP '^[0-9]+$'").count,
+    }
+  end
 end

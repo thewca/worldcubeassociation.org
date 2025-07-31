@@ -31,6 +31,11 @@ const TIMELINE_STATUSES = [
     data in InboxResults.`,
   },
   {
+    status: ticketsCompetitionResultStatuses.created_wca_ids,
+    description: `WRT will have to go through the newcomers, verify their
+    details and generate WCA ID for them.`,
+  },
+  {
     status: ticketsCompetitionResultStatuses.posted,
     description: `When the results are posted, the results become public, and
     also email notification will be sent to participants informing that the

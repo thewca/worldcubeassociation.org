@@ -235,6 +235,7 @@ Rails.application.routes.draw do
     post 'update_status' => 'tickets#update_status', as: :update_status
     post 'merge_inbox_results' => 'tickets#merge_inbox_results', as: :merge_inbox_results
     get 'edit_person_validators' => 'tickets#edit_person_validators', as: :edit_person_validators
+    get 'inbox_person_summary' => 'tickets#inbox_person_summary', as: :inbox_person_summary
     resources :ticket_comments, only: %i[index create], as: :comments
     resources :ticket_logs, only: [:index], as: :logs
   end
