@@ -22,6 +22,10 @@ class RegistrationPayment < ApplicationRecord
     amount_lowest_denomination + refunding_registration_payments.sum(:amount_lowest_denomination)
   end
 
+  def status
+    receipt.parent_record.payment_intent.wca_status
+  end
+
   private def auto_accept_hook
     registration.attempt_auto_accept(:live)
   end
