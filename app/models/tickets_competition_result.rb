@@ -8,6 +8,7 @@ class TicketsCompetitionResult < ApplicationRecord
     locked_for_posting: "locked_for_posting",
     warnings_verified: "warnings_verified",
     merged_inbox_results: "merged_inbox_results",
+    created_wca_ids: "created_wca_ids",
     posted: "posted",
   }
 

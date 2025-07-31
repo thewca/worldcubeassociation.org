@@ -4,6 +4,7 @@ import WarningsVerification from './WarningsVerification';
 import { adminImportResultsUrl } from '../../../../lib/requests/routes.js.erb';
 import TimelineView from './TimelineView';
 import MergeInboxResults from './MergeInboxResults';
+import CreateWcaIds from './CreateWcaIds';
 
 export default function CompetitionResultActionerView({ ticketDetails, updateStatus }) {
   const { ticket: { metadata: { status, competition_id: competitionId } } } = ticketDetails;
@@ -44,6 +45,12 @@ function ViewForStatus({
       );
 
     case ticketsCompetitionResultStatuses.merged_inbox_results:
+      return (
+        <CreateWcaIds
+          ticketDetails={ticketDetails}
+        />
+      );
+    case ticketsCompetitionResultStatuses.created_wca_ids:
       return (
         <p>
           Please finish the remaining steps in
