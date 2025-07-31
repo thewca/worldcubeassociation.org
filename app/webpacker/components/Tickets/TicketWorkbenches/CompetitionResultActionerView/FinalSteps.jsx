@@ -86,7 +86,10 @@ export default function FinalSteps({ ticketDetails }) {
         open={showPostConfirm}
         content="You are about to publish the results, including sending out emails to the competitors. Are you sure?"
         onCancel={() => setShowPostConfirm(false)}
-        onConfirm={() => postResultsMutate({ ticketId: id })}
+        onConfirm={() => {
+          postResultsMutate({ ticketId: id });
+          setShowPostConfirm(false);
+        }}
       />
     </>
   );
