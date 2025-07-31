@@ -1,14 +1,17 @@
 import React from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Button, List } from 'semantic-ui-react';
 import getInboxPersonSummary from '../../api/competitionResult/getInboxPersonSummary';
 import Loading from '../../../Requests/Loading';
 import Errored from '../../../Requests/Errored';
 import { viewUrls } from '../../../../lib/requests/routes.js.erb';
+import { ticketsCompetitionResultStatuses } from '../../../../lib/wca-data.js.erb';
+import deleteInboxPersons from '../../api/competitionResult/deleteInboxPersons';
 
 export default function CreateWcaIds({ ticketDetails }) {
   const { ticket: { id, metadata: { competition_id: competitionId } } } = ticketDetails;
 
+  const queryClient = useQueryClient();
   const {
     data: inboxPersonSummary,
     isFetching,
@@ -19,9 +22,34 @@ export default function CreateWcaIds({ ticketDetails }) {
     queryKey: ['inbox-person-summary', id],
     queryFn: () => getInboxPersonSummary({ ticketId: id }),
   });
+  const {
+    mutate: deleteInboxPersonsMutate,
+    isPending,
+    isError: isDeleteError,
+    error: deleteError,
+  } = useMutation({
+    mutationFn: deleteInboxPersons,
+    onSuccess: () => {
+      queryClient.setQueryData(
+        ['ticket-details', id],
+        (oldTicketDetails) => ({
+          ...oldTicketDetails,
+          ticket: {
+            ...oldTicketDetails.ticket,
+            metadata: {
+              ...oldTicketDetails.ticket.metadata,
+              status: ticketsCompetitionResultStatuses.created_wca_ids,
+            },
+          },
+        }),
+      );
+      queryClient.setQueryData(['imported-temporary-results', competitionId], []);
+    },
+  });
 
-  if (isFetching) return <Loading />;
+  if (isFetching || isPending) return <Loading />;
   if (isError) return <Errored error={error} />;
+  if (isDeleteError) return <Errored error={deleteError} />;
 
   const {
     inbox_person_count: inboxPersonCount,
@@ -61,6 +89,14 @@ export default function CreateWcaIds({ ticketDetails }) {
           </Button>
           If you are done with assigning, please click this button.
         </List.Item>
+        {resultNoWcaIdCount === 0 && (
+          <Button
+            primary
+            onClick={() => deleteInboxPersonsMutate({ ticketId: id })}
+          >
+            Delete the inbox rows
+          </Button>
+        )}
       </List>
     </>
   );
