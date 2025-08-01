@@ -5,9 +5,9 @@ FactoryBot.define do
     transient do
       skip_auto_accept_hook { false }
       competition { registration.competition }
-      payment_intent { association(:payment_intent, :confirmed, holder: registration) }
     end
 
+    payment_intent { association(:payment_intent, :confirmed, holder: registration) }
     user_id { registration&.user_id }
     amount_lowest_denomination { competition&.base_entry_fee_lowest_denomination }
     currency_code { competition&.currency_code }
