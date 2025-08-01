@@ -3,7 +3,7 @@
 class RegistrationPayment < ApplicationRecord
   belongs_to :registration
   belongs_to :user
-  belongs_to :payment_intent
+  belongs_to :payment_intent, optional: true
 
   belongs_to :receipt, polymorphic: true, optional: true
 
