@@ -3,6 +3,7 @@
 class Ticket < ApplicationRecord
   TICKET_TYPES = {
     edit_person: "TicketsEditPerson",
+    competition_result: "TicketsCompetitionResult",
   }.freeze
 
   has_many :ticket_comments
@@ -20,7 +21,9 @@ class Ticket < ApplicationRecord
   def user_stakeholders(user)
     return [] if user.nil?
 
-    ticket_stakeholders.belongs_to_user(user).or(ticket_stakeholders.belongs_to_groups(user.active_groups))
+    ticket_stakeholders.belongs_to_user(user)
+                       .or(ticket_stakeholders.belongs_to_groups(user.active_groups))
+                       .or(ticket_stakeholders.belongs_to_competitions(user.delegated_competitions))
   end
 
   def can_user_access?(user)
@@ -28,12 +31,6 @@ class Ticket < ApplicationRecord
 
     ticket_stakeholders.belongs_to_user(user).any? ||
       ticket_stakeholders.belongs_to_groups(user.active_groups).any?
-  end
-
-  def action_allowed?(action, user)
-    user_stakeholders(user).any? do |ticket_stakeholder|
-      metadata.action_user_groups(action).include?(ticket_stakeholder.stakeholder)
-    end
   end
 
   DEFAULT_SERIALIZE_OPTIONS = {

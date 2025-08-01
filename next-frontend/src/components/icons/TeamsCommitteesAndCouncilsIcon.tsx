@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { createIcon } from "@chakra-ui/react";
 
 const TeamsCommitteesAndCouncilsIcon = createIcon({
@@ -13,10 +14,9 @@ const TeamsCommitteesAndCouncilsIcon = createIcon({
       />
     </>
   ),
+  defaultProps: {
+    boxSize: "1em",
+  },
 });
 
-const TeamsCommitteesAndCouncilsIconPreview = () => {
-  return <TeamsCommitteesAndCouncilsIcon size="lg" />;
-};
-
-export default TeamsCommitteesAndCouncilsIconPreview;
+export default TeamsCommitteesAndCouncilsIcon;

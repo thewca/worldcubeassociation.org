@@ -370,14 +370,9 @@ RSpec.describe CompetitionsMailer do
     let(:delegates) { create_list(:delegate, 3) }
     let(:trainee_delegates) { create_list(:trainee_delegate, 3) }
     let(:competition) { create(:competition, name: "Comp of the future 2017", id: "CompFut2017", delegates: delegates + trainee_delegates) }
-    let(:results_submission) do
-      build(
-        :results_submission,
-        schedule_url: link_to_competition_schedule_tab(competition),
-        message: "Hello, here are the results",
-      )
-    end
-    let(:mail) { CompetitionsMailer.results_submitted(competition, results_submission, delegates.first) }
+    let(:results_validator) { ResultsValidators::CompetitionsResultsValidator.create_full_validation.validate(competition.id) }
+    let(:message) { "Hello, here are the results" }
+    let(:mail) { CompetitionsMailer.results_submitted(competition, results_validator, message, delegates.first) }
     let(:utc_now) { Time.utc(2018, 2, 23, 22, 3, 32) }
 
     before(:each) do

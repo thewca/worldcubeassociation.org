@@ -1,17 +1,46 @@
-import { NextAuthConfig } from "next-auth";
+import type { NextAuthConfig } from "next-auth";
+import { Provider } from "@auth/core/providers";
+
+export const WCA_PROVIDER_ID = "WCA";
+export const WCA_CMS_PROVIDER_ID = `${WCA_PROVIDER_ID}-CMS`;
+
+const baseWcaProvider: Provider = {
+  id: WCA_PROVIDER_ID,
+  name: "WCA-OIDC-Provider",
+  type: "oidc",
+  issuer: process.env.OIDC_ISSUER,
+  clientId: process.env.OIDC_CLIENT_ID,
+  clientSecret: process.env.OIDC_CLIENT_SECRET,
+};
+
+const cmsWcaProvider: Provider = {
+  ...baseWcaProvider,
+  id: WCA_CMS_PROVIDER_ID,
+  name: "WCA-OIDC-Provider with CMS access",
+  authorization: {
+    params: { scope: "openid profile email cms" },
+  },
+  idToken: false,
+  profile: (profile) => {
+    return {
+      id: profile.sub,
+      name: profile.name,
+      email: profile.email,
+      roles: profile.roles,
+    };
+  },
+  // allow re-linking of accounts that have the same email.
+  //   This happens when a user who is allowed to use Payload
+  //   First logs in via the "normal" provider, and later wants to "switch"
+  //   to using Payload via the CMS provider.
+  // See https://authjs.dev/concepts#security for details. Quote:
+  //   > Examples of scenarios where this is secure include an OAuth provider you control [...]
+  allowDangerousEmailAccountLinking: true,
+};
 
 export const authConfig: NextAuthConfig = {
-  debug: true,
-  providers: [
-    {
-      id: "WCA",
-      name: "WCA-OIDC-Provider",
-      type: "oidc",
-      issuer: process.env.OIDC_ISSUER,
-      clientId: process.env.OIDC_CLIENT_ID,
-      clientSecret: process.env.OIDC_CLIENT_SECRET,
-    },
-  ],
+  secret: process.env.AUTH_SECRET,
+  providers: [baseWcaProvider, cmsWcaProvider],
   callbacks: {
     async jwt({ token, account }) {
       if (account) {
@@ -38,4 +67,9 @@ export const authConfig: NextAuthConfig = {
       return session;
     },
   },
+};
+
+export const payloadAuthConfig: NextAuthConfig = {
+  ...authConfig,
+  providers: [cmsWcaProvider],
 };

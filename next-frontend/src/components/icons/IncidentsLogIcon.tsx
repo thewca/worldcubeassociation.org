@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { createIcon } from "@chakra-ui/react";
 
 const IncidentsLogIcon = createIcon({
@@ -13,10 +14,9 @@ const IncidentsLogIcon = createIcon({
       />
     </>
   ),
+  defaultProps: {
+    boxSize: "1em",
+  },
 });
 
-const IncidentsLogIconPreview = () => {
-  return <IncidentsLogIcon size="lg" />;
-};
-
-export default IncidentsLogIconPreview;
+export default IncidentsLogIcon;

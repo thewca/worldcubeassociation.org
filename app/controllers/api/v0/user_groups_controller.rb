@@ -40,7 +40,7 @@ class Api::V0::UserGroupsController < Api::V0::ApiController
     # Sorts the list of groups by name.
     groups = groups.sort_by(&:name)
 
-    render json: groups
+    render json: groups, methods: %w[lead_user]
   end
 
   def create

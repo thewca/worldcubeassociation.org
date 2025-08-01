@@ -59,6 +59,7 @@ class User < ApplicationRecord
   belongs_to :current_avatar, class_name: "UserAvatar", inverse_of: :current_user, optional: true
   belongs_to :pending_avatar, class_name: "UserAvatar", inverse_of: :pending_user, optional: true
   has_many :user_avatars, dependent: :destroy, inverse_of: :user
+  has_many :potential_duplicate_persons, dependent: :destroy, foreign_key: :original_user_id, class_name: "PotentialDuplicatePerson"
 
   scope :confirmed_email, -> { where.not(confirmed_at: nil) }
   scope :newcomers, -> { where(wca_id: nil) }
@@ -73,6 +74,8 @@ class User < ApplicationRecord
   ANONYMOUS_DOB = '1954-12-04'
   ANONYMOUS_GENDER = 'o'
   ANONYMOUS_COUNTRY_ISO2 = 'US'
+
+  FORUM_AGE_REQUIREMENT = 13
 
   def self.eligible_voters
     [
@@ -90,6 +93,10 @@ class User < ApplicationRecord
     team_leaders = RolesMetadataTeamsCommittees.leader.includes(:user, :user_role).select { |role_metadata| role_metadata.user_role.active? }.map(&:user)
     senior_delegates = RolesMetadataDelegateRegions.senior_delegate.includes(:user, :user_role).select { |role_metadata| role_metadata.user_role.active? }.map(&:user)
     (team_leaders + senior_delegates).uniq.compact
+  end
+
+  def self.regional_voters
+    RolesMetadataDelegateRegions.regional_delegate.joins(:user_role).merge(UserRole.active).includes(:user).map(&:user).uniq.compact
   end
 
   def self.all_discourse_groups
@@ -454,6 +461,10 @@ class User < ApplicationRecord
     Rails.env.production? && EnvConfig.WCA_LIVE_SITE? ? software_team_admin? : (software_team? || software_team_admin?)
   end
 
+  def can_administrate_livestream?
+    software_team? || board_member? || communication_team?
+  end
+
   def any_kind_of_delegate?
     delegate_role_metadata.any?
   end
@@ -490,12 +501,16 @@ class User < ApplicationRecord
     user.senior_delegates.include?(self)
   end
 
-  def banned?
-    group_member?(UserGroup.banned_competitors.first)
+  def below_forum_age_requirement?
+    (Date.today - FORUM_AGE_REQUIREMENT.years) < dob
   end
 
   def forum_banned?
     current_ban&.metadata&.scope == 'competing_and_attending_and_forums'
+  end
+
+  def banned?
+    group_member?(UserGroup.banned_competitors.first)
   end
 
   def banned_in_past?
@@ -631,7 +646,7 @@ class User < ApplicationRecord
       generateDataExports
       fixResults
       mergeProfiles
-      reassignConnectedWcaId
+      mergeUsers
     ].index_with { |panel_page| panel_page.to_s.underscore.dasherize }
   end
 
@@ -690,7 +705,7 @@ class User < ApplicationRecord
           panel_pages[:generateDataExports],
           panel_pages[:fixResults],
           panel_pages[:mergeProfiles],
-          panel_pages[:reassignConnectedWcaId],
+          panel_pages[:mergeUsers],
         ],
       },
       wst: {
@@ -744,6 +759,7 @@ class User < ApplicationRecord
         name: 'WEAT panel',
         pages: [
           panel_pages[:bannedCompetitors],
+          panel_pages[:delegateProbations],
         ],
       },
     }
@@ -916,18 +932,17 @@ class User < ApplicationRecord
   end
 
   def can_upload_competition_results?(competition)
-    can_submit_competition_results?(competition, upload_only: true)
+    return false if competition.upcoming? || !competition.announced?
+
+    can_admin_results? || (competition.delegates.include?(self) && !competition.results_posted?)
   end
 
-  def can_submit_competition_results?(competition, upload_only: false)
-    allowed_delegate = if upload_only
-                         competition.delegates.include?(self)
-                       else
-                         competition.staff_delegates.include?(self)
-                       end
-    appropriate_role = can_admin_results? || allowed_delegate
-    appropriate_time = competition.in_progress? || competition.probably_over?
-    competition.announced? && appropriate_role && appropriate_time && !competition.results_posted?
+  def can_submit_competition_results?(competition)
+    can_upload_competition_results?(competition) && (can_admin_results? || competition.staff_delegates.include?(self))
+  end
+
+  def can_check_newcomers_data?(competition)
+    competition.upcoming? && can_admin_results?
   end
 
   def can_create_poll?
@@ -1030,6 +1045,8 @@ class User < ApplicationRecord
   end
 
   def cannot_edit_data_reason_html(user_to_edit)
+    return I18n.t('users.edit.cannot_edit.reason.no_access') unless user_to_edit == self || can_edit_any_user?
+
     # Don't allow editing data if they have a WCA ID assigned, or if they
     # have already registered for a competition. We do allow admins and delegates
     # who have registered for a competition to edit their own data.
@@ -1037,7 +1054,7 @@ class User < ApplicationRecord
                            # Not using _html suffix as automatic html_safe is available only from
                            # the view helper
                            I18n.t('users.edit.cannot_edit.reason.assigned')
-                         elsif user_to_edit == self && !(admin? || any_kind_of_delegate?) && user_to_edit.registrations.accepted.count.positive?
+                         elsif user_to_edit == self && !(admin? || any_kind_of_delegate?) && user_to_edit.registrations.accepted.any?
                            I18n.t('users.edit.cannot_edit.reason.registered')
                          end
     return unless cannot_edit_reason
@@ -1084,10 +1101,8 @@ class User < ApplicationRecord
 
   private def editable_competitor_info_fields(user)
     fields = Set.new
-    if user == self || can_edit_any_user?
-      fields += %i[name dob gender country_iso2] unless cannot_edit_data_reason_html(user)
-      fields += CLAIM_WCA_ID_PARAMS
-    end
+    fields += %i[name dob gender country_iso2] unless cannot_edit_data_reason_html(user)
+    fields += CLAIM_WCA_ID_PARAMS if user == self || can_edit_any_user?
     fields << :name if user.wca_id.blank? && organizer_for?(user)
     if can_edit_any_user?
       fields += %i[
@@ -1233,18 +1248,26 @@ class User < ApplicationRecord
   DEFAULT_SERIALIZE_OPTIONS = {
     only: %w[id wca_id name gender
              country_iso2 created_at updated_at],
-    methods: %w[url country delegate_status],
-    include: %w[avatar teams],
+    methods: %w[url country],
+    include: %w[avatar],
   }.freeze
 
   def serializable_hash(options = nil)
     # NOTE: doing deep_dup is necessary here to avoid changing the inner values
     # of the freezed variables (which would leak PII)!
     default_options = DEFAULT_SERIALIZE_OPTIONS.deep_dup
-    # Delegates's emails and regions are public information.
-    default_options[:methods].push("email", "location", "region_id") if staff_delegate?
+
+    include_email, exclude_deprecated = options&.values_at(:include_email, :exclude_deprecated)
+
+    unless exclude_deprecated
+      default_options[:methods].push("location", "region_id") if staff_delegate?
+      default_options[:methods].push("delegate_status")
+      default_options[:include].push("teams")
+    end
+    default_options[:methods].push("email") if include_email || staff_delegate?
 
     options = default_options.merge(options || {}).deep_dup
+
     # Preempt the values for avatar and teams, they have a special treatment.
     include_avatar = options[:include]&.delete("avatar")
     include_teams = options[:include]&.delete("teams")
@@ -1344,15 +1367,20 @@ class User < ApplicationRecord
     end
   end
 
+  def special_account_competitions
+    {
+      organized_competitions: organized_competitions.pluck(:name),
+      delegated_competitions: delegated_competitions.pluck(:name),
+      announced_competitions: competitions_announced.pluck(:name),
+      results_posted_competitions: competitions_results_posted.pluck(:name),
+    }.reject { |_, value| value.empty? }
+  end
+
   # Special Accounts are accounts where the WCA ID and user account should always be connected
   # These includes any teams, organizers, delegates
   # Note: Someone can Delegate a competition without ever being a Delegate.
   def special_account?
-    self.roles.any? ||
-      !self.organized_competitions.empty? ||
-      !delegated_competitions.empty? ||
-      !competitions_announced.empty? ||
-      !competitions_results_posted.empty?
+    self.roles.any? || self.special_account_competitions.present?
   end
 
   def accepted_registrations
@@ -1374,7 +1402,7 @@ class User < ApplicationRecord
   end
 
   private def can_manage_delegate_probation?
-    admin? || board_member? || senior_delegate? || can_access_wfc_senior_matters? || group_leader?(UserGroup.teams_committees_group_wic)
+    admin? || board_member? || senior_delegate? || can_access_wfc_senior_matters? || group_leader?(UserGroup.teams_committees_group_wic) || weat_team?
   end
 
   def senior_delegates
@@ -1499,5 +1527,30 @@ class User < ApplicationRecord
       current_avatar_id: special_account? ? nil : current_avatar_id,
       country_iso2: special_account? ? country_iso2 : nil,
     )
+  end
+
+  def transfer_data_to(new_user)
+    ActiveRecord::Base.transaction do
+      competition_organizers.update_all(organizer_id: new_user.id)
+      competition_delegates.update_all(delegate_id: new_user.id)
+      competitions_results_posted.update_all(results_posted_by: new_user.id)
+      competitions_announced.update_all(announced_by: new_user.id)
+      roles.update_all(user_id: new_user.id)
+      registrations.update_all(user_id: new_user.id)
+
+      return if wca_id.blank?
+
+      wca_id_to_be_transferred = self.wca_id
+      self.update!(wca_id: nil) # Must remove WCA ID before adding it as it is unique in the Users table.
+      new_user.update!(wca_id: wca_id_to_be_transferred)
+
+      # After this merge, there won't be any registrations for self as all of
+      # them will be transferred to new_user. So any potential duplicates of
+      # self is no longer valid. There might be some potential duplicates for
+      # new_user, but they need to be refetched. But refetching here may look
+      # confusing, so removing the potential duplicates of new_user as well.
+      self.potential_duplicate_persons.delete_all
+      new_user.potential_duplicate_persons.delete_all
+    end
   end
 end

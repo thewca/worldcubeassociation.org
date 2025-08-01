@@ -27,6 +27,101 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CompetitionInfo'
+  /competitions/{competitionId}/events:
+    get:
+      summary: Get competition events in WCIF v0 format
+      parameters:
+        - name: competitionId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/WcifEvent'
+
+  /competitions/{competitionId}/schedule:
+    get:
+      summary: Get competition schedule in WCIF format
+      parameters:
+        - name: competitionId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WcifSchedule'
+
+  /competitions/{competitionId}/registrations:
+    get:
+      summary: Get competition registrations
+      parameters:
+        - name: competitionId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RegistrationData'
+  /competition_index:
+    get:
+      summary: Get a list of (upcoming) competitions for table display
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CompetitionIndex'
+  /incidents:
+    get:
+      summary: Get a list of incidents
+      parameters:
+        - name: q
+          in: query
+          schema:
+            type: string
+        - name: tags
+          in: query
+          schema:
+            type: string
+        - name: page
+          in: query
+          schema:
+            type: number
+        - name: per_page
+          in: query
+          schema:
+            type: number
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Incident'
   /persons/{wca_id}/:
     get:
       summary: Get information for a person
@@ -63,7 +158,126 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Results'
+  /user_groups:
+    get:
+      summary: Get user groups
+      parameters:
+        - name: isActive
+          in: query
+          schema:
+            type: boolean
+          description: Filter by whether the group is active
+        - name: isHidden
+          in: query
+          schema:
+            type: boolean
+          description: Filter by whether the group is hidden
+        - name: groupType
+          in: query
+          schema:
+            type: string
+          description: Filter by group type (e.g., "officers")
+        - name: sort
+          in: query
+          schema:
+            type: string
+          description: Sort by a specific field (e.g., "start_date", "-created_at")
+      responses:
+        '200':
+          description: A list of user groups
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserGroup'
 
+  /user_roles:
+    get:
+      summary: Get user roles
+      parameters:
+        - name: isActive
+          in: query
+          schema:
+            type: boolean
+          description: Filter by whether the group is active
+        - name: isGroupHidden
+          in: query
+          schema:
+            type: boolean
+          description: Filter by whether the group is hidden
+        - name: userId
+          in: query
+          schema:
+            type: integer
+          description: Filter by user ID
+        - name: groupId
+          in: query
+          schema:
+            type: integer
+          description: Filter by group ID
+        - name: status
+          in: query
+          schema:
+            type: string
+          description: Filter by metadata status (e.g., "chair")
+        - name: groupType
+          in: query
+          schema:
+            type: string
+          description: Filter by group type (e.g., "officers")
+        - name: parentGroupId
+          in: query
+          schema:
+            type: number
+          description: Filter by parent Group
+        - name: isLead
+          in: query
+          schema:
+            type: boolean
+          description: Filter by whether the user is the lead of the group
+        - name: sort
+          in: query
+          schema:
+            type: string
+          description: Sort by a specific field (e.g., "start_date", "-created_at")
+        - name: perPage
+          in: query
+          schema:
+            type: integer
+            default: 100
+          description: Number of results per page
+      responses:
+        '200':
+          description: A list of user roles
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserRole'
+
+  /regulations/translations:
+    get:
+      summary: Gets all translations of regulations
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegulationsTranslations'
+  /export/public:
+    get:
+      summary: Get Export Information
+      operationId: getExports
+      responses:
+        "200":
+          description: Successfully retrieved exports
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ExportInfo"
   /users/me/permissions:
     get:
       summary: Get user's permissions
@@ -81,6 +295,33 @@ paths:
                 $ref: "#/components/schemas/UserPermissions"
         "401":
           description: Unauthorized
+  /known-timezones:
+    get:
+      summary: Get a list of Olson timezones that the backend understands
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+                  example: 'America/New_York'
+
+  /regional-organizations:
+    get:
+      summary: A list of currently acknowledged regional organizations
+      operationId: getOrganizations
+      responses:
+        "200":
+          description: Retrieved organizations
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/RegionalOrganization"
 
 components:
   securitySchemes:
@@ -90,6 +331,124 @@ components:
       bearerFormat: JWT
 
   schemas:
+    UserRole:
+      type: object
+      required:
+        - id
+        - start_date
+        - end_date
+        - group
+        - user
+        - metadata
+      properties:
+        id:
+          type: integer
+        start_date:
+          type: string
+          format: date
+        end_date:
+          type: string
+          format: date
+          nullable: true
+        group:
+          $ref: '#/components/schemas/UserGroup'
+        user:
+          $ref: '#/components/schemas/Person'
+        metadata:
+          type: object
+          properties:
+            id:
+              type: integer
+            status:
+              type: string
+            created_at:
+              type: string
+              format: date-time
+            updated_at:
+              type: string
+              format: date-time
+            email:
+              type: string
+              format: email
+        class:
+          type: string
+
+    UserGroup:
+      type: object
+      required:
+        - id
+        - name
+        - group_type
+        - is_active
+        - is_hidden
+        - created_at
+        - updated_at
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        group_type:
+          type: string
+        parent_group_id:
+          type: integer
+          nullable: true
+        is_active:
+          type: boolean
+        is_hidden:
+          type: boolean
+        metadata_id:
+          type: integer
+          nullable: true
+        metadata_type:
+          type: string
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        lead_user:
+          $ref: '#/components/schemas/Person'
+        metadata:
+          type: object
+          properties:
+            id:
+              type: integer
+            status:
+              type: string
+            created_at:
+              type: string
+              format: date-time
+            updated_at:
+              type: string
+              format: date-time
+            email:
+              type: string
+              format: email
+            preferred_contact_mode:
+              type: string
+            friendly_id:
+              type: string
+
+    RegionalOrganization:
+      type: object
+      required:
+        - name
+        - country_iso2
+        - website
+      properties:
+        name:
+          type: string
+        country_iso2:
+          type: string
+        website:
+          type: string
+        logo_url:
+          type: string
+          format: uri
+
     Person:
       type: object
       required:
@@ -97,7 +456,10 @@ components:
         - name
         - wca_id
         - country_iso2
+        - delegate_status
+        - teams
         - url
+        - avatar
       properties:
         id:
           type: integer
@@ -105,16 +467,170 @@ components:
         name:
           type: string
           example: "Tim Reynolds"
+        gender:
+          type: string
+          example: "m"
         wca_id:
           type: string
           example: "2005REYN01"
         country_iso2:
           type: string
           example: "US"
+        delegate_status:
+          type: string
+          example: "delegate"
+        teams:
+          type: array
+          items:
+            $ref: '#/components/schemas/TeamMembership'
         url:
           type: string
           format: uri
           example: "https://www.worldcubeassociation.org/persons/2005REYN01"
+        avatar:
+          $ref: '#/components/schemas/UserAvatar'
+
+    Incident:
+      type: object
+      required:
+        - id
+        - title
+        - public_summary
+        - created_at
+        - updated_at
+        - resolved_at
+        - digest_worthy
+        - url
+        - tags
+        - competitions
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        private_description:
+          type: string
+        public_summary:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        resolved_at:
+          type: string
+          format: date-time
+        digest_worthy:
+          type: boolean
+        digest_sent_at:
+          type: string
+          format: date-time
+        url:
+          type: string
+          format: uri
+        tags:
+          type: array
+          items:
+            type: object
+            required:
+              - name
+              - content_html
+              - url
+            properties:
+              name:
+                type: string
+              id:
+                type: number
+              url:
+                type: string
+                format: uri
+              content_html:
+                type: string
+        competitions:
+          type: array
+          items:
+            type: object
+            required:
+              - id
+              - name
+            properties:
+              id:
+                type: string
+              name:
+                type: string
+              comments:
+                type: string
+
+    TeamMembership:
+      type: object
+      required:
+        - id
+        - friendly_id
+        - leader
+        - senior_member
+      properties:
+        id:
+          type: integer
+        friendly_id:
+          type: string
+          example: "wst"
+        leader:
+          type: boolean
+        senior_member:
+          type: boolean
+        name:
+          type: string
+        wca_id:
+          type: string
+        avatar:
+          $ref: '#/components/schemas/UserAvatar'
+
+    RegulationsTranslations:
+      type: object
+      required:
+        - current
+        - outdated
+      properties:
+        current:
+          type: array
+          items:
+            $ref: '#/components/schemas/Translation'
+        outdated:
+          type: array
+          items:
+            $ref: '#/components/schemas/Translation'
+
+    Translation:
+      type: object
+      required:
+        - version
+        - language
+        - language_english
+        - url
+      properties:
+        version:
+          type: string
+        language:
+          type: string
+        language_english:
+          type: string
+        url:
+          type: string
+
+    UserAvatar:
+      type: object
+      required:
+        - url
+      properties:
+        url:
+          type: string
+          format: uri
+          example: "https://avatars.worldcubeassociation.org/uploads/user/avatar/2099EXAM/1535183030.jpg"
+        thumb_url:
+          type: string
+          format: uri
+          example: "https://avatars.worldcubeassociation.org/uploads/user/avatar/2099EXAM/1535183030_thumb.jpg"
 
     Organizer:
       allOf:
@@ -129,41 +645,61 @@ components:
               format: email
               example: "255@worldcubeassociation.org"
             avatar:
-              type: object
-              properties:
-                url:
-                  type: string
-                  format: uri
-                  example: "https://avatars.worldcubeassociation.org/uploads/user/avatar/2099EXAM/1535183030.jpg"
-                thumb_url:
-                  type: string
-                  format: uri
-                  example: "https://avatars.worldcubeassociation.org/uploads/user/avatar/2099EXAM/1535183030_thumb.jpg"
+              $ref: '#/components/schemas/UserAvatar'
+
+    ExportInfo:
+      type: object
+      required:
+        - export_date
+        - sql_url
+        - sql_filesize_bytes
+        - tsv_url
+        - tsv_filesize_bytes
+        - readme
+      properties:
+        export_date:
+          type: string
+          format: date
+        sql_url:
+          type: string
+          format: uri
+        sql_filesize_bytes:
+          type: number
+        tsv_url:
+          type: string
+          format: uri
+        tsv_filesize_bytes:
+          type: number
+        readme:
+          type: string
+        developer_url:
+          type: string
+          format: uri
 
     Rank:
       type: object
       required:
         - id
-        - personId
-        - eventId
+        - person_id
+        - event_id
         - best
-        - worldRank
-        - continentRank
-        - countryRank
+        - world_rank
+        - continent_rank
+        - country_rank
       properties:
         id:
           type: integer
-        personId:
+        person_id:
           type: string
-        eventId:
+        event_id:
           type: string
         best:
           type: integer
-        worldRank:
+        world_rank:
           type: integer
-        continentRank:
+        continent_rank:
           type: integer
-        countryRank:
+        country_rank:
           type: integer
 
     Medals:
@@ -204,12 +740,11 @@ components:
       type: object
       required:
         - person
-        - previous_persons
-        - ranks_average
-        - ranks_single
         - medals
         - records
+        - personal_records
         - championship_podiums
+        - competition_count
       properties:
         person:
           $ref: '#/components/schemas/Person'
@@ -229,6 +764,10 @@ components:
           $ref: '#/components/schemas/Medals'
         records:
           $ref: '#/components/schemas/Records'
+        personal_records:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/SingleAndAverageRank'
         championship_podiums:
           type: object
           properties:
@@ -248,6 +787,114 @@ components:
               type: array
               items:
                 type: object
+        competition_count:
+          type: integer
+
+    SingleAndAverageRank:
+      type: object
+      required:
+        - average
+        - single
+      properties:
+        average:
+          $ref: "#/components/schemas/Rank"
+        single:
+          $ref: "#/components/schemas/Rank"
+
+    CompetitionIndex:
+      type: object
+      required:
+        - id
+        - name
+        - short_display_name
+        - start_date
+        - end_date
+        - registration_open
+        - registration_close
+        - announced_at
+        - country_iso2
+        - city
+        - venue
+        - latitude_degrees
+        - longitude_degrees
+        - event_ids
+        - main_event_id
+        - competitor_limit
+        - championship_types
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        short_display_name:
+          type: string
+        start_date:
+          type: string
+          format: date
+        end_date:
+          type: string
+          format: date
+        registration_open:
+          type: string
+          format: date-time
+        registration_close:
+          type: string
+          format: date-time
+        announced_at:
+          type: string
+          format: date-time
+        country_iso2:
+          type: string
+        city:
+          type: string
+        venue:
+          type: string
+        latitude_degrees:
+          type: number
+          format: float
+        longitude_degrees:
+          type: number
+          format: float
+        event_ids:
+          type: array
+          items:
+            type: string
+        main_event_id:
+          type: string
+        competitor_limit:
+          type: integer
+        championship_types:
+          type: array
+          items:
+            type: string
+            example: 'world'
+        results_submitted_at:
+          type: string
+          format: date-time
+        results_posted_at:
+          type: string
+          format: date-time
+        report_posted_at:
+          type: string
+          format: date-time
+        report_posted_by_user:
+          type: integer
+        delegates:
+          type: array
+          items:
+            type: object
+            required:
+              - id
+              - name
+              - avatar
+            properties:
+              id:
+                type: integer
+              name:
+                type: string
+              avatar:
+                $ref: '#/components/schemas/UserAvatar'
+
 
     CompetitionInfo:
       type: object
@@ -434,6 +1081,8 @@ components:
         number_of_bookmarks:
           type: integer
           example: 123
+        uses_qualification?:
+          type: boolean
         registration_full?:
           type: boolean
           example: true
@@ -669,3 +1318,395 @@ components:
           type: string
         name:
           type: string
+
+    RegistrationData:
+      type: object
+      properties:
+        id:
+          type: integer
+        competition_id:
+          type: string
+        user_id:
+          type: integer
+        event_ids:
+          type: array
+          items:
+            type: string
+      required:
+        - id
+        - competition_id
+        - user_id
+        - event_ids
+
+    WcifEvent:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '333'
+        rounds:
+          type: array
+          items:
+            $ref: '#/components/schemas/WcifRound'
+        competitorLimit:
+          type: integer
+        qualification:
+          $ref: '#/components/schemas/WcifQualification'
+        extensions:
+          type: array
+      required:
+        - id
+        - rounds
+        - extensions
+
+    WcifRound:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "333-r1"
+        format:
+          type: string
+          enum: [ '1', '2', '3', 'a', 'm' ]
+        timeLimit:
+          $ref: '#/components/schemas/WcifTimeLimit'
+        cutoff:
+          $ref: '#/components/schemas/WcifCutoff'
+        advancementCondition:
+          $ref: '#/components/schemas/WcifAdvancementCondition'
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/WcifResult'
+        scrambleSetCount:
+          type: integer
+        scrambleSets:
+          type: array
+          items:
+            $ref: '#/components/schemas/WcifScrambleSet'
+        extensions:
+          type: array
+      required:
+        - id
+        - format
+        - results
+        - scrambleSetCount
+        - scrambleSets
+        - extensions
+
+    WcifQualification:
+      oneOf:
+        - $ref: '#/components/schemas/WcifQualificationAttemptResult'
+        - $ref: '#/components/schemas/WcifQualificationRanking'
+        - $ref: '#/components/schemas/WcifQualificationAnyResult'
+      discriminator:
+        propertyName: type
+        mapping:
+          attemptResult: '#/components/schemas/WcifQualificationAttemptResult'
+          ranking: '#/components/schemas/WcifQualificationRanking'
+          anyResult: '#/components/schemas/WcifQualificationAnyResult'
+
+    WcifQualificationAttemptResult:
+      type: object
+      properties:
+        whenDate:
+          type: string
+          format: date
+        type:
+          type: string
+          example: "attemptResult"
+        resultType:
+          type: string
+          enum: [ 'single', 'average' ]
+        level:
+          $ref: '#/components/schemas/WcifAttemptResult'
+      required:
+        - whenDate
+        - type
+        - resultType
+        - level
+
+    WcifQualificationRanking:
+      type: object
+      properties:
+        whenDate:
+          type: string
+          format: date
+        type:
+          type: string
+          example: "ranking"
+        resultType:
+          type: string
+          enum: [ 'single', 'average' ]
+        level:
+          $ref: '#/components/schemas/WcifRanking'
+      required:
+        - whenDate
+        - type
+        - resultType
+        - level
+
+    WcifQualificationAnyResult:
+      type: object
+      properties:
+        whenDate:
+          type: string
+          format: date
+        type:
+          type: string
+          example: "anyResult"
+        resultType:
+          type: string
+          enum: [ 'single', 'average' ]
+      required:
+        - whenDate
+        - type
+        - resultType
+
+    WcifTimeLimit:
+      type: object
+      properties:
+        centiseconds:
+          type: integer
+          example: 18000
+        cumulativeRoundIds:
+          type: array
+          items:
+            type: string
+      required:
+        - centiseconds
+        - cumulativeRoundIds
+
+    WcifCutoff:
+      type: object
+      properties:
+        numberOfAttempts:
+          type: integer
+          example: 2
+        attemptResult:
+          $ref: '#/components/schemas/WcifAttemptResult'
+      required:
+        - numberOfAttempts
+        - attemptResult
+
+    WcifAdvancementCondition:
+      oneOf:
+        - $ref: '#/components/schemas/WcifAdvancementConditionRanking'
+        - $ref: '#/components/schemas/WcifAdvancementConditionPercent'
+        - $ref: '#/components/schemas/WcifAdvancementConditionAttemptResult'
+      discriminator:
+        propertyName: type
+        mapping:
+          ranking: '#/components/schemas/WcifAdvancementConditionRanking'
+          percent: '#/components/schemas/WcifAdvancementConditionPercent'
+          attemptResult: '#/components/schemas/WcifAdvancementConditionAttemptResult'
+
+    WcifAdvancementConditionRanking:
+      type: object
+      properties:
+        type:
+          type: string
+          example: "ranking"
+        level:
+          $ref: '#/components/schemas/WcifRanking'
+      required:
+        - type
+        - level
+
+    WcifAdvancementConditionPercent:
+      type: object
+      properties:
+        type:
+          type: string
+          example: "percent"
+        level:
+          $ref: '#/components/schemas/WcifPercent'
+      required:
+        - type
+        - level
+
+    WcifAdvancementConditionAttemptResult:
+      type: object
+      properties:
+        type:
+          type: string
+          example: "attemptResult"
+        level:
+          $ref: '#/components/schemas/WcifAttemptResult'
+      required:
+        - type
+        - level
+
+    WcifResult:
+      type: object
+      properties:
+        personId:
+          type: integer
+          example: 1
+        ranking:
+          type: integer
+          example: 10
+        attempts:
+          type: array
+          items:
+            $ref: '#/components/schemas/WcifAttempt'
+        best:
+          $ref: '#/components/schemas/WcifAttemptResult'
+        average:
+          $ref: '#/components/schemas/WcifAttemptResult'
+      required:
+        - personId
+        - attempts
+        - best
+        - average
+
+    WcifScrambleSet:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        scrambles:
+          type: array
+          items:
+            $ref: '#/components/schemas/WcifScramble'
+        extraScrambles:
+          type: array
+          items:
+            $ref: '#/components/schemas/WcifScramble'
+      required:
+        - id
+        - scrambles
+        - extraScrambles
+
+    WcifAttemptResult:
+      type: integer
+
+    WcifAttempt:
+      type: object
+      properties:
+        result:
+          $ref: '#/components/schemas/WcifAttemptResult'
+        reconstruction:
+          type: string
+      required:
+        - result
+
+    WcifRanking:
+      type: integer
+
+    WcifPercent:
+      type: integer
+
+    WcifScramble:
+      type: string
+
+    WcifSchedule:
+      type: object
+      properties:
+        startDate:
+          type: string
+          format: date
+        numberOfDays:
+          type: integer
+        venues:
+          type: array
+          items:
+            $ref: '#/components/schemas/WcifVenue'
+      required:
+        - startDate
+        - numberOfDays
+        - venues
+
+    WcifVenue:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        latitudeMicrodegrees:
+          type: integer
+        longitudeMicrodegrees:
+          type: integer
+        countryIso2:
+          $ref: '#/components/schemas/WcifCountryCode'
+        timezone:
+          type: string
+        rooms:
+          type: array
+          items:
+            $ref: '#/components/schemas/WcifRoom'
+        extensions:
+          type: array
+      required:
+        - id
+        - name
+        - latitudeMicrodegrees
+        - longitudeMicrodegrees
+        - countryIso2
+        - timezone
+        - rooms
+        - extensions
+
+    WcifRoom:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        color:
+          type: string
+        activities:
+          type: array
+          items:
+            $ref: '#/components/schemas/WcifActivity'
+        extensions:
+          type: array
+      required:
+        - id
+        - name
+        - color
+        - activities
+        - extensions
+
+    WcifActivity:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        activityCode:
+          $ref: '#/components/schemas/WcifActivityCode'
+        startTime:
+          type: string
+          format: date-time
+        endTime:
+          type: string
+          format: date-time
+        childActivities:
+          type: array
+          items:
+            $ref: '#/components/schemas/WcifActivity'
+        scrambleSetId:
+          type: integer
+        extensions:
+          type: array
+      required:
+        - id
+        - name
+        - activityCode
+        - startTime
+        - endTime
+        - childActivities
+        - extensions
+
+    WcifCountryCode:
+      type: string
+      example: "US"
+
+    WcifActivityCode:
+      type: string
+      example: "333-r1-g1"

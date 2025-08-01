@@ -913,8 +913,6 @@ eu:
         results_file: ''
         #original_hash: da39a3e
         message: ''
-        #original_hash: da39a3e
-        confirm_information: ''
       regional_organization:
         #original_hash: da39a3e
         name: ''
@@ -1517,7 +1515,7 @@ eu:
         Kontsulta bat egin aurretik, baliteke gure <a href="/faq">Ohiko
         Galderak</a> ikusi nahi izatea! Hemen aipatu ez den komite edo talde
         jakin batekin harremanetan jarri nahi baduzu, kontsultatu zehaztasunak
-        <a href="/teams-committees-councils">orri honetan</a>.
+        <a href="/teams-committees">orri honetan</a>.
       #original_hash: ea20be0
       success_message: Mezu elektronikoa bidalita - laster itzuliko gatzaizkizu.
       #original_hash: 8fa6b95

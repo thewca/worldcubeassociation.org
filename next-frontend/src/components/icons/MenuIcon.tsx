@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { createIcon } from "@chakra-ui/react";
 
 const MenuIcon = createIcon({
@@ -78,10 +79,9 @@ const MenuIcon = createIcon({
       />
     </>
   ),
+  defaultProps: {
+    boxSize: "1em",
+  },
 });
 
-const MenuIconPreview = () => {
-  return <MenuIcon size="lg" />;
-};
-
-export default MenuIconPreview;
+export default MenuIcon;

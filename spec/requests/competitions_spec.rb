@@ -3,9 +3,9 @@
 require "rails_helper"
 
 RSpec.describe "competitions" do
-  let!(:competition) { create(:competition, :with_delegate, :future, :visible, :with_valid_schedule) }
-
   describe "PATCH #update_competition" do
+    let!(:competition) { create(:competition, :with_delegate, :future, :visible, :auto_accept, :with_valid_schedule) }
+
     context "when signed in as admin" do
       before { sign_in create :admin }
 

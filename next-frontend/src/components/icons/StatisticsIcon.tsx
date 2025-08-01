@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { createIcon } from "@chakra-ui/react";
 
 const StatisticsIcon = createIcon({
@@ -13,10 +14,9 @@ const StatisticsIcon = createIcon({
       />
     </>
   ),
+  defaultProps: {
+    boxSize: "1em",
+  },
 });
 
-const StatisticsIconPreview = () => {
-  return <StatisticsIcon size="lg" />;
-};
-
-export default StatisticsIconPreview;
+export default StatisticsIcon;

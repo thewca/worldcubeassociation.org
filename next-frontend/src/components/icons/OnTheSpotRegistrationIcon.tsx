@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { createIcon } from "@chakra-ui/react";
 
 const OnTheSpotRegistrationIcon = createIcon({
@@ -13,10 +14,9 @@ const OnTheSpotRegistrationIcon = createIcon({
       />
     </>
   ),
+  defaultProps: {
+    boxSize: "1em",
+  },
 });
 
-const OnTheSpotRegistrationIconPreview = () => {
-  return <OnTheSpotRegistrationIcon size="lg" />;
-};
-
-export default OnTheSpotRegistrationIconPreview;
+export default OnTheSpotRegistrationIcon;

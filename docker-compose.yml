@@ -83,6 +83,8 @@ services:
       yarn run dev'
     volumes:
       - ./next-frontend:/app
+      - ./lib/static_data:/app/src/lib/staticData
+      - ./config/locales/available.json:/app/src/lib/i18n/locales/available.json
       - next_yarn_volume:/app/node_modules
     networks:
       - wca-main

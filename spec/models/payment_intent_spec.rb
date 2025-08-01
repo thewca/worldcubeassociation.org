@@ -87,8 +87,21 @@ RSpec.describe PaymentIntent do
 
     context 'invalid status combinations update' do
       it_behaves_like '#update PaymentIntent to incompatible status', 'requires_payment_method', 'created', 'pending'
-      it_behaves_like '#update PaymentIntent to incompatible status', 'requires_capture', 'pending', 'partial'
+      it_behaves_like '#update PaymentIntent to incompatible status', 'requires_capture', 'requires_capture', 'partial'
       it_behaves_like '#update PaymentIntent to incompatible status', 'legacy_failure', 'failed', 'succeeded'
+    end
+  end
+
+  describe 'update status and charges' do
+    let(:intent) { create(:payment_intent, :pending) }
+    # StripeUpdate is an arbitrary value - class type is not under test in this example
+    let(:mock_update) { double("StripeUpdate", status: "requires_capture", last_payment_error: nil) }
+
+    it 'updates pending to requires_capture' do
+      expect(intent.wca_status).to eq('pending')
+      intent.update_status_and_charges(nil, mock_update, nil)
+
+      expect(intent.reload.wca_status).to eq('requires_capture')
     end
   end
 end

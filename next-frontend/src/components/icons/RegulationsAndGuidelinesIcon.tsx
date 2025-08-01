@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { createIcon } from "@chakra-ui/react";
 
 const RegulationsAndGuidelinesIcon = createIcon({
@@ -13,10 +14,9 @@ const RegulationsAndGuidelinesIcon = createIcon({
       />
     </>
   ),
+  defaultProps: {
+    boxSize: "1em",
+  },
 });
 
-const RegulationsAndGuidelinesIconPreview = () => {
-  return <RegulationsAndGuidelinesIcon size="lg" />;
-};
-
-export default RegulationsAndGuidelinesIconPreview;
+export default RegulationsAndGuidelinesIcon;

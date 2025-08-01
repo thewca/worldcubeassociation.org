@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { createIcon } from "@chakra-ui/react";
 
 const VenueIcon = createIcon({
@@ -13,10 +14,9 @@ const VenueIcon = createIcon({
       />
     </>
   ),
+  defaultProps: {
+    boxSize: "1em",
+  },
 });
 
-const VenueIconPreview = () => {
-  return <VenueIcon size="lg" />;
-};
-
-export default VenueIconPreview;
+export default VenueIcon;

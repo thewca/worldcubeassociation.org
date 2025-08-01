@@ -11,7 +11,7 @@ async function listScrambleFiles(competitionId) {
   return data;
 }
 
-async function uploadScrambleFile(competitionId, file) {
+async function uploadScrambleFile({ competitionId, file }) {
   const formData = new FormData();
   formData.append('tnoodle[json]', file);
 
@@ -42,7 +42,7 @@ export default function FileUpload({
   });
 
   const { mutateAsync, isPending } = useMutation({
-    mutationFn: (file) => uploadScrambleFile(competitionId, file),
+    mutationFn: uploadScrambleFile,
     onSuccess: (data) => {
       queryClient.setQueryData(
         ['scramble-files', competitionId],
@@ -65,11 +65,11 @@ export default function FileUpload({
 
   const uploadNewScramble = useCallback((ev) => {
     const filesArr = Array.from(ev.target.files);
-    const uploadPromises = filesArr.map((f) => mutateAsync(f));
+    const uploadPromises = filesArr.map((file) => mutateAsync({ competitionId, file }));
 
     return Promise.all(uploadPromises)
       .finally(resetFileUpload);
-  }, [mutateAsync, resetFileUpload]);
+  }, [competitionId, mutateAsync, resetFileUpload]);
 
   const clickOnInput = () => {
     inputRef.current?.click();

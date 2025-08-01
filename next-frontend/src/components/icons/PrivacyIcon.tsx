@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { createIcon } from "@chakra-ui/react";
 
 const PrivacyIcon = createIcon({
@@ -13,10 +14,9 @@ const PrivacyIcon = createIcon({
       />
     </>
   ),
+  defaultProps: {
+    boxSize: "1em",
+  },
 });
 
-const PrivacyIconPreview = () => {
-  return <PrivacyIcon size="lg" />;
-};
-
-export default PrivacyIconPreview;
+export default PrivacyIcon;

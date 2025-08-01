@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { createIcon } from "@chakra-ui/react";
 
 const CompRegoNotFullOpen_greenIcon = createIcon({
@@ -13,10 +14,10 @@ const CompRegoNotFullOpen_greenIcon = createIcon({
       />
     </>
   ),
+  defaultProps: {
+    boxSize: "1em",
+    color: "green.500",
+  },
 });
 
-const CompRegoNotFullOpen_greenIconPreview = () => {
-  return <CompRegoNotFullOpen_greenIcon size="lg" color="green.500" />;
-};
-
-export default CompRegoNotFullOpen_greenIconPreview;
+export default CompRegoNotFullOpen_greenIcon;

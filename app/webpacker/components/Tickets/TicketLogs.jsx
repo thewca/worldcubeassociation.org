@@ -12,12 +12,14 @@ export default function TicketLogs({ ticketId }) {
     queryFn: () => getLogs({ ticketId }),
   });
 
-  function logText(actionType, actionValue) {
+  function logText(actionType) {
     switch (actionType) {
-      case ticketLogActionTypes.status_updated:
-        return `Status updated to ${actionValue}`;
+      case ticketLogActionTypes.create_ticket:
+        return 'Ticket created.';
+      case ticketLogActionTypes.update_status:
+        return 'Status updated.';
       default:
-        return `[Unsupported log]: ${actionType}: ${actionValue}`;
+        return `[Unsupported log]: ${actionType}.`;
     }
   }
 
@@ -30,13 +32,12 @@ export default function TicketLogs({ ticketId }) {
       <List>
         {logs.map(({
           action_type: actionType,
-          action_value: actionValue,
           created_at: createdAt,
         }) => (
           <List.Item>
             {createdAt}
             {': '}
-            {logText(actionType, actionValue)}
+            {logText(actionType)}
           </List.Item>
         ))}
       </List>

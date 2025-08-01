@@ -4,11 +4,23 @@ class TicketsController < ApplicationController
   include Rails::Pagination
 
   before_action :authenticate_user!
+  before_action -> { check_ticket_errors(TicketLog.action_types[:update_status]) }, only: [:update_status]
+  before_action -> { redirect_to_root_unless_user(:can_admin_results?) }, only: %i[merge_inbox_results delete_inbox_persons]
 
   SORT_WEIGHT_LAMBDAS = {
     createdAt:
       ->(ticket) { ticket.created_at },
   }.freeze
+
+  private def check_ticket_errors(action_type)
+    @action_type = action_type
+    @ticket = Ticket.find(params.require(:ticket_id))
+    @acting_stakeholder = TicketStakeholder.find(params.require(:acting_stakeholder_id))
+
+    render status: :bad_request, json: { error: "You are not a stakeholder for this ticket." } unless @ticket.user_stakeholders(current_user).include?(@acting_stakeholder)
+
+    render status: :unauthorized, json: { error: "You are not allowed to perform this action." } unless @acting_stakeholder.actions_allowed.include?(@action_type)
+  end
 
   def index
     tickets = Ticket
@@ -45,7 +57,7 @@ class TicketsController < ApplicationController
   def show
     respond_to do |format|
       format.html do
-        @ticket_id = params.require(:id)
+        @ticket_id = params.require(:id).to_i
         render :show
       end
       format.json do
@@ -63,21 +75,18 @@ class TicketsController < ApplicationController
   end
 
   def update_status
-    ticket = Ticket.find(params.require(:ticket_id))
     ticket_status = params.require(:ticket_status)
-    acting_stakeholder_id = params.require(:acting_stakeholder_id)
-
-    return head :unauthorized unless ticket.action_allowed?(:update_status, current_user)
-    return head :bad_request unless ticket.user_stakeholders(current_user).map(&:id).include?(acting_stakeholder_id)
 
     ActiveRecord::Base.transaction do
-      ticket.metadata.update!(status: ticket_status)
-      TicketLog.create!(
-        ticket_id: ticket.id,
-        action_type: TicketLog.action_types[:status_updated],
-        action_value: ticket_status,
+      @ticket.metadata.update!(status: ticket_status)
+      ticket_log = @ticket.ticket_logs.create!(
+        action_type: @action_type,
         acting_user_id: current_user.id,
-        acting_stakeholder_id: acting_stakeholder_id,
+        acting_stakeholder_id: @acting_stakeholder.id,
+      )
+      ticket_log.ticket_log_changes.create!(
+        field_name: TicketLogChange.field_names[:status],
+        field_value: ticket_status,
       )
     end
     render json: { success: true }
@@ -122,28 +131,27 @@ class TicketsController < ApplicationController
     [user, person]
   end
 
-  private def check_errors(user, person)
-    if user.present? && person.present? && person&.user != user
+  before_action :check_errors, only: %i[details_before_anonymization anonymize]
+
+  private def check_errors
+    @user, @person = user_and_person_from_params
+
+    if @user.present? && @person.present? && @person.user != @user
       render status: :unprocessable_entity, json: {
         error: "Person and user not linked.",
       }
-      true
-    elsif user.nil? && person.nil?
+    elsif @user.nil? && @person.nil?
       render status: :unprocessable_entity, json: {
         error: "User ID and WCA ID is not provided.",
       }
-      true
     end
   end
 
   def details_before_anonymization
-    user, person = user_and_person_from_params
-    return if check_errors(user, person)
+    person_private_attributes = @person&.private_attributes_for_user(current_user)
 
-    person_private_attributes = person&.private_attributes_for_user(current_user)
-
-    user_anonymization_checks, user_message_args = user&.anonymization_checks_with_message_args
-    person_anonymization_checks, person_message_args = person&.anonymization_checks_with_message_args
+    user_anonymization_checks, user_message_args = @user&.anonymization_checks_with_message_args
+    person_anonymization_checks, person_message_args = @person&.anonymization_checks_with_message_args
 
     anonymization_checks = (user_anonymization_checks || {}).merge(person_anonymization_checks || {})
     message_args = (user_message_args || {}).merge(person_message_args || {})
@@ -153,8 +161,8 @@ class TicketsController < ApplicationController
                                      .map { |checks| checks.map(&:first) }
 
     render json: {
-      user: user,
-      person: person&.as_json(private_attributes: person_private_attributes),
+      user: @user,
+      person: @person&.as_json(private_attributes: person_private_attributes),
       action_items: action_items,
       non_action_items: non_action_items,
       message_args: message_args,
@@ -162,31 +170,77 @@ class TicketsController < ApplicationController
   end
 
   def anonymize
-    user, person = user_and_person_from_params
-    return if check_errors(user, person)
-
-    if user&.banned?
+    if @user&.banned?
       return render status: :unprocessable_entity, json: {
         error: "Error anonymizing: This person is currently banned and cannot be anonymized.",
       }
     end
 
-    if user.present? && person.present?
-      users_to_anonymize = User.where(id: user.id).or(User.where(unconfirmed_wca_id: person.wca_id))
-    elsif user.present? && person.nil?
-      users_to_anonymize = User.where(id: user.id)
-    elsif user.nil? && person.present?
-      users_to_anonymize = User.where(unconfirmed_wca_id: person.wca_id)
+    if @user.present? && @person.present?
+      users_to_anonymize = User.where(id: @user.id).or(User.where(unconfirmed_wca_id: @person.wca_id))
+    elsif @user.present? && @person.nil?
+      users_to_anonymize = User.where(id: @user.id)
+    elsif @user.nil? && @person.present?
+      users_to_anonymize = User.where(unconfirmed_wca_id: @person.wca_id)
     end
 
     ActiveRecord::Base.transaction do
-      new_wca_id = person&.anonymize
+      new_wca_id = @person&.anonymize
       users_to_anonymize.each { it.anonymize(new_wca_id) }
     end
 
     render json: {
       success: true,
-      new_wca_id: person&.reload&.wca_id, # Reload to get the new wca_id
+      new_wca_id: @person&.reload&.wca_id, # Reload to get the new wca_id
     }
+  end
+
+  def imported_temporary_results
+    competition = Competition.find(params.require(:competition_id))
+
+    render json: competition.inbox_results.includes(:inbox_person)
+  end
+
+  def merge_inbox_results
+    ticket = Ticket.find(params.require(:ticket_id))
+
+    ticket.metadata.merge_inbox_results
+
+    render status: :ok, json: { success: true }
+  end
+
+  def inbox_person_summary
+    ticket = Ticket.find(params.require(:ticket_id))
+    competition = ticket.metadata.competition
+
+    render status: :ok, json: {
+      inbox_person_count: competition.inbox_persons.count,
+      inbox_person_no_wca_id_count: competition.inbox_persons.where(wca_id: '').count,
+      result_no_wca_id_count: competition.results.select(:person_id).distinct.where("person_id REGEXP '^[0-9]+$'").count,
+    }
+  end
+
+  def delete_inbox_persons
+    ticket = Ticket.find(params.require(:ticket_id))
+    competition = ticket.metadata.competition
+
+    ActiveRecord::Base.transaction do
+      competition.inbox_persons.delete_all
+      ticket.metadata.update!(status: TicketsCompetitionResult.statuses[:created_wca_ids])
+    end
+
+    render status: :ok, json: { success: true }
+  end
+
+  def post_results
+    ticket = Ticket.find(params.require(:ticket_id))
+    competition = ticket.metadata.competition
+
+    error = CompetitionResultsImport.post_results_error(competition)
+    return render status: :unprocessable_entity, json: { error: error } if error
+
+    CompetitionResultsImport.post_results(competition, current_user)
+
+    render status: :ok, json: { success: true }
   end
 end
