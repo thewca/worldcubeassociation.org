@@ -34,7 +34,7 @@ RSpec.describe RegistrationPayment do
 
     it 'returns nil when there is no associated PaymentIntent' do
       registration_payment.payment_intent = nil
-      expect(registration_payment.status).to eq(nil)
+      expect(registration_payment.status).to be_nil
     end
   end
 end
