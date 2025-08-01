@@ -28,8 +28,8 @@ RSpec.describe RegistrationPayment do
     let(:registration) { create(:registration, competition: competition) }
     let!(:registration_payment) { create(:registration_payment, registration: registration) }
 
-    it 'returns confirmed status when associated with confirmed payment intent', :only do
-      expect(registration_payment.status).to eq('succeeded')
+    it 'returns confirmed status when associated with confirmed payment intent' do
+      expect(registration_payment.payment_intent.wca_status).to eq('succeeded')
     end
   end
 end
