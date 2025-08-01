@@ -24,7 +24,7 @@ class RegistrationPayment < ApplicationRecord
   end
 
   def status
-    receipt.parent_record.payment_intent.wca_status
+    payment_intent&.wca_status
   end
 
   private def auto_accept_hook
