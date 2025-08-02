@@ -4,7 +4,7 @@
 const fs = require("fs");
 const path = require("path");
 const yaml = require("js-yaml");
-const { languages } = require("./src/lib/i18n/settings.ts");
+const languages = Object.keys(require("./src/lib/i18n/locales/available.json"));
 
 // Recursively flatten a nested object using dot notation
 function flattenObject(obj, prefix = "") {
@@ -19,7 +19,9 @@ function flattenObject(obj, prefix = "") {
   }, {});
 }
 
-const inputDir = path.resolve(__dirname, "../config/locales/");
+const localeDir = process.env.LOCALE_DIR || "../config/locales/";
+
+const inputDir = path.resolve(__dirname, localeDir);
 const outputDir = path.resolve(__dirname, "./src/lib/i18n/locales");
 
 if (!fs.existsSync(outputDir)) {
