@@ -155,8 +155,8 @@ export default async function ScramblesPage() {
         </Text>
         <Heading size="2xl">History of Official Releases</Heading>
         <Text>
-          Old versions must not be used. These are provided in case you want 
-          to check the behaviour of an older version.
+          Old versions must not be used. These are provided in case you want
+          check the behaviour of an older version.
         </Text>
         <List.Root>
           <List.Item>
