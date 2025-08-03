@@ -5335,8 +5335,8 @@ ko:
       regulation_9m3_error: >-
         라운드 %{round_id}에는 경쟁자가 7명 이하이지만 후속 라운드가 1개 이상 있습니다 - 이는 규정 9m3에 따라 허용되지
         않습니다.
-      #original_hash: e12138a
-      regulation_9p1_error: '라운드 %{round_id}: 경쟁자 중 25%% 미만이 탈락했는데, 이는 규정 9p1에 따라 허용되지 않습니다.'
+      #original_hash: 44fbfde
+      regulation_9p1_error: '라운드 %{round_id}: 경쟁자 중 25% 미만이 탈락했는데, 이는 규정 9p1에 따라 허용되지 않습니다.'
       #original_hash: f5d8ae9
       no_competitor_eliminated_error: '라운드 %{round_id}: 규정 9p(2010년 4월 이전 대회)에 따라 최소 한 명의 경쟁자가 탈락해야 합니다.'
       #original_hash: b868019
