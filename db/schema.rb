@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_07_26_030259) do
+ActiveRecord::Schema[7.2].define(version: 2025_08_04_070122) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -349,6 +349,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_26_030259) do
   create_table "competition_payment_integrations", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "connected_account_type", null: false
     t.bigint "connected_account_id", null: false
+    t.boolean "is_inactive", default: false, null: false
     t.string "competition_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -791,6 +792,21 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_26_030259) do
     t.datetime "updated_at", precision: nil, null: false
   end
 
+  create_table "manual_payment_integrations", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "payment_reference", null: false
+    t.text "payment_information", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "manual_payment_records", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "payment_reference"
+    t.integer "amount_iso_denomination", null: false
+    t.string "currency_code", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "oauth_access_grants", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.integer "resource_owner_id", null: false
     t.integer "application_id", null: false
@@ -1048,6 +1064,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_26_030259) do
     t.datetime "updated_at", precision: nil, null: false
     t.integer "refunded_registration_payment_id"
     t.integer "user_id"
+    t.integer "payment_intent_id"
     t.index ["receipt_type", "receipt_id"], name: "index_registration_payments_on_receipt"
     t.index ["refunded_registration_payment_id"], name: "idx_reg_payments_on_refunded_registration_payment_id"
     t.index ["registration_id"], name: "index_registration_payments_on_registration_id"
@@ -1211,7 +1228,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_26_030259) do
   end
 
   create_table "schedule_activities", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
-    t.bigint "venue_room_id", null: false
+    t.bigint "venue_room_id"
     t.bigint "parent_activity_id"
     t.integer "wcif_id", null: false
     t.string "name", null: false
