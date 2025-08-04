@@ -6,9 +6,9 @@ import {
 } from "./TableCells";
 import { Alert, Table } from "@chakra-ui/react";
 import I18nHTMLTranslate from "@/components/I18nHTMLTranslate";
-import { CalendarIcon } from "@payloadcms/ui";
-import { CheckCircleIcon } from "@chakra-ui/react/dist/types/components/icons";
+import { CalendarIcon, CheckIcon } from "@payloadcms/ui";
 import { Tooltip } from "@/components/ui/tooltip";
+import { useT } from "@/lib/i18n/useI18n";
 
 interface PastCompetitionsTableProps {
   competitions: {
@@ -16,8 +16,10 @@ interface PastCompetitionsTableProps {
     name: string;
     start_date: string;
     competing_status: string;
+    "results_posted?": boolean;
+    "report_posted?": boolean;
   }[];
-  fallbackMessage?: { key: string; options: Record<string, string> };
+  fallbackMessage?: { key: string; options?: Record<string, string> };
 }
 
 export default function PastCompetitionsTable({
@@ -72,7 +74,7 @@ export default function PastCompetitionsTable({
                 <Tooltip
                   content={t("competitions.my_competitions_table.results_up")}
                 >
-                  <CheckCircleIcon />
+                  <CheckIcon />
                 </Tooltip>
               )}
             </Table.Cell>

@@ -16,6 +16,7 @@ import { BiSolidTrash } from "react-icons/bi";
 import { Alert, Table } from "@chakra-ui/react";
 import { useT } from "@/lib/i18n/useI18n";
 import { Tooltip } from "@/components/ui/tooltip";
+import I18n from "../../../../../app/webpacker/lib/i18n";
 
 const competingStatusIcon = (competingStatus: string) => {
   switch (competingStatus) {
@@ -33,6 +34,42 @@ const competingStatusIcon = (competingStatus: string) => {
       return null;
   }
 };
+
+const registrationStatusHint = (competingStatus: string) => {
+  if (competingStatus === "waiting_list") {
+    return I18n.t("competitions.messages.tooltip_waiting_list");
+  }
+  if (competingStatus === "accepted") {
+    return I18n.t("competitions.messages.tooltip_registered");
+  }
+  if (competingStatus === "cancelled" || competingStatus === "rejected") {
+    return I18n.t("competitions.messages.tooltip_deleted");
+  }
+  if (competingStatus === "pending") {
+    return I18n.t("competitions.messages.tooltip_pending");
+  }
+  return "";
+};
+
+const competitionStatusHint = (isConfirmed: boolean, isVisible: boolean) => {
+  let text = "";
+  if (!isConfirmed) {
+    text += I18n.t("competitions.messages.not_confirmed_not_visible");
+  } else if (!isVisible) {
+    text += I18n.t("competitions.messages.confirmed_not_visible");
+  } else {
+    text += I18n.t("competitions.messages.confirmed_visible");
+  }
+
+  return text;
+};
+
+const competitionStatusText = (
+  isConfirmed: boolean,
+  isVisible: boolean,
+  competingStatus: string,
+) =>
+  `${registrationStatusHint(competingStatus)} ${competitionStatusHint(isConfirmed, isVisible)}`;
 
 const registrationStatusIconText = (
   registrationOpen: string,
@@ -79,7 +116,12 @@ interface UpcomingCompetitionTableProps {
     id: string;
     name: string;
     start_date: string;
+    registration_open: string;
+    registration_status: string;
     competing_status: string;
+    "confirmed?": boolean;
+    "visible?": boolean;
+    "cancelled?": boolean;
   }[];
   fallbackMessage?: { key: string; options: Record<string, string> };
 }
@@ -149,15 +191,17 @@ export default function UpcomingCompetitionTable({
               <Tooltip
                 key={competition.id}
                 content={competitionStatusText(
-                  competition,
+                  competition["confirmed?"],
+                  competition["visible?"],
                   competition.competing_status,
                 )}
               >
                 <Table.Row
-                  positive={
+                  color={
                     competition["confirmed?"] && !competition["cancelled?"]
+                      ? "green"
+                      : "red"
                   }
-                  negative={!competition["visible?"]}
                 >
                   <Tooltip
                     content={registrationStatusIconText(
@@ -187,7 +231,7 @@ export default function UpcomingCompetitionTable({
                   )}
                   {canAdminThisComp ? (
                     <Table.Cell>
-                      <a href={competitionEditRegistrationsUrl(competition.id)}>
+                      <a href={`/competitions/${competition.id}/registrations`}>
                         {t("competitions.my_competitions_table.registrations")}
                       </a>
                     </Table.Cell>
