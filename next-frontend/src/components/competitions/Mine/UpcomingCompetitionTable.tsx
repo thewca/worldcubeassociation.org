@@ -17,6 +17,7 @@ import { Alert, Table } from "@chakra-ui/react";
 import { useT } from "@/lib/i18n/useI18n";
 import { Tooltip } from "@/components/ui/tooltip";
 import I18n from "../../../../../app/webpacker/lib/i18n";
+import { components } from "@/types/openapi";
 
 const competingStatusIcon = (competingStatus: string) => {
   switch (competingStatus) {
@@ -112,18 +113,8 @@ const registrationStatusIcon = (registrationStatus: string) => {
 };
 
 interface UpcomingCompetitionTableProps {
-  competitions: {
-    id: string;
-    name: string;
-    start_date: string;
-    registration_open: string;
-    registration_status: string;
-    competing_status: string;
-    "confirmed?": boolean;
-    "visible?": boolean;
-    "cancelled?": boolean;
-  }[];
-  fallbackMessage?: { key: string; options: Record<string, string> };
+  competitions: components["schemas"]["MyCompetition"][];
+  fallbackMessage?: { key: string; options?: Record<string, string> };
 }
 
 export default function UpcomingCompetitionTable({
@@ -193,7 +184,7 @@ export default function UpcomingCompetitionTable({
                 content={competitionStatusText(
                   competition["confirmed?"],
                   competition["visible?"],
-                  competition.competing_status,
+                  competition.competing_status!,
                 )}
               >
                 <Table.Row
@@ -206,21 +197,21 @@ export default function UpcomingCompetitionTable({
                   <Tooltip
                     content={registrationStatusIconText(
                       competition.registration_open,
-                      competition.registration_status,
+                      competition.registration_status!,
                       competition.start_date,
                       t,
                       lng,
                     )}
                   >
                     <Table.Cell>
-                      {registrationStatusIcon(competition.registration_status)}
+                      {registrationStatusIcon(competition.registration_status!)}
                     </Table.Cell>
                   </Tooltip>
                   <NameTableCell competition={competition} />
                   <LocationTableCell competition={competition} />
                   <DateTableCell competition={competition} />
                   <Table.Cell>
-                    {competingStatusIcon(competition.competing_status)}
+                    {competingStatusIcon(competition.competing_status!)}
                   </Table.Cell>
                   {canAdminThisComp && (
                     <Table.Cell>

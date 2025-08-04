@@ -9,16 +9,10 @@ import I18nHTMLTranslate from "@/components/I18nHTMLTranslate";
 import { CalendarIcon, CheckIcon } from "@payloadcms/ui";
 import { Tooltip } from "@/components/ui/tooltip";
 import { useT } from "@/lib/i18n/useI18n";
+import { components } from "@/types/openapi";
 
 interface PastCompetitionsTableProps {
-  competitions: {
-    id: string;
-    name: string;
-    start_date: string;
-    competing_status: string;
-    "results_posted?": boolean;
-    "report_posted?": boolean;
-  }[];
+  competitions: components["schemas"]["MyCompetition"][];
   fallbackMessage?: { key: string; options?: Record<string, string> };
 }
 
