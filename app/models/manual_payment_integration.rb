@@ -42,9 +42,9 @@ class ManualPaymentIntegration < ApplicationRecord
   #   yield payment_intent.payment_record
   # end
 
-  # def self.generate_onboarding_link(competition_id)
-  #   Rails.application.routes.url_helpers.competition_manual_payment_setup_url(competition_id)
-  # end
+  def self.generate_onboarding_link(competition_id)
+    Rails.application.routes.url_helpers.competition_manual_payment_setup_url(competition_id)
+  end
 
   # def account_details
   #   serializable_hash(only: %i[payment_information payment_reference])
