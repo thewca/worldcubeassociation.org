@@ -1,0 +1,95 @@
+import countries from "@/lib/wca/data/countries";
+import { IconButton, Table } from "@chakra-ui/react";
+import { usePermissions } from "@/providers/PermissionProvider";
+import { AiFillFileImage, AiFillTrophy } from "react-icons/ai";
+import { useT } from "@/lib/i18n/useI18n";
+import EditIcon from "@/components/icons/EditIcon";
+import { WarningIcon } from "@payloadcms/ui";
+import { Tooltip } from "@/components/ui/tooltip";
+import { dateRange } from "@/lib/wca/dates";
+
+export function NameTableCell({ competition }) {
+  return (
+    <Table.Cell>
+      <a href={competition.url}>
+        {competition.short_display_name}{" "}
+        {competition.championships?.length > 0 && <AiFillTrophy />}
+      </a>
+    </Table.Cell>
+  );
+}
+
+export function LocationTableCell({ competition }) {
+  return (
+    <Table.Cell>
+      {competition.city}
+      {`, ${countries.byIso2[competition.country_iso2].name}`}
+    </Table.Cell>
+  );
+}
+
+export function DateTableCell({ competition }) {
+  return (
+    <Table.Cell>
+      {dateRange(competition.start_date, competition.end_date, {
+        separator: "-",
+      })}
+    </Table.Cell>
+  );
+}
+
+interface ReportTableCellProps {
+  competitionId: string;
+  isReportPosted: boolean;
+  isPastCompetition: boolean;
+}
+
+export function ReportTableCell({
+  competitionId,
+  isReportPosted,
+  isPastCompetition,
+}: ReportTableCellProps) {
+  const {
+    canViewDelegateReport,
+    canEditDelegateReport,
+    canAdministerCompetition,
+  } = usePermissions()!;
+
+  const { t } = useT();
+  if (!canViewDelegateReport(competitionId)) {
+    return <Table.Cell />;
+  }
+  return (
+    <Table.Cell>
+      <>
+        <Tooltip content={t("competitions.my_competitions_table.report")}>
+          <a href={`/competitions/${competitionId}/report`}>
+            <AiFillFileImage />
+          </a>
+        </Tooltip>
+
+        {!isReportPosted && canEditDelegateReport(competitionId) && (
+          <Tooltip
+            content={t("competitions.my_competitions_table.edit_report")}
+          >
+            <IconButton asChild variant="ghost">
+              <a href={`/competitions/${competitionId}/report/edit`}>
+                <EditIcon />
+              </a>
+            </IconButton>
+          </Tooltip>
+        )}
+
+        {isPastCompetition &&
+          !isReportPosted &&
+          canAdministerCompetition(competitionId) && (
+            <Tooltip
+              content={t("competitions.my_competitions_table.missing_report")}
+            >
+              <WarningIcon />
+            </Tooltip>
+          )}
+      </>
+    </Table.Cell>
+  );
+}
