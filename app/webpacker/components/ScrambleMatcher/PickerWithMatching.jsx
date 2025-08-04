@@ -7,7 +7,7 @@ import MoveMatchingRowModal from './MoveMatchingRowModal';
 
 export default function PickerWithMatching({
   pickerKey,
-  pickerHistory = [],
+  pickerNavigation,
   selectableEntities = [],
   expectedEntitiesLength = selectableEntities.length,
   rootMatchState = selectableEntities,
@@ -22,29 +22,18 @@ export default function PickerWithMatching({
     return null;
   }
 
-  const pickerActive = pickerConfig.isActive?.(pickerHistory) ?? true;
+  const pickerActive = pickerConfig.isActive?.(pickerNavigation) ?? true;
 
   if (!pickerActive) {
     return null;
   }
 
-  if (expectedEntitiesLength === 1) {
-    return (
-      <SelectedEntityPanel
-        pickerConfig={pickerConfig}
-        pickerHistory={pickerHistory}
-        selectedEntity={selectableEntities[0]}
-        rootMatchState={rootMatchState}
-        dispatchMatchState={dispatchMatchState}
-      />
-    );
-  }
-
   return (
     <EntityPicker
       pickerConfig={pickerConfig}
-      pickerHistory={pickerHistory}
+      pickerNavigation={pickerNavigation}
       selectableEntities={selectableEntities}
+      expectedEntitiesLength={expectedEntitiesLength}
       rootMatchState={rootMatchState}
       dispatchMatchState={dispatchMatchState}
     />
@@ -53,18 +42,32 @@ export default function PickerWithMatching({
 
 function EntityPicker({
   pickerConfig,
-  pickerHistory,
-  selectableEntities = [],
+  pickerNavigation,
+  selectableEntities,
+  expectedEntitiesLength,
   rootMatchState,
   dispatchMatchState,
 }) {
   const {
+    key: pickerKey,
     headerLabel,
     computeEntityName,
     customPickerComponent: CustomPicker,
   } = pickerConfig;
 
-  const [selectedEntityId, setSelectedEntityId] = useState();
+  const selectedEntityId = useMemo(
+    () => pickerNavigation.find((nav) => nav.pickerKey === pickerKey)?.entityId,
+    [pickerKey, pickerNavigation],
+  );
+
+  const setSelectedEntityId = useCallback(
+    (newId) => dispatchMatchState({
+      action: 'navigatePicker',
+      pickerKey,
+      newId,
+    }),
+    [pickerKey, dispatchMatchState],
+  );
 
   const selectedEntity = useMemo(
     () => selectableEntities.find((ent) => ent.id === selectedEntityId),
@@ -109,7 +112,7 @@ function EntityPicker({
       {selectedEntity && (
         <SelectedEntityPanel
           pickerConfig={pickerConfig}
-          pickerHistory={pickerHistory}
+          pickerNavigation={pickerNavigation}
           selectedEntity={selectedEntity}
           rootMatchState={rootMatchState}
           dispatchMatchState={dispatchMatchState}
@@ -121,7 +124,7 @@ function EntityPicker({
 
 function SelectedEntityPanel({
   pickerConfig,
-  pickerHistory,
+  pickerNavigation,
   selectedEntity,
   rootMatchState,
   dispatchMatchState,
@@ -151,31 +154,26 @@ function SelectedEntityPanel({
     [computeDefinitionName, selectedEntity],
   );
 
-  const continuedHistory = useMemo(() => (
-    [...pickerHistory, {
-      pickerKey,
-      matchingKey,
-      entity: selectedEntity,
-    }]
-  ), [
-    pickerHistory,
-    pickerKey,
-    matchingKey,
-    selectedEntity,
-  ]);
+  const localHistory = useMemo(
+    () => {
+      const pickerKeyIndex = pickerNavigation.findIndex((nav) => nav.pickerKey === pickerKey);
+      return pickerNavigation.slice(0, pickerKeyIndex + 1);
+    },
+    [pickerNavigation, pickerKey],
+  );
 
   const onRoundDragCompleted = useCallback(
     (fromIndex, toIndex) => dispatchMatchState({
       type: 'reorderMatchingEntities',
-      pickerHistory: continuedHistory,
+      localHistory,
       fromIndex,
       toIndex,
     }),
-    [dispatchMatchState, continuedHistory],
+    [dispatchMatchState, localHistory],
   );
 
   const selectedEntityRows = selectedEntity[matchingKey];
-  const expectedNumOfRows = computeExpectedRowCount?.(selectedEntity, pickerHistory);
+  const expectedNumOfRows = computeExpectedRowCount?.(selectedEntity, localHistory);
 
   return (
     <>
@@ -197,14 +195,14 @@ function SelectedEntityPanel({
             dispatchMatchState={dispatchMatchState}
             selectedMatchingRow={modalPayload}
             rootMatchState={rootMatchState}
-            pickerHistory={continuedHistory}
+            localHistory={localHistory}
             pickerConfig={pickerConfig}
           />
         </>
       )}
       <PickerWithMatching
         pickerKey={matchingKey}
-        pickerHistory={continuedHistory}
+        pickerNavigation={pickerNavigation}
         selectableEntities={selectedEntityRows}
         expectedEntitiesLength={expectedNumOfRows}
         rootMatchState={rootMatchState}

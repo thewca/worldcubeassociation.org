@@ -3,7 +3,21 @@ import { Button, Form, Modal } from 'semantic-ui-react';
 import _ from 'lodash';
 import pickerConfigurations from './config';
 import { useInputUpdater } from '../../lib/hooks/useInputState';
-import { translateHistoryToPath, translatePathToLodash } from './reducer';
+import { translateNavigationToLodash } from './reducer';
+
+function navigationToDescriptor(pickerNavigation) {
+  return pickerNavigation.reduce((acc, historyStep) => ({
+    ...acc,
+    [historyStep.pickerKey]: historyStep.entityId,
+  }), {});
+}
+
+function descriptorToNavigation(descriptor, referenceNavigation) {
+  return referenceNavigation.map((nav) => ({
+    ...nav,
+    entityId: descriptor[nav.pickerKey],
+  }));
+}
 
 function MatchingSelect({
   pickerKey,
@@ -42,36 +56,37 @@ export default function MoveMatchingRowModal({
   dispatchMatchState,
   selectedMatchingRow,
   rootMatchState,
-  pickerHistory,
+  localHistory,
   pickerConfig,
 }) {
   const {
     computeMatchingCellName,
   } = pickerConfig;
 
-  const basePath = useMemo(() => translateHistoryToPath(pickerHistory), [pickerHistory]);
+  const baseDescriptor = useMemo(() => navigationToDescriptor(localHistory), [localHistory]);
 
-  const [targetPath, setTargetPath] = useState(basePath);
+  const [targetDescriptor, setTargetDescriptor] = useState(baseDescriptor);
 
-  const onConfirm = useCallback((entityToMove, newTargetPath) => {
+  const onConfirm = useCallback((entityToMove, newTargetDescriptor) => {
     dispatchMatchState({
       type: 'moveMatchingEntity',
-      pickerHistory,
       entity: entityToMove,
-      targetPath: newTargetPath,
+      fromNavigation: descriptorToNavigation(baseDescriptor, localHistory),
+      toNavigation: descriptorToNavigation(newTargetDescriptor, localHistory),
     });
 
     onClose();
-  }, [dispatchMatchState, pickerHistory, onClose]);
+  }, [dispatchMatchState, baseDescriptor, localHistory, onClose]);
 
   const computeChoices = useCallback((historyIdx, selectedPath) => {
-    const parentSteps = pickerHistory.slice(0, historyIdx);
+    const reconstructedHistory = descriptorToNavigation(selectedPath, localHistory);
+    const parentSteps = reconstructedHistory.slice(0, historyIdx);
 
-    return translatePathToLodash(selectedPath, parentSteps, rootMatchState).lookup;
-  }, [pickerHistory, rootMatchState]);
+    return translateNavigationToLodash(parentSteps, rootMatchState).lookup;
+  }, [localHistory, rootMatchState]);
 
   const fixSelectionPath = useCallback(
-    (selectedPath) => pickerHistory.reduce((correctedPath, historyStep, idx) => {
+    (selectedPath) => localHistory.reduce((correctedPath, historyStep, idx) => {
       const availableChoices = computeChoices(idx, correctedPath);
 
       const originalChoiceId = selectedPath[historyStep.pickerKey];
@@ -86,20 +101,20 @@ export default function MoveMatchingRowModal({
         [historyStep.pickerKey]: finalChoice.id,
       };
     }, {}),
-    [computeChoices, pickerHistory],
+    [computeChoices, localHistory],
   );
 
   const updateTargetPath = useCallback(
-    (pickerKey, entityId) => setTargetPath(
+    (pickerKey, entityId) => setTargetDescriptor(
       (prevTargetPath) => fixSelectionPath({
         ...prevTargetPath,
         [pickerKey]: entityId,
       }),
     ),
-    [setTargetPath, fixSelectionPath],
+    [setTargetDescriptor, fixSelectionPath],
   );
 
-  const canMove = !_.isEqual(targetPath, basePath);
+  const canMove = !_.isEqual(targetDescriptor, baseDescriptor);
 
   if (!selectedMatchingRow) {
     return null;
@@ -118,12 +133,12 @@ export default function MoveMatchingRowModal({
       </Modal.Header>
       <Modal.Content>
         <Form>
-          {pickerHistory.map((historyStep, idx) => (
+          {localHistory.map((historyStep, idx) => (
             <MatchingSelect
               key={historyStep.pickerKey}
               pickerKey={historyStep.pickerKey}
-              selectableEntities={computeChoices(idx, targetPath)}
-              selectedEntityId={targetPath[historyStep.pickerKey]}
+              selectableEntities={computeChoices(idx, targetDescriptor)}
+              selectedEntityId={targetDescriptor[historyStep.pickerKey]}
               updateTargetPath={(id) => updateTargetPath(historyStep.pickerKey, id)}
             />
           ))}
@@ -133,7 +148,7 @@ export default function MoveMatchingRowModal({
         <Button onClick={onClose}>Cancel</Button>
         <Button
           positive
-          onClick={() => onConfirm(selectedMatchingRow, targetPath)}
+          onClick={() => onConfirm(selectedMatchingRow, targetDescriptor)}
           disabled={!canMove}
         >
           Move

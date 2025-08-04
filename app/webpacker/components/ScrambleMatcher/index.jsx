@@ -65,11 +65,16 @@ function ScrambleMatcher({
     {
       initial: persistedMatchState,
       current: matchState,
+      navigation: navigationState,
     },
     dispatchMatchState,
   ] = useReducer(
     scrambleMatchReducer,
-    { wcifEvents, scrambleSets: inboxScrambleSets },
+    {
+      wcifEvents,
+      scrambleSets: inboxScrambleSets,
+      navigationRootKey: 'events',
+    },
     initializeState,
   );
 

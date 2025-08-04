@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import { moveArrayItem } from './util';
+import pickerConfigurations from './config';
 
 function addScrambleSetsToEvents(wcifEvents, scrambleSets) {
   const groupedScrambleSets = _.groupBy(
@@ -30,9 +31,25 @@ function applyAction(state, keys, action) {
   }), state);
 }
 
-export function initializeState({ wcifEvents, scrambleSets }) {
+function unfoldNavigation(pickerKey, accu = []) {
+  const pickerConfig = pickerConfigurations.find((cfg) => cfg.key === pickerKey);
+
+  if (!pickerConfig) {
+    return accu;
+  }
+
+  const nextAccu = [...accu, {
+    pickerKey,
+    matchingKey: pickerConfig.matchingKey,
+    entityId: null,
+  }];
+
+  return unfoldNavigation(pickerConfig.matchingKey, nextAccu);
+}
+
+export function initializeState({ wcifEvents, scrambleSets, navigationRootKey = undefined }) {
   return applyAction(
-    {},
+    { navigation: unfoldNavigation(navigationRootKey) },
     ['initial', 'current'],
     () => addScrambleSetsToEvents(wcifEvents, scrambleSets),
   );
@@ -54,11 +71,9 @@ function removeScrambleFile(state, oldScrambleFile) {
   }));
 }
 
-export function translatePathToLodash(path, pickerHistory, initialLookup) {
+export function translateNavigationToLodash(pickerHistory, initialLookup) {
   return pickerHistory.reduce((accu, historyStep) => {
-    const idToSearch = path[historyStep.pickerKey];
-
-    const selectedIndex = accu.lookup.findIndex((ent) => ent.id === idToSearch);
+    const selectedIndex = accu.lookup.findIndex((ent) => ent.id === pickerHistory.entityId);
     const selectedEntity = accu.lookup[selectedIndex];
 
     return {
@@ -69,13 +84,6 @@ export function translatePathToLodash(path, pickerHistory, initialLookup) {
     path: [],
     lookup: initialLookup,
   });
-}
-
-export function translateHistoryToPath(pickerHistory) {
-  return pickerHistory.reduce((acc, historyStep) => ({
-    ...acc,
-    [historyStep.pickerKey]: historyStep.entity.id,
-  }), {});
 }
 
 export default function scrambleMatchReducer(state, action) {
@@ -93,23 +101,27 @@ export default function scrambleMatchReducer(state, action) {
         (subState) => removeScrambleFile(subState, action.scrambleFile),
       );
     case 'resetAfterSave':
-      return initializeState({
-        wcifEvents: state.initial,
-        scrambleSets: action.scrambleSets,
-      });
+      return {
+        ...initializeState({
+          wcifEvents: state.initial,
+          scrambleSets: action.scrambleSets,
+        }),
+        navigation: state.navigation,
+      };
+    case 'navigatePicker':
+      return applyAction(state, ['navigation'], (navState) => navState.map((nav) => (nav.pickerKey === action.pickerKey ? ({
+        ...nav,
+        entityId: action.newId,
+      }) : nav)));
     case 'moveMatchingEntity':
       return applyAction(state, ['current'], (subState) => {
-        const fromPath = translateHistoryToPath(action.pickerHistory);
-
-        const { path: oldPath } = translatePathToLodash(
-          fromPath,
-          action.pickerHistory,
+        const { path: oldPath } = translateNavigationToLodash(
+          action.fromNavigation,
           subState,
         );
 
-        const { path: newPath } = translatePathToLodash(
-          action.targetPath,
-          action.pickerHistory,
+        const { path: newPath } = translateNavigationToLodash(
+          action.toNavigation,
           subState,
         );
 
@@ -121,11 +133,8 @@ export default function scrambleMatchReducer(state, action) {
       });
     case 'reorderMatchingEntities':
       return applyAction(state, ['current'], (subState) => {
-        const entityPath = translateHistoryToPath(action.pickerHistory);
-
-        const { path: lodashPath, lookup: currentOrder } = translatePathToLodash(
-          entityPath,
-          action.pickerHistory,
+        const { path: lodashPath, lookup: currentOrder } = translateNavigationToLodash(
+          action.localHistory,
           subState,
         );
 
