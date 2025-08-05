@@ -6,7 +6,6 @@ import {
   Button,
   Container,
   Heading,
-  Icon,
   VStack,
 } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
@@ -48,7 +47,7 @@ export default function MyCompetitions() {
 
   return (
     <Container bg={"bg"}>
-      <VStack gap="8" width="full" pt="8" alignItems="left">
+      <VStack gap="8" pt="8" alignItems="left">
         <Heading size={"5xl"}>
           {session.user?.id && (
             <Button asChild>

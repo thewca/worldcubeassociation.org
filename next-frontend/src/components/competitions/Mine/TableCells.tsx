@@ -7,19 +7,24 @@ import EditIcon from "@/components/icons/EditIcon";
 import { WarningIcon } from "@payloadcms/ui";
 import { Tooltip } from "@/components/ui/tooltip";
 import { dateRange } from "@/lib/wca/dates";
+import { components } from "@/types/openapi";
 
-export function NameTableCell({ competition }) {
+interface TableCellProps {
+  competition: components["schemas"]["MyCompetition"];
+}
+
+export function NameTableCell({ competition }: TableCellProps) {
   return (
     <Table.Cell>
       <a href={competition.url}>
         {competition.short_display_name}{" "}
-        {competition.championships?.length > 0 && <AiFillTrophy />}
+        {(competition.championships?.length ?? 0) > 0 && <AiFillTrophy />}
       </a>
     </Table.Cell>
   );
 }
 
-export function LocationTableCell({ competition }) {
+export function LocationTableCell({ competition }: TableCellProps) {
   return (
     <Table.Cell>
       {competition.city}
@@ -28,7 +33,7 @@ export function LocationTableCell({ competition }) {
   );
 }
 
-export function DateTableCell({ competition }) {
+export function DateTableCell({ competition }: TableCellProps) {
   return (
     <Table.Cell>
       {dateRange(competition.start_date, competition.end_date, {

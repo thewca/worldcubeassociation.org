@@ -36,50 +36,52 @@ export default function PastCompetitionsTable({
   }
 
   return (
-    <Table.Root>
-      <Table.Header>
-        <Table.Row>
-          <Table.ColumnHeader>
-            {t("competitions.competition_info.name")}
-          </Table.ColumnHeader>
-          <Table.ColumnHeader>
-            {t("competitions.competition_info.location")}
-          </Table.ColumnHeader>
-          <Table.ColumnHeader>
-            {t("competitions.competition_info.date")}
-          </Table.ColumnHeader>
-          <Table.ColumnHeader />
-          <Table.ColumnHeader />
-          <Table.ColumnHeader />
-        </Table.Row>
-      </Table.Header>
-
-      <Table.Body>
-        {competitions.map((competition) => (
-          <Table.Row key={competition.id}>
-            <NameTableCell competition={competition} />
-            <LocationTableCell competition={competition} />
-            <DateTableCell competition={competition} />
-            <Table.Cell>
-              {!competition["results_posted?"] && <CalendarIcon />}
-            </Table.Cell>
-            <Table.Cell>
-              {competition["results_posted?"] && (
-                <Tooltip
-                  content={t("competitions.my_competitions_table.results_up")}
-                >
-                  <CheckIcon />
-                </Tooltip>
-              )}
-            </Table.Cell>
-            <ReportTableCell
-              competitionId={competition.id}
-              isReportPosted={competition["report_posted?"]}
-              isPastCompetition
-            />
+    <Table.ScrollArea borderWidth="1px" maxW="100%">
+      <Table.Root>
+        <Table.Header>
+          <Table.Row>
+            <Table.ColumnHeader>
+              {t("competitions.competition_info.name")}
+            </Table.ColumnHeader>
+            <Table.ColumnHeader>
+              {t("competitions.competition_info.location")}
+            </Table.ColumnHeader>
+            <Table.ColumnHeader>
+              {t("competitions.competition_info.date")}
+            </Table.ColumnHeader>
+            <Table.ColumnHeader />
+            <Table.ColumnHeader />
+            <Table.ColumnHeader />
           </Table.Row>
-        ))}
-      </Table.Body>
-    </Table.Root>
+        </Table.Header>
+
+        <Table.Body>
+          {competitions.map((competition) => (
+            <Table.Row key={competition.id}>
+              <NameTableCell competition={competition} />
+              <LocationTableCell competition={competition} />
+              <DateTableCell competition={competition} />
+              <Table.Cell>
+                {!competition["results_posted?"] && <CalendarIcon />}
+              </Table.Cell>
+              <Table.Cell>
+                {competition["results_posted?"] && (
+                  <Tooltip
+                    content={t("competitions.my_competitions_table.results_up")}
+                  >
+                    <CheckIcon />
+                  </Tooltip>
+                )}
+              </Table.Cell>
+              <ReportTableCell
+                competitionId={competition.id}
+                isReportPosted={competition["report_posted?"]}
+                isPastCompetition
+              />
+            </Table.Row>
+          ))}
+        </Table.Body>
+      </Table.Root>
+    </Table.ScrollArea>
   );
 }

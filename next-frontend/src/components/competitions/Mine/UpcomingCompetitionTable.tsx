@@ -153,7 +153,7 @@ export default function UpcomingCompetitionTable({
   }
 
   return (
-    <div style={{ overflowX: "auto" }}>
+    <Table.ScrollArea borderWidth="1px" maxW="100%">
       <Table.Root>
         <Table.Header>
           <Table.Row>
@@ -252,6 +252,6 @@ export default function UpcomingCompetitionTable({
           })}
         </Table.Body>
       </Table.Root>
-    </div>
+    </Table.ScrollArea>
   );
 }
