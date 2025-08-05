@@ -1372,6 +1372,34 @@ RSpec.describe 'API Registrations' do
     end
   end
 
+  describe 'GET #payment_completion' do
+    context 'manual payments' do
+      let(:comp) { create(:competition, :manual_payments, :registration_open) }
+      let(:reg) { create(:registration, competition: comp) }
+      let(:payment_intent) { create(:payment_intent, :manual) }
+      let(:manual_record) { payment_intent.payment_record }
+
+      before do
+        sign_in reg.user
+        get registration_payment_completion_path(comp, 'manual'), headers: headers, params: {
+          client_secret: manual_record.id, payment_reference: 'test_reference'
+        }
+        puts response
+      end
+
+      it 'creates a manual payment record with user_submitted status' do
+        expect(manual_record.reload.manual_status).to eq('user_submitted')
+      end
+
+      it 'updates the payment reference', :only do
+        expect(manual_record.reload.payment_reference).to eq('test reference')
+      end
+
+      it 'payment intent has requires_capture wca_status' do
+      end
+    end
+  end
+
   describe 'PATCH #bulk_accept' do
     let(:auto_accept_comp) do
       create(

@@ -10,8 +10,7 @@ class AddManualCpiTables < ActiveRecord::Migration[7.2]
 
     create_table :manual_payment_records do |t|
       t.string :payment_reference
-      t.integer :amount_iso_denomination, null: false
-      t.string :currency_code, null: false
+      t.string :manual_status
       t.timestamps
     end
   end
