@@ -29,7 +29,7 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
         [r.competition_id, r.competing_status]
       end
       competition_ids.concat(registered_for_by_competition_id.keys)
-      competition_ids.concat(current_user.person.competitions.pluck(:competition_id)) if current_user.person
+      competition_ids.concat(user.person.competitions.pluck(:competition_id)) if user.person
       # An organiser might still have duties to perform for a cancelled competition until the date of the competition has passed.
       # For example, mailing all competitors about the cancellation.
       # In general ensuring ease of access until it is certain that they won't need to frequently visit the page anymore.
@@ -54,7 +54,7 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
 
       future_competitions = not_past_competitions.as_json(options_with_reg_status)
 
-      future_competitions_with_competing_status = future_competitions.map { |c| c.merge({ competing_status: registered_for_by_competition_id[c.id]})}
+      future_competitions_with_competing_status = future_competitions.map { |c| c.merge({ competing_status: registered_for_by_competition_id[c["id"]]})}
 
       render json: {
         past_competitions: past_competitions.as_json(options),
