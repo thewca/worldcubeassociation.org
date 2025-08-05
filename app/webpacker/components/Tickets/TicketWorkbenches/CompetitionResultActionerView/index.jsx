@@ -5,6 +5,7 @@ import TimelineView from './TimelineView';
 import MergeInboxResults from './MergeInboxResults';
 import CreateWcaIds from './CreateWcaIds';
 import FinalSteps from './FinalSteps';
+import MiscActions from './MiscActions';
 
 export default function CompetitionResultActionerView({ ticketDetails, updateStatus }) {
   const { ticket: { metadata: { status } } } = ticketDetails;
@@ -14,6 +15,10 @@ export default function CompetitionResultActionerView({ ticketDetails, updateSta
       <TimelineView status={status} />
       <ViewForStatus
         status={status}
+        ticketDetails={ticketDetails}
+        updateStatus={updateStatus}
+      />
+      <MiscActions
         ticketDetails={ticketDetails}
         updateStatus={updateStatus}
       />

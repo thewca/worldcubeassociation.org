@@ -8,5 +8,6 @@
     resultsSubmitted: @competition.results_submitted?,
     hasTemporaryResults: @competition.inbox_results.present?,
     canSubmitResults: @current_user.can_submit_competition_results?(@competition),
+    resultProcessAborted: @competition.tickets_competition_result&.aborted?,
   }) %>
 <% end %>

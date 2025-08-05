@@ -23,14 +23,16 @@ export default function Wrapper(
 
 function CompetitionResultSubmission(
   {
-    competitionId, resultsSubmitted, hasTemporaryResults, canSubmitResults,
+    competitionId, resultsSubmitted, hasTemporaryResults, canSubmitResults, resultProcessAborted,
   },
 ) {
-  if (resultsSubmitted) {
-    <Message positive>
-      The results have already been submitted. If you have any more questions or
-      comments please reply to the email sent with the first results submission.
-    </Message>;
+  if (resultsSubmitted && !resultProcessAborted) {
+    return (
+      <Message positive>
+        The results have already been submitted. If you have any more questions or
+        comments please reply to the email sent with the first results submission.
+      </Message>
+    );
   }
 
   return (
