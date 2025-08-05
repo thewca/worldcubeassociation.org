@@ -137,11 +137,11 @@ GEM
     autoprefixer-rails (9.4.7)
       execjs
     aws-eventstream (1.4.0)
-    aws-partitions (1.1140.0)
+    aws-partitions (1.1141.0)
     aws-sdk-cloudfront (1.123.0)
       aws-sdk-core (~> 3, >= 3.228.0)
       aws-sigv4 (~> 1.5)
-    aws-sdk-core (3.228.0)
+    aws-sdk-core (3.229.0)
       aws-eventstream (~> 1, >= 1.3.0)
       aws-partitions (~> 1, >= 1.992.0)
       aws-sigv4 (~> 1.9)
@@ -159,8 +159,8 @@ GEM
       aws-sdk-core (~> 3, >= 3.228.0)
       aws-sdk-kms (~> 1)
       aws-sigv4 (~> 1.5)
-    aws-sdk-sqs (1.98.0)
-      aws-sdk-core (~> 3, >= 3.227.0)
+    aws-sdk-sqs (1.100.0)
+      aws-sdk-core (~> 3, >= 3.228.0)
       aws-sigv4 (~> 1.5)
     aws-sigv4 (1.12.1)
       aws-eventstream (~> 1, >= 1.0.2)
@@ -1145,13 +1145,13 @@ CHECKSUMS
   ast (2.4.3) sha256=954615157c1d6a382bc27d690d973195e79db7f55e9765ac7c481c60bdb4d383
   autoprefixer-rails (9.4.7) sha256=7104f54efa89e6390391bd894498a9db92bffaf74474942c4152e6dc0775ab3b
   aws-eventstream (1.4.0) sha256=116bf85c436200d1060811e6f5d2d40c88f65448f2125bc77ffce5121e6e183b
-  aws-partitions (1.1140.0) sha256=f300149dfeb36d74926447ceaa24f9e04d1ae6708e76932eae396c23ad79dcea
+  aws-partitions (1.1141.0) sha256=1bd49e86a56d84dbbb0b3756954304cd58cfaa041e4a2385e4958ec107c88464
   aws-sdk-cloudfront (1.123.0) sha256=e857c6b6396bb9306e459ecce4a945e232fb475b41dd405d15b5fb4ced3dca65
-  aws-sdk-core (3.228.0) sha256=06ddac5e9e3596cba5e3f8994c3ab3bd6a36edabd07ecb9260e0e16631df7564
+  aws-sdk-core (3.229.0) sha256=792629981ee265a9d126e7c17ca236526b3b5ad4a22ff8fa9cb3c1affd46b087
   aws-sdk-kms (1.109.0) sha256=5c49284e9e2e6dd6cf86e9478f43cad1c542ce274458fc0a441f10b172497162
   aws-sdk-rds (1.285.0) sha256=3c5862b5db9476a2ee55a2b66d8d7e0328e255624e0d202868213b813647dc82
   aws-sdk-s3 (1.195.0) sha256=22b164a97f83ff352f9f323e094a80f0b9703be8149ad7956cb60f7081d0a4b9
-  aws-sdk-sqs (1.98.0) sha256=7d9f537498d52d2c43c0c39d928b00456eb1be5488538f3178a7029c77c96a86
+  aws-sdk-sqs (1.100.0) sha256=c62fd69eb68d7f05736f664e379ac13043a801140c903f836567aabc4bc845df
   aws-sigv4 (1.12.1) sha256=6973ff95cb0fd0dc58ba26e90e9510a2219525d07620c8babeb70ef831826c00
   babel-source (5.8.35) sha256=79ef222a9dcb867ac2efa3b0da35b4bcb15a4bfa67b6b2dcbf1e9a29104498d9
   babel-transpiler (0.7.0) sha256=4c06f4ad9e8e1cabe94f99e11df2f140bb72aca9ba067dbb49dc14d9b98d1570
