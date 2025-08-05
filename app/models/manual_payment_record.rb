@@ -31,6 +31,6 @@ class ManualPaymentRecord < ApplicationRecord
   end
 
   def update_status(updated_record)
-    puts updated_record.inspect
+    update(payment_reference: updated_record.payment_reference, manual_status: updated_record.manual_status)
   end
 end

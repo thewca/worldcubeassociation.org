@@ -35,6 +35,7 @@ class ManualPaymentIntegration < ApplicationRecord
     # from a payment provider after paying
     ManualPaymentRecord.find(params[:client_secret]).tap do |mpr|
       mpr.payment_reference = params[:payment_reference]
+      mpr.manual_status = ManualPaymentRecord.manual_statuses[:user_submitted]
     end
   end
 

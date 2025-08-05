@@ -1391,11 +1391,12 @@ RSpec.describe 'API Registrations' do
         expect(manual_record.reload.manual_status).to eq('user_submitted')
       end
 
-      it 'updates the payment reference', :only do
-        expect(manual_record.reload.payment_reference).to eq('test reference')
+      it 'updates the payment reference' do
+        expect(manual_record.reload.payment_reference).to eq('test_reference')
       end
 
       it 'payment intent has requires_capture wca_status' do
+        expect(payment_intent.reload.wca_status).to eq('requires_capture')
       end
     end
   end
