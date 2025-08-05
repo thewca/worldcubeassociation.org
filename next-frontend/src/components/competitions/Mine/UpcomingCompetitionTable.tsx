@@ -16,7 +16,6 @@ import { BiSolidTrash } from "react-icons/bi";
 import { Alert, Table } from "@chakra-ui/react";
 import { useT } from "@/lib/i18n/useI18n";
 import { Tooltip } from "@/components/ui/tooltip";
-import I18n from "../../../../../app/webpacker/lib/i18n";
 import { components } from "@/types/openapi";
 
 const competingStatusIcon = (competingStatus: string) => {
@@ -36,30 +35,34 @@ const competingStatusIcon = (competingStatus: string) => {
   }
 };
 
-const registrationStatusHint = (competingStatus: string) => {
+const registrationStatusHint = (competingStatus: string, t: TFunction) => {
   if (competingStatus === "waiting_list") {
-    return I18n.t("competitions.messages.tooltip_waiting_list");
+    return t("competitions.messages.tooltip_waiting_list");
   }
   if (competingStatus === "accepted") {
-    return I18n.t("competitions.messages.tooltip_registered");
+    return t("competitions.messages.tooltip_registered");
   }
   if (competingStatus === "cancelled" || competingStatus === "rejected") {
-    return I18n.t("competitions.messages.tooltip_deleted");
+    return t("competitions.messages.tooltip_deleted");
   }
   if (competingStatus === "pending") {
-    return I18n.t("competitions.messages.tooltip_pending");
+    return t("competitions.messages.tooltip_pending");
   }
   return "";
 };
 
-const competitionStatusHint = (isConfirmed: boolean, isVisible: boolean) => {
+const competitionStatusHint = (
+  isConfirmed: boolean,
+  isVisible: boolean,
+  t: TFunction,
+) => {
   let text = "";
   if (!isConfirmed) {
-    text += I18n.t("competitions.messages.not_confirmed_not_visible");
+    text += t("competitions.messages.not_confirmed_not_visible");
   } else if (!isVisible) {
-    text += I18n.t("competitions.messages.confirmed_not_visible");
+    text += t("competitions.messages.confirmed_not_visible");
   } else {
-    text += I18n.t("competitions.messages.confirmed_visible");
+    text += t("competitions.messages.confirmed_visible");
   }
 
   return text;
@@ -69,8 +72,9 @@ const competitionStatusText = (
   isConfirmed: boolean,
   isVisible: boolean,
   competingStatus: string,
+  t: TFunction,
 ) =>
-  `${registrationStatusHint(competingStatus)} ${competitionStatusHint(isConfirmed, isVisible)}`;
+  `${registrationStatusHint(competingStatus, t)} ${competitionStatusHint(isConfirmed, isVisible, t)}`;
 
 const registrationStatusIconText = (
   registrationOpen: string,
@@ -185,6 +189,7 @@ export default function UpcomingCompetitionTable({
                   competition["confirmed?"],
                   competition["visible?"],
                   competition.competing_status!,
+                  t,
                 )}
               >
                 <Table.Row
