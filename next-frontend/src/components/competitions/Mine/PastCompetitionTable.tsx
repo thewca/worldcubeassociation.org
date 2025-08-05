@@ -6,10 +6,10 @@ import {
 } from "./TableCells";
 import { Alert, Table } from "@chakra-ui/react";
 import I18nHTMLTranslate from "@/components/I18nHTMLTranslate";
-import { CalendarIcon, CheckIcon } from "@payloadcms/ui";
 import { Tooltip } from "@/components/ui/tooltip";
 import { useT } from "@/lib/i18n/useI18n";
 import { components } from "@/types/openapi";
+import { AiFillCalendar, AiFillCheckCircle } from "react-icons/ai";
 
 interface PastCompetitionsTableProps {
   competitions: components["schemas"]["MyCompetition"][];
@@ -36,8 +36,13 @@ export default function PastCompetitionsTable({
   }
 
   return (
-    <Table.ScrollArea borderWidth="1px" maxW="100%">
-      <Table.Root>
+    <Table.ScrollArea
+      borderWidth="1px"
+      maxW="100%"
+      height={"400px"}
+      rounded={"md"}
+    >
+      <Table.Root stickyHeader>
         <Table.Header>
           <Table.Row>
             <Table.ColumnHeader>
@@ -62,14 +67,14 @@ export default function PastCompetitionsTable({
               <LocationTableCell competition={competition} />
               <DateTableCell competition={competition} />
               <Table.Cell>
-                {!competition["results_posted?"] && <CalendarIcon />}
+                {!competition["results_posted?"] && <AiFillCalendar />}
               </Table.Cell>
               <Table.Cell>
                 {competition["results_posted?"] && (
                   <Tooltip
                     content={t("competitions.my_competitions_table.results_up")}
                   >
-                    <CheckIcon />
+                    <AiFillCheckCircle />
                   </Tooltip>
                 )}
               </Table.Cell>

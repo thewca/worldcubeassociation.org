@@ -1,5 +1,5 @@
 import countries from "@/lib/wca/data/countries";
-import { IconButton, Table } from "@chakra-ui/react";
+import { HStack, IconButton, Table } from "@chakra-ui/react";
 import { usePermissions } from "@/providers/PermissionProvider";
 import { AiFillFileImage, AiFillTrophy } from "react-icons/ai";
 import { useT } from "@/lib/i18n/useI18n";
@@ -16,10 +16,10 @@ interface TableCellProps {
 export function NameTableCell({ competition }: TableCellProps) {
   return (
     <Table.Cell>
-      <a href={competition.url}>
-        {competition.short_display_name}{" "}
+      <HStack>
+        <a href={competition.url}>{competition.short_display_name}</a>
         {(competition.championships?.length ?? 0) > 0 && <AiFillTrophy />}
-      </a>
+      </HStack>
     </Table.Cell>
   );
 }
@@ -66,7 +66,7 @@ export function ReportTableCell({
   }
   return (
     <Table.Cell>
-      <>
+      <HStack>
         <Tooltip content={t("competitions.my_competitions_table.report")}>
           <a href={`/competitions/${competitionId}/report`}>
             <AiFillFileImage />
@@ -94,7 +94,7 @@ export function ReportTableCell({
               <WarningIcon />
             </Tooltip>
           )}
-      </>
+      </HStack>
     </Table.Cell>
   );
 }

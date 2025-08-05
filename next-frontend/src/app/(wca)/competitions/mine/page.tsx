@@ -28,16 +28,11 @@ export default function MyCompetitions() {
   });
 
   const myCompetitions = useMemo(
-    () =>
-      myCompetitionsRequest?.data ?? {
-        future_competitions: [],
-        past_competitions: [],
-        bookmarked_competitions: [],
-      },
+    () => myCompetitionsRequest?.data,
     [myCompetitionsRequest],
   );
 
-  if (isLoading) {
+  if (isLoading || !myCompetitions) {
     return <Loading />;
   }
 
@@ -87,8 +82,7 @@ export default function MyCompetitions() {
           </Accordion.Item>
         </Accordion.Root>
         <Heading>
-          <BookmarkIcon />
-          {t("competitions.my_competitions.bookmarked_title")}
+          <BookmarkIcon /> {t("competitions.my_competitions.bookmarked_title")}
         </Heading>
         <p>{t("competitions.my_competitions.bookmarked_explanation")}</p>
         <UpcomingCompetitionTable
