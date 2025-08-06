@@ -5,6 +5,7 @@ import events, { WCA_EVENT_IDS } from "@/lib/wca/data/events";
 import RecordsTable from "@/components/results/RecordsTable";
 import { CurrentEventId } from "@wca/helpers";
 import React from "react";
+import EventIcon from "@/components/EventIcon";
 
 export default async function RecordsPage() {
   const { t } = await getT();
@@ -29,7 +30,7 @@ export default async function RecordsPage() {
             records.world_records[event as CurrentEventId] && (
               <React.Fragment key={event}>
                 <Heading size={"2xl"} key={event}>
-                  {events.byId[event].name}
+                  <EventIcon eventId={event} /> {events.byId[event].name}
                 </Heading>
                 <RecordsTable
                   records={records.world_records[event as CurrentEventId]!}
