@@ -1,0 +1,227 @@
+# frozen_string_literal: true
+
+class Api::V0::RecordsController < Api::V0::ApiController
+  REGION_WORLD = "world"
+  YEARS_ALL = "all years"
+  SHOW_100_PERSONS = "100 persons"
+  SHOWS = ['mixed', 'slim', 'separate', 'history', 'mixed history'].freeze
+  GENDERS = %w[Male Female].freeze
+  SHOW_MIXED = "mixed"
+  GENDER_ALL = "All"
+  EVENTS_ALL = "all events"
+
+  MODE_RANKINGS = "rankings"
+  MODE_RECORDS = "records"
+
+  def index
+    concise_results_date = ComputeAuxiliaryData.end_date || Date.current
+    cache_key = ["records", concise_results_date.iso8601]
+    json = Rails.cache.fetch(cache_key) do
+      records = ActiveRecord::Base.connection.exec_query <<-SQL.squish
+        SELECT 'single' type, MIN(best) value, country_id, event_id
+        FROM concise_single_results
+        GROUP BY country_id, event_id
+        UNION ALL
+        SELECT 'average' type, MIN(average) value, country_id, event_id
+        FROM concise_average_results
+        GROUP BY country_id, event_id
+      SQL
+      records = records.to_a
+      {
+        world_records: records_by_event(records),
+        continental_records: records.group_by { |record| Country.c_find(record["country_id"]).continent_id }.transform_values!(&method(:records_by_event)),
+        national_records: records.group_by { |record| record["country_id"] }.transform_values!(&method(:records_by_event)),
+      }
+    end
+    render json: json
+  end
+
+  def history
+    params[:event_id] ||= EVENTS_ALL
+    params[:region] ||= REGION_WORLD
+    params[:years] = YEARS_ALL # FIXME: this is disabling years filters for now
+    params[:show] ||= SHOW_MIXED
+    params[:gender] ||= GENDER_ALL
+
+    @is_mixed = params[:show] == SHOWS[0]
+    @is_slim = params[:show] == SHOWS[1]
+    @is_separate = params[:show] == SHOWS[2]
+    @is_history = params[:show] == SHOWS[3]
+    @is_mixed_history = params[:show] == SHOWS[4]
+    @is_histories = @is_history || @is_mixed_history
+
+    order = if @is_history
+              'events.`rank`, type desc, value, start_date desc, round_types.`rank` desc'
+            else
+              'start_date desc, events.`rank`, type desc, value, round_types.`rank` desc'
+            end
+
+    @query = <<-SQL.squish
+        SELECT
+          competitions.start_date,
+          YEAR(competitions.start_date)  year,
+          MONTH(competitions.start_date) month,
+          DAY(competitions.start_date)   day,
+          events.id              event_id,
+          events.name            event_name,
+          results.id              id,
+          results.type            type,
+          results.value           value,
+          results.format_id       format_id,
+          results.round_type_id   round_type_id,
+          events.format          value_format,
+                                 record_name,
+          results.person_id       person_id,
+          results.person_name     person_name,
+          results.country_id      country_id,
+          countries.name         country_name,
+          competitions.id        competition_id,
+          competitions.cell_name competition_name,
+          value1, value2, value3, value4, value5
+        FROM
+          (SELECT results.*, 'single' type, best value, regional_single_record record_name FROM results WHERE regional_single_record<>'' UNION
+            SELECT results.*, 'average' type, average value, regional_average_record record_name FROM results WHERE regional_average_record<>'') results
+          #{@gender_condition.present? ? 'JOIN persons ON results.person_id = persons.wca_id and persons.sub_id = 1,' : ','}
+          events,
+          round_types,
+          competitions,
+          countries
+        WHERE events.id = event_id
+          AND events.`rank` < 1000
+          AND round_types.id = round_type_id
+          AND competitions.id = competition_id
+          AND countries.id = results.country_id
+          #{@region_condition}
+          #{@event_condition}
+          #{@years_condition_competition}
+          #{@gender_condition}
+        ORDER BY
+          #{order}
+      SQL
+
+    @record_timestamp = ComputeAuxiliaryData.successful_start_date || Date.current
+
+    cached_data = Rails.cache.fetch ["records-api", *@cache_params, @record_timestamp] do
+      rows = DbHelper.execute_cached_query(@cache_params, @record_timestamp, @query)
+
+      # First, extract unique competitions
+      comp_ids = rows.map { |r| r["competition_id"] }.uniq
+      competitions_by_id = Competition.where(id: comp_ids)
+                                      .index_by(&:id)
+                                      .transform_values { |comp| comp.as_json(methods: %w[country], include: [], only: %w[cell_name id]) }
+
+      # Now that we've remembered all competitions, we can safely transform the rows
+      rows = yield rows if block_given?
+
+      {
+        history: rows.as_json, competitionsById: competitions_by_id
+      }
+    end
+    render json: cached_data
+  end
+
+  private def shared_constants_and_conditions
+    @years = Competition.non_future_years
+    @types = %w[single average]
+
+    if params[:event_id] == EVENTS_ALL
+      @event_condition = ""
+    else
+      event = Event.c_find!(params[:event_id])
+      @event_condition = "AND event_id = '#{event.id}'"
+    end
+
+    @continent = Continent.c_find(params[:region])
+    @country = Country.c_find(params[:region])
+    if @continent.present?
+      @region_condition = "AND results.country_id IN (#{@continent.country_ids.map { |id| "'#{id}'" }.join(',')})"
+      @region_condition += " AND record_name IN ('WR', '#{@continent.record_name}')" if @is_histories
+    elsif @country.present?
+      @region_condition = "AND results.country_id = '#{@country.id}'"
+      @region_condition += " AND record_name <> ''" if @is_histories
+    else
+      @region_condition = ""
+      @region_condition += "AND record_name = 'WR'" if @is_histories
+    end
+
+    @gender = params[:gender]
+    @gender_condition = case params[:gender]
+                        when "Male"
+                          "AND gender = 'm'"
+                        when "Female"
+                          "AND gender = 'f'"
+                        else
+                          ""
+                        end
+
+    @is_all_years = params[:years] == YEARS_ALL
+    splitted_years_param = params[:years].split
+    @is_only = splitted_years_param[0] == "only"
+    @is_until = splitted_years_param[0] == "until"
+    @year = splitted_years_param[1].to_i
+
+    if @is_only
+      @years_condition_competition = "AND YEAR(competitions.start_date) = #{@year}"
+      @years_condition_result = "AND results.year = #{@year}"
+    elsif @is_until
+      @years_condition_competition = "AND YEAR(competitions.start_date) <= #{@year}"
+      @years_condition_result = "AND results.year <= #{@year}"
+    else
+      @years_condition_competition = ""
+      @years_condition_result = ""
+    end
+  end
+
+  private def shared_constants_and_conditions
+    @years = Competition.non_future_years
+    @types = %w[single average]
+
+    if params[:event_id] == EVENTS_ALL
+      @event_condition = ""
+    else
+      event = Event.c_find!(params[:event_id])
+      @event_condition = "AND event_id = '#{event.id}'"
+    end
+
+    @continent = Continent.c_find(params[:region])
+    @country = Country.c_find(params[:region])
+    if @continent.present?
+      @region_condition = "AND results.country_id IN (#{@continent.country_ids.map { |id| "'#{id}'" }.join(',')})"
+      @region_condition += " AND record_name IN ('WR', '#{@continent.record_name}')" if @is_histories
+    elsif @country.present?
+      @region_condition = "AND results.country_id = '#{@country.id}'"
+      @region_condition += " AND record_name <> ''" if @is_histories
+    else
+      @region_condition = ""
+      @region_condition += "AND record_name = 'WR'" if @is_histories
+    end
+
+    @gender = params[:gender]
+    @gender_condition = case params[:gender]
+                        when "Male"
+                          "AND gender = 'm'"
+                        when "Female"
+                          "AND gender = 'f'"
+                        else
+                          ""
+                        end
+
+    @is_all_years = params[:years] == YEARS_ALL
+    splitted_years_param = params[:years].split
+    @is_only = splitted_years_param[0] == "only"
+    @is_until = splitted_years_param[0] == "until"
+    @year = splitted_years_param[1].to_i
+
+    if @is_only
+      @years_condition_competition = "AND YEAR(competitions.start_date) = #{@year}"
+      @years_condition_result = "AND results.year = #{@year}"
+    elsif @is_until
+      @years_condition_competition = "AND YEAR(competitions.start_date) <= #{@year}"
+      @years_condition_result = "AND results.year <= #{@year}"
+    else
+      @years_condition_competition = ""
+      @years_condition_result = ""
+    end
+  end
+
+end
