@@ -466,6 +466,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/results/records": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get the current records for all regions */
+        get: operations["getRecords"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/users/me/permissions": {
         parameters: {
             query?: never;
@@ -614,6 +631,92 @@ export interface components {
              */
             url: string;
             avatar: components["schemas"]["UserAvatar"];
+        };
+        Record: {
+            type?: string;
+            /** @example 6709306 */
+            id: number;
+            /** @example 1 */
+            pos: number;
+            /** @example 2019WANY36 */
+            person_id: string;
+            /** @example Yiheng Wang (王艺衡) */
+            person_name: string;
+            /** @example China */
+            country_id: string;
+            /** @example China */
+            competition_country_id: string;
+            /** @example HangzhouOpen2024 */
+            competition_id: string;
+            /** @example Hangzhou Open 2024 */
+            competition_name: string;
+            /** @example 222 */
+            event_id: string;
+            /** @example 2 */
+            round_type_id: string;
+            /** @example null */
+            round_id: string | null;
+            /** @example a */
+            format_id: string;
+            /** @example 126 */
+            value1: number;
+            /** @example 84 */
+            value2: number;
+            /** @example 91 */
+            value3: number;
+            /** @example 89 */
+            value4: number;
+            /** @example 85 */
+            value5: number;
+            /** @example 84 */
+            best: number;
+            /** @example 88 */
+            average: number;
+            /** @example null */
+            regional_single_record: string | null;
+            /** @example WR */
+            regional_average_record: string | null;
+            /**
+             * Format: date-time
+             * @example 2024-12-19T13:40:19.000Z
+             */
+            updated_at: string;
+            /** @example 88 */
+            value: number;
+        };
+        RecordByEvent: {
+            222?: components["schemas"]["Record"][];
+            333?: components["schemas"]["Record"][];
+            444?: components["schemas"]["Record"][];
+            555?: components["schemas"]["Record"][];
+            666?: components["schemas"]["Record"][];
+            777?: components["schemas"]["Record"][];
+            "333oh"?: components["schemas"]["Record"][];
+            clock?: components["schemas"]["Record"][];
+            minx?: components["schemas"]["Record"][];
+            pyram?: components["schemas"]["Record"][];
+            skewb?: components["schemas"]["Record"][];
+            sq1?: components["schemas"]["Record"][];
+            "333bf"?: components["schemas"]["Record"][];
+            "333ft"?: components["schemas"]["Record"][];
+            "333fm"?: components["schemas"]["Record"][];
+            "333mbf"?: components["schemas"]["Record"][];
+            "444bf"?: components["schemas"]["Record"][];
+            "555bf"?: components["schemas"]["Record"][];
+            magic?: components["schemas"]["Record"][];
+            mmagic?: components["schemas"]["Record"][];
+            "333mbo"?: components["schemas"]["Record"][];
+        };
+        ContinentalRecords: {
+            [key: string]: components["schemas"]["RecordByEvent"];
+        };
+        NationalRecords: {
+            [key: string]: components["schemas"]["RecordByEvent"];
+        };
+        RecordsResponse: {
+            world_records: components["schemas"]["RecordByEvent"];
+            /** Format: date */
+            timestamp: string;
         };
         Incident: {
             id: string;
@@ -1166,6 +1269,26 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ExportInfo"];
+                };
+            };
+        };
+    };
+    getRecords: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successfully retrieved records */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RecordsResponse"];
                 };
             };
         };

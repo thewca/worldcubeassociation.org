@@ -278,6 +278,17 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ExportInfo"
+  /results/records:
+    get:
+      summary: Get the current records for all regions
+      operationId: getRecords
+      responses:
+        "200":
+          description: Successfully retrieved records
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RecordsResponse"
   /users/me/permissions:
     get:
       summary: Get user's permissions
@@ -489,6 +500,220 @@ components:
           example: "https://www.worldcubeassociation.org/persons/2005REYN01"
         avatar:
           $ref: '#/components/schemas/UserAvatar'
+
+    Record:
+      type: object
+      required:
+        - id
+        - pos
+        - person_id
+        - person_name
+        - country_id
+        - competition_country_id
+        - competition_id
+        - competition_name
+        - event_id
+        - round_type_id
+        - round_id
+        - format_id
+        - value1
+        - value2
+        - value3
+        - value4
+        - value5
+        - best
+        - average
+        - regional_single_record
+        - regional_average_record
+        - updated_at
+        - value
+      properties:
+        "type":
+          type: string
+        id:
+          type: integer
+          example: 6709306
+        pos:
+          type: integer
+          example: 1
+        person_id:
+          type: string
+          example: "2019WANY36"
+        person_name:
+          type: string
+          example: "Yiheng Wang (王艺衡)"
+        country_id:
+          type: string
+          example: "China"
+        competition_country_id:
+          type: string
+          example: "China"
+        competition_id:
+          type: string
+          example: "HangzhouOpen2024"
+        competition_name:
+          type: string
+          example: "Hangzhou Open 2024"
+        event_id:
+          type: string
+          example: "222"
+        round_type_id:
+          type: string
+          example: "2"
+        round_id:
+          type: string
+          nullable: true
+          example: null
+        format_id:
+          type: string
+          example: "a"
+        value1:
+          type: integer
+          example: 126
+        value2:
+          type: integer
+          example: 84
+        value3:
+          type: integer
+          example: 91
+        value4:
+          type: integer
+          example: 89
+        value5:
+          type: integer
+          example: 85
+        best:
+          type: integer
+          example: 84
+        average:
+          type: integer
+          example: 88
+        regional_single_record:
+          type: string
+          nullable: true
+          example: null
+        regional_average_record:
+          type: string
+          nullable: true
+          example: "WR"
+        updated_at:
+          type: string
+          format: date-time
+          example: "2024-12-19T13:40:19.000Z"
+        value:
+          type: integer
+          example: 88
+
+    RecordByEvent:
+      type: object
+      properties:
+        222:
+          type: array
+          items:
+            $ref: '#/components/schemas/Record'
+        333:
+          type: array
+          items:
+            $ref: '#/components/schemas/Record'
+        444:
+          type: array
+          items:
+            $ref: '#/components/schemas/Record'
+        555:
+          type: array
+          items:
+            $ref: '#/components/schemas/Record'
+        666:
+          type: array
+          items:
+            $ref: '#/components/schemas/Record'
+        777:
+          type: array
+          items:
+            $ref: '#/components/schemas/Record'
+        333oh:
+          type: array
+          items:
+            $ref: '#/components/schemas/Record'
+        clock:
+          type: array
+          items:
+            $ref: '#/components/schemas/Record'
+        minx:
+          type: array
+          items:
+            $ref: '#/components/schemas/Record'
+        pyram:
+          type: array
+          items:
+            $ref: '#/components/schemas/Record'
+        skewb:
+          type: array
+          items:
+            $ref: '#/components/schemas/Record'
+        sq1:
+          type: array
+          items:
+            $ref: '#/components/schemas/Record'
+        333bf:
+          type: array
+          items:
+            $ref: '#/components/schemas/Record'
+        333ft:
+          type: array
+          items:
+            $ref: '#/components/schemas/Record'
+        333fm:
+          type: array
+          items:
+            $ref: '#/components/schemas/Record'
+        333mbf:
+          type: array
+          items:
+            $ref: '#/components/schemas/Record'
+        444bf:
+          type: array
+          items:
+            $ref: '#/components/schemas/Record'
+        555bf:
+          type: array
+          items:
+            $ref: '#/components/schemas/Record'
+        magic:
+          type: array
+          items:
+            $ref: '#/components/schemas/Record'
+        mmagic:
+          type: array
+          items:
+            $ref: '#/components/schemas/Record'
+        333mbo:
+          type: array
+          items:
+            $ref: '#/components/schemas/Record'
+
+    ContinentalRecords:
+      type: object
+      additionalProperties:
+        $ref: '#/components/schemas/RecordByEvent'
+
+    NationalRecords:
+      type: object
+      additionalProperties:
+        $ref: '#/components/schemas/RecordByEvent'
+
+    RecordsResponse:
+      type: object
+      required:
+        - world_records
+        - timestamp
+      properties:
+        world_records:
+          $ref: '#/components/schemas/RecordByEvent'
+        timestamp:
+          type: string
+          format: date
+
 
     Incident:
       type: object

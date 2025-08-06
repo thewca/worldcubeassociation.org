@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Api::V0::RecordsController < Api::V0::ApiController
+class Api::V0::Results::RecordsController < Api::V0::ApiController
   REGION_WORLD = "world"
   YEARS_ALL = "all years"
   SHOW_100_PERSONS = "100 persons"
@@ -14,26 +14,37 @@ class Api::V0::RecordsController < Api::V0::ApiController
   MODE_RECORDS = "records"
 
   def index
-    concise_results_date = ComputeAuxiliaryData.end_date || Date.current
-    cache_key = ["records", concise_results_date.iso8601]
-    json = Rails.cache.fetch(cache_key) do
-      records = ActiveRecord::Base.connection.exec_query <<-SQL.squish
-        SELECT 'single' type, MIN(best) value, country_id, event_id
-        FROM concise_single_results
-        GROUP BY country_id, event_id
-        UNION ALL
-        SELECT 'average' type, MIN(average) value, country_id, event_id
-        FROM concise_average_results
-        GROUP BY country_id, event_id
+    # Default params
+    params[:event_id] = EVENTS_ALL
+    params[:region] = REGION_WORLD
+    params[:years] = YEARS_ALL
+    params[:show] = SHOW_MIXED
+    params[:gender] = GENDER_ALL
+
+    shared_constants_and_conditions
+
+    cache_params = ResultsController.compute_cache_key(MODE_RECORDS, **params_for_cache)
+    record_timestamp = ComputeAuxiliaryData.successful_start_date || Date.current
+
+    query = <<-SQL.squish
+        SELECT *
+        FROM
+          (#{current_records_query('best', 'single')}
+          UNION
+          #{current_records_query('average', 'average')}) helper
+        ORDER BY
+          type DESC, round_type_id, person_name
       SQL
-      records = records.to_a
-      {
-        world_records: records_by_event(records),
-        continental_records: records.group_by { |record| Country.c_find(record["country_id"]).continent_id }.transform_values!(&method(:records_by_event)),
-        national_records: records.group_by { |record| record["country_id"] }.transform_values!(&method(:records_by_event)),
-      }
+
+    records = Rails.cache.fetch ["records-page-api", *cache_params, record_timestamp] do
+      DbHelper.execute_cached_query(cache_params, record_timestamp, query)
     end
-    render json: json
+    records = records.to_a
+
+    render json: {
+      world_records: records.group_by { |r| r["event_id"]},
+      timestamp: record_timestamp,
+    }
   end
 
   def history
@@ -49,6 +60,8 @@ class Api::V0::RecordsController < Api::V0::ApiController
     @is_history = params[:show] == SHOWS[3]
     @is_mixed_history = params[:show] == SHOWS[4]
     @is_histories = @is_history || @is_mixed_history
+
+    shared_constants_and_conditions
 
     order = if @is_history
               'events.`rank`, type desc, value, start_date desc, round_types.`rank` desc'
@@ -120,56 +133,47 @@ class Api::V0::RecordsController < Api::V0::ApiController
     render json: cached_data
   end
 
-  private def shared_constants_and_conditions
-    @years = Competition.non_future_years
-    @types = %w[single average]
-
-    if params[:event_id] == EVENTS_ALL
-      @event_condition = ""
-    else
-      event = Event.c_find!(params[:event_id])
-      @event_condition = "AND event_id = '#{event.id}'"
+  private def records_by_event(records)
+    records.group_by { |record| record["event_id"] }.transform_values! do |event_records|
+      event_records.group_by { |record| record["type"] }.transform_values! do |type_records|
+        type_records.map { |record| record["value"] }.min
+      end
     end
+  end
 
-    @continent = Continent.c_find(params[:region])
-    @country = Country.c_find(params[:region])
-    if @continent.present?
-      @region_condition = "AND results.country_id IN (#{@continent.country_ids.map { |id| "'#{id}'" }.join(',')})"
-      @region_condition += " AND record_name IN ('WR', '#{@continent.record_name}')" if @is_histories
-    elsif @country.present?
-      @region_condition = "AND results.country_id = '#{@country.id}'"
-      @region_condition += " AND record_name <> ''" if @is_histories
-    else
-      @region_condition = ""
-      @region_condition += "AND record_name = 'WR'" if @is_histories
-    end
+  private def current_records_query(value, type)
+    <<-SQL.squish
+      SELECT
+      '#{type}' type,
+                results.*,
+                value,
+                competitions.cell_name competition_name,
+                competitions.country_id competition_country_id
+      FROM
+        (SELECT event_id record_event_id, MIN(value_and_id) DIV 1000000000 value
+          FROM concise_#{type}_results results
+          #{'JOIN persons ON results.person_id = persons.wca_id and persons.sub_id = 1' if @gender_condition.present?}
+          WHERE 1
+          #{@event_condition}
+          #{@region_condition}
+          #{@years_condition_result}
+          #{@gender_condition}
+          GROUP BY event_id) records,
+        results
+        #{@gender_condition.present? ? 'JOIN persons ON results.person_id = persons.wca_id and persons.sub_id = 1,' : ','}
+        competitions
+      WHERE results.#{value} = value
+        #{@event_condition}
+        #{@region_condition}
+        #{@years_condition_competition}
+        #{@gender_condition}
+        AND results.event_id = record_event_id
+        AND competitions.id  = results.competition_id
+    SQL
+  end
 
-    @gender = params[:gender]
-    @gender_condition = case params[:gender]
-                        when "Male"
-                          "AND gender = 'm'"
-                        when "Female"
-                          "AND gender = 'f'"
-                        else
-                          ""
-                        end
-
-    @is_all_years = params[:years] == YEARS_ALL
-    splitted_years_param = params[:years].split
-    @is_only = splitted_years_param[0] == "only"
-    @is_until = splitted_years_param[0] == "until"
-    @year = splitted_years_param[1].to_i
-
-    if @is_only
-      @years_condition_competition = "AND YEAR(competitions.start_date) = #{@year}"
-      @years_condition_result = "AND results.year = #{@year}"
-    elsif @is_until
-      @years_condition_competition = "AND YEAR(competitions.start_date) <= #{@year}"
-      @years_condition_result = "AND results.year <= #{@year}"
-    else
-      @years_condition_competition = ""
-      @years_condition_result = ""
-    end
+  private def params_for_cache
+    params.permit(:event_id, :region, :years, :show, :gender, :type).to_h.symbolize_keys
   end
 
   private def shared_constants_and_conditions
@@ -223,5 +227,4 @@ class Api::V0::RecordsController < Api::V0::ApiController
       @years_condition_result = ""
     end
   end
-
 end
