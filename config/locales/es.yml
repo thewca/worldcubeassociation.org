@@ -3116,7 +3116,7 @@ es:
       #original_hash: 7cff459
       past_all: Anteriores de cualquier año
       #original_hash: 6eef664
-      no_delegates: Ninguna
+      no_delegates: Ninguno
       #original_hash: ef0c8bc
       delegates_loading: Cargando todos los Delegados...
       #original_hash: 7045db2
@@ -3814,7 +3814,7 @@ es:
           puedas asistir!
       list:
         #original_hash: 6eef664
-        empty: Ninguna
+        empty: Ninguno
         #original_hash: 627422a
         spots_remaining_plural:
           zero: Sin lugares restantes
@@ -4480,7 +4480,7 @@ es:
         #original_hash: 6a72085
         all: Todo
         #original_hash: 6eef664
-        none: Ninguno
+        none: Ninguna
         #original_hash: 9b9a6aa
         show_buttons: Mostrar botones de zona horaria
         #original_hash: d2ac826
@@ -6403,11 +6403,10 @@ es:
         [%{round_id}] La ronda tiene 7 competidores o menos pero cuenta con
         rondas subsiguientes, lo cual no se permite por reglamento (9m3). Se
         deben retirar las rondas inválidas.
-      #original_hash: e12138a
+      #original_hash: 44fbfde
       regulation_9p1_error: >-
-        [%{round_id}] Menos del 25% de los competidores fueron eliminados, lo
-        cual no se permite por reglamento (9p1). Por favor, retira los
-        resultados inválidos.
+        [%{round_id}] Menos del 25% de los competidores ha sido eliminado, lo
+        que no se permite por la regla 9p1.
       #original_hash: f5d8ae9
       no_competitor_eliminated_error: >-
         [%{round_id}] Al menos un competidor debe ser eliminado, por reglamento
