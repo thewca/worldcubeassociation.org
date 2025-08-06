@@ -47,14 +47,6 @@ class Api::V0::Results::RecordsController < Api::V0::ApiController
     }
   end
 
-  private def records_by_event(records)
-    records.group_by { |record| record["event_id"] }.transform_values! do |event_records|
-      event_records.group_by { |record| record["type"] }.transform_values! do |type_records|
-        type_records.map { |record| record["value"] }.min
-      end
-    end
-  end
-
   private def current_records_query(value, type)
     <<-SQL.squish
       SELECT
