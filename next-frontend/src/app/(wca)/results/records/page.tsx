@@ -1,18 +1,31 @@
 import { getT } from "@/lib/i18n/get18n";
 import { getRecords } from "@/lib/wca/results/records";
 import { Alert, Container, Heading, VStack } from "@chakra-ui/react";
-import events, { WCA_EVENT_IDS } from "@/lib/wca/data/events";
-import RecordsTable from "@/components/results/RecordsTable";
-import { CurrentEventId } from "@wca/helpers";
 import React from "react";
-import EventIcon from "@/components/EventIcon";
+import FilteredRecords from "@/app/(wca)/results/records/filteredRecords";
 
-export default async function RecordsPage() {
+const GENDER_ALL = "All";
+const EVENTS_ALL = "all events";
+const SHOW_MIXED = "mixed";
+const REGION_WORLD = "world";
+const TYPE_SINGLE = "single";
+
+export default async function RecordsPage(
+  searchParams: Promise<{ [key: string]: string | undefined }>,
+) {
   const { t } = await getT();
 
-  const { data: records, error } = await getRecords();
+  const response = await getRecords();
 
-  if (error) {
+  const {
+    gender = GENDER_ALL,
+    event = EVENTS_ALL,
+    region = REGION_WORLD,
+    show = SHOW_MIXED,
+    type = TYPE_SINGLE,
+  } = await searchParams;
+
+  if (response.error) {
     return (
       <Alert.Root status={"error"}>
         <Alert.Title>Error fetching Records</Alert.Title>
@@ -24,21 +37,11 @@ export default async function RecordsPage() {
     <Container bg={"bg"}>
       <VStack align={"left"} gap={4}>
         <Heading size={"5xl"}>{t("results.records.title")}</Heading>
-        {t("results.last_updated_html", { timestamp: records.timestamp })}
-        {WCA_EVENT_IDS.map((event) => {
-          const recordsByEvent = records.records[event as CurrentEventId];
-
-          return (
-            recordsByEvent && (
-              <React.Fragment key={event}>
-                <Heading size={"2xl"} key={event}>
-                  <EventIcon eventId={event} /> {events.byId[event].name}
-                </Heading>
-                <RecordsTable records={recordsByEvent} />
-              </React.Fragment>
-            )
-          );
-        })}
+        {t("results.last_updated_html", { timestamp: response.data.timestamp })}
+        <FilteredRecords
+          initialRecords={{ data: response.data }}
+          searchParams={{ gender, event, region, show, rankingType: type }}
+        />
       </VStack>
     </Container>
   );

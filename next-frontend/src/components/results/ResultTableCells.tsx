@@ -65,7 +65,9 @@ export function CompetitionCell({
   return (
     <Table.Cell>
       <HStack>
-        <Flag code={country?.iso2} />{" "}
+        <Icon asChild size="sm">
+          <Flag code={country.iso2} />
+        </Icon>
         <a href={`/competitions/${competitionId}`}>{competitionName}</a>
       </HStack>
     </Table.Cell>
