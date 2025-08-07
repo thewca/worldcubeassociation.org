@@ -74,7 +74,7 @@ export default function FinalSteps({ ticketDetails }) {
           >
             Public results page
           </Button>
-          You can click this to visit the competition page as an additional sanity check.
+          You can click this to visit the public results page as an additional sanity check.
           Once you are sure, you can post the results using the button below.
         </List.Item>
         <List.Item />
