@@ -39,6 +39,7 @@ export default async function RecordsPage(
         <Heading size={"5xl"}>{t("results.records.title")}</Heading>
         {t("results.last_updated_html", { timestamp: response.data.timestamp })}
         <FilteredRecords
+          // @ts-expect-error next can't serialize the response object to a client component, but it's necessary in the type
           initialRecords={{ data: response.data }}
           searchParams={{ gender, event, region, show, rankingType: type }}
         />
