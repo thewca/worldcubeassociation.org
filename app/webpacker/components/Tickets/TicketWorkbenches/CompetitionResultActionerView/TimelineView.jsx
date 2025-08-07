@@ -43,15 +43,6 @@ const TIMELINE_STATUSES = [
   },
 ];
 
-const STATUS_LABELS = {
-  submitted: 'Submitted',
-  locked_for_posting: 'Locked for Posting',
-  warnings_verified: 'Warnings Verified',
-  merged_inbox_results: 'Merged Inbox Results',
-  created_wca_ids: 'Created WCA IDs',
-  posted: 'Posted'
-};
-
 export default function TimelineView({ status }) {
   const currentStatusIndex = useMemo(
     () => TIMELINE_STATUSES.findIndex((s) => s.status === status),
@@ -67,7 +58,7 @@ export default function TimelineView({ status }) {
         >
           <Step.Content>
             <Step.Title>
-              {STATUS_LABELS[timelineStatus] || _.startCase(timelineStatus)}
+              {_.startCase(timelineStatus)}
               <Popup
                 trigger={<Icon name="info circle" size="large" />}
                 content={description}
