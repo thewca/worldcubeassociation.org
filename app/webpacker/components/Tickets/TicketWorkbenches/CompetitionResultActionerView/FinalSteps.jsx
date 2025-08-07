@@ -5,7 +5,7 @@ import Loading from '../../../Requests/Loading';
 import Errored from '../../../Requests/Errored';
 import postResults from '../../api/competitionResult/postResults';
 import { ticketsCompetitionResultStatuses } from '../../../../lib/wca-data.js.erb';
-import { viewUrls, competitionUrl } from '../../../../lib/requests/routes.js.erb';
+import { viewUrls, competitionAllResultsUrl } from '../../../../lib/requests/routes.js.erb';
 
 export default function FinalSteps({ ticketDetails }) {
   const { ticket: { id, metadata: { competition_id: competitionId } } } = ticketDetails;
@@ -69,12 +69,12 @@ export default function FinalSteps({ ticketDetails }) {
           <Button
             as="a"
             primary
-            href={competitionUrl(competitionId)}
+            href={competitionAllResultsUrl(competitionId, 'all')}
             target="_blank"
           >
             Competitions Page
           </Button>
-          You can click this to visit the competition page as an additional sanity check.
+          You can click this to visit the public results page as an additional sanity check.
           Once you are sure, you can post the results using the button below.
         </List.Item>
         <List.Item />
