@@ -707,14 +707,8 @@ export interface components {
             mmagic?: components["schemas"]["Record"][];
             "333mbo"?: components["schemas"]["Record"][];
         };
-        ContinentalRecords: {
-            [key: string]: components["schemas"]["RecordByEvent"];
-        };
-        NationalRecords: {
-            [key: string]: components["schemas"]["RecordByEvent"];
-        };
         RecordsResponse: {
-            world_records: components["schemas"]["RecordByEvent"];
+            records: components["schemas"]["RecordByEvent"];
             /** Format: date */
             timestamp: string;
         };
@@ -1275,7 +1269,12 @@ export interface operations {
     };
     getRecords: {
         parameters: {
-            query?: never;
+            query?: {
+                event_id?: string;
+                region?: string;
+                show?: string;
+                gender?: string;
+            };
             header?: never;
             path?: never;
             cookie?: never;

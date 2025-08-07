@@ -281,6 +281,23 @@ paths:
   /results/records:
     get:
       summary: Get the current records for all regions
+      parameters:
+        - in: query
+          name: event_id
+          schema:
+            type: string
+        - in: query
+          name: region
+          schema:
+            type: string
+        - in: query
+          name: show
+          schema:
+            type: string
+        - in: query
+          name: gender
+          schema:
+            type: string
       operationId: getRecords
       responses:
         "200":
@@ -691,24 +708,13 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Record'
-
-    ContinentalRecords:
-      type: object
-      additionalProperties:
-        $ref: '#/components/schemas/RecordByEvent'
-
-    NationalRecords:
-      type: object
-      additionalProperties:
-        $ref: '#/components/schemas/RecordByEvent'
-
     RecordsResponse:
       type: object
       required:
-        - world_records
+        - records
         - timestamp
       properties:
-        world_records:
+        records:
           $ref: '#/components/schemas/RecordByEvent'
         timestamp:
           type: string

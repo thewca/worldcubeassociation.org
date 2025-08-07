@@ -15,11 +15,11 @@ class Api::V0::Results::RecordsController < Api::V0::ApiController
 
   def index
     # Default params
-    params[:event_id] = EVENTS_ALL
-    params[:region] = REGION_WORLD
+    params[:event_id] ||= EVENTS_ALL
+    params[:region] ||= REGION_WORLD
     params[:years] = YEARS_ALL
-    params[:show] = SHOW_MIXED
-    params[:gender] = GENDER_ALL
+    params[:show] ||= SHOW_MIXED
+    params[:gender] ||= GENDER_ALL
 
     shared_constants_and_conditions
 
@@ -42,7 +42,7 @@ class Api::V0::Results::RecordsController < Api::V0::ApiController
     records = records.to_a
 
     render json: {
-      world_records: records.group_by { |r| r["event_id"]},
+      records: records.group_by { |r| r["event_id"]},
       timestamp: record_timestamp,
     }
   end

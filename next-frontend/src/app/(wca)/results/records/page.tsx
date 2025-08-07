@@ -26,15 +26,15 @@ export default async function RecordsPage() {
         <Heading size={"5xl"}>{t("results.records.title")}</Heading>
         {t("results.last_updated_html", { timestamp: records.timestamp })}
         {WCA_EVENT_IDS.map((event) => {
+          const recordsByEvent = records.records[event as CurrentEventId];
+
           return (
-            records.world_records[event as CurrentEventId] && (
+            recordsByEvent && (
               <React.Fragment key={event}>
                 <Heading size={"2xl"} key={event}>
                   <EventIcon eventId={event} /> {events.byId[event].name}
                 </Heading>
-                <RecordsTable
-                  records={records.world_records[event as CurrentEventId]!}
-                />
+                <RecordsTable records={recordsByEvent} />
               </React.Fragment>
             )
           );
