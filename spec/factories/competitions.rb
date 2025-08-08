@@ -293,6 +293,7 @@ FactoryBot.define do
     end
 
     trait :registration_open do
+      visible
       starts { 1.month.from_now }
       ends { starts }
       registration_open { 2.weeks.ago.change(usec: 0) }
@@ -370,6 +371,12 @@ FactoryBot.define do
     trait :paypal_connected do
       transient do
         paypal_merchant_id { '95XC2UKUP2CFW' }
+      end
+    end
+
+    trait :manual_payments do
+      transient do
+        manual_payment_reference { 'Manual payment instructions' }
       end
     end
 
@@ -579,6 +586,14 @@ FactoryBot.define do
           consent_status: "test",
         )
         competition.competition_payment_integrations.new(connected_account: paypal_account)
+        competition.save
+      end
+
+      if defined?(evaluator.manual_payment_reference)
+        manual_payment_account = ManualPaymentIntegration.new(
+          payment_information: evaluator.manual_payment_reference, payment_reference: "test reference",
+        )
+        competition.competition_payment_integrations.new(connected_account: manual_payment_account)
         competition.save
       end
     end
