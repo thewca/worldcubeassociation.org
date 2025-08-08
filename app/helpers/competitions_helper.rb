@@ -235,11 +235,7 @@ module CompetitionsHelper
         playwright.chromium.launch(headless: true, channel: 'chromium', &)
       end
     else
-      endpoint_url = "#{EnvConfig.PLAYWRIGHT_SERVER_SOCKET_URL}?browser=chromium"
-
-      Playwright.connect_to_playwright_server(endpoint_url) do |playwright|
-        playwright.chromium.launch(headless: true, channel: 'chromium', &)
-      end
+      Playwright.connect_to_browser_server(EnvConfig.PLAYWRIGHT_SERVER_SOCKET_URL, browser_type: 'chromium', &)
     end
   end
 
