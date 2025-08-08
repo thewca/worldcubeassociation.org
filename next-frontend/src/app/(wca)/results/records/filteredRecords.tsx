@@ -135,7 +135,7 @@ export default function FilteredRecords({
     <VStack align={"left"} gap={4}>
       <FilterBox filterState={filterState} filterActions={filterActions} />
       {WCA_EVENT_IDS.map((event) => {
-        const recordsByEvent = records[event as CurrentEventId];
+        const recordsByEvent = records![event as CurrentEventId];
 
         return (
           recordsByEvent && (

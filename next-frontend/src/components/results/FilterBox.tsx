@@ -1,6 +1,7 @@
 import { Box, VStack } from "@chakra-ui/react";
 import EventSelector from "@/components/EventSelector";
 import { useT } from "@/lib/i18n/useI18n";
+import RegionSelector from "@/components/RegionSelector";
 
 interface FilterBoxProps {
   filterState: {
@@ -33,7 +34,13 @@ export default function FilterBox({
           hideAllButton
           hideClearButton
         />
-        {JSON.stringify(filterState)}
+        <RegionSelector
+          region={filterState.region}
+          onRegionChange={filterActions.setRegion}
+          label={t("common.country")}
+          t={t}
+          name={t("delegates_page.all_regions")}
+        />
       </VStack>
     </Box>
   );
