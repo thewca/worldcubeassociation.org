@@ -52,7 +52,7 @@ Capybara.register_driver :playwright do |app|
   if ENV["CI"].present?
     Capybara::Playwright::Driver.new(app, playwright_cli_executable_path: 'yarn playwright', channel: :chromium)
   else
-    Capybara::Playwright::Driver.new(app, playwright_server_endpoint_url: EnvConfig.PLAYWRIGHT_SERVER_SOCKET_URL, channel: :chromium)
+    Capybara::Playwright::Driver.new(app, browser_server_endpoint_url: EnvConfig.PLAYWRIGHT_SERVER_SOCKET_URL, channel: :chromium)
   end
 end
 
