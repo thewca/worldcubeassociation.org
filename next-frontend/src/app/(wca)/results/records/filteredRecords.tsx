@@ -35,7 +35,6 @@ type FilterAction = {
 type FilterParams = {
   event: string;
   region: string;
-  rankingType: string;
   gender: string;
   show: string;
 };
@@ -77,8 +76,6 @@ export default function FilteredRecords({
         dispatch({ type: ActionTypes.SET_EVENT, payload: event }),
       setRegion: (region: string) =>
         dispatch({ type: ActionTypes.SET_REGION, payload: region }),
-      setRankingType: (rankingType: string) =>
-        dispatch({ type: ActionTypes.SET_RANKING_TYPE, payload: rankingType }),
       setGender: (gender: string) =>
         dispatch({ type: ActionTypes.SET_GENDER, payload: gender }),
       setShow: (show: string) =>
@@ -87,7 +84,7 @@ export default function FilteredRecords({
     [dispatch],
   );
 
-  const { event, region, rankingType, gender, show } = filterState;
+  const { event, region, gender, show } = filterState;
   const api = useAPI();
 
   const {
@@ -95,16 +92,30 @@ export default function FilteredRecords({
     isFetching,
     isError,
   } = useQuery({
-    queryKey: ["records", event, region, show, gender, rankingType],
+    queryKey: ["records", event, region, gender, show],
     queryFn: () =>
       api
         .GET("/results/records", {
           params: {
-            query: { eventId: event, type: rankingType, region, show, gender },
+            query: { event_id: event, region, show, gender },
           },
         })
         .then((res) => res.data!.records),
-    initialData: initialRecords,
+    initialData: () => {
+      if (
+        region !== searchParams.region ||
+        gender !== searchParams.gender ||
+        show !== searchParams.show
+      ) {
+        return undefined;
+      }
+      if (event !== searchParams.event) {
+        return {
+          [event as CurrentEventId]: initialRecords[event as CurrentEventId],
+        };
+      }
+      return initialRecords;
+    },
     refetchOnMount: false,
   });
 

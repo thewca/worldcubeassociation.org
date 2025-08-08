@@ -8,7 +8,6 @@ const GENDER_ALL = "All";
 const EVENTS_ALL = "all events";
 const SHOW_MIXED = "mixed";
 const REGION_WORLD = "world";
-const TYPE_SINGLE = "single";
 
 export default async function RecordsPage({
   searchParams,
@@ -17,15 +16,19 @@ export default async function RecordsPage({
 }) {
   const { t } = await getT();
 
-  const response = await getRecords();
-
   const {
     gender = GENDER_ALL,
     event = EVENTS_ALL,
     region = REGION_WORLD,
     show = SHOW_MIXED,
-    type = TYPE_SINGLE,
   } = await searchParams;
+
+  const response = await getRecords({
+    gender,
+    event,
+    region,
+    show,
+  });
 
   if (response.error) {
     return (
@@ -42,7 +45,7 @@ export default async function RecordsPage({
         {t("results.last_updated_html", { timestamp: response.data.timestamp })}
         <FilteredRecords
           initialRecords={response.data.records}
-          searchParams={{ gender, event, region, show, rankingType: type }}
+          searchParams={{ gender, event, region, show }}
         />
       </VStack>
     </Container>
