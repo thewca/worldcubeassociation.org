@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import StepPanel from './StepPanel';
 import Loading from '../../Requests/Loading';
 import RegistrationProvider, { useRegistration } from '../lib/RegistrationProvider';
@@ -102,7 +102,6 @@ function FormObjectWrapper({
   const {
     registration,
     isFetching: registrationFetching,
-    isRejected: registrationRejected,
   } = useRegistration();
 
   const { steps, isFetching } = useStepConfig();
@@ -128,7 +127,6 @@ function FormObjectWrapper({
       <RegisterNavigationWrapper
         steps={steps}
         competitionInfo={competitionInfo}
-        registrationRejected={registrationRejected}
         userInfo={userInfo}
         userCanPreRegister={userCanPreRegister}
         cannotRegisterReasons={cannotRegisterReasons}
@@ -139,20 +137,25 @@ function FormObjectWrapper({
 
 function RegisterNavigationWrapper({
   steps,
-  registrationRejected,
   competitionInfo,
   userInfo,
   userCanPreRegister,
   cannotRegisterReasons,
 }) {
   const formObject = useFormObject();
+  const registrationContext = useRegistration();
+
+  const payload = useMemo(() => ({
+    ...registrationContext,
+    registration: formObject,
+  }), [registrationContext, formObject]);
 
   return (
     <StepNavigationProvider
       stepsConfiguration={steps}
       availableSteps={availableSteps}
-      payload={formObject}
-      navigationDisabled={registrationRejected}
+      payload={payload}
+      navigationDisabled={payload.isRejected}
       summaryPanelKey={registrationOverviewConfig.key}
     >
       <Register
