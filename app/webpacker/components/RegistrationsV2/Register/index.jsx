@@ -99,12 +99,11 @@ function FormObjectWrapper({
   userCanPreRegister,
   cannotRegisterReasons,
 }) {
-  const registrationPayload = useRegistration();
-
   const {
+    registration,
     isFetching: registrationFetching,
     isRejected: registrationRejected,
-  } = registrationPayload;
+  } = useRegistration();
 
   const { steps, isFetching } = useStepConfig();
 
@@ -117,7 +116,7 @@ function FormObjectWrapper({
   ).parameters;
 
   const formRegistration = buildFormRegistration({
-    registrationPayload,
+    registration,
     competitionInfo,
     preferredEvents,
     qualifications,
