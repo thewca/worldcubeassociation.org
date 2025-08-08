@@ -41,14 +41,7 @@ type FilterParams = {
 };
 
 interface filteredRecordsProps {
-  initialRecords: {
-    data: {
-      records: components["schemas"]["RecordByEvent"];
-      timestamp: string;
-    };
-    error?: never;
-    response: never;
-  };
+  initialRecords: components["schemas"]["RecordByEvent"];
   searchParams: FilterParams;
 }
 
@@ -98,18 +91,21 @@ export default function FilteredRecords({
   const api = useAPI();
 
   const {
-    data: { data: records },
+    data: records,
     isFetching,
     isError,
   } = useQuery({
     queryKey: ["records", event, region, show, gender, rankingType],
     queryFn: () =>
-      api.GET("/results/records", {
-        params: {
-          query: { eventId: event, type: rankingType, region, show, gender },
-        },
-      }),
+      api
+        .GET("/results/records", {
+          params: {
+            query: { eventId: event, type: rankingType, region, show, gender },
+          },
+        })
+        .then((res) => res.data!.records),
     initialData: initialRecords,
+    refetchOnMount: false,
   });
 
   if (isFetching) {
@@ -128,7 +124,7 @@ export default function FilteredRecords({
     <VStack align={"left"} gap={4}>
       <FilterBox filterState={filterState} filterActions={filterActions} />
       {WCA_EVENT_IDS.map((event) => {
-        const recordsByEvent = records!.records[event as CurrentEventId];
+        const recordsByEvent = records[event as CurrentEventId];
 
         return (
           recordsByEvent && (

@@ -1,4 +1,6 @@
-import { HStack } from "@chakra-ui/react";
+import { Box, HStack } from "@chakra-ui/react";
+import EventSelector from "@/components/EventSelector";
+import { useT } from "@/lib/i18n/useI18n";
 
 interface FilterBoxProps {
   filterState: {
@@ -21,10 +23,17 @@ export default function FilterBox({
   filterState,
   filterActions,
 }: FilterBoxProps) {
+  const { t } = useT();
+
   return (
-    <HStack>
-      {JSON.stringify(filterActions)}
-      {JSON.stringify(filterState)}
-    </HStack>
+    <Box>
+      <HStack>
+        <EventSelector
+          title={t("competitions.competition_form.events")}
+          selectedEvents={[filterState.event]}
+          onEventClick={(event) => filterActions.setEvent(event)}
+        />
+      </HStack>
+    </Box>
   );
 }

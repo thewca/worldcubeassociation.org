@@ -10,9 +10,11 @@ const SHOW_MIXED = "mixed";
 const REGION_WORLD = "world";
 const TYPE_SINGLE = "single";
 
-export default async function RecordsPage(
-  searchParams: Promise<{ [key: string]: string | undefined }>,
-) {
+export default async function RecordsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ [key: string]: string | undefined }>;
+}) {
   const { t } = await getT();
 
   const response = await getRecords();
@@ -39,8 +41,7 @@ export default async function RecordsPage(
         <Heading size={"5xl"}>{t("results.records.title")}</Heading>
         {t("results.last_updated_html", { timestamp: response.data.timestamp })}
         <FilteredRecords
-          // @ts-expect-error next can't serialize the response object to a client component, but it's necessary in the type
-          initialRecords={{ data: response.data }}
+          initialRecords={response.data.records}
           searchParams={{ gender, event, region, show, rankingType: type }}
         />
       </VStack>
