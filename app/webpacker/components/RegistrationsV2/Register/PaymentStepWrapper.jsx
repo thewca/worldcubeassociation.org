@@ -3,6 +3,7 @@ import { Message } from 'semantic-ui-react';
 import { useQuery } from '@tanstack/react-query';
 import StripePaymentStep from './StripePaymentStep';
 import { useRegistration } from '../lib/RegistrationProvider';
+import { useStepNavigation } from '../lib/StepNavigationProvider';
 import PaymentOverview from './PaymentOverview';
 import { hasPassed } from '../../../lib/utils/dates';
 import I18n from '../../../lib/i18n';
@@ -11,11 +12,12 @@ import Loading from '../../Requests/Loading';
 
 export default function PaymentStepWrapper({
   competitionInfo,
-  stripePublishableKey,
-  connectedAccountId,
   user,
 }) {
   const { registration } = useRegistration();
+
+  const { currentStep: { parameters: currentStepParameters } } = useStepNavigation();
+  const { stripePublishableKey, connectedAccountId } = currentStepParameters;
 
   const {
     data: payments,
