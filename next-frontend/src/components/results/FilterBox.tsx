@@ -25,12 +25,23 @@ export default function FilterBox({
   const { t } = useT();
 
   return (
-    <Box>
+    <Box
+      bg="bg"
+      p={6}
+      borderRadius="md"
+      boxShadow="md"
+      borderWidth="1px"
+      borderColor="gray.100"
+    >
       <VStack align={"left"}>
         <EventSelector
           title={t("competitions.competition_form.events")}
           selectedEvents={[filterState.event]}
-          onEventClick={(event) => filterActions.setEvent(event)}
+          onEventClick={(event) =>
+            event === filterState.event
+              ? filterActions.setEvent("all events")
+              : filterActions.setEvent(event)
+          }
           hideAllButton
           hideClearButton
         />
