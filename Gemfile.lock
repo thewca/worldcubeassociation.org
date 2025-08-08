@@ -137,29 +137,30 @@ GEM
     autoprefixer-rails (9.4.7)
       execjs
     aws-eventstream (1.4.0)
-    aws-partitions (1.1135.0)
-    aws-sdk-cloudfront (1.121.0)
-      aws-sdk-core (~> 3, >= 3.227.0)
+    aws-partitions (1.1141.0)
+    aws-sdk-cloudfront (1.123.0)
+      aws-sdk-core (~> 3, >= 3.228.0)
       aws-sigv4 (~> 1.5)
-    aws-sdk-core (3.227.0)
+    aws-sdk-core (3.229.0)
       aws-eventstream (~> 1, >= 1.3.0)
       aws-partitions (~> 1, >= 1.992.0)
       aws-sigv4 (~> 1.9)
       base64
+      bigdecimal
       jmespath (~> 1, >= 1.6.1)
       logger
-    aws-sdk-kms (1.107.0)
-      aws-sdk-core (~> 3, >= 3.227.0)
+    aws-sdk-kms (1.109.0)
+      aws-sdk-core (~> 3, >= 3.228.0)
       aws-sigv4 (~> 1.5)
-    aws-sdk-rds (1.284.0)
-      aws-sdk-core (~> 3, >= 3.227.0)
+    aws-sdk-rds (1.285.0)
+      aws-sdk-core (~> 3, >= 3.228.0)
       aws-sigv4 (~> 1.5)
-    aws-sdk-s3 (1.194.0)
-      aws-sdk-core (~> 3, >= 3.227.0)
+    aws-sdk-s3 (1.195.0)
+      aws-sdk-core (~> 3, >= 3.228.0)
       aws-sdk-kms (~> 1)
       aws-sigv4 (~> 1.5)
-    aws-sdk-sqs (1.98.0)
-      aws-sdk-core (~> 3, >= 3.227.0)
+    aws-sdk-sqs (1.100.0)
+      aws-sdk-core (~> 3, >= 3.228.0)
       aws-sigv4 (~> 1.5)
     aws-sigv4 (1.12.1)
       aws-eventstream (~> 1, >= 1.0.2)
@@ -536,7 +537,7 @@ GEM
     net-smtp (0.5.1)
       net-protocol
     netrc (0.11.0)
-    newrelic_rpm (9.19.0)
+    newrelic_rpm (9.20.0)
     nio4r (2.7.4)
     nokogiri (1.18.9)
       mini_portile2 (~> 2.8.2)
@@ -609,7 +610,7 @@ GEM
       date
       stringio
     public_suffix (6.0.2)
-    puma (6.6.0)
+    puma (6.6.1)
       nio4r (~> 2.0)
     raabro (1.4.0)
     racc (1.8.1)
@@ -685,7 +686,7 @@ GEM
       redis-client (>= 0.22.0)
     redis-client (0.25.1)
       connection_pool
-    regexp_parser (2.10.0)
+    regexp_parser (2.11.0)
     reline (0.6.1)
       io-console (~> 0.5)
     representable (3.2.0)
@@ -731,7 +732,7 @@ GEM
     rspec-retry (0.6.2)
       rspec-core (> 3.3)
     rspec-support (3.13.4)
-    rubocop (1.79.0)
+    rubocop (1.79.1)
       json (~> 2.3)
       language_server-protocol (~> 3.17.0.2)
       lint_roller (~> 1.1.0)
@@ -741,7 +742,6 @@ GEM
       regexp_parser (>= 2.9.3, < 3.0)
       rubocop-ast (>= 1.46.0, < 2.0)
       ruby-progressbar (~> 1.7)
-      tsort (>= 0.2.0)
       unicode-display_width (>= 2.4.0, < 4.0)
     rubocop-ast (1.46.0)
       parser (>= 3.3.7.2)
@@ -899,7 +899,7 @@ GEM
     stringio (3.1.7)
     strip_attributes (2.0.0)
       activemodel (>= 3.0, < 9.0)
-    stripe (15.3.0)
+    stripe (15.4.0)
     superconfig (3.0.0)
     terminal-table (4.0.0)
       unicode-display_width (>= 1.1.1, < 4)
@@ -1145,13 +1145,13 @@ CHECKSUMS
   ast (2.4.3) sha256=954615157c1d6a382bc27d690d973195e79db7f55e9765ac7c481c60bdb4d383
   autoprefixer-rails (9.4.7) sha256=7104f54efa89e6390391bd894498a9db92bffaf74474942c4152e6dc0775ab3b
   aws-eventstream (1.4.0) sha256=116bf85c436200d1060811e6f5d2d40c88f65448f2125bc77ffce5121e6e183b
-  aws-partitions (1.1135.0) sha256=cfb69f16f35dadb444be8b49071aa98b6699ea5b1a832be48709daee673063a4
-  aws-sdk-cloudfront (1.121.0) sha256=decd3281c901dcb56bb5e7c95e829c941a3a47336109e8d2d01f7acf1d107e4e
-  aws-sdk-core (3.227.0) sha256=99071fc5e3ca9347873fd114574319740c3041745df3c74e27875bd912dfc79e
-  aws-sdk-kms (1.107.0) sha256=1ca8e16a29459349c88f17108573fa577287a43d6f113fab0aafae79168ffe1d
-  aws-sdk-rds (1.284.0) sha256=eeae8982c56864f421f27dd2595ee1e5d10b6e32e8c9a2fe0b727aee2a62dd78
-  aws-sdk-s3 (1.194.0) sha256=44cf5e32ec7af4df68da2eab01eeb206514fc1e2991b08e87940fbf9cb9e006b
-  aws-sdk-sqs (1.98.0) sha256=7d9f537498d52d2c43c0c39d928b00456eb1be5488538f3178a7029c77c96a86
+  aws-partitions (1.1141.0) sha256=1bd49e86a56d84dbbb0b3756954304cd58cfaa041e4a2385e4958ec107c88464
+  aws-sdk-cloudfront (1.123.0) sha256=e857c6b6396bb9306e459ecce4a945e232fb475b41dd405d15b5fb4ced3dca65
+  aws-sdk-core (3.229.0) sha256=792629981ee265a9d126e7c17ca236526b3b5ad4a22ff8fa9cb3c1affd46b087
+  aws-sdk-kms (1.109.0) sha256=5c49284e9e2e6dd6cf86e9478f43cad1c542ce274458fc0a441f10b172497162
+  aws-sdk-rds (1.285.0) sha256=3c5862b5db9476a2ee55a2b66d8d7e0328e255624e0d202868213b813647dc82
+  aws-sdk-s3 (1.195.0) sha256=22b164a97f83ff352f9f323e094a80f0b9703be8149ad7956cb60f7081d0a4b9
+  aws-sdk-sqs (1.100.0) sha256=c62fd69eb68d7f05736f664e379ac13043a801140c903f836567aabc4bc845df
   aws-sigv4 (1.12.1) sha256=6973ff95cb0fd0dc58ba26e90e9510a2219525d07620c8babeb70ef831826c00
   babel-source (5.8.35) sha256=79ef222a9dcb867ac2efa3b0da35b4bcb15a4bfa67b6b2dcbf1e9a29104498d9
   babel-transpiler (0.7.0) sha256=4c06f4ad9e8e1cabe94f99e11df2f140bb72aca9ba067dbb49dc14d9b98d1570
@@ -1328,7 +1328,7 @@ CHECKSUMS
   net-protocol (0.2.2) sha256=aa73e0cba6a125369de9837b8d8ef82a61849360eba0521900e2c3713aa162a8
   net-smtp (0.5.1) sha256=ed96a0af63c524fceb4b29b0d352195c30d82dd916a42f03c62a3a70e5b70736
   netrc (0.11.0) sha256=de1ce33da8c99ab1d97871726cba75151113f117146becbe45aa85cb3dabee3f
-  newrelic_rpm (9.19.0) sha256=b07bfbdb3526899c0e36ad7db7b83d258b89ce7d4e4bcf8d9e5368207f7da24f
+  newrelic_rpm (9.20.0) sha256=6316f28e1849c116e0423ac4d41c4ad7462ac5c5a993540a1ebd75794f54565c
   nio4r (2.7.4) sha256=d95dee68e0bb251b8ff90ac3423a511e3b784124e5db7ff5f4813a220ae73ca9
   nokogiri (1.18.9) sha256=ac5a7d93fd0e3cef388800b037407890882413feccca79eb0272a2715a82fa33
   nokogiri (1.18.9-aarch64-linux-gnu) sha256=5bcfdf7aa8d1056a7ad5e52e1adffc64ef53d12d0724fbc6f458a3af1a4b9e32
@@ -1360,7 +1360,7 @@ CHECKSUMS
   pry (0.14.1) sha256=99b6df0665875dd5a39d85e0150aa5a12e2bb4fef401b6c4f64d32ee502f8454
   psych (5.2.6) sha256=814328aa5dcb6d604d32126a20bc1cbcf05521a5b49dbb1a8b30a07e580f316e
   public_suffix (6.0.2) sha256=bfa7cd5108066f8c9602e0d6d4114999a5df5839a63149d3e8b0f9c1d3558394
-  puma (6.6.0) sha256=f25c06873eb3d5de5f0a4ebc783acc81a4ccfe580c760cfe323497798018ad87
+  puma (6.6.1) sha256=b9b56e4a4ea75d1bfa6d9e1972ee2c9f43d0883f011826d914e8e37b3694ea1e
   raabro (1.4.0) sha256=d4fa9ff5172391edb92b242eed8be802d1934b1464061ae5e70d80962c5da882
   racc (1.8.1) sha256=4a7f6929691dbec8b5209a0b373bc2614882b55fc5d2e447a21aaa691303d62f
   rack (3.1.16) sha256=efb5606c351efc56b85b10c3493055d0d35209d23f44792ec4e1183eb0234635
@@ -1387,7 +1387,7 @@ CHECKSUMS
   redcarpet (3.6.1) sha256=d444910e6aa55480c6bcdc0cdb057626e8a32c054c29e793fa642ba2f155f445
   redis (5.4.1) sha256=b5e675b57ad22b15c9bcc765d5ac26f60b675408af916d31527af9bd5a81faae
   redis-client (0.25.1) sha256=40130f8f95194c9c73eec322516781b0bfdd8293369a67dc175bd7bc391a68bd
-  regexp_parser (2.10.0) sha256=cb6f0ddde88772cd64bff1dbbf68df66d376043fe2e66a9ef77fcb1b0c548c61
+  regexp_parser (2.11.0) sha256=d9dd78b475d18893ce3da55ea1a913499b75f26180a3463e9233d7e419c0cd40
   reline (0.6.1) sha256=1afcc9d7cb1029cdbe780d72f2f09251ce46d3780050f3ec39c3ccc6b60675fb
   representable (3.2.0) sha256=cc29bf7eebc31653586849371a43ffe36c60b54b0a6365b5f7d95ec34d1ebace
   responders (3.1.1) sha256=92f2a87e09028347368639cfb468f5fefa745cb0dc2377ef060db1cdd79a341a
@@ -1405,7 +1405,7 @@ CHECKSUMS
   rspec-rails (8.0.1) sha256=0c3700b10ab6d7c648c4cd554023d8c2b5b07e7f01205f7608f0c511cf686505
   rspec-retry (0.6.2) sha256=6101ba23a38809811ae3484acde4ab481c54d846ac66d5037ccb40131a60d858
   rspec-support (3.13.4) sha256=184b1814f6a968102b57df631892c7f1990a91c9a3b9e80ef892a0fc2a71a3f7
-  rubocop (1.79.0) sha256=c709e83b16f9fced295d83d190a3a5bbcc46c419d8f9b85f259b99ba6faf5bbe
+  rubocop (1.79.1) sha256=32e05778282d5c869f6dbb6410c4b765efc11c55d90abd6ce1b4adf4efd99891
   rubocop-ast (1.46.0) sha256=0da7f6ad5b98614f89b74f11873c191059c823eae07d6ffd40a42a3338f2232b
   rubocop-capybara (2.22.1) sha256=ced88caef23efea53f46e098ff352f8fc1068c649606ca75cb74650970f51c0c
   rubocop-factory_bot (2.27.1) sha256=9d744b5916778c1848e5fe6777cc69855bd96548853554ec239ba9961b8573fe
@@ -1465,7 +1465,7 @@ CHECKSUMS
   starburst (2.0.0.rc0)
   stringio (3.1.7) sha256=5b78b7cb242a315fb4fca61a8255d62ec438f58da2b90be66048546ade4507fa
   strip_attributes (2.0.0) sha256=7f3c914c9562043fd13b13981d7780d93dcaa2d8c34a542860f32f99e1671a41
-  stripe (15.3.0) sha256=628b9deafaf84cc3eeaba738514881a569fe6e2de444781e442547ae57bd56f3
+  stripe (15.4.0) sha256=8feb2b2d3d0bcd7dff57067a364a28ccb6ba4c3f39126d83cf75de0ef1d91290
   superconfig (3.0.0) sha256=2f89acd3635ecf8783fcc881b3768ec4b088987f1d4113351f1c9810bba22133
   terminal-table (4.0.0) sha256=f504793203f8251b2ea7c7068333053f0beeea26093ec9962e62ea79f94301d2
   terser (1.2.6) sha256=6ddf00b93df7015b07e2b9b149e74cd70fa7aa4f0f89a15d9922a6ebd13f37ab

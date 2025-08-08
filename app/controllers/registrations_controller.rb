@@ -82,7 +82,7 @@ class RegistrationsController < ApplicationController
 
   def do_import
     competition = competition_from_params
-    file = params[:registrations_import][:registrations_file]
+    file = params[:csv_registration_file]
     required_columns = ["status", "name", "country", "wca id", "birth date", "gender", "email"] + competition.events.map(&:id)
     # Ensure the CSV file includes all required columns.
     headers = CSV.read(file.path).first.compact.map(&:downcase)
@@ -143,11 +143,9 @@ class RegistrationsController < ApplicationController
     new_locked_users.each do |user|
       RegistrationsMailer.notify_registrant_of_locked_account_creation(user, competition).deliver_later
     end
-    flash[:success] = I18n.t("registrations.flash.imported")
-    redirect_to competition_registrations_import_url(competition)
+    render status: :ok, json: { success: true }
   rescue StandardError => e
-    flash[:danger] = e.to_s
-    redirect_to competition_registrations_import_url(competition)
+    render status: :unprocessable_entity, json: { error: e.to_s }
   end
 
   def add
