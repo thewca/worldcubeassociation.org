@@ -1,7 +1,7 @@
 import Flag from "react-world-flags";
 import EventIcon from "@/components/EventIcon";
 import events from "@/lib/wca/data/events";
-import { HStack, Icon, Table } from "@chakra-ui/react";
+import { HStack, Icon, Link, Table } from "@chakra-ui/react";
 import { formatAttemptResult } from "@/lib/wca/wcif/attempts";
 import countries from "@/lib/wca/data/countries";
 
@@ -68,7 +68,7 @@ export function CompetitionCell({
         <Icon asChild size="sm">
           <Flag code={country.iso2} />
         </Icon>
-        <a href={`/competitions/${competitionId}`}>{competitionName}</a>
+        <Link href={`/competitions/${competitionId}`}>{competitionName}</Link>
       </HStack>
     </Table.Cell>
   );
@@ -82,7 +82,7 @@ interface PersonCellProps {
 export function PersonCell({ personId, personName }: PersonCellProps) {
   return (
     <Table.Cell>
-      <a href={`/persons/${personId}`}>{personName}</a>
+      <Link href={`/persons/${personId}`}>{personName}</Link>
     </Table.Cell>
   );
 }
