@@ -58,7 +58,7 @@ export default function Competitors({
           break;
       }
       // always sort by user name as a fallback
-      orderBy.push('user.name');
+      orderBy.push((item) => item.user.name.toLowerCase());
       const direction = sortedDirection === 'descending' ? 'desc' : 'asc';
 
       return _.orderBy(registrations, orderBy, [direction]);
