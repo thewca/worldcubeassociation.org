@@ -156,6 +156,42 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/competitions/mine": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get a list of a users competition */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Successful response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["MyCompetitions"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/competition_index": {
         parameters: {
             query?: never;
@@ -540,6 +576,35 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        MyCompetitions: {
+            past_competitions: components["schemas"]["MyCompetition"][];
+            future_competitions: components["schemas"]["MyCompetition"][];
+            bookmarked_competitions: components["schemas"]["MyCompetition"][];
+        };
+        MyCompetition: {
+            id: string;
+            name: string;
+            website: string;
+            /** Format: date */
+            start_date: string;
+            /** Format: date */
+            end_date: string;
+            /** Format: date */
+            registration_open: string;
+            /** Format: uri */
+            url: string;
+            city: string;
+            country_iso2: string;
+            "results_posted?": boolean;
+            "visible?": boolean;
+            "confirmed?": boolean;
+            "cancelled?": boolean;
+            "report_posted?": boolean;
+            short_display_name: string;
+            championships?: string[];
+            registration_status?: string;
+            competing_status?: string;
+        };
         UserRole: {
             id: number;
             /** Format: date */
