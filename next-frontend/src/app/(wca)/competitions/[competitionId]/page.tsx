@@ -124,7 +124,7 @@ export default async function CompetitionOverView({
       <Tabs.Root
         variant="enclosed"
         w="100%"
-        defaultValue={"general"}
+        defaultValue="general"
         orientation="vertical"
         lazyMount
         unmountOnExit

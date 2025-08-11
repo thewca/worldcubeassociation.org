@@ -229,7 +229,7 @@ const FeaturedCompetitions = ({
                     variant="information"
                     colorPalette={featuredComp.colorPalette}
                   >
-                    <Flag code={"US"} fallback={"US"} />
+                    <Flag code="US" fallback="US" />
                     <CountryMap code="US" bold /> Seattle
                   </Badge>
                   <Badge

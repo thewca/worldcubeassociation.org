@@ -32,7 +32,7 @@ export default async function DelegatesPage() {
 
   return (
     <Container>
-      <VStack align={"left"} gap="8" width="full" pt="8" alignItems="left">
+      <VStack align="left" gap="8" width="full" pt="8" alignItems="left">
         <Heading size="5xl">{t("delegates_page.title")}</Heading>
         <I18nHTMLTranslate
           i18nKey="about.structure.delegates_html"
@@ -55,7 +55,7 @@ export default async function DelegatesPage() {
             ))}
           </Tabs.List>
           {rootGroups.map((group) => (
-            <Tabs.Content value={group.name} key={group.id} w={"full"}>
+            <Tabs.Content value={group.name} key={group.id} w="full">
               <DelegateTab group={group} />
             </Tabs.Content>
           ))}
@@ -70,7 +70,7 @@ function DelegateTab({ group }: { group: components["schemas"]["UserGroup"] }) {
   const { email } = metadata!;
 
   return (
-    <VStack align={"left"}>
+    <VStack align="left">
       <Heading size="2xl">{name}</Heading>
       <Link href={`mailto:${email}`}>{email}</Link>
       <Center>
@@ -97,7 +97,7 @@ async function MemberTable({ id }: { id: number }) {
 
   return _.map(roles, (delegates, region) => (
     <VStack>
-      <Heading size={"xl"}>{region}</Heading>
+      <Heading size="xl">{region}</Heading>
       <Table.Root>
         <Table.Header>
           <Table.Row>

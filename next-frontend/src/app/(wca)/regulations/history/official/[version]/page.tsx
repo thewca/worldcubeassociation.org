@@ -11,7 +11,7 @@ export default async function HistoricalRegulation({
     <Container>
       <AspectRatio>
         <iframe
-          width={"100%"}
+          width="100%"
           src={`https://regulations.worldcubeassociation.org/history/official/${version}/index.html`}
         ></iframe>
       </AspectRatio>

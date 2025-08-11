@@ -26,7 +26,7 @@ export default async function CompetitionOverview({
     <Container centerContent>
       <Heading>{competitionInfo.name}</Heading>
       <PermissionCheck
-        requiredPermission={"canAdministerCompetition"}
+        requiredPermission="canAdministerCompetition"
         item={competitionId}
       >
         <Text>You are administering this competition</Text>
