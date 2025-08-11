@@ -1315,7 +1315,7 @@ ko:
         #original_hash: 58765c7
         wsot: WCA 스포츠 조직 팀
         #original_hash: 78949a7
-        wapc: WCA 항소 협의회
+        wapc: WCA 항소 위원회
       groups_description:
         #original_hash: d62001b
         wat: >-
@@ -1364,7 +1364,7 @@ ko:
         wsot: WCA 스포츠 조직 팀(WSOT)은 WCA가 국제 스포츠 조직으로 인정받는 것을 감독하고 지원합니다.
         #original_hash: 30d6048
         wapc: >-
-          WCA 항소 협의회(WAC)는 다른 WCA 자원봉사자가 내린 결정에 대한 항소를 검토하고 의결합니다. WAC는 독립적이고
+          WCA 항소 위원회(WAC)는 다른 WCA 자원봉사자가 내린 결정에 대한 항소를 검토하고 의결합니다. WAC는 독립적이고
           공정한 검토 절차를 통해 결정이 공정하고 합리적이며 WCA 정책 및 규정에 부합하는지 확인합니다.
     contacts:
       #original_hash: 4ef2aad
@@ -2702,7 +2702,7 @@ ko:
           #original_hash: 97b061a
           announced_on: '%{announcement_date}에 공지됨'
         #original_hash: ccd2db9
-        search: 이름 혹은 도시
+        search: 대회명 혹은 도시
         #original_hash: 3bc8082
         recent: '지난 %{count}일'
         registration:
