@@ -49,6 +49,10 @@ interface SeparateRecordsRowProp {
   record: components["schemas"]["Record"];
 }
 
+interface HistoryRowProps {
+  record: components["schemas"]["Record"];
+}
+
 interface SlimRecordsRowProp {
   singles: components["schemas"]["Record"][];
   averages: components["schemas"]["Record"][];
@@ -70,6 +74,45 @@ export function MixedRecordsRow({ record, t }: MixedRecordsRowProp) {
       <Table.Cell>
         {formatAttemptResult(record.value, record.event_id)}
       </Table.Cell>
+      <CountryCell countryId={record.country_id} />
+      <CompetitionCell
+        competitionId={record.competition_id}
+        competitionName={record.competition_name}
+        competitionCountry={record.competition_country_id}
+      />
+      <AttemptsCells
+        attempts={attempts}
+        bestResultIndex={bestResultIndex}
+        worstResultIndex={worstResultIndex}
+        eventId={record.event_id}
+      />
+    </Table.Row>
+  );
+}
+
+export function HistoryRow({ record }: HistoryRowProps) {
+  const {
+    definedAttempts: attempts,
+    bestResultIndex,
+    worstResultIndex,
+  } = resultAttempts(record);
+
+  const formattedValue = formatAttemptResult(record.value, record.event_id);
+
+  return (
+    <Table.Row>
+      <Table.Cell>{record.start_date}</Table.Cell>
+      <PersonCell personId={record.person_id} personName={record.person_name} />
+      {record.type === "single" ? (
+        <Table.Cell>{formattedValue}</Table.Cell>
+      ) : (
+        <Table.Cell />
+      )}
+      {record.type === "average" ? (
+        <Table.Cell>{formattedValue}</Table.Cell>
+      ) : (
+        <Table.Cell />
+      )}
       <CountryCell countryId={record.country_id} />
       <CompetitionCell
         competitionId={record.competition_id}

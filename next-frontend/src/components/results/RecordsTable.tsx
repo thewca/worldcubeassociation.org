@@ -4,6 +4,7 @@ import { Heading, Table, VStack } from "@chakra-ui/react";
 import { components } from "@/types/openapi";
 import _ from "lodash";
 import {
+  HistoryRow,
   MixedRecordsRow,
   SeparateRecordsRow,
   SlimRecordsRow,
@@ -19,6 +20,10 @@ interface WrapperTableProps {
   show: string;
 }
 
+interface HistoryTableProps {
+  records: components["schemas"]["RecordByEvent"];
+}
+
 interface RecordsTableProps {
   records: components["schemas"]["Record"][];
 }
@@ -27,7 +32,7 @@ interface SlimRecordsTableProps {
   records: components["schemas"]["RecordByEvent"];
 }
 
-interface SeperateRecordsTableProps {
+interface SeparateRecordsTableProps {
   recordsByType: {
     single: components["schemas"]["Record"][];
     average: components["schemas"]["Record"][];
@@ -70,6 +75,66 @@ export default function RecordsTable({ records, show }: WrapperTableProps) {
 
     return <SeparateRecordsTable recordsByType={{ average, single }} />;
   }
+
+  if (show === "history") {
+    return <HistoryTable records={records} />;
+  }
+}
+
+function HistoryTable({ records }: HistoryTableProps) {
+  const { t } = useT();
+
+  return WCA_EVENT_IDS.map((eventId) => {
+    const groupedByType = _.groupBy(
+      records[eventId as CurrentEventId],
+      (record) => record.type,
+    );
+    const single = groupedByType["single"];
+    const average = groupedByType["average"];
+
+    return (
+      <VStack key={eventId} align={"left"}>
+        <Heading size={"2xl"}>
+          <EventIcon eventId={eventId} /> {events.byId[eventId].name}
+        </Heading>
+        <Table.Root>
+          <Table.Header>
+            <Table.Row>
+              <Table.ColumnHeader>
+                {t("results.table_elements.date_circa")}
+              </Table.ColumnHeader>
+              <Table.ColumnHeader>
+                {t("results.table_elements.name")}
+              </Table.ColumnHeader>
+              <Table.ColumnHeader>
+                {t("results.selector_elements.type_selector.single")}
+              </Table.ColumnHeader>
+              <Table.ColumnHeader>
+                {t("results.selector_elements.type_selector.average")}
+              </Table.ColumnHeader>
+              <Table.ColumnHeader>
+                {t("results.table_elements.region")}
+              </Table.ColumnHeader>
+              <Table.ColumnHeader>
+                {t("results.table_elements.competition")}
+              </Table.ColumnHeader>
+              <Table.ColumnHeader>
+                {t("results.table_elements.solves")}
+              </Table.ColumnHeader>
+            </Table.Row>
+          </Table.Header>
+          <Table.Body>
+            {single.map((record) => (
+              <HistoryRow key={record.id} record={record} />
+            ))}
+            {average?.map((record) => (
+              <HistoryRow key={record.id} record={record} />
+            ))}
+          </Table.Body>
+        </Table.Root>
+      </VStack>
+    );
+  });
 }
 
 function SlimRecordsTable({ records }: SlimRecordsTableProps) {
@@ -121,7 +186,7 @@ function SlimRecordsTable({ records }: SlimRecordsTableProps) {
   );
 }
 
-function SeparateRecordsTable({ recordsByType }: SeperateRecordsTableProps) {
+function SeparateRecordsTable({ recordsByType }: SeparateRecordsTableProps) {
   const { t } = useT();
 
   return ["single", "average"].map((type) => (

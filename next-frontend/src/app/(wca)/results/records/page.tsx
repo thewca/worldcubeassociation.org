@@ -1,10 +1,9 @@
 import { getRecords } from "@/lib/wca/results/records";
-import { Container, VStack } from "@chakra-ui/react";
+import { Container } from "@chakra-ui/react";
 import React from "react";
 import FilteredRecords from "@/app/(wca)/results/records/filteredRecords";
 import { HydrationBoundary, QueryClient } from "@tanstack/react-query";
 import { dehydrate } from "@tanstack/query-core";
-import { getT } from "@/lib/i18n/get18n";
 
 const GENDER_ALL = "All";
 const EVENTS_ALL = "all events";
@@ -24,18 +23,20 @@ export default async function RecordsPage({
 
   const queryClient = new QueryClient();
 
+  const isHistory = show === "history";
+
   await queryClient.prefetchQuery({
     queryFn: () =>
       getRecords({
         gender,
         region,
-        show,
+        show: isHistory ? "history" : "mixed",
       }) // We need to take out the response as Next can't serialize it
         .then((res) => ({
           data: res.data,
           error: res.error,
         })),
-    queryKey: ["records", region, gender, show],
+    queryKey: ["records", region, gender, isHistory],
   });
 
   return (

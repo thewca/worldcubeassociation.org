@@ -26,7 +26,28 @@ class Api::V0::Results::RecordsController < Api::V0::ApiController
     cache_params = ResultsController.compute_cache_key(MODE_RECORDS, **params_for_cache)
     record_timestamp = ComputeAuxiliaryData.successful_start_date || Date.current
 
-    query = <<-SQL.squish
+    query = if params[:show] == "history"
+              <<-SQL.squish
+        SELECT
+          results.*,
+          value,
+          competitions.cell_name competition_name,
+          competitions.start_date,
+          competitions.country_id competition_country_id
+        FROM
+          (SELECT results.*, 'single' type, best value, regional_single_record record_name FROM results WHERE regional_single_record<>'' UNION
+            SELECT results.*, 'average' type, average value, regional_average_record record_name FROM results WHERE regional_average_record<>'') results
+          #{@gender_condition.present? ? 'JOIN persons ON results.person_id = persons.wca_id and persons.sub_id = 1,' : ','}
+          competitions
+        WHERE
+          competitions.id = competition_id
+          #{@region_condition}
+          #{@gender_condition}
+        ORDER BY
+          type desc, value, start_date desc
+              SQL
+            else
+              <<-SQL.squish
         SELECT *
         FROM
           (#{current_records_query('best', 'single')}
@@ -34,7 +55,8 @@ class Api::V0::Results::RecordsController < Api::V0::ApiController
           #{current_records_query('average', 'average')}) helper
         ORDER BY
           type DESC, round_type_id, person_name
-      SQL
+              SQL
+            end
 
     records = Rails.cache.fetch ["records-page-api", *cache_params, record_timestamp] do
       DbHelper.execute_cached_query(cache_params, record_timestamp, query)
@@ -42,7 +64,7 @@ class Api::V0::Results::RecordsController < Api::V0::ApiController
     records = records.to_a
 
     render json: {
-      records: records.group_by { |r| r["event_id"]},
+      records: records.group_by { |r| r["event_id"] },
       timestamp: record_timestamp,
     }
   end
@@ -60,18 +82,14 @@ class Api::V0::Results::RecordsController < Api::V0::ApiController
           FROM concise_#{type}_results results
           #{'JOIN persons ON results.person_id = persons.wca_id and persons.sub_id = 1' if @gender_condition.present?}
           WHERE 1
-          #{@event_condition}
           #{@region_condition}
-          #{@years_condition_result}
           #{@gender_condition}
           GROUP BY event_id) records,
         results
         #{@gender_condition.present? ? 'JOIN persons ON results.person_id = persons.wca_id and persons.sub_id = 1,' : ','}
         competitions
       WHERE results.#{value} = value
-        #{@event_condition}
         #{@region_condition}
-        #{@years_condition_competition}
         #{@gender_condition}
         AND results.event_id = record_event_id
         AND competitions.id  = results.competition_id
@@ -85,13 +103,6 @@ class Api::V0::Results::RecordsController < Api::V0::ApiController
   private def shared_constants_and_conditions
     @years = Competition.non_future_years
     @types = %w[single average]
-
-    if params[:event_id] == EVENTS_ALL
-      @event_condition = ""
-    else
-      event = Event.c_find!(params[:event_id])
-      @event_condition = "AND event_id = '#{event.id}'"
-    end
 
     @continent = Continent.c_find(params[:region])
     @country = Country.c_find(params[:region])
@@ -115,22 +126,5 @@ class Api::V0::Results::RecordsController < Api::V0::ApiController
                         else
                           ""
                         end
-
-    @is_all_years = params[:years] == YEARS_ALL
-    splitted_years_param = params[:years].split
-    @is_only = splitted_years_param[0] == "only"
-    @is_until = splitted_years_param[0] == "until"
-    @year = splitted_years_param[1].to_i
-
-    if @is_only
-      @years_condition_competition = "AND YEAR(competitions.start_date) = #{@year}"
-      @years_condition_result = "AND results.year = #{@year}"
-    elsif @is_until
-      @years_condition_competition = "AND YEAR(competitions.start_date) <= #{@year}"
-      @years_condition_result = "AND results.year <= #{@year}"
-    else
-      @years_condition_competition = ""
-      @years_condition_result = ""
-    end
   end
 end

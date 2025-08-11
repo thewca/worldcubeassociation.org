@@ -86,12 +86,14 @@ export default function FilteredRecords({
 
   const api = useAPI();
 
+  const isHistory = show === "history";
+
   const { data, isFetching, isError } = useQuery({
-    queryKey: ["records", region, gender],
+    queryKey: ["records", region, gender, isHistory],
     queryFn: () =>
       api.GET("/results/records", {
         params: {
-          query: { region, gender },
+          query: { region, gender, show: isHistory ? "history" : "mixed" },
         },
       }),
     select: (data) => {
