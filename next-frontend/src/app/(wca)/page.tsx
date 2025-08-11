@@ -65,7 +65,7 @@ const TextCard = ({ block }: { block: TextCardBlock }) => {
       <Card.Body>
         <Card.Title>{block.heading}</Card.Title>
         {block.separatorAfterHeading && <Separator size="md" />}
-        <Card.Description>{block.body}</Card.Description>
+        <Card.Description>{block.bodyMarkdown}</Card.Description>
         {block.buttonText?.trim() && (
           <Button mr="auto" asChild>
             <ChakraLink asChild>
@@ -165,7 +165,7 @@ const ImageBanner = ({ block }: { block: ImageBannerBlock }) => {
           {block.heading}
         </Heading>
         <Text fontSize="md" color="colorPalette.fg">
-          {block.body}
+          {block.bodyMarkdown}
         </Text>
       </Card.Body>
     </Card.Root>

@@ -1,4 +1,5 @@
 import { Block, CheckboxField, GlobalConfig, SelectField } from "payload";
+import { markdownConvertedField } from "@/collections/helpers";
 
 const colorPaletteSelect: SelectField = {
   name: "colorPalette",
@@ -28,9 +29,10 @@ const TextCard: Block = {
     },
     {
       name: "body",
-      type: "textarea",
+      type: "richText",
       required: true,
     },
+    markdownConvertedField("body"),
     {
       name: "variant",
       type: "select",
@@ -75,9 +77,10 @@ const ImageBanner: Block = {
     },
     {
       name: "body",
-      type: "textarea",
+      type: "richText",
       required: true,
     },
+    markdownConvertedField("body"),
     {
       name: "mainImage",
       type: "upload",

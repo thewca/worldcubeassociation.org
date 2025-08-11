@@ -803,7 +803,22 @@ export interface TwoBlocksBlock {
  */
 export interface TextCardBlock {
   heading: string;
-  body: string;
+  body: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  bodyMarkdown: string;
   variant: 'info' | 'hero';
   separatorAfterHeading: boolean;
   buttonText?: string | null;
@@ -832,7 +847,22 @@ export interface AnnouncementsSectionBlock {
  */
 export interface ImageBannerBlock {
   heading: string;
-  body: string;
+  body: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  bodyMarkdown: string;
   mainImage: number | Media;
   colorPalette: ColorPaletteSelect;
   /**
@@ -1314,6 +1344,7 @@ export interface TwoBlocksBlockSelect<T extends boolean = true> {
 export interface TextCardBlockSelect<T extends boolean = true> {
   heading?: T;
   body?: T;
+  bodyMarkdown?: T;
   variant?: T;
   separatorAfterHeading?: T;
   buttonText?: T;
@@ -1341,6 +1372,7 @@ export interface AnnouncementsSectionBlockSelect<T extends boolean = true> {
 export interface ImageBannerBlockSelect<T extends boolean = true> {
   heading?: T;
   body?: T;
+  bodyMarkdown?: T;
   mainImage?: T;
   colorPalette?: T;
   colorPaletteDarker?: T;
