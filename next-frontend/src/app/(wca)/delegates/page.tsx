@@ -2,6 +2,7 @@ import {
   Center,
   Container,
   Heading,
+  Link,
   Table,
   Tabs,
   VStack,
@@ -13,7 +14,6 @@ import {
 } from "@/lib/wca/roles/delegateRegions";
 import { Prose } from "@/components/ui/prose";
 import { components } from "@/types/openapi";
-import Link from "next/link";
 import UserBadge from "@/components/UserBadge";
 import I18nHTMLTranslate from "@/components/I18nHTMLTranslate";
 import _ from "lodash";

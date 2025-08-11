@@ -22,11 +22,27 @@ declare module "nextjs-routes" {
     | DynamicRoute<"/competitions/[competitionId]", { "competitionId": string }>
     | DynamicRoute<"/competitions/[competitionId]/admin", { "competitionId": string }>
     | StaticRoute<"/dashboard">
+    | StaticRoute<"/delegates">
     | StaticRoute<"/disclaimer">
+    | StaticRoute<"/documents">
+    | StaticRoute<"/export/developer">
+    | StaticRoute<"/export/results">
     | StaticRoute<"/faq">
+    | StaticRoute<"/incidents">
+    | StaticRoute<"/officers-and-board">
+    | StaticRoute<"/organizations">
     | DynamicRoute<"/payload/[[...segments]]", { "segments"?: string[] | undefined }>
     | DynamicRoute<"/persons/[wcaId]", { "wcaId": string }>
-    | StaticRoute<"/privacy">;
+    | StaticRoute<"/privacy">
+    | StaticRoute<"/regulations/about">
+    | StaticRoute<"/regulations/history">
+    | DynamicRoute<"/regulations/history/official/[version]", { "version": string }>
+    | StaticRoute<"/regulations/scrambles">
+    | StaticRoute<"/regulations/translations">
+    | StaticRoute<"/score-tools">
+    | StaticRoute<"/speedcubing-history">
+    | StaticRoute<"/teams-committees">
+    | StaticRoute<"/translators">;
 
   interface StaticRoute<Pathname> {
     pathname: Pathname;

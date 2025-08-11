@@ -3,7 +3,7 @@ import React, { JSX, useState } from "react";
 import {
   Table,
   Text,
-  Link,
+  Link as ChakraLink,
   Button,
   CloseButton,
   Drawer,
@@ -31,6 +31,8 @@ import EventIcon from "@/components/EventIcon";
 import CountryMap from "@/components/CountryMap";
 
 import type { components } from "@/types/openapi";
+import Link from "next/link";
+import { route } from "nextjs-routes";
 
 // Raw competition type from WCA API
 type CompetitionIndex = components["schemas"]["CompetitionIndex"];
@@ -109,13 +111,16 @@ const CompetitionTableEntry: React.FC<Props> = ({ comp }) => {
       </Table.Cell>
 
       <Table.Cell>
-        <Link
-          hoverArrow
-          href={`/competitions/${comp.id}`}
-          onClick={(e) => e.stopPropagation()}
-        >
-          {comp.name}
-        </Link>
+        <ChakraLink asChild hoverArrow onClick={(e) => e.stopPropagation()}>
+          <Link
+            href={route({
+              pathname: "/competitions/[competitionId]",
+              query: { competitionId: comp.id },
+            })}
+          >
+            {comp.name}
+          </Link>
+        </ChakraLink>
       </Table.Cell>
 
       <Table.Cell width="100%">

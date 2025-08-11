@@ -82,8 +82,11 @@ export default function Footer() {
           <ChakraLink asChild variant="plainLink">
             <Link href="/faq">FAQs</Link>
           </ChakraLink>
-          <ChakraLink asChild variant="plainLink">
-            <Link href="/contact">Contact</Link>
+          <ChakraLink
+            variant="plainLink"
+            href="https://worldcubeassociation.org/contact"
+          >
+            Contact
           </ChakraLink>
           <ChakraLink
             variant="plainLink"
