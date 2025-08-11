@@ -121,23 +121,6 @@ export type IconName =
   | 'SkewbIcon'
   | 'Sq1Icon';
 /**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "ColorSelect".
- */
-export type ColorSelect =
-  | 'darkBlue'
-  | 'darkRed'
-  | 'darkGreen'
-  | 'darkOrange'
-  | 'darkYellow'
-  | 'blue'
-  | 'red'
-  | 'green'
-  | 'orange'
-  | 'yellow'
-  | 'white'
-  | 'black';
-/**
  * Supported timezones in IANA format.
  *
  * This interface was referenced by `Config`'s JSON-Schema
@@ -852,9 +835,11 @@ export interface ImageBannerBlock {
   body: string;
   mainImage: number | Media;
   colorPalette: ColorPaletteSelect;
-  bgColor: ColorSelect;
-  headingColor: ColorSelect;
-  textColor: ColorSelect;
+  /**
+   * Use a slightly darker nuance of the color palette
+   */
+  colorPaletteDarker?: boolean | null;
+  headingColor?: ColorPaletteSelect;
   bgImage?: (number | null) | Media;
   bgSize?: number | null;
   bgPos?: string | null;
@@ -1358,9 +1343,8 @@ export interface ImageBannerBlockSelect<T extends boolean = true> {
   body?: T;
   mainImage?: T;
   colorPalette?: T;
-  bgColor?: T;
+  colorPaletteDarker?: T;
   headingColor?: T;
-  textColor?: T;
   bgImage?: T;
   bgSize?: T;
   bgPos?: T;

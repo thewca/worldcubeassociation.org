@@ -8,7 +8,7 @@ import {
   Card,
   Separator,
   Box,
-  Image,
+  Image as ChakraImage,
   Heading,
   Text,
   Tabs,
@@ -40,43 +40,12 @@ import type {
   TwoBlocksBlock,
   TwoBlocksBranchBlock,
   TwoBlocksLeafBlock,
-  ColorSelect,
   Testimonial,
   AnnouncementsSectionBlock,
   Announcement,
   User,
 } from "@/types/payload";
 import Link from "next/link";
-
-const colorMap: Record<ColorSelect, string> = {
-  blue: "blue.50",
-  red: "red.50",
-  green: "green.50",
-  orange: "orange.50",
-  yellow: "yellow.50",
-  darkBlue: "blue.100",
-  darkRed: "red.100",
-  darkGreen: "green.100",
-  darkOrange: "orange.100",
-  darkYellow: "yellow.100",
-  white: "supplementary.texts.light",
-  black: "supplementary.texts.dark",
-};
-
-const colorGradientMap: Record<ColorSelect, string> = {
-  blue: "blue-50",
-  red: "red-50",
-  green: "green-50",
-  orange: "orange-50",
-  yellow: "yellow-50",
-  darkBlue: "blue-100",
-  darkRed: "red-100",
-  darkGreen: "green-100",
-  darkOrange: "orange-100",
-  darkYellow: "yellow-100",
-  white: "white-100",
-  black: "black-100",
-};
 
 const TextCard = ({ block }: { block: TextCardBlock }) => {
   return (
@@ -87,7 +56,7 @@ const TextCard = ({ block }: { block: TextCardBlock }) => {
       width="full"
     >
       {block.headerImage && (
-        <Image
+        <ChakraImage
           src={(block.headerImage as Media).url ?? undefined}
           alt={(block.headerImage as Media).alt ?? undefined}
           aspectRatio="3/1"
@@ -138,6 +107,9 @@ const AnnouncementsSection = ({
 };
 
 const ImageBanner = ({ block }: { block: ImageBannerBlock }) => {
+  const colorPaletteTone = block.colorPaletteDarker ? 100 : 50;
+  const headingColorPalette = block.headingColor ?? "colorPalette";
+
   return (
     <Card.Root
       variant="info"
@@ -146,25 +118,23 @@ const ImageBanner = ({ block }: { block: ImageBannerBlock }) => {
       colorPalette={block.colorPalette}
       size="lg"
     >
-      <Box position="relative" flex="1" minW="50%" maxW="50%" overflow="hidden">
-        <Image
+      <Box position="relative" width="50%" overflow="hidden">
+        <ChakraImage
           src={(block.mainImage as Media).url ?? undefined}
           alt={(block.mainImage as Media).alt ?? undefined}
           objectFit="cover"
           width="100%"
           height="40vh"
-          bg={colorMap[block.bgColor]}
+          bg={`colorPalette.${colorPaletteTone}`}
         />
-        {/* Blue Gradient Overlay */}
+        {/* Gradient Overlay */}
         <Box
           position="absolute"
           top="0"
           right="0"
           bottom="0"
           left="50%"
-          style={{
-            backgroundImage: `linear-gradient(to right, transparent, var(--chakra-colors-${colorGradientMap[block.bgColor]}))`,
-          }}
+          bgImage={`linear-gradient(to right, transparent, {colors.colorPalette.${colorPaletteTone}})`}
           zIndex="1"
         />
       </Box>
@@ -174,7 +144,7 @@ const ImageBanner = ({ block }: { block: ImageBannerBlock }) => {
         zIndex="2"
         color="white"
         p="8"
-        bg={colorMap[block.bgColor]}
+        bg={`colorPalette.${colorPaletteTone}`}
         justifyContent="center"
         pr="15%"
         backgroundImage={
@@ -188,13 +158,13 @@ const ImageBanner = ({ block }: { block: ImageBannerBlock }) => {
       >
         <Heading
           size="4xl"
-          color={colorMap[block.headingColor]}
+          color={`${headingColorPalette}.emphasized`}
           mb="4"
           textTransform="uppercase"
         >
           {block.heading}
         </Heading>
-        <Text fontSize="md" color={colorMap[block.textColor]}>
+        <Text fontSize="md" color="colorPalette.fg">
           {block.body}
         </Text>
       </Card.Body>
@@ -210,7 +180,7 @@ const ImageOnlyCard = ({ block }: { block: ImageOnlyCardBlock }) => {
       colorPalette={block.colorPalette}
       width="full"
     >
-      <Image
+      <ChakraImage
         src={(block.mainImage as Media).url ?? undefined}
         alt={(block.mainImage as Media).alt ?? block.heading ?? undefined}
         aspectRatio="2/1"
@@ -346,7 +316,7 @@ const TestimonialsSpinner = ({ block }: { block: TestimonialsBlock }) => {
                 overflow="hidden"
                 colorPalette={slide.colorPalette}
               >
-                <Image
+                <ChakraImage
                   src={
                     testimonial.image != null
                       ? ((testimonial.image as Media).url ?? undefined)

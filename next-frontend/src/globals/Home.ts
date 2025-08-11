@@ -1,25 +1,4 @@
-import { Block, GlobalConfig, SelectField } from "payload";
-
-const colorSelect: SelectField = {
-  name: "color",
-  type: "select",
-  required: true,
-  interfaceName: "ColorSelect",
-  options: [
-    "darkBlue",
-    "darkRed",
-    "darkGreen",
-    "darkOrange",
-    "darkYellow",
-    "blue",
-    "red",
-    "green",
-    "orange",
-    "yellow",
-    "white",
-    "black",
-  ],
-};
+import { Block, CheckboxField, GlobalConfig, SelectField } from "payload";
 
 const colorPaletteSelect: SelectField = {
   name: "colorPalette",
@@ -27,6 +6,14 @@ const colorPaletteSelect: SelectField = {
   required: true,
   interfaceName: "ColorPaletteSelect",
   options: ["blue", "red", "green", "orange", "yellow", "grey"],
+};
+
+const colorPaletteToneToggle: CheckboxField = {
+  name: "colorPaletteDarker",
+  type: "checkbox",
+  admin: {
+    description: "Use a slightly darker nuance of the color palette",
+  },
 };
 
 const TextCard: Block = {
@@ -98,17 +85,15 @@ const ImageBanner: Block = {
       required: true,
     },
     colorPaletteSelect,
+    colorPaletteToneToggle,
     {
-      ...colorSelect,
-      name: "bgColor",
-    },
-    {
-      ...colorSelect,
+      ...colorPaletteSelect,
       name: "headingColor",
-    },
-    {
-      ...colorSelect,
-      name: "textColor",
+      required: false,
+      admin: {
+        description:
+          "Color for the heading. Will follow the overall color palette by default, only use this field if you want to purposely override (for example, to achieve a more striking contrast that garners attention)",
+      },
     },
     {
       name: "bgImage",
