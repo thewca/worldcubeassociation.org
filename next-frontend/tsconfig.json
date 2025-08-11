@@ -36,7 +36,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "src/nextjs-routes.d.ts"
+    "src/types/nextjs-routes.d.ts"
   ],
   "exclude": [
     "node_modules",
