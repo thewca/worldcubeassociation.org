@@ -1,7 +1,6 @@
 import { Prose } from "@/components/ui/prose";
 import Markdown from "react-markdown";
 import { Link as ChakraLink } from "@chakra-ui/react";
-import Link from "next/link";
 
 import type {
   ComponentPropsWithoutRef,
@@ -32,14 +31,12 @@ export const MarkdownProse: MarkdownProseComponent = ({
       <Markdown
         components={{
           a: ({ href, children }) => (
-            <ChakraLink asChild>
-              <Link
-                href={href || "#"}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                {children}
-              </Link>
+            <ChakraLink
+              href={href || "#"}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {children}
             </ChakraLink>
           ),
         }}

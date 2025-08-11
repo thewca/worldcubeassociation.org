@@ -1,6 +1,7 @@
 import {
   Container,
   Heading,
+  Link,
   SimpleGrid,
   Tabs,
   Text,
@@ -9,7 +10,6 @@ import {
 import { getT } from "@/lib/i18n/get18n";
 import { Prose } from "@/components/ui/prose";
 import { components } from "@/types/openapi";
-import Link from "next/link";
 import UserBadge from "@/components/UserBadge";
 import {
   getTeamCommitteeMembers,

@@ -1,9 +1,15 @@
 "use client";
 
-import { Box, Button, ButtonGroup, Container, Stack } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  ButtonGroup,
+  Container,
+  Link,
+  Stack,
+} from "@chakra-ui/react";
 import React from "react";
 import { MarkdownProse } from "@/components/Markdown";
-import Link from "next/link";
 
 type CallToActionBlockProps = {
   content: string;

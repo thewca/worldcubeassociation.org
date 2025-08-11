@@ -47,6 +47,7 @@ import type {
   User,
 } from "@/types/payload";
 import Link from "next/link";
+import { route } from "nextjs-routes";
 
 const TextCard = ({ block }: { block: TextCardBlock }) => {
   return (
@@ -67,13 +68,14 @@ const TextCard = ({ block }: { block: TextCardBlock }) => {
         <Card.Title>{block.heading}</Card.Title>
         {block.separatorAfterHeading && <Separator size="md" />}
         <Card.Description>
-          <MarkdownProse content={block.bodyMarkdown} color="colorPalette.fg" />
+          <MarkdownProse
+            content={block.bodyMarkdown!}
+            color="colorPalette.fg"
+          />
         </Card.Description>
         {block.buttonText?.trim() && (
           <Button mr="auto" asChild>
-            <ChakraLink asChild>
-              <Link href={block.buttonLink!}>{block.buttonText}</Link>
-            </ChakraLink>
+            <ChakraLink href={block.buttonLink!}>{block.buttonText}</ChakraLink>
           </Button>
         )}
       </Card.Body>
@@ -168,7 +170,7 @@ const ImageBanner = ({ block }: { block: ImageBannerBlock }) => {
           {block.heading}
         </Heading>
         <MarkdownProse
-          content={block.bodyMarkdown}
+          content={block.bodyMarkdown!}
           color="colorPalette.fg"
           fontSize="md"
         />
@@ -334,7 +336,7 @@ const TestimonialsSpinner = ({ block }: { block: TestimonialsBlock }) => {
                   <Separator size="md" />
                   <Card.Description>
                     <MarkdownProse
-                      content={testimonial.fullTestimonialMarkdown}
+                      content={testimonial.fullTestimonialMarkdown!}
                       color="colorPalette.fg"
                     />
                   </Card.Description>
@@ -432,7 +434,7 @@ const renderBlockGroup = (entry: TwoBlocksUnion, keyPrefix = "") => {
                 <ImageOnlyCard block={subEntry} />
               </GridItem>
             );
-          case "FeaturedCompetitions":
+          case "FeaturedComps":
             return (
               <GridItem key={key} colSpan={columns[i] || 1} display="flex">
                 <FeaturedCompetitions block={subEntry} />
@@ -466,7 +468,7 @@ const renderFullBlock = (entry: FullWidthBlock, keyPrefix = "") => {
             return <ImageBanner key={key} block={subEntry} />;
           case "ImageOnlyCard":
             return <ImageOnlyCard key={key} block={subEntry} />;
-          case "FeaturedCompetitions":
+          case "FeaturedComps":
             return <FeaturedCompetitions key={key} block={subEntry} />;
           case "TestimonialsSpinner":
             return <TestimonialsSpinner key={key} block={subEntry} />;
@@ -491,7 +493,11 @@ export default async function Homepage() {
         <Text>
           No homepage content yet, go ahead and{" "}
           <ChakraLink asChild>
-            <Link href="/payload">add some!</Link>
+            <Link
+              href={route({ pathname: "/payload/[[...segments]]", query: {} })}
+            >
+              add some!
+            </Link>
           </ChakraLink>
         </Text>
       </Center>
