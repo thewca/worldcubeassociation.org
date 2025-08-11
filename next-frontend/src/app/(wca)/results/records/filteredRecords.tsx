@@ -1,13 +1,10 @@
 "use client";
 
-import { components } from "@/types/openapi";
 import React, { useMemo, useReducer } from "react";
 import { useQuery } from "@tanstack/react-query";
 import useAPI from "@/lib/wca/useAPI";
-import events, { WCA_EVENT_IDS } from "@/lib/wca/data/events";
 import { CurrentEventId } from "@wca/helpers";
 import { Alert, Heading, VStack } from "@chakra-ui/react";
-import EventIcon from "@/components/EventIcon";
 import RecordsTable from "@/components/results/RecordsTable";
 import Loading from "@/components/ui/loading";
 import FilterBox from "@/components/results/FilterBox";
@@ -90,11 +87,11 @@ export default function FilteredRecords({
   const api = useAPI();
 
   const { data, isFetching, isError } = useQuery({
-    queryKey: ["records", region, gender, show],
+    queryKey: ["records", region, gender],
     queryFn: () =>
       api.GET("/results/records", {
         params: {
-          query: { region, show, gender },
+          query: { region, gender },
         },
       }),
     select: (data) => {
@@ -129,20 +126,7 @@ export default function FilteredRecords({
       <Heading size={"5xl"}>{t("results.records.title")}</Heading>
       {t("results.last_updated_html", { timestamp: data!.timestamp })}
       <FilterBox filterState={filterState} filterActions={filterActions} />
-      {WCA_EVENT_IDS.map((event) => {
-        const recordsByEvent = data!.records![event as CurrentEventId];
-
-        return (
-          recordsByEvent && (
-            <React.Fragment key={event}>
-              <Heading size={"2xl"} key={event}>
-                <EventIcon eventId={event} /> {events.byId[event].name}
-              </Heading>
-              <RecordsTable records={recordsByEvent} />
-            </React.Fragment>
-          )
-        );
-      })}
+      <RecordsTable records={data!.records!} show={show} />
     </VStack>
   );
 }

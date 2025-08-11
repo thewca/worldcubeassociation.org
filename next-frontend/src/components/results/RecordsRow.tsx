@@ -3,6 +3,7 @@ import {
   AttemptsCells,
   CompetitionCell,
   CountryCell,
+  EventCell,
   PersonCell,
 } from "@/components/results/ResultTableCells";
 import { formatAttemptResult } from "@/lib/wca/wcif/attempts";
@@ -39,12 +40,17 @@ function resultAttempts(result: components["schemas"]["Record"]) {
   };
 }
 
-interface RecordsRowProps {
+interface MixedRecordsRowProp {
   record: components["schemas"]["Record"];
   t: TFunction;
 }
 
-export default function RecordsRow({ record, t }: RecordsRowProps) {
+interface SlimRecordsRowProp {
+  singles: components["schemas"]["Record"][];
+  averages: components["schemas"]["Record"][];
+}
+
+export function MixedRecordsRow({ record, t }: MixedRecordsRowProp) {
   const {
     definedAttempts: attempts,
     bestResultIndex,
@@ -52,7 +58,7 @@ export default function RecordsRow({ record, t }: RecordsRowProps) {
   } = resultAttempts(record);
 
   return (
-    <Table.Row key={record.id}>
+    <Table.Row>
       <Table.Cell>
         {t(`results.selector_elements.type_selector.${record.type}`)}
       </Table.Cell>
@@ -74,4 +80,53 @@ export default function RecordsRow({ record, t }: RecordsRowProps) {
       />
     </Table.Row>
   );
+}
+
+export function SlimRecordsRow({ singles, averages }: SlimRecordsRowProp) {
+  const rowLengths = Math.max(singles.length, averages.length);
+
+  return _.range(rowLengths).map((i) => {
+    const single = singles[i];
+    const average = averages[i];
+
+    const {
+      definedAttempts: attempts,
+      bestResultIndex,
+      worstResultIndex,
+    } = resultAttempts(average);
+
+    return (
+      <Table.Row key={`${single?.id}-${average?.id}`}>
+        {single && (
+          <>
+            <PersonCell
+              personId={single.person_id}
+              personName={single.person_name}
+            />
+            <Table.Cell>
+              {formatAttemptResult(single.value, single.event_id)}
+            </Table.Cell>
+          </>
+        )}
+        <EventCell eventId={single.event_id} />
+        {average && (
+          <>
+            <PersonCell
+              personId={average.person_id}
+              personName={average.person_name}
+            />
+            <Table.Cell>
+              {formatAttemptResult(average.value, average.event_id)}
+            </Table.Cell>
+            <AttemptsCells
+              attempts={attempts}
+              bestResultIndex={bestResultIndex}
+              worstResultIndex={worstResultIndex}
+              eventId={average.event_id}
+            />
+          </>
+        )}
+      </Table.Row>
+    );
+  });
 }

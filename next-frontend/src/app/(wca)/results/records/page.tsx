@@ -30,7 +30,7 @@ export default async function RecordsPage({
         gender,
         region,
         show,
-      }) // We need to take out the response as Next can't serialize that
+      }) // We need to take out the response as Next can't serialize it
         .then((res) => ({
           data: res.data,
           error: res.error,
@@ -42,7 +42,7 @@ export default async function RecordsPage({
     <Container bg={"bg"}>
       <HydrationBoundary state={dehydrate(queryClient)}>
         <FilteredRecords
-          // We always fetch all events so we get filtering for free on the frontend
+          // We always fetch all events, so we get filtering for free on the frontend
           searchParams={{ gender, region, show, event: EVENTS_ALL }}
         />
       </HydrationBoundary>
