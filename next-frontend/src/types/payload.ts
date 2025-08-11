@@ -234,7 +234,27 @@ export type WcaIconName =
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "StaticTargetLink".
  */
-export type StaticTargetLink = '/' | '/faq' | '/api/swagger' | '/competitions';
+export type StaticTargetLink =
+  | '/'
+  | '/faq'
+  | '/api/swagger'
+  | '/competitions'
+  | '/delegates'
+  | '/disclaimer'
+  | '/documents'
+  | '/export/developer'
+  | '/export/results'
+  | '/incidents'
+  | '/officers-and-board'
+  | '/organizations'
+  | '/privacy'
+  | '/regulations/about'
+  | '/regulations/history'
+  | '/regulations/scrambles'
+  | '/score-tools'
+  | '/speedcubing-history'
+  | '/teams-committees'
+  | '/translators';
 /**
  * Supported timezones in IANA format.
  *
