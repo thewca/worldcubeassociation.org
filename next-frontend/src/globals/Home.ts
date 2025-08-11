@@ -149,22 +149,16 @@ const FeaturedCompetitions: Block = {
   imageURL: "/payload/featured_upcoming_competitions.png",
   fields: [
     {
-      name: "Competition1ID",
-      type: "text",
-      required: true,
-    },
-    {
-      ...colorPaletteSelect,
-      name: "colorPalette1",
-    },
-    {
-      name: "Competition2ID",
-      type: "text",
-      required: true,
-    },
-    {
-      ...colorPaletteSelect,
-      name: "colorPalette2",
+      name: "competitions",
+      type: "array",
+      fields: [
+        {
+          name: "competitionId",
+          type: "text",
+          required: true,
+        },
+        colorPaletteSelect,
+      ],
     },
   ],
 };
@@ -190,24 +184,6 @@ const AnnouncementsSection: Block = {
   ],
 };
 
-const TestimonialSlide: Block = {
-  slug: "TestimonialSlide",
-  interfaceName: "TestimonialSlideBlock",
-  labels: {
-    singular: "Testimonial",
-    plural: "Testimonials",
-  },
-  fields: [
-    {
-      name: "testimonial",
-      type: "relationship",
-      relationTo: "testimonials",
-      required: true,
-    },
-    colorPaletteSelect,
-  ],
-};
-
 const TestimonialsSpinner: Block = {
   slug: "TestimonialsSpinner",
   interfaceName: "TestimonialsBlock",
@@ -218,9 +194,17 @@ const TestimonialsSpinner: Block = {
   },
   fields: [
     {
-      name: "blocks",
-      type: "blocks",
-      blocks: [TestimonialSlide],
+      name: "slides",
+      type: "array",
+      fields: [
+        {
+          name: "testimonial",
+          type: "relationship",
+          relationTo: "testimonials",
+          required: true,
+        },
+        colorPaletteSelect,
+      ],
       required: true,
       minRows: 1,
     },

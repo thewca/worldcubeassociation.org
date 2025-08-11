@@ -208,61 +208,54 @@ const FeaturedCompetitions = ({
           Featured Upcoming Competitions
           <Button variant="outline">View all Competitions</Button>
         </Card.Title>
-        <SimpleGrid columns={2} gap={4}>
-          <Card.Root variant="info" colorPalette={block.colorPalette1}>
-            <Card.Body>
-              <Heading size="3xl">{block.Competition1ID}</Heading>
-              <VStack alignItems="start">
-                <Badge variant="information" colorPalette={block.colorPalette1}>
-                  <Flag code={"US"} fallback={"US"} />
-                  <CountryMap code="US" bold /> Seattle
-                </Badge>
-                <Badge variant="information" colorPalette={block.colorPalette1}>
-                  <CompRegoCloseDateIcon />
-                  <Text>Jul 3 - 6, 2025</Text>
-                </Badge>
-                <Badge variant="information" colorPalette={block.colorPalette1}>
-                  <CompetitorsIcon />
-                  2000 Competitor Limit
-                </Badge>
-                <Badge variant="information" colorPalette={block.colorPalette1}>
-                  <RegisterIcon />0 Spots Left
-                </Badge>
-                <Badge variant="information" colorPalette={block.colorPalette1}>
-                  <LocationIcon />
-                  Seattle Convention Center
-                </Badge>
-              </VStack>
-            </Card.Body>
-          </Card.Root>
-
-          <Card.Root variant="info" colorPalette="yellow">
-            <Card.Body>
-              <Heading size="3xl">{block.Competition2ID}</Heading>
-              <VStack alignItems="start">
-                <Badge variant="information" colorPalette={block.colorPalette2}>
-                  <Flag code={"NZ"} fallback={"NZ"} />
-                  <CountryMap code="NZ" bold /> Auckland
-                </Badge>
-                <Badge variant="information" colorPalette={block.colorPalette2}>
-                  <CompRegoCloseDateIcon />
-                  <Text>Dec 12 - 14, 2025</Text>
-                </Badge>
-                <Badge variant="information" colorPalette={block.colorPalette2}>
-                  <CompetitorsIcon />
-                  300 Competitor Limit
-                </Badge>
-                <Badge variant="information" colorPalette={block.colorPalette2}>
-                  <RegisterIcon />
-                  300 Spots Left
-                </Badge>
-                <Badge variant="information" colorPalette={block.colorPalette2}>
-                  <LocationIcon />
-                  Auckland Netball Centre
-                </Badge>
-              </VStack>
-            </Card.Body>
-          </Card.Root>
+        <SimpleGrid columns={block.competitions?.length} gap={4}>
+          {block.competitions?.map((featuredComp) => (
+            <Card.Root
+              key={featuredComp.competitionId}
+              variant="info"
+              colorPalette={featuredComp.colorPalette}
+            >
+              <Card.Body>
+                <Heading size="3xl">{featuredComp.competitionId}</Heading>
+                <VStack alignItems="start">
+                  <Badge
+                    variant="information"
+                    colorPalette={featuredComp.colorPalette}
+                  >
+                    <Flag code={"US"} fallback={"US"} />
+                    <CountryMap code="US" bold /> Seattle
+                  </Badge>
+                  <Badge
+                    variant="information"
+                    colorPalette={featuredComp.colorPalette}
+                  >
+                    <CompRegoCloseDateIcon />
+                    <Text>Jul 3 - 6, 2025</Text>
+                  </Badge>
+                  <Badge
+                    variant="information"
+                    colorPalette={featuredComp.colorPalette}
+                  >
+                    <CompetitorsIcon />
+                    2000 Competitor Limit
+                  </Badge>
+                  <Badge
+                    variant="information"
+                    colorPalette={featuredComp.colorPalette}
+                  >
+                    <RegisterIcon />0 Spots Left
+                  </Badge>
+                  <Badge
+                    variant="information"
+                    colorPalette={featuredComp.colorPalette}
+                  >
+                    <LocationIcon />
+                    Seattle Convention Center
+                  </Badge>
+                </VStack>
+              </Card.Body>
+            </Card.Root>
+          ))}
         </SimpleGrid>
       </Card.Body>
     </Card.Root>
@@ -270,7 +263,8 @@ const FeaturedCompetitions = ({
 };
 
 const TestimonialsSpinner = ({ block }: { block: TestimonialsBlock }) => {
-  const slides = block.blocks;
+  const slides = block.slides;
+
   return (
     <Tabs.Root
       defaultValue={slides[0].id}

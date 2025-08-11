@@ -897,31 +897,27 @@ export interface ImageOnlyCardBlock {
  * via the `definition` "TestimonialsBlock".
  */
 export interface TestimonialsBlock {
-  blocks: TestimonialSlideBlock[];
+  slides: {
+    testimonial: number | Testimonial;
+    colorPalette: ColorPaletteSelect;
+    id?: string | null;
+  }[];
   id?: string | null;
   blockName?: string | null;
   blockType: 'TestimonialsSpinner';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "TestimonialSlideBlock".
- */
-export interface TestimonialSlideBlock {
-  testimonial: number | Testimonial;
-  colorPalette: ColorPaletteSelect;
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'TestimonialSlide';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "FeaturedCompetitionsBlock".
  */
 export interface FeaturedCompetitionsBlock {
-  Competition1ID: string;
-  colorPalette1: ColorPaletteSelect;
-  Competition2ID: string;
-  colorPalette2: ColorPaletteSelect;
+  competitions?:
+    | {
+        competitionId: string;
+        colorPalette: ColorPaletteSelect;
+        id?: string | null;
+      }[]
+    | null;
   id?: string | null;
   blockName?: string | null;
   blockType: 'FeaturedCompetitions';
@@ -1402,21 +1398,13 @@ export interface ImageOnlyCardBlockSelect<T extends boolean = true> {
  * via the `definition` "TestimonialsBlock_select".
  */
 export interface TestimonialsBlockSelect<T extends boolean = true> {
-  blocks?:
+  slides?:
     | T
     | {
-        TestimonialSlide?: T | TestimonialSlideBlockSelect<T>;
+        testimonial?: T;
+        colorPalette?: T;
+        id?: T;
       };
-  id?: T;
-  blockName?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "TestimonialSlideBlock_select".
- */
-export interface TestimonialSlideBlockSelect<T extends boolean = true> {
-  testimonial?: T;
-  colorPalette?: T;
   id?: T;
   blockName?: T;
 }
@@ -1425,10 +1413,13 @@ export interface TestimonialSlideBlockSelect<T extends boolean = true> {
  * via the `definition` "FeaturedCompetitionsBlock_select".
  */
 export interface FeaturedCompetitionsBlockSelect<T extends boolean = true> {
-  Competition1ID?: T;
-  colorPalette1?: T;
-  Competition2ID?: T;
-  colorPalette2?: T;
+  competitions?:
+    | T
+    | {
+        competitionId?: T;
+        colorPalette?: T;
+        id?: T;
+      };
   id?: T;
   blockName?: T;
 }
