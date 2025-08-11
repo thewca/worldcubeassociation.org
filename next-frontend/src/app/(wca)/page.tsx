@@ -8,7 +8,7 @@ import {
   Card,
   Separator,
   Box,
-  Image,
+  Image as ChakraImage,
   Heading,
   Text,
   Tabs,
@@ -17,6 +17,7 @@ import {
   Link as ChakraLink,
   Center,
 } from "@chakra-ui/react";
+import { MarkdownProse } from "@/components/Markdown";
 import AnnouncementsCard from "@/components/AnnouncementsCard";
 import { getPayload } from "payload";
 import config from "@payload-config";
@@ -40,43 +41,12 @@ import type {
   TwoBlocksBlock,
   TwoBlocksBranchBlock,
   TwoBlocksLeafBlock,
-  ColorSelect,
   Testimonial,
   AnnouncementsSectionBlock,
   Announcement,
   User,
 } from "@/types/payload";
 import Link from "next/link";
-
-const colorMap: Record<ColorSelect, string> = {
-  blue: "blue.50",
-  red: "red.50",
-  green: "green.50",
-  orange: "orange.50",
-  yellow: "yellow.50",
-  darkBlue: "blue.100",
-  darkRed: "red.100",
-  darkGreen: "green.100",
-  darkOrange: "orange.100",
-  darkYellow: "yellow.100",
-  white: "supplementary.texts.light",
-  black: "supplementary.texts.dark",
-};
-
-const colorGradientMap: Record<ColorSelect, string> = {
-  blue: "blue-50",
-  red: "red-50",
-  green: "green-50",
-  orange: "orange-50",
-  yellow: "yellow-50",
-  darkBlue: "blue-100",
-  darkRed: "red-100",
-  darkGreen: "green-100",
-  darkOrange: "orange-100",
-  darkYellow: "yellow-100",
-  white: "white-100",
-  black: "black-100",
-};
 
 const TextCard = ({ block }: { block: TextCardBlock }) => {
   return (
@@ -87,7 +57,7 @@ const TextCard = ({ block }: { block: TextCardBlock }) => {
       width="full"
     >
       {block.headerImage && (
-        <Image
+        <ChakraImage
           src={(block.headerImage as Media).url ?? undefined}
           alt={(block.headerImage as Media).alt ?? undefined}
           aspectRatio="3/1"
@@ -96,7 +66,9 @@ const TextCard = ({ block }: { block: TextCardBlock }) => {
       <Card.Body>
         <Card.Title>{block.heading}</Card.Title>
         {block.separatorAfterHeading && <Separator size="md" />}
-        <Card.Description>{block.body}</Card.Description>
+        <Card.Description>
+          <MarkdownProse content={block.bodyMarkdown} color="colorPalette.fg" />
+        </Card.Description>
         {block.buttonText?.trim() && (
           <Button mr="auto" asChild>
             <ChakraLink asChild>
@@ -138,6 +110,9 @@ const AnnouncementsSection = ({
 };
 
 const ImageBanner = ({ block }: { block: ImageBannerBlock }) => {
+  const colorPaletteTone = block.colorPaletteDarker ? 100 : 50;
+  const headingColorPalette = block.headingColor ?? "colorPalette";
+
   return (
     <Card.Root
       variant="info"
@@ -146,25 +121,23 @@ const ImageBanner = ({ block }: { block: ImageBannerBlock }) => {
       colorPalette={block.colorPalette}
       size="lg"
     >
-      <Box position="relative" flex="1" minW="50%" maxW="50%" overflow="hidden">
-        <Image
+      <Box position="relative" width="50%" overflow="hidden">
+        <ChakraImage
           src={(block.mainImage as Media).url ?? undefined}
           alt={(block.mainImage as Media).alt ?? undefined}
           objectFit="cover"
           width="100%"
           height="40vh"
-          bg={colorMap[block.bgColor]}
+          bg={`colorPalette.${colorPaletteTone}`}
         />
-        {/* Blue Gradient Overlay */}
+        {/* Gradient Overlay */}
         <Box
           position="absolute"
           top="0"
           right="0"
           bottom="0"
           left="50%"
-          style={{
-            backgroundImage: `linear-gradient(to right, transparent, var(--chakra-colors-${colorGradientMap[block.bgColor]}))`,
-          }}
+          bgImage={`linear-gradient(to right, transparent, {colors.colorPalette.${colorPaletteTone}})`}
           zIndex="1"
         />
       </Box>
@@ -174,29 +147,31 @@ const ImageBanner = ({ block }: { block: ImageBannerBlock }) => {
         zIndex="2"
         color="white"
         p="8"
-        bg={colorMap[block.bgColor]}
+        bg={`colorPalette.${colorPaletteTone}`}
         justifyContent="center"
-        pr="15%"
+        paddingRight="15%"
         backgroundImage={
           block.bgImage != null
             ? `url('${(block.bgImage as Media).url}')`
             : undefined
         }
-        backgroundSize={block.bgSize != null ? `${block.bgSize}%` : undefined}
-        backgroundPosition={block.bgPos ?? undefined}
+        backgroundSize={`${block.bgSize}%`}
+        backgroundPosition={block.bgPos}
         backgroundRepeat="no-repeat"
       >
         <Heading
           size="4xl"
-          color={colorMap[block.headingColor]}
-          mb="4"
+          color={`${headingColorPalette}.emphasized`}
+          marginBottom="4"
           textTransform="uppercase"
         >
           {block.heading}
         </Heading>
-        <Text fontSize="md" color={colorMap[block.textColor]}>
-          {block.body}
-        </Text>
+        <MarkdownProse
+          content={block.bodyMarkdown}
+          color="colorPalette.fg"
+          fontSize="md"
+        />
       </Card.Body>
     </Card.Root>
   );
@@ -210,7 +185,7 @@ const ImageOnlyCard = ({ block }: { block: ImageOnlyCardBlock }) => {
       colorPalette={block.colorPalette}
       width="full"
     >
-      <Image
+      <ChakraImage
         src={(block.mainImage as Media).url ?? undefined}
         alt={(block.mainImage as Media).alt ?? block.heading ?? undefined}
         aspectRatio="2/1"
@@ -238,61 +213,54 @@ const FeaturedCompetitions = ({
           Featured Upcoming Competitions
           <Button variant="outline">View all Competitions</Button>
         </Card.Title>
-        <SimpleGrid columns={2} gap={4}>
-          <Card.Root variant="info" colorPalette={block.colorPalette1}>
-            <Card.Body>
-              <Heading size="3xl">{block.Competition1ID}</Heading>
-              <VStack alignItems="start">
-                <Badge variant="information" colorPalette={block.colorPalette1}>
-                  <Flag code={"US"} fallback={"US"} />
-                  <CountryMap code="US" bold /> Seattle
-                </Badge>
-                <Badge variant="information" colorPalette={block.colorPalette1}>
-                  <CompRegoCloseDateIcon />
-                  <Text>Jul 3 - 6, 2025</Text>
-                </Badge>
-                <Badge variant="information" colorPalette={block.colorPalette1}>
-                  <CompetitorsIcon />
-                  2000 Competitor Limit
-                </Badge>
-                <Badge variant="information" colorPalette={block.colorPalette1}>
-                  <RegisterIcon />0 Spots Left
-                </Badge>
-                <Badge variant="information" colorPalette={block.colorPalette1}>
-                  <LocationIcon />
-                  Seattle Convention Center
-                </Badge>
-              </VStack>
-            </Card.Body>
-          </Card.Root>
-
-          <Card.Root variant="info" colorPalette="yellow">
-            <Card.Body>
-              <Heading size="3xl">{block.Competition2ID}</Heading>
-              <VStack alignItems="start">
-                <Badge variant="information" colorPalette={block.colorPalette2}>
-                  <Flag code={"NZ"} fallback={"NZ"} />
-                  <CountryMap code="NZ" bold /> Auckland
-                </Badge>
-                <Badge variant="information" colorPalette={block.colorPalette2}>
-                  <CompRegoCloseDateIcon />
-                  <Text>Dec 12 - 14, 2025</Text>
-                </Badge>
-                <Badge variant="information" colorPalette={block.colorPalette2}>
-                  <CompetitorsIcon />
-                  300 Competitor Limit
-                </Badge>
-                <Badge variant="information" colorPalette={block.colorPalette2}>
-                  <RegisterIcon />
-                  300 Spots Left
-                </Badge>
-                <Badge variant="information" colorPalette={block.colorPalette2}>
-                  <LocationIcon />
-                  Auckland Netball Centre
-                </Badge>
-              </VStack>
-            </Card.Body>
-          </Card.Root>
+        <SimpleGrid columns={block.competitions?.length} gap={4}>
+          {block.competitions?.map((featuredComp) => (
+            <Card.Root
+              key={featuredComp.competitionId}
+              variant="info"
+              colorPalette={featuredComp.colorPalette}
+            >
+              <Card.Body>
+                <Heading size="3xl">{featuredComp.competitionId}</Heading>
+                <VStack alignItems="start">
+                  <Badge
+                    variant="information"
+                    colorPalette={featuredComp.colorPalette}
+                  >
+                    <Flag code={"US"} fallback={"US"} />
+                    <CountryMap code="US" bold /> Seattle
+                  </Badge>
+                  <Badge
+                    variant="information"
+                    colorPalette={featuredComp.colorPalette}
+                  >
+                    <CompRegoCloseDateIcon />
+                    <Text>Jul 3 - 6, 2025</Text>
+                  </Badge>
+                  <Badge
+                    variant="information"
+                    colorPalette={featuredComp.colorPalette}
+                  >
+                    <CompetitorsIcon />
+                    2000 Competitor Limit
+                  </Badge>
+                  <Badge
+                    variant="information"
+                    colorPalette={featuredComp.colorPalette}
+                  >
+                    <RegisterIcon />0 Spots Left
+                  </Badge>
+                  <Badge
+                    variant="information"
+                    colorPalette={featuredComp.colorPalette}
+                  >
+                    <LocationIcon />
+                    Seattle Convention Center
+                  </Badge>
+                </VStack>
+              </Card.Body>
+            </Card.Root>
+          ))}
         </SimpleGrid>
       </Card.Body>
     </Card.Root>
@@ -300,7 +268,8 @@ const FeaturedCompetitions = ({
 };
 
 const TestimonialsSpinner = ({ block }: { block: TestimonialsBlock }) => {
-  const slides = block.blocks;
+  const slides = block.slides;
+
   return (
     <Tabs.Root
       defaultValue={slides[0].id}
@@ -346,7 +315,7 @@ const TestimonialsSpinner = ({ block }: { block: TestimonialsBlock }) => {
                 overflow="hidden"
                 colorPalette={slide.colorPalette}
               >
-                <Image
+                <ChakraImage
                   src={
                     testimonial.image != null
                       ? ((testimonial.image as Media).url ?? undefined)
@@ -364,7 +333,10 @@ const TestimonialsSpinner = ({ block }: { block: TestimonialsBlock }) => {
                   <Card.Title>{testimonial.punchline}</Card.Title>
                   <Separator size="md" />
                   <Card.Description>
-                    {testimonial.fullTestimonialMarkdown}
+                    <MarkdownProse
+                      content={testimonial.fullTestimonialMarkdown}
+                      color="colorPalette.fg"
+                    />
                   </Card.Description>
                   <Text>{testimonial.whoDunnit}</Text>
                 </Card.Body>

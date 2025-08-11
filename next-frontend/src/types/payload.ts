@@ -121,23 +121,6 @@ export type IconName =
   | 'SkewbIcon'
   | 'Sq1Icon';
 /**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "ColorSelect".
- */
-export type ColorSelect =
-  | 'darkBlue'
-  | 'darkRed'
-  | 'darkGreen'
-  | 'darkOrange'
-  | 'darkYellow'
-  | 'blue'
-  | 'red'
-  | 'green'
-  | 'orange'
-  | 'yellow'
-  | 'white'
-  | 'black';
-/**
  * Supported timezones in IANA format.
  *
  * This interface was referenced by `Config`'s JSON-Schema
@@ -820,7 +803,22 @@ export interface TwoBlocksBlock {
  */
 export interface TextCardBlock {
   heading: string;
-  body: string;
+  body: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  bodyMarkdown: string;
   variant: 'info' | 'hero';
   separatorAfterHeading: boolean;
   buttonText?: string | null;
@@ -849,15 +847,35 @@ export interface AnnouncementsSectionBlock {
  */
 export interface ImageBannerBlock {
   heading: string;
-  body: string;
+  body: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  bodyMarkdown: string;
   mainImage: number | Media;
   colorPalette: ColorPaletteSelect;
-  bgColor: ColorSelect;
-  headingColor: ColorSelect;
-  textColor: ColorSelect;
+  /**
+   * Use a slightly darker nuance of the color palette
+   */
+  colorPaletteDarker?: boolean | null;
+  headingColor?: ColorPaletteSelect;
   bgImage?: (number | null) | Media;
-  bgSize?: number | null;
-  bgPos?: string | null;
+  /**
+   * The size of the background image in percent (%)
+   */
+  bgSize: number;
+  bgPos: 'right' | 'left';
   id?: string | null;
   blockName?: string | null;
   blockType: 'ImageBanner';
@@ -879,31 +897,27 @@ export interface ImageOnlyCardBlock {
  * via the `definition` "TestimonialsBlock".
  */
 export interface TestimonialsBlock {
-  blocks: TestimonialSlideBlock[];
+  slides: {
+    testimonial: number | Testimonial;
+    colorPalette: ColorPaletteSelect;
+    id?: string | null;
+  }[];
   id?: string | null;
   blockName?: string | null;
   blockType: 'TestimonialsSpinner';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "TestimonialSlideBlock".
- */
-export interface TestimonialSlideBlock {
-  testimonial: number | Testimonial;
-  colorPalette: ColorPaletteSelect;
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'TestimonialSlide';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "FeaturedCompetitionsBlock".
  */
 export interface FeaturedCompetitionsBlock {
-  Competition1ID: string;
-  colorPalette1: ColorPaletteSelect;
-  Competition2ID: string;
-  colorPalette2: ColorPaletteSelect;
+  competitions?:
+    | {
+        competitionId: string;
+        colorPalette: ColorPaletteSelect;
+        id?: string | null;
+      }[]
+    | null;
   id?: string | null;
   blockName?: string | null;
   blockType: 'FeaturedCompetitions';
@@ -1329,6 +1343,7 @@ export interface TwoBlocksBlockSelect<T extends boolean = true> {
 export interface TextCardBlockSelect<T extends boolean = true> {
   heading?: T;
   body?: T;
+  bodyMarkdown?: T;
   variant?: T;
   separatorAfterHeading?: T;
   buttonText?: T;
@@ -1356,11 +1371,11 @@ export interface AnnouncementsSectionBlockSelect<T extends boolean = true> {
 export interface ImageBannerBlockSelect<T extends boolean = true> {
   heading?: T;
   body?: T;
+  bodyMarkdown?: T;
   mainImage?: T;
   colorPalette?: T;
-  bgColor?: T;
+  colorPaletteDarker?: T;
   headingColor?: T;
-  textColor?: T;
   bgImage?: T;
   bgSize?: T;
   bgPos?: T;
@@ -1383,21 +1398,13 @@ export interface ImageOnlyCardBlockSelect<T extends boolean = true> {
  * via the `definition` "TestimonialsBlock_select".
  */
 export interface TestimonialsBlockSelect<T extends boolean = true> {
-  blocks?:
+  slides?:
     | T
     | {
-        TestimonialSlide?: T | TestimonialSlideBlockSelect<T>;
+        testimonial?: T;
+        colorPalette?: T;
+        id?: T;
       };
-  id?: T;
-  blockName?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "TestimonialSlideBlock_select".
- */
-export interface TestimonialSlideBlockSelect<T extends boolean = true> {
-  testimonial?: T;
-  colorPalette?: T;
   id?: T;
   blockName?: T;
 }
@@ -1406,10 +1413,13 @@ export interface TestimonialSlideBlockSelect<T extends boolean = true> {
  * via the `definition` "FeaturedCompetitionsBlock_select".
  */
 export interface FeaturedCompetitionsBlockSelect<T extends boolean = true> {
-  Competition1ID?: T;
-  colorPalette1?: T;
-  Competition2ID?: T;
-  colorPalette2?: T;
+  competitions?:
+    | T
+    | {
+        competitionId?: T;
+        colorPalette?: T;
+        id?: T;
+      };
   id?: T;
   blockName?: T;
 }

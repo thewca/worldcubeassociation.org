@@ -14,7 +14,6 @@ export const markdownConvertedField = (
 ): Field => {
   return {
     name: convertedName,
-    required: true,
     type: "textarea",
     admin: {
       hidden: true,
