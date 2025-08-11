@@ -45,6 +45,10 @@ interface MixedRecordsRowProp {
   t: TFunction;
 }
 
+interface SeparateRecordsRowProp {
+  record: components["schemas"]["Record"];
+}
+
 interface SlimRecordsRowProp {
   singles: components["schemas"]["Record"][];
   averages: components["schemas"]["Record"][];
@@ -78,6 +82,38 @@ export function MixedRecordsRow({ record, t }: MixedRecordsRowProp) {
         worstResultIndex={worstResultIndex}
         eventId={record.event_id}
       />
+    </Table.Row>
+  );
+}
+
+export function SeparateRecordsRow({ record }: SeparateRecordsRowProp) {
+  const {
+    definedAttempts: attempts,
+    bestResultIndex,
+    worstResultIndex,
+  } = resultAttempts(record);
+
+  return (
+    <Table.Row>
+      <EventCell eventId={record.event_id} />
+      <Table.Cell>
+        {formatAttemptResult(record.value, record.event_id)}
+      </Table.Cell>
+      <PersonCell personId={record.person_id} personName={record.person_name} />
+      <CountryCell countryId={record.country_id} />
+      <CompetitionCell
+        competitionId={record.competition_id}
+        competitionName={record.competition_name}
+        competitionCountry={record.competition_country_id}
+      />
+      {record.type === "average" && (
+        <AttemptsCells
+          attempts={attempts}
+          bestResultIndex={bestResultIndex}
+          worstResultIndex={worstResultIndex}
+          eventId={record.event_id}
+        />
+      )}
     </Table.Row>
   );
 }

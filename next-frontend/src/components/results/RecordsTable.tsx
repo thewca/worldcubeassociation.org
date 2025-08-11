@@ -1,10 +1,11 @@
 "use client";
 
-import { Heading, Table } from "@chakra-ui/react";
+import { Heading, Table, VStack } from "@chakra-ui/react";
 import { components } from "@/types/openapi";
 import _ from "lodash";
 import {
   MixedRecordsRow,
+  SeparateRecordsRow,
   SlimRecordsRow,
 } from "@/components/results/RecordsRow";
 import { useT } from "@/lib/i18n/useI18n";
@@ -24,6 +25,13 @@ interface RecordsTableProps {
 
 interface SlimRecordsTableProps {
   records: components["schemas"]["RecordByEvent"];
+}
+
+interface SeperateRecordsTableProps {
+  recordsByType: {
+    single: components["schemas"]["Record"][];
+    average: components["schemas"]["Record"][];
+  };
 }
 
 export default function RecordsTable({ records, show }: WrapperTableProps) {
@@ -48,6 +56,19 @@ export default function RecordsTable({ records, show }: WrapperTableProps) {
 
   if (show === "slim") {
     return <SlimRecordsTable records={records} />;
+  }
+
+  if (show === "separate") {
+    // Make sure we don't include any unofficial events and keep the right order
+    const allRecords = WCA_EVENT_IDS.reduce(
+      (acc, event) => [...records[event as CurrentEventId]!, ...acc],
+      [] as components["schemas"]["Record"][],
+    ).toReversed();
+
+    const average = allRecords.filter((record) => record.type === "average");
+    const single = allRecords.filter((record) => record.type === "single");
+
+    return <SeparateRecordsTable recordsByType={{ average, single }} />;
   }
 }
 
@@ -98,6 +119,49 @@ function SlimRecordsTable({ records }: SlimRecordsTableProps) {
       </Table.Body>
     </Table.Root>
   );
+}
+
+function SeparateRecordsTable({ recordsByType }: SeperateRecordsTableProps) {
+  const { t } = useT();
+
+  return ["single", "average"].map((type) => (
+    <VStack align={"left"} key={type}>
+      <Heading size={"2xl"}>
+        {t(`results.selector_elements.type_selector.${type}`)}
+      </Heading>
+      <Table.Root>
+        <Table.Header>
+          <Table.Row>
+            <Table.ColumnHeader>
+              {t("results.table_elements.event")}
+            </Table.ColumnHeader>
+            <Table.ColumnHeader>
+              {t("results.table_elements.result")}
+            </Table.ColumnHeader>
+            <Table.ColumnHeader>
+              {t("results.table_elements.name")}
+            </Table.ColumnHeader>
+            <Table.ColumnHeader>
+              {t("results.table_elements.region")}
+            </Table.ColumnHeader>
+            <Table.ColumnHeader>
+              {t("results.table_elements.competition")}
+            </Table.ColumnHeader>
+            {type === "average" && (
+              <Table.ColumnHeader>
+                {t("results.table_elements.solves")}
+              </Table.ColumnHeader>
+            )}
+          </Table.Row>
+        </Table.Header>
+        <Table.Body>
+          {recordsByType[type as "single" | "average"].map((record) => (
+            <SeparateRecordsRow key={record.id} record={record} />
+          ))}
+        </Table.Body>
+      </Table.Root>
+    </VStack>
+  ));
 }
 
 function MixedRecordsTable({ records }: RecordsTableProps) {
