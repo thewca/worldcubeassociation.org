@@ -11,6 +11,7 @@ import EventIcon from "@/components/EventIcon";
 import RecordsTable from "@/components/results/RecordsTable";
 import Loading from "@/components/ui/loading";
 import FilterBox from "@/components/results/FilterBox";
+import { useT } from "@/lib/i18n/useI18n";
 
 type ValidActions =
   | "SET_EVENT"
@@ -40,7 +41,6 @@ type FilterParams = {
 };
 
 interface filteredRecordsProps {
-  initialRecords: components["schemas"]["RecordByEvent"];
   searchParams: FilterParams;
 }
 
@@ -65,7 +65,6 @@ function filterReducer(state: FilterParams, action: FilterAction) {
 }
 
 export default function FilteredRecords({
-  initialRecords,
   searchParams,
 }: filteredRecordsProps) {
   const [filterState, dispatch] = useReducer(filterReducer, searchParams);
@@ -85,36 +84,30 @@ export default function FilteredRecords({
   );
 
   const { event, region, gender, show } = filterState;
+
+  const { t } = useT();
+
   const api = useAPI();
 
-  const {
-    data: records,
-    isFetching,
-    isError,
-  } = useQuery({
-    queryKey: ["records", event, region, gender, show],
+  const { data, isFetching, isError } = useQuery({
+    queryKey: ["records", region, gender, show],
     queryFn: () =>
-      api
-        .GET("/results/records", {
-          params: {
-            query: { event_id: event, region, show, gender },
-          },
-        })
-        .then((res) => res.data!.records),
-    initialData: () => {
-      if (
-        region !== searchParams.region ||
-        gender !== searchParams.gender ||
-        show !== searchParams.show
-      ) {
-        return undefined;
+      api.GET("/results/records", {
+        params: {
+          query: { region, show, gender },
+        },
+      }),
+    select: (data) => {
+      if (event === "all events") {
+        return data.data;
       }
-      if (event !== searchParams.event) {
-        return {
-          [event as CurrentEventId]: initialRecords[event as CurrentEventId],
-        };
-      }
-      return initialRecords;
+      return {
+        timestamp: data.data!.timestamp,
+        records: {
+          [event as CurrentEventId]:
+            data.data!.records[event as CurrentEventId],
+        },
+      };
     },
     refetchOnMount: false,
   });
@@ -133,9 +126,11 @@ export default function FilteredRecords({
 
   return (
     <VStack align={"left"} gap={4}>
+      <Heading size={"5xl"}>{t("results.records.title")}</Heading>
+      {t("results.last_updated_html", { timestamp: data!.timestamp })}
       <FilterBox filterState={filterState} filterActions={filterActions} />
       {WCA_EVENT_IDS.map((event) => {
-        const recordsByEvent = records![event as CurrentEventId];
+        const recordsByEvent = data!.records![event as CurrentEventId];
 
         return (
           recordsByEvent && (

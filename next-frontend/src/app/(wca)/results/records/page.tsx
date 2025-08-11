@@ -1,8 +1,10 @@
-import { getT } from "@/lib/i18n/get18n";
 import { getRecords } from "@/lib/wca/results/records";
-import { Alert, Container, Heading, VStack } from "@chakra-ui/react";
+import { Container, VStack } from "@chakra-ui/react";
 import React from "react";
 import FilteredRecords from "@/app/(wca)/results/records/filteredRecords";
+import { HydrationBoundary, QueryClient } from "@tanstack/react-query";
+import { dehydrate } from "@tanstack/query-core";
+import { getT } from "@/lib/i18n/get18n";
 
 const GENDER_ALL = "All";
 const EVENTS_ALL = "all events";
@@ -14,40 +16,36 @@ export default async function RecordsPage({
 }: {
   searchParams: Promise<{ [key: string]: string | undefined }>;
 }) {
-  const { t } = await getT();
-
   const {
     gender = GENDER_ALL,
-    event = EVENTS_ALL,
     region = REGION_WORLD,
     show = SHOW_MIXED,
   } = await searchParams;
 
-  const response = await getRecords({
-    gender,
-    event,
-    region,
-    show,
-  });
+  const queryClient = new QueryClient();
 
-  if (response.error) {
-    return (
-      <Alert.Root status={"error"}>
-        <Alert.Title>Error fetching Records</Alert.Title>
-      </Alert.Root>
-    );
-  }
+  await queryClient.prefetchQuery({
+    queryFn: () =>
+      getRecords({
+        gender,
+        region,
+        show,
+      }) // We need to take out the response as Next can't serialize that
+        .then((res) => ({
+          data: res.data,
+          error: res.error,
+        })),
+    queryKey: ["records", region, gender, show],
+  });
 
   return (
     <Container bg={"bg"}>
-      <VStack align={"left"} gap={4}>
-        <Heading size={"5xl"}>{t("results.records.title")}</Heading>
-        {t("results.last_updated_html", { timestamp: response.data.timestamp })}
+      <HydrationBoundary state={dehydrate(queryClient)}>
         <FilteredRecords
-          initialRecords={response.data.records}
-          searchParams={{ gender, event, region, show }}
+          // We always fetch all events so we get filtering for free on the frontend
+          searchParams={{ gender, region, show, event: EVENTS_ALL }}
         />
-      </VStack>
+      </HydrationBoundary>
     </Container>
   );
 }
