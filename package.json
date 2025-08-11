@@ -22,7 +22,7 @@
     "@cubing/icons": "^3.0.4",
     "@fullcalendar/core": "^6.1.18",
     "@fullcalendar/interaction": "^6.1.18",
-    "@fullcalendar/luxon3": "^6.1.18",
+    "@fullcalendar/luxon3": "^6.1.19",
     "@fullcalendar/react": "^6.1.18",
     "@fullcalendar/timegrid": "^6.1.18",
     "@hello-pangea/dnd": "^18.0.1",
