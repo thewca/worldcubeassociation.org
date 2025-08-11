@@ -17,6 +17,7 @@ import {
   Link as ChakraLink,
   Center,
 } from "@chakra-ui/react";
+import { MarkdownProse } from "@/components/Markdown";
 import AnnouncementsCard from "@/components/AnnouncementsCard";
 import { getPayload } from "payload";
 import config from "@payload-config";
@@ -65,7 +66,9 @@ const TextCard = ({ block }: { block: TextCardBlock }) => {
       <Card.Body>
         <Card.Title>{block.heading}</Card.Title>
         {block.separatorAfterHeading && <Separator size="md" />}
-        <Card.Description>{block.bodyMarkdown}</Card.Description>
+        <Card.Description>
+          <MarkdownProse content={block.bodyMarkdown} color="colorPalette.fg" />
+        </Card.Description>
         {block.buttonText?.trim() && (
           <Button mr="auto" asChild>
             <ChakraLink asChild>
@@ -164,9 +167,11 @@ const ImageBanner = ({ block }: { block: ImageBannerBlock }) => {
         >
           {block.heading}
         </Heading>
-        <Text fontSize="md" color="colorPalette.fg">
-          {block.bodyMarkdown}
-        </Text>
+        <MarkdownProse
+          content={block.bodyMarkdown}
+          color="colorPalette.fg"
+          fontSize="md"
+        />
       </Card.Body>
     </Card.Root>
   );
@@ -328,7 +333,10 @@ const TestimonialsSpinner = ({ block }: { block: TestimonialsBlock }) => {
                   <Card.Title>{testimonial.punchline}</Card.Title>
                   <Separator size="md" />
                   <Card.Description>
-                    {testimonial.fullTestimonialMarkdown}
+                    <MarkdownProse
+                      content={testimonial.fullTestimonialMarkdown}
+                      color="colorPalette.fg"
+                    />
                   </Card.Description>
                   <Text>{testimonial.whoDunnit}</Text>
                 </Card.Body>

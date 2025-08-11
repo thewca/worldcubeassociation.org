@@ -144,7 +144,7 @@ const ImageOnlyCard: Block = {
 };
 
 const FeaturedCompetitions: Block = {
-  slug: "FeaturedCompetitions",
+  slug: "FeaturedComps", // intentionally short to avoid Payload internally assigning a long table name
   interfaceName: "FeaturedCompetitionsBlock",
   imageURL: "/payload/featured_upcoming_competitions.png",
   fields: [
