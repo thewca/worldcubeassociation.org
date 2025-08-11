@@ -72,9 +72,7 @@ const TextCard = ({ block }: { block: TextCardBlock }) => {
         </Card.Description>
         {block.buttonText?.trim() && (
           <Button mr="auto" asChild>
-            <ChakraLink href={block.buttonLink!}>
-              {block.buttonText}
-            </ChakraLink>
+            <ChakraLink href={block.buttonLink!}>{block.buttonText}</ChakraLink>
           </Button>
         )}
       </Card.Body>
