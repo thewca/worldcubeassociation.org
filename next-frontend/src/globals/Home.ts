@@ -106,12 +106,20 @@ const ImageBanner: Block = {
     {
       name: "bgSize",
       type: "number",
+      min: 10,
+      max: 100,
       defaultValue: 100,
+      required: true,
+      admin: {
+        description: "The size of the background image in percent (%)",
+      },
     },
     {
       name: "bgPos",
-      type: "text",
+      type: "select",
+      options: ["right", "left"],
       defaultValue: "right",
+      required: true,
     },
   ],
 };

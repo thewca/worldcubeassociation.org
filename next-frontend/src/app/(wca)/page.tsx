@@ -146,20 +146,20 @@ const ImageBanner = ({ block }: { block: ImageBannerBlock }) => {
         p="8"
         bg={`colorPalette.${colorPaletteTone}`}
         justifyContent="center"
-        pr="15%"
+        paddingRight="15%"
         backgroundImage={
           block.bgImage != null
             ? `url('${(block.bgImage as Media).url}')`
             : undefined
         }
-        backgroundSize={block.bgSize != null ? `${block.bgSize}%` : undefined}
-        backgroundPosition={block.bgPos ?? undefined}
+        backgroundSize={`${block.bgSize}%`}
+        backgroundPosition={block.bgPos}
         backgroundRepeat="no-repeat"
       >
         <Heading
           size="4xl"
           color={`${headingColorPalette}.emphasized`}
-          mb="4"
+          marginBottom="4"
           textTransform="uppercase"
         >
           {block.heading}

@@ -871,8 +871,11 @@ export interface ImageBannerBlock {
   colorPaletteDarker?: boolean | null;
   headingColor?: ColorPaletteSelect;
   bgImage?: (number | null) | Media;
-  bgSize?: number | null;
-  bgPos?: string | null;
+  /**
+   * The size of the background image in percent (%)
+   */
+  bgSize: number;
+  bgPos: 'right' | 'left';
   id?: string | null;
   blockName?: string | null;
   blockType: 'ImageBanner';
