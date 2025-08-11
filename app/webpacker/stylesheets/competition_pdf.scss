@@ -32,18 +32,18 @@ header {
 }
 
 .nobreak {
-  page-break-inside: avoid;
+  break-inside: avoid;
   &::before {
     clear: both;
   }
 }
 
 .break-before {
-  page-break-before: always;
+  break-before: always;
 }
 
 .break-after {
-  page-break-after: always;
+  break-after: always;
 }
 
 table {
