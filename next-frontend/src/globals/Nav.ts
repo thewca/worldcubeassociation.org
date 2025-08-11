@@ -12,6 +12,23 @@ const staticLinkOptions = [
   "/faq",
   "/api/swagger",
   "/competitions",
+  "/delegates",
+  "/disclaimer",
+  "/documents",
+  "/export/developer",
+  "/export/results",
+  "/faq",
+  "/incidents",
+  "/officers-and-board",
+  "/organizations",
+  "/privacy",
+  "/regulations/about",
+  "/regulations/history",
+  "/regulations/scrambles",
+  "/score-tools",
+  "/speedcubing-history",
+  "/teams-committees",
+  "/translators",
 ] satisfies StaticRoute[];
 
 const LinkItem: Block = {
