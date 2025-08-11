@@ -69,7 +69,7 @@ const UserBadge: React.FC<UserBadgeData> = ({
                     teamRole={role.teamRole}
                     teamText={role.teamText ?? ""}
                     staffColor={role.staffColor}
-                    fontSize={"0.7em"}
+                    fontSize="0.7em"
                   />
                 ))}
               </HStack>

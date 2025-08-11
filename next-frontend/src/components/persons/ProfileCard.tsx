@@ -99,7 +99,7 @@ const ProfileCard: React.FC<ProfileData> = ({
         <Flex flexDirection="row" alignItems="flex-end">
           <Flex flexWrap="wrap">
             {" "}
-            {/* TODO SLATE - fill out these badges with real info*/}
+            {/* TODO SLATE - fill out these badges with real info */}
             <Badge size="lg" variant="achievement">
               <NationalChampionshipIcon />
               147 Championship Titles

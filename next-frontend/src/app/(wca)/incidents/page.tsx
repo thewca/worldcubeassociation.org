@@ -103,10 +103,10 @@ export default function IncidentsPage() {
 
   return (
     <Container>
-      <VStack align={"left"}>
+      <VStack align="left">
         <Heading size="5xl">Incidents Log</Heading>
         <Input
-          placeholder={"Search"}
+          placeholder="Search"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
         />
