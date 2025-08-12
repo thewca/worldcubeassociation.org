@@ -41,9 +41,9 @@ export default function MyCompetitions() {
   }
 
   return (
-    <Container bg={"bg"}>
+    <Container bg="bg">
       <VStack gap="8" pt="8" alignItems="left">
-        <Heading size={"5xl"}>
+        <Heading size="5xl">
           {session.user?.id && (
             <Button asChild>
               <a href={`/persons/${session.user.id}`}>
@@ -64,7 +64,7 @@ export default function MyCompetitions() {
           }}
         />
         <Accordion.Root collapsible>
-          <Accordion.Item value={"past_competitions"}>
+          <Accordion.Item value="past_competitions">
             <Accordion.ItemTrigger>
               <Accordion.ItemIndicator />
               {`${t("competitions.my_competitions.past_competitions")} (${myCompetitions.past_competitions?.length ?? 0})`}

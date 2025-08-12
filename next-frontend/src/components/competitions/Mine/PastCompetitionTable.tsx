@@ -24,7 +24,7 @@ export default function PastCompetitionsTable({
 
   if (competitions.length === 0 && fallbackMessage) {
     return (
-      <Alert.Root status={"info"}>
+      <Alert.Root status="info">
         <Alert.Title>
           <I18nHTMLTranslate
             i18nKey={fallbackMessage.key}
@@ -36,12 +36,7 @@ export default function PastCompetitionsTable({
   }
 
   return (
-    <Table.ScrollArea
-      borderWidth="1px"
-      maxW="100%"
-      height={"400px"}
-      rounded={"md"}
-    >
+    <Table.ScrollArea borderWidth="1px" maxW="100%" height="400px" rounded="md">
       <Table.Root stickyHeader>
         <Table.Header>
           <Table.Row>

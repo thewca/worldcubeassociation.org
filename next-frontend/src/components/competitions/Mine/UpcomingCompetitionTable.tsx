@@ -140,7 +140,7 @@ export default function UpcomingCompetitionTable({
 
   if (competitions.length === 0 && fallbackMessage) {
     return (
-      <Alert.Root status={"info"}>
+      <Alert.Root status="info">
         <Alert.Indicator></Alert.Indicator>
         <Alert.Title>
           <I18nHTMLTranslate
