@@ -25,10 +25,10 @@ export const Users: CollectionConfig = {
     },
   ],
   access: {
-    admin: ({ req }) => {
-      const user = req.user;
-
-      return user?.roles?.includes("wst") === true;
+    admin: ({ req: { user } }) => {
+      return ["wst", "wct", "wat", "wmt", "board"].some((team) =>
+        user?.roles?.includes(team),
+      );
     },
   },
 };
