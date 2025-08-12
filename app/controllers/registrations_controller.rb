@@ -34,6 +34,53 @@ class RegistrationsController < ApplicationController
     redirect_to competition_path(competition_from_params) if competition_from_params.use_wca_registration?
   end
 
+  before_action :check_errors_import_registration!, only: %i[do_import]
+  private def check_errors_import_registration!
+    @competition = competition_from_params
+    file = params[:csv_registration_file]
+
+    competition_events = @competition.competition_events
+    required_event_columns = competition_events.map(&:event_id)
+    required_other_columns = ["status", "name", "country", "wca id", "birth date", "gender", "email"]
+
+    headers = CSV.read(file.path).first.compact.map(&:downcase)
+    missing_headers = (required_other_columns + required_event_columns) - headers
+    return render status: :unprocessable_entity, json: { error: I18n.t("registrations.import.errors.missing_columns", columns: missing_headers.join(", ")) } if missing_headers.any?
+
+    filtered_csv_rows = CSV.read(
+      file.path,
+      headers: true,
+      header_converters: :symbol,
+      skip_blanks: true,
+      converters: ->(string) { string&.strip },
+    ).select { |row| row[:status] == "a" }
+
+    event_column_error = nil
+    @registration_rows = []
+
+    filtered_csv_rows.each do |row|
+      event_ids = []
+
+      competition_events.each do |competition_event|
+        cell_value = row[competition_event.event_id.to_sym]
+        if cell_value == "1"
+          event_ids << competition_event.id
+        elsif cell_value != "0"
+          event_column_error = I18n.t("registrations.import.errors.invalid_event_column", value: cell_value, column: event_column)
+          break
+        end
+      end
+
+      break if event_column_error
+
+      row_hash = row.to_hash
+      row_hash[:event_ids] = event_ids
+      @registration_rows << row_hash
+    end
+
+    render status: :unprocessable_entity, json: { error: event_column_error } if event_column_error
+  end
+
   def edit_registrations
     @competition = competition_from_params
   end
@@ -81,17 +128,9 @@ class RegistrationsController < ApplicationController
   end
 
   def do_import
-    competition = competition_from_params
-    file = params[:csv_registration_file]
-    required_columns = ["status", "name", "country", "wca id", "birth date", "gender", "email"] + competition.events.map(&:id)
-    # Ensure the CSV file includes all required columns.
-    headers = CSV.read(file.path).first.compact.map(&:downcase)
-    missing_headers = required_columns - headers
-    raise I18n.t("registrations.import.errors.missing_columns", columns: missing_headers.join(", ")) if missing_headers.any?
+    competition = @competition
+    registration_rows = @registration_rows
 
-    registration_rows = CSV.read(file.path, headers: true, header_converters: :symbol, skip_blanks: true, converters: ->(string) { string&.strip })
-                           .map(&:to_hash)
-                           .select { |registration_row| registration_row[:status] == "a" }
     if competition.competitor_limit_enabled? && registration_rows.length > competition.competitor_limit
       raise I18n.t("registrations.import.errors.over_competitor_limit",
                    accepted_count: registration_rows.length,
@@ -126,13 +165,8 @@ class RegistrationsController < ApplicationController
         end
         registration.assign_attributes(competing_status: Registrations::Helper::STATUS_ACCEPTED) unless registration.accepted?
         registration.registration_competition_events = []
-        competition.competition_events.map do |competition_event|
-          value = registration_row[competition_event.event_id.to_sym]
-          if value == "1"
-            registration.registration_competition_events.build(competition_event_id: competition_event.id)
-          elsif value != "0"
-            raise I18n.t("registrations.import.errors.invalid_event_column", value: value, column: competition_event.event_id)
-          end
+        registration_row[:event_ids].each do |event_id|
+          registration.registration_competition_events.build(competition_event_id: event_id)
         end
         registration.save!
         registration.add_history_entry({ event_ids: registration.event_ids }, "user", current_user.id, "CSV Import")
