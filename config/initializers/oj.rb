@@ -1,1 +1,3 @@
-Oj.optimize_rails()
+# frozen_string_literal: true
+
+Oj.optimize_rails
