@@ -172,13 +172,24 @@ class ResultsSubmissionController < ApplicationController
 
     return render status: :unprocessable_entity, json: { error: "Submitted results contain errors." } if results_validator.any_errors?
 
-    return render status: :unprocessable_entity, json: { error: "There is already a ticket associated, please contact WRT to update this." } if competition.result_ticket.present?
+    if competition.tickets_competition_result.present? && !competition.tickets_competition_result.aborted?
+      return render status: :unprocessable_entity, json: {
+        error: "There is already a ticket associated with this, hence the results can be resubmitted only if the previous posting has been cancelled by WRT.",
+      }
+    end
 
     CompetitionsMailer.results_submitted(competition, results_validator, message, current_user).deliver_now
 
     ActiveRecord::Base.transaction do
       competition.touch(:results_submitted_at)
-      TicketsCompetitionResult.create_ticket!(competition, message, current_user)
+      if competition.tickets_competition_result.present?
+        competition.tickets_competition_result.update!(
+          status: TicketsCompetitionResult.statuses[:submitted],
+          delegate_message: message,
+        )
+      else
+        TicketsCompetitionResult.create_ticket!(competition, message, current_user)
+      end
     end
 
     render status: :ok, json: { success: true }
