@@ -17,6 +17,53 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
     paginate json: competitions
   end
 
+  def mine
+    user = require_user!
+    ActiveRecord::Base.connected_to(role: :read_replica) do
+      competition_ids = user.organized_competitions.pluck(:competition_id)
+      competition_ids.concat(user.delegated_competitions.pluck(:competition_id))
+      registrations = user.registrations.includes(:competition).accepted.reject { |r| r.competition.results_posted? }
+      registrations.concat(user.registrations.includes(:competition).waitlisted.select { |r| r.competition.upcoming? })
+      registrations.concat(user.registrations.includes(:competition).pending.select { |r| r.competition.upcoming? })
+      registered_for_by_competition_id = registrations.uniq.to_h do |r|
+        [r.competition_id, r.competing_status]
+      end
+      competition_ids.concat(registered_for_by_competition_id.keys)
+      competition_ids.concat(user.person.competitions.pluck(:competition_id)) if user.person
+      # An organiser might still have duties to perform for a cancelled competition until the date of the competition has passed.
+      # For example, mailing all competitors about the cancellation.
+      # In general ensuring ease of access until it is certain that they won't need to frequently visit the page anymore.
+      competitions = Competition.includes(:delegate_report, :championships)
+                                .where(id: competition_ids.uniq).where("cancelled_at is null or end_date >= curdate()")
+                                .sort_by { |comp| comp.start_date || (Date.today + 20.years) }.reverse
+      past_competitions, not_past_competitions = competitions.partition(&:probably_over?)
+      bookmarked_ids = user.competitions_bookmarked.pluck(:competition_id)
+      bookmarked_competitions = Competition.not_over
+                                           .where(id: bookmarked_ids.uniq)
+                                           .sort_by(&:start_date)
+
+      options = {
+        only: %w[id name website start_date end_date registration_open],
+        methods: %w[url city country_iso2 results_posted? visible? confirmed? cancelled? report_posted? short_display_name],
+        include: %w[championships],
+      }
+
+      options_with_reg_status = options.deep_merge({
+                                                     methods: options[:methods] + %w[registration_status],
+                                                   })
+
+      future_competitions = not_past_competitions.as_json(options_with_reg_status)
+
+      future_competitions_with_competing_status = future_competitions.map { |c| c.merge({ competing_status: registered_for_by_competition_id[c["id"]] }) }
+
+      render json: {
+        past_competitions: past_competitions.as_json(options),
+        future_competitions: future_competitions_with_competing_status,
+        bookmarked_competitions: bookmarked_competitions.as_json(options_with_reg_status),
+      }
+    end
+  end
+
   def competition_index
     admin_mode = current_user&.can_see_admin_competitions?
 
