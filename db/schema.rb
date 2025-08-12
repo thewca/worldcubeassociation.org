@@ -1314,16 +1314,17 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_28_105210) do
   create_table "terms_and_conditions", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.text "content", null: false
     t.string "competition_id", null: false
-    t.datetime "deleted_at"
+    t.datetime "revoked_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["competition_id"], name: "index_terms_and_conditions_on_competition_id"
-    t.index ["deleted_at"], name: "index_terms_and_conditions_on_deleted_at"
+    t.index ["revoked_at"], name: "index_terms_and_conditions_on_revoked_at"
   end
 
   create_table "terms_and_conditions_accepts", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "terms_and_conditions_id", null: false
     t.integer "user_id", null: false
+    t.datetime "accepted_at", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["terms_and_conditions_id", "user_id"], name: "index_terms_accepts_on_terms_and_user", unique: true

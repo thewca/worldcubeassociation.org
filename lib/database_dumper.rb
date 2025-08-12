@@ -952,6 +952,18 @@ module DatabaseDumper
         ],
       ),
     }.freeze,
+    "terms_and_conditions" => {
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w[
+          content
+          competition_id
+          revoked_at
+          created_at
+          updated_at
+        ],
+        ),
+    }.freeze,
+    "terms_and_conditions_accepts" => :skip_all_rows,
     "roles_metadata_banned_competitors" => :skip_all_rows,
     "jwt_denylist" => :skip_all_rows,
     "wfc_xero_users" => :skip_all_rows,
