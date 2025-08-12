@@ -961,7 +961,7 @@ module DatabaseDumper
           created_at
           updated_at
         ],
-        ),
+      ),
     }.freeze,
     "terms_and_conditions_accepts" => :skip_all_rows,
     "roles_metadata_banned_competitors" => :skip_all_rows,
