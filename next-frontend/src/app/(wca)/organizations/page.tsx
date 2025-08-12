@@ -32,8 +32,8 @@ export default async function RegionalOrganizations() {
 
   return (
     <Container>
-      <VStack align={"left"}>
-        <Heading size={"5xl"}>{I18n.t("regional_organizations.title")}</Heading>
+      <VStack align="left">
+        <Heading size="5xl">{I18n.t("regional_organizations.title")}</Heading>
         <Text>{I18n.t("regional_organizations.content")}</Text>
         <SimpleGrid columns={3} columnGap={4} rowGap={6}>
           {organizations.map((org) => (
@@ -89,12 +89,12 @@ export default async function RegionalOrganizations() {
             </LinkBox>
           ))}
         </SimpleGrid>
-        <Heading size={"2xl"}>
+        <Heading size="2xl">
           {I18n.t("regional_organizations.how_to.title")}
         </Heading>
         <Text>{I18n.t("regional_organizations.how_to.description")}</Text>
 
-        <Heading size={"xl"}>
+        <Heading size="xl">
           {I18n.t("regional_organizations.requirements.title")}
         </Heading>
         <List.Root>
@@ -109,7 +109,7 @@ export default async function RegionalOrganizations() {
           ))}
         </List.Root>
 
-        <Heading size={"xl"}>
+        <Heading size="xl">
           {I18n.t("regional_organizations.application_instructions.title")}
         </Heading>
         <I18nHTMLTranslate i18nKey="regional_organizations.application_instructions.description_html" />

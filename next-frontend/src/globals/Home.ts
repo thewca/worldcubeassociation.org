@@ -1,25 +1,5 @@
-import { Block, GlobalConfig, SelectField } from "payload";
-
-const colorSelect: SelectField = {
-  name: "color",
-  type: "select",
-  required: true,
-  interfaceName: "ColorSelect",
-  options: [
-    "darkBlue",
-    "darkRed",
-    "darkGreen",
-    "darkOrange",
-    "darkYellow",
-    "blue",
-    "red",
-    "green",
-    "orange",
-    "yellow",
-    "white",
-    "black",
-  ],
-};
+import { Block, CheckboxField, GlobalConfig, SelectField } from "payload";
+import { markdownConvertedField } from "@/collections/helpers";
 
 const colorPaletteSelect: SelectField = {
   name: "colorPalette",
@@ -27,6 +7,14 @@ const colorPaletteSelect: SelectField = {
   required: true,
   interfaceName: "ColorPaletteSelect",
   options: ["blue", "red", "green", "orange", "yellow", "grey"],
+};
+
+const colorPaletteToneToggle: CheckboxField = {
+  name: "colorPaletteDarker",
+  type: "checkbox",
+  admin: {
+    description: "Use a slightly darker nuance of the color palette",
+  },
 };
 
 const TextCard: Block = {
@@ -41,9 +29,10 @@ const TextCard: Block = {
     },
     {
       name: "body",
-      type: "textarea",
+      type: "richText",
       required: true,
     },
+    markdownConvertedField("body"),
     {
       name: "variant",
       type: "select",
@@ -88,9 +77,10 @@ const ImageBanner: Block = {
     },
     {
       name: "body",
-      type: "textarea",
+      type: "richText",
       required: true,
     },
+    markdownConvertedField("body"),
     {
       name: "mainImage",
       type: "upload",
@@ -98,17 +88,15 @@ const ImageBanner: Block = {
       required: true,
     },
     colorPaletteSelect,
+    colorPaletteToneToggle,
     {
-      ...colorSelect,
-      name: "bgColor",
-    },
-    {
-      ...colorSelect,
+      ...colorPaletteSelect,
       name: "headingColor",
-    },
-    {
-      ...colorSelect,
-      name: "textColor",
+      required: false,
+      admin: {
+        description:
+          "Color for the heading. Will follow the overall color palette by default, only use this field if you want to purposely override (for example, to achieve a more striking contrast that garners attention)",
+      },
     },
     {
       name: "bgImage",
@@ -118,12 +106,20 @@ const ImageBanner: Block = {
     {
       name: "bgSize",
       type: "number",
+      min: 10,
+      max: 100,
       defaultValue: 100,
+      required: true,
+      admin: {
+        description: "The size of the background image in percent (%)",
+      },
     },
     {
       name: "bgPos",
-      type: "text",
+      type: "select",
+      options: ["right", "left"],
       defaultValue: "right",
+      required: true,
     },
   ],
 };
@@ -148,27 +144,21 @@ const ImageOnlyCard: Block = {
 };
 
 const FeaturedCompetitions: Block = {
-  slug: "FeaturedCompetitions",
+  slug: "FeaturedComps", // intentionally short to avoid Payload internally assigning a long table name
   interfaceName: "FeaturedCompetitionsBlock",
   imageURL: "/payload/featured_upcoming_competitions.png",
   fields: [
     {
-      name: "Competition1ID",
-      type: "text",
-      required: true,
-    },
-    {
-      ...colorPaletteSelect,
-      name: "colorPalette1",
-    },
-    {
-      name: "Competition2ID",
-      type: "text",
-      required: true,
-    },
-    {
-      ...colorPaletteSelect,
-      name: "colorPalette2",
+      name: "competitions",
+      type: "array",
+      fields: [
+        {
+          name: "competitionId",
+          type: "text",
+          required: true,
+        },
+        colorPaletteSelect,
+      ],
     },
   ],
 };
@@ -194,24 +184,6 @@ const AnnouncementsSection: Block = {
   ],
 };
 
-const TestimonialSlide: Block = {
-  slug: "TestimonialSlide",
-  interfaceName: "TestimonialSlideBlock",
-  labels: {
-    singular: "Testimonial",
-    plural: "Testimonials",
-  },
-  fields: [
-    {
-      name: "testimonial",
-      type: "relationship",
-      relationTo: "testimonials",
-      required: true,
-    },
-    colorPaletteSelect,
-  ],
-};
-
 const TestimonialsSpinner: Block = {
   slug: "TestimonialsSpinner",
   interfaceName: "TestimonialsBlock",
@@ -222,9 +194,17 @@ const TestimonialsSpinner: Block = {
   },
   fields: [
     {
-      name: "blocks",
-      type: "blocks",
-      blocks: [TestimonialSlide],
+      name: "slides",
+      type: "array",
+      fields: [
+        {
+          name: "testimonial",
+          type: "relationship",
+          relationTo: "testimonials",
+          required: true,
+        },
+        colorPaletteSelect,
+      ],
       required: true,
       minRows: 1,
     },
