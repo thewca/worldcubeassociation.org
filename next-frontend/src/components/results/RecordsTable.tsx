@@ -85,6 +85,8 @@ function HistoryTable({ records }: HistoryTableProps) {
   const { t } = useT();
 
   return WCA_EVENT_IDS.map((eventId) => {
+    if (!records[eventId as CurrentEventId]) return;
+
     const groupedByType = _.groupBy(
       records[eventId as CurrentEventId],
       (record) => record.type,
