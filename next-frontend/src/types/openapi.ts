@@ -681,6 +681,8 @@ export interface components {
              * @example 2024-12-19T13:40:19.000Z
              */
             updated_at: string;
+            /** Format: date */
+            start_date: string;
             /** @example 88 */
             value: number;
         };

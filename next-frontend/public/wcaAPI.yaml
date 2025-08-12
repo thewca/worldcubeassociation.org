@@ -529,6 +529,7 @@ components:
         - competition_country_id
         - competition_id
         - competition_name
+        - start_date
         - event_id
         - round_type_id
         - round_id
@@ -617,6 +618,9 @@ components:
           type: string
           format: date-time
           example: "2024-12-19T13:40:19.000Z"
+        start_date:
+          type: string
+          format: date
         value:
           type: integer
           example: 88
