@@ -1,10 +1,37 @@
 import React, { useState } from 'react';
 import { Button, Confirm, Popup } from 'semantic-ui-react';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { ticketsCompetitionResultStatuses } from '../../../../../lib/wca-data.js.erb';
+import clearResultsSubmission from '../../../api/competitionResult/clearResultsSubmission';
+import Loading from '../../../../Requests/Loading';
+import Errored from '../../../../Requests/Errored';
 
-export default function AbortProcess({ ticketDetails, updateStatus }) {
-  const { ticket: { metadata: { status } } } = ticketDetails;
+export default function AbortProcess({ ticketDetails }) {
+  const { ticket: { id, metadata: { status, competition_id: competitionId } } } = ticketDetails;
   const [confirmAbort, setConfirmAbort] = useState();
+
+  const queryClient = useQueryClient();
+  const {
+    mutate: clearResultsSubmissionMutate,
+    isPending,
+    isError,
+    error,
+  } = useMutation({
+    mutationFn: clearResultsSubmission,
+    onSuccess: () => queryClient.setQueryData(
+      ['ticket-details', id],
+      (oldTicketDetails) => ({
+        ...oldTicketDetails,
+        ticket: {
+          ...oldTicketDetails.ticket,
+          metadata: {
+            ...oldTicketDetails.ticket.metadata,
+            status: ticketsCompetitionResultStatuses.aborted,
+          },
+        },
+      }),
+    ),
+  });
 
   // Result Process can be aborted before the inbox results are merged.
   const canAbort = [
@@ -12,6 +39,9 @@ export default function AbortProcess({ ticketDetails, updateStatus }) {
     ticketsCompetitionResultStatuses.locked_for_posting,
     ticketsCompetitionResultStatuses.warnings_verified,
   ].includes(status);
+
+  if (isPending) return <Loading />;
+  if (isError) return <Errored error={error} />;
 
   return (
     <>
@@ -32,7 +62,10 @@ export default function AbortProcess({ ticketDetails, updateStatus }) {
       <Confirm
         open={confirmAbort}
         onCancel={() => setConfirmAbort(false)}
-        onConfirm={() => updateStatus(ticketsCompetitionResultStatuses.aborted)}
+        onConfirm={() => {
+          setConfirmAbort(false);
+          clearResultsSubmissionMutate({ competitionId });
+        }}
         content="Are you sure you want to abort the process and allow Delegates to resubmit results?"
       />
     </>

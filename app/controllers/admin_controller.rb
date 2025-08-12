@@ -36,6 +36,24 @@ class AdminController < ApplicationController
     @competition = competition_from_params
   end
 
+  def clear_results_submission
+    # Just clear the "results_submitted_at" field to let the Delegate submit
+    # the results again. We don't actually want to clear InboxResult and InboxPerson.
+    @competition = competition_from_params
+
+    if @competition.results_submitted? && !@competition.results_posted?
+      ActiveRecord::Base.transaction do
+        @competition.update!(results_submitted_at: nil)
+        @competition.tickets_competition_result.update!(status: TicketsCompetitionResult.statuses[:aborted])
+      end
+      render status: :ok, json: { success: true }
+    else
+      render status: :unprocessable_entity, json: {
+        error: "Could not clear the results submission. Maybe results are already posted, or there is no submission.",
+      }
+    end
+  end
+
   # The order of this array has to follow the steps in which results have to be imported.
   RESULTS_POSTING_STEPS = %i[inbox_result inbox_person].freeze
 
