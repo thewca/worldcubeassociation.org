@@ -4485,13 +4485,13 @@ es:
       #original_hash: f7fd979
       venue_selection_html:
         zero: >-
-          Estás viendo el horario para "%{venue_name}", uno de ${count} lugares
+          Estás viendo el horario para "%{venue_name}", uno de %{count} lugares
           para esta competición.
         one: >-
           Estás viendo el horario para "%{venue_name}", el único lugar para esta
           competición.
         other: >-
-          Estás viendo el horario para "%{venue_name}", uno de ${count} lugares
+          Estás viendo el horario para "%{venue_name}", uno de %{count} lugares
           para esta competición.
       #original_hash: 8d175ad
       venue_selection_all: >-
