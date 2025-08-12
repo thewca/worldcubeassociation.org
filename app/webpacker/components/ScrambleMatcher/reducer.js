@@ -2,13 +2,13 @@ import { useCallback } from 'react';
 import _ from 'lodash';
 import { moveArrayItem } from './util';
 
-export function mergeScrambleSets(state, newScrambleFile) {
+export function groupAndSortScrambles(scrambleSets) {
   const groupedScrambleSets = _.groupBy(
-    newScrambleFile.inbox_scramble_sets,
+    scrambleSets,
     'matched_round_wcif_id',
   );
 
-  const orderedScrambleSets = _.mapValues(
+  return _.mapValues(
     groupedScrambleSets,
     (sets) => _.sortBy(sets, 'ordered_index')
       .map((set) => ({
@@ -16,22 +16,45 @@ export function mergeScrambleSets(state, newScrambleFile) {
         inbox_scrambles: _.sortBy(set.inbox_scrambles, 'ordered_index'),
       })),
   );
+}
 
+function mergeScrambleSets(sortedScramblesOld, sortedScramblesNew) {
   return _.mergeWith(
-    orderedScrambleSets,
-    state,
-    (a, b) => {
-      const aOrEmpty = a ?? [];
-      const bOrEmpty = b ?? [];
+    sortedScramblesOld,
+    sortedScramblesNew,
+    (oldSets, newSets) => {
+      const oldOrEmpty = oldSets ?? [];
+      const newOrEmpty = newSets ?? [];
 
-      const merged = [...bOrEmpty, ...aOrEmpty];
+      const merged = [...oldOrEmpty, ...newOrEmpty];
 
       return _.uniqBy(merged, 'id');
     },
   );
 }
 
-function removeScrambleSet(state, oldScrambleFile) {
+function applyAction(state, keys, action) {
+  return keys.reduce((accState, key) => ({
+    ...accState,
+    [key]: action(state[key]),
+  }), state);
+}
+
+export function initializeState(scrambleSets) {
+  return applyAction(
+    {},
+    ['initial', 'current'],
+    () => groupAndSortScrambles(scrambleSets),
+  );
+}
+
+function addScrambleFile(state, newScrambleFile) {
+  const sortedFileScrambles = groupAndSortScrambles(newScrambleFile.inbox_scramble_sets);
+
+  return mergeScrambleSets(state, sortedFileScrambles);
+}
+
+function removeScrambleFile(state, oldScrambleFile) {
   const withoutScrambleFile = _.mapValues(
     state,
     (sets) => sets.filter(
@@ -55,33 +78,43 @@ export function useDispatchWrapper(originalDispatch, actionVars) {
 export default function scrambleMatchReducer(state, action) {
   switch (action.type) {
     case 'addScrambleFile':
-      return mergeScrambleSets(state, action.scrambleFile);
+      return applyAction(
+        state,
+        ['initial', 'current'],
+        (subState) => addScrambleFile(subState, action.scrambleFile),
+      );
     case 'removeScrambleFile':
-      return removeScrambleSet(state, action.scrambleFile);
+      return applyAction(
+        state,
+        ['initial', 'current'],
+        (subState) => removeScrambleFile(subState, action.scrambleFile),
+      );
+    case 'resetAfterSave':
+      return initializeState(action.scrambleSets);
     case 'moveRoundScrambleSet':
-      return {
-        ...state,
+      return applyAction(state, ['current'], (subState) => ({
+        ...subState,
         [action.roundId]: moveArrayItem(
-          state[action.roundId],
+          subState[action.roundId],
           action.fromIndex,
           action.toIndex,
         ),
-      };
+      }));
     case 'moveScrambleSetToRound':
-      return {
-        ...state,
-        [action.fromRoundId]: state[action.fromRoundId].filter(
+      return applyAction(state, ['current'], (subState) => ({
+        ...subState,
+        [action.fromRoundId]: subState[action.fromRoundId].filter(
           (scrSet) => scrSet.id !== action.scrambleSet.id,
         ),
         [action.toRoundId]: [
-          ...state[action.toRoundId],
+          ...subState[action.toRoundId],
           { ...action.scrambleSet },
         ],
-      };
+      }));
     case 'moveScrambleInSet':
-      return {
-        ...state,
-        [action.roundId]: state[action.roundId]
+      return applyAction(state, ['current'], (subState) => ({
+        ...subState,
+        [action.roundId]: subState[action.roundId]
           .map((scrSet, i) => (i === action.setNumber ? ({
             ...scrSet,
             inbox_scrambles: moveArrayItem(
@@ -90,7 +123,7 @@ export default function scrambleMatchReducer(state, action) {
               action.toIndex,
             ),
           }) : scrSet)),
-      };
+      }));
     default:
       throw new Error(`Unhandled action type: ${action.type}`);
   }

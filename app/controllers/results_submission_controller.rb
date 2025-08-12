@@ -9,8 +9,6 @@ class ResultsSubmissionController < ApplicationController
 
   def new
     @competition = competition_from_params
-    @results_validator = ResultsValidators::CompetitionsResultsValidator.create_full_validation
-    @results_validator.validate(@competition.id)
   end
 
   def newcomer_checks
@@ -44,6 +42,11 @@ class ResultsSubmissionController < ApplicationController
   end
 
   def compute_potential_duplicates
+    last_job_run = DuplicateCheckerJobRun.find_by(competition_id: params.require(:competition_id))
+    job_run_running_too_long = last_job_run&.run_status_not_started? || last_job_run&.run_status_in_progress?
+
+    last_job_run.update!(run_status: DuplicateCheckerJobRun.run_statuses[:long_running_uncertain]) if job_run_running_too_long
+
     job_run = DuplicateCheckerJobRun.create!(competition_id: params.require(:competition_id))
     ComputePotentialDuplicates.perform_later(job_run)
 

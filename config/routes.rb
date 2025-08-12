@@ -233,7 +233,11 @@ Rails.application.routes.draw do
   end
   resources :tickets, only: %i[index show] do
     post 'update_status' => 'tickets#update_status', as: :update_status
+    post 'merge_inbox_results' => 'tickets#merge_inbox_results', as: :merge_inbox_results
+    post 'post_results' => 'tickets#post_results', as: :post_results
     get 'edit_person_validators' => 'tickets#edit_person_validators', as: :edit_person_validators
+    get 'inbox_person_summary' => 'tickets#inbox_person_summary', as: :inbox_person_summary
+    post 'delete_inbox_persons' => 'tickets#delete_inbox_persons', as: :delete_inbox_persons
     resources :ticket_comments, only: %i[index create], as: :comments
     resources :ticket_logs, only: [:index], as: :logs
   end
@@ -388,6 +392,7 @@ Rails.application.routes.draw do
       get '/auth/results' => 'api#auth_results'
       get '/export/public' => 'api#export_public'
       get '/scramble-program' => 'api#scramble_program'
+      get '/known-timezones' => 'api#known_timezones'
       get '/search' => 'api#omni_search'
       get '/search/posts' => 'api#posts_search'
       get '/search/competitions' => 'api#competitions_search'

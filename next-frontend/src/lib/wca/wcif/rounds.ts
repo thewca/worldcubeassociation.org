@@ -7,13 +7,13 @@ import {
 import type { components } from "@/types/openapi";
 import type { TFunction } from "i18next";
 
-type WcifEvent = components["schemas"]["WcifEvent"];
-type WcifRound = components["schemas"]["WcifRound"];
-type WcifTimeLimit = components["schemas"]["WcifTimeLimit"];
-type WcifCutoff = components["schemas"]["WcifCutoff"];
-type WcifAdvancementCondition =
+export type WcifEvent = components["schemas"]["WcifEvent"];
+export type WcifRound = components["schemas"]["WcifRound"];
+export type WcifTimeLimit = components["schemas"]["WcifTimeLimit"];
+export type WcifCutoff = components["schemas"]["WcifCutoff"];
+export type WcifAdvancementCondition =
   components["schemas"]["WcifAdvancementCondition"];
-type WcifQualification = components["schemas"]["WcifQualification"];
+export type WcifQualification = components["schemas"]["WcifQualification"];
 
 export type RoundTypeId = "1" | "2" | "3" | "c" | "d" | "e" | "f" | "g";
 

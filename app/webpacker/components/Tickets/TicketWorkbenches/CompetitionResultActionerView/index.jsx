@@ -1,11 +1,13 @@
 import React from 'react';
 import { ticketsCompetitionResultStatuses } from '../../../../lib/wca-data.js.erb';
 import WarningsVerification from './WarningsVerification';
-import { adminImportResultsUrl } from '../../../../lib/requests/routes.js.erb';
 import TimelineView from './TimelineView';
+import MergeInboxResults from './MergeInboxResults';
+import CreateWcaIds from './CreateWcaIds';
+import FinalSteps from './FinalSteps';
 
 export default function CompetitionResultActionerView({ ticketDetails, updateStatus }) {
-  const { ticket: { metadata: { status, competition_id: competitionId } } } = ticketDetails;
+  const { ticket: { metadata: { status } } } = ticketDetails;
 
   return (
     <>
@@ -14,15 +16,12 @@ export default function CompetitionResultActionerView({ ticketDetails, updateSta
         status={status}
         ticketDetails={ticketDetails}
         updateStatus={updateStatus}
-        competitionId={competitionId}
       />
     </>
   );
 }
 
-function ViewForStatus({
-  status, ticketDetails, updateStatus, competitionId,
-}) {
+function ViewForStatus({ status, ticketDetails, updateStatus }) {
   switch (status) {
     case ticketsCompetitionResultStatuses.submitted:
       return <p>Please lock the competition results from the Posting dashboard.</p>;
@@ -37,12 +36,22 @@ function ViewForStatus({
 
     case ticketsCompetitionResultStatuses.warnings_verified:
       return (
-        <p>
-          Please finish the remaining steps in
-          {' '}
-          <a href={adminImportResultsUrl(competitionId)}>import results page</a>
-          .
-        </p>
+        <MergeInboxResults
+          ticketDetails={ticketDetails}
+        />
+      );
+
+    case ticketsCompetitionResultStatuses.merged_inbox_results:
+      return (
+        <CreateWcaIds
+          ticketDetails={ticketDetails}
+        />
+      );
+    case ticketsCompetitionResultStatuses.created_wca_ids:
+      return (
+        <FinalSteps
+          ticketDetails={ticketDetails}
+        />
       );
 
     default:

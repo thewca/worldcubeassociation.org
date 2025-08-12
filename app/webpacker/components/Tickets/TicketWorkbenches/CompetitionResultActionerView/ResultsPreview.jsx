@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import React, { useMemo, useState } from 'react';
 import _ from 'lodash';
-import { Accordion } from 'semantic-ui-react';
+import { Accordion, Message } from 'semantic-ui-react';
 import getImportedTemporaryResults from '../../api/competitionResult/getImportedTemporaryResults';
 import Errored from '../../../Requests/Errored';
 import Loading from '../../../Requests/Loading';
@@ -16,7 +16,7 @@ export default function Wrapper({ competitionId }) {
   );
 }
 
-function ResultsPreview({ competitionId }) {
+export function ResultsPreview({ competitionId }) {
   const {
     data: importedTemporaryResults,
     isPending,
@@ -65,6 +65,11 @@ function ResultsPreview({ competitionId }) {
         Preview imported results
       </Accordion.Title>
       <Accordion.Content active={activeAccordion}>
+        <Message positive>
+          Total no. of temporary results:
+          {' '}
+          {importedTemporaryResults.length}
+        </Message>
         <ResultsPreviewAccordion roundDetails={roundDetails} groupedResults={groupedResults} />
       </Accordion.Content>
     </Accordion>

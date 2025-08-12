@@ -85,38 +85,12 @@ class AdminController < ApplicationController
   def import_inbox_results
     @competition = competition_from_params
 
-    ActiveRecord::Base.transaction do
-      result_rows = @competition.inbox_results
-                                .includes(:inbox_person)
-                                .map do |inbox_res|
-        inbox_person = inbox_res.inbox_person
-
-        person_id = inbox_person&.wca_id.presence || inbox_res.person_id
-        person_country = inbox_person&.country
-
-        {
-          pos: inbox_res.pos,
-          person_id: person_id,
-          person_name: inbox_res.person_name,
-          country_id: person_country.id,
-          competition_id: inbox_res.competition_id,
-          event_id: inbox_res.event_id,
-          round_type_id: inbox_res.round_type_id,
-          round_id: inbox_res.round_id,
-          format_id: inbox_res.format_id,
-          value1: inbox_res.value1,
-          value2: inbox_res.value2,
-          value3: inbox_res.value3,
-          value4: inbox_res.value4,
-          value5: inbox_res.value5,
-          best: inbox_res.best,
-          average: inbox_res.average,
-        }
-      end
-
-      Result.insert_all!(result_rows)
-      @competition.inbox_results.destroy_all
+    if @competition.tickets_competition_result.nil?
+      flash[:danger] = "Cannot import results because the competition does not have a results ticket."
+      return redirect_to competition_admin_import_results_path(@competition)
     end
+
+    @competition.tickets_competition_result.merge_inbox_results
 
     load_result_posting_steps do
       render partial: 'import_results_steps'

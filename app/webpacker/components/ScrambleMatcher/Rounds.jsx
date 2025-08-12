@@ -9,6 +9,7 @@ import Groups from './Groups';
 import { useDispatchWrapper } from './reducer';
 import { scrambleSetToDetails, scrambleSetToName } from './util';
 import useInputState from '../../lib/hooks/useInputState';
+import { formats } from '../../lib/wca-data.js.erb';
 
 export default function Rounds({
   wcifRounds,
@@ -90,6 +91,11 @@ function SelectedRoundPanel({
     [selectedRound.id],
   );
 
+  const selectedRoundFormat = useMemo(
+    () => formats.byId[selectedRound.format],
+    [selectedRound.format],
+  );
+
   return (
     <>
       <ScrambleMatch
@@ -113,6 +119,7 @@ function SelectedRoundPanel({
         <Groups
           scrambleSetCount={selectedRound.scrambleSetCount}
           scrambleSets={matchState[selectedRound.id]}
+          expectedSolveCount={selectedRoundFormat?.expectedSolveCount}
           dispatchMatchState={wrappedDispatch}
         />
       )}
@@ -185,6 +192,7 @@ function RoundsPicker({
   showGroupsPicker = false,
 }) {
   const [selectedRoundId, setSelectedRoundId] = useState();
+
   const selectedRound = useMemo(
     () => wcifRounds.find((r) => r.id === selectedRoundId),
     [wcifRounds, selectedRoundId],

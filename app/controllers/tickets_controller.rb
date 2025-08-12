@@ -5,6 +5,7 @@ class TicketsController < ApplicationController
 
   before_action :authenticate_user!
   before_action -> { check_ticket_errors(TicketLog.action_types[:update_status]) }, only: [:update_status]
+  before_action -> { redirect_to_root_unless_user(:can_admin_results?) }, only: %i[merge_inbox_results delete_inbox_persons]
 
   SORT_WEIGHT_LAMBDAS = {
     createdAt:
@@ -56,7 +57,7 @@ class TicketsController < ApplicationController
   def show
     respond_to do |format|
       format.html do
-        @ticket_id = params.require(:id)
+        @ticket_id = params.require(:id).to_i
         render :show
       end
       format.json do
@@ -78,12 +79,14 @@ class TicketsController < ApplicationController
 
     ActiveRecord::Base.transaction do
       @ticket.metadata.update!(status: ticket_status)
-      TicketLog.create!(
-        ticket_id: @ticket.id,
+      ticket_log = @ticket.ticket_logs.create!(
         action_type: @action_type,
-        action_value: ticket_status,
         acting_user_id: current_user.id,
         acting_stakeholder_id: @acting_stakeholder.id,
+      )
+      ticket_log.ticket_log_changes.create!(
+        field_name: TicketLogChange.field_names[:status],
+        field_value: ticket_status,
       )
     end
     render json: { success: true }
@@ -196,5 +199,48 @@ class TicketsController < ApplicationController
     competition = Competition.find(params.require(:competition_id))
 
     render json: competition.inbox_results.includes(:inbox_person)
+  end
+
+  def merge_inbox_results
+    ticket = Ticket.find(params.require(:ticket_id))
+
+    ticket.metadata.merge_inbox_results
+
+    render status: :ok, json: { success: true }
+  end
+
+  def inbox_person_summary
+    ticket = Ticket.find(params.require(:ticket_id))
+    competition = ticket.metadata.competition
+
+    render status: :ok, json: {
+      inbox_person_count: competition.inbox_persons.count,
+      inbox_person_no_wca_id_count: competition.inbox_persons.where(wca_id: '').count,
+      result_no_wca_id_count: competition.results.select(:person_id).distinct.where("person_id REGEXP '^[0-9]+$'").count,
+    }
+  end
+
+  def delete_inbox_persons
+    ticket = Ticket.find(params.require(:ticket_id))
+    competition = ticket.metadata.competition
+
+    ActiveRecord::Base.transaction do
+      competition.inbox_persons.delete_all
+      ticket.metadata.update!(status: TicketsCompetitionResult.statuses[:created_wca_ids])
+    end
+
+    render status: :ok, json: { success: true }
+  end
+
+  def post_results
+    ticket = Ticket.find(params.require(:ticket_id))
+    competition = ticket.metadata.competition
+
+    error = CompetitionResultsImport.post_results_error(competition)
+    return render status: :unprocessable_entity, json: { error: error } if error
+
+    CompetitionResultsImport.post_results(competition, current_user)
+
+    render status: :ok, json: { success: true }
   end
 end

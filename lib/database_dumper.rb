@@ -969,6 +969,7 @@ module DatabaseDumper
     "wfc_xero_users" => :skip_all_rows,
     "wfc_dues_redirects" => :skip_all_rows,
     "ticket_logs" => :skip_all_rows,
+    "ticket_log_changes" => :skip_all_rows,
     "ticket_comments" => :skip_all_rows,
     "ticket_stakeholders" => :skip_all_rows,
     "tickets" => :skip_all_rows,
@@ -1322,7 +1323,7 @@ module DatabaseDumper
   end
 
   def self.mysqldump_tsv(database, command, dest_filename)
-    system_pipefail!("mysql #{self.mysql_cli_creds} #{database} --batch -e \"#{command}\" #{filter_out_mysql_warning dest_filename}")
+    system_pipefail!("mysql #{self.mysql_cli_creds} #{database} --batch --quick -e \"#{command}\" #{filter_out_mysql_warning dest_filename}")
   end
 
   def self.mysqldump(db_name, dest_filename)

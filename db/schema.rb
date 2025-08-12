@@ -692,7 +692,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_28_105210) do
     t.bigint "external_upload_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["competition_id", "event_id", "round_number", "scramble_set_number"], name: "idx_on_competition_id_event_id_round_number_scrambl_d9248c75e4", unique: true
     t.index ["competition_id", "event_id", "round_number"], name: "idx_on_competition_id_event_id_round_number_063e808d5f"
     t.index ["competition_id"], name: "index_inbox_scramble_sets_on_competition_id"
     t.index ["event_id"], name: "fk_rails_7a55abc2f3"
@@ -1344,10 +1343,18 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_28_105210) do
     t.index ["ticket_id"], name: "index_ticket_comments_on_ticket_id"
   end
 
+  create_table "ticket_log_changes", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.bigint "ticket_log_id", null: false
+    t.string "field_name", null: false
+    t.string "field_value", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["ticket_log_id"], name: "index_ticket_log_changes_on_ticket_log_id"
+  end
+
   create_table "ticket_logs", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "ticket_id", null: false
     t.string "action_type", null: false
-    t.string "action_value"
     t.integer "acting_user_id", null: false
     t.bigint "acting_stakeholder_id", null: false
     t.datetime "created_at", null: false
