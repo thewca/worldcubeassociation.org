@@ -1,12 +1,4 @@
-import {
-  Box,
-  Button,
-  ButtonGroup,
-  VStack,
-  HStack,
-  Field,
-  SegmentGroup,
-} from "@chakra-ui/react";
+import { Box, VStack, HStack, Field, SegmentGroup } from "@chakra-ui/react";
 import EventSelector from "@/components/EventSelector";
 import { useT } from "@/lib/i18n/useI18n";
 import RegionSelector from "@/components/RegionSelector";
@@ -41,7 +33,7 @@ export default function FilterBox({
       borderWidth="1px"
       borderColor="gray.100"
     >
-      <VStack align={"left"}>
+      <VStack align="left">
         <EventSelector
           title={t("competitions.competition_form.events")}
           selectedEvents={[filterState.event]}
@@ -66,7 +58,7 @@ export default function FilterBox({
             <SegmentGroup.Root
               value={filterState.gender}
               onValueChange={(e) => filterActions.setGender(e.value!)}
-              size={"md"}
+              size="md"
             >
               <SegmentGroup.Indicator />
               <SegmentGroup.Items items={["All", "Male", "Female"]} />
@@ -77,7 +69,7 @@ export default function FilterBox({
             <SegmentGroup.Root
               value={filterState.show}
               onValueChange={(e) => filterActions.setShow(e.value!)}
-              size={"md"}
+              size="md"
             >
               <SegmentGroup.Indicator />
               <SegmentGroup.Items

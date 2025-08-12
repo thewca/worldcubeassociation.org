@@ -52,7 +52,7 @@ export default function RecordsTable({ records, show }: WrapperTableProps) {
         recordsByEvent && (
           <React.Fragment key={event}>
             {show === "mixed" && (
-              <Heading size={"2xl"} key={event}>
+              <Heading size="2xl" key={event}>
                 <EventIcon eventId={event} /> {events.byId[event].name}
               </Heading>
             )}
@@ -150,8 +150,8 @@ function HistoryTable({ records }: HistoryTableProps) {
     const average = groupedByType["average"];
 
     return (
-      <VStack key={eventId} align={"left"}>
-        <Heading size={"2xl"}>
+      <VStack key={eventId} align="left">
+        <Heading size="2xl">
           <EventIcon eventId={eventId} /> {events.byId[eventId].name}
         </Heading>
         <Table.Root>
@@ -247,8 +247,8 @@ function SeparateRecordsTable({ recordsByType }: SeparateRecordsTableProps) {
   const { t } = useT();
 
   return ["single", "average"].map((type) => (
-    <VStack align={"left"} key={type}>
-      <Heading size={"2xl"}>
+    <VStack align="left" key={type}>
+      <Heading size="2xl">
         {t(`results.selector_elements.type_selector.${type}`)}
       </Heading>
       <Table.Root>

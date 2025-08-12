@@ -117,15 +117,15 @@ export default function FilteredRecords({
 
   if (isError) {
     return (
-      <Alert.Root status={"error"}>
+      <Alert.Root status="error">
         <Alert.Title>Error fetching Records</Alert.Title>
       </Alert.Root>
     );
   }
 
   return (
-    <VStack align={"left"} gap={4}>
-      <Heading size={"5xl"}>{t("results.records.title")}</Heading>
+    <VStack align="left" gap={4}>
+      <Heading size="5xl">{t("results.records.title")}</Heading>
       {t("results.last_updated_html", { timestamp: data!.timestamp })}
       <FilterBox filterState={filterState} filterActions={filterActions} />
       <RecordsTable records={data!.records!} show={show} />

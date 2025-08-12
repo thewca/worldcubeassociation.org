@@ -40,7 +40,7 @@ export default async function RecordsPage({
   });
 
   return (
-    <Container bg={"bg"}>
+    <Container bg="bg">
       <HydrationBoundary state={dehydrate(queryClient)}>
         <FilteredRecords
           // We always fetch all events, so we get filtering for free on the frontend
