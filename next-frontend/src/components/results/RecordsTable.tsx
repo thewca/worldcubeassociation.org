@@ -124,7 +124,7 @@ function HistoryTable({ records }: HistoryTableProps) {
             </Table.Row>
           </Table.Header>
           <Table.Body>
-            {single.map((record) => (
+            {single?.map((record) => (
               <HistoryRow key={record.id} record={record} />
             ))}
             {average?.map((record) => (

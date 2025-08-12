@@ -21,12 +21,14 @@ class Api::V0::Results::RecordsController < Api::V0::ApiController
     params[:show] ||= SHOW_MIXED
     params[:gender] ||= GENDER_ALL
 
+    @is_history = params[:show] == "history"
+
     shared_constants_and_conditions
 
     cache_params = ResultsController.compute_cache_key(MODE_RECORDS, **params_for_cache)
     record_timestamp = ComputeAuxiliaryData.successful_start_date || Date.current
 
-    query = if params[:show] == "history"
+    query = if @is_history
               <<-SQL.squish
         SELECT
           results.*,
@@ -57,8 +59,9 @@ class Api::V0::Results::RecordsController < Api::V0::ApiController
           type DESC, round_type_id, person_name
               SQL
             end
+    # TODO: move this to records-page-api when migration to next is done so this can be properly precompute
 
-    records = Rails.cache.fetch ["records-page-api", *cache_params, record_timestamp] do
+    records = Rails.cache.fetch ["records-page-api-next", *cache_params, record_timestamp] do
       DbHelper.execute_cached_query(cache_params, record_timestamp, query)
     end
     records = records.to_a
@@ -108,13 +111,13 @@ class Api::V0::Results::RecordsController < Api::V0::ApiController
     @country = Country.c_find(params[:region])
     if @continent.present?
       @region_condition = "AND results.country_id IN (#{@continent.country_ids.map { |id| "'#{id}'" }.join(',')})"
-      @region_condition += " AND record_name IN ('WR', '#{@continent.record_name}')" if @is_histories
+      @region_condition += " AND record_name IN ('WR', '#{@continent.record_name}')" if @is_history
     elsif @country.present?
       @region_condition = "AND results.country_id = '#{@country.id}'"
-      @region_condition += " AND record_name <> ''" if @is_histories
+      @region_condition += " AND record_name <> ''" if @is_history
     else
       @region_condition = ""
-      @region_condition += "AND record_name = 'WR'" if @is_histories
+      @region_condition += "AND record_name = 'WR'" if @is_history
     end
 
     @gender = params[:gender]
