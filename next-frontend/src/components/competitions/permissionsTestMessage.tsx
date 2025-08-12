@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { route } from "nextjs-routes";
 import { usePermissions } from "@/providers/PermissionProvider";
 import { components } from "@/types/openapi";
 import { Text, Link as ChakraLink } from "@chakra-ui/react";
@@ -16,7 +17,14 @@ export default function PermissionsTestMessage({
     <Text>
       You can administer this competition{" "}
       <ChakraLink asChild variant="underline" colorPalette="teal">
-        <Link href={`/competitions/${competitionInfo.id}/admin`}>here</Link>
+        <Link
+          href={route({
+            pathname: "/competitions/[competitionId]/admin",
+            query: { competitionId: competitionInfo.id },
+          })}
+        >
+          here
+        </Link>
       </ChakraLink>
     </Text>
   ) : (

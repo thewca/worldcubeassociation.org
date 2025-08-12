@@ -477,33 +477,33 @@ const customConfig = defineConfig({
         variants: {
           size: {
             sm: {
-              fontWeight: "medium", //Not used in styleguide
+              fontWeight: "medium", // Not used in styleguide
             },
             md: {
-              fontWeight: "medium", //Subheading 2
-              textStyle: "lg", //same size as lg, just thinner
+              fontWeight: "medium", // Subheading 2
+              textStyle: "lg", // same size as lg, just thinner
             },
             lg: {
-              fontWeight: "bold", //Subheading 1
+              fontWeight: "bold", // Subheading 1
             },
             xl: {
-              fontWeight: "bold", //Not used in styleguide
+              fontWeight: "bold", // Not used in styleguide
             },
             "2xl": {
-              fontWeight: "extrabold", //H4
+              fontWeight: "extrabold", // H4
             },
             "3xl": {
-              fontWeight: "extrabold", //H3
+              fontWeight: "extrabold", // H3
             },
             "4xl": {
-              fontWeight: "extrabold", //H2
+              fontWeight: "extrabold", // H2
             },
             "5xl": {
-              fontWeight: "extrabold", //H1
+              fontWeight: "extrabold", // H1
               textTransform: "uppercase",
             },
             "6xl": {
-              fontWeight: "extrabold", //Not used in styleguide
+              fontWeight: "extrabold", // Not used in styleguide
             },
           },
         },
@@ -595,7 +595,7 @@ const customConfig = defineConfig({
           {
             variant: "achievement",
             css: {
-              textStyle: "lg", //needed to supercede the default textStyle
+              textStyle: "lg", // needed to supercede the default textStyle
               // @ts-expect-error TODO: Fix this
               svg: {
                 height: "1.25em",
@@ -606,7 +606,7 @@ const customConfig = defineConfig({
           {
             variant: "information",
             css: {
-              textStyle: "md", //needed to supercede the default textStyle
+              textStyle: "md", // needed to supercede the default textStyle
               // @ts-expect-error TODO: Fix this
               svg: {
                 height: "1.1em",
@@ -711,7 +711,7 @@ const customConfig = defineConfig({
           {
             variant: "info",
             css: {
-              title: { textStyle: "4xl" }, //needed to supercede the default textStyle
+              title: { textStyle: "4xl" }, // needed to supercede the default textStyle
             },
           },
           {

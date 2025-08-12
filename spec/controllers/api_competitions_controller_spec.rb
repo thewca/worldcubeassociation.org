@@ -97,7 +97,7 @@ RSpec.describe Api::V0::CompetitionsController do
       get :index
       expect(response).to have_http_status :ok
       json = response.parsed_body
-      expect(json.map { |c| c["id"] }).to eq [tomorrow_comp, today_comp, yesterday_comp, yesteryear_comp].map(&:id)
+      expect(json.pluck("id")).to eq [tomorrow_comp, today_comp, yesterday_comp, yesteryear_comp].map(&:id)
     end
 
     it 'can query by country_iso2' do
@@ -207,19 +207,19 @@ RSpec.describe Api::V0::CompetitionsController do
 
       get :index, params: { start: "2015-02-01" }
       json = response.parsed_body
-      expect(json.map { |c| c["id"] }).to eq [march_comp.id, feb_comp.id, last_feb_comp.id]
+      expect(json.pluck("id")).to eq [march_comp.id, feb_comp.id, last_feb_comp.id]
 
       get :index, params: { end: "2016-03-01" }
       json = response.parsed_body
-      expect(json.map { |c| c["id"] }).to eq [march_comp.id, feb_comp.id, last_feb_comp.id]
+      expect(json.pluck("id")).to eq [march_comp.id, feb_comp.id, last_feb_comp.id]
 
       get :index, params: { start: "2015-02-01", end: "2016-02-15" }
       json = response.parsed_body
-      expect(json.map { |c| c["id"] }).to eq [feb_comp.id, last_feb_comp.id]
+      expect(json.pluck("id")).to eq [feb_comp.id, last_feb_comp.id]
 
       get :index, params: { start: "2015-02-01", end: "2015-02-01" }
       json = response.parsed_body
-      expect(json.map { |c| c["id"] }).to eq [last_feb_comp.id]
+      expect(json.pluck("id")).to eq [last_feb_comp.id]
     end
 
     it 'can query by announced_after' do
@@ -228,7 +228,7 @@ RSpec.describe Api::V0::CompetitionsController do
       get :index, params: { announced_after: 2.days.ago }
       expect(response).to have_http_status :ok
       json = response.parsed_body
-      expect(json.map { |c| c["name"] }).to eq ["New comp 2018"]
+      expect(json.pluck("name")).to eq ["New comp 2018"]
     end
 
     it 'paginates' do

@@ -1311,7 +1311,7 @@ module DatabaseDumper
   end
 
   def self.mysqldump_tsv(database, command, dest_filename)
-    system_pipefail!("mysql #{self.mysql_cli_creds} #{database} --batch -e \"#{command}\" #{filter_out_mysql_warning dest_filename}")
+    system_pipefail!("mysql #{self.mysql_cli_creds} #{database} --batch --quick -e \"#{command}\" #{filter_out_mysql_warning dest_filename}")
   end
 
   def self.mysqldump(db_name, dest_filename)

@@ -31,12 +31,26 @@ const TIMELINE_STATUSES = [
     data in InboxResults.`,
   },
   {
+    status: ticketsCompetitionResultStatuses.created_wca_ids,
+    description: `WRT will have to go through the newcomers, verify their
+    details and generate WCA ID for them.`,
+  },
+  {
     status: ticketsCompetitionResultStatuses.posted,
     description: `When the results are posted, the results become public, and
     also email notification will be sent to participants informing that the
     results are posted.`,
   },
 ];
+
+const STATUS_LABELS = {
+  submitted: 'Submitted',
+  locked_for_posting: 'Locked for Posting',
+  warnings_verified: 'Warnings Verified',
+  merged_inbox_results: 'Merged Inbox Results',
+  created_wca_ids: 'Created WCA IDs',
+  posted: 'Posted',
+};
 
 export default function TimelineView({ status }) {
   const currentStatusIndex = useMemo(
@@ -53,7 +67,7 @@ export default function TimelineView({ status }) {
         >
           <Step.Content>
             <Step.Title>
-              {_.startCase(timelineStatus)}
+              {STATUS_LABELS[timelineStatus] || _.startCase(timelineStatus)}
               <Popup
                 trigger={<Icon name="info circle" size="large" />}
                 content={description}

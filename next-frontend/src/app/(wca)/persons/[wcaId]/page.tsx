@@ -232,7 +232,7 @@ export default async function PersonOverview({
   return (
     <Container centerContent maxW="1800px">
       {/* Profile Section */}
-      {/* TODO SLATE - stick the bottom of this Profile card to the bottom of the page*/}
+      {/* TODO SLATE - stick the bottom of this Profile card to the bottom of the page */}
       <SimpleGrid gap={8} columns={24} padding={5}>
         <GridItem colSpan={7} h="80lvh" position="sticky" top="0px" pt="20px">
           <ProfileCard

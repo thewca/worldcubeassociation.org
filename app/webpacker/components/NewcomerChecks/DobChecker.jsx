@@ -17,7 +17,7 @@ export default function DobChecker({ competitionId }) {
   if (isLoading) return <Loading />;
   if (isError) return <Errored error={error} />;
   if (dobChecks.length === 0) {
-    return <Message positive>All names looks good. Thanks for checking.</Message>;
+    return <Message positive>All DOBs are looking good. Thanks for checking.</Message>;
   }
 
   return (

@@ -17,6 +17,7 @@ import Link from "next/link";
 
 import { iconMap } from "@/components/icons/iconMap";
 import { WCA_PROVIDER_ID } from "@/auth.config";
+import { route } from "nextjs-routes";
 
 export default function Dashboard() {
   const { data: session } = useSession();
@@ -40,19 +41,34 @@ export default function Dashboard() {
       <Text>Test Links:</Text>
       <HStack>
         <ChakraLink asChild variant="colouredLink" colorPalette="blue">
-          <Link href="competitions/OC2024">
+          <Link
+            href={route({
+              pathname: "/competitions/[competitionId]",
+              query: { competitionId: "OC2024" },
+            })}
+          >
             <Button variant="outline">OC2024</Button>
           </Link>
         </ChakraLink>
         <ChakraLink asChild variant="colouredLink" colorPalette="red">
-          <Link href="competitions/WC2025">
+          <Link
+            href={route({
+              pathname: "/competitions/[competitionId]",
+              query: { competitionId: "OC2024" },
+            })}
+          >
             <Button variant="outline" colorPalette="red">
               WC2025
             </Button>
           </Link>
         </ChakraLink>
         <ChakraLink asChild variant="colouredLink" colorPalette="red">
-          <Link href="persons/2022ANDE01">
+          <Link
+            href={route({
+              pathname: "/persons/[wcaId]",
+              query: { wcaId: "2022ANDE01" },
+            })}
+          >
             <Button variant="outline" colorPalette="red">
               2022ANDE01
             </Button>

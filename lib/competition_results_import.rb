@@ -70,4 +70,29 @@ module CompetitionResultsImport
       competition.inbox_results.destroy_all
     end
   end
+
+  def self.post_results_error(comp)
+    return t('competitions.messages.computing_auxiliary_data') if ComputeAuxiliaryData.in_progress?
+
+    return t('competitions.messages.no_results') unless comp.results.any?
+
+    return t('competitions.messages.no_main_event_results', event_name: comp.main_event.name) if comp.main_event && comp.results.where(event_id: comp.main_event_id).empty?
+
+    t('competitions.messages.results_already_posted') if comp.results_posted?
+  end
+
+  def self.post_results(comp, current_user)
+    ActiveRecord::Base.transaction do
+      # It's important to clearout the 'posting_by' here to make sure
+      # another WRT member can start posting other results.
+      comp.update!(results_posted_at: Time.now, results_posted_by: current_user.id, posting_by: nil)
+      comp.competitor_users.each { |user| user.notify_of_results_posted(comp) }
+      comp.registrations.accepted.each { |registration| registration.user.maybe_assign_wca_id_by_results(comp) }
+      if comp.tickets_competition_result.present?
+        comp.tickets_competition_result.update!(
+          status: TicketsCompetitionResult.statuses[:posted],
+        )
+      end
+    end
+  end
 end
