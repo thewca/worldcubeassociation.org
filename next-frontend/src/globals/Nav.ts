@@ -1,8 +1,35 @@
 import { Block, GlobalConfig } from "payload";
 
-import { iconMap, IconName } from "@/components/icons/iconMap";
+import { iconMap, type IconName } from "@/components/icons/iconMap";
+import type { Route } from "nextjs-routes";
 
 const iconOptions = Object.keys(iconMap) as IconName[];
+
+type StaticRoute = Exclude<Route, { query: unknown }>["pathname"];
+
+const staticLinkOptions = [
+  "/",
+  "/faq",
+  "/api/swagger",
+  "/competitions",
+  "/delegates",
+  "/disclaimer",
+  "/documents",
+  "/export/developer",
+  "/export/results",
+  "/faq",
+  "/incidents",
+  "/officers-and-board",
+  "/organizations",
+  "/privacy",
+  "/regulations/about",
+  "/regulations/history",
+  "/regulations/scrambles",
+  "/score-tools",
+  "/speedcubing-history",
+  "/teams-committees",
+  "/translators",
+] satisfies StaticRoute[];
 
 const LinkItem: Block = {
   slug: "LinkItem", // required
@@ -15,7 +42,9 @@ const LinkItem: Block = {
     },
     {
       name: "targetLink",
-      type: "text",
+      type: "select",
+      options: staticLinkOptions,
+      interfaceName: "StaticTargetLink",
       required: true,
     },
     {

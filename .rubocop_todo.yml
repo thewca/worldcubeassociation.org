@@ -21,3 +21,11 @@ Metrics/PerceivedComplexity:
     - 'app/jobs/sync_mailing_lists_job.rb'
     - 'app/models/competition.rb'
     - 'lib/results_validators/*.rb'
+
+# This cop wants us to stop doing things like
+#   @being_cloned_from ||= Competition.find_by(id: being_cloned_from_id)
+# because it thinks that `being_cloned_from_id` is a database column-backed property.
+# But it isn't. We should think these few cases over, but that comes later.
+Rails/FindByOrAssignmentMemoization:
+  Exclude:
+    - 'app/models/*.rb'

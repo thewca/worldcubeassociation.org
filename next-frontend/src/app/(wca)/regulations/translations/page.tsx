@@ -24,24 +24,22 @@ export default async function RegulationsTranslations() {
 
   return (
     <Container>
-      <VStack align={"left"}>
+      <VStack align="left">
         <Heading size="5xl">{t("regulations_translations.title")}</Heading>
         <Text>{t("regulations_translations.paragraph1")}</Text>
         <Text>{t("regulations_translations.paragraph2")}</Text>
 
-        <Heading size={"2xl"}>
+        <Heading size="2xl">
           {t("regulations_translations.translations")}
         </Heading>
-        <Heading size={"xl"}>{t("regulations_translations.current")}</Heading>
+        <Heading size="xl">{t("regulations_translations.current")}</Heading>
         <TranslationList translations={current} />
-        <Heading size={"xl"}>{t("regulations_translations.old")}</Heading>
-        <Heading size={"2xl"}>
+        <Heading size="xl">{t("regulations_translations.old")}</Heading>
+        <Heading size="2xl">
           {t("regulations_translations.translating")}
         </Heading>
         <TranslationList translations={outdated} />
-        <I18nHTMLTranslate
-          i18nKey={"regulations_translations.paragraph3_html"}
-        />
+        <I18nHTMLTranslate i18nKey="regulations_translations.paragraph3_html" />
       </VStack>
     </Container>
   );

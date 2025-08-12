@@ -13,6 +13,7 @@ import { getPayload } from "payload";
 import config from "@payload-config";
 import Link from "next/link";
 import Image from "next/image";
+import { route } from "nextjs-routes";
 import { RefreshRouteOnSave } from "@/components/RefreshRouteOnSave";
 import { ColorModeButton } from "@/components/ui/color-mode";
 import { LuChevronDown, LuMonitorCheck } from "react-icons/lu";
@@ -34,14 +35,14 @@ export default async function Navbar() {
       <RefreshRouteOnSave />
       <HStack>
         <IconButton asChild variant="ghost">
-          <Link href={"/"}>
+          <Link href="/">
             <ChakraImage asChild maxW={10}>
               <Image src="/logo.png" alt="WCA Logo" height={50} width={50} />
             </ChakraImage>
           </Link>
         </IconButton>
         <IconButton asChild variant="ghost">
-          <Link href={"/dashboard"}>
+          <Link href="/dashboard">
             <LuMonitorCheck />
           </Link>
         </IconButton>
@@ -141,7 +142,11 @@ export default async function Navbar() {
         <LanguageSelector />
         <ColorModeButton />
         <Button asChild variant="ghost" size="sm">
-          <Link href="/payload">Payload CMS</Link>
+          <Link
+            href={route({ pathname: "/payload/[[...segments]]", query: {} })}
+          >
+            Payload CMS
+          </Link>
         </Button>
       </HStack>
     </HStack>

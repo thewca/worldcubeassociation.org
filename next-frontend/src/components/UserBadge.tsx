@@ -10,6 +10,7 @@ import {
 import Image from "next/image";
 import RoleBadge, { StaffColor } from "@/components/RoleBadge";
 import Link from "next/link";
+import { route } from "nextjs-routes";
 
 interface UserBadgeData {
   name: string;
@@ -50,7 +51,14 @@ const UserBadge: React.FC<UserBadgeData> = ({
           <Card.Body>
             <Card.Title>
               <LinkOverlay asChild>
-                <Link href={`/persons/${wcaId}`}>{name}</Link>
+                <Link
+                  href={route({
+                    pathname: "/persons/[wcaId]",
+                    query: { wcaId },
+                  })}
+                >
+                  {name}
+                </Link>
               </LinkOverlay>
             </Card.Title>
             {roles && (
@@ -61,7 +69,7 @@ const UserBadge: React.FC<UserBadgeData> = ({
                     teamRole={role.teamRole}
                     teamText={role.teamText ?? ""}
                     staffColor={role.staffColor}
-                    fontSize={"0.7em"}
+                    fontSize="0.7em"
                   />
                 ))}
               </HStack>
