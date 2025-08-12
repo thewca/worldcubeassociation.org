@@ -13,8 +13,7 @@ class TicketsCompetitionResult < ApplicationRecord
   }
 
   has_one :ticket, as: :metadata
-  belongs_to :competition
-  delegate :name, to: :competition, prefix: true
+  belongs_to :competition, -> { select(:id, :name) }
 
   def actions_allowed_for(ticket_stakeholder)
     if ticket_stakeholder.stakeholder == UserGroup.teams_committees_group_wrt
@@ -71,7 +70,9 @@ class TicketsCompetitionResult < ApplicationRecord
   end
 
   DEFAULT_SERIALIZE_OPTIONS = {
-    methods: %w[competition_name],
+    include: {
+      competition: { only: %i[id name], methods: [], include: [] },
+    },
   }.freeze
 
   def serializable_hash(options = nil)

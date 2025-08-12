@@ -30,7 +30,7 @@ function Heading({ ticketDetails }) {
     case ticketTypes.edit_person:
       return 'Edit Person';
     case ticketTypes.competition_result:
-      return metadata.competition_name;
+      return metadata.competition.name;
     default:
       return 'Unknown Ticket';
   }
