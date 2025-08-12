@@ -51,6 +51,7 @@ interface SeparateRecordsRowProp {
 
 interface HistoryRowProps {
   record: components["schemas"]["Record"];
+  mixed?: boolean;
 }
 
 interface SlimRecordsRowProp {
@@ -90,7 +91,7 @@ export function MixedRecordsRow({ record, t }: MixedRecordsRowProp) {
   );
 }
 
-export function HistoryRow({ record }: HistoryRowProps) {
+export function HistoryRow({ record, mixed = false }: HistoryRowProps) {
   const {
     definedAttempts: attempts,
     bestResultIndex,
@@ -102,6 +103,7 @@ export function HistoryRow({ record }: HistoryRowProps) {
   return (
     <Table.Row>
       <Table.Cell>{record.start_date}</Table.Cell>
+      {mixed && <EventCell eventId={record.event_id} />}
       <PersonCell personId={record.person_id} personName={record.person_name} />
       {record.type === "single" ? (
         <Table.Cell>{formattedValue}</Table.Cell>

@@ -24,6 +24,10 @@ interface HistoryTableProps {
   records: components["schemas"]["RecordByEvent"];
 }
 
+interface MixedHistoryTableProps {
+  records: components["schemas"]["Record"][];
+}
+
 interface RecordsTableProps {
   records: components["schemas"]["Record"][];
 }
@@ -79,6 +83,57 @@ export default function RecordsTable({ records, show }: WrapperTableProps) {
   if (show === "history") {
     return <HistoryTable records={records} />;
   }
+
+  if (show === "mixed history") {
+    const allRecords = WCA_EVENT_IDS.reduce(
+      (acc, event) => [...records[event as CurrentEventId]!, ...acc],
+      [] as components["schemas"]["Record"][],
+    ).sort((a, b) => b.start_date.localeCompare(a.start_date));
+
+    return <MixedHistoryTable records={allRecords} />;
+  }
+}
+
+function MixedHistoryTable({ records }: MixedHistoryTableProps) {
+  const { t } = useT();
+
+  return (
+    <Table.Root>
+      <Table.Header>
+        <Table.Row>
+          <Table.ColumnHeader>
+            {t("results.table_elements.date_circa")}
+          </Table.ColumnHeader>
+          <Table.ColumnHeader>
+            {t("results.table_elements.event")}
+          </Table.ColumnHeader>
+          <Table.ColumnHeader>
+            {t("results.table_elements.name")}
+          </Table.ColumnHeader>
+          <Table.ColumnHeader>
+            {t("results.selector_elements.type_selector.single")}
+          </Table.ColumnHeader>
+          <Table.ColumnHeader>
+            {t("results.selector_elements.type_selector.average")}
+          </Table.ColumnHeader>
+          <Table.ColumnHeader>
+            {t("results.table_elements.region")}
+          </Table.ColumnHeader>
+          <Table.ColumnHeader>
+            {t("results.table_elements.competition")}
+          </Table.ColumnHeader>
+          <Table.ColumnHeader>
+            {t("results.table_elements.solves")}
+          </Table.ColumnHeader>
+        </Table.Row>
+      </Table.Header>
+      <Table.Body>
+        {records.map((record, index) => (
+          <HistoryRow key={`${record.id}-${index}`} record={record} mixed />
+        ))}
+      </Table.Body>
+    </Table.Root>
+  );
 }
 
 function HistoryTable({ records }: HistoryTableProps) {

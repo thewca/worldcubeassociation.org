@@ -86,7 +86,7 @@ export default function FilteredRecords({
 
   const api = useAPI();
 
-  const isHistory = show === "history";
+  const isHistory = show === "history" || show === "mixed history";
 
   const { data, isFetching, isError } = useQuery({
     queryKey: ["records", region, gender, isHistory],

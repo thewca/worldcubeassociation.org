@@ -86,7 +86,7 @@ export default function FilterBox({
                   "slim",
                   "separate",
                   "history",
-                  "mixed History",
+                  "mixed history",
                 ]}
               />
             </SegmentGroup.Root>
