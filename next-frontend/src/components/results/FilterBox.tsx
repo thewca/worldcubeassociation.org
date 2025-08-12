@@ -5,6 +5,7 @@ import {
   VStack,
   HStack,
   Field,
+  SegmentGroup,
 } from "@chakra-ui/react";
 import EventSelector from "@/components/EventSelector";
 import { useT } from "@/lib/i18n/useI18n";
@@ -62,68 +63,33 @@ export default function FilterBox({
         <HStack>
           <Field.Root>
             <Field.Label>Gender</Field.Label>
-            <ButtonGroup attached size="md" width="100%">
-              <Button
-                flex={1}
-                onClick={() => filterActions.setGender("All")}
-                variant={filterState.gender == "All" ? "outline" : "solid"}
-              >
-                All
-              </Button>
-              <Button
-                flex={1}
-                onClick={() => filterActions.setGender("Male")}
-                variant={filterState.gender == "Male" ? "outline" : "solid"}
-              >
-                Male
-              </Button>
-              <Button
-                flex={1}
-                onClick={() => filterActions.setGender("Female")}
-                variant={filterState.gender == "Female" ? "outline" : "solid"}
-              >
-                Female
-              </Button>
-            </ButtonGroup>
+            <SegmentGroup.Root
+              value={filterState.gender}
+              onValueChange={(e) => filterActions.setGender(e.value!)}
+              size={"md"}
+            >
+              <SegmentGroup.Indicator />
+              <SegmentGroup.Items items={["All", "Male", "Female"]} />
+            </SegmentGroup.Root>
           </Field.Root>
           <Field.Root>
             <Field.Label>Show</Field.Label>
-            <ButtonGroup attached size="md" width="100%">
-              <Button
-                flex={1}
-                onClick={() => filterActions.setShow("mixed")}
-                variant={filterState.show == "mixed" ? "outline" : "solid"}
-              >
-                Mixed
-              </Button>
-              <Button
-                flex={1}
-                onClick={() => filterActions.setShow("slim")}
-                variant={filterState.show == "slim" ? "outline" : "solid"}
-              >
-                Slim
-              </Button>
-              <Button
-                flex={1}
-                onClick={() => filterActions.setShow("separate")}
-                variant={filterState.show == "separate" ? "outline" : "solid"}
-              >
-                Separate
-              </Button>
-              <Button
-                flex={1}
-                onClick={() => filterActions.setShow("history")}
-                variant={filterState.show == "history" ? "outline" : "solid"}
-              >
-                History
-              </Button>
-              <Button
-                flex={1}
-                onClick={() => filterActions.setShow("Mixed History")}
-              >
-                Mixed History
-              </Button>
-            </ButtonGroup>
+            <SegmentGroup.Root
+              value={filterState.show}
+              onValueChange={(e) => filterActions.setShow(e.value!)}
+              size={"md"}
+            >
+              <SegmentGroup.Indicator />
+              <SegmentGroup.Items
+                items={[
+                  "mixed",
+                  "slim",
+                  "separate",
+                  "history",
+                  "mixed History",
+                ]}
+              />
+            </SegmentGroup.Root>
           </Field.Root>
         </HStack>
       </VStack>
