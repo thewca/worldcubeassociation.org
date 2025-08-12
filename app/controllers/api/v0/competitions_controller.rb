@@ -39,8 +39,8 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
       past_competitions, not_past_competitions = competitions.partition(&:probably_over?)
       bookmarked_ids = user.competitions_bookmarked.pluck(:competition_id)
       bookmarked_competitions = Competition.not_over
-                                            .where(id: bookmarked_ids.uniq)
-                                            .sort_by(&:start_date)
+                                           .where(id: bookmarked_ids.uniq)
+                                           .sort_by(&:start_date)
 
       options = {
         only: %w[id name website start_date end_date registration_open],
@@ -49,12 +49,12 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
       }
 
       options_with_reg_status = options.deep_merge({
-                                                     methods: options[:methods] + %w[registration_status]
+                                                     methods: options[:methods] + %w[registration_status],
                                                    })
 
       future_competitions = not_past_competitions.as_json(options_with_reg_status)
 
-      future_competitions_with_competing_status = future_competitions.map { |c| c.merge({ competing_status: registered_for_by_competition_id[c["id"]]})}
+      future_competitions_with_competing_status = future_competitions.map { |c| c.merge({ competing_status: registered_for_by_competition_id[c["id"]] }) }
 
       render json: {
         past_competitions: past_competitions.as_json(options),
