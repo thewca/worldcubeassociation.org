@@ -20,7 +20,7 @@ export default async function ResultExportPage() {
         <Heading size="5xl">{t("database.developer_export.heading")}</Heading>
         <I18nHTMLTranslate
           as={Text}
-          i18nKey={"database.developer_export.description_html"}
+          i18nKey="database.developer_export.description_html"
           options={{
             github_link:
               "<a href='https://github.com/thewca/worldcubeassociation.org/wiki/Developer-database-export'>GitHub</a>",
