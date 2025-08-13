@@ -33,14 +33,15 @@ class Api::V0::Results::RankingsController < Api::V0::Results::ResultsController
               <<-SQL.squish
         SELECT
           results.*,
-          results.#{value} value
+          results.#{value} value,
+          competitions.cell_name competition_name,
+          competitions.country_id competition_country_id
         FROM (
           SELECT MIN(value_and_id) value_and_id
           FROM concise_#{type_param}_results results
           #{'JOIN persons ON results.person_id = persons.wca_id and persons.sub_id = 1' if @gender_condition.present?}
           WHERE #{value} > 0
             #{@event_condition}
-            #{@years_condition_result}
             #{@region_condition}
             #{@gender_condition}
           GROUP BY person_id
@@ -48,6 +49,7 @@ class Api::V0::Results::RankingsController < Api::V0::Results::ResultsController
           #{limit_condition}
         ) top
         JOIN results ON results.id = value_and_id % 1000000000
+        JOIN competitions on competitions.id = results.competition_id
         ORDER BY value, person_name
               SQL
             elsif is_results
@@ -58,10 +60,9 @@ class Api::V0::Results::RankingsController < Api::V0::Results::ResultsController
             average value
           FROM results
           #{'JOIN persons ON results.person_id = persons.wca_id and persons.sub_id = 1' if @gender_condition.present?}
-          #{'JOIN competitions on competitions.id = results.competition_id' if @years_condition_competition.present?}
+          JOIN competitions on competitions.id = results.competition_id
           WHERE average > 0
             #{@event_condition}
-            #{@years_condition_competition}
             #{@region_condition}
             #{@gender_condition}
           ORDER BY
@@ -76,10 +77,9 @@ class Api::V0::Results::RankingsController < Api::V0::Results::ResultsController
               value#{i} value
             FROM results
             #{'JOIN persons ON results.person_id = persons.wca_id and persons.sub_id = 1' if @gender_condition.present?}
-            #{'JOIN competitions on competitions.id = results.competition_id' if @years_condition_competition.present?}
+            JOIN competitions on competitions.id = results.competition_id
             WHERE value#{i} > 0
               #{@event_condition}
-              #{@years_condition_competition}
               #{@region_condition}
               #{@gender_condition}
             ORDER BY value
@@ -107,7 +107,6 @@ class Api::V0::Results::RankingsController < Api::V0::Results::ResultsController
           #{'JOIN persons ON results.person_id = persons.wca_id and persons.sub_id = 1' if @gender_condition.present?}
           WHERE 1
             #{@event_condition}
-            #{@years_condition_result}
             #{@gender_condition}
           GROUP BY results.country_id
         ) records
@@ -116,7 +115,6 @@ class Api::V0::Results::RankingsController < Api::V0::Results::ResultsController
         #{'JOIN persons ON results.person_id = persons.wca_id and persons.sub_id = 1' if @gender_condition.present?}
         WHERE 1
           #{@event_condition}
-          #{@years_condition_competition}
           #{@gender_condition}
         ORDER BY value, results.country_id, start_date, person_name
               SQL

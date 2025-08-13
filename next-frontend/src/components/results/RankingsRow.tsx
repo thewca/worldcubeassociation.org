@@ -1,11 +1,12 @@
 import { components } from "@/types/openapi";
 import { Table } from "@chakra-ui/react";
-import { formatAttemptResult } from "../../../../app/webpacker/lib/wca-live/attempts";
 import {
   AttemptsCells,
   CompetitionCell,
   CountryCell,
+  PersonCell,
 } from "@/components/results/ResultTableCells";
+import { formatAttemptResult } from "@/lib/wca/wcif/attempts";
 
 interface RankingsRowProps {
   ranking: components["schemas"]["Result"];
@@ -55,13 +56,16 @@ export function RankingsRow({
 
   return (
     <Table.Row>
-      <Table.Cell>{index}</Table.Cell>
-      <Table.Cell>{formatAttemptResult(ranking.value)}</Table.Cell>
+      <Table.Cell>{index + 1}</Table.Cell>
+      <PersonCell personId={ranking.wca_id} personName={ranking.person_name} />
+      <Table.Cell>
+        {formatAttemptResult(ranking.value, ranking.event_id)}
+      </Table.Cell>
       <CountryCell countryId={ranking.country_id} />
       <CompetitionCell
         competitionId={ranking.competition_id}
-        competitionName={ranking.competitionName}
-        competitionCountry={ranking.competitionCountry}
+        competitionName={ranking.competition_name}
+        competitionCountry={ranking.competition_country_id}
       />
       {isAverage && (
         <AttemptsCells

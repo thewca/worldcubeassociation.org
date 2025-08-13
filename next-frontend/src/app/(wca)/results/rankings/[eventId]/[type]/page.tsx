@@ -6,7 +6,7 @@ import { HydrationBoundary, QueryClient } from "@tanstack/react-query";
 import { dehydrate } from "@tanstack/query-core";
 
 const GENDER_ALL = "All";
-const SHOW_MIXED = "mixed";
+const SHOW_100_PERSONS = "100 persons";
 const REGION_WORLD = "world";
 
 export default async function RecordsPage({
@@ -19,7 +19,7 @@ export default async function RecordsPage({
   const {
     gender = GENDER_ALL,
     region = REGION_WORLD,
-    show = SHOW_MIXED,
+    show = SHOW_100_PERSONS,
   } = await searchParams;
 
   const { eventId, type } = await params;

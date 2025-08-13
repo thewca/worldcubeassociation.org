@@ -25,7 +25,7 @@ export default function RankingsTable({
             {t("results.table_elements.name")}
           </Table.ColumnHeader>
           <Table.ColumnHeader>
-            {t("results.selector_elements.type_selector.result")}
+            {t("results.table_elements.result")}
           </Table.ColumnHeader>
           <Table.ColumnHeader>
             {t("results.table_elements.region")}

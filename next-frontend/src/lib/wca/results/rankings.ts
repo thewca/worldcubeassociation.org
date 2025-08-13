@@ -11,7 +11,11 @@ export const getRankings = cache(
   }) => {
     return await serverClient.GET("/results/rankings/{event_id}/{type}", {
       params: {
-        query: searchParams,
+        query: {
+          gender: searchParams.gender,
+          region: searchParams.region,
+          show: searchParams.show,
+        },
         path: { event_id: searchParams.eventId, type: searchParams.type },
       },
     });
