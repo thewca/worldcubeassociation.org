@@ -1,6 +1,5 @@
 import _ from 'lodash';
 import { moveArrayItem } from './util';
-import pickerConfigurations from './config';
 
 function addScrambleSetsToEvents(wcifEvents, scrambleSets) {
   const groupedScrambleSets = _.groupBy(
@@ -31,25 +30,9 @@ function applyAction(state, keys, action) {
   }), state);
 }
 
-function unfoldNavigation(pickerKey, accu = []) {
-  const pickerConfig = pickerConfigurations.find((cfg) => cfg.key === pickerKey);
-
-  if (!pickerConfig) {
-    return accu;
-  }
-
-  const nextAccu = [...accu, {
-    pickerKey,
-    matchingKey: pickerConfig.matchingKey,
-    entityId: null,
-  }];
-
-  return unfoldNavigation(pickerConfig.matchingKey, nextAccu);
-}
-
-export function initializeState({ wcifEvents, scrambleSets, navigationRootKey = undefined }) {
+export function initializeState({ wcifEvents, scrambleSets }) {
   return applyAction(
-    { navigation: unfoldNavigation(navigationRootKey) },
+    {},
     ['initial', 'current'],
     () => addScrambleSetsToEvents(wcifEvents, scrambleSets),
   );

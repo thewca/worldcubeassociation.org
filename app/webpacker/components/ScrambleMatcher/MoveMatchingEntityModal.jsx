@@ -1,7 +1,6 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { Button, Form, Modal } from 'semantic-ui-react';
 import _ from 'lodash';
-import pickerConfigurations from './config';
 import { useInputUpdater } from '../../lib/hooks/useInputState';
 import { translateNavigationToLodash } from './reducer';
 
@@ -50,20 +49,16 @@ function MatchingSelect({
   );
 }
 
-export default function MoveMatchingRowModal({
+export default function MoveMatchingEntityModal({
   isOpen,
   onClose,
   dispatchMatchState,
   selectedMatchingRow,
   rootMatchState,
-  localHistory,
-  pickerConfig,
+  pickerHistory,
+  entityToName,
 }) {
-  const {
-    computeMatchingCellName,
-  } = pickerConfig;
-
-  const baseDescriptor = useMemo(() => navigationToDescriptor(localHistory), [localHistory]);
+  const baseDescriptor = useMemo(() => navigationToDescriptor(pickerHistory), [pickerHistory]);
 
   const [targetDescriptor, setTargetDescriptor] = useState(baseDescriptor);
 
@@ -71,22 +66,22 @@ export default function MoveMatchingRowModal({
     dispatchMatchState({
       type: 'moveMatchingEntity',
       entity: entityToMove,
-      fromNavigation: descriptorToNavigation(baseDescriptor, localHistory),
-      toNavigation: descriptorToNavigation(newTargetDescriptor, localHistory),
+      fromNavigation: descriptorToNavigation(baseDescriptor, pickerHistory),
+      toNavigation: descriptorToNavigation(newTargetDescriptor, pickerHistory),
     });
 
     onClose();
-  }, [dispatchMatchState, baseDescriptor, localHistory, onClose]);
+  }, [dispatchMatchState, baseDescriptor, pickerHistory, onClose]);
 
   const computeChoices = useCallback((historyIdx, selectedPath) => {
-    const reconstructedHistory = descriptorToNavigation(selectedPath, localHistory);
+    const reconstructedHistory = descriptorToNavigation(selectedPath, pickerHistory);
     const parentSteps = reconstructedHistory.slice(0, historyIdx);
 
     return translateNavigationToLodash(parentSteps, rootMatchState).lookup;
-  }, [localHistory, rootMatchState]);
+  }, [pickerHistory, rootMatchState]);
 
   const fixSelectionPath = useCallback(
-    (selectedPath) => localHistory.reduce((correctedPath, historyStep, idx) => {
+    (selectedPath) => pickerHistory.reduce((correctedPath, historyStep, idx) => {
       const availableChoices = computeChoices(idx, correctedPath);
 
       const originalChoiceId = selectedPath[historyStep.pickerKey];
@@ -101,7 +96,7 @@ export default function MoveMatchingRowModal({
         [historyStep.pickerKey]: finalChoice.id,
       };
     }, {}),
-    [computeChoices, localHistory],
+    [computeChoices, pickerHistory],
   );
 
   const updateTargetPath = useCallback(
@@ -129,11 +124,11 @@ export default function MoveMatchingRowModal({
       <Modal.Header>
         Move
         {' '}
-        {computeMatchingCellName(selectedMatchingRow)}
+        {entityToName(selectedMatchingRow)}
       </Modal.Header>
       <Modal.Content>
         <Form>
-          {localHistory.map((historyStep, idx) => (
+          {pickerHistory.map((historyStep, idx) => (
             <MatchingSelect
               key={historyStep.pickerKey}
               pickerKey={historyStep.pickerKey}

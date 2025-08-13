@@ -134,7 +134,7 @@ export default function ScrambleMatch({
                                   )}
                               </Table.Cell>
                               {moveAwayAction && (
-                                <Table.Cell textAlign="center" collapsing icon>
+                                <Table.Cell textAlign="center" collapsing>
                                   <Icon
                                     name="arrows alternate horizontal"
                                     link

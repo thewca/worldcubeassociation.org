@@ -4,13 +4,13 @@ import _ from 'lodash';
 import { useMutation } from '@tanstack/react-query';
 import WCAQueryClientProvider from '../../lib/providers/WCAQueryClientProvider';
 import FileUpload from './FileUpload';
-import PickerWithMatching from './PickerWithMatching';
 import { fetchJsonOrError } from '../../lib/requests/fetchWithAuthenticityToken';
 import { scramblesUpdateRoundMatchingUrl } from '../../lib/requests/routes.js.erb';
 import scrambleMatchReducer, { initializeState } from './reducer';
 import useUnsavedChangesAlert from '../../lib/hooks/useUnsavedChangesAlert';
 import { computeMatchingProgress } from './util';
 import MatchingProgressMessage from './MatchingProgressMessage';
+import Events from "./Events";
 
 export default function Wrapper({
   wcifEvents,
@@ -65,7 +65,6 @@ function ScrambleMatcher({
     {
       initial: persistedMatchState,
       current: matchState,
-      navigation: navigationState,
     },
     dispatchMatchState,
   ] = useReducer(
@@ -73,7 +72,6 @@ function ScrambleMatcher({
     {
       wcifEvents,
       scrambleSets: inboxScrambleSets,
-      navigationRootKey: 'events',
     },
     initializeState,
   );
@@ -125,6 +123,8 @@ function ScrambleMatcher({
     </Button>
   ), [isSubmitting, submitAction, hasAnyMissing]);
 
+  const innerMatchState = useMemo(() => ({ events: matchState }), [matchState]);
+
   return (
     <>
       <MatchingProgressMessage
@@ -145,9 +145,8 @@ function ScrambleMatcher({
           your changes!
         </Message>
       )}
-      <PickerWithMatching
-        pickerKey="events"
-        selectableEntities={matchState}
+      <Events
+        matchState={innerMatchState}
         dispatchMatchState={dispatchMatchState}
       />
       {hasUnsavedChanges && (
