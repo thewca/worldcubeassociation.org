@@ -10,7 +10,7 @@ function SelectedScrambleSetPanel({
   pickerHistory,
 }) {
   const selectedRound = useMemo(
-    () => applyPickerHistory(matchState, pickerHistory.slice(-1)),
+    () => applyPickerHistory(matchState, pickerHistory.slice(0, -1)),
     [matchState, pickerHistory],
   );
 

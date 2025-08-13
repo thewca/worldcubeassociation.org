@@ -90,6 +90,8 @@ export default function scrambleMatchReducer(state, action) {
         const oldPath = unwrapActionNavigation(action, 'fromNavigation');
         const newPath = unwrapActionNavigation(action, 'toNavigation');
 
+        console.log('trying to move', oldPath, newPath);
+
         return _.chain(subState)
           .cloneDeep()
           .update(oldPath, (arr) => arr.filter((ent) => ent.id !== action.entity.id))

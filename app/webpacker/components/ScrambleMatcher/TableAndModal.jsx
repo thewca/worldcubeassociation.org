@@ -56,6 +56,7 @@ export default function TableAndModal({
         selectedMatchingEntity={modalPayload}
         rootMatchState={matchState}
         pickerHistory={pickerHistory}
+        matchingKey={matchingKey}
         entityToName={computeCellName}
       />
     </>

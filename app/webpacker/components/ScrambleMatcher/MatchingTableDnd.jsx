@@ -139,6 +139,7 @@ export default function MatchingTableDnd({
                                     name="arrows alternate horizontal"
                                     link
                                     onClick={() => moveAwayAction(rowData)}
+                                    disabled={hasError}
                                   />
                                 </Table.Cell>
                               )}

@@ -73,6 +73,7 @@ export default function MoveMatchingEntityModal({
   selectedMatchingEntity,
   rootMatchState,
   pickerHistory,
+  matchingKey,
   entityToName,
 }) {
   const baseDescriptor = useMemo(() => navigationToDescriptor(pickerHistory), [pickerHistory]);
@@ -83,24 +84,28 @@ export default function MoveMatchingEntityModal({
     dispatchMatchState({
       type: 'moveMatchingEntity',
       entity: entityToMove,
-      fromNavigation: descriptorToNavigation(baseDescriptor, pickerHistory, rootMatchState),
-      toNavigation: descriptorToNavigation(newTargetDescriptor, pickerHistory, rootMatchState),
+      fromNavigation: pickerHistory,
+      toNavigation: descriptorToNavigation(
+        newTargetDescriptor,
+        pickerHistory,
+        rootMatchState,
+      ),
+      matchingKey,
     });
 
     onClose();
-  }, [dispatchMatchState, baseDescriptor, pickerHistory, rootMatchState, onClose]);
+  }, [dispatchMatchState, pickerHistory, rootMatchState, matchingKey, onClose]);
 
   const computeChoices = useCallback((historyIdx, selectedPath) => {
-    const reconstructedHistory = descriptorToNavigation(
+    const currentKey = pickerHistory[historyIdx].key;
+
+    const parentSteps = descriptorToNavigation(
       selectedPath,
-      pickerHistory,
+      pickerHistory.slice(0, historyIdx),
       rootMatchState,
     );
 
-    const parentSteps = reconstructedHistory.slice(0, historyIdx);
-    const currentStep = reconstructedHistory[historyIdx];
-
-    return applyPickerHistory(rootMatchState, parentSteps)[currentStep.key];
+    return applyPickerHistory(rootMatchState, parentSteps)[currentKey];
   }, [pickerHistory, rootMatchState]);
 
   const fixSelectionPath = useCallback(
