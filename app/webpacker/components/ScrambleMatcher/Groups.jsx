@@ -1,9 +1,9 @@
-import React, { useCallback, useMemo } from 'react';
-import ScrambleMatch from './ScrambleMatch';
+import React, { useMemo } from 'react';
 import ButtonGroupPicker from './ButtonGroupPicker';
 import { applyPickerHistory, scrambleToName } from './util';
 import { formats } from '../../lib/wca-data.js.erb';
 import PickerWithShortcut from './PickerWithShortcut';
+import TableAndModal from './TableAndModal';
 
 function ScrambleSetPickerCompat({
   entityChoices,
@@ -36,29 +36,16 @@ function SelectedScrambleSetPanel({
     [selectedRound.format],
   );
 
-  const onScrambleSetDragCompleted = useCallback(
-    (fromIndex, toIndex) => dispatchMatchState({
-      action: 'reorderMatchingEntities',
-      fromIndex,
-      toIndex,
-      pickerHistory,
-      matchingKey: 'inbox_scrambles',
-    }),
-    [dispatchMatchState, pickerHistory],
-  );
-
-  const selectedScrambleSet = useMemo(
-    () => applyPickerHistory(matchState, pickerHistory),
-    [matchState, pickerHistory],
-  );
-
   return (
-    <ScrambleMatch
-      matchableRows={selectedScrambleSet.inbox_scrambles}
-      expectedNumOfRows={expectedSolveCount}
-      onRowDragCompleted={onScrambleSetDragCompleted}
+    <TableAndModal
+      key={JSON.stringify(pickerHistory)}
+      matchState={matchState}
+      pickerHistory={pickerHistory}
+      dispatchMatchState={dispatchMatchState}
+      matchingKey="inbox_scrambles"
       computeDefinitionName={(idx) => `Attempt ${idx + 1}`}
       computeCellName={scrambleToName}
+      computeExpectedNumOfRows={() => expectedSolveCount}
     />
   );
 }

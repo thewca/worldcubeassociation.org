@@ -87,7 +87,7 @@ export default function MoveMatchingEntityModal({
   isOpen,
   onClose,
   dispatchMatchState,
-  selectedMatchingRow,
+  selectedMatchingEntity,
   rootMatchState,
   pickerHistory,
   entityToName,
@@ -150,7 +150,7 @@ export default function MoveMatchingEntityModal({
 
   const canMove = !_.isEqual(targetDescriptor, baseDescriptor);
 
-  if (!selectedMatchingRow) {
+  if (!selectedMatchingEntity) {
     return null;
   }
 
@@ -163,7 +163,7 @@ export default function MoveMatchingEntityModal({
       <Modal.Header>
         Move
         {' '}
-        {entityToName(selectedMatchingRow)}
+        {entityToName(selectedMatchingEntity)}
       </Modal.Header>
       <Modal.Content>
         <Form>
@@ -182,7 +182,7 @@ export default function MoveMatchingEntityModal({
         <Button onClick={onClose}>Cancel</Button>
         <Button
           positive
-          onClick={() => onConfirm(selectedMatchingRow, targetDescriptor)}
+          onClick={() => onConfirm(selectedMatchingEntity, targetDescriptor)}
           disabled={!canMove}
         >
           Move

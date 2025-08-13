@@ -5,7 +5,7 @@ import {
 import _ from 'lodash';
 import { DragDropContext, Draggable, Droppable } from '@hello-pangea/dnd';
 
-export default function ScrambleMatch({
+export default function MatchingTableDnd({
   matchableRows = [],
   expectedNumOfRows = matchableRows.length,
   onRowDragCompleted,
