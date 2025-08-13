@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-class Api::V0::Results::RankingsController < Api::V0::ApiController
-  def rankings
+class Api::V0::Results::RankingsController < Api::V0::Results::ResultsController
+  def index
     support_old_links!
 
     # Default params
@@ -14,27 +14,23 @@ class Api::V0::Results::RankingsController < Api::V0::ApiController
 
     shared_constants_and_conditions
 
-    @quantities = %w[100 1000]
+    ResultsController.compute_cache_key(MODE_RECORDS, **params_for_cache)
+    record_timestamp = ComputeAuxiliaryData.successful_start_date || Date.current
+    cache_params = ResultsController.compute_cache_key(MODE_RANKINGS, **params_for_cache)
 
-    if @types.exclude?(params[:type])
-      flash[:danger] = t(".unknown_type")
-      return redirect_to rankings_path(params[:event_id], "single")
-    end
-    @is_average = params[:type] == @types[1]
-    value = @is_average ? "average" : "best"
+    is_average = params[:type] == @types[1]
+    value = is_average ? "average" : "best"
     type_param = params[:type]
 
-    @is_by_region = params[:show] == "by region"
+    is_by_region = params[:show] == "by region"
     splitted_show_param = params[:show].split
-    @show = splitted_show_param[0].to_i
-    @is_persons = splitted_show_param[1] == "persons"
-    @is_results = splitted_show_param[1] == "results"
-    limit_condition = "LIMIT #{@show}"
+    show = splitted_show_param[0].to_i
+    is_persons = splitted_show_param[1] == "persons"
+    is_results = splitted_show_param[1] == "results"
+    limit_condition = "LIMIT #{show}"
 
-    @cache_params = ResultsController.compute_cache_key(MODE_RANKINGS, **params_for_cache)
-
-    if @is_persons
-      @query = <<-SQL.squish
+    query = if is_persons
+              <<-SQL.squish
         SELECT
           results.*,
           results.#{value} value
@@ -53,11 +49,10 @@ class Api::V0::Results::RankingsController < Api::V0::ApiController
         ) top
         JOIN results ON results.id = value_and_id % 1000000000
         ORDER BY value, person_name
-      SQL
-
-    elsif @is_results
-      if @is_average
-        @query = <<-SQL.squish
+              SQL
+            elsif is_results
+              if is_average
+                <<-SQL.squish
           SELECT
             results.*,
             average value
@@ -72,11 +67,10 @@ class Api::V0::Results::RankingsController < Api::V0::ApiController
           ORDER BY
             average, person_name, competition_id, round_type_id
           #{limit_condition}
-        SQL
-
-      else
-        subqueries = (1..5).map do |i|
-          <<-SQL.squish
+                SQL
+              else
+                subqueries = (1..5).map do |i|
+                  <<-SQL.squish
             SELECT
               results.*,
               value#{i} value
@@ -90,18 +84,18 @@ class Api::V0::Results::RankingsController < Api::V0::ApiController
               #{@gender_condition}
             ORDER BY value
             #{limit_condition}
-          SQL
-        end
-        subquery = "(#{subqueries.join(') UNION ALL (')})"
-        @query = <<-SQL.squish
+                  SQL
+                end
+                subquery = "(#{subqueries.join(') UNION ALL (')})"
+                <<-SQL.squish
           SELECT *
           FROM (#{subquery}) union_results
           ORDER BY value, person_name, competition_id, round_type_id
           #{limit_condition}
-        SQL
-      end
-    elsif @is_by_region
-      @query = <<-SQL.squish
+                SQL
+              end
+            elsif is_by_region
+              <<-SQL.squish
         SELECT
           results.*,
           results.#{value} value
@@ -125,17 +119,19 @@ class Api::V0::Results::RankingsController < Api::V0::ApiController
           #{@years_condition_competition}
           #{@gender_condition}
         ORDER BY value, results.country_id, start_date, person_name
-      SQL
+              SQL
+            end
 
-    else
-      flash[:danger] = t(".unknown_show")
-      return redirect_to rankings_path
+    # TODO: move this to rankings-page-api when migration to next is done so this can be properly precompute
+    rankings = Rails.cache.fetch ["rankings-page-api-next", *cache_params, record_timestamp] do
+      DbHelper.execute_cached_query(cache_params, record_timestamp, query)
     end
 
-    @record_timestamp = ComputeAuxiliaryData.successful_start_date || Date.current
+    rankings = rankings.to_a
 
-    respond_from_cache("results-page-api") do |rows|
-      @is_by_region ? compute_rankings_by_region(rows, @continent, @country) : rows
-    end
+    render json: {
+      rankings: rankings,
+      timestamp: record_timestamp,
+    }
   end
 end
