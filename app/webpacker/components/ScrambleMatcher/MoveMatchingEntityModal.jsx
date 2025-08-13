@@ -2,7 +2,7 @@ import React, { useCallback, useMemo, useState } from 'react';
 import { Button, Form, Modal } from 'semantic-ui-react';
 import _ from 'lodash';
 import { useInputUpdater } from '../../lib/hooks/useInputState';
-import { translateNavigationToLodash } from './reducer';
+import { applyPickerHistory } from './PickerWithShortcut';
 
 function navigationToDescriptor(pickerNavigation) {
   return pickerNavigation.reduce((acc, historyStep) => ({
@@ -77,7 +77,7 @@ export default function MoveMatchingEntityModal({
     const reconstructedHistory = descriptorToNavigation(selectedPath, pickerHistory);
     const parentSteps = reconstructedHistory.slice(0, historyIdx);
 
-    return translateNavigationToLodash(parentSteps, rootMatchState).lookup;
+    return applyPickerHistory(rootMatchState, parentSteps);
   }, [pickerHistory, rootMatchState]);
 
   const fixSelectionPath = useCallback(

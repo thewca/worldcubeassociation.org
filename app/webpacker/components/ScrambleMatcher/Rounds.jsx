@@ -46,10 +46,11 @@ function SelectedRoundPanel({
 
   const onRoundDragCompleted = useCallback(
     (fromIndex, toIndex) => dispatchMatchState({
-      action: 'reorderMatchingEntities',
+      type: 'reorderMatchingEntities',
       fromIndex,
       toIndex,
       pickerHistory,
+      matchingKey: 'scrambleSets',
     }),
     [dispatchMatchState, pickerHistory],
   );

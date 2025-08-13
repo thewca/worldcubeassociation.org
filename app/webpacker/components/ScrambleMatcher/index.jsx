@@ -32,7 +32,7 @@ export default function Wrapper({
 
 async function submitMatchedScrambles({ competitionId, matchState }) {
   const roundsByWcifId = _.keyBy(
-    matchState.flatMap((wcifEvent) => wcifEvent.rounds),
+    matchState.events.flatMap((wcifEvent) => wcifEvent.rounds),
     'id',
   );
 
@@ -103,7 +103,10 @@ function ScrambleMatcher({
     [competitionId, matchState, submitMatchState],
   );
 
-  const roundMatchingProgress = useMemo(() => computeMatchingProgress(matchState), [matchState]);
+  const roundMatchingProgress = useMemo(
+    () => computeMatchingProgress(matchState.events),
+    [matchState],
+  );
 
   const hasAnyMissing = roundMatchingProgress.some(
     (roundProgress) => roundProgress.actual < roundProgress.expected
@@ -122,8 +125,6 @@ function ScrambleMatcher({
       {btnText}
     </Button>
   ), [isSubmitting, submitAction, hasAnyMissing]);
-
-  const innerMatchState = useMemo(() => ({ events: matchState }), [matchState]);
 
   return (
     <>
@@ -146,7 +147,7 @@ function ScrambleMatcher({
         </Message>
       )}
       <Events
-        matchState={innerMatchState}
+        matchState={matchState}
         dispatchMatchState={dispatchMatchState}
       />
       {hasUnsavedChanges && (
