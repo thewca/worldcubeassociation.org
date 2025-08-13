@@ -2,24 +2,7 @@ import React, { useCallback, useMemo, useState } from 'react';
 import { Button, Form, Modal } from 'semantic-ui-react';
 import _ from 'lodash';
 import { useInputUpdater } from '../../lib/hooks/useInputState';
-import { applyPickerHistory } from './util';
-import { events } from '../../lib/wca-data.js.erb';
-import { humanizeActivityCode } from '../../lib/utils/wcif';
-
-const inputDropdownConfig = {
-  events: {
-    computeEntityName: (evt) => events.byId[evt.id].name,
-    dropdownLabel: 'Event',
-  },
-  rounds: {
-    computeEntityName: (rd) => humanizeActivityCode(rd.id),
-    dropdownLabel: 'Round',
-  },
-  scrambleSets: {
-    computeEntityName: (scrSet, idx) => `Group ${idx + 1}`,
-    dropdownLabel: 'Scramble Set',
-  },
-};
+import { applyPickerHistory, pickerLocalizationConfig } from './util';
 
 function navigationToDescriptor(pickerNavigation) {
   return pickerNavigation.reduce((acc, historyStep) => ({
@@ -61,7 +44,7 @@ function MatchingSelect({
   const {
     computeEntityName,
     dropdownLabel,
-  } = inputDropdownConfig[pickerKey];
+  } = pickerLocalizationConfig[pickerKey];
 
   const roundsSelectOptions = useMemo(() => selectableEntities.map((ent, idx) => ({
     key: ent.id,

@@ -1,5 +1,24 @@
 import _ from 'lodash';
 import { events, formats } from '../../lib/wca-data.js.erb';
+import { humanizeActivityCode } from '../../lib/utils/wcif';
+
+export const pickerLocalizationConfig = {
+  events: {
+    computeEntityName: (evt) => events.byId[evt.id].name,
+    headerLabel: 'Events',
+    dropdownLabel: 'Event',
+  },
+  rounds: {
+    computeEntityName: (rd) => humanizeActivityCode(rd.id),
+    headerLabel: 'Rounds',
+    dropdownLabel: 'Round',
+  },
+  scrambleSets: {
+    computeEntityName: (scrSet, idx) => `Group ${idx + 1}`,
+    headerLabel: 'Groups',
+    dropdownLabel: 'Scramble Set',
+  },
+};
 
 const prefixForIndex = (index) => {
   const char = String.fromCharCode(65 + (index % 26));

@@ -2,7 +2,6 @@ import React, { useMemo, useCallback } from 'react';
 import TableAndModal from './TableAndModal';
 import Groups from './Groups';
 import { scrambleSetToDetails, scrambleSetToName } from './util';
-import ButtonGroupPicker from './ButtonGroupPicker';
 import { humanizeActivityCode } from '../../lib/utils/wcif';
 import PickerWithShortcut from './PickerWithShortcut';
 
@@ -12,22 +11,6 @@ function useHistoryId(pickerHistory, pickerKey) {
   return useMemo(
     () => pickerHistory.find((step) => step.key === pickerKey).id,
     [pickerHistory, pickerKey],
-  );
-}
-
-function RoundsPickerCompat({
-  entityChoices,
-  selectedEntityId,
-  onSelectEntityId,
-}) {
-  return (
-    <ButtonGroupPicker
-      availableEntities={entityChoices}
-      selectedEntityId={selectedEntityId}
-      onEntityIdSelected={onSelectEntityId}
-      header="Rounds"
-      entityToName={(rd) => humanizeActivityCode(rd.id)}
-    />
   );
 }
 
@@ -84,7 +67,6 @@ export default function Rounds({
       dispatchMatchState={dispatchMatchState}
       pickerHistory={pickerHistory}
       pickerKey="rounds"
-      pickerComponent={RoundsPickerCompat}
       nextStepComponent={SelectedRoundPanel}
     />
   );

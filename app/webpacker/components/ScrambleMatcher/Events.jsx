@@ -6,7 +6,7 @@ import PickerWithShortcut from './PickerWithShortcut';
 function EventsPickerCompat({
   entityChoices,
   selectedEntityId,
-  onSelectEntityId,
+  onEntityIdSelected,
 }) {
   const availableEventIds = useMemo(() => entityChoices.map((evt) => evt.id), [entityChoices]);
 
@@ -14,9 +14,9 @@ function EventsPickerCompat({
     <EventSelector
       selectedEvents={[selectedEntityId]}
       eventList={availableEventIds}
-      onEventClick={onSelectEntityId}
+      onEventClick={onEntityIdSelected}
       hideAllButton
-      onClearClick={() => onSelectEntityId(null)}
+      onClearClick={() => onEntityIdSelected(null)}
       showBreakBeforeButtons={false}
     />
   );

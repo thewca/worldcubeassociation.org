@@ -1,12 +1,13 @@
 import React, { useMemo, useState } from 'react';
-import { applyPickerHistory } from './util';
+import { applyPickerHistory, pickerLocalizationConfig } from './util';
+import ButtonGroupPicker from './ButtonGroupPicker';
 
 export default function PickerWithShortcut({
   matchState,
   dispatchMatchState,
   pickerHistory = [],
   pickerKey,
-  pickerComponent,
+  pickerComponent = ButtonGroupPicker,
   nextStepComponent,
 }) {
   const entityChoices = useMemo(
@@ -59,12 +60,19 @@ function EntityPicker({
 }) {
   const [selectedEntityId, setSelectedEntityId] = useState();
 
+  const {
+    computeEntityName,
+    headerLabel,
+  } = pickerLocalizationConfig[pickerKey];
+
   return (
     <>
       <PickerComponent
         entityChoices={entityChoices}
         selectedEntityId={selectedEntityId}
-        onSelectEntityId={setSelectedEntityId}
+        onEntityIdSelected={setSelectedEntityId}
+        computeEntityName={computeEntityName}
+        headerLabel={headerLabel}
       />
       {selectedEntityId && (
         <WrapHistory

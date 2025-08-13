@@ -1,25 +1,8 @@
 import React, { useMemo } from 'react';
-import ButtonGroupPicker from './ButtonGroupPicker';
 import { applyPickerHistory, scrambleToName } from './util';
 import { formats } from '../../lib/wca-data.js.erb';
 import PickerWithShortcut from './PickerWithShortcut';
 import TableAndModal from './TableAndModal';
-
-function ScrambleSetPickerCompat({
-  entityChoices,
-  selectedEntityId,
-  onSelectEntityId,
-}) {
-  return (
-    <ButtonGroupPicker
-      availableEntities={entityChoices}
-      selectedEntityId={selectedEntityId}
-      onEntityIdSelected={onSelectEntityId}
-      header="Groups"
-      entityToName={(scrSet, idx) => `Group ${idx + 1}`}
-    />
-  );
-}
 
 function SelectedScrambleSetPanel({
   matchState,
@@ -61,7 +44,6 @@ export default function Groups({
       dispatchMatchState={dispatchMatchState}
       pickerHistory={pickerHistory}
       pickerKey="scrambleSets"
-      pickerComponent={ScrambleSetPickerCompat}
       nextStepComponent={SelectedScrambleSetPanel}
     />
   );

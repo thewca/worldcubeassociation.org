@@ -3,16 +3,16 @@ import { Button, Header } from 'semantic-ui-react';
 import I18n from '../../lib/i18n';
 
 export default function ButtonGroupPicker({
-  availableEntities,
+  entityChoices,
   selectedEntityId,
   onEntityIdSelected,
-  header,
-  entityToName,
+  headerLabel,
+  computeEntityName,
 }) {
   return (
     <>
       <Header as="h4">
-        {header}
+        {headerLabel}
         {' '}
         <Button
           size="mini"
@@ -22,7 +22,7 @@ export default function ButtonGroupPicker({
         </Button>
       </Header>
       <Button.Group>
-        {availableEntities.map((entity, idx) => (
+        {entityChoices.map((entity, idx) => (
           <Button
             key={entity.id}
             toggle
@@ -30,7 +30,7 @@ export default function ButtonGroupPicker({
             active={entity.id === selectedEntityId}
             onClick={() => onEntityIdSelected(entity.id)}
           >
-            {entityToName(entity, idx)}
+            {computeEntityName(entity, idx)}
           </Button>
         ))}
       </Button.Group>
