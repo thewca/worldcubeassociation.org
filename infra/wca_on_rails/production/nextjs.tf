@@ -26,6 +26,10 @@ locals {
       value = aws_s3_bucket.next-media.id
     },
     {
+      name = "MEDIA_BUCKET_CDN"
+      value = "https://assets-nextjs.worldcubeassociation.org"
+    },
+    {
       name  = "OIDC_ISSUER"
       value = "https://www.worldcubeassociation.org/"
     },
