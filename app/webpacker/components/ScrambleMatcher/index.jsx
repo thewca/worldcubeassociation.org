@@ -10,7 +10,7 @@ import scrambleMatchReducer, { initializeState } from './reducer';
 import useUnsavedChangesAlert from '../../lib/hooks/useUnsavedChangesAlert';
 import { computeMatchingProgress } from './util';
 import MatchingProgressMessage from './MatchingProgressMessage';
-import Events from "./Events";
+import Events from './Events';
 
 export default function Wrapper({
   wcifEvents,

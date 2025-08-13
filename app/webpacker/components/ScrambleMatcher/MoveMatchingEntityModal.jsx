@@ -3,19 +3,53 @@ import { Button, Form, Modal } from 'semantic-ui-react';
 import _ from 'lodash';
 import { useInputUpdater } from '../../lib/hooks/useInputState';
 import { applyPickerHistory } from './PickerWithShortcut';
+import { events } from '../../lib/wca-data.js.erb';
+import { humanizeActivityCode } from '../../lib/utils/wcif';
+
+const inputDropdownConfig = {
+  events: {
+    computeEntityName: (evt) => events.byId[evt.id].name,
+    dropdownLabel: 'Event',
+  },
+  rounds: {
+    computeEntityName: (rd) => humanizeActivityCode(rd.id),
+    dropdownLabel: 'Round',
+  },
+  scrambleSets: {
+    computeEntityName: (scrSet, idx) => `Group ${idx + 1}`,
+    dropdownLabel: 'Scramble Set',
+  },
+};
 
 function navigationToDescriptor(pickerNavigation) {
   return pickerNavigation.reduce((acc, historyStep) => ({
     ...acc,
-    [historyStep.pickerKey]: historyStep.entityId,
+    [historyStep.key]: historyStep.id,
   }), {});
 }
 
-function descriptorToNavigation(descriptor, referenceNavigation) {
-  return referenceNavigation.map((nav) => ({
-    ...nav,
-    entityId: descriptor[nav.pickerKey],
-  }));
+function descriptorToNavigation(descriptor, referenceNavigation, rootMatchState) {
+  return referenceNavigation.reduce((accu, nav) => {
+    const baseLookup = accu.lookup[nav.key];
+
+    const entityId = descriptor[nav.key];
+    const entityIndex = baseLookup.findIndex((ent) => ent.id === entityId);
+
+    return ({
+      navigation: [
+        ...accu.navigation,
+        {
+          key: nav.key,
+          id: entityId,
+          index: entityIndex,
+        },
+      ],
+      lookup: baseLookup[entityIndex],
+    });
+  }, {
+    navigation: [],
+    lookup: rootMatchState,
+  }).navigation;
 }
 
 function MatchingSelect({
@@ -24,16 +58,16 @@ function MatchingSelect({
   selectedEntityId,
   updateTargetPath,
 }) {
-  const pickerConfig = useMemo(
-    () => pickerConfigurations.find((cfg) => cfg.key === pickerKey),
-    [pickerKey],
-  );
+  const {
+    computeEntityName,
+    dropdownLabel,
+  } = inputDropdownConfig[pickerKey];
 
   const roundsSelectOptions = useMemo(() => selectableEntities.map((ent, idx) => ({
     key: ent.id,
-    text: pickerConfig.computeEntityName(ent, idx),
+    text: computeEntityName(ent, idx),
     value: ent.id,
-  })), [selectableEntities, pickerConfig]);
+  })), [selectableEntities, computeEntityName]);
 
   const updateInputState = useInputUpdater(updateTargetPath);
 
@@ -41,7 +75,7 @@ function MatchingSelect({
     <Form.Select
       inline
       compact
-      label={pickerConfig.headerLabel}
+      label={dropdownLabel}
       options={roundsSelectOptions}
       value={selectedEntityId}
       onChange={updateInputState}
@@ -66,36 +100,41 @@ export default function MoveMatchingEntityModal({
     dispatchMatchState({
       type: 'moveMatchingEntity',
       entity: entityToMove,
-      fromNavigation: descriptorToNavigation(baseDescriptor, pickerHistory),
-      toNavigation: descriptorToNavigation(newTargetDescriptor, pickerHistory),
+      fromNavigation: descriptorToNavigation(baseDescriptor, pickerHistory, rootMatchState),
+      toNavigation: descriptorToNavigation(newTargetDescriptor, pickerHistory, rootMatchState),
     });
 
     onClose();
-  }, [dispatchMatchState, baseDescriptor, pickerHistory, onClose]);
+  }, [dispatchMatchState, baseDescriptor, pickerHistory, rootMatchState, onClose]);
 
   const computeChoices = useCallback((historyIdx, selectedPath) => {
-    const reconstructedHistory = descriptorToNavigation(selectedPath, pickerHistory);
-    const parentSteps = reconstructedHistory.slice(0, historyIdx);
+    const reconstructedHistory = descriptorToNavigation(
+      selectedPath,
+      pickerHistory,
+      rootMatchState,
+    );
 
-    return applyPickerHistory(rootMatchState, parentSteps);
+    const parentSteps = reconstructedHistory.slice(0, historyIdx);
+    const currentStep = reconstructedHistory[historyIdx];
+
+    return applyPickerHistory(rootMatchState, parentSteps)[currentStep.key];
   }, [pickerHistory, rootMatchState]);
 
   const fixSelectionPath = useCallback(
     (selectedPath) => pickerHistory.reduce((correctedPath, historyStep, idx) => {
       const availableChoices = computeChoices(idx, correctedPath);
 
-      const originalChoiceId = selectedPath[historyStep.pickerKey];
-      const firstAvailableFallback = availableChoices[0];
+      const originalChoiceId = selectedPath[historyStep.key];
 
       const finalChoice = availableChoices.find(
         (item) => item.id === originalChoiceId,
-      ) ?? firstAvailableFallback;
+      ) ?? availableChoices[0];
 
       return {
         ...correctedPath,
-        [historyStep.pickerKey]: finalChoice.id,
+        [historyStep.key]: finalChoice.id,
       };
-    }, {}),
+    }, selectedPath),
     [computeChoices, pickerHistory],
   );
 
@@ -130,11 +169,11 @@ export default function MoveMatchingEntityModal({
         <Form>
           {pickerHistory.map((historyStep, idx) => (
             <MatchingSelect
-              key={historyStep.pickerKey}
-              pickerKey={historyStep.pickerKey}
+              key={historyStep.key}
+              pickerKey={historyStep.key}
               selectableEntities={computeChoices(idx, targetDescriptor)}
-              selectedEntityId={targetDescriptor[historyStep.pickerKey]}
-              updateTargetPath={(id) => updateTargetPath(historyStep.pickerKey, id)}
+              selectedEntityId={targetDescriptor[historyStep.key]}
+              updateTargetPath={(id) => updateTargetPath(historyStep.key, id)}
             />
           ))}
         </Form>
