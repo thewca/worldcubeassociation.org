@@ -466,6 +466,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/results/rankings/{event_id}/{type}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get the current rankings */
+        get: operations["getRankings"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/users/me/permissions": {
         parameters: {
             query?: never;
@@ -614,6 +631,11 @@ export interface components {
              */
             url: string;
             avatar: components["schemas"]["UserAvatar"];
+        };
+        RankingsResponse: {
+            rankings: components["schemas"]["Result"][];
+            /** Format: date */
+            timestamp: string;
         };
         Incident: {
             id: string;
@@ -1166,6 +1188,33 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ExportInfo"];
+                };
+            };
+        };
+    };
+    getRankings: {
+        parameters: {
+            query?: {
+                region?: string;
+                show?: string;
+                gender?: string;
+            };
+            header?: never;
+            path: {
+                type: string;
+                event_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successfully retrieved rankings */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RankingsResponse"];
                 };
             };
         };

@@ -23,6 +23,7 @@ declare module "nextjs-routes" {
     | DynamicRoute<"/competitions/[competitionId]/admin", { "competitionId": string }>
     | StaticRoute<"/dashboard">
     | StaticRoute<"/delegates">
+    | StaticRoute<"/disciplinary">
     | StaticRoute<"/disclaimer">
     | StaticRoute<"/documents">
     | StaticRoute<"/export/developer">
@@ -39,6 +40,7 @@ declare module "nextjs-routes" {
     | DynamicRoute<"/regulations/history/official/[version]", { "version": string }>
     | StaticRoute<"/regulations/scrambles">
     | StaticRoute<"/regulations/translations">
+    | DynamicRoute<"/results/rankings/[eventId]/[type]", { "eventId": string; "type": string }>
     | StaticRoute<"/score-tools">
     | StaticRoute<"/speedcubing-history">
     | StaticRoute<"/teams-committees">
