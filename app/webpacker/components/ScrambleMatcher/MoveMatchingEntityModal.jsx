@@ -2,7 +2,7 @@ import React, { useCallback, useMemo, useState } from 'react';
 import { Button, Form, Modal } from 'semantic-ui-react';
 import _ from 'lodash';
 import { useInputUpdater } from '../../lib/hooks/useInputState';
-import { applyPickerHistory } from './PickerWithShortcut';
+import { applyPickerHistory } from './util';
 import { events } from '../../lib/wca-data.js.erb';
 import { humanizeActivityCode } from '../../lib/utils/wcif';
 

@@ -1,13 +1,20 @@
 import React, { useMemo, useState, useCallback } from 'react';
 import ScrambleMatch from './ScrambleMatch';
 import Groups from './Groups';
-import { scrambleSetToDetails, scrambleSetToName } from './util';
+import { applyPickerHistory, scrambleSetToDetails, scrambleSetToName } from './util';
 import ButtonGroupPicker from './ButtonGroupPicker';
 import { humanizeActivityCode } from '../../lib/utils/wcif';
-import PickerWithShortcut, { applyPickerHistory, useHistoryId } from './PickerWithShortcut';
+import PickerWithShortcut from './PickerWithShortcut';
 import MoveMatchingEntityModal from './MoveMatchingEntityModal';
 
 const ATTEMPT_BASED_EVENTS = ['333fm', '333mbf'];
+
+function useHistoryId(pickerHistory, pickerKey) {
+  return useMemo(
+    () => pickerHistory.find((step) => step.key === pickerKey).id,
+    [pickerHistory, pickerKey],
+  );
+}
 
 function RoundsPickerCompat({
   entityChoices,

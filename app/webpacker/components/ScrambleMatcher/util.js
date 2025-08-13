@@ -43,6 +43,13 @@ export function moveArrayItem(arr, fromIndex, toIndex) {
   ];
 }
 
+export function applyPickerHistory(rootState, pickerHistory) {
+  return pickerHistory.reduce(
+    (state, historyStep) => state[historyStep.key][historyStep.index],
+    rootState,
+  );
+}
+
 export function computeMatchingProgress(wcifEvents) {
   return wcifEvents.flatMap(
     (wcifEvent) => wcifEvent.rounds.map(

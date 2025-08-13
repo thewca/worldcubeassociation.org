@@ -1,9 +1,9 @@
 import React, { useCallback, useMemo } from 'react';
 import ScrambleMatch from './ScrambleMatch';
 import ButtonGroupPicker from './ButtonGroupPicker';
-import { scrambleToName } from './util';
+import { applyPickerHistory, scrambleToName } from './util';
 import { formats } from '../../lib/wca-data.js.erb';
-import PickerWithShortcut, { applyPickerHistory } from './PickerWithShortcut';
+import PickerWithShortcut from './PickerWithShortcut';
 
 function ScrambleSetPickerCompat({
   entityChoices,
@@ -42,6 +42,7 @@ function SelectedScrambleSetPanel({
       fromIndex,
       toIndex,
       pickerHistory,
+      matchingKey: 'inbox_scrambles',
     }),
     [dispatchMatchState, pickerHistory],
   );

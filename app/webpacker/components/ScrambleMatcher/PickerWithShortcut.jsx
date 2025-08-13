@@ -1,18 +1,5 @@
 import React, { useMemo, useState } from 'react';
-
-export function applyPickerHistory(rootState, pickerHistory) {
-  return pickerHistory.reduce(
-    (state, historyStep) => state[historyStep.key][historyStep.index],
-    rootState,
-  );
-}
-
-export function useHistoryId(pickerHistory, pickerKey) {
-  return useMemo(
-    () => pickerHistory.find((step) => step.key === pickerKey).id,
-    [pickerHistory, pickerKey],
-  );
-}
+import { applyPickerHistory } from './util';
 
 export default function PickerWithShortcut({
   matchState,
@@ -49,7 +36,7 @@ export default function PickerWithShortcut({
 
   return (
     <EntityPicker
-      key={pickerHistory.at(-1)?.id}
+      key={JSON.stringify(pickerHistory)}
       entityChoices={entityChoices}
       matchState={matchState}
       dispatchMatchState={dispatchMatchState}

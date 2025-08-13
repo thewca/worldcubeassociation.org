@@ -1,6 +1,5 @@
 import _ from 'lodash';
-import { moveArrayItem } from './util';
-import { applyPickerHistory } from './PickerWithShortcut';
+import { moveArrayItem, applyPickerHistory } from './util';
 
 function addScrambleSetsToEvents(wcifEvents, scrambleSets) {
   const groupedScrambleSets = _.groupBy(
