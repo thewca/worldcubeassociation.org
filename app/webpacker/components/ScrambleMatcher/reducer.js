@@ -82,15 +82,15 @@ export default function scrambleMatchReducer(state, action) {
       );
     case 'resetAfterSave':
       return initializeState({
-        wcifEvents: state.initial,
+        wcifEvents: state.initial.events,
         scrambleSets: action.scrambleSets,
       });
+    case 'resetToInitial':
+      return applyAction(state, ['current'], () => state.initial);
     case 'moveMatchingEntity':
       return applyAction(state, ['current'], (subState) => {
         const oldPath = unwrapActionNavigation(action, 'fromNavigation');
         const newPath = unwrapActionNavigation(action, 'toNavigation');
-
-        console.log('trying to move', oldPath, newPath);
 
         return _.chain(subState)
           .cloneDeep()

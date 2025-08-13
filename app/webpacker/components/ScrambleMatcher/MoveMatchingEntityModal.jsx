@@ -96,11 +96,11 @@ export default function MoveMatchingEntityModal({
     onClose();
   }, [dispatchMatchState, pickerHistory, rootMatchState, matchingKey, onClose]);
 
-  const computeChoices = useCallback((historyIdx, selectedPath) => {
+  const computeChoices = useCallback((historyIdx, descriptor) => {
     const currentKey = pickerHistory[historyIdx].key;
 
     const parentSteps = descriptorToNavigation(
-      selectedPath,
+      descriptor,
       pickerHistory.slice(0, historyIdx),
       rootMatchState,
     );
@@ -109,20 +109,20 @@ export default function MoveMatchingEntityModal({
   }, [pickerHistory, rootMatchState]);
 
   const fixSelectionPath = useCallback(
-    (selectedPath) => pickerHistory.reduce((correctedPath, historyStep, idx) => {
-      const availableChoices = computeChoices(idx, correctedPath);
+    (selectedDescriptor) => pickerHistory.reduce((correctedDescriptor, historyStep, idx) => {
+      const availableChoices = computeChoices(idx, correctedDescriptor);
 
-      const originalChoiceId = selectedPath[historyStep.key];
+      const originalChoiceId = selectedDescriptor[historyStep.key];
 
       const finalChoice = availableChoices.find(
         (item) => item.id === originalChoiceId,
       ) ?? availableChoices[0];
 
       return {
-        ...correctedPath,
+        ...correctedDescriptor,
         [historyStep.key]: finalChoice.id,
       };
-    }, selectedPath),
+    }, selectedDescriptor),
     [computeChoices, pickerHistory],
   );
 

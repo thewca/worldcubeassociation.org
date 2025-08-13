@@ -115,15 +115,15 @@ function ScrambleMatcher({
       ),
   );
 
-  const renderSubmitButton = useCallback((btnText) => (
+  const renderSubmitButton = useCallback((btnText, disabledOverride = false) => (
     <Button
       primary
+      content={btnText}
+      icon="save"
       onClick={submitAction}
       loading={isSubmitting}
-      disabled={isSubmitting || hasAnyMissing}
-    >
-      {btnText}
-    </Button>
+      disabled={isSubmitting || hasAnyMissing || disabledOverride}
+    />
   ), [isSubmitting, submitAction, hasAnyMissing]);
 
   return (
@@ -154,7 +154,10 @@ function ScrambleMatcher({
         <Message info content="You have unsaved changes. Don't forget to Save below!" />
       )}
       <Divider />
-      {renderSubmitButton('Save Changes')}
+      <Button.Group>
+        {renderSubmitButton('Save Changes', !hasUnsavedChanges)}
+        <Button positive content="Reset" icon="refresh" onClick={() => dispatchMatchState({ type: 'resetToInitial' })} />
+      </Button.Group>
     </>
   );
 }
