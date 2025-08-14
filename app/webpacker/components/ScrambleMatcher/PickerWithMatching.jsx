@@ -121,7 +121,8 @@ function WrapHistory({
   return (
     <>
       {matchingConfig && (
-        <MatchingPanel
+        <TableAndModal
+          key={selectedEntity.id}
           matchState={selectedEntity}
           rootMatchState={rootMatchState}
           dispatchMatchState={dispatchMatchState}
@@ -139,41 +140,5 @@ function WrapHistory({
         />
       )}
     </>
-  );
-}
-
-function MatchingPanel({
-  matchState,
-  rootMatchState,
-  dispatchMatchState,
-  pickerHistory,
-  matchingConfig,
-}) {
-  const {
-    key: matchingKey,
-    computeExpectedRowCount,
-    computeDefinitionName,
-    computeCellName,
-    computeRowDetails,
-  } = matchingConfig;
-
-  const expectedNumOfRows = useMemo(
-    () => computeExpectedRowCount?.(matchState, pickerHistory),
-    [computeExpectedRowCount, matchState, pickerHistory],
-  );
-
-  return (
-    <TableAndModal
-      key={matchState.id}
-      matchState={matchState}
-      rootMatchState={rootMatchState}
-      pickerHistory={pickerHistory}
-      dispatchMatchState={dispatchMatchState}
-      matchingKey={matchingKey}
-      computeDefinitionName={computeDefinitionName}
-      computeCellName={computeCellName}
-      computeRowDetails={computeRowDetails}
-      expectedNumOfRows={expectedNumOfRows}
-    />
   );
 }

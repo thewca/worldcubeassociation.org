@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, {useCallback, useMemo, useState} from 'react';
 import MatchingTableDnd from './MatchingTableDnd';
 import MoveMatchingEntityModal from './MoveMatchingEntityModal';
 
@@ -7,12 +7,21 @@ export default function TableAndModal({
   rootMatchState,
   dispatchMatchState,
   pickerHistory,
-  matchingKey,
-  computeDefinitionName,
-  computeCellName,
-  computeRowDetails = undefined,
-  expectedNumOfRows = undefined,
+  matchingConfig,
 }) {
+  const {
+    key: matchingKey,
+    computeDefinitionName,
+    computeCellName,
+    computeRowDetails,
+    computeExpectedRowCount,
+  } = matchingConfig;
+
+  const expectedNumOfRows = useMemo(
+    () => computeExpectedRowCount?.(matchState, pickerHistory),
+    [computeExpectedRowCount, matchState, pickerHistory],
+  );
+
   const [modalPayload, setModalPayload] = useState(null);
 
   const onModalClose = useCallback(() => {
