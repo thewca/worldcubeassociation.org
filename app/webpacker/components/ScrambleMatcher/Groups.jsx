@@ -19,7 +19,7 @@ function SelectedScrambleSetPanel({
 
   return (
     <TableAndModal
-      key={JSON.stringify(pickerHistory)}
+      key={matchState.id}
       matchState={matchState}
       rootMatchState={rootMatchState}
       pickerHistory={pickerHistory}
@@ -28,7 +28,7 @@ function SelectedScrambleSetPanel({
       computeDefinitionName={(idx) => `Attempt ${idx + 1}`}
       computeCellName={scrambleToName}
       computeRowDetails={(scr) => scr.scramble_string}
-      computeExpectedNumOfRows={() => expectedSolveCount}
+      expectedNumOfRows={expectedSolveCount}
     />
   );
 }

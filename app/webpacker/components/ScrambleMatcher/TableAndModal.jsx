@@ -11,7 +11,7 @@ export default function TableAndModal({
   computeDefinitionName,
   computeCellName,
   computeRowDetails = undefined,
-  computeExpectedNumOfRows = undefined,
+  expectedNumOfRows = undefined,
 }) {
   const [modalPayload, setModalPayload] = useState(null);
 
@@ -29,8 +29,6 @@ export default function TableAndModal({
     }),
     [dispatchMatchState, pickerHistory, matchingKey],
   );
-
-  const expectedNumOfRows = computeExpectedNumOfRows?.(matchState);
 
   return (
     <>

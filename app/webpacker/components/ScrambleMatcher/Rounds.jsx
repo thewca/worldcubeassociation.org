@@ -28,15 +28,16 @@ function SelectedRoundPanel({
   return (
     <>
       <TableAndModal
-        key={JSON.stringify(pickerHistory)}
+        key={matchState.id}
         matchState={matchState}
-        pickerHistory={pickerHistory}
+        rootMatchState={rootMatchState}
         dispatchMatchState={dispatchMatchState}
+        pickerHistory={pickerHistory}
         matchingKey="scrambleSets"
         computeDefinitionName={roundToGroupName}
         computeCellName={scrambleSetToName}
         computeRowDetails={(scrSet) => scrSet.original_filename}
-        computeExpectedNumOfRows={(round) => round.scrambleSetCount}
+        expectedNumOfRows={matchState.scrambleSetCount}
       />
       {isAttemptBasedEvent && (
         <Groups
