@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import {
   Header,
-  Icon, Popup,
+  Icon,
+  Popup,
   Ref,
   Table,
 } from 'semantic-ui-react';
@@ -15,6 +16,7 @@ export default function MatchingTableDnd({
   computeDefinitionName,
   computeCellName,
   computeCellDetails = undefined,
+  cellDetailsAreData = false,
   onClickMoveAction = undefined,
 }) {
   const [currentDragStart, setCurrentDragStart] = useState(null);
@@ -124,7 +126,9 @@ export default function MatchingTableDnd({
                                       <Header.Content>
                                         {computeCellName(rowData)}
                                         {computeCellDetails && (
-                                          <Header.Subheader>
+                                          <Header.Subheader
+                                            style={cellDetailsAreData ? { whiteSpace: 'pre-line', fontFamily: 'monospace' } : undefined}
+                                          >
                                             {computeCellDetails(rowData)}
                                           </Header.Subheader>
                                         )}

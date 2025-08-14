@@ -14,6 +14,7 @@ export default function TableAndModal({
     key: matchingKey,
     computeCellName,
     computeCellDetails,
+    cellDetailsAreData,
     computeExpectedRowCount,
   } = matchingConfig;
 
@@ -55,6 +56,7 @@ export default function TableAndModal({
         computeDefinitionName={computeDefinitionName}
         computeCellName={computeCellName}
         computeCellDetails={computeCellDetails}
+        cellDetailsAreData={cellDetailsAreData}
         onClickMoveAction={setModalPayload}
       />
       <MoveMatchingEntityModal

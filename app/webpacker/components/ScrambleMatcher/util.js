@@ -69,6 +69,7 @@ export const pickerStepConfig = {
       key: 'inbox_scrambles',
       computeCellName: scrambleToName,
       computeCellDetails: (scr) => scr.scramble_string,
+      cellDetailsAreData: true,
       computeExpectedRowCount: (scrambleSet, history) => inferExpectedSolveCount(history),
     },
   },
