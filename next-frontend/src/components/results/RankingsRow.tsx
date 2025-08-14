@@ -7,14 +7,15 @@ import {
   PersonCell,
 } from "@/components/results/ResultTableCells";
 import { formatAttemptResult } from "@/lib/wca/wcif/attempts";
+import _ from "lodash";
 
 interface RankingsRowProps {
-  ranking: components["schemas"]["Result"];
+  ranking: components["schemas"]["ExtendedResult"];
   index: number;
   isAverage?: boolean;
 }
 
-function resultAttempts(result: components["schemas"]["Result"]) {
+function resultAttempts(result: components["schemas"]["ExtendedResult"]) {
   const definedAttempts = [
     result?.value1,
     result?.value2,
@@ -57,7 +58,10 @@ export function RankingsRow({
   return (
     <Table.Row>
       <Table.Cell>{index + 1}</Table.Cell>
-      <PersonCell personId={ranking.wca_id} personName={ranking.person_name} />
+      <PersonCell
+        personId={ranking.person_id}
+        personName={ranking.person_name}
+      />
       <Table.Cell>
         {formatAttemptResult(ranking.value, ranking.event_id)}
       </Table.Cell>

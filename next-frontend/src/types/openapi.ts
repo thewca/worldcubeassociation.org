@@ -633,7 +633,7 @@ export interface components {
             avatar: components["schemas"]["UserAvatar"];
         };
         RankingsResponse: {
-            rankings: components["schemas"]["Result"][];
+            rankings: components["schemas"]["ExtendedResult"][];
             /** Format: date */
             timestamp: string;
         };
@@ -972,6 +972,60 @@ export interface components {
             name?: string;
             /** Format: email */
             email?: string;
+        };
+        ExtendedResult: {
+            type?: string;
+            /** @example 6709306 */
+            id: number;
+            /** @example 1 */
+            pos: number;
+            /** @example 2019WANY36 */
+            person_id: string;
+            /** @example Yiheng Wang (王艺衡) */
+            person_name: string;
+            /** @example China */
+            country_id: string;
+            /** @example China */
+            competition_country_id: string;
+            /** @example HangzhouOpen2024 */
+            competition_id: string;
+            /** @example Hangzhou Open 2024 */
+            competition_name: string;
+            /** @example 222 */
+            event_id: string;
+            /** @example 2 */
+            round_type_id: string;
+            /** @example null */
+            round_id: string | null;
+            /** @example a */
+            format_id: string;
+            /** @example 126 */
+            value1: number;
+            /** @example 84 */
+            value2: number;
+            /** @example 91 */
+            value3: number;
+            /** @example 89 */
+            value4: number;
+            /** @example 85 */
+            value5: number;
+            /** @example 84 */
+            best: number;
+            /** @example 88 */
+            average: number;
+            /** @example null */
+            regional_single_record: string | null;
+            /** @example WR */
+            regional_average_record: string | null;
+            /**
+             * Format: date-time
+             * @example 2024-12-19T13:40:19.000Z
+             */
+            updated_at: string;
+            /** Format: date */
+            start_date: string;
+            /** @example 88 */
+            value: number;
         };
         Results: components["schemas"]["Result"][];
         Result: {

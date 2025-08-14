@@ -6,7 +6,7 @@ import { Table } from "@chakra-ui/react";
 import { RankingsRow } from "@/components/results/RankingsRow";
 
 interface RankingsTableProps {
-  rankings: components["schemas"]["Result"][];
+  rankings: components["schemas"]["ExtendedResult"][];
   isAverage?: boolean;
 }
 
