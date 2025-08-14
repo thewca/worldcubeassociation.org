@@ -10,7 +10,7 @@ import scrambleMatchReducer, { initializeState } from './reducer';
 import useUnsavedChangesAlert from '../../lib/hooks/useUnsavedChangesAlert';
 import { computeMatchingProgress } from './util';
 import MatchingProgressMessage from './MatchingProgressMessage';
-import Events from './Events';
+import PickerWithMatching from './PickerWithMatching';
 
 export default function Wrapper({
   wcifEvents,
@@ -146,9 +146,10 @@ function ScrambleMatcher({
           your changes!
         </Message>
       )}
-      <Events
+      <PickerWithMatching
         matchState={matchState}
         dispatchMatchState={dispatchMatchState}
+        pickerKey="events"
       />
       {hasUnsavedChanges && (
         <Message info content="You have unsaved changes. Don't forget to Save below!" />

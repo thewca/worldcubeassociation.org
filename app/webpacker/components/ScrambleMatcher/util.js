@@ -1,7 +1,9 @@
 import { useMemo } from 'react';
-import _ from 'lodash';
 import { events, formats } from '../../lib/wca-data.js.erb';
 import { humanizeActivityCode } from '../../lib/utils/wcif';
+import { EventsPickerCompat } from './ButtonGroupPicker';
+
+const ATTEMPT_BASED_EVENTS = ['333fm', '333mbf'];
 
 export const pickerLocalizationConfig = {
   events: {
@@ -32,39 +34,39 @@ export const scrambleSetToName = (scrambleSet) => `${events.byId[scrambleSet.eve
 
 export const scrambleToName = (scramble) => `Scramble ${scramble.scramble_number}`;
 
-export const scrambleSetToDetails = (scrambleSet) => {
-  const [extraScr, standardScr] = _.partition(scrambleSet.inbox_scrambles, 'is_extra');
-
-  const stdScrambleList = standardScr.map((scr) => scr.scramble_string).join('\n');
-
-  if (extraScr.length > 0) {
-    const extraScrambleList = extraScr.map((scr) => scr.scramble_string).join('\n');
-
-    return [stdScrambleList, extraScrambleList].join('\n\n');
-  }
-
-  return stdScrambleList;
+const isForAttemptBasedEvent = (pickerHistory) => {
+  const eventsStep = pickerHistory.find((step) => step.key === 'events');
+  return ATTEMPT_BASED_EVENTS.includes(eventsStep.id);
 };
 
-const pickerStepConfig = {
+const inferExpectedSolveCount = (pickerHistory) => {
+  const roundsStep = pickerHistory.find((step) => step.key === 'rounds');
+  return formats.byId[roundsStep.entity.format].expected_solve_count;
+};
+
+export const pickerStepConfig = {
   events: {
-    //pickerComponent: EventPickerCompat,
+    pickerComponent: EventsPickerCompat,
     nestedPicker: 'rounds',
   },
   rounds: {
     matchingConfig: {
       key: 'scrambleSets',
-      computeDefinitionName: (idx, descriptor) => `${humanizeActivityCode(descriptor.rounds)}, Group ${idx + 1}`,
+      computeDefinitionName: (idx) => `Group ${idx + 1}`,
       computeCellName: scrambleSetToName,
-      computeRowDetails: scrambleSetToDetails,
-      computeExpectedNumOfRows: (round) => round.scrambleSetCount,
+      computeRowDetails: (scrSet) => scrSet.original_filename,
+      computeExpectedRowCount: (round) => round.scrambleSetCount,
     },
     nestedPicker: 'scrambleSets',
+    nestingCondition: (history) => isForAttemptBasedEvent(history),
   },
   scrambleSets: {
     matchingConfig: {
+      key: 'inbox_scrambles',
       computeDefinitionName: (idx) => `Attempt ${idx + 1}`,
       computeCellName: scrambleToName,
+      computeRowDetails: (scr) => scr.scramble_string,
+      computeExpectedRowCount: (scrambleSet, history) => inferExpectedSolveCount(history),
     },
   },
 };

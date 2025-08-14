@@ -1,15 +1,14 @@
 import React, { useMemo, useState } from 'react';
-import { pickerLocalizationConfig } from './util';
+import { pickerLocalizationConfig, pickerStepConfig } from './util';
 import ButtonGroupPicker from './ButtonGroupPicker';
+import TableAndModal from './TableAndModal';
 
-export default function PickerWithShortcut({
+export default function PickerWithMatching({
   matchState,
   rootMatchState = matchState,
   dispatchMatchState,
   pickerHistory = [],
   pickerKey,
-  pickerComponent = ButtonGroupPicker,
-  nextStepComponent,
 }) {
   const entityChoices = useMemo(
     () => matchState[pickerKey],
@@ -31,7 +30,6 @@ export default function PickerWithShortcut({
         pickerKey={pickerKey}
         selectedEntity={selectedEntity}
         entityChoices={entityChoices}
-        nextStepComponent={nextStepComponent}
       />
     );
   }
@@ -43,8 +41,6 @@ export default function PickerWithShortcut({
       dispatchMatchState={dispatchMatchState}
       pickerHistory={pickerHistory}
       pickerKey={pickerKey}
-      pickerComponent={pickerComponent}
-      nextStepComponent={nextStepComponent}
     />
   );
 }
@@ -55,8 +51,6 @@ function EntityPicker({
   dispatchMatchState,
   pickerHistory,
   pickerKey,
-  pickerComponent: PickerComponent,
-  nextStepComponent,
 }) {
   const [selectedEntityId, setSelectedEntityId] = useState();
 
@@ -64,6 +58,8 @@ function EntityPicker({
     computeEntityName,
     headerLabel,
   } = pickerLocalizationConfig[pickerKey];
+
+  const { pickerComponent: PickerComponent = ButtonGroupPicker } = pickerStepConfig[pickerKey];
 
   const selectedEntity = useMemo(
     () => entityChoices.find((ent) => ent.id === selectedEntityId),
@@ -87,7 +83,6 @@ function EntityPicker({
           pickerKey={pickerKey}
           selectedEntity={selectedEntity}
           entityChoices={entityChoices}
-          nextStepComponent={nextStepComponent}
         />
       )}
     </>
@@ -101,7 +96,6 @@ function WrapHistory({
   pickerKey,
   selectedEntity,
   entityChoices,
-  nextStepComponent: NextStepComponent,
 }) {
   const nextHistory = useMemo(() => {
     const selectedEntityIdx = entityChoices.findIndex((ent) => ent.id === selectedEntity.id);
@@ -117,12 +111,69 @@ function WrapHistory({
     ];
   }, [entityChoices, pickerHistory, pickerKey, selectedEntity]);
 
+  const { matchingConfig, nestedPicker, nestingCondition } = pickerStepConfig[pickerKey];
+
+  const isUsingNesting = useMemo(
+    () => nestingCondition?.(nextHistory) ?? true,
+    [nestingCondition, nextHistory],
+  );
+
   return (
-    <NextStepComponent
-      matchState={selectedEntity}
+    <>
+      {matchingConfig && (
+        <MatchingPanel
+          matchState={selectedEntity}
+          rootMatchState={rootMatchState}
+          dispatchMatchState={dispatchMatchState}
+          pickerHistory={nextHistory}
+          matchingConfig={matchingConfig}
+        />
+      )}
+      {nestedPicker && isUsingNesting && (
+        <PickerWithMatching
+          matchState={selectedEntity}
+          rootMatchState={rootMatchState}
+          dispatchMatchState={dispatchMatchState}
+          pickerHistory={nextHistory}
+          pickerKey={nestedPicker}
+        />
+      )}
+    </>
+  );
+}
+
+function MatchingPanel({
+  matchState,
+  rootMatchState,
+  dispatchMatchState,
+  pickerHistory,
+  matchingConfig,
+}) {
+  const {
+    key: matchingKey,
+    computeExpectedRowCount,
+    computeDefinitionName,
+    computeCellName,
+    computeRowDetails,
+  } = matchingConfig;
+
+  const expectedNumOfRows = useMemo(
+    () => computeExpectedRowCount?.(matchState, pickerHistory),
+    [computeExpectedRowCount, matchState, pickerHistory],
+  );
+
+  return (
+    <TableAndModal
+      key={matchState.id}
+      matchState={matchState}
       rootMatchState={rootMatchState}
+      pickerHistory={pickerHistory}
       dispatchMatchState={dispatchMatchState}
-      pickerHistory={nextHistory}
+      matchingKey={matchingKey}
+      computeDefinitionName={computeDefinitionName}
+      computeCellName={computeCellName}
+      computeRowDetails={computeRowDetails}
+      expectedNumOfRows={expectedNumOfRows}
     />
   );
 }

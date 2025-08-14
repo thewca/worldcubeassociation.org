@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Button, Header } from 'semantic-ui-react';
 import I18n from '../../lib/i18n';
+import EventSelector from '../wca/EventSelector';
 
 export default function ButtonGroupPicker({
   entityChoices,
@@ -35,5 +36,24 @@ export default function ButtonGroupPicker({
         ))}
       </Button.Group>
     </>
+  );
+}
+
+export function EventsPickerCompat({
+  entityChoices,
+  selectedEntityId,
+  onEntityIdSelected,
+}) {
+  const availableEventIds = useMemo(() => entityChoices.map((evt) => evt.id), [entityChoices]);
+
+  return (
+    <EventSelector
+      selectedEvents={[selectedEntityId]}
+      eventList={availableEventIds}
+      onEventClick={onEntityIdSelected}
+      hideAllButton
+      onClearClick={() => onEntityIdSelected(null)}
+      showBreakBeforeButtons={false}
+    />
   );
 }
