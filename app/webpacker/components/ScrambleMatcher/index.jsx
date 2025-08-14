@@ -157,7 +157,7 @@ function ScrambleMatcher({
       <Divider />
       <Button.Group>
         {renderSubmitButton('Save Changes', !hasUnsavedChanges)}
-        <Button positive content="Reset" icon="refresh" onClick={() => dispatchMatchState({ type: 'resetToInitial' })} />
+        <Button secondary basic content="Reset" icon="refresh" onClick={() => dispatchMatchState({ type: 'resetToInitial' })} />
       </Button.Group>
     </>
   );
