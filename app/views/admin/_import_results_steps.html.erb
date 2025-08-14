@@ -54,65 +54,6 @@
           </p>
       <% end %>
     <% end %>
-
-    <% if @existing_data[:result] > 0 || @existing_data[:scramble] > 0 %>
-      <hr/>
-
-      <% message = [:result, :scramble].filter { |data| @existing_data[data] > 0 }.map(&:capitalize).join(' and ') %>
-
-      <%= alert :warning, note: true do %>
-        This competition has <%= message %> data uploaded. Uploading more data will override the existing inbox data, but not the imported results data.
-        You may remove the currently imported results data using the interface below.
-      <% end %>
-
-      <div class="container">
-        <%= wca_table striped: false, float_thead: false, greedy: false do %>
-          <thead>
-          <tr>
-            <th class="event text-right">Event</th>
-            <th class="round-format">Round</th>
-            <th class="text-center">Fully imported Results</th>
-            <th class="text-center">Fully imported Scrambles</th>
-          </tr>
-          </thead>
-          <tbody>
-          <% rounds_by_event = @competition.rounds.group_by(&:event) %>
-
-          <% @competition.events.sort_by(&:rank).each do |e| %>
-            <% announced_event = false %>
-
-            <% rounds_by_event[e].sort_by { |r| r.round_type.rank }.each do |r| %>
-              <tr>
-                <td class="text-right <%= "active" unless announced_event %>"><%= e.name unless announced_event %></td>
-                <td class="<%= "active" unless announced_event %>"><%= r.round_type.name %></td>
-
-                <% [Result, Scramble].each do |model| %>
-                  <% assoc_count = model.where(competition_id: @competition.id, event_id: e.id, round_type_id: r.round_type.id).count %>
-                  <% has_assoc = assoc_count > 0 %>
-
-                  <td class="text-center <%= has_assoc ? "success" : "warning" %>">
-                    <% if has_assoc %>
-                      <span style="margin-inline: 10px">Yes</span>(<%= link_to "X", competition_admin_delete_results_data_path(@competition.id, model: model.name, event_id: e.id, round_type_id: r.round_type.id), class: 'inbox-trigger', data: { jquery_method: :delete, jquery_confirm: delete_inbox_confirm_message(model.name, assoc_count) } %>)
-                    <% else %>
-                      Nope.
-                    <% end %>
-                  </td>
-                <% end %>
-              </tr>
-
-              <% announced_event = true %>
-            <% end %>
-          <% end %>
-          </tbody>
-        <% end %>
-
-        <p>
-          <strong style='color: #900'>Please be careful removing data! Data in the above table is live.</strong><br/>
-          Remove all results and scrambles only, does not affect
-          persons: <%= link_to "X ALL", competition_admin_delete_results_data_path(@competition.id, model: 'All'), class: 'inbox-trigger', data: { jquery_method: :delete, jquery_confirm: "You're about to delete ALL Results and Scrambles for #{@competition.id}.\nTHIS ACTION CANNOT BE UNDONE!\n\nPlease confirm below if you're sure." } %>
-        </p>
-      </div>
-    <% end %>
   <% end %>
 
   <script>

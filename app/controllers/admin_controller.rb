@@ -130,22 +130,19 @@ class AdminController < ApplicationController
       @competition.results.destroy_all
       @competition.scrambles.destroy_all
     else
-      event_id = params.require(:event_id)
-      round_type_id = params.require(:round_type_id)
+      round_id = params.require(:roundId)
 
       case model
       when Result.name
-        Result.where(competition_id: @competition.id, event_id: event_id, round_type_id: round_type_id).destroy_all
+        Result.where(round_id: round_id).destroy_all
       when Scramble.name
-        Scramble.where(competition_id: @competition.id, event_id: event_id, round_type_id: round_type_id).destroy_all
+        Scramble.where(round_id: round_id).destroy_all
       else
-        raise "Invalid table: #{params[:table]}"
+        return render status: :bad_request, json: { error: "Invalid model: #{model}" }
       end
     end
 
-    load_result_posting_steps do
-      render partial: 'import_results_steps'
-    end
+    render status: :ok, json: { success: true }
   end
 
   def fix_results
