@@ -451,7 +451,7 @@ GEM
     js_cookie_rails (2.2.0)
       railties (>= 3.1)
     json (2.13.2)
-    json-schema (5.2.1)
+    json-schema (6.0.0)
       addressable (~> 2.8)
       bigdecimal (~> 3.1)
     jwt (2.10.2)
@@ -1285,7 +1285,7 @@ CHECKSUMS
   jmespath (1.6.2) sha256=238d774a58723d6c090494c8879b5e9918c19485f7e840f2c1c7532cf84ebcb1
   js_cookie_rails (2.2.0) sha256=06e6b27ee093945c3acf3982d2dbf9e9117d1130f33bb07e1660ebea68229c62
   json (2.13.2) sha256=02e1f118d434c6b230a64ffa5c8dee07e3ec96244335c392eaed39e1199dbb68
-  json-schema (5.2.1) sha256=1ef39286c4771e7a71661d955fec9b66d1d1708547a0071c130af7c0a9264898
+  json-schema (6.0.0) sha256=79ecaffba197008912933f66f6c5428f5ce7716e42bb1a8f0d56079f2d58633f
   jwt (2.10.2) sha256=31e1ee46f7359883d5e622446969fe9c118c3da87a0b1dca765ce269c3a0c4f4
   kaminari (1.2.2) sha256=c4076ff9adccc6109408333f87b5c4abbda5e39dc464bd4c66d06d9f73442a3e
   kaminari-actionview (1.2.2) sha256=1330f6fc8b59a4a4ef6a549ff8a224797289ebf7a3a503e8c1652535287cc909
