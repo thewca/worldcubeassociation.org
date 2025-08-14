@@ -1,19 +1,16 @@
-import React, {
-  useCallback,
-  useMemo,
-  useReducer,
-} from 'react';
+import React, { useCallback, useMemo, useReducer } from 'react';
 import { Button, Divider, Message } from 'semantic-ui-react';
 import _ from 'lodash';
 import { useMutation } from '@tanstack/react-query';
-import { activityCodeToName } from '@wca/helpers';
 import WCAQueryClientProvider from '../../lib/providers/WCAQueryClientProvider';
 import FileUpload from './FileUpload';
-import Events from './Events';
 import { fetchJsonOrError } from '../../lib/requests/fetchWithAuthenticityToken';
 import { scramblesUpdateRoundMatchingUrl } from '../../lib/requests/routes.js.erb';
 import scrambleMatchReducer, { initializeState } from './reducer';
 import useUnsavedChangesAlert from '../../lib/hooks/useUnsavedChangesAlert';
+import { computeMatchingProgress } from './util';
+import MatchingProgressMessage from './MatchingProgressMessage';
+import PickerWithMatching from './PickerWithMatching';
 
 export default function Wrapper({
   wcifEvents,
@@ -34,9 +31,14 @@ export default function Wrapper({
 }
 
 async function submitMatchedScrambles({ competitionId, matchState }) {
+  const roundsByWcifId = _.keyBy(
+    matchState.events.flatMap((wcifEvent) => wcifEvent.rounds),
+    'id',
+  );
+
   const matchStateIdsOnly = _.mapValues(
-    matchState,
-    (sets) => sets.map((set) => ({
+    roundsByWcifId,
+    (round) => round.scrambleSets.map((set) => ({
       id: set.id,
       inbox_scrambles: set.inbox_scrambles.map((scr) => scr.id),
     })),
@@ -67,7 +69,10 @@ function ScrambleMatcher({
     dispatchMatchState,
   ] = useReducer(
     scrambleMatchReducer,
-    inboxScrambleSets,
+    {
+      wcifEvents,
+      scrambleSets: inboxScrambleSets,
+    },
     initializeState,
   );
 
@@ -98,79 +103,34 @@ function ScrambleMatcher({
     [competitionId, matchState, submitMatchState],
   );
 
-  const roundIds = useMemo(() => wcifEvents.flatMap((event) => event.rounds)
-    .map((r) => r.id), [wcifEvents]);
+  const roundMatchingProgress = useMemo(
+    () => computeMatchingProgress(matchState.events),
+    [matchState],
+  );
 
-  const roundIdsWithoutScrambles = useMemo(() => _.difference(
-    roundIds,
-    Object.keys(matchState),
-  ), [matchState, roundIds]);
+  const hasAnyMissing = roundMatchingProgress.some(
+    (roundProgress) => roundProgress.actual < roundProgress.expected
+      || roundProgress.scrambleSets.some(
+        (setProgress) => setProgress.actual < setProgress.expected,
+      ),
+  );
 
-  const missingScrambleIds = useMemo(() => {
-    if (_.isEmpty(matchState)) return [];
-
-    return roundIds.filter((roundId) => {
-      const matchedRound = matchState[roundId] ?? [];
-      const wcifRound = wcifEvents.flatMap((event) => event.rounds).find((r) => r.id === roundId);
-      return matchedRound.length < wcifRound.scrambleSetCount;
-    });
-  }, [matchState, roundIds, wcifEvents]);
-
-  const submitDisabled = useMemo(() => (
-    isSubmitting
-      || missingScrambleIds.length > 0
-      || roundIdsWithoutScrambles.length > 0
-  ), [isSubmitting, missingScrambleIds.length, roundIdsWithoutScrambles.length]);
-
-  const renderSubmitButton = useCallback((btnText) => (
+  const renderSubmitButton = useCallback((btnText, disabledOverride = false) => (
     <Button
       primary
+      content={btnText}
+      icon="save"
       onClick={submitAction}
       loading={isSubmitting}
-      disabled={submitDisabled}
-    >
-      {btnText}
-    </Button>
-  ), [isSubmitting, submitAction, submitDisabled]);
+      disabled={isSubmitting || hasAnyMissing || disabledOverride}
+    />
+  ), [isSubmitting, submitAction, hasAnyMissing]);
 
   return (
     <>
-      {roundIdsWithoutScrambles.length > 0 && (
-        Object.keys(matchState).length === 0 ? (
-          <Message
-            warning
-            header="No scramble sets available"
-            content="Upload some JSON files to get started!"
-          />
-        ) : (
-          <Message error>
-            <Message.Header>Missing Scramble Sets</Message.Header>
-            <Message.List>
-              {roundIdsWithoutScrambles.map((id) => (
-                <Message.Item key={id}>
-                  Missing scramble sets for round
-                  {' '}
-                  {activityCodeToName(id)}
-                </Message.Item>
-              ))}
-            </Message.List>
-          </Message>
-        )
-      )}
-      {missingScrambleIds.length > 0 && (
-        <Message error>
-          <Message.Header>Missing Scrambles</Message.Header>
-          <Message.List>
-            {missingScrambleIds.map((id) => (
-              <Message.Item key={id}>
-                Missing scrambles in round
-                {' '}
-                {activityCodeToName(id)}
-              </Message.Item>
-            ))}
-          </Message.List>
-        </Message>
-      )}
+      <MatchingProgressMessage
+        roundMatchingProgress={roundMatchingProgress}
+      />
       <FileUpload
         competitionId={competitionId}
         initialScrambleFiles={initialScrambleFiles}
@@ -186,16 +146,19 @@ function ScrambleMatcher({
           your changes!
         </Message>
       )}
-      <Events
-        wcifEvents={wcifEvents}
+      <PickerWithMatching
         matchState={matchState}
         dispatchMatchState={dispatchMatchState}
+        pickerKey="events"
       />
       {hasUnsavedChanges && (
         <Message info content="You have unsaved changes. Don't forget to Save below!" />
       )}
       <Divider />
-      {renderSubmitButton('Save Changes')}
+      <Button.Group>
+        {renderSubmitButton('Save Changes', !hasUnsavedChanges)}
+        <Button secondary basic content="Reset" icon="refresh" onClick={() => dispatchMatchState({ type: 'resetToInitial' })} />
+      </Button.Group>
     </>
   );
 }
