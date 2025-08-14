@@ -1,4 +1,3 @@
-import { useMemo } from 'react';
 import { events, formats } from '../../lib/wca-data.js.erb';
 import { humanizeActivityCode } from '../../lib/utils/wcif';
 import { EventsPickerCompat } from './ButtonGroupPicker';
@@ -96,13 +95,6 @@ export function applyPickerHistory(rootState, pickerHistory) {
   return pickerHistory.reduce(
     (state, historyStep) => state[historyStep.key][historyStep.index],
     rootState,
-  );
-}
-
-export function useHistoryEntry(pickerHistory, pickerKey) {
-  return useMemo(
-    () => pickerHistory.find((step) => step.key === pickerKey),
-    [pickerHistory, pickerKey],
   );
 }
 
