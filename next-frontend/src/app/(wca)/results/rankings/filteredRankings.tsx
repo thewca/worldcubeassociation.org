@@ -120,6 +120,16 @@ export default function FilteredRecords({
       <RankingsFilterBox
         filterState={filterState}
         filterActions={filterActions}
+        valueLabelMap={{
+          single: t("results.selector_elements.type_selector.single"),
+          average: t("results.selector_elements.type_selector.average"),
+          All: t("results.selector_elements.gender_selector.gender_all"),
+          Male: t("results.selector_elements.gender_selector.male"),
+          Female: t("results.selector_elements.gender_selector.female"),
+          "100 persons": t("results.selector_elements.show_selector.persons"),
+          results: t("results.selector_elements.show_selector.results"),
+          "by region": t("results.selector_elements.show_selector.by_region"),
+        }}
       />
       <RankingsTable
         rankings={data!.rankings}

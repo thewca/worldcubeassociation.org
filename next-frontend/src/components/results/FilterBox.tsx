@@ -2,6 +2,7 @@ import { Box, VStack, HStack, Field, SegmentGroup } from "@chakra-ui/react";
 import EventSelector from "@/components/EventSelector";
 import { useT } from "@/lib/i18n/useI18n";
 import RegionSelector from "@/components/RegionSelector";
+import _ from "lodash";
 
 type FilterState = {
   event: string;
@@ -28,6 +29,7 @@ interface FilterBoxProps {
 interface RecordsFilterBoxProps {
   filterState: FilterState;
   filterActions: FilterActions;
+  valueLabelMap: Record<string, string>;
 }
 
 export function RecordsFilterBox({
@@ -69,6 +71,7 @@ export function RecordsFilterBox({
 export function RankingsFilterBox({
   filterState,
   filterActions,
+  valueLabelMap,
 }: RecordsFilterBoxProps) {
   return (
     <FilterBox filterState={filterState} filterActions={filterActions}>
@@ -76,34 +79,54 @@ export function RankingsFilterBox({
         <Field.Root>
           <Field.Label>Type</Field.Label>
           <SegmentGroup.Root
-            value={filterState.rankingType}
-            onValueChange={(e) => filterActions.setType(e.value!)}
+            value={valueLabelMap[filterState.rankingType]}
+            onValueChange={(e) =>
+              filterActions.setType(_.invert(valueLabelMap)[e.value!])
+            }
             size="md"
           >
             <SegmentGroup.Indicator />
-            <SegmentGroup.Items items={["Single", "Average"]} />
+            <SegmentGroup.Items
+              items={[valueLabelMap["single"], valueLabelMap["average"]]}
+            />
           </SegmentGroup.Root>
         </Field.Root>
         <Field.Root>
           <Field.Label>Gender</Field.Label>
           <SegmentGroup.Root
-            value={filterState.gender}
-            onValueChange={(e) => filterActions.setGender(e.value!)}
+            value={valueLabelMap[filterState.gender]}
+            onValueChange={(e) =>
+              filterActions.setGender(_.invert(valueLabelMap)[e.value!])
+            }
             size="md"
           >
             <SegmentGroup.Indicator />
-            <SegmentGroup.Items items={["All", "Male", "Female"]} />
+            <SegmentGroup.Items
+              items={[
+                valueLabelMap["All"],
+                valueLabelMap["Male"],
+                valueLabelMap["Female"],
+              ]}
+            />
           </SegmentGroup.Root>
         </Field.Root>
         <Field.Root>
           <Field.Label>Show</Field.Label>
           <SegmentGroup.Root
-            value={filterState.show}
-            onValueChange={(e) => filterActions.setShow(e.value!)}
+            value={valueLabelMap[filterState.show]}
+            onValueChange={(e) =>
+              filterActions.setShow(_.invert(valueLabelMap)[e.value!])
+            }
             size="md"
           >
             <SegmentGroup.Indicator />
-            <SegmentGroup.Items items={["Persons", "Results", "By region"]} />
+            <SegmentGroup.Items
+              items={[
+                valueLabelMap["100 persons"],
+                valueLabelMap["results"],
+                valueLabelMap["by region"],
+              ]}
+            />
           </SegmentGroup.Root>
         </Field.Root>
       </HStack>
