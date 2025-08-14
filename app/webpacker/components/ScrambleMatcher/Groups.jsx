@@ -27,6 +27,7 @@ function SelectedScrambleSetPanel({
       matchingKey="inbox_scrambles"
       computeDefinitionName={(idx) => `Attempt ${idx + 1}`}
       computeCellName={scrambleToName}
+      computeRowDetails={(scr) => scr.scramble_string}
       computeExpectedNumOfRows={() => expectedSolveCount}
     />
   );

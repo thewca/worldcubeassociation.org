@@ -35,7 +35,7 @@ function SelectedRoundPanel({
         matchingKey="scrambleSets"
         computeDefinitionName={roundToGroupName}
         computeCellName={scrambleSetToName}
-        computeRowDetails={scrambleSetToDetails}
+        computeRowDetails={(scrSet) => scrSet.original_filename}
         computeExpectedNumOfRows={(round) => round.scrambleSetCount}
       />
       {isAttemptBasedEvent && (

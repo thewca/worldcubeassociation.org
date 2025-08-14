@@ -21,9 +21,34 @@ export const pickerLocalizationConfig = {
   },
 };
 
+const prefixForIndex = (index) => {
+  const char = String.fromCharCode(65 + (index % 26));
+  if (index < 26) return char;
+
+  return prefixForIndex(Math.floor(index / 26) - 1) + char;
+};
+
+export const scrambleSetToName = (scrambleSet) => `${events.byId[scrambleSet.event_id].name} Round ${scrambleSet.round_number} Scramble Set ${prefixForIndex(scrambleSet.scramble_set_number - 1)}`;
+
+export const scrambleToName = (scramble) => `Scramble ${scramble.scramble_number}`;
+
+export const scrambleSetToDetails = (scrambleSet) => {
+  const [extraScr, standardScr] = _.partition(scrambleSet.inbox_scrambles, 'is_extra');
+
+  const stdScrambleList = standardScr.map((scr) => scr.scramble_string).join('\n');
+
+  if (extraScr.length > 0) {
+    const extraScrambleList = extraScr.map((scr) => scr.scramble_string).join('\n');
+
+    return [stdScrambleList, extraScrambleList].join('\n\n');
+  }
+
+  return stdScrambleList;
+};
+
 const pickerStepConfig = {
   events: {
-    pickerComponent: EventPickerCompat,
+    //pickerComponent: EventPickerCompat,
     nestedPicker: 'rounds',
   },
   rounds: {
@@ -42,31 +67,6 @@ const pickerStepConfig = {
       computeCellName: scrambleToName,
     },
   },
-};
-
-const prefixForIndex = (index) => {
-  const char = String.fromCharCode(65 + (index % 26));
-  if (index < 26) return char;
-
-  return prefixForIndex(Math.floor(index / 26) - 1) + char;
-};
-
-export const scrambleSetToName = (scrambleSet) => `${events.byId[scrambleSet.event_id].name} Round ${scrambleSet.round_number} Scramble Set ${prefixForIndex(scrambleSet.scramble_set_number - 1)}`;
-
-export const scrambleToName = (scramble) => `Scramble ${scramble.scramble_number} (${scramble.scramble_string})`;
-
-export const scrambleSetToDetails = (scrambleSet) => {
-  const [extraScr, standardScr] = _.partition(scrambleSet.inbox_scrambles, 'is_extra');
-
-  const stdScrambleList = standardScr.map((scr) => scr.scramble_string).join('\n');
-
-  if (extraScr.length > 0) {
-    const extraScrambleList = extraScr.map((scr) => scr.scramble_string).join('\n');
-
-    return [stdScrambleList, extraScrambleList].join('\n\n');
-  }
-
-  return stdScrambleList;
 };
 
 export function moveArrayItem(arr, fromIndex, toIndex) {

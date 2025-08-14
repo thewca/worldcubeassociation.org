@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import {
-  Icon, Popup, Ref, Table,
+  Header,
+  Icon, Popup,
+  Ref,
+  Table,
 } from 'semantic-ui-react';
 import _ from 'lodash';
 import { DragDropContext, Draggable, Droppable } from '@hello-pangea/dnd';
@@ -12,7 +15,7 @@ export default function MatchingTableDnd({
   computeDefinitionName,
   computeCellName,
   computeRowDetails = undefined,
-  moveAwayAction = undefined,
+  onClickMoveAction = undefined,
 }) {
   const [currentDragStart, setCurrentDragStart] = useState(null);
   const [currentDragIndex, setCurrentDragIndex] = useState(null);
@@ -64,7 +67,7 @@ export default function MatchingTableDnd({
         <Table.Row>
           <Table.HeaderCell />
           <Table.HeaderCell>Assigned Scrambles</Table.HeaderCell>
-          {moveAwayAction && (<Table.HeaderCell>Move</Table.HeaderCell>)}
+          {onClickMoveAction && (<Table.HeaderCell>Move</Table.HeaderCell>)}
         </Table.Row>
       </Table.Header>
       <DragDropContext
@@ -102,43 +105,42 @@ export default function MatchingTableDnd({
                               {...providedDraggable.draggableProps}
                               negative={hasError || isExtra}
                             >
-                              <Table.Cell textAlign="right" collapsing>
+                              <Table.Cell textAlign="right" collapsing verticalAlign="middle">
                                 {isExpected
                                   ? computeDefinitionName(definitionIndex)
                                   : 'Extra Scramble set (unassigned)'}
                                 {isExtra && (
-                                  <>
-                                    <Icon name="exclamation triangle" />
-                                    Unexpected Scramble Set
-                                  </>
+                                  <Popup
+                                    trigger={<Icon name="exclamation triangle" />}
+                                    content="Unexpected Scramble Set"
+                                    position="top center"
+                                  />
                                 )}
                               </Table.Cell>
                               <Table.Cell {...providedDraggable.dragHandleProps}>
-                                <Icon name={hasError ? 'exclamation triangle' : 'bars'} />
                                 {hasError
                                   ? 'Missing scramble set'
                                   : (
-                                    <>
-                                      {computeCellName(rowData)}
-                                      {' '}
-                                      {computeRowDetails && (
-                                        <Popup
-                                          trigger={<Icon name="info circle" />}
-                                          position="right center"
-                                          style={{ whiteSpace: 'pre-line' }}
-                                        >
-                                          {computeRowDetails(rowData)}
-                                        </Popup>
-                                      )}
-                                    </>
+                                    <Header size="small">
+                                      <Icon name={hasError ? 'exclamation triangle' : 'bars'} />
+                                      <Header.Content>
+                                        {computeCellName(rowData)}
+                                        {computeRowDetails && (
+                                          <Header.Subheader>
+                                            {computeRowDetails(rowData)}
+                                          </Header.Subheader>
+                                        )}
+                                      </Header.Content>
+                                    </Header>
                                   )}
                               </Table.Cell>
-                              {moveAwayAction && (
-                                <Table.Cell textAlign="center" collapsing>
+                              {onClickMoveAction && (
+                                <Table.Cell textAlign="center" verticalAlign="middle" collapsing>
                                   <Icon
                                     name="arrows alternate horizontal"
+                                    size="large"
                                     link
-                                    onClick={() => moveAwayAction(rowData)}
+                                    onClick={() => onClickMoveAction(rowData)}
                                     disabled={hasError}
                                   />
                                 </Table.Cell>

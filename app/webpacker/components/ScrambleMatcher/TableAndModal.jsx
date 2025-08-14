@@ -41,7 +41,7 @@ export default function TableAndModal({
         computeDefinitionName={computeDefinitionName}
         computeCellName={computeCellName}
         computeRowDetails={computeRowDetails}
-        moveAwayAction={setModalPayload}
+        onClickMoveAction={setModalPayload}
       />
       <MoveMatchingEntityModal
         key={modalPayload?.id}
