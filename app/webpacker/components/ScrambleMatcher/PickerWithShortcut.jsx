@@ -20,7 +20,7 @@ export default function PickerWithShortcut({
   }
 
   if (entityChoices.length === 1) {
-    const selectedEntityId = entityChoices[0].id;
+    const selectedEntity = entityChoices[0];
 
     return (
       <WrapHistory
@@ -28,7 +28,7 @@ export default function PickerWithShortcut({
         dispatchMatchState={dispatchMatchState}
         pickerHistory={pickerHistory}
         pickerKey={pickerKey}
-        selectedEntityId={selectedEntityId}
+        selectedEntity={selectedEntity}
         entityChoices={entityChoices}
         nextStepComponent={nextStepComponent}
       />
@@ -37,7 +37,6 @@ export default function PickerWithShortcut({
 
   return (
     <EntityPicker
-      key={JSON.stringify(pickerHistory)}
       entityChoices={entityChoices}
       matchState={matchState}
       dispatchMatchState={dispatchMatchState}
@@ -65,6 +64,11 @@ function EntityPicker({
     headerLabel,
   } = pickerLocalizationConfig[pickerKey];
 
+  const selectedEntity = useMemo(
+    () => entityChoices.find((ent) => ent.id === selectedEntityId),
+    [entityChoices, selectedEntityId],
+  );
+
   return (
     <>
       <PickerComponent
@@ -74,13 +78,13 @@ function EntityPicker({
         computeEntityName={computeEntityName}
         headerLabel={headerLabel}
       />
-      {selectedEntityId && (
+      {selectedEntity && (
         <WrapHistory
           matchState={matchState}
           dispatchMatchState={dispatchMatchState}
           pickerHistory={pickerHistory}
           pickerKey={pickerKey}
-          selectedEntityId={selectedEntityId}
+          selectedEntity={selectedEntity}
           entityChoices={entityChoices}
           nextStepComponent={nextStepComponent}
         />
@@ -94,18 +98,23 @@ function WrapHistory({
   dispatchMatchState,
   pickerHistory,
   pickerKey,
-  selectedEntityId,
+  selectedEntity,
   entityChoices,
   nextStepComponent: NextStepComponent,
 }) {
   const nextHistory = useMemo(() => {
-    const selectedEntityIdx = entityChoices.findIndex((ent) => ent.id === selectedEntityId);
+    const selectedEntityIdx = entityChoices.findIndex((ent) => ent.id === selectedEntity.id);
 
     return [
       ...pickerHistory,
-      { key: pickerKey, id: selectedEntityId, index: selectedEntityIdx },
+      {
+        key: pickerKey,
+        id: selectedEntity.id,
+        index: selectedEntityIdx,
+        value: selectedEntity,
+      },
     ];
-  }, [entityChoices, pickerHistory, pickerKey, selectedEntityId]);
+  }, [entityChoices, pickerHistory, pickerKey, selectedEntity]);
 
   return (
     <NextStepComponent

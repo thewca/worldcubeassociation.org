@@ -20,6 +20,29 @@ export const pickerLocalizationConfig = {
   },
 };
 
+const pickerStepConfig = {
+  events: {
+    pickerComponent: EventPickerCompat,
+    nestedPicker: 'rounds',
+  },
+  rounds: {
+    matchingConfig: {
+      key: 'scrambleSets',
+      computeDefinitionName: (idx, descriptor) => `${humanizeActivityCode(descriptor.rounds)}, Group ${idx + 1}`,
+      computeCellName: scrambleSetToName,
+      computeRowDetails: scrambleSetToDetails,
+      computeExpectedNumOfRows: (round) => round.scrambleSetCount,
+    },
+    nestedPicker: 'scrambleSets',
+  },
+  scrambleSets: {
+    matchingConfig: {
+      computeDefinitionName: (idx) => `Attempt ${idx + 1}`,
+      computeCellName: scrambleToName,
+    },
+  },
+};
+
 const prefixForIndex = (index) => {
   const char = String.fromCharCode(65 + (index % 26));
   if (index < 26) return char;
