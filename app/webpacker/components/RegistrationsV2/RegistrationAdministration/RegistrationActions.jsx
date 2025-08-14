@@ -45,9 +45,9 @@ function V3csvExport(selected, registrations, competition) {
         registration.registrant_id
       },${
         registration.competing.waiting_list_position || ''
-      },"${
+      },${
         escapeCsv(registration.competing.comments)
-      }"\n`;
+      }\n`;
     });
 
   const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
