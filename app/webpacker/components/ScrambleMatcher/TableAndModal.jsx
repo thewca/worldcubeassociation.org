@@ -1,6 +1,7 @@
-import React, {useCallback, useMemo, useState} from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import MatchingTableDnd from './MatchingTableDnd';
 import MoveMatchingEntityModal from './MoveMatchingEntityModal';
+import { pickerLocalizationConfig } from './util';
 
 export default function TableAndModal({
   matchState,
@@ -11,11 +12,17 @@ export default function TableAndModal({
 }) {
   const {
     key: matchingKey,
-    computeDefinitionName,
     computeCellName,
-    computeRowDetails,
+    computeCellDetails,
     computeExpectedRowCount,
   } = matchingConfig;
+
+  const { computeEntityName } = pickerLocalizationConfig[matchingKey];
+
+  const computeDefinitionName = useCallback(
+    (idx) => computeEntityName(matchState, idx),
+    [computeEntityName, matchState],
+  );
 
   const expectedNumOfRows = useMemo(
     () => computeExpectedRowCount?.(matchState, pickerHistory),
@@ -47,7 +54,7 @@ export default function TableAndModal({
         onRowDragCompleted={onRoundDragCompleted}
         computeDefinitionName={computeDefinitionName}
         computeCellName={computeCellName}
-        computeRowDetails={computeRowDetails}
+        computeCellDetails={computeCellDetails}
         onClickMoveAction={setModalPayload}
       />
       <MoveMatchingEntityModal

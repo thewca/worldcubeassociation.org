@@ -14,7 +14,7 @@ export default function MatchingTableDnd({
   onRowDragCompleted,
   computeDefinitionName,
   computeCellName,
-  computeRowDetails = undefined,
+  computeCellDetails = undefined,
   onClickMoveAction = undefined,
 }) {
   const [currentDragStart, setCurrentDragStart] = useState(null);
@@ -123,9 +123,9 @@ export default function MatchingTableDnd({
                                       <Icon name={hasError ? 'exclamation triangle' : 'bars'} />
                                       <Header.Content>
                                         {computeCellName(rowData)}
-                                        {computeRowDetails && (
+                                        {computeCellDetails && (
                                           <Header.Subheader>
-                                            {computeRowDetails(rowData)}
+                                            {computeCellDetails(rowData)}
                                           </Header.Subheader>
                                         )}
                                       </Header.Content>

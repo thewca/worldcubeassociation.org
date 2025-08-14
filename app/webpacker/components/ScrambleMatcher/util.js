@@ -21,6 +21,11 @@ export const pickerLocalizationConfig = {
     headerLabel: 'Groups',
     dropdownLabel: 'Scramble Set',
   },
+  inbox_scrambles: {
+    computeEntityName: (scr, idx) => `Attempt ${idx + 1}`,
+    headerLabel: 'Scrambles',
+    dropdownLabel: 'Scramble',
+  },
 };
 
 const prefixForIndex = (index) => {
@@ -52,9 +57,8 @@ export const pickerStepConfig = {
   rounds: {
     matchingConfig: {
       key: 'scrambleSets',
-      computeDefinitionName: (idx) => `Group ${idx + 1}`,
       computeCellName: scrambleSetToName,
-      computeRowDetails: (scrSet) => scrSet.original_filename,
+      computeCellDetails: (scrSet) => scrSet.original_filename,
       computeExpectedRowCount: (round) => round.scrambleSetCount,
     },
     nestedPicker: 'scrambleSets',
@@ -63,9 +67,8 @@ export const pickerStepConfig = {
   scrambleSets: {
     matchingConfig: {
       key: 'inbox_scrambles',
-      computeDefinitionName: (idx) => `Attempt ${idx + 1}`,
       computeCellName: scrambleToName,
-      computeRowDetails: (scr) => scr.scramble_string,
+      computeCellDetails: (scr) => scr.scramble_string,
       computeExpectedRowCount: (scrambleSet, history) => inferExpectedSolveCount(history),
     },
   },
