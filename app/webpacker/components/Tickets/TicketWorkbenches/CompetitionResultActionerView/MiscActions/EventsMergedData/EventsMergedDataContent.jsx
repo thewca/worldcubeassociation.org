@@ -69,7 +69,7 @@ export default function EventsMergedDataContent({ ticketDetails }) {
         more data will override the existing inbox data, but not the merged results data. You
         may remove the currently merged results data using the interface below.
       </Message>
-      <Table celled striped>
+      <Table celled striped compact="very">
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell>Event Round</Table.HeaderCell>
@@ -80,8 +80,8 @@ export default function EventsMergedDataContent({ ticketDetails }) {
         <Table.Body>
           {eventsMergedData.map((roundData) => (
             <Table.Row key={roundData.round_id}>
-              <Table.Cell>{roundData.round_name}</Table.Cell>
-              <Table.Cell>
+              <Table.Cell collapsing>{roundData.round_name}</Table.Cell>
+              <Table.Cell collapsing>
                 <DataActioner
                   roundData={roundData}
                   model="Result"
@@ -89,7 +89,7 @@ export default function EventsMergedDataContent({ ticketDetails }) {
                   competitionId={competitionId}
                 />
               </Table.Cell>
-              <Table.Cell>
+              <Table.Cell collapsing>
                 <DataActioner
                   roundData={roundData}
                   model="Scramble"
@@ -130,7 +130,15 @@ function DataActioner({
         <>
           Yes
           {' '}
-          <Button color="red" as="a" onClick={() => setShowConfirm(true)}>X</Button>
+          <Button
+            color="red"
+            as="a"
+            onClick={() => setShowConfirm(true)}
+            floated
+            compact
+          >
+            X
+          </Button>
         </>
         <Confirm
           open={showConfirm}
