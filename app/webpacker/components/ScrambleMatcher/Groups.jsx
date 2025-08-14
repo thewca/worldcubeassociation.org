@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { scrambleToName } from './util';
+import { scrambleToName, useHistoryEntry } from './util';
 import { formats } from '../../lib/wca-data.js.erb';
 import PickerWithShortcut from './PickerWithShortcut';
 import TableAndModal from './TableAndModal';
@@ -10,14 +10,11 @@ function SelectedScrambleSetPanel({
   dispatchMatchState,
   pickerHistory,
 }) {
-  const selectedRound = useMemo(
-    () => pickerHistory.find((step) => step.key === 'rounds')?.entity,
-    [pickerHistory],
-  );
+  const selectedRound = useHistoryEntry(pickerHistory, 'rounds');
 
   const expectedSolveCount = useMemo(
-    () => formats.byId[selectedRound.format].expected_solve_count,
-    [selectedRound.format],
+    () => formats.byId[selectedRound.entity.format].expected_solve_count,
+    [selectedRound.entity],
   );
 
   return (

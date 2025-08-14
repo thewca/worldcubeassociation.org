@@ -1,18 +1,11 @@
 import React, { useMemo, useCallback } from 'react';
 import TableAndModal from './TableAndModal';
 import Groups from './Groups';
-import { scrambleSetToDetails, scrambleSetToName } from './util';
+import { scrambleSetToDetails, scrambleSetToName, useHistoryEntry } from './util';
 import { humanizeActivityCode } from '../../lib/utils/wcif';
 import PickerWithShortcut from './PickerWithShortcut';
 
 const ATTEMPT_BASED_EVENTS = ['333fm', '333mbf'];
-
-function useHistoryId(pickerHistory, pickerKey) {
-  return useMemo(
-    () => pickerHistory.find((step) => step.key === pickerKey).id,
-    [pickerHistory, pickerKey],
-  );
-}
 
 function SelectedRoundPanel({
   matchState,
@@ -20,17 +13,16 @@ function SelectedRoundPanel({
   dispatchMatchState,
   pickerHistory,
 }) {
-  const selectedEventId = useHistoryId(pickerHistory, 'events');
-  const selectedRoundId = useHistoryId(pickerHistory, 'rounds');
+  const selectedEvent = useHistoryEntry(pickerHistory, 'events');
 
   const isAttemptBasedEvent = useMemo(
-    () => ATTEMPT_BASED_EVENTS.includes(selectedEventId),
-    [selectedEventId],
+    () => ATTEMPT_BASED_EVENTS.includes(selectedEvent.id),
+    [selectedEvent.id],
   );
 
   const roundToGroupName = useCallback(
-    (idx) => `${humanizeActivityCode(selectedRoundId)}, Group ${idx + 1}`,
-    [selectedRoundId],
+    (idx) => `${humanizeActivityCode(matchState.id)}, Group ${idx + 1}`,
+    [matchState.id],
   );
 
   return (

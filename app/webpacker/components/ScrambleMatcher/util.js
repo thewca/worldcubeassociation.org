@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import _ from 'lodash';
 import { events, formats } from '../../lib/wca-data.js.erb';
 import { humanizeActivityCode } from '../../lib/utils/wcif';
@@ -89,6 +90,13 @@ export function applyPickerHistory(rootState, pickerHistory) {
   return pickerHistory.reduce(
     (state, historyStep) => state[historyStep.key][historyStep.index],
     rootState,
+  );
+}
+
+export function useHistoryEntry(pickerHistory, pickerKey) {
+  return useMemo(
+    () => pickerHistory.find((step) => step.key === pickerKey),
+    [pickerHistory, pickerKey],
   );
 }
 
