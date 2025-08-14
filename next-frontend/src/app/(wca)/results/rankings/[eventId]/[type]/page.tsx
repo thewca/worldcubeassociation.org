@@ -46,7 +46,6 @@ export default async function RecordsPage({
     <Container bg="bg">
       <HydrationBoundary state={dehydrate(queryClient)}>
         <FilteredRankings
-          // We always fetch all events, so we get filtering for free on the frontend
           searchParams={{
             gender,
             region,

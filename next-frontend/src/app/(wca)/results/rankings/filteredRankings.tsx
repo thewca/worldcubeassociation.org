@@ -5,7 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import useAPI from "@/lib/wca/useAPI";
 import { Alert, Heading, VStack } from "@chakra-ui/react";
 import Loading from "@/components/ui/loading";
-import FilterBox from "@/components/results/FilterBox";
+import { RankingsFilterBox } from "@/components/results/FilterBox";
 import { useT } from "@/lib/i18n/useI18n";
 import RankingsTable from "@/components/results/RankingsTable";
 
@@ -117,7 +117,10 @@ export default function FilteredRecords({
     <VStack align="left" gap={4}>
       <Heading size="5xl">{t("results.records.title")}</Heading>
       {t("results.last_updated_html", { timestamp: data!.timestamp })}
-      <FilterBox filterState={filterState} filterActions={filterActions} />
+      <RankingsFilterBox
+        filterState={filterState}
+        filterActions={filterActions}
+      />
       <RankingsTable
         rankings={data!.rankings}
         isAverage={rankingType === "average"}
