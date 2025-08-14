@@ -42,7 +42,11 @@ export default function RankingsTable({
       </Table.Header>
       <Table.Body>
         {rankings.map((ranking, index) => (
-          <RankingsRow ranking={ranking} index={index} key={ranking.id} />
+          <RankingsRow
+            ranking={ranking}
+            index={index}
+            key={`${ranking.id}-${index}`}
+          />
         ))}
       </Table.Body>
     </Table.Root>

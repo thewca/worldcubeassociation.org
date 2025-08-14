@@ -55,7 +55,7 @@ function filterReducer(state: FilterParams, action: FilterAction) {
     case ActionTypes.SET_GENDER:
       return { ...state, gender: action.payload };
     case ActionTypes.SET_SHOW:
-      return { ...state, ranking: action.payload };
+      return { ...state, show: action.payload };
     default:
       throw new Error(`Unhandled action type: ${action.type}`);
   }
@@ -127,7 +127,7 @@ export default function FilteredRecords({
           Male: t("results.selector_elements.gender_selector.male"),
           Female: t("results.selector_elements.gender_selector.female"),
           "100 persons": t("results.selector_elements.show_selector.persons"),
-          results: t("results.selector_elements.show_selector.results"),
+          "100 results": t("results.selector_elements.show_selector.results"),
           "by region": t("results.selector_elements.show_selector.by_region"),
         }}
       />

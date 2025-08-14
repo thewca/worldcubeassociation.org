@@ -123,7 +123,7 @@ export function RankingsFilterBox({
             <SegmentGroup.Items
               items={[
                 valueLabelMap["100 persons"],
-                valueLabelMap["results"],
+                valueLabelMap["100 results"],
                 valueLabelMap["by region"],
               ]}
             />

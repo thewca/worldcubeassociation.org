@@ -57,7 +57,9 @@ class Api::V0::Results::RankingsController < Api::V0::Results::ResultsController
                 <<-SQL.squish
           SELECT
             results.*,
-            average value
+            average value,
+            competitions.cell_name competition_name,
+            competitions.country_id competition_country_id
           FROM results
           #{'JOIN persons ON results.person_id = persons.wca_id and persons.sub_id = 1' if @gender_condition.present?}
           JOIN competitions on competitions.id = results.competition_id
@@ -74,7 +76,9 @@ class Api::V0::Results::RankingsController < Api::V0::Results::ResultsController
                   <<-SQL.squish
             SELECT
               results.*,
-              value#{i} value
+              value#{i} value,
+            competitions.cell_name competition_name,
+            competitions.country_id competition_country_id
             FROM results
             #{'JOIN persons ON results.person_id = persons.wca_id and persons.sub_id = 1' if @gender_condition.present?}
             JOIN competitions on competitions.id = results.competition_id
@@ -98,7 +102,9 @@ class Api::V0::Results::RankingsController < Api::V0::Results::ResultsController
               <<-SQL.squish
         SELECT
           results.*,
-          results.#{value} value
+          results.#{value} value,
+          competitions.cell_name competition_name,
+          competitions.country_id competition_country_id
         FROM (
           SELECT
             results.country_id record_country_id,
