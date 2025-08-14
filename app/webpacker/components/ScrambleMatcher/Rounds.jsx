@@ -20,11 +20,6 @@ function SelectedRoundPanel({
     [selectedEvent.id],
   );
 
-  const roundToGroupName = useCallback(
-    (idx) => `${humanizeActivityCode(matchState.id)}, Group ${idx + 1}`,
-    [matchState.id],
-  );
-
   return (
     <>
       <TableAndModal
@@ -34,7 +29,7 @@ function SelectedRoundPanel({
         dispatchMatchState={dispatchMatchState}
         pickerHistory={pickerHistory}
         matchingKey="scrambleSets"
-        computeDefinitionName={roundToGroupName}
+        computeDefinitionName={(idx) => `Group ${idx + 1}`}
         computeCellName={scrambleSetToName}
         computeRowDetails={(scrSet) => scrSet.original_filename}
         expectedNumOfRows={matchState.scrambleSetCount}

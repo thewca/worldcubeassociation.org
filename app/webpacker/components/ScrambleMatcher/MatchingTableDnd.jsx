@@ -105,21 +105,19 @@ export default function MatchingTableDnd({
                               {...providedDraggable.draggableProps}
                               negative={hasError || isExtra}
                             >
-                              <Table.Cell textAlign="right" collapsing verticalAlign="middle">
-                                {isExpected
-                                  ? computeDefinitionName(definitionIndex)
-                                  : 'Extra Scramble set (unassigned)'}
+                              <Table.Cell textAlign="center" collapsing verticalAlign="middle">
+                                {isExpected && computeDefinitionName(definitionIndex)}
                                 {isExtra && (
                                   <Popup
                                     trigger={<Icon name="exclamation triangle" />}
-                                    content="Unexpected Scramble Set"
+                                    content="This entry is unexpected"
                                     position="top center"
                                   />
                                 )}
                               </Table.Cell>
                               <Table.Cell {...providedDraggable.dragHandleProps}>
                                 {hasError
-                                  ? 'Missing scramble set'
+                                  ? 'Missing row'
                                   : (
                                     <Header size="small">
                                       <Icon name={hasError ? 'exclamation triangle' : 'bars'} />
