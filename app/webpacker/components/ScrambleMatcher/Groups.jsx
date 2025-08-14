@@ -1,17 +1,18 @@
 import React, { useMemo } from 'react';
-import { applyPickerHistory, scrambleToName } from './util';
+import { scrambleToName } from './util';
 import { formats } from '../../lib/wca-data.js.erb';
 import PickerWithShortcut from './PickerWithShortcut';
 import TableAndModal from './TableAndModal';
 
 function SelectedScrambleSetPanel({
   matchState,
+  rootMatchState,
   dispatchMatchState,
   pickerHistory,
 }) {
   const selectedRound = useMemo(
-    () => applyPickerHistory(matchState, pickerHistory.slice(0, -1)),
-    [matchState, pickerHistory],
+    () => pickerHistory.find((step) => step.key === 'rounds')?.entity,
+    [pickerHistory],
   );
 
   const expectedSolveCount = useMemo(
@@ -23,6 +24,7 @@ function SelectedScrambleSetPanel({
     <TableAndModal
       key={JSON.stringify(pickerHistory)}
       matchState={matchState}
+      rootMatchState={rootMatchState}
       pickerHistory={pickerHistory}
       dispatchMatchState={dispatchMatchState}
       matchingKey="inbox_scrambles"
@@ -35,12 +37,14 @@ function SelectedScrambleSetPanel({
 
 export default function Groups({
   matchState,
+  rootMatchState,
   dispatchMatchState,
   pickerHistory,
 }) {
   return (
     <PickerWithShortcut
       matchState={matchState}
+      rootMatchState={rootMatchState}
       dispatchMatchState={dispatchMatchState}
       pickerHistory={pickerHistory}
       pickerKey="scrambleSets"

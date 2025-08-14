@@ -16,6 +16,7 @@ function useHistoryId(pickerHistory, pickerKey) {
 
 function SelectedRoundPanel({
   matchState,
+  rootMatchState,
   dispatchMatchState,
   pickerHistory,
 }) {
@@ -48,6 +49,7 @@ function SelectedRoundPanel({
       {isAttemptBasedEvent && (
         <Groups
           matchState={matchState}
+          rootMatchState={rootMatchState}
           dispatchMatchState={dispatchMatchState}
           pickerHistory={pickerHistory}
         />
@@ -58,12 +60,14 @@ function SelectedRoundPanel({
 
 export default function Rounds({
   matchState,
+  rootMatchState,
   dispatchMatchState,
   pickerHistory,
 }) {
   return (
     <PickerWithShortcut
       matchState={matchState}
+      rootMatchState={rootMatchState}
       dispatchMatchState={dispatchMatchState}
       pickerHistory={pickerHistory}
       pickerKey="rounds"

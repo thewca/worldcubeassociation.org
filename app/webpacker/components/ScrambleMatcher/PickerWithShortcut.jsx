@@ -1,9 +1,10 @@
 import React, { useMemo, useState } from 'react';
-import { applyPickerHistory, pickerLocalizationConfig } from './util';
+import { pickerLocalizationConfig } from './util';
 import ButtonGroupPicker from './ButtonGroupPicker';
 
 export default function PickerWithShortcut({
   matchState,
+  rootMatchState = matchState,
   dispatchMatchState,
   pickerHistory = [],
   pickerKey,
@@ -11,8 +12,8 @@ export default function PickerWithShortcut({
   nextStepComponent,
 }) {
   const entityChoices = useMemo(
-    () => applyPickerHistory(matchState, pickerHistory)[pickerKey],
-    [matchState, pickerHistory, pickerKey],
+    () => matchState[pickerKey],
+    [matchState, pickerKey],
   );
 
   if (entityChoices === undefined) {
@@ -24,7 +25,7 @@ export default function PickerWithShortcut({
 
     return (
       <WrapHistory
-        matchState={matchState}
+        rootMatchState={rootMatchState}
         dispatchMatchState={dispatchMatchState}
         pickerHistory={pickerHistory}
         pickerKey={pickerKey}
@@ -38,7 +39,7 @@ export default function PickerWithShortcut({
   return (
     <EntityPicker
       entityChoices={entityChoices}
-      matchState={matchState}
+      rootMatchState={rootMatchState}
       dispatchMatchState={dispatchMatchState}
       pickerHistory={pickerHistory}
       pickerKey={pickerKey}
@@ -50,7 +51,7 @@ export default function PickerWithShortcut({
 
 function EntityPicker({
   entityChoices,
-  matchState,
+  rootMatchState,
   dispatchMatchState,
   pickerHistory,
   pickerKey,
@@ -80,7 +81,7 @@ function EntityPicker({
       />
       {selectedEntity && (
         <WrapHistory
-          matchState={matchState}
+          rootMatchState={rootMatchState}
           dispatchMatchState={dispatchMatchState}
           pickerHistory={pickerHistory}
           pickerKey={pickerKey}
@@ -94,7 +95,7 @@ function EntityPicker({
 }
 
 function WrapHistory({
-  matchState,
+  rootMatchState,
   dispatchMatchState,
   pickerHistory,
   pickerKey,
@@ -111,14 +112,15 @@ function WrapHistory({
         key: pickerKey,
         id: selectedEntity.id,
         index: selectedEntityIdx,
-        value: selectedEntity,
+        entity: selectedEntity,
       },
     ];
   }, [entityChoices, pickerHistory, pickerKey, selectedEntity]);
 
   return (
     <NextStepComponent
-      matchState={matchState}
+      matchState={selectedEntity}
+      rootMatchState={rootMatchState}
       dispatchMatchState={dispatchMatchState}
       pickerHistory={nextHistory}
     />

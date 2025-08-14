@@ -1,10 +1,10 @@
-import React, { useCallback, useMemo, useState } from 'react';
-import { applyPickerHistory } from './util';
+import React, { useCallback, useState } from 'react';
 import MatchingTableDnd from './MatchingTableDnd';
 import MoveMatchingEntityModal from './MoveMatchingEntityModal';
 
 export default function TableAndModal({
   matchState,
+  rootMatchState,
   dispatchMatchState,
   pickerHistory,
   matchingKey,
@@ -30,17 +30,12 @@ export default function TableAndModal({
     [dispatchMatchState, pickerHistory, matchingKey],
   );
 
-  const selectedEntity = useMemo(
-    () => applyPickerHistory(matchState, pickerHistory),
-    [matchState, pickerHistory],
-  );
-
-  const expectedNumOfRows = computeExpectedNumOfRows?.(selectedEntity);
+  const expectedNumOfRows = computeExpectedNumOfRows?.(matchState);
 
   return (
     <>
       <MatchingTableDnd
-        matchableRows={selectedEntity[matchingKey]}
+        matchableRows={matchState[matchingKey]}
         expectedNumOfRows={expectedNumOfRows}
         onRowDragCompleted={onRoundDragCompleted}
         computeDefinitionName={computeDefinitionName}
@@ -54,7 +49,7 @@ export default function TableAndModal({
         onClose={onModalClose}
         dispatchMatchState={dispatchMatchState}
         selectedMatchingEntity={modalPayload}
-        rootMatchState={matchState}
+        rootMatchState={rootMatchState}
         pickerHistory={pickerHistory}
         matchingKey={matchingKey}
         entityToName={computeCellName}
