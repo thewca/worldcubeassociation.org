@@ -12,14 +12,22 @@ function addScrambleSetsToEvents(wcifEvents, scrambleSets) {
       ...wcifEvent,
       rounds: wcifEvent.rounds.map((round) => ({
         ...round,
-        scrambleSets: _.uniqBy([
-          ...(round.scrambleSets ?? []),
-          ..._.sortBy(groupedScrambleSets[round.id], 'ordered_index')
-            .map((scrSet) => ({
-              ...scrSet,
-              inbox_scrambles: _.sortBy(scrSet.inbox_scrambles, 'ordered_index'),
-            })),
-        ], 'id'),
+        scrambleSets: _.sortBy(
+          _.uniqBy([
+            // The order of lines is important here:
+            //   Lodash keeps only the first appearance, so we need to list
+            //   the newest possible entries first, followed by existing entries.
+            ...(groupedScrambleSets[round.id] ?? []),
+            ...(round.scrambleSets ?? []),
+          ], 'id').map((scrSet) => ({
+            ...scrSet,
+            inbox_scrambles: _.sortBy(
+              scrSet.inbox_scrambles,
+              'ordered_index',
+            ),
+          })),
+          'ordered_index',
+        ),
       })),
     })),
   };
