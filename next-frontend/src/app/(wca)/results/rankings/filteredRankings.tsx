@@ -134,6 +134,7 @@ export default function FilteredRecords({
       <RankingsTable
         rankings={data!.rankings}
         isAverage={rankingType === "average"}
+        isByRegion={show === "by region"}
       />
     </VStack>
   );

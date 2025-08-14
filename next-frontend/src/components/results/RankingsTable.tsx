@@ -8,11 +8,13 @@ import { RankingsRow } from "@/components/results/RankingsRow";
 interface RankingsTableProps {
   rankings: components["schemas"]["ExtendedResult"][];
   isAverage?: boolean;
+  isByRegion?: boolean;
 }
 
 export default function RankingsTable({
   rankings,
   isAverage = false,
+  isByRegion = false,
 }: RankingsTableProps) {
   const { t } = useT();
 
@@ -20,16 +22,20 @@ export default function RankingsTable({
     <Table.Root>
       <Table.Header>
         <Table.Row>
-          <Table.ColumnHeader>#</Table.ColumnHeader>
+          <Table.ColumnHeader>
+            {isByRegion ? t("results.table_elements.region") : "#"}
+          </Table.ColumnHeader>
           <Table.ColumnHeader>
             {t("results.table_elements.name")}
           </Table.ColumnHeader>
           <Table.ColumnHeader>
             {t("results.table_elements.result")}
           </Table.ColumnHeader>
-          <Table.ColumnHeader>
-            {t("results.table_elements.region")}
-          </Table.ColumnHeader>
+          {!isByRegion && (
+            <Table.ColumnHeader>
+              {t("results.table_elements.region")}
+            </Table.ColumnHeader>
+          )}
           <Table.ColumnHeader>
             {t("results.table_elements.competition")}
           </Table.ColumnHeader>
@@ -46,6 +52,7 @@ export default function RankingsTable({
             ranking={ranking}
             index={index}
             key={`${ranking.id}-${index}`}
+            isByRegion={isByRegion}
           />
         ))}
       </Table.Body>

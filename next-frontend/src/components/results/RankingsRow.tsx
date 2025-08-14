@@ -13,6 +13,7 @@ interface RankingsRowProps {
   ranking: components["schemas"]["ExtendedResult"];
   index: number;
   isAverage?: boolean;
+  isByRegion?: boolean;
 }
 
 function resultAttempts(result: components["schemas"]["ExtendedResult"]) {
@@ -48,6 +49,7 @@ export function RankingsRow({
   ranking,
   index,
   isAverage = false,
+  isByRegion = false,
 }: RankingsRowProps) {
   const {
     definedAttempts: attempts,
@@ -57,7 +59,11 @@ export function RankingsRow({
 
   return (
     <Table.Row>
-      <Table.Cell>{index + 1}</Table.Cell>
+      {isByRegion ? (
+        <CountryCell countryId={ranking.country_id} />
+      ) : (
+        <Table.Cell>{index + 1}</Table.Cell>
+      )}
       <PersonCell
         personId={ranking.person_id}
         personName={ranking.person_name}
@@ -65,7 +71,7 @@ export function RankingsRow({
       <Table.Cell>
         {formatAttemptResult(ranking.value, ranking.event_id)}
       </Table.Cell>
-      <CountryCell countryId={ranking.country_id} />
+      {!isByRegion && <CountryCell countryId={ranking.country_id} />}
       <CompetitionCell
         competitionId={ranking.competition_id}
         competitionName={ranking.competition_name}
