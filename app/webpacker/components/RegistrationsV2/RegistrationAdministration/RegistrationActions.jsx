@@ -46,7 +46,7 @@ function V3csvExport(selected, registrations, competition) {
       },${
         registration.competing.waiting_list_position || ''
       },"${
-        registration.competing.comments || ''
+        escapeCsv(registration.competing.comments)
       }"\n`;
     });
 
@@ -61,6 +61,16 @@ function V3csvExport(selected, registrations, competition) {
 
   document.body.removeChild(link);
   URL.revokeObjectURL(url);
+}
+
+function escapeCsv(value) {
+  if (value == null) return '';
+  const str = String(value);
+  const escaped = str.replace(/"/g, '""');
+  if (/[",\n\r]/.test(str)) {
+    return `"${escaped}"`;
+  }
+  return escaped;
 }
 
 function csvExport(selected, registrations, competition) {
