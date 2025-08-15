@@ -8,6 +8,8 @@ import Loading from "@/components/ui/loading";
 import { RankingsFilterBox } from "@/components/results/FilterBox";
 import { useT } from "@/lib/i18n/useI18n";
 import RankingsTable from "@/components/results/RankingsTable";
+import { useRouter } from "next/navigation";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 
 type ValidActions =
   | "SET_EVENT"
@@ -27,6 +29,7 @@ const ActionTypes: Record<ValidActions, ValidActions> = {
 type FilterAction = {
   type: ValidActions;
   payload: string;
+  router: AppRouterInstance;
 };
 
 type FilterParams = {
@@ -42,23 +45,35 @@ interface filteredRecordsProps {
 }
 
 function filterReducer(state: FilterParams, action: FilterAction) {
+  let newState = state;
+
   switch (action.type) {
     case ActionTypes.SET_EVENT:
       if (action.payload === "333mbf") {
-        return { ...state, event: action.payload, rankingType: "single" };
+        newState = { ...state, event: action.payload, rankingType: "single" };
+        break;
       }
-      return { ...state, event: action.payload };
+      newState = { ...state, event: action.payload };
+      break;
     case ActionTypes.SET_REGION:
-      return { ...state, region: action.payload };
+      newState = { ...state, region: action.payload };
+      break;
     case ActionTypes.SET_RANKING_TYPE:
-      return { ...state, rankingType: action.payload };
+      newState = { ...state, rankingType: action.payload };
+      break;
     case ActionTypes.SET_GENDER:
-      return { ...state, gender: action.payload };
+      newState = { ...state, gender: action.payload };
+      break;
     case ActionTypes.SET_SHOW:
-      return { ...state, show: action.payload };
+      newState = { ...state, show: action.payload };
+      break;
     default:
       throw new Error(`Unhandled action type: ${action.type}`);
   }
+  action.router.replace(
+    `/results/rankings/${newState.event}/${newState.rankingType}/?gender=${newState.gender}&show=${newState.show}&region=${newState.region}`,
+  );
+  return newState;
 }
 
 export default function FilteredRecords({
@@ -66,20 +81,22 @@ export default function FilteredRecords({
 }: filteredRecordsProps) {
   const [filterState, dispatch] = useReducer(filterReducer, searchParams);
 
+  const router = useRouter();
+
   const filterActions = useMemo(
     () => ({
       setEvent: (event: string) =>
-        dispatch({ type: ActionTypes.SET_EVENT, payload: event }),
+        dispatch({ type: ActionTypes.SET_EVENT, payload: event, router }),
       setRegion: (region: string) =>
-        dispatch({ type: ActionTypes.SET_REGION, payload: region }),
+        dispatch({ type: ActionTypes.SET_REGION, payload: region, router }),
       setGender: (gender: string) =>
-        dispatch({ type: ActionTypes.SET_GENDER, payload: gender }),
+        dispatch({ type: ActionTypes.SET_GENDER, payload: gender, router }),
       setShow: (show: string) =>
-        dispatch({ type: ActionTypes.SET_SHOW, payload: show }),
+        dispatch({ type: ActionTypes.SET_SHOW, payload: show, router }),
       setType: (type: string) =>
-        dispatch({ type: ActionTypes.SET_RANKING_TYPE, payload: type }),
+        dispatch({ type: ActionTypes.SET_RANKING_TYPE, payload: type, router }),
     }),
-    [dispatch],
+    [dispatch, router],
   );
 
   const { event, region, gender, show, rankingType } = filterState;
@@ -115,7 +132,7 @@ export default function FilteredRecords({
 
   return (
     <VStack align="left" gap={4}>
-      <Heading size="5xl">{t("results.records.title")}</Heading>
+      <Heading size="5xl">{t("results.rankings.title")}</Heading>
       {t("results.last_updated_html", { timestamp: data!.timestamp })}
       <RankingsFilterBox
         filterState={filterState}
