@@ -219,35 +219,35 @@ zh-CN:
       percent: '前 %{percent}%'
       attempt_result:
         #original_hash: ac6a282
-        time: '%{round_format}<%{time}'
+        time: '%{round_format} < %{time}'
         #original_hash: 45db130
-        moves: '%{round_format}<%{moves}步'
+        moves: '%{round_format} < %{moves}步'
         #original_hash: 076911b
-        points: '%{round_format}<%{points}点'
+        points: '%{round_format} > %{points}点'
     #original_hash: 6e55337
     ranking: '排名前%{ranking}晋级下一轮'
     #original_hash: 7ee969c
     percent: '前%{percent}%晋级下一轮'
     attempt_result:
       #original_hash: 6173090
-      time: '%{round_format}<%{time}晋级下一轮'
+      time: '%{round_format} < %{time}晋级下一轮'
       #original_hash: 581709d
-      moves: '%{round_format}<%{moves}步晋级下一轮'
+      moves: '%{round_format} < %{moves}步晋级下一轮'
       #original_hash: e9f0c92
-      points: '%{round_format}<%{points}点晋级下一轮'
+      points: '%{round_format} > %{points}点晋级下一轮'
   cutoff:
     #original_hash: cf458e7
     time:
-      zero: '%{count}次尝试<%{time}'
-      other: '%{count}次尝试<%{time}'
+      zero: '%{count}次尝试 < %{time}'
+      other: '%{count}次尝试 < %{time}'
     #original_hash: b49d930
     moves:
-      zero: '%{count}次尝试<%{moves}步'
-      other: '%{count}次尝试<%{moves}步'
+      zero: '%{count}次尝试 < %{moves}步'
+      other: '%{count}次尝试 < %{moves}步'
     #original_hash: eba1b97
     points:
-      zero: '%{count}次尝试>%{points}分'
-      other: '%{count}次尝试>%{points}分'
+      zero: '%{count}次尝试 > %{points}分'
+      other: '%{count}次尝试 > %{points}分'
   time_limit:
     cumulative:
       #original_hash: 9da5a3e
@@ -278,22 +278,22 @@ zh-CN:
       any_result: 任何结果
     single:
       #original_hash: d596f44
-      time: '单次还原小于%{time}'
+      time: '单次还原 < %{time}'
       #original_hash: 52ba186
-      moves: '单次小于%{moves}步'
+      moves: '单次 < %{moves}步'
       #original_hash: b1993ae
-      points: '单次分数超过%{points}点'
+      points: '单次分数 > %{points}点'
       #original_hash: ed2b051
       ranking: '单次前%{ranking}'
       #original_hash: 933b7dc
       any_result: 任何单次成绩
     average:
       #original_hash: 2682ae8
-      time: '平均低于%{time}'
+      time: '平均 < %{time}'
       #original_hash: 1b9b5fc
-      moves: '平均低于%{moves}步'
+      moves: '平均 < %{moves}步'
       #original_hash: 05c417e
-      points: '平均超过%{points}点'
+      points: '平均 > %{points}点'
       #original_hash: 805171c
       ranking: '平均为前%{ranking}'
       #original_hash: 2223a1b
