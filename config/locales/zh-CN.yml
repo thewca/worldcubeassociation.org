@@ -127,26 +127,26 @@ zh-CN:
     333mbo: 多盲-旧赛制
   formats:
     #original_hash: e4b3c11
-    '1': 单次最好
+    '1': 单次计最好
     #original_hash: 778e14d
-    '2': 2次取最佳
+    '2': 两次计最好
     #original_hash: 21f623c
-    '3': 3次取最佳
+    '3': 三次计最好
     #original_hash: 2342d2b
-    a: 5次去头尾平均
+    a: 五次计平均
     #original_hash: 940c82d
-    m: 3次平均
+    m: 三次计平均
     short:
       #original_hash: c21bc2a
-      '1': 单次最好
+      '1': 单次计最好
       #original_hash: 49e914a
-      '2': 2次取最佳
+      '2': 两次计最好
       #original_hash: b41f36f
-      '3': 3次取最佳
+      '3': 三次计最好
       #original_hash: 4a34175
-      a: 5次平均
+      a: 五次计平均
       #original_hash: 53ba088
-      m: 3次平均
+      m: 三次计平均
   rounds:
     '0':
       #original_hash: 4d618bb
@@ -219,22 +219,22 @@ zh-CN:
       percent: '前 %{percent}%'
       attempt_result:
         #original_hash: ac6a282
-        time: '%{round_format} 优于 %{time}'
+        time: '%{round_format}<%{time}'
         #original_hash: 45db130
-        moves: '%{round_format} 优于 %{moves} 步'
+        moves: '%{round_format}<%{moves}步'
         #original_hash: 076911b
-        points: '%{round_format} 优于 %{points} 点'
+        points: '%{round_format}<%{points}点'
     #original_hash: 6e55337
-    ranking: '排名前 %{ranking} 晋级下一轮'
+    ranking: '排名前%{ranking}晋级下一轮'
     #original_hash: 7ee969c
-    percent: '前 %{percent}% 晋级下一轮'
+    percent: '前%{percent}%晋级下一轮'
     attempt_result:
       #original_hash: 6173090
-      time: '%{round_format} 优于 %{time} 晋级下一轮'
+      time: '%{round_format}<%{time}晋级下一轮'
       #original_hash: 581709d
-      moves: '%{round_format} 优于 %{moves} 步晋级下一轮'
+      moves: '%{round_format}<%{moves}步晋级下一轮'
       #original_hash: e9f0c92
-      points: '%{round_format} 优于 %{points} 点晋级下一轮'
+      points: '%{round_format}<%{points}点晋级下一轮'
   cutoff:
     #original_hash: cf458e7
     time:
