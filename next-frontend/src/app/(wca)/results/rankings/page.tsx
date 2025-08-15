@@ -11,18 +11,16 @@ const REGION_WORLD = "world";
 
 export default async function RecordsPage({
   searchParams,
-  params,
 }: {
   searchParams: Promise<{ [key: string]: string | undefined }>;
-  params: Promise<{ eventId: string; type: string }>;
 }) {
   const {
     gender = GENDER_ALL,
     region = REGION_WORLD,
     show = SHOW_100_PERSONS,
+    event_id: eventId = "333",
+    type = "single",
   } = await searchParams;
-
-  const { eventId, type } = await params;
 
   const queryClient = new QueryClient();
 
@@ -45,15 +43,7 @@ export default async function RecordsPage({
   return (
     <Container bg="bg">
       <HydrationBoundary state={dehydrate(queryClient)}>
-        <FilteredRankings
-          searchParams={{
-            gender,
-            region,
-            show,
-            event: eventId,
-            rankingType: type,
-          }}
-        />
+        <FilteredRankings />
       </HydrationBoundary>
     </Container>
   );

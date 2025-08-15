@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo, useReducer } from "react";
+import React, { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import useAPI from "@/lib/wca/useAPI";
 import { Alert, Heading, VStack } from "@chakra-ui/react";
@@ -8,29 +8,8 @@ import Loading from "@/components/ui/loading";
 import { RankingsFilterBox } from "@/components/results/FilterBox";
 import { useT } from "@/lib/i18n/useI18n";
 import RankingsTable from "@/components/results/RankingsTable";
-import { useRouter } from "next/navigation";
-import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
-
-type ValidActions =
-  | "SET_EVENT"
-  | "SET_REGION"
-  | "SET_RANKING_TYPE"
-  | "SET_GENDER"
-  | "SET_SHOW";
-
-const ActionTypes: Record<ValidActions, ValidActions> = {
-  SET_EVENT: "SET_EVENT",
-  SET_REGION: "SET_REGION",
-  SET_RANKING_TYPE: "SET_RANKING_TYPE",
-  SET_GENDER: "SET_GENDER",
-  SET_SHOW: "SET_SHOW",
-};
-
-type FilterAction = {
-  type: ValidActions;
-  payload: string;
-  router: AppRouterInstance;
-};
+import { useRouter, useSearchParams } from "next/navigation";
+import { route } from "nextjs-routes";
 
 type FilterParams = {
   event: string;
@@ -40,66 +19,99 @@ type FilterParams = {
   rankingType: string;
 };
 
-interface filteredRecordsProps {
-  searchParams: FilterParams;
+function createUrl(params: FilterParams) {
+  const { event, region, gender, show, rankingType } = params;
+  return route({
+    pathname: "/results/rankings",
+    query: { event_id: event, region, gender, show, type: rankingType },
+  });
 }
 
-function filterReducer(state: FilterParams, action: FilterAction) {
-  let newState = state;
-
-  switch (action.type) {
-    case ActionTypes.SET_EVENT:
-      if (action.payload === "333mbf") {
-        newState = { ...state, event: action.payload, rankingType: "single" };
-        break;
-      }
-      newState = { ...state, event: action.payload };
-      break;
-    case ActionTypes.SET_REGION:
-      newState = { ...state, region: action.payload };
-      break;
-    case ActionTypes.SET_RANKING_TYPE:
-      newState = { ...state, rankingType: action.payload };
-      break;
-    case ActionTypes.SET_GENDER:
-      newState = { ...state, gender: action.payload };
-      break;
-    case ActionTypes.SET_SHOW:
-      newState = { ...state, show: action.payload };
-      break;
-    default:
-      throw new Error(`Unhandled action type: ${action.type}`);
-  }
-  action.router.replace(
-    `/results/rankings/${newState.event}/${newState.rankingType}/?gender=${newState.gender}&show=${newState.show}&region=${newState.region}`,
-  );
-  return newState;
-}
-
-export default function FilteredRecords({
-  searchParams,
-}: filteredRecordsProps) {
-  const [filterState, dispatch] = useReducer(filterReducer, searchParams);
+export default function FilteredRecords() {
+  const searchParams = useSearchParams();
 
   const router = useRouter();
 
-  const filterActions = useMemo(
-    () => ({
-      setEvent: (event: string) =>
-        dispatch({ type: ActionTypes.SET_EVENT, payload: event, router }),
-      setRegion: (region: string) =>
-        dispatch({ type: ActionTypes.SET_REGION, payload: region, router }),
-      setGender: (gender: string) =>
-        dispatch({ type: ActionTypes.SET_GENDER, payload: gender, router }),
-      setShow: (show: string) =>
-        dispatch({ type: ActionTypes.SET_SHOW, payload: show, router }),
-      setType: (type: string) =>
-        dispatch({ type: ActionTypes.SET_RANKING_TYPE, payload: type, router }),
-    }),
-    [dispatch, router],
-  );
+  const filterState = useMemo(() => {
+    return {
+      gender: searchParams.get("gender") ?? "All",
+      region: searchParams.get("region") ?? "world",
+      show: searchParams.get("show") ?? "100 persons",
+      event: searchParams.get("event_id") ?? "333",
+      rankingType: searchParams.get("type") ?? "single",
+    };
+  }, [searchParams]);
 
   const { event, region, gender, show, rankingType } = filterState;
+
+  const filterActions = useMemo(
+    () => ({
+      setEvent: (event: string) => {
+        if (event === "333mbf") {
+          router.replace(
+            createUrl({
+              event,
+              region,
+              gender,
+              show,
+              rankingType: "single",
+            }),
+          );
+        } else {
+          router.replace(
+            createUrl({
+              event,
+              region,
+              gender,
+              show,
+              rankingType,
+            }),
+          );
+        }
+      },
+      setRegion: (region: string) =>
+        router.replace(
+          createUrl({
+            event,
+            region,
+            gender,
+            show,
+            rankingType,
+          }),
+        ),
+      setGender: (gender: string) =>
+        router.replace(
+          createUrl({
+            event,
+            region,
+            gender,
+            show,
+            rankingType,
+          }),
+        ),
+      setShow: (show: string) =>
+        router.replace(
+          createUrl({
+            event,
+            region,
+            gender,
+            show,
+            rankingType,
+          }),
+        ),
+      setType: (rankingType: string) =>
+        router.replace(
+          createUrl({
+            event,
+            region,
+            gender,
+            show,
+            rankingType,
+          }),
+        ),
+    }),
+    [event, gender, rankingType, region, router, show],
+  );
 
   const { t } = useT();
 
@@ -118,10 +130,6 @@ export default function FilteredRecords({
     refetchOnMount: false,
   });
 
-  if (isFetching) {
-    return <Loading />;
-  }
-
   if (isError) {
     return (
       <Alert.Root status="error">
@@ -133,7 +141,7 @@ export default function FilteredRecords({
   return (
     <VStack align="left" gap={4}>
       <Heading size="5xl">{t("results.rankings.title")}</Heading>
-      {t("results.last_updated_html", { timestamp: data!.timestamp })}
+      {t("results.last_updated_html", { timestamp: data?.timestamp })}
       <RankingsFilterBox
         filterState={filterState}
         filterActions={filterActions}
@@ -148,11 +156,15 @@ export default function FilteredRecords({
           "by region": t("results.selector_elements.show_selector.by_region"),
         }}
       />
-      <RankingsTable
-        rankings={data!.rankings}
-        isAverage={rankingType === "average"}
-        isByRegion={show === "by region"}
-      />
+      {isFetching ? (
+        <Loading />
+      ) : (
+        <RankingsTable
+          rankings={data!.rankings}
+          isAverage={rankingType === "average"}
+          isByRegion={show === "by region"}
+        />
+      )}
     </VStack>
   );
 }

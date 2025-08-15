@@ -40,7 +40,7 @@ declare module "nextjs-routes" {
     | DynamicRoute<"/regulations/history/official/[version]", { "version": string }>
     | StaticRoute<"/regulations/scrambles">
     | StaticRoute<"/regulations/translations">
-    | DynamicRoute<"/results/rankings/[eventId]/[type]", { "eventId": string; "type": string }>
+    | StaticRoute<"/results/rankings">
     | StaticRoute<"/score-tools">
     | StaticRoute<"/speedcubing-history">
     | StaticRoute<"/teams-committees">
