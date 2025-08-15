@@ -9,12 +9,9 @@ export default function EventsMergedData({ ticketDetails }) {
     <>
       <Popup
         trigger={(
-          <div>
-            {/* Button wrapped in a div because disabled button does not fire mouse events */}
-            <Button onClick={() => setIsModalOpen(true)}>
-              Events Merged Data
-            </Button>
-          </div>
+          <Button onClick={() => setIsModalOpen(true)}>
+            Events Merged Data
+          </Button>
       )}
         content="View & manage the results data of every events which are merged."
       />

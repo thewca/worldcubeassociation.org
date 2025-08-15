@@ -252,8 +252,10 @@ class TicketsController < ApplicationController
       {
         round_id: round.id,
         round_name: round.name,
-        result_count: round.results.count,
-        scramble_count: round.scrambles.count,
+        count: {
+          result: round.results.count,
+          scramble: round.scrambles.count,
+        },
       }
     end
 

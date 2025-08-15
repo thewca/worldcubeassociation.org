@@ -42,14 +42,19 @@ export default function EventsMergedDataContent({ ticketDetails }) {
           if (model === 'All') {
             return {
               ...roundData,
-              result_count: 0,
-              scramble_count: 0,
+              count: {
+                results: 0,
+                scrambles: 0,
+              },
             };
           }
           if (roundData.round_id === roundId) {
             return {
               ...roundData,
-              [`${model.toLowerCase()}_count`]: 0,
+              count: {
+                ...roundData.count,
+                [model.toLowerCase()]: 0,
+              },
             };
           }
           return roundData;
@@ -69,34 +74,30 @@ export default function EventsMergedDataContent({ ticketDetails }) {
         more data will override the existing inbox data, but not the merged results data. You
         may remove the currently merged results data using the interface below.
       </Message>
-      <Table celled striped compact="very">
+      <Table celled striped compact="very" definition>
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell>Event Round</Table.HeaderCell>
-            <Table.HeaderCell>Has Merged Results</Table.HeaderCell>
-            <Table.HeaderCell>Has Merged Scrambles</Table.HeaderCell>
+            <Table.HeaderCell colSpan="2">Has Merged Results</Table.HeaderCell>
+            <Table.HeaderCell colSpan="2">Has Merged Scrambles</Table.HeaderCell>
           </Table.Row>
         </Table.Header>
         <Table.Body>
           {eventsMergedData.map((roundData) => (
             <Table.Row key={roundData.round_id}>
-              <Table.Cell collapsing>{roundData.round_name}</Table.Cell>
-              <Table.Cell collapsing>
-                <DataActioner
-                  roundData={roundData}
-                  model="Result"
-                  deleteMutate={deleteResultsDataMutate}
-                  competitionId={competitionId}
-                />
-              </Table.Cell>
-              <Table.Cell collapsing>
-                <DataActioner
-                  roundData={roundData}
-                  model="Scramble"
-                  deleteMutate={deleteResultsDataMutate}
-                  competitionId={competitionId}
-                />
-              </Table.Cell>
+              <Table.Cell>{roundData.round_name}</Table.Cell>
+              <DataActioner
+                roundData={roundData}
+                model="Result"
+                deleteMutate={deleteResultsDataMutate}
+                competitionId={competitionId}
+              />
+              <DataActioner
+                roundData={roundData}
+                model="Scramble"
+                deleteMutate={deleteResultsDataMutate}
+                competitionId={competitionId}
+              />
             </Table.Row>
           ))}
         </Table.Body>
@@ -122,35 +123,30 @@ function DataActioner({
   roundData, model, deleteMutate, competitionId,
 }) {
   const [showConfirm, setShowConfirm] = useState();
-  const count = model === 'Result' ? roundData.result_count : roundData.scramble_count;
+  const count = model === 'Result' ? roundData.count.result : roundData.count.scramble;
 
-  if (count > 0) {
-    return (
-      <>
-        <>
-          Yes
-          {' '}
-          <Button
-            color="red"
-            as="a"
-            onClick={() => setShowConfirm(true)}
-            floated
-            compact
-          >
-            X
-          </Button>
-        </>
-        <Confirm
-          open={showConfirm}
-          content={`You are about to remove ${count} entries from ${model}. Please confirm below if you're sure.`}
-          onCancel={() => setShowConfirm(false)}
-          onConfirm={() => {
-            deleteMutate({ competitionId, model, roundId: roundData.round_id });
-            setShowConfirm(false);
-          }}
-        />
-      </>
-    );
-  }
-  return 'No';
+  return (
+    <>
+      <Table.Cell>{count > 0 ? 'Yes' : 'No'}</Table.Cell>
+      <Table.Cell>
+        <Button
+          color="red"
+          onClick={() => setShowConfirm(true)}
+          compact
+          disabled={count === 0}
+        >
+          X
+        </Button>
+      </Table.Cell>
+      <Confirm
+        open={showConfirm}
+        content={`You are about to remove ${count} entries from ${model}. Please confirm below if you're sure.`}
+        onCancel={() => setShowConfirm(false)}
+        onConfirm={() => {
+          deleteMutate({ competitionId, model, roundId: roundData.round_id });
+          setShowConfirm(false);
+        }}
+      />
+    </>
+  );
 }
