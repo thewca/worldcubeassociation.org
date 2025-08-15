@@ -32,7 +32,6 @@ class Api::V0::Results::ResultsController < Api::V0::ApiController
   end
 
   private def shared_constants_and_conditions
-    @years = Competition.non_future_years
     @types = %w[single average]
 
     if params[:event_id] == EVENTS_ALL

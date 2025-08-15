@@ -118,7 +118,7 @@ export default function FilteredRecords() {
   const api = useAPI();
 
   const { data, isFetching, isError } = useQuery({
-    queryKey: ["records", region, gender, show, event, rankingType],
+    queryKey: ["rankings", region, gender, show, event, rankingType],
     queryFn: () =>
       api.GET("/results/rankings/{event_id}/{type}", {
         params: {
