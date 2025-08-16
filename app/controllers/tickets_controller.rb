@@ -243,4 +243,22 @@ class TicketsController < ApplicationController
 
     render status: :ok, json: { success: true }
   end
+
+  def events_merged_data
+    ticket = Ticket.find(params.require(:ticket_id))
+    competition = ticket.metadata.competition
+
+    rounds_data = competition.rounds.sort_by { |r| [r.event_id, r.round_type.rank] }.map do |round|
+      {
+        round_id: round.id,
+        round_name: round.name,
+        count: {
+          result: round.results.count,
+          scramble: round.scrambles.count,
+        },
+      }
+    end
+
+    render status: :ok, json: rounds_data
+  end
 end

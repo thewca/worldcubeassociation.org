@@ -122,30 +122,27 @@ class AdminController < ApplicationController
   end
 
   def delete_results_data
-    @competition = competition_from_params
+    competition = competition_from_params(associations: [:results, :scrambles, { rounds: %i[results scrambles] }])
 
     model = params.require(:model)
 
     if model == 'All'
-      @competition.results.destroy_all
-      @competition.scrambles.destroy_all
+      competition.results.destroy_all
+      competition.scrambles.destroy_all
     else
-      event_id = params.require(:event_id)
-      round_type_id = params.require(:round_type_id)
+      round = competition.rounds.find(params.require(:roundId))
 
       case model
       when Result.name
-        Result.where(competition_id: @competition.id, event_id: event_id, round_type_id: round_type_id).destroy_all
+        round.results.destroy_all
       when Scramble.name
-        Scramble.where(competition_id: @competition.id, event_id: event_id, round_type_id: round_type_id).destroy_all
+        round.scrambles.destroy_all
       else
-        raise "Invalid table: #{params[:table]}"
+        return render status: :bad_request, json: { error: "Invalid model: #{model}" }
       end
     end
 
-    load_result_posting_steps do
-      render partial: 'import_results_steps'
-    end
+    render status: :ok, json: { success: true }
   end
 
   def fix_results
