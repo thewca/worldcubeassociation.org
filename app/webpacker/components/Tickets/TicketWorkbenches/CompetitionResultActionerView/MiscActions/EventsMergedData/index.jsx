@@ -12,7 +12,7 @@ export default function EventsMergedData({ ticketDetails }) {
           <Button onClick={() => setIsModalOpen(true)}>
             Events Merged Data
           </Button>
-      )}
+        )}
         content="View & manage the results data of every events which are merged."
       />
       <Modal

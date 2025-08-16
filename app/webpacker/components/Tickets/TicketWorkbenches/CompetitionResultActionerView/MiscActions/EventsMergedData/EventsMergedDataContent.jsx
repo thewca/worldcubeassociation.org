@@ -85,7 +85,7 @@ export default function EventsMergedDataContent({ ticketDetails }) {
         <Table.Body>
           {eventsMergedData.map((roundData) => (
             <Table.Row key={roundData.round_id}>
-              <Table.Cell>{roundData.round_name}</Table.Cell>
+              <Table.Cell verticalAlign="middle">{roundData.round_name}</Table.Cell>
               <DataActioner
                 roundData={roundData}
                 model="Result"
@@ -105,7 +105,7 @@ export default function EventsMergedDataContent({ ticketDetails }) {
       Please be careful removing data! Data in the above table is live.
       Remove all results and scrambles only, does not affect persons:
       {' '}
-      <Button color="red" as="a" onClick={() => setShowConfirm(true)}>X ALL</Button>
+      <Button negative onClick={() => setShowConfirm(true)}>X ALL</Button>
       <Confirm
         open={showConfirm}
         content={`You are about to remove all entries from Results and Scrambles for ${competitionId}. THIS ACTION CANNOT BE UNDONE! Please confirm below if you're sure.`}
@@ -123,14 +123,14 @@ function DataActioner({
   roundData, model, deleteMutate, competitionId,
 }) {
   const [showConfirm, setShowConfirm] = useState();
-  const count = model === 'Result' ? roundData.count.result : roundData.count.scramble;
+  const count = roundData.count[model.toLowerCase()];
 
   return (
     <>
-      <Table.Cell>{count > 0 ? 'Yes' : 'No'}</Table.Cell>
+      <Table.Cell verticalAlign="middle">{count > 0 ? 'Yes' : 'No'}</Table.Cell>
       <Table.Cell>
         <Button
-          color="red"
+          negative
           onClick={() => setShowConfirm(true)}
           compact
           disabled={count === 0}

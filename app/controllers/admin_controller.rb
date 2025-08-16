@@ -122,21 +122,21 @@ class AdminController < ApplicationController
   end
 
   def delete_results_data
-    @competition = competition_from_params(associations: %i[rounds results scrambles])
+    competition = competition_from_params(associations: %i[rounds results scrambles])
 
     model = params.require(:model)
 
     if model == 'All'
-      @competition.results.destroy_all
-      @competition.scrambles.destroy_all
+      competition.results.destroy_all
+      competition.scrambles.destroy_all
     else
-      round_id = params.require(:roundId)
+      round = competition.rounds.find(params.require(:roundId))
 
       case model
       when Result.name
-        @competition.rounds.find(round_id).results.destroy_all
+        round.results.destroy_all
       when Scramble.name
-        @competition.rounds.find(round_id).scrambles.destroy_all
+        round.scrambles.destroy_all
       else
         return render status: :bad_request, json: { error: "Invalid model: #{model}" }
       end
