@@ -14,19 +14,31 @@
         <%= f.input :password_confirmation, required: true %>
         <div class="field">
           <%= f.label :should_claim_wca_id %>
+          <input type="hidden" name="user[should_claim_wca_id]" id="should_claim_wca_id_hidden">
           <div>
-            <%= f.radio_button :should_claim_wca_id, true %>
-            <%= f.label :should_claim_wca_id_true, "Yes" %>
+            <input type="radio" class="virtual-should-claim-wca-id" name="should_claim_wca_id_selector" id="should_claim_wca_id_true" value="true">
+            <label for="should_claim_wca_id_true">Yes</label>
           </div>
           <div>
-            <%= f.radio_button :should_claim_wca_id, false %>
-            <%= f.label :should_claim_wca_id_false, "No" %>
+            <input type="radio" class="virtual-should-claim-wca-id" name="should_claim_wca_id_selector" id="should_claim_wca_id_false" value="false">
+            <label for="should_claim_wca_id_false">No</label>
           </div>
         </div>
         <%= recaptcha_tags %>
         <br>
-        <%= f.submit t('.sign_up'), class: "btn btn-primary" %>
+        <%= f.submit t('.sign_up'), class: "btn btn-primary", disabled: true %>
       <% end %>
     </div>
   </div>
 </div>
+
+<script>
+  $(function() {
+    $('.virtual-should-claim-wca-id').on('change', function() {
+      const selectedValue = $(this).val();
+
+      $('#should_claim_wca_id_hidden').val(selectedValue);
+      $('input[type="submit"]').attr('disabled', false);
+    });
+  });
+</script>

@@ -658,8 +658,6 @@ en:
     mailer:
       confirmation_instructions:
         subject: "Please confirm your new email address"
-    after_sign_in:
-      wca_claim_alert: "During sign up, you informed that you have competed in a WCA competition in past. You can claim the WCA ID using this link: %{claim_wca_id_path}."
   #context: Key used in external code that the WCA use
   wca:
     # These are locales used in WCA's app relevant to external gems, but which are not present in the gem's default locale file.
@@ -1009,6 +1007,12 @@ en:
       info_competed_before: "If you've competed before, you can request to have your WCA ID connected to your account."
       info_never_competed_html: "If you've never competed before, go to a %{comp}! A WCA ID will be created for you when the results from your first competition are published."
       submit_value: "Claim WCA ID"
+      after_sign_in:
+        wca_claim_alert: "During sign up, you informed that you have competed in a WCA competition in past. Do you like to claim your WCA ID?"
+        claim_action: "Yes, claim my WCA ID"
+        do_not_claim_action: "No, this is my first time"
+        reset_success: "Thanks for informing, you won't be asked to claim WCA ID hereafter."
+
     #context: related to editing the avatar thumbnail
     edit_avatar_thumbnail:
       cdn_explanation: "All avatar images are stored in the Cloud, so any changes to the thumbnail can take several minutes to be displayed correctly."

@@ -26,7 +26,7 @@ RSpec.feature "Sign up" do
       fill_in "Email", with: "jack@example.com"
       fill_in "user[password]", with: "wca"
       fill_in "user[password_confirmation]", with: "wca"
-      check "Please check this if you have competed in a WCA competition before, so that you can claim your WCA ID."
+      check "should_claim_wca_id_true"
 
       expect(page).to have_button("Sign up")
 
@@ -48,6 +48,7 @@ RSpec.feature "Sign up" do
       fill_in "Email", with: "jack@example.com"
       fill_in "user[password]", with: "wca"
       fill_in "user[password_confirmation]", with: "wca"
+      check "should_claim_wca_id_false"
 
       expect(page).to have_button("Sign up")
 
