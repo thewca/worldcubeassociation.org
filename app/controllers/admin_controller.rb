@@ -122,7 +122,7 @@ class AdminController < ApplicationController
   end
 
   def delete_results_data
-    competition = competition_from_params(associations: %i[rounds results scrambles])
+    competition = competition_from_params(associations: [:results, :scrambles, { rounds: %i[results scrambles] }])
 
     model = params.require(:model)
 
