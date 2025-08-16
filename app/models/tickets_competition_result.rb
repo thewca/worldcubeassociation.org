@@ -70,7 +70,9 @@ class TicketsCompetitionResult < ApplicationRecord
   end
 
   DEFAULT_SERIALIZE_OPTIONS = {
-    include: %w[competition],
+    include: {
+      competition: { only: %i[id name], methods: [], include: [] },
+    },
   }.freeze
 
   def serializable_hash(options = nil)
