@@ -5,21 +5,27 @@ class TicketsController < ApplicationController
 
   before_action :authenticate_user!
   before_action -> { check_ticket_errors(TicketLog.action_types[:update_status]) }, only: [:update_status]
-  before_action -> { redirect_to_root_unless_user(:can_admin_results?) }, only: %i[merge_inbox_results delete_inbox_persons]
+  before_action -> { check_ticket_errors(TicketLog.action_types[:metadata_action], TicketsCompetitionResult::ACTION_TYPE[:merge_inbox_results]) }, only: [:merge_inbox_results]
+  before_action -> { redirect_to_root_unless_user(:can_admin_results?) }, only: %i[delete_inbox_persons]
 
   SORT_WEIGHT_LAMBDAS = {
     createdAt:
       ->(ticket) { ticket.created_at },
   }.freeze
 
-  private def check_ticket_errors(action_type)
+  private def check_ticket_errors(action_type, metadata_action = nil)
     @action_type = action_type
+    @metadata_action = metadata_action
     @ticket = Ticket.find(params.require(:ticket_id))
     @acting_stakeholder = TicketStakeholder.find(params.require(:acting_stakeholder_id))
 
     render status: :bad_request, json: { error: "You are not a stakeholder for this ticket." } unless @ticket.user_stakeholders(current_user).include?(@acting_stakeholder)
 
-    render status: :unauthorized, json: { error: "You are not allowed to perform this action." } unless @acting_stakeholder.actions_allowed.include?(@action_type)
+    if metadata_action.nil?
+      render status: :unauthorized, json: { error: "You are not allowed to perform this action." } unless @acting_stakeholder.actions_allowed.include?(@action_type)
+    else
+      render status: :unauthorized, json: { error: "You are not allowed to perform this metadata action." } unless @acting_stakeholder.metadata_actions_allowed.include?(@metadata_action)
+    end
   end
 
   def index
@@ -202,9 +208,15 @@ class TicketsController < ApplicationController
   end
 
   def merge_inbox_results
-    ticket = Ticket.find(params.require(:ticket_id))
-
-    ticket.metadata.merge_inbox_results
+    ActiveRecord::Base.transaction do
+      @ticket.metadata.merge_inbox_results
+      @ticket.ticket_logs.create!(
+        action_type: @action_type,
+        acting_user_id: current_user.id,
+        acting_stakeholder_id: @acting_stakeholder.id,
+        metadata_action: @metadata_action,
+      )
+    end
 
     render status: :ok, json: { success: true }
   end

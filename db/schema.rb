@@ -1340,6 +1340,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_08_26_042935) do
     t.bigint "acting_stakeholder_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "metadata_action"
     t.index ["acting_stakeholder_id"], name: "index_ticket_logs_on_acting_stakeholder_id"
     t.index ["acting_user_id"], name: "index_ticket_logs_on_acting_user_id"
     t.index ["ticket_id"], name: "index_ticket_logs_on_ticket_id"
