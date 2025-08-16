@@ -38,6 +38,10 @@ class TicketStakeholder < ApplicationRecord
     ticket.metadata.actions_allowed_for(self)
   end
 
+  def metadata_actions_allowed
+    ticket.metadata.metadata_actions_allowed_for(self)
+  end
+
   DEFAULT_SERIALIZE_OPTIONS = {
     include: %w[stakeholder],
     methods: %w[actions_allowed],
