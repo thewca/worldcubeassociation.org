@@ -349,6 +349,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_08_04_070122) do
   create_table "competition_payment_integrations", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "connected_account_type", null: false
     t.bigint "connected_account_id", null: false
+    t.boolean "is_inactive", default: false, null: false
     t.string "competition_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -1062,8 +1063,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_08_04_070122) do
     t.datetime "updated_at", precision: nil, null: false
     t.integer "refunded_registration_payment_id"
     t.integer "user_id"
-    t.bigint "payment_intent_id"
-    t.index ["payment_intent_id"], name: "index_registration_payments_on_payment_intent_id"
+    t.boolean "is_captured", default: true, null: false
     t.index ["receipt_type", "receipt_id"], name: "index_registration_payments_on_receipt"
     t.index ["refunded_registration_payment_id"], name: "idx_reg_payments_on_refunded_registration_payment_id"
     t.index ["registration_id"], name: "index_registration_payments_on_registration_id"
@@ -1585,7 +1585,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_08_04_070122) do
   add_foreign_key "potential_duplicate_persons", "users", column: "original_user_id"
   add_foreign_key "regional_records_lookup", "results", on_update: :cascade, on_delete: :cascade
   add_foreign_key "registration_history_changes", "registration_history_entries"
-  add_foreign_key "registration_payments", "payment_intents"
   add_foreign_key "results", "rounds"
   add_foreign_key "sanity_check_exclusions", "sanity_checks"
   add_foreign_key "sanity_checks", "sanity_check_categories"
