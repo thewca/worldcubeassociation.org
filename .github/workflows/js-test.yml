@@ -15,7 +15,7 @@ jobs:
       run:
         working-directory: next-frontend
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Set up Corepack/Yarn
         run: corepack enable # this allows NPM to use its own Yarn. It is crucial that this is run BEFORE the Node setup!
       - uses: actions/setup-node@v4
