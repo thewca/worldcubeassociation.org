@@ -11,12 +11,32 @@ class RegistrationPayment < ApplicationRecord
 
   delegate :auto_accept_preference_live?, to: :registration
   after_create :auto_accept_hook, if: :auto_accept_preference_live?
-  after_create :auto_close_hook, unless: :refunded_registration_payment_id?
+  after_commit :auto_close_hook, if: :should_auto_close?
+  # after_create :create_uncaptured_payment # This is to help identify the places we reference registration_payments without considering is_captured
 
   monetize :amount_lowest_denomination,
            as: "amount",
            allow_nil: true,
            with_model_currency: :currency_code
+
+  def should_auto_close?
+    puts "refund absent: #{refunded_registration_payment_id.nil?}"
+    puts "is_captured status: #{self.is_captured?}"
+    puts "change to is_captured?: #{saved_change_to_is_captured?}"
+    puts "changed to true?: #{saved_change_to_is_captured?(to: true)}"
+    refunded_registration_payment_id.nil? && saved_change_to_is_captured?(to: true)
+  end
+
+  def create_uncaptured_payment
+    return unless self.is_captured?
+    RegistrationPayment.create(
+      amount_lowest_denomination: self.amount_lowest_denomination,
+      currency_code: self.currency_code,
+      user: self.user,
+      registration: self.registration,
+      is_captured: false,
+    )
+  end
 
   def amount_available_for_refund
     amount_lowest_denomination + refunding_registration_payments.sum(:amount_lowest_denomination)
@@ -27,7 +47,7 @@ class RegistrationPayment < ApplicationRecord
   end
 
   private def auto_close_hook
-    registration.consider_auto_close
+    registration.consider_auto_close if self.is_captured? # TODO: Move this condition in the after_create definition
   end
 
   def to_v2_json(refunds: false)

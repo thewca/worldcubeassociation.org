@@ -1561,10 +1561,11 @@ RSpec.describe 'API Registrations' do
       let(:receipt_record) { registration_payment.receipt }
       let!(:refund_record) { create(:stripe_record, :pending_refund, amount_stripe_denomination: 500) }
 
-      it 'creates a refund registration_payment' do
+      it 'creates a refund registration_payment', :tag do
         expect(registration_payment.refunding_registration_payments.count).to be(0)
 
         post registration_stripe_webhook_path, params: refund_webhook(amount: 500, type: 'refund.updated'), as: :json
+        byebug
 
         expect(registration_payment.refunding_registration_payments.count).to be(1)
         expect(registration.reload.outstanding_entry_fees.cents).to eq(500)

@@ -1218,8 +1218,8 @@ RSpec.describe Registration do
     expect(create(:registration, :waiting_list, competition: competition)).to be_valid
   end
 
-  describe 'hooks' do
-    it 'positive registration_payment calls registration.consider_auto_close' do
+  describe 'hooks', :tag do
+    it 'positive, captured registration_payment calls registration.consider_auto_close', :only do
       competition = create(:competition)
       reg = create(:registration, competition: competition)
       expect(reg).to receive(:consider_auto_close).once
@@ -1230,6 +1230,36 @@ RSpec.describe Registration do
         user: reg.user,
         amount_lowest_denomination: reg.competition.base_entry_fee_lowest_denomination,
       )
+    end
+
+    it 'doesnt call registration.consider auto_close! for a non-captured registration_payment' do
+      competition = create(:competition)
+      reg = create(:registration, competition: competition)
+      expect(reg).to receive(:consider_auto_close).exactly(0).times
+
+      create(
+        :registration_payment,
+        registration: reg,
+        user: reg.user,
+        amount_lowest_denomination: reg.competition.base_entry_fee_lowest_denomination,
+        is_captured: false,
+      )
+    end
+
+    it 'calls registration.consider_auto_close! if reg_payment gets marked as captured' do
+      competition = create(:competition)
+      reg = create(:registration, competition: competition)
+      expect(reg).to receive(:consider_auto_close).once
+
+      reg_payment = create(
+        :registration_payment,
+        registration: reg,
+        user: reg.user,
+        amount_lowest_denomination: reg.competition.base_entry_fee_lowest_denomination,
+        is_captured: false,
+      )
+
+      reg_payment.update!(is_captured: true)
     end
 
     it 'doesnt call registration.auto_close! after a refund is created' do
