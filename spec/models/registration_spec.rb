@@ -1218,8 +1218,8 @@ RSpec.describe Registration do
     expect(create(:registration, :waiting_list, competition: competition)).to be_valid
   end
 
-  describe 'hooks', :tag do
-    it 'positive, captured registration_payment calls registration.consider_auto_close', :only do
+  describe 'hooks' do
+    it 'positive, captured registration_payment calls registration.consider_auto_close' do
       competition = create(:competition)
       reg = create(:registration, competition: competition)
       expect(reg).to receive(:consider_auto_close).once
