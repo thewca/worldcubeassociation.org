@@ -3,7 +3,6 @@
 class RegistrationPayment < ApplicationRecord
   belongs_to :registration
   belongs_to :user
-  belongs_to :payment_intent, optional: true
 
   belongs_to :receipt, polymorphic: true, optional: true
 
@@ -21,10 +20,6 @@ class RegistrationPayment < ApplicationRecord
 
   def amount_available_for_refund
     amount_lowest_denomination + refunding_registration_payments.sum(:amount_lowest_denomination)
-  end
-
-  def status
-    payment_intent&.wca_status
   end
 
   private def auto_accept_hook

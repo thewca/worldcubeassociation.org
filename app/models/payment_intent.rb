@@ -7,8 +7,6 @@ class PaymentIntent < ApplicationRecord
   belongs_to :confirmation_source, polymorphic: true, optional: true
   belongs_to :cancellation_source, polymorphic: true, optional: true
 
-  has_many :registration_payment
-
   validate :wca_status_consistency
 
   scope :started, -> { where.not(wca_status: 'created') }
