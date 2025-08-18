@@ -63,7 +63,7 @@ export default function CompetingStep({
   competitionInfo,
   user,
 }) {
-  const { nextStep, currentStep: { parameters: currentStepParameters } } = useStepNavigation();
+  const { nextStep, jumpToSummary, currentStep: { parameters: currentStepParameters } } = useStepNavigation();
   const maxEvents = currentStepParameters.events_per_registration_limit ?? Infinity;
   const {
     isRegistered, isPolling, isProcessing, startPolling, refetchRegistration,
@@ -105,8 +105,8 @@ export default function CompetingStep({
 
   const onUpdateSuccess = useCallback((data) => {
     formSuccess(data.registration);
-    nextStep();
-  }, [formSuccess, nextStep]);
+    jumpToSummary();
+  }, [formSuccess, jumpToSummary]);
 
   const onRegistrationError = useRegistrationMutationErrorHandler();
 
