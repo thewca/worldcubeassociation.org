@@ -177,7 +177,7 @@ class Registration < ApplicationRecord
       # registration.includes(:registration_payments) that may exist.
       # It's fine to turn the associated records to an array and sum on ithere,
       # as it's usually just a couple of rows.
-      registration_payments.sum(&:amount_lowest_denomination),
+      registration_payments.captured.sum(&:amount_lowest_denomination),
       competition.currency_code,
     )
   end

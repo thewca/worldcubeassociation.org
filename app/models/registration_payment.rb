@@ -14,6 +14,8 @@ class RegistrationPayment < ApplicationRecord
   after_save :auto_close_hook
   after_create :create_uncaptured_payment # This is to help identify the places we reference registration_payments without considering is_captured
 
+  scope :captured, -> { where(is_captured: true) }
+
   monetize :amount_lowest_denomination,
            as: "amount",
            allow_nil: true,

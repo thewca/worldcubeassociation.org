@@ -1284,7 +1284,7 @@ RSpec.describe Registration do
       reg.consider_auto_close
     end
 
-    it 'calls competition.attempt_auto_close! if reg is fully paid' do
+    it 'calls competition.attempt_auto_close! if reg is fully paid', :only do
       competition = create(:competition)
       expect_any_instance_of(Competition).to receive(:attempt_auto_close!).once
 
@@ -1359,6 +1359,41 @@ RSpec.describe Registration do
 
       expect(second_reg).to be_valid
       expect(registration).to be_valid
+    end
+  end
+
+  describe '#paid_entry_fees' do
+    let(:comp) { create(:competition) }
+    let(:reg) { create(:registration, :paid, competition: comp) }
+
+    it 'correctly calculates a single payment' do
+      expect(reg.paid_entry_fees.cents).to eq(1000)
+    end
+
+    it 'correctly sums multiple payments' do
+      create(:registration_payment, registration: reg)
+      expect(reg.reload.paid_entry_fees.cents).to eq(2000)
+    end
+
+    it 'returns 0 for a refunded payment' do
+      create(:registration_payment, :refund, registration: reg)
+      expect(reg.reload.paid_entry_fees.cents).to eq(0)
+    end
+
+    it 'returns net amount of multiple payments/refunds' do
+      create_list(:registration_payment, 2, registration: reg)
+      create_list(:registration_payment, 2, :refund, registration: reg)
+      expect(reg.reload.paid_entry_fees.cents).to eq(1000)
+    end
+
+    it 'correctly calculates a partial refund' do
+      create(:registration_payment, :refund, registration: reg, amount_lowest_denomination: -500)
+      expect(reg.reload.paid_entry_fees.cents).to eq(500)
+    end
+
+    it 'only considers captured payments' do
+      create(:registration_payment, registration: reg, is_captured: false)
+      expect(reg.reload.paid_entry_fees.cents).to eq(1000)
     end
   end
 end
