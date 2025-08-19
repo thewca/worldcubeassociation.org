@@ -1,1 +1,1 @@
-//= require moment/es.js
+//= require moment/es-mx.js
