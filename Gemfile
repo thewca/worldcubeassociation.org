@@ -105,6 +105,8 @@ gem 'playwright-ruby-client', require: 'playwright'
 gem 'hash_diff'
 gem 'tsort'
 gem 'html_safe_flash'
+gem "graphql"
+gem "oj"
 
 group :development, :test do
   gem 'spring'
@@ -139,6 +141,7 @@ group :development do
   gem 'binding_of_caller'
   gem 'bullet'
   gem 'web-console'
+  gem "graphiql-rails"
 end
 
 group :test do
