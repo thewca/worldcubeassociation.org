@@ -1451,7 +1451,8 @@ RSpec.describe 'API Registrations' do
         it 'creates a refund registration_payment for a full refund' do
           post registration_stripe_webhook_path, params: refund_webhook, as: :json
           expect(registration_payment.refunding_registration_payments.count).to be(1)
-          expect(registration.outstanding_entry_fees).to eq(0)
+
+          expect(registration.outstanding_entry_fees.cents).to eq(1000)
         end
 
         it 'creates a refund registration_payment for a partial refund' do
@@ -1548,7 +1549,7 @@ RSpec.describe 'API Registrations' do
           post registration_stripe_webhook_path, params: refund_webhook(type: 'refund.updated'), as: :json
 
           expect(registration_payment.refunding_registration_payments.count).to be(1)
-          expect(registration.outstanding_entry_fees.cents).to eq(0)
+          expect(registration.outstanding_entry_fees.cents).to eq(1000)
         end
       end
     end
@@ -1565,7 +1566,6 @@ RSpec.describe 'API Registrations' do
         expect(registration_payment.refunding_registration_payments.count).to be(0)
 
         post registration_stripe_webhook_path, params: refund_webhook(amount: 500, type: 'refund.updated'), as: :json
-        byebug
 
         expect(registration_payment.refunding_registration_payments.count).to be(1)
         expect(registration.reload.outstanding_entry_fees.cents).to eq(500)

@@ -22,10 +22,6 @@ class RegistrationPayment < ApplicationRecord
            with_model_currency: :currency_code
 
   def should_auto_close?
-    puts "refund absent: #{refunded_registration_payment_id.nil?}"
-    puts "is_captured status: #{self.is_captured?}"
-    puts "change to is_captured?: #{saved_change_to_is_captured?}"
-    puts "changed to true?: #{saved_change_to_is_captured?(to: true)}"
     refunded_registration_payment_id.nil? && saved_change_to_is_captured?(to: true)
   end
 
