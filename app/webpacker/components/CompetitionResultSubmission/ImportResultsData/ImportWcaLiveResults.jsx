@@ -1,6 +1,6 @@
 import React from 'react';
 import { useMutation } from '@tanstack/react-query';
-import { Button } from 'semantic-ui-react';
+import { Button, Message } from 'semantic-ui-react';
 import Errored from '../../Requests/Errored';
 import importWcaLiveResults from '../api/importWcaLiveResults';
 import Loading from '../../Requests/Loading';
@@ -17,6 +17,24 @@ export default function ImportWcaLiveResults({ competitionId, onImportSuccess })
   if (isError) return <Errored error={error} />;
 
   return (
-    <Button primary onClick={importWcaLiveResultsMutate}>Import WCA Live Results</Button>
+    <>
+      <Message warning>
+        <Message.Header>Please Note</Message.Header>
+        <Message.List>
+          <Message.Item>
+            Make sure to hit
+            {' '}
+            <b>&quot;Synchronize&quot;</b>
+            {' '}
+            in WCA Live first. This button can only use results which have been synchronized!
+          </Message.Item>
+          <Message.Item>
+            Don&apos;t forget to also upload scrambles separately.
+            Already uploaded scrambles will be used automatically.
+          </Message.Item>
+        </Message.List>
+      </Message>
+      <Button primary onClick={importWcaLiveResultsMutate}>Import WCA Live Results</Button>
+    </>
   );
 }

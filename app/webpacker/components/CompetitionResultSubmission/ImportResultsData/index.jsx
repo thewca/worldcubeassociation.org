@@ -49,7 +49,7 @@ export function ImportResultsData({
         </Tab.Pane>
       ),
     },
-    ...(isAdminView ? [{
+    {
       menuItem: 'Import WCA Live Results',
       render: () => (
         <Tab.Pane>
@@ -59,7 +59,7 @@ export function ImportResultsData({
           />
         </Tab.Pane>
       ),
-    }] : []),
+    },
   ];
 
   return (
