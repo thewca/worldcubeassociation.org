@@ -42,12 +42,16 @@ class AdminController < ApplicationController
     @competition = competition_from_params
 
     if @competition.results_submitted? && !@competition.results_posted?
-      @competition.update(results_submitted_at: nil)
-      flash[:success] = "Results submission cleared."
+      ActiveRecord::Base.transaction do
+        @competition.update!(results_submitted_at: nil)
+        @competition.tickets_competition_result.update!(status: TicketsCompetitionResult.statuses[:aborted])
+      end
+      render status: :ok, json: { success: true }
     else
-      flash[:danger] = "Could not clear the results submission. Maybe results are already posted, or there is no submission."
+      render status: :unprocessable_entity, json: {
+        error: "Could not clear the results submission. Maybe results are already posted, or there is no submission.",
+      }
     end
-    redirect_to competition_admin_upload_results_edit_path
   end
 
   # The order of this array has to follow the steps in which results have to be imported.

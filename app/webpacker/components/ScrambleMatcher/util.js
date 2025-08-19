@@ -1,5 +1,31 @@
-import _ from 'lodash';
-import { events } from '../../lib/wca-data.js.erb';
+import { events, formats } from '../../lib/wca-data.js.erb';
+import { humanizeActivityCode } from '../../lib/utils/wcif';
+import { EventsPickerCompat } from './ButtonGroupPicker';
+
+const ATTEMPT_BASED_EVENTS = ['333fm', '333mbf'];
+
+export const pickerLocalizationConfig = {
+  events: {
+    computeEntityName: (evt) => events.byId[evt.id].name,
+    headerLabel: 'Events',
+    dropdownLabel: 'Event',
+  },
+  rounds: {
+    computeEntityName: (rd) => humanizeActivityCode(rd.id),
+    headerLabel: 'Rounds',
+    dropdownLabel: 'Round',
+  },
+  scrambleSets: {
+    computeEntityName: (scrSet, idx) => `Group ${idx + 1}`,
+    headerLabel: 'Groups',
+    dropdownLabel: 'Scramble Set',
+  },
+  inbox_scrambles: {
+    computeEntityName: (scr, idx) => `Attempt ${idx + 1}`,
+    headerLabel: 'Scrambles',
+    dropdownLabel: 'Scramble',
+  },
+};
 
 const prefixForIndex = (index) => {
   const char = String.fromCharCode(65 + (index % 26));
@@ -10,18 +36,42 @@ const prefixForIndex = (index) => {
 
 export const scrambleSetToName = (scrambleSet) => `${events.byId[scrambleSet.event_id].name} Round ${scrambleSet.round_number} Scramble Set ${prefixForIndex(scrambleSet.scramble_set_number - 1)}`;
 
-export const scrambleSetToDetails = (scrambleSet) => {
-  const [extraScr, standardScr] = _.partition(scrambleSet.inbox_scrambles, 'is_extra');
+export const scrambleToName = (scramble) => `Scramble ${scramble.scramble_number}`;
 
-  const stdScrambleList = standardScr.map((scr) => scr.scramble_string).join('\n');
+const isForAttemptBasedEvent = (pickerHistory) => {
+  const eventsStep = pickerHistory.find((step) => step.key === 'events');
+  return ATTEMPT_BASED_EVENTS.includes(eventsStep.id);
+};
 
-  if (extraScr.length > 0) {
-    const extraScrambleList = extraScr.map((scr) => scr.scramble_string).join('\n');
+const inferExpectedSolveCount = (pickerHistory) => {
+  const roundsStep = pickerHistory.find((step) => step.key === 'rounds');
+  return formats.byId[roundsStep.entity.format].expected_solve_count;
+};
 
-    return [stdScrambleList, extraScrambleList].join('\n\n');
-  }
-
-  return stdScrambleList;
+export const pickerStepConfig = {
+  events: {
+    pickerComponent: EventsPickerCompat,
+    nestedPicker: 'rounds',
+  },
+  rounds: {
+    matchingConfig: {
+      key: 'scrambleSets',
+      computeCellName: scrambleSetToName,
+      computeCellDetails: (scrSet) => scrSet.original_filename,
+      computeExpectedRowCount: (round) => round.scrambleSetCount,
+    },
+    nestedPicker: 'scrambleSets',
+    nestingCondition: (history) => isForAttemptBasedEvent(history),
+  },
+  scrambleSets: {
+    matchingConfig: {
+      key: 'inbox_scrambles',
+      computeCellName: scrambleToName,
+      computeCellDetails: (scr) => scr.scramble_string,
+      cellDetailsAreData: true,
+      computeExpectedRowCount: (scrambleSet, history) => inferExpectedSolveCount(history),
+    },
+  },
 };
 
 export function moveArrayItem(arr, fromIndex, toIndex) {
@@ -39,4 +89,35 @@ export function moveArrayItem(arr, fromIndex, toIndex) {
     // here we do NOT want to ignore the items that were originally there, so no +1
     ...withoutMovedItem.slice(toIndex),
   ];
+}
+
+export function applyPickerHistory(rootState, pickerHistory) {
+  return pickerHistory.reduce(
+    (state, historyStep) => state[historyStep.key][historyStep.index],
+    rootState,
+  );
+}
+
+export function computeMatchingProgress(wcifEvents) {
+  return wcifEvents.flatMap(
+    (wcifEvent) => wcifEvent.rounds.map(
+      (wcifRound) => {
+        const formatExpectedSolveCount = formats.byId[wcifRound.format]?.expected_solve_count;
+
+        return {
+          id: wcifRound.id,
+          expected: wcifRound.scrambleSetCount,
+          actual: wcifRound.scrambleSets?.length ?? 0,
+          scrambleSets: wcifRound.scrambleSets?.map(
+            (scrSet, idx) => ({
+              id: scrSet.id,
+              index: idx,
+              expected: formatExpectedSolveCount,
+              actual: scrSet.inbox_scrambles?.length ?? 0,
+            }),
+          ),
+        };
+      },
+    ),
+  );
 }

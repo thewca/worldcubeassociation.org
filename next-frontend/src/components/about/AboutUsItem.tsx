@@ -27,7 +27,7 @@ export default function AboutUsItem({
 
       {image?.url && (
         <Box position="relative" maxW="500px" w="full">
-          <ChakraImage asChild borderRadius={"1rem"}>
+          <ChakraImage asChild borderRadius="1rem">
             <Image src={image.url} alt={image.alt || title} fill />
           </ChakraImage>
         </Box>

@@ -13,6 +13,8 @@ class InboxScrambleSet < ApplicationRecord
 
   before_validation :backfill_round_information!, if: :matched_round_id?
 
+  delegate :original_filename, to: :scramble_file_upload, allow_nil: true
+
   def backfill_round_information!
     return if matched_round.blank?
 
@@ -38,7 +40,7 @@ class InboxScrambleSet < ApplicationRecord
 
   DEFAULT_SERIALIZE_OPTIONS = {
     except: %w[matched_round_id],
-    methods: %w[matched_round_wcif_id],
+    methods: %w[matched_round_wcif_id original_filename],
     include: %w[inbox_scrambles],
   }.freeze
 

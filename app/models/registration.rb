@@ -299,6 +299,7 @@ class Registration < ApplicationRecord
       registrant_id: registrant_id,
       competing: {
         event_ids: event_ids,
+        comments: comments,
       },
     }
     if admin

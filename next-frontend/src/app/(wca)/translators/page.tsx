@@ -15,15 +15,15 @@ export default async function TranslatorsPage() {
   const translatorsByLanguage = _.groupBy(translatorRoles, "group.name");
 
   if (!translatorsByLanguage)
-    return <Errored error={"Error Loading Translators"} />;
+    return <Errored error="Error Loading Translators" />;
 
   return (
     <Container>
-      <VStack align={"left"}>
-        <Heading size={"5xl"}>{t("page.translators.title")}</Heading>
+      <VStack align="left">
+        <Heading size="5xl">{t("page.translators.title")}</Heading>
         {_.map(translatorsByLanguage, (translators, language) => (
-          <VStack align={"left"} key={language}>
-            <Heading size={"2xl"} marginY={2}>
+          <VStack align="left" key={language}>
+            <Heading size="2xl" marginY={2}>
               {language}
             </Heading>
             <SimpleGrid columns={3} gap="16px">

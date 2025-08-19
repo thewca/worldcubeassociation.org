@@ -35,9 +35,9 @@ export default async function OfficersAndBoard() {
 
   return (
     <Container>
-      <VStack align={"left"}>
-        <Heading size={"5xl"}>{t("page.officers_and_board.title")}</Heading>
-        <Heading size={"2xl"}>{t("user_groups.group_types.officers")}</Heading>
+      <VStack align="left">
+        <Heading size="5xl">{t("page.officers_and_board.title")}</Heading>
+        <Heading size="2xl">{t("user_groups.group_types.officers")}</Heading>
         <Text>{t("page.officers_and_board.officers_description")}</Text>
         <SimpleGrid columns={3} gap="16px">
           {officers.map((officer) => (
@@ -55,7 +55,7 @@ export default async function OfficersAndBoard() {
             />
           ))}
         </SimpleGrid>
-        <Heading size={"2xl"}>
+        <Heading size="2xl">
           {t("user_groups.group_types.board")}{" "}
           <Link href={boardRoles[0].group.metadata!.email}>
             <MdMarkEmailUnread />

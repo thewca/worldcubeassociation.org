@@ -750,8 +750,8 @@ class User < ApplicationRecord
       wic: {
         name: 'WIC panel',
         pages: [
-          panel_pages[:bannedCompetitors],
           panel_pages[:downloadVoters],
+          panel_pages[:bannedCompetitors],
           panel_pages[:delegateProbations],
         ],
       },

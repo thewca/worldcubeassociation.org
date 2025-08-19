@@ -2914,7 +2914,7 @@ en:
       regulation_9m1_error: "Round %{round_id} has 99 or fewer competitors but has more than two subsequent rounds, which is not permitted as per Regulation 9m1."
       regulation_9m2_error: "Round %{round_id} has 15 or fewer competitors but has more than one subsequent round, which is not permitted as per Regulation 9m2."
       regulation_9m3_error: "Round %{round_id} has 7 or fewer competitors but has at least one subsequent round, which is not permitted as per Regulation 9m3."
-      regulation_9p1_error: "Round %{round_id}: Fewer than 25%% of competitors were eliminated, which is not permitted as per Regulation 9p1."
+      regulation_9p1_error: "Round %{round_id}: Fewer than 25% of competitors were eliminated, which is not permitted as per Regulation 9p1."
       no_competitor_eliminated_error: "Round %{round_id}: There must be at least one competitor eliminated, which is required as per Regulation 9p (competitions before April 2010)."
       less_than_twenty_five_percent_eliminated_error: "Round %{round_id}: according to the advancement condition (%{condition}), fewer than 25%% of competitors would be eliminated, which is not permitted as per Regulation 9p1. Please update the round information in the manage events page."
       not_enough_qualified_warning: "Round %{round_id}: according to the events data, at most %{expected} could have proceed, but only %{actual} competed in the round. Please leave a comment about that (or fix the events data if you applied a different advancement condition)."
