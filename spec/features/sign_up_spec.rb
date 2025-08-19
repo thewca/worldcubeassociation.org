@@ -308,7 +308,7 @@ RSpec.feature "Sign up" do
       fill_in "user[email]", with: "jack@example.com"
       fill_in "user[password]", with: "wca"
       fill_in "user[password_confirmation]", with: "wca"
-      click_on "Nunca he competido en competiciones de la WCA."
+      click_on "Non ho MAI partecipato a una competizione WCA."
       fill_in "user[name]", with: "Jack Johnson"
 
       click_button "Registrati"
