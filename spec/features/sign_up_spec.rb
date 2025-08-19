@@ -302,7 +302,7 @@ RSpec.feature "Sign up" do
 
   context "when signing up as a non-english speaker", :js do
     it "stores the user's preferred locale" do
-      page.driver.with_playwright_page { it.context.set_extra_http_headers({ 'Accept-Language' => 'es-ES' }) }
+      page.driver.with_playwright_page { it.context.set_extra_http_headers({ 'Accept-Language' => 'it' }) }
       visit "/users/sign_up"
 
       fill_in "user[email]", with: "jack@example.com"
@@ -311,7 +311,7 @@ RSpec.feature "Sign up" do
       click_on "Nunca he competido en competiciones de la WCA."
       fill_in "user[name]", with: "Jack Johnson"
 
-      click_button "Registrarse"
+      click_button "Registrati"
 
       user = User.find_by!(email: "jack@example.com")
       expect(user.preferred_locale).to eq "es"
