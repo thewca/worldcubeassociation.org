@@ -17,7 +17,7 @@ RSpec.describe "Locale files content" do
 end
 
 RSpec.describe "Momentjs activation" do
-  locale_mappings = {"es-es" => "es", "es-419" => "es-mx"}
+  locale_mappings = { "es-es" => "es", "es-419" => "es-mx" }
 
   (I18n.available_locales - [:en]).each do |locale|
     context "for #{locale} the app/assets/javascripts/application.js file" do
