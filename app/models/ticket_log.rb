@@ -20,7 +20,7 @@ class TicketLog < ApplicationRecord
 
     errors.add(:metadata_action, "must be present when action_type is metadata_action") if action_type == TicketLog.action_types[:metadata_action] && metadata_action.nil?
 
-    return if ticket.metadata_type.safe_constantize::ACTION_TYPE.key?(metadata_action)
+    return if metadata_action.nil? || ticket.metadata_type.safe_constantize::ACTION_TYPE.key?(metadata_action)
 
     errors.add(:metadata_action, "is not a valid action")
   end

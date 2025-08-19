@@ -21,7 +21,7 @@ export default function TicketLogs({ ticketId }) {
       case ticketLogActionTypes.create_comment:
         return 'Comment added.';
       case ticketLogActionTypes.metadata_action:
-        return `Metadata action ${metadataAction} performed.`;
+        return `Action ${metadataAction} performed.`;
       default:
         return `[Unsupported log]: ${actionType}.`;
     }
