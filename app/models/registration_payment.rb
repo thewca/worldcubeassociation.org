@@ -11,7 +11,6 @@ class RegistrationPayment < ApplicationRecord
 
   delegate :auto_accept_preference_live?, to: :registration
   after_create :auto_accept_hook, if: :auto_accept_preference_live?
-  after_create :create_uncaptured_payment # This is to help identify the places we reference registration_payments without considering is_captured
   after_save :auto_close_hook
 
   scope :captured, -> { where(is_captured: true) }
