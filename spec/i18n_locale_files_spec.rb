@@ -16,7 +16,7 @@ RSpec.describe "Locale files content" do
   end
 end
 
-RSpec.describe "Momentjs activation" do
+RSpec.describe "Momentjs activation", :tag do
   (I18n.available_locales - [:en]).each do |locale|
     context "for #{locale} the app/assets/javascripts/application.js file" do
       moment_content = Rails.root.join('app', 'assets', 'javascripts', 'locales', "#{locale.downcase}.js").read

@@ -302,7 +302,7 @@ RSpec.feature "Sign up" do
 
   context "when signing up as a non-english speaker", :js do
     it "stores the user's preferred locale" do
-      page.driver.with_playwright_page { it.context.set_extra_http_headers({ 'Accept-Language' => 'es' }) }
+      page.driver.with_playwright_page { it.context.set_extra_http_headers({ 'Accept-Language' => 'es-ES' }) }
       visit "/users/sign_up"
 
       fill_in "user[email]", with: "jack@example.com"
