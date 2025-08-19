@@ -32,7 +32,7 @@ class TicketsCompetitionResult < ApplicationRecord
 
   def metadata_actions_allowed_for(ticket_stakeholder)
     if ticket_stakeholder.stakeholder == UserGroup.teams_committees_group_wrt
-      [TicketsCompetitionResult::ACTION_TYPE[:merge_inbox_results]]
+      [ACTION_TYPE[:merge_inbox_results]]
     else
       []
     end
