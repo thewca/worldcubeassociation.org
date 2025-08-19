@@ -43,8 +43,8 @@ export default function EventsMergedDataContent({ ticketDetails }) {
             return {
               ...roundData,
               count: {
-                results: 0,
-                scrambles: 0,
+                result: 0,
+                scramble: 0,
               },
             };
           }
