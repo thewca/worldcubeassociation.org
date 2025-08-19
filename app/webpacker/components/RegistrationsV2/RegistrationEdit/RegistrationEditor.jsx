@@ -155,7 +155,7 @@ export default function RegistrationEditor({ registrationId, competitor, competi
           {competitor.wca_id ? (
             <a href={personUrl(competitor.wca_id)} target="_blank" rel="noreferrer" className="hide-new-window-icon">{competitor.wca_id}</a>
           ) : (
-            I18n.t('registrations.registration_info_people.newcomer.one')
+            I18n.t('registrations.registration_info_people.newcomer', { count: 1 })
           )}
           {') '}
           <a href={editPersonUrl(competitor.id)} target="_blank" rel="noreferrer" className="hide-new-window-icon"><Icon name="edit" /></a>
