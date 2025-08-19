@@ -314,7 +314,7 @@ RSpec.feature "Sign up" do
       click_button "Registrati"
 
       user = User.find_by!(email: "jack@example.com")
-      expect(user.preferred_locale).to eq "es"
+      expect(user.preferred_locale).to eq "it"
     end
   end
 end
