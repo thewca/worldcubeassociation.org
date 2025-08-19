@@ -49,7 +49,7 @@ export default function ImportWcaLiveResults({
         onClick={importWcaLiveResultsMutate}
         disabled={uploadedScrambleFilesCount === 0}
       >
-        Import WCA Live Results
+        Use WCA Live Results
       </Button>
     </>
   );
