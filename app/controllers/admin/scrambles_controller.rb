@@ -24,7 +24,7 @@ module Admin
       @scramble = Scramble.includes(:competition).find(params[:id])
     end
 
-    def match_scrambles
+    def upload
       @competition = Competition.includes(
         scramble_file_uploads: ScrambleFileUpload::SERIALIZATION_INCLUDES,
         **ScrambleFileUpload::SERIALIZATION_INCLUDES,

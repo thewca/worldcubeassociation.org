@@ -4,6 +4,7 @@ import { Button, Message } from 'semantic-ui-react';
 import Errored from '../../Requests/Errored';
 import importWcaLiveResults from '../api/importWcaLiveResults';
 import Loading from '../../Requests/Loading';
+import { uploadScramblesUrl } from '../../../lib/requests/routes.js.erb';
 
 export default function ImportWcaLiveResults({ competitionId, onImportSuccess }) {
   const {
@@ -29,8 +30,11 @@ export default function ImportWcaLiveResults({ competitionId, onImportSuccess })
             in WCA Live first. This button can only use results which have been synchronized!
           </Message.Item>
           <Message.Item>
-            Don&apos;t forget to also upload scrambles separately.
-            Already uploaded scrambles will be used automatically.
+            Don&apos;t forget to also
+            {' '}
+            <a href={uploadScramblesUrl(competitionId)}>upload scrambles</a>
+            {' '}
+            separately. Already uploaded scrambles will be used automatically.
           </Message.Item>
         </Message.List>
       </Message>
