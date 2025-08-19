@@ -6,7 +6,11 @@ import importWcaLiveResults from '../api/importWcaLiveResults';
 import Loading from '../../Requests/Loading';
 import { uploadScramblesUrl } from '../../../lib/requests/routes.js.erb';
 
-export default function ImportWcaLiveResults({ competitionId, onImportSuccess }) {
+export default function ImportWcaLiveResults({
+  competitionId,
+  uploadedScrambleFilesCount,
+  onImportSuccess,
+}) {
   const {
     mutate: importWcaLiveResultsMutate, error, isPending, isError,
   } = useMutation({
@@ -34,11 +38,19 @@ export default function ImportWcaLiveResults({ competitionId, onImportSuccess })
             {' '}
             <a href={uploadScramblesUrl(competitionId)}>upload scrambles</a>
             {' '}
-            separately. Already uploaded scrambles will be used automatically.
+            separately. Already uploaded scramble files:
+            {' '}
+            <code>{uploadedScrambleFilesCount}</code>
           </Message.Item>
         </Message.List>
       </Message>
-      <Button primary onClick={importWcaLiveResultsMutate}>Import WCA Live Results</Button>
+      <Button
+        primary
+        onClick={importWcaLiveResultsMutate}
+        disabled={uploadedScrambleFilesCount === 0}
+      >
+        Import WCA Live Results
+      </Button>
     </>
   );
 }
