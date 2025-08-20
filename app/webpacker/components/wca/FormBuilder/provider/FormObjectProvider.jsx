@@ -30,8 +30,8 @@ export default function FormObjectProvider({
     !_.isEqual(formState.object, formState.initialObject)
   ), [formState.object, formState.initialObject]);
 
-  const onSuccess = useCallback((override = undefined, localOverride = false) => {
-    dispatch(changesSaved(override, localOverride));
+  const onSuccess = useCallback((override = undefined) => {
+    dispatch(changesSaved(override));
     dispatch(setErrors(null));
   }, [dispatch]);
 

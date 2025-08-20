@@ -16,7 +16,7 @@ import RegistrationStatus from './RegistrationStatus';
 import { useRegistration } from '../lib/RegistrationProvider';
 import { useStepNavigation } from '../lib/StepNavigationProvider';
 import { isoMoneyToHumanReadable } from '../../../lib/helpers/money';
-import { useFormSuccessHandler } from '../../wca/FormBuilder/provider/FormObjectProvider';
+import {useFormObjectState, useFormSuccessHandler} from '../../wca/FormBuilder/provider/FormObjectProvider';
 
 export default function RegistrationOverview({
   competitionInfo,
@@ -24,6 +24,7 @@ export default function RegistrationOverview({
   const dispatch = useDispatch();
   const confirm = useConfirm();
 
+  const [, setCompetingStatus] = useFormObjectState('status', ['competing']);
   const onFormSuccess = useFormSuccessHandler();
 
   const {
@@ -74,7 +75,8 @@ export default function RegistrationOverview({
           payment: prevRegistration.payment,
         }),
       );
-      onFormSuccess(data.registration, true);
+      onFormSuccess(data.registration);
+      setCompetingStatus('cancelled');
       dispatch(showMessage('competitions.registration_v2.register.registration_status.cancelled', 'positive'));
     },
   });
