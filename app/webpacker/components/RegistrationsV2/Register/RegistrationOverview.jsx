@@ -29,6 +29,7 @@ export default function RegistrationOverview({
     isAccepted,
     hasPaid,
   } = useRegistration();
+
   const {
     jumpToStart, jumpToStepByKey,
   } = useStepNavigation();

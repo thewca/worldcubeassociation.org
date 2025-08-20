@@ -63,8 +63,14 @@ export default function CompetingStep({
   competitionInfo,
   user,
 }) {
-  const { nextStep, jumpToSummary, currentStep: { parameters: currentStepParameters } } = useStepNavigation();
+  const {
+    nextStep,
+    jumpToSummary,
+    currentStep: { parameters: currentStepParameters },
+  } = useStepNavigation();
+
   const maxEvents = currentStepParameters.events_per_registration_limit ?? Infinity;
+
   const {
     isRegistered, isPolling, isProcessing, startPolling, refetchRegistration,
     isPending, isWaitingList, registration,
