@@ -6,7 +6,6 @@ import TicketCommentCreate from './TicketCommentCreate';
 import getComments from './api/getComments';
 import Loading from '../Requests/Loading';
 import Errored from '../Requests/Errored';
-import { ticketLogActionTypes } from '../../lib/wca-data.js.erb';
 import '../../stylesheets/semantic/components/comment.min.css';
 
 export default function TicketComments({ ticketId, currentStakeholder }) {
@@ -25,9 +24,7 @@ export default function TicketComments({ ticketId, currentStakeholder }) {
   return (
     <>
       <Header as="h2">Comments</Header>
-      {currentStakeholder.actions_allowed.includes(ticketLogActionTypes.create_comment) && (
-        <Button onClick={() => setCreateComment(true)}>Add new comment</Button>
-      )}
+      <Button onClick={() => setCreateComment(true)}>Add new comment</Button>
 
       <Comment.Group>
         {comments.map((comment) => (
