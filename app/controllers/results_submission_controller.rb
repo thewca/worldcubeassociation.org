@@ -25,12 +25,15 @@ class ResultsSubmissionController < ApplicationController
     competition = competition_from_params
 
     name_format_issues = competition.accepted_newcomers.filter_map do |user|
-      ResultsValidators::PersonsValidator.name_issues(user.name).presence
-    end.map do |issues|
-      {
-        id: user.id,
-        issues: issues,
-      }
+      issues = ResultsValidators::PersonsValidator.name_validations(user.name)
+
+      if issues.present?
+        {
+          id: user.id,
+          name: user.name,
+          issues: issues,
+        }
+      end
     end
 
     render status: :ok, json: name_format_issues
