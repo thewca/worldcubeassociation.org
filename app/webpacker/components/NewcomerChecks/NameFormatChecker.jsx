@@ -29,7 +29,7 @@ export default function NameFormatChecker({ competitionId, setUserIdToEdit }) {
         </Table.Row>
       </Table.Header>
       <Table.Body>
-        {nameFormatChecks.map(({ id, issues }) => issues.map(({ id: issueId, args }) => (
+        {nameFormatChecks.flatMap(({ id, issues }) => issues.map(({ id: issueId, args }) => (
           <Table.Row>
             <Table.Cell>{I18n.t(`validators.persons.${issueId}`, args)}</Table.Cell>
             <Table.Cell>
