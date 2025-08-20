@@ -29,9 +29,9 @@ export default function NameFormatChecker({ competitionId, setUserIdToEdit }) {
         </Table.Row>
       </Table.Header>
       <Table.Body>
-        {nameFormatChecks.map(({ id, name, issues }) => issues.map((issue) => (
+        {nameFormatChecks.map(({ id, issues }) => issues.map(({ id: issueId, args }) => (
           <Table.Row>
-            <Table.Cell>{I18n.t(`validators.persons.${issue}`, { name })}</Table.Cell>
+            <Table.Cell>{I18n.t(`validators.persons.${issueId}`, { args })}</Table.Cell>
             <Table.Cell>
               <Button onClick={() => setUserIdToEdit(id)}>
                 Edit

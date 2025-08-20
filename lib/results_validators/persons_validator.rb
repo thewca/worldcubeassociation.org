@@ -60,64 +60,42 @@ module ResultsValidators
       validation_issues
     end
 
-    def self.name_validations(name, competition_id = nil)
-      errors = PersonsValidator.name_errors(name).map do |issue|
-        ValidationError.new(issue, :persons, competition_id, name: name)
-      end
-
-      warnings = PersonsValidator.name_warnings(name).map do |issue|
-        ValidationWarning.new(issue, :persons, competition_id, name: name)
-      end
-
-      [errors + warnings].flatten
-    end
-
-    def self.name_errors(name)
-      issues = []
-
-      # Check for double whitespaces or leading/trailing whitespaces.
-      issues << WHITESPACE_IN_NAME_ERROR unless name.squeeze(" ").strip == name
-
-      # Check for opening parenthesis without space before it.
-      issues << WRONG_PARENTHESIS_FORMAT_ERROR if /[[:alnum:]]\(/.match?(name)
-
-      # Check for wrong parenthesis type.
-      issues << WRONG_PARENTHESIS_TYPE_ERROR if /[（）]/.match?(name)
-
-      issues
-    end
-
-    def self.name_warnings(name)
-      issues = []
+    def self.name_validations(name, competition_id = nil, **_message_args)
+      validation_issues = []
       roman_readable = PersonsValidator.roman_readable_part(name)
       split_name = roman_readable.split
 
+      # Check for double whitespaces or leading/trailing whitespaces.
+      validation_issues << ValidationError.new(WHITESPACE_IN_NAME_ERROR, :persons, competition_id, name: name) unless name.squeeze(" ").strip == name
+
+      # Check for opening parenthesis without space before it.
+      validation_issues << ValidationError.new(WRONG_PARENTHESIS_FORMAT_ERROR, :persons, competition_id, name: name) if /[[:alnum:]]\(/.match?(name)
+
+      # Check for wrong parenthesis type.
+      validation_issues << ValidationError.new(WRONG_PARENTHESIS_TYPE_ERROR, :persons, competition_id, name: name) if /[（）]/.match?(name)
+
       # Check for lowercase name.
-      issues << LOWERCASE_NAME_WARNING if split_name.first.downcase == split_name.first || split_name.last.downcase == split_name.last
+      validation_issues << ValidationWarning.new(LOWERCASE_NAME_WARNING, :persons, competition_id, name: name) if split_name.first.downcase == split_name.first || split_name.last.downcase == split_name.last
 
       # Check for successive uppercase letters in the name.
-      issues << UPPERCASE_NAME_WARNING if split_name.any? { |n| n =~ /[[:upper:]]{2}/ && n.length > 2 && n != 'III' } # Roman numerals are allowed as suffixes
+      validation_issues << ValidationWarning.new(UPPERCASE_NAME_WARNING, :persons, competition_id, name: name) if split_name.any? { |n| n =~ /[[:upper:]]{2}/ && n.length > 2 && n != 'III' } # Roman numerals are allowed as suffixes
 
       # Check if the name is a single name.
-      issues << SINGLE_NAME_WARNING if split_name.length == 1
+      validation_issues << ValidationWarning.new(SINGLE_NAME_WARNING, :persons, competition_id, name: name) if split_name.length == 1
 
       # Check for missing period in single letter middle name.
-      issues << MISSING_PERIOD_WARNING if split_name.length > 2 && split_name[1, split_name.length - 2].any? { |n| n.length == 1 }
+      validation_issues << ValidationWarning.new(MISSING_PERIOD_WARNING, :persons, competition_id, name: name) if split_name.length > 2 && split_name[1, split_name.length - 2].any? { |n| n.length == 1 }
 
       # Check for letter after period.
-      issues << LETTER_AFTER_PERIOD_WARNING if split_name.any? { |n| n.chop.include? '.' }
+      validation_issues << ValidationWarning.new(LETTER_AFTER_PERIOD_WARNING, :persons, competition_id, name: name) if split_name.any? { |n| n.chop.include? '.' }
 
       # Check for single letter first or last name.
       non_word_after_first_letter = [' ', '.'].include?(roman_readable[1])
       space_before_last_letter = (roman_readable[-2] == " ") && %w[I V].exclude?(roman_readable[-1]) # Roman numerals are allowed as suffixes
       abbreviated_last_name = (roman_readable[-1] == ".") && (roman_readable[-3] == " ")
-      issues << SINGLE_LETTER_FIRST_OR_LAST_NAME_WARNING if non_word_after_first_letter || space_before_last_letter || abbreviated_last_name
+      validation_issues << ValidationWarning.new(SINGLE_LETTER_FIRST_OR_LAST_NAME_WARNING, :persons, competition_id, name: name) if non_word_after_first_letter || space_before_last_letter || abbreviated_last_name
 
-      issues
-    end
-
-    def self.name_issues(name)
-      name_warnings(name) + name_errors(name)
+      validation_issues
     end
 
     def run_validation(validator_data)

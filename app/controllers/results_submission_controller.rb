@@ -29,7 +29,6 @@ class ResultsSubmissionController < ApplicationController
     end.map do |issues|
       {
         id: user.id,
-        name: user.name,
         issues: issues,
       }
     end
