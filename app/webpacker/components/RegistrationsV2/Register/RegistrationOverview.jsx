@@ -16,12 +16,15 @@ import RegistrationStatus from './RegistrationStatus';
 import { useRegistration } from '../lib/RegistrationProvider';
 import { useStepNavigation } from '../lib/StepNavigationProvider';
 import { isoMoneyToHumanReadable } from '../../../lib/helpers/money';
+import { useFormSuccessHandler } from '../../wca/FormBuilder/provider/FormObjectProvider';
 
 export default function RegistrationOverview({
   competitionInfo,
 }) {
   const dispatch = useDispatch();
   const confirm = useConfirm();
+
+  const onFormSuccess = useFormSuccessHandler();
 
   const {
     registration,
@@ -65,12 +68,13 @@ export default function RegistrationOverview({
     onSuccess: (data) => {
       jumpToStart();
       queryClient.setQueryData(
-        ['registration', competitionInfo.id, registration.user_id],
-        {
+        ['registration', competitionInfo.id, registration.user_id, registration.id],
+        (prevRegistration) => ({
           ...data.registration,
-          payment: registration.payment,
-        },
+          payment: prevRegistration.payment,
+        }),
       );
+      onFormSuccess(data.registration, true);
       dispatch(showMessage('competitions.registration_v2.register.registration_status.cancelled', 'positive'));
     },
   });
