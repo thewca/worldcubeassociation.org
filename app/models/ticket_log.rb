@@ -16,9 +16,9 @@ class TicketLog < ApplicationRecord
 
   validate :validate_metadata_action
   def validate_metadata_action
-    errors.add(:metadata_action, "can only be set when action_type is metadata_action") if action_type != TicketLog.action_types[:metadata_action] && metadata_action.present?
+    errors.add(:metadata_action, "can only be set when action_type is metadata_action") if !action_type_metadata_action? && metadata_action.present?
 
-    errors.add(:metadata_action, "must be present when action_type is metadata_action") if action_type == TicketLog.action_types[:metadata_action] && metadata_action.nil?
+    errors.add(:metadata_action, "must be present when action_type is metadata_action") if action_type_metadata_action? && metadata_action.nil?
 
     return if metadata_action.nil? || ticket.metadata_type.safe_constantize::ACTION_TYPE.key?(metadata_action)
 
