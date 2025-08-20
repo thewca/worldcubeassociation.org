@@ -1,4 +1,4 @@
-es:
+es-ES:
   errors:
     messages:
       carrierwave_processing_error: no pudo ser procesado
