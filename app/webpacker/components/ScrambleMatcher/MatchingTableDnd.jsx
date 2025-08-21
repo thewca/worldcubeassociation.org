@@ -18,6 +18,7 @@ export default function MatchingTableDnd({
   computeCellDetails = undefined,
   cellDetailsAreData = false,
   onClickMoveAction = undefined,
+  onClickDeleteAction = undefined,
 }) {
   const [currentDragStart, setCurrentDragStart] = useState(null);
   const [currentDragIndex, setCurrentDragIndex] = useState(null);
@@ -70,6 +71,7 @@ export default function MatchingTableDnd({
           <Table.HeaderCell />
           <Table.HeaderCell>Assigned Scrambles</Table.HeaderCell>
           {onClickMoveAction && (<Table.HeaderCell>Move</Table.HeaderCell>)}
+          {onClickDeleteAction && (<Table.HeaderCell>Delete</Table.HeaderCell>)}
         </Table.Row>
       </Table.Header>
       <DragDropContext
@@ -105,13 +107,13 @@ export default function MatchingTableDnd({
                             <Table.Row
                               key={key}
                               {...providedDraggable.draggableProps}
-                              negative={hasError || isExtra}
+                              negative={hasError}
                             >
                               <Table.Cell textAlign="center" collapsing verticalAlign="middle">
                                 {isExpected && computeDefinitionName(definitionIndex)}
                                 {isExtra && (
                                   <Popup
-                                    trigger={<Icon name="exclamation triangle" />}
+                                    trigger={<Icon name="exclamation triangle" color="red" />}
                                     content="This entry is unexpected"
                                     position="top center"
                                   />
@@ -143,6 +145,17 @@ export default function MatchingTableDnd({
                                     size="large"
                                     link
                                     onClick={() => onClickMoveAction(rowData)}
+                                    disabled={hasError}
+                                  />
+                                </Table.Cell>
+                              )}
+                              {onClickDeleteAction && (
+                                <Table.Cell textAlign="center" verticalAlign="middle" collapsing>
+                                  <Icon
+                                    name="trash"
+                                    size="large"
+                                    link
+                                    onClick={() => onClickDeleteAction(rowData)}
                                     disabled={hasError}
                                   />
                                 </Table.Cell>

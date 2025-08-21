@@ -118,6 +118,18 @@ export default function scrambleMatchReducer(state, action) {
           .set(lodashPath, movedItemState)
           .value();
       });
+    case 'deleteEntityFromMatching':
+      return applyAction(state, ['current'], (subState) => {
+        const lodashPath = navigationToLodash(action, 'pickerHistory');
+
+        const currentList = applyPickerHistory(subState, action.pickerHistory)[action.matchingKey];
+        const filteredItemState = currentList.filter((ent) => ent.id !== action.entity.id);
+
+        return _.chain(subState)
+          .cloneDeep()
+          .set(lodashPath, filteredItemState)
+          .value();
+      });
     default:
       throw new Error(`Unhandled action type: ${action.type}`);
   }

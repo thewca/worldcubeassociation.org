@@ -47,6 +47,16 @@ export default function TableAndModal({
     [dispatchMatchState, pickerHistory, matchingKey],
   );
 
+  const deleteEntityFromMatching = useCallback(
+    (entity) => dispatchMatchState({
+      type: 'deleteEntityFromMatching',
+      entity,
+      pickerHistory,
+      matchingKey,
+    }),
+    [dispatchMatchState, pickerHistory, matchingKey],
+  );
+
   return (
     <>
       <MatchingTableDnd
@@ -58,6 +68,7 @@ export default function TableAndModal({
         computeCellDetails={computeCellDetails}
         cellDetailsAreData={cellDetailsAreData}
         onClickMoveAction={setModalPayload}
+        onClickDeleteAction={deleteEntityFromMatching}
       />
       <MoveMatchingEntityModal
         key={modalPayload?.id}
