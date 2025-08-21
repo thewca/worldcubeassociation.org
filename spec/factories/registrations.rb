@@ -111,7 +111,7 @@ FactoryBot.define do
           registration: registration,
           user: registration.user,
           amount_lowest_denomination: registration.competition.base_entry_fee_lowest_denomination.round,
-          is_captured: false,
+          is_completed: false,
         )
       end
     end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_08_01_074513) do
+ActiveRecord::Schema[7.2].define(version: 2025_08_04_070122) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -1048,7 +1048,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_08_01_074513) do
     t.datetime "updated_at", precision: nil, null: false
     t.integer "refunded_registration_payment_id"
     t.integer "user_id"
-    t.boolean "is_captured", default: true, null: false
+    t.boolean "is_completed", default: true, null: false
     t.index ["receipt_type", "receipt_id"], name: "index_registration_payments_on_receipt"
     t.index ["refunded_registration_payment_id"], name: "idx_reg_payments_on_refunded_registration_payment_id"
     t.index ["registration_id"], name: "index_registration_payments_on_registration_id"

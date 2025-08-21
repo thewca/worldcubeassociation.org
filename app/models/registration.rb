@@ -177,16 +177,16 @@ class Registration < ApplicationRecord
       # registration.includes(:registration_payments) that may exist.
       # It's fine to turn the associated records to an array and sum on ithere,
       # as it's usually just a couple of rows.
-      registration_payments.captured.sum(&:amount_lowest_denomination),
+      registration_payments.completed.sum(&:amount_lowest_denomination),
       competition.currency_code,
     )
   end
 
   def last_payment
     if registration_payments.loaded?
-      registration_payments.captured.max_by(&:created_at)
+      registration_payments.completed.max_by(&:created_at)
     else
-      registration_payments.captured.order(:created_at).last
+      registration_payments.completed.order(:created_at).last
     end
   end
 
@@ -578,7 +578,7 @@ class Registration < ApplicationRecord
 
   def last_positive_payment
     registration_payments
-      .captured
+      .completed
       .where.not(amount_lowest_denomination: ..0)
       .order(updated_at: :desc)
       .first
