@@ -302,7 +302,7 @@ class Registration < ApplicationRecord
                                   payment_status: last_payment_status,
                                   paid_amount_iso: paid_entry_fees.cents,
                                   currency_code: paid_entry_fees.currency.iso_code,
-                                  updated_at: last_payment.created_at,
+                                  updated_at: last_payment&.created_at,
                                 },
                               })
       end
