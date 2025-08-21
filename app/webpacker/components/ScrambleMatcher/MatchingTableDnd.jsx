@@ -119,13 +119,12 @@ export default function MatchingTableDnd({
                                   />
                                 )}
                               </Table.Cell>
-                              <Table.Cell {...providedDraggable.dragHandleProps}>
-                                {hasError
-                                  ? 'Missing row'
-                                  : (
-                                    <Header size="small">
-                                      <Icon name={hasError ? 'exclamation triangle' : 'bars'} />
-                                      <Header.Content>
+                              <Table.Cell {...providedDraggable.dragHandleProps} verticalAlign="middle">
+                                <Header size="small" color={hasError ? 'red' : undefined}>
+                                  <Icon name={hasError ? 'exclamation triangle' : 'bars'} />
+                                  <Header.Content>
+                                    {hasError ? 'Missing Row' : (
+                                      <>
                                         {computeCellName(rowData)}
                                         {computeCellDetails && (
                                           <Header.Subheader
@@ -134,9 +133,10 @@ export default function MatchingTableDnd({
                                             {computeCellDetails(rowData)}
                                           </Header.Subheader>
                                         )}
-                                      </Header.Content>
-                                    </Header>
-                                  )}
+                                      </>
+                                    )}
+                                  </Header.Content>
+                                </Header>
                               </Table.Cell>
                               {onClickMoveAction && (
                                 <Table.Cell textAlign="center" verticalAlign="middle" collapsing>

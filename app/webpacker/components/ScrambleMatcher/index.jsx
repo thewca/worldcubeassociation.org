@@ -145,6 +145,9 @@ function ScrambleMatcher({
         <Message info content="You have unsaved changes. Don't forget to Save below!" />
       )}
       <Divider />
+      <MatchingProgressMessage
+        roundMatchingProgress={roundMatchingProgress}
+      />
       <Button.Group>
         {renderSubmitButton('Save Changes', !hasUnsavedChanges)}
         <Button secondary basic content="Reset" icon="refresh" onClick={() => dispatchMatchState({ type: 'resetToInitial' })} />
