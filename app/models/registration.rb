@@ -586,6 +586,7 @@ class Registration < ApplicationRecord
 
   def last_positive_payment
     registration_payments
+      .captured
       .where.not(amount_lowest_denomination: ..0)
       .order(updated_at: :desc)
       .first

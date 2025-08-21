@@ -1396,4 +1396,27 @@ RSpec.describe Registration do
       expect(reg.reload.paid_entry_fees.cents).to eq(1000)
     end
   end
+
+  describe '#last_postitive_payment' do
+    let!(:payments) { create_list(:registration_payment, 3, registration: registration) }
+
+    before do
+      sleep 1 # Necessary to create a timer difference in when the RegPayments are created
+      @last_payment = create(:registration_payment, registration: registration) # We have to use an instance variable to define the sleep before it
+    end
+
+    it 'has 4 total payments' do
+      expect(registration.registration_payments.count).to eq(4)
+    end
+
+    it 'returns the latest payment' do
+      expect(registration.last_positive_payment).to eq(@last_payment)
+    end
+
+    it 'does not return uncaptured payments' do
+      sleep 1 # Necessary to create a timer difference in when the RegPayments are created
+      uncaptured_payment = create(:registration_payment, is_captured: false, registration: registration)
+      expect(registration.last_positive_payment).to eq(@last_payment)
+    end
+  end
 end
