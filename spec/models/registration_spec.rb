@@ -1425,7 +1425,7 @@ RSpec.describe Registration do
 
         it 'does not return un-succeeded payments' do
           sleep 1
-          uncaptured_payment = create(:registration_payment, is_captured: false, registration: registration)
+          create(:registration_payment, is_captured: false, registration: registration)
           registration.registration_payments.reload # We have to reload because we've already loaded the records
           expect(registration.last_payment).to eq(@last_payment)
         end
@@ -1442,7 +1442,7 @@ RSpec.describe Registration do
 
         it 'does not return un-succeeded payments' do
           sleep 1
-          uncaptured_payment = create(:registration_payment, is_captured: false, registration: registration)
+          create(:registration_payment, is_captured: false, registration: registration)
           expect(registration.last_payment).to eq(@last_payment)
         end
       end
@@ -1455,7 +1455,7 @@ RSpec.describe Registration do
 
       it 'does not return uncaptured payments' do
         sleep 1 # Necessary to create a timer difference in when the RegPayments are created
-        uncaptured_payment = create(:registration_payment, is_captured: false, registration: registration)
+        create(:registration_payment, is_captured: false, registration: registration)
         expect(registration.last_positive_payment).to eq(@last_payment)
       end
     end
