@@ -6336,7 +6336,7 @@ pt:
         A ronda %{round_id} tem 7 ou menos competidores, mas tem pelo menos uma
         ronda subsequente, o que não é permitido de acordo com o Regulamento
         9m3.
-      #original_hash: e12138a
+      #original_hash: 44fbfde
       regulation_9p1_error: >-
         Ronda %{round_id}: Menos de 25% dos competidores foram eliminados, o que
         não é permitido pelo Regulamento 9p1.
@@ -6437,3 +6437,9 @@ pt:
         embaralhamento do especificado no separador "Gerir Eventos". Ajuste o
         número de conjuntos de embaralhamento no separador "Gerir Eventos" para
         o número de conjuntos que foram utilizados.
+  tickets:
+    type:
+      #original_hash: e43f273
+      edit_person: Editar Pessoa
+      #original_hash: 5fb2137
+      competition_result: Resultado de Competição
