@@ -42,10 +42,10 @@ class RegistrationsController < ApplicationController
     csv_data = parse_csv_file(file.path)
     return render status: :unprocessable_entity, json: { error: I18n.t("registrations.import.errors.empty_file") } if csv_data[:rows].empty?
 
-    header_error = validate_required_headers(csv_data[:headers])
+    header_error = validate_required_headers(csv_data[:headers], @competition)
     return render status: :unprocessable_entity, json: { error: header_error } if header_error
 
-    event_columns_error = validate_event_columns(csv_data[:rows])
+    event_columns_error = validate_event_columns(csv_data[:rows], @competition)
     return render status: :unprocessable_entity, json: { error: event_columns_error } if event_columns_error
 
     @registration_rows = process_registration_rows(csv_data[:rows])
@@ -81,25 +81,28 @@ class RegistrationsController < ApplicationController
   end
 
   private def parse_csv_file(file_path)
-    headers = nil
-    rows = []
-
-    CSV.foreach(
+    all_rows = CSV.read(
       file_path,
       headers: true,
       header_converters: :symbol,
       skip_blanks: true,
       converters: ->(string) { string&.strip },
-    ) do |row|
-      headers ||= row.headers.map { |header| header.to_s.downcase }
-      rows << row if row[:status] == "a"
+    )
+
+    filtered_rows = all_rows.select do |row|
+      row[:status] == 'a'
     end
 
-    { headers: headers, rows: rows }
+    # Extract the headers from the first row and transform them
+    headers = all_rows.headers.map do |header|
+      header.to_s.downcase
+    end
+
+    { headers: headers, rows: filtered_rows }
   end
 
-  private def validate_required_headers(headers)
-    competition_events = @competition.competition_events
+  private def validate_required_headers(headers, competition)
+    competition_events = competition.competition_events
     required_event_columns = competition_events.pluck(:event_id)
     required_other_columns = %w[status name country wca_id birth_date gender email]
     required_columns = required_other_columns + required_event_columns
@@ -109,8 +112,8 @@ class RegistrationsController < ApplicationController
     I18n.t("registrations.import.errors.missing_columns", columns: missing_columns.join(", ")) if missing_columns.any?
   end
 
-  private def validate_event_columns(csv_rows)
-    competition_events = @competition.competition_events
+  private def validate_event_columns(csv_rows, competition)
+    competition_events = competition.competition_events
     error = nil
 
     csv_rows.each do |row|
