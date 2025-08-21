@@ -2,7 +2,7 @@ import { events, formats } from '../../lib/wca-data.js.erb';
 import { humanizeActivityCode } from '../../lib/utils/wcif';
 import { EventsPickerCompat } from './ButtonGroupPicker';
 
-const ATTEMPT_BASED_EVENTS = ['333fm', '333mbf'];
+export const ATTEMPT_BASED_EVENTS = ['333fm', '333mbf'];
 
 export const pickerLocalizationConfig = {
   events: {
@@ -34,7 +34,8 @@ const prefixForIndex = (index) => {
   return prefixForIndex(Math.floor(index / 26) - 1) + char;
 };
 
-export const scrambleSetToName = (scrambleSet) => `${events.byId[scrambleSet.event_id].name} Round ${scrambleSet.round_number} Scramble Set ${prefixForIndex(scrambleSet.scramble_set_number - 1)}`;
+export const scrambleSetToName = (scrambleSet) => `Scramble Set ${prefixForIndex(scrambleSet.scramble_set_number - 1)}`;
+const scrambleSetToTitle = (scrambleSet) => `${events.byId[scrambleSet.event_id].name} Round ${scrambleSet.round_number} ${scrambleSetToName(scrambleSet)}`;
 
 export const scrambleToName = (scramble) => `Scramble ${scramble.scramble_number}`;
 
@@ -56,7 +57,7 @@ export const pickerStepConfig = {
   rounds: {
     matchingConfig: {
       key: 'scrambleSets',
-      computeCellName: scrambleSetToName,
+      computeCellName: scrambleSetToTitle,
       computeCellDetails: (scrSet) => scrSet.original_filename,
       computeExpectedRowCount: (round) => round.scrambleSetCount,
     },
