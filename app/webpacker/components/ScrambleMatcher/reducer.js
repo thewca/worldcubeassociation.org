@@ -67,7 +67,7 @@ function removeScrambleFile(state, oldScrambleFile) {
   };
 }
 
-function unwrapActionNavigation(actionWithNav, selector) {
+function navigationToLodash(actionWithNav, selector) {
   return [
     ...actionWithNav[selector].flatMap((step) => [step.key, step.index]),
     actionWithNav.matchingKey,
@@ -97,8 +97,8 @@ export default function scrambleMatchReducer(state, action) {
       return applyAction(state, ['current'], () => state.initial);
     case 'moveMatchingEntity':
       return applyAction(state, ['current'], (subState) => {
-        const oldPath = unwrapActionNavigation(action, 'fromNavigation');
-        const newPath = unwrapActionNavigation(action, 'toNavigation');
+        const oldPath = navigationToLodash(action, 'fromNavigation');
+        const newPath = navigationToLodash(action, 'toNavigation');
 
         return _.chain(subState)
           .cloneDeep()
@@ -108,7 +108,7 @@ export default function scrambleMatchReducer(state, action) {
       });
     case 'reorderMatchingEntities':
       return applyAction(state, ['current'], (subState) => {
-        const lodashPath = unwrapActionNavigation(action, 'pickerHistory');
+        const lodashPath = navigationToLodash(action, 'pickerHistory');
 
         const currentOrder = applyPickerHistory(subState, action.pickerHistory)[action.matchingKey];
         const movedItemState = moveArrayItem(currentOrder, action.fromIndex, action.toIndex);

@@ -6,22 +6,22 @@ export const ATTEMPT_BASED_EVENTS = ['333fm', '333mbf'];
 
 export const pickerLocalizationConfig = {
   events: {
-    computeEntityName: (evt) => events.byId[evt.id].name,
+    computeEntityName: (id) => events.byId[id].name,
     headerLabel: 'Events',
     dropdownLabel: 'Event',
   },
   rounds: {
-    computeEntityName: (rd) => humanizeActivityCode(rd.id),
+    computeEntityName: (id) => humanizeActivityCode(id),
     headerLabel: 'Rounds',
     dropdownLabel: 'Round',
   },
   scrambleSets: {
-    computeEntityName: (scrSet, idx) => `Group ${idx + 1}`,
+    computeEntityName: (id, idx) => `Group ${idx + 1}`,
     headerLabel: 'Groups',
     dropdownLabel: 'Scramble Set',
   },
   inbox_scrambles: {
-    computeEntityName: (scr, idx) => `Attempt ${idx + 1}`,
+    computeEntityName: (id, idx) => `Attempt ${idx + 1}`,
     headerLabel: 'Scrambles',
     dropdownLabel: 'Scramble',
   },

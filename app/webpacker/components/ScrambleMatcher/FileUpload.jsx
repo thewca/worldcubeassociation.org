@@ -26,8 +26,8 @@ async function uploadScrambleFile({ competitionId, file }) {
 export default function FileUpload({
   competitionId,
   initialScrambleFiles,
-  addScrambleFile,
-  removeScrambleFile,
+  matchState,
+  dispatchMatchState,
 }) {
   const inputRef = useRef();
   const queryClient = useQueryClient();
@@ -52,7 +52,7 @@ export default function FileUpload({
         ],
       );
 
-      addScrambleFile(data);
+      dispatchMatchState({ type: 'addScrambleFile', scrambleFile: data });
     },
     onError: (responseError) => setError(responseError.message),
   });
@@ -118,7 +118,8 @@ export default function FileUpload({
       <ScrambleFileList
         scrambleFiles={uploadedJsonFiles}
         isFetching={isFetching}
-        removeScrambleFile={removeScrambleFile}
+        matchState={matchState}
+        dispatchMatchState={dispatchMatchState}
       />
     </>
   );

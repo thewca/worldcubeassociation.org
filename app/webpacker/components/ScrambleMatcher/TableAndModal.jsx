@@ -21,8 +21,8 @@ export default function TableAndModal({
   const { computeEntityName } = pickerLocalizationConfig[matchingKey];
 
   const computeDefinitionName = useCallback(
-    (idx) => computeEntityName(matchState, idx),
-    [computeEntityName, matchState],
+    (idx) => computeEntityName(matchState.id, idx),
+    [computeEntityName, matchState.id],
   );
 
   const expectedNumOfRows = useMemo(

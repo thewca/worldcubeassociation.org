@@ -48,7 +48,7 @@ function MatchingSelect({
 
   const roundsSelectOptions = useMemo(() => selectableEntities.map((ent, idx) => ({
     key: ent.id,
-    text: computeEntityName(ent, idx),
+    text: computeEntityName(ent.id, idx),
     value: ent.id,
   })), [selectableEntities, computeEntityName]);
 

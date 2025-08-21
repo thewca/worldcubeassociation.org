@@ -31,7 +31,7 @@ export default function ButtonGroupPicker({
             active={entity.id === selectedEntityId}
             onClick={() => onEntityIdSelected(entity.id)}
           >
-            {computeEntityName(entity, idx)}
+            {computeEntityName(entity.id, idx)}
           </Button>
         ))}
       </Button.Group>
