@@ -2,7 +2,7 @@ import React, { useCallback, useMemo, useState } from 'react';
 import { Button, Form, Modal } from 'semantic-ui-react';
 import _ from 'lodash';
 import { useInputUpdater } from '../../lib/hooks/useInputState';
-import { applyPickerHistory, pickerLocalizationConfig } from './util';
+import { applyPickerHistory, matchingDndConfig, pickerLocalizationConfig } from './util';
 
 function navigationToDescriptor(pickerNavigation) {
   return pickerNavigation.reduce((acc, historyStep) => ({
@@ -74,8 +74,9 @@ export default function MoveMatchingEntityModal({
   rootMatchState,
   pickerHistory,
   matchingKey,
-  entityToName,
 }) {
+  const { computeCellName: entityToName } = matchingDndConfig[matchingKey];
+
   const baseDescriptor = useMemo(() => navigationToDescriptor(pickerHistory), [pickerHistory]);
 
   const [targetDescriptor, setTargetDescriptor] = useState(baseDescriptor);
@@ -94,7 +95,13 @@ export default function MoveMatchingEntityModal({
     });
 
     onClose();
-  }, [dispatchMatchState, pickerHistory, rootMatchState, matchingKey, onClose]);
+  }, [
+    dispatchMatchState,
+    pickerHistory,
+    rootMatchState,
+    matchingKey,
+    onClose,
+  ]);
 
   const computeChoices = useCallback((historyIdx, descriptor) => {
     const currentKey = pickerHistory[historyIdx].key;

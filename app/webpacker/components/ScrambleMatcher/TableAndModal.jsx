@@ -79,7 +79,6 @@ export default function TableAndModal({
         rootMatchState={rootMatchState}
         pickerHistory={pickerHistory}
         matchingKey={matchingKey}
-        entityToName={computeCellName}
       />
     </>
   );

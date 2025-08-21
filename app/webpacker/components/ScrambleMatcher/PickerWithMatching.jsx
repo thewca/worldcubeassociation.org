@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import {matchingDndConfig, pickerLocalizationConfig, pickerStepConfig} from './util';
+import { matchingDndConfig, pickerLocalizationConfig, pickerStepConfig } from './util';
 import ButtonGroupPicker from './ButtonGroupPicker';
 import TableAndModal from './TableAndModal';
 

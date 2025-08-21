@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import {addItemToArray, moveArrayItem} from './util';
+import { addItemToArray, moveArrayItem } from './util';
 
 function addScrambleSetsToEvents(wcifEvents, scrambleSets) {
   const groupedScrambleSets = _.groupBy(
@@ -122,7 +122,7 @@ export default function scrambleMatchReducer(state, action) {
         return _.chain(subState)
           .cloneDeep()
           .update(oldPath, (arr) => arr.filter((ent) => ent.id !== action.entity.id))
-          .update(newPath, (arr = []) => [...arr, action.entity])
+          .update(newPath, (arr = []) => addItemToArray(arr, action.entity))
           .value();
       });
     case 'reorderMatchingEntities':
