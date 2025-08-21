@@ -182,11 +182,11 @@ class Registration < ApplicationRecord
     )
   end
 
-  private def last_payment
+  def last_payment
     if registration_payments.loaded?
-      registration_payments.max_by(&:created_at)
+      registration_payments.captured.max_by(&:created_at)
     else
-      registration_payments.order(:created_at).last
+      registration_payments.captured.order(:created_at).last
     end
   end
 

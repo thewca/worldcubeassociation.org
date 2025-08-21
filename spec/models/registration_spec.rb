@@ -1284,7 +1284,7 @@ RSpec.describe Registration do
       reg.consider_auto_close
     end
 
-    it 'calls competition.attempt_auto_close! if reg is fully paid', :only do
+    it 'calls competition.attempt_auto_close! if reg is fully paid' do
       competition = create(:competition)
       expect_any_instance_of(Competition).to receive(:attempt_auto_close!).once
 
@@ -1397,11 +1397,11 @@ RSpec.describe Registration do
     end
   end
 
-  describe '#last_postitive_payment' do
+  describe 'last_payment methods' do
     let!(:payments) { create_list(:registration_payment, 3, registration: registration) }
 
     before do
-      sleep 1 # Necessary to create a timer difference in when the RegPayments are created
+      sleep 1 # Necessary to create a time difference in when the RegPayments are created
       @last_payment = create(:registration_payment, registration: registration) # We have to use an instance variable to define the sleep before it
     end
 
@@ -1409,14 +1409,55 @@ RSpec.describe Registration do
       expect(registration.registration_payments.count).to eq(4)
     end
 
-    it 'returns the latest payment' do
-      expect(registration.last_positive_payment).to eq(@last_payment)
+    describe '#last_payment' do
+      context 'payments are loaded' do
+        before do
+          registration.registration_payments.load
+        end
+
+        it 'confirms that payments are loaded' do
+          expect(registration.registration_payments.loaded?).to be(true)
+        end
+
+        it 'returns last payment' do
+          expect(registration.last_payment).to eq(@last_payment)
+        end
+
+        it 'does not return un-succeeded payments' do
+          sleep 1
+          uncaptured_payment = create(:registration_payment, is_captured: false, registration: registration)
+          registration.registration_payments.reload # We have to reload because we've already loaded the records
+          expect(registration.last_payment).to eq(@last_payment)
+        end
+      end
+
+      context 'payments are NOT loaded' do
+        it 'confirms payments arent loaded' do
+          expect(registration.registration_payments.loaded?).to be(false)
+        end
+
+        it 'returns last payment' do
+          expect(registration.last_payment).to eq(@last_payment)
+        end
+
+        it 'does not return un-succeeded payments' do
+          sleep 1
+          uncaptured_payment = create(:registration_payment, is_captured: false, registration: registration)
+          expect(registration.last_payment).to eq(@last_payment)
+        end
+      end
     end
 
-    it 'does not return uncaptured payments' do
-      sleep 1 # Necessary to create a timer difference in when the RegPayments are created
-      uncaptured_payment = create(:registration_payment, is_captured: false, registration: registration)
-      expect(registration.last_positive_payment).to eq(@last_payment)
+    describe '#last_positive_payment' do
+      it 'returns the latest payment' do
+        expect(registration.last_positive_payment).to eq(@last_payment)
+      end
+
+      it 'does not return uncaptured payments' do
+        sleep 1 # Necessary to create a timer difference in when the RegPayments are created
+        uncaptured_payment = create(:registration_payment, is_captured: false, registration: registration)
+        expect(registration.last_positive_payment).to eq(@last_payment)
+      end
     end
   end
 end
