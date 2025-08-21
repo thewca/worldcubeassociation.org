@@ -8,7 +8,9 @@ import { fetchJsonOrError } from '../../lib/requests/fetchWithAuthenticityToken'
 import { scrambleFileUrl } from '../../lib/requests/routes.js.erb';
 import Loading from '../Requests/Loading';
 import {
-  ATTEMPT_BASED_EVENTS, pickerLocalizationConfig, scrambleSetToName, scrambleToName,
+  ATTEMPT_BASED_EVENTS,
+  matchingDndConfig,
+  pickerLocalizationConfig,
 } from './util';
 import { events } from '../../lib/wca-data.js.erb';
 import { getFullDateTimeString } from '../../lib/utils/dates';
@@ -74,12 +76,24 @@ function ScrambleMatchingReportCells({
   entity,
   actualNavigation,
   expectedNavigation,
-  entityToName,
+  targetIndex,
+  dispatchMatchState,
+  matchingKey,
   rowSpan = undefined,
 }) {
+  const { computeCellName, computeTableName = computeCellName } = matchingDndConfig[matchingKey];
+
   const matchesExpectations = expectedNavigation.every(
     (nav) => actualNavigation?.find((actNav) => actNav.key === nav.key)?.id === nav.id,
   );
+
+  const reinstateEntity = useCallback(() => dispatchMatchState({
+    type: 'addEntityToMatching',
+    entity,
+    pickerHistory: expectedNavigation,
+    matchingKey,
+    targetIndex,
+  }), [dispatchMatchState, entity, expectedNavigation, matchingKey, targetIndex]);
 
   return (
     <>
@@ -89,7 +103,7 @@ function ScrambleMatchingReportCells({
         textAlign="center"
         singleLine
       >
-        {entityToName(entity)}
+        {computeTableName(entity)}
       </Table.Cell>
       <Table.Cell
         rowSpan={rowSpan}
@@ -107,7 +121,14 @@ function ScrambleMatchingReportCells({
             ))}
           </Breadcrumb>
         ) : (
-          <Button positive basic compact>Reinstate</Button>
+          <Button
+            positive
+            basic
+            compact
+            icon="magic"
+            content="Add to table"
+            onClick={reinstateEntity}
+          />
         )}
       </Table.Cell>
     </>
@@ -228,7 +249,9 @@ function ScrambleFileBody({ scrambleFile, matchState, dispatchMatchState }) {
                                   buildHistory('events', eventId),
                                   buildHistory('rounds', `${eventId}-r${roundNum}`),
                                 ]}
-                                entityToName={scrambleSetToName}
+                                targetIndex={setIdx}
+                                dispatchMatchState={dispatchMatchState}
+                                matchingKey="scrambleSets"
                                 rowSpan={scrambles.length}
                               />
                             </>
@@ -251,7 +274,9 @@ function ScrambleFileBody({ scrambleFile, matchState, dispatchMatchState }) {
                                 buildHistory('rounds', `${eventId}-r${roundNum}`),
                                 buildHistory('scrambleSets', scrSet.id),
                               ]}
-                              entityToName={scrambleToName}
+                              targetIndex={scrIdx}
+                              dispatchMatchState={dispatchMatchState}
+                              matchingKey="inbox_scrambles"
                             />
                           )}
                         </Table.Row>

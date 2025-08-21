@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { moveArrayItem, applyPickerHistory } from './util';
+import {addItemToArray, moveArrayItem} from './util';
 
 function addScrambleSetsToEvents(wcifEvents, scrambleSets) {
   const groupedScrambleSets = _.groupBy(
@@ -67,6 +67,25 @@ function removeScrambleFile(state, oldScrambleFile) {
   };
 }
 
+function deriveFullNavigation(lightNavigation, rootState) {
+  return lightNavigation.reduce((acc, nav) => {
+    const lookupChoices = acc.lookup[nav.key];
+
+    const entityIndex = lookupChoices.findIndex((ent) => ent.id === nav.id);
+    const nextEntity = lookupChoices[entityIndex];
+
+    const currentNav = { ...nav, index: entityIndex, entity: nextEntity };
+
+    return {
+      lookup: nextEntity,
+      fullNav: [...acc.fullNav, currentNav],
+    };
+  }, {
+    lookup: rootState,
+    fullNav: [],
+  }).fullNav;
+}
+
 function navigationToLodash(actionWithNav, selector) {
   return [
     ...actionWithNav[selector].flatMap((step) => [step.key, step.index]),
@@ -110,24 +129,32 @@ export default function scrambleMatchReducer(state, action) {
       return applyAction(state, ['current'], (subState) => {
         const lodashPath = navigationToLodash(action, 'pickerHistory');
 
-        const currentOrder = applyPickerHistory(subState, action.pickerHistory)[action.matchingKey];
-        const movedItemState = moveArrayItem(currentOrder, action.fromIndex, action.toIndex);
-
         return _.chain(subState)
           .cloneDeep()
-          .set(lodashPath, movedItemState)
+          .update(lodashPath, (arr = []) => moveArrayItem(arr, action.fromIndex, action.toIndex))
           .value();
       });
     case 'deleteEntityFromMatching':
       return applyAction(state, ['current'], (subState) => {
         const lodashPath = navigationToLodash(action, 'pickerHistory');
 
-        const currentList = applyPickerHistory(subState, action.pickerHistory)[action.matchingKey];
-        const filteredItemState = currentList.filter((ent) => ent.id !== action.entity.id);
+        return _.chain(subState)
+          .cloneDeep()
+          .update(lodashPath, (arr = []) => arr.filter((ent) => ent.id !== action.entity.id))
+          .value();
+      });
+    case 'addEntityToMatching':
+      return applyAction(state, ['current'], (subState) => {
+        const developedNavigation = deriveFullNavigation(action.pickerHistory, subState);
+
+        const lodashPath = navigationToLodash({
+          ...action,
+          pickerHistory: developedNavigation,
+        }, 'pickerHistory');
 
         return _.chain(subState)
           .cloneDeep()
-          .set(lodashPath, filteredItemState)
+          .update(lodashPath, (arr = []) => addItemToArray(arr, action.entity, action.targetIndex))
           .value();
       });
     default:

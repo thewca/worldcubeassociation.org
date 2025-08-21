@@ -55,23 +55,27 @@ export const pickerStepConfig = {
     nestedPicker: 'rounds',
   },
   rounds: {
-    matchingConfig: {
-      key: 'scrambleSets',
-      computeCellName: scrambleSetToTitle,
-      computeCellDetails: (scrSet) => scrSet.original_filename,
-      computeExpectedRowCount: (round) => round.scrambleSetCount,
-    },
+    matchingConfigKey: 'scrambleSets',
     nestedPicker: 'scrambleSets',
     nestingCondition: (history) => isForAttemptBasedEvent(history),
   },
   scrambleSets: {
-    matchingConfig: {
-      key: 'inbox_scrambles',
-      computeCellName: scrambleToName,
-      computeCellDetails: (scr) => scr.scramble_string,
-      cellDetailsAreData: true,
-      computeExpectedRowCount: (scrambleSet, history) => inferExpectedSolveCount(history),
-    },
+    matchingConfigKey: 'inbox_scrambles',
+  },
+};
+
+export const matchingDndConfig = {
+  scrambleSets: {
+    computeCellName: scrambleSetToTitle,
+    computeTableName: scrambleSetToName,
+    computeCellDetails: (scrSet) => scrSet.original_filename,
+    computeExpectedRowCount: (round) => round.scrambleSetCount,
+  },
+  inbox_scrambles: {
+    computeCellName: scrambleToName,
+    computeCellDetails: (scr) => scr.scramble_string,
+    cellDetailsAreData: true,
+    computeExpectedRowCount: (scrambleSet, history) => inferExpectedSolveCount(history),
   },
 };
 
@@ -90,6 +94,10 @@ export function moveArrayItem(arr, fromIndex, toIndex) {
     // here we do NOT want to ignore the items that were originally there, so no +1
     ...withoutMovedItem.slice(toIndex),
   ];
+}
+
+export function addItemToArray(arr, entity, targetIdx = arr.length) {
+  return arr.toSpliced(targetIdx, 0, entity);
 }
 
 export function applyPickerHistory(rootState, pickerHistory) {

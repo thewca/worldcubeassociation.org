@@ -8,10 +8,10 @@ export default function TableAndModal({
   rootMatchState,
   dispatchMatchState,
   pickerHistory,
+  matchingKey,
   matchingConfig,
 }) {
   const {
-    key: matchingKey,
     computeCellName,
     computeCellDetails,
     cellDetailsAreData,

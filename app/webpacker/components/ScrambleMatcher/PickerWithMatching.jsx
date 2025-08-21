@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { pickerLocalizationConfig, pickerStepConfig } from './util';
+import {matchingDndConfig, pickerLocalizationConfig, pickerStepConfig} from './util';
 import ButtonGroupPicker from './ButtonGroupPicker';
 import TableAndModal from './TableAndModal';
 
@@ -111,7 +111,8 @@ function WrapHistory({
     ];
   }, [entityChoices, pickerHistory, pickerKey, selectedEntity]);
 
-  const { matchingConfig, nestedPicker, nestingCondition } = pickerStepConfig[pickerKey];
+  const { matchingConfigKey, nestedPicker, nestingCondition } = pickerStepConfig[pickerKey];
+  const matchingConfig = matchingDndConfig[matchingConfigKey];
 
   const isUsingNesting = useMemo(
     () => nestingCondition?.(nextHistory) ?? true,
@@ -127,6 +128,7 @@ function WrapHistory({
           rootMatchState={rootMatchState}
           dispatchMatchState={dispatchMatchState}
           pickerHistory={nextHistory}
+          matchingKey={matchingConfigKey}
           matchingConfig={matchingConfig}
         />
       )}
