@@ -190,14 +190,6 @@ class Registration < ApplicationRecord
     end
   end
 
-  def last_payment_date
-    if registration_payments.loaded?
-      last_payment&.created_at
-    else
-      registration_payments.maximum(:created_at)
-    end
-  end
-
   def last_payment_status
     # Store this in a variable so we don't have to recompute over and over
     most_recent_payment = self.last_payment
@@ -310,7 +302,7 @@ class Registration < ApplicationRecord
                                   payment_status: last_payment_status,
                                   paid_amount_iso: paid_entry_fees.cents,
                                   currency_code: paid_entry_fees.currency.iso_code,
-                                  updated_at: last_payment_date,
+                                  updated_at: last_payment.created_at,
                                 },
                               })
       end
