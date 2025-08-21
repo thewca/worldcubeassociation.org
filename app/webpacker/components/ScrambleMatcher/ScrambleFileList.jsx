@@ -77,10 +77,13 @@ function ScrambleFileBody({ scrambleFile, removeScrambleFile }) {
     <>
       <Table celled structured compact>
         <Table.Header>
-          <Table.Row>
+          <Table.Row textAlign="center">
             <Table.HeaderCell collapsing>Event</Table.HeaderCell>
             <Table.HeaderCell collapsing>Round</Table.HeaderCell>
-            <Table.HeaderCell colSpan={2}>Scramble Set Details</Table.HeaderCell>
+            <Table.HeaderCell>Scramble Set</Table.HeaderCell>
+            <Table.HeaderCell>Current Status</Table.HeaderCell>
+            <Table.HeaderCell>Scramble</Table.HeaderCell>
+            <Table.HeaderCell>Current Status</Table.HeaderCell>
           </Table.Row>
         </Table.Header>
         <Table.Body>
@@ -136,15 +139,28 @@ function ScrambleFileBody({ scrambleFile, removeScrambleFile }) {
                               )}
                               <Table.Cell
                                 rowSpan={scrambles.length}
-                                colSpan={scr.id === DUMMY_SCRAMBLE_ID ? 2 : 1}
                                 verticalAlign="middle"
+                                textAlign="right"
                               >
                                 {scrambleSetToName(scrSet)}
+                              </Table.Cell>
+                              <Table.Cell
+                                rowSpan={scrambles.length}
+                                verticalAlign="middle"
+                                textAlign="left"
+                                colSpan={scr.id === DUMMY_SCRAMBLE_ID ? 3 : 1}
+                              >
+                                <Button positive basic compact>Reinstate</Button>
                               </Table.Cell>
                             </>
                           )}
                           {scr.id !== DUMMY_SCRAMBLE_ID && (
-                            <Table.Cell>{scrambleToName(scr)}</Table.Cell>
+                            <>
+                              <Table.Cell verticalAlign="middle" textAlign="right">{scrambleToName(scr)}</Table.Cell>
+                              <Table.Cell verticalAlign="middle">
+                                <Button positive basic compact>Reinstate</Button>
+                              </Table.Cell>
+                            </>
                           )}
                         </Table.Row>
                       )
