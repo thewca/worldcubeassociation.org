@@ -1,0 +1,29 @@
+"use client";
+
+import I18nHTMLTranslate from "@/components/I18nHTMLTranslate";
+import { useState } from "react";
+import { Button, Checkbox, VStack } from "@chakra-ui/react";
+
+export default function LogoDownload() {
+  const [acceptedGuidelines, setAcceptedGuidelines] = useState(false);
+
+  return (
+    <VStack align="left">
+      <Checkbox.Root
+        checked={acceptedGuidelines}
+        onCheckedChange={(e) => setAcceptedGuidelines(!!e.checked)}
+      >
+        <Checkbox.HiddenInput />
+        <Checkbox.Control />
+        <Checkbox.Label>
+          <I18nHTMLTranslate i18nKey="logo.headings.download_logo_assets.accept_terms_and_conditions" />
+        </Checkbox.Label>
+      </Checkbox.Root>
+      <Button disabled={!acceptedGuidelines} asChild>
+        <a href="https://assets.worldcubeassociation.org/assets/9963bbd/files/WCA%20Logo%20Assets.zip">
+          <I18nHTMLTranslate i18nKey="logo.headings.download_logo_assets.download_button_text" />
+        </a>
+      </Button>
+    </VStack>
+  );
+}
