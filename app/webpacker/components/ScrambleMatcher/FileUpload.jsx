@@ -1,9 +1,16 @@
-import React, { useCallback, useRef, useState } from 'react';
+import React, {
+  useCallback,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { Button, Header, Message } from 'semantic-ui-react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { fetchJsonOrError } from '../../lib/requests/fetchWithAuthenticityToken';
 import { competitionScrambleFilesUrl } from '../../lib/requests/routes.js.erb';
 import ScrambleFileList from './ScrambleFileList';
+import UnusedScramblesPanel from './UnusedScramblesPanel';
+import { buildLightHistory } from './util';
 
 async function listScrambleFiles(competitionId) {
   const { data } = await fetchJsonOrError(competitionScrambleFilesUrl(competitionId));
@@ -75,6 +82,19 @@ export default function FileUpload({
     inputRef.current?.click();
   };
 
+  const unfoldedMatchState = useMemo(() => matchState.events.flatMap(
+    (event, eventIdx) => event.rounds.flatMap(
+      (round, roundIdx) => round.scrambleSets.flatMap(
+        (scrSet, scrSetIdx) => scrSet.inbox_scrambles.map((scr, scrIdx) => [
+          buildLightHistory('events', event.id, eventIdx),
+          buildLightHistory('rounds', round.id, roundIdx),
+          buildLightHistory('scrambleSets', scrSet.id, scrSetIdx),
+          buildLightHistory('inbox_scrambles', scr.id, scrIdx),
+        ]),
+      ),
+    ),
+  ), [matchState.events]);
+
   return (
     <>
       <Header>
@@ -118,7 +138,12 @@ export default function FileUpload({
       <ScrambleFileList
         scrambleFiles={uploadedJsonFiles}
         isFetching={isFetching}
-        matchState={matchState}
+        unfoldedMatchState={unfoldedMatchState}
+        dispatchMatchState={dispatchMatchState}
+      />
+      <UnusedScramblesPanel
+        scrambleFiles={uploadedJsonFiles}
+        unfoldedMatchState={unfoldedMatchState}
         dispatchMatchState={dispatchMatchState}
       />
     </>

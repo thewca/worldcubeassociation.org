@@ -57,6 +57,7 @@ function EntityPicker({
   const {
     computeEntityName,
     headerLabel,
+    pickerLabel = headerLabel,
   } = pickerLocalizationConfig[pickerKey];
 
   const { pickerComponent: PickerComponent = ButtonGroupPicker } = pickerStepConfig[pickerKey];
@@ -73,7 +74,7 @@ function EntityPicker({
         selectedEntityId={selectedEntityId}
         onEntityIdSelected={setSelectedEntityId}
         computeEntityName={computeEntityName}
-        headerLabel={headerLabel}
+        pickerLabel={pickerLabel}
       />
       {selectedEntity && (
         <WrapHistory

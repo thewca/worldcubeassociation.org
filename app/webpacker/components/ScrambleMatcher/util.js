@@ -17,8 +17,9 @@ export const pickerLocalizationConfig = {
   },
   scrambleSets: {
     computeEntityName: (id, idx) => `Group ${idx + 1}`,
-    headerLabel: 'Groups',
+    headerLabel: 'Scramble Sets',
     dropdownLabel: 'Scramble Set',
+    pickerLabel: 'Groups',
   },
   inbox_scrambles: {
     computeEntityName: (id, idx) => `Attempt ${idx + 1}`,
@@ -70,14 +71,20 @@ export const matchingDndConfig = {
     computeTableName: scrambleSetToName,
     computeCellDetails: (scrSet) => scrSet.original_filename,
     computeExpectedRowCount: (round) => round.scrambleSetCount,
+    indexAccessKey: 'scramble_set_number',
   },
   inbox_scrambles: {
     computeCellName: scrambleToName,
     computeCellDetails: (scr) => scr.scramble_string,
     cellDetailsAreData: true,
     computeExpectedRowCount: (scrambleSet, history) => inferExpectedSolveCount(history),
+    indexAccessKey: 'scramble_number',
   },
 };
+
+export function buildLightHistory(key, id, index = undefined) {
+  return { key, id, index };
+}
 
 export function moveArrayItem(arr, fromIndex, toIndex) {
   const movedItem = arr[fromIndex];

@@ -7,13 +7,13 @@ export default function ButtonGroupPicker({
   entityChoices,
   selectedEntityId,
   onEntityIdSelected,
-  headerLabel,
+  pickerLabel,
   computeEntityName,
 }) {
   return (
     <>
       <Header as="h4">
-        {headerLabel}
+        {pickerLabel}
         {' '}
         <Button
           size="mini"

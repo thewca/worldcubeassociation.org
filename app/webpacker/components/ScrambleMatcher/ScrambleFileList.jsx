@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback } from 'react';
 import {
   Accordion, Breadcrumb, Button, Header, Icon, Popup, Table,
 } from 'semantic-ui-react';
@@ -9,6 +9,7 @@ import { scrambleFileUrl } from '../../lib/requests/routes.js.erb';
 import Loading from '../Requests/Loading';
 import {
   ATTEMPT_BASED_EVENTS,
+  buildLightHistory,
   matchingDndConfig,
   pickerLocalizationConfig,
 } from './util';
@@ -39,10 +40,6 @@ function reduceSetLength(scrSets, isAttemptBasedEvent = false) {
       ? set.inbox_scrambles.length
       : 1
   ), 0);
-}
-
-function buildHistory(key, id, index = undefined) {
-  return { key, id, index };
 }
 
 function navToBreadcrumbContent(navigationStep) {
@@ -76,12 +73,15 @@ function ScrambleMatchingReportCells({
   entity,
   actualNavigation,
   expectedNavigation,
-  targetIndex,
   dispatchMatchState,
   matchingKey,
   rowSpan = undefined,
 }) {
-  const { computeCellName, computeTableName = computeCellName } = matchingDndConfig[matchingKey];
+  const {
+    indexAccessKey,
+    computeCellName,
+    computeTableName = computeCellName,
+  } = matchingDndConfig[matchingKey];
 
   const matchesExpectations = expectedNavigation.every(
     (nav) => actualNavigation?.find((actNav) => actNav.key === nav.key)?.id === nav.id,
@@ -92,8 +92,8 @@ function ScrambleMatchingReportCells({
     entity,
     pickerHistory: expectedNavigation,
     matchingKey,
-    targetIndex,
-  }), [dispatchMatchState, entity, expectedNavigation, matchingKey, targetIndex]);
+    targetIndex: entity[indexAccessKey],
+  }), [dispatchMatchState, entity, expectedNavigation, matchingKey, indexAccessKey]);
 
   return (
     <>
@@ -135,7 +135,7 @@ function ScrambleMatchingReportCells({
   );
 }
 
-function ScrambleFileBody({ scrambleFile, matchState, dispatchMatchState }) {
+function ScrambleFileBody({ scrambleFile, unfoldedMatchState, dispatchMatchState }) {
   const queryClient = useQueryClient();
 
   const { mutate: deleteMutation, isPending: isDeleting } = useMutation({
@@ -155,26 +155,13 @@ function ScrambleFileBody({ scrambleFile, matchState, dispatchMatchState }) {
     [deleteMutation, scrambleFile.id],
   );
 
-  const unfoldedState = useMemo(() => matchState.events.flatMap(
-    (event, eventIdx) => event.rounds.flatMap(
-      (round, roundIdx) => round.scrambleSets.flatMap(
-        (scrSet, scrSetIdx) => scrSet.inbox_scrambles.map((scr, scrIdx) => [
-          buildHistory('events', event.id, eventIdx),
-          buildHistory('rounds', round.id, roundIdx),
-          buildHistory('scrambleSets', scrSet.id, scrSetIdx),
-          buildHistory('inbox_scrambles', scr.id, scrIdx),
-        ]),
-      ),
-    ),
-  ), [matchState.events]);
-
   const scrambleSetLookup = _.keyBy(
-    unfoldedState.map((nav) => nav.slice(0, -1)),
+    unfoldedMatchState.map((nav) => nav.slice(0, -1)),
     (hist) => hist.find((nav) => nav.key === 'scrambleSets').id,
   );
 
   const scramblesLookup = _.keyBy(
-    unfoldedState,
+    unfoldedMatchState,
     (hist) => hist.find((nav) => nav.key === 'inbox_scrambles').id,
   );
 
@@ -246,10 +233,9 @@ function ScrambleFileBody({ scrambleFile, matchState, dispatchMatchState }) {
                                 entity={scrSet}
                                 actualNavigation={scrambleSetLookup[scrSet.id]}
                                 expectedNavigation={[
-                                  buildHistory('events', eventId),
-                                  buildHistory('rounds', `${eventId}-r${roundNum}`),
+                                  buildLightHistory('events', eventId),
+                                  buildLightHistory('rounds', `${eventId}-r${roundNum}`),
                                 ]}
-                                targetIndex={setIdx}
                                 dispatchMatchState={dispatchMatchState}
                                 matchingKey="scrambleSets"
                                 rowSpan={scrambles.length}
@@ -270,11 +256,10 @@ function ScrambleFileBody({ scrambleFile, matchState, dispatchMatchState }) {
                               entity={scr}
                               actualNavigation={scramblesLookup[scr.id]}
                               expectedNavigation={[
-                                buildHistory('events', eventId),
-                                buildHistory('rounds', `${eventId}-r${roundNum}`),
-                                buildHistory('scrambleSets', scrSet.id),
+                                buildLightHistory('events', eventId),
+                                buildLightHistory('rounds', `${eventId}-r${roundNum}`),
+                                buildLightHistory('scrambleSets', scrSet.id),
                               ]}
-                              targetIndex={scrIdx}
                               dispatchMatchState={dispatchMatchState}
                               matchingKey="inbox_scrambles"
                             />
@@ -305,7 +290,7 @@ function ScrambleFileBody({ scrambleFile, matchState, dispatchMatchState }) {
 export default function ScrambleFileList({
   scrambleFiles,
   isFetching,
-  matchState,
+  unfoldedMatchState,
   dispatchMatchState,
 }) {
   if (isFetching) {
@@ -321,7 +306,7 @@ export default function ScrambleFileList({
     content: {
       content: <ScrambleFileBody
         scrambleFile={scrFile}
-        matchState={matchState}
+        unfoldedMatchState={unfoldedMatchState}
         dispatchMatchState={dispatchMatchState}
       />,
     },
