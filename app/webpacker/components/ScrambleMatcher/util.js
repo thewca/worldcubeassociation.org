@@ -115,6 +115,31 @@ export function applyPickerHistory(rootState, pickerHistory) {
   );
 }
 
+export const searchRecursive = (data, currentKey, targetStep, searchHistory = []) => {
+  const { nestedPicker, matchingConfigKey = nestedPicker } = pickerStepConfig[currentKey] || {};
+
+  return data[currentKey]?.reduce((foundPath, item, index) => {
+    if (foundPath) return foundPath;
+
+    const nextHistory = [...searchHistory, {
+      key: currentKey,
+      id: item.id,
+      entity: item,
+      index,
+    }];
+
+    if (currentKey === targetStep.key && item.id === targetStep.id) {
+      return nextHistory;
+    }
+
+    if (matchingConfigKey) {
+      return searchRecursive(item, matchingConfigKey, targetStep, nextHistory);
+    }
+
+    return null;
+  }, null);
+};
+
 export function groupScrambleSetsIntoWcif(scrambleSets) {
   const groupedMap = _.mapValues(
     _.groupBy(scrambleSets, 'event_id'),

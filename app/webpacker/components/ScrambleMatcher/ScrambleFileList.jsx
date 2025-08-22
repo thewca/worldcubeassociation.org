@@ -10,7 +10,7 @@ import {
   groupScrambleSetsIntoWcif,
   matchingDndConfig,
   pickerLocalizationConfig,
-  pickerStepConfig,
+  pickerStepConfig, searchRecursive,
 } from './util';
 import { events } from '../../lib/wca-data.js.erb';
 import { getFullDateTimeString } from '../../lib/utils/dates';
@@ -148,6 +148,7 @@ function buildTableRows(
 function BodyForMatching({
   matchingKey,
   matchEntity,
+  matchState,
 }) {
   const tableRows = buildTableRows(matchingKey, matchEntity);
 
@@ -166,7 +167,7 @@ function BodyForMatching({
           .filter((laterRow) => laterRow[stepIdx].id === step.id)
           .length;
 
-        const actualNavigation = null; // TODO
+        const actualNavigation = searchRecursive(matchState, matchingKey, step);
 
         const reactKey = `${step.key}-${step.id}`;
 
@@ -284,6 +285,7 @@ function ScrambleFileBody({
           <BodyForMatching
             matchingKey="events"
             matchEntity={scrambleFileTree}
+            matchState={matchState}
           />
         </Table.Body>
       </Table>
