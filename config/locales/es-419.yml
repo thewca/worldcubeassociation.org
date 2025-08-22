@@ -6497,3 +6497,9 @@ es-419:
         [%{round_id}] Esta ronda tiene distinto número de sets de mezcla a lo
         especificado en la pestaña de "Administrar eventos" (Manage Events). Por
         favor, ajusta el número a lo correcto.
+  tickets:
+    type:
+      #original_hash: e43f273
+      edit_person: Editar persona
+      #original_hash: 5fb2137
+      competition_result: Resultado de competición
