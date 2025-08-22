@@ -2,7 +2,6 @@ import React, { useCallback, useState } from 'react';
 import {
   Button, Card, Divider, Header, Segment,
 } from 'semantic-ui-react';
-import _ from 'lodash';
 import { ATTEMPT_BASED_EVENTS, matchingDndConfig, pickerLocalizationConfig } from './util';
 import MoveMatchingEntityModal from './MoveMatchingEntityModal';
 
@@ -87,27 +86,20 @@ function UnusedEntitiesPanel({
 
 export default function UnusedScramblesPanel({
   scrambleFiles,
-  unfoldedMatchState,
+  matchState,
+  scrambleFilesTree,
   dispatchMatchState,
 }) {
+  return null;
+
   const allScrambleSets = scrambleFiles.flatMap((scrFile) => scrFile.inbox_scramble_sets);
 
-  const allScrambles = allScrambleSets
+  const allAttemptScrambles = allScrambleSets
     .filter((scrSet) => ATTEMPT_BASED_EVENTS.includes(scrSet.event_id))
     .flatMap((scrSet) => scrSet.inbox_scrambles);
 
-  const scrambleSetLookup = _.keyBy(
-    unfoldedMatchState.map((nav) => nav.slice(0, -1)),
-    (hist) => hist.find((nav) => nav.key === 'scrambleSets').id,
-  );
-
-  const scramblesLookup = _.keyBy(
-    unfoldedMatchState,
-    (hist) => hist.find((nav) => nav.key === 'inbox_scrambles').id,
-  );
-
   const unusedScrambleSets = computeUnused(scrambleSetLookup, allScrambleSets);
-  const unusedScrambles = computeUnused(scramblesLookup, allScrambles);
+  const unusedScrambles = computeUnused(scramblesLookup, allAttemptScrambles);
 
   const anyUnusedEntries = unusedScrambleSets.length > 0 || unusedScrambles.length > 0;
 

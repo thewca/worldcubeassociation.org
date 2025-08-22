@@ -1,17 +1,16 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import {
   Accordion, Breadcrumb, Button, Header, Icon, Popup, Table,
 } from 'semantic-ui-react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import _ from 'lodash';
 import { fetchJsonOrError } from '../../lib/requests/fetchWithAuthenticityToken';
 import { scrambleFileUrl } from '../../lib/requests/routes.js.erb';
 import Loading from '../Requests/Loading';
 import {
-  ATTEMPT_BASED_EVENTS,
-  buildLightHistory,
+  groupScrambleSetsIntoWcif,
   matchingDndConfig,
   pickerLocalizationConfig,
+  pickerStepConfig,
 } from './util';
 import { events } from '../../lib/wca-data.js.erb';
 import { getFullDateTimeString } from '../../lib/utils/dates';
@@ -24,22 +23,30 @@ async function deleteScrambleFile({ fileId }) {
   return data;
 }
 
-const DUMMY_SCRAMBLE_ID = 0;
-const DUMMY_SCRAMBLE = { id: DUMMY_SCRAMBLE_ID };
-const DUMMY_SCRAMBLE_SET = [DUMMY_SCRAMBLE];
+const DUMMY_ENTITY_ID = 0;
+const DUMMY_ENTITY = { id: DUMMY_ENTITY_ID };
+const DUMMY_ENTITY_SET = [DUMMY_ENTITY];
 
-function groupAndIterate(list, iteratee, fn) {
-  return Object.entries(
-    _.groupBy(list, iteratee),
-  ).flatMap(([key, values], ...args) => fn(key, values, ...args));
-}
+function navToDefCellContent(navigationStep) {
+  const {
+    computeCellName,
+    computeTableName = computeCellName,
+  } = matchingDndConfig[navigationStep.key] || {};
 
-function reduceSetLength(scrSets, isAttemptBasedEvent = false) {
-  return scrSets.reduce((sum, set) => sum + (
-    isAttemptBasedEvent
-      ? set.inbox_scrambles.length
-      : 1
-  ), 0);
+  switch (navigationStep.key) {
+    case 'events':
+      return (
+        <Popup
+          content={events.byId[navigationStep.id].name}
+          trigger={<Icon size="large" className={`cubing-icon event-${navigationStep.id}`} />}
+          position="top center"
+        />
+      );
+    case 'rounds':
+      return navigationStep.index + 1;
+    default:
+      return computeTableName(navigationStep.entity);
+  }
 }
 
 function navToBreadcrumbContent(navigationStep) {
@@ -69,73 +76,178 @@ function ScrambleFileHeader({ scrambleFile }) {
   );
 }
 
-function ScrambleMatchingReportCells({
-  entity,
-  actualNavigation,
-  expectedNavigation,
-  dispatchMatchState,
-  matchingKey,
-  rowSpan = undefined,
-}) {
+function HeadersForMatching({ matchingKey, previousMatching = undefined }) {
+  const { dropdownLabel } = pickerLocalizationConfig[matchingKey];
+
   const {
-    indexAccessKey,
-    computeCellName,
-    computeTableName = computeCellName,
-  } = matchingDndConfig[matchingKey];
-
-  const matchesExpectations = expectedNavigation.every(
-    (nav) => actualNavigation?.find((actNav) => actNav.key === nav.key)?.id === nav.id,
-  );
-
-  const reinstateEntity = useCallback(() => dispatchMatchState({
-    type: 'addEntityToMatching',
-    entity,
-    pickerHistory: expectedNavigation,
-    matchingKey,
-    targetIndex: entity[indexAccessKey],
-  }), [dispatchMatchState, entity, expectedNavigation, matchingKey, indexAccessKey]);
+    matchingConfigKey,
+    nestedPicker = matchingConfigKey,
+  } = pickerStepConfig[matchingKey] || {};
 
   return (
     <>
-      <Table.Cell
-        rowSpan={rowSpan}
-        verticalAlign="middle"
-        textAlign="center"
-        singleLine
-      >
-        {computeTableName(entity)}
-      </Table.Cell>
-      <Table.Cell
-        rowSpan={rowSpan}
-        verticalAlign="middle"
-        textAlign="center"
-        positive={matchesExpectations}
-      >
-        {actualNavigation ? (
-          <Breadcrumb size="tiny">
-            {actualNavigation.map((nav, idx) => (
-              <React.Fragment key={nav.key}>
-                {idx > 0 && (<Breadcrumb.Divider icon="chevron right" />)}
-                <Breadcrumb.Section>{navToBreadcrumbContent(nav)}</Breadcrumb.Section>
-              </React.Fragment>
-            ))}
-          </Breadcrumb>
-        ) : (
-          <Button
-            positive
-            basic
-            compact
-            icon="magic"
-            content="Add to table"
-            onClick={reinstateEntity}
-          />
-        )}
-      </Table.Cell>
+      <Table.HeaderCell collapsing>{dropdownLabel}</Table.HeaderCell>
+      {previousMatching === matchingKey && (
+        <Table.HeaderCell>Current Status</Table.HeaderCell>
+      )}
+      {nestedPicker && (
+        <HeadersForMatching
+          matchingKey={nestedPicker}
+          previousMatching={matchingConfigKey}
+        />
+      )}
     </>
   );
 }
 
-function ScrambleFileBody({ scrambleFile, unfoldedMatchState, dispatchMatchState }) {
+function buildTableRows(
+  matchingKey,
+  matchEntity,
+  previousMatching = undefined,
+  nestingStillEnabled = true,
+  history = [],
+) {
+  const {
+    enabledCondition,
+    matchingConfigKey,
+    nestedPicker = matchingConfigKey,
+  } = pickerStepConfig[matchingKey] || {};
+
+  const currentStepEnabled = enabledCondition?.(history) ?? true;
+  const tableStatusEnabled = currentStepEnabled && nestingStillEnabled;
+
+  const entityRows = nestingStillEnabled ? matchEntity[matchingKey] : DUMMY_ENTITY_SET;
+
+  return entityRows.flatMap((rowEntity, i) => {
+    const nextHistory = [
+      ...history,
+      {
+        key: matchingKey,
+        id: rowEntity.id,
+        entity: rowEntity,
+        index: i,
+        hasPicker: previousMatching === matchingKey,
+        tableStatusEnabled,
+      },
+    ];
+
+    if (nestedPicker) {
+      return buildTableRows(
+        nestedPicker,
+        rowEntity,
+        matchingConfigKey,
+        tableStatusEnabled,
+        nextHistory,
+      );
+    }
+
+    return [nextHistory];
+  });
+}
+
+function BodyForMatching({
+  matchingKey,
+  matchEntity,
+}) {
+  const tableRows = buildTableRows(matchingKey, matchEntity);
+
+  return tableRows.map((rowHistory, rowIdx, allRows) => (
+    <Table.Row key={rowHistory.reduce((acc, step) => [...acc, step.id], []).join('-')}>
+      {rowHistory.map((step, stepIdx, allSteps) => {
+        const remainingSteps = allSteps.slice(stepIdx + 1);
+        const isDefCell = remainingSteps.every((remStep) => remStep.index === 0);
+
+        if (!isDefCell) {
+          return null;
+        }
+
+        const defRowSpan = allRows
+          .slice(rowIdx)
+          .filter((laterRow) => laterRow[stepIdx].id === step.id)
+          .length;
+
+        const actualNavigation = null; // TODO
+
+        const reactKey = `${step.key}-${step.id}`;
+
+        if (step.id === DUMMY_ENTITY_ID) {
+          if (stepIdx > 0 && allSteps[stepIdx - 1].id === DUMMY_ENTITY_ID) {
+            return null;
+          }
+
+          const remainingColSpan = allSteps.slice(stepIdx)
+            .reduce((sum, remStep) => sum + (remStep.hasPicker ? 2 : 1), 0);
+
+          return (
+            <Table.Cell
+              textAlign="center"
+              verticalAlign="middle"
+              singleLine
+              colSpan={remainingColSpan}
+              disabled
+            >
+              (automatic)
+            </Table.Cell>
+          );
+        }
+
+        return (
+          <React.Fragment key={reactKey}>
+            <Table.Cell
+              textAlign="center"
+              verticalAlign="middle"
+              singleLine
+              rowSpan={defRowSpan}
+            >
+              {navToDefCellContent(step)}
+            </Table.Cell>
+            {step.hasPicker && (
+              <Table.Cell
+                textAlign="center"
+                verticalAlign="middle"
+                rowSpan={defRowSpan}
+              >
+                {actualNavigation ? (
+                  <Breadcrumb size="tiny">
+                    {actualNavigation.map((nav, breadIdx) => (
+                      <React.Fragment key={nav.key}>
+                        {breadIdx > 0 && (<Breadcrumb.Divider icon="chevron right" />)}
+                        <Breadcrumb.Section>{navToBreadcrumbContent(nav)}</Breadcrumb.Section>
+                      </React.Fragment>
+                    ))}
+                  </Breadcrumb>
+                ) : (
+                  <Button.Group fluid>
+                    <Button
+                      positive
+                      basic
+                      compact
+                      icon="magic"
+                      content="Add to table"
+                    />
+                    <Button
+                      primary
+                      basic
+                      compact
+                      icon="pen"
+                      content="Manual"
+                    />
+                  </Button.Group>
+                )}
+              </Table.Cell>
+            )}
+          </React.Fragment>
+        );
+      })}
+    </Table.Row>
+  ));
+}
+
+function ScrambleFileBody({
+  scrambleFile,
+  matchState,
+  dispatchMatchState,
+}) {
   const queryClient = useQueryClient();
 
   const { mutate: deleteMutation, isPending: isDeleting } = useMutation({
@@ -155,123 +267,24 @@ function ScrambleFileBody({ scrambleFile, unfoldedMatchState, dispatchMatchState
     [deleteMutation, scrambleFile.id],
   );
 
-  const scrambleSetLookup = _.keyBy(
-    unfoldedMatchState.map((nav) => nav.slice(0, -1)),
-    (hist) => hist.find((nav) => nav.key === 'scrambleSets').id,
-  );
-
-  const scramblesLookup = _.keyBy(
-    unfoldedMatchState,
-    (hist) => hist.find((nav) => nav.key === 'inbox_scrambles').id,
+  const scrambleFileTree = useMemo(
+    () => groupScrambleSetsIntoWcif(scrambleFile.inbox_scramble_sets),
+    [scrambleFile.inbox_scramble_sets],
   );
 
   return (
     <>
       <Table celled structured compact>
         <Table.Header>
-          <Table.Row textAlign="center">
-            <Table.HeaderCell collapsing>Event</Table.HeaderCell>
-            <Table.HeaderCell collapsing>Round</Table.HeaderCell>
-            <Table.HeaderCell collapsing>Scramble Set</Table.HeaderCell>
-            <Table.HeaderCell>Current Status</Table.HeaderCell>
-            <Table.HeaderCell collapsing>Scramble</Table.HeaderCell>
-            <Table.HeaderCell>Current Status</Table.HeaderCell>
+          <Table.Row textAlign="center" verticalAlign="middle">
+            <HeadersForMatching matchingKey="events" />
           </Table.Row>
         </Table.Header>
         <Table.Body>
-          {groupAndIterate(
-            scrambleFile.inbox_scramble_sets,
-            'event_id',
-            (eventId, eventScrambleSets) => groupAndIterate(
-              eventScrambleSets,
-              'round_number',
-              (roundNum, roundScrambleSets, roundIdx) => {
-                const isAttemptBasedEvent = ATTEMPT_BASED_EVENTS.includes(eventId);
-
-                return roundScrambleSets.flatMap(
-                  (scrSet, setIdx) => {
-                    const scrambleSets = isAttemptBasedEvent
-                      ? scrSet.inbox_scrambles
-                      : DUMMY_SCRAMBLE_SET;
-
-                    return scrambleSets.map((scr, scrIdx, scrambles) => (
-                      (
-                        <Table.Row key={`${scrSet.id}--${scr.id}`}>
-                          {scrIdx === 0 && (
-                            <>
-                              {setIdx === 0 && (
-                                <>
-                                  {roundIdx === 0 && (
-                                    <Table.Cell
-                                      rowSpan={reduceSetLength(
-                                        eventScrambleSets,
-                                        isAttemptBasedEvent,
-                                      )}
-                                      verticalAlign="middle"
-                                      textAlign="center"
-                                    >
-                                      <Popup
-                                        content={events.byId[eventId].name}
-                                        trigger={<Icon size="large" className={`cubing-icon event-${eventId}`} />}
-                                        position="top center"
-                                      />
-                                    </Table.Cell>
-                                  )}
-                                  <Table.Cell
-                                    rowSpan={reduceSetLength(
-                                      roundScrambleSets,
-                                      isAttemptBasedEvent,
-                                    )}
-                                    verticalAlign="middle"
-                                    textAlign="center"
-                                  >
-                                    {roundNum}
-                                  </Table.Cell>
-                                </>
-                              )}
-                              <ScrambleMatchingReportCells
-                                entity={scrSet}
-                                actualNavigation={scrambleSetLookup[scrSet.id]}
-                                expectedNavigation={[
-                                  buildLightHistory('events', eventId),
-                                  buildLightHistory('rounds', `${eventId}-r${roundNum}`),
-                                ]}
-                                dispatchMatchState={dispatchMatchState}
-                                matchingKey="scrambleSets"
-                                rowSpan={scrambles.length}
-                              />
-                            </>
-                          )}
-                          {scr.id === DUMMY_SCRAMBLE_ID ? (
-                            <Table.Cell
-                              colSpan={2}
-                              verticalAlign="middle"
-                              textAlign="center"
-                              disabled
-                            >
-                              (automatic)
-                            </Table.Cell>
-                          ) : (
-                            <ScrambleMatchingReportCells
-                              entity={scr}
-                              actualNavigation={scramblesLookup[scr.id]}
-                              expectedNavigation={[
-                                buildLightHistory('events', eventId),
-                                buildLightHistory('rounds', `${eventId}-r${roundNum}`),
-                                buildLightHistory('scrambleSets', scrSet.id),
-                              ]}
-                              dispatchMatchState={dispatchMatchState}
-                              matchingKey="inbox_scrambles"
-                            />
-                          )}
-                        </Table.Row>
-                      )
-                    ));
-                  },
-                );
-              },
-            ),
-          )}
+          <BodyForMatching
+            matchingKey="events"
+            matchEntity={scrambleFileTree}
+          />
         </Table.Body>
       </Table>
       <Button
@@ -290,7 +303,7 @@ function ScrambleFileBody({ scrambleFile, unfoldedMatchState, dispatchMatchState
 export default function ScrambleFileList({
   scrambleFiles,
   isFetching,
-  unfoldedMatchState,
+  matchState,
   dispatchMatchState,
 }) {
   if (isFetching) {
@@ -306,7 +319,7 @@ export default function ScrambleFileList({
     content: {
       content: <ScrambleFileBody
         scrambleFile={scrFile}
-        unfoldedMatchState={unfoldedMatchState}
+        matchState={matchState}
         dispatchMatchState={dispatchMatchState}
       />,
     },

@@ -10,12 +10,16 @@ export default function PickerWithMatching({
   pickerHistory = [],
   pickerKey,
 }) {
+  const { enabledCondition } = pickerStepConfig[pickerKey];
+
+  const isEnabled = enabledCondition?.(pickerHistory) ?? true;
+
   const entityChoices = useMemo(
     () => matchState[pickerKey],
     [matchState, pickerKey],
   );
 
-  if (entityChoices === undefined) {
+  if (entityChoices === undefined || !isEnabled) {
     return null;
   }
 
@@ -112,13 +116,8 @@ function WrapHistory({
     ];
   }, [entityChoices, pickerHistory, pickerKey, selectedEntity]);
 
-  const { matchingConfigKey, nestedPicker, nestingCondition } = pickerStepConfig[pickerKey];
+  const { matchingConfigKey, nestedPicker } = pickerStepConfig[pickerKey];
   const matchingConfig = matchingDndConfig[matchingConfigKey];
-
-  const isUsingNesting = useMemo(
-    () => nestingCondition?.(nextHistory) ?? true,
-    [nestingCondition, nextHistory],
-  );
 
   return (
     <>
@@ -133,7 +132,7 @@ function WrapHistory({
           matchingConfig={matchingConfig}
         />
       )}
-      {nestedPicker && isUsingNesting && (
+      {nestedPicker && (
         <PickerWithMatching
           matchState={selectedEntity}
           rootMatchState={rootMatchState}

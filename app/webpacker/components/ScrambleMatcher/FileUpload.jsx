@@ -10,7 +10,7 @@ import { fetchJsonOrError } from '../../lib/requests/fetchWithAuthenticityToken'
 import { competitionScrambleFilesUrl } from '../../lib/requests/routes.js.erb';
 import ScrambleFileList from './ScrambleFileList';
 import UnusedScramblesPanel from './UnusedScramblesPanel';
-import { buildLightHistory } from './util';
+import { groupScrambleSetsIntoWcif } from './util';
 
 async function listScrambleFiles(competitionId) {
   const { data } = await fetchJsonOrError(competitionScrambleFilesUrl(competitionId));
@@ -82,25 +82,18 @@ export default function FileUpload({
     inputRef.current?.click();
   };
 
-  const unfoldedMatchState = useMemo(() => matchState.events.flatMap(
-    (event, eventIdx) => event.rounds.flatMap(
-      (round, roundIdx) => round.scrambleSets.flatMap(
-        (scrSet, scrSetIdx) => scrSet.inbox_scrambles.map((scr, scrIdx) => [
-          buildLightHistory('events', event.id, eventIdx),
-          buildLightHistory('rounds', round.id, roundIdx),
-          buildLightHistory('scrambleSets', scrSet.id, scrSetIdx),
-          buildLightHistory('inbox_scrambles', scr.id, scrIdx),
-        ]),
-      ),
-    ),
-  ), [matchState.events]);
+  const scrambleFilesTree = useMemo(() => {
+    const allScrambleSets = uploadedJsonFiles.flatMap((file) => file.inbox_scramble_sets);
+
+    return groupScrambleSetsIntoWcif(allScrambleSets);
+  }, [uploadedJsonFiles]);
 
   return (
     <>
       <Header>
         Uploaded JSON files:
         {' '}
-        {uploadedJsonFiles?.length}
+        {uploadedJsonFiles.length}
         {' '}
         <Button.Group floated="right">
           <Button
@@ -138,12 +131,13 @@ export default function FileUpload({
       <ScrambleFileList
         scrambleFiles={uploadedJsonFiles}
         isFetching={isFetching}
-        unfoldedMatchState={unfoldedMatchState}
+        matchState={matchState}
         dispatchMatchState={dispatchMatchState}
       />
       <UnusedScramblesPanel
         scrambleFiles={uploadedJsonFiles}
-        unfoldedMatchState={unfoldedMatchState}
+        matchState={matchState}
+        scrambleFilesTree={scrambleFilesTree}
         dispatchMatchState={dispatchMatchState}
       />
     </>

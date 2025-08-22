@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import { events, formats } from '../../lib/wca-data.js.erb';
 import { humanizeActivityCode } from '../../lib/utils/wcif';
 import { EventsPickerCompat } from './ButtonGroupPicker';
@@ -40,7 +41,7 @@ const scrambleSetToTitle = (scrambleSet) => `${events.byId[scrambleSet.event_id]
 
 export const scrambleToName = (scramble) => `Scramble ${scramble.scramble_number}`;
 
-const isForAttemptBasedEvent = (pickerHistory) => {
+export const isForAttemptBasedEvent = (pickerHistory) => {
   const eventsStep = pickerHistory.find((step) => step.key === 'events');
   return ATTEMPT_BASED_EVENTS.includes(eventsStep.id);
 };
@@ -58,9 +59,9 @@ export const pickerStepConfig = {
   rounds: {
     matchingConfigKey: 'scrambleSets',
     nestedPicker: 'scrambleSets',
-    nestingCondition: (history) => isForAttemptBasedEvent(history),
   },
   scrambleSets: {
+    enabledCondition: (history) => isForAttemptBasedEvent(history),
     matchingConfigKey: 'inbox_scrambles',
   },
 };
@@ -112,6 +113,23 @@ export function applyPickerHistory(rootState, pickerHistory) {
     (state, historyStep) => state[historyStep.key][historyStep.index],
     rootState,
   );
+}
+
+export function groupScrambleSetsIntoWcif(scrambleSets) {
+  const groupedMap = _.mapValues(
+    _.groupBy(scrambleSets, 'event_id'),
+    (eventItems) => _.groupBy(eventItems, 'round_number'),
+  );
+
+  const wcifEvents = _.map(groupedMap, (roundsMap, eventId) => ({
+    id: eventId,
+    rounds: _.map(roundsMap, (sets, roundNum) => ({
+      id: `${eventId}-r${roundNum}`,
+      scrambleSets: sets,
+    })),
+  }));
+
+  return { events: _.sortBy(wcifEvents, (evt) => events.byId[evt.id].rank) };
 }
 
 export function computeMatchingProgress(wcifEvents) {
