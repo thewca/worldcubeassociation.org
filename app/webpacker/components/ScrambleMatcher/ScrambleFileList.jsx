@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import {
   Accordion, Breadcrumb, Button, Header, Icon, Popup, Table,
 } from 'semantic-ui-react';
@@ -14,6 +14,7 @@ import {
 } from './util';
 import { events } from '../../lib/wca-data.js.erb';
 import { getFullDateTimeString } from '../../lib/utils/dates';
+import MoveMatchingEntityModal from './MoveMatchingEntityModal';
 
 async function deleteScrambleFile({ fileId }) {
   const { data } = await fetchJsonOrError(scrambleFileUrl(fileId), {
@@ -149,8 +150,20 @@ function BodyForMatching({
   matchingKey,
   matchEntity,
   matchState,
+  dispatchMatchState,
 }) {
   const tableRows = buildTableRows(matchingKey, matchEntity);
+
+  const [modalEntity, setModalEntity] = useState(null);
+
+  const addAutomatic = useCallback((entity, pickerHistory, targetMatchingKey) => {
+    dispatchMatchState({
+      type: 'addEntityToMatching',
+      pickerHistory,
+      matchingKey: targetMatchingKey,
+      entity,
+    });
+  }, [dispatchMatchState]);
 
   return tableRows.map((rowHistory, rowIdx, allRows) => (
     <Table.Row key={rowHistory.reduce((acc, step) => [...acc, step.id], []).join('-')}>
@@ -168,6 +181,9 @@ function BodyForMatching({
           .length;
 
         const actualNavigation = searchRecursive(matchState, matchingKey, step);
+
+        const autoInsertTarget = stepIdx > 0 ? allSteps[stepIdx - 1] : {};
+        const autoInsertNavigation = searchRecursive(matchState, matchingKey, autoInsertTarget);
 
         const reactKey = `${step.key}-${step.id}`;
 
@@ -203,6 +219,7 @@ function BodyForMatching({
               {navToDefCellContent(step)}
             </Table.Cell>
             {step.hasPicker && (
+            <>
               <Table.Cell
                 textAlign="center"
                 verticalAlign="middle"
@@ -219,13 +236,16 @@ function BodyForMatching({
                   </Breadcrumb>
                 ) : (
                   <Button.Group fluid>
-                    <Button
-                      positive
-                      basic
-                      compact
-                      icon="magic"
-                      content="Add to table"
-                    />
+                    {autoInsertNavigation && (
+                      <Button
+                        positive
+                        basic
+                        compact
+                        icon="magic"
+                        content="Add to table"
+                        onClick={() => addAutomatic(step.entity, autoInsertNavigation, step.key)}
+                      />
+                    )}
                     <Button
                       primary
                       basic
@@ -236,6 +256,17 @@ function BodyForMatching({
                   </Button.Group>
                 )}
               </Table.Cell>
+              <MoveMatchingEntityModal
+                key={modalEntity?.id}
+                isOpen={modalEntity !== null}
+                onClose={() => setModalEntity(null)}
+                dispatchMatchState={dispatchMatchState}
+                selectedMatchingEntity={modalEntity}
+                rootMatchState={matchState}
+                pickerHistory={allSteps.slice(0, stepIdx + 1)}
+                matchingKey={step.key}
+              />
+            </>
             )}
           </React.Fragment>
         );
@@ -286,6 +317,7 @@ function ScrambleFileBody({
             matchingKey="events"
             matchEntity={scrambleFileTree}
             matchState={matchState}
+            dispatchMatchState={dispatchMatchState}
           />
         </Table.Body>
       </Table>

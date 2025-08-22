@@ -67,25 +67,6 @@ function removeScrambleFile(state, oldScrambleFile) {
   };
 }
 
-function deriveFullNavigation(lightNavigation, rootState) {
-  return lightNavigation.reduce((acc, nav) => {
-    const lookupChoices = acc.lookup[nav.key];
-
-    const entityIndex = lookupChoices.findIndex((ent) => ent.id === nav.id);
-    const nextEntity = lookupChoices[entityIndex];
-
-    const currentNav = { ...nav, index: entityIndex, entity: nextEntity };
-
-    return {
-      lookup: nextEntity,
-      fullNav: [...acc.fullNav, currentNav],
-    };
-  }, {
-    lookup: rootState,
-    fullNav: [],
-  }).fullNav;
-}
-
 function navigationToLodash(actionWithNav, selector) {
   return [
     ...actionWithNav[selector].flatMap((step) => [step.key, step.index]),
@@ -145,12 +126,7 @@ export default function scrambleMatchReducer(state, action) {
       });
     case 'addEntityToMatching':
       return applyAction(state, ['current'], (subState) => {
-        const developedNavigation = deriveFullNavigation(action.pickerHistory, subState);
-
-        const lodashPath = navigationToLodash({
-          ...action,
-          pickerHistory: developedNavigation,
-        }, 'pickerHistory');
+        const lodashPath = navigationToLodash(action, 'pickerHistory');
 
         return _.chain(subState)
           .cloneDeep()
