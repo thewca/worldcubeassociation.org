@@ -82,3 +82,4 @@ translations:
       - "*.cronjobs.*"
       - "*.payments.*"
       - "*.misc.*"
+      - "*.tickets.*"

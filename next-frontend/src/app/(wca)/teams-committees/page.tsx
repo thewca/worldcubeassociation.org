@@ -1,6 +1,7 @@
 import {
   Container,
   Heading,
+  Link,
   SimpleGrid,
   Tabs,
   Text,
@@ -9,7 +10,6 @@ import {
 import { getT } from "@/lib/i18n/get18n";
 import { Prose } from "@/components/ui/prose";
 import { components } from "@/types/openapi";
-import Link from "next/link";
 import UserBadge from "@/components/UserBadge";
 import {
   getTeamCommitteeMembers,
@@ -27,7 +27,7 @@ export default async function TeamsCommitteesPage() {
 
   return (
     <Container>
-      <VStack align={"left"} gap="8" width="full" pt="8" alignItems="left">
+      <VStack align="left" gap="8" width="full" pt="8" alignItems="left">
         <Heading size="5xl">
           {t("page.teams_committees_councils.title")}
         </Heading>
@@ -47,7 +47,7 @@ export default async function TeamsCommitteesPage() {
             ))}
           </Tabs.List>
           {teamsCommittees.map((group) => (
-            <Tabs.Content value={group.name} key={group.id} w={"full"}>
+            <Tabs.Content value={group.name} key={group.id} w="full">
               <TeamTab group={group} />
             </Tabs.Content>
           ))}
@@ -71,7 +71,7 @@ async function TeamTab({
   const canReadGroupPast = permissions?.canReadGroupPast(group.name);
 
   return (
-    <VStack align={"left"}>
+    <VStack align="left">
       <Heading size="2xl">{name}</Heading>
       <Text>
         {t(`page.teams_committees_councils.groups_description.${friendly_id}`)}
@@ -80,7 +80,7 @@ async function TeamTab({
       <MemberTable id={id} />
       {canReadGroupPast && (
         <>
-          <Heading size={"xl"}>Past Roles</Heading>
+          <Heading size="xl">Past Roles</Heading>
           <MemberTable id={id} isActive={false} />
         </>
       )}
@@ -102,7 +102,7 @@ async function MemberTable({
   if (error) return <Errored error={error} />;
 
   return (
-    <SimpleGrid columns={{ md: 1, sm: 1, lg: 2 }} gap={"20px"}>
+    <SimpleGrid columns={{ md: 1, sm: 1, lg: 2 }} gap="20px">
       {roles.map((role) => (
         <UserBadge
           key={role.id}

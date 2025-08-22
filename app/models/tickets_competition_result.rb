@@ -5,6 +5,7 @@ class TicketsCompetitionResult < ApplicationRecord
 
   enum :status, {
     submitted: "submitted",
+    aborted: "aborted",
     locked_for_posting: "locked_for_posting",
     warnings_verified: "warnings_verified",
     merged_inbox_results: "merged_inbox_results",
@@ -67,5 +68,15 @@ class TicketsCompetitionResult < ApplicationRecord
 
       self.update!(status: TicketsCompetitionResult.statuses[:merged_inbox_results])
     end
+  end
+
+  DEFAULT_SERIALIZE_OPTIONS = {
+    include: {
+      competition: { only: %i[id name], methods: [], include: [] },
+    },
+  }.freeze
+
+  def serializable_hash(options = nil)
+    super(DEFAULT_SERIALIZE_OPTIONS.merge(options || {}))
   end
 end

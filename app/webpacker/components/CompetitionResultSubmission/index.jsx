@@ -27,10 +27,12 @@ function CompetitionResultSubmission(
   },
 ) {
   if (resultsSubmitted) {
-    <Message positive>
-      The results have already been submitted. If you have any more questions or
-      comments please reply to the email sent with the first results submission.
-    </Message>;
+    return (
+      <Message positive>
+        The results have already been submitted. If you have any more questions or
+        comments please reply to the email sent with the first results submission.
+      </Message>
+    );
   }
 
   return (

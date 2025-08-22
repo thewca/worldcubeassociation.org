@@ -32,7 +32,7 @@ export default async function AboutTheRegulations() {
               <Card.Description>
                 <MarkdownProse
                   key={item.id}
-                  content={item.contentMarkdown}
+                  content={item.contentMarkdown!}
                   as={Text}
                 />
               </Card.Description>

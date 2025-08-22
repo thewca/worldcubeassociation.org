@@ -42,12 +42,16 @@ class AdminController < ApplicationController
     @competition = competition_from_params
 
     if @competition.results_submitted? && !@competition.results_posted?
-      @competition.update(results_submitted_at: nil)
-      flash[:success] = "Results submission cleared."
+      ActiveRecord::Base.transaction do
+        @competition.update!(results_submitted_at: nil)
+        @competition.tickets_competition_result.update!(status: TicketsCompetitionResult.statuses[:aborted])
+      end
+      render status: :ok, json: { success: true }
     else
-      flash[:danger] = "Could not clear the results submission. Maybe results are already posted, or there is no submission."
+      render status: :unprocessable_entity, json: {
+        error: "Could not clear the results submission. Maybe results are already posted, or there is no submission.",
+      }
     end
-    redirect_to competition_admin_upload_results_edit_path
   end
 
   # The order of this array has to follow the steps in which results have to be imported.
@@ -118,30 +122,27 @@ class AdminController < ApplicationController
   end
 
   def delete_results_data
-    @competition = competition_from_params
+    competition = competition_from_params(associations: [:results, :scrambles, { rounds: %i[results scrambles] }])
 
     model = params.require(:model)
 
     if model == 'All'
-      @competition.results.destroy_all
-      @competition.scrambles.destroy_all
+      competition.results.destroy_all
+      competition.scrambles.destroy_all
     else
-      event_id = params.require(:event_id)
-      round_type_id = params.require(:round_type_id)
+      round = competition.rounds.find(params.require(:roundId))
 
       case model
       when Result.name
-        Result.where(competition_id: @competition.id, event_id: event_id, round_type_id: round_type_id).destroy_all
+        round.results.destroy_all
       when Scramble.name
-        Scramble.where(competition_id: @competition.id, event_id: event_id, round_type_id: round_type_id).destroy_all
+        round.scrambles.destroy_all
       else
-        raise "Invalid table: #{params[:table]}"
+        return render status: :bad_request, json: { error: "Invalid model: #{model}" }
       end
     end
 
-    load_result_posting_steps do
-      render partial: 'import_results_steps'
-    end
+    render status: :ok, json: { success: true }
   end
 
   def fix_results

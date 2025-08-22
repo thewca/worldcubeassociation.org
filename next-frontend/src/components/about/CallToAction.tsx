@@ -1,9 +1,15 @@
 "use client";
 
-import { Box, Button, ButtonGroup, Container, Stack } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  ButtonGroup,
+  Container,
+  Link,
+  Stack,
+} from "@chakra-ui/react";
 import React from "react";
 import { MarkdownProse } from "@/components/Markdown";
-import Link from "next/link";
 
 type CallToActionBlockProps = {
   content: string;
@@ -34,7 +40,7 @@ export function CallToActionBlock({
           <ButtonGroup colorScheme="blue" size="lg">
             {buttons.map((button, i) => (
               <Button key={i} variant={i === 0 ? "solid" : "outline"} asChild>
-                <Link href={button.url} target={"_blank"} rel={"noopener"}>
+                <Link href={button.url} target="_blank" rel="noopener">
                   {button.label}
                 </Link>
               </Button>

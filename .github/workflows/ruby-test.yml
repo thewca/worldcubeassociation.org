@@ -17,7 +17,7 @@ jobs:
       PLAYWRIGHT_BROWSERS_PATH: ./pw-browsers
       CAPYBARA_APP_HOST: "" # Explicitly set a blank value to override our default Docker container setup
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: fregante/setup-git-user@v2 # set up dummy user.name and user.email in git so that Overcommit doesn't explode
       - name: Set up ImageMagick and Libvips # This is not included in GitHub runners by default anymore
         run: |
