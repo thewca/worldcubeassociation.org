@@ -3013,6 +3013,7 @@ class Competition < ApplicationRecord
   def fully_paid_registrations_count
     registrations
       .joins(:registration_payments)
+      .where(registration_payments: { is_completed: true })
       .group('registrations.id')
       .having('SUM(registration_payments.amount_lowest_denomination) >= ?', base_entry_fee_lowest_denomination)
       .count.size # .count changes the AssociationRelation into a hash, and then .size gives the number of items in the hash

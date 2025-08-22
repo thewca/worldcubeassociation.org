@@ -1219,7 +1219,7 @@ RSpec.describe Registration do
   end
 
   describe 'hooks' do
-    it 'positive registration_payment calls registration.consider_auto_close' do
+    it 'positive, captured registration_payment calls registration.consider_auto_close' do
       competition = create(:competition)
       reg = create(:registration, competition: competition)
       expect(reg).to receive(:consider_auto_close).once
@@ -1230,6 +1230,36 @@ RSpec.describe Registration do
         user: reg.user,
         amount_lowest_denomination: reg.competition.base_entry_fee_lowest_denomination,
       )
+    end
+
+    it 'doesnt call registration.consider auto_close! for a non-captured registration_payment' do
+      competition = create(:competition)
+      reg = create(:registration, competition: competition)
+      expect(reg).to receive(:consider_auto_close).exactly(0).times
+
+      create(
+        :registration_payment,
+        registration: reg,
+        user: reg.user,
+        amount_lowest_denomination: reg.competition.base_entry_fee_lowest_denomination,
+        is_completed: false,
+      )
+    end
+
+    it 'calls registration.consider_auto_close! if reg_payment gets marked as captured' do
+      competition = create(:competition)
+      reg = create(:registration, competition: competition)
+      expect(reg).to receive(:consider_auto_close).once
+
+      reg_payment = create(
+        :registration_payment,
+        registration: reg,
+        user: reg.user,
+        amount_lowest_denomination: reg.competition.base_entry_fee_lowest_denomination,
+        is_completed: false,
+      )
+
+      reg_payment.update!(is_completed: true)
     end
 
     it 'doesnt call registration.auto_close! after a refund is created' do
@@ -1329,6 +1359,105 @@ RSpec.describe Registration do
 
       expect(second_reg).to be_valid
       expect(registration).to be_valid
+    end
+  end
+
+  describe '#paid_entry_fees' do
+    let(:comp) { create(:competition) }
+    let(:reg) { create(:registration, :paid, competition: comp) }
+
+    it 'correctly calculates a single payment' do
+      expect(reg.paid_entry_fees.cents).to eq(1000)
+    end
+
+    it 'correctly sums multiple payments' do
+      create(:registration_payment, registration: reg)
+      expect(reg.reload.paid_entry_fees.cents).to eq(2000)
+    end
+
+    it 'returns 0 for a refunded payment' do
+      create(:registration_payment, :refund, registration: reg)
+      expect(reg.reload.paid_entry_fees.cents).to eq(0)
+    end
+
+    it 'returns net amount of multiple payments/refunds' do
+      create_list(:registration_payment, 2, registration: reg)
+      create_list(:registration_payment, 2, :refund, registration: reg)
+      expect(reg.reload.paid_entry_fees.cents).to eq(1000)
+    end
+
+    it 'correctly calculates a partial refund' do
+      create(:registration_payment, :refund, registration: reg, amount_lowest_denomination: -500)
+      expect(reg.reload.paid_entry_fees.cents).to eq(500)
+    end
+
+    it 'only considers captured payments' do
+      create(:registration_payment, registration: reg, is_completed: false)
+      expect(reg.reload.paid_entry_fees.cents).to eq(1000)
+    end
+  end
+
+  describe 'last_payment methods' do
+    let!(:payments) { create_list(:registration_payment, 3, registration: registration) }
+
+    before do
+      sleep 1 # Necessary to create a time difference in when the RegPayments are created
+      @last_payment = create(:registration_payment, registration: registration) # We have to use an instance variable to define the sleep before it
+    end
+
+    it 'has 4 total payments' do
+      expect(registration.registration_payments.count).to eq(4)
+    end
+
+    describe '#last_payment' do
+      context 'payments are loaded' do
+        before do
+          registration.registration_payments.load
+        end
+
+        it 'confirms that payments are loaded' do
+          expect(registration.registration_payments.loaded?).to be(true)
+        end
+
+        it 'returns last payment' do
+          expect(registration.last_payment).to eq(@last_payment)
+        end
+
+        it 'does not return un-succeeded payments' do
+          sleep 1
+          create(:registration_payment, is_completed: false, registration: registration)
+          registration.registration_payments.reload # We have to reload because we've already loaded the records
+          expect(registration.last_payment).to eq(@last_payment)
+        end
+      end
+
+      context 'payments are NOT loaded' do
+        it 'confirms payments arent loaded' do
+          expect(registration.registration_payments.loaded?).to be(false)
+        end
+
+        it 'returns last payment' do
+          expect(registration.last_payment).to eq(@last_payment)
+        end
+
+        it 'does not return un-succeeded payments' do
+          sleep 1
+          create(:registration_payment, is_completed: false, registration: registration)
+          expect(registration.last_payment).to eq(@last_payment)
+        end
+      end
+    end
+
+    describe '#last_positive_payment' do
+      it 'returns the latest payment' do
+        expect(registration.last_positive_payment).to eq(@last_payment)
+      end
+
+      it 'does not return uncaptured payments' do
+        sleep 1 # Necessary to create a timer difference in when the RegPayments are created
+        create(:registration_payment, is_completed: false, registration: registration)
+        expect(registration.last_positive_payment).to eq(@last_payment)
+      end
     end
   end
 end
