@@ -128,7 +128,6 @@ function buildTableRows(
         entity: rowEntity,
         index: i,
         hasPicker: previousMatching === matchingKey,
-        tableStatusEnabled,
       },
     ];
 

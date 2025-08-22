@@ -72,14 +72,12 @@ export const matchingDndConfig = {
     computeTableName: scrambleSetToName,
     computeCellDetails: (scrSet) => scrSet.original_filename,
     computeExpectedRowCount: (round) => round.scrambleSetCount,
-    indexAccessKey: 'scramble_set_number',
   },
   inbox_scrambles: {
     computeCellName: scrambleToName,
     computeCellDetails: (scr) => scr.scramble_string,
     cellDetailsAreData: true,
     computeExpectedRowCount: (scrambleSet, history) => inferExpectedSolveCount(history),
-    indexAccessKey: 'scramble_number',
   },
 };
 
@@ -138,6 +136,22 @@ export const searchRecursive = (data, currentKey, targetStep, searchHistory = []
 
     return null;
   }, null);
+};
+
+export const flattenToLevel = (data, currentKey, targetKey) => {
+  const items = data[currentKey];
+
+  if (currentKey === targetKey) {
+    return items;
+  }
+
+  const { nestedPicker, matchingConfigKey = nestedPicker } = pickerStepConfig[currentKey] || {};
+
+  if (!matchingConfigKey || !items) {
+    return [];
+  }
+
+  return items?.flatMap((item) => flattenToLevel(item, matchingConfigKey, targetKey));
 };
 
 export function groupScrambleSetsIntoWcif(scrambleSets) {

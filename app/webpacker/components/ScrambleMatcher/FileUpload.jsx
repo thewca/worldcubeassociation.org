@@ -1,6 +1,5 @@
 import React, {
   useCallback,
-  useMemo,
   useRef,
   useState,
 } from 'react';
@@ -10,7 +9,6 @@ import { fetchJsonOrError } from '../../lib/requests/fetchWithAuthenticityToken'
 import { competitionScrambleFilesUrl } from '../../lib/requests/routes.js.erb';
 import ScrambleFileList from './ScrambleFileList';
 import UnusedScramblesPanel from './UnusedScramblesPanel';
-import { groupScrambleSetsIntoWcif } from './util';
 
 async function listScrambleFiles(competitionId) {
   const { data } = await fetchJsonOrError(competitionScrambleFilesUrl(competitionId));
@@ -82,12 +80,6 @@ export default function FileUpload({
     inputRef.current?.click();
   };
 
-  const scrambleFilesTree = useMemo(() => {
-    const allScrambleSets = uploadedJsonFiles.flatMap((file) => file.inbox_scramble_sets);
-
-    return groupScrambleSetsIntoWcif(allScrambleSets);
-  }, [uploadedJsonFiles]);
-
   return (
     <>
       <Header>
@@ -137,7 +129,6 @@ export default function FileUpload({
       <UnusedScramblesPanel
         scrambleFiles={uploadedJsonFiles}
         matchState={matchState}
-        scrambleFilesTree={scrambleFilesTree}
         dispatchMatchState={dispatchMatchState}
       />
     </>
