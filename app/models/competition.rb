@@ -1418,7 +1418,7 @@ class Competition < ApplicationRecord
   end
 
   def user_can_view?(user)
-    puts self.show_at_all?
+    Rails.logger.debug self.show_at_all?
     self.show_at_all? || user&.can_manage_competition?(self)
   end
 

@@ -264,7 +264,7 @@ class CompetitionsController < ApplicationController
     end
 
     if CompetitionPaymentIntegration::AVAILABLE_INTEGRATIONS[payment_integration].nil?
-        flash[:error] = "Payment Integration #{payment_integration} not found"
+      flash[:error] = "Payment Integration #{payment_integration} not found"
       return redirect_to competition_payment_integration_setup_path(competition)
     end
 

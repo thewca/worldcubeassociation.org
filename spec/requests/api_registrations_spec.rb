@@ -1384,7 +1384,7 @@ RSpec.describe 'API Registrations' do
         get registration_payment_completion_path(comp, 'manual'), headers: headers, params: {
           client_secret: manual_record.id, payment_reference: 'test_reference'
         }
-        puts response
+        Rails.logger.debug response
       end
 
       it 'creates a manual payment record with user_submitted status' do

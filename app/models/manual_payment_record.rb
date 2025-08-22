@@ -12,7 +12,6 @@ class ManualPaymentRecord < ApplicationRecord
     canceled: %w[],
   }.freeze
 
-
   enum :manual_status, {
     created: 'created',
     user_submitted: 'user_submitted',
