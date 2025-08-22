@@ -1266,7 +1266,17 @@ module DatabaseDumper
   def self.development_dump(dump_filename)
     self.with_dumped_db(:developer_dump, DEV_SANITIZERS, DEV_TIMESTAMP_NAME, drop_db_after_dump: false) do |dump_db|
       LogTask.log_task "Running SQL dump to '#{dump_filename}'" do
+        # Turn of foreign key checking to avoid errors when dumping data caused by foreign keys referencing not yet
+        # existing rows.
+        DatabaseDumper.mysql("SET unique_checks=0", dump_db)
+        DatabaseDumper.mysql("SET foreign_key_checks=0", dump_db)
+        DatabaseDumper.mysql("SET autocommit=0", dump_db)
+
         self.mysqldump(dump_db, dump_filename)
+
+        DatabaseDumper.mysql("SET unique_checks=1", dump_db)
+        DatabaseDumper.mysql("SET foreign_key_checks=1", dump_db)
+        DatabaseDumper.mysql("SET autocommit=1", dump_db)
       end
     end
   end
