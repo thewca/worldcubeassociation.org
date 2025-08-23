@@ -11,7 +11,7 @@ module Registrations
         #   cloning _then_ sets it to the `accepted` status of the original registration.
         # In practice, this change is necessary so that verifying a registration update
         #   of a full competition does not trigger registration limit checks.
-        entity&.deep_dup&.tap { it.clear_changes_information }
+        entity&.deep_dup&.tap(&:clear_changes_information)
       else
         entity
       end
@@ -81,7 +81,7 @@ module Registrations
 
     class << self
       def validate_registration_events!(registration)
-        process_nested_validation_error!(registration, :registration_competition_events, :competition_event) { it.event_id }
+        process_nested_validation_error!(registration, :registration_competition_events, :competition_event, &:event_id)
         process_validation_error!(registration, :registration_competition_events)
         process_validation_error!(registration, :competition_events)
       end
@@ -101,7 +101,7 @@ module Registrations
         return if registration.valid?
 
         grouped_error_details = registration.public_send(association)
-                                            .reject { it.valid? }
+                                            .reject(&:valid?)
                                             .index_with { it.errors.details[field]&.presence }
                                             .compact
 

@@ -191,7 +191,7 @@ class Api::V1::Registrations::RegistrationsController < Api::V1::ApiController
                                   competition.event_ids,
                                   registrations.joins(:user).order(:id).pluck(:id, :updated_at, user: [:updated_at]),
                                 ]) do
-      registrations.includes(:user).map { |r| r.to_v2_json }
+      registrations.includes(:user).map(&:to_v2_json)
     end
     render json: payload
   end

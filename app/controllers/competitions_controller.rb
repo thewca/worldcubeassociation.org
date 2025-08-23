@@ -377,9 +377,7 @@ class CompetitionsController < ApplicationController
       },
       limit: other_comp.competitor_limit_enabled ? other_comp.competitor_limit : "",
       competitors: other_comp.probably_over? ? other_comp.results.select('DISTINCT person_id').count : "",
-      events: other_comp.events.map { |event|
-        event.id
-      },
+      events: other_comp.events.map(&:id),
       coordinates: {
         lat: other_comp.latitude_degrees,
         long: other_comp.longitude_degrees,
@@ -424,9 +422,7 @@ class CompetitionsController < ApplicationController
       minutesUntil: competition.minutes_until_other_registration_starts(other_comp),
       cityName: other_comp.city_name,
       countryId: other_comp.country_id,
-      events: other_comp.events.map { |event|
-        event.id
-      },
+      events: other_comp.events.map(&:id),
     }
   end
 

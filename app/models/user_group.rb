@@ -59,11 +59,11 @@ class UserGroup < ApplicationRecord
   end
 
   def all_child_users
-    self.all_child_roles.map { |role| role.user }
+    self.all_child_roles.map(&:user)
   end
 
   def active_all_child_users
-    self.active_all_child_roles.map { |role| role.user }
+    self.active_all_child_roles.map(&:user)
   end
 
   def self.group_types_containing_status_metadata
@@ -170,7 +170,7 @@ class UserGroup < ApplicationRecord
   end
 
   def lead_role
-    active_roles.includes(:group, :metadata).find { |role| role.lead? }
+    active_roles.includes(:group, :metadata).find(&:lead?)
   end
 
   # TODO: Once the roles migration is done, add a validation to make sure there is only one lead_user per group.

@@ -27,7 +27,7 @@ module AdvancementConditions
     end
 
     def self.wcif_type_to_class
-      @@wcif_type_to_class ||= @@advancement_conditions.index_by { |cls| cls.wcif_type }
+      @@wcif_type_to_class ||= @@advancement_conditions.index_by(&:wcif_type)
     end
 
     def self.load(json)

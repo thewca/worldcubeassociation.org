@@ -182,9 +182,7 @@ class TicketsController < ApplicationController
     ActiveRecord::Base.transaction do
       person&.anonymize
 
-      users_to_anonymize.each do |user_to_anonymize|
-        user_to_anonymize.anonymize
-      end
+      users_to_anonymize.each(&:anonymize)
     end
 
     render json: {
