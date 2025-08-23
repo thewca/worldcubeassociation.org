@@ -1374,7 +1374,7 @@ RSpec.describe 'API Registrations' do
 
   describe 'GET #payment_completion' do
     context 'manual payments' do
-      let(:comp) { create(:competition, :manual_payments, :registration_open) }
+      let(:comp) { create(:competition, :manual_payments, :registration_open, :visible) }
       let(:reg) { create(:registration, competition: comp) }
       let(:payment_intent) { create(:payment_intent, :manual) }
       let(:manual_record) { payment_intent.payment_record }
