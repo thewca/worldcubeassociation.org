@@ -14,7 +14,7 @@ class ManualPaymentIntegration < ApplicationRecord
   end
 
   private def create_intent(registration, amount_iso, currency_iso, paying_user)
-    manual_record = ManualPaymentRecord.create(amount_iso_denomination: amount_iso, currency_code: currency_iso)
+    manual_record = ManualPaymentRecord.create(amount_iso_denomination: amount_iso, currency_code: currency_iso, manual_status: :created)
 
     PaymentIntent.create!(
       holder: registration,

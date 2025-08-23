@@ -1387,7 +1387,7 @@ RSpec.describe 'API Registrations' do
         Rails.logger.debug response
       end
 
-      it 'creates a manual payment record with user_submitted status' do
+      it 'updates the manual payment record with user_submitted status' do
         expect(manual_record.reload.manual_status).to eq('user_submitted')
       end
 
@@ -1397,6 +1397,10 @@ RSpec.describe 'API Registrations' do
 
       it 'payment intent has requires_capture wca_status' do
         expect(payment_intent.reload.wca_status).to eq('requires_capture')
+      end
+
+      it 'creates an un-completed registration payment' do
+        expect(manual_record.reload.registration_payment.is_completed).to be(false)
       end
     end
   end

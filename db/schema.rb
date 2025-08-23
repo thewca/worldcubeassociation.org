@@ -800,7 +800,9 @@ ActiveRecord::Schema[7.2].define(version: 2025_08_04_070122) do
 
   create_table "manual_payment_records", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "payment_reference"
-    t.string "manual_status"
+    t.string "manual_status", null: false
+    t.integer "amount_iso_denomination", null: false
+    t.string "currency_code", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -1226,7 +1228,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_08_04_070122) do
   end
 
   create_table "schedule_activities", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
-    t.bigint "venue_room_id", null: false
+    t.bigint "venue_room_id"
     t.bigint "parent_activity_id"
     t.integer "wcif_id", null: false
     t.string "name", null: false
