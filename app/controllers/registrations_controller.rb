@@ -34,6 +34,114 @@ class RegistrationsController < ApplicationController
     redirect_to competition_path(competition_from_params) if competition_from_params.use_wca_registration?
   end
 
+  before_action :validate_import_registration, only: %i[do_import]
+  private def validate_import_registration
+    @competition = competition_from_params
+    file = params.require(:csv_registration_file)
+
+    registration_rows, errors = parse_csv_file(file.path, @competition)
+
+    return render status: :unprocessable_entity, json: { error: errors.compact.join(", ") } if errors.any?
+
+    @registration_rows = process_registration_rows(registration_rows)
+    if @competition.competitor_limit_enabled? && @registration_rows.length > @competition.competitor_limit
+      return render status: :unprocessable_entity, json: {
+        error: I18n.t("registrations.import.errors.over_competitor_limit", accepted_count: @registration_rows.length, limit: @competition.competitor_limit),
+      }
+    end
+
+    @emails = @registration_rows.pluck(:email)
+    email_duplicates = @emails.select { |email| @emails.count(email) > 1 }.uniq
+    if email_duplicates.any?
+      return render status: :unprocessable_entity, json: {
+        error: I18n.t("registrations.import.errors.email_duplicates", emails: email_duplicates.join(", ")),
+      }
+    end
+
+    wca_ids = @registration_rows.pluck(:wca_id)
+    wca_id_duplicates = wca_ids.select { |wca_id| wca_ids.count(wca_id) > 1 }.uniq
+    if wca_id_duplicates.any?
+      return render status: :unprocessable_entity, json: {
+        error: I18n.t("registrations.import.errors.wca_id_duplicates", wca_ids: wca_id_duplicates.join(", ")),
+      }
+    end
+
+    raw_dobs = @registration_rows.pluck(:birth_date)
+    wrong_format_dobs = raw_dobs.reject { |raw_dob| Date.safe_parse(raw_dob)&.to_fs == raw_dob }
+    return unless wrong_format_dobs.any?
+
+    render status: :unprocessable_entity, json: {
+      error: I18n.t("registrations.import.errors.wrong_dob_format", raw_dobs: wrong_format_dobs.join(", ")),
+    }
+  end
+
+  private def parse_csv_file(file_path, competition)
+    all_rows = CSV.read(
+      file_path,
+      headers: true,
+      header_converters: :symbol,
+      skip_blanks: true,
+      converters: ->(string) { string&.strip },
+    )
+
+    filtered_rows = all_rows.select do |row|
+      row[:status] == 'a'
+    end
+
+    # Extract the headers from the first row and transform them
+    headers = all_rows.headers.map do |header|
+      header.to_s.downcase
+    end
+
+    errors = [
+      validate_required_headers(headers, competition),
+      validate_event_columns(filtered_rows, competition),
+      filtered_rows.empty? && I18n.t("registrations.import.errors.empty_file"),
+    ].compact.flatten
+
+    [filtered_rows, errors]
+  end
+
+  private def validate_required_headers(headers, competition)
+    competition_events = competition.competition_events
+    required_event_columns = competition_events.pluck(:event_id)
+    required_other_columns = %w[status name country wca_id birth_date gender email]
+    required_columns = required_other_columns + required_event_columns
+
+    missing_columns = required_columns - headers
+
+    I18n.t("registrations.import.errors.missing_columns", columns: missing_columns.join(", ")) if missing_columns.any?
+  end
+
+  private def validate_event_columns(csv_rows, competition)
+    competition_events = competition.competition_events
+
+    csv_rows.filter_map do |row|
+      competition_events.find do |competition_event|
+        cell_value = row[competition_event.event_id.to_sym]
+        next unless %w[1 0].exclude?(cell_value)
+
+        I18n.t(
+          "registrations.import.errors.invalid_event_column",
+          value: cell_value,
+          column: competition_event.event_id,
+        )
+      end
+    end
+  end
+
+  private def process_registration_rows(csv_rows)
+    competition_events = @competition.competition_events
+
+    csv_rows.map do |row|
+      event_ids = competition_events.filter_map do |competition_event|
+        competition_event.id if row[competition_event.event_id.to_sym] == "1"
+      end
+
+      row.to_hash.merge(event_ids: event_ids)
+    end
+  end
+
   def edit_registrations
     @competition = competition_from_params
   end
@@ -81,58 +189,25 @@ class RegistrationsController < ApplicationController
   end
 
   def do_import
-    competition = competition_from_params
-    file = params[:csv_registration_file]
-    required_columns = ["status", "name", "country", "wca id", "birth date", "gender", "email"] + competition.events.map(&:id)
-    # Ensure the CSV file includes all required columns.
-    headers = CSV.read(file.path).first.compact.map(&:downcase)
-    missing_headers = required_columns - headers
-    raise I18n.t("registrations.import.errors.missing_columns", columns: missing_headers.join(", ")) if missing_headers.any?
-
-    registration_rows = CSV.read(file.path, headers: true, header_converters: :symbol, skip_blanks: true, converters: ->(string) { string&.strip })
-                           .map(&:to_hash)
-                           .select { |registration_row| registration_row[:status] == "a" }
-    if competition.competitor_limit_enabled? && registration_rows.length > competition.competitor_limit
-      raise I18n.t("registrations.import.errors.over_competitor_limit",
-                   accepted_count: registration_rows.length,
-                   limit: competition.competitor_limit)
-    end
-    emails = registration_rows.pluck(:email)
-    email_duplicates = emails.select { |email| emails.count(email) > 1 }.uniq
-    raise I18n.t("registrations.import.errors.email_duplicates", emails: email_duplicates.join(", ")) if email_duplicates.any?
-
-    wca_ids = registration_rows.pluck(:wca_id)
-    wca_id_duplicates = wca_ids.select { |wca_id| wca_ids.count(wca_id) > 1 }.uniq
-    raise I18n.t("registrations.import.errors.wca_id_duplicates", wca_ids: wca_id_duplicates.join(", ")) if wca_id_duplicates.any?
-
-    raw_dobs = registration_rows.pluck(:birth_date)
-    wrong_format_dobs = raw_dobs.reject { |raw_dob| Date.safe_parse(raw_dob)&.to_fs == raw_dob }
-    raise I18n.t("registrations.import.errors.wrong_dob_format", raw_dobs: wrong_format_dobs.join(", ")) if wrong_format_dobs.any?
-
     new_locked_users = []
     # registered_at stores millisecond precision, but we want all registrations
     #   from CSV import to be considered as one "batch". So we mark a timestamp
     #   once, and then reuse it throughout the loop.
     import_time = Time.now.utc
     ActiveRecord::Base.transaction do
-      competition.registrations.accepted.each do |registration|
-        registration.update!(competing_status: Registrations::Helper::STATUS_CANCELLED) unless emails.include?(registration.user.email)
+      @competition.registrations.accepted.each do |registration|
+        registration.update!(competing_status: Registrations::Helper::STATUS_CANCELLED) unless @emails.include?(registration.user.email)
       end
-      registration_rows.each do |registration_row|
+      @registration_rows.each do |registration_row|
         user, locked_account_created = user_for_registration!(registration_row)
         new_locked_users << user if locked_account_created
-        registration = competition.registrations.find_or_initialize_by(user_id: user.id) do |reg|
+        registration = @competition.registrations.find_or_initialize_by(user_id: user.id) do |reg|
           reg.registered_at = import_time
         end
         registration.assign_attributes(competing_status: Registrations::Helper::STATUS_ACCEPTED) unless registration.accepted?
         registration.registration_competition_events = []
-        competition.competition_events.map do |competition_event|
-          value = registration_row[competition_event.event_id.to_sym]
-          if value == "1"
-            registration.registration_competition_events.build(competition_event_id: competition_event.id)
-          elsif value != "0"
-            raise I18n.t("registrations.import.errors.invalid_event_column", value: value, column: competition_event.event_id)
-          end
+        registration_row[:event_ids].each do |event_id|
+          registration.registration_competition_events.build(competition_event_id: event_id)
         end
         registration.save!
         registration.add_history_entry({ event_ids: registration.event_ids }, "user", current_user.id, "CSV Import")
@@ -141,7 +216,7 @@ class RegistrationsController < ApplicationController
       end
     end
     new_locked_users.each do |user|
-      RegistrationsMailer.notify_registrant_of_locked_account_creation(user, competition).deliver_later
+      RegistrationsMailer.notify_registrant_of_locked_account_creation(user, @competition).deliver_later
     end
     render status: :ok, json: { success: true }
   rescue StandardError => e
