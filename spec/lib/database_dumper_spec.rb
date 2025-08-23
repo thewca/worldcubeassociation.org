@@ -87,6 +87,7 @@ RSpec.describe "DatabaseDumper" do
       end_time: last_schedule_activity.end_time,
     )
 
+    expect(first_schedule_activity.id).to be < first_schedule_activity.parent_activity_id
     expect {
       dump_file = Tempfile.new
       before_dump = Time.now.change(usec: 0) # Truncate the sub second part of the datetime, since mysql only stores 1 second granularity.
