@@ -39,16 +39,11 @@ class RegistrationsController < ApplicationController
     @competition = competition_from_params
     file = params.require(:csv_registration_file)
 
-    csv_data = parse_csv_file(file.path)
-    return render status: :unprocessable_entity, json: { error: I18n.t("registrations.import.errors.empty_file") } if csv_data[:rows].empty?
+    registration_rows, errors = parse_csv_file(file.path, @competition)
 
-    header_error = validate_required_headers(csv_data[:headers], @competition)
-    return render status: :unprocessable_entity, json: { error: header_error } if header_error
+    return render status: :unprocessable_entity, json: { error: errors.compact.join(", ") } if errors.any?
 
-    event_columns_errors = validate_event_columns(csv_data[:rows], @competition)
-    return render status: :unprocessable_entity, json: { error: event_columns_errors.join(", ") } if event_columns_errors.present?
-
-    @registration_rows = process_registration_rows(csv_data[:rows])
+    @registration_rows = process_registration_rows(registration_rows)
     if @competition.competitor_limit_enabled? && @registration_rows.length > @competition.competitor_limit
       return render status: :unprocessable_entity, json: {
         error: I18n.t("registrations.import.errors.over_competitor_limit", accepted_count: @registration_rows.length, limit: @competition.competitor_limit),
@@ -80,7 +75,7 @@ class RegistrationsController < ApplicationController
     }
   end
 
-  private def parse_csv_file(file_path)
+  private def parse_csv_file(file_path, competition)
     all_rows = CSV.read(
       file_path,
       headers: true,
@@ -98,7 +93,13 @@ class RegistrationsController < ApplicationController
       header.to_s.downcase
     end
 
-    { headers: headers, rows: filtered_rows }
+    errors = [
+      validate_required_headers(headers, competition),
+      validate_event_columns(filtered_rows, competition),
+      filtered_rows.empty? && I18n.t("registrations.import.errors.empty_file"),
+    ].compact.flatten
+
+    [filtered_rows, errors]
   end
 
   private def validate_required_headers(headers, competition)
