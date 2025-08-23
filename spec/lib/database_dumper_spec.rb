@@ -75,6 +75,25 @@ RSpec.describe "DatabaseDumper" do
     end
   end
 
+  it 'handles key references to later records in the same table', :only do
+    comp = create(:competition, :visible, :with_valid_schedule, remarks: "Super secret message to the Board")
+    last_schedule_activity = comp.competition_venues.first.venue_rooms.first.schedule_activities.last
+    first_schedule_activity = comp.competition_venues.first.venue_rooms.first.schedule_activities.first
+    first_schedule_activity.update!(
+      parent_activity: last_schedule_activity,
+      activity_code: "#{last_schedule_activity.activity_code}-g1",
+      round_id: last_schedule_activity.round_id,
+      start_time: last_schedule_activity.start_time + 1,
+      end_time: last_schedule_activity.end_time,
+    )
+
+    expect {
+      dump_file = Tempfile.new
+      before_dump = Time.now.change(usec: 0) # Truncate the sub second part of the datetime, since mysql only stores 1 second granularity.
+      DatabaseDumper.development_dump(dump_file.path)
+    }.not_to raise_error
+  end
+
   context "Results Export" do
     it "defines sanitizers that match the expected output schema (backwards compatibility)" do
       with_database :results_dump do
