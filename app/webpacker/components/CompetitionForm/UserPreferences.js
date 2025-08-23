@@ -16,6 +16,7 @@ function NotificationSettingsAction({
   userPreferences,
 }) {
   const { isReceivingNotifications } = userPreferences;
+  console.log("userPreferences", userPreferences)
 
   const queryClient = useQueryClient();
   const mutation = useMutation({
@@ -31,10 +32,13 @@ function NotificationSettingsAction({
         receive_registration_emails: receiveNotifications,
       }),
     }).then((raw) => raw.data),
-    onSuccess: (respData, variables) => queryClient.setQueryData(
-      userPreferencesQueryKey(variables.competitionId),
-      respData.data,
-    ),
+    onSuccess: (respData, variables) => {
+      console.log("onSuccess respData:", respData.data);
+      queryClient.setQueryData(
+        userPreferencesQueryKey(variables.competitionId),
+        respData.data,
+      );
+    }
   });
 
   const saveNotificationPreference = useCallback((_, { checked: receiveNotifications }) => {
