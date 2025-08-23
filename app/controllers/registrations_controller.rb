@@ -45,8 +45,8 @@ class RegistrationsController < ApplicationController
     header_error = validate_required_headers(csv_data[:headers], @competition)
     return render status: :unprocessable_entity, json: { error: header_error } if header_error
 
-    event_columns_error = validate_event_columns(csv_data[:rows], @competition)
-    return render status: :unprocessable_entity, json: { error: event_columns_error } if event_columns_error
+    event_columns_errors = validate_event_columns(csv_data[:rows], @competition)
+    return render status: :unprocessable_entity, json: { error: event_columns_errors.join(", ") } if event_columns_errors.present?
 
     @registration_rows = process_registration_rows(csv_data[:rows])
     if @competition.competitor_limit_enabled? && @registration_rows.length > @competition.competitor_limit
@@ -114,21 +114,19 @@ class RegistrationsController < ApplicationController
 
   private def validate_event_columns(csv_rows, competition)
     competition_events = competition.competition_events
-    error = nil
 
-    csv_rows.each do |row|
-      invalid_event = competition_events.find do |competition_event|
+    csv_rows.filter_map do |row|
+      competition_events.find do |competition_event|
         cell_value = row[competition_event.event_id.to_sym]
-        %w[1 0].exclude?(cell_value)
-      end
+        next unless %w[1 0].exclude?(cell_value)
 
-      if invalid_event
-        error = I18n.t("registrations.import.errors.invalid_event_column", value: row[invalid_event.event_id.to_sym], column: invalid_event.event_id)
-        break
+        I18n.t(
+          "registrations.import.errors.invalid_event_column",
+          value: cell_value,
+          column: competition_event.event_id,
+        )
       end
     end
-
-    error
   end
 
   private def process_registration_rows(csv_rows)
