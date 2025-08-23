@@ -58,7 +58,7 @@ export default function EditTimeLimitModal({ wcifEvent, wcifRound, disabled }) {
 
   const hasUnsavedChanges = useCallback(() => (
     !_.isEqual(timeLimit, { centiseconds, cumulativeRoundIds })
-  ), [timeLimit, cumulativeRoundIds, draftInput]);
+  ), [timeLimit, cumulativeRoundIds, centiseconds]);
 
   const reset = useCallback(() => {
     setDraftInput(centisecondsToClockFormat(timeLimit?.centiseconds ?? 0));
