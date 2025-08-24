@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { Button, Dropdown, Icon } from 'semantic-ui-react';
 import _ from 'lodash';
-import { ticketStatuses, ticketLogActionTypes } from '../../../lib/wca-data.js.erb';
+import { ticketStatuses } from '../../../lib/wca-data.js.erb';
 import useInputState from '../../../lib/hooks/useInputState';
 
 const ticketTypePrefix = 'Tickets';
@@ -57,13 +57,11 @@ export default function StatusView({ ticketDetails, currentStakeholder, updateSt
     <>
       <span>{`Status: ${metadata.status}`}</span>
       {' '}
-      {currentStakeholder.actions_allowed.includes(ticketLogActionTypes.update_status) && (
-        <Icon
-          name="edit"
-          link
-          onClick={() => setEditMode(true)}
-        />
-      )}
+      <Icon
+        name="edit"
+        link
+        onClick={() => setEditMode(true)}
+      />
     </>
   );
 }

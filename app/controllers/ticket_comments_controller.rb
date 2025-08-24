@@ -10,8 +10,6 @@ class TicketCommentsController < ApplicationController
     @acting_stakeholder = TicketStakeholder.find(params.require(:acting_stakeholder_id))
 
     render status: :bad_request, json: { error: "You are not a stakeholder for this ticket." } unless @ticket.user_stakeholders(current_user).include?(@acting_stakeholder)
-
-    render status: :unauthorized, json: { error: "You are not allowed to perform this action." } unless @acting_stakeholder.actions_allowed.include?(@action_type)
   end
 
   def index

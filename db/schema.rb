@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_07_26_030259) do
+ActiveRecord::Schema[7.2].define(version: 2025_08_16_050817) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -1334,6 +1334,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_26_030259) do
   create_table "ticket_logs", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "ticket_id", null: false
     t.string "action_type", null: false
+    t.string "metadata_action"
     t.integer "acting_user_id", null: false
     t.bigint "acting_stakeholder_id", null: false
     t.datetime "created_at", null: false

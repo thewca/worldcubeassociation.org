@@ -7,7 +7,11 @@ import CreateWcaIds from './CreateWcaIds';
 import FinalSteps from './FinalSteps';
 import MiscActions from './MiscActions';
 
-export default function CompetitionResultActionerView({ ticketDetails, updateStatus }) {
+export default function CompetitionResultActionerView({
+  ticketDetails,
+  updateStatus,
+  currentStakeholder,
+}) {
   const { ticket: { metadata: { status } } } = ticketDetails;
 
   return (
@@ -17,6 +21,7 @@ export default function CompetitionResultActionerView({ ticketDetails, updateSta
         status={status}
         ticketDetails={ticketDetails}
         updateStatus={updateStatus}
+        currentStakeholder={currentStakeholder}
       />
       <MiscActions
         ticketDetails={ticketDetails}
@@ -26,7 +31,9 @@ export default function CompetitionResultActionerView({ ticketDetails, updateSta
   );
 }
 
-function ViewForStatus({ status, ticketDetails, updateStatus }) {
+function ViewForStatus({
+  status, ticketDetails, updateStatus, currentStakeholder,
+}) {
   switch (status) {
     case ticketsCompetitionResultStatuses.submitted:
       return <p>Please lock the competition results from the Posting dashboard.</p>;
@@ -43,6 +50,7 @@ function ViewForStatus({ status, ticketDetails, updateStatus }) {
       return (
         <MergeInboxResults
           ticketDetails={ticketDetails}
+          currentStakeholder={currentStakeholder}
         />
       );
 
