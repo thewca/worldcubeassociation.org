@@ -73,26 +73,28 @@ export default function PaymentOverview({
         currencyCode={competitionInfo.currency_code}
       />
       { !hasPaid && !hasPassed(competitionInfo.registration_close) && (
-      <Accordion styled fluid>
-        <Accordion.Title
-          icon
-          active={payAgain}
-          index={0}
-          onClick={() => setPayAgain((prev) => !prev)}
-        >
-          <Icon name="dropdown" />
-          {I18n.t('registrations.entry_fees_pay_again')}
-        </Accordion.Title>
-        <Accordion.Content active={payAgain}>
-          <StripePaymentStep
-            competitionInfo={competitionInfo}
-            connectedAccountId={connectedAccountId}
-            nextStep={nextStep}
-            stripePublishableKey={stripePublishableKey}
-            user={user}
-          />
-        </Accordion.Content>
-      </Accordion>
+        <Accordion styled fluid>
+          <Accordion.Title
+            icon
+            active={payAgain}
+            index={0}
+            onClick={() => setPayAgain((prev) => !prev)}
+          >
+            <Icon name="dropdown" />
+            {I18n.t('registrations.entry_fees_pay_again')}
+          </Accordion.Title>
+          <Accordion.Content active={payAgain}>
+            { competitionInfo.payment_integration_type === 'stripe' && (
+              <StripePaymentStep
+                competitionInfo={competitionInfo}
+                connectedAccountId={connectedAccountId}
+                nextStep={nextStep}
+                stripePublishableKey={stripePublishableKey}
+                user={user}
+              />
+            )}
+          </Accordion.Content>
+        </Accordion>
       )}
     </>
   );

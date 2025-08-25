@@ -116,7 +116,7 @@ function PaymentStep({
     await elements.submit();
 
     // Create the PaymentIntent and obtain clientSecret
-    const data = await getPaymentTicket(registration.id, isoDonationAmount);
+    const data = await getPaymentTicket(registration.id, isoDonationAmount, 'stripe');
 
     const { client_secret: clientSecret } = data;
 

@@ -12,18 +12,35 @@
     </p>
     <ul>
       <% cpi.connected_account.account_details.each do |key, value| %>
-        <li><b><%= t("payments.payment_setup.account_details.#{type}.#{key}") %></b>: <%= value || t('payments.payment_setup.account_details.fallback_not_applicable') %></li>
+        <li>
+          <b><%= t("payments.payment_setup.account_details.#{type}.#{key}") %></b>:
+          <% if cpi.connected_account_type == CompetitionPaymentIntegration::AVAILABLE_INTEGRATIONS[:manual] && key.to_sym == :payment_information %>
+            <%= md value %>
+          <% else %>
+            <%= value || t('payments.payment_setup.account_details.fallback_not_applicable') %>
+          <% end %>
+        </li>
       <% end %>
     </ul>
-    <p>
-      <b><%= t("payments.payment_setup.before_disconnect_warning", provider: t("payments.payment_providers.#{type}")) %></b>
-    </p>
-    <ul>
-      <li><%= link_to(t("payments.payment_setup.external_dashboard", provider: t("payments.payment_providers.#{type}")), CompetitionPaymentIntegration::INTEGRATION_DASHBOARD_URLS[type]) %></li>
-    </ul>
+    <% if CompetitionPaymentIntegration::INTEGRATION_DASHBOARD_URLS[type].present?  %>
+      <p>
+        <b><%= t("payments.payment_setup.before_disconnect_warning", provider: t("payments.payment_providers.#{type}")) %></b>
+      </p>
+      <ul>
+        <li><%= link_to(t("payments.payment_setup.external_dashboard", provider: t("payments.payment_providers.#{type}")), CompetitionPaymentIntegration::INTEGRATION_DASHBOARD_URLS[type]) %></li>
+      </ul>
+    <% end %>
     <p>
       <%= t("payments.payment_setup.before_disconnect_info", provider: t("payments.payment_providers.#{type}")) %>
     </p>
+
+    <% if cpi.connected_account_type == CompetitionPaymentIntegration::AVAILABLE_INTEGRATIONS[:manual] %>
+      <%= link_to(
+            t('payments.payment_setup.edit_account', provider: t("payments.payment_providers.#{type}")),
+            competition_manual_payment_setup_url(@competition),
+            class: 'btn btn-primary'
+          ) %>
+    <% end %>
 
     <% if current_user&.can_admin_competitions? %>
       <%= button_to(
@@ -42,6 +59,7 @@
 
       <ul>
         <% @cpi_onboarding_urls.keys.each do |type| %>
+          <% next if CompetitionPaymentIntegration::INTEGRATION_CURRENCY_INFORMATION[type].nil? %>
           <li>
             <%= link_to(
                   t('payments.payment_setup.supported_currencies', provider: t("payments.payment_providers.#{type}")),

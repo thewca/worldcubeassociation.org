@@ -135,6 +135,7 @@ Rails.application.routes.draw do
     get '/admin/scrambles/:round_id/new' => 'admin/scrambles#new', as: :new_scramble
 
     get '/payment_integration/setup' => 'competitions#payment_integration_setup', as: :payment_integration_setup
+    get '/payment_integration/setup/manual' => 'competitions#payment_integration_manual_setup', as: :manual_payment_setup
     get '/payment_integration/:payment_integration/connect' => 'competitions#connect_payment_integration', as: :connect_payment_integration
     post '/payment_integration/:payment_integration/disconnect' => 'competitions#disconnect_payment_integration', as: :disconnect_payment_integration
   end

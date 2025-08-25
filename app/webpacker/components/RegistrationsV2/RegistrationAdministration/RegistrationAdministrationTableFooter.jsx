@@ -5,6 +5,10 @@ import { isoMoneyToHumanReadable } from '../../../lib/helpers/money';
 import I18n from '../../../lib/i18n';
 
 const moneyCountHumanReadable = (registrations, competitionInfo) => {
+  if (competitionInfo.payment_integration_type === 'manual') {
+    return '';
+  }
+
   const moneyCount = _.sum(registrations.map((r) => r.payment.paid_amount_iso));
 
   return isoMoneyToHumanReadable(

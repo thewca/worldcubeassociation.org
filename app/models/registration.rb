@@ -177,24 +177,16 @@ class Registration < ApplicationRecord
       # registration.includes(:registration_payments) that may exist.
       # It's fine to turn the associated records to an array and sum on ithere,
       # as it's usually just a couple of rows.
-      registration_payments.sum(&:amount_lowest_denomination),
+      registration_payments.completed.sum(&:amount_lowest_denomination),
       competition.currency_code,
     )
   end
 
-  private def last_payment
+  def last_payment
     if registration_payments.loaded?
-      registration_payments.max_by(&:created_at)
+      registration_payments.completed.max_by(&:created_at)
     else
-      registration_payments.order(:created_at).last
-    end
-  end
-
-  def last_payment_date
-    if registration_payments.loaded?
-      last_payment&.created_at
-    else
-      registration_payments.maximum(:created_at)
+      registration_payments.completed.order(:created_at).last
     end
   end
 
@@ -223,11 +215,13 @@ class Registration < ApplicationRecord
     user_id
   )
     add_history_entry({ payment_status: receipt.determine_wca_status, iso_amount: amount_lowest_denomination }, "user", user_id, 'Payment')
+
     registration_payments.create!(
       amount_lowest_denomination: amount_lowest_denomination,
       currency_code: currency_code,
       receipt: receipt,
       user_id: user_id,
+      is_completed: receipt.try(:manual_status) != 'user_submitted',
     )
   end
 
@@ -289,6 +283,11 @@ class Registration < ApplicationRecord
     end
   end
 
+  def payment_reference
+    # TODO: We currently have no concept of payment reference for stripe or paypal
+    registration_payments.first&.receipt&.payment_reference
+  end
+
   def to_v2_json(admin: false, pii: false)
     private_attributes = pii ? %w[dob email] : nil
 
@@ -308,9 +307,10 @@ class Registration < ApplicationRecord
                                 payment: {
                                   has_paid: outstanding_entry_fees <= 0,
                                   payment_status: last_payment_status,
+                                  payment_reference: payment_reference,
                                   paid_amount_iso: paid_entry_fees.cents,
                                   currency_code: paid_entry_fees.currency.iso_code,
-                                  updated_at: last_payment_date,
+                                  updated_at: last_payment&.created_at,
                                 },
                               })
       end
@@ -586,6 +586,7 @@ class Registration < ApplicationRecord
 
   def last_positive_payment
     registration_payments
+      .completed
       .where.not(amount_lowest_denomination: ..0)
       .order(updated_at: :desc)
       .first

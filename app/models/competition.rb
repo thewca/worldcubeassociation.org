@@ -999,6 +999,15 @@ class Competition < ApplicationRecord
     competition_payment_integrations.any? && paid_entry?
   end
 
+  def payment_integration_type
+    return nil unless using_payment_integrations?
+    CompetitionPaymentIntegration::AVAILABLE_INTEGRATIONS.key(competition_payment_integrations.first.connected_account_type)
+  end
+
+  def using_manual_payment?
+    payment_integration_type == :manual
+  end
+
   def can_edit_registration_fees?
     # Quick workaround for https://github.com/thewca/worldcubeassociation.org/issues/2123
     # (We used to return `registrations.with_payments.empty?` here)
@@ -1408,6 +1417,7 @@ class Competition < ApplicationRecord
   end
 
   def user_can_view?(user)
+    Rails.logger.debug self.show_at_all?
     self.show_at_all? || user&.can_manage_competition?(self)
   end
 
@@ -1785,6 +1795,12 @@ class Competition < ApplicationRecord
     competition_venues.includes(venue_rooms: { schedule_activities: [:child_activities] }).map(&:top_level_activities).flatten
   end
 
+  def manual_payment_details
+    return nil unless using_manual_payment?
+
+    competition_payment_integrations.first.connected_account.account_details
+  end
+
   # See https://github.com/thewca/worldcubeassociation.org/wiki/wcif
   def to_wcif(authorized: false)
     {
@@ -1819,8 +1835,8 @@ class Competition < ApplicationRecord
                force_comment_in_registration use_wca_registration external_registration_page guests_entry_fee_lowest_denomination guest_entry_status
                information events_per_registration_limit guests_enabled auto_accept_preference auto_accept_disable_threshold],
       methods: %w[url website short_name city venue_address venue_details latitude_degrees longitude_degrees country_iso2 event_ids
-                  main_event_id number_of_bookmarks using_payment_integrations? uses_qualification? uses_cutoff? competition_series_ids registration_full?
-                  part_of_competition_series? registration_full_and_accepted?],
+                  main_event_id number_of_bookmarks using_payment_integrations? payment_integration_type manual_payment_details uses_qualification?
+                  uses_cutoff? competition_series_ids registration_full? part_of_competition_series? registration_full_and_accepted?],
       include: %w[delegates organizers],
     }
     self.as_json(options)
@@ -2996,6 +3012,7 @@ class Competition < ApplicationRecord
   def fully_paid_registrations_count
     registrations
       .joins(:registration_payments)
+      .where(registration_payments: { is_completed: true })
       .group('registrations.id')
       .having('SUM(registration_payments.amount_lowest_denomination) >= ?', base_entry_fee_lowest_denomination)
       .count.size # .count changes the AssociationRelation into a hash, and then .size gives the number of items in the hash

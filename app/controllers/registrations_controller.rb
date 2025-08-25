@@ -434,7 +434,6 @@ class RegistrationsController < ApplicationController
   end
 
   def payment_completion
-    # Provided by Stripe upon redirect when the "PaymentElement" workflow is completed
     competition_id = params[:competition_id]
     competition = Competition.find(competition_id)
 
