@@ -31,10 +31,6 @@ module ResultsValidators
       new(ResultsValidators::Utils::ALL_VALIDATORS)
     end
 
-    def check_real_results?
-      @check_real_results
-    end
-
     def any_results?
       @results.any?
     end
