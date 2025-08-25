@@ -221,7 +221,7 @@ class Registration < ApplicationRecord
       currency_code: currency_code,
       receipt: receipt,
       user_id: user_id,
-      is_completed: receipt&.manual_status != 'user_submitted',
+      is_completed: receipt.try(:manual_status) != 'user_submitted',
     )
   end
 
