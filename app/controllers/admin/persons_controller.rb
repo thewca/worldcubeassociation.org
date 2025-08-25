@@ -54,17 +54,17 @@ module Admin
 
       person = Person.current.find_by!(wca_id: person_wca_id)
       registrations = person.user.registrations
-        .joins(:competition)
-        .where('competitions.start_date > ?', Date.current)
-        .order('competitions.start_date DESC')
-        .select(
-          'registrations.*,
+                            .joins(:competition)
+                            .where('competitions.start_date > ?', Date.current)
+                            .order('competitions.start_date DESC')
+                            .select(
+                              'registrations.*,
           competitions.id   AS competition_id,
           competitions.name AS competition_name,
           competitions.city_name,
           competitions.country_id,
-          competitions.start_date'
-        )
+          competitions.start_date',
+                            )
 
       render json: registrations.as_json(
         only: %w[competition_id competition_name city_name country_id start_date competing_status],
@@ -76,14 +76,14 @@ module Admin
 
       person = Person.current.find_by!(wca_id: person_wca_id)
       competitions = person.user.organized_competitions
-        .order('competitions.start_date DESC')
-        .where('competitions.announced_at IS NOT NULL')
-        .where('competitions.cancelled_at IS NULL')
-        .select(
-          'competitions.*,
+                           .order('competitions.start_date DESC')
+                           .where.not(competitions: { announced_at: nil })
+                           .where(competitions: { cancelled_at: nil })
+                           .select(
+                             'competitions.*,
           competitions.id   AS competition_id,
-          competitions.name AS competition_name'
-        )
+          competitions.name AS competition_name',
+                           )
 
       render json: competitions.as_json(
         only: %w[competition_id competition_name city_name country_id start_date competing_status],
@@ -95,14 +95,14 @@ module Admin
 
       person = Person.current.find_by!(wca_id: person_wca_id)
       competitions = person.user.delegated_competitions
-        .order('competitions.start_date DESC')
-        .where('competitions.announced_at IS NOT NULL')
-        .where('competitions.cancelled_at IS NULL')
-        .select(
-          'competitions.*,
+                           .order('competitions.start_date DESC')
+                           .where.not(competitions: { announced_at: nil })
+                           .where(competitions: { cancelled_at: nil })
+                           .select(
+                             'competitions.*,
           competitions.id   AS competition_id,
-          competitions.name AS competition_name'
-        )
+          competitions.name AS competition_name',
+                           )
 
       render json: competitions.as_json(
         only: %w[competition_id competition_name city_name country_id start_date competing_status],
