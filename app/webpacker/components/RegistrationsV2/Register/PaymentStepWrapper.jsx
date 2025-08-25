@@ -1,6 +1,13 @@
 import React from 'react';
-import StripeWrapper from './StripeWrapper';
-import ManualPaymentStep from './ManualPaymentStep';
+import { Message } from 'semantic-ui-react';
+import { useQuery } from '@tanstack/react-query';
+import StripePaymentStep from './StripePaymentStep';
+import { useRegistration } from '../lib/RegistrationProvider';
+import PaymentOverview from './PaymentOverview';
+import { hasPassed } from '../../../lib/utils/dates';
+import I18n from '../../../lib/i18n';
+import getRegistrationPayments from '../api/payment/get/getRegistrationPayments';
+import Loading from '../../Requests/Loading';
 
 export default function PaymentStepWrapper({
   competitionInfo,
@@ -9,9 +16,25 @@ export default function PaymentStepWrapper({
   user,
   nextStep,
 }) {
-  if (competitionInfo.payment_integration_type === 'stripe') {
+  const { registration } = useRegistration();
+
+  const {
+    data: payments,
+    isLoading,
+  } = useQuery({
+    queryKey: ['payments', registration.id],
+    queryFn: () => getRegistrationPayments(registration.id),
+    select: (data) => data.charges,
+  });
+
+  if (isLoading) {
+    return <Loading />;
+  }
+
+  if (payments.length > 0) {
     return (
-      <StripeWrapper
+      <PaymentOverview
+        payments={payments}
         competitionInfo={competitionInfo}
         connectedAccountId={connectedAccountId}
         nextStep={nextStep}
@@ -20,13 +43,25 @@ export default function PaymentStepWrapper({
       />
     );
   }
-  if (competitionInfo.payment_integration_type === 'manual') {
+
+  if (hasPassed(competitionInfo.registration_close)) {
     return (
-      <ManualPaymentStep
+      <Message error>{I18n.t('registrations.payment_form.errors.registration_closed')}</Message>
+    );
+  }
+
+  if (competitionInfo.payment_integration_type === 'stripe') {
+    return (
+      <StripePaymentStep
         competitionInfo={competitionInfo}
+        connectedAccountId={connectedAccountId}
         nextStep={nextStep}
-        userInfo={user}
+        stripePublishableKey={stripePublishableKey}
+        user={user}
       />
     );
+  }
+
+  if (competitionInfo.payment_integration_type === 'manual') {
   }
 }
