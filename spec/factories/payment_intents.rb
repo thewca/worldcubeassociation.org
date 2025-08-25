@@ -7,6 +7,11 @@ FactoryBot.define do
     initiated_by { association(:user) }
     wca_status { 'pending' }
 
+    trait :manual do
+      payment_record { association(:manual_payment_record) }
+      wca_status { 'created' }
+    end
+
     trait :canceled do
       canceled_at { DateTime.now }
       wca_status { 'canceled' }

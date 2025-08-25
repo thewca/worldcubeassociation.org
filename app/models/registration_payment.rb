@@ -11,15 +11,33 @@ class RegistrationPayment < ApplicationRecord
 
   delegate :auto_accept_preference_live?, to: :registration
   after_create :auto_accept_hook, if: :auto_accept_preference_live?
-  after_create :auto_close_hook, unless: :refunded_registration_payment_id?
+  after_save :auto_close_hook
+
+  scope :completed, -> { where(is_completed: true) }
 
   monetize :amount_lowest_denomination,
            as: "amount",
            allow_nil: true,
            with_model_currency: :currency_code
 
+  def should_auto_close?
+    refunded_registration_payment_id.nil? && saved_change_to_is_completed?(to: true)
+  end
+
+  def create_uncaptured_payment
+    return unless self.is_completed?
+
+    RegistrationPayment.create(
+      amount_lowest_denomination: self.amount_lowest_denomination,
+      currency_code: self.currency_code,
+      user: self.user,
+      registration: self.registration,
+      is_completed: false,
+    )
+  end
+
   def amount_available_for_refund
-    amount_lowest_denomination + refunding_registration_payments.sum(:amount_lowest_denomination)
+    amount_lowest_denomination + refunding_registration_payments.completed.sum(:amount_lowest_denomination)
   end
 
   private def auto_accept_hook
@@ -27,7 +45,9 @@ class RegistrationPayment < ApplicationRecord
   end
 
   private def auto_close_hook
-    registration.consider_auto_close
+    return unless refunded_registration_payment_id.nil? && is_completed?
+
+    registration.consider_auto_close if saved_change_to_is_completed? || previously_new_record?
   end
 
   def to_v2_json(refunds: false)
