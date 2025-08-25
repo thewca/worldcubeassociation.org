@@ -283,6 +283,11 @@ class Registration < ApplicationRecord
     end
   end
 
+  def payment_reference
+    # TODO: We currently have no concept of payment reference for stripe or paypal
+    registration_payments.first&.receipt&.payment_reference
+  end
+
   def to_v2_json(admin: false, pii: false)
     private_attributes = pii ? %w[dob email] : nil
 
@@ -302,6 +307,7 @@ class Registration < ApplicationRecord
                                 payment: {
                                   has_paid: outstanding_entry_fees <= 0,
                                   payment_status: last_payment_status,
+                                  payment_reference: payment_reference,
                                   paid_amount_iso: paid_entry_fees.cents,
                                   currency_code: paid_entry_fees.currency.iso_code,
                                   updated_at: last_payment&.created_at,
