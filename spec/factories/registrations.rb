@@ -104,6 +104,18 @@ FactoryBot.define do
       end
     end
 
+    trait :uncaptured do
+      after(:create) do |registration|
+        FactoryBot.create(
+          :registration_payment,
+          registration: registration,
+          user: registration.user,
+          amount_lowest_denomination: registration.competition.base_entry_fee_lowest_denomination.round,
+          is_completed: false,
+        )
+      end
+    end
+
     trait :paid_no_hooks do
       after(:create) do |registration|
         payment = FactoryBot.build(:registration_payment, registration: registration, user: registration.user,
