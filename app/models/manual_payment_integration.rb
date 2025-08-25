@@ -47,9 +47,9 @@ class ManualPaymentIntegration < ApplicationRecord
     Rails.application.routes.url_helpers.competition_manual_payment_setup_url(competition_id)
   end
 
-  # def account_details
-  #   serializable_hash(only: %i[payment_information payment_reference])
-  # end
+  def account_details
+    serializable_hash(only: %i[payment_information payment_reference])
+  end
 
   def self.connect_integration(form_params)
     model_attributes = form_params.permit(:payment_information, :payment_reference)

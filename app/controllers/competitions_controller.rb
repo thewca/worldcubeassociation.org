@@ -241,6 +241,10 @@ class CompetitionsController < ApplicationController
     render :edit
   end
 
+  def payment_integration_manual_setup
+    @competition = competition_from_params
+  end
+
   def payment_integration_setup
     @competition = competition_from_params
 

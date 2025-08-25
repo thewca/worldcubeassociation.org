@@ -2288,6 +2288,7 @@ en:
       supported_currencies: "%{provider} Supported Currencies"
       provider_heading: "%{provider} Payments"
       accept_payments_header: "Accept Registration Payments"
+      manual_payments_header: "Configure Manual Payments"
       connect_button: "Set up %{provider}"
       connect_account_info:
         stripe: "In order to accept payments for this competition, you need to connect your own Stripe account with the WCA Stripe account by clicking the button below. If you don't already have your own Stripe account you can still click on the button below and it will guide you through the process."
