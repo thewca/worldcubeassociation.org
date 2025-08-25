@@ -16,6 +16,7 @@ import {
 import { events } from '../../lib/wca-data.js.erb';
 import { getFullDateTimeString } from '../../lib/utils/dates';
 import MoveMatchingEntityModal from './MoveMatchingEntityModal';
+import {UnusedEntityButtonGroup} from "./UnusedScramblesPanel";
 
 async function deleteScrambleFile({ fileId }) {
   const { data } = await fetchJsonOrError(scrambleFileUrl(fileId), {
@@ -102,6 +103,101 @@ function HeadersForMatching({ matchingKey, previousMatching = undefined }) {
   );
 }
 
+function MatchingTableCellContent({
+  rowIdx,
+  allRows,
+  step,
+  stepIdx,
+  allSteps,
+  matchState,
+  dispatchMatchState,
+}) {
+  const remainingSteps = allSteps.slice(stepIdx + 1);
+  const isDefCell = remainingSteps.every((remStep) => remStep.index === 0);
+
+  const addAutomatic = useCallback((entity, pickerHistory) => {
+    dispatchMatchState({
+      type: 'addEntityToMatching',
+      entity,
+      pickerHistory,
+      matchingKey: step.key,
+    });
+  }, [dispatchMatchState, step.key]);
+
+  if (!isDefCell) {
+    return null;
+  }
+
+  const defRowSpan = allRows
+    .slice(rowIdx)
+    .filter((laterRow) => laterRow[stepIdx].id === step.id)
+    .length;
+
+  const actualNavigation = searchRecursive(matchState, step);
+
+  const pathToStepEntity = allSteps.slice(0, stepIdx + 1);
+
+  if (step.id === DUMMY_ENTITY_ID) {
+    if (stepIdx > 0 && allSteps[stepIdx - 1].id === DUMMY_ENTITY_ID) {
+      return null;
+    }
+
+    const remainingColSpan = allSteps.slice(stepIdx)
+      .reduce((sum, remStep) => sum + (remStep.hasPicker ? 2 : 1), 0);
+
+    return (
+      <Table.Cell
+        textAlign="center"
+        verticalAlign="middle"
+        singleLine
+        colSpan={remainingColSpan}
+        disabled
+      >
+        (automatic)
+      </Table.Cell>
+    );
+  }
+
+  return (
+    <>
+      <Table.Cell
+        textAlign="center"
+        verticalAlign="middle"
+        singleLine
+        rowSpan={defRowSpan}
+      >
+        {navToDefCellContent(step)}
+      </Table.Cell>
+      {step.hasPicker && (
+        <Table.Cell
+          textAlign="center"
+          verticalAlign="middle"
+          rowSpan={defRowSpan}
+        >
+            {actualNavigation ? (
+              <Breadcrumb size="tiny">
+                {actualNavigation.map((nav, breadIdx) => (
+                  <React.Fragment key={nav.key}>
+                    {breadIdx > 0 && (<Breadcrumb.Divider icon="chevron right" />)}
+                    <Breadcrumb.Section>{navToBreadcrumbContent(nav)}</Breadcrumb.Section>
+                  </React.Fragment>
+                ))}
+              </Breadcrumb>
+            ) : (
+              <UnusedEntityButtonGroup
+                entity={step.entity}
+                fullPathToEntity={pathToStepEntity}
+                referenceMatchState={matchState}
+                onClickAutoAssign={addAutomatic}
+                onClickManualAssign={TODO}
+              />
+            )}
+        </Table.Cell>
+      )}
+    </>
+  );
+}
+
 function buildTableRows(
   matchingKey,
   matchEntity,
@@ -156,106 +252,25 @@ function BodyForMatching({
 
   const [modalEntity, setModalEntity] = useState(null);
 
-  const addAutomatic = useCallback((entity, pickerHistory, targetMatchingKey) => {
-    dispatchMatchState({
-      type: 'addEntityToMatching',
-      pickerHistory,
-      matchingKey: targetMatchingKey,
-      entity,
-    });
-  }, [dispatchMatchState]);
+  return tableRows.map((rowHistory, rowIdx, allRows) => {
+    const rowKey = rowHistory.reduce((acc, step) => [...acc, step.id], []).join('-');
 
-  return tableRows.map((rowHistory, rowIdx, allRows) => (
-    <Table.Row key={rowHistory.reduce((acc, step) => [...acc, step.id], []).join('-')}>
-      {rowHistory.map((step, stepIdx, allSteps) => {
-        const remainingSteps = allSteps.slice(stepIdx + 1);
-        const isDefCell = remainingSteps.every((remStep) => remStep.index === 0);
-
-        if (!isDefCell) {
-          return null;
-        }
-
-        const defRowSpan = allRows
-          .slice(rowIdx)
-          .filter((laterRow) => laterRow[stepIdx].id === step.id)
-          .length;
-
-        const actualNavigation = searchRecursive(matchState, step);
-
-        const autoInsertTarget = stepIdx > 0 ? allSteps[stepIdx - 1] : {};
-        const autoInsertNavigation = searchRecursive(matchState, autoInsertTarget);
-
-        const reactKey = `${step.key}-${step.id}`;
-
-        if (step.id === DUMMY_ENTITY_ID) {
-          if (stepIdx > 0 && allSteps[stepIdx - 1].id === DUMMY_ENTITY_ID) {
-            return null;
-          }
-
-          const remainingColSpan = allSteps.slice(stepIdx)
-            .reduce((sum, remStep) => sum + (remStep.hasPicker ? 2 : 1), 0);
+    return (
+      <Table.Row key={rowKey}>
+        {rowHistory.map((step, stepIdx, allSteps) => {
+          const stepKey = `${step.key}-${step.id}`;
 
           return (
-            <Table.Cell
-              textAlign="center"
-              verticalAlign="middle"
-              singleLine
-              colSpan={remainingColSpan}
-              disabled
-            >
-              (automatic)
-            </Table.Cell>
-          );
-        }
-
-        return (
-          <React.Fragment key={reactKey}>
-            <Table.Cell
-              textAlign="center"
-              verticalAlign="middle"
-              singleLine
-              rowSpan={defRowSpan}
-            >
-              {navToDefCellContent(step)}
-            </Table.Cell>
-            {step.hasPicker && (
-            <>
-              <Table.Cell
-                textAlign="center"
-                verticalAlign="middle"
-                rowSpan={defRowSpan}
-              >
-                {actualNavigation ? (
-                  <Breadcrumb size="tiny">
-                    {actualNavigation.map((nav, breadIdx) => (
-                      <React.Fragment key={nav.key}>
-                        {breadIdx > 0 && (<Breadcrumb.Divider icon="chevron right" />)}
-                        <Breadcrumb.Section>{navToBreadcrumbContent(nav)}</Breadcrumb.Section>
-                      </React.Fragment>
-                    ))}
-                  </Breadcrumb>
-                ) : (
-                  <Button.Group fluid>
-                    {autoInsertNavigation && (
-                      <Button
-                        positive
-                        basic
-                        compact
-                        icon="magic"
-                        content="Add to table"
-                        onClick={() => addAutomatic(step.entity, autoInsertNavigation, step.key)}
-                      />
-                    )}
-                    <Button
-                      primary
-                      basic
-                      compact
-                      icon="pen"
-                      content="Manual"
-                    />
-                  </Button.Group>
-                )}
-              </Table.Cell>
+            <React.Fragment key={stepKey}>
+              <MatchingTableCellContent
+                rowIdx={rowIdx}
+                allRows={allRows}
+                step={step}
+                stepIdx={stepIdx}
+                allSteps={allSteps}
+                matchState={matchState}
+                dispatchMatchState={dispatchMatchState}
+              />
               <MoveMatchingEntityModal
                 key={modalEntity?.id}
                 isOpen={modalEntity !== null}
@@ -266,13 +281,12 @@ function BodyForMatching({
                 pickerHistory={allSteps.slice(0, stepIdx + 1)}
                 matchingKey={step.key}
               />
-            </>
-            )}
-          </React.Fragment>
-        );
-      })}
-    </Table.Row>
-  ));
+            </React.Fragment>
+          );
+        })}
+      </Table.Row>
+    );
+  });
 }
 
 function ScrambleFileBody({

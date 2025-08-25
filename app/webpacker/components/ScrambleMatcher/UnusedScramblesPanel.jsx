@@ -81,6 +81,39 @@ const filterUnusedItems = (
   return [currentStepReturn, ...combinedUnused];
 };
 
+export function UnusedEntityButtonGroup({
+  entity,
+  fullPathToEntity,
+  referenceMatchState,
+  onClickAutoAssign,
+  onClickManualAssign,
+}) {
+  const autoInsertTarget = fullPathToEntity[fullPathToEntity.length - 2];
+
+  const autoInsertNavigation = searchRecursive(referenceMatchState, autoInsertTarget);
+
+  return (
+    <Button.Group compact widths={2}>
+      {autoInsertNavigation && (
+        <Button
+          positive
+          basic
+          icon="magic"
+          content="Auto-Assign"
+          onClick={() => onClickAutoAssign(entity, autoInsertNavigation)}
+        />
+      )}
+      <Button
+        primary
+        basic
+        icon="pen"
+        content="Manual"
+        onClick={() => onClickManualAssign(entity)}
+      />
+    </Button.Group>
+  );
+}
+
 function UnusedEntitiesPanel({
   matchingKey,
   unusedEntities,
@@ -123,13 +156,13 @@ function UnusedEntitiesPanel({
       <Segment attached>
         <Card.Group>
           {unusedEntities.map((entity) => {
-            const pathToUnusedEntity = searchRecursive(scrambleFilesTree, { key: matchingKey, id: entity.id });
-            const autoInsertTarget = pathToUnusedEntity[pathToUnusedEntity.length - 2];
-
-            const autoInsertNavigation = searchRecursive(rootMatchState, autoInsertTarget);
+            const pathToUnusedEntity = searchRecursive(
+              scrambleFilesTree,
+              { key: matchingKey, id: entity.id },
+            );
 
             return (
-              <Card>
+              <Card key={entity.id}>
                 <Card.Content>
                   <Card.Header>{computeCellName(entity)}</Card.Header>
                   {computeCellDetails && !cellDetailsAreData && (
@@ -137,12 +170,13 @@ function UnusedEntitiesPanel({
                   )}
                 </Card.Content>
                 <Card.Content extra>
-                  <Button.Group compact widths={2}>
-                    {autoInsertNavigation && (
-                      <Button icon="magic" content="Assign" positive basic onClick={() => autoAssignEntity(entity, autoInsertNavigation)} />
-                    )}
-                    <Button icon="pen" content="Manual" primary basic onClick={() => setModalPayload(entity)} />
-                  </Button.Group>
+                  <UnusedEntityButtonGroup
+                    entity={entity}
+                    fullPathToEntity={pathToUnusedEntity}
+                    referenceMatchState={rootMatchState}
+                    onClickAutoAssign={autoAssignEntity}
+                    onClickManualAssign={setModalPayload}
+                  />
                 </Card.Content>
               </Card>
             );
