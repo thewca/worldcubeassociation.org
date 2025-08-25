@@ -12889,7 +12889,7 @@ __metadata:
     nextjs-routes: "npm:^2.2.5"
     node-vault: "npm:^0.10.5"
     openapi-fetch: "npm:^0.14.0"
-    openapi-typescript: "npm:^7.9.0"
+    openapi-typescript: "npm:^7.9.1"
     payload: "npm:^3.52.0"
     payload-authjs: "npm:^0.8.3"
     prettier: "npm:^3.6.2"
@@ -13294,9 +13294,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"openapi-typescript@npm:^7.9.0":
-  version: 7.9.0
-  resolution: "openapi-typescript@npm:7.9.0"
+"openapi-typescript@npm:^7.9.1":
+  version: 7.9.1
+  resolution: "openapi-typescript@npm:7.9.1"
   dependencies:
     "@redocly/openapi-core": "npm:^1.34.5"
     ansi-colors: "npm:^4.1.3"
@@ -13308,7 +13308,7 @@ __metadata:
     typescript: ^5.x
   bin:
     openapi-typescript: bin/cli.js
-  checksum: 10c0/55a8dfddf101ef6bdd9f10af282145499ba8a5ce7dee7149850e3bfa0e42421a1f03104520230399c4c6df172ef72eab4e6af97f2435e2b215068a7086b6e4aa
+  checksum: 10c0/52db65d211f872e0a34018cca409f388d70d55fa7cd6e07eacbb8ffc873ed78ffa29f95758766e2bd51ef87145aea8b66350638355cac5887f407aba9080d408
   languageName: node
   linkType: hard
 
