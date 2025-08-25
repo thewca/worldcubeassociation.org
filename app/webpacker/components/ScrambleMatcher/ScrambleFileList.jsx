@@ -10,7 +10,8 @@ import {
   groupScrambleSetsIntoWcif,
   matchingDndConfig,
   pickerLocalizationConfig,
-  pickerStepConfig, searchRecursive,
+  pickerStepConfig,
+  searchRecursive,
 } from './util';
 import { events } from '../../lib/wca-data.js.erb';
 import { getFullDateTimeString } from '../../lib/utils/dates';
@@ -179,10 +180,10 @@ function BodyForMatching({
           .filter((laterRow) => laterRow[stepIdx].id === step.id)
           .length;
 
-        const actualNavigation = searchRecursive(matchState, matchingKey, step);
+        const actualNavigation = searchRecursive(matchState, step);
 
         const autoInsertTarget = stepIdx > 0 ? allSteps[stepIdx - 1] : {};
-        const autoInsertNavigation = searchRecursive(matchState, matchingKey, autoInsertTarget);
+        const autoInsertNavigation = searchRecursive(matchState, autoInsertTarget);
 
         const reactKey = `${step.key}-${step.id}`;
 

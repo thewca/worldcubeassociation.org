@@ -113,7 +113,7 @@ export function applyPickerHistory(rootState, pickerHistory) {
   );
 }
 
-export const searchRecursive = (data, currentKey, targetStep, searchHistory = []) => {
+export const searchRecursive = (data, targetStep, currentKey = 'events', searchHistory = []) => {
   const { nestedPicker, matchingConfigKey = nestedPicker } = pickerStepConfig[currentKey] || {};
 
   return data[currentKey]?.reduce((foundPath, item, index) => {
@@ -131,27 +131,11 @@ export const searchRecursive = (data, currentKey, targetStep, searchHistory = []
     }
 
     if (matchingConfigKey) {
-      return searchRecursive(item, matchingConfigKey, targetStep, nextHistory);
+      return searchRecursive(item, targetStep, matchingConfigKey, nextHistory);
     }
 
     return null;
   }, null);
-};
-
-export const flattenToLevel = (data, currentKey, targetKey) => {
-  const items = data[currentKey];
-
-  if (currentKey === targetKey) {
-    return items;
-  }
-
-  const { nestedPicker, matchingConfigKey = nestedPicker } = pickerStepConfig[currentKey] || {};
-
-  if (!matchingConfigKey || !items) {
-    return [];
-  }
-
-  return items?.flatMap((item) => flattenToLevel(item, matchingConfigKey, targetKey));
 };
 
 export function groupScrambleSetsIntoWcif(scrambleSets) {
