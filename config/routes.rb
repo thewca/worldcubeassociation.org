@@ -198,6 +198,7 @@ Rails.application.routes.draw do
 
   get 'persons/new_id' => 'admin/persons#generate_ids'
   get '/persons/results' => 'admin/persons#results', as: :person_results
+  get '/persons/registrations' => 'admin/persons#registrations', as: :person_registrations
   resources :persons, only: %i[index show]
   post 'persons' => 'admin/persons#create'
 
