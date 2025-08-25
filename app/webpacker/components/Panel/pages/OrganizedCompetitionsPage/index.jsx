@@ -13,7 +13,7 @@ async function getCompetitions({ wcaId }) {
     viewUrls.persons.organizedCompetitions(wcaId),
   );
   return data || {};
-};
+}
 
 function OrganizedCompetitioinsPage() {
   const [formValues, setFormValues] = useState({});

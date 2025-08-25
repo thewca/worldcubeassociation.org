@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import {
-  Form, Header, Message, Label, Table, Loader
+  Form, Header, Message, Label, Table, Loader,
 } from 'semantic-ui-react';
 import { useQuery } from '@tanstack/react-query';
 import { IdWcaSearch } from '../../../SearchWidget/WcaSearch';
@@ -13,7 +13,7 @@ async function getCompetitions({ wcaId }) {
     viewUrls.persons.registrations(wcaId),
   );
   return data || {};
-};
+}
 
 function CompetitorRegistrationPage() {
   const [formValues, setFormValues] = useState({});
@@ -46,7 +46,6 @@ function CompetitorRegistrationPage() {
       default: return 'grey';
     }
   };
-
 
   return (
     <>
