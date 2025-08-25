@@ -1227,9 +1227,9 @@ module DatabaseDumper
 
     # Turn of foreign key checking to avoid errors when dumping data caused by foreign keys referencing not yet
     # existing rows.
-    DatabaseDumper.mysql("SET unique_checks=0", dump_db_name)
-    DatabaseDumper.mysql("SET foreign_key_checks=0", dump_db_name)
-    DatabaseDumper.mysql("SET autocommit=0", dump_db_name)
+    ActiveRecord::Base.connection.execute("SET unique_checks=0")
+    ActiveRecord::Base.connection.execute("SET foreign_key_checks=0")
+    ActiveRecord::Base.connection.execute("SET autocommit=0")
 
     LogTask.log_task "Populating sanitized tables in '#{dump_db_name}'" do
       ordered_table_names.each do |table_name|
@@ -1259,6 +1259,11 @@ module DatabaseDumper
       end
 
       ActiveRecord::Base.connection.execute("INSERT INTO #{dump_db_name}.server_settings (name, value, created_at, updated_at) VALUES ('#{dump_ts_name}', UNIX_TIMESTAMP(), NOW(), NOW())") if dump_ts_name.present?
+
+      # Turn these back on. We do establish a new connection again in the ensure block, but just in case this carries over
+      ActiveRecord::Base.connection.execute("SET unique_checks=0")
+      ActiveRecord::Base.connection.execute("SET foreign_key_checks=0")
+      ActiveRecord::Base.connection.execute("SET autocommit=0")
     end
 
     yield dump_db_name
@@ -1273,10 +1278,6 @@ module DatabaseDumper
     self.with_dumped_db(:developer_dump, DEV_SANITIZERS, DEV_TIMESTAMP_NAME, drop_db_after_dump: false) do |dump_db|
       LogTask.log_task "Running SQL dump to '#{dump_filename}'" do
         self.mysqldump(dump_db, dump_filename)
-
-        DatabaseDumper.mysql("SET unique_checks=1", dump_db)
-        DatabaseDumper.mysql("SET foreign_key_checks=1", dump_db)
-        DatabaseDumper.mysql("SET autocommit=1", dump_db)
       end
     end
   end
