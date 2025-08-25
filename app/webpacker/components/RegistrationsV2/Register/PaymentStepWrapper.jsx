@@ -2,6 +2,7 @@ import React from 'react';
 import { Message } from 'semantic-ui-react';
 import { useQuery } from '@tanstack/react-query';
 import StripePaymentStep from './StripePaymentStep';
+import ManualPaymentStep from './ManualPaymentStep';
 import { useRegistration } from '../lib/RegistrationProvider';
 import PaymentOverview from './PaymentOverview';
 import { hasPassed } from '../../../lib/utils/dates';
@@ -63,5 +64,12 @@ export default function PaymentStepWrapper({
   }
 
   if (competitionInfo.payment_integration_type === 'manual') {
+    return (
+      <ManualPaymentStep
+        competitionInfo={competitionInfo}
+        nextStep={nextStep}
+        userInfo={user}
+      />
+    );
   }
 }

@@ -259,10 +259,17 @@ class Api::V1::RegistrationsController < Api::V1::ApiController
 
   def payment_ticket
     iso_donation_amount = params[:iso_donation_amount].to_i
+
+    # TODO: GB Remove this default after deployment, once we're sure all existing competitions' requests
+    #   have been fully processed (~30 minutes after the AWS deployment cycle is complete should be more than sufficient)
+    payment_integration_type = params[:payment_integration_type] || :stripe
+    payment_account = @competition.payment_account_for(payment_integration_type.to_sym)
+    render_error(:forbidden, Registrations::ErrorCodes::PAYMENT_NOT_ENABLED) if payment_account.nil?
+
     # We could delegate this call to the prepare_intent function given that we're already giving it registration - however,
     # in the long-term we want to decouple registrations from payments, so I'm deliberately not introducing any more tight coupling
     ruby_money = @registration.entry_fee_with_donation(iso_donation_amount)
-    payment_account = @competition.payment_account_for(:stripe)
+
     payment_intent = payment_account.prepare_intent(@registration, ruby_money.cents, ruby_money.currency.iso_code, @current_user)
     render json: { client_secret: payment_intent.client_secret }
   end

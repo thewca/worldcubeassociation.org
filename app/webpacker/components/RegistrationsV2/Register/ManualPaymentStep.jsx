@@ -27,7 +27,7 @@ export default function ManualPaymentStep({
   const { data, isLoading } = useQuery({
     queryKey: ['manual-payment', competitionInfo.id],
     queryFn: () => getPaymentTicket(
-      competitionInfo,
+      registration.id,
       0,
       'manual',
     ),
