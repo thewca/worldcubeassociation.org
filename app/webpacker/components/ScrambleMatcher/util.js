@@ -48,7 +48,7 @@ export const isForAttemptBasedEvent = (pickerHistory) => {
 
 const inferExpectedSolveCount = (pickerHistory) => {
   const roundsStep = pickerHistory.find((step) => step.key === 'rounds');
-  return formats.byId[roundsStep.entity.format].expected_solve_count;
+  return formats.byId[roundsStep.entity.format].expectedSolveCount;
 };
 
 export const pickerStepConfig = {
@@ -159,7 +159,7 @@ export function computeMatchingProgress(wcifEvents) {
   return wcifEvents.flatMap(
     (wcifEvent) => wcifEvent.rounds.map(
       (wcifRound) => {
-        const formatExpectedSolveCount = formats.byId[wcifRound.format]?.expected_solve_count;
+        const formatExpectedSolveCount = formats.byId[wcifRound.format]?.expectedSolveCount;
 
         return {
           id: wcifRound.id,
