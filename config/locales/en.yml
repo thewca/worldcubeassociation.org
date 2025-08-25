@@ -2166,7 +2166,7 @@ en:
         tabs: "Manage tabs"
         newcomer_checks: "Newcomer Checks"
         submit_results: "Submit results"
-        match_scrambles: "Submit scrambles"
+        upload_scrambles: "Upload scrambles"
         delegate_report: "Delegate report"
         registration: "Registration"
         import_registrations: "Import registrations"

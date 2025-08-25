@@ -4,28 +4,33 @@ import { ImportResultsData } from './ImportResultsData';
 import WCAQueryClientProvider from '../../lib/providers/WCAQueryClientProvider';
 import FormToWrt from './FormToWrt';
 
-export default function Wrapper(
-  {
-    competitionId, resultsSubmitted, hasTemporaryResults, canSubmitResults,
-  },
-) {
+export default function Wrapper({
+  competitionId,
+  resultsSubmitted,
+  hasTemporaryResults,
+  uploadedScrambleFilesCount,
+  canSubmitResults,
+}) {
   return (
     <WCAQueryClientProvider>
       <CompetitionResultSubmission
         competitionId={competitionId}
         resultsSubmitted={resultsSubmitted}
         hasTemporaryResults={hasTemporaryResults}
+        uploadedScrambleFilesCount={uploadedScrambleFilesCount}
         canSubmitResults={canSubmitResults}
       />
     </WCAQueryClientProvider>
   );
 }
 
-function CompetitionResultSubmission(
-  {
-    competitionId, resultsSubmitted, hasTemporaryResults, canSubmitResults,
-  },
-) {
+function CompetitionResultSubmission({
+  competitionId,
+  resultsSubmitted,
+  hasTemporaryResults,
+  uploadedScrambleFilesCount,
+  canSubmitResults,
+}) {
   if (resultsSubmitted) {
     return (
       <Message positive>
@@ -48,6 +53,7 @@ function CompetitionResultSubmission(
       </List>
       <ImportResultsData
         competitionId={competitionId}
+        uploadedScrambleFilesCount={uploadedScrambleFilesCount}
         hasTemporaryResults={hasTemporaryResults}
       />
       {hasTemporaryResults && (

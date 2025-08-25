@@ -114,7 +114,7 @@ Rails.application.routes.draw do
     get 'newcomer-dob-check' => 'results_submission#newcomer_dob_check', as: :newcomer_dob_check
     post 'compute_potential_duplicates' => 'results_submission#compute_potential_duplicates', as: :compute_potential_duplicates
     get 'submit-results' => 'results_submission#new', as: :submit_results_edit
-    get 'submit-scrambles' => 'admin/scrambles#match_scrambles', as: :match_scrambles
+    get 'upload-scrambles' => 'admin/scrambles#upload', as: :upload_scrambles
     post 'submit-results' => 'results_submission#create', as: :submit_results
     post 'import-wca-live-results' => 'results_submission#import_from_live'
     resources :scramble_files, only: %i[index create destroy], shallow: true do

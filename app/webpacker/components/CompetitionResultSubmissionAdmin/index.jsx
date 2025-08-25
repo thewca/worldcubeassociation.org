@@ -4,19 +4,30 @@ import WCAQueryClientProvider from '../../lib/providers/WCAQueryClientProvider';
 import { ImportResultsData } from '../CompetitionResultSubmission/ImportResultsData';
 import { adminImportResultsUrl, viewUrls } from '../../lib/requests/routes.js.erb';
 
-export default function Wrapper({ competitionId, hasTemporaryResults, ticketId }) {
+export default function Wrapper({
+  competitionId,
+  hasTemporaryResults,
+  uploadedScrambleFilesCount,
+  ticketId,
+}) {
   return (
     <WCAQueryClientProvider>
       <CompetitionResultSubmissionAdmin
         competitionId={competitionId}
         hasTemporaryResults={hasTemporaryResults}
+        uploadedScrambleFilesCount={uploadedScrambleFilesCount}
         ticketId={ticketId}
       />
     </WCAQueryClientProvider>
   );
 }
 
-function CompetitionResultSubmissionAdmin({ competitionId, hasTemporaryResults, ticketId }) {
+function CompetitionResultSubmissionAdmin({
+  competitionId,
+  hasTemporaryResults,
+  uploadedScrambleFilesCount,
+  ticketId,
+}) {
   if (!ticketId) {
     return (
       <Message error>
@@ -41,6 +52,7 @@ function CompetitionResultSubmissionAdmin({ competitionId, hasTemporaryResults, 
       <ImportResultsData
         competitionId={competitionId}
         hasTemporaryResults={hasTemporaryResults}
+        uploadedScrambleFilesCount={uploadedScrambleFilesCount}
         isAdminView
       />
     </>
