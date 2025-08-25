@@ -200,6 +200,7 @@ Rails.application.routes.draw do
   get '/persons/results' => 'admin/persons#results', as: :person_results
   get '/persons/registrations' => 'admin/persons#registrations', as: :person_registrations
   get '/persons/organized-competitions' => 'admin/persons#organized_competitions', as: :person_organized_competitions
+  get '/persons/delegated-competitions' => 'admin/persons#delegated_competitions', as: :person_delegated_competitions
   resources :persons, only: %i[index show]
   post 'persons' => 'admin/persons#create'
 
