@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import {
-  Form, Header, Message, Label, Table, Loader
+  Form, Header, Message, Table, Loader,
 } from 'semantic-ui-react';
 import { useQuery } from '@tanstack/react-query';
 import { IdWcaSearch } from '../../../SearchWidget/WcaSearch';
@@ -10,12 +10,12 @@ import { viewUrls } from '../../../../lib/requests/routes.js.erb';
 
 async function getCompetitions({ wcaId }) {
   const { data } = await fetchJsonOrError(
-    viewUrls.persons.registrations(wcaId),
+    viewUrls.persons.organizedCompetitions(wcaId),
   );
   return data || {};
 };
 
-function CompetitorRegistrationPage() {
+function OrganizedCompetitioinsPage() {
   const [formValues, setFormValues] = useState({});
 
   const { wcaId } = formValues;
@@ -24,7 +24,7 @@ function CompetitorRegistrationPage() {
     data: competitionsList,
     isFetching: competitionsFetching,
   } = useQuery({
-    queryKey: ['competitor-registration-competitions', wcaId],
+    queryKey: ['organized-competitions-competitions', wcaId],
     queryFn: () => getCompetitions({ wcaId }),
     enabled: !!wcaId,
   });
@@ -36,21 +36,9 @@ function CompetitorRegistrationPage() {
     }),
   );
 
-  const statusColor = (s) => {
-    switch ((s || '').toLowerCase()) {
-      case 'accepted': return 'green';
-      case 'pending': return 'grey';
-      case 'waiting_list': return 'yellow';
-      case 'cancelled': return 'orange';
-      case 'rejected': return 'red';
-      default: return 'grey';
-    }
-  };
-
-
   return (
     <>
-      <Header>Competitor Registrations</Header>
+      <Header>Organized Competitions</Header>
       <Form>
         <Form.Field
           label="WCA ID"
@@ -64,11 +52,11 @@ function CompetitorRegistrationPage() {
       </Form>
       <Loader active={competitionsFetching} />
       {!wcaId && (
-        <Message info content="Select a WCA ID to load registrations." />
+        <Message info content="Select a WCA ID to load organized competitions." />
       )}
 
       {wcaId && competitionsList?.length === 0 && (
-        <Message content="No registrations found for this competitor." />
+        <Message content="No organized competitions found." />
       )}
 
       {wcaId && competitionsList?.length > 0 && (
@@ -79,7 +67,6 @@ function CompetitorRegistrationPage() {
               <Table.HeaderCell>City</Table.HeaderCell>
               <Table.HeaderCell>Country</Table.HeaderCell>
               <Table.HeaderCell>Date</Table.HeaderCell>
-              <Table.HeaderCell>Status</Table.HeaderCell>
             </Table.Row>
           </Table.Header>
 
@@ -90,11 +77,6 @@ function CompetitorRegistrationPage() {
                 <Table.Cell>{row.city_name}</Table.Cell>
                 <Table.Cell>{row.country_id}</Table.Cell>
                 <Table.Cell>{row.start_date}</Table.Cell>
-                <Table.Cell>
-                  <Label basic color={statusColor(row.competing_status)}>
-                    {row.competing_status}
-                  </Label>
-                </Table.Cell>
               </Table.Row>
             ))}
           </Table.Body>
@@ -104,4 +86,4 @@ function CompetitorRegistrationPage() {
   );
 }
 
-export default CompetitorRegistrationPage;
+export default OrganizedCompetitioinsPage;

@@ -39,6 +39,7 @@ import CheckRecordsPage from './pages/CheckRecordsPage';
 import FixResultsPage from './pages/FixResultsPage';
 import MergeUsersPage from './pages/MergeUsersPage';
 import CompetitorRegistrationPage from './pages/CompetitorRegistrationPage';
+import OrganizedCompetitionsPage from './pages/OrganizedCompetitionsPage';
 
 export default {
   [PANEL_PAGES.postingDashboard]: {
@@ -192,5 +193,9 @@ export default {
   [PANEL_PAGES.competitorRegistration]: {
     name: 'Competitor Registrations',
     component: CompetitorRegistrationPage,
+  },
+  [PANEL_PAGES.organizedCompetitions]: {
+    name: 'Organized Competitions',
+    component: OrganizedCompetitionsPage,
   },
 };

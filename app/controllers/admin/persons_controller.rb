@@ -71,6 +71,25 @@ module Admin
       )
     end
 
+    def organized_competitions
+      person_wca_id = params.require(:wcaId)
+
+      person = Person.current.find_by!(wca_id: person_wca_id)
+      competitions = person.user.organized_competitions
+        .order('competitions.start_date DESC')
+        .where('competitions.announced_at IS NOT NULL')
+        .where('competitions.cancelled_at IS NULL')
+        .select(
+          'competitions.*,
+          competitions.id   AS competition_id,
+          competitions.name AS competition_name'
+        )
+
+      render json: competitions.as_json(
+        only: %w[competition_id competition_name city_name country_id start_date competing_status],
+      )
+    end
+
     private def new_id_params
       params.permit(:name, :competition_id, :semi_id)
     end
