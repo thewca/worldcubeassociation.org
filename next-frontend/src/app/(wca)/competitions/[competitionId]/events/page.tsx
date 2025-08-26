@@ -1,5 +1,4 @@
 import { getCompetitionInfo } from "@/lib/wca/competitions/getCompetitionInfo";
-import { Tabs } from "@chakra-ui/react";
 import TabEvents from "@/components/competitions/TabEvents";
 
 export default async function Events({
@@ -12,11 +11,9 @@ export default async function Events({
   const competitionInfo = await getCompetitionInfo(competitionId)!;
 
   return (
-    <Tabs.Content value="events">
-      <TabEvents
-        competitionId={competitionInfo.data!.id}
-        forceQualifications={competitionInfo.data!["uses_qualification?"]}
-      />
-    </Tabs.Content>
+    <TabEvents
+      competitionId={competitionInfo.data!.id}
+      forceQualifications={competitionInfo.data!["uses_qualification?"]}
+    />
   );
 }

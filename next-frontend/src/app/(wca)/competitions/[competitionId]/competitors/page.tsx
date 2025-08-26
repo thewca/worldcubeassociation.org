@@ -1,4 +1,3 @@
-import { Tabs } from "@chakra-ui/react";
 import TabCompetitors from "@/components/competitions/TabCompetitors";
 
 export default async function Events({
@@ -8,9 +7,5 @@ export default async function Events({
 }) {
   const { competitionId } = await params;
 
-  return (
-    <Tabs.Content value="competitors">
-      <TabCompetitors id={competitionId} />
-    </Tabs.Content>
-  );
+  return <TabCompetitors id={competitionId} />;
 }

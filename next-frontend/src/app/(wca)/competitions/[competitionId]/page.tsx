@@ -114,7 +114,7 @@ async function GeneralPage({ competitionId }: { competitionId: string }) {
   const { t } = await getT();
 
   return (
-    <Tabs.Content value="general">
+    <>
       <HStack gap="8" alignItems="stretch">
         <VStack maxW="45%" w="45%" gap="8">
           <Card.Root variant="plain">
@@ -483,6 +483,6 @@ async function GeneralPage({ competitionId }: { competitionId: string }) {
           <MarkdownProse content={competitionInfo.information} />
         </Card.Body>
       </Card.Root>
-    </Tabs.Content>
+    </>
   );
 }

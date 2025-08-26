@@ -15,13 +15,14 @@ export default function TabMenu({
 }) {
   const pathName = usePathname();
 
-  const currentPath = _.last(pathName.split("/"));
+  const path = _.last(pathName.split("/"));
+  const currentPath = path === competitionId ? "general" : path;
 
   return (
     <Tabs.Root
       variant="enclosed"
       w="100%"
-      defaultValue={currentPath === competitionId ? "general" : pathName}
+      defaultValue={currentPath}
       orientation="vertical"
       lazyMount
       unmountOnExit
@@ -72,7 +73,7 @@ export default function TabMenu({
         <Tabs.Trigger value="custom-2">Custom 2</Tabs.Trigger>
         <Tabs.Trigger value="custom-3">Custom 3</Tabs.Trigger>
       </Tabs.List>
-      {children}
+      <Tabs.Content value={currentPath!}>{children}</Tabs.Content>
     </Tabs.Root>
   );
 }
