@@ -1,27 +1,29 @@
+import _ from 'lodash';
 import { events, formats } from '../../lib/wca-data.js.erb';
 import { humanizeActivityCode } from '../../lib/utils/wcif';
 import { EventsPickerCompat } from './ButtonGroupPicker';
 
-const ATTEMPT_BASED_EVENTS = ['333fm', '333mbf'];
+export const ATTEMPT_BASED_EVENTS = ['333fm', '333mbf'];
 
 export const pickerLocalizationConfig = {
   events: {
-    computeEntityName: (evt) => events.byId[evt.id].name,
+    computeEntityName: (id) => events.byId[id].name,
     headerLabel: 'Events',
     dropdownLabel: 'Event',
   },
   rounds: {
-    computeEntityName: (rd) => humanizeActivityCode(rd.id),
+    computeEntityName: (id) => humanizeActivityCode(id),
     headerLabel: 'Rounds',
     dropdownLabel: 'Round',
   },
   scrambleSets: {
-    computeEntityName: (scrSet, idx) => `Group ${idx + 1}`,
-    headerLabel: 'Groups',
+    computeEntityName: (id, idx) => `Group ${idx + 1}`,
+    headerLabel: 'Scramble Sets',
     dropdownLabel: 'Scramble Set',
+    pickerLabel: 'Groups',
   },
   inbox_scrambles: {
-    computeEntityName: (scr, idx) => `Attempt ${idx + 1}`,
+    computeEntityName: (id, idx) => `Attempt ${idx + 1}`,
     headerLabel: 'Scrambles',
     dropdownLabel: 'Scramble',
   },
@@ -34,18 +36,19 @@ const prefixForIndex = (index) => {
   return prefixForIndex(Math.floor(index / 26) - 1) + char;
 };
 
-export const scrambleSetToName = (scrambleSet) => `${events.byId[scrambleSet.event_id].name} Round ${scrambleSet.round_number} Scramble Set ${prefixForIndex(scrambleSet.scramble_set_number - 1)}`;
+export const scrambleSetToName = (scrambleSet) => `Scramble Set ${prefixForIndex(scrambleSet.scramble_set_number - 1)}`;
+const scrambleSetToTitle = (scrambleSet) => `${events.byId[scrambleSet.event_id].name} Round ${scrambleSet.round_number} ${scrambleSetToName(scrambleSet)}`;
 
 export const scrambleToName = (scramble) => `Scramble ${scramble.scramble_number}`;
 
-const isForAttemptBasedEvent = (pickerHistory) => {
+export const isForAttemptBasedEvent = (pickerHistory) => {
   const eventsStep = pickerHistory.find((step) => step.key === 'events');
   return ATTEMPT_BASED_EVENTS.includes(eventsStep.id);
 };
 
 const inferExpectedSolveCount = (pickerHistory) => {
   const roundsStep = pickerHistory.find((step) => step.key === 'rounds');
-  return formats.byId[roundsStep.entity.format].expected_solve_count;
+  return formats.byId[roundsStep.entity.format].expectedSolveCount;
 };
 
 export const pickerStepConfig = {
@@ -54,25 +57,38 @@ export const pickerStepConfig = {
     nestedPicker: 'rounds',
   },
   rounds: {
-    matchingConfig: {
-      key: 'scrambleSets',
-      computeCellName: scrambleSetToName,
-      computeCellDetails: (scrSet) => scrSet.original_filename,
-      computeExpectedRowCount: (round) => round.scrambleSetCount,
-    },
+    matchingConfigKey: 'scrambleSets',
     nestedPicker: 'scrambleSets',
-    nestingCondition: (history) => isForAttemptBasedEvent(history),
   },
   scrambleSets: {
-    matchingConfig: {
-      key: 'inbox_scrambles',
-      computeCellName: scrambleToName,
-      computeCellDetails: (scr) => scr.scramble_string,
-      cellDetailsAreData: true,
-      computeExpectedRowCount: (scrambleSet, history) => inferExpectedSolveCount(history),
-    },
+    enabledCondition: (history) => isForAttemptBasedEvent(history),
+    matchingConfigKey: 'inbox_scrambles',
   },
 };
+
+export const matchingDndConfig = {
+  scrambleSets: {
+    computeCellName: scrambleSetToTitle,
+    computeTableName: scrambleSetToName,
+    computeCellDetails: (scrSet) => scrSet.original_filename,
+    computeExpectedRowCount: (round) => round.scrambleSetCount,
+  },
+  inbox_scrambles: {
+    computeCellName: scrambleToName,
+    computeCellDetails: (scr) => scr.scramble_string,
+    cellDetailsAreData: true,
+    computeExpectedRowCount: (scrambleSet, history) => inferExpectedSolveCount(history),
+  },
+};
+
+export function buildHistoryStep(key, entity, index) {
+  return {
+    key,
+    entity,
+    id: entity.id,
+    index,
+  };
+}
 
 export function moveArrayItem(arr, fromIndex, toIndex) {
   const movedItem = arr[fromIndex];
@@ -91,18 +107,61 @@ export function moveArrayItem(arr, fromIndex, toIndex) {
   ];
 }
 
-export function applyPickerHistory(rootState, pickerHistory) {
-  return pickerHistory.reduce(
-    (state, historyStep) => state[historyStep.key][historyStep.index],
-    rootState,
+export function addItemToArray(arr, entity, targetIdx = arr.length) {
+  return arr.toSpliced(targetIdx, 0, entity);
+}
+
+export const searchRecursive = (data, targetStep, currentKey = 'events', searchHistory = []) => {
+  const { nestedPicker, matchingConfigKey = nestedPicker } = pickerStepConfig[currentKey] || {};
+
+  return data[currentKey]?.reduce((foundPath, item, index) => {
+    if (foundPath) return foundPath;
+
+    const nextHistory = [
+      ...searchHistory,
+      buildHistoryStep(currentKey, item, index),
+    ];
+
+    if (currentKey === targetStep.key && item.id === targetStep.id) {
+      return nextHistory;
+    }
+
+    if (matchingConfigKey) {
+      return searchRecursive(item, targetStep, matchingConfigKey, nextHistory);
+    }
+
+    return null;
+  }, null);
+};
+
+export function groupScrambleSetsIntoWcif(scrambleSets) {
+  const groupedMap = _.mapValues(
+    _.groupBy(
+      _.sortBy(scrambleSets, (scrSet) => events.byId[scrSet.event_id].rank),
+      'event_id',
+    ),
+    (eventItems) => _.groupBy(
+      _.sortBy(eventItems, (evt) => evt.round_number),
+      'round_number',
+    ),
   );
+
+  const wcifEvents = _.map(groupedMap, (roundsMap, eventId) => ({
+    id: eventId,
+    rounds: _.map(roundsMap, (sets, roundNum) => ({
+      id: `${eventId}-r${roundNum}`,
+      scrambleSets: sets,
+    })),
+  }));
+
+  return { events: wcifEvents };
 }
 
 export function computeMatchingProgress(wcifEvents) {
   return wcifEvents.flatMap(
     (wcifEvent) => wcifEvent.rounds.map(
       (wcifRound) => {
-        const formatExpectedSolveCount = formats.byId[wcifRound.format]?.expected_solve_count;
+        const formatExpectedSolveCount = formats.byId[wcifRound.format]?.expectedSolveCount;
 
         return {
           id: wcifRound.id,

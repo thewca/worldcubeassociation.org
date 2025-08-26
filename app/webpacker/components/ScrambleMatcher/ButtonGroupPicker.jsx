@@ -7,13 +7,13 @@ export default function ButtonGroupPicker({
   entityChoices,
   selectedEntityId,
   onEntityIdSelected,
-  headerLabel,
+  pickerLabel,
   computeEntityName,
 }) {
   return (
     <>
       <Header as="h4">
-        {headerLabel}
+        {pickerLabel}
         {' '}
         <Button
           size="mini"
@@ -31,7 +31,7 @@ export default function ButtonGroupPicker({
             active={entity.id === selectedEntityId}
             onClick={() => onEntityIdSelected(entity.id)}
           >
-            {computeEntityName(entity, idx)}
+            {computeEntityName(entity.id, idx)}
           </Button>
         ))}
       </Button.Group>

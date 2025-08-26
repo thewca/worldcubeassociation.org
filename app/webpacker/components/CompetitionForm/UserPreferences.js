@@ -32,7 +32,7 @@ function NotificationSettingsAction({
       }),
     }).then((raw) => raw.data),
     onSuccess: (respData, variables) => queryClient.setQueryData(
-      userPreferencesQueryKey(variables.competitionId),
+      userPreferencesQueryKey(variables.compId),
       respData.data,
     ),
   });

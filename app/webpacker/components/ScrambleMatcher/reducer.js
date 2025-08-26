@@ -1,9 +1,17 @@
 import _ from 'lodash';
-import { moveArrayItem, applyPickerHistory } from './util';
+import { addItemToArray, moveArrayItem } from './util';
 
-function addScrambleSetsToEvents(wcifEvents, scrambleSets) {
+function addScrambleSetsToEvents(wcifEvents, scrambleSets, keepExistingSets = true) {
+  const groupedScrambles = _.groupBy(
+    scrambleSets.flatMap((scrSet) => scrSet.inbox_scrambles),
+    'matched_scramble_set_id',
+  );
+
   const groupedScrambleSets = _.groupBy(
-    scrambleSets,
+    scrambleSets.map((scrSet) => ({
+      ...scrSet,
+      inbox_scrambles: groupedScrambles[scrSet.id],
+    })),
     'matched_round_wcif_id',
   );
 
@@ -18,7 +26,7 @@ function addScrambleSetsToEvents(wcifEvents, scrambleSets) {
             //   Lodash keeps only the first appearance, so we need to list
             //   the newest possible entries first, followed by existing entries.
             ...(groupedScrambleSets[round.id] ?? []),
-            ...(round.scrambleSets ?? []),
+            ...(keepExistingSets ? (round.scrambleSets ?? []) : []),
           ], 'id').map((scrSet) => ({
             ...scrSet,
             inbox_scrambles: _.sortBy(
@@ -44,7 +52,7 @@ export function initializeState({ wcifEvents, scrambleSets }) {
   return applyAction(
     {},
     ['initial', 'current'],
-    () => addScrambleSetsToEvents(wcifEvents, scrambleSets),
+    () => addScrambleSetsToEvents(wcifEvents, scrambleSets, false),
   );
 }
 
@@ -53,6 +61,11 @@ function addScrambleFile(state, newScrambleFile) {
 }
 
 function removeScrambleFile(state, oldScrambleFile) {
+  const scrambleSets = state.events.flatMap((evt) => evt.rounds.flatMap((rd) => rd.scrambleSets));
+
+  const scrSetLookup = _.keyBy(scrambleSets, 'id');
+  const setUploadLookup = _.mapValues(scrSetLookup, 'external_upload_id');
+
   return {
     ...state,
     events: state.events.map((wcifEvent) => ({
@@ -60,14 +73,19 @@ function removeScrambleFile(state, oldScrambleFile) {
       rounds: wcifEvent.rounds.map((round) => ({
         ...round,
         scrambleSets: round.scrambleSets.filter(
-          (scrSet) => scrSet.external_upload_id !== oldScrambleFile.id,
-        ),
+          (scrSet) => setUploadLookup[scrSet.id] !== oldScrambleFile.id,
+        ).map((scrSet) => ({
+          ...scrSet,
+          inbox_scrambles: scrSet.inbox_scrambles.filter(
+            (ibs) => setUploadLookup[ibs.matched_scramble_set_id] !== oldScrambleFile.id,
+          ),
+        })),
       })),
     })),
   };
 }
 
-function unwrapActionNavigation(actionWithNav, selector) {
+function navigationToLodash(actionWithNav, selector) {
   return [
     ...actionWithNav[selector].flatMap((step) => [step.key, step.index]),
     actionWithNav.matchingKey,
@@ -97,25 +115,40 @@ export default function scrambleMatchReducer(state, action) {
       return applyAction(state, ['current'], () => state.initial);
     case 'moveMatchingEntity':
       return applyAction(state, ['current'], (subState) => {
-        const oldPath = unwrapActionNavigation(action, 'fromNavigation');
-        const newPath = unwrapActionNavigation(action, 'toNavigation');
+        const oldPath = navigationToLodash(action, 'fromNavigation');
+        const newPath = navigationToLodash(action, 'toNavigation');
 
         return _.chain(subState)
           .cloneDeep()
           .update(oldPath, (arr) => arr.filter((ent) => ent.id !== action.entity.id))
-          .update(newPath, (arr = []) => [...arr, action.entity])
+          .update(newPath, (arr = []) => addItemToArray(arr, action.entity))
           .value();
       });
     case 'reorderMatchingEntities':
       return applyAction(state, ['current'], (subState) => {
-        const lodashPath = unwrapActionNavigation(action, 'pickerHistory');
-
-        const currentOrder = applyPickerHistory(subState, action.pickerHistory)[action.matchingKey];
-        const movedItemState = moveArrayItem(currentOrder, action.fromIndex, action.toIndex);
+        const lodashPath = navigationToLodash(action, 'pickerHistory');
 
         return _.chain(subState)
           .cloneDeep()
-          .set(lodashPath, movedItemState)
+          .update(lodashPath, (arr = []) => moveArrayItem(arr, action.fromIndex, action.toIndex))
+          .value();
+      });
+    case 'deleteEntityFromMatching':
+      return applyAction(state, ['current'], (subState) => {
+        const lodashPath = navigationToLodash(action, 'pickerHistory');
+
+        return _.chain(subState)
+          .cloneDeep()
+          .update(lodashPath, (arr = []) => arr.filter((ent) => ent.id !== action.entity.id))
+          .value();
+      });
+    case 'addEntityToMatching':
+      return applyAction(state, ['current'], (subState) => {
+        const lodashPath = navigationToLodash(action, 'pickerHistory');
+
+        return _.chain(subState)
+          .cloneDeep()
+          .update(lodashPath, (arr = []) => addItemToArray(arr, action.entity, action.targetIndex))
           .value();
       });
     default:

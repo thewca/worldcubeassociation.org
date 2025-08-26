@@ -78,6 +78,7 @@ class ScrambleFilesController < ApplicationController
                   scramble_number: n + 1,
                   ordered_index: n + num_persisted_scrambles,
                   is_extra: scramble_kind == :extraScrambles,
+                  matched_scramble_set: scramble_set,
                 )
               end
             end
@@ -109,33 +110,34 @@ class ScrambleFilesController < ApplicationController
 
         next if updated_sets.blank?
 
-        round.inbox_scramble_sets.update_all(matched_round_id: nil)
         updated_set_ids = updated_sets.pluck(:id)
+        updated_sets_by_id = updated_sets.index_by { it[:id] }
+
+        round.inbox_scramble_sets.update_all(matched_round_id: nil)
 
         # This avoids validation issues when reassigning the indices one by one in the `each` loop below
         InboxScrambleSet.where(id: updated_set_ids).update_all(ordered_index: -1)
 
         InboxScrambleSet.find(updated_set_ids)
-                        .each_with_index do |scramble_set, idx|
-          scramble_set.update!(matched_round: round, ordered_index: idx)
-        end
+                        .each_with_index do |scramble_set, set_idx|
+          scramble_set.update!(matched_round: round, ordered_index: set_idx)
 
-        updated_sets.each do |updated_set|
-          updated_scramble_ids = updated_set[:inbox_scrambles]
+          updated_scramble_ids = updated_sets_by_id[scramble_set.id][:inbox_scrambles]
+          scramble_set.matched_inbox_scrambles.update_all(matched_scramble_set_id: nil)
 
           # This avoids validation issues when reassigning the indices one by one in the `each` loop below
           InboxScramble.where(id: updated_scramble_ids).update_all(ordered_index: -1)
 
           InboxScramble.find(updated_scramble_ids)
                        .each_with_index do |scramble, idx|
-            scramble.update!(ordered_index: idx)
+            scramble.update!(matched_scramble_set: scramble_set, ordered_index: idx)
           end
         end
       end
     end
 
     render json: competition.inbox_scramble_sets
-                            .includes(:inbox_scrambles, matched_round: [:competition_event])
+                            .includes(**InboxScrambleSet::SERIALIZATION_INCLUDES)
   end
 
   private def competition_from_params

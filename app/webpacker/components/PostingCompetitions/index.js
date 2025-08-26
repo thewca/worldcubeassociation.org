@@ -13,7 +13,6 @@ import RegionFlag from '../wca/RegionFlag';
 import {
   adminCheckUploadedResults,
   adminPostingCompetitionsUrl,
-  adminImportResultsUrl,
   adminStartPostingUrl,
   competitionUrl,
   viewUrls,
@@ -100,20 +99,13 @@ function PostingCompetitionsIndex({
                   >
                     Check results page
                   </Button>
-                  <Button
-                    target="_blank"
-                    color="green"
-                    href={adminImportResultsUrl(c.id)}
-                  >
-                    Import results page
-                  </Button>
                   {c.result_ticket && (
                     <Button
                       target="_blank"
-                      color="red"
+                      color="green"
                       href={viewUrls.tickets.show(c.result_ticket.id)}
                     >
-                      Tickets page
+                      Post through Tickets page
                     </Button>
                   )}
                 </>

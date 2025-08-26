@@ -69,4 +69,14 @@ class TicketsCompetitionResult < ApplicationRecord
       self.update!(status: TicketsCompetitionResult.statuses[:merged_inbox_results])
     end
   end
+
+  DEFAULT_SERIALIZE_OPTIONS = {
+    include: {
+      competition: { only: %i[id name], methods: [], include: [] },
+    },
+  }.freeze
+
+  def serializable_hash(options = nil)
+    super(DEFAULT_SERIALIZE_OPTIONS.merge(options || {}))
+  end
 end
