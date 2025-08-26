@@ -24,7 +24,7 @@ export default async function CompetitionLayout({
         <Tabs.List height="fit-content" position="sticky" top="3">
           <Link
             href={route({
-              pathname: "/competitions/[competitionId]/general",
+              pathname: "/competitions/[competitionId]",
               query: { competitionId },
             })}
           >
