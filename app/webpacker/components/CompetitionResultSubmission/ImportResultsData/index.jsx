@@ -52,7 +52,7 @@ export function ImportResultsData({
         </Tab.Pane>
       ),
     },
-    {
+    ...(isAdminView ? [{
       menuItem: '[BETA] Use WCA Live Results',
       render: () => (
         <Tab.Pane>
@@ -63,7 +63,7 @@ export function ImportResultsData({
           />
         </Tab.Pane>
       ),
-    },
+    }] : []),
   ];
 
   return (

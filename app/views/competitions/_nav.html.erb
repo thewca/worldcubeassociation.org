@@ -95,7 +95,7 @@
             text: t('.menu.upload_scrambles'),
             path: competition_upload_scrambles_path(@competition),
             icon: "spy",
-          }
+          } unless Rails.env.production? && EnvConfig.WCA_LIVE_SITE?
         end
         if current_user&.can_admin_results?
           nav_items << {
