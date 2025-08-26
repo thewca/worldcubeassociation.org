@@ -44,7 +44,14 @@ const filterUnusedItems = (
   }
 
   const unusedBranches = masterItems.map((masterItem, i) => {
-    const workingItemCandidate = workingItems?.find((itm) => itm.id === masterItem.id);
+    const mergedWorkingItems = workingItems?.reduce((acc, workingItem) => ({
+      ...acc,
+      ...workingItem,
+      [nestedPicker]: [
+        ...acc[nestedPicker],
+        ...workingItem[nestedPicker],
+      ],
+    }));
 
     const nextHistory = [
       ...history,
@@ -58,7 +65,7 @@ const filterUnusedItems = (
 
     return filterUnusedItems(
       masterItem,
-      workingItemCandidate,
+      mergedWorkingItems,
       nextHistory,
       nestedPicker,
       matchingConfigKey,
@@ -87,13 +94,14 @@ export function UnusedEntityButtonGroup({
   referenceMatchState,
   onClickAutoAssign,
   onClickManualAssign,
+  fluid = undefined,
 }) {
   const autoInsertTarget = fullPathToEntity[fullPathToEntity.length - 2];
 
   const autoInsertNavigation = searchRecursive(referenceMatchState, autoInsertTarget);
 
   return (
-    <Button.Group compact widths={2}>
+    <Button.Group compact fluid={fluid}>
       {autoInsertNavigation && (
         <Button
           positive
@@ -176,6 +184,7 @@ function UnusedEntitiesPanel({
                     referenceMatchState={rootMatchState}
                     onClickAutoAssign={addBackEntity}
                     onClickManualAssign={setModalPayload}
+                    fluid
                   />
                   <MoveMatchingEntityModal
                     key={modalPayload?.id}
@@ -209,7 +218,11 @@ export default function UnusedScramblesPanel({
     return groupScrambleSetsIntoWcif(allScrambleSets);
   }, [scrambleFiles]);
 
-  const unusedPickerEntities = filterUnusedItems(scrambleFilesTree, matchState);
+  const unusedPickerEntities = useMemo(
+    () => filterUnusedItems(scrambleFilesTree, matchState),
+    [scrambleFilesTree, matchState],
+  );
+
   const anyUnusedEntries = unusedPickerEntities.some((step) => step.unused.length > 0);
 
   return (
