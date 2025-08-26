@@ -17,10 +17,15 @@ RSpec.describe "Locale files content" do
 end
 
 RSpec.describe "Momentjs activation" do
+  locale_mappings = { "es-es" => "es", "es-419" => "es-mx" }
+
   (I18n.available_locales - [:en]).each do |locale|
     context "for #{locale} the app/assets/javascripts/application.js file" do
+      locale = locale.to_s.downcase
+      mapped_locale = locale_mappings[locale] || locale
       moment_content = Rails.root.join('app', 'assets', 'javascripts', 'locales', "#{locale.downcase}.js").read
-      it { expect(moment_content).to include("//= require moment/#{locale.downcase}.js") }
+
+      it { expect(moment_content).to include("//= require moment/#{mapped_locale}.js") }
     end
   end
 end
