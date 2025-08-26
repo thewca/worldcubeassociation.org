@@ -3,7 +3,7 @@
 class InboxScrambleSet < ApplicationRecord
   SERIALIZATION_INCLUDES = { inbox_scrambles: [], scramble_file_upload: [], matched_round: [:competition_event] }.freeze
 
-  belongs_to :competition
+  belongs_to :competition, inverse_of: :inbox_scramble_sets
   belongs_to :event
 
   belongs_to :scramble_file_upload, optional: true, foreign_key: "external_upload_id", inverse_of: :inbox_scramble_sets
@@ -15,6 +15,10 @@ class InboxScrambleSet < ApplicationRecord
   validates :ordered_index, uniqueness: { scope: :matched_round_id }
 
   delegate :original_filename, to: :scramble_file_upload, allow_nil: true
+
+  def event
+    Event.c_find(self.event_id)
+  end
 
   def matched_round_wcif_id
     matched_round&.wcif_id || "#{self.event_id}-r#{self.round_number}"

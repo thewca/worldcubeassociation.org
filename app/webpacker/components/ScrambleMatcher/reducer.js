@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import { addItemToArray, moveArrayItem } from './util';
 
-function addScrambleSetsToEvents(wcifEvents, scrambleSets) {
+function addScrambleSetsToEvents(wcifEvents, scrambleSets, keepExistingSets = true) {
   const groupedScrambleSets = _.groupBy(
     scrambleSets,
     'matched_round_wcif_id',
@@ -18,7 +18,7 @@ function addScrambleSetsToEvents(wcifEvents, scrambleSets) {
             //   Lodash keeps only the first appearance, so we need to list
             //   the newest possible entries first, followed by existing entries.
             ...(groupedScrambleSets[round.id] ?? []),
-            ...(round.scrambleSets ?? []),
+            ...(keepExistingSets ? (round.scrambleSets ?? []) : []),
           ], 'id').map((scrSet) => ({
             ...scrSet,
             inbox_scrambles: _.sortBy(
@@ -44,7 +44,7 @@ export function initializeState({ wcifEvents, scrambleSets }) {
   return applyAction(
     {},
     ['initial', 'current'],
-    () => addScrambleSetsToEvents(wcifEvents, scrambleSets),
+    () => addScrambleSetsToEvents(wcifEvents, scrambleSets, false),
   );
 }
 
