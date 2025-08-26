@@ -708,7 +708,7 @@ RSpec.describe Registration do
       expect(waiting_list_reg.reload.competing_status).to eq('accepted')
     end
 
-    context 'auto-accept isnt triggered' do
+    context 'auto-accept does not succed' do
       it 'if a waitlisted registration is not first in the waiting list' do
         create_list(:registration, 3, :waiting_list, competition: auto_accept_comp)
         waiting_list_reg = create(:registration, :waiting_list, competition: auto_accept_comp)
@@ -719,6 +719,14 @@ RSpec.describe Registration do
         waiting_list_reg.attempt_auto_accept(:live)
         expect(waiting_list_reg.reload.competing_status).to eq('waiting_list')
         expect(waiting_list_reg.registration_history.last[:changed_attributes][:auto_accept_failure_reasons]).to eq("-7003")
+      end
+
+      it 'if registration_payment.is_completed: false' do
+        create(:registration_payment, :skip_create_hook, registration: reg, competition: auto_accept_comp, is_completed: false)
+
+        reg.attempt_auto_accept(:live)
+        expect(reg.reload.competing_status).to eq('pending')
+        expect(reg.registration_history.last[:changed_attributes][:auto_accept_failure_reasons]).to eq("-7001")
       end
 
       it 'if status is cancelled' do

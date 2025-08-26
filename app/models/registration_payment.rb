@@ -20,22 +20,6 @@ class RegistrationPayment < ApplicationRecord
            allow_nil: true,
            with_model_currency: :currency_code
 
-  def should_auto_close?
-    refunded_registration_payment_id.nil? && saved_change_to_is_completed?(to: true)
-  end
-
-  def create_uncaptured_payment
-    return unless self.is_completed?
-
-    RegistrationPayment.create(
-      amount_lowest_denomination: self.amount_lowest_denomination,
-      currency_code: self.currency_code,
-      user: self.user,
-      registration: self.registration,
-      is_completed: false,
-    )
-  end
-
   def amount_available_for_refund
     amount_lowest_denomination + refunding_registration_payments.completed.sum(:amount_lowest_denomination)
   end
