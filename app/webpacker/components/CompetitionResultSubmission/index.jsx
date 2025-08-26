@@ -43,9 +43,17 @@ function CompetitionResultSubmission({
   return (
     <>
       The result submission process has two steps:
-      <List bulleted>
+      <List ordered>
         <List.Item>
-          Uploading a valid JSON to the website.
+          Providing valid results data to the website. This can be done in one of two ways:
+          <List.List>
+            <List.Item value="a">
+              Uploading a Results JSON file
+              {' '}
+              <b>OR</b>
+            </List.Item>
+            <List.Item value="b">Importing results directly from WCA Live</List.Item>
+          </List.List>
         </List.Item>
         <List.Item>
           Submit these results to the WRT after addressing warnings (if any).

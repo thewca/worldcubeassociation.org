@@ -53,7 +53,7 @@ export function ImportResultsData({
       ),
     },
     {
-      menuItem: 'Use WCA Live Results',
+      menuItem: '[BETA] Use WCA Live Results',
       render: () => (
         <Tab.Pane>
           <ImportWcaLiveResults

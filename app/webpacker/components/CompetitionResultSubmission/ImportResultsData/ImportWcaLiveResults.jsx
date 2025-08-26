@@ -4,7 +4,7 @@ import { Button, Message } from 'semantic-ui-react';
 import Errored from '../../Requests/Errored';
 import importWcaLiveResults from '../api/importWcaLiveResults';
 import Loading from '../../Requests/Loading';
-import { uploadScramblesUrl } from '../../../lib/requests/routes.js.erb';
+import { contactRecipientUrl, uploadScramblesUrl } from '../../../lib/requests/routes.js.erb';
 
 export default function ImportWcaLiveResults({
   competitionId,
@@ -41,6 +41,13 @@ export default function ImportWcaLiveResults({
             separately. Already uploaded scramble files:
             {' '}
             <code>{uploadedScrambleFilesCount}</code>
+          </Message.Item>
+          <Message.Item>
+            This feature is still in Beta.
+            Please report any errors or issues to the
+            {' '}
+            <a href={contactRecipientUrl('wst')}>WCA Software Team</a>
+            .
           </Message.Item>
         </Message.List>
       </Message>
