@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class InboxScrambleSet < ApplicationRecord
+  SERIALIZATION_INCLUDES = { inbox_scrambles: [], scramble_file_upload: [], matched_round: [:competition_event] }.freeze
+
   belongs_to :competition
   belongs_to :event
 
