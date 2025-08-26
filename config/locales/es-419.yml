@@ -3458,7 +3458,8 @@ es-419:
           Una breve descripción del nombre de la competición. El nombre debe
           respetar la <a
           href='https://documents.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>Política
-          de Requisitos de Competiciones de la WCA</a>
+          de Requisitos de Competiciones de la WCA</a>. ¡Por favor, <b>rellena
+          este campo en inglés</b>!
         venue:
           #original_hash: da39a3e
           country_id: ''
@@ -3643,7 +3644,7 @@ es-419:
           #original_hash: 4b51faa
           guests_per_registration: >-
             El número de invitados por inscripción permitidos en esta
-            competicióin. Inscripciones con demasiados invitados se bloquearán.
+            competición. Inscripciones con demasiados invitados se bloquearán.
             Dejar en blanco si no hay límite.
           #original_hash: 3de153b
           extra_requirements: >-
