@@ -1,5 +1,6 @@
 import { Container, Separator, Tabs } from "@chakra-ui/react";
 import Link from "next/link";
+import { route } from "nextjs-routes";
 
 export default async function CompetitionLayout({
   children,
@@ -21,19 +22,44 @@ export default async function CompetitionLayout({
         unmountOnExit
       >
         <Tabs.List height="fit-content" position="sticky" top="3">
-          <Link href={`/competitions/${competitionId}/general`}>
+          <Link
+            href={route({
+              pathname: "/competitions/[competitionId]/general",
+              query: { competitionId },
+            })}
+          >
             <Tabs.Trigger value="general">General</Tabs.Trigger>
           </Link>
-          <Link href={`/competitions/${competitionId}/register`}>
+          <Link
+            href={route({
+              pathname: "/competitions/[competitionId]/register",
+              query: { competitionId },
+            })}
+          >
             <Tabs.Trigger value="register">Register</Tabs.Trigger>
           </Link>
-          <Link href={`/competitions/${competitionId}/competitors`}>
+          <Link
+            href={route({
+              pathname: "/competitions/[competitionId]/competitors",
+              query: { competitionId },
+            })}
+          >
             <Tabs.Trigger value="competitors">Competitors</Tabs.Trigger>
           </Link>
-          <Link href={`/competitions/${competitionId}/events`}>
+          <Link
+            href={route({
+              pathname: "/competitions/[competitionId]/events",
+              query: { competitionId },
+            })}
+          >
             <Tabs.Trigger value="events">Events </Tabs.Trigger>
           </Link>
-          <Link href={`/competitions/${competitionId}/schedule`}>
+          <Link
+            href={route({
+              pathname: "/competitions/[competitionId]/schedule",
+              query: { competitionId },
+            })}
+          >
             <Tabs.Trigger value="schedule">Schedule</Tabs.Trigger>
           </Link>
           <Separator />
