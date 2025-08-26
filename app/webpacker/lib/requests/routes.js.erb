@@ -156,8 +156,6 @@ export const clearResultsSubmissionUrl = (competitionId) => `<%= CGI.unescape(Ra
 
 export const adminDeleteResultsDataUrl = (competitionId, roundId, model) => `<%= CGI.unescape(Rails.application.routes.url_helpers.competition_admin_delete_results_data_path("${competitionId}")) %>?${jsonToQueryString({ roundId, model })}`;
 
-export const adminImportResultsUrl = (competitionId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.competition_admin_import_results_path("${competitionId}")) %>`;
-
 export const adminCheckUploadedResults = (competitionId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.competition_admin_upload_results_edit_path("${competitionId}"))%>`;
 
 export const fetchUserGroupsUrl = (groupType) => {
