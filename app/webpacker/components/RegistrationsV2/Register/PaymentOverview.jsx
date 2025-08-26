@@ -8,6 +8,7 @@ import I18n from '../../../lib/i18n';
 import { useRegistration } from '../lib/RegistrationProvider';
 import { isoMoneyToHumanReadable } from '../../../lib/helpers/money';
 import useCheckboxState from '../../../lib/hooks/useCheckboxState';
+import ManualPaymentStep from './ManualPaymentStep';
 import StripePaymentStep from './StripePaymentStep';
 import { hasPassed } from '../../../lib/utils/dates';
 
@@ -73,26 +74,35 @@ export default function PaymentOverview({
         currencyCode={competitionInfo.currency_code}
       />
       { !hasPaid && !hasPassed(competitionInfo.registration_close) && (
-      <Accordion styled fluid>
-        <Accordion.Title
-          icon
-          active={payAgain}
-          index={0}
-          onClick={() => setPayAgain((prev) => !prev)}
-        >
-          <Icon name="dropdown" />
-          {I18n.t('registrations.entry_fees_pay_again')}
-        </Accordion.Title>
-        <Accordion.Content active={payAgain}>
-          <StripePaymentStep
-            competitionInfo={competitionInfo}
-            connectedAccountId={connectedAccountId}
-            nextStep={nextStep}
-            stripePublishableKey={stripePublishableKey}
-            user={user}
-          />
-        </Accordion.Content>
-      </Accordion>
+        <Accordion styled fluid>
+          <Accordion.Title
+            icon
+            active={payAgain}
+            index={0}
+            onClick={() => setPayAgain((prev) => !prev)}
+          >
+            <Icon name="dropdown" />
+            {I18n.t('registrations.entry_fees_pay_again')}
+          </Accordion.Title>
+          <Accordion.Content active={payAgain}>
+            { competitionInfo.payment_integration_type === 'stripe' && (
+              <StripePaymentStep
+                competitionInfo={competitionInfo}
+                connectedAccountId={connectedAccountId}
+                nextStep={nextStep}
+                stripePublishableKey={stripePublishableKey}
+                user={user}
+              />
+            )}
+            { competitionInfo.payment_integration_type === 'manual' && (
+              <ManualPaymentStep
+                competitionInfo={competitionInfo}
+                nextStep={nextStep}
+                userInfo={user}
+              />
+            )}
+          </Accordion.Content>
+        </Accordion>
       )}
     </>
   );

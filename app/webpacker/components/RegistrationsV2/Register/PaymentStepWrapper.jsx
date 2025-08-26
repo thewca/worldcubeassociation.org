@@ -1,6 +1,7 @@
 import React from 'react';
 import { Message } from 'semantic-ui-react';
 import { useQuery } from '@tanstack/react-query';
+import ManualPaymentStep from './ManualPaymentStep';
 import StripePaymentStep from './StripePaymentStep';
 import { useRegistration } from '../lib/RegistrationProvider';
 import PaymentOverview from './PaymentOverview';
@@ -50,14 +51,25 @@ export default function PaymentStepWrapper({
     );
   }
 
-  // This will distinguish between Manual and Stripe Payments when #11299 is merged
-  return (
-    <StripePaymentStep
-      competitionInfo={competitionInfo}
-      connectedAccountId={connectedAccountId}
-      nextStep={nextStep}
-      stripePublishableKey={stripePublishableKey}
-      user={user}
-    />
-  );
+  if (competitionInfo.payment_integration_type === 'stripe') {
+    return (
+      <StripePaymentStep
+        competitionInfo={competitionInfo}
+        connectedAccountId={connectedAccountId}
+        nextStep={nextStep}
+        stripePublishableKey={stripePublishableKey}
+        user={user}
+      />
+    );
+  }
+
+  if (competitionInfo.payment_integration_type === 'manual') {
+    return (
+      <ManualPaymentStep
+        competitionInfo={competitionInfo}
+        nextStep={nextStep}
+        userInfo={user}
+      />
+    );
+  }
 }
