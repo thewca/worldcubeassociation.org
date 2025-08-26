@@ -4,6 +4,7 @@
   <%= react_component("CompetitionResultSubmissionAdmin", {
     competitionId: @competition.id,
     hasTemporaryResults: @competition.inbox_results.present?,
+    uploadedScrambleFilesCount: @competition.scramble_file_uploads.count,
     ticketId: @competition.result_ticket&.id,
   }) %>
 <% end %>

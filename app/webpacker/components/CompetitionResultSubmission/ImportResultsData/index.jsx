@@ -10,6 +10,7 @@ export default function Wrapper({
   competitionId,
   alreadyHasSubmittedResult,
   isAdminView,
+  uploadedScrambleFilesCount,
 }) {
   return (
     <WCAQueryClientProvider>
@@ -17,6 +18,7 @@ export default function Wrapper({
         competitionId={competitionId}
         hasTemporaryResults={alreadyHasSubmittedResult}
         isAdminView={isAdminView}
+        uploadedScrambleFilesCount={uploadedScrambleFilesCount}
       />
     </WCAQueryClientProvider>
   );
@@ -26,6 +28,7 @@ export function ImportResultsData({
   competitionId,
   hasTemporaryResults,
   isAdminView = false,
+  uploadedScrambleFilesCount = 0,
 }) {
   const [activeAccordion, setActiveAccordion] = useState(!hasTemporaryResults);
 
@@ -50,11 +53,12 @@ export function ImportResultsData({
       ),
     },
     ...(isAdminView ? [{
-      menuItem: 'Import WCA Live Results',
+      menuItem: '[BETA] Use WCA Live Results',
       render: () => (
         <Tab.Pane>
           <ImportWcaLiveResults
             competitionId={competitionId}
+            uploadedScrambleFilesCount={uploadedScrambleFilesCount}
             onImportSuccess={onImportSuccess}
           />
         </Tab.Pane>

@@ -7,7 +7,7 @@ class InboxScrambleSet < ApplicationRecord
   belongs_to :event
 
   belongs_to :scramble_file_upload, optional: true, foreign_key: "external_upload_id", inverse_of: :inbox_scramble_sets
-  belongs_to :matched_round, class_name: "Round", optional: true, inverse_of: :inbox_scramble_sets
+  belongs_to :matched_round, class_name: "Round", optional: true, inverse_of: :matched_scramble_sets
 
   has_many :inbox_scrambles, inverse_of: :inbox_scramble_set, dependent: :destroy
   has_many :matched_inbox_scrambles, class_name: "InboxScramble", inverse_of: :matched_scramble_set, dependent: :nullify

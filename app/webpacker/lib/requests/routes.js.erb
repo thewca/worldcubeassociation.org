@@ -386,6 +386,8 @@ export const bulkUpdateRegistrationUrl = (competitionId) => `<%= CGI.unescape(Ra
 
 export const paymentTicketUrl = (registrationId, isoDonationAmount) => `<%= CGI.unescape(Rails.application.routes.url_helpers.payment_ticket_api_v1_registration_path("${registrationId}", iso_donation_amount: "${isoDonationAmount}")) %>`;
 
+export const uploadScramblesUrl = (competitionId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.competition_upload_scrambles_path("${competitionId}")) %>`;
+
 export const rankingsUrl = (eventId, rankingType, region, gender, show) => {
   const url = `<%= CGI.unescape(Rails.application.routes.url_helpers.rankings_path(event_id: "${eventId}", type: "${rankingType}")) %>`
   const queryParams = new URLSearchParams();
