@@ -11,19 +11,9 @@ class InboxScrambleSet < ApplicationRecord
 
   has_many :inbox_scrambles, dependent: :destroy
 
-  validates :ordered_index, uniqueness: { scope: %i[competition_id event_id round_number] }
-
-  before_validation :backfill_round_information!, if: :matched_round_id?
+  validates :ordered_index, uniqueness: { scope: :matched_round_id }
 
   delegate :original_filename, to: :scramble_file_upload, allow_nil: true
-
-  def backfill_round_information!
-    return if matched_round.blank?
-
-    self.competition_id = matched_round.competition_id
-    self.event_id = matched_round.event_id
-    self.round_number = matched_round.number
-  end
 
   def matched_round_wcif_id
     matched_round&.wcif_id || "#{self.event_id}-r#{self.round_number}"
