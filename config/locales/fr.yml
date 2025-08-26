@@ -6574,7 +6574,7 @@ fr:
       regulation_9m3_error: >-
         Le tour %{round_id} compte 7 compétiteurs ou moins mais comporte au
         moins un tour suivant, ce qui n'est pas autorisé par la règle 9m3.
-      #original_hash: e12138a
+      #original_hash: 44fbfde
       regulation_9p1_error: >-
         Tour %{round_id} : Moins de 25% des compétiteurs ont été éliminés, ce
         qui n'est pas autorisé selon la règle 9p1.
@@ -6678,3 +6678,9 @@ fr:
         dans l'onglet Gérer les événements. Veuillez ajuster le nombre de sets
         de mélanges dans l'onglet Gérer les événements en fonction du nombre de
         sets utilisés.
+  tickets:
+    type:
+      #original_hash: e43f273
+      edit_person: Modifier la personne
+      #original_hash: 5fb2137
+      competition_result: Résultat de la compétition
