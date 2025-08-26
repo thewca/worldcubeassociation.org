@@ -81,8 +81,8 @@ export default function MoveMatchingEntityModal({
 }) {
   const { computeCellName: entityToName } = matchingDndConfig[matchingKey];
 
-  const pickerConfigForMatching = Object.values(pickerStepConfig).find((cfg) => cfg.matchingConfigKey === matchingKey);
-  const { enabledCondition } = pickerConfigForMatching || {};
+  const matchingConfig = _.find(pickerStepConfig, (cfg) => cfg.matchingConfigKey === matchingKey);
+  const { enabledCondition } = matchingConfig || {};
 
   const baseDescriptor = useMemo(() => navigationToDescriptor(pickerHistory), [pickerHistory]);
   const [targetDescriptor, setTargetDescriptor] = useState(baseDescriptor);
