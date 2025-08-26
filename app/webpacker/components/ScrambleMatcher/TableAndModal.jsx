@@ -8,10 +8,10 @@ export default function TableAndModal({
   rootMatchState,
   dispatchMatchState,
   pickerHistory,
+  matchingKey,
   matchingConfig,
 }) {
   const {
-    key: matchingKey,
     computeCellName,
     computeCellDetails,
     cellDetailsAreData,
@@ -21,8 +21,8 @@ export default function TableAndModal({
   const { computeEntityName } = pickerLocalizationConfig[matchingKey];
 
   const computeDefinitionName = useCallback(
-    (idx) => computeEntityName(matchState, idx),
-    [computeEntityName, matchState],
+    (idx) => computeEntityName(matchState.id, idx),
+    [computeEntityName, matchState.id],
   );
 
   const expectedNumOfRows = useMemo(
@@ -47,6 +47,27 @@ export default function TableAndModal({
     [dispatchMatchState, pickerHistory, matchingKey],
   );
 
+  const moveSelectedEntity = useCallback(
+    (entity, targetHistory) => dispatchMatchState({
+      type: 'moveMatchingEntity',
+      entity,
+      fromNavigation: pickerHistory,
+      toNavigation: targetHistory,
+      matchingKey,
+    }),
+    [dispatchMatchState, pickerHistory, matchingKey],
+  );
+
+  const deleteEntityFromMatching = useCallback(
+    (entity) => dispatchMatchState({
+      type: 'deleteEntityFromMatching',
+      entity,
+      pickerHistory,
+      matchingKey,
+    }),
+    [dispatchMatchState, pickerHistory, matchingKey],
+  );
+
   return (
     <>
       <MatchingTableDnd
@@ -58,17 +79,17 @@ export default function TableAndModal({
         computeCellDetails={computeCellDetails}
         cellDetailsAreData={cellDetailsAreData}
         onClickMoveAction={setModalPayload}
+        onClickDeleteAction={deleteEntityFromMatching}
       />
       <MoveMatchingEntityModal
         key={modalPayload?.id}
         isOpen={modalPayload !== null}
         onClose={onModalClose}
-        dispatchMatchState={dispatchMatchState}
+        onConfirm={moveSelectedEntity}
         selectedMatchingEntity={modalPayload}
         rootMatchState={rootMatchState}
         pickerHistory={pickerHistory}
         matchingKey={matchingKey}
-        entityToName={computeCellName}
       />
     </>
   );
