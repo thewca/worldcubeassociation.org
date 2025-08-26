@@ -14,14 +14,11 @@ class InboxScrambleSet < ApplicationRecord
 
   validates :ordered_index, uniqueness: { scope: :matched_round_id }
 
+  delegate :wcif_id, to: :matched_round, allow_nil: true, prefix: true
   delegate :original_filename, to: :scramble_file_upload, allow_nil: true
 
   def event
     Event.c_find(self.event_id)
-  end
-
-  def matched_round_wcif_id
-    matched_round&.wcif_id || "#{self.event_id}-r#{self.round_number}"
   end
 
   def alphabetic_group_index

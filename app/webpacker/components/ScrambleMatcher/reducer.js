@@ -2,8 +2,16 @@ import _ from 'lodash';
 import { addItemToArray, moveArrayItem } from './util';
 
 function addScrambleSetsToEvents(wcifEvents, scrambleSets, keepExistingSets = true) {
+  const groupedScrambles = _.groupBy(
+    scrambleSets.flatMap((scrSet) => scrSet.inbox_scrambles),
+    'matched_scramble_set_id',
+  );
+
   const groupedScrambleSets = _.groupBy(
-    scrambleSets,
+    scrambleSets.map((scrSet) => ({
+      ...scrSet,
+      inbox_scrambles: groupedScrambles[scrSet.id],
+    })),
     'matched_round_wcif_id',
   );
 
@@ -53,6 +61,11 @@ function addScrambleFile(state, newScrambleFile) {
 }
 
 function removeScrambleFile(state, oldScrambleFile) {
+  const scrambleSets = state.events.flatMap((evt) => evt.rounds.flatMap((rd) => rd.scrambleSets));
+
+  const scrSetLookup = _.keyBy(scrambleSets, 'id');
+  const setUploadLookup = _.mapValues(scrSetLookup, 'external_upload_id');
+
   return {
     ...state,
     events: state.events.map((wcifEvent) => ({
@@ -60,8 +73,13 @@ function removeScrambleFile(state, oldScrambleFile) {
       rounds: wcifEvent.rounds.map((round) => ({
         ...round,
         scrambleSets: round.scrambleSets.filter(
-          (scrSet) => scrSet.external_upload_id !== oldScrambleFile.id,
-        ),
+          (scrSet) => setUploadLookup[scrSet.id] !== oldScrambleFile.id,
+        ).map((scrSet) => ({
+          ...scrSet,
+          inbox_scrambles: scrSet.inbox_scrambles.filter(
+            (ibs) => setUploadLookup[ibs.matched_scramble_set_id] !== oldScrambleFile.id,
+          ),
+        })),
       })),
     })),
   };
