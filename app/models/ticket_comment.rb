@@ -10,18 +10,14 @@ class TicketComment < ApplicationRecord
   }.freeze
 
   private def stakeholder_emails_to_notify
-    stakeholders = ticket.ticket_stakeholders.includes(:stakeholder)
-
-    stakeholders = stakeholders.reject { |stakeholder| stakeholder.id == acting_stakeholder_id } if acting_stakeholder.user_stakeholder?
-
-    stakeholders.flat_map(&:emails)
+    ticket.ticket_stakeholders.includes(:stakeholder).flat_map do |stakeholder|
+      stakeholder.emails unless stakeholder.user_stakeholder? && stakeholder.id == acting_stakeholder_id
+    end.compact
   end
 
   after_create :notify_stakeholders
   private def notify_stakeholders
-    recipient_emails = stakeholder_emails_to_notify
-
-    TicketsMailer.notify_create_ticket_comment(self, recipient_emails).deliver_now # TODO: Change to deliver_later
+    TicketsMailer.notify_create_ticket_comment(self, stakeholder_emails_to_notify).deliver_later
   end
 
   def author_text

@@ -40,7 +40,7 @@ class TicketStakeholder < ApplicationRecord
 
   def emails
     if competition_stakeholder?
-      stakeholder.delegates.map(&:email)
+      stakeholder.delegates.pluck(:email)
     else
       [stakeholder.email]
     end
