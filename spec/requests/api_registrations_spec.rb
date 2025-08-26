@@ -1374,33 +1374,56 @@ RSpec.describe 'API Registrations' do
 
   describe 'GET #payment_completion' do
     context 'manual payments' do
-      let(:comp) { create(:competition, :manual_payments, :registration_open, :visible) }
-      let(:reg) { create(:registration, competition: comp) }
-      let(:payment_intent) { create(:payment_intent, :manual) }
-      let(:manual_record) { payment_intent.payment_record }
+      context 'first-time payment' do
+        let(:comp) { create(:competition, :manual_payments, :registration_open, :visible) }
+        let(:reg) { create(:registration, competition: comp) }
+        let(:payment_intent) { create(:payment_intent, :manual) }
+        let(:manual_record) { payment_intent.payment_record }
 
-      before do
-        sign_in reg.user
-        get registration_payment_completion_path(comp, 'manual'), headers: headers, params: {
-          client_secret: manual_record.id, payment_reference: 'test_reference'
-        }
-        Rails.logger.debug response
+        before do
+          sign_in reg.user
+          get registration_payment_completion_path(comp, 'manual'), headers: headers, params: {
+            client_secret: manual_record.id, payment_reference: 'test_reference'
+          }
+        end
+
+        it 'updates the manual payment record with user_submitted status' do
+          expect(manual_record.reload.manual_status).to eq('user_submitted')
+        end
+
+        it 'updates the payment reference' do
+          expect(manual_record.reload.payment_reference).to eq('test_reference')
+        end
+
+        it 'payment intent has requires_capture wca_status' do
+          expect(payment_intent.reload.wca_status).to eq('requires_capture')
+        end
+
+        it 'creates an un-completed registration payment' do
+          expect(manual_record.reload.registration_payment.is_completed).to be(false)
+        end
       end
 
-      it 'updates the manual payment record with user_submitted status' do
-        expect(manual_record.reload.manual_status).to eq('user_submitted')
-      end
+      context 'updating payment reference' do
+        let(:comp) { create(:competition, :manual_payments, :registration_open, :visible) }
+        let(:reg) { create(:registration, competition: comp) }
+        let(:payment_intent) { create(:payment_intent, :manual_with_ref, holder: reg)}
+        let(:manual_record) { payment_intent.payment_record }
 
-      it 'updates the payment reference' do
-        expect(manual_record.reload.payment_reference).to eq('test_reference')
-      end
+        before do
+          sign_in reg.user
+          get registration_payment_completion_path(comp, 'manual'), headers: headers, params: {
+            client_secret: manual_record.id, payment_reference: 'updated reference'
+          }
+        end
 
-      it 'payment intent has requires_capture wca_status' do
-        expect(payment_intent.reload.wca_status).to eq('requires_capture')
-      end
+        it 'updates the payment reference' do
+          expect(manual_record.reload.payment_reference).to eq('updated reference')
+        end
 
-      it 'creates an un-completed registration payment' do
-        expect(manual_record.reload.registration_payment.is_completed).to be(false)
+        it 'does not create another registration payment' do
+          expect(reg.registration_payments.count).to eq(1)
+        end
       end
     end
   end
@@ -1595,7 +1618,7 @@ RSpec.describe 'API Registrations' do
       let(:receipt_record) { registration_payment.receipt }
       let!(:refund_record) { create(:stripe_record, :pending_refund, amount_stripe_denomination: 500) }
 
-      it 'creates a refund registration_payment', :tag do
+      it 'creates a refund registration_payment' do
         expect(registration_payment.refunding_registration_payments.count).to be(0)
 
         post registration_stripe_webhook_path, params: refund_webhook(amount: 500, type: 'refund.updated'), as: :json

@@ -6,5 +6,11 @@ FactoryBot.define do
     manual_status { 'created' }
     amount_iso_denomination { 1000 }
     currency_code { 'USD' }
+
+    trait :with_reference do
+      payment_reference { 'test_reference' }
+      manual_status { 'user_submitted' }
+
+    end
   end
 end

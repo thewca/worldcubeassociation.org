@@ -1,8 +1,8 @@
 import React from 'react';
 import { Message } from 'semantic-ui-react';
 import { useQuery } from '@tanstack/react-query';
-import StripePaymentStep from './StripePaymentStep';
 import ManualPaymentStep from './ManualPaymentStep';
+import StripePaymentStep from './StripePaymentStep';
 import { useRegistration } from '../lib/RegistrationProvider';
 import PaymentOverview from './PaymentOverview';
 import { hasPassed } from '../../../lib/utils/dates';

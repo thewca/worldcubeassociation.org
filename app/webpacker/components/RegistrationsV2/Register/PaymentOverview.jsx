@@ -8,6 +8,7 @@ import I18n from '../../../lib/i18n';
 import { useRegistration } from '../lib/RegistrationProvider';
 import { isoMoneyToHumanReadable } from '../../../lib/helpers/money';
 import useCheckboxState from '../../../lib/hooks/useCheckboxState';
+import ManualPaymentStep from './ManualPaymentStep';
 import StripePaymentStep from './StripePaymentStep';
 import { hasPassed } from '../../../lib/utils/dates';
 
@@ -91,6 +92,13 @@ export default function PaymentOverview({
                 nextStep={nextStep}
                 stripePublishableKey={stripePublishableKey}
                 user={user}
+              />
+            )}
+            { competitionInfo.payment_integration_type === 'manual' && (
+              <ManualPaymentStep
+                competitionInfo={competitionInfo}
+                nextStep={nextStep}
+                userInfo={user}
               />
             )}
           </Accordion.Content>

@@ -12,6 +12,15 @@ FactoryBot.define do
       wca_status { 'created' }
     end
 
+    trait :manual_with_ref do
+      payment_record { association(:manual_payment_record, :with_reference) }
+      wca_status { 'requires_capture' }
+
+      after(:create) do |intent|
+        create(:registration_payment, receipt: intent.payment_record, registration: intent.holder, is_completed: false)
+      end
+    end
+
     trait :canceled do
       canceled_at { DateTime.now }
       wca_status { 'canceled' }
