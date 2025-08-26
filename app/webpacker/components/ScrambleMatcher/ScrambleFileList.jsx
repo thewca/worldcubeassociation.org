@@ -16,7 +16,7 @@ import {
 import { events } from '../../lib/wca-data.js.erb';
 import { getFullDateTimeString } from '../../lib/utils/dates';
 import MoveMatchingEntityModal from './MoveMatchingEntityModal';
-import {UnusedEntityButtonGroup} from "./UnusedScramblesPanel";
+import { UnusedEntityButtonGroup } from './UnusedScramblesPanel';
 
 async function deleteScrambleFile({ fileId }) {
   const { data } = await fetchJsonOrError(scrambleFileUrl(fileId), {
@@ -112,10 +112,16 @@ function MatchingTableCellContent({
   matchState,
   dispatchMatchState,
 }) {
+  const [modalEntity, setModalEntity] = useState(null);
+
+  const onModalClose = useCallback(() => {
+    setModalEntity(null);
+  }, [setModalEntity]);
+
   const remainingSteps = allSteps.slice(stepIdx + 1);
   const isDefCell = remainingSteps.every((remStep) => remStep.index === 0);
 
-  const addAutomatic = useCallback((entity, pickerHistory) => {
+  const addEntityBack = useCallback((entity, pickerHistory) => {
     dispatchMatchState({
       type: 'addEntityToMatching',
       entity,
@@ -184,13 +190,25 @@ function MatchingTableCellContent({
                 ))}
               </Breadcrumb>
             ) : (
-              <UnusedEntityButtonGroup
-                entity={step.entity}
-                fullPathToEntity={pathToStepEntity}
-                referenceMatchState={matchState}
-                onClickAutoAssign={addAutomatic}
-                onClickManualAssign={TODO}
-              />
+              <>
+                <UnusedEntityButtonGroup
+                  entity={step.entity}
+                  fullPathToEntity={pathToStepEntity}
+                  referenceMatchState={matchState}
+                  onClickAutoAssign={addEntityBack}
+                  onClickManualAssign={setModalEntity}
+                />
+                <MoveMatchingEntityModal
+                  isOpen={modalEntity !== null}
+                  onClose={onModalClose}
+                  onConfirm={addEntityBack}
+                  selectedMatchingEntity={modalEntity}
+                  rootMatchState={matchState}
+                  pickerHistory={allSteps.slice(0, stepIdx)}
+                  matchingKey={step.key}
+                  isAddMode
+                />
+              </>
             )}
         </Table.Cell>
       )}
@@ -250,8 +268,6 @@ function BodyForMatching({
 }) {
   const tableRows = buildTableRows(matchingKey, matchEntity);
 
-  const [modalEntity, setModalEntity] = useState(null);
-
   return tableRows.map((rowHistory, rowIdx, allRows) => {
     const rowKey = rowHistory.reduce((acc, step) => [...acc, step.id], []).join('-');
 
@@ -261,27 +277,16 @@ function BodyForMatching({
           const stepKey = `${step.key}-${step.id}`;
 
           return (
-            <React.Fragment key={stepKey}>
-              <MatchingTableCellContent
-                rowIdx={rowIdx}
-                allRows={allRows}
-                step={step}
-                stepIdx={stepIdx}
-                allSteps={allSteps}
-                matchState={matchState}
-                dispatchMatchState={dispatchMatchState}
-              />
-              <MoveMatchingEntityModal
-                key={modalEntity?.id}
-                isOpen={modalEntity !== null}
-                onClose={() => setModalEntity(null)}
-                dispatchMatchState={dispatchMatchState}
-                selectedMatchingEntity={modalEntity}
-                rootMatchState={matchState}
-                pickerHistory={allSteps.slice(0, stepIdx + 1)}
-                matchingKey={step.key}
-              />
-            </React.Fragment>
+            <MatchingTableCellContent
+              key={stepKey}
+              rowIdx={rowIdx}
+              allRows={allRows}
+              step={step}
+              stepIdx={stepIdx}
+              allSteps={allSteps}
+              matchState={matchState}
+              dispatchMatchState={dispatchMatchState}
+            />
           );
         })}
       </Table.Row>

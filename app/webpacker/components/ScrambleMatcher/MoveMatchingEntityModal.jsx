@@ -2,7 +2,12 @@ import React, { useCallback, useMemo, useState } from 'react';
 import { Button, Form, Modal } from 'semantic-ui-react';
 import _ from 'lodash';
 import { useInputUpdater } from '../../lib/hooks/useInputState';
-import { applyPickerHistory, matchingDndConfig, pickerLocalizationConfig } from './util';
+import {
+  matchingDndConfig,
+  pickerLocalizationConfig,
+  pickerStepConfig,
+  searchRecursive,
+} from './util';
 
 function navigationToDescriptor(pickerNavigation) {
   return pickerNavigation.reduce((acc, historyStep) => ({
@@ -11,28 +16,25 @@ function navigationToDescriptor(pickerNavigation) {
   }), {});
 }
 
-function descriptorToNavigation(descriptor, referenceNavigation, rootMatchState) {
-  return referenceNavigation.reduce((accu, nav) => {
-    const baseLookup = accu.lookup[nav.key];
+function unpackDescriptor(
+  descriptor,
+  currentKey = 'events',
+  accu = [],
+) {
+  if (!descriptor[currentKey]) {
+    return accu;
+  }
 
-    const entityId = descriptor[nav.key];
-    const entityIndex = baseLookup.findIndex((ent) => ent.id === entityId);
+  const currentStep = { key: currentKey, id: descriptor[currentKey] };
+  const nextAccu = [...accu, currentStep];
 
-    return ({
-      navigation: [
-        ...accu.navigation,
-        {
-          key: nav.key,
-          id: entityId,
-          index: entityIndex,
-        },
-      ],
-      lookup: baseLookup[entityIndex],
-    });
-  }, {
-    navigation: [],
-    lookup: rootMatchState,
-  }).navigation;
+  const { nestedPicker, matchingConfigKey = nestedPicker } = pickerStepConfig[currentKey] || {};
+
+  if (!matchingConfigKey) {
+    return nextAccu;
+  }
+
+  return unpackDescriptor(descriptor, matchingConfigKey, nextAccu);
 }
 
 function MatchingSelect({
@@ -69,68 +71,59 @@ function MatchingSelect({
 export default function MoveMatchingEntityModal({
   isOpen,
   onClose,
-  dispatchMatchState,
+  onConfirm,
   selectedMatchingEntity,
   rootMatchState,
   pickerHistory,
   matchingKey,
+  isAddMode = false,
 }) {
   const { computeCellName: entityToName } = matchingDndConfig[matchingKey];
 
   const baseDescriptor = useMemo(() => navigationToDescriptor(pickerHistory), [pickerHistory]);
-
   const [targetDescriptor, setTargetDescriptor] = useState(baseDescriptor);
 
-  const onConfirm = useCallback((entityToMove, newTargetDescriptor) => {
-    dispatchMatchState({
-      type: 'moveMatchingEntity',
-      entity: entityToMove,
-      fromNavigation: pickerHistory,
-      toNavigation: descriptorToNavigation(
-        newTargetDescriptor,
-        pickerHistory,
-        rootMatchState,
-      ),
-      matchingKey,
-    });
+  const onConfirmInternal = useCallback((entityToMove, newTargetDescriptor) => {
+    const unpackedDescriptor = unpackDescriptor(newTargetDescriptor);
 
-    onClose();
-  }, [
-    dispatchMatchState,
-    pickerHistory,
-    rootMatchState,
-    matchingKey,
-    onClose,
-  ]);
-
-  const computeChoices = useCallback((historyIdx, descriptor) => {
-    const currentKey = pickerHistory[historyIdx].key;
-
-    const parentSteps = descriptorToNavigation(
-      descriptor,
-      pickerHistory.slice(0, historyIdx),
+    const fullHistoryPath = searchRecursive(
       rootMatchState,
+      unpackedDescriptor[unpackedDescriptor.length - 1],
     );
 
-    return applyPickerHistory(rootMatchState, parentSteps)[currentKey];
-  }, [pickerHistory, rootMatchState]);
+    onConfirm(entityToMove, fullHistoryPath);
+    onClose();
+  }, [rootMatchState, onConfirm, onClose]);
+
+  const computeChoices = useCallback((historyIdx, descriptor) => {
+    const unpacked = unpackDescriptor(descriptor);
+    const currentKey = unpacked[historyIdx].key;
+
+    return unpacked
+      .slice(0, historyIdx)
+      .reduce(
+        (state, unpackedStep) => state[unpackedStep.key].find((ent) => ent.id === unpackedStep.id),
+        rootMatchState,
+      )[currentKey];
+  }, [rootMatchState]);
 
   const fixSelectionPath = useCallback(
-    (selectedDescriptor) => pickerHistory.reduce((correctedDescriptor, historyStep, idx) => {
-      const availableChoices = computeChoices(idx, correctedDescriptor);
+    (selectedDescriptor) => unpackDescriptor(selectedDescriptor)
+      .reduce((correctedDescriptor, historyStep, idx) => {
+        const availableChoices = computeChoices(idx, correctedDescriptor);
 
-      const originalChoiceId = selectedDescriptor[historyStep.key];
+        const originalChoiceId = selectedDescriptor[historyStep.key];
 
-      const finalChoice = availableChoices.find(
-        (item) => item.id === originalChoiceId,
-      ) ?? availableChoices[0];
+        const finalChoice = availableChoices.find(
+          (item) => item.id === originalChoiceId,
+        ) ?? availableChoices[0];
 
-      return {
-        ...correctedDescriptor,
-        [historyStep.key]: finalChoice.id,
-      };
-    }, selectedDescriptor),
-    [computeChoices, pickerHistory],
+        return {
+          ...correctedDescriptor,
+          [historyStep.key]: finalChoice.id,
+        };
+      }, selectedDescriptor),
+    [computeChoices],
   );
 
   const updateTargetPath = useCallback(
@@ -143,7 +136,7 @@ export default function MoveMatchingEntityModal({
     [setTargetDescriptor, fixSelectionPath],
   );
 
-  const canMove = !_.isEqual(targetDescriptor, baseDescriptor);
+  const canMove = isAddMode || !_.isEqual(targetDescriptor, baseDescriptor);
 
   if (!selectedMatchingEntity) {
     return null;
@@ -177,10 +170,10 @@ export default function MoveMatchingEntityModal({
         <Button onClick={onClose}>Cancel</Button>
         <Button
           positive
-          onClick={() => onConfirm(selectedMatchingEntity, targetDescriptor)}
+          onClick={() => onConfirmInternal(selectedMatchingEntity, targetDescriptor)}
           disabled={!canMove}
         >
-          Move
+          {isAddMode ? 'Add' : 'Move'}
         </Button>
       </Modal.Actions>
     </Modal>

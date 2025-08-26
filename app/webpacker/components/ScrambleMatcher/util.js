@@ -81,10 +81,6 @@ export const matchingDndConfig = {
   },
 };
 
-export function buildLightHistory(key, id, index = undefined) {
-  return { key, id, index };
-}
-
 export function moveArrayItem(arr, fromIndex, toIndex) {
   const movedItem = arr[fromIndex];
 
@@ -104,13 +100,6 @@ export function moveArrayItem(arr, fromIndex, toIndex) {
 
 export function addItemToArray(arr, entity, targetIdx = arr.length) {
   return arr.toSpliced(targetIdx, 0, entity);
-}
-
-export function applyPickerHistory(rootState, pickerHistory) {
-  return pickerHistory.reduce(
-    (state, historyStep) => state[historyStep.key][historyStep.index],
-    rootState,
-  );
 }
 
 export const searchRecursive = (data, targetStep, currentKey = 'events', searchHistory = []) => {

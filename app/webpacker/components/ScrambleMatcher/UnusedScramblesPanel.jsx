@@ -135,7 +135,7 @@ function UnusedEntitiesPanel({
     setModalPayload(null);
   }, [setModalPayload]);
 
-  const autoAssignEntity = useCallback((entity, pickerHistory) => dispatchMatchState({
+  const addBackEntity = useCallback((entity, pickerHistory) => dispatchMatchState({
     type: 'addEntityToMatching',
     entity,
     pickerHistory,
@@ -174,8 +174,19 @@ function UnusedEntitiesPanel({
                     entity={entity}
                     fullPathToEntity={pathToUnusedEntity}
                     referenceMatchState={rootMatchState}
-                    onClickAutoAssign={autoAssignEntity}
+                    onClickAutoAssign={addBackEntity}
                     onClickManualAssign={setModalPayload}
+                  />
+                  <MoveMatchingEntityModal
+                    key={modalPayload?.id}
+                    isOpen={modalPayload !== null}
+                    onClose={onModalClose}
+                    onConfirm={addBackEntity}
+                    selectedMatchingEntity={modalPayload}
+                    rootMatchState={rootMatchState}
+                    pickerHistory={pathToUnusedEntity.slice(0, -1)}
+                    matchingKey={matchingKey}
+                    isAddMode
                   />
                 </Card.Content>
               </Card>
@@ -183,16 +194,6 @@ function UnusedEntitiesPanel({
           })}
         </Card.Group>
       </Segment>
-      <MoveMatchingEntityModal
-        key={modalPayload?.id}
-        isOpen={modalPayload !== null}
-        onClose={onModalClose}
-        dispatchMatchState={dispatchMatchState}
-        selectedMatchingEntity={modalPayload}
-        rootMatchState={rootMatchState}
-        pickerHistory={[]}
-        matchingKey={matchingKey}
-      />
     </>
   );
 }

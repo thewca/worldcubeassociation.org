@@ -47,6 +47,17 @@ export default function TableAndModal({
     [dispatchMatchState, pickerHistory, matchingKey],
   );
 
+  const moveSelectedEntity = useCallback(
+    (entity, targetHistory) => dispatchMatchState({
+      type: 'moveMatchingEntity',
+      entity,
+      fromNavigation: pickerHistory,
+      toNavigation: targetHistory,
+      matchingKey,
+    }),
+    [dispatchMatchState, pickerHistory, matchingKey],
+  );
+
   const deleteEntityFromMatching = useCallback(
     (entity) => dispatchMatchState({
       type: 'deleteEntityFromMatching',
@@ -74,7 +85,7 @@ export default function TableAndModal({
         key={modalPayload?.id}
         isOpen={modalPayload !== null}
         onClose={onModalClose}
-        dispatchMatchState={dispatchMatchState}
+        onConfirm={moveSelectedEntity}
         selectedMatchingEntity={modalPayload}
         rootMatchState={rootMatchState}
         pickerHistory={pickerHistory}
