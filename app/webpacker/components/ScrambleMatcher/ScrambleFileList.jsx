@@ -114,6 +114,8 @@ function MatchingTableCellContent({
   const remainingSteps = allSteps.slice(stepIdx + 1);
   const isDefCell = remainingSteps.every((remStep) => remStep.index === 0);
 
+  const actualNavigation = useMemo(() => searchRecursive(matchState, step), [matchState, step]);
+
   const addEntityBack = useCallback((entity, pickerHistory) => {
     dispatchMatchState({
       type: 'addEntityToMatching',
@@ -126,13 +128,6 @@ function MatchingTableCellContent({
   if (!isDefCell) {
     return null;
   }
-
-  const defRowSpan = allRows
-    .slice(rowIdx)
-    .filter((laterRow) => laterRow[stepIdx].id === step.id)
-    .length;
-
-  const actualNavigation = searchRecursive(matchState, step);
 
   if (step.id === DUMMY_ENTITY_ID) {
     if (stepIdx > 0 && allSteps[stepIdx - 1].id === DUMMY_ENTITY_ID) {
@@ -154,6 +149,11 @@ function MatchingTableCellContent({
       </Table.Cell>
     );
   }
+
+  const defRowSpan = allRows
+    .slice(rowIdx)
+    .filter((laterRow) => laterRow[stepIdx].id === step.id)
+    .length;
 
   return (
     <>

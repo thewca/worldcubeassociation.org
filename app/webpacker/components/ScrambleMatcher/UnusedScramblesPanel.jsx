@@ -102,9 +102,11 @@ export function UnusedEntityButtonGroup({
     setModalPayload(null);
   }, [setModalPayload]);
 
-  const autoInsertTarget = pickerHistory[pickerHistory.length - 1];
+  const autoInsertNavigation = useMemo(() => {
+    const autoInsertTarget = pickerHistory[pickerHistory.length - 1];
 
-  const autoInsertNavigation = searchRecursive(referenceMatchState, autoInsertTarget);
+    return searchRecursive(referenceMatchState, autoInsertTarget);
+  }, [pickerHistory, referenceMatchState]);
 
   return (
     <>
