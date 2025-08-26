@@ -34,13 +34,12 @@ class TicketStakeholder < ApplicationRecord
     stakeholder_type == "User"
   end
 
-  def actions_allowed
-    ticket.metadata.actions_allowed_for(self)
+  def metadata_actions_allowed
+    ticket.metadata.metadata_actions_allowed_for(self)
   end
 
   DEFAULT_SERIALIZE_OPTIONS = {
     include: %w[stakeholder],
-    methods: %w[actions_allowed],
   }.freeze
 
   def serializable_hash(options = nil)

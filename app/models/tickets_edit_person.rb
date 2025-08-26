@@ -11,12 +11,6 @@ class TicketsEditPerson < ApplicationRecord
   has_one :ticket, as: :metadata
   has_many :tickets_edit_person_fields
 
-  def actions_allowed_for(ticket_stakeholder)
-    return [] if ticket_stakeholder.nil?
-
-    [TicketLog.action_types[:create_comment], TicketLog.action_types[:update_status]]
-  end
-
   def self.create_ticket(wca_id, changes_requested, requester)
     ActiveRecord::Base.transaction do
       ticket_metadata = TicketsEditPerson.create!(

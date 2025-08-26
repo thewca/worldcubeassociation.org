@@ -1336,6 +1336,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_08_26_042935) do
   create_table "ticket_logs", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "ticket_id", null: false
     t.string "action_type", null: false
+    t.string "metadata_action"
     t.integer "acting_user_id", null: false
     t.bigint "acting_stakeholder_id", null: false
     t.datetime "created_at", null: false
