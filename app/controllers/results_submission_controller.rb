@@ -138,8 +138,8 @@ class ResultsSubmissionController < ApplicationController
                       })
     end
 
-    scrambles_to_import = competition.inbox_scramble_sets.flat_map do |scramble_set|
-      scramble_set.inbox_scrambles.map do |scramble|
+    scrambles_to_import = competition.matched_scramble_sets.flat_map do |scramble_set|
+      scramble_set.matched_inbox_scrambles.map do |scramble|
         Scramble.new({
                        competition_id: competition.id,
                        event_id: scramble_set.event_id,
