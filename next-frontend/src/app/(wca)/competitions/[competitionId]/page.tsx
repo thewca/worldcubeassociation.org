@@ -6,7 +6,6 @@ import {
   Heading,
   HStack,
   SimpleGrid,
-  Tabs,
   Text,
   Link as ChakraLink,
   VStack,
