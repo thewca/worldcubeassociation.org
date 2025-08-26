@@ -34,6 +34,18 @@ class TicketStakeholder < ApplicationRecord
     stakeholder_type == "User"
   end
 
+  def competition_stakeholder?
+    stakeholder_type == "Competition"
+  end
+
+  def emails
+    if competition_stakeholder?
+      stakeholder.delegates.map(&:email)
+    else
+      [stakeholder.email]
+    end
+  end
+
   def metadata_actions_allowed
     ticket.metadata.metadata_actions_allowed_for(self)
   end
