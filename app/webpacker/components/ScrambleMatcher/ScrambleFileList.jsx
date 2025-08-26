@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import {
   Accordion, Breadcrumb, Button, Header, Icon, Popup, Table,
 } from 'semantic-ui-react';
@@ -15,7 +15,6 @@ import {
 } from './util';
 import { events } from '../../lib/wca-data.js.erb';
 import { getFullDateTimeString } from '../../lib/utils/dates';
-import MoveMatchingEntityModal from './MoveMatchingEntityModal';
 import { UnusedEntityButtonGroup } from './UnusedScramblesPanel';
 
 async function deleteScrambleFile({ fileId }) {
@@ -112,12 +111,6 @@ function MatchingTableCellContent({
   matchState,
   dispatchMatchState,
 }) {
-  const [modalEntity, setModalEntity] = useState(null);
-
-  const onModalClose = useCallback(() => {
-    setModalEntity(null);
-  }, [setModalEntity]);
-
   const remainingSteps = allSteps.slice(stepIdx + 1);
   const isDefCell = remainingSteps.every((remStep) => remStep.index === 0);
 
@@ -140,8 +133,6 @@ function MatchingTableCellContent({
     .length;
 
   const actualNavigation = searchRecursive(matchState, step);
-
-  const pathToStepEntity = allSteps.slice(0, stepIdx + 1);
 
   if (step.id === DUMMY_ENTITY_ID) {
     if (stepIdx > 0 && allSteps[stepIdx - 1].id === DUMMY_ENTITY_ID) {
@@ -190,25 +181,13 @@ function MatchingTableCellContent({
                 ))}
               </Breadcrumb>
             ) : (
-              <>
-                <UnusedEntityButtonGroup
-                  entity={step.entity}
-                  fullPathToEntity={pathToStepEntity}
-                  referenceMatchState={matchState}
-                  onClickAutoAssign={addEntityBack}
-                  onClickManualAssign={setModalEntity}
-                />
-                <MoveMatchingEntityModal
-                  isOpen={modalEntity !== null}
-                  onClose={onModalClose}
-                  onConfirm={addEntityBack}
-                  selectedMatchingEntity={modalEntity}
-                  rootMatchState={matchState}
-                  pickerHistory={allSteps.slice(0, stepIdx)}
-                  matchingKey={step.key}
-                  isAddMode
-                />
-              </>
+              <UnusedEntityButtonGroup
+                entity={step.entity}
+                matchingKey={step.key}
+                pickerHistory={allSteps.slice(0, stepIdx)}
+                referenceMatchState={matchState}
+                moveEntity={addEntityBack}
+              />
             )}
         </Table.Cell>
       )}

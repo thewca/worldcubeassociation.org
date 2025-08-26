@@ -90,35 +90,54 @@ const filterUnusedItems = (
 
 export function UnusedEntityButtonGroup({
   entity,
-  fullPathToEntity,
+  pickerHistory,
+  matchingKey,
   referenceMatchState,
-  onClickAutoAssign,
-  onClickManualAssign,
+  moveEntity,
   fluid = undefined,
 }) {
-  const autoInsertTarget = fullPathToEntity[fullPathToEntity.length - 2];
+  const [modalPayload, setModalPayload] = useState(null);
+
+  const onModalClose = useCallback(() => {
+    setModalPayload(null);
+  }, [setModalPayload]);
+
+  const autoInsertTarget = pickerHistory[pickerHistory.length - 1];
 
   const autoInsertNavigation = searchRecursive(referenceMatchState, autoInsertTarget);
 
   return (
-    <Button.Group compact fluid={fluid}>
-      {autoInsertNavigation && (
+    <>
+      <Button.Group compact fluid={fluid}>
+        {autoInsertNavigation && (
+          <Button
+            positive
+            basic
+            icon="magic"
+            content="Auto-Assign"
+            onClick={() => moveEntity(entity, autoInsertNavigation)}
+          />
+        )}
         <Button
-          positive
+          primary
           basic
-          icon="magic"
-          content="Auto-Assign"
-          onClick={() => onClickAutoAssign(entity, autoInsertNavigation)}
+          icon="pen"
+          content="Manual"
+          onClick={setModalPayload}
         />
-      )}
-      <Button
-        primary
-        basic
-        icon="pen"
-        content="Manual"
-        onClick={() => onClickManualAssign(entity)}
+      </Button.Group>
+      <MoveMatchingEntityModal
+        key={modalPayload?.id}
+        isOpen={modalPayload !== null}
+        onClose={onModalClose}
+        onConfirm={moveEntity}
+        selectedMatchingEntity={modalPayload}
+        rootMatchState={referenceMatchState}
+        pickerHistory={pickerHistory}
+        matchingKey={matchingKey}
+        isAddMode
       />
-    </Button.Group>
+    </>
   );
 }
 
@@ -136,12 +155,6 @@ function UnusedEntitiesPanel({
   } = matchingDndConfig[matchingKey];
 
   const { headerLabel } = pickerLocalizationConfig[matchingKey];
-
-  const [modalPayload, setModalPayload] = useState(null);
-
-  const onModalClose = useCallback(() => {
-    setModalPayload(null);
-  }, [setModalPayload]);
 
   const addBackEntity = useCallback((entity, pickerHistory) => dispatchMatchState({
     type: 'addEntityToMatching',
@@ -180,22 +193,11 @@ function UnusedEntitiesPanel({
                 <Card.Content extra>
                   <UnusedEntityButtonGroup
                     entity={entity}
-                    fullPathToEntity={pathToUnusedEntity}
-                    referenceMatchState={rootMatchState}
-                    onClickAutoAssign={addBackEntity}
-                    onClickManualAssign={setModalPayload}
-                    fluid
-                  />
-                  <MoveMatchingEntityModal
-                    key={modalPayload?.id}
-                    isOpen={modalPayload !== null}
-                    onClose={onModalClose}
-                    onConfirm={addBackEntity}
-                    selectedMatchingEntity={modalPayload}
-                    rootMatchState={rootMatchState}
                     pickerHistory={pathToUnusedEntity.slice(0, -1)}
                     matchingKey={matchingKey}
-                    isAddMode
+                    referenceMatchState={rootMatchState}
+                    moveEntity={addBackEntity}
+                    fluid
                   />
                 </Card.Content>
               </Card>
