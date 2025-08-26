@@ -2,7 +2,7 @@ import React from 'react';
 import { Message } from 'semantic-ui-react';
 import WCAQueryClientProvider from '../../lib/providers/WCAQueryClientProvider';
 import { ImportResultsData } from '../CompetitionResultSubmission/ImportResultsData';
-import { adminImportResultsUrl, viewUrls } from '../../lib/requests/routes.js.erb';
+import { viewUrls } from '../../lib/requests/routes.js.erb';
 
 export default function Wrapper({ competitionId, hasTemporaryResults, ticketId }) {
   return (
@@ -30,10 +30,6 @@ function CompetitionResultSubmissionAdmin({ competitionId, hasTemporaryResults, 
     <>
       <p>
         When you are done checking the results, you can go ahead with posting process using
-        {' '}
-        <a href={adminImportResultsUrl(competitionId)}>import results page</a>
-        {' '}
-        or
         {' '}
         <a href={viewUrls.tickets.show(ticketId)}>tickets page</a>
         .
