@@ -6,6 +6,7 @@ class TicketsController < ApplicationController
   before_action :authenticate_user!
   before_action -> { check_ticket_errors(TicketLog.action_types[:update_status]) }, only: [:update_status]
   before_action -> { check_ticket_errors(TicketLog.action_types[:metadata_action], TicketsCompetitionResult::ACTION_TYPE[:merge_inbox_results]) }, only: [:merge_inbox_results]
+  before_action -> { check_ticket_errors(TicketLog.action_types[:metadata_action], TicketsEditPerson::ACTION_TYPE[:reject_edit_person_request]) }, only: [:reject_edit_person_request]
   before_action -> { redirect_to_root_unless_user(:can_admin_results?) }, only: %i[delete_inbox_persons]
 
   SORT_WEIGHT_LAMBDAS = {
@@ -271,5 +272,24 @@ class TicketsController < ApplicationController
     end
 
     render status: :ok, json: rounds_data
+  end
+
+  def reject_edit_person_request
+    ActiveRecord::Base.transaction do
+      ticket_status = TicketsEditPerson.statuses[:closed]
+      @ticket.metadata.update!(status: ticket_status)
+      ticket_log = @ticket.ticket_logs.create!(
+        action_type: @action_type,
+        acting_user_id: current_user.id,
+        acting_stakeholder_id: @acting_stakeholder.id,
+        metadata_action: @metadata_action,
+      )
+      ticket_log.ticket_log_changes.create!(
+        field_name: TicketLogChange.field_names[:status],
+        field_value: ticket_status,
+      )
+    end
+
+    render status: :ok, json: { success: true }
   end
 end
