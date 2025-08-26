@@ -4,6 +4,7 @@ import {
 } from 'semantic-ui-react';
 import _ from 'lodash';
 import {
+  buildHistoryStep,
   groupScrambleSetsIntoWcif,
   matchingDndConfig,
   pickerLocalizationConfig,
@@ -57,12 +58,7 @@ const filterUnusedItems = (
 
     const nextHistory = [
       ...history,
-      {
-        key: currentKey,
-        id: masterItem.id,
-        entity: masterItem,
-        index: i,
-      },
+      buildHistoryStep(currentKey, masterItem, i),
     ];
 
     return filterUnusedItems(
@@ -179,28 +175,26 @@ function UnusedEntitiesPanel({
       </Header>
       <Segment attached>
         <Card.Group>
-          {unusedEntries.map(({ entity, pickerHistory }) => {
-            return (
-              <Card key={entity.id}>
-                <Card.Content>
-                  <Card.Header>{computeCellName(entity)}</Card.Header>
-                  {computeCellDetails && !cellDetailsAreData && (
-                    <Card.Meta>{computeCellDetails(entity)}</Card.Meta>
-                  )}
-                </Card.Content>
-                <Card.Content extra>
-                  <UnusedEntityButtonGroup
-                    entity={entity}
-                    pickerHistory={pickerHistory}
-                    matchingKey={matchingKey}
-                    referenceMatchState={rootMatchState}
-                    moveEntity={addBackEntity}
-                    fluid
-                  />
-                </Card.Content>
-              </Card>
-            );
-          })}
+          {unusedEntries.map(({ entity, pickerHistory }) => (
+            <Card key={entity.id}>
+              <Card.Content>
+                <Card.Header>{computeCellName(entity)}</Card.Header>
+                {computeCellDetails && !cellDetailsAreData && (
+                <Card.Meta>{computeCellDetails(entity)}</Card.Meta>
+                )}
+              </Card.Content>
+              <Card.Content extra>
+                <UnusedEntityButtonGroup
+                  entity={entity}
+                  pickerHistory={pickerHistory}
+                  matchingKey={matchingKey}
+                  referenceMatchState={rootMatchState}
+                  moveEntity={addBackEntity}
+                  fluid
+                />
+              </Card.Content>
+            </Card>
+          ))}
         </Card.Group>
       </Segment>
     </>

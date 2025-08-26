@@ -3,6 +3,7 @@ import { Button, Form, Modal } from 'semantic-ui-react';
 import _ from 'lodash';
 import { useInputUpdater } from '../../lib/hooks/useInputState';
 import {
+  buildHistoryStep,
   matchingDndConfig,
   pickerLocalizationConfig,
   pickerStepConfig,
@@ -80,6 +81,9 @@ export default function MoveMatchingEntityModal({
 }) {
   const { computeCellName: entityToName } = matchingDndConfig[matchingKey];
 
+  const pickerConfigForMatching = Object.values(pickerStepConfig).find((cfg) => cfg.matchingConfigKey === matchingKey);
+  const { enabledCondition } = pickerConfigForMatching || {};
+
   const baseDescriptor = useMemo(() => navigationToDescriptor(pickerHistory), [pickerHistory]);
   const [targetDescriptor, setTargetDescriptor] = useState(baseDescriptor);
 
@@ -97,15 +101,20 @@ export default function MoveMatchingEntityModal({
 
   const computeChoices = useCallback((historyIdx, descriptor) => {
     const unpacked = unpackDescriptor(descriptor);
+
+    const previousHistory = unpacked.slice(0, historyIdx);
     const currentKey = unpacked[historyIdx].key;
 
-    return unpacked
-      .slice(0, historyIdx)
-      .reduce(
-        (state, unpackedStep) => state[unpackedStep.key].find((ent) => ent.id === unpackedStep.id),
-        rootMatchState,
-      )[currentKey];
-  }, [rootMatchState]);
+    const optionsInState = previousHistory.reduce(
+      (state, unpackedStep) => state[unpackedStep.key].find((ent) => ent.id === unpackedStep.id),
+      rootMatchState,
+    )[currentKey];
+
+    return optionsInState.filter((opt, idx) => {
+      const mockHistory = [...previousHistory, buildHistoryStep(currentKey, opt, idx)];
+      return enabledCondition?.(mockHistory) ?? true;
+    });
+  }, [rootMatchState, enabledCondition]);
 
   const fixSelectionPath = useCallback(
     (selectedDescriptor) => unpackDescriptor(selectedDescriptor)

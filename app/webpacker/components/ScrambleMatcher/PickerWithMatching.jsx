@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { matchingDndConfig, pickerLocalizationConfig, pickerStepConfig } from './util';
+import {buildHistoryStep, matchingDndConfig, pickerLocalizationConfig, pickerStepConfig} from './util';
 import ButtonGroupPicker from './ButtonGroupPicker';
 import TableAndModal from './TableAndModal';
 
@@ -107,12 +107,7 @@ function WrapHistory({
 
     return [
       ...pickerHistory,
-      {
-        key: pickerKey,
-        id: selectedEntity.id,
-        index: selectedEntityIdx,
-        entity: selectedEntity,
-      },
+      buildHistoryStep(pickerKey, selectedEntity, selectedEntityIdx),
     ];
   }, [entityChoices, pickerHistory, pickerKey, selectedEntity]);
 

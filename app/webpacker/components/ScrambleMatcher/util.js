@@ -81,6 +81,15 @@ export const matchingDndConfig = {
   },
 };
 
+export function buildHistoryStep(key, entity, index) {
+  return {
+    key,
+    entity,
+    id: entity.id,
+    index,
+  };
+}
+
 export function moveArrayItem(arr, fromIndex, toIndex) {
   const movedItem = arr[fromIndex];
 
@@ -108,12 +117,10 @@ export const searchRecursive = (data, targetStep, currentKey = 'events', searchH
   return data[currentKey]?.reduce((foundPath, item, index) => {
     if (foundPath) return foundPath;
 
-    const nextHistory = [...searchHistory, {
-      key: currentKey,
-      id: item.id,
-      entity: item,
-      index,
-    }];
+    const nextHistory = [
+      ...searchHistory,
+      buildHistoryStep(currentKey, item, index),
+    ];
 
     if (currentKey === targetStep.key && item.id === targetStep.id) {
       return nextHistory;

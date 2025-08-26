@@ -7,6 +7,7 @@ import { fetchJsonOrError } from '../../lib/requests/fetchWithAuthenticityToken'
 import { scrambleFileUrl } from '../../lib/requests/routes.js.erb';
 import Loading from '../Requests/Loading';
 import {
+  buildHistoryStep,
   groupScrambleSetsIntoWcif,
   matchingDndConfig,
   pickerLocalizationConfig,
@@ -217,10 +218,7 @@ function buildTableRows(
     const nextHistory = [
       ...history,
       {
-        key: matchingKey,
-        id: rowEntity.id,
-        entity: rowEntity,
-        index: i,
+        ...buildHistoryStep(matchingKey, rowEntity, i),
         hasPicker: previousMatching === matchingKey,
       },
     ];
