@@ -35,9 +35,11 @@ const filterUnusedItems = (
   const workingItems = matchState?.[currentKey];
 
   const usedIds = workingItems?.map((itm) => itm.id);
-  const unusedItems = masterItems.filter((masterItem) => !usedIds?.includes(masterItem.id));
 
-  const currentStepReturn = { key: currentKey, unused: unusedItems };
+  const unusedItems = masterItems.filter((masterItem) => !usedIds?.includes(masterItem.id));
+  const unusedResult = unusedItems.map((entity) => ({ entity, pickerHistory: history }));
+
+  const currentStepReturn = { key: currentKey, unused: unusedResult };
 
   if (!nestedPicker || !currentPickerEnabled) {
     return [currentStepReturn];
@@ -125,7 +127,7 @@ export function UnusedEntityButtonGroup({
           basic
           icon="pen"
           content="Manual"
-          onClick={setModalPayload}
+          onClick={() => setModalPayload(entity)}
         />
       </Button.Group>
       <MoveMatchingEntityModal
@@ -145,9 +147,8 @@ export function UnusedEntityButtonGroup({
 
 function UnusedEntitiesPanel({
   matchingKey,
-  unusedEntities,
+  unusedEntries,
   dispatchMatchState,
-  scrambleFilesTree,
   rootMatchState,
 }) {
   const {
@@ -165,7 +166,7 @@ function UnusedEntitiesPanel({
     matchingKey,
   }), [dispatchMatchState, matchingKey]);
 
-  if (unusedEntities.length === 0) {
+  if (unusedEntries.length === 0) {
     return null;
   }
 
@@ -178,12 +179,7 @@ function UnusedEntitiesPanel({
       </Header>
       <Segment attached>
         <Card.Group>
-          {unusedEntities.map((entity) => {
-            const pathToUnusedEntity = searchRecursive(
-              scrambleFilesTree,
-              { key: matchingKey, id: entity.id },
-            );
-
+          {unusedEntries.map(({ entity, pickerHistory }) => {
             return (
               <Card key={entity.id}>
                 <Card.Content>
@@ -195,7 +191,7 @@ function UnusedEntitiesPanel({
                 <Card.Content extra>
                   <UnusedEntityButtonGroup
                     entity={entity}
-                    pickerHistory={pathToUnusedEntity.slice(0, -1)}
+                    pickerHistory={pickerHistory}
                     matchingKey={matchingKey}
                     referenceMatchState={rootMatchState}
                     moveEntity={addBackEntity}
@@ -236,9 +232,8 @@ export default function UnusedScramblesPanel({
         <UnusedEntitiesPanel
           key={unusedStep.key}
           matchingKey={unusedStep.key}
-          unusedEntities={unusedStep.unused}
+          unusedEntries={unusedStep.unused}
           dispatchMatchState={dispatchMatchState}
-          scrambleFilesTree={scrambleFilesTree}
           rootMatchState={matchState}
         />
       ))}
