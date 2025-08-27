@@ -73,7 +73,7 @@ export default function CompetingStep({
 
   const {
     isRegistered, isPolling, isProcessing, startPolling, refetchRegistration,
-    isPending, isWaitingList, registration,
+    isPending, isWaitingList, registrationId,
   } = useRegistration();
 
   const dispatch = useDispatch();
@@ -110,7 +110,7 @@ export default function CompetingStep({
   } = useUpdateRegistrationMutation(competitionInfo, user, 'basic');
 
   const onUpdateSuccess = useCallback((data) => {
-    formSuccess(data.registration);
+    formSuccess(data.registration, true);
     jumpToSummary();
   }, [formSuccess, jumpToSummary]);
 
@@ -185,10 +185,8 @@ export default function CompetingStep({
       if (canEditRegistration) {
         dispatch(showMessage('competitions.registration_v2.update.being_updated', 'basic'));
         updateRegistrationMutation({
-          registrationId: registration.id,
+          registrationId,
           payload: {
-            user_id: user.id,
-            competition_id: competitionInfo.id,
             competing: {
               comment: hasCommentChanged ? comment : undefined,
               event_ids: hasEventsChanged ? selectedEventIds.asArray : undefined,
@@ -225,8 +223,7 @@ export default function CompetingStep({
     dispatch,
     updateRegistrationMutation,
     competitionInfo,
-    registration?.id,
-    user,
+    registrationId,
     hasCommentChanged,
     comment,
     hasEventsChanged,
@@ -241,23 +238,19 @@ export default function CompetingStep({
 
   const actionReRegister = useCallback(() => {
     updateRegistrationMutation({
-      registrationId: registration.id,
+      registrationId,
       payload: {
         ...formState,
         competing: {
           ...formState.competing,
           status: 'pending',
         },
-        user_id: user.id,
-        competition_id: competitionInfo.id,
       },
     }, { onSuccess: onUpdateSuccess });
   }, [
     updateRegistrationMutation,
     formState,
-    registration?.id,
-    user.id,
-    competitionInfo.id,
+    registrationId,
     onUpdateSuccess,
   ]);
 
@@ -390,18 +383,18 @@ export default function CompetingStep({
           />
         </Form.Field>
         {currentStepParameters.guests_enabled && (
-        <Form.Field>
-          <label htmlFor="guest-dropdown">{I18n.t('activerecord.attributes.registration.guests')}</label>
-          <Form.Input
-            id="guest-dropdown"
-            type="number"
-            value={guests}
-            onChange={setGuests}
-            min="0"
-            max={guestLimit}
-            error={guestsRestricted && guests > guestLimit && I18n.t('competitions.competition_info.guest_limit', { count: guestLimit })}
-          />
-        </Form.Field>
+          <Form.Field>
+            <label htmlFor="guest-dropdown">{I18n.t('activerecord.attributes.registration.guests')}</label>
+            <Form.Input
+              id="guest-dropdown"
+              type="number"
+              value={guests}
+              onChange={setGuests}
+              min="0"
+              max={guestLimit}
+              error={guestsRestricted && guests > guestLimit && I18n.t('competitions.competition_info.guest_limit', { count: guestLimit })}
+            />
+          </Form.Field>
         )}
         {isRegistered ? (
           <ButtonGroup widths={2}>

@@ -28,6 +28,7 @@ export default function RegistrationOverview({
 
   const {
     registration,
+    registrationId,
     isRejected,
     isAccepted,
     hasPaid,
@@ -36,6 +37,16 @@ export default function RegistrationOverview({
   const {
     jumpToStart, jumpToStepByKey,
   } = useStepNavigation();
+
+  const {
+    competing: {
+      registration_status: registrationStatus,
+      comment,
+      event_ids: eventIds,
+    },
+    guests,
+    payment: registrationPayment,
+  } = registration;
 
   const hasRegistrationEditDeadlinePassed = hasPassed(
     competitionInfo.event_change_deadline_date ?? competitionInfo.start_date,
@@ -55,7 +66,7 @@ export default function RegistrationOverview({
   );
 
   const deleteRegistrationMutation = useCallback(() => updateRegistrationForDeletionMutation({
-    registrationId: registration.id,
+    registrationId,
     payload: {
       competing: {
         status: 'cancelled',
@@ -69,7 +80,7 @@ export default function RegistrationOverview({
     },
   }), [
     updateRegistrationForDeletionMutation,
-    registration.id,
+    registrationId,
     jumpToStart,
     onFormSuccess,
     dispatch,
@@ -92,7 +103,7 @@ export default function RegistrationOverview({
   return (
     <>
       <RegistrationStatus registration={registration} competitionInfo={competitionInfo} />
-      { !competitionInfo['using_payment_integrations?'] && registration.competing.registration_status === 'pending' && competitionInfo.base_entry_fee_lowest_denomination && (
+      { !competitionInfo['using_payment_integrations?'] && registrationStatus === 'pending' && competitionInfo.base_entry_fee_lowest_denomination && (
         <Message info>
           {I18n.t('registrations.wont_pay_here')}
         </Message>
@@ -108,7 +119,7 @@ export default function RegistrationOverview({
               </List.Header>
               { /* Make sure to keep WCA Event order */}
               {events.official
-                .filter((e) => registration.competing.event_ids.includes(e.id))
+                .filter((e) => eventIds.includes(e.id))
                 .map((e) => (
                   <React.Fragment key={e.id}>
                     <EventIcon id={e.id} hoverable={false} />
@@ -121,7 +132,7 @@ export default function RegistrationOverview({
                 {I18n.t('activerecord.attributes.registration.comments')}
                 :
               </List.Header>
-              {registration.competing.comment?.length > 0 ? registration.competing.comment : I18n.t('competitions.schedule.rooms_panel.none')}
+              {comment?.length > 0 ? comment : I18n.t('competitions.schedule.rooms_panel.none')}
             </List.Item>
             {competitionInfo.guests_enabled && (
               <List.Item>
@@ -129,18 +140,18 @@ export default function RegistrationOverview({
                   {I18n.t('activerecord.attributes.registration.guests')}
                   :
                 </List.Header>
-                {registration.guests}
+                {guests}
               </List.Item>
             )}
-            { registration.payment && (
+            { registrationPayment && (
               <List.Item>
                 <List.Header>
                   {I18n.t('payments.labels.net_payment')}
                   :
                 </List.Header>
                 {isoMoneyToHumanReadable(
-                  registration.payment.paid_amount_iso,
-                  registration.payment.currency_code,
+                  registrationPayment.paid_amount_iso,
+                  registrationPayment.currency_code,
                 )}
               </List.Item>
             )}

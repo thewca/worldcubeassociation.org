@@ -14,7 +14,7 @@ export default function PaymentStepWrapper({
   competitionInfo,
   user,
 }) {
-  const { registration } = useRegistration();
+  const { registrationId } = useRegistration();
 
   const { currentStep: { parameters: currentStepParameters } } = useStepNavigation();
   const { stripePublishableKey, connectedAccountId } = currentStepParameters;
@@ -23,9 +23,10 @@ export default function PaymentStepWrapper({
     data: payments,
     isLoading,
   } = useQuery({
-    queryKey: ['payments', registration.id],
-    queryFn: () => getRegistrationPayments(registration.id),
+    queryKey: ['payments', registrationId],
+    queryFn: () => getRegistrationPayments(registrationId),
     select: (data) => data.charges,
+    enabled: !!registrationId,
   });
 
   if (isLoading) {

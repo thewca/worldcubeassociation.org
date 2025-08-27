@@ -74,6 +74,7 @@ export default function RegistrationProvider({
   const hasPaid = registration?.payment?.has_paid;
   const isPending = isRegistered && registration.competing.registration_status === 'pending';
   const isWaitingList = isRegistered && registration.competing.registration_status === 'waiting_list';
+  const registrationId = registration?.id;
 
   const value = useMemo(() => ({
     isRegistered,
@@ -83,6 +84,7 @@ export default function RegistrationProvider({
     isPending,
     isWaitingList,
     registration,
+    registrationId,
     refetchRegistration,
     isFetching,
     pollCounter,
@@ -102,6 +104,7 @@ export default function RegistrationProvider({
     isPolling,
     refetchRegistration,
     registration,
+    registrationId,
     pollCounter,
     pollingData,
     startPolling,

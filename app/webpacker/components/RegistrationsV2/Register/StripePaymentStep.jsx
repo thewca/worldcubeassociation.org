@@ -39,13 +39,11 @@ export default function Wrapper({
   const initialAmount = competitionInfo.base_entry_fee_lowest_denomination;
   const [isoDonationAmount, setIsoDonationAmount] = useState(0);
 
-  const { registration } = useRegistration();
-
   const {
     data, isFetching,
   } = useQuery({
-    queryFn: () => convertISOAmount(competitionInfo.id, registration.user_id, isoDonationAmount),
-    queryKey: ['displayAmount', isoDonationAmount, competitionInfo.id, registration.user_id],
+    queryFn: () => convertISOAmount(competitionInfo.id, user.id, isoDonationAmount),
+    queryKey: ['displayAmount', isoDonationAmount, competitionInfo.id, user.id],
   });
 
   return (
@@ -65,12 +63,10 @@ export default function Wrapper({
           options={{ amount: data?.api_amounts.stripe ?? initialAmount, currency: competitionInfo.currency_code.toLowerCase(), mode: 'payment' }}
         >
           <PaymentStep
-            setIsoDonationAmount={setIsoDonationAmount}
             competitionInfo={competitionInfo}
-            user={user}
+            setIsoDonationAmount={setIsoDonationAmount}
             isoDonationAmount={isoDonationAmount}
             displayAmount={data?.human_amount}
-            registration={registration}
             conversionFetching={isFetching}
           />
         </Elements>
@@ -89,7 +85,8 @@ function PaymentStep({
   const stripe = useStripe();
   const elements = useElements();
   const dispatch = useDispatch();
-  const { registration } = useRegistration();
+
+  const { registrationId } = useRegistration();
 
   const [isLoading, setIsLoading] = useState(false);
   const [isDonationChecked, setDonationChecked] = useCheckboxState(false);
@@ -109,7 +106,7 @@ function PaymentStep({
     await elements.submit();
 
     // Create the PaymentIntent and obtain clientSecret
-    const data = await getPaymentTicket(registration.id, isoDonationAmount);
+    const data = await getPaymentTicket(registrationId, isoDonationAmount);
 
     const { client_secret: clientSecret } = data;
 
