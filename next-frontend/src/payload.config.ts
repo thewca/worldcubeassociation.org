@@ -45,7 +45,12 @@ async function plugins() {
       ...defaultPlugins,
       s3Storage({
         collections: {
-          media: true,
+          media: {
+            prefix: "media",
+            generateFileURL: ({ prefix, filename }) => {
+              return `${process.env.MEDIA_BUCKET_CDN!}/${prefix}/${filename}`;
+            },
+          },
         },
         bucket: process.env.MEDIA_BUCKET!,
         config: {
