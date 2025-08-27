@@ -3,7 +3,7 @@ import React, {
 } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
-import { getRegistrationByUser, getSingleRegistration } from '../api/registration/get/get_registrations';
+import { getRegistrationByUser } from '../api/registration/get/get_registrations';
 import { showMessage } from '../Register/RegistrationMessage';
 import pollRegistrations from '../api/registration/get/poll_registrations';
 
@@ -11,24 +11,12 @@ const REFETCH_INTERVAL = 3000;
 
 const RegistrationContext = createContext();
 
-const getRegistrationFromParams = ({
-  competitionId,
-  userId,
-  registrationId = null,
-}) => {
-  if (registrationId) {
-    return getSingleRegistration(registrationId);
-  }
-
-  return getRegistrationByUser(userId, competitionId);
-};
-
 export default function RegistrationProvider({
   competitionInfo,
   userInfo,
-  registrationId,
   isProcessing,
   children,
+  serverRegistration = undefined,
 }) {
   const dispatch = useDispatch();
 
@@ -43,9 +31,9 @@ export default function RegistrationProvider({
     setIsPolling(false);
   }, [setIsPolling]);
 
-  const { data: pollingData, status: pollingStatus } = useQuery({
+  const { data: pollingData, isSuccess: pollingSuccess } = useQuery({
     queryKey: ['registration-status-polling', userInfo.id, competitionInfo.id],
-    queryFn: async () => pollRegistrations(userInfo.id, competitionInfo.id),
+    queryFn: () => pollRegistrations(userInfo.id, competitionInfo.id),
     refetchInterval: REFETCH_INTERVAL,
     onSuccess: () => {
       setPollCounter((prevCounter) => prevCounter + 1);
@@ -64,12 +52,12 @@ export default function RegistrationProvider({
     isFetching,
     refetch: refetchRegistration,
   } = useQuery({
-    queryKey: ['registration', competitionInfo.id, userInfo.id, registrationId],
-    queryFn: () => getRegistrationFromParams({
-      competitionId: competitionInfo.id,
-      userId: userInfo.id,
-      registrationId,
-    }),
+    queryKey: ['registration', competitionInfo.id, userInfo.id],
+    queryFn: () => getRegistrationByUser(
+      userInfo.id,
+      competitionInfo.id,
+    ),
+    initialData: serverRegistration,
     onError: (error) => {
       dispatch(
         showMessage(
@@ -86,6 +74,7 @@ export default function RegistrationProvider({
   const hasPaid = registration?.payment?.has_paid;
   const isPending = isRegistered && registration.competing.registration_status === 'pending';
   const isWaitingList = isRegistered && registration.competing.registration_status === 'waiting_list';
+  const registrationId = registration?.id;
 
   const value = useMemo(() => ({
     isRegistered,
@@ -95,15 +84,16 @@ export default function RegistrationProvider({
     isPending,
     isWaitingList,
     registration,
+    registrationId,
     refetchRegistration,
     isFetching,
     pollCounter,
     isPolling,
     startPolling,
-    isProcessing: pollingStatus !== 'success' || pollingData.processing,
+    isProcessing: !pollingSuccess || pollingData.processing,
     queueCount: pollingData?.queue_count,
   }), [
-    pollingStatus,
+    pollingSuccess,
     hasPaid,
     isAccepted,
     isFetching,
@@ -114,6 +104,7 @@ export default function RegistrationProvider({
     isPolling,
     refetchRegistration,
     registration,
+    registrationId,
     pollCounter,
     pollingData,
     startPolling,

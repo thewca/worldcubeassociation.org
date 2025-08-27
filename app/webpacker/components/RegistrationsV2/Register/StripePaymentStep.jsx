@@ -3,7 +3,7 @@ import {
   Elements, PaymentElement, useElements, useStripe,
 } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
-import React, { useEffect, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import {
   Button, Checkbox, Divider, Form, FormField, Header, Label, Message, Segment,
 } from 'semantic-ui-react';
@@ -31,28 +31,20 @@ export default function Wrapper({
   stripePublishableKey,
   connectedAccountId,
   user,
-  nextStep,
 }) {
-  const [stripePromise, setStripePromise] = useState(null);
+  const stripePromise = useMemo(() => loadStripe(stripePublishableKey, {
+    stripeAccount: connectedAccountId,
+  }), [stripePublishableKey, connectedAccountId]);
+
   const initialAmount = competitionInfo.base_entry_fee_lowest_denomination;
   const [isoDonationAmount, setIsoDonationAmount] = useState(0);
-
-  const { registration } = useRegistration();
 
   const {
     data, isFetching,
   } = useQuery({
-    queryFn: () => convertISOAmount(competitionInfo.id, registration.user_id, isoDonationAmount),
-    queryKey: ['displayAmount', isoDonationAmount, competitionInfo.id, registration.user_id],
+    queryFn: () => convertISOAmount(competitionInfo.id, user.id, isoDonationAmount),
+    queryKey: ['displayAmount', isoDonationAmount, competitionInfo.id, user.id],
   });
-
-  useEffect(() => {
-    setStripePromise(
-      loadStripe(stripePublishableKey, {
-        stripeAccount: connectedAccountId,
-      }),
-    );
-  }, [connectedAccountId, stripePublishableKey]);
 
   return (
     <>
@@ -71,13 +63,10 @@ export default function Wrapper({
           options={{ amount: data?.api_amounts.stripe ?? initialAmount, currency: competitionInfo.currency_code.toLowerCase(), mode: 'payment' }}
         >
           <PaymentStep
-            setIsoDonationAmount={setIsoDonationAmount}
             competitionInfo={competitionInfo}
-            user={user}
+            setIsoDonationAmount={setIsoDonationAmount}
             isoDonationAmount={isoDonationAmount}
             displayAmount={data?.human_amount}
-            registration={registration}
-            nextStep={nextStep}
             conversionFetching={isFetching}
           />
         </Elements>
@@ -96,7 +85,8 @@ function PaymentStep({
   const stripe = useStripe();
   const elements = useElements();
   const dispatch = useDispatch();
-  const { registration } = useRegistration();
+
+  const { registrationId } = useRegistration();
 
   const [isLoading, setIsLoading] = useState(false);
   const [isDonationChecked, setDonationChecked] = useCheckboxState(false);
@@ -116,7 +106,7 @@ function PaymentStep({
     await elements.submit();
 
     // Create the PaymentIntent and obtain clientSecret
-    const data = await getPaymentTicket(registration.id, isoDonationAmount);
+    const data = await getPaymentTicket(registrationId, isoDonationAmount);
 
     const { client_secret: clientSecret } = data;
 

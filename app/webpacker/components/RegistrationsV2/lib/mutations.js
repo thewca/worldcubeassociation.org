@@ -17,7 +17,11 @@ export const useRegistrationMutationErrorHandler = () => {
   }, [dispatch]);
 };
 
-export const useUpdateRegistrationMutation = (competitionInfo, userInfo, inProgressMessageType = 'positive') => {
+export const useUpdateRegistrationMutation = (
+  competitionInfo,
+  userInfo,
+  inProgressMessageType = 'positive',
+) => {
   const queryClient = useQueryClient();
   const dispatch = useDispatch();
 
@@ -25,13 +29,15 @@ export const useUpdateRegistrationMutation = (competitionInfo, userInfo, inProgr
 
   return useMutation({
     mutationFn: updateRegistration,
-    onMutate: () => dispatch(showMessage('competitions.registration_v2.update.being_updated', inProgressMessageType)),
+    onMutate: () => {
+      if (inProgressMessageType) {
+        dispatch(showMessage('competitions.registration_v2.update.being_updated', inProgressMessageType));
+      }
+    },
     onError,
     onSuccess: (data) => {
-      const registrationId = data.registration.id;
-
       queryClient.setQueryData(
-        ['registration', competitionInfo.id, userInfo.id, registrationId],
+        ['registration', competitionInfo.id, userInfo.id],
         (prevRegistration) => ({
           ...data.registration,
           payment: prevRegistration.payment,

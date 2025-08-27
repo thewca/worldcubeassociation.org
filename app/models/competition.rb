@@ -1779,6 +1779,45 @@ class Competition < ApplicationRecord
     competitions.includes(:delegates, :organizers, *previous_includes).order(**order)
   end
 
+  def competing_step_parameters(current_user)
+    competition_params = serializable_hash(only: %i[events_per_registration_limit
+                                                    allow_registration_edits
+                                                    guest_entry_status
+                                                    guests_per_registration_limit
+                                                    guests_enabled
+                                                    uses_qualification?
+                                                    allow_registration_without_qualification
+                                                    force_comment_in_registration],
+                                           methods: %i[qualification_wcif event_ids],
+                                           include: [])
+    user_params = {
+      preferredEvents: current_user.preferred_events.pluck(:id),
+      personalRecords: {
+        single: current_user.ranks_single&.map(&:to_wcif) || [],
+        average: current_user.ranks_average&.map(&:to_wcif) || [],
+      },
+    }
+    competition_params.merge(user_params)
+  end
+
+  def payment_step_parameters
+    # Currently hardcoded to support stripe only
+    {
+      stripePublishableKey: AppSecrets.STRIPE_PUBLISHABLE_KEY,
+      connectedAccountId: payment_account_for(:stripe)&.account_id,
+    }
+  end
+
+  def available_registration_lanes(current_user)
+    # There is currently only one lane, so this always returns the competitor lane
+    steps = []
+    steps << { key: 'requirements', isEditable: false }
+    steps << { key: 'competing', parameters: competing_step_parameters(current_user), isEditable: true }
+    steps << { key: 'payment', parameters: payment_step_parameters, isEditable: true, deadline: self.registration_close } if using_payment_integrations?
+
+    steps
+  end
+
   def all_activities
     competition_venues.includes(venue_rooms: { schedule_activities: [child_activities: [:child_activities]] }).map(&:all_activities).flatten
   end
