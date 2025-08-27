@@ -190,7 +190,6 @@ export default function CompetingStep({
       content: I18n.t(canEditRegistration ? 'competitions.registration_v2.update.update_confirm' : 'competitions.registration_v2.update.update_confirm_contact'),
     }).then(() => {
       if (canEditRegistration) {
-        dispatch(showMessage('competitions.registration_v2.update.being_updated', 'basic'));
         updateRegistrationMutation({
           registrationId,
           payload: {
