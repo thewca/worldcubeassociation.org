@@ -4,6 +4,7 @@ import { ticketStatuses } from '../../../../lib/wca-data.js.erb';
 import EditPersonValidations from './EditPersonValidations';
 import EditPersonRequestedChanges from './EditPersonRequestedChanges';
 import RejectView from './RejectView';
+import OldDataSyncInfo from './OldDataSyncInfo';
 
 export default function EditPersonActionerView({
   ticketDetails,
@@ -22,6 +23,10 @@ export default function EditPersonActionerView({
     <>
       <EditPersonValidations
         ticketDetails={ticketDetails}
+      />
+      <OldDataSyncInfo
+        ticketDetails={ticketDetails}
+        currentStakeholder={currentStakeholder}
       />
       <EditPersonRequestedChanges
         ticketId={id}
