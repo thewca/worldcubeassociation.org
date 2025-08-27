@@ -28,6 +28,7 @@ import useInputState from '../../../lib/hooks/useInputState';
 import ActivityPicker from './ActivityPicker';
 import {
   getMatchingActivities,
+  isActivityTimeValid,
   roomWcifFromId,
   venueWcifFromRoomId,
 } from '../../../lib/utils/wcif';
@@ -157,6 +158,18 @@ function EditActivities({
       };
     })
   ), [wcifRoom?.activities, wcifSchedule, shouldUpdateMatches]);
+
+  // theoretically this should always be empty, but there have been back-end bugs
+  const activitiesWithInvalidTimes = wcifRoom?.activities?.filter(
+    (activity) => !isActivityTimeValid(activity, wcifVenue, wcifSchedule),
+  ) ?? [];
+
+  const deleteInvalidActivities = () => {
+    activitiesWithInvalidTimes.forEach((activity) => {
+      // do not remove matching activities; they may be valid in their time zone
+      dispatch(removeActivity(activity.id, false));
+    });
+  };
 
   // we 'fake' our own ref due to quirks in useRef + useEffect combinations.
   // See https://medium.com/@teh_builder/ref-objects-inside-useeffect-hooks-eb7c15198780
@@ -458,6 +471,18 @@ function EditActivities({
                     </b>
                     .
                   </Container>
+                  {activitiesWithInvalidTimes.length > 0 && (
+                    <Message negative floating>
+                      <b>Warning:</b>
+                      {' '}
+                      You have activities outside the competition
+                      dates or with non-positive durations.
+                      {' '}
+                      <Button onClick={deleteInvalidActivities} size="tiny" compact negative>
+                        Delete them.
+                      </Button>
+                    </Message>
+                  )}
                   <FullCalendar
                     // plugins for the basic FullCalendar implementation.
                     //   - timeGridPlugin: Display days as vertical grid
