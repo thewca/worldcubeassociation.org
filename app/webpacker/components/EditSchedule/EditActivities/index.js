@@ -166,7 +166,13 @@ function EditActivities({
   ) ?? [];
 
   const deleteInvalidActivities = () => {
-    dispatch(removeActivities(activitiesWithInvalidTimes.map((a) => a.id), false));
+    confirm({
+      content: `Are you sure you want to delete the following event(s): ${
+        activitiesWithInvalidTimes.map((a) => a.name).join(', ')
+      }? THIS ACTION CANNOT BE UNDONE!`,
+    }).then(() => {
+      dispatch(removeActivities(activitiesWithInvalidTimes.map((a) => a.id), false));
+    });
   };
 
   // we 'fake' our own ref due to quirks in useRef + useEffect combinations.
