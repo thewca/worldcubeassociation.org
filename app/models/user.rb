@@ -647,9 +647,7 @@ class User < ApplicationRecord
       fixResults
       mergeProfiles
       mergeUsers
-      competitorRegistration
-      organizedCompetitions
-      delegatedCompetitions
+      helpfulQueries
     ].index_with { |panel_page| panel_page.to_s.underscore.dasherize }
   end
 
@@ -756,9 +754,7 @@ class User < ApplicationRecord
           panel_pages[:downloadVoters],
           panel_pages[:bannedCompetitors],
           panel_pages[:delegateProbations],
-          panel_pages[:competitorRegistration],
-          panel_pages[:organizedCompetitions],
-          panel_pages[:delegatedCompetitions],
+          panel_pages[:helpfulQueries],
         ],
       },
       weat: {
