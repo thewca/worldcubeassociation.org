@@ -20,7 +20,6 @@ export default function RegistrationEdit({ registrationId, competitionInfo, user
             <RegistrationProvider
               competitionInfo={competitionInfo}
               userInfo={user}
-              registrationId={registrationId}
             >
               <Sticky context={ref}>
                 <RegistrationMessage />

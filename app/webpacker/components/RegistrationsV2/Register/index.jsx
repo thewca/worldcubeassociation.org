@@ -63,7 +63,7 @@ const buildFormRegistration = ({
 export default function Index({
   competitionInfo,
   userInfo,
-  registrationId,
+  serverRegistration,
   userCanPreRegister,
   cannotRegisterReasons,
   isProcessing = false,
@@ -76,7 +76,7 @@ export default function Index({
             <RegistrationProvider
               competitionInfo={competitionInfo}
               userInfo={userInfo}
-              registrationId={registrationId}
+              serverRegistration={serverRegistration}
               isProcessing={isProcessing}
             >
               <FormObjectWrapper

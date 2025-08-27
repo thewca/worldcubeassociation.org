@@ -23,7 +23,7 @@
   <% else %>
   <%= react_component('RegistrationsV2/Register', { competitionInfo: @competition.to_competition_info ,
                                                     userInfo: @current_user,
-                                                    registrationId: @registration&.id,
+                                                    serverRegistration: @registration&.to_v2_json(admin: true),
                                                     userCanPreRegister: @competition.user_can_pre_register?(@current_user),
                                                     cannotRegisterReasons: current_user.cannot_register_for_competition_reasons(@competition),
                                                     isProcessing: @is_processing,

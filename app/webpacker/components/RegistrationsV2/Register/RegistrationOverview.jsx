@@ -1,13 +1,12 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import {
   Button, ButtonGroup, Form, Header, List, Message, Segment,
 } from 'semantic-ui-react';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
 import I18n from '../../../lib/i18n';
 import EventIcon from '../../wca/EventIcon';
 import { hasPassed } from '../../../lib/utils/dates';
 import { events } from '../../../lib/wca-data.js.erb';
-import updateRegistration from '../api/registration/patch/update_registration';
+import { useUpdateRegistrationMutation } from '../lib/mutations';
 import { showMessage } from './RegistrationMessage';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
 import { useConfirm } from '../../../lib/providers/ConfirmProvider';
@@ -20,6 +19,7 @@ import { useFormObjectState, useFormSuccessHandler } from '../../wca/FormBuilder
 
 export default function RegistrationOverview({
   competitionInfo,
+  user,
 }) {
   const dispatch = useDispatch();
   const confirm = useConfirm();
@@ -48,41 +48,39 @@ export default function RegistrationOverview({
     || (competitionInfo.competitor_can_cancel === 'not_accepted' && !isAccepted)
     || (competitionInfo.competitor_can_cancel === 'unpaid' && !hasPaid);
 
-  const queryClient = useQueryClient();
+  const {
+    mutate: updateRegistrationForDeletionMutation,
+    isPending: isDeleting,
+  } = useUpdateRegistrationMutation(
+    competitionInfo,
+    user,
+    null, // turn off "update in progress" message
+  );
 
-  const { mutate: deleteRegistrationMutation, isPending: isDeleting } = useMutation({
-    mutationFn: () => updateRegistration({
-      registrationId: registration.id,
-      payload: {
-        user_id: registration.user_id,
-        competition_id: competitionInfo.id,
-        competing: {
-          status: 'cancelled',
-        },
+  const deleteRegistrationMutation = useCallback(() => updateRegistrationForDeletionMutation({
+    registrationId: registration.id,
+    payload: {
+      competing: {
+        status: 'cancelled',
       },
-    }),
-    onError: (data) => {
-      const { error } = data.json;
-      dispatch(showMessage(
-        `competitions.registration_v2.errors.${error}`,
-        'negative',
-      ));
     },
+  }, {
     onSuccess: (data) => {
       jumpToStart();
-      queryClient.setQueryData(
-        ['registration', competitionInfo.id, registration.user_id, registration.id],
-        (prevRegistration) => ({
-          ...data.registration,
-          payment: prevRegistration.payment,
-        }),
-      );
       onFormSuccess(data.registration);
       setCompetingStatus('cancelled');
       setRequirementsAccepted(false);
       dispatch(showMessage('competitions.registration_v2.register.registration_status.cancelled', 'positive'));
     },
-  });
+  }), [
+    updateRegistrationForDeletionMutation,
+    registration.id,
+    jumpToStart,
+    onFormSuccess,
+    setCompetingStatus,
+    setRequirementsAccepted,
+    dispatch,
+  ]);
 
   const deleteRegistration = (event) => {
     event.preventDefault();
