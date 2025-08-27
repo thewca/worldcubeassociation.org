@@ -92,7 +92,7 @@ export default function StepNavigationProvider({
 
   const stepDeadlinesPassed = usePerpetualState(() => _.mapValues(stepDeadlines, hasPassed));
 
-  const isStepDisabled = useCallback((stepConfig, stepIndex) => {
+  const isStepDisabled = useCallback((stepConfig, stepIndex, allSteps) => {
     if (navigationDisabled) {
       return stepConfig.key !== summaryPanelKey;
     }
@@ -103,7 +103,13 @@ export default function StepNavigationProvider({
 
     // The step in question already passed.
     if (stepIndex < activeIndex) {
-      return !stepConfig.isEditable;
+      const completeAndNotEditable = stepConfig.isCompleted(payload) && !stepConfig.isEditable;
+
+      const anyPreviousStepNotCompleted = allSteps
+        .slice(0, stepIndex)
+        .some((preStep) => !preStep.isCompleted(payload));
+
+      return completeAndNotEditable || anyPreviousStepNotCompleted;
     }
 
     if (stepConfig.key === summaryPanelKey) {
@@ -123,10 +129,10 @@ export default function StepNavigationProvider({
   }, [navigationDisabled, activeIndex, summaryPanelKey, stepDeadlinesPassed, payload]);
 
   const steps = useMemo(() => (
-    extendedStepsConfig.map((step, index) => ({
+    extendedStepsConfig.map((step, index, allSteps) => ({
       ...step,
       isCompleted: step.isCompleted(payload),
-      isDisabled: isStepDisabled(step, index),
+      isDisabled: isStepDisabled(step, index, allSteps),
     }))
   ), [extendedStepsConfig, isStepDisabled, payload]);
 
