@@ -39,6 +39,7 @@ import {
   addActivity,
   editActivity,
   moveActivity,
+  removeActivities,
   removeActivity,
   scaleActivity,
 } from '../store/actions';
@@ -165,10 +166,7 @@ function EditActivities({
   ) ?? [];
 
   const deleteInvalidActivities = () => {
-    activitiesWithInvalidTimes.forEach((activity) => {
-      // do not remove matching activities; they may be valid in their time zone
-      dispatch(removeActivity(activity.id, false));
-    });
+    dispatch(removeActivities(activitiesWithInvalidTimes.map((a) => a.id), false));
   };
 
   // we 'fake' our own ref due to quirks in useRef + useEffect combinations.
