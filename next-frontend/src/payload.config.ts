@@ -65,7 +65,7 @@ async function plugins() {
 
 async function dbAdapter() {
   if (process.env.NODE_ENV === "production") {
-    const { mongooseAdapter, compatabilityOptions } = await import(
+    const { mongooseAdapter, compatibilityOptions } = await import(
       "@payloadcms/db-mongodb"
     );
     return mongooseAdapter({
@@ -76,8 +76,7 @@ async function dbAdapter() {
         tls: true,
         tlsCAFile: "/app/global-bundle.pem",
       },
-      ...compatabilityOptions.documentdb,
-      useJoinAggregations: false,
+      ...compatibilityOptions.documentdb,
     });
   } else {
     const { sqliteAdapter } = await import("@payloadcms/db-sqlite");

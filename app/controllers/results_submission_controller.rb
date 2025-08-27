@@ -24,8 +24,16 @@ class ResultsSubmissionController < ApplicationController
   def newcomer_name_format_check
     competition = competition_from_params
 
-    name_format_issues = competition.accepted_newcomers.flat_map do |user|
-      ResultsValidators::PersonsValidator.name_validations(user.name, nil)
+    name_format_issues = competition.accepted_newcomers.filter_map do |user|
+      issues = ResultsValidators::PersonsValidator.name_validations(user.name)
+
+      if issues.present?
+        {
+          id: user.id,
+          name: user.name,
+          issues: issues,
+        }
+      end
     end
 
     render status: :ok, json: name_format_issues
@@ -138,8 +146,8 @@ class ResultsSubmissionController < ApplicationController
                       })
     end
 
-    scrambles_to_import = InboxScrambleSet.where(competition_id: competition.id).flat_map do |scramble_set|
-      scramble_set.inbox_scrambles.map do |scramble|
+    scrambles_to_import = competition.matched_scramble_sets.flat_map do |scramble_set|
+      scramble_set.matched_inbox_scrambles.map do |scramble|
         Scramble.new({
                        competition_id: competition.id,
                        event_id: scramble_set.event_id,

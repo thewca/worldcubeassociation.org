@@ -7,7 +7,7 @@ import Loading from '../../../Requests/Loading';
 import Errored from '../../../Requests/Errored';
 import { ticketsCompetitionResultStatuses } from '../../../../lib/wca-data.js.erb';
 
-export default function MergeInboxResults({ ticketDetails }) {
+export default function MergeInboxResults({ ticketDetails, currentStakeholder }) {
   const { ticket: { id, metadata: { competition_id: competitionId } } } = ticketDetails;
 
   const queryClient = useQueryClient();
@@ -17,7 +17,7 @@ export default function MergeInboxResults({ ticketDetails }) {
     isError,
     error,
   } = useMutation({
-    mutationFn: () => mergeInboxResults({ ticketId: id }),
+    mutationFn: mergeInboxResults,
     onSuccess: () => {
       queryClient.setQueryData(
         ['ticket-details', id],
@@ -42,7 +42,11 @@ export default function MergeInboxResults({ ticketDetails }) {
   return (
     <>
       <ResultsPreview competitionId={competitionId} />
-      <Button onClick={mergeInboxResultsMutate}>
+      <Button onClick={() => mergeInboxResultsMutate({
+        ticketId: id,
+        actingStakeholderId: currentStakeholder.id,
+      })}
+      >
         Merge Inbox Results
       </Button>
     </>
