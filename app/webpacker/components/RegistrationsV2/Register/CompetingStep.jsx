@@ -95,14 +95,22 @@ export default function CompetingStep({
   // Don't set an error state before the user has interacted with the eventPicker
   const [hasInteracted, setHasInteracted] = useState(false);
 
+  const formSuccess = useFormSuccessHandler();
+
   useEffect(() => {
     if (isPolling && !isProcessing) {
-      refetchRegistration();
-      nextStep();
+      refetchRegistration().then((serverRegistration) => {
+        formSuccess(serverRegistration, true);
+        nextStep();
+      });
     }
-  }, [isPolling, isProcessing, nextStep, refetchRegistration]);
-
-  const formSuccess = useFormSuccessHandler();
+  }, [
+    isPolling,
+    isProcessing,
+    refetchRegistration,
+    formSuccess,
+    nextStep,
+  ]);
 
   const {
     mutate: updateRegistrationMutation,
@@ -123,7 +131,6 @@ export default function CompetingStep({
       // We can't update the registration yet, because there might be more steps needed
       // And the Registration might still be processing
       dispatch(showMessage('registrations.flash.registered', 'positive'));
-      formSuccess();
       startPolling();
     },
   });

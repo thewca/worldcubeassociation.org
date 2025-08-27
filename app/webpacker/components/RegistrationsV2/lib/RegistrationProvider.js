@@ -31,9 +31,9 @@ export default function RegistrationProvider({
     setIsPolling(false);
   }, [setIsPolling]);
 
-  const { data: pollingData, status: pollingStatus } = useQuery({
+  const { data: pollingData, isSuccess: pollingSuccess } = useQuery({
     queryKey: ['registration-status-polling', userInfo.id, competitionInfo.id],
-    queryFn: async () => pollRegistrations(userInfo.id, competitionInfo.id),
+    queryFn: () => pollRegistrations(userInfo.id, competitionInfo.id),
     refetchInterval: REFETCH_INTERVAL,
     onSuccess: () => {
       setPollCounter((prevCounter) => prevCounter + 1);
@@ -90,10 +90,10 @@ export default function RegistrationProvider({
     pollCounter,
     isPolling,
     startPolling,
-    isProcessing: pollingStatus !== 'success' || pollingData.processing,
+    isProcessing: !pollingSuccess || pollingData.processing,
     queueCount: pollingData?.queue_count,
   }), [
-    pollingStatus,
+    pollingSuccess,
     hasPaid,
     isAccepted,
     isFetching,
