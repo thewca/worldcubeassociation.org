@@ -47,8 +47,8 @@ async function plugins() {
         collections: {
           media: {
             prefix: "media",
-            generateFileURL: (file) => {
-              return `${process.env.MEDIA_BUCKET_CDN!}/${file.prefix}/${file.filename}`;
+            generateFileURL: ({ prefix, filename }) => {
+              return `${process.env.MEDIA_BUCKET_CDN!}/${prefix}/${filename}`;
             },
           },
         },
