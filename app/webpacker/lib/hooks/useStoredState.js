@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { getJsonItem } from '../utils/localStorage';
 
 /**
  * This functions like the useState hook, but it fetches the state stored in
@@ -9,12 +10,7 @@ import { useState } from 'react';
  */
 export default function useStoredState(initialState, key) {
   const [state, setState] = useState(() => {
-    let storedState;
-    try {
-      storedState = JSON.parse(localStorage.getItem(key));
-    } catch {
-      storedState = null;
-    }
+    const storedState = getJsonItem(key);
 
     if (storedState === null) {
       localStorage.setItem(key, JSON.stringify(initialState));

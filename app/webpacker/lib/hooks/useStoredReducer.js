@@ -1,4 +1,5 @@
 import { useReducer } from 'react';
+import { getJsonItem } from '../utils/localStorage';
 
 /**
  * This functions like the useReducer hook, but it fetches the state stored in
@@ -15,12 +16,7 @@ export default function useStoredReducer(reducer, initialState, key) {
   }
 
   const [state, dispatch] = useReducer(augmentedReducer, initialState, (value) => {
-    let storedState;
-    try {
-      storedState = JSON.parse(localStorage.getItem(key));
-    } catch {
-      storedState = null;
-    }
+    const storedState = getJsonItem(key);
 
     if (storedState === null) {
       localStorage.setItem(key, JSON.stringify(value));
