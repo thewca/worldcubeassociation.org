@@ -3842,8 +3842,8 @@ ko:
         newcomer_checks: 첫 참가자 검증
         #original_hash: f3d6278
         submit_results: 결과 제출
-        #original_hash: e2d046b
-        match_scrambles: 스크램블 제출
+        #original_hash: dd2e98f
+        upload_scrambles: 스크램블 업로드
         #original_hash: 4c9f914
         delegate_report: 파견위원 보고서
         #original_hash: b233e77
