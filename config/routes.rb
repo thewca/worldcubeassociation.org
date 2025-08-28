@@ -242,6 +242,7 @@ Rails.application.routes.draw do
     post 'reject_edit_person_request' => 'tickets#reject_edit_person_request', as: :reject_edit_person_request
     resources :ticket_comments, only: %i[index create], as: :comments
     resources :ticket_logs, only: [:index], as: :logs
+    resources :tickets_edit_person_fields, only: %i[create update destroy], as: :edit_person_fields
   end
   resources :notifications, only: [:index]
 
