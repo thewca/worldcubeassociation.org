@@ -11,6 +11,18 @@ class TicketsEditPerson < ApplicationRecord
   has_one :ticket, as: :metadata
   has_many :tickets_edit_person_fields
 
+  ACTION_TYPE = {
+    reject_edit_person_request: "reject_edit_person_request",
+  }.freeze
+
+  def metadata_actions_allowed_for(ticket_stakeholder)
+    if ticket_stakeholder.stakeholder == UserGroup.teams_committees_group_wrt
+      [ACTION_TYPE[:reject_edit_person_request]]
+    else
+      []
+    end
+  end
+
   def self.create_ticket(wca_id, changes_requested, requester)
     ActiveRecord::Base.transaction do
       ticket_metadata = TicketsEditPerson.create!(
