@@ -3,5 +3,14 @@
 class AddPaidAtToRegistrationPayment < ActiveRecord::Migration[7.2]
   def change
     add_column :registration_payments, :paid_at, :datetime
+
+    reversible do |direction|
+      direction.up do
+        execute <<~SQL
+          UPDATE registration_payments
+          SET paid_at = created_at
+        SQL
+      end
+    end
   end
 end

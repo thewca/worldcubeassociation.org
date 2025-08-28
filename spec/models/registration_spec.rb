@@ -1209,7 +1209,6 @@ RSpec.describe Registration do
 
       it 'gets accepted later if repaid after another registration' do
         create(:registration_payment, :skip_create_hook, registration: reg2, competition: reg2.competition)
-        sleep 1 # It appears we can only order payments to second-precision
         create(:registration_payment, :skip_create_hook, registration: reg1, competition: reg1.competition)
 
         Registration.bulk_auto_accept(auto_accept_comp)
@@ -1406,15 +1405,35 @@ RSpec.describe Registration do
   end
 
   describe 'last_payment methods' do
-    let!(:payments) { create_list(:registration_payment, 3, registration: registration) }
-
     before do
-      sleep 1 # Necessary to create a time difference in when the RegPayments are created
-      @last_payment = create(:registration_payment, registration: registration) # We have to use an instance variable to define the sleep before it
+      # Use sleeps to ensure that created_at and updated_at have delays between them
+      @expected_pmt = create(:registration_payment, registration: registration)
+      sleep 1
+      @other1 = create(:registration_payment, registration: registration)
+      sleep 1
+      @other2 = create(:registration_payment, registration: registration)
+
+      @expected_pmt.update_columns(paid_at: Time.now.utc) # Use update_columns to not changed the update_at timestamp
     end
 
-    it 'has 4 total payments' do
-      expect(registration.registration_payments.count).to eq(4)
+    it 'paid_at for first payment is after all timestamps for other payments' do
+      expect(@expected_pmt.paid_at).to be > @other2.created_at
+      expect(@expected_pmt.paid_at).to be > @other2.updated_at
+      expect(@expected_pmt.paid_at).to be > @other2.paid_at
+      expect(@expected_pmt.paid_at).to be > @other1.created_at
+      expect(@expected_pmt.paid_at).to be > @other1.updated_at
+      expect(@expected_pmt.paid_at).to be > @other1.paid_at
+    end
+
+    it 'non-paid_at timestamps for first payment are before all timestamps for other payments' do
+      expect(@expected_pmt.created_at).to be < @other2.created_at
+      expect(@expected_pmt.updated_at).to be < @other2.created_at
+      expect(@expected_pmt.created_at).to be < @other2.updated_at
+      expect(@expected_pmt.updated_at).to be < @other2.updated_at
+      expect(@expected_pmt.created_at).to be < @other1.created_at
+      expect(@expected_pmt.updated_at).to be < @other1.created_at
+      expect(@expected_pmt.created_at).to be < @other1.updated_at
+      expect(@expected_pmt.updated_at).to be < @other1.updated_at
     end
 
     describe '#last_payment' do
@@ -1428,14 +1447,14 @@ RSpec.describe Registration do
         end
 
         it 'returns last payment' do
-          expect(registration.last_payment).to eq(@last_payment)
+          expect(registration.last_payment).to eq(@expected_pmt)
         end
 
         it 'does not return un-succeeded payments' do
-          sleep 1
+          sleep 1 # Necessary to create a timer difference in when the RegPayments are created
           create(:registration_payment, is_completed: false, registration: registration)
           registration.registration_payments.reload # We have to reload because we've already loaded the records
-          expect(registration.last_payment).to eq(@last_payment)
+          expect(registration.last_payment).to eq(@expected_pmt)
         end
       end
 
@@ -1445,26 +1464,26 @@ RSpec.describe Registration do
         end
 
         it 'returns last payment' do
-          expect(registration.last_payment).to eq(@last_payment)
+          expect(registration.last_payment).to eq(@expected_pmt)
         end
 
         it 'does not return un-succeeded payments' do
-          sleep 1
+          sleep 1 # Necessary to create a timer difference in when the RegPayments are created
           create(:registration_payment, is_completed: false, registration: registration)
-          expect(registration.last_payment).to eq(@last_payment)
+          expect(registration.last_payment).to eq(@expected_pmt)
         end
       end
     end
 
     describe '#last_positive_payment' do
-      it 'returns the latest payment' do
-        expect(registration.last_positive_payment).to eq(@last_payment)
+      it 'returns the latest payment based on paid_on, not created_at or updated_at' do
+        expect(registration.last_positive_payment).to eq(@expected_pmt)
       end
 
       it 'does not return uncaptured payments' do
         sleep 1 # Necessary to create a timer difference in when the RegPayments are created
         create(:registration_payment, is_completed: false, registration: registration)
-        expect(registration.last_positive_payment).to eq(@last_payment)
+        expect(registration.last_positive_payment).to eq(@expected_pmt)
       end
     end
   end
