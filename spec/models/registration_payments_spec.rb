@@ -22,9 +22,9 @@ RSpec.describe RegistrationPayment do
       expect(registration_payment.amount_available_for_refund).to eq(0)
     end
 
-    it 'does not included is_completed: false refunds' do
+    it 'includes is_completed: false refunds' do
       create(:registration_payment, :refund, is_completed: false, registration: registration)
-      expect(registration_payment.amount_available_for_refund).to eq(1000)
+      expect(registration_payment.amount_available_for_refund).to eq(0)
     end
   end
 end
