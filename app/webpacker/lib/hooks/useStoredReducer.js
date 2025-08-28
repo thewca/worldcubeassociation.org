@@ -8,13 +8,6 @@ import { useReducer } from 'react';
  * will not update the other's state.
  */
 export default function useStoredReducer(reducer, initialState, key) {
-  let storedState;
-  try {
-    storedState = JSON.parse(localStorage.getItem(key));
-  } catch {
-    storedState = null;
-  }
-
   function augmentedReducer(state, action) {
     const newState = reducer(state, action);
     localStorage.setItem(key, JSON.stringify(newState));
@@ -22,6 +15,13 @@ export default function useStoredReducer(reducer, initialState, key) {
   }
 
   const [state, dispatch] = useReducer(augmentedReducer, initialState, (value) => {
+    let storedState;
+    try {
+      storedState = JSON.parse(localStorage.getItem(key));
+    } catch {
+      storedState = null;
+    }
+
     if (storedState === null) {
       localStorage.setItem(key, JSON.stringify(value));
       return value;
