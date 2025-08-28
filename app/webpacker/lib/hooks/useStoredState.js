@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { getJsonItem } from '../utils/localStorage';
+import { getJsonItem, setJsonItem } from '../utils/localStorage';
 
 /**
  * This functions like the useState hook, but it fetches the state stored in
@@ -21,7 +21,7 @@ export default function useStoredState(initialState, key) {
 
   function setAndStoreState(newState) {
     setState(newState);
-    localStorage.setItem(key, JSON.stringify(newState));
+    setJsonItem(key, newState);
   }
 
   return [state, setAndStoreState];

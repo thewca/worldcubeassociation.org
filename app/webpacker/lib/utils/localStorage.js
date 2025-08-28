@@ -8,3 +8,7 @@ export function getJsonItem(key) {
   }
   return parsedItem;
 }
+
+export function setJsonItem(key, obj) {
+  localStorage.setItem(key, JSON.stringify(obj));
+}
