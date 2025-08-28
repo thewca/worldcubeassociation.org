@@ -3914,8 +3914,8 @@ fr-CA:
           d’attente et vous recevrez un courriel si suffisamment de places sont
           disponibles pour que vous puissiez y assister.
       list:
-        #original_hash: e8f8827
-        empty: Aucune
+        #original_hash: b2ed82f
+        empty: Aucun
         #original_hash: c15d545
         spots_remaining_plural:
           zero: Aucune place disponible
@@ -4680,8 +4680,8 @@ fr-CA:
         newcomer_checks: Vérifications des nouveaux compétiteurs
         #original_hash: 678d15b
         submit_results: Envoyer les résultats
-        #original_hash: d8bb428
-        match_scrambles: Soumettre les mélanges
+        #original_hash: 1d0b625
+        upload_scrambles: Mettre en ligne les mélanges
         #original_hash: 21f47fb
         delegate_report: Rapport des Délégués
         #original_hash: 3e69f54
