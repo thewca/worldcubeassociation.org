@@ -39,40 +39,7 @@ class RegistrationsController < ApplicationController
     @competition = competition_from_params
     file = params.require(:csv_registration_file)
 
-    registration_rows, errors = parse_csv_file(file.path, @competition)
-
-    return render status: :unprocessable_entity, json: { error: errors.compact.join(", ") } if errors.any?
-
-    @registration_rows = process_registration_rows(registration_rows)
-    if @competition.competitor_limit_enabled? && @registration_rows.length > @competition.competitor_limit
-      return render status: :unprocessable_entity, json: {
-        error: I18n.t("registrations.import.errors.over_competitor_limit", accepted_count: @registration_rows.length, limit: @competition.competitor_limit),
-      }
-    end
-
-    @emails = @registration_rows.pluck(:email)
-    email_duplicates = @emails.select { |email| @emails.count(email) > 1 }.uniq
-    if email_duplicates.any?
-      return render status: :unprocessable_entity, json: {
-        error: I18n.t("registrations.import.errors.email_duplicates", emails: email_duplicates.join(", ")),
-      }
-    end
-
-    wca_ids = @registration_rows.pluck(:wca_id)
-    wca_id_duplicates = wca_ids.select { |wca_id| wca_ids.count(wca_id) > 1 }.uniq
-    if wca_id_duplicates.any?
-      return render status: :unprocessable_entity, json: {
-        error: I18n.t("registrations.import.errors.wca_id_duplicates", wca_ids: wca_id_duplicates.join(", ")),
-      }
-    end
-
-    raw_dobs = @registration_rows.pluck(:birth_date)
-    wrong_format_dobs = raw_dobs.reject { |raw_dob| Date.safe_parse(raw_dob)&.to_fs == raw_dob }
-    return unless wrong_format_dobs.any?
-
-    render status: :unprocessable_entity, json: {
-      error: I18n.t("registrations.import.errors.wrong_dob_format", raw_dobs: wrong_format_dobs.join(", ")),
-    }
+    @registration_rows = parse_csv_file(file.path, @competition)
   end
 
   private def parse_csv_file(file_path, competition)
@@ -95,11 +62,20 @@ class RegistrationsController < ApplicationController
 
     errors = [
       validate_required_headers(headers, competition),
-      validate_event_columns(filtered_rows, competition),
+      validate_rows(filtered_rows, competition),
       filtered_rows.empty? && I18n.t("registrations.import.errors.empty_file"),
+      competitor_limit_error(competition, filtered_rows.length),
     ].compact.flatten
 
-    [filtered_rows, errors]
+    return render status: :unprocessable_entity, json: { error: errors.compact.join(", ") } if errors.any?
+
+    filtered_rows.map do |row|
+      event_ids = competition.competition_events.filter_map do |competition_event|
+        competition_event.id if row[competition_event.event_id.to_sym] == "1"
+      end
+
+      row.to_hash.merge(event_ids: event_ids)
+    end
   end
 
   private def validate_required_headers(headers, competition)
@@ -113,10 +89,10 @@ class RegistrationsController < ApplicationController
     I18n.t("registrations.import.errors.missing_columns", columns: missing_columns.join(", ")) if missing_columns.any?
   end
 
-  private def validate_event_columns(csv_rows, competition)
+  private def validate_rows(csv_rows, competition)
     competition_events = competition.competition_events
 
-    csv_rows.filter_map do |row|
+    event_column_errors = csv_rows.filter_map do |row|
       competition_events.find do |competition_event|
         cell_value = row[competition_event.event_id.to_sym]
         next unless %w[1 0].exclude?(cell_value)
@@ -128,18 +104,26 @@ class RegistrationsController < ApplicationController
         )
       end
     end
+
+    raw_dobs = csv_rows.pluck(:birth_date)
+    wrong_format_dobs = raw_dobs.reject { |raw_dob| Date.safe_parse(raw_dob)&.to_fs == raw_dob }
+    dob_column_error = I18n.t("registrations.import.errors.wrong_dob_format", raw_dobs: wrong_format_dobs.join(", ")) if wrong_format_dobs.any?
+
+    @emails = csv_rows.pluck(:email)
+    email_duplicates = @emails.select { |email| @emails.count(email) > 1 }.uniq
+    email_duplicate_error = I18n.t("registrations.import.errors.email_duplicates", emails: email_duplicates.join(", ")) if email_duplicates.any?
+
+    wca_ids = csv_rows.pluck(:wca_id).reject(&:empty?)
+    wca_id_duplicates = wca_ids.select { |wca_id| wca_ids.count(wca_id) > 1 }.uniq
+    wca_id_duplicate_error = I18n.t("registrations.import.errors.wca_id_duplicates", wca_ids: wca_id_duplicates.join(", ")) if wca_id_duplicates.any?
+
+    [event_column_errors, dob_column_error, email_duplicate_error, wca_id_duplicate_error].flatten
   end
 
-  private def process_registration_rows(csv_rows)
-    competition_events = @competition.competition_events
+  private def competitor_limit_error(competition, competitor_count)
+    return unless competition.competitor_limit_enabled? && competitor_count > competition.competitor_limit
 
-    csv_rows.map do |row|
-      event_ids = competition_events.filter_map do |competition_event|
-        competition_event.id if row[competition_event.event_id.to_sym] == "1"
-      end
-
-      row.to_hash.merge(event_ids: event_ids)
-    end
+    I18n.t("registrations.import.errors.over_competitor_limit", accepted_count: competitor_count, limit: competition.competitor_limit)
   end
 
   def edit_registrations
