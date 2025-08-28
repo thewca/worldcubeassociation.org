@@ -4553,8 +4553,8 @@ es-419:
         newcomer_checks: Chequeos de primerizos
         #original_hash: f3d6278
         submit_results: Entregar resultados
-        #original_hash: e2d046b
-        match_scrambles: Enviar mezclas
+        #original_hash: dd2e98f
+        upload_scrambles: Subir mezclas
         #original_hash: 4c9f914
         delegate_report: Informe del Delegado
         #original_hash: b233e77
