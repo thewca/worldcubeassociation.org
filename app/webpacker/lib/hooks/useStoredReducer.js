@@ -11,7 +11,7 @@ import { getJsonItem, setJsonItem } from '../utils/localStorage';
 export default function useStoredReducer(reducer, initialState, key) {
   function augmentedReducer(state, action) {
     const newState = reducer(state, action);
-    localStorage.setItem(key, JSON.stringify(newState));
+    setJsonItem(key, newState);
     return newState;
   }
 

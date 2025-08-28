@@ -13,7 +13,7 @@ export default function useStoredState(initialState, key) {
     const storedState = getJsonItem(key);
 
     if (storedState === null) {
-      localStorage.setItem(key, JSON.stringify(initialState));
+      setJsonItem(key, initialState);
       return initialState;
     }
     return storedState;
