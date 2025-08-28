@@ -6,7 +6,7 @@ class AddPaidAtToRegistrationPayment < ActiveRecord::Migration[7.2]
 
     reversible do |direction|
       direction.up do
-        execute <<~SQL
+        execute <<~SQL.squish
           UPDATE registration_payments
           SET paid_at = created_at
         SQL
