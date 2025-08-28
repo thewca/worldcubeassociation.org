@@ -35,16 +35,16 @@ RSpec.describe RegistrationPayment do
 
     describe 'setting upon creation' do
       it 'sets paid_at if is_completed is true' do
-        travel_to(Time.zone.now) do
+        freeze_time(Time.zone.now) do
           completed_payment = create(:registration_payment, registration: registration)
           expect(completed_payment.paid_at).to eq(Time.zone.now)
         end
       end
 
       it 'does not set paid_at if is_completed is false' do
-        travel_to(Time.zone.now) do
+        freeze_time(Time.zone.now) do
           incomplete_payment = create(:registration_payment, registration: registration, is_completed: false)
-          expect(incomplete_payment.paid_at).to be nil
+          expect(incomplete_payment.paid_at).to be_nil
         end
       end
     end
@@ -54,9 +54,9 @@ RSpec.describe RegistrationPayment do
       let(:complete) { create(:registration_payment, registration: registration) }
 
       it 'sets paid at when is_completed becomes true' do
-        expect(incomplete.paid_at).to be nil
+        expect(incomplete.paid_at).to be_nil
 
-        travel_to(Time.zone.now) do
+        freeze_time(Time.zone.now) do
           incomplete.update!(is_completed: true)
           expect(incomplete.paid_at).to eq(Time.zone.now)
         end
@@ -66,11 +66,10 @@ RSpec.describe RegistrationPayment do
         original_time = complete.paid_at
         expect(original_time).to be_present
 
-        travel_to(Time.zone.now) do
+        freeze_time(Time.zone.now) do
           complete.update!(amount_lowest_denomination: 1001)
           expect(complete.paid_at).to eq(original_time)
         end
-
       end
     end
   end
