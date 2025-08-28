@@ -10,6 +10,7 @@ class RegistrationPayment < ApplicationRecord
   has_many :refunding_registration_payments, class_name: 'RegistrationPayment', inverse_of: :refunded_registration_payment, foreign_key: :refunded_registration_payment_id, dependent: :destroy
 
   delegate :auto_accept_preference_live?, to: :registration
+  before_save :set_paid_at, if: :becoming_completed?
   after_create :auto_accept_hook, if: :auto_accept_preference_live?
   after_save :auto_close_hook
 
@@ -19,6 +20,14 @@ class RegistrationPayment < ApplicationRecord
            as: "amount",
            allow_nil: true,
            with_model_currency: :currency_code
+
+  private def becoming_completed?
+    is_completed && (will_save_change_to_is_completed? || new_record?)
+  end
+
+  private def set_paid_at
+    self.paid_at = Time.now.utc
+  end
 
   def amount_available_for_refund
     amount_lowest_denomination + refunding_registration_payments.sum(:amount_lowest_denomination)
