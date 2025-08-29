@@ -9,6 +9,7 @@ class ResultsSubmissionController < ApplicationController
 
   def new
     @competition = competition_from_params
+    @show_wca_live_beta = params[:wcaLiveBeta] == "0xCaliforniaRoll"
   end
 
   def newcomer_checks
