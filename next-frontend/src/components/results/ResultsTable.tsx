@@ -1,6 +1,6 @@
 import { components } from "@/types/openapi";
 import events from "@/lib/wca/data/events";
-import { Badge, Link, Table } from "@chakra-ui/react";
+import { Link, Table } from "@chakra-ui/react";
 import { formatAttemptResult } from "@/lib/wca/wcif/attempts";
 import { route } from "nextjs-routes";
 import { AttemptsCells, recordTagBadge } from "@/components/results/TableCells";
