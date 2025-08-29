@@ -134,6 +134,8 @@ RSpec.configure do |config|
   end
 
   config.filter_run_excluding disabled: true if Rails.env.local?
+
+  config.include ActiveSupport::Testing::TimeHelpers
 end
 
 # See: https://github.com/rspec/rspec-expectations/issues/664#issuecomment-58134735
