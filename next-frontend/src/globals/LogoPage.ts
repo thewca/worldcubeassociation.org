@@ -22,6 +22,21 @@ const paragraph: Block = {
   ],
 };
 
+const downloadLink: Block = {
+  slug: "logoDownload",
+  labels: {
+    singular: "Logo Download Box",
+    plural: "Logo Download Boxes",
+  },
+  fields: [
+    {
+      name: "url",
+      type: "text",
+      required: true,
+    },
+  ],
+};
+
 const logoVariant: Block = {
   slug: "logoVariant",
   labels: {
@@ -50,6 +65,10 @@ const logoVariant: Block = {
           relationTo: "media",
           required: true,
         },
+        {
+          name: "darkBackground",
+          type: "checkbox",
+        },
       ],
     },
   ],
@@ -63,7 +82,7 @@ export const LogoPage: GlobalConfig = {
       name: "blocks",
       type: "blocks",
       required: true,
-      blocks: [paragraph, logoVariant],
+      blocks: [paragraph, logoVariant, downloadLink],
     },
   ],
 };

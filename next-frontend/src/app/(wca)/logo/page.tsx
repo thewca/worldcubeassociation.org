@@ -31,7 +31,7 @@ export default async function LogoPage() {
 
   return (
     <Container>
-      <VStack gap="8" width="full" pt="8" alignItems="left">
+      <VStack alignItems="left">
         <Heading size="5xl">{t("logo.title")}</Heading>
         {logoItems.map((item) => {
           switch (item.blockType) {
@@ -47,6 +47,9 @@ export default async function LogoPage() {
                 </Fragment>
               );
             }
+            case "logoDownload": {
+              return <LogoDownload logoDownloadLink={item.url} />;
+            }
             case "logoVariant": {
               return (
                 <Fragment key={item.id}>
@@ -59,7 +62,7 @@ export default async function LogoPage() {
                         <Image
                           src={image.url!}
                           alt={item.caption}
-                          key={image.url}
+                          key={image.id}
                           w="100%"
                           maxW="400px"
                           bg="grey"
@@ -72,7 +75,6 @@ export default async function LogoPage() {
             }
           }
         })}
-        <LogoDownload />
       </VStack>
     </Container>
   );

@@ -4,7 +4,11 @@ import I18nHTMLTranslate from "@/components/I18nHTMLTranslate";
 import { useState } from "react";
 import { Button, Checkbox, VStack } from "@chakra-ui/react";
 
-export default function LogoDownload() {
+export default function LogoDownload({
+  logoDownloadLink,
+}: {
+  logoDownloadLink: string;
+}) {
   const [acceptedGuidelines, setAcceptedGuidelines] = useState(false);
 
   return (
@@ -20,7 +24,7 @@ export default function LogoDownload() {
         </Checkbox.Label>
       </Checkbox.Root>
       <Button disabled={!acceptedGuidelines} asChild>
-        <a href="https://assets.worldcubeassociation.org/assets/9963bbd/files/WCA%20Logo%20Assets.zip">
+        <a href={logoDownloadLink}>
           <I18nHTMLTranslate i18nKey="logo.headings.download_logo_assets.download_button_text" />
         </a>
       </Button>

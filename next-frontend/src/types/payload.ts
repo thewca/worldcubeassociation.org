@@ -1291,11 +1291,18 @@ export interface LogoPage {
         caption: string;
         images: {
           image: number | Media;
+          darkBackground?: boolean | null;
           id?: string | null;
         }[];
         id?: string | null;
         blockName?: string | null;
         blockType: 'logoVariant';
+      }
+    | {
+        url: string;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'logoDownload';
       }
   )[];
   updatedAt?: string | null;
@@ -1732,8 +1739,16 @@ export interface LogoPageSelect<T extends boolean = true> {
                 | T
                 | {
                     image?: T;
+                    darkBackground?: T;
                     id?: T;
                   };
+              id?: T;
+              blockName?: T;
+            };
+        logoDownload?:
+          | T
+          | {
+              url?: T;
               id?: T;
               blockName?: T;
             };
