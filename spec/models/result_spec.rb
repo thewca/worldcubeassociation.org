@@ -77,15 +77,9 @@ RSpec.describe Result do
       expect(result).to be_invalid_with_errors(format: ["must exist"])
     end
 
-    it "validates round_type_id" do
+    it "validates round_id" do
       result = build(:result, round_type_id: "foo", skip_round_creation: true)
-      # Skipping the round creation also creates a round validation error which
-      # is reported on :round_type.
-      expect(result).to be_invalid_with_errors(round_type:
-      [
-        "must exist",
-        "Result must belong to a valid round. Please check that the tuple (competition_id, event_id, round_type_id, format_id) matches an existing round.",
-      ])
+      expect(result).to be_invalid_with_errors(round: ["must exist"])
     end
 
     it "person association always looks for sub_id 1" do
