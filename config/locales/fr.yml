@@ -3914,7 +3914,7 @@ fr:
           disponibles pour que vous puissiez y assister.
       list:
         #original_hash: 6eef664
-        empty: Aucune
+        empty: Aucun
         #original_hash: 627422a
         spots_remaining_plural:
           zero: Aucune place disponible
@@ -4679,8 +4679,8 @@ fr:
         newcomer_checks: Vérifications des nouveaux compétiteurs
         #original_hash: f3d6278
         submit_results: Envoyer les résultats
-        #original_hash: e2d046b
-        match_scrambles: Soumettre les mélanges
+        #original_hash: dd2e98f
+        upload_scrambles: Mettre en ligne les mélanges
         #original_hash: 4c9f914
         delegate_report: Rapport des Délégués
         #original_hash: b233e77
