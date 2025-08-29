@@ -21,6 +21,7 @@ export default async function PodiumsPage({
   return (
     <Container bg="bg">
       <VStack align="left" gap={4}>
+        <Heading size="5xl">Podiums</Heading>
         {WCA_EVENT_IDS.map((eventId) => {
           const results = resultsByEvent[eventId];
           if (!results) {
