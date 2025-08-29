@@ -1288,7 +1288,7 @@ en:
         amount_too_low: "The total amount must be at least the registration fees to be paid."
         amount_rather_high: "You are about to pay at least double the required amount for your registration to proceed."
       errors:
-        no_account_access: "Unable to access the organizer's payment account. Please contact the organization and ask them to confirm their Payment Setup details on the WCA website."
+        no_account_access: "Unable to access the organizer's payment account. Please contact the organization team and ask them to confirm their Payment Setup details on the WCA website."
         registration_closed: "Registration has closed - no further payments are allowed."
         already_paid: "The charge was not placed because the registration fees are already paid."
         not_allowed: "You can't pay for that registration."
