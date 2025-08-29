@@ -1,4 +1,4 @@
-import { Container, Heading } from "@chakra-ui/react";
+import { Container, Heading, VStack } from "@chakra-ui/react";
 import ResultsTable from "@/components/results/ResultsTable";
 import events, { WCA_EVENT_IDS } from "@/lib/wca/data/events";
 import { getPodiums } from "@/lib/wca/competitions/getPodiums";
@@ -20,24 +20,26 @@ export default async function PodiumsPage({
 
   return (
     <Container bg="bg">
+      <VStack align="left" gap={4}>
+        {WCA_EVENT_IDS.map((eventId) => {
+          const results = resultsByEvent[eventId];
+          if (!results) {
+            return null;
+          }
+          return (
+            <Fragment key={eventId}>
+              <Heading size="2xl">{events.byId[eventId].name}</Heading>
+              <ResultsTable
+                results={results.toSorted((a, b) => a.pos - b.pos)}
+                competitionId={competitionId}
+                eventId={eventId}
+                isAdmin={false}
+              />
+            </Fragment>
+          );
+        })}
+      </VStack>
       <Heading size="5xl">Podiums</Heading>
-      {WCA_EVENT_IDS.map((eventId) => {
-        const results = resultsByEvent[eventId];
-        if (!results) {
-          return null;
-        }
-        return (
-          <Fragment key={eventId}>
-            <Heading size="2xl">{events.byId[eventId].name}</Heading>
-            <ResultsTable
-              results={results.toSorted((a, b) => a.pos - b.pos)}
-              competitionId={competitionId}
-              eventId={eventId}
-              isAdmin={false}
-            />
-          </Fragment>
-        );
-      })}
     </Container>
   );
 }

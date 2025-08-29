@@ -1,48 +1,33 @@
 import { components } from "@/types/openapi";
 import events from "@/lib/wca/data/events";
-import { Link, Table } from "@chakra-ui/react";
-import { centisecondsToClockFormat } from "@/lib/wca/wcif/attempts";
+import { Badge, Link, Table } from "@chakra-ui/react";
+import { formatAttemptResult } from "@/lib/wca/wcif/attempts";
 import { route } from "nextjs-routes";
+import { AttemptsCells, recordTagBadge } from "@/components/results/TableCells";
+import _ from "lodash";
 
-export const recordTagStyle = (tag?: string | null) => {
-  const styles = {
-    display: "block",
-    lineHeight: 1,
-    padding: "0.3em 0.4em",
-    borderRadius: "4px",
-    fontWeight: 600,
-    fontSize: "0.6em",
-    position: "absolute",
-    top: "0px",
-    right: "0px",
-    transform: "translate(110%, -40%)",
-    color: "rgb(255, 255, 255)",
-    backgroundColor: "",
+function resultAttempts(result: components["schemas"]["Result"]) {
+  const definedAttempts = result.attempts.filter((res) => res);
+
+  const validAttempts = definedAttempts.filter((res) => res !== 0);
+  const completedAttempts = validAttempts.filter((res) => res > 0);
+  const uncompletedAttempts = validAttempts.filter((res) => res < 0);
+
+  // DNF/DNS values are very small. If all solves were successful,
+  //   then `uncompletedAttempts` is empty and the min is `undefined`,
+  //   which means we fall back to the actually slowest value.
+  const worstResult = _.min(uncompletedAttempts) || _.max(validAttempts);
+  const bestResult = _.min(completedAttempts);
+
+  const bestResultIndex = definedAttempts.indexOf(bestResult!);
+  const worstResultIndex = definedAttempts.indexOf(worstResult!);
+
+  return {
+    definedAttempts,
+    bestResultIndex,
+    worstResultIndex,
   };
-
-  switch (tag) {
-    case "WR": {
-      styles.backgroundColor = "rgb(244, 67, 54)";
-      break;
-    }
-    case "CR": {
-      styles.backgroundColor = "rgb(255, 235, 59)";
-      break;
-    }
-    case "NR": {
-      styles.backgroundColor = "rgb(0, 230, 118)";
-      break;
-    }
-    case "PR": {
-      styles.backgroundColor = "rgb(66, 66, 66)";
-      break;
-    }
-    default: {
-      return {};
-    }
-  }
-  return styles;
-};
+}
 
 export default function ResultsTable({
   results,
@@ -57,30 +42,30 @@ export default function ResultsTable({
   const event = events.byId[eventId];
 
   const solveCount = event.recommendedFormat.expected_solve_count;
-  const attemptIndexes = [...Array(solveCount).keys()];
 
   return (
     <Table.Root>
       <Table.Header>
         <Table.Row>
-          <Table.ColumnHeader textAlign="right">#</Table.ColumnHeader>
+          <Table.ColumnHeader>#</Table.ColumnHeader>
           {isAdmin && <Table.ColumnHeader>Edit</Table.ColumnHeader>}
           <Table.ColumnHeader>Competitor</Table.ColumnHeader>
-          {attemptIndexes.map((num) => (
-            <Table.ColumnHeader key={num} textAlign="right">
-              {num + 1}
-            </Table.ColumnHeader>
-          ))}
-          <Table.ColumnHeader textAlign="right">Average</Table.ColumnHeader>
-          <Table.ColumnHeader textAlign="right">Best</Table.ColumnHeader>
+          <Table.ColumnHeader>Best</Table.ColumnHeader>
+          <Table.ColumnHeader>Average</Table.ColumnHeader>
+          <Table.ColumnHeader colSpan={solveCount} textAlign="center">
+            Solves
+          </Table.ColumnHeader>
         </Table.Row>
       </Table.Header>
 
       <Table.Body>
         {results.map((competitorResult) => {
+          const { definedAttempts, bestResultIndex, worstResultIndex } =
+            resultAttempts(competitorResult);
           return (
             <Table.Row key={competitorResult.id}>
-              <Table.Cell textAlign="right">{competitorResult.pos}</Table.Cell>
+              {isAdmin && <Table.Cell>EDIT</Table.Cell>}
+              <Table.Cell>{competitorResult.pos}</Table.Cell>
               <Table.Cell>
                 <Link
                   href={route({
@@ -91,40 +76,21 @@ export default function ResultsTable({
                   {competitorResult.name}
                 </Link>
               </Table.Cell>
-              {competitorResult.attempts.map((attempt, index) => (
-                <Table.Cell
-                  textAlign="right"
-                  key={`${competitorResult.id}-${eventId}-${index}`}
-                >
-                  {centisecondsToClockFormat(attempt)}
-                </Table.Cell>
-              ))}
-              <>
-                <Table.Cell textAlign="right" style={{ position: "relative" }}>
-                  {centisecondsToClockFormat(competitorResult.average)}{" "}
-                  {!isAdmin && (
-                    <span
-                      style={recordTagStyle(
-                        competitorResult.regional_single_record,
-                      )}
-                    >
-                      {competitorResult.regional_average_record}
-                    </span>
-                  )}
-                </Table.Cell>
-                <Table.Cell textAlign="right" style={{ position: "relative" }}>
-                  {centisecondsToClockFormat(competitorResult.best)}
-                  {!isAdmin && (
-                    <span
-                      style={recordTagStyle(
-                        competitorResult.regional_single_record,
-                      )}
-                    >
-                      {competitorResult.regional_average_record}
-                    </span>
-                  )}
-                </Table.Cell>
-              </>
+              <Table.Cell style={{ position: "relative" }}>
+                {formatAttemptResult(competitorResult.best, eventId)}{" "}
+                {recordTagBadge(competitorResult.regional_single_record)}
+              </Table.Cell>
+              <Table.Cell style={{ position: "relative" }}>
+                {formatAttemptResult(competitorResult.average, eventId)}{" "}
+                {recordTagBadge(competitorResult.regional_average_record)}
+              </Table.Cell>
+              <AttemptsCells
+                attempts={definedAttempts}
+                bestResultIndex={bestResultIndex}
+                worstResultIndex={worstResultIndex}
+                eventId={eventId}
+                recordTag={competitorResult.regional_single_record}
+              />
             </Table.Row>
           );
         })}
