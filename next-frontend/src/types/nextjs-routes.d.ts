@@ -34,6 +34,7 @@ declare module "nextjs-routes" {
     | StaticRoute<"/export/results">
     | StaticRoute<"/faq">
     | StaticRoute<"/incidents">
+    | StaticRoute<"/logo">
     | StaticRoute<"/officers-and-board">
     | StaticRoute<"/organizations">
     | DynamicRoute<"/payload/[[...segments]]", { "segments"?: string[] | undefined }>
