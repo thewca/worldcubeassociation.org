@@ -33,4 +33,13 @@ class CompetitionPaymentIntegration < ApplicationRecord
     raise ArgumentError.new("Invalid integration name. Allowed values are: #{AVAILABLE_INTEGRATIONS.keys.join(', ')}") unless
       AVAILABLE_INTEGRATIONS.key?(integration_name)
   end
+
+  # We mark an account as inactive if a payment provider informs us that we no longer have access to that account
+  # In this case, the expected workflow is:
+  # 1. Inform the organizer via UI that the account is inactive, and ask them to remove the connected payment integration
+  # 2. Organizer removes CPI and connects a new account
+  # Thus "inactive" is a placeholder state before a CPI is removed - which is why we have no mark_active functionality
+  def mark_inactive!
+    self.update(is_inactive: true)
+  end
 end

@@ -1283,6 +1283,7 @@ en:
         amount_too_low: "The total amount must be at least the registration fees to be paid."
         amount_rather_high: "You are about to pay at least double the required amount for your registration to proceed."
       errors:
+        no_account_access: "Unable to access the organizer's payment account. Please contact the organization team and ask them to confirm their Payment Setup details on the WCA website."
         registration_closed: "Registration has closed - no further payments are allowed."
         already_paid: "The charge was not placed because the registration fees are already paid."
         not_allowed: "You can't pay for that registration."
@@ -2297,6 +2298,7 @@ en:
       currently_connected_info: "This competition is set up to accept payments through %{provider}. The Delegate(s) of the competition should contact WCAT to make any changes to connected accounts."
       before_disconnect_warning: "Disconnecting on this page will make our website forget the connection to your %{provider} account. But your %{provider} dashboard (see link below) may still list the WCA website based on the authorization that you previously granted. Note that revoking authorization in the %{provider} dashboard will also affect any other competition linked to accept payments through this account!"
       before_disconnect_info: "Keep in mind that disconnecting an account should only be done in exceptional situations, such as the current account being unable to receive payments."
+      inactive_account: 'The account you had connected is no longer active - this is probably because access was revoked by the account owner. Please click the "Disconnect" button below, and connect a new account.'
       account_details:
         stripe:
           email: "Email"
