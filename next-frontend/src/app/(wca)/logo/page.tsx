@@ -65,7 +65,7 @@ export default async function LogoPage() {
                           key={image.id}
                           w="100%"
                           maxW="400px"
-                          bg="grey"
+                          bg={value.darkBackground ? "black" : "white"}
                         />
                       );
                     })}
