@@ -6,6 +6,7 @@ class Competition < ApplicationRecord
   has_many :events, through: :competition_events
   has_many :rounds, through: :competition_events
   has_many :registrations, dependent: :destroy
+  has_many :registration_payments, through: :registrations
   has_many :results
   has_many :scrambles, -> { order(:group_id, :is_extra, :scramble_num) }
   has_many :uploaded_jsons, dependent: :destroy
@@ -2666,7 +2667,7 @@ class Competition < ApplicationRecord
   end
 
   def total_payment_amount
-    registrations.joins(:registration_payments).sum('registration_payments.amount_lowest_denomination')
+    registration_payments.sum(:amount_lowest_denomination)
   end
 
   # Our React date picker unfortunately behaves weirdly in terms of backend data
