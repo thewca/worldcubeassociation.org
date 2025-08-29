@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { createIcon } from "@chakra-ui/react";
 
 const _MinxIcon = createIcon({
@@ -53,6 +54,9 @@ const _MinxIcon = createIcon({
       />
     </>
   ),
+  defaultProps: {
+    boxSize: "1em",
+  },
 });
 
 export default _MinxIcon;

@@ -11,10 +11,15 @@ class TicketsEditPerson < ApplicationRecord
   has_one :ticket, as: :metadata
   has_many :tickets_edit_person_fields
 
-  def action_user_groups(action)
-    case action
-    when :update_status
-      [UserGroup.teams_committees_group_wrt]
+  ACTION_TYPE = {
+    reject_edit_person_request: "reject_edit_person_request",
+  }.freeze
+
+  def metadata_actions_allowed_for(ticket_stakeholder)
+    if ticket_stakeholder.stakeholder == UserGroup.teams_committees_group_wrt
+      [ACTION_TYPE[:reject_edit_person_request]]
+    else
+      []
     end
   end
 
@@ -40,19 +45,20 @@ class TicketsEditPerson < ApplicationRecord
         ticket_id: ticket.id,
         stakeholder: UserGroup.teams_committees_group_wrt,
         connection: TicketStakeholder.connections[:assigned],
+        stakeholder_role: TicketStakeholder.stakeholder_roles[:actioner],
         is_active: true,
       )
       requester_stakeholder = TicketStakeholder.create!(
         ticket_id: ticket.id,
         stakeholder: requester,
         connection: TicketStakeholder.connections[:cc],
+        stakeholder_role: TicketStakeholder.stakeholder_roles[:requester],
         is_active: true,
       )
 
       TicketLog.create!(
         ticket_id: ticket.id,
-        action_type: TicketLog.action_types[:status_updated],
-        action_value: TicketsEditPerson.statuses[:open],
+        action_type: TicketLog.action_types[:create_ticket],
         acting_user_id: requester.id,
         acting_stakeholder_id: requester_stakeholder.id,
       )

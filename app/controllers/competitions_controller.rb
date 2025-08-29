@@ -92,33 +92,15 @@ class CompetitionsController < ApplicationController
 
   def post_results
     comp = competition_from_params
-    if ComputeAuxiliaryData.in_progress?
-      flash[:danger] = t('competitions.messages.computing_auxiliary_data')
+
+    error = CompetitionResultsImport.post_results_error(comp)
+
+    if error
+      flash[:danger] = error
       return redirect_to competition_admin_import_results_path(comp)
     end
 
-    unless comp.results.any?
-      flash[:danger] = t('competitions.messages.no_results')
-      return redirect_to competition_admin_import_results_path(comp)
-    end
-
-    if comp.main_event && comp.results.where(event_id: comp.main_event_id).empty?
-      flash[:danger] = t('competitions.messages.no_main_event_results', event_name: comp.main_event.name)
-      return redirect_to competition_admin_import_results_path(comp)
-    end
-
-    if comp.results_posted?
-      flash[:danger] = t('competitions.messages.results_already_posted')
-      return redirect_to competition_admin_import_results_path(comp)
-    end
-
-    ActiveRecord::Base.transaction do
-      # It's important to clearout the 'posting_by' here to make sure
-      # another WRT member can start posting other results.
-      comp.update!(results_posted_at: Time.now, results_posted_by: current_user.id, posting_by: nil)
-      comp.competitor_users.each { |user| user.notify_of_results_posted(comp) }
-      comp.registrations.accepted.each { |registration| registration.user.maybe_assign_wca_id_by_results(comp) }
-    end
+    CompetitionResultsImport.post_results(comp, current_user)
 
     flash[:success] = t('competitions.messages.results_posted')
     redirect_to competition_admin_import_results_path(comp)
@@ -505,7 +487,6 @@ class CompetitionsController < ApplicationController
   end
 
   before_action -> { require_user_permission(:can_manage_competition?, competition_from_params) }, only: [:update]
-
   def update
     competition = competition_from_params
 

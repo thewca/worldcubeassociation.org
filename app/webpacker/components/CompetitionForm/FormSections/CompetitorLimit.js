@@ -1,20 +1,26 @@
 import React from 'react';
-import { InputBooleanSelect, InputNumber, InputTextArea } from '../../wca/FormBuilder/input/FormInputs';
+import {
+  InputBooleanSelect, InputNumber, InputSelect, InputTextArea,
+} from '../../wca/FormBuilder/input/FormInputs';
 import ConditionalSection from './ConditionalSection';
 import SubSection from '../../wca/FormBuilder/SubSection';
-import { newcomerMonthEnabled } from '../../../lib/wca-data.js.erb';
+import { autoAcceptPreferences, newcomerMonthEnabled } from '../../../lib/wca-data.js.erb';
+import I18n from '../../../lib/i18n';
 import { useFormObject } from '../../wca/FormBuilder/provider/FormObjectProvider';
-import { useStore } from '../../../lib/providers/StoreProvider';
 
 export default function CompetitorLimit() {
   const {
     competitorLimit: {
       enabled: hasLimit,
-      autoAcceptEnabled,
+      autoAcceptPreference,
     },
   } = useFormObject();
 
-  const { isAdminView } = useStore();
+  const autoAcceptOptions = Object.keys(autoAcceptPreferences).map((status) => ({
+    key: status,
+    value: status,
+    text: I18n.t(`competitions.competition_form.choices.competitor_limit.auto_accept_preference.${status}`),
+  }));
 
   return (
     <SubSection section="competitorLimit">
@@ -27,11 +33,9 @@ export default function CompetitorLimit() {
           <InputNumber id="newcomerMonthReservedSpots" min={1} nullable />
         </ConditionalSection>
       </ConditionalSection>
-      <ConditionalSection showIf={isAdminView}>
-        <InputBooleanSelect id="autoAcceptEnabled" required />
-        <ConditionalSection showIf={autoAcceptEnabled}>
-          <InputNumber id="autoAcceptDisableThreshold" nullable />
-        </ConditionalSection>
+      <InputSelect id="autoAcceptPreference" options={autoAcceptOptions} required ignoreDisabled />
+      <ConditionalSection showIf={autoAcceptPreference !== 'disabled'}>
+        <InputNumber id="autoAcceptDisableThreshold" nullable ignoreDisabled />
       </ConditionalSection>
     </SubSection>
   );

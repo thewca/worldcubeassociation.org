@@ -24,8 +24,11 @@ module Admin
       @scramble = Scramble.includes(:competition).find(params[:id])
     end
 
-    def match_scrambles
-      @competition = Competition.find(params[:competition_id])
+    def upload
+      @competition = Competition.includes(
+        scramble_file_uploads: ScrambleFileUpload::SERIALIZATION_INCLUDES,
+        **ScrambleFileUpload::SERIALIZATION_INCLUDES,
+      ).find(params[:competition_id])
     end
 
     def create
@@ -87,8 +90,8 @@ module Admin
     end
 
     private def scramble_params
-      params.require(:scramble).permit(:competition_id, :round_type_id, :event_id, :group_id,
-                                       :is_extra, :scramble_num, :scramble)
+      params.require(:scramble).permit(:competition_id, :round_type_id, :round_id, :event_id,
+                                       :group_id, :is_extra, :scramble_num, :scramble)
     end
   end
 end

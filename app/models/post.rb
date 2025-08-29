@@ -2,6 +2,7 @@
 
 class Post < ApplicationRecord
   include MarkdownHelper
+
   belongs_to :author, class_name: "User"
   has_many :post_tags, autosave: true, dependent: :destroy
   include Taggable
@@ -20,6 +21,11 @@ class Post < ApplicationRecord
   before_validation :clear_unstick_at, unless: :sticky?
   private def clear_unstick_at
     self.unstick_at = nil
+  end
+
+  before_validation :set_default_unstick_at, if: :sticky?
+  private def set_default_unstick_at
+    self.unstick_at ||= 2.weeks.from_now.to_date
   end
 
   BREAK_TAG_RE = /<!--\s*break\s*-->/

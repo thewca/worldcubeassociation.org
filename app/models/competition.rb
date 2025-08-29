@@ -34,10 +34,17 @@ class Competition < ApplicationRecord
   belongs_to :posting_user, optional: true, foreign_key: 'posting_by', class_name: "User"
   has_many :inbox_results, dependent: :delete_all
   has_many :inbox_persons, dependent: :delete_all
+  has_many :inbox_scramble_sets, dependent: :delete_all
+  has_many :matched_scramble_sets, through: :rounds
   belongs_to :announced_by_user, optional: true, foreign_key: "announced_by", class_name: "User"
   belongs_to :cancelled_by_user, optional: true, foreign_key: "cancelled_by", class_name: "User"
   has_many :competition_payment_integrations
-  has_many :scramble_file_uploads
+  has_many :scramble_file_uploads, dependent: :delete_all
+  has_many :accepted_registrations, -> { accepted }, class_name: "Registration", foreign_key: "competition_id"
+  has_many :accepted_newcomers, -> { where(wca_id: nil) }, through: :accepted_registrations, source: :user
+  has_many :duplicate_checker_job_runs, dependent: :delete_all
+  has_one :tickets_competition_result
+  has_one :result_ticket, through: :tickets_competition_result, source: :ticket
 
   accepts_nested_attributes_for :competition_events, allow_destroy: true
   accepts_nested_attributes_for :championships, allow_destroy: true
@@ -96,6 +103,8 @@ class Competition < ApplicationRecord
   }, prefix: true
 
   enum :competitor_can_cancel, %i[not_accepted always unpaid], prefix: true
+
+  enum :auto_accept_preference, %i[disabled bulk live], prefix: true
 
   CLONEABLE_ATTRIBUTES = %w[
     city_name
@@ -172,6 +181,7 @@ class Competition < ApplicationRecord
     event_change_deadline_date
     competition_series_id
     auto_accept_registrations
+    auto_accept_preference
     auto_accept_disable_threshold
     newcomer_month_reserved_spots
   ].freeze
@@ -380,28 +390,28 @@ class Competition < ApplicationRecord
 
   validate :auto_accept_validations
   private def auto_accept_validations
-    errors.add(:auto_accept_registrations, I18n.t('competitions.errors.must_use_wca_registration')) if
-      auto_accept_registrations? && !use_wca_registration
+    errors.add(:auto_accept_preference, I18n.t('competitions.errors.must_use_wca_registration')) if
+      !auto_accept_preference_disabled? && !use_wca_registration
 
-    errors.add(:auto_accept_registrations, I18n.t('competitions.errors.must_use_payment_integration')) if
-      auto_accept_registrations? && confirmed_or_visible? && competition_payment_integrations.where(connected_account_type: "ConnectedStripeAccount").none?
+    errors.add(:auto_accept_preference, I18n.t('competitions.errors.must_use_payment_integration')) if
+      !auto_accept_preference_disabled? && confirmed_or_visible? && competition_payment_integrations.where(connected_account_type: "ConnectedStripeAccount").none?
 
-    errors.add(:auto_accept_registrations, I18n.t('competitions.errors.auto_accept_limit')) if
+    errors.add(:auto_accept_preference, I18n.t('competitions.errors.auto_accept_limit')) if
       auto_accept_disable_threshold.present? &&
       auto_accept_disable_threshold.positive? &&
       competitor_limit.present? &&
       auto_accept_disable_threshold >= competitor_limit
 
-    errors.add(:auto_accept_registrations, I18n.t('competitions.errors.auto_accept_not_negative')) if
+    errors.add(:auto_accept_preference, I18n.t('competitions.errors.auto_accept_not_negative')) if
       auto_accept_disable_threshold.present? && auto_accept_disable_threshold.negative?
 
     # TODO: This logic belongs in a controller more appropriately than in the validation.
     # IF we build a controller endpoint specifically for auto_accept, this logic should be move there.
-    return unless auto_accept_registrations_changed? && auto_accept_registrations?
+    return unless auto_accept_preference_changed? && !auto_accept_preference_disabled?
 
-    errors.add(:auto_accept_registrations, I18n.t('competitions.errors.auto_accept_accept_paid_pending')) if registrations.pending.with_payments.count.positive?
-    errors.add(:auto_accept_registrations, I18n.t('competitions.errors.auto_accept_accept_waitlisted')) if
-      registrations.waitlisted.count.positive? && !registration_full_and_accepted?
+    errors.add(:auto_accept_preference, I18n.t('competitions.errors.auto_accept_accept_paid_pending')) if registrations.pending.with_payments.any?
+    errors.add(:auto_accept_preference, I18n.t('competitions.errors.auto_accept_accept_waitlisted')) if
+      registrations.waitlisted.any? && !registration_full_and_accepted?
   end
 
   def no_event_without_rounds?
@@ -694,13 +704,20 @@ class Competition < ApplicationRecord
              'posting_user',
              'inbox_results',
              'inbox_persons',
+             'inbox_scramble_sets',
+             'matched_scramble_sets',
              'announced_by_user',
              'cancelled_by_user',
              'competition_payment_integrations',
              'venue_countries',
              'venue_continents',
              'waiting_list',
-             'scramble_file_uploads'
+             'scramble_file_uploads',
+             'accepted_registrations',
+             'accepted_newcomers',
+             'duplicate_checker_job_runs',
+             'tickets_competition_result',
+             'result_ticket'
           # Do nothing as they shouldn't be cloned.
         when 'organizers'
           clone.organizers = organizers
@@ -990,8 +1007,12 @@ class Competition < ApplicationRecord
     true
   end
 
+  def after_registration_open?
+    !registration_not_yet_opened?
+  end
+
   def registration_currently_open?
-    use_wca_registration? && !cancelled? && !registration_not_yet_opened? && !registration_past?
+    use_wca_registration? && !cancelled? && after_registration_open? && !registration_past?
   end
 
   def registration_not_yet_opened?
@@ -1000,6 +1021,10 @@ class Competition < ApplicationRecord
 
   def registration_past?
     registration_close && registration_close < Time.now
+  end
+
+  def can_show_competitors_page?
+    after_registration_open? && registrations.competing_status_accepted.competing.any?
   end
 
   def registration_status
@@ -1369,9 +1394,7 @@ class Competition < ApplicationRecord
     !confirmed_at.nil?
   end
 
-  def confirmed
-    self.confirmed?
-  end
+  alias_method :confirmed, :confirmed?
 
   def confirmed=(new_confirmed_str)
     new_confirmed = ActiveRecord::Type::Boolean.new.cast(new_confirmed_str)
@@ -1796,7 +1819,7 @@ class Competition < ApplicationRecord
                base_entry_fee_lowest_denomination currency_code allow_registration_edits competitor_can_cancel
                allow_registration_without_qualification refund_policy_percent use_wca_registration guests_per_registration_limit venue contact
                force_comment_in_registration use_wca_registration external_registration_page guests_entry_fee_lowest_denomination guest_entry_status
-               information events_per_registration_limit guests_enabled auto_accept_registrations auto_accept_disable_threshold],
+               information events_per_registration_limit guests_enabled auto_accept_preference auto_accept_disable_threshold],
       methods: %w[url website short_name city venue_address venue_details latitude_degrees longitude_degrees country_iso2 event_ids
                   main_event_id number_of_bookmarks using_payment_integrations? uses_qualification? uses_cutoff? competition_series_ids registration_full?
                   part_of_competition_series? registration_full_and_accepted?],
@@ -1832,6 +1855,7 @@ class Competition < ApplicationRecord
     includes_associations = [
       { assignments: [:schedule_activity] },
       { user: {
+        current_avatar: [],
         person: %i[ranks_single ranks_average],
       } },
       :wcif_extensions,
@@ -1844,9 +1868,9 @@ class Competition < ApplicationRecord
     persons_wcif = self.registrations
                        .includes(includes_associations)
                        .select { authorized || it.wcif_status == "accepted" }
-                       .map do
-      managers.delete(it.user)
-      it.user.to_wcif(self, it, authorized: authorized)
+                       .map do |registration|
+      managers.delete(registration.user)
+      registration.user.to_wcif(self, registration, authorized: authorized)
     end
     # NOTE: unregistered managers may generate N+1 queries on their personal bests,
     # but that's fine because there are very few of them!
@@ -2154,7 +2178,17 @@ class Competition < ApplicationRecord
   end
 
   def world_or_continental_championship?
-    championships.map(&:championship_type).any? { |ct| Championship::MAJOR_CHAMPIONSHIP_TYPES.include?(ct) }
+    championship_types.any? { |ct| Championship::MAJOR_CHAMPIONSHIP_TYPES.include?(ct) }
+  end
+
+  def any_championship?
+    championship_types.any?
+  end
+
+  alias_method :competition_is_championship, :any_championship?
+
+  def championship_types
+    championships.pluck(:championship_type)
   end
 
   def multi_country_fmc_competition?
@@ -2208,9 +2242,19 @@ class Competition < ApplicationRecord
     end
   end
 
-  def dues_per_competitor_in_usd
-    dues = DuesCalculator.dues_per_competitor_in_usd(self.country_iso2, self.base_entry_fee_lowest_denomination.to_i, self.currency_code)
-    dues.presence || 0
+  def export_for_dues_generation
+    error = DuesCalculator.error_in_dues_calculation(self.country_iso2, self.currency_code)
+    dues_per_competitor_in_usd = error.nil? ? DuesCalculator.dues_per_competitor_in_usd(self.country_iso2, self.base_entry_fee_lowest_denomination.to_i, self.currency_code) : 0
+
+    [
+      id, name, country.iso2, continent.id,
+      start_date, end_date, announced_at, results_posted_at,
+      Rails.application.routes.url_helpers.competition_url(id), num_competitors, delegates.reject(&:trainee_delegate?).map(&:name).sort.join(","),
+      currency_code, base_entry_fee_lowest_denomination, Money::Currency.new(currency_code).subunit_to_unit,
+      championships.map(&:championship_type).sort.join(","), exempt_from_wca_dues?, organizers.map(&:name).sort.join(","),
+      dues_per_competitor_in_usd * num_competitors, dues_payer_name, dues_payer_email, dues_payer_is_combined_invoice?, country.band&.number || 0,
+      error
+    ]
   end
 
   private def xero_dues_payer
@@ -2296,7 +2340,7 @@ class Competition < ApplicationRecord
         "reason" => competitor_limit_reason,
         "autoCloseThreshold" => auto_close_threshold,
         "newcomerMonthReservedSpots" => newcomer_month_reserved_spots,
-        "autoAcceptEnabled" => auto_accept_registrations,
+        "autoAcceptPreference" => auto_accept_preference,
         "autoAcceptDisableThreshold" => auto_accept_disable_threshold,
       },
       "staff" => {
@@ -2305,7 +2349,7 @@ class Competition < ApplicationRecord
         "organizerIds" => organizers.to_a.pluck(:id),
         "contact" => contact,
       },
-      "championships" => championships.map(&:championship_type),
+      "championships" => championship_types,
       "website" => {
         "generateWebsite" => generate_website,
         "externalWebsite" => external_website,
@@ -2403,7 +2447,7 @@ class Competition < ApplicationRecord
         "reason" => errors[:competitor_limit_reason],
         "autoCloseThreshold" => errors[:auto_close_threshold],
         "newcomer_month_reserved_spots" => errors[:newcomer_month_reserved_spots],
-        "autoAcceptEnabled" => errors[:auto_accept_registrations],
+        "autoAcceptPreference" => errors[:auto_accept_preference],
         "autoAcceptDisableThreshold" => errors[:auto_accept_disable_threshold],
       },
       "staff" => {
@@ -2601,7 +2645,7 @@ class Competition < ApplicationRecord
       competitor_limit_reason: form_data.dig('competitorLimit', 'reason'),
       auto_close_threshold: form_data.dig('competitorLimit', 'autoCloseThreshold'),
       newcomer_month_reserved_spots: form_data.dig('competitorLimit', 'newcomerMonthReservedSpots'),
-      auto_accept_registrations: form_data.dig('competitorLimit', 'autoAcceptEnabled'),
+      auto_accept_preference: form_data.dig('competitorLimit', 'autoAcceptPreference'),
       auto_accept_disable_threshold: form_data.dig('competitorLimit', 'autoAcceptDisableThreshold'),
       extra_registration_requirements: form_data.dig('registration', 'extraRequirements'),
       on_the_spot_registration: form_data.dig('registration', 'allowOnTheSpot'),
@@ -2742,7 +2786,7 @@ class Competition < ApplicationRecord
             "reason" => { "type" => %w[string null] },
             "autoCloseThreshold" => { "type" => %w[integer null] },
             "newcomerMonthReservedSpots" => { "type" => %w[integer null] },
-            "autoAcceptEnabled" => { "type" => %w[boolean null] },
+            "autoAcceptPreference" => { "type" => "string", "enum" => Competition.auto_accept_preferences.keys },
             "autoAcceptDisableThreshold" => { "type" => %w[integer null] },
           },
         },
@@ -2938,6 +2982,13 @@ class Competition < ApplicationRecord
           "additionalProperties" => false,
           "properties" => {
             "mainEventId" => { "type" => %w[string null] },
+          },
+        },
+        "competitorLimit" => {
+          "type" => "object",
+          "properties" => {
+            "autoAcceptPreference" => { "type" => "string", "enum" => Competition.auto_accept_preferences.keys },
+            "autoAcceptDisableThreshold" => { "type" => %w[integer null] },
           },
         },
       },

@@ -148,7 +148,7 @@ module ResultsValidators
             end
           end
           # Look for if 2 new competitors that share the exact same name
-          duplicate_newcomer_names << p.name if without_wca_id.count { |p2| p2.name == p.name } > 1 && duplicate_newcomer_names.exclude?(p.name)
+          duplicate_newcomer_names << p.name if without_wca_id.many? { |p2| p2.name == p.name } && duplicate_newcomer_names.exclude?(p.name)
         end
         duplicate_newcomer_names.each do |name|
           @warnings << ValidationWarning.new(MULTIPLE_NEWCOMERS_WITH_SAME_NAME_WARNING,

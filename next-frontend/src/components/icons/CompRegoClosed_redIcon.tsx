@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { createIcon } from "@chakra-ui/react";
 
 const CompRegoClosed_redIcon = createIcon({
@@ -13,10 +14,10 @@ const CompRegoClosed_redIcon = createIcon({
       />
     </>
   ),
+  defaultProps: {
+    boxSize: "1em",
+    color: "red.500",
+  },
 });
 
-const CompRegoClosed_redIconPreview = () => {
-  return <CompRegoClosed_redIcon size="lg" color="red.500" />;
-};
-
-export default CompRegoClosed_redIconPreview;
+export default CompRegoClosed_redIcon;

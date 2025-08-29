@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { createIcon } from "@chakra-ui/react";
 
 const ContactIcon = createIcon({
@@ -13,10 +14,9 @@ const ContactIcon = createIcon({
       />
     </>
   ),
+  defaultProps: {
+    boxSize: "1em",
+  },
 });
 
-const ContactIconPreview = () => {
-  return <ContactIcon size="lg" />;
-};
-
-export default ContactIconPreview;
+export default ContactIcon;

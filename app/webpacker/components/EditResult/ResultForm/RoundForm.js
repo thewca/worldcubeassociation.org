@@ -6,6 +6,7 @@ import {
 import _ from 'lodash';
 import { formats, events, roundTypes } from '../../../lib/wca-data.js.erb';
 import useNestedInputUpdater from '../../../lib/hooks/useNestedInputUpdater';
+import useRoundDataSetter from '../../../lib/hooks/useRoundDataSetter';
 import { competitionEventsDataUrl } from '../../../lib/requests/routes.js.erb';
 import { fetchJsonOrError } from '../../../lib/requests/fetchWithAuthenticityToken';
 
@@ -15,10 +16,12 @@ const itemFromId = (id, items) => ({
   text: items.byId[id].name,
 });
 
-const formatRoundData = ({ eventId, formatId, roundTypeId }) => ({
+const formatRoundData = ({
+  eventId, formatId, roundTypeId, roundId,
+}) => ({
   [eventId]: {
     eventId,
-    rounds: [{ formatId, roundTypeId }],
+    rounds: [{ formatId, roundTypeId, roundId }],
   },
 });
 
@@ -33,13 +36,14 @@ function RoundForm({ roundData, setRoundData }) {
   } = roundData;
 
   const setCompetition = useNestedInputUpdater(setRoundData, 'competitionId');
-  const setEvent = useNestedInputUpdater(setRoundData, 'eventId');
-  const setFormat = useNestedInputUpdater(setRoundData, 'formatId');
-  const setRoundType = useNestedInputUpdater(setRoundData, 'roundTypeId');
-
-  const [competitionIdError, setCompetitionIdError] = useState(null);
 
   const [localRoundData, setLocalRoundData] = useState(formatRoundData(roundData));
+
+  const setEvent = useRoundDataSetter(setRoundData, 'eventId', roundData, localRoundData);
+  const setFormat = useRoundDataSetter(setRoundData, 'formatId', roundData, localRoundData);
+  const setRoundType = useRoundDataSetter(setRoundData, 'roundTypeId', roundData, localRoundData);
+
+  const [competitionIdError, setCompetitionIdError] = useState(null);
 
   const availableEvents = Object.keys(localRoundData).map((k) => itemFromId(k, events));
   const availableRoundTypes = extractFromRoundData(localRoundData, eventId, 'roundTypeId', roundTypes);

@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { createIcon } from "@chakra-ui/react";
 
 const ScramblesIcon = createIcon({
@@ -13,10 +14,9 @@ const ScramblesIcon = createIcon({
       />
     </>
   ),
+  defaultProps: {
+    boxSize: "1em",
+  },
 });
 
-const ScramblesIconPreview = () => {
-  return <ScramblesIcon size="lg" />;
-};
-
-export default ScramblesIconPreview;
+export default ScramblesIcon;

@@ -1,7 +1,0 @@
-<%= render layout: 'competitions/nav' do %>
-  <%= react_component("ScrambleMatcher", {
-    wcifEvents: @competition.events_wcif,
-    competitionId: @competition.id,
-    initialScrambleFiles: @competition.scramble_file_uploads,
-  }) %>
-<% end %>

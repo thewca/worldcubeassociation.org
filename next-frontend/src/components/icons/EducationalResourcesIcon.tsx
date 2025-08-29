@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { createIcon } from "@chakra-ui/react";
 
 const EducationalResourcesIcon = createIcon({
@@ -13,10 +14,9 @@ const EducationalResourcesIcon = createIcon({
       />
     </>
   ),
+  defaultProps: {
+    boxSize: "1em",
+  },
 });
 
-const EducationalResourcesIconPreview = () => {
-  return <EducationalResourcesIcon size="lg" />;
-};
-
-export default EducationalResourcesIconPreview;
+export default EducationalResourcesIcon;

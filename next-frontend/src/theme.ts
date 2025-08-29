@@ -111,6 +111,12 @@ const customConfig = defineConfig({
         danger: { value: "{colors.red.50}" },
         warning: { value: "{colors.yellow.50}" },
         success: { value: "{colors.green.100}" },
+        recordColors: {
+          personal: { value: "{colors.orange.50}" },
+          national: { value: "{colors.green.50}" },
+          continental: { value: "{colors.red.50}" },
+          world: { value: "{colors.blue.50}" },
+        },
         grey: {
           solid: {
             value: {
@@ -134,6 +140,18 @@ const customConfig = defineConfig({
               _dark: "colors.wcawhite.200",
             },
           },
+          spanBg: { value: "#3e3e3e" },
+          cls1: { value: "#3e3e3e" },
+          cls2: { value: "#7a7a7a" },
+          cls3: { value: "#dcdcdc" },
+          cls4: { value: "#525252" },
+        },
+        black: {
+          spanBg: { value: "#1e1e1e" },
+          cls1: { value: "#1e1e1e" },
+          cls2: { value: "#3b3b3b" },
+          cls3: { value: "#6b6b6b" },
+          cls4: { value: "#282828" },
         },
         yellow: {
           solid: {
@@ -173,6 +191,11 @@ const customConfig = defineConfig({
               },
             },
           },
+          spanBg: { value: "#664d00" },
+          cls1: { value: "#664d00" },
+          cls2: { value: "#ffd313" },
+          cls3: { value: "#ffde55" },
+          cls4: { value: "#cea705" },
         },
         green: {
           solid: {
@@ -207,6 +230,11 @@ const customConfig = defineConfig({
               },
             },
           },
+          spanBg: { value: "#1B4D3E" },
+          cls1: { value: "#1B4D3E" },
+          cls2: { value: "#049347" },
+          cls3: { value: "#04632D" },
+          cls4: { value: "#1AB55C" },
         },
         blue: {
           solid: {
@@ -241,6 +269,11 @@ const customConfig = defineConfig({
               },
             },
           },
+          spanBg: { value: "#003366" },
+          cls1: { value: "#003366" },
+          cls2: { value: "#0051BA" },
+          cls3: { value: "#03458C" },
+          cls4: { value: "#066AC4" },
         },
         red: {
           solid: {
@@ -275,6 +308,11 @@ const customConfig = defineConfig({
               },
             },
           },
+          spanBg: { value: "#7A1220" },
+          cls1: { value: "#7A1220" },
+          cls2: { value: "#CF1A1B" },
+          cls3: { value: "#A3131A" },
+          cls4: { value: "#E53841" },
         },
         orange: {
           solid: {
@@ -314,6 +352,11 @@ const customConfig = defineConfig({
               },
             },
           },
+          spanBg: { value: "#7A2B00" },
+          cls1: { value: "#7A2B00" },
+          cls2: { value: "#FF5800" },
+          cls3: { value: "#D34405" },
+          cls4: { value: "#F96E32" },
         },
         bg: {
           DEFAULT: {
@@ -424,6 +467,7 @@ const customConfig = defineConfig({
           },
         },
         defaultVariants: {
+          // @ts-expect-error TODO: Fix this
           variant: "solid",
           size: "lg",
         },
@@ -433,33 +477,33 @@ const customConfig = defineConfig({
         variants: {
           size: {
             sm: {
-              fontWeight: "medium", //Not used in styleguide
+              fontWeight: "medium", // Not used in styleguide
             },
             md: {
-              fontWeight: "medium", //Subheading 2
-              textStyle: "lg", //same size as lg, just thinner
+              fontWeight: "medium", // Subheading 2
+              textStyle: "lg", // same size as lg, just thinner
             },
             lg: {
-              fontWeight: "bold", //Subheading 1
+              fontWeight: "bold", // Subheading 1
             },
             xl: {
-              fontWeight: "bold", //Not used in styleguide
+              fontWeight: "bold", // Not used in styleguide
             },
             "2xl": {
-              fontWeight: "extrabold", //H4
+              fontWeight: "extrabold", // H4
             },
             "3xl": {
-              fontWeight: "extrabold", //H3
+              fontWeight: "extrabold", // H3
             },
             "4xl": {
-              fontWeight: "extrabold", //H2
+              fontWeight: "extrabold", // H2
             },
             "5xl": {
-              fontWeight: "extrabold", //H1
+              fontWeight: "extrabold", // H1
               textTransform: "uppercase",
             },
             "6xl": {
-              fontWeight: "extrabold", //Not used in styleguide
+              fontWeight: "extrabold", // Not used in styleguide
             },
           },
         },
@@ -523,6 +567,7 @@ const customConfig = defineConfig({
           },
         },
         defaultVariants: {
+          // @ts-expect-error TODO: Fix this
           variant: "wcaLink",
           hoverArrow: "false",
         },
@@ -533,7 +578,14 @@ const customConfig = defineConfig({
             achievement: {
               bg: "transparent",
               color: "fg",
-              fontWeight: "bold",
+              fontWeight: "medium",
+              gap: "2",
+              mr: "2.5",
+            },
+            information: {
+              bg: "transparent",
+              color: "colorPalette.contrast",
+              fontWeight: "light",
               gap: "2",
               mr: "2.5",
             },
@@ -543,10 +595,27 @@ const customConfig = defineConfig({
           {
             variant: "achievement",
             css: {
-              textStyle: "lg", //needed to supercede the default textStyle
+              textStyle: "lg", // needed to supercede the default textStyle
+              // @ts-expect-error TODO: Fix this
               svg: {
                 height: "1.25em",
                 width: "1.25em",
+              },
+            },
+          },
+          {
+            variant: "information",
+            css: {
+              textStyle: "md", // needed to supercede the default textStyle
+              // @ts-expect-error TODO: Fix this
+              svg: {
+                height: "1.1em",
+                width: "1.1em",
+              },
+              img: {
+                height: "1.1em",
+                width: "auto",
+                borderRadius: "3px",
               },
             },
           },
@@ -574,6 +643,7 @@ const customConfig = defineConfig({
           },
         },
         defaultVariants: {
+          // @ts-expect-error TODO: Fix this
           size: "sm",
         },
         variants: {
@@ -582,6 +652,14 @@ const customConfig = defineConfig({
               body: {
                 bg: "colorPalette.solid",
                 color: "colorPalette.contrast",
+              },
+            },
+            summary: {
+              body: {
+                bg: "colorPalette.solid",
+                color: "colorPalette.contrast",
+                p: "7",
+                gap: "3",
               },
             },
             info: {
@@ -633,13 +711,14 @@ const customConfig = defineConfig({
           {
             variant: "info",
             css: {
-              title: { textStyle: "4xl" }, //needed to supercede the default textStyle
+              title: { textStyle: "4xl" }, // needed to supercede the default textStyle
             },
           },
           {
             variant: "infoSnippet",
             css: {
               header: {
+                // @ts-expect-error TODO: Fix this
                 svg: {
                   height: "1.15em",
                   width: "1.15em",
@@ -649,7 +728,77 @@ const customConfig = defineConfig({
           },
         ],
       },
+      checkboxCard: {
+        slots: [],
+        variants: {
+          size: {
+            xs: {
+              root: {
+                textStyle: "xs",
+              },
+              control: {
+                padding: "1",
+                gap: "0.5",
+              },
+              addon: {
+                px: "1.5",
+                py: "0.5",
+                borderTopWidth: "1px",
+              },
+              indicator: {
+                boxSize: "2",
+              },
+            },
+          },
+        },
+      },
+      segmentGroup: {
+        slots: [],
+        variants: {
+          variant: {
+            inset: {
+              root: {
+                bg: "transparent",
+              },
+              item: {
+                px: "5",
+                py: "2.5",
+                fontWeight: "600",
+                border: "2px solid",
+                borderColor: "colorPalette.solid",
+                color: "colorPalette.highContrast",
+                bg: "transparent",
+                borderRadius: "0",
+                transition: "all 250ms",
+                cursor: "pointer",
+                _first: {
+                  borderTopLeftRadius: "5px",
+                  borderBottomLeftRadius: "5px",
+                  borderRight: "0px",
+                },
+                _last: {
+                  borderTopRightRadius: "5px",
+                  borderBottomRightRadius: "5px",
+                  borderLeft: "0px",
+                },
+                _checked: {
+                  bg: "colorPalette.solid",
+                  color: "colorPalette.contrast",
+                  boxShadow: "inset rgba(0, 0, 0, 0.25) 0 0 5px 0",
+                },
+                "&:not([data-state=checked]):hover": {
+                  bg: "colorPalette.fg/30",
+                },
+              },
+              indicator: {
+                display: "none",
+              },
+            },
+          },
+        },
+      },
       accordion: {
+        slots: [],
         variants: {
           variant: {
             subtle: {
@@ -692,11 +841,12 @@ const customConfig = defineConfig({
         },
       },
       table: {
+        slots: [],
         variants: {
           variant: {
             results: {
               cell: {
-                padding: "0",
+                p: "0",
               },
             },
             competitions: {
@@ -707,6 +857,11 @@ const customConfig = defineConfig({
                 width: "1%",
                 whiteSpace: "noWrap",
                 padding: "0",
+                "& img": {
+                  height: "1.1em",
+                  width: "2.8em",
+                  borderRadius: "3px",
+                },
               },
               row: {
                 "& td": {
@@ -743,11 +898,12 @@ const customConfig = defineConfig({
         },
       },
       drawer: {
+        slots: [],
         variants: {
           variant: {
             competitionInfo: {
               content: {
-                borderRadius: "md",
+                borderRadius: "xl",
                 shadow: "{shadows.wca}",
                 height: "max-content",
               },
@@ -756,6 +912,7 @@ const customConfig = defineConfig({
         },
       },
       tabs: {
+        slots: [],
         variants: {
           variant: {
             enclosed: {
@@ -782,6 +939,88 @@ const customConfig = defineConfig({
               },
               content: {
                 flexGrow: "1",
+              },
+            },
+            slider: {
+              root: {
+                width: "100%",
+              },
+              content: {
+                _vertical: {
+                  ps: "0px",
+                },
+                width: "100%",
+              },
+              trigger: {
+                p: "0px",
+                width: "1rem",
+                height: "1rem",
+                bg: "white/50",
+                cursor: "pointer",
+                minWidth: "1rem",
+                borderRadius: "0.5rem",
+                _selected: {
+                  bg: "white",
+                },
+              },
+            },
+            results: {
+              content: {
+                p: "8",
+              },
+              trigger: {
+                borderRadius: "0",
+                color: "fg",
+                _notFirst: {
+                  _before: {
+                    content: '""',
+                    position: "absolute",
+                    left: 0,
+                    top: "50%",
+                    transform: "translateY(-50%)",
+                    height: "1.5em",
+                    width: "1.5px",
+                    backgroundColor: "#D9D9D9",
+                  },
+                },
+                _selected: {
+                  bg: "colorPalette.solid",
+                  color: "colorPalette.contrast",
+                  _before: {
+                    display: "none", // Remove the line when selected
+                  },
+                },
+                "&[data-selected] + &::before": {
+                  display: "none",
+                },
+              },
+            },
+          },
+        },
+      },
+      dataList: {
+        slots: [],
+        variants: {
+          variant: {
+            profileStat: {
+              root: {
+                display: "grid",
+                gridTemplateColumns: "1fr 1fr",
+                columnGap: "2rem",
+                rowGap: "0.5rem",
+              },
+              item: {
+                flexDirection: "column-reverse",
+                alignItems: "flex-start", // default for left column
+                _even: {
+                  alignItems: "flex-end", // right column overrides
+                },
+              },
+              itemLabel: {
+                fontWeight: "regular",
+              },
+              itemValue: {
+                fontWeight: "semibold",
               },
             },
           },

@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { createIcon } from "@chakra-ui/react";
 
 const EventLocationIcon = createIcon({
@@ -13,10 +14,9 @@ const EventLocationIcon = createIcon({
       />
     </>
   ),
+  defaultProps: {
+    boxSize: "1em",
+  },
 });
 
-const EventLocationIconPreview = () => {
-  return <EventLocationIcon size="lg" />;
-};
-
-export default EventLocationIconPreview;
+export default EventLocationIcon;

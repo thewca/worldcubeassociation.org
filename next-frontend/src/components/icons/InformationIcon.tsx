@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { createIcon } from "@chakra-ui/react";
 
 const InformationIcon = createIcon({
@@ -13,10 +14,9 @@ const InformationIcon = createIcon({
       />
     </>
   ),
+  defaultProps: {
+    boxSize: "1em",
+  },
 });
 
-const InformationIconPreview = () => {
-  return <InformationIcon size="lg" />;
-};
-
-export default InformationIconPreview;
+export default InformationIcon;

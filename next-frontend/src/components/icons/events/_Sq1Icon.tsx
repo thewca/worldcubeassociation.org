@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { createIcon } from "@chakra-ui/react";
 
 const _Sq1Icon = createIcon({
@@ -13,6 +14,9 @@ const _Sq1Icon = createIcon({
       />
     </>
   ),
+  defaultProps: {
+    boxSize: "1em",
+  },
 });
 
 export default _Sq1Icon;

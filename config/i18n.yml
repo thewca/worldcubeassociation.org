@@ -81,3 +81,5 @@ translations:
       - "*.validators.*"
       - "*.cronjobs.*"
       - "*.payments.*"
+      - "*.misc.*"
+      - "*.tickets.*"

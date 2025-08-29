@@ -19,7 +19,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Checkout primary branch
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Switch to PR branch
         run: gh pr checkout $PR_NUMBER
         env:

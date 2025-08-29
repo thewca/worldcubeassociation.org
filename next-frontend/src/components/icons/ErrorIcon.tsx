@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { createIcon } from "@chakra-ui/react";
 
 const ErrorIcon = createIcon({
@@ -13,10 +14,9 @@ const ErrorIcon = createIcon({
       />
     </>
   ),
+  defaultProps: {
+    boxSize: "1em",
+  },
 });
 
-const ErrorIconPreview = () => {
-  return <ErrorIcon size="lg" />;
-};
-
-export default ErrorIconPreview;
+export default ErrorIcon;

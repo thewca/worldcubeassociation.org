@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { createIcon } from "@chakra-ui/react";
 
 const SpotsLeftIcon = createIcon({
@@ -49,10 +50,9 @@ const SpotsLeftIcon = createIcon({
       />
     </>
   ),
+  defaultProps: {
+    boxSize: "1em",
+  },
 });
 
-const SpotsLeftIconPreview = () => {
-  return <SpotsLeftIcon size="lg" />;
-};
-
-export default SpotsLeftIconPreview;
+export default SpotsLeftIcon;

@@ -884,8 +884,6 @@ fi:
         results_file: ''
         #original_hash: da39a3e
         message: ''
-        #original_hash: da39a3e
-        confirm_information: ''
       regional_organization:
         #original_hash: da39a3e
         name: ''
@@ -1453,7 +1451,7 @@ fi:
         Ennen kysymyksen lähettämistä, luethan <a href="/faq">usein kysytyt
         kysymykset</a>! Jos haluat ottaa yhteyttä tiettyyn toimikuntaan, jota ei
         ole lueteltu tässä, löydät tiedot <a
-        href="/teams-committees-councils">tältä sivulta</a>.
+        href="/teams-committees">tältä sivulta</a>.
       #original_hash: ea20be0
       success_message: Viesti lähetetty - palaamme asiaan pian.
       form:

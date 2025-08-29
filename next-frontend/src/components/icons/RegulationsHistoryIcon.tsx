@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { createIcon } from "@chakra-ui/react";
 
 const RegulationsHistoryIcon = createIcon({
@@ -13,10 +14,9 @@ const RegulationsHistoryIcon = createIcon({
       />
     </>
   ),
+  defaultProps: {
+    boxSize: "1em",
+  },
 });
 
-const RegulationsHistoryIconPreview = () => {
-  return <RegulationsHistoryIcon size="lg" />;
-};
-
-export default RegulationsHistoryIconPreview;
+export default RegulationsHistoryIcon;

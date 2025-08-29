@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { createIcon } from "@chakra-ui/react";
 
 const WeiboIcon = createIcon({
@@ -25,10 +26,9 @@ const WeiboIcon = createIcon({
       />
     </>
   ),
+  defaultProps: {
+    boxSize: "1em",
+  },
 });
 
-const WeiboIconPreview = () => {
-  return <WeiboIcon size="lg" />;
-};
-
-export default WeiboIconPreview;
+export default WeiboIcon;
