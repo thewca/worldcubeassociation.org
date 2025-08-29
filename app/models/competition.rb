@@ -380,10 +380,8 @@ class Competition < ApplicationRecord
     errors.add(:registration_close, I18n.t('competitions.errors.registration_already_closed')) if !editing_user.can_admin_competitions? && registration_range_specified? && registration_past?
   end
 
-  validate :payments_nil_to_change_currency
+  validate :payments_nil_to_change_currency, if: :currency_code_changed?
   private def payments_nil_to_change_currency
-    return unless currency_code_changed?
-
     errors.add(:currency_code, I18n.t('competitions.errors.currency_cant_change')) if total_payment_amount != 0
   end
 
