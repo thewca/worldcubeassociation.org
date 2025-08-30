@@ -24,11 +24,11 @@ export default function OldDataSyncInfo({ ticketDetails, currentStakeholder }) {
     error,
   } = useMutation({
     mutationFn: syncEditPersonRequest,
-    onSuccess: () => {
-      // We've invalidated the ticket details because we can't confirm that the updated value
-      // matches the current person's data. To be safe, we're refetching the information, as
-      // the person's details may have changed since the last time they were accessed.
-      queryClient.invalidateQueries(['ticket-details', id]);
+    onSuccess: (syncedTicketDetails) => {
+      queryClient.setQueryData(
+        ['ticket-details', id],
+        (oldTicketDetails) => ({ ...oldTicketDetails, ticket: syncedTicketDetails }),
+      );
     },
   });
 

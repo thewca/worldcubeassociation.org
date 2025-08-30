@@ -322,6 +322,6 @@ class TicketsController < ApplicationController
       )
     end
 
-    render status: :ok, json: { success: true }
+    render status: :ok, json: @ticket
   end
 end
