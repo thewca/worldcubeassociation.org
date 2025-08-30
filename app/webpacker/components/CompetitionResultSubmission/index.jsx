@@ -9,6 +9,7 @@ export default function Wrapper({
   resultsSubmitted,
   hasTemporaryResults,
   uploadedScrambleFilesCount,
+  showWcaLiveBeta,
   canSubmitResults,
 }) {
   return (
@@ -18,6 +19,7 @@ export default function Wrapper({
         resultsSubmitted={resultsSubmitted}
         hasTemporaryResults={hasTemporaryResults}
         uploadedScrambleFilesCount={uploadedScrambleFilesCount}
+        showWcaLiveBeta={showWcaLiveBeta}
         canSubmitResults={canSubmitResults}
       />
     </WCAQueryClientProvider>
@@ -29,6 +31,7 @@ function CompetitionResultSubmission({
   resultsSubmitted,
   hasTemporaryResults,
   uploadedScrambleFilesCount,
+  showWcaLiveBeta,
   canSubmitResults,
 }) {
   if (resultsSubmitted) {
@@ -45,14 +48,13 @@ function CompetitionResultSubmission({
       The result submission process has two steps:
       <List ordered>
         <List.Item>
-          Providing valid results data to the website. This can be done in one of two ways:
+          Providing valid results data to the website.
+          This can be done in one of the following ways:
           <List.List>
-            <List.Item value="a">
-              Uploading a Results JSON file
-              {' '}
-              <b>OR</b>
-            </List.Item>
-            <List.Item value="b">Importing results directly from WCA Live</List.Item>
+            <List.Item value="a">Uploading a Results JSON file</List.Item>
+            {showWcaLiveBeta && (
+              <List.Item value="b">Importing results directly from WCA Live</List.Item>
+            )}
           </List.List>
         </List.Item>
         <List.Item>
@@ -63,6 +65,7 @@ function CompetitionResultSubmission({
         competitionId={competitionId}
         uploadedScrambleFilesCount={uploadedScrambleFilesCount}
         hasTemporaryResults={hasTemporaryResults}
+        showWcaLiveBeta={showWcaLiveBeta}
       />
       {hasTemporaryResults && (
         <FormToWrt competitionId={competitionId} canSubmitResults={canSubmitResults} />

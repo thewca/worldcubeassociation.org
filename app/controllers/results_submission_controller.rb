@@ -9,6 +9,9 @@ class ResultsSubmissionController < ApplicationController
 
   def new
     @competition = competition_from_params
+
+    expected_feature_flag = ServerSetting.find_by(name: ServerSetting::WCA_LIVE_BETA_FEATURE_FLAG)
+    @show_wca_live_beta = expected_feature_flag.present? && params[:wcaLiveBeta] == expected_feature_flag.value
   end
 
   def newcomer_checks

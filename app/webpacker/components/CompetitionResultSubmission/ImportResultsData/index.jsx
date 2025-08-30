@@ -29,6 +29,7 @@ export function ImportResultsData({
   hasTemporaryResults,
   isAdminView = false,
   uploadedScrambleFilesCount = 0,
+  showWcaLiveBeta = false,
 }) {
   const [activeAccordion, setActiveAccordion] = useState(!hasTemporaryResults);
 
@@ -52,7 +53,7 @@ export function ImportResultsData({
         </Tab.Pane>
       ),
     },
-    ...(isAdminView ? [{
+    ...((isAdminView || showWcaLiveBeta) ? [{
       menuItem: '[BETA] Use WCA Live Results',
       render: () => (
         <Tab.Pane>
