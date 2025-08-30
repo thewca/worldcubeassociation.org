@@ -95,7 +95,7 @@ class RegistrationsController < ApplicationController
     event_column_errors = csv_rows.filter_map do |row|
       competition_events.find do |competition_event|
         cell_value = row[competition_event.event_id.to_sym]
-        next unless %w[1 0].exclude?(cell_value)
+        next if %w[1 0].include?(cell_value)
 
         I18n.t(
           "registrations.import.errors.invalid_event_column",
@@ -105,19 +105,29 @@ class RegistrationsController < ApplicationController
       end
     end
 
-    raw_dobs = csv_rows.pluck(:birth_date)
-    wrong_format_dobs = raw_dobs.reject { |raw_dob| Date.safe_parse(raw_dob)&.to_fs == raw_dob }
-    dob_column_error = I18n.t("registrations.import.errors.wrong_dob_format", raw_dobs: wrong_format_dobs.join(", ")) if wrong_format_dobs.any?
+    dob_column_error = column_check(csv_rows, :birth_date, 'wrong_dob_format', :raw_dobs) do |raw_dob|
+      Date.safe_parse(raw_dob)&.to_fs != raw_dob
+    end
 
-    @emails = csv_rows.pluck(:email)
-    email_duplicates = @emails.select { |email| @emails.count(email) > 1 }.uniq
-    email_duplicate_error = I18n.t("registrations.import.errors.email_duplicates", emails: email_duplicates.join(", ")) if email_duplicates.any?
+    email_duplicate_error = column_check(csv_rows, :email, 'email_duplicates', :emails) do |email, emails|
+      emails.count(email) > 1
+    end
 
-    wca_ids = csv_rows.pluck(:wca_id).reject(&:empty?)
-    wca_id_duplicates = wca_ids.select { |wca_id| wca_ids.count(wca_id) > 1 }.uniq
-    wca_id_duplicate_error = I18n.t("registrations.import.errors.wca_id_duplicates", wca_ids: wca_id_duplicates.join(", ")) if wca_id_duplicates.any?
+    wca_id_duplicate_error = column_check(csv_rows, :wca_id, "wca_id_duplicates", :wca_ids) do |wca_id, wca_ids|
+      wca_id.present? && wca_ids.count(wca_id) > 1
+    end
 
     [event_column_errors, dob_column_error, email_duplicate_error, wca_id_duplicate_error].flatten
+  end
+
+  private def column_check(csv_rows, column_name, error_key, i18n_keyword)
+    column_values = csv_rows.pluck(column_name)
+
+    malformed_values = column_values.select do |value|
+      yield value, column_values
+    end.uniq
+
+    I18n.t("registrations.import.errors.#{error_key}", i18n_keyword => malformed_values.join(", ")) if malformed_values.any?
   end
 
   private def competitor_limit_error(competition, competitor_count)
@@ -178,9 +188,10 @@ class RegistrationsController < ApplicationController
     #   from CSV import to be considered as one "batch". So we mark a timestamp
     #   once, and then reuse it throughout the loop.
     import_time = Time.now.utc
+    emails = @registration_rows.pluck(:email)
     ActiveRecord::Base.transaction do
       @competition.registrations.accepted.each do |registration|
-        registration.update!(competing_status: Registrations::Helper::STATUS_CANCELLED) unless @emails.include?(registration.user.email)
+        registration.update!(competing_status: Registrations::Helper::STATUS_CANCELLED) unless emails.include?(registration.user.email)
       end
       @registration_rows.each do |registration_row|
         user, locked_account_created = user_for_registration!(registration_row)

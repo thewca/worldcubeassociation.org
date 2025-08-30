@@ -428,6 +428,19 @@ RSpec.describe "registrations" do
             end.to change { competition.registrations.count }.by(1)
           end
         end
+
+        context "CSV empty file" do
+          it "throws an error" do
+            file = csv_file [
+              ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
+            ]
+            expect do
+              post competition_registrations_do_import_path(competition), params: { csv_registration_file: file }
+            end.not_to(change { competition.registrations.count })
+            expect(response).to have_http_status(:unprocessable_entity)
+            expect(response.body).to include "The file is empty."
+          end
+        end
       end
     end
   end
