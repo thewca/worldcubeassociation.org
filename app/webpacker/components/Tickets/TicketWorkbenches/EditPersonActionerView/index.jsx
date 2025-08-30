@@ -2,7 +2,7 @@ import React from 'react';
 import EditPersonForm from '../../../Panel/pages/EditPersonPage/EditPersonForm';
 import { ticketStatuses } from '../../../../lib/wca-data.js.erb';
 import EditPersonValidations from './EditPersonValidations';
-import EditPersonRequestedChangesList from './EditPersonRequestedChangesList';
+import EditPersonRequestedChanges from './EditPersonRequestedChanges';
 import RejectView from './RejectView';
 
 export default function EditPersonActionerView({
@@ -23,8 +23,11 @@ export default function EditPersonActionerView({
       <EditPersonValidations
         ticketDetails={ticketDetails}
       />
-      <EditPersonRequestedChangesList
+      <EditPersonRequestedChanges
+        ticketId={id}
+        currentStakeholder={currentStakeholder}
         requestedChanges={metadata.tickets_edit_person_fields}
+        person={metadata.person}
       />
       <EditPersonForm
         wcaId={metadata.wca_id}
