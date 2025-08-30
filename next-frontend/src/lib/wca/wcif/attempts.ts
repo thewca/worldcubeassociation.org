@@ -2,6 +2,10 @@ import type { components } from "@/types/openapi";
 
 type AttemptResult = components["schemas"]["WcifAttemptResult"];
 
+export const SKIPPED_VALUE = 0;
+export const DNF_VALUE = -1;
+export const DNS_VALUE = -2;
+
 /**
  * Converts centiseconds to a human-friendly string.
  */
@@ -78,4 +82,43 @@ export function attemptResultToMbldPoints(attemptResult: AttemptResult) {
   const { solved, attempted } = parseMbldResult(attemptResult);
   const missed = attempted - solved;
   return solved - missed;
+}
+
+function formatMbldAttemptResult(attemptResult: number) {
+  const { solved, attempted, timeCentiseconds } =
+    parseMbldResult(attemptResult);
+  const clockFormat = centisecondsToClockFormat(timeCentiseconds!);
+  const shortClockFormat = clockFormat.replace(/\.00$/, "");
+  // u2002 is a special space character
+  // using it here allows us to expand space between mbf results without
+  //  expanding the spaces within the individual results
+  // see https://github.com/thewca/worldcubeassociation.org/issues/6375
+  return `${solved}/${attempted}\u2002${shortClockFormat}`;
+}
+
+function formatFmAttemptResult(attemptResult: number) {
+  /* Note: FM singles are stored as the number of moves (e.g. 25),
+     while averages are stored with 2 decimal places (e.g. 2533 for an average of 25.33 moves). */
+  const isAverage = attemptResult >= 1000;
+  return isAverage
+    ? (attemptResult / 100).toFixed(2)
+    : attemptResult.toString();
+}
+
+/**
+ * Converts the given attempt result to a human-friendly string.
+ *
+ * @example
+ * formatAttemptResult(-1, '333'); // => 'DNF'
+ * formatAttemptResult(6111, '333'); // => '1:01.11'
+ * formatAttemptResult(900348002, '333mbf'); // => '11/13 58:00'
+ */
+export function formatAttemptResult(attemptResult: number, eventId: string) {
+  if (attemptResult === SKIPPED_VALUE) return "";
+  if (attemptResult === DNF_VALUE) return "DNF";
+  if (attemptResult === DNS_VALUE) return "DNS";
+  if (eventId === "333mbf" || eventId === "333mbo")
+    return formatMbldAttemptResult(attemptResult);
+  if (eventId === "333fm") return formatFmAttemptResult(attemptResult);
+  return centisecondsToClockFormat(attemptResult);
 }
