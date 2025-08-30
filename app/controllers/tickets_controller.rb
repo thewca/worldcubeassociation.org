@@ -280,18 +280,17 @@ class TicketsController < ApplicationController
       ticket_status = TicketsEditPerson.statuses[:closed]
       @ticket.metadata.update!(status: ticket_status)
       ticket_log = @ticket.ticket_logs.create!(
-        @ticket.ticket_logs.create!(
-          action_type: @action_type,
-          acting_user_id: current_user.id,
-          acting_stakeholder_id: @acting_stakeholder.id,
-          metadata_action: @metadata_action,
-        ),
+        action_type: @action_type,
+        acting_user_id: current_user.id,
+        acting_stakeholder_id: @acting_stakeholder.id,
+        metadata_action: @metadata_action,
       )
       ticket_log.ticket_log_changes.create!(
         field_name: TicketLogChange.field_names[:status],
         field_value: ticket_status,
       )
     end
+    render status: :ok, json: { success: true }
   end
 
   def sync_edit_person_request
@@ -322,6 +321,6 @@ class TicketsController < ApplicationController
       )
     end
 
-    render status: :ok, json: { success: true }
+    render status: :ok, json: @ticket
   end
 end
