@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { Form } from 'semantic-ui-react';
 import useInputState from '../../../../lib/hooks/useInputState';
 import I18n from '../../../../lib/i18n';
@@ -15,16 +15,18 @@ export default function EditPersonFieldEditor({
   actionMutate,
 }) {
   const [newValue, setNewValue] = useInputState(oldValue);
+
+  const formSubmitHandler = useCallback(() => actionMutate({
+    ticketId,
+    actingStakeholderId,
+    fieldName,
+    oldValue,
+    newValue,
+    editPersonFieldId: id,
+  }), [actingStakeholderId, actionMutate, fieldName, id, newValue, oldValue, ticketId]);
+
   return (
-    <Form onSubmit={() => actionMutate({
-      ticketId,
-      actingStakeholderId,
-      fieldName,
-      oldValue,
-      newValue,
-      editPersonFieldId: id,
-    })}
-    >
+    <Form onSubmit={formSubmitHandler}>
       <FormInput
         fieldName={fieldName}
         newValue={newValue}

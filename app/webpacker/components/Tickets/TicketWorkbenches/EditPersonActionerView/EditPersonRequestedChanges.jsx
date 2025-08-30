@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { Confirm, Modal } from 'semantic-ui-react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import EditPersonRequestedChangesList from './EditPersonRequestedChangesList';
@@ -8,6 +8,7 @@ import createEditPersonField from '../../api/competitionResult/createEditPersonF
 import updateEditPersonField from '../../api/competitionResult/updateEditPersonField';
 import deleteEditPersonField from '../../api/competitionResult/deleteEditPersonField';
 import EditPersonFieldEditor from './EditPersonFieldEditor';
+import { updateTicketMetadata } from '../../../../lib/helpers/update-ticket-query-data';
 
 export default function EditPersonRequestedChanges({
   ticketId,
@@ -29,19 +30,11 @@ export default function EditPersonRequestedChanges({
       setEditPersonFieldActionDetails(null);
       queryClient.setQueryData(
         ['ticket-details', ticketId],
-        (oldTicketDetails) => ({
-          ...oldTicketDetails,
-          ticket: {
-            ...oldTicketDetails.ticket,
-            metadata: {
-              ...oldTicketDetails.ticket.metadata,
-              tickets_edit_person_fields: [
-                ...oldTicketDetails.ticket.metadata.tickets_edit_person_fields,
-                newEditField,
-              ],
-            },
-          },
-        }),
+        (oldTicketDetails) => updateTicketMetadata(
+          oldTicketDetails,
+          'tickets_edit_person_fields',
+          [...oldTicketDetails.ticket.metadata.tickets_edit_person_fields, newEditField],
+        ),
       );
     },
   });
@@ -57,25 +50,18 @@ export default function EditPersonRequestedChanges({
       setEditPersonFieldActionDetails(null);
       queryClient.setQueryData(
         ['ticket-details', ticketId],
-        (oldTicketDetails) => ({
-          ...oldTicketDetails,
-          ticket: {
-            ...oldTicketDetails.ticket,
-            metadata: {
-              ...oldTicketDetails.ticket.metadata,
-              tickets_edit_person_fields: (
-                oldTicketDetails.ticket.metadata.tickets_edit_person_fields.map(
-                  (editPersonField) => {
-                    if (editPersonField.id === editPersonFieldId) {
-                      return { ...editPersonField, new_value: newValue };
-                    }
-                    return editPersonField;
-                  },
-                )
-              ),
+        (oldTicketDetails) => updateTicketMetadata(
+          oldTicketDetails,
+          'tickets_edit_person_fields',
+          oldTicketDetails.ticket.metadata.tickets_edit_person_fields.map(
+            (editPersonField) => {
+              if (editPersonField.id === editPersonFieldId) {
+                return { ...editPersonField, new_value: newValue };
+              }
+              return editPersonField;
             },
-          },
-        }),
+          ),
+        ),
       );
     },
   });
@@ -91,20 +77,13 @@ export default function EditPersonRequestedChanges({
       setEditPersonFieldActionDetails(null);
       queryClient.setQueryData(
         ['ticket-details', ticketId],
-        (oldTicketDetails) => ({
-          ...oldTicketDetails,
-          ticket: {
-            ...oldTicketDetails.ticket,
-            metadata: {
-              ...oldTicketDetails.ticket.metadata,
-              tickets_edit_person_fields: (
-                oldTicketDetails.ticket.metadata.tickets_edit_person_fields.filter(
-                  (editPersonField) => editPersonField.id !== editPersonFieldId,
-                )
-              ),
-            },
-          },
-        }),
+        (oldTicketDetails) => updateTicketMetadata(
+          oldTicketDetails,
+          'tickets_edit_person_fields',
+          oldTicketDetails.ticket.metadata.tickets_edit_person_fields.filter(
+            (editPersonField) => editPersonField.id !== editPersonFieldId,
+          ),
+        ),
       );
     },
   });
@@ -113,6 +92,30 @@ export default function EditPersonRequestedChanges({
     create: createEditPersonFieldMutate,
     update: updateEditPersonFieldMutate,
   };
+
+  const createChangeHandler = useCallback((
+    { fieldName, oldValue },
+  ) => setEditPersonFieldActionDetails({
+    action: 'create',
+    fieldName,
+    oldValue,
+  }), []);
+
+  const updateChangeHandler = useCallback(({
+    id,
+    field_name: fieldName,
+    old_value: oldValue,
+  }) => setEditPersonFieldActionDetails({
+    action: 'update',
+    id,
+    fieldName,
+    oldValue,
+  }), []);
+
+  const deleteChangeHandler = useCallback((editPersonFieldId) => setEditPersonFieldActionDetails({
+    action: 'delete',
+    editPersonFieldId,
+  }), []);
 
   if (isCreatePending || isUpdatePending || isDeletePending) return <Loading />;
   if (isCreateError) return <Errored error={createError} />;
@@ -123,25 +126,9 @@ export default function EditPersonRequestedChanges({
     <>
       <EditPersonRequestedChangesList
         requestedChanges={requestedChanges}
-        createChange={({ fieldName, oldValue }) => setEditPersonFieldActionDetails({
-          action: 'create',
-          fieldName,
-          oldValue,
-        })}
-        updateChange={({
-          id,
-          field_name: fieldName,
-          old_value: oldValue,
-        }) => setEditPersonFieldActionDetails({
-          action: 'update',
-          id,
-          fieldName,
-          oldValue,
-        })}
-        deleteChange={(editPersonFieldId) => setEditPersonFieldActionDetails({
-          action: 'delete',
-          editPersonFieldId,
-        })}
+        createChange={createChangeHandler}
+        updateChange={updateChangeHandler}
+        deleteChange={deleteChangeHandler}
       />
       <Confirm
         open={editPersonFieldActionDetails?.action === 'delete'}
