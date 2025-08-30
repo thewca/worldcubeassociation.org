@@ -13,24 +13,16 @@ class TicketsEditPerson < ApplicationRecord
   belongs_to :person, -> { current }, primary_key: :wca_id, foreign_key: :wca_id
 
   ACTION_TYPE = {
+    reject_edit_person_request: "reject_edit_person_request",
     sync_edit_person_request: "sync_edit_person_request",
   }.freeze
 
   def metadata_actions_allowed_for(ticket_stakeholder)
     if ticket_stakeholder.stakeholder == UserGroup.teams_committees_group_wrt
-      [ACTION_TYPE[:sync_edit_person_request]]
-    else
-      []
-    end
-  end
-
-  ACTION_TYPE = {
-    reject_edit_person_request: "reject_edit_person_request",
-  }.freeze
-
-  def metadata_actions_allowed_for(ticket_stakeholder)
-    if ticket_stakeholder.stakeholder == UserGroup.teams_committees_group_wrt
-      [ACTION_TYPE[:reject_edit_person_request]]
+      [
+        ACTION_TYPE[:reject_edit_person_request],
+        ACTION_TYPE[:sync_edit_person_request],
+      ]
     else
       []
     end
