@@ -17,12 +17,16 @@ class TicketsCompetitionResult < ApplicationRecord
   belongs_to :competition
 
   ACTION_TYPE = {
+    verify_warnings: "verify_warnings",
     merge_inbox_results: "merge_inbox_results",
   }.freeze
 
   def metadata_actions_allowed_for(ticket_stakeholder)
     if ticket_stakeholder.stakeholder == UserGroup.teams_committees_group_wrt
-      [ACTION_TYPE[:merge_inbox_results]]
+      [
+        ACTION_TYPE[:verify_warnings],
+        ACTION_TYPE[:merge_inbox_results],
+      ]
     else
       []
     end
