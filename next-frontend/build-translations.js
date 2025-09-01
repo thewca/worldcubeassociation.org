@@ -23,20 +23,28 @@ function flattenObject(obj, prefix = "") {
 // Add Country Names if not translated already
 function addCountryNames(translation, lang) {
   const supportedLanguages = countries.getSupportedLanguages();
-  if (supportedLanguages.indexOf(lang) === -1) {
+  const iso639LanguageCode = lang.slice(0, 2);
+
+  if (!supportedLanguages.includes(iso639LanguageCode)) {
     return translation;
   }
-  const languageCode = lang.slice(0, 2);
-  const codes = Object.keys(countries.getAlpha2Codes());
+  const iso3166CountryCodes = Object.keys(countries.getAlpha2Codes());
+
+  // Load the language file for the country names
   countries.registerLocale(
-    require(`i18n-iso-countries/langs/${languageCode}.json`),
+    require(`i18n-iso-countries/langs/${iso639LanguageCode}.json`),
   );
-  codes.forEach((code) => {
-    const languageKey = `countries.${code}`;
+
+  iso3166CountryCodes.forEach((iso3166CountryCode) => {
+    const languageKey = `countries.${iso3166CountryCode}`;
     if (!translation[languageKey]) {
-      translation[languageKey] = countries.getName(code, languageCode);
+      translation[languageKey] = countries.getName(
+        iso3166CountryCode,
+        iso639LanguageCode,
+      );
     }
   });
+
   return translation;
 }
 
