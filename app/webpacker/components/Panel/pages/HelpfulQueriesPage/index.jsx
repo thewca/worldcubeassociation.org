@@ -12,7 +12,7 @@ import useInputState from '../../../../lib/hooks/useInputState';
 const hasWcaId = (val) => val?.trim()?.length > 0;
 
 const statusColor = (s) => {
-  switch ((s?.toLowerCase() || '')) {
+  switch (s?.toLowerCase()) {
     case 'accepted': return 'green';
     case 'pending': return 'grey';
     case 'waiting_list': return 'yellow';
