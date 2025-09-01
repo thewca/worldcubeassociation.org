@@ -672,6 +672,11 @@ en:
         500_contact_html: "<a href=%{contact_url}>Click here</a> to report it."
         400_error: "The page you were looking for doesn't exist."
         400_contact_html: "If you think this is a mistake please <a href=%{contact_url}>click here</a> to report it."
+        comp_not_found: "Competition Not Found"
+        comp_not_found_action: "We couldn't find a competition with the ID \"%{comp_id}\". Please search for it using the search bar."
+        comp_not_found_action_2: "If you followed a link from another website to get here, please tell that website that their link is incorrect."
+        session_expired: "Session Expired"
+        session_expired_action: "Your session has expired. Please refresh the page, retry your action, or log in again to continue."
     #context: Key used when an external OAuth app is willing to access a WCA user's data
     doorkeeper:
       applications:
