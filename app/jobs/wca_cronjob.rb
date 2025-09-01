@@ -10,7 +10,7 @@ class WcaCronjob < ApplicationJob
   before_enqueue do |job|
     statistics = job.class.cronjob_statistics
 
-    if statistics.scheduled? || statistics.in_progress? || statistics.recently_errored?
+    if statistics.scheduled? || statistics.in_progress? || (statistics.recently_errored? && !statistics.is_aggressive_retry?)
       statistics.increment! :recently_rejected
 
       # Make ActiveJob abort and do NOT enqueue the job

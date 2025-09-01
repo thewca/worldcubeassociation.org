@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_08_26_042935) do
+ActiveRecord::Schema[7.2].define(version: 2025_09_01_035157) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -551,6 +551,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_08_26_042935) do
     t.datetime "enqueued_at", precision: nil
     t.integer "recently_rejected", default: 0, null: false
     t.integer "recently_errored", default: 0, null: false
+    t.boolean "is_aggressive_retry", default: false, null: false
     t.integer "times_completed", default: 0, null: false
     t.bigint "average_runtime"
   end
