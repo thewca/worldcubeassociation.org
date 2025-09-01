@@ -1,0 +1,72 @@
+import {
+  Card,
+  Container,
+  Heading,
+  HStack,
+  Text,
+  VStack,
+} from "@chakra-ui/react";
+import ResultsTable from "@/components/results/ResultsTable";
+import events, { WCA_EVENT_IDS } from "@/lib/wca/data/events";
+import { Fragment } from "react";
+import _ from "lodash";
+import { getT } from "@/lib/i18n/get18n";
+import { getCompetitionInfo } from "@/lib/wca/competitions/getCompetitionInfo";
+import { InfoCard } from "@/components/competitions/Cards";
+import { MarkdownFirstImage } from "@/components/MarkdownFirstImage";
+import { getCompetitionResults } from "@/lib/wca/competitions/getCompetitionResults";
+import FilteredResults from "@/app/(wca)/competitions/[competitionId]/results/all/FilteredResults";
+
+export default async function PodiumsPage({
+  params,
+}: {
+  params: Promise<{ competitionId: string }>;
+}) {
+  const { competitionId } = await params;
+
+  const { data: competitionInfo, error } =
+    await getCompetitionInfo(competitionId);
+
+  if (error) {
+    return <Text>Error fetching competition</Text>;
+  }
+
+  if (!competitionInfo) {
+    return <Text>Competition does not exist</Text>;
+  }
+
+  const { t } = await getT();
+
+  const podiumsRequest = await getCompetitionResults(competitionId);
+
+  const competitionResults = podiumsRequest.data!;
+
+  const resultsByEvent = _.groupBy(competitionResults, "event_id");
+
+  return (
+    <Container bg="bg">
+      <HStack gap="8" alignItems="stretch">
+        <InfoCard competitionInfo={competitionInfo} t={t} />
+        <MarkdownFirstImage content={competitionInfo.information} />
+      </HStack>
+      <Card.Root variant="plain" mt="8">
+        <Card.Body>
+          <Card.Title>
+            <Text
+              fontSize="md"
+              textTransform="uppercase"
+              fontWeight="medium"
+              letterSpacing="wider"
+            >
+              Results
+            </Text>
+          </Card.Title>
+          <FilteredResults
+            competitionInfo={competitionInfo}
+            resultsByEvent={resultsByEvent}
+          />
+        </Card.Body>
+      </Card.Root>
+    </Container>
+  );
+}
