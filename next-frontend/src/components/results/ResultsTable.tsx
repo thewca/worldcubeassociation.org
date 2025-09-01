@@ -52,7 +52,8 @@ export default function ResultsTable({
           <Table.ColumnHeader>Competitor</Table.ColumnHeader>
           <Table.ColumnHeader>Best</Table.ColumnHeader>
           <Table.ColumnHeader>Average</Table.ColumnHeader>
-          <Table.ColumnHeader colSpan={solveCount} textAlign="center">
+          <Table.ColumnHeader>Representing</Table.ColumnHeader>
+          <Table.ColumnHeader colSpan={solveCount} textAlign="left">
             Solves
           </Table.ColumnHeader>
         </Table.Row>
@@ -84,6 +85,7 @@ export default function ResultsTable({
                 {formatAttemptResult(competitorResult.average, eventId)}{" "}
                 {recordTagBadge(competitorResult.regional_average_record)}
               </Table.Cell>
+              <Table.Cell>{competitorResult.country_iso2}</Table.Cell>
               <AttemptsCells
                 attempts={definedAttempts}
                 bestResultIndex={bestResultIndex}

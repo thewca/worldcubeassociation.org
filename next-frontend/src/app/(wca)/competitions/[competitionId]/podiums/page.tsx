@@ -14,6 +14,7 @@ import _ from "lodash";
 import { getT } from "@/lib/i18n/get18n";
 import { getCompetitionInfo } from "@/lib/wca/competitions/getCompetitionInfo";
 import { EventCard, InfoCard } from "@/components/competitions/Cards";
+import { MarkdownFirstImage } from "@/components/MarkdownFirstImage";
 
 export default async function PodiumsPage({
   params,
@@ -45,7 +46,7 @@ export default async function PodiumsPage({
     <Container bg="bg">
       <HStack gap="8" alignItems="stretch">
         <InfoCard competitionInfo={competitionInfo} t={t} />
-        <EventCard competitionInfo={competitionInfo} />s
+        <MarkdownFirstImage content={competitionInfo.information} />
       </HStack>
       <Card.Root variant="plain" mt="8">
         <Card.Body>
