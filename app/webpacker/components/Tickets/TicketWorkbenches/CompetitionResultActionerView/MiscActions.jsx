@@ -2,8 +2,9 @@ import React from 'react';
 import { Header, List, Segment } from 'semantic-ui-react';
 import AbortProcess from './MiscActions/AbortProcess';
 import EventsMergedData from './MiscActions/EventsMergedData';
+import WarningsAndMessageButton from './MiscActions/WarningsAndMessageButton';
 
-export default function MiscActions({ ticketDetails, updateStatus }) {
+export default function MiscActions({ ticketDetails }) {
   return (
     <Segment>
       <Header>Misc Actions</Header>
@@ -11,11 +12,15 @@ export default function MiscActions({ ticketDetails, updateStatus }) {
         <List.Item>
           <AbortProcess
             ticketDetails={ticketDetails}
-            updateStatus={updateStatus}
           />
         </List.Item>
         <List.Item>
           <EventsMergedData
+            ticketDetails={ticketDetails}
+          />
+        </List.Item>
+        <List.Item>
+          <WarningsAndMessageButton
             ticketDetails={ticketDetails}
           />
         </List.Item>

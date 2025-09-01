@@ -5,6 +5,7 @@ class TicketsController < ApplicationController
 
   before_action :authenticate_user!
   before_action -> { check_ticket_errors(TicketLog.action_types[:update_status]) }, only: [:update_status]
+  before_action -> { check_ticket_errors(TicketLog.action_types[:metadata_action], TicketsCompetitionResult::ACTION_TYPE[:verify_warnings]) }, only: [:verify_warnings]
   before_action -> { check_ticket_errors(TicketLog.action_types[:metadata_action], TicketsCompetitionResult::ACTION_TYPE[:merge_inbox_results]) }, only: [:merge_inbox_results]
   before_action -> { check_ticket_errors(TicketLog.action_types[:metadata_action], TicketsEditPerson::ACTION_TYPE[:reject_edit_person_request]) }, only: [:reject_edit_person_request]
   before_action -> { check_ticket_errors(TicketLog.action_types[:metadata_action], TicketsEditPerson::ACTION_TYPE[:sync_edit_person_request]) }, only: [:sync_edit_person_request]
@@ -206,6 +207,20 @@ class TicketsController < ApplicationController
     competition = Competition.find(params.require(:competition_id))
 
     render json: competition.inbox_results.includes(:inbox_person)
+  end
+
+  def verify_warnings
+    ActiveRecord::Base.transaction do
+      @ticket.metadata.update!(status: TicketsCompetitionResult.statuses[:warnings_verified])
+      @ticket.ticket_logs.create!(
+        action_type: @action_type,
+        acting_user_id: current_user.id,
+        acting_stakeholder_id: @acting_stakeholder.id,
+        metadata_action: @metadata_action,
+      )
+    end
+
+    render status: :ok, json: { success: true }
   end
 
   def merge_inbox_results

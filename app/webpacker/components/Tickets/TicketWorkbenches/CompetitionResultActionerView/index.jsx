@@ -7,11 +7,7 @@ import CreateWcaIds from './CreateWcaIds';
 import FinalSteps from './FinalSteps';
 import MiscActions from './MiscActions';
 
-export default function CompetitionResultActionerView({
-  ticketDetails,
-  updateStatus,
-  currentStakeholder,
-}) {
+export default function CompetitionResultActionerView({ ticketDetails, currentStakeholder }) {
   const { ticket: { metadata: { status } } } = ticketDetails;
 
   return (
@@ -20,19 +16,17 @@ export default function CompetitionResultActionerView({
       <ViewForStatus
         status={status}
         ticketDetails={ticketDetails}
-        updateStatus={updateStatus}
         currentStakeholder={currentStakeholder}
       />
       <MiscActions
         ticketDetails={ticketDetails}
-        updateStatus={updateStatus}
       />
     </>
   );
 }
 
 function ViewForStatus({
-  status, ticketDetails, updateStatus, currentStakeholder,
+  status, ticketDetails, currentStakeholder,
 }) {
   switch (status) {
     case ticketsCompetitionResultStatuses.submitted:
@@ -42,7 +36,7 @@ function ViewForStatus({
       return (
         <WarningsVerification
           ticketDetails={ticketDetails}
-          updateStatus={updateStatus}
+          currentStakeholder={currentStakeholder}
         />
       );
 
