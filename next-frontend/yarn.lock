@@ -13001,7 +13001,7 @@ __metadata:
     react-icons: "npm:^5.5.0"
     react-markdown: "npm:^10.1.0"
     react-world-flags: "npm:^1.6.0"
-    swagger-ui-react: "npm:^5.27.1"
+    swagger-ui-react: "npm:^5.28.0"
     typescript: "npm:^5"
     vitest: "npm:^3.2.4"
   languageName: unknown
@@ -15118,7 +15118,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"sha.js@npm:^2.4.11":
+"sha.js@npm:^2.4.12":
   version: 2.4.12
   resolution: "sha.js@npm:2.4.12"
   dependencies:
@@ -15910,9 +15910,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"swagger-ui-react@npm:^5.27.1":
-  version: 5.27.1
-  resolution: "swagger-ui-react@npm:5.27.1"
+"swagger-ui-react@npm:^5.28.0":
+  version: 5.28.0
+  resolution: "swagger-ui-react@npm:5.28.0"
   dependencies:
     "@babel/runtime-corejs3": "npm:^7.27.1"
     "@scarf/scarf": "npm:=1.4.0"
@@ -15941,16 +15941,16 @@ __metadata:
     remarkable: "npm:^2.0.1"
     reselect: "npm:^5.1.1"
     serialize-error: "npm:^8.1.0"
-    sha.js: "npm:^2.4.11"
+    sha.js: "npm:^2.4.12"
     swagger-client: "npm:^3.35.5"
     url-parse: "npm:^1.5.10"
     xml: "npm:=1.0.1"
     xml-but-prettier: "npm:^1.0.1"
     zenscroll: "npm:^4.0.2"
   peerDependencies:
-    react: ">=16.8.0 <19"
-    react-dom: ">=16.8.0 <19"
-  checksum: 10c0/f5e2a58e846611ce34aad2220e0d2ec6eed9d830399a20f1f9619a790f272cce4c9d5be167865ad3f6536940a6fc3ee4348267f3c69bdd7a9bd10b9315e33af9
+    react: ">=16.8.0 <20"
+    react-dom: ">=16.8.0 <20"
+  checksum: 10c0/5464df86757aaf20421e02a29fd61806ab802764f159293f33aaca7d0507e46bab059876b2ebc2387cffd7b540fe1dd0dae27a5b89d182bb649846b1b432d27e
   languageName: node
   linkType: hard
 
