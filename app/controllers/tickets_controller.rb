@@ -7,6 +7,7 @@ class TicketsController < ApplicationController
   before_action -> { check_ticket_errors(TicketLog.action_types[:update_status]) }, only: [:update_status]
   before_action -> { check_ticket_errors(TicketLog.action_types[:metadata_action], TicketsCompetitionResult::ACTION_TYPE[:merge_inbox_results]) }, only: [:merge_inbox_results]
   before_action -> { check_ticket_errors(TicketLog.action_types[:metadata_action], TicketsEditPerson::ACTION_TYPE[:reject_edit_person_request]) }, only: [:reject_edit_person_request]
+  before_action -> { check_ticket_errors(TicketLog.action_types[:metadata_action], TicketsEditPerson::ACTION_TYPE[:sync_edit_person_request]) }, only: [:sync_edit_person_request]
   before_action -> { redirect_to_root_unless_user(:can_admin_results?) }, only: %i[delete_inbox_persons]
 
   SORT_WEIGHT_LAMBDAS = {
@@ -289,7 +290,37 @@ class TicketsController < ApplicationController
         field_value: ticket_status,
       )
     end
-
     render status: :ok, json: { success: true }
+  end
+
+  def sync_edit_person_request
+    person = @ticket.metadata.person
+    any_request_still_valid = @ticket.metadata.tickets_edit_person_fields.any? do |edit_person_field|
+      person.send(edit_person_field.field_name).to_s != edit_person_field.new_value
+    end
+
+    unless any_request_still_valid
+      return render status: :unprocessable_entity, json: {
+        error: "All requested changes have already been applied. If you think this is correct, please reject the request.",
+      }
+    end
+
+    ActiveRecord::Base.transaction do
+      @ticket.metadata.tickets_edit_person_fields.each do |edit_person_field|
+        if person.send(edit_person_field.field_name).to_s == edit_person_field.new_value
+          edit_person_field.delete
+        else
+          edit_person_field.update!(old_value: person.send(edit_person_field.field_name).to_s)
+        end
+      end
+      @ticket.ticket_logs.create!(
+        action_type: @action_type,
+        acting_user_id: current_user.id,
+        acting_stakeholder_id: @acting_stakeholder.id,
+        metadata_action: @metadata_action,
+      )
+    end
+
+    render status: :ok, json: @ticket
   end
 end

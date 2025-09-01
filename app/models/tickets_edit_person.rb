@@ -17,6 +17,7 @@ class TicketsEditPerson < ApplicationRecord
     create_edit_person_change: "create_edit_person_change",
     update_edit_person_change: "update_edit_person_change",
     delete_edit_person_change: "delete_edit_person_change",
+    sync_edit_person_request: "sync_edit_person_request",
   }.freeze
 
   def metadata_actions_allowed_for(ticket_stakeholder)
@@ -26,6 +27,7 @@ class TicketsEditPerson < ApplicationRecord
         ACTION_TYPE[:create_edit_person_change],
         ACTION_TYPE[:update_edit_person_change],
         ACTION_TYPE[:delete_edit_person_change],
+        ACTION_TYPE[:sync_edit_person_request],
       ]
     else
       []
