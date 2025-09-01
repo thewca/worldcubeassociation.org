@@ -63,6 +63,7 @@ module Admin
         include: {
           competition: {
             only: %w[id name city_name country_id start_date],
+            include: [],
           },
         },
       )

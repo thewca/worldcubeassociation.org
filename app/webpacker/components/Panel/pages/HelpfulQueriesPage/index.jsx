@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo } from 'react';
 import {
   Form, Header, Label, Loader, Message, Segment, Tab, Table,
 } from 'semantic-ui-react';
@@ -7,11 +7,12 @@ import { IdWcaSearch } from '../../../SearchWidget/WcaSearch';
 import SEARCH_MODELS from '../../../SearchWidget/SearchModel';
 import { fetchJsonOrError } from '../../../../lib/requests/fetchWithAuthenticityToken';
 import { viewUrls, competitionUrl } from '../../../../lib/requests/routes.js.erb';
+import useInputState from '../../../../lib/hooks/useInputState';
 
-const hasWcaId = (val) => typeof val === 'string' && val.trim().length > 0;
+const hasWcaId = (val) => val?.trim()?.length > 0;
 
 const statusColor = (s) => {
-  switch ((s || '').toLowerCase()) {
+  switch ((s?.toLowerCase() || '')) {
     case 'accepted': return 'green';
     case 'pending': return 'grey';
     case 'waiting_list': return 'yellow';
@@ -24,15 +25,7 @@ const statusColor = (s) => {
 async function fetchRegistrations(wcaId) {
   if (!hasWcaId(wcaId)) return [];
   const { data } = await fetchJsonOrError(viewUrls.persons.registrations(wcaId));
-  const arr = data || [];
-  return arr.map((r) => ({
-    id: r.competition.id,
-    name: r.competition.name,
-    city_name: r.competition.city_name,
-    country_id: r.competition.country_id,
-    start_date: r.competition.start_date,
-    status: r.competing_status,
-  }));
+  return (data || []);
 }
 
 async function fetchOrganized(wcaId) {
@@ -55,40 +48,36 @@ function RegistrationsPane({ wcaId }) {
     enabled,
   });
 
-  if (!enabled) return <Message info content="Select a WCA ID to load registrations." />;
-  if (!isFetching && data.length === 0) return <Message content="No registrations found for this competitor." />;
+  if (isFetching) return <Loader active inline />;
 
-  return (
-    <>
-      <Loader active={isFetching} inline />
-      {data.length > 0 && (
-        <Table celled striped>
-          <Table.Header>
-            <Table.Row>
-              <Table.HeaderCell>Competition</Table.HeaderCell>
-              <Table.HeaderCell>City</Table.HeaderCell>
-              <Table.HeaderCell>Country</Table.HeaderCell>
-              <Table.HeaderCell>Date</Table.HeaderCell>
-              <Table.HeaderCell>Status</Table.HeaderCell>
-            </Table.Row>
-          </Table.Header>
-          <Table.Body>
-            {data.map((row) => (
-              <Table.Row key={row.id}>
-                <Table.Cell><a href={competitionUrl(row.id)}>{row.name}</a></Table.Cell>
-                <Table.Cell>{row.city_name}</Table.Cell>
-                <Table.Cell>{row.country_id}</Table.Cell>
-                <Table.Cell>{row.start_date}</Table.Cell>
-                <Table.Cell>
-                  <Label basic color={statusColor(row.status)}>{row.status}</Label>
-                </Table.Cell>
-              </Table.Row>
-            ))}
-          </Table.Body>
-        </Table>
-      )}
-    </>
-  );
+  return data.length > 0 ? (
+    <Table celled striped>
+      <Table.Header>
+        <Table.Row>
+          <Table.HeaderCell>Competition</Table.HeaderCell>
+          <Table.HeaderCell>City</Table.HeaderCell>
+          <Table.HeaderCell>Country</Table.HeaderCell>
+          <Table.HeaderCell>Date</Table.HeaderCell>
+          <Table.HeaderCell>Status</Table.HeaderCell>
+        </Table.Row>
+      </Table.Header>
+      <Table.Body>
+        {data.map((row) => (
+          <Table.Row key={row.competition.id}>
+            <Table.Cell>
+              <a href={competitionUrl(row.competition.id)}>{row.competition.name}</a>
+            </Table.Cell>
+            <Table.Cell>{row.competition.city_name}</Table.Cell>
+            <Table.Cell>{row.competition.country_id}</Table.Cell>
+            <Table.Cell>{row.competition.start_date}</Table.Cell>
+            <Table.Cell>
+              <Label basic color={statusColor(row.competing_status)}>{row.competing_status}</Label>
+            </Table.Cell>
+          </Table.Row>
+        ))}
+      </Table.Body>
+    </Table>
+  ) : <Message content="No registrations found for this competitor." />;
 }
 
 function OrganizedPane({ wcaId }) {
@@ -99,36 +88,30 @@ function OrganizedPane({ wcaId }) {
     enabled,
   });
 
-  if (!enabled) return <Message info content="Select a WCA ID to load organized competitions." />;
-  if (!isFetching && data.length === 0) return <Message content="No organized competitions found." />;
+  if (isFetching) return <Loader active inline />;
 
-  return (
-    <>
-      <Loader active={isFetching} inline />
-      {data.length > 0 && (
-        <Table celled compact striped>
-          <Table.Header>
-            <Table.Row>
-              <Table.HeaderCell>Competition</Table.HeaderCell>
-              <Table.HeaderCell>City</Table.HeaderCell>
-              <Table.HeaderCell>Country</Table.HeaderCell>
-              <Table.HeaderCell>Date</Table.HeaderCell>
-            </Table.Row>
-          </Table.Header>
-          <Table.Body>
-            {data.map((row) => (
-              <Table.Row key={row.id}>
-                <Table.Cell><a href={competitionUrl(row.id)}>{row.name}</a></Table.Cell>
-                <Table.Cell>{row.city_name}</Table.Cell>
-                <Table.Cell>{row.country_id}</Table.Cell>
-                <Table.Cell>{row.start_date}</Table.Cell>
-              </Table.Row>
-            ))}
-          </Table.Body>
-        </Table>
-      )}
-    </>
-  );
+  return data.length > 0 ? (
+    <Table celled compact striped>
+      <Table.Header>
+        <Table.Row>
+          <Table.HeaderCell>Competition</Table.HeaderCell>
+          <Table.HeaderCell>City</Table.HeaderCell>
+          <Table.HeaderCell>Country</Table.HeaderCell>
+          <Table.HeaderCell>Date</Table.HeaderCell>
+        </Table.Row>
+      </Table.Header>
+      <Table.Body>
+        {data.map((row) => (
+          <Table.Row key={row.id}>
+            <Table.Cell><a href={competitionUrl(row.id)}>{row.name}</a></Table.Cell>
+            <Table.Cell>{row.city_name}</Table.Cell>
+            <Table.Cell>{row.country_id}</Table.Cell>
+            <Table.Cell>{row.start_date}</Table.Cell>
+          </Table.Row>
+        ))}
+      </Table.Body>
+    </Table>
+  ) : <Message content="No organized competitions found." />;
 }
 
 function DelegatedPane({ wcaId }) {
@@ -139,47 +122,41 @@ function DelegatedPane({ wcaId }) {
     enabled,
   });
 
-  if (!enabled) return <Message info content="Select a WCA ID to load delegated competitions." />;
-  if (!isFetching && data.length === 0) return <Message content="No delegated competitions found." />;
+  if (isFetching) return <Loader active inline />;
 
-  return (
-    <>
-      <Loader active={isFetching} inline />
-      {data.length > 0 && (
-        <Table celled compact striped>
-          <Table.Header>
-            <Table.Row>
-              <Table.HeaderCell>Competition</Table.HeaderCell>
-              <Table.HeaderCell>City</Table.HeaderCell>
-              <Table.HeaderCell>Country</Table.HeaderCell>
-              <Table.HeaderCell>Date</Table.HeaderCell>
-            </Table.Row>
-          </Table.Header>
-          <Table.Body>
-            {data.map((row) => (
-              <Table.Row key={row.id}>
-                <Table.Cell><a href={competitionUrl(row.id)}>{row.name}</a></Table.Cell>
-                <Table.Cell>{row.city_name}</Table.Cell>
-                <Table.Cell>{row.country_id}</Table.Cell>
-                <Table.Cell>{row.start_date}</Table.Cell>
-              </Table.Row>
-            ))}
-          </Table.Body>
-        </Table>
-      )}
-    </>
-  );
+  return data.length > 0 ? (
+    <Table celled compact striped>
+      <Table.Header>
+        <Table.Row>
+          <Table.HeaderCell>Competition</Table.HeaderCell>
+          <Table.HeaderCell>City</Table.HeaderCell>
+          <Table.HeaderCell>Country</Table.HeaderCell>
+          <Table.HeaderCell>Date</Table.HeaderCell>
+        </Table.Row>
+      </Table.Header>
+      <Table.Body>
+        {data.map((row) => (
+          <Table.Row key={row.id}>
+            <Table.Cell><a href={competitionUrl(row.id)}>{row.name}</a></Table.Cell>
+            <Table.Cell>{row.city_name}</Table.Cell>
+            <Table.Cell>{row.country_id}</Table.Cell>
+            <Table.Cell>{row.start_date}</Table.Cell>
+          </Table.Row>
+        ))}
+      </Table.Body>
+    </Table>
+  ) : <Message content="No delegated competitions found." />;
 }
 
-function HelpfulQueriesPage() {
-  const [wcaId, setWcaId] = useState();
-
-  const panes = [
+function HelpfulTabs({ wcaId }) {
+  const panes = useMemo(() => ([
     {
       menuItem: 'Competitor Registrations',
       render: () => (
         <Tab.Pane>
-          <RegistrationsPane wcaId={wcaId} />
+          {!hasWcaId(wcaId)
+            ? <Message info content="Select a WCA ID to load registrations." />
+            : <RegistrationsPane wcaId={wcaId} />}
         </Tab.Pane>
       ),
     },
@@ -187,7 +164,9 @@ function HelpfulQueriesPage() {
       menuItem: 'Organized Competitions',
       render: () => (
         <Tab.Pane>
-          <OrganizedPane wcaId={wcaId} />
+          {!hasWcaId(wcaId)
+            ? <Message info content="Select a WCA ID to load organized competitions." />
+            : <OrganizedPane wcaId={wcaId} />}
         </Tab.Pane>
       ),
     },
@@ -195,11 +174,19 @@ function HelpfulQueriesPage() {
       menuItem: 'Delegated Competitions',
       render: () => (
         <Tab.Pane>
-          <DelegatedPane wcaId={wcaId} />
+          {!hasWcaId(wcaId)
+            ? <Message info content="Select a WCA ID to load delegated competitions." />
+            : <DelegatedPane wcaId={wcaId} />}
         </Tab.Pane>
       ),
     },
-  ];
+  ]), [wcaId]);
+
+  return <Tab panes={panes} />;
+}
+
+function HelpfulQueriesPage() {
+  const [wcaId, setWcaId] = useInputState();
 
   return (
     <>
@@ -213,11 +200,11 @@ function HelpfulQueriesPage() {
             model={SEARCH_MODELS.person}
             multiple={false}
             value={wcaId}
-            onChange={(_, { value }) => setWcaId(value || '')}
+            onChange={setWcaId}
           />
         </Form>
       </Segment>
-      <Tab panes={panes} />
+      <HelpfulTabs wcaId={wcaId} />
     </>
   );
 }
