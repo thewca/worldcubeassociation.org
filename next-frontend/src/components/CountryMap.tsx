@@ -1,16 +1,14 @@
-"use client";
-
 import { Text } from "@chakra-ui/react";
 import WCACountries from "@/lib/wca/data/countries";
-import { useT } from "@/lib/i18n/useI18n";
+import { TFunction } from "i18next";
 
 type CountryMapProps = {
   code: string;
+  t: TFunction;
   bold?: boolean;
 };
 
-const CountryMap = ({ code, bold = false }: CountryMapProps) => {
-  const { t } = useT();
+const CountryMap = ({ code, t, bold = false }: CountryMapProps) => {
   const translatedCountryName = t(`countries.${code}`);
   const countryName =
     translatedCountryName ||
