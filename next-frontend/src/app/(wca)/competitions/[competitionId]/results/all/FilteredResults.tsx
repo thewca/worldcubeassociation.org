@@ -6,7 +6,7 @@ import { Heading, VStack } from "@chakra-ui/react";
 import EventSelector from "@/components/EventSelector";
 import _ from "lodash";
 import events from "@/lib/wca/data/events";
-import ResultsTable from "@/components/results/ResultsTable";
+import { ResultsTable } from "@/components/results/ResultsTable";
 import { useT } from "@/lib/i18n/useI18n";
 
 export default function FilteredResults({

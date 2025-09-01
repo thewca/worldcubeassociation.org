@@ -78,13 +78,14 @@ const afterCompetitionTabs = (
       }),
       menuKey: "all",
     },
-    // {
-    //   i18nKey: "competitions.tab.competitors",
-    //   href: route({
-    //     pathname: "/competitions/[competitionId]/results/by_person",
-    //     query: { competitionId: competitionInfo.id },
-    //   }),
-    // },
+    {
+      i18nKey: "competitions.nav.menu.by_person",
+      href: route({
+        pathname: "/competitions/[competitionId]/results/byPerson",
+        query: { competitionId: competitionInfo.id },
+      }),
+      menuKey: "byPerson",
+    },
     // {
     //   i18nKey: "competitions.tab.scrambles",
     //   href: route({

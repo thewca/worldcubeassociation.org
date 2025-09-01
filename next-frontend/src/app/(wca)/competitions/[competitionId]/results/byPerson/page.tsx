@@ -1,11 +1,13 @@
-import { Card, Container, HStack, Text } from "@chakra-ui/react";
+import { Card, Container, Heading, HStack, Link, Text } from "@chakra-ui/react";
 import _ from "lodash";
 import { getT } from "@/lib/i18n/get18n";
 import { getCompetitionInfo } from "@/lib/wca/competitions/getCompetitionInfo";
 import { InfoCard } from "@/components/competitions/Cards";
 import { MarkdownFirstImage } from "@/components/MarkdownFirstImage";
 import { getCompetitionResults } from "@/lib/wca/competitions/getCompetitionResults";
-import FilteredResults from "@/app/(wca)/competitions/[competitionId]/results/all/FilteredResults";
+import { Fragment } from "react";
+import { ByPersonTable } from "@/components/results/ResultsTable";
+import { route } from "nextjs-routes";
 
 export default async function PodiumsPage({
   params,
@@ -31,7 +33,10 @@ export default async function PodiumsPage({
 
   const competitionResults = podiumsRequest.data!;
 
-  const resultsByEvent = _.groupBy(competitionResults, "event_id");
+  const resultsByPerson = _.groupBy(
+    competitionResults.toSorted((a, b) => a.name.localeCompare(b.name)),
+    "wca_id",
+  );
 
   return (
     <Container bg="bg">
@@ -51,10 +56,21 @@ export default async function PodiumsPage({
               Results
             </Text>
           </Card.Title>
-          <FilteredResults
-            competitionInfo={competitionInfo}
-            resultsByEvent={resultsByEvent}
-          />
+          {_.map(resultsByPerson, (results, wcaId) => (
+            <Fragment key={wcaId}>
+              <Heading size="2xl">
+                <Link
+                  href={route({
+                    pathname: "/persons/[wcaId]",
+                    query: { wcaId },
+                  })}
+                >
+                  {results[0].name}
+                </Link>
+              </Heading>
+              <ByPersonTable results={results} isAdmin={false} t={t} />
+            </Fragment>
+          ))}
         </Card.Body>
       </Card.Root>
     </Container>
