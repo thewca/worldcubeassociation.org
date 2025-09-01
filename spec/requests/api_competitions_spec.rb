@@ -549,14 +549,11 @@ RSpec.describe "API Competitions" do
 
         it "prevents from CSRF attacks" do
           headers["ACCESS_TOKEN"] = "INVALID"
-          wcif_before = competition.to_wcif
           wcif = create_wcif_with_events(%w[333])
 
-          patch api_v0_competition_update_wcif_path(competition), params: wcif.to_json, headers: headers
-
-          wcif_after = competition.reload.to_wcif
-          expect(response).to have_http_status(:redirect)
-          expect(wcif_before).to eq(wcif_after)
+          expect do
+            patch api_v0_competition_update_wcif_path(competition), params: wcif.to_json, headers: headers
+          end.to raise_exception ActionController::InvalidAuthenticityToken
         end
       end
 

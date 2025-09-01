@@ -590,7 +590,6 @@ en:
         new_password_confirmation: 'Re-enter new password'
 
     sessions:
-      expired: "Your session expired. Please try again."
       new:
         sign_in: "Sign in"
         #context: used when handling two-factor authentication for a user
