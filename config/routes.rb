@@ -198,9 +198,6 @@ Rails.application.routes.draw do
 
   get 'persons/new_id' => 'admin/persons#generate_ids'
   get '/persons/results' => 'admin/persons#results', as: :person_results
-  get '/persons/registrations' => 'admin/persons#registrations', as: :person_registrations
-  get '/persons/organized-competitions' => 'admin/persons#organized_competitions', as: :person_organized_competitions
-  get '/persons/delegated-competitions' => 'admin/persons#delegated_competitions', as: :person_delegated_competitions
   resources :persons, only: %i[index show]
   post 'persons' => 'admin/persons#create'
 
@@ -335,6 +332,9 @@ Rails.application.routes.draw do
   get '/admin/complete_persons' => 'admin#complete_persons'
   post '/admin/complete_persons' => 'admin#do_complete_persons'
   get '/admin/peek_unfinished_results' => 'admin#peek_unfinished_results'
+  get '/admin/registrations' => 'admin#registrations', as: :helpful_queries_registrations
+  get '/admin/organized-competitions' => 'admin#organized_competitions', as: :helpful_queries_organized_competitions
+  get '/admin/delegated-competitions' => 'admin#delegated_competitions', as: :helpful_queries_delegated_competitions
 
   get '/search' => 'search_results#index'
 

@@ -24,19 +24,19 @@ const statusColor = (s) => {
 
 async function fetchRegistrations(wcaId) {
   if (!hasWcaId(wcaId)) return [];
-  const { data } = await fetchJsonOrError(viewUrls.persons.registrations(wcaId));
+  const { data } = await fetchJsonOrError(viewUrls.helpfulQueries.registrations(wcaId));
   return (data || []);
 }
 
 async function fetchOrganized(wcaId) {
   if (!hasWcaId(wcaId)) return [];
-  const { data } = await fetchJsonOrError(viewUrls.persons.organizedCompetitions(wcaId));
+  const { data } = await fetchJsonOrError(viewUrls.helpfulQueries.organizedCompetitions(wcaId));
   return (data || []);
 }
 
 async function fetchDelegated(wcaId) {
   if (!hasWcaId(wcaId)) return [];
-  const { data } = await fetchJsonOrError(viewUrls.persons.delegatedCompetitions(wcaId));
+  const { data } = await fetchJsonOrError(viewUrls.helpfulQueries.delegatedCompetitions(wcaId));
   return (data || []);
 }
 

@@ -211,6 +211,52 @@ class AdminController < ApplicationController
     voters User.regional_voters, "regional-wca-voters"
   end
 
+  def registrations
+    person_wca_id = params.require(:wcaId)
+
+    person = Person.current.find_by!(wca_id: person_wca_id)
+    registrations = person.user.registrations
+                          .joins(:competition)
+                          .merge(Competition.not_over)
+                          .order(start_date: :asc)
+
+    render json: registrations.as_json(
+      only: %w[competing_status],
+      include: {
+        competition: {
+          only: %w[id name city_name country_id start_date],
+          include: [],
+        },
+      },
+    )
+  end
+
+  def organized_competitions
+    person_wca_id = params.require(:wcaId)
+
+    person = Person.current.find_by!(wca_id: person_wca_id)
+    competitions = person.user.organized_competitions
+                         .over.visible.not_cancelled
+                         .order(start_date: :desc)
+
+    render json: competitions.as_json(
+      only: %w[id name city_name country_id start_date],
+    )
+  end
+
+  def delegated_competitions
+    person_wca_id = params.require(:wcaId)
+
+    person = Person.current.find_by!(wca_id: person_wca_id)
+    competitions = person.user.delegated_competitions
+                         .over.visible.not_cancelled
+                         .order(start_date: :desc)
+
+    render json: competitions.as_json(
+      only: %w[id name city_name country_id start_date],
+    )
+  end
+
   private def voters(users, filename)
     csv = CSV.generate do |line|
       users.each do |user|
