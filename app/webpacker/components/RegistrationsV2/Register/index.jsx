@@ -110,7 +110,7 @@ function FormObjectWrapper({
     return <Loading />;
   }
 
-  const { preferredEvents, personalRecords, qualifications_wcif: qualifications } = steps.find(
+  const { preferredEvents, personalRecords, qualification_wcif: qualifications } = steps.find(
     (stepConfig) => stepConfig.key === 'competing',
   ).parameters;
 
