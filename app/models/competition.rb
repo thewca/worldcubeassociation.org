@@ -32,6 +32,7 @@ class Competition < ApplicationRecord
   has_many :series_competitions, -> { readonly }, through: :competition_series, source: :competitions
   has_many :series_registrations, -> { readonly }, through: :series_competitions, source: :registrations
   belongs_to :posting_user, optional: true, foreign_key: 'posting_by', class_name: "User"
+  belongs_to :posted_user, optional: true, foreign_key: 'results_posted_by', class_name: "User"
   has_many :inbox_results, dependent: :delete_all
   has_many :inbox_persons, dependent: :delete_all
   has_many :inbox_scramble_sets, dependent: :delete_all
@@ -702,6 +703,7 @@ class Competition < ApplicationRecord
              'series_competitions',
              'series_registrations',
              'posting_user',
+             'posted_user',
              'inbox_results',
              'inbox_persons',
              'inbox_scramble_sets',

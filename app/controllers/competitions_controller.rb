@@ -26,9 +26,6 @@ class CompetitionsController < ApplicationController
     admin_edit
     disconnect_payment_integration
   ]
-  before_action -> { redirect_to_root_unless_user(:can_admin_results?) }, only: [
-    :post_results,
-  ]
   before_action -> { redirect_to_root_unless_user(:can_create_competitions?) }, only: [
     :new,
   ]
@@ -88,22 +85,6 @@ class CompetitionsController < ApplicationController
   # Rubocop is unhappy about all the things we do in this controller action,
   # which is understandable.
   def index
-  end
-
-  def post_results
-    comp = competition_from_params
-
-    error = CompetitionResultsImport.post_results_error(comp)
-
-    if error
-      flash[:danger] = error
-      return redirect_to competition_admin_import_results_path(comp)
-    end
-
-    CompetitionResultsImport.post_results(comp, current_user)
-
-    flash[:success] = t('competitions.messages.results_posted')
-    redirect_to competition_admin_import_results_path(comp)
   end
 
   def edit_events
