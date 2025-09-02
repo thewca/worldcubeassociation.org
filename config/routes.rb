@@ -378,6 +378,7 @@ Rails.application.routes.draw do
 
           member do
             get 'payment_ticket', to: 'registrations#payment_ticket'
+            get 'config', to: 'registrations#registration_config', as: :registration_config
           end
 
           collection do
