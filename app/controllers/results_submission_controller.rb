@@ -64,6 +64,13 @@ class ResultsSubmissionController < ApplicationController
     render status: :ok, json: job_run
   end
 
+  def upload_scrambles
+    @competition = Competition.includes(
+      scramble_file_uploads: ScrambleFileUpload::SERIALIZATION_INCLUDES,
+      **ScrambleFileUpload::SERIALIZATION_INCLUDES,
+    ).find(params[:competition_id])
+  end
+
   def upload_json
     competition = competition_from_params
 
