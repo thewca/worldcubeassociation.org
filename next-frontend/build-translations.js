@@ -30,11 +30,6 @@ function addCountryNames(translation, lang) {
   }
   const iso3166CountryCodes = Object.keys(countries.getAlpha2Codes());
 
-  // Load the language file for the country names
-  countries.registerLocale(
-    require(`i18n-iso-countries/langs/${iso639LanguageCode}.json`),
-  );
-
   iso3166CountryCodes.forEach((iso3166CountryCode) => {
     const languageKey = `countries.${iso3166CountryCode}`;
     if (!translation[languageKey]) {
