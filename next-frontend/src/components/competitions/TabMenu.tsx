@@ -58,33 +58,19 @@ const afterCompetitionTabs = (
 ) => {
   return [
     {
+      i18nKey: "competitions.nav.menu.general",
+      href: route({
+        pathname: "/competitions/[competitionId]",
+        query: { competitionId: competitionInfo.id },
+      }),
+    },
+    {
       i18nKey: "competitions.nav.menu.podiums",
       href: route({
         pathname: "/competitions/[competitionId]/podiums",
         query: { competitionId: competitionInfo.id },
       }),
     },
-    // {
-    //   i18nKey: "competitions.tab.results",
-    //   href: route({
-    //     pathname: "/competitions/[competitionId]/results/all",
-    //     query: { competitionId: competitionInfo.id },
-    //   }),
-    // },
-    // {
-    //   i18nKey: "competitions.tab.competitors",
-    //   href: route({
-    //     pathname: "/competitions/[competitionId]/results/by_person",
-    //     query: { competitionId: competitionInfo.id },
-    //   }),
-    // },
-    // {
-    //   i18nKey: "competitions.tab.scrambles",
-    //   href: route({
-    //     pathname: "/competitions/[competitionId]/scrambles",
-    //     query: { competitionId: competitionInfo.id },
-    //   }),
-    // },
   ];
 };
 
