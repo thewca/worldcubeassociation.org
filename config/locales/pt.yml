@@ -1191,6 +1191,22 @@ pt:
         400_contact_html: >-
           Se acha que isto é um erro, por favor <a href=%{contact_url}>clique
           aqui</a> para o reportar.
+        #original_hash: 508c106
+        comp_not_found: Competição Não Encontrada
+        #original_hash: c0e86d5
+        comp_not_found_action: >-
+          Não encontrámos a competição com o ID "%{comp_id}". Pesquise
+          utilizando a barra de pesquisa.
+        #original_hash: 695f7ba
+        comp_not_found_action_2: >-
+          Se seguiu um link de outro site para chegar aqui, por favor informe
+          esse site que o link está incorreto.
+        #original_hash: 7f8f419
+        session_expired: Sessão Expirou
+        #original_hash: f3e688a
+        session_expired_action: >-
+          A sua sessão expirou. Atualize a página, tente novamente ou inicie
+          sessão novamente para continuar.
     doorkeeper:
       applications:
         help:
@@ -4501,8 +4517,8 @@ pt:
         newcomer_checks: Verificações Novos Competidores
         #original_hash: f3d6278
         submit_results: Submeter resultados
-        #original_hash: e2d046b
-        match_scrambles: Submeter embaralhamentos
+        #original_hash: dd2e98f
+        upload_scrambles: Carregar embaralhamentos
         #original_hash: 4c9f914
         delegate_report: Relatório do Delegado
         #original_hash: b233e77
