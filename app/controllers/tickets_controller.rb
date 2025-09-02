@@ -7,6 +7,7 @@ class TicketsController < ApplicationController
   before_action -> { check_ticket_errors(TicketLog.action_types[:update_status]) }, only: [:update_status]
   before_action -> { check_ticket_errors(TicketLog.action_types[:metadata_action], TicketsCompetitionResult::ACTION_TYPE[:verify_warnings]) }, only: [:verify_warnings]
   before_action -> { check_ticket_errors(TicketLog.action_types[:metadata_action], TicketsCompetitionResult::ACTION_TYPE[:merge_inbox_results]) }, only: [:merge_inbox_results]
+  before_action -> { check_ticket_errors(TicketLog.action_types[:metadata_action], TicketsEditPerson::ACTION_TYPE[:approve_edit_person_request]) }, only: [:approve_edit_person_request]
   before_action -> { check_ticket_errors(TicketLog.action_types[:metadata_action], TicketsEditPerson::ACTION_TYPE[:reject_edit_person_request]) }, only: [:reject_edit_person_request]
   before_action -> { check_ticket_errors(TicketLog.action_types[:metadata_action], TicketsEditPerson::ACTION_TYPE[:sync_edit_person_request]) }, only: [:sync_edit_person_request]
   before_action -> { redirect_to_root_unless_user(:can_admin_results?) }, only: %i[delete_inbox_persons]
@@ -288,6 +289,43 @@ class TicketsController < ApplicationController
     end
 
     render status: :ok, json: rounds_data
+  end
+
+  def approve_edit_person_request
+    change_type = params.require(:change_type)
+    person = @ticket.metadata.person
+    edit_params = @ticket.metadata.tickets_edit_person_fields.to_h do |edit_person_field|
+      # Temporary hack till we migrate to using country_iso2 everywhere
+      if edit_person_field.field_name == TicketsEditPersonField.field_names[:country_iso2]
+        ['country_id', Country.c_find_by_iso2(edit_person_field.new_value).id]
+      else
+        [edit_person_field.field_name, edit_person_field.new_value]
+      end
+    end
+
+    ticket_status = TicketsEditPerson.statuses[:closed]
+
+    if @ticket.metadata.out_of_sync
+      return render status: :unprocessable_content, json: {
+        error: "The person's data has changed since this request was created. Please sync the request before approving it.",
+      }
+    end
+
+    ActiveRecord::Base.transaction do
+      person.execute_edit_person_request(change_type, edit_params)
+      @ticket.metadata.update!(status: ticket_status)
+      ticket_log = @ticket.ticket_logs.create!(
+        action_type: @action_type,
+        acting_user_id: current_user.id,
+        acting_stakeholder_id: @acting_stakeholder.id,
+        metadata_action: @metadata_action,
+      )
+      ticket_log.ticket_log_changes.create!(
+        field_name: TicketLogChange.field_names[:status],
+        field_value: ticket_status,
+      )
+    end
+    render status: :ok, json: { success: true }
   end
 
   def reject_edit_person_request
