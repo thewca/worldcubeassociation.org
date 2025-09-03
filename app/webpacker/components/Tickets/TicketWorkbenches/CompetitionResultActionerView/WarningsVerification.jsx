@@ -1,37 +1,62 @@
-import { useQuery } from '@tanstack/react-query';
 import React from 'react';
-import { Button, Header, Segment } from 'semantic-ui-react';
-import runValidatorsForCompetitionList from '../../../Panel/pages/RunValidatorsPage/api/runValidatorsForCompetitionList';
-import { ALL_VALIDATORS, ticketsCompetitionResultStatuses } from '../../../../lib/wca-data.js.erb';
-import ValidationOutput from '../../../Panel/pages/RunValidatorsPage/ValidationOutput';
+import { Button } from 'semantic-ui-react';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { ticketsCompetitionResultStatuses } from '../../../../lib/wca-data.js.erb';
+import WarningsAndMessage from './WarningsAndMessage';
+import Loading from '../../../Requests/Loading';
+import Errored from '../../../Requests/Errored';
+import verifyWarnings from '../../api/competitionResult/verify_warnings';
+import { updateTicketMetadata } from '../../../../lib/helpers/update-ticket-query-data';
 
-export default function WarningsVerification({ ticketDetails, updateStatus }) {
-  const { ticket: { id, metadata } } = ticketDetails;
+export default function WarningsVerification({ ticketDetails, currentStakeholder }) {
+  const { ticket: { id } } = ticketDetails;
+
+  const queryClient = useQueryClient();
   const {
-    data: validationOutput, isPending, isError, error,
-  } = useQuery({
-    queryKey: ['ticketCompetitionResultValidationOutput', id],
-    queryFn: () => runValidatorsForCompetitionList(
-      metadata.competition_id,
-      ALL_VALIDATORS,
-      false,
-      false,
-    ),
+    mutate: verifyWarningsMutate,
+    isPending,
+    isError,
+    error,
+  } = useMutation({
+    mutationFn: verifyWarnings,
+    onSuccess: () => {
+      queryClient.setQueryData(
+        ['ticket-details', id],
+        (oldTicketDetails) => ({
+          ...oldTicketDetails,
+          ticket: {
+            ...oldTicketDetails.ticket,
+            metadata: {
+              ...oldTicketDetails.ticket.metadata,
+              status: ticketsCompetitionResultStatuses.merged_inbox_results,
+            },
+          },
+        }),
+      );
+      queryClient.setQueryData(
+        ['ticket-details', id],
+        (oldTicketDetails) => updateTicketMetadata(
+          oldTicketDetails,
+          'status',
+          ticketsCompetitionResultStatuses.warnings_verified,
+        ),
+      );
+    },
   });
 
+  if (isPending) return <Loading />;
+  if (isError) return <Errored error={error} />;
   return (
     <>
-      <ValidationOutput
-        validationOutput={validationOutput}
-        isPending={isPending}
-        isError={isError}
-        error={error}
+      <WarningsAndMessage
+        ticketDetails={ticketDetails}
       />
-      <Header>Delegate&apos;s message</Header>
-      <Segment>{ticketDetails.ticket.metadata.delegate_message}</Segment>
       <Button
         primary
-        onClick={() => updateStatus(ticketsCompetitionResultStatuses.warnings_verified)}
+        onClick={() => verifyWarningsMutate({
+          ticketId: id,
+          actingStakeholderId: currentStakeholder.id,
+        })}
       >
         Warnings verified
       </Button>

@@ -1,5 +1,10 @@
 import React, { useMemo, useState } from 'react';
-import { pickerLocalizationConfig, pickerStepConfig } from './util';
+import {
+  buildHistoryStep,
+  matchingDndConfig,
+  pickerLocalizationConfig,
+  pickerStepConfig,
+} from './util';
 import ButtonGroupPicker from './ButtonGroupPicker';
 import TableAndModal from './TableAndModal';
 
@@ -10,12 +15,16 @@ export default function PickerWithMatching({
   pickerHistory = [],
   pickerKey,
 }) {
+  const { enabledCondition } = pickerStepConfig[pickerKey];
+
+  const isEnabled = enabledCondition?.(pickerHistory) ?? true;
+
   const entityChoices = useMemo(
     () => matchState[pickerKey],
     [matchState, pickerKey],
   );
 
-  if (entityChoices === undefined) {
+  if (entityChoices === undefined || !isEnabled) {
     return null;
   }
 
@@ -57,6 +66,7 @@ function EntityPicker({
   const {
     computeEntityName,
     headerLabel,
+    pickerLabel = headerLabel,
   } = pickerLocalizationConfig[pickerKey];
 
   const { pickerComponent: PickerComponent = ButtonGroupPicker } = pickerStepConfig[pickerKey];
@@ -73,7 +83,7 @@ function EntityPicker({
         selectedEntityId={selectedEntityId}
         onEntityIdSelected={setSelectedEntityId}
         computeEntityName={computeEntityName}
-        headerLabel={headerLabel}
+        pickerLabel={pickerLabel}
       />
       {selectedEntity && (
         <WrapHistory
@@ -102,21 +112,12 @@ function WrapHistory({
 
     return [
       ...pickerHistory,
-      {
-        key: pickerKey,
-        id: selectedEntity.id,
-        index: selectedEntityIdx,
-        entity: selectedEntity,
-      },
+      buildHistoryStep(pickerKey, selectedEntity, selectedEntityIdx),
     ];
   }, [entityChoices, pickerHistory, pickerKey, selectedEntity]);
 
-  const { matchingConfig, nestedPicker, nestingCondition } = pickerStepConfig[pickerKey];
-
-  const isUsingNesting = useMemo(
-    () => nestingCondition?.(nextHistory) ?? true,
-    [nestingCondition, nextHistory],
-  );
+  const { matchingConfigKey, nestedPicker } = pickerStepConfig[pickerKey];
+  const matchingConfig = matchingDndConfig[matchingConfigKey];
 
   return (
     <>
@@ -127,10 +128,11 @@ function WrapHistory({
           rootMatchState={rootMatchState}
           dispatchMatchState={dispatchMatchState}
           pickerHistory={nextHistory}
+          matchingKey={matchingConfigKey}
           matchingConfig={matchingConfig}
         />
       )}
-      {nestedPicker && isUsingNesting && (
+      {nestedPicker && (
         <PickerWithMatching
           matchState={selectedEntity}
           rootMatchState={rootMatchState}

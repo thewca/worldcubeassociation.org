@@ -45,7 +45,12 @@ async function plugins() {
       ...defaultPlugins,
       s3Storage({
         collections: {
-          media: true,
+          media: {
+            prefix: "media",
+            generateFileURL: ({ prefix, filename }) => {
+              return `${process.env.MEDIA_BUCKET_CDN!}/${prefix}/${filename}`;
+            },
+          },
         },
         bucket: process.env.MEDIA_BUCKET!,
         config: {
@@ -60,7 +65,7 @@ async function plugins() {
 
 async function dbAdapter() {
   if (process.env.NODE_ENV === "production") {
-    const { mongooseAdapter, compatabilityOptions } = await import(
+    const { mongooseAdapter, compatibilityOptions } = await import(
       "@payloadcms/db-mongodb"
     );
     return mongooseAdapter({
@@ -71,8 +76,7 @@ async function dbAdapter() {
         tls: true,
         tlsCAFile: "/app/global-bundle.pem",
       },
-      ...compatabilityOptions.documentdb,
-      useJoinAggregations: false,
+      ...compatibilityOptions.documentdb,
     });
   } else {
     const { sqliteAdapter } = await import("@payloadcms/db-sqlite");

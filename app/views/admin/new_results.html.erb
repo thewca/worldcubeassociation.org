@@ -4,12 +4,7 @@
   <%= react_component("CompetitionResultSubmissionAdmin", {
     competitionId: @competition.id,
     hasTemporaryResults: @competition.inbox_results.present?,
+    uploadedScrambleFilesCount: @competition.scramble_file_uploads.count,
     ticketId: @competition.result_ticket&.id,
-  }) %>
-
-  <%= render "results_submission/check_results_panel", results_validator: @results_validator %>
-
-  <%= react_component("Tickets/TicketWorkbenches/CompetitionResultActionerView/ResultsPreview", {
-    competitionId: @competition.id,
   }) %>
 <% end %>

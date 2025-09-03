@@ -3842,8 +3842,8 @@ ko:
         newcomer_checks: 첫 참가자 검증
         #original_hash: f3d6278
         submit_results: 결과 제출
-        #original_hash: e2d046b
-        match_scrambles: 스크램블 제출
+        #original_hash: dd2e98f
+        upload_scrambles: 스크램블 업로드
         #original_hash: 4c9f914
         delegate_report: 파견위원 보고서
         #original_hash: b233e77
@@ -4705,7 +4705,7 @@ ko:
         paragraph: WCA 로고의 고해상도 PNG 및 벡터 버전을 다운로드할 수 있습니다.
         #original_hash: 9de7d59
         accept_terms_and_conditions: >-
-          a
+          <a
           href="https://documents.worldcubeassociation.org/documents/policies/external/Logo%20Usage.pdf">WCA
           로고 사용 정책</a>을 읽었으며 이에 동의합니다.
         #original_hash: ebc85b2
@@ -5345,8 +5345,9 @@ ko:
         9p1에 따라 허용되지 않습니다. 종목 관리 페이지에서 라운드 정보를 업데이트해 주십시오.
       #original_hash: d6fc805
       not_enough_qualified_warning: >-
-        라운드 %{round_id}: 종목 데이터에 따르면 최대 %{expected}가 진출할 수 있었지만 라운드에서 경쟁한 사람은
-        %{actual}뿐이었습니다. 이에 대해 코멘트를 남겨주십시오(또는 다른 진행 조건을 적용한 경우 종목 데이터를 수정하십시오).
+        라운드 %{round_id}: 종목 데이터에 따르면 최대 %{expected}명이 진출할 수 있었지만 라운드에서 경쟁한 사람은
+        %{actual}명 뿐이었습니다. 이에 대해 코멘트를 남겨주십시오(또는 다른 진행 조건을 적용한 경우 종목 데이터를
+        수정하십시오).
       #original_hash: 7915e13
       competed_not_qualified_error: >-
         라운드 %{round_id}: %{ids}가 경쟁했지만 진출 조건(%{condition})을 충족하지 못했습니다. 진출 조건이
@@ -5408,3 +5409,9 @@ ko:
       wrong_number_of_scramble_sets_error: >-
         [%{round_id}] 이 라운드에는 종목 관리 탭에 지정된 스크램블 세트 수와 다른 수의 스크램블 세트 수가 있습니다. 종목
         관리 탭에서 스크램블 세트 수를 사용된 세트 수로 조정하십시오.
+  tickets:
+    type:
+      #original_hash: e43f273
+      edit_person: 인물 수정
+      #original_hash: 5fb2137
+      competition_result: 대회 결과

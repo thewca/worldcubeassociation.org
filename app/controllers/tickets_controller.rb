@@ -5,21 +5,29 @@ class TicketsController < ApplicationController
 
   before_action :authenticate_user!
   before_action -> { check_ticket_errors(TicketLog.action_types[:update_status]) }, only: [:update_status]
-  before_action -> { redirect_to_root_unless_user(:can_admin_results?) }, only: %i[merge_inbox_results delete_inbox_persons]
+  before_action -> { check_ticket_errors(TicketLog.action_types[:metadata_action], TicketsCompetitionResult::ACTION_TYPE[:verify_warnings]) }, only: [:verify_warnings]
+  before_action -> { check_ticket_errors(TicketLog.action_types[:metadata_action], TicketsCompetitionResult::ACTION_TYPE[:merge_inbox_results]) }, only: [:merge_inbox_results]
+  before_action -> { check_ticket_errors(TicketLog.action_types[:metadata_action], TicketsEditPerson::ACTION_TYPE[:reject_edit_person_request]) }, only: [:reject_edit_person_request]
+  before_action -> { check_ticket_errors(TicketLog.action_types[:metadata_action], TicketsEditPerson::ACTION_TYPE[:sync_edit_person_request]) }, only: [:sync_edit_person_request]
+  before_action -> { redirect_to_root_unless_user(:can_admin_results?) }, only: %i[delete_inbox_persons]
 
   SORT_WEIGHT_LAMBDAS = {
     createdAt:
       ->(ticket) { ticket.created_at },
   }.freeze
 
-  private def check_ticket_errors(action_type)
+  private def check_ticket_errors(action_type, metadata_action = nil)
     @action_type = action_type
+    @metadata_action = metadata_action
     @ticket = Ticket.find(params.require(:ticket_id))
     @acting_stakeholder = TicketStakeholder.find(params.require(:acting_stakeholder_id))
 
     render status: :bad_request, json: { error: "You are not a stakeholder for this ticket." } unless @ticket.user_stakeholders(current_user).include?(@acting_stakeholder)
 
-    render status: :unauthorized, json: { error: "You are not allowed to perform this action." } unless @acting_stakeholder.actions_allowed.include?(@action_type)
+    # Actions which are not metadata-actions are allowed for all stakeholders currently.
+    return if metadata_action.nil?
+
+    render status: :unauthorized, json: { error: "You are not allowed to perform this metadata action." } unless @acting_stakeholder.metadata_actions_allowed.include?(@metadata_action)
   end
 
   def index
@@ -201,10 +209,30 @@ class TicketsController < ApplicationController
     render json: competition.inbox_results.includes(:inbox_person)
   end
 
-  def merge_inbox_results
-    ticket = Ticket.find(params.require(:ticket_id))
+  def verify_warnings
+    ActiveRecord::Base.transaction do
+      @ticket.metadata.update!(status: TicketsCompetitionResult.statuses[:warnings_verified])
+      @ticket.ticket_logs.create!(
+        action_type: @action_type,
+        acting_user_id: current_user.id,
+        acting_stakeholder_id: @acting_stakeholder.id,
+        metadata_action: @metadata_action,
+      )
+    end
 
-    ticket.metadata.merge_inbox_results
+    render status: :ok, json: { success: true }
+  end
+
+  def merge_inbox_results
+    ActiveRecord::Base.transaction do
+      @ticket.metadata.merge_inbox_results
+      @ticket.ticket_logs.create!(
+        action_type: @action_type,
+        acting_user_id: current_user.id,
+        acting_stakeholder_id: @acting_stakeholder.id,
+        metadata_action: @metadata_action,
+      )
+    end
 
     render status: :ok, json: { success: true }
   end
@@ -260,5 +288,54 @@ class TicketsController < ApplicationController
     end
 
     render status: :ok, json: rounds_data
+  end
+
+  def reject_edit_person_request
+    ActiveRecord::Base.transaction do
+      ticket_status = TicketsEditPerson.statuses[:closed]
+      @ticket.metadata.update!(status: ticket_status)
+      ticket_log = @ticket.ticket_logs.create!(
+        action_type: @action_type,
+        acting_user_id: current_user.id,
+        acting_stakeholder_id: @acting_stakeholder.id,
+        metadata_action: @metadata_action,
+      )
+      ticket_log.ticket_log_changes.create!(
+        field_name: TicketLogChange.field_names[:status],
+        field_value: ticket_status,
+      )
+    end
+    render status: :ok, json: { success: true }
+  end
+
+  def sync_edit_person_request
+    person = @ticket.metadata.person
+    any_request_still_valid = @ticket.metadata.tickets_edit_person_fields.any? do |edit_person_field|
+      person.send(edit_person_field.field_name).to_s != edit_person_field.new_value
+    end
+
+    unless any_request_still_valid
+      return render status: :unprocessable_entity, json: {
+        error: "All requested changes have already been applied. If you think this is correct, please reject the request.",
+      }
+    end
+
+    ActiveRecord::Base.transaction do
+      @ticket.metadata.tickets_edit_person_fields.each do |edit_person_field|
+        if person.send(edit_person_field.field_name).to_s == edit_person_field.new_value
+          edit_person_field.delete
+        else
+          edit_person_field.update!(old_value: person.send(edit_person_field.field_name).to_s)
+        end
+      end
+      @ticket.ticket_logs.create!(
+        action_type: @action_type,
+        acting_user_id: current_user.id,
+        acting_stakeholder_id: @acting_stakeholder.id,
+        metadata_action: @metadata_action,
+      )
+    end
+
+    render status: :ok, json: @ticket
   end
 end

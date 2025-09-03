@@ -813,6 +813,7 @@ module DatabaseDumper
     "vote_options" => :skip_all_rows,
     "votes" => :skip_all_rows,
     "server_settings" => {
+      where_clause: "WHERE name NOT IN (#{ServerSetting::HIDDEN_SETTINGS.map { "'#{it}'" }.join(',')})",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w[
           name
@@ -1227,6 +1228,10 @@ module DatabaseDumper
                                          .index_with { ActiveRecord::Base.connection.foreign_keys(it).pluck(:to_table) }
                                          .tsort
 
+    # Turn of foreign key checking to avoid errors when dumping data caused by foreign keys referencing not yet
+    # existing rows.
+    ActiveRecord::Base.connection.execute("SET foreign_key_checks=0")
+
     LogTask.log_task "Populating sanitized tables in '#{dump_db_name}'" do
       ordered_table_names.each do |table_name|
         table_sanitizer = dump_sanitizers[table_name]
@@ -1255,6 +1260,9 @@ module DatabaseDumper
       end
 
       ActiveRecord::Base.connection.execute("INSERT INTO #{dump_db_name}.server_settings (name, value, created_at, updated_at) VALUES ('#{dump_ts_name}', UNIX_TIMESTAMP(), NOW(), NOW())") if dump_ts_name.present?
+
+      # Turn these back on. We do establish a new connection again in the ensure block, but just in case this carries over
+      ActiveRecord::Base.connection.execute("SET foreign_key_checks=1")
     end
 
     yield dump_db_name

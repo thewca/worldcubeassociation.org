@@ -1215,6 +1215,22 @@ fr:
         400_contact_html: >-
           Si vous pensez qu'il s'agit d'une erreur, merci de <a
           href=%{contact_url}>cliquer ici</a> pour le signaler.
+        #original_hash: 508c106
+        comp_not_found: Compétition introuvable
+        #original_hash: c0e86d5
+        comp_not_found_action: >-
+          Nous n'avons pas trouvé de compétition avec l'identifiant « %{comp_id}
+          ». Veuillez effectuer une recherche à l'aide de la barre de recherche.
+        #original_hash: 695f7ba
+        comp_not_found_action_2: >-
+          Si vous avez suivi un lien depuis un autre site web pour arriver ici,
+          veuillez signaler à ce site web que son lien est incorrect.
+        #original_hash: 7f8f419
+        session_expired: Session expirée
+        #original_hash: f3e688a
+        session_expired_action: >-
+          Votre session a expiré. Veuillez actualiser la page, réessayer
+          l'action ou vous reconnecter pour continuer.
     doorkeeper:
       applications:
         help:
@@ -3914,7 +3930,7 @@ fr:
           disponibles pour que vous puissiez y assister.
       list:
         #original_hash: 6eef664
-        empty: Aucune
+        empty: Aucun
         #original_hash: 627422a
         spots_remaining_plural:
           zero: Aucune place disponible
@@ -4679,8 +4695,8 @@ fr:
         newcomer_checks: Vérifications des nouveaux compétiteurs
         #original_hash: f3d6278
         submit_results: Envoyer les résultats
-        #original_hash: e2d046b
-        match_scrambles: Soumettre les mélanges
+        #original_hash: dd2e98f
+        upload_scrambles: Mettre en ligne les mélanges
         #original_hash: 4c9f914
         delegate_report: Rapport des Délégués
         #original_hash: b233e77
@@ -6574,7 +6590,7 @@ fr:
       regulation_9m3_error: >-
         Le tour %{round_id} compte 7 compétiteurs ou moins mais comporte au
         moins un tour suivant, ce qui n'est pas autorisé par la règle 9m3.
-      #original_hash: e12138a
+      #original_hash: 44fbfde
       regulation_9p1_error: >-
         Tour %{round_id} : Moins de 25% des compétiteurs ont été éliminés, ce
         qui n'est pas autorisé selon la règle 9p1.
@@ -6678,3 +6694,9 @@ fr:
         dans l'onglet Gérer les événements. Veuillez ajuster le nombre de sets
         de mélanges dans l'onglet Gérer les événements en fonction du nombre de
         sets utilisés.
+  tickets:
+    type:
+      #original_hash: e43f273
+      edit_person: Modifier la personne
+      #original_hash: 5fb2137
+      competition_result: Résultat de la compétition

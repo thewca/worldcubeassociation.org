@@ -24,11 +24,16 @@ export default function RegistrationMessage() {
 
   useEffect(() => {
     if (nonNegativeMessages.length > 0) {
-      setTimeout(() => {
+      const timer = setTimeout(() => {
         // some may already be cleared by an earlier timeout; that's fine
         dispatch(clearMessages(nonNegativeMessages.map(({ id }) => id)));
       }, 4000);
+
+      return () => clearTimeout(timer);
     }
+
+    // Nothing to time means nothing to clear
+    return undefined;
   }, [dispatch, nonNegativeMessages]);
 
   if (messages.length === 0) return null;

@@ -1,4 +1,5 @@
 import React from 'react';
+import { DateTime } from 'luxon';
 import { ticketsCompetitionResultStatuses } from '../../../../lib/wca-data.js.erb';
 import WarningsVerification from './WarningsVerification';
 import TimelineView from './TimelineView';
@@ -6,8 +7,9 @@ import MergeInboxResults from './MergeInboxResults';
 import CreateWcaIds from './CreateWcaIds';
 import FinalSteps from './FinalSteps';
 import MiscActions from './MiscActions';
+import I18n from '../../../../lib/i18n';
 
-export default function CompetitionResultActionerView({ ticketDetails, updateStatus }) {
+export default function CompetitionResultActionerView({ ticketDetails, currentStakeholder }) {
   const { ticket: { metadata: { status } } } = ticketDetails;
 
   return (
@@ -16,17 +18,26 @@ export default function CompetitionResultActionerView({ ticketDetails, updateSta
       <ViewForStatus
         status={status}
         ticketDetails={ticketDetails}
-        updateStatus={updateStatus}
+        currentStakeholder={currentStakeholder}
       />
       <MiscActions
         ticketDetails={ticketDetails}
-        updateStatus={updateStatus}
       />
     </>
   );
 }
 
-function ViewForStatus({ status, ticketDetails, updateStatus }) {
+function ViewForStatus({
+  status, ticketDetails, currentStakeholder,
+}) {
+  const {
+    ticket: {
+      metadata: {
+        competition: { results_posted_at: resultsPostedAt, posted_user: postedUser },
+      },
+    },
+  } = ticketDetails;
+
   switch (status) {
     case ticketsCompetitionResultStatuses.submitted:
       return <p>Please lock the competition results from the Posting dashboard.</p>;
@@ -35,7 +46,7 @@ function ViewForStatus({ status, ticketDetails, updateStatus }) {
       return (
         <WarningsVerification
           ticketDetails={ticketDetails}
-          updateStatus={updateStatus}
+          currentStakeholder={currentStakeholder}
         />
       );
 
@@ -43,6 +54,7 @@ function ViewForStatus({ status, ticketDetails, updateStatus }) {
       return (
         <MergeInboxResults
           ticketDetails={ticketDetails}
+          currentStakeholder={currentStakeholder}
         />
       );
 
@@ -57,6 +69,15 @@ function ViewForStatus({ status, ticketDetails, updateStatus }) {
         <FinalSteps
           ticketDetails={ticketDetails}
         />
+      );
+    case ticketsCompetitionResultStatuses.posted:
+      return (
+        <>
+          {I18n.t('competitions.results_posted_by_html', {
+            poster_name: postedUser.name,
+            date_time: DateTime.fromISO(resultsPostedAt).toLocaleString(DateTime.DATETIME_FULL),
+          })}
+        </>
       );
 
     default:

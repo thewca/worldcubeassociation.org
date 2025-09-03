@@ -81,6 +81,24 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/RegistrationData'
+  /competitions/{competitionId}/podiums:
+    get:
+      summary: Returns the podium results
+      parameters:
+        - name: competitionId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Result"
   /competition_index:
     get:
       summary: Get a list of (upcoming) competitions for table display

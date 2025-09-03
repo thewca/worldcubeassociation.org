@@ -184,9 +184,9 @@ class Registration < ApplicationRecord
 
   def last_payment
     if registration_payments.loaded?
-      registration_payments.completed.max_by(&:created_at)
+      registration_payments.completed.max_by(&:paid_at)
     else
-      registration_payments.completed.order(:created_at).last
+      registration_payments.completed.order(:paid_at).last
     end
   end
 
@@ -304,7 +304,7 @@ class Registration < ApplicationRecord
                                   payment_status: last_payment_status,
                                   paid_amount_iso: paid_entry_fees.cents,
                                   currency_code: paid_entry_fees.currency.iso_code,
-                                  updated_at: last_payment&.created_at,
+                                  updated_at: last_payment&.paid_at,
                                 },
                               })
       end
@@ -570,7 +570,7 @@ class Registration < ApplicationRecord
                             .registrations
                             .competing_status_pending
                             .with_payments
-                            .sort_by { |registration| registration.last_positive_payment.updated_at }
+                            .sort_by { |registration| registration.last_positive_payment.paid_at }
 
     # We dont need to break out of pending registrations because auto accept can still put them on the waiting list
     pending_outcomes = pending_registrations.index_by(&:id).transform_values { it.attempt_auto_accept(:bulk) }
@@ -582,8 +582,8 @@ class Registration < ApplicationRecord
     registration_payments
       .completed
       .where.not(amount_lowest_denomination: ..0)
-      .order(updated_at: :desc)
-      .first
+      .order(:paid_at)
+      .last
   end
 
   delegate :auto_accept_preference, :auto_accept_preference_disabled?, :auto_accept_preference_bulk?, :auto_accept_preference_live?, to: :competition

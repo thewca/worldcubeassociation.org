@@ -1061,7 +1061,7 @@ fr-CA:
           otp_email:
             #original_hash: a238ac2
             subject: Votre code à usage unique pour le site internet de la WCA
-            #original_hash: 7ccea57
+            #original_hash: b235c68
             2fa_attempt: >-
               Vous être en train de vous connecter sur le site de la WCA.
               L'authentification à deux facteur est activée pour votre compte,
@@ -1215,6 +1215,22 @@ fr-CA:
         400_contact_html: >-
           Si vous pensez qu'il s'agit d'une erreur, merci de <a
           href=%{contact_url}>cliquer ici</a> pour le signaler.
+        #original_hash: 8fec548
+        comp_not_found: Compétition introuvable
+        #original_hash: 8342dcb
+        comp_not_found_action: >-
+          Nous n'avons pas trouvé de compétition avec l'identifiant « %{comp_id}
+          ». Veuillez effectuer une recherche à l'aide de la barre de recherche.
+        #original_hash: 616d097
+        comp_not_found_action_2: >-
+          Si vous avez suivi un lien depuis un autre site web pour arriver ici,
+          veuillez signaler à ce site web que son lien est incorrect.
+        #original_hash: 6344d1b
+        session_expired: Session expirée
+        #original_hash: 7114c05
+        session_expired_action: >-
+          Votre session a expiré. Veuillez actualiser la page, réessayer
+          l'action ou vous reconnecter pour continuer.
     doorkeeper:
       applications:
         help:
@@ -3554,7 +3570,7 @@ fr-CA:
             Nom de la ville où la compétition a lieu ainsi que la province /
             état (dans les pays où c'est l'usage). Ne pas mettre le pays.
             Exemple d'entrée valide : Montréal, Quebec
-          #original_hash: a6acbaa
+          #original_hash: aa8ebf8
           name_html: >-
             La salle où la compétition à lieu. %{md}. Par exemple : [École de
             Technologie Supérieure](https://www.etsmtl.ca/)
@@ -3914,8 +3930,8 @@ fr-CA:
           d’attente et vous recevrez un courriel si suffisamment de places sont
           disponibles pour que vous puissiez y assister.
       list:
-        #original_hash: e8f8827
-        empty: Aucune
+        #original_hash: b2ed82f
+        empty: Aucun
         #original_hash: c15d545
         spots_remaining_plural:
           zero: Aucune place disponible
@@ -4680,8 +4696,8 @@ fr-CA:
         newcomer_checks: Vérifications des nouveaux compétiteurs
         #original_hash: 678d15b
         submit_results: Envoyer les résultats
-        #original_hash: d8bb428
-        match_scrambles: Soumettre les mélanges
+        #original_hash: 1d0b625
+        upload_scrambles: Mettre en ligne les mélanges
         #original_hash: 21f47fb
         delegate_report: Rapport des Délégués
         #original_hash: 3e69f54
@@ -6679,3 +6695,9 @@ fr-CA:
         dans l'onglet Gérer les événements. Veuillez ajuster le nombre de sets
         de mélanges dans l'onglet Gérer les événements en fonction du nombre de
         sets utilisés.
+  tickets:
+    type:
+      #original_hash: 170f350
+      edit_person: Modifier la personne
+      #original_hash: aa4151c
+      competition_result: Résultat de la compétition

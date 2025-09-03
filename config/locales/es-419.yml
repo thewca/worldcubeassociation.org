@@ -2246,7 +2246,7 @@ es-419:
       #original_hash: 13bfcd6
       can_only_register_for_qualified_events: No puedes registrarte en eventos en los que no estás calificado.
       #original_hash: 93ed20e
-      cannot_change_events_when_cancelling: No puedes cambiar tus eventos al cancelar el registro.
+      cannot_change_events_when_cancelling: No puedes cambiar tus eventos al eliminar el registro.
       #original_hash: 4025877
       cannot_register_without_comment: >-
         Debes introducir un comentario. Asegúrate de leer en los requisitos de
@@ -2544,7 +2544,7 @@ es-419:
             no coincide con nuestros registros.
         #original_hash: df1a70e
         paypal_canceled: >-
-          PayPal reportó que la orden fue cancelada manualmente. Por favor,
+          PayPal reportó que la orden fue abortada manualmente. Por favor,
           intenta nuevamente.
         #original_hash: 8d1a199
         payment_reset: El pago fue rechazado por Stripe.
@@ -2555,7 +2555,7 @@ es-419:
           El pago no fue exitoso. Por favor, controla tus detalles de pago e
           intenta nuevamente.
         #original_hash: 7fb8be2
-        payment_canceled: El pago fue cancelado y no será completado.
+        payment_canceled: El pago fue abortado y no será completado.
     #original_hash: 4cf01a2
     preferred_events_prompt_html: >-
       Para facilitar tus registros en el futuro, puedes seleccionar tus eventos
@@ -2712,9 +2712,9 @@ es-419:
       #original_hash: b4aa5ee
       cancel_success: ¡Competición cancelada con éxito!
       #original_hash: d0478cf
-      cancel_failure: No se ha podido cancelar la competición.
+      cancel_failure: No se pudo cancelar la competición.
       #original_hash: 09df36b
-      uncancel_success: ¡Competición no cancelada con éxito!
+      uncancel_success: ¡Cancelación quitada con éxito!
       #original_hash: ead4a9e
       uncancel_failure: No se ha podido quitar la cancelación de la competición.
       #original_hash: 8ad5e67
@@ -2859,7 +2859,7 @@ es-419:
       #original_hash: b8bf8b6
       submitted_by_other: Enviado por otro
       #original_hash: 2260929
-      display_name: '[Cancelado] %{name}'
+      display_name: '[Cancelada] %{name}'
       #original_hash: 680567f
       organizer_plural:
         zero: Organizadores
@@ -2925,7 +2925,7 @@ es-419:
         vez registrado.
       #original_hash: d6bab8f
       refund_policy_html: >-
-        Si tu registro se cancela antes de %{limit_date_and_time} se te
+        Si tu registro se elimina antes de %{limit_date_and_time} se te
         reembolsará un %{refund_policy_percent} de tu cuota de registro.
       #original_hash: 4aca553
       no_refunds: Las cuotas de registro no se reembolsarán bajo ninguna circunstancia.
@@ -3373,7 +3373,7 @@ es-419:
           #original_hash: 2529d04
           allow_on_the_spot: Registros in situ
           #original_hash: b6faf84
-          competitor_can_cancel: Cuándo pueden cancelar el registro los competidores
+          competitor_can_cancel: Cuándo pueden los competidores eliminar su registro
           #original_hash: 7e53b96
           allow_self_edits: Modificaciones de registro
           #original_hash: 3c23a67
@@ -3458,7 +3458,8 @@ es-419:
           Una breve descripción del nombre de la competición. El nombre debe
           respetar la <a
           href='https://documents.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>Política
-          de Requisitos de Competiciones de la WCA</a>
+          de Requisitos de Competiciones de la WCA</a>. ¡Por favor, <b>rellena
+          este campo en inglés</b>!
         venue:
           #original_hash: da39a3e
           country_id: ''
@@ -3643,7 +3644,7 @@ es-419:
           #original_hash: 4b51faa
           guests_per_registration: >-
             El número de invitados por inscripción permitidos en esta
-            competicióin. Inscripciones con demasiados invitados se bloquearán.
+            competición. Inscripciones con demasiados invitados se bloquearán.
             Dejar en blanco si no hay límite.
           #original_hash: 3de153b
           extra_requirements: >-
@@ -3795,7 +3796,7 @@ es-419:
         is_accepted: '¡Haz tus maletas, tu registro está aprobado!'
         #original_hash: 89448a8
         is_cancelled: >-
-          Tu registro ha sido cancelado y no competirás, pero puedes registrarte
+          Tu registro ha sido eliminado y no competirás, pero puedes registrarte
           nuevamente.
         #original_hash: 2a88d10
         is_rejected: >-
@@ -3855,10 +3856,10 @@ es-419:
             seleccionados?
         cancelled:
           #original_hash: bd69c74
-          title: Registros cancelados
+          title: Registros eliminados
           #original_hash: bb5b570
           information: >-
-            Los competidores con su registro cancelado pueden registrarse
+            Los competidores con su registro eliminado pueden registrarse
             nuevamente.
         rejected:
           #original_hash: 9cef5ae
@@ -3944,7 +3945,7 @@ es-419:
         #original_hash: 41b81eb
         approved: Aprobado
         #original_hash: a1bf92e
-        cancelled: Cancelado
+        cancelled: Eliminado
         #original_hash: 27eeb7a
         rejected: Rechazado
         #original_hash: 43dc853
@@ -4089,7 +4090,7 @@ es-419:
         #original_hash: 020234c
         '-4008': El registro ha cerrado
         #original_hash: b30e613
-        '-4009': Solo los organizadores pueden cancelar registros en esta competición
+        '-4009': Solo los organizadores pueden eliminar registros en esta competición
         #original_hash: 3c4cbaa
         '-4010': La posición en la lista de espera no es válida
         #original_hash: e489908
@@ -4354,7 +4355,7 @@ es-419:
     #original_hash: 7628a51
     uncancel: Quitar la cancelación de la competición
     #original_hash: 9122a6c
-    cancelled_by_html: 'Cancelado por by %{name} en %{date_time}'
+    cancelled_by_html: 'Cancelada por %{name} en %{date_time}'
     #original_hash: 25e68c3
     cancel_confirm: ¿Estás seguro de que quieres cancelar la competición?
     #original_hash: 01de5ee
@@ -4364,7 +4365,7 @@ es-419:
     #original_hash: a6b5efe
     cancel_mistake: ¿Cometiste un error?
     #original_hash: 0fb43d5
-    note_before_cancel: 'Nota: Sólo se pueden cancelar competiciones confirmadas.'
+    note_before_cancel: 'Nota: sólo se pueden cancelar competiciones confirmadas.'
     #original_hash: b38ee61
     orga_close_reg: Cerrar Inscripciones.
     #original_hash: b2bfea9
@@ -4552,8 +4553,8 @@ es-419:
         newcomer_checks: Chequeos de primerizos
         #original_hash: f3d6278
         submit_results: Entregar resultados
-        #original_hash: e2d046b
-        match_scrambles: Enviar mezclas
+        #original_hash: dd2e98f
+        upload_scrambles: Subir mezclas
         #original_hash: 4c9f914
         delegate_report: Informe del Delegado
         #original_hash: b233e77
@@ -6497,3 +6498,9 @@ es-419:
         [%{round_id}] Esta ronda tiene distinto número de sets de mezcla a lo
         especificado en la pestaña de "Administrar eventos" (Manage Events). Por
         favor, ajusta el número a lo correcto.
+  tickets:
+    type:
+      #original_hash: e43f273
+      edit_person: Editar persona
+      #original_hash: 5fb2137
+      competition_result: Resultado de competición

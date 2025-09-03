@@ -10,6 +10,7 @@ class RegistrationPayment < ApplicationRecord
   has_many :refunding_registration_payments, class_name: 'RegistrationPayment', inverse_of: :refunded_registration_payment, foreign_key: :refunded_registration_payment_id, dependent: :destroy
 
   delegate :auto_accept_preference_live?, to: :registration
+  before_save :set_paid_at, if: :becoming_completed?, unless: :paid_at?
   after_create :auto_accept_hook, if: :auto_accept_preference_live?
   after_save :auto_close_hook
 
@@ -20,20 +21,12 @@ class RegistrationPayment < ApplicationRecord
            allow_nil: true,
            with_model_currency: :currency_code
 
-  def should_auto_close?
-    refunded_registration_payment_id.nil? && saved_change_to_is_completed?(to: true)
+  private def becoming_completed?
+    is_completed && (will_save_change_to_is_completed? || new_record?)
   end
 
-  def create_uncaptured_payment
-    return unless self.is_completed?
-
-    RegistrationPayment.create(
-      amount_lowest_denomination: self.amount_lowest_denomination,
-      currency_code: self.currency_code,
-      user: self.user,
-      registration: self.registration,
-      is_completed: false,
-    )
+  private def set_paid_at
+    self.paid_at = current_time_from_proper_timezone
   end
 
   def amount_available_for_refund
