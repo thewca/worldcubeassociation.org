@@ -1,9 +1,10 @@
 import { CollectionConfig } from "payload";
+import { markdownConvertedField } from "@/collections/helpers";
 
 export const Posts: CollectionConfig = {
   slug: "posts",
   admin: {
-    useAsTitle: "name",
+    useAsTitle: "title",
   },
   fields: [
     {
@@ -36,6 +37,7 @@ export const Posts: CollectionConfig = {
       type: "richText",
       required: true,
     },
+    markdownConvertedField("body"),
     {
       name: "approvedBy",
       type: "relationship",
