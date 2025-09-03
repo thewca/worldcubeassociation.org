@@ -45,6 +45,7 @@ export default function FilteredResults({
           <ResultsTable
             results={results.toSorted((a, b) => a.pos - b.pos)}
             eventId={activeEventId}
+            t={t}
             isAdmin={false}
           />
         </Fragment>

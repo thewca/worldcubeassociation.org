@@ -1,6 +1,6 @@
 import { components } from "@/types/openapi";
 import events from "@/lib/wca/data/events";
-import { Icon, Link, Table } from "@chakra-ui/react";
+import { HStack, Icon, Link, Table } from "@chakra-ui/react";
 import { formatAttemptResult } from "@/lib/wca/wcif/attempts";
 import { route } from "nextjs-routes";
 import { AttemptsCells, recordTagBadge } from "@/components/results/TableCells";
@@ -8,6 +8,7 @@ import _ from "lodash";
 import Flag from "react-world-flags";
 import { TFunc } from "ts-interface-checker";
 import { TFunction } from "i18next";
+import CountryMap from "@/components/CountryMap";
 
 function resultAttempts(result: components["schemas"]["Result"]) {
   const definedAttempts = result.attempts.filter((res) => res);
@@ -35,11 +36,12 @@ function resultAttempts(result: components["schemas"]["Result"]) {
 export function ResultsTable({
   results,
   eventId,
+  t,
   isAdmin = false,
 }: {
   results: components["schemas"]["Result"][];
   eventId: string;
-  competitionId: string;
+  t: TFunction;
   isAdmin?: boolean;
 }) {
   const event = events.byId[eventId];
@@ -89,10 +91,12 @@ export function ResultsTable({
                 {recordTagBadge(competitorResult.regional_average_record)}
               </Table.Cell>
               <Table.Cell>
-                <Icon asChild size="sm">
-                  <Flag code={competitorResult.country_iso2} />
-                </Icon>{" "}
-                {competitorResult.country_iso2}
+                <HStack>
+                  <Icon asChild size="sm">
+                    <Flag code={competitorResult.country_iso2} />
+                  </Icon>
+                  <CountryMap code={competitorResult.country_iso2} t={t} />
+                </HStack>
               </Table.Cell>
               <AttemptsCells
                 attempts={definedAttempts}
@@ -157,12 +161,13 @@ export function ByPersonTable({
                 {recordTagBadge(competitorResult.regional_average_record)}
               </Table.Cell>
               <Table.Cell>
-                <Icon asChild size="sm">
-                  <Flag code={competitorResult.country_iso2} />
-                </Icon>{" "}
-                {competitorResult.country_iso2}
+                <HStack>
+                  <Icon asChild size="sm">
+                    <Flag code={competitorResult.country_iso2} />
+                  </Icon>
+                  <CountryMap code={competitorResult.country_iso2} t={t} />
+                </HStack>
               </Table.Cell>
-              <Table.Cell>{competitorResult.country_iso2}</Table.Cell>
               <AttemptsCells
                 attempts={definedAttempts}
                 bestResultIndex={bestResultIndex}
