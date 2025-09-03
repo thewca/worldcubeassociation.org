@@ -10,7 +10,7 @@ class RegistrationPayment < ApplicationRecord
   has_many :refunding_registration_payments, class_name: 'RegistrationPayment', inverse_of: :refunded_registration_payment, foreign_key: :refunded_registration_payment_id, dependent: :destroy
 
   delegate :auto_accept_preference_live?, to: :registration
-  before_save :set_paid_at, if: :becoming_completed?, unless: :paid_at
+  before_save :set_paid_at, if: :becoming_completed?, unless: :paid_at?
   after_create :auto_accept_hook, if: :auto_accept_preference_live?
   after_save :auto_close_hook
 
