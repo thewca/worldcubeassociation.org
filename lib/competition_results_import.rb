@@ -72,7 +72,7 @@ module CompetitionResultsImport
   end
 
   def self.post_results_error(comp)
-    I18n.t('competitions.messages.computing_auxiliary_data') if ComputeAuxiliaryData.in_progress?
+    return I18n.t('competitions.messages.computing_auxiliary_data') if ComputeAuxiliaryData.in_progress?
 
     return I18n.t('competitions.messages.no_results') unless comp.results.any?
 
