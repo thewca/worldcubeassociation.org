@@ -26,7 +26,7 @@ class RegistrationPayment < ApplicationRecord
   end
 
   private def set_paid_at
-    self.paid_at = Time.now.utc
+    self.paid_at = Time.now.utc unless self.paid_at.present?
   end
 
   def amount_available_for_refund

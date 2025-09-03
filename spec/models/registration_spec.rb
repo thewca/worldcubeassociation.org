@@ -1404,13 +1404,17 @@ RSpec.describe Registration do
     end
   end
 
-  describe 'last_payment methods', :zxc do
+  describe 'last_payment methods' do
     before do
-      @expected_pmt = create(:registration_payment, registration: registration, created_at: Time.now.utc-4, updated_at: Time.now.utc-4)
-      @other1 = create(:registration_payment, registration: registration, created_at: Time.now.utc-3, updated_at: Time.now.utc-3)
-      @other2 = create(:registration_payment, registration: registration, created_at: Time.now.utc-2, updated_at: Time.now.utc-2)
-
-      @expected_pmt.update_columns(paid_at: Time.now.utc-1) # Use update_columns to not changed the update_at timestamp
+      @expected_pmt = create(
+        :registration_payment, registration: registration, created_at: Time.now.utc-4, updated_at: Time.now.utc-4, paid_at: Time.now.utc-1
+      )
+      @other1 = create(
+        :registration_payment, registration: registration, created_at: Time.now.utc-3, updated_at: Time.now.utc-3, paid_at: Time.now.utc-3
+      )
+      @other2 = create(
+        :registration_payment, registration: registration, created_at: Time.now.utc-2, updated_at: Time.now.utc-2, paid_at: Time.now.utc-2
+      )
     end
 
     it 'paid_at for first payment is after all timestamps for other payments' do
