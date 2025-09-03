@@ -78,7 +78,7 @@ class TicketsCompetitionResult < ApplicationRecord
 
   DEFAULT_SERIALIZE_OPTIONS = {
     include: {
-      competition: { only: %i[id name], methods: [], include: [] },
+      competition: { only: %i[id name results_posted_at], methods: [], include: %i[posted_user] },
     },
   }.freeze
 
