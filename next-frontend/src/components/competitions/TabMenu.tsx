@@ -26,6 +26,7 @@ export default function TabMenu({
       orientation="vertical"
       lazyMount
       unmountOnExit
+      hideBelow="md"
     >
       <Tabs.List height="fit-content" position="sticky" top="3">
         <Link

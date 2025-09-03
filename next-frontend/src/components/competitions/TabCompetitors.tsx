@@ -47,7 +47,7 @@ const TabCompetitors: React.FC<CompetitorData> = ({ id }) => {
   return (
     <Card.Root>
       <Card.Body>
-        <Table.Root width="100%">
+        <Table.Root>
           <Table.Header>
             <Table.Row>
               <Table.Cell>Competitor</Table.Cell>
