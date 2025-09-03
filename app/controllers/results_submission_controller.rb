@@ -146,9 +146,8 @@ class ResultsSubmissionController < ApplicationController
                                    .select { it.wcif_status == "accepted" && person_with_results.include?(it.registrant_id.to_s) }
                                    .map do |registration|
       InboxPerson.new({
-                        id: registration.registrant_id,
+                        id: [registration.registrant_id, competition.id],
                         wca_id: registration.wca_id || '',
-                        competition_id: competition.id,
                         name: registration.name,
                         country_iso2: registration.country.iso2,
                         gender: registration.gender,
