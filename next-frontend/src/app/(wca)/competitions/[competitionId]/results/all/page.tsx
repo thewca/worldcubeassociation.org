@@ -21,15 +21,14 @@ export default async function PodiumsPage({
     return <Text>Error fetching competition</Text>;
   }
 
-  if (!competitionInfo) {
-    return <Text>Competition does not exist</Text>;
-  }
-
   const { t } = await getT();
 
-  const podiumsRequest = await getCompetitionResults(competitionId);
+  const { error: resultsError, data: competitionResults } =
+    await getCompetitionResults(competitionId);
 
-  const competitionResults = podiumsRequest.data!;
+  if (resultsError) {
+    return <Text>Error fetching Results</Text>;
+  }
 
   const resultsByEvent = _.groupBy(competitionResults, "event_id");
 
