@@ -148,7 +148,11 @@ async function GeneralPage({ competitionId }: { competitionId: string }) {
                   </Card.Header>
                   <Card.Body>
                     <Text>{competitionInfo.city}, </Text>
-                    <CountryMap code={competitionInfo.country_iso2} bold />
+                    <CountryMap
+                      code={competitionInfo.country_iso2}
+                      t={t}
+                      bold
+                    />
                   </Card.Body>
                 </Card.Root>
 

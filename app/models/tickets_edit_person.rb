@@ -10,14 +10,25 @@ class TicketsEditPerson < ApplicationRecord
 
   has_one :ticket, as: :metadata
   has_many :tickets_edit_person_fields
+  belongs_to :person, -> { current }, primary_key: :wca_id, foreign_key: :wca_id
 
   ACTION_TYPE = {
     reject_edit_person_request: "reject_edit_person_request",
+    create_edit_person_change: "create_edit_person_change",
+    update_edit_person_change: "update_edit_person_change",
+    delete_edit_person_change: "delete_edit_person_change",
+    sync_edit_person_request: "sync_edit_person_request",
   }.freeze
 
   def metadata_actions_allowed_for(ticket_stakeholder)
     if ticket_stakeholder.stakeholder == UserGroup.teams_committees_group_wrt
-      [ACTION_TYPE[:reject_edit_person_request]]
+      [
+        ACTION_TYPE[:reject_edit_person_request],
+        ACTION_TYPE[:create_edit_person_change],
+        ACTION_TYPE[:update_edit_person_change],
+        ACTION_TYPE[:delete_edit_person_change],
+        ACTION_TYPE[:sync_edit_person_request],
+      ]
     else
       []
     end
@@ -68,7 +79,14 @@ class TicketsEditPerson < ApplicationRecord
   end
 
   DEFAULT_SERIALIZE_OPTIONS = {
-    include: %w[tickets_edit_person_fields],
+    include: {
+      tickets_edit_person_fields: {},
+      person: {
+        only: %w[name gender],
+        methods: %w[country_iso2],
+        private_attributes: %w[dob],
+      },
+    },
   }.freeze
 
   def serializable_hash(options = nil)
