@@ -84,6 +84,7 @@ export default function RegistrationProvider({
   const isAccepted = isRegistered && registration.competing.registration_status === 'accepted';
   const isRejected = isRegistered && registration.competing.registration_status === 'rejected';
   const hasPaid = registration?.payment?.has_paid;
+  const paymentStatus = registration?.payment?.payment_status;
   const isPending = isRegistered && registration.competing.registration_status === 'pending';
   const isWaitingList = isRegistered && registration.competing.registration_status === 'waiting_list';
 
@@ -92,6 +93,7 @@ export default function RegistrationProvider({
     isAccepted,
     isRejected,
     hasPaid,
+    paymentStatus,
     isPending,
     isWaitingList,
     registration,
@@ -105,6 +107,7 @@ export default function RegistrationProvider({
   }), [
     pollingStatus,
     hasPaid,
+    paymentStatus,
     isAccepted,
     isFetching,
     isRegistered,

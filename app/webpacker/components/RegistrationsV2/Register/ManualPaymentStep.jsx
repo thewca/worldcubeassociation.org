@@ -19,9 +19,12 @@ import { isoMoneyToHumanReadable } from '../../../lib/helpers/money';
 export default function ManualPaymentStep({
   competitionInfo,
 }) {
-  const { hasPaid, registration } = useRegistration();
+  const { hasPaid, paymentStatus, registration } = useRegistration();
+  console.log("payment status", paymentStatus)
 
-  const [paymentReference, setPaymentReference] = useInputState(hasPaid ? registration.payment.payment_reference : '');
+  const originalPaymentReference = registration.payment.payment_reference || ''
+  const [paymentReference, setPaymentReference] = useInputState(originalPaymentReference);
+  const [paymentReferenceChanged, setPaymentReferenceChanged] = useInputState(false);
   const [paymentConfirmation, setPaymentConfirmation] = useCheckboxState(hasPaid);
 
   const { data, isLoading } = useQuery({
@@ -32,6 +35,11 @@ export default function ManualPaymentStep({
       'manual',
     ),
   });
+
+  const updatePaymentReference = (event) => {
+    setPaymentReference(event.target.value)
+    setPaymentReferenceChanged(originalPaymentReference !== paymentReference)
+  }
 
   if (hasPassed(competitionInfo.registration_close)) {
     return (
@@ -63,9 +71,9 @@ export default function ManualPaymentStep({
         </Form.Field>
         <Form.Field required disabled={hasPaid}>
           <label htmlFor="paymentReference">{competitionInfo.manual_payment_details.payment_reference}</label>
-          <Form.Input id="paymentReference" name="payment_reference" value={paymentReference} onChange={setPaymentReference} />
+          <Form.Input id="paymentReference" name="payment_reference" value={paymentReference} onChange={updatePaymentReference} />
         </Form.Field>
-        <Form.Button type="submit" disabled={hasPaid}>
+        <Form.Button type="submit" disabled={hasPaid || !paymentConfirmation || !paymentReferenceChanged}>
           {I18n.t('registrations.payment_form.button_text')}
         </Form.Button>
         <input hidden name="client_secret" value={data.client_secret} />

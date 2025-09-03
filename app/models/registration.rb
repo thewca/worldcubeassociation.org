@@ -182,17 +182,25 @@ class Registration < ApplicationRecord
     )
   end
 
-  def last_payment
+  def last_payment(include_incomplete: false)
     if registration_payments.loaded?
-      registration_payments.completed.max_by(&:created_at)
+      if include_incomplete
+        registration_payments.max_by(&:created_at)
+      else
+        registration_payments.completed.max_by(&:created_at)
+      end
     else
-      registration_payments.completed.order(:created_at).last
+      if include_incomplete
+        registration_payments.order(:created_at).last
+      else
+        registration_payments.completed.order(:created_at).last
+      end
     end
   end
 
   def last_payment_status
     # Store this in a variable so we don't have to recompute over and over
-    most_recent_payment = self.last_payment
+    most_recent_payment = self.last_payment(include_incomplete: self.competition.using_manual_payment?)
 
     return nil if most_recent_payment.blank?
     return "refund" if most_recent_payment.refunded_registration_payment_id?

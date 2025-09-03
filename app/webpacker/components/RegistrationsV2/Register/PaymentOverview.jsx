@@ -26,11 +26,30 @@ function PaymentMessage({
 }
 
 function PaymentStatus({
-  hasPaid, totalPaid, paymentFee, currencyCode,
+  hasPaid, totalPaid, paymentFee, currencyCode, paymentReference,
 }) {
   const totalPaidString = isoMoneyToHumanReadable(totalPaid, currencyCode);
   const paymentFeeString = isoMoneyToHumanReadable(paymentFee, currencyCode);
 
+  if (paymentReference) {
+    if (hasPaid) {
+      return (
+        <PaymentMessage
+          message={I18n.t('registrations.approved_manual_payment', { payment_reference: paymentReference})}
+          icon="checkmark"
+          success
+        />
+      )
+    } else {
+      return (
+        <PaymentMessage
+          message={I18n.t('registrations.pending_manual_payment', { payment_reference: paymentReference })}
+          icon={hasPaid ? "checkmark" : "warning circle"}
+          warning
+        />
+      )
+    }
+  }
   if (hasPaid) {
     return (
       <PaymentMessage
@@ -58,12 +77,18 @@ function PaymentStatus({
   );
 }
 
+
 export default function PaymentOverview({
   payments, competitionInfo, connectedAccountId, stripePublishableKey, user, nextStep,
 }) {
-  const { hasPaid } = useRegistration();
+  const { hasPaid, registration } = useRegistration();
   const totalPaid = _.sumBy(payments, 'iso_amount_refundable');
   const [payAgain, setPayAgain] = useCheckboxState(false);
+  const paymentReference = registration.payment.payment_reference
+
+  const payAgainText = competitionInfo.payment_integration_type === 'manual' ?
+    I18n.t('registrations.entry_fees_pay_again') :
+    I18n.t('registrations.update_payment_ref')
 
   return (
     <>
@@ -72,6 +97,7 @@ export default function PaymentOverview({
         hasPaid={hasPaid}
         totalPaid={totalPaid}
         currencyCode={competitionInfo.currency_code}
+        paymentReference={paymentReference}
       />
       { !hasPaid && !hasPassed(competitionInfo.registration_close) && (
         <Accordion styled fluid>

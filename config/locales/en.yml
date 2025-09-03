@@ -1256,6 +1256,9 @@ en:
     entry_fees_partially_paid: "You have paid %{paid} of %{total}. Check with the organizers if you need to pay the rest."
     entry_fees_fully_refunded: "Your registration fees were fully refunded. If you need to pay again, you can do so below"
     entry_fees_pay_again: "I want to pay again"
+    pending_manual_payment: "Waiting for organizers to confirm your payment. You may update your payment reference \"%{payment_reference}\" below if needed."
+    approved_manual_payment: "Your payment with reference \"%{payment_reference}\" has been confirmed by the organizers."
+    update_payment_ref: "I want to update my payment reference"
     will_pay_here: "You will pay them here after submitting your registration"
     wont_pay_here: "Please check the competition's information for instructions about how to pay"
     refund_form:
