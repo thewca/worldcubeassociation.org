@@ -1404,16 +1404,13 @@ RSpec.describe Registration do
     end
   end
 
-  describe 'last_payment methods' do
+  describe 'last_payment methods', :zxc do
     before do
-      # Use sleeps to ensure that created_at and updated_at have delays between them
-      @expected_pmt = create(:registration_payment, registration: registration)
-      sleep 1
-      @other1 = create(:registration_payment, registration: registration)
-      sleep 1
-      @other2 = create(:registration_payment, registration: registration)
+      @expected_pmt = create(:registration_payment, registration: registration, created_at: Time.now.utc-4, updated_at: Time.now.utc-4)
+      @other1 = create(:registration_payment, registration: registration, created_at: Time.now.utc-3, updated_at: Time.now.utc-3)
+      @other2 = create(:registration_payment, registration: registration, created_at: Time.now.utc-2, updated_at: Time.now.utc-2)
 
-      @expected_pmt.update_columns(paid_at: Time.now.utc) # Use update_columns to not changed the update_at timestamp
+      @expected_pmt.update_columns(paid_at: Time.now.utc-1) # Use update_columns to not changed the update_at timestamp
     end
 
     it 'paid_at for first payment is after all timestamps for other payments' do
@@ -1451,7 +1448,6 @@ RSpec.describe Registration do
         end
 
         it 'does not return un-succeeded payments' do
-          sleep 1 # Necessary to create a timer difference in when the RegPayments are created
           create(:registration_payment, is_completed: false, registration: registration)
           registration.registration_payments.reload # We have to reload because we've already loaded the records
           expect(registration.last_payment).to eq(@expected_pmt)
@@ -1468,7 +1464,6 @@ RSpec.describe Registration do
         end
 
         it 'does not return un-succeeded payments' do
-          sleep 1 # Necessary to create a timer difference in when the RegPayments are created
           create(:registration_payment, is_completed: false, registration: registration)
           expect(registration.last_payment).to eq(@expected_pmt)
         end
@@ -1481,7 +1476,6 @@ RSpec.describe Registration do
       end
 
       it 'does not return uncaptured payments' do
-        sleep 1 # Necessary to create a timer difference in when the RegPayments are created
         create(:registration_payment, is_completed: false, registration: registration)
         expect(registration.last_positive_payment).to eq(@expected_pmt)
       end
