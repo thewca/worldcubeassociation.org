@@ -9,6 +9,7 @@ class AddPaidAtToRegistrationPayment < ActiveRecord::Migration[7.2]
         execute <<~SQL.squish
           UPDATE registration_payments
           SET paid_at = created_at
+          WHERE paid_at IS NULL
         SQL
       end
     end
