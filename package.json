@@ -28,9 +28,9 @@
     "@hello-pangea/dnd": "^18.0.1",
     "@rails/actioncable": "^8.0.201",
     "@rails/ujs": "^7.1.502",
-    "@stripe/react-stripe-js": "^3.9.1",
-    "@stripe/stripe-js": "^7.8.0",
-    "@tanstack/react-query": "^5.85.5",
+    "@stripe/react-stripe-js": "^3.9.2",
+    "@stripe/stripe-js": "^7.9.0",
+    "@tanstack/react-query": "^5.85.6",
     "@tanstack/react-table": "^8.21.3",
     "@wca/helpers": "^1.1.5",
     "autonumeric": "^4.10.8",
@@ -70,7 +70,7 @@
     "postcss-flexbugs-fixes": "^5.0.2",
     "postcss-import": "^16.1.1",
     "postcss-loader": "^8.1.1",
-    "postcss-preset-env": "^10.3.0",
+    "postcss-preset-env": "^10.3.1",
     "prop-types": "^15.8.1",
     "rails-erb-loader": "^5.5.2",
     "react": "^18.3.1",
@@ -87,7 +87,7 @@
     "react_ujs": "^3.2.1",
     "regenerator-runtime": "^0.14.1",
     "resolve-url-loader": "^5.0.0",
-    "sass": "^1.90.0",
+    "sass": "^1.91.0",
     "sass-loader": "^16.0.5",
     "semantic-ui-react": "^2.1.5",
     "shakapacker": "8.3.0",
@@ -129,5 +129,5 @@
     "lint": "eslint -c .eslintrc.json app/webpacker/components/**/*.js app/webpacker/components/**/*.jsx app/webpacker/lib/**/*.js",
     "webpack:analyze": "mkdir -p public/packs && RACK_ENV=test NODE_ENV=production webpack --config config/webpack/webpack.config.js --profile --json > public/packs/stats.json && webpack-bundle-analyzer public/packs/stats.json"
   },
-  "packageManager": "yarn@4.9.3"
+  "packageManager": "yarn@4.9.4"
 }

@@ -6,10 +6,11 @@ export const UpdateFormValue = 'update_form_value';
  * Action creator for marking changes as saved
  * @returns {Action}
  */
-export const changesSaved = (override = undefined) => ({
+export const changesSaved = (override = undefined, writeWorkingState = false) => ({
   type: ChangesSaved,
   payload: {
     override,
+    writeWorkingState,
   },
 });
 

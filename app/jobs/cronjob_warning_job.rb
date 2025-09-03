@@ -5,7 +5,7 @@ class CronjobWarningJob < WcaCronjob
     scheduled_jobs = Sidekiq::Cron::Job.all
 
     scheduled_jobs.each do |job|
-      next if job.klass == self.class
+      next if job.klass == self.class.name
 
       statistics = CronjobStatistic.find_by(name: job.klass)
       next if statistics.nil? || statistics.average_runtime.nil?

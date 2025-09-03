@@ -114,7 +114,7 @@ Rails.application.routes.draw do
     get 'newcomer-dob-check' => 'results_submission#newcomer_dob_check', as: :newcomer_dob_check
     post 'compute_potential_duplicates' => 'results_submission#compute_potential_duplicates', as: :compute_potential_duplicates
     get 'submit-results' => 'results_submission#new', as: :submit_results_edit
-    get 'upload-scrambles' => 'admin/scrambles#upload', as: :upload_scrambles
+    get 'upload-scrambles' => 'results_submission#upload_scrambles', as: :upload_scrambles
     post 'submit-results' => 'results_submission#create', as: :submit_results
     post 'import-wca-live-results' => 'results_submission#import_from_live'
     resources :scramble_files, only: %i[index create destroy], shallow: true do
@@ -126,10 +126,6 @@ Rails.application.routes.draw do
     get '/admin/upload-results' => "admin#new_results", as: :admin_upload_results_edit
     get '/admin/check-existing-results' => "admin#check_competition_results", as: :admin_check_existing_results
     post '/admin/clear-submission' => "admin#clear_results_submission", as: :clear_results_submission
-    get '/admin/import-results' => 'admin#import_results', as: :admin_import_results
-    get '/admin/result-inbox-steps' => 'admin#result_inbox_steps', as: :admin_result_inbox_steps
-    post '/admin/import-inbox-results' => 'admin#import_inbox_results', as: :admin_import_inbox_results
-    delete '/admin/inbox-data' => 'admin#delete_inbox_data', as: :admin_delete_inbox_data
     delete '/admin/results-data' => 'admin#delete_results_data', as: :admin_delete_results_data
     get '/admin/results/:round_id/new' => 'admin/results#new', as: :new_result
     get '/admin/scrambles/:round_id/new' => 'admin/scrambles#new', as: :new_scramble
@@ -198,6 +194,9 @@ Rails.application.routes.draw do
 
   get 'persons/new_id' => 'admin/persons#generate_ids'
   get '/persons/results' => 'admin/persons#results', as: :person_results
+  get '/persons/registrations' => 'admin/persons#registrations', as: :person_registrations
+  get '/persons/organized-competitions' => 'admin/persons#organized_competitions', as: :person_organized_competitions
+  get '/persons/delegated-competitions' => 'admin/persons#delegated_competitions', as: :person_delegated_competitions
   resources :persons, only: %i[index show]
   post 'persons' => 'admin/persons#create'
 
@@ -206,8 +205,6 @@ Rails.application.routes.draw do
   get 'polls/:id/results' => 'polls#results', as: 'polls_results'
 
   resources :votes, only: %i[create update]
-
-  post 'competitions/:id/post_results' => 'competitions#post_results', as: :competition_post_results
 
   get 'panel/pending-claims(/:user_id)' => 'panel#pending_claims_for_subordinate_delegates', as: 'pending_claims'
   scope 'panel' do
@@ -233,6 +230,7 @@ Rails.application.routes.draw do
   end
   resources :tickets, only: %i[index show] do
     post 'update_status' => 'tickets#update_status', as: :update_status
+    post 'verify_warnings' => 'tickets#verify_warnings', as: :verify_warnings
     post 'merge_inbox_results' => 'tickets#merge_inbox_results', as: :merge_inbox_results
     post 'post_results' => 'tickets#post_results', as: :post_results
     get 'edit_person_validators' => 'tickets#edit_person_validators', as: :edit_person_validators
@@ -240,8 +238,10 @@ Rails.application.routes.draw do
     post 'delete_inbox_persons' => 'tickets#delete_inbox_persons', as: :delete_inbox_persons
     get 'events_merged_data' => 'tickets#events_merged_data', as: :events_merged_data
     post 'reject_edit_person_request' => 'tickets#reject_edit_person_request', as: :reject_edit_person_request
+    post 'sync_edit_person_request' => 'tickets#sync_edit_person_request', as: :sync_edit_person_request
     resources :ticket_comments, only: %i[index create], as: :comments
     resources :ticket_logs, only: [:index], as: :logs
+    resources :tickets_edit_person_fields, only: %i[create update destroy], as: :edit_person_fields
   end
   resources :notifications, only: [:index]
 
@@ -375,6 +375,7 @@ Rails.application.routes.draw do
 
           member do
             get 'payment_ticket', to: 'registrations#payment_ticket'
+            get 'config', to: 'registrations#registration_config', as: :registration_config
           end
 
           collection do
