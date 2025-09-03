@@ -39,6 +39,7 @@ export function ResultsTable({
 }: {
   results: components["schemas"]["Result"][];
   eventId: string;
+  competitionId: string;
   isAdmin?: boolean;
 }) {
   const event = events.byId[eventId];
@@ -161,6 +162,7 @@ export function ByPersonTable({
                 </Icon>{" "}
                 {competitorResult.country_iso2}
               </Table.Cell>
+              <Table.Cell>{competitorResult.country_iso2}</Table.Cell>
               <AttemptsCells
                 attempts={definedAttempts}
                 bestResultIndex={bestResultIndex}
