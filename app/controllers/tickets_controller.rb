@@ -269,7 +269,7 @@ class TicketsController < ApplicationController
 
     CompetitionResultsImport.post_results(competition, current_user)
 
-    render status: :ok, json: { success: true }
+    render status: :ok, json: ticket
   end
 
   def events_merged_data

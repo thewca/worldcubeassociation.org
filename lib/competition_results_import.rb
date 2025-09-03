@@ -72,13 +72,13 @@ module CompetitionResultsImport
   end
 
   def self.post_results_error(comp)
-    return t('competitions.messages.computing_auxiliary_data') if ComputeAuxiliaryData.in_progress?
+    I18n.t('competitions.messages.computing_auxiliary_data') if ComputeAuxiliaryData.in_progress?
 
-    return t('competitions.messages.no_results') unless comp.results.any?
+    return I18n.t('competitions.messages.no_results') unless comp.results.any?
 
-    return t('competitions.messages.no_main_event_results', event_name: comp.main_event.name) if comp.main_event && comp.results.where(event_id: comp.main_event_id).empty?
+    return I18n.t('competitions.messages.no_main_event_results', event_name: comp.main_event.name) if comp.main_event && comp.results.where(event_id: comp.main_event_id).empty?
 
-    t('competitions.messages.results_already_posted') if comp.results_posted?
+    I18n.t('competitions.messages.results_already_posted') if comp.results_posted?
   end
 
   def self.post_results(comp, current_user)
