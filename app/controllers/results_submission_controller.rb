@@ -146,9 +146,8 @@ class ResultsSubmissionController < ApplicationController
                                    .select { it.wcif_status == "accepted" && person_with_results.include?(it.registrant_id.to_s) }
                                    .map do |registration|
       InboxPerson.new({
-                        id: registration.registrant_id,
+                        id: [registration.registrant_id, competition.id],
                         wca_id: registration.wca_id || '',
-                        competition_id: competition.id,
                         name: registration.name,
                         country_iso2: registration.country.iso2,
                         gender: registration.gender,
@@ -164,7 +163,7 @@ class ResultsSubmissionController < ApplicationController
                        round_type_id: scramble_set.round_type_id,
                        round_id: scramble_set.matched_round_id,
                        group_id: scramble_set.alphabetic_group_index,
-                       is_extra: scramble.is_extra,
+                       is_extra: scramble.is_extra?,
                        scramble_num: scramble.ordered_index + 1,
                        scramble: scramble.scramble_string,
                      })

@@ -1914,6 +1914,11 @@ RSpec.describe Competition do
       expect(comp.fully_paid_registrations_count).to eq(0)
     end
 
+    it 'doesnt include uncaptured registration payments' do
+      create_list(:registration, 5, :uncaptured, competition: comp)
+      expect(comp.fully_paid_registrations_count).to eq(0)
+    end
+
     it 'counts registrations == competition fee' do
       create_list(:registration, 5, :paid, competition: comp)
       expect(comp.fully_paid_registrations_count).to eq(5)

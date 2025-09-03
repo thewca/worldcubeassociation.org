@@ -116,7 +116,6 @@ Rails.application.routes.draw do
     get 'submit-results' => 'results_submission#new', as: :submit_results_edit
     get 'upload-scrambles' => 'results_submission#upload_scrambles', as: :upload_scrambles
     post 'submit-results' => 'results_submission#create', as: :submit_results
-    post 'import-wca-live-results' => 'results_submission#import_from_live'
     resources :scramble_files, only: %i[index create destroy], shallow: true do
       patch 'update-round-matching' => 'scramble_files#update_round_matching', on: :collection
     end
@@ -126,10 +125,6 @@ Rails.application.routes.draw do
     get '/admin/upload-results' => "admin#new_results", as: :admin_upload_results_edit
     get '/admin/check-existing-results' => "admin#check_competition_results", as: :admin_check_existing_results
     post '/admin/clear-submission' => "admin#clear_results_submission", as: :clear_results_submission
-    get '/admin/import-results' => 'admin#import_results', as: :admin_import_results
-    get '/admin/result-inbox-steps' => 'admin#result_inbox_steps', as: :admin_result_inbox_steps
-    post '/admin/import-inbox-results' => 'admin#import_inbox_results', as: :admin_import_inbox_results
-    delete '/admin/inbox-data' => 'admin#delete_inbox_data', as: :admin_delete_inbox_data
     delete '/admin/results-data' => 'admin#delete_results_data', as: :admin_delete_results_data
     get '/admin/results/:round_id/new' => 'admin/results#new', as: :new_result
     get '/admin/scrambles/:round_id/new' => 'admin/scrambles#new', as: :new_scramble
@@ -209,8 +204,6 @@ Rails.application.routes.draw do
   get 'polls/:id/results' => 'polls#results', as: 'polls_results'
 
   resources :votes, only: %i[create update]
-
-  post 'competitions/:id/post_results' => 'competitions#post_results', as: :competition_post_results
 
   get 'panel/pending-claims(/:user_id)' => 'panel#pending_claims_for_subordinate_delegates', as: 'pending_claims'
   scope 'panel' do
@@ -448,6 +441,7 @@ Rails.application.routes.draw do
         get '/registrations' => 'competitions#registrations'
         get '/events' => 'competitions#events'
         get '/schedule' => 'competitions#schedule'
+        get '/podiums' => 'competitions#podiums'
         get '/scrambles' => 'competitions#scrambles', as: :scrambles
         get '/scrambles/:event_id' => 'competitions#event_scrambles', as: :event_scrambles
         get '/psych-sheet/:event_id' => 'competitions#event_psych_sheet', as: :event_psych_sheet

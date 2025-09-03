@@ -1,6 +1,7 @@
-import { Container } from "@chakra-ui/react";
+import { Container, Text } from "@chakra-ui/react";
 import TabMenu from "@/components/competitions/TabMenu";
 import MobileMenu from "@/components/competitions/MobileMenu";
+import { getCompetitionInfo } from "@/lib/wca/competitions/getCompetitionInfo";
 
 export default async function CompetitionLayout({
   children,
@@ -10,11 +11,19 @@ export default async function CompetitionLayout({
   params: Promise<{ competitionId: string }>;
 }) {
   const { competitionId } = await params;
+  const { data: competitionInfo, error } =
+    await getCompetitionInfo(competitionId);
+
+  if (error) {
+    return <Text>Error fetching competition</Text>;
+  }
 
   return (
     <Container minW="80vw" p="8">
       <MobileMenu competitionId={competitionId}>{children}</MobileMenu>
-      <TabMenu competitionId={competitionId}>{children}</TabMenu>
+      <TabMenu competitionId={competitionId} competitionInfo={competitionInfo}>
+        {children}
+      </TabMenu>
     </Container>
   );
 }

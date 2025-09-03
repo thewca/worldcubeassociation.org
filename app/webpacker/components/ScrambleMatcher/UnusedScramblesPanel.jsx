@@ -51,10 +51,10 @@ const filterUnusedItems = (
       ...acc,
       ...workingItem,
       [nestedPicker]: [
-        ...acc[nestedPicker],
+        ...(acc[nestedPicker] ?? []),
         ...workingItem[nestedPicker],
       ],
-    }));
+    }), {});
 
     const nextHistory = [
       ...history,
