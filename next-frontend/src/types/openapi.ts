@@ -156,6 +156,44 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/competitions/{competitionId}/scrambles": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Returns the competition scrambles */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    competitionId: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Successful Response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Scramble"][];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/competitions/{competitionId}/podiums": {
         parameters: {
             query?: never;
@@ -751,6 +789,17 @@ export interface components {
             silver: number;
             bronze: number;
             total: number;
+        };
+        Scramble: {
+            id: number;
+            competition_id: string;
+            event_id: string;
+            round_type_id: string;
+            round_id: number;
+            group_id: string;
+            is_extra: string;
+            scramble_num: number;
+            scramble: string;
         };
         Records: {
             national: number;
