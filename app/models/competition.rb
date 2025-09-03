@@ -1003,6 +1003,16 @@ class Competition < ApplicationRecord
     competition_payment_integrations.any? && paid_entry?
   end
 
+  def payment_integration_type
+    return nil unless using_payment_integrations?
+
+    CompetitionPaymentIntegration::AVAILABLE_INTEGRATIONS.key(competition_payment_integrations.first.connected_account_type)
+  end
+
+  def using_manual_payment?
+    payment_integration_type == :manual
+  end
+
   def can_edit_registration_fees?
     # Quick workaround for https://github.com/thewca/worldcubeassociation.org/issues/2123
     # (We used to return `registrations.with_payments.empty?` here)
@@ -1412,6 +1422,7 @@ class Competition < ApplicationRecord
   end
 
   def user_can_view?(user)
+    Rails.logger.debug self.show_at_all?
     self.show_at_all? || user&.can_manage_competition?(self)
   end
 
@@ -1826,6 +1837,12 @@ class Competition < ApplicationRecord
 
   def top_level_activities
     competition_venues.includes(venue_rooms: { schedule_activities: [:child_activities] }).map(&:top_level_activities).flatten
+  end
+
+  def manual_payment_details
+    return nil unless using_manual_payment?
+
+    competition_payment_integrations.first.connected_account.account_details
   end
 
   # See https://github.com/thewca/worldcubeassociation.org/wiki/wcif
