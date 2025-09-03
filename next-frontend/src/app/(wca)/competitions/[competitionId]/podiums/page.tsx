@@ -13,7 +13,7 @@ import { Fragment } from "react";
 import _ from "lodash";
 import { getT } from "@/lib/i18n/get18n";
 import { getCompetitionInfo } from "@/lib/wca/competitions/getCompetitionInfo";
-import { EventCard, InfoCard } from "@/components/competitions/Cards";
+import { InfoCard } from "@/components/competitions/Cards";
 import { MarkdownFirstImage } from "@/components/MarkdownFirstImage";
 
 export default async function PodiumsPage({
@@ -30,15 +30,14 @@ export default async function PodiumsPage({
     return <Text>Error fetching competition</Text>;
   }
 
-  if (!competitionInfo) {
-    return <Text>Competition does not exist</Text>;
-  }
-
   const { t } = await getT();
 
-  const podiumsRequest = await getPodiums(competitionId);
+  const { error: podiumError, data: podiumResults } =
+    await getPodiums(competitionId);
 
-  const podiumResults = podiumsRequest.data!;
+  if (podiumError) {
+    return <Text>Error fetching Podiums</Text>;
+  }
 
   const resultsByEvent = _.groupBy(podiumResults, "event_id");
 
