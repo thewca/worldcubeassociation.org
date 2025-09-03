@@ -1407,13 +1407,13 @@ RSpec.describe Registration do
   describe 'last_payment methods' do
     before do
       @expected_pmt = create(
-        :registration_payment, registration: registration, created_at: Time.now.utc-4, updated_at: Time.now.utc-4, paid_at: Time.now.utc-1
+        :registration_payment, registration: registration, created_at: Time.now.utc - 4, updated_at: Time.now.utc - 4, paid_at: Time.now.utc - 1
       )
       @other1 = create(
-        :registration_payment, registration: registration, created_at: Time.now.utc-3, updated_at: Time.now.utc-3, paid_at: Time.now.utc-3
+        :registration_payment, registration: registration, created_at: Time.now.utc - 3, updated_at: Time.now.utc - 3, paid_at: Time.now.utc - 3
       )
       @other2 = create(
-        :registration_payment, registration: registration, created_at: Time.now.utc-2, updated_at: Time.now.utc-2, paid_at: Time.now.utc-2
+        :registration_payment, registration: registration, created_at: Time.now.utc - 2, updated_at: Time.now.utc - 2, paid_at: Time.now.utc - 2
       )
     end
 

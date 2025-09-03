@@ -10,7 +10,7 @@ class RegistrationPayment < ApplicationRecord
   has_many :refunding_registration_payments, class_name: 'RegistrationPayment', inverse_of: :refunded_registration_payment, foreign_key: :refunded_registration_payment_id, dependent: :destroy
 
   delegate :auto_accept_preference_live?, to: :registration
-  before_save :set_paid_at, if: :becoming_completed?
+  before_save :set_paid_at, if: -> { becoming_completed? && paid_at.blank? }
   after_create :auto_accept_hook, if: :auto_accept_preference_live?
   after_save :auto_close_hook
 
@@ -26,7 +26,7 @@ class RegistrationPayment < ApplicationRecord
   end
 
   private def set_paid_at
-    self.paid_at = Time.now.utc unless self.paid_at.present?
+    self.paid_at = current_time_from_proper_timezone unless self.paid_at.present?
   end
 
   def amount_available_for_refund
