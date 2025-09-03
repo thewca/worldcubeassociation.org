@@ -67,7 +67,7 @@ const TabCompetitors: React.FC<CompetitorData> = ({ id }) => {
                   <Text fontWeight="medium">{registration.user_id}</Text>
                 </Table.Cell>
                 <Table.Cell>
-                  <CountryMap code="AU" bold />
+                  <CountryMap code="AU" bold t={t} />
                 </Table.Cell>
 
                 {eventIds.map((eventId) => (
