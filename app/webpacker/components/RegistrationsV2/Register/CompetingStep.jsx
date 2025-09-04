@@ -270,7 +270,7 @@ export default function CompetingStep({
       selectedEventIds.update(
         currentStepParameters.event_ids.filter((e) => isQualifiedForEvent(
           e,
-          currentStepParameters.qualifications_wcif,
+          currentStepParameters.qualification_wcif,
           currentStepParameters.personalRecords,
         )),
       );
@@ -343,13 +343,13 @@ export default function CompetingStep({
                   ? []
                   : eventsNotQualifiedFor(
                     currentStepParameters.event_ids,
-                    currentStepParameters.qualifications_wcif,
+                    currentStepParameters.qualification_wcif,
                     currentStepParameters.personalRecords,
                   )
               }
             disabledText={(event) => eventQualificationToString(
               { id: event },
-              currentStepParameters.qualifications_wcif[event],
+              currentStepParameters.qualification_wcif[event],
               { short: true },
             )}
               // Don't error if the user hasn't interacted with the form yet
