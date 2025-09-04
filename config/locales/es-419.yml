@@ -1211,6 +1211,22 @@ es-419:
         400_contact_html: >-
           Si crees que esto es un error por favor <a href=%{contact_url}>click
           aquí</a> para reportarlo.
+        #original_hash: 508c106
+        comp_not_found: Competición no encontrada
+        #original_hash: c0e86d5
+        comp_not_found_action: >-
+          No pudimos encontrar una competición con el ID "%{comp_id}". Por
+          favor, búscala de otra forma.
+        #original_hash: 695f7ba
+        comp_not_found_action_2: >-
+          Si vienes de otro sitio web, por favor avisa a los propietarios de ese
+          sitio que su enlace es incorrecto.
+        #original_hash: 7f8f419
+        session_expired: Sesión expirada
+        #original_hash: f3e688a
+        session_expired_action: >-
+          Tu sesión ha expirado. Por favor refresca la página y vuelve a
+          intentarlo, o inicia sesión nuevamente para continuar.
     doorkeeper:
       applications:
         help:
@@ -2727,8 +2743,6 @@ es-419:
         estarán disponibles en breve.
       #original_hash: e205d73
       results_already_posted: Los resultados ya han sido cargados.
-      #original_hash: 376f461
-      results_posted: ¡Resultados cargados con éxito!
       #original_hash: afe3a23
       results_preview_alert: Estás consultando resultados que no se han publicado aún.
       #original_hash: 16dd227
@@ -4358,8 +4372,6 @@ es-419:
     cancelled_by_html: 'Cancelada por %{name} en %{date_time}'
     #original_hash: 25e68c3
     cancel_confirm: ¿Estás seguro de que quieres cancelar la competición?
-    #original_hash: 01de5ee
-    post_results: Publicar los resultados
     #original_hash: b6513f1
     results_posted_by_html: 'Publicado por %{poster_name} en %{date_time}'
     #original_hash: a6b5efe
