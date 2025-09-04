@@ -38,7 +38,7 @@ export default function ManualPaymentStep({
 
   const updatePaymentReference = (event) => {
     setPaymentReference(event.target.value)
-    setPaymentReferenceChanged(originalPaymentReference !== paymentReference)
+    setPaymentReferenceChanged(originalPaymentReference !== event.target.value)
   }
 
   if (hasPassed(competitionInfo.registration_close)) {
@@ -74,7 +74,7 @@ export default function ManualPaymentStep({
           <Form.Input id="paymentReference" name="payment_reference" value={paymentReference} onChange={updatePaymentReference} />
         </Form.Field>
         <Form.Button type="submit" disabled={hasPaid || !paymentConfirmation || !paymentReferenceChanged}>
-          {I18n.t('registrations.payment_form.button_text')}
+          {I18n.t('registrations.payment_form.manual_button_text')}
         </Form.Button>
         <input hidden name="client_secret" value={data.client_secret} />
       </Form>

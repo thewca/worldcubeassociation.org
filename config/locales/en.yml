@@ -1270,6 +1270,7 @@ en:
       payment_processing: "Your payment has been confirmed, but the transaction is still pending."
       payment_partial: "Your payment has been confirmed, but it does not cover the full amount. Please pay the remaining fee as well."
       button_text: "Pay now!"
+      manual_button_text: "Submit"
       hints:
         donation: "Optional donation that will go only to the organization team"
         payment_button: "Your payment information never reaches the WCA website. It is securely sent to Stripe, which handles the payment process and gets back to us."

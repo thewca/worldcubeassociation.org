@@ -87,8 +87,8 @@ export default function PaymentOverview({
   const paymentReference = registration.payment.payment_reference
 
   const payAgainText = competitionInfo.payment_integration_type === 'manual' ?
-    I18n.t('registrations.entry_fees_pay_again') :
-    I18n.t('registrations.update_payment_ref')
+    I18n.t('registrations.update_payment_ref') :
+    I18n.t('registrations.entry_fees_pay_again')
 
   return (
     <>
@@ -108,7 +108,7 @@ export default function PaymentOverview({
             onClick={() => setPayAgain((prev) => !prev)}
           >
             <Icon name="dropdown" />
-            {I18n.t('registrations.entry_fees_pay_again')}
+            {payAgainText}
           </Accordion.Title>
           <Accordion.Content active={payAgain}>
             { competitionInfo.payment_integration_type === 'stripe' && (
