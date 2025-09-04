@@ -26,6 +26,7 @@ declare module "nextjs-routes" {
     | DynamicRoute<"/competitions/[competitionId]/podiums", { "competitionId": string }>
     | DynamicRoute<"/competitions/[competitionId]/register", { "competitionId": string }>
     | DynamicRoute<"/competitions/[competitionId]/schedule", { "competitionId": string }>
+    | DynamicRoute<"/competitions/[competitionId]/scrambles", { "competitionId": string }>
     | StaticRoute<"/dashboard">
     | StaticRoute<"/delegates">
     | StaticRoute<"/disclaimer">

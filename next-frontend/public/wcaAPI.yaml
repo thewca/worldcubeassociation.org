@@ -81,6 +81,24 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/RegistrationData'
+  /competitions/{competitionId}/scrambles:
+    get:
+      summary: Returns the competition scrambles
+      parameters:
+        - name: competitionId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Scramble"
   /competitions/{competitionId}/podiums:
     get:
       summary: Returns the podium results
@@ -736,6 +754,38 @@ components:
           type: integer
         total:
           type: integer
+
+    Scramble:
+      type: object
+      required:
+        - id
+        - competition_id
+        - event_id
+        - round_id
+        - round_type_id
+        - group_id
+        - is_extra
+        - scramble
+        - scramble_num
+      properties:
+        id:
+          type: number
+        competition_id:
+          type: string
+        event_id:
+          type: string
+        round_type_id:
+          type: string
+        round_id:
+          type: number
+        group_id:
+          type: string
+        is_extra:
+          type: string
+        scramble_num:
+          type: number
+        scramble:
+          type: string
 
     Records:
       type: object
