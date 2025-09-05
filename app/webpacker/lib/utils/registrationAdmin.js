@@ -15,6 +15,15 @@ export const CANCELLED_ICON = 'trash';
 export const REJECTED_ICON = 'x';
 export const NON_COMPETING_ICON = 'clipboard outline';
 
+export const registrationStatusKeys = [
+  'pending',
+  'waiting',
+  'accepted',
+  'cancelled',
+  'rejected',
+  'nonCompeting',
+];
+
 export const getStatusColor = (key) => {
   switch (key) {
     case 'pending':
@@ -62,6 +71,18 @@ export const getStatusIcon = (key) => {
 
     default:
       return undefined;
+  }
+};
+
+export const getStatusTranslationKey = (key) => {
+  switch (key) {
+    case 'pending': return 'pending';
+    case 'waiting': return 'waitlist';
+    case 'accepted': return 'approved';
+    case 'cancelled': return 'cancelled';
+    case 'rejected': return 'rejected';
+    case 'nonCompeting': return 'non_competing';
+    default: return undefined;
   }
 };
 

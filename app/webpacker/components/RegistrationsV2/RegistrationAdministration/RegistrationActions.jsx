@@ -13,8 +13,11 @@ import {
   CANCELLED_COLOR, CANCELLED_ICON,
   getSkippedPendingCount,
   getSkippedWaitlistCount,
-  NON_COMPETING_COLOR, NON_COMPETING_ICON,
+  getStatusColor,
+  getStatusIcon,
+  getStatusTranslationKey,
   PENDING_COLOR, PENDING_ICON,
+  registrationStatusKeys,
   REJECTED_COLOR, REJECTED_ICON,
   sortRegistrations,
   WAITLIST_COLOR, WAITLIST_ICON,
@@ -291,49 +294,18 @@ export default function RegistrationActions({
         button
       >
         <Dropdown.Menu>
-          <DropdownAction
-            text={I18n.t('competitions.registration_v2.update.pending')}
-            icon={PENDING_ICON}
-            color={PENDING_COLOR}
-            onClick={() => scrollToRef(tableRefs.pending)}
-          />
-
-          <DropdownAction
-            text={I18n.t('competitions.registration_v2.update.waitlist')}
-            icon={WAITLIST_ICON}
-            color={WAITLIST_COLOR}
-            onClick={() => scrollToRef(tableRefs.waiting)}
-          />
-
-          <DropdownAction
-            text={I18n.t('competitions.registration_v2.update.approved')}
-            icon={APPROVED_ICON}
-            color={APPROVED_COLOR}
-            onClick={() => scrollToRef(tableRefs.accepted)}
-          />
-
-          <DropdownAction
-            text={I18n.t('competitions.registration_v2.update.cancelled')}
-            icon={CANCELLED_ICON}
-            color={CANCELLED_COLOR}
-            onClick={() => scrollToRef(tableRefs.cancelled)}
-          />
-
-          <DropdownAction
-            text={I18n.t('competitions.registration_v2.update.rejected')}
-            icon={REJECTED_ICON}
-            color={REJECTED_COLOR}
-            onClick={() => scrollToRef(tableRefs.rejected)}
-          />
-
-          {partitionedRegistrations.nonCompeting.length > 0 && (
-            <DropdownAction
-              text={I18n.t('competitions.registration_v2.update.non_competing')}
-              icon={NON_COMPETING_ICON}
-              color={NON_COMPETING_COLOR}
-              onClick={() => scrollToRef(tableRefs.nonCompeting)}
-            />
-          )}
+          {registrationStatusKeys.map((status) => (
+            (status !== 'nonCompeting' || partitionedRegistrations.nonCompeting.length > 0) && (
+              <DropdownAction
+                text={
+                  I18n.t(`competitions.registration_v2.update.${getStatusTranslationKey(status)}`)
+                }
+                icon={getStatusIcon(status)}
+                color={getStatusColor(status)}
+                onClick={() => scrollToRef(tableRefs[status])}
+              />
+            )
+          ))}
         </Dropdown.Menu>
       </Dropdown>
 
