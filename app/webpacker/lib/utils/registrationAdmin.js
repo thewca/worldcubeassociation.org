@@ -1,19 +1,19 @@
 import { DateTime } from 'luxon';
 import { countries, WCA_EVENT_IDS } from '../wca-data.js.erb';
 
-export const PENDING_COLOR = 'grey';
-export const WAITLIST_COLOR = 'yellow';
-export const APPROVED_COLOR = 'green';
-export const CANCELLED_COLOR = 'orange';
-export const REJECTED_COLOR = 'red';
-export const NON_COMPETING_COLOR = 'purple';
+const PENDING_COLOR = 'grey';
+const WAITLIST_COLOR = 'yellow';
+const APPROVED_COLOR = 'green';
+const CANCELLED_COLOR = 'orange';
+const REJECTED_COLOR = 'red';
+const NON_COMPETING_COLOR = 'purple';
 
-export const PENDING_ICON = 'circle notched';
-export const WAITLIST_ICON = 'hourglass';
-export const APPROVED_ICON = 'check';
-export const CANCELLED_ICON = 'trash';
-export const REJECTED_ICON = 'x';
-export const NON_COMPETING_ICON = 'clipboard outline';
+const PENDING_ICON = 'circle notched';
+const WAITLIST_ICON = 'hourglass';
+const APPROVED_ICON = 'check';
+const CANCELLED_ICON = 'trash';
+const REJECTED_ICON = 'x';
+const NON_COMPETING_ICON = 'clipboard outline';
 
 export const registrationStatusKeys = [
   'pending',
