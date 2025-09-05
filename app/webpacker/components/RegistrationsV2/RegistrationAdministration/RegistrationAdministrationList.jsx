@@ -3,7 +3,7 @@ import React, {
   useMemo, useReducer, useRef, useState,
 } from 'react';
 import {
-  Accordion, Button, Checkbox, Divider, Form, Header, Icon, List, Modal, Segment, Sticky,
+  Accordion, Button, Checkbox, Divider, Form, Header, Icon, List, Modal, Ref, Segment, Sticky,
 } from 'semantic-ui-react';
 import { getAllRegistrations } from '../api/registration/get/get_registrations';
 import RegistrationAdministrationSearch from './RegistrationAdministrationSearch';
@@ -19,14 +19,9 @@ import RegistrationAdministrationTable from './RegistrationsAdministrationTable'
 import useCheckboxState from '../../../lib/hooks/useCheckboxState';
 import useOrderedSet from '../../../lib/hooks/useOrderedSet';
 import {
-  APPROVED_COLOR, APPROVED_ICON,
-  CANCELLED_COLOR, CANCELLED_ICON,
-  NON_COMPETING_COLOR,
-  NON_COMPETING_ICON,
+  getStatusColor,
+  getStatusIcon,
   partitionRegistrations,
-  PENDING_COLOR, PENDING_ICON,
-  REJECTED_COLOR, REJECTED_ICON,
-  WAITLIST_COLOR, WAITLIST_ICON,
 } from '../../../lib/utils/registrationAdmin';
 
 const expandableColumns = {
@@ -67,6 +62,21 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
   const dispatchStore = useDispatch();
 
   const actionsRef = useRef();
+
+  const pendingRef = useRef();
+  const waitlistRef = useRef();
+  const approvedRef = useRef();
+  const cancelledRef = useRef();
+  const rejectedRef = useRef();
+  const nonCompetingRef = useRef();
+  const tableRefs = useMemo(() => ({
+    pending: pendingRef,
+    waiting: waitlistRef,
+    accepted: approvedRef,
+    cancelled: cancelledRef,
+    rejected: rejectedRef,
+    nonCompeting: nonCompetingRef,
+  }), []);
 
   const {
     isLoading: isRegistrationsLoading,
@@ -203,10 +213,11 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
       title: {
         content: (
           <SectionToggle
-            icon={PENDING_ICON}
+            icon={getStatusIcon('pending')}
             title={I18n.t('competitions.registration_v2.list.pending.title')}
             inParens={pending.length}
-            color={PENDING_COLOR}
+            color={getStatusColor('pending')}
+            sectionRef={pendingRef}
           />
         ),
       },
@@ -224,7 +235,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
               onUnselect={selectedIds.remove}
               onToggle={selectedIds.toggle}
               competitionInfo={competitionInfo}
-              color={PENDING_COLOR}
+              color={getStatusColor('pending')}
               distinguishPaidUnpaid
             />
           </>
@@ -236,10 +247,11 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
       title: {
         content: (
           <SectionToggle
-            icon={WAITLIST_ICON}
+            icon={getStatusIcon('waiting')}
             title={I18n.t('competitions.registration_v2.list.waitlist.title')}
             inParens={waiting.length}
-            color={WAITLIST_COLOR}
+            color={getStatusColor('waiting')}
+            sectionRef={waitlistRef}
           />
         ),
       },
@@ -270,7 +282,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
               draggable={waitlistEditModeEnabled}
               sortable={false}
               withPosition
-              color={WAITLIST_COLOR}
+              color={getStatusColor('waiting')}
             />
           </>
         ),
@@ -281,7 +293,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
       title: {
         content: (
           <SectionToggle
-            icon={APPROVED_ICON}
+            icon={getStatusIcon('accepted')}
             title={I18n.t('competitions.registration_v2.list.approved.title')}
             inParens={
               `${
@@ -292,7 +304,8 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
                   : ''
               }`
             }
-            color={APPROVED_COLOR}
+            color={getStatusColor('accepted')}
+            sectionRef={approvedRef}
           />
         ),
       },
@@ -306,7 +319,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
             onUnselect={selectedIds.remove}
             onToggle={selectedIds.toggle}
             competitionInfo={competitionInfo}
-            color={APPROVED_COLOR}
+            color={getStatusColor('accepted')}
           />
         ),
       },
@@ -316,10 +329,11 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
       title: {
         content: (
           <SectionToggle
-            icon={CANCELLED_ICON}
+            icon={getStatusIcon('cancelled')}
             title={I18n.t('competitions.registration_v2.list.cancelled.title')}
             inParens={cancelled.length}
-            color={CANCELLED_COLOR}
+            color={getStatusColor('cancelled')}
+            sectionRef={cancelledRef}
           />
         ),
       },
@@ -337,7 +351,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
               onUnselect={selectedIds.remove}
               onToggle={selectedIds.toggle}
               competitionInfo={competitionInfo}
-              color={CANCELLED_COLOR}
+              color={getStatusColor('cancelled')}
             />
           </>
         ),
@@ -348,10 +362,11 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
       title: {
         content: (
           <SectionToggle
-            icon={REJECTED_ICON}
+            icon={getStatusIcon('rejected')}
             title={I18n.t('competitions.registration_v2.list.rejected.title')}
             inParens={rejected.length}
-            color={REJECTED_COLOR}
+            color={getStatusColor('rejected')}
+            sectionRef={rejectedRef}
           />
         ),
       },
@@ -369,7 +384,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
               onUnselect={selectedIds.remove}
               onToggle={selectedIds.toggle}
               competitionInfo={competitionInfo}
-              color={REJECTED_COLOR}
+              color={getStatusColor('rejected')}
             />
           </>
         ),
@@ -380,10 +395,11 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
       title: {
         content: (
           <SectionToggle
-            icon={NON_COMPETING_ICON}
+            icon={getStatusIcon('nonCompeting')}
             title={I18n.t('competitions.registration_v2.list.non_competing.title')}
             inParens={nonCompeting.length}
-            color={NON_COMPETING_COLOR}
+            color={getStatusColor('nonCompeting')}
+            sectionRef={nonCompetingRef}
           />
         ),
       },
@@ -401,7 +417,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
               onUnselect={selectedIds.remove}
               onToggle={selectedIds.toggle}
               competitionInfo={competitionInfo}
-              color={NON_COMPETING_COLOR}
+              color={getStatusColor('nonCompeting')}
             />
           </>
         ),
@@ -501,11 +517,13 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
         <Sticky context={actionsRef} offset={20}>
           <RegistrationActions
             partitionedSelectedIds={partitionedSelectedIds}
+            partitionedRegistrations={partitionedRegistrations}
             refresh={selectedIds.clear}
             registrations={registrations}
             spotsRemaining={spotsRemaining}
             competitionInfo={competitionInfo}
             updateRegistrationMutation={updateRegistrationMutation}
+            tableRefs={tableRefs}
           />
         </Sticky>
 
@@ -525,12 +543,14 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
 }
 
 function SectionToggle({
-  icon, title, inParens, color,
+  icon, title, inParens, color, sectionRef,
 }) {
   return (
-    <Header as="span" size="large">
-      <Icon name={icon} color={color} />
-      {`${title} (${inParens})`}
-    </Header>
+    <Ref innerRef={sectionRef} style={{ scrollMarginTop: '3em' }}>
+      <Header as="span" size="large">
+        <Icon name={icon} color={color} />
+        {`${title} (${inParens})`}
+      </Header>
+    </Ref>
   );
 }
