@@ -294,35 +294,35 @@ export default function RegistrationActions({
             text={I18n.t('competitions.registration_v2.update.pending')}
             icon={PENDING_ICON}
             color={PENDING_COLOR}
-            onClick={() => scrollToRef(tableRefs.pendingRef)}
+            onClick={() => scrollToRef(tableRefs.pending)}
           />
 
           <DropdownAction
             text={I18n.t('competitions.registration_v2.update.waitlist')}
             icon={WAITLIST_ICON}
             color={WAITLIST_COLOR}
-            onClick={() => scrollToRef(tableRefs.waitlistRef)}
+            onClick={() => scrollToRef(tableRefs.waiting)}
           />
 
           <DropdownAction
             text={I18n.t('competitions.registration_v2.update.approved')}
             icon={APPROVED_ICON}
             color={APPROVED_COLOR}
-            onClick={() => scrollToRef(tableRefs.approvedRef)}
+            onClick={() => scrollToRef(tableRefs.accepted)}
           />
 
           <DropdownAction
             text={I18n.t('competitions.registration_v2.update.cancelled')}
             icon={CANCELLED_ICON}
             color={CANCELLED_COLOR}
-            onClick={() => scrollToRef(tableRefs.cancelledRef)}
+            onClick={() => scrollToRef(tableRefs.cancelled)}
           />
 
           <DropdownAction
             text={I18n.t('competitions.registration_v2.update.rejected')}
             icon={REJECTED_ICON}
             color={REJECTED_COLOR}
-            onClick={() => scrollToRef(tableRefs.rejectedRef)}
+            onClick={() => scrollToRef(tableRefs.rejected)}
           />
         </Dropdown.Menu>
       </Dropdown>

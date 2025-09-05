@@ -74,7 +74,11 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
   const cancelledRef = useRef();
   const rejectedRef = useRef();
   const tableRefs = useMemo(() => ({
-    pendingRef, waitlistRef, approvedRef, cancelledRef, rejectedRef,
+    pending: pendingRef,
+    waiting: waitlistRef,
+    accepted: approvedRef,
+    cancelled: cancelledRef,
+    rejected: rejectedRef,
   }), []);
 
   const {
