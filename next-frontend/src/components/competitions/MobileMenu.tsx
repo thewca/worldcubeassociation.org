@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { List, VStack } from "@chakra-ui/react";
+import { Card, List, VStack } from "@chakra-ui/react";
 import { useMemo } from "react";
 import { hasPassed } from "@/lib/wca/dates";
 import {
@@ -10,6 +10,8 @@ import {
 } from "@/lib/wca/competitions/tabs";
 import { components } from "@/types/openapi";
 import { useT } from "@/lib/i18n/useI18n";
+import _ from "lodash";
+import { usePathname } from "next/navigation";
 
 export default function MobileMenu({
   competitionInfo,
@@ -19,6 +21,9 @@ export default function MobileMenu({
   competitionInfo: components["schemas"]["CompetitionInfo"];
 }) {
   const { t } = useT();
+  const pathName = usePathname();
+  const path = _.last(pathName.split("/"));
+  const currentPath = path === competitionInfo.id ? "general" : path;
 
   const tabs = useMemo(() => {
     if (!hasPassed(competitionInfo.start_date)) {
@@ -33,14 +38,28 @@ export default function MobileMenu({
   }, [competitionInfo]);
 
   return (
-    <VStack hideFrom="md">
-      <List.Root>
-        {tabs.map((tab) => (
-          <List.Item key={tab.menuKey}>
-            <Link href={tab.href}>{t(tab.i18nKey)}</Link>
-          </List.Item>
-        ))}
-      </List.Root>
+    <VStack hideFrom="md" align="left">
+      <Card.Root>
+        <Card.Body>
+          <List.Root align="center" variant="plain" gap={2}>
+            {tabs.map((tab) => {
+              const { menuKey, i18nKey, href, icon: IconComponent } = tab;
+              return (
+                <List.Item
+                  key={menuKey}
+                  color={currentPath === menuKey ? "teal" : "grey"}
+                  width="100%"
+                >
+                  <List.Indicator asChild>
+                    <IconComponent />
+                  </List.Indicator>
+                  <Link href={href}>{t(i18nKey)}</Link>
+                </List.Item>
+              );
+            })}
+          </List.Root>
+        </Card.Body>
+      </Card.Root>
       {children}
     </VStack>
   );

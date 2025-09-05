@@ -1,5 +1,7 @@
 import { route } from "nextjs-routes";
 import { components } from "@/types/openapi";
+import { iconMap } from "@/components/icons/iconMap";
+import { CalendarIcon } from "@payloadcms/ui";
 
 export const beforeCompetitionTabs = (
   competitionInfo: components["schemas"]["CompetitionInfo"],
@@ -12,6 +14,7 @@ export const beforeCompetitionTabs = (
         query: { competitionId: competitionInfo.id },
       }),
       menuKey: "general",
+      icon: iconMap["Information"],
     },
     {
       i18nKey: "competitions.nav.menu.register",
@@ -20,6 +23,7 @@ export const beforeCompetitionTabs = (
         query: { competitionId: competitionInfo.id },
       }),
       menuKey: "register",
+      icon: iconMap["Register"],
     },
     {
       i18nKey: "competitions.nav.menu.competitors",
@@ -28,6 +32,7 @@ export const beforeCompetitionTabs = (
         query: { competitionId: competitionInfo.id },
       }),
       menuKey: "competitors",
+      icon: iconMap["Competitors"],
     },
     {
       i18nKey: "competitions.nav.menu.events",
@@ -36,6 +41,7 @@ export const beforeCompetitionTabs = (
         query: { competitionId: competitionInfo.id },
       }),
       menuKey: "events",
+      icon: iconMap["333Icon"],
     },
     {
       i18nKey: "competitions.nav.menu.schedule",
@@ -44,6 +50,7 @@ export const beforeCompetitionTabs = (
         query: { competitionId: competitionInfo.id },
       }),
       menuKey: "schedule",
+      icon: CalendarIcon,
     },
   ];
 };
@@ -60,6 +67,7 @@ export const afterCompetitionTabs = (
         query: { competitionId: competitionInfo.id },
       }),
       menuKey: "general",
+      icon: iconMap["Information"],
     },
     {
       i18nKey: "competitions.nav.menu.podiums",
@@ -68,6 +76,7 @@ export const afterCompetitionTabs = (
         query: { competitionId: competitionInfo.id },
       }),
       menuKey: "podiums",
+      icon: iconMap["Records"],
     },
     {
       i18nKey: "competitions.nav.menu.results",
@@ -76,6 +85,7 @@ export const afterCompetitionTabs = (
         query: { competitionId: competitionInfo.id },
       }),
       menuKey: "all",
+      icon: iconMap["List"],
     },
     {
       i18nKey: "competitions.nav.menu.by_person",
@@ -84,6 +94,7 @@ export const afterCompetitionTabs = (
         query: { competitionId: competitionInfo.id },
       }),
       menuKey: "byPerson",
+      icon: iconMap["Competitors"],
     },
   ];
 };
