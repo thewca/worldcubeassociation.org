@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import {
-  Button, Dropdown, Popup, Table, TableBody, TableCell, TableHeader, TableHeaderCell, TableRow,
+  Button, Dropdown, Popup, Table,
 } from 'semantic-ui-react';
 import { DateTime } from 'luxon';
 import { noop } from 'lodash';
@@ -440,33 +440,33 @@ function SummaryTable({
 }) {
   return (
     <Table basic="very">
-      <TableHeader>
-        <TableRow>
-          <TableHeaderCell />
-          {withSelectedCounts && <TableHeaderCell textAlign="right">Selected</TableHeaderCell>}
-          <TableHeaderCell textAlign="right">Size</TableHeaderCell>
-          {withMaximums && <TableHeaderCell textAlign="right">Max</TableHeaderCell>}
-        </TableRow>
-      </TableHeader>
+      <Table.Header>
+        <Table.Row>
+          <Table.HeaderCell />
+          {withSelectedCounts && <Table.HeaderCell textAlign="right">Selected</Table.HeaderCell>}
+          <Table.HeaderCell textAlign="right">Size</Table.HeaderCell>
+          {withMaximums && <Table.HeaderCell textAlign="right">Max</Table.HeaderCell>}
+        </Table.Row>
+      </Table.Header>
 
-      <TableBody>
+      <Table.Body>
         {Object.entries(registrationStatusTranslationKeys).map(([status, translationKey]) => (
-          <TableRow key={status}>
-            <TableCell>{I18n.t(`competitions.registration_v2.update.${translationKey}`)}</TableCell>
-            {withSelectedCounts && <TableCell textAlign="right">{partitionedSelectedIds[status].length}</TableCell>}
-            <TableCell textAlign="right">{partitionedRegistrations[status].length}</TableCell>
-            {withMaximums && <TableCell textAlign="right">{partitionedMaximums[status] ?? '-'}</TableCell>}
-          </TableRow>
+          <Table.Row key={status}>
+            <Table.Cell>{I18n.t(`competitions.registration_v2.update.${translationKey}`)}</Table.Cell>
+            {withSelectedCounts && <Table.Cell textAlign="right">{partitionedSelectedIds[status].length}</Table.Cell>}
+            <Table.Cell textAlign="right">{partitionedRegistrations[status].length}</Table.Cell>
+            {withMaximums && <Table.Cell textAlign="right">{partitionedMaximums[status] ?? '-'}</Table.Cell>}
+          </Table.Row>
         ))}
-      </TableBody>
+      </Table.Body>
 
       <Table.Footer>
-        <TableRow>
-          <TableCell>Total</TableCell>
-          {withSelectedCounts && <TableCell textAlign="right">{selectedCount}</TableCell>}
-          <TableCell textAlign="right">{registrationCount}</TableCell>
-          {withMaximums && <TableCell textAlign="right">-</TableCell>}
-        </TableRow>
+        <Table.Row>
+          <Table.Cell>Total</Table.Cell>
+          {withSelectedCounts && <Table.Cell textAlign="right">{selectedCount}</Table.Cell>}
+          <Table.Cell textAlign="right">{registrationCount}</Table.Cell>
+          {withMaximums && <Table.Cell textAlign="right">-</Table.Cell>}
+        </Table.Row>
       </Table.Footer>
     </Table>
   );
