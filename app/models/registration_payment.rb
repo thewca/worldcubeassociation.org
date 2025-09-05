@@ -56,7 +56,8 @@ class RegistrationPayment < ApplicationRecord
     v2_json = {
       user_id: self.user_id,
       payment_id: self.receipt_id,
-      payment_provider: payment_provider,
+      completed: self.is_completed,
+      payment_provider: payment_provider.to_s,
       iso_amount_payment: self.amount_lowest_denomination.abs,
       currency_code: self.currency_code,
     }

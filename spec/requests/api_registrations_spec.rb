@@ -1428,6 +1428,71 @@ RSpec.describe 'API Registrations' do
     end
   end
 
+  describe 'PATCH #toggle_payment_capture' do
+    let(:comp) { create(:competition, :manual_payments, :registration_open, :visible, :with_organizer) }
+    let(:reg) { create(:registration, competition: comp) }
+    let(:payment_intent) { create(:payment_intent, :manual_with_ref, holder: reg) }
+    let(:manual_payment) { payment_intent.payment_record }
+    let(:reg_payment) { manual_payment.registration_payment }
+
+
+    context 'signed in as organizer' do
+      # TODO: Add cases where the payment is already marked as paid
+      context 'marking a manual payment as paid', :zxc do
+        before do
+          headers['Authorization'] = fetch_jwt_token(comp.organizers.first.id)
+          patch api_v1_toggle_payment_capture_path(reg_payment), headers: headers
+        end
+
+        it 'succeeds' do
+          expect(response).to be_successful
+        end
+
+        it 'returns payment.to_v2_json after upload' do
+          expected_response = reg_payment.to_v2_json.stringify_keys
+          expected_response['completed'] = true
+
+          expect(response.parsed_body).to eq(expected_response)
+        end
+
+        it 'sets manual_status to organizer_accepted' do
+          expect(manual_payment.reload.manual_status).to eq('organizer_approved')
+        end
+
+        it 'updates payment intent to completed' do
+          expect(payment_intent.reload.wca_status).to eq('succeeded')
+        end
+
+        it 'marks payment as completed' do
+          expect(reg_payment.reload.is_completed).to be true
+        end
+      end
+
+      # TODO: Add cases where the payment is already marked as unpaid
+      context 'marking a manual payment as unpaid' do
+        it 'sets organizer_approved payment record to user_submitted' do
+          expect(true).to be false
+        end
+
+        it 'returns an error when called on a created record' do
+          expect(true).to be false
+        end
+      end
+    end
+
+    context 'signed in as user' do
+      before do
+        headers['Authorization'] = fetch_jwt_token(reg.user.id)
+      end
+
+      it 'rejects the toggle attempt' do
+        patch api_v1_toggle_payment_capture_path(reg_payment), headers: headers
+
+        expect(response).to be_unauthorized
+      end
+    end
+  end
+
   describe 'PATCH #bulk_accept' do
     let(:auto_accept_comp) do
       create(

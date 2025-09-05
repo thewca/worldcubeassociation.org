@@ -368,6 +368,7 @@ Rails.application.routes.draw do
     # While this is the start of a v1 API, this is currently not usable by outside developers as
     # getting a JWT token requires you to be logged in through the Website
     namespace :v1 do
+      patch 'registration_payments/:registration_payment_id/toggle-payment-capture' => 'registration_payments#toggle_payment_capture', as: :toggle_payment_capture
       resources :competitions, only: [] do
         resources :registrations, only: %i[index show create update], shallow: true do
           resource :history, only: %i[show], controller: :registration_history
