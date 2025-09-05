@@ -9,18 +9,13 @@ import { showMessage } from '../Register/RegistrationMessage';
 import I18n from '../../../lib/i18n';
 import { countries } from '../../../lib/wca-data.js.erb';
 import {
-  APPROVED_COLOR, APPROVED_ICON,
-  CANCELLED_COLOR, CANCELLED_ICON,
   getSkippedPendingCount,
   getSkippedWaitlistCount,
   getStatusColor,
   getStatusIcon,
   getStatusTranslationKey,
-  PENDING_COLOR, PENDING_ICON,
   registrationStatusKeys,
-  REJECTED_COLOR, REJECTED_ICON,
   sortRegistrations,
-  WAITLIST_COLOR, WAITLIST_ICON,
 } from '../../../lib/utils/registrationAdmin';
 import { useConfirm } from '../../../lib/providers/ConfirmProvider';
 
@@ -112,11 +107,6 @@ export default function RegistrationActions({
   const {
     pending, accepted, cancelled, waiting, rejected, nonCompeting,
   } = partitionedSelectedIds;
-  const anyPending = pending.length < selectedCount;
-  const anyApprovable = accepted.length < selectedCount;
-  const anyCancellable = cancelled.length < selectedCount;
-  const anyWaitlistable = waiting.length < selectedCount;
-  const anyRejectable = rejected.length < selectedCount;
 
   const userEmailMap = useMemo(
     () => Object.fromEntries(
@@ -253,6 +243,42 @@ export default function RegistrationActions({
     }
   };
 
+  const onMove = (status) => {
+    switch (status) {
+      case 'pending':
+        changeStatus(
+          [...accepted, ...cancelled, ...waiting, ...rejected],
+          'pending',
+        );
+        break;
+
+      case 'waiting':
+        onMoveSelectedToWaitlist();
+        break;
+
+      case 'accepted':
+        onMoveSelectedToApproved();
+        break;
+
+      case 'cancelled':
+        changeStatus(
+          [...pending, ...accepted, ...waiting, ...rejected],
+          'cancelled',
+        );
+        break;
+
+      case 'rejected':
+        changeStatus(
+          [...pending, ...accepted, ...waiting, ...cancelled],
+          'rejected',
+        );
+        break;
+
+      default:
+        break;
+    }
+  };
+
   const copyEmails = (emails) => {
     navigator.clipboard.writeText(emails);
     dispatch(showMessage('competitions.registration_v2.update.email_message', 'positive'));
@@ -357,54 +383,19 @@ export default function RegistrationActions({
         disabled={!anySelected}
       >
         <Dropdown.Menu>
-          <DropdownAction
-            text={I18n.t('competitions.registration_v2.update.pending')}
-            icon={PENDING_ICON}
-            color={PENDING_COLOR}
-            isDisabled={!anyPending}
-            onClick={() => changeStatus(
-              [...accepted, ...cancelled, ...waiting, ...rejected],
-              'pending',
-            )}
-          />
-
-          <DropdownAction
-            text={I18n.t('competitions.registration_v2.update.waitlist')}
-            icon={WAITLIST_ICON}
-            color={WAITLIST_COLOR}
-            isDisabled={!anyWaitlistable}
-            onClick={onMoveSelectedToWaitlist}
-          />
-
-          <DropdownAction
-            text={I18n.t('competitions.registration_v2.update.approved')}
-            icon={APPROVED_ICON}
-            color={APPROVED_COLOR}
-            isDisabled={!anyApprovable}
-            onClick={onMoveSelectedToApproved}
-          />
-
-          <DropdownAction
-            text={I18n.t('competitions.registration_v2.update.cancelled')}
-            icon={CANCELLED_ICON}
-            color={CANCELLED_COLOR}
-            isDisabled={!anyCancellable}
-            onClick={() => changeStatus(
-              [...pending, ...accepted, ...waiting, ...rejected],
-              'cancelled',
-            )}
-          />
-
-          <DropdownAction
-            text={I18n.t('competitions.registration_v2.update.rejected')}
-            icon={REJECTED_ICON}
-            color={REJECTED_COLOR}
-            isDisabled={!anyRejectable}
-            onClick={() => changeStatus(
-              [...pending, ...accepted, ...waiting, ...cancelled],
-              'rejected',
-            )}
-          />
+          {registrationStatusKeys.map((status) => (
+            status !== 'nonCompeting' && (
+              <DropdownAction
+                text={
+                  I18n.t(`competitions.registration_v2.update.${getStatusTranslationKey(status)}`)
+                }
+                icon={getStatusIcon(status)}
+                color={getStatusColor(status)}
+                isDisabled={partitionedSelectedIds[status].length === selectedCount}
+                onClick={() => onMove(status)}
+              />
+            )
+          ))}
         </Dropdown.Menu>
       </Dropdown>
     </>
