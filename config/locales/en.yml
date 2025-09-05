@@ -1903,6 +1903,7 @@ en:
         approved: "Approved"
         cancelled: "Cancelled"
         rejected: "Rejected"
+        non_competing: "Non-Competing"
         amount: "Amount"
         too_many: "Accepting all these registrations would go over the competitor limit by %{count}."
         no_self_update: "Contact the Organization Team to update your registration."

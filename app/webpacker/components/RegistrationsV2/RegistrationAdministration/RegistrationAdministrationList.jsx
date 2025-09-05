@@ -73,12 +73,14 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
   const approvedRef = useRef();
   const cancelledRef = useRef();
   const rejectedRef = useRef();
+  const nonCompetingRef = useRef();
   const tableRefs = useMemo(() => ({
     pending: pendingRef,
     waiting: waitlistRef,
     accepted: approvedRef,
     cancelled: cancelledRef,
     rejected: rejectedRef,
+    nonCompeting: nonCompetingRef,
   }), []);
 
   const {
@@ -402,6 +404,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
             title={I18n.t('competitions.registration_v2.list.non_competing.title')}
             inParens={nonCompeting.length}
             color={NON_COMPETING_COLOR}
+            sectionRef={nonCompetingRef}
           />
         ),
       },

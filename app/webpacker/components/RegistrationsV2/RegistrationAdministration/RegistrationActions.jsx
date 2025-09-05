@@ -13,6 +13,7 @@ import {
   CANCELLED_COLOR, CANCELLED_ICON,
   getSkippedPendingCount,
   getSkippedWaitlistCount,
+  NON_COMPETING_COLOR, NON_COMPETING_ICON,
   PENDING_COLOR, PENDING_ICON,
   REJECTED_COLOR, REJECTED_ICON,
   sortRegistrations,
@@ -324,6 +325,15 @@ export default function RegistrationActions({
             color={REJECTED_COLOR}
             onClick={() => scrollToRef(tableRefs.rejected)}
           />
+
+          {partitionedRegistrations.nonCompeting.length > 0 && (
+            <DropdownAction
+              text={I18n.t('competitions.registration_v2.update.non_competing')}
+              icon={NON_COMPETING_ICON}
+              color={NON_COMPETING_COLOR}
+              onClick={() => scrollToRef(tableRefs.nonCompeting)}
+            />
+          )}
         </Dropdown.Menu>
       </Dropdown>
 
