@@ -3,7 +3,7 @@ import React, {
   useMemo, useReducer, useRef, useState,
 } from 'react';
 import {
-  Accordion, Button, Checkbox, Divider, Form, Header, Icon, List, Modal, Segment, Sticky,
+  Accordion, Button, Checkbox, Divider, Form, Header, Icon, List, Modal, Ref, Segment, Sticky,
 } from 'semantic-ui-react';
 import { getAllRegistrations } from '../api/registration/get/get_registrations';
 import RegistrationAdministrationSearch from './RegistrationAdministrationSearch';
@@ -544,11 +544,11 @@ function SectionToggle({
   icon, title, inParens, color, sectionRef,
 }) {
   return (
-    <span ref={sectionRef} style={{ scrollMarginTop: '7em' }}>
+    <Ref innerRef={sectionRef} style={{ scrollMarginTop: '3em' }}>
       <Header as="span" size="large">
         <Icon name={icon} color={color} />
         {`${title} (${inParens})`}
       </Header>
-    </span>
+    </Ref>
   );
 }
