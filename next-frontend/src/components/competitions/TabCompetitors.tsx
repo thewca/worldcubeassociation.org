@@ -47,40 +47,42 @@ const TabCompetitors: React.FC<CompetitorData> = ({ id }) => {
   return (
     <Card.Root>
       <Card.Body>
-        <Table.Root>
-          <Table.Header>
-            <Table.Row>
-              <Table.Cell>Competitor</Table.Cell>
-              <Table.Cell>Country</Table.Cell>
-              {eventIds.map((eventId) => (
-                <Table.Cell key={eventId}>
-                  <EventIcon eventId={eventId} />
-                </Table.Cell>
-              ))}
-            </Table.Row>
-          </Table.Header>
-
-          <Table.Body>
-            {registrationsQuery.data.map((registration) => (
-              <Table.Row key={registration.id}>
-                <Table.Cell>
-                  <Text fontWeight="medium">{registration.user_id}</Text>
-                </Table.Cell>
-                <Table.Cell>
-                  <CountryMap code="AU" bold t={t} />
-                </Table.Cell>
-
+        <Table.ScrollArea borderWidth="1px" maxW="xl">
+          <Table.Root>
+            <Table.Header>
+              <Table.Row>
+                <Table.Cell>Competitor</Table.Cell>
+                <Table.Cell>Country</Table.Cell>
                 {eventIds.map((eventId) => (
                   <Table.Cell key={eventId}>
-                    {registration.event_ids.includes(eventId) ? (
-                      <EventIcon eventId={eventId} />
-                    ) : null}
+                    <EventIcon eventId={eventId} />
                   </Table.Cell>
                 ))}
               </Table.Row>
-            ))}
-          </Table.Body>
-        </Table.Root>
+            </Table.Header>
+
+            <Table.Body>
+              {registrationsQuery.data.map((registration) => (
+                <Table.Row key={registration.id}>
+                  <Table.Cell>
+                    <Text fontWeight="medium">{registration.user_id}</Text>
+                  </Table.Cell>
+                  <Table.Cell>
+                    <CountryMap code="AU" bold t={t} />
+                  </Table.Cell>
+
+                  {eventIds.map((eventId) => (
+                    <Table.Cell key={eventId}>
+                      {registration.event_ids.includes(eventId) ? (
+                        <EventIcon eventId={eventId} />
+                      ) : null}
+                    </Table.Cell>
+                  ))}
+                </Table.Row>
+              ))}
+            </Table.Body>
+          </Table.Root>
+        </Table.ScrollArea>
       </Card.Body>
     </Card.Root>
   );
