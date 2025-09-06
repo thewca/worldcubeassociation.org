@@ -10,7 +10,11 @@ FactoryBot.define do
     trait :with_reference do
       payment_reference { 'test_reference' }
       manual_status { 'user_submitted' }
+    end
 
+    trait :organizer_approved do
+      payment_reference { 'test_reference' }
+      manual_status { 'organizer_approved' }
     end
   end
 end

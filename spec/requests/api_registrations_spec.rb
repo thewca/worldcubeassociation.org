@@ -1407,7 +1407,7 @@ RSpec.describe 'API Registrations' do
       context 'updating payment reference' do
         let(:comp) { create(:competition, :manual_payments, :registration_open, :visible) }
         let(:reg) { create(:registration, competition: comp) }
-        let(:payment_intent) { create(:payment_intent, :manual_with_ref, holder: reg)}
+        let(:payment_intent) { create(:payment_intent, :manual_requires_capture, holder: reg)}
         let(:manual_record) { payment_intent.payment_record }
 
         before do
@@ -1421,7 +1421,7 @@ RSpec.describe 'API Registrations' do
           expect(manual_record.reload.payment_reference).to eq('updated reference')
         end
 
-        it 'does not create another registration payment' do
+        it 'does not create another registration payment', :cxz do
           expect(reg.registration_payments.count).to eq(1)
         end
       end
@@ -1431,14 +1431,17 @@ RSpec.describe 'API Registrations' do
   describe 'PATCH #toggle_payment_capture' do
     let(:comp) { create(:competition, :manual_payments, :registration_open, :visible, :with_organizer) }
     let(:reg) { create(:registration, competition: comp) }
-    let(:payment_intent) { create(:payment_intent, :manual_with_ref, holder: reg) }
-    let(:manual_payment) { payment_intent.payment_record }
-    let(:reg_payment) { manual_payment.registration_payment }
-
 
     context 'signed in as organizer' do
-      # TODO: Add cases where the payment is already marked as paid
-      context 'marking a manual payment as paid', :zxc do
+      # it 'returns an error when called on a created record' do
+      #   expect(true).to be false
+      # end
+
+      context 'marking a manual payment as paid' do
+        let(:payment_intent) { create(:payment_intent, :manual_requires_capture, holder: reg) }
+        let(:manual_payment) { payment_intent.payment_record }
+        let(:reg_payment) { manual_payment.registration_payment }
+
         before do
           headers['Authorization'] = fetch_jwt_token(comp.organizers.first.id)
           patch api_v1_toggle_payment_capture_path(reg_payment), headers: headers
@@ -1468,19 +1471,46 @@ RSpec.describe 'API Registrations' do
         end
       end
 
-      # TODO: Add cases where the payment is already marked as unpaid
       context 'marking a manual payment as unpaid' do
-        it 'sets organizer_approved payment record to user_submitted' do
-          expect(true).to be false
+        let(:payment_intent) { create(:payment_intent, :manual_succeeded, holder: reg) }
+        let(:manual_payment) { payment_intent.payment_record }
+        let(:reg_payment) { manual_payment.registration_payment }
+
+        before do
+          headers['Authorization'] = fetch_jwt_token(comp.organizers.first.id)
+          patch api_v1_toggle_payment_capture_path(reg_payment), headers: headers
         end
 
-        it 'returns an error when called on a created record' do
-          expect(true).to be false
+        it 'succeeds' do
+          expect(response).to be_successful
+        end
+
+        it 'returns payment.to_v2_json after upload' do
+          expected_response = reg_payment.to_v2_json.stringify_keys
+          expected_response['completed'] = false
+
+          expect(response.parsed_body).to eq(expected_response)
+        end
+
+        it 'sets manual_status to user_submitted' do
+          expect(manual_payment.reload.manual_status).to eq('user_submitted')
+        end
+
+        it 'updates payment intent to requires_capture' do
+          expect(payment_intent.reload.wca_status).to eq('requires_capture')
+        end
+
+        it 'marks payment as incomplete' do
+          expect(reg_payment.reload.is_completed).to be false
         end
       end
     end
 
     context 'signed in as user' do
+      let(:payment_intent) { create(:payment_intent, :manual_requires_capture, holder: reg) }
+      let(:manual_payment) { payment_intent.payment_record }
+      let(:reg_payment) { manual_payment.registration_payment }
+
       before do
         headers['Authorization'] = fetch_jwt_token(reg.user.id)
       end

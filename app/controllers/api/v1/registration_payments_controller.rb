@@ -26,15 +26,21 @@ class Api::V1::RegistrationPaymentsController < Api::V1::ApiController
 
   def toggle_payment_capture
     stored_record = @payment.receipt
-    stored_record.assign_attributes(manual_status: 'organizer_approved')
-
     stored_intent = stored_record.payment_intent
     comp = @payment.registration.competition
     connected_account = comp.payment_account_for(:manual)
 
+    if stored_record.manual_status == 'user_submitted'
+      stored_record.assign_attributes(manual_status: 'organizer_approved')
+    elsif stored_record.manual_status == 'organizer_approved'
+      stored_record.assign_attributes(manual_status: 'user_submitted')
+    end
+
     stored_intent.update_status_and_charges(connected_account, stored_record, current_user) do |updated_record|
       render json: @payment.to_v2_json if
         updated_record.manual_status == 'organizer_approved' && !@payment.is_completed? && @payment.update(is_completed: true)
+      render json: @payment.to_v2_json if
+        updated_record.manual_status == 'user_submitted' && @payment.is_completed? && @payment.update(is_completed: false)
     end
   end
 end

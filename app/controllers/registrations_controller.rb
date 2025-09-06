@@ -484,7 +484,7 @@ class RegistrationsController < ApplicationController
         ruby_money.currency.iso_code,
         charge_transaction,
         current_user.id,
-      )
+      ) unless registration.competition.using_manual_payment? && registration.registration_payments.any?
 
       # Running in sync mode, so if the code reaches this point we're reasonably confident that the time the Stripe payment
       #   succeeded matches the time that the information reached our database. There are cases for async webhooks where
