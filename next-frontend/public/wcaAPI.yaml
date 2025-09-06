@@ -99,6 +99,24 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/Result"
+  /competitions/{competitionId}/results:
+    get:
+      summary: Returns all results
+      parameters:
+        - name: competitionId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Result"
   /competition_index:
     get:
       summary: Get a list of (upcoming) competitions for table display
