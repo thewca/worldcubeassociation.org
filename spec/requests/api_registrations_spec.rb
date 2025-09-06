@@ -1433,11 +1433,7 @@ RSpec.describe 'API Registrations' do
     let(:reg) { create(:registration, competition: comp) }
 
     context 'signed in as organizer' do
-      # it 'returns an error when called on a created record' do
-      #   expect(true).to be false
-      # end
-
-      context 'marking a manual payment as paid' do
+      context 'marking a user_submitted payment as paid' do
         let(:payment_intent) { create(:payment_intent, :manual_requires_capture, holder: reg) }
         let(:manual_payment) { payment_intent.payment_record }
         let(:reg_payment) { manual_payment.registration_payment }
