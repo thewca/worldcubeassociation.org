@@ -229,7 +229,6 @@ class Registration < ApplicationRecord
       currency_code: currency_code,
       receipt: receipt,
       user_id: user_id,
-      is_completed: receipt.try(:manual_status) != 'user_submitted',
     )
   end
 
@@ -313,6 +312,7 @@ class Registration < ApplicationRecord
       if competition.using_payment_integrations?
         base_json.deep_merge!({
                                 payment: {
+                                  id: last_payment(include_incomplete: true)&.id,
                                   has_paid: outstanding_entry_fees <= 0,
                                   payment_status: last_payment_status,
                                   payment_reference: payment_reference,

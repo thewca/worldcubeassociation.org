@@ -1282,63 +1282,79 @@ RSpec.describe 'API Registrations' do
   end
 
   describe 'GET #payment_ticket' do
-    let(:competition) { create(:competition, :registration_open, :with_organizer, :stripe_connected) }
-    let(:reg) { create(:registration, :pending, competition: competition) }
-    let(:headers) { { 'Authorization' => fetch_jwt_token(reg.user_id) } }
+    context 'stripe connected' do
+      let(:competition) { create(:competition, :registration_open, :with_organizer, :stripe_connected) }
+      let(:reg) { create(:registration, :pending, competition: competition) }
+      let(:headers) { { 'Authorization' => fetch_jwt_token(reg.user_id) } }
 
-    it 'successfully builds a payment_intent via Stripe API' do
-      get payment_ticket_api_v1_registration_path(reg), headers: headers
-      expect(response).to be_successful
-    end
-
-    context 'successful payment ticket' do
-      before do
+      it 'successfully builds a payment_intent via Stripe API' do
         get payment_ticket_api_v1_registration_path(reg), headers: headers
+        expect(response).to be_successful
       end
 
-      it 'returns a client secret' do
-        expect(response.parsed_body.keys).to include('client_secret')
+      context 'successful payment ticket' do
+        before do
+          get payment_ticket_api_v1_registration_path(reg), headers: headers
+        end
+
+        it 'returns a client secret' do
+          expect(response.parsed_body.keys).to include('client_secret')
+        end
+
+        it 'creates a payment intent' do
+          expect(PaymentIntent.find_by(holder_type: "Registration", holder_id: reg.id)).to be_present
+        end
+
+        it 'payment intent details match expected values' do
+          payment_record = PaymentIntent.find_by(holder_type: "Registration", holder_id: reg.id).payment_record
+          expect(payment_record.amount_stripe_denomination).to be(1000)
+          expect(payment_record.currency_code).to eq("usd")
+        end
       end
 
-      it 'creates a payment intent' do
-        expect(PaymentIntent.find_by(holder_type: "Registration", holder_id: reg.id)).to be_present
-      end
+      it 'has the correct payment_intent properties when a donation is present' do
+        get payment_ticket_api_v1_registration_path(reg), headers: headers, params: { iso_donation_amount: 1300 }
 
-      it 'payment intent details match expected values' do
         payment_record = PaymentIntent.find_by(holder_type: "Registration", holder_id: reg.id).payment_record
-        expect(payment_record.amount_stripe_denomination).to be(1000)
+        expect(payment_record.amount_stripe_denomination).to be(2300)
         expect(payment_record.currency_code).to eq("usd")
       end
+
+      describe 'refuse ticket create request' do
+        it 'if registration already paid' do
+          create(:registration_payment, registration: reg)
+          get payment_ticket_api_v1_registration_path(reg), headers: headers
+
+          body = response.parsed_body
+          expect(response).to have_http_status(:forbidden)
+          expect(body).to eq({ error: Registrations::ErrorCodes::NO_OUTSTANDING_PAYMENT }.with_indifferent_access)
+        end
+
+        it 'if registration is closed' do
+          closed_comp = create(:competition, :registration_closed, :with_organizer, :stripe_connected)
+          closed_reg = create(:registration, :pending, competition: closed_comp)
+
+          headers = { 'Authorization' => fetch_jwt_token(closed_reg.user_id) }
+          get payment_ticket_api_v1_registration_path(closed_reg), headers: headers
+
+          body = response.parsed_body
+          expect(response).to have_http_status(:forbidden)
+          expect(body).to eq({ error: Registrations::ErrorCodes::REGISTRATION_CLOSED }.with_indifferent_access)
+        end
+      end
     end
 
-    it 'has the correct payment_intent properties when a donation is present' do
-      get payment_ticket_api_v1_registration_path(reg), headers: headers, params: { iso_donation_amount: 1300 }
+    context 'manual payment integration' do
+      let(:comp) { create(:competition, :manual_payments, :registration_open, :visible) }
+      let(:reg) { create(:registration, competition: comp) }
+      let(:headers) { { 'Authorization' => fetch_jwt_token(reg.user_id) } }
 
-      payment_record = PaymentIntent.find_by(holder_type: "Registration", holder_id: reg.id).payment_record
-      expect(payment_record.amount_stripe_denomination).to be(2300)
-      expect(payment_record.currency_code).to eq("usd")
-    end
-
-    describe 'refuse ticket create request' do
-      it 'if registration already paid' do
-        create(:registration_payment, registration: reg)
-        get payment_ticket_api_v1_registration_path(reg), headers: headers
-
-        body = response.parsed_body
-        expect(response).to have_http_status(:forbidden)
-        expect(body).to eq({ error: Registrations::ErrorCodes::NO_OUTSTANDING_PAYMENT }.with_indifferent_access)
+      before do
+        get payment_ticket_api_v1_registration_path(reg), headers: headers, params: { payment_integration_type: 'manual' }
       end
 
-      it 'if registration is closed' do
-        closed_comp = create(:competition, :registration_closed, :with_organizer, :stripe_connected)
-        closed_reg = create(:registration, :pending, competition: closed_comp)
-
-        headers = { 'Authorization' => fetch_jwt_token(closed_reg.user_id) }
-        get payment_ticket_api_v1_registration_path(closed_reg), headers: headers
-
-        body = response.parsed_body
-        expect(response).to have_http_status(:forbidden)
-        expect(body).to eq({ error: Registrations::ErrorCodes::REGISTRATION_CLOSED }.with_indifferent_access)
+      it 'succeeds' do
+        expect(response).to be_successful
       end
     end
   end
@@ -1377,7 +1393,7 @@ RSpec.describe 'API Registrations' do
       context 'first-time payment' do
         let(:comp) { create(:competition, :manual_payments, :registration_open, :visible) }
         let(:reg) { create(:registration, competition: comp) }
-        let(:payment_intent) { create(:payment_intent, :manual) }
+        let(:payment_intent) { create(:payment_intent, :manual, holder: reg) }
         let(:manual_record) { payment_intent.payment_record }
 
         before do
@@ -1399,8 +1415,8 @@ RSpec.describe 'API Registrations' do
           expect(payment_intent.reload.wca_status).to eq('requires_capture')
         end
 
-        it 'creates an un-completed registration payment' do
-          expect(manual_record.reload.registration_payment.is_completed).to be(false)
+        it 'does not create another registration payment' do
+          expect(reg.reload.registration_payments.count).to eq(1)
         end
       end
 
@@ -1421,7 +1437,7 @@ RSpec.describe 'API Registrations' do
           expect(manual_record.reload.payment_reference).to eq('updated reference')
         end
 
-        it 'does not create another registration payment', :cxz do
+        it 'does not create another registration payment' do
           expect(reg.registration_payments.count).to eq(1)
         end
       end
@@ -1433,6 +1449,39 @@ RSpec.describe 'API Registrations' do
     let(:reg) { create(:registration, competition: comp) }
 
     context 'signed in as organizer' do
+      context 'marking a created payment as paid' do
+        let(:payment_intent) { create(:payment_intent, :manual, holder: reg) }
+        let(:manual_payment) { payment_intent.payment_record }
+        let(:reg_payment) { manual_payment.registration_payment }
+
+        before do
+          headers['Authorization'] = fetch_jwt_token(comp.organizers.first.id)
+          patch api_v1_toggle_payment_capture_path(reg_payment), headers: headers
+        end
+
+        it 'succeeds' do
+          expect(response).to be_successful
+        end
+
+        it 'returns payment.to_v2_json after upload' do
+          expected_response = reg_payment.to_v2_json.stringify_keys
+          expected_response['completed'] = true
+
+          expect(response.parsed_body).to eq(expected_response)
+        end
+
+        it 'sets manual_status to organizer_accepted' do
+          expect(manual_payment.reload.manual_status).to eq('organizer_approved')
+        end
+
+        it 'updates payment intent to completed' do
+          expect(payment_intent.reload.wca_status).to eq('succeeded')
+        end
+
+        it 'marks payment as completed' do
+          expect(reg_payment.reload.is_completed).to be true
+        end
+      end
       context 'marking a user_submitted payment as paid' do
         let(:payment_intent) { create(:payment_intent, :manual_requires_capture, holder: reg) }
         let(:manual_payment) { payment_intent.payment_record }
@@ -1496,7 +1545,7 @@ RSpec.describe 'API Registrations' do
           expect(payment_intent.reload.wca_status).to eq('requires_capture')
         end
 
-        it 'marks payment as incomplete' do
+        it 'marks payment as incomplete', :cxz do
           expect(reg_payment.reload.is_completed).to be false
         end
       end

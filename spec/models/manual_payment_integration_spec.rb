@@ -8,19 +8,22 @@ RSpec.describe ManualPaymentIntegration do
     let(:registration) { create(:registration, competition: competition) }
     let(:payment_account) { competition.payment_account_for(:manual) }
 
-    context 'no payment intent exists' do
+    context 'no payment intent exists', :zxc do
       before do
         payment_account.prepare_intent(registration, 1000, "USD", registration.user)
         @payment_intent = PaymentIntent.first
-        @payment_record = @payment_intent.payment_record
       end
 
       it 'creates a PaymentIntent' do
         expect(@payment_intent.initiated_by).to eq(registration.user)
       end
 
-      it 'creates a ManualPaymentRecord' do
-        expect(@payment_record).to be_present
+      it 'creates a `created` ManualPaymentRecord' do
+        expect(@payment_intent.payment_record.manual_status).to eq('created')
+      end
+
+      it 'creates an incomplete RegistrationPayment' do
+        expect(@payment_intent.payment_record.registration_payment.is_completed).to be false
       end
     end
 

@@ -1,5 +1,5 @@
 import {
-  Checkbox, Icon, Popup, Ref, Table,
+  Button, Checkbox, Icon, Popup, Ref, Table,
 } from 'semantic-ui-react';
 import React from 'react';
 import { Draggable } from '@hello-pangea/dnd';
@@ -11,6 +11,7 @@ import {
 } from '../../../lib/utils/dates';
 import EventIcon from '../../wca/EventIcon';
 import { editRegistrationUrl, editPersonUrl, personUrl } from '../../../lib/requests/routes.js.erb';
+import { togglePaymentCapture } from '../api/payment/patch/toggle_payment_capture';
 import { isoMoneyToHumanReadable } from '../../../lib/helpers/money';
 import { countries } from '../../../lib/wca-data.js.erb';
 import RegionFlag from '../../wca/RegionFlag';
@@ -22,37 +23,56 @@ import RegionFlag from '../../wca/RegionFlag';
 const truncateComment = (comment) => (comment?.length > 12 ? `${comment.slice(0, 12)}...` : comment);
 
 function RegistrationTime({
-  timestamp, registeredOn, paymentStatus, hasPaid, paidOn, usesPaymentIntegration,
+  timestamp, registeredOn, payment, usesPaymentIntegration,
 }) {
   if (timestamp) {
-    return getRegistrationTimestamp(paidOn ?? registeredOn);
+    return getRegistrationTimestamp(payment.paid_on ?? registeredOn);
   }
 
-  if (usesPaymentIntegration && !hasPaid) {
+  if (usesPaymentIntegration && !payment.has_paid) {
     let content = I18n.t('registrations.list.payment_requested_on', { date: getRegistrationTimestamp(registeredOn) });
     let trigger = <span>{I18n.t('registrations.list.not_paid')}</span>;
 
-    if (paymentStatus === 'initialized') {
-      content = I18n.t('competitions.registration_v2.list.payment.initialized', { date: getRegistrationTimestamp(paidOn) });
+    if (payment.payment_status === 'initialized') {
+      content = I18n.t('competitions.registration_v2.list.payment.initialized', { date: getRegistrationTimestamp(payment.paid_on) });
     }
 
-    if (paymentStatus === 'refund') {
-      content = I18n.t('competitions.registration_v2.list.payment.refunded', { date: getRegistrationTimestamp(paidOn) });
+    if (payment.payment_status === 'refund') {
+      content = I18n.t('competitions.registration_v2.list.payment.refunded', { date: getRegistrationTimestamp(payment.paid_on) });
       trigger = <span>{I18n.t('competitions.registration_v2.list.payment.refunded_status')}</span>;
     }
 
     return (
-      <Popup
-        content={content}
-        trigger={trigger}
-      />
+      <>
+        { payment.id &&
+          <Popup
+            content="Confirm payment"
+            trigger={
+              <Button
+                icon
+                onClick={() => {
+                  console.log(payment)
+                  togglePaymentCapture(payment.id)
+                }}
+              >
+                <Icon name="money bill alternate" />
+              </Button>
+            }
+          />
+        }
+        <Popup
+          content={content}
+          trigger={trigger}
+        />
+      </>
+
     );
   }
 
   return (
     <Popup
-      content={getRegistrationTimestamp(paidOn ?? registeredOn)}
-      trigger={<span>{getShortDateString(paidOn ?? registeredOn)}</span>}
+      content={getRegistrationTimestamp(payment.paid_on ?? registeredOn)}
+      trigger={<span>{getShortDateString(payment.paid_on ?? registeredOn)}</span>}
     />
   );
 }
@@ -167,10 +187,8 @@ export default function TableRow({
             <Table.Cell>
               <RegistrationTime
                 timestamp={timestampIsShown}
-                paidOn={updatedAt}
-                hasPaid={hasPaid}
+                payment={registration.payment}
                 registeredOn={registeredOn}
-                paymentStatus={paymentStatus}
                 usesPaymentIntegration={competitionInfo['using_payment_integrations?']}
               />
             </Table.Cell>

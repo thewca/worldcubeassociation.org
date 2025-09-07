@@ -10,6 +10,10 @@ FactoryBot.define do
     trait :manual do
       payment_record { association(:manual_payment_record) }
       wca_status { 'created' }
+
+      after(:create) do |intent|
+        create(:registration_payment, receipt: intent.payment_record, registration: intent.holder, is_completed: false)
+      end
     end
 
     trait :manual_requires_capture do
