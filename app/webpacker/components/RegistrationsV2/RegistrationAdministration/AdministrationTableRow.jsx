@@ -1,5 +1,5 @@
 import {
-  Button, Checkbox, Icon, Popup, Ref, Table,
+  Checkbox, Icon, Popup, Ref, Table,
 } from 'semantic-ui-react';
 import React from 'react';
 import { Draggable } from '@hello-pangea/dnd';
@@ -43,36 +43,17 @@ function RegistrationTime({
     }
 
     return (
-      <>
-        { payment.id &&
-          <Popup
-            content="Confirm payment"
-            trigger={
-              <Button
-                icon
-                onClick={() => {
-                  console.log(payment)
-                  captureManualPayments(payment.id, null)
-                }}
-              >
-                <Icon name="money bill alternate" />
-              </Button>
-            }
-          />
-        }
-        <Popup
-          content={content}
-          trigger={trigger}
-        />
-      </>
-
+      <Popup
+        content={content}
+        trigger={trigger}
+      />
     );
   }
 
   return (
     <Popup
-      content={getRegistrationTimestamp(payment.paid_on ?? registeredOn)}
-      trigger={<span>{getShortDateString(payment.paid_on ?? registeredOn)}</span>}
+      content={getRegistrationTimestamp(payment?.paid_on ?? registeredOn)}
+      trigger={<span>{getShortDateString(payment?.paid_on ?? registeredOn)}</span>}
     />
   );
 }

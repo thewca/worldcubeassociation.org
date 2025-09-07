@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react';
+import { useMutation } from '@tanstack/react-query';
 import { Button, Dropdown } from 'semantic-ui-react';
 import { DateTime } from 'luxon';
 import { noop } from 'lodash';
@@ -84,6 +85,7 @@ export default function RegistrationActions({
   spotsRemaining,
   competitionInfo,
   updateRegistrationMutation,
+  captureManualPaymentsMutation
 }) {
   const confirm = useConfirm();
   const dispatch = useDispatch();
@@ -117,6 +119,18 @@ export default function RegistrationActions({
   ]
     .map((userId) => userEmailMap[userId])
     .join(',');
+
+  const capturePayments = () => {
+    const selectedUserIds = [...pending, ...waiting, ...cancelled, ...accepted, ...rejected];
+    const registrationsToCapture = registrations.filter(
+      (reg) => selectedUserIds.includes(reg.user_id),
+    ).map(reg => reg.id)
+
+    captureManualPaymentsMutation({
+      competitionId: competitionInfo.id,
+      registrationIds: registrationsToCapture,
+    })
+  }
 
   const isUsingPaymentIntegration = competitionInfo['using_payment_integrations?'];
   const checkForSkippedPending = isUsingPaymentIntegration;
@@ -339,15 +353,16 @@ export default function RegistrationActions({
         </Dropdown.Menu>
       </Dropdown>
 
-      <Button
-        content={"Approve Payments"}
-        color="green"
-        icon="money bill alternate"
-        labelPosition="left"
-        onClick={() => captureManualPaymentMutation(registrationIds)}
-        disabled={!anySelected}
-      />
-
+      {competitionInfo.payment_integration_type === 'manual' && (
+        <Button
+          content={"Approve Payments"}
+          color="green"
+          icon="money bill alternate"
+          labelPosition="left"
+          onClick={() =>  capturePayments() }
+          disabled={!anySelected}
+        />
+      )}
     </>
   );
 }
