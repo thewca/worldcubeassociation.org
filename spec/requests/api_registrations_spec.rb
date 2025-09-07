@@ -1548,7 +1548,41 @@ RSpec.describe 'API Registrations' do
         end
       end
 
-      context 'capturing payments in different statuses' do
+      context 'capturing multiple payments' do
+        let!(:created_pi) { create(:payment_intent, :manual, holder: reg) }
+        let(:reg2) { create(:registration, competition: comp) }
+        let!(:created_pi_2) { create(:payment_intent, :manual, holder: reg2) }
+
+        let(:reg3) { create(:registration, competition: comp) }
+        let!(:created_pi_3) { create(:payment_intent, :manual_requires_capture, holder: reg3) }
+        let(:reg4) { create(:registration, competition: comp) }
+        let!(:created_pi_4) { create(:payment_intent, :manual_requires_capture, holder: reg4) }
+
+        let(:reg5) { create(:registration, competition: comp) }
+        let!(:created_pi_5) { create(:payment_intent, :manual_succeeded, holder: reg5) }
+        let(:reg6) { create(:registration, competition: comp) }
+        let!(:created_pi_6) { create(:payment_intent, :manual_succeeded, holder: reg6) }
+
+        it 'has the expected initial conditions' do
+          expect(PaymentIntent.count).to be(6)
+          expect(ManualPaymentRecord.created.count).to be(2)
+          expect(ManualPaymentRecord.user_submitted.count).to be(2)
+          expect(ManualPaymentRecord.organizer_approved.count).to be(2)
+          expect(RegistrationPayment.where(is_completed: false).count).to be(4)
+          expect(RegistrationPayment.completed.count).to be(2)
+        end
+
+        it 'captures all payments' do
+          registration_ids = [reg.id, reg2.id, reg3.id, reg4.id, reg5.id, reg6.id]
+
+          headers['Authorization'] = fetch_jwt_token(comp.organizers.first.id)
+          patch capture_manual_payments_api_v1_competition_registrations_path(comp),
+            headers: headers, params: { registration_ids: registration_ids }, as: :json
+
+          expect(RegistrationPayment.completed.count).to be(6)
+          expect(ManualPaymentRecord.organizer_approved.count).to be(6)
+          expect(response.parsed_body.keys.count).to be(6)
+        end
       end
     end
 

@@ -275,7 +275,6 @@ class Api::V1::RegistrationsController < Api::V1::ApiController
   end
 
   def capture_manual_payments
-    puts params
     registrations = Registration.find(params.require(:registration_ids))
 
     # TODO: There's an each_with_object way of doing this, or something that Gregor hates less I think
@@ -298,9 +297,9 @@ class Api::V1::RegistrationsController < Api::V1::ApiController
             !payment.is_completed? && payment.update(is_completed: true) && updated_record.manual_status == 'organizer_approved'
         end
       end
-
-      render json: toggled_payments
     end
+
+    render json: toggled_payments
   end
 
   private
