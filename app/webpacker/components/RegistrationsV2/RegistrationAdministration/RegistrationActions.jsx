@@ -288,18 +288,65 @@ export default function RegistrationActions({
         disabled={!anySelected}
       >
         <Dropdown.Menu>
+          <MoveAction
+            text={I18n.t('competitions.registration_v2.update.pending')}
+            icon={PENDING_ICON}
+            color={PENDING_COLOR}
+            isDisabled={!anyPending}
+            onClick={() => changeStatus(
+              [...accepted, ...cancelled, ...waiting, ...rejected],
+              'pending',
+            )}
+          />
 
+          <MoveAction
+            text={I18n.t('competitions.registration_v2.update.waitlist')}
+            icon={WAITLIST_ICON}
+            color={WAITLIST_COLOR}
+            isDisabled={!anyWaitlistable}
+            onClick={onMoveSelectedToWaitlist}
+          />
+
+          <MoveAction
+            text={I18n.t('competitions.registration_v2.update.approved')}
+            icon={APPROVED_ICON}
+            color={APPROVED_COLOR}
+            isDisabled={!anyApprovable}
+            onClick={onMoveSelectedToApproved}
+          />
+
+          <MoveAction
+            text={I18n.t('competitions.registration_v2.update.cancelled')}
+            icon={CANCELLED_ICON}
+            color={CANCELLED_COLOR}
+            isDisabled={!anyCancellable}
+            onClick={() => changeStatus(
+              [...pending, ...accepted, ...waiting, ...rejected],
+              'cancelled',
+            )}
+          />
+
+          <MoveAction
+            text={I18n.t('competitions.registration_v2.update.rejected')}
+            icon={REJECTED_ICON}
+            color={REJECTED_COLOR}
+            isDisabled={!anyRejectable}
+            onClick={() => changeStatus(
+              [...pending, ...accepted, ...waiting, ...cancelled],
+              'rejected',
+            )}
+          />
         </Dropdown.Menu>
       </Dropdown>
 
-      {/* <Button */}
-      {/*   color="blue" */}
-      {/*   content={"Confirm Payments"} */}
-      {/*   icon="money bill alternate" */}
-      {/*   labelPosition="left" */}
-      {/*   onClick={() => captureManualPaymentMutation(registrationIds)} */}
-      {/*   disabled={!anySelected} */}
-      {/* /> */}
+      <Button
+        content={"Approve Payments"}
+        color="green"
+        icon="money bill alternate"
+        labelPosition="left"
+        onClick={() => captureManualPaymentMutation(registrationIds)}
+        disabled={!anySelected}
+      />
 
     </>
   );
