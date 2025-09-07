@@ -11,7 +11,7 @@ import {
 } from '../../../lib/utils/dates';
 import EventIcon from '../../wca/EventIcon';
 import { editRegistrationUrl, editPersonUrl, personUrl } from '../../../lib/requests/routes.js.erb';
-import { togglePaymentCapture } from '../api/payment/patch/toggle_payment_capture';
+import { captureManualPayments } from '../api/payment/patch/capture_manual_payments';
 import { isoMoneyToHumanReadable } from '../../../lib/helpers/money';
 import { countries } from '../../../lib/wca-data.js.erb';
 import RegionFlag from '../../wca/RegionFlag';
@@ -52,7 +52,7 @@ function RegistrationTime({
                 icon
                 onClick={() => {
                   console.log(payment)
-                  togglePaymentCapture(payment.id)
+                  captureManualPayments(payment.id, null)
                 }}
               >
                 <Icon name="money bill alternate" />

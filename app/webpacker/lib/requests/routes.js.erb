@@ -106,7 +106,7 @@ export const connectPaymentIntegrationUrl = (competitionId, paymentIntegration) 
 
 export const paymentFinishUrl = (competitionId, paymentIntegration) => `<%= CGI.unescape(Rails.application.routes.url_helpers.registration_payment_completion_url("${competitionId}", "${paymentIntegration}", host: EnvConfig.ROOT_URL)) %>`
 
-export const paymentCaptureToggleUrl = (registrationPaymentId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v1_toggle_payment_capture_path("${registrationPaymentId}")) %>`
+export const captureManualPaymentsUrl = (registrationPaymentId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.capture_manual_payments_api_v1_competition_registrations_path("${registrationPaymentId}")) %>`
 
 export const registrationPaymentsUrl = (registrationId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v1_registration_payments_path("${registrationId}")) %>`
 
