@@ -483,8 +483,8 @@ RSpec.describe "competitions" do
         expect do
           get competition_connect_payment_integration_path(competition, 'stripe')
         end.to raise_error(OAuth2::Error) do |error|
-            expect(error.response.status).to eq(400)
-            expect(JSON.parse(error.response.body)).to eq(expected_error)
+          expect(error.response.status).to eq(400)
+          expect(JSON.parse(error.response.body)).to eq(expected_error)
         end
       end
     end
