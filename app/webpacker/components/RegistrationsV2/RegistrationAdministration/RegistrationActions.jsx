@@ -19,14 +19,6 @@ import {
 } from '../../../lib/utils/registrationAdmin';
 import { useConfirm } from '../../../lib/providers/ConfirmProvider';
 
-export const registrationStatusTranslationKeys = {
-  pending: 'pending',
-  waiting: 'waitlist',
-  accepted: 'approved',
-  cancelled: 'cancelled',
-  rejected: 'rejected',
-};
-
 function escapeCsv(value) {
   if (!value) return '';
   // Double any quotes (RFC 4180), then wrap the whole field in quotes
@@ -423,9 +415,9 @@ function SummaryTable({
       </Table.Header>
 
       <Table.Body>
-        {Object.entries(registrationStatusTranslationKeys).map(([status, translationKey]) => (
+        {registrationStatusKeys.map((status) => (
           <Table.Row key={status}>
-            <Table.Cell>{I18n.t(`competitions.registration_v2.update.${translationKey}`)}</Table.Cell>
+            <Table.Cell>{I18n.t(`competitions.registration_v2.update.${getStatusTranslationKey(status)}`)}</Table.Cell>
             {withSelectedCounts && <Table.Cell textAlign="right">{partitionedSelectedIds[status].length}</Table.Cell>}
             <Table.Cell textAlign="right">{partitionedRegistrations[status].length}</Table.Cell>
             {withMaximums && <Table.Cell textAlign="right">{partitionedMaximums[status] ?? '-'}</Table.Cell>}
