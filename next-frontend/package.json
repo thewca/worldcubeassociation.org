@@ -58,7 +58,7 @@
     "react-icons": "^5.5.0",
     "react-markdown": "^10.1.0",
     "react-world-flags": "^1.6.0",
-    "swagger-ui-react": "^5.28.0"
+    "swagger-ui-react": "^5.28.1"
   },
   "devDependencies": {
     "@chakra-ui/cli": "^3.26.0",
