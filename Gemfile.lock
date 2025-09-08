@@ -138,7 +138,7 @@ GEM
       execjs
     aws-eventstream (1.4.0)
     aws-partitions (1.1155.0)
-    aws-sdk-cloudfront (1.127.0)
+    aws-sdk-cloudfront (1.128.0)
       aws-sdk-core (~> 3, >= 3.231.0)
       aws-sigv4 (~> 1.5)
     aws-sdk-core (3.232.0)
@@ -1145,7 +1145,7 @@ CHECKSUMS
   autoprefixer-rails (9.4.7) sha256=7104f54efa89e6390391bd894498a9db92bffaf74474942c4152e6dc0775ab3b
   aws-eventstream (1.4.0) sha256=116bf85c436200d1060811e6f5d2d40c88f65448f2125bc77ffce5121e6e183b
   aws-partitions (1.1155.0) sha256=cb40eba09118492c81277e7c11bffb06e2c97cd6cac7b1af3300e7e03f57754e
-  aws-sdk-cloudfront (1.127.0) sha256=30c122ab7e1e1c1c5347b8fa9d2046a394337659d37812b3dc856f71077ae4cb
+  aws-sdk-cloudfront (1.128.0) sha256=3771b91325a15beec068f7c43c1f969f4179b6bea74f1e11aef2407da652e811
   aws-sdk-core (3.232.0) sha256=05291ae0da4fb69e9b6494fcc2d839584e8345714a93cd01f0f1bf11475619f2
   aws-sdk-kms (1.112.0) sha256=aa68feb901545a7fc14be327735740b89f90cfee825a46ddea601c7c80c922d4
   aws-sdk-rds (1.292.0) sha256=3c3d641d8718d550911cd31025b50e7ec0f4129ba70f6d05b16c0a16b0a8adc7
