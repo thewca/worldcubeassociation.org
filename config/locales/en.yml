@@ -1900,7 +1900,7 @@ en:
         email_message: "Copied to clipboard. Remember to use bcc!"
         scroll_to: "Scroll to"
         move_to:
-          one: "Move %{count} registrations to"
+          one: "Move %{count} registration to"
           other: "Move %{count} registrations to"
         pending: "Pending"
         waitlist: "Waiting List"
