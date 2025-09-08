@@ -1,0 +1,14 @@
+get:
+  summary: Get user's permissions
+  operationId: getUserPermissions
+  tags:
+    - Users
+  security:
+    - bearerAuth: []
+  responses:
+    "200":
+      description: Successfully retrieved permissions
+      content:
+        application/json:
+          schema:
+            $ref: "../../schemas/users/UserPermissions.yaml"

@@ -37,55 +37,20 @@ paths:
     $ref: 'paths/users/userGroups.yaml'
   /user_roles:
     $ref: 'paths/users/userRoles.yaml'
+  /users/me/permissions:
+    $ref: 'paths/users/userPermissions.yaml'
 
   /regulations/translations:
     $ref: 'paths/regulations/regulationTranslations.yaml'
+
   /export/public:
     $ref: 'paths/results/publicExports.yaml'
-  /users/me/permissions:
-    get:
-      summary: Get user's permissions
-      operationId: getUserPermissions
-      tags:
-        - Users
-      security:
-        - bearerAuth: []
-      responses:
-        "200":
-          description: Successfully retrieved permissions
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/UserPermissions"
-        "401":
-          description: Unauthorized
+
   /known-timezones:
-    get:
-      summary: Get a list of Olson timezones that the backend understands
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: string
-                  example: 'America/New_York'
+    $ref: 'paths/wca/knownTimezones.yaml'
 
   /regional-organizations:
-    get:
-      summary: A list of currently acknowledged regional organizations
-      operationId: getOrganizations
-      responses:
-        "200":
-          description: Retrieved organizations
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/RegionalOrganization"
+    $ref: 'paths/wca/regionalOrganizations.yaml'
 
 components:
   securitySchemes:
@@ -93,182 +58,3 @@ components:
       type: http
       scheme: bearer
       bearerFormat: JWT
-
-  schemas:
-    RegionalOrganization:
-      type: object
-      required:
-        - name
-        - country_iso2
-        - website
-      properties:
-        name:
-          type: string
-        country_iso2:
-          type: string
-        website:
-          type: string
-        logo_url:
-          type: string
-          format: uri
-    CompetitionPermissions:
-      oneOf:
-        - type: array
-          items:
-            type: string
-        - type: string
-          format: "Wildcard"
-          enum: "*"
-
-    UserPermissions:
-      type: object
-      required:
-        - can_access_panels
-        - can_administer_competitions
-        - can_attend_competitions
-        - can_create_groups
-        - can_edit_delegate_report
-        - can_edit_groups
-        - can_organize_competitions
-        - can_read_groups_current
-        - can_read_groups_past
-        - can_request_to_edit_others_profile
-        - can_view_delegate_admin_page
-        - can_view_delegate_report
-      properties:
-        can_attend_competitions:
-          type: object
-          required:
-            - scope
-          properties:
-            scope:
-              $ref: "#/components/schemas/CompetitionPermissions"
-            until:
-              type: string
-              format: date-time
-              nullable: true
-        can_organize_competitions:
-          type: object
-          required:
-            - scope
-          properties:
-            scope:
-              $ref: "#/components/schemas/CompetitionPermissions"
-        can_administer_competitions:
-          type: object
-          required:
-            - scope
-          properties:
-            scope:
-              $ref: "#/components/schemas/CompetitionPermissions"
-        can_view_delegate_admin_page:
-          type: object
-          required:
-            - scope
-          properties:
-            scope:
-              $ref: "#/components/schemas/CompetitionPermissions"
-        can_view_delegate_report:
-          type: object
-          required:
-            - scope
-          properties:
-            scope:
-              $ref: "#/components/schemas/CompetitionPermissions"
-        can_edit_delegate_report:
-          type: object
-          required:
-            - scope
-          properties:
-            scope:
-              $ref: "#/components/schemas/CompetitionPermissions"
-        can_create_groups:
-          type: object
-          required:
-            - scope
-          properties:
-            scope:
-              type: array
-              items:
-                type: string
-        can_read_groups_current:
-          type: object
-          required:
-            - scope
-          properties:
-            scope:
-              type: array
-              items:
-                type: string
-        can_read_groups_past:
-          type: object
-          required:
-            - scope
-          properties:
-            scope:
-              type: array
-              items:
-                type: string
-        can_edit_groups:
-          type: object
-          required:
-            - scope
-          properties:
-            scope:
-              type: array
-              items:
-                type: string
-        can_access_panels:
-          type: object
-          required:
-            - scope
-          properties:
-            scope:
-              type: array
-              items:
-                type: string
-        can_request_to_edit_others_profile:
-          type: object
-          required:
-            - scope
-          properties:
-            scope:
-              oneOf:
-                - type: array
-                  items:
-                    type: string
-                - type: string
-                  format: "Wildcard"
-                  enum: "*"
-
-    User:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        name:
-          type: string
-        email:
-          type: string
-          format: email
-
-    PersonalRecord:
-      type: object
-      properties:
-        eventId:
-          type: string
-        bestTime:
-          type: integer
-          description: Best performance in milliseconds
-        averageTime:
-          type: integer
-          description: Average performance in milliseconds
-
-    Event:
-      type: object
-      properties:
-        id:
-          type: string
-        name:
-          type: string
