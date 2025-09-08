@@ -578,90 +578,12 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
-        UserRole: {
-            id: number;
-            /** Format: date */
-            start_date: string;
-            /** Format: date */
-            end_date: string | null;
-            group: components["schemas"]["UserGroup"];
-            user: components["schemas"]["Person"];
-            metadata: {
-                id?: number;
-                status?: string;
-                /** Format: date-time */
-                created_at?: string;
-                /** Format: date-time */
-                updated_at?: string;
-                /** Format: email */
-                email?: string;
-            };
-            class?: string;
-        };
-        UserGroup: {
-            id: number;
-            name: string;
-            group_type: string;
-            parent_group_id?: number | null;
-            is_active: boolean;
-            is_hidden: boolean;
-            metadata_id?: number | null;
-            metadata_type?: string | null;
-            /** Format: date-time */
-            created_at: string;
-            /** Format: date-time */
-            updated_at: string;
-            lead_user?: components["schemas"]["Person"];
-            metadata?: {
-                id?: number;
-                status?: string;
-                /** Format: date-time */
-                created_at?: string;
-                /** Format: date-time */
-                updated_at?: string;
-                /** Format: email */
-                email?: string;
-                preferred_contact_mode?: string;
-                friendly_id?: string;
-            };
-        };
         RegionalOrganization: {
             name: string;
             country_iso2: string;
             website: string;
             /** Format: uri */
             logo_url?: string;
-        };
-        Person: {
-            /** @example 267 */
-            id: number;
-            /** @example Tim Reynolds */
-            name: string;
-            /** @example m */
-            gender?: string;
-            /** @example 2005REYN01 */
-            wca_id: string;
-            /** @example US */
-            country_iso2: string;
-            /** @example delegate */
-            delegate_status: string;
-            teams: components["schemas"]["TeamMembership"][];
-            /**
-             * Format: uri
-             * @example https://www.worldcubeassociation.org/persons/2005REYN01
-             */
-            url: string;
-            avatar: components["schemas"]["UserAvatar"];
-        };
-        TeamMembership: {
-            id: number;
-            /** @example wst */
-            friendly_id: string;
-            leader: boolean;
-            senior_member: boolean;
-            name?: string;
-            wca_id?: string;
-            avatar?: components["schemas"]["UserAvatar"];
         };
         RegulationsTranslations: {
             current: components["schemas"]["Translation"][];
@@ -1049,6 +971,37 @@ export interface components {
         WcifCountryCode: string;
         /** @example 333-r1-g1 */
         WcifActivityCode: string;
+        TeamMembership: {
+            id: number;
+            /** @example wst */
+            friendly_id: string;
+            leader: boolean;
+            senior_member: boolean;
+            name?: string;
+            wca_id?: string;
+            avatar?: components["schemas"]["UserAvatar"];
+        };
+        Person: {
+            /** @example 267 */
+            id: number;
+            /** @example Tim Reynolds */
+            name: string;
+            /** @example m */
+            gender?: string;
+            /** @example 2005REYN01 */
+            wca_id: string;
+            /** @example US */
+            country_iso2: string;
+            /** @example delegate */
+            delegate_status: string;
+            teams: components["schemas"]["TeamMembership"][];
+            /**
+             * Format: uri
+             * @example https://www.worldcubeassociation.org/persons/2005REYN01
+             */
+            url: string;
+            avatar: components["schemas"]["UserAvatar"];
+        };
         Organizer: components["schemas"]["Person"] & {
             /** @example regional_delegate */
             delegate_status?: string;
@@ -1178,6 +1131,53 @@ export interface components {
                 national?: Record<string, never>[];
             };
             competition_count: number;
+        };
+        UserGroup: {
+            id: number;
+            name: string;
+            group_type: string;
+            parent_group_id?: number | null;
+            is_active: boolean;
+            is_hidden: boolean;
+            metadata_id?: number | null;
+            metadata_type?: string | null;
+            /** Format: date-time */
+            created_at: string;
+            /** Format: date-time */
+            updated_at: string;
+            lead_user?: components["schemas"]["Person"];
+            metadata?: {
+                id?: number;
+                status?: string;
+                /** Format: date-time */
+                created_at?: string;
+                /** Format: date-time */
+                updated_at?: string;
+                /** Format: email */
+                email?: string;
+                preferred_contact_mode?: string;
+                friendly_id?: string;
+            };
+        };
+        UserRole: {
+            id: number;
+            /** Format: date */
+            start_date: string;
+            /** Format: date */
+            end_date: string | null;
+            group: components["schemas"]["UserGroup"];
+            user: components["schemas"]["Person"];
+            metadata: {
+                id?: number;
+                status?: string;
+                /** Format: date-time */
+                created_at?: string;
+                /** Format: date-time */
+                updated_at?: string;
+                /** Format: email */
+                email?: string;
+            };
+            class?: string;
         };
     };
     responses: never;
