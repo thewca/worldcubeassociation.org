@@ -419,7 +419,7 @@ class UsersController < ApplicationController
   def delegated_competitions
     user_id = params.require(:userId)
 
-    user = User.find_by!(id: user_id)
+    user = User.find(user_id)
     competitions = user.delegated_competitions
                        .over.visible.not_cancelled
                        .order(start_date: :desc)
