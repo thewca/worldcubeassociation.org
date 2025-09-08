@@ -6,6 +6,7 @@ import {
 import _ from 'lodash';
 import getRegistrationPayments from '../api/payment/get/getRegistrationPayments';
 import refundPayment from '../api/payment/get/refundPayment';
+import { captureManualPayments } from '../api/payment/patch/capture_manual_payments';
 import Loading from '../../Requests/Loading';
 import AutonumericField from '../../wca/FormBuilder/input/AutonumericField';
 import I18n from '../../../lib/i18n';
@@ -18,7 +19,7 @@ import { useConfirm } from '../../../lib/providers/ConfirmProvider';
 
 export default function RegistrationPayments({
   registrationId,
-  competitionId,
+  competitionInfo,
 }) {
   const {
     data: payments,
@@ -56,7 +57,7 @@ export default function RegistrationPayments({
       <PaymentsMainBody
         registrationId={registrationId}
         payments={payments}
-        competitionId={competitionId}
+        competitionInfo={competitionInfo}
         userInfo={userInfo}
       />
     </>
@@ -66,7 +67,7 @@ export default function RegistrationPayments({
 function PaymentsMainBody({
   registrationId,
   payments,
-  competitionId,
+  competitionInfo,
   userInfo,
 }) {
   const dispatch = useDispatch();
@@ -108,9 +109,21 @@ function PaymentsMainBody({
     },
   });
 
+  const { mutate: captureManualPaymentsMutation, isPending: isCapturing } = useMutation({
+    mutationFn: captureManualPayments,
+    onError: () => {
+      dispatch(showMessage('An error occurred while trying to capture manual payments', 'negative'));
+    },
+    onSuccess: () => {
+      dispatch(showMessage('Registration payments successfully approved', 'positive'));
+    }
+  });
+
   if (payments.length === 0) {
     return <Message warning>{I18n.t('payments.messages.no_payments')}</Message>;
   }
+
+  console.log(payments)
 
   return (
     <>
@@ -120,24 +133,45 @@ function PaymentsMainBody({
 
       <Table>
         <Table.Header>
-          <Table.Row>
-            <Table.HeaderCell>{I18n.t('payments.labels.net_payment')}</Table.HeaderCell>
-            <Table.HeaderCell>{I18n.t('payments.labels.original_payment')}</Table.HeaderCell>
-            <Table.HeaderCell>{I18n.t('registrations.refund_form.labels.refund_amount')}</Table.HeaderCell>
-            <Table.HeaderCell />
-          </Table.Row>
+          {competitionInfo.payment_integration_type === 'manual' ?
+            <Table.Row>
+                <Table.HeaderCell>{'Payment Reference'}</Table.HeaderCell>
+                <Table.HeaderCell>{'Payment Status'}</Table.HeaderCell>
+            </Table.Row> :
+            <Table.Row>
+                <Table.HeaderCell>{I18n.t('payments.labels.net_payment')}</Table.HeaderCell>
+                <Table.HeaderCell>{I18n.t('payments.labels.original_payment')}</Table.HeaderCell>
+                <Table.HeaderCell>{I18n.t('registrations.refund_form.labels.refund_amount')}</Table.HeaderCell>
+                <Table.HeaderCell />
+            </Table.Row>
+          }
         </Table.Header>
         <Table.Body>
-          {payments.map((refund) => (
-            <PaymentRow
-              payment={refund}
-              refundMutation={refundMutation}
-              isMutating={isMutating}
-              competitionId={competitionId}
-              key={refund.payment_id}
-              userInfo={userInfo}
-            />
-          ))}
+          {competitionInfo.payment_integration_type === 'manual' ?
+            <Table.Row>
+              <Table.Cell>{payments[0].payment_reference}</Table.Cell>
+              <Table.Cell>{payments[0].completed ? 'Paid' : 'Not Paid'}</Table.Cell>
+              <Table.Cell>
+                <Button
+                  onClick={() => captureManualPaymentsMutation({ competitionId: competitionInfo.id, registrationIds: [registrationId]})}
+                  disabled={false}
+                >
+                  {payments[0].completed ? 'Mark Unpaid' : 'Approve Payment'}
+                </Button>
+              </Table.Cell>
+
+            </Table.Row> :
+            payments.map((refund) => (
+              <PaymentRow
+                payment={refund}
+                refundMutation={refundMutation}
+                isMutating={isMutating}
+                competitionId={competitionInfo.id}
+                key={refund.payment_id}
+                userInfo={userInfo}
+              />
+            ))
+          }
         </Table.Body>
       </Table>
     </>

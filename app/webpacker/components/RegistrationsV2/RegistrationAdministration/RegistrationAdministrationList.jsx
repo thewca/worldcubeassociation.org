@@ -139,10 +139,11 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
 
   const { mutate: captureManualPaymentsMutation, isPending: isCapturing } = useMutation({
     mutationFn: captureManualPayments,
-    onError: (data) => {
+    onError: () => {
       dispatchStore(showMessage('An error occurred while trying to capture manual payments', 'negative'));
     },
     onSuccess: async () => {
+      dispatchStore(showMessage('Registration payments successfully approved', 'positive'));
       await refetch()
     }
   })

@@ -11,7 +11,6 @@ import {
 } from '../../../lib/utils/dates';
 import EventIcon from '../../wca/EventIcon';
 import { editRegistrationUrl, editPersonUrl, personUrl } from '../../../lib/requests/routes.js.erb';
-import { captureManualPayments } from '../api/payment/patch/capture_manual_payments';
 import { isoMoneyToHumanReadable } from '../../../lib/helpers/money';
 import { countries } from '../../../lib/wca-data.js.erb';
 import RegionFlag from '../../wca/RegionFlag';
@@ -26,7 +25,7 @@ function RegistrationTime({
   timestamp, registeredOn, payment, usesPaymentIntegration,
 }) {
   if (timestamp) {
-    return getRegistrationTimestamp(payment.paid_on ?? registeredOn);
+    return getRegistrationTimestamp(payment?.paid_on ?? registeredOn);
   }
 
   if (usesPaymentIntegration && !payment.has_paid) {

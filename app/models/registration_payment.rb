@@ -58,6 +58,7 @@ class RegistrationPayment < ApplicationRecord
       payment_id: self.receipt_id,
       completed: self.is_completed,
       payment_provider: payment_provider.to_s,
+      payment_reference: self.receipt&.payment_reference,
       iso_amount_payment: self.amount_lowest_denomination.abs,
       currency_code: self.currency_code,
     }
