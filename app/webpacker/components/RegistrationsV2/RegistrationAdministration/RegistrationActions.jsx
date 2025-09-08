@@ -312,17 +312,17 @@ export default function RegistrationActions({
         button
       >
         <Dropdown.Menu>
-          {registrationStatusKeys.map((status) => (
-            (status !== 'nonCompeting' || partitionedRegistrations.nonCompeting.length > 0) && (
-              <DropdownAction
-                text={
-                  I18n.t(`competitions.registration_v2.update.${getStatusTranslationKey(status)}`)
-                }
-                icon={getStatusIcon(status)}
-                color={getStatusColor(status)}
-                onClick={() => scrollToRef(tableRefs[status])}
-              />
-            )
+          {registrationStatusKeys(
+            { includeNonCompeting: partitionedRegistrations.nonCompeting.length > 0 },
+          ).map((status) => (
+            <DropdownAction
+              text={
+                I18n.t(`competitions.registration_v2.update.${getStatusTranslationKey(status)}`)
+              }
+              icon={getStatusIcon(status)}
+              color={getStatusColor(status)}
+              onClick={() => scrollToRef(tableRefs[status])}
+            />
           ))}
         </Dropdown.Menu>
       </Dropdown>
@@ -375,18 +375,16 @@ export default function RegistrationActions({
         disabled={!anySelected}
       >
         <Dropdown.Menu>
-          {registrationStatusKeys.map((status) => (
-            status !== 'nonCompeting' && (
-              <DropdownAction
-                text={
-                  I18n.t(`competitions.registration_v2.update.${getStatusTranslationKey(status)}`)
-                }
-                icon={getStatusIcon(status)}
-                color={getStatusColor(status)}
-                isDisabled={partitionedSelectedIds[status].length === selectedCount}
-                onClick={() => onMove(status)}
-              />
-            )
+          {registrationStatusKeys().map((status) => (
+            <DropdownAction
+              text={
+                I18n.t(`competitions.registration_v2.update.${getStatusTranslationKey(status)}`)
+              }
+              icon={getStatusIcon(status)}
+              color={getStatusColor(status)}
+              isDisabled={partitionedSelectedIds[status].length === selectedCount}
+              onClick={() => onMove(status)}
+            />
           ))}
         </Dropdown.Menu>
       </Dropdown>
@@ -415,7 +413,7 @@ function SummaryTable({
       </Table.Header>
 
       <Table.Body>
-        {registrationStatusKeys.map((status) => (
+        {registrationStatusKeys().map((status) => (
           <Table.Row key={status}>
             <Table.Cell>{I18n.t(`competitions.registration_v2.update.${getStatusTranslationKey(status)}`)}</Table.Cell>
             {withSelectedCounts && <Table.Cell textAlign="right">{partitionedSelectedIds[status].length}</Table.Cell>}

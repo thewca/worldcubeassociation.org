@@ -15,14 +15,18 @@ const CANCELLED_ICON = 'trash';
 const REJECTED_ICON = 'x';
 const NON_COMPETING_ICON = 'clipboard outline';
 
-export const registrationStatusKeys = [
+/**
+ * Does NOT include 'nonCompeting' by default. Use
+ * `{ includeNonCompeting: true }` to include it.
+ */
+export const registrationStatusKeys = (options) => [
   'pending',
   'waiting',
   'accepted',
   'cancelled',
   'rejected',
   'nonCompeting',
-];
+].filter((s) => options?.includeNonCompeting || s !== 'nonCompeting');
 
 export const getStatusColor = (key) => {
   switch (key) {
