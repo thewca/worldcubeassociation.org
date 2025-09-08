@@ -442,20 +442,3 @@ function DropdownAction({
     />
   );
 }
-
-function DropdownLink({
-  text, icon, color, isDisabled, href,
-}) {
-  return (
-    <Dropdown.Item
-      content={text}
-      icon={{ color, name: icon, size: 'large' }}
-      disabled={isDisabled}
-      as="a"
-      href={href}
-      // id="email-selected"
-      target="_blank"
-      rel="noreferrer"
-    />
-  );
-}
