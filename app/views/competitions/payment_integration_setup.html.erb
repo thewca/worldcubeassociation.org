@@ -34,6 +34,14 @@
       <%= t("payments.payment_setup.before_disconnect_info", provider: t("payments.payment_providers.#{type}")) %>
     </p>
 
+    <% if cpi.connected_account_type == CompetitionPaymentIntegration::AVAILABLE_INTEGRATIONS[:manual] %>
+      <%= link_to(
+            t('payments.payment_setup.edit_account', provider: t("payments.payment_providers.#{type}")),
+            competition_manual_payment_setup_url(@competition),
+            class: 'btn btn-primary'
+          ) %>
+    <% end %>
+
     <% if current_user&.can_admin_competitions? %>
       <%= button_to(
             competition_disconnect_payment_integration_path(payment_integration: type),
