@@ -9,25 +9,30 @@ class CompetitionPaymentIntegration < ApplicationRecord
   AVAILABLE_INTEGRATIONS = {
     paypal: 'ConnectedPaypalAccount',
     stripe: 'ConnectedStripeAccount',
+    manual: 'ManualPaymentIntegration',
   }.freeze
 
   INTEGRATION_DASHBOARD_URLS = {
     paypal: "https://www.paypal.com/listing/customers",
     stripe: "https://dashboard.stripe.com/account/applications",
+    manual: nil,
   }.freeze
 
   INTEGRATION_CURRENCY_INFORMATION = {
     paypal: "https://developer.paypal.com/docs/reports/reference/paypal-supported-currencies/",
     stripe: "https://docs.stripe.com/currencies#supportedcurrencies",
+    manual: nil,
   }.freeze
 
   INTEGRATION_RECORD_TYPES = {
     paypal: 'PaypalRecord',
     stripe: 'StripeRecord',
+    manual: 'ManualPaymentRecord',
   }.freeze
 
   scope :paypal, -> { where(connected_account_type: AVAILABLE_INTEGRATIONS[:paypal]) }
   scope :stripe, -> { where(connected_account_type: AVAILABLE_INTEGRATIONS[:stripe]) }
+  scope :manual, -> { where(connected_account_type: AVAILABLE_INTEGRATIONS[:manual]) }
 
   def self.validate_integration_name!(integration_name)
     raise ArgumentError.new("Invalid integration name. Allowed values are: #{AVAILABLE_INTEGRATIONS.keys.join(', ')}") unless
