@@ -1,0 +1,16 @@
+/competitions/{competitionId}/:
+  get:
+    summary: Get competition details
+    parameters:
+      - name: competitionId
+        in: path
+        required: true
+        schema:
+          type: string
+    responses:
+      '200':
+        description: Successful response
+        content:
+          application/json:
+            schema:
+              $ref: '../../schemas/competitions/CompetitionInfo.yaml'
