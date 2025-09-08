@@ -119,7 +119,7 @@
     "jshint": "^2.13.6",
     "playwright": "^1.55.0",
     "react-refresh": "^0.17.0",
-    "stylelint": "^16.23.1",
+    "stylelint": "^16.24.0",
     "stylelint-config-recommended-scss": "^16.0.0",
     "stylelint-scss": "^6.12.1",
     "webpack-bundle-analyzer": "^4.10.2",
