@@ -11,3 +11,8 @@ properties:
     enum: [ 'single', 'average' ]
   level:
     $ref: './WcifRanking.yaml'
+required:
+  - whenDate
+  - type
+  - resultType
+  - level

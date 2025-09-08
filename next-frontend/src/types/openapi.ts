@@ -839,15 +839,15 @@ export interface components {
         };
         WcifQualificationRanking: {
             /** Format: date */
-            whenDate?: string;
+            whenDate: string;
             /**
              * @description discriminator enum property added by openapi-typescript
              * @enum {string}
              */
             type: "ranking";
             /** @enum {string} */
-            resultType?: "single" | "average";
-            level?: components["schemas"]["WcifRanking"];
+            resultType: "single" | "average";
+            level: components["schemas"]["WcifRanking"];
         };
         WcifQualificationAnyResult: {
             /** Format: date */
