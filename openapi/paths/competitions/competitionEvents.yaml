@@ -1,5 +1,5 @@
 get:
-  summary: Get competition details
+  summary: Get competition events in WCIF v0 format
   parameters:
     - name: competitionId
       in: path
@@ -12,4 +12,6 @@ get:
       content:
         application/json:
           schema:
-            $ref: '../../schemas/competitions/CompetitionInfo.yaml'
+            type: array
+            items:
+              $ref: '../../schemas/wcif/WcifEvent.yaml'

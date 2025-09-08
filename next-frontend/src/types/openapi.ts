@@ -714,16 +714,6 @@ export interface components {
              */
             thumb_url?: string;
         };
-        Organizer: components["schemas"]["Person"] & {
-            /** @example regional_delegate */
-            delegate_status?: string;
-            /**
-             * Format: email
-             * @example 255@worldcubeassociation.org
-             */
-            email?: string;
-            avatar?: components["schemas"]["UserAvatar"];
-        };
         ExportInfo: {
             /** Format: date */
             export_date: string;
@@ -1061,15 +1051,15 @@ export interface components {
         };
         WcifQualificationRanking: {
             /** Format: date */
-            whenDate: string;
+            whenDate?: string;
             /**
              * @description discriminator enum property added by openapi-typescript
              * @enum {string}
              */
             type: "ranking";
             /** @enum {string} */
-            resultType: "single" | "average";
-            level: components["schemas"]["WcifRanking"];
+            resultType?: "single" | "average";
+            level?: components["schemas"]["WcifRanking"];
         };
         WcifQualificationAnyResult: {
             /** Format: date */
@@ -1132,14 +1122,10 @@ export interface components {
             scrambles: components["schemas"]["WcifScramble"][];
             extraScrambles: components["schemas"]["WcifScramble"][];
         };
-        WcifAttemptResult: number;
         WcifAttempt: {
             result: components["schemas"]["WcifAttemptResult"];
             reconstruction?: string;
         };
-        WcifRanking: number;
-        WcifPercent: number;
-        WcifScramble: string;
         WcifSchedule: {
             /** Format: date */
             startDate: string;
@@ -1179,6 +1165,20 @@ export interface components {
         WcifCountryCode: string;
         /** @example 333-r1-g1 */
         WcifActivityCode: string;
+        Organizer: components["schemas"]["Person"] & {
+            /** @example regional_delegate */
+            delegate_status?: string;
+            /**
+             * Format: email
+             * @example 255@worldcubeassociation.org
+             */
+            email?: string;
+            avatar?: components["schemas"]["UserAvatar"];
+        };
+        WcifAttemptResult: number;
+        WcifRanking: number;
+        WcifPercent: number;
+        WcifScramble: string;
     };
     responses: never;
     parameters: never;

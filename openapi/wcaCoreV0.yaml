@@ -15,23 +15,7 @@ paths:
   /competitions/{competitionId}/:
     $ref: 'paths/competitions/competitionById.yaml'
   /competitions/{competitionId}/events:
-    get:
-      summary: Get competition events in WCIF v0 format
-      parameters:
-        - name: competitionId
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/WcifEvent'
+    $ref: 'paths/competitions/competitionEvents.yaml'
 
   /competitions/{competitionId}/schedule:
     get:
@@ -1100,369 +1084,61 @@ components:
         - event_ids
 
     WcifEvent:
-      type: object
-      properties:
-        id:
-          type: string
-          example: '333'
-        rounds:
-          type: array
-          items:
-            $ref: '#/components/schemas/WcifRound'
-        competitorLimit:
-          type: integer
-        qualification:
-          $ref: '#/components/schemas/WcifQualification'
-        extensions:
-          type: array
-      required:
-        - id
-        - rounds
-        - extensions
+      $ref: './schemas/wcif/WcifEvent.yaml'
 
     WcifRound:
-      type: object
-      properties:
-        id:
-          type: string
-          example: "333-r1"
-        format:
-          type: string
-          enum: [ '1', '2', '3', 'a', 'm' ]
-        timeLimit:
-          $ref: '#/components/schemas/WcifTimeLimit'
-        cutoff:
-          $ref: '#/components/schemas/WcifCutoff'
-        advancementCondition:
-          $ref: '#/components/schemas/WcifAdvancementCondition'
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/WcifResult'
-        scrambleSetCount:
-          type: integer
-        scrambleSets:
-          type: array
-          items:
-            $ref: '#/components/schemas/WcifScrambleSet'
-        extensions:
-          type: array
-      required:
-        - id
-        - format
-        - results
-        - scrambleSetCount
-        - scrambleSets
-        - extensions
+      $ref: './schemas/wcif/WcifRound.yaml'
 
     WcifQualification:
-      oneOf:
-        - $ref: '#/components/schemas/WcifQualificationAttemptResult'
-        - $ref: '#/components/schemas/WcifQualificationRanking'
-        - $ref: '#/components/schemas/WcifQualificationAnyResult'
-      discriminator:
-        propertyName: type
-        mapping:
-          attemptResult: '#/components/schemas/WcifQualificationAttemptResult'
-          ranking: '#/components/schemas/WcifQualificationRanking'
-          anyResult: '#/components/schemas/WcifQualificationAnyResult'
+      $ref: './schemas/wcif/WcifQualification.yaml'
 
     WcifQualificationAttemptResult:
-      type: object
-      properties:
-        whenDate:
-          type: string
-          format: date
-        type:
-          type: string
-          example: "attemptResult"
-        resultType:
-          type: string
-          enum: [ 'single', 'average' ]
-        level:
-          $ref: '#/components/schemas/WcifAttemptResult'
-      required:
-        - whenDate
-        - type
-        - resultType
-        - level
+      $ref: './schemas/wcif/WcifQualificationAttemptResult.yaml'
 
     WcifQualificationRanking:
-      type: object
-      properties:
-        whenDate:
-          type: string
-          format: date
-        type:
-          type: string
-          example: "ranking"
-        resultType:
-          type: string
-          enum: [ 'single', 'average' ]
-        level:
-          $ref: '#/components/schemas/WcifRanking'
-      required:
-        - whenDate
-        - type
-        - resultType
-        - level
+      $ref: './schemas/wcif/WcifQualificationRanking.yaml'
 
     WcifQualificationAnyResult:
-      type: object
-      properties:
-        whenDate:
-          type: string
-          format: date
-        type:
-          type: string
-          example: "anyResult"
-        resultType:
-          type: string
-          enum: [ 'single', 'average' ]
-      required:
-        - whenDate
-        - type
-        - resultType
+      $ref: './schemas/wcif/WcifQualificationAnyResult.yaml'
 
     WcifTimeLimit:
-      type: object
-      properties:
-        centiseconds:
-          type: integer
-          example: 18000
-        cumulativeRoundIds:
-          type: array
-          items:
-            type: string
-      required:
-        - centiseconds
-        - cumulativeRoundIds
+      $ref: './schemas/wcif/WcifTimeLimit.yaml'
 
     WcifCutoff:
-      type: object
-      properties:
-        numberOfAttempts:
-          type: integer
-          example: 2
-        attemptResult:
-          $ref: '#/components/schemas/WcifAttemptResult'
-      required:
-        - numberOfAttempts
-        - attemptResult
+      $ref: './schemas/wcif/WcifCutoff.yaml'
 
     WcifAdvancementCondition:
-      oneOf:
-        - $ref: '#/components/schemas/WcifAdvancementConditionRanking'
-        - $ref: '#/components/schemas/WcifAdvancementConditionPercent'
-        - $ref: '#/components/schemas/WcifAdvancementConditionAttemptResult'
-      discriminator:
-        propertyName: type
-        mapping:
-          ranking: '#/components/schemas/WcifAdvancementConditionRanking'
-          percent: '#/components/schemas/WcifAdvancementConditionPercent'
-          attemptResult: '#/components/schemas/WcifAdvancementConditionAttemptResult'
+      $ref: './schemas/wcif/WcifAdvancementCondition.yaml'
 
     WcifAdvancementConditionRanking:
-      type: object
-      properties:
-        type:
-          type: string
-          example: "ranking"
-        level:
-          $ref: '#/components/schemas/WcifRanking'
-      required:
-        - type
-        - level
+      $ref: './schemas/wcif/WcifAdvancementConditionRanking.yaml'
 
     WcifAdvancementConditionPercent:
-      type: object
-      properties:
-        type:
-          type: string
-          example: "percent"
-        level:
-          $ref: '#/components/schemas/WcifPercent'
-      required:
-        - type
-        - level
+      $ref: './schemas/wcif/WcifAdvancementConditionPercent.yaml'
 
     WcifAdvancementConditionAttemptResult:
-      type: object
-      properties:
-        type:
-          type: string
-          example: "attemptResult"
-        level:
-          $ref: '#/components/schemas/WcifAttemptResult'
-      required:
-        - type
-        - level
+      $ref: './schemas/wcif/WcifAdvancementConditionAttemptResult.yaml'
 
     WcifResult:
-      type: object
-      properties:
-        personId:
-          type: integer
-          example: 1
-        ranking:
-          type: integer
-          example: 10
-        attempts:
-          type: array
-          items:
-            $ref: '#/components/schemas/WcifAttempt'
-        best:
-          $ref: '#/components/schemas/WcifAttemptResult'
-        average:
-          $ref: '#/components/schemas/WcifAttemptResult'
-      required:
-        - personId
-        - attempts
-        - best
-        - average
+      $ref: './schemas/wcif/WcifResult.yaml'
 
     WcifScrambleSet:
-      type: object
-      properties:
-        id:
-          type: integer
-          example: 1
-        scrambles:
-          type: array
-          items:
-            $ref: '#/components/schemas/WcifScramble'
-        extraScrambles:
-          type: array
-          items:
-            $ref: '#/components/schemas/WcifScramble'
-      required:
-        - id
-        - scrambles
-        - extraScrambles
-
-    WcifAttemptResult:
-      type: integer
+      $ref: './schemas/wcif/WcifScrambleSet.yaml'
 
     WcifAttempt:
-      type: object
-      properties:
-        result:
-          $ref: '#/components/schemas/WcifAttemptResult'
-        reconstruction:
-          type: string
-      required:
-        - result
-
-    WcifRanking:
-      type: integer
-
-    WcifPercent:
-      type: integer
-
-    WcifScramble:
-      type: string
+      $ref: './schemas/wcif/WcifAttempt.yaml'
 
     WcifSchedule:
-      type: object
-      properties:
-        startDate:
-          type: string
-          format: date
-        numberOfDays:
-          type: integer
-        venues:
-          type: array
-          items:
-            $ref: '#/components/schemas/WcifVenue'
-      required:
-        - startDate
-        - numberOfDays
-        - venues
+      $ref: './schemas/wcif/WcifSchedule.yaml'
 
     WcifVenue:
-      type: object
-      properties:
-        id:
-          type: integer
-        name:
-          type: string
-        latitudeMicrodegrees:
-          type: integer
-        longitudeMicrodegrees:
-          type: integer
-        countryIso2:
-          $ref: '#/components/schemas/WcifCountryCode'
-        timezone:
-          type: string
-        rooms:
-          type: array
-          items:
-            $ref: '#/components/schemas/WcifRoom'
-        extensions:
-          type: array
-      required:
-        - id
-        - name
-        - latitudeMicrodegrees
-        - longitudeMicrodegrees
-        - countryIso2
-        - timezone
-        - rooms
-        - extensions
+      $ref: './schemas/wcif/WcifVenue.yaml'
 
     WcifRoom:
-      type: object
-      properties:
-        id:
-          type: integer
-        name:
-          type: string
-        color:
-          type: string
-        activities:
-          type: array
-          items:
-            $ref: '#/components/schemas/WcifActivity'
-        extensions:
-          type: array
-      required:
-        - id
-        - name
-        - color
-        - activities
-        - extensions
+      $ref: './schemas/wcif/WcifRoom.yaml'
 
     WcifActivity:
-      type: object
-      properties:
-        id:
-          type: integer
-        name:
-          type: string
-        activityCode:
-          $ref: '#/components/schemas/WcifActivityCode'
-        startTime:
-          type: string
-          format: date-time
-        endTime:
-          type: string
-          format: date-time
-        childActivities:
-          type: array
-          items:
-            $ref: '#/components/schemas/WcifActivity'
-        scrambleSetId:
-          type: integer
-        extensions:
-          type: array
-      required:
-        - id
-        - name
-        - activityCode
-        - startTime
-        - endTime
-        - childActivities
-        - extensions
+      $ref: './schemas/wcif/WcifActivity.yaml'
 
     WcifCountryCode:
       type: string

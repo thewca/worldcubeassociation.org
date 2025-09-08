@@ -1,0 +1,20 @@
+type: object
+properties:
+  id:
+    type: integer
+  name:
+    type: string
+  color:
+    type: string
+  activities:
+    type: array
+    items:
+      $ref: './WcifActivity.yaml'
+  extensions:
+    type: array
+required:
+  - id
+  - name
+  - color
+  - activities
+  - extensions
