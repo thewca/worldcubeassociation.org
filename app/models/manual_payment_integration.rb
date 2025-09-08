@@ -3,6 +3,10 @@
 class ManualPaymentIntegration < ApplicationRecord
   has_one :competition_payment_integration, as: :connected_account
 
+  def self.manual_payments_disabled?
+    Rails.env.production? && EnvConfig.WCA_LIVE_SITE?
+  end
+
   def prepare_intent(registration, amount_iso, currency_iso, paying_user)
     existing_intent = registration.payment_intents.first
     if existing_intent.present?
@@ -44,12 +48,14 @@ class ManualPaymentIntegration < ApplicationRecord
   end
 
   def self.generate_onboarding_link(competition_id)
+    return nil if self.manual_payments_disabled?
+
     Rails.application.routes.url_helpers.competition_manual_payment_setup_url(competition_id)
   end
 
-  # def account_details
-  #   serializable_hash(only: %i[payment_information payment_reference])
-  # end
+  def account_details
+    serializable_hash(only: %i[payment_information payment_reference])
+  end
 
   def self.connect_integration(form_params)
     model_attributes = form_params.permit(:payment_information, :payment_reference)
