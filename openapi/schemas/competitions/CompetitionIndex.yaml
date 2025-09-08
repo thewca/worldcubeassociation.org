@@ -89,4 +89,4 @@ properties:
         name:
           type: string
         avatar:
-          $ref: '#/components/schemas/UserAvatar'
+          $ref: '../users/UserAvatar.yaml'

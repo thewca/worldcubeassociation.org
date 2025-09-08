@@ -7,7 +7,7 @@ info:
     name: WCA Software Team
     url: https://www.worldcubeassociation.org
     email: software@worldcubeassociation.org
-  version: 0.0.1
+  version: 0.1.0
 servers:
   - url: http://localhost:3000/api/v0
     description: The production API server
@@ -25,50 +25,9 @@ paths:
   /competition_index:
     $ref: 'paths/competitions/competitionList.yaml'
   /incidents:
-    get:
-      summary: Get a list of incidents
-      parameters:
-        - name: q
-          in: query
-          schema:
-            type: string
-        - name: tags
-          in: query
-          schema:
-            type: string
-        - name: page
-          in: query
-          schema:
-            type: number
-        - name: per_page
-          in: query
-          schema:
-            type: number
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Incident'
+    $ref: 'paths/regulations/incidentsList.yaml'
   /persons/{wca_id}/:
-    get:
-      summary: Get information for a person
-      parameters:
-        - name: wca_id
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PersonInfo'
+    $ref: 'paths/users/personByWCAId.yaml'
   /persons/{wca_id}/results:
     get:
       summary: Get results for a person
@@ -421,78 +380,6 @@ components:
         avatar:
           $ref: '#/components/schemas/UserAvatar'
 
-    Incident:
-      type: object
-      required:
-        - id
-        - title
-        - public_summary
-        - created_at
-        - updated_at
-        - resolved_at
-        - digest_worthy
-        - url
-        - tags
-        - competitions
-      properties:
-        id:
-          type: string
-        title:
-          type: string
-        private_description:
-          type: string
-        public_summary:
-          type: string
-        created_at:
-          type: string
-          format: date-time
-        updated_at:
-          type: string
-          format: date-time
-        resolved_at:
-          type: string
-          format: date-time
-        digest_worthy:
-          type: boolean
-        digest_sent_at:
-          type: string
-          format: date-time
-        url:
-          type: string
-          format: uri
-        tags:
-          type: array
-          items:
-            type: object
-            required:
-              - name
-              - content_html
-              - url
-            properties:
-              name:
-                type: string
-              id:
-                type: number
-              url:
-                type: string
-                format: uri
-              content_html:
-                type: string
-        competitions:
-          type: array
-          items:
-            type: object
-            required:
-              - id
-              - name
-            properties:
-              id:
-                type: string
-              name:
-                type: string
-              comments:
-                type: string
-
     TeamMembership:
       $ref: 'schemas/users/TeamMembership.yaml'
 
@@ -559,132 +446,6 @@ components:
         developer_url:
           type: string
           format: uri
-
-    Rank:
-      type: object
-      required:
-        - id
-        - person_id
-        - event_id
-        - best
-        - world_rank
-        - continent_rank
-        - country_rank
-      properties:
-        id:
-          type: integer
-        person_id:
-          type: string
-        event_id:
-          type: string
-        best:
-          type: integer
-        world_rank:
-          type: integer
-        continent_rank:
-          type: integer
-        country_rank:
-          type: integer
-
-    Medals:
-      type: object
-      required:
-        - gold
-        - silver
-        - bronze
-        - total
-      properties:
-        gold:
-          type: integer
-        silver:
-          type: integer
-        bronze:
-          type: integer
-        total:
-          type: integer
-
-    Records:
-      type: object
-      required:
-        - national
-        - continental
-        - world
-        - total
-      properties:
-        national:
-          type: integer
-        continental:
-          type: integer
-        world:
-          type: integer
-        total:
-          type: integer
-
-    PersonInfo:
-      type: object
-      required:
-        - person
-        - medals
-        - records
-        - personal_records
-        - championship_podiums
-        - competition_count
-      properties:
-        person:
-          $ref: '#/components/schemas/Person'
-        previous_persons:
-          type: array
-          items:
-            type: object
-        ranks_single:
-          type: array
-          items:
-            $ref: '#/components/schemas/Rank'
-        ranks_average:
-          type: array
-          items:
-            $ref: '#/components/schemas/Rank'
-        medals:
-          $ref: '#/components/schemas/Medals'
-        records:
-          $ref: '#/components/schemas/Records'
-        personal_records:
-          type: object
-          additionalProperties:
-            $ref: '#/components/schemas/SingleAndAverageRank'
-        championship_podiums:
-          type: object
-          properties:
-            world:
-              type: array
-              items:
-                type: object
-            continental:
-              type: array
-              items:
-                type: object
-            greater_china:
-              type: array
-              items:
-                type: object
-            national:
-              type: array
-              items:
-                type: object
-        competition_count:
-          type: integer
-
-    SingleAndAverageRank:
-      type: object
-      required:
-        - average
-        - single
-      properties:
-        average:
-          $ref: "#/components/schemas/Rank"
-        single:
-          $ref: "#/components/schemas/Rank"
-
 
     CompetitionInfo:
       $ref: 'schemas/competitions/CompetitionInfo.yaml'

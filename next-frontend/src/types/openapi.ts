@@ -653,35 +653,6 @@ export interface components {
             url: string;
             avatar: components["schemas"]["UserAvatar"];
         };
-        Incident: {
-            id: string;
-            title: string;
-            private_description?: string;
-            public_summary: string;
-            /** Format: date-time */
-            created_at: string;
-            /** Format: date-time */
-            updated_at: string;
-            /** Format: date-time */
-            resolved_at: string;
-            digest_worthy: boolean;
-            /** Format: date-time */
-            digest_sent_at?: string;
-            /** Format: uri */
-            url: string;
-            tags: {
-                name: string;
-                id?: number;
-                /** Format: uri */
-                url: string;
-                content_html: string;
-            }[];
-            competitions: {
-                id: string;
-                name: string;
-                comments?: string;
-            }[];
-        };
         TeamMembership: {
             id: number;
             /** @example wst */
@@ -726,87 +697,6 @@ export interface components {
             readme: string;
             /** Format: uri */
             developer_url?: string;
-        };
-        Rank: {
-            id: number;
-            person_id: string;
-            event_id: string;
-            best: number;
-            world_rank: number;
-            continent_rank: number;
-            country_rank: number;
-        };
-        Medals: {
-            gold: number;
-            silver: number;
-            bronze: number;
-            total: number;
-        };
-        Records: {
-            national: number;
-            continental: number;
-            world: number;
-            total: number;
-        };
-        PersonInfo: {
-            person: components["schemas"]["Person"];
-            previous_persons?: Record<string, never>[];
-            ranks_single?: components["schemas"]["Rank"][];
-            ranks_average?: components["schemas"]["Rank"][];
-            medals: components["schemas"]["Medals"];
-            records: components["schemas"]["Records"];
-            personal_records: {
-                [key: string]: components["schemas"]["SingleAndAverageRank"];
-            };
-            championship_podiums: {
-                world?: Record<string, never>[];
-                continental?: Record<string, never>[];
-                greater_china?: Record<string, never>[];
-                national?: Record<string, never>[];
-            };
-            competition_count: number;
-        };
-        SingleAndAverageRank: {
-            average: components["schemas"]["Rank"];
-            single: components["schemas"]["Rank"];
-        };
-        CompetitionIndex: {
-            id: string;
-            name: string;
-            short_display_name: string;
-            /** Format: date */
-            start_date: string;
-            /** Format: date */
-            end_date: string;
-            /** Format: date-time */
-            registration_open: string;
-            /** Format: date-time */
-            registration_close: string;
-            /** Format: date-time */
-            announced_at: string;
-            country_iso2: string;
-            city: string;
-            venue: string;
-            /** Format: float */
-            latitude_degrees: number;
-            /** Format: float */
-            longitude_degrees: number;
-            event_ids: string[];
-            main_event_id: string;
-            competitor_limit: number;
-            championship_types: string[];
-            /** Format: date-time */
-            results_submitted_at?: string;
-            /** Format: date-time */
-            results_posted_at?: string;
-            /** Format: date-time */
-            report_posted_at?: string;
-            report_posted_by_user?: number;
-            delegates?: {
-                id: number;
-                name: string;
-                avatar: components["schemas"]["UserAvatar"];
-            }[];
         };
         CompetitionInfo: {
             /** @example WC2003 */
@@ -1178,6 +1068,116 @@ export interface components {
             competition_id: string;
             user_id: number;
             event_ids: string[];
+        };
+        CompetitionIndex: {
+            id: string;
+            name: string;
+            short_display_name: string;
+            /** Format: date */
+            start_date: string;
+            /** Format: date */
+            end_date: string;
+            /** Format: date-time */
+            registration_open: string;
+            /** Format: date-time */
+            registration_close: string;
+            /** Format: date-time */
+            announced_at: string;
+            country_iso2: string;
+            city: string;
+            venue: string;
+            /** Format: float */
+            latitude_degrees: number;
+            /** Format: float */
+            longitude_degrees: number;
+            event_ids: string[];
+            main_event_id: string;
+            competitor_limit: number;
+            championship_types: string[];
+            /** Format: date-time */
+            results_submitted_at?: string;
+            /** Format: date-time */
+            results_posted_at?: string;
+            /** Format: date-time */
+            report_posted_at?: string;
+            report_posted_by_user?: number;
+            delegates?: {
+                id: number;
+                name: string;
+                avatar: components["schemas"]["UserAvatar"];
+            }[];
+        };
+        Incident: {
+            id: string;
+            title: string;
+            private_description?: string;
+            public_summary: string;
+            /** Format: date-time */
+            created_at: string;
+            /** Format: date-time */
+            updated_at: string;
+            /** Format: date-time */
+            resolved_at: string;
+            digest_worthy: boolean;
+            /** Format: date-time */
+            digest_sent_at?: string;
+            /** Format: uri */
+            url: string;
+            tags: {
+                name: string;
+                id?: number;
+                /** Format: uri */
+                url: string;
+                content_html: string;
+            }[];
+            competitions: {
+                id: string;
+                name: string;
+                comments?: string;
+            }[];
+        };
+        Rank: {
+            id: number;
+            person_id: string;
+            event_id: string;
+            best: number;
+            world_rank: number;
+            continent_rank: number;
+            country_rank: number;
+        };
+        Medals: {
+            gold: number;
+            silver: number;
+            bronze: number;
+            total: number;
+        };
+        Records: {
+            national: number;
+            continental: number;
+            world: number;
+            total: number;
+        };
+        SingleAndAverageRank: {
+            average: components["schemas"]["Rank"];
+            single: components["schemas"]["Rank"];
+        };
+        PersonInfo: {
+            person: components["schemas"]["Person"];
+            previous_persons?: Record<string, never>[];
+            ranks_single?: components["schemas"]["Rank"][];
+            ranks_average?: components["schemas"]["Rank"][];
+            medals: components["schemas"]["Medals"];
+            records: components["schemas"]["Records"];
+            personal_records: {
+                [key: string]: components["schemas"]["SingleAndAverageRank"];
+            };
+            championship_podiums: {
+                world?: Record<string, never>[];
+                continental?: Record<string, never>[];
+                greater_china?: Record<string, never>[];
+                national?: Record<string, never>[];
+            };
+            competition_count: number;
         };
     };
     responses: never;
