@@ -465,7 +465,7 @@ RSpec.describe "competitions" do
     end
   end
 
-  describe "GET #connect_payment_integration", :zxc do
+  describe "GET #connect_payment_integration" do
     before do
       sign_in competition.delegates.first
     end
@@ -473,6 +473,20 @@ RSpec.describe "competitions" do
     it 'rejects an invalid payment integration type' do
       get competition_connect_payment_integration_path(competition, 'invalid')
       expect(response).not_to be_successful
+    end
+
+    context 'connecting stripe integration' do
+      # This is the furthest I got without detouring into the Stripe account connection workflow
+      # It validates the first half of the controller code, including catching an incorrect function name that initially went undetected
+      it 'fails due to no authorization code provided' do
+        expected_error = { error: "invalid_request", error_description: "No authorization code provided" }.stringify_keys
+        expect do
+          get competition_connect_payment_integration_path(competition, 'stripe')
+        end.to raise_error(OAuth2::Error) do |error|
+            expect(error.response.status).to eq(400)
+            expect(JSON.parse(error.response.body)).to eq(expected_error)
+        end
+      end
     end
 
     context 'connecting a manual integration' do
