@@ -1891,13 +1891,14 @@ en:
         no_changes: "There are no changes"
         email: "Email"
         email_send: "Send Email"
-        email_copy: "Copy Emails"
+        email_copy:
+          one: "Copy %{count} Email Address"
+          other: "Copy %{count} Email Addresses"
         email_message: "Copied to clipboard. Remember to use bcc!"
         scroll_to: "Scroll to"
         move_to:
-          zero: "Move to"
-          one: "Move %{count} to"
-          other: "Move %{count} to"
+          one: "Move %{count} registrations to"
+          other: "Move %{count} registrations to"
         pending: "Pending"
         waitlist: "Waiting List"
         approved: "Approved"

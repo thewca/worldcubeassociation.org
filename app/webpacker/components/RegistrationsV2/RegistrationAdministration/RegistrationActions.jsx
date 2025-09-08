@@ -288,7 +288,7 @@ export default function RegistrationActions({
         flowing
         position="bottom left"
         trigger={
-          <Button color="black" icon="info" text={I18n.t('competitions.registration_v2.info')} />
+          <Button color="grey" icon="info" />
         }
         content={(
           <SummaryTable
@@ -304,10 +304,9 @@ export default function RegistrationActions({
       />
 
       <Dropdown
+        data-tooltip={I18n.t('competitions.registration_v2.update.scroll_to')}
         pointing
-        className="icon white"
-        labeled
-        text={I18n.t('competitions.registration_v2.update.scroll_to')}
+        className="icon black"
         icon="th list"
         button
       >
@@ -328,10 +327,9 @@ export default function RegistrationActions({
       </Dropdown>
 
       <Button
-        content={I18n.t('registrations.list.export_csv')}
+        data-tooltip={I18n.t('registrations.list.export_csv')}
         icon="download"
-        labelPosition="left"
-        color="blue"
+        color="green"
         onClick={() => {
           csvExport(
             [...pending, ...accepted, ...cancelled, ...waiting, ...rejected],
@@ -341,35 +339,32 @@ export default function RegistrationActions({
         }}
       />
 
-      <Dropdown
-        pointing
-        className="icon grey"
-        labeled
-        text={I18n.t('competitions.registration_v2.update.email', { count: selectedCount })}
+      <Button
+        data-tooltip={I18n.t('competitions.registration_v2.update.email_send')}
         icon="envelope"
-        button
+        color="blue"
+        href={`mailto:?bcc=${selectedEmails}`}
+        target="_blank"
+        rel="noreferrer"
         disabled={!anySelected}
-      >
-        <Dropdown.Menu>
-          <DropdownLink
-            text={I18n.t('competitions.registration_v2.update.email_send')}
-            icon="pencil"
-            href={`mailto:?bcc=${selectedEmails}`}
-          />
+      />
 
-          <DropdownAction
-            text={I18n.t('competitions.registration_v2.update.email_copy')}
-            icon="copy"
-            onClick={() => copyEmails(selectedEmails)}
-          />
-        </Dropdown.Menu>
-      </Dropdown>
+      <Button
+        data-tooltip={
+          I18n.t('competitions.registration_v2.update.email_copy', { count: selectedCount })
+        }
+        icon="copy"
+        color="teal"
+        onClick={() => copyEmails(selectedEmails)}
+        disabled={!anySelected}
+      />
 
       <Dropdown
+        data-tooltip={
+          I18n.t('competitions.registration_v2.update.move_to', { count: selectedCount })
+        }
         pointing
         className="icon brown"
-        labeled
-        text={I18n.t('competitions.registration_v2.update.move_to', { count: selectedCount })}
         icon="arrow right"
         button
         disabled={!anySelected}
