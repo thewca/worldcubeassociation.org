@@ -30,7 +30,7 @@ class RegistrationPayment < ApplicationRecord
   end
 
   def amount_available_for_refund
-    amount_lowest_denomination + refunding_registration_payments.completed.sum(:amount_lowest_denomination)
+    amount_lowest_denomination + refunding_registration_payments.sum(:amount_lowest_denomination)
   end
 
   private def auto_accept_hook
