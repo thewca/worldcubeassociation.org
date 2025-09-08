@@ -63,6 +63,9 @@ Rails.application.routes.draw do
   delete 'users/:id/avatar' => 'users#delete_avatar'
   post 'users/update_user_data' => 'users#update_user_data'
   post 'users/merge' => 'users#merge'
+  get '/users/registrations' => 'users#registrations', as: :helpful_queries_registrations
+  get '/users/organized-competitions' => 'users#organized_competitions', as: :helpful_queries_organized_competitions
+  get '/users/delegated-competitions' => 'users#delegated_competitions', as: :helpful_queries_delegated_competitions
   get 'admin/avatars/pending' => 'admin/avatars#pending_avatar_users', as: :pending_avatars
   post 'admin/avatars' => 'admin/avatars#update_avatar', as: :admin_update_avatar
 
@@ -332,9 +335,6 @@ Rails.application.routes.draw do
   get '/admin/complete_persons' => 'admin#complete_persons'
   post '/admin/complete_persons' => 'admin#do_complete_persons'
   get '/admin/peek_unfinished_results' => 'admin#peek_unfinished_results'
-  get '/admin/registrations' => 'admin#registrations', as: :helpful_queries_registrations
-  get '/admin/organized-competitions' => 'admin#organized_competitions', as: :helpful_queries_organized_competitions
-  get '/admin/delegated-competitions' => 'admin#delegated_competitions', as: :helpful_queries_delegated_competitions
 
   get '/search' => 'search_results#index'
 

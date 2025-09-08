@@ -9,7 +9,7 @@ import { fetchJsonOrError } from '../../../../lib/requests/fetchWithAuthenticity
 import { viewUrls, competitionUrl } from '../../../../lib/requests/routes.js.erb';
 import useInputState from '../../../../lib/hooks/useInputState';
 
-const hasWcaId = (val) => val?.trim()?.length > 0;
+const hasUserId = (val) => val?.toString().trim()?.length > 0;
 
 const statusColor = (s) => {
   switch (s?.toLowerCase()) {
@@ -22,29 +22,29 @@ const statusColor = (s) => {
   }
 };
 
-async function fetchRegistrations(wcaId) {
-  if (!hasWcaId(wcaId)) return [];
-  const { data } = await fetchJsonOrError(viewUrls.helpfulQueries.registrations(wcaId));
+async function fetchRegistrations(userId) {
+  if (!hasUserId(userId)) return [];
+  const { data } = await fetchJsonOrError(viewUrls.helpfulQueries.registrations(userId));
   return (data || []);
 }
 
-async function fetchOrganized(wcaId) {
-  if (!hasWcaId(wcaId)) return [];
-  const { data } = await fetchJsonOrError(viewUrls.helpfulQueries.organizedCompetitions(wcaId));
+async function fetchOrganized(userId) {
+  if (!hasUserId(userId)) return [];
+  const { data } = await fetchJsonOrError(viewUrls.helpfulQueries.organizedCompetitions(userId));
   return (data || []);
 }
 
-async function fetchDelegated(wcaId) {
-  if (!hasWcaId(wcaId)) return [];
-  const { data } = await fetchJsonOrError(viewUrls.helpfulQueries.delegatedCompetitions(wcaId));
+async function fetchDelegated(userId) {
+  if (!hasUserId(userId)) return [];
+  const { data } = await fetchJsonOrError(viewUrls.helpfulQueries.delegatedCompetitions(userId));
   return (data || []);
 }
 
-function RegistrationsPane({ wcaId }) {
-  const enabled = hasWcaId(wcaId);
+function RegistrationsPane({ userId }) {
+  const enabled = hasUserId(userId);
   const { data = [], isFetching } = useQuery({
-    queryKey: ['hq-registrations', wcaId],
-    queryFn: () => fetchRegistrations(wcaId),
+    queryKey: ['hq-registrations', userId],
+    queryFn: () => fetchRegistrations(userId),
     enabled,
   });
 
@@ -80,11 +80,11 @@ function RegistrationsPane({ wcaId }) {
   ) : <Message content="No registrations found for this competitor." />;
 }
 
-function OrganizedPane({ wcaId }) {
-  const enabled = hasWcaId(wcaId);
+function OrganizedPane({ userId }) {
+  const enabled = hasUserId(userId);
   const { data = [], isFetching } = useQuery({
-    queryKey: ['hq-organized', wcaId],
-    queryFn: () => fetchOrganized(wcaId),
+    queryKey: ['hq-organized', userId],
+    queryFn: () => fetchOrganized(userId),
     enabled,
   });
 
@@ -114,11 +114,11 @@ function OrganizedPane({ wcaId }) {
   ) : <Message content="No organized competitions found." />;
 }
 
-function DelegatedPane({ wcaId }) {
-  const enabled = hasWcaId(wcaId);
+function DelegatedPane({ userId }) {
+  const enabled = hasUserId(userId);
   const { data = [], isFetching } = useQuery({
-    queryKey: ['hq-delegated', wcaId],
-    queryFn: () => fetchDelegated(wcaId),
+    queryKey: ['hq-delegated', userId],
+    queryFn: () => fetchDelegated(userId),
     enabled,
   });
 
@@ -148,15 +148,15 @@ function DelegatedPane({ wcaId }) {
   ) : <Message content="No delegated competitions found." />;
 }
 
-function HelpfulTabs({ wcaId }) {
+function HelpfulTabs({ userId }) {
   const panes = useMemo(() => ([
     {
       menuItem: 'Competitor Registrations',
       render: () => (
         <Tab.Pane>
-          {!hasWcaId(wcaId)
-            ? <Message info content="Select a WCA ID to load registrations." />
-            : <RegistrationsPane wcaId={wcaId} />}
+          {!hasUserId(userId)
+            ? <Message info content="Select a User to load registrations." />
+            : <RegistrationsPane userId={userId} />}
         </Tab.Pane>
       ),
     },
@@ -164,9 +164,9 @@ function HelpfulTabs({ wcaId }) {
       menuItem: 'Organized Competitions',
       render: () => (
         <Tab.Pane>
-          {!hasWcaId(wcaId)
-            ? <Message info content="Select a WCA ID to load organized competitions." />
-            : <OrganizedPane wcaId={wcaId} />}
+          {!hasUserId(userId)
+            ? <Message info content="Select a User to load organized competitions." />
+            : <OrganizedPane userId={userId} />}
         </Tab.Pane>
       ),
     },
@@ -174,19 +174,19 @@ function HelpfulTabs({ wcaId }) {
       menuItem: 'Delegated Competitions',
       render: () => (
         <Tab.Pane>
-          {!hasWcaId(wcaId)
-            ? <Message info content="Select a WCA ID to load delegated competitions." />
-            : <DelegatedPane wcaId={wcaId} />}
+          {!hasUserId(userId)
+            ? <Message info content="Select a User to load delegated competitions." />
+            : <DelegatedPane userId={userId} />}
         </Tab.Pane>
       ),
     },
-  ]), [wcaId]);
+  ]), [userId]);
 
   return <Tab panes={panes} />;
 }
 
 function HelpfulQueriesPage() {
-  const [wcaId, setWcaId] = useInputState();
+  const [userId, setUserId] = useInputState();
 
   return (
     <>
@@ -194,17 +194,17 @@ function HelpfulQueriesPage() {
       <Segment>
         <Form>
           <Form.Field
-            label="WCA ID"
-            name="wcaId"
+            label="User"
+            name="userId"
             control={IdWcaSearch}
-            model={SEARCH_MODELS.person}
+            model={SEARCH_MODELS.user}
             multiple={false}
-            value={wcaId}
-            onChange={setWcaId}
+            value={userId}
+            onChange={setUserId}
           />
         </Form>
       </Segment>
-      <HelpfulTabs wcaId={wcaId} />
+      <HelpfulTabs userId={userId} />
     </>
   );
 }

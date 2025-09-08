@@ -4,8 +4,8 @@ require 'csv'
 
 class AdminController < ApplicationController
   before_action :authenticate_user!
-  before_action -> { redirect_to_root_unless_user(:can_admin_results?) }, except: %i[all_voters leader_senior_voters regional_voters registrations organized_competitions delegated_competitions]
-  before_action -> { redirect_to_root_unless_user(:can_see_eligible_voters?) }, only: %i[all_voters leader_senior_voters regional_voters registrations organized_competitions delegated_competitions]
+  before_action -> { redirect_to_root_unless_user(:can_admin_results?) }, except: %i[all_voters leader_senior_voters regional_voters]
+  before_action -> { redirect_to_root_unless_user(:can_see_eligible_voters?) }, only: %i[all_voters leader_senior_voters regional_voters]
 
   def index
   end
@@ -209,52 +209,6 @@ class AdminController < ApplicationController
 
   def regional_voters
     voters User.regional_voters, "regional-wca-voters"
-  end
-
-  def registrations
-    person_wca_id = params.require(:wcaId)
-
-    person = Person.current.find_by!(wca_id: person_wca_id)
-    registrations = person.user.registrations
-                          .joins(:competition)
-                          .merge(Competition.not_over)
-                          .order(start_date: :asc)
-
-    render json: registrations.as_json(
-      only: %w[competing_status],
-      include: {
-        competition: {
-          only: %w[id name city_name country_id start_date],
-          include: [],
-        },
-      },
-    )
-  end
-
-  def organized_competitions
-    person_wca_id = params.require(:wcaId)
-
-    person = Person.current.find_by!(wca_id: person_wca_id)
-    competitions = person.user.organized_competitions
-                         .over.visible.not_cancelled
-                         .order(start_date: :desc)
-
-    render json: competitions.as_json(
-      only: %w[id name city_name country_id start_date],
-    )
-  end
-
-  def delegated_competitions
-    person_wca_id = params.require(:wcaId)
-
-    person = Person.current.find_by!(wca_id: person_wca_id)
-    competitions = person.user.delegated_competitions
-                         .over.visible.not_cancelled
-                         .order(start_date: :desc)
-
-    render json: competitions.as_json(
-      only: %w[id name city_name country_id start_date],
-    )
   end
 
   private def voters(users, filename)
