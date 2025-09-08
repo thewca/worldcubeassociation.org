@@ -1009,12 +1009,6 @@ export interface components {
             id?: string;
             name?: string;
         };
-        RegistrationData: {
-            id: number;
-            competition_id: string;
-            user_id: number;
-            event_ids: string[];
-        };
         WcifEvent: {
             /** @example 333 */
             id: string;
@@ -1179,6 +1173,12 @@ export interface components {
         WcifRanking: number;
         WcifPercent: number;
         WcifScramble: string;
+        RegistrationData: {
+            id: number;
+            competition_id: string;
+            user_id: number;
+            event_ids: string[];
+        };
     };
     responses: never;
     parameters: never;
