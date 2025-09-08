@@ -585,15 +585,64 @@ export interface components {
             /** Format: uri */
             logo_url?: string;
         };
-        RegulationsTranslations: {
-            current: components["schemas"]["Translation"][];
-            outdated: components["schemas"]["Translation"][];
+        CompetitionPermissions: string[] | string;
+        UserPermissions: {
+            can_attend_competitions: {
+                scope: components["schemas"]["CompetitionPermissions"];
+                /** Format: date-time */
+                until?: string | null;
+            };
+            can_organize_competitions: {
+                scope: components["schemas"]["CompetitionPermissions"];
+            };
+            can_administer_competitions: {
+                scope: components["schemas"]["CompetitionPermissions"];
+            };
+            can_view_delegate_admin_page: {
+                scope: components["schemas"]["CompetitionPermissions"];
+            };
+            can_view_delegate_report: {
+                scope: components["schemas"]["CompetitionPermissions"];
+            };
+            can_edit_delegate_report: {
+                scope: components["schemas"]["CompetitionPermissions"];
+            };
+            can_create_groups: {
+                scope: string[];
+            };
+            can_read_groups_current: {
+                scope: string[];
+            };
+            can_read_groups_past: {
+                scope: string[];
+            };
+            can_edit_groups: {
+                scope: string[];
+            };
+            can_access_panels: {
+                scope: string[];
+            };
+            can_request_to_edit_others_profile: {
+                scope: string[] | string;
+            };
         };
-        Translation: {
-            version: string;
-            language: string;
-            language_english: string;
-            url: string;
+        User: {
+            /** Format: uuid */
+            id?: string;
+            name?: string;
+            /** Format: email */
+            email?: string;
+        };
+        PersonalRecord: {
+            eventId?: string;
+            /** @description Best performance in milliseconds */
+            bestTime?: number;
+            /** @description Average performance in milliseconds */
+            averageTime?: number;
+        };
+        Event: {
+            id?: string;
+            name?: string;
         };
         UserAvatar: {
             /**
@@ -607,18 +656,46 @@ export interface components {
              */
             thumb_url?: string;
         };
-        ExportInfo: {
-            /** Format: date */
-            export_date: string;
-            /** Format: uri */
-            sql_url: string;
-            sql_filesize_bytes: number;
-            /** Format: uri */
-            tsv_url: string;
-            tsv_filesize_bytes: number;
-            readme: string;
-            /** Format: uri */
-            developer_url?: string;
+        TeamMembership: {
+            id: number;
+            /** @example wst */
+            friendly_id: string;
+            leader: boolean;
+            senior_member: boolean;
+            name?: string;
+            wca_id?: string;
+            avatar?: components["schemas"]["UserAvatar"];
+        };
+        Person: {
+            /** @example 267 */
+            id: number;
+            /** @example Tim Reynolds */
+            name: string;
+            /** @example m */
+            gender?: string;
+            /** @example 2005REYN01 */
+            wca_id: string;
+            /** @example US */
+            country_iso2: string;
+            /** @example delegate */
+            delegate_status: string;
+            teams: components["schemas"]["TeamMembership"][];
+            /**
+             * Format: uri
+             * @example https://www.worldcubeassociation.org/persons/2005REYN01
+             */
+            url: string;
+            avatar: components["schemas"]["UserAvatar"];
+        };
+        Organizer: components["schemas"]["Person"] & {
+            /** @example regional_delegate */
+            delegate_status?: string;
+            /**
+             * Format: email
+             * @example 255@worldcubeassociation.org
+             */
+            email?: string;
+            avatar?: components["schemas"]["UserAvatar"];
         };
         CompetitionInfo: {
             /** @example WC2003 */
@@ -743,91 +820,63 @@ export interface components {
             delegates: components["schemas"]["Person"][];
             organizers: components["schemas"]["Organizer"][];
         };
-        CompetitionPermissions: string[] | string;
-        UserPermissions: {
-            can_attend_competitions: {
-                scope: components["schemas"]["CompetitionPermissions"];
-                /** Format: date-time */
-                until?: string | null;
-            };
-            can_organize_competitions: {
-                scope: components["schemas"]["CompetitionPermissions"];
-            };
-            can_administer_competitions: {
-                scope: components["schemas"]["CompetitionPermissions"];
-            };
-            can_view_delegate_admin_page: {
-                scope: components["schemas"]["CompetitionPermissions"];
-            };
-            can_view_delegate_report: {
-                scope: components["schemas"]["CompetitionPermissions"];
-            };
-            can_edit_delegate_report: {
-                scope: components["schemas"]["CompetitionPermissions"];
-            };
-            can_create_groups: {
-                scope: string[];
-            };
-            can_read_groups_current: {
-                scope: string[];
-            };
-            can_read_groups_past: {
-                scope: string[];
-            };
-            can_edit_groups: {
-                scope: string[];
-            };
-            can_access_panels: {
-                scope: string[];
-            };
-            can_request_to_edit_others_profile: {
-                scope: string[] | string;
-            };
+        WcifTimeLimit: {
+            /** @example 18000 */
+            centiseconds: number;
+            cumulativeRoundIds: string[];
         };
-        User: {
-            /** Format: uuid */
-            id?: string;
-            name?: string;
-            /** Format: email */
-            email?: string;
+        WcifAttemptResult: number;
+        WcifCutoff: {
+            /** @example 2 */
+            numberOfAttempts: number;
+            attemptResult: components["schemas"]["WcifAttemptResult"];
         };
-        Results: components["schemas"]["Result"][];
-        Result: {
+        WcifRanking: number;
+        WcifAdvancementConditionRanking: {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            type: "ranking";
+            level: components["schemas"]["WcifRanking"];
+        };
+        WcifPercent: number;
+        WcifAdvancementConditionPercent: {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            type: "percent";
+            level: components["schemas"]["WcifPercent"];
+        };
+        WcifAdvancementConditionAttemptResult: {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            type: "attemptResult";
+            level: components["schemas"]["WcifAttemptResult"];
+        };
+        WcifAdvancementCondition: components["schemas"]["WcifAdvancementConditionRanking"] | components["schemas"]["WcifAdvancementConditionPercent"] | components["schemas"]["WcifAdvancementConditionAttemptResult"];
+        WcifAttempt: {
+            result: components["schemas"]["WcifAttemptResult"];
+            reconstruction?: string;
+        };
+        WcifResult: {
+            /** @example 1 */
+            personId: number;
+            /** @example 10 */
+            ranking?: number;
+            attempts: components["schemas"]["WcifAttempt"][];
+            best: components["schemas"]["WcifAttemptResult"];
+            average: components["schemas"]["WcifAttemptResult"];
+        };
+        WcifScramble: string;
+        WcifScrambleSet: {
+            /** @example 1 */
             id: number;
-            pos: number;
-            best: number;
-            average: number;
-            name: string;
-            country_iso2: string;
-            competition_id: string;
-            event_id: string;
-            round_type_id: string;
-            format_id: string;
-            wca_id: string;
-            attempts: number[];
-            best_index: number;
-            worst_index: number;
-            regional_single_record: string | null;
-            regional_average_record: string | null;
-        };
-        PersonalRecord: {
-            eventId?: string;
-            /** @description Best performance in milliseconds */
-            bestTime?: number;
-            /** @description Average performance in milliseconds */
-            averageTime?: number;
-        };
-        Event: {
-            id?: string;
-            name?: string;
-        };
-        WcifEvent: {
-            /** @example 333 */
-            id: string;
-            rounds: components["schemas"]["WcifRound"][];
-            competitorLimit?: number;
-            qualification?: components["schemas"]["WcifQualification"];
-            extensions: unknown[];
+            scrambles: components["schemas"]["WcifScramble"][];
+            extraScrambles: components["schemas"]["WcifScramble"][];
         };
         WcifRound: {
             /** @example 333-r1 */
@@ -842,7 +891,6 @@ export interface components {
             scrambleSets: components["schemas"]["WcifScrambleSet"][];
             extensions: unknown[];
         };
-        WcifQualification: components["schemas"]["WcifQualificationAttemptResult"] | components["schemas"]["WcifQualificationRanking"] | components["schemas"]["WcifQualificationAnyResult"];
         WcifQualificationAttemptResult: {
             /** Format: date */
             whenDate: string;
@@ -878,83 +926,19 @@ export interface components {
             /** @enum {string} */
             resultType: "single" | "average";
         };
-        WcifTimeLimit: {
-            /** @example 18000 */
-            centiseconds: number;
-            cumulativeRoundIds: string[];
-        };
-        WcifCutoff: {
-            /** @example 2 */
-            numberOfAttempts: number;
-            attemptResult: components["schemas"]["WcifAttemptResult"];
-        };
-        WcifAdvancementCondition: components["schemas"]["WcifAdvancementConditionRanking"] | components["schemas"]["WcifAdvancementConditionPercent"] | components["schemas"]["WcifAdvancementConditionAttemptResult"];
-        WcifAdvancementConditionRanking: {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            type: "ranking";
-            level: components["schemas"]["WcifRanking"];
-        };
-        WcifAdvancementConditionPercent: {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            type: "percent";
-            level: components["schemas"]["WcifPercent"];
-        };
-        WcifAdvancementConditionAttemptResult: {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            type: "attemptResult";
-            level: components["schemas"]["WcifAttemptResult"];
-        };
-        WcifResult: {
-            /** @example 1 */
-            personId: number;
-            /** @example 10 */
-            ranking?: number;
-            attempts: components["schemas"]["WcifAttempt"][];
-            best: components["schemas"]["WcifAttemptResult"];
-            average: components["schemas"]["WcifAttemptResult"];
-        };
-        WcifScrambleSet: {
-            /** @example 1 */
-            id: number;
-            scrambles: components["schemas"]["WcifScramble"][];
-            extraScrambles: components["schemas"]["WcifScramble"][];
-        };
-        WcifAttempt: {
-            result: components["schemas"]["WcifAttemptResult"];
-            reconstruction?: string;
-        };
-        WcifSchedule: {
-            /** Format: date */
-            startDate: string;
-            numberOfDays: number;
-            venues: components["schemas"]["WcifVenue"][];
-        };
-        WcifVenue: {
-            id: number;
-            name: string;
-            latitudeMicrodegrees: number;
-            longitudeMicrodegrees: number;
-            countryIso2: components["schemas"]["WcifCountryCode"];
-            timezone: string;
-            rooms: components["schemas"]["WcifRoom"][];
+        WcifQualification: components["schemas"]["WcifQualificationAttemptResult"] | components["schemas"]["WcifQualificationRanking"] | components["schemas"]["WcifQualificationAnyResult"];
+        WcifEvent: {
+            /** @example 333 */
+            id: string;
+            rounds: components["schemas"]["WcifRound"][];
+            competitorLimit?: number;
+            qualification?: components["schemas"]["WcifQualification"];
             extensions: unknown[];
         };
-        WcifRoom: {
-            id: number;
-            name: string;
-            color: string;
-            activities: components["schemas"]["WcifActivity"][];
-            extensions: unknown[];
-        };
+        /** @example US */
+        WcifCountryCode: string;
+        /** @example 333-r1-g1 */
+        WcifActivityCode: string;
         WcifActivity: {
             id: number;
             name: string;
@@ -967,60 +951,52 @@ export interface components {
             scrambleSetId?: number;
             extensions: unknown[];
         };
-        /** @example US */
-        WcifCountryCode: string;
-        /** @example 333-r1-g1 */
-        WcifActivityCode: string;
-        TeamMembership: {
+        WcifRoom: {
             id: number;
-            /** @example wst */
-            friendly_id: string;
-            leader: boolean;
-            senior_member: boolean;
-            name?: string;
-            wca_id?: string;
-            avatar?: components["schemas"]["UserAvatar"];
-        };
-        Person: {
-            /** @example 267 */
-            id: number;
-            /** @example Tim Reynolds */
             name: string;
-            /** @example m */
-            gender?: string;
-            /** @example 2005REYN01 */
-            wca_id: string;
-            /** @example US */
-            country_iso2: string;
-            /** @example delegate */
-            delegate_status: string;
-            teams: components["schemas"]["TeamMembership"][];
-            /**
-             * Format: uri
-             * @example https://www.worldcubeassociation.org/persons/2005REYN01
-             */
-            url: string;
-            avatar: components["schemas"]["UserAvatar"];
+            color: string;
+            activities: components["schemas"]["WcifActivity"][];
+            extensions: unknown[];
         };
-        Organizer: components["schemas"]["Person"] & {
-            /** @example regional_delegate */
-            delegate_status?: string;
-            /**
-             * Format: email
-             * @example 255@worldcubeassociation.org
-             */
-            email?: string;
-            avatar?: components["schemas"]["UserAvatar"];
+        WcifVenue: {
+            id: number;
+            name: string;
+            latitudeMicrodegrees: number;
+            longitudeMicrodegrees: number;
+            countryIso2: components["schemas"]["WcifCountryCode"];
+            timezone: string;
+            rooms: components["schemas"]["WcifRoom"][];
+            extensions: unknown[];
         };
-        WcifAttemptResult: number;
-        WcifRanking: number;
-        WcifPercent: number;
-        WcifScramble: string;
+        WcifSchedule: {
+            /** Format: date */
+            startDate: string;
+            numberOfDays: number;
+            venues: components["schemas"]["WcifVenue"][];
+        };
         RegistrationData: {
             id: number;
             competition_id: string;
             user_id: number;
             event_ids: string[];
+        };
+        Result: {
+            id: number;
+            pos: number;
+            best: number;
+            average: number;
+            name: string;
+            country_iso2: string;
+            competition_id: string;
+            event_id: string;
+            round_type_id: string;
+            format_id: string;
+            wca_id: string;
+            attempts: number[];
+            best_index: number;
+            worst_index: number;
+            regional_single_record: string | null;
+            regional_average_record: string | null;
         };
         CompetitionIndex: {
             id: string;
@@ -1132,6 +1108,7 @@ export interface components {
             };
             competition_count: number;
         };
+        Results: components["schemas"]["Result"][];
         UserGroup: {
             id: number;
             name: string;
@@ -1178,6 +1155,29 @@ export interface components {
                 email?: string;
             };
             class?: string;
+        };
+        Translation: {
+            version: string;
+            language: string;
+            language_english: string;
+            url: string;
+        };
+        RegulationsTranslations: {
+            current: components["schemas"]["Translation"][];
+            outdated: components["schemas"]["Translation"][];
+        };
+        ExportInfo: {
+            /** Format: date */
+            export_date: string;
+            /** Format: uri */
+            sql_url: string;
+            sql_filesize_bytes: number;
+            /** Format: uri */
+            tsv_url: string;
+            tsv_filesize_bytes: number;
+            readme: string;
+            /** Format: uri */
+            developer_url?: string;
         };
     };
     responses: never;

@@ -24,39 +24,24 @@ paths:
     $ref: 'paths/competitions/competitionPodiums.yaml'
   /competition_index:
     $ref: 'paths/competitions/competitionList.yaml'
+
   /incidents:
     $ref: 'paths/regulations/incidentsList.yaml'
+
   /persons/{wca_id}/:
     $ref: 'paths/users/personByWCAId.yaml'
   /persons/{wca_id}/results:
     $ref: 'paths/users/personResults.yaml'
+
   /user_groups:
     $ref: 'paths/users/userGroups.yaml'
-
   /user_roles:
     $ref: 'paths/users/userRoles.yaml'
 
   /regulations/translations:
-    get:
-      summary: Gets all translations of regulations
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/RegulationsTranslations'
+    $ref: 'paths/regulations/regulationTranslations.yaml'
   /export/public:
-    get:
-      summary: Get Export Information
-      operationId: getExports
-      responses:
-        "200":
-          description: Successfully retrieved exports
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ExportInfo"
+    $ref: 'paths/results/publicExports.yaml'
   /users/me/permissions:
     get:
       summary: Get user's permissions
@@ -126,74 +111,6 @@ components:
         logo_url:
           type: string
           format: uri
-
-    RegulationsTranslations:
-      type: object
-      required:
-        - current
-        - outdated
-      properties:
-        current:
-          type: array
-          items:
-            $ref: '#/components/schemas/Translation'
-        outdated:
-          type: array
-          items:
-            $ref: '#/components/schemas/Translation'
-
-    Translation:
-      type: object
-      required:
-        - version
-        - language
-        - language_english
-        - url
-      properties:
-        version:
-          type: string
-        language:
-          type: string
-        language_english:
-          type: string
-        url:
-          type: string
-
-    UserAvatar:
-      $ref: './schemas/users/UserAvatar.yaml'
-
-    ExportInfo:
-      type: object
-      required:
-        - export_date
-        - sql_url
-        - sql_filesize_bytes
-        - tsv_url
-        - tsv_filesize_bytes
-        - readme
-      properties:
-        export_date:
-          type: string
-          format: date
-        sql_url:
-          type: string
-          format: uri
-        sql_filesize_bytes:
-          type: number
-        tsv_url:
-          type: string
-          format: uri
-        tsv_filesize_bytes:
-          type: number
-        readme:
-          type: string
-        developer_url:
-          type: string
-          format: uri
-
-    CompetitionInfo:
-      $ref: 'schemas/competitions/CompetitionInfo.yaml'
-
     CompetitionPermissions:
       oneOf:
         - type: array
@@ -336,68 +253,6 @@ components:
           type: string
           format: email
 
-    Results:
-      type: array
-      items:
-        $ref: "#/components/schemas/Result"
-
-    Result:
-      type: object
-      required:
-        - id
-        - pos
-        - best
-        - average
-        - name
-        - country_iso2
-        - competition_id
-        - event_id
-        - round_type_id
-        - format_id
-        - wca_id
-        - attempts
-        - best_index
-        - worst_index
-        - regional_single_record
-        - regional_average_record
-      properties:
-        id:
-          type: integer
-        pos:
-          type: integer
-        best:
-          type: integer
-        average:
-          type: integer
-        name:
-          type: string
-        country_iso2:
-          type: string
-        competition_id:
-          type: string
-        event_id:
-          type: string
-        round_type_id:
-          type: string
-        format_id:
-          type: string
-        wca_id:
-          type: string
-        attempts:
-          type: array
-          items:
-            type: integer
-        best_index:
-          type: integer
-        worst_index:
-          type: integer
-        regional_single_record:
-          type: string
-          nullable: true
-        regional_average_record:
-          type: string
-          nullable: true
-
     PersonalRecord:
       type: object
       properties:
@@ -417,68 +272,3 @@ components:
           type: string
         name:
           type: string
-
-    WcifEvent:
-      $ref: './schemas/wcif/WcifEvent.yaml'
-
-    WcifRound:
-      $ref: './schemas/wcif/WcifRound.yaml'
-
-    WcifQualification:
-      $ref: './schemas/wcif/WcifQualification.yaml'
-
-    WcifQualificationAttemptResult:
-      $ref: './schemas/wcif/WcifQualificationAttemptResult.yaml'
-
-    WcifQualificationRanking:
-      $ref: './schemas/wcif/WcifQualificationRanking.yaml'
-
-    WcifQualificationAnyResult:
-      $ref: './schemas/wcif/WcifQualificationAnyResult.yaml'
-
-    WcifTimeLimit:
-      $ref: './schemas/wcif/WcifTimeLimit.yaml'
-
-    WcifCutoff:
-      $ref: './schemas/wcif/WcifCutoff.yaml'
-
-    WcifAdvancementCondition:
-      $ref: './schemas/wcif/WcifAdvancementCondition.yaml'
-
-    WcifAdvancementConditionRanking:
-      $ref: './schemas/wcif/WcifAdvancementConditionRanking.yaml'
-
-    WcifAdvancementConditionPercent:
-      $ref: './schemas/wcif/WcifAdvancementConditionPercent.yaml'
-
-    WcifAdvancementConditionAttemptResult:
-      $ref: './schemas/wcif/WcifAdvancementConditionAttemptResult.yaml'
-
-    WcifResult:
-      $ref: './schemas/wcif/WcifResult.yaml'
-
-    WcifScrambleSet:
-      $ref: './schemas/wcif/WcifScrambleSet.yaml'
-
-    WcifAttempt:
-      $ref: './schemas/wcif/WcifAttempt.yaml'
-
-    WcifSchedule:
-      $ref: './schemas/wcif/WcifSchedule.yaml'
-
-    WcifVenue:
-      $ref: './schemas/wcif/WcifVenue.yaml'
-
-    WcifRoom:
-      $ref: './schemas/wcif/WcifRoom.yaml'
-
-    WcifActivity:
-      $ref: './schemas/wcif/WcifActivity.yaml'
-
-    WcifCountryCode:
-      type: string
-      example: "US"
-
-    WcifActivityCode:
-      type: string
-      example: "333-r1-g1"
