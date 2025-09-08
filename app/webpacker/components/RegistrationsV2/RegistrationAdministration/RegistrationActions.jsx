@@ -327,7 +327,7 @@ export default function RegistrationActions({
       </Dropdown>
 
       <Button
-        data-tooltip={I18n.t('registrations.list.export_csv')}
+        data-tooltip={I18n.t('registrations.list.export_csv', { count: selectedCount })}
         icon="download"
         color="green"
         onClick={() => {
