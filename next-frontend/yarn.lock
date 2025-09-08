@@ -11969,10 +11969,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"luxon@npm:^3.7.1":
-  version: 3.7.1
-  resolution: "luxon@npm:3.7.1"
-  checksum: 10c0/f83bc23a4c09da9111bc2510d2f5346e1ced4938379ebff13e308fece2ea852eb6e8b9ed8053b8d82e0fce05d5dd46e4cd64d8831ca04cfe32c0954b6f087258
+"luxon@npm:^3.7.2":
+  version: 3.7.2
+  resolution: "luxon@npm:3.7.2"
+  checksum: 10c0/ed8f0f637826c08c343a29dd478b00628be93bba6f068417b1d8896b61cb61c6deacbe1df1e057dbd9298334044afa150f9aaabbeb3181418ac8520acfdc2ae2
   languageName: node
   linkType: hard
 
@@ -12965,7 +12965,7 @@ __metadata:
     js-cookie: "npm:^3.0.5"
     jsdom: "npm:^26.1.0"
     lodash: "npm:^4.17.21"
-    luxon: "npm:^3.7.1"
+    luxon: "npm:^3.7.2"
     newrelic: "npm:^13.2.1"
     next: "npm:15.5.2"
     next-auth: "npm:5.0.0-beta.29"
