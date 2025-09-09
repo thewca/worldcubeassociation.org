@@ -24,7 +24,7 @@ export default function PermissionProvider({
   const { data: rawPermissions, isLoading } = useQuery({
     enabled: Boolean(session),
     queryKey: ["permissions", session?.user?.id],
-    queryFn: () => api.GET("/users/me/permissions"),
+    queryFn: () => api.GET("/v0/users/me/permissions"),
     select: (data) => data.data,
   });
 
