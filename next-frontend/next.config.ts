@@ -24,6 +24,14 @@ const nextConfig: NextConfig = {
   },
   output: "standalone",
   productionBrowserSourceMaps: true,
+  async rewrites() {
+    return [
+      {
+        source: "/api_documentation",
+        destination: "/api.html",
+      },
+    ];
+  },
 };
 
 export default withPayload(withRoutes(nextConfig));
