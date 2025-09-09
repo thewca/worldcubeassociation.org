@@ -29,9 +29,9 @@ class ManualPaymentIntegration < ApplicationRecord
     )
   end
 
-  # def find_payment(record_id)
-  #   ManualPaymentRecord.find(record_id)
-  # end
+  def find_payment(record_id)
+    ManualPaymentRecord.find(record_id)
+  end
 
   def find_payment_from_request(params)
     # The client secret is just the id of the database model, but we override the payment_reference
