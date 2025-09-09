@@ -19,10 +19,9 @@ import { isoMoneyToHumanReadable } from '../../../lib/helpers/money';
 export default function ManualPaymentStep({
   competitionInfo,
 }) {
-  const { hasPaid, paymentStatus, registration } = useRegistration();
-  console.log("payment status", paymentStatus)
+  const { hasPaid, registration } = useRegistration();
 
-  const originalPaymentReference = registration.payment.payment_reference || ''
+  const originalPaymentReference = registration.payment.payment_reference || '';
   const [paymentReference, setPaymentReference] = useInputState(originalPaymentReference);
   const [paymentReferenceChanged, setPaymentReferenceChanged] = useInputState(false);
   const [paymentConfirmation, setPaymentConfirmation] = useCheckboxState(hasPaid);
@@ -37,9 +36,9 @@ export default function ManualPaymentStep({
   });
 
   const updatePaymentReference = (event) => {
-    setPaymentReference(event.target.value)
-    setPaymentReferenceChanged(originalPaymentReference !== event.target.value)
-  }
+    setPaymentReference(event.target.value);
+    setPaymentReferenceChanged(originalPaymentReference !== event.target.value);
+  };
 
   if (hasPassed(competitionInfo.registration_close)) {
     return (
