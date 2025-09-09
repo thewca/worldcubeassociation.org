@@ -28,7 +28,7 @@ RSpec.describe ManualPaymentIntegration do
     end
 
     context 'payment already exists' do
-      let!(:payment_intent) { create(:payment_intent, :manual_requires_capture, holder: registration)}
+      let!(:payment_intent) { create(:payment_intent, :manual_requires_capture, holder: registration) }
 
       it 'reuses the existing PaymentIntent' do
         prepared_intent = payment_account.prepare_intent(registration, 1000, "USD", registration.user)
