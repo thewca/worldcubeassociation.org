@@ -396,7 +396,7 @@ export const bulkAutoAcceptUrl = (competitionId) => `<%= CGI.unescape(Rails.appl
 
 export const bulkUpdateRegistrationUrl = (competitionId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.bulk_update_api_v1_competition_registrations_path(competition_id: "${competitionId}")) %>`;
 
-export const paymentTicketUrl = (registrationId, isoDonationAmount) => `<%= CGI.unescape(Rails.application.routes.url_helpers.payment_ticket_api_v1_registration_path("${registrationId}", iso_donation_amount: "${isoDonationAmount}")) %>`;
+export const paymentTicketUrl = (registrationId, isoDonationAmount, paymentIntegrationType) => `<%= CGI.unescape(Rails.application.routes.url_helpers.payment_ticket_api_v1_registration_path(id: "${registrationId}", iso_donation_amount: "${isoDonationAmount}", payment_integration_type: "${paymentIntegrationType}")) %>`;
 
 export const uploadScramblesUrl = (competitionId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.competition_upload_scrambles_path("${competitionId}")) %>`;
 
