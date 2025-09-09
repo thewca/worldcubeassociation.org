@@ -10,6 +10,29 @@ FactoryBot.define do
     trait :manual do
       payment_record { association(:manual_payment_record) }
       wca_status { 'created' }
+
+      after(:create) do |intent|
+        create(:registration_payment, receipt: intent.payment_record, registration: intent.holder, is_completed: false)
+      end
+    end
+
+    trait :manual_requires_capture do
+      payment_record { association(:manual_payment_record, :with_reference) }
+      wca_status { 'requires_capture' }
+
+      after(:create) do |intent|
+        create(:registration_payment, receipt: intent.payment_record, registration: intent.holder, is_completed: false)
+      end
+    end
+
+    trait :manual_succeeded do
+      payment_record { association(:manual_payment_record, :organizer_approved) }
+      wca_status { 'succeeded' }
+      confirmed_at { DateTime.now }
+
+      after(:create) do |intent|
+        create(:registration_payment, receipt: intent.payment_record, registration: intent.holder)
+      end
     end
 
     trait :canceled do
