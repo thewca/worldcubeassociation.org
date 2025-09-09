@@ -293,7 +293,6 @@ FactoryBot.define do
     end
 
     trait :registration_open do
-      # visible
       starts { 1.month.from_now }
       ends { starts }
       registration_open { 2.weeks.ago.change(usec: 0) }
