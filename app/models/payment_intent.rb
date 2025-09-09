@@ -83,8 +83,6 @@ class PaymentIntent < ApplicationRecord
           cancellation_source: nil,
           wca_status: updated_wca_status,
         )
-      when PaymentIntent.wca_statuses[:requires_capture]
-        yield self.payment_record if block_given? && self.payment_record&.manual_status == 'user_submitted'
       end
 
       self.update_common_attributes!(api_intent, updated_wca_status)
