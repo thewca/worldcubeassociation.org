@@ -35,20 +35,19 @@ function PaymentStatus({
     if (hasPaid) {
       return (
         <PaymentMessage
-          message={I18n.t('registrations.approved_manual_payment', { payment_reference: paymentReference})}
+          message={I18n.t('registrations.approved_manual_payment', { payment_reference: paymentReference })}
           icon="checkmark"
           success
         />
-      )
-    } else {
-      return (
-        <PaymentMessage
-          message={I18n.t('registrations.pending_manual_payment', { payment_reference: paymentReference })}
-          icon={hasPaid ? "checkmark" : "warning circle"}
-          warning
-        />
-      )
+      );
     }
+    return (
+      <PaymentMessage
+        message={I18n.t('registrations.pending_manual_payment', { payment_reference: paymentReference })}
+        icon={hasPaid ? 'checkmark' : 'warning circle'}
+        warning
+      />
+    );
   }
   if (hasPaid) {
     return (
@@ -77,18 +76,17 @@ function PaymentStatus({
   );
 }
 
-
 export default function PaymentOverview({
   payments, competitionInfo, connectedAccountId, stripePublishableKey, user, nextStep,
 }) {
   const { hasPaid, registration } = useRegistration();
   const totalPaid = _.sumBy(payments, 'iso_amount_refundable');
   const [payAgain, setPayAgain] = useCheckboxState(false);
-  const paymentReference = registration.payment.payment_reference
+  const paymentReference = registration.payment.payment_reference;
 
-  const payAgainText = competitionInfo.payment_integration_type === 'manual' ?
-    I18n.t('registrations.update_payment_ref') :
-    I18n.t('registrations.entry_fees_pay_again')
+  const payAgainText = competitionInfo.payment_integration_type === 'manual'
+    ? I18n.t('registrations.update_payment_ref')
+    : I18n.t('registrations.entry_fees_pay_again');
 
   return (
     <>
