@@ -14,10 +14,14 @@ export const serverClientWithToken = (token: string) =>
     },
   });
 
-export const unauthenticatedClient = createClient<paths>({
-  baseUrl: process.env.NEXT_PUBLIC_WCA_FRONTEND_API_URL,
-  headers: { "Content-Type": "application/json" },
-});
+export const unauthenticatedClient = (v1: boolean) =>
+  createClient<paths>({
+    baseUrl: process.env.NEXT_PUBLIC_WCA_FRONTEND_API_URL?.replace(
+      "v0",
+      v1 ? "v1" : "v0",
+    ),
+    headers: { "Content-Type": "application/json" },
+  });
 export const authenticatedClient = (token: string) =>
   createClient<paths>({
     baseUrl: process.env.NEXT_PUBLIC_WCA_FRONTEND_API_URL,
