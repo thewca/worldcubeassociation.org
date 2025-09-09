@@ -248,7 +248,7 @@ class CompetitionsController < ApplicationController
       return redirect_to competition_payment_integration_setup_path(competition)
     end
 
-    if payment_integration == :manual && ManualPaymentIntegration.manual_payments_disabled??
+    if payment_integration == :manual && ManualPaymentIntegration.manual_payments_disabled?
       flash[:error] = 'Manual payments are not yet available in production environments'
       return redirect_to competition_payment_integration_setup_path(competition)
     end
