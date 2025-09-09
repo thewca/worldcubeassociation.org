@@ -1,5 +1,8 @@
 get:
   summary: Get a list of incidents
+  tags:
+    - regulations
+  operationId: regulationsList
   parameters:
     - name: q
       in: query

@@ -1,6 +1,8 @@
 get:
   summary: Get Export Information
-  operationId: getExports
+  tags:
+    - results
+  operationId: publicExports
   responses:
     "200":
       description: Successfully retrieved exports

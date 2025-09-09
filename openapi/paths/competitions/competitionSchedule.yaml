@@ -1,5 +1,8 @@
 get:
   summary: Get competition schedule in WCIF format
+  tags:
+    - competitions
+  operationId: competitionSchedule
   parameters:
     - name: competitionId
       in: path

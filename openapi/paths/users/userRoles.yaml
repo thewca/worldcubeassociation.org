@@ -1,5 +1,8 @@
 get:
   summary: Get user roles
+  tags:
+    - users
+  operationId: userRoles
   parameters:
     - name: isActive
       in: query

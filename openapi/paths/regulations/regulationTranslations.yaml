@@ -1,5 +1,8 @@
 get:
   summary: Gets all translations of regulations
+  tags:
+    - regulations
+  operationId: regulationTranslations
   responses:
     '200':
       description: Successful response

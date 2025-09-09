@@ -1,5 +1,8 @@
 get:
   summary: Get user groups
+  tags:
+    - users
+  operationId: userGroups
   parameters:
     - name: isActive
       in: query

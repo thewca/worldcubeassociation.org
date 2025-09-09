@@ -12,28 +12,7 @@ export interface paths {
             cookie?: never;
         };
         /** Get competition details */
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    competitionId: string;
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Successful response */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["CompetitionInfo"];
-                    };
-                };
-            };
-        };
+        get: operations["competitionById"];
         put?: never;
         post?: never;
         delete?: never;
@@ -50,28 +29,7 @@ export interface paths {
             cookie?: never;
         };
         /** Get competition events in WCIF v0 format */
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    competitionId: string;
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Successful response */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["WcifEvent"][];
-                    };
-                };
-            };
-        };
+        get: operations["competitionEvents"];
         put?: never;
         post?: never;
         delete?: never;
@@ -88,28 +46,7 @@ export interface paths {
             cookie?: never;
         };
         /** Get competition schedule in WCIF format */
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    competitionId: string;
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Successful response */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["WcifSchedule"];
-                    };
-                };
-            };
-        };
+        get: operations["competitionSchedule"];
         put?: never;
         post?: never;
         delete?: never;
@@ -126,28 +63,7 @@ export interface paths {
             cookie?: never;
         };
         /** Get competition registrations */
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    competitionId: string;
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Successful response */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["RegistrationData"][];
-                    };
-                };
-            };
-        };
+        get: operations["competitionRegistrations"];
         put?: never;
         post?: never;
         delete?: never;
@@ -164,28 +80,7 @@ export interface paths {
             cookie?: never;
         };
         /** Returns the podium results */
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    competitionId: string;
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Successful Response */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["Result"][];
-                    };
-                };
-            };
-        };
+        get: operations["competitionPodiums"];
         put?: never;
         post?: never;
         delete?: never;
@@ -202,26 +97,7 @@ export interface paths {
             cookie?: never;
         };
         /** Get a list of (upcoming) competitions for table display */
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Successful response */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["CompetitionIndex"][];
-                    };
-                };
-            };
-        };
+        get: operations["competitionList"];
         put?: never;
         post?: never;
         delete?: never;
@@ -238,31 +114,7 @@ export interface paths {
             cookie?: never;
         };
         /** Get a list of incidents */
-        get: {
-            parameters: {
-                query?: {
-                    q?: string;
-                    tags?: string;
-                    page?: number;
-                    per_page?: number;
-                };
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Successful response */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["Incident"][];
-                    };
-                };
-            };
-        };
+        get: operations["regulationsList"];
         put?: never;
         post?: never;
         delete?: never;
@@ -279,28 +131,7 @@ export interface paths {
             cookie?: never;
         };
         /** Get information for a person */
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    wca_id: string;
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Successful response */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["PersonInfo"];
-                    };
-                };
-            };
-        };
+        get: operations["personByWCAId"];
         put?: never;
         post?: never;
         delete?: never;
@@ -317,30 +148,7 @@ export interface paths {
             cookie?: never;
         };
         /** Get results for a person */
-        get: {
-            parameters: {
-                query?: {
-                    event_id?: string;
-                };
-                header?: never;
-                path: {
-                    wca_id: string;
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Successful response */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["Results"];
-                    };
-                };
-            };
-        };
+        get: operations["personResults"];
         put?: never;
         post?: never;
         delete?: never;
@@ -357,35 +165,7 @@ export interface paths {
             cookie?: never;
         };
         /** Get user groups */
-        get: {
-            parameters: {
-                query?: {
-                    /** @description Filter by whether the group is active */
-                    isActive?: boolean;
-                    /** @description Filter by whether the group is hidden */
-                    isHidden?: boolean;
-                    /** @description Filter by group type (e.g., "officers") */
-                    groupType?: string;
-                    /** @description Sort by a specific field (e.g., "start_date", "-created_at") */
-                    sort?: string;
-                };
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description A list of user groups */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["UserGroup"][];
-                    };
-                };
-            };
-        };
+        get: operations["userGroups"];
         put?: never;
         post?: never;
         delete?: never;
@@ -402,47 +182,7 @@ export interface paths {
             cookie?: never;
         };
         /** Get user roles */
-        get: {
-            parameters: {
-                query?: {
-                    /** @description Filter by whether the group is active */
-                    isActive?: boolean;
-                    /** @description Filter by whether the group is hidden */
-                    isGroupHidden?: boolean;
-                    /** @description Filter by user ID */
-                    userId?: number;
-                    /** @description Filter by group ID */
-                    groupId?: number;
-                    /** @description Filter by metadata status (e.g., "chair") */
-                    status?: string;
-                    /** @description Filter by group type (e.g., "officers") */
-                    groupType?: string;
-                    /** @description Filter by parent Group */
-                    parentGroupId?: number;
-                    /** @description Filter by whether the user is the lead of the group */
-                    isLead?: boolean;
-                    /** @description Sort by a specific field (e.g., "start_date", "-created_at") */
-                    sort?: string;
-                    /** @description Number of results per page */
-                    perPage?: number;
-                };
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description A list of user roles */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["UserRole"][];
-                    };
-                };
-            };
-        };
+        get: operations["userRoles"];
         put?: never;
         post?: never;
         delete?: never;
@@ -459,7 +199,7 @@ export interface paths {
             cookie?: never;
         };
         /** Get user's permissions */
-        get: operations["getUserPermissions"];
+        get: operations["userPermissions"];
         put?: never;
         post?: never;
         delete?: never;
@@ -476,26 +216,7 @@ export interface paths {
             cookie?: never;
         };
         /** Gets all translations of regulations */
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Successful response */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["RegulationsTranslations"];
-                    };
-                };
-            };
-        };
+        get: operations["regulationTranslations"];
         put?: never;
         post?: never;
         delete?: never;
@@ -512,7 +233,7 @@ export interface paths {
             cookie?: never;
         };
         /** Get Export Information */
-        get: operations["getExports"];
+        get: operations["publicExports"];
         put?: never;
         post?: never;
         delete?: never;
@@ -529,26 +250,7 @@ export interface paths {
             cookie?: never;
         };
         /** Get a list of Olson timezones that the backend understands */
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Successful response */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": string[];
-                    };
-                };
-            };
-        };
+        get: operations["knownTimezones"];
         put?: never;
         post?: never;
         delete?: never;
@@ -565,7 +267,7 @@ export interface paths {
             cookie?: never;
         };
         /** A list of currently acknowledged regional organizations */
-        get: operations["getOrganizations"];
+        get: operations["regionalOrganizations"];
         put?: never;
         post?: never;
         delete?: never;
@@ -1170,7 +872,278 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
-    getUserPermissions: {
+    competitionById: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                competitionId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CompetitionInfo"];
+                };
+            };
+        };
+    };
+    competitionEvents: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                competitionId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WcifEvent"][];
+                };
+            };
+        };
+    };
+    competitionSchedule: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                competitionId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WcifSchedule"];
+                };
+            };
+        };
+    };
+    competitionRegistrations: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                competitionId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RegistrationData"][];
+                };
+            };
+        };
+    };
+    competitionPodiums: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                competitionId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Result"][];
+                };
+            };
+        };
+    };
+    competitionList: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CompetitionIndex"][];
+                };
+            };
+        };
+    };
+    regulationsList: {
+        parameters: {
+            query?: {
+                q?: string;
+                tags?: string;
+                page?: number;
+                per_page?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Incident"][];
+                };
+            };
+        };
+    };
+    personByWCAId: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                wca_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PersonInfo"];
+                };
+            };
+        };
+    };
+    personResults: {
+        parameters: {
+            query?: {
+                event_id?: string;
+            };
+            header?: never;
+            path: {
+                wca_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Results"];
+                };
+            };
+        };
+    };
+    userGroups: {
+        parameters: {
+            query?: {
+                /** @description Filter by whether the group is active */
+                isActive?: boolean;
+                /** @description Filter by whether the group is hidden */
+                isHidden?: boolean;
+                /** @description Filter by group type (e.g., "officers") */
+                groupType?: string;
+                /** @description Sort by a specific field (e.g., "start_date", "-created_at") */
+                sort?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description A list of user groups */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UserGroup"][];
+                };
+            };
+        };
+    };
+    userRoles: {
+        parameters: {
+            query?: {
+                /** @description Filter by whether the group is active */
+                isActive?: boolean;
+                /** @description Filter by whether the group is hidden */
+                isGroupHidden?: boolean;
+                /** @description Filter by user ID */
+                userId?: number;
+                /** @description Filter by group ID */
+                groupId?: number;
+                /** @description Filter by metadata status (e.g., "chair") */
+                status?: string;
+                /** @description Filter by group type (e.g., "officers") */
+                groupType?: string;
+                /** @description Filter by parent Group */
+                parentGroupId?: number;
+                /** @description Filter by whether the user is the lead of the group */
+                isLead?: boolean;
+                /** @description Sort by a specific field (e.g., "start_date", "-created_at") */
+                sort?: string;
+                /** @description Number of results per page */
+                perPage?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description A list of user roles */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UserRole"][];
+                };
+            };
+        };
+    };
+    userPermissions: {
         parameters: {
             query?: never;
             header?: never;
@@ -1190,7 +1163,27 @@ export interface operations {
             };
         };
     };
-    getExports: {
+    regulationTranslations: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RegulationsTranslations"];
+                };
+            };
+        };
+    };
+    publicExports: {
         parameters: {
             query?: never;
             header?: never;
@@ -1210,7 +1203,27 @@ export interface operations {
             };
         };
     };
-    getOrganizations: {
+    knownTimezones: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string[];
+                };
+            };
+        };
+    };
+    regionalOrganizations: {
         parameters: {
             query?: never;
             header?: never;

@@ -1,5 +1,8 @@
 get:
   summary: Returns the podium results
+  tags:
+    - competitions
+  operationId: competitionPodiums
   parameters:
     - name: competitionId
       in: path

@@ -1,5 +1,8 @@
 get:
   summary: Get results for a person
+  tags:
+    - users
+  operationId: personResults
   parameters:
     - name: wca_id
       in: path

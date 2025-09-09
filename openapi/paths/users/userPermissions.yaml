@@ -1,8 +1,8 @@
 get:
   summary: Get user's permissions
-  operationId: getUserPermissions
   tags:
-    - Users
+    - users
+  operationId: userPermissions
   security:
     - bearerAuth: []
   responses:

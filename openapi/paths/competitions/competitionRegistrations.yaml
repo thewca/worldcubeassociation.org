@@ -1,5 +1,8 @@
 get:
   summary: Get competition registrations
+  tags:
+    - competitions
+  operationId: competitionRegistrations
   parameters:
     - name: competitionId
       in: path

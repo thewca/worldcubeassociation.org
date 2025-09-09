@@ -1,5 +1,8 @@
 get:
   summary: Get a list of (upcoming) competitions for table display
+  tags:
+    - competitions
+  operationId: competitionList
   responses:
     '200':
       description: Successful response

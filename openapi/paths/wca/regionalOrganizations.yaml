@@ -1,6 +1,8 @@
 get:
   summary: A list of currently acknowledged regional organizations
-  operationId: getOrganizations
+  tags:
+    - wca
+  operationId: regionalOrganizations
   responses:
     "200":
       description: Retrieved organizations

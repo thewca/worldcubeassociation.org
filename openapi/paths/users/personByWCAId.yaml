@@ -1,5 +1,8 @@
 get:
   summary: Get information for a person
+  tags:
+    - users
+  operationId: personByWCAId
   parameters:
     - name: wca_id
       in: path
