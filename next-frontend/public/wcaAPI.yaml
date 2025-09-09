@@ -81,6 +81,32 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/RegistrationData'
+  /competitions/{competitionId}/psych-sheet/{eventId}:
+    get:
+      summary: Get competition registrations
+      parameters:
+        - name: competitionId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: eventId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: sort_by
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PsychSheet'
   /competitions/{competitionId}/podiums:
     get:
       summary: Returns the podium results
@@ -1337,24 +1363,123 @@ components:
         name:
           type: string
 
+    PsychSheet:
+      type: object
+      required:
+        - sort_by
+        - sort_by_second
+        - sorted_rankings
+      properties:
+        sort_by:
+          type: string
+        sort_by_second:
+          type: string
+        sorted_rankings:
+          type: array
+          items:
+            type: object
+            required:
+              - name
+              - user_id
+              - wca_id
+              - country_iso2
+              - average_best
+              - average_rank
+              - single_best
+              - single_rank
+              - tied_previous
+              - pos
+            properties:
+              name:
+                type: string
+              user_id:
+                type: integer
+              wca_id:
+                type: string
+              country_iso2:
+                type: string
+              average_best:
+                type: integer
+              average_rank:
+                type: integer
+              single_best:
+                type: integer
+              single_rank:
+                type: integer
+              tied_previous:
+                type: boolean
+              pos:
+                type: integer
+
     RegistrationData:
       type: object
+      required:
+        - id
+        - registrant_id
+        - user_id
+        - user
+        - competing
       properties:
         id:
           type: integer
-        competition_id:
-          type: string
+        registrant_id:
+          type: integer
         user_id:
           type: integer
-        event_ids:
-          type: array
-          items:
-            type: string
-      required:
-        - id
-        - competition_id
-        - user_id
-        - event_ids
+        guests:
+          type: integer
+        user:
+          type: object
+          required:
+            - id
+            - name
+            - gender
+            - country_iso2
+          properties:
+            id:
+              type: integer
+            name:
+              type: string
+            gender:
+              type: string
+            country_iso2:
+              type: string
+            wca_id:
+              type: string
+        competing:
+          type: object
+          required:
+            - event_ids
+          properties:
+            event_ids:
+              type: array
+              items:
+                type: string
+            # only when authenticated
+            registration_status:
+              type: string
+            registered_on:
+              type: string
+              format: datetime
+            comment:
+              type: string
+            admin_comment:
+              type: string
+        # only when authenticated
+        payment:
+          type: object
+          properties:
+            has_paid:
+              type: boolean
+            payment_status:
+              type: string
+            paid_amount_iso:
+              type: integer
+            currency_code:
+              type: string
+            updated_at:
+              type: string
+              format: datetime
 
     WcifEvent:
       type: object

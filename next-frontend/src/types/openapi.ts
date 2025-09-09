@@ -156,6 +156,47 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/competitions/{competitionId}/psych-sheet/{eventId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get competition registrations */
+        get: {
+            parameters: {
+                query?: {
+                    sort_by?: string;
+                };
+                header?: never;
+                path: {
+                    competitionId: string;
+                    eventId: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Successful response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["PsychSheet"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/competitions/{competitionId}/podiums": {
         parameters: {
             query?: never;
@@ -1019,11 +1060,50 @@ export interface components {
             id?: string;
             name?: string;
         };
+        PsychSheet: {
+            sort_by: string;
+            sort_by_second: string;
+            sorted_rankings: {
+                name: string;
+                user_id: number;
+                wca_id: string;
+                country_iso2: string;
+                average_best: number;
+                average_rank: number;
+                single_best: number;
+                single_rank: number;
+                tied_previous: boolean;
+                pos: number;
+            }[];
+        };
         RegistrationData: {
             id: number;
-            competition_id: string;
+            registrant_id: number;
             user_id: number;
-            event_ids: string[];
+            guests?: number;
+            user: {
+                id: number;
+                name: string;
+                gender: string;
+                country_iso2: string;
+                wca_id?: string;
+            };
+            competing: {
+                event_ids: string[];
+                registration_status?: string;
+                /** Format: datetime */
+                registered_on?: string;
+                comment?: string;
+                admin_comment?: string;
+            };
+            payment?: {
+                has_paid?: boolean;
+                payment_status?: string;
+                paid_amount_iso?: number;
+                currency_code?: string;
+                /** Format: datetime */
+                updated_at?: string;
+            };
         };
         WcifEvent: {
             /** @example 333 */
