@@ -1281,7 +1281,7 @@ RSpec.describe 'API Registrations' do
     end
   end
 
-  describe 'GET #payment_ticket' do
+  describe 'GET #payment_ticket', :zxc do
     context 'stripe connected' do
       let(:competition) { create(:competition, :registration_open, :with_organizer, :stripe_connected) }
       let(:reg) { create(:registration, :pending, competition: competition) }

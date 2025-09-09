@@ -7,6 +7,37 @@ class ManualPaymentIntegration < ApplicationRecord
     Rails.env.production? && EnvConfig.WCA_LIVE_SITE?
   end
 
+  def prepare_intent(registration, amount_iso, currency_iso, paying_user)
+    existing_intent = registration.payment_intents.first
+    if existing_intent.present?
+      existing_intent.payment_record.update(amount_iso_denomination: amount_iso, currency_code: currency_iso)
+      return existing_intent
+    end
+
+    self.create_intent(registration, amount_iso, currency_iso, paying_user)
+  end
+
+  private def create_intent(registration, amount_iso, currency_iso, paying_user)
+    manual_record = ManualPaymentRecord.create(amount_iso_denomination: amount_iso, currency_code: currency_iso, manual_status: :created)
+    # We create a registration payment with the payment ticket instead of upon payment completion
+    # so that organizrs can mark a registrant as paid even if the registrant hasn't submitted a payment reference yet
+    registration.registration_payments.create!(
+      amount_lowest_denomination: amount_iso,
+      currency_code: currency_iso,
+      receipt: manual_record,
+      user: paying_user,
+      is_completed: false,
+    )
+
+    PaymentIntent.create!(
+      holder: registration,
+      payment_record: manual_record,
+      client_secret: manual_record.id,
+      initiated_by: paying_user,
+      wca_status: manual_record.determine_wca_status,
+    )
+  end
+
   def find_payment(record_id)
     ManualPaymentRecord.find(record_id)
   end
