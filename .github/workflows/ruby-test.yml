@@ -2,8 +2,7 @@ name: Ruby tests
 
 on:
   push:
-    branches:
-      - '**'
+    branches: [ main ]
   pull_request:
     branches:
       - '**'
