@@ -106,7 +106,8 @@ function PaymentStep({
     await elements.submit();
 
     // Create the PaymentIntent and obtain clientSecret
-    const data = await getPaymentTicket(registrationId, isoDonationAmount);
+    // TODO: This is 10 lines earlier than the frontend diff, but there are apparently no other changes in the front diff - what gives?
+    const data = await getPaymentTicket(registrationId, isoDonationAmount, 'stripe');
 
     const { client_secret: clientSecret } = data;
 

@@ -1,9 +1,9 @@
 import React from 'react';
 import { Message } from 'semantic-ui-react';
 import { useQuery } from '@tanstack/react-query';
+import ManualPaymentStep from './ManualPaymentStep';
 import StripePaymentStep from './StripePaymentStep';
 import { useRegistration } from '../lib/RegistrationProvider';
-import { useStepNavigation } from '../lib/StepNavigationProvider';
 import PaymentOverview from './PaymentOverview';
 import { hasPassed } from '../../../lib/utils/dates';
 import I18n from '../../../lib/i18n';
@@ -12,21 +12,20 @@ import Loading from '../../Requests/Loading';
 
 export default function PaymentStepWrapper({
   competitionInfo,
+  stripePublishableKey,
+  connectedAccountId,
   user,
+  nextStep,
 }) {
-  const { registrationId } = useRegistration();
-
-  const { currentStep: { parameters: currentStepParameters } } = useStepNavigation();
-  const { stripePublishableKey, connectedAccountId } = currentStepParameters;
+  const { registration } = useRegistration();
 
   const {
     data: payments,
     isLoading,
   } = useQuery({
-    queryKey: ['payments', registrationId],
-    queryFn: () => getRegistrationPayments(registrationId),
+    queryKey: ['payments', registration.id],
+    queryFn: () => getRegistrationPayments(registration.id),
     select: (data) => data.charges,
-    enabled: !!registrationId,
   });
 
   if (isLoading) {
@@ -39,6 +38,7 @@ export default function PaymentStepWrapper({
         payments={payments}
         competitionInfo={competitionInfo}
         connectedAccountId={connectedAccountId}
+        nextStep={nextStep}
         stripePublishableKey={stripePublishableKey}
         user={user}
       />
@@ -51,13 +51,25 @@ export default function PaymentStepWrapper({
     );
   }
 
-  // This will distinguish between Manual and Stripe Payments when #11299 is merged
-  return (
-    <StripePaymentStep
-      competitionInfo={competitionInfo}
-      connectedAccountId={connectedAccountId}
-      stripePublishableKey={stripePublishableKey}
-      user={user}
-    />
-  );
+  if (competitionInfo.payment_integration_type === 'stripe') {
+    return (
+      <StripePaymentStep
+        competitionInfo={competitionInfo}
+        connectedAccountId={connectedAccountId}
+        nextStep={nextStep}
+        stripePublishableKey={stripePublishableKey}
+        user={user}
+      />
+    );
+  }
+
+  if (competitionInfo.payment_integration_type === 'manual') {
+    return (
+      <ManualPaymentStep
+        competitionInfo={competitionInfo}
+        nextStep={nextStep}
+        userInfo={user}
+      />
+    );
+  }
 }

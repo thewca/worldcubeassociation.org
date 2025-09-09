@@ -8,6 +8,7 @@ import I18n from '../../../lib/i18n';
 import { useRegistration } from '../lib/RegistrationProvider';
 import { isoMoneyToHumanReadable } from '../../../lib/helpers/money';
 import useCheckboxState from '../../../lib/hooks/useCheckboxState';
+import ManualPaymentStep from './ManualPaymentStep';
 import StripePaymentStep from './StripePaymentStep';
 import { hasPassed } from '../../../lib/utils/dates';
 
@@ -25,11 +26,30 @@ function PaymentMessage({
 }
 
 function PaymentStatus({
-  hasPaid, totalPaid, paymentFee, currencyCode,
+  hasPaid, totalPaid, paymentFee, currencyCode, paymentReference,
 }) {
   const totalPaidString = isoMoneyToHumanReadable(totalPaid, currencyCode);
   const paymentFeeString = isoMoneyToHumanReadable(paymentFee, currencyCode);
 
+  if (paymentReference) {
+    if (hasPaid) {
+      return (
+        <PaymentMessage
+          message={I18n.t('registrations.approved_manual_payment', { payment_reference: paymentReference})}
+          icon="checkmark"
+          success
+        />
+      )
+    } else {
+      return (
+        <PaymentMessage
+          message={I18n.t('registrations.pending_manual_payment', { payment_reference: paymentReference })}
+          icon={hasPaid ? "checkmark" : "warning circle"}
+          warning
+        />
+      )
+    }
+  }
   if (hasPaid) {
     return (
       <PaymentMessage
@@ -57,12 +77,18 @@ function PaymentStatus({
   );
 }
 
+
 export default function PaymentOverview({
   payments, competitionInfo, connectedAccountId, stripePublishableKey, user, nextStep,
 }) {
-  const { hasPaid } = useRegistration();
+  const { hasPaid, registration } = useRegistration();
   const totalPaid = _.sumBy(payments, 'iso_amount_refundable');
   const [payAgain, setPayAgain] = useCheckboxState(false);
+  const paymentReference = registration.payment.payment_reference
+
+  const payAgainText = competitionInfo.payment_integration_type === 'manual' ?
+    I18n.t('registrations.update_payment_ref') :
+    I18n.t('registrations.entry_fees_pay_again')
 
   return (
     <>
@@ -71,28 +97,38 @@ export default function PaymentOverview({
         hasPaid={hasPaid}
         totalPaid={totalPaid}
         currencyCode={competitionInfo.currency_code}
+        paymentReference={paymentReference}
       />
       { !hasPaid && !hasPassed(competitionInfo.registration_close) && (
-      <Accordion styled fluid>
-        <Accordion.Title
-          icon
-          active={payAgain}
-          index={0}
-          onClick={() => setPayAgain((prev) => !prev)}
-        >
-          <Icon name="dropdown" />
-          {I18n.t('registrations.entry_fees_pay_again')}
-        </Accordion.Title>
-        <Accordion.Content active={payAgain}>
-          <StripePaymentStep
-            competitionInfo={competitionInfo}
-            connectedAccountId={connectedAccountId}
-            nextStep={nextStep}
-            stripePublishableKey={stripePublishableKey}
-            user={user}
-          />
-        </Accordion.Content>
-      </Accordion>
+        <Accordion styled fluid>
+          <Accordion.Title
+            icon
+            active={payAgain}
+            index={0}
+            onClick={() => setPayAgain((prev) => !prev)}
+          >
+            <Icon name="dropdown" />
+            {payAgainText}
+          </Accordion.Title>
+          <Accordion.Content active={payAgain}>
+            { competitionInfo.payment_integration_type === 'stripe' && (
+              <StripePaymentStep
+                competitionInfo={competitionInfo}
+                connectedAccountId={connectedAccountId}
+                nextStep={nextStep}
+                stripePublishableKey={stripePublishableKey}
+                user={user}
+              />
+            )}
+            { competitionInfo.payment_integration_type === 'manual' && (
+              <ManualPaymentStep
+                competitionInfo={competitionInfo}
+                nextStep={nextStep}
+                userInfo={user}
+              />
+            )}
+          </Accordion.Content>
+        </Accordion>
       )}
     </>
   );
