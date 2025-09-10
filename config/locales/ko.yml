@@ -2494,7 +2494,7 @@ ko:
       #original_hash: 5101f65
       no_competitor_limit: 참가자 정원이 없습니다.
       #original_hash: f979d5e
-      entry_fee_is: '본 대회의 기본 참가비는 %{base_entry_fee}원입니다.'
+      entry_fee_is: '본 대회의 기본 참가비는 %{base_entry_fee} 입니다.'
       #original_hash: 5390a91
       no_entry_fee: 이 대회의 참가비는 무료입니다.
       #original_hash: 29af5c2
