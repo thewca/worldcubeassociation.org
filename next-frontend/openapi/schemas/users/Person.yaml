@@ -1,0 +1,39 @@
+type: object
+required:
+  - id
+  - name
+  - wca_id
+  - country_iso2
+  - delegate_status
+  - teams
+  - url
+  - avatar
+properties:
+  id:
+    type: integer
+    example: 267
+  name:
+    type: string
+    example: "Tim Reynolds"
+  gender:
+    type: string
+    example: "m"
+  wca_id:
+    type: string
+    example: "2005REYN01"
+  country_iso2:
+    type: string
+    example: "US"
+  delegate_status:
+    type: string
+    example: "delegate"
+  teams:
+    type: array
+    items:
+      $ref: './TeamMembership.yaml'
+  url:
+    type: string
+    format: uri
+    example: "https://www.worldcubeassociation.org/persons/2005REYN01"
+  avatar:
+    $ref: './UserAvatar.yaml'

@@ -1,0 +1,17 @@
+type: object
+properties:
+  id:
+    type: integer
+    example: 1
+  scrambles:
+    type: array
+    items:
+      $ref: './WcifScramble.yaml'
+  extraScrambles:
+    type: array
+    items:
+      $ref: './WcifScramble.yaml'
+required:
+  - id
+  - scrambles
+  - extraScrambles

@@ -1,0 +1,10 @@
+type: object
+properties:
+  numberOfAttempts:
+    type: integer
+    example: 2
+  attemptResult:
+    $ref: './WcifAttemptResult.yaml'
+required:
+  - numberOfAttempts
+  - attemptResult
