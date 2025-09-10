@@ -1,9 +1,11 @@
 namespace :next do
   namespace :posts do
     desc "Import Posts into nextjs"
-    task :import, :environment do
+    task :import, [:next_url] => [:environment] do
+      abort "NextJS Url is required" if args[:next_url].blank?
+
       connection = Faraday.new(
-        url: EnvConfig.NEXTJS_URL,
+        url: args[:next_url],
         headers: {
           'Content-Type' => 'application/json',
         },
