@@ -2514,7 +2514,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@floating-ui/dom@npm:1.7.4, @floating-ui/dom@npm:^1.0.0, @floating-ui/dom@npm:^1.0.1":
+"@floating-ui/dom@npm:1.7.4, @floating-ui/dom@npm:^1.0.0, @floating-ui/dom@npm:^1.0.1, @floating-ui/dom@npm:^1.7.4":
   version: 1.7.4
   resolution: "@floating-ui/dom@npm:1.7.4"
   dependencies:
@@ -2536,6 +2536,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@floating-ui/react-dom@npm:^2.1.6":
+  version: 2.1.6
+  resolution: "@floating-ui/react-dom@npm:2.1.6"
+  dependencies:
+    "@floating-ui/dom": "npm:^1.7.4"
+  peerDependencies:
+    react: ">=16.8.0"
+    react-dom: ">=16.8.0"
+  checksum: 10c0/6654834a8e73ecbdbc6cad2ad8f7abc698ac7c1800ded4d61113525c591c03d2e3b59d3cf9205859221465ea38c87af4f9e6e204703c5b7a7e85332d1eef2e18
+  languageName: node
+  linkType: hard
+
 "@floating-ui/react@npm:^0.27.0":
   version: 0.27.5
   resolution: "@floating-ui/react@npm:0.27.5"
@@ -2547,6 +2559,20 @@ __metadata:
     react: ">=17.0.0"
     react-dom: ">=17.0.0"
   checksum: 10c0/2da91779fddd3f368bfec0ceeb67b98e7b73f07b27f56f5ae339169de9c4145851ed432469d5dd81b99b9d6a5f0fefbb4ea8c881d2c97dd2dc0a0e96ad0945dd
+  languageName: node
+  linkType: hard
+
+"@floating-ui/react@npm:^0.27.8":
+  version: 0.27.16
+  resolution: "@floating-ui/react@npm:0.27.16"
+  dependencies:
+    "@floating-ui/react-dom": "npm:^2.1.6"
+    "@floating-ui/utils": "npm:^0.2.10"
+    tabbable: "npm:^6.0.0"
+  peerDependencies:
+    react: ">=17.0.0"
+    react-dom: ">=17.0.0"
+  checksum: 10c0/a026266d8875e69de1ac1e1a00588660c8ee299c1e7d067c5c5fd1d69a46fd10acff5dd6cb66c3fe40a3347b443234309ba95f5b33d49059d0cda121f558f566
   languageName: node
   linkType: hard
 
@@ -3025,263 +3051,264 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@lexical/clipboard@npm:0.28.0":
-  version: 0.28.0
-  resolution: "@lexical/clipboard@npm:0.28.0"
+"@lexical/clipboard@npm:0.35.0":
+  version: 0.35.0
+  resolution: "@lexical/clipboard@npm:0.35.0"
   dependencies:
-    "@lexical/html": "npm:0.28.0"
-    "@lexical/list": "npm:0.28.0"
-    "@lexical/selection": "npm:0.28.0"
-    "@lexical/utils": "npm:0.28.0"
-    lexical: "npm:0.28.0"
-  checksum: 10c0/15d77d67bf5cd96b783022600dd5dc43615f943aa79b236954c89d509acf2043394a7311835f238cca09357213708da5645c294eb05d86d6eed59f17334398b9
+    "@lexical/html": "npm:0.35.0"
+    "@lexical/list": "npm:0.35.0"
+    "@lexical/selection": "npm:0.35.0"
+    "@lexical/utils": "npm:0.35.0"
+    lexical: "npm:0.35.0"
+  checksum: 10c0/fa1988c35e03a3a63884dfc212bf1a8f43ff2595657ae90d2d2b5b4e4b202622e704ae191f4b3a70c14ae93c379bc099d6fa28e167b0c7e78b30720a751652b8
   languageName: node
   linkType: hard
 
-"@lexical/code@npm:0.28.0":
-  version: 0.28.0
-  resolution: "@lexical/code@npm:0.28.0"
+"@lexical/code@npm:0.35.0":
+  version: 0.35.0
+  resolution: "@lexical/code@npm:0.35.0"
   dependencies:
-    "@lexical/utils": "npm:0.28.0"
-    lexical: "npm:0.28.0"
+    "@lexical/utils": "npm:0.35.0"
+    lexical: "npm:0.35.0"
     prismjs: "npm:^1.30.0"
-  checksum: 10c0/4bc80d6422a6940c7660a9e1e89cc883c447b0420f2ffa2936a6e558dca4bd5eda4dd31b565917bbfbf3bef580b5cb706683fe95b68796f28955d0a140bc2f76
+  checksum: 10c0/1134cc01d50b0ba3711d5bc49e2cedad7f04ea26528ea0fc3751bf63437e433c8ea6eb0993663eae7281090ca8454f563b76a8cd068e797a7769b2ebf58e6c51
   languageName: node
   linkType: hard
 
-"@lexical/devtools-core@npm:0.28.0":
-  version: 0.28.0
-  resolution: "@lexical/devtools-core@npm:0.28.0"
+"@lexical/devtools-core@npm:0.35.0":
+  version: 0.35.0
+  resolution: "@lexical/devtools-core@npm:0.35.0"
   dependencies:
-    "@lexical/html": "npm:0.28.0"
-    "@lexical/link": "npm:0.28.0"
-    "@lexical/mark": "npm:0.28.0"
-    "@lexical/table": "npm:0.28.0"
-    "@lexical/utils": "npm:0.28.0"
-    lexical: "npm:0.28.0"
+    "@lexical/html": "npm:0.35.0"
+    "@lexical/link": "npm:0.35.0"
+    "@lexical/mark": "npm:0.35.0"
+    "@lexical/table": "npm:0.35.0"
+    "@lexical/utils": "npm:0.35.0"
+    lexical: "npm:0.35.0"
   peerDependencies:
     react: ">=17.x"
     react-dom: ">=17.x"
-  checksum: 10c0/8f493ce6f355892373e821f6e8721420f3250b70e9c4851fa4b67b18ac97662a2ae8b0b846ca2a18dbd1f0f959ba44e01c4e56afcf18ff14059aaa389e9cf596
+  checksum: 10c0/988d220c674ec7fc64d713cfc38c71f05dc8be7d8d2001863503b5fc205724cd17edd2e82fb531ccdee2b07d125038202b2c48257659edfbb54e35f2d9b5d812
   languageName: node
   linkType: hard
 
-"@lexical/dragon@npm:0.28.0":
-  version: 0.28.0
-  resolution: "@lexical/dragon@npm:0.28.0"
+"@lexical/dragon@npm:0.35.0":
+  version: 0.35.0
+  resolution: "@lexical/dragon@npm:0.35.0"
   dependencies:
-    lexical: "npm:0.28.0"
-  checksum: 10c0/5c721dace3ef1ffc7002a7f42b901d2f746f8cee58e563d367e6500f62ca89eb5689e16bcef1b470a18bb1b04ea3cc3dd23662501d800ee0d244a647eff601a6
+    lexical: "npm:0.35.0"
+  checksum: 10c0/8c0014a512fba1a661ded4323c5dedb908e77d60f363bc4842408fcaae5b27cf4935381531f46b44664d8223b1f2e66424f0adcdf9068a3aca2cb83cf49a69a7
   languageName: node
   linkType: hard
 
-"@lexical/hashtag@npm:0.28.0":
-  version: 0.28.0
-  resolution: "@lexical/hashtag@npm:0.28.0"
+"@lexical/hashtag@npm:0.35.0":
+  version: 0.35.0
+  resolution: "@lexical/hashtag@npm:0.35.0"
   dependencies:
-    "@lexical/utils": "npm:0.28.0"
-    lexical: "npm:0.28.0"
-  checksum: 10c0/f16985e2ef0bb61b42ea0f0e955c718299e144e77883c7a6137c587b25729e4a75026093653c23ea70d722e3136cd48c3f1ce354a52b56aede7eb87cc32214cb
+    "@lexical/utils": "npm:0.35.0"
+    lexical: "npm:0.35.0"
+  checksum: 10c0/e282f3e448df8d305bdcc3c495f25092b3a0b55ef4a352943952069e142edd95ff6c1cb7f6fe1f1b77409ff1d79d82c09b7b729d5e4d3f2e27587d7371056382
   languageName: node
   linkType: hard
 
-"@lexical/headless@npm:0.28.0":
-  version: 0.28.0
-  resolution: "@lexical/headless@npm:0.28.0"
+"@lexical/headless@npm:0.35.0":
+  version: 0.35.0
+  resolution: "@lexical/headless@npm:0.35.0"
   dependencies:
-    lexical: "npm:0.28.0"
-  checksum: 10c0/ac43ab84e97df7615353338e804a11327f813ce543f04928b5a60355af2b5078a54d817c3b21be432d25168eb22ece13472a7b010ed8f7585286c60ff0d7fc56
+    lexical: "npm:0.35.0"
+  checksum: 10c0/305c48fda962aea470b8cd8406101b98edcbdde52b8ab1afade698beed14090d3d1ec1eac46a312d6717a47792eeaea545ecb279f279608d3f3f26fec3d830ca
   languageName: node
   linkType: hard
 
-"@lexical/history@npm:0.28.0":
-  version: 0.28.0
-  resolution: "@lexical/history@npm:0.28.0"
+"@lexical/history@npm:0.35.0":
+  version: 0.35.0
+  resolution: "@lexical/history@npm:0.35.0"
   dependencies:
-    "@lexical/utils": "npm:0.28.0"
-    lexical: "npm:0.28.0"
-  checksum: 10c0/68918680cb78c6494dc8c7e748ae1aea1acb3920615ba9a25cf6ab47de1a0400adc8d9f39abc792f9e3086808f19d2d37950a0ed6e5caf5c0054f03d9d247256
+    "@lexical/utils": "npm:0.35.0"
+    lexical: "npm:0.35.0"
+  checksum: 10c0/37fd57995448db1c713b76997927afdf2588f6eba205abb83bb9602cb43e81bed84fb4e2b8c25ed2414c5dc6b70686f4b0268c871e2d88c8ac585e573758abf8
   languageName: node
   linkType: hard
 
-"@lexical/html@npm:0.28.0":
-  version: 0.28.0
-  resolution: "@lexical/html@npm:0.28.0"
+"@lexical/html@npm:0.35.0":
+  version: 0.35.0
+  resolution: "@lexical/html@npm:0.35.0"
   dependencies:
-    "@lexical/selection": "npm:0.28.0"
-    "@lexical/utils": "npm:0.28.0"
-    lexical: "npm:0.28.0"
-  checksum: 10c0/6cca81a2f8521bbf1ac20edec4bf4d41889aef6b4a56eec0a53d66039f8d81cf1274ece33ac83695e6d8bf4bcc89c517861c81c8fd30e11ea115f7da04799f24
+    "@lexical/selection": "npm:0.35.0"
+    "@lexical/utils": "npm:0.35.0"
+    lexical: "npm:0.35.0"
+  checksum: 10c0/89e9960cb6c988127da8bb5d5247c65bfd43ac75dcb93af6949fb36e353450eeccaf0dc33e78632c8f70672ba011ac9d80671133147b6dd465e59cd1dd48e557
   languageName: node
   linkType: hard
 
-"@lexical/link@npm:0.28.0":
-  version: 0.28.0
-  resolution: "@lexical/link@npm:0.28.0"
+"@lexical/link@npm:0.35.0":
+  version: 0.35.0
+  resolution: "@lexical/link@npm:0.35.0"
   dependencies:
-    "@lexical/utils": "npm:0.28.0"
-    lexical: "npm:0.28.0"
-  checksum: 10c0/2e879f945a4440201910d6ea2226fc6a6c48de8ae523fc736d1b5d4e8b8f267600866fcdfc35d621b0b6545ad70d897919a4cb8997b76f7206be5d44bdf7965c
+    "@lexical/utils": "npm:0.35.0"
+    lexical: "npm:0.35.0"
+  checksum: 10c0/a588d7428380c302ba2b7a35b9be0dc4a4096848520a07ba2efb60df799165b821e533cfe68bc62ae279914459cd5dd7377a916eefff4ef9a955b1d2e23a54dc
   languageName: node
   linkType: hard
 
-"@lexical/list@npm:0.28.0":
-  version: 0.28.0
-  resolution: "@lexical/list@npm:0.28.0"
+"@lexical/list@npm:0.35.0":
+  version: 0.35.0
+  resolution: "@lexical/list@npm:0.35.0"
   dependencies:
-    "@lexical/selection": "npm:0.28.0"
-    "@lexical/utils": "npm:0.28.0"
-    lexical: "npm:0.28.0"
-  checksum: 10c0/721e45f163a06c40706d8661e0ebeb7dbb8d488283d1e41ec462390f3d9968471c26582fe14a7fe8e1e1ce2352bfe3b1c2850c95359d78b8c6a655af244a3503
+    "@lexical/selection": "npm:0.35.0"
+    "@lexical/utils": "npm:0.35.0"
+    lexical: "npm:0.35.0"
+  checksum: 10c0/b9207be2754a91e875d2ff03f9b2939563dd3b9577d35f21663267dd5935d92549ed57d7295b8bac59a022f85d5970766d25a1ba6a5c5f4fbd0e2003b17a2a1c
   languageName: node
   linkType: hard
 
-"@lexical/mark@npm:0.28.0":
-  version: 0.28.0
-  resolution: "@lexical/mark@npm:0.28.0"
+"@lexical/mark@npm:0.35.0":
+  version: 0.35.0
+  resolution: "@lexical/mark@npm:0.35.0"
   dependencies:
-    "@lexical/utils": "npm:0.28.0"
-    lexical: "npm:0.28.0"
-  checksum: 10c0/22f4aeabfbfce369720d9b243ecf27ea0eaf3a2f55aae512f03cea205709ca00bf13e09d6031f20071b70db1147b0c5eb152363edb8626594d12dd28c3921eb6
+    "@lexical/utils": "npm:0.35.0"
+    lexical: "npm:0.35.0"
+  checksum: 10c0/5305cf71f9882db34fec22d4088e9ad7bce332a18d4072bbec2242c3ee3838d55538e555797df6c369a39d1024ea4fa8a45f35ac6feb24cc3980643f51912eef
   languageName: node
   linkType: hard
 
-"@lexical/markdown@npm:0.28.0":
-  version: 0.28.0
-  resolution: "@lexical/markdown@npm:0.28.0"
+"@lexical/markdown@npm:0.35.0":
+  version: 0.35.0
+  resolution: "@lexical/markdown@npm:0.35.0"
   dependencies:
-    "@lexical/code": "npm:0.28.0"
-    "@lexical/link": "npm:0.28.0"
-    "@lexical/list": "npm:0.28.0"
-    "@lexical/rich-text": "npm:0.28.0"
-    "@lexical/text": "npm:0.28.0"
-    "@lexical/utils": "npm:0.28.0"
-    lexical: "npm:0.28.0"
-  checksum: 10c0/717fbd2a5e121bf135a82c571711b75ae9d789c3339718e97f27d2c568b6cf6714c7b3af75fa54facdb84fe47e2e93bc498b8464d433c4ef9650c8b8eadef68d
+    "@lexical/code": "npm:0.35.0"
+    "@lexical/link": "npm:0.35.0"
+    "@lexical/list": "npm:0.35.0"
+    "@lexical/rich-text": "npm:0.35.0"
+    "@lexical/text": "npm:0.35.0"
+    "@lexical/utils": "npm:0.35.0"
+    lexical: "npm:0.35.0"
+  checksum: 10c0/efecb14f18f6122ea4a52672c2dd33be6b03dbea7bb1b3ed9258251f14b35ea3370467481f7704d7ca21407e47a0683fa178a3ad0df9561f545baa48325634d0
   languageName: node
   linkType: hard
 
-"@lexical/offset@npm:0.28.0":
-  version: 0.28.0
-  resolution: "@lexical/offset@npm:0.28.0"
+"@lexical/offset@npm:0.35.0":
+  version: 0.35.0
+  resolution: "@lexical/offset@npm:0.35.0"
   dependencies:
-    lexical: "npm:0.28.0"
-  checksum: 10c0/48c4918cc6bea9d673e6da48d1dde18acd2b0096c4a7a8c0e4620ff77bbf400c6422a66e5d25ea14399ef745faf661f3f89fa8728847d5de40ca1228c4d5be14
+    lexical: "npm:0.35.0"
+  checksum: 10c0/2bada8943b5a70fbcbc4ac6b4a3cb2481edc13d57ff1ef377276d274171854c24fdf309bb472300f15c99d1ef9a0e35bb7869a847c74e599f27752dca9da0ed0
   languageName: node
   linkType: hard
 
-"@lexical/overflow@npm:0.28.0":
-  version: 0.28.0
-  resolution: "@lexical/overflow@npm:0.28.0"
+"@lexical/overflow@npm:0.35.0":
+  version: 0.35.0
+  resolution: "@lexical/overflow@npm:0.35.0"
   dependencies:
-    lexical: "npm:0.28.0"
-  checksum: 10c0/258506590f61fc1861d28a986fa04ba3cbb8b8bc03a0921887287b825dc1e727afffa3e1cee18eb36f214c706ebd317ae176ae6ba866773552d502da42468f8f
+    lexical: "npm:0.35.0"
+  checksum: 10c0/caf5b0c9e228b190b66410ab211b0a1759deb497fda4623eeb9e8da8d951c43a3ee9dc6c873855f2f1648c0fbeaf348e60280568cd74489e891e82c957817cf6
   languageName: node
   linkType: hard
 
-"@lexical/plain-text@npm:0.28.0":
-  version: 0.28.0
-  resolution: "@lexical/plain-text@npm:0.28.0"
+"@lexical/plain-text@npm:0.35.0":
+  version: 0.35.0
+  resolution: "@lexical/plain-text@npm:0.35.0"
   dependencies:
-    "@lexical/clipboard": "npm:0.28.0"
-    "@lexical/selection": "npm:0.28.0"
-    "@lexical/utils": "npm:0.28.0"
-    lexical: "npm:0.28.0"
-  checksum: 10c0/b078ef92b6e34783f0d52c8e348ccb4fcbef21b061646bce43f129b50a5a741835cf2165a5f6880cafc684a0f27a765612038f46be22ce9ea302dbed67fd6949
+    "@lexical/clipboard": "npm:0.35.0"
+    "@lexical/selection": "npm:0.35.0"
+    "@lexical/utils": "npm:0.35.0"
+    lexical: "npm:0.35.0"
+  checksum: 10c0/db8b5fac89751f1d50658e447efdfa0021f27af0d52f638eacd06895b7926b24d818f82f55c49fb48d061ca776dc7e24cba9fce7b4b3da12a9e9884b8e3a13d3
   languageName: node
   linkType: hard
 
-"@lexical/react@npm:0.28.0":
-  version: 0.28.0
-  resolution: "@lexical/react@npm:0.28.0"
+"@lexical/react@npm:0.35.0":
+  version: 0.35.0
+  resolution: "@lexical/react@npm:0.35.0"
   dependencies:
-    "@lexical/devtools-core": "npm:0.28.0"
-    "@lexical/dragon": "npm:0.28.0"
-    "@lexical/hashtag": "npm:0.28.0"
-    "@lexical/history": "npm:0.28.0"
-    "@lexical/link": "npm:0.28.0"
-    "@lexical/list": "npm:0.28.0"
-    "@lexical/mark": "npm:0.28.0"
-    "@lexical/markdown": "npm:0.28.0"
-    "@lexical/overflow": "npm:0.28.0"
-    "@lexical/plain-text": "npm:0.28.0"
-    "@lexical/rich-text": "npm:0.28.0"
-    "@lexical/table": "npm:0.28.0"
-    "@lexical/text": "npm:0.28.0"
-    "@lexical/utils": "npm:0.28.0"
-    "@lexical/yjs": "npm:0.28.0"
-    lexical: "npm:0.28.0"
+    "@floating-ui/react": "npm:^0.27.8"
+    "@lexical/devtools-core": "npm:0.35.0"
+    "@lexical/dragon": "npm:0.35.0"
+    "@lexical/hashtag": "npm:0.35.0"
+    "@lexical/history": "npm:0.35.0"
+    "@lexical/link": "npm:0.35.0"
+    "@lexical/list": "npm:0.35.0"
+    "@lexical/mark": "npm:0.35.0"
+    "@lexical/markdown": "npm:0.35.0"
+    "@lexical/overflow": "npm:0.35.0"
+    "@lexical/plain-text": "npm:0.35.0"
+    "@lexical/rich-text": "npm:0.35.0"
+    "@lexical/table": "npm:0.35.0"
+    "@lexical/text": "npm:0.35.0"
+    "@lexical/utils": "npm:0.35.0"
+    "@lexical/yjs": "npm:0.35.0"
+    lexical: "npm:0.35.0"
     react-error-boundary: "npm:^3.1.4"
   peerDependencies:
     react: ">=17.x"
     react-dom: ">=17.x"
-  checksum: 10c0/097eacae89174ccf126309629f90b52b397fe11c9cc28d0628b6ac7b700c29afe60af28f8c3a8ac2083b1484e8db998bf198f77122b778b5f748398f81558e9e
+  checksum: 10c0/fc3dd570f08cf54f4947cfe0fa62ba9a19109bd277a3b4e9d572a072963a3a2632d186b19370abd25cdede83194402d2b4daf887bb4668b090c351a6004ee43c
   languageName: node
   linkType: hard
 
-"@lexical/rich-text@npm:0.28.0":
-  version: 0.28.0
-  resolution: "@lexical/rich-text@npm:0.28.0"
+"@lexical/rich-text@npm:0.35.0":
+  version: 0.35.0
+  resolution: "@lexical/rich-text@npm:0.35.0"
   dependencies:
-    "@lexical/clipboard": "npm:0.28.0"
-    "@lexical/selection": "npm:0.28.0"
-    "@lexical/utils": "npm:0.28.0"
-    lexical: "npm:0.28.0"
-  checksum: 10c0/3850006b7ebe13911ebbdda28b799154eb8a19320fad677a024251465c43e321ad999b706cbcd66671466c5c8fcb16aec10f94cfa04a2d012012bdfff58521cb
+    "@lexical/clipboard": "npm:0.35.0"
+    "@lexical/selection": "npm:0.35.0"
+    "@lexical/utils": "npm:0.35.0"
+    lexical: "npm:0.35.0"
+  checksum: 10c0/a148c7f8bc5785c3ec09c9e15e22412c258f1c67b7e5690ab50cd5f855e46ef22a4664351db6214dab4014540e7a8239200a5e524d9f615cfd27e88bc2784b4d
   languageName: node
   linkType: hard
 
-"@lexical/selection@npm:0.28.0":
-  version: 0.28.0
-  resolution: "@lexical/selection@npm:0.28.0"
+"@lexical/selection@npm:0.35.0":
+  version: 0.35.0
+  resolution: "@lexical/selection@npm:0.35.0"
   dependencies:
-    lexical: "npm:0.28.0"
-  checksum: 10c0/11536ee40ca24cb1c93035fb2593cd74d91d948215da7a361e1aece30071aea512cf51b0e95f8d1eca7f67963460e3edf7287a05acf97aff5624c689bc5865f8
+    lexical: "npm:0.35.0"
+  checksum: 10c0/494ace8b2abb0c7c7d44380946b480a8f5ff8f998de535c762a0cbea049cf9a01a9407e3ec55454b72115ba83cea88686060096d7c58480f53b22af6d89e1b54
   languageName: node
   linkType: hard
 
-"@lexical/table@npm:0.28.0":
-  version: 0.28.0
-  resolution: "@lexical/table@npm:0.28.0"
+"@lexical/table@npm:0.35.0":
+  version: 0.35.0
+  resolution: "@lexical/table@npm:0.35.0"
   dependencies:
-    "@lexical/clipboard": "npm:0.28.0"
-    "@lexical/utils": "npm:0.28.0"
-    lexical: "npm:0.28.0"
-  checksum: 10c0/7e19172303ddb51995d2b78c89283a173dcb05d13f67aba151b2ef9fc7b1443c8e12f28ad25d4a8a22362e906a989c3d3fb947b4fcba11233131205f5d746e9b
+    "@lexical/clipboard": "npm:0.35.0"
+    "@lexical/utils": "npm:0.35.0"
+    lexical: "npm:0.35.0"
+  checksum: 10c0/90802e83333f5743f2fb72b9ef08a482dc216a1a1760b3d838d16be9cb04d7cf26d78a1897ce87dfbfcda4b14506618f47bf4a6e65839dd9e16991c96ec5f985
   languageName: node
   linkType: hard
 
-"@lexical/text@npm:0.28.0":
-  version: 0.28.0
-  resolution: "@lexical/text@npm:0.28.0"
+"@lexical/text@npm:0.35.0":
+  version: 0.35.0
+  resolution: "@lexical/text@npm:0.35.0"
   dependencies:
-    lexical: "npm:0.28.0"
-  checksum: 10c0/dc22b7c8a649c158fc34253576eb35ea9ffcb41eb3c771e141a91dd657fe6ae4b668d8adb7c207f32c887c6730e047a1966d965a115cc7ca891724debefe209d
+    lexical: "npm:0.35.0"
+  checksum: 10c0/6054aafef32532a392be87c490603c59ca115dead122405e4c22ee3cf235536a95aa23bec9387234cd3eb3b664b2ef2aa3e1fedb3563385addcd81789316d0ea
   languageName: node
   linkType: hard
 
-"@lexical/utils@npm:0.28.0":
-  version: 0.28.0
-  resolution: "@lexical/utils@npm:0.28.0"
+"@lexical/utils@npm:0.35.0":
+  version: 0.35.0
+  resolution: "@lexical/utils@npm:0.35.0"
   dependencies:
-    "@lexical/list": "npm:0.28.0"
-    "@lexical/selection": "npm:0.28.0"
-    "@lexical/table": "npm:0.28.0"
-    lexical: "npm:0.28.0"
-  checksum: 10c0/82023bdf1578e4029d228d6611b88a80a30649a630e271e76f09e0b189bbf5915da6632859d0b9b188b57d3bac9ab30140fcfd9bcc543261a6f2ccfc275af8d5
+    "@lexical/list": "npm:0.35.0"
+    "@lexical/selection": "npm:0.35.0"
+    "@lexical/table": "npm:0.35.0"
+    lexical: "npm:0.35.0"
+  checksum: 10c0/139d6c86ba0679256dd2528e533e916084034bf482e4f2d90fe5eeb4a38d4b9e05f8bfe14632df83387eba25fc84ca34e20fa94efb2539698aeaa47ea3f16222
   languageName: node
   linkType: hard
 
-"@lexical/yjs@npm:0.28.0":
-  version: 0.28.0
-  resolution: "@lexical/yjs@npm:0.28.0"
+"@lexical/yjs@npm:0.35.0":
+  version: 0.35.0
+  resolution: "@lexical/yjs@npm:0.35.0"
   dependencies:
-    "@lexical/offset": "npm:0.28.0"
-    "@lexical/selection": "npm:0.28.0"
-    lexical: "npm:0.28.0"
+    "@lexical/offset": "npm:0.35.0"
+    "@lexical/selection": "npm:0.35.0"
+    lexical: "npm:0.35.0"
   peerDependencies:
     yjs: ">=13.5.22"
-  checksum: 10c0/b817a3542e39c78b3e02468e40b39f38629097f1202c58e00ed33d893d136dd06b5a061d49019e989f4c7021b3a0e042a14f7d6c4cafcb0d36484221651f35f2
+  checksum: 10c0/d7c88158a7bbfa4a0ae533dfe337c60dafc00b6e484f44bb3b87aa0c6c67d9122c4e2dc3e35de0b4b70b0be3e19a8d28f912a428a9ef4aabd305e0029260d0c9
   languageName: node
   linkType: hard
 
@@ -3786,26 +3813,26 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@payloadcms/db-mongodb@npm:3.54.0":
-  version: 3.54.0
-  resolution: "@payloadcms/db-mongodb@npm:3.54.0"
+"@payloadcms/db-mongodb@npm:3.55.0":
+  version: 3.55.0
+  resolution: "@payloadcms/db-mongodb@npm:3.55.0"
   dependencies:
     mongoose: "npm:8.15.1"
     mongoose-paginate-v2: "npm:1.8.5"
     prompts: "npm:2.4.2"
     uuid: "npm:10.0.0"
   peerDependencies:
-    payload: 3.54.0
-  checksum: 10c0/1f4cf94b24d73a210a3094f0b7b6511c265ab9dacc800767dfd4df665f2255999ac997b7273e325245576720ddc5b51341d7cbcb0621822e43438274c6aae87c
+    payload: 3.55.0
+  checksum: 10c0/fe5449ed0c66164ad2f51fc9d80305d2587d4507ae7bcf1088166449fec0ed45ff955d88e0d786af5797b8b174bc3f7020127019fcf6610c394fe4bef474db34
   languageName: node
   linkType: hard
 
-"@payloadcms/db-sqlite@npm:3.54.0":
-  version: 3.54.0
-  resolution: "@payloadcms/db-sqlite@npm:3.54.0"
+"@payloadcms/db-sqlite@npm:3.55.0":
+  version: 3.55.0
+  resolution: "@payloadcms/db-sqlite@npm:3.55.0"
   dependencies:
     "@libsql/client": "npm:0.14.0"
-    "@payloadcms/drizzle": "npm:3.54.0"
+    "@payloadcms/drizzle": "npm:3.55.0"
     console-table-printer: "npm:2.12.1"
     drizzle-kit: "npm:0.31.4"
     drizzle-orm: "npm:0.44.2"
@@ -3813,14 +3840,14 @@ __metadata:
     to-snake-case: "npm:1.0.0"
     uuid: "npm:9.0.0"
   peerDependencies:
-    payload: 3.54.0
-  checksum: 10c0/efd78629265a90e9b4885e401b2b45428ecbaaadb3461eccb2da9a0355929d4d6441795f848443c9f9b054c94dc7f7915d2c2020afbf223355e62728d51e1f06
+    payload: 3.55.0
+  checksum: 10c0/9fa9a0ed2f723d0236813a04ac4a2700590f630fc5a7ce79cf10c88145a8427712c03887abecb18f46ffc8fa4496a33f7d4142ad4f15e6ac21284a639c80d296
   languageName: node
   linkType: hard
 
-"@payloadcms/drizzle@npm:3.54.0":
-  version: 3.54.0
-  resolution: "@payloadcms/drizzle@npm:3.54.0"
+"@payloadcms/drizzle@npm:3.55.0":
+  version: 3.55.0
+  resolution: "@payloadcms/drizzle@npm:3.55.0"
   dependencies:
     console-table-printer: "npm:2.12.1"
     dequal: "npm:2.0.3"
@@ -3829,14 +3856,14 @@ __metadata:
     to-snake-case: "npm:1.0.0"
     uuid: "npm:9.0.0"
   peerDependencies:
-    payload: 3.54.0
-  checksum: 10c0/3abf0fe59e3769b432096762abe8d25b0764ce2bd559a689526cd55cc1b6985773aea4fc205c87625b8b954734aafe0cbb20487d266e11679694e56303bea778
+    payload: 3.55.0
+  checksum: 10c0/64050cddfb91d8f1094dd5e8377a40958c5bfdf66a656f7662f8be401410aff06876482238b65260fa7e1d1c04ed0c7cbb8293c55f69e2962510f2c107971038
   languageName: node
   linkType: hard
 
-"@payloadcms/graphql@npm:3.54.0":
-  version: 3.54.0
-  resolution: "@payloadcms/graphql@npm:3.54.0"
+"@payloadcms/graphql@npm:3.55.0":
+  version: 3.55.0
+  resolution: "@payloadcms/graphql@npm:3.55.0"
   dependencies:
     graphql-scalars: "npm:1.22.2"
     pluralize: "npm:8.0.0"
@@ -3844,40 +3871,40 @@ __metadata:
     tsx: "npm:4.19.2"
   peerDependencies:
     graphql: ^16.8.1
-    payload: 3.54.0
+    payload: 3.55.0
   bin:
     payload-graphql: bin.js
-  checksum: 10c0/3c45e1112e973a48b055a18f83e71cc7915c445413fc3707c20e01010fe72def9abacae57b090e19f91fea2dad7fdd048b496988b55e96c4f5f1a93ea20ee585
+  checksum: 10c0/7ec0b648567ec86954158b3e2baf2b866efad9ff4b17a7d626c349d227491f14248371cb67d65d4c4a30f382a2ea598dc8b1a6a89e5d6c3397f569436ec3b7e2
   languageName: node
   linkType: hard
 
-"@payloadcms/live-preview-react@npm:3.54.0":
-  version: 3.54.0
-  resolution: "@payloadcms/live-preview-react@npm:3.54.0"
+"@payloadcms/live-preview-react@npm:3.55.0":
+  version: 3.55.0
+  resolution: "@payloadcms/live-preview-react@npm:3.55.0"
   dependencies:
-    "@payloadcms/live-preview": "npm:3.54.0"
+    "@payloadcms/live-preview": "npm:3.55.0"
   peerDependencies:
     react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0 || ^19.0.0-rc-65a56d0e-20241020
     react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0 || ^19.0.0-rc-65a56d0e-20241020
-  checksum: 10c0/985cee5cf9918daac7ef418774321c94644fbf8260fbc832887cee58ef4be29784b0014fec19d78aaccca457a301b28a9d7e30934e5fa10ea2dc808d9e9198b0
+  checksum: 10c0/2e10c58ddb675fb2a52c293d888944ecde0015c67be2b06d43b93aec7d1a7bb876770d2f957603fa309ffd631885dde3c2b158f3ba5096a5761a753b318935ff
   languageName: node
   linkType: hard
 
-"@payloadcms/live-preview@npm:3.54.0":
-  version: 3.54.0
-  resolution: "@payloadcms/live-preview@npm:3.54.0"
-  checksum: 10c0/ff9a38f62fb66de1a26cb5baec71ec46e45aed2a0928f698023a2bbf82fbed231345dfc1c3cfbe473b48a497a56103330b9eab9c8cfcedc4bdf16035ad276620
+"@payloadcms/live-preview@npm:3.55.0":
+  version: 3.55.0
+  resolution: "@payloadcms/live-preview@npm:3.55.0"
+  checksum: 10c0/3cfbb194d938f4a12f3a86b0b86e7fbba7d6063e3d572b5db92cad45331ba83c7a2bf172e9aa0adc7066bd07932ab3901fd6b82c780273885492ea0824a3567a
   languageName: node
   linkType: hard
 
-"@payloadcms/next@npm:3.54.0":
-  version: 3.54.0
-  resolution: "@payloadcms/next@npm:3.54.0"
+"@payloadcms/next@npm:3.55.0":
+  version: 3.55.0
+  resolution: "@payloadcms/next@npm:3.55.0"
   dependencies:
     "@dnd-kit/core": "npm:6.0.8"
-    "@payloadcms/graphql": "npm:3.54.0"
-    "@payloadcms/translations": "npm:3.54.0"
-    "@payloadcms/ui": "npm:3.54.0"
+    "@payloadcms/graphql": "npm:3.55.0"
+    "@payloadcms/translations": "npm:3.55.0"
+    "@payloadcms/ui": "npm:3.55.0"
     busboy: "npm:^1.6.0"
     dequal: "npm:2.0.3"
     file-type: "npm:19.3.0"
@@ -3891,42 +3918,42 @@ __metadata:
   peerDependencies:
     graphql: ^16.8.1
     next: ^15.2.3
-    payload: 3.54.0
-  checksum: 10c0/40e284581c603fffbd4d66d5326e79bc92c9d6393c0bca8902e099b579293a386094b2b85bcd3f5e6563d06574f237889053f67522006da79bf2e55b2fe0d076
+    payload: 3.55.0
+  checksum: 10c0/eb968d61740ab0ed0cae7fe34c8cfa31d4a20566425b39057cc57df5274a10c3db8f481fd5176472136da4da396ed39204ff7cfc886670b4b7b18c492645bf1d
   languageName: node
   linkType: hard
 
-"@payloadcms/plugin-cloud-storage@npm:3.54.0":
-  version: 3.54.0
-  resolution: "@payloadcms/plugin-cloud-storage@npm:3.54.0"
+"@payloadcms/plugin-cloud-storage@npm:3.55.0":
+  version: 3.55.0
+  resolution: "@payloadcms/plugin-cloud-storage@npm:3.55.0"
   dependencies:
-    "@payloadcms/ui": "npm:3.54.0"
+    "@payloadcms/ui": "npm:3.55.0"
     find-node-modules: "npm:^2.1.3"
     range-parser: "npm:^1.2.1"
   peerDependencies:
-    payload: 3.54.0
+    payload: 3.55.0
     react: ^19.0.0 || ^19.0.0-rc-65a56d0e-20241020
     react-dom: ^19.0.0 || ^19.0.0-rc-65a56d0e-20241020
-  checksum: 10c0/001b6d2432e9fa4498c3304981212c8a4472525bf68f8e82255e349a168f0c93b68fcd00ba1cc3e825f53dc10edc18a33727124050da69139e55c7327852c25f
+  checksum: 10c0/ab1d04b81a7a0843afe70ddd3e06cfadb90f18923a7d612f8861a3b3772bca3a2263d4595c664983c2758b7acd4cff79a103d3a7cc9c906ab1191a42ff41ea83
   languageName: node
   linkType: hard
 
-"@payloadcms/richtext-lexical@npm:3.54.0":
-  version: 3.54.0
-  resolution: "@payloadcms/richtext-lexical@npm:3.54.0"
+"@payloadcms/richtext-lexical@npm:3.55.0":
+  version: 3.55.0
+  resolution: "@payloadcms/richtext-lexical@npm:3.55.0"
   dependencies:
-    "@lexical/headless": "npm:0.28.0"
-    "@lexical/html": "npm:0.28.0"
-    "@lexical/link": "npm:0.28.0"
-    "@lexical/list": "npm:0.28.0"
-    "@lexical/mark": "npm:0.28.0"
-    "@lexical/react": "npm:0.28.0"
-    "@lexical/rich-text": "npm:0.28.0"
-    "@lexical/selection": "npm:0.28.0"
-    "@lexical/table": "npm:0.28.0"
-    "@lexical/utils": "npm:0.28.0"
-    "@payloadcms/translations": "npm:3.54.0"
-    "@payloadcms/ui": "npm:3.54.0"
+    "@lexical/headless": "npm:0.35.0"
+    "@lexical/html": "npm:0.35.0"
+    "@lexical/link": "npm:0.35.0"
+    "@lexical/list": "npm:0.35.0"
+    "@lexical/mark": "npm:0.35.0"
+    "@lexical/react": "npm:0.35.0"
+    "@lexical/rich-text": "npm:0.35.0"
+    "@lexical/selection": "npm:0.35.0"
+    "@lexical/table": "npm:0.35.0"
+    "@lexical/utils": "npm:0.35.0"
+    "@payloadcms/translations": "npm:3.55.0"
+    "@payloadcms/ui": "npm:3.55.0"
     "@types/uuid": "npm:10.0.0"
     acorn: "npm:8.12.1"
     bson-objectid: "npm:2.0.4"
@@ -3934,7 +3961,7 @@ __metadata:
     dequal: "npm:2.0.3"
     escape-html: "npm:1.0.3"
     jsox: "npm:1.2.121"
-    lexical: "npm:0.28.0"
+    lexical: "npm:0.35.0"
     mdast-util-from-markdown: "npm:2.0.2"
     mdast-util-mdx-jsx: "npm:3.1.3"
     micromark-extension-mdx-jsx: "npm:3.0.1"
@@ -3945,40 +3972,40 @@ __metadata:
   peerDependencies:
     "@faceless-ui/modal": 3.0.0-beta.2
     "@faceless-ui/scroll-info": 2.0.0
-    "@payloadcms/next": 3.54.0
-    payload: 3.54.0
+    "@payloadcms/next": 3.55.0
+    payload: 3.55.0
     react: ^19.0.0 || ^19.0.0-rc-65a56d0e-20241020
     react-dom: ^19.0.0 || ^19.0.0-rc-65a56d0e-20241020
-  checksum: 10c0/04868e29104a1065a79bf6ca9d1eec76e4c97eb571d5de031be6ae1d013c9519c7f42aa2a46e6b4d47bb68b2866ddd9d2887559455ec37f9ac688984f1c12296
+  checksum: 10c0/0817efa3882475b37dfa6c078c6a4eaa53a7470d437c53ea2f351582addb4cce26ed67171b470ed155690649b4131739b6ba1ec6e437c00d046442655b4d583b
   languageName: node
   linkType: hard
 
-"@payloadcms/storage-s3@npm:3.54.0":
-  version: 3.54.0
-  resolution: "@payloadcms/storage-s3@npm:3.54.0"
+"@payloadcms/storage-s3@npm:3.55.0":
+  version: 3.55.0
+  resolution: "@payloadcms/storage-s3@npm:3.55.0"
   dependencies:
     "@aws-sdk/client-s3": "npm:^3.614.0"
     "@aws-sdk/lib-storage": "npm:^3.614.0"
     "@aws-sdk/s3-request-presigner": "npm:^3.614.0"
-    "@payloadcms/plugin-cloud-storage": "npm:3.54.0"
+    "@payloadcms/plugin-cloud-storage": "npm:3.55.0"
   peerDependencies:
-    payload: 3.54.0
-  checksum: 10c0/1c2b245847b68242e7ae24ec99d882267820b0613176acf1c91fa2e809e4f1f892db6323cc6de251069895277f12315584a5fffb950f5b3bc4b11afded9f08bb
+    payload: 3.55.0
+  checksum: 10c0/43695910afe8949cada739c5123e9b4a43a3d64d3daab51144882d06980581a6023e7cbbd14ed9dbea96f0a005b8757193ff880d70c81e906135f3c03f0d0054
   languageName: node
   linkType: hard
 
-"@payloadcms/translations@npm:3.54.0":
-  version: 3.54.0
-  resolution: "@payloadcms/translations@npm:3.54.0"
+"@payloadcms/translations@npm:3.55.0":
+  version: 3.55.0
+  resolution: "@payloadcms/translations@npm:3.55.0"
   dependencies:
     date-fns: "npm:4.1.0"
-  checksum: 10c0/7ccb2a8dd0933dccfd720a285ff9b0607c829bc0d095965a412542df79c3172d1f64d1f8305f6e9c78b5a2748bfa1dcc084ca4c38f1f95bcabf3a2f605752a49
+  checksum: 10c0/42ecbc3a0f28620ecc55b34b80a3db343c40c3d3de9f914612fbb9601329c75961e36805d02eb4841672da3ad20fa72cae391856028d731559d4732320e12839
   languageName: node
   linkType: hard
 
-"@payloadcms/ui@npm:3.54.0":
-  version: 3.54.0
-  resolution: "@payloadcms/ui@npm:3.54.0"
+"@payloadcms/ui@npm:3.55.0":
+  version: 3.55.0
+  resolution: "@payloadcms/ui@npm:3.55.0"
   dependencies:
     "@date-fns/tz": "npm:1.2.0"
     "@dnd-kit/core": "npm:6.0.8"
@@ -3988,7 +4015,7 @@ __metadata:
     "@faceless-ui/scroll-info": "npm:2.0.0"
     "@faceless-ui/window-info": "npm:3.0.1"
     "@monaco-editor/react": "npm:4.7.0"
-    "@payloadcms/translations": "npm:3.54.0"
+    "@payloadcms/translations": "npm:3.55.0"
     bson-objectid: "npm:2.0.4"
     date-fns: "npm:4.1.0"
     dequal: "npm:2.0.3"
@@ -4005,10 +4032,10 @@ __metadata:
     uuid: "npm:10.0.0"
   peerDependencies:
     next: ^15.2.3
-    payload: 3.54.0
+    payload: 3.55.0
     react: ^19.0.0 || ^19.0.0-rc-65a56d0e-20241020
     react-dom: ^19.0.0 || ^19.0.0-rc-65a56d0e-20241020
-  checksum: 10c0/ead877daa686293437f47938a0621d31ba687c744507c6efe87df6399e67732833da25c3963ef50a02fa03ad2f1c24988cb2fdfc614a6132b067e7bb579cd389
+  checksum: 10c0/434b84b5d7812e722c9dbd6c0fd6000b695868323484ad9d534d7fae88368af6c7ed356503e0817c768904a8a5a6ee521bd4e133c45dd8c5fcccbf17f54748f0
   languageName: node
   linkType: hard
 
@@ -12205,10 +12232,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lexical@npm:0.28.0":
-  version: 0.28.0
-  resolution: "lexical@npm:0.28.0"
-  checksum: 10c0/0a255801ae2fec2cae27af46dd65479eb4cc7310c6b6f94792c4b6dc3686a3cdab0b215ce733dcf4cf4bfcf7d58499dd56a5117492929bf72917dd1eea543e3e
+"lexical@npm:0.35.0":
+  version: 0.35.0
+  resolution: "lexical@npm:0.35.0"
+  checksum: 10c0/22638a7dcef2bff6430330763617d0a040a1531594f5b1c681c992020f8bfb2081228d803fe18e7b202ce81c1134eeb502f6b8dbce2d0e482b33062aac17ef91
   languageName: node
   linkType: hard
 
@@ -13339,12 +13366,12 @@ __metadata:
     "@fullcalendar/luxon3": "npm:^6.1.19"
     "@fullcalendar/react": "npm:^6.1.19"
     "@fullcalendar/timegrid": "npm:^6.1.19"
-    "@payloadcms/db-mongodb": "npm:3.54.0"
-    "@payloadcms/db-sqlite": "npm:3.54.0"
-    "@payloadcms/live-preview-react": "npm:3.54.0"
-    "@payloadcms/next": "npm:3.54.0"
-    "@payloadcms/richtext-lexical": "npm:3.54.0"
-    "@payloadcms/storage-s3": "npm:3.54.0"
+    "@payloadcms/db-mongodb": "npm:3.55.0"
+    "@payloadcms/db-sqlite": "npm:3.55.0"
+    "@payloadcms/live-preview-react": "npm:3.55.0"
+    "@payloadcms/next": "npm:3.55.0"
+    "@payloadcms/richtext-lexical": "npm:3.55.0"
+    "@payloadcms/storage-s3": "npm:3.55.0"
     "@stylistic/eslint-plugin": "npm:^5.3.1"
     "@tanstack/eslint-plugin-query": "npm:^5.86.0"
     "@tanstack/react-query": "npm:^5.87.1"
@@ -13386,7 +13413,7 @@ __metadata:
     node-vault: "npm:^0.10.5"
     openapi-fetch: "npm:^0.14.0"
     openapi-typescript: "npm:^7.9.1"
-    payload: "npm:3.54.0"
+    payload: "npm:3.55.0"
     payload-authjs: "npm:^0.8.4"
     prettier: "npm:^3.6.2"
     react: "npm:^19.1.1"
@@ -14041,12 +14068,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"payload@npm:3.54.0":
-  version: 3.54.0
-  resolution: "payload@npm:3.54.0"
+"payload@npm:3.55.0":
+  version: 3.55.0
+  resolution: "payload@npm:3.55.0"
   dependencies:
     "@next/env": "npm:^15.1.5"
-    "@payloadcms/translations": "npm:3.54.0"
+    "@payloadcms/translations": "npm:3.55.0"
     "@types/busboy": "npm:1.5.4"
     ajv: "npm:8.17.1"
     bson-objectid: "npm:2.0.4"
@@ -14080,7 +14107,7 @@ __metadata:
     graphql: ^16.8.1
   bin:
     payload: bin.js
-  checksum: 10c0/b74364e62bab990fde1925f37e41910a5e35ceffaedbf6534764bf264670105660a4fca77ee3aed737db97b462426edbfa241772f67a1ede77629b0777cfe565
+  checksum: 10c0/68c09966e5e98ee5656b9647cc4b36096ffae06b8fd547751ca02995314b91f730c838b2d36fbd445741c0bfcd206171ff9a196ccc742125f4f4c6fdb8f3047e
   languageName: node
   linkType: hard
 
