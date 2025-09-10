@@ -3292,7 +3292,7 @@ es-419:
         #original_hash: fdba578
         short_name: Nombre breve
         #original_hash: f91b080
-        name_reason: Razón para el nombre
+        name_reason: Razón para el nombre (¡completar en <b>inglés</b>!)
         venue:
           #original_hash: 0f21717
           country_id: Región
