@@ -14,6 +14,10 @@ type WCAPost = {
   url: string;
   author_name: string;
   body: string;
+  user: {
+    user_id: number;
+    wca_id: string;
+  };
 };
 
 export async function POST(request: Request) {
@@ -33,14 +37,14 @@ export async function POST(request: Request) {
   await Promise.all(
     body.map(async (post) =>
       payload.create({
-        collection: "posts",
+        collection: "announcements",
         data: {
           title: post.title,
           "author name": post.author_name,
           slug: post.slug,
           sticky: post.sticky,
-          // @ts-expect-error payload still marks this as string even though it is richText
-          body: convertMarkdownToLexicalJSON(post.body),
+          // @ts-expect-error might be a payload bug?
+          content: convertMarkdownToLexicalJSON(post.body),
         },
         locale: "en",
         fallbackLocale: false,

@@ -10,7 +10,7 @@ namespace :next do
         &FaradayConfig
       )
       connection.post("/api/wca/import-posts") do |req|
-        req.body = Post.all.sample(1).to_json(teaser_only: false)
+        req.body = Post.all.sample(1).to_json(teaser_only: false, includes: ["user"])
       end
     end
   end

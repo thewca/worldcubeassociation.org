@@ -215,7 +215,6 @@ export interface Config {
     documents: Document;
     regulationsHistoryItem: RegulationsHistoryItem;
     tools: Tool;
-    posts: Post;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
@@ -235,7 +234,6 @@ export interface Config {
     documents: DocumentsSelect<false> | DocumentsSelect<true>;
     regulationsHistoryItem: RegulationsHistoryItemSelect<false> | RegulationsHistoryItemSelect<true>;
     tools: ToolsSelect<false> | ToolsSelect<true>;
-    posts: PostsSelect<false> | PostsSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
@@ -374,6 +372,7 @@ export interface Testimonial {
  */
 export interface Announcement {
   id: number;
+  slug: string;
   image?: (number | null) | Media;
   title: string;
   content: {
@@ -392,8 +391,11 @@ export interface Announcement {
     [k: string]: unknown;
   };
   contentMarkdown?: string | null;
-  publishedAt: string;
+  publishAt: string;
+  sticky?: boolean | null;
+  unstickAt?: string | null;
   publishedBy: string | User;
+  approvedBy?: (string | null) | User;
   updatedAt: string;
   createdAt: string;
 }
@@ -495,37 +497,6 @@ export interface Tool {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "posts".
- */
-export interface Post {
-  id: number;
-  slug: string;
-  title: string;
-  sticky?: boolean | null;
-  unstickAt?: string | null;
-  'author name': string;
-  body: {
-    root: {
-      type: string;
-      children: {
-        type: string;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  };
-  bodyMarkdown?: string | null;
-  approvedBy?: (string | null) | User;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-locked-documents".
  */
 export interface PayloadLockedDocument {
@@ -566,10 +537,6 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'tools';
         value: number | Tool;
-      } | null)
-    | ({
-        relationTo: 'posts';
-        value: number | Post;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -649,12 +616,16 @@ export interface TestimonialsSelect<T extends boolean = true> {
  * via the `definition` "announcements_select".
  */
 export interface AnnouncementsSelect<T extends boolean = true> {
+  slug?: T;
   image?: T;
   title?: T;
   content?: T;
   contentMarkdown?: T;
-  publishedAt?: T;
+  publishAt?: T;
+  sticky?: T;
+  unstickAt?: T;
   publishedBy?: T;
+  approvedBy?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -739,22 +710,6 @@ export interface ToolsSelect<T extends boolean = true> {
   isOfficial?: T;
   author?: T;
   category?: T;
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "posts_select".
- */
-export interface PostsSelect<T extends boolean = true> {
-  slug?: T;
-  title?: T;
-  sticky?: T;
-  unstickAt?: T;
-  'author name'?: T;
-  body?: T;
-  bodyMarkdown?: T;
-  approvedBy?: T;
   updatedAt?: T;
   createdAt?: T;
 }
