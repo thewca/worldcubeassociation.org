@@ -33,7 +33,7 @@
     "@tanstack/react-query": "^5.87.1",
     "@tanstack/react-table": "^8.21.3",
     "@wca/helpers": "^1.1.5",
-    "autonumeric": "^4.10.8",
+    "autonumeric": "^4.10.9",
     "autoprefixer": "^10.4.21",
     "autosize": "^6.0.1",
     "babel-loader": "^10.0.0",
