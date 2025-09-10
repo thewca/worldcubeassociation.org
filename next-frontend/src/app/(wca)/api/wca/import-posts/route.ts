@@ -1,9 +1,10 @@
-import { getPayload } from "payload";
+import { BasePayload, getPayload } from "payload";
 import config from "@payload-config";
 import {
   convertMarkdownToLexical,
   editorConfigFactory,
 } from "@payloadcms/richtext-lexical";
+import { User } from "@/types/payload";
 
 type WCAPost = {
   id: number;
@@ -11,13 +12,37 @@ type WCAPost = {
   slug: string;
   sticky: boolean;
   created_at: string;
+  unstick_at: string;
   url: string;
   author_name: string;
   body: string;
-  user: {
+  author: {
     user_id: number;
     wca_id: string;
+    email: string;
+    name: string;
   };
+};
+
+const findOrCreateUser = async (
+  author: { email: string; name: string },
+  payload: BasePayload,
+) => {
+  const user = await payload.find({
+    collection: "users",
+    where: { email: { equals: author.email } },
+  });
+  console.log(user);
+  if (user.docs.length > 0) {
+    return user.docs[0];
+  }
+  return payload.create({
+    collection: "users",
+    data: {
+      email: author.email,
+      name: author.name,
+    },
+  });
 };
 
 export async function POST(request: Request) {
@@ -34,24 +59,33 @@ export async function POST(request: Request) {
       markdown: markdown,
     });
 
-  await Promise.all(
-    body.map(async (post) =>
-      payload.create({
-        collection: "announcements",
-        data: {
-          title: post.title,
-          "author name": post.author_name,
-          slug: post.slug,
-          sticky: post.sticky,
-          // @ts-expect-error might be a payload bug?
-          content: convertMarkdownToLexicalJSON(post.body),
-        },
-        locale: "en",
-        fallbackLocale: false,
-        overrideAccess: true,
-      }),
-    ),
-  );
+  // Cache the users so we don't have to do a lookup for each post
+  const users: Record<string, User> = {};
+
+  for (let i = 0; i < body.length; i++) {
+    const post = body[i];
+    const publishedBy = users[post.author.email];
+    if (!publishedBy) {
+      users[post.author.email] = await findOrCreateUser(post.author, payload);
+    }
+
+    await payload.create({
+      collection: "announcements",
+      data: {
+        slug: post.slug,
+        title: post.title,
+        // @ts-expect-error might be a payload bug?
+        content: convertMarkdownToLexicalJSON(post.body),
+        publishAt: post.created_at,
+        sticky: post.sticky,
+        unstickAt: post.unstick_at,
+        publishedBy: users[post.author.email],
+        approvedBy: users[post.author.email],
+      },
+      locale: "en",
+      overrideAccess: true,
+    });
+  }
 
   return Response.json({ status: "ok" });
 }

@@ -32,6 +32,9 @@ export const Announcements: CollectionConfig = {
     markdownConvertedField("content"),
     {
       name: "publishAt",
+      admin: {
+        description: "The date the announcement will be published",
+      },
       type: "date",
       required: true,
     },

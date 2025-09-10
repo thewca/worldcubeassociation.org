@@ -9,8 +9,14 @@ namespace :next do
         },
         &FaradayConfig
       )
-      connection.post("/api/wca/import-posts") do |req|
-        req.body = Post.all.sample(1).to_json(teaser_only: false, includes: ["user"])
+      Post.find_in_batches(batch_size: 10) do |batch|
+        connection.post("/api/wca/import-posts") do |req|
+          req.body = batch.to_json(
+            teaser_only: false,
+            include: [author: { only: [:email] }],
+            only: %w[id slug title sticky created_at unstick_at]
+          )
+        end
       end
     end
   end

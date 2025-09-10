@@ -391,6 +391,9 @@ export interface Announcement {
     [k: string]: unknown;
   };
   contentMarkdown?: string | null;
+  /**
+   * The date the announcement will be published
+   */
   publishAt: string;
   sticky?: boolean | null;
   unstickAt?: string | null;
