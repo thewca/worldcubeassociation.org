@@ -22,6 +22,9 @@ type WCAPost = {
     email: string;
     name: string;
   };
+  post_tags: {
+    tag: string;
+  }[];
 };
 
 const findOrCreateUser = async (
@@ -32,7 +35,6 @@ const findOrCreateUser = async (
     collection: "users",
     where: { email: { equals: author.email } },
   });
-  console.log(user);
   if (user.docs.length > 0) {
     return user.docs[0];
   }
