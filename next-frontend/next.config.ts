@@ -27,7 +27,7 @@ const nextConfig: NextConfig = {
   async rewrites() {
     return [
       {
-        source: "/api_documentation",
+        source: "/api/documentation",
         destination: "/api.html",
       },
     ];
