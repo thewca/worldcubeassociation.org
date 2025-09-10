@@ -7,7 +7,7 @@
     "check:types": "tsc --noEmit",
     "build": "next build",
     "start": "next start",
-    "types:openapi": "openapi-typescript public/wcaAPI.yaml -o src/types/openapi.ts",
+    "types:openapi": "redocly bundle openapi/wcaCoreV0.yaml -o openapi/wcaAPI.yaml && openapi-typescript openapi/wcaAPI.yaml -o src/types/openapi.ts",
     "types:chakra": "chakra typegen ./src/theme.ts --outdir src/types/chakra --strict",
     "types:payload": "payload generate:types",
     "build:translations": "./build-translations.js",
@@ -63,6 +63,7 @@
   "devDependencies": {
     "@chakra-ui/cli": "^3.26.0",
     "@eslint/eslintrc": "^3",
+    "@redocly/cli": "2.0.8",
     "@stylistic/eslint-plugin": "^5.3.1",
     "@tanstack/eslint-plugin-query": "^5.86.0",
     "@testing-library/dom": "^10.4.1",
