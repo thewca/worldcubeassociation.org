@@ -8,9 +8,11 @@ import { TFunction } from "i18next";
 export default function PsychsheetTable({
   pychsheet,
   t,
+  setSortBy,
 }: {
   pychsheet: components["schemas"]["PsychSheet"];
   t: TFunction;
+  setSortBy: (sortBy: string) => void;
 }) {
   return (
     <Table.Root width="100%">
@@ -20,8 +22,12 @@ export default function PsychsheetTable({
           <Table.ColumnHeader>Name</Table.ColumnHeader>
           <Table.ColumnHeader>Representing</Table.ColumnHeader>
           <Table.ColumnHeader>WR</Table.ColumnHeader>
-          <Table.ColumnHeader>Single</Table.ColumnHeader>
-          <Table.ColumnHeader>Average</Table.ColumnHeader>
+          <Table.ColumnHeader onClick={() => setSortBy("single")}>
+            Single
+          </Table.ColumnHeader>
+          <Table.ColumnHeader onClick={() => setSortBy("average")}>
+            Average
+          </Table.ColumnHeader>
           <Table.ColumnHeader>WR</Table.ColumnHeader>
         </Table.Row>
       </Table.Header>

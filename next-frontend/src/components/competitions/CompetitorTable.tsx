@@ -13,7 +13,7 @@ export default function CompetitorTable({
   setPsychSheetEvent,
 }: {
   eventIds: string[];
-  registrations: components["schemas"]["RegistrationData"][];
+  registrations: components["schemas"]["RegistrationDataV2"][];
   setPsychSheetEvent: (eventId: string) => void;
   t: TFunction;
 }) {

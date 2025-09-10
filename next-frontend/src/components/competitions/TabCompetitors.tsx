@@ -1,22 +1,9 @@
 "use client";
 import React, { useMemo, useState } from "react";
-import {
-  Card,
-  Text,
-  Table,
-  Center,
-  Spinner,
-  Link,
-  HStack,
-  Icon,
-} from "@chakra-ui/react";
-import EventIcon from "@/components/EventIcon";
-import CountryMap from "@/components/CountryMap";
+import { Card, Text, Center, Spinner } from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
 import useAPI from "@/lib/wca/useAPI";
 import { useT } from "@/lib/i18n/useI18n";
-import { route } from "nextjs-routes";
-import Flag from "react-world-flags";
 import EventSelector from "@/components/EventSelector";
 import CompetitorTable from "@/components/competitions/CompetitorTable";
 import PsychsheetTable from "@/components/competitions/PsychsheetTable";
@@ -36,7 +23,7 @@ const TabCompetitors: React.FC<CompetitorData> = ({ id }) => {
   const { data: registrationsQuery, isFetching } = useQuery({
     queryKey: ["registrations", id],
     queryFn: () =>
-      api.GET("/v0/competitions/{competitionId}/registrations", {
+      api.GET("/v1/competitions/{competitionId}/registrations", {
         params: { path: { competitionId: id } },
       }),
   });
@@ -45,7 +32,7 @@ const TabCompetitors: React.FC<CompetitorData> = ({ id }) => {
     {
       queryKey: ["psychSheets", id, psychSheetEvent, sortBy],
       queryFn: () =>
-        v0api.GET("/competitions/{competitionId}/psych-sheet/{eventId}", {
+        v0api.GET("/v0/competitions/{competitionId}/psych-sheet/{eventId}", {
           params: {
             path: { competitionId: id, eventId: psychSheetEvent! },
             query: { sort_by: sortBy },
@@ -91,7 +78,11 @@ const TabCompetitors: React.FC<CompetitorData> = ({ id }) => {
           />
         </Card.Title>
         {psychSheetEvent && (
-          <PsychsheetTable pychsheet={psychSheetQuery!.data!} t={t} />
+          <PsychsheetTable
+            pychsheet={psychSheetQuery!.data!}
+            t={t}
+            setSortBy={setSortBy}
+          />
         )}
         {!psychSheetEvent && (
           <CompetitorTable
