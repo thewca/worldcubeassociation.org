@@ -10233,7 +10233,7 @@ __metadata:
     sass: "npm:^1.92.1"
     sass-loader: "npm:^16.0.5"
     semantic-ui-react: "npm:^2.1.5"
-    shakapacker: "npm:8.3.0"
+    shakapacker: "npm:8.4.0"
     style-loader: "npm:^4.0.0"
     stylelint: "npm:^16.24.0"
     stylelint-config-recommended-scss: "npm:^16.0.0"
@@ -10563,9 +10563,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"shakapacker@npm:8.3.0":
-  version: 8.3.0
-  resolution: "shakapacker@npm:8.3.0"
+"shakapacker@npm:8.4.0":
+  version: 8.4.0
+  resolution: "shakapacker@npm:8.4.0"
   dependencies:
     js-yaml: "npm:^4.1.0"
     path-complete-extname: "npm:^1.0.0"
@@ -10582,14 +10582,17 @@ __metadata:
     webpack: ^5.76.0
     webpack-assets-manifest: ^5.0.6 || ^6.0.0
     webpack-cli: ^4.9.2 || ^5.0.0 || ^6.0.0
-    webpack-dev-server: ^4.9.0 || ^5.0.0
+    webpack-dev-server: ^4.15.2 || ^5.2.2
     webpack-merge: ^5.8.0 || ^6.0.0
+    webpack-subresource-integrity: ^5.1.0
   peerDependenciesMeta:
     "@types/babel__core":
       optional: true
     "@types/webpack":
       optional: true
-  checksum: 10c0/ddcac57f13458eabdb2ca1a021013acc28b6d3dc74e82dece3a485e64f0e3b6ab789d4ba725c8f748c78bcbfe8427ef82782f7cd8024c954ffd4c12a0cd25a22
+    webpack-subresource-integrity:
+      optional: true
+  checksum: 10c0/470135fcda066060547904dcf8646e9b39af3f79a5fbdd4fdafef324b3eff38f5603f0fe84622337518851285a725f31aee115685436c1858262d095643e70fd
   languageName: node
   linkType: hard
 
