@@ -4,7 +4,7 @@
  */
 
 export interface paths {
-    "/competitions/{competitionId}/": {
+    "/v0/competitions/{competitionId}/": {
         parameters: {
             query?: never;
             header?: never;
@@ -21,7 +21,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/competitions/{competitionId}/events": {
+    "/v0/competitions/{competitionId}/events": {
         parameters: {
             query?: never;
             header?: never;
@@ -38,7 +38,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/competitions/{competitionId}/schedule": {
+    "/v0/competitions/{competitionId}/schedule": {
         parameters: {
             query?: never;
             header?: never;
@@ -55,7 +55,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/competitions/{competitionId}/registrations": {
+    "/v0/competitions/{competitionId}/registrations": {
         parameters: {
             query?: never;
             header?: never;
@@ -72,7 +72,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/competitions/{competitionId}/podiums": {
+    "/v0/competitions/{competitionId}/podiums": {
         parameters: {
             query?: never;
             header?: never;
@@ -89,7 +89,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/competition_index": {
+    "/v0/competition_index": {
         parameters: {
             query?: never;
             header?: never;
@@ -106,7 +106,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/incidents": {
+    "/v0/incidents": {
         parameters: {
             query?: never;
             header?: never;
@@ -123,7 +123,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/persons/{wca_id}/": {
+    "/v0/persons/{wca_id}/": {
         parameters: {
             query?: never;
             header?: never;
@@ -140,7 +140,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/persons/{wca_id}/results": {
+    "/v0/persons/{wca_id}/results": {
         parameters: {
             query?: never;
             header?: never;
@@ -157,7 +157,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/user_groups": {
+    "/v0/user_groups": {
         parameters: {
             query?: never;
             header?: never;
@@ -174,7 +174,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/user_roles": {
+    "/v0/user_roles": {
         parameters: {
             query?: never;
             header?: never;
@@ -191,7 +191,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/users/me/permissions": {
+    "/v0/users/me/permissions": {
         parameters: {
             query?: never;
             header?: never;
@@ -208,7 +208,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/regulations/translations": {
+    "/v0/regulations/translations": {
         parameters: {
             query?: never;
             header?: never;
@@ -225,7 +225,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/export/public": {
+    "/v0/export/public": {
         parameters: {
             query?: never;
             header?: never;
@@ -242,7 +242,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/known-timezones": {
+    "/v0/known-timezones": {
         parameters: {
             query?: never;
             header?: never;
@@ -259,7 +259,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/regional-organizations": {
+    "/v0/regional-organizations": {
         parameters: {
             query?: never;
             header?: never;

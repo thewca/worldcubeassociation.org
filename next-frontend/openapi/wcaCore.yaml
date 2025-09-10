@@ -9,47 +9,47 @@ info:
     email: software@worldcubeassociation.org
   version: 0.1.0
 servers:
-  - url: http://localhost:3000/api/v0
+  - url: http://localhost:3000/api/
     description: The production API server
 paths:
-  /competitions/{competitionId}/:
+  /v0/competitions/{competitionId}/:
     $ref: 'paths/competitions/competitionById.yaml'
-  /competitions/{competitionId}/events:
+  /v0/competitions/{competitionId}/events:
     $ref: 'paths/competitions/competitionEvents.yaml'
-  /competitions/{competitionId}/schedule:
+  /v0/competitions/{competitionId}/schedule:
     $ref: 'paths/competitions/competitionSchedule.yaml'
-  /competitions/{competitionId}/registrations:
+  /v0/competitions/{competitionId}/registrations:
     $ref: 'paths/competitions/competitionRegistrations.yaml'
-  /competitions/{competitionId}/podiums:
+  /v0/competitions/{competitionId}/podiums:
     $ref: 'paths/competitions/competitionPodiums.yaml'
-  /competition_index:
+  /v0/competition_index:
     $ref: 'paths/competitions/competitionList.yaml'
 
-  /incidents:
+  /v0/incidents:
     $ref: 'paths/regulations/incidentsList.yaml'
 
-  /persons/{wca_id}/:
+  /v0/persons/{wca_id}/:
     $ref: 'paths/users/personByWCAId.yaml'
-  /persons/{wca_id}/results:
+  /v0/persons/{wca_id}/results:
     $ref: 'paths/users/personResults.yaml'
 
-  /user_groups:
+  /v0/user_groups:
     $ref: 'paths/users/userGroups.yaml'
-  /user_roles:
+  /v0/user_roles:
     $ref: 'paths/users/userRoles.yaml'
-  /users/me/permissions:
+  /v0/users/me/permissions:
     $ref: 'paths/users/userPermissions.yaml'
 
-  /regulations/translations:
+  /v0/regulations/translations:
     $ref: 'paths/regulations/regulationTranslations.yaml'
 
-  /export/public:
+  /v0/export/public:
     $ref: 'paths/results/publicExports.yaml'
 
-  /known-timezones:
+  /v0/known-timezones:
     $ref: 'paths/wca/knownTimezones.yaml'
 
-  /regional-organizations:
+  /v0/regional-organizations:
     $ref: 'paths/wca/regionalOrganizations.yaml'
 
 components:

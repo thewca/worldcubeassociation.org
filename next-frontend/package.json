@@ -7,7 +7,7 @@
     "check:types": "tsc --noEmit",
     "build": "next build",
     "start": "next start",
-    "types:openapi": "redocly bundle openapi/wcaCoreV0.yaml -o openapi/wcaAPI.yaml && openapi-typescript openapi/wcaAPI.yaml -o src/types/openapi.ts && redocly build-docs openapi/wcaAPI.yaml -o public/api.html",
+    "types:openapi": "redocly bundle openapi/wcaCore.yaml -o openapi/wcaAPI.yaml && openapi-typescript openapi/wcaAPI.yaml -o src/types/openapi.ts && redocly build-docs openapi/wcaAPI.yaml -o public/api.html",
     "types:chakra": "chakra typegen ./src/theme.ts --outdir src/types/chakra --strict",
     "types:payload": "payload generate:types",
     "build:translations": "./build-translations.js",
