@@ -32,7 +32,9 @@ export default function PaymentStepWrapper({
     return <Loading />;
   }
 
-  if (payments.length > 0) {
+  const completedPayments = payments.filter((payment) => payment.is_completed)
+
+  if (completedPayments.length > 0) {
     return (
       <PaymentOverview
         payments={payments}

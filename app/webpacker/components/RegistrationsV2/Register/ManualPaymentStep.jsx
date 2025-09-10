@@ -52,14 +52,14 @@ export default function ManualPaymentStep({
 
   return (
     <Segment>
-      <Header as="h2">{I18n.t('competitions.registration_v2.list.payment.payment_info')}</Header>
+      <Header as="h2">{I18n.t('registrations.payment_form.manual.payment_info')}</Header>
       <Message>
         <Markdown id="paymentInfo" md={competitionInfo.manual_payment_details.payment_information} />
       </Message>
       <Form id="manual-payment-form" action={paymentFinishUrl(competitionInfo.id, 'manual')} method="GET">
         <Form.Field required disabled={hasPaid}>
-          <label htmlFor="paymentReference">{I18n.t('competitions.registration_v2.list.payment.payment_reference')}</label>
-          <Form.Checkbox id="paymentConfirm" onChange={setPaymentConfirmation} checked={paymentConfirmation} label={I18n.t('competitions.registration_v2.list.payment.confirmation')} />
+          <label htmlFor="paymentReference">{I18n.t('registrations.payment_form.manual.payment_reference')}</label>
+          <Form.Checkbox id="paymentConfirm" onChange={setPaymentConfirmation} checked={paymentConfirmation} label={I18n.t('registrations.payment_form.manual.confirmation')} />
         </Form.Field>
         <Form.Field>
           <Header as="h5">{I18n.t('registrations.payment_form.labels.subtotal')}</Header>
@@ -73,7 +73,7 @@ export default function ManualPaymentStep({
           <Form.Input id="paymentReference" name="payment_reference" value={paymentReference} onChange={updatePaymentReference} />
         </Form.Field>
         <Form.Button type="submit" disabled={hasPaid || !paymentConfirmation || !paymentReferenceChanged}>
-          {I18n.t('registrations.payment_form.manual_button_text')}
+          {I18n.t('registrations.payment_form.manual.submit')}
         </Form.Button>
         <input hidden name="client_secret" value={data.client_secret} />
       </Form>
