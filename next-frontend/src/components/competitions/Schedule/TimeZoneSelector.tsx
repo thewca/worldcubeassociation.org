@@ -49,7 +49,7 @@ export default function TimeZoneSelector({
 
   const { data: apiTimeZones } = useQuery({
     queryKey: ["backend-timezones"],
-    queryFn: () => api.GET("/known-timezones"),
+    queryFn: () => api.GET("/v0/known-timezones"),
     select: (data) => data.data,
   });
 

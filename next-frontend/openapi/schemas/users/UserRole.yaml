@@ -1,0 +1,40 @@
+type: object
+required:
+  - id
+  - start_date
+  - end_date
+  - group
+  - user
+  - metadata
+properties:
+  id:
+    type: integer
+  start_date:
+    type: string
+    format: date
+  end_date:
+    type: string
+    format: date
+    nullable: true
+  group:
+    $ref: './UserGroup.yaml'
+  user:
+    $ref: './Person.yaml'
+  metadata:
+    type: object
+    properties:
+      id:
+        type: integer
+      status:
+        type: string
+      created_at:
+        type: string
+        format: date-time
+      updated_at:
+        type: string
+        format: date-time
+      email:
+        type: string
+        format: email
+  class:
+    type: string

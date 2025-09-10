@@ -1,0 +1,55 @@
+type: object
+required:
+  - id
+  - pos
+  - best
+  - average
+  - name
+  - country_iso2
+  - competition_id
+  - event_id
+  - round_type_id
+  - format_id
+  - wca_id
+  - attempts
+  - best_index
+  - worst_index
+  - regional_single_record
+  - regional_average_record
+properties:
+  id:
+    type: integer
+  pos:
+    type: integer
+  best:
+    type: integer
+  average:
+    type: integer
+  name:
+    type: string
+  country_iso2:
+    type: string
+  competition_id:
+    type: string
+  event_id:
+    type: string
+  round_type_id:
+    type: string
+  format_id:
+    type: string
+  wca_id:
+    type: string
+  attempts:
+    type: array
+    items:
+      type: integer
+  best_index:
+    type: integer
+  worst_index:
+    type: integer
+  regional_single_record:
+    type: string
+    nullable: true
+  regional_average_record:
+    type: string
+    nullable: true

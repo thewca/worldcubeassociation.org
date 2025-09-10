@@ -36,7 +36,7 @@ const TabCompetitors: React.FC<CompetitorData> = ({ id }) => {
   const { data: registrationsQuery, isFetching } = useQuery({
     queryKey: ["registrations", id],
     queryFn: () =>
-      api.GET("/competitions/{competitionId}/registrations", {
+      api.GET("/v0/competitions/{competitionId}/registrations", {
         params: { path: { competitionId: id } },
       }),
   });
