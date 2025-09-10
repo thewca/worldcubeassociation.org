@@ -12,7 +12,7 @@ export interface paths {
             cookie?: never;
         };
         /** Get competition registrations */
-        get: operations["competitionRegistrations"];
+        get: operations["competitionRegistrationsV2"];
         put?: never;
         post?: never;
         delete?: never;
@@ -975,7 +975,7 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
-    competitionRegistrations: {
+    competitionRegistrationsV2: {
         parameters: {
             query?: never;
             header?: never;

@@ -3,7 +3,7 @@ get:
   tags:
     - competitions
     - registrations
-  operationId: competitionRegistrations
+  operationId: competitionRegistrationsV2
   parameters:
     - name: competitionId
       in: path

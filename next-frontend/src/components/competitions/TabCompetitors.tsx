@@ -16,8 +16,7 @@ const TabCompetitors: React.FC<CompetitorData> = ({ id }) => {
   const [psychSheetEvent, setPsychSheetEvent] = useState<string | null>(null);
   const [sortBy, setSortBy] = useState<string>("average");
 
-  const api = useAPI(true);
-  const v0api = useAPI(false);
+  const api = useAPI();
   const { t } = useT();
 
   const { data: registrationsQuery, isFetching } = useQuery({
@@ -32,7 +31,7 @@ const TabCompetitors: React.FC<CompetitorData> = ({ id }) => {
     {
       queryKey: ["psychSheets", id, psychSheetEvent, sortBy],
       queryFn: () =>
-        v0api.GET("/v0/competitions/{competitionId}/psych-sheet/{eventId}", {
+        api.GET("/v0/competitions/{competitionId}/psych-sheet/{eventId}", {
           params: {
             path: { competitionId: id, eventId: psychSheetEvent! },
             query: { sort_by: sortBy },
