@@ -490,12 +490,12 @@ RSpec.describe "competitions" do
     end
 
     context 'connecting a manual integration' do
-      let(:unencoded_payment_information) { 'example instructions' }
-      let(:manual_payment_reference) { 'test ref' }
+      let(:unencoded_payment_instructions) { 'example instructions' }
+      let(:manual_payment_reference_label) { 'test ref' }
 
       before do
         get competition_connect_payment_integration_path(competition, 'manual'), params: {
-          payment_information: "ZXhhbXBsZSBpbnN0cnVjdGlvbnM", payment_reference: "test ref"
+          payment_instructions: "ZXhhbXBsZSBpbnN0cnVjdGlvbnM", payment_reference_label: "test ref"
         }
       end
 
@@ -509,8 +509,8 @@ RSpec.describe "competitions" do
 
       it 'populates the integration with the submitted data' do
         integration = ManualPaymentIntegration.first
-        expect(integration.payment_information).to eq(unencoded_payment_information)
-        expect(integration.payment_reference).to eq(manual_payment_reference)
+        expect(integration.payment_instructions).to eq(unencoded_payment_instructions)
+        expect(integration.payment_reference_label).to eq(manual_payment_reference_label)
       end
     end
   end
