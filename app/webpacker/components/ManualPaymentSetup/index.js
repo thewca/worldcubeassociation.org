@@ -13,8 +13,8 @@ function utf8ToBase64(str) {
 }
 
 export default function ManualPaymentSetup({ competitionId, accountDetails = null }) {
-  const [paymentInfo, setPaymentInfo] = useInputState(accountDetails?.payment_information);
-  const [paymentReference, setPaymentReference] = useInputState(accountDetails?.payment_reference);
+  const [paymentInstructions, setPaymentInstructions] = useInputState(accountDetails?.payment_instructions);
+  const [paymentReferenceLabel, setPaymentReferenceLabel] = useInputState(accountDetails?.payment_reference_label);
 
   return (
     <>
@@ -25,17 +25,17 @@ export default function ManualPaymentSetup({ competitionId, accountDetails = nul
         <Form.Field
           label={I18n.t('payments.payment_setup.account_details.manual.payment_info')}
           control={MarkdownEditor}
-          value={paymentInfo}
-          onChange={setPaymentInfo}
+          value={paymentInstructions}
+          onChange={setPaymentInstructions}
           imageUploadEnabled
         />
         {/* Transport the Markdown covertly through Base64 to maintain line breaks */}
-        <input value={utf8ToBase64(paymentInfo)} name="payment_information" hidden />
+        <input value={utf8ToBase64(paymentInstructions)} name="payment_instructions" hidden />
         <Form.Input
           label={I18n.t('payments.payment_setup.account_details.manual.payment_reference')}
-          name="payment_reference"
-          value={paymentReference}
-          onChange={setPaymentReference}
+          name="payment_reference_label"
+          value={paymentReferenceLabel}
+          onChange={setPaymentReferenceLabel}
         />
         <Form.Button primary type="submit">
           Submit
