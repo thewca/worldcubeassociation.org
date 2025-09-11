@@ -47,7 +47,7 @@ class ManualPaymentIntegration < ApplicationRecord
     # from the new one, so we can update it in update_status. This is simulating getting an updated version
     # from a payment provider after paying
     ManualPaymentRecord.find(params[:client_secret]).tap do |mpr|
-      mpr.payment_reference = params[:payment_reference]
+      mpr.payment_reference = params[:payment_reference_label]
       mpr.manual_status = ManualPaymentRecord.manual_statuses[:user_submitted]
     end
   end
@@ -63,14 +63,14 @@ class ManualPaymentIntegration < ApplicationRecord
   end
 
   def account_details
-    serializable_hash(only: %i[payment_information payment_reference])
+    serializable_hash(only: %i[payment_instructions payment_reference_label])
   end
 
   def self.connect_integration(form_params)
-    model_attributes = form_params.permit(:payment_information, :payment_reference)
+    model_attributes = form_params.permit(:payment_instructions, :payment_reference_label)
 
     # We need to pipe the `payment_information` field through Markdown, because otherwise line breaks are lost :(
-    model_attributes[:payment_information] = Base64.decode64(form_params[:payment_information].to_s).force_encoding("UTF-8")
+    model_attributes[:payment_instructions] = Base64.decode64(form_params[:payment_instructions].to_s).force_encoding("UTF-8")
 
     ManualPaymentIntegration.new(model_attributes)
   end

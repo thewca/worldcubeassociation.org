@@ -224,6 +224,7 @@ class CompetitionsController < ApplicationController
 
   def payment_integration_manual_setup
     @competition = competition_from_params
+    @account_details = @competition.payment_account_for(:manual)&.account_details
   end
 
   def payment_integration_setup
@@ -263,13 +264,12 @@ class CompetitionsController < ApplicationController
 
     raise ActionController::RoutingError.new("No integration reference submitted") if integration_reference.blank?
 
-    if payment_integration == :manual && competition.manual_payment_details.present?
-      existing_cpi = competition.competition_payment_integrations.first
-
-      # Small hack: We allow de-facto updates by "re-connecting" manual payment in the UI.
-      #   This is done to allow edits to a Manual CPI, but coding a proper `PATCH` form
-      #   would break the mold of the usual OAuth flow with "proper" payment providers.
-      existing_cpi.connected_account.update(**integration_reference.account_details)
+    # Small hack: We allow de-facto updates by "re-connecting" manual payment in the UI.
+    #   This is done to allow edits to a Manual CPI, but coding a proper `PATCH` form
+    #   would break the mold of the usual OAuth flow with "proper" payment providers.
+    existing_manual_cpi = competition.payment_account_for(:manual) if payment_integration == :manual
+    if existing_manual_cpi&.account_details.present?
+      existing_manual_cpi.update(**integration_reference.account_details)
     else
       competition.competition_payment_integrations.build(connected_account: integration_reference)
     end

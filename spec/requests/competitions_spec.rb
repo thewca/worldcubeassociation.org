@@ -490,12 +490,12 @@ RSpec.describe "competitions" do
     end
 
     context 'connecting a manual integration' do
-      let(:unencoded_payment_information) { 'example instructions' }
-      let(:manual_payment_reference) { 'test ref' }
+      let(:unencoded_payment_instructions) { 'example instructions' }
+      let(:manual_payment_reference_label) { 'test ref' }
 
       before do
         get competition_connect_payment_integration_path(competition, 'manual'), params: {
-          payment_information: "ZXhhbXBsZSBpbnN0cnVjdGlvbnM", payment_reference: "test ref"
+          payment_instructions: "ZXhhbXBsZSBpbnN0cnVjdGlvbnM", payment_reference_label: "test ref"
         }
       end
 
@@ -509,8 +509,52 @@ RSpec.describe "competitions" do
 
       it 'populates the integration with the submitted data' do
         integration = ManualPaymentIntegration.first
-        expect(integration.payment_information).to eq(unencoded_payment_information)
-        expect(integration.payment_reference).to eq(manual_payment_reference)
+        expect(integration.payment_instructions).to eq(unencoded_payment_instructions)
+        expect(integration.payment_reference_label).to eq(manual_payment_reference_label)
+      end
+    end
+
+    context 'updating a manual integration' do
+      let(:comp_with_manual_integration) do
+        create(:competition, :with_delegate, :future, :visible, :with_valid_schedule, :manual_connected)
+      end
+      let(:updated_instructions) { 'Updated instructions' }
+      let(:updated_label) { 'Updated label' }
+
+      before do
+        sign_in comp_with_manual_integration.delegates.first
+      end
+
+      it 'returns redirects to confirmation page response' do
+        get competition_connect_payment_integration_path(comp_with_manual_integration, 'manual'), params: {
+          payment_instructions: "VXBkYXRlZCBpbnN0cnVjdGlvbnM=", payment_reference_label: updated_label
+        }
+
+        expect(response).to redirect_to(competition_payment_integration_setup_path(comp_with_manual_integration))
+      end
+
+      it 'does not create a new connected_payment_integration record' do
+        expect(ManualPaymentIntegration.count).to eq(1) # Confirm we already have a manual payment integration
+
+        get competition_connect_payment_integration_path(comp_with_manual_integration, 'manual'), params: {
+          payment_instructions: "VXBkYXRlZCBpbnN0cnVjdGlvbnM=", payment_reference_label: updated_label
+        }
+
+        expect(ManualPaymentIntegration.count).to eq(1)
+      end
+
+      it 'updates the integration with the submitted data' do
+        # Confirm the existing integration data is different to what we're submitting - we expect the values from the factory
+        integration = ManualPaymentIntegration.first
+        expect(integration.payment_instructions).to eq("Cash in an unmarked envelope left under a bench in the park")
+        expect(integration.payment_reference_label).to eq("Bench Location")
+
+        get competition_connect_payment_integration_path(comp_with_manual_integration, 'manual'), params: {
+          payment_instructions: "VXBkYXRlZCBpbnN0cnVjdGlvbnM=", payment_reference_label: updated_label
+        }
+
+        expect(integration.reload.payment_instructions).to eq(updated_instructions)
+        expect(integration.reload.payment_reference_label).to eq(updated_label)
       end
     end
   end
