@@ -267,10 +267,9 @@ class CompetitionsController < ApplicationController
     # Small hack: We allow de-facto updates by "re-connecting" manual payment in the UI.
     #   This is done to allow edits to a Manual CPI, but coding a proper `PATCH` form
     #   would break the mold of the usual OAuth flow with "proper" payment providers.
-    if payment_integration == :manual && competition.payment_account_for(:manual)&.account_details.present?
-      existing_cpi = competition.competition_payment_integrations.first
-
-      existing_cpi.connected_account.update(**integration_reference.account_details)
+    existing_manual_cpi = competition.payment_account_for(:manual) if payment_integration == :manual
+    if existing_manual_cpi&.account_details.present?
+      existing_manual_cpi.update(**integration_reference.account_details)
     else
       competition.competition_payment_integrations.build(connected_account: integration_reference)
     end

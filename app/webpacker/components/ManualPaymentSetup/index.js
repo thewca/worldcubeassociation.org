@@ -23,7 +23,7 @@ export default function ManualPaymentSetup({ competitionId, accountDetails = nul
       </Header>
       <Form method="GET" action={connectPaymentIntegrationUrl(competitionId, 'manual')}>
         <Form.Field
-          label={I18n.t('payments.payment_setup.account_details.manual.payment_info')}
+          label={I18n.t('payments.payment_setup.account_details.manual.payment_instructions')}
           control={MarkdownEditor}
           value={paymentInstructions}
           onChange={setPaymentInstructions}
@@ -32,7 +32,7 @@ export default function ManualPaymentSetup({ competitionId, accountDetails = nul
         {/* Transport the Markdown covertly through Base64 to maintain line breaks */}
         <input value={utf8ToBase64(paymentInstructions)} name="payment_instructions" hidden />
         <Form.Input
-          label={I18n.t('payments.payment_setup.account_details.manual.payment_reference')}
+          label={I18n.t('payments.payment_setup.account_details.manual.payment_reference_label')}
           name="payment_reference_label"
           value={paymentReferenceLabel}
           onChange={setPaymentReferenceLabel}

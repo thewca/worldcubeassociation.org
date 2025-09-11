@@ -513,6 +513,35 @@ RSpec.describe "competitions" do
         expect(integration.payment_reference_label).to eq(manual_payment_reference_label)
       end
     end
+
+    context 'updating a manual integration', :zxc do
+      let(:comp_with_manual_integration) { create(
+        :competition, :with_delegate, :future, :visible, :with_valid_schedule, :manual_connected
+      ) }
+      let(:updated_instructions) { 'Updated instructions' }
+      let(:updated_label) { 'Updated label' }
+
+      before do
+        sign_in comp_with_manual_integration.delegates.first
+        get competition_connect_payment_integration_path(comp_with_manual_integration, 'manual'), params: {
+          payment_instructions: updated_instructions, payment_reference_label: updated_label
+        }
+      end
+
+      it 'returns redirects to confirmation page response' do
+        expect(response).to redirect_to(competition_payment_integration_setup_path(competition))
+      end
+
+      it 'does not create a new connected_payment_integration record' do
+        expect(ManualPaymentIntegration.count).to eq(1)
+      end
+
+      it 'updates the integration with the submitted data' do
+        integration = ManualPaymentIntegration.first
+        expect(integration.payment_instructions).to eq(updated_instructions)
+        expect(integration.payment_reference_label).to eq(updated_label)
+      end
+    end
   end
 end
 

@@ -2314,8 +2314,8 @@ en:
           display_name: "Name"
           primary_email: "Email"
         manual:
-          payment_info: "Payment instructions (will be displayed on Competition Page)"
-          payment_reference: "What information should the user provide for you to identify their payment? (eg, payment reference number / account ID / etc)"
+          payment_instructions: "Payment instructions (will be displayed on Competition Page)"
+          payment_reference_label: "What information should the user provide for you to identify their payment? (eg, payment reference number / account ID / etc)"
         fallback_not_applicable: "N/A"
   persons:
     #context: Person search page
