@@ -13,8 +13,12 @@ function utf8ToBase64(str) {
 }
 
 export default function ManualPaymentSetup({ competitionId, accountDetails = null }) {
-  const [paymentInstructions, setPaymentInstructions] = useInputState(accountDetails?.payment_instructions);
-  const [paymentReferenceLabel, setPaymentReferenceLabel] = useInputState(accountDetails?.payment_reference_label);
+  const [paymentInstructions, setPaymentInstructions] = useInputState(
+    accountDetails?.payment_instructions,
+  );
+  const [paymentReferenceLabel, setPaymentReferenceLabel] = useInputState(
+    accountDetails?.payment_reference_label,
+  );
 
   return (
     <>

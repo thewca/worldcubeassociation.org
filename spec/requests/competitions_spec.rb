@@ -515,9 +515,9 @@ RSpec.describe "competitions" do
     end
 
     context 'updating a manual integration' do
-      let(:comp_with_manual_integration) { create(
-        :competition, :with_delegate, :future, :visible, :with_valid_schedule, :manual_connected
-      ) }
+      let(:comp_with_manual_integration) do
+        create(:competition, :with_delegate, :future, :visible, :with_valid_schedule, :manual_connected)
+      end
       let(:updated_instructions) { 'Updated instructions' }
       let(:updated_label) { 'Updated label' }
 
