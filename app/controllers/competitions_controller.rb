@@ -279,6 +279,7 @@ class CompetitionsController < ApplicationController
     else
       flash[:danger] = t('payments.payment_setup.account_not_connected', provider: t("payments.payment_providers.#{payment_integration}"))
     end
+
     redirect_to competition_payment_integration_setup_path(competition)
   end
 
