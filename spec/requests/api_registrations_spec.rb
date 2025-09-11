@@ -1345,7 +1345,7 @@ RSpec.describe 'API Registrations' do
     end
 
     context 'manual payment integration' do
-      let(:comp) { create(:competition, :manual_payments, :registration_open, :visible) }
+      let(:comp) { create(:competition, :manual_connected, :registration_open, :visible) }
       let(:reg) { create(:registration, competition: comp) }
       let(:headers) { { 'Authorization' => fetch_jwt_token(reg.user_id) } }
 
@@ -1392,7 +1392,7 @@ RSpec.describe 'API Registrations' do
   describe 'GET #payment_completion' do
     context 'manual payments' do
       context 'first-time payment' do
-        let(:comp) { create(:competition, :manual_payments, :registration_open, :visible) }
+        let(:comp) { create(:competition, :manual_connected, :registration_open, :visible) }
         let(:reg) { create(:registration, competition: comp) }
         let(:payment_intent) { create(:payment_intent, :manual, holder: reg) }
         let(:manual_record) { payment_intent.payment_record }
@@ -1422,7 +1422,7 @@ RSpec.describe 'API Registrations' do
       end
 
       context 'updating payment reference' do
-        let(:comp) { create(:competition, :manual_payments, :registration_open, :visible) }
+        let(:comp) { create(:competition, :manual_connected, :registration_open, :visible) }
         let(:reg) { create(:registration, competition: comp) }
         let(:payment_intent) { create(:payment_intent, :manual_requires_capture, holder: reg) }
         let(:manual_record) { payment_intent.payment_record }

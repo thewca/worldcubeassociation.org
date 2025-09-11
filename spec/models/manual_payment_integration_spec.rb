@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe ManualPaymentIntegration do
   describe '#prepare_intent' do
-    let(:competition) { create(:competition, :manual_payments) }
+    let(:competition) { create(:competition, :manual_connected) }
     let(:registration) { create(:registration, competition: competition) }
     let(:payment_account) { competition.payment_account_for(:manual) }
 
