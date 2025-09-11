@@ -2770,6 +2770,10 @@ class Competition < ApplicationRecord
     self.payment_integration_connected?(:paypal)
   end
 
+  def manual_connected?
+    self.payment_integration_connected?(:manual)
+  end
+
   def payment_account_for(integration_name)
     CompetitionPaymentIntegration.validate_integration_name!(integration_name)
 
