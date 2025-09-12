@@ -8,7 +8,7 @@ class PaymentIntent < ApplicationRecord
   belongs_to :cancellation_source, polymorphic: true, optional: true
 
   validate :wca_status_consistency
-  validates :holder_id, uniqueness: { scope: [:holder_type, :payment_record_type] }, if: -> { payment_record_type == 'ManualPaymentRecord' }
+  validates :holder_id, uniqueness: { scope: %i[holder_type, payment_record_type] }, if: -> { payment_record_type == 'ManualPaymentRecord' }
 
   scope :started, -> { where.not(wca_status: 'created') }
   scope :incomplete, -> { where.not(wca_status: %w[succeeded canceled]) }

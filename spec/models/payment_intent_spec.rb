@@ -117,7 +117,7 @@ RSpec.describe PaymentIntent do
       it 'only allows 1 payment intent for a manual payment per registration' do
         manual_record = ManualPaymentRecord.create(amount_iso_denomination: 1000, currency_code: 'usd', manual_status: :created)
 
-        expect {
+        expect do
           PaymentIntent.create!(
             holder: reg,
             payment_record: manual_record,
@@ -125,7 +125,7 @@ RSpec.describe PaymentIntent do
             initiated_by: reg.user,
             wca_status: manual_record.determine_wca_status,
           )
-        }.to raise_error(ActiveRecord::RecordInvalid) do |error|
+        end.to raise_error(ActiveRecord::RecordInvalid) do |error|
           expect(error.message).to eq('Validation failed: Holder has already been taken')
         end
       end
@@ -135,7 +135,7 @@ RSpec.describe PaymentIntent do
 
         manual_record = ManualPaymentRecord.create(amount_iso_denomination: 1000, currency_code: 'usd', manual_status: :created)
 
-        expect {
+        expect do
           PaymentIntent.create!(
             holder: reg2,
             payment_record: manual_record,
@@ -143,13 +143,13 @@ RSpec.describe PaymentIntent do
             initiated_by: reg2.user,
             wca_status: manual_record.determine_wca_status,
           )
-        }.not_to raise_error
+        end.not_to raise_error
       end
 
       it 'allows multiple payment intents for the same registration with Stripe' do
         stripe_record = create(:stripe_record)
 
-        expect {
+        expect do
           PaymentIntent.create!(
             holder: stripe_reg,
             payment_record: stripe_record,
@@ -157,13 +157,13 @@ RSpec.describe PaymentIntent do
             initiated_by: stripe_reg.user,
             wca_status: stripe_record.determine_wca_status,
           )
-        }.not_to raise_error
+        end.not_to raise_error
       end
 
       it 'allows multiple payment intents with different payment record types' do
         manual_record = ManualPaymentRecord.create(amount_iso_denomination: 1000, currency_code: 'usd', manual_status: :created)
 
-        expect {
+        expect do
           PaymentIntent.create!(
             holder: stripe_reg,
             payment_record: manual_record,
@@ -171,8 +171,7 @@ RSpec.describe PaymentIntent do
             initiated_by: stripe_reg.user,
             wca_status: manual_record.determine_wca_status,
           )
-
-        }.not_to raise_error
+        end.not_to raise_error
       end
     end
   end
