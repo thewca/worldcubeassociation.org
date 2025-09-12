@@ -371,6 +371,7 @@ export interface Testimonial {
  */
 export interface Announcement {
   id: number;
+  slug: string;
   image?: (number | null) | Media;
   title: string;
   content: {
@@ -389,8 +390,14 @@ export interface Announcement {
     [k: string]: unknown;
   };
   contentMarkdown?: string | null;
-  publishedAt: string;
+  /**
+   * The date the announcement will be published
+   */
+  publishAt: string;
+  sticky?: boolean | null;
+  unstickAt?: string | null;
   publishedBy: string | User;
+  approvedBy?: (string | null) | User;
   updatedAt: string;
   createdAt: string;
 }
@@ -611,12 +618,16 @@ export interface TestimonialsSelect<T extends boolean = true> {
  * via the `definition` "announcements_select".
  */
 export interface AnnouncementsSelect<T extends boolean = true> {
+  slug?: T;
   image?: T;
   title?: T;
   content?: T;
   contentMarkdown?: T;
-  publishedAt?: T;
+  publishAt?: T;
+  sticky?: T;
+  unstickAt?: T;
   publishedBy?: T;
+  approvedBy?: T;
   updatedAt?: T;
   createdAt?: T;
 }
