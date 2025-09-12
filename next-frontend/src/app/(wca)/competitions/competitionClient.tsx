@@ -36,6 +36,8 @@ import Flag from "react-world-flags";
 import countries from "@/lib/wca/data/countries";
 import { WCA_EVENT_IDS } from "@/lib/wca/data/events";
 import type { components } from "@/types/openapi";
+import { useSession } from "next-auth/react";
+import { useEffect, useMemo, useState } from "react";
 
 type CompetitionIndex = components["schemas"]["CompetitionIndex"];
 
@@ -43,9 +45,40 @@ interface CompetitionsListProps {
   competitions: CompetitionIndex[];
 }
 
+// Haversine formula to compute distance between two lat/lng pairs
+function getDistanceFromLatLonInKm(
+  lat1: number,
+  lon1: number,
+  lat2: number,
+  lon2: number,
+) {
+  const R = 6371; // Earth's radius in km
+  const dLat = deg2rad(lat2 - lat1);
+  const dLon = deg2rad(lon2 - lon1);
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(deg2rad(lat1)) *
+      Math.cos(deg2rad(lat2)) *
+      Math.sin(dLon / 2) *
+      Math.sin(dLon / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return R * c; // Distance in km
+}
+
+function deg2rad(deg: number) {
+  return deg * (Math.PI / 180);
+}
+
 export default function CompetitionsClient({
   competitions,
 }: CompetitionsListProps) {
+  const session = useSession();
+  const [location, setLocation] = useState<{
+    latitude: number;
+    longitude: number;
+  } | null>(null);
+  const [distanceFilter, setDistanceFilter] = useState<number>(100);
+
   const { contains } = useFilter({ sensitivity: "base" });
 
   const { collection, filter } = useListCollection({
@@ -56,6 +89,14 @@ export default function CompetitionsClient({
     filter: contains,
   });
 
+  useEffect(() => {
+    if ("geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        setLocation(position.coords);
+      });
+    }
+  });
+
   const marks = [
     { value: 0, label: "closest" },
     { value: 25, label: "close" },
@@ -64,16 +105,31 @@ export default function CompetitionsClient({
     { value: 100, label: "all" },
   ];
 
+  const competitionsDistanceFiltered = useMemo(() => {
+    if (location === null || distanceFilter === 100) return competitions;
+    return competitions.filter(
+      (c) =>
+        getDistanceFromLatLonInKm(
+          location.latitude,
+          location.latitude,
+          c.longitude_degrees,
+          c.latitude_degrees,
+        ) <= distanceFilter,
+    );
+  }, [location, distanceFilter, competitions]);
+
   return (
     <Container>
       <VStack gap="8" width="full" pt="8" alignItems="left">
-        <RemovableCard
-          imageUrl="newcomer.png"
-          heading="Why Compete?"
-          description="This section will only be visible to new visitors..."
-          buttonText="Learn More"
-          buttonUrl="/"
-        />
+        {!session.data?.user && (
+          <RemovableCard
+            imageUrl="newcomer.png"
+            heading="Why Compete?"
+            description="This section will only be visible to new visitors..."
+            buttonText="Learn More"
+            buttonUrl="/"
+          />
+        )}
         <Card.Root variant="hero" size="md" overflow="hidden">
           <Card.Body bg="bg">
             <VStack gap="8" width="full" alignItems="left">
@@ -137,9 +193,10 @@ export default function CompetitionsClient({
                     <Slider.Root
                       width="250px"
                       colorPalette="blue"
-                      defaultValue={[100]}
+                      value={[distanceFilter]}
+                      onValueChange={(e) => setDistanceFilter(e.value[0])}
                       step={25}
-                      disabled
+                      disabled={location === null}
                     >
                       <Slider.Label>Distance</Slider.Label>
                       <Slider.Control>
@@ -236,7 +293,7 @@ export default function CompetitionsClient({
                 <Card.Body p={0}>
                   <Table.Root size="xs" rounded="md" variant="competitions">
                     <Table.Body>
-                      {competitions.map((comp) => (
+                      {competitionsDistanceFiltered.map((comp) => (
                         <CompetitionTableEntry comp={comp} key={comp.id} />
                       ))}
                     </Table.Body>
