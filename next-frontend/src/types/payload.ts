@@ -443,6 +443,22 @@ export interface FaqQuestion {
   category: number | FaqCategory;
   question: string;
   answer: string;
+  answerRichtext?: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  answerRichtextMarkdown?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -641,6 +657,8 @@ export interface FaqQuestionsSelect<T extends boolean = true> {
   category?: T;
   question?: T;
   answer?: T;
+  answerRichtext?: T;
+  answerRichtextMarkdown?: T;
   updatedAt?: T;
   createdAt?: T;
 }
