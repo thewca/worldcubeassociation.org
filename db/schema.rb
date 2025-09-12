@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_09_09_120729) do
+ActiveRecord::Schema[7.2].define(version: 2025_09_11_125658) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -459,7 +459,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_09_09_120729) do
     t.integer "competitor_can_cancel", default: 0, null: false
     t.integer "newcomer_month_reserved_spots"
     t.integer "auto_close_threshold"
-    t.boolean "auto_accept_registrations", default: false, null: false
     t.integer "auto_accept_disable_threshold"
     t.integer "auto_accept_preference", default: 0, null: false
     t.index ["cancelled_at"], name: "index_competitions_on_cancelled_at"
