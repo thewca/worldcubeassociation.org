@@ -514,7 +514,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
       <Divider />
 
       <div ref={actionsRef}>
-        <Sticky context={actionsRef} offset={20}>
+        <Sticky context={actionsRef} offset={65}>
           <RegistrationActions
             partitionedSelectedIds={partitionedSelectedIds}
             partitionedRegistrations={partitionedRegistrations}
