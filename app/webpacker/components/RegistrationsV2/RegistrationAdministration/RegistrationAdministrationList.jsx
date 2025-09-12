@@ -546,7 +546,7 @@ function SectionToggle({
   icon, title, inParens, color, sectionRef,
 }) {
   return (
-    <Ref innerRef={sectionRef} style={{ scrollMarginTop: '3em' }}>
+    <Ref innerRef={sectionRef} style={{ scrollMarginTop: '4.5em' }}>
       <Header as="span" size="large">
         <Icon name={icon} color={color} />
         {`${title} (${inParens})`}
