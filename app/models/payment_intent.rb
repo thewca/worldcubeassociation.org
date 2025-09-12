@@ -102,19 +102,9 @@ class PaymentIntent < ApplicationRecord
 
     def wca_status_consistency
       # Check that payment_record's status is in sync with wca_status
-      case payment_record_type
-      when 'StripeRecord'
-        errors.add(:wca_status, "#{wca_status} is not compatible with StripeRecord status: #{payment_record.stripe_status}") unless
-          StripeRecord::WCA_TO_STRIPE_STATUS_MAP[wca_status.to_sym].include?(payment_record.stripe_status)
-      when 'PaypalRecord'
-        errors.add(:wca_status, "#{wca_status} is not compatible with PaypalRecord status: #{payment_record.paypal_status}") unless
-          PaypalRecord::WCA_TO_PAYPAL_STATUS_MAP[wca_status.to_sym].include?(payment_record.paypal_status)
-      when 'ManualPaymentRecord'
-        errors.add(:wca_status, "#{wca_status} is not compatible with ManualPaymentRecord status: #{payment_record.manual_status}") unless
-          ManualPaymentRecord::WCA_TO_MANUAL_PAYMENT_STATUS_MAP[wca_status.to_sym].include?(payment_record.manual_status)
-      else
-        raise "No status combination validation defined for: #{payment_record_type}"
-      end
+      status_map = payment_record_type.safe_constantize::WCA_TO_PROVIDER_STATUS_MAP
+      error_string = "#{wca_status} is not compatible with #{payment_record_type} status: #{payment_record.provider_status}"
+      errors.add(:wca_status, error_string) unless status_map[wca_status.to_sym].include?(payment_record.provider_status)
 
       # Succeeded/cancelled statuses require timestamps, and vice-versa
       errors.add(:confirmed_at, "should only be non-nil if wca_status is `succeeded`") if

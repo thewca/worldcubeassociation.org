@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class ManualPaymentRecord < ApplicationRecord
-  WCA_TO_MANUAL_PAYMENT_STATUS_MAP = {
+  WCA_TO_PROVIDER_STATUS_MAP = {
     created: %w[created],
     pending: %w[],
     processing: %w[],
@@ -21,8 +21,10 @@ class ManualPaymentRecord < ApplicationRecord
   has_one :registration_payment, as: :receipt
   has_one :payment_intent, as: :payment_record
 
+  alias_attribute :provider_status, :manual_status
+
   def determine_wca_status
-    WCA_TO_MANUAL_PAYMENT_STATUS_MAP.find { |_key, values| values.include?(self.manual_status) }.first
+    WCA_TO_PROVIDER_STATUS_MAP.find { |_key, values| values.include?(self.manual_status) }.first
   end
 
   def retrieve_remote
