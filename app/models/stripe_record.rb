@@ -3,7 +3,7 @@
 class StripeRecord < ApplicationRecord
   # NOTE: Should the list items be the keys or values of stripe_status? Should stripe_status be an enum or just a list?
   # TODO: Add a link to the Stripe status definitions/documentation
-  WCA_TO_STRIPE_STATUS_MAP = {
+  WCA_TO_PROVIDER_STATUS_MAP = {
     created: %w[requires_payment_method legacy_payment_intent_registered legacy_unknown],
     pending: %w[pending requires_confirmation requires_action],
     processing: %w[processing],
@@ -49,8 +49,10 @@ class StripeRecord < ApplicationRecord
   # Also saves us from some pains because JSON columns are highly inconsistent among MySQL and MariaDB.
   serialize :parameters, coder: JSON
 
+  alias_attribute :provider_status, :stripe_status
+
   def determine_wca_status
-    result = WCA_TO_STRIPE_STATUS_MAP.find { |_key, values| values.include?(self.stripe_status) }
+    result = WCA_TO_PROVIDER_STATUS_MAP.find { |_key, values| values.include?(self.stripe_status) }
     result&.first || raise("No associated wca_status for stripe_status: #{self.stripe_status} - our tests should prevent this from happening!")
   end
 

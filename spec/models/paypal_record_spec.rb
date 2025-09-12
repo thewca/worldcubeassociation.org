@@ -5,11 +5,11 @@ require 'rails_helper'
 RSpec.describe PaypalRecord do
   describe 'status mappings' do
     it 'contains all wca_statuses' do
-      expect(PaypalRecord::WCA_TO_PAYPAL_STATUS_MAP.keys.sort.map(&:to_s)).to eq(PaymentIntent.wca_statuses.values.sort)
+      expect(PaypalRecord::WCA_TO_PROVIDER_STATUS_MAP.keys.sort.map(&:to_s)).to eq(PaymentIntent.wca_statuses.values.sort)
     end
 
     it 'contains all paypal_statuses' do
-      expect(PaypalRecord.paypal_statuses.keys.sort).to eq(PaypalRecord::WCA_TO_PAYPAL_STATUS_MAP.values.flatten.sort)
+      expect(PaypalRecord.paypal_statuses.keys.sort).to eq(PaypalRecord::WCA_TO_PROVIDER_STATUS_MAP.values.flatten.sort)
     end
   end
 
