@@ -48,6 +48,7 @@ import type {
 } from "@/types/payload";
 import Link from "next/link";
 import { route } from "nextjs-routes";
+import { getT } from "@/lib/i18n/get18n";
 
 const TextCard = ({ block }: { block: TextCardBlock }) => {
   return (
@@ -203,11 +204,12 @@ const ImageOnlyCard = ({ block }: { block: ImageOnlyCardBlock }) => {
   );
 };
 
-const FeaturedCompetitions = ({
+const FeaturedCompetitions = async ({
   block,
 }: {
   block: FeaturedCompetitionsBlock;
 }) => {
+  const { t } = await getT();
   return (
     <Card.Root variant="info" colorPalette="grey" width="full">
       <Card.Body justifyContent="space-around">
@@ -230,7 +232,7 @@ const FeaturedCompetitions = ({
                     colorPalette={featuredComp.colorPalette}
                   >
                     <Flag code="US" fallback="US" />
-                    <CountryMap code="US" bold /> Seattle
+                    <CountryMap code="US" bold t={t} /> Seattle
                   </Badge>
                   <Badge
                     variant="information"

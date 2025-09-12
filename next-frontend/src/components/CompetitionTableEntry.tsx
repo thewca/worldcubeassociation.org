@@ -33,6 +33,7 @@ import CountryMap from "@/components/CountryMap";
 import type { components } from "@/types/openapi";
 import Link from "next/link";
 import { route } from "nextjs-routes";
+import { useT } from "@/lib/i18n/useI18n";
 
 // Raw competition type from WCA API
 type CompetitionIndex = components["schemas"]["CompetitionIndex"];
@@ -102,6 +103,8 @@ function formatDateRange(start: string, end: string): string {
 const CompetitionTableEntry: React.FC<Props> = ({ comp }) => {
   const [open, setOpen] = useState(false);
   const regoStatus = getRegistrationStatus(comp);
+
+  const { t } = useT();
   return (
     <Table.Row bg="bg.inverted" onClick={() => setOpen(true)} key={comp.id}>
       <Table.Cell>{registrationStatusIcons[regoStatus] || null}</Table.Cell>
@@ -128,7 +131,7 @@ const CompetitionTableEntry: React.FC<Props> = ({ comp }) => {
       </Table.Cell>
 
       <Table.Cell textAlign="right">
-        <CountryMap code={comp.country_iso2} bold />
+        <CountryMap code={comp.country_iso2} bold t={t} />
       </Table.Cell>
 
       <Table.Cell minWidth="4em">
@@ -165,7 +168,8 @@ const CompetitionTableEntry: React.FC<Props> = ({ comp }) => {
                       code={comp.country_iso2}
                       fallback={comp.country_iso2}
                     />
-                    <CountryMap code={comp.country_iso2} bold /> {comp.city}
+                    <CountryMap code={comp.country_iso2} bold t={t} />{" "}
+                    {comp.city}
                   </Badge>
                   <Badge variant="information" colorPalette="grey">
                     <CompRegoCloseDateIcon />

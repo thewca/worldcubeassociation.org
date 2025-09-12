@@ -127,7 +127,6 @@ export type IconName =
 export type StaticTargetLink =
   | '/'
   | '/faq'
-  | '/api/swagger'
   | '/competitions'
   | '/delegates'
   | '/disclaimer'

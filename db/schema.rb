@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_08_26_042935) do
+ActiveRecord::Schema[7.2].define(version: 2025_09_11_125658) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -459,7 +459,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_08_26_042935) do
     t.integer "competitor_can_cancel", default: 0, null: false
     t.integer "newcomer_month_reserved_spots"
     t.integer "auto_close_threshold"
-    t.boolean "auto_accept_registrations", default: false, null: false
     t.integer "auto_accept_disable_threshold"
     t.integer "auto_accept_preference", default: 0, null: false
     t.index ["cancelled_at"], name: "index_competitions_on_cancelled_at"
@@ -793,6 +792,13 @@ ActiveRecord::Schema[7.2].define(version: 2025_08_26_042935) do
     t.datetime "updated_at", precision: nil, null: false
   end
 
+  create_table "manual_payment_integrations", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "payment_reference_label", null: false
+    t.text "payment_instructions", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "oauth_access_grants", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.integer "resource_owner_id", null: false
     t.integer "application_id", null: false
@@ -1050,6 +1056,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_08_26_042935) do
     t.datetime "updated_at", precision: nil, null: false
     t.integer "refunded_registration_payment_id"
     t.integer "user_id"
+    t.boolean "is_completed", default: true, null: false
+    t.datetime "paid_at"
     t.index ["receipt_type", "receipt_id"], name: "index_registration_payments_on_receipt"
     t.index ["refunded_registration_payment_id"], name: "idx_reg_payments_on_refunded_registration_payment_id"
     t.index ["registration_id"], name: "index_registration_payments_on_registration_id"

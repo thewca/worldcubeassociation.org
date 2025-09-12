@@ -8,6 +8,7 @@
     resultsSubmitted: @competition.results_submitted?,
     hasTemporaryResults: @competition.inbox_results.present?,
     uploadedScrambleFilesCount: @competition.scramble_file_uploads.count,
+    showWcaLiveBeta: @show_wca_live_beta,
     canSubmitResults: @current_user.can_submit_competition_results?(@competition),
   }) %>
 <% end %>

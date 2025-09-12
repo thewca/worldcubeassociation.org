@@ -1,0 +1,15 @@
+type: object
+required:
+  - name
+  - country_iso2
+  - website
+properties:
+  name:
+    type: string
+  country_iso2:
+    type: string
+  website:
+    type: string
+  logo_url:
+    type: string
+    format: uri

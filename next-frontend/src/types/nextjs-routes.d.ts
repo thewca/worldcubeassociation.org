@@ -17,13 +17,13 @@ declare module "nextjs-routes" {
     | DynamicRoute<"/api/payload/[...slug]", { "slug": string[] }>
     | StaticRoute<"/api/payload/graphql">
     | StaticRoute<"/api/payload/graphql-playground">
-    | StaticRoute<"/api/swagger">
     | StaticRoute<"/api/wca/import-posts">
     | StaticRoute<"/competitions">
     | DynamicRoute<"/competitions/[competitionId]", { "competitionId": string }>
     | DynamicRoute<"/competitions/[competitionId]/admin", { "competitionId": string }>
     | DynamicRoute<"/competitions/[competitionId]/competitors", { "competitionId": string }>
     | DynamicRoute<"/competitions/[competitionId]/events", { "competitionId": string }>
+    | DynamicRoute<"/competitions/[competitionId]/podiums", { "competitionId": string }>
     | DynamicRoute<"/competitions/[competitionId]/register", { "competitionId": string }>
     | DynamicRoute<"/competitions/[competitionId]/schedule", { "competitionId": string }>
     | StaticRoute<"/dashboard">

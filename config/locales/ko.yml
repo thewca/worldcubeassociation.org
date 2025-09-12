@@ -1107,6 +1107,16 @@ ko:
         400_error: 찾으시는 페이지가 존재하지 않습니다.
         #original_hash: c9290b6
         400_contact_html: '이것이 실수라고 생각되면 <a href=%{contact_url}>여기를 클릭</a>하여 신고해 주십시오.'
+        #original_hash: 508c106
+        comp_not_found: 대회를 찾을 수 없음
+        #original_hash: c0e86d5
+        comp_not_found_action: 'ID가"%{comp_id}"인 대회를 찾을 수 없습니다. 검색창을 사용하여 검색해 주십시오.'
+        #original_hash: 695f7ba
+        comp_not_found_action_2: '다른 웹사이트의 링크를 따라 이곳에 접속했다면, 해당 웹사이트에 링크가 잘못되었다고 알려주시기 바랍니다.'
+        #original_hash: 7f8f419
+        session_expired: 세션 만료됨
+        #original_hash: f3e688a
+        session_expired_action: '세션이 만료되었습니다. 계속하려면 페이지를 새로고침 하거나, 작업을 재시도하거나, 다시 로그인하십시오.'
     doorkeeper:
       applications:
         help:
@@ -2331,8 +2341,6 @@ ko:
       results_still_processing: 현재 이 대회의 결과를 처리하고 있습니다. 곧 결과를 확인하실 수 있습니다.
       #original_hash: e205d73
       results_already_posted: 결과가 이미 발표되었습니다.
-      #original_hash: 376f461
-      results_posted: 결과가 성공적으로 발표되었습니다!
       #original_hash: afe3a23
       results_preview_alert: 아직 발표되지 않은 결과를 보고 계십니다.
       #original_hash: 16dd227
@@ -2468,7 +2476,7 @@ ko:
       #original_hash: a082288
       claim_wca_id_html: '이 대회가 귀하의 첫 대회가 아니라면, %{here}에서 WCA ID를 WCA 계정과 연결하십시오.'
       #original_hash: 56fc229
-      register_link_html: '%{here}에서 이 대회에 참가 신청하십시오.'
+      register_link_html: '%{here}에서 본 대회의 참가 신청을 하십시오.'
       #original_hash: 45834fd
       register_below_html: 아래에서 이 대회에 참가 신청하십시오.
       #original_hash: c5dfcc7
@@ -2486,11 +2494,11 @@ ko:
       #original_hash: 5101f65
       no_competitor_limit: 참가자 정원이 없습니다.
       #original_hash: f979d5e
-      entry_fee_is: '이 대회의 기본 참가비는 %{base_entry_fee}원입니다.'
+      entry_fee_is: '본 대회의 기본 참가비는 %{base_entry_fee} 입니다.'
       #original_hash: 5390a91
       no_entry_fee: 이 대회의 참가비는 무료입니다.
       #original_hash: 29af5c2
-      use_stripe_link_html: '참가 신청 후 참가비는 Stripe %{here}를 통해 지불해야 합니다.'
+      use_stripe_link_html: '참가비는 참가 신청 후 %{here}에서 Stripe를 통해 지불해야 합니다.'
       #original_hash: cea0eb4
       use_stripe_below_html: 참가 신청 후 참가비는 아래의 Stripe를 통해 지불해야 합니다.
       #original_hash: d6bab8f
@@ -2511,10 +2519,10 @@ ko:
         수 있습니다.
       #original_hash: eff3594
       event_change_deadline_default_html: >-
-        온라인 참가 신청을 통해 참가하고자 하는 종목에 등록하는 것이 좋지만, 종목이 시작되기 전까지는 신청 내역에 신청 종목을 추가할
-        수 있습니다.
+        참가 희망 종목은 온라인 참가 신청을 통해 등록하는 것을 권장하지만, 해당 종목의 경기가 시작되기 전까지 신청 내역에 참가 희망
+        종목을 추가할 수 있습니다.
       #original_hash: cf7be5d
-      on_the_spot_registration_fee_html: '현장 참가 신청은 기본 참가비 %{on_the_spot_base_entry_fee}로 승인됩니다.'
+      on_the_spot_registration_fee_html: '현장 참가 신청시 기본 참가비는 %{on_the_spot_base_entry_fee}입니다.'
       #original_hash: 1637bea
       on_the_spot_registration_free: 현장 참가 신청은 무료로 가능합니다.
       #original_hash: f5f687d
@@ -3369,9 +3377,9 @@ ko:
         panel:
           approval:
             #original_hash: 8cc047a
-            title: 승인
+            title: 참가 신청 승인
             #original_hash: 3bdafe5
-            description: 주최 팀에 의한
+            description: 주최 측에 의함
           payment:
             #original_hash: 4930c06
             title: 결제 정보
@@ -3379,9 +3387,9 @@ ko:
             description: 결제 정보 입력
           competing:
             #original_hash: d672995
-            title: 참가 신청하기
+            title: 참가 신청
             #original_hash: af0e6a0
-            description: 종목을 선택하십시오
+            description: 종목 선택
           requirements:
             #original_hash: 09a428f
             title: 요구 사항
@@ -3675,8 +3683,6 @@ ko:
     cancelled_by_html: '%{name}이 %{date_time}에 취소했습니다'
     #original_hash: 25e68c3
     cancel_confirm: 정말로 대회를 취소하시겠습니까?
-    #original_hash: 01de5ee
-    post_results: 결과 게시하기
     #original_hash: b6513f1
     results_posted_by_html: '%{poster_name}님이 %{date_time}에 게시했습니다'
     #original_hash: a6b5efe
