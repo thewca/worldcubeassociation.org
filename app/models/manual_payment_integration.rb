@@ -47,7 +47,7 @@ class ManualPaymentIntegration < ApplicationRecord
     # from the new one, so we can update it in update_status. This is simulating getting an updated version
     # from a payment provider after paying
     ManualPaymentRecord.find(params[:client_secret]).tap do |mpr|
-      mpr.payment_reference = params[:payment_reference_label]
+      mpr.payment_reference = params[:payment_reference]
       mpr.manual_status = ManualPaymentRecord.manual_statuses[:user_submitted]
     end
   end

@@ -29,10 +29,6 @@ class ManualPaymentRecord < ApplicationRecord
     self
   end
 
-  def retrieve_payments
-    self
-  end
-
   def money_amount
     Money.new(self.amount_iso_denomination, self.currency_code)
   end
