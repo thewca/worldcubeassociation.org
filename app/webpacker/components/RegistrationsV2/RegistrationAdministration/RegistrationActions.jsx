@@ -436,7 +436,9 @@ function SummaryTable({
         {withMaximums && <Grid.Column>Max</Grid.Column>}
       </Grid.Row>
 
-      {registrationStatusKeys().map((status) => (
+      {registrationStatusKeys(
+        { includeNonCompeting: partitionedRegistrations.nonCompeting.length > 0 },
+      ).map((status) => (
         <Grid.Row key={status}>
           <Grid.Column>
             <Icon color={getStatusColor(status)} name={getStatusIcon(status)} size="large" />
