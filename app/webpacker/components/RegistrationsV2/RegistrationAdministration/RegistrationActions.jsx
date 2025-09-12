@@ -303,86 +303,114 @@ export default function RegistrationActions({
         )}
       />
 
-      <Dropdown
-        data-tooltip={I18n.t('competitions.registration_v2.update.scroll_to')}
-        pointing
-        className="icon black"
-        icon="th list"
-        button
-      >
-        <Dropdown.Menu>
-          {registrationStatusKeys(
-            { includeNonCompeting: partitionedRegistrations.nonCompeting.length > 0 },
-          ).map((status) => (
-            <DropdownAction
-              text={
-                I18n.t(`competitions.registration_v2.update.${getStatusTranslationKey(status)}`)
-              }
-              icon={getStatusIcon(status)}
-              color={getStatusColor(status)}
-              onClick={() => scrollToRef(tableRefs[status])}
-            />
-          ))}
-        </Dropdown.Menu>
-      </Dropdown>
-
-      <Button
-        data-tooltip={I18n.t('registrations.list.export_csv', { count: selectedCount })}
-        icon="download"
-        color="green"
-        onClick={() => {
-          csvExport(
-            [...pending, ...accepted, ...cancelled, ...waiting, ...rejected],
-            registrations,
-            competitionInfo,
-          );
-        }}
+      <Popup
+        flowing
+        position="top center"
+        trigger={(
+          <Dropdown
+            pointing
+            className="icon black"
+            icon="th list"
+            button
+          >
+            <Dropdown.Menu>
+              {registrationStatusKeys(
+                { includeNonCompeting: partitionedRegistrations.nonCompeting.length > 0 },
+              ).map((status) => (
+                <DropdownAction
+                  text={
+                    I18n.t(
+                      `competitions.registration_v2.update.${getStatusTranslationKey(status)}`,
+                    )
+                  }
+                  icon={getStatusIcon(status)}
+                  color={getStatusColor(status)}
+                  onClick={() => scrollToRef(tableRefs[status])}
+                />
+              ))}
+            </Dropdown.Menu>
+          </Dropdown>
+        )}
+        content={I18n.t('competitions.registration_v2.update.scroll_to')}
       />
 
-      <Button
-        data-tooltip={I18n.t('competitions.registration_v2.update.email_send')}
-        icon="envelope"
-        color="blue"
-        href={`mailto:?bcc=${selectedEmails}`}
-        target="_blank"
-        rel="noreferrer"
-        disabled={!anySelected}
+      <Popup
+        flowing
+        position="top center"
+        trigger={(
+          <Button
+            icon="download"
+            color="green"
+            onClick={() => {
+              csvExport(
+                [...pending, ...accepted, ...cancelled, ...waiting, ...rejected],
+                registrations,
+                competitionInfo,
+              );
+            }}
+          />
+        )}
+        content={I18n.t('registrations.list.export_csv', { count: selectedCount })}
       />
 
-      <Button
-        data-tooltip={
-          I18n.t('competitions.registration_v2.update.email_copy', { count: selectedCount })
-        }
-        icon="copy"
-        color="teal"
-        onClick={() => copyEmails(selectedEmails)}
-        disabled={!anySelected}
+      <Popup
+        flowing
+        position="top center"
+        trigger={(
+          <Button
+            icon="envelope"
+            color="blue"
+            href={`mailto:?bcc=${selectedEmails}`}
+            target="_blank"
+            rel="noreferrer"
+            disabled={!anySelected}
+          />
+        )}
+        content={I18n.t('competitions.registration_v2.update.email_send', { count: selectedCount })}
       />
 
-      <Dropdown
-        data-tooltip={
-          I18n.t('competitions.registration_v2.update.move_to', { count: selectedCount })
-        }
-        pointing
-        className="icon brown"
-        icon="arrow right"
-        button
-        disabled={!anySelected}
-      >
-        <Dropdown.Menu>
-          {registrationStatusKeys().map((status) => (
-            <DropdownAction
-              text={
-                I18n.t(`competitions.registration_v2.update.${getStatusTranslationKey(status)}`)
-              }
-              icon={getStatusIcon(status)}
-              color={getStatusColor(status)}
-              isDisabled={partitionedSelectedIds[status].length === selectedCount}
-              onClick={() => onMove(status)}
-            />
-          ))}
-        </Dropdown.Menu>
-      </Dropdown>
+      <Popup
+        flowing
+        position="top center"
+        trigger={(
+          <Button
+            icon="copy"
+            color="teal"
+            onClick={() => copyEmails(selectedEmails)}
+            disabled={!anySelected}
+          />
+        )}
+        content={I18n.t('competitions.registration_v2.update.email_copy', { count: selectedCount })}
+      />
+
+      <Popup
+        flowing
+        position="top center"
+        trigger={(
+          <Dropdown
+            pointing
+            className="icon brown"
+            icon="arrow right"
+            button
+            disabled={!anySelected}
+          >
+            <Dropdown.Menu>
+              {registrationStatusKeys().map((status) => (
+                <DropdownAction
+                  text={
+                    I18n.t(`competitions.registration_v2.update.${getStatusTranslationKey(status)}`)
+                  }
+                  icon={getStatusIcon(status)}
+                  color={getStatusColor(status)}
+                  isDisabled={partitionedSelectedIds[status].length === selectedCount}
+                  onClick={() => onMove(status)}
+                />
+              ))}
+            </Dropdown.Menu>
+          </Dropdown>
+        )}
+        content={I18n.t('competitions.registration_v2.update.move_to', { count: selectedCount })}
+      />
     </>
   );
 }
