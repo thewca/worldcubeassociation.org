@@ -8,7 +8,7 @@ class ManualPaymentIntegration < ApplicationRecord
   end
 
   def prepare_intent(registration, amount_iso, currency_iso, paying_user)
-    existing_intent = registration.payment_intents.first
+    existing_intent = registration.manual_payment_intent
     if existing_intent.present?
       existing_intent.payment_record.update(amount_iso_denomination: amount_iso, currency_code: currency_iso)
       return existing_intent
