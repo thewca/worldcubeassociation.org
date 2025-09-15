@@ -295,6 +295,15 @@ export default function CompetitionsPage() {
                     <EventSelector
                       selectedEvents={filterState.selectedEvents}
                       title="Event"
+                      onEventClick={(eventId) =>
+                        dispatchFilter({ type: "toggle_event", eventId })
+                      }
+                      onClearClick={() =>
+                        dispatchFilter({ type: "clear_events" })
+                      }
+                      onAllClick={() =>
+                        dispatchFilter({ type: "select_all_events" })
+                      }
                     />
                   </Flex>
                 </Flex>

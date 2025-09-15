@@ -231,9 +231,15 @@ export const updateSearchParams = (
   );
 };
 
+type ReducerAction =
+  | { type: "reset" }
+  | { type: "toggle_event"; eventId: string }
+  | { type: "select_all_events" }
+  | { type: "clear_events" };
+
 export const competitionFilterReducer = (
   state: CompetitionFilterState,
-  action: { type: string; eventId: string },
+  action: ReducerAction,
 ) => {
   switch (action.type) {
     case "reset":
@@ -249,7 +255,5 @@ export const competitionFilterReducer = (
       return { ...state, selectedEvents: WCA_EVENT_IDS };
     case "clear_events":
       return { ...state, selectedEvents: [] };
-    default:
-      return { ...state, ...action };
   }
 };
