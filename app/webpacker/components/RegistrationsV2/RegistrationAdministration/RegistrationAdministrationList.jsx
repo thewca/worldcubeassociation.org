@@ -29,6 +29,7 @@ import {
   REJECTED_COLOR, REJECTED_ICON,
   WAITLIST_COLOR, WAITLIST_ICON,
 } from '../../../lib/utils/registrationAdmin';
+import { captureManualPayments } from '../api/payment/patch/captureManualPayments';
 
 const expandableColumns = {
   dob: I18n.t('activerecord.attributes.user.dob'),
@@ -137,6 +138,17 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
       await refetch();
     },
   });
+
+  const { mutate: captureManualPaymentsMutation, isPending: isCapturing } = useMutation({
+    mutationFn: captureManualPayments,
+    onError: () => {
+      dispatchStore(showMessage('An error occurred while trying to capture manual payments', 'negative'));
+    },
+    onSuccess: async () => {
+      dispatchStore(showMessage('Registration payments successfully approved', 'positive'));
+      await refetch()
+    }
+  })
 
   const partitionedRegistrations = useMemo(
     () => partitionRegistrations(registrations ?? []),
@@ -425,7 +437,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
   );
 
   return (
-    <Segment loading={isMutating || isAutoAccepting}>
+    <Segment loading={isMutating || isAutoAccepting || isCapturing}>
       {competitionInfo.auto_accept_preference === autoAcceptPreferences.bulk && (
         <>
           <Button
@@ -508,6 +520,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
             spotsRemaining={spotsRemaining}
             competitionInfo={competitionInfo}
             updateRegistrationMutation={updateRegistrationMutation}
+            captureManualPaymentsMutation={captureManualPaymentsMutation}
           />
         </Sticky>
 

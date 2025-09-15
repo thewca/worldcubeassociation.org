@@ -84,6 +84,7 @@ export default function RegistrationActions({
   spotsRemaining,
   competitionInfo,
   updateRegistrationMutation,
+  captureManualPaymentsMutation
 }) {
   const confirm = useConfirm();
   const dispatch = useDispatch();
@@ -118,6 +119,17 @@ export default function RegistrationActions({
     .map((userId) => userEmailMap[userId])
     .join(',');
 
+  const capturePayments = () => {
+    const selectedUserIds = [...pending, ...waiting, ...cancelled, ...accepted, ...rejected];
+    const registrationsToCapture = registrations.filter(
+      (reg) => selectedUserIds.includes(reg.user_id),
+    ).map(reg => reg.id)
+
+    captureManualPaymentsMutation({
+      competitionId: competitionInfo.id,
+      registrationIds: registrationsToCapture,
+    })
+  }
   const isUsingPaymentIntegration = competitionInfo['using_payment_integrations?'];
   const checkForSkippedPending = isUsingPaymentIntegration;
 
@@ -338,6 +350,17 @@ export default function RegistrationActions({
           />
         </Dropdown.Menu>
       </Dropdown>
+
+      {competitionInfo.connected_payment_integration_types.includes('manual') && (
+        <Button
+          content={"Approve Payments"}
+          color="green"
+          icon="money bill alternate"
+          labelPosition="left"
+          onClick={() =>  capturePayments() }
+          disabled={!anySelected}
+        />
+      )}
     </>
   );
 }
