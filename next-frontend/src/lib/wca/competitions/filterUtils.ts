@@ -235,7 +235,17 @@ type ReducerAction =
   | { type: "reset" }
   | { type: "toggle_event"; eventId: string }
   | { type: "select_all_events" }
-  | { type: "clear_events" };
+  | { type: "clear_events" }
+  | { type: "set_region"; region: string }
+  | { type: "set_delegate"; delegate: string | number }
+  | { type: "set_search"; search: string }
+  | { type: "set_time_order"; timeOrder: string }
+  | { type: "set_selected_year"; selectedYear: number | string }
+  | { type: "set_custom_start_date"; customStartDate: string | null }
+  | { type: "set_custom_end_date"; customEndDate: string | null }
+  | { type: "set_should_include_cancelled"; shouldIncludeCancelled: boolean }
+  | { type: "set_should_show_admin_details"; shouldShowAdminDetails: boolean }
+  | { type: "set_admin_status"; adminStatus: string };
 
 export const competitionFilterReducer = (
   state: CompetitionFilterState,
@@ -255,5 +265,7 @@ export const competitionFilterReducer = (
       return { ...state, selectedEvents: WCA_EVENT_IDS };
     case "clear_events":
       return { ...state, selectedEvents: [] };
+    default:
+      return { ...state, ...action };
   }
 };

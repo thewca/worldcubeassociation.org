@@ -52,6 +52,7 @@ import { useSearchParams } from "next/navigation";
 import { useInView } from "react-intersection-observer";
 import { TFunction } from "i18next";
 import { useT } from "@/lib/i18n/useI18n";
+import RegionSelector from "@/components/RegionSelector";
 
 const DEBOUNCE_MS = 600;
 
@@ -231,13 +232,17 @@ export default function CompetitionsPage() {
                       colorPalette="blue"
                       openOnClick
                     >
-                      <Combobox.Control>
-                        <Combobox.Input placeholder="Country/Continent" />
-                        <Combobox.IndicatorGroup>
-                          <Combobox.ClearTrigger />
-                          <Combobox.Trigger />
-                        </Combobox.IndicatorGroup>
-                      </Combobox.Control>
+                      <RegionSelector
+                        t={t}
+                        region={filterState.region}
+                        label="Country/Continent"
+                        onRegionChange={(region) =>
+                          dispatchFilter({
+                            type: "set_region",
+                            region: countries.byId[region].iso2,
+                          })
+                        }
+                      />
                       <Portal>
                         <Combobox.Positioner>
                           <Combobox.Content justifyContent="flex-start">
