@@ -381,6 +381,7 @@ Rails.application.routes.draw do
           collection do
             patch 'bulk_auto_accept', to: 'registrations#bulk_auto_accept'
             patch 'bulk_update', to: 'registrations#bulk_update'
+            patch 'capture_manual_payments', to: 'registrations#capture_manual_payments'
             get 'admin', to: 'registrations#index_admin'
             get ':user_id', to: 'registrations#show_by_user', as: :show_by_user
           end

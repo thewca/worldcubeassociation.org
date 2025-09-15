@@ -50,7 +50,7 @@ class RegistrationPayment < ApplicationRecord
       user_id: self.user_id,
       payment_id: self.receipt_id,
       is_completed: self.is_completed, # Determines whether or not to show PaymentOverview in PaymentPanel
-      payment_provider: payment_provider,
+      payment_provider: payment_provider.to_s,
       iso_amount_payment: self.amount_lowest_denomination.abs,
       currency_code: self.currency_code,
     }

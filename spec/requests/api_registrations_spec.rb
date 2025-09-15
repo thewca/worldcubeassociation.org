@@ -1445,6 +1445,165 @@ RSpec.describe 'API Registrations' do
     end
   end
 
+  describe 'PATCH #capture_manual_payments' do
+    let(:reg) { create(:registration, competition: comp) }
+    let(:comp) { create(:competition, :manual_connected, :registration_open, :visible, :with_organizer) }
+    let(:params) { { registration_ids: [reg.id] } }
+
+    context 'signed in as organizer' do
+      context 'capturing one payment' do
+        context 'manual_status: created' do
+          let!(:payment_intent) { create(:payment_intent, :manual, holder: reg) }
+
+          before do
+            headers['Authorization'] = fetch_jwt_token(comp.organizers.first.id)
+            patch capture_manual_payments_api_v1_competition_registrations_path(comp), headers: headers, params: params, as: :json
+          end
+
+          it 'succeeds' do
+            expect(response).to be_successful
+          end
+
+          it 'returns payment.to_v2_json after upload' do
+            payment_json = payment_intent.payment_record.registration_payment.to_v2_json
+            payment_json[:is_completed] = true
+            expected_response = { reg.id => payment_json }.deep_stringify_keys
+
+            expect(response.parsed_body).to eq(expected_response)
+          end
+
+          it 'sets manual_status to organizer_accepted' do
+            expect(payment_intent.payment_record.reload.manual_status).to eq('organizer_approved')
+          end
+
+          it 'updates payment intent to completed' do
+            expect(payment_intent.reload.wca_status).to eq('succeeded')
+          end
+
+          it 'marks payment as completed' do
+            expect(payment_intent.payment_record.registration_payment.reload.is_completed).to be true
+          end
+        end
+
+        context 'manual_status: requires_capture' do
+          let!(:payment_intent) { create(:payment_intent, :manual_requires_capture, holder: reg) }
+
+          before do
+            headers['Authorization'] = fetch_jwt_token(comp.organizers.first.id)
+            patch capture_manual_payments_api_v1_competition_registrations_path(comp), headers: headers, params: params, as: :json
+          end
+
+          it 'succeeds' do
+            expect(response).to be_successful
+          end
+
+          it 'returns payment.to_v2_json after upload' do
+            payment_json = payment_intent.payment_record.registration_payment.to_v2_json
+            payment_json['is_completed'] = true
+            expected_response = { reg.id => payment_json }.deep_stringify_keys
+
+            expect(response.parsed_body).to eq(expected_response)
+          end
+
+          it 'sets manual_status to organizer_accepted' do
+            expect(payment_intent.payment_record.reload.manual_status).to eq('organizer_approved')
+          end
+
+          it 'updates payment intent to completed' do
+            expect(payment_intent.reload.wca_status).to eq('succeeded')
+          end
+
+          it 'marks payment as completed' do
+            expect(payment_intent.payment_record.registration_payment.reload.is_completed).to be true
+          end
+        end
+
+        context 'manual_status: organizer_approved' do
+          let!(:payment_intent) { create(:payment_intent, :manual_succeeded, holder: reg) }
+
+          before do
+            headers['Authorization'] = fetch_jwt_token(comp.organizers.first.id)
+            patch capture_manual_payments_api_v1_competition_registrations_path(comp), headers: headers, params: params, as: :json
+          end
+
+          it 'succeeds' do
+            expect(response).to be_successful
+          end
+
+          it 'returns payment.to_v2_json after upload' do
+            payment_json = payment_intent.payment_record.registration_payment.to_v2_json
+            expect(response.parsed_body).to eq({ reg.id => payment_json}.deep_stringify_keys)
+          end
+
+          it 'manual status remains organizer_approved' do
+            expect(payment_intent.payment_record.reload.manual_status).to eq('organizer_approved')
+          end
+
+          it 'wca_status remains succeeded' do
+            expect(payment_intent.reload.wca_status).to eq('succeeded')
+          end
+
+          it 'no change to registration_payment.is_completed' do
+            expect(payment_intent.payment_record.registration_payment.reload.is_completed).to be true
+          end
+        end
+      end
+
+      context 'capturing multiple payments' do
+        let!(:created_pi) { create(:payment_intent, :manual, holder: reg) }
+        let(:reg2) { create(:registration, competition: comp) }
+        let!(:created_pi_2) { create(:payment_intent, :manual, holder: reg2) }
+
+        let(:reg3) { create(:registration, competition: comp) }
+        let!(:created_pi_3) { create(:payment_intent, :manual_requires_capture, holder: reg3) }
+        let(:reg4) { create(:registration, competition: comp) }
+        let!(:created_pi_4) { create(:payment_intent, :manual_requires_capture, holder: reg4) }
+
+        let(:reg5) { create(:registration, competition: comp) }
+        let!(:created_pi_5) { create(:payment_intent, :manual_succeeded, holder: reg5) }
+        let(:reg6) { create(:registration, competition: comp) }
+        let!(:created_pi_6) { create(:payment_intent, :manual_succeeded, holder: reg6) }
+
+        it 'has the expected initial conditions' do
+          expect(PaymentIntent.count).to be(6)
+          expect(ManualPaymentRecord.created.count).to be(2)
+          expect(ManualPaymentRecord.user_submitted.count).to be(2)
+          expect(ManualPaymentRecord.organizer_approved.count).to be(2)
+          expect(RegistrationPayment.where(is_completed: false).count).to be(4)
+          expect(RegistrationPayment.completed.count).to be(2)
+        end
+
+        it 'captures all payments' do
+          registration_ids = [reg.id, reg2.id, reg3.id, reg4.id, reg5.id, reg6.id]
+
+          headers['Authorization'] = fetch_jwt_token(comp.organizers.first.id)
+          patch capture_manual_payments_api_v1_competition_registrations_path(comp),
+            headers: headers, params: { registration_ids: registration_ids }, as: :json
+
+          expect(RegistrationPayment.completed.count).to be(6)
+          expect(ManualPaymentRecord.organizer_approved.count).to be(6)
+          expect(response.parsed_body.keys.count).to be(6)
+        end
+      end
+    end
+
+    context 'signed in as user' do
+      let(:payment_intent) { create(:payment_intent, :manual_requires_capture, holder: reg) }
+      let(:manual_payment) { payment_intent.payment_record }
+      let(:reg_payment) { manual_payment.registration_payment }
+
+      before do
+        headers['Authorization'] = fetch_jwt_token(reg.user.id)
+      end
+
+      it 'rejects the toggle attempt' do
+        patch capture_manual_payments_api_v1_competition_registrations_path(comp), headers: headers
+
+        expect(response).to be_unauthorized
+      end
+    end
+  end
+
   describe 'PATCH #bulk_accept' do
     let(:auto_accept_comp) do
       create(

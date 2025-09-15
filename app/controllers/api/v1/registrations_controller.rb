@@ -10,7 +10,7 @@ class Api::V1::RegistrationsController < Api::V1::ApiController
   before_action :ensure_registration_exists, only: [:show_by_user]
   before_action :validate_show_registration_by_user, only: [:show_by_user]
   before_action :validate_show_registration, only: [:show]
-  before_action :validate_admin_action, only: %i[index_admin bulk_auto_accept]
+  before_action :validate_admin_action, only: %i[index_admin bulk_auto_accept capture_manual_payments]
   before_action :load_registration_from_request, only: [:update]
   before_action :user_can_modify_registration, only: [:update]
   before_action :validate_update_request, only: [:update]
@@ -277,6 +277,34 @@ class Api::V1::RegistrationsController < Api::V1::ApiController
 
     payment_intent = payment_account.prepare_intent(@registration, ruby_money.cents, ruby_money.currency.iso_code, @current_user)
     render json: { client_secret: payment_intent.client_secret }
+  end
+
+  def capture_manual_payments
+    registrations = Registration.find(params.require(:registration_ids))
+
+    # TODO: There's an each_with_object way of doing this, or something that Gregor hates less I think
+    toggled_payments = {}
+    # TODO: This relies on the assumption that there is only one registration_payment per registration - is this reliable?
+    registrations.each do |registration|
+      payment = registration.registration_payments.first
+      stored_record = payment.receipt
+      stored_intent = stored_record.payment_intent
+      comp = payment.registration.competition
+      connected_account = comp.payment_account_for(:manual)
+
+      if stored_record.manual_status == 'organizer_approved'
+        toggled_payments[registration.id] = payment.to_v2_json
+      else
+        stored_record.assign_attributes(manual_status: 'organizer_approved')
+
+        stored_intent.update_status_and_charges(connected_account, stored_record, current_user) do |updated_record|
+          toggled_payments[registration.id] = payment.to_v2_json if
+            !payment.is_completed? && payment.update(is_completed: true) && updated_record.manual_status == 'organizer_approved'
+        end
+      end
+    end
+
+    render json: toggled_payments
   end
 
   private
