@@ -5,9 +5,8 @@ import _ from 'lodash';
 import { Form, Label, Radio } from 'semantic-ui-react';
 import { events } from '../../../../lib/wca-data.js.erb';
 import { roundIdToString } from '../../../../lib/utils/wcif';
-import { centisecondsToClockFormat } from '../../../../lib/wca-live/attempts';
+import { centisecondsToClockFormat, clockFormatToCentiseconds, reformatInput } from '../../../../lib/wca-live/attempts';
 import { useDispatch } from '../../../../lib/providers/StoreProvider';
-import TimeField from '../../../EditResult/WCALive/AttemptResultField/TimeField';
 import { updateTimeLimit } from '../../store/actions';
 import ButtonActivatedModal from '../ButtonActivatedModal';
 import TimeLimitDescription from './TimeLimitDescription';
@@ -23,8 +22,14 @@ export default function EditTimeLimitModal({ wcifEvent, wcifRound, disabled }) {
   const dispatch = useDispatch();
   const event = events.byId[wcifEvent.id];
 
-  const [centiseconds, setCentiseconds] = useState(timeLimit?.centiseconds ?? 0);
+  const [draftInput, setDraftInput] = useState(centisecondsToClockFormat(timeLimit?.centiseconds ?? 0));
   const [cumulativeRoundIds, setCumulativeRoundIds] = useState(timeLimit?.cumulativeRoundIds ?? []);
+  
+  const centiseconds = useMemo(() => clockFormatToCentiseconds(draftInput), [draftInput]);
+
+  const onChange = useCallback((event) => {
+    setDraftInput(reformatInput(event.target.value));    
+  }, [draftInput]);
 
   const Trigger = useMemo(() => {
     if (!timeLimit) {
@@ -51,12 +56,12 @@ export default function EditTimeLimitModal({ wcifEvent, wcifRound, disabled }) {
 
   const Title = useMemo(() => `Time limit for ${roundIdToString(wcifRound.id)}`, [wcifRound.id]);
 
-  const hasUnsavedChanges = () => (
+  const hasUnsavedChanges = useCallback(() => (
     !_.isEqual(timeLimit, { centiseconds, cumulativeRoundIds })
-  );
+  ), [timeLimit, cumulativeRoundIds, centiseconds]);
 
   const reset = useCallback(() => {
-    setCentiseconds(timeLimit?.centiseconds ?? 0);
+    setDraftInput(centisecondsToClockFormat(timeLimit?.centiseconds ?? 0));
     setCumulativeRoundIds(timeLimit?.cumulativeRoundIds ?? []);
   }, [timeLimit?.centiseconds, timeLimit?.cumulativeRoundIds]);
 
@@ -94,10 +99,12 @@ export default function EditTimeLimitModal({ wcifEvent, wcifRound, disabled }) {
       <Label>
         Time Limit
       </Label>
-      <TimeField
-        value={centiseconds}
-        onChange={setCentiseconds}
+      <Form.Input
         disabled={disabled}
+        spellCheck={false}
+        value={draftInput}
+        onChange={onChange}
+        autoFocus
       />
       <br />
       <Form.Field inline>
@@ -116,6 +123,7 @@ export default function EditTimeLimitModal({ wcifEvent, wcifRound, disabled }) {
           onChange={() => setCumulativeRoundIds([wcifRound.id])}
         />
       </Form.Field>
+
       <TimeLimitDescription
         wcifRound={wcifRound}
         timeLimit={{ centiseconds, cumulativeRoundIds }}
