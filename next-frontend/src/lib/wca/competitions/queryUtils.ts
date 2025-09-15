@@ -60,7 +60,7 @@ export function createSearchParams(
     );
   }
   if (delegate) {
-    searchParams.append("delegate", delegate);
+    searchParams.append("delegate", delegate.toString());
   }
   if (search) {
     searchParams.append("q", search);
@@ -104,8 +104,8 @@ export function createSearchParams(
     searchParams.append("sort", "-announced_at,name");
     searchParams.append("page", pageParam);
   } else if (timeOrder === "custom") {
-    const startLuxon = DateTime.fromISO(customStartDate, { zone: "UTC" });
-    const endLuxon = DateTime.fromISO(customEndDate, { zone: "UTC" });
+    const startLuxon = DateTime.fromISO(customStartDate!, { zone: "UTC" });
+    const endLuxon = DateTime.fromISO(customEndDate!, { zone: "UTC" });
 
     searchParams.append("sort", "start_date,end_date,name");
     searchParams.append(

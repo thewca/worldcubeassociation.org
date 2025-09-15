@@ -43,10 +43,10 @@ const LEGACY_YEARS_ALL = "all";
 export type CompetitionFilterState = {
   timeOrder: string;
   selectedYear: number | string;
-  customStartDate: string;
-  customEndDate: string;
+  customStartDate: string | null;
+  customEndDate: string | null;
   region: string;
-  delegate: string;
+  delegate: string | number;
   search: string;
   selectedEvents: string[];
   shouldIncludeCancelled: boolean;
@@ -185,7 +185,7 @@ export const updateSearchParams = (
   searchParams.delete(REGION, DEFAULT_REGION_ALL);
   searchParams.delete(REGION, DEFAULT_REGION);
 
-  searchParams.set(DELEGATE, delegate);
+  searchParams.set(DELEGATE, delegate.toString());
   searchParams.delete(DELEGATE, DEFAULT_DELEGATE);
 
   searchParams.set(SEARCH, search);
@@ -231,7 +231,7 @@ export const updateSearchParams = (
   );
 };
 
-export const filterReducer = (
+export const competitionFilterReducer = (
   state: CompetitionFilterState,
   action: { type: string; eventId: string },
 ) => {
