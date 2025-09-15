@@ -43,7 +43,7 @@
     "js-cookie": "^3.0.5",
     "lodash": "^4.17.21",
     "luxon": "^3.7.2",
-    "newrelic": "^13.3.1",
+    "newrelic": "^13.3.2",
     "next": "15.5.2",
     "next-auth": "5.0.0-beta.29",
     "next-themes": "^0.4.6",
