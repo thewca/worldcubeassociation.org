@@ -10236,7 +10236,7 @@ __metadata:
     shakapacker: "npm:8.4.0"
     style-loader: "npm:^4.0.0"
     stylelint: "npm:^16.24.0"
-    stylelint-config-recommended-scss: "npm:^16.0.0"
+    stylelint-config-recommended-scss: "npm:^16.0.1"
     stylelint-scss: "npm:^6.12.1"
     terser-webpack-plugin: "npm:^5.3.14"
     webpack: "npm:^5.101.3"
@@ -11080,9 +11080,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"stylelint-config-recommended-scss@npm:^16.0.0":
-  version: 16.0.0
-  resolution: "stylelint-config-recommended-scss@npm:16.0.0"
+"stylelint-config-recommended-scss@npm:^16.0.1":
+  version: 16.0.1
+  resolution: "stylelint-config-recommended-scss@npm:16.0.1"
   dependencies:
     postcss-scss: "npm:^4.0.9"
     stylelint-config-recommended: "npm:^17.0.0"
@@ -11093,7 +11093,7 @@ __metadata:
   peerDependenciesMeta:
     postcss:
       optional: true
-  checksum: 10c0/9b0d953edb6e8042e2095117d676e2e9591a840f3091534270238df327bee3afc846ad7b316c475617c96ddfa8f39f792a5d88541026104458b93873f00858cc
+  checksum: 10c0/340aa85fa964ebac7efdbef4c51bab8e0ef62716e2826fe1156a0087b700c02d92b4dfd7ef5e60d86171f9b28c93dafc0a117d4548df51b3096583d1618acc9d
   languageName: node
   linkType: hard
 
