@@ -56,6 +56,7 @@ import { useInView } from "react-intersection-observer";
 import { TFunction } from "i18next";
 import { useT } from "@/lib/i18n/useI18n";
 import RegionSelector from "@/components/RegionSelector";
+import { components } from "@/types/openapi";
 
 const DEBOUNCE_MS = 600;
 
@@ -198,10 +199,6 @@ export default function CompetitionsPage() {
     competitionsFetchNextPage,
     competitionsIsFetching,
   ]);
-
-  if (competitionsIsFetching) {
-    return <Loading />;
-  }
 
   if (!competitionsDistanceFiltered) {
     return "Error";
@@ -372,20 +369,13 @@ export default function CompetitionsPage() {
                 width="full"
               >
                 <Card.Body p={0}>
-                  <Table.Root size="xs" rounded="md" variant="competitions">
-                    <Table.Body>
-                      {competitionsDistanceFiltered.map((comp) => (
-                        <CompetitionTableEntry comp={comp} key={comp.id} />
-                      ))}
-                    </Table.Body>
-                    <ListViewFooter
-                      isLoading={competitionsIsFetching}
-                      hasMoreCompsToLoad={hasMoreCompsToLoad}
-                      numCompetitions={competitionsDistanceFiltered.length}
-                      bottomRef={bottomRef}
-                      t={t}
-                    />
-                  </Table.Root>
+                  <CompetitionTable
+                    competitions={competitionsDistanceFiltered}
+                    isLoading={competitionsIsFetching}
+                    hasMoreCompsToLoad={hasMoreCompsToLoad}
+                    bottomRef={bottomRef}
+                    t={t}
+                  />
                 </Card.Body>
               </Card.Root>
             </VStack>
@@ -393,6 +383,37 @@ export default function CompetitionsPage() {
         </Card.Root>
       </VStack>
     </Container>
+  );
+}
+
+function CompetitionTable({
+  competitions,
+  isLoading,
+  hasMoreCompsToLoad,
+  bottomRef,
+  t,
+}: {
+  competitions: components["schemas"]["CompetitionIndex"][];
+  isLoading: boolean;
+  hasMoreCompsToLoad: boolean;
+  t: TFunction;
+  bottomRef: (node?: Element | null) => void;
+}) {
+  return (
+    <Table.Root size="xs" rounded="md" variant="competitions">
+      <Table.Body>
+        {competitions.map((comp) => (
+          <CompetitionTableEntry comp={comp} key={comp.id} />
+        ))}
+      </Table.Body>
+      <ListViewFooter
+        isLoading={isLoading}
+        hasMoreCompsToLoad={hasMoreCompsToLoad}
+        numCompetitions={competitions.length}
+        bottomRef={bottomRef}
+        t={t}
+      />
+    </Table.Root>
   );
 }
 
@@ -409,6 +430,16 @@ function ListViewFooter({
   bottomRef: (node?: Element | null) => void;
   t: TFunction;
 }) {
+  if (isLoading) {
+    return (
+      <Table.Row textAlign="center">
+        <Table.Cell colSpan={6}>
+          <Loading />
+        </Table.Cell>
+      </Table.Row>
+    );
+  }
+
   if (!isLoading && !hasMoreCompsToLoad) {
     return (
       numCompetitions > 0 && (
