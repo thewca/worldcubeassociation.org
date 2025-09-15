@@ -409,12 +409,14 @@ function ListViewFooter({
   if (!isLoading && !hasMoreCompsToLoad) {
     return (
       numCompetitions > 0 && (
-        <Container textAlign="center">
-          {t("competitions.index.no_more_comps")}
-        </Container>
+        <Table.Row textAlign="center">
+          <Table.Cell colSpan={6}>
+            {t("competitions.index.no_more_comps")}
+          </Table.Cell>
+        </Table.Row>
       )
     );
   }
 
-  return <Box ref={bottomRef} />;
+  return <Table.Row ref={bottomRef} />;
 }
