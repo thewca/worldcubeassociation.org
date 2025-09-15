@@ -12814,6 +12814,7 @@ __metadata:
     react-dom: "npm:^19.1.1"
     react-i18next: "npm:^15.7.3"
     react-icons: "npm:^5.5.0"
+    react-intersection-observer: "npm:^9.16.0"
     react-markdown: "npm:^10.1.0"
     react-world-flags: "npm:^1.6.0"
     typescript: "npm:^5"
@@ -14178,6 +14179,19 @@ __metadata:
   peerDependencies:
     react: ">=16.13.1"
   checksum: 10c0/7d5da917b95951490041f8e7567d7e7d4cd4ce24a24626edc4893fd3d5d6c4c72572ddbb994fcee78dec6e6f608f6a65d4c9675e484e5f868671ce33856e182e
+  languageName: node
+  linkType: hard
+
+"react-intersection-observer@npm:^9.16.0":
+  version: 9.16.0
+  resolution: "react-intersection-observer@npm:9.16.0"
+  peerDependencies:
+    react: ^17.0.0 || ^18.0.0 || ^19.0.0
+    react-dom: ^17.0.0 || ^18.0.0 || ^19.0.0
+  peerDependenciesMeta:
+    react-dom:
+      optional: true
+  checksum: 10c0/2aee5103fb460c6e5a3ab5a4fdc8c69a5215e23699a12d7857f25ba765fed48eacbed94ca835d79edf00c0edcc9c4fbb5bb057a373402d0551718546810e0e48
   languageName: node
   linkType: hard
 

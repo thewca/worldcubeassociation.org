@@ -16,6 +16,7 @@ import {
   HStack,
   SegmentGroup,
   Slider,
+  Box,
 } from "@chakra-ui/react";
 import { AllCompsIcon } from "@/components/icons/AllCompsIcon";
 import MapIcon from "@/components/icons/MapIcon";
@@ -31,7 +32,6 @@ import CompRegoCloseDateIcon from "@/components/icons/CompRegoCloseDateIcon";
 import Flag from "react-world-flags";
 
 import countries from "@/lib/wca/data/countries";
-import type { components } from "@/types/openapi";
 import { useSession } from "next-auth/react";
 import { useEffect, useMemo, useReducer, useState } from "react";
 import { useInfiniteQuery } from "@tanstack/react-query";
@@ -49,6 +49,9 @@ import useDebounce from "@/lib/hooks/useDebounce";
 import { WCA_API_PAGINATION } from "@/lib/wca/data/wca";
 import Loading from "@/components/ui/loading";
 import { useSearchParams } from "next/navigation";
+import { useInView } from "react-intersection-observer";
+import { TFunction } from "i18next";
+import { useT } from "@/lib/i18n/useI18n";
 
 const DEBOUNCE_MS = 600;
 
@@ -103,6 +106,10 @@ export default function CompetitionsPage() {
     searchParams,
     createFilterState,
   );
+
+  const { ref: bottomRef, inView: bottomInView } = useInView();
+
+  const { t } = useT();
 
   const canViewAdminDetails = false;
 
@@ -176,6 +183,17 @@ export default function CompetitionsPage() {
           ) <= distanceFilter,
       );
   }, [location, distanceFilter, rawCompetitionData]);
+
+  useEffect(() => {
+    if (hasMoreCompsToLoad && bottomInView && !competitionsIsFetching) {
+      competitionsFetchNextPage();
+    }
+  }, [
+    hasMoreCompsToLoad,
+    bottomInView,
+    competitionsFetchNextPage,
+    competitionsIsFetching,
+  ]);
 
   if (competitionsIsFetching) {
     return <Loading />;
@@ -343,6 +361,13 @@ export default function CompetitionsPage() {
                         <CompetitionTableEntry comp={comp} key={comp.id} />
                       ))}
                     </Table.Body>
+                    <ListViewFooter
+                      isLoading={competitionsIsFetching}
+                      hasMoreCompsToLoad={hasMoreCompsToLoad}
+                      numCompetitions={competitionsDistanceFiltered.length}
+                      bottomRef={bottomRef}
+                      t={t}
+                    />
                   </Table.Root>
                 </Card.Body>
               </Card.Root>
@@ -352,4 +377,30 @@ export default function CompetitionsPage() {
       </VStack>
     </Container>
   );
+}
+
+function ListViewFooter({
+  isLoading,
+  hasMoreCompsToLoad,
+  numCompetitions,
+  bottomRef,
+  t,
+}: {
+  isLoading: boolean;
+  hasMoreCompsToLoad: boolean;
+  numCompetitions: number;
+  bottomRef: (node?: Element | null) => void;
+  t: TFunction;
+}) {
+  if (!isLoading && !hasMoreCompsToLoad) {
+    return (
+      numCompetitions > 0 && (
+        <Container textAlign="center">
+          {t("competitions.index.no_more_comps")}
+        </Container>
+      )
+    );
+  }
+
+  return <Box ref={bottomRef} />;
 }
