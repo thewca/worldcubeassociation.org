@@ -17,6 +17,9 @@ import {
   SegmentGroup,
   Slider,
   Box,
+  Input,
+  CloseButton,
+  InputGroup,
 } from "@chakra-ui/react";
 import { AllCompsIcon } from "@/components/icons/AllCompsIcon";
 import MapIcon from "@/components/icons/MapIcon";
@@ -224,18 +227,26 @@ export default function CompetitionsPage() {
               </Heading>
               <Flex gap="2" width="full" alignItems="flex-start">
                 <Flex gap="2" width="full" flexDirection="column">
-                  <Flex gap="2" width="full" alignItems="flex-start">
-                    <Combobox.Root
-                      collection={collection}
-                      onInputValueChange={(e) => filter(e.inputValue)}
-                      width="320px"
-                      colorPalette="blue"
-                      openOnClick
-                    >
+                  <HStack gap="2" width="full" alignItems="flex-start">
+                    <EventSelector
+                      selectedEvents={filterState.selectedEvents}
+                      title="Event"
+                      onEventClick={(eventId) =>
+                        dispatchFilter({ type: "toggle_event", eventId })
+                      }
+                      onClearClick={() =>
+                        dispatchFilter({ type: "clear_events" })
+                      }
+                      onAllClick={() =>
+                        dispatchFilter({ type: "select_all_events" })
+                      }
+                    />
+                  </HStack>
+                  <HStack>
+                    <Box flex={1}>
                       <RegionSelector
                         t={t}
                         region={filterState.region}
-                        label="Country/Continent"
                         onRegionChange={(region) =>
                           dispatchFilter({
                             type: "set_region",
@@ -243,42 +254,35 @@ export default function CompetitionsPage() {
                           })
                         }
                       />
-                      <Portal>
-                        <Combobox.Positioner>
-                          <Combobox.Content justifyContent="flex-start">
-                            <Combobox.Empty>No items found</Combobox.Empty>
-                            {collection.items.map((item) => (
-                              <Combobox.Item item={item} key={item.value}>
-                                <Flag
-                                  code={item.value}
-                                  fallback={item.value}
-                                  height="25"
-                                  width="32"
-                                />
-                                {item.label}
-                                <Combobox.ItemIndicator />
-                              </Combobox.Item>
-                            ))}
-                          </Combobox.Content>
-                        </Combobox.Positioner>
-                      </Portal>
-                    </Combobox.Root>
-                    {/* TODO: replace these buttons with DatePicker (Chakra does not have one by default) */}
-                    <Button variant="outline">
-                      <CompRegoOpenDateIcon />
-                      Date From
-                    </Button>
-                    <Button variant="outline">
-                      <CompRegoCloseDateIcon />
-                      Date To
-                    </Button>
-                    {/* TODO: add "accordion" functionality to this button */}
-                    <Button variant="outline" size="sm">
-                      Advanced Filters
-                    </Button>
-                  </Flex>
-
-                  <Flex gap="2" width="full" alignItems="flex-start">
+                    </Box>
+                    <InputGroup
+                      flex={1}
+                      endElement={
+                        <CloseButton
+                          size="xs"
+                          onClick={() => {
+                            dispatchFilter({
+                              type: "set_search",
+                              search: "",
+                            });
+                          }}
+                          me="-2"
+                        />
+                      }
+                    >
+                      <Input
+                        placeholder="Search"
+                        value={filterState.search}
+                        onChange={(e) => {
+                          dispatchFilter({
+                            type: "set_search",
+                            search: e.target.value,
+                          });
+                        }}
+                      />
+                    </InputGroup>
+                  </HStack>
+                  <HStack gap="2" width="full" alignItems="flex-start">
                     <Slider.Root
                       width="250px"
                       colorPalette="blue"
@@ -296,21 +300,20 @@ export default function CompetitionsPage() {
                         <Slider.Marks marks={marks} />
                       </Slider.Control>
                     </Slider.Root>
-
-                    <EventSelector
-                      selectedEvents={filterState.selectedEvents}
-                      title="Event"
-                      onEventClick={(eventId) =>
-                        dispatchFilter({ type: "toggle_event", eventId })
-                      }
-                      onClearClick={() =>
-                        dispatchFilter({ type: "clear_events" })
-                      }
-                      onAllClick={() =>
-                        dispatchFilter({ type: "select_all_events" })
-                      }
-                    />
-                  </Flex>
+                    {/* TODO: replace these buttons with DatePicker (Chakra does not have one by default) */}
+                    <Button variant="outline">
+                      <CompRegoOpenDateIcon />
+                      Date From
+                    </Button>
+                    <Button variant="outline">
+                      <CompRegoCloseDateIcon />
+                      Date To
+                    </Button>
+                    {/* TODO: add "accordion" functionality to this button */}
+                    <Button variant="outline" size="sm">
+                      Advanced Filters
+                    </Button>
+                  </HStack>
                 </Flex>
 
                 <Flex gap="2" ml="auto">

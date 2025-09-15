@@ -12,7 +12,7 @@ import { TFunction } from "i18next";
 
 interface RegionSelectorProps {
   onlyCountries?: boolean;
-  label: string;
+  label?: string;
   region?: string;
   onRegionChange: (region: string) => void;
   nullable?: boolean;
@@ -51,7 +51,7 @@ export default function RegionSelector({
 
   return (
     <VStack alignItems="start">
-      <Text textStyle="label">{label}</Text>
+      {label && <Text textStyle="label">{label}</Text>}
       <Combobox.Root
         collection={collection}
         onInputValueChange={(e) => filter(e.inputValue)}
