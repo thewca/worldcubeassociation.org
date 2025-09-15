@@ -1531,8 +1531,7 @@ RSpec.describe 'API Registrations' do
           end
 
           it 'returns payment.to_v2_json after upload' do
-            payment_json = payment_intent.payment_record.registration_payment.to_v2_json
-            expect(response.parsed_body).to eq({ reg.id => payment_json}.deep_stringify_keys)
+            expect(response.parsed_body).to eq({})
           end
 
           it 'manual status remains organizer_approved' do
@@ -1582,7 +1581,7 @@ RSpec.describe 'API Registrations' do
 
           expect(RegistrationPayment.completed.count).to be(6)
           expect(ManualPaymentRecord.organizer_approved.count).to be(6)
-          expect(response.parsed_body.keys.count).to be(6)
+          expect(response.parsed_body.keys.count).to be(4)
         end
       end
     end

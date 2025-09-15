@@ -142,13 +142,13 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
   const { mutate: captureManualPaymentsMutation, isPending: isCapturing } = useMutation({
     mutationFn: captureManualPayments,
     onError: () => {
-      dispatchStore(showMessage('An error occurred while trying to capture manual payments', 'negative'));
+      dispatchStore(showMessage('competition.registration_v2.payments.capture_manual_error', 'negative'));
     },
     onSuccess: async () => {
-      dispatchStore(showMessage('Registration payments successfully approved', 'positive'));
+      dispatchStore(showMessage('competitions.registration_v2.payments.capture_manual_success', 'positive'));
       await refetch()
     }
-  })
+  });
 
   const partitionedRegistrations = useMemo(
     () => partitionRegistrations(registrations ?? []),
