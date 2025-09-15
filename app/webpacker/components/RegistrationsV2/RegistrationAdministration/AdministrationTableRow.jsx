@@ -92,7 +92,9 @@ export default function TableRow({
     updated_at: updatedAt,
     payment_status: paymentStatus,
     has_paid: hasPaid,
+    payment_reference: paymentReference
   } = registration.payment ?? {};
+  const usingManualPayment = competitionInfo['connected_payment_integration_types'].includes('manual')
   const usingPayment = competitionInfo['using_payment_integrations?'];
   const checkboxCellColor = !distinguishPaidUnpaid || !usingPayment || hasPaid
     ? color
@@ -102,6 +104,14 @@ export default function TableRow({
     navigator.clipboard.writeText(emailAddress);
     showMessage('Copied email address to clipboard.', 'positive');
   };
+
+  const amountValue = () => {
+    if (usingManualPayment) {
+      return paymentReference
+    } else if (usingPayment) {
+      return paymentAmount !== 0 ? isoMoneyToHumanReadable(paymentAmount, competitionInfo.currency_code) : ''
+    }
+  }
 
   /* eslint-disable react/jsx-props-no-spreading */
   return (
@@ -174,13 +184,9 @@ export default function TableRow({
               />
             </Table.Cell>
 
-            {competitionInfo['using_payment_integrations?'] && (
             <Table.Cell>
-              {paymentAmount !== 0
-                ? isoMoneyToHumanReadable(paymentAmount, competitionInfo.currency_code)
-                : ''}
+              {amountValue()}
             </Table.Cell>
-            )}
 
             {eventsAreExpanded ? (
               competitionInfo.event_ids.map((eventId) => (
