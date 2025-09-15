@@ -18,6 +18,8 @@ export default function TableHeader({
     dob: dobIsShown, events: eventsAreExpanded, comments: commentsAreShown,
   } = columnsExpanded;
 
+  const usingManualPayments = competitionInfo.connected_payment_integration_types.includes('manual')
+
   return (
     <Table.Header>
       <Table.Row>
@@ -68,7 +70,9 @@ export default function TableHeader({
               sorted={sortColumn === 'amount' ? sortDirection : undefined}
               onClick={() => onColumnClick('amount')}
             >
-              {I18n.t('competitions.registration_v2.update.amount')}
+              {usingManualPayments
+                ? I18n.t('registrations.payment_form.manual.payment_reference')
+                : I18n.t('competitions.registration_v2.update.amount')}
             </Table.HeaderCell>
           </>
         ) : (
