@@ -1,0 +1,336 @@
+import React, { useState, useEffect, useCallback } from "react";
+import {
+  Box,
+  Button,
+  Grid,
+  Text,
+  HStack,
+  VStack,
+  IconButton,
+  Flex,
+  ButtonProps,
+  Portal,
+  Popover,
+} from "@chakra-ui/react";
+import {
+  PopoverArrow,
+  PopoverBody,
+  PopoverContent,
+  PopoverRoot,
+  PopoverTrigger,
+} from "@chakra-ui/react";
+import {
+  format,
+  startOfMonth,
+  endOfMonth,
+  eachDayOfInterval,
+  isSameMonth,
+  isSameDay,
+  addMonths,
+  subMonths,
+  isToday,
+  isWithinInterval,
+  startOfWeek,
+  endOfWeek,
+} from "date-fns";
+import * as dateLocales from "date-fns/locale";
+import { AiFillCalendar } from "react-icons/ai";
+import { BiChevronLeft, BiChevronRight } from "react-icons/bi";
+
+export interface DateRange {
+  start: Date | null;
+  end: Date | null;
+}
+
+export interface DatePickerProps {
+  value?: Date | DateRange | null;
+  onChange: (date: Date | DateRange | null) => void;
+  mode?: "single" | "range";
+  locale: string;
+  placeholder?: string;
+  minDate?: Date;
+  maxDate?: Date;
+  disabled?: boolean;
+}
+
+export const DatePicker: React.FC<DatePickerProps> = ({
+  value,
+  onChange,
+  mode = "single",
+  locale,
+  placeholder,
+  minDate,
+  maxDate,
+  disabled = false,
+}) => {
+  const [currentMonth, setCurrentMonth] = useState(new Date());
+  const [tempRange, setTempRange] = useState<DateRange>({
+    start: null,
+    end: null,
+  });
+  const [isOpen, setIsOpen] = useState(false);
+
+  const currentLocale = dateLocales[locale as keyof typeof dateLocales];
+
+  // Reset temp range when mode changes or picker closes
+  useEffect(() => {
+    if (!isOpen) {
+      setTempRange({ start: null, end: null });
+    }
+  }, [isOpen]);
+
+  const monthStart = startOfMonth(currentMonth);
+  const monthEnd = endOfMonth(currentMonth);
+  const calendarStart = startOfWeek(monthStart, { locale: currentLocale });
+  const calendarEnd = endOfWeek(monthEnd, { locale: currentLocale });
+
+  const days = eachDayOfInterval({ start: calendarStart, end: calendarEnd });
+
+  const formatDisplayValue = useCallback(() => {
+    if (!value) return placeholder || "Select date";
+
+    if (mode === "single" && value instanceof Date) {
+      return format(value, "PPP", { locale: currentLocale });
+    }
+
+    if (
+      mode === "range" &&
+      value &&
+      typeof value === "object" &&
+      "start" in value
+    ) {
+      const { start, end } = value as DateRange;
+      if (start && end) {
+        return `${format(start, "MMM dd", { locale: currentLocale })} - ${format(end, "MMM dd", { locale: currentLocale })}`;
+      }
+      if (start) {
+        return `${format(start, "MMM dd", { locale: currentLocale })} - ...`;
+      }
+    }
+
+    return placeholder || "Select date";
+  }, [currentLocale, mode, placeholder, value]);
+
+  const handleDateClick = (date: Date) => {
+    if (disabled) return;
+
+    // Check if date is within allowed range
+    if (minDate && date < minDate) return;
+    if (maxDate && date > maxDate) return;
+
+    if (mode === "single") {
+      onChange(date);
+      setIsOpen(false);
+    } else {
+      // Range mode logic
+      if (!tempRange.start || (tempRange.start && tempRange.end)) {
+        // Start new range
+        setTempRange({ start: date, end: null });
+      } else if (tempRange.start && !tempRange.end) {
+        // Complete the range
+        const newRange = {
+          start: date < tempRange.start ? date : tempRange.start,
+          end: date < tempRange.start ? tempRange.start : date,
+        };
+        setTempRange(newRange);
+        onChange(newRange);
+        setIsOpen(false);
+      }
+    }
+  };
+
+  const getDayButtonProps = (date: Date) => {
+    const isCurrentMonth = isSameMonth(date, currentMonth);
+    const isSelected =
+      mode === "single"
+        ? value instanceof Date && isSameDay(date, value)
+        : false;
+
+    let isInRange = false;
+    let isRangeStart = false;
+    let isRangeEnd = false;
+    let isTempInRange = false;
+    let isTempStart = false;
+    let isTempEnd = false;
+
+    if (mode === "range") {
+      // Check actual selected range
+      if (value && typeof value === "object" && "start" in value) {
+        const { start, end } = value as DateRange;
+        if (start && end) {
+          isInRange = isWithinInterval(date, { start, end });
+          isRangeStart = isSameDay(date, start);
+          isRangeEnd = isSameDay(date, end);
+        }
+      }
+
+      // Check temporary range
+      if (tempRange.start) {
+        isTempStart = isSameDay(date, tempRange.start);
+        if (tempRange.end) {
+          isTempInRange = isWithinInterval(date, {
+            start:
+              tempRange.start < tempRange.end ? tempRange.start : tempRange.end,
+            end:
+              tempRange.start < tempRange.end ? tempRange.end : tempRange.start,
+          });
+          isTempEnd = isSameDay(date, tempRange.end);
+        }
+      }
+    }
+
+    const isDisabledDate =
+      (minDate && date < minDate) || (maxDate && date > maxDate);
+
+    return {
+      size: "sm",
+      variant:
+        isSelected || isRangeStart || isRangeEnd || isTempStart || isTempEnd
+          ? "solid"
+          : isInRange || isTempInRange
+            ? "outline"
+            : "ghost",
+      colorPalette:
+        isSelected || isRangeStart || isRangeEnd || isTempStart || isTempEnd
+          ? "blue"
+          : isInRange || isTempInRange
+            ? "blue"
+            : "gray",
+      bg: !isCurrentMonth
+        ? "transparent"
+        : isToday(date) &&
+            !isSelected &&
+            !isRangeStart &&
+            !isRangeEnd &&
+            !isTempStart &&
+            !isTempEnd
+          ? "blue.50"
+          : undefined,
+      color: !isCurrentMonth ? "gray.400" : undefined,
+      opacity: isDisabledDate ? 0.4 : 1,
+      cursor: isDisabledDate ? "not-allowed" : "pointer",
+      _hover: isDisabledDate ? {} : { bg: "blue.50" },
+    } as ButtonProps;
+  };
+
+  const weekDays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map(
+    (day) =>
+      format(
+        new Date(
+          2024,
+          0,
+          day === "Sun"
+            ? 7
+            : ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].indexOf(day) + 1,
+        ),
+        "EEE",
+        { locale: currentLocale },
+      ),
+  );
+
+  return (
+    <PopoverRoot
+      open={isOpen}
+      onOpenChange={({ open }) => setIsOpen(open)}
+      positioning={{ placement: "bottom-start" }}
+    >
+      <PopoverTrigger asChild>
+        <Button
+          disabled={disabled}
+          justifyContent="flex-start"
+          w="full"
+          maxW="300px"
+        >
+          <AiFillCalendar size={16} />
+          <Text truncate>{formatDisplayValue()}</Text>
+        </Button>
+      </PopoverTrigger>
+      <Portal>
+        <Popover.Positioner>
+          <PopoverContent width="320px" p={0}>
+            <PopoverArrow />
+            <PopoverBody p={4}>
+              <VStack gap={4}>
+                {/* Month Navigation */}
+                <HStack w="full" justify="space-between" align="center">
+                  <IconButton
+                    aria-label="Previous month"
+                    size="sm"
+                    variant="ghost"
+                    onClick={() => setCurrentMonth(subMonths(currentMonth, 1))}
+                  >
+                    <BiChevronLeft size={16} />
+                  </IconButton>
+                  <Text fontSize="lg" fontWeight="semibold">
+                    {format(currentMonth, "MMMM yyyy", {
+                      locale: currentLocale,
+                    })}
+                  </Text>
+                  <IconButton
+                    aria-label="Next month"
+                    size="sm"
+                    variant="ghost"
+                    onClick={() => setCurrentMonth(addMonths(currentMonth, 1))}
+                  >
+                    <BiChevronRight size={16} />
+                  </IconButton>
+                </HStack>
+
+                {/* Calendar Grid */}
+                <Box w="full">
+                  {/* Week day headers */}
+                  <Grid templateColumns="repeat(7, 1fr)" gap={1} mb={2}>
+                    {weekDays.map((day) => (
+                      <Text
+                        key={day}
+                        fontSize="xs"
+                        fontWeight="medium"
+                        color="gray.500"
+                        textAlign="center"
+                        py={1}
+                      >
+                        {day}
+                      </Text>
+                    ))}
+                  </Grid>
+
+                  {/* Calendar days */}
+                  <Grid templateColumns="repeat(7, 1fr)" gap={1}>
+                    {days.map((date) => (
+                      <Button
+                        key={date.toISOString()}
+                        onClick={() => handleDateClick(date)}
+                        {...getDayButtonProps(date)}
+                      >
+                        {format(date, "d")}
+                      </Button>
+                    ))}
+                  </Grid>
+                </Box>
+
+                {/* Mode indicator */}
+                <Flex
+                  w="full"
+                  justify="space-between"
+                  align="center"
+                  pt={2}
+                  borderTop="1px solid"
+                  borderColor="gray.100"
+                >
+                  <Text fontSize="xs" color="gray.500">
+                    Mode: {mode === "single" ? "Single Date" : "Date Range"}
+                  </Text>
+                  {tempRange.start && mode === "range" && !tempRange.end && (
+                    <Text fontSize="xs" color="blue.500">
+                      Select end date
+                    </Text>
+                  )}
+                </Flex>
+              </VStack>
+            </PopoverBody>
+          </PopoverContent>
+        </Popover.Positioner>
+      </Portal>
+    </PopoverRoot>
+  );
+};
