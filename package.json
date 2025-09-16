@@ -120,7 +120,7 @@
     "playwright": "^1.55.0",
     "react-refresh": "^0.17.0",
     "stylelint": "^16.24.0",
-    "stylelint-config-recommended-scss": "^16.0.0",
+    "stylelint-config-recommended-scss": "^16.0.1",
     "stylelint-scss": "^6.12.1",
     "webpack-bundle-analyzer": "^4.10.2",
     "webpack-dev-server": "^5.2.2"
