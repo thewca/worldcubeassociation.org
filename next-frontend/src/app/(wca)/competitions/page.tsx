@@ -1,16 +1,12 @@
 "use client";
 
 import {
-  useFilter,
-  useListCollection,
   Container,
   VStack,
   Heading,
   Flex,
   Button,
   Text,
-  Combobox,
-  Portal,
   Table,
   Card,
   HStack,
@@ -32,7 +28,6 @@ import CompRegoNotOpenYetGreyIcon from "@/components/icons/CompRegoNotOpenYet_gr
 import CompRegoClosedRedIcon from "@/components/icons/CompRegoClosed_redIcon";
 import CompRegoOpenDateIcon from "@/components/icons/CompRegoOpenDateIcon";
 import CompRegoCloseDateIcon from "@/components/icons/CompRegoCloseDateIcon";
-import Flag from "react-world-flags";
 
 import countries from "@/lib/wca/data/countries";
 import { useSession } from "next-auth/react";
@@ -91,16 +86,6 @@ export default function CompetitionsPage() {
     longitude: number;
   } | null>(null);
   const [distanceFilter, setDistanceFilter] = useState<number>(100);
-
-  const { contains } = useFilter({ sensitivity: "base" });
-
-  const { collection, filter } = useListCollection({
-    initialItems: Object.entries(countries.byIso2).map(([code, country]) => ({
-      label: country.id,
-      value: code,
-    })),
-    filter: contains,
-  });
 
   const api = useAPI();
 
