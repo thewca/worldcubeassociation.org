@@ -1603,6 +1603,117 @@ RSpec.describe 'API Registrations' do
     end
   end
 
+  describe 'PATCH #uncapture_manual_payments' do
+    let(:comp) { create(:competition, :manual_connected, :registration_open, :visible, :with_organizer) }
+    let(:reg) { create(:registration, competition: comp) }
+
+    context 'as organizer' do
+      before do
+        headers['Authorization'] = fetch_jwt_token(comp.organizers.first.id)
+      end
+
+      context 'manual_status: organizer_approved, payment_reference present' do
+        let(:payment_intent) { create(:payment_intent, :manual_succeeded, holder: reg) }
+        let!(:manual_payment) { payment_intent.payment_record }
+        let(:reg_payment) { manual_payment.registration_payment }
+
+        before do
+          patch uncapture_manual_payment_api_v1_registration_path(reg), headers: headers, as: :json
+        end
+
+        it 'succeeds' do
+          expect(response).to be_successful
+        end
+
+        it 'returns payment.to_v2_json after upload' do
+          expected_response = reg_payment.to_v2_json.stringify_keys
+          expected_response['is_completed'] = false
+
+          expect(response.parsed_body).to eq(expected_response)
+        end
+
+        it 'sets manual_status to user_submitted' do
+          expect(manual_payment.reload.manual_status).to eq('user_submitted')
+        end
+
+        it 'updates payment intent to requires_capture' do
+          expect(payment_intent.reload.wca_status).to eq('requires_capture')
+        end
+
+        it 'marks payment as incomplete' do
+          expect(reg_payment.reload.is_completed).to be false
+        end
+      end
+
+      context 'manual_status: organizer_approved, no payment_reference' do
+        let(:payment_intent) { create(:payment_intent, :manual_succeeded, holder: reg) }
+        let!(:manual_payment) { payment_intent.payment_record }
+        let(:reg_payment) { manual_payment.registration_payment }
+
+        before do
+          manual_payment.update(payment_reference: nil) # Remove the payment reference created by the factory
+          patch uncapture_manual_payment_api_v1_registration_path(reg), headers: headers, as: :json
+        end
+
+        it 'succeeds' do
+          expect(response).to be_successful
+        end
+
+        it 'returns payment.to_v2_json after upload' do
+          expected_response = reg_payment.to_v2_json.stringify_keys
+          expected_response['is_completed'] = false
+
+          expect(response.parsed_body).to eq(expected_response)
+        end
+
+        it 'sets manual_status to user_submitted' do
+          expect(manual_payment.reload.manual_status).to eq('created')
+        end
+
+        it 'updates payment intent to requires_capture' do
+          expect(payment_intent.reload.wca_status).to eq('created')
+        end
+
+        it 'marks payment as incomplete' do
+          expect(reg_payment.reload.is_completed).to be false
+        end
+      end
+
+      context 'manual_status != organizer_approved' do
+        it 'manual_stauts: created returns unprocessable entity' do
+          intent = create(:payment_intent, :manual, holder: reg)
+          expect(intent.payment_record.manual_status == 'created')
+
+          patch uncapture_manual_payment_api_v1_registration_path(reg), headers: headers, as: :json
+
+          expect(response.status).to be(422)
+          expect(response.parsed_body).to eq({ 'error' => 'Cannot uncapture a non-captured payment' })
+          expect(intent.reload.payment_record.manual_status == 'created')
+        end
+
+        it 'manual_stauts: requires_capture returns unprocessable entity' do
+          intent = create(:payment_intent, :manual_requires_capture, holder: reg)
+          expect(intent.payment_record.manual_status == 'requires_capture')
+
+          patch uncapture_manual_payment_api_v1_registration_path(reg), headers: headers, as: :json
+
+          expect(response.status).to be(422)
+          expect(response.parsed_body).to eq({ 'error' => 'Cannot uncapture a non-captured payment' })
+          expect(intent.reload.payment_record.manual_status == 'requires_capture')
+        end
+      end
+    end
+
+    context 'as user' do
+      it 'rejects with unauthorized' do
+        headers['Authorization'] = fetch_jwt_token(reg.user.id)
+        patch uncapture_manual_payment_api_v1_registration_path(reg), headers: headers, as: :json
+
+        expect(response).to be_unauthorized
+      end
+    end
+  end
+
   describe 'PATCH #bulk_accept' do
     let(:auto_accept_comp) do
       create(

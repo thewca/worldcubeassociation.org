@@ -10,7 +10,7 @@ class Api::V1::RegistrationsController < Api::V1::ApiController
   before_action :ensure_registration_exists, only: [:show_by_user]
   before_action :validate_show_registration_by_user, only: [:show_by_user]
   before_action :validate_show_registration, only: [:show]
-  before_action :validate_admin_action, only: %i[index_admin bulk_auto_accept capture_manual_payments]
+  before_action :validate_admin_action, only: %i[index_admin bulk_auto_accept capture_manual_payments uncapture_manual_payment]
   before_action :load_registration_from_request, only: [:update]
   before_action :user_can_modify_registration, only: [:update]
   before_action :validate_update_request, only: [:update]
@@ -228,8 +228,12 @@ class Api::V1::RegistrationsController < Api::V1::ApiController
 
   # To list Registrations in the admin view you need to be able to administer the competition
   def validate_admin_action
-    competition_id = params_competition_id
-    @competition = Competition.find(competition_id)
+    if params[:competition_id].present?
+      @competition = Competition.find(params_competition_id)
+    else
+      @registration = Registration.find(params_id)
+      @competition = @registration.competition
+    end
 
     render_error(:unauthorized, Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) unless @current_user.can_manage_competition?(@competition)
   end
@@ -304,6 +308,26 @@ class Api::V1::RegistrationsController < Api::V1::ApiController
     end
 
     render json: toggled_payments
+  end
+
+  def uncapture_manual_payment
+    payment = @registration.registration_payments.first # TODO: How can we access/handle payments without just doing .first
+
+    stored_record = payment.receipt
+    return render_error(:unprocessable_entity, 'Cannot uncapture a non-captured payment') unless stored_record.manual_status == 'organizer_approved'
+
+    stored_intent = stored_record.payment_intent
+
+    comp = payment.registration.competition
+    connected_account = comp.payment_account_for(:manual)
+
+    updated_status = stored_record.payment_reference.present? ? 'user_submitted' : 'created'
+    stored_record.assign_attributes(manual_status: updated_status)
+
+    stored_intent.update_status_and_charges(connected_account, stored_record, current_user) do |updated_record|
+      render json: payment.to_v2_json if
+        payment.is_completed? && payment.update(is_completed: false) && updated_record.manual_status != 'organizer_approved'
+    end
   end
 
   private

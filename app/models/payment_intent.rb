@@ -40,6 +40,7 @@ class PaymentIntent < ApplicationRecord
     self.with_lock do
       # The order of operations here is critical:
       #   We need to update the underlying raw record first, so that `determine_wca_status` works correctly
+      previous_provider_status = self.payment_record.provider_status
       self.payment_record.update_status(api_intent)
       updated_wca_status = self.determine_wca_status.to_s
 
@@ -75,7 +76,9 @@ class PaymentIntent < ApplicationRecord
           )
         end
       when PaymentIntent.wca_statuses[:created],
-        PaymentIntent.wca_statuses[:pending]
+        PaymentIntent.wca_statuses[:pending],
+        PaymentIntent.wca_statuses[:requires_capture]
+
         # Reset by the gateway
         self.update!(
           confirmed_at: nil,
@@ -84,6 +87,8 @@ class PaymentIntent < ApplicationRecord
           cancellation_source: nil,
           wca_status: updated_wca_status,
         )
+
+        yield self.payment_record if self.payment_record_type == 'ManualPaymentRecord' && previous_provider_status == 'organizer_approved'
       end
 
       self.update_common_attributes!(api_intent, updated_wca_status)
