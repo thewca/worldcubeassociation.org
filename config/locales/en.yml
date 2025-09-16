@@ -1832,8 +1832,11 @@ en:
     registration_v2:
       payments:
         capture_manual_error: "An error occurred while trying to capture manual payments. If this issue persists contact WST"
+        nothing_captured: "No new payments were approved - it is likely that the selected payments were already marked as paid."
         capture_manual_success: "Registration payments successfully approved"
+        approved_modal_header: "Approved payments for the following registrations"
       auto_accept:
+        bulk_modal_header: "Bulk Auto-Accept Result"
         bulk_auto_accept: "Auto-Approve Competitors"
         cant_bulk_auto_accept: "An error occurred while trying to bulk auto accept - contact WST for assistance if needed"
         bulk_auto_accepted: "Bulk auto accept succeeded"
@@ -2382,6 +2385,7 @@ en:
     forum_age_requirement: "You must be 13 years old to access the WCA Forum."
     forum_enter_dob: "A date of birth is required before accessing the forum. Please enter your date of birth, and then try and access the forum again."
     refresh: "Refresh"
+    close: "Close"
   #context: FAQ page
   faq:
     title: "Frequently Asked Questions"
