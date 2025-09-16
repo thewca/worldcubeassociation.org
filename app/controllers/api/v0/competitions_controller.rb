@@ -64,6 +64,12 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
     render json: competition.results
   end
 
+  def podiums
+    competition = Competition.find(params.require(:competition_id))
+
+    render json: competition.results.podium
+  end
+
   def event_results
     competition = competition_from_params(associations: [:rounds])
     event = Event.c_find!(params[:event_id])

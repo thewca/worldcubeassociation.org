@@ -9,6 +9,9 @@ class ResultsSubmissionController < ApplicationController
 
   def new
     @competition = competition_from_params
+
+    expected_feature_flag = ServerSetting.find_by(name: ServerSetting::WCA_LIVE_BETA_FEATURE_FLAG)
+    @show_wca_live_beta = expected_feature_flag.present? && params[:wcaLiveBeta] == expected_feature_flag.value
   end
 
   def newcomer_checks
@@ -24,8 +27,16 @@ class ResultsSubmissionController < ApplicationController
   def newcomer_name_format_check
     competition = competition_from_params
 
-    name_format_issues = competition.accepted_newcomers.flat_map do |user|
-      ResultsValidators::PersonsValidator.name_validations(user.name, nil)
+    name_format_issues = competition.accepted_newcomers.filter_map do |user|
+      issues = ResultsValidators::PersonsValidator.name_validations(user.name)
+
+      if issues.present?
+        {
+          id: user.id,
+          name: user.name,
+          issues: issues,
+        }
+      end
     end
 
     render status: :ok, json: name_format_issues
@@ -51,6 +62,13 @@ class ResultsSubmissionController < ApplicationController
     ComputePotentialDuplicates.perform_later(job_run)
 
     render status: :ok, json: job_run
+  end
+
+  def upload_scrambles
+    @competition = Competition.includes(
+      scramble_file_uploads: ScrambleFileUpload::SERIALIZATION_INCLUDES,
+      **ScrambleFileUpload::SERIALIZATION_INCLUDES,
+    ).find(params[:competition_id])
   end
 
   def upload_json
@@ -128,9 +146,8 @@ class ResultsSubmissionController < ApplicationController
                                    .select { it.wcif_status == "accepted" && person_with_results.include?(it.registrant_id.to_s) }
                                    .map do |registration|
       InboxPerson.new({
-                        id: registration.registrant_id,
+                        id: [registration.registrant_id, competition.id],
                         wca_id: registration.wca_id || '',
-                        competition_id: competition.id,
                         name: registration.name,
                         country_iso2: registration.country.iso2,
                         gender: registration.gender,
@@ -138,15 +155,15 @@ class ResultsSubmissionController < ApplicationController
                       })
     end
 
-    scrambles_to_import = InboxScrambleSet.where(competition_id: competition.id).flat_map do |scramble_set|
-      scramble_set.inbox_scrambles.map do |scramble|
+    scrambles_to_import = competition.matched_scramble_sets.flat_map do |scramble_set|
+      scramble_set.matched_inbox_scrambles.map do |scramble|
         Scramble.new({
                        competition_id: competition.id,
                        event_id: scramble_set.event_id,
                        round_type_id: scramble_set.round_type_id,
                        round_id: scramble_set.matched_round_id,
                        group_id: scramble_set.alphabetic_group_index,
-                       is_extra: scramble.is_extra,
+                       is_extra: scramble.is_extra?,
                        scramble_num: scramble.ordered_index + 1,
                        scramble: scramble.scramble_string,
                      })
@@ -172,13 +189,24 @@ class ResultsSubmissionController < ApplicationController
 
     return render status: :unprocessable_entity, json: { error: "Submitted results contain errors." } if results_validator.any_errors?
 
-    return render status: :unprocessable_entity, json: { error: "There is already a ticket associated, please contact WRT to update this." } if competition.result_ticket.present?
+    if competition.tickets_competition_result.present? && !competition.tickets_competition_result.aborted?
+      return render status: :unprocessable_entity, json: {
+        error: "There is already a ticket associated with this, hence the results can be resubmitted only if the previous posting has been cancelled by WRT.",
+      }
+    end
 
     CompetitionsMailer.results_submitted(competition, results_validator, message, current_user).deliver_now
 
     ActiveRecord::Base.transaction do
       competition.touch(:results_submitted_at)
-      TicketsCompetitionResult.create_ticket!(competition, message, current_user)
+      if competition.tickets_competition_result.present?
+        competition.tickets_competition_result.update!(
+          status: TicketsCompetitionResult.statuses[:submitted],
+          delegate_message: message,
+        )
+      else
+        TicketsCompetitionResult.create_ticket!(competition, message, current_user)
+      end
     end
 
     render status: :ok, json: { success: true }

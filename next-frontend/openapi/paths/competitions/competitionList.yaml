@@ -1,0 +1,14 @@
+get:
+  summary: Get a list of (upcoming) competitions for table display
+  tags:
+    - competitions
+  operationId: competitionList
+  responses:
+    '200':
+      description: Successful response
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '../../schemas/competitions/CompetitionIndex.yaml'

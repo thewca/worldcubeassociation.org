@@ -4,7 +4,6 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import Loading from '../../../Requests/Loading';
 import Errored from '../../../Requests/Errored';
 import postResults from '../../api/competitionResult/postResults';
-import { ticketsCompetitionResultStatuses } from '../../../../lib/wca-data.js.erb';
 import { viewUrls, competitionAllResultsUrl } from '../../../../lib/requests/routes.js.erb';
 
 export default function FinalSteps({ ticketDetails }) {
@@ -19,21 +18,10 @@ export default function FinalSteps({ ticketDetails }) {
     error,
   } = useMutation({
     mutationFn: postResults,
-    onSuccess: () => {
-      queryClient.setQueryData(
-        ['ticket-details', id],
-        (oldTicketDetails) => ({
-          ...oldTicketDetails,
-          ticket: {
-            ...oldTicketDetails.ticket,
-            metadata: {
-              ...oldTicketDetails.ticket.metadata,
-              status: ticketsCompetitionResultStatuses.posted,
-            },
-          },
-        }),
-      );
-    },
+    onSuccess: (ticket) => queryClient.setQueryData(
+      ['ticket-details', id],
+      (oldTicketDetails) => ({ ...oldTicketDetails, ticket }),
+    ),
   });
 
   if (isPending) return <Loading />;

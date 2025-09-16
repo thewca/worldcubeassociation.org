@@ -647,6 +647,7 @@ class User < ApplicationRecord
       fixResults
       mergeProfiles
       mergeUsers
+      helpfulQueries
     ].index_with { |panel_page| panel_page.to_s.underscore.dasherize }
   end
 
@@ -750,9 +751,10 @@ class User < ApplicationRecord
       wic: {
         name: 'WIC panel',
         pages: [
-          panel_pages[:bannedCompetitors],
           panel_pages[:downloadVoters],
+          panel_pages[:bannedCompetitors],
           panel_pages[:delegateProbations],
+          panel_pages[:helpfulQueries],
         ],
       },
       weat: {
