@@ -7220,9 +7220,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"leaflet-geosearch@npm:^4.2.0":
-  version: 4.2.0
-  resolution: "leaflet-geosearch@npm:4.2.0"
+"leaflet-geosearch@npm:^4.2.1":
+  version: 4.2.1
+  resolution: "leaflet-geosearch@npm:4.2.1"
   dependencies:
     "@googlemaps/js-api-loader": "npm:^1.16.6"
     leaflet: "npm:^1.6.0"
@@ -7231,7 +7231,7 @@ __metadata:
       optional: true
     leaflet:
       optional: true
-  checksum: 10c0/431d00d5779af179a51edbbf08c68779b353ee7001b8a44950eb4185207a514a835b101c745a632904e7f87fd547cc85ef3a9b453467bef67e62ee2ef6204e80
+  checksum: 10c0/75ba22d29c48c575afaed8f1c39879d51b61e6f92bb4d70a9563ec22ce422c939736c8eeec1259ff917095cfeadb8f0ba5e1fc04d09daab1f694b79f277282bc
   languageName: node
   linkType: hard
 
@@ -10200,7 +10200,7 @@ __metadata:
     js-yaml: "npm:^4.1.0"
     jshint: "npm:^2.13.6"
     leaflet: "npm:^1.9.4"
-    leaflet-geosearch: "npm:^4.2.0"
+    leaflet-geosearch: "npm:^4.2.1"
     lodash: "npm:^4.17.21"
     luxon: "npm:^3.7.2"
     make-plural: "npm:^7.4.0"
