@@ -2284,6 +2284,8 @@ en:
     labels:
       net_payment: "Net Payment"
       original_payment: "Original Payment"
+      manual_reference: "Payment Reference"
+      manual_status: "Payment Status"
     #context: localized names of payment providers
     payment_providers:
       paypal: 'PayPal'
