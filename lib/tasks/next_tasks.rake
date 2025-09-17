@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 namespace :next do
   namespace :posts do
     desc "Import Posts into nextjs"
@@ -16,7 +18,7 @@ namespace :next do
           req.body = batch.to_json(
             teaser_only: false,
             include: [author: { only: [:email] }, post_tags: { only: [:tag] }],
-            only: %w[id slug title sticky created_at unstick_at]
+            only: %w[id slug title sticky created_at unstick_at],
           )
         end
       end
