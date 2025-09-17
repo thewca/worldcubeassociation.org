@@ -2,6 +2,7 @@
 
 class SemiId
   include ActiveModel::Model
+
   attr_accessor :value
 
   SEMI_ID_RE = /\A[1-9][[:digit:]]{3}[[:upper:]]{4}\z/

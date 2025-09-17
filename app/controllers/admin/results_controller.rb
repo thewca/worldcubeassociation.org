@@ -5,30 +5,23 @@ module Admin
     # NOTE: authentication is performed by admin controller
 
     def posting_index
-      respond_to do |format|
-        format.html do
-          render :posting_index
-        end
-        format.json do
-          @pending_competitions = Competition.pending_posting.order(results_submitted_at: :asc)
-          user_attributes = {
-            only: %w[id name],
-            methods: [],
-            include: [],
-          }
-          render json: {
-            current_user: current_user.as_json(user_attributes),
-            competitions: @pending_competitions.as_json(
-              only: %w[id name results_submitted_at],
-              methods: %w[city country_iso2],
-              include: {
-                posting_user: user_attributes,
-                result_ticket: {},
-              },
-            ),
-          }
-        end
-      end
+      @pending_competitions = Competition.pending_posting.order(results_submitted_at: :asc)
+      user_attributes = {
+        only: %w[id name],
+        methods: [],
+        include: [],
+      }
+      render json: {
+        current_user: current_user.as_json(user_attributes),
+        competitions: @pending_competitions.as_json(
+          only: %w[id name results_submitted_at],
+          methods: %w[city country_iso2],
+          include: {
+            posting_user: user_attributes,
+            result_ticket: {},
+          },
+        ),
+      }
     end
 
     def start_posting
@@ -47,7 +40,7 @@ module Admin
 
       ActiveRecord::Base.transaction do
         TicketsCompetitionResult.where(competition: @updated_competitions)
-                                .update_all(status: TicketsCompetitionResult.statuses[:warnings_verification])
+                                .update_all(status: TicketsCompetitionResult.statuses[:locked_for_posting])
         @updated_competitions.update(posting_user: current_user)
       end
 

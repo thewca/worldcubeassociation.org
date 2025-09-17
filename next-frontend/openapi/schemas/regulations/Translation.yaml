@@ -1,0 +1,15 @@
+type: object
+required:
+  - version
+  - language
+  - language_english
+  - url
+properties:
+  version:
+    type: string
+  language:
+    type: string
+  language_english:
+    type: string
+  url:
+    type: string

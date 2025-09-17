@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_07_10_084311) do
+ActiveRecord::Schema[7.2].define(version: 2025_09_11_125658) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -459,7 +459,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_10_084311) do
     t.integer "competitor_can_cancel", default: 0, null: false
     t.integer "newcomer_month_reserved_spots"
     t.integer "auto_close_threshold"
-    t.boolean "auto_accept_registrations", default: false, null: false
     t.integer "auto_accept_disable_threshold"
     t.integer "auto_accept_preference", default: 0, null: false
     t.index ["cancelled_at"], name: "index_competitions_on_cancelled_at"
@@ -692,7 +691,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_10_084311) do
     t.bigint "external_upload_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["competition_id", "event_id", "round_number", "scramble_set_number"], name: "idx_on_competition_id_event_id_round_number_scrambl_d9248c75e4", unique: true
     t.index ["competition_id", "event_id", "round_number"], name: "idx_on_competition_id_event_id_round_number_063e808d5f"
     t.index ["competition_id"], name: "index_inbox_scramble_sets_on_competition_id"
     t.index ["event_id"], name: "fk_rails_7a55abc2f3"
@@ -705,11 +703,13 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_10_084311) do
     t.boolean "is_extra", default: false, null: false
     t.integer "scramble_number", null: false
     t.integer "ordered_index", null: false
+    t.bigint "matched_scramble_set_id"
     t.text "scramble_string", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["inbox_scramble_set_id", "scramble_number", "is_extra"], name: "idx_on_inbox_scramble_set_id_scramble_number_is_ext_bd518aa059", unique: true
     t.index ["inbox_scramble_set_id"], name: "index_inbox_scrambles_on_inbox_scramble_set_id"
+    t.index ["matched_scramble_set_id"], name: "index_inbox_scrambles_on_matched_scramble_set_id"
   end
 
   create_table "incident_competitions", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
@@ -790,6 +790,13 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_10_084311) do
     t.integer "notification_radius_km"
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
+  end
+
+  create_table "manual_payment_integrations", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "payment_reference_label", null: false
+    t.text "payment_instructions", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "oauth_access_grants", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
@@ -1070,6 +1077,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_10_084311) do
     t.datetime "updated_at", precision: nil, null: false
     t.integer "refunded_registration_payment_id"
     t.integer "user_id"
+    t.boolean "is_completed", default: true, null: false
+    t.datetime "paid_at"
     t.index ["receipt_type", "receipt_id"], name: "index_registration_payments_on_receipt"
     t.index ["refunded_registration_payment_id"], name: "idx_reg_payments_on_refunded_registration_payment_id"
     t.index ["registration_id"], name: "index_registration_payments_on_registration_id"
@@ -1362,10 +1371,19 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_10_084311) do
     t.index ["ticket_id"], name: "index_ticket_comments_on_ticket_id"
   end
 
+  create_table "ticket_log_changes", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.bigint "ticket_log_id", null: false
+    t.string "field_name", null: false
+    t.string "field_value", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["ticket_log_id"], name: "index_ticket_log_changes_on_ticket_log_id"
+  end
+
   create_table "ticket_logs", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "ticket_id", null: false
     t.string "action_type", null: false
-    t.string "action_value"
+    t.string "metadata_action"
     t.integer "acting_user_id", null: false
     t.bigint "acting_stakeholder_id", null: false
     t.datetime "created_at", null: false
@@ -1378,7 +1396,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_10_084311) do
   create_table "ticket_stakeholders", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "ticket_id", null: false
     t.string "stakeholder_type", null: false
-    t.bigint "stakeholder_id", null: false
+    t.string "stakeholder_id", limit: 255, null: false
     t.string "connection", null: false
     t.boolean "is_active", null: false
     t.datetime "created_at", null: false
@@ -1592,6 +1610,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_10_084311) do
   add_foreign_key "inbox_scramble_sets", "rounds", column: "matched_round_id"
   add_foreign_key "inbox_scramble_sets", "scramble_file_uploads", column: "external_upload_id"
   add_foreign_key "inbox_scrambles", "inbox_scramble_sets"
+  add_foreign_key "inbox_scrambles", "inbox_scramble_sets", column: "matched_scramble_set_id"
   add_foreign_key "live_attempt_history_entries", "live_attempts"
   add_foreign_key "oauth_openid_requests", "oauth_access_grants", column: "access_grant_id", on_delete: :cascade
   add_foreign_key "payment_intents", "users", column: "initiated_by_id"

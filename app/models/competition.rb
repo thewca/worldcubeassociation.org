@@ -32,12 +32,15 @@ class Competition < ApplicationRecord
   has_many :series_competitions, -> { readonly }, through: :competition_series, source: :competitions
   has_many :series_registrations, -> { readonly }, through: :series_competitions, source: :registrations
   belongs_to :posting_user, optional: true, foreign_key: 'posting_by', class_name: "User"
+  belongs_to :posted_user, optional: true, foreign_key: 'results_posted_by', class_name: "User"
   has_many :inbox_results, dependent: :delete_all
   has_many :inbox_persons, dependent: :delete_all
+  has_many :inbox_scramble_sets, dependent: :delete_all
+  has_many :matched_scramble_sets, through: :rounds
   belongs_to :announced_by_user, optional: true, foreign_key: "announced_by", class_name: "User"
   belongs_to :cancelled_by_user, optional: true, foreign_key: "cancelled_by", class_name: "User"
   has_many :competition_payment_integrations
-  has_many :scramble_file_uploads
+  has_many :scramble_file_uploads, dependent: :delete_all
   has_many :accepted_registrations, -> { accepted }, class_name: "Registration", foreign_key: "competition_id"
   has_many :accepted_newcomers, -> { where(wca_id: nil) }, through: :accepted_registrations, source: :user
   has_many :duplicate_checker_job_runs, dependent: :delete_all
@@ -178,7 +181,6 @@ class Competition < ApplicationRecord
     waiting_list_deadline_date
     event_change_deadline_date
     competition_series_id
-    auto_accept_registrations
     auto_accept_preference
     auto_accept_disable_threshold
     newcomer_month_reserved_spots
@@ -407,9 +409,9 @@ class Competition < ApplicationRecord
     # IF we build a controller endpoint specifically for auto_accept, this logic should be move there.
     return unless auto_accept_preference_changed? && !auto_accept_preference_disabled?
 
-    errors.add(:auto_accept_preference, I18n.t('competitions.errors.auto_accept_accept_paid_pending')) if registrations.pending.with_payments.count.positive?
+    errors.add(:auto_accept_preference, I18n.t('competitions.errors.auto_accept_accept_paid_pending')) if registrations.pending.with_payments.any?
     errors.add(:auto_accept_preference, I18n.t('competitions.errors.auto_accept_accept_waitlisted')) if
-      registrations.waitlisted.count.positive? && !registration_full_and_accepted?
+      registrations.waitlisted.any? && !registration_full_and_accepted?
   end
 
   def no_event_without_rounds?
@@ -700,8 +702,11 @@ class Competition < ApplicationRecord
              'series_competitions',
              'series_registrations',
              'posting_user',
+             'posted_user',
              'inbox_results',
              'inbox_persons',
+             'inbox_scramble_sets',
+             'matched_scramble_sets',
              'announced_by_user',
              'cancelled_by_user',
              'competition_payment_integrations',
@@ -1003,8 +1008,12 @@ class Competition < ApplicationRecord
     true
   end
 
+  def after_registration_open?
+    !registration_not_yet_opened?
+  end
+
   def registration_currently_open?
-    use_wca_registration? && !cancelled? && !registration_not_yet_opened? && !registration_past?
+    use_wca_registration? && !cancelled? && after_registration_open? && !registration_past?
   end
 
   def registration_not_yet_opened?
@@ -1013,6 +1022,10 @@ class Competition < ApplicationRecord
 
   def registration_past?
     registration_close && registration_close < Time.now
+  end
+
+  def can_show_competitors_page?
+    after_registration_open? && registrations.competing_status_accepted.competing.any?
   end
 
   def registration_status
@@ -1382,9 +1395,7 @@ class Competition < ApplicationRecord
     !confirmed_at.nil?
   end
 
-  def confirmed
-    self.confirmed?
-  end
+  alias_method :confirmed, :confirmed?
 
   def confirmed=(new_confirmed_str)
     new_confirmed = ActiveRecord::Type::Boolean.new.cast(new_confirmed_str)
@@ -1769,6 +1780,45 @@ class Competition < ApplicationRecord
     competitions.includes(:delegates, :organizers, *previous_includes).order(**order)
   end
 
+  def competing_step_parameters(current_user)
+    competition_params = serializable_hash(only: %i[events_per_registration_limit
+                                                    allow_registration_edits
+                                                    guest_entry_status
+                                                    guests_per_registration_limit
+                                                    guests_enabled
+                                                    uses_qualification?
+                                                    allow_registration_without_qualification
+                                                    force_comment_in_registration],
+                                           methods: %i[qualification_wcif event_ids],
+                                           include: [])
+    user_params = {
+      preferredEvents: current_user.preferred_events.pluck(:id),
+      personalRecords: {
+        single: current_user.ranks_single&.map(&:to_wcif) || [],
+        average: current_user.ranks_average&.map(&:to_wcif) || [],
+      },
+    }
+    competition_params.merge(user_params)
+  end
+
+  def payment_step_parameters
+    # Currently hardcoded to support stripe only
+    {
+      stripePublishableKey: AppSecrets.STRIPE_PUBLISHABLE_KEY,
+      connectedAccountId: payment_account_for(:stripe)&.account_id,
+    }
+  end
+
+  def available_registration_lanes(current_user)
+    # There is currently only one lane, so this always returns the competitor lane
+    steps = []
+    steps << { key: 'requirements', isEditable: false }
+    steps << { key: 'competing', parameters: competing_step_parameters(current_user), isEditable: true }
+    steps << { key: 'payment', parameters: payment_step_parameters, isEditable: true, deadline: self.registration_close } if using_payment_integrations?
+
+    steps
+  end
+
   def all_activities
     competition_venues.includes(venue_rooms: { schedule_activities: [child_activities: [:child_activities]] }).map(&:all_activities).flatten
   end
@@ -1845,6 +1895,7 @@ class Competition < ApplicationRecord
     includes_associations = [
       { assignments: [:schedule_activity] },
       { user: {
+        current_avatar: [],
         person: %i[ranks_single ranks_average],
       } },
       :wcif_extensions,
@@ -1857,9 +1908,9 @@ class Competition < ApplicationRecord
     persons_wcif = self.registrations
                        .includes(includes_associations)
                        .select { authorized || it.wcif_status == "accepted" }
-                       .map do
-      managers.delete(it.user)
-      it.user.to_wcif(self, it, authorized: authorized)
+                       .map do |registration|
+      managers.delete(registration.user)
+      registration.user.to_wcif(self, registration, authorized: authorized)
     end
     # NOTE: unregistered managers may generate N+1 queries on their personal bests,
     # but that's fine because there are very few of them!
@@ -2702,6 +2753,10 @@ class Competition < ApplicationRecord
     self.payment_integration_connected?(:paypal)
   end
 
+  def manual_connected?
+    self.payment_integration_connected?(:manual)
+  end
+
   def payment_account_for(integration_name)
     CompetitionPaymentIntegration.validate_integration_name!(integration_name)
 
@@ -2987,6 +3042,7 @@ class Competition < ApplicationRecord
   def fully_paid_registrations_count
     registrations
       .joins(:registration_payments)
+      .merge(RegistrationPayment.completed)
       .group('registrations.id')
       .having('SUM(registration_payments.amount_lowest_denomination) >= ?', base_entry_fee_lowest_denomination)
       .count.size # .count changes the AssociationRelation into a hash, and then .size gives the number of items in the hash

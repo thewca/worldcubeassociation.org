@@ -1,5 +1,8 @@
 import { withPayload } from "@payloadcms/next/withPayload";
 import type { NextConfig } from "next";
+import nextRoutes from "nextjs-routes/config";
+
+const withRoutes = nextRoutes({ outDir: "src/types" });
 
 const nextConfig: NextConfig = {
   experimental: {
@@ -20,6 +23,15 @@ const nextConfig: NextConfig = {
     ],
   },
   output: "standalone",
+  productionBrowserSourceMaps: true,
+  async rewrites() {
+    return [
+      {
+        source: "/api/documentation",
+        destination: "/api.html",
+      },
+    ];
+  },
 };
 
-export default withPayload(nextConfig);
+export default withPayload(withRoutes(nextConfig));

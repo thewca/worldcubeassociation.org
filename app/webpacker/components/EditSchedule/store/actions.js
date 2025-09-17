@@ -2,6 +2,7 @@ export const ChangesSaved = 'saving_started';
 export const AddActivity = 'ADD_ACTIVITY';
 export const EditActivity = 'EDIT_ACTIVITY';
 export const RemoveActivity = 'REMOVE_ACTIVITY';
+export const RemoveActivities = 'REMOVE_ACTIVITIES';
 export const MoveActivity = 'MOVE_ACTIVITY';
 export const ScaleActivity = 'SCALE_ACTIVITY';
 export const EditVenue = 'EDIT_VENUE';
@@ -64,6 +65,20 @@ export const removeActivity = (activityId, updateMatches) => ({
   type: RemoveActivity,
   payload: {
     activityId,
+    updateMatches,
+  },
+});
+
+/**
+ * Action creator for removing activities.
+ * @param {int[]} activityIds
+ * @param {boolean} updateMatches
+ * @returns {Action}
+ */
+export const removeActivities = (activityIds, updateMatches) => ({
+  type: RemoveActivities,
+  payload: {
+    activityIds,
     updateMatches,
   },
 });

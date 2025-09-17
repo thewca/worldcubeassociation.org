@@ -25,15 +25,31 @@ RSpec.describe Api::V0::UserRolesController do
       end
 
       it 'fetches list of roles of a user' do
+        user_roles = user_whose_delegate_status_changes.active_roles.to_json(
+          include: {
+            user: { exclude_deprecated: true, include_email: true },
+            group: {},
+            metadata: {},
+          },
+        )
+
         get :index, params: { userId: user_whose_delegate_status_changes.id }
 
-        expect(response.body).to eq(user_whose_delegate_status_changes.active_roles.to_json)
+        expect(response.body).to eq(user_roles)
       end
 
-      it 'does not fetches list of banned competitos' do
+      it 'fetches list of banned competitos' do
+        expected_role_list = [banned_competitor].to_json(
+          include: {
+            user: { exclude_deprecated: true, include_email: true },
+            group: {},
+            metadata: {},
+          },
+        )
+
         get :index, params: { groupType: UserGroup.group_types[:banned_competitors] }
 
-        expect(response.body).to eq([banned_competitor].to_json)
+        expect(response.body).to eq(expected_role_list)
       end
     end
 
@@ -41,12 +57,19 @@ RSpec.describe Api::V0::UserRolesController do
       before { sign_in create(:user) }
 
       it 'fetches list of roles of a user' do
+        user_roles = user_whose_delegate_status_changes.active_roles.to_json(
+          include: {
+            user: { exclude_deprecated: true, include_email: true },
+            group: {},
+            metadata: {},
+          },
+        )
         get :index, params: { userId: user_whose_delegate_status_changes.id }
 
-        expect(response.body).to eq(user_whose_delegate_status_changes.active_roles.to_json)
+        expect(response.body).to eq(user_roles)
       end
 
-      it 'fetches list of banned competitos' do
+      it 'does not fetches list of banned competitos' do
         get :index, params: { groupType: UserGroup.group_types[:banned_competitors] }
 
         expect(response.body).to eq([].to_json)
@@ -54,11 +77,17 @@ RSpec.describe Api::V0::UserRolesController do
 
       it 'fetches list of roles of a region' do
         group = user_senior_delegate_role.group
-        group_roles = group.roles
+        group_roles = group.roles.to_json(
+          include: {
+            user: { exclude_deprecated: true, include_email: true },
+            group: {},
+            metadata: {},
+          },
+        )
 
         get :index, params: { groupId: group.id }
 
-        expect(response.body).to eq(group_roles.to_json)
+        expect(response.body).to eq(group_roles)
       end
     end
 
@@ -66,9 +95,17 @@ RSpec.describe Api::V0::UserRolesController do
       before { sign_in create(:wst_admin_role).user }
 
       it 'does return banned_competitors if isGroupHidden is true' do
+        expected_role_list = [banned_competitor].to_json(
+          include: {
+            user: { exclude_deprecated: true, include_email: true },
+            group: {},
+            metadata: {},
+          },
+        )
+
         get :index, params: { userId: banned_competitor.user.id, isGroupHidden: true }
 
-        expect(response.body).to eq([banned_competitor].to_json)
+        expect(response.body).to eq(expected_role_list)
       end
 
       it 'does not return banned_competitors if isGroupHidden is false' do

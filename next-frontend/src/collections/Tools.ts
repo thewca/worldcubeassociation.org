@@ -16,6 +16,7 @@ export const Tools: CollectionConfig = {
       name: "description",
       type: "text",
       required: true,
+      localized: true,
     },
     {
       name: "homepageLink",

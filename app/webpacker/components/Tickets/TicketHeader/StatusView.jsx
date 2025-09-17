@@ -57,13 +57,11 @@ export default function StatusView({ ticketDetails, currentStakeholder, updateSt
     <>
       <span>{`Status: ${metadata.status}`}</span>
       {' '}
-      {currentStakeholder.actions_allowed.includes('update_status') && (
-        <Icon
-          name="edit"
-          link
-          onClick={() => setEditMode(true)}
-        />
-      )}
+      <Icon
+        name="edit"
+        link
+        onClick={() => setEditMode(true)}
+      />
     </>
   );
 }

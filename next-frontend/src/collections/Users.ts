@@ -25,10 +25,27 @@ export const Users: CollectionConfig = {
     },
   ],
   access: {
-    admin: ({ req }) => {
-      const user = req.user;
+    admin: ({ req: { user } }) => {
+      return ["wst", "wct", "wat", "wmt", "board"].some((team) =>
+        user?.roles?.includes(team),
+      );
+    },
+    read: ({ req: { user } }) => {
+      if (!user) {
+        return false;
+      }
 
-      return user?.roles?.includes("wst") === true;
+      if (user.roles?.includes("wst_admin")) {
+        // Admins are allowed to see all users
+        return true;
+      }
+
+      return {
+        // Only allow to read the current user, ie "yourself"
+        id: {
+          equals: user.id,
+        },
+      };
     },
   },
 };

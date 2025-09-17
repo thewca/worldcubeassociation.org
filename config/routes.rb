@@ -46,6 +46,7 @@ Rails.application.routes.draw do
   get 'registration/:competition_id/:user_id/payment-denomination' => 'registrations#payment_denomination', as: :registration_payment_denomination
   get '/users/admin_search' => 'users#admin_search'
   resources :users, only: %i[index edit update]
+  get 'users/show_for_edit' => 'users#show_for_edit', as: :user_show_for_edit
   get 'users/show_for_merge' => 'users#show_for_merge', as: :user_show_for_merge
   get 'profile/edit' => 'users#edit'
   post 'profile/enable-2fa' => 'users#enable_2fa'
@@ -60,6 +61,7 @@ Rails.application.routes.draw do
   post 'users/:id/avatar' => 'users#upload_avatar'
   patch 'users/:id/avatar' => 'users#update_avatar'
   delete 'users/:id/avatar' => 'users#delete_avatar'
+  post 'users/update_user_data' => 'users#update_user_data'
   post 'users/merge' => 'users#merge'
   get 'admin/avatars/pending' => 'admin/avatars#pending_avatar_users', as: :pending_avatars
   post 'admin/avatars' => 'admin/avatars#update_avatar', as: :admin_update_avatar
@@ -108,11 +110,12 @@ Rails.application.routes.draw do
     # Delegate views and action
     get 'newcomer-checks' => 'results_submission#newcomer_checks', as: :newcomer_checks
     get 'last-duplicate-checker-job' => 'results_submission#last_duplicate_checker_job_run', as: :last_duplicate_checker_job_run
+    get 'newcomer-name-format-check' => 'results_submission#newcomer_name_format_check', as: :newcomer_name_format_check
+    get 'newcomer-dob-check' => 'results_submission#newcomer_dob_check', as: :newcomer_dob_check
     post 'compute_potential_duplicates' => 'results_submission#compute_potential_duplicates', as: :compute_potential_duplicates
     get 'submit-results' => 'results_submission#new', as: :submit_results_edit
-    get 'submit-scrambles' => 'admin/scrambles#match_scrambles', as: :match_scrambles
+    get 'upload-scrambles' => 'results_submission#upload_scrambles', as: :upload_scrambles
     post 'submit-results' => 'results_submission#create', as: :submit_results
-    post 'import-wca-live-results' => 'results_submission#import_from_live'
     resources :scramble_files, only: %i[index create destroy], shallow: true do
       patch 'update-round-matching' => 'scramble_files#update_round_matching', on: :collection
     end
@@ -122,15 +125,12 @@ Rails.application.routes.draw do
     get '/admin/upload-results' => "admin#new_results", as: :admin_upload_results_edit
     get '/admin/check-existing-results' => "admin#check_competition_results", as: :admin_check_existing_results
     post '/admin/clear-submission' => "admin#clear_results_submission", as: :clear_results_submission
-    get '/admin/import-results' => 'admin#import_results', as: :admin_import_results
-    get '/admin/result-inbox-steps' => 'admin#result_inbox_steps', as: :admin_result_inbox_steps
-    post '/admin/import-inbox-results' => 'admin#import_inbox_results', as: :admin_import_inbox_results
-    delete '/admin/inbox-data' => 'admin#delete_inbox_data', as: :admin_delete_inbox_data
     delete '/admin/results-data' => 'admin#delete_results_data', as: :admin_delete_results_data
     get '/admin/results/:round_id/new' => 'admin/results#new', as: :new_result
     get '/admin/scrambles/:round_id/new' => 'admin/scrambles#new', as: :new_scramble
 
     get '/payment_integration/setup' => 'competitions#payment_integration_setup', as: :payment_integration_setup
+    get '/payment_integration/setup/manual' => 'competitions#payment_integration_manual_setup', as: :manual_payment_setup
     get '/payment_integration/:payment_integration/connect' => 'competitions#connect_payment_integration', as: :connect_payment_integration
     post '/payment_integration/:payment_integration/disconnect' => 'competitions#disconnect_payment_integration', as: :disconnect_payment_integration
   end
@@ -194,6 +194,9 @@ Rails.application.routes.draw do
 
   get 'persons/new_id' => 'admin/persons#generate_ids'
   get '/persons/results' => 'admin/persons#results', as: :person_results
+  get '/persons/registrations' => 'admin/persons#registrations', as: :person_registrations
+  get '/persons/organized-competitions' => 'admin/persons#organized_competitions', as: :person_organized_competitions
+  get '/persons/delegated-competitions' => 'admin/persons#delegated_competitions', as: :person_delegated_competitions
   resources :persons, only: %i[index show]
   post 'persons' => 'admin/persons#create'
 
@@ -202,8 +205,6 @@ Rails.application.routes.draw do
   get 'polls/:id/results' => 'polls#results', as: 'polls_results'
 
   resources :votes, only: %i[create update]
-
-  post 'competitions/:id/post_results' => 'competitions#post_results', as: :competition_post_results
 
   get 'panel/pending-claims(/:user_id)' => 'panel#pending_claims_for_subordinate_delegates', as: 'pending_claims'
   scope 'panel' do
@@ -225,12 +226,22 @@ Rails.application.routes.draw do
   scope 'tickets' do
     get 'details_before_anonymization' => 'tickets#details_before_anonymization', as: :tickets_details_before_anonymization
     post 'anonymize' => 'tickets#anonymize', as: :tickets_anonymize
+    get 'imported_temporary_results' => 'tickets#imported_temporary_results', as: :imported_temporary_results
   end
   resources :tickets, only: %i[index show] do
     post 'update_status' => 'tickets#update_status', as: :update_status
+    post 'verify_warnings' => 'tickets#verify_warnings', as: :verify_warnings
+    post 'merge_inbox_results' => 'tickets#merge_inbox_results', as: :merge_inbox_results
+    post 'post_results' => 'tickets#post_results', as: :post_results
     get 'edit_person_validators' => 'tickets#edit_person_validators', as: :edit_person_validators
+    get 'inbox_person_summary' => 'tickets#inbox_person_summary', as: :inbox_person_summary
+    post 'delete_inbox_persons' => 'tickets#delete_inbox_persons', as: :delete_inbox_persons
+    get 'events_merged_data' => 'tickets#events_merged_data', as: :events_merged_data
+    post 'reject_edit_person_request' => 'tickets#reject_edit_person_request', as: :reject_edit_person_request
+    post 'sync_edit_person_request' => 'tickets#sync_edit_person_request', as: :sync_edit_person_request
     resources :ticket_comments, only: %i[index create], as: :comments
     resources :ticket_logs, only: [:index], as: :logs
+    resources :tickets_edit_person_fields, only: %i[create update destroy], as: :edit_person_fields
   end
   resources :notifications, only: [:index]
 
@@ -364,6 +375,7 @@ Rails.application.routes.draw do
 
           member do
             get 'payment_ticket', to: 'registrations#payment_ticket'
+            get 'config', to: 'registrations#registration_config', as: :registration_config
           end
 
           collection do
@@ -383,6 +395,7 @@ Rails.application.routes.draw do
       get '/auth/results' => 'api#auth_results'
       get '/export/public' => 'api#export_public'
       get '/scramble-program' => 'api#scramble_program'
+      get '/known-timezones' => 'api#known_timezones'
       get '/search' => 'api#omni_search'
       get '/search/posts' => 'api#posts_search'
       get '/search/competitions' => 'api#competitions_search'
@@ -416,6 +429,7 @@ Rails.application.routes.draw do
       get '/competition_series/:id' => 'api#competition_series'
       get '/competition_index' => 'competitions#competition_index', as: :competition_index
 
+      resources :incidents, only: %i[index]
       resources :regional_organizations, only: %i[index], path: '/regional-organizations'
 
       resources :competitions, only: %i[index show] do
@@ -428,6 +442,7 @@ Rails.application.routes.draw do
         get '/registrations' => 'competitions#registrations'
         get '/events' => 'competitions#events'
         get '/schedule' => 'competitions#schedule'
+        get '/podiums' => 'competitions#podiums'
         get '/scrambles' => 'competitions#scrambles', as: :scrambles
         get '/scrambles/:event_id' => 'competitions#event_scrambles', as: :event_scrambles
         get '/psych-sheet/:event_id' => 'competitions#event_psych_sheet', as: :event_psych_sheet

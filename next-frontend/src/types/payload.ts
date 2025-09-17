@@ -12,22 +12,138 @@
  */
 export type ColorPaletteSelect = 'blue' | 'red' | 'green' | 'orange' | 'yellow' | 'grey';
 /**
+ * Icon name
+ *
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "ColorSelect".
+ * via the `definition` "IconName".
  */
-export type ColorSelect =
-  | 'darkBlue'
-  | 'darkRed'
-  | 'darkGreen'
-  | 'darkOrange'
-  | 'darkYellow'
-  | 'blue'
-  | 'red'
-  | 'green'
-  | 'orange'
-  | 'yellow'
-  | 'white'
-  | 'black';
+export type IconName =
+  | 'About the Regulations'
+  | 'About the WCA'
+  | 'Admin Results'
+  | 'All Competitions'
+  | 'Bookmark'
+  | 'Clone'
+  | 'Competition Not Started'
+  | 'Registration Closed'
+  | 'Registration Closed (Red)'
+  | 'Registration Full but Open'
+  | 'Registration Full but Open (Orange)'
+  | 'Registration Not Full, Open'
+  | 'Registration Not Full, Open (Green)'
+  | 'Registration Not Open Yet'
+  | 'Registration Not Open Yet (Grey)'
+  | 'Registration Open Date'
+  | 'Registration Close Date'
+  | 'Competitors'
+  | 'Contact'
+  | 'Delegate Report'
+  | 'Details'
+  | 'Developer Export'
+  | 'Disciplinary Log'
+  | 'Disclaimer'
+  | 'Download'
+  | 'Edit'
+  | 'Educational Resources'
+  | 'Error'
+  | 'External Link'
+  | 'Facebook'
+  | 'Filters'
+  | 'GitHub'
+  | 'Guidelines'
+  | 'Help and FAQs'
+  | 'Incidents Log'
+  | 'Information'
+  | 'Instagram'
+  | 'Language'
+  | 'List'
+  | 'Location'
+  | 'Manage Tabs'
+  | 'Map'
+  | 'Media Submission'
+  | 'Menu'
+  | 'Multimedia'
+  | 'My Competitions'
+  | 'My Results'
+  | 'National Championship'
+  | 'New Competition'
+  | 'On-the-Spot Registration'
+  | 'Payment'
+  | 'Privacy'
+  | 'Rankings'
+  | 'Records'
+  | 'Regional Organisations'
+  | 'Register'
+  | 'Registration'
+  | 'Regulations and Guidelines'
+  | 'Regulations History'
+  | 'Regulations'
+  | 'Results Export'
+  | 'Scrambles'
+  | 'Search'
+  | 'Spectators'
+  | 'Speedcubing History'
+  | 'Spots Left'
+  | 'Statistics'
+  | 'Teams, Committees and Councils'
+  | 'Tools'
+  | 'Translators'
+  | 'Twitch'
+  | 'User'
+  | 'Users / Persons'
+  | 'Venue'
+  | 'WCA Delegates'
+  | 'WCA Documents'
+  | 'WCA Live'
+  | 'WCA Officers and Board'
+  | 'Weibo'
+  | 'X (formerly Twitter)'
+  | 'YouTube'
+  | '222Icon'
+  | '333bfIcon'
+  | '333fmIcon'
+  | '333ftIcon'
+  | '333Icon'
+  | '333mbfIcon'
+  | '333ohIcon'
+  | '333mboIcon'
+  | '444bfIcon'
+  | '444Icon'
+  | '555bfIcon'
+  | '555Icon'
+  | '666Icon'
+  | '777Icon'
+  | 'ClockIcon'
+  | 'MagicIcon'
+  | 'MinxIcon'
+  | 'MmagicIcon'
+  | 'PyramIcon'
+  | 'SkewbIcon'
+  | 'Sq1Icon';
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "StaticTargetLink".
+ */
+export type StaticTargetLink =
+  | '/'
+  | '/faq'
+  | '/competitions'
+  | '/delegates'
+  | '/disclaimer'
+  | '/documents'
+  | '/export/developer'
+  | '/export/results'
+  | '/incidents'
+  | '/officers-and-board'
+  | '/organizations'
+  | '/privacy'
+  | '/regulations/about'
+  | '/regulations/history'
+  | '/regulations/scrambles'
+  | '/score-tools'
+  | '/speedcubing-history'
+  | '/teams-committees'
+  | '/translators';
 /**
  * Supported timezones in IANA format.
  *
@@ -95,6 +211,7 @@ export interface Config {
     faqCategories: FaqCategory;
     faqQuestions: FaqQuestion;
     users: User;
+    documents: Document;
     regulationsHistoryItem: RegulationsHistoryItem;
     tools: Tool;
     'payload-locked-documents': PayloadLockedDocument;
@@ -113,6 +230,7 @@ export interface Config {
     faqCategories: FaqCategoriesSelect<false> | FaqCategoriesSelect<true>;
     faqQuestions: FaqQuestionsSelect<false> | FaqQuestionsSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
+    documents: DocumentsSelect<false> | DocumentsSelect<true>;
     regulationsHistoryItem: RegulationsHistoryItemSelect<false> | RegulationsHistoryItemSelect<true>;
     tools: ToolsSelect<false> | ToolsSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
@@ -140,7 +258,40 @@ export interface Config {
     'speedcubing-history-page': SpeedcubingHistoryPageSelect<false> | SpeedcubingHistoryPageSelect<true>;
     'about-regulations-page': AboutRegulationsPageSelect<false> | AboutRegulationsPageSelect<true>;
   };
-  locale: null;
+  locale:
+    | 'en'
+    | 'ca'
+    | 'cs'
+    | 'da'
+    | 'de'
+    | 'eo'
+    | 'es-ES'
+    | 'es-419'
+    | 'eu'
+    | 'fi'
+    | 'fr'
+    | 'fr-CA'
+    | 'hr'
+    | 'hu'
+    | 'id'
+    | 'it'
+    | 'ja'
+    | 'kk'
+    | 'ko'
+    | 'nl'
+    | 'pl'
+    | 'pt'
+    | 'pt-BR'
+    | 'ro'
+    | 'ru'
+    | 'sk'
+    | 'sl'
+    | 'sv'
+    | 'th'
+    | 'uk'
+    | 'vi'
+    | 'zh-CN'
+    | 'zh-TW';
   user: User & {
     collection: 'users';
   };
@@ -209,7 +360,7 @@ export interface Testimonial {
     };
     [k: string]: unknown;
   };
-  fullTestimonialMarkdown: string;
+  fullTestimonialMarkdown?: string | null;
   whoDunnit: string;
   updatedAt: string;
   createdAt: string;
@@ -237,7 +388,7 @@ export interface Announcement {
     };
     [k: string]: unknown;
   };
-  contentMarkdown: string;
+  contentMarkdown?: string | null;
   publishedAt: string;
   publishedBy: string | User;
   updatedAt: string;
@@ -256,10 +407,10 @@ export interface User {
   roles?: string[];
   accounts?:
     | {
-        id?: string | null;
         provider: string;
         providerAccountId: string;
         type: string;
+        id?: string | null;
       }[]
     | null;
   updatedAt: string;
@@ -290,6 +441,22 @@ export interface FaqQuestion {
   category: number | FaqCategory;
   question: string;
   answer: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "documents".
+ */
+export interface Document {
+  id: number;
+  title: string;
+  icon: IconName;
+  link: string;
+  /**
+   * Category name (used for grouping documents)
+   */
+  category?: ('motions' | 'minutes' | 'policies' | 'finances') | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -353,6 +520,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'users';
         value: string | User;
+      } | null)
+    | ({
+        relationTo: 'documents';
+        value: number | Document;
       } | null)
     | ({
         relationTo: 'regulationsHistoryItem';
@@ -485,11 +656,23 @@ export interface UsersSelect<T extends boolean = true> {
   accounts?:
     | T
     | {
-        id?: T;
         provider?: T;
         providerAccountId?: T;
         type?: T;
+        id?: T;
       };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "documents_select".
+ */
+export interface DocumentsSelect<T extends boolean = true> {
+  title?: T;
+  icon?: T;
+  link?: T;
+  category?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -562,359 +745,23 @@ export interface Nav {
   entry: (
     | {
         title: string;
-        displayIcon?:
-          | (
-              | 'About the Regulations'
-              | 'About the WCA'
-              | 'Admin Results'
-              | 'All Competitions'
-              | 'Bookmark'
-              | 'Clone'
-              | 'Competition Not Started'
-              | 'Registration Closed'
-              | 'Registration Closed (Red)'
-              | 'Registration Full but Open'
-              | 'Registration Full but Open (Orange)'
-              | 'Registration Not Full, Open'
-              | 'Registration Not Full, Open (Green)'
-              | 'Registration Not Open Yet'
-              | 'Registration Not Open Yet (Grey)'
-              | 'Registration Open Date'
-              | 'Registration Close Date'
-              | 'Competitors'
-              | 'Contact'
-              | 'Delegate Report'
-              | 'Details'
-              | 'Developer Export'
-              | 'Disciplinary Log'
-              | 'Disclaimer'
-              | 'Download'
-              | 'Edit'
-              | 'Educational Resources'
-              | 'Error'
-              | 'External Link'
-              | 'Facebook'
-              | 'Filters'
-              | 'GitHub'
-              | 'Guidelines'
-              | 'Help and FAQs'
-              | 'Incidents Log'
-              | 'Information'
-              | 'Instagram'
-              | 'Language'
-              | 'List'
-              | 'Location'
-              | 'Manage Tabs'
-              | 'Map'
-              | 'Media Submission'
-              | 'Menu'
-              | 'Multimedia'
-              | 'My Competitions'
-              | 'My Results'
-              | 'National Championship'
-              | 'New Competition'
-              | 'On-the-Spot Registration'
-              | 'Payment'
-              | 'Privacy'
-              | 'Rankings'
-              | 'Records'
-              | 'Regional Organisations'
-              | 'Register'
-              | 'Registration'
-              | 'Regulations and Guidelines'
-              | 'Regulations History'
-              | 'Regulations'
-              | 'Results Export'
-              | 'Scrambles'
-              | 'Search'
-              | 'Spectators'
-              | 'Speedcubing History'
-              | 'Spots Left'
-              | 'Statistics'
-              | 'Teams, Committees and Councils'
-              | 'Tools'
-              | 'Translators'
-              | 'Twitch'
-              | 'User'
-              | 'Users / Persons'
-              | 'Venue'
-              | 'WCA Delegates'
-              | 'WCA Documents'
-              | 'WCA Live'
-              | 'WCA Officers and Board'
-              | 'Weibo'
-              | 'X (formerly Twitter)'
-              | 'YouTube'
-            )
-          | null;
+        displayIcon?: IconName;
         entries: (
           | {
               displayText: string;
-              targetLink: string;
-              displayIcon?:
-                | (
-                    | 'About the Regulations'
-                    | 'About the WCA'
-                    | 'Admin Results'
-                    | 'All Competitions'
-                    | 'Bookmark'
-                    | 'Clone'
-                    | 'Competition Not Started'
-                    | 'Registration Closed'
-                    | 'Registration Closed (Red)'
-                    | 'Registration Full but Open'
-                    | 'Registration Full but Open (Orange)'
-                    | 'Registration Not Full, Open'
-                    | 'Registration Not Full, Open (Green)'
-                    | 'Registration Not Open Yet'
-                    | 'Registration Not Open Yet (Grey)'
-                    | 'Registration Open Date'
-                    | 'Registration Close Date'
-                    | 'Competitors'
-                    | 'Contact'
-                    | 'Delegate Report'
-                    | 'Details'
-                    | 'Developer Export'
-                    | 'Disciplinary Log'
-                    | 'Disclaimer'
-                    | 'Download'
-                    | 'Edit'
-                    | 'Educational Resources'
-                    | 'Error'
-                    | 'External Link'
-                    | 'Facebook'
-                    | 'Filters'
-                    | 'GitHub'
-                    | 'Guidelines'
-                    | 'Help and FAQs'
-                    | 'Incidents Log'
-                    | 'Information'
-                    | 'Instagram'
-                    | 'Language'
-                    | 'List'
-                    | 'Location'
-                    | 'Manage Tabs'
-                    | 'Map'
-                    | 'Media Submission'
-                    | 'Menu'
-                    | 'Multimedia'
-                    | 'My Competitions'
-                    | 'My Results'
-                    | 'National Championship'
-                    | 'New Competition'
-                    | 'On-the-Spot Registration'
-                    | 'Payment'
-                    | 'Privacy'
-                    | 'Rankings'
-                    | 'Records'
-                    | 'Regional Organisations'
-                    | 'Register'
-                    | 'Registration'
-                    | 'Regulations and Guidelines'
-                    | 'Regulations History'
-                    | 'Regulations'
-                    | 'Results Export'
-                    | 'Scrambles'
-                    | 'Search'
-                    | 'Spectators'
-                    | 'Speedcubing History'
-                    | 'Spots Left'
-                    | 'Statistics'
-                    | 'Teams, Committees and Councils'
-                    | 'Tools'
-                    | 'Translators'
-                    | 'Twitch'
-                    | 'User'
-                    | 'Users / Persons'
-                    | 'Venue'
-                    | 'WCA Delegates'
-                    | 'WCA Documents'
-                    | 'WCA Live'
-                    | 'WCA Officers and Board'
-                    | 'Weibo'
-                    | 'X (formerly Twitter)'
-                    | 'YouTube'
-                  )
-                | null;
+              targetLink: StaticTargetLink;
+              displayIcon?: IconName;
               id?: string | null;
               blockName?: string | null;
               blockType: 'LinkItem';
             }
           | {
               title: string;
-              displayIcon?:
-                | (
-                    | 'About the Regulations'
-                    | 'About the WCA'
-                    | 'Admin Results'
-                    | 'All Competitions'
-                    | 'Bookmark'
-                    | 'Clone'
-                    | 'Competition Not Started'
-                    | 'Registration Closed'
-                    | 'Registration Closed (Red)'
-                    | 'Registration Full but Open'
-                    | 'Registration Full but Open (Orange)'
-                    | 'Registration Not Full, Open'
-                    | 'Registration Not Full, Open (Green)'
-                    | 'Registration Not Open Yet'
-                    | 'Registration Not Open Yet (Grey)'
-                    | 'Registration Open Date'
-                    | 'Registration Close Date'
-                    | 'Competitors'
-                    | 'Contact'
-                    | 'Delegate Report'
-                    | 'Details'
-                    | 'Developer Export'
-                    | 'Disciplinary Log'
-                    | 'Disclaimer'
-                    | 'Download'
-                    | 'Edit'
-                    | 'Educational Resources'
-                    | 'Error'
-                    | 'External Link'
-                    | 'Facebook'
-                    | 'Filters'
-                    | 'GitHub'
-                    | 'Guidelines'
-                    | 'Help and FAQs'
-                    | 'Incidents Log'
-                    | 'Information'
-                    | 'Instagram'
-                    | 'Language'
-                    | 'List'
-                    | 'Location'
-                    | 'Manage Tabs'
-                    | 'Map'
-                    | 'Media Submission'
-                    | 'Menu'
-                    | 'Multimedia'
-                    | 'My Competitions'
-                    | 'My Results'
-                    | 'National Championship'
-                    | 'New Competition'
-                    | 'On-the-Spot Registration'
-                    | 'Payment'
-                    | 'Privacy'
-                    | 'Rankings'
-                    | 'Records'
-                    | 'Regional Organisations'
-                    | 'Register'
-                    | 'Registration'
-                    | 'Regulations and Guidelines'
-                    | 'Regulations History'
-                    | 'Regulations'
-                    | 'Results Export'
-                    | 'Scrambles'
-                    | 'Search'
-                    | 'Spectators'
-                    | 'Speedcubing History'
-                    | 'Spots Left'
-                    | 'Statistics'
-                    | 'Teams, Committees and Councils'
-                    | 'Tools'
-                    | 'Translators'
-                    | 'Twitch'
-                    | 'User'
-                    | 'Users / Persons'
-                    | 'Venue'
-                    | 'WCA Delegates'
-                    | 'WCA Documents'
-                    | 'WCA Live'
-                    | 'WCA Officers and Board'
-                    | 'Weibo'
-                    | 'X (formerly Twitter)'
-                    | 'YouTube'
-                  )
-                | null;
+              displayIcon?: IconName;
               entries: {
                 displayText: string;
-                targetLink: string;
-                displayIcon?:
-                  | (
-                      | 'About the Regulations'
-                      | 'About the WCA'
-                      | 'Admin Results'
-                      | 'All Competitions'
-                      | 'Bookmark'
-                      | 'Clone'
-                      | 'Competition Not Started'
-                      | 'Registration Closed'
-                      | 'Registration Closed (Red)'
-                      | 'Registration Full but Open'
-                      | 'Registration Full but Open (Orange)'
-                      | 'Registration Not Full, Open'
-                      | 'Registration Not Full, Open (Green)'
-                      | 'Registration Not Open Yet'
-                      | 'Registration Not Open Yet (Grey)'
-                      | 'Registration Open Date'
-                      | 'Registration Close Date'
-                      | 'Competitors'
-                      | 'Contact'
-                      | 'Delegate Report'
-                      | 'Details'
-                      | 'Developer Export'
-                      | 'Disciplinary Log'
-                      | 'Disclaimer'
-                      | 'Download'
-                      | 'Edit'
-                      | 'Educational Resources'
-                      | 'Error'
-                      | 'External Link'
-                      | 'Facebook'
-                      | 'Filters'
-                      | 'GitHub'
-                      | 'Guidelines'
-                      | 'Help and FAQs'
-                      | 'Incidents Log'
-                      | 'Information'
-                      | 'Instagram'
-                      | 'Language'
-                      | 'List'
-                      | 'Location'
-                      | 'Manage Tabs'
-                      | 'Map'
-                      | 'Media Submission'
-                      | 'Menu'
-                      | 'Multimedia'
-                      | 'My Competitions'
-                      | 'My Results'
-                      | 'National Championship'
-                      | 'New Competition'
-                      | 'On-the-Spot Registration'
-                      | 'Payment'
-                      | 'Privacy'
-                      | 'Rankings'
-                      | 'Records'
-                      | 'Regional Organisations'
-                      | 'Register'
-                      | 'Registration'
-                      | 'Regulations and Guidelines'
-                      | 'Regulations History'
-                      | 'Regulations'
-                      | 'Results Export'
-                      | 'Scrambles'
-                      | 'Search'
-                      | 'Spectators'
-                      | 'Speedcubing History'
-                      | 'Spots Left'
-                      | 'Statistics'
-                      | 'Teams, Committees and Councils'
-                      | 'Tools'
-                      | 'Translators'
-                      | 'Twitch'
-                      | 'User'
-                      | 'Users / Persons'
-                      | 'Venue'
-                      | 'WCA Delegates'
-                      | 'WCA Documents'
-                      | 'WCA Live'
-                      | 'WCA Officers and Board'
-                      | 'Weibo'
-                      | 'X (formerly Twitter)'
-                      | 'YouTube'
-                    )
-                  | null;
+                targetLink: StaticTargetLink;
+                displayIcon?: IconName;
                 id?: string | null;
                 blockName?: string | null;
                 blockType: 'LinkItem';
@@ -935,92 +782,8 @@ export interface Nav {
       }
     | {
         displayText: string;
-        targetLink: string;
-        displayIcon?:
-          | (
-              | 'About the Regulations'
-              | 'About the WCA'
-              | 'Admin Results'
-              | 'All Competitions'
-              | 'Bookmark'
-              | 'Clone'
-              | 'Competition Not Started'
-              | 'Registration Closed'
-              | 'Registration Closed (Red)'
-              | 'Registration Full but Open'
-              | 'Registration Full but Open (Orange)'
-              | 'Registration Not Full, Open'
-              | 'Registration Not Full, Open (Green)'
-              | 'Registration Not Open Yet'
-              | 'Registration Not Open Yet (Grey)'
-              | 'Registration Open Date'
-              | 'Registration Close Date'
-              | 'Competitors'
-              | 'Contact'
-              | 'Delegate Report'
-              | 'Details'
-              | 'Developer Export'
-              | 'Disciplinary Log'
-              | 'Disclaimer'
-              | 'Download'
-              | 'Edit'
-              | 'Educational Resources'
-              | 'Error'
-              | 'External Link'
-              | 'Facebook'
-              | 'Filters'
-              | 'GitHub'
-              | 'Guidelines'
-              | 'Help and FAQs'
-              | 'Incidents Log'
-              | 'Information'
-              | 'Instagram'
-              | 'Language'
-              | 'List'
-              | 'Location'
-              | 'Manage Tabs'
-              | 'Map'
-              | 'Media Submission'
-              | 'Menu'
-              | 'Multimedia'
-              | 'My Competitions'
-              | 'My Results'
-              | 'National Championship'
-              | 'New Competition'
-              | 'On-the-Spot Registration'
-              | 'Payment'
-              | 'Privacy'
-              | 'Rankings'
-              | 'Records'
-              | 'Regional Organisations'
-              | 'Register'
-              | 'Registration'
-              | 'Regulations and Guidelines'
-              | 'Regulations History'
-              | 'Regulations'
-              | 'Results Export'
-              | 'Scrambles'
-              | 'Search'
-              | 'Spectators'
-              | 'Speedcubing History'
-              | 'Spots Left'
-              | 'Statistics'
-              | 'Teams, Committees and Councils'
-              | 'Tools'
-              | 'Translators'
-              | 'Twitch'
-              | 'User'
-              | 'Users / Persons'
-              | 'Venue'
-              | 'WCA Delegates'
-              | 'WCA Documents'
-              | 'WCA Live'
-              | 'WCA Officers and Board'
-              | 'Weibo'
-              | 'X (formerly Twitter)'
-              | 'YouTube'
-            )
-          | null;
+        targetLink: StaticTargetLink;
+        displayIcon?: IconName;
         id?: string | null;
         blockName?: string | null;
         blockType: 'LinkItem';
@@ -1065,7 +828,22 @@ export interface TwoBlocksBlock {
  */
 export interface TextCardBlock {
   heading: string;
-  body: string;
+  body: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  bodyMarkdown?: string | null;
   variant: 'info' | 'hero';
   separatorAfterHeading: boolean;
   buttonText?: string | null;
@@ -1094,15 +872,35 @@ export interface AnnouncementsSectionBlock {
  */
 export interface ImageBannerBlock {
   heading: string;
-  body: string;
+  body: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  bodyMarkdown?: string | null;
   mainImage: number | Media;
   colorPalette: ColorPaletteSelect;
-  bgColor: ColorSelect;
-  headingColor: ColorSelect;
-  textColor: ColorSelect;
+  /**
+   * Use a slightly darker nuance of the color palette
+   */
+  colorPaletteDarker?: boolean | null;
+  headingColor?: ColorPaletteSelect;
   bgImage?: (number | null) | Media;
-  bgSize?: number | null;
-  bgPos?: string | null;
+  /**
+   * The size of the background image in percent (%)
+   */
+  bgSize: number;
+  bgPos: 'right' | 'left';
   id?: string | null;
   blockName?: string | null;
   blockType: 'ImageBanner';
@@ -1124,34 +922,30 @@ export interface ImageOnlyCardBlock {
  * via the `definition` "TestimonialsBlock".
  */
 export interface TestimonialsBlock {
-  blocks: TestimonialSlideBlock[];
+  slides: {
+    testimonial: number | Testimonial;
+    colorPalette: ColorPaletteSelect;
+    id?: string | null;
+  }[];
   id?: string | null;
   blockName?: string | null;
   blockType: 'TestimonialsSpinner';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "TestimonialSlideBlock".
- */
-export interface TestimonialSlideBlock {
-  testimonial: number | Testimonial;
-  colorPalette: ColorPaletteSelect;
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'TestimonialSlide';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "FeaturedCompetitionsBlock".
  */
 export interface FeaturedCompetitionsBlock {
-  Competition1ID: string;
-  colorPalette1: ColorPaletteSelect;
-  Competition2ID: string;
-  colorPalette2: ColorPaletteSelect;
+  competitions?:
+    | {
+        competitionId: string;
+        colorPalette: ColorPaletteSelect;
+        id?: string | null;
+      }[]
+    | null;
   id?: string | null;
   blockName?: string | null;
-  blockType: 'FeaturedCompetitions';
+  blockType: 'FeaturedComps';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1232,7 +1026,7 @@ export interface AboutUsPage {
           };
           [k: string]: unknown;
         };
-        contentMarkdown: string;
+        contentMarkdown?: string | null;
         buttons: {
           label: string;
           url: string;
@@ -1260,7 +1054,7 @@ export interface AboutUsPage {
           };
           [k: string]: unknown;
         };
-        contentMarkdown: string;
+        contentMarkdown?: string | null;
         id?: string | null;
         blockName?: string | null;
         blockType: 'simpleItem';
@@ -1281,7 +1075,7 @@ export interface AboutUsPage {
           };
           [k: string]: unknown;
         };
-        contentMarkdown: string;
+        contentMarkdown?: string | null;
         quotedPerson: string;
         id?: string | null;
         blockName?: string | null;
@@ -1312,7 +1106,7 @@ export interface PrivacyPage {
     };
     [k: string]: unknown;
   };
-  preambleMarkdown: string;
+  preambleMarkdown?: string | null;
   blocks: {
     title: string;
     content: {
@@ -1330,7 +1124,7 @@ export interface PrivacyPage {
       };
       [k: string]: unknown;
     };
-    contentMarkdown: string;
+    contentMarkdown?: string | null;
     id?: string | null;
     blockName?: string | null;
     blockType: 'privacyItem';
@@ -1361,7 +1155,7 @@ export interface DisclaimerPage {
       };
       [k: string]: unknown;
     };
-    contentMarkdown: string;
+    contentMarkdown?: string | null;
     id?: string | null;
     blockName?: string | null;
     blockType: 'disclaimerItem';
@@ -1392,7 +1186,7 @@ export interface SpeedcubingHistoryPage {
           };
           [k: string]: unknown;
         };
-        contentMarkdown: string;
+        contentMarkdown?: string | null;
         id?: string | null;
         blockName?: string | null;
         blockType: 'paragraph';
@@ -1420,7 +1214,7 @@ export interface SpeedcubingHistoryPage {
           };
           [k: string]: unknown;
         };
-        contentMarkdown: string;
+        contentMarkdown?: string | null;
         quotedPerson: string;
         id?: string | null;
         blockName?: string | null;
@@ -1453,7 +1247,7 @@ export interface AboutRegulationsPage {
       };
       [k: string]: unknown;
     };
-    contentMarkdown: string;
+    contentMarkdown?: string | null;
     id?: string | null;
     blockName?: string | null;
     blockType: 'paragraph';
@@ -1561,7 +1355,7 @@ export interface TwoBlocksBlockSelect<T extends boolean = true> {
         ImageBanner?: T | ImageBannerBlockSelect<T>;
         ImageOnlyCard?: T | ImageOnlyCardBlockSelect<T>;
         TestimonialsSpinner?: T | TestimonialsBlockSelect<T>;
-        FeaturedCompetitions?: T | FeaturedCompetitionsBlockSelect<T>;
+        FeaturedComps?: T | FeaturedCompetitionsBlockSelect<T>;
         twoBlocksBranch?: T | TwoBlocksBranchBlockSelect<T>;
       };
   id?: T;
@@ -1574,6 +1368,7 @@ export interface TwoBlocksBlockSelect<T extends boolean = true> {
 export interface TextCardBlockSelect<T extends boolean = true> {
   heading?: T;
   body?: T;
+  bodyMarkdown?: T;
   variant?: T;
   separatorAfterHeading?: T;
   buttonText?: T;
@@ -1601,11 +1396,11 @@ export interface AnnouncementsSectionBlockSelect<T extends boolean = true> {
 export interface ImageBannerBlockSelect<T extends boolean = true> {
   heading?: T;
   body?: T;
+  bodyMarkdown?: T;
   mainImage?: T;
   colorPalette?: T;
-  bgColor?: T;
+  colorPaletteDarker?: T;
   headingColor?: T;
-  textColor?: T;
   bgImage?: T;
   bgSize?: T;
   bgPos?: T;
@@ -1628,21 +1423,13 @@ export interface ImageOnlyCardBlockSelect<T extends boolean = true> {
  * via the `definition` "TestimonialsBlock_select".
  */
 export interface TestimonialsBlockSelect<T extends boolean = true> {
-  blocks?:
+  slides?:
     | T
     | {
-        TestimonialSlide?: T | TestimonialSlideBlockSelect<T>;
+        testimonial?: T;
+        colorPalette?: T;
+        id?: T;
       };
-  id?: T;
-  blockName?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "TestimonialSlideBlock_select".
- */
-export interface TestimonialSlideBlockSelect<T extends boolean = true> {
-  testimonial?: T;
-  colorPalette?: T;
   id?: T;
   blockName?: T;
 }
@@ -1651,10 +1438,13 @@ export interface TestimonialSlideBlockSelect<T extends boolean = true> {
  * via the `definition` "FeaturedCompetitionsBlock_select".
  */
 export interface FeaturedCompetitionsBlockSelect<T extends boolean = true> {
-  Competition1ID?: T;
-  colorPalette1?: T;
-  Competition2ID?: T;
-  colorPalette2?: T;
+  competitions?:
+    | T
+    | {
+        competitionId?: T;
+        colorPalette?: T;
+        id?: T;
+      };
   id?: T;
   blockName?: T;
 }
@@ -1673,7 +1463,7 @@ export interface TwoBlocksBranchBlockSelect<T extends boolean = true> {
         ImageBanner?: T | ImageBannerBlockSelect<T>;
         ImageOnlyCard?: T | ImageOnlyCardBlockSelect<T>;
         TestimonialsSpinner?: T | TestimonialsBlockSelect<T>;
-        FeaturedCompetitions?: T | FeaturedCompetitionsBlockSelect<T>;
+        FeaturedComps?: T | FeaturedCompetitionsBlockSelect<T>;
         twoBlocksLeaf?: T | TwoBlocksLeafBlockSelect<T>;
       };
   id?: T;
@@ -1694,7 +1484,7 @@ export interface TwoBlocksLeafBlockSelect<T extends boolean = true> {
         ImageBanner?: T | ImageBannerBlockSelect<T>;
         ImageOnlyCard?: T | ImageOnlyCardBlockSelect<T>;
         TestimonialsSpinner?: T | TestimonialsBlockSelect<T>;
-        FeaturedCompetitions?: T | FeaturedCompetitionsBlockSelect<T>;
+        FeaturedComps?: T | FeaturedCompetitionsBlockSelect<T>;
       };
   id?: T;
   blockName?: T;
@@ -1712,7 +1502,7 @@ export interface FullWidthBlockSelect<T extends boolean = true> {
         ImageBanner?: T | ImageBannerBlockSelect<T>;
         ImageOnlyCard?: T | ImageOnlyCardBlockSelect<T>;
         TestimonialsSpinner?: T | TestimonialsBlockSelect<T>;
-        FeaturedCompetitions?: T | FeaturedCompetitionsBlockSelect<T>;
+        FeaturedComps?: T | FeaturedCompetitionsBlockSelect<T>;
       };
   id?: T;
   blockName?: T;

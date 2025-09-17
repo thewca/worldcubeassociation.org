@@ -10,24 +10,28 @@ export default function Wrapper({
   competitionId,
   alreadyHasSubmittedResult,
   isAdminView,
+  uploadedScrambleFilesCount,
 }) {
   return (
     <WCAQueryClientProvider>
       <ImportResultsData
         competitionId={competitionId}
-        alreadyHasSubmittedResult={alreadyHasSubmittedResult}
+        hasTemporaryResults={alreadyHasSubmittedResult}
         isAdminView={isAdminView}
+        uploadedScrambleFilesCount={uploadedScrambleFilesCount}
       />
     </WCAQueryClientProvider>
   );
 }
 
-function ImportResultsData({
+export function ImportResultsData({
   competitionId,
-  alreadyHasSubmittedResult,
+  hasTemporaryResults,
   isAdminView = false,
+  uploadedScrambleFilesCount = 0,
+  showWcaLiveBeta = false,
 }) {
-  const [activeAccordion, setActiveAccordion] = useState(!alreadyHasSubmittedResult);
+  const [activeAccordion, setActiveAccordion] = useState(!hasTemporaryResults);
 
   const onImportSuccess = () => {
     // Ideally page should not be reloaded, but this is currently required to re-render
@@ -49,12 +53,13 @@ function ImportResultsData({
         </Tab.Pane>
       ),
     },
-    ...(isAdminView ? [{
-      menuItem: 'Import WCA Live Results',
+    ...((isAdminView || showWcaLiveBeta) ? [{
+      menuItem: '[BETA] Use WCA Live Results',
       render: () => (
         <Tab.Pane>
           <ImportWcaLiveResults
             competitionId={competitionId}
+            uploadedScrambleFilesCount={uploadedScrambleFilesCount}
             onImportSuccess={onImportSuccess}
           />
         </Tab.Pane>
@@ -73,10 +78,10 @@ function ImportResultsData({
         </Accordion.Title>
         <Accordion.Content active={activeAccordion}>
           <Message
-            warning={alreadyHasSubmittedResult}
-            info={!alreadyHasSubmittedResult}
+            warning={hasTemporaryResults}
+            info={!hasTemporaryResults}
           >
-            {alreadyHasSubmittedResult
+            {hasTemporaryResults
               ? 'Some results have already been uploaded before, importing results data again will override all of them!'
               : 'Please start by selecting a JSON file to import.'}
           </Message>

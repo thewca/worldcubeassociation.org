@@ -1191,6 +1191,22 @@ pt:
         400_contact_html: >-
           Se acha que isto é um erro, por favor <a href=%{contact_url}>clique
           aqui</a> para o reportar.
+        #original_hash: 508c106
+        comp_not_found: Competição Não Encontrada
+        #original_hash: c0e86d5
+        comp_not_found_action: >-
+          Não encontrámos a competição com o ID "%{comp_id}". Pesquise
+          utilizando a barra de pesquisa.
+        #original_hash: 695f7ba
+        comp_not_found_action_2: >-
+          Se seguiu um link de outro site para chegar aqui, por favor informe
+          esse site que o link está incorreto.
+        #original_hash: 7f8f419
+        session_expired: Sessão Expirou
+        #original_hash: f3e688a
+        session_expired_action: >-
+          A sua sessão expirou. Atualize a página, tente novamente ou inicie
+          sessão novamente para continuar.
     doorkeeper:
       applications:
         help:
@@ -1988,6 +2004,8 @@ pt:
           WCA</a> ou com o seu <a href='%{delegate_url}'>Delegado</a> para fazer
           algumas dessas mudanças.
         reason:
+          #original_hash: 2e22133
+          no_access: não tem acesso para editar o utilizador
           #original_hash: 370ff12
           assigned: tem um ID da WCA associado
           #original_hash: 1c4670f
@@ -2691,8 +2709,6 @@ pt:
         deverão estar disponíveis em breve.
       #original_hash: e205d73
       results_already_posted: Os resultados já foram publicados.
-      #original_hash: 376f461
-      results_posted: Resultados publicados com sucesso!
       #original_hash: afe3a23
       results_preview_alert: Está a visualizar resultados que ainda não foram publicados.
       #original_hash: 16dd227
@@ -4304,8 +4320,6 @@ pt:
     cancelled_by_html: 'Cancelado por %{name} em %{date_time}'
     #original_hash: 25e68c3
     cancel_confirm: Tem a certeza que pretende cancelar a competição?
-    #original_hash: 01de5ee
-    post_results: Submeter os resultados
     #original_hash: b6513f1
     results_posted_by_html: 'Colocado por %{poster_name} em %{date_time}'
     #original_hash: a6b5efe
@@ -4499,8 +4513,8 @@ pt:
         newcomer_checks: Verificações Novos Competidores
         #original_hash: f3d6278
         submit_results: Submeter resultados
-        #original_hash: e2d046b
-        match_scrambles: Submeter embaralhamentos
+        #original_hash: dd2e98f
+        upload_scrambles: Carregar embaralhamentos
         #original_hash: 4c9f914
         delegate_report: Relatório do Delegado
         #original_hash: b233e77
@@ -4655,11 +4669,15 @@ pt:
     #original_hash: 10bcdbd
     connect_wca_id: Associe o seu ID da WCA à sua conta!
   payments:
+    #original_hash: cfeba03
+    header: Histórico de Pagamentos
     messages:
       #original_hash: 2eac1cb
       charge_refunded: Pagamento foi reembolsado
       #original_hash: 1e1d219
       charges_refunded: Todas os valores cobrados foram reembolsados
+      #original_hash: c677bd3
+      no_payments: Nenhum pagamento foi efetuado para este registo.
     errors:
       refund:
         #original_hash: 66475ae
@@ -4866,6 +4884,8 @@ pt:
     forum_enter_dob: >-
       É necessário introduzir a data de nascimento para aceder ao fórum.
       Introduza a sua data de nascimento e tente aceder novamente ao fórum.
+    #original_hash: 56e3bad
+    refresh: Atualizar
   faq:
     #original_hash: d790b40
     title: Perguntas Frequentes
@@ -6328,7 +6348,7 @@ pt:
         A ronda %{round_id} tem 7 ou menos competidores, mas tem pelo menos uma
         ronda subsequente, o que não é permitido de acordo com o Regulamento
         9m3.
-      #original_hash: e12138a
+      #original_hash: 44fbfde
       regulation_9p1_error: >-
         Ronda %{round_id}: Menos de 25% dos competidores foram eliminados, o que
         não é permitido pelo Regulamento 9p1.
@@ -6429,3 +6449,9 @@ pt:
         embaralhamento do especificado no separador "Gerir Eventos". Ajuste o
         número de conjuntos de embaralhamento no separador "Gerir Eventos" para
         o número de conjuntos que foram utilizados.
+  tickets:
+    type:
+      #original_hash: e43f273
+      edit_person: Editar Pessoa
+      #original_hash: 5fb2137
+      competition_result: Resultado de Competição

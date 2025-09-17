@@ -672,6 +672,11 @@ en:
         500_contact_html: "<a href=%{contact_url}>Click here</a> to report it."
         400_error: "The page you were looking for doesn't exist."
         400_contact_html: "If you think this is a mistake please <a href=%{contact_url}>click here</a> to report it."
+        comp_not_found: "Competition Not Found"
+        comp_not_found_action: "We couldn't find a competition with the ID \"%{comp_id}\". Please search for it using the search bar."
+        comp_not_found_action_2: "If you followed a link from another website to get here, please tell that website that their link is incorrect."
+        session_expired: "Session Expired"
+        session_expired_action: "Your session has expired. Please refresh the page, retry your action, or log in again to continue."
     #context: Key used when an external OAuth app is willing to access a WCA user's data
     doorkeeper:
       applications:
@@ -1045,6 +1050,7 @@ en:
       cannot_edit:
         msg: "You cannot change your name, birthdate, gender, or region. Reason: %{reason}. Contact the <a href='%{wrt_contact_path}' target='_blank'>WCA Results Team</a> or your <a href='%{delegate_url}'>Delegate</a> if you need to change any of these."
         reason:
+          no_access: "you don't have access to edit the user"
           assigned: "you have a WCA ID assigned"
           registered: "you have registered for a competition"
       guidelines_confirmation: "I confirm that my avatar fulfills all avatar guidelines."
@@ -1357,7 +1363,6 @@ en:
       results_not_posted: "This competition's results are visible but haven't been posted yet."
       results_still_processing: "We are busy processing this competition's results - they should be available shortly."
       results_already_posted: "The results have already been posted."
-      results_posted: "Successfully posted results!"
       results_preview_alert: "You are viewing results that have not been posted yet."
       upload_results: "This competition is over. We are working to upload the results as soon as possible!"
       computing_auxiliary_data: "Please wait until auxiliary data is computed."
@@ -2068,7 +2073,6 @@ en:
     uncancel: "Uncancel the competition"
     cancelled_by_html: "Cancelled by %{name} on %{date_time}"
     cancel_confirm: "Are you sure you want to cancel that competition?"
-    post_results: "Post the results"
     results_posted_by_html: "Posted by %{poster_name} on %{date_time}"
     cancel_mistake: "Made a mistake?"
     note_before_cancel: "Note: only confirmed competitions can be cancelled."
@@ -2165,7 +2169,7 @@ en:
         tabs: "Manage tabs"
         newcomer_checks: "Newcomer Checks"
         submit_results: "Submit results"
-        match_scrambles: "Submit scrambles"
+        upload_scrambles: "Upload scrambles"
         delegate_report: "Delegate report"
         registration: "Registration"
         import_registrations: "Import registrations"
@@ -2256,9 +2260,11 @@ en:
   notifications:
     connect_wca_id: "Connect your WCA ID to your account!"
   payments:
+    header: "Payment History"
     messages:
       charge_refunded: "Payment was refunded"
       charges_refunded: "All charges have been refunded"
+      no_payments: "No payments have been made for this registration."
     errors:
       refund:
         provider_disconnected: "You cannot issue a refund for this competition anymore. Please use your payment provider's dashboard to do so."
@@ -2271,6 +2277,7 @@ en:
     payment_providers:
       paypal: 'PayPal'
       stripe: 'Stripe'
+      manual: 'Manual/External'
     #context: Setting up and making payments
     payment_setup:
       external_dashboard: '%{provider} Dashboard'
@@ -2280,17 +2287,21 @@ en:
       account_not_connected: "There was a problem and we could not connect your %{provider} account."
       disconnect_account: "Disconnect %{provider} Account"
       confirm_account_disconnect: "Are you sure you want to disconnect the %{provider} account? This action cannot be undone."
+      edit_account: "Edit Account"
       supported_currency_warning: "Please make sure the currency you have selected is supported by your chosen payment integration! The supported currencies will depend on the country where the account is based, you can check them below:"
       supported_currencies: "%{provider} Supported Currencies"
       provider_heading: "%{provider} Payments"
       accept_payments_header: "Accept Registration Payments"
-      connect_button: "Connect with %{provider}"
+      manual_payments_header: "Configure Manual Payments"
+      connect_button: "Set up %{provider}"
       connect_account_info:
         stripe: "In order to accept payments for this competition, you need to connect your own Stripe account with the WCA Stripe account by clicking the button below. If you don't already have your own Stripe account you can still click on the button below and it will guide you through the process."
         paypal: "A PayPal Business account is required to accept PayPal payments via the competition page. If you don't already have a PayPal business account, you can still click on the button below and it will guide you through the process."
+        manual: "Define payment instructions for competitors. Competitors will be able to indicate when they have paid, and provide a payment reference for you to check against your records in the external payment service you use."
       connect_account_warning:
         stripe: "Connecting your Stripe account gives the WCA website the ability to create charges, and issue refunds directly on your Stripe account."
         paypal: "Connecting your PayPal account gives the WCA website the ability to route payments to you, and issue refunds directly on your PayPal account."
+        manual:  ""
       currently_connected_info: "This competition is set up to accept payments through %{provider}. The Delegate(s) of the competition should contact WCAT to make any changes to connected accounts."
       before_disconnect_warning: "Disconnecting on this page will make our website forget the connection to your %{provider} account. But your %{provider} dashboard (see link below) may still list the WCA website based on the authorization that you previously granted. Note that revoking authorization in the %{provider} dashboard will also affect any other competition linked to accept payments through this account!"
       before_disconnect_info: "Keep in mind that disconnecting an account should only be done in exceptional situations, such as the current account being unable to receive payments."
@@ -2302,6 +2313,9 @@ en:
         paypal:
           display_name: "Name"
           primary_email: "Email"
+        manual:
+          payment_instructions: "Payment instructions (will be displayed on Competition Page)"
+          payment_reference_label: "What information should the user provide for you to identify their payment? (eg, payment reference number / account ID / etc)"
         fallback_not_applicable: "N/A"
   persons:
     #context: Person search page
@@ -2359,6 +2373,7 @@ en:
   misc:
     forum_age_requirement: "You must be 13 years old to access the WCA Forum."
     forum_enter_dob: "A date of birth is required before accessing the forum. Please enter your date of birth, and then try and access the forum again."
+    refresh: "Refresh"
   #context: FAQ page
   faq:
     title: "Frequently Asked Questions"
@@ -2910,7 +2925,7 @@ en:
       regulation_9m1_error: "Round %{round_id} has 99 or fewer competitors but has more than two subsequent rounds, which is not permitted as per Regulation 9m1."
       regulation_9m2_error: "Round %{round_id} has 15 or fewer competitors but has more than one subsequent round, which is not permitted as per Regulation 9m2."
       regulation_9m3_error: "Round %{round_id} has 7 or fewer competitors but has at least one subsequent round, which is not permitted as per Regulation 9m3."
-      regulation_9p1_error: "Round %{round_id}: Fewer than 25%% of competitors were eliminated, which is not permitted as per Regulation 9p1."
+      regulation_9p1_error: "Round %{round_id}: Fewer than 25% of competitors were eliminated, which is not permitted as per Regulation 9p1."
       no_competitor_eliminated_error: "Round %{round_id}: There must be at least one competitor eliminated, which is required as per Regulation 9p (competitions before April 2010)."
       less_than_twenty_five_percent_eliminated_error: "Round %{round_id}: according to the advancement condition (%{condition}), fewer than 25%% of competitors would be eliminated, which is not permitted as per Regulation 9p1. Please update the round information in the manage events page."
       not_enough_qualified_warning: "Round %{round_id}: according to the events data, at most %{expected} could have proceed, but only %{actual} competed in the round. Please leave a comment about that (or fix the events data if you applied a different advancement condition)."
@@ -2931,3 +2946,7 @@ en:
       missing_scrambles_for_multi_error: "[%{round_id}] While you may have multiple groups in 3x3x3 Multi-Blind, at least one of the groups must contain scrambles for all attempts."
       multiple_fmc_groups_warning: "[%{round_id}] There are multiple groups of FMC used. If one group of FMC was used, please use the Scrambles Matcher to uncheck the unused scrambles. Otherwise, please include a comment to WRT explaining why multiple groups of FMC were used."
       wrong_number_of_scramble_sets_error: "[%{round_id}] This round has a different number of scramble sets than specified on the Manage Events tab. Please adjust the number of scramble sets in the Manage Events tab to the number of sets that were used."
+  tickets:
+    type:
+      edit_person: "Edit Person"
+      competition_result: "Competition Result"

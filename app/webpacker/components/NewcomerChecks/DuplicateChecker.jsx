@@ -6,18 +6,16 @@ import computePotentialDuplicates from './api/computePotentialDuplicates';
 import getLastDuplicateCheckerJobRun from './api/getLastDuplicateCheckerJobRun';
 import SimilarPersons from './SimilarPersons';
 import DuplicateCheckerHeader from './DuplicateCheckerHeader';
-import WCAQueryClientProvider from '../../lib/providers/WCAQueryClientProvider';
+import { duplicateCheckerJobRunStatuses } from '../../lib/wca-data.js.erb';
 
-export default function Wrapper({ competitionId }) {
-  return (
-    <WCAQueryClientProvider>
-      <DuplicateChecker competitionId={competitionId} />
-    </WCAQueryClientProvider>
-  );
-}
-
-function DuplicateChecker({ competitionId }) {
-  const { data: lastDuplicateCheckerJobRun, isLoading, isError } = useQuery({
+export default function DuplicateChecker({ competitionId, setUserIdToEdit }) {
+  const {
+    data: lastDuplicateCheckerJobRun,
+    isFetching,
+    isError,
+    error,
+    refetch,
+  } = useQuery({
     queryKey: ['last-duplicate-checker-job', competitionId],
     queryFn: () => getLastDuplicateCheckerJobRun({ competitionId }),
   });
@@ -34,16 +32,24 @@ function DuplicateChecker({ competitionId }) {
     },
   });
 
-  if (isLoading) return <Loading />;
-  if (isError) return <Errored />;
+  if (isFetching) return <Loading />;
+  if (isError) return <Errored error={error} />;
 
   return (
     <>
       <DuplicateCheckerHeader
         lastDuplicateCheckerJobRun={lastDuplicateCheckerJobRun}
         run={() => computePotentialDuplicatesMutate({ competitionId })}
+        refetch={refetch}
       />
-      <SimilarPersons similarPersons={lastDuplicateCheckerJobRun.potential_duplicate_persons} />
+      {lastDuplicateCheckerJobRun.run_status === duplicateCheckerJobRunStatuses.success
+      && (
+        <SimilarPersons
+          similarPersons={lastDuplicateCheckerJobRun.potential_duplicate_persons}
+          competitionId={competitionId}
+          setUserIdToEdit={setUserIdToEdit}
+        />
+      )}
     </>
   );
 }

@@ -23,11 +23,14 @@ import Image from "next/image";
 import _ from "lodash";
 
 export default async function ScoreTools() {
+  const { t, lng } = await getT();
+
   const payload = await getPayload({ config });
 
   const toolResults = await payload.find({
     collection: "tools",
     limit: 0,
+    locale: lng,
   });
 
   const tools = toolResults.docs;
@@ -35,8 +38,6 @@ export default async function ScoreTools() {
   if (tools.length === 0) {
     return <Heading>No Tools found. Add some</Heading>;
   }
-
-  const { t } = await getT();
 
   const toolsByCategory = _.groupBy(tools, "category");
 
@@ -47,19 +48,19 @@ export default async function ScoreTools() {
         <Text>{t("score_tools.intro.desc")}</Text>
         <Text>{t("score_tools.intro.disclaimer")}</Text>
         <Text>{t("score_tools.intro.used")}</Text>
-        <Heading size={"2xl"}>{t("score_tools.before.title")}</Heading>
+        <Heading size="2xl">{t("score_tools.before.title")}</Heading>
         <Text>{t("score_tools.before.desc")}</Text>
-        {toolsByCategory["before"].map((tool) => (
+        {toolsByCategory["before"]?.map((tool) => (
           <ToolCard key={tool.id} tool={tool} />
         ))}
-        <Heading size={"2xl"}>{t("score_tools.during.title")}</Heading>
+        <Heading size="2xl">{t("score_tools.during.title")}</Heading>
         <Text>{t("score_tools.during.desc")}</Text>
-        {toolsByCategory["during"].map((tool) => (
+        {toolsByCategory["during"]?.map((tool) => (
           <ToolCard key={tool.id} tool={tool} />
         ))}
-        <Heading size={"2xl"}>{t("score_tools.after.title")}</Heading>
+        <Heading size="2xl">{t("score_tools.after.title")}</Heading>
         <Text>{t("score_tools.after.desc")}</Text>
-        {toolsByCategory["after"].map((tool) => (
+        {toolsByCategory["after"]?.map((tool) => (
           <ToolCard key={tool.id} tool={tool} />
         ))}
       </VStack>

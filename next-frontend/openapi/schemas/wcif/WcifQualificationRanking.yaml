@@ -1,0 +1,18 @@
+type: object
+properties:
+  whenDate:
+    type: string
+    format: date
+  type:
+    type: string
+    example: "ranking"
+  resultType:
+    type: string
+    enum: [ 'single', 'average' ]
+  level:
+    $ref: './WcifRanking.yaml'
+required:
+  - whenDate
+  - type
+  - resultType
+  - level

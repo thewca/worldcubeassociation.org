@@ -24,9 +24,7 @@ export default function TicketComments({ ticketId, currentStakeholder }) {
   return (
     <>
       <Header as="h2">Comments</Header>
-      {currentStakeholder.actions_allowed.includes('add_comment') && (
-        <Button onClick={() => setCreateComment(true)}>Add new comment</Button>
-      )}
+      <Button onClick={() => setCreateComment(true)}>Add new comment</Button>
 
       <Comment.Group>
         {comments.map((comment) => (

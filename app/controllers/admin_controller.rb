@@ -42,132 +42,40 @@ class AdminController < ApplicationController
     @competition = competition_from_params
 
     if @competition.results_submitted? && !@competition.results_posted?
-      @competition.update(results_submitted_at: nil)
-      flash[:success] = "Results submission cleared."
-    else
-      flash[:danger] = "Could not clear the results submission. Maybe results are already posted, or there is no submission."
-    end
-    redirect_to competition_admin_upload_results_edit_path
-  end
-
-  # The order of this array has to follow the steps in which results have to be imported.
-  RESULTS_POSTING_STEPS = %i[inbox_result inbox_person].freeze
-
-  private def load_result_posting_steps
-    @competition = competition_from_params(associations: %i[events rounds])
-
-    data_tables = {
-      result: Result,
-      scramble: Scramble,
-      inbox_result: InboxResult,
-      inbox_person: InboxPerson,
-      newcomer_person: InboxPerson.where(wca_id: ''),
-      newcomer_result: Result.select(:person_id).distinct.where("person_id REGEXP '^[0-9]+$'"),
-    }
-
-    @existing_data = data_tables.transform_values { |table| table.where(competition_id: @competition.id).count }
-    @inbox_step = RESULTS_POSTING_STEPS.find { |inbox| @existing_data[inbox].positive? }
-
-    yield if block_given?
-  end
-
-  def import_results
-    @competition = competition_from_params
-    load_result_posting_steps
-  end
-
-  def result_inbox_steps
-    load_result_posting_steps do
-      render partial: 'import_results_steps'
-    end
-  end
-
-  def import_inbox_results
-    @competition = competition_from_params
-
-    ActiveRecord::Base.transaction do
-      result_rows = @competition.inbox_results
-                                .includes(:inbox_person)
-                                .map do |inbox_res|
-        inbox_person = inbox_res.inbox_person
-
-        person_id = inbox_person&.wca_id.presence || inbox_res.person_id
-        person_country = inbox_person&.country
-
-        {
-          pos: inbox_res.pos,
-          person_id: person_id,
-          person_name: inbox_res.person_name,
-          country_id: person_country.id,
-          competition_id: inbox_res.competition_id,
-          event_id: inbox_res.event_id,
-          round_type_id: inbox_res.round_type_id,
-          round_id: inbox_res.round_id,
-          format_id: inbox_res.format_id,
-          value1: inbox_res.value1,
-          value2: inbox_res.value2,
-          value3: inbox_res.value3,
-          value4: inbox_res.value4,
-          value5: inbox_res.value5,
-          best: inbox_res.best,
-          average: inbox_res.average,
-        }
+      ActiveRecord::Base.transaction do
+        @competition.update!(results_submitted_at: nil)
+        @competition.tickets_competition_result.update!(status: TicketsCompetitionResult.statuses[:aborted])
       end
-
-      Result.insert_all!(result_rows)
-      @competition.inbox_results.destroy_all
-    end
-
-    load_result_posting_steps do
-      render partial: 'import_results_steps'
-    end
-  end
-
-  def delete_inbox_data
-    @competition = competition_from_params
-
-    inbox_model = params.require(:model).to_sym
-
-    case inbox_model
-    when :inbox_result
-      @competition.inbox_results.destroy_all
-    when :inbox_person
-      # Ugly hack because we don't have primary keys on InboxPerson, also see comment on `InboxPerson#delete`
-      @competition.inbox_persons.each(&:delete)
+      render status: :ok, json: { success: true }
     else
-      raise "Invalid model association: #{inbox_model}"
-    end
-
-    load_result_posting_steps do
-      render partial: 'import_results_steps'
+      render status: :unprocessable_entity, json: {
+        error: "Could not clear the results submission. Maybe results are already posted, or there is no submission.",
+      }
     end
   end
 
   def delete_results_data
-    @competition = competition_from_params
+    competition = competition_from_params(associations: [:results, :scrambles, { rounds: %i[results scrambles] }])
 
     model = params.require(:model)
 
     if model == 'All'
-      @competition.results.destroy_all
-      @competition.scrambles.destroy_all
+      competition.results.destroy_all
+      competition.scrambles.destroy_all
     else
-      event_id = params.require(:event_id)
-      round_type_id = params.require(:round_type_id)
+      round = competition.rounds.find(params.require(:roundId))
 
       case model
       when Result.name
-        Result.where(competition_id: @competition.id, event_id: event_id, round_type_id: round_type_id).destroy_all
+        round.results.destroy_all
       when Scramble.name
-        Scramble.where(competition_id: @competition.id, event_id: event_id, round_type_id: round_type_id).destroy_all
+        round.scrambles.destroy_all
       else
-        raise "Invalid table: #{params[:table]}"
+        return render status: :bad_request, json: { error: "Invalid model: #{model}" }
       end
     end
 
-    load_result_posting_steps do
-      render partial: 'import_results_steps'
-    end
+    render status: :ok, json: { success: true }
   end
 
   def fix_results
