@@ -131,6 +131,7 @@ export default function RegionSelector({
         width="100%"
         colorPalette="blue"
         openOnClick
+        value={region ? [region] : undefined}
         disabled={disabled}
         defaultValue={[ALL_REGIONS_VALUE]}
         invalid={error !== undefined}
