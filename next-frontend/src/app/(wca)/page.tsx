@@ -96,7 +96,7 @@ const AnnouncementsSection = ({
       hero={{
         title: mainAnnouncement.title,
         postedBy: (mainAnnouncement.publishedBy as User).name!,
-        postedAt: mainAnnouncement.publishedAt,
+        postedAt: mainAnnouncement.publishAt,
         markdown: mainAnnouncement.contentMarkdown!,
         fullLink: `/articles/${mainAnnouncement.id}`,
       }}
