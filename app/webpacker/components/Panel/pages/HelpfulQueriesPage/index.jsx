@@ -174,7 +174,7 @@ function HelpfulTabs({ userId }) {
     },
   ]), [userId]);
 
-  if (!userId) return <Message info content="Select a User to load data."></Message>;
+  if (!userId) return <Message info content="Select a User to load data." />;
 
   return <Tab panes={panes} />;
 }
