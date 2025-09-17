@@ -47,6 +47,7 @@ class RegionalRecord < ApplicationRecord
     query.minimum(:value)
   end
 
+  # rubocop:disable Style/PredicateMethod this returns a boolean + the marker so this is still a predicate method
   def self.record_at_date?(value, event_id, record_type, country_id, timestamp)
     scope_filter = arel_table[:record_scope]
     continent_id = Country.c_find(country_id).continent_id
