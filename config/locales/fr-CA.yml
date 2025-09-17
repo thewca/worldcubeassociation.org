@@ -1061,7 +1061,7 @@ fr-CA:
           otp_email:
             #original_hash: a238ac2
             subject: Votre code à usage unique pour le site internet de la WCA
-            #original_hash: 7ccea57
+            #original_hash: b235c68
             2fa_attempt: >-
               Vous être en train de vous connecter sur le site de la WCA.
               L'authentification à deux facteur est activée pour votre compte,
@@ -1215,6 +1215,22 @@ fr-CA:
         400_contact_html: >-
           Si vous pensez qu'il s'agit d'une erreur, merci de <a
           href=%{contact_url}>cliquer ici</a> pour le signaler.
+        #original_hash: 8fec548
+        comp_not_found: Compétition introuvable
+        #original_hash: 8342dcb
+        comp_not_found_action: >-
+          Nous n'avons pas trouvé de compétition avec l'identifiant « %{comp_id}
+          ». Veuillez effectuer une recherche à l'aide de la barre de recherche.
+        #original_hash: 616d097
+        comp_not_found_action_2: >-
+          Si vous avez suivi un lien depuis un autre site web pour arriver ici,
+          veuillez signaler à ce site web que son lien est incorrect.
+        #original_hash: 6344d1b
+        session_expired: Session expirée
+        #original_hash: 7114c05
+        session_expired_action: >-
+          Votre session a expiré. Veuillez actualiser la page, réessayer
+          l'action ou vous reconnecter pour continuer.
     doorkeeper:
       applications:
         help:
@@ -1696,7 +1712,7 @@ fr-CA:
       form:
         contact_email:
           #original_hash: 25e3a06
-          label: Email de contact
+          label: Courriel de contact
         wca_id:
           #original_hash: 7951ca7
           label: Saisir l'identifiant WCA
@@ -2013,7 +2029,7 @@ fr-CA:
         qu'elle puisse être effective.
       #original_hash: f572e4a
       pending_mail_confirmation: >-
-        Ce compte est en attente de confirmation de la nouvelle adresse email
+        Ce compte est en attente de confirmation de la nouvelle adresse courriel
         %{email}.
       #original_hash: a96e012
       pending_avatar_confirmation: Ce compte est en attente de confirmation d'une nouvelle photo de profil.
@@ -2377,7 +2393,7 @@ fr-CA:
         #original_hash: 68512ca
         waitlisted_html: >-
           La compétition est pleine, mais vous avez été placé sur une liste
-          d'attente, et vous recevrez un email si suffisamment de places se
+          d'attente, et vous recevrez un courriel si suffisamment de places se
           libèrent pour que vous puissiez y participer. Vérifiez votre position
           sur la liste d'attente %{here}.
         #original_hash: f8da4c2
@@ -2794,8 +2810,6 @@ fr-CA:
         devraient être disponibles sous peu.
       #original_hash: 6c46989
       results_already_posted: Les résultats ont déjà été postés.
-      #original_hash: 360971e
-      results_posted: Résultats postés avec succès !
       #original_hash: 9a15889
       results_preview_alert: Vous visualisez des résultats qui n'ont pas encore été postés.
       #original_hash: 52f0c1d
@@ -3554,7 +3568,7 @@ fr-CA:
             Nom de la ville où la compétition a lieu ainsi que la province /
             état (dans les pays où c'est l'usage). Ne pas mettre le pays.
             Exemple d'entrée valide : Montréal, Quebec
-          #original_hash: a6acbaa
+          #original_hash: aa8ebf8
           name_html: >-
             La salle où la compétition à lieu. %{md}. Par exemple : [École de
             Technologie Supérieure](https://www.etsmtl.ca/)
@@ -3914,8 +3928,8 @@ fr-CA:
           d’attente et vous recevrez un courriel si suffisamment de places sont
           disponibles pour que vous puissiez y assister.
       list:
-        #original_hash: e8f8827
-        empty: Aucune
+        #original_hash: b2ed82f
+        empty: Aucun
         #original_hash: c15d545
         spots_remaining_plural:
           zero: Aucune place disponible
@@ -4486,8 +4500,6 @@ fr-CA:
     cancelled_by_html: 'Annulée par %{name} le %{date_time}'
     #original_hash: 6851f7a
     cancel_confirm: Êtes-vous sûr·e de vouloir annuler cette compétition ?
-    #original_hash: 99120ff
-    post_results: Poster les résultats
     #original_hash: e8714ac
     results_posted_by_html: 'Postés par %{poster_name} le %{date_time}'
     #original_hash: 039ddbf
@@ -4680,8 +4692,8 @@ fr-CA:
         newcomer_checks: Vérifications des nouveaux compétiteurs
         #original_hash: 678d15b
         submit_results: Envoyer les résultats
-        #original_hash: d8bb428
-        match_scrambles: Soumettre les mélanges
+        #original_hash: 1d0b625
+        upload_scrambles: Mettre en ligne les mélanges
         #original_hash: 21f47fb
         delegate_report: Rapport des Délégués
         #original_hash: 3e69f54
@@ -6679,3 +6691,9 @@ fr-CA:
         dans l'onglet Gérer les événements. Veuillez ajuster le nombre de sets
         de mélanges dans l'onglet Gérer les événements en fonction du nombre de
         sets utilisés.
+  tickets:
+    type:
+      #original_hash: 170f350
+      edit_person: Modifier la personne
+      #original_hash: aa4151c
+      competition_result: Résultat de la compétition

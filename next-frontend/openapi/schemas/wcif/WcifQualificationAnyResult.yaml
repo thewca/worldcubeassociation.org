@@ -1,0 +1,15 @@
+type: object
+properties:
+  whenDate:
+    type: string
+    format: date
+  type:
+    type: string
+    example: "anyResult"
+  resultType:
+    type: string
+    enum: [ 'single', 'average' ]
+required:
+  - whenDate
+  - type
+  - resultType

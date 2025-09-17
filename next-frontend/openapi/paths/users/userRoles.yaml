@@ -1,0 +1,66 @@
+get:
+  summary: Get user roles
+  tags:
+    - users
+  operationId: userRoles
+  parameters:
+    - name: isActive
+      in: query
+      schema:
+        type: boolean
+      description: Filter by whether the group is active
+    - name: isGroupHidden
+      in: query
+      schema:
+        type: boolean
+      description: Filter by whether the group is hidden
+    - name: userId
+      in: query
+      schema:
+        type: integer
+      description: Filter by user ID
+    - name: groupId
+      in: query
+      schema:
+        type: integer
+      description: Filter by group ID
+    - name: status
+      in: query
+      schema:
+        type: string
+      description: Filter by metadata status (e.g., "chair")
+    - name: groupType
+      in: query
+      schema:
+        type: string
+      description: Filter by group type (e.g., "officers")
+    - name: parentGroupId
+      in: query
+      schema:
+        type: number
+      description: Filter by parent Group
+    - name: isLead
+      in: query
+      schema:
+        type: boolean
+      description: Filter by whether the user is the lead of the group
+    - name: sort
+      in: query
+      schema:
+        type: string
+      description: Sort by a specific field (e.g., "start_date", "-created_at")
+    - name: perPage
+      in: query
+      schema:
+        type: integer
+        default: 100
+      description: Number of results per page
+  responses:
+    '200':
+      description: A list of user roles
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '../../schemas/users/UserRole.yaml'

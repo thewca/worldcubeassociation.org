@@ -10,6 +10,7 @@ import {
   EditRoom,
   EditVenue,
   MoveActivity,
+  RemoveActivities,
   RemoveActivity,
   RemoveRoom,
   RemoveVenue,
@@ -93,6 +94,32 @@ const reducers = {
             activities: room.activities.filter((activity) => (
               activity.id !== payload.activityId && (
                 !payload.updateMatches || !doActivitiesMatch(activity, selectedActivity)
+              )
+            )),
+          })),
+        })),
+      },
+    };
+  },
+
+  [RemoveActivities]: (state, { payload }) => {
+    const selectedActivities = payload.activityIds.map(
+      (activityId) => activityWcifFromId(state.wcifSchedule, activityId),
+    );
+
+    return {
+      ...state,
+      wcifSchedule: {
+        ...state.wcifSchedule,
+        venues: state.wcifSchedule.venues.map((venue) => ({
+          ...venue,
+          rooms: venue.rooms.map((room) => ({
+            ...room,
+            activities: room.activities.filter((activity) => (
+              !payload.activityIds.includes(activity.id) && (
+                !payload.updateMatches || !selectedActivities.some(
+                  (selectedActivity) => doActivitiesMatch(activity, selectedActivity),
+                )
               )
             )),
           })),

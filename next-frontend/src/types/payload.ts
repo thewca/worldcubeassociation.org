@@ -127,7 +127,6 @@ export type IconName =
 export type StaticTargetLink =
   | '/'
   | '/faq'
-  | '/api/swagger'
   | '/competitions'
   | '/delegates'
   | '/disclaimer'
@@ -266,7 +265,8 @@ export interface Config {
     | 'da'
     | 'de'
     | 'eo'
-    | 'es'
+    | 'es-ES'
+    | 'es-419'
     | 'eu'
     | 'fi'
     | 'fr'
