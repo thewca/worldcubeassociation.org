@@ -9,8 +9,6 @@ import { fetchJsonOrError } from '../../../../lib/requests/fetchWithAuthenticity
 import { viewUrls, competitionUrl } from '../../../../lib/requests/routes.js.erb';
 import useInputState from '../../../../lib/hooks/useInputState';
 
-const hasUserId = (val) => val?.toString().trim()?.length > 0;
-
 const statusColor = (s) => {
   switch (s?.toLowerCase()) {
     case 'accepted': return 'green';
@@ -23,25 +21,25 @@ const statusColor = (s) => {
 };
 
 async function fetchRegistrations(userId) {
-  if (!hasUserId(userId)) return [];
+  if (!userId) return [];
   const { data } = await fetchJsonOrError(viewUrls.helpfulQueries.registrations(userId));
   return (data || []);
 }
 
 async function fetchOrganized(userId) {
-  if (!hasUserId(userId)) return [];
+  if (!userId) return [];
   const { data } = await fetchJsonOrError(viewUrls.helpfulQueries.organizedCompetitions(userId));
   return (data || []);
 }
 
 async function fetchDelegated(userId) {
-  if (!hasUserId(userId)) return [];
+  if (!userId) return [];
   const { data } = await fetchJsonOrError(viewUrls.helpfulQueries.delegatedCompetitions(userId));
   return (data || []);
 }
 
 function RegistrationsPane({ userId }) {
-  const enabled = hasUserId(userId);
+  const enabled = !!userId;
   const { data = [], isFetching } = useQuery({
     queryKey: ['hq-registrations', userId],
     queryFn: () => fetchRegistrations(userId),
@@ -81,7 +79,7 @@ function RegistrationsPane({ userId }) {
 }
 
 function OrganizedPane({ userId }) {
-  const enabled = hasUserId(userId);
+  const enabled = !!userId;
   const { data = [], isFetching } = useQuery({
     queryKey: ['hq-organized', userId],
     queryFn: () => fetchOrganized(userId),
@@ -115,7 +113,7 @@ function OrganizedPane({ userId }) {
 }
 
 function DelegatedPane({ userId }) {
-  const enabled = hasUserId(userId);
+  const enabled = !!userId;
   const { data = [], isFetching } = useQuery({
     queryKey: ['hq-delegated', userId],
     queryFn: () => fetchDelegated(userId),
@@ -154,9 +152,7 @@ function HelpfulTabs({ userId }) {
       menuItem: 'Competitor Registrations',
       render: () => (
         <Tab.Pane>
-          {!hasUserId(userId)
-            ? <Message info content="Select a User to load registrations." />
-            : <RegistrationsPane userId={userId} />}
+          <RegistrationsPane userId={userId} />
         </Tab.Pane>
       ),
     },
@@ -164,9 +160,7 @@ function HelpfulTabs({ userId }) {
       menuItem: 'Organized Competitions',
       render: () => (
         <Tab.Pane>
-          {!hasUserId(userId)
-            ? <Message info content="Select a User to load organized competitions." />
-            : <OrganizedPane userId={userId} />}
+          <OrganizedPane userId={userId} />
         </Tab.Pane>
       ),
     },
@@ -174,13 +168,13 @@ function HelpfulTabs({ userId }) {
       menuItem: 'Delegated Competitions',
       render: () => (
         <Tab.Pane>
-          {!hasUserId(userId)
-            ? <Message info content="Select a User to load delegated competitions." />
-            : <DelegatedPane userId={userId} />}
+          <DelegatedPane userId={userId} />
         </Tab.Pane>
       ),
     },
   ]), [userId]);
+
+  if (!userId) return <Message info content="Select a User to load data."></Message>;
 
   return <Tab panes={panes} />;
 }
