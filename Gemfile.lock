@@ -325,6 +325,7 @@ GEM
     ffi (1.17.1-x86_64-darwin)
     ffi (1.17.1-x86_64-linux-gnu)
     ffi (1.17.1-x86_64-linux-musl)
+    fiber-storage (1.0.1)
     formatador (0.3.0)
     fugit (1.11.1)
       et-orbi (~> 1, >= 1.2.11)
@@ -383,6 +384,12 @@ GEM
       multi_json (~> 1.11)
       os (>= 0.9, < 2.0)
       signet (>= 0.16, < 2.a)
+    graphiql-rails (1.10.5)
+      railties
+    graphql (2.5.11)
+      base64
+      fiber-storage
+      logger
     guard (2.18.0)
       formatador (>= 0.2.4)
       listen (>= 2.7, < 4.0)
@@ -574,6 +581,9 @@ GEM
     oga (3.4)
       ast
       ruby-ll (~> 2.1)
+    oj (3.16.11)
+      bigdecimal (>= 3.0)
+      ostruct (>= 0.2)
     openssl (3.3.0)
     orm_adapter (0.5.0)
     os (1.1.4)
@@ -1031,6 +1041,8 @@ DEPENDENCIES
   faraday
   faraday-retry
   google-apis-admin_directory_v1
+  graphiql-rails
+  graphql
   guard-rspec
   hash_diff
   hiredis
@@ -1062,6 +1074,7 @@ DEPENDENCIES
   oauth2
   octokit
   oga
+  oj
   openssl
   overcommit
   playwright-ruby-client
@@ -1236,6 +1249,7 @@ CHECKSUMS
   ffi (1.17.1-x86_64-darwin) sha256=0036199c290462dd7f03bc22933644c1685b7834a21788062bd5df48c72aa7a6
   ffi (1.17.1-x86_64-linux-gnu) sha256=8c0ade2a5d19f3672bccfe3b58e016ae5f159e3e2e741c856db87fcf07c903d0
   ffi (1.17.1-x86_64-linux-musl) sha256=3a343086820c96d6fbea4a5ef807fb69105b2b8174678f103b3db210c3f78401
+  fiber-storage (1.0.1) sha256=f48e5b6d8b0be96dac486332b55cee82240057065dc761c1ea692b2e719240e1
   formatador (0.3.0) sha256=65c37ec773f3fc7faa02cd5efd9599dc72970af5ebca8041a3e5dbcf5b70f956
   fugit (1.11.1) sha256=e89485e7be22226d8e9c6da411664d0660284b4b1c08cacb540f505907869868
   gli (2.22.2) sha256=580e8d6c88b0f0f0cb8e8b2ca18c3485ed0f742cece855de46bf8e36202f5db0
@@ -1255,6 +1269,8 @@ CHECKSUMS
   google-protobuf (4.31.1-x86_64-linux-gnu) sha256=7def6dbf996dab289dd541a3ee8b201e2c3e35911c274325ad9b483ebffb6dcd
   google-protobuf (4.31.1-x86_64-linux-musl) sha256=7d99d7728d9d7a6fda36130acac2a9947b868e28fe3f4aec4131cebce0d420f9
   googleauth (1.14.0) sha256=62e7de11791890c3d3dc70582dfd9ab5516530e4e4f56d96451fd62c76475149
+  graphiql-rails (1.10.5) sha256=d911486eeac01e125d403a61c04f634cccaff9f8ecee5dc4efce3e7aa11bf5d3
+  graphql (2.5.11) sha256=1169ffc6e215fd4d60056455b672c40a0cafa0607262049c2cca343b0f6bdb5c
   guard (2.18.0) sha256=12f2b801a0c8d41e7480ab5c2c4283e439fbe0ac7574a0da1dee82ec484a1eff
   guard-compat (1.2.1) sha256=3ad21ab0070107f92edfd82610b5cdc2fb8e368851e72362ada9703443d646fe
   guard-rspec (4.7.3) sha256=a47ba03cbd1e3c71e6ae8645cea97e203098a248aede507461a43e906e2f75ca
@@ -1341,6 +1357,7 @@ CHECKSUMS
   oauth2 (2.0.17) sha256=c4e182aeabc06dfdafce9a15095c30edc3a1a21fc3c4f0ea49d9295429e79835
   octokit (10.0.0) sha256=82e99a539b7637b7e905e6d277bb0c1a4bed56735935cc33db6da7eae49a24e8
   oga (3.4) sha256=953039cd7be8dc50dfdafe052588e369c707ff1a82e06980b90944e1a1061b6d
+  oj (3.16.11) sha256=2aab609d2bc896529bd3c70d737f591c13932a640ba6164a0f7e414efdb052b1
   openssl (3.3.0) sha256=ff3a573fc97ab30f69483fddc80029f91669bf36532859bd182d1836f45aee79
   orm_adapter (0.5.0) sha256=aa5d0be5d540cbb46d3a93e88061f4ece6a25f6e97d6a47122beb84fe595e9b9
   os (1.1.4) sha256=57816d6a334e7bd6aed048f4b0308226c5fb027433b67d90a9ab435f35108d3f
