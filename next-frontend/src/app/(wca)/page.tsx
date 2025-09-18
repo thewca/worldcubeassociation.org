@@ -8,7 +8,6 @@ import {
   Card,
   Separator,
   Box,
-  Image as ChakraImage,
   Heading,
   Text,
   Tabs,
@@ -49,6 +48,7 @@ import type {
 import Link from "next/link";
 import { route } from "nextjs-routes";
 import { getT } from "@/lib/i18n/get18n";
+import { MediaImage } from "@/components/MediaImage";
 
 const TextCard = ({ block }: { block: TextCardBlock }) => {
   return (
@@ -59,10 +59,9 @@ const TextCard = ({ block }: { block: TextCardBlock }) => {
       width="full"
     >
       {block.headerImage && (
-        <ChakraImage
-          src={(block.headerImage as Media).url ?? undefined}
-          alt={(block.headerImage as Media).alt ?? undefined}
-          aspectRatio="3/1"
+        <MediaImage
+          media={block.headerImage as Media}
+          imageProps={{ aspectRatio: "3/1" }}
         />
       )}
       <Card.Body>
@@ -125,13 +124,14 @@ const ImageBanner = ({ block }: { block: ImageBannerBlock }) => {
       size="lg"
     >
       <Box position="relative" width="50%" overflow="hidden">
-        <ChakraImage
-          src={(block.mainImage as Media).url ?? undefined}
-          alt={(block.mainImage as Media).alt ?? undefined}
-          objectFit="cover"
-          width="100%"
-          height="40vh"
-          bg={`colorPalette.${colorPaletteTone}`}
+        <MediaImage
+          media={block.mainImage as Media}
+          imageProps={{
+            objectFit: "cover",
+            width: "100%",
+            height: "40vh",
+            bg: `colorPalette.${colorPaletteTone}`,
+          }}
         />
         {/* Gradient Overlay */}
         <Box
@@ -188,10 +188,10 @@ const ImageOnlyCard = ({ block }: { block: ImageOnlyCardBlock }) => {
       colorPalette={block.colorPalette}
       width="full"
     >
-      <ChakraImage
-        src={(block.mainImage as Media).url ?? undefined}
-        alt={(block.mainImage as Media).alt ?? block.heading ?? undefined}
-        aspectRatio="2/1"
+      <MediaImage
+        media={block.mainImage as Media}
+        imageProps={{ aspectRatio: "2/1" }}
+        altFallback={block.heading}
       />
       {block.heading && (
         <Card.Body p={6}>
@@ -319,19 +319,11 @@ const TestimonialsSpinner = ({ block }: { block: TestimonialsBlock }) => {
                 overflow="hidden"
                 colorPalette={slide.colorPalette}
               >
-                <ChakraImage
-                  src={
-                    testimonial.image != null
-                      ? ((testimonial.image as Media).url ?? undefined)
-                      : "/placeholder.png"
-                  }
-                  alt={
-                    testimonial.image != null
-                      ? (testimonial.image as Media).alt
-                      : testimonial.punchline
-                  }
-                  maxW="1/3"
-                  objectFit="cover"
+                <MediaImage
+                  media={testimonial.image as Media}
+                  imageProps={{ maxW: "1/3", objectFit: "cover" }}
+                  srcFallback="/placeholder.png"
+                  altFallback={testimonial.punchline}
                 />
                 <Card.Body pr="3em">
                   <Card.Title>{testimonial.punchline}</Card.Title>
