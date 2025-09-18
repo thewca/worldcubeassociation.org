@@ -21,29 +21,24 @@ const statusColor = (s) => {
 };
 
 async function fetchRegistrations(userId) {
-  if (!userId) return [];
   const { data } = await fetchJsonOrError(viewUrls.helpfulQueries.registrations(userId));
   return (data || []);
 }
 
 async function fetchOrganized(userId) {
-  if (!userId) return [];
   const { data } = await fetchJsonOrError(viewUrls.helpfulQueries.organizedCompetitions(userId));
   return (data || []);
 }
 
 async function fetchDelegated(userId) {
-  if (!userId) return [];
   const { data } = await fetchJsonOrError(viewUrls.helpfulQueries.delegatedCompetitions(userId));
   return (data || []);
 }
 
 function RegistrationsPane({ userId }) {
-  const enabled = !!userId;
   const { data = [], isFetching } = useQuery({
     queryKey: ['hq-registrations', userId],
     queryFn: () => fetchRegistrations(userId),
-    enabled,
   });
 
   if (isFetching) return <Loader active inline />;
@@ -79,11 +74,9 @@ function RegistrationsPane({ userId }) {
 }
 
 function OrganizedPane({ userId }) {
-  const enabled = !!userId;
   const { data = [], isFetching } = useQuery({
     queryKey: ['hq-organized', userId],
     queryFn: () => fetchOrganized(userId),
-    enabled,
   });
 
   if (isFetching) return <Loader active inline />;
@@ -113,11 +106,9 @@ function OrganizedPane({ userId }) {
 }
 
 function DelegatedPane({ userId }) {
-  const enabled = !!userId;
   const { data = [], isFetching } = useQuery({
     queryKey: ['hq-delegated', userId],
     queryFn: () => fetchDelegated(userId),
-    enabled,
   });
 
   if (isFetching) return <Loader active inline />;
