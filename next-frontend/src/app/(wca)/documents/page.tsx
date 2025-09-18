@@ -12,26 +12,30 @@ import { getPayload } from "payload";
 import config from "@payload-config";
 import _ from "lodash";
 import IconDisplay from "@/components/IconDisplay";
+import { Document } from "@/types/payload";
 
 export default async function Documents() {
   const payload = await getPayload({ config });
 
-  const documentsResult = await payload.find({
-    collection: "documents",
-    limit: 0,
+  const documentsResult = await payload.findGlobal({
+    slug: "documents-page",
   });
 
-  const documents = documentsResult.docs;
+  const documentRelation = documentsResult.documents;
 
-  if (documents.length === 0) {
+  if (!documentRelation || documentRelation?.length === 0) {
     return <Heading>No documents found. Add some</Heading>;
   }
+
+  const documents = documentRelation.map(
+    ({ document }) => document as Document,
+  );
 
   const [categorizedRaw, uncategorized] = _.partition(documents, "category");
   const categorized = _.groupBy(categorizedRaw, "category");
 
   return (
-    <Container>
+    <Container bg="bg">
       <VStack gap="8" pt="8" alignItems="left">
         <Heading size="5xl">Documents</Heading>
         <Accordion.Root variant="enclosed" multiple>
