@@ -182,6 +182,10 @@ class Registration < ApplicationRecord
     )
   end
 
+  def manual_payment_intent
+    payment_intents.where(payment_record_type: 'ManualPaymentRecord').first
+  end
+
   def last_payment
     if registration_payments.loaded?
       registration_payments.completed.max_by(&:paid_at)
