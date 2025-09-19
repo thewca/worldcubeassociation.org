@@ -89,6 +89,19 @@ services:
     networks:
       - wca-main
 
+  # 5.0 for documentdb compatability
+  wca_payload_db:
+    image: mongo:5.0
+    container_name: "payload_db"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+      MONGO_INITDB_DATABASE: payload
+    ports:
+      - "27017:27017"
+    networks:
+      - wca-main
+
   wca_webpacker:
     <<: *app
     container_name: "webpacker"
