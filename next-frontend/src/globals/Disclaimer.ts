@@ -1,5 +1,5 @@
 import type { GlobalConfig } from "payload";
-import { paragraphBlock } from "@/blocks/text/paragraph";
+import { ParagraphBlock } from "@/blocks/text/paragraph";
 
 export const Disclaimer: GlobalConfig = {
   slug: "disclaimer-page",
@@ -9,7 +9,7 @@ export const Disclaimer: GlobalConfig = {
       name: "blocks",
       type: "blocks",
       required: true,
-      blocks: [paragraphBlock],
+      blocks: [ParagraphBlock],
     },
   ],
 };
