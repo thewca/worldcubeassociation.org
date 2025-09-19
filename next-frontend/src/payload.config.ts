@@ -26,6 +26,11 @@ import { Privacy } from "@/globals/Privacy";
 import { Disclaimer } from "@/globals/Disclaimer";
 import { AboutUsPage } from "@/globals/About";
 import { languageConfig, fallbackLng } from "@/lib/i18n/settings";
+import {
+  compatibilityOptions,
+  mongooseAdapter,
+  Args,
+} from "@payloadcms/db-mongodb";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -63,12 +68,9 @@ async function plugins() {
   return defaultPlugins;
 }
 
-async function dbAdapter() {
+function dbOptions(): Args {
   if (process.env.NODE_ENV === "production") {
-    const { mongooseAdapter, compatibilityOptions } = await import(
-      "@payloadcms/db-mongodb"
-    );
-    return mongooseAdapter({
+    return {
       url: process.env.DATABASE_URI || "",
       connectOptions: {
         authMechanism: "MONGODB-AWS",
@@ -77,14 +79,17 @@ async function dbAdapter() {
         tlsCAFile: "/app/global-bundle.pem",
       },
       ...compatibilityOptions.documentdb,
-    });
+    };
   } else {
-    const { sqliteAdapter } = await import("@payloadcms/db-sqlite");
-    return sqliteAdapter({
-      client: {
-        url: process.env.DATABASE_URI || "",
+    return {
+      url: process.env.DATABASE_URI || "",
+      connectOptions: {
+        authMechanism: "SCRAM-SHA-256",
+        authSource: "admin",
+        user: process.env.DATABASE_USER || "",
+        pass: process.env.DATABASE_PASSWORD || "",
       },
-    });
+    };
   }
 }
 
@@ -131,7 +136,7 @@ export default buildConfig({
   typescript: {
     outputFile: path.resolve(dirname, "types/payload.ts"),
   },
-  db: await dbAdapter(),
+  db: mongooseAdapter(dbOptions()),
   sharp,
   plugins: await plugins(),
 });
