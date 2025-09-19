@@ -248,6 +248,7 @@ export interface Config {
     'disclaimer-page': DisclaimerPage;
     'speedcubing-history-page': SpeedcubingHistoryPage;
     'about-regulations-page': AboutRegulationsPage;
+    'documents-page': DocumentsPage;
   };
   globalsSelect: {
     nav: NavSelect<false> | NavSelect<true>;
@@ -257,6 +258,7 @@ export interface Config {
     'disclaimer-page': DisclaimerPageSelect<false> | DisclaimerPageSelect<true>;
     'speedcubing-history-page': SpeedcubingHistoryPageSelect<false> | SpeedcubingHistoryPageSelect<true>;
     'about-regulations-page': AboutRegulationsPageSelect<false> | AboutRegulationsPageSelect<true>;
+    'documents-page': DocumentsPageSelect<false> | DocumentsPageSelect<true>;
   };
   locale:
     | 'en'
@@ -1257,6 +1259,21 @@ export interface AboutRegulationsPage {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "documents-page".
+ */
+export interface DocumentsPage {
+  id: number;
+  documents?:
+    | {
+        document: number | Document;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "nav_select".
  */
 export interface NavSelect<T extends boolean = true> {
@@ -1655,6 +1672,21 @@ export interface AboutRegulationsPageSelect<T extends boolean = true> {
               id?: T;
               blockName?: T;
             };
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "documents-page_select".
+ */
+export interface DocumentsPageSelect<T extends boolean = true> {
+  documents?:
+    | T
+    | {
+        document?: T;
+        id?: T;
       };
   updatedAt?: T;
   createdAt?: T;

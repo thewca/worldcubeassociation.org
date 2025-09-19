@@ -26,6 +26,7 @@ import { Privacy } from "@/globals/Privacy";
 import { Disclaimer } from "@/globals/Disclaimer";
 import { AboutUsPage } from "@/globals/About";
 import { languageConfig, fallbackLng } from "@/lib/i18n/settings";
+import { DocumentsPage } from "@/globals/Documents";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -125,6 +126,7 @@ export default buildConfig({
     Disclaimer,
     SpeedCubingHistoryPage,
     AboutRegulations,
+    DocumentsPage,
   ],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || "",
