@@ -344,9 +344,20 @@ export const Home: GlobalConfig = {
       minRows: 1,
     },
   ],
+  versions: {
+    drafts: {
+      autosave: true,
+    },
+    max: 5,
+  },
   admin: {
-    livePreview: {
-      url: "/",
+    preview: () => {
+      const encodedParams = new URLSearchParams({
+        path: `/`,
+        previewSecret: process.env.PREVIEW_SECRET!,
+      });
+
+      return `/api/payload/draft?${encodedParams.toString()}`;
     },
   },
 };
