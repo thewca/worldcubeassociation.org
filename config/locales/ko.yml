@@ -278,9 +278,9 @@ ko:
       any_result: 결과의 유무
     single:
       #original_hash: d596f44
-      time: '%{time} 미만의 단일 솔브'
+      time: '%{time} 미만의 단일 기록'
       #original_hash: 52ba186
-      moves: '%{moves}회전 미만의 단일 솔브'
+      moves: '%{moves}회전 미만의 단일 기록'
       #original_hash: b1993ae
       points: '%{points}점 초과의 단일 솔브'
       #original_hash: ed2b051
@@ -289,9 +289,9 @@ ko:
       any_result: 모든 단일 기록
     average:
       #original_hash: 2682ae8
-      time: '%{time} 미만의 평균'
+      time: '%{time} 미만의 평균 기록'
       #original_hash: 1b9b5fc
-      moves: '%{moves}회전 미만의 평균'
+      moves: '%{moves}회전 미만의 평균 기록'
       #original_hash: 05c417e
       points: '%{points}점 초과의 평균'
       #original_hash: 805171c
@@ -2395,9 +2395,9 @@ ko:
       #original_hash: 94a2fc8
       past_competitions: 지난 대회
       #original_hash: ec7e697
-      bookmarked_title: 즐겨 찾기 한 대회
+      bookmarked_title: 북마크한 대회
       #original_hash: e5665fb
-      bookmarked_explanation: WCA 사이트에 즐겨 찾기 한 대회. 참가 신청이 시작되기 24시간 전에 이메일을 보내드리겠습니다.
+      bookmarked_explanation: WCA 사이트에서 북마크한 대회. 참가 신청이 시작되기 24시간 전에 이메일이 발송됩니다.
     competition_info:
       pdf:
         #original_hash: 05af803
@@ -2607,11 +2607,11 @@ ko:
       #original_hash: 2444261
       regional_average_record: '%{event_name} %{result} (평균)'
       #original_hash: 8eda7ac
-      bookmark: 이 대회를 즐겨 찾기 하기
+      bookmark: 이 대회를 북마크하기
       #original_hash: 4dfea97
-      is_bookmarked: 이 대회를 즐겨 찾기 했습니다.
+      is_bookmarked: 이 대회를 북마크했습니다.
       #original_hash: 74598a7
-      number_of_bookmarks: 즐겨 찾기 한 횟수
+      number_of_bookmarks: 북마크한 횟수
     index:
       #original_hash: db98a68
       title: 대회
@@ -2746,7 +2746,7 @@ ko:
       #original_hash: 9104a03
       no_past_competitions: 과거 대회 참가 내역이 없습니다.
       #original_hash: 43c3543
-      no_bookmarked_competitions: 다가오는 대회를 즐겨 찾기 하지 않았습니다. 대회 페이지에서 즐겨 찾기 아이콘을 클릭하여 여기에 저장하십시오!
+      no_bookmarked_competitions: 다가오는 대회를 북마크하지 않았습니다. 대회 페이지에서 북마크 아이콘을 클릭하여 이곳에 저장하십시오!
     competition_form:
       #original_hash: 2b81984
       wcat: WCA 대회 발표 팀
@@ -3314,7 +3314,7 @@ ko:
         edit_waiting_list: 대기자 명단 수정 모드 활성화
       bookmark:
         #original_hash: 7952a5c
-        unbookmark: 즐겨 찾기를 삭제했습니다
+        unbookmark: 북마크를 삭제했습니다
       requirements:
         #original_hash: 1255806
         acknowledgement: '저는 ''참가 신청'' 탭에 있는 모든 정보(참가비, 환불 정책 및 위에 나열된 추가 요구 사항 포함)를 읽고 확인했습니다.'
