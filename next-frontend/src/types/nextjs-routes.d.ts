@@ -15,6 +15,7 @@ declare module "nextjs-routes" {
     | StaticRoute<"/about">
     | DynamicRoute<"/api/auth/[...nextauth]", { "nextauth": string[] }>
     | DynamicRoute<"/api/payload/[...slug]", { "slug": string[] }>
+    | StaticRoute<"/api/payload/draft">
     | StaticRoute<"/api/payload/graphql">
     | StaticRoute<"/api/payload/graphql-playground">
     | StaticRoute<"/competitions">
