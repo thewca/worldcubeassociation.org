@@ -614,6 +614,8 @@ class Registration < ApplicationRecord
     return Registrations::ErrorCodes::AUTO_ACCEPT_NOT_ENABLED if auto_accept_preference_disabled? || (auto_accept_preference.to_sym != mode)
     return Registrations::ErrorCodes::INELIGIBLE_FOR_AUTO_ACCEPT unless competing_status_pending? || waiting_list_leader?
     return Registrations::ErrorCodes::AUTO_ACCEPT_DISABLE_THRESHOLD if competition.auto_accept_threshold_reached?
+    # Pending registrations can still be accepted onto the waiting list, so we only raise an error for already-waitlisted registrations
+    return Registrations::ErrorCodes::COMPETITOR_LIMIT_REACHED if competing_status_waiting_list? && competition.registration_full_and_accepted?
 
     Registrations::ErrorCodes::REGISTRATION_NOT_OPEN unless competition.registration_currently_open?
   end
@@ -628,10 +630,16 @@ class Registration < ApplicationRecord
   end
 
   private def build_auto_accept_payload
-    status = if competition.registration_full_and_accepted? && competing_status_pending?
-               Registrations::Helper::STATUS_WAITING_LIST
-             else
+    # The default case should be that a user's status will be waiting list, unless specific criteria for acceptance are met
+    # We can only accept a registration in one of these cases:
+    # 1. There must be space on the Accepted list, and
+    # 2. They're first on the waiting list, or
+    # 3. The waiting list is empty and they're on the pending list
+    status = if !competition.registration_full_and_accepted? &&
+             (waiting_list_leader? || competing_status_pending? && waiting_list.empty?)
                Registrations::Helper::STATUS_ACCEPTED
+             else
+               Registrations::Helper::STATUS_WAITING_LIST
              end
 
     # String keys because this is mimicing a params payload

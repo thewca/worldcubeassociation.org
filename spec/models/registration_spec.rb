@@ -708,7 +708,7 @@ RSpec.describe Registration do
       expect(waiting_list_reg.reload.competing_status).to eq('accepted')
     end
 
-    context 'auto-accept does not succed' do
+    context 'auto-accept does not succeed' do
       it 'if a waitlisted registration is not first in the waiting list' do
         create_list(:registration, 3, :waiting_list, competition: auto_accept_comp)
         waiting_list_reg = create(:registration, :waiting_list, competition: auto_accept_comp)
@@ -719,6 +719,14 @@ RSpec.describe Registration do
         waiting_list_reg.attempt_auto_accept(:live)
         expect(waiting_list_reg.reload.competing_status).to eq('waiting_list')
         expect(waiting_list_reg.registration_history.last[:changed_attributes][:auto_accept_failure_reasons]).to eq("-7003")
+      end
+
+      it 'does not accept a pending registration ahead of a waitlisted one' do
+        create(:registration, :waiting_list, competition: auto_accept_comp)
+        create(:registration_payment, :skip_create_hook, registration: reg, competition: auto_accept_comp)
+
+        reg.attempt_auto_accept(:live)
+        expect(reg.reload.competing_status).to eq('waiting_list')
       end
 
       it 'if registration_payment.is_completed: false' do
@@ -839,7 +847,6 @@ RSpec.describe Registration do
       end
       let!(:prevented_reg) { create(:registration, competition: limited_comp) }
 
-      # Fails because waiting_list_position persists when it shouldnt; #11173 should fix
       it 'if competitor limit is reached and first on waiting list' do
         create_list(:registration, 5, :accepted, competition: limited_comp)
 
@@ -848,7 +855,7 @@ RSpec.describe Registration do
         expect(waiting_list_reg.reload.competing_status).to eq('waiting_list')
 
         waiting_list_reg.attempt_auto_accept(:live)
-        expect(waiting_list_reg.registration_history.last[:changed_attributes][:auto_accept_failure_reasons]).to eq(['Competitor limit reached.'].to_s)
+        expect(waiting_list_reg.registration_history.last[:changed_attributes][:auto_accept_failure_reasons]).to eq('-4006')
         expect(waiting_list_reg.reload.competing_status).to eq('waiting_list')
       end
 
