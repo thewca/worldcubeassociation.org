@@ -1233,76 +1233,102 @@ RSpec.describe Registration do
   end
 
   describe 'hooks' do
-    it 'positive, captured registration_payment calls registration.consider_auto_close' do
-      competition = create(:competition)
-      reg = create(:registration, competition: competition)
-      expect(reg).to receive(:consider_auto_close).once
+    context 'auto close' do
+      it 'positive, captured registration_payment calls registration.consider_auto_close' do
+        competition = create(:competition)
+        reg = create(:registration, competition: competition)
+        expect(reg).to receive(:consider_auto_close).once
 
-      create(
-        :registration_payment,
-        registration: reg,
-        user: reg.user,
-        amount_lowest_denomination: reg.competition.base_entry_fee_lowest_denomination,
-      )
+        create(
+          :registration_payment,
+          registration: reg,
+          user: reg.user,
+          amount_lowest_denomination: reg.competition.base_entry_fee_lowest_denomination,
+        )
+      end
+
+      it 'doesnt call registration.consider auto_close! for a non-captured registration_payment' do
+        competition = create(:competition)
+        reg = create(:registration, competition: competition)
+        expect(reg).to receive(:consider_auto_close).exactly(0).times
+
+        create(
+          :registration_payment,
+          registration: reg,
+          user: reg.user,
+          amount_lowest_denomination: reg.competition.base_entry_fee_lowest_denomination,
+          is_completed: false,
+        )
+      end
+
+      it 'calls registration.consider_auto_close! if reg_payment gets marked as captured' do
+        competition = create(:competition)
+        reg = create(:registration, competition: competition)
+        expect(reg).to receive(:consider_auto_close).once
+
+        reg_payment = create(
+          :registration_payment,
+          registration: reg,
+          user: reg.user,
+          amount_lowest_denomination: reg.competition.base_entry_fee_lowest_denomination,
+          is_completed: false,
+        )
+
+        reg_payment.update!(is_completed: true)
+      end
+
+      it 'doesnt call registration.auto_close! after a refund is created' do
+        competition = create(:competition)
+        reg = create(:registration, :paid, competition: competition)
+        expect(reg).to receive(:consider_auto_close).exactly(0).times
+
+        create(
+          :registration_payment,
+          registration: reg,
+          user: reg.user,
+          amount_lowest_denomination: -reg.competition.base_entry_fee_lowest_denomination,
+          refunded_registration_payment_id: reg.registration_payments.first.id,
+        )
+      end
+
+      it 'doesnt competition.attempt_auto_close! if reg is partially paid' do
+        competition = create(:competition)
+        expect(competition).to receive(:attempt_auto_close!).exactly(0).times
+
+        reg = create(:registration, :partially_paid, competition: competition)
+        reg.consider_auto_close
+      end
+
+      it 'calls competition.attempt_auto_close! if reg is fully paid' do
+        competition = create(:competition)
+        expect_any_instance_of(Competition).to receive(:attempt_auto_close!).once
+
+        create(:registration, :paid, competition: competition)
+      end
     end
 
-    it 'doesnt call registration.consider auto_close! for a non-captured registration_payment' do
-      competition = create(:competition)
-      reg = create(:registration, competition: competition)
-      expect(reg).to receive(:consider_auto_close).exactly(0).times
+    context 'auto accept', :zxc do
+      let(:auto_accept_comp) { create(:competition, :live_auto_accept, :registration_open) }
+      let(:pending_reg) { create(:registration, competition: auto_accept_comp) }
+      let(:accepted_reg) { create(:registration, :accepted, competition: auto_accept_comp) }
+      let(:waitlisted_reg) { create(:registration, :waiting_list, competition: auto_accept_comp) }
 
-      create(
-        :registration_payment,
-        registration: reg,
-        user: reg.user,
-        amount_lowest_denomination: reg.competition.base_entry_fee_lowest_denomination,
-        is_completed: false,
-      )
-    end
+      it 'triggers when accepted registration is cancelled', :cxz do
+        accepted_reg.update_lanes!(
+          { user_id: accepted_reg.user.id, competing: { status: 'cancelled' } },
+          accepted_reg.user.id,
+        )
+        expect(waitlisted_reg.reload.competing_status).to eq('accepted')
+      end
 
-    it 'calls registration.consider_auto_close! if reg_payment gets marked as captured' do
-      competition = create(:competition)
-      reg = create(:registration, competition: competition)
-      expect(reg).to receive(:consider_auto_close).once
-
-      reg_payment = create(
-        :registration_payment,
-        registration: reg,
-        user: reg.user,
-        amount_lowest_denomination: reg.competition.base_entry_fee_lowest_denomination,
-        is_completed: false,
-      )
-
-      reg_payment.update!(is_completed: true)
-    end
-
-    it 'doesnt call registration.auto_close! after a refund is created' do
-      competition = create(:competition)
-      reg = create(:registration, :paid, competition: competition)
-      expect(reg).to receive(:consider_auto_close).exactly(0).times
-
-      create(
-        :registration_payment,
-        registration: reg,
-        user: reg.user,
-        amount_lowest_denomination: -reg.competition.base_entry_fee_lowest_denomination,
-        refunded_registration_payment_id: reg.registration_payments.first.id,
-      )
-    end
-
-    it 'doesnt competition.attempt_auto_close! if reg is partially paid' do
-      competition = create(:competition)
-      expect(competition).to receive(:attempt_auto_close!).exactly(0).times
-
-      reg = create(:registration, :partially_paid, competition: competition)
-      reg.consider_auto_close
-    end
-
-    it 'calls competition.attempt_auto_close! if reg is fully paid' do
-      competition = create(:competition)
-      expect_any_instance_of(Competition).to receive(:attempt_auto_close!).once
-
-      create(:registration, :paid, competition: competition)
+      it 'doesnt trigger if non-accepted registration is cancelled' do
+        expect(waitlisted_reg.reload.competing_status).to eq('accepted')
+        pending_reg.update_lanes!(
+          { user_id: pending_reg.user.id, competing: { status: 'cancelled' } },
+          pending_reg.user.id,
+        )
+        expect(waitlisted_reg.reload.competing_status).to eq('waiting_list')
+      end
     end
   end
 
