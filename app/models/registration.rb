@@ -636,7 +636,7 @@ class Registration < ApplicationRecord
     # 2. They're first on the waiting list, or
     # 3. The waiting list is empty and they're on the pending list
     status = if !competition.registration_full_and_accepted? &&
-             (waiting_list_leader? || competing_status_pending? && waiting_list.empty?)
+                (waiting_list_leader? || (competing_status_pending? && waiting_list.empty?))
                Registrations::Helper::STATUS_ACCEPTED
              else
                Registrations::Helper::STATUS_WAITING_LIST
