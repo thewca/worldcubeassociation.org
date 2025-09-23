@@ -593,19 +593,20 @@ class Registration < ApplicationRecord
       return { succeeded: false, info: failure_reason }
     end
 
+    new_competing_status = can_be_accepted? ? Registrations::Helper::STATUS_ACCEPTED : Registrations::Helper::STATUS_WAITING_LIST
     # String keys because this is mimicing a params payload
-    update_payload = { 'user_id' => user_id, 'competing' => { 'status' => auto_accept_competing_status } }
+    update_payload = { 'user_id' => user_id, 'competing' => { 'status' => new_competing_status } }
 
-    auto_accepted_registration = Registrations::RegistrationChecker.apply_payload(self, update_payload, clone: false)
+    updated_registration = Registrations::RegistrationChecker.apply_payload(self, update_payload, clone: false)
 
-    if auto_accepted_registration.valid?
+    if updated_registration.valid?
       update_lanes!(
         update_payload,
         AUTO_ACCEPT_ENTITY_ID,
       )
-      { succeeded: true, info: auto_accepted_registration.competing_status }
+      { succeeded: true, info: updated_registration.competing_status }
     else
-      error = auto_accepted_registration.errors.messages.values.flatten
+      error = updated_registration.errors.messages.values.flatten
       log_auto_accept_failure(error)
       { succeeded: false, info: error }
     end
@@ -631,21 +632,16 @@ class Registration < ApplicationRecord
     )
   end
 
-  private def auto_accept_competing_status
-    # The only possible status is waiting list if registration is full
-    return Registrations::Helper::STATUS_WAITING_LIST if competition.registration_full_and_accepted?
+  private def can_be_accepted?
+    return false if competition.registration_full_and_accepted?
 
-    # Only Pending and Waitlisted registrations can be auto-accepted
     case competing_status
     when Registrations::Helper::STATUS_WAITING_LIST
-      # We can only accept the waiting list leader - a non-waiting-list-leader registration should never make it here
-      waiting_list_leader? ? Registrations::Helper::STATUS_ACCEPTED : Registrations::Helper::STATUS_WAITING_LIST
+      waiting_list_leader?
     when Registrations::Helper::STATUS_PENDING
-      # Pending registrations should go to waiting list unless there is no one on the waiting list
-      waiting_list.empty? ? Registrations::Helper::STATUS_ACCEPTED : Registrations::Helper::STATUS_WAITING_LIST
+      waiting_list.empty?
     else
-      # Waiting list is our default status - but registrations with other statuses should never make it to here
-      Registrations::Helper::STATUS_WAITING_LIST
+      false
     end
   end
 end
