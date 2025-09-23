@@ -89,9 +89,8 @@ services:
     networks:
       - wca-main
 
-  # 5.0 for documentdb compatability
   wca_payload_db:
-    image: mongo:5.0
+    image: mongo:8
     container_name: "payload_db"
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
