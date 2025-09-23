@@ -639,7 +639,10 @@ class Registration < ApplicationRecord
     when Registrations::Helper::STATUS_WAITING_LIST
       waiting_list_leader?
     when Registrations::Helper::STATUS_PENDING
-      waiting_list.empty?
+      # The Rails shorthand `blank?` specifically checks "nil or empty". This is exactly what we need because:
+      #   - Either a competition has no waiting list at all, in which case a pending registration can be accepted
+      #   - Or the waiting list exists and is empty, in which case a pending registration can proceed to accepted
+      waiting_list_blank?
     else
       false
     end
