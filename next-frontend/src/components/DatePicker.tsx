@@ -219,19 +219,14 @@ export const DatePicker: React.FC<DatePickerProps> = ({
       positioning={{ placement: "bottom-start" }}
     >
       <Popover.Trigger asChild>
-        <Button
-          disabled={disabled}
-          justifyContent="flex-start"
-          w="full"
-          maxW="300px"
-        >
+        <Button disabled={disabled} justifyContent="flex-start">
           <LuCalendar size={16} />
           <Text truncate>{formatDisplayValue()}</Text>
         </Button>
       </Popover.Trigger>
       <Portal>
         <Popover.Positioner>
-          <Popover.Content width="320px" p={0}>
+          <Popover.Content width="sm" p={0}>
             <Popover.Arrow />
             <Popover.Body p={4}>
               <VStack gap={4}>
