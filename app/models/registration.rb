@@ -593,7 +593,7 @@ class Registration < ApplicationRecord
       return { succeeded: false, info: failure_reason }
     end
 
-    new_competing_status = can_be_accepted? ? Registrations::Helper::STATUS_ACCEPTED : Registrations::Helper::STATUS_WAITING_LIST
+    new_competing_status = eligible_for_accepted_status? ? Registrations::Helper::STATUS_ACCEPTED : Registrations::Helper::STATUS_WAITING_LIST
     # String keys because this is mimicing a params payload
     update_payload = { 'user_id' => user_id, 'competing' => { 'status' => new_competing_status } }
 
@@ -632,7 +632,7 @@ class Registration < ApplicationRecord
     )
   end
 
-  private def can_be_accepted?
+  private def eligible_for_accepted_status?
     return false if competition.registration_full_and_accepted?
 
     case competing_status
