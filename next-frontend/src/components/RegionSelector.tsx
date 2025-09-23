@@ -125,7 +125,6 @@ export default function RegionSelector({
         onInputValueChange={(e) => filter(e.inputValue)}
         onValueChange={(e) => onRegionChange(e.value[0])}
         width="100%"
-        colorPalette="blue"
         openOnClick
         value={region ? [region] : undefined}
         disabled={disabled}
