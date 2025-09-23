@@ -620,7 +620,7 @@ class Registration < ApplicationRecord
   private def auto_accept_failure_reason(mode)
     return Registrations::ErrorCodes::OUTSTANDING_FEES if outstanding_entry_fees.positive?
     return Registrations::ErrorCodes::AUTO_ACCEPT_NOT_ENABLED if auto_accept_preference_disabled? ||
-      (auto_accept_preference == 'bulk' && auto_accept_preference.to_sym != mode)
+                                                                 (auto_accept_preference == 'bulk' && auto_accept_preference.to_sym != mode)
     return Registrations::ErrorCodes::INELIGIBLE_FOR_AUTO_ACCEPT unless competing_status_pending? || waiting_list_leader?
     return Registrations::ErrorCodes::AUTO_ACCEPT_DISABLE_THRESHOLD if competition.auto_accept_threshold_reached?
     # Pending registrations can still be accepted onto the waiting list, so we only raise an error for already-waitlisted registrations
