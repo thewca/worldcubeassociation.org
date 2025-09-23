@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_09_11_125658) do
+ActiveRecord::Schema[7.2].define(version: 2025_09_23_142438) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -837,6 +837,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_09_11_125658) do
     t.string "owner_type"
     t.boolean "dangerously_allow_any_redirect_uri", default: false, null: false
     t.boolean "confidential", default: true, null: false
+    t.boolean "superapp", default: false
     t.index ["owner_id", "owner_type"], name: "index_oauth_applications_on_owner_id_and_owner_type"
     t.index ["uid"], name: "index_oauth_applications_on_uid", unique: true
   end
