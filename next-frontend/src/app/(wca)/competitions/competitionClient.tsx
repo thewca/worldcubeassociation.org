@@ -34,7 +34,7 @@ import Flag from "react-world-flags";
 import countries from "@/lib/wca/data/countries";
 import { WCA_EVENT_IDS } from "@/lib/wca/data/events";
 import type { components } from "@/types/openapi";
-import { DatePicker } from "@/components/DatePicker";
+import { DatePicker, DatePickerValue } from "@/components/DatePicker";
 import { useT } from "@/lib/i18n/useI18n";
 import { useState } from "react";
 
@@ -47,14 +47,7 @@ interface CompetitionsListProps {
 export default function CompetitionsClient({
   competitions,
 }: CompetitionsListProps) {
-  const [date, setDate] = useState<
-    | Date
-    | {
-        start: Date | null;
-        end: Date | null;
-      }
-    | null
-  >(null);
+  const [date, setDate] = useState<DatePickerValue>(null);
   const { contains } = useFilter({ sensitivity: "base" });
 
   const { collection, filter } = useListCollection({

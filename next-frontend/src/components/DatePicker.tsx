@@ -27,8 +27,9 @@ import {
   endOfWeek,
 } from "date-fns";
 import * as dateLocales from "date-fns/locale";
-import { BiChevronLeft, BiChevronRight } from "react-icons/bi";
-import { LuCalendar } from "react-icons/lu";
+import { LuCalendar, LuChevronLeft, LuChevronRight } from "react-icons/lu";
+
+export type DatePickerValue = Date | DateRange | null;
 
 export interface DateRange {
   start: Date | null;
@@ -36,8 +37,8 @@ export interface DateRange {
 }
 
 export interface DatePickerProps {
-  value?: Date | DateRange | null;
-  onChange: (date: Date | DateRange | null) => void;
+  value?: DatePickerValue;
+  onChange: (date: DatePickerValue) => void;
   mode?: "single" | "range";
   locale: string;
   placeholder?: string;
@@ -252,7 +253,7 @@ export const DatePicker: React.FC<DatePickerProps> = ({
                     variant="ghost"
                     onClick={() => setCurrentMonth(subMonths(currentMonth, 1))}
                   >
-                    <BiChevronLeft size={16} />
+                    <LuChevronLeft size={16} />
                   </IconButton>
                   <Text fontSize="lg" fontWeight="semibold">
                     {format(currentMonth, "MMMM yyyy", {
@@ -265,7 +266,7 @@ export const DatePicker: React.FC<DatePickerProps> = ({
                     variant="ghost"
                     onClick={() => setCurrentMonth(addMonths(currentMonth, 1))}
                   >
-                    <BiChevronRight size={16} />
+                    <LuChevronRight size={16} />
                   </IconButton>
                 </HStack>
 
