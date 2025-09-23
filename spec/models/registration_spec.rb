@@ -949,7 +949,7 @@ RSpec.describe Registration do
         it 'non-accepted registration has reg_id, succeeded:false and info:{error_code}' do
           unsucceeded_response = @result[waitlisted2.id]
           expect(unsucceeded_response[:succeeded]).to be(false)
-          expect(unsucceeded_response[:info]).to eq('-4006')
+          expect(unsucceeded_response[:info]).to eq(-4006)
         end
 
         it 'waitlisted registration has info:waiting_list' do
