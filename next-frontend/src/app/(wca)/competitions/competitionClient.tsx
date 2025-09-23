@@ -121,7 +121,6 @@ export default function CompetitionsClient({
                         </Combobox.Positioner>
                       </Portal>
                     </Combobox.Root>
-                    {/* TODO: replace these buttons with DatePicker (Chakra does not have one by default) */}
                     <DatePicker
                       onChange={(d) => setDate(d)}
                       value={date}

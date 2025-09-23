@@ -2,7 +2,6 @@ import React, { useState, useEffect, useCallback } from "react";
 import {
   Box,
   Button,
-  Grid,
   Text,
   HStack,
   VStack,
@@ -11,6 +10,7 @@ import {
   ButtonProps,
   Portal,
   Popover,
+  SimpleGrid,
 } from "@chakra-ui/react";
 import {
   format,
@@ -201,9 +201,8 @@ export const DatePicker: React.FC<DatePickerProps> = ({
           ? "blue.50"
           : undefined,
       color: !isCurrentMonth ? "gray.400" : undefined,
-      opacity: isDisabledDate ? 0.4 : 1,
-      cursor: isDisabledDate ? "not-allowed" : "pointer",
-      _hover: isDisabledDate ? {} : { bg: "blue.50" },
+      disabled: isDisabledDate,
+      _hover: isDisabledDate ? {} : { bg: "colorPalette.50" },
     } as ButtonProps;
   };
 
@@ -273,7 +272,7 @@ export const DatePicker: React.FC<DatePickerProps> = ({
                 {/* Calendar Grid */}
                 <Box w="full">
                   {/* Week day headers */}
-                  <Grid templateColumns="repeat(7, 1fr)" gap={1} mb={2}>
+                  <SimpleGrid columns={7} gap={1} mb={2}>
                     {weekDays.map((day) => (
                       <Text
                         key={day}
@@ -286,10 +285,10 @@ export const DatePicker: React.FC<DatePickerProps> = ({
                         {day}
                       </Text>
                     ))}
-                  </Grid>
+                  </SimpleGrid>
 
                   {/* Calendar days */}
-                  <Grid templateColumns="repeat(7, 1fr)" gap={1}>
+                  <SimpleGrid columns={7} gap={1}>
                     {days.map((date) => (
                       <Button
                         key={date.toISOString()}
@@ -299,7 +298,7 @@ export const DatePicker: React.FC<DatePickerProps> = ({
                         {format(date, "d")}
                       </Button>
                     ))}
-                  </Grid>
+                  </SimpleGrid>
                 </Box>
 
                 {/* Mode indicator */}
