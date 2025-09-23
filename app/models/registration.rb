@@ -638,11 +638,14 @@ class Registration < ApplicationRecord
     # Only Pending and Waitlisted registrations can be auto-accepted
     case competing_status
     when Registrations::Helper::STATUS_WAITING_LIST
-      # Only the waiting list leader can be accepted from the waiting list
-      Registrations::Helper::STATUS_ACCEPTED if waiting_list_leader?
+      # We can only accept the waiting list leader - a non-waiting-list-leader registration should never make it here
+      waiting_list_leader? ? Registrations::Helper::STATUS_ACCEPTED : Registrations::Helper::STATUS_WAITING_LIST
     when Registrations::Helper::STATUS_PENDING
-      # Pending registrations should go to waiting list unless there is no waiting list
+      # Pending registrations should go to waiting list unless there is no one on the waiting list
       waiting_list.empty? ? Registrations::Helper::STATUS_ACCEPTED : Registrations::Helper::STATUS_WAITING_LIST
+    else
+      # Waiting list is our default status - but registrations with other statuses should never make it to here
+      Registrations::Helper::STATUS_WAITING_LIST
     end
   end
 end
