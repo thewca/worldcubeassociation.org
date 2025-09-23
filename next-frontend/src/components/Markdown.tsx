@@ -8,11 +8,10 @@ type MarkdownProseOwnProps = {
   content: string;
 };
 
-export const MarkdownProse: PolymorphicComponent<MarkdownProseOwnProps, typeof Prose> = ({
-  content,
-  as: RenderAs = Prose,
-  ...restProps
-}) => {
+export const MarkdownProse: PolymorphicComponent<
+  MarkdownProseOwnProps,
+  typeof Prose
+> = ({ content, as: RenderAs = Prose, ...restProps }) => {
   return (
     <RenderAs {...restProps}>
       <Markdown

@@ -7,11 +7,11 @@ import type { ElementType } from "react";
 type ImageRawProps = {
   src?: string;
   alt: string;
-}
+};
 
 type LinkRawProps = {
   href: string;
-}
+};
 
 type MediaImageOwnProps = {
   media: Media;
@@ -20,7 +20,11 @@ type MediaImageOwnProps = {
   linkComponent?: ElementType<LinkRawProps>;
 };
 
-export const MediaImage: PolymorphicComponent<MediaImageOwnProps, typeof ChakraImage, ImageRawProps> = ({
+export const MediaImage: PolymorphicComponent<
+  MediaImageOwnProps,
+  typeof ChakraImage,
+  ImageRawProps
+> = ({
   media,
   as: RenderImage = ChakraImage,
   linkComponent: RenderLink = ChakraLink,
@@ -41,4 +45,4 @@ export const MediaImage: PolymorphicComponent<MediaImageOwnProps, typeof ChakraI
   }
 
   return pureImage;
-}
+};
