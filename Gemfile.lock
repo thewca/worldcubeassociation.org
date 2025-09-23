@@ -454,7 +454,7 @@ GEM
     json-schema (6.0.0)
       addressable (~> 2.8)
       bigdecimal (~> 3.1)
-    jwt (2.10.2)
+    jwt (3.1.2)
       base64
     kaminari (1.2.2)
       activesupport (>= 4.1.0)
@@ -941,10 +941,10 @@ GEM
     version_gem (1.1.9)
     warden (1.2.9)
       rack (>= 2.0.9)
-    warden-jwt_auth (0.10.0)
+    warden-jwt_auth (0.12.0)
       dry-auto_inject (>= 0.8, < 2)
       dry-configurable (>= 0.13, < 2)
-      jwt (~> 2.1)
+      jwt (>= 2.1, < 4)
       warden (~> 1.2)
     wca_i18n (0.4.4)
       colorize (~> 0.8)
@@ -1286,7 +1286,7 @@ CHECKSUMS
   js_cookie_rails (2.2.0) sha256=06e6b27ee093945c3acf3982d2dbf9e9117d1130f33bb07e1660ebea68229c62
   json (2.14.1) sha256=b08994d751e9f0697cc089243a3cfabf998da1d25e81e7dd0d0f84136ff74642
   json-schema (6.0.0) sha256=79ecaffba197008912933f66f6c5428f5ce7716e42bb1a8f0d56079f2d58633f
-  jwt (2.10.2) sha256=31e1ee46f7359883d5e622446969fe9c118c3da87a0b1dca765ce269c3a0c4f4
+  jwt (3.1.2) sha256=af6991f19a6bb4060d618d9add7a66f0eeb005ac0bc017cd01f63b42e122d535
   kaminari (1.2.2) sha256=c4076ff9adccc6109408333f87b5c4abbda5e39dc464bd4c66d06d9f73442a3e
   kaminari-actionview (1.2.2) sha256=1330f6fc8b59a4a4ef6a549ff8a224797289ebf7a3a503e8c1652535287cc909
   kaminari-activerecord (1.2.2) sha256=0dd3a67bab356a356f36b3b7236bcb81cef313095365befe8e98057dd2472430
@@ -1491,7 +1491,7 @@ CHECKSUMS
   vault (0.18.2) sha256=29346c2d8364c19effb548b7a8952bf187545b99b70d1ddde76bd6c69046d27c
   version_gem (1.1.9) sha256=0c1a0962ae543c84a00889bb018d9f14d8f8af6029d26b295d98774e3d2eb9a4
   warden (1.2.9) sha256=46684f885d35a69dbb883deabf85a222c8e427a957804719e143005df7a1efd0
-  warden-jwt_auth (0.10.0) sha256=9bbdcb035e34f59f06b731833c53d9cb4821b96efe8fa76936c2c35b3402912e
+  warden-jwt_auth (0.12.0) sha256=a1a857f3f93da4e529c9c45d6d432578bd48e3b0313d2fa1ccd2bb767d9b2ec2
   wca_i18n (0.4.4) sha256=33830f157616a33d10918d4f9e9c1c17e4311731832f19153c3cfcbb51233461
   web-console (4.2.1) sha256=e7bcf37a10ea2b4ec4281649d1cee461b32232d0a447e82c786e6841fd22fe20
   webmock (3.25.1) sha256=ab9d5d9353bcbe6322c83e1c60a7103988efc7b67cd72ffb9012629c3d396323
