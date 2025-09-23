@@ -11,8 +11,8 @@
     "types:chakra": "chakra typegen ./src/theme.ts --outdir src/types/chakra --strict",
     "types:payload": "payload generate:types",
     "build:translations": "./build-translations.js",
-    "lint": "next lint",
-    "lint:fix": "next lint --fix",
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix .",
     "test": "vitest",
     "test:ui": "vitest --ui",
     "postinstall": "chakra typegen ./src/theme.ts"
