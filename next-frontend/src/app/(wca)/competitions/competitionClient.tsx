@@ -28,14 +28,15 @@ import CompRegoFullButOpenOrangeIcon from "@/components/icons/CompRegoFullButOpe
 import CompRegoNotFullOpenGreenIcon from "@/components/icons/CompRegoNotFullOpen_greenIcon";
 import CompRegoNotOpenYetGreyIcon from "@/components/icons/CompRegoNotOpenYet_greyIcon";
 import CompRegoClosedRedIcon from "@/components/icons/CompRegoClosed_redIcon";
-import CompRegoOpenDateIcon from "@/components/icons/CompRegoOpenDateIcon";
-import CompRegoCloseDateIcon from "@/components/icons/CompRegoCloseDateIcon";
 import EventIcon from "@/components/EventIcon";
 import Flag from "react-world-flags";
 
 import countries from "@/lib/wca/data/countries";
 import { WCA_EVENT_IDS } from "@/lib/wca/data/events";
 import type { components } from "@/types/openapi";
+import { DatePicker, DatePickerValue } from "@/components/DatePicker";
+import { useT } from "@/lib/i18n/useI18n";
+import { useState } from "react";
 
 type CompetitionIndex = components["schemas"]["CompetitionIndex"];
 
@@ -46,6 +47,7 @@ interface CompetitionsListProps {
 export default function CompetitionsClient({
   competitions,
 }: CompetitionsListProps) {
+  const [date, setDate] = useState<DatePickerValue>(null);
   const { contains } = useFilter({ sensitivity: "base" });
 
   const { collection, filter } = useListCollection({
@@ -55,6 +57,8 @@ export default function CompetitionsClient({
     })),
     filter: contains,
   });
+
+  const { i18n } = useT();
 
   const marks = [
     { value: 0, label: "closest" },
@@ -117,15 +121,12 @@ export default function CompetitionsClient({
                         </Combobox.Positioner>
                       </Portal>
                     </Combobox.Root>
-                    {/* TODO: replace these buttons with DatePicker (Chakra does not have one by default) */}
-                    <Button variant="outline">
-                      <CompRegoOpenDateIcon />
-                      Date From
-                    </Button>
-                    <Button variant="outline">
-                      <CompRegoCloseDateIcon />
-                      Date To
-                    </Button>
+                    <DatePicker
+                      onChange={(d) => setDate(d)}
+                      value={date}
+                      locale={i18n.language}
+                      mode="range"
+                    />
                     {/* TODO: add "accordion" functionality to this button */}
                     <Button variant="outline" size="sm">
                       Advanced Filters
