@@ -120,7 +120,7 @@ FactoryBot.define do
       after(:create) do |registration|
         payment = FactoryBot.build(:registration_payment, registration: registration, user: registration.user,
                                                           amount_lowest_denomination: registration.competition.base_entry_fee_lowest_denomination)
-        payment.save(validate: false)
+        RegistrationPayment.insert!(payment.attributes.except("id", "created_at", "updated_at"))
       end
     end
 

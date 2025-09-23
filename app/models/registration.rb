@@ -75,6 +75,7 @@ class Registration < ApplicationRecord
   validates :guests, numericality: { less_than_or_equal_to: DEFAULT_GUEST_LIMIT, if: :guests_unrestricted?, frontend_code: Registrations::ErrorCodes::UNREASONABLE_GUEST_COUNT }
 
   after_save :mark_registration_processing_as_done
+  after_save :trigger_bulk_auto_accept, if: -> { competing_status_previously_changed?(from: 'accepted', to: 'cancelled') }
 
   private def mark_registration_processing_as_done
     Rails.cache.delete(CacheAccess.registration_processing_cache_key(competition_id, user_id))
@@ -553,6 +554,11 @@ class Registration < ApplicationRecord
     super(DEFAULT_SERIALIZE_OPTIONS.merge(options || {}))
   end
 
+  # Allows us to trigger bulk_auto_accept from within an instance of Registration
+  def trigger_bulk_auto_accept
+    self.class.bulk_auto_accept(competition)
+  end
+
   def self.bulk_auto_accept(competition)
     if competition.waiting_list.present?
       waitlisted_registrations = competition.registrations.find(competition.waiting_list.entries)
@@ -563,6 +569,8 @@ class Registration < ApplicationRecord
         break hash unless result[:succeeded]
       end
     end
+
+    return waitlisted_outcomes if competition.registration_full_and_accepted?
 
     pending_registrations = competition
                             .registrations
@@ -611,7 +619,8 @@ class Registration < ApplicationRecord
 
   private def auto_accept_failure_reason(mode)
     return Registrations::ErrorCodes::OUTSTANDING_FEES if outstanding_entry_fees.positive?
-    return Registrations::ErrorCodes::AUTO_ACCEPT_NOT_ENABLED if auto_accept_preference_disabled? || (auto_accept_preference.to_sym != mode)
+    return Registrations::ErrorCodes::AUTO_ACCEPT_NOT_ENABLED if auto_accept_preference_disabled? ||
+      (auto_accept_preference == 'bulk' && auto_accept_preference.to_sym != mode)
     return Registrations::ErrorCodes::INELIGIBLE_FOR_AUTO_ACCEPT unless competing_status_pending? || waiting_list_leader?
     return Registrations::ErrorCodes::AUTO_ACCEPT_DISABLE_THRESHOLD if competition.auto_accept_threshold_reached?
     # Pending registrations can still be accepted onto the waiting list, so we only raise an error for already-waitlisted registrations

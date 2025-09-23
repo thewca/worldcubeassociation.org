@@ -949,7 +949,7 @@ RSpec.describe Registration do
         it 'non-accepted registration has reg_id, succeeded:false and info:{error_code}' do
           unsucceeded_response = @result[waitlisted2.id]
           expect(unsucceeded_response[:succeeded]).to be(false)
-          expect(unsucceeded_response[:info]).to eq(['Competitor limit reached.'])
+          expect(unsucceeded_response[:info]).to eq(-4006)
         end
 
         it 'waitlisted registration has info:waiting_list' do
@@ -1307,22 +1307,26 @@ RSpec.describe Registration do
       end
     end
 
-    context 'auto accept', :zxc do
+    context 'auto accept' do
       let(:auto_accept_comp) { create(:competition, :live_auto_accept, :registration_open) }
       let(:pending_reg) { create(:registration, competition: auto_accept_comp) }
       let(:accepted_reg) { create(:registration, :accepted, competition: auto_accept_comp) }
-      let(:waitlisted_reg) { create(:registration, :waiting_list, competition: auto_accept_comp) }
+      # Ensure the waiting list is populated even if waitlisted_reg isn't explicitly called
+      let!(:waitlisted_reg) { create(:registration, :waiting_list, :paid_no_hooks, competition: auto_accept_comp) }
 
-      it 'triggers when accepted registration is cancelled', :cxz do
+      it 'triggers when accepted registration is cancelled' do
+        expect(waitlisted_reg.reload.competing_status).to eq('waiting_list')
+
         accepted_reg.update_lanes!(
-          { user_id: accepted_reg.user.id, competing: { status: 'cancelled' } },
+          { user_id: accepted_reg.user.id, competing: { status: 'cancelled' } }.with_indifferent_access,
           accepted_reg.user.id,
         )
         expect(waitlisted_reg.reload.competing_status).to eq('accepted')
       end
 
       it 'doesnt trigger if non-accepted registration is cancelled' do
-        expect(waitlisted_reg.reload.competing_status).to eq('accepted')
+        expect(waitlisted_reg.reload.competing_status).to eq('waiting_list')
+
         pending_reg.update_lanes!(
           { user_id: pending_reg.user.id, competing: { status: 'cancelled' } },
           pending_reg.user.id,
