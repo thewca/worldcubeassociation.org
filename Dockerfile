@@ -41,7 +41,6 @@ RUN corepack enable
 RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y \
       build-essential \
-      software-properties-common \
       git \
       clang \
       pkg-config \
