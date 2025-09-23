@@ -2,6 +2,6 @@
 
 class AddSuperappColumn < ActiveRecord::Migration[7.2]
   def change
-    add_column :oauth_applications, :superapp, :boolean, default: false
+    add_column :oauth_applications, :superapp, :boolean, default: false, null: false
   end
 end

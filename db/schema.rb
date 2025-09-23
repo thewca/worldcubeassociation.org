@@ -837,7 +837,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_09_23_142438) do
     t.string "owner_type"
     t.boolean "dangerously_allow_any_redirect_uri", default: false, null: false
     t.boolean "confidential", default: true, null: false
-    t.boolean "superapp", default: false
+    t.boolean "superapp", default: false, null: false
     t.index ["owner_id", "owner_type"], name: "index_oauth_applications_on_owner_id_and_owner_type"
     t.index ["uid"], name: "index_oauth_applications_on_uid", unique: true
   end
