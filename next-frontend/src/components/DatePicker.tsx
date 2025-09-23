@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import {
   Box,
   Button,
@@ -176,29 +176,25 @@ export const DatePicker: React.FC<DatePickerProps> = ({
     const isDisabledDate =
       (minDate && date < minDate) || (maxDate && date > maxDate);
 
+    const shouldShowSelected =
+      isSelected || isRangeStart || isRangeEnd || isTempStart || isTempEnd;
+
     return {
       size: "sm",
-      variant:
-        isSelected || isRangeStart || isRangeEnd || isTempStart || isTempEnd
-          ? "solid"
-          : isInRange || isTempInRange
-            ? "outline"
-            : "ghost",
-      colorPalette:
-        isSelected || isRangeStart || isRangeEnd || isTempStart || isTempEnd
+      variant: shouldShowSelected
+        ? "solid"
+        : isInRange || isTempInRange
+          ? "outline"
+          : "ghost",
+      colorPalette: shouldShowSelected
+        ? "blue"
+        : isInRange || isTempInRange
           ? "blue"
-          : isInRange || isTempInRange
-            ? "blue"
-            : "gray",
+          : "gray",
       bg: !isCurrentMonth
         ? "transparent"
-        : isToday(date) &&
-            !isSelected &&
-            !isRangeStart &&
-            !isRangeEnd &&
-            !isTempStart &&
-            !isTempEnd
-          ? "blue.50"
+        : isToday(date) && !shouldShowSelected
+          ? "colorPalette.50"
           : undefined,
       color: !isCurrentMonth ? "gray.400" : undefined,
       disabled: isDisabledDate,
@@ -206,20 +202,15 @@ export const DatePicker: React.FC<DatePickerProps> = ({
     } as ButtonProps;
   };
 
-  const weekDays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map(
-    (day) =>
-      format(
-        new Date(
-          2024,
-          0,
-          day === "Sun"
-            ? 7
-            : ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].indexOf(day) + 1,
-        ),
-        "EEE",
-        { locale: currentLocale },
-      ),
-  );
+  const weekDays = useMemo(() => {
+    const start = startOfWeek(new Date(), { locale: currentLocale }); // locale-aware start of week
+    const days = eachDayOfInterval({
+      start,
+      end: new Date(start.getTime() + 6 * 86400000),
+    });
+
+    return days.map((day) => format(day, "EEE", { locale: currentLocale }));
+  }, [currentLocale]);
 
   return (
     <Popover.Root
