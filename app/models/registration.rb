@@ -593,7 +593,9 @@ class Registration < ApplicationRecord
       return { succeeded: false, info: failure_reason }
     end
 
-    update_payload = build_auto_accept_payload
+    # String keys because this is mimicing a params payload
+    update_payload = { 'user_id' => user_id, 'competing' => { 'status' => auto_accept_competing_status } }
+
     auto_accepted_registration = Registrations::RegistrationChecker.apply_payload(self, update_payload, clone: false)
 
     if auto_accepted_registration.valid?
@@ -629,20 +631,18 @@ class Registration < ApplicationRecord
     )
   end
 
-  private def build_auto_accept_payload
-    # The default case should be that a user's status will be waiting list, unless specific criteria for acceptance are met
-    # We can only accept a registration in one of these cases:
-    # 1. There must be space on the Accepted list, and
-    # 2. They're first on the waiting list, or
-    # 3. The waiting list is empty and they're on the pending list
+  private def auto_accept_competing_status
+    # The only possible status is waiting list if registration is full
     return Registrations::Helper::STATUS_WAITING_LIST if competition.registration_full_and_accepted?
-    status = if waiting_list_leader? || (competing_status_pending? && waiting_list.empty?)
-               Registrations::Helper::STATUS_ACCEPTED
-             else
-               Registrations::Helper::STATUS_WAITING_LIST
-             end
 
-    # String keys because this is mimicing a params payload
-    { 'user_id' => user_id, 'competing' => { 'status' => status } }
+    # Only Pending and Waitlisted registrations can be auto-accepted
+    case competing_status
+    when Registrations::Helper::STATUS_WAITING_LIST
+      # Only the waiting list leader can be accepted from the waiting list
+      Registrations::Helper::STATUS_ACCEPTED if waiting_list_leader?
+    when Registrations::Helper::STATUS_PENDING
+      # Pending registrations should go to waiting list unless there is no waiting list
+      waiting_list.empty? ? Registrations::Helper::STATUS_ACCEPTED : Registrations::Helper::STATUS_WAITING_LIST
+    end
   end
 end
