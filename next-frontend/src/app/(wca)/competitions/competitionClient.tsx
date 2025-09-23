@@ -28,8 +28,6 @@ import CompRegoFullButOpenOrangeIcon from "@/components/icons/CompRegoFullButOpe
 import CompRegoNotFullOpenGreenIcon from "@/components/icons/CompRegoNotFullOpen_greenIcon";
 import CompRegoNotOpenYetGreyIcon from "@/components/icons/CompRegoNotOpenYet_greyIcon";
 import CompRegoClosedRedIcon from "@/components/icons/CompRegoClosed_redIcon";
-import CompRegoOpenDateIcon from "@/components/icons/CompRegoOpenDateIcon";
-import CompRegoCloseDateIcon from "@/components/icons/CompRegoCloseDateIcon";
 import EventIcon from "@/components/EventIcon";
 import Flag from "react-world-flags";
 

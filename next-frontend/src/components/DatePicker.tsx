@@ -13,13 +13,6 @@ import {
   Popover,
 } from "@chakra-ui/react";
 import {
-  PopoverArrow,
-  PopoverBody,
-  PopoverContent,
-  PopoverRoot,
-  PopoverTrigger,
-} from "@chakra-ui/react";
-import {
   format,
   startOfMonth,
   endOfMonth,
@@ -34,8 +27,8 @@ import {
   endOfWeek,
 } from "date-fns";
 import * as dateLocales from "date-fns/locale";
-import { AiFillCalendar } from "react-icons/ai";
 import { BiChevronLeft, BiChevronRight } from "react-icons/bi";
+import { LuCalendar } from "react-icons/lu";
 
 export interface DateRange {
   start: Date | null;
@@ -229,27 +222,27 @@ export const DatePicker: React.FC<DatePickerProps> = ({
   );
 
   return (
-    <PopoverRoot
+    <Popover.Root
       open={isOpen}
       onOpenChange={({ open }) => setIsOpen(open)}
       positioning={{ placement: "bottom-start" }}
     >
-      <PopoverTrigger asChild>
+      <Popover.Trigger asChild>
         <Button
           disabled={disabled}
           justifyContent="flex-start"
           w="full"
           maxW="300px"
         >
-          <AiFillCalendar size={16} />
+          <LuCalendar size={16} />
           <Text truncate>{formatDisplayValue()}</Text>
         </Button>
-      </PopoverTrigger>
+      </Popover.Trigger>
       <Portal>
         <Popover.Positioner>
-          <PopoverContent width="320px" p={0}>
-            <PopoverArrow />
-            <PopoverBody p={4}>
+          <Popover.Content width="320px" p={0}>
+            <Popover.Arrow />
+            <Popover.Body p={4}>
               <VStack gap={4}>
                 {/* Month Navigation */}
                 <HStack w="full" justify="space-between" align="center">
@@ -327,10 +320,10 @@ export const DatePicker: React.FC<DatePickerProps> = ({
                   )}
                 </Flex>
               </VStack>
-            </PopoverBody>
-          </PopoverContent>
+            </Popover.Body>
+          </Popover.Content>
         </Popover.Positioner>
       </Portal>
-    </PopoverRoot>
+    </Popover.Root>
   );
 };
