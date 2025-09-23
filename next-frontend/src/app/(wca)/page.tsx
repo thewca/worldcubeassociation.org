@@ -61,7 +61,7 @@ const TextCard = ({ block }: { block: TextCardBlock }) => {
       {block.headerImage && (
         <MediaImage
           media={block.headerImage as Media}
-          imageProps={{ aspectRatio: "3/1" }}
+          aspectRatio="3/1"
         />
       )}
       <Card.Body>
@@ -126,12 +126,10 @@ const ImageBanner = ({ block }: { block: ImageBannerBlock }) => {
       <Box position="relative" width="50%" overflow="hidden">
         <MediaImage
           media={block.mainImage as Media}
-          imageProps={{
-            objectFit: "cover",
-            width: "100%",
-            height: "40vh",
-            bg: `colorPalette.${colorPaletteTone}`,
-          }}
+          objectFit="cover"
+          width="100%"
+          height="40vh"
+          bg={`colorPalette.${colorPaletteTone}`}
         />
         {/* Gradient Overlay */}
         <Box
@@ -190,8 +188,8 @@ const ImageOnlyCard = ({ block }: { block: ImageOnlyCardBlock }) => {
     >
       <MediaImage
         media={block.mainImage as Media}
-        imageProps={{ aspectRatio: "2/1" }}
         altFallback={block.heading}
+        aspectRatio="2/1"
       />
       {block.heading && (
         <Card.Body p={6}>
@@ -321,9 +319,10 @@ const TestimonialsSpinner = ({ block }: { block: TestimonialsBlock }) => {
               >
                 <MediaImage
                   media={testimonial.image as Media}
-                  imageProps={{ maxW: "1/3", objectFit: "cover" }}
                   srcFallback="/placeholder.png"
                   altFallback={testimonial.punchline}
+                  maxW="1/3"
+                  objectFit="cover"
                 />
                 <Card.Body pr="3em">
                   <Card.Title>{testimonial.punchline}</Card.Title>
