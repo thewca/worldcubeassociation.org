@@ -44,20 +44,15 @@ const allRegionsOption = (t: TFunction) => ({
 
 const continentOptions = (t: TFunction) =>
   Object.values(continents.real)
-    .toSorted((a, b) =>
-      t(`continents.${a.id}`).localeCompare(t(`continents.${b.id}`)),
-    )
     .map((continent) => ({
       key: continent.id,
       label: t(`continents.${continent.name}`),
       value: continent.id,
-    }));
+    }))
+    .toSorted((a, b) => a.label.localeCompare(b.label));
 
 const countryOptions = (t: TFunction) =>
   Object.values(countries.real)
-    .toSorted((a, b) =>
-      t(`countries.${a.iso2}`).localeCompare(t(`countries.${b.iso2}`)),
-    )
     .map((country) => ({
       key: country.id,
       label: t(`countries.${country.iso2}`),
@@ -70,7 +65,8 @@ const countryOptions = (t: TFunction) =>
         />
       ),
       value: country.iso2,
-    }));
+    }))
+    .toSorted((a, b) => a.label.localeCompare(b.label));
 
 const regionsOptions = (t: TFunction) =>
   [
@@ -151,7 +147,7 @@ export default function RegionSelector({
               {collection.items.map((item) => (
                 <Combobox.Item item={item} key={item.key}>
                   {item.flag}
-                  {item.content ? item.content : item.label}
+                  {item.content ?? item.label}
                   <Combobox.ItemIndicator />
                 </Combobox.Item>
               ))}
