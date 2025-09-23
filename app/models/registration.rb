@@ -75,6 +75,7 @@ class Registration < ApplicationRecord
   validates :guests, numericality: { less_than_or_equal_to: DEFAULT_GUEST_LIMIT, if: :guests_unrestricted?, frontend_code: Registrations::ErrorCodes::UNREASONABLE_GUEST_COUNT }
 
   after_save :mark_registration_processing_as_done
+  after_save :trigger_bulk_auto_accept, if: -> { competing_status_previously_changed?(from: 'accepted', to: 'cancelled') }
 
   private def mark_registration_processing_as_done
     Rails.cache.delete(CacheAccess.registration_processing_cache_key(competition_id, user_id))
@@ -553,6 +554,11 @@ class Registration < ApplicationRecord
     super(DEFAULT_SERIALIZE_OPTIONS.merge(options || {}))
   end
 
+  # Allows us to trigger bulk_auto_accept from within an instance of Registration
+  def trigger_bulk_auto_accept
+    self.class.bulk_auto_accept(competition)
+  end
+
   def self.bulk_auto_accept(competition)
     if competition.waiting_list.present?
       waitlisted_registrations = competition.registrations.find(competition.waiting_list.entries)
@@ -563,6 +569,8 @@ class Registration < ApplicationRecord
         break hash unless result[:succeeded]
       end
     end
+
+    return waitlisted_outcomes if competition.registration_full_and_accepted?
 
     pending_registrations = competition
                             .registrations
@@ -611,9 +619,12 @@ class Registration < ApplicationRecord
 
   private def auto_accept_failure_reason(mode)
     return Registrations::ErrorCodes::OUTSTANDING_FEES if outstanding_entry_fees.positive?
-    return Registrations::ErrorCodes::AUTO_ACCEPT_NOT_ENABLED if auto_accept_preference_disabled? || (auto_accept_preference.to_sym != mode)
+    return Registrations::ErrorCodes::AUTO_ACCEPT_NOT_ENABLED if auto_accept_preference_disabled? ||
+                                                                 (auto_accept_preference == 'bulk' && auto_accept_preference.to_sym != mode)
     return Registrations::ErrorCodes::INELIGIBLE_FOR_AUTO_ACCEPT unless competing_status_pending? || waiting_list_leader?
     return Registrations::ErrorCodes::AUTO_ACCEPT_DISABLE_THRESHOLD if competition.auto_accept_threshold_reached?
+    # Pending registrations can still be accepted onto the waiting list, so we only raise an error for already-waitlisted registrations
+    return Registrations::ErrorCodes::COMPETITOR_LIMIT_REACHED if competing_status_waiting_list? && competition.registration_full_and_accepted?
 
     Registrations::ErrorCodes::REGISTRATION_NOT_OPEN unless competition.registration_currently_open?
   end
@@ -628,10 +639,16 @@ class Registration < ApplicationRecord
   end
 
   private def build_auto_accept_payload
-    status = if competition.registration_full_and_accepted? && competing_status_pending?
-               Registrations::Helper::STATUS_WAITING_LIST
-             else
+    # The default case should be that a user's status will be waiting list, unless specific criteria for acceptance are met
+    # We can only accept a registration in one of these cases:
+    # 1. There must be space on the Accepted list, and
+    # 2. They're first on the waiting list, or
+    # 3. The waiting list is empty and they're on the pending list
+    status = if !competition.registration_full_and_accepted? &&
+                (waiting_list_leader? || (competing_status_pending? && waiting_list.empty?))
                Registrations::Helper::STATUS_ACCEPTED
+             else
+               Registrations::Helper::STATUS_WAITING_LIST
              end
 
     # String keys because this is mimicing a params payload
