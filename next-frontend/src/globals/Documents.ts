@@ -8,6 +8,7 @@ export const DocumentsPage: GlobalConfig = {
       type: "array",
       label: "documents",
       name: "documents",
+      required: true,
       fields: [
         {
           name: "document",

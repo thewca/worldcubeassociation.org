@@ -23,7 +23,7 @@ export default async function Documents() {
 
   const documentRelation = documentsResult.documents;
 
-  if (!documentRelation || documentRelation?.length === 0) {
+  if (documentRelation.length === 0) {
     return <Heading>No documents found. Add some</Heading>;
   }
 

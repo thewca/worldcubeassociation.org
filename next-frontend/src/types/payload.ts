@@ -1265,12 +1265,10 @@ export interface AboutRegulationsPage {
  */
 export interface DocumentsPage {
   id: number;
-  documents?:
-    | {
-        document: number | Document;
-        id?: string | null;
-      }[]
-    | null;
+  documents: {
+    document: string | Document;
+    id?: string | null;
+  }[];
   updatedAt?: string | null;
   createdAt?: string | null;
 }
