@@ -593,17 +593,20 @@ class Registration < ApplicationRecord
       return { succeeded: false, info: failure_reason }
     end
 
-    update_payload = build_auto_accept_payload
-    auto_accepted_registration = Registrations::RegistrationChecker.apply_payload(self, update_payload, clone: false)
+    new_competing_status = eligible_for_accepted_status? ? Registrations::Helper::STATUS_ACCEPTED : Registrations::Helper::STATUS_WAITING_LIST
+    # String keys because this is mimicing a params payload
+    update_payload = { 'user_id' => user_id, 'competing' => { 'status' => new_competing_status } }
 
-    if auto_accepted_registration.valid?
+    updated_registration = Registrations::RegistrationChecker.apply_payload(self, update_payload, clone: false)
+
+    if updated_registration.valid?
       update_lanes!(
         update_payload,
         AUTO_ACCEPT_ENTITY_ID,
       )
-      { succeeded: true, info: auto_accepted_registration.competing_status }
+      { succeeded: true, info: updated_registration.competing_status }
     else
-      error = auto_accepted_registration.errors.messages.values.flatten
+      error = updated_registration.errors.messages.values.flatten
       log_auto_accept_failure(error)
       { succeeded: false, info: error }
     end
@@ -614,6 +617,8 @@ class Registration < ApplicationRecord
     return Registrations::ErrorCodes::AUTO_ACCEPT_NOT_ENABLED if auto_accept_preference_disabled? || (auto_accept_preference.to_sym != mode)
     return Registrations::ErrorCodes::INELIGIBLE_FOR_AUTO_ACCEPT unless competing_status_pending? || waiting_list_leader?
     return Registrations::ErrorCodes::AUTO_ACCEPT_DISABLE_THRESHOLD if competition.auto_accept_threshold_reached?
+    # Pending registrations can still be accepted onto the waiting list, so we only raise an error for already-waitlisted registrations
+    return Registrations::ErrorCodes::COMPETITOR_LIMIT_REACHED if competing_status_waiting_list? && competition.registration_full_and_accepted?
 
     Registrations::ErrorCodes::REGISTRATION_NOT_OPEN unless competition.registration_currently_open?
   end
@@ -627,14 +632,19 @@ class Registration < ApplicationRecord
     )
   end
 
-  private def build_auto_accept_payload
-    status = if competition.registration_full_and_accepted? && competing_status_pending?
-               Registrations::Helper::STATUS_WAITING_LIST
-             else
-               Registrations::Helper::STATUS_ACCEPTED
-             end
+  private def eligible_for_accepted_status?
+    return false if competition.registration_full_and_accepted?
 
-    # String keys because this is mimicing a params payload
-    { 'user_id' => user_id, 'competing' => { 'status' => status } }
+    case competing_status
+    when Registrations::Helper::STATUS_WAITING_LIST
+      waiting_list_leader?
+    when Registrations::Helper::STATUS_PENDING
+      # The Rails shorthand `blank?` specifically checks "nil or empty". This is exactly what we need because:
+      #   - Either a competition has no waiting list at all, in which case a pending registration can be accepted
+      #   - Or the waiting list exists and is empty, in which case a pending registration can proceed to accepted
+      waiting_list_blank?
+    else
+      false
+    end
   end
 end
