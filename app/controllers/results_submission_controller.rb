@@ -163,7 +163,7 @@ class ResultsSubmissionController < ApplicationController
                        round_type_id: scramble_set.round_type_id,
                        round_id: scramble_set.matched_round_id,
                        group_id: scramble_set.alphabetic_group_index,
-                       is_extra: scramble.is_extra,
+                       is_extra: scramble.is_extra?,
                        scramble_num: scramble.ordered_index + 1,
                        scramble: scramble.scramble_string,
                      })

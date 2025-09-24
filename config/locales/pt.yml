@@ -2709,8 +2709,6 @@ pt:
         deverão estar disponíveis em breve.
       #original_hash: e205d73
       results_already_posted: Os resultados já foram publicados.
-      #original_hash: 376f461
-      results_posted: Resultados publicados com sucesso!
       #original_hash: afe3a23
       results_preview_alert: Está a visualizar resultados que ainda não foram publicados.
       #original_hash: 16dd227
@@ -4322,8 +4320,6 @@ pt:
     cancelled_by_html: 'Cancelado por %{name} em %{date_time}'
     #original_hash: 25e68c3
     cancel_confirm: Tem a certeza que pretende cancelar a competição?
-    #original_hash: 01de5ee
-    post_results: Submeter os resultados
     #original_hash: b6513f1
     results_posted_by_html: 'Colocado por %{poster_name} em %{date_time}'
     #original_hash: a6b5efe

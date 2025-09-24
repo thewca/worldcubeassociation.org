@@ -106,13 +106,12 @@ module DatabaseDumper
           forbid_newcomers
           forbid_newcomers_reason
           auto_close_threshold
-          auto_accept_registrations
-          auto_accept_preference
           auto_accept_disable_threshold
           newcomer_month_reserved_spots
           competitor_can_cancel
         ],
         db_default: %w[
+          auto_accept_preference
           connected_stripe_account_id
         ],
         fake_values: {
@@ -175,6 +174,7 @@ module DatabaseDumper
     }.freeze,
     "connected_paypal_accounts" => :skip_all_rows,
     "connected_stripe_accounts" => :skip_all_rows,
+    "manual_payment_integrations" => :skip_all_rows,
     "continents" => {
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w[

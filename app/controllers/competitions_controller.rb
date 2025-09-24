@@ -222,6 +222,11 @@ class CompetitionsController < ApplicationController
     render :edit
   end
 
+  def payment_integration_manual_setup
+    @competition = competition_from_params
+    @account_details = @competition.payment_account_for(:manual)&.account_details
+  end
+
   def payment_integration_setup
     @competition = competition_from_params
 
@@ -235,21 +240,39 @@ class CompetitionsController < ApplicationController
 
   def connect_payment_integration
     competition = competition_from_params
-    payment_integration = params.require(:payment_integration)
+    payment_integration = params.require(:payment_integration).to_sym
 
     raise ActionController::RoutingError.new('Not Found') unless current_user&.can_manage_competition?(competition)
 
-    if payment_integration == 'paypal' && PaypalInterface.paypal_disabled?
+    if payment_integration == :paypal && PaypalInterface.paypal_disabled?
       flash[:error] = 'PayPal is not yet available in production environments'
-      return redirect_to competitions_payment_setup_path(competition)
+      return redirect_to competition_payment_integration_setup_path(competition)
     end
 
-    connector = CompetitionPaymentIntegration::AVAILABLE_INTEGRATIONS[payment_integration.to_sym].safe_constantize
-    account_reference = connector&.connect_account(params)
+    if payment_integration == :manual && ManualPaymentIntegration.manual_payments_disabled?
+      flash[:error] = 'Manual payments are not yet available in production environments'
+      return redirect_to competition_payment_integration_setup_path(competition)
+    end
 
-    raise ActionController::RoutingError.new("Payment Integration #{payment_integration} not Found") if account_reference.blank?
+    if CompetitionPaymentIntegration::AVAILABLE_INTEGRATIONS[payment_integration].nil?
+      flash[:error] = "Payment Integration #{payment_integration} not found"
+      return redirect_to competition_payment_integration_setup_path(competition)
+    end
 
-    competition.competition_payment_integrations.new(connected_account: account_reference)
+    connector = CompetitionPaymentIntegration::AVAILABLE_INTEGRATIONS[payment_integration].safe_constantize
+    integration_reference = connector&.connect_integration(params)
+
+    raise ActionController::RoutingError.new("No integration reference submitted") if integration_reference.blank?
+
+    # Small hack: We allow de-facto updates by "re-connecting" manual payment in the UI.
+    #   This is done to allow edits to a Manual CPI, but coding a proper `PATCH` form
+    #   would break the mold of the usual OAuth flow with "proper" payment providers.
+    existing_manual_cpi = competition.payment_account_for(:manual) if payment_integration == :manual
+    if existing_manual_cpi&.account_details.present?
+      existing_manual_cpi.update(**integration_reference.account_details)
+    else
+      competition.competition_payment_integrations.build(connected_account: integration_reference)
+    end
 
     if competition.save
       flash[:success] = t('payments.payment_setup.account_connected', provider: t("payments.payment_providers.#{payment_integration}"))

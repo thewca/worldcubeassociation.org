@@ -39,11 +39,11 @@ locals {
     },
     {
       name  = "WCA_BACKEND_API_URL"
-      value = "https://www.worldcubeassociation.org/api/v0/"
+      value = "https://www.worldcubeassociation.org/api/"
     },
     {
       name  = "WCA_FRONTEND_API_URL"
-      value = "https://www.worldcubeassociation.org/api/v0/"
+      value = "https://www.worldcubeassociation.org/api/"
     },
     {
       name = "NEXTAUTH_URL"

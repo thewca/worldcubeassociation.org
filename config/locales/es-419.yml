@@ -1211,6 +1211,22 @@ es-419:
         400_contact_html: >-
           Si crees que esto es un error por favor <a href=%{contact_url}>click
           aquí</a> para reportarlo.
+        #original_hash: 508c106
+        comp_not_found: Competición no encontrada
+        #original_hash: c0e86d5
+        comp_not_found_action: >-
+          No pudimos encontrar una competición con el ID "%{comp_id}". Por
+          favor, búscala de otra forma.
+        #original_hash: 695f7ba
+        comp_not_found_action_2: >-
+          Si vienes de otro sitio web, por favor avisa a los propietarios de ese
+          sitio que su enlace es incorrecto.
+        #original_hash: 7f8f419
+        session_expired: Sesión expirada
+        #original_hash: f3e688a
+        session_expired_action: >-
+          Tu sesión ha expirado. Por favor refresca la página y vuelve a
+          intentarlo, o inicia sesión nuevamente para continuar.
     doorkeeper:
       applications:
         help:
@@ -2727,8 +2743,6 @@ es-419:
         estarán disponibles en breve.
       #original_hash: e205d73
       results_already_posted: Los resultados ya han sido cargados.
-      #original_hash: 376f461
-      results_posted: ¡Resultados cargados con éxito!
       #original_hash: afe3a23
       results_preview_alert: Estás consultando resultados que no se han publicado aún.
       #original_hash: 16dd227
@@ -3278,7 +3292,7 @@ es-419:
         #original_hash: fdba578
         short_name: Nombre breve
         #original_hash: f91b080
-        name_reason: Razón para el nombre
+        name_reason: Razón para el nombre (¡completar en <b>inglés</b>!)
         venue:
           #original_hash: 0f21717
           country_id: Región
@@ -4358,8 +4372,6 @@ es-419:
     cancelled_by_html: 'Cancelada por %{name} en %{date_time}'
     #original_hash: 25e68c3
     cancel_confirm: ¿Estás seguro de que quieres cancelar la competición?
-    #original_hash: 01de5ee
-    post_results: Publicar los resultados
     #original_hash: b6513f1
     results_posted_by_html: 'Publicado por %{poster_name} en %{date_time}'
     #original_hash: a6b5efe
@@ -4738,6 +4750,8 @@ es-419:
       paypal: PayPal
       #original_hash: 4d08ec5
       stripe: Stripe
+      #original_hash: 5cd5075
+      manual: Manual/Externos
     payment_setup:
       #original_hash: 0aa09ee
       external_dashboard: 'Panel de control de %{provider}'
@@ -4757,6 +4771,8 @@ es-419:
       confirm_account_disconnect: >-
         ¿Seguro que deseas desvincular tu cuenta de %{provider}? Esta acción no
         puede deshacerse.
+      #original_hash: a7bbd29
+      edit_account: Editar cuenta
       #original_hash: ddea6cf
       supported_currency_warning: >-
         Por favor, asegúrate de que la moneda seleccionada es soportada por tu
@@ -4768,8 +4784,10 @@ es-419:
       provider_heading: 'Pagos de %{provider}'
       #original_hash: 40a098a
       accept_payments_header: Aceptar pagos de registro
-      #original_hash: 7ebe178
-      connect_button: 'Conectar con %{provider}'
+      #original_hash: ebf1ae6
+      manual_payments_header: Configurar pagos manuales
+      #original_hash: 399052b
+      connect_button: 'Configurar %{provider}'
       connect_account_info:
         #original_hash: f3fdb64
         stripe: >-
@@ -4782,6 +4800,11 @@ es-419:
           Se necesita una cuenta de PayPal Business para aceptar pagos via
           PayPal. Si no tienes una cuenta PayPal Business, puedes clickear el
           botón a continuación igualmente y se te guiará en el proceso.
+        #original_hash: d32cb06
+        manual: >-
+          Definir instrucciones de pago para los competidores. Podrán indicar
+          cuando han pagado, y proveer una referencia del pago para tu control
+          en el servicio de pago externo que uses.
       connect_account_warning:
         #original_hash: 53adda3
         stripe: >-
@@ -4791,6 +4814,8 @@ es-419:
         paypal: >-
           Conectar tu cuenta de PayPal permite al sitio web de la WCA rutear
           pagos a tí y emitir reembolsos directamente a tu cuenta.
+        #original_hash: da39a3e
+        manual: ''
       #original_hash: ef7e7f6
       currently_connected_info: >-
         Esta competición ha sido configurada para recibir pagos a través de
@@ -4823,6 +4848,13 @@ es-419:
           display_name: Nombre
           #original_hash: 84add5b
           primary_email: Correo
+        manual:
+          #original_hash: e5f0dfd
+          payment_instructions: Instrucciones de pago (se mostrará en la página de la competición)
+          #original_hash: 5e7242c
+          payment_reference_label: >-
+            ¿Qué información precisas para identificar el pago? (ej. número de
+            referencia, ID de cuenta, etc.)
         #original_hash: 08d2e98
         fallback_not_applicable: N/A
   persons:

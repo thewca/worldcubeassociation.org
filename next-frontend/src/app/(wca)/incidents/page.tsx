@@ -45,7 +45,7 @@ export default function IncidentsPage() {
     isFetching,
   } = useQuery({
     queryFn: () =>
-      api.GET("/incidents", {
+      api.GET("/v0/incidents", {
         params: {
           query: {
             per_page: itemsPerPage,
