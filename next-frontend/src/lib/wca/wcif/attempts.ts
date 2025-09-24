@@ -105,10 +105,28 @@ export function attemptResultToMbldPoints(attemptResult: AttemptResult) {
   return solved - missed;
 }
 
+export function formatAttemptsForResult(
+  result: { attempts: number[]; best_index: number; worst_index: number },
+  eventId: string,
+) {
+  // Only highlight best and worst if the number of unskipped attempts is 5.
+  const highlightBestAndWorst =
+    result.attempts.filter((a) => a !== 0).length === 5;
+  return result.attempts
+    .map((attempt, index) => {
+      const attemptStr = formatAttemptResult(attempt, eventId);
+      return highlightBestAndWorst &&
+        (result.best_index === index || result.worst_index === index)
+        ? `(${attemptStr})`
+        : attemptStr;
+    })
+    .join(" ");
+}
+
 function formatMbldAttemptResult(attemptResult: number) {
-  const { solved, attempted, centiseconds } =
-    decodeMbldAttemptResult(attemptResult);
-  const clockFormat = centisecondsToClockFormat(centiseconds!);
+  const { solved, attempted, timeCentiseconds } =
+    parseMbldResult(attemptResult);
+  const clockFormat = centisecondsToClockFormat(timeCentiseconds!);
   const shortClockFormat = clockFormat.replace(/\.00$/, "");
   // u2002 is a special space character
   // using it here allows us to expand space between mbf results without
@@ -142,22 +160,4 @@ export function formatAttemptResult(attemptResult: number, eventId: string) {
     return formatMbldAttemptResult(attemptResult);
   if (eventId === "333fm") return formatFmAttemptResult(attemptResult);
   return centisecondsToClockFormat(attemptResult);
-}
-
-export function formatAttemptsForResult(
-  result: { attempts: number[]; best_index: number; worst_index: number },
-  eventId: string,
-) {
-  // Only highlight best and worst if the number of unskipped attempts is 5.
-  const highlightBestAndWorst =
-    result.attempts.filter((a) => a !== 0).length === 5;
-  return result.attempts
-    .map((attempt, index) => {
-      const attemptStr = formatAttemptResult(attempt, eventId);
-      return highlightBestAndWorst &&
-        (result.best_index === index || result.worst_index === index)
-        ? `(${attemptStr})`
-        : attemptStr;
-    })
-    .join(" ");
 }

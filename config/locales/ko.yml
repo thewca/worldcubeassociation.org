@@ -278,9 +278,9 @@ ko:
       any_result: 결과의 유무
     single:
       #original_hash: d596f44
-      time: '%{time} 미만의 단일 솔브'
+      time: '%{time} 미만의 단일 기록'
       #original_hash: 52ba186
-      moves: '%{moves}회전 미만의 단일 솔브'
+      moves: '%{moves}회전 미만의 단일 기록'
       #original_hash: b1993ae
       points: '%{points}점 초과의 단일 솔브'
       #original_hash: ed2b051
@@ -289,9 +289,9 @@ ko:
       any_result: 모든 단일 기록
     average:
       #original_hash: 2682ae8
-      time: '%{time} 미만의 평균'
+      time: '%{time} 미만의 평균 기록'
       #original_hash: 1b9b5fc
-      moves: '%{moves}회전 미만의 평균'
+      moves: '%{moves}회전 미만의 평균 기록'
       #original_hash: 05c417e
       points: '%{points}점 초과의 평균'
       #original_hash: 805171c
@@ -1107,6 +1107,16 @@ ko:
         400_error: 찾으시는 페이지가 존재하지 않습니다.
         #original_hash: c9290b6
         400_contact_html: '이것이 실수라고 생각되면 <a href=%{contact_url}>여기를 클릭</a>하여 신고해 주십시오.'
+        #original_hash: 508c106
+        comp_not_found: 대회를 찾을 수 없음
+        #original_hash: c0e86d5
+        comp_not_found_action: 'ID가"%{comp_id}"인 대회를 찾을 수 없습니다. 검색창을 사용하여 검색해 주십시오.'
+        #original_hash: 695f7ba
+        comp_not_found_action_2: '다른 웹사이트의 링크를 따라 이곳에 접속했다면, 해당 웹사이트에 링크가 잘못되었다고 알려주시기 바랍니다.'
+        #original_hash: 7f8f419
+        session_expired: 세션 만료됨
+        #original_hash: f3e688a
+        session_expired_action: '세션이 만료되었습니다. 계속하려면 페이지를 새로고침 하거나, 작업을 재시도하거나, 다시 로그인하십시오.'
     doorkeeper:
       applications:
         help:
@@ -2331,8 +2341,6 @@ ko:
       results_still_processing: 현재 이 대회의 결과를 처리하고 있습니다. 곧 결과를 확인하실 수 있습니다.
       #original_hash: e205d73
       results_already_posted: 결과가 이미 발표되었습니다.
-      #original_hash: 376f461
-      results_posted: 결과가 성공적으로 발표되었습니다!
       #original_hash: afe3a23
       results_preview_alert: 아직 발표되지 않은 결과를 보고 계십니다.
       #original_hash: 16dd227
@@ -2387,9 +2395,9 @@ ko:
       #original_hash: 94a2fc8
       past_competitions: 지난 대회
       #original_hash: ec7e697
-      bookmarked_title: 즐겨 찾기 한 대회
+      bookmarked_title: 북마크한 대회
       #original_hash: e5665fb
-      bookmarked_explanation: WCA 사이트에 즐겨 찾기 한 대회. 참가 신청이 시작되기 24시간 전에 이메일을 보내드리겠습니다.
+      bookmarked_explanation: WCA 사이트에서 북마크한 대회. 참가 신청이 시작되기 24시간 전에 이메일이 발송됩니다.
     competition_info:
       pdf:
         #original_hash: 05af803
@@ -2468,7 +2476,7 @@ ko:
       #original_hash: a082288
       claim_wca_id_html: '이 대회가 귀하의 첫 대회가 아니라면, %{here}에서 WCA ID를 WCA 계정과 연결하십시오.'
       #original_hash: 56fc229
-      register_link_html: '%{here}에서 이 대회에 참가 신청하십시오.'
+      register_link_html: '%{here}에서 본 대회의 참가 신청을 하십시오.'
       #original_hash: 45834fd
       register_below_html: 아래에서 이 대회에 참가 신청하십시오.
       #original_hash: c5dfcc7
@@ -2486,11 +2494,11 @@ ko:
       #original_hash: 5101f65
       no_competitor_limit: 참가자 정원이 없습니다.
       #original_hash: f979d5e
-      entry_fee_is: '이 대회의 기본 참가비는 %{base_entry_fee}원입니다.'
+      entry_fee_is: '본 대회의 기본 참가비는 %{base_entry_fee} 입니다.'
       #original_hash: 5390a91
       no_entry_fee: 이 대회의 참가비는 무료입니다.
       #original_hash: 29af5c2
-      use_stripe_link_html: '참가 신청 후 참가비는 Stripe %{here}를 통해 지불해야 합니다.'
+      use_stripe_link_html: '참가비는 참가 신청 후 %{here}에서 Stripe를 통해 지불해야 합니다.'
       #original_hash: cea0eb4
       use_stripe_below_html: 참가 신청 후 참가비는 아래의 Stripe를 통해 지불해야 합니다.
       #original_hash: d6bab8f
@@ -2511,10 +2519,10 @@ ko:
         수 있습니다.
       #original_hash: eff3594
       event_change_deadline_default_html: >-
-        온라인 참가 신청을 통해 참가하고자 하는 종목에 등록하는 것이 좋지만, 종목이 시작되기 전까지는 신청 내역에 신청 종목을 추가할
-        수 있습니다.
+        참가 희망 종목은 온라인 참가 신청을 통해 등록하는 것을 권장하지만, 해당 종목의 경기가 시작되기 전까지 신청 내역에 참가 희망
+        종목을 추가할 수 있습니다.
       #original_hash: cf7be5d
-      on_the_spot_registration_fee_html: '현장 참가 신청은 기본 참가비 %{on_the_spot_base_entry_fee}로 승인됩니다.'
+      on_the_spot_registration_fee_html: '현장 참가 신청시 기본 참가비는 %{on_the_spot_base_entry_fee}입니다.'
       #original_hash: 1637bea
       on_the_spot_registration_free: 현장 참가 신청은 무료로 가능합니다.
       #original_hash: f5f687d
@@ -2599,11 +2607,11 @@ ko:
       #original_hash: 2444261
       regional_average_record: '%{event_name} %{result} (평균)'
       #original_hash: 8eda7ac
-      bookmark: 이 대회를 즐겨 찾기 하기
+      bookmark: 이 대회를 북마크하기
       #original_hash: 4dfea97
-      is_bookmarked: 이 대회를 즐겨 찾기 했습니다.
+      is_bookmarked: 이 대회를 북마크했습니다.
       #original_hash: 74598a7
-      number_of_bookmarks: 즐겨 찾기 한 횟수
+      number_of_bookmarks: 북마크한 횟수
     index:
       #original_hash: db98a68
       title: 대회
@@ -2738,7 +2746,7 @@ ko:
       #original_hash: 9104a03
       no_past_competitions: 과거 대회 참가 내역이 없습니다.
       #original_hash: 43c3543
-      no_bookmarked_competitions: 다가오는 대회를 즐겨 찾기 하지 않았습니다. 대회 페이지에서 즐겨 찾기 아이콘을 클릭하여 여기에 저장하십시오!
+      no_bookmarked_competitions: 다가오는 대회를 북마크하지 않았습니다. 대회 페이지에서 북마크 아이콘을 클릭하여 이곳에 저장하십시오!
     competition_form:
       #original_hash: 2b81984
       wcat: WCA 대회 발표 팀
@@ -3306,7 +3314,7 @@ ko:
         edit_waiting_list: 대기자 명단 수정 모드 활성화
       bookmark:
         #original_hash: 7952a5c
-        unbookmark: 즐겨 찾기를 삭제했습니다
+        unbookmark: 북마크를 삭제했습니다
       requirements:
         #original_hash: 1255806
         acknowledgement: '저는 ''참가 신청'' 탭에 있는 모든 정보(참가비, 환불 정책 및 위에 나열된 추가 요구 사항 포함)를 읽고 확인했습니다.'
@@ -3369,9 +3377,9 @@ ko:
         panel:
           approval:
             #original_hash: 8cc047a
-            title: 승인
+            title: 참가 신청 승인
             #original_hash: 3bdafe5
-            description: 주최 팀에 의한
+            description: 주최 측에 의함
           payment:
             #original_hash: 4930c06
             title: 결제 정보
@@ -3379,9 +3387,9 @@ ko:
             description: 결제 정보 입력
           competing:
             #original_hash: d672995
-            title: 참가 신청하기
+            title: 참가 신청
             #original_hash: af0e6a0
-            description: 종목을 선택하십시오
+            description: 종목 선택
           requirements:
             #original_hash: 09a428f
             title: 요구 사항
@@ -3675,8 +3683,6 @@ ko:
     cancelled_by_html: '%{name}이 %{date_time}에 취소했습니다'
     #original_hash: 25e68c3
     cancel_confirm: 정말로 대회를 취소하시겠습니까?
-    #original_hash: 01de5ee
-    post_results: 결과 게시하기
     #original_hash: b6513f1
     results_posted_by_html: '%{poster_name}님이 %{date_time}에 게시했습니다'
     #original_hash: a6b5efe
@@ -3842,8 +3848,8 @@ ko:
         newcomer_checks: 첫 참가자 검증
         #original_hash: f3d6278
         submit_results: 결과 제출
-        #original_hash: e2d046b
-        match_scrambles: 스크램블 제출
+        #original_hash: dd2e98f
+        upload_scrambles: 스크램블 업로드
         #original_hash: 4c9f914
         delegate_report: 파견위원 보고서
         #original_hash: b233e77
@@ -4705,7 +4711,7 @@ ko:
         paragraph: WCA 로고의 고해상도 PNG 및 벡터 버전을 다운로드할 수 있습니다.
         #original_hash: 9de7d59
         accept_terms_and_conditions: >-
-          a
+          <a
           href="https://documents.worldcubeassociation.org/documents/policies/external/Logo%20Usage.pdf">WCA
           로고 사용 정책</a>을 읽었으며 이에 동의합니다.
         #original_hash: ebc85b2
@@ -5345,8 +5351,9 @@ ko:
         9p1에 따라 허용되지 않습니다. 종목 관리 페이지에서 라운드 정보를 업데이트해 주십시오.
       #original_hash: d6fc805
       not_enough_qualified_warning: >-
-        라운드 %{round_id}: 종목 데이터에 따르면 최대 %{expected}가 진출할 수 있었지만 라운드에서 경쟁한 사람은
-        %{actual}뿐이었습니다. 이에 대해 코멘트를 남겨주십시오(또는 다른 진행 조건을 적용한 경우 종목 데이터를 수정하십시오).
+        라운드 %{round_id}: 종목 데이터에 따르면 최대 %{expected}명이 진출할 수 있었지만 라운드에서 경쟁한 사람은
+        %{actual}명 뿐이었습니다. 이에 대해 코멘트를 남겨주십시오(또는 다른 진행 조건을 적용한 경우 종목 데이터를
+        수정하십시오).
       #original_hash: 7915e13
       competed_not_qualified_error: >-
         라운드 %{round_id}: %{ids}가 경쟁했지만 진출 조건(%{condition})을 충족하지 못했습니다. 진출 조건이
@@ -5408,3 +5415,9 @@ ko:
       wrong_number_of_scramble_sets_error: >-
         [%{round_id}] 이 라운드에는 종목 관리 탭에 지정된 스크램블 세트 수와 다른 수의 스크램블 세트 수가 있습니다. 종목
         관리 탭에서 스크램블 세트 수를 사용된 세트 수로 조정하십시오.
+  tickets:
+    type:
+      #original_hash: e43f273
+      edit_person: 인물 수정
+      #original_hash: 5fb2137
+      competition_result: 대회 결과

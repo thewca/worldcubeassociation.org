@@ -23,9 +23,13 @@
     "flag_id": "eo",
     "name": "Esperanto"
   },
-  "es": {
+  "es-ES": {
     "flag_id": "es",
-    "name": "Español"
+    "name": "Español (España)"
+  },
+  "es-419": {
+    "flag_id": "LatAm",
+    "name": "Español (América Latina)"
   },
   "eu": {
     "flag_id": "es-eu",

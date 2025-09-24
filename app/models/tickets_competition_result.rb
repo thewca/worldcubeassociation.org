@@ -16,11 +16,17 @@ class TicketsCompetitionResult < ApplicationRecord
   has_one :ticket, as: :metadata
   belongs_to :competition
 
-  def actions_allowed_for(ticket_stakeholder)
+  ACTION_TYPE = {
+    verify_warnings: "verify_warnings",
+    merge_inbox_results: "merge_inbox_results",
+  }.freeze
+
+  def metadata_actions_allowed_for(ticket_stakeholder)
     if ticket_stakeholder.stakeholder == UserGroup.teams_committees_group_wrt
-      actions = [TicketLog.action_types[:create_comment]]
-      actions << TicketLog.action_types[:update_status] unless posted?
-      actions
+      [
+        ACTION_TYPE[:verify_warnings],
+        ACTION_TYPE[:merge_inbox_results],
+      ]
     else
       []
     end
@@ -68,5 +74,15 @@ class TicketsCompetitionResult < ApplicationRecord
 
       self.update!(status: TicketsCompetitionResult.statuses[:merged_inbox_results])
     end
+  end
+
+  DEFAULT_SERIALIZE_OPTIONS = {
+    include: {
+      competition: { only: %i[id name results_posted_at], methods: [], include: %i[posted_user] },
+    },
+  }.freeze
+
+  def serializable_hash(options = nil)
+    super(DEFAULT_SERIALIZE_OPTIONS.merge(options || {}))
   end
 end

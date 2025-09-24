@@ -14,13 +14,18 @@ declare module "nextjs-routes" {
     | StaticRoute<"/">
     | StaticRoute<"/about">
     | DynamicRoute<"/api/auth/[...nextauth]", { "nextauth": string[] }>
+    | DynamicRoute<"/api/auth/payload/[...nextauth]", { "nextauth": string[] }>
     | DynamicRoute<"/api/payload/[...slug]", { "slug": string[] }>
     | StaticRoute<"/api/payload/graphql">
     | StaticRoute<"/api/payload/graphql-playground">
-    | StaticRoute<"/api/swagger">
     | StaticRoute<"/competitions">
     | DynamicRoute<"/competitions/[competitionId]", { "competitionId": string }>
     | DynamicRoute<"/competitions/[competitionId]/admin", { "competitionId": string }>
+    | DynamicRoute<"/competitions/[competitionId]/competitors", { "competitionId": string }>
+    | DynamicRoute<"/competitions/[competitionId]/events", { "competitionId": string }>
+    | DynamicRoute<"/competitions/[competitionId]/podiums", { "competitionId": string }>
+    | DynamicRoute<"/competitions/[competitionId]/register", { "competitionId": string }>
+    | DynamicRoute<"/competitions/[competitionId]/schedule", { "competitionId": string }>
     | StaticRoute<"/dashboard">
     | StaticRoute<"/delegates">
     | StaticRoute<"/disciplinary">

@@ -1,0 +1,13 @@
+type: object
+required:
+  - current
+  - outdated
+properties:
+  current:
+    type: array
+    items:
+      $ref: './Translation.yaml'
+  outdated:
+    type: array
+    items:
+      $ref: './Translation.yaml'
