@@ -1,0 +1,10 @@
+type: object
+properties:
+  type:
+    type: string
+    example: "percent"
+  level:
+    $ref: './WcifPercent.yaml'
+required:
+  - type
+  - level

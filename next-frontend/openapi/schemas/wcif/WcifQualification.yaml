@@ -1,0 +1,10 @@
+oneOf:
+  - $ref: './WcifQualificationAttemptResult.yaml'
+  - $ref: './WcifQualificationRanking.yaml'
+  - $ref: './WcifQualificationAnyResult.yaml'
+discriminator:
+  propertyName: type
+  mapping:
+    attemptResult: './WcifQualificationAttemptResult.yaml'
+    ranking: './WcifQualificationRanking.yaml'
+    anyResult: './WcifQualificationAnyResult.yaml'

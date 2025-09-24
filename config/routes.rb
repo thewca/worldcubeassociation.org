@@ -63,6 +63,9 @@ Rails.application.routes.draw do
   delete 'users/:id/avatar' => 'users#delete_avatar'
   post 'users/update_user_data' => 'users#update_user_data'
   post 'users/merge' => 'users#merge'
+  get '/users/registrations' => 'users#registrations', as: :helpful_queries_registrations
+  get '/users/organized-competitions' => 'users#organized_competitions', as: :helpful_queries_organized_competitions
+  get '/users/delegated-competitions' => 'users#delegated_competitions', as: :helpful_queries_delegated_competitions
   get 'admin/avatars/pending' => 'admin/avatars#pending_avatar_users', as: :pending_avatars
   post 'admin/avatars' => 'admin/avatars#update_avatar', as: :admin_update_avatar
 
@@ -130,6 +133,7 @@ Rails.application.routes.draw do
     get '/admin/scrambles/:round_id/new' => 'admin/scrambles#new', as: :new_scramble
 
     get '/payment_integration/setup' => 'competitions#payment_integration_setup', as: :payment_integration_setup
+    get '/payment_integration/setup/manual' => 'competitions#payment_integration_manual_setup', as: :manual_payment_setup
     get '/payment_integration/:payment_integration/connect' => 'competitions#connect_payment_integration', as: :connect_payment_integration
     post '/payment_integration/:payment_integration/disconnect' => 'competitions#disconnect_payment_integration', as: :disconnect_payment_integration
   end
@@ -193,9 +197,6 @@ Rails.application.routes.draw do
 
   get 'persons/new_id' => 'admin/persons#generate_ids'
   get '/persons/results' => 'admin/persons#results', as: :person_results
-  get '/persons/registrations' => 'admin/persons#registrations', as: :person_registrations
-  get '/persons/organized-competitions' => 'admin/persons#organized_competitions', as: :person_organized_competitions
-  get '/persons/delegated-competitions' => 'admin/persons#delegated_competitions', as: :person_delegated_competitions
   resources :persons, only: %i[index show]
   post 'persons' => 'admin/persons#create'
 

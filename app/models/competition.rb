@@ -181,7 +181,6 @@ class Competition < ApplicationRecord
     waiting_list_deadline_date
     event_change_deadline_date
     competition_series_id
-    auto_accept_registrations
     auto_accept_preference
     auto_accept_disable_threshold
     newcomer_month_reserved_spots
@@ -2754,6 +2753,10 @@ class Competition < ApplicationRecord
     self.payment_integration_connected?(:paypal)
   end
 
+  def manual_connected?
+    self.payment_integration_connected?(:manual)
+  end
+
   def payment_account_for(integration_name)
     CompetitionPaymentIntegration.validate_integration_name!(integration_name)
 
@@ -3039,6 +3042,7 @@ class Competition < ApplicationRecord
   def fully_paid_registrations_count
     registrations
       .joins(:registration_payments)
+      .merge(RegistrationPayment.completed)
       .group('registrations.id')
       .having('SUM(registration_payments.amount_lowest_denomination) >= ?', base_entry_fee_lowest_denomination)
       .count.size # .count changes the AssociationRelation into a hash, and then .size gives the number of items in the hash

@@ -1712,7 +1712,7 @@ fr-CA:
       form:
         contact_email:
           #original_hash: 25e3a06
-          label: Email de contact
+          label: Courriel de contact
         wca_id:
           #original_hash: 7951ca7
           label: Saisir l'identifiant WCA
@@ -2029,7 +2029,7 @@ fr-CA:
         qu'elle puisse être effective.
       #original_hash: f572e4a
       pending_mail_confirmation: >-
-        Ce compte est en attente de confirmation de la nouvelle adresse email
+        Ce compte est en attente de confirmation de la nouvelle adresse courriel
         %{email}.
       #original_hash: a96e012
       pending_avatar_confirmation: Ce compte est en attente de confirmation d'une nouvelle photo de profil.
@@ -2393,7 +2393,7 @@ fr-CA:
         #original_hash: 68512ca
         waitlisted_html: >-
           La compétition est pleine, mais vous avez été placé sur une liste
-          d'attente, et vous recevrez un email si suffisamment de places se
+          d'attente, et vous recevrez un courriel si suffisamment de places se
           libèrent pour que vous puissiez y participer. Vérifiez votre position
           sur la liste d'attente %{here}.
         #original_hash: f8da4c2
@@ -2810,8 +2810,6 @@ fr-CA:
         devraient être disponibles sous peu.
       #original_hash: 6c46989
       results_already_posted: Les résultats ont déjà été postés.
-      #original_hash: 360971e
-      results_posted: Résultats postés avec succès !
       #original_hash: 9a15889
       results_preview_alert: Vous visualisez des résultats qui n'ont pas encore été postés.
       #original_hash: 52f0c1d
@@ -4502,8 +4500,6 @@ fr-CA:
     cancelled_by_html: 'Annulée par %{name} le %{date_time}'
     #original_hash: 6851f7a
     cancel_confirm: Êtes-vous sûr·e de vouloir annuler cette compétition ?
-    #original_hash: 99120ff
-    post_results: Poster les résultats
     #original_hash: e8714ac
     results_posted_by_html: 'Postés par %{poster_name} le %{date_time}'
     #original_hash: 039ddbf
