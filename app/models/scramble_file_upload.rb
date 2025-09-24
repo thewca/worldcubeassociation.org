@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class ScrambleFileUpload < ApplicationRecord
-  SERIALIZATION_INCLUDES = { inbox_scramble_sets: { inbox_scrambles: [], matched_round: [:competition_event] } }.freeze
+  SERIALIZATION_INCLUDES = { inbox_scramble_sets: InboxScrambleSet::SERIALIZATION_INCLUDES }.freeze
 
   belongs_to :uploaded_by_user, foreign_key: "uploaded_by", class_name: "User"
   belongs_to :competition

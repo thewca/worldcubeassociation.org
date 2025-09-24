@@ -1438,19 +1438,23 @@ RSpec.describe Competition do
 
   context "payment integration methods" do
     describe "#payment_account_for" do
+      let(:competition) { create(:competition, :all_integrations_connected) }
+
       it 'returns the connected stripe account' do
-        competition = create(:competition, :stripe_connected, :paypal_connected)
         expect(competition.payment_account_for(:stripe).account_id).to eq('acct_19ZQVmE2qoiROdto')
       end
 
       it 'returns the connected paypal account' do
-        competition = create(:competition, :stripe_connected, :paypal_connected)
         expect(competition.payment_account_for(:paypal).paypal_merchant_id).to eq('95XC2UKUP2CFW')
       end
 
+      it 'returns the connected manual payment account' do
+        expect(competition.payment_account_for(:manual).payment_reference_label).to eq('Bench Location')
+      end
+
       it 'returns nil if no matching account is found' do
-        competition = create(:competition)
-        expect(competition.payment_account_for(:paypal)).to be_nil
+        paypal_not_connected = create(:competition, :stripe_connected, :manual_connected)
+        expect(paypal_not_connected.payment_account_for(:paypal)).to be_nil
       end
     end
 
@@ -1465,8 +1469,13 @@ RSpec.describe Competition do
         expect(competition.payments_enabled?).to be(true)
       end
 
+      it 'returns true when manual is connected' do
+        competition = create(:competition, :manual_connected)
+        expect(competition.payments_enabled?).to be(true)
+      end
+
       it 'returns true when multiple integrations are connected' do
-        competition = create(:competition, :stripe_connected, :paypal_connected)
+        competition = create(:competition, :all_integrations_connected)
         expect(competition.payments_enabled?).to be(true)
       end
 
@@ -1487,6 +1496,11 @@ RSpec.describe Competition do
         expect(competition.stripe_connected?).to be(false)
       end
 
+      it 'returns false when manual is connected' do
+        competition = create(:competition, :manual_connected)
+        expect(competition.stripe_connected?).to be(false)
+      end
+
       it 'returns false when no integrations are connected' do
         competition = create(:competition)
         expect(competition.stripe_connected?).to be(false)
@@ -1504,9 +1518,36 @@ RSpec.describe Competition do
         expect(competition.paypal_connected?).to be(true)
       end
 
+      it 'returns false when manual is connected' do
+        competition = create(:competition, :manual_connected)
+        expect(competition.paypal_connected?).to be(false)
+      end
+
       it 'returns false when no integrations are connected' do
         competition = create(:competition)
         expect(competition.paypal_connected?).to be(false)
+      end
+    end
+
+    describe '#manual_connected?' do
+      it 'returns false when stripe is connected' do
+        competition = create(:competition, :stripe_connected)
+        expect(competition.manual_connected?).to be(false)
+      end
+
+      it 'returns false when paypal is connected' do
+        competition = create(:competition, :paypal_connected)
+        expect(competition.manual_connected?).to be(false)
+      end
+
+      it 'returns true when manual is connected' do
+        competition = create(:competition, :manual_connected)
+        expect(competition.manual_connected?).to be(true)
+      end
+
+      it 'returns false when no integrations are connected' do
+        competition = create(:competition)
+        expect(competition.manual_connected?).to be(false)
       end
     end
 
@@ -1911,6 +1952,11 @@ RSpec.describe Competition do
 
     it 'doesnt count unpaid registrations' do
       create_list(:registration, 5, competition: comp)
+      expect(comp.fully_paid_registrations_count).to eq(0)
+    end
+
+    it 'doesnt include uncaptured registration payments' do
+      create_list(:registration, 5, :uncaptured, competition: comp)
       expect(comp.fully_paid_registrations_count).to eq(0)
     end
 

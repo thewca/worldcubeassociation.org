@@ -30,6 +30,8 @@ class ApplicationController < ActionController::Base
     #  - the current user preferred locale
     #  - the Accept-Language http header
     session[:locale] ||= current_user&.preferred_locale || http_accept_language.language_region_compatible_from(I18n.available_locales)
+    session[:locale] = current_user&.country_iso2 == 'ES' ? 'es-ES' : 'es-419' if session[:locale] == 'es'
+
     I18n.locale = session[:locale] || I18n.default_locale
 
     @@locale_counts ||= Hash.new(0)

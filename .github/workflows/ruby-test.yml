@@ -4,7 +4,8 @@ on:
   push:
     branches: [ main ]
   pull_request:
-    branches: [ main ]
+    branches:
+      - '**'
 
 jobs:
   test:
@@ -17,7 +18,7 @@ jobs:
       PLAYWRIGHT_BROWSERS_PATH: ./pw-browsers
       CAPYBARA_APP_HOST: "" # Explicitly set a blank value to override our default Docker container setup
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: fregante/setup-git-user@v2 # set up dummy user.name and user.email in git so that Overcommit doesn't explode
       - name: Set up ImageMagick and Libvips # This is not included in GitHub runners by default anymore
         run: |
@@ -31,7 +32,7 @@ jobs:
         run: bin/bundle install
       - name: Set up Corepack/Yarn
         run: corepack enable # this allows NPM to use its own Yarn. It is crucial that this is run BEFORE the Node setup!
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
         with:
           node-version: '20'
           cache: 'yarn'

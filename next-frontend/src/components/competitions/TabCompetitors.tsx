@@ -18,7 +18,7 @@ const TabCompetitors: React.FC<CompetitorData> = ({ id }) => {
   const { data: registrationsQuery, isFetching } = useQuery({
     queryKey: ["registrations", id],
     queryFn: () =>
-      api.GET("/competitions/{competitionId}/registrations", {
+      api.GET("/v0/competitions/{competitionId}/registrations", {
         params: { path: { competitionId: id } },
       }),
   });
@@ -67,7 +67,7 @@ const TabCompetitors: React.FC<CompetitorData> = ({ id }) => {
                   <Text fontWeight="medium">{registration.user_id}</Text>
                 </Table.Cell>
                 <Table.Cell>
-                  <CountryMap code="AU" bold />
+                  <CountryMap code="AU" bold t={t} />
                 </Table.Cell>
 
                 {eventIds.map((eventId) => (

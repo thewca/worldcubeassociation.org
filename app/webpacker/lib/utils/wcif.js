@@ -324,3 +324,17 @@ export function cutoffToString(wcifRound, { short } = {}) {
 
   return null;
 }
+
+export function isActivityTimeValid(activity, wcifVenue, wcifSchedule) {
+  const { startDate, numberOfDays: days } = wcifSchedule;
+  const { startTime, endTime } = activity;
+
+  const luxonStartDate = DateTime.fromISO(startDate).setZone(wcifVenue?.timezone);
+  const luxonEndDate = DateTime.fromISO(startDate).plus({ days }).setZone(wcifVenue?.timezone);
+
+  const hasPositiveDuration = DateTime.fromISO(startTime) < DateTime.fromISO(endTime);
+  const startsOnOrAfterStartDate = luxonStartDate <= DateTime.fromISO(startTime);
+  const endsOnOrBeforeEndDate = DateTime.fromISO(endTime) <= luxonEndDate;
+
+  return hasPositiveDuration && startsOnOrAfterStartDate && endsOnOrBeforeEndDate;
+}

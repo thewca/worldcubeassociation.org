@@ -1,0 +1,12 @@
+type: object
+properties:
+  centiseconds:
+    type: integer
+    example: 18000
+  cumulativeRoundIds:
+    type: array
+    items:
+      type: string
+required:
+  - centiseconds
+  - cumulativeRoundIds

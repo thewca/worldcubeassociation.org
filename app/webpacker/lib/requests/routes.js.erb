@@ -102,6 +102,8 @@ export const adminFixResultsUrl = (personId, competition_id = undefined, event_i
   return `<%= CGI.unescape(Rails.application.routes.url_helpers.admin_fix_results_path) %>?${searchParams.toString()}`
 };
 
+export const connectPaymentIntegrationUrl = (competitionId, paymentIntegration) => `<%= CGI.unescape(Rails.application.routes.url_helpers.competition_connect_payment_integration_url("${competitionId}", "${paymentIntegration}")) %>`
+
 export const paymentFinishUrl = (competitionId, paymentIntegration) => `<%= CGI.unescape(Rails.application.routes.url_helpers.registration_payment_completion_url("${competitionId}", "${paymentIntegration}", host: EnvConfig.ROOT_URL)) %>`
 
 export const registrationPaymentsUrl = (registrationId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v1_registration_payments_path("${registrationId}")) %>`
@@ -152,7 +154,9 @@ export const adminPostingCompetitionsUrl = `<%= CGI.unescape(Rails.application.r
 
 export const adminStartPostingUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.start_posting_path) %>`;
 
-export const adminImportResultsUrl = (competitionId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.competition_admin_import_results_path("${competitionId}")) %>`;
+export const clearResultsSubmissionUrl = (competitionId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.competition_clear_results_submission_path("${competitionId}")) %>`;
+
+export const adminDeleteResultsDataUrl = (competitionId, roundId, model) => `<%= CGI.unescape(Rails.application.routes.url_helpers.competition_admin_delete_results_data_path("${competitionId}")) %>?${jsonToQueryString({ roundId, model })}`;
 
 export const adminCheckUploadedResults = (competitionId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.competition_admin_upload_results_edit_path("${competitionId}"))%>`;
 
@@ -277,6 +281,7 @@ export const viewUrls = {
     listLogs: (ticketId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.ticket_logs_path("${ticketId}")) %>`,
     importedTemporaryResults: (competitionId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.imported_temporary_results_path(competition_id: "${competitionId}")) %>`,
     inboxPersonSummary: (ticketId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.ticket_inbox_person_summary_path("${ticketId}")) %>`,
+    eventsMergedData: (ticketId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.ticket_events_merged_data_path("${ticketId}")) %>`,
   },
   admin: {
     completePersons: (competitionIds) => `<%= CGI.unescape(Rails.application.routes.url_helpers.admin_complete_persons_path) %>?${jsonToQueryString({ competition_ids: competitionIds })}`,
@@ -300,6 +305,11 @@ export const viewUrls = {
     showForMerge: (userId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.user_show_for_merge_path(id: "${userId}")) %>`,
     rolesEditPage: (userId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.edit_user_path("${userId}"))%>?${jsonToQueryString({ section: "roles" })}`,
   },
+  helpfulQueries: {
+    registrations: (userId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.helpful_queries_registrations_path) %>?${jsonToQueryString({ userId })}`,
+    organizedCompetitions: (userId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.helpful_queries_organized_competitions_path) %>?${jsonToQueryString({ userId })}`,
+    delegatedCompetitions: (userId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.helpful_queries_delegated_competitions_path) %>?${jsonToQueryString({ userId })}`,
+  },
 }
 
 export const actionUrls = {
@@ -310,9 +320,14 @@ export const actionUrls = {
     addComment: (ticketId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.ticket_comments_path("${ticketId}")) %>`,
     getDetailsBeforeAnonymization: (userId, wcaId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.tickets_details_before_anonymization_path) %>?${jsonToQueryString({ userId, wcaId })}`,
     anonymize: `<%= CGI.unescape(Rails.application.routes.url_helpers.tickets_anonymize_path) %>`,
+    verifyWarnings: (ticketId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.ticket_verify_warnings_path("${ticketId}")) %>`,
     mergeInboxResults: (ticketId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.ticket_merge_inbox_results_path("${ticketId}")) %>`,
     deleteInboxPersons: (ticketId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.ticket_delete_inbox_persons_path("${ticketId}")) %>`,
     postResults: (ticketId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.ticket_post_results_path("${ticketId}")) %>`,
+    rejectEditPersonRequest: (ticketId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.ticket_reject_edit_person_request_path("${ticketId}")) %>`,
+    editPersonFields: (ticketId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.ticket_edit_person_fields_path("${ticketId}")) %>`,
+    editPersonField: (ticketId, editPersonFieldId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.ticket_edit_person_field_path("${ticketId}", "${editPersonFieldId}")) %>`,
+    syncEditPersonRequest: (ticketId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.ticket_sync_edit_person_request_path("${ticketId}")) %>`,
   },
   validators: {
     forCompetitionList: (competitionIds, selectedValidators, applyFixWhenPossible, checkRealResults) => `<%= CGI.unescape(Rails.application.routes.url_helpers.panel_validators_for_competition_list_path) %>?${jsonToQueryString({ competitionIds, selectedValidators, applyFixWhenPossible, checkRealResults })}`,
@@ -371,6 +386,8 @@ export const allRegistrationsUrl = (competitionId) => `<%= CGI.unescape(Rails.ap
 
 export const singleRegistrationUrl = (registrationId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v1_registration_path("${registrationId}")) %>`;
 
+export const getRegistrationConfigUrl = (competitionId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.registration_config_api_v1_registration_path("${competitionId}")) %>`;
+
 export const registrationByUserUrl = (competitionId, userId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.show_by_user_api_v1_competition_registrations_path(competition_id: "${competitionId}", user_id: "${userId}")) %>`;
 
 export const submitRegistrationUrl = (competitionId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v1_competition_registrations_path(competition_id: "${competitionId}")) %>`;
@@ -382,6 +399,8 @@ export const bulkAutoAcceptUrl = (competitionId) => `<%= CGI.unescape(Rails.appl
 export const bulkUpdateRegistrationUrl = (competitionId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.bulk_update_api_v1_competition_registrations_path(competition_id: "${competitionId}")) %>`;
 
 export const paymentTicketUrl = (registrationId, isoDonationAmount) => `<%= CGI.unescape(Rails.application.routes.url_helpers.payment_ticket_api_v1_registration_path("${registrationId}", iso_donation_amount: "${isoDonationAmount}")) %>`;
+
+export const uploadScramblesUrl = (competitionId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.competition_upload_scrambles_path("${competitionId}")) %>`;
 
 export const rankingsUrl = (eventId, rankingType, region, gender, show) => {
   const url = `<%= CGI.unescape(Rails.application.routes.url_helpers.rankings_path(event_id: "${eventId}", type: "${rankingType}")) %>`

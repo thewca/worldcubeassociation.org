@@ -89,6 +89,18 @@ services:
     networks:
       - wca-main
 
+  wca_payload_db:
+    image: mongo:8
+    container_name: "payload_db"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+      MONGO_INITDB_DATABASE: payload
+    ports:
+      - "27017:27017"
+    networks:
+      - wca-main
+
   wca_webpacker:
     <<: *app
     container_name: "webpacker"
@@ -166,7 +178,7 @@ services:
       - wca-main
 
   wca_playwright:
-    image: mcr.microsoft.com/playwright:v1.54.2
+    image: mcr.microsoft.com/playwright:v1.55.0
     container_name: "playwright"
     extra_hosts:
       - "hostmachine:host-gateway"

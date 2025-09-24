@@ -8,7 +8,6 @@ import {
   Card,
   Separator,
   Box,
-  Image as ChakraImage,
   Heading,
   Text,
   Tabs,
@@ -48,6 +47,8 @@ import type {
 } from "@/types/payload";
 import Link from "next/link";
 import { route } from "nextjs-routes";
+import { getT } from "@/lib/i18n/get18n";
+import { MediaImage } from "@/components/MediaImage";
 
 const TextCard = ({ block }: { block: TextCardBlock }) => {
   return (
@@ -58,11 +59,7 @@ const TextCard = ({ block }: { block: TextCardBlock }) => {
       width="full"
     >
       {block.headerImage && (
-        <ChakraImage
-          src={(block.headerImage as Media).url ?? undefined}
-          alt={(block.headerImage as Media).alt ?? undefined}
-          aspectRatio="3/1"
-        />
+        <MediaImage media={block.headerImage as Media} aspectRatio="3/1" />
       )}
       <Card.Body>
         <Card.Title>{block.heading}</Card.Title>
@@ -124,9 +121,8 @@ const ImageBanner = ({ block }: { block: ImageBannerBlock }) => {
       size="lg"
     >
       <Box position="relative" width="50%" overflow="hidden">
-        <ChakraImage
-          src={(block.mainImage as Media).url ?? undefined}
-          alt={(block.mainImage as Media).alt ?? undefined}
+        <MediaImage
+          media={block.mainImage as Media}
           objectFit="cover"
           width="100%"
           height="40vh"
@@ -187,9 +183,9 @@ const ImageOnlyCard = ({ block }: { block: ImageOnlyCardBlock }) => {
       colorPalette={block.colorPalette}
       width="full"
     >
-      <ChakraImage
-        src={(block.mainImage as Media).url ?? undefined}
-        alt={(block.mainImage as Media).alt ?? block.heading ?? undefined}
+      <MediaImage
+        media={block.mainImage as Media}
+        altFallback={block.heading}
         aspectRatio="2/1"
       />
       {block.heading && (
@@ -203,11 +199,12 @@ const ImageOnlyCard = ({ block }: { block: ImageOnlyCardBlock }) => {
   );
 };
 
-const FeaturedCompetitions = ({
+const FeaturedCompetitions = async ({
   block,
 }: {
   block: FeaturedCompetitionsBlock;
 }) => {
+  const { t } = await getT();
   return (
     <Card.Root variant="info" colorPalette="grey" width="full">
       <Card.Body justifyContent="space-around">
@@ -230,7 +227,7 @@ const FeaturedCompetitions = ({
                     colorPalette={featuredComp.colorPalette}
                   >
                     <Flag code="US" fallback="US" />
-                    <CountryMap code="US" bold /> Seattle
+                    <CountryMap code="US" bold t={t} /> Seattle
                   </Badge>
                   <Badge
                     variant="information"
@@ -317,17 +314,10 @@ const TestimonialsSpinner = ({ block }: { block: TestimonialsBlock }) => {
                 overflow="hidden"
                 colorPalette={slide.colorPalette}
               >
-                <ChakraImage
-                  src={
-                    testimonial.image != null
-                      ? ((testimonial.image as Media).url ?? undefined)
-                      : "/placeholder.png"
-                  }
-                  alt={
-                    testimonial.image != null
-                      ? (testimonial.image as Media).alt
-                      : testimonial.punchline
-                  }
+                <MediaImage
+                  media={testimonial.image as Media}
+                  srcFallback="/placeholder.png"
+                  altFallback={testimonial.punchline}
                   maxW="1/3"
                   objectFit="cover"
                 />

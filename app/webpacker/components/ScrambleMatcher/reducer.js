@@ -1,36 +1,44 @@
-import { useCallback } from 'react';
 import _ from 'lodash';
-import { moveArrayItem } from './util';
+import { addItemToArray, moveArrayItem } from './util';
 
-export function groupAndSortScrambles(scrambleSets) {
+function addScrambleSetsToEvents(wcifEvents, scrambleSets, keepExistingSets = true) {
+  const groupedScrambles = _.groupBy(
+    scrambleSets.flatMap((scrSet) => scrSet.inbox_scrambles),
+    'matched_scramble_set_id',
+  );
+
   const groupedScrambleSets = _.groupBy(
-    scrambleSets,
+    scrambleSets.map((scrSet) => ({
+      ...scrSet,
+      inbox_scrambles: groupedScrambles[scrSet.id],
+    })),
     'matched_round_wcif_id',
   );
 
-  return _.mapValues(
-    groupedScrambleSets,
-    (sets) => _.sortBy(sets, 'ordered_index')
-      .map((set) => ({
-        ...set,
-        inbox_scrambles: _.sortBy(set.inbox_scrambles, 'ordered_index'),
+  return {
+    events: wcifEvents.map((wcifEvent) => ({
+      ...wcifEvent,
+      rounds: wcifEvent.rounds.map((round) => ({
+        ...round,
+        scrambleSets: _.sortBy(
+          _.uniqBy([
+            // The order of lines is important here:
+            //   Lodash keeps only the first appearance, so we need to list
+            //   the newest possible entries first, followed by existing entries.
+            ...(groupedScrambleSets[round.id] ?? []),
+            ...(keepExistingSets ? (round.scrambleSets ?? []) : []),
+          ], 'id').map((scrSet) => ({
+            ...scrSet,
+            inbox_scrambles: _.sortBy(
+              scrSet.inbox_scrambles,
+              'ordered_index',
+            ),
+          })),
+          'ordered_index',
+        ),
       })),
-  );
-}
-
-function mergeScrambleSets(sortedScramblesOld, sortedScramblesNew) {
-  return _.mergeWith(
-    sortedScramblesOld,
-    sortedScramblesNew,
-    (oldSets, newSets) => {
-      const oldOrEmpty = oldSets ?? [];
-      const newOrEmpty = newSets ?? [];
-
-      const merged = [...oldOrEmpty, ...newOrEmpty];
-
-      return _.uniqBy(merged, 'id');
-    },
-  );
+    })),
+  };
 }
 
 function applyAction(state, keys, action) {
@@ -40,39 +48,48 @@ function applyAction(state, keys, action) {
   }), state);
 }
 
-export function initializeState(scrambleSets) {
+export function initializeState({ wcifEvents, scrambleSets }) {
   return applyAction(
     {},
     ['initial', 'current'],
-    () => groupAndSortScrambles(scrambleSets),
+    () => addScrambleSetsToEvents(wcifEvents, scrambleSets, false),
   );
 }
 
 function addScrambleFile(state, newScrambleFile) {
-  const sortedFileScrambles = groupAndSortScrambles(newScrambleFile.inbox_scramble_sets);
-
-  return mergeScrambleSets(state, sortedFileScrambles);
+  return addScrambleSetsToEvents(state.events, newScrambleFile.inbox_scramble_sets);
 }
 
 function removeScrambleFile(state, oldScrambleFile) {
-  const withoutScrambleFile = _.mapValues(
-    state,
-    (sets) => sets.filter(
-      (set) => set.external_upload_id !== oldScrambleFile.id,
-    ),
-  );
+  const scrambleSets = state.events.flatMap((evt) => evt.rounds.flatMap((rd) => rd.scrambleSets));
 
-  // Throw away state entries for rounds that don't have any sets at all anymore
-  return _.pickBy(withoutScrambleFile, (sets) => sets.length > 0);
+  const scrSetLookup = _.keyBy(scrambleSets, 'id');
+  const setUploadLookup = _.mapValues(scrSetLookup, 'external_upload_id');
+
+  return {
+    ...state,
+    events: state.events.map((wcifEvent) => ({
+      ...wcifEvent,
+      rounds: wcifEvent.rounds.map((round) => ({
+        ...round,
+        scrambleSets: round.scrambleSets.filter(
+          (scrSet) => setUploadLookup[scrSet.id] !== oldScrambleFile.id,
+        ).map((scrSet) => ({
+          ...scrSet,
+          inbox_scrambles: scrSet.inbox_scrambles.filter(
+            (ibs) => setUploadLookup[ibs.matched_scramble_set_id] !== oldScrambleFile.id,
+          ),
+        })),
+      })),
+    })),
+  };
 }
 
-export function useDispatchWrapper(originalDispatch, actionVars) {
-  return useCallback((action) => {
-    originalDispatch({
-      ...actionVars,
-      ...action,
-    });
-  }, [actionVars, originalDispatch]);
+function navigationToLodash(actionWithNav, selector) {
+  return [
+    ...actionWithNav[selector].flatMap((step) => [step.key, step.index]),
+    actionWithNav.matchingKey,
+  ];
 }
 
 export default function scrambleMatchReducer(state, action) {
@@ -90,40 +107,50 @@ export default function scrambleMatchReducer(state, action) {
         (subState) => removeScrambleFile(subState, action.scrambleFile),
       );
     case 'resetAfterSave':
-      return initializeState(action.scrambleSets);
-    case 'moveRoundScrambleSet':
-      return applyAction(state, ['current'], (subState) => ({
-        ...subState,
-        [action.roundId]: moveArrayItem(
-          subState[action.roundId],
-          action.fromIndex,
-          action.toIndex,
-        ),
-      }));
-    case 'moveScrambleSetToRound':
-      return applyAction(state, ['current'], (subState) => ({
-        ...subState,
-        [action.fromRoundId]: subState[action.fromRoundId].filter(
-          (scrSet) => scrSet.id !== action.scrambleSet.id,
-        ),
-        [action.toRoundId]: [
-          ...subState[action.toRoundId],
-          { ...action.scrambleSet },
-        ],
-      }));
-    case 'moveScrambleInSet':
-      return applyAction(state, ['current'], (subState) => ({
-        ...subState,
-        [action.roundId]: subState[action.roundId]
-          .map((scrSet, i) => (i === action.setNumber ? ({
-            ...scrSet,
-            inbox_scrambles: moveArrayItem(
-              scrSet.inbox_scrambles,
-              action.fromIndex,
-              action.toIndex,
-            ),
-          }) : scrSet)),
-      }));
+      return initializeState({
+        wcifEvents: state.initial.events,
+        scrambleSets: action.scrambleSets,
+      });
+    case 'resetToInitial':
+      return applyAction(state, ['current'], () => state.initial);
+    case 'moveMatchingEntity':
+      return applyAction(state, ['current'], (subState) => {
+        const oldPath = navigationToLodash(action, 'fromNavigation');
+        const newPath = navigationToLodash(action, 'toNavigation');
+
+        return _.chain(subState)
+          .cloneDeep()
+          .update(oldPath, (arr) => arr.filter((ent) => ent.id !== action.entity.id))
+          .update(newPath, (arr = []) => addItemToArray(arr, action.entity))
+          .value();
+      });
+    case 'reorderMatchingEntities':
+      return applyAction(state, ['current'], (subState) => {
+        const lodashPath = navigationToLodash(action, 'pickerHistory');
+
+        return _.chain(subState)
+          .cloneDeep()
+          .update(lodashPath, (arr = []) => moveArrayItem(arr, action.fromIndex, action.toIndex))
+          .value();
+      });
+    case 'deleteEntityFromMatching':
+      return applyAction(state, ['current'], (subState) => {
+        const lodashPath = navigationToLodash(action, 'pickerHistory');
+
+        return _.chain(subState)
+          .cloneDeep()
+          .update(lodashPath, (arr = []) => arr.filter((ent) => ent.id !== action.entity.id))
+          .value();
+      });
+    case 'addEntityToMatching':
+      return applyAction(state, ['current'], (subState) => {
+        const lodashPath = navigationToLodash(action, 'pickerHistory');
+
+        return _.chain(subState)
+          .cloneDeep()
+          .update(lodashPath, (arr = []) => addItemToArray(arr, action.entity, action.targetIndex))
+          .value();
+      });
     default:
       throw new Error(`Unhandled action type: ${action.type}`);
   }
