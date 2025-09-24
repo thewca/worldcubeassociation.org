@@ -24,6 +24,8 @@ paths:
     $ref: 'paths/competitions/competitionPodiums.yaml'
   /v0/competition_index:
     $ref: 'paths/competitions/competitionList.yaml'
+  /v0/competitions/{competitionId}/scrambles:
+    $ref: 'paths/competitions/competitionScrambles.yaml'
 
   /v0/incidents:
     $ref: 'paths/regulations/incidentsList.yaml'
