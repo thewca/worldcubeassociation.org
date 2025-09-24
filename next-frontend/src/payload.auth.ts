@@ -10,7 +10,7 @@ declare module "@auth/core/types" {
   interface User extends PayloadAuthjsUser<PayloadUser> {}
 }
 
-export const { handlers, signIn, signOut, auth } = NextAuth(
+export const { handlers } = NextAuth(
   withPayload(payloadAuthConfig, {
     payloadConfig,
     events: {
