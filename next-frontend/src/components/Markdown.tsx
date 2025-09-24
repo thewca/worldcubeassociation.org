@@ -2,30 +2,16 @@ import { Prose } from "@/components/ui/prose";
 import Markdown from "react-markdown";
 import { Link as ChakraLink } from "@chakra-ui/react";
 
-import type {
-  ComponentPropsWithoutRef,
-  ElementType,
-  ReactElement,
-} from "react";
+import type { PolymorphicComponent } from "@/lib/types/components";
 
 type MarkdownProseOwnProps = {
   content: string;
 };
 
-type PolymorphicMarkdownProseProps<T extends ElementType> =
-  MarkdownProseOwnProps & {
-    as?: T;
-  } & Omit<ComponentPropsWithoutRef<T>, keyof MarkdownProseOwnProps | "as">;
-
-type MarkdownProseComponent = <T extends ElementType = typeof Prose>(
-  props: PolymorphicMarkdownProseProps<T>,
-) => ReactElement | null;
-
-export const MarkdownProse: MarkdownProseComponent = ({
-  content,
-  as: RenderAs = Prose,
-  ...restProps
-}) => {
+export const MarkdownProse: PolymorphicComponent<
+  MarkdownProseOwnProps,
+  typeof Prose
+> = ({ content, as: RenderAs = Prose, ...restProps }) => {
   return (
     <RenderAs {...restProps}>
       <Markdown

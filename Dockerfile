@@ -1,4 +1,4 @@
-FROM ruby:3.4.2 AS base
+FROM ruby:3.4.6 AS base
 ARG BUILD_TAG=local
 ARG WCA_LIVE_SITE
 ARG SHAKAPACKER_ASSET_HOST
@@ -41,7 +41,6 @@ RUN corepack enable
 RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y \
       build-essential \
-      software-properties-common \
       git \
       clang \
       pkg-config \

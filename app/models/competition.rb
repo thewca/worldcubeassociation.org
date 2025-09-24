@@ -181,7 +181,6 @@ class Competition < ApplicationRecord
     waiting_list_deadline_date
     event_change_deadline_date
     competition_series_id
-    auto_accept_registrations
     auto_accept_preference
     auto_accept_disable_threshold
     newcomer_month_reserved_spots
@@ -2752,6 +2751,10 @@ class Competition < ApplicationRecord
 
   def paypal_connected?
     self.payment_integration_connected?(:paypal)
+  end
+
+  def manual_connected?
+    self.payment_integration_connected?(:manual)
   end
 
   def payment_account_for(integration_name)
