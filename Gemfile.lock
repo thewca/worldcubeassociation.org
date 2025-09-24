@@ -159,7 +159,7 @@ GEM
       aws-sdk-core (~> 3, >= 3.231.0)
       aws-sdk-kms (~> 1)
       aws-sigv4 (~> 1.5)
-    aws-sdk-sqs (1.103.0)
+    aws-sdk-sqs (1.104.0)
       aws-sdk-core (~> 3, >= 3.231.0)
       aws-sigv4 (~> 1.5)
     aws-sigv4 (1.12.1)
@@ -454,7 +454,7 @@ GEM
     json-schema (6.0.0)
       addressable (~> 2.8)
       bigdecimal (~> 3.1)
-    jwt (2.10.2)
+    jwt (3.1.2)
       base64
     kaminari (1.2.2)
       activesupport (>= 4.1.0)
@@ -609,7 +609,7 @@ GEM
       date
       stringio
     public_suffix (6.0.2)
-    puma (6.6.1)
+    puma (7.0.3)
       nio4r (~> 2.0)
     raabro (1.4.0)
     racc (1.8.1)
@@ -668,7 +668,7 @@ GEM
     rb-fsevent (0.11.0)
     rb-inotify (0.10.1)
       ffi (~> 1.0)
-    rb_sys (0.9.115)
+    rb_sys (0.9.117)
       rake-compiler-dock (= 1.9.1)
     rdoc (6.14.2)
       erb
@@ -775,7 +775,7 @@ GEM
       lint_roller (~> 1.1)
       rubocop (~> 1.72, >= 1.72.1)
       rubocop-ast (>= 1.44.0, < 2.0)
-    ruby-ll (2.1.2)
+    ruby-ll (2.1.4)
       ansi
       ast
     ruby-progressbar (1.13.0)
@@ -941,10 +941,10 @@ GEM
     version_gem (1.1.9)
     warden (1.2.9)
       rack (>= 2.0.9)
-    warden-jwt_auth (0.10.0)
+    warden-jwt_auth (0.12.0)
       dry-auto_inject (>= 0.8, < 2)
       dry-configurable (>= 0.13, < 2)
-      jwt (~> 2.1)
+      jwt (>= 2.1, < 4)
       warden (~> 1.2)
     wca_i18n (0.4.4)
       colorize (~> 0.8)
@@ -1150,7 +1150,7 @@ CHECKSUMS
   aws-sdk-kms (1.112.0) sha256=aa68feb901545a7fc14be327735740b89f90cfee825a46ddea601c7c80c922d4
   aws-sdk-rds (1.293.0) sha256=71dd2d0b5fb8ebb7b0edd37b566ec750ca6ab7a32e970572858a46dda3652e20
   aws-sdk-s3 (1.199.0) sha256=0d36a53d068257d0de2cf17d935224a73d540fae71016f7bb6d3ae5fee2c3fa8
-  aws-sdk-sqs (1.103.0) sha256=79844ccb0d84c5abf7c3bf808adc8d90430d1400ba41ea3ca5bf1ff846f9ae01
+  aws-sdk-sqs (1.104.0) sha256=5f4de801f826264b5b79be19a63be17f8d46fea9cd453c01ffa9926d85302ee9
   aws-sigv4 (1.12.1) sha256=6973ff95cb0fd0dc58ba26e90e9510a2219525d07620c8babeb70ef831826c00
   babel-source (5.8.35) sha256=79ef222a9dcb867ac2efa3b0da35b4bcb15a4bfa67b6b2dcbf1e9a29104498d9
   babel-transpiler (0.7.0) sha256=4c06f4ad9e8e1cabe94f99e11df2f140bb72aca9ba067dbb49dc14d9b98d1570
@@ -1286,7 +1286,7 @@ CHECKSUMS
   js_cookie_rails (2.2.0) sha256=06e6b27ee093945c3acf3982d2dbf9e9117d1130f33bb07e1660ebea68229c62
   json (2.14.1) sha256=b08994d751e9f0697cc089243a3cfabf998da1d25e81e7dd0d0f84136ff74642
   json-schema (6.0.0) sha256=79ecaffba197008912933f66f6c5428f5ce7716e42bb1a8f0d56079f2d58633f
-  jwt (2.10.2) sha256=31e1ee46f7359883d5e622446969fe9c118c3da87a0b1dca765ce269c3a0c4f4
+  jwt (3.1.2) sha256=af6991f19a6bb4060d618d9add7a66f0eeb005ac0bc017cd01f63b42e122d535
   kaminari (1.2.2) sha256=c4076ff9adccc6109408333f87b5c4abbda5e39dc464bd4c66d06d9f73442a3e
   kaminari-actionview (1.2.2) sha256=1330f6fc8b59a4a4ef6a549ff8a224797289ebf7a3a503e8c1652535287cc909
   kaminari-activerecord (1.2.2) sha256=0dd3a67bab356a356f36b3b7236bcb81cef313095365befe8e98057dd2472430
@@ -1358,7 +1358,7 @@ CHECKSUMS
   pry (0.14.1) sha256=99b6df0665875dd5a39d85e0150aa5a12e2bb4fef401b6c4f64d32ee502f8454
   psych (5.2.6) sha256=814328aa5dcb6d604d32126a20bc1cbcf05521a5b49dbb1a8b30a07e580f316e
   public_suffix (6.0.2) sha256=bfa7cd5108066f8c9602e0d6d4114999a5df5839a63149d3e8b0f9c1d3558394
-  puma (6.6.1) sha256=b9b56e4a4ea75d1bfa6d9e1972ee2c9f43d0883f011826d914e8e37b3694ea1e
+  puma (7.0.3) sha256=131b5fd02c89c2445114cdce906114e75ea4cf22842fcf5bbee4500f1c868ba5
   raabro (1.4.0) sha256=d4fa9ff5172391edb92b242eed8be802d1934b1464061ae5e70d80962c5da882
   racc (1.8.1) sha256=4a7f6929691dbec8b5209a0b373bc2614882b55fc5d2e447a21aaa691303d62f
   rack (3.1.16) sha256=efb5606c351efc56b85b10c3493055d0d35209d23f44792ec4e1183eb0234635
@@ -1378,7 +1378,7 @@ CHECKSUMS
   rake-compiler-dock (1.9.1) sha256=e73720a29aba9c114728ce39cc0d8eef69ba61d88e7978c57bac171724cd4d53
   rb-fsevent (0.11.0) sha256=3a02b6360c856cc16e7f62382573b238f5cfb61a48169dd4c83b842c094b5de3
   rb-inotify (0.10.1) sha256=050062d4f31d307cca52c3f6a7f4b946df8de25fc4bd373e1a5142e41034a7ca
-  rb_sys (0.9.115) sha256=4696a623b89131f4a12bd9e38710add1c64b478dc3d2e9275f61a65f42f743ec
+  rb_sys (0.9.117) sha256=755feaf6c640baceca7a9362dfb0ae87ff4ff16e3566d9ef86533896eb85cb59
   rdoc (6.14.2) sha256=9fdd44df130f856ae70cc9a264dfd659b9b40de369b16581f4ab746e42439226
   react-rails (3.2.1) sha256=2235db0b240517596b1cb3e26177ab5bc64d3a56579b0415ee242b1691f81f64
   recaptcha (5.21.1) sha256=e003e9ceba9b993a9f0c6a828c192f2d46693cd2aa0b0beae94f936649507adb
@@ -1413,7 +1413,7 @@ CHECKSUMS
   rubocop-rspec (3.7.0) sha256=b7b214da112034db9c6d00f2d811a354847e870f7b6ed2482b29649c3d42058f
   rubocop-rspec_rails (2.31.0) sha256=775375e18a26a1184a812ef3054b79d218e85601b9ae897f38f8be24dddf1f45
   rubocop-thread_safety (0.7.3) sha256=067cdd52fbf5deffc18995437e45b5194236eaff4f71de3375a1f6052e48f431
-  ruby-ll (2.1.2) sha256=167fd5254f2dc765d63ca5cfee8806edd14e81069e5f1312f9ac61ee559d3c43
+  ruby-ll (2.1.4) sha256=bec3a40078e4b8578b20751f0b2e3dc3fcaa773e34fae3d9725b724032e47e0c
   ruby-progressbar (1.13.0) sha256=80fc9c47a9b640d6834e0dc7b3c94c9df37f08cb072b7761e4a71e22cff29b33
   ruby-vips (2.2.3) sha256=41d12b1a805cd6ead4a7965201a8f7c5fe459bb58d3a7d967c9eb0719a6edc92
   sass-embedded (1.89.2) sha256=fa171bdca12cb9d622b7b49e76e40b677957ac348e7375ddef2c1dec08d1556f
@@ -1491,7 +1491,7 @@ CHECKSUMS
   vault (0.18.2) sha256=29346c2d8364c19effb548b7a8952bf187545b99b70d1ddde76bd6c69046d27c
   version_gem (1.1.9) sha256=0c1a0962ae543c84a00889bb018d9f14d8f8af6029d26b295d98774e3d2eb9a4
   warden (1.2.9) sha256=46684f885d35a69dbb883deabf85a222c8e427a957804719e143005df7a1efd0
-  warden-jwt_auth (0.10.0) sha256=9bbdcb035e34f59f06b731833c53d9cb4821b96efe8fa76936c2c35b3402912e
+  warden-jwt_auth (0.12.0) sha256=a1a857f3f93da4e529c9c45d6d432578bd48e3b0313d2fa1ccd2bb767d9b2ec2
   wca_i18n (0.4.4) sha256=33830f157616a33d10918d4f9e9c1c17e4311731832f19153c3cfcbb51233461
   web-console (4.2.1) sha256=e7bcf37a10ea2b4ec4281649d1cee461b32232d0a447e82c786e6841fd22fe20
   webmock (3.25.1) sha256=ab9d5d9353bcbe6322c83e1c60a7103988efc7b67cd72ffb9012629c3d396323
@@ -1501,4 +1501,4 @@ CHECKSUMS
   zeitwerk (2.7.3) sha256=b2e86b4a9b57d26ba68a15230dcc7fe6f040f06831ce64417b0621ad96ba3e85
 
 BUNDLED WITH
-   2.6.8
+   2.7.2

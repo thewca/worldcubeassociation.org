@@ -1,8 +1,6 @@
 "use client";
 
 import {
-  useFilter,
-  useListCollection,
   Container,
   VStack,
   Heading,
@@ -33,9 +31,10 @@ import CompRegoCloseDateIcon from "@/components/icons/CompRegoCloseDateIcon";
 import EventIcon from "@/components/EventIcon";
 import Flag from "react-world-flags";
 
-import countries from "@/lib/wca/data/countries";
 import { WCA_EVENT_IDS } from "@/lib/wca/data/events";
 import type { components } from "@/types/openapi";
+import RegionSelector from "@/components/RegionSelector";
+import { useT } from "@/lib/i18n/useI18n";
 
 type CompetitionIndex = components["schemas"]["CompetitionIndex"];
 
@@ -46,16 +45,6 @@ interface CompetitionsListProps {
 export default function CompetitionsClient({
   competitions,
 }: CompetitionsListProps) {
-  const { contains } = useFilter({ sensitivity: "base" });
-
-  const { collection, filter } = useListCollection({
-    initialItems: Object.entries(countries.byIso2).map(([code, country]) => ({
-      label: country.id,
-      value: code,
-    })),
-    filter: contains,
-  });
-
   const marks = [
     { value: 0, label: "closest" },
     { value: 25, label: "close" },
@@ -63,6 +52,8 @@ export default function CompetitionsClient({
     { value: 75, label: "furthest" },
     { value: 100, label: "all" },
   ];
+
+  const { t } = useT();
 
   return (
     <Container>
@@ -83,40 +74,11 @@ export default function CompetitionsClient({
               <Flex gap="2" width="full" alignItems="flex-start">
                 <Flex gap="2" width="full" flexDirection="column">
                   <Flex gap="2" width="full" alignItems="flex-start">
-                    <Combobox.Root
-                      collection={collection}
-                      onInputValueChange={(e) => filter(e.inputValue)}
-                      width="320px"
-                      colorPalette="blue"
-                      openOnClick
-                    >
-                      <Combobox.Control>
-                        <Combobox.Input placeholder="Country/Continent" />
-                        <Combobox.IndicatorGroup>
-                          <Combobox.ClearTrigger />
-                          <Combobox.Trigger />
-                        </Combobox.IndicatorGroup>
-                      </Combobox.Control>
-                      <Portal>
-                        <Combobox.Positioner>
-                          <Combobox.Content justifyContent="flex-start">
-                            <Combobox.Empty>No items found</Combobox.Empty>
-                            {collection.items.map((item) => (
-                              <Combobox.Item item={item} key={item.value}>
-                                <Flag
-                                  code={item.value}
-                                  fallback={item.value}
-                                  height="25"
-                                  width="32"
-                                />
-                                {item.label}
-                                <Combobox.ItemIndicator />
-                              </Combobox.Item>
-                            ))}
-                          </Combobox.Content>
-                        </Combobox.Positioner>
-                      </Portal>
-                    </Combobox.Root>
+                    <RegionSelector
+                      label={t("region")}
+                      onRegionChange={(e) => console.log(e)}
+                      t={t}
+                    />
                     {/* TODO: replace these buttons with DatePicker (Chakra does not have one by default) */}
                     <Button variant="outline">
                       <CompRegoOpenDateIcon />
