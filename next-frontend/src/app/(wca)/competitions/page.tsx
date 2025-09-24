@@ -228,11 +228,12 @@ export default function CompetitionsPage() {
                     <Box flex={1}>
                       <RegionSelector
                         t={t}
+                        label={t("activerecord.attributes.user.region")}
                         region={filterState.region}
                         onRegionChange={(region) =>
                           dispatchFilter({
                             type: "set_region",
-                            region: countries.byId[region].iso2,
+                            region,
                           })
                         }
                       />
