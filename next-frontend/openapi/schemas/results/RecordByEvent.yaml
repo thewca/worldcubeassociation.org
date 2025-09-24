@@ -1,0 +1,86 @@
+type: object
+properties:
+  222:
+    type: array
+    items:
+      $ref: './Record.yaml'
+  333:
+    type: array
+    items:
+      $ref: './Record.yaml'
+  444:
+    type: array
+    items:
+      $ref: './Record.yaml'
+  555:
+    type: array
+    items:
+      $ref: './Record.yaml'
+  666:
+    type: array
+    items:
+      $ref: './Record.yaml'
+  777:
+    type: array
+    items:
+      $ref: './Record.yaml'
+  333oh:
+    type: array
+    items:
+      $ref: './Record.yaml'
+  clock:
+    type: array
+    items:
+      $ref: './Record.yaml'
+  minx:
+    type: array
+    items:
+      $ref: './Record.yaml'
+  pyram:
+    type: array
+    items:
+      $ref: './Record.yaml'
+  skewb:
+    type: array
+    items:
+      $ref: './Record.yaml'
+  sq1:
+    type: array
+    items:
+      $ref: './Record.yaml'
+  333bf:
+    type: array
+    items:
+      $ref: './Record.yaml'
+  333ft:
+    type: array
+    items:
+      $ref: './Record.yaml'
+  333fm:
+    type: array
+    items:
+      $ref: './Record.yaml'
+  333mbf:
+    type: array
+    items:
+      $ref: './Record.yaml'
+  444bf:
+    type: array
+    items:
+      $ref: './Record.yaml'
+  555bf:
+    type: array
+    items:
+      $ref: './Record.yaml'
+  magic:
+    type: array
+    items:
+      $ref: './Record.yaml'
+  mmagic:
+    type: array
+    items:
+      $ref: './Record.yaml'
+  333mbo:
+    type: array
+    items:
+      $ref: './Record.yaml'
