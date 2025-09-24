@@ -120,7 +120,7 @@ export default function FilteredRecords() {
   const { data, isFetching, isError } = useQuery({
     queryKey: ["rankings", region, gender, show, event, rankingType],
     queryFn: () =>
-      api.GET("/results/rankings/{event_id}/{type}", {
+      api.GET("/v0/results/rankings/{event_id}/{type}", {
         params: {
           path: { event_id: event, type: rankingType },
           query: { region, gender, show: show },
