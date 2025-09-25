@@ -100,15 +100,14 @@ class ConnectedStripeAccount < ApplicationRecord
     StripeRecord.charge.find(record_id)
   end
 
-  def find_payment_from_request(params)
+  def find_payment_intent_from_request(params)
     # Provided by Stripe upon redirect when the "PaymentElement" workflow is completed
     intent_id = params[:payment_intent]
-    intent_secret = params[:payment_intent_client_secret]
 
     # We expect that the record here is a top-level PaymentIntent in Stripe's API model
-    stored_record = StripeRecord.payment_intent.find_by(stripe_id: intent_id)
-
-    [stored_record, intent_secret]
+    # The first invocation of `payment_intent` is the payment_intent scope on StripeRecord
+    # The second is getting the associated PaymentIntent object from the found StripeRecord
+    StripeRecord.payment_intent.find_by(stripe_id: intent_id).payment_intent
   end
 
   def issue_refund(charge_record, amount_iso)
