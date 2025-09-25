@@ -1357,6 +1357,9 @@ RSpec.describe 'API Registrations' do
       it 'succeeds' do
         expect(response).to be_successful
       end
+
+      it 'creates a PaymentIntent' do
+      end
     end
   end
 

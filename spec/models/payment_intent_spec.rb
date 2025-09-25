@@ -21,7 +21,19 @@ RSpec.describe PaymentIntent do
     end
   end
 
+
   describe 'enforce status consistency' do
+    it 'allows creation of a PaymentIntent with no linked PaymentRecord' do
+      intent = build(:payment_intent, payment_record: nil, wca_status: 'created')
+      expect(intent).to be_valid
+    end
+
+    it 'doesnt allow non-created PaymentIntent with no linked PaymentRecord' do
+      intent = build(:payment_intent, payment_record: nil, wca_status: 'pending')
+      expect(intent).not_to be_valid
+      expect(intent.errors[:wca_status]).to eq(['Must have an associated payment record if in a non-created state'])
+    end
+
     shared_examples '#create incompatible PaymentIntent' do |stripe_record_status, intent_status|
       it 'fails' do
         stripe_record = create(:stripe_record, stripe_status: stripe_record_status)

@@ -18,23 +18,21 @@ class ManualPaymentIntegration < ApplicationRecord
   end
 
   private def create_intent(registration, amount_iso, currency_iso, paying_user)
-    manual_record = ManualPaymentRecord.create(amount_iso_denomination: amount_iso, currency_code: currency_iso, manual_status: :created)
-    # We create a registration payment with the payment ticket instead of upon payment completion
-    # so that organizers can mark a registrant as paid even if the registrant hasn't submitted a payment reference yet
-    registration.registration_payments.create!(
-      amount_lowest_denomination: amount_iso,
-      currency_code: currency_iso,
-      receipt: manual_record,
-      user: paying_user,
-      is_completed: false,
-    )
+    # manual_record = ManualPaymentRecord.create(amount_iso_denomination: amount_iso, currency_code: currency_iso, manual_status: :created)
+    # # We create a registration payment with the payment ticket instead of upon payment completion
+    # # so that organizers can mark a registrant as paid even if the registrant hasn't submitted a payment reference yet
+    # registration.registration_payments.create!(
+    #   amount_lowest_denomination: amount_iso,
+    #   currency_code: currency_iso,
+    #   receipt: manual_record,
+    #   user: paying_user,
+    #   is_completed: false,
+    # )
 
     PaymentIntent.create!(
       holder: registration,
-      payment_record: manual_record,
-      client_secret: manual_record.id,
       initiated_by: paying_user,
-      wca_status: manual_record.determine_wca_status,
+      wca_status: PaymentIntent.wca_statuses[:created],
     )
   end
 
