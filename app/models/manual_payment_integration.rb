@@ -7,7 +7,7 @@ class ManualPaymentIntegration < ApplicationRecord
     Rails.env.production? && EnvConfig.WCA_LIVE_SITE?
   end
 
-  def prepare_intent(registration, amount_iso, currency_iso, paying_user)
+  def prepare_intent(registration, amount_iso, currency_iso, paying_user, payment_reference: nil)
     existing_intent = registration.manual_payment_intent
     if existing_intent.present?
       existing_intent.payment_record.update(amount_iso_denomination: amount_iso, currency_code: currency_iso)
@@ -17,8 +17,13 @@ class ManualPaymentIntegration < ApplicationRecord
     self.create_intent(registration, amount_iso, currency_iso, paying_user)
   end
 
-  private def create_intent(registration, amount_iso, currency_iso, paying_user)
-    manual_record = ManualPaymentRecord.create(amount_iso_denomination: amount_iso, currency_code: currency_iso, manual_status: :created)
+  private def create_intent(registration, amount_iso, currency_iso, paying_user, payment_reference: nil)
+    manual_record = ManualPaymentRecord.create(
+      amount_iso_denomination: amount_iso,
+      currency_code: currency_iso,
+      manual_status: payment_reference.present? ? :created : :user_submitted,
+      payment_reference: payment_reference
+    )
     # We create a registration payment with the payment ticket instead of upon payment completion
     # so that organizers can mark a registrant as paid even if the registrant hasn't submitted a payment reference yet
     # registration.registration_payments.create!(
@@ -32,7 +37,9 @@ class ManualPaymentIntegration < ApplicationRecord
     PaymentIntent.create!(
       holder: registration,
       initiated_by: paying_user,
-      wca_status: PaymentIntent.wca_statuses[:created],
+      client_secret: manual_record.id,
+      wca_status: manual_record.determine_wca_status,
+      payment_record: manual_record
     )
   end
 
@@ -40,14 +47,16 @@ class ManualPaymentIntegration < ApplicationRecord
     ManualPaymentRecord.find(record_id)
   end
 
-  def find_payment_from_request(params)
-    # The client secret is just the id of the database model, but we override the payment_reference
-    # from the new one, so we can update it in update_status. This is simulating getting an updated version
-    # from a payment provider after paying
-    ManualPaymentRecord.find(params[:client_secret]).tap do |mpr|
-      mpr.payment_reference = params[:payment_reference]
-      mpr.manual_status = ManualPaymentRecord.manual_statuses[:user_submitted]
-    end
+  def find_payment_intent_from_request(params)
+    # Because there is no outgoing request to a payment provider, we did not create a PaymentIntent during the payment_ticket step
+    # Thus, we need to create the PaymentIntent and associated PaymentRecord now instead
+
+    registration = Registration.find(params[:registration_id])
+    entry_fee = registration.competition.base_entry_fee_lowest_denomination
+    currency_code = registration.competition.currency_code
+    user = registration.user
+
+    prepare_intent(registration, entry_fee, currency_code, user, payment_reference: params[:payment_reference])
   end
 
   def retrieve_payments(payment_intent)

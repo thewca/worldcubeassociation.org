@@ -1353,12 +1353,16 @@ RSpec.describe 'API Registrations' do
         get payment_ticket_api_v1_registration_path(reg), headers: headers, params: { payment_integration_type: 'manual' }
       end
 
-      # TODO: Add tests for reg payment, payment intent and manual payment record?
       it 'succeeds' do
         expect(response).to be_successful
       end
 
-      it 'creates a PaymentIntent' do
+      it 'returns client_secret: manual' do
+        expect(response.parsed_body).to eq({ 'client_secret' => 'manual' })
+      end
+
+      it 'does not create a PaymentIntent' do
+        expect(PaymentIntent.where(payment_record_type: "ManualPaymentRecord")).to be_empty
       end
     end
   end
@@ -1394,33 +1398,34 @@ RSpec.describe 'API Registrations' do
 
   describe 'GET #payment_completion' do
     context 'manual payments' do
-      context 'first-time payment' do
+      context 'first-time payment', :zxc do
         let(:comp) { create(:competition, :manual_connected, :registration_open, :visible) }
         let(:reg) { create(:registration, competition: comp) }
-        let(:payment_intent) { create(:payment_intent, :manual, holder: reg) }
-        let(:manual_record) { payment_intent.payment_record }
 
         before do
           sign_in reg.user
           get registration_payment_completion_path(comp, 'manual'), headers: headers, params: {
-            client_secret: manual_record.id, payment_reference: 'test_reference'
+            registration_id: reg.id, payment_reference: 'test_reference'
           }
+          @payment_intent = reg.payment_intents.first
+          @manual_record = @payment_intent.payment_record
         end
 
         it 'updates the manual payment record with user_submitted status' do
-          expect(manual_record.reload.manual_status).to eq('user_submitted')
+          expect(@manual_record.reload.manual_status).to eq('user_submitted')
         end
 
-        it 'updates the payment reference' do
-          expect(manual_record.reload.payment_reference).to eq('test_reference')
+        it 'updates the payment reference', :cxz do
+          expect(@manual_record.reload.payment_reference).to eq('test_reference')
         end
 
         it 'payment intent has requires_capture wca_status' do
-          expect(payment_intent.reload.wca_status).to eq('requires_capture')
+          expect(@payment_intent.reload.wca_status).to eq('requires_capture')
         end
 
-        it 'does not create another registration payment' do
+        it 'creates an incomplete registration payment' do
           expect(reg.reload.registration_payments.count).to eq(1)
+          expect(reg.reload.registration_payments.first.is_completed).to eq(false)
         end
       end
 

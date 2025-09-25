@@ -21,7 +21,6 @@ RSpec.describe PaymentIntent do
     end
   end
 
-
   describe 'enforce status consistency' do
     it 'allows creation of a PaymentIntent with no linked PaymentRecord' do
       intent = build(:payment_intent, payment_record: nil, wca_status: 'created')

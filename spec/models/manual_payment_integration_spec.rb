@@ -3,11 +3,11 @@
 require 'rails_helper'
 
 RSpec.describe ManualPaymentIntegration do
-  describe '#prepare_intent' do
-    let(:competition) { create(:competition, :manual_connected) }
-    let(:registration) { create(:registration, competition: competition) }
-    let(:payment_account) { competition.payment_account_for(:manual) }
+  let(:competition) { create(:competition, :manual_connected) }
+  let(:registration) { create(:registration, competition: competition) }
+  let(:payment_account) { competition.payment_account_for(:manual) }
 
+  describe '#prepare_intent' do
     context 'no payment intent exists' do
       before do
         payment_account.prepare_intent(registration, 1000, "USD", registration.user)
@@ -35,6 +35,33 @@ RSpec.describe ManualPaymentIntegration do
       it 'resuses the existing ManualPaymentRecord' do
         expect(ManualPaymentRecord.count).to be(1)
       end
+    end
+  end
+
+  describe '#find_payment_intent_from_request' do
+    let(:params) do
+      {
+        registration_id: registration.id,
+      }.with_indifferent_access # To mimic behaviour of params payload
+    end
+
+    it 'returns a `created` payment intent' do
+      intent = payment_account.find_payment_intent_from_request(params)
+
+      expect(intent.wca_status).to eq('created')
+    end
+
+    it 'persists the payment intent to the database' do
+      expect(registration.payment_intents.any?).to be(false)
+
+      payment_account.find_payment_intent_from_request(params)
+
+      expect(registration.payment_intents.count).to be(1)
+    end
+
+    it 'creates a `created` manual payment record' do
+      payment_account.find_payment_intent_from_request(params)
+      expect(registration.payment_intents.first.payment_record.manual_status).to eq('created')
     end
   end
 end
