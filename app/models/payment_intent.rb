@@ -2,7 +2,7 @@
 
 class PaymentIntent < ApplicationRecord
   belongs_to :holder, polymorphic: true
-  belongs_to :payment_record, polymorphic: true, optional: true
+  belongs_to :payment_record, polymorphic: true
   belongs_to :initiated_by, class_name: 'User' # For now only users can initiate payments - in future, this may become a polymorphic association
   belongs_to :confirmation_source, polymorphic: true, optional: true
   belongs_to :cancellation_source, polymorphic: true, optional: true
@@ -102,12 +102,6 @@ class PaymentIntent < ApplicationRecord
     end
 
     def wca_status_consistency
-      if payment_record.nil?
-        errors.add(:wca_status, 'Must have an associated payment record if in a non-created state') if
-          wca_status != PaymentIntent.wca_statuses[:created]
-        return
-      end
-
       status_map = payment_record_type.safe_constantize::WCA_TO_PROVIDER_STATUS_MAP
       error_string = "#{wca_status} is not compatible with #{payment_record_type} status: #{payment_record.provider_status}"
       errors.add(:wca_status, error_string) unless status_map[wca_status.to_sym].include?(payment_record.provider_status)

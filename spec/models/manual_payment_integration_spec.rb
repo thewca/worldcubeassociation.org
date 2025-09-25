@@ -18,17 +18,9 @@ RSpec.describe ManualPaymentIntegration do
         expect(@payment_intent.initiated_by).to eq(registration.user)
       end
 
-      it 'does not create a ManualPaymentRecord', :cxz do
-        expect(@payment_intent.payment_record).to eq(nil)
+      it 'creates a `created` ManualPaymentRecord' do
+        expect(@payment_intent.payment_record.manual_status).to eq('created')
       end
-
-      # it 'creates a `created` ManualPaymentRecord' do
-      #   expect(@payment_intent.payment_record.manual_status).to eq('created')
-      # end
-
-      # it 'creates an incomplete RegistrationPayment' do
-      #   expect(@payment_intent.payment_record.registration_payment.is_completed).to be false
-      # end
     end
 
     context 'payment already exists' do

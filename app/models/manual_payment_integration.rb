@@ -18,9 +18,9 @@ class ManualPaymentIntegration < ApplicationRecord
   end
 
   private def create_intent(registration, amount_iso, currency_iso, paying_user)
-    # manual_record = ManualPaymentRecord.create(amount_iso_denomination: amount_iso, currency_code: currency_iso, manual_status: :created)
-    # # We create a registration payment with the payment ticket instead of upon payment completion
-    # # so that organizers can mark a registrant as paid even if the registrant hasn't submitted a payment reference yet
+    manual_record = ManualPaymentRecord.create(amount_iso_denomination: amount_iso, currency_code: currency_iso, manual_status: :created)
+    # We create a registration payment with the payment ticket instead of upon payment completion
+    # so that organizers can mark a registrant as paid even if the registrant hasn't submitted a payment reference yet
     # registration.registration_payments.create!(
     #   amount_lowest_denomination: amount_iso,
     #   currency_code: currency_iso,
