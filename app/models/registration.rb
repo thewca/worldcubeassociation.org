@@ -218,6 +218,10 @@ class Registration < ApplicationRecord
     receipt,
     user_id
   )
+    # Don't create multiple registration payments for a manual payment
+    return if receipt.instance_of?(ManualPaymentRecord) &&
+              registration_payments.where(receipt_type: CompetitionPaymentIntegration::INTEGRATION_RECORD_TYPES[:manual]).any?
+
     add_history_entry({ payment_status: receipt.determine_wca_status, iso_amount: amount_lowest_denomination }, "user", user_id, 'Payment')
     registration_payments.create!(
       amount_lowest_denomination: amount_lowest_denomination,

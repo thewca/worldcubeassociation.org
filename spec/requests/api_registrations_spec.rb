@@ -1398,10 +1398,10 @@ RSpec.describe 'API Registrations' do
 
   describe 'GET #payment_completion' do
     context 'manual payments' do
-      context 'first-time payment' do
-        let(:comp) { create(:competition, :manual_connected, :registration_open, :visible) }
-        let(:reg) { create(:registration, competition: comp) }
+      let(:comp) { create(:competition, :manual_connected, :registration_open, :visible) }
+      let(:reg) { create(:registration, competition: comp) }
 
+      context 'first-time payment' do
         before do
           sign_in reg.user
           get registration_payment_completion_path(comp, 'manual'), headers: headers, params: {
@@ -1430,15 +1430,13 @@ RSpec.describe 'API Registrations' do
       end
 
       context 'updating payment reference' do
-        let(:comp) { create(:competition, :manual_connected, :registration_open, :visible) }
-        let(:reg) { create(:registration, competition: comp) }
-        let(:payment_intent) { create(:payment_intent, :manual_requires_capture, holder: reg) }
+        let!(:payment_intent) { create(:payment_intent, :manual_requires_capture, holder: reg) }
         let(:manual_record) { payment_intent.payment_record }
 
         before do
           sign_in reg.user
           get registration_payment_completion_path(comp, 'manual'), headers: headers, params: {
-            client_secret: manual_record.id, payment_reference: 'updated reference'
+            registration_id: reg.id, payment_reference: 'updated reference'
           }
         end
 
