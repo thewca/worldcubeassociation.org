@@ -263,9 +263,10 @@ class Api::V1::RegistrationsController < Api::V1::ApiController
   end
 
   def payment_ticket
-    payment_integration_type = params.require(:payment_integration_type)
+    # TODO: GB Remove this default after deployment, once we're sure all existing competitions' requests
+    #   have been fully processed (~30 minutes after the AWS deployment cycle is complete should be more than sufficient)
+    payment_integration_type = params[:payment_integration_type] || :stripe
 
-    # TODO: Refactor the frontend to submit the values of CompetitionPaymentIntegration::AVAILABLE_INTEGRATIONS, and compare against those
     return render json: { client_secret: 'manual' } if payment_integration_type == 'manual'
 
     iso_donation_amount = params[:iso_donation_amount].to_i
