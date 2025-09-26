@@ -41,7 +41,6 @@ class PaymentIntent < ApplicationRecord
       # The order of operations here is critical:
       #   We need to update the underlying raw record first, so that `determine_wca_status` works correctly
       self.payment_record.update_status(api_intent)
-      previous_wca_status = self.wca_status
       updated_wca_status = self.determine_wca_status.to_s
 
       case updated_wca_status
@@ -76,8 +75,7 @@ class PaymentIntent < ApplicationRecord
           )
         end
       when PaymentIntent.wca_statuses[:created],
-        PaymentIntent.wca_statuses[:pending],
-
+        PaymentIntent.wca_statuses[:pending]
         self.update!(
           confirmed_at: nil,
           confirmation_source: nil,

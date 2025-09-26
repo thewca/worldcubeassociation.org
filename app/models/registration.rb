@@ -228,7 +228,7 @@ class Registration < ApplicationRecord
       currency_code: currency_code,
       receipt: receipt,
       user_id: user_id,
-      is_completed: receipt.determine_wca_status == PaymentIntent.wca_statuses[:succeeded]
+      is_completed: receipt.determine_wca_status == PaymentIntent.wca_statuses[:succeeded],
     )
   end
 

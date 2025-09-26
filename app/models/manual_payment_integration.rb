@@ -10,7 +10,7 @@ class ManualPaymentIntegration < ApplicationRecord
   def prepare_intent(registration, amount_iso, currency_iso, paying_user, payment_reference: nil)
     existing_intent = registration.manual_payment_intent
     if existing_intent.present?
-      reference_to_write = payment_reference.present? ? payment_reference : existing_intent.payment_record.payment_reference
+      reference_to_write = payment_reference.presence || existing_intent.payment_record.payment_reference
       existing_intent.payment_record.update(amount_iso_denomination: amount_iso, currency_code: currency_iso, payment_reference: reference_to_write)
       return existing_intent
     end
@@ -23,7 +23,7 @@ class ManualPaymentIntegration < ApplicationRecord
       amount_iso_denomination: amount_iso,
       currency_code: currency_iso,
       manual_status: payment_reference.present? ? :user_submitted : :created,
-      payment_reference: payment_reference
+      payment_reference: payment_reference,
     )
     # We create a registration payment with the payment ticket instead of upon payment completion
     # so that organizers can mark a registrant as paid even if the registrant hasn't submitted a payment reference yet
@@ -40,7 +40,7 @@ class ManualPaymentIntegration < ApplicationRecord
       initiated_by: paying_user,
       client_secret: manual_record.id,
       wca_status: manual_record.determine_wca_status,
-      payment_record: manual_record
+      payment_record: manual_record,
     )
   end
 

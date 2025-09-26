@@ -1425,7 +1425,7 @@ RSpec.describe 'API Registrations' do
 
         it 'creates an incomplete registration payment' do
           expect(reg.reload.registration_payments.count).to eq(1)
-          expect(reg.reload.registration_payments.first.is_completed).to eq(false)
+          expect(reg.reload.registration_payments.first.is_completed).to be(false)
         end
       end
 
