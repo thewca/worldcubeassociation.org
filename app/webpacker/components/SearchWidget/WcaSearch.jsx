@@ -75,7 +75,8 @@ export function IdWcaSearch({
     }),
   }, WCA_SEARCH_QUERY_CLIENT);
 
-  const valueOptions = multiple ? fetchedOptions : fetchedOptions[0];
+  const filteredOptions = fetchedOptions.filter(Boolean);
+  const valueOptions = multiple ? filteredOptions : filteredOptions[0];
 
   const onChangeIdOnly = useCallback((evt, data) => {
     const { value: apiValues } = data;
