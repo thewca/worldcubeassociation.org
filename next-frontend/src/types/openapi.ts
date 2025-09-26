@@ -106,6 +106,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v0/competitions/{competitionId}/results": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Returns all results */
+        get: operations["resultsByCompetition"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v0/incidents": {
         parameters: {
             query?: never;
@@ -672,6 +689,7 @@ export interface components {
                 avatar: components["schemas"]["UserAvatar"];
             }[];
         };
+        Results: components["schemas"]["Result"][];
         Incident: {
             id: string;
             title: string;
@@ -744,7 +762,6 @@ export interface components {
             };
             competition_count: number;
         };
-        Results: components["schemas"]["Result"][];
         UserGroup: {
             id: number;
             name: string;
@@ -998,6 +1015,28 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["CompetitionIndex"][];
+                };
+            };
+        };
+    };
+    resultsByCompetition: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                competitionId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Results"];
                 };
             };
         };
