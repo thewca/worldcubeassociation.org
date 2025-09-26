@@ -1,0 +1,69 @@
+type: object
+required:
+  - id
+  - registrant_id
+  - user_id
+  - user
+  - competing
+properties:
+  id:
+    type: integer
+  registrant_id:
+    type: integer
+  user_id:
+    type: integer
+  guests:
+    type: integer
+  user:
+    type: object
+    required:
+      - id
+      - name
+      - gender
+      - country_iso2
+      - wca_id
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      gender:
+        type: string
+      country_iso2:
+        type: string
+      wca_id:
+        type: string
+  competing:
+    type: object
+    required:
+      - event_ids
+    properties:
+      event_ids:
+        type: array
+        items:
+          type: string
+      # only when authenticated
+      registration_status:
+        type: string
+      registered_on:
+        type: string
+        format: datetime
+      comment:
+        type: string
+      admin_comment:
+        type: string
+  # only when authenticated
+  payment:
+    type: object
+    properties:
+      has_paid:
+        type: boolean
+      payment_status:
+        type: string
+      paid_amount_iso:
+        type: integer
+      currency_code:
+        type: string
+      updated_at:
+        type: string
+        format: datetime
