@@ -15,7 +15,7 @@ class ManualPaymentIntegration < ApplicationRecord
       return existing_intent
     end
 
-    self.create_intent(registration, amount_iso, currency_iso, paying_user, payment_reference: payment_reference)
+    self.create_intent(registration, amount_iso, currency_iso, paying_user, payment_reference)
   end
 
   private def create_intent(registration, amount_iso, currency_iso, paying_user, payment_reference = nil)
@@ -47,8 +47,9 @@ class ManualPaymentIntegration < ApplicationRecord
     entry_fee = registration.competition.base_entry_fee_lowest_denomination
     currency_code = registration.competition.currency_code
     user = registration.user
+    reference = params[:payment_reference]
 
-    prepare_intent(registration, entry_fee, currency_code, user, payment_reference: params[:payment_reference])
+    prepare_intent(registration, entry_fee, currency_code, user, reference)
   end
 
   def retrieve_payments(payment_intent)
