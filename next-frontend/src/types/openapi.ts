@@ -984,7 +984,16 @@ export interface operations {
     };
     competitionList: {
         parameters: {
-            query?: never;
+            query?: {
+                include_cancelled?: string;
+                continent?: string;
+                country_iso2?: string;
+                delegate?: string;
+                event_ids?: string[];
+                start?: string;
+                end?: string;
+                admin_status?: string;
+            };
             header?: never;
             path?: never;
             cookie?: never;
