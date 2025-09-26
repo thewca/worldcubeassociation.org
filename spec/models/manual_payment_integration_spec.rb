@@ -42,7 +42,7 @@ RSpec.describe ManualPaymentIntegration do
     let(:params) do
       {
         registration_id: registration.id,
-        payment_reference: "test reference"
+        payment_reference: "test reference",
       }.with_indifferent_access # To mimic behaviour of params payload
     end
 
