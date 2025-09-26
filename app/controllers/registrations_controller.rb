@@ -455,10 +455,13 @@ class RegistrationsController < ApplicationController
     # Some API gateways like Stripe provide the client_secret as a kind of "checksum" (or fraud protection)
     #   back to us upon redirect. Other providers (like PayPal…) unfortunately don't.
     #   So we only compare this secret value with our stored intent record if it's actually provided to us
-    validation_token = params[:payment_intent_client_secret]
-    if validation_token.present? && stored_intent.client_secret != validation_token
-      flash[:error] = t("registrations.payment_form.errors.generic.secret_invalid", provider: t("payments.payment_providers.#{payment_integration}"))
-      return redirect_to competition_register_path(competition)
+    # TODO: Refactor `secret_check` to `validate_token`, and consider making this a PaymentIntent method
+    if payment_integration == :stripe
+      secret_check = params[:payment_intent_client_secret]
+      unless secret_check.present? && stored_intent.client_secret == secret_check
+        flash[:error] = t("registrations.payment_form.errors.generic.secret_invalid", provider: t("payments.payment_providers.#{payment_integration}"))
+        return redirect_to competition_register_path(competition)
+      end
     end
 
     remote_intent = stored_intent.retrieve_remote

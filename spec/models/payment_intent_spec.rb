@@ -116,7 +116,7 @@ RSpec.describe PaymentIntent do
 
       it 'only allows 1 payment intent for a manual payment per registration' do
         manual_record = ManualPaymentRecord.create(
-          amount_iso_denomination: 1000, currency_code: 'usd', manual_status: :user_submitted, payment_reference: "ref"
+          amount_iso_denomination: 1000, currency_code: 'usd', manual_status: :user_submitted, payment_reference: "ref",
         )
 
         expect do
@@ -136,7 +136,7 @@ RSpec.describe PaymentIntent do
         reg2 = create(:registration, competition: manual_comp)
 
         manual_record = ManualPaymentRecord.create(
-          amount_iso_denomination: 1000, currency_code: 'usd', manual_status: :user_submitted, payment_reference: "ref"
+          amount_iso_denomination: 1000, currency_code: 'usd', manual_status: :user_submitted, payment_reference: "ref",
         )
 
         expect do
@@ -166,9 +166,8 @@ RSpec.describe PaymentIntent do
 
       it 'allows multiple payment intents with different payment record types' do
         manual_record = ManualPaymentRecord.create(
-          amount_iso_denomination: 1000, currency_code: 'usd', manual_status: :user_submitted, payment_reference: "ref"
+          amount_iso_denomination: 1000, currency_code: 'usd', manual_status: :user_submitted, payment_reference: "ref",
         )
-
 
         expect do
           PaymentIntent.create!(
