@@ -3,6 +3,7 @@ import { Provider } from "@auth/core/providers";
 
 export const WCA_PROVIDER_ID = "WCA";
 export const WCA_CMS_PROVIDER_ID = `${WCA_PROVIDER_ID}-CMS`;
+export const TOKEN_ENDPOINT = `${process.env.OIDC_ISSUER}/oauth/token`;
 
 const baseWcaProvider: Provider = {
   id: WCA_PROVIDER_ID,
@@ -56,13 +57,57 @@ export const authConfig: NextAuthConfig = {
         // Subsequent logins, but the `access_token` is still valid
         return token;
       } else {
-        // TODO Implement Refreshing
-        return token;
+        // as per https://authjs.dev/guides/refresh-token-rotation
+        if (!token.refresh_token) throw new TypeError("Missing refresh_token");
+
+        try {
+          const response = await fetch(TOKEN_ENDPOINT, {
+            method: "POST",
+            body: new URLSearchParams({
+              client_id: baseWcaProvider.clientId!,
+              client_secret: baseWcaProvider.clientSecret!,
+              grant_type: "refresh_token",
+              refresh_token: token.refresh_token! as string,
+            }),
+          });
+
+          const tokensOrError = await response.json();
+
+          if (!response.ok) throw tokensOrError;
+
+          // A response looks like this
+          // {
+          //  access_token: 'xx',
+          //  token_type: 'xx',
+          //  expires_in: 7199,
+          //  refresh_token: 'xx',
+          //  scope: 'xx',
+          //  created_at: 1758544723,
+          //  id_token: 'xx'
+          // }
+
+          const newTokens = tokensOrError as {
+            access_token: string;
+            expires_in: number;
+            refresh_token: string;
+          };
+
+          return {
+            ...token,
+            access_token: newTokens.access_token,
+            expires_at: Math.floor(Date.now() / 1000 + newTokens.expires_in),
+            refresh_token: newTokens.refresh_token,
+          };
+        } catch (error) {
+          console.error("Error refreshing access_token", error);
+          // If we fail to refresh the token, return an error so we can handle it on the page
+          token.error = "RefreshTokenError";
+          return token;
+        }
       }
     },
     async session({ session, token }) {
-      // @ts-expect-error TODO: Fix this
-      session.accessToken = token.access_token;
+      session.accessToken = token.access_token as string;
       session.user.id = token.userId as string;
       return session;
     },
