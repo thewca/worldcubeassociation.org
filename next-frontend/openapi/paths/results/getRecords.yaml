@@ -1,0 +1,36 @@
+get:
+  summary: Get the current records for all regions
+  parameters:
+    - in: query
+      name: event_id
+      schema:
+        type: string
+    - in: query
+      name: region
+      schema:
+        type: string
+    - in: query
+      name: show
+      schema:
+        type: string
+    - in: query
+      name: gender
+      schema:
+        type: string
+  operationId: getRecords
+  responses:
+    "200":
+      description: Successfully retrieved records
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - records
+              - timestamp
+            properties:
+              records:
+                $ref: '../../schemas/results/RecordByEvent.yaml'
+              timestamp:
+                type: string
+                format: date
