@@ -1430,7 +1430,7 @@ RSpec.describe 'API Registrations' do
       end
 
       context 'updating payment reference' do
-        let!(:payment_intent) { create(:payment_intent, :manual_requires_capture, holder: reg) }
+        let!(:payment_intent) { create(:payment_intent, :manual, holder: reg) }
         let(:manual_record) { payment_intent.payment_record }
 
         before do

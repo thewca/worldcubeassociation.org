@@ -7,7 +7,7 @@ class ManualPaymentIntegration < ApplicationRecord
     Rails.env.production? && EnvConfig.WCA_LIVE_SITE?
   end
 
-  def prepare_intent(registration, amount_iso, currency_iso, paying_user, payment_reference: nil)
+  def prepare_intent(registration, amount_iso, currency_iso, paying_user, payment_reference = nil)
     existing_intent = registration.manual_payment_intent
     if existing_intent.present?
       reference_to_write = payment_reference.presence || existing_intent.payment_record.payment_reference
@@ -18,7 +18,7 @@ class ManualPaymentIntegration < ApplicationRecord
     self.create_intent(registration, amount_iso, currency_iso, paying_user, payment_reference: payment_reference)
   end
 
-  private def create_intent(registration, amount_iso, currency_iso, paying_user, payment_reference: nil)
+  private def create_intent(registration, amount_iso, currency_iso, paying_user, payment_reference = nil)
     manual_record = ManualPaymentRecord.create(
       amount_iso_denomination: amount_iso,
       currency_code: currency_iso,

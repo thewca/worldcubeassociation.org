@@ -10,7 +10,7 @@ RSpec.describe ManualPaymentIntegration do
   describe '#prepare_intent' do
     context 'no payment intent exists' do
       before do
-        payment_account.prepare_intent(registration, 1000, "USD", registration.user)
+        payment_account.prepare_intent(registration, 1000, "USD", registration.user, "test reference")
         @payment_intent = PaymentIntent.first
       end
 
@@ -18,16 +18,16 @@ RSpec.describe ManualPaymentIntegration do
         expect(@payment_intent.initiated_by).to eq(registration.user)
       end
 
-      it 'creates a `created` ManualPaymentRecord' do
-        expect(@payment_intent.payment_record.manual_status).to eq('created')
+      it 'creates a `user_submitted` ManualPaymentRecord' do
+        expect(@payment_intent.payment_record.manual_status).to eq('user_submitted')
       end
     end
 
     context 'payment already exists' do
-      let!(:payment_intent) { create(:payment_intent, :manual_requires_capture, holder: registration) }
+      let!(:payment_intent) { create(:payment_intent, :manual, holder: registration) }
 
       it 'reuses the existing PaymentIntent' do
-        prepared_intent = payment_account.prepare_intent(registration, 1000, "USD", registration.user)
+        prepared_intent = payment_account.prepare_intent(registration, 1000, "USD", registration.user, "test_reference")
         expect(prepared_intent).to eq(payment_intent)
         expect(PaymentIntent.count).to be(1)
       end
@@ -45,10 +45,10 @@ RSpec.describe ManualPaymentIntegration do
       }.with_indifferent_access # To mimic behaviour of params payload
     end
 
-    it 'returns a `created` payment intent' do
+    it 'returns a `requires_capture` payment intent' do
       intent = payment_account.find_payment_intent_from_request(params)
 
-      expect(intent.wca_status).to eq('created')
+      expect(intent.wca_status).to eq('requires_capture')
     end
 
     it 'persists the payment intent to the database' do
@@ -61,7 +61,7 @@ RSpec.describe ManualPaymentIntegration do
 
     it 'creates a `created` manual payment record' do
       payment_account.find_payment_intent_from_request(params)
-      expect(registration.payment_intents.first.payment_record.manual_status).to eq('created')
+      expect(registration.payment_intents.first.payment_record.manual_status).to eq('user_submitted')
     end
   end
 end

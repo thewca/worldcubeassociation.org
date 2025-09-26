@@ -84,7 +84,7 @@ class PaymentIntent < ApplicationRecord
           wca_status: updated_wca_status,
         )
       when PaymentIntent.wca_statuses[:requires_capture]
-        yield api_intent
+        yield api_intent if block_given?
       end
 
       self.update_common_attributes!(api_intent, updated_wca_status)

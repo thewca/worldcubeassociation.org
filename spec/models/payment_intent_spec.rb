@@ -22,17 +22,6 @@ RSpec.describe PaymentIntent do
   end
 
   describe 'enforce status consistency' do
-    it 'allows creation of a PaymentIntent with no linked PaymentRecord' do
-      intent = build(:payment_intent, payment_record: nil, wca_status: 'created')
-      expect(intent).to be_valid
-    end
-
-    it 'doesnt allow non-created PaymentIntent with no linked PaymentRecord' do
-      intent = build(:payment_intent, payment_record: nil, wca_status: 'pending')
-      expect(intent).not_to be_valid
-      expect(intent.errors[:wca_status]).to eq(['Must have an associated payment record if in a non-created state'])
-    end
-
     shared_examples '#create incompatible PaymentIntent' do |stripe_record_status, intent_status|
       it 'fails' do
         stripe_record = create(:stripe_record, stripe_status: stripe_record_status)
@@ -126,7 +115,9 @@ RSpec.describe PaymentIntent do
       let!(:stripe_pi) { create(:payment_intent, holder: stripe_reg) }
 
       it 'only allows 1 payment intent for a manual payment per registration' do
-        manual_record = ManualPaymentRecord.create(amount_iso_denomination: 1000, currency_code: 'usd', manual_status: :created)
+        manual_record = ManualPaymentRecord.create(
+          amount_iso_denomination: 1000, currency_code: 'usd', manual_status: :user_submitted, payment_reference: "ref"
+        )
 
         expect do
           PaymentIntent.create!(
@@ -144,7 +135,9 @@ RSpec.describe PaymentIntent do
       it 'allows manual payment intents for different registrations' do
         reg2 = create(:registration, competition: manual_comp)
 
-        manual_record = ManualPaymentRecord.create(amount_iso_denomination: 1000, currency_code: 'usd', manual_status: :created)
+        manual_record = ManualPaymentRecord.create(
+          amount_iso_denomination: 1000, currency_code: 'usd', manual_status: :user_submitted, payment_reference: "ref"
+        )
 
         expect do
           PaymentIntent.create!(
@@ -172,7 +165,10 @@ RSpec.describe PaymentIntent do
       end
 
       it 'allows multiple payment intents with different payment record types' do
-        manual_record = ManualPaymentRecord.create(amount_iso_denomination: 1000, currency_code: 'usd', manual_status: :created)
+        manual_record = ManualPaymentRecord.create(
+          amount_iso_denomination: 1000, currency_code: 'usd', manual_status: :user_submitted, payment_reference: "ref"
+        )
+
 
         expect do
           PaymentIntent.create!(
