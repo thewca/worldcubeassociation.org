@@ -183,6 +183,7 @@ class Registration < ApplicationRecord
   end
 
   def manual_payment_intent
+    # We have a validation in payment_intent which ensures that there will only be one PaymentIntent representing a manual payment per registration
     payment_intents.where(payment_record_type: 'ManualPaymentRecord').first
   end
 

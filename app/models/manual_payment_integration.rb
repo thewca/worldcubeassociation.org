@@ -25,15 +25,6 @@ class ManualPaymentIntegration < ApplicationRecord
       manual_status: payment_reference.present? ? :user_submitted : :created,
       payment_reference: payment_reference,
     )
-    # We create a registration payment with the payment ticket instead of upon payment completion
-    # so that organizers can mark a registrant as paid even if the registrant hasn't submitted a payment reference yet
-    # registration.registration_payments.create!(
-    #   amount_lowest_denomination: amount_iso,
-    #   currency_code: currency_iso,
-    #   receipt: manual_record,
-    #   user: paying_user,
-    #   is_completed: false,
-    # )
 
     PaymentIntent.create!(
       holder: registration,

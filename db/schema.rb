@@ -800,7 +800,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_09_11_125658) do
   end
 
   create_table "manual_payment_records", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
-    t.string "payment_reference"
+    t.string "payment_reference", null: false
     t.string "manual_status", null: false
     t.integer "amount_iso_denomination", null: false
     t.string "currency_code", null: false

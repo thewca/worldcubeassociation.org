@@ -36,6 +36,6 @@ class ManualPaymentRecord < ApplicationRecord
   end
 
   def update_status(updated_record)
-    update(payment_reference: updated_record.payment_reference, manual_status: updated_record.manual_status)
+    update(payment_reference: updated_record.payment_reference)
   end
 end
