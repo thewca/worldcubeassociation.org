@@ -42,6 +42,7 @@ RSpec.describe ManualPaymentIntegration do
     let(:params) do
       {
         registration_id: registration.id,
+        payment_reference: "test reference"
       }.with_indifferent_access # To mimic behaviour of params payload
     end
 
@@ -59,9 +60,10 @@ RSpec.describe ManualPaymentIntegration do
       expect(registration.payment_intents.count).to be(1)
     end
 
-    it 'creates a `created` manual payment record' do
+    it 'creates a `user_submitted` manual payment record' do
       payment_account.find_payment_intent_from_request(params)
       expect(registration.payment_intents.first.payment_record.manual_status).to eq('user_submitted')
+      expect(registration.payment_intents.first.payment_record.payment_reference).to eq('test reference')
     end
   end
 end
