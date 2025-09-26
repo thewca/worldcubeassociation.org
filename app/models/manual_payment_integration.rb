@@ -14,14 +14,14 @@ class ManualPaymentIntegration < ApplicationRecord
       return existing_intent
     end
 
-    self.create_intent(registration, amount_iso, currency_iso, paying_user)
+    self.create_intent(registration, amount_iso, currency_iso, paying_user, payment_reference: payment_reference)
   end
 
   private def create_intent(registration, amount_iso, currency_iso, paying_user, payment_reference: nil)
     manual_record = ManualPaymentRecord.create(
       amount_iso_denomination: amount_iso,
       currency_code: currency_iso,
-      manual_status: payment_reference.present? ? :created : :user_submitted,
+      manual_status: payment_reference.present? ? :user_submitted : :created,
       payment_reference: payment_reference
     )
     # We create a registration payment with the payment ticket instead of upon payment completion

@@ -1398,7 +1398,7 @@ RSpec.describe 'API Registrations' do
 
   describe 'GET #payment_completion' do
     context 'manual payments' do
-      context 'first-time payment', :zxc do
+      context 'first-time payment' do
         let(:comp) { create(:competition, :manual_connected, :registration_open, :visible) }
         let(:reg) { create(:registration, competition: comp) }
 
@@ -1415,7 +1415,7 @@ RSpec.describe 'API Registrations' do
           expect(@manual_record.reload.manual_status).to eq('user_submitted')
         end
 
-        it 'updates the payment reference', :cxz do
+        it 'updates the payment reference' do
           expect(@manual_record.reload.payment_reference).to eq('test_reference')
         end
 

@@ -75,8 +75,8 @@ class PaymentIntent < ApplicationRecord
           )
         end
       when PaymentIntent.wca_statuses[:created],
-        PaymentIntent.wca_statuses[:pending]
-        # Reset by the gateway
+        PaymentIntent.wca_statuses[:pending],
+
         self.update!(
           confirmed_at: nil,
           confirmation_source: nil,
@@ -84,6 +84,8 @@ class PaymentIntent < ApplicationRecord
           cancellation_source: nil,
           wca_status: updated_wca_status,
         )
+      when PaymentIntent.wca_statuses[:requires_capture]
+        yield api_intent
       end
 
       self.update_common_attributes!(api_intent, updated_wca_status)
