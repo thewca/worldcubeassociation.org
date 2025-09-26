@@ -40,14 +40,31 @@ async function GeneralPage({ competitionId }: { competitionId: string }) {
 
   return (
     <>
-      <HStack gap="8" alignItems="stretch">
-        <VStack maxW="45%" w="45%" gap="8">
+      <HStack
+        gap="8"
+        alignItems="stretch"
+        flexDir={{ base: "column", md: "row" }}
+      >
+        <VStack
+          maxW={{ base: "100%", md: "45%" }}
+          w={{ base: "100%", md: "45%" }}
+          gap="8"
+        >
           <InfoCard competitionInfo={competitionInfo} t={t} />
           <RegistrationCard competitionInfo={competitionInfo} />
           <EventCard competitionInfo={competitionInfo} />
         </VStack>
-        <VStack maxW="55%" w="55%" gap="8">
-          <HStack gap="8" alignItems="stretch" width="100%">
+        <VStack
+          maxW={{ base: "100%", md: "55%" }}
+          w={{ base: "100%", md: "55%" }}
+          gap="8"
+        >
+          <HStack
+            gap="8"
+            alignItems="stretch"
+            width="100%"
+            flexDir={{ base: "column", sm: "row" }}
+          >
             <OrganizationTeamCard competitionInfo={competitionInfo} />
             <MarkdownFirstImage content={competitionInfo.information} />
           </HStack>
