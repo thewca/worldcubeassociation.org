@@ -450,7 +450,7 @@ GEM
     jmespath (1.6.2)
     js_cookie_rails (2.2.0)
       railties (>= 3.1)
-    json (2.14.1)
+    json (2.15.0)
     json-schema (6.0.0)
       addressable (~> 2.8)
       bigdecimal (~> 3.1)
@@ -875,7 +875,7 @@ GEM
     simplecov_json_formatter (0.1.4)
     simpleidn (0.2.1)
       unf (~> 0.1.4)
-    slack-ruby-client (2.7.0)
+    slack-ruby-client (3.0.0)
       faraday (>= 2.0.1)
       faraday-mashify
       faraday-multipart
@@ -1284,7 +1284,7 @@ CHECKSUMS
   jbuilder (2.14.1) sha256=4eb26376ff60ef100cb4fd6fd7533cd271f9998327e86adf20fd8c0e69fabb42
   jmespath (1.6.2) sha256=238d774a58723d6c090494c8879b5e9918c19485f7e840f2c1c7532cf84ebcb1
   js_cookie_rails (2.2.0) sha256=06e6b27ee093945c3acf3982d2dbf9e9117d1130f33bb07e1660ebea68229c62
-  json (2.14.1) sha256=b08994d751e9f0697cc089243a3cfabf998da1d25e81e7dd0d0f84136ff74642
+  json (2.15.0) sha256=bc24d490a1d81bcbf6b45ee5c02695545d4ed37f679cee879b789a2bbb53ad5c
   json-schema (6.0.0) sha256=79ecaffba197008912933f66f6c5428f5ce7716e42bb1a8f0d56079f2d58633f
   jwt (3.1.2) sha256=af6991f19a6bb4060d618d9add7a66f0eeb005ac0bc017cd01f63b42e122d535
   kaminari (1.2.2) sha256=c4076ff9adccc6109408333f87b5c4abbda5e39dc464bd4c66d06d9f73442a3e
@@ -1454,7 +1454,7 @@ CHECKSUMS
   simplecov-lcov (0.9.0) sha256=7a77a31e200a595ed4b0249493056efd0c920601f53d2ef135ca34ee796346cd
   simplecov_json_formatter (0.1.4) sha256=529418fbe8de1713ac2b2d612aa3daa56d316975d307244399fa4838c601b428
   simpleidn (0.2.1) sha256=35dda985b761dff5751fefa7fba02e477427c975d47b11c4c4ffaf01afe1c719
-  slack-ruby-client (2.7.0) sha256=0a230686a9afc0cacea20f68d14762eb18cb7a425676c6cfa89715481ad49bd3
+  slack-ruby-client (3.0.0) sha256=e22d07e3b586018b38dcfb3b14af9542c6063bf6992bc0c4f2433d0b5b8a674a
   snaky_hash (2.0.3) sha256=25a3d299566e8153fb02fa23fd9a9358845950f7a523ddbbe1fa1e0d79a6d456
   spring (4.4.0) sha256=ec4e6cf5fb48d96b9ec9a80ebb40f962f2467b651c000693f33c14b6d6c340af
   spring-commands-rspec (1.0.4) sha256=6202e54fa4767452e3641461a83347645af478bf45dddcca9737b43af0dd1a2c
