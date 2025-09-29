@@ -71,6 +71,13 @@ const afterCompetitionTabs = (
         query: { competitionId: competitionInfo.id },
       }),
     },
+    {
+      i18nKey: "competitions.nav.menu.scrambles",
+      href: route({
+        pathname: "/competitions/[competitionId]/scrambles",
+        query: { competitionId: competitionInfo.id },
+      }),
+    },
   ];
 };
 
