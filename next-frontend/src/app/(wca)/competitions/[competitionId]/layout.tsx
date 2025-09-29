@@ -1,5 +1,6 @@
 import { Container, Text } from "@chakra-ui/react";
 import TabMenu from "@/components/competitions/TabMenu";
+import MobileMenu from "@/components/competitions/MobileMenu";
 import { getCompetitionInfo } from "@/lib/wca/competitions/getCompetitionInfo";
 
 export default async function CompetitionLayout({
@@ -19,9 +20,8 @@ export default async function CompetitionLayout({
 
   return (
     <Container minW="80vw" p="8">
-      <TabMenu competitionId={competitionId} competitionInfo={competitionInfo}>
-        {children}
-      </TabMenu>
+      <MobileMenu competitionInfo={competitionInfo}>{children}</MobileMenu>
+      <TabMenu competitionInfo={competitionInfo}>{children}</TabMenu>
     </Container>
   );
 }
