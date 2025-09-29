@@ -26,7 +26,7 @@
     "@fullcalendar/react": "^6.1.19",
     "@fullcalendar/timegrid": "^6.1.19",
     "@hello-pangea/dnd": "^18.0.1",
-    "@rails/actioncable": "^8.0.201",
+    "@rails/actioncable": "^8.0.300",
     "@rails/ujs": "^7.1.502",
     "@stripe/react-stripe-js": "^4.0.2",
     "@stripe/stripe-js": "^7.9.0",

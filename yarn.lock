@@ -2563,10 +2563,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rails/actioncable@npm:^8.0.201":
-  version: 8.0.201
-  resolution: "@rails/actioncable@npm:8.0.201"
-  checksum: 10c0/422bc0ad1b2ce84365b4ab65ed7b606d07bb591fa6ac91251e24942d33c3f7202d4f4d4ae758ce91f5bc44c834067c7c7af2e572015a89705feb52c8cbdfe4d6
+"@rails/actioncable@npm:^8.0.300":
+  version: 8.0.300
+  resolution: "@rails/actioncable@npm:8.0.300"
+  checksum: 10c0/b93b63c57909ff5b17154a0d564ef0e68b36bcfe416c68e140c6c74bc4f156a9bc38c253d9e37ae0b8f80a29d7c6034e6296c3882735d0b8bcdfe1f256c54d80
   languageName: node
   linkType: hard
 
@@ -10185,7 +10185,7 @@ __metadata:
     "@fullcalendar/timegrid": "npm:^6.1.19"
     "@hello-pangea/dnd": "npm:^18.0.1"
     "@pmmmwh/react-refresh-webpack-plugin": "npm:^0.6.1"
-    "@rails/actioncable": "npm:^8.0.201"
+    "@rails/actioncable": "npm:^8.0.300"
     "@rails/ujs": "npm:^7.1.502"
     "@stripe/react-stripe-js": "npm:^4.0.2"
     "@stripe/stripe-js": "npm:^7.9.0"
