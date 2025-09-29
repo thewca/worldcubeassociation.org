@@ -3,6 +3,41 @@ get:
   tags:
     - competitions
   operationId: competitionList
+  parameters:
+    - name: include_cancelled
+      in: query
+      schema:
+        type: string
+    - name: continent
+      in: query
+      schema:
+        type: string
+    - name: country_iso2
+      in: query
+      schema:
+        type: string
+    - name: delegate
+      in: query
+      schema:
+        type: string
+    - name: event_ids
+      in: query
+      schema:
+        type: array
+        items:
+          type: string
+    - name: start
+      in: query
+      schema:
+        type: string
+    - name: end
+      in: query
+      schema:
+        type: string
+    - name: admin_status
+      in: query
+      schema:
+        type: string
   responses:
     '200':
       description: Successful response
