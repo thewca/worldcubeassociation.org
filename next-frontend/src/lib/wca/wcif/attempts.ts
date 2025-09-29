@@ -77,11 +77,50 @@ export function parseMbldResult(val: number): MultiBldResult {
   };
 }
 
+export function decodeMbldAttemptResult(value: number) {
+  if (value <= 0) return { solved: 0, attempted: 0, centiseconds: value };
+  // Old-style results, written as a 10-digit number, start with a '1'.
+  // New-style results start with a '0'.
+  const isOldStyleResult = value.toString().padStart(10, "0").startsWith("1");
+  if (isOldStyleResult) {
+    const seconds = value % 1e5;
+    const attempted = Math.floor(value / 1e5) % 100;
+    const solved = 99 - (Math.floor(value / 1e7) % 100);
+    const centiseconds = seconds === 99999 ? null : seconds * 100;
+    return { solved, attempted, centiseconds };
+  }
+  const missed = value % 100;
+  const seconds = Math.floor(value / 100) % 1e5;
+  const points = 99 - (Math.floor(value / 1e7) % 100);
+  const solved = points + missed;
+  const attempted = solved + missed;
+  const centiseconds = seconds === 99999 ? null : seconds * 100;
+  return { solved, attempted, centiseconds };
+}
+
 // See https://www.worldcubeassociation.org/regulations/#9f12c
 export function attemptResultToMbldPoints(attemptResult: AttemptResult) {
   const { solved, attempted } = parseMbldResult(attemptResult);
   const missed = attempted - solved;
   return solved - missed;
+}
+
+export function formatAttemptsForResult(
+  result: { attempts: number[]; best_index: number; worst_index: number },
+  eventId: string,
+) {
+  // Only highlight best and worst if the number of unskipped attempts is 5.
+  const highlightBestAndWorst =
+    result.attempts.filter((a) => a !== 0).length === 5;
+  return result.attempts
+    .map((attempt, index) => {
+      const attemptStr = formatAttemptResult(attempt, eventId);
+      return highlightBestAndWorst &&
+        (result.best_index === index || result.worst_index === index)
+        ? `(${attemptStr})`
+        : attemptStr;
+    })
+    .join(" ");
 }
 
 function formatMbldAttemptResult(attemptResult: number) {
