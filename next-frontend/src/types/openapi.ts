@@ -4,6 +4,23 @@
  */
 
 export interface paths {
+    "/v1/competitions/{competitionId}/registrations": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get competition registrations */
+        get: operations["competitionRegistrationsV2"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v0/competitions/{competitionId}/": {
         parameters: {
             query?: never;
@@ -81,6 +98,47 @@ export interface paths {
         };
         /** Returns the podium results */
         get: operations["competitionPodiums"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v0/competitions/{competitionId}/psych-sheet/{eventId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get competition registrations */
+        get: {
+            parameters: {
+                query?: {
+                    sort_by?: string;
+                };
+                header?: never;
+                path: {
+                    competitionId: string;
+                    eventId: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Successful response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["PsychSheet"];
+                    };
+                };
+            };
+        };
         put?: never;
         post?: never;
         delete?: never;
@@ -280,6 +338,35 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        RegistrationDataV2: {
+            id: number;
+            registrant_id: number;
+            user_id: number;
+            guests?: number;
+            user: {
+                id: number;
+                name: string;
+                gender: string;
+                country_iso2: string;
+                wca_id: string;
+            };
+            competing: {
+                event_ids: string[];
+                registration_status?: string;
+                /** Format: datetime */
+                registered_on?: string;
+                comment?: string;
+                admin_comment?: string;
+            };
+            payment?: {
+                has_paid?: boolean;
+                payment_status?: string;
+                paid_amount_iso?: number;
+                currency_code?: string;
+                /** Format: datetime */
+                updated_at?: string;
+            };
+        };
         UserAvatar: {
             /**
              * Format: uri
@@ -634,6 +721,22 @@ export interface components {
             regional_single_record: string | null;
             regional_average_record: string | null;
         };
+        PsychSheet: {
+            sort_by: string;
+            sort_by_second: string;
+            sorted_rankings: {
+                name: string;
+                user_id: number;
+                wca_id: string;
+                country_iso2: string;
+                average_best: number;
+                average_rank: number;
+                single_best: number;
+                single_rank: number;
+                tied_previous: boolean;
+                pos: number;
+            }[];
+        };
         CompetitionIndex: {
             id: string;
             name: string;
@@ -872,6 +975,28 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
+    competitionRegistrationsV2: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                competitionId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RegistrationDataV2"][];
+                };
+            };
+        };
+    };
     competitionById: {
         parameters: {
             query?: never;
