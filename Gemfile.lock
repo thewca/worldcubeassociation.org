@@ -522,7 +522,8 @@ GEM
     multi_xml (0.7.2)
       bigdecimal (~> 3.1)
     multipart-post (2.4.1)
-    mysql2 (0.5.6)
+    mysql2 (0.5.7)
+      bigdecimal
     nenv (0.3.0)
     net-http (0.6.0)
       uri
@@ -1318,7 +1319,7 @@ CHECKSUMS
   multi_json (1.17.0) sha256=76581f6c96aebf2e85f8a8b9854829e0988f335e8671cd1a56a1036eb75e4a1b
   multi_xml (0.7.2) sha256=307a96dc48613badb7b2fc174fd4e62d7c7b619bc36ea33bfd0c49f64f5787ce
   multipart-post (2.4.1) sha256=9872d03a8e552020ca096adadbf5e3cb1cd1cdd6acd3c161136b8a5737cdb4a8
-  mysql2 (0.5.6) sha256=70f447d45d6b3cc16b00f7dd30366f708a81b4093a35d026ff7135d778d8da33
+  mysql2 (0.5.7) sha256=ba09ede515a0ae8a7192040a1b778c0fb0f025fa5877e9be895cd325fa5e9d7b
   nenv (0.3.0) sha256=d9de6d8fb7072228463bf61843159419c969edb34b3cef51832b516ae7972765
   net-http (0.6.0) sha256=9621b20c137898af9d890556848c93603716cab516dc2c89b01a38b894e259fb
   net-imap (0.5.10) sha256=f84d206a296bff48a3a10507567fc38b050d2a40c92ea0d448164f64e60d6205
