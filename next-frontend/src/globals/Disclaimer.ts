@@ -1,25 +1,5 @@
-import type { GlobalConfig, Block } from "payload";
-import { markdownConvertedField } from "@/collections/helpers";
-
-const disclaimerItem: Block = {
-  slug: "disclaimerItem",
-  labels: {
-    singular: "Item",
-    plural: "Items",
-  },
-  fields: [
-    {
-      name: "title",
-      type: "text",
-    },
-    {
-      name: "content",
-      type: "richText",
-      required: true,
-    },
-    markdownConvertedField("content"),
-  ],
-};
+import type { GlobalConfig } from "payload";
+import { ParagraphBlock } from "@/blocks/text/paragraph";
 
 export const Disclaimer: GlobalConfig = {
   slug: "disclaimer-page",
@@ -29,7 +9,7 @@ export const Disclaimer: GlobalConfig = {
       name: "blocks",
       type: "blocks",
       required: true,
-      blocks: [disclaimerItem],
+      blocks: [ParagraphBlock],
     },
   ],
 };
