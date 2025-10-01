@@ -17,6 +17,7 @@ namespace :results do
     SQL
   end
 
+  desc "Check if the attempts table is correct"
   task check_attempts: :environment do
     sql = <<-SQL.squish
     SELECT ra.id, ra.result_id, ra.attempt_number, ra.value,
