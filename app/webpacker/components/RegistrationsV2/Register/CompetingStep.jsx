@@ -59,6 +59,8 @@ const potentialWarnings = (competitionInfo) => {
   return warnings;
 };
 
+const getName = (eventId) => events.byId[eventId].name;
+
 function getUpdateMessage(
   hasCommentChanged,
   comment,
@@ -74,11 +76,11 @@ function getUpdateMessage(
   return `\n${
     hasCommentChanged ? `Updated Comment: ${comment}\n` : ''
   }${
-    addedEventIds.length ? `Added Events: ${addedEventIds.map((eventId) => events.byId[eventId].name).join(', ')}\n` : ''
+    addedEventIds.length ? `Added Events: ${addedEventIds.map(getName).join(', ')}\n` : ''
   }${
-    removedEventIds.length ? `Removed Events: ${removedEventIds.map((eventId) => events.byId[eventId].name).join(', ')}\n` : ''
+    removedEventIds.length ? `Removed Events: ${removedEventIds.map(getName).join(', ')}\n` : ''
   }${
-    hasEventsChanged ? `Updated Event List: ${selectedEventIds.map((eventId) => events.byId[eventId].name).join(', ')}\n` : ''
+    hasEventsChanged ? `Updated Event List: ${selectedEventIds.map(getName).join(', ')}\n` : ''
   }${
     hasGuestsChanged ? `Updated Guests: ${guests}\n` : ''
   }`;
