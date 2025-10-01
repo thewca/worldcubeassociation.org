@@ -248,7 +248,7 @@ export default function CompetingStep({
         const updateMessage = getUpdateMessage(
           hasCommentChanged,
           comment,
-          registration.competing.event_ids,
+          registration?.competing?.event_ids ?? [],
           selectedEventIds.asArray,
           hasGuestsChanged,
           guests,
@@ -267,7 +267,7 @@ export default function CompetingStep({
     hasCommentChanged,
     comment,
     hasEventsChanged,
-    registration.competing.event_ids,
+    registration?.competing?.event_ids,
     selectedEventIds.asArray,
     hasGuestsChanged,
     guests,
