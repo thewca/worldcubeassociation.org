@@ -69,17 +69,26 @@ export default function RegistrationHistory({ registrationId }) {
               <Table.Cell>
                 {Object.entries(entry.changed_attributes).map(
                   ([k, v]) => (
-                    <span key={k}>
-                      Changed
-                      {' '}
-                      {k}
-                      {' '}
-                      to
-                      {' '}
-                      {formatHistoryColumn(k, v)}
-                      {' '}
+                    <>
+                      {k === 'event_ids' ? (
+                        <span key={k}>
+                          Toggled events
+                          {' '}
+                          {formatHistoryColumn(k, v)}
+                        </span>
+                      ) : (
+                        <span key={k}>
+                          Changed
+                          {' '}
+                          {k}
+                          {' '}
+                          to
+                          {' '}
+                          {formatHistoryColumn(k, v)}
+                        </span>
+                      )}
                       <br />
-                    </span>
+                    </>
                   ),
                 )}
               </Table.Cell>
