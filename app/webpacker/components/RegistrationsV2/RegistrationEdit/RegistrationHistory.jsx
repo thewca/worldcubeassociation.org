@@ -67,7 +67,7 @@ export default function RegistrationHistory({ registrationId }) {
                         <span key={k}>
                           Toggled events
                           {' '}
-                          {renderEventIcons(v)}
+                          <EventIcons ids={v} />
                         </span>
                       ) : (
                         <span key={k}>
@@ -101,6 +101,6 @@ export default function RegistrationHistory({ registrationId }) {
   );
 }
 
-const renderEventIcons = (ids) => {
+function EventIcons({ ids }) {
   return events.official.map((e) => ids.includes(e.id) && <EventIcon key={e.id} id={e.id} style={{ cursor: 'unset' }} />);
-};
+}
