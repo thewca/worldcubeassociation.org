@@ -3,7 +3,18 @@
 namespace :results do
   desc "Migrates all results to attempts"
   task migrate_attempts: [:environment] do
-    Result.find_each(&:create_or_update_attempts)
+    ActiveRecord::Base.connection.execute <<-SQL.squish
+    INSERT IGNORE INTO result_attempts (value, attempt_number, result_id)
+    SELECT value1, 1, id FROM results WHERE value1 != 0
+    UNION ALL
+    SELECT value2, 2, id FROM results WHERE value2 != 0
+    UNION ALL
+    SELECT value3, 3, id FROM results WHERE value3 != 0
+    UNION ALL
+    SELECT value4, 4, id FROM results WHERE value4 != 0
+    UNION ALL
+    SELECT value5, 5, id FROM results WHERE value5 != 0
+    SQL
   end
 
   desc "Migrates results from one competition to attempts"
