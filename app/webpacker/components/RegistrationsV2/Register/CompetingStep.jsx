@@ -59,6 +59,17 @@ const potentialWarnings = (competitionInfo) => {
   return warnings;
 };
 
+function getUpdateMessage(
+  hasCommentChanged,
+  comment,
+  hasEventsChanged,
+  selectedEventIds,
+  hasGuestsChanged,
+  guests,
+) {
+  return `\n${hasCommentChanged ? `Comment: ${comment}\n` : ''}${hasEventsChanged ? `Events: ${selectedEventIds.map((eventId) => events.byId[eventId].name).join(', ')}\n` : ''}${hasGuestsChanged ? `Guests: ${guests}\n` : ''}`;
+}
+
 export default function CompetingStep({
   competitionInfo,
   user,
@@ -218,7 +229,14 @@ export default function CompetingStep({
           },
         });
       } else {
-        const updateMessage = getUpdateMessage(hasCommentChanged, comment, hasEventsChanged, selectedEventIds, hasGuestsChanged, guests);
+        const updateMessage = getUpdateMessage(
+          hasCommentChanged,
+          comment,
+          hasEventsChanged,
+          selectedEventIds.asArray,
+          hasGuestsChanged,
+          guests,
+        );
         window.location = contactCompetitionUrl(competitionInfo.id, encodeURIComponent(I18n.t('competitions.registration_v2.update.update_contact_message', { update_params: updateMessage })));
       }
     }).catch(() => {
@@ -458,8 +476,4 @@ export default function CompetingStep({
       </Form>
     </Segment>
   );
-}
-
-const getUpdateMessage = (hasCommentChanged, comment, hasEventsChanged, selectedEventIds, hasGuestsChanged, guests) => {
-  return `\n${hasCommentChanged ? `Comment: ${comment}\n` : ''}${hasEventsChanged ? `Events: ${selectedEventIds.asArray.map((eventId) => events.byId[eventId].name).join(', ')}\n` : ''}${hasGuestsChanged ? `Guests: ${guests}\n` : ''}`
 }
