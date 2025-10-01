@@ -12,11 +12,8 @@ import getUsersInfo from '../api/user/post/getUserInfo';
 import Loading from '../../Requests/Loading';
 import { getRegistrationHistory } from '../api/registration/get/get_registrations';
 
-const formatHistoryColumn = (key, value) => {
-  if (key === 'event_ids') {
-    return events.official.flatMap((e) => (value.includes(e.id) ? <EventIcon key={e.id} id={e.id} style={{ cursor: 'unset' }} /> : []));
-  }
-  return value;
+const renderEventIcons = (ids) => {
+  return events.official.flatMap((e) => (ids.includes(e.id) ? <EventIcon key={e.id} id={e.id} style={{ cursor: 'unset' }} /> : []));
 };
 
 export default function RegistrationHistory({ registrationId }) {
@@ -74,7 +71,7 @@ export default function RegistrationHistory({ registrationId }) {
                         <span key={k}>
                           Toggled events
                           {' '}
-                          {formatHistoryColumn(k, v)}
+                          {renderEventIcons(v)}
                         </span>
                       ) : (
                         <span key={k}>
