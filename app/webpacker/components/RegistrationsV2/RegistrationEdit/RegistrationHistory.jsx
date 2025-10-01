@@ -84,7 +84,7 @@ export default function RegistrationHistory({ registrationId }) {
                           {' '}
                           to
                           {' '}
-                          {formatHistoryColumn(k, v)}
+                          {v}
                         </span>
                       )}
                       <br />
