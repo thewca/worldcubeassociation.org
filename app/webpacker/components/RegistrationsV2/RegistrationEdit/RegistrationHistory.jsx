@@ -12,10 +12,6 @@ import getUsersInfo from '../api/user/post/getUserInfo';
 import Loading from '../../Requests/Loading';
 import { getRegistrationHistory } from '../api/registration/get/get_registrations';
 
-const renderEventIcons = (ids) => {
-  return events.official.flatMap((e) => (ids.includes(e.id) ? <EventIcon key={e.id} id={e.id} style={{ cursor: 'unset' }} /> : []));
-};
-
 export default function RegistrationHistory({ registrationId }) {
   const {
     isLoading: historyLoading,
@@ -104,3 +100,7 @@ export default function RegistrationHistory({ registrationId }) {
     </>
   );
 }
+
+const renderEventIcons = (ids) => {
+  return events.official.flatMap((e) => (ids.includes(e.id) ? <EventIcon key={e.id} id={e.id} style={{ cursor: 'unset' }} /> : []));
+};
