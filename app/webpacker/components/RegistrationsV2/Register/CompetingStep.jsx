@@ -62,17 +62,25 @@ const potentialWarnings = (competitionInfo) => {
 function getUpdateMessage(
   hasCommentChanged,
   comment,
-  hasEventsChanged,
+  originalEventIds,
   selectedEventIds,
   hasGuestsChanged,
   guests,
 ) {
+  const addedEventIds = selectedEventIds.filter((id) => !originalEventIds.includes(id));
+  const removedEventIds = originalEventIds.filter((id) => !selectedEventIds.includes(id));
+  const hasEventsChanged = (addedEventIds.length + removedEventIds.length) > 0;
+
   return `\n${
-    hasCommentChanged ? `Comment: ${comment}\n` : ''
+    hasCommentChanged ? `Updated Comment: ${comment}\n` : ''
   }${
-    hasEventsChanged ? `Events: ${selectedEventIds.map((eventId) => events.byId[eventId].name).join(', ')}\n` : ''
+    addedEventIds.length ? `Added Events: ${addedEventIds.map((eventId) => events.byId[eventId].name).join(', ')}\n` : ''
   }${
-    hasGuestsChanged ? `Guests: ${guests}\n` : ''
+    removedEventIds.length ? `Removed Events: ${removedEventIds.map((eventId) => events.byId[eventId].name).join(', ')}\n` : ''
+  }${
+    hasEventsChanged ? `Updated Event List: ${selectedEventIds.map((eventId) => events.byId[eventId].name).join(', ')}\n` : ''
+  }${
+    hasGuestsChanged ? `Updated Guests: ${guests}\n` : ''
   }`;
 }
 
@@ -90,7 +98,7 @@ export default function CompetingStep({
 
   const {
     isRegistered, isPolling, isProcessing, startPolling, refetchRegistration,
-    isPending, isWaitingList, registrationId,
+    isPending, isWaitingList, registration, registrationId,
   } = useRegistration();
 
   const dispatch = useDispatch();
@@ -238,7 +246,7 @@ export default function CompetingStep({
         const updateMessage = getUpdateMessage(
           hasCommentChanged,
           comment,
-          hasEventsChanged,
+          registration.competing.event_ids,
           selectedEventIds.asArray,
           hasGuestsChanged,
           guests,
@@ -257,6 +265,7 @@ export default function CompetingStep({
     hasCommentChanged,
     comment,
     hasEventsChanged,
+    registration.competing.event_ids,
     selectedEventIds.asArray,
     hasGuestsChanged,
     guests,
