@@ -18,22 +18,27 @@ namespace :results do
   end
 
   task check_attempts: :environment do
-    total = Result.count
-    i = 0
+    sql = <<-SQL.squish
+    SELECT ra.id, ra.result_id, ra.attempt_number, ra.value,
+           r.value1, r.value2, r.value3, r.value4, r.value5
+    FROM result_attempts ra
+    JOIN results r ON ra.result_id = r.id
+    WHERE (ra.attempt_number = 1 AND ra.value <> r.value1)
+       OR (ra.attempt_number = 2 AND ra.value <> r.value2)
+       OR (ra.attempt_number = 3 AND ra.value <> r.value3)
+       OR (ra.attempt_number = 4 AND ra.value <> r.value4)
+       OR (ra.attempt_number = 5 AND ra.value <> r.value5)
+    SQL
 
-    Result.find_each do |result|
-      result.result_attempts.each do |attempt|
-        expected = result.public_send("value#{attempt.attempt_number}")
-        if attempt.value != expected
-          abort "Result #{result.id} does not match attempt #{attempt.attempt_number} (attempt id #{attempt.id})"
-        end
+    mismatches = ActiveRecord::Base.connection.exec_query(sql)
+    if mismatches.any?
+      puts "Found #{mismatches.count} mismatches"
+      mismatches.each do |mismatch|
+        puts mismatch.inspect
       end
-
-      i += 1
-      puts "Checked #{i}/#{total} results" if i % 1000 == 0
+    else
+      puts "All result_attempts match results"
     end
-
-    puts "All result_attempts match their results"
   end
 
   desc "Migrates results from one competition to attempts"
