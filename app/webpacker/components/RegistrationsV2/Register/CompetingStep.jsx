@@ -67,7 +67,13 @@ function getUpdateMessage(
   hasGuestsChanged,
   guests,
 ) {
-  return `\n${hasCommentChanged ? `Comment: ${comment}\n` : ''}${hasEventsChanged ? `Events: ${selectedEventIds.map((eventId) => events.byId[eventId].name).join(', ')}\n` : ''}${hasGuestsChanged ? `Guests: ${guests}\n` : ''}`;
+  return `\n${
+    hasCommentChanged ? `Comment: ${comment}\n` : ''
+  }${
+    hasEventsChanged ? `Events: ${selectedEventIds.map((eventId) => events.byId[eventId].name).join(', ')}\n` : ''
+  }${
+    hasGuestsChanged ? `Guests: ${guests}\n` : ''
+  }`;
 }
 
 export default function CompetingStep({
