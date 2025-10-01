@@ -17,6 +17,25 @@ namespace :results do
     SQL
   end
 
+  task check_attempts: :environment do
+    total = Result.count
+    i = 0
+
+    Result.find_each do |result|
+      result.result_attempts.each do |attempt|
+        expected = result.public_send("value#{attempt.attempt_number}")
+        if attempt.value != expected
+          abort "Result #{result.id} does not match attempt #{attempt.attempt_number} (attempt id #{attempt.id})"
+        end
+      end
+
+      i += 1
+      puts "Checked #{i}/#{total} results" if i % 1000 == 0
+    end
+
+    puts "All result_attempts match their results"
+  end
+
   desc "Migrates results from one competition to attempts"
   task :migrate_competition_results, [:competition_id] => [:environment] do |_, args|
     competition_id = args[:competition_id]
