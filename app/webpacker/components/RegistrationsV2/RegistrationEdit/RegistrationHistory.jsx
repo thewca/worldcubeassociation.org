@@ -62,15 +62,15 @@ export default function RegistrationHistory({ registrationId }) {
               <Table.Cell>
                 {Object.entries(entry.changed_attributes).map(
                   ([k, v]) => (
-                    <>
+                    <React.Fragment key={k}>
                       {k === 'event_ids' ? (
-                        <span key={k}>
+                        <span>
                           Toggled events
                           {' '}
                           <EventIcons ids={v} />
                         </span>
                       ) : (
-                        <span key={k}>
+                        <span>
                           Changed
                           {' '}
                           {k}
@@ -81,7 +81,7 @@ export default function RegistrationHistory({ registrationId }) {
                         </span>
                       )}
                       <br />
-                    </>
+                    </React.Fragment>
                   ),
                 )}
               </Table.Cell>
