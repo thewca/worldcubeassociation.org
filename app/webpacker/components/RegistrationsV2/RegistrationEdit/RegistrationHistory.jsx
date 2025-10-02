@@ -102,5 +102,7 @@ export default function RegistrationHistory({ registrationId }) {
 }
 
 function EventIcons({ ids }) {
-  return events.official.map((e) => ids.includes(e.id) && <EventIcon key={e.id} id={e.id} style={{ cursor: 'unset' }} />);
+  return events.official.map((e) => (
+    ids.includes(e.id) && <EventIcon key={e.id} id={e.id} style={{ cursor: 'unset' }} />
+  ));
 }
