@@ -15,6 +15,7 @@ FactoryBot.define do
       # In order to be valid, a result must have a round.
       # Make sure it exists before going through validations.
       FactoryBot.create(:round, competition: result.competition, event_id: result.event_id, format_id: result.format_id) if !result.round && !options.skip_round_creation
+      result.create_or_update_attempts
     end
 
     competition_id { competition.id }
