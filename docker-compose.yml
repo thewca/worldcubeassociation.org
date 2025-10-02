@@ -92,6 +92,10 @@ services:
   wca_payload_db:
     image: mongo:8
     container_name: "payload_db"
+    command:
+      - --quiet
+      - --logpath
+      - /var/log/mongodb/mongod.log
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: root
