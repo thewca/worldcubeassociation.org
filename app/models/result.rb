@@ -23,6 +23,11 @@ class Result < ApplicationRecord
 
       { value: value, attempt_number: n, result_id: id } unless value.zero?
     end
+
+    # Delete attempts when the value was set to 0
+    zero_attempts = (1..5).select { |n| public_send(:"value#{n}").zero? }
+    ResultAttempt.where(result_id: id, attempt_number: zero_attempts).delete_all if zero_attempts.any?
+
     ResultAttempt.upsert_all(attempts)
   end
 
