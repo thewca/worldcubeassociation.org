@@ -15,7 +15,7 @@ class Result < ApplicationRecord
 
   has_many :result_attempts, dependent: :destroy
 
-  after_commit :create_or_update_attempts
+  after_update_commit :create_or_update_attempts
 
   def create_or_update_attempts
     attempts = (1..5).filter_map do |n|
