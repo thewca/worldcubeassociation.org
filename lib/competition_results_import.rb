@@ -48,7 +48,7 @@ module CompetitionResultsImport
         result_attempts = (1..5).filter_map do |n|
           value = inbox_res.public_send(:"value#{n}")
 
-          { value: value, attempt_number: n, result_id: id } unless value.zero?
+          { value: value, attempt_number: n } unless value.zero?
         end
 
         {
