@@ -206,7 +206,7 @@ module Resultable
   end
 
   def solve_times
-    @solve_times ||= result_attempts.map {|r| SolveTime.new(event_id, :single, r.value)}.freeze
+    @solve_times ||= result_attempts.map { |r| SolveTime.new(event_id, :single, r.value) }.freeze
   end
 
   def worst_index

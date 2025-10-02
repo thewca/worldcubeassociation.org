@@ -14,10 +14,8 @@ module ResultsHelper
 
     # Because we are using attempts now, there might be fewer attempts than expected
     # Fill up with empty TDs
-    missing_solves =  result.format.expected_solve_count - result.solve_times.length
-    if missing_solves != 0
-      return completed_solves + Array.new(missing_solves, (content_tag :td)).reduce(:+)
-    end
+    missing_solves = result.format.expected_solve_count - result.solve_times.length
+    return completed_solves + Array.new(missing_solves, (content_tag :td)).reduce(:+) if missing_solves != 0
 
     completed_solves
     # rubocop:enable Performance/Sum
