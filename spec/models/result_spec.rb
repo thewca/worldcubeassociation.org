@@ -99,9 +99,9 @@ RSpec.describe Result do
   end
 
   context "valid" do
-    it "skipped solves must all come at the end" do
+    it "skipped solve in the middle causes error" do
       result = build(:result, value2: 0)
-      expect(result).to be_invalid_with_errors(base: ["Skipped solves must all come at the end."])
+      expect(result).to be_invalid_with_errors(base: ["Expected 5 solves, but found 4."])
     end
 
     it "cannot skip all solves" do
@@ -436,9 +436,10 @@ RSpec.describe Result do
     context "check number of non-zero solves" do
       def result_with_n_solves(n, options)
         result = build(:result, options)
-        (1..5).each do |i|
+        (1..5).map do |i|
           result.send :"value#{i}=", i <= n ? 42 : 0
         end
+        result.result_attempts = result.result_attempts_payload.map(&ResultAttempt.method(:new))
         result
       end
 

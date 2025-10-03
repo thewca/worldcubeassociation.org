@@ -15,6 +15,14 @@ class InboxResult < ApplicationRecord
     inbox_person&.name || "<person_id=#{person_id}>"
   end
 
+  def solve_times
+    @solve_times ||= [SolveTime.new(event_id, :single, value1),
+                      SolveTime.new(event_id, :single, value2),
+                      SolveTime.new(event_id, :single, value3),
+                      SolveTime.new(event_id, :single, value4),
+                      SolveTime.new(event_id, :single, value5)].freeze
+  end
+
   alias_method :name, :person_name
 
   def attempts
