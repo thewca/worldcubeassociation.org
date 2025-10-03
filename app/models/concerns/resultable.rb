@@ -206,7 +206,15 @@ module Resultable
   end
 
   def solve_times
-    @solve_times ||= result_attempts.map { |r| SolveTime.new(event_id, :single, r.value) }.freeze
+    @solve_times ||= if is_a?(InboxResult) # TODO: Remove this when we switch from InboxResult to LiveAttempts
+                       [SolveTime.new(event_id, :single, value1),
+                        SolveTime.new(event_id, :single, value2),
+                        SolveTime.new(event_id, :single, value3),
+                        SolveTime.new(event_id, :single, value4),
+                        SolveTime.new(event_id, :single, value5)].freeze
+                     else
+                       result_attempts.map { |r| SolveTime.new(event_id, :single, r.value) }.freeze
+                     end
   end
 
   def worst_index
