@@ -17,14 +17,6 @@ class Result < ApplicationRecord
 
   after_update_commit :create_or_update_attempts
 
-  def result_attempts_payload(**kwargs)
-    (1..5).filter_map do |n|
-      value = public_send(:"value#{n}")
-
-      { value: value, attempt_number: n, **kwargs } unless value.zero?
-    end
-  end
-
   def create_or_update_attempts
     attempts = result_attempts_payload(result_id: self.id)
 

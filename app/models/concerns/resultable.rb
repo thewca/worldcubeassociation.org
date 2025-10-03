@@ -213,6 +213,14 @@ module Resultable
                       SolveTime.new(event_id, :single, value5)].freeze
   end
 
+  def result_attempts_payload(**kwargs)
+    (1..5).filter_map do |n|
+      value = public_send(:"value#{n}")
+
+      { value: value, attempt_number: n, **kwargs } unless value.zero?
+    end
+  end
+
   def worst_index
     sorted_solves_with_index.max[1]
   end
