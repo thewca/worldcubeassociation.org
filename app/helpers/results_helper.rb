@@ -12,9 +12,9 @@ module ResultsHelper
       content_tag :td, solve_time.clock_format, class: classes.join(' ')
     end.reduce(:+)
 
-    # Because we are using attempts now, there might be fewer attempts than expected
-    # Fill up with empty TDs
-    missing_solves = result.format.expected_solve_count - result.solve_times.length
+    # Currently there are always 5 solves in any results, even for mean of 3 or Bo1
+    # That's why we always need to fill it up with 5 tds
+    missing_solves = 5 - result.solve_times.length
     return completed_solves + Array.new(missing_solves, (content_tag :td)).reduce(:+) if missing_solves != 0
 
     completed_solves
