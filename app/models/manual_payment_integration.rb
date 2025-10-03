@@ -49,7 +49,7 @@ class ManualPaymentIntegration < ApplicationRecord
     user = registration.user
     reference = params[:payment_reference]
 
-    prepare_intent(registration, entry_fee, currency_code, user, reference)
+    self.prepare_intent(registration, entry_fee, currency_code, user, reference)
   end
 
   def retrieve_payments(payment_intent)
