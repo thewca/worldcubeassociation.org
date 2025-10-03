@@ -17,12 +17,16 @@ class Result < ApplicationRecord
 
   after_update_commit :create_or_update_attempts
 
-  def create_or_update_attempts
-    attempts = (1..5).filter_map do |n|
+  def result_attempts_payload(**kwargs)
+    (1..5).filter_map do |n|
       value = public_send(:"value#{n}")
 
-      { value: value, attempt_number: n, result_id: id } unless value.zero?
+      { value: value, attempt_number: n, **kwargs } unless value.zero?
     end
+  end
+
+  def create_or_update_attempts
+    attempts = result_attempts_payload(result_id: self.id)
 
     # Delete attempts when the value was set to 0
     zero_attempts = (1..5).select { |n| public_send(:"value#{n}").zero? }

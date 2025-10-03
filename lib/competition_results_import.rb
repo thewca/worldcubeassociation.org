@@ -45,11 +45,7 @@ module CompetitionResultsImport
 
         person_id = inbox_person&.wca_id.presence || inbox_res.person_id
         person_country = inbox_person&.country
-        result_attempts = (1..5).filter_map do |n|
-          value = inbox_res.public_send(:"value#{n}")
-
-          { value: value, attempt_number: n } unless value.zero?
-        end
+        result_attempts = inbox_res.result_attempts_payload
 
         {
           pos: inbox_res.pos,
