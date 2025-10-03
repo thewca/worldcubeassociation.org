@@ -122,11 +122,7 @@ FactoryBot.define do
     end
 
     after(:build) do |result, _options|
-      result.result_attempts = (1..5).filter_map do |n|
-        value = result.public_send(:"value#{n}")
-
-        ResultAttempt.new({ value: value, attempt_number: n }) unless value.zero?
-      end
+      result.result_attempts = result.result_attempts_payload.map(&ResultAttempt.method(:new))
     end
 
     person_id { person.wca_id }
