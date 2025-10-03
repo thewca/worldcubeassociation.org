@@ -17,10 +17,6 @@ FactoryBot.define do
       FactoryBot.create(:round, competition: result.competition, event_id: result.event_id, format_id: result.format_id) if !result.round && !options.skip_round_creation
     end
 
-    after(:create) do |result, _options|
-      result.create_or_update_attempts
-    end
-
     competition_id { competition.id }
     pos { 1 }
     event_id { "333oh" }
@@ -123,6 +119,10 @@ FactoryBot.define do
     instance_eval(&resultable_instance_members)
     transient do
       person { FactoryBot.create(:person) }
+    end
+
+    after(:create) do |result, _options|
+      result.create_or_update_attempts
     end
 
     person_id { person.wca_id }
