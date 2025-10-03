@@ -42,15 +42,7 @@ RSpec.describe Result do
         result = build_result "event_id" => "333", "value1" => 20, "value2" => 10, "value3" => 60, "value4" => SolveTime::SKIPPED_VALUE, "value5" => SolveTime::SKIPPED_VALUE, "average" => SolveTime::SKIPPED_VALUE, "format_id" => "a"
         expect(result.format.expected_solve_count).to eq 5
         expect(result.solve_times).to eq [
-          solve_time(20), solve_time(10), solve_time(60), solve_time(SolveTime::SKIPPED_VALUE), solve_time(SolveTime::SKIPPED_VALUE)
-        ]
-      end
-
-      it "returns 5 SolveTimes even for a round with 3 solves" do
-        result = build_result "event_id" => "333bf", "value1" => 20, "value2" => 10, "value3" => 60, "value4" => SolveTime::SKIPPED_VALUE, "value5" => SolveTime::SKIPPED_VALUE, "average" => SolveTime::SKIPPED_VALUE, "format_id" => "3"
-        expect(result.format.expected_solve_count).to eq 3
-        expect(result.solve_times).to eq [
-          solve_time(20), solve_time(10), solve_time(60), solve_time(SolveTime::SKIPPED_VALUE), solve_time(SolveTime::SKIPPED_VALUE)
+          solve_time(20), solve_time(10), solve_time(60)
         ]
       end
     end
