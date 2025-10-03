@@ -84,7 +84,9 @@ class PaymentIntent < ApplicationRecord
           wca_status: updated_wca_status,
         )
       when PaymentIntent.wca_statuses[:requires_capture]
-        yield api_intent if block_given?
+        payment_account.retrieve_payments(self) do |payment|
+          yield payment if block_given?
+        end
       end
 
       self.update_common_attributes!(api_intent, updated_wca_status)
