@@ -87,6 +87,8 @@ RUN rm -rf node_modules
 
 FROM base AS runtime
 
+RUN ./bin/bundle check
+
 # Install fonts for rendering PDFs (mostly competition summary PDFs)
 # dejavu = Hebrew, Arabic, Greek
 # unfonts-core = Korean
