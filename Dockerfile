@@ -116,8 +116,6 @@ COPY --chown=rails:rails --from=build /rails .
 #   but we also still need `sudo` privileges to be able to install runtime dependencies through apt
 RUN "$PLAYWRIGHT_BROWSERS_PATH/node_modules/playwright/cli.js" install-deps chromium
 
-RUN ./bin/bundle check
-
 USER rails:rails
 
 FROM runtime AS sidekiq

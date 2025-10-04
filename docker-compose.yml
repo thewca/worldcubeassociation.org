@@ -140,7 +140,7 @@ services:
       # Cronjobs are disabled in development by default. If you wish to run cronjobs,
       # set this env variable to any integer value greater than zero
       # CRONJOB_POLLING_MINUTES: 30
-    command: bin/bundle exec sidekiq
+    command: bin/sidekiq
     depends_on:
       wca_environment:
         condition: service_completed_successfully
