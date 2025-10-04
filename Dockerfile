@@ -87,8 +87,6 @@ RUN rm -rf node_modules
 
 FROM base AS runtime
 
-RUN ./bin/bundle check
-
 # Install fonts for rendering PDFs (mostly competition summary PDFs)
 # dejavu = Hebrew, Arabic, Greek
 # unfonts-core = Korean
@@ -117,6 +115,8 @@ COPY --chown=rails:rails --from=build /rails .
 # We already need the Playwright CLI which is part of the /rails folder,
 #   but we also still need `sudo` privileges to be able to install runtime dependencies through apt
 RUN "$PLAYWRIGHT_BROWSERS_PATH/node_modules/playwright/cli.js" install-deps chromium
+
+RUN ./bin/bundle check
 
 USER rails:rails
 
