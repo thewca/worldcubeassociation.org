@@ -14,6 +14,7 @@ export const FaqPage: GlobalConfig = {
       type: "array",
       label: "questions",
       name: "questions",
+      required: true,
       fields: [
         {
           name: "faqQuestion",

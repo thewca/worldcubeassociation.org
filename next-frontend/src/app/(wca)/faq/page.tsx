@@ -21,7 +21,7 @@ export default async function FAQ() {
   const faqPage = await payload.findGlobal({ slug: "faq-page", depth: 2 });
   const faqQuestionsRaw = faqPage.questions;
 
-  if (!faqQuestionsRaw || faqQuestionsRaw.length === 0) {
+  if (faqQuestionsRaw.length === 0) {
     return <Heading>No FAQ Categories, add some!</Heading>;
   }
 

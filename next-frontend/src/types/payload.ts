@@ -1315,12 +1315,10 @@ export interface FaqPage {
     [k: string]: unknown;
   } | null;
   introTextMarkdown?: string | null;
-  questions?:
-    | {
-        faqQuestion: string | FaqQuestion;
-        id?: string | null;
-      }[]
-    | null;
+  questions: {
+    faqQuestion: string | FaqQuestion;
+    id?: string | null;
+  }[];
   updatedAt?: string | null;
   createdAt?: string | null;
 }
