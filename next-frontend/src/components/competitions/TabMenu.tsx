@@ -100,6 +100,7 @@ const afterCompetitionTabs = (
         pathname: "/competitions/[competitionId]/scrambles",
         query: { competitionId: competitionInfo.id },
       }),
+      menuKey: "scrambles",
     },
   ];
 };
