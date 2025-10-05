@@ -48,6 +48,7 @@ import type {
 import Link from "next/link";
 import { route } from "nextjs-routes";
 import { getT } from "@/lib/i18n/get18n";
+import { draftMode } from "next/headers";
 import { MediaImage } from "@/components/MediaImage";
 
 const TextCard = ({ block }: { block: TextCardBlock }) => {
@@ -473,7 +474,11 @@ const renderFullBlock = (entry: FullWidthBlock, keyPrefix = "") => {
 
 export default async function Homepage() {
   const payload = await getPayload({ config });
-  const homepage = await payload.findGlobal({ slug: "home" });
+  const { isEnabled: isDraftMode } = await draftMode();
+  const homepage = await payload.findGlobal({
+    slug: "home",
+    draft: isDraftMode,
+  });
 
   const homepageEntries = homepage?.item || [];
 

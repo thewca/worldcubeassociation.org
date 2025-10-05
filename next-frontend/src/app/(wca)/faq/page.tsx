@@ -7,25 +7,33 @@ import {
   Heading,
   Tabs,
   Accordion,
+  Text,
 } from "@chakra-ui/react";
 import { getPayload } from "payload";
 import config from "@payload-config";
-import { FaqQuestion } from "@/types/payload";
+import { FaqCategory, FaqQuestion } from "@/types/payload";
+import { MarkdownProse } from "@/components/Markdown";
+import { uniqBy } from "lodash";
 
 export default async function FAQ() {
   const payload = await getPayload({ config });
 
-  const faqCategoriesResult = await payload.find({
-    collection: "faqCategories",
-    limit: 0,
-    depth: 1,
-  });
+  const faqPage = await payload.findGlobal({ slug: "faq-page", depth: 2 });
+  const faqQuestionsRaw = faqPage.questions;
 
-  const faqCategories = faqCategoriesResult.docs;
-
-  if (faqCategories.length === 0) {
-    return <Heading>No FAQ categories found, add some!</Heading>;
+  if (faqQuestionsRaw.length === 0) {
+    return <Heading>No FAQ Categories, add some!</Heading>;
   }
+
+  const faqQuestions = faqQuestionsRaw.map(
+    (item) => item.faqQuestion as FaqQuestion,
+  );
+
+  const allCategories = faqQuestions.map(
+    (item) => item.category as FaqCategory,
+  );
+
+  const faqCategories = uniqBy(allCategories, "id");
 
   return (
     <Container>
@@ -33,10 +41,11 @@ export default async function FAQ() {
         <Heading size="5xl"> Frequently Asked Questions</Heading>
         <Card.Root maxW="40em">
           <Card.Body>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-            aliquip ex ea commodo consequat.
+            {faqPage.introTextMarkdown ? (
+              <MarkdownProse content={faqPage.introTextMarkdown} />
+            ) : (
+              <Text>No Intro text, add it!</Text>
+            )}
           </Card.Body>
         </Card.Root>
         <Card.Root variant="hero" overflow="hidden">
@@ -57,19 +66,23 @@ export default async function FAQ() {
                   </Tabs.Trigger>
                 ))}
               </Tabs.List>
-              {faqCategories.map((category) => (
-                <Tabs.Content key={category.id} value={category.id.toString()}>
-                  <Accordion.Root
-                    multiple
-                    collapsible
-                    variant="subtle"
-                    width="full"
+              {faqCategories.map((category) => {
+                const questions = faqQuestions.filter(
+                  (faqQuestion) =>
+                    (faqQuestion.category as FaqCategory).id === category.id,
+                );
+                return (
+                  <Tabs.Content
+                    key={category.id}
+                    value={category.id.toString()}
                   >
-                    {category
-                      .relatedQuestions!.docs!.map(
-                        (question) => question as FaqQuestion,
-                      )
-                      .map((question) => (
+                    <Accordion.Root
+                      multiple
+                      collapsible
+                      variant="subtle"
+                      width="full"
+                    >
+                      {questions.map((question) => (
                         <Accordion.Item
                           key={question.id}
                           value={question.id.toString()}
@@ -84,9 +97,10 @@ export default async function FAQ() {
                           </Accordion.ItemContent>
                         </Accordion.Item>
                       ))}
-                  </Accordion.Root>
-                </Tabs.Content>
-              ))}
+                    </Accordion.Root>
+                  </Tabs.Content>
+                );
+              })}
             </Tabs.Root>
           </Card.Body>
         </Card.Root>

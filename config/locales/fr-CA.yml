@@ -4880,6 +4880,8 @@ fr-CA:
       paypal: PayPal
       #original_hash: 4d08ec5
       stripe: Stripe
+      #original_hash: 7209be5
+      manual: Manuel/Externe
     payment_setup:
       #original_hash: 50d8ee0
       external_dashboard: 'Tableau de bord %{provider}'
@@ -4903,6 +4905,8 @@ fr-CA:
       confirm_account_disconnect: >-
         Êtes-vous sûr·e de vouloir déconnecter le compte %{provider} ? Cette
         action est irréversible.
+      #original_hash: 7261fb9
+      edit_account: Modifier le compte
       #original_hash: ffee885
       supported_currency_warning: "Veuillez vous assurer que la devise que vous avez sélectionnée est prise en charge par votre intégration de paiement choisie ! Les devises prises en charge dépendront du pays où le compte est basé, vous pouvez les vérifier ci-dessous\_:"
       #original_hash: ea493e6
@@ -4911,8 +4915,10 @@ fr-CA:
       provider_heading: 'Paiements %{provider}'
       #original_hash: d907ad7
       accept_payments_header: Accepter les paiements d’inscription
-      #original_hash: afcfefc
-      connect_button: 'Se connecter avec %{provider}'
+      #original_hash: 5100703
+      manual_payments_header: Configurer les paiements manuels
+      #original_hash: 2e39846
+      connect_button: 'Configurer %{provider}'
       connect_account_info:
         #original_hash: 3e298a2
         stripe: >-
@@ -4927,6 +4933,12 @@ fr-CA:
           PayPal via la page de la compétition. Si vous n’avez pas encore de
           compte PayPal Business, vous pouvez toujours cliquer sur le bouton
           ci-dessous et il vous guidera tout au long du processus de création.
+        #original_hash: f8b9924
+        manual: >-
+          Définissez les instructions de paiement pour les compétiteurs. Les
+          compétiteurs pourront indiquer quand ils ont effectué leur paiement et
+          fournir une référence de paiement que vous pourrez vérifier dans vos
+          registres dans le service de paiement externe que vous utilisez.
       connect_account_warning:
         #original_hash: 025b561
         stripe: >-
@@ -4938,6 +4950,8 @@ fr-CA:
           La connexion de votre compte PayPal permet au site WCA d’acheminer les
           paiements vers vous et d’émettre des remboursements directement sur
           votre compte PayPal.
+        #original_hash: da39a3e
+        manual: ''
       #original_hash: f7842cb
       currently_connected_info: >-
         Cette compétition est configurée pour accepter les paiements par
@@ -4971,6 +4985,14 @@ fr-CA:
           display_name: Nom
           #original_hash: e0edc01
           primary_email: Adresse courriel
+        manual:
+          #original_hash: d30593f
+          payment_instructions: Instructions de paiement (affichées sur la page de la compétition)
+          #original_hash: 2b35dac
+          payment_reference_label: >-
+            Quelles informations l'utilisateur doit-il vous fournir pour que
+            vous puissiez identifier son paiement ? (par exemple, numéro de
+            référence du paiement / identifiant du compte / etc.)
         #original_hash: 08d2e98
         fallback_not_applicable: N/A
   persons:
