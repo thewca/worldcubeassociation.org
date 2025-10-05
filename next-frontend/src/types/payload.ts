@@ -803,6 +803,7 @@ export interface Nav {
 export interface Home {
   id: string;
   item: (TwoBlocksBlock | FullWidthBlock)[];
+  _status?: ('draft' | 'published') | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -1353,6 +1354,7 @@ export interface HomeSelect<T extends boolean = true> {
         twoBlocks?: T | TwoBlocksBlockSelect<T>;
         fullWidth?: T | FullWidthBlockSelect<T>;
       };
+  _status?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
