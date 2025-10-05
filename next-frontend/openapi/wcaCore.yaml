@@ -29,6 +29,8 @@ paths:
     $ref: 'paths/results/psychSheetByCompetitionAndEvent.yaml'
   /v0/competition_index:
     $ref: 'paths/competitions/competitionList.yaml'
+  /v0/competitions/{competitionId}/results:
+    $ref: 'paths/results/resultsByCompetition.yaml'
   /v0/competitions/{competitionId}/scrambles:
     $ref: 'paths/competitions/competitionScrambles.yaml'
 
