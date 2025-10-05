@@ -24,7 +24,7 @@ export default function MyCompetitions() {
 
   const { data: myCompetitionsRequest, isLoading } = useQuery({
     queryKey: ["my-competitions"],
-    queryFn: () => api.GET("/competitions/mine", {}),
+    queryFn: () => api.GET("/v0/competitions/mine", {}),
   });
 
   const myCompetitions = useMemo(
