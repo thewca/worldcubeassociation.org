@@ -1,0 +1,10 @@
+type: object
+properties:
+  type:
+    type: string
+    example: "attemptResult"
+  level:
+    $ref: './WcifAttemptResult.yaml'
+required:
+  - type
+  - level

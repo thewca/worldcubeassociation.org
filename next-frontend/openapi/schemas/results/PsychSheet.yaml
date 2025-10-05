@@ -1,0 +1,46 @@
+type: object
+required:
+  - sort_by
+  - sort_by_second
+  - sorted_rankings
+properties:
+  sort_by:
+    type: string
+  sort_by_second:
+    type: string
+  sorted_rankings:
+    type: array
+    items:
+      type: object
+      required:
+        - name
+        - user_id
+        - wca_id
+        - country_iso2
+        - average_best
+        - average_rank
+        - single_best
+        - single_rank
+        - tied_previous
+        - pos
+      properties:
+        name:
+          type: string
+        user_id:
+          type: integer
+        wca_id:
+          type: string
+        country_iso2:
+          type: string
+        average_best:
+          type: integer
+        average_rank:
+          type: integer
+        single_best:
+          type: integer
+        single_rank:
+          type: integer
+        tied_previous:
+          type: boolean
+        pos:
+          type: integer

@@ -7,7 +7,6 @@ import SubSection from '../../wca/FormBuilder/SubSection';
 import { autoAcceptPreferences, newcomerMonthEnabled } from '../../../lib/wca-data.js.erb';
 import I18n from '../../../lib/i18n';
 import { useFormObject } from '../../wca/FormBuilder/provider/FormObjectProvider';
-import { useStore } from '../../../lib/providers/StoreProvider';
 
 export default function CompetitorLimit() {
   const {
@@ -17,13 +16,7 @@ export default function CompetitorLimit() {
     },
   } = useFormObject();
 
-  const { isAdminView } = useStore();
-
-  const availableAutoAcceptPreferences = isAdminView
-    ? Object.keys(autoAcceptPreferences)
-    : [autoAcceptPreferences.disabled, autoAcceptPreferences.bulk];
-
-  const autoAcceptOptions = availableAutoAcceptPreferences.map((status) => ({
+  const autoAcceptOptions = Object.keys(autoAcceptPreferences).map((status) => ({
     key: status,
     value: status,
     text: I18n.t(`competitions.competition_form.choices.competitor_limit.auto_accept_preference.${status}`),

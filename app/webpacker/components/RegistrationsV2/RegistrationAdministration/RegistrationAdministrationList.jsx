@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import React, {
-  useMemo, useReducer, useRef, useState,
+  useMemo, useRef, useState,
 } from 'react';
 import {
   Accordion, Button, Checkbox, Divider, Form, Header, Icon, List, Modal, Segment, Sticky,
@@ -18,6 +18,7 @@ import bulkAutoAccept from '../api/registration/patch/bulk_auto_accept';
 import RegistrationAdministrationTable from './RegistrationsAdministrationTable';
 import useCheckboxState from '../../../lib/hooks/useCheckboxState';
 import useOrderedSet from '../../../lib/hooks/useOrderedSet';
+import useStoredReducer from '../../../lib/hooks/useStoredReducer';
 import {
   APPROVED_COLOR, APPROVED_ICON,
   CANCELLED_COLOR, CANCELLED_ICON,
@@ -57,9 +58,10 @@ const expandedColumnsReducer = (state, action) => {
 };
 
 export default function RegistrationAdministrationList({ competitionInfo }) {
-  const [expandedColumns, dispatchExpandedColumns] = useReducer(
+  const [expandedColumns, dispatchExpandedColumns] = useStoredReducer(
     expandedColumnsReducer,
     initialExpandedColumns,
+    'reg-admin-expanded-columns',
   );
 
   const [waitlistEditModeEnabled, setWaitlistEditModeEnabled] = useCheckboxState(false);

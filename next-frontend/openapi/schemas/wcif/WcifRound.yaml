@@ -1,0 +1,33 @@
+type: object
+properties:
+  id:
+    type: string
+    example: "333-r1"
+  format:
+    type: string
+    enum: [ '1', '2', '3', 'a', 'm' ]
+  timeLimit:
+    $ref: './WcifTimeLimit.yaml'
+  cutoff:
+    $ref: './WcifCutoff.yaml'
+  advancementCondition:
+    $ref: './WcifAdvancementCondition.yaml'
+  results:
+    type: array
+    items:
+      $ref: './WcifResult.yaml'
+  scrambleSetCount:
+    type: integer
+  scrambleSets:
+    type: array
+    items:
+      $ref: './WcifScrambleSet.yaml'
+  extensions:
+    type: array
+required:
+  - id
+  - format
+  - results
+  - scrambleSetCount
+  - scrambleSets
+  - extensions

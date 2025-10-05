@@ -32,9 +32,11 @@ class Competition < ApplicationRecord
   has_many :series_competitions, -> { readonly }, through: :competition_series, source: :competitions
   has_many :series_registrations, -> { readonly }, through: :series_competitions, source: :registrations
   belongs_to :posting_user, optional: true, foreign_key: 'posting_by', class_name: "User"
+  belongs_to :posted_user, optional: true, foreign_key: 'results_posted_by', class_name: "User"
   has_many :inbox_results, dependent: :delete_all
   has_many :inbox_persons, dependent: :delete_all
   has_many :inbox_scramble_sets, dependent: :delete_all
+  has_many :matched_scramble_sets, through: :rounds
   belongs_to :announced_by_user, optional: true, foreign_key: "announced_by", class_name: "User"
   belongs_to :cancelled_by_user, optional: true, foreign_key: "cancelled_by", class_name: "User"
   has_many :competition_payment_integrations
@@ -179,7 +181,6 @@ class Competition < ApplicationRecord
     waiting_list_deadline_date
     event_change_deadline_date
     competition_series_id
-    auto_accept_registrations
     auto_accept_preference
     auto_accept_disable_threshold
     newcomer_month_reserved_spots
@@ -701,9 +702,11 @@ class Competition < ApplicationRecord
              'series_competitions',
              'series_registrations',
              'posting_user',
+             'posted_user',
              'inbox_results',
              'inbox_persons',
              'inbox_scramble_sets',
+             'matched_scramble_sets',
              'announced_by_user',
              'cancelled_by_user',
              'competition_payment_integrations',
@@ -1777,6 +1780,45 @@ class Competition < ApplicationRecord
     competitions.includes(:delegates, :organizers, *previous_includes).order(**order)
   end
 
+  def competing_step_parameters(current_user)
+    competition_params = serializable_hash(only: %i[events_per_registration_limit
+                                                    allow_registration_edits
+                                                    guest_entry_status
+                                                    guests_per_registration_limit
+                                                    guests_enabled
+                                                    uses_qualification?
+                                                    allow_registration_without_qualification
+                                                    force_comment_in_registration],
+                                           methods: %i[qualification_wcif event_ids],
+                                           include: [])
+    user_params = {
+      preferredEvents: current_user.preferred_events.pluck(:id),
+      personalRecords: {
+        single: current_user.ranks_single&.map(&:to_wcif) || [],
+        average: current_user.ranks_average&.map(&:to_wcif) || [],
+      },
+    }
+    competition_params.merge(user_params)
+  end
+
+  def payment_step_parameters
+    # Currently hardcoded to support stripe only
+    {
+      stripePublishableKey: AppSecrets.STRIPE_PUBLISHABLE_KEY,
+      connectedAccountId: payment_account_for(:stripe)&.account_id,
+    }
+  end
+
+  def available_registration_lanes(current_user)
+    # There is currently only one lane, so this always returns the competitor lane
+    steps = []
+    steps << { key: 'requirements', isEditable: false }
+    steps << { key: 'competing', parameters: competing_step_parameters(current_user), isEditable: true }
+    steps << { key: 'payment', parameters: payment_step_parameters, isEditable: true, deadline: self.registration_close } if using_payment_integrations?
+
+    steps
+  end
+
   def all_activities
     competition_venues.includes(venue_rooms: { schedule_activities: [child_activities: [:child_activities]] }).map(&:all_activities).flatten
   end
@@ -2257,7 +2299,7 @@ class Competition < ApplicationRecord
 
   private def xero_dues_payer
     self.country&.wfc_dues_redirect&.redirect_to ||
-    self.organizers.find { |organizer| organizer.wfc_dues_redirect.present? }&.wfc_dues_redirect&.redirect_to
+      self.organizers.find { |organizer| organizer.wfc_dues_redirect.present? }&.wfc_dues_redirect&.redirect_to
   end
 
   # WFC usually sends dues to the first staff delegate in alphabetical order if there are no redirects setup for the country or organizer.
@@ -2711,6 +2753,10 @@ class Competition < ApplicationRecord
     self.payment_integration_connected?(:paypal)
   end
 
+  def manual_connected?
+    self.payment_integration_connected?(:manual)
+  end
+
   def payment_account_for(integration_name)
     CompetitionPaymentIntegration.validate_integration_name!(integration_name)
 
@@ -2996,6 +3042,7 @@ class Competition < ApplicationRecord
   def fully_paid_registrations_count
     registrations
       .joins(:registration_payments)
+      .merge(RegistrationPayment.completed)
       .group('registrations.id')
       .having('SUM(registration_payments.amount_lowest_denomination) >= ?', base_entry_fee_lowest_denomination)
       .count.size # .count changes the AssociationRelation into a hash, and then .size gives the number of items in the hash
