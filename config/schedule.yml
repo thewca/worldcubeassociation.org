@@ -45,7 +45,7 @@ publish_metrics:
 
 sync_mailing_lists:
   class: "SyncMailingListsJob"
-  cron: "0 * * * *"
+  cron: "15 4,16 * * *"
   queue: wca_jobs
 
 notify_translators:

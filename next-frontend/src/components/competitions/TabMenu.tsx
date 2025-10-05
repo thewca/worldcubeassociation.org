@@ -94,6 +94,13 @@ const afterCompetitionTabs = (
       }),
       menuKey: "byPerson",
     },
+    {
+      i18nKey: "competitions.nav.menu.scrambles",
+      href: route({
+        pathname: "/competitions/[competitionId]/scrambles",
+        query: { competitionId: competitionInfo.id },
+      }),
+    },
   ];
 };
 

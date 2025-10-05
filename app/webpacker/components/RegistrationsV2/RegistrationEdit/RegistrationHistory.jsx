@@ -12,13 +12,6 @@ import getUsersInfo from '../api/user/post/getUserInfo';
 import Loading from '../../Requests/Loading';
 import { getRegistrationHistory } from '../api/registration/get/get_registrations';
 
-const formatHistoryColumn = (key, value) => {
-  if (key === 'event_ids') {
-    return events.official.flatMap((e) => (value.includes(e.id) ? <EventIcon key={e.id} id={e.id} style={{ cursor: 'unset' }} /> : []));
-  }
-  return value;
-};
-
 export default function RegistrationHistory({ registrationId }) {
   const {
     isLoading: historyLoading,
@@ -69,17 +62,26 @@ export default function RegistrationHistory({ registrationId }) {
               <Table.Cell>
                 {Object.entries(entry.changed_attributes).map(
                   ([k, v]) => (
-                    <span key={k}>
-                      Changed
-                      {' '}
-                      {k}
-                      {' '}
-                      to
-                      {' '}
-                      {formatHistoryColumn(k, v)}
-                      {' '}
+                    <React.Fragment key={k}>
+                      {k === 'event_ids' ? (
+                        <span>
+                          Toggled events
+                          {' '}
+                          <EventIcons ids={v} />
+                        </span>
+                      ) : (
+                        <span>
+                          Changed
+                          {' '}
+                          {k}
+                          {' '}
+                          to
+                          {' '}
+                          {v}
+                        </span>
+                      )}
                       <br />
-                    </span>
+                    </React.Fragment>
                   ),
                 )}
               </Table.Cell>
@@ -97,4 +99,10 @@ export default function RegistrationHistory({ registrationId }) {
       </Table>
     </>
   );
+}
+
+function EventIcons({ ids }) {
+  return events.official.map((e) => (
+    ids.includes(e.id) && <EventIcon key={e.id} id={e.id} style={{ cursor: 'unset' }} />
+  ));
 }

@@ -12,6 +12,9 @@ servers:
   - url: http://localhost:3000/api/
     description: The production API server
 paths:
+  /v1/competitions/{competitionId}/registrations:
+    $ref: 'paths/registrations/registrationsByCompetition.yaml'
+
   /v0/competitions/{competitionId}/:
     $ref: 'paths/competitions/competitionById.yaml'
   /v0/competitions/{competitionId}/events:
@@ -22,10 +25,14 @@ paths:
     $ref: 'paths/competitions/competitionRegistrations.yaml'
   /v0/competitions/{competitionId}/podiums:
     $ref: 'paths/competitions/competitionPodiums.yaml'
+  /v0/competitions/{competitionId}/psych-sheet/{eventId}:
+    $ref: 'paths/results/psychSheetByCompetitionAndEvent.yaml'
   /v0/competition_index:
     $ref: 'paths/competitions/competitionList.yaml'
   /v0/competitions/{competitionId}/results:
     $ref: 'paths/results/resultsByCompetition.yaml'
+  /v0/competitions/{competitionId}/scrambles:
+    $ref: 'paths/competitions/competitionScrambles.yaml'
 
   /v0/incidents:
     $ref: 'paths/regulations/incidentsList.yaml'
