@@ -6,7 +6,6 @@ import { route } from "nextjs-routes";
 import { AttemptsCells, recordTagBadge } from "@/components/results/TableCells";
 import _ from "lodash";
 import Flag from "react-world-flags";
-import { TFunc } from "ts-interface-checker";
 import { TFunction } from "i18next";
 import CountryMap from "@/components/CountryMap";
 
