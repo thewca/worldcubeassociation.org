@@ -352,7 +352,7 @@ export interface Testimonial {
     root: {
       type: string;
       children: {
-        type: string;
+        type: any;
         version: number;
         [k: string]: unknown;
       }[];
@@ -380,7 +380,7 @@ export interface Announcement {
     root: {
       type: string;
       children: {
-        type: string;
+        type: any;
         version: number;
         [k: string]: unknown;
       }[];
@@ -837,7 +837,7 @@ export interface TextCardBlock {
     root: {
       type: string;
       children: {
-        type: string;
+        type: any;
         version: number;
         [k: string]: unknown;
       }[];
@@ -881,7 +881,7 @@ export interface ImageBannerBlock {
     root: {
       type: string;
       children: {
-        type: string;
+        type: any;
         version: number;
         [k: string]: unknown;
       }[];
@@ -1020,7 +1020,7 @@ export interface AboutUsPage {
           root: {
             type: string;
             children: {
-              type: string;
+              type: any;
               version: number;
               [k: string]: unknown;
             }[];
@@ -1048,7 +1048,7 @@ export interface AboutUsPage {
           root: {
             type: string;
             children: {
-              type: string;
+              type: any;
               version: number;
               [k: string]: unknown;
             }[];
@@ -1069,7 +1069,7 @@ export interface AboutUsPage {
           root: {
             type: string;
             children: {
-              type: string;
+              type: any;
               version: number;
               [k: string]: unknown;
             }[];
@@ -1100,7 +1100,7 @@ export interface PrivacyPage {
     root: {
       type: string;
       children: {
-        type: string;
+        type: any;
         version: number;
         [k: string]: unknown;
       }[];
@@ -1118,7 +1118,7 @@ export interface PrivacyPage {
       root: {
         type: string;
         children: {
-          type: string;
+          type: any;
           version: number;
           [k: string]: unknown;
         }[];
@@ -1149,7 +1149,7 @@ export interface DisclaimerPage {
       root: {
         type: string;
         children: {
-          type: string;
+          type: any;
           version: number;
           [k: string]: unknown;
         }[];
@@ -1180,7 +1180,7 @@ export interface SpeedcubingHistoryPage {
           root: {
             type: string;
             children: {
-              type: string;
+              type: any;
               version: number;
               [k: string]: unknown;
             }[];
@@ -1208,7 +1208,7 @@ export interface SpeedcubingHistoryPage {
           root: {
             type: string;
             children: {
-              type: string;
+              type: any;
               version: number;
               [k: string]: unknown;
             }[];
@@ -1241,7 +1241,7 @@ export interface AboutRegulationsPage {
       root: {
         type: string;
         children: {
-          type: string;
+          type: any;
           version: number;
           [k: string]: unknown;
         }[];
@@ -1265,7 +1265,7 @@ export interface AboutRegulationsPage {
  * via the `definition` "documents-page".
  */
 export interface DocumentsPage {
-  id: number;
+  id: string;
   documents: {
     document: string | Document;
     id?: string | null;
