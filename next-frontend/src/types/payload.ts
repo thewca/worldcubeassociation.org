@@ -238,7 +238,7 @@ export interface Config {
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
   };
   db: {
-    defaultIDType: number;
+    defaultIDType: string;
   };
   globals: {
     nav: Nav;
@@ -248,6 +248,7 @@ export interface Config {
     'disclaimer-page': DisclaimerPage;
     'speedcubing-history-page': SpeedcubingHistoryPage;
     'about-regulations-page': AboutRegulationsPage;
+    'documents-page': DocumentsPage;
     'faq-page': FaqPage;
   };
   globalsSelect: {
@@ -258,6 +259,7 @@ export interface Config {
     'disclaimer-page': DisclaimerPageSelect<false> | DisclaimerPageSelect<true>;
     'speedcubing-history-page': SpeedcubingHistoryPageSelect<false> | SpeedcubingHistoryPageSelect<true>;
     'about-regulations-page': AboutRegulationsPageSelect<false> | AboutRegulationsPageSelect<true>;
+    'documents-page': DocumentsPageSelect<false> | DocumentsPageSelect<true>;
     'faq-page': FaqPageSelect<false> | FaqPageSelect<true>;
   };
   locale:
@@ -325,8 +327,9 @@ export interface UserAuthOperations {
  * via the `definition` "media".
  */
 export interface Media {
-  id: number;
+  id: string;
   alt: string;
+  customLink?: string | null;
   updatedAt: string;
   createdAt: string;
   url?: string | null;
@@ -344,14 +347,14 @@ export interface Media {
  * via the `definition` "testimonials".
  */
 export interface Testimonial {
-  id: number;
-  image?: (number | null) | Media;
+  id: string;
+  image?: (string | null) | Media;
   punchline: string;
   fullTestimonial: {
     root: {
       type: string;
       children: {
-        type: string;
+        type: any;
         version: number;
         [k: string]: unknown;
       }[];
@@ -372,14 +375,14 @@ export interface Testimonial {
  * via the `definition` "announcements".
  */
 export interface Announcement {
-  id: number;
-  image?: (number | null) | Media;
+  id: string;
+  image?: (string | null) | Media;
   title: string;
   content: {
     root: {
       type: string;
       children: {
-        type: string;
+        type: any;
         version: number;
         [k: string]: unknown;
       }[];
@@ -423,11 +426,11 @@ export interface User {
  * via the `definition` "faqCategories".
  */
 export interface FaqCategory {
-  id: number;
+  id: string;
   title: string;
   colorPalette: ColorPaletteSelect;
   relatedQuestions?: {
-    docs?: (number | FaqQuestion)[];
+    docs?: (string | FaqQuestion)[];
     hasNextPage?: boolean;
     totalDocs?: number;
   };
@@ -439,15 +442,15 @@ export interface FaqCategory {
  * via the `definition` "faqQuestions".
  */
 export interface FaqQuestion {
-  id: number;
-  category: number | FaqCategory;
+  id: string;
+  category: string | FaqCategory;
   question: string;
   answer: string;
   answerRichtext?: {
     root: {
       type: string;
       children: {
-        type: string;
+        type: any;
         version: number;
         [k: string]: unknown;
       }[];
@@ -467,7 +470,7 @@ export interface FaqQuestion {
  * via the `definition` "documents".
  */
 export interface Document {
-  id: number;
+  id: string;
   title: string;
   icon: IconName;
   link: string;
@@ -483,7 +486,7 @@ export interface Document {
  * via the `definition` "regulationsHistoryItem".
  */
 export interface RegulationsHistoryItem {
-  id: number;
+  id: string;
   version: string;
   url: string;
   changesUrl?: string | null;
@@ -496,7 +499,7 @@ export interface RegulationsHistoryItem {
  * via the `definition` "tools".
  */
 export interface Tool {
-  id: number;
+  id: string;
   name: string;
   description: string;
   homepageLink: string;
@@ -513,27 +516,27 @@ export interface Tool {
  * via the `definition` "payload-locked-documents".
  */
 export interface PayloadLockedDocument {
-  id: number;
+  id: string;
   document?:
     | ({
         relationTo: 'media';
-        value: number | Media;
+        value: string | Media;
       } | null)
     | ({
         relationTo: 'testimonials';
-        value: number | Testimonial;
+        value: string | Testimonial;
       } | null)
     | ({
         relationTo: 'announcements';
-        value: number | Announcement;
+        value: string | Announcement;
       } | null)
     | ({
         relationTo: 'faqCategories';
-        value: number | FaqCategory;
+        value: string | FaqCategory;
       } | null)
     | ({
         relationTo: 'faqQuestions';
-        value: number | FaqQuestion;
+        value: string | FaqQuestion;
       } | null)
     | ({
         relationTo: 'users';
@@ -541,15 +544,15 @@ export interface PayloadLockedDocument {
       } | null)
     | ({
         relationTo: 'documents';
-        value: number | Document;
+        value: string | Document;
       } | null)
     | ({
         relationTo: 'regulationsHistoryItem';
-        value: number | RegulationsHistoryItem;
+        value: string | RegulationsHistoryItem;
       } | null)
     | ({
         relationTo: 'tools';
-        value: number | Tool;
+        value: string | Tool;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -564,7 +567,7 @@ export interface PayloadLockedDocument {
  * via the `definition` "payload-preferences".
  */
 export interface PayloadPreference {
-  id: number;
+  id: string;
   user: {
     relationTo: 'users';
     value: string | User;
@@ -587,7 +590,7 @@ export interface PayloadPreference {
  * via the `definition` "payload-migrations".
  */
 export interface PayloadMigration {
-  id: number;
+  id: string;
   name?: string | null;
   batch?: number | null;
   updatedAt: string;
@@ -599,6 +602,7 @@ export interface PayloadMigration {
  */
 export interface MediaSelect<T extends boolean = true> {
   alt?: T;
+  customLink?: T;
   updatedAt?: T;
   createdAt?: T;
   url?: T;
@@ -761,7 +765,7 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
  * via the `definition` "nav".
  */
 export interface Nav {
-  id: number;
+  id: string;
   entry: (
     | {
         title: string;
@@ -817,8 +821,9 @@ export interface Nav {
  * via the `definition` "home".
  */
 export interface Home {
-  id: number;
+  id: string;
   item: (TwoBlocksBlock | FullWidthBlock)[];
+  _status?: ('draft' | 'published') | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -852,7 +857,7 @@ export interface TextCardBlock {
     root: {
       type: string;
       children: {
-        type: string;
+        type: any;
         version: number;
         [k: string]: unknown;
       }[];
@@ -868,7 +873,7 @@ export interface TextCardBlock {
   separatorAfterHeading: boolean;
   buttonText?: string | null;
   buttonLink?: string | null;
-  headerImage?: (number | null) | Media;
+  headerImage?: (string | null) | Media;
   colorPalette: ColorPaletteSelect;
   id?: string | null;
   blockName?: string | null;
@@ -879,8 +884,8 @@ export interface TextCardBlock {
  * via the `definition` "AnnouncementsSectionBlock".
  */
 export interface AnnouncementsSectionBlock {
-  mainAnnouncement: number | Announcement;
-  furtherAnnouncements?: (number | Announcement)[] | null;
+  mainAnnouncement: string | Announcement;
+  furtherAnnouncements?: (string | Announcement)[] | null;
   colorPalette: ColorPaletteSelect;
   id?: string | null;
   blockName?: string | null;
@@ -896,7 +901,7 @@ export interface ImageBannerBlock {
     root: {
       type: string;
       children: {
-        type: string;
+        type: any;
         version: number;
         [k: string]: unknown;
       }[];
@@ -908,14 +913,14 @@ export interface ImageBannerBlock {
     [k: string]: unknown;
   };
   bodyMarkdown?: string | null;
-  mainImage: number | Media;
+  mainImage: string | Media;
   colorPalette: ColorPaletteSelect;
   /**
    * Use a slightly darker nuance of the color palette
    */
   colorPaletteDarker?: boolean | null;
   headingColor?: ColorPaletteSelect;
-  bgImage?: (number | null) | Media;
+  bgImage?: (string | null) | Media;
   /**
    * The size of the background image in percent (%)
    */
@@ -930,7 +935,7 @@ export interface ImageBannerBlock {
  * via the `definition` "ImageOnlyCardBlock".
  */
 export interface ImageOnlyCardBlock {
-  mainImage: number | Media;
+  mainImage: string | Media;
   heading?: string | null;
   colorPalette: ColorPaletteSelect;
   id?: string | null;
@@ -943,7 +948,7 @@ export interface ImageOnlyCardBlock {
  */
 export interface TestimonialsBlock {
   slides: {
-    testimonial: number | Testimonial;
+    testimonial: string | Testimonial;
     colorPalette: ColorPaletteSelect;
     id?: string | null;
   }[];
@@ -1028,14 +1033,14 @@ export interface FullWidthBlock {
  * via the `definition` "about-us-page".
  */
 export interface AboutUsPage {
-  id: number;
+  id: string;
   blocks: (
     | {
         content: {
           root: {
             type: string;
             children: {
-              type: string;
+              type: any;
               version: number;
               [k: string]: unknown;
             }[];
@@ -1058,12 +1063,12 @@ export interface AboutUsPage {
       }
     | {
         title: string;
-        image?: (number | null) | Media;
+        image?: (string | null) | Media;
         content: {
           root: {
             type: string;
             children: {
-              type: string;
+              type: any;
               version: number;
               [k: string]: unknown;
             }[];
@@ -1084,7 +1089,7 @@ export interface AboutUsPage {
           root: {
             type: string;
             children: {
-              type: string;
+              type: any;
               version: number;
               [k: string]: unknown;
             }[];
@@ -1110,12 +1115,12 @@ export interface AboutUsPage {
  * via the `definition` "privacy-page".
  */
 export interface PrivacyPage {
-  id: number;
+  id: string;
   preamble: {
     root: {
       type: string;
       children: {
-        type: string;
+        type: any;
         version: number;
         [k: string]: unknown;
       }[];
@@ -1133,7 +1138,7 @@ export interface PrivacyPage {
       root: {
         type: string;
         children: {
-          type: string;
+          type: any;
           version: number;
           [k: string]: unknown;
         }[];
@@ -1157,14 +1162,14 @@ export interface PrivacyPage {
  * via the `definition` "disclaimer-page".
  */
 export interface DisclaimerPage {
-  id: number;
+  id: string;
   blocks: {
     title?: string | null;
     content: {
       root: {
         type: string;
         children: {
-          type: string;
+          type: any;
           version: number;
           [k: string]: unknown;
         }[];
@@ -1188,14 +1193,14 @@ export interface DisclaimerPage {
  * via the `definition` "speedcubing-history-page".
  */
 export interface SpeedcubingHistoryPage {
-  id: number;
+  id: string;
   blocks: (
     | {
         content: {
           root: {
             type: string;
             children: {
-              type: string;
+              type: any;
               version: number;
               [k: string]: unknown;
             }[];
@@ -1213,7 +1218,7 @@ export interface SpeedcubingHistoryPage {
       }
     | {
         caption: string;
-        image: number | Media;
+        image: string | Media;
         id?: string | null;
         blockName?: string | null;
         blockType: 'captionedImage';
@@ -1223,7 +1228,7 @@ export interface SpeedcubingHistoryPage {
           root: {
             type: string;
             children: {
-              type: string;
+              type: any;
               version: number;
               [k: string]: unknown;
             }[];
@@ -1249,14 +1254,14 @@ export interface SpeedcubingHistoryPage {
  * via the `definition` "about-regulations-page".
  */
 export interface AboutRegulationsPage {
-  id: number;
+  id: string;
   blocks: {
     title: string;
     content: {
       root: {
         type: string;
         children: {
-          type: string;
+          type: any;
           version: number;
           [k: string]: unknown;
         }[];
@@ -1277,15 +1282,28 @@ export interface AboutRegulationsPage {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "documents-page".
+ */
+export interface DocumentsPage {
+  id: string;
+  documents: {
+    document: string | Document;
+    id?: string | null;
+  }[];
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "faq-page".
  */
 export interface FaqPage {
-  id: number;
+  id: string;
   introText?: {
     root: {
       type: string;
       children: {
-        type: string;
+        type: any;
         version: number;
         [k: string]: unknown;
       }[];
@@ -1299,7 +1317,7 @@ export interface FaqPage {
   introTextMarkdown?: string | null;
   questions?:
     | {
-        faqQuestion: number | FaqQuestion;
+        faqQuestion: string | FaqQuestion;
         id?: string | null;
       }[]
     | null;
@@ -1387,6 +1405,7 @@ export interface HomeSelect<T extends boolean = true> {
         twoBlocks?: T | TwoBlocksBlockSelect<T>;
         fullWidth?: T | FullWidthBlockSelect<T>;
       };
+  _status?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
@@ -1706,6 +1725,21 @@ export interface AboutRegulationsPageSelect<T extends boolean = true> {
               id?: T;
               blockName?: T;
             };
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "documents-page_select".
+ */
+export interface DocumentsPageSelect<T extends boolean = true> {
+  documents?:
+    | T
+    | {
+        document?: T;
+        id?: T;
       };
   updatedAt?: T;
   createdAt?: T;
