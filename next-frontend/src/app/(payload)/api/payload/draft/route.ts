@@ -1,4 +1,4 @@
-import type { CollectionSlug, PayloadRequest } from 'payload'
+import type { PayloadRequest } from 'payload'
 import { getPayload } from 'payload'
 
 import { draftMode } from 'next/headers'
