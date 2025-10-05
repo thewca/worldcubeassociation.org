@@ -13,25 +13,27 @@ import { getPayload } from "payload";
 import config from "@payload-config";
 import { FaqCategory, FaqQuestion } from "@/types/payload";
 import { MarkdownProse } from "@/components/Markdown";
+import { uniqBy } from "lodash";
 
 export default async function FAQ() {
   const payload = await getPayload({ config });
 
-  const faqPage = await payload.findGlobal({ slug: "faq-page" });
-  const faqQuestions = faqPage.questions;
+  const faqPage = await payload.findGlobal({ slug: "faq-page", depth: 2 });
+  const faqQuestionsRaw = faqPage.questions;
 
-  if (!faqQuestions || faqQuestions.length === 0) {
+  if (!faqQuestionsRaw || faqQuestionsRaw.length === 0) {
     return <Heading>No FAQ Categories, add some!</Heading>;
   }
 
-  const faqCategories = faqQuestions.reduce((acc, item) => {
-    const question = item.faqQuestion as FaqQuestion;
-    if (acc.find((cat) => cat.id === (question.category as FaqCategory).id)) {
-      return acc;
-    } else {
-      return [...acc, question.category as FaqCategory];
-    }
-  }, [] as FaqCategory[]);
+  const faqQuestions = faqQuestionsRaw.map(
+    (item) => item.faqQuestion as FaqQuestion,
+  );
+
+  const allCategories = faqQuestions.map(
+    (item) => item.category as FaqCategory,
+  );
+
+  const faqCategories = uniqBy(allCategories, "id");
 
   return (
     <Container>
@@ -51,27 +53,23 @@ export default async function FAQ() {
             <Tabs.Root
               variant="subtle"
               fitted
-              defaultValue={faqCategories[0].id!.toString()}
+              defaultValue={faqCategories[0].id.toString()}
               width="full"
             >
               <Tabs.List>
-                {faqCategories.map((item) => {
-                  const category = item as FaqCategory;
-                  return (
-                    <Tabs.Trigger
-                      key={category.id}
-                      value={category.id!.toString()}
-                    >
-                      {category.title}
-                    </Tabs.Trigger>
-                  );
-                })}
+                {faqCategories.map((category) => (
+                  <Tabs.Trigger
+                    key={category.id}
+                    value={category.id!.toString()}
+                  >
+                    {category.title}
+                  </Tabs.Trigger>
+                ))}
               </Tabs.List>
               {faqCategories.map((category) => {
                 const questions = faqQuestions.filter(
-                  ({ faqQuestion }) =>
-                    ((faqQuestion as FaqQuestion).category as FaqCategory)
-                      .id === category.id,
+                  (faqQuestion) =>
+                    (faqQuestion.category as FaqCategory).id === category.id,
                 );
                 return (
                   <Tabs.Content
@@ -84,26 +82,21 @@ export default async function FAQ() {
                       variant="subtle"
                       width="full"
                     >
-                      {questions
-                        .map(
-                          ({ faqQuestion: question }) =>
-                            question as FaqQuestion,
-                        )
-                        .map((question) => (
-                          <Accordion.Item
-                            key={question.id}
-                            value={question.id.toString()}
+                      {questions.map((question) => (
+                        <Accordion.Item
+                          key={question.id}
+                          value={question.id.toString()}
+                        >
+                          <Accordion.ItemTrigger
+                            colorPalette={category.colorPalette}
                           >
-                            <Accordion.ItemTrigger
-                              colorPalette={category.colorPalette}
-                            >
-                              {question.question}
-                            </Accordion.ItemTrigger>
-                            <Accordion.ItemContent>
-                              {question.answer}
-                            </Accordion.ItemContent>
-                          </Accordion.Item>
-                        ))}
+                            {question.question}
+                          </Accordion.ItemTrigger>
+                          <Accordion.ItemContent>
+                            {question.answer}
+                          </Accordion.ItemContent>
+                        </Accordion.Item>
+                      ))}
                     </Accordion.Root>
                   </Tabs.Content>
                 );
