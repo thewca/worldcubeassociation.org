@@ -164,6 +164,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v0/competitions/mine": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get a list of a users competition */
+        get: operations["getMyCompetitions"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v0/competitions/{competitionId}/results": {
         parameters: {
             query?: never;
@@ -809,6 +826,30 @@ export interface components {
                 avatar: components["schemas"]["UserAvatar"];
             }[];
         };
+        MyCompetition: {
+            id: string;
+            name: string;
+            website: string;
+            /** Format: date */
+            start_date: string;
+            /** Format: date */
+            end_date: string;
+            /** Format: date */
+            registration_open: string;
+            /** Format: uri */
+            url: string;
+            city: string;
+            country_iso2: string;
+            "results_posted?": boolean;
+            "visible?": boolean;
+            "confirmed?": boolean;
+            "cancelled?": boolean;
+            "report_posted?": boolean;
+            short_display_name: string;
+            championships?: string[];
+            registration_status?: string;
+            competing_status?: string;
+        };
         Results: components["schemas"]["Result"][];
         Scramble: {
             id: number;
@@ -1177,6 +1218,30 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["CompetitionIndex"][];
+                };
+            };
+        };
+    };
+    getMyCompetitions: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        past_competitions: components["schemas"]["MyCompetition"][];
+                        future_competitions: components["schemas"]["MyCompetition"][];
+                        bookmarked_competitions: components["schemas"]["MyCompetition"][];
+                    };
                 };
             };
         };
