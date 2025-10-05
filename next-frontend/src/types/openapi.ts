@@ -164,6 +164,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v0/competitions/{competitionId}/scrambles": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Returns the competition scrambles */
+        get: operations["getScrambles"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v0/incidents": {
         parameters: {
             query?: never;
@@ -775,6 +792,17 @@ export interface components {
                 avatar: components["schemas"]["UserAvatar"];
             }[];
         };
+        Scramble: {
+            id: number;
+            competition_id: string;
+            event_id: string;
+            round_type_id: string;
+            round_id: number;
+            group_id: string;
+            is_extra: string;
+            scramble_num: number;
+            scramble: string;
+        };
         Incident: {
             id: string;
             title: string;
@@ -1132,6 +1160,28 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["CompetitionIndex"][];
+                };
+            };
+        };
+    };
+    getScrambles: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                competitionId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Scramble"][];
                 };
             };
         };
