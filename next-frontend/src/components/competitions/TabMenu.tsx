@@ -107,18 +107,16 @@ const afterCompetitionTabs = (
 
 export default function TabMenu({
   competitionInfo,
-  competitionId,
   children,
 }: {
   children: React.ReactNode;
   competitionInfo: components["schemas"]["CompetitionInfo"];
-  competitionId: string;
 }) {
   const pathName = usePathname();
   const { t } = useT();
 
   const path = _.last(pathName.split("/"));
-  const currentPath = path === competitionId ? "general" : path;
+  const currentPath = path === competitionInfo.id ? "general" : path;
 
   const tabs = useMemo(() => {
     if (!hasPassed(competitionInfo.start_date)) {
