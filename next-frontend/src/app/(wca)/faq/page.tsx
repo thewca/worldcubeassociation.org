@@ -60,7 +60,7 @@ export default async function FAQ() {
                 {faqCategories.map((category) => (
                   <Tabs.Trigger
                     key={category.id}
-                    value={category.id!.toString()}
+                    value={category.id.toString()}
                   >
                     {category.title}
                   </Tabs.Trigger>
