@@ -40,7 +40,7 @@ const cmsWcaProvider: Provider = {
 
 export const authConfig: NextAuthConfig = {
   secret: process.env.AUTH_SECRET,
-  providers: [baseWcaProvider, cmsWcaProvider],
+  providers: [baseWcaProvider],
   callbacks: {
     async jwt({ token, account }) {
       if (account) {
@@ -72,4 +72,16 @@ export const authConfig: NextAuthConfig = {
 export const payloadAuthConfig: NextAuthConfig = {
   ...authConfig,
   providers: [cmsWcaProvider],
+  basePath: "/api/auth/payload",
+  cookies: {
+    sessionToken: {
+      name: "authjs.admin.session-token",
+    },
+    csrfToken: {
+      name: "authjs.admin.csrf-token",
+    },
+    callbackUrl: {
+      name: "authjs.admin.callback-url",
+    },
+  },
 };
