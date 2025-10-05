@@ -27,6 +27,7 @@ import { Disclaimer } from "@/globals/Disclaimer";
 import { AboutUsPage } from "@/globals/About";
 import { languageConfig, fallbackLng } from "@/lib/i18n/settings";
 import { DocumentsPage } from "@/globals/Documents";
+import { FaqPage } from "@/globals/FaqPage";
 import {
   compatibilityOptions,
   mongooseAdapter,
@@ -126,6 +127,7 @@ export default buildConfig({
     SpeedCubingHistoryPage,
     AboutRegulations,
     DocumentsPage,
+    FaqPage,
   ],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || "",

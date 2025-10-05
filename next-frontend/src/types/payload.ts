@@ -249,6 +249,7 @@ export interface Config {
     'speedcubing-history-page': SpeedcubingHistoryPage;
     'about-regulations-page': AboutRegulationsPage;
     'documents-page': DocumentsPage;
+    'faq-page': FaqPage;
   };
   globalsSelect: {
     nav: NavSelect<false> | NavSelect<true>;
@@ -259,6 +260,7 @@ export interface Config {
     'speedcubing-history-page': SpeedcubingHistoryPageSelect<false> | SpeedcubingHistoryPageSelect<true>;
     'about-regulations-page': AboutRegulationsPageSelect<false> | AboutRegulationsPageSelect<true>;
     'documents-page': DocumentsPageSelect<false> | DocumentsPageSelect<true>;
+    'faq-page': FaqPageSelect<false> | FaqPageSelect<true>;
   };
   locale:
     | 'en'
@@ -444,6 +446,22 @@ export interface FaqQuestion {
   category: string | FaqCategory;
   question: string;
   answer: string;
+  answerRichtext?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  answerRichtextMarkdown?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -643,6 +661,8 @@ export interface FaqQuestionsSelect<T extends boolean = true> {
   category?: T;
   question?: T;
   answer?: T;
+  answerRichtext?: T;
+  answerRichtextMarkdown?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -1275,6 +1295,35 @@ export interface DocumentsPage {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "faq-page".
+ */
+export interface FaqPage {
+  id: string;
+  introText?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  introTextMarkdown?: string | null;
+  questions: {
+    faqQuestion: string | FaqQuestion;
+    id?: string | null;
+  }[];
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "nav_select".
  */
 export interface NavSelect<T extends boolean = true> {
@@ -1688,6 +1737,23 @@ export interface DocumentsPageSelect<T extends boolean = true> {
     | T
     | {
         document?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "faq-page_select".
+ */
+export interface FaqPageSelect<T extends boolean = true> {
+  introText?: T;
+  introTextMarkdown?: T;
+  questions?:
+    | T
+    | {
+        faqQuestion?: T;
         id?: T;
       };
   updatedAt?: T;
