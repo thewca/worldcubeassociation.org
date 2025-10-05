@@ -29,7 +29,6 @@ import CompRegoClosedRedIcon from "@/components/icons/CompRegoClosed_redIcon";
 import CompRegoOpenDateIcon from "@/components/icons/CompRegoOpenDateIcon";
 import CompRegoCloseDateIcon from "@/components/icons/CompRegoCloseDateIcon";
 
-import countries from "@/lib/wca/data/countries";
 import { useSession } from "next-auth/react";
 import { useEffect, useMemo, useReducer, useState } from "react";
 import { useInfiniteQuery } from "@tanstack/react-query";
@@ -52,39 +51,14 @@ import { TFunction } from "i18next";
 import { useT } from "@/lib/i18n/useI18n";
 import RegionSelector from "@/components/RegionSelector";
 import { components } from "@/types/openapi";
+import { getDistanceInKm } from "@/lib/math/geolocation";
+import type { GeoCoordinates } from "@/lib/types/geolocation";
 
 const DEBOUNCE_MS = 600;
 
-// Haversine formula to compute distance between two lat/lng pairs
-function getDistanceFromLatLonInKm(
-  lat1: number,
-  lon1: number,
-  lat2: number,
-  lon2: number,
-) {
-  const R = 6371; // Earth's radius in km
-  const dLat = deg2rad(lat2 - lat1);
-  const dLon = deg2rad(lon2 - lon1);
-  const a =
-    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-    Math.cos(deg2rad(lat1)) *
-      Math.cos(deg2rad(lat2)) *
-      Math.sin(dLon / 2) *
-      Math.sin(dLon / 2);
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-  return R * c; // Distance in km
-}
-
-function deg2rad(deg: number) {
-  return deg * (Math.PI / 180);
-}
-
 export default function CompetitionsPage() {
   const session = useSession();
-  const [location, setLocation] = useState<{
-    latitude: number;
-    longitude: number;
-  } | null>(null);
+  const [location, setLocation] = useState<GeoCoordinates | null>(null);
   const [distanceFilter, setDistanceFilter] = useState<number>(100);
 
   const api = useAPI();
@@ -159,18 +133,18 @@ export default function CompetitionsPage() {
 
   const competitionsDistanceFiltered = useMemo(() => {
     if (!rawCompetitionData) return [];
+
     if (location === null || distanceFilter === 100)
       return rawCompetitionData!.pages.flatMap(({ data }) => data!);
+
     return rawCompetitionData!.pages
       .flatMap(({ data }) => data!)
       .filter(
         (competition) =>
-          getDistanceFromLatLonInKm(
-            location.latitude,
-            location.latitude,
-            competition.longitude_degrees,
-            competition.latitude_degrees,
-          ) <= distanceFilter,
+          getDistanceInKm(location, {
+            longitude: competition.longitude_degrees,
+            latitude: competition.latitude_degrees,
+          }) <= distanceFilter,
       );
   }, [location, distanceFilter, rawCompetitionData]);
 
