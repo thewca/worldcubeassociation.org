@@ -119,7 +119,7 @@ export const hydrateUserPermissions = (
 const fetchPermissions = cache(async (authToken: string) => {
   const client = serverClientWithToken(authToken);
 
-  return await client.GET("/users/me/permissions");
+  return await client.GET("/v0/users/me/permissions");
 });
 
 export const getPermissions = async () => {

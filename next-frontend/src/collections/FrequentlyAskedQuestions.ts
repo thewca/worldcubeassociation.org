@@ -1,4 +1,5 @@
 import { CollectionConfig } from "payload";
+import { markdownConvertedField } from "@/collections/helpers";
 
 export const FaqCategories: CollectionConfig = {
   slug: "faqCategories",
@@ -46,6 +47,11 @@ export const FaqQuestions: CollectionConfig = {
       type: "textarea",
       required: true,
     },
+    {
+      name: "answerRichtext",
+      type: "richText",
+    },
+    markdownConvertedField("answerRichtext"),
   ],
   admin: {
     useAsTitle: "question",

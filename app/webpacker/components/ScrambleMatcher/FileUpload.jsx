@@ -1,9 +1,14 @@
-import React, { useCallback, useRef, useState } from 'react';
+import React, {
+  useCallback,
+  useRef,
+  useState,
+} from 'react';
 import { Button, Header, Message } from 'semantic-ui-react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { fetchJsonOrError } from '../../lib/requests/fetchWithAuthenticityToken';
 import { competitionScrambleFilesUrl } from '../../lib/requests/routes.js.erb';
 import ScrambleFileList from './ScrambleFileList';
+import UnusedScramblesPanel from './UnusedScramblesPanel';
 
 async function listScrambleFiles(competitionId) {
   const { data } = await fetchJsonOrError(competitionScrambleFilesUrl(competitionId));
@@ -26,8 +31,8 @@ async function uploadScrambleFile({ competitionId, file }) {
 export default function FileUpload({
   competitionId,
   initialScrambleFiles,
-  addScrambleFile,
-  removeScrambleFile,
+  matchState,
+  dispatchMatchState,
 }) {
   const inputRef = useRef();
   const queryClient = useQueryClient();
@@ -52,7 +57,7 @@ export default function FileUpload({
         ],
       );
 
-      addScrambleFile(data);
+      dispatchMatchState({ type: 'addScrambleFile', scrambleFile: data });
     },
     onError: (responseError) => setError(responseError.message),
   });
@@ -80,7 +85,7 @@ export default function FileUpload({
       <Header>
         Uploaded JSON files:
         {' '}
-        {uploadedJsonFiles?.length}
+        {uploadedJsonFiles.length}
         {' '}
         <Button.Group floated="right">
           <Button
@@ -118,7 +123,13 @@ export default function FileUpload({
       <ScrambleFileList
         scrambleFiles={uploadedJsonFiles}
         isFetching={isFetching}
-        removeScrambleFile={removeScrambleFile}
+        matchState={matchState}
+        dispatchMatchState={dispatchMatchState}
+      />
+      <UnusedScramblesPanel
+        scrambleFiles={uploadedJsonFiles}
+        matchState={matchState}
+        dispatchMatchState={dispatchMatchState}
       />
     </>
   );

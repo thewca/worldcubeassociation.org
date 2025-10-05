@@ -8,7 +8,7 @@ import SimilarPersons from './SimilarPersons';
 import DuplicateCheckerHeader from './DuplicateCheckerHeader';
 import { duplicateCheckerJobRunStatuses } from '../../lib/wca-data.js.erb';
 
-export default function DuplicateChecker({ competitionId }) {
+export default function DuplicateChecker({ competitionId, setUserIdToEdit }) {
   const {
     data: lastDuplicateCheckerJobRun,
     isFetching,
@@ -47,6 +47,7 @@ export default function DuplicateChecker({ competitionId }) {
         <SimilarPersons
           similarPersons={lastDuplicateCheckerJobRun.potential_duplicate_persons}
           competitionId={competitionId}
+          setUserIdToEdit={setUserIdToEdit}
         />
       )}
     </>

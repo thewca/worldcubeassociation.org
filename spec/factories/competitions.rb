@@ -356,6 +356,12 @@ FactoryBot.define do
       cancelled_by { FactoryBot.create(:user, :wcat_member).id }
     end
 
+    trait :all_integrations_connected do
+      stripe_connected
+      paypal_connected
+      manual_connected
+    end
+
     trait :stripe_connected do
       # This is an actual test stripe account set up
       # for testing Stripe payments, and is connected
@@ -370,6 +376,12 @@ FactoryBot.define do
     trait :paypal_connected do
       transient do
         paypal_merchant_id { '95XC2UKUP2CFW' }
+      end
+    end
+
+    trait :manual_connected do
+      transient do
+        manual_payment_instructions { "Cash in an unmarked envelope left under a bench in the park" }
       end
     end
 
@@ -579,6 +591,14 @@ FactoryBot.define do
           consent_status: "test",
         )
         competition.competition_payment_integrations.new(connected_account: paypal_account)
+        competition.save
+      end
+
+      if defined?(evaluator.manual_payment_instructions)
+        manual_payment_account = ManualPaymentIntegration.new(
+          payment_instructions: evaluator.manual_payment_instructions, payment_reference_label: "Bench Location",
+        )
+        competition.competition_payment_integrations.new(connected_account: manual_payment_account)
         competition.save
       end
     end

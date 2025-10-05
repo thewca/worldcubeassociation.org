@@ -1,0 +1,12 @@
+get:
+  summary: Get Export Information
+  tags:
+    - results
+  operationId: publicExports
+  responses:
+    "200":
+      description: Successfully retrieved exports
+      content:
+        application/json:
+          schema:
+            $ref: "../../schemas/results/ExportInfo.yaml"

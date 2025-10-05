@@ -12,7 +12,7 @@ export default function ResultsTable({ wcaId }: { wcaId: string }) {
 
   const { data: resultsQuery, isLoading } = useQuery({
     queryFn: () =>
-      api.GET("/persons/{wca_id}/results", {
+      api.GET("/v0/persons/{wca_id}/results", {
         params: { path: { wca_id: wcaId }, query: { event_id: eventId } },
       }),
     queryKey: ["person-results", eventId, wcaId],

@@ -76,6 +76,11 @@ class Api::V1::RegistrationsController < Api::V1::ApiController
     render json: @registration.to_v2_json(admin: true)
   end
 
+  def registration_config
+    competition = Competition.find(params[:id])
+    render json: competition.available_registration_lanes(@current_user)
+  end
+
   def create
     # Currently we only have one lane
     if params[:competing]
