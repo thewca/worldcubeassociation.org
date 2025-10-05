@@ -351,9 +351,12 @@ export const Home: GlobalConfig = {
     max: 5,
   },
   admin: {
+    livePreview: {
+      url: "/",
+    },
     preview: () => {
       const encodedParams = new URLSearchParams({
-        path: `/`,
+        path: "/",
         previewSecret: process.env.PREVIEW_SECRET!,
       });
 
