@@ -29,12 +29,14 @@ declare module "nextjs-routes" {
     | DynamicRoute<"/competitions/[competitionId]/schedule", { "competitionId": string }>
     | StaticRoute<"/dashboard">
     | StaticRoute<"/delegates">
+    | StaticRoute<"/disciplinary">
     | StaticRoute<"/disclaimer">
     | StaticRoute<"/documents">
     | StaticRoute<"/export/developer">
     | StaticRoute<"/export/results">
     | StaticRoute<"/faq">
     | StaticRoute<"/incidents">
+    | StaticRoute<"/logo">
     | StaticRoute<"/officers-and-board">
     | StaticRoute<"/organizations">
     | DynamicRoute<"/payload/[[...segments]]", { "segments"?: string[] | undefined }>

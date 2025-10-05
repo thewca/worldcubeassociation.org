@@ -250,6 +250,7 @@ export interface Config {
     'about-regulations-page': AboutRegulationsPage;
     'documents-page': DocumentsPage;
     'faq-page': FaqPage;
+    'logo-page': LogoPage;
   };
   globalsSelect: {
     nav: NavSelect<false> | NavSelect<true>;
@@ -261,6 +262,7 @@ export interface Config {
     'about-regulations-page': AboutRegulationsPageSelect<false> | AboutRegulationsPageSelect<true>;
     'documents-page': DocumentsPageSelect<false> | DocumentsPageSelect<true>;
     'faq-page': FaqPageSelect<false> | FaqPageSelect<true>;
+    'logo-page': LogoPageSelect<false> | LogoPageSelect<true>;
   };
   locale:
     | 'en'
@@ -1324,6 +1326,57 @@ export interface FaqPage {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "logo-page".
+ */
+export interface LogoPage {
+  id: string;
+  blocks: (
+    | {
+        title: string;
+        content: {
+          root: {
+            type: string;
+            children: {
+              type: any;
+              version: number;
+              [k: string]: unknown;
+            }[];
+            direction: ('ltr' | 'rtl') | null;
+            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+            indent: number;
+            version: number;
+          };
+          [k: string]: unknown;
+        };
+        contentMarkdown?: string | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'paragraph';
+      }
+    | {
+        title: string;
+        caption: string;
+        images: {
+          image: string | Media;
+          darkBackground?: boolean | null;
+          id?: string | null;
+        }[];
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'logoVariant';
+      }
+    | {
+        url: string;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'logoDownload';
+      }
+  )[];
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "nav_select".
  */
 export interface NavSelect<T extends boolean = true> {
@@ -1755,6 +1808,50 @@ export interface FaqPageSelect<T extends boolean = true> {
     | {
         faqQuestion?: T;
         id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "logo-page_select".
+ */
+export interface LogoPageSelect<T extends boolean = true> {
+  blocks?:
+    | T
+    | {
+        paragraph?:
+          | T
+          | {
+              title?: T;
+              content?: T;
+              contentMarkdown?: T;
+              id?: T;
+              blockName?: T;
+            };
+        logoVariant?:
+          | T
+          | {
+              title?: T;
+              caption?: T;
+              images?:
+                | T
+                | {
+                    image?: T;
+                    darkBackground?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        logoDownload?:
+          | T
+          | {
+              url?: T;
+              id?: T;
+              blockName?: T;
+            };
       };
   updatedAt?: T;
   createdAt?: T;
