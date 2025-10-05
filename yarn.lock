@@ -2563,10 +2563,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rails/actioncable@npm:^8.0.201":
-  version: 8.0.201
-  resolution: "@rails/actioncable@npm:8.0.201"
-  checksum: 10c0/422bc0ad1b2ce84365b4ab65ed7b606d07bb591fa6ac91251e24942d33c3f7202d4f4d4ae758ce91f5bc44c834067c7c7af2e572015a89705feb52c8cbdfe4d6
+"@rails/actioncable@npm:^8.0.300":
+  version: 8.0.300
+  resolution: "@rails/actioncable@npm:8.0.300"
+  checksum: 10c0/b93b63c57909ff5b17154a0d564ef0e68b36bcfe416c68e140c6c74bc4f156a9bc38c253d9e37ae0b8f80a29d7c6034e6296c3882735d0b8bcdfe1f256c54d80
   languageName: node
   linkType: hard
 
@@ -2635,21 +2635,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tanstack/query-core@npm:5.89.0":
-  version: 5.89.0
-  resolution: "@tanstack/query-core@npm:5.89.0"
-  checksum: 10c0/8e1e92fb4e3694d7f706bb686135a237280528ad5da890e996521780ecf30dbe139662dfd75b2f73bfe617e9275de1b3e7ab5c9fc6cacbf79cabf8163922e334
+"@tanstack/query-core@npm:5.90.2":
+  version: 5.90.2
+  resolution: "@tanstack/query-core@npm:5.90.2"
+  checksum: 10c0/695a7450b0bb9f6dd21bebeacfc962dfc886631a3b3a13c33a842ef719b4c3dd30c15febe8c1ade6902a85e0f387c51a97570f430cc8f5c7032ff737d6410597
   languageName: node
   linkType: hard
 
-"@tanstack/react-query@npm:^5.89.0":
-  version: 5.89.0
-  resolution: "@tanstack/react-query@npm:5.89.0"
+"@tanstack/react-query@npm:^5.90.2":
+  version: 5.90.2
+  resolution: "@tanstack/react-query@npm:5.90.2"
   dependencies:
-    "@tanstack/query-core": "npm:5.89.0"
+    "@tanstack/query-core": "npm:5.90.2"
   peerDependencies:
     react: ^18 || ^19
-  checksum: 10c0/07364b36bcf8424777b79fad3a87e16867e955a09c27696e8a9833bacf5cd2a3f69474bb7285b6103a7c49f578a23a3f211cf3dbd36c63871ffdacd8baf0faeb
+  checksum: 10c0/22e76626a59890409858521b0e42b49219126a4ea5ed79eaa48a267959175dfdd28b30b9b03a415dccf703d95c18100a9d8917679818f6d2adc26d6c5f96a4d6
   languageName: node
   linkType: hard
 
@@ -10185,11 +10185,11 @@ __metadata:
     "@fullcalendar/timegrid": "npm:^6.1.19"
     "@hello-pangea/dnd": "npm:^18.0.1"
     "@pmmmwh/react-refresh-webpack-plugin": "npm:^0.6.1"
-    "@rails/actioncable": "npm:^8.0.201"
+    "@rails/actioncable": "npm:^8.0.300"
     "@rails/ujs": "npm:^7.1.502"
     "@stripe/react-stripe-js": "npm:^4.0.2"
     "@stripe/stripe-js": "npm:^7.9.0"
-    "@tanstack/react-query": "npm:^5.89.0"
+    "@tanstack/react-query": "npm:^5.90.2"
     "@tanstack/react-table": "npm:^8.21.3"
     "@wca/helpers": "npm:^1.1.5"
     autonumeric: "npm:^4.10.9"
@@ -10256,13 +10256,13 @@ __metadata:
     react_ujs: "npm:^3.2.1"
     regenerator-runtime: "npm:^0.14.1"
     resolve-url-loader: "npm:^5.0.0"
-    sass: "npm:^1.93.0"
+    sass: "npm:^1.93.2"
     sass-loader: "npm:^16.0.5"
     semantic-ui-react: "npm:^2.1.5"
     shakapacker: "npm:8.4.0"
     style-loader: "npm:^4.0.0"
     stylelint: "npm:^16.24.0"
-    stylelint-config-recommended-scss: "npm:^16.0.1"
+    stylelint-config-recommended-scss: "npm:^16.0.2"
     stylelint-scss: "npm:^6.12.1"
     terser-webpack-plugin: "npm:^5.3.14"
     webpack: "npm:^5.101.3"
@@ -10373,9 +10373,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"sass@npm:^1.93.0":
-  version: 1.93.0
-  resolution: "sass@npm:1.93.0"
+"sass@npm:^1.93.2":
+  version: 1.93.2
+  resolution: "sass@npm:1.93.2"
   dependencies:
     "@parcel/watcher": "npm:^2.4.1"
     chokidar: "npm:^4.0.0"
@@ -10386,7 +10386,7 @@ __metadata:
       optional: true
   bin:
     sass: sass.js
-  checksum: 10c0/51dcb4e65a69f97b4c200ee154ca45f81b748a45f8ef0ec3236b774bb143590a9304038e9ab09f809f734d4edb3add96a0a690b2e8451ff66b9f57c469b2685e
+  checksum: 10c0/5a19f12dbe8c142e40c1e0473d1e624898242b1c21010301e169b528be8c580df6356329c798522b525eb11eda4b04b9b77422badc55c47889600f8477201d2b
   languageName: node
   linkType: hard
 
@@ -11106,20 +11106,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"stylelint-config-recommended-scss@npm:^16.0.1":
-  version: 16.0.1
-  resolution: "stylelint-config-recommended-scss@npm:16.0.1"
+"stylelint-config-recommended-scss@npm:^16.0.2":
+  version: 16.0.2
+  resolution: "stylelint-config-recommended-scss@npm:16.0.2"
   dependencies:
     postcss-scss: "npm:^4.0.9"
     stylelint-config-recommended: "npm:^17.0.0"
     stylelint-scss: "npm:^6.12.1"
   peerDependencies:
     postcss: ^8.3.3
-    stylelint: ^16.23.1
+    stylelint: ^16.24.0
   peerDependenciesMeta:
     postcss:
       optional: true
-  checksum: 10c0/340aa85fa964ebac7efdbef4c51bab8e0ef62716e2826fe1156a0087b700c02d92b4dfd7ef5e60d86171f9b28c93dafc0a117d4548df51b3096583d1618acc9d
+  checksum: 10c0/d4e30a881e248d8b039347bf967526f6afe6d6a07f18e2747e14568de32273e819ba478be7a61a0dd63178931b4e891050a34e73d296ab533aa434209a7f3146
   languageName: node
   linkType: hard
 
