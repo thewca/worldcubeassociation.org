@@ -19,7 +19,9 @@ export default function RegistrationAdministrationTableFooter({
   competitionInfo,
   withPosition = false,
 }) {
-  const { events: eventsAreExpanded, comments: commentsAreShown } = columnsExpanded;
+  const {
+    dob: dobIsShown, events: eventsAreExpanded, comments: commentsAreShown,
+  } = columnsExpanded;
 
   const newcomerCount = registrations.filter(
     (reg) => !reg.user.wca_id,
@@ -62,6 +64,7 @@ export default function RegistrationAdministrationTableFooter({
           }`
         }
       </Table.Cell>
+      {dobIsShown && <Table.Cell key="dob" />}
       <Table.Cell>
         {`${I18n.t('registrations.list.country_plural', { count: countryCount })}`}
       </Table.Cell>
